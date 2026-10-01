@@ -1,141 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E7428CF4A;
-	Thu,  1 Oct 2026 04:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813B923BD06;
+	Thu,  1 Oct 2026 04:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790828675; cv=none; b=dxa88Ms6A++w6cCxnWQ8CMyNEaquiCw1Vvj+Wxc5ABwJkH2m/B9EmOI+GU/i3LLRgBReOLp6vuWcoaf4RKxygMPeyU7PYkPwi+4HlBvnXxLhTdt+SsII7OepCZybeuwRZbV4B3x5vCtNnb4iq1Q/BWssjmyw7YT7Me3BUh7sQR8=
+	t=1790830698; cv=none; b=SpBJQMXRPQJiSNkRmCXPFzLZWwWpkEWYPBYl7ASiCKdMI3SdtxtjF2YZ9zIu3n2epRB/J8mFPw0bbkIfT6V1oPvArZqnQvJCiKLbPI13rC6qoG17JLS+jQtCRofDWuazUTQWtQti/Xn352Qjg/NLMTStSH2QDG0AJPJmDt6c9xE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790828675; c=relaxed/simple;
-	bh=O71I7Sd+UVgF+ricRHOXozqdt+rTYHriJWMGJ39H0lo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=mY/oSAJuBUbjlt6icPERlvknxKJnV1eFdxz1sVQzjesYlhRgRUl6hpg2sVrcrnQR3+RlNCoFnvvqwbSRdlqwWQWLeZqnF3s1U0CeLoJd8rsQrVVfIPudhP5IjT0WoZoQIxo71Slaf59Ka3CbltrOQOpOf92QOpVWmL7Vuqx2npg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blQvsOzI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790830698; c=relaxed/simple;
+	bh=Mb/l6MdlnUv+ToedgXmh1TdSiP6BX/+taiJniP47WfE=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mOmoM6ryV43AtqeoT+BOh9Yk3UNUGS3V4DUxfCHo+FYxkt5ueEVKm9KZKrjQH5R5hMZHw5ZywlMuY49TBvsXBUu8YHN2qBf6mQR6/l2f36Ez559xUePDjvB2xj59p3clJnDB1FKvVEypwJS+HvWm+hp5nBwLZ/kRre6gO7dT8Js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BP1A33E0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blQvsOzI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF84A1F00899;
-	Thu,  1 Oct 2026 04:24:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BP1A33E0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F22A1F000FF;
+	Thu,  1 Oct 2026 04:58:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790828673;
-	bh=WsfUU+gE2evcY+s7/YBmSj0bnF8yeYgv9vmgU5mDu+U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=blQvsOzI67O9A2yZLm8jpSFzvqmim9KtOw9HFtRhVKc0ykLp+72iwyD+f61Pn91OT
-	 qs6OgQ+mEl3qGnJei4P2V3dn6qaWUvOBc0E+2vPRe4GtzYwA9aP14PLBltA96YCEiI
-	 3M61dbJsXn+jOHC1oSBGskWGRtkEXdyauSLSVyZZv2GUsiFt4lA9dryAe1GmGxI7zc
-	 PKfUJGH6rYkWIVrmuZengGzqqQloXAC83eHnIJW+RxPTQ5V6BdrDGGn7t9QawIXU8S
-	 qkXwP2U06ZTFgQbWXJh47vvuM59/giuMfRAg5fVJydBDOiOV2dLky1OvV/9etB+ppS
-	 fqzwQorUoR5pw==
-Content-Type: multipart/mixed; boundary="===============0581563529611211921=="
+	s=k20260515; t=1790830694;
+	bh=fjPIGhc+wki6rbjpccgd1/DrHrcJIdvyJ27p4BzaPWc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=BP1A33E03QtdehBVZF+QtyRCxZ+A7LKujSPpx7irqp7vcg+0YMWIsZYTpNZHawiZb
+	 fmXyOm2uJ6lIn1jXYr891cxR0IUNl1VSQS6rwiTMkk48hz2v5hhMvQA+WeW2kmlNZC
+	 dfL4XbttQ+n83vB4BL+C7eLV3jaAl9lps8l8plkgNBbn0Qjm40aq+5tbzRP6Wo4aA7
+	 1J653tI0pH+ujHa/Os2HdWt/Ich+Bf1mzI4k33wNdgBjZzuo72INI61gLtpQmI5SAP
+	 B2fxSVPWP7p0laVctuXHy3EhGnJxgN9NR4qmgHJS5W5HQzWvLbIaxTvjIKBHnMdOA5
+	 v/Or7kn2mSPYw==
+Subject:
+ Re: [PATCH net] selftests: fib_tests: use per-test return value in subtests
+From: netdev-bot+sashiko@kernel.org
+To: hangbin.liu@linux.dev
+Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, idosch@mellanox.com, dsahern@gmail.com,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, liuhangbin@kylinos.cn,
+ netdev-bot+sashiko@kernel.org
+Date: Thu, 01 Oct 2026 04:58:13 +0000
+Message-ID: <179083069319.434549.6042480426596220206@kernel.org>
+In-Reply-To: <20260929-self_fib_tests-v1-1-0eab6a3c3a3c@kylinos.cn>
+References: <20260929-self_fib_tests-v1-1-0eab6a3c3a3c@kylinos.cn>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <949432be604253c161dcc398a00cb8268d0f0781e9a8566064d855fa9478918a@mail.kernel.org>
-In-Reply-To: <20261001-libbpf-btf-enodata-fix-v2-1-89f6e8a0240e@gmail.com>
-References: <20261001-libbpf-btf-enodata-fix-v2-1-89f6e8a0240e@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] libbpf: Fix struct and union zero detection in BTF dumper
-From: bot+bpf-ci@kernel.org
-To: luisflavieira@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,luisflavieira@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  1 Oct 2026 04:24:32 +0000 (UTC)
 
---===============0581563529611211921==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-> libbpf: Fix struct and union zero detection in BTF dumper
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-TL;DR:
-- Fix may read past the buffer end when dumping a truncated struct, since
-  later members are now scanned unbounded
-- Missing Fixes: tag
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
->     libbpf: Fix struct and union zero detection in BTF dumper
->
->     btf_dump_type_data_check_zero() uses -ENODATA to indicate that a value
->     is zero. The array path handles this sentinel correctly, but the struct
->     and union path compares the return value against positive ENODATA.
->
->     As a result, the member loop returns after examining its first member.
->     A nested struct or union whose first member is zero can therefore be
->     treated as entirely zero even when a later member is non-zero.
->
->     Compare against -ENODATA so zero members are skipped while looking for
->     a non-zero member.
->
->     Signed-off-by: Luis Vieira <luisflavieira@gmail.com>
+- [Medium] In tools/testing/selftests/net/fib_tests.sh, the patch
+  converts check_rt_num() from `ret` to `RET`, but the helper still sets…
 
-This looks like a bug fix, but there is no Fixes: tag.  The faulty
-"if (err != ENODATA)" comparison came in with the original typed data
-dumper support.  Should this include:
+--
 
-  Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
+selftests: fib_tests: use per-test return value in subtests
 
-> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-> --- a/tools/lib/bpf/btf_dump.c
-> +++ b/tools/lib/bpf/btf_dump.c
+This commit changes fib_tests.sh to use RET, as defined in lib.sh, for the
+per-test return value. The global exit code ret is now only set in
+log_test(), so a later subtest can no longer clear an earlier failure.
+
+Closes: https://lore.kernel.org/all/178961184152.22033.9267194009793243294@kernel.org
+
+> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+> index b338bfb196a27..9ce5623b049c1 100755
+> --- a/tools/testing/selftests/net/fib_tests.sh
+> +++ b/tools/testing/selftests/net/fib_tests.sh
 
 [ ... ]
 
-> @@ -2564,7 +2564,7 @@ static int btf_dump_type_data_check_zero(struct btf_dump *d,
->  			bit_sz = btf_member_bitfield_size(t, i);
->  			err = btf_dump_type_data_check_zero(d, mtype, m->type, data + moffset / 8,
->  							    moffset % 8, bit_sz);
-> -			if (err != ENODATA)
-> +			if (err != -ENODATA)
->  				return err;
->  		}
->  		return -ENODATA;
+> @@ -763,9 +763,9 @@ check_rt_num()
+>  
+>      if [ $num -ne $expected ]; then
+>  	echo "FAIL: Expected $expected routes, got $num"
+> -	ret=1
+> +	RET=1
+>      else
+> -	ret=0
+> +	RET=0
+>      fi
+>  }
 
-Can this now read past the end of the caller's buffer when data_sz is
-smaller than the type?
+[Severity: Medium]
+check_rt_num() still sets RET=0 when a check passes. Can a later passing
+check_rt_num() in the same subtest hide an earlier failure?
 
-btf_dump_type_data_check_overflow() only bounds-checks base types and skips
-structs, unions and arrays, so a truncated struct still reaches
-btf_dump_type_data_check_zero().  Before this change the member loop
-returned after the first member.  With -ENODATA, the loop proceeds to later
-members, and the base type checks they reach never compare against
-d->typed_dump->data_end:
+lib.sh describes RET as "Per-test return value. Clear at the beginning of
+each test." Its helpers only ever raise it. For example,
+ret_set_ksft_status() does:
 
-  btf_dump_base_type_check_zero() does memcmp(data, bytecmp, nr_bytes)
-  btf_dump_get_enum_value() dereferences data directly
+	RET=$(ksft_status_merge $RET $ksft_status)
 
-For example, with:
+Several subtests call check_rt_num() more than once before a single
+log_test. For example, fib6_ra_to_static() does:
 
-  struct outer { int a; struct inner { int x; int y; } s; };
+	check_rt_num 1 $($IP -6 route list |grep expires|wc -l)
+	...
+	check_rt_num 1 $($IP -6 route list |grep expires|wc -l)
+	...
+	check_rt_num 2 $($IP -6 route list |grep expires|wc -l)
 
-and btf_dump__dump_type_data(d, outer_id, buf, 8, &opts) using an 8 byte
-buf, a != 0 and s.x == 0:
+	log_test "$RET" 0 "ipv6 promote RA route to static"
 
-  btf_dump_struct_data()
-    btf_dump_dump_type_data(s)
-      btf_dump_type_data_check_overflow(s)   /* no bounds check for STRUCT */
-      btf_dump_type_data_check_zero(s)
-        x is zero, returns -ENODATA, loop continues
-        y: btf_dump_base_type_check_zero() reads 4 bytes at data + 8,
-           which is data_end
+Say the on-link route still has an expiry after the static address is
+added. The first check prints "FAIL: Expected 1 routes, got 2". If the
+last check then passes, it resets RET to 0. log_test() prints [ OK ],
+nfail is not incremented, the global ret stays 0, and the script exits
+with 0.
 
-The outcome then depends on bytes beyond the buffer.  If they are non-zero,
-the struct is treated as non-zero and the later y member fails with -E2BIG.
-If they are zero, the struct is skipped and the call succeeds with the
-truncated data.
+The same pattern shows up in two more places:
 
-The array branch has the same unbounded scan, but the comment on
-TEST_BTF_DUMP_DATA_OVER says overflow checking should trump "is field
-zero?" checks.  Should the member checks in this path be bounded by
-data_end?
+- In fib6_gc_test(), for "promote to permanent routes": three check_rt_num
+  calls run before the final "check_rt_num 0" on route list cache.
 
-I don't see a later patch in this series that addresses this.  The
-follow-up selftest commit (f1b0479c0af4) only exercises a full-size buffer.
+- In fib6_ra_to_static(), for "RA route with nexthop do not merge into
+  ECMP with static": the "2001:12::/64 via" check is followed by the
+  "nexthop via" check.
 
+This looks like the same symptom the commit message describes, only
+inside a single subtest. Could check_rt_num() set RET=1 only on failure,
+with RET=0 cleared at the start of each logged subtest?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36812677691
---===============0581563529611211921==--
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260929-self_fib_tests-v1-1-0eab6a3c3a3c%40kylinos.cn
