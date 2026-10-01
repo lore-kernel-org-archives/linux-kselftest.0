@@ -1,43 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B892949EC76;
-	Thu,  1 Oct 2026 12:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AE831E106;
+	Thu,  1 Oct 2026 12:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790856512; cv=none; b=JBUsMKWM82tYGrY4LbG+Iukyul8DY/bQNhTJOLGBH22l6JtV3no+64A65Fxm5w3mZdLnjBEFHTRWrxgwv7ttoCZVGv0fdb/bUXjH1nRsJehs436YSOFGQl+xD9xLcIh5YDwV7xryvR7DZhlqvifZCwlPfMpKc7fAbwFz1eTtUK4=
+	t=1790857149; cv=none; b=K4Wmrih2/SucxgTI4PYIekEHZkZQ3H415xB3WUVKw9Gz0Nd2W9Q/NAQ2/GY0DSpla+Ebz7+MG1p4JKXZ9JW0Nm6ICKv5fjOyGXutn1Z/JNQVF1D+RHCUzYze4FYK5yOBbpE/WgMxA2zx/NiP04TP+4yO637dcHUXf0UYsqPC4w4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790856512; c=relaxed/simple;
-	bh=wx4Mbv/Dx6UAy9KrfDT6GoeCx12UNgoBU2rSXd8LxnE=;
+	s=arc-20240116; t=1790857149; c=relaxed/simple;
+	bh=L2x4F+RZepP9Ibzqqt/hat84vnlTSP8mV9e6KOzkB/Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S5m711hv7uJB7w//4zfBhhVcqaYBMmtcapBgZ2xPxtobk04Ozo57pb0mO6Zbk5NZTKzJZHDUzD8YTMVFWOMAP0BwvWVbStBcwtS1cWr9Ffk1dOQQkrZVMEgDMPqpJYrx9Y3LVtl0nzI1eThoxSdCXIeMCrW6+wgy+b5h46uL0zY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DMmQHHlz; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=pkiOIvpNT+8nPPaxf8nwGfkL4700WysfCy0bIMR+UqgmqrR6TEY995iLIgLGxdFKQpxsWDK3WokIOIjzdIbHn6JtYFexkCx9VNTwuw33ZVEJMlWxo4WwiMoFqXf5Xu1nma3IMf9kopbfvvgnNwsq5jaXN1AT3f1aB+13EGc936k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OiPIkXFh; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DMmQHHlz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B13DC1F000FF;
-	Thu,  1 Oct 2026 12:08:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1790856500;
-	bh=vVQBmByUL0b38bMZkqFlIw1DQs32Q1NlWpDovlmveUE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=DMmQHHlzHHm8B/O1lGgsaKmj2BPL313ItlwRbgeUMMMOrdAl6BwQBf8e2CY4SeloA
-	 Wfjk3cpvfmV56flIZYv92o8jbkP9bR7j2+bfdNfuNLRODyOWUjO7q48Z4QJ8m7f/1d
-	 NsBKEesLoEZU1Y4fQTtzD9vUpZ14KZ9DEruX70IY=
-Date: Thu, 1 Oct 2026 14:00:06 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Rishi Chhibber <rishi.chhibber@broadcom.com>
-Cc: arnd@arndb.de, bryan-bt.tan@broadcom.com, vishnu.dasa@broadcom.com,
-	corbet@lwn.net, skhan@linuxfoundation.org, shuah@kernel.org,
-	rdunlap@infradead.org, bcm-kernel-feedback-list@broadcom.com,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ajay.kaher@broadcom.com,
-	alexey.makhalov@broadcom.com,
-	vamsi-krishna.brahmajosyula@broadcom.com, yin.ding@broadcom.com,
-	tapas.kundu@broadcom.com
-Subject: Re: [PATCH v3 0/4] misc: vmw_zerocopy: VMware zero-copy buffer
- sharing driver
-Message-ID: <2026100137-molasses-rented-5c88@gregkh>
-References: <cover.1789413109.git.rishi.chhibber@broadcom.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OiPIkXFh"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=7xQHNY097cBtbkyro3E4qxSO+Gg+rAp0ETijwlM2SaY=; b=OiPIkXFhwRsB7f4czffZ0jIZlm
+	MCegJdLQMkRCITcBPZnjFi+xdFJmNsNYnkZ9B4CHXl8n/ymjc5GGKywxn+HO8CUzgI4tyswsKvAqG
+	IEyk1gdrEjJcyNNll0GXiOdPIz5+009/vS4jAKYGN/PZVHPDP/KfEHnFARdHdAzaotCRe7FHa03Ox
+	w4x26e8bbZjFvBTInTMYBT4reQytBaZGcobnOqemIzcSVXJhMp+X6GhTYVW5Lmy/4lvxbBJyn/kM8
+	JG5Hsrb89Bs24SboJ23d6HZHCLw5zeztahs1xSuG6b0YPmq/plhVBaGeh66+OVKS56EtawE8lKtqS
+	bkU1HZPQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1xCFkK-00000004xMh-08zf;
+	Thu, 01 Oct 2026 12:18:44 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 1EE53300578; Thu, 01 Oct 2026 14:18:42 +0200 (CEST)
+Date: Thu, 1 Oct 2026 14:18:42 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Tejun Heo <tj@kernel.org>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Aaron Lu <ziqianlu@bytedance.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com,
+	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
+ done for
+Message-ID: <20261001121842.GJ4121620@noisy.programming.kicks-ass.net>
+References: <20260924184714.912181-1-shakeel.butt@linux.dev>
+ <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
+ <20261001105909.GL4121339@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,29 +72,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1789413109.git.rishi.chhibber@broadcom.com>
+In-Reply-To: <20261001105909.GL4121339@noisy.programming.kicks-ass.net>
 
-On Mon, Sep 14, 2026 at 01:22:05PM -0700, Rishi Chhibber wrote:
-> Summary of changes:
-> - 1/4 reserves a VMCI datagram resource id for the hypervisor-side
->   zero-copy service
-> - 2/4 adds the vmw_zerocopy driver: /dev/vmw_zc, a single ioctl, page
->   pinning and the VMCI datagram transport
-> - 3/4 documents the userspace interface
-> - 4/4 adds a kselftest covering the ioctl input-validation paths
+On Thu, Oct 01, 2026 at 12:59:09PM +0200, Peter Zijlstra wrote:
+> On Thu, Sep 24, 2026 at 10:28:10AM -1000, Tejun Heo wrote:
+> > Hello, Shakeel.
+> > 
+> > On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
+> > > This series lets a kernel thread say which cgroup it is working for.
+> > > That cgroup then sees the CPU time in its cpu.stat and the stalls in
+> > > its memory.pressure, and the CPU time comes out of its cpu.max quota.
+> > > The first user is the memcg reclaim that runs from high_work.
+> > 
+> > This doesn't translate to net rx, which is another major source of
+> > displaced CPU usage. Switching membership on each packet isn't going to
+> > work there. Attribution can't happen that way. We'd much rather count
+> > per-cgroup received packets and prorate the CPU consumption. If at all
+> > possible, I think it'd be better to adopt an approach which can cover
+> > both use cases.
 > 
-> This series adds a misc character device, /dev/vmw_zc, that lets guest
-> userspace hand a buffer to a VMware hypervisor-side peer without copying
-> it. The driver pins the user pages, collects their guest physical frame
-> numbers and sends that list over a VMCI datagram; the hypervisor then
-> reads the buffer directly out of guest memory. An optional metadata
-> buffer is pinned writable so the peer can return a result through the
-> same mechanism.
+> Ideally RX would be split for each network queue, rather than lumped
+> into the one giant softirq that nobody owns.
+> 
+> I know PREEMPT_RT has been wanting something like that for ages. Not all
+> queues are created equal. Some might want RT priority while others
+> should definitely not.
+> 
+> Furthermore, without ingress throttling, your RX back charge could
+> completely deplete the actual cgroup time quota.
+> 
+> Anyway, if you get per queue RX processing threads, then you can move
+> them into cgroups where so desired.
 
-You are going to need to get the -mm maintainers/developers to sign off
-on this thing before I can accept it due to your "fun" use of memory
-buffers in here.
-
-thanks,
-
-greg k-h
+Gemini is trying to tell me this exists and is called Threaded NAPI.
