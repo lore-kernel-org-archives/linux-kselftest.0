@@ -1,71 +1,60 @@
-Received: from sender-pp-o93.zoho.in (sender-pp-o93.zoho.in [103.117.158.93])
+Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E7349B20A
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 07:27:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=103.117.158.93
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790839690; cv=pass; b=MOzWXi5veZAAUnNvRr2YGVa7f35npZs1sCq6ixl+qKvo/ARkk88/2J8GEISpyrk3DCVFNq2a4TyxkdIYZTxHnjKnrqhwtYLBXrvcST3pm3JrHYAz+d8/XDd3pkQxH2Tp5zGU45UWP2/bwrtg6gnSuvsWxlpfRU6XBp60OKdFzDI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790839690; c=relaxed/simple;
-	bh=eJWJB0H9VEmdFvt7JdLn1cb+jNxA3rfMaBb9MNEK8Pw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LpG/FT4bdaUDNlFWSjQh0iY4lhdGZ4iWywsFNocnm7VLh2g4PyObY3A5EOZiam7ZQ9pZWcsU+VxVD/oy1F7sCwv4ETw3XMWCYw/T55iWxWeTWMkCcCRRhO+3pr0IAo9iFT91q2z7eOAvUOOr3hQAlegOx0GFc3Prdikq4A/DDvM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in; spf=pass smtp.mailfrom=zohomail.in; dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b=Em4/zbh7; arc=pass smtp.client-ip=103.117.158.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.in
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762584B8DF2;
+	Thu,  1 Oct 2026 08:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.35.192.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790843080; cv=none; b=PjyVI95qiXRax7yVcbdhoeLmQAXdHAXzSWHqX/L4sKqOBir2QccGAE87ID0LjPG7kpWXxf0fi9VNiL6Yiaw5g9RQ+WZ16myWn/DGmnRuiW/Z0pI/5hPQS4QuAZ0pGqiEHFULKG9TKzLKRB9Gv/J2F7s2tcNzgAQNSG6tLHzIspA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790843080; c=relaxed/simple;
+	bh=uUxVbAJFD0ONKElLX279ok1VDHKLisqJOgNdYvH1EM8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GmHLwclDfaQLatXsaeb6ib8tb2RUQN/ncum8xZkXj2oz+pA2Gkj+vR68aVUNRg+7IfVnEwB3B5i4r+Vf8F1TWorL+sX6l6mtYqPkiCl/ieKCXXBgrKK1XEUdqURYAeR/DJcEhUPtGRQ3EMtHGMLWRYT3cOfXbUWdn14VBhmngzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=AV/+hu+Y; arc=none smtp.client-ip=52.35.192.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b="Em4/zbh7"
-ARC-Seal: i=1; a=rsa-sha256; t=1790839548; cv=none; 
-	d=zohomail.in; s=zohoarc; 
-	b=Js5gv1tKRCvM5GZJ48x18kZfc1ILec3CSoaoEXg6Jv8aJYA44pfQuNWmvogNL3Ro1B4D/w07GKu2bq8dZhke+JheaxdRM5B9rrjK47x5QNGjQYdikf1oOUzrQvI3eEceufCmYMyltaYsKTnxTjUpvpJHMtuy5DJpvyXiVA5MVUE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-	t=1790839548; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=pyWpbR5qhAlwkofjRKC2L8fa2LYDr/4E5RqDvdpLEM0=; 
-	b=NmaznjWntl9KVEe2TmJvZwx57xK2PyqdMg/zAtZfTh/qE8Wc7QUXM/SVesHO8eFAMaLVMWhUJnNbc3S2MiHsFIz3D4wn4PY9kIIVIPTBX/tWLrhdYDoZj+5GrdR2uz2PaoFATPqU7B9+iFnaVif760VgsfepuvD3kPqn7Ay+rJA=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-	dkim=pass  header.i=zohomail.in;
-	spf=pass  smtp.mailfrom=adi.sharma@zohomail.in;
-	dmarc=pass header.from=<adi.sharma@zohomail.in>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1790839548;
-	s=zoho; d=zohomail.in; i=adi.sharma@zohomail.in;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=pyWpbR5qhAlwkofjRKC2L8fa2LYDr/4E5RqDvdpLEM0=;
-	b=Em4/zbh7bltJFiDOJNpuNKBJu6QtGJ6QLrdStMK81z0B85vIGLPAZOX1ESrFIb5b
-	xlCFi5aJ3gE9GvMJw7Qfj0DhsgsZfNvrDHYQdzOsvUIOyayKoGRVz5JjB+ftENRsPST
-	xJblg0zexbniNZWjP8S3rHYHl+2IfEjPOIa+5fDo=
-Received: by smtp.zoho.in with SMTPS id 1790839546031530.9137311836425;
-	Thu, 1 Oct 2026 12:55:46 +0530 (IST)
-From: Aditya Sharma <adi.sharma@zohomail.in>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	kpsingh@kernel.org,
-	matt@bobrowski.net,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	shuah@kernel.org,
-	puranjay@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Aditya Sharma <adi.sharma@zohomail.in>
-Subject: [PATCH bpf-next v2 1/2] bpf: Remove nmi_uaccess_okay() check in bpf_send_signal_common()
-Date: Thu,  1 Oct 2026 12:54:48 +0530
-Message-Id: <20261001072449.1377267-2-adi.sharma@zohomail.in>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261001072449.1377267-1-adi.sharma@zohomail.in>
-References: <20261001072449.1377267-1-adi.sharma@zohomail.in>
+	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="AV/+hu+Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
+  t=1790843074; x=1822379074;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dwZ6+Ny11M89ZBPSWHCcY4nVqs3E53TyZaHaH2FNxjU=;
+  b=AV/+hu+YSyvhUrq3r+y9vT8WJR/g9cpvdlPGTW2GWDefG3n3x4OHHsgJ
+   J2HKzpfaDWp+krAbe/ksrqlEEh/SyDGrSqGVje7/Yb7QLmRHSQyTb9loj
+   aw3B1/ZXovgqpbS77JEELVu1w1Cw+DXTedQNlvxQ9A1hP+vQsc1R4KC55
+   GAuAs5ye40rHMzzL/yaiDgG5p1TUe8cpdGqRqSj5O/I6/a+OgYu9+TY4J
+   1u2s3pWTSHOSHMk3+vGe3OtgdVH3wHaQHAaF5HJASXe0e4/vN3BsIbnK9
+   ZNxcHyp8/eucanUl2bewyv3yOnkYcJj4X/gy6bgQhni5QWO8DLi5KJLQ/
+   w==;
+X-CSE-ConnectionGUID: Rg9+v9BFRVey2C7lw34VuQ==
+X-CSE-MsgGUID: 2lZptLmrSLOH0UT76MqrXw==
+X-IronPort-AV: E=Sophos;i="6.27,134,1787011200"; 
+   d="scan'208";a="29880503"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2026 08:24:26 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.51:4411]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.12.131:2525] with esmtp (Farcaster)
+ id 585c572d-5cd2-4dd5-95a8-6793cabf42c1; Thu, 1 Oct 2026 08:24:26 +0000 (UTC)
+X-Farcaster-Flow-ID: 585c572d-5cd2-4dd5-95a8-6793cabf42c1
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Thu, 1 Oct 2026 08:24:26 +0000
+Received: from dev-dsk-doebel-1a-7b355d76.us-east-1.amazon.com (10.169.119.5)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Thu, 1 Oct 2026 08:24:25 +0000
+From: Bjoern Doebel <doebel@amazon.de>
+To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+CC: Jan Kara <jack@suse.cz>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Bjoern Doebel <doebel@amazon.de>,
+	<stable@vger.kernel.org>
+Subject: [PATCH] selftests/filesystems: Fix idmapped_tmpfile layer dir ownership
+Date: Thu, 1 Oct 2026 08:24:11 +0000
+Message-ID: <20261001082411.1493072-1-doebel@amazon.de>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,61 +62,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D039UWB001.ant.amazon.com (10.13.138.119) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-nmi_uaccess_okay() takes no task argument and is a statement about
-current. When commit 6280cf718db0 ("bpf: Implement bpf_send_signal_task()
-kfunc") made the PF_KTHREAD/PF_EXITING and is_global_init() test the
-supplied task, nmi_uaccess_okay() was left testing current.
+The recent idmapped_tmpfile selftest creates a new directory in tmpfs
+owned by user ID 0. It then idmaps the mount as caller [0,10000) to disk
+[10000,20000). The original uid 0 owner does not exist in the mapped
+range. As a result, mapped_caller_creates_and_links fails at the
+O_TMPFILE open because inode_permission() rejects MAY_WRITE access:
 
-As a result bpf_send_signal_task() returns -EPERM whenever the
-calling context happens to be a kernel thread, regardless of which task
-the signal is aimed at. The same call with the same target succeeds or
-fails depending only on what the CPU was running:
+  idmapped_tmpfile.c:145:mapped_caller_creates_and_links:
+  Expected fd (-1) >= 0 (0)
 
-  bpf_send_signal_task() from tp_btf/workqueue_execute_start : -EPERM
-  bpf_send_signal_task() from tp_btf/sys_enter               : 0
+Chown the directory into the mapped range to satisfy the UID
+requirement.
 
-The check was carried over from bpf_probe_write_user() when
-bpf_send_signal() was added in commit 8b401f9ed244 ("bpf: implement
-bpf_send_signal() helper"). There it guards a user memory write, but
-bpf_send_signal_common() does no user memory access, so the check has
-nothing to guard here. It is also already a no-op outside x86.
-
-Remove it, and drop the part of the comment above it that described
-the memory access checks, as none remain.
-
-Fixes: 6280cf718db0 ("bpf: Implement bpf_send_signal_task() kfunc")
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20260819124324.43162-1-adi.sharma@zohomail.in/T/#u
-Signed-off-by: Aditya Sharma <adi.sharma@zohomail.in>
+Fixes: d943e68edc5cb ("selftests/filesystems: test O_TMPFILE creation on idmapped mounts")
+Cc: stable@vger.kernel.org # 7.2+
+Assisted-by: kiro:claude-opus-5
+Signed-off-by: Bjoern Doebel <doebel@amazon.de>
 ---
- kernel/trace/bpf_trace.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ tools/testing/selftests/filesystems/idmapped_tmpfile.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 195f78db9bda..f6e335a37a91 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -864,15 +864,12 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struc
- 		siginfo = &info;
- 	}
- 
--	/* Similar to bpf_probe_write_user, task needs to be
--	 * in a sound condition and kernel memory access be
--	 * permitted in order to send signal to the current
--	 * task.
+diff --git a/tools/testing/selftests/filesystems/idmapped_tmpfile.c b/tools/testing/selftests/filesystems/idmapped_tmpfile.c
+index bc411ab8281ea..77b96d0943578 100644
+--- a/tools/testing/selftests/filesystems/idmapped_tmpfile.c
++++ b/tools/testing/selftests/filesystems/idmapped_tmpfile.c
+@@ -91,6 +91,13 @@ FIXTURE_SETUP(idmapped_tmpfile)
+ 	ASSERT_EQ(mkdir(self->dir, 0777), 0);
+ 	/* World-writable so an unmapped caller still passes permission(). */
+ 	ASSERT_EQ(chmod(self->dir, 0777), 0);
 +	/*
-+	 * Similar to bpf_probe_write_user, task needs to be
-+	 * in a sound condition.
- 	 */
- 	if (unlikely(task->flags & (PF_KTHREAD | PF_EXITING)))
- 		return -EPERM;
--	if (unlikely(!nmi_uaccess_okay()))
--		return -EPERM;
- 	/* Task should not be pid=1 to avoid kernel panic. */
- 	if (unlikely(is_global_init(task)))
- 		return -EPERM;
++	 * The directory itself must be inside the range the mount maps.
++	 * Left owned by 0 it has no mapping in the mount, and
++	 * inode_permission() then fails MAY_WRITE via HAS_UNMAPPED_ID()
++	 * before any of the tmpfile logic is reached, regardless of mode.
++	 */
++	ASSERT_EQ(chown(self->dir, MAP_HOST, MAP_HOST), 0);
+ }
+ 
+ FIXTURE_TEARDOWN(idmapped_tmpfile)
 -- 
-2.34.1
+2.50.1
 
