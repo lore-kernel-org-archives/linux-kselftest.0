@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830B048F83C;
-	Thu,  1 Oct 2026 11:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE59477287;
+	Thu,  1 Oct 2026 12:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790855813; cv=none; b=THbxKh1JnZC/m7m3XoEzylGT18/Ft6pRH0BfNmfat5nWrweN7gnCa1FXVaWF7gyOyYxAtdTt5PafL00K0QiFGVdWV2th/zxWh6K/8TRSGDMXK6tzkEsSxlw5pHr+NDJ2ah1paHa/r0CUOuEFQkyOQxmz74/v0MKHSnEhzV8Sgdk=
+	t=1790856034; cv=none; b=qscZIWI7dk6Ewmjkoar4T+4b28NUWK959Bmr3SNYSaybhyTYPIHtC5ZWqKi8MNGx2Vea3ewH+NWv4vmrJNaCxmCyroE99iboz7OPCpOwVabJR0DOSqpoppXTNZov/CdZb0tJes2TbmYVgs9TOfTmwjr7W3Ms3XRnDptjDAHvldY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790855813; c=relaxed/simple;
-	bh=i5AK5q7H8Os1u4t21o1q7o5Ic6k9u1hhkZ2r7bXxq8A=;
+	s=arc-20240116; t=1790856034; c=relaxed/simple;
+	bh=qhgWGsY5p5k/DgjMbPrUF970emGIxq3CPhcU+xixPgA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WiE6acdooJjpMG2jkeOF7c/ggNnyMuCj0qmEzKG1ztaOUMX8DmJYuChHZbB7AkvIpPxybP7Yi74ae0dDemQfAAMeSKP/qIqFQ6iVjpjlZWvt4F62SbldMhC+bbstxySCw+tUVtxDfr/BLzBfry8RCUJv1D0Q059G6K76iCSRGlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hQAftGTL; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=LRvMtDGAhUL5KJfMOLvybUQWQiJlnvddREw5pjoFwyxLxQxW53jUm5Mi2iu30/PCPHi9hHfdSEx8GPr3rW6PJp0vPJ7ox6Y3lGv197qZorMDfX/y+outFPHHKYS/QMhYrzx3dVjJlCjR/XQlg1qs1cC9ez3B+e63gAa6fJqtRgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dEq1H6O6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hQAftGTL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809761F000FF;
-	Thu,  1 Oct 2026 11:56:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dEq1H6O6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC171F000FF;
+	Thu,  1 Oct 2026 12:00:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790855807;
-	bh=jwXy9Brx1hUXrdP0tPQxlxrwWDU3cUickTJZN9A11GI=;
+	s=k20260515; t=1790856030;
+	bh=QlLXNEoEhaxlpUOmNEGk0GST558WV4z35ATUA2llJZg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=hQAftGTLbbZEnlvN6gOGfsufrGBy/6rO7VByoEAaOs1HKczt8hsuH8jRk2kU5SHrE
-	 DzvsL1qqOl76GHK1bTG1v4A9JfoZhpWcAA2ZfdfWZOmLGUeD8wcRdC2Y8QK/RV/mcW
-	 BNAkXcmRWw1+Tfi/V1QQ4G/xB+PDZ9OrfUuMwVRM2WoTMbrUfYr+brkveboCmYUiBt
-	 g7bp4KdvSZxFyToaAEBTCE7hYR6S9s8Ec+ekHwL7X/eBPql9rogb1x4OpT13otBFc6
-	 Yi6JvwKVWHqqjTJZXI8FvSVzVdmp4UTUAwadkuq8AfmJiOqy22WNBff8HUgbU/gSqI
-	 3T2m/UNctXmTA==
-Message-ID: <7ee37eb7-49d0-4c29-93c5-552c908e2077@kernel.org>
-Date: Thu, 1 Oct 2026 13:56:39 +0200
+	b=dEq1H6O6x3KoA9AnzZqRIvzijzq08b3P6Io3AIK1goEzHYRIc0N6U91nJl/pQZihv
+	 HZ6h51UkqSm1/09N3J8KJSVRfK4ajDFr7KzFjbAB71sqnmSuo5WI0tjBjg5Rm7Mgl1
+	 Ba8aSeVPI1xFIimIPu/bRyHt4jv6OCI8zKvXbrDLZ/nr+Tkqklp3NZGp6c8K1/ZigB
+	 v+deWysGRSfyy5iWRA18rxKu++H6yZTacu+w9w8ra7LAvi9SioyT3nh/9UcLnvxx0+
+	 Kt+vEfg42NFy0I7XZwC6/lo6gnzD3rw8Pmi51L7QWPVmmoIsjy9vDez8SSnkzrf44Y
+	 19/gVHtZZVDsQ==
+Message-ID: <b45813af-df08-4270-93ac-d99ee42830ec@kernel.org>
+Date: Thu, 1 Oct 2026 14:00:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND 7/9] selftests/mm: mremap_test: remove perf tests
- and timing
+Subject: Re: [PATCH RESEND 6/9] selftests/mm: mremap_test: replace random data
+ with deterministic pattern
 To: Sarthak Sharma <sarthak.sharma@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>
 Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
@@ -48,7 +48,7 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
  <ts930@dgu.ac.kr>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260924050009.19974-1-sarthak.sharma@arm.com>
- <20260924050009.19974-8-sarthak.sharma@arm.com>
+ <20260924050009.19974-7-sarthak.sharma@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -95,29 +95,27 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260924050009.19974-8-sarthak.sharma@arm.com>
+In-Reply-To: <20260924050009.19974-7-sarthak.sharma@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 9/24/26 07:00, Sarthak Sharma wrote:
-> mremap_test contains three perf tests that report the time
-> taken to move 1GB mappings with different page table level
-> alignments. Although they validate the remapped data,
-> their main purpose it to report timing information. The
-> recorded time also does not affect the test result. Also,
-> they are skipped with the default validation threshold.
+> mremap_test uses a random data stream to detect corruption after remap
+> operations. This requires seed handling and byte by byte validation,
+> which is inefficient.
 > 
-> Remove these tests and the timing infrastructure from
-> mremap_test.c. The regular tests continue to cover PUD
-> and PMD aligned remaps.
+> Replace it with a deterministic pattern where every word in a page
+> contains its one-based page index. Use memcpy() and memcmp() to
+> initialize and validate the mappings. Remove the pattern seed and
+> its command line option. Also update the comment diagrams to
+> reflect the new deterministic pattern.
 > 
 > Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
 > Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
 > ---
 
-Thanks!
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+How will this patch change with the change in threshold handling? Does it make
+sense to reshuffle the patches?
 
 -- 
 Cheers,
