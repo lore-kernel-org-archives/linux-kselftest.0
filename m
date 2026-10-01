@@ -1,331 +1,223 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D65449B01;
-	Thu,  1 Oct 2026 13:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790862734; cv=none; b=DbFKZGnFqJOSY9D4R0QH3U/kYCUxLZGpJKA89ismj9XY2H+Zq64bbVO744SSzz3+pf5eLoiZFpwOB+32OpQb7cwlXlvIulxQNBtL35HsDziboPPxg/sLgYrcQqXgGKimGjjbnsX1zLusZBtSLaRYmQ6ft01wydwXTiU5GsW/IjM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790862734; c=relaxed/simple;
-	bh=BFYsSQEEDW9ivKme2GW+ybv9NgRrwNxqnlj2UvnfFOY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MimD4An8XhbFqvXIDS0SKS8Tfnj9KAbTrA7QiimW/QUhTmFMKHMf4ZUblepAYm8lJpECYZ5VcGxXOJZ0h12XFHTQyjpgc/xWq6aW3DnbL+bY5uUFhy8q1v6Dje613eXIVaJ9ALIgbnWzOWg9iy1sma+AiZ1EQ5JNiEqJvIoff4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=avLvr1eT; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012068.outbound.protection.outlook.com [52.101.43.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C4237A831;
+	Thu,  1 Oct 2026 13:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790862922; cv=fail; b=SexG5eRuuxXNXXtgHM0B3MIFuPrE8wA94jW1hcMoyySKBiTW1lqL4wX+rHVwCjh5NVys43uMg3yvpEyC8VWd8QYvBQ4lGACIHlnSPh+36RuaWD9AnSp6H6l/a/cynRk41MivBT0R0eVxEOco/xYULZm9MjHmKQ5vaflsstKFeZA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790862922; c=relaxed/simple;
+	bh=OTwX3E4lPyMNwQeDfn2T0hskA/1x2RSI41STJRof5qw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=L69p1dgVjG6HVu3LzhkQ3KnwOYRP9Lkrj+v0Ep7G8NM4pyxEsbkWcRIv3HUGR+DlazEy+st5HGXgjDAN8n9ndoBdq7d7+hVRqYn8XTZqcaFyUKKC5yAMg+NbWHDqyIVPASosC516eLqIi0z0JhosRF/JiOQe1zyK5dQOJU/nGpA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=q6H+LFhc; arc=fail smtp.client-ip=52.101.43.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="avLvr1eT"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97F87497;
-	Thu,  1 Oct 2026 06:52:07 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 572643F86F;
-	Thu,  1 Oct 2026 06:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790862731; bh=BFYsSQEEDW9ivKme2GW+ybv9NgRrwNxqnlj2UvnfFOY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=avLvr1eTGOHRMC4ainKq32M1Rv9qJhzcdp8ui1a6bT05iOwUQqOjMwV6ahWU8ss3M
-	 jdv6uqw6vGM52rUj4rOlVEcanprQmJ311rJcSCmQcbBoyOGAeEvbbSnKj2j+zpn10K
-	 uKUcHHRSK8QicsnORjwxzMBcM3eo2FWE3bVkDB3I=
-Date: Thu, 1 Oct 2026 14:52:06 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 3/4] kselftest: mm: integrate huge page checks
-Message-ID: <ar5lhhdKlK6NwX19@e129823.arm.com>
-References: <20260924-fix_split-v8-0-cba7359d882a@arm.com>
- <20260924-fix_split-v8-3-cba7359d882a@arm.com>
- <16f16e77-05ab-418e-ad06-8f48fb29375a@kernel.org>
- <aruMgm8UZ_t2V_wh@e129823.arm.com>
- <3e03425b-7962-4c69-93aa-96168fd7168e@kernel.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="q6H+LFhc"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pD0HYF6Sr0nejyw7mtmCzmrRQeUzSzEbEnAohA8aqNvmuqA9dMFmOoIcY0YePmTpx9wNF4s/8mHybhWDmk0Z8BEwmC7oiES6dCj+buHF4lQsJE65SINQxIVvMYcEuk/swD8P7vzLldC2KniAdRhC7UUpkLYxQEqrhGpOJqaIhfNRzCHJfgn2l9rmtEIJ6CAyrmDw98Z0Waq5l+FWYOJ+iktShzq6zBjeWDm40G3lt7GTGP8k/9Ilo50TmTfsWUqANJFpxJNQd0wt8AVX33Qhi+Y5cWeVZhQ+EFb7Ft24qKi+mILZKPwI/2o2UK6QXMkCHmLA/hGz7crg7e5y9/eMag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3siXg0IhTY//Sutc/x/nP5WRti7EKsOTdiA3nQA1VbQ=;
+ b=jKbTTWYpWuYnbjGf+vRxU/ZCwcbo1stR1hezElhp/maDScnA4YKBDdwJzskzg9uv/F4BKV9oCiIvCmW8+I+xl+rhaMVl9lYrpNF5RsxK3KcT/pl11pzh8vO2d6YOZPNXYvM+8HcI3bnSWdsnA/v5pt97Ms1hnfHU3UFrZkvjf89fQ2g2oXm5BceRfwvwGrIlpqOpGAy1ZtsDsz66AIszheEVWdbHxTMfu74tx8/xfdwp9CJlwWAuU4JBt6nLolOK1vH52Qe+2p4UrshFl9a/rSKyWrCPItM9TUgZPV3KKComtfmdl7rssLPaNJX6N79cd71c73iHPUaUxjV5WvQnPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3siXg0IhTY//Sutc/x/nP5WRti7EKsOTdiA3nQA1VbQ=;
+ b=q6H+LFhcoUMnNa1FMxW/1RkyWTd0onQaLk2MgVX57Z8PWTPUBKHVACro44ykXAfAK8LxfJHi8P8G7eiZlibuPh6Co3aCTcJCQgZ+fEQjmvawxyl37vwHIVBfISoJauUDG0/yNHXmEfXbh9it2daPGiKMaqVcq3zZa8gw+wgEp8y3mH3Ku+Vz5Tlpjmj5F9iMNDlyRwXOiDlyMNUDTKq3E3sbkIlwhi4vvnXo0Xapcc87Nx8A1gJV9wzJwIKOhajNryaa0yC5h7QqtS9jjnWjCFFi/vXsl0XdzhfFhaY7kRtcksGQsK4XDfmrH+I1e6FIAAK2sFVLxdIKq9Ptlsm9vA==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH0PR12MB7957.namprd12.prod.outlook.com (2603:10b6:510:281::22)
+ by PH7PR12MB7307.namprd12.prod.outlook.com (2603:10b6:510:20b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.24; Thu, 1 Oct
+ 2026 13:55:13 +0000
+Received: from PH0PR12MB7957.namprd12.prod.outlook.com
+ ([fe80::9251:acc2:cc63:3499]) by PH0PR12MB7957.namprd12.prod.outlook.com
+ ([fe80::9251:acc2:cc63:3499%3]) with mapi id 15.21.0451.026; Thu, 1 Oct 2026
+ 13:55:12 +0000
+Date: Thu, 1 Oct 2026 16:55:01 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: netdev-bot+sashiko@kernel.org, hangbin.liu@linux.dev
+Cc: hangbin.liu@linux.dev, dsahern@kernel.org, davem@davemloft.net,
+	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, shuah@kernel.org, idosch@mellanox.com,
+	dsahern@gmail.com, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	liuhangbin@kylinos.cn
+Subject: Re: [PATCH net] selftests: fib_tests: use per-test return value in
+ subtests
+Message-ID: <20261001135501.GA1567272@shredder>
+References: <20260929-self_fib_tests-v1-1-0eab6a3c3a3c@kylinos.cn>
+ <179083069319.434549.6042480426596220206@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179083069319.434549.6042480426596220206@kernel.org>
+X-ClientProxiedBy: TL0P290CA0005.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:5::16) To PH0PR12MB7957.namprd12.prod.outlook.com
+ (2603:10b6:510:281::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e03425b-7962-4c69-93aa-96168fd7168e@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR12MB7957:EE_|PH7PR12MB7307:EE_
+X-MS-Office365-Filtering-Correlation-Id: 365be658-ccbe-42ec-359f-08df1fc39d0c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|1800799024|23010399003|376014|366016|6133799003|22082099003|18002099003|10067099003|4143699003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	CzD7LfAFQWOrAUvPk5SXT5t++BgJaQigenYEDyfxNeM2mZOyRWo0HrxituC58Hc/u5cFwzrW9Bj5ds37rLJ0y7g61Vs1oXF12GFL56qfbBEXQFgnwcO3uTrP1ox9APLipwEPyrUI5Bm7kFnhSe2em5VBUZqxWun8QXhRKrKkzEBb3lLo9e+v64ZUWmeyyF1tqnwuy3CE42v0nvowiAL1GrX+1PNPy7VmKtLg5gAK2EmKHUzq1ZbVqlq4M1VI7vnUE1Zh1SfCvWvzzkzZrguxn/anRzk/Prd+dtMb3mcUBZ/E91sEMcGLjRB+QeXj7NrOKIkjzlSg6TT1mKjbUJESr58JRr44XdQKa5v6sAOmU7/5thK8NBNxC3neD7YhU6sZr0BMCf6SsnHBPc9ieqU07y31Qw+jWQKK2OzjdHk7LwBnHnOvLZDNvuMGiLoje7USFKou68YPbWmT9Sm5/2lCFIHBfTHek/oobDNSKwLy8vCg/kCfsi+0fgRRMKYMeuIs1oryg8HyL7JwHrR1ZYlNYIFSIBov7R+/zTxxSZZNcjCLDyPmA4c+zHkUU4ndZG5RT6aO3cwy5pYjkWPp00sJhO5x9Iel8LLdggJJGOl/+yiJNdeYJwdFeZRcdrJz8PRdl5QhhaBUHKHgRtuteDeokQ/mlOQG6LcY3MPuauPuMd4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB7957.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(23010399003)(376014)(366016)(6133799003)(22082099003)(18002099003)(10067099003)(4143699003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?R09MYmFqZ3diOVliWStZOVRqWk1jS0xHa0F5ZFpxcGVHb0lrUS9qYm56c2U0?=
+ =?utf-8?B?ckliWXQwb01JNUhWKzJCZlVmbzVHaWxmanZtR1h3YUFJQUQ1RTRCUlZjMHlX?=
+ =?utf-8?B?Z2IrSjRmZFFMOEhqeWw5QUlHR0c3UEVLbkQvNlhacGR2cDJsOXNKZlFIM2lu?=
+ =?utf-8?B?THVYVDRmY2k5SlF0WEVrb2dTZjdJaVZzQVNuMldkdUg1OEdIYnlOWEhZQmdU?=
+ =?utf-8?B?QUNNekxBOXFRTDgxQUI4SkJ6eEZ4SHc2aWVQMGt5UGtzU01qcGRNZ3VIcmk2?=
+ =?utf-8?B?YUV3YjFWajdwWXpPU0xIak9nWkk1TktpbnBSTXN3bXY2ck5YR1lxVWxjU2xl?=
+ =?utf-8?B?cktmMXVta2FHbFJSUUxWbmo2SlBIU0tuaFd0cTlLS2wwT2JtcHdILzh2dCtE?=
+ =?utf-8?B?NkhhL1FHREdPRXp2VWw2azh2WkhYTkpOU3p6M2NrQ21NQkZjVnRIWkVCNlVT?=
+ =?utf-8?B?elhla0puMk9yVHE4VXQ4L2k0SUw0cjRNVVZVQW03YVp1Rkp5K3JMZldNUGY5?=
+ =?utf-8?B?anVuUWxZOUcyMWQ1cXpIYnY2d2dyaGhXVzVVVHZiL0dzZnUvd3FjbGN4Szhi?=
+ =?utf-8?B?aEEwRHo1T2VlNkxSdnZ5Qkl0NDZGdWdNMEFwVkg0YnV4YWFWNUM2UE1SR1I0?=
+ =?utf-8?B?VHV1R2NDSWdiYTFPRmZIZVRDcWFWYlJWQWNZK3NvVGl0ODdpVisybjU2MHdo?=
+ =?utf-8?B?VW1STisydTRESGpPMUN2VEJtbnc0T08wQ3BhOUM5eDAybjUzaVorckgrampJ?=
+ =?utf-8?B?VE84SDNNTlkvL000L0tmUFFOMHc5WWdlMlFuT1hpNGgyejcySUFnYzZUYVBX?=
+ =?utf-8?B?aXN5eWx1NDFiclA2djkvZ2dZTDQ2OFNCcFZxN2p1NEc5YXlOd2RTRjRhbEdP?=
+ =?utf-8?B?RmIvUHN2OTdKRVdQSDFJWldjQjM1QW1xVkxON2l5Wkt0aEIwaXBlUVcwWlVY?=
+ =?utf-8?B?ZityY08xK0gxc3Q4OTlvVkl5TkVNckdKSTBOdFdueEpVTFBIU0pMK0xBYUc2?=
+ =?utf-8?B?Rm5laTdqeWpRS3JZZEl4bCsxb2JVSHJyZVdFSFgyenZPYVl0WkZoZkFWb0RV?=
+ =?utf-8?B?RWJLQzd1aXMrVWlsVkJKalVOdXVKdmZkME1rWEhxQTZvOHplSTZoWXJSeHVH?=
+ =?utf-8?B?YThkaHF0N2twemJaVnZMQXZ5RmZRWXYwRHZsM1BISlBuSzhnMFpMaFc3c29J?=
+ =?utf-8?B?QS9PRUdVUjluRGNNQWVDejVpL3ZUMWJnUExIeVZPS21BVGdETDZaOTFUYjRN?=
+ =?utf-8?B?MG12S3RXN0ZOZng1ckZMemJLNFlIK0ZDUjdiN0phSEpudTIxK1ZrdUdiMGlt?=
+ =?utf-8?B?S0d6c0xONWZMV0JtNDk2T2wxZWt5Yk95RDdqYnovTDBPbkp0MTJQbEFBT3NN?=
+ =?utf-8?B?K2kwZ1JKeDNGL0JtVURhSnZjL0JVVzNBVFprbHdEd3lGemRoTm41eXZjb0gv?=
+ =?utf-8?B?UEhMK3BiQ0ttc0YwajhHTXBxNWVwcis2Z2oyQWNFM1J3Z2Jzd21FR0Z5V28r?=
+ =?utf-8?B?cS9hOURBalVIb3MvRnBSUi90Y1JjWUVsZlc0VDduOUkvL2J1SWxBLzZCSGV4?=
+ =?utf-8?B?Qjg1WEJNcWI2RGpST1RYdnQrcUxoY05BeUxxSUNQaXVGeHRsQmx4Y0xrWHJT?=
+ =?utf-8?B?SWF2cDN4eTJvSWtCS1drL09XR1pvOVBURXFPak5BUGdqR05XRUFVcUl2bU81?=
+ =?utf-8?B?UjZLbXRLZmt3UHBFamtNdTdMbm9MR0E0ck9YVHplNkh5c3U1VDVnNVk4Uzg2?=
+ =?utf-8?B?T3c0ODZJaEt0a3FGZ1ZGN3JlK2s3ZFd0b2IxNFMrOUVZUGg5T0d6aU0rYVpy?=
+ =?utf-8?B?dStaZVppNGRGUUhKTCt4cEZSZ1Z0RmlBUHo1MndLWXBZOG9peFhRcGNrd0Ur?=
+ =?utf-8?B?N3hDejFRQzNDNmhudTZzeCtycnJKVDNtTTZQQkt5bDh3S2JoZTFKOStSOUZ0?=
+ =?utf-8?B?TTBJQU94QXJESXNiakxybU1sRS82QUhSUXEvQVc1V3BXUHhJRFJITTRacURq?=
+ =?utf-8?B?TUZFcERNZVpoMWcxajJrT3lIM1ZmZnVadmsvblZTUUkvZS9Nb1pyazQwODli?=
+ =?utf-8?B?c1BNajBQZzFjNDc2Y3BCOUYwaWVuSFRhRUR4eHc3aStsRW9YTHJXQXprV1B1?=
+ =?utf-8?B?VE9DajEyVUtWZ1lTSnJ6di8wOWRWbjhiYjlFQVRnTGEvbldtdXpMWlY4M3ZP?=
+ =?utf-8?B?TzVPNExVVkdJa1JkZGt6Tnk4dTB4TVhsdHBFZFNPb09wVElMaXk1NzUydU9l?=
+ =?utf-8?B?TU96L1pOR3BuMFZiK1RaalRtNEdkbWVFSHBjNU5UKzlLeDhESWxjS1E3WGRC?=
+ =?utf-8?B?VFZ4a21seDlTdW81NmlBRTl4dURMUXdiQytqTjVNM1MvcHRyMXYrdz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 365be658-ccbe-42ec-359f-08df1fc39d0c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB7957.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Oct 2026 13:55:12.4646
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2aw2P6aICvHKwu1zrnIoc9o2XWMdk1HmOVKZeejirQLeSh5rzbPoZYrc9R37JFWRVD2WXLdQS8n8sdGJu/9pIw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7307
 
-> On 9/29/26 12:01, Yeoreum Yun wrote:
-> > On Tue, Sep 29, 2026 at 10:07:37AM +0200, David Hildenbrand (Arm) wrote:
-> >> On 9/24/26 21:11, Yeoreum Yun wrote:
-> >>> check_large_folios() only checks for large folios without distinguishing
-> >>> between anonymous and file-backed huge pages.
-> >>>
-> >>> To add huge page type checking, integrate the huge page checks into
-> >>> __check_huge():
-> >>>
-> >>>   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of using
-> >>>      check_large_folios(), since only the mapping type matters. This
-> >>>      identifies PMD-mapped huge pages.
-> >>>
-> >>>   2. Otherwise, use check_large_folios() to detect large folios. This
-> >>>      covers mTHP cases.
-> >>>
-> >>>   3. Check the folio flags according to the huge page type.
-> >>>
-> >>> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> >>> Suggested-by: Zi Yan <ziy@nvidia.com>
-> >>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> >>> ---
-> >>
-> >> Instead of merging both things (detecting mapping vs. detecting anon vs. file),
-> >> could we simply perform the anon vs. file change separately?
-> >>
-> >> Doing another pagemap walk that focuses on that should end up with something
-> >> that is easier to read.
-> > 
-> > Okay. I'll change like below in next-spin:
-> > 
-> > -------&<-------
-> > 
-> > @@ -411,57 +400,78 @@ static bool check_huge_type(uint64_t categories, enum check_huge_type type)
-> >         return false;
-> >  }
-> > 
-> > -static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
-> > -                 uint64_t hpage_size, enum check_huge_type type)
-> > +static bool __check_huge(void *addr, size_t len, int nr_hpages,
-> > +               uint64_t hpage_size, enum check_huge_type type)
-> >  {
-> >  {
-> > -       int pagemap_fd;
-> > +       bool ret = false;
-> > +       int pagemap_fd, kpageflags_fd;
-> >         int nr_pmd_mappings = 0;
-> > +       uint64_t pmd_pagesize, scan_mapping_size;
-> >         uint64_t categories;
-> > +       unsigned long pfn;
-> > +       bool check_pmd_mapping, allow_nonpresent;
-> >         char *start = addr;
-> >         char *end = start + len;
-> > 
-> > +       pmd_pagesize = read_pmd_pagesize();
-> > +       if (!pmd_pagesize)
-> > +               ksft_exit_fail_msg("reading PMD pagesize failed\n");
-> > +
-> > +       check_pmd_mapping = hpage_size == pmd_pagesize;
-> > +       scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
-> > +       /* Some mTHP tests check a partially populated PMD-sized range. */
-> > +       allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
-> > +
-> >         pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> >         if (pagemap_fd < 0)
-> >                 ksft_exit_fail_perror("open pagemap");
-> > 
-> > -       for (; start < end; start += hpage_size) {
-> > +       kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-> > +       if (kpageflags_fd < 0)
-> > +               ksft_exit_fail_perror("open kpageflags");
-> > +
-> > +       for (; start < end; start += scan_mapping_size) {
-> >                 categories = pagemap_scan_get_categories(pagemap_fd, start);
-> > -               if (!(categories & PAGE_IS_HUGE))
-> > +               pfn = pagemap_get_pfn(pagemap_fd, start);
-> > +               if (pfn == -1UL) {
-> > +                       if (!allow_nonpresent)
-> > +                               goto out;
-> >                         continue;
-> > -               if (check_huge_type(categories, type))
-> > +               }
-> > +               if (!check_huge_type(categories, type))
-> > +                       goto out;
-> > +       }
-> > +
-> > +       if (!check_pmd_mapping) {
-> > +               ret = check_large_folios(pagemap_fd, kpageflags_fd,
-> > +                               addr, len, nr_hpages, hpage_size);
-> > +               goto out;
-> > +       }
-> > +
-> > +       for (start = addr; start < end; start += scan_mapping_size) {
-> > +               categories = pagemap_scan_get_categories(pagemap_fd, start);
-> > +               if (categories & PAGE_IS_HUGE)
-> >                         nr_pmd_mappings++;
-> >         }
-> > -       close(pagemap_fd);
-> > 
-> > -       return nr_hpages == nr_pmd_mappings;
-> > +       if (nr_pmd_mappings != nr_hpages)
-> > +               goto out;
-> > +       ret = true;
-> > +
-> > +out:
-> > +       close(pagemap_fd);
-> > +       close(kpageflags_fd);
-> > +       return ret;
-> >  }
-> > 
+On Thu, Oct 01, 2026 at 04:58:13AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
 > 
-> I'd leave existing __check_huge() mostly alone, and instead have an additional
-> function that checks the type.
+> Critical: 0 · High: 0 · Medium: 1 · Low: 0
 > 
-> Essentially a __check_type() or sth that we run after the large folio / pmd check.
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] In tools/testing/selftests/net/fib_tests.sh, the patch
+>   converts check_rt_num() from `ret` to `RET`, but the helper still sets…
+> 
+> --
+> 
+> selftests: fib_tests: use per-test return value in subtests
+> 
+> This commit changes fib_tests.sh to use RET, as defined in lib.sh, for the
+> per-test return value. The global exit code ret is now only set in
+> log_test(), so a later subtest can no longer clear an earlier failure.
+> 
+> Closes: https://lore.kernel.org/all/178961184152.22033.9267194009793243294@kernel.org
+> 
+> > diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+> > index b338bfb196a27..9ce5623b049c1 100755
+> > --- a/tools/testing/selftests/net/fib_tests.sh
+> > +++ b/tools/testing/selftests/net/fib_tests.sh
+> 
+> [ ... ]
+> 
+> > @@ -763,9 +763,9 @@ check_rt_num()
+> >  
+> >      if [ $num -ne $expected ]; then
+> >  	echo "FAIL: Expected $expected routes, got $num"
+> > -	ret=1
+> > +	RET=1
+> >      else
+> > -	ret=0
+> > +	RET=0
+> >      fi
+> >  }
+> 
+> [Severity: Medium]
+> check_rt_num() still sets RET=0 when a check passes. Can a later passing
+> check_rt_num() in the same subtest hide an earlier failure?
+> 
+> lib.sh describes RET as "Per-test return value. Clear at the beginning of
+> each test." Its helpers only ever raise it. For example,
+> ret_set_ksft_status() does:
+> 
+> 	RET=$(ksft_status_merge $RET $ksft_status)
+> 
+> Several subtests call check_rt_num() more than once before a single
+> log_test. For example, fib6_ra_to_static() does:
+> 
+> 	check_rt_num 1 $($IP -6 route list |grep expires|wc -l)
+> 	...
+> 	check_rt_num 1 $($IP -6 route list |grep expires|wc -l)
+> 	...
+> 	check_rt_num 2 $($IP -6 route list |grep expires|wc -l)
+> 
+> 	log_test "$RET" 0 "ipv6 promote RA route to static"
+> 
+> Say the on-link route still has an expiry after the static address is
+> added. The first check prints "FAIL: Expected 1 routes, got 2". If the
+> last check then passes, it resets RET to 0. log_test() prints [ OK ],
+> nfail is not incremented, the global ret stays 0, and the script exits
+> with 0.
+> 
+> The same pattern shows up in two more places:
+> 
+> - In fib6_gc_test(), for "promote to permanent routes": three check_rt_num
+>   calls run before the final "check_rt_num 0" on route list cache.
+> 
+> - In fib6_ra_to_static(), for "RA route with nexthop do not merge into
+>   ECMP with static": the "2001:12::/64 via" check is followed by the
+>   "nexthop via" check.
+> 
+> This looks like the same symptom the commit message describes, only
+> inside a single subtest. Could check_rt_num() set RET=1 only on failure,
+> with RET=0 cleared at the start of each logged subtest?
 
-So, You mean like this?
+This is a pre-existing issue and should be handled by a separate patch.
+This patch merely renames the variable.
 
--------&<-------
-
--enum check_huge_type {
--       CHECK_HUGE_ANON,
--       CHECK_HUGE_FILE,
-+enum check_type {
-+       CHECK_TYPE_ANON,
-+       CHECK_TYPE_FILE,
- };
-
--static bool check_huge_type(uint64_t categories, enum check_huge_type type)
-+static bool __check_type(void *addr, size_t len, uint64_t page_size,
-+               bool allow_nonpresent, enum check_type type)
- {
--       const bool file = categories & PAGE_IS_FILE;
-+       bool ret = false;
-+       int pagemap_fd, kpageflags_fd;
-+       char *start = addr;
-+       char *end = start + len;
-+       uint64_t categories;
-+       unsigned long pfn;
-+
-+       pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-+       if (pagemap_fd < 0)
-+               ksft_exit_fail_perror("open pagemap");
-+
-+       kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-+       if (kpageflags_fd < 0)
-+               ksft_exit_fail_perror("open kpageflags");
-
--       switch (type) {
--       case CHECK_HUGE_ANON:
--               return !file;
--       case CHECK_HUGE_FILE:
--               return file;
-+       for (; start < end; start += page_size) {
-+               categories = pagemap_scan_get_categories(pagemap_fd, start);
-+               pfn = pagemap_get_pfn(pagemap_fd, start);
-+               if (pfn == -1UL) {
-+                       if (!allow_nonpresent)
-+                               goto out;
-+                       continue;
-+               }
-+
-+               if ((type == CHECK_TYPE_FILE) != !!(categories & PAGE_IS_FILE))
-+                       goto out;
-        }
-
--       return false;
-+       ret = true;
-+
-+out:
-+       close(kpageflags_fd);
-+       close(pagemap_fd);
-+       return ret;
- }
-
--static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
--                 uint64_t hpage_size, enum check_huge_type type)
-+static bool __check_huge(void *addr, size_t len, int nr_hpages,
-+               uint64_t hpage_size)
- {
-+       bool ret = false;
-        int pagemap_fd;
-        int nr_pmd_mappings = 0;
-+       uint64_t pmd_pagesize;
-        uint64_t categories;
-        char *start = addr;
-        char *end = start + len;
-
-+       pmd_pagesize = read_pmd_pagesize();
-+       if (!pmd_pagesize)
-+               ksft_exit_fail_msg("reading PMD pagesize failed\n");
-+
-        pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-        if (pagemap_fd < 0)
-                ksft_exit_fail_perror("open pagemap");
-
--       for (; start < end; start += hpage_size) {
-+       if (hpage_size != pmd_pagesize) {
-+               ret = check_large_folios(addr, len, nr_hpages, hpage_size);
-+               goto out;
-+       }
-+
-+       for (start = addr; start < end; start += hpage_size) {
-                categories = pagemap_scan_get_categories(pagemap_fd, start);
--               if (!(categories & PAGE_IS_HUGE))
--                       continue;
--               if (check_huge_type(categories, type))
-+               if (categories & PAGE_IS_HUGE)
-                        nr_pmd_mappings++;
-        }
--       close(pagemap_fd);
-
--       return nr_hpages == nr_pmd_mappings;
-+       if (nr_pmd_mappings != nr_hpages)
-+               goto out;
-+
-+       ret = true;
-+
-+out:
-+       close(pagemap_fd);
-+       return ret;
- }
-
- bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- {
--       uint64_t pmd_pagesize = read_pmd_pagesize();
--
--       if (!pmd_pagesize)
--               ksft_exit_fail_msg("reading PMD pagesize failed\n");
-+       /* Some mTHP tests check a partially populated PMD-sized range. */
-+       const bool allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
-+       const uint64_t scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
-
--       if (hpage_size == pmd_pagesize)
--               return __check_pmd_huge(addr, len, nr_hpages, hpage_size,
--                                       CHECK_HUGE_ANON);
-+       if (! __check_huge(addr, len, nr_hpages, hpage_size))
-+               return false;
-
--       return check_large_folios(addr, len, nr_hpages, hpage_size);
-+       return __check_type(addr, len, scan_mapping_size, allow_nonpresent,
-+                       CHECK_TYPE_ANON);
- }
-
- bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- {
--       uint64_t pmd_pagesize = read_pmd_pagesize();
-+       /* Some mTHP tests check a partially populated PMD-sized range. */
-+       const bool allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
-+       const uint64_t scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
-
--       if (!pmd_pagesize)
--               ksft_exit_fail_msg("reading PMD pagesize failed\n");
--
--       if (hpage_size == pmd_pagesize)
--               return __check_pmd_huge(addr, len, nr_hpages, hpage_size,
--                                       CHECK_HUGE_FILE);
-+       if (! __check_huge(addr, len, nr_hpages, hpage_size))
-+               return false;
-
--       return check_large_folios(addr, len, nr_hpages, hpage_size);
-+       return __check_type(addr, len, scan_mapping_size, allow_nonpresent,
-+                       CHECK_TYPE_FILE);
- }
-
--- 
-Sincerely,
-Yeoreum Yun
+Hangbin, can you follow up on this?
