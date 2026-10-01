@@ -1,132 +1,96 @@
-Received: from mail-oo2-f35.google.com (mail-oo2-f35.google.com [74.125.231.163])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47683C585C
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 17:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48852515983;
+	Thu,  1 Oct 2026 17:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790874911; cv=none; b=P+2uIyltSJzIZ4JC5BlWcz6QBKsMfpo/UvW1HY4I3sOP3TMShZeI2JtmKuE8eug720FHoYUVCBDyfc+jBS1FGC4WEgQCrDgY5CX2USZV2IcnjmXlL3yoU5wAOL/ee51+JHGP7DNEnMOiEoICx7rniQBkkXOC/QhD9udx8RFI2Og=
+	t=1790875684; cv=none; b=LrPZF0m0DJnUb+ZvaZUDmdVwCBEMyrg1iHhXDiDbOiGlRYCA0tkTE9AqSqDzSHgjfLd9NkadsUC/Qx2iszhALXcxKcY0R1zS9Jw/tRAbCe2JaEI1Gwvvxfzxn1/tpXhRJqtaWcJ6CaB2sE4VvsVc5mPpzm4+7PsEd7kgAcDPW4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790874911; c=relaxed/simple;
-	bh=a7oq1MIgLZQaYmPsWc/dtcP0sMS+eH9o/8iLzIQIc/M=;
+	s=arc-20240116; t=1790875684; c=relaxed/simple;
+	bh=2WHrAWI44umCgo5dA1afQgqYa6TJwqxBCWXf73OqFms=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lw2rwhAh62lklFx78jCARNjih0fyUOywM+93elPh1grxOOjuan2LjCMezYA1v9PmDfTW1Bl7ELNMeUp0IKdwFBZoXcE7YOxqGORTf8KdbJRrhHu7vx+Priotyy3oHt9W+jxPgZ+EScMDy4Htbbenm63tbc7+mLLRa4XZ8y0abM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=LiMyoth8; arc=none smtp.client-ip=74.125.231.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	 Content-Type:Content-Disposition:In-Reply-To; b=J7DU6J68Vz47BX5lVuHhXQowhVee6LG0e5qEbrnZuwuFpBjzS6cmjqcjFfHrpRsouadzHNN0PAjPNQWGXfnvGeJSiNPTatpf7fxbjqm4eD9DTBGwrLdbUoeoAwmrJ0eJgw9sz49XgeitpI0CdpXBSvDViau9Gou6K56mQcBq71Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAb0Gw1r; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="LiMyoth8"
-Received: by mail-oo2-f35.google.com with SMTP id 006d021491bc7-6dd4abbdd97so385951eaf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 10:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1790874903; x=1791479703; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=t/6p+zYx/lSA8o0kTLIaLNlPefSKg05wX6rF51KJFNw=;
-        b=LiMyoth8etbND3MNQwHkSEaJ+HRDwN2uwRaewq7vz7DMUR87ukAlz/idYFO+9P6q+F
-         praczIlNXVUo7jpkHmQrcQSqHqJd30JN6mwusqmR5YmITRuzCwAY1SH2MAA3lHTAxxHo
-         faGoT3BQxCP6RyuF8r8RHTRZIN1Ph/QB1SVB05+al/6VVF3S276Y/hxw1gLp+1oFhFCs
-         lmZ+9tOAyzFeR6sKKWseaDtFdWeWBhVmsqFNOHFVT+ePvsahskBDp+eAee0YutmzEMYi
-         lXWUnFYXBSu+OFBL88bdW+EF4UaSB6nQY5vV3JPLiXRtYb8F4eCw0g5h62Cc3OhIQKcW
-         5wkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790874903; x=1791479703;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=t/6p+zYx/lSA8o0kTLIaLNlPefSKg05wX6rF51KJFNw=;
-        b=ZQ/OgRnOfg0FBHgIXZldr9wJTcXuHhUCoJr5HlJsa3IFBdvTlp+0H0YcytOAuBPrtL
-         5q8isOY8AAa7afKzOzeJBzGgcGdOIv3bPmY/0hUW+mhU5Y7Dwn+SltoSHtR19hDCLvJ6
-         Pyer/yT6X0EydVKiZo+JBd2vLujQBb7RjVCN/H00BfZ19pvoRRvfVWV2w5asuUdj+Vv1
-         pBcR/nsSCDKztllaeUTghJNaO7C0czH7FnYNUNDR2pmWOKuEZezNkuXhvH20Z02AXZ39
-         6i38sK18oPacYb4VbtMrruOm8YL9yQWijiBWA/Y7Fe9zdOaYw4XjGhgpG4kktrxmNlYb
-         tQMw==
-X-Forwarded-Encrypted: i=1; AKwUvBz6C3IWCfo0IvzlVknjaq5tifJrN9913MP4dRWMbd4FNPJcs5HA5tskPfp4OJjwKX2eDFg6F6JnbLLRHLx6kV4=@vger.kernel.org
-X-Gm-Message-State: AFuF++lpersyqfcJ7oBPTEAZ+1l7uvUSjGqDD0FCWYIFelsGZvyETUPw
-	PvCIt44Y4okxDVrtTAEj9C8GdzBszcQu6OQewOvlyY7jF+NcphqSZalu/0Smf7DXSYs=
-X-Gm-Gg: AYBFou27LA6b4J0hEWNe+WT3DFYvrhLAnTvWINJX12xZJ7VuiDxu1vJ+fes0/tlKQVx
-	/5DjDzM0+0s+3pMgPHcT6LukvQK4KFacU+fSD0A+Wik2rNcTtcrcRNvrHZ7MvMjBP9nU/lZPn1A
-	sgoQ7bIhT59F7P1YO6HOrf2MyYHwYn5bhGv+tWYAH5MnXpg2MuCkG+6uJww7uPfoiOQtLloHrwY
-	8PmIWiZOw5r8e6sgL3/fVMj1WibcGCe/0H3TYMTXMb7p8XSc1J9jJ2uyUrFH0ofIQvh3Oj6VDHf
-	sqipkhF8YULf/jrsKw2wciibHBw0ybbXMeVpfAgWYcGQa2b3t7uYxv+UNj2Xb7VQWcKMomTbZuQ
-	IjDMGlpBHJSD+ViwVzBh/AXBkyi5v3uElAyNFb+aNRfVDWM3eM9q9CRCZGPIEa7ECBuVUvVxK3b
-	9d9loEqQ3MruUMoenz6HPlxtt12EDgFA4C22YFUDQIw08r
-X-Received: by 2002:a05:6820:f025:b0:6c3:32f0:6307 with SMTP id 006d021491bc7-6df32aa7ec9mr9152eaf.12.1790874902929;
-        Thu, 01 Oct 2026 10:15:02 -0700 (PDT)
-Received: from ziepe.ca ([130.41.10.202])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6dd97aff835sm3239083eaf.6.2026.10.01.10.15.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2026 10:15:02 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1xCKN3-0000000EaHJ-0IkU;
-	Thu, 01 Oct 2026 14:15:01 -0300
-Date: Thu, 1 Oct 2026 14:15:01 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Fred Griffoul <fgriffo@amazon.co.uk>,
-	Connor Williamson <connordw@amazon.com>, ackerleytng@google.com,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>,
-	vannapurve@google.com, erdemaktas@google.com, jxgao@google.com,
-	rientjes@google.com, fvdl@google.com, jthoughton@google.com,
-	tarunsahu@google.com, pratyush@kernel.org, fuad.tabba@linux.dev,
-	Gregory Price <gourry@gourry.net>, yan.y.zhao@intel.com,
-	michael.roth@amd.com, suzuki.poulose@arm.com,
-	Christian Brauner <brauner@kernel.org>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Xu Yilun <yilun.xu@linux.intel.com>, aik@amd.com,
-	aneesh.kumar@kernel.org, Vlastimil Babka <vbabka@kernel.org>,
-	kernel-team@android.com, kernel-team@meta.com,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 01/17] mm: shmem: Implement guest_memfd provider
- operations for tmpfs
-Message-ID: <20261001171501.GD3019323@ziepe.ca>
-References: <20260925-gmem-tmpfs-backend-v1-0-d36159822d18@google.com>
- <20260925-gmem-tmpfs-backend-v1-1-d36159822d18@google.com>
- <9292b27b8f48c515bee3246cf3b3a60762302186.camel@infradead.org>
- <20261001141743.GB3019323@ziepe.ca>
- <ba82487d2fe70e762a06e42a9474299d1a501ed7.camel@infradead.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAb0Gw1r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E73A1F000FF;
+	Thu,  1 Oct 2026 17:27:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790875682;
+	bh=W58m5D1Qq04GgCBROcqOqYr4uS4iCeytTxLxmDkHG/g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=cAb0Gw1rbEm2vy6R+OXcDxHJqLX/4dmDQcOkQOkVwveQJWdcaZ0N+F15BE8YTm4YT
+	 Glf9iGP+lxwwQvq2jxCl/Xx+TtkSIDjhxy3CWeps7DVPvQnVIkrw1dIX0PZp2jdx9g
+	 RV4fjje8yt90XBnu1P22JXo9aeoHjNVm3vQEcRyCCrsqXztIEXx5icf/ale1T762W9
+	 +xDyp/LZ8MZvXK4IxwhmPwNTpdX8IAeLDRAVm8OMhLHBV382GYG6E9I4QOx1gQPqMd
+	 v/S3bGMoYpHgkjPJH6gb6IjI4bzYgbRaCjS1BqiwFat+FHnNVGtxua0wZzNV7WzK7M
+	 R2RC6kyZdJcvg==
+Date: Thu, 1 Oct 2026 18:27:56 +0100
+From: Mark Brown <broonie@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Leonardo Bras <leo.bras@arm.com>,
+	Wei-Lin Chang <weilin.chang@arm.com>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v21 14/15] tools: Synchronise the kernel esr.h
+Message-ID: <680fe21e-beca-4056-84e3-f501fdfed902@sirena.org.uk>
+References: <20260930-arm64-gcs-v21-0-3556644cd927@kernel.org>
+ <20260930-arm64-gcs-v21-14-3556644cd927@kernel.org>
+ <ar6NXWzQ1rMb1aId@gremlin>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="DprvDADVm2j3tP+g"
+Content-Disposition: inline
+In-Reply-To: <ar6NXWzQ1rMb1aId@gremlin>
+X-Cookie: Do not stamp.
+
+
+--DprvDADVm2j3tP+g
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ba82487d2fe70e762a06e42a9474299d1a501ed7.camel@infradead.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 01, 2026 at 04:47:54PM +0100, David Woodhouse wrote:
-> On Thu, 2026-10-01 at 11:17 -0300, Jason Gunthorpe wrote:
+On Thu, Oct 01, 2026 at 05:47:42PM +0100, Lorenzo Stoakes (ARM) wrote:
+> On Wed, Sep 30, 2026 at 10:48:24PM +0100, Mark Brown wrote:
+> > To pick up definitions for GCS.
+> >
+> > Reviewed-by: Leonardo Bras <leo.bras@arm.com>
+> > Signed-off-by: Mark Brown <broonie@kernel.org>
+>=20
+> This seems to be out of date, with your series applied to next:
 
-> > It would be nice if it could handle MMIO and "cachable MMIO" as well.
-> 
-> As opposed to just MMIO vs. RAM as implemented in the prototype in
-> https://git.infradead.org/?p=users/dwmw2/linux.git;a=commitdiff;h=a7ca2d8859036 ?
+Yeah, though some of those are changes that are in -next only so
+possibly slightly premature.  I'll resync with mainline, really this
+shouldn't be a manual sync :/
 
-Sort of, RAM is a little more permanent than "cachable mmio", I prefer
-the latter because it conveys it is located on a device, is subject to
-things like reset. Eg "CXL ram" would be cachable mmio.
+--DprvDADVm2j3tP+g
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I haven't heard of anything needing a unique PTE for this yet, but who
-knows down the road.
+-----BEGIN PGP SIGNATURE-----
 
-> I think Fred has a cleaner version of that about ready to post as the
-> next version of my series.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmq+mBsACgkQJNaLcl1U
+h9AFugf+Psag1H7XxGuG3D4J0/kGv/EHHZDmwkNPNqHh4/wspf175JUlhs6i7NeS
+Y38pNSWL3cKJn0FLw7hI+vi4i92gbgTQSVVa3kaJlydpTYpyotb22WgoU73NchNL
+yTTVA7wbyAC1doxMCSTTuYweTipV+TMrZMlDJ+D7S+0vCYG23NrQgPo6rbB+LCDw
+Fqq9aZEcGFOEDcIR+FNSw+jDD2lGg3xv+fngs/LBmUmIXPFA7wdZPXSyNie2S7QB
+6eTPT6HOtTcY6lxfDAsuqvuW+f/O9v3pC5ITzRFuEqKEODOBbtBADTITjuF6osqd
+pfVyCXWgX4SyvytiMyoI1EYtFdIT6w==
+=lSPU
+-----END PGP SIGNATURE-----
 
-Yeah, cleaned up is needed, I want us to resolve this in the dmabuf
-code cleanly not add more of the hack mess I made for vfio/iommufd..
-
-Jason
+--DprvDADVm2j3tP+g--
