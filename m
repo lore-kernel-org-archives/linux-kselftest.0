@@ -1,119 +1,92 @@
-Received: from mail-dl2-f41.google.com (mail-dl2-f41.google.com [74.125.229.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5526151AFF8
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 14:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6424051A73A;
+	Thu,  1 Oct 2026 14:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790864269; cv=none; b=f7hNEYOj0IKP1fFJS47ib5eyPKkCv0VU1psD6gYujBj2uWPE8lvoHUb/iFpxEVbZ/OqaFW98VNfnpL6BxvPsC6UCF4BVaILKyBAS5d246V6C3GdPGvRNhsj5qzB89Hs/JePCTZi0tc4WWjzse8lZMS5Hoa4wc+EvxC+xvLNfAmA=
+	t=1790864313; cv=none; b=SJFlL34tF74sEm9K/HpTSoo8UIEbT2IX5+jTZGtvvVeiqJ2KReeiFJS03Rwkx0C2pzjQSGwxNKEoEdQvdE2vveJLz5XipG+Q6pn8cbDOSK+K4Q27lHpjih53liN/390XibqbfNsFGyV2y91h58UQF7Ec90lx0rQCjPEGX6R3NKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790864269; c=relaxed/simple;
-	bh=xDMyZjpmBuMrFbLISKqTNyCUa2kXcFY6ppx5n8yKikE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oVYV3tbzjb+rkNs6F+dH9FLzg2kINdnMtgGP/8rZWTnlIbLaES5ysmlcVllLy1OdxNgXqstojAqgSfid8/CUpH2w3gRccTdwcIYUK0KOMLeWdEed5w15qah2WwQ7p2PHWAvPDzmvbMG+b6zwGHDRlVDTx2MiOh9aBow8hAGkZss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=BXigv9eW; arc=none smtp.client-ip=74.125.229.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1790864313; c=relaxed/simple;
+	bh=bF0Zo2SuQraBYIJ5v1w10yzUFUX4eqnYQL41CyZG1Gs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=s9z7nNXBvDY/LmTGTgmwLo9k+NfMS0wu+3uWTGuYOM0KrI4EXbjmxBYlFdUdyqgtfo/27OPlR/NkfH6Gula+4HbOQ4iI2XlN5fbx/Ljiyk40AKA+O2QRTmqgadLuhbAQatOqpe3UklY7Mie5r/DljCD6Cmgq5z78FLLSBbelZ2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=FPORlZOK; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="BXigv9eW"
-Received: by mail-dl2-f41.google.com with SMTP id a92af1059eb24-14936924913so989604c88.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 07:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1790864266; x=1791469066; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xDMyZjpmBuMrFbLISKqTNyCUa2kXcFY6ppx5n8yKikE=;
-        b=BXigv9eW+sYJ2/al5rZthSGvatRRCrx21esZ8DRDlyQzVTzJ1n3lmdW1BXCm34jrdR
-         1sYBYhv1ljlYYb3CUglLDIH5H4KxOBTYBzZHM2ML9L9v1iFjRBkRgF50qfe9ZyE+WSXv
-         VFV0SnGbOT1PyzvYxVnKBLcxIFL+uD4sVYTdKtRFjpDe2YBkJTyo9PzRLTvZyizm8ffW
-         vxsModyQrWZ3UTUnsWemUyyMDw9PnGUSVWN/ToeddRIvjpQxwhU9FIRqaR9eBODMCHt1
-         F5QRRTDbnvJfUI7vhDggC5mOLm1MJFa1OnDlMjpRPZvp2Wcvso3bwCkW/R+ecr+g1Mh8
-         3mrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790864266; x=1791469066;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xDMyZjpmBuMrFbLISKqTNyCUa2kXcFY6ppx5n8yKikE=;
-        b=WTq7/wqf9hh8ynRoBtm8OwPA0cVF+ynYFvHQEYh+Qy//cu7hk6r8UVuGo3dAYCFEsU
-         JnWuU7e8felMKoEDJQawEZM0G1kbsZyo0EfqGx0fxJCjmj3UrtB5ODC034x+7qSH7SBU
-         RZrM2jr8qj3/Oq3aGfLBw1EfP8XKYvlzqsHlSvW0T7GYADaLmobvf4M06X62UYq5mWU3
-         y8GmxGrUez4A4p3amqM7EtPbN8BI6EL/rY+GzFrXlT3nrHgFraZeAPsFuztt7YK/XkkD
-         OelNhCQ39uRfVVpL4Qyd+4/zE5FTmOY80AXQLLeGSxx2CKYlJ+P5DztyjbSXyF9sAEwE
-         hGHg==
-X-Forwarded-Encrypted: i=1; AKwUvBzmjwAsGlXsfJjOLDsOcqXsexiKi+ljgP92wjSJzpt6aNwhXaZ5Si3GlhJ7Q3qkRCYrqwQFRuyz702b7g/rRN0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kGgBBWsEW6HiwaAzOShtsOVJ35JpmXGBKTPkUtm4qCcAjNoFQ5
-	WHDEyO56Ro9KYKA6zH1L77bwRNWfqErO9aokzcJ/1aEbWzf0o05s/RjZcVRc6bRfeE0=
-X-Gm-Gg: AYBFou0JZR3HUycd848k4DQ2wbB950rg+EPxZUlCdtkFAjKdwS2Zc46n1MlkHP+zSzD
-	GyqM7XTgYUI+CD8TpR5iawR/ytQci3mfoJXCcnzQAMr8uMjvSxNBrsW7KMnYHpwBJiY/J/9IJQn
-	IB4vJzdXaO0cAxcFeCMRv92mDf//PFllz5PxlCGcsQxbGyhwxtHNVfRsyYpIYcOCqe/9C+N5x6D
-	7S6g+jR4iFpG2Cx/ZBY+qAK3RdbSLQNxwcFaarMf0vSZZ+GTJc6bntu0OAZcTJEPtyXkslJZLAK
-	U9Mb3XGv3RciGjF/tvFk3E6MLKBI2SqeU7Nn5Q9NQe/mWPZu0NdSAt5OD5MnZl1BOPo/vYX5Adx
-	g4gKge69IBMSmQHvGktZBrzuWLGEvEx1CscdVK7xk2F3eiIEl6kJToD5UzKBfAu3BYnz0c/hyWE
-	+ln6GV9V4KN/eDdkUpACsLlN9vYckDbuwFRKe2XYaPBJfTQL58mMIqtbY=
-X-Received: by 2002:a05:7022:ed02:b0:147:5149:d12d with SMTP id a92af1059eb24-14d33f39e14mr4209784c88.18.1790864264892;
-        Thu, 01 Oct 2026 07:17:44 -0700 (PDT)
-Received: from ziepe.ca ([130.41.10.202])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14df3ed1adcsm6451579c88.10.2026.10.01.07.17.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2026 07:17:44 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1xCHbT-0000000EHOj-0Nin;
-	Thu, 01 Oct 2026 11:17:43 -0300
-Date: Thu, 1 Oct 2026 11:17:43 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: ackerleytng@google.com, Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>,
-	vannapurve@google.com, erdemaktas@google.com, jxgao@google.com,
-	rientjes@google.com, fvdl@google.com, jthoughton@google.com,
-	tarunsahu@google.com, pratyush@kernel.org, fuad.tabba@linux.dev,
-	Gregory Price <gourry@gourry.net>, yan.y.zhao@intel.com,
-	michael.roth@amd.com, suzuki.poulose@arm.com,
-	Christian Brauner <brauner@kernel.org>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Xu Yilun <yilun.xu@linux.intel.com>, aik@amd.com,
-	aneesh.kumar@kernel.org, Vlastimil Babka <vbabka@kernel.org>,
-	Fred Griffoul <fgriffo@amazon.co.uk>,
-	Connor Williamson <connordw@amazon.com>, kernel-team@android.com,
-	kernel-team@meta.com, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 01/17] mm: shmem: Implement guest_memfd provider
- operations for tmpfs
-Message-ID: <20261001141743.GB3019323@ziepe.ca>
-References: <20260925-gmem-tmpfs-backend-v1-0-d36159822d18@google.com>
- <20260925-gmem-tmpfs-backend-v1-1-d36159822d18@google.com>
- <9292b27b8f48c515bee3246cf3b3a60762302186.camel@infradead.org>
+	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="FPORlZOK"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 93FA13ED89;
+	Thu,  1 Oct 2026 14:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
+	t=1790864303;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FyO6LOCavfvkW41vMTq8mkPPmIkVy5QIh9FpKo5+d/c=;
+	b=FPORlZOKOOCn6UfuHeGxvuzKbSHzu72g4+MNVdCGTGYG5JaMPBnIcJ2Bw6BSjvuJnvUlcg
+	kjaBso3iRTzCP+CMGzcxuemSW8m+BD11GnmS0qKxz8vHbdc0zIt6spOS0QrXYhsfh+0lyN
+	052OvTq5KYnE2ZpQRamqzSBNOMSMWEcu2v1vMpwlyFzPxFF3zw3Y6S/ChV9v8I25xkZvys
+	thkGcIAcxce3iaIbvMkX6aF8t6VfHK4eADXyaJ4rvoGJTFuonnwfpd40Qb7jBFF5pkDbTo
+	otAshxGwOc97MSQnb+AwED9p38i/MJ/Ap9tUv8YgrG8wasHMET4YxTAX+OVerw==
+Message-ID: <c5ceb79f-3548-41ba-b1e1-96e5d2f32860@gtucker.io>
+Date: Thu, 1 Oct 2026 16:18:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9292b27b8f48c515bee3246cf3b3a60762302186.camel@infradead.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [ANNOUNCE/CFP] Kernel Testing & Dependability Micro-conference at
+ LPC 2026 CFP
+To: Arisu Tachibana <arisu.tachibana@miraclelinux.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ shuah@kernel.org, sashal@kernel.org, kernelci@lists.linux.dev,
+ automated-testing@lists.yoctoproject.org
+References: <CANgtXuMMvU7TQq8hv-T5NQbA6yfzcAMsFq5sdxXq-VzF+oHYxA@mail.gmail.com>
+Content-Language: en-GB
+From: Guillaume Tucker <gtucker@gtucker.io>
+Organization: gtucker.io
+In-Reply-To: <CANgtXuMMvU7TQq8hv-T5NQbA6yfzcAMsFq5sdxXq-VzF+oHYxA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: gtucker@gtucker.io
+X-GND-Score: -100
+X-GND-Cause: dmFkZTFTO7wUx0kPeaHeDSVqPMOTzvvZeMAw/PRd7pwuxCYtT9BbgaDo4q4D8MHWLYo7HpTk0s1iRRF36KXutJ2FAe2fCBurdztavBLW8fsIwlkzlgLpXHQKwJgdKiFwyHdnpaBdBu+APvj79A+jrfVZ+b4doXGq+wdiag+XtElik36RpFK73hJvQbs1YXOYJbWM6OWUWHH3jgxGuFPcn6B9OIPpVn4C/LayACMRVpGD72YKxowqpea0Qya9tV6xIILQRBKrQaeCkBLSNjb+z8tSvsXufUuRS/e01hA+Iuz8TN8pwRhQAUTj3v3SE0V4eBhFCjBobp4Q4OJx4KB6tMY893wRX9Vn19r94R0LF2wrROGX6bnpAKGyzq6rm6MD2K6gOmH/KdXynAF1ssPouLJqGEJGZiQ1VvI/EDtNRYPuOlchU99JFWE9y2kNHcqg6lthcVphIBnLsJ5OA7kt63tOAeQpdMILT1YAyZge3h1Aw8OziBmk05nk0deFLfRViby1hEyN7Q9cOnfMLdFX30LmCh0FGhTE/N6U7qUM+0SI2IX6yza81b5yJczXnEfoB0EXOde1u61Cexs0QTiccRBYZVUv0E+dDpy5O196zXngaoQDnjphEDPuZoG7qoAFPegTox+SxlqGFxGm2ZJghSWeGZowuRbFhZoeD71W+PidrQCtSw
+X-GND-State: clean
 
-On Thu, Oct 01, 2026 at 02:07:40PM +0100, David Woodhouse wrote:
-> The *consumers* of this memory provider API will include KVM/guestmemfd
-> and IOMMUFD. The latter *might* be through masquerading as dmabuf, or
-> IOMMUFD might treat memory providers as a first class citizen and be
-> taught to consume them directly.
+On 17/07/2026 05:04, Arisu Tachibana wrote:
+> Hello everyone,
+> 
+> We are pleased to announce that the Kernel Testing & Dependability
+> Micro-Conference has been accepted for Linux Plumbers 2026!
+> You can read more about our track here:
+> https://lpc.events/event/20/contributions/2328/
+> 
+> Our Call for Proposals (CFP) is currently open.
+> This is a quick reminder to please get your submissions in by 11:59 PM
+> UTC on Saturday, August 7, 2026.
+> 
+> We highly encourage you to send your submissions as soon as possible
+> to ensure you have a chance to get into preregistration!
+> 
+> You can submit your proposals here: https://lpc.events/event/20/abstracts/
 
-If we are reinventing a dmabuf improved for these use cases then lets
-just use it directly.
+Thanks to everyone who sent a proposal.  Plumbers is next week!
 
-It would be nice if it could handle MMIO and "cachable MMIO" as well.
+The Testing MC is on the Tuesday afternoon, here's the full
+schedule with a wide variety of topics this year:
 
-Jason
+  https://lpc.events/event/20/sessions/259/
+
+See you in Prague.
+
+Best wishes,
+Guillaume
+
+> Thanks,
+> Arisu, Guillaume, Shuah, and Sasha
+> 
+
