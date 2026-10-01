@@ -1,68 +1,44 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B9C4052A9;
-	Thu,  1 Oct 2026 10:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5FB501F29;
+	Thu,  1 Oct 2026 11:06:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790852373; cv=none; b=ME4OU926/abbA/RRUQysqAjOAp7VuuYTuEQCrPNtQMbR2RcZkLtXvSkwX3zQG+vcR97BSeMjqb1+axBqYGMa1tRQEDcwxINV2D0Bj0JhXcv9bDLcUiBaAet98g62D6LHfKtboIN86Dshn9K8l/ICa3pff2RXZJrQkah+bO8snkI=
+	t=1790852817; cv=none; b=ROm7v0zlzuZuvJd5dtB3i3aAZ9D0tYez5A1xL9oiKuy9EKAhAosGqDLCBCvFRXrePY8dWi9g1//mGSsUmlzAp84yMIqX9u68nZxmwRklwhSWoesANYAETxGrHZ2vrr4YboF4dA9uSm+CZr26iKKhfF07JZk/Tu4aQC0VKhmQMAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790852373; c=relaxed/simple;
-	bh=P2mPmdSeN7M/92lKbHc68p8T0hLOu0rZMNpkrr+Q7S8=;
+	s=arc-20240116; t=1790852817; c=relaxed/simple;
+	bh=tAQqtrJBE7Ko4/xRfW80wygky66q8H6fLYYYsojsIOQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p+TuZH63WJEWulYv8TyEPyfMO52YboAKb8OEW4wPGvPhfhx2hnjUUhe/Z99/eionTomHcNG/V7g5SfyFNeAZ3vQ7lKhrfz3QU8bj4ZfQ4x/4k1KcPWTqasdDCT9EqkKz6pXBlCAtCdiP9aODUSVaJZzPmnAq80W+W51R9PRIyw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=LCl1OI8l; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=AO5pIjQxrtILGFyRMXwIoUgt8+Ohck7dsIvcn0KOzyquTzRIcLVEXnnnqMkRtMPY6/Uq11KE7jKTjwv51HCwicSv3wDv3WS7bCBpUYdCZ9UWPKU2YHuyY4YmGIOL7JIY+vIHXnkXWZSIHyAC8d6IZWUR0WbNSMA+ejdntC+egD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TqZk2SZ/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LCl1OI8l"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=MXA2KDE32vmEL8dBfumYlL+dA+/j3dJ1ohxuDqggpGk=; b=LCl1OI8lRvcv+outLHBWL9A2bo
-	DG5ITJUiFjfuw/CEH5vbNjtI/P+BGLUvwXGLDA3jC0T340gY/Wk7k1gpkQvW1Z70RfVbhOYmCo3xw
-	AQrPBZuoPECelcO87vpNBk1zQqZk4sUCEzOkgiymVqQuPddoPjUy5oK3h0Qme/AB7rJNngceuc7hq
-	SpH7CHPQ+yTaxLRhMOeVVPTVIV3l0euLPDh5NhuMo38PzhWMuEE+tFR7wdSAxCvYvgzjUDCfjyRZJ
-	2Vfd5RXX1oJ8sfOXd6TivgxG21zO1fScJ0vlE+bpH4aP4s6m55zck+Q/N8LB/P1cBonRI090dOtPd
-	BxfbrTrw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1xCEVK-00000006r8z-1WSi;
-	Thu, 01 Oct 2026 10:59:10 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id E81DA3001FD; Thu, 01 Oct 2026 12:59:09 +0200 (CEST)
-Date: Thu, 1 Oct 2026 12:59:09 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Tejun Heo <tj@kernel.org>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Aaron Lu <ziqianlu@bytedance.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com,
-	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TqZk2SZ/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 116C31F000FF;
+	Thu,  1 Oct 2026 11:06:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790852815;
+	bh=CkXuyHSbtVf4eYHlPuWTnVc0hAJ85ieRSImmWIYe7/4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=TqZk2SZ/8pigdRKHqYx0leDaHTQMicntgZgVWLIj/8lyUDWVcCxo2ayEdd+gg0geh
+	 lU92zvlhLMZNr3NNjlFOp/Oekg9VzaUVc3T0L6z3VNWI0xNRwTgcA1XHJdYf/4FP+j
+	 7ZDv8Fzf3ygiXZ9aGAbEFkeX5PJuDdWLg5lYgOXH1+wx8UafefVWrpEOz5hACzdv8E
+	 flzBLVvshzqJrHgxgKEIraQdDlNSHpSoOjt2A11kbg9N9AHbZqeczL+5T5R63LW/F9
+	 wB5J7nZOK0RILQNXUNmgE9wq89o/fLLdXB2MrB1Fgw/Fk+5CaPXSlE7ZVoS49ySMVc
+	 LJh7EGRfSfvcw==
+Date: Thu, 1 Oct 2026 12:06:49 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Aveline Noir <jm5905938@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Christian Brauner <brauner@kernel.org>, Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org, 
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
- done for
-Message-ID: <20261001105909.GL4121339@noisy.programming.kicks-ass.net>
-References: <20260924184714.912181-1-shakeel.butt@linux.dev>
- <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
+Subject: Re: [PATCH] selftests/mm: mrelease_test: fix retry limit
+Message-ID: <ar4-wT278zc2Fmh8@gremlin>
+References: <CANOyQmFzsssM_BXHUDrV+UuVD5SZMBmSkg3UQnmw9Ns1PV7GCQ@mail.gmail.com>
+ <9a6a1c15-89aa-4504-8585-0f7861c3377b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,33 +47,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
+In-Reply-To: <9a6a1c15-89aa-4504-8585-0f7861c3377b@kernel.org>
 
-On Thu, Sep 24, 2026 at 10:28:10AM -1000, Tejun Heo wrote:
-> Hello, Shakeel.
-> 
-> On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
-> > This series lets a kernel thread say which cgroup it is working for.
-> > That cgroup then sees the CPU time in its cpu.stat and the stalls in
-> > its memory.pressure, and the CPU time comes out of its cpu.max quota.
-> > The first user is the memcg reclaim that runs from high_work.
-> 
-> This doesn't translate to net rx, which is another major source of
-> displaced CPU usage. Switching membership on each packet isn't going to
-> work there. Attribution can't happen that way. We'd much rather count
-> per-cgroup received packets and prorate the CPU consumption. If at all
-> possible, I think it'd be better to adopt an approach which can cover
-> both use cases.
+On Thu, Oct 01, 2026 at 11:47:01AM +0200, David Hildenbrand (Arm) wrote:
+> On 10/1/26 08:00, Aveline Noir wrote:
+> > mrelease_test doubles the child allocation when process_mrelease()
+> > returns ESRCH.
+> >
+> > When size is already MAX_SIZE_MB, the current <= check still allows
+> > another retry, causing the allocation to grow from 1024 MB to 2048 MB.
+> >
+> > Use < instead of <= so the largest allocation attempted remains
+> > MAX_SIZE_MB.
+> >
+> > LLM used in discovering bug. Changes were made and reviewed manually.
+> >
+> > Fixes: 33776141b812 ("selftests: vm: add process_mrelease tests")
+> > Assisted-by: LLM
+> > Signed-off-by: Aveline Noir <jm5905938@gmail.com>
+> > ---
+> >  tools/testing/selftests/mm/mrelease_test.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/mm/mrelease_test.c
+> > b/tools/testing/selftests/mm/mrelease_test.c
+> > index 64e8d00ae944..a5124c9e9f43 100644
+> > --- a/tools/testing/selftests/mm/mrelease_test.c
+> > +++ b/tools/testing/selftests/mm/mrelease_test.c
+> > @@ -157,7 +157,7 @@ int main(void)
+> >  		 * Retry until we succeed or reach MAX_SIZE_MB.
+> >  		 */
+> >  		if (errno == ESRCH) {
+> > -			retry = (size <= MAX_SIZE_MB);
+> > +			retry = (size < MAX_SIZE_MB);
+> >  		} else {
+> >  			waitpid(pid, NULL, 0);
+> >  			ksft_exit_fail_msg("process_mrelease: %s\n", strerror(errno));
+>
+> Makes sense
+>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
-Ideally RX would be split for each network queue, rather than lumped
-into the one giant softirq that nobody owns.
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-I know PREEMPT_RT has been wanting something like that for ages. Not all
-queues are created equal. Some might want RT priority while others
-should definitely not.
+>
+> --
+> Cheers,
+>
+> David
 
-Furthermore, without ingress throttling, your RX back charge could
-completely deplete the actual cgroup time quota.
-
-Anyway, if you get per queue RX processing threads, then you can move
-them into cgroups where so desired.
+--
+Cheers, Lorenzo
