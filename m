@@ -1,120 +1,139 @@
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A71B499F1D
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 21:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877B1485920
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 21:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790890445; cv=none; b=K5UhVbYVFqkebVBr+k4I09p+HYsKpq0UhzHz5++2fEC4YDFSVWRPWhtZXDWqKW/SlZnrq0m+JWtYhA55UCEWRHF8pIAlZMcK7f0TFin75AZH5vyGoVfRpgFojQTiOPrTkmFM9mVdnX2phfMThKP3yXglC+Zd6Z1IKKWPXwzkyjM=
+	t=1790891801; cv=none; b=Oct9q92WWYFbrlS+yg5/qzmQVtEHsl4oeoO1eKkbWjiqs6hNVQgf2ftR1pdsO9zSHJyotzxFTU1MA0p7QmAtD4cSiFGoibUJLX3WQHpS8qsUiqGJsLWGgJdesizPqels0VxbOAT6Bt5i7mk2wqBIn/qmipfi43caDIHW61XBozU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790890445; c=relaxed/simple;
-	bh=nT9hMrtZRR/2siI80QtehZ8BnMD1l4DAL83J/BAbUcM=;
+	s=arc-20240116; t=1790891801; c=relaxed/simple;
+	bh=PJkhgsHiHUBvEvna17aTIkDs3O8oEYUtQ4paJax81FY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=eyHG4F7D6iXaD1+najjFHlrkTo/ZsuzWHopEFAq4n9TmkxAh06sX0OQ9Q/C9xyrL7kp/fIC+DoCVQL7Jt5Mdjw2Akgc6WDlocE13war+epw6X6buvFFIQ9vRC9vFjIAN/cmmFmzWHCn5GYiejlrC7JHg8fm7VjgBMFnGKM0Bkmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tlM3Lxtc; arc=none smtp.client-ip=209.85.167.198
+	 To:Cc:Content-Type; b=Xi9uKHhItsadYfHua8bgg0QLrKbHJZxutv+7eZCs9ll9mgP97hvYJXoF1j7mxhh3vxFD2yejhzxKt2eDAC+HXJ53NJdVlsrEE5kcV6nm7z+UdOBFpOVj7RYDqPal+b3dbr2hfx8lEGB0r2TEBdfM73Q8SntxFwdJCXHQ47HuBIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G3V8XTwm; arc=none smtp.client-ip=209.85.216.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tlM3Lxtc"
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-4cbf700ddccso6996566b6e.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 14:34:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G3V8XTwm"
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-398dcfabbf8so15270337a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 14:56:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790890439; x=1791495239; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1790891800; x=1791496600; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nT9hMrtZRR/2siI80QtehZ8BnMD1l4DAL83J/BAbUcM=;
-        b=tlM3Lxtc3WbIZgWz/Xm+xUadbSBplTug2uUjQgOHf8LqtVeSfHnfzdKEY3MKHG3hIB
-         pGbXeenqxFZMyOIOw5fLqnl4Vc8TXJx+iLR2zhaY3T74vpojbMBPtA+AxIqDsgZeTi1X
-         NHyiSKlysIlTdFyhK8gXAEcGZTg7EPVyQVoYO563WrhvWt1chumYtIMU4q3h5188AFOn
-         8bRz11fSTBgxH7CrBAdROTRTlyIKahNT2RP+bZO6PiBfoY4EVVqI+KrSDNp7Rcfkn70l
-         sdS4UhbqD28R022nca9PFW3THNTgpMqV8e0fnQrSnc+2YHt5drIXwrer7xEAJnUNz/1i
-         DWVw==
+        bh=ahstotXE2MD3z7KL/66fsytb53m57t/MSgEl40ciijM=;
+        b=G3V8XTwmGPy6RggkXwfdjzg0CCbRKnLMfCedvQQe9GoVGVBHsa5PRpDnvW+FFC2FZh
+         C5zpULRLxbRUfzVi1vPO2Igdq0xjktfg0+tPzJX9enNTbOdbAiwAEGYvSGwuy2BxKQMu
+         KKrbdOLLx7mT0XGUWpUcGPDTr3uRC7YoQlkrJUb5QzVacgzMwc/GKGiz1JhEH5LOqcxi
+         zeplo3sXYm7q1gkMZ4oaWO26MjpleY/UzVGH4hdfsvWhY+l7xLcnXYIutlIwVDmhsq76
+         432xLSI6v0GluTW2i/Y5ECqsHhAf6KCnizC+NEcNqFE7Vspobt/Ll9zrB6vWkDw2Dh3c
+         kjew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790890439; x=1791495239;
+        d=1e100.net; s=20260707; t=1790891800; x=1791496600;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=nT9hMrtZRR/2siI80QtehZ8BnMD1l4DAL83J/BAbUcM=;
-        b=k64FreOqOtdz9ukl9dXXd3TAbzeZKauYVYyxJdIAy9zpcgjaAH+3HXeeXRPsjRSlk3
-         dbHhZBItTNUx27lqoZG0QShRz5KbnnlUof7eEQ8EyBD5VCi0ni/mv758XqXtj/M/bUrC
-         yx7Q7tX4HntTor1VQJhqr1Q38RTt0yWUbZYMmQ5D/gpEQMJoXnWnl/Wx/lK0Do2kDFFV
-         wT7tuAz7dBUfxDoZ7uETPdGYuVYQpU1Eo9CIoPs9j5nq8ux1xV6fAHcUNxr+WZKbZSRl
-         kx5jlOKto0AR8cWRpe6LljTG642EZaCRczbaRmT5O3YBz1dZePBwIwjZuZYQvap9oTCb
-         53ww==
-X-Forwarded-Encrypted: i=1; AKwUvBxN+xOxNZ16yD2V0YJcX8NUsAXl6nmls7Azs73aDHHZqJhTVgAQiMPmD/1FtwJgSYcJm86d9aMcJlK4SFTphjs=@vger.kernel.org
-X-Gm-Message-State: AFuF++nvc+sgjk5wfzo7EUOm4Yd6VxC/eQjCGExBZp8pl5fV4Ak0Yzrx
-	XVuqYnCxyebuPFoYvhX/YXM1QCBj5K42yhSjHB8d20RZywVyBYpqXSvw397SAkddAvQbykNBUnT
-	CsY+p2DarrRMQIjotpYBCG7TdTw==
-X-Received: from ioben34.prod.google.com ([2002:a05:6602:3f62:b0:9af:289c:476c])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:bc1:b0:4c3:2e7:55bb with SMTP id 5614622812f47-4f52a57e776mr435364b6e.38.1790890438606;
- Thu, 01 Oct 2026 14:33:58 -0700 (PDT)
-Date: Thu,  1 Oct 2026 21:33:56 +0000
-In-Reply-To: <5750151d-cb99-4f9d-b469-12a7b7796985@linaro.org>
+        bh=ahstotXE2MD3z7KL/66fsytb53m57t/MSgEl40ciijM=;
+        b=sYwF+od/vVTMuo1j3FC1dbiq8hPaDyPVmi54AhzyMM3/b40XdCwJ1RHYgl+pf9YbSk
+         tFk4asiTBjsH5yiaHtPiHEFsRxdfnwc05brDwGK4L/fU09mTkJV/4bMfC6WBNgfxn6DI
+         xj7Yiw/sGbHmvDHAlJv2AgJkHaja+iEOvtIH2eRbL3YRCI6NJK53cQARJAAmvvhAzSoe
+         bvGwpZUg3OHR/Dx0SjEhJ5t9vOlH2eWWkYibtwANIKCBjG8q/YJSiWVaU8SDQ/322A1L
+         iCfE/Vqay/auAngOu6BZyvkoSS+ykLSer67+KAN2yq+Q38jogv9ZSMDUCJToDcssdLaO
+         lgCw==
+X-Forwarded-Encrypted: i=1; AKwUvBwGQ+WgNl7vt05QfF0Zdumnq7S3W9381z4vMxLXkuNt67qhfGn/YDGXPyHVfVaR8750kIg+buYhOozX8/BG018=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLEGX2RNzsW1xxUgTWoGRRkLmxE+OTWV1GTGHrsstO8lvgCc3ck
+	JMZ8Z5XEIeeQG/7J06mlfuzTJmXQsbHoTv6fIQILYJizoijzMQcd97Zfif0zXYvksQNgmwy/2LF
+	Sn3Uetg==
+X-Received: from plad17.prod.google.com ([2002:a17:902:e151:b0:2e2:f199:a1a0])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5281:b0:3a4:9f46:83c3
+ with SMTP id 98e67ed59e1d1-3a6cec4fc8fmr743920a91.45.1790891799435; Thu, 01
+ Oct 2026 14:56:39 -0700 (PDT)
+Date: Thu, 1 Oct 2026 14:56:38 -0700
+In-Reply-To: <ar6SHjnMYNqiEpVa@LeoBrasDK>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260924172928.2110956-1-coltonlewis@google.com> <5750151d-cb99-4f9d-b469-12a7b7796985@linaro.org>
-X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
-Message-ID: <20261001213357.2088894-2-coltonlewis@google.com>
-Subject: Re: [PATCH v9 00/22] ARM64 PMU Partitioning
-From: Colton Lewis <coltonlewis@google.com>
-To: James Clark <james.clark@linaro.org>
-Cc: Colton Lewis <coltonlewis@google.com>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Fuad Tabba <fuad.tabba@linux.dev>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Zide Chen <zide.chen@intel.com>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, 
-	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>, Mingwei Zhang <mizhang@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Russell King <linux@armlinux.org.uk>, Shuah Khan <shuah@kernel.org>, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+References: <20260929113711.2064390-1-leo.bras@arm.com> <20260929113711.2064390-3-leo.bras@arm.com>
+ <ar1xne00AHnJ-p_d@google.com> <ar5yW30S75THCfdV@LeoBrasDK> <ar6SHjnMYNqiEpVa@LeoBrasDK>
+Message-ID: <ar7XFr51N_oK7hN-@google.com>
+Subject: Re: [PATCH v1 2/3] KVM: selftests: Check dirty-ring size before enabling
+From: Sean Christopherson <seanjc@google.com>
+To: Leonardo Bras <leo.bras@arm.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	David Matlack <dmatlack@google.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Marc Zyngier <maz@kernel.org>, Josh Hilke <jrhilke@google.com>, Oliver Upton <oupton@kernel.org>, 
+	Wu Fei <wu.fei9@sanechips.com.cn>, Steffen Eiden <seiden@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Hi James,
+On Thu, Oct 01, 2026, Leonardo Bras wrote:
+> On Thu, Oct 01, 2026 at 03:46:51PM +0100, Leonardo Bras wrote:
+> > On Wed, Sep 30, 2026 at 01:31:25PM -0700, Sean Christopherson wrote:
+> > > On Tue, Sep 29, 2026, Leonardo Bras wrote:
+> > > >  void vm_enable_dirty_ring(struct kvm_vm *vm, u32 ring_size)
+> > > >  {
+> > > > -	if (vm_check_cap(vm, KVM_CAP_DIRTY_LOG_RING_ACQ_REL))
+> > > > -		vm_enable_cap(vm, KVM_CAP_DIRTY_LOG_RING_ACQ_REL, ring_size);
+> > > > -	else
+> > > > -		vm_enable_cap(vm, KVM_CAP_DIRTY_LOG_RING, ring_size);
+> > > > +	long cap = KVM_CAP_DIRTY_LOG_RING_ACQ_REL;
+> > > > +	int max_size = vm_check_cap(vm, cap);
+> > > > +
+> > > > +	if (!max_size) {
+> > > > +		cap = KVM_CAP_DIRTY_LOG_RING;
+> > > > +		max_size = vm_check_cap(vm, cap);
+> > > > +	}
+> > > > +
+> > > > +	TEST_ASSERT(max_size > 0,
+> > > 
+> > > Rather than open code this, which is kinda sorta going to show up in multiple
+> > > places, what if we do this as a prep patch?  Then vm_enable_dirty_ring() can use
+> > > kvm_get_dirty_ring_cap() (completely untested).
+> > 
+> > Sure, if you think it's useful :)
+> 
+> Oh, vm_check_cap() is different than kvm_has_cap()/kvm_check_cap():
+> IIUC, the vm* version will check if the extension is enabled in the current 
+> VM,
 
-On Wed, Sep 30, 2026 at 04:26:23PM +0100, James Clark wrote:
-> On 24/09/2026 18:29, Colton Lewis wrote:
-> > This series creates a new PMU scheme on ARM, a partitioned PMU that
-> > allows reserving a subset of counters for more direct guest access,
-> > significantly reducing overhead. More details, including performance
-> > benchmarks, can be read in the v1 cover letter linked below.
-> >
-> > There is no longer a kernel command line parameter
-> > (`arm_pmuv3.reserved_host_counters`); PMU partitioning is now completely
-> > controlled via the KVM API using `KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION`
-> > and `KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS` vCPU device attributes. When
->
-> As far as I know there isn't a straightforward way to get the number of hw
-> counters from userspace. You have to either parse dmesg or attempt to open
-> incrementally more counters in a group until it fails.
->
-> This makes doing things like "use all counters for guest" or "reserve two
-> for the host" difficult. Maybe it's time to add a file to the PMU that
-> userspace can use query this.
+No, the VM-scoped version checks if the VM *can* support the capability in its
+current configuration, e.g. some capabilities are fundamentally incompatible with
+certain VM types.
 
-Inside a VMM, userspace can query the default PMCR_EL0.N via
-KVM_GET_ONE_REG(SYS_PMCR_EL0) after KVM_ARM_VCPU_INIT (or
-KVM_ARM_VCPU_PMU_V3_SET_PMU) and before calling
-KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS, since KVM initializes
-nr_pmu_counters to the PMU's max_counters (which is how
-vpmu_counter_access discovers the limit).
+> while the kvm* version will open a new /dev/kvm fd and check the 
+> extension there, probably meaning the CAP is available in the system.
+> 
+> So, maybe we would need a slightly different approach?
+> I.E. have the kvm_get_dirty_ring_cap() to use the VM version, and 
+> have dirty_ring_supported() to start the new /dev/kvm fd and free it later?
+> 
+> What do you think?
 
-For users and management tools outside the VMM (e.g. choosing N to pass
-on the QEMU command line), I agree it's awkward that
-/sys/bus/event_source/devices/<pmu>/caps/ exposes slots and bus_width
-but not the number of counters. I will add a patch to expose a caps
-attribute for the number of counters in drivers/perf/arm_pmuv3.c.
+It's not necessary in this case.  All KVM_CHECK_EXTENSION calls feed into
+kvm_vm_ioctl_check_extension_generic(), the only difference is that the @kvm
+pointer will be NULL when called on /dev/kvm.  While some capabilities do behave
+differently if @kvm is valid, the majority do not, including the dirty ring ones:
 
-Thanks,
-Colton
+	case KVM_CAP_DIRTY_LOG_RING:
+#ifdef CONFIG_HAVE_KVM_DIRTY_RING_TSO
+		return KVM_DIRTY_RING_MAX_ENTRIES * sizeof(struct kvm_dirty_gfn);
+#else
+		return 0;
+#endif
+	case KVM_CAP_DIRTY_LOG_RING_ACQ_REL:
+#ifdef CONFIG_HAVE_KVM_DIRTY_RING_ACQ_REL
+		return KVM_DIRTY_RING_MAX_ENTRIES * sizeof(struct kvm_dirty_gfn);
+#else
+		return 0;
+#endif
+
+I.e. the VM version and /dev/kvm version will always yield the same result.  Very
+theoretically that could change, but it's unlikely.  And we can always update
+KVM selftests in the unlikely case a specific VM type comes along that doesn't
+support the dirty ring even when the broader architectures does.
