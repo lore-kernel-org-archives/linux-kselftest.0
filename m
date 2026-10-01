@@ -1,126 +1,277 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sender-pp-o93.zoho.in (sender-pp-o93.zoho.in [103.117.158.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794DF37C900;
-	Thu,  1 Oct 2026 07:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790838524; cv=none; b=kRqjOUL4LcaNBlKqWLFNalnIvJqP1ru19jm7so/+WA+Xbz3C2bc7+3Cw9h2zXL4mhsvPWi357TrgqtoWkKk/xeRok85HE0wwsDrpqCU2UVx1t1Qy+6s6uaXFuKYkzh/hdwKnJiHlwlZnIxxkKEesG84WdKadbA8dVnl6+Uxn9xM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790838524; c=relaxed/simple;
-	bh=223qejtntGPNSAVFviI/+OzcjaTm/9uheZooSnKb87U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VRHLWqZPs5FFWeeAfvDK5gh6f5Jbqlgy+81ov1IrKkBMayv/ZqKP8Epw67hy0b2zIT3wxmBtVMxO2mlrE4YNuIg2rczMTxPbaW6OesTgAng7jX8/DFQZZPkRlgtno3OFYppCKM5mV3TbgdkcivF0+v0hi/ov3+JcjfXmUy3TW0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wuzhray8; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12D94A3852
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 07:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=103.117.158.93
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790839676; cv=pass; b=dwxDWspdiykFbLlYAeAkq2Ne9CSC0Tom2j2O9l4WWbtM0T7vF7I8BSGCJlv0LoAt8VZme6m5xyHGpGPpl4ZobVef3zGmmv8htodXi50vTqaWO8dHwnciD15j56UlbJNNdgHXHxJ+Et3BnNg6xAXQZ44gsoGvtsWADKqcPbD+V+o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790839676; c=relaxed/simple;
+	bh=f9a1YoBw/YsnoqlxfFjyORNzOu7fLh2uiwTq5UKBoRM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=BnlqCoAnDgOhnIMPJyRm9sI4buqFw+o3SA2+39j/V7R7XZf8KSHrYHaf8MRX+jIQ1L/8Jj6ewUIwPwhDCaupFAQdoaFnwXSqPJhyW2nY+1m7CfhQjYl3snLOBGM0GteIY0Aq9TKRqW+j62xMe6KZZQXGdVXlILkDTsSPUeQmVvk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in; spf=pass smtp.mailfrom=zohomail.in; dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b=QdtAOkOO; arc=pass smtp.client-ip=103.117.158.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.in
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wuzhray8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299501F000FF;
-	Thu,  1 Oct 2026 07:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790838523;
-	bh=FvSYXYalm63CDGUp0iUMo4KFN4PdB/yvny+LMXqSogI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Wuzhray8wlCI4wK6CdYNATgeXQk1B1+6oDPjXFB6wgag6e8Zyayeenn0GpvbleIN6
-	 B9WaFzIZYilGEIPzM/fGe96QLu3nOblllzyhAslnrLWKR1kKbm9zArBR+ZI9Uq7evp
-	 f3grQzKvpQOqytiQ1J1wxObVg0HL4fxsheS86h8oZHU74sJLvOqgA1czZSBjeryb0K
-	 wYDPXcy+jDX9rjw0WDm7FOYEyxhOUdfAVX+aNDl5+PCNmL+eUzqR7LLvaO4FDlxcR7
-	 0fGkKvwEi7wQyYZb83GPZcRmYJ8aSa2TA0A3PU1BBnjQfUk2tibb4v1VNn+c2A4ER+
-	 os8O7YULYHA/w==
-Message-ID: <bda5eeaa-7868-4d4a-9026-9e99347afd7c@kernel.org>
-Date: Thu, 1 Oct 2026 09:08:33 +0200
+	dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b="QdtAOkOO"
+ARC-Seal: i=1; a=rsa-sha256; t=1790839550; cv=none; 
+	d=zohomail.in; s=zohoarc; 
+	b=BmF6Lh8vQTs0BOfu7CN03E525S5Uxlw7xqShoe/nu01Nt2QTSyZinhId32y5L9Gcfzsp494buwn1omucbSMWhIZ6GSLms9Q4MTShRIc0XDJVqGmvLGaRnb/ydaZ65G0FQFmP4rkAxxt1ut5HrL0xCNXkUVmgY1z/3QPCmn+ZoQw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+	t=1790839550; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Q4PHbtIIQrTJCe963mowL0owP4RmywZzLUn4iaGUQrU=; 
+	b=JTIQdbSJOtzq+uckpIjVy4uD6HTY1ZwDB7RGcO+mO85d7WYqVGH12Fx/IRRDIzdElIkoDblGIdBEa/CcSCYFmZNmFChXTrVSQqnyTqgwQhHBmg762dS73XHf87iKTEdnobn8sxWlUUS0jl2837c9M4oSa43QOVh7EwDpmM4y5yk=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+	dkim=pass  header.i=zohomail.in;
+	spf=pass  smtp.mailfrom=adi.sharma@zohomail.in;
+	dmarc=pass header.from=<adi.sharma@zohomail.in>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1790839550;
+	s=zoho; d=zohomail.in; i=adi.sharma@zohomail.in;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=Q4PHbtIIQrTJCe963mowL0owP4RmywZzLUn4iaGUQrU=;
+	b=QdtAOkOOKuMjNvHl4PIst4inCaN1IcidLQ+YnDWuwSuL0TY01+s6oWcqsEDMJOfc
+	KnhF4KXeA1p2thAIBGiAWZAEO0AKKTnddC2F9QMsEsylAfrBejdnn1Se3SSyKL8nV6e
+	ZIrMA9M6li0XeVRcQlL6cbOVCIrIwrH5CkDI7AMw=
+Received: by smtp.zoho.in with SMTPS id 1790839548838234.24264859201674;
+	Thu, 1 Oct 2026 12:55:48 +0530 (IST)
+From: Aditya Sharma <adi.sharma@zohomail.in>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	kpsingh@kernel.org,
+	matt@bobrowski.net,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	shuah@kernel.org,
+	puranjay@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Aditya Sharma <adi.sharma@zohomail.in>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test bpf_send_signal_task() from kernel thread context
+Date: Thu,  1 Oct 2026 12:54:49 +0530
+Message-Id: <20261001072449.1377267-3-adi.sharma@zohomail.in>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261001072449.1377267-1-adi.sharma@zohomail.in>
+References: <20261001072449.1377267-1-adi.sharma@zohomail.in>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] selftests: run tests on nommu architecture
-To: Hajime Tazaki <thehajime@gmail.com>, linux-mm@kvack.org,
- liam@infradead.org, rbm@suse.com, akpm@linux-foundation.org,
- luto@amacapital.net, brendan.jackman@linux.dev, liuhangbin@gmail.com,
- corbet@lwn.net, kees@kernel.org, ljs@kernel.org, broonie@kernel.org,
- mhocko@suse.com, rppt@kernel.org, shuah@kernel.org, surenb@google.com,
- vbabka@kernel.org, wad@chromium.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org
-Cc: geert@linux-m68k.org, daniel@thingy.jp
-References: <20260929235711.2287931-1-thehajime@gmail.com>
- <20260929235711.2287931-2-thehajime@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260929235711.2287931-2-thehajime@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On 9/30/26 01:57, Hajime Tazaki wrote:
-> Architectures lacking MMU don't support fork(2) syscall and only
-> vfork(2) is available with limitations.  Thus, we cannot run kselftest
-> on nommu architecture as is.
-> 
-> This commit addresses this issue with the following changes:
-> 
-> - on test run stage, avoid calling timeout command when NOMMU=1 variable
->   added to environmental variable, since timeout command uses fork
->   syscall which nommu platform doesn't support.
-> - describe the difference of nommu tests in the document.
-> 
-> So command line to build/execute tests for nommu should be like below:
-> 
->  $ make ARCH=um NOMMU=1 O=build kselftest-all TARGETS=nommu
->  $ make ARCH=um NOMMU=1 O=build kselftest-install TARGETS=nommu
->  $ NOMMU=1 ./build/kselftest/kselftest_install/run_kselftest.sh -p \
->    -c nommu
+The existing send_signal tests, including the _remote variants that
+exercise bpf_send_signal_task() with a caller-supplied target, all
+gate on
 
-Is there a way we could derive that from the environment in one of these cases?
+  if ((bpf_get_current_pid_tgid() >> 32) == pid)
 
-I'd assume once could compile and run the nommu um variant, and within there
-simply build the selftests and run them?
+so the BPF program only ever runs while current is the test process.
+The caller-context dimension is therefore untested, which is how
+bpf_send_signal_task() failing from kernel thread context went
+unnoticed.
 
+Add a program attached to tp_btf/workqueue_execute_start, where
+current is always a kworker. It cannot filter on current, so it is
+driven by target_pid and gated on a kworker_test flag that only this
+test sets, and the test asserts the child receives the signal.
+Setting pid to 0 leaves the pre-existing programs in the skeleton
+inert. Workqueues run on their own, so nothing has to be triggered
+from userspace.
+
+Without removing the nmi_uaccess_okay() check, this test fails on x86.
+
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Aditya Sharma <adi.sharma@zohomail.in>
+---
+ .../selftests/bpf/prog_tests/send_signal.c    | 106 ++++++++++++++++++
+ .../bpf/progs/test_send_signal_kern.c         |  29 +++++
+ 2 files changed, 135 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+index 7ac4d5a488aa..ecec2ee8b19a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
++++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+@@ -261,6 +261,110 @@ static void test_send_signal_nmi(bool signal_thread, bool remote)
+ 	test_send_signal_common(&attr, signal_thread, remote);
+ }
+ 
++static void test_send_signal_kworker(void)
++{
++	struct test_send_signal_kern *skel;
++	int pipe_c2p[2], pipe_p2c[2];
++	struct sigaction sa = {};
++	char buf[256];
++	int err = -1;
++	pid_t pid;
++
++	if (!ASSERT_OK(pipe(pipe_c2p), "pipe_c2p"))
++		return;
++
++	if (!ASSERT_OK(pipe(pipe_p2c), "pipe_p2c")) {
++		close(pipe_c2p[0]);
++		close(pipe_c2p[1]);
++		return;
++	}
++
++	pid = fork();
++	if (!ASSERT_GE(pid, 0, "fork")) {
++		close(pipe_c2p[0]);
++		close(pipe_c2p[1]);
++		close(pipe_p2c[0]);
++		close(pipe_p2c[1]);
++		return;
++	}
++
++	if (pid == 0) {
++		/* install signal handler and notify parent */
++		sa.sa_sigaction = sigusr1_siginfo_handler;
++		sa.sa_flags = SA_RESTART | SA_SIGINFO;
++		ASSERT_NEQ(sigaction(SIGUSR1, &sa, NULL), -1, "sigaction");
++
++		close(pipe_c2p[0]); /* close read */
++		close(pipe_p2c[1]); /* close write */
++
++		/* notify parent signal handler is installed */
++		ASSERT_EQ(write(pipe_c2p[1], buf, 1), 1, "pipe_write");
++
++		/* make sure parent enabled bpf program to send_signal */
++		ASSERT_EQ(read(pipe_p2c[0], buf, 1), 1, "pipe_read");
++
++		/*
++		 * The signal is sent from workqueue context, so nothing has
++		 * to be triggered from here.
++		 */
++		while (!sigusr1_received)
++			sleep(1);
++
++		buf[0] = sigusr1_received;
++
++		ASSERT_EQ(sigusr1_received, 8, "sigusr1_received");
++		ASSERT_EQ(write(pipe_c2p[1], buf, 1), 1, "pipe_write");
++
++		close(pipe_c2p[1]);
++		close(pipe_p2c[0]);
++		exit(0);
++	}
++
++	close(pipe_c2p[1]); /* close write */
++	close(pipe_p2c[0]); /* close read */
++
++	skel = test_send_signal_kern__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		goto skel_open_load_failure;
++
++	/* wait until child signal handler installed */
++	ASSERT_EQ(read(pipe_c2p[0], buf, 1), 1, "pipe_read");
++
++	/* pid == 0 keeps the other programs of this skeleton inactive */
++	skel->bss->kworker_test = 1;
++	skel->bss->pid = 0;
++	skel->bss->sig = SIGUSR1;
++	skel->bss->target_pid = pid;
++
++	err = test_send_signal_kern__attach(skel);
++	if (!ASSERT_OK(err, "skel_attach")) {
++		err = -1;
++		goto destroy_skel;
++	}
++
++	/* notify child that bpf program can send_signal now */
++	ASSERT_EQ(write(pipe_p2c[1], buf, 1), 1, "pipe_write");
++
++	/* wait for result, workqueues run on their own */
++	err = read_with_timeout(pipe_c2p[0], buf, 1, 10 * 1000 * 1000);
++	if (!ASSERT_GT(err, 0, "reading pipe"))
++		goto destroy_skel;
++
++	ASSERT_EQ(buf[0], 8, "incorrect result");
++
++destroy_skel:
++	test_send_signal_kern__destroy(skel);
++skel_open_load_failure:
++	close(pipe_c2p[0]);
++	close(pipe_p2c[1]);
++	/*
++	 * Child is either about to exit cleanly or stuck in case of errors.
++	 * Nudge it to exit.
++	 */
++	kill(pid, SIGKILL);
++	wait(NULL);
++}
++
+ void test_send_signal(void)
+ {
+ 	if (test__start_subtest("send_signal_tracepoint"))
+@@ -289,4 +393,6 @@ void test_send_signal(void)
+ 		test_send_signal_perf(true, true);
+ 	if (test__start_subtest("send_signal_nmi_thread_remote"))
+ 		test_send_signal_nmi(true, true);
++	if (test__start_subtest("send_signal_kworker"))
++		test_send_signal_kworker();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+index 176a355e3062..f9c4496d9fe1 100644
+--- a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+@@ -9,6 +9,7 @@ void bpf_task_release(struct task_struct *p) __ksym;
+ int bpf_send_signal_task(struct task_struct *task, int sig, enum pid_type type, u64 value) __ksym;
+ 
+ __u32 sig = 0, pid = 0, status = 0, signal_thread = 0, target_pid = 0;
++__u32 kworker_test = 0;
+ 
+ static __always_inline int bpf_send_signal_test(void *ctx)
+ {
+@@ -60,6 +61,34 @@ int send_signal_tp_sched(void *ctx)
+ 	return bpf_send_signal_test(ctx);
+ }
+ 
++/*
++ * Send a signal to a task other than current, from a context where current
++ * is a kernel thread. No filtering on current is possible here, so this is
++ * driven by target_pid, and gated on kworker_test so that it stays inactive
++ * in the other tests.
++ */
++SEC("tp_btf/workqueue_execute_start")
++int send_signal_kworker(void *ctx)
++{
++	struct task_struct *target_task;
++	int ret;
++
++	if (status != 0 || !kworker_test || target_pid == 0)
++		return 0;
++
++	target_task = bpf_task_from_pid(target_pid);
++	if (!target_task)
++		return 0;
++
++	ret = bpf_send_signal_task(target_task, sig, PIDTYPE_TGID, 8);
++	bpf_task_release(target_task);
++
++	if (ret == 0)
++		status = 1;
++
++	return 0;
++}
++
+ SEC("perf_event")
+ int send_signal_perf(void *ctx)
+ {
 -- 
-Cheers,
+2.34.1
 
-David
