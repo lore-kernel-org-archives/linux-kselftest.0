@@ -1,56 +1,56 @@
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A614486B85
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 22:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAA84C9E03
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 22:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790894806; cv=none; b=hVvoL5n0iMnfOjSXRPyn1Whk89CAf9SbIgFHhbg1UaZl+/VSDHpXORIGwFCydf3m0Up7giMPmSP6uLHZXwg/c5fzGXYyfnICEIOWehZXYtFEzBTJ6vVdaOPCyQFpBsM7Q3Wjz5BBNMRpNflUIMT8YzbGp1eYTvuWXCH7UF9kn64=
+	t=1790894808; cv=none; b=QOmnyQWDc9S0TI+VH/WIK/JiEJxgn2Ukm2gKZ87lUXu3T6X6NldUEMQ9m639HNAvu/6DoOMXTNA2wPh9imLu8zWCbmcMoERjPiJD+n0Bb1gWqPMQZ7PNrb0A8m6EPDenFgLTwGNIZRpGqTgSK0fdElTGQB538mS859s1jFbEesI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790894806; c=relaxed/simple;
-	bh=MHNDsu3yQbllRoUb8NzvwGkLU3dDlWNg06MHok4gmaw=;
+	s=arc-20240116; t=1790894808; c=relaxed/simple;
+	bh=I4Eb0TQXvIje7w417a5e7xobqbWORtKJ3XI4af3ycUQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=l5Av3THxz7jBnSJuly96XhulkWyWaif4+HPhMd2etM447wuxg3peQs3HRe+iD2RIBfGQUflWR2MDAPtxr/dUJCeadTgfJ5XVeJCAqerMFvV+UsYu3jbZPnIWP99EtXmF0GL1K3HvM4tuwHbziZ0ymxcouTKMGm7iqTPoaRGYOxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--praan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qj2QzxCv; arc=none smtp.client-ip=209.85.215.199
+	 To:Cc:Content-Type; b=Q1f8T43MSmrV7t+J5ORLuPIZZ6DCl2XBkp1AtS26h7qCy8XT1sNtoVRzlR4G96aqgi4hTBFDDGFSBz1E1udAU/qx+0Yk+eawL/PL8dYipuK+rumwkt5y2W/lLahTsQNoodhAyBP3Q/HoWUv8SrthJoqR8qnhNM2fOiYrxnv73Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--praan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fEQyV4DG; arc=none smtp.client-ip=209.85.210.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--praan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qj2QzxCv"
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cbe77d6864dso6334926a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 15:46:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fEQyV4DG"
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-8886b1d3242so979297b3a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 15:46:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790894804; x=1791499604; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1790894806; x=1791499606; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yFPVDvuO1NNrX9ksocas+3JOEOZdDhafmgmm3nX6/R4=;
-        b=qj2QzxCvAoCmH/iIJqTJ9pMVvosBXSkpOdApHifFeJJu/hKhI/0UdXfOyC8g8wK0rr
-         80xsCCCkDojWcGN5+yR8Zd8NZvLVXTaPADxKKl6r16A35wYgnizcioaPSO9u0HvJ1BHs
-         q+aGw2dBs4OqE0k8tOlKHJcBxUE3BgpOfUuCpf05acZ8P13d4MKMmNFoHa2m28S2qoLd
-         aAd06kZIkv/gxZIGoAw36R6YF/kT/Wo7nGO8oYCgXqb939cifb0WRRBVww0MpALJIMvk
-         A0T4HF+ITuD6ikxPO30Ps+xdIreR1DZWTuDs/H0fReKz432FFWu2f9G9KZyiyAEdwWGW
-         LAZw==
+        bh=x0wc41/LqtlI4rj0/ni4k6LG5KAkWTAQw55eEd0Lzvs=;
+        b=fEQyV4DGaWITeMh1P2XQ+dfEXTltnyx6bF0iOcvQCoLZGTCT5UZglhmE2SrRNZjoSi
+         14rOF4fiAcvAIiot5lN3nlLM09sF0DqqrSMh2dxVrShme1bqnjRuh7yA1LwbVVwX/TWs
+         CsmBLlmnwXOFvF0raxZ+Flqh5Jpg4awOh/MTw+1ZwGovCprIq0RVXdLLAX68Kp5TZDOT
+         /5Le/Z5xmfqiUf2ImwLOKSIl718Ge++oo/JD9wfhvZp1hpZld8GpVcywiPWKELhmCA9t
+         83Us6De6+yGoLEYUhHJ2rURY47Y8VLgVUY8DSsbh4VHLrMw+b/P/FO8kTVuKDUgco7MP
+         KpHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790894804; x=1791499604;
+        d=1e100.net; s=20260707; t=1790894806; x=1791499606;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=yFPVDvuO1NNrX9ksocas+3JOEOZdDhafmgmm3nX6/R4=;
-        b=woeu6ZeOlJeYdJOMqqECBQUAQVpyYQ61FgWszEwIEAG+uwwhBMbw+Te/HU8G8Biiuj
-         kCdTtO/P42PIShZTRZmoeFK67LQ/G6zsDokL1r/KiorUEo6+epleIhsErZZeFfl+9wXg
-         RB37Z0WzJubHaxsOeVbTMSUjgCxeqpmyez0bxD6z/em/BYm3CUsoY5tVq7f3OPQzxPrU
-         su2rdbs9pt2i7Dm+y9eza8EZ7885wynxhLbfh6QIfCXpeN3+4qDyWn3atE31bLQ/Htqc
-         4UE2PUFDerEmtVObobmk404/7Yh49S0BxWjtJKpFymXIJ4t28rbceot6n53A2vpYRIPO
-         jkHQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwCvfxhH+aMBET+39oCAx6+6Q4jkvqjk44vqaJtrYMufYXwDeJr1gfYlDG0nWDQzipT4QDqcI6JXqSIT2FV6EQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++kGQRSCbvPe8ES/cU9TVqsYZ36UnFLCVrU5DLlt3NtRnINdgT5M
-	dh0adIqvloE18cmPfax/uhMBnTYqQ//czVhuv7c1qF96t2f4BglnRhXE66zrTo2yN+LnpbQUTXu
-	IwQ==
-X-Received: from pgbcv10.prod.google.com ([2002:a05:6a02:420a:b0:cc7:c2c8:8591])
- (user=praan job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:1016:b0:3da:1fc0:fb07
- with SMTP id adf61e73a8af0-3e0bc9ebe3bmr821714637.6.1790894803696; Thu, 01
- Oct 2026 15:46:43 -0700 (PDT)
-Date: Thu,  1 Oct 2026 22:45:29 +0000
+        bh=x0wc41/LqtlI4rj0/ni4k6LG5KAkWTAQw55eEd0Lzvs=;
+        b=p6yq1zHKTCmudI64vM2N18Hc6+jrBYcnZYcmD17+HvNMD2DWUEV4PaFXJ6emXow322
+         8k2+hjt3UZBWeiu2g4Noc0DVP8UyM8PgZU3uL/odkaU81jPcGjHSdgOquQEQQWAD7Xjo
+         r9jj/CCNF/3TMnp5uF2bRXWDbk2EAfPdZ4E9M0azztylGeoJ45VAa5lWopORoea9jfKf
+         98euUSEjFeN7jcQIBqO3TCAHiE/ggLQ7+b4r7EPoCbdSgaT8IY5YCwKEn0FWLjSD3V3n
+         Fh3HPUEWPZ+CWgq1fey/stykRDlD3Bzr2RoRSrrVhNXp1/UJkgT0J4gtjhJngX1eblIt
+         SGTA==
+X-Forwarded-Encrypted: i=1; AKwUvBz4P7xLBzepCkBnWKxUVSgiC+FNI19guM33d103hX4mr68EgfXBD+5Wkz5WOjN99VtwxgbvxR6/sRir2YBSwnU=@vger.kernel.org
+X-Gm-Message-State: AFuF++nj8EgMQTTJOmDniC6Enq6+XZbhOtWJ9UMTu0Wm7VHDwYvMzL/C
+	0eQ/hkIsXkQDoS/7ydJKjR4nYKo/VLyZM3VBH8uWyLH5I75BZOWIoXWV2yZVkO6RZXqfMWy74Ou
+	Uhg==
+X-Received: from pgbcs6.prod.google.com ([2002:a05:6a02:4186:b0:cc7:d1fb:4ccd])
+ (user=praan job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:6a10:b0:3de:8ee8:8306
+ with SMTP id adf61e73a8af0-3e0bcfdd8ecmr751775637.31.1790894806215; Thu, 01
+ Oct 2026 15:46:46 -0700 (PDT)
+Date: Thu,  1 Oct 2026 22:45:30 +0000
 In-Reply-To: <20261001224531.765278-1-praan@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -60,8 +60,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20261001224531.765278-1-praan@google.com>
 X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
-Message-ID: <20261001224531.765278-6-praan@google.com>
-Subject: [RFC PATCH 5/7] iommufd: Expose IO page table usage via fdinfo
+Message-ID: <20261001224531.765278-7-praan@google.com>
+Subject: [RFC PATCH 6/7] iommufd/selftest: Add observability test for iommu-nr-pages
 From: Pranjal Shrivastava <praan@google.com>
 To: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
 	Robin Murphy <robin.murphy@arm.com>, Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>, 
@@ -74,117 +74,74 @@ Cc: Mostafa Saleh <smostafa@google.com>, Daniel Mentz <danielmentz@google.com>,
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Collect the IO page table usage statistics from each paging HWPT object
-within an iommufd context and expose that data to userspace via the new
-iommu-nr-pages field in fdinfo.
-
-Implement a show_fdinfo hook for iommufd_fops that iterates over the
-context's object xarray, identifies paging HWPTs, and aggregates their
-nr_pages counters. Nested HWPTs are skipped as their stage-1 page tables
-are owned by userspace.
-
-Only domains whose page table is implemented by the generic_pt library
-account their page table memory. If the domain of any paging HWPT does
-not, the field is omitted instead of reporting a partial count.
-
-Document the new field in Documentation/filesystems/proc.rst.
+Add a test case to validate the iommu-nr-pages fdinfo metric. The test
+maps sparse IOVAs to force page table directory allocations, verifies
+that the metric increments accordingly, and asserts that the count
+remains stranded after unmapping, verifying the current behaviour
+required for future automated reclamation logic.
 
 Signed-off-by: Pranjal Shrivastava <praan@google.com>
 ---
- Documentation/filesystems/proc.rst | 17 +++++++++++++
- drivers/iommu/iommufd/main.c       | 38 ++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+)
+ tools/testing/selftests/iommu/iommufd.c | 48 +++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 2d06c9930fcf..90ba32e9e3b1 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -2217,6 +2217,23 @@ IOMMU backend is set, or when any attached domain does not account its IO page
- table memory. Currently only domains using the generic_pt page table library
- account their IO page table memory.
- 
-+IOMMUFD files
-+~~~~~~~~~~~~~
-+
-+::
-+
-+	pos:	0
-+	flags:	02000002
-+	mnt_id:	17
-+	ino:	1104
-+	iommu-nr-pages:	11
-+
-+where 'iommu-nr-pages' is the number of pages of memory used by the IO page
-+tables of all paging HW pagetables owned by the iommufd context. Nested HW
-+pagetables are not included since their page tables are owned by userspace.
-+The field is omitted when any paging HW pagetable does not account its IO page
-+table memory.
-+
- 3.9	/proc/<pid>/map_files - Information about memory mapped files
- ---------------------------------------------------------------------
- This directory contains symbolic links which represent memory mapped files
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index 9a921b153162..51d0d100dc91 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -11,6 +11,7 @@
- #include <linux/bug.h>
- #include <linux/file.h>
- #include <linux/fs.h>
-+#include <linux/seq_file.h>
- #include <linux/iommufd.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
-@@ -633,12 +634,49 @@ static int iommufd_fops_mmap(struct file *filp, struct vm_area_struct *vma)
- 	return rc;
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index d44b34b05757..f5f4ef01ea4f 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -3613,4 +3613,52 @@ TEST_F(iommufd_device_pasid, pasid_attach)
+ 	test_cmd_mock_domain_replace(self->stdev_id, self->ioas_id);
  }
  
-+#ifdef CONFIG_PROC_FS
-+static void iommufd_fops_show_fdinfo(struct seq_file *m, struct file *filep)
++TEST_F(iommufd_ioas, iommufd_nr_pages)
 +{
-+	struct iommufd_ctx *ictx = filep->private_data;
-+	struct iommufd_object *obj;
-+	unsigned long nr_pages = 0;
-+	bool supported = true;
-+	unsigned long index;
++	char path[256];
++	char line[128];
++	FILE *f;
++	long nr_pages_initial = -1;
++	long nr_pages_mapped = -1;
++	long nr_pages_final = -1;
 +
-+	xa_lock(&ictx->objects);
-+	xa_for_each(&ictx->objects, index, obj) {
-+		struct iommufd_hw_pagetable *hwpt;
++	if (!self->stdev_id)
++		SKIP(return, "Needs a device attached for HWPT");
 +
-+		/* Nested stage-1 page tables are owned by the guest */
-+		if (obj->type != IOMMUFD_OBJ_HWPT_PAGING)
-+			continue;
-+
-+		hwpt = container_of(obj, struct iommufd_hw_pagetable, obj);
-+		if (!hwpt->domain)
-+			continue;
-+		/* Only generic_pt page tables account their pages */
-+		if (!hwpt->domain->is_iommupt) {
-+			supported = false;
++	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", self->fd);
++	f = fopen(path, "r");
++	ASSERT_NE(NULL, f);
++	while (fgets(line, sizeof(line), f)) {
++		if (sscanf(line, "iommu-nr-pages:\t%ld", &nr_pages_initial) == 1)
 +			break;
-+		}
-+		nr_pages += atomic_long_read(&hwpt->domain->nr_pages);
 +	}
-+	xa_unlock(&ictx->objects);
++	fclose(f);
++	ASSERT_GE(nr_pages_initial, 0);
 +
-+	if (supported)
-+		seq_printf(m, "iommu-nr-pages:\t%lu\n", nr_pages);
++	/* Map a page at start and one far away */
++	test_ioctl_ioas_map_fixed(buffer, PAGE_SIZE, self->base_iova);
++	test_ioctl_ioas_map_fixed(buffer, PAGE_SIZE, self->base_iova + (1UL << 30));
++
++	f = fopen(path, "r");
++	ASSERT_NE(NULL, f);
++	while (fgets(line, sizeof(line), f)) {
++		if (sscanf(line, "iommu-nr-pages:\t%ld", &nr_pages_mapped) == 1)
++			break;
++	}
++	fclose(f);
++	ASSERT_GT(nr_pages_mapped, nr_pages_initial);
++
++	test_ioctl_ioas_unmap(self->base_iova, PAGE_SIZE);
++	test_ioctl_ioas_unmap(self->base_iova + (1UL << 30), PAGE_SIZE);
++
++	f = fopen(path, "r");
++	ASSERT_NE(NULL, f);
++	while (fgets(line, sizeof(line), f)) {
++		if (sscanf(line, "iommu-nr-pages:\t%ld", &nr_pages_final) == 1)
++			break;
++	}
++	fclose(f);
++	ASSERT_EQ(nr_pages_final, nr_pages_mapped);
 +}
-+#endif
 +
- static const struct file_operations iommufd_fops = {
- 	.owner = THIS_MODULE,
- 	.open = iommufd_fops_open,
- 	.release = iommufd_fops_release,
- 	.unlocked_ioctl = iommufd_fops_ioctl,
- 	.mmap = iommufd_fops_mmap,
-+#ifdef CONFIG_PROC_FS
-+	.show_fdinfo = iommufd_fops_show_fdinfo,
-+#endif
- };
- 
- /**
+ TEST_HARNESS_MAIN
 -- 
 2.56.0.rc1.315.gc6ed9934b7-goog
 
