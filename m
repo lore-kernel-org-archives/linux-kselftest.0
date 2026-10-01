@@ -1,35 +1,35 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A403B5E15;
-	Thu,  1 Oct 2026 21:18:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E8534F93DC;
+	Thu,  1 Oct 2026 21:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790889488; cv=none; b=XZY54x1DGzfXi+u2ySyRkMgE3YW0U3Ys7t4cRPScp5qTTixZO/KjlUlmXoehJpmGsxs6EzrwpxjETBj18n8PsJFBtuP3BwGvg3T+V52bidFCIc1D1eEtY2p2MAt6mgrQ+Q5rjVwsQl6VGBtdVjSG/TUIqTGJ4Aj0UPS63SxXtMM=
+	t=1790889493; cv=none; b=rHFdsvCtn30Pf8o+rMla8tdqmN/VHXq3G48jwr0wptQECg2KF51K67eTGpsFDJvKv0ba5ISogz6Zf8I4d7E7I0ESA7HiCD4QeHgDsu+2jvmMLVXm8Tp2YDSGUnP/HvnEGpDx9Cu9lDQYk8wYY5XlJv9j/24Zfdl7Cfm/62CIOw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790889488; c=relaxed/simple;
-	bh=elVZHf3wDmPU0tfGL4EH9o7DXhEwI7HvqsyNCh92HrY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=N5wHGccWiCj+rhRWjkQAmRiD6kFh1AIdPZTauyTz3Kz+EhWHIvDvvs2EolWORdvpmhQPhrQ+RAKPgnngjQNffw870Wy5bqEnQFbJ9Ga+4SBuZkgrCNiBQrVAmVbq0oFwH+uaFqRCSxxC8SUTy116/4g2tyRfpGd28npG4JTNXX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=m3xOepUI; arc=none smtp.client-ip=217.140.110.172
+	s=arc-20240116; t=1790889493; c=relaxed/simple;
+	bh=QTDzI9TFR5poyDcHbXwN5yB0vq+wEkyrdEszsBvl/zE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ebr3hv5PKNQy08zrJboJxPCO8uLPu1xS6LjzWTmktHfJ8Fzr55Ut2PIBzowHyNz6zzHkhoXQSaSCxY1C/QU3aJZOvvavtSON+H5IyszueTNQ1I3/9k2E1nAFceOfP4w3IShO2ufH2ShSuuO/dSj6uf1rBHyCCFq8YlTpvp3xHNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=KuEUnD1L; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="m3xOepUI"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="KuEUnD1L"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35AA1497;
-	Thu,  1 Oct 2026 14:18:03 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 797821476;
+	Thu,  1 Oct 2026 14:18:06 -0700 (PDT)
 Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9EBB83F86F;
-	Thu,  1 Oct 2026 14:18:03 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E38223F86F;
+	Thu,  1 Oct 2026 14:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790889486; bh=elVZHf3wDmPU0tfGL4EH9o7DXhEwI7HvqsyNCh92HrY=;
-	h=From:Subject:Date:To:Cc:From;
-	b=m3xOepUIC8hdRxYywAiIF5vtRDekYWf/7c295Zg1wqeeeoAppiDD6ypWp0sWJe+df
-	 QIMr1y0GfX5MbVVohQrIm7xQL2sle2zYASnzUEvqQKa8tNSMNqLvrpGMiPOO3nyzKn
-	 YX0sgY3UT15ctZ5mpfB8OkFrpxs+NO5yzCV5SVsE=
+	t=1790889489; bh=QTDzI9TFR5poyDcHbXwN5yB0vq+wEkyrdEszsBvl/zE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=KuEUnD1LIbrX/jzzm1mZU/5F3Ih+d9xB1/92+Mz5bXrOPOgmJGXD68Xo+HU4T+sjf
+	 uUJU6JOq70hPW4Su+HLIYp5N+9TfL8d/JnhxGV8zCiyqzp4bxpqN5IGQS4LtYIuAmn
+	 7L/Vp08sWJtgtf1TkHBorBCIGw/zajASP6GMTtmY=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [PATCH v9 0/4] kselftest: mm: fix some failure of
- split_huge_page_test
-Date: Thu, 01 Oct 2026 22:17:50 +0100
-Message-Id: <20261001-fix_split-v9-0-0f4ba8bbdbdf@arm.com>
+Date: Thu, 01 Oct 2026 22:17:51 +0100
+Subject: [PATCH v9 1/4] kselftest: mm: prevent random failure of huge page
+ split for khugepaged
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,12 +37,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAP7NvmoC/23QQW7DIBAF0KtErOtqGAYzZNV7VFEFGDdITRxBZ
- KWKfPfibIKjLj/w/oy4ixJzikXsd3eR45xKms412LedCEd3/o5dGmoWCNgDI3Rjun2Vy0+6diO
- RVTYGIs+ivr/kWC8fXZ+Hmo+pXKf8+6ie5Xr6X8ssO+icJwVBczBh/HD59B6mk1g7ZtU6bp2qT
- hkCRM29I7919HQWsHVUHesRlAU9Gi+3TrfOtE6vDtGzBNLsw9b1jZPUur462cfBSFQM8LKnaRz
- K1pnqBtQxWCulti//wq3bzOPqgndGaTswo3u6ZVn+AFmT7f3wAQAA
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261001-fix_split-v9-1-0f4ba8bbdbdf@arm.com>
+References: <20261001-fix_split-v9-0-0f4ba8bbdbdf@arm.com>
+In-Reply-To: <20261001-fix_split-v9-0-0f4ba8bbdbdf@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
  David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
  Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
@@ -57,123 +55,93 @@ Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, Sarthak Sharma <sarthak.sharma@arm.com>, 
  Yeoreum Yun <yeoreum.yun@arm.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4504; i=yeoreum.yun@arm.com;
- h=from:subject:message-id; bh=elVZHf3wDmPU0tfGL4EH9o7DXhEwI7HvqsyNCh92HrY=;
- b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqvs4J9kNPaSxDmOGK6cAuegoeJSlB/nC6jvHsp
- 92wNFXht1OJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCar7OCQAKCRBt1cPRWsUx
- M1JfC/sFJzOYGspJBLB/MTgJIVH2alzwBjlzkrTRTPo4Zh0NKFh/Nx66ovKfSxWpLsll9rhdbFL
- i2e2ZA5IJbS57pbkyea0YnCXEwF4jQ1/K+CZf+jdzNZrZntfzLBdzx98s8m3+01437QXeyvYama
- BsnN9PNwvB6e+hs+q3XaLkw5YUP9e7izGSGOBSxE+luNEXaz3bBLrYx9cuGInQ8ptiAaTJ4yHEr
- FEE7vDFaQIJt5EJOXJ3uwmdzrM2F3Mzxx6R+rH+VOGLwu3VoJwhaViBAtbFV7KES6yvBzg7CsGb
- 0U2hro+rZVBHL5CqEl6P059jEzIeV3kx4/0KDH6DKdpC8RvjlG59u5EjQgTZUmBeHIIU20G/kPr
- JkrND+KuRU+OOne1rp7qs5Ns4lJ/uIvjxwwJgSwrmxLYVApNM7WG4f8Q4Uzrvsc8Vmo9Ob4RKRh
- k/ruWgOh5dFPivdwV25w/qHVHEQXTrgGmKw+nXduP/S3VOA/JGy6Q471pC1YdiwBuuvO0=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2774; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=QTDzI9TFR5poyDcHbXwN5yB0vq+wEkyrdEszsBvl/zE=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqvs4JqSJ1v+3SCIVc/Qop0U3V/fHOG0In9DYc6
+ qk+W9AnCi2JAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCar7OCQAKCRBt1cPRWsUx
+ M3GrDADMQ9d4L9YVcXONl31+8k2UAQroC+yDBfRk+kHoqTncqw/AFZd7JktlL4pZNsOiLhl9MB2
+ hjUqOHiPzndcOKMiKCugRHmoiZ21xvIi6JpbXGzNWuOV4KTKl5Zgti4LXttMFTpdKDYMK5FUhZe
+ fNyFE5cpSyny5d8rKJk/C2KbwvnYGZvijDOzpHkidAbG75XD8fKx+TQPyA79E3on2eAYmbPw7cE
+ QR9lMSNFU7tuau5RgRmRi6N256cX1Fm8S5D4gIvcD8tikyGWY76r0/EEstl12wedqXytcHQpCBD
+ ThZt2haAqv9Gt0IiEfCNJgHrzDtxfjrjw3KCHs2aQF93T9M3Lq3QKdvq1+1GJ5nKrzuTf8hof7l
+ VFd3Fop4Eef5hmAd5aa6Af9XUJpvc2p1aVH8aP3ZjdvefZsyUjt4GUeXLSPo74mCTn92X2cemAX
+ a6NWDcoLLOaJS8FPkHShJtN0GUSFQKiKAY+gwmyp2QuuGBVDTh/Urk7XRGZY9jZUo+eRE=
 X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
  fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
-split_huge_page_test can fail for the following reasons:
+There're some random failure for split_huge_page_test when khugepaged
+collapses pages into pmd again which had split by the test.
 
-  1. During the test, khugepaged may collapse previously split pages again,
-     causing intermittent failures.
+Prevent the khugepaged's collapses for split page by setting the
+mapped pmd-huge-page with MADV_NOHUGEPAGE before split.
 
-  2. Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-     glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-     made by memalign(). The underlying VMA may start at a different address
-     from the aligned address returned by memalign(). Moreover, a subsequent
-     madvise(MADV_HUGEPAGE) call does not split the VMA because it already
-     has the same advice.
-
-     This causes the test to fail because the check_huge_xxx() helpers
-     incorrectly require the address returned by memalign() to match the
-     VMA start address reported in /proc/self/smaps.
-
-Address these issues by applying MADV_NOHUGEPAGE after faulting in the
-huge page, preventing khugepaged from collapsing it again, and instead of
-relying on /proc/self/smaps, use /proc/self/pagemap and
-/proc/kpageflags to detect huge-page mappings and large folios:
-
-  1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
-     using check_large_folios(), since only the mapping type matters.
-     This identifies PMD-mapped huge pages.
-  2. Otherwise, use check_large_folios() to detect large folios. This
-     covers mTHP cases.
-  3. Check the folio flags according to the type of huge page.
-
-Since check_huge_shmem() was required to distinguish shmem huge pages
-because /proc/self/smaps reports them using a dedicated “ShmemPmdMapped”
-entry, as opposed to “FilePmdMapped” for file-backed huge pages.
-
-Now that /proc/self/smaps is no longer used to detect huge pages and
-/proc/kpageflags is used instead, it is sufficient to distinguish
- between file-backed and anonymous pages since the ShmemPmdMapped is also
-kind of file-backed.
-
-Therefore, remove check_huge_shmem() and use check_huge_file() instead.
-
-This patch based on mm-unstable
-
+Suggested-by: Kevin Brodsky <kevin.brodsky@arm.com>
+Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
-Changes in v9:
-  - fix some typos in comment and Fixes tag.
-  - separating huge and type checking.
-  - add r-b tags.
-  - Link to v8: https://lore.kernel.org/r/20260924-fix_split-v8-0-cba7359d882a@arm.com
+ tools/testing/selftests/mm/split_huge_page_test.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Changes in v8:
-  - add intermediate patch for __check_pmd_huge().
-  - add r-b, a-b tags.
-  - Link to v7: https://lore.kernel.org/r/20260921-fix_split-v7-0-d25ec991159f@arm.com
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index c5d96a4b1db3..36a6719ff09a 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -108,6 +108,15 @@ static char *allocate_zero_filled_hugepage(size_t len)
+ 	return result;
+ }
+ 
++static void disable_khugepaged(void *addr, size_t len)
++{
++	/* Disables khugepaged from collapsing pages in range into THPs */
++	if (!madvise(addr, len, MADV_NOHUGEPAGE))
++		return;
++
++	ksft_exit_fail_perror("MADV_NOHUGEPAGE failed");
++}
++
+ static void verify_rss_anon_split_huge_page_all_zeroes(char *one_page, int nr_hpages, size_t len)
+ {
+ 	unsigned long rss_anon_before, rss_anon_after;
+@@ -120,6 +129,8 @@ static void verify_rss_anon_split_huge_page_all_zeroes(char *one_page, int nr_hp
+ 	if (!rss_anon_before)
+ 		ksft_exit_fail_msg("No RssAnon is allocated before split\n");
+ 
++	disable_khugepaged(one_page, len);
++
+ 	/* split all THPs */
+ 	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
+ 		      (uint64_t)one_page + len, 0);
+@@ -167,6 +178,8 @@ static void split_pmd_thp_to_order(int order)
+ 	if (!check_huge_anon(one_page, 4 * pmd_pagesize, 4, pmd_pagesize))
+ 		ksft_exit_fail_msg("No THP is allocated\n");
+ 
++	disable_khugepaged(one_page, len);
++
+ 	/* split all THPs */
+ 	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
+ 		(uint64_t)one_page + len, order);
+@@ -215,6 +228,8 @@ static void split_pte_mapped_thp(void)
+ 		goto out;
+ 	}
+ 
++	disable_khugepaged(thp_area, thp_area_size);
++
+ 	/*
+ 	 * To challenge spitting code, we will mremap a single page of each
+ 	 * THP (page[i] of thp[i]) in the thp_area into page_area. This will
+@@ -482,6 +497,7 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
+ 		ksft_test_result_skip("Pagecache folio split skipped\n");
+ 		return -2;
+ 	}
++	disable_khugepaged(*addr, fd_size);
+ 	return 0;
+ err_out_close:
+ 	close(*fd);
 
-Changes in v7:
-  - change khugepaged's check_huge() callback.
-  - Link to v6: https://lore.kernel.org/r/20260914-fix_split-v6-0-16ed7123800b@arm.com
-
-Changes in v6:
-  - drop alloc_isolated_mem() patch.
-  - remove check_huge_shmem().
-  - Link to v5: https://lore.kernel.org/r/20260907-fix_split-v5-0-822b810458bc@arm.com
-
-Changes in v5:
-  - rename madv_nohuge() to disable_khugepaged().
-  - Link to v4: https://lore.kernel.org/r/20260902-fix_split-v4-0-85f03905f7b1@arm.com
-
-Changes in v4:
-  - reparse commit message.
-  - introduce alloc_isolated_mem().
-  - make madv_nohuge() helper according to suggestion.
-  - Link to v3: https://lore.kernel.org/r/20260828-fix_split-v3-0-374022586a4b@arm.com
-
-Changes in v3:
-  - change  message in case of failure of madvise() with MADV_NOHUGEPAGE.
-  - fix collapse_single_mthp (mthp_khugepaged:anon) test case failure.
-  - Link to v2: https://lore.kernel.org/all/20260826-fix_split-v2-0-71153c7f579a@arm.com/
-
-Changes in v2:
-  - rebase to mm-unstable.
-  - add message in case of failure of madvise() with MADV_NOHUGEPAGE.
-  - fix wrong setup expected_huge in check_huge_shmem().
-  - Link to v1: https://lore.kernel.org/r/20260820-fix_split-v1-0-ab430c58c7cf@arm.com
-
----
-Yeoreum Yun (4):
-      kselftest: mm: prevent random failure of huge page split for khugepaged
-      kselftest: mm: replace usage of /proc/self/smaps for __check_pmd_huge()
-      kselftest: mm: integrate huge page checks
-      kselftest: mm: remove check_huge_shmem()
-
- tools/testing/selftests/mm/folio_split_race_test.c |   2 +-
- tools/testing/selftests/mm/khugepaged.c            |  38 ++-----
- tools/testing/selftests/mm/split_huge_page_test.c  |  16 +++
- tools/testing/selftests/mm/uffd-common.c           |   4 +-
- tools/testing/selftests/mm/vm_util.c               | 113 ++++++++++++++-------
- tools/testing/selftests/mm/vm_util.h               |   1 -
- 6 files changed, 100 insertions(+), 74 deletions(-)
----
-base-commit: e8d0f6a1b2a447d02845984fa6288787543cb03c
-change-id: 20260820-fix_split-f44939ec44b8
-
-Best regards,
 -- 
-Sincerely,
-Yeoreum Yun
+2.43.0
 
