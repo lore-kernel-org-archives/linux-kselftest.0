@@ -1,211 +1,147 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF00C4A3862;
-	Thu,  1 Oct 2026 17:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DB334F479
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 17:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790874162; cv=none; b=AqrTlfxuNWjc9Krx5KRBjv+wMHroIsB3CKr38GQqRABI9aCH28AyYfYfdROjP4VlOrODr8d3YUD+mR+ckDd9ncEUY+kGV/5WZZ6hos6gN/VyXHVcPNLsi19sJ05krha7QIi3T0wQgk+T4mF+ZBI/5lZnGWRMFIYf8kiGh6sKjEE=
+	t=1790874635; cv=none; b=atLO5yqGRW1/aw4DKIe5fPQvJchngVcbtHL8yuaKXEZ1XmERfwF4f5YqAbn0Xa/R690ZehMJvTQ9r2/VPD5DiwoImzYHLXoZxdt6Hqjp+YmUfSy1TPAFgbzf2Si6KnnZXWEy8NuiEth7pEBTDiYEremJjaXKrhyqnCe8M8s9wTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790874162; c=relaxed/simple;
-	bh=l9dUTRwvgqc1WP+4Zk1aYmL4l0jLZasgEBzCwMrMk+E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition; b=U+XYjO/186Fjt7jGvWTEBAngUO6LkG7Nuo/hE0emEPUL8NOc43w967jOPrsF0s5n11nzGak2wrbGzB9quyxLMzvEmCrxy9mUb/qEkOg3abIcOW31eEgCPek2JoWPNOdNIubVk4BN1n905DBL8RSHBz4+YdEaEDBA37q1+kTDaeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Gldmk7Qn; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1790874635; c=relaxed/simple;
+	bh=iRuh/s6Ipo9nZvx/J9+0+HpYrUaUvgSFRS3OUGAoNwI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dY3NbsReIWFlHqNPlZnUBUzNjMxcCR56h9GbxEoMkDSYwGdU4VtjfjcD8ZolTW8oADKmKnsNHroih/uTrQmIsQhGU5b9U7yT5u8USBsm+ScTtIGNKS0PmsovQeRrjXMdj/3ybMo9Racpe3qClSOAIv8tCSjJ+snBsOz40FjIvco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net; spf=pass smtp.mailfrom=blockcast.net; dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b=KPBN5Q7p; arc=none smtp.client-ip=74.125.225.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Gldmk7Qn"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B440497;
-	Thu,  1 Oct 2026 10:02:27 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CE233F85F;
-	Thu,  1 Oct 2026 10:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790874150; bh=l9dUTRwvgqc1WP+4Zk1aYmL4l0jLZasgEBzCwMrMk+E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Gldmk7QnRni3aiFeWUUJzLP0btxS+WxJc+KhRKjF95pfna6heJ+SuyuiTsnqZe9WW
-	 u66m1WGr7IK4Ya6urCwRwTegi1ZX+qydSl4wexR4k+xPyiE0FWSSlJ3yJLy0VqWJX2
-	 dMdhcD1y/aXVVETjtrkoiNuKE00k13C9gC/C3WQU=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Matlack <dmatlack@google.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Josh Hilke <jrhilke@google.com>,
-	Oliver Upton <oupton@kernel.org>,
-	Wu Fei <wu.fei9@sanechips.com.cn>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	kvm@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b="KPBN5Q7p"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6e43b9d8so22419375e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 10:10:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blockcast.net; s=google; t=1790874627; x=1791479427; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nBgkdMW2PJxTxBX+kIlfjfUkDEKiBwZjSW88C9NEh9s=;
+        b=KPBN5Q7pmsFdNiGDGmqAHm+VUxTbNXGzZaVJ/O+EwdGRFHDx6Mrd5lm0Kp6DfoOLyD
+         F22C+MjaTY71cLdY9D+c5c5HdmUxlEgAYBhWrh/ejmkXNzReBGPhU3qJ8Me4FfJsFh8N
+         5Bf9VgxgX1F6V0A6wYzVxnAi3M/slh1XyXOJFMQMOEV1LsB5/h3TxajpNmvfYqdx57EP
+         FMHAtsfpYkhU/2OeTy+USeAIJqt68lUIe5Vs62vtxFtR05krFM8cprK7zAu9slyLwSB7
+         cr6OMEf/l4bPiehyGakXhlZX+4BP0jJdKBnP51b2nnz09k+ACttUjhOiYr973KVeF/w/
+         dm6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790874627; x=1791479427;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nBgkdMW2PJxTxBX+kIlfjfUkDEKiBwZjSW88C9NEh9s=;
+        b=hJW+UXfZJNTKK+fA7r4SuNCnzFetcBpGAVpXHEfksUsMr6vUusXEkzfE5d/TNz6p+3
+         kfl32D69YWyakZqj+cUrptvLXa5XOJJyAxCeB+Wvq5EAjVpWzCYxpXATFoGsO4ay1imL
+         LSKU8JoljbFy7dnhrlS8cHf2sbdmKpfnJKqUQfiYOC5IObZcztauhaBXKVLyimjh+QYN
+         98nqaQV8y6GmN5q4OipVrGjF/cJKkKefn4uX0fRzkywzX39VaQY+GA3e2LALU8Ir9IXP
+         uVd9A4iThG7YOD8+DxY0QJbRv7q9DatIZysa7jdnQrBstOnsblHPhVkNDYijIyJY9wKO
+         eBhg==
+X-Forwarded-Encrypted: i=1; AKwUvBx2IxQh0NwdVvASKqyozeG/x2hjiqqv7Vb7vwYtOidQYhsH58Pi+PwXVFjmHCzIXBxYCe+B6PjNJMnaN5n0La0=@vger.kernel.org
+X-Gm-Message-State: AFuF++mlQ59eDplztMndjPD5Hv8o7mJ8hrxYJs1b38DKnPkmqFOGf/dF
+	1Sj4F5HPAu3LEWzMjtjiKJfTuDG7Ru60iu1khQ+6UdTrNe64b4JdEevK56vcXAyYi+8=
+X-Gm-Gg: AYBFou33YaN8vlue38Ycw1/Cr3UZRXfdH4OOeYuQVoHHRGwSU8HS4Ro7mRWIP9jyqGB
+	EdZJNbuEJb7iqcl3VznNYdz9RlZ0AvyPFcNfzudEW/AsVM6IlEnvbqP9l3gkeoDyAfKkDNuloDI
+	P0c5sPvvWqJL+avGCNhk9DIo15QVNbpronjcwzCAoW4AiApAMfu9PyEv9r0Jv1EY4DJvxT3YzOk
+	wcvdm1j3RK9OJn07HCejuNlx+TcyuGP8MxkVIAZISQQpIhjYJjlmGk1eaDR1DRwHhNQE1XCZiM+
+	+72k/qKbQVDeQEhkTfOAwg5rRuJEEsp51pUex35En6K3MSsGyhTaZ8lRR1pNF+d7/R0IPyfNdNN
+	GIUQSpRCDQpZRTwi6ToIqsppptWBswzhfvm4eLWASa+BeLYGLMQNxQUZhA/L/l3BrrAZka4N62x
+	RtBcq11wz19JZOxOsL4yJjwTrHs0/8XoHQMm+10KFiOiuHqMJjGjZ78V9PAjFVjAyvM236D0LN+
+	iBIlKpcRgNAcjHDVcB6WA0HhgmhEeSoY9jy4V7VhPU7XOeBIC+DYXZduRCLrIS62JYrDwqX1RGv
+	DWHA
+X-Received: by 2002:a7b:cd8e:0:b0:49f:bd3c:bc18 with SMTP id 5b1f17b1804b1-4a02758ff89mr4168705e9.19.1790874626793;
+        Thu, 01 Oct 2026 10:10:26 -0700 (PDT)
+Received: from localhost.localdomain ([197.51.130.226])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0278fb6f1sm2496985e9.9.2026.10.01.10.10.22
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 01 Oct 2026 10:10:24 -0700 (PDT)
+From: Omar Ramadan <omar@blockcast.net>
+To: Taehee Yoo <ap420073@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] KVM: selftests: Check dirty-ring size before enabling
-Date: Thu,  1 Oct 2026 18:02:22 +0100
-Message-ID: <ar6SHjnMYNqiEpVa@LeoBrasDK>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <ar5yW30S75THCfdV@LeoBrasDK>
-References: <20260929113711.2064390-1-leo.bras@arm.com> <20260929113711.2064390-3-leo.bras@arm.com> <ar1xne00AHnJ-p_d@google.com> <ar5yW30S75THCfdV@LeoBrasDK>
+Subject: [PATCH net-next 0/2] amt: mark relay data as a UDP tunnel packet, with a selftest
+Date: Thu,  1 Oct 2026 20:10:14 +0300
+Message-ID: <20261001171016.88208-1-omar@blockcast.net>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 01, 2026 at 03:46:51PM +0100, Leonardo Bras wrote:
-> On Wed, Sep 30, 2026 at 01:31:25PM -0700, Sean Christopherson wrote:
-> > On Tue, Sep 29, 2026, Leonardo Bras wrote:
-> > > As of today, trying to enable dirty-ring with a size bigger than the
-> > > maximum will return an "argument list too long" error.
-> > > 
-> > > Change vm_enable_dirty_ring() to get the maximum size, then compare it to
-> > > the desired size before enabling. If the value is invalid, print a more
-> > > precise error message.
-> > > 
-> > > Signed-off-by: Leonardo Bras <leo.bras@arm.com>
-> > > ---
-> > >  tools/testing/selftests/kvm/lib/kvm_util.c | 21 +++++++++++++++++----
-> > >  1 file changed, 17 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > > index 9ddc047d5c27..15a671b71553 100644
-> > > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > > @@ -168,24 +168,37 @@ unsigned int kvm_check_cap(long cap)
-> > >  	ret = __kvm_ioctl(kvm_fd, KVM_CHECK_EXTENSION, (void *)cap);
-> > >  	TEST_ASSERT(ret >= 0, KVM_IOCTL_ERROR(KVM_CHECK_EXTENSION, ret));
-> > >  
-> > >  	kvm_free_fd(kvm_fd);
-> > >  
-> > >  	return (unsigned int)ret;
-> > >  }
-> > >  
-> > >  void vm_enable_dirty_ring(struct kvm_vm *vm, u32 ring_size)
-> > >  {
-> > > -	if (vm_check_cap(vm, KVM_CAP_DIRTY_LOG_RING_ACQ_REL))
-> > > -		vm_enable_cap(vm, KVM_CAP_DIRTY_LOG_RING_ACQ_REL, ring_size);
-> > > -	else
-> > > -		vm_enable_cap(vm, KVM_CAP_DIRTY_LOG_RING, ring_size);
-> > > +	long cap = KVM_CAP_DIRTY_LOG_RING_ACQ_REL;
-> > > +	int max_size = vm_check_cap(vm, cap);
-> > > +
-> > > +	if (!max_size) {
-> > > +		cap = KVM_CAP_DIRTY_LOG_RING;
-> > > +		max_size = vm_check_cap(vm, cap);
-> > > +	}
-> > > +
-> > > +	TEST_ASSERT(max_size > 0,
-> > 
-> > Rather than open code this, which is kinda sorta going to show up in multiple
-> > places, what if we do this as a prep patch?  Then vm_enable_dirty_ring() can use
-> > kvm_get_dirty_ring_cap() (completely untested).
-> 
-> Sure, if you think it's useful :)
+This series follows the discussion of my earlier [PATCH net] "amt: do
+not offer software GSO on the amt device", which I withdrew. Eric
+Dumazet pointed out that tx checksum offload is off by default on amt,
+so that case does not trigger by default, and that the better fix is to
+call udp_tunnel_handle_offloads() in amt_send_multicast_data() like the
+other UDP tunnels do. Patch 1 does that, and patch 2 adds the selftest
+that I said I would send with it.
 
-Oh, vm_check_cap() is different than kvm_has_cap()/kvm_check_cap():
-IIUC, the vm* version will check if the extension is enabled in the current 
-VM, while the kvm* version will open a new /dev/kvm fd and check the 
-extension there, probably meaning the CAP is available in the system.
+The earlier thread: https://lore.kernel.org/all/20260928181554.85766-1-omar@blockcast.net/
 
-So, maybe we would need a slightly different approach?
-I.E. have the kvm_get_dirty_ring_cap() to use the VM version, and 
-have dirty_ring_supported() to start the new /dev/kvm fd and free it later?
+The trigger needs a non-default setting (ethtool -K <amt dev> tx on) and a
+GSO source, such as a UDP_SEGMENT sender on the relay. The problem was
+found by an LLM-assisted code review of drivers/net/amt.c, while
+developing an IPv6 outer transport for amt.
 
-What do you think?
+Results, from the selftest in patch 2 in a KVM guest on net-next
+commit eb0c18404c89 ("amt: pull the AMT header behind the transport
+header in amt_parse_type()") with CONFIG_DEBUG_NET=y, eleven runs per
+kernel:
+without patch 1 the UDP_SEGMENT burst with tx on is dropped (0 of 900
+datagrams arrive, tx_dropped of the relay's egress device +100 per run,
+a trace shows __udp_gso_segment() returning -EINVAL during the
+segmentation on that device); with patch 1 all 900 arrive intact and
+tx_dropped does not move. With tx off, and with plain datagrams, both
+kernels pass. The existing amt.sh passes with patch 1 (it was not run
+on the unpatched kernel).
 
-Thanks!
-Leo 
+Not tested: hardware with UDP tunnel segmentation offload, hardware
+checksumming on the egress device (the selftest turns it off there, so
+the non-GSO CHECKSUM_PARTIAL packet that now leaves with
+skb->encapsulation set is only checked through the software path),
+KASAN, sparse, the udp_csum=false variant, and NETIF_F_GSO_FRAGLIST.
 
+The selftest is a small sample so far: an earlier version of it failed
+intermittently in about 3 of 25 full runs (listener counters rose but
+the receiver got nothing, which I think was its idle timer expiring
+before the sender started, inferred and not confirmed). The final
+version passed or failed as expected in all 22 runs, but those were in
+one 4-vCPU KVM guest, so it may still be flaky elsewhere.
 
+Known and not touched here: amt advertises NETIF_F_GSO_FRAGLIST, and
+skb_copy_expand() refuses a SKB_GSO_FRAGLIST skb with a WARN_ON_ONCE().
+That is independent of this series, I have not reproduced it, and if it
+is real it would be a separate fix for the net tree.
 
+Assisted-by: LLM
 
-> 
-> > 
-> > diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
-> > index af5eb0334a74..558a71d631da 100644
-> > --- a/tools/testing/selftests/kvm/dirty_log_test.c
-> > +++ b/tools/testing/selftests/kvm/dirty_log_test.c
-> > @@ -291,8 +291,7 @@ static void default_after_vcpu_run(struct kvm_vcpu *vcpu)
-> >  
-> >  static bool dirty_ring_supported(void)
-> >  {
-> > -	return (kvm_has_cap(KVM_CAP_DIRTY_LOG_RING) ||
-> > -		kvm_has_cap(KVM_CAP_DIRTY_LOG_RING_ACQ_REL));
-> > +	return kvm_get_dirty_ring_cap();
-> >  }
-> >  
-> >  static void dirty_ring_create_vm_done(struct kvm_vm *vm)
-> > diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> > index e3b122719262..c08d1581221e 100644
-> > --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> > +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> > @@ -339,6 +339,17 @@ static inline bool kvm_has_cap(long cap)
-> >  	return kvm_check_cap(cap);
-> >  }
-> >  
-> > +static inline long kvm_get_dirty_ring_cap(void)
-> > +{
-> > +	if (kvm_has_cap(KVM_CAP_DIRTY_LOG_RING_ACQ_REL))
-> > +		return KVM_CAP_DIRTY_LOG_RING_ACQ_REL;
-> > +
-> > +	if (kvm_has_cap(KVM_CAP_DIRTY_LOG_RING))
-> > +		return KVM_CAP_DIRTY_LOG_RING;
-> > +
-> > +	return 0;	
-> > +}
-> > +
-> >  /*
-> >   * Use the "inner", double-underscore macro when reporting errors from within
-> >   * other macros so that the name of ioctl() and not its literal numeric value
-> > 
-> > 
-> > > "Dirty-ring not supported in this kernel\n");
-> > 
-> > "this kernel" could be misleading, some architectures simply don't support the
-> > dirty ring.
-> 
-> So, do you suggest keeping it simple by printing "Dirty-ring not supported"?
-> 
-> 
-> > 
-> > > +	TEST_ASSERT(ring_size <= max_size && is_power_of_2(ring_size) &&
-> > > +		    ring_size >= getpagesize(),
-> > > +		    "Invalid dirty-ring size: Should be a power of two "
-> > > +		    "between %lu and %lu entries\n",
-> > 
-> > Don't wrap strings.  The "Invalid dirty-ring size:" part is redudant with the
-> > expressions, just drop that to shorten things.  This should also spit out the
-> > requested ring_size.  Stating the range as a number of entries is also confusing;
-> > as a debugger, I don't want to have to go look at the size of kvm_dirty_gfn to
-> > understand why ring_size is invalid.
-> > 
-> > And maybe split up the asserts?  If the goal is to make it easier for developers
-> > to know when they messed up, might as well make it as easy as possible.  E.g.
-> > leaning on the above diff, something like this?
-> > 
-> > 	long cap = kvm_get_dirty_ring_cap();
-> > 
-> > 	TEST_ASSERT(cap, "Dirty-ring not supported");
-> > 
-> > 	TEST_ASSERT(is_power_of_2(ring_size),
-> > 		    "Dirty-ring size '0x%x' must be a power-of-2", ring_size);
-> > 	TEST_ASSERT(ring_size >= getpagesize(),
-> > 		    "Dirty-ring size '0x%x' must be at least one (host) page", ring_size);
-> > 	TEST_ASSERT(ring_size >= vm_check_cap(vm, cap),
-> > 		    "Dirty-ring size '0x%x' is larger than KVM's limit of '0x%x'",
-> > 		    ring_size, vm_check_cap(vm, cap));
-> > 
-> > 	vm_enable_cap(vm, cap, ring_size);
-> > 	vm->dirty_ring_size = ring_size;
-> > 
-> 
-> Humm, I see the point. 
-> Will do as suggested then, thanks!
-> 
-> Leo
+Omar Ramadan (2):
+  amt: mark relay data as a UDP tunnel packet before sending it
+  selftests: net: add an amt test for UDP_SEGMENT through the relay
+
+ drivers/net/amt.c                      |  11 +
+ tools/testing/selftests/net/.gitignore |   1 +
+ tools/testing/selftests/net/Makefile   |   2 +
+ tools/testing/selftests/net/amt_gso.c  | 473 +++++++++++++++++++++++++
+ tools/testing/selftests/net/amt_gso.sh | 269 ++++++++++++++
+ 5 files changed, 756 insertions(+)
+ create mode 100644 tools/testing/selftests/net/amt_gso.c
+ create mode 100755 tools/testing/selftests/net/amt_gso.sh
+
+-- 
+2.43.0
+
