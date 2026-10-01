@@ -1,139 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE034A5EB6;
-	Thu,  1 Oct 2026 09:47:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45AE4BD782;
+	Thu,  1 Oct 2026 10:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790848029; cv=none; b=Wqx8pqZhdzh5wYFfuF+SPKqYVWSMramVx2zCi7XJXiVCNPJZV2QV/sQZ8SoPVTzhdjHsgtJuMbcLp6QOhvIKy0R9f9ccnG4+Q7mkph4tVCcu7C1/8P/eZBN9XZBSJT+DXovKpF4xxqICL4vCjjCfFdBEsnNlo0HssGU7xfvAd9U=
+	t=1790848925; cv=none; b=RtI1fHXmAS3q+gIxraOTQpnZaq4BOASHs9OtRCGO7QN6r5xPtVheCz3M2VqN+meqHOmlG62jIEfRxGs7gCcScJ+x/kVg8D0vm6go3pIgAomjCQBv0PmyhhAhoy4Cga4aNEa+1j63l5mZsMaeZS9pxVibMptIXiKsWA5Uvm1PmX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790848029; c=relaxed/simple;
-	bh=LIsI7pJf92ZC8exo8cetPNOBspcx+EJXW8oMIPASwJ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cgS0TpaIrSjZzfgLxVRSzwLyjvBN+qwrHaKFmn2qUd0bo+HgxYQyX8/yWECkjXqdBYjGcewbGy+UVIaqab4F+g8dzyabNzOlkabMHsrZGipsBIpRtDVStemUa5SDskAg4Bk/nuVPDz9BD1w5cIFwrx1mjvJSoBhVkmwEz6oLLhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJWxzyDP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790848925; c=relaxed/simple;
+	bh=NHzN2YXmU8BLXeWCHs+b8V0pYB1gKOyCtkBAw3USOmI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JVWv9MWt2wX+oZBfv2cJ6bDN0irUZWTynX6rGvI6k5EjopZfwk152nSLzxboXdRh1lgfrT99FxuR+LPk1s4CoCyXlZwLVdmR3mv5+vBFaXAo/1hRYGZwvqCK8F4O9nxYWHQ3o42RtyaZ5QfD06F9WBKGxxxMm2GK7V7UIsav7Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=J+9bbUt7; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJWxzyDP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8015F1F000FF;
-	Thu,  1 Oct 2026 09:47:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790848028;
-	bh=v4GqKargadOKFOeTVuHEXINDOBqQTvwvPfjl+C4vh8U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=aJWxzyDPdnJdNi2TjUCTK0yhJBzt46zkMU32arEIItoVyd6OsLs9rdL2/KHw/bKVk
-	 NhoB18799FLYONifrXyeku4nuFSlMDusVkEvECBPW3Ghaxy36jJSOeBhKvgHTFMqpP
-	 CdBlRMKIYu0qMGk/zs2DkGlMoSteG4LWfotigkhQq2zpPiOeGUpHqkXSHxnPQKQbMA
-	 KoI3m2rRWuT8iQMvrYfW5j2NswsLTkD+wbEiAHHwYTsJYKp8limOtk9mXMwE6TsqeZ
-	 Lc+UvKef3mi3q16kqYD7xBUqb7E7syPsnOveSYYWRDGTOW/Fbi53NgTzW/KwkLqqRx
-	 WqUQoI1gjEdwQ==
-Message-ID: <9a6a1c15-89aa-4504-8585-0f7861c3377b@kernel.org>
-Date: Thu, 1 Oct 2026 11:47:01 +0200
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="J+9bbUt7"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=Qhjkz5LGIQ5OQf96jD8ObHxGuARoVZWuTiE3aF/pzBw=;
+	t=1790848923; x=1792058523; b=J+9bbUt7NCRMVmDoA+WX+CejOgMkWb4zv3BPoGnZSkOshpI
+	9wYlhVfkAfrwH4xe0TTjexQX366zFoPm36psDG9WfRQUhFvinTBG30MQq2/px/QKNsgGSUXxigtBg
+	oIaRdP9rzmq3rLJslCqJ5haCTkUGEyRIN41iIYPMPa+fKLiSPkHRPN7RTkPHGHTkAiD7CFPOKToUA
+	oV+Q5i4NVECUftXjxrwZ71n20Y2viTmSeDhLzoHCpJ3shdTy8S9NZsH/r9B1gCvCUqk4w92YTK1/A
+	CAcbyIl64s+M3BiqnXuG56FZg+3A8o3RM3tTP50E9/uYdStTu7wZjdqGTy+WSvXQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__ECDSA_SECP256R1_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1xCDbn-000000001cC-1VvD;
+	Thu, 01 Oct 2026 12:01:47 +0200
+Message-ID: <94759bed23f00d2044005e36be6f72f297e092f0.camel@sipsolutions.net>
+Subject: Re: [PATCH v4 1/2] selftests: run tests on nommu architecture
+From: Johannes Berg <johannes@sipsolutions.net>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, "David Hildenbrand (Arm)"
+	 <david@kernel.org>
+Cc: Hajime Tazaki <thehajime@gmail.com>, linux-mm@kvack.org,
+ liam@infradead.org, 	rbm@suse.com, akpm@linux-foundation.org,
+ luto@amacapital.net, 	brendan.jackman@linux.dev, liuhangbin@gmail.com,
+ corbet@lwn.net, kees@kernel.org, 	broonie@kernel.org, mhocko@suse.com,
+ rppt@kernel.org, shuah@kernel.org, 	surenb@google.com, vbabka@kernel.org,
+ wad@chromium.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org, 
+	geert@linux-m68k.org, daniel@thingy.jp
+Date: Thu, 01 Oct 2026 12:01:45 +0200
+In-Reply-To: <ar4br2vW7yZGd3gt@gremlin>
+References: <20260929235711.2287931-1-thehajime@gmail.com>
+	 <20260929235711.2287931-2-thehajime@gmail.com>
+	 <bda5eeaa-7868-4d4a-9026-9e99347afd7c@kernel.org>
+	 <ar4br2vW7yZGd3gt@gremlin>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: mrelease_test: fix retry limit
-To: Aveline Noir <jm5905938@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: Suren Baghdasaryan <surenb@google.com>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
- Christian Brauner <brauner@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CANOyQmFzsssM_BXHUDrV+UuVD5SZMBmSkg3UQnmw9Ns1PV7GCQ@mail.gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <CANOyQmFzsssM_BXHUDrV+UuVD5SZMBmSkg3UQnmw9Ns1PV7GCQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 
-On 10/1/26 08:00, Aveline Noir wrote:
-> mrelease_test doubles the child allocation when process_mrelease()
-> returns ESRCH.
-> 
-> When size is already MAX_SIZE_MB, the current <= check still allows
-> another retry, causing the allocation to grow from 1024 MB to 2048 MB.
-> 
-> Use < instead of <= so the largest allocation attempted remains
-> MAX_SIZE_MB.
-> 
-> LLM used in discovering bug. Changes were made and reviewed manually.
-> 
-> Fixes: 33776141b812 ("selftests: vm: add process_mrelease tests")
-> Assisted-by: LLM
-> Signed-off-by: Aveline Noir <jm5905938@gmail.com>
-> ---
->  tools/testing/selftests/mm/mrelease_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/mrelease_test.c
-> b/tools/testing/selftests/mm/mrelease_test.c
-> index 64e8d00ae944..a5124c9e9f43 100644
-> --- a/tools/testing/selftests/mm/mrelease_test.c
-> +++ b/tools/testing/selftests/mm/mrelease_test.c
-> @@ -157,7 +157,7 @@ int main(void)
->  		 * Retry until we succeed or reach MAX_SIZE_MB.
->  		 */
->  		if (errno == ESRCH) {
-> -			retry = (size <= MAX_SIZE_MB);
-> +			retry = (size < MAX_SIZE_MB);
->  		} else {
->  			waitpid(pid, NULL, 0);
->  			ksft_exit_fail_msg("process_mrelease: %s\n", strerror(errno));
+On Thu, 2026-10-01 at 09:42 +0100, Lorenzo Stoakes (ARM) wrote:
+> On Thu, Oct 01, 2026 at 09:08:33AM +0200, David Hildenbrand (Arm) wrote:
+> > On 9/30/26 01:57, Hajime Tazaki wrote:
+> > > Architectures lacking MMU don't support fork(2) syscall and only
+> > > vfork(2) is available with limitations.  Thus, we cannot run kselftes=
+t
+> > > on nommu architecture as is.
+> > >=20
+> > > This commit addresses this issue with the following changes:
+> > >=20
+> > > - on test run stage, avoid calling timeout command when NOMMU=3D1 var=
+iable
+> > >   added to environmental variable, since timeout command uses fork
+> > >   syscall which nommu platform doesn't support.
+> > > - describe the difference of nommu tests in the document.
+> > >=20
+> > > So command line to build/execute tests for nommu should be like below=
+:
+> > >=20
+> > >  $ make ARCH=3Dum NOMMU=3D1 O=3Dbuild kselftest-all TARGETS=3Dnommu
+> > >  $ make ARCH=3Dum NOMMU=3D1 O=3Dbuild kselftest-install TARGETS=3Dnom=
+mu
+> > >  $ NOMMU=3D1 ./build/kselftest/kselftest_install/run_kselftest.sh -p =
+\
+> > >    -c nommu
+> >=20
+> > Is there a way we could derive that from the environment in one of thes=
+e cases?
+>=20
+> I thought maybe uname could help but our LLM overlords tell me no.
 
-Makes sense
+Hajime originally wanted uname to indicate it, but that caused
+regressions elsewhere, so we dropped that commit. I guess we could put
+_something_ back?
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> It pointed at something though.
+>=20
+> In fs/proc/meminfo.c:
+>=20
+> #ifndef CONFIG_MMU
+> 	show_val_kb(m, "MmapCopy:       ",
+> 		    (unsigned long)atomic_long_read(&mmap_pages_allocated));
+> #endif
+>=20
+> So MmapCopy in /proc/meminfo tells us definitively, weirdly enough.
 
--- 
-Cheers,
+Hyrum's law and all that, but I guess it's not highly likely to (want
+to) change :)
 
-David
+johannes
