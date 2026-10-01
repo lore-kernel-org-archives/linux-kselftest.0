@@ -1,134 +1,198 @@
-Received: from mail-oi2-f6.google.com (mail-oi2-f6.google.com [74.125.231.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8239367B9C
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 06:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.198
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790834432; cv=pass; b=dOmP3LvGNnJcZ77N57Ri6ekm0uHfvg25VMS+sSNm29AZbPQRs2Zz+t+k4C5oTPhz3v1JXv8TNY1U7c4wPeF5Kd9V0aLG7nyVs7tQV2PsnfA2Q9r7bD+dsLKBIcTm2EXgNUWABtcupss9laBU7LOnG0rucyYokPlaBcgPGpN6hUQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790834432; c=relaxed/simple;
-	bh=Ea5L+NfGwGW15gGuIzQxh+b2WvHUSCGvR5hc6itnj1I=;
-	h=From:MIME-Version:Date:Message-ID:Subject:To:Cc:Content-Type; b=jUY/pygYnt9ZwSKtpTVfbfmLlf6RpClSBlEV424huC15ARWF/Az5EgKZqvcSXsa6MMRYK4YvV3BWFwPtXUP0Mvn2dyBxCZekgHLo8mHdYecIn5pbtKVG0/gDfw/nTVEtaBuTD/4z459k0basnfPmFLLPPEqrAhakOAo0PBS2AEk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UgiLHK6P; arc=pass smtp.client-ip=74.125.231.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD79331ED0;
+	Thu,  1 Oct 2026 06:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790837861; cv=none; b=H1Z7GA/AAa1Az+lKUZQbwKrWTwBwG2ptX/d+e+y4zLf8FTcHg17flUpGkd7boNrU7YCH5o8cftFzJF7r59yy7HdcHqeZa8ru7QpJFB6Mg+KNZcr4pF6G/Rl2m6L7oIF0vyp7jSoWe3HmARirFee9DUbLiZe+t1W0rcF5+I7eov8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790837861; c=relaxed/simple;
+	bh=knj1/QwjgxK+Js/aA4lalZiDyzZB5ToCrLnOCaDmx60=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZFH4Du+rW6aL9SK/xJaJ/rvNLr1xE2KOtmC9i8J6dXJS0egD1fCgYQdnO+CNlq/WNZW+oVE/3ve0jUAGK2di6S2x43E/0B4xILLpCIiMv/GB9OtiY/rLrPuWXjcrayzQF9QxCKzkToGBu9RvASTVBvuTLL0MWD1RPJ/+Np4PoGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CGyrauEn; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgiLHK6P"
-Received: by mail-oi2-f6.google.com with SMTP id 5614622812f47-4b374c2cf2cso962136b6e.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 23:00:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790834428; cv=none;
-        d=google.com; s=arc-20260327;
-        b=rAiim/eOKtkx4PXkO0Naes5od+KeLWY76IE4gAXXDb1Yjj6jK7worvdZrFIPEEuxfq
-         6DPJ00ByLm6Vh5ewgylWLv3lRBVYDCQLlv3NEwKdlMbsEf6M/JMvCliHWXyJT4ChHmd4
-         jUYQQE12hig+6EnmpElhKmI+CBwEWJDTBf3VNsPBMcYPU60fDJx7UGJ/DF/UV5hnhyCr
-         0LsAXrDd+1MH59ta9QdlcDCTI0R7s2n6GlC9MEqDQdZduTccCbpZ/08wyodfIyO2Hxzr
-         By+75dY3N4egfgJsMB79c3DgT7tUjIqdDtiQJmWRhm2pg3Yp+j1WgxoqC2QW7sIZQkKl
-         Jm9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:from:dkim-signature;
-        bh=86MBDdoN8+nPFAYYb3eyEgckb6tHnNUv3pn1Zb+pPE8=;
-        fh=Bi9+1vRKJgkU8iCfmeAq+q6oY22N78AuDa13Xs8v3f8=;
-        b=SV0awrqdlMyfyV8R4byny3NZZQaGBM2+0/MJU9vZUnTFAI6BeNnEcb+A0Dl8+puKZ/
-         tiyMgn2M91Zkm8LomkMpsQx0HwQvarjSszsR7nmUwZeeE/mDRMlZclFBZ8a1HHM0hZV0
-         jFnAzFT3i5wNIJlRYTfJLFf/7h6i9d4T7xja6Uiz3VqWk/EePEAM9sfO5iNV8CXRDtuz
-         xr/8RT+ZC229l2NabPWMvZRVDJRt2PoGWhmG+nttKUX1bJ//LqkjRoW4AwNq6kM+PrJS
-         809Kc2FCfu2i1GCvazVF7IpxFCUbDvvfNi32sHOp5gzvikI50bFx/K/34myxp1DYNnFe
-         gtsw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790834428; x=1791439228; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:from:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=86MBDdoN8+nPFAYYb3eyEgckb6tHnNUv3pn1Zb+pPE8=;
-        b=UgiLHK6PhxSzQIvNG0AKz//Yr+Gj+umBXHHfkF832o28gIeZ1X8LELmmcH/MEaP8RB
-         +CmeL9009CelREWGS0fgOwiUzlBxhV8/QpNKXDeP9to5rj64JyQOizkRfxmyZyuSDJnJ
-         ZS302YC+MqJIJ56QL8Z2d7XWYFZ8iKlWKUACUtlYWPDkXV9GdumaWCnztIUoCVFer/hw
-         8PbS/ffFZjCESBHUs94CW5DNyl4HmEtOnoJdbxdMvkXy4DS1RPRHFiEYafnZqF/eA0Sc
-         ekcPfxcy+0oVGf25q7bh2ciJpJsJsmCv79K6gssJ4PqDcUp4v1yTePVZaKKPLT90VF4E
-         X2Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790834428; x=1791439228;
-        h=content-type:cc:to:subject:message-id:date:mime-version:from
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=86MBDdoN8+nPFAYYb3eyEgckb6tHnNUv3pn1Zb+pPE8=;
-        b=whongUAOmLArqY0QpO77/1ZVSs3peWsQ+pCKbBRaKD7KmtQRFkC1TF5AmI1+oNCLEy
-         v0oWrZ2bqWtDOsE6pLi0dl9xtHpPkQU7pk7U3E44Pkr6pZ+Lk61IT8lDw5gLOn4zYebo
-         avrAK7GCrdLH1PGCve4zCiPhEJtcOAEJhU6tiGuXDbZxoxe8GfQ3y6NqnDTw2uCM+/z7
-         uOsMLyRzHpAa05VtmjtpZ1kGIsISzLIDf4fWfymFyyS2r2enbvGkSA9RcyiZKLd/Cb4/
-         EUBO3M8LSk4sdGtOQDLK4rBqt/63J+h/EO/Mxpwthb5YzaGATKeCzddKxNbqqqZOm9Ch
-         AQYw==
-X-Forwarded-Encrypted: i=1; AKwUvBxJ5e868FTHhx9Nnaz8sLar05ODka56XjRxiSocxUBLxKvh4cBlxpJyJW7BZDfDAjqq01SraWHmuhkHfL+pBpk=@vger.kernel.org
-X-Gm-Message-State: AFuF++kWpajSJse7vc+pS9CSUTE2+2Wf8IMJfqwNb3yod9CIVonRMRCz
-	AWSnGZEWUZIRCqme6K2hm5VzXhLCGvcsWsa4rV3rNe2Q4xoaw1LpukYgbMcsLGkTjIROHjzVlmW
-	5M/x/lbIjIQNfaV4If2jMn4KhtMUt3naapOIuanIsA4k0o4o=
-X-Gm-Gg: AYBFou1iGjN6+bEl4k4ZUiym5bxuNzUMEhs8230rMIFo5ltZ4GfHuaKFVg3l/X6TL9g
-	ExXGjAtUsjPQig0jjyax/A6sjRZDLBOcSfBp6kU2X1T1hcRJwf9X9BtRPKt3FF7zaAJZIWXufug
-	lz40pcMkzb4RMlSUNlZALhv0bHnJ279vaWmLajsBmIEayLI2MQDGmdBKdEJCsuxDtvYcAjxfUtF
-	jGkacBr7U4cKTK3nCAnIaNLVlhRwDt3MiQIfs0EIMxtECk2G79J6m+RZHLeiO8vJV188iTcHb5n
-	mvIn0GATr4Clr/k+u5vzSny92QcdGrJt7+CS+MKlAqOSTsnXgmNwtoy6y8+SkbU9QIJCSj3ZvY5
-	EBJlp5g3Nug==
-X-Received: by 2002:a05:6808:c2d2:b0:4d6:93e2:5bc7 with SMTP id
- 5614622812f47-4f1b937789bmr4169206b6e.67.1790834428301; Wed, 30 Sep 2026
- 23:00:28 -0700 (PDT)
-Received: from 578479312649 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 30 Sep 2026 23:00:27 -0700
-Received: from 578479312649 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 30 Sep 2026 23:00:27 -0700
-From: Aveline Noir <jm5905938@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CGyrauEn"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69145cpZ3678977;
+	Thu, 1 Oct 2026 06:57:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=ziaTfx1aXsXmlTmInIvB+yu/gQZ/7XNSzAB3CSzlZ
+	k4=; b=CGyrauEn2SRZ92ojJMIo+43D5giDslwGHegowA4Y76kO42S8tkxGJLyqh
+	ot/RLmuG3/Cf6Zlqwhjv7oVlbyS6xMz+ggBDLMlZ0weOeHUFoMuA2TRmOGdA6pPP
+	72C1S8U0nLfkD4fmVW/QI9NikyS5dkUNH2shfH1H/4UbYbsnqj66JjEAw3YhKx2r
+	0z3rbB8u3dYkT7Q4XMQQaU4Vz9BrlDdVtpLzUjenDdJq6nfr1EhrlRk36FFagUOo
+	Lk5zJZXYm/HHrPA//iV0yHH595hmmyXMTCSVL9uPb4bn1Kgr7+0aqLj6+kZSjPo6
+	6ksF3DUfr7y4IAtpYi3LnYrJpYxrQ==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gx4fegjq3-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Thu, 01 Oct 2026 06:57:36 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6913ljqM3246006;
+	Thu, 1 Oct 2026 06:57:36 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4h0q4pe694-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Oct 2026 06:57:36 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6916vYDN40894960
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 1 Oct 2026 06:57:34 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5976620043;
+	Thu,  1 Oct 2026 06:57:34 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A691920040;
+	Thu,  1 Oct 2026 06:57:32 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.39.22.119])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  1 Oct 2026 06:57:32 +0000 (GMT)
+From: Disha Goel <disgoel@linux.ibm.com>
+To: brauner@kernel.org, shuah@kernel.org
+Cc: linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Disha Goel <disgoel@linux.ibm.com>
+Subject: [PATCH 1/2] selftests/empty_mntns: fix header conflicts and remove TOOLS_INCLUDES
+Date: Thu,  1 Oct 2026 12:27:27 +0530
+Message-ID: <20261001065728.90239-1-disgoel@linux.ibm.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 30 Sep 2026 23:00:27 -0700
-X-Gm-Features: AclHuK-fk3VgJqHBfeBrKPt-2j6Rf7JJ_J_9SFI-Q-5BndDxw9L61bmuFQdGI00
-Message-ID: <CANOyQmFzsssM_BXHUDrV+UuVD5SZMBmSkg3UQnmw9Ns1PV7GCQ@mail.gmail.com>
-Subject: [PATCH] selftests/mm: mrelease_test: fix retry limit
-To: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>
-Cc: Suren Baghdasaryan <surenb@google.com>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Michal Hocko <mhocko@suse.com>, Christian Brauner <brauner@kernel.org>, 
-	Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=FYWiV5+6 c=1 sm=1 tr=0 ts=6abe0461 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8 a=aVn8jr3HOu2W0GN4xw8A:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAxMDAyNiBTYWx0ZWRfXzy9jAo0SHzzn
+ xsXcuVJCEs31Vf+xdLchzJFxd/mRY9NjLreow+v+XB3emcOf614oeDoJCzAW8Jk/aMSv+qdaTHj
+ kqW75kVBNCRS2fFhoK1TrBVn2BMYIzw=
+X-Proofpoint-ORIG-GUID: mjNus_jGLg6CBHJMiHarjqru0iRR41N3
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAxMDAyNiBTYWx0ZWRfX1G8gaw91iEOT
+ dF3kyxKzwfu+YOp0ZAW6g1eIW5EK8nrgwH6pdY3NST1bwbOFnPtnlPZtO7c9g7zo5b92t8kzgl0
+ 3DFj6rhHghsTQ86urEscNvw76fqJlJMjL0HEs+ATtJywa6Z51j44UR1VNa1i3Q3o6ekc5Vxk/X2
+ Mp1iObb10d7bbW0rI0TWYbW22A6UaE3Y9lVDP/dW7k0tm3qjcxwdjyb6KZlh0QTX/eOa24EPYCh
+ Axf0ry9J85H19zwGbofGMQd/qalNoMICnsGqj6nmWvLPjgOoRO2ozMh5zwlSLlkT7C4N3qTDif1
+ 7TI649aLSz85vbf2DcCoPO67s4rDRO4S4WnIa7jsNotGyjYC3PCv+82boU1gyKdVUWrXdvIOkqn
+ EbqGL8/bFRkLNMiy8Mrb/npCCRKzioC7xXCfNLe0ny+ZSRvUQpx7YCOdlTurmRTXLeuJ1O1sUKQ
+ T3kEO2MQxLFsUhFE1fg==
+X-Proofpoint-GUID: mjNus_jGLg6CBHJMiHarjqru0iRR41N3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-01_02,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1015 impostorscore=0 spamscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2610010026
 
-mrelease_test doubles the child allocation when process_mrelease()
-returns ESRCH.
+Including <linux/mount.h> alongside <sys/mount.h> in empty_mntns test
+files leads to compilation errors with glibc due to conflicting enum
+definitions of MS_RDONLY and other mount flags.
 
-When size is already MAX_SIZE_MB, the current <= check still allows
-another retry, causing the allocation to grow from 1024 MB to 2048 MB.
+Additionally, passing $(TOOLS_INCLUDES) (-isystem tools/include/uapi)
+causes tools/include/uapi/linux/types.h to be included, forcing
+int-ll64.h definitions on architectures like PowerPC (ppc64le) that
+use int-l64.h, resulting in type collisions with system headers.
 
-Use < instead of <= so the largest allocation attempted remains
-MAX_SIZE_MB.
+Fix this by:
+- Dropping <linux/mount.h> from the test sources in favor of
+  <sys/mount.h> (with <linux/stat.h> included after system headers).
+- Removing $(TOOLS_INCLUDES) from the Makefile since standard UAPI
+  headers are already supplied via $(KHDR_INCLUDES).
 
-LLM used in discovering bug. Changes were made and reviewed manually.
-
-Fixes: 33776141b812 ("selftests: vm: add process_mrelease tests")
-Assisted-by: LLM
-Signed-off-by: Aveline Noir <jm5905938@gmail.com>
+Fixes: 32f54f2bbccf ("selftests/filesystems: add tests for empty mount namespaces")
+Fixes: 5b8ffd63fbd9 ("selftests/filesystems: add clone3 tests for empty mount namespaces")
+Signed-off-by: Disha Goel <disgoel@linux.ibm.com>
 ---
- tools/testing/selftests/mm/mrelease_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/filesystems/empty_mntns/Makefile       | 2 +-
+ .../filesystems/empty_mntns/clone3_empty_mntns_test.c          | 3 +--
+ .../selftests/filesystems/empty_mntns/empty_mntns_test.c       | 3 +--
+ .../selftests/filesystems/empty_mntns/overmount_chroot_test.c  | 3 +--
+ 4 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/mrelease_test.c
-b/tools/testing/selftests/mm/mrelease_test.c
-index 64e8d00ae944..a5124c9e9f43 100644
---- a/tools/testing/selftests/mm/mrelease_test.c
-+++ b/tools/testing/selftests/mm/mrelease_test.c
-@@ -157,7 +157,7 @@ int main(void)
- 		 * Retry until we succeed or reach MAX_SIZE_MB.
- 		 */
- 		if (errno == ESRCH) {
--			retry = (size <= MAX_SIZE_MB);
-+			retry = (size < MAX_SIZE_MB);
- 		} else {
- 			waitpid(pid, NULL, 0);
- 			ksft_exit_fail_msg("process_mrelease: %s\n", strerror(errno));
+diff --git a/tools/testing/selftests/filesystems/empty_mntns/Makefile b/tools/testing/selftests/filesystems/empty_mntns/Makefile
+index 22e3fb915e81..8d2cb46668fc 100644
+--- a/tools/testing/selftests/filesystems/empty_mntns/Makefile
++++ b/tools/testing/selftests/filesystems/empty_mntns/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ 
+-CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
++CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
+ LDLIBS += -lcap
+ 
+ TEST_GEN_PROGS := empty_mntns_test overmount_chroot_test clone3_empty_mntns_test
+diff --git a/tools/testing/selftests/filesystems/empty_mntns/clone3_empty_mntns_test.c b/tools/testing/selftests/filesystems/empty_mntns/clone3_empty_mntns_test.c
+index 6370086f886d..de0cbd1a5ee0 100644
+--- a/tools/testing/selftests/filesystems/empty_mntns/clone3_empty_mntns_test.c
++++ b/tools/testing/selftests/filesystems/empty_mntns/clone3_empty_mntns_test.c
+@@ -15,14 +15,13 @@
+ 
+ #define _GNU_SOURCE
+ #include <fcntl.h>
+-#include <linux/mount.h>
+-#include <linux/stat.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <sys/mount.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <unistd.h>
++#include <linux/stat.h>
+ 
+ #include "../utils.h"
+ #include "../wrappers.h"
+diff --git a/tools/testing/selftests/filesystems/empty_mntns/empty_mntns_test.c b/tools/testing/selftests/filesystems/empty_mntns/empty_mntns_test.c
+index 43e296b97d84..a6a90d0b6ff9 100644
+--- a/tools/testing/selftests/filesystems/empty_mntns/empty_mntns_test.c
++++ b/tools/testing/selftests/filesystems/empty_mntns/empty_mntns_test.c
+@@ -7,8 +7,6 @@
+ 
+ #define _GNU_SOURCE
+ #include <fcntl.h>
+-#include <linux/mount.h>
+-#include <linux/stat.h>
+ #include <sched.h>
+ #include <stdio.h>
+ #include <string.h>
+@@ -17,6 +15,7 @@
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
++#include <linux/stat.h>
+ 
+ #include "../utils.h"
+ #include "../wrappers.h"
+diff --git a/tools/testing/selftests/filesystems/empty_mntns/overmount_chroot_test.c b/tools/testing/selftests/filesystems/empty_mntns/overmount_chroot_test.c
+index 6e21c58258c3..574c03311245 100644
+--- a/tools/testing/selftests/filesystems/empty_mntns/overmount_chroot_test.c
++++ b/tools/testing/selftests/filesystems/empty_mntns/overmount_chroot_test.c
+@@ -18,8 +18,6 @@
+ 
+ #define _GNU_SOURCE
+ #include <fcntl.h>
+-#include <linux/mount.h>
+-#include <linux/stat.h>
+ #include <sched.h>
+ #include <stdio.h>
+ #include <string.h>
+@@ -29,6 +27,7 @@
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
++#include <linux/stat.h>
+ 
+ #include "../utils.h"
+ #include "empty_mntns.h"
 -- 
-2.55.0
+2.45.1
+
