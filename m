@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8EA492E29;
-	Thu,  1 Oct 2026 11:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830B048F83C;
+	Thu,  1 Oct 2026 11:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790855714; cv=none; b=uMqVB4w/OuzlHX+kDIQVCeqS3g7KIW81f2AgT1/coZWWPDdHoDc2gtctfGmDT/Y2W6ETlIjJ6IKy3oCkhjFuncmujKBnEbrZgZ+YVhCO033vAigrhe4N93k81Z+GdfhwxFvgbGzLCFvvLztSGbmht0+xGgXCo0qoocOuwHwz+Lw=
+	t=1790855813; cv=none; b=THbxKh1JnZC/m7m3XoEzylGT18/Ft6pRH0BfNmfat5nWrweN7gnCa1FXVaWF7gyOyYxAtdTt5PafL00K0QiFGVdWV2th/zxWh6K/8TRSGDMXK6tzkEsSxlw5pHr+NDJ2ah1paHa/r0CUOuEFQkyOQxmz74/v0MKHSnEhzV8Sgdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790855714; c=relaxed/simple;
-	bh=RRMTgVjHYWpJUBHFnMBwjywn7B1gN/LLvIt/LIKbVNE=;
+	s=arc-20240116; t=1790855813; c=relaxed/simple;
+	bh=i5AK5q7H8Os1u4t21o1q7o5Ic6k9u1hhkZ2r7bXxq8A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EI3wp90LpL1R8PTmMDhuWEM0aBo/k60cPz0+zxd+r79B1FR4ZgmLNTGyR31ob25vjWLM49qEwRBhv+KfQUvxfkx3yBfVtnrItI+nr5pDfO6QP1Ckh1EGs3EBq7G8bKps8ihD4KETUNL57fZsSzIDSX6GT1WfFo4Cl/aBUu2Oh/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZVCBDOK3; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=WiE6acdooJjpMG2jkeOF7c/ggNnyMuCj0qmEzKG1ztaOUMX8DmJYuChHZbB7AkvIpPxybP7Yi74ae0dDemQfAAMeSKP/qIqFQ6iVjpjlZWvt4F62SbldMhC+bbstxySCw+tUVtxDfr/BLzBfry8RCUJv1D0Q059G6K76iCSRGlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hQAftGTL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZVCBDOK3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A8F1F000FF;
-	Thu,  1 Oct 2026 11:54:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hQAftGTL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809761F000FF;
+	Thu,  1 Oct 2026 11:56:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790855704;
-	bh=rUAi0n/sFGjsoDFX+Uxvih/avWET3Jejf0xqGsJw/4Q=;
+	s=k20260515; t=1790855807;
+	bh=jwXy9Brx1hUXrdP0tPQxlxrwWDU3cUickTJZN9A11GI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ZVCBDOK31CqNfjz8WrdjvxSo7vEkXTFpiZNcf6y2UpSuuhsETtZ6iSyUnN0Gx66lr
-	 x3T9K4HC3f4TiqTrL6O/LZb5j7aZlgSTaHsP32QDSqLQOyKqnknKrFPKuDxBwkVpzv
-	 x6GTQIMKL92VV2q90LTf2vCbBycVTzflHONMLZ0BjXCm6ZoxRNvqvpNkkW6g8/HtFk
-	 6J/P6DqYgUfZ2gZi4BaajiuFKIn6Bh4nzHfw7qDnA4SyqsR8FJUFioNY2PuTopauaD
-	 dfq7h5EZXgL8fjYirKGwheX3F2MF11zeIfcepTgLYif0WNhGE1MWNVIoduUU7z5t6G
-	 gse+9UCLeKQOw==
-Message-ID: <66643a71-efcd-4bfb-98e9-2e71766e0357@kernel.org>
-Date: Thu, 1 Oct 2026 13:54:57 +0200
+	b=hQAftGTLbbZEnlvN6gOGfsufrGBy/6rO7VByoEAaOs1HKczt8hsuH8jRk2kU5SHrE
+	 DzvsL1qqOl76GHK1bTG1v4A9JfoZhpWcAA2ZfdfWZOmLGUeD8wcRdC2Y8QK/RV/mcW
+	 BNAkXcmRWw1+Tfi/V1QQ4G/xB+PDZ9OrfUuMwVRM2WoTMbrUfYr+brkveboCmYUiBt
+	 g7bp4KdvSZxFyToaAEBTCE7hYR6S9s8Ec+ekHwL7X/eBPql9rogb1x4OpT13otBFc6
+	 Yi6JvwKVWHqqjTJZXI8FvSVzVdmp4UTUAwadkuq8AfmJiOqy22WNBff8HUgbU/gSqI
+	 3T2m/UNctXmTA==
+Message-ID: <7ee37eb7-49d0-4c29-93c5-552c908e2077@kernel.org>
+Date: Thu, 1 Oct 2026 13:56:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND 5/9] selftests/mm: mremap_test: fail on data
- corruption
+Subject: Re: [PATCH RESEND 7/9] selftests/mm: mremap_test: remove perf tests
+ and timing
 To: Sarthak Sharma <sarthak.sharma@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>
 Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
@@ -48,7 +48,7 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
  <ts930@dgu.ac.kr>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260924050009.19974-1-sarthak.sharma@arm.com>
- <20260924050009.19974-6-sarthak.sharma@arm.com>
+ <20260924050009.19974-8-sarthak.sharma@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -95,20 +95,27 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260924050009.19974-6-sarthak.sharma@arm.com>
+In-Reply-To: <20260924050009.19974-8-sarthak.sharma@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 9/24/26 07:00, Sarthak Sharma wrote:
-> In mremap_move_multiple_vmas_split(), if data is corrupted
-> after mremap, the control jumps to cleanup without marking
-> the test as failed.
+> mremap_test contains three perf tests that report the time
+> taken to move 1GB mappings with different page table level
+> alignments. Although they validate the remapped data,
+> their main purpose it to report timing information. The
+> recorded time also does not affect the test result. Also,
+> they are skipped with the default validation threshold.
 > 
-> Set success to false before moving to cleanup.
+> Remove these tests and the timing infrastructure from
+> mremap_test.c. The regular tests continue to cover PUD
+> and PMD aligned remaps.
 > 
-> Fixes: 7d6597dfef11 ("tools/testing/selftests: explicitly test split multi VMA mremap move")
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
 > Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
 > ---
+
+Thanks!
 
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
