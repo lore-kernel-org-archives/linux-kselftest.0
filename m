@@ -1,74 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511C73C3C08;
-	Thu,  1 Oct 2026 22:45:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B86153A48E6
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 22:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790894714; cv=none; b=K+cHJ3bYRt2jeCKmpUXZv7EEkZShNEXUm8aruVgUu3XPdVW4YjPz/TjkpwQv9MDZvxIZzc63O3t1qXJr1xOgj877AlyHtrSqyqW831wpiaT/r0tjyQmT55Zlt222iGOVw1J7YqNRLNntHQLVLjSunBhX/Q6IREwSn01T9YLyerg=
+	t=1790894748; cv=none; b=qnzJU5v0YgmfNN6m49h45fXF2yAnvtw5uthqvS78syuie3jrzHa53dqChStcVsqCN/rcqYVc5aCVLGuOIVyAeEZXXR1saXKZuESemvRT+Wi5fr/Uay/Zq8hUNNspK2pk9DXo0ywhbegQW8z/mLr9TItCU3N2/94UlbMpJT+mlHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790894714; c=relaxed/simple;
-	bh=gp7PRv3WjAiMJrp0DvXpRvTv3mwC8R3NiezXzUE7FxE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RJv7d4MJ1sbVMG9XaSUjrDRAgcsf9alYJa+gKUmPXKZJCc0CmQpJ5WBI9qsnH9qCQRqHaEMAd5ny+YLva/odcf/O3dDU/UPumwheZR4aFIlV56KlSgncBGdXFRD4NcHDsl31LirqzUdoc3F1KnUWcsFbkKTpvX9zHsruj2Scpnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Elyr2LgB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790894748; c=relaxed/simple;
+	bh=1lmvz1gSrAujeaxqnCoydH1/hO6InoEWG6kj/zEEDSY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=TTKWgnNuBGTqXBF2kCT4gX+X7jAoNVnnHE6EgWJ0qfMCLVuxEmHmzua3fYdWIAip09IidTNnO6zesTo13h2Us1zsXbGzeKhLBdLVE3nj4b29QYEBuXYpv18NylIXdXo9yzRe07ge8lSg9wtMZBeB28ItY9Hv3OmErloW8rg+1jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--praan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S12QMDAM; arc=none smtp.client-ip=209.85.215.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--praan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Elyr2LgB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 931971F000FF;
-	Thu,  1 Oct 2026 22:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790894712;
-	bh=Z9zRtXHe/J1k/4/9wAeq1n+PwAt+ioXmV3zyjSNrjDw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Elyr2LgBSalBJ1Ai633m8ndKegOKWym2npAUMOk+dZwgHv/+ZxLxSSAbwAHP0MyAi
-	 IdCZZwKx6kc8rdFHteudltI0tTVY0796SssuwWz5vLqAfDtCleW/S5MBi6H+ET3i71
-	 1d+msaAWd0/5vuGoir4RbYnhHuyQcVHq/KgIy2L3Tnu5jXbLJfkXbCkX/9W578bJrm
-	 5vHp5o7xCAsjRmjW6JztdQxXRJdoXXbTrDhmwvBeAvWGdoIAU0+8ht9AiVOCa142Eh
-	 aX/yKQt+2vr/6S2rAV7D7Lhe6ojBD+9+IO2zFeCoWhIh8ebdnqSd6/bpSLd7E66LLy
-	 CSIlFq6hqJyww==
-From: netdev-bot+sinfo@kernel.org
-To: Chuck Lever <cel@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>,
- "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Dave Watson <davejwatson@fb.com>,
- Shuah Khan <shuah@kernel.org>, Qingfang Deng <qingfang.deng@linux.dev>,
- Eric Dumazet <edumazet@kernel.org>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 0/8] net/tls: Receive-path fixes for
- zero-length data records
-Date: Thu, 01 Oct 2026 22:45:11 +0000
-Message-ID: <179089471115.1402591.14877215785916752547@kernel.org>
-In-Reply-To: <20261001-tls-follow-on-v2-0-2dd1947bb642@kernel.org>
-References: <20261001-tls-follow-on-v2-0-2dd1947bb642@kernel.org>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S12QMDAM"
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cc1b8088202so4946971a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 15:45:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790894745; x=1791499545; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=N7eSAUXHwsAygHXMeAum7tZT9f+Wmgg5m71MP+aREYo=;
+        b=S12QMDAMqQRddohmLKtvCjCjVMpwjreCCWbCR6r26AvHGWMh8rdE3K1oLE+YIWKTX9
+         o2F0UMXkS5PJ1U7Kt4EhJlUszyOJhRvZL/RN8J/06fCrbHWqZGBQ0AucilndlJ5uPjKK
+         EkG5fUGtzBLU/BiLBk+EgAo+6qzwxXZqHuCtfh3nQBEiCqMbG0K3u9MOicGt7l7Xtjvf
+         g2dQWXjmJN4CQc9qah5kkc8Uofm8YUenTDDrpHhwJ9iOAUY8z5BzzWID395Gr/uTl3p0
+         gxcDXnpn5ggAzuTFVIvnl7lzOJn82oVxxOrFLWRAXeWsWoE8XDv+O4W97Tm2iP2BtQxs
+         F1+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790894745; x=1791499545;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=N7eSAUXHwsAygHXMeAum7tZT9f+Wmgg5m71MP+aREYo=;
+        b=dA4/fqPVui4cwHGSDnh64UnZeL6Ywxw0EB8Jur3C3c2lmcjuFUVB6KkVPyBJlTIXOl
+         0HsH8OW3bDvagBNP6hg2o7rMa3MMXZL2CnwyWsUPey6F+6ijmeFIHLbPdaa2OE0YQxA6
+         JwD4rvBYMcIMDfGWWkvtKswB0dikDzotjAslPNTMr4oyp6yFNDNqK6a7GznGj9c+xrEK
+         UrNfxk9IQ0FLGbOkmC5IlWXQc2wMG2p3O8MmC/A50EHipXXJ0wXQz4dD6VRy4LxREL/N
+         TuOMlkHdUM5orNpIgPA6C7WUDJz7ivvKLN1N1UJWqiVfK+GAtJnPIxstUEAj0XnY7kvw
+         z1qg==
+X-Forwarded-Encrypted: i=1; AKwUvBxYKXsgISsK9itCw0S8TnknIn3flokt/VHAPvY77Wn6pcfB7VcSJSAb+RDg5wiqDm/5l1GzkxMjslnmuDa7Xto=@vger.kernel.org
+X-Gm-Message-State: AFuF++knmvm8ku+W3wKnBBgzOfX30SrDc1EDA+H2ePqUj6nHtfumXPm2
+	vdm4lM3HC4hRUe1zHlkmXFemFf1fN8ma8RZvAS1wfaCouK6BBOWNgNhXA0ncmSfTKRwGv4tv7Sx
+	CKw==
+X-Received: from pgdh4.prod.google.com ([2002:a05:6a02:5184:b0:cc9:f746:40c4])
+ (user=praan job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:a344:b0:3dd:a00a:7ad0
+ with SMTP id adf61e73a8af0-3e0bd3e5169mr730038637.61.1790894744569; Thu, 01
+ Oct 2026 15:45:44 -0700 (PDT)
+Date: Thu,  1 Oct 2026 22:45:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
+Message-ID: <20261001224531.765278-1-praan@google.com>
+Subject: [RFC PATCH 0/7] iommu: Introduce Page Table Observability Framework
+From: Pranjal Shrivastava <praan@google.com>
+To: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>, 
+	Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
+Cc: Mostafa Saleh <smostafa@google.com>, Daniel Mentz <danielmentz@google.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, iommu@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Logan Odell <loganodell@google.com>, Pranjal Shrivastava <praan@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi!
+Introduce an observability framework to track and expose IOMMU page table
+memory usage per domain. As VMMs and userspace drivers map and unmap large,
+sparse IOVA regions through VFIO and iommufd, page table directories are
+often left allocated but completely empty. generic_pt frees a table when a
+single unmap covers it entirely, but tables that empty through a series of
+partial unmaps stay allocated until the domain is destroyed.
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+Currently, this *stranded* memory is only visible in aggregate
+(nr_iommu_pages in /proc/vmstat, and sec_pagetables in the memcg
+memory.stat). There is no way to tell which domain, and hence which VFIO
+container or iommufd context, owns it. On a host, it shows up as a drop in
+available memory with no corresponding owner and has resulted in OOMs
+without any diagnostic information.
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+The series implements the tracking infrastructure to attribute this
+memory to its domain and exposes it per fd, so that userspace / telemetry
+can see which VFIO container or iommufd context holds it.
 
- - Whether the issue was actually triggered, or is only theoretical
-   (e.g. found by code inspection). If it was triggered please include
-   the symptoms, like the stack trace or error messages.
+Design
+======
+The tracking is implemented once, within the generic_pt library:
 
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account. If the series needs another revision for
-other reasons, please include the information in the commit messages
-then.
+ - struct iommu_domain gains an atomic_long_t nr_pages counter.
+ - To avoid expanding existing metadata structures, struct ioptdesc
+   repurposes the unused page->private slot to alias the owning
+   struct iommu_domain pointer. The ioptdesc layout stays identical to
+   struct page.
+ - The core page allocator (iommu_alloc_pages_node_sz()) is wrapped with
+   an attributed variant, iommu_alloc_pages_node_sz_attributed(), which
+   charges the domain on allocation. The common free path uncharges it
+   using the stored domain pointer, so no free call site changes.
+ - generic_pt's table allocator uses the attributed variant, so every
+   driver built on generic_pt gains accounting without driver changes.
 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+The cost is one atomic operation per page table allocation and free. Leaf
+map and unmap are unchanged.
+
+Userspace interface
+===================
+The per-domain counts are aggregated when fdinfo is read, and exposed
+through /proc/<pid>/fdinfo/<fd>:
+
+ - VFIO container fd (type1): summed over all attached domains.
+ - iommufd fd: summed over all paging HWPTs in the context. Nested HWPTs
+   are skipped as their stage-1 page tables are owned by userspace.
+
+Both backends report the same key, so tooling does not need to know
+whether a VMM uses VFIO type1 or iommufd:
+
+	iommu-nr-pages:	<pages>
+
+Only domains whose page table is implemented by generic_pt account their
+memory. If any relevant domain does not, the key is omitted rather than
+reporting a misleading partial count. The field is documented in
+Documentation/filesystems/proc.rst.
+
+Built on generic_pt
+=====================
+All users of generic_pt in this tree: Intel VT-d (first and second stage),
+AMD IOMMU (v1 and v2 page tables) and RISC-V. ARM SMMUv3 will gain
+accounting once its conversion to generic_pt lands. [1]
+
+Open questions
+==============
+ - Is a single, backend-agnostic fdinfo key preferred over per-backend
+   keys (e.g. vfio-nr-pages / iommufd-nr-pages)?
+ - Is omitting the key preferable to reporting a partial count when a
+   domain without accounting is attached?
+ - The value is in pages, consistent with nr_iommu_pages in /proc/vmstat.
+   Would bytes be preferred?
+ - Is aliasing page->private through the ioptdesc overlay acceptable?
+
+Upcoming Work / Roadmap
+=======================
+An IO page table shrinker, which reclaims empty leaf directories under
+memory pressure, is posted separately as an RFC. The two series are
+independent. Per-domain accounting is useful on its own, and also
+quantifies the memory such reclaim could recover.
+
+There's an alignment session at Linux Plumbers Conference 2026 for these [2]
+
+[1] https://lore.kernel.org/all/0-v2-563ee63886f0+1209-iommupt_armv8_jgg@nvidia.com/
+[2] https://lpc.events/event/20/contributions/2624/
+
+Logan Odell (1):
+  vfio/type1: Expose IO page table usage via fdinfo
+
+Pranjal Shrivastava (6):
+  iommu: Add infrastructure for per-domain IOPT accounting
+  iommu: Implement domain-attributed page allocation
+  iommupt: Enable per-domain IOPT attribution
+  iommufd: Expose IO page table usage via fdinfo
+  iommufd/selftest: Add observability test for iommu-nr-pages
+  vfio/selftests: Add observability test for IO page table usage
+
+ Documentation/filesystems/proc.rst            |  34 +++++
+ drivers/iommu/generic_pt/iommu_pt.h           |   7 +-
+ drivers/iommu/iommu-pages.c                   |  35 +++++-
+ drivers/iommu/iommu-pages.h                   |  25 +++-
+ drivers/iommu/iommufd/main.c                  |  38 ++++++
+ drivers/vfio/container.c                      |  21 ++++
+ drivers/vfio/vfio.h                           |   2 +
+ drivers/vfio/vfio_iommu_type1.c               |  21 ++++
+ include/linux/iommu.h                         |   2 +
+ tools/testing/selftests/iommu/iommufd.c       |  48 +++++++
+ tools/testing/selftests/vfio/Makefile         |   1 +
+ .../selftests/vfio/vfio_nr_pages_test.c       | 119 ++++++++++++++++++
+ 12 files changed, 347 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/vfio/vfio_nr_pages_test.c
+
+
+base-commit: 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e
+-- 
+2.56.0.rc1.315.gc6ed9934b7-goog
+
