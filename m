@@ -1,133 +1,146 @@
-Received: from mta0.migadu.com (out-240.mta0.migadu.com [91.218.175.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62E043DEBC
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 08:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002AE44065B;
+	Fri,  2 Oct 2026 08:10:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790928221; cv=none; b=lJgpEp14qOkQQaeedjCuFT2w2hve2E+8EClddMjTSIM4DD0VE1o75fvOYjVd/miQMVHU2ZaIHYxPJdpl9iYqg1yNtg3C/3Iu0LF1XSq1g4gutIyi9TTMJEAqX3wJcd/tYQiJvPOGEUv/nqH9bQgb1+M+Eko/e2Az2OfT0AAeAPU=
+	t=1790928628; cv=none; b=hLhbc+Nq4sX3lVCy8fBUBTytDOlequG/y9M2CaJXjICw5lt6qcy2mWDByKkf8+vq0/U6EwX9uZ5Y6knTapozQSmXljFv3jM1ib+wA9M8i/CkqYFSowZvTuIvBAk454qarDP4uXcm+yKHQKKKoNwsUXqSxMTgUqIPBrQzCJ2jVB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790928221; c=relaxed/simple;
-	bh=CE54ArF9CfZSFzFjBXuY+9dl8X+yjhtgmfmzwiHATzM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=GB+Jjaxmo3E8+3tPEhdg92moJDzMruT+I0qlRH7tUq2/AVYAU2hJlIN2PycuRv/L5qeiDmiwC6wuZktJjLmYphOKhRI6a3eedNY26nKQqqRGmxwOv/mO7HkIqTOV5EA3pYRsrHufQVqnU7A/r7xyjfDpsVvTslQVrjeggyZv2vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ds3++d5y; arc=none smtp.client-ip=91.218.175.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790928628; c=relaxed/simple;
+	bh=/jWlfTYISWDRdwB70XBgz/0rZ6uagYb5mFQFGQi3k1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FWLHwkt/Nh6mtiOA6ynxM5G+ogwLmQOc3SRKgIk/7C/u2iDHUMNWPImKjDlOqmO5fQ6c8hQvKIn7hcndQkEE+as5ofFAEnT3WyOKLO+RgoqvMiWNs0zQi1/SmtSeWHuSfyw58Y043JkIAuxU3k4Y8HTaU41WRZUDk2XwqlH2mpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZkKfj52w; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ds3++d5y"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=CE54ArF9CfZSFzFjBXuY+9dl8X+yjhtgmfmzwiHATzM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790928212; v=1; x=1791533012;
- b=Ds3++d5yfDk3weHdTLBg3OgvNzweIJnH6GRoSyfTW1ra7WqtBBSuaC1czrtFxSira0HEyujf
- Y8HxXqfT27CknSgNDgx89MZxLDRzOu9z7WQUTgayBxIIWxxmgFdjrK+ah3ev8EZrxRsZTpkjLXO
- vzfCowrKNNGEbhnXRi904XKc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3000c729e5b3d0a9;
-	Fri, 02 Oct 2026 08:03:32 +0000
-X-Mizu-Trace-ID: 3000c729e5b3d0a9
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <4fc25ca5-bd57-4df0-a8e1-cf6bb9ba2fcb@linux.dev>
-Date: Fri, 2 Oct 2026 09:03:28 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZkKfj52w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CD511F000FF;
+	Fri,  2 Oct 2026 08:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790928623;
+	bh=BIHFM4YkUGLtT//ijgD4g07c9OxY00eHXMaA/kwG2nM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ZkKfj52wi+HBtm4OSS7+TGHkipMV+dWZaiDRPkTP1OUg2cSZgWi236Wj6NYUE3zhP
+	 cE/wLWLsAeog8taVdUpM5sc8E4yCibHvboHgqOHxAEG+Y5Z/wzqywqWTkRHX1PX8RJ
+	 Y6MrqkaPJzwXRfn048jxdDXzNp00NQ6UuQjAuOmLFP1bfYlCjQ7TtK0Qzpq09+/X09
+	 mUlW0HPJX0OTnzNLrxPH7PlPg13Ld0kUi9GjYTFEQg80JgThJuOQqXg7k0VabrPqqj
+	 M9I4tH9JjiDYoMcnmK8F+JM777QiRIOEKoJxCdsUEHTj9cABRLPo4injcxApsYeJGY
+	 nLF4S21X/85NQ==
+Date: Fri, 2 Oct 2026 09:10:15 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Hajime Tazaki <thehajime@gmail.com>, johannes@sipsolutions.net, 
+	linux-mm@kvack.org, liam@infradead.org, rbm@suse.com, akpm@linux-foundation.org, 
+	luto@amacapital.net, brendan.jackman@linux.dev, liuhangbin@gmail.com, corbet@lwn.net, 
+	kees@kernel.org, broonie@kernel.org, mhocko@suse.com, rppt@kernel.org, 
+	shuah@kernel.org, surenb@google.com, vbabka@kernel.org, wad@chromium.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org, 
+	geert@linux-m68k.org, daniel@thingy.jp
+Subject: Re: [PATCH v4 1/2] selftests: run tests on nommu architecture
+Message-ID: <ar9ldn036SgT-bq1@gremlin>
+References: <20260929235711.2287931-1-thehajime@gmail.com>
+ <20260929235711.2287931-2-thehajime@gmail.com>
+ <bda5eeaa-7868-4d4a-9026-9e99347afd7c@kernel.org>
+ <ar4br2vW7yZGd3gt@gremlin>
+ <94759bed23f00d2044005e36be6f72f297e092f0.camel@sipsolutions.net>
+ <m2se2o3jyc.wl-thehajime@gmail.com>
+ <a65f4431-d225-4535-b921-00319ceeb2a2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Subject: Re: [PATCH bpf-next v2 01/13] bpf: move linked-scalar flags out of
- bpf_reg_state->id [NFC]
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
- <20260910164635.459558-2-vineet.gupta@linux.dev>
- <DLDKB6BTHVXE.PFK87O3QY1J5@gmail.com>
- <f575fe19-a5a0-4f43-b1bd-cdec2c6e9830@linux.dev>
- <DLH1MDZPU5G0.228555JR34D3N@gmail.com>
- <76ca0a2e-dd9a-41c9-90e4-5fd3c9171172@linux.dev>
- <CAADnVQKKWBV+pFMAStB_-POKveeO83RiXU+VKeua3odSu-Xrmg@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAADnVQKKWBV+pFMAStB_-POKveeO83RiXU+VKeua3odSu-Xrmg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a65f4431-d225-4535-b921-00319ceeb2a2@kernel.org>
 
-On 9/16/26 5:36 PM, Alexei Starovoitov wrote:
-> On Wed, Sep 16, 2026 at 2:24 PM Vineet Gupta<vineet.gupta@linux.dev> wrote:
->> On 9/16/26 2:02 PM, Alexei Starovoitov wrote:
->>> On Tue Sep 15, 2026 at 1:17 AM UTC, Vineet Gupta wrote:
->>>> Back when I started, keeping it NFC made more sense. But with all the
->>>> nuances discovered in the process, I'm inclined to drop the NFC stance
->>> What is NFC ?
->> non functional change aka refactoring.
->> Like I said when I started I wanted to keep the id / flag breakout
->> purely non functional. But given that splitting it does change one thing
->> (mentioned below) - I'm dropping NFC attribution.
->>
->>>> and make functional changes - there's at least one which is the
->>>> following accepted pre-series and now rejected.
->>>>
->>>>          old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
->>> that's a red flag, no? The refactoring patch shouldn't have
->>> any changes to selftest and veristat numbers?
->>> Unless I'm missing it again.
->> Yes understood except that it is no longer refactoring.
-> NFC is gcc probably lingvo? In kernel people just put in the commit
-> log "No functional changes", so it's easier for humans and for AI
-> to review patches.
-> So pls skip such unusual tags in the future,
+On Fri, Oct 02, 2026 at 08:08:44AM +0200, David Hildenbrand (Arm) wrote:
+> On 10/2/26 04:38, Hajime Tazaki wrote:
+> >
+> > David, Lorenzo, Johannes,
+> >
+> > thanks for the comments and inputs.
+> >
+> > On Thu, 01 Oct 2026 19:01:45 +0900,
+> > Johannes Berg wrote:
+> >>>
+> >>> I thought maybe uname could help but our LLM overlords tell me no.
+> >>
+> >> Hajime originally wanted uname to indicate it, but that caused
+> >> regressions elsewhere, so we dropped that commit. I guess we could put
+> >> _something_ back?
+> >
+> > systemd uses uname information and our (old) patch changing the format
+> > triggered the regression.  thus, we dropped it.
+> >
+> >>> It pointed at something though.
+> >>>
+> >>> In fs/proc/meminfo.c:
+> >>>
+> >>> #ifndef CONFIG_MMU
+> >>> 	show_val_kb(m, "MmapCopy:       ",
+> >>> 		    (unsigned long)atomic_long_read(&mmap_pages_allocated));
+> >>> #endif
+> >>>
+> >>> So MmapCopy in /proc/meminfo tells us definitively, weirdly enough.
+> >>
+> >> Hyrum's law and all that, but I guess it's not highly likely to (want
+> >> to) change :)
+> >
+> > a runtime detection is nice.
+> >
+> > scanning /proc/meminfo might be useful. although it requires to mount
+> > procfs (we can actually skip procfs mount as it is optional) so, this
+> > is not 100% portable.
+> >
+> > checking ENOSYS like syscall(SYS_mprotect) might be useful but I
+> > wasn't sure if this is always the case of NOMMU or not.
+> >
+>
+> I assume there are plenty of other mechanisms. Like testing if fork isn't allowed.
 
-Yes keeping kernel's existing conventions makes sense, although LLMs 
-understand what NFC is.
+Yup that's an obvious candidate!
 
-> but keep the first patch as "No functional change".
+You actually need to check for both -EINVAL and -ENOSYS since, of course, we are
+inconsistent with this.
 
-Just to rehash since the meaning of first has moved significantly.
+Some nommu arches specify __ARCH_WANT_SYS_FORK unconditionally for both
+mmu/nommu variants meaning you get -EINVAL in that case:
 
-1. Now the first change (patch 1/x and its test 2/x )  is no longer the 
-compound id conversion, but coerce_reg_to_size_sx / 
-coerce_subreg_to_size_sx change to fix the errno range case, as 
-suggested by you. It is a functional change, with following improvement:
+https://elixir.bootlin.com/linux/v7.2.8/source/kernel/fork.c#L2830
 
-    === VERDICT CHANGES: 3 ===
-        mov32sx_s8_negative_range     failure -> success
-        mov64sx_s32_negative_range    failure -> success
-        mov64sx_s8_negative_range     failure -> success
+Otherwise you get -ENOSYS because it's not defined.
 
-    === total_insns:  0 changed among 1242 both-passing, 0 worse ===
-    === total_states: 0 changed among 1242 both-passing, 0 worse ===
+But fork() -> -EINVAL or -ENOSYS = nommu, then just have the child quit and
+etc. should do it.
 
-2. The second change (3/x and its test 4/x) is accumulating add_const 
-deltas (w3 = w0; w3 -=1). This makes the 32-bit link with delta special 
-handling of zext unnecessary so its a prereq for the series.
+But then that'd need some C... ah fun :)
 
-3. I guess you are referring to the patch to convert compound id to 
-broken out id + flags (5/x ) is also technically a functional change - 
-due to the state comparison behavior improvement that fell out of the 
-seemingly mechanical conversion and is clearly called out now. However I 
-verified it in isolation (on top of 4 prior of course) and there are no 
-veristat or selftest changes with it (just a cosmetic name change due to 
-base_id -> id)
+Crazy to me that we don't expose it in uname...
 
-    === VERDICT CHANGES: 0 ===
-    === total_insns:  0 changed among 1247 both-passing, 0 worse ===
-    === total_states: 0 changed among 1247 both-passing, 0 worse ===
+>
+> > My original attempt was to use include/generated/autoconf.h; with that
+> > we can omit environmental variable or command argument of NOMMU=1,
+> > but gave up with handling standalone build/test case which might miss
+> > the generated file (and complicate the patch only for the NOMMU
+> > detection).
+> >
+> > So, specifying NOMMU=1 is my previous, though dirty, conclusion.
+> Let's avoid making it harder on users by doing some runtime detection.
 
+Yeah it'd be preferable.
 
-I presume that is what you were asking for ?
+I see a bunch of usage of procfs in selftests.
 
-Thx,
--Vineet
+So can we just please require that the selftests have the user mount /proc, then
+the /proc/meminfo grep is the easiest + quickest way.
 
+>
+> --
+> Cheers,
+>
+> David
+
+--
+Cheers, Lorenzo
