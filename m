@@ -1,201 +1,227 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA6D418359
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 08:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB123815E4;
+	Fri,  2 Oct 2026 08:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790930462; cv=none; b=AgL79EeWqjuSti2qcouppmRGH7JEwdW2cJ4kYzuQK0mDTq3QoS9O2Z2L7yhjFNUsQA6u/P0FxdrFaOHYEFCj9uk2+dJvuMQyWaAJnx5SS1IYKuXdNfvYCpu+KPFv+ESNU0e0cQd8sfgEK7oFT033C6yL5aD1kiU8/fA5P4up8M4=
+	t=1790930644; cv=none; b=k1ovLIZmYM7pTkElWOkS73rqh0QguOuVYdpJj4yMowoC61JpJK+GooJg58A/DziE62z0g+Q/qO7DEgC20bjhkQWyeOKQtvoRDGW9WfXzFGPVvSb/H5hpb50UzySyET7uLBUyr/LE4ZBjBVu4qVsB9FY42IJLbGTAMHezCfQ0Abg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790930462; c=relaxed/simple;
-	bh=g3WQYC9inDBpN52heydkhuKN+wu9j/uQyOu98dyVs18=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eTxbp2chWdcPRgS2ekvWjJnPD9oJVR+kROK8Mxz5WRrbYrPSTZatupkzm/ueGZtntvbQNXULnqAz0mYH4d2xxCQTOeEOFBs0LeX8EwQCt+MOBIik0NV1R71PL2SeIgk/VNf7tai87mZZsnEG6bkX6JiNN8pM0kN3uykd30CWz2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=I+XTzA3+; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=N/MisG4Y; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1790930644; c=relaxed/simple;
+	bh=WMXtorft3yFSsxaaQVsOoB9M+UsRVtahEneyXQcysGY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n/o0uDU7Rsgu63ai5xx0KvZWJCVpWKAOhEbJikeVIxO0bgevHej3FpPtf0xpRLrcMbzD1QFYjvTk7ew4RoBUms2nTEt30Ijl5wenj3ygThWfR5CVrEBVDakNtzyormJpPbzh6opMNf3UvqIfHYqaOYDoPbusSnc/lx1Eq3RED9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vwe8P+39; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="I+XTzA3+";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="N/MisG4Y"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6925jeTf036694
-	for <linux-kselftest@vger.kernel.org>; Fri, 2 Oct 2026 08:41:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	SRt1xEPKkLyIuVd9CabpyHFvvXu/eoMAADR7BossydM=; b=I+XTzA3+iRDxGOSA
-	N9/9ZBRzW2HXfCTAgVwjZe24AnIhhUaKp0G3zfrQr2YFnpI7ViDv7Hi/7K+dZAEa
-	qbQe6bmSKZn4Bns3FZ9pNcVJN1//Exrhqp+t/1dW86qQNbMc8tJcagKBjFRPJ6Ml
-	yiWGxKiVSEVgdWizKlR+BLNaoKKSEFW4wRLsT17wMMlXlCKsAaXmhDKxyfg3fe7+
-	8VPCDHi9Pkr3imA/unPMcsjZ+R26yh+te1hedKCneUMgWYvRzMYEQyjIqtsiOWb2
-	Xx1onrV3oEtZv31ruToPiyZ1ZNcVocEtN9CdCbcclX3ZfHYMwAYVmKCFHQ9kv5LH
-	vl3JVg==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4h1tbgb8wt-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 08:40:59 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3a6d95d6e08so557656a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 01:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1790930459; x=1791535259; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:content-type:references
-         :in-reply-to:subject:cc:to:from:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=SRt1xEPKkLyIuVd9CabpyHFvvXu/eoMAADR7BossydM=;
-        b=N/MisG4YZHAt0Wst7HdEyZT0Z4i8Y+wuDDlN02eVIIkbuhSbV4b1c7vCEyq3EgY3+/
-         WpbLcLT8XRTJzJmmhYOR9++Xoi+7gRQk7TolhM9z6VMZ0Auh4WbgMzBs+XTspRl/BQtV
-         FO97K0rMQO6ZjcLdY8t0zJMToeAsgWkXIDYF0G8kgIVhdTftTXNRDtqUYbflLassY0hq
-         fCUrjod+F5IPBR+wkesXzxDyvsXEVPn2aSkNXSR/BiSfuSo5Ax7YCTI0kWJjuLAC6nlO
-         XDFAAHG5EaONyf6WBglEXdG8bnW/WzqjHCRzTubkqDaciNjxn5VBesSy7IDKmwkHR1TF
-         NUkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790930459; x=1791535259;
-        h=mime-version:content-transfer-encoding:content-type:references
-         :in-reply-to:subject:cc:to:from:message-id:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SRt1xEPKkLyIuVd9CabpyHFvvXu/eoMAADR7BossydM=;
-        b=lFhicrKVEU2hsJ/9U0GjmKKa7vDAfPhFXmSA3Oj+vkBasQWSWd9o1yNo7Ynl1r8gnw
-         NewN2An80sQ3V7FB0Qg6ObEeEn99jANjdIoNDeeskc2pex4YzR5GjLyeTUjLF1Nj0wKg
-         8WejPlL9foIF0UEB2aM05sM7ij8X9a8w/Cf9N2g2ddhPQd4OXIyiCcGzxU7nUybMWz2j
-         ELw/ZKVnylGJ4o7QL/9+67hHqbtm/5d8vp6/KAE19UeVmcOHqFdxrcp/JvtsO+PfGICT
-         92/F7J6V8EDxUVlQ0/rJt5W7BWuEP2ecvXVQJa/jsVUDclLWkv1pAufyz8NqQ2R6xDie
-         42eQ==
-X-Forwarded-Encrypted: i=1; AKwUvBysUYzjh6Cmtfg7mtJToGwtblmP9eoNMCEpmPkdLtAG8DpCIlgLlDee5j3NO8x/2XjPSWQ/W2fkKHfyaGTO1vU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ5cHjhXx3TJl8EoJ9Qjpql+iiTWScP8bJPvtY0q3a7rfZCUnTu
-	QV9W8P8Wth/zJcFkEnWgnhB/0UMj9ttqehVmb838Bqt5/XlZPe9iCpAPGbckhohd0JYkDoOuDm0
-	ILRy6XSnvhGlVyCfzXD05CdB6ABeRNBXr89NHbI5Ixjz9NqZtf4mEKXr6RLfX6r/bi8xBgg0=
-X-Gm-Gg: AYBFou2S93/+19+cxgZJzWhAgkwi8fiPHhUlYG6dC9D4OisC2QKEcuLbY4PTjKmjtAG
-	J+UNxGRBe5iWfOi/7uFKSuAM6IeKLvRw8WBAB8/48k880RNRIKks7qMn14CAAQVOVSH+iJWUh1a
-	y8mmyV44TL2ok8+JdcygcGTkwJ83rZgAa6U0V3zejbjVOL2k12BpFZHv76aSKr0U/PWcCrKBN/b
-	UKtQKg1hgw3xS8lC3O7f8FZx2N25IyLhcIGQuAt+I3FAtKaVPYT0FppvITxoRlveZ9eZCcYIJsn
-	XZFf5jTDfIdlEcC9iD6Xhv3/5g9uoycrMwjvi3vwZ96Pyr91Ii4sM1tkYjNoiY2MIpqRR2+mzpr
-	GqMMY7z6QrKx/
-X-Received: by 2002:a17:90a:d64b:b0:3a4:6f87:c0cf with SMTP id 98e67ed59e1d1-3a6ce84bc31mr1544742a91.53.1790930458866;
-        Fri, 02 Oct 2026 01:40:58 -0700 (PDT)
-X-Received: by 2002:a17:90a:d64b:b0:3a4:6f87:c0cf with SMTP id 98e67ed59e1d1-3a6ce84bc31mr1544697a91.53.1790930458256;
-        Fri, 02 Oct 2026 01:40:58 -0700 (PDT)
-Received: from localhost ([2a12:a305:4::30fb])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a6cd59187csm3397134a91.10.2026.10.02.01.40.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 01:40:56 -0700 (PDT)
-Date: Fri, 02 Oct 2026 04:40:53 -0400
-Message-ID: <7325307a9d029ef3277c343230a46a40.guodong.xu@oss.qualcomm.com>
-From: Guodong Xu <guodong.xu@oss.qualcomm.com>
-To: "rkrcmar@qti.qualcomm.com" <rkrcmar@qti.qualcomm.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
-        Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@kernel.org>,
-        Chen Wang <chen.wang@linux.dev>, Inochi Amaoto <inochiama@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "spacemit@lists.linux.dev" <spacemit@lists.linux.dev>,
-        "sophgo@lists.linux.dev" <sophgo@lists.linux.dev>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Andy Chiu <tchiu@tenstorrent.com>, Florian Weimer <fweimer@redhat.com>,
-        Peter Bergner <bergner@oss.tenstorrent.com>,
-        Zihong Yao <zihong.plct@isrc.iscas.ac.cn>,
-        Mark Harris <mark.hsj@gmail.com>,
-        Aurelien Jarno <aurelien@aurel32.net>,
-        Andrew Jones <andrew.jones@oss.qualcomm.com>
-Subject: Re: [PATCH v8 11/11] riscv: hwprobe: Introduce rva23u64 base behavior
-In-Reply-To: <DLRXBUKNNOWW.BHCJX6LQ9LB1@qti.qualcomm.com>
-References: <20260920-rva23u64-hwprobe-v2-v8-0-5f14bc5c23d3@oss.qualcomm.com>
- <20260920-rva23u64-hwprobe-v2-v8-11-5f14bc5c23d3@oss.qualcomm.com>
- <DLRXBUKNNOWW.BHCJX6LQ9LB1@qti.qualcomm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vwe8P+39"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858461F000FF;
+	Fri,  2 Oct 2026 08:43:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790930642;
+	bh=QaW3NvlDbie2nX8q04QLao6HBP5b6PgxRU/jNxrvHlo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Vwe8P+39JCuHBizogmo2GNh1ALOKZtDQnio60+ojHg0sgpeiqScLp79z3mbw02V8F
+	 EYxN83kKfoU1dBWiYlTSNvqPO1sv2qLGQOHtGQ88RqyFySjslidqooaKnggLK/gJKG
+	 IWC5bqdlh9R7rDJ83vR8KTnnawGa9boU4Lb7HKydbTNBsoXeXWf2WMnkMILp6bICUN
+	 iHO/PMicuO4lycVHpnBubmnWdEzmOyVRE765syr056W+9jA4+6LnbRxAw4zEa6ohWa
+	 6CAE+VUsdlJvbi6bS41ZcL7w0M7FG61svR56MHeK92o8dhMmvZCsTExm2N2AYdnoxH
+	 W1EwRBuRDq0NQ==
+Date: Fri, 2 Oct 2026 09:43:55 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
+	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+	Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: Re: [PATCH v9 2/4] kselftest: mm: replace usage of /proc/self/smaps
+ for __check_pmd_huge()
+Message-ID: <ar9utGn5OEWjZUd9@gremlin>
+References: <20261001-fix_split-v9-0-0f4ba8bbdbdf@arm.com>
+ <20261001-fix_split-v9-2-0f4ba8bbdbdf@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAyMDAzNCBTYWx0ZWRfX3Z60ULczP0+1
- nbwma0B1Lddo6zREov3+OnxrBXsAF9o+LoPQ6BP/nNaIFw27JHNpspRrxTQg7vNyM5+vxEhhePC
- +Mgdi1E8GMyQMBjACOmvdA/rmVvRf4U=
-X-Authority-Analysis: v=2.4 cv=QY7zLcbv c=1 sm=1 tr=0 ts=6abf6e1b cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22 a=VwQbUJbxAAAA:8
- a=t9496tuAAAAA:8 a=EUspDBNiAAAA:8 a=9U0Ts4Z4qhTHMBCqQIgA:9 a=QEXdDO2ut3YA:10
- a=iS9zxrgQBfv6-_F4QbHw:22 a=4wQ91nGE5lQcD7eh5OX0:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAyMDAzNCBTYWx0ZWRfX7PXe5IKafnnO
- e7RYp8Do9ch0hVHhvkneBvkZixMHOT4R6s6UeA5uMsGN8p48DZ43qYgjn2pIZw10GKNipyKvN6E
- MwKKibHwHWMi4NHjKVgQM9gwuCh+N31Axo5gOWpKJw6gv50oC3jBxtd18u4nYpk3EqDITpOItGA
- DuUyyhUQOr/v//iGD3t3mN236H+ne9zv8fg610HOmBwDh5gIfrtoqDo6n0SQjjmCJWZktdDOKsR
- 4mwlZuR7cezyGYsU1q7xgpfUKnfCmTRi9LIn3+AFzwy4bC7Vio2KcmC56t6xReTupkUa/tG7on2
- SG7HFK+xLbu8oXmqyCVE4lHB4vp30ArVxN2kmJW8IgUwgEJQB5RYKECpLxS1S4F4MZ8iIvmnJHM
- lBSSIpsS6dX1kkGIkGbtk5um9IxCdhL4KFhDOW4d69tpEvU+HjYadAxNWc3b2xRsL8MA5l9K4fA
- keGo+Vid9ApAKmIb7/Q==
-X-Proofpoint-ORIG-GUID: mQI5ZVESj_qABUNO8J1wACpQyd0qRzDx
-X-Proofpoint-GUID: mQI5ZVESj_qABUNO8J1wACpQyd0qRzDx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-02_02,2026-10-01_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 adultscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
- bulkscore=0 spamscore=0 suspectscore=0 impostorscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2610020034
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261001-fix_split-v9-2-0f4ba8bbdbdf@arm.com>
 
-Hi Radim,
-
-On Tue, 29 Sep 2026 16:00:22 +0000, Radim Krcmar wrote:
-> 2026-09-20T03:18:31-04:00, Guodong Xu <guodong.xu@oss.qualcomm.com>:
->> [ ... ]
->> +	int cpu;
->> +
->> +	for_each_cpu(cpu, cpus) {
->> +		if (!riscv_isa_base_available(hart_isa[cpu].isa_bases, base))
->> +			return false;
+On Thu, Oct 01, 2026 at 10:17:52PM +0100, Yeoreum Yun wrote:
+> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> made by memalign().
 >
-> I think that extensions like F or V might be present in the ISA, yet
-> actually disabled in user-mode and this loop would misreport that
-> RVA23U64 is present.
+> The underlying VMA may start at a different address from the aligned
+> address returned by memalign(). Furthermore, a subsequent
+> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> already set.
+>
+> This causes split_huge_page_test to fail because the check_pmd_huge()
+> helpers incorrectly require the address returned by memalign() to
+> match the VMA start address reported in /proc/self/smaps.
+>
+> Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
+> /proc/kpageflags to detect huge-page mappings checking PAGE_IS_HUGE
+> and PAGE_IS_FILE according to type of huge page.
+>
+> Since shmem pages are also file-backed, simply check whether the page
+> is file-backed.
+>
+> Fixes: 642bc52aed9c ("selftests: vm: bring common functions to a new file")
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 
-Only V has a way to be disabled by user-mode, through
-prctl(PR_RISCV_V_SET_CONTROL) with PR_RISCV_V_VSTATE_CTRL_OFF. That
-interface is questionable, and obsoleting it was discussed on the
-RISE Platform WG call on 16 Sep. And I plan to take this to LPC26
-next week in Prague to see what the community says.
+LGTM so:
 
-Besides, since you mentioned hwprobe_isa_ext0() below: actually, today's
-per hart hwprobe_isa_ext0() doesn't honor that prctl(V OFF), IMA_V stays
-set. Refer to [1].
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-There is no way for a user-mode application to disable F/D.
+Thanks for doing this! :)
 
-> Is there a reason to diverge from how hwprobe_isa_ext0() does the
-> extension detection?  (has_fpu() and other global checks)
+> ---
+>  tools/testing/selftests/mm/vm_util.c | 78 ++++++++++++++++++++++--------------
+>  1 file changed, 49 insertions(+), 29 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index a0ab78ceedb1..a3c3a2706c22 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -351,24 +351,6 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
+>  	return entry;
+>  }
+>
+> -static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
+> -		  uint64_t hpage_size)
+> -{
+> -	char buffer[MAX_LINE_LENGTH];
+> -	uint64_t thp = -1;
+> -	char *entry;
+> -
+> -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
+> -	if (!entry)
+> -		goto err_out;
+> -
+> -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
+> -		ksft_exit_fail_msg("Reading smap error\n");
+> -
+> -err_out:
+> -	return thp == (nr_hpages * (hpage_size >> 10));
+> -}
+> -
+>  static bool check_large_folios(void *addr, size_t len, int nr_hpages,
+>  		uint64_t hpage_size)
+>  {
+> @@ -410,20 +392,51 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
+>  	return ret;
+>  }
+>
+> -bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> +enum check_huge_type {
+> +	CHECK_HUGE_ANON,
+> +	CHECK_HUGE_FILE,
+> +};
+> +
+> +static bool check_huge_type(uint64_t categories, enum check_huge_type type)
+>  {
+> -	uint64_t pmd_pagesize = read_pmd_pagesize();
+> +	const bool file = categories & PAGE_IS_FILE;
+>
+> -	if (!pmd_pagesize)
+> -		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+> +	switch (type) {
+> +	case CHECK_HUGE_ANON:
+> +		return !file;
+> +	case CHECK_HUGE_FILE:
+> +		return file;
+> +	}
+>
+> -	if (hpage_size == pmd_pagesize)
+> -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
+> +	return false;
+> +}
+>
+> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
+> +static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
+> +		  uint64_t hpage_size, enum check_huge_type type)
+> +{
+> +	int pagemap_fd;
+> +	int nr_pmd_mappings = 0;
+> +	uint64_t categories;
+> +	char *start = addr;
+> +	char *end = start + len;
+> +
+> +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_perror("open pagemap");
+> +
+> +	for (; start < end; start += hpage_size) {
+> +		categories = pagemap_scan_get_categories(pagemap_fd, start);
+> +		if (!(categories & PAGE_IS_HUGE))
+> +			continue;
+> +		if (check_huge_type(categories, type))
+> +			nr_pmd_mappings++;
+> +	}
+> +	close(pagemap_fd);
+> +
+> +	return nr_hpages == nr_pmd_mappings;
+>  }
+>
+> -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> +bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+>  {
+>  	uint64_t pmd_pagesize = read_pmd_pagesize();
+>
+> @@ -431,12 +444,13 @@ bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+>  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+>
+>  	if (hpage_size == pmd_pagesize)
+> -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
+> +		return __check_pmd_huge(addr, len, nr_hpages, hpage_size,
+> +					CHECK_HUGE_ANON);
+>
+>  	return check_large_folios(addr, len, nr_hpages, hpage_size);
+>  }
+>
+> -bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> +bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+>  {
+>  	uint64_t pmd_pagesize = read_pmd_pagesize();
+>
+> @@ -444,11 +458,17 @@ bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size
+>  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+>
+>  	if (hpage_size == pmd_pagesize)
+> -		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
+> +		return __check_pmd_huge(addr, len, nr_hpages, hpage_size,
+> +					CHECK_HUGE_FILE);
+>
+>  	return check_large_folios(addr, len, nr_hpages, hpage_size);
+>  }
+>
+> +bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> +{
+> +	return check_huge_file(addr, len, nr_hpages, hpage_size);
+> +}
+> +
+>  int64_t allocate_transhuge(void *ptr, int pagemap_fd)
+>  {
+>  	uint64_t ent[2];
+>
+> --
+> 2.43.0
+>
 
-Anyway, back to the RVA23U64 isa_base bit. In this design, I mean to
-report the per-hart RVA23U64 base, which is derived from hart_isa[cpu].isa.
-That bitmap has passed the validate callbacks in riscv_resolve_isa(), so
-it "matches kernel configuration as well as correct extension
-dependencies".
-
-There can be a mismatch on a system with heterogeneous harts, where
-has_fpu() is false globally but this particular hart has F/D. On such
-a system Zfa and Zcd are still reported for that hart today, which is
-the same mismatch. Same reason, because Zfa/Zcd passed validate callbacks
-per hart.
-
-So the isa_base bit RVA23U64 behaves like the per-hart keys do today,
-while IMA_FD, IMA_C and IMA_V at the top of hwprobe_isa_ext0() are
-host-wide. My take is that when user space queries over all CPUs, it
-gets the intersection, where RVA23U64 is not reported in such a
-heterogeneous situation. Per hart, I want to keep the kernel config + ISA
-string truth.
-
-[1] https://lore.kernel.org/linux-riscv/20260725001614.2578617-1-tchiu@tenstorrent.com/
-
-Guodong
+--
+Cheers, Lorenzo
