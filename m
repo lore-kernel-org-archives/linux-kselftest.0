@@ -1,86 +1,202 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F133E2771;
-	Fri,  2 Oct 2026 18:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA86347532
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 19:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790967363; cv=none; b=bWh8cnZ//tPRCtU8AlOD3lMPIX9fb6iUECyP0SjRfZ34L3bS21nCMrmVQCPtPmr43USvNYft2Xbvw0GhcTGlcOEemSiI9bxoh8rRfvs4T6WX2/C3j7YebD973iz7twu6Efo4UvlrcgI1Te1QMp4YtEKTEEcP8Z4NCnasN7OEgqE=
+	t=1790968377; cv=none; b=O9EDt4GGq8AMA71ROCJWpO7v0xwCAObgqhg5IIikjd1dV31A/0kFUVyv1ng9pI3R2mBE6nT2kCr3+ykpuBvYtGV9fuvp0wYJvgXgt9BfDG5SqGHSk1KMGsKvqhq7ioAJ+18vN6x95EE8aFRuQNK5/U2vAP74TFiKRpz5353t9Xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790967363; c=relaxed/simple;
-	bh=ZxwKMOOvmrfGgtZgwQPEiVdQ3xPZwGfN2W3kmQxgemc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XCo8vs0yQ3AYz2VpMqORHuvIevdNInXfkaTYACqR6ZKWG9xhFldrt9zHpDiCOLs0kBblx+1yS2wRbJLCSlLQ2wnOLpt/AfoGRh12etwrkkAlnzKCwneziHr+inNG+dTreo8MUenG1lRBxKAFRrqaHsFUJtYPAlWa3YBURhciM6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=naBtS+AI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790968377; c=relaxed/simple;
+	bh=VXYscRPCLO7/B51vHKehDNHl1fFhWkTSNPgHZbmLDBE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Vrc+PHelWNdfHAvRkCofmk+BZUaj3XDz7TRPTpBboEQzKFnCfOvMn+g6mXcPIvdHfHOfQB3+gdTFdSD8dnBy8q3acsEe8aY82UqALp6F+/d2f1+gsg8gZhmQ9tl8yRMiFRI334tPo16W5XjubKxtZqNpfL5cGmA8Stc73vabXRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WCb0bZ60; arc=none smtp.client-ip=209.85.167.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="naBtS+AI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53EBC1F000FF;
-	Fri,  2 Oct 2026 18:55:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790967362;
-	bh=0+fy1k/FTgNKjVO3WlIWR90qWFOxGe1fwcU4uHmJ++s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=naBtS+AIPsfSrE5BcNQ1Zi33yx+/tTwg0tt/VobHkuWWljZUi3mor2m8UIgDUaVFs
-	 g1XOCyT31LALkpGFvi+VLey0ibZUmrwQ51rGq2S+b0CsAwheQy2ZqwvTwWiykgJlxh
-	 n5JBWbtnSYTDHBc9hUD0KEONNXlvdcpuObp3B6kkYgYnQaRopftTuAUoJeTsa8Noiu
-	 jAn1mBhMX/c8j7+o4PX8ed9yb+D249oDuAjS/E2yHHlHA5HwwyPMgtqOXNKcQgeMyV
-	 Xq0f4dDVIOVm84BOYF3exj+hKCrLyLWYlzQO1qPMLJSv9vsr5qABECQI6td28+1Hec
-	 7BbLpqerulZvQ==
-From: SJ Park <sj@kernel.org>
-To: Aveline Noir <jm5905938@gmail.com>
-Cc: SJ Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@arm.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: mrelease_test: fix retry limit
-Date: Fri,  2 Oct 2026 11:55:55 -0700
-Message-ID: <20261002185556.41533-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <CANOyQmFzsssM_BXHUDrV+UuVD5SZMBmSkg3UQnmw9Ns1PV7GCQ@mail.gmail.com>
-References: 
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WCb0bZ60"
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4c734afb8deso12666514b6e.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 12:12:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790968375; x=1791573175; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ju7lYd5Yw64Z3Dvl1ezRi6rNcZFkDznJ7WatWUwaWnE=;
+        b=WCb0bZ608q75jsSV9HbRvoALBTMxDyUEzvwzVHoZwHmB1C8rXLagN6bBmNS8xt4nKJ
+         fJ317/s6YSoXWk5zCUxe5MdT4cAQyStuJgVclPyUXCaJFRpI5KXTEeX5Bx/T8T25kEFe
+         mLGXcNIUOv6FnqO6ig33l3pQvrlz/n89ZBOJlIrxEfhxrALdMUdflrO5q5WMF/eQ45Hb
+         Ot4rZYzFXCng3h29XN9wOgl32emRASZXEN1rrV+fdheYP0ad84+1iLy4p3FDmnGXluPm
+         aBcHVUnqBz+Sh4ctVrat8kAYZKmdLR0Hu5Hkah++5TUBS7PX1lrjPkd69f6blOX7hetk
+         WsYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790968375; x=1791573175;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ju7lYd5Yw64Z3Dvl1ezRi6rNcZFkDznJ7WatWUwaWnE=;
+        b=ewiE0FtDUOJjmGl9SWO5YGULqNGztAItRbZvt7kT/58DWkem+ieZNdWDi3iW8yekcr
+         R/lPeynmdTuQPutGk8fh39xhFWN1klmUamDDNABNnubKLZa5VDAWZnwj+fhjB7xy1j3R
+         7APehfz1IoVPNCCr8rA6/a3z6URrsmwjBRKrAKmIxJfDo86cyp2QR7xR2atgCvu6Hpka
+         vL2t6pbXPywoJWvKyOfx8q4fzmq52ciQ8h+YD4SP9ANPb66gEItIItcLPT5Xdu1v8u7w
+         qFKbyVvmPrpnMAsBQHWJYfl6SYYKM/LDGrQweVDuMlP7oI1zRPm64dPesad+4DZo3Kp1
+         Obaw==
+X-Forwarded-Encrypted: i=1; AKwUvBz+WIMjj1JNiuZjGyB9n8Zd2kwS/yXJAVlJ4vRDKUno8Ia7U04TiZOt7F+ZaQZeNxDOgn1BjVZ9hy3zawrY5no=@vger.kernel.org
+X-Gm-Message-State: AFuF++lsFA1EQbc4vZIUuvjJaS91uSPXYqFu6K1Ch58yM4wbKL0bMl94
+	+JbGLXrQOsTIVin5zNhHDDHN3Q1pkph7iEQHLmoTkeXVI3EoupF46jrsH9jz8h1vmI6z7JJ5yez
+	z78keYM6xxt9iZ23y3PFSLdX3jg==
+X-Received: from jaso12.prod.google.com ([2002:a05:6638:124c:b0:5f9:6f05:3fd8])
+ (user=justinstitt job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6808:6409:b0:4d5:2b09:a6a8 with SMTP id 5614622812f47-4f67bb70fd6mr326114b6e.66.1790968374329;
+ Fri, 02 Oct 2026 12:12:54 -0700 (PDT)
+Date: Fri, 2 Oct 2026 12:12:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM0QpAQBCF4VfRXNvanQ3lVeTCMhiKbQcpeXeLy
+ 6/+cy4QCkwCZXJBoIOF1yXCpAm0Y7MMpLiLBtSYG61RzeK9MpgpS7YhdE6bwkLMfaCez++qqn/ L7iZqt3cP9/0AJ59dH2wAAAA=
+X-Change-Id: 20261002-kspp-125-3e3ae2bb0173
+X-Developer-Key: i=justinstitt@google.com; a=openpgp; fpr=E8700888482CBCD3779E67F32D8CB922E382C412
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4319; i=justinstitt@google.com;
+ h=from:subject:message-id; bh=CMxtKQblFVuOs9yO0cOd0qjokWPxJqtBuipzA4VLqOk=;
+ b=owEBbQKS/ZANAwAKAS2MuSLjgsQSAcsmYgBqwAE2r0gF8ef+9zrb/Tnx5YDs+uDLCUy900v6U
+ kKaVNpzhvWJAjMEAAEKAB0WIQTocAiISCy803eeZ/MtjLki44LEEgUCasABNgAKCRAtjLki44LE
+ EruhEACo681vlkH22FDTfWSqCvpuIODD+WjYFnnSK5TVc/3YmBNBVYd34ULTGijvGhh39H7Z5bh
+ D5zUjNlbu7NXvlXE5QqoacRc/RPi3BQdxkrC+YGjiaS53nyoWkkFBsW+No4r11gRw1Pbu0UATKs
+ JgXyMbb4ev3Ep/c2eDhTgywCsvURzhy3rU/sCKgmZ+WuUtIwa0IGHuQKrwy/+iZxpLDnYlYzEl3
+ cigkyHDf1igCYUdh/vk24sBixs/AI+jWoy1+bHoOJsZt7jUwdd0/gZ9WRmflqhcHFRk+Dn6UdVY
+ uye+kEyRR45nNTnju6tfHs+dr2fJGjM/iJRrYpvbyJ83iwwjDSjiHLYZ+bYzndYwkhzTcYT/BZH
+ UEz580uo3+nA57hgzSjpX5vPQ2HcGlfTt6MC05E9TXMm4DKF8+5OTjc48EHSf1WTANbFtOnVJG0
+ iLvEv4eVD8lol8YXkv/dVdXM2rSpcM30sb3fUN6nFPiaLgJ0+ra7I9KF/3g+m5EMjfbV+UkFfVz
+ PDRP/fj+L2t/z0OKL29LkKqEcO05ZfW39dHP+ADHcI9wz5jx+LluT16T465qcdeAaMzfSsz4iqo
+ vervsLOV9SxujrHtS0bx/m2SyWMo4i45eCL3jyTtCj6JYM/j6ZCn2ytvyN/sxhTzUau88EK4uzr jmAdEgNtYEPzPBA==
+X-Mailer: b4 0.15.2
+Message-ID: <20261002-kspp-125-v1-1-91286a454fda@google.com>
+Subject: [PATCH] kunit/stackinit: Cover declarations bypassed by goto and switch
+From: Justin Stitt <justinstitt@google.com>
+To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>
+Cc: linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Wed, 30 Sep 2026 23:00:27 -0700 Aveline Noir <jm5905938@gmail.com> wrote:
+From: Justin Stitt <justinstitt@google.com>
 
-> mrelease_test doubles the child allocation when process_mrelease()
-> returns ESRCH.
-> 
-> When size is already MAX_SIZE_MB, the current <= check still allows
-> another retry, causing the allocation to grow from 1024 MB to 2048 MB.
-> 
-> Use < instead of <= so the largest allocation attempted remains
-> MAX_SIZE_MB.
+Under -ftrivial-auto-var-init= the initialization is emitted where a
+variable is declared. A switch dispatch that reaches a case label below
+the declaration, or a goto that jumps past it, never reaches that point,
+so the variable was left uninitialized.
 
-Makes sense to me.
+Commit 9cf016e6b49b ("lib: test_stackinit.c: XFAIL switch variable init
+tests") marked test_switch_1_none and test_switch_2_none as expected
+failures, noting the test should be retained "so that we can evaluate
+compiler fixes". Clang 24 emits the initialization on the jumps that
+bypass the declaration, so make the expectation depend on the compiler
+version instead of failing unconditionally.
 
-> 
-> LLM used in discovering bug. Changes were made and reviewed manually.
-> 
-> Fixes: 33776141b812 ("selftests: vm: add process_mrelease tests")
-> Assisted-by: LLM
-> Signed-off-by: Aveline Noir <jm5905938@gmail.com>
+Add test_goto_none as well. The existing cases only cover a declaration
+sitting between a switch and its first case label, while the compiler
+change covers plain goto too.
 
-Reviewed-by: SJ Park <sj@kernel.org>
+GCC continues to initialize only at the declaration, and reports as much
+with -Wtrivial-auto-var-init, so it keeps the expected-failure path.
 
+Link: https://github.com/llvm/llvm-project/pull/181937
+Link: https://github.com/KSPP/linux/issues/125
+Link: https://llvm.org/pr44916
+Assisted-by: LLM
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+ lib/tests/stackinit_kunit.c | 53 ++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 47 insertions(+), 6 deletions(-)
 
-Thanks,
-SJ
+diff --git a/lib/tests/stackinit_kunit.c b/lib/tests/stackinit_kunit.c
+index ff2784769772..a0029f3b894d 100644
+--- a/lib/tests/stackinit_kunit.c
++++ b/lib/tests/stackinit_kunit.c
+@@ -493,6 +493,36 @@ static int noinline __leaf_switch_none(int path, bool fill)
+ 	return 0;
+ }
+ 
++static noinline int __leaf_goto_none(bool fill)
++{
++	goto bypass;
++	/*
++	 * This declaration is jumped over by the goto above, so it is
++	 * never reached. Compilers that initialize only at the point of
++	 * declaration leave this variable untouched.
++	 */
++	uint64_t var[10];
++
++bypass:
++	target_start = &var;
++	target_size = sizeof(var);
++	if (fill) {
++		fill_start = &var;
++		fill_size = sizeof(var);
++
++		memset(fill_start, (forced_mask | 0x55) & FILL_BYTE, fill_size);
++	}
++	memcpy(check_buf, target_start, target_size);
++
++	return 0;
++}
++
++static noinline int leaf_goto_none(unsigned long sp, bool fill,
++					  uint64_t *arg)
++{
++	return __leaf_goto_none(fill);
++}
++
+ static noinline int leaf_switch_1_none(unsigned long sp, bool fill,
+ 					      uint64_t *arg)
+ {
+@@ -506,13 +536,23 @@ static noinline int leaf_switch_2_none(unsigned long sp, bool fill,
+ }
+ 
+ /*
+- * These are expected to fail for most configurations because neither
+- * GCC nor Clang have a way to perform initialization of variables in
+- * non-code areas (i.e. in a switch statement before the first "case").
+- * https://llvm.org/pr44916
++ * A declaration whose definition point is jumped over, either by a switch
++ * dispatch reaching a "case" label below it or by a goto, used to be left
++ * uninitialized: the initialization is emitted where the variable is
++ * declared, and that point is never reached.
++ *
++ * Clang 24 and later emit the initialization on the jumps that bypass the
++ * declaration instead. GCC still initializes only at the declaration, and
++ * says so with -Wtrivial-auto-var-init.
+  */
+-DEFINE_TEST_DRIVER(switch_1_none, uint64_t, SCALAR, ALWAYS_FAIL);
+-DEFINE_TEST_DRIVER(switch_2_none, uint64_t, SCALAR, ALWAYS_FAIL);
++#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION >= 240000
++# define BYPASS_PASS	WANT_SUCCESS
++#else
++# define BYPASS_PASS	XFAIL
++#endif
++DEFINE_TEST_DRIVER(switch_1_none, uint64_t, SCALAR, BYPASS_PASS);
++DEFINE_TEST_DRIVER(switch_2_none, uint64_t, SCALAR, BYPASS_PASS);
++DEFINE_TEST_DRIVER(goto_none, uint64_t, SCALAR, BYPASS_PASS);
+ 
+ #define KUNIT_test_scalars(init)			\
+ 		KUNIT_CASE(test_u8_ ## init),		\
+@@ -568,6 +608,7 @@ static struct kunit_case stackinit_test_cases[] = {
+ 	KUNIT_test_scalars(none),
+ 	KUNIT_CASE(test_switch_1_none),
+ 	KUNIT_CASE(test_switch_2_none),
++	KUNIT_CASE(test_goto_none),
+ 	/* STRUCTLEAK_BYREF should cover from here down. */
+ 	KUNIT_test_structs(none),
+ 	/* STRUCTLEAK will only cover this. */
 
-[...]
+---
+base-commit: 5e0f8396d4805a3e7f753fa58c8c55f1f3cc2160
+change-id: 20261002-kspp-125-3e3ae2bb0173
+
+Best regards,
+--  
+Justin Stitt <justinstitt@google.com>
+
