@@ -1,170 +1,118 @@
-Received: from mta1.migadu.com (out-211.mta1.migadu.com [95.215.58.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047D04BB26D
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 13:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0B022D4DC;
+	Fri,  2 Oct 2026 14:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790949592; cv=none; b=FyvtxwIxIiQPt+PLUB5o84udpbZfn7OLdRVQDRzjyaR6/ehUI4ooyBuTAxUcugm/CjWZKBd0CTTzSKnCx/5tbqWgf+0Bf+LJEyrbN86OETGVVAEALRo++snjKCVaKM9/qGwXVIJokYzJsQcs2HHhMWgORI+0jKxoLt66Pai8bRE=
+	t=1790949738; cv=none; b=naCLLT6/F8SDsRLLG0jfPVTCrnVRKHIVl+nxl6/s6557NEElGzdCX4s7fWlyxzzCQ/0Djx1EVS5b4hEdy2wXjDdVdqaTXgWwlzP7hwTvl9PGprDkZuzr1tWREBAT7L4XTBcuFfKLjZIJaRvQhL9CqjbQezFd8e0mYHZeHjvtOKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790949592; c=relaxed/simple;
-	bh=OVRHodOou3p5ApMLB0Mqi/H+Mqtef861PTeuOygMVtA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=skCJPBOO6XyidkjvF+n66i2PhFwQWk8CzbZtG5p5dv26XZk5EqzluI8hR7xcaQJsAQRuw999shbCamAill3aqd5ibJ2VGeR1KRbmOw3hnCxWzNIIMzD2igv+Sq2qtwFCj2ZjmSSw7ElTCotjTlDuuvHJuo828YWbacIvDilzj9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MJvJPh+a; arc=none smtp.client-ip=95.215.58.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790949738; c=relaxed/simple;
+	bh=AC554Ou05N1hw/cT7duBqRDHOUr+JTWVpBTr2ggZFqM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cErTCQDPaHrNzVwh8R1nVco3NWEaGrGlv62CtsdEq+9H9IWruyt1jH/h1Zu6SUtkQtQGeH5gSbFV2O4WySbjWdzuZUyS35JoJtRL0Csn1Ug38LtTC9pWBKKXKEjA6dEhJ64dlt2E13OAAIlXoi3cs7+Gp/RicdlBPPPXfpzNkvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CIXGYEjh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MJvJPh+a"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=OVRHodOou3p5ApMLB0Mqi/H+Mqtef861PTeuOygMVtA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790949588; v=1; x=1791554388;
- b=MJvJPh+aMJWC8Ck0g8P4reAMGqnG9Gfr7JXX4vgwgHe69tVNC4hB59sC99L2Nxvorly/Zjwf
- p5aw4yJbvE+pSHYmckKbR73x66ZN8nD2bTc2UiHkP++BBeWAgS2UQelezIm1sRevTg/usInatQd
- 3hPyP137MLUGzDF9KYtCnSa8=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 67bf14ff651fffc5;
-	Fri, 02 Oct 2026 13:59:48 +0000
-X-Mizu-Trace-ID: 67bf14ff651fffc5
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <81cf1bec-0e88-468b-b7b1-992aa92cff80@linux.dev>
-Date: Fri, 2 Oct 2026 14:59:46 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CIXGYEjh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A311F000FF;
+	Fri,  2 Oct 2026 14:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790949737;
+	bh=iSSvV6DoYFNrgcl/md3k3IV9ZcypTzps793/msz7EC0=;
+	h=From:To:Cc:Subject:Date;
+	b=CIXGYEjhAPg4K6ZFaCcuCpDRnpGmyQDfYG3D7MoizYCpc4PDEOjcFq4AAdpd/ZDv2
+	 LTiLih2IhlEp96xE6vwAQLh7SmCAAEDpiz5+QtwM9ZL4cn9LQaI+WeP9Wm1rDt2xzZ
+	 ORu2b2lGtSy7VkixIKT9PBMg2BSfjXjoCSJffHk7Bct7mmOIUZJUL5mHVLDxbNb8h+
+	 Lh61cQxsJjuXP5J5XTYxBf4qxtD0TctNN8+Dz7mqPPCdHiZalufzI7IPKzU8gP8IM+
+	 iW57VOLzkZ0Q0tldBEzTFBz2X/rYPJudaCTV8lzWVwl/VgMXA1rJAhr74VToXHzW8i
+	 ZRVXFb38kW1hQ==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 0/2] tracing: Override trace_instance parameter
+Date: Fri,  2 Oct 2026 23:02:11 +0900
+Message-ID: <179094973121.609715.2103310055830923648.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Eduard Zingerman <eddyz87@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
- <20260910164635.459558-4-vineet.gupta@linux.dev>
- <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
- <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
- <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
- <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
- <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
- <ff18ccb77a554000a030199e8c1fbb7d8d298e18.camel@gmail.com>
- <DLL84IMPTRQF.3DOQQTN2KCAEW@gmail.com>
- <e9aad352ba82dadd97a17867108b5db1865fa38d.camel@gmail.com>
- <DLL8Q69N7BUD.1HI0MKU2M2UGE@gmail.com>
- <951923920747d8dcba3d56ca8858e106d9c7ba4e.camel@gmail.com>
- <DLLBVIU33MLC.ITFPYGMFKWUT@gmail.com>
- <f4a616cf9241589fd093bbd0b34e8c8a162d579a.camel@gmail.com>
- <DLLCIL3RGVY1.H5A4OEASW5OF@gmail.com>
-Content-Language: en-US
-In-Reply-To: <DLLCIL3RGVY1.H5A4OEASW5OF@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On 9/21/26 11:25 PM, Alexei Starovoitov wrote:
-> On Mon Sep 21, 2026 at 10:17 PM UTC, Eduard Zingerman wrote:
->> On Mon, 2026-09-21 at 21:55 +0000, Alexei Starovoitov wrote:
->>> On Mon Sep 21, 2026 at 7:44 PM UTC, Eduard Zingerman wrote:
->>>>>>>> Where:
->>>>>>>> - id == 0 => no id link
->>>>>>>> - full => all 64-bits of the register are identical to
->>>>>>>>            all 64-bits of a scalar value `id' (let's call it X).
->>>>>>>>            ∀ rA{.id == X, .link == full}, rB{X,full} => rA == rB
->>>>>>>> - zext => lower 32-bits of the register are identical to
->>>>>>>>            lower 32-bits of a scalar value X,
->>>>>>>>            upper 32-bits of the register are null.
->>>>>>>>            ∀ rA{.id == X, .link == ?}, rB{X,zext} => rA % 32 == rB % 32
->>>>>>>> - sext => lower 32-bits of the register are identical to
->>>>>>>>            lower 32-bits of a scalar value X,
->>>>>>>>            upper 32-bits of the register are either 0 or 1,
->>>>>>>>            depending on the bit 31 value.
->>>>>>>>            ∀ rA{.id == X, .link == ?}, rB{X,sext} => sext(rA % 32) == sext(rB % 32)
->>>>>>> hmm.
->>>>>>> there is also 32-bit link with delta, right?
->>>>>> My point is that delta is independent of 32-bit/64-bit property.
->>>>>> `delta' can be used to propagate in both directions:
->>>>>> - full 64 bit -> 32 bit sign/zero-extened
->>>>>> - 32 bit sign/zero-extened -> full 64-bit
->>>>> both? how ?
->>>>> I was under impression that in 32-bit domain delta is one way.
->>>>> rX = ...
->>>>> wY = wX
->>>>> wY += 5
->>>>>
->>>>> if wY == 10
->>>>> We cannot do -5 to rX
->>>> Why?
->>>> It is still valid to transfer r32 and tnum_subreg knowledge from wY to rX.
->>>>
->>>>    wY + 5 == rX % 32 + 5 => hence rX % 32 knowledge can be recovered.
->>>>
->>>> If rX itself had some delta, e.g.:
->>>>
->>>>    rX = ...
->>>>    rX += 7
->>>>    wY = wX
->>>>    wY += 5
->>>>
->>>> Then it would still be possible:
->>>>
->>>>    wY + 5 == (rX - 7) % 32 + 5 = rX % 32 - 2.
->>>>
->>>> Again, in case of this direction, only lower 32-bits of the 'full'
->>>> register can be inferred.
->>> Ok, so we're argeeing that it's not 'full' in your above definition.
->>> Your enum id_link_kind needs a 4th category : apply-delta-to-lower-32bit-...
->>> and it's not bi-directional.
->> It's not really a category, it's just a direction in a sync function:
->> - if known_reg is 'full' -> sync to sext/zext register recovers lower
->>    32-bits and infers upper
->> - if known_reg is sext/zext -> sync to 'full' register recovers only
->>    lower 32-bits and keeps upper untouched (counting on cross-domain
->>    bounds sync logic).
->> - 'full' -> 'full' and 'sext/zext' -> 'sext/zext' syncs are trivial.
->>
->>> rX = ...
->>> wY = wX
->>> wY += 5
->>> if wY == 10
->>> here can apply -5 to lower 32-bit of rX only.
->>>
->>> rX = ...
->>> wY = wX
->>> wY += 5
->>> if rX == 10
->>> here can apply +5 to lower 32-bit of wY _and_ do zero extend into full rY.
->>>
->>> I don't see a value of 'zext' kind alone that doesn't do 'add delta'.
->> Exactly, that's why I suggest this as a completely orthogonal encoding.
->> Effectively for an abstract scalar value X it would encode whether
->> the particular register is:
->> - X + delta
->> - zext(X + delta)
->> - sext(X + delta)
-> ahh. it wasn't clear to me that 'zext' you're proposing does '+ delta'.
-> Now I see that your zext is the same as apply-delta-to-lower-32bit-and-zext
-> as I was talking about all along.
+Hi,
 
-So to close the loop on this v3 will support the above three forms: 
-add_const:2 and subreg_ext:1merge into one {none,
+Here is the 3rd version of the patches to change the "trace_instance="
+kernel parameter to be overridden by later parameters.
+The previous version is here:
 
-And just to recap, we will be adding two features:
-  - adding the sext with delta
-  - reverse syncing of low 32 bits
+ https://lore.kernel.org/all/179091984881.537422.15308457677039592540.stgit@devnote2/
 
-Thx,
--Vineet
+This version fixes some issues pointed by Sashiko and add more selftests.
+(the selftest is optional.)
+
+Currently if the user specifies the same name trace_instance at
+boot time, the later one is skipped.
+However, this does not allow user to override the trace_instance
+setting via bootloader if user specifies the default trace_instance
+in the bootconfig, because the bootconfig parameter is prepended to
+the kernel cmdline. (IOW, the bootconfig expects kernel parameters
+follow a LAST_WIN policy.)
+
+To fix this issue, [01/02] splits the command line parsing loop
+and trace instance initialization loop. The parser checks the
+overlap of the trace instance name and overrides with the later one
+if those have the same name.
+
+This series also includes a test set as [02/02], which is based on
+the ftrace boottime test patchset [1], currently on probes/core.
+
+Detailed changes are here:
+
+Changes in v3:
+ [01/02]
+  - Count the number of instances in enable_instances().
+  - Check whether source instance exists before the backup instance.
+  - Fix memmap_area leaking across loop iterations.
+  - Add array index range check for boot_instances array.
+ [02/02]
+  - Add test cases for overriding memory-mapped instances (@trace).
+  - Add test cases for overriding backup instances (=source).
+  - Add test cases for multiple tabs and empty strings.
+
+[1] https://lore.kernel.org/all/178649540853.438282.4271870161169100680.stgit@devnote2/
+
+Thank you,
+
+---
+base-commit: b15df7805dc52555e7c867d33a496edf5be11289
+
+Masami Hiramatsu (Google) (2):
+      tracing: Override the same name trace_instance= by latter one
+      selftests/ftrace: Add test case for overriding trace_instance parameter
 
 
+ Documentation/admin-guide/kernel-parameters.txt    |    7 +
+ Documentation/trace/debugging.rst                  |   15 ++
+ kernel/trace/trace.c                               |  150 +++++++++++++++-----
+ .../cmdline-07-trace-instance-override.bconf       |    4 +
+ .../cmdline-07-trace-instance-override.cmdline     |    1 
+ .../selftests/ftrace/boottime/run_boottime_test.sh |    2 
+ .../tests/cmdline-07-trace-instance-override.sh    |  148 ++++++++++++++++++++
+ 7 files changed, 290 insertions(+), 37 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/cmdline-07-trace-instance-override.bconf
+ create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-07-trace-instance-override.cmdline
+ create mode 100755 tools/testing/selftests/ftrace/boottime/tests/cmdline-07-trace-instance-override.sh
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
