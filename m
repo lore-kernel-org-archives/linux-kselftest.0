@@ -1,84 +1,111 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C9D547ACD0;
-	Fri,  2 Oct 2026 11:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE08485937
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 11:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790939695; cv=none; b=hRJd8zQ+gjkVc52dSwSzIeyw15jwf8zzhJe+pW46dhudeA4UR5iYAVreQG9HJ/IjNeBLKGLxjcBrJo82+RsiGpH6RLoV20jQNnnPD6zIZ0/Z4GEBBQLBY3fFlxZBjIhdKmo+t7Cz8ztZ5DIRqxcA/EvdC86xamxWSJhRGiRKOAI=
+	t=1790940236; cv=none; b=EZT1V0fPY9JHmLR2UFIJTy3UuZ9CgS06Nr8JEZXlnq7ZKqJ3o5+vM4+ifMABX05fNRQ0zciA0/JHL05EuymsI2w4GRPCmOg0Br+WTsPLfj0rFvQD7/71GOjVVy4jmBpS+M68fnndjgdZTwSfSZTlv+G4E72BoyJAkz7XKkDqLc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790939695; c=relaxed/simple;
-	bh=AHV6GqfcQkNE50jwqkl3c6c+aR1aTKotUJBs2VFir8Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition; b=e9zmcblHu1NyRV1tZDVN20NjPp202tGQkI7FjMXCk2QtCozG72ej1DShvfyUZGRI59WXZCW+x1zIcWKoYNczWVoPao3W/JrcSvbSxt+FOaLUoUOTVXOZXuyl3ud4A7+k8FydqYAkad/2Dcj+jBPJktNp/qxjVEZvtkO/lAM9yak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=X9jmQKAV; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1790940236; c=relaxed/simple;
+	bh=uWTyIrw3+J2wmrV8H6/EmYwes6ol8qrMbKD1n67/RQY=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=T5TJSzgdGHtfqyMzWf0BnTSWmi7aev8C8YZiyzjCWE+gxfNrXzwUWUW+bou34TlY4XrmZt0Pnd0SV2GzfB8ht1SnoEdqcDRqy0VKw1B+em0x4FPI6yLkuyDYnHLx9EiSofIwPJw6wYsRWjqrTy+lxRdj6VlqWeXn45m9o8OR6xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ifEq4KsZ; arc=none smtp.client-ip=74.125.227.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="X9jmQKAV"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8EF44497;
-	Fri,  2 Oct 2026 04:14:49 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 362693F85F;
-	Fri,  2 Oct 2026 04:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790939692; bh=AHV6GqfcQkNE50jwqkl3c6c+aR1aTKotUJBs2VFir8Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=X9jmQKAVzRfRHkywLZv8lcNL/IaeYIMgScnpocagAoyrOkVEsqRTxf9UfadP9w3El
-	 Hk/vcsbM98qqvEaYVJHIEGhWr8ToUL/lSN8flesU53n3XqcaMUQZ8K1JrPFKKObKzN
-	 8MH4Y2l6m8W9AQBm7On7/Dib0IptG8Wv8ttdQZeo=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Matlack <dmatlack@google.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Josh Hilke <jrhilke@google.com>,
-	Oliver Upton <oupton@kernel.org>,
-	Wu Fei <wu.fei9@sanechips.com.cn>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] KVM: selftests: Check dirty-ring size before enabling
-Date: Fri,  2 Oct 2026 12:14:49 +0100
-Message-ID: <ar-SKLFC1gxQ5_aB@LeoBrasDK>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <ar7qS3PeV_zo93iT@google.com>
-References: <20260929113711.2064390-1-leo.bras@arm.com> <20260929113711.2064390-3-leo.bras@arm.com> <ar1xne00AHnJ-p_d@google.com> <ar5yW30S75THCfdV@LeoBrasDK> <ar7qS3PeV_zo93iT@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ifEq4KsZ"
+Received: by mail-pj2-f42.google.com with SMTP id 98e67ed59e1d1-396ccc09d65so4597407a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 04:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790940235; x=1791545035; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=miimb3EraPnCYPNbdRUj3O61Jimf2dupqweL2RsvTZc=;
+        b=ifEq4KsZKnik7SWXDKvrDVGC8R3p2A9qqiwep+VVFYKSa2M2SRyeCNmoXR6WTKm99q
+         WKKicv8AH8ddu56Ke0+gbNCQ6SPdHBq2iOFhw3kp12+lN9V8bayP++im+hh3WqoOrur2
+         SHI7R7E47bSPVrKa50u1kguG37aLGXxRFWP9cJkaHCNiP34bgsEexiNBN21l++74AM7g
+         dht/mASDFI0w21UeJcFVUt9mtRDEBDsAEkbAgaWtWOXacl4x5bVgnE15F1z7FpzmgGJz
+         x0jHDLtI7eDbHU813R/2FtfQWX2+PaHaif1BGpxsjXLY1CiVbqYFsxP1b3LEFX6vocDa
+         W2dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790940235; x=1791545035;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=miimb3EraPnCYPNbdRUj3O61Jimf2dupqweL2RsvTZc=;
+        b=A52aQRgNSS+YA8WhSmuVehKNQHdgUoGwW5kMvp4kEwQ5JIXRpZv0lVKrnq8Uj+IlAt
+         gO5HfaeHm2KMDPeh7oEnH9Hz/pOekHYN067CHjtPd6dnOlptRPVuzcV7W0NbRfbAcZSN
+         1S5jgAUCaAAlngsN5tLpNi16qt4Mm8IWYyglL7n9jh9C797RP4v8Z+ED4c2Dk0DvUpg9
+         PY1n2hICiBUqeCiAVlxk4MT3JikHH17v2T4raFFavl8pZ0VOsDmkear8PYRC50rnKRWf
+         bzRWpbOuidNsKu7fh+SJsMMnPembMbp1WHoSUuO2qZhLhQA8PFGbaRZraSJeGDvuQU3L
+         BFPQ==
+X-Forwarded-Encrypted: i=1; AKwUvByauZ3O0xdqqBUtH/226hthCS7S2Yqm5yRw0rRDr0ktFlc6vS00u3vZTl0Bq4R1UoEhAVzeTY5TWNypLo00WO8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIPrgiQfCmJ+meG5yAfX0I+ZRpq987PsoCkvVHcZFWiVbuVDbKq
+	2vTRicoByXorf2munDcqoMEUMY1LvaN8myupnKrWE/idgpu+GP5lbJUO
+X-Gm-Gg: AYBFou1mVZgqeg4VJoXZqETQtkeGU6i/AAMIrnUsZ7StXuhHSXWQPH+r/FC3mCBPimp
+	XLPCftPcZHD68Dg68oU7G0EAkZEkHp4D2PMoCrTFQ924naJO/RVVKlUDMo7mgk4fo2clqWgD3Tk
+	X+f7kZ8++lZFyjzrBCOo0msDrvJREe7Rvb671VAD7fPK9kmGp6nHRyRhL8bd9pjblPy72RKw02c
+	6q/A70ywWRCS3/QawPVuYoindDJcLIvO43ElCn4f1L2b/d6gzqwyhVGTyVPw2J2z/PUBt4MG0oE
+	ryf/5+FMGxcCWhUmIs+4ifvazGezxTdljQug4zBwIi01m5GCvG2z8LE1JqCv9Ysx2w4CC/wCxzg
+	LGLeP5PljNT/+60XOCiUkgz8UT2QPxQqZTcT2IDOSGqd1Oj5TomZ2g+zbrAJP9bRDzAhhmN56ui
+	D4Qj90KVLcA7aBgEWVfT7W0pGQNjsLKEHxZYyK4NvS8npJuCCTVk7fqYG1B6zkG7BlE5v1MPhTP
+	u1lMZOCp7Rvvp9bj8hRPtJrO/w54XfayT1W9jmeobMcCyN1cLLDJlxzBE8EyhaMglQ3eOo2yzTh
+	TNPy
+X-Received: by 2002:a17:90a:f94e:b0:3a4:b0f3:6597 with SMTP id 98e67ed59e1d1-3a6cddd3f6cmr2178403a91.0.1790940234675;
+        Fri, 02 Oct 2026 04:23:54 -0700 (PDT)
+Received: from localhost ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a4f47cbd1dsm9002948a91.16.2026.10.02.04.23.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Oct 2026 04:23:54 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 02 Oct 2026 11:23:52 +0000
+Message-Id: <DLUBBSS7CLQB.13TU52TZ9UYRE@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard" <eddyz87@gmail.com>, "Kumar Kartikeya
+ Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>, "bpf"
+ <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "open
+ list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 01/13] bpf: move linked-scalar flags out of
+ bpf_reg_state->id [NFC]
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Vineet Gupta" <vineet.gupta@linux.dev>
+In-Reply-To: <4fc25ca5-bd57-4df0-a8e1-cf6bb9ba2fcb@linux.dev>
+References: <20260910164635.459558-1-vineet.gupta@linux.dev> <20260910164635.459558-2-vineet.gupta@linux.dev> <DLDKB6BTHVXE.PFK87O3QY1J5@gmail.com> <f575fe19-a5a0-4f43-b1bd-cdec2c6e9830@linux.dev> <DLH1MDZPU5G0.228555JR34D3N@gmail.com> <76ca0a2e-dd9a-41c9-90e4-5fd3c9171172@linux.dev> <CAADnVQKKWBV+pFMAStB_-POKveeO83RiXU+VKeua3odSu-Xrmg@mail.gmail.com> <4fc25ca5-bd57-4df0-a8e1-cf6bb9ba2fcb@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 01, 2026 at 04:18:35PM -0700, Sean Christopherson wrote:
-> On Thu, Oct 01, 2026, Leonardo Bras wrote:
-> > On Wed, Sep 30, 2026 at 01:31:25PM -0700, Sean Christopherson wrote:
-> > > > "Dirty-ring not supported in this kernel\n");
-> > > 
-> > > "this kernel" could be misleading, some architectures simply don't support the
-> > > dirty ring.
-> 
-> Hmm, the counter argument is that this is actually accurate if those architectures
-> were to gain support in the future, but someone ran this on an older kernel...
-> 
-> > So, do you suggest keeping it simple by printing "Dirty-ring not supported"?
-> 
-> Yeah, unless you have a better idea.  Actually, even though Kconfig isn't user-
-> controllable, it's still there in the .config.  So maybe something like this?
-> 
-> 	TEST_ASSERT(cap, "Dirty-ring not supported, check CONFIG_HAVE_KVM_DIRTY_RING?");
-> 
-> That would at least give the user a breadcrumb to start with.
+On Fri, Oct 02, 2026 at 09:03 AM Vineet Gupta <vineet.gupta@linux.dev> wrote:
+> 3. I guess you are referring to the patch to convert compound id to
+> broken out id + flags (5/x ) is also technically a functional change -
+> due to the state comparison behavior improvement that fell out of the
+> seemingly mechanical conversion and is clearly called out now. However I
+> verified it in isolation (on top of 4 prior of course) and there are no
+> veristat or selftest changes with it (just a cosmetic name change due to
+> base_id -> id)
+>
+>     === VERDICT CHANGES: 0 ===
+>     === total_insns:  0 changed among 1247 both-passing, 0 worse ===
+>     === total_states: 0 changed among 1247 both-passing, 0 worse ===
+>
+>
+> I presume that is what you were asking for ?
 
-Yeah, that looks better.
+Yes.
 
-Thanks!
-Leo
+but 1247 progs is verifier_*.bpf.o only ?
+These are tiny asm tests. Pls run veristat on the rest and
+scx and meta progs too.
