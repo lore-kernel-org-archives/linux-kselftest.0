@@ -1,85 +1,79 @@
-Received: from mail-wr2-f34.google.com (mail-wr2-f34.google.com [74.125.225.98])
+Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD94544AB7E
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 21:21:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA64407597
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 21:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790976072; cv=none; b=SNkArdgZomlT0ZE6o6QqgGJZEpeVSYvujdq+Go5jSw7tb3GJ2rnruV+/at4xc1q7AMPgfVR42BP8jWJNjbBjbB9xIrmtfhSyOKQXqXpQLRb3TEh437CTdb4NCdSqWxvFohvLWzGmBUTC0YAe6VYmtedS2tg63L6eJ0TD9VL3Bfk=
+	t=1790976329; cv=none; b=fPFwi93yeoY1HXkcbh+5jLojCDIbpi1pf4QQEs2+ATOlfZgcIepATtrywEiAIqJBGCCEygKf2vJpbF82MdNdFJHnfxS14Mvmz0vTb7ri3JscOiTztCuyPEfqmMmI7vRnFrkPumvL0ktct8LTvW+BR1ZaTFHOHzJkY4XpbxpCoyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790976072; c=relaxed/simple;
-	bh=t5wWBrGsG33k1BbhMasdkPiERxAa2b8DhvgK5I4BLnc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=erE1iH2JW8zN2qW8CaruW2cf0lmDrJ17DMy5eP2k5cQqERkwZ0lrUBjZGpuvDKHIVZq7gW4xxxjXyscVa6QmYMlEyHyUjGvXRzNVp/VoLVaTq8pOupGkf445/kZLFTiisX+4TFEvMxi3+ZfFEi72NCQbatVZ2y0rXm7M+DrjHtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XN8Cb6Tk; arc=none smtp.client-ip=74.125.225.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790976329; c=relaxed/simple;
+	bh=9aWfK60Ckds4L/biCInfmc5Y+mPQ3yBYOZ7PLGxJJso=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n3u6eFoA7OmxQs9JZmJRiXFruGRyClkJXV3G7rD11Ev79iliUoubE1FL9CKiXUUR9z7DS7d0a6IId7BU4pp8Vk800JNRiViYZOau8Ru6TYG0w7ne8Px3cVpTmti4JgwH+ZzPj7IPnQkgkqiz1oWCSnaxBf1uGbfslIf5CM5lvVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net; spf=pass smtp.mailfrom=blockcast.net; dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b=Isa/r3hK; arc=none smtp.client-ip=74.125.225.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XN8Cb6Tk"
-Received: by mail-wr2-f34.google.com with SMTP id ffacd0b85a97d-48aff58e6abso156984f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 14:21:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b="Isa/r3hK"
+Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-48b02aab050so127596f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 14:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790976069; x=1791580869; darn=vger.kernel.org;
+        d=blockcast.net; s=google; t=1790976326; x=1791581126; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ysJfmU2nfXZTtv2veyVxAaXsizKh3WhPhhl4gdeIEl8=;
-        b=XN8Cb6TkH/Is+iiqkQ3xv4bkD7rFfFE+OrplKO6bvz1T4vQF7iyfGSFIpJObRLVukz
-         V9J9Uo8mQev43w6WLASe6dAt5NMWGHRtg9++8pkrXC3C1+NAnGRiV88KTDi/sSiaO/43
-         DeadgRqPf22qp5wlgGjECpDU7Rif8BrEzrFQ8AR0xiTGVV5IUkIJ6OI0fTdFg8XuTbGw
-         saPdx+P7r+KwSf+tz/1oJJrXOCAqh/uEXxt/SDCBTeiI6es69CEJP0iCNkuAh8vfb3WC
-         yjZTOkbHrCSO0F7Js8NKYFEhK90mhG8w4z6oodLa9IR0EgugrtOZf+ahz/EX0XugHU9k
-         WlJw==
+        bh=wwz5V5DznazyEKiv4IPRIgKMZcVLA06YApkEuH5pcPQ=;
+        b=Isa/r3hKxdf+jbnew8xlY8wzTq4bpyJoy0lAGFL2byOsYtHoFVznWAbfpmfweCTD9O
+         +MGjMpzvFevkmghNTD8mlea4Bf69No7s/HOpwpQcTkcWXQlS7EJJhhAxpPwDppsk9tHF
+         gYW0jWwCZRr9BM6zcUY677hcLoDd5ytoK07SBpb/0MskHEkr8n+WB/91paiFf8hffFaW
+         Wid6tofro2snMaBm1Er09oaPji/lMgDRtQNaxgDlshVee3520wwFp260qAiSvbOdqqSf
+         RiFE4GxQKf0CYNLK37lXDfItF9wZQVPA0TvpVOGcE41lkg/VQK7aF5nDnHbOe6G4eYbV
+         XN7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790976069; x=1791580869;
+        d=1e100.net; s=20260707; t=1790976326; x=1791581126;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ysJfmU2nfXZTtv2veyVxAaXsizKh3WhPhhl4gdeIEl8=;
-        b=a3OIpNw1Uvlewy42S/PGspT36QPczivdeEm3HPtUFEO2aEuE6ztHBbJdUO6D2hR1ju
-         Bkjzfd6mUYG+TtUTQISzDy4gl6AW6cROyIW6nwVrugEVSP4hHLscz+eACsmcH2uHsqxP
-         ol7WMIoh34n0xQSOUKmspzuqaiJxrU7PLMYuvbZ+dJTvUVHlCI4rVNPyYZ0PZ5HhWMwD
-         iFOhBxBb865BBZc1/lgBkqDODkrrNf8G4Rt8codinEmZKw2PPZGewbCKPJ8N/mjIBxuY
-         CSWZ8TCt/ZvLWkJbfk3k7j2KcJPXdLXJkuYT3tUns/G1+i+uB/dPTChJB/2HmBQkGL7y
-         64HA==
-X-Forwarded-Encrypted: i=1; AKwUvBzl5kDV2e9SRU6OlohkcINAgduJ1UD6Kp+7Y91Dyx+jazvqibf2+7kk+lBCgc95JkPxgYDRrr1YBDiYvQj3DaI=@vger.kernel.org
-X-Gm-Message-State: AFuF++keeydlDaRL99YMa6/jpxMEPZ9HtlSom6qusoZ70JaPJf3cMqW/
-	WaXl9nJ2M2kKLabGA2qTonP9RSbnXDAR3va3ZxynMIcnxAj41pcRvs4a
-X-Gm-Gg: AYBFou1P18KSe4zNy//91BsgApVjaCQav0SWlZPT2PyKqf0XPkPlDsCaGyXSVPkgWie
-	ET35Ed1RY8eo3N4OyRxAB9O0bMeDezc1+vxI0IeQTWtBL/co6c4Ck/9/yIhhn9WU8PemE5WAlmN
-	+JwwEijqxJgxqWnbsH7++leToEPpFM1r0Me3QBiGZD1aMKAdpU0unrM8lcuEjNlVzl3cGLiGZce
-	8YpMmZt/Ge1vQ0eyQRj03Tz0F1v71RJ48U0/gTd+2NOaIzkG+YecsyVpqtmTzAVW31AzOVndj05
-	v1W6AJ6rAQrjiB7AufmDvk9Dsvx3oJMIm5IPBW2GGm/qWfYngjXSuPcbs9rht7JNgKxgYw+gz1m
-	+RuxLzz05iFiIwGSuuwP9bYOOnka+gGpYvRYbA2VLgd+1Gb0HGkIQ0kIjciA/hHryGqNdJyX5g5
-	ub6Jq97WhZ8s0oBaBJWhMA9qPCkSSGhcjL471nYGo6LCXalpg9UAXbb2bLDxsaiUC/g2QlX3oPG
-	4c0qCCoszK2M95LFj4uf90gu8WBRyENE70Xhsqp4jxf9aleQCXmEyAkg3rOWepnC5IlfgyBwWdq
-	CwEk/zX4+xquqbYFitAtqtqFvq+0eZQrQJ3+YLkf8p9mvcqyuZSeoipNgTgd15kum59dVVcmcam
-	WtZ1Jti0=
-X-Received: by 2002:a05:600c:3490:b0:4a0:1b14:e845 with SMTP id 5b1f17b1804b1-4a0274d1600mr67284215e9.2.1790976068456;
-        Fri, 02 Oct 2026 14:21:08 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a02-3100-af35-1901-81da-eee8-c2d0-ee3b.310.pool.telefonica.de. [2a02:3100:af35:1901:81da:eee8:c2d0:ee3b])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a027698f13sm111894055e9.1.2026.10.02.14.21.07
+        bh=wwz5V5DznazyEKiv4IPRIgKMZcVLA06YApkEuH5pcPQ=;
+        b=q5YZt1kQmvBhy9JMykDgpJ55ebEqcQGN6KNwxFos2xynnltSNieNjejcpzDOMoIxwz
+         OxxjHyF4EjjbpJEl0rjex+KtX5IzZE4i/wuH0I+fiJkHRza1iv1d1yTXBEnicRwGKwMc
+         3NQFQxzBqTtz7YusPQmC5J39lMKbhCg66YILpkKr5veAj48WAOdjCQ0AwKZ7TjEINNZY
+         UfaPsqhV/FNVCQO09lOi4lLEtbHLd+8eX3s6iV/g9Pfd3Ojf/7/05lYGtkwcqPsjz5q1
+         U05ZAztIDUTFNRzJL7dD0oLb+SW+gm4ISc73IJFZF1DwJwBDxATJx/Jg4ZoXhgb7neJg
+         IDIw==
+X-Forwarded-Encrypted: i=1; AKwUvBzu4EyZVHv8MtscxWd9kvR8n6QDpScDeue91pCCh4WrzT5FvkF8Ecw2/guQ43pL7NPKQbYC0HhAbiFEPyvmUHQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++ncLyxSycFag872NEMOrbbsS0ryn/WyfEM0my4KQJ/jMwhFPRbX
+	JATmF7ZrRGdFZ0UGdgipQuoFvLXZmGK7OIQG/yCqUwn9Ok1zfBz0quyvpSVQNH/uGFo=
+X-Gm-Gg: AYBFou2oiTAiVOSMo5/EvwUUjmx3mEVQ6ggS3PCo4cBHTjXqSLvyX+IEQSLhOxB/l2e
+	Q7yNBGz2z+2DsTblAyt1j9rQWasOUtW1iKmC1j6aGufQluPJl01pZXyWdMGKMdBqe2po5YTihiI
+	AWHcHTN8KX1c5EqZfOsi2CjGjVbON9MT8ERhDEe+GA5gVD2Nx7QzrZnoxuYvwCkqbGVgoUEkGSx
+	7giCjnMkAxMC0rFE5ui0NkCPX6WFGPdWNNOPmX3iemzmq4WGtEc60uaG0Cn7MUVEm1Fs6ONrNL2
+	9vVy1TkDUnzWNRGnT8ci60v/QqRpujvoXon27BlYoJJ/7vR+f/oiI7lgwf8WL2Yc4PooWFF6VmY
+	DxYq66s3miG6zDhBLET/C5IVKJQWqLdKnU85Nvhcx8kfIIsOCJ2FaOgwcI8iPp1ub/aVzHUlEe/
+	nWGBzeUQSC6a4/UT9+F8KL3qartrBFyqGSEdVi8fICuGme5FYuU3h3RmomXYrecAz/LKzS35xi9
+	uBqCVE+RwBuS1Q7/mbgub8JaYgSWuh7RG4hwyMYfCvwEB6whP0yh/6FeXq3JbSQx41P7Q953pv4
+	2w==
+X-Received: by 2002:a05:600c:4f93:b0:4a0:27eb:49b with SMTP id 5b1f17b1804b1-4a027eb058cmr61869705e9.30.1790976326117;
+        Fri, 02 Oct 2026 14:25:26 -0700 (PDT)
+Received: from localhost.localdomain ([197.51.72.2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b82253ae9sm7183149f8f.2.2026.10.02.14.25.12
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 02 Oct 2026 14:21:07 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Jeremy Kerr <jk@codeconstruct.com.au>,
-	Matt Johnston <matt@codeconstruct.com.au>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
+        Fri, 02 Oct 2026 14:25:25 -0700 (PDT)
+From: Omar Ramadan <omar@blockcast.net>
+To: Taehee Yoo <ap420073@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Simon Horman <horms@kernel.org>,
 	netdev@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>,
 	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3] net: mctp: Make flow KUnit coverage an explicit opt-in
-Date: Fri,  2 Oct 2026 23:20:58 +0200
-Message-Id: <20261002212058.25117-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+Subject: [PATCH net-next v2 0/2] amt: mark relay data as a UDP tunnel packet, with a selftest
+Date: Sat,  3 Oct 2026 00:24:56 +0300
+Message-ID: <20261002212458.34247-1-omar@blockcast.net>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,106 +82,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-MCTP_TEST selects MCTP_FLOWS, so KUNIT_ALL_TESTS builds flow support and
-SKB_EXTENSIONS even when no transport needs them. KUnit's style guide
-says tests should not select otherwise unused functionality. The CRC
-and crypto library tests use explicit ENABLE_ALL_FOR_KUNIT options for
-full coverage.
+amt_send_multicast_data() never calls udp_tunnel_handle_offloads(),
+unlike other UDP tunnels. With tx checksum offload on the amt device (off
+by default), a UDP_SEGMENT burst through the relay is dropped before
+patch 1 and delivered after it. Patch 2 adds the selftest.
 
-Remove the selection from MCTP_TEST. The core suite remains available
-without flows; its two flow cases use their existing skip paths. Add
-MCTP_ENABLE_ALL_FOR_KUNIT to opt into full coverage, and enable it in
-all_tests.config and a dedicated net/mctp/.kunitconfig. Both profiles
-run the flow cases without a hardware transport.
+This follows Eric Dumazet's suggestion on my withdrawn [PATCH net] "amt:
+do not offer software GSO on the amt device":
+https://lore.kernel.org/all/20260928181554.85766-1-omar@blockcast.net/
 
-A plain MCTP_TEST=y configuration without the opt-in now skips those
-two cases. This is the coverage cost of leaving otherwise unused flow
-support disabled.
+Not touched: amt advertises NETIF_F_GSO_FRAGLIST and skb_copy_expand()
+refuses such skbs with a WARN_ON_ONCE(). I have not reproduced it, and
+it would be a separate fix.
 
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
----
-Changes in v3:
-- Keep the core suite available without MCTP_FLOWS; a plain MCTP_TEST=y
-  configuration now skips only the two flow cases.
-- Add MCTP_ENABLE_ALL_FOR_KUNIT to retain full coverage in
-  all_tests.config and a focused net/mctp/.kunitconfig.
-- Drop the Fixes tag because this changes test configuration rather
-  than fixing a runtime MCTP bug.
+v2:
+ - shorten the changelogs, add Suggested-by, and move the testing notes
+   below the "---" (Eric); patch 1's code is unchanged, one comment is
+   corrected
+ - patch 2: fix the shellcheck and 80-column checkpatch findings reported
+   by the netdev CI, skip when AF_PACKET is not available (v1 reported no
+   result and exit 0), add CONFIG_PACKET to the config, drop dead options
+   and code
+v1: https://lore.kernel.org/all/20261001171016.88208-1-omar@blockcast.net/
 
-v2: https://lore.kernel.org/r/20260928205352.30502-1-kmehltretter@gmail.com/
-v1: https://lore.kernel.org/r/20260925192510.93840-1-kmehltretter@gmail.com/
+Omar Ramadan (2):
+  amt: mark relay data as a UDP tunnel packet before sending it
+  selftests: net: add an amt test for UDP_SEGMENT through the relay
 
-Validation: The MCTP KUnit suites were built with GCC 15.2 and booted
-under QEMU 10.2.1 on an isolated source export from net-next
-014d795c7383, with the changed Kconfig files copied from 071876fd5048.
-Without the opt-in, mctp-sock passed 5/5 tests and mctp-route passed
-21/23 tests with two expected flow-case skips. With the opt-in, both
-suites passed all 5 and 23 tests, respectively. On the full
-071876fd5048 tree, the new net/mctp/.kunitconfig resolves all requested
-symbols and selects MCTP_FLOWS and SKB_EXTENSIONS.
+ drivers/net/amt.c                      |  10 +
+ tools/testing/selftests/net/.gitignore |   1 +
+ tools/testing/selftests/net/Makefile   |   2 +
+ tools/testing/selftests/net/amt_gso.c  | 457 +++++++++++++++++++++++++
+ tools/testing/selftests/net/amt_gso.sh | 269 +++++++++++++++
+ tools/testing/selftests/net/config     |   1 +
+ 6 files changed, 740 insertions(+)
+ create mode 100644 tools/testing/selftests/net/amt_gso.c
+ create mode 100755 tools/testing/selftests/net/amt_gso.sh
 
- net/mctp/.kunitconfig                        |  5 +++++
- net/mctp/Kconfig                             | 16 +++++++++++++++-
- tools/testing/kunit/configs/all_tests.config |  2 +-
- 3 files changed, 21 insertions(+), 2 deletions(-)
- create mode 100644 net/mctp/.kunitconfig
-
-diff --git a/net/mctp/.kunitconfig b/net/mctp/.kunitconfig
-new file mode 100644
-index 000000000..4b2969e42
---- /dev/null
-+++ b/net/mctp/.kunitconfig
-@@ -0,0 +1,5 @@
-+CONFIG_KUNIT=y
-+CONFIG_NET=y
-+CONFIG_MCTP=y
-+CONFIG_MCTP_TEST=y
-+CONFIG_MCTP_ENABLE_ALL_FOR_KUNIT=y
-diff --git a/net/mctp/Kconfig b/net/mctp/Kconfig
-index d8d3413a3..a89678428 100644
---- a/net/mctp/Kconfig
-+++ b/net/mctp/Kconfig
-@@ -12,9 +12,23 @@ menuconfig MCTP
- 	  devices, you'll want to enable a driver for a specific hardware
- 	  channel.
- 
-+config MCTP_ENABLE_ALL_FOR_KUNIT
-+	bool "Enable all optional MCTP features for KUnit tests"
-+	depends on MCTP=y && KUNIT=y
-+	select MCTP_FLOWS
-+	help
-+	  Enable all optional MCTP features covered by KUnit tests, even
-+	  when no transport needs them. Currently this selects MCTP_FLOWS
-+	  so the two flow cases can run.
-+
-+	  Without this option, the core suite remains available; the flow
-+	  cases skip unless a transport enables flow support.
-+
-+	  You still need to enable MCTP_TEST, either individually or through
-+	  KUNIT_ALL_TESTS.
-+
- config MCTP_TEST
-         bool "MCTP core tests" if !KUNIT_ALL_TESTS
--        select MCTP_FLOWS
-         depends on MCTP=y && KUNIT=y
-         default KUNIT_ALL_TESTS
- 
-diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-index 31e930a0f..b3ea56f4e 100644
---- a/tools/testing/kunit/configs/all_tests.config
-+++ b/tools/testing/kunit/configs/all_tests.config
-@@ -26,7 +26,7 @@ CONFIG_GPIOLIB=y
- 
- CONFIG_NET=y
- CONFIG_MCTP=y
--CONFIG_MCTP_FLOWS=y
-+CONFIG_MCTP_ENABLE_ALL_FOR_KUNIT=y
- 
- CONFIG_INET=y
- CONFIG_MPTCP=y
-
-base-commit: 071876fd50482a68603a9460d80dd6dd58827ee1
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 
