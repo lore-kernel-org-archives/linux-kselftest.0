@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0CE2F361E;
-	Fri,  2 Oct 2026 00:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295FB2D9EFB;
+	Fri,  2 Oct 2026 01:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790901621; cv=none; b=nWB17z5VqWBefli5M/5Q4PDwxIoOdsGRLSDxM15Ri1uBbEYwMB6o/WGa9/NNuVOoARHvSVwtnNd4PFGvR4wJKj4/Ak5x2C+IMvdELLjslTklPh55O4dV9n8O5F8WNfIOiC+H71hG9GiL8WeWSo59dIYlmXMBf5GiKaJ52Dpkr0g=
+	t=1790904009; cv=none; b=WTVvDBfiD8nB1aPCsX0dDDRA2BZE0Wfdw9VcHjhT+ZD3n9s7PgVwnNSjOoKfBHlahSG9//jvcAX3LMytQ5eG1dqzIDigATBuzgbYEDFgFTft0usP5+lGe7NK4U4ckDXJteM/cskhKirVlA2T/529xQHFoRV55BX9RcsFZQWwHSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790901621; c=relaxed/simple;
-	bh=bvxSfzJ1Do6DP2fV4Uv3RtwyxARHGg3VSfADEHsFvPA=;
+	s=arc-20240116; t=1790904009; c=relaxed/simple;
+	bh=pA6Lj/PnlNf1kqnfb10VlKbsQncX4piLaeFr8vXL78Q=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=eyIY7OVdJQAKCAaOHYPBHu6E0hQt6z5mOx1oOKklTploxlIV4YmayZBnozPbA/cOCCgb2MlXcr76vlAw/R0O3SDuZyfFeM8YN2lH+tOpG6W5rnRp54pzMhJhixQm9a5TeEWcEMQbP/gyxR22f8SjPg7d6LLB7D4OfGTahVINZfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7jxFMqc; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=EpKutmsGB26v+8WV9q/W/hxyv3ZKHhq/jkOu91k6wJXumWKkz22YThSvSnWn43iOPFWO59Ci2sAr1z+U/cdbjwShPYYAhcgu3BecaRuR6X9bdPG7AtGuIcGOfis9Am4sYaFrE/fIhHh1ycDw8id79eFjsHiWju/T08/6/03FBfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I44WG0pN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7jxFMqc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0629D1F000FF;
-	Fri,  2 Oct 2026 00:40:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I44WG0pN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE27A1F00893;
+	Fri,  2 Oct 2026 01:20:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790901610;
-	bh=TRPS9y/D6Tp/goluC2H5KUikxeiVKybRcoa8yCPc+B0=;
+	s=k20260515; t=1790904007;
+	bh=UPqKbSIAC9atYzCZEnw24JepnGDdsd7RY2VNRLHZUj0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=k7jxFMqcFHZmUEe3kfk6CwtkjRCtDc8aTTsqIvAdUeK0AGdOXEzsZVRInQdsxYe0u
-	 yoKVrFrie6e7M+1/hcKBM2lv9X2wiZEdOaiIx+fx74vaXBSI4keQ6fJwkA55qZIP8H
-	 3Jd93XyU+G9t2Eo0OZ5flkGv4AH2oYIpx2L8ve0c/eZ4CZDwTwzu/4vHzGXL0a8sZV
-	 xkpVmyFNylWqrbDbqKdyFRFBYK/l4uoPanvWA4+srQS7lYkSysKOqgBLStTBv/gqNs
-	 W1brKcmSrwcas+WlUfjYFZ7MA/MYSbGN1Id7sonVg1m7a4cPSuOxoh+TkLqLhTlxpc
-	 hEHyBgocAss1Q==
+	b=I44WG0pNCMKq2EqpZrhq41A7QTGcTAegA54qCD1/063z3Oi+6qVbXpBMeL6eXLSHD
+	 ZNTf1lF9BMcUwQ3FIsN62PkWMRS5MRPz+PR2LJlrCZy5YHEk4Zzj5KdFe17brlXFSu
+	 Tk6OQTdrQg1QoPsvvrc+vXESwx7tK/T2dsFLymZwgfAryeHAaUyEcAbWl5Ou1SLPiB
+	 Ev6r13u7LUxPH7alF7adJ7Stw5644GSq3tnedBehy+imJLDiDiR+TXYiUWxrG7fd+r
+	 BWCL++1z3o7d1ZibhbAM/h8MUPEL4kZFM1yI0taXZYhhzOG/EEX3YtjzZLYfYHC3u+
+	 yGHu9+vvShhrw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F152E381197C;
-	Fri,  2 Oct 2026 00:40:09 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B45C2381197C;
+	Fri,  2 Oct 2026 01:20:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -37,39 +37,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v6] selftests: net: move log_test to lib file and
- remove duplicate code
+Subject: Re: [PATCH net v4 0/2] amt: send the relay's General Query directly
+ from
+ the receive path
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179090160852.3158777.16183907324374057117.git-patchwork-notify@kernel.org>
-Date: Fri, 02 Oct 2026 00:40:08 +0000
-References: <20260929-self_log_test-v6-1-41199262e50b@kylinos.cn>
-In-Reply-To: <20260929-self_log_test-v6-1-41199262e50b@kylinos.cn>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, dsahern@kernel.org,
- idosch@nvidia.com, andrea.mayer@uniroma2.it, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- liuhangbin@kylinos.cn
+ <179090400653.3168550.15976743708132455802.git-patchwork-notify@kernel.org>
+Date: Fri, 02 Oct 2026 01:20:06 +0000
+References: <20260928202312.74574-1-omar@blockcast.net>
+In-Reply-To: <20260928202312.74574-1-omar@blockcast.net>
+To: Omar Ramadan <omar@blockcast.net>
+Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, AutonomousCodeSecurity@microsoft.com,
+ xmei5@asu.edu, tgopinath@linux.microsoft.com, kys@microsoft.com,
+ cenzhang@linux.microsoft.com
 
 Hello:
 
-This patch was applied to netdev/net-next.git (main)
+This series was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue, 29 Sep 2026 10:06:40 +0800 you wrote:
-> From: Hangbin Liu <liuhangbin@kylinos.cn>
-> 
-> Many test scripts under tools/testing/selftests/net/ each define their
-> own log_test() function with near-identical logic for comparing a return
-> code against an expected value and printing OK/FAIL. Add a shared
-> log_test_expected() to lib.sh so we can replace each local definitions.
+On Mon, 28 Sep 2026 23:23:10 +0300 you wrote:
+> The relay queues its General Query on the amt device with a raw tunnel
+> pointer in skb->cb, and a query that waits in a qdisc can outlive its
+> tunnel: a use-after-free in amt_dev_xmit(), reported by Microsoft with
+> a KASAN reproducer. Patch 1 sends the query directly from
+> amt_request_handler(), inside the RCU section that found or created
+> the tunnel, so it never waits in a qdisc and nothing is stored in
+> skb->cb.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v6] selftests: net: move log_test to lib file and remove duplicate code
-    https://git.kernel.org/netdev/net-next/c/ffa16b43078a
+  - [net,v4,1/2] amt: send the relay's General Query directly from the receive path
+    https://git.kernel.org/netdev/net/c/afae89de73dd
+  - [net,v4,2/2] selftests: net: amt: check that the relay's queries bypass the amt device
+    https://git.kernel.org/netdev/net/c/c41817fcaf39
 
 You are awesome, thank you!
 -- 
