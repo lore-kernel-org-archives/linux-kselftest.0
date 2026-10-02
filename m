@@ -1,157 +1,125 @@
-Received: from mail-vs2-f38.google.com (mail-vs2-f38.google.com [74.125.227.38])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16BD48034C
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 11:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9B2489FBF
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 11:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790941127; cv=none; b=J4UngJkU60Neov7thssuuLv3wMdu0C0iFXbDc8EBZx+7e9PQGlnitpR18XwVmfC4tzrXGbzVpHFAqni8RV0jA/P/RyRe7IsD9uDVxsCAcPFsg88M8Fdlx9AHrpV1eYYebGuEIU0uYgcLTxmHO7B9/nWQJ6sdDIFCJQ3feI2XHVY=
+	t=1790941169; cv=none; b=Z99pZK+GZzAHCCYr7XiOtLmPYHvYxJqTmRSDEEKOfA5i2plYebcAsqoAFy74ayX70JSnTVW7ussC6y3xtxU4QFtwaS8x4B+w8Gu/vRs7fbbnBoic3LEMsDQMWlkUIsCOustbdWjncobeqIQM0kPQitjuSDxMCL1SNcEA1FnvhoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790941127; c=relaxed/simple;
-	bh=f9oplO5WC58bhFJzOVFaqIm9gWgGw58xMvElkvBM7LE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E9F1m1KCOWhLgF328OGcQg3+LZ5WC2zbb6hug8pEyAWWxM4wpFC3asQUeeqhYAC5ALgK5ctTNOnKCbEZ3uDpJlnoRT4ovCUE9fSz7HBEbrvuhsaKLVSm0ESCmVXd+C87gmTS1b34/pSF/j8AL0g6KjibnMk57DvftLfcq6TYT94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.227.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1790941169; c=relaxed/simple;
+	bh=Ev1N1gc/lPc5jNTnXcyH2a+Fgv/qSRx7c/in2/QcUfg=;
+	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:MIME-Version; b=uyA+j+YCJFZzOu/z+aOayhyvD5gtDKUvCQ9Tt112cze/vaaJRTdxHbCCv0Hbe9rp7MSoaB5V/T/zxOrBg8FLZS7pG+MMHrezvnGsdWEVcqS06jJ2cY68nvELNoqKoHw+oRDc2no1mC0lLMlQNvMYrr/4e11tnaESEasnIHXMIkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WAJBoY1s; arc=none smtp.client-ip=74.125.228.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs2-f38.google.com with SMTP id ada2fe7eead31-7b3a6aa10c2so2181740137.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 04:38:45 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WAJBoY1s"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc797656e5eso3960317a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 04:39:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790941167; x=1791545967; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=g8eATBOK+fGnHSCDRa/FUOxqb8y1u4ArDefdKZmCanA=;
+        b=WAJBoY1sllEh3zZduW7NzMzW0d8IHHeFKlnnhU1QXRYvMLgSk9c7XCjbA+XN2+d7YS
+         o6NcdjiaENnBDhV2A5zGkA4T4+Oi1FCob6+riwbzCB54jLCfh+InnTdSBoxz2dtjoJrC
+         lfpYThFzPpYa+8esZnNo/WvND63CtyqiCS2za3JXsb5jgnr74qMwU/kbLF+/op2G2Wrf
+         sflFsBKT3IDi29IMG3aPNu2xTqweEgOlLU1y0B881wvZPUdO6/rgr9NBi9gvO03x0lXJ
+         n3jmNJZmmmSqurMCb/Sqyy9iOPs91wVTHxCIsGL7NFD9HGiZkNttRzVMxa5eUfB8l/9o
+         iCsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790941124; x=1791545924;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=20l5MGKYIkk3dxTQvp40s490//vZekkNtR3rks2T+EI=;
-        b=SbOXweLLC3E5HaKmTe3R9EFXJk9FE22CX5lY68+N4ibJBx3prxIgLBNHxpVSDn7UVI
-         wq5k073eqMc1P32w/0/iAvYkhP08emP9Hb2F62XzNgrrMJRJxw7JxJwjuDb7+en46kat
-         0zWfijD8vrBh7Cuyqxy5G2Yh3NINtozFRc3zv4crodBKdXl8f+ySMGOaGkn5yu0SvTii
-         qQupVZZHmq2/hFYZdeK2BY61XBtngEPOcwM2lT/WQTlIHfFuolaYNxJUm0cQ7ud9nrtS
-         dYEz76ANIj1OYBVdVX2NBUKZ3v06Btb994dAK4EHW3U03PMzrnFawOki0RPqTXqKEBzW
-         Mjfw==
-X-Forwarded-Encrypted: i=1; AKwUvBwPOSj68s3u0LKCvGn87CzsH5VYz74AgOSjSmLEcMGiwxXlsa4LmY0LTv/So7QFl0sXqUribEsmFUSZEU8PSiA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKPswdLjPmTvO/kuKwqBE00gJVktirZcaQ54/XDq0XoZS5w17I8
-	dzHxiqxSf+hO9fQ14TCRp2f6Y2/6MUiM57OnkcmVVu+WJxT06TppPzDd8+bleS3E
-X-Gm-Gg: AYBFou25vSvUgOGwBBiYXxWPBmIQxu12G4Q7juoInpplazJ0WxhdLIdBmzAR1lsDn2j
-	4mom0AtR1yTk7lxsdmM1g8CLp42TgYt3TxTGyKB8Cr12rRQmRlLp9zLkV6G+GpZsWN5cmLDfwoQ
-	knz3vzEids3pOI7tpFM9PBWr7eCBkMVRPXlDaD/rpZt6wiW3rTrD71sEgCpwsZfmkwEQmKWLN1o
-	0wMSvGF4tKrXk6D+FUTuJUfO8rXbp2qRIUGAIgK6mXsx2Yq3MMb528EtFdAjtjPgPWMdvcXNbkB
-	SSOIyxNUn6JVnG6h7eHpci+cvxXvdhv+8PGKIMLe+ENEt7Ersv5i9SVGwUXTI06eiYmjv1xcs/u
-	85W4V7Jzn31e3q/Us6r9/gsx0+iUI+TIZfmqwk1kz9BzR40cMUWE0VkxFskSbpGzmYZbMxwpMCM
-	ADkROmiCcdmZylDK2fEfLKFr6eCnpt0UNVjuT95Y0YYq2wL7RNyf1Siw1rEHTpbCBUR4ji5RcEX
-	ccGiC0yQdZI81w3c4dWWZozJDJW/+praDKGnIv1MeBmuc/w
-X-Received: by 2002:a05:6102:5121:b0:785:c39b:6a1 with SMTP id ada2fe7eead31-7c0f4a8568dmr522080137.6.1790941124617;
-        Fri, 02 Oct 2026 04:38:44 -0700 (PDT)
-Received: from mail-ua2-f41.google.com (mail-ua2-f41.google.com. [74.125.226.233])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-98b19aeef63sm2622773241.1.2026.10.02.04.38.44
-        for <linux-kselftest@vger.kernel.org>
+        d=1e100.net; s=20260707; t=1790941167; x=1791545967;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=g8eATBOK+fGnHSCDRa/FUOxqb8y1u4ArDefdKZmCanA=;
+        b=Rg37nb5CTD29LbM6yiFo7REK9SahYAWzoRTbU9lTMMRCdUQrENhkK+7TOzkNOYsdgJ
+         S07RTASsHQ2s+tIJvmfOsEfZlymZqead1bjXApOfGUxysI0UUHniUfvpPd+nYB8g7R3V
+         VZhaN0X8mv/ChP2VUmbA/fq7jryEHd9bYqCopdn6cuQbcbRWQxUW6qcNOkPU0KRnzpep
+         B10ZdObMJJrM0a9SV07keEGraxEmlH54/rPhegvfUgqQu/VziDwOm0xto3QozaMOM7+U
+         zOjBop2I5MkPwq6/U3KNiUO0DRzd1lxp3WrsgEOCTnav+LAW2RPm6mR1UwVMrlsGfqY5
+         nvAw==
+X-Forwarded-Encrypted: i=1; AKwUvBzt6Wy7feRoW942/LwIhhS1ECYeiL0wcnLkmhhQc6Lm/jFsjjmxEwVGqHDxnjoGUmFpcA+pUkgcunxtqoIOQo4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJUViLm4nF/Up4nKaij2nDWkPh8Diu97+9Ps/YxTeMEF0eMOMuB
+	hMxAP9ColjaCtoUGH6OOKxHV3LLEJrZ6QkoxO2ChBrnE0r9/CvUrToz+
+X-Gm-Gg: AYBFou3B5igaFXVIY5TQ3RVJvrMiL3a2RdcwAf1LzvDttkyupWyjR/vSEKOxU0nV5+K
+	NZr1+qYGF7BmfrqGJiNXbvImjFAVWHAqT0BpsiQw0CTPkj3DmL6TeaTUOZXNZY8xM87LaHaBZ8x
+	KF7HWrZTFnIZ9nEf3W13XI8etcO9WZ0R1fXGr4cr2ud+DgP7YjsRJOaoT/2cRy5zdky0K4PHJkt
+	vvGHzpfbNspiCzWeOKXAiuqDEu6QQjz9/oSO6nBEtYbbcuHYQYc1GalguskfGFUPi5cml4QIYb2
+	K99tDsfGvX/ldxc7fuNGezh3njjajGUwcPmv/WmhpvkSBoHh6+3wTm8Q/7WJCyPo90q61GquXfY
+	1uStDWQLP8eoZIIncwgDmGGRWuGCNtpKgT0+uW0qNDtVEnEGAGsyFm6mXG2Mz9GEdPLme9rnR7Z
+	r7WuYI7pc87oazpdbs1D43gx7w/k9Rc3kLQGW6VkMvSdg1YkO4/ibbIKwMCByH5Z62CPmt6Hkmp
+	i42NzAkKtR7tlf5v72c/ZroW5Gsxqczz8TMQjOy8osjGRM8riFw+hY5bJNn40M2vRQr7/KFLmwv
+	6mT6Hn23klsltw==
+X-Received: by 2002:a17:90b:1a89:b0:39e:53a:c8d4 with SMTP id 98e67ed59e1d1-3a6ce6df006mr2483776a91.12.1790941167163;
+        Fri, 02 Oct 2026 04:39:27 -0700 (PDT)
+Received: from localhost ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a6dd0cd76bsm1402993a91.2.2026.10.02.04.39.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 04:38:44 -0700 (PDT)
-Received: by mail-ua2-f41.google.com with SMTP id a1e0cc1a2514c-98a92bfba4dso358059241.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 04:38:44 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBw3QZ95jch1hnzDJIjnPr7MhMlXzqDXDvXmcsMxoFlOBK9DjfeZIcjMy98WKZKOjg21WHeaH+U8cKDfriIzuoI=@vger.kernel.org
-X-Received: by 2002:a05:6102:14aa:b0:7bd:b263:14c8 with SMTP id
- ada2fe7eead31-7c0f60ae056mr564893137.30.1790941124266; Fri, 02 Oct 2026
- 04:38:44 -0700 (PDT)
+        Fri, 02 Oct 2026 04:39:26 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 02 Oct 2026 11:39:26 +0000
+Message-Id: <DLUBNPLXRU86.358M4SOQJIGWI@gmail.com>
+Subject: Re: [PATCH bpf-next 0/4] bpf: Apply the rewrites of
+ bpf_do_misc_fixups() at once
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Qiliang Yuan" <odys.yuan@gmail.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+In-Reply-To: <20261001-bpf-verifier-patch-batch-v1-0-a12df8a09160@gmail.com>
+References: <20261001-bpf-verifier-patch-batch-v1-0-a12df8a09160@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260929235711.2287931-1-thehajime@gmail.com> <20260929235711.2287931-2-thehajime@gmail.com>
- <bda5eeaa-7868-4d4a-9026-9e99347afd7c@kernel.org> <ar4br2vW7yZGd3gt@gremlin>
- <94759bed23f00d2044005e36be6f72f297e092f0.camel@sipsolutions.net>
- <m2se2o3jyc.wl-thehajime@gmail.com> <a65f4431-d225-4535-b921-00319ceeb2a2@kernel.org>
- <ar9ldn036SgT-bq1@gremlin>
-In-Reply-To: <ar9ldn036SgT-bq1@gremlin>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 2 Oct 2026 13:38:31 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUKcUxHZKhTEF1gwWrU1o8O6jt6N3r90V5hynrLFdwY0A@mail.gmail.com>
-X-Gm-Features: AclHuK8oY5W9edeNeZu9OdjhmLKHIkhJXkjnhYM2yOIrkiFEQlBpS9n1EzHgsaE
-Message-ID: <CAMuHMdUKcUxHZKhTEF1gwWrU1o8O6jt6N3r90V5hynrLFdwY0A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] selftests: run tests on nommu architecture
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, Hajime Tazaki <thehajime@gmail.com>, johannes@sipsolutions.net, 
-	linux-mm@kvack.org, liam@infradead.org, rbm@suse.com, 
-	akpm@linux-foundation.org, luto@amacapital.net, brendan.jackman@linux.dev, 
-	liuhangbin@gmail.com, corbet@lwn.net, kees@kernel.org, broonie@kernel.org, 
-	mhocko@suse.com, rppt@kernel.org, shuah@kernel.org, surenb@google.com, 
-	vbabka@kernel.org, wad@chromium.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org, 
-	daniel@thingy.jp
-Content-Type: text/plain; charset="UTF-8"
 
-Hi Lorenzo,
+On Thu, Oct 01, 2026 at 05:35 PM Qiliang Yuan <odys.yuan@gmail.com> wrote:
+> The other passes still use bpf_patch_insn_data() and can move over to
+> the list one at a time in follow-up series.
 
-On Fri, 2 Oct 2026 at 10:10, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
-> On Fri, Oct 02, 2026 at 08:08:44AM +0200, David Hildenbrand (Arm) wrote:
-> > On 10/2/26 04:38, Hajime Tazaki wrote:
-> > > On Thu, 01 Oct 2026 19:01:45 +0900,
-> > > Johannes Berg wrote:
-> > >>>
-> > >>> I thought maybe uname could help but our LLM overlords tell me no.
-> > >>
-> > >> Hajime originally wanted uname to indicate it, but that caused
-> > >> regressions elsewhere, so we dropped that commit. I guess we could put
-> > >> _something_ back?
-> > >
-> > > systemd uses uname information and our (old) patch changing the format
-> > > triggered the regression.  thus, we dropped it.
-> > >
-> > >>> It pointed at something though.
-> > >>>
-> > >>> In fs/proc/meminfo.c:
-> > >>>
-> > >>> #ifndef CONFIG_MMU
-> > >>>   show_val_kb(m, "MmapCopy:       ",
-> > >>>               (unsigned long)atomic_long_read(&mmap_pages_allocated));
-> > >>> #endif
-> > >>>
-> > >>> So MmapCopy in /proc/meminfo tells us definitively, weirdly enough.
-> > >>
-> > >> Hyrum's law and all that, but I guess it's not highly likely to (want
-> > >> to) change :)
-> > >
-> > > a runtime detection is nice.
-> > >
-> > > scanning /proc/meminfo might be useful. although it requires to mount
-> > > procfs (we can actually skip procfs mount as it is optional) so, this
-> > > is not 100% portable.
-> > >
-> > > checking ENOSYS like syscall(SYS_mprotect) might be useful but I
-> > > wasn't sure if this is always the case of NOMMU or not.
-> > >
-> >
-> > I assume there are plenty of other mechanisms. Like testing if fork isn't allowed.
->
-> Yup that's an obvious candidate!
->
-> You actually need to check for both -EINVAL and -ENOSYS since, of course, we are
-> inconsistent with this.
->
-> Some nommu arches specify __ARCH_WANT_SYS_FORK unconditionally for both
-> mmu/nommu variants meaning you get -EINVAL in that case:
->
-> https://elixir.bootlin.com/linux/v7.2.8/source/kernel/fork.c#L2830
->
-> Otherwise you get -ENOSYS because it's not defined.
->
-> But fork() -> -EINVAL or -ENOSYS = nommu, then just have the child quit and
-> etc. should do it.
+That's not going to fly.
+After this series there are two implementations of the same thing.
+patch_list_adj_aux() is a copy of adjust_insn_aux_data().
+patch_list_adj_insn() redoes bpf_adj_branches().
+The tail of bpf_patch_list_commit() redoes adjust_subprog_starts(),
+bpf_adj_linfo(), adjust_insn_arrays(), bpf_adjust_func_ptrs() and
+adjust_poke_descs().
+__bpf_patch_insn_data() and these helpers were changed four times
+in September. Every such change would have to be done twice.
 
-fork() is not strictly an MMU-feature (you can implement fork on nommu
-if all memory accesses are done relative to a base address register),
-while I think mprotect() is an MMU-feature. Unless it can also be used
-to change the protection using the one or two BARs most MCU haves?
-Anything else that is a real MMU-feature? Non-identity mmap()?
+Jiong's RFC converted all passes and deleted the old code in the
+last patch:
+https://lore.kernel.org/bpf/1562275611-31790-1-git-send-email-jiong.wang@netronome.com/
+Pls do the same in one series. One-off patches can be add + commit.
 
-Gr{oetje,eeting}s,
+>                       base      patched
+>   pyperf180          0.575 s    0.458 s   -20.4%
+>   pyperf600          1.491 s    1.041 s   -30.2%
 
-                        Geert
+That's veristat on x86.
+test_progs loads pyperf with BPF_F_TEST_RND_HI32, and s390, riscv,
+powerpc need zext. bpf_opt_subreg_zext_lo32_rnd_hi32() does more
+patches than misc_fixups there, I think, and it has one call site.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> On a side note, the largest part of the time to load pyperf180 is the
+> arg tracking analysis: analyze_subprog() takes about half of it on base,
+> __arg_track_join() alone about 30%.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+That's unexpected. Pls share the perf report.
+
+pw-bot: cr
