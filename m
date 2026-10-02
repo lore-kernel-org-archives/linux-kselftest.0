@@ -1,227 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv2-f41.google.com (mail-qv2-f41.google.com [74.125.230.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB123815E4;
-	Fri,  2 Oct 2026 08:44:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D0947AF6E
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 09:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790930644; cv=none; b=k1ovLIZmYM7pTkElWOkS73rqh0QguOuVYdpJj4yMowoC61JpJK+GooJg58A/DziE62z0g+Q/qO7DEgC20bjhkQWyeOKQtvoRDGW9WfXzFGPVvSb/H5hpb50UzySyET7uLBUyr/LE4ZBjBVu4qVsB9FY42IJLbGTAMHezCfQ0Abg=
+	t=1790932698; cv=none; b=XHgwBixKj8PcGnTHssEQg+PfN0l2OpEjg/TgKJlSBTzOGuqKOK9krcOEJ5+5HFyobqjYG2dKcrLHMHt84lUJXP+fxn9CVeqteVJunEiL+FyeQB/UsDC8RPBHmAB44Riii0X/S5O1MizdTaIEmOEWtKMnQpJDOw0orw92RPMRJoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790930644; c=relaxed/simple;
-	bh=WMXtorft3yFSsxaaQVsOoB9M+UsRVtahEneyXQcysGY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n/o0uDU7Rsgu63ai5xx0KvZWJCVpWKAOhEbJikeVIxO0bgevHej3FpPtf0xpRLrcMbzD1QFYjvTk7ew4RoBUms2nTEt30Ijl5wenj3ygThWfR5CVrEBVDakNtzyormJpPbzh6opMNf3UvqIfHYqaOYDoPbusSnc/lx1Eq3RED9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vwe8P+39; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790932698; c=relaxed/simple;
+	bh=Qfsjd4gOBk2R1cAVmxNn9b1xSjQOZ/MyAh0pURKAmQo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=rvgN9UzKrpSSL/bkLMp7aat3RIfnjj3Txw0YPsIi+m3WgxNkSczethDLr/jlza6H4mx4M+i3QSysVk4yHqVUMilDwm+93q1RNArLvUxAXDiVh8GaJO6m+kWarO7WGHSniv7ww+avfF4C9ZVBH1cmpCxemgjCDrV7CpxFEoQu4Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C2HSWPlO; arc=none smtp.client-ip=74.125.230.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vwe8P+39"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858461F000FF;
-	Fri,  2 Oct 2026 08:43:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790930642;
-	bh=QaW3NvlDbie2nX8q04QLao6HBP5b6PgxRU/jNxrvHlo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Vwe8P+39JCuHBizogmo2GNh1ALOKZtDQnio60+ojHg0sgpeiqScLp79z3mbw02V8F
-	 EYxN83kKfoU1dBWiYlTSNvqPO1sv2qLGQOHtGQ88RqyFySjslidqooaKnggLK/gJKG
-	 IWC5bqdlh9R7rDJ83vR8KTnnawGa9boU4Lb7HKydbTNBsoXeXWf2WMnkMILp6bICUN
-	 iHO/PMicuO4lycVHpnBubmnWdEzmOyVRE765syr056W+9jA4+6LnbRxAw4zEa6ohWa
-	 6CAE+VUsdlJvbi6bS41ZcL7w0M7FG61svR56MHeK92o8dhMmvZCsTExm2N2AYdnoxH
-	 W1EwRBuRDq0NQ==
-Date: Fri, 2 Oct 2026 09:43:55 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: Re: [PATCH v9 2/4] kselftest: mm: replace usage of /proc/self/smaps
- for __check_pmd_huge()
-Message-ID: <ar9utGn5OEWjZUd9@gremlin>
-References: <20261001-fix_split-v9-0-0f4ba8bbdbdf@arm.com>
- <20261001-fix_split-v9-2-0f4ba8bbdbdf@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C2HSWPlO"
+Received: by mail-qv2-f41.google.com with SMTP id 6a1803df08f44-91784fbb60dso43390036d6.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 02:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790932695; x=1791537495; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Qi9AutxC+YxaVYc+sgXQhd2bNMCFaltRc/nQQBHbNXo=;
+        b=C2HSWPlOBODAEnXbDpuwl56cL4P+YrbZGRADpH5kpPpdv41r96qFVxMojhe+alWWwz
+         0h2yB1VQvIK2defDyTkcbtFsX57pasAF21csbbMSgK7CKg5JTSGjOahXBMwudFw4Tj0Q
+         k9vLHNkpW8dxJHs9fQL/iYpRAZ281pepRmfGLWRGHB9iXlcHVWunhSa94RgxXGa9AhE+
+         yxDewJGzhEzrOtBDcOBeIwNnLft0/Cg6SERXowQ9Wt7+UYeFys9URt0oRonjWthWeOKw
+         5Gf92ZM+V/SpiOVUzTRd33dmOu4H36gtz1mhxFG4M4iueKfx4v/4wpG894/NW6xnDGHA
+         Sslw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790932695; x=1791537495;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Qi9AutxC+YxaVYc+sgXQhd2bNMCFaltRc/nQQBHbNXo=;
+        b=eazgD+CH+sF/y4M2kx1XA36zgNL2hW1AcEVgXGMzWb3X8dHRMoquc/PaeIqnUEi4Ro
+         XE2AIlHtyzK+OXdAnZ9gdX1dIOwyeRmzE/+uN+j6UcFJt5QmBRUUVuQ2PObjFJTe5C5d
+         6p9q6mzOyspzYkFlcDPipBPuEXG+r/9hS78sTPX3chTZ0TkYZ70Fiup1eCVnH9rBhkgE
+         2qPEz1GULMfokwTyrTu3swUHx8ydgM9a4qtV7WQI71EE2qcFOksiAhszpSELrRvRxnlv
+         FyTcEH8W9NtDgKmGJeGhEy7LySMt4qrCxkxTLOMl7fFX4LK6/mm/dLIbzDltczYPMvv9
+         FeNw==
+X-Forwarded-Encrypted: i=1; AKwUvBy6cwIKPVlL2Sd7OhoqMK/lfezqhx3yfPQm+TgJ2QHLjGsJG86uNrp3ZnB0X6nX2trc6yKXRJnE9JpB7z638rA=@vger.kernel.org
+X-Gm-Message-State: AFuF++l3m3RZUgw5ggV7Ep9WqME82UCsuD77+LVE2UXlVicC5WDRcVCY
+	YLVlnPFQM+NdJDl3N9WWGqerK5EancfhP+CN8EaeHSXrHJJcUw2Y0WG4
+X-Gm-Gg: AYBFou3FLND4SmxceKeyFl25c5WttYiBIdLiIw3lGDzK04rog7s32in9W1kqGN67KaA
+	G95j1HJxHDXN0FRaauje8ComIlxBHOSbzZE0VVZuMwTteA8je1l7smX+SaunUpRVmWBq2yqQmR1
+	1cE/EwWmle1GjwaLdlOjf6W53HDgEV3sVm+wxfs1R6kyDyVyEnBqSfB6UxOuN1yHnJqpLyZNxqa
+	KBMcHTPVZhm3mD/Q04G2aEbvbcVNRC2Elx2HFpfnuNCrPzZrsF+t8XIkbQ7Q7m6R/8mQfx9Nu1g
+	24jWpqbarwnoTgL4nehHcNCLinWu2GQjtx9QDU5CByHro9v53oewn7DZP2K74BIHErCoUc90Vfi
+	jEakmzwhpVBo0nCtkSvmvjt5f9XcEs8hFa4ai+hz0i8t5sxEDeUQ0RzzeJV148w0j0/RDIl4PUk
+	IQX6gYtyOgrCoY3u4GrPYT7zX5L0fcMJgOQ/iObHZHmoUr1sQgD0Gks3PettKpc+dTnjLGexROj
+	jk=
+X-Received: by 2002:a05:620a:1b9a:b0:93c:b47b:26f with SMTP id af79cd13be357-93cf178a668mr324269985a.49.1790932694960;
+        Fri, 02 Oct 2026 02:18:14 -0700 (PDT)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93cca26dae0sm170607785a.33.2026.10.02.02.18.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Oct 2026 02:18:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261001-fix_split-v9-2-0f4ba8bbdbdf@arm.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 02 Oct 2026 05:18:13 -0400
+Message-Id: <DLU8NL6QVE5F.3Q1Y7MLJVGCXE@gmail.com>
+Cc: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 2/4] net: psp: require an established
+ connection for association setup
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>, "Daniel Zahka"
+ <daniel.zahka@gmail.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Shuah
+ Khan" <shuah@kernel.org>, "Simon Horman" <horms@kernel.org>, "Jonathan
+ Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy
+ Dunlap" <rdunlap@infradead.org>, "Kuniyuki Iwashima" <kuniyu@google.com>,
+ "Willem de Bruijn" <willemb@google.com>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20260930-psp-defeat-v2-0-f266e7447129@gmail.com>
+ <20260930-psp-defeat-v2-2-f266e7447129@gmail.com>
+ <willemdebruijn.kernel.7eaf3a38aa5c@gmail.com>
+In-Reply-To: <willemdebruijn.kernel.7eaf3a38aa5c@gmail.com>
 
-On Thu, Oct 01, 2026 at 10:17:52PM +0100, Yeoreum Yun wrote:
-> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> made by memalign().
+On Thu Oct 1, 2026 at 8:19 PM EDT, Willem de Bruijn wrote:
+> Daniel Zahka wrote:
+>> Check sk_state under the socket lock in both the rx-assoc and tx-assoc
+>> handlers, and only allow association setup on sockets in
+>> TCP_ESTABLISHED. Also, fail connect() when PSP assoc state is already
+>> present, and remove the dead PSP MSS adjustment from
+>> tcp_v[46]_connect().
+>>=20
+>> The net effect of this commit is:
+>> 1. PSP assoc state can never exist on a listen socket.
+>> 2. The upgrade to PSP must be done while the socket is in
+>>    TCP_ESTABLISHED.
+>>=20
+>> This change defeatures behavior that was previously allowed under the
+>> PSP uapi. My justification is:
+>>=20
+>> Nothing useful can be done after association setup on closed or listen
+>> sockets today. Listen sockets could accept a PSP-encrypted TCP SYN, but
+>> the child socket will not inherit any PSP state. On the other side,
+>> establishing PSP state prior to connect() will result in a PSP-encrypted
+>> TCP SYN sent to a listening peer, which in turn has the aforementioned
+>> limitations. That implies that there cannot be any users of this
+>> feature, so it should be safe to remove it from the PSP uapi.
+>>=20
+>> In theory, the check in the tx-assoc path is more restrictive than
+>> necessary. FIN_WAIT1/2, CLOSING, LAST_ACK and CLOSE_WAIT could be
+>> allowed, and the peer would accept PSP-encrypted ACKs in the
+>> post-FIN-sent states, or data in the half-close case, but it is simpler
+>> to disallow those states because they don't fit the upgrade model.
 >
-> The underlying VMA may start at a different address from the aligned
-> address returned by memalign(). Furthermore, a subsequent
-> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> already set.
+> And preferable to do so. While it could be allowed, there is no real
+> use case for it. Simpler state model allows simpler code.
 >
-> This causes split_huge_page_test to fail because the check_pmd_huge()
-> helpers incorrectly require the address returned by memalign() to
-> match the VMA start address reported in /proc/self/smaps.
+>> The check in the tx-assoc path fixes a bug in commit 6b46ca260e22 ("net:
+>> psp: add socket security association code") where an unsynchronized
+>> write can be performed on an assoc shared with a timewait socket when
+>> the socket is in TCP_CLOSE after shutdown. This commit is not targeted
+>> at net because its premise of preventing listen sockets from holding
+>> assoc state depends on net-next commit 8cc3aef0cb19 ("tcp: Do not allow
+>> buggy transitions between ehash and lhash2.")
+>>=20
+>> Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 >
-> Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
-> /proc/kpageflags to detect huge-page mappings checking PAGE_IS_HUGE
-> and PAGE_IS_FILE according to type of huge page.
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
 >
-> Since shmem pages are also file-backed, simply check whether the page
-> is file-backed.
->
-> Fixes: 642bc52aed9c ("selftests: vm: bring common functions to a new file")
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> Even if targeting to net-next, you could consider keeping the Fixes tag.
+> Importantly the prerequisite patch is mentioned. But is only one of two
+> mentioned here?
 
-LGTM so:
-
-Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-
-Thanks for doing this! :)
-
-> ---
->  tools/testing/selftests/mm/vm_util.c | 78 ++++++++++++++++++++++--------------
->  1 file changed, 49 insertions(+), 29 deletions(-)
->
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index a0ab78ceedb1..a3c3a2706c22 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -351,24 +351,6 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
->  	return entry;
->  }
->
-> -static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
-> -		  uint64_t hpage_size)
-> -{
-> -	char buffer[MAX_LINE_LENGTH];
-> -	uint64_t thp = -1;
-> -	char *entry;
-> -
-> -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
-> -	if (!entry)
-> -		goto err_out;
-> -
-> -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
-> -		ksft_exit_fail_msg("Reading smap error\n");
-> -
-> -err_out:
-> -	return thp == (nr_hpages * (hpage_size >> 10));
-> -}
-> -
->  static bool check_large_folios(void *addr, size_t len, int nr_hpages,
->  		uint64_t hpage_size)
->  {
-> @@ -410,20 +392,51 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
->  	return ret;
->  }
->
-> -bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +enum check_huge_type {
-> +	CHECK_HUGE_ANON,
-> +	CHECK_HUGE_FILE,
-> +};
-> +
-> +static bool check_huge_type(uint64_t categories, enum check_huge_type type)
->  {
-> -	uint64_t pmd_pagesize = read_pmd_pagesize();
-> +	const bool file = categories & PAGE_IS_FILE;
->
-> -	if (!pmd_pagesize)
-> -		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-> +	switch (type) {
-> +	case CHECK_HUGE_ANON:
-> +		return !file;
-> +	case CHECK_HUGE_FILE:
-> +		return file;
-> +	}
->
-> -	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-> +	return false;
-> +}
->
-> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> +static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
-> +		  uint64_t hpage_size, enum check_huge_type type)
-> +{
-> +	int pagemap_fd;
-> +	int nr_pmd_mappings = 0;
-> +	uint64_t categories;
-> +	char *start = addr;
-> +	char *end = start + len;
-> +
-> +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> +	if (pagemap_fd < 0)
-> +		ksft_exit_fail_perror("open pagemap");
-> +
-> +	for (; start < end; start += hpage_size) {
-> +		categories = pagemap_scan_get_categories(pagemap_fd, start);
-> +		if (!(categories & PAGE_IS_HUGE))
-> +			continue;
-> +		if (check_huge_type(categories, type))
-> +			nr_pmd_mappings++;
-> +	}
-> +	close(pagemap_fd);
-> +
-> +	return nr_hpages == nr_pmd_mappings;
->  }
->
-> -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
->  {
->  	uint64_t pmd_pagesize = read_pmd_pagesize();
->
-> @@ -431,12 +444,13 @@ bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
->  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
->
->  	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-> +		return __check_pmd_huge(addr, len, nr_hpages, hpage_size,
-> +					CHECK_HUGE_ANON);
->
->  	return check_large_folios(addr, len, nr_hpages, hpage_size);
->  }
->
-> -bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
->  {
->  	uint64_t pmd_pagesize = read_pmd_pagesize();
->
-> @@ -444,11 +458,17 @@ bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size
->  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
->
->  	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
-> +		return __check_pmd_huge(addr, len, nr_hpages, hpage_size,
-> +					CHECK_HUGE_FILE);
->
->  	return check_large_folios(addr, len, nr_hpages, hpage_size);
->  }
->
-> +bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +{
-> +	return check_huge_file(addr, len, nr_hpages, hpage_size);
-> +}
-> +
->  int64_t allocate_transhuge(void *ptr, int pagemap_fd)
->  {
->  	uint64_t ent[2];
->
-> --
-> 2.43.0
->
-
---
-Cheers, Lorenzo
+Yes, sorry. I replied with the full Fixes info to the bot here:
+https://lore.kernel.org/netdev/DLTLF0VWT5UY.2WUPQRDZJQO3W@gmail.com/
