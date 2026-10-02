@@ -1,69 +1,69 @@
-Received: from mail-pj2-f38.google.com (mail-pj2-f38.google.com [74.125.227.166])
+Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B3139022A
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 12:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B60C39A7EA
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 12:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790944287; cv=none; b=Q8b4scLUS2HF5KcHmNwgVXXyje/Axi76CN9thgzDXhzFnTkFzekThUb92aklRmE/v11/WJ6yDoISqCL9KsYCWheOoXFdFONW2P+4yWoyhE4Bd+PCDC5O2GTfeLVMQH6c+YPMP3vyRT0OJGpY/PQAoZ6+tFPVXFYs2fsHwuIwwkk=
+	t=1790944292; cv=none; b=shS2xk+4t13rw/QxU7tJ1hgdRipV+aIrCE9h7GZDTJkAWbfOngHcf0eoZpAebBFvp7Ozis8g3F4TmzMtaMiqVq4Bf8YhJie0lHMH4eKWP2VCd3hhmQeWEQd0ds9dm/XVgIVkxI/XzUNy9LzsH0qk7k0oOGkP0YW4LMdraWwoRTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790944287; c=relaxed/simple;
-	bh=yEKSdvYiUQnk2OPWfSThF5HFZhlH1p49IlTTEPxIgxs=;
+	s=arc-20240116; t=1790944292; c=relaxed/simple;
+	bh=a3EGyXSbhmytqEXpD9fmG98pLVBnzM8e4tIe5kcKbn4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KqaxzJx2XboicFrXkO046VgQ2WfkHTCsUrxNKp3wKRdxL64Uj5nmymMpUMDqNJ7KB42byTkYXzwMKv4wTbD3BboALDmMtubcbnqCqUpDYqWJxnxwV5y0l51bVR21aPwwAIC65YgbJGNhefVui4lBOMtyMJIA7s/DbUq/oHgj6rI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OowCOqPu; arc=none smtp.client-ip=74.125.227.166
+	 In-Reply-To:To:Cc; b=Z2P4/xj+jyKuWERu8UI6k5FsGZWarINxJlMKGJSKQqZN1bS19/dIIMgK8dfyvO3Rp1xbxJKb8JNTGrZD1DTLD3yDRxI8b9z9VWGLlIY+D4p0T9WvgQUIyGaCHdqbTrIL9uA3AW51cE6Ze0Xxcm3Y8sdHoVFQY8wL4QB7Ks2tpNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LWcbuy2R; arc=none smtp.client-ip=74.125.227.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OowCOqPu"
-Received: by mail-pj2-f38.google.com with SMTP id d9443c01a7336-2e2d9fdf798so15897495ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 05:31:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LWcbuy2R"
+Received: by mail-pj2-f41.google.com with SMTP id d9443c01a7336-2e49be254c3so3238865ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 05:31:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790944285; x=1791549085; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790944288; x=1791549088; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=9v5ii6TfP9FO3+IPzpTmqGqHl9/teaNXkGBFJeS5lsU=;
-        b=OowCOqPuFuc6kSGycRmCtSGdavj100/qgADyvUXRL/gAzOJHUPAy8cAjueOSJx6rH0
-         spWvCkvyCoPvSnYOevXpg/ZO31pEDXjlS5fvpMt9r9G6I0GPP+N/Ov7feKXneSf9EFdQ
-         u+PTL7AP4yWEnId0fpl73Wt+AG41x+hVkjT9B6P+153PGP+G9QqUTS9OLvzSYdjFqlui
-         TFE3Eis+BsTN3noLMixE9MgjLKNHUlC2zQ1NZTFiY0ixJw5mhDawC+CdLu0KwoZF2luy
-         Zc7Q+TvXZ1qmcvirsAIaoqQFfRKIANedjC+FGw60sXSHDC7XvyHhyqBJWanIIv6jurzi
-         DSNA==
+        bh=Uks/NqzFf+zFSvKEeAW0tttt9eHl3GPp8C4s7TgrNuk=;
+        b=LWcbuy2Rp29O4Xhf7FOV0dnIqmVA1vvuv6b9SbFHXBycJwuIJiFmCiMDhivZsVRhuh
+         bs7hHlFndYOVE1cgTFaFIaFvT0yE/30Wr5alaJI8GStMU1cRilzz1gDTZFEkdLuB5WLQ
+         nBn0I9r4Gh1crDBIVLDNwSAXDuEWAFfBaRByEXOVnbh+xOYrD5w6vpOxn7XMCzWfUoZk
+         XPBTaHIPKXnEAyebI7Ku5KFeG59PaAPWFeI5Ny4ZQ65F3FPBXzP+rFEx5kZolY4PHgNm
+         gS8j9BiqtxOjqEufKFT52UKznptrOC53EXCNOO/g7mQotRVpSdYhndpHJOiiT3hZjxxb
+         xexw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790944285; x=1791549085;
+        d=1e100.net; s=20260707; t=1790944288; x=1791549088;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9v5ii6TfP9FO3+IPzpTmqGqHl9/teaNXkGBFJeS5lsU=;
-        b=SRGVv11mQfOxGXj4kH2eodLEeliDV6EzwlKq4dnV61VOU4BW8tLpfw/UJaNmDa1oTd
-         ItT2flFchS75cKh7t2scHXlItHKITBSdOnIqBCg9EmLOAI+yLVoPGiotaSrK0d6/FQF2
-         HvrPXtwH2zfIZBwxeJH6BTfx6WnT4pDwL84ODulKTJoteFnYJrot1J5YnQ1vb7AyXUMt
-         dFf5fWsAgNxKqw1SoTg1tICvWwOgP/eBNB9Nl8JzGDhM+elH3asLS3Mf/D9hCURyn0Iz
-         mE48jBn5+OYT8+v0bDAzbogAJFcPiqzlH/XowIem74O+stjmWcqktEBz0NArl56Qsnhd
-         suqA==
-X-Forwarded-Encrypted: i=1; AKwUvBxqKr5gkIgLtWPO1Zn2vJGocyTrKLSUp6hb0cjftTZVtel2ufJlJK7PmELql3BhJh6qEJRTqa/AqYV5Rs+rysY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIWswPtINIwarL1lyL+zEdj+PsHfHrxZR4nPOYGXjASpft2Hr97
-	mSNGI7mzBTzriynpfeo5qawY6/ngr48Pc8zD/DNkH99tdwSY8qzYpZ4L
-X-Gm-Gg: AYBFou0pXWvuFDyVBpkZbYoorpFcdFX4mBzNC4K9LBPIXAKrwWUkENJAgBXIgp26izd
-	iBHBYf4vqeQkd+eddfXW2u65fBN9pwKDTeA3Cci5UJ+ALwQziFhnIwNJDcZKpmV+ar0ESOvRdX4
-	gRbxYL9xkKFiUrThp53nN4GxJgKuhbApm7NiBpgNv55X/O9L8XpXEdmS/Zf1JbYDOMdajAQupQj
-	QWjsqvQLNx6mE07M0Sbw2H8zl3gzSscsDWl5NuJ9f4287XNGv3khpL0KLqjN5Yxp/CVFJOGLesQ
-	xmNyIu+yUw4Iu4ym8OtHg6GLmLLMoT92Ufnh5BRbnhefLNURyO6XTHlr8vfDBjhnBWaWSuARGdo
-	PELFmBgnXlYSpvaJA1g0NwLbQ88K50zLppzgQdMpVbcGBE+hJaoR3nTkxdo+w5tDmWcSMH06u2z
-	K64KqyC1ONkVR2d+Lf/42NkTxzcIn+Z/4ztqUXdwSvOnRtZOsyjlSx5RuEDGQa/R24q02WK2/+i
-	LsN8Yfg
-X-Received: by 2002:a17:903:1b06:b0:2e2:de8e:7315 with SMTP id d9443c01a7336-2e49b6a0c59mr23651015ad.38.1790944284835;
-        Fri, 02 Oct 2026 05:31:24 -0700 (PDT)
+        bh=Uks/NqzFf+zFSvKEeAW0tttt9eHl3GPp8C4s7TgrNuk=;
+        b=x63RD5IgRslkqgndL0fhGx4b31jNnzDM9gkTndgtWQN8ykuccLS3KV2tFcl/i7OjAv
+         2wqKkvTJOcYQs1GDJUjLIiBybf3h38D6e7lsS6L+QW76zsPj+CzEgfEG6oPrcqX8YKD8
+         fqBUH07VI2m2gVwTz+PPcfDcG+KVaXCKd597dvt0dMbS1eHd5DoQdATqDGTU4pdQ8E/p
+         ZuOUbo5+4fq0E0Qv5faRSbwzM7IhcctONzMkQoPQU7vi1xjdnwRXFsqTQFUN6IKjWOVS
+         Y8dK4oXrOo78omBn4c46y+dkmJR7D9ReoXSwFIBhZqqTS47oVTIaoJbt8QddocB/bkTt
+         mgZA==
+X-Forwarded-Encrypted: i=1; AKwUvBwojYV228oLql2SEH5wSuhulBhG/7raebqW0+UtiasV8GoCEh/CFnXlZG01a0vWwXccZdRLU+ax8gUdv5OBSWo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI/K/4Z+phXlKtOR5iSd93C9Wni757EvkggaCTpm9iNHOpF++YD
+	YGWX+oiiLc1GD0b29+nXfq+WjqKfLNTzPs62qXmf7vlJPca7PQaQ03YB
+X-Gm-Gg: AYBFou3dX0E7fLTHdLTGWB8+X92JqyR6FbROvaibVaH+7Z5L7Dgp4gg/xLQcFdz3YWF
+	M4Upe+ks0bCcEIZg3i1702ScIfNkgb4lvhwORaYGqe12NLNSdK/QYooRxAtTA/EtiE49k49Th5x
+	ydfcKiB6mkZ7n+OqX802eWFEZgjvhJp478aQQrVSDDoK7pttW9FC5mbhlQ7Pal9L91O6cOcUrAc
+	aIqQlZ37y2FKMqMU4tJd1hkFedjuVh4/P55Rmq5pq0bWwQNmXnExs2tfotPgdZaOnJRmA0k/f9X
+	mdPBQF4mEJW1HBzvNEfqIn6Ytb3e5DAezyFkeYLVgBDa18Mimg/E4xiTHTiVkP5DgjMJaj98wHg
+	j8sXtC6B2NOUI1Q9HQfvDQZO/6eM7+Stjg9g9KR1ORD54DsDzACvTAGfsuz33jY8xypwZW4yKBy
+	24/+KUyqxigValEEOskzdTALYgSJhKiG9Y2O0J0VRsC5EE83H2bfG5Z0ihY9yiWgBZ1KwJ8yn4d
+	l9Ab5xvxw==
+X-Received: by 2002:a17:902:fc85:b0:2dd:ad74:ac28 with SMTP id d9443c01a7336-2e49b6f427bmr22754145ad.26.1790944287913;
+        Fri, 02 Oct 2026 05:31:27 -0700 (PDT)
 Received: from [163.43.103.131] ([163.43.103.131])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e49f705f37sm6938125ad.64.2026.10.02.05.31.22
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e49f705f37sm6938125ad.64.2026.10.02.05.31.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 05:31:24 -0700 (PDT)
+        Fri, 02 Oct 2026 05:31:27 -0700 (PDT)
 From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-Date: Fri, 02 Oct 2026 21:31:17 +0900
-Subject: [PATCH RFC net-next v5 1/2] seg6: add support for the SRv6 End.MAP
- behavior
+Date: Fri, 02 Oct 2026 21:31:18 +0900
+Subject: [PATCH RFC net-next v5 2/2] selftests: seg6: add selftest for
+ End.MAP behavior
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261002-seg6-mobile-end-map-v5-1-30eec37563a8@gmail.com>
+Message-Id: <20261002-seg6-mobile-end-map-v5-2-30eec37563a8@gmail.com>
 References: <20261002-seg6-mobile-end-map-v5-0-30eec37563a8@gmail.com>
 In-Reply-To: <20261002-seg6-mobile-end-map-v5-0-30eec37563a8@gmail.com>
 To: Andrea Mayer <andrea.mayer@uniroma2.it>, 
@@ -87,964 +87,840 @@ Cc: Justin Iurman <justin.iurman@gmail.com>,
  netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Yuya Kusakabe <yuya.kusakabe@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=27295;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=24671;
  i=yuya.kusakabe@gmail.com; h=from:subject:message-id;
- bh=yEKSdvYiUQnk2OPWfSThF5HFZhlH1p49IlTTEPxIgxs=;
- b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBqv6QWPM8tq7/FmOFHVermLqE6t1NcXELUQDP2y
- SHBCZep8QOJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCar+kFgAKCRAq19F1Kl0b
- TQ+OEADG+ypG4zUACi8cv3Qk91F2HArEYb77Q7mJxDUXUb/sRlkXQvNqSInR4o9QU82oTZv3BGy
- ccEmp2hF0+2qabSps8YfhGlwbyjdQQAnZknA4N+YoXRer3bWbcnhjh1wnHQO3pLoNiJCvIgo6Kk
- 5zCmuuDZCQS8M/ISj7SnfaAz99AsTR4R5ErtqhFH7KGTeYiWqoLdYk80HAZTUiT9+kCrQCmppXK
- EJ0bbJl1BXdtxpRKIsZe367iu3EH0BrrasG4VUfGvQu6+suUB1vO13GjSnmIaDmYWWRqkBt+DxI
- MutFWo9EH2KriN5FZfEu+ty0mwZlUSY00/oMi4EAzMfkzGwGGGwpvMuXV4a9Bkj19Msq3UriXEr
- iTnxEfyNnUw2+6tjKGBrOmVkzziVwzEz15C7QlmXCixtMxzLacomMSVgD9rAQ1p0vZCzr+RLj+b
- hSlRlr9Ykq2YxRZvO6kL5wxObiXbkSQYf7S+juxV1d3CDEYZRipTPV12CwNGylteetFLHwsF1A8
- JMhwKBw9NWvA8tbZFgUu3H4eJzmIrQinl0RLRoT0JlWnV4+lLj4azxUbE6HsvTHhbjU0xFjoQaj
- BW19ll7LikfJkDgFY1aax5/TkCnO6ByOeZHvttvGb1T6msx0OU52d2TRw/Sd6o1A4ZEr05yMId3
- bJVaoQE9y2U9+Qw==
+ bh=a3EGyXSbhmytqEXpD9fmG98pLVBnzM8e4tIe5kcKbn4=;
+ b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBqv6QWlQRJO0zRpZaKMTl318lJ1/cBdVQkxf2HM
+ /57U09LKSSJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCar+kFgAKCRAq19F1Kl0b
+ TXEKD/40C0q3ZPyJlmC0ZsoD0Ne04ferX1eAGL9bo9sTcXrog8nN7+GUCj6P1dL+HGdCYLOlm6V
+ L1V0cQTJsqAb68U/VQ6HSATT09wzSiRW3OUoctWHZ34m1ECO2A0KVof+59nhTCLm34picEjXWXR
+ ON1UmWHwdgaAuKpWkrK9QT/Qw+00YbqLONnWVjjKyN1WyBXmxx5S5N50CVNTlorg6sl6tFItmwq
+ VGhVPo4bGA6623I68AZ71hCkcZPlyhmFnlKdgL6FL9HOTj69e/WVcgiIFWT8dKvhGg5GBVnQf1y
+ LvYQD/HapVMOM+dF4Um+cXds8f5GCIH8zIpkOoUZrfcEUx1bUADHhxM+sQ0JFed5SsIRWJuO9JD
+ f5Xo0MFyk9L5Ke1XMmh1PZizE+a0cDhiBV1ePMP+S8y8hh2OEmq6lMrjXzu7qh9bgXrWe7LsDRJ
+ vM2eHJLWneBPl/i0GDl0JlxDbg4KMCl6vDC8TGu8Nzu/qXVU97Q0VmhhdxvndPrYCeBbOo33kns
+ 2OHyiDtaf6VlvToDJZbOvhruoEGLjbBcq7nR9jtdw53tC8CqLt/BEQU8sWOS7d2CKYl4t7XH4JN
+ eBHs2d+7PZdshkdmHkLfSvqDhJzGCiMOiQQ7urBR1TdUAsNyhezCjLTaTCfiMbXwnq/iMH3ZK0e
+ izwZ04ws5Caymcg==
 X-Developer-Key: i=yuya.kusakabe@gmail.com; a=openpgp;
  fpr=DA07BBAC01FC4D28C7AA6BA62AD7D1752A5D1B4D
 
-SRv6 End.MAP is defined in RFC 9433 [1].
+This selftest is designed for testing the SRv6 End.MAP behavior.  It
+instantiates three network namespaces interconnected through veth
+pairs, with the middle one running End.MAP; the topology and the
+cases are described in the script header.
 
-The SRv6 End.MAP is an SRv6 endpoint that replaces the IPv6
-destination address with the configured mapped SID and forwards the
-packet via the IPv6 FIB without consuming the SRH.
-
-The SRv6 End.MAP Linux implementation is the first behavior of the
-SRv6 Mobile User Plane and introduces a dedicated
-LWTUNNEL_ENCAP_SEG6_MOBILE encap type, a CONFIG_IPV6_SEG6_MOBILE
-build option and a net/ipv6/seg6_mobile.c file that hosts the
-action dispatch table.  The user-space ABI lives in
-include/uapi/linux/seg6_mobile.h under a SEG6_MOBILE_* namespace,
-kept separate from SEG6_LOCAL_* so that attributes whose semantics
-differ between behaviors do not overload the same UAPI table.
-
-The SRv6 End.MAP behavior can be instantiated using a command
-similar to the following:
-
- $ ip -6 route add 2001:db8:f::/64 encap seg6mobile action End.MAP \
-     mapped_sid 2001:db8:2::e dev eth0
-
-We introduce the "seg6mobile" extension in iproute2 in a following
-patch.
-
-[1] https://www.rfc-editor.org/rfc/rfc9433.html
+The correct execution of the behavior is verified through ICMPv6 echo
+reachability with and without an SRH, asserting that the receiver
+counts no transport checksum errors, and through the route's own
+error counter for the packets End.MAP must drop.  A small C helper,
+srv6_mobile_send, crafts the routing headers the standard tools
+cannot produce.
 
 Assisted-by: LLM
 Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
 ---
- include/net/seg6.h               |   8 +
- include/uapi/linux/lwtunnel.h    |   1 +
- include/uapi/linux/seg6_mobile.h |  61 ++++
- net/core/lwtunnel.c              |   2 +
- net/ipv6/Kconfig                 |  10 +
- net/ipv6/Makefile                |   1 +
- net/ipv6/seg6.c                  |   7 +
- net/ipv6/seg6_mobile.c           | 723 +++++++++++++++++++++++++++++++++++++++
- 8 files changed, 813 insertions(+)
+ tools/testing/selftests/net/.gitignore           |   1 +
+ tools/testing/selftests/net/Makefile             |   2 +
+ tools/testing/selftests/net/config               |   1 +
+ tools/testing/selftests/net/srv6_end_map_test.sh | 456 +++++++++++++++++++++++
+ tools/testing/selftests/net/srv6_mobile_send.c   | 283 ++++++++++++++
+ 5 files changed, 743 insertions(+)
 
-diff --git a/include/net/seg6.h b/include/net/seg6.h
-index 82b3fbbcbb93..789e9bcc4773 100644
---- a/include/net/seg6.h
-+++ b/include/net/seg6.h
-@@ -64,6 +64,14 @@ static inline int seg6_local_init(void) { return 0; }
- static inline void seg6_local_exit(void) {}
- #endif
- 
-+#ifdef CONFIG_IPV6_SEG6_MOBILE
-+extern int seg6_mobile_init(void);
-+extern void seg6_mobile_exit(void);
-+#else
-+static inline int seg6_mobile_init(void) { return 0; }
-+static inline void seg6_mobile_exit(void) {}
-+#endif
-+
- extern bool seg6_validate_srh(struct ipv6_sr_hdr *srh, int len, bool reduced);
- extern struct ipv6_sr_hdr *seg6_get_srh(struct sk_buff *skb, int flags);
- extern void seg6_icmp_srh(struct sk_buff *skb, struct inet6_skb_parm *opt);
-diff --git a/include/uapi/linux/lwtunnel.h b/include/uapi/linux/lwtunnel.h
-index 229655ef792f..6e48f79c548e 100644
---- a/include/uapi/linux/lwtunnel.h
-+++ b/include/uapi/linux/lwtunnel.h
-@@ -16,6 +16,7 @@ enum lwtunnel_encap_types {
- 	LWTUNNEL_ENCAP_RPL,
- 	LWTUNNEL_ENCAP_IOAM6,
- 	LWTUNNEL_ENCAP_XFRM,
-+	LWTUNNEL_ENCAP_SEG6_MOBILE,
- 	__LWTUNNEL_ENCAP_MAX,
- };
- 
-diff --git a/include/uapi/linux/seg6_mobile.h b/include/uapi/linux/seg6_mobile.h
-new file mode 100644
-index 000000000000..068ab91b2873
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index c9f46031ac73..9afff0d83dde 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -42,6 +42,7 @@ socket
+ so_incoming_cpu
+ so_netns_cookie
+ so_rcv_listener
++srv6_mobile_send
+ stress_reuseport_listen
+ tap
+ tcp_fastopen_backup_key
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index d4ca82fec0b4..377bb91e178c 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -97,6 +97,7 @@ TEST_PROGS := \
+ 	srv6_end_dx4_netfilter_test.sh \
+ 	srv6_end_dx6_netfilter_test.sh \
+ 	srv6_end_flavors_test.sh \
++	srv6_end_map_test.sh \
+ 	srv6_end_next_csid_l3vpn_test.sh \
+ 	srv6_end_x_next_csid_l3vpn_test.sh \
+ 	srv6_hencap_red_l3vpn_test.sh \
+@@ -166,6 +167,7 @@ TEST_GEN_FILES := \
+ 	so_netns_cookie \
+ 	so_rcv_listener \
+ 	socket \
++	srv6_mobile_send \
+ 	stress_reuseport_listen \
+ 	tcp_fastopen_backup_key \
+ 	tcp_inq \
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 737e7e6327b3..abdc585a325e 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -49,6 +49,7 @@ CONFIG_IPV6_ROUTE_INFO=y
+ CONFIG_IPV6_ROUTER_PREF=y
+ CONFIG_IPV6_RPL_LWTUNNEL=y
+ CONFIG_IPV6_SEG6_LWTUNNEL=y
++CONFIG_IPV6_SEG6_MOBILE=y
+ CONFIG_IPV6_SIT=y
+ CONFIG_IPV6_VTI=y
+ CONFIG_IPVLAN=m
+diff --git a/tools/testing/selftests/net/srv6_end_map_test.sh b/tools/testing/selftests/net/srv6_end_map_test.sh
+new file mode 100755
+index 000000000000..4c6360795456
 --- /dev/null
-+++ b/include/uapi/linux/seg6_mobile.h
-@@ -0,0 +1,61 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ *  SRv6 Mobile User Plane implementation
-+ *
-+ *  Author:
-+ *  Yuya Kusakabe <yuya.kusakabe@gmail.com>
-+ */
-+#ifndef _UAPI_LINUX_SEG6_MOBILE_H
-+#define _UAPI_LINUX_SEG6_MOBILE_H
++++ b/tools/testing/selftests/net/srv6_end_map_test.sh
+@@ -0,0 +1,456 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# author: Yuya Kusakabe <yuya.kusakabe@gmail.com>
 +
-+enum {
-+	SEG6_MOBILE_UNSPEC,
-+	SEG6_MOBILE_ACTION,
-+	SEG6_MOBILE_MAPPED_SID,
-+	SEG6_MOBILE_COUNTERS,
-+	__SEG6_MOBILE_MAX,
-+};
++# Selftest for the SRv6 End.MAP behavior (RFC 9433).
++#
++#   +------+    2001:db8:1::/64    +------+    2001:db8:2::/64    +------+
++#   | rt-1 | --------------------- | rt-2 | --------------------- | rt-3 |
++#   +------+         veth1         +------+         veth2         +------+
++#                                 (End.MAP)
++#
++# rt-2 holds the End.MAP route for 2001:db8:f::/64 that replaces the
++# IPv6 destination with 2001:db8:3::3 (an address on rt-3's loopback,
++# also used as the final SRv6 segment in the H.Encaps scenario).
++#
++# The original destination 2001:db8:f::1 and the replacement
++# 2001:db8:3::3 have different 16-bit word sums, so any regression in
++# the transport-checksum diff update would corrupt the ICMPv6
++# checksum and bump Icmp6InCsumErrors -- the forwarding cases assert
++# that the counter does not move.
++#
++# Ten cases are exercised:
++#
++#   1. SRH absent     -- plain ICMPv6 echo to the End.MAP SID.
++#   2. SRH present    -- the destination is reached through an
++#                        H.Encaps wrapper that carries an SRH with
++#                        two segments; End.MAP must leave the SRH
++#                        structurally intact.
++#   3. SRH inline     -- the destination is reached through an
++#                        H.Insert wrapper that inserts an SRH whose
++#                        first hop is the End.MAP SID; End.MAP must
++#                        NOT patch the L4 checksum, because the
++#                        receiver's SRv6 processing restores the
++#                        destination from segments[0] before the
++#                        ICMPv6 handler verifies it.
++#   4. RH not an SRH, Segments Left 0
++#                     -- a C helper sends an echo whose Routing Header
++#                        is type 0 rather than 4; RFC 8200 has an
++#                        unrecognized Routing Type with Segments Left 0
++#                        ignored, so End.MAP must forward it as if no
++#                        SRH were present and the receiver must accept
++#                        the echo.
++#   5. RH not an SRH, Segments Left 1
++#                     -- the same Routing Header with Segments Left 1;
++#                        End.MAP must drop it.  The behavior's own
++#                        errors counter binds the assertion to the drop.
++#   6. SRH malformed  -- the helper sends an SRH whose Last Entry
++#                        exceeds its length; End.MAP must drop it.
++#   7. SRH exhausted  -- the helper sends a valid SRH with Segments
++#                        Left 0, so the IPv6 DA already is the final
++#                        destination; End.MAP must patch the L4
++#                        checksum as in the SRH-absent case and the
++#                        receiver must accept the echo.
++#   8. Fragmented     -- an oversized echo without an SRH is fragmented
++#                        by rt-1; only the first fragment carries the
++#                        ICMPv6 header, and End.MAP must patch its
++#                        checksum so the reassembled echo verifies at
++#                        rt-3.
++#   9. Hop Limit      -- an echo whose Hop Limit is 1 on arrival at
++#                        the End.MAP node must yield an ICMPv6 Time
++#                        Exceeded from that node, confirming Hop Limit
++#                        handling is delegated to the ip6_forward path.
++#  10. No Next Header -- the helper sends a bare IPv6 header whose Next
++#                        Header is 59; there is no L4 checksum to patch,
++#                        and End.MAP must forward it.  The behavior's
++#                        packets counter binds the assertion.
 +
-+#define SEG6_MOBILE_MAX	(__SEG6_MOBILE_MAX - 1)
++source lib.sh
 +
-+enum {
-+	SEG6_MOBILE_ACTION_UNSPEC	= 0,
-+	/* swap IPv6 DA with the mapped SID, leave SRH untouched */
-+	SEG6_MOBILE_ACTION_END_MAP	= 1,
++readonly PING_TIMEOUT_SEC=4
++readonly COUNTER_TIMEOUT_SEC=2
++readonly END_MAP_PREFIX="2001:db8:f::/64"
++readonly END_MAP_SID="2001:db8:f::1"
++readonly RT3_SID="2001:db8:3::3"
++HELPER_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
++readonly HELPER_DIR
++readonly HELPER="${HELPER_DIR}/srv6_mobile_send"
 +
-+	__SEG6_MOBILE_ACTION_MAX,
-+};
++ret=0
++nsuccess=0
++nfail=0
 +
-+#define SEG6_MOBILE_ACTION_MAX	(__SEG6_MOBILE_ACTION_MAX - 1)
++PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
 +
-+/* SRv6 Mobile Behavior counters are encoded as netlink attributes
-+ * guaranteeing the correct alignment.
-+ * Each counter is identified by a different attribute type (i.e.
-+ * SEG6_MOBILE_CNT_PACKETS).
-+ *
-+ * - SEG6_MOBILE_CNT_PACKETS: identifies a counter that counts the number
-+ *   of packets that have been CORRECTLY processed by an SRv6 Behavior
-+ *   instance (i.e., packets that generate errors or are dropped are NOT
-+ *   counted).
-+ *
-+ * - SEG6_MOBILE_CNT_BYTES: identifies a counter that counts the total
-+ *   amount of traffic in bytes of all packets that have been CORRECTLY
-+ *   processed by an SRv6 Behavior instance (i.e., packets that generate
-+ *   errors or are dropped are NOT counted).
-+ *
-+ * - SEG6_MOBILE_CNT_ERRORS: identifies a counter that counts the number
-+ *   of packets that have NOT been properly processed by an SRv6 Behavior
-+ *   instance (i.e., packets that generate errors or are dropped).
-+ */
-+enum {
-+	SEG6_MOBILE_CNT_UNSPEC,
-+	SEG6_MOBILE_CNT_PACKETS,
-+	SEG6_MOBILE_CNT_BYTES,
-+	SEG6_MOBILE_CNT_ERRORS,
-+	SEG6_MOBILE_CNT_PAD,		/* pad for 64 bits values */
-+	__SEG6_MOBILE_CNT_MAX,
-+};
-+
-+#define SEG6_MOBILE_CNT_MAX	(__SEG6_MOBILE_CNT_MAX - 1)
-+
-+#endif /* _UAPI_LINUX_SEG6_MOBILE_H */
-diff --git a/net/core/lwtunnel.c b/net/core/lwtunnel.c
-index b01a395d9a96..4476293ccb37 100644
---- a/net/core/lwtunnel.c
-+++ b/net/core/lwtunnel.c
-@@ -53,6 +53,8 @@ static const char *lwtunnel_encap_str(enum lwtunnel_encap_types encap_type)
- 	case LWTUNNEL_ENCAP_XFRM:
- 		/* module autoload not supported for encap type */
- 		return NULL;
-+	case LWTUNNEL_ENCAP_SEG6_MOBILE:
-+		return "SEG6MOBILE";
- 	case LWTUNNEL_ENCAP_IP6:
- 	case LWTUNNEL_ENCAP_IP:
- 	case LWTUNNEL_ENCAP_NONE:
-diff --git a/net/ipv6/Kconfig b/net/ipv6/Kconfig
-index c3806c6ac96f..e094b835a118 100644
---- a/net/ipv6/Kconfig
-+++ b/net/ipv6/Kconfig
-@@ -314,6 +314,16 @@ config IPV6_SEG6_BPF
- 	depends on IPV6_SEG6_LWTUNNEL
- 	depends on IPV6 = y
- 
-+config IPV6_SEG6_MOBILE
-+	bool "IPv6: SRv6 Mobile User Plane (RFC 9433) behaviors"
-+	depends on IPV6_SEG6_LWTUNNEL
-+	help
-+	  Support for the SRv6 Mobile User Plane behaviors defined by
-+	  RFC 9433, exposed via the LWTUNNEL_ENCAP_SEG6_MOBILE lightweight
-+	  tunnel encapsulation.
-+
-+	  If unsure, say N.
-+
- config IPV6_RPL_LWTUNNEL
- 	bool "IPv6: RPL Source Routing Header support"
- 	depends on IPV6
-diff --git a/net/ipv6/Makefile b/net/ipv6/Makefile
-index cf5e01f83ce3..95961f180439 100644
---- a/net/ipv6/Makefile
-+++ b/net/ipv6/Makefile
-@@ -24,6 +24,7 @@ ipv6-$(CONFIG_SYN_COOKIES) += syncookies.o
- ipv6-$(CONFIG_NETLABEL) += calipso.o
- ipv6-$(CONFIG_IPV6_SEG6_LWTUNNEL) += seg6_iptunnel.o seg6_local.o
- ipv6-$(CONFIG_IPV6_SEG6_HMAC) += seg6_hmac.o
-+ipv6-$(CONFIG_IPV6_SEG6_MOBILE) += seg6_mobile.o
- ipv6-$(CONFIG_IPV6_RPL_LWTUNNEL) += rpl_iptunnel.o
- ipv6-$(CONFIG_IPV6_IOAM6_LWTUNNEL) += ioam6_iptunnel.o
- 
-diff --git a/net/ipv6/seg6.c b/net/ipv6/seg6.c
-index 8c2b156c227a..c7f71174b6d0 100644
---- a/net/ipv6/seg6.c
-+++ b/net/ipv6/seg6.c
-@@ -525,10 +525,16 @@ int __init seg6_init(void)
- 	if (err)
- 		goto out_unregister_iptun;
- 
-+	err = seg6_mobile_init();
-+	if (err)
-+		goto out_unregister_local;
-+
- 	pr_info("Segment Routing with IPv6\n");
- 
- out:
- 	return err;
-+out_unregister_local:
-+	seg6_local_exit();
- out_unregister_iptun:
- 	seg6_iptunnel_exit();
- out_unregister_genl:
-@@ -540,6 +546,7 @@ int __init seg6_init(void)
- 
- void seg6_exit(void)
- {
-+	seg6_mobile_exit();
- 	seg6_local_exit();
- 	seg6_iptunnel_exit();
- 	genl_unregister_family(&seg6_genl_family);
-diff --git a/net/ipv6/seg6_mobile.c b/net/ipv6/seg6_mobile.c
-new file mode 100644
-index 000000000000..8a228f44d1e2
---- /dev/null
-+++ b/net/ipv6/seg6_mobile.c
-@@ -0,0 +1,723 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *  SRv6 Mobile User Plane implementation
-+ *
-+ *  Author:
-+ *  Yuya Kusakabe <yuya.kusakabe@gmail.com>
-+ */
-+
-+#include <linux/icmpv6.h>
-+#include <linux/in6.h>
-+#include <linux/ipv6.h>
-+#include <linux/module.h>
-+#include <linux/skbuff.h>
-+#include <linux/tcp.h>
-+#include <linux/types.h>
-+#include <linux/udp.h>
-+#include <net/checksum.h>
-+#include <net/ipv6.h>
-+#include <net/lwtunnel.h>
-+#include <net/seg6.h>
-+#ifdef CONFIG_IPV6_SEG6_HMAC
-+#include <net/seg6_hmac.h>
-+#endif
-+#include <uapi/linux/seg6_mobile.h>
-+
-+#define SEG6_MOBILE_F_ATTR(i)		BIT(i)
-+#define SEG6_F_MOBILE_COUNTERS		SEG6_MOBILE_F_ATTR(SEG6_MOBILE_COUNTERS)
-+
-+struct seg6_mobile_lwt;
-+
-+struct seg6_mobile_action_desc {
-+	int action;
-+	unsigned long attrs;
-+	unsigned long optattrs;
-+	int (*input)(struct sk_buff *skb, struct seg6_mobile_lwt *slwt);
-+};
-+
-+struct seg6_mobile_action_param {
-+	int (*parse)(struct nlattr **attrs, struct seg6_mobile_lwt *slwt,
-+		     struct netlink_ext_ack *extack);
-+	int (*put)(struct sk_buff *skb, struct seg6_mobile_lwt *slwt);
-+	int (*cmp)(struct seg6_mobile_lwt *a, struct seg6_mobile_lwt *b);
-+
-+	/* optional destroy() callback to release resources acquired in
-+	 * the corresponding parse() function.
-+	 */
-+	void (*destroy)(struct seg6_mobile_lwt *slwt);
-+};
-+
-+struct pcpu_seg6_mobile_counters {
-+	u64_stats_t packets;
-+	u64_stats_t bytes;
-+	u64_stats_t errors;
-+
-+	struct u64_stats_sync syncp;
-+};
-+
-+/* User-space aggregate format for the per-CPU counters.  Kept private
-+ * to the kernel; userspace receives the values through SEG6_MOBILE_CNT_*
-+ * nested netlink attributes.
-+ */
-+struct seg6_mobile_counters {
-+	__u64 packets;
-+	__u64 bytes;
-+	__u64 errors;
-+};
-+
-+#define seg6_mobile_alloc_pcpu_counters(__gfp)				\
-+	__netdev_alloc_pcpu_stats(struct pcpu_seg6_mobile_counters,	\
-+				  ((__gfp) | __GFP_ZERO))
-+
-+struct seg6_mobile_lwt {
-+	int action;
-+	struct in6_addr mapped_sid;
-+	const struct seg6_mobile_action_desc *desc;
-+	struct pcpu_seg6_mobile_counters __percpu *pcpu_counters;
-+
-+	/* required attrs are tracked by desc->attrs; optional attrs that
-+	 * the user actually configured are tracked here so that fill_encap
-+	 * / cmp / destroy can iterate only over what was parsed.
-+	 */
-+	unsigned long parsed_optattrs;
-+};
-+
-+static struct seg6_mobile_lwt *seg6_mobile_lwtunnel(struct lwtunnel_state *lwt)
++log_test()
 +{
-+	return (struct seg6_mobile_lwt *)lwt->data;
-+}
++	local rc=$1
++	local expected=$2
++	local msg="$3"
 +
-+/* ABSENT is told apart from MALFORMED so that a behavior which accepts
-+ * SRH-less packets still drops a malformed SRH
-+ */
-+enum seg6_mobile_srh_state {
-+	SEG6_MOBILE_SRH_ABSENT,
-+	SEG6_MOBILE_SRH_PRESENT,
-+	SEG6_MOBILE_SRH_MALFORMED,
-+};
-+
-+static struct ipv6_sr_hdr *
-+seg6_mobile_get_and_validate_srh(struct sk_buff *skb,
-+				 enum seg6_mobile_srh_state *state)
-+{
-+	struct ipv6_rt_hdr _rh, *rh;
-+	struct ipv6_sr_hdr *srh;
-+	unsigned int srhoff = 0;
-+	int hdr_proto;
-+	int flags = 0;
-+
-+	srh = seg6_get_srh(skb, 0);
-+	if (srh) {
-+#ifdef CONFIG_IPV6_SEG6_HMAC
-+		if (!seg6_hmac_validate_skb(skb, srh)) {
-+			*state = SEG6_MOBILE_SRH_MALFORMED;
-+			return NULL;
-+		}
-+#endif
-+		*state = SEG6_MOBILE_SRH_PRESENT;
-+		return srh;
-+	}
-+
-+	hdr_proto = ipv6_find_hdr(skb, &srhoff, IPPROTO_ROUTING, NULL, &flags);
-+	if (hdr_proto == -ENOENT) {
-+		*state = SEG6_MOBILE_SRH_ABSENT;
-+		return NULL;
-+	}
-+
-+	/* RFC 8200 Section 4.4: an unrecognized Routing Type with Segments
-+	 * Left 0 is ignored
-+	 */
-+	rh = hdr_proto == IPPROTO_ROUTING ?
-+	     skb_header_pointer(skb, srhoff, sizeof(_rh), &_rh) : NULL;
-+	if (rh && rh->type != IPV6_SRCRT_TYPE_4 && !rh->segments_left)
-+		*state = SEG6_MOBILE_SRH_ABSENT;
++	if [ "${rc}" -eq "${expected}" ]; then
++		nsuccess=$((nsuccess + 1))
++		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
 +	else
-+		*state = SEG6_MOBILE_SRH_MALFORMED;
-+	return NULL;
++		ret=1
++		nfail=$((nfail + 1))
++		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
++		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
++			echo
++			echo "hit enter to continue, 'q' to quit"
++			read -r a
++			[ "$a" = "q" ] && exit 1
++		fi
++	fi
 +}
 +
-+static int seg6_mobile_l4_csum_hlen(u8 nexthdr)
++print_log_test_results()
 +{
-+	switch (nexthdr) {
-+	case IPPROTO_TCP:
-+		return sizeof(struct tcphdr);
-+	case IPPROTO_UDP:
-+		return sizeof(struct udphdr);
-+	case IPPROTO_ICMPV6:
-+		return sizeof(struct icmp6hdr);
-+	}
-+	return 0;
++	printf "\nTests passed: %3d\n" "${nsuccess}"
++	printf "Tests failed: %3d\n"   "${nfail}"
 +}
 +
-+static __sum16 *seg6_mobile_l4_csum(struct sk_buff *skb, int l4_off,
-+				    u8 nexthdr)
++cleanup()
 +{
-+	switch (nexthdr) {
-+	case IPPROTO_TCP:
-+		return &((struct tcphdr *)(skb->data + l4_off))->check;
-+	case IPPROTO_UDP: {
-+		struct udphdr *uh = (struct udphdr *)(skb->data + l4_off);
-+
-+		/* zero UDPv6 checksum on a non-offloaded skb means "none" */
-+		if (!uh->check && skb->ip_summed != CHECKSUM_PARTIAL)
-+			return NULL;
-+		return &uh->check;
-+	}
-+	case IPPROTO_ICMPV6:
-+		return &((struct icmp6hdr *)(skb->data + l4_off))->icmp6_cksum;
-+	}
-+	return NULL;
++	cleanup_all_ns
 +}
 +
-+/* rewrite DA; the L4 checksum follows only when the receiver will verify
-+ * it against the new DA, i.e. no SRH is left for it to process
++trap cleanup EXIT
++
++check_dependencies()
++{
++	if [ "$(id -u)" -ne 0 ]; then
++		echo "SKIP: need root privileges"
++		exit "${ksft_skip}"
++	fi
++
++	for cmd in ip ping nstat sysctl ethtool; do
++		if ! command -v "$cmd" >/dev/null; then
++			echo "SKIP: ${cmd} is required"
++			exit "${ksft_skip}"
++		fi
++	done
++
++	if [ ! -x "${HELPER}" ]; then
++		echo "SKIP: ${HELPER} not built"
++		exit "${ksft_skip}"
++	fi
++
++	if ! ip route help 2>&1 | grep -qF "seg6mobile"; then
++		echo "SKIP: iproute2 lacks seg6mobile support"
++		exit "${ksft_skip}"
++	fi
++
++	if ! ip route help 2>&1 | grep -qF "End.MAP"; then
++		echo "SKIP: iproute2 lacks End.MAP action"
++		exit "${ksft_skip}"
++	fi
++}
++
++setup()
++{
++	setup_ns rt1 rt2 rt3
++
++	# shellcheck disable=SC2154 # variables assigned by setup_ns
++	for ns in "$rt1" "$rt2" "$rt3"; do
++		ip -n "$ns" link set lo up
++	done
++
++	ip link add veth1 netns "$rt1" \
++		type veth peer name veth1-rt2 netns "$rt2"
++	ip link add veth2 netns "$rt2" \
++		type veth peer name veth2-rt3 netns "$rt3"
++
++	ip -n "$rt1" addr add 2001:db8:1::1/64 dev veth1 nodad
++	ip -n "$rt2" addr add 2001:db8:1::2/64 dev veth1-rt2 nodad
++	ip -n "$rt2" addr add 2001:db8:2::1/64 dev veth2 nodad
++	ip -n "$rt3" addr add 2001:db8:2::2/64 dev veth2-rt3 nodad
++	# rt-3 also owns the End.MAP replacement SID / SRH endpoint.
++	ip -n "$rt3" addr add "$RT3_SID/128" dev lo nodad
++
++	ip -n "$rt1" link set veth1 up
++	ip -n "$rt2" link set veth1-rt2 up
++	ip -n "$rt2" link set veth2 up
++	ip -n "$rt3" link set veth2-rt3 up
++
++	ip netns exec "$rt2" sysctl -wq net.ipv6.conf.all.forwarding=1
++
++	# rt-3 must accept SRv6 packets so ipv6_srh_rcv lets the
++	# extension header chain through to local delivery.
++	ip netns exec "$rt3" sysctl -wq net.ipv6.conf.all.seg6_enabled=1
++	ip netns exec "$rt3" \
++		sysctl -wq net.ipv6.conf.veth2-rt3.seg6_enabled=1
++	ip netns exec "$rt3" sysctl -wq net.ipv6.conf.lo.seg6_enabled=1
++
++	# Disable HW checksum offload so the kernel software checksum
++	# path runs unconditionally and any csum bug surfaces.
++	ip netns exec "$rt1" ethtool -K veth1 tx off rx off
++	ip netns exec "$rt2" ethtool -K veth1-rt2 tx off rx off
++	ip netns exec "$rt2" ethtool -K veth2 tx off rx off
++	ip netns exec "$rt3" ethtool -K veth2-rt3 tx off rx off
++
++	# rt-1: route the End.MAP locator into rt-2.
++	ip -n "$rt1" -6 route add "$END_MAP_PREFIX" via 2001:db8:1::2
++
++	# rt-1: a separate H.Encaps route for the SRH-present scenario,
++	# wrapping the inner ICMPv6 echo in an outer IPv6+SRH carrying
++	# [End.MAP_SID, RT3_SID].
++	ip -n "$rt1" -6 route add "$RT3_SID/128" via 2001:db8:1::2 \
++		encap seg6 mode encap \
++		segs "$END_MAP_SID","$RT3_SID" \
++		dev veth1
++
++	# rt-2: End.MAP -- swap DA from the End.MAP SID to RT3_SID
++	# (an address on rt-3) and forward via the IPv6 FIB.  "count"
++	# enables the per-behavior counters the drop tests read.
++	ip -n "$rt2" -6 route add "$END_MAP_PREFIX" \
++		encap seg6mobile action End.MAP mapped_sid "$RT3_SID" count \
++		dev veth2
++
++	# rt-2: reach RT3_SID (on rt-3's loopback) through the
++	# directly connected neighbour 2001:db8:2::2.
++	ip -n "$rt2" -6 route add "$RT3_SID/128" via 2001:db8:2::2
++
++	# rt-3: return route for the ICMPv6 echo reply.
++	ip -n "$rt3" -6 route add 2001:db8:1::/64 via 2001:db8:2::1
++}
++
++read_nstat_counter()
++{
++	local ns=$1
++	local name=$2
++
++	# nstat -az reports a counter that has never incremented as 0,
++	# which is what we rely on for a clean before/after delta.
++	ip netns exec "$ns" nstat -az "$name" \
++		| awk -v n="$name" '$1 == n {print $2}'
++}
++
++read_route_counter()
++{
++	local name=$1
++
++	ip -n "$rt2" -j -s -6 route show "$END_MAP_PREFIX" \
++		| grep -oE "\"${name}\":[0-9]+" | grep -oE '[0-9]+'
++}
++
++read_route_errors()
++{
++	# The End.MAP route carries "count", so its errors counter
++	# increments once for every packet the behavior drops.  Reading it
++	# binds the negative test to the drop itself rather than to any
++	# unrelated loss on the path to rt-3.
++	read_route_counter errors
++}
++
++test_srh_absent()
++{
++	local before after rc=0
++
++	before=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
++
++	if ! ip netns exec "$rt1" \
++			ping -6 -c 1 -W "$PING_TIMEOUT_SEC" "$END_MAP_SID" \
++			>/dev/null 2>&1; then
++		rc=1
++	fi
++
++	if [ "$rc" -eq 0 ]; then
++		after=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
++		[ "$before" != "$after" ] && rc=1
++	fi
++
++	log_test "$rc" 0 "End.MAP forwards an ICMPv6 echo without an SRH"
++}
++
++test_srh_present()
++{
++	local before after rc=0
++
++	before=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
++
++	if ! ip netns exec "$rt1" \
++			ping -6 -c 1 -W "$PING_TIMEOUT_SEC" "$RT3_SID" \
++			>/dev/null 2>&1; then
++		rc=1
++	fi
++
++	if [ "$rc" -eq 0 ]; then
++		after=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
++		[ "$before" != "$after" ] && rc=1
++	fi
++
++	log_test "$rc" 0 "End.MAP preserves an SRH carried by H.Encaps"
++}
++
++test_srh_inline()
++{
++	local before after rc=0
++
++	ip -n "$rt1" -6 route add 2001:db8:2::2/128 via 2001:db8:1::2 \
++		encap seg6 mode inline segs "$END_MAP_SID" \
++		dev veth1
++
++	before=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
++
++	if ! ip netns exec "$rt1" \
++			ping -6 -c 1 -W "$PING_TIMEOUT_SEC" 2001:db8:2::2 \
++			>/dev/null 2>&1; then
++		rc=1
++	fi
++
++	if [ "$rc" -eq 0 ]; then
++		after=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
++		[ "$before" != "$after" ] && rc=1
++	fi
++
++	log_test "$rc" 0 "End.MAP preserves L4 csum across mode inline SRH"
++}
++
++# The drop happens on rt-2's receive path, asynchronously to the
++# sender, so wait for the errors counter instead of sampling it.
++expect_end_map_drop()
++{
++	local before rc=0
++
++	before=$(read_route_errors)
++
++	ip netns exec "$rt1" "$HELPER" -m end-map "$@" \
++		-s 2001:db8:1::1 -d "$END_MAP_SID" >/dev/null 2>&1
++
++	slowwait "$COUNTER_TIMEOUT_SEC" until_counter_is ">= $((before + 1))" \
++		read_route_errors >/dev/null || rc=1
++	[ "$(read_route_errors)" -eq "$((before + 1))" ] || rc=1
++
++	echo "$rc"
++}
++
++# Sends a helper-crafted echo through End.MAP and waits for rt-3 to
++# accept it with a valid transport checksum.
++expect_end_map_echo()
++{
++	local before_echos before_csum rc=0
++
++	before_echos=$(read_nstat_counter "$rt3" Icmp6InEchos)
++	before_csum=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
++
++	ip netns exec "$rt1" "$HELPER" -m end-map "$@" \
++		-s 2001:db8:1::1 -d "$END_MAP_SID" >/dev/null 2>&1
++
++	slowwait "$COUNTER_TIMEOUT_SEC" \
++		until_counter_is ">= $((before_echos + 1))" \
++		read_nstat_counter "$rt3" Icmp6InEchos >/dev/null || rc=1
++	[ "$(read_nstat_counter "$rt3" Icmp6InCsumErrors)" -eq \
++		"$before_csum" ] || rc=1
++
++	echo "$rc"
++}
++
++test_rh_not_srh()
++{
++	local rc
++
++	rc=$(expect_end_map_echo --rh-type 0)
++	log_test "$rc" 0 "End.MAP ignores a non-SRH RH with Segments Left 0"
++}
++
++test_rh_not_srh_segleft()
++{
++	local rc
++
++	rc=$(expect_end_map_drop --rh-type 0 --segleft 1)
++	log_test "$rc" 0 "End.MAP drops a non-SRH RH with Segments Left 1"
++}
++
++test_srh_malformed()
++{
++	local rc
++
++	rc=$(expect_end_map_drop --bad-srh)
++	log_test "$rc" 0 "End.MAP drops a malformed SRH"
++}
++
++test_srh_exhausted()
++{
++	local rc
++
++	rc=$(expect_end_map_echo)
++	log_test "$rc" 0 "End.MAP patches the L4 csum of an exhausted SRH"
++}
++
++test_fragmented()
++{
++	local before after rc=0
++
++	before=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
++
++	if ! ip netns exec "$rt1" \
++			ping -6 -c 1 -s 2000 -M dont -W "$PING_TIMEOUT_SEC" \
++			"$END_MAP_SID" >/dev/null 2>&1; then
++		rc=1
++	fi
++
++	if [ "$rc" -eq 0 ]; then
++		after=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
++		[ "$before" != "$after" ] && rc=1
++	fi
++
++	log_test "$rc" 0 "End.MAP patches the L4 csum of a fragmented echo"
++}
++
++test_hoplimit_expiry()
++{
++	local before after rc=0
++
++	before=$(read_nstat_counter "$rt2" Icmp6OutTimeExcds)
++
++	ip netns exec "$rt1" \
++		ping -6 -c 1 -t 1 -W "$PING_TIMEOUT_SEC" "$END_MAP_SID" \
++		>/dev/null 2>&1
++
++	after=$(read_nstat_counter "$rt2" Icmp6OutTimeExcds)
++	[ "$((after - before))" -eq 1 ] || rc=1
++
++	log_test "$rc" 0 "End.MAP delegates Hop Limit expiry to ip6_forward"
++}
++
++test_no_next_header()
++{
++	local before_pkts before_errs rc=0
++
++	before_pkts=$(read_route_counter packets)
++	before_errs=$(read_route_errors)
++
++	ip netns exec "$rt1" "$HELPER" -m end-map --no-next-header \
++		-s 2001:db8:1::1 -d "$END_MAP_SID" >/dev/null 2>&1
++
++	slowwait "$COUNTER_TIMEOUT_SEC" \
++		until_counter_is ">= $((before_pkts + 1))" \
++		read_route_counter packets >/dev/null || rc=1
++	[ "$(read_route_errors)" -eq "$before_errs" ] || rc=1
++
++	log_test "$rc" 0 "End.MAP forwards a packet with No Next Header"
++}
++
++main()
++{
++	check_dependencies
++	setup
++
++	test_srh_absent
++	test_srh_present
++	test_srh_inline
++	test_rh_not_srh
++	test_rh_not_srh_segleft
++	test_srh_malformed
++	test_srh_exhausted
++	test_fragmented
++	test_hoplimit_expiry
++	test_no_next_header
++
++	print_log_test_results
++	exit "${ret}"
++}
++
++main "$@"
+diff --git a/tools/testing/selftests/net/srv6_mobile_send.c b/tools/testing/selftests/net/srv6_mobile_send.c
+new file mode 100644
+index 000000000000..3ee95e09f4ed
+--- /dev/null
++++ b/tools/testing/selftests/net/srv6_mobile_send.c
+@@ -0,0 +1,283 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Author: Yuya Kusakabe (yuya.kusakabe@gmail.com)
++ *
++ * Helper for SRv6 Mobile (RFC 9433) selftests.
++ *
++ * Usage:
++ *   srv6_mobile_send -m end-map -s <src> -d <dst> [--rh-type N]
++ *                    [--segleft N] [--bad-srh] [--no-next-header]
 + */
-+static enum skb_drop_reason
-+seg6_mobile_advance_da(struct sk_buff *skb, const struct in6_addr *nh,
-+		       bool srh_present)
-+{
-+	int l4_off = 0, l4_hlen = 0;
-+	unsigned int nonext_off = 0;
-+	struct in6_addr old_da;
-+	struct ipv6hdr *ip6h;
-+	__be16 frag_off;
-+	u8 nexthdr = 0;
-+	__sum16 *csum;
-+	int write_len;
 +
-+	if (!pskb_may_pull(skb, sizeof(*ip6h)))
-+		return SKB_DROP_REASON_NOT_SPECIFIED;
++#include <arpa/inet.h>
++#include <assert.h>
++#include <errno.h>
++#include <getopt.h>
++#include <netinet/in.h>
++#include <netinet/ip6.h>
++#include <netinet/icmp6.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <sys/types.h>
++#include <unistd.h>
 +
-+	ip6h = ipv6_hdr(skb);
-+	write_len = sizeof(*ip6h);
-+
-+	if (!srh_present) {
-+		nexthdr = ip6h->nexthdr;
-+		l4_off = ipv6_skip_exthdr(skb, sizeof(*ip6h), &nexthdr,
-+					  &frag_off);
-+		/* a chain ending in No Next Header has no L4 checksum */
-+		if (l4_off < 0 &&
-+		    ipv6_find_hdr(skb, &nonext_off, NEXTHDR_NONE, NULL,
-+				  NULL) != NEXTHDR_NONE)
-+			return SKB_DROP_REASON_NOT_SPECIFIED;
-+
-+		/* only the first fragment carries the L4 header; frag_off
-+		 * is the raw field, M flag included
-+		 */
-+		if (l4_off >= 0 && !(frag_off & htons(IP6_OFFSET)))
-+			l4_hlen = seg6_mobile_l4_csum_hlen(nexthdr);
-+		if (l4_hlen)
-+			write_len = l4_off + l4_hlen;
-+	}
-+
-+	if (skb_ensure_writable(skb, write_len))
-+		return SKB_DROP_REASON_NOMEM;
-+
-+	/* skb_ensure_writable() may change skb pointers; evaluate ip6h again */
-+	ip6h = ipv6_hdr(skb);
-+	old_da = ip6h->daddr;
-+
-+	csum = l4_hlen ? seg6_mobile_l4_csum(skb, l4_off, nexthdr) : NULL;
-+	if (csum) {
-+		inet_proto_csum_replace16(csum, skb, old_da.s6_addr32,
-+					  nh->s6_addr32, true);
-+		if (nexthdr == IPPROTO_UDP && !*csum)
-+			*csum = CSUM_MANGLED_0;
-+	} else if (skb->ip_summed == CHECKSUM_COMPLETE) {
-+		/* no L4 patch, so skb->csum must track the DA change itself */
-+		update_csum_diff16(skb, old_da.s6_addr32, (__be32 *)nh);
-+	}
-+
-+	ip6h->daddr = *nh;
-+	skb_clear_hash(skb);
-+
-+	return SKB_NOT_DROPPED_YET;
-+}
-+
-+static int seg6_mobile_forward(struct sk_buff *skb)
-+{
-+	seg6_lookup_nexthop(skb, NULL, 0);
-+	return dst_input(skb);
-+}
-+
-+/* replace DA with the mapped SID and forward, leaving the SRH untouched */
-+static int input_action_end_map(struct sk_buff *skb,
-+				struct seg6_mobile_lwt *slwt)
-+{
-+	enum skb_drop_reason reason = SKB_DROP_REASON_NOT_SPECIFIED;
-+	enum seg6_mobile_srh_state srh_state;
-+	struct ipv6_sr_hdr *srh;
-+
-+	srh = seg6_mobile_get_and_validate_srh(skb, &srh_state);
-+	if (srh_state == SEG6_MOBILE_SRH_MALFORMED)
-+		goto drop;
-+
-+	/* SL == 0: SRH spent, L4 is verified against the new DA */
-+	reason = seg6_mobile_advance_da(skb, &slwt->mapped_sid,
-+					srh && srh->segments_left);
-+	if (reason)
-+		goto drop;
-+
-+	return seg6_mobile_forward(skb);
-+
-+drop:
-+	kfree_skb_reason(skb, reason);
-+	return -EINVAL;
-+}
-+
-+static int parse_nla_mapped_sid(struct nlattr **attrs,
-+				struct seg6_mobile_lwt *slwt,
-+				struct netlink_ext_ack *extack)
-+{
-+	memcpy(&slwt->mapped_sid, nla_data(attrs[SEG6_MOBILE_MAPPED_SID]),
-+	       sizeof(struct in6_addr));
-+
-+	return 0;
-+}
-+
-+static int put_nla_mapped_sid(struct sk_buff *skb, struct seg6_mobile_lwt *slwt)
-+{
-+	if (nla_put_in6_addr(skb, SEG6_MOBILE_MAPPED_SID, &slwt->mapped_sid))
-+		return -EMSGSIZE;
-+
-+	return 0;
-+}
-+
-+static int cmp_nla_mapped_sid(struct seg6_mobile_lwt *a,
-+			      struct seg6_mobile_lwt *b)
-+{
-+	return memcmp(&a->mapped_sid, &b->mapped_sid, sizeof(struct in6_addr));
-+}
-+
-+static const struct
-+nla_policy seg6_mobile_counters_policy[SEG6_MOBILE_CNT_MAX + 1] = {
-+	[SEG6_MOBILE_CNT_PACKETS]	= { .type = NLA_U64 },
-+	[SEG6_MOBILE_CNT_BYTES]		= { .type = NLA_U64 },
-+	[SEG6_MOBILE_CNT_ERRORS]	= { .type = NLA_U64 },
-+};
-+
-+static int parse_nla_counters(struct nlattr **attrs,
-+			      struct seg6_mobile_lwt *slwt,
-+			      struct netlink_ext_ack *extack)
-+{
-+	struct pcpu_seg6_mobile_counters __percpu *pcounters;
-+	struct nlattr *tb[SEG6_MOBILE_CNT_MAX + 1];
-+	int ret;
-+
-+	ret = nla_parse_nested(tb, SEG6_MOBILE_CNT_MAX,
-+			       attrs[SEG6_MOBILE_COUNTERS],
-+			       seg6_mobile_counters_policy, extack);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* basic support for SRv6 Behavior counters requires at least:
-+	 * packets, bytes and errors.
-+	 */
-+	if (!tb[SEG6_MOBILE_CNT_PACKETS] || !tb[SEG6_MOBILE_CNT_BYTES] ||
-+	    !tb[SEG6_MOBILE_CNT_ERRORS])
-+		return -EINVAL;
-+
-+	/* counters are always zero initialized */
-+	pcounters = seg6_mobile_alloc_pcpu_counters(GFP_KERNEL);
-+	if (!pcounters)
-+		return -ENOMEM;
-+
-+	slwt->pcpu_counters = pcounters;
-+
-+	return 0;
-+}
-+
-+static int seg6_mobile_fill_nla_counters(struct sk_buff *skb,
-+					 struct seg6_mobile_counters *counters)
-+{
-+	if (nla_put_u64_64bit(skb, SEG6_MOBILE_CNT_PACKETS, counters->packets,
-+			      SEG6_MOBILE_CNT_PAD))
-+		return -EMSGSIZE;
-+
-+	if (nla_put_u64_64bit(skb, SEG6_MOBILE_CNT_BYTES, counters->bytes,
-+			      SEG6_MOBILE_CNT_PAD))
-+		return -EMSGSIZE;
-+
-+	if (nla_put_u64_64bit(skb, SEG6_MOBILE_CNT_ERRORS, counters->errors,
-+			      SEG6_MOBILE_CNT_PAD))
-+		return -EMSGSIZE;
-+
-+	return 0;
-+}
-+
-+static int put_nla_counters(struct sk_buff *skb, struct seg6_mobile_lwt *slwt)
-+{
-+	struct seg6_mobile_counters counters = { 0, 0, 0 };
-+	struct nlattr *nest;
-+	int rc, i;
-+
-+	nest = nla_nest_start(skb, SEG6_MOBILE_COUNTERS);
-+	if (!nest)
-+		return -EMSGSIZE;
-+
-+	for_each_possible_cpu(i) {
-+		struct pcpu_seg6_mobile_counters *pcounters;
-+		u64 packets, bytes, errors;
-+		unsigned int start;
-+
-+		pcounters = per_cpu_ptr(slwt->pcpu_counters, i);
-+		do {
-+			start = u64_stats_fetch_begin(&pcounters->syncp);
-+
-+			packets = u64_stats_read(&pcounters->packets);
-+			bytes = u64_stats_read(&pcounters->bytes);
-+			errors = u64_stats_read(&pcounters->errors);
-+
-+		} while (u64_stats_fetch_retry(&pcounters->syncp, start));
-+
-+		counters.packets += packets;
-+		counters.bytes += bytes;
-+		counters.errors += errors;
-+	}
-+
-+	rc = seg6_mobile_fill_nla_counters(skb, &counters);
-+	if (rc < 0) {
-+		nla_nest_cancel(skb, nest);
-+		return rc;
-+	}
-+
-+	return nla_nest_end(skb, nest);
-+}
-+
-+static int cmp_nla_counters(struct seg6_mobile_lwt *a,
-+			    struct seg6_mobile_lwt *b)
-+{
-+	/* tunnels with counters enabled and disabled are different. */
-+	return (!!((unsigned long)a->pcpu_counters)) ^
-+		(!!((unsigned long)b->pcpu_counters));
-+}
-+
-+static void destroy_attr_counters(struct seg6_mobile_lwt *slwt)
-+{
-+	free_percpu(slwt->pcpu_counters);
-+}
-+
-+static const struct seg6_mobile_action_desc seg6_mobile_action_table[] = {
-+	{
-+		.action		= SEG6_MOBILE_ACTION_END_MAP,
-+		.attrs		= SEG6_MOBILE_F_ATTR(SEG6_MOBILE_MAPPED_SID),
-+		.optattrs	= SEG6_F_MOBILE_COUNTERS,
-+		.input		= input_action_end_map,
-+	},
-+};
-+
-+static const struct seg6_mobile_action_param
-+seg6_mobile_action_params[SEG6_MOBILE_MAX + 1] = {
-+	[SEG6_MOBILE_MAPPED_SID] = {
-+		.parse	= parse_nla_mapped_sid,
-+		.put	= put_nla_mapped_sid,
-+		.cmp	= cmp_nla_mapped_sid,
-+	},
-+	[SEG6_MOBILE_COUNTERS] = {
-+		.parse		= parse_nla_counters,
-+		.put		= put_nla_counters,
-+		.cmp		= cmp_nla_counters,
-+		.destroy	= destroy_attr_counters,
-+	},
-+};
-+
-+static const struct nla_policy
-+seg6_mobile_policy[SEG6_MOBILE_MAX + 1] = {
-+	[SEG6_MOBILE_ACTION]	= { .type = NLA_U32 },
-+	[SEG6_MOBILE_MAPPED_SID]	=
-+		NLA_POLICY_EXACT_LEN(sizeof(struct in6_addr)),
-+	[SEG6_MOBILE_COUNTERS]	= { .type = NLA_NESTED },
-+};
-+
-+static const struct seg6_mobile_action_desc *
-+seg6_mobile_get_action_desc(int action)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(seg6_mobile_action_table); i++) {
-+		if (seg6_mobile_action_table[i].action == action)
-+			return &seg6_mobile_action_table[i];
-+	}
-+
-+	return NULL;
-+}
-+
-+/* call the destroy() callback (if available) for each set attribute in
-+ * @parsed_attrs, starting from the first attribute up to the @max_parsed
-+ * (excluded) attribute.
++/* RFC 8200 Routing header common fields are 4 bytes; an additional
++ * 4 bytes of type-specific data follow (the Reserved field for the
++ * deprecated type 0, or first_segment/flags/tag for SRH type 4).  The
++ * segment list then runs in 16-byte units, giving a total of 24 bytes
++ * for one segment -- which is what ip6r_len = 2 advertises.
 + */
-+static void __destroy_attrs(unsigned long parsed_attrs, int max_parsed,
-+			    struct seg6_mobile_lwt *slwt)
++struct srh_one_seg {
++	struct ip6_rthdr rthdr;
++	uint32_t type_data;
++	struct in6_addr segment;
++};
++
++/* Built as a struct so the headers are written through typed, aligned
++ * members rather than casts of a byte array; static_assert keeps it
++ * exactly the on-wire layout.
++ */
++struct end_map_frame {
++	struct ip6_hdr		ip6;
++	struct srh_one_seg	srh;
++	struct icmp6_hdr	icmp6;
++};
++
++static_assert(sizeof(struct end_map_frame) ==
++	      sizeof(struct ip6_hdr) + sizeof(struct srh_one_seg) +
++	      sizeof(struct icmp6_hdr),
++	      "end_map_frame must not contain padding");
++
++enum mode {
++	MODE_NONE,
++	MODE_END_MAP,
++};
++
++struct cfg {
++	enum mode	mode;
++	struct in6_addr	src6;
++	struct in6_addr	dst6;
++	uint8_t		rh_type;
++	uint8_t		segleft;
++	bool		bad_srh;
++	bool		no_next_header;
++};
++
++static void usage(const char *bin)
 +{
-+	const struct seg6_mobile_action_param *param;
-+	int i;
-+
-+	for (i = SEG6_MOBILE_ACTION + 1; i < max_parsed; i++) {
-+		if (!(parsed_attrs & SEG6_MOBILE_F_ATTR(i)))
-+			continue;
-+
-+		param = &seg6_mobile_action_params[i];
-+		if (param->destroy)
-+			param->destroy(slwt);
-+	}
++	fprintf(stderr,
++		"Usage: %s -m <mode> -s <src> -d <dst> [opts]\n"
++		"\n"
++		"Modes:\n"
++		"  end-map    Send IPv6 + SRH + ICMPv6 echo for End.MAP testing\n"
++		"\n"
++		"Mode end-map options:\n"
++		"  --rh-type <n>       Routing Header type (default 4, the SRH)\n"
++		"  --segleft <n>       Routing Header Segments Left (default 0)\n"
++		"  --bad-srh           emit an SRH whose Last Entry exceeds its length (drop test)\n"
++		"  --no-next-header    send a bare IPv6 header with Next Header 59\n"
++		"\n"
++		"Exit: 0 sent, 1 failure, 3 invalid arguments.\n",
++		bin);
 +}
 +
-+static void destroy_attrs(struct seg6_mobile_lwt *slwt)
++static int parse_u32(const char *s, uint32_t *out)
 +{
-+	unsigned long attrs = slwt->desc->attrs | slwt->parsed_optattrs;
++	unsigned long v;
++	char *end;
 +
-+	__destroy_attrs(attrs, SEG6_MOBILE_MAX + 1, slwt);
++	errno = 0;
++	v = strtoul(s, &end, 0);
++	if (errno || !*s || *end || v > 0xffffffffUL)
++		return -1;
++	*out = (uint32_t)v;
++	return 0;
 +}
 +
-+static int seg6_mobile_parse_attrs(struct nlattr **attrs,
-+				   struct seg6_mobile_lwt *slwt,
-+				   struct netlink_ext_ack *extack)
++static int parse_u8(const char *s, uint8_t *out)
 +{
-+	const struct seg6_mobile_action_param *param;
-+	const struct seg6_mobile_action_desc *desc;
-+	unsigned long parsed_optattrs = 0;
-+	int i, err;
++	uint32_t v;
 +
-+	desc = slwt->desc;
++	if (parse_u32(s, &v) || v > 0xff)
++		return -1;
++	*out = (uint8_t)v;
++	return 0;
++}
 +
-+	if (WARN_ON_ONCE(desc->attrs & desc->optattrs))
-+		return -EINVAL;
++static enum mode parse_mode(const char *s)
++{
++	if (!strcmp(s, "end-map"))
++		return MODE_END_MAP;
++	return MODE_NONE;
++}
 +
-+	for (i = SEG6_MOBILE_ACTION + 1; i <= SEG6_MOBILE_MAX; i++) {
-+		bool required = desc->attrs & SEG6_MOBILE_F_ATTR(i);
-+		bool optional = desc->optattrs & SEG6_MOBILE_F_ATTR(i);
++static int parse_args(int argc, char **argv, struct cfg *cfg)
++{
++	enum { OPT_RH_TYPE = 256, OPT_SEGLEFT, OPT_BAD_SRH, OPT_NO_NEXT_HEADER };
++	static const struct option longopts[] = {
++		{ "rh-type",         required_argument, NULL, OPT_RH_TYPE },
++		{ "segleft",         required_argument, NULL, OPT_SEGLEFT },
++		{ "bad-srh",         no_argument, NULL, OPT_BAD_SRH },
++		{ "no-next-header",  no_argument, NULL, OPT_NO_NEXT_HEADER },
++		{ NULL, 0, NULL, 0 },
++	};
++	int c;
 +
-+		if (!required && !optional)
-+			continue;
-+
-+		if (required && !attrs[i]) {
-+			NL_SET_ERR_MSG_MOD(extack,
-+					   "missing required attribute");
-+			err = -EINVAL;
-+			goto err;
++	cfg->rh_type = 4;	/* RFC 8754: the SRH is Routing Header type 4 */
++	while ((c = getopt_long(argc, argv, "m:s:d:", longopts, NULL))
++	       != -1) {
++		switch (c) {
++		case 'm':
++			cfg->mode = parse_mode(optarg);
++			break;
++		case 's':
++			if (inet_pton(AF_INET6, optarg, &cfg->src6) != 1)
++				return -1;
++			break;
++		case 'd':
++			if (inet_pton(AF_INET6, optarg, &cfg->dst6) != 1)
++				return -1;
++			break;
++		case OPT_RH_TYPE:
++			if (parse_u8(optarg, &cfg->rh_type))
++				return -1;
++			break;
++		case OPT_SEGLEFT:
++			if (parse_u8(optarg, &cfg->segleft))
++				return -1;
++			break;
++		case OPT_BAD_SRH:
++			cfg->bad_srh = true;
++			break;
++		case OPT_NO_NEXT_HEADER:
++			cfg->no_next_header = true;
++			break;
++		default:
++			return -1;
 +		}
-+
-+		if (!attrs[i])
-+			continue;
-+
-+		param = &seg6_mobile_action_params[i];
-+		err = param->parse(attrs, slwt, extack);
-+		if (err < 0)
-+			goto err;
-+
-+		if (optional)
-+			parsed_optattrs |= SEG6_MOBILE_F_ATTR(i);
 +	}
-+
-+	slwt->parsed_optattrs = parsed_optattrs;
-+
-+	return 0;
-+
-+err:
-+	__destroy_attrs(desc->attrs | parsed_optattrs, i, slwt);
-+	return err;
-+}
-+
-+static bool seg6_mobile_counters_enabled(struct seg6_mobile_lwt *slwt)
-+{
-+	return slwt->parsed_optattrs & SEG6_F_MOBILE_COUNTERS;
-+}
-+
-+static void seg6_mobile_update_counters(struct seg6_mobile_lwt *slwt,
-+					unsigned int len, int err)
-+{
-+	struct pcpu_seg6_mobile_counters *pcounters;
-+
-+	pcounters = this_cpu_ptr(slwt->pcpu_counters);
-+	u64_stats_update_begin(&pcounters->syncp);
-+
-+	if (likely(!err)) {
-+		u64_stats_inc(&pcounters->packets);
-+		u64_stats_add(&pcounters->bytes, len);
-+	} else {
-+		u64_stats_inc(&pcounters->errors);
-+	}
-+
-+	u64_stats_update_end(&pcounters->syncp);
-+}
-+
-+static int seg6_mobile_input(struct sk_buff *skb)
-+{
-+	struct dst_entry *orig_dst = skb_dst(skb);
-+	struct seg6_mobile_lwt *slwt;
-+	unsigned int len = skb->len;
-+	int rc;
-+
-+	if (skb->protocol != htons(ETH_P_IPV6)) {
-+		kfree_skb(skb);
-+		return -EINVAL;
-+	}
-+
-+	slwt = seg6_mobile_lwtunnel(orig_dst->lwtstate);
-+
-+	rc = slwt->desc->input(skb, slwt);
-+
-+	if (seg6_mobile_counters_enabled(slwt))
-+		seg6_mobile_update_counters(slwt, len, rc);
-+
-+	return rc;
-+}
-+
-+static int seg6_mobile_build_state(struct net *net, struct nlattr *nla,
-+				   unsigned int family, const void *cfg,
-+				   struct lwtunnel_state **ts,
-+				   struct netlink_ext_ack *extack)
-+{
-+	const struct seg6_mobile_action_desc *desc;
-+	struct nlattr *tb[SEG6_MOBILE_MAX + 1];
-+	struct lwtunnel_state *newts;
-+	struct seg6_mobile_lwt *slwt;
-+	int err;
-+
-+	if (family != AF_INET6)
-+		return -EINVAL;
-+
-+	err = nla_parse_nested(tb, SEG6_MOBILE_MAX, nla,
-+			       seg6_mobile_policy, extack);
-+	if (err < 0)
-+		return err;
-+
-+	if (!tb[SEG6_MOBILE_ACTION]) {
-+		NL_SET_ERR_MSG_MOD(extack, "missing SEG6_MOBILE_ACTION");
-+		return -EINVAL;
-+	}
-+
-+	desc = seg6_mobile_get_action_desc(nla_get_u32(tb[SEG6_MOBILE_ACTION]));
-+	if (!desc) {
-+		NL_SET_ERR_MSG_MOD(extack, "unknown SRv6 Mobile action");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	newts = lwtunnel_state_alloc(sizeof(*slwt));
-+	if (!newts)
-+		return -ENOMEM;
-+
-+	slwt = seg6_mobile_lwtunnel(newts);
-+	slwt->action = desc->action;
-+	slwt->desc = desc;
-+
-+	err = seg6_mobile_parse_attrs(tb, slwt, extack);
-+	if (err < 0) {
-+		kfree(newts);
-+		return err;
-+	}
-+
-+	newts->type = LWTUNNEL_ENCAP_SEG6_MOBILE;
-+	newts->flags = LWTUNNEL_STATE_INPUT_REDIRECT;
-+
-+	*ts = newts;
-+
++	if (cfg->mode == MODE_NONE)
++		return -1;
 +	return 0;
 +}
 +
-+static void seg6_mobile_destroy_state(struct lwtunnel_state *lwt)
++static uint16_t csum_fold(uint32_t sum)
 +{
-+	destroy_attrs(seg6_mobile_lwtunnel(lwt));
++	while (sum >> 16)
++		sum = (sum & 0xffff) + (sum >> 16);
++	return ~sum;
 +}
 +
-+static int seg6_mobile_fill_encap(struct sk_buff *skb,
-+				  struct lwtunnel_state *lwt)
++static uint32_t csum_partial(const void *buf, size_t len, uint32_t sum)
 +{
-+	struct seg6_mobile_lwt *slwt = seg6_mobile_lwtunnel(lwt);
-+	const struct seg6_mobile_action_param *param;
-+	unsigned long attrs;
-+	int i, err;
++	const uint8_t *p = buf;
++	uint16_t word;
 +
-+	if (nla_put_u32(skb, SEG6_MOBILE_ACTION, slwt->action))
-+		return -EMSGSIZE;
++	while (len > 1) {
++		memcpy(&word, p, sizeof(word));
++		sum += word;
++		p += sizeof(word);
++		len -= sizeof(word);
++	}
++	if (len)
++		sum += *p;
++	return sum;
++}
 +
-+	attrs = slwt->desc->attrs | slwt->parsed_optattrs;
-+	for (i = SEG6_MOBILE_ACTION + 1; i <= SEG6_MOBILE_MAX; i++) {
-+		if (!(attrs & SEG6_MOBILE_F_ATTR(i)))
-+			continue;
++static uint16_t pseudo_csum(const struct in6_addr *src,
++			    const struct in6_addr *dst,
++			    uint32_t plen, uint8_t nexthdr,
++			    const void *payload, size_t len)
++{
++	uint32_t nh = htonl(nexthdr);
++	uint32_t pl = htonl(plen);
++	uint32_t sum;
 +
-+		param = &seg6_mobile_action_params[i];
-+		err = param->put(skb, slwt);
-+		if (err < 0)
-+			return err;
++	sum = csum_partial(src, sizeof(*src), 0);
++	sum = csum_partial(dst, sizeof(*dst), sum);
++	sum = csum_partial(&pl, sizeof(pl), sum);
++	sum = csum_partial(&nh, sizeof(nh), sum);
++	sum = csum_partial(payload, len, sum);
++	return csum_fold(sum);
++}
++
++static int send_end_map(const struct cfg *cfg)
++{
++	struct sockaddr_in6 dst_addr = { .sin6_family = AF_INET6 };
++	struct end_map_frame frame = {};
++	size_t len = sizeof(frame);
++	ssize_t res;
++	int fd;
++
++	frame.ip6.ip6_flow = htonl(6u << 28);
++	frame.ip6.ip6_plen = htons(sizeof(frame.srh) + sizeof(frame.icmp6));
++	frame.ip6.ip6_nxt = IPPROTO_ROUTING;
++	frame.ip6.ip6_hops = 64;
++	frame.ip6.ip6_src = cfg->src6;
++	frame.ip6.ip6_dst = cfg->dst6;
++
++	frame.srh.rthdr.ip6r_nxt = IPPROTO_ICMPV6;
++	frame.srh.rthdr.ip6r_len = 2;		/* (1 + ip6r_len) * 8 = 24 */
++	frame.srh.rthdr.ip6r_type = cfg->rh_type;
++	frame.srh.rthdr.ip6r_segleft = cfg->segleft;
++	/* SRH Last Entry is the high byte of the type-specific word.  A
++	 * single segment makes it 0; --bad-srh claims a second segment the
++	 * header has no room for, which seg6_validate_srh() rejects.
++	 */
++	frame.srh.type_data = htonl((uint32_t)(cfg->bad_srh ? 1 : 0) << 24);
++	frame.srh.segment = frame.ip6.ip6_dst;
++
++	frame.icmp6.icmp6_type = ICMP6_ECHO_REQUEST;
++	frame.icmp6.icmp6_code = 0;
++	frame.icmp6.icmp6_dataun.icmp6_un_data16[0] = htons(0x1234);
++	frame.icmp6.icmp6_dataun.icmp6_un_data16[1] = htons(1);
++	frame.icmp6.icmp6_cksum = pseudo_csum(&frame.ip6.ip6_src,
++					      &frame.ip6.ip6_dst,
++					      sizeof(frame.icmp6),
++					      IPPROTO_ICMPV6, &frame.icmp6,
++					      sizeof(frame.icmp6));
++
++	if (cfg->no_next_header) {
++		frame.ip6.ip6_nxt = IPPROTO_NONE;
++		frame.ip6.ip6_plen = 0;
++		len = sizeof(frame.ip6);
 +	}
 +
-+	return 0;
-+}
-+
-+static int seg6_mobile_get_encap_size(struct lwtunnel_state *lwt)
-+{
-+	struct seg6_mobile_lwt *slwt = seg6_mobile_lwtunnel(lwt);
-+	unsigned long attrs;
-+	int nlsize;
-+
-+	nlsize = nla_total_size(sizeof(u32)); /* SEG6_MOBILE_ACTION */
-+
-+	attrs = slwt->desc->attrs | slwt->parsed_optattrs;
-+	if (attrs & SEG6_MOBILE_F_ATTR(SEG6_MOBILE_MAPPED_SID))
-+		nlsize += nla_total_size(sizeof(struct in6_addr));
-+
-+	if (attrs & SEG6_F_MOBILE_COUNTERS)
-+		nlsize += nla_total_size(0) + /* nest SEG6_MOBILE_COUNTERS */
-+			  /* SEG6_MOBILE_CNT_PACKETS */
-+			  nla_total_size_64bit(sizeof(__u64)) +
-+			  /* SEG6_MOBILE_CNT_BYTES */
-+			  nla_total_size_64bit(sizeof(__u64)) +
-+			  /* SEG6_MOBILE_CNT_ERRORS */
-+			  nla_total_size_64bit(sizeof(__u64));
-+
-+	return nlsize;
-+}
-+
-+static int seg6_mobile_cmp_encap(struct lwtunnel_state *a,
-+				 struct lwtunnel_state *b)
-+{
-+	struct seg6_mobile_lwt *slwt_a = seg6_mobile_lwtunnel(a);
-+	struct seg6_mobile_lwt *slwt_b = seg6_mobile_lwtunnel(b);
-+	const struct seg6_mobile_action_param *param;
-+	unsigned long attrs_a, attrs_b;
-+	int i;
-+
-+	if (slwt_a->action != slwt_b->action)
++	fd = socket(AF_INET6, SOCK_RAW, IPPROTO_RAW);
++	if (fd < 0) {
++		perror("socket");
 +		return 1;
-+
-+	attrs_a = slwt_a->desc->attrs | slwt_a->parsed_optattrs;
-+	attrs_b = slwt_b->desc->attrs | slwt_b->parsed_optattrs;
-+
-+	if (attrs_a != attrs_b)
-+		return 1;
-+
-+	for (i = SEG6_MOBILE_ACTION + 1; i <= SEG6_MOBILE_MAX; i++) {
-+		if (!(attrs_a & SEG6_MOBILE_F_ATTR(i)))
-+			continue;
-+
-+		param = &seg6_mobile_action_params[i];
-+		if (param->cmp(slwt_a, slwt_b))
-+			return 1;
 +	}
++	dst_addr.sin6_addr = frame.ip6.ip6_dst;
 +
++	res = sendto(fd, &frame, len, 0,
++		     (struct sockaddr *)&dst_addr, sizeof(dst_addr));
++	close(fd);
++	if (res != (ssize_t)len) {
++		perror("sendto");
++		return 1;
++	}
 +	return 0;
 +}
 +
-+static const struct lwtunnel_encap_ops seg6_mobile_ops = {
-+	.build_state	= seg6_mobile_build_state,
-+	.destroy_state	= seg6_mobile_destroy_state,
-+	.input		= seg6_mobile_input,
-+	.fill_encap	= seg6_mobile_fill_encap,
-+	.get_encap_size	= seg6_mobile_get_encap_size,
-+	.cmp_encap	= seg6_mobile_cmp_encap,
-+	.owner		= THIS_MODULE,
-+};
-+
-+int __init seg6_mobile_init(void)
++int main(int argc, char **argv)
 +{
-+	BUILD_BUG_ON(SEG6_MOBILE_MAX + 1 > BITS_PER_TYPE(unsigned long));
++	struct cfg cfg = {};
 +
-+	return lwtunnel_encap_add_ops(&seg6_mobile_ops,
-+				      LWTUNNEL_ENCAP_SEG6_MOBILE);
-+}
++	if (parse_args(argc, argv, &cfg)) {
++		usage(argv[0]);
++		return 3;
++	}
 +
-+void seg6_mobile_exit(void)
-+{
-+	lwtunnel_encap_del_ops(&seg6_mobile_ops, LWTUNNEL_ENCAP_SEG6_MOBILE);
++	switch (cfg.mode) {
++	case MODE_END_MAP:
++		return send_end_map(&cfg);
++	default:
++		usage(argv[0]);
++		return 3;
++	}
 +}
 
 -- 
