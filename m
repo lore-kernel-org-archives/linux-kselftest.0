@@ -1,133 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from cvsmtppost06.nm.naver.com (cvsmtppost06.nm.naver.com [114.111.35.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A757F47CC6B;
-	Fri,  2 Oct 2026 10:29:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6DC03C7DF5
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 10:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.111.35.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790936971; cv=none; b=rzc42k3LD/8aV4wGtL2xQs8nwHqcoVOKOOkLvXqnQEbIH4ThNq/2iVa87vABo2aiSNh1ACrC8y7SbM89OTC2AMN+KN3nQN6g8WHiBaN8bCuwiWOYTHrQhDGX09H/1kUt54LnJHm8g09PMbfA5oLUCuZtRXxEP0OFjdgwJvdIcqk=
+	t=1790938596; cv=none; b=cmyDNBOAvG6ZWNZondBTSMkmcf2itBkqeLRqmxWN0O29S5/5R3UneJ5THFTdoddhWqe8RO0cR8OYvGn3wLyOEIzRYIkfUNPUGlqL6Oh1XfO+NjuumG+9ge6kn9zh0zrpJ5SJ4RIrb5OHD+D9ybJoNRCbgx26ySl+1DLxuAceewU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790936971; c=relaxed/simple;
-	bh=V9pV3ZkkcUvIvt6I4RvKsPeQD9GdKmYVzQtSvVBbOEc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NANID+CJR7Xm3OG8ChIyckLOB7VsXY2Qw4STkJ1+MBhh5frRqcpUVWb2kLWRvaKIgS2Ntbkk/YAvHKS49WAqiTq7boBsWVnskPMflJk0kT0A2O6WIdN/qLtpbrlX4Cbr0NdSqOsQT9c6TkOgGDrzlGPV7+wINkTmTBuf2Vhg4lA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GdQd6SpP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790938596; c=relaxed/simple;
+	bh=C8ot/11l/XK4YxVaGNujg22DIFt6ej+wd5mPVQ1P4aI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QSjw5PwPjutrUM5QMj7BdzhPkdf+A12RfNDgbHub8HCpee8LvhtzNniBWVunwmR69HPYORbLi7yAKiKRyt8eJ4yS7bA1zMwwTly9gtwsUadXqqQ/Js34X9ZQVTOscOXVD5G1YauzoHe3m3V1qbYbRvdAqXJv++7qH9x4hJ+wplM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=naver.com; spf=pass smtp.mailfrom=naver.com; dkim=pass (2048-bit key) header.d=naver.com header.i=@naver.com header.b=tLTAqqae; arc=none smtp.client-ip=114.111.35.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=naver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=naver.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GdQd6SpP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D781F00893;
-	Fri,  2 Oct 2026 10:29:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790936969;
-	bh=3hd7QozUAtCgPHqY9/nDgR3yxkuQqIYoWENVU+JEeAo=;
-	h=From:To:Cc:Subject:Date;
-	b=GdQd6SpPFdBtbjy04L7nq/Ny+g0lLZBlDtqsRicYVU2KgU2Amfr8Os26H+CDRc8x/
-	 8PZRZXNnr2FYu/Cjd1gGqS0Xc9Pt7dBWdeXi5zmwmDXPLEQY33vZIUWEcCgpzIqjJo
-	 9GXj+34WNptzYXbFZHKIGte+9sWk+hoQrHB/E6sU5Y5I6lrd5ECMOph37QlEzSiqAZ
-	 nMWBWge3RWohOctGFpVooO20iwO4t6rxLxwu0ct2KfyOUe7aqOu/b+xzEFc+oKCv3F
-	 uwyPuFdXpCARvA2E45xaSNsWVRbXKnFtDYoSTxA9iTSZDJLaG03TkuVqrPthR4YnFi
-	 JFuixzqEL5VkQ==
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 5C9E9F40066;
-	Fri,  2 Oct 2026 06:29:27 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Fri, 02 Oct 2026 06:29:27 -0400
-X-ME-Sender: <xms:h4e_ar7xU2ShAmF5oNXetXdM5WALbIYV6jCa2jq8K3R2LwVHJA3S9Q>
-    <xme:h4e_apsRKhlJsZcx_r9LzBzLh6jtKZxWQ_AwzHf0UxNxLSOZ5t0BUWAPZJNLaix7h
-    68FWAlfgwisrtwmgRC2WOoomJuyE7hNB1Hj_X-iAmktxebsYXd2PRY_>
-X-ME-Received: <xmr:h4e_apZ7cymsfuucgfwLHSTqqffA-pVMBg2vVQYRkiTFnE5a3o46GoiugqCj>
-X-ME-Proxy-Cause: dmFkZTF6ejqiiIIIVBwko2bAePHhMhz1ubb8sHy1I7wDnl97sVe6F6iOH3k2VCcq7bJm/b
-    rMgTnQurjYvhCWSK/AfAtC7e+ZILRvjXsFJ/7Fc3WUpSBIUe7Eki5i7Hc2y6sl9LOfzrTl
-    YKkL84eHzeS8OBDkblQUiMHhPGEMLPDZZSUK1S7C555OdZYs71SGT1/PCq684Y4FaZL4SR
-    WzQ3iqFyTURlTqms7UHgwhgYUJEaao/OwHlAu2ZXamYUJc7YgC59ilDqHCc+5Pln7LJJq5
-    Ba+nm2qzU3WqoyzZH7M3OY5gnE9/wCk5VIGcfYTPyDJPtYenTPrTW8PxTq5jZC2JbNh4Tu
-    0MyZusGxFLy32BQhC8smcy/Pbmk2DA0+b5p6HUrz3UCYbLOXdROFxxgksCjCt5+VfR8Qyi
-    SPC4vdifNZOL3Rh4c4U1unzzvmafTRLa9N+Mf1+CnrUk9G8bFOI6JWF3v0UHaun98hjCrH
-    6bFxpXegDItEIGPbOp78/8aOLJnCW0y+HQr6RoKlI9mBmlemwyLotD3MQhSMYSK3+pzp0H
-    rvtMiSE79G1s10SJqEgwmSK1rFyK4OWCl+YBfwhE3lhNxbBzHLWjfCaAxMxJxnrLUOmBsI
-    LUX7SwkZFTLIuTBFkoi1C2m7QfUxhQ5jMI/dwjfVdB4ms9kZlkLNcDaFtnvw
-X-ME-Proxy: <xmx:h4e_aluY7zPRxTnMg-F8AJ6K2crKRbUrECrHPRmTbvKvrwoP2QaCMQ>
-    <xmx:h4e_aoCYlxqtG26oZbwf8Jup3DSmwPQeSUO3E-d1lD0zsK1kpQLPWw>
-    <xmx:h4e_akPRG_n-rnSS3xuVkIKhrTN6FijyoiEG_msb5oKPiOma2-8I9g>
-    <xmx:h4e_aq6M_xF5_i2dlxKt8s5HgsAZ-BAiooeKuC_67roGyJdOvxw91w>
-    <xmx:h4e_am1YnOadiB1ZtifsIphdJXYlTNbRL905JGazwCFvnYaQ3nkTfLk->
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Oct 2026 06:29:26 -0400 (EDT)
-From: Boqun Feng <boqun@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Ingo Molnar" <mingo@kernel.org>,	"Will Deacon" <will@kernel.org>,
-	"Boqun Feng" <boqun@kernel.org>,	"Waiman Long" <longman@redhat.com>,
-	"Gary Guo" <gary@garyguo.net>,	"Alice Ryhl" <aliceryhl@google.com>,
-	"Lyude Paul" <lyude@redhat.com>,
-	"Daniel Almeida" <daniel.almeida@collabora.com>,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
-	"Miguel Ojeda" <ojeda@kernel.org>,	"Danilo Krummrich" <dakr@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,	linux-kselftest@vger.kernel.org,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Leon Hwang <leon.hwang@linux.dev>,	Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH v3] selftests/bpf: Use the new NMI_BITS definition
-Date: Fri,  2 Oct 2026 12:29:23 +0200
-Message-ID: <20261002102923.45846-1-boqun@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=naver.com header.i=@naver.com header.b="tLTAqqae"
+Received: from cvsendbo029.nm ([10.112.18.60])
+  by cvsmtppost06.nm.naver.com with ESMTP id kjlWWZwfRvCf-GAixHKfAg
+  for <linux-kselftest@vger.kernel.org>;
+  Fri, 02 Oct 2026 10:56:24 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=naver.com; s=s20171208;
+	t=1790938584; bh=C8ot/11l/XK4YxVaGNujg22DIFt6ej+wd5mPVQ1P4aI=;
+	h=From:To:Subject:Date:Message-ID:From:Subject:Feedback-ID:
+	 X-Works-Security;
+	b=tLTAqqaeSNS1Xkc9kNrCUivkBNJNCPBX+E0vHFpiLIwnGsmpNpmYpg6lY0CfRSM+u
+	 6dcM3NZ4nsH/zw6/jrW7Pa+sO2QEXunEfwoECpTSXB4ADaL+1zWnNAZhfDJhzsTxgQ
+	 kQJttPU7FSL9Qn7ztXtv4s1dC+6OYaOy/gCRUIX45TW4AP4wC9jbIPQf2hM01eezaP
+	 EYhqWLImme0pApowBDveogoIXdZZ113cA1bXx9moYngo1TP5i/UypP0CeD5YaoFPJG
+	 lwQKmz4XQIZWjLf5CjIrJcD4wdU/F5YZ8csRFaPbf5hqSUFA71lieyUmxEbkaAgU0E
+	 Be3RLMHcaeE8A==
+X-Session-ID: BxO2uDGsRFiUFQ09q6O3Qg
+X-Works-Send-Opt: Os+wpzGdjHmdKHFOMr39Ko3YKBm/jAudFqM9KqMqFxIYkEljxBmwjAg=
+X-Works-Smtp-Source: PqnmaxglFqJZ+HmqaAur+6E=
+Received: from localhost.localdomain ([115.136.205.4])
+  by cvnsmtp004.nm.naver.com with ESMTP id BxO2uDGsRFiUFQ09q6O3Qg
+  for <multiple recipients>
+  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+  Fri, 02 Oct 2026 10:56:23 -0000
+From: tjdqudcks0424@naver.com
+To: bsingharora@gmail.com,
+	akpm@linux-foundation.org
+Cc: xu.xin@linux.dev,
+	gregkh@linuxfoundation.org,
+	shuah@kernel.org,
+	cyyzero16@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	=?UTF-8?q?=EC=84=B1=EB=B3=91=EC=B0=AC?= <tjdqudcks0424@naver.com>
+Subject: [PATCH v3 0/2] taskstats: fix cross-netns exit listener delivery
+Date: Fri,  2 Oct 2026 19:56:12 +0900
+Message-ID: <20261002105614.195370-1-tjdqudcks0424@naver.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The definition of NMI_BITS was out of sync after the introduction of
-HAS_SEPARATE_PREEMPT_RESCHED_BITS, hence adjust it.
+From: 성병찬 <tjdqudcks0424@naver.com>
 
-Reported-by: Shrikanth Hegde <sshegde@linux.ibm.com>
-Fixes: 3b0e2a22d408 ("preempt: Introduce HAS_SEPARATE_PREEMPT_RESCHED_BITS")
-Reviewed-by: Shrikanth Hegde <sshegde@linux.ibm.com>
-Cc: Leon Hwang <leon.hwang@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Boqun Feng <boqun@kernel.org>
----
-v2: https://lore.kernel.org/lkml/20261001082519.16195-4-boqun@kernel.org/
-v2 -> v3:
+CPU-mask taskstats listeners are currently identified only by a numeric
+Generic Netlink port ID and exit records are sent through init_net. Since
+port IDs are namespace-local, an unprivileged init_net socket can bind the
+same number as a listener in another network namespace and receive that
+listener's cross-UID exit record.
 
-* Add Fixes tag.
-* Add CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS weak symbol because
-  CONFIG_* is not available in bpf programs.
+Patch 1 associates listener entries with the registering Generic Netlink
+socket's namespace and port ID and cleans them up when that socket closes.
+Patch 2 adds an acct kselftest which constructs the collision and checks the
+normal listener, explicit deregistration, and unrelated-port controls.
+
+The test was built with GCC using -Wall -Wextra and run in disposable QEMU
+guests with the same userspace binary. On the unmodified baseline it reports
+3 passes and 1 failure: the child-netns listener misses the victim record and
+the colliding unprivileged init_net socket receives it. On the fixed kernel,
+three independent clean boots each report 4 passes and no failures. No
+KASAN, UBSAN, BUG, WARNING, Oops, panic, lockdep, refcount, use-after-free,
+out-of-bounds, or kmemleak diagnostic was emitted during the final runs.
+
+The exact Message-ID and lore URL of the previous public posting were not
+present in the available local sent-mail or raw-mail artifacts:
+
+Link: https://lore.kernel.org/r/20261002075842.146026-1-tjdqudcks0424@naver.com/
+
+Changes in v3:
+- remove wording that called a private draft "v1"
+- add an in-tree taskstats CPU-listener network-namespace regression test
+- send the fix and selftest as a two-patch series
+
+성병찬 (2):
+  taskstats: route exit listener records through their netns
+  selftests: acct: test taskstats listener netns routing
+
+ kernel/taskstats.c                            | 135 ++-
+ tools/testing/selftests/acct/Makefile         |   1 +
+ .../selftests/acct/taskstats_netns_listener.c | 945 ++++++++++++++++++
+ 3 files changed, 1037 insertions(+), 44 deletions(-)
+ create mode 100644 tools/testing/selftests/acct/taskstats_netns_listener.c
 
 
- tools/testing/selftests/bpf/bpf_experimental.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 2893bf06ff25..a09448347966 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -367,11 +367,16 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__str,
- extern int bpf_sock_read_xattr(struct socket *sock, const char *name__str,
- 			       struct bpf_dynptr *value_p) __weak __ksym;
- 
-+extern bool CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS __kconfig __weak;
-+
-+/* A trivial macro to make NMI_BITS exactly the same as in <linux/preempt.h> */
-+#define IS_ENABLED(cfg)	(cfg)
-+
- #define PREEMPT_BITS	8
- #define SOFTIRQ_BITS	8
- #define HARDIRQ_DISABLE_BITS	8
- #define HARDIRQ_BITS	4
--#define NMI_BITS	1
-+#define NMI_BITS	(1 + 3*IS_ENABLED(CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS))
- 
- #define PREEMPT_SHIFT	0
- #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
+base-commit: ce1e0223d8ad4211275c82a17ed6d43ab81e13d9
 -- 
-2.51.0
-
+2.43.0
