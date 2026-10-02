@@ -1,189 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk2-f39.google.com (mail-qk2-f39.google.com [74.125.230.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EFE30C160;
-	Fri,  2 Oct 2026 02:50:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B18EDF59
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 03:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790909458; cv=none; b=nJXNJGOHSJyMGouEOodOg32FImMBZrStrFEW1w6KVVbSvucLns0SMPLi4brHEr92fRAkQQq7Cg1SnBKnEJfIzUUqEoYQHUYhUK9aGUU6qyT24pNdVWaqRfFWoajfyrQMSz2tn0r4GZmaUfV5jItdsKb4YiTMtmW6PbM8QfeUsuI=
+	t=1790911271; cv=none; b=GJ4ccVEPLMfpEyr0PtddPJg6CI06zDNkxQsgBcolbmJI1aOahW+8i2LyJKPjnRKm64flh7LVTwvRCc1T8iOY3vkds7Be2Z/Q7nS1qQ26sSxS0RJSiSCBtTFR6XJDq2u+EXdSDPsMwdwd5a2xyt0vGS1tvS/FvlVlufCM7WtaF4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790909458; c=relaxed/simple;
-	bh=+6FS9oR0kKGWZoZx6bJzlD4S3IzPtDhJPjUDsFzwNXI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc:
-	 References:In-Reply-To; b=XkDCTQVuY/iS9QSvk3mJTNmdJ6Ze3/zCzE8skfZxiO3aGN5SQtyj4qdXcSOy/AEwECQVMBSLbcOvvdJhJVbnrHqJt1lLUY2rildhRa7exn+wvaKFvqoxt7rVpGMlVoYr8HP0NhBqLRvaq1eA341w2o8T8f/bHrPMZQySFWo07fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyP77aDC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1790911271; c=relaxed/simple;
+	bh=9e/CIFXE1hRvmmBtn81dZMs2PO0YXmm+YvcEIQTBoeM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AnRaecOIzQJssLkACpSXSasSSTXnrRCBp3YxdYyOij4sHjg8vpd+AvDAhFDnrTyYCzykkVuMx4fpoPeU5MYeFhLmonE9DDPST3p0xj0hqpr+DNssE51TCGLfZaInl6E/+CglIKhzhxCS20/vMkoV2lMPwYrMCgnCTvhJyevo5QM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu; spf=pass smtp.mailfrom=cs.unc.edu; dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b=G3/K8+F7; arc=none smtp.client-ip=74.125.230.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unc.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyP77aDC"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0322DC4AF14;
-	Fri,  2 Oct 2026 02:50:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1790909458;
-	bh=+6FS9oR0kKGWZoZx6bJzlD4S3IzPtDhJPjUDsFzwNXI=;
-	h=From:Date:Subject:To:Cc:References:In-Reply-To:Reply-To:From;
-	b=lyP77aDCZDRsf51vNhBk68pMy9TmVId8gIdQgWRyIlCDYB2XXFX7dSyyPRs1vnaQK
-	 K8fS3iBgCUfUrqQiQ3Nbbo6nLKNqCA7MzWLABr0AeE2oWTruyXl92ZUpHnZ5OAnYjg
-	 hme50BuCqEWMo55qOlvUAg9/6sTwwCIFXGN9t3/7FyLeeKmJ6LDd0W9KbRZLd9aYpM
-	 o2V7jneO86QLCGBspSeaH77suuC4nG1/myaPSbgechiWlDzw03qzD1XLky70QO1/fW
-	 x8Q35o92p5tBZcfxJyt8gGpDVUu3ZtrTrBYHXzB374wbArI0nZF7MUMwms72QVMb6Z
-	 ZbEOeD/hlhqMg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFA2FCA5FCE;
-	Fri,  2 Oct 2026 02:50:57 +0000 (UTC)
-From: Haseeb Malik via B4 Relay <devnull+haseebulhaq55.gmail.com@kernel.org>
-Date: Thu, 01 Oct 2026 22:33:58 -0400
-Subject: [PATCH net v3 2/2] selftests: net: test MACsec undefined SCI
- uniqueness
+	dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b="G3/K8+F7"
+Received: by mail-qk2-f39.google.com with SMTP id af79cd13be357-93cb9310676so146081685a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 20:21:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs.unc.edu; s=google; t=1790911269; x=1791516069; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9azLLJ0/w2SLdlZw13OtPeIgu3MHaV6UePQJr1K1VpA=;
+        b=G3/K8+F71Mu2gcVcmNmfX6/T0m4YK5IngvZctDFZpfXuH37EGn4ONxXLR1kbHMTTCs
+         imUM4a9H7D7YJuz0NAFTDbr5C2Hsj2HfiIgu3gq1wvXXihuNCYQponLgwoe4Mdl54Vpe
+         bbGjH3CgSYzbAcOuB88MfqLeGoyCC2f34j9FQfIaLoUnwoItRDzigIC45EKoW42jA9qj
+         fleey2Hj/+V9P65bGvPU3orw4OYfnuJfyyKo9UknMYaGqeGeuriurT763umfhfVfUrOC
+         w8I3EF+H1bmeZW7S83RNhuW+f0VtOGGizIBZsw3lCmO599y4oIRuZfIW9z4CYXuWJsJ/
+         5ihw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790911269; x=1791516069;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9azLLJ0/w2SLdlZw13OtPeIgu3MHaV6UePQJr1K1VpA=;
+        b=qavrZY92Ix+A2N/gGIbaJ7ZC2/7XWZYnfNb8F3pg4ZWRL9dsFRRXBjeOgaIUFTxvLJ
+         0j5CecTcd+FKU0vLcYiO6yL10gFjBX5g5Hm71Rsow/wI3QtJdtVALJ67R8yDw4S3ltPc
+         /ZOWknZL9p6OKTcMwON7Ei94yQ8gKD2/v6JYjN0g/w6Q4dvCRwukW8COvNTYCZeb7fKA
+         xyFAhJc0xCIy8WogEDtGySRd9Hp+v8HpQuVYNbm+fk7J6jNh+RkZyh5Kc4XRDOCgykdi
+         gLMkxKYmRFO23AujUfJFcKcQ12fBSry4uXwyi5ig59oS0WB5Wv0KbM3qUZ5DpyHW54fi
+         J2DA==
+X-Forwarded-Encrypted: i=1; AKwUvBxfsBEDADSmIr3jVmfaOtFlOYbZ/Xge730sKL45sHQtF/IfoUbmrsaHbvcEOtxe/V9TIi7dAQw2N6Q9VEFpJYo=@vger.kernel.org
+X-Gm-Message-State: AFuF++lryLSjs8d2ydcY/HxrNQqRF34+BpZ+/Epn1/AB0jvfzFyxHy7b
+	QUyGyWDoanvezKdbZZXV5Fro0MQHD5vSvchAiMq/HIL/zln2z1Tvj9Ivr/6TQqLS9DwSJL1Rw0M
+	Wsi4UHg==
+X-Gm-Gg: AYBFou0W0m5vTkE1aDuIrXdMxVfX5LFtG8T0D0A9dCmECWPH0LZfPF+cCei/uU9vlbS
+	DNmOsJVomhmUF+CW95fxp5+Lq+xaZsjEtTPzvQGJOId7gqPGlS/8QdWKf3kw0a18chx11U5bUXl
+	jIIsbi1zd6F28dPv5T1VegadVr4asUxZbemyxWeUW/SV3YGY6UN3Gi5Got48oAvW92b+HelQqGJ
+	5HUzlcemZ+BLmCULWqw+463oE7EGlQqRx4GzWpUuaulamYTTzwmo3FkD2z9O/B+W8DgHbH0lBu1
+	R93Bl4N2bQH1591c9LLKvlNCxEHyMG7lwErTORal5t5oYjSowunvpmpAH1HZXTUTnxJTiCdX9yR
+	MXCF7zA4ILVarJrcCmmUKWveFfn+Uq4KoajPIT7gUa8Go+s83cOQRQKF+lurPFe8lAGIFlmVvw+
+	ypTGHBEYcc+V0Q90qVUolkhXCd5g6Y/UHHr6QgWQUna1Eyq0qEcuMVVWoTUYTDh+6Eb3DAkRq8h
+	e/aJ4uoTmOlLS/cQRXkQA==
+X-Received: by 2002:a05:620a:4713:b0:939:fce5:f6d2 with SMTP id af79cd13be357-93cf16de7femr243905585a.27.1790911268791;
+        Thu, 01 Oct 2026 20:21:08 -0700 (PDT)
+Received: from cobra01.cs.unc.edu (cobra01.cs.unc.edu. [152.2.130.143])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93cca2d361bsm115242285a.45.2026.10.01.20.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Oct 2026 20:21:08 -0700 (PDT)
+From: Hengyu Liang <hengyul@cs.unc.edu>
+To: idosch@nvidia.com
+Cc: netdev@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	jiayuan.chen@shopee.com,
+	jiayuan.chen@linux.dev,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH net 1/2] ipv6: route: do not validate nexthop of routes promoted to reject routes
+Date: Thu,  1 Oct 2026 23:21:07 -0400
+Message-ID: <20261002032107.3289370-1-hengyul@cs.unc.edu>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261001154629.GA1611116@shredder>
+References: <20261001154629.GA1611116@shredder>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261001-fix-macsec-duplicate-sci-v3-2-0f179fbe1f2d@gmail.com>
-To: Sabrina Dubroca <sd@queasysnail.net>, netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, 
- Hannes Frederic Sowa <hannes@stressinduktion.org>, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Haseeb Malik <haseebulhaq55@gmail.com>
-References: <20261001-fix-macsec-duplicate-sci-v3-1-0f179fbe1f2d@gmail.com>
-In-Reply-To: <20261001-fix-macsec-duplicate-sci-v3-1-0f179fbe1f2d@gmail.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790909457; l=4909;
- i=haseebulhaq55@gmail.com; s=default; h=from:subject:message-id;
- bh=0FAExNzFPlS4rBSxGGWB8MJ7GqCJcuq2Irbp0eayKWI=;
- b=bJOiPG0vs9xPf3yDxU/38xNbCx3D4i9MbDMwxyAW9369llatbyeCykR6T0FMXF0HIKdm32luB
- O7ih59WLfSaBzcARBKqcNL3CjX8l3tj6R19Ykp6FcDF/A5ywohR+jLE
-X-Developer-Key: i=haseebulhaq55@gmail.com; a=ed25519;
- pk=U/yCVc6cTsqDqxWLzvoONZ7DUA3EfRU+rfO9Xxo4p2w=
-X-Endpoint-Received: by B4 Relay for haseebulhaq55@gmail.com/default with
- auth_id=1026
-X-Original-From: Haseeb Malik <haseebulhaq55@gmail.com>
-Reply-To: haseebulhaq55@gmail.com
+Content-Transfer-Encoding: 8bit
 
-From: Haseeb Malik <haseebulhaq55@gmail.com>
+On Thu, Oct 01, 2026 at 06:46:29PM +0300, Ido Schimmel wrote:
+> On Wed, Sep 30, 2026 at 11:22:28AM -0400, hengyul@cs.unc.edu wrote:
 
-Exercise duplicate transmit SCI rejection using default, explicit and
-all-ones SCI requests on the same lower device. Cover an all-ones request
-for both the first and second device, and clean up the second device if
-a kernel incorrectly accepts the duplicate.
+[...]
 
-Also verify that an all-ones SCI still resolves to the default when a
-different port is already in use, and that deleting the device makes
-its SCI available for reuse.
+> >   # ip link set dev lo down
+> >   # ip -6 route add 2001:db8::/32 dev lo
+> >   Error: Nexthop device is not up.
+>
+> Consistent with IPv4 and expected:
 
-These cases cover the duplicate acceptance flagged by Sashiko during
-review of an earlier MACsec initialization fix. The same tests produce
-five passes and two failures before the fix, and seven passes after it.
+[...]
 
-Check local iproute2 MACsec support before running the new tests. Keep
-the existing local and remote checks for callers supplying a configuration,
-without requiring remote or offload support for the new local tests.
+> I don't understand what motivated this series.
 
-Link: https://lists.openwall.net/netdev/2026/09/16/11
-Assisted-by: LLM
-Signed-off-by: Haseeb Malik <haseebulhaq55@gmail.com>
----
-Changes in v3:
-- Split the selftests from the driver fix, as Jakub requested.
-- No code changes from v2.
+Thanks for the review, and sorry that the motivation was not clear.
 
-Changes in v2:
-- Check local iproute2 MACsec support in the new tests, as Sashiko noted.
+I found this while comparing the behavior of different kernel versions.
+It does not come from a user report and I am not aware of anything that
+depends on the old behavior. These commands succeeded before
+21ec92774d15, and its changelog describes the
+"ip -6 route add 2001:db8::/32 dev lo" case as unchanged apart from the
+unused nhc_pcpu_rth_output allocation. As the commit also went to the
+stable trees, I took the new errors for an unintended side effect and
+tried to restore the old results.
 
-Link to v2: https://lore.kernel.org/netdev/20261001-fix-macsec-duplicate-sci-v2-1-330311abe5ec@gmail.com/
+I agree that the current behavior is consistent with IPv4. The syzbot ci
+report on this series also shows that the old behavior was wrong for
+multipath routes. With patch 1 applied, as before 21ec92774d15,
 
- tools/testing/selftests/drivers/net/macsec.py | 57 +++++++++++++++++++++++++--
- 1 file changed, 54 insertions(+), 3 deletions(-)
+  # ip -6 route add 2001:db8:100::/64 \
+        nexthop via fe80::1 dev eth1 nexthop via fe80::1 dev lo
 
-diff --git a/tools/testing/selftests/drivers/net/macsec.py b/tools/testing/selftests/drivers/net/macsec.py
-index 9a83d9542e04..81003bda9b0d 100755
---- a/tools/testing/selftests/drivers/net/macsec.py
-+++ b/tools/testing/selftests/drivers/net/macsec.py
-@@ -34,9 +34,10 @@ def _get_features(dev):
-     return ethtool(f"-k {dev}", json=True)[0]
- 
- 
--def _require_ip_macsec(cfg):
--    """SKIP if iproute2 on local or remote lacks 'ip macsec' support."""
--    for host in [None, cfg.remote]:
-+def _require_ip_macsec(cfg=None):
-+    """SKIP if iproute2 lacks MACsec locally or on cfg.remote, when given."""
-+    hosts = [None, cfg.remote] if cfg is not None else [None]
-+    for host in hosts:
-         out = cmd("ip macsec help", fail=False, host=host)
-         if "Usage" not in out.stdout + out.stderr:
-             where = "remote" if host else "local"
-@@ -263,6 +264,54 @@ def test_offload_state(cfg) -> None:
-             "features should match first offload-on snapshot")
- 
- 
-+@ksft_variants([
-+    KsftNamedVariant("default", "", ""),
-+    KsftNamedVariant("explicit", "", "sci {sci}"),
-+    KsftNamedVariant("undefined", "", "sci ffffffffffffffff"),
-+    KsftNamedVariant("undefined_default", "sci ffffffffffffffff", ""),
-+    KsftNamedVariant("undefined_explicit", "sci ffffffffffffffff", "sci {sci}"),
-+    KsftNamedVariant("undefined_twice", "sci ffffffffffffffff",
-+                     "sci ffffffffffffffff"),
-+])
-+def test_duplicate_sci(cfg, first, second) -> None:
-+    """Reject duplicate transmit SCIs, including the undefined-SCI fallback."""
-+
-+    _require_ip_macsec()
-+    ms0 = _macsec_name(0)
-+    ms1 = _macsec_name(1)
-+    sci = _get_mac(cfg.ifname).replace(":", "") + "0001"
-+
-+    ip(f"link add link {cfg.ifname} {ms0} type macsec {first}")
-+    defer(ip, f"link del {ms0}")
-+    with ksft_raises(CmdExitFailure):
-+        ip(f"link add link {cfg.ifname} {ms1} type macsec "
-+           f"{second.format(sci=sci)}")
-+        # Clean up if the kernel incorrectly accepted the duplicate.
-+        defer(ip, f"link del {ms1}")
-+
-+
-+def test_undefined_sci(cfg) -> None:
-+    """An undefined SCI still selects the default when it is available."""
-+
-+    _require_ip_macsec()
-+    ms0 = _macsec_name(0)
-+    ms1 = _macsec_name(1)
-+    sci = _get_mac(cfg.ifname).replace(":", "") + "0001"
-+
-+    # A different port on the same lower device must not block the fallback.
-+    ip(f"link add link {cfg.ifname} {ms0} type macsec port 2")
-+    defer(ip, f"link del {ms0}")
-+    ip(f"link add link {cfg.ifname} {ms1} type macsec sci ffffffffffffffff")
-+    cleanup = defer(ip, f"link del {ms1}")
-+    info = ip(f"-d link show dev {ms1}", json=True)[0]
-+    ksft_eq(info["linkinfo"]["info_data"]["sci"], sci)
-+
-+    # Deleting a device must make its SCI available again.
-+    cleanup.exec()
-+    ip(f"link add link {cfg.ifname} {ms1} type macsec sci ffffffffffffffff")
-+    defer(ip, f"link del {ms1}")
-+
-+
- def _check_nsim_vid(cfg, vid, expected) -> None:
-     """Checks if a VLAN is present. Only works on netdevsim."""
- 
-@@ -333,6 +382,8 @@ def main() -> None:
-                   test_max_secy,
-                   test_max_sc,
-                   test_offload_state,
-+                  test_duplicate_sci,
-+                  test_undefined_sci,
-                   test_vlan,
-                   test_vlan_toggle,
-                   ], args=(cfg,))
+is accepted and installs two separate routes: the loopback nexthop
+becomes a reject route that does not qualify for ECMP, while
+ip6_route_multipath_add() still notifies the first route with nhn - 1
+siblings. With a netdevsim device, I can reproduce the WARN_ON_ONCE()
+in nsim_fib6_event_init() with this command on the patched kernel, and
+it is followed by a NULL pointer dereference in nsim_fib_event_work().
+The current code rejects the loopback nexthop instead.
 
--- 
-2.43.0
-
-
+So please drop this series. Sorry for the noise.
