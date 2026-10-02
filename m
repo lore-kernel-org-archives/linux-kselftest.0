@@ -1,209 +1,174 @@
-Received: from mta1.migadu.com (out-218.mta1.migadu.com [95.215.58.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9736E35E95C
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 04:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA492DAFAF;
+	Fri,  2 Oct 2026 05:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790915801; cv=none; b=ir2GoWCF86Vn56RZr22BI8vlX7WxmMPQcKPmnLgX799XovXBajTCV8rP6CiqbEmdMN770L2ORYqxyGZDsqtBy69DlBz6H8YItmh0BMfnYM6N4CTt+OAQtB0QXNZOyjlidQKGaiCo9nDxUsHmjpf3Dec/nyzEh9k+OvwZlJ9QUR8=
+	t=1790918083; cv=none; b=lmWdzZCi4f8ySmjRToigzU981M/nPiQICFBunfDSOipAiYQwt2EyTKM9imFDLEL+JF92aLF07NEO1NopMf2WxXPMVrUvC65UwkARr7YUel5GmO5WNTgx84n4Lg8Bj+fd4GmxsbZ6WGYsNwq0uOVT1g6ZdE/FsoS0k8kTT9lbF/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790915801; c=relaxed/simple;
-	bh=y/0CXx9eIXXSUi0htzgjyz98uoanzac/KLtq3JYsrjo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ViQtp1vNdfVxzhDWedvalhDM2jidKRxbSo1kgTscp8P6S1xxoHX5K34PfFVQElsm1RBaRv/oTtUs5tEZZDCXzSLkMNeEj60p7DB8AY/1/yqfUlJBUSKJ7VxtEuShD98wsCU7OUyqe4SXky8XeYi33cwpO9UT0LM89RWY/NHi1Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xP7aSUJC; arc=none smtp.client-ip=95.215.58.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790918083; c=relaxed/simple;
+	bh=D92WhrZH+54cjQPN+K8ltIeWhFkD/it2q9JkQccXjjQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Bxbleta7Oqy59nksxVnKslgS3fxFuGPYnX1TA7yJfQxfH37MCFtWm9EPbOWP2Muv5rtg2i83E7ExXhwgomW0aZQaRJq55i1RXqKyGZFMLJpLuNoVRSInFKE9/1lyKoz6dKGjxBemq3AN7FuozMN1p/EsWzlnYNeeeoBwhEE3LhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bxa3in1P; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xP7aSUJC"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=y/0CXx9eIXXSUi0htzgjyz98uoanzac/KLtq3JYsrjo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790915796; v=1; x=1791520596;
- b=xP7aSUJCP1VTTt6HWpzfU6gfjbJUEIPtiK8ipSLspAPJnzEqFk/WM+JNBurF6U2QCmVsxMvG
- 3PR1iwIg3AKQMVR7+YU7efgObTMGdGBxsTGYBdZZ+wpGtupWp9dgG2wr3Cg9QLQOQHoKY73d1nf
- KBHl4A10s6law16XIbcTgVec=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d68e9918b237ea7b;
-	Fri, 02 Oct 2026 04:36:36 +0000
-X-Mizu-Trace-ID: d68e9918b237ea7b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
-Date: Thu, 1 Oct 2026 21:36:24 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bxa3in1P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA3B1F000FF;
+	Fri,  2 Oct 2026 05:14:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790918081;
+	bh=ZTPYABB2u4qxTYVrhofxTi+nKWD1avZUblAo3JWd1fA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Bxa3in1PDTIc9CtlCSc//T2TREVtKt53RDb2K2dmzUUofLbGS3BBPrcfI3wvZCHgK
+	 R703RSR6Alq4uXKpQqh69KSmoyFRNJG/ZSHdeaSib6AXHqCGNFk+16GyMqXeFEQItz
+	 XgF18r7u6VlMu7oygdwcHjTB8r4v8xwIYEJULwm3e5EO3pbUiA310L1jIx2AA5dG01
+	 o2p6ZAe1nRw3UzmSq7rNfZI5ksZNba8seInXyF5S6gl12iejdXrITno/CQWmrcqFvJ
+	 hx87SVQhGNsfXpV+umqu31RRYqLiJu+f+YlVD35qUWF0Rf0duiatjUZvOrgweYisLd
+	 OryKoC95ySoAQ==
+Content-Type: multipart/mixed; boundary="===============3278906847704703613=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand
- loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
-To: Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Christian Heusel <christian@heusel.eu>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-trace-kernel@vger.kernel.org,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org,
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
- sched-ext@lists.linux.dev, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
- rust-for-linux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
- Bjoern Doebel <doebel@amazon.de>, Martin Pohlack <mpohlack@amazon.de>,
- jay.wang.upstream@gmail.com
-References: <20261001225214.12351-1-wanjay@amazon.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20261001225214.12351-1-wanjay@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <aa827bb60ac91fb2860c3307b5942aee2bf0810b21dbbc297aac5f61fb102627@mail.kernel.org>
+In-Reply-To: <20261002042201.3483076-1-anilkaushikwireless@gmail.com>
+References: <20261002042201.3483076-1-anilkaushikwireless@gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: add XDP test for per-flow LRU_HASH window updates
+From: bot+bpf-ci@kernel.org
+To: anilkaushikwireless@gmail.com,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org
+Cc: sdf@fomichev.me,ihor.solodrai@linux.dev,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,anilkaushikwireless@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  2 Oct 2026 05:14:40 +0000 (UTC)
+
+--===============3278906847704703613==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 2026-10-01 3:52 p.m., Jay Wang wrote:
-> Based on and tested against bpf-next commit b5a4aa31abd6 ("bpf, cgroup:
-> Fix cgroup struct_ops query for a second attach type").
-> 
-> This series makes CONFIG_DEBUG_INFO_BTF a tristate, so that it can be
-> set to =m.  With =m the vmlinux BTF is carried by a module, btf_vmlinux,
-> that the kernel loads the first time user space asks for something that
-> needs the BTF.  On a system where nothing does, that saves ~5.4 MB of
-> RAM with a distribution config; on a system that uses BTF, it behaves as
-> with =y.  =y itself is untouched.
-> 
-> Problem
-> -------
-> 
-> The vmlinux BTF that CONFIG_DEBUG_INFO_BTF=y builds into the kernel
-> image takes ~5.4 MB of memory, resident from boot whether anything uses
-> it or not.  On small instances that is not negligible.
-> 
-> A distribution cannot simply turn it off for the users who do not need
-> it: it ships one kernel build for all its users, and BTF is not debug
-> info anymore.  CO-RE, fentry/fexit, kfuncs, struct_ops, sched_ext and
-> bpf-lsm all depend on it, so =n takes those away from everyone who does
-> use them.
-> 
-> Hence this series adds CONFIG_DEBUG_INFO_BTF=m: the BTF becomes an
-> on-demand module.  Users who never use BTF get the memory back; for
-> users who do, the first request that needs it loads it, and everything
-> works as with =y.
-> 
-> [...]
-> 
->   Documentation/bpf/btf.rst                  |   68 ++
->   Makefile                                   |    8 +-
->   include/asm-generic/vmlinux.lds.h          |   32 +-
->   include/linux/bpf.h                        |   15 +
->   include/linux/btf.h                        |   11 +
->   include/linux/btf_ids.h                    |    2 +-
->   include/linux/compiler_types.h             |    2 +-
->   include/linux/module.h                     |    2 +-
->   include/trace/trace_events.h               |    2 +-
->   init/Kconfig                               |    2 +-
->   kernel/bpf/Makefile                        |    6 +-
->   kernel/bpf/bpf_struct_ops.c                |    3 +-
->   kernel/bpf/btf.c                           | 1085 ++++++++++++++++++--
->   kernel/bpf/btf_vmlinux.c                   |   23 +
->   kernel/bpf/inode.c                         |   44 +-
->   kernel/bpf/preload/Kconfig                 |    4 +
->   kernel/bpf/syscall.c                       |   51 +-
->   kernel/bpf/sysfs_btf.c                     |   97 +-
->   kernel/bpf/verifier.c                      |  172 +++-
->   kernel/module/Kconfig                      |    2 +-
->   kernel/module/main.c                       |    4 +-
->   kernel/trace/bpf_trace.c                   |    3 +-
->   kernel/trace/trace_events.c                |   10 +
->   kernel/trace/trace_output.c                |    7 +
->   kernel/trace/trace_probe.c                 |   16 +
->   kernel/trace/trace_syscalls.c              |    6 +-
->   lib/Kconfig.debug                          |   30 +-
->   net/netfilter/Makefile                     |    6 +-
->   net/xfrm/Makefile                          |    4 +-
->   samples/bpf/Makefile                       |    6 +-
->   samples/hid/Makefile                       |    6 +-
->   scripts/Makefile.modfinal                  |   28 +-
->   scripts/Makefile.vmlinux                   |    5 +
->   scripts/gen-btf.sh                         |   53 +-
->   scripts/link-vmlinux.sh                    |   25 +-
->   scripts/package/PKGBUILD                   |    7 +
->   scripts/package/kernel.spec                |    4 +
->   scripts/package/mkspec                     |    7 +
->   tools/bpf/bpftool/Makefile                 |    6 +-
->   tools/bpf/resolve_btfids/main.c            |  217 +++-
->   tools/perf/bpf_skel.mak                    |    8 +-
->   tools/sched_ext/Makefile                   |    6 +-
->   tools/testing/selftests/bpf/Makefile       |    6 +-
->   tools/testing/selftests/hid/Makefile       |    6 +-
->   tools/testing/selftests/sched_ext/Makefile |    6 +-
->   45 files changed, 1936 insertions(+), 177 deletions(-)
+> selftests/bpf: add XDP test for per-flow LRU_HASH window updates
 
-This series caught my attention because of the sheer amount of the code
-and the iteration speed. I've tried to read the cover (it was
-tiresome, please ask your "agent" to be concise), and fed the series
-to my bot.
+TL;DR:
+- Test issue: wrap subtest uses identical packet lengths, so it can't detect a
+  wrong post-wrap index
+- trunc subtest sends a non-IPv4 frame, so it likely never reaches the
+  truncation checks
 
-A question I had: is it really worth 2k of complicated kernel code to
-*maybe sometimes* save <10Mb of memory?
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_lru_window.c b/tools/testing/selftests/bpf/prog_tests/xdp_lru_window.c
+> new file mode 100644
+> index 000000000000..55175c2165ec
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_lru_window.c
+> @@ -0,0 +1,168 @@
 
-And then the bot found this:
+[ ... ]
 
-     What systemd does at every boot
+> +static void test_one_and_wrap(void)
+> +{
+> +	struct xdp_lru_window_state st;
+> +	struct xdp_lru_window_key key;
+> +	int i, n;
+> +
+> +	reset_map();
+> +	if (inject(1, DST_PORT))
+> +		return;
+> +	fill_key(&key, DST_PORT);
+> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &st), "lookup"))
+> +		return;
+> +	ASSERT_EQ(st.seq, 1, "seq");
+> +	ASSERT_EQ(st.pkt_len[0], sizeof(struct ipv4_packet), "len0");
+> +
+> +	n = AGGREGATION_WINDOW + 5;
+> +	if (inject(n - 1, DST_PORT))
+> +		return;
+> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &st), "lookup wrap"))
+> +		return;
+> +	ASSERT_EQ(st.seq, n, "seq wrap");
+> +	for (i = 0; i < AGGREGATION_WINDOW; i++)
+> +		ASSERT_EQ(st.pkt_len[i], sizeof(struct ipv4_packet), "slot");
+> +}
 
-     PID1 loads and attaches a BTF-dependent LSM program at every boot
+Can the final "slot" loop detect a wrong post-wrap write?
 
-       src/core/manager.c:1026-1059, in manager_new():
+Every packet sent by inject() is the same pkt_v4 copy, so every write stores
+sizeof(struct ipv4_packet) (54).  After the first 50 packets, slots 0..49
+already hold 54, and packets 51..55 write 54 into slots 0..4 again.  The
+loop therefore checks nothing that was not already true before the index
+wrapped.
 
-       if (FLAGS_SET(test_run_flags, MANAGER_TEST_RUN_MINIMAL)) {
-               ...
-       } else {
-               ...
-               (void) bpf_restrict_fs_setup(m);
-       }
+The "seq wrap" check only shows the program did not take the
+"idx >= AGGREGATION_WINDOW" early return.  A miscompiled modulo that
+produced a wrong but in-range index would still pass.
 
-https://github.com/systemd/systemd/blob/main/src/core/manager.c#L1026-L1059
-https://github.com/systemd/systemd/blob/main/src/core/bpf-restrict-fs.c#L27-L85
+The commit message says this subtest checks that "the bounded array wraps".
+Would it make sense to send the post-wrap packets with a different length
+(run_pkt() accepts any len >= ETH_HLEN, and the program records
+data_end - data), then check that slots 0..4 hold the new length while
+slots 5..49 keep the old one?
 
-Do those tiny VMs that you target run systemd with BPF LSM?
-I assume you target concrete VMs, not "small instances" in a vacuum.
+[ ... ]
 
-You can check this by booting them with =m and then:
-   $ lsmod | grep btf_vmlinux
-   $ systemctl --version  # look for +BPF_FRAMEWORK
-   $ cat /sys/kernel/security/lsm
+> +static void test_trunc(void)
+> +{
+> +	struct xdp_lru_window_state before, after;
+> +	struct xdp_lru_window_key key, next;
+> +	unsigned char short_pkt[sizeof(struct ethhdr)] = {};
+> +	int err, retval;
+> +
+> +	reset_map();
+> +	err = run_pkt(short_pkt, sizeof(short_pkt), &retval);
+> +	if (err)
+> +		return;
+> +	ASSERT_EQ(retval, XDP_PASS, "trunc retval");
+> +	err = bpf_map_get_next_key(map_fd, NULL, &next);
+> +	ASSERT_EQ(err, -ENOENT, "trunc no insert");
 
-If the answer is "yes" for the majority of them, the whole project is
-moot, because the module will be loaded immediately on boot.
+Does this subtest reach any of the program's truncation checks?
 
-My bot found more stuff implementation-wise...
+short_pkt is 14 zero bytes, so eth->h_proto is 0.  In
+progs/xdp_lru_window.c the program passes the Ethernet bounds check and then
+returns at:
 
-I suggest to slow down, stop burning tokens for a bit, and first try
-to figure out the important details:
-   - who will actually benefit from these memory savings and do they care?
-   - is it worth it in terms of implementation complexity?
+    if (eth->h_proto != bpf_htons(ETH_P_IP))
+            return XDP_PASS;
 
-Even for LLM it's easier to deal with a 100 lines of code than with 2k.
+The IPv4 length check ((void *)(iph + 1) > data_end) and the TCP length
+check ((void *)(th + 1) > data_end) never run, here or in any other
+subtest.
 
-pw-bot: cr
+The "trunc no insert" and "trunc no mutate" assertions would pass the same
+way for a full-length non-IPv4 frame, so this exercises the ethertype
+filter rather than truncated-packet handling.  The commit message describes
+this subtest as checking that "a short (parse-failing) packet neither
+inserts a new entry nor mutates an existing one".
 
->   create mode 100644 kernel/bpf/btf_vmlinux.c
-> 
-> 
-> base-commit: b5a4aa31abd6fe90009b63e35dc18c67d041ec0c
+Should short_pkt have h_proto set to htons(ETH_P_IP) so the IPv4 length check
+is reached?  To also reach the TCP header check, a truncated copy of pkt_v4
+of sizeof(struct ethhdr) + sizeof(struct iphdr) bytes could be sent.
+bpf_prog_test_run_xdp() only requires data_size_in >= ETH_HLEN, so both
+sizes are accepted.
 
+> +
+> +	if (inject(1, DST_PORT))
+> +		return;
+> +	fill_key(&key, DST_PORT);
+> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &before), "setup"))
+> +		return;
+> +	if (run_pkt(short_pkt, sizeof(short_pkt), &retval))
+> +		return;
+> +	ASSERT_EQ(retval, XDP_PASS, "trunc2 retval");
+> +	if (!ASSERT_OK(bpf_map_lookup_elem(map_fd, &key, &after), "after"))
+> +		return;
+> +	ASSERT_EQ(after.seq, before.seq, "trunc no mutate");
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36965595251
+--===============3278906847704703613==--
