@@ -1,430 +1,154 @@
-Received: from mail-qv2-f41.google.com (mail-qv2-f41.google.com [74.125.230.169])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8898517BAE
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 20:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790972701; cv=none; b=leSdttVDD1haNiuLDl9sdvleTD+iwqaH8fOmCNIJZd3ndr4YnE4awxHx+MnDB8Zxbsq6WUpq/HVXQokAUsE53RZ+KyXpwZEQ9lcxUrHoZ4sKsPOofS8ATJNTgm17cg9jcZaIn670uIWrcp+4GthSLbq7AOHQ60Y4r/OtSv8sS6I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790972701; c=relaxed/simple;
-	bh=gOIDQvoTPC54kqM693/RjiH3DniyfGvoRnPoN723y18=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AXXt6hAvqfzodV8nDVrCO+hGqP2EN+YIqfc2ulQ404DqMhLTFjG/wcDNaJZyu15+kU5F6fAZlsAprMTZWDmqRhZU0Pti21Z21oW4OfFHrydkxKwkSbK70aMq57Z+ibmQ+brljcXjNcP2Gib4wkt8ccYlX8O+XZmVQCObW1lGlt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oYGfOsnH; arc=none smtp.client-ip=74.125.230.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C42D44065B
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 20:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790973782; cv=pass; b=gEH+QmbKWoxMEHLBkWdGG3tnBmI98CewAfY4vKOwoQz2vdT5xzecuYOOubJQ7j+GN/9wdM22//2E4kk5hmr6xvXszWORQgIu+8WvUq5IJNtQz/S29jG/lswu1i8R9hFb8lReJ+uzM7Q37bdgBBd8sS7DwBwSatvHCDj1x80iV34=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790973782; c=relaxed/simple;
+	bh=O0oErUdvCGd0lNeKXzKbX7E7eK5xVZTCX98mTa3dJ6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P+A/zj5OHifeQhDtkG1KlrQfEZAdjl8M9E54JfqxRJLibuUCLMYZaKzBjQRZytzNMq9oWzKKZSORDKOOY+nC3I8AwLI9akukyNTF52ZKfKtkAEaeGS8He7Ca51E6W01TTULGBShNXNMFfKZMnZYo1YhBPZgU7PtH54WH8uuNiBk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d2FArZdd; arc=pass smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oYGfOsnH"
-Received: by mail-qv2-f41.google.com with SMTP id 6a1803df08f44-9178b9ca7e8so2914796d6.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 13:24:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d2FArZdd"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd5462b69so1645305e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 13:42:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790973777; cv=none;
+        d=google.com; s=arc-20260327;
+        b=MHNdafkVq2CdBGlbLPOx+BO+///1IkUzWb/bxdrrC36eoFmvNd3uvco8ZFxpJXGKp8
+         OVLc5xF0r/yeCd+A/UlhuwDjaSBXzMg6q+ClolVuJmzH5tMGVnQ07w2ZHRq77M2E9E71
+         3Ja7FcjFnN6esDfWQX19+4TRixNDWiCE9Bk0RA2BhmyKYBJ9S287wnvFlPIvpuhFkexX
+         bVYsxUfKOEPKvnUJbkwNw5/e6Jx0Wg1R/YMgKBaFK3s38OjrlN7f0GlXwROK5blvVDlv
+         T+IN22akIYPqW+WKhl3zXbxIJqkRfNe4/0ZrFNxRYLULJzo8/jEbFdLm3SDftOkU57xd
+         iWYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2B52yACNSq43ABlpVzKEc+uObRnusBAROE8TzluhGEQ=;
+        fh=NRO4g2vs0h1QYgyODu9p4/4zwK498ZG+0zGNOokHv8Q=;
+        b=mv0+oM/93U6GaSKzD0AiNq5K0IaEDgjZdKdn4/+qm2YWE5+pDQqomDUq9ioSTNh4V+
+         xAmPMINZiMTerb2LZQmLx9U4jHCirpR6dYxKi5yLvZ/MtCbkt8tN/8TrQpiR3sDe9pmW
+         oFtHtwz1c/IgWeQhp8KRo6HCGmunAUpRGI9AArYrKMM/3aHvHjmin87T4GIVoacmJjnT
+         FKeYwB/XygKXeuCRnVW6nC/OtWSoerFXchWirUMIu17NDupl0rSNzkVODbpjlczRjTNO
+         /54koRnxIcNQLjUS/MKIl6sQMKML5FegN2fZYxKWtzQukysfUIkXyN4Cd/NhB5Btjy1y
+         7/iA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790972697; x=1791577497; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=S35goerxP799yBtkbGvn8cEv+WRt3OcPuehglbCBDPM=;
-        b=oYGfOsnHfMqF/z0u7x40j9iM9H9rkjtlCIWTe98cWdFMZ3azizldJBS2MmUneIw/Md
-         8KjrNHhkfCVpFaFnPG1cb5+GnwcrCzKLb4XE6R55a+cWuUDTay1KyhHHpaEppMLH2GEY
-         7WR28EHswmkIgaHWNl7oyBRhIzi7Yh+OfywVpcx9eJcB21d7OZ2Yy/+9vxEV+W5y5a6P
-         6TfHqjTuVIE7G+tiacZFg9FXN3KjSmYm0GrmZozKzsadBpzhZNIDZBIuRisorTJs2kf+
-         FF2V9k8GTmOoi8S3LcXhbc5eU2UusZ08fku5poy4OAE8m7oGFKKuOUTZgEi+PNW8Z8Rv
-         GCaA==
+        d=google.com; s=20251104; t=1790973777; x=1791578577; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2B52yACNSq43ABlpVzKEc+uObRnusBAROE8TzluhGEQ=;
+        b=d2FArZddCvzzX4kGFZD/GcsWkEm07K7qUaqAHzs+JQ10c03/DY8JrDKmqEl2fDAm80
+         z4oetGdhgfPtqX2Stf6uHwFmPns7GrbyueX6EsLB776UJA8Qe5yuzuD1tNqXjzvbN078
+         QrTH0k6apZxgd7FYmnS9sZiF1Z7MN9Hfkn2KdewBCUv6VSn/8Ci4Wadvd2nhSRlGQdK3
+         zuQmg8BYUdnNkeD82XjrE7tGoQqVBrted1FgefCdh+9kdZTfu3be2bWn1ajYFznwtEjy
+         40teb/pvgeLJn9lxQ+wr8qKnEEX0xZeIT0oWmWUOo8oXCPPrzoD7jB1AxJt2ZSi7Zz58
+         a1MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790972697; x=1791577497;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=S35goerxP799yBtkbGvn8cEv+WRt3OcPuehglbCBDPM=;
-        b=iNPkReO4jv81PMIz+oLLws1QxdbuWy173tIvJ1rebyW+pNm6Ui16cdbly/OpjMzFn4
-         s97RA+EBzv12981WFu27YsA99ksK8apkFXAApJQSmeCyuf8BlzRuxxT0d3M5AD+VhLN4
-         o6yxkd5m++l8OBE7rWfDm1cms+gII4M19Vf34fbVb0No6QMyUTRpqLekq0eTp98ZCKTY
-         xJBF1lHR2m7crM3gDWGHlcH3Mpgv543eY+bro88MmfQzrnBQsdQlstJTep/iYl+Pzzr/
-         QrdLYXTE1YE2AS2VhhzMOv4uRZx/VwAfTIXME3rbGWRsdsvSodI9pXR4IId4gEkKFZ55
-         utdQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzWJ6JiaSZNeEfRVqGh3m0rXRk1xk4/bd3EcNAiiFZVaW5FJ2IfeZDgNckOQW+vQj5/z1MzzxxhgsXDeFEm75Y=@vger.kernel.org
-X-Gm-Message-State: AFuF++lMzy//SezDRpzIzHCfWeOIxVQGAWimmd+1CpRZOdvx1BDOytHP
-	kIXx/bAfFm2CRr0T7qBXJUB6bGBa1gd/f28OLGribnsLgVBFh4/0G93z
-X-Gm-Gg: AYBFou2Iz1cAlN/EJlfOW+r1k8kyJpi8s7WCfEvaH6+7LWJySfmxgIZsumy4TwU7s2c
-	os2HkusZEYI5Q7/yTSyjttkIQxPGQ/wcGLMSv/6ZtKL/zE+W8f8j/43uErLb/MnqP/H20SWEW6i
-	YN8bzfdMlp8ZzMSa9xHPSgY0Ug9yNpkERedhISS77kpTdV4DdDgeNBLbsNf75O54mr7U6f2WzNh
-	Wu6o2osQEq3bhxKt7R8bIn0cGp1QhQb4JcWWdnV3X37QGm+wGEYZx86bTvtV1BiYoVpv8LJ16tk
-	f52Ouxz5M2If8y9IW8Z651b7qUA0uEF+0PsjqmQy9eJjFWiZBC9sZNwR9/3bV1uxU3EczDTReax
-	aq5of3+FqJpB21IeqoGTQI8upsW8BiuPAC5vI4YCosr+gVBiOJjF1c/fKe47JpvgTGlLOgooE7u
-	dnRxiKjvBG6cWRvzn+M9Bj76fYfvQJyO68J8Id2PJbLapf2EJGqyGxG5E/X+ndmik10xxo8pj+p
-	C5nPMxCsWcqXfY9khLprvNQovmfA2mJWrHBEF9zL5/bQC/zHj08C2IofI+vmZwGqO/0D3BvR1lD
-	92a6aZo=
-X-Received: by 2002:a05:6214:598b:b0:917:bfaa:3c4f with SMTP id 6a1803df08f44-917c01f8e7fmr74650926d6.41.1790972697062;
-        Fri, 02 Oct 2026 13:24:57 -0700 (PDT)
-Received: from localhost.localdomain (pool-173-71-97-169.cmdnnj.fios.verizon.net. [173.71.97.169])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-917e0bc98fbsm28215126d6.29.2026.10.02.13.24.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 13:24:56 -0700 (PDT)
-From: Akira Patafio <kokokoala4211@gmail.com>
-To: gregkh@linuxfoundation.org,
-	jirislaby@kernel.org
-Cc: linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Akira Patafio <kokokoala4211@gmail.com>
-Subject: [PATCH v2] tty: pty: preserve open slaves after rejected locked open
-Date: Fri,  2 Oct 2026 16:24:55 -0400
-Message-ID: <20261002202455.25324-1-kokokoala4211@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20261001165552.2439-1-kokokoala4211@gmail.com>
-References: <20261001165552.2439-1-kokokoala4211@gmail.com>
+        d=1e100.net; s=20260707; t=1790973777; x=1791578577;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2B52yACNSq43ABlpVzKEc+uObRnusBAROE8TzluhGEQ=;
+        b=Ft198EmxaZexudS7xyaDbr1wHs5VkKASstONpmsCRN3InyP4+LhR0ltiRlVZiqfXw2
+         5gNxPshXIoDb4XxbbG5GlPskdLXw0CeQpkifkT0st0fiFNeePCleGfqKEGKncah9hAcc
+         jPDGUIgZ7tkrxC2A9xy4x1xaPHbRXAWpdqZcvv7UUwIDpGA6B+nKdRU/1ieAZW8K8zf7
+         xTojRJR6INAxbgrXEze+OEReZzFxECu1gEQ8OqFdSzghp73iw474Vghmgy8uGHun0goN
+         xn/UPiBEogJGIbBJhpLct16AmMrmdIc+WvsxFrOZu8f48WRxUsPYiSniwgMG4iWHpJ5z
+         KdTw==
+X-Forwarded-Encrypted: i=1; AKwUvBycDKFuCMo3nd63RKffGB7HFU/gwcvC2fGKcE6TLZJariaHue691NaRhSoe0bvV5R1ZQTnDZ6UBYlXOJPIuYzs=@vger.kernel.org
+X-Gm-Message-State: AFuF++m/MgD43iri9WDmo+R93KFqccHb8ASqCkafCj74NOhvofXwG5Gj
+	GZVPD5W4Lk3N4KOSUkZQiIQtWkzn5diqfLHIgxUPRZKjdGBmYgr2OfdZ8GVH0BWmKRKetc73u1R
+	h++vVgCc8OeTzuAtDYjcUz3Xp0/OchYfhL/0r/lsLDgrxS1RU7Tpy1TYh
+X-Gm-Gg: AYBFou0c7n3PMJ6h1sN2vDFWBnNw5B86uuQEKeUkTvWYwELvYmj0PANj/Hn0XTrVH2M
+	kk3BhnX++TL0xK3POSTxuHtb2kfMv1VnqwEYJo5wP6DiMJ+MIVlbO/VjzJJJr++rHnPO8Yfygh+
+	JgWUsep1R5CzxQmyK+8hyGmEkRKWuNK6TXWzfjhI03+ytVFfNuCKIlWBVwMDLpPDXqevi7zWwCf
+	e4gXzAi6j26ucHxB4ZNeLyhe2EGrBYyB6VvdV2Xs2ZN6PixGGnIC1Bg69vXIhagNbG1oSOg6alX
+	PO+DpM/ltYhwDF3aUgkcerljc0P63gX4QMf4TcbkOEWzJ2V8pO5VK32Jdn53mc8ApwKaEadRZ8s
+	6LuV/HGxAxLYDmQWI+s/wRJ+3MG+1cebl81k6G52KwmkCAV8ZflueF8sFdhI9UemmSToGXw==
+X-Received: by 2002:a05:600c:a011:b0:49f:ce78:356f with SMTP id
+ 5b1f17b1804b1-4a0276b869fmr57980835e9.32.1790973776781; Fri, 02 Oct 2026
+ 13:42:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261002-maintainers-stackinit-v1-1-27112a221527@google.com>
+In-Reply-To: <20261002-maintainers-stackinit-v1-1-27112a221527@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 2 Oct 2026 13:42:45 -0700
+X-Gm-Features: AclHuK9GtaEMxub0C4cC2iFOReeGZtM2r5F_DDQMeKZ3U6WaUokmOoRrco02awg
+Message-ID: <CAKwvOdkjLkKb1503q6HOnJG5ps3iZ3GdTxP5B6rOSPEfkJ-PBg@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add stackinit KUnit test to HARDENING
+To: Justin Stitt <justinstitt@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>, Bill Wendling <morbo@google.com>, 
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Opening a locked PTY slave fails with EIO, but the failure path sets
-TTY_IO_ERROR on the shared slave tty. Previously opened slave files then
-fail I/O even though their master is still open.
+On Fri, Oct 2, 2026 at 12:27=E2=80=AFPM Justin Stitt <justinstitt@google.co=
+m> wrote:
+>
+> From: Justin Stitt <justinstitt@google.com>
+>
+> Noticed while preparing a patch to lib/tests/stackinit_kunit.c: the file
+> is not listed in MAINTAINERS, so get_maintainer.pl does not suggest Kees
+> or linux-hardening for changes to it, only the catch-all list.
+>
+> before:
+>   $ ./scripts/get_maintainer.pl -f lib/tests/stackinit_kunit.c
+>   linux-kernel@vger.kernel.org (open list)
+>
+> after:
+>   $ ./scripts/get_maintainer.pl -f lib/tests/stackinit_kunit.c
+>   Kees Cook <kees@kernel.org> (maintainer:KERNEL HARDENING
+>   "Gustavo A. R. Silva" <gustavoars@kernel.org> (reviewer:KERNEL HARDENIN=
+G
+>   linux-hardening@vger.kernel.org (open list:KERNEL HARDENING
+>   linux-kernel@vger.kernel.org (open list)
+>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-tty_open() releases a file after the slave open callback fails. Merely
-skipping TTY_IO_ERROR on the rejected open is insufficient: pty_close()
-can mistake the failed file for the last slave and close the master.
-Counting tty references is also insufficient because a real last close
-can race the failed open and its release.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Track which slave files opened successfully. Ignore failed files during
-close, and mark the master peer closed only when the last successful
-slave file closes. In-kernel callers may pass NULL instead of a file;
-retain the count-based close behavior for those callers. A selftest
-checks locked opens with zero, one, and two existing slave files, plus
-ordinary last-slave close behavior.
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4f72b4ac27ee..019f443af051 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14164,6 +14164,7 @@ F:      include/linux/ucopysize.h
+>  F:     kernel/configs/hardening.config
+>  F:     kernel/kstack_erase.c
+>  F:     lib/tests/randstruct_kunit.c
+> +F:     lib/tests/stackinit_kunit.c
+>  F:     lib/tests/usercopy_kunit.c
+>  F:     mm/usercopy.c
+>  F:     scripts/Makefile.kstack_erase
+>
+> ---
+> base-commit: 5e0f8396d4805a3e7f753fa58c8c55f1f3cc2160
+> change-id: 20261002-maintainers-stackinit-230afe234e5a
+>
+> Best regards,
+> --
+> Justin Stitt <justinstitt@google.com>
+>
 
-Fixes: 699390354da6 ("pty: Ignore slave pty close() if never successfully opened")
-Assisted-by: LLM
-Signed-off-by: Akira Patafio <kokokoala4211@gmail.com>
----
-Changes in v2:
-- Preserve the existing NULL-file callback behavior for in-kernel TTY users.
-- Add the Assisted-by tag requested in review.
 
-Tests:
-- The selftest failed on an unpatched Linux 6.12.69 kernel at the
-  pre-existing slave write with errno EIO (TAP fail:1).
-- Built the patched 7.3.0-rc5 x86_64 kernel with legacy PTYs and Speakup
-  enabled, without compiler warnings. Booted it in QEMU/HVF and ran the
-  selftest in the guest: TAP pass:1 fail:0, exit status 0.
-
- drivers/tty/pty.c                             |  34 +++-
- drivers/tty/tty_io.c                          |   1 +
- include/linux/tty.h                           |   1 +
- .../testing/selftests/filesystems/.gitignore  |   1 +
- tools/testing/selftests/filesystems/Makefile  |   2 +-
- .../selftests/filesystems/pty_locked_open.c   | 187 ++++++++++++++++++
- 6 files changed, 222 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/filesystems/pty_locked_open.c
-
-diff --git a/drivers/tty/pty.c b/drivers/tty/pty.c
-index cc7f709..4024c5d 100644
---- a/drivers/tty/pty.c
-+++ b/drivers/tty/pty.c
-@@ -46,12 +46,31 @@ static DEFINE_MUTEX(devpts_mutex);
- 
- static void pty_close(struct tty_struct *tty, struct file *filp)
- {
-+	struct tty_file_private *priv = filp ? filp->private_data : NULL;
-+	struct tty_file_private *other;
-+	bool another_open = false;
-+
- 	if (tty->driver->subtype == PTY_TYPE_MASTER)
- 		WARN_ON(tty->count > 1);
- 	else {
--		if (tty_io_error(tty))
-+		/* tty_release() also calls close after an unsuccessful open. */
-+		if (priv && !priv->pty_opened)
-+			return;
-+		/* In-kernel users have no per-file open state. */
-+		if (!priv && tty->count > 2)
- 			return;
--		if (tty->count > 2)
-+		/* tty->count includes opens that have not succeeded yet. */
-+		spin_lock(&tty->files_lock);
-+		if (priv)
-+			priv->pty_opened = false;
-+		list_for_each_entry(other, &tty->tty_files, list) {
-+			if (other->pty_opened) {
-+				another_open = true;
-+				break;
-+			}
-+		}
-+		spin_unlock(&tty->files_lock);
-+		if (another_open || tty_io_error(tty))
- 			return;
- 	}
- 	set_bit(TTY_IO_ERROR, &tty->flags);
-@@ -223,14 +242,23 @@ static int pty_open(struct tty_struct *tty, struct file *filp)
- 
- 	if (test_bit(TTY_OTHER_CLOSED, &tty->flags))
- 		goto out;
-+	/* A rejected open must not disrupt already-open slave descriptors. */
- 	if (test_bit(TTY_PTY_LOCK, &tty->link->flags))
--		goto out;
-+		return -EIO;
- 	if (tty->driver->subtype == PTY_TYPE_SLAVE && tty->link->count != 1)
- 		goto out;
- 
- 	clear_bit(TTY_IO_ERROR, &tty->flags);
- 	clear_bit(TTY_OTHER_CLOSED, &tty->link->flags);
- 	set_bit(TTY_THROTTLED, &tty->flags);
-+	/* Record a successful open before another slave can close. */
-+	if (filp && tty->driver->subtype == PTY_TYPE_SLAVE) {
-+		struct tty_file_private *priv = filp->private_data;
-+
-+		spin_lock(&tty->files_lock);
-+		priv->pty_opened = true;
-+		spin_unlock(&tty->files_lock);
-+	}
- 	return 0;
- 
- out:
-diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-index 4856903..e0b5f97 100644
---- a/drivers/tty/tty_io.c
-+++ b/drivers/tty/tty_io.c
-@@ -186,6 +186,7 @@ int tty_alloc_file(struct file *file)
- 	priv = kmalloc_obj(*priv);
- 	if (!priv)
- 		return -ENOMEM;
-+	priv->pty_opened = false;
- 
- 	file->private_data = priv;
- 
-diff --git a/include/linux/tty.h b/include/linux/tty.h
-index 0a46e40..c44d11f 100644
---- a/include/linux/tty.h
-+++ b/include/linux/tty.h
-@@ -247,6 +247,7 @@ struct tty_file_private {
- 	struct tty_struct *tty;
- 	struct file *file;
- 	struct list_head list;
-+	bool pty_opened;
- };
- 
- /**
-diff --git a/tools/testing/selftests/filesystems/.gitignore b/tools/testing/selftests/filesystems/.gitignore
-index 9eb185f..5cbbfca 100644
---- a/tools/testing/selftests/filesystems/.gitignore
-+++ b/tools/testing/selftests/filesystems/.gitignore
-@@ -6,4 +6,5 @@ file_stressor
- anon_inode_test
- kernfs_test
- idmapped_tmpfile
-+pty_locked_open
- ustat_test
-diff --git a/tools/testing/selftests/filesystems/Makefile b/tools/testing/selftests/filesystems/Makefile
-index 03be337..b92a4f1 100644
---- a/tools/testing/selftests/filesystems/Makefile
-+++ b/tools/testing/selftests/filesystems/Makefile
-@@ -2,7 +2,7 @@
- 
- CFLAGS += $(KHDR_INCLUDES)
- TEST_GEN_PROGS := devpts_pts file_stressor anon_inode_test kernfs_test fclog ustat_test
--TEST_GEN_PROGS += idmapped_tmpfile
-+TEST_GEN_PROGS += idmapped_tmpfile pty_locked_open
- TEST_GEN_PROGS_EXTENDED := dnotify_test
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/filesystems/pty_locked_open.c b/tools/testing/selftests/filesystems/pty_locked_open.c
-new file mode 100644
-index 0000000..eba661c
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/pty_locked_open.c
-@@ -0,0 +1,187 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <stdio.h>
-+#include <sys/ioctl.h>
-+#include <unistd.h>
-+#include <asm/ioctls.h>
-+
-+#include "kselftest.h"
-+
-+#ifndef TIOCGPTPEER
-+int main(void)
-+{
-+	ksft_exit_skip("TIOCGPTPEER is unavailable\n");
-+}
-+#else
-+static int expect_no_master_hup(int master)
-+{
-+	struct pollfd pfd = { .fd = master, .events = POLLIN | POLLOUT };
-+	int ret;
-+
-+	ret = poll(&pfd, 1, 0);
-+	if (ret < 0 || (pfd.revents & POLLHUP)) {
-+		ksft_print_msg("master poll returned %d (revents %#x)\n",
-+			       ret, pfd.revents);
-+		return -1;
-+	}
-+	return 0;
-+}
-+
-+static int expect_master_hup(int master)
-+{
-+	struct pollfd pfd = { .fd = master, .events = POLLIN | POLLOUT };
-+	int ret;
-+
-+	ret = poll(&pfd, 1, 0);
-+	if (ret != 1 || !(pfd.revents & POLLHUP)) {
-+		ksft_print_msg("master poll returned %d (revents %#x), expected HUP\n",
-+			       ret, pfd.revents);
-+		return -1;
-+	}
-+	return 0;
-+}
-+
-+static int expect_locked_peer_rejected(int master)
-+{
-+	int fd;
-+
-+	errno = 0;
-+	fd = ioctl(master, TIOCGPTPEER, O_RDWR | O_NOCTTY | O_CLOEXEC);
-+	if (fd >= 0) {
-+		ksft_print_msg("locked slave unexpectedly opened\n");
-+		close(fd);
-+		return -1;
-+	}
-+	if (errno != EIO) {
-+		ksft_print_msg("locked slave open returned errno %d, expected EIO\n",
-+			       errno);
-+		return -1;
-+	}
-+	return 0;
-+}
-+
-+static int transfer_byte(int master, int slave, char value)
-+{
-+	struct pollfd pfd = { .fd = master, .events = POLLIN };
-+	char received;
-+	ssize_t ret;
-+
-+	ret = write(slave, &value, 1);
-+	if (ret != 1) {
-+		ksft_print_msg("slave write returned %zd (errno %d)\n", ret, errno);
-+		return -1;
-+	}
-+
-+	ret = poll(&pfd, 1, 1000);
-+	if (ret != 1 || !(pfd.revents & POLLIN)) {
-+		ksft_print_msg("master poll returned %zd (revents %#x)\n",
-+			       ret, pfd.revents);
-+		return -1;
-+	}
-+
-+	ret = read(master, &received, 1);
-+	if (ret != 1 || received != value) {
-+		ksft_print_msg("master read returned %zd (value %#x)\n",
-+			       ret, ret == 1 ? (unsigned char)received : 0);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+int main(void)
-+{
-+	int master = -1, slave_a = -1, slave_b = -1;
-+	int locked = 1, unlocked = 0;
-+	int ret = KSFT_FAIL;
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	master = open("/dev/ptmx", O_RDWR | O_NOCTTY | O_CLOEXEC);
-+	if (master < 0) {
-+		ksft_print_msg("cannot open /dev/ptmx: %d\n", errno);
-+		goto out;
-+	}
-+	if (expect_no_master_hup(master) ||
-+	    expect_locked_peer_rejected(master) ||
-+	    expect_no_master_hup(master))
-+		goto out;
-+
-+	if (ioctl(master, TIOCSPTLCK, &unlocked) < 0) {
-+		ksft_print_msg("cannot unlock slave: %d\n", errno);
-+		goto out;
-+	}
-+	slave_a = ioctl(master, TIOCGPTPEER, O_RDWR | O_NOCTTY | O_CLOEXEC);
-+	if (slave_a < 0) {
-+		ksft_print_msg("cannot open slave A: %d\n", errno);
-+		goto out;
-+	}
-+	if (transfer_byte(master, slave_a, 'A'))
-+		goto out;
-+	if (ioctl(master, TIOCSPTLCK, &locked) < 0) {
-+		ksft_print_msg("cannot relock slave: %d\n", errno);
-+		goto out;
-+	}
-+	if (expect_locked_peer_rejected(master) ||
-+	    transfer_byte(master, slave_a, 'B'))
-+		goto out;
-+	if (ioctl(master, TIOCSPTLCK, &unlocked) < 0) {
-+		ksft_print_msg("cannot unlock slave: %d\n", errno);
-+		goto out;
-+	}
-+	slave_b = ioctl(master, TIOCGPTPEER, O_RDWR | O_NOCTTY | O_CLOEXEC);
-+	if (slave_b < 0) {
-+		ksft_print_msg("cannot open slave B: %d\n", errno);
-+		goto out;
-+	}
-+	if (transfer_byte(master, slave_a, 'C') ||
-+	    transfer_byte(master, slave_b, 'D'))
-+		goto out;
-+
-+	if (ioctl(master, TIOCSPTLCK, &locked) < 0) {
-+		ksft_print_msg("cannot relock slave: %d\n", errno);
-+		goto out;
-+	}
-+	if (transfer_byte(master, slave_a, 'E') ||
-+	    transfer_byte(master, slave_b, 'F'))
-+		goto out;
-+
-+	if (expect_locked_peer_rejected(master) ||
-+	    transfer_byte(master, slave_a, 'G') ||
-+	    transfer_byte(master, slave_b, 'H'))
-+		goto out;
-+	if (close(slave_b)) {
-+		ksft_print_msg("cannot close slave B: %d\n", errno);
-+		slave_b = -1;
-+		goto out;
-+	}
-+	slave_b = -1;
-+	if (expect_no_master_hup(master) ||
-+	    transfer_byte(master, slave_a, 'I'))
-+		goto out;
-+	if (close(slave_a)) {
-+		ksft_print_msg("cannot close slave A: %d\n", errno);
-+		slave_a = -1;
-+		goto out;
-+	}
-+	slave_a = -1;
-+	if (expect_master_hup(master))
-+		goto out;
-+	ret = KSFT_PASS;
-+
-+out:
-+	if (slave_b >= 0)
-+		close(slave_b);
-+	if (slave_a >= 0)
-+		close(slave_a);
-+	if (master >= 0)
-+		close(master);
-+	ksft_test_result(ret == KSFT_PASS,
-+			 "locked slave open preserves master and existing slave I/O\n");
-+	ksft_exit(ret == KSFT_PASS);
-+}
-+#endif
--- 
-2.50.1
+--=20
+Thanks,
+~Nick Desaulniers
