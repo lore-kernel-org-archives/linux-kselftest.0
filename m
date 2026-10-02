@@ -1,50 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002AE44065B;
-	Fri,  2 Oct 2026 08:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67ABC425CC0;
+	Fri,  2 Oct 2026 08:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790928628; cv=none; b=hLhbc+Nq4sX3lVCy8fBUBTytDOlequG/y9M2CaJXjICw5lt6qcy2mWDByKkf8+vq0/U6EwX9uZ5Y6knTapozQSmXljFv3jM1ib+wA9M8i/CkqYFSowZvTuIvBAk454qarDP4uXcm+yKHQKKKoNwsUXqSxMTgUqIPBrQzCJ2jVB0=
+	t=1790929124; cv=none; b=Y02QuEni5h8KGDGwDkojkJ57V5RL5rh8Mc1oMGpKfTZzZ/VoH/RQ25xw8wNi+owkKwcE4OXEoxJztyv3aMYzdEKXm/VKk/7MJ2iuksgnkowkqj3feo7VzYEB0z/7yoZ1BRLkBD/8IoFtMSgynarXwyFjHTEOstKzFIf1pyGJ9e0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790928628; c=relaxed/simple;
-	bh=/jWlfTYISWDRdwB70XBgz/0rZ6uagYb5mFQFGQi3k1g=;
+	s=arc-20240116; t=1790929124; c=relaxed/simple;
+	bh=CBS6JSjB0UZC8SssSvUKAHAc2GXcrOVu4GUnUPyBGhg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FWLHwkt/Nh6mtiOA6ynxM5G+ogwLmQOc3SRKgIk/7C/u2iDHUMNWPImKjDlOqmO5fQ6c8hQvKIn7hcndQkEE+as5ofFAEnT3WyOKLO+RgoqvMiWNs0zQi1/SmtSeWHuSfyw58Y043JkIAuxU3k4Y8HTaU41WRZUDk2XwqlH2mpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZkKfj52w; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=QgNmycOFNauHcy+v3svnPtkCLBZ6iJ3XODGajsYyVdXD15HdPYhj3iRAyAdpUqoVQtFmsmmzb512OPBPiMM0pegk3uK+WzILzBZBWKrZ1kOqGtXxaU8wI5/N2/BuTHdPQa5xMAORiIs1g4DtdgjtmtALS4JWUuFbV8j/twl3Cq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UK6jrH00; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZkKfj52w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CD511F000FF;
-	Fri,  2 Oct 2026 08:10:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UK6jrH00"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522631F000FF;
+	Fri,  2 Oct 2026 08:18:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790928623;
-	bh=BIHFM4YkUGLtT//ijgD4g07c9OxY00eHXMaA/kwG2nM=;
+	s=k20260515; t=1790929122;
+	bh=sptNDyqmlXmK1/4meQkZ0Gk1mM5t6HWPSQC9jCl7kpg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZkKfj52wi+HBtm4OSS7+TGHkipMV+dWZaiDRPkTP1OUg2cSZgWi236Wj6NYUE3zhP
-	 cE/wLWLsAeog8taVdUpM5sc8E4yCibHvboHgqOHxAEG+Y5Z/wzqywqWTkRHX1PX8RJ
-	 Y6MrqkaPJzwXRfn048jxdDXzNp00NQ6UuQjAuOmLFP1bfYlCjQ7TtK0Qzpq09+/X09
-	 mUlW0HPJX0OTnzNLrxPH7PlPg13Ld0kUi9GjYTFEQg80JgThJuOQqXg7k0VabrPqqj
-	 M9I4tH9JjiDYoMcnmK8F+JM777QiRIOEKoJxCdsUEHTj9cABRLPo4injcxApsYeJGY
-	 nLF4S21X/85NQ==
-Date: Fri, 2 Oct 2026 09:10:15 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Hajime Tazaki <thehajime@gmail.com>, johannes@sipsolutions.net, 
-	linux-mm@kvack.org, liam@infradead.org, rbm@suse.com, akpm@linux-foundation.org, 
-	luto@amacapital.net, brendan.jackman@linux.dev, liuhangbin@gmail.com, corbet@lwn.net, 
-	kees@kernel.org, broonie@kernel.org, mhocko@suse.com, rppt@kernel.org, 
-	shuah@kernel.org, surenb@google.com, vbabka@kernel.org, wad@chromium.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org, 
-	geert@linux-m68k.org, daniel@thingy.jp
-Subject: Re: [PATCH v4 1/2] selftests: run tests on nommu architecture
-Message-ID: <ar9ldn036SgT-bq1@gremlin>
-References: <20260929235711.2287931-1-thehajime@gmail.com>
- <20260929235711.2287931-2-thehajime@gmail.com>
- <bda5eeaa-7868-4d4a-9026-9e99347afd7c@kernel.org>
- <ar4br2vW7yZGd3gt@gremlin>
- <94759bed23f00d2044005e36be6f72f297e092f0.camel@sipsolutions.net>
- <m2se2o3jyc.wl-thehajime@gmail.com>
- <a65f4431-d225-4535-b921-00319ceeb2a2@kernel.org>
+	b=UK6jrH00Df4LQaMV+8HKaLesemGA9Aso9iWdTe5PapieS2cOaA97os33M5D7hv2Vv
+	 sTb/0j3Utjt8MgKBiwMMhel507fxJMLVL2gPjAclVQoypPvGvaSUBloiCHjVkSriYL
+	 VVpOTrETRDRlEkEFSD5MdFx1t9X1wWcQtkqbRko93z6X4Esf5VHClDsnXQ2KdiIvH1
+	 fHXciRk4vA+m8ixtC+m+Z1caDsWAf1oZb4PnJOQnh+2SUsLIWLZcELQo2UxjPYW1XA
+	 2D3CX5FuJ5oz9i/ghNQAtHTaZEtpJ5DuGZvrHefxkn3m2D+0omTdL/vXYEMKKg8CiX
+	 JrZPKBmQgiR5A==
+Date: Fri, 2 Oct 2026 10:18:35 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, surenb@google.com,
+	aarcange@redhat.com, david@kernel.org, ljs@kernel.org,
+	liam@infradead.org, vbabka@kernel.org, mhocko@suse.com,
+	shuah@kernel.org, kirill@shutemov.name, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] userfaultfd: clear the inherited uffd bit in
+ move_swap_pte()
+Message-ID: <ar9o2zVvUkMUxVzv@kernel.org>
+References: <20260926124145.2878520-1-donggeunyoo.kernel@gmail.com>
+ <20260926124145.2878520-2-donggeunyoo.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,94 +48,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a65f4431-d225-4535-b921-00319ceeb2a2@kernel.org>
+In-Reply-To: <20260926124145.2878520-2-donggeunyoo.kernel@gmail.com>
 
-On Fri, Oct 02, 2026 at 08:08:44AM +0200, David Hildenbrand (Arm) wrote:
-> On 10/2/26 04:38, Hajime Tazaki wrote:
-> >
-> > David, Lorenzo, Johannes,
-> >
-> > thanks for the comments and inputs.
-> >
-> > On Thu, 01 Oct 2026 19:01:45 +0900,
-> > Johannes Berg wrote:
-> >>>
-> >>> I thought maybe uname could help but our LLM overlords tell me no.
-> >>
-> >> Hajime originally wanted uname to indicate it, but that caused
-> >> regressions elsewhere, so we dropped that commit. I guess we could put
-> >> _something_ back?
-> >
-> > systemd uses uname information and our (old) patch changing the format
-> > triggered the regression.  thus, we dropped it.
-> >
-> >>> It pointed at something though.
-> >>>
-> >>> In fs/proc/meminfo.c:
-> >>>
-> >>> #ifndef CONFIG_MMU
-> >>> 	show_val_kb(m, "MmapCopy:       ",
-> >>> 		    (unsigned long)atomic_long_read(&mmap_pages_allocated));
-> >>> #endif
-> >>>
-> >>> So MmapCopy in /proc/meminfo tells us definitively, weirdly enough.
-> >>
-> >> Hyrum's law and all that, but I guess it's not highly likely to (want
-> >> to) change :)
-> >
-> > a runtime detection is nice.
-> >
-> > scanning /proc/meminfo might be useful. although it requires to mount
-> > procfs (we can actually skip procfs mount as it is optional) so, this
-> > is not 100% portable.
-> >
-> > checking ENOSYS like syscall(SYS_mprotect) might be useful but I
-> > wasn't sure if this is always the case of NOMMU or not.
-> >
->
-> I assume there are plenty of other mechanisms. Like testing if fork isn't allowed.
+On Sat, Sep 26, 2026 at 09:41:44PM +0900, Donggeun Yoo wrote:
+> UFFDIO_MOVE on a swapped-out page installs the source PTE at the
+> destination unchanged, so a uffd bit set on a write-protected or
+> RWP-protected source lands in a destination VMA that was never
+> registered for either.  Nothing clears it there, and userspace sees:
+> 
+>  - /proc/<pid>/pagemap reports the page as uffd-tracked (bit 57), both
+>    while it is swapped out and after it is faulted back in.
+>  - MADV_COLLAPSE fails with EINVAL on a range containing it, because the
+>    collapse scan bails on a swap entry with the uffd bit set.
+>  - With CONFIG_PAGE_TABLE_CHECK, faulting the page in warns.
+>    do_swap_page() carries the bit into the present PTE and, since the
+>    destination isn't WP-registered, also makes it writable:
+> 
+>    WARNING: mm/page_table_check.c:202 at __page_table_check_ptes_set+0x185/0x1e0
+>    Call Trace:
+>     set_ptes+0x67/0xc0
+>     do_swap_page+0x990/0xfe0
+>     __handle_mm_fault+0x7d0/0xeb0
+>     handle_mm_fault+0x9c/0x250
+>     do_user_addr_fault+0x207/0x650
+>     exc_page_fault+0x65/0x150
+>     asm_exc_page_fault+0x26/0x30
+> 
+> Reaching it takes UFFDIO_MOVE out of a WP- or RWP-protected area into
+> one that isn't, on a page that is swapped out at the time.  It hasn't
+> been seen in practice.
+> 
+> A resident page doesn't carry the bit, because move_present_ptes() builds
+> the destination PTE from dst_vma->vm_page_prot.  Clear it on the moved
+> swap entry as well, then re-arm it if the destination is RWP-registered.
+> 
+> The WP case has been there since v6.8, where UFFDIO_MOVE was added.
+> 
+> Fixes: adef440691ba ("userfaultfd: UFFDIO_MOVE uABI")
+> Cc: <stable@vger.kernel.org>
+> Assisted-by: LLM
+> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
 
-Yup that's an obvious candidate!
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-You actually need to check for both -EINVAL and -ENOSYS since, of course, we are
-inconsistent with this.
 
-Some nommu arches specify __ARCH_WANT_SYS_FORK unconditionally for both
-mmu/nommu variants meaning you get -EINVAL in that case:
+> ---
+>  mm/userfaultfd.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index 74f04c323c50f..f39f109f17989 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -1449,6 +1449,7 @@ static int move_swap_pte(struct mm_struct *mm, struct vm_area_struct *dst_vma,
+>  	orig_src_pte = ptep_get_and_clear(mm, src_addr, src_pte);
+>  	if (pgtable_supports_soft_dirty())
+>  		orig_src_pte = pte_swp_mksoft_dirty(orig_src_pte);
+> +	orig_src_pte = pte_swp_clear_uffd(orig_src_pte);
+>  	/* Re-arm RWP on the moved swap entry if dst_vma is RWP-registered. */
+>  	if (userfaultfd_rwp(dst_vma))
+>  		orig_src_pte = pte_swp_mkuffd(orig_src_pte);
+> -- 
+> 2.53.0
+> 
 
-https://elixir.bootlin.com/linux/v7.2.8/source/kernel/fork.c#L2830
-
-Otherwise you get -ENOSYS because it's not defined.
-
-But fork() -> -EINVAL or -ENOSYS = nommu, then just have the child quit and
-etc. should do it.
-
-But then that'd need some C... ah fun :)
-
-Crazy to me that we don't expose it in uname...
-
->
-> > My original attempt was to use include/generated/autoconf.h; with that
-> > we can omit environmental variable or command argument of NOMMU=1,
-> > but gave up with handling standalone build/test case which might miss
-> > the generated file (and complicate the patch only for the NOMMU
-> > detection).
-> >
-> > So, specifying NOMMU=1 is my previous, though dirty, conclusion.
-> Let's avoid making it harder on users by doing some runtime detection.
-
-Yeah it'd be preferable.
-
-I see a bunch of usage of procfs in selftests.
-
-So can we just please require that the selftests have the user mount /proc, then
-the /proc/meminfo grep is the easiest + quickest way.
-
->
-> --
-> Cheers,
->
-> David
-
---
-Cheers, Lorenzo
+-- 
+Sincerely yours,
+Mike.
