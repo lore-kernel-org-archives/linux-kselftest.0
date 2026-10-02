@@ -1,424 +1,136 @@
-Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.1.125])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E693EDE5C
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 06:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.204
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790923709; cv=pass; b=u40LimKqEgyJ24uOCoPz9QDZGslh7RMMKLqntWqF0bbA8HyqCPNfXlu/H0PXxtjdjnCHIKLX/I6q7oiEwMFg0iklZrHFObN6nj2u8piWnwRsI1qK+zfZdgHeGawVqQYnyy/sYcA2/NehI7Gj3476s1n1FNUPCvyyICqMA2RTT9k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790923709; c=relaxed/simple;
-	bh=Gn3DzN67gt8dqk+SVB2qqbya2F4alfWx+9qoC2ReG4M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YdRv1zVbJH0pFLuNFgvn3s97NktYjHmWhYMx9O2/rBsAClv1j4Nqf52Wzg5LgSminEFklpxDSZVxrAjoWytHeYk5BItuF/ZSvScCG92AUfSAyP1ulD0wJoi/Y0FY+OOrVgDC2DojOJFi+PKSUO1l6VYYGdCFsP05b90ZjnPPztM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault.org header.i=@brainfault.org header.b=eOCI8bJt; arc=pass smtp.client-ip=74.125.229.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7E843DEC6;
+	Fri,  2 Oct 2026 07:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.1.125
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790926465; cv=none; b=amkjYiYHW3DCLDIyKTUmXCMwGMWsqWbajf//YSIO7DWlmFIXitiQJhxYtyaf5oR2XzCzvg2uajjD9XtA/+tvsGP9fmwUL3aGs70gu12Hp/qhM5ESknDuFd+LrVeMtAu5V7LkPhA6Lqf730VX61N8wMpQVnKkj2eySzIvWQYa71Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790926465; c=relaxed/simple;
+	bh=m+LVU2zi0zSOvknT2CQZ4vuI1VWQtPXUViI/XoHlI50=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M+d5T2ds2YMHYPnnG7W7IdERmZlXmNQQ+UehJrh/xK4wXjCkJ9nGxbWgjSnerfezJT8yAQdIAHbMGCrveDPen6HBhs19LPtL554nbD4YYK9TGaw22bzHGzeH3XJiEbZWfRZzwGz6GRdL4YG+8yz8ScwvwUgrm4PBZFb8u4lqh10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=pWkW/SR5; arc=none smtp.client-ip=44.246.1.125
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault.org header.i=@brainfault.org header.b="eOCI8bJt"
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5ba31af701aso3157852e87.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 23:48:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790923705; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GrwyCLxT/VzCAgPj8Wke86QSUp2qQUKsYJB+m2w/Ren7orJZc2aUp/TtaW+4307uah
-         cC6QOtsCzDrc8vCoe472tycsEbSlpjLvbgWrQYqEgN7Uu1XaZ6LrYX3c2f/WKohwgoKQ
-         1SRrnGBpLvbCNtAzHeq9Dp3K6nPZrbW5ViU/NGbP9p/Ut5DoBfXoUs/FAZ4MKv1iigq1
-         9xFiIxqXC8W1AZqoRAl4XzQBE+vigePN9sHXU11OiDqaryIule09vnI8XtrLoLi4eZWq
-         5am3/m1h1ngHTPqDFfBb886WZDkqLsY9hsWZlxvGny54KUTy6YDxc8RRWOIZ55gCND/k
-         sdBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6lOPOZOlRG1U0jS9b5qGM2HS9CvZmsUPCrds2bv1Jqg=;
-        fh=AiD6bTnIV7Nv9gqOpLrGhrl7bxJWOaljqB24pQV006E=;
-        b=ZyzFWc2upJfogXpaW/lcqEl0Fq5xpenUwpB4Y3XVWQ82/DcZ3UZemdIxR5aPcRec4t
-         51mK6uJYwcpdXv6p2jgkrL29G7m/LDIoPWHDTLhvyyuCqWXzgCCosU/C3sN9Y42hJPDH
-         knkRE0URLzQzEZ3T85ONW1ULRDgNU4sTufS2YuIyPl7NspuhMF8o3opjW76bVYvANjOr
-         l2Dqi4M4+mFYQ0DrWyg4TtPmlY/f+3xYd5t3b/B/u3n6/3UqwJXax20WSSJuaDKKLZbA
-         f/d4Cjo59B1N1D5tVxb756EtfkvWj6bL7uYPbtTZbsc41FpOP+/2DZcOYY8dehM9cPrq
-         Hp1A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="pWkW/SR5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault.org; s=google; t=1790923705; x=1791528505; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6lOPOZOlRG1U0jS9b5qGM2HS9CvZmsUPCrds2bv1Jqg=;
-        b=eOCI8bJtmYiI0RA+xIEZoLqYERxqGMJ32hRPkuM54vMNze75RdiKwv6CywIhOCixqu
-         ob4wVFDUcIvA5za9Fgczqbgyztg4YBro+t+gm8ZaVJMT8G/NL6yxXXfMjrYpjjrn17FV
-         MrftiL0NkVFs3xuF1gSJARLGOwgWCn60Rw/H2HHp8D9QUQkNdW144HjBLdqzyVJl8ma0
-         /wprCCwlVEcNOgNpbkU8D0NJRxahjvIDnDTx5wNPtH5QzXhmSr7PrLIiR9UvHh17zfGe
-         nKWzqmoNFgJ3G2jT2teM9GGslw6/VnrJgYv3aAL1rQuzZBo+veuIHLXXvZ+4HeFrmvGz
-         9UAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790923705; x=1791528505;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6lOPOZOlRG1U0jS9b5qGM2HS9CvZmsUPCrds2bv1Jqg=;
-        b=fJBLpDmmE8uZfV+05ieW3jhQF+p6Yf7wFS+4EZYdK+PsN6YTRR+lXIK+srRP8Vjah3
-         PLZe8xCpqn/91KPKIutq0ucrrcskRYHWFuVm3Y6nHiqTzqLMuYZ88yprSjy+duXpMBff
-         uoOFIKdXeT1g35vRTmPbHxVoX2DTutKJzxxnN7F5NXIAqf0/eOKRHwsCdl9xInwsZZ+y
-         /CHxps2LJg5AvDMpn2dGCX3Nz5LS2nIC5qGAf2zyTv+pWsh7JFYdtULKu+z7HP5GbuoL
-         6+D/ugC//IUjJU/JG/rFtUMvVailCCCRvz7zA54uZw2Ifrh+CzV0Ov+n78hZlTSXQen7
-         DQ8Q==
-X-Forwarded-Encrypted: i=1; AKwUvBx/NNEGzm41IppFyzjt5iunPnczJoMgdeQ2pyI5Pf+livAT/YezLVwffH5aCu3b3DBQEmh64ecumB9PiVC40dw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLOVi7eSs8s+SaGpz4MB+jgfogyBkByeuY5QFh+0UE9KqW5fS9h
-	sLgPFeWUsMcUr6+bf9Uo1dTmWU/MyArgwmDDA3U773Ur/0CXgq0hTu6Y/RdfbvRzEXU74QMlIS8
-	COBhK/88q8eyNVYB86TbBptj2k02uprUVMTKWj/rr1Q==
-X-Gm-Gg: AYBFou2utWuJFmRSJ6JUcoEb47lrhuCcGPnIGaexhP2d/kSARgmMZGgHSqNu2zvzNa/
-	vPitpSqe0N0MqNLQ99Hf7q1oB/VZE87fVWK8Y4IFS0BRbd2rLdxOVrHXOlch3OumaeArU+0AmSi
-	6lpNx1XqUrjlijc8q5Y7taKSCago6AEgzpHVKc1Iukp3tgad6jImfj0/xgS4pXmZuZGTItNx6kG
-	B6bRj8ZRiG6jPIjZ9uyqd7YXKNrXFYRuMKVnUI/IXxCdwYFuHuL8fkfxkLtXDsw+JhnWcgM4KuV
-	RY1PUpWNPIvbRl+RpkD+0UX1sAnvxLdevuw0zc8nAM4+fBqbaEMgM2QiODnk0WXCqpRwlmUsZl/
-	KRshXVoCMbZVwJ+eHrp0Hrt6HYWf/lMCFiZsZ40ul4Q9Qa7nYr3vuGxuB6RZ0bZw5SrqrTobZEO
-	yu34pc4j0rkw==
-X-Received: by 2002:a05:6512:401d:b0:5b8:fa05:e49c with SMTP id
- 2adb3069b0e04-5bb9bb19500mr596734e87.34.1790923704845; Thu, 01 Oct 2026
- 23:48:24 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1790926463; x=1822462463;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Tpiacak94CnVvVjiQqt6BeZBKKqRNWtVDXJ5p2keyyY=;
+  b=pWkW/SR5o4ecfiiDnP7CK1rmOpiI1VeyVJ6JWRumilOAInAoMaI/m/F+
+   OEx9y8NDVUzFsmRn1Y0urdTZRVruBT+JKCIfohxUQoIF8PZUZ+zx50Cpr
+   DF4rTY2doqH2dq6PXt+krMhaO+c/CwDBtA3bIdYVgaVDXAtolsO186IdI
+   1iU3rsmUS92WZB3xOamZJTGvFsCEtIofPrb/HF1KEUtzWDbfYdv1CNLye
+   dPZll+uMcY0JB+gKg6XNPyC/SOInfqGxv2OPhrSIPh4l+sl8/5sbbST73
+   bAvDPwCSTCYUlD4bIi+c/1BbVcsaHeJZNEEt5ZMShZYxqj6PYmu2OJ1nz
+   Q==;
+X-CSE-ConnectionGUID: mQGoYcZMSYWiuYG0x9YIvQ==
+X-CSE-MsgGUID: yxmXURUMRpy+DovE+/uubw==
+X-IronPort-AV: E=Sophos;i="6.27,136,1787011200"; 
+   d="scan'208";a="30213323"
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 07:34:23 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:10260]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.164:2525] with esmtp (Farcaster)
+ id c36c8b8c-7ef4-4a34-8890-c411c7f7ff52; Fri, 2 Oct 2026 07:34:23 +0000 (UTC)
+X-Farcaster-Flow-ID: c36c8b8c-7ef4-4a34-8890-c411c7f7ff52
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Fri, 2 Oct 2026 07:34:23 +0000
+Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Fri, 2 Oct 2026 07:34:22 +0000
+From: Jay Wang <wanjay@amazon.com>
+To: <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+	<memxor@gmail.com>
+CC: <alan.maguire@oracle.com>, <martin.lau@linux.dev>,
+	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <qmo@kernel.org>,
+	<nathan@kernel.org>, <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
+	<linux@weissschuh.net>, <christian@heusel.eu>, <mcgrof@kernel.org>,
+	<petr.pavlu@suse.com>, <samitolvanen@google.com>,
+	<linux-modules@vger.kernel.org>, <rostedt@goodmis.org>,
+	<mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<linux-trace-kernel@vger.kernel.org>, <acme@kernel.org>,
+	<namhyung@kernel.org>, <irogers@google.com>,
+	<linux-perf-users@vger.kernel.org>, <jikos@kernel.org>, <bentiss@kernel.org>,
+	<linux-input@vger.kernel.org>, <tj@kernel.org>, <void@manifault.com>,
+	<arighi@nvidia.com>, <changwoo@igalia.com>, <sched-ext@lists.linux.dev>,
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ojeda@kernel.org>,
+	<rust-for-linux@vger.kernel.org>, <arnd@arndb.de>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<abuehaze@amazon.com>, <doebel@amazon.de>, <mpohlack@amazon.de>,
+	<jay.wang.upstream@gmail.com>
+Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
+Date: Fri, 2 Oct 2026 07:34:22 +0000
+Message-ID: <20261002073422.14253-1-wanjay@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
+References: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260904175550.430266-1-dongli.zhang@oracle.com> <20260904175550.430266-2-dongli.zhang@oracle.com>
-In-Reply-To: <20260904175550.430266-2-dongli.zhang@oracle.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Fri, 2 Oct 2026 12:18:11 +0530
-X-Gm-Features: AclHuK8jni4c7kFYNY1Z67Q0WeqgvibrlMJVROVFG2iQbTyVsq4GtRVUGzMalTs
-Message-ID: <CAAhSdy2oKW8SDKd5ax8Tw3Wr-i8_x+i2WviK_9r6+HsG-83FYw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] KVM: Move last_steal to common struct kvm_vcpu
-To: Dongli Zhang <dongli.zhang@oracle.com>
-Cc: kvm@vger.kernel.org, kvmarm@lists.linux.dev, loongarch@lists.linux.dev, 
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	maz@kernel.org, oupton@kernel.org, fuad.tabba@linux.dev, joey.gouly@arm.com, 
-	seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	zhaotianrui@loongson.cn, maobibo@loongson.cn, chenhuacai@kernel.org, 
-	atish.patra@linux.dev, seanjc@google.com, pbonzini@redhat.com, 
-	shuah@kernel.org, dwmw2@infradead.org, joe.jin@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Fri, Sep 4, 2026 at 11:26=E2=80=AFPM Dongli Zhang <dongli.zhang@oracle.c=
-om> wrote:
->
-> KVM caches per-vCPU host task's run_delay in per-architecture struct
-> kvm_vcpu_arch at last_steal.
->
-> Move the cache to struct kvm_vcpu and convert x86, arm64, riscv, and
-> loongarch to use the common field.
->
-> Add HAVE_KVM_PV_STEAL_TIME so last_steal is used only for architectures
-> that implement KVM stealtime.
->
-> Suggested-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+> A question I had: is it really worth 2k of complicated kernel code to
+> *maybe sometimes* save <10Mb of memory?
 
-For KVM RISC-V:
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Acked-by: Anup Patel <anup@brainfault.org>
+There are many reasons this is worth it.  The main ones:
 
-Thanks,
-Anup
+1. This did not start from a number we picked, but from a real use
+   case: users who run large fleets of small instances, 1 GiB of
+   memory or less, with their workloads sized to fit.  We are not able
+   to disclose more detail, but for them 5.4 MB on every instance is
+   real money, and it can be exactly what pushes a workload over its
+   memory budget and onto the next instance size.  That is why we took
+   this on, even though we knew it would not be a small change.
+
+2. Loading code and data only when a system needs them is what kernel
+   modules exist for.  And most of them take well under ~1 MB once
+   loaded (nf_conntrack, overlay, vfat); even big ones like ext4, kvm
+   and btrfs stay around 1-2.5 MB.  The vmlinux BTF is 5.4 MB.
+
+3. We are not alone in trying to keep BTF out of memory until it is
+   needed.  The inline BTF work [1] plans to deliver its data, which
+   is even larger, through a module too.  The .BTF.link record and the
+   resolve_btfids option that serve both are already part of this
+   series (patch 10), so this is not machinery for the vmlinux BTF
+   alone.
+
+> Do those tiny VMs that you target run systemd with BPF LSM?
+
+Not necessarily, and that is the image's choice.  Even with BPF LSM
+built in and bpf in CONFIG_LSM, memory-conscious users can turn it off
+at boot with an lsm= list that leaves it out, and then systemd does not
+load restrict_fs at all.
+
+And even where user space is in the way, which as above it does not
+have to be, the answer is to fix user space so it gets this win too,
+not to give up on it.
+
+> If the answer is "yes" for the majority of them,
+
+"The majority" is also hard to pin down here: what runs at boot
+depends on the user space packages built into each image, and on the
+workload.
+
+So the question should be what it takes to make this work, not whether
+to drop it because it is complicated.  If there are ways to cut it
+down, or issues found in the implementation, we would be happy to take
+them and go through every one.
 
 
-> ---
-> Marc suggested reusing CONFIG_HAVE_PV_STEAL_CLOCK_GEN, but I introduced
-> HAVE_KVM_PV_STEAL_TIME instead.
->
-> As I have access to only x86 and arm64 KVM hosts, I created and validated
-> the selftest on those two architectures only.
->
->  arch/arm64/include/asm/kvm_host.h     |  1 -
->  arch/arm64/kvm/Kconfig                |  1 +
->  arch/arm64/kvm/pvtime.c               |  8 ++++----
->  arch/loongarch/include/asm/kvm_host.h |  1 -
->  arch/loongarch/kvm/Kconfig            |  1 +
->  arch/loongarch/kvm/exit.c             |  2 +-
->  arch/loongarch/kvm/vcpu.c             |  6 +++---
->  arch/riscv/include/asm/kvm_host.h     |  1 -
->  arch/riscv/kvm/Kconfig                |  1 +
->  arch/riscv/kvm/vcpu_sbi_sta.c         | 10 +++++-----
->  arch/x86/include/asm/kvm_host.h       |  1 -
->  arch/x86/kvm/Kconfig                  |  1 +
->  arch/x86/kvm/x86.c                    |  5 ++---
->  include/linux/kvm_host.h              |  4 ++++
->  virt/kvm/Kconfig                      |  3 +++
->  15 files changed, 26 insertions(+), 20 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/k=
-vm_host.h
-> index 27fe0cd5b2d7..36cb7dee988c 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -937,7 +937,6 @@ struct kvm_vcpu_arch {
->
->         /* Guest PV state */
->         struct {
-> -               u64 last_steal;
->                 gpa_t base;
->         } steal;
->
-> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-> index 449154f9a485..f5855bfc681c 100644
-> --- a/arch/arm64/kvm/Kconfig
-> +++ b/arch/arm64/kvm/Kconfig
-> @@ -34,6 +34,7 @@ menuconfig KVM
->         select HAVE_KVM_IRQ_BYPASS
->         select HAVE_KVM_READONLY_MEM
->         select HAVE_KVM_VCPU_RUN_PID_CHANGE
-> +       select HAVE_KVM_PV_STEAL_TIME
->         select SCHED_INFO
->         select GUEST_PERF_EVENTS if PERF_EVENTS
->         select KVM_GUEST_MEMFD
-> diff --git a/arch/arm64/kvm/pvtime.c b/arch/arm64/kvm/pvtime.c
-> index 4ceabaa4c30b..a67d93845d79 100644
-> --- a/arch/arm64/kvm/pvtime.c
-> +++ b/arch/arm64/kvm/pvtime.c
-> @@ -14,7 +14,7 @@ void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
->  {
->         struct kvm *kvm =3D vcpu->kvm;
->         u64 base =3D vcpu->arch.steal.base;
-> -       u64 last_steal =3D vcpu->arch.steal.last_steal;
-> +       u64 last_steal =3D vcpu->last_steal;
->         u64 offset =3D offsetof(struct pvclock_vcpu_stolen_time, stolen_t=
-ime);
->         u64 steal =3D 0;
->         int idx;
-> @@ -25,8 +25,8 @@ void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
->         idx =3D srcu_read_lock(&kvm->srcu);
->         if (!kvm_get_guest(kvm, base + offset, steal)) {
->                 steal =3D le64_to_cpu(steal);
-> -               vcpu->arch.steal.last_steal =3D READ_ONCE(current->sched_=
-info.run_delay);
-> -               steal +=3D vcpu->arch.steal.last_steal - last_steal;
-> +               vcpu->last_steal =3D READ_ONCE(current->sched_info.run_de=
-lay);
-> +               steal +=3D vcpu->last_steal - last_steal;
->                 kvm_put_guest(kvm, base + offset, cpu_to_le64(steal));
->         }
->         srcu_read_unlock(&kvm->srcu, idx);
-> @@ -61,7 +61,7 @@ gpa_t kvm_init_stolen_time(struct kvm_vcpu *vcpu)
->          * Start counting stolen time from the time the guest requests
->          * the feature enabled.
->          */
-> -       vcpu->arch.steal.last_steal =3D current->sched_info.run_delay;
-> +       vcpu->last_steal =3D current->sched_info.run_delay;
->         kvm_write_guest_lock(kvm, base, &init_values, sizeof(init_values)=
-);
->
->         return base;
-> diff --git a/arch/loongarch/include/asm/kvm_host.h b/arch/loongarch/inclu=
-de/asm/kvm_host.h
-> index 23cfbecebbd7..14514a25b261 100644
-> --- a/arch/loongarch/include/asm/kvm_host.h
-> +++ b/arch/loongarch/include/asm/kvm_host.h
-> @@ -253,7 +253,6 @@ struct kvm_vcpu_arch {
->         /* paravirt steal time */
->         struct {
->                 u64 guest_addr;
-> -               u64 last_steal;
->                 struct gfn_to_hva_cache cache;
->                 u8  preempted;
->         } st;
-> diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
-> index 15da2d88c0c1..4996ec9c07f9 100644
-> --- a/arch/loongarch/kvm/Kconfig
-> +++ b/arch/loongarch/kvm/Kconfig
-> @@ -26,6 +26,7 @@ config KVM
->         select HAVE_KVM_MSI
->         select HAVE_KVM_READONLY_MEM
->         select KVM_COMMON
-> +       select HAVE_KVM_PV_STEAL_TIME
->         select KVM_GENERIC_DIRTYLOG_READ_PROTECT
->         select KVM_GENERIC_HARDWARE_ENABLING
->         select KVM_MMIO
-> diff --git a/arch/loongarch/kvm/exit.c b/arch/loongarch/kvm/exit.c
-> index 4f58e6e2cf86..56ae6b18f8c1 100644
-> --- a/arch/loongarch/kvm/exit.c
-> +++ b/arch/loongarch/kvm/exit.c
-> @@ -773,7 +773,7 @@ static long kvm_save_notify(struct kvm_vcpu *vcpu)
->                 if (!(data & KVM_STEAL_PHYS_VALID))
->                         return 0;
->
-> -               vcpu->arch.st.last_steal =3D current->sched_info.run_dela=
-y;
-> +               vcpu->last_steal =3D current->sched_info.run_delay;
->                 kvm_make_request(KVM_REQ_STEAL_UPDATE, vcpu);
->                 return 0;
->         default:
-> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
-> index ed9e092c97ba..728d29eba8e0 100644
-> --- a/arch/loongarch/kvm/vcpu.c
-> +++ b/arch/loongarch/kvm/vcpu.c
-> @@ -187,8 +187,8 @@ static void kvm_update_stolen_time(struct kvm_vcpu *v=
-cpu)
->         smp_wmb();
->
->         unsafe_get_user(steal, &st->steal, out);
-> -       steal +=3D current->sched_info.run_delay - vcpu->arch.st.last_ste=
-al;
-> -       vcpu->arch.st.last_steal =3D current->sched_info.run_delay;
-> +       steal +=3D current->sched_info.run_delay - vcpu->last_steal;
-> +       vcpu->last_steal =3D current->sched_info.run_delay;
->         unsafe_put_user(steal, &st->steal, out);
->
->         smp_wmb();
-> @@ -1205,7 +1205,7 @@ static int kvm_loongarch_pvtime_set_attr(struct kvm=
-_vcpu *vcpu,
->
->         if (!ret) {
->                 vcpu->arch.st.guest_addr =3D gpa;
-> -               vcpu->arch.st.last_steal =3D current->sched_info.run_dela=
-y;
-> +               vcpu->last_steal =3D current->sched_info.run_delay;
->                 kvm_make_request(KVM_REQ_STEAL_UPDATE, vcpu);
->         }
->
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/k=
-vm_host.h
-> index a30600579231..305875301c04 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -273,7 +273,6 @@ struct kvm_vcpu_arch {
->         /* SBI steal-time accounting */
->         struct {
->                 gpa_t shmem;
-> -               u64 last_steal;
->         } sta;
->  };
->
-> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
-> index ec2cee0a39e0..1ff07a904a02 100644
-> --- a/arch/riscv/kvm/Kconfig
-> +++ b/arch/riscv/kvm/Kconfig
-> @@ -26,6 +26,7 @@ config KVM
->         select HAVE_KVM_READONLY_MEM
->         select HAVE_KVM_DIRTY_RING_ACQ_REL
->         select KVM_COMMON
-> +       select HAVE_KVM_PV_STEAL_TIME
->         select KVM_GENERIC_DIRTYLOG_READ_PROTECT
->         select KVM_GENERIC_HARDWARE_ENABLING
->         select KVM_MMIO
-> diff --git a/arch/riscv/kvm/vcpu_sbi_sta.c b/arch/riscv/kvm/vcpu_sbi_sta.=
-c
-> index 60e50296a008..9a77d3bde7c7 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_sta.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_sta.c
-> @@ -19,13 +19,13 @@
->  static void kvm_riscv_vcpu_sbi_sta_reset(struct kvm_vcpu *vcpu)
->  {
->         vcpu->arch.sta.shmem =3D INVALID_GPA;
-> -       vcpu->arch.sta.last_steal =3D 0;
-> +       vcpu->last_steal =3D 0;
->  }
->
->  void kvm_riscv_vcpu_record_steal_time(struct kvm_vcpu *vcpu)
->  {
->         gpa_t shmem =3D vcpu->arch.sta.shmem;
-> -       u64 last_steal =3D vcpu->arch.sta.last_steal;
-> +       u64 last_steal =3D vcpu->last_steal;
->         __le32 __user *sequence_ptr;
->         __le64 __user *steal_ptr;
->         __le32 sequence_le;
-> @@ -67,8 +67,8 @@ void kvm_riscv_vcpu_record_steal_time(struct kvm_vcpu *=
-vcpu)
->
->         if (!WARN_ON(get_user(steal_le, steal_ptr))) {
->                 steal =3D le64_to_cpu(steal_le);
-> -               vcpu->arch.sta.last_steal =3D READ_ONCE(current->sched_in=
-fo.run_delay);
-> -               steal +=3D vcpu->arch.sta.last_steal - last_steal;
-> +               vcpu->last_steal =3D READ_ONCE(current->sched_info.run_de=
-lay);
-> +               steal +=3D vcpu->last_steal - last_steal;
->                 WARN_ON(put_user(cpu_to_le64(steal), steal_ptr));
->         }
->
-> @@ -115,7 +115,7 @@ static int kvm_sbi_sta_steal_time_set_shmem(struct kv=
-m_vcpu *vcpu)
->                 return SBI_ERR_INVALID_ADDRESS;
->
->         vcpu->arch.sta.shmem =3D shmem;
-> -       vcpu->arch.sta.last_steal =3D current->sched_info.run_delay;
-> +       vcpu->last_steal =3D current->sched_info.run_delay;
->
->         return 0;
->  }
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_h=
-ost.h
-> index 683bb8bf43a9..ebdd8526ae12 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -872,7 +872,6 @@ struct kvm_vcpu_arch {
->         struct {
->                 u8 preempted;
->                 u64 msr_val;
-> -               u64 last_steal;
->                 struct gfn_to_hva_cache cache;
->         } st;
->
-> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> index 538ed1e80332..b2aea8058841 100644
-> --- a/arch/x86/kvm/Kconfig
-> +++ b/arch/x86/kvm/Kconfig
-> @@ -40,6 +40,7 @@ config KVM_X86
->         select HAVE_KVM_MSI
->         select HAVE_KVM_CPU_RELAX_INTERCEPT
->         select HAVE_KVM_NO_POLL
-> +       select HAVE_KVM_PV_STEAL_TIME
->         select VIRT_XFER_TO_GUEST_WORK
->         select KVM_GENERIC_DIRTYLOG_READ_PROTECT
->         select KVM_VFIO
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 79468ddfe473..927c8b1ed83d 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -2129,9 +2129,8 @@ static void record_steal_time(struct kvm_vcpu *vcpu=
-)
->         smp_wmb();
->
->         unsafe_get_user(steal, &st->steal, out);
-> -       steal +=3D current->sched_info.run_delay -
-> -               vcpu->arch.st.last_steal;
-> -       vcpu->arch.st.last_steal =3D current->sched_info.run_delay;
-> +       steal +=3D current->sched_info.run_delay - vcpu->last_steal;
-> +       vcpu->last_steal =3D current->sched_info.run_delay;
->         unsafe_put_user(steal, &st->steal, out);
->
->         version +=3D 1;
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 03bfc92864b6..ff9d423b6a7c 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -398,6 +398,10 @@ struct kvm_vcpu {
->          */
->         struct kvm_memory_slot *last_used_slot;
->         u64 last_used_slot_gen;
-> +
-> +#ifdef CONFIG_HAVE_KVM_PV_STEAL_TIME
-> +       u64 last_steal;
-> +#endif
->  };
->
->  /*
-> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-> index c3c0ee253fc7..f42a3a0fc5ba 100644
-> --- a/virt/kvm/Kconfig
-> +++ b/virt/kvm/Kconfig
-> @@ -82,6 +82,9 @@ config HAVE_KVM_IRQ_BYPASS
->  config HAVE_KVM_VCPU_RUN_PID_CHANGE
->         bool
->
-> +config HAVE_KVM_PV_STEAL_TIME
-> +       bool
-> +
->  config HAVE_KVM_NO_POLL
->         bool
->
-> --
-> 2.43.7
->
+[1] https://lore.kernel.org/bpf/20260916074118.1007116-1-alan.maguire@oracle.com/
