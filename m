@@ -1,154 +1,237 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mta0.migadu.com (out-81.mta0.migadu.com [91.218.175.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C42D44065B
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 20:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790973782; cv=pass; b=gEH+QmbKWoxMEHLBkWdGG3tnBmI98CewAfY4vKOwoQz2vdT5xzecuYOOubJQ7j+GN/9wdM22//2E4kk5hmr6xvXszWORQgIu+8WvUq5IJNtQz/S29jG/lswu1i8R9hFb8lReJ+uzM7Q37bdgBBd8sS7DwBwSatvHCDj1x80iV34=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790973782; c=relaxed/simple;
-	bh=O0oErUdvCGd0lNeKXzKbX7E7eK5xVZTCX98mTa3dJ6g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P+A/zj5OHifeQhDtkG1KlrQfEZAdjl8M9E54JfqxRJLibuUCLMYZaKzBjQRZytzNMq9oWzKKZSORDKOOY+nC3I8AwLI9akukyNTF52ZKfKtkAEaeGS8He7Ca51E6W01TTULGBShNXNMFfKZMnZYo1YhBPZgU7PtH54WH8uuNiBk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d2FArZdd; arc=pass smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0B03A901F
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2026 20:58:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.81
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790974707; cv=none; b=Scy/keijPh4KVeRenKttv4TKdHVye9rE0Xfnw9tPk1N7rB6SLj7L9gH+UyT9xnVHeUgS7nVP9ow5eVc0/QovLq7zbVSIvZc7W+QUn3iaEoRgC6kavntCtB/R/wqRY7znxMN0uFXA4h8dd8IC9Nx/2d/PSmV4pK0iMQp2uROup3o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790974707; c=relaxed/simple;
+	bh=cyE7xCmOBBATCOr27hlaYfNiIVy0ZG/W7o34fqS3PW0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dQx82StFiroAdBR00gE3nPj9OTaefM6l3TpNt7laZCvaUbW0oqfI3UvXMepcLGDDbIYjEr00VM+6FEE4hAbJOF2iElULznJHCX0/OGu+Pm0HJe+Z+JIseDCb5+3S5jbD3p2LSPQtiByu+KhhDaFdFcUywaScms6FnjcbeucezbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ax+vZviq; arc=none smtp.client-ip=91.218.175.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d2FArZdd"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd5462b69so1645305e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 13:42:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790973777; cv=none;
-        d=google.com; s=arc-20260327;
-        b=MHNdafkVq2CdBGlbLPOx+BO+///1IkUzWb/bxdrrC36eoFmvNd3uvco8ZFxpJXGKp8
-         OVLc5xF0r/yeCd+A/UlhuwDjaSBXzMg6q+ClolVuJmzH5tMGVnQ07w2ZHRq77M2E9E71
-         3Ja7FcjFnN6esDfWQX19+4TRixNDWiCE9Bk0RA2BhmyKYBJ9S287wnvFlPIvpuhFkexX
-         bVYsxUfKOEPKvnUJbkwNw5/e6Jx0Wg1R/YMgKBaFK3s38OjrlN7f0GlXwROK5blvVDlv
-         T+IN22akIYPqW+WKhl3zXbxIJqkRfNe4/0ZrFNxRYLULJzo8/jEbFdLm3SDftOkU57xd
-         iWYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2B52yACNSq43ABlpVzKEc+uObRnusBAROE8TzluhGEQ=;
-        fh=NRO4g2vs0h1QYgyODu9p4/4zwK498ZG+0zGNOokHv8Q=;
-        b=mv0+oM/93U6GaSKzD0AiNq5K0IaEDgjZdKdn4/+qm2YWE5+pDQqomDUq9ioSTNh4V+
-         xAmPMINZiMTerb2LZQmLx9U4jHCirpR6dYxKi5yLvZ/MtCbkt8tN/8TrQpiR3sDe9pmW
-         oFtHtwz1c/IgWeQhp8KRo6HCGmunAUpRGI9AArYrKMM/3aHvHjmin87T4GIVoacmJjnT
-         FKeYwB/XygKXeuCRnVW6nC/OtWSoerFXchWirUMIu17NDupl0rSNzkVODbpjlczRjTNO
-         /54koRnxIcNQLjUS/MKIl6sQMKML5FegN2fZYxKWtzQukysfUIkXyN4Cd/NhB5Btjy1y
-         7/iA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790973777; x=1791578577; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2B52yACNSq43ABlpVzKEc+uObRnusBAROE8TzluhGEQ=;
-        b=d2FArZddCvzzX4kGFZD/GcsWkEm07K7qUaqAHzs+JQ10c03/DY8JrDKmqEl2fDAm80
-         z4oetGdhgfPtqX2Stf6uHwFmPns7GrbyueX6EsLB776UJA8Qe5yuzuD1tNqXjzvbN078
-         QrTH0k6apZxgd7FYmnS9sZiF1Z7MN9Hfkn2KdewBCUv6VSn/8Ci4Wadvd2nhSRlGQdK3
-         zuQmg8BYUdnNkeD82XjrE7tGoQqVBrted1FgefCdh+9kdZTfu3be2bWn1ajYFznwtEjy
-         40teb/pvgeLJn9lxQ+wr8qKnEEX0xZeIT0oWmWUOo8oXCPPrzoD7jB1AxJt2ZSi7Zz58
-         a1MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790973777; x=1791578577;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2B52yACNSq43ABlpVzKEc+uObRnusBAROE8TzluhGEQ=;
-        b=Ft198EmxaZexudS7xyaDbr1wHs5VkKASstONpmsCRN3InyP4+LhR0ltiRlVZiqfXw2
-         5gNxPshXIoDb4XxbbG5GlPskdLXw0CeQpkifkT0st0fiFNeePCleGfqKEGKncah9hAcc
-         jPDGUIgZ7tkrxC2A9xy4x1xaPHbRXAWpdqZcvv7UUwIDpGA6B+nKdRU/1ieAZW8K8zf7
-         xTojRJR6INAxbgrXEze+OEReZzFxECu1gEQ8OqFdSzghp73iw474Vghmgy8uGHun0goN
-         xn/UPiBEogJGIbBJhpLct16AmMrmdIc+WvsxFrOZu8f48WRxUsPYiSniwgMG4iWHpJ5z
-         KdTw==
-X-Forwarded-Encrypted: i=1; AKwUvBycDKFuCMo3nd63RKffGB7HFU/gwcvC2fGKcE6TLZJariaHue691NaRhSoe0bvV5R1ZQTnDZ6UBYlXOJPIuYzs=@vger.kernel.org
-X-Gm-Message-State: AFuF++m/MgD43iri9WDmo+R93KFqccHb8ASqCkafCj74NOhvofXwG5Gj
-	GZVPD5W4Lk3N4KOSUkZQiIQtWkzn5diqfLHIgxUPRZKjdGBmYgr2OfdZ8GVH0BWmKRKetc73u1R
-	h++vVgCc8OeTzuAtDYjcUz3Xp0/OchYfhL/0r/lsLDgrxS1RU7Tpy1TYh
-X-Gm-Gg: AYBFou0c7n3PMJ6h1sN2vDFWBnNw5B86uuQEKeUkTvWYwELvYmj0PANj/Hn0XTrVH2M
-	kk3BhnX++TL0xK3POSTxuHtb2kfMv1VnqwEYJo5wP6DiMJ+MIVlbO/VjzJJJr++rHnPO8Yfygh+
-	JgWUsep1R5CzxQmyK+8hyGmEkRKWuNK6TXWzfjhI03+ytVFfNuCKIlWBVwMDLpPDXqevi7zWwCf
-	e4gXzAi6j26ucHxB4ZNeLyhe2EGrBYyB6VvdV2Xs2ZN6PixGGnIC1Bg69vXIhagNbG1oSOg6alX
-	PO+DpM/ltYhwDF3aUgkcerljc0P63gX4QMf4TcbkOEWzJ2V8pO5VK32Jdn53mc8ApwKaEadRZ8s
-	6LuV/HGxAxLYDmQWI+s/wRJ+3MG+1cebl81k6G52KwmkCAV8ZflueF8sFdhI9UemmSToGXw==
-X-Received: by 2002:a05:600c:a011:b0:49f:ce78:356f with SMTP id
- 5b1f17b1804b1-4a0276b869fmr57980835e9.32.1790973776781; Fri, 02 Oct 2026
- 13:42:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ax+vZviq"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=cyE7xCmOBBATCOr27hlaYfNiIVy0ZG/W7o34fqS3PW0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790974701; v=1; x=1791579501;
+ b=ax+vZviqSRu1XPDQEGrAVT+HGPvUUq/pOwLuAN59kN0XrzQ0GMdPmtqRWmTKqVzKLzBFj5Ar
+ VG1+QumlCqDH0np/SydZbLM0hXAuBSkFKaLCyQbsm1jdTGV5zx+j/MyZ/bTFOv3Nuf3mCl8oU/r
+ diH3WnacJGosTjeavKbQZdXQ=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 16a5b7b703a7aea2;
+	Fri, 02 Oct 2026 20:58:20 +0000
+X-Mizu-Trace-ID: 16a5b7b703a7aea2
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
+Date: Fri, 2 Oct 2026 13:58:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261002-maintainers-stackinit-v1-1-27112a221527@google.com>
-In-Reply-To: <20261002-maintainers-stackinit-v1-1-27112a221527@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 2 Oct 2026 13:42:45 -0700
-X-Gm-Features: AclHuK9GtaEMxub0C4cC2iFOReeGZtM2r5F_DDQMeKZ3U6WaUokmOoRrco02awg
-Message-ID: <CAKwvOdkjLkKb1503q6HOnJG5ps3iZ3GdTxP5B6rOSPEfkJ-PBg@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add stackinit KUnit test to HARDENING
-To: Justin Stitt <justinstitt@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>, Bill Wendling <morbo@google.com>, 
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand
+ loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
+To: Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: alan.maguire@oracle.com, martin.lau@linux.dev, yonghong.song@linux.dev,
+ jolsa@kernel.org, qmo@kernel.org, nathan@kernel.org, nsc@kernel.org,
+ linux-kbuild@vger.kernel.org, linux@weissschuh.net, christian@heusel.eu,
+ mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com,
+ linux-modules@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org,
+ acme@kernel.org, namhyung@kernel.org, irogers@google.com,
+ linux-perf-users@vger.kernel.org, jikos@kernel.org, bentiss@kernel.org,
+ linux-input@vger.kernel.org, tj@kernel.org, void@manifault.com,
+ arighi@nvidia.com, changwoo@igalia.com, sched-ext@lists.linux.dev,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ojeda@kernel.org,
+ rust-for-linux@vger.kernel.org, arnd@arndb.de, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, abuehaze@amazon.com, doebel@amazon.de,
+ mpohlack@amazon.de, jay.wang.upstream@gmail.com
+References: <596bfb65-db2d-413b-8039-c921031b50fd@linux.dev>
+ <20261002073422.14253-1-wanjay@amazon.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20261002073422.14253-1-wanjay@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 2, 2026 at 12:27=E2=80=AFPM Justin Stitt <justinstitt@google.co=
-m> wrote:
->
-> From: Justin Stitt <justinstitt@google.com>
->
-> Noticed while preparing a patch to lib/tests/stackinit_kunit.c: the file
-> is not listed in MAINTAINERS, so get_maintainer.pl does not suggest Kees
-> or linux-hardening for changes to it, only the catch-all list.
->
-> before:
->   $ ./scripts/get_maintainer.pl -f lib/tests/stackinit_kunit.c
->   linux-kernel@vger.kernel.org (open list)
->
-> after:
->   $ ./scripts/get_maintainer.pl -f lib/tests/stackinit_kunit.c
->   Kees Cook <kees@kernel.org> (maintainer:KERNEL HARDENING
->   "Gustavo A. R. Silva" <gustavoars@kernel.org> (reviewer:KERNEL HARDENIN=
-G
->   linux-hardening@vger.kernel.org (open list:KERNEL HARDENING
->   linux-kernel@vger.kernel.org (open list)
->
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+Hi Jay, thank you for taking the time to reply.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+On 2026-10-02 12:34 a.m., Jay Wang wrote:
+>> A question I had: is it really worth 2k of complicated kernel code to
+>> *maybe sometimes* save <10Mb of memory?
+> 
+> There are many reasons this is worth it.  The main ones:
+> 
+> 1. This did not start from a number we picked, but from a real use
+>     case: users who run large fleets of small instances, 1 GiB of
+>     memory or less, with their workloads sized to fit.  We are not able
+>     to disclose more detail, but for them 5.4 MB on every instance is
+>     real money, and it can be exactly what pushes a workload over its
+>     memory budget and onto the next instance size.  That is why we took
+>     this on, even though we knew it would not be a small change.
 
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4f72b4ac27ee..019f443af051 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14164,6 +14164,7 @@ F:      include/linux/ucopysize.h
->  F:     kernel/configs/hardening.config
->  F:     kernel/kstack_erase.c
->  F:     lib/tests/randstruct_kunit.c
-> +F:     lib/tests/stackinit_kunit.c
->  F:     lib/tests/usercopy_kunit.c
->  F:     mm/usercopy.c
->  F:     scripts/Makefile.kstack_erase
->
-> ---
-> base-commit: 5e0f8396d4805a3e7f753fa58c8c55f1f3cc2160
-> change-id: 20261002-maintainers-stackinit-230afe234e5a
->
-> Best regards,
-> --
-> Justin Stitt <justinstitt@google.com>
->
+Ok, good to know there is a real customer for this.
 
+Obviously I don't know any details of the use-case apart from what
+you've shared. But bear with me trying the customer's hat on:
 
---=20
-Thanks,
-~Nick Desaulniers
+   - I am running a workload on a legion of 1GiB instances
+   - I care about memory footprint a lot, because it directly
+     translates into the amount of compute I pay for
+   - If I know I don't need BPF on the workload, and these 5.4 MB
+     bite me, I can just turn off BPF
+   - If I know I need BPF, then those 5.4 MB must be loaded anyways, so
+     I have to look for savings elsewhere
+
+What I find strange is for a user of this scale *to not know* whether
+BPF will be used in the workload or not, which is what lazy load may
+solve.
+
+One thing I can imagine is an opaque workload: untrusted (AI agents
+etc), end-user-defined (including BPF usage), or confidential.  But in
+these cases, what are the chances that BPF is used there? They are
+high, BPF is very widespread.
+
+I can also imagine normal workload not needing BPF, but when something
+goes wrong an observability or security thing turning on that loads
+BPF programs. But this contradicts the "5.4 MB may push workload over
+1GiB" premise: you still need to reserve/swap memory for just-in-time
+BPF-based tools, otherwise you OOM.
+
+I of course may be missing something, happy to be corrected.
+
+> 
+> 2. Loading code and data only when a system needs them is what kernel
+>     modules exist for.  And most of them take well under ~1 MB once
+>     loaded (nf_conntrack, overlay, vfat); even big ones like ext4, kvm
+>     and btrfs stay around 1-2.5 MB.  The vmlinux BTF is 5.4 MB.
+
+True. At the same time BPF without vmlinux BTF is barely useful. And
+it is trusted by the verifier. Both are addressed by BTF being
+built-in in the kernel image.
+
+> 
+> 3. We are not alone in trying to keep BTF out of memory until it is
+>     needed.  The inline BTF work [1] plans to deliver its data, which
+>     is even larger, through a module too.  The .BTF.link record and the
+>     resolve_btfids option that serve both are already part of this
+>     series (patch 10), so this is not machinery for the vmlinux BTF
+>     alone.
+
+The inline data is different. It's bigger by it's nature, and it has
+more specific users: tracing tools. The userspace tools are able to
+themselves decide whether to use that data. The kernel only needs to
+make it available.
+
+In comparison, as you yourself noted in the cover:
+
+     CO-RE, fentry/fexit, kfuncs, struct_ops, sched_ext and bpf-lsm
+     all depend on vmlinux BTF
+
+> 
+>> Do those tiny VMs that you target run systemd with BPF LSM?
+> 
+> Not necessarily, and that is the image's choice.  Even with BPF LSM
+> built in and bpf in CONFIG_LSM, memory-conscious users can turn it off
+> at boot with an lsm= list that leaves it out, and then systemd does not
+> load restrict_fs at all.
+> 
+> And even where user space is in the way, which as above it does not
+> have to be, the answer is to fix user space so it gets this win too,
+> not to give up on it.
+> 
+>> If the answer is "yes" for the majority of them,
+> 
+> "The majority" is also hard to pin down here: what runs at boot
+> depends on the user space packages built into each image, and on the
+> workload.
+
+Yes, it is hard to pin down. Which is why we first need to figure out
+whether the alleged memory savings actually help anyone.
+
+Adding code to the kernel is not free. More complexity means bigger
+bug surface: more opportunities for concurrency bugs, security bugs
+etc. Especially runtime loads with retries and stuff. I'm sure you
+understand the future cost of all that.
+
+So the bias shouldn't be "let's implement a big thing that might
+hypothetically help someone". It's backwards IMO.
+
+> 
+> So the question should be what it takes to make this work, not whether
+> to drop it because it is complicated.  If there are ways to cut it
+> down, or issues found in the implementation, we would be happy to take
+> them and go through every one.
+
+The question is in the trade-off.
+
+Would you run a million line python program to search for a string in
+a text file? No, that's absurd. But you could.
+
+I'm not saying 2k line patch series is unacceptable in principle. It
+may be justified. But I am not convinced it is justified in this case.
+
+Let's say we (as in kernel devs) decided that we want to reduce
+vmlinux BTF size, and only load it when necessary. Here are a couple
+of alternatives, simpler in comparison to CONFIG_DEBUG_INFO_BTF=m,
+although still a bit complex:
+
+   * Compress it.
+
+     $ ls -lah /sys/kernel/btf/vmlinux
+     -r--r--r-- 1 root root 6.7M Jul 18 01:54 /sys/kernel/btf/vmlinux
+     $ tar --zstd -cf /tmp/vmlinux.btf.zstd -C /sys/kernel/btf vmlinux
+     $ ls -lah /tmp/vmlinux.btf.zstd
+     -rw-r--r-- 1 isolodrai users 2.2M Oct  2 10:11 /tmp/vmlinux.btf.zstd
+
+     3x win right there.
+
+     Keep zstd-compressed blob in the kernel image and decompress and
+     parse it synchronously on first use.
+
+     Here is a prototype (vibe-coded, obviously):
+  
+https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf:vmlinux.btf.zstd-20261002
+
+   * Use an external blob.
+
+     Ship /lib/modules/$r/vmlinux.btf, checked against a SHA-256
+     recorded in the image. The catch is a synchronous file I/O under
+     caller locks, so this is less straightforward.
+     But this should cover embedded case that Alan has mentioned.
+
+     Here is a prototype:
+  
+https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf:vmlinux.btf.external-20261002
+
+Both alternatives avoid kernel-module loading machine. If we think
+harder, we may come up with something even more clever.
+
+I don't particularly prefer one approach over the other, including the
+module one. Maintainers probably have a better intuition on that.
+
+The point I'm trying to make is that if you could achieve similar
+memory savings with say 500-line well encapsulated diff (or even
+better: by refactoring, simplifying, deleting code) it would have
+already landed.
+
+And if it was a 50-line patch, the discussion on whether anyone cares
+wouldn't be relevant, because it's so cheap.
+
+As it stands, it's not clear (to me at least) in what circumstances
+we'll get the promised memory savings at all.
+
+> 
+> 
+> [1] https://lore.kernel.org/bpf/20260916074118.1007116-1-alan.maguire@oracle.com/
+
