@@ -1,159 +1,372 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3241F388394
-	for <linux-kselftest@vger.kernel.org>; Sat,  3 Oct 2026 04:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791000156; cv=none; b=lHpFt3fqwhxqupZQn2A4bcoNfKOBrgp73rRaacrRQMF/Q2k2i4S5+OI2YQkYhVHWELD2ZA42QzqBteAkU/8NhPaI+eBglMAzcCwKEPHGHWaZrw45BTfleOCz6vHEKvNUGalCttMb3VbrkWLz3LmpcPC+OqaXGPUxdHu8+1gwo04=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791000156; c=relaxed/simple;
-	bh=DHf+N8sLAfAAiDtbstMHFBX0Xlx5TDyTO3nV1Op8V/8=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E3528C5B1
+	for <linux-kselftest@vger.kernel.org>; Sat,  3 Oct 2026 05:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.99
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791004408; cv=pass; b=H+9g0mfCVJoOdMh2sUnLh7PAorGJizSq0GbEhC86qy5UfWwf8AaKoiAh7uyDWWp6M3eeX7vqqgVX/KtAjf+yIzwf2ihZm7iDQR6v3trqJhjdbTuBtgOVrpiPxsM7IO4Rpr7Co74p3Tp1g8RRkX0aGqO+8xW73QnZGcLbU4oyNuo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791004408; c=relaxed/simple;
+	bh=c21Wo+/2g/WjcHOxIjHfoI3SUBjaHXeuY4OLe6Mm0UA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UsvMF6NNDRBb4WX6SL0JWhT+OBJYKYr+V6HJ0jMOzKihGHzKP9tkOJ3zI5CE6W0re49jVN3yxWJm22D1FheHU5Ch2K5hqi13KxlIvOAP6lTRSXfmMPlYg1vVWp5cAxg9z9SGle0pHbGN8caYrJ/Z/CHVPAJWMbUQFisX+3wvT2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n7KYmbsi; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=d+u0OlZjBKJiV3QtN3hoRZOpANo+TVHe9GVNTTZJOPvp6cRNcqom257CgJ7CwwyywcTPN9bNHWWuvimTXr2A8qo9lZjRdctSJ3LqxeyUvlICYLTxtxG07/X2fuXfKjmqI0GmiSbcak9PkN+gl9c9Er/UHjWdnXTHSyHtgYvUVUM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault.org header.i=@brainfault.org header.b=isl6JP1E; arc=pass smtp.client-ip=74.125.225.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n7KYmbsi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B42A61F0089D
-	for <linux-kselftest@vger.kernel.org>; Sat,  3 Oct 2026 04:02:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791000154;
-	bh=2ShSmRUtxWEdg8PYGPavnsBraONwW1LV3c/s5yV1NCs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=n7KYmbsikhCRwDIsEDTjeuN6Zwp5d4UnP9SMGVQzLIZEz4qvkknXFTP6F7xnYkzx2
-	 LH90XwQ/O+DzlWJeDjwt/0PRFwP/0egrfoYq2YHSz//0WGzqutU2HXZnQKnmSlgBMJ
-	 wOG+ZD7/fpD2ZRthhiv3JGU6WM5vkBFQvSDBrIovn0MN/iXgy6Z/6DTQMhFP+d6v6w
-	 yokUdgl80oIErNZ6qAQ3WjY4L8EUR7iRzlNvmTHO5OcZ+4QW/EL2V9CqociQdlrdeV
-	 XXn146ME1kYjrV4ExORsZdEP0qeN9499rC75L43wgmrMlVGe9zPpZ9ej+YWyx1niv0
-	 I77qnsdfbPWJw==
-Received: by mail-ed2-f32.google.com with SMTP id 4fb4d7f45d1cf-6ad186afdf4so153420a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 21:02:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBwa6SYm3KbWIeAS/zzpJ5LaCTNN+V3YfY2+OS6bkiw1KAp9khBc2bLmg8PhqIfPWqrJUx7J/qCTsaNi5TyQ5CU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYICUZlYLzvtjnGSfiqf+mlty4DmSxpdXWjn6mIhTk6geL2v9YP1
-	kc8CQe2aj6bef9sAX7iTpkD6H1Kv4s50Zj52i2t2uLNNQGaY2KmCDjJO5k4BtoXWSD00QU62WcG
-	gIZRL0QkCo6TtiUuZGqdXkUH/AhnDM+Y=
-X-Received: by 2002:a05:6402:52c1:b0:6ae:550e:59ee with SMTP id
- 4fb4d7f45d1cf-6af9e30f5a0mr2805647a12.36.1791000153376; Fri, 02 Oct 2026
- 21:02:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=brainfault.org header.i=@brainfault.org header.b="isl6JP1E"
+Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-48b03eb33b2so30043f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 22:13:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791004404; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ZtndCeAIGwnZQR0mNn+ZrjRtLNgNNv+QVuSQWp3CMNDDUj1OYhjymHRZBgFVUa5adC
+         MPrZjG/vv3UXYdYcMgsoUbnJLIQs15s8Yw1Y/aFoe06FTafVGG6emtVGoZVSw4JdcASH
+         BoY3bj9kaXOUvVUEg4qassoyukqOXtJQmtXIQBxDMB4nMiw0pGBJmZ5rwKdUVK2dcMIW
+         4VGktnWqRr8zk9FIl8dPixW26sjEASpsRFT0dw0QM3csrcSYsOdTIiGD/CVGFRGe4P9s
+         p+ngjdc7hcUNrkW5OYIdblmUb9msC+rRwJf4cOI5VpDXOzRe630YlblqGvAwrOZLkUz5
+         /FBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ja5/K6y/ZwOjuHXyeMKgCswBU4BMbBpgHHGQKqQjNeY=;
+        fh=BocjIav6zOPfyJ8NME54AfDYkWJwnqV/rVzmGPlRr9o=;
+        b=MOLhTdByhENjlIzSXhoDWaOVUuubolAFCwjja3kV0q8IMBsR/nNuwN3dj+J0egACA0
+         0D0uV4YVIjDRxZb/wYB6Q4ChgmJou/OAJAFhBFiLY2r6qU8gdEv6gn9RoFiD8VHBirvb
+         dhQ1PUWYGoEwl2QBVTBjYn1I7ZdXNCTKN8b01R7AKe0F9dPdX277S/kuA9Odju71CYDA
+         KWP22XMQX2CjSsv3m/PWQ0mTv3H5Llzp4KNPjW97Br9O+Kwc64dP+jbt5B8RMu9rIq12
+         OXSvTTMEibvSFDbaO++OU4af7Rdml1vAYdvqu9niQhzuIMPWBFoJAJb2AwDao+rgWqS0
+         azsA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault.org; s=google; t=1791004404; x=1791609204; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ja5/K6y/ZwOjuHXyeMKgCswBU4BMbBpgHHGQKqQjNeY=;
+        b=isl6JP1EwEGsrR/nNYuwyLfCmUE0f09rU+Eg59ANFPx7W7MonD+MRPqA4q5WJvelXv
+         g+Q+wfNNVcF0y1EUYfgW8JJt70wAnWaemUecBJb3BI0KzuUF+Lw3oAkqI8IYP4Tqr4ax
+         Ndka/zWiWpecmCmjXRTGGX2o1IVwNd7LMIZBmY44icLva72sUT8kgsC/0AfrpvVJwX6e
+         aB0s87pI6VMRxA+fKe5xJYO3E1srxPZl67/JRKoZhbHDdFne5MS2hmm0Ra40oMAcw0Za
+         0XqQ5Xy7dOfSyalsColSFsEL2GRw61P84abjCN0/1j1VKj6embHdNXEOBLpoQkkyr/DG
+         E1qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791004404; x=1791609204;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ja5/K6y/ZwOjuHXyeMKgCswBU4BMbBpgHHGQKqQjNeY=;
+        b=Tc9d8g/E7tgp2fzx3wz8KTxkwGfF7kbZGlGkXuWO3mVzO5+5h5b1a966Iz5h7srfJb
+         gzx6yD8KFT+XFkb+LTQltZMYavNIbOi00SqDcbpF8OL5Aqx8acOmInWRHJI3eCJ4d+KA
+         dOfs9OC4JHnLJBJ7+nU+PeSTTkMcc/Sx2FSroLsHtgceSKgW5b3/0eWwpIoSkA54PXUm
+         1Hzfi3bpGhQws4Gk8g0+vMzqEfv4esb5w7293jNHOBqfH80HKh2ywz+VsY4KWBPRx7dW
+         paIRJ4wmAXgz7u51KeJZPJ4/lTdSlNzWBi8eZLW84k8R8BtZkiChMnhJZMVNYyjEPapM
+         ed1Q==
+X-Forwarded-Encrypted: i=1; AKwUvBx3Ld4d8S7MdQaFajGBr+zL/5k6GetZN4+8/ruL68kUB1YUWo25oL2/cPrniGT8JVK1K/1ZaI/EtrylDMBozvI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJIDbCzm1lntiO12BHr8pqKIOWTZNFku1RNOW8OtnZAHLlzUXCi
+	VFNi+PapfZ9rf2uJ5eyPCPVMKBG7xOki9/ta/Wux0RmvI/atj58/7uhQqn+CrJMRizBG1v58TSk
+	wgs9Qz+OrrVD602mjmfqJ7iLbfpnjZnRCVX3VsWMlKQ==
+X-Gm-Gg: AYBFou0pIbilk0XkeHx6Fcm/rw2cynH12+V0i/whC4EJ4X8d9orb/fDU5ooF89cXz7y
+	yKtMa24DCT7sRsjI0GQZ77l9auluiCO4JcCF2kAlbgohanKTOlHPP+1tjbcX6+ol/G4cHXfv5UG
+	mBkEo5g53IZcsnoIh6F3wOPh0E4OWKBO2whvemMFLMdtDeZS0NLBL0uHEs0B1L0TJyfp6bzag5W
+	ZcIkLtUuLapGPBSHBhwOskOpi2HLnZDx1pR7T0NtjvgcQTnDDXupVkhdmtfBbSUrjhajsl1QQKA
+	VzHJN9qSdVKtyuXWXLAZpe8QwogaGGrj0nGIfQ8TxdKqs4SNjJlfoP/O017NZ6hGgXSB3FYmuAd
+	xwvVCHBeFW4hW+B8WqDhBuVLg4SmMTENkov7a/UiUMyOBOpJn02VIdNWJx9Da2VqPHVRu7cm0om
+	U=
+X-Received: by 2002:a05:6000:61a:b0:48c:4a62:9b31 with SMTP id
+ ffacd0b85a97d-48c4a62a7b5mr1221302f8f.5.1791004403595; Fri, 02 Oct 2026
+ 22:13:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260923012356.1058379-1-maobibo@loongson.cn>
-In-Reply-To: <20260923012356.1058379-1-maobibo@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sat, 3 Oct 2026 12:02:21 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5+pFcSbjKzH-wHsOR2+07Q8D51S73DF6qCyUjdwMiHjA@mail.gmail.com>
-X-Gm-Features: AclHuK8QPrzkNUWV8LeYPocyeAeY7oS40yvBcmThzE45_K4ID_lbjWl7UEZ3Hfo
-Message-ID: <CAAhV-H5+pFcSbjKzH-wHsOR2+07Q8D51S73DF6qCyUjdwMiHjA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: LoongArch: selftests: Enable HW PTW by auto
- detection method
-To: Bibo Mao <maobibo@loongson.cn>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260807053227.341700-1-yhchen312@gmail.com> <20260807053227.341700-2-yhchen312@gmail.com>
+In-Reply-To: <20260807053227.341700-2-yhchen312@gmail.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Sat, 3 Oct 2026 10:43:12 +0530
+X-Gm-Features: AclHuK_pQRRoDWZRfANFMjdOjJ21LWi5Ny6ywTR26TEbK6g2y0ccg6Q7CWbAjRc
+Message-ID: <CAAhSdy3Zfdv3WzFZPPQqjR6_VPvfAGzirx=sXcy1G76TEdJYfg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] RISC-V: KVM: Add PMU event filter support
+To: "Yuhang.chen" <yhchen312@gmail.com>
+Cc: atish.patra@linux.dev, palmer@dabbelt.com, pjw@kernel.org, 
+	aou@eecs.berkeley.edu, alex@ghiti.fr, pbonzini@redhat.com, shuah@kernel.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, zhouquan@iscas.ac.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks.
-
-Huacai
-
-On Wed, Sep 23, 2026 at 9:31=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> wrot=
-e:
+On Fri, Aug 7, 2026 at 11:02=E2=80=AFAM Yuhang.chen <yhchen312@gmail.com> w=
+rote:
 >
-> Add HW PTW feature when VM is created. This feature is detected firstly,
-> enable it if it is available on host machine. With HW PTW feature enabled=
-,
-> refill exception will not happen and it is not necessary to set refill
-> exception entry.
+> Allow userspace to restrict which SBI PMU events a guest is permitted
+> to program via the new VM ioctl KVM_SET_PMU_EVENT_FILTER.  It takes a
+> struct kvm_pmu_event_filter whose events[] array holds SBI PMU event
+> indices encoded as (type << 16) | code.  The action field selects ALLOW
+> (only listed events may be programmed) or DENY (listed events are
+> rejected); nevents =3D=3D 0 clears any active filter.
 >
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> The filter is enforced in kvm_riscv_vcpu_pmu_ctr_cfg_match(), where a
+> disallowed event fails configuration with SBI_ERR_NOT_SUPPORTED.  It
+> governs new counter configuration only and is not retroactive.  The
+> filter lives in struct kvm_arch, read via SRCU on the vCPU run path and
+> replaced under kvm->lock with synchronize_srcu_expedited().  Event
+> indices are masked to their valid bits before comparison, so reserved
+> high bits cannot bypass a DENY filter.
+>
+> Advertise the feature with KVM_CAP_PMU_EVENT_FILTER.
+>
+> Assisted-by: YuanSheng:deepseek-v4-pro
+> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
+> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+> Signed-off-by: Yuhang.chen <yhchen312@gmail.com>
 > ---
->  .../selftests/kvm/include/loongarch/processor.h  |  3 +++
->  .../selftests/kvm/lib/loongarch/processor.c      | 16 ++++++++++++++--
->  2 files changed, 17 insertions(+), 2 deletions(-)
+>  arch/riscv/include/asm/kvm_host.h |  3 ++
+>  arch/riscv/include/uapi/asm/kvm.h | 20 +++++++++
+>  arch/riscv/kvm/vcpu_pmu.c         | 31 ++++++++++++++
+>  arch/riscv/kvm/vm.c               | 69 ++++++++++++++++++++++++++++++-
+>  4 files changed, 122 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/kvm/include/loongarch/processor.h b/=
-tools/testing/selftests/kvm/include/loongarch/processor.h
-> index 0e59daa8024e..8d9fabdc89e3 100644
-> --- a/tools/testing/selftests/kvm/include/loongarch/processor.h
-> +++ b/tools/testing/selftests/kvm/include/loongarch/processor.h
-> @@ -79,6 +79,7 @@
->  #define  CPUCFG2_LASX                  BIT(7)
->  #define  CPUCFG2_LLFTP                 BIT(14)
->  #define  CPUCFG2_LLFTPREV              GENMASK(17, 15)
-> +#define  CPUCFG2_PTW                   BIT(24)
+> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/k=
+vm_host.h
+> index 60017ceec9d2..1cd3d6a11057 100644
+> --- a/arch/riscv/include/asm/kvm_host.h
+> +++ b/arch/riscv/include/asm/kvm_host.h
+> @@ -95,6 +95,9 @@ struct kvm_arch {
 >
->  /* LoongArch Basic CSR registers */
->  #define LOONGARCH_CSR_CRMD             0x0 /* Current mode info */
-> @@ -128,6 +129,8 @@
->  #define LOONGARCH_CSR_PGD              0x1b
->  #define LOONGARCH_CSR_PWCTL0           0x1c
->  #define LOONGARCH_CSR_PWCTL1           0x1d
-> +#define  CSR_PWCTL1_PTW_SHIFT          24
-> +#define  CSR_PWCTL1_PTW                        BIT_ULL(CSR_PWCTL1_PTW_SH=
-IFT)
->  #define LOONGARCH_CSR_STLBPGSIZE       0x1e
->  #define LOONGARCH_CSR_CPUID            0x20
->  #define LOONGARCH_CSR_KS0              0x30
-> diff --git a/tools/testing/selftests/kvm/lib/loongarch/processor.c b/tool=
-s/testing/selftests/kvm/lib/loongarch/processor.c
-> index 47bbde3e205a..35e35c62759f 100644
-> --- a/tools/testing/selftests/kvm/lib/loongarch/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/loongarch/processor.c
-> @@ -282,6 +282,7 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
->         unsigned int cfg;
->         unsigned long val;
->         struct kvm_vm *vm =3D vcpu->vm;
-> +       bool has_ptw =3D false;
+>         /* KVM_CAP_RISCV_MP_STATE_RESET */
+>         bool mp_state_reset;
+> +
+> +       /* KVM_SET_PMU_EVENT_FILTER */
+> +       struct kvm_pmu_event_filter __rcu *pmu_event_filter;
+>  };
 >
->         switch (vm->mode) {
->         case VM_MODE_P36V47_16K:
-> @@ -300,6 +301,12 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
->         ret =3D __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,=
- KVM_LOONGARCH_VM_FEAT_LASX);
->         if (!ret)
->                 cfg |=3D CPUCFG2_LASX;
-> +       ret =3D __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,=
- KVM_LOONGARCH_VM_FEAT_PTW);
-> +       if (!ret) {
-> +               cfg |=3D CPUCFG2_PTW;
-> +               has_ptw =3D true;
+>  struct kvm_cpu_trap {
+> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/=
+asm/kvm.h
+> index 504e73305343..da4f639fa89f 100644
+> --- a/arch/riscv/include/uapi/asm/kvm.h
+> +++ b/arch/riscv/include/uapi/asm/kvm.h
+> @@ -12,6 +12,7 @@
+>  #ifndef __ASSEMBLER__
+>
+>  #include <linux/types.h>
+> +#include <linux/stddef.h>
+>  #include <asm/bitsperlong.h>
+>  #include <asm/ptrace.h>
+>
+> @@ -396,6 +397,25 @@ struct kvm_riscv_sbi_fwft {
+>  /* One single KVM irqchip, ie. the AIA */
+>  #define KVM_NR_IRQCHIPS                        1
+>
+> +/* for KVM_CAP_PMU_EVENT_FILTER */
+> +#define KVM_PMU_EVENT_ALLOW    0
+> +#define KVM_PMU_EVENT_DENY     1
+> +
+> +/*
+> + * For KVM_SET_PMU_EVENT_FILTER: restrict which SBI PMU events a guest m=
+ay
+> + * configure.  Each @events entry is a SBI PMU event index (type in bits
+> + * 19:16, code in bits 15:0).  %KVM_PMU_EVENT_ALLOW permits only listed
+> + * events; %KVM_PMU_EVENT_DENY rejects them.  Enforced at counter
+> + * configuration (SBI PMU COUNTER_CFG_MATCH), not retroactively.
+> + */
+> +struct kvm_pmu_event_filter {
+> +       __u32 action;
+> +       __u32 nevents;
+> +       __u32 flags;
+> +       __u32 pad;
+> +       __DECLARE_FLEX_ARRAY(__u64, events);
+> +};
+> +
+
+This definition of kvm_pmu_event_filter does not cover SBI PMU
+RAW and RAWv2 events.
+
+Maybe you can go with something like below:
+
+struct kvm_pmu_event {
+       __u32 pad;
+       __u32 event_idx;
+       __u64 event_data;
+};
+
+struct kvm_pmu_event_filter {
+#define KVM_PMU_EVENT_ACTION_ALLOW    0
+#define KVM_PMU_EVENT_ACTION_DENY      1
+       __u32 action;
+       __u32 nevents;
+       __u32 pad[2];
+       __DECLARE_FLEX_ARRAY(struct kvm_pmu_event, events);
+};
+
+>  #endif
+>
+>  #endif /* __LINUX_KVM_RISCV_H */
+> diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+> index bb46dcbfb24d..756040913468 100644
+> --- a/arch/riscv/kvm/vcpu_pmu.c
+> +++ b/arch/riscv/kvm/vcpu_pmu.c
+> @@ -733,6 +733,32 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcp=
+u, unsigned long ctr_base,
+>         return 0;
+>  }
+>
+> +static bool kvm_riscv_pmu_event_allowed(struct kvm *kvm, unsigned long e=
+idx)
+> +{
+> +       struct kvm_pmu_event_filter *filter;
+> +       bool in_list =3D false;
+> +       unsigned int i;
+> +
+> +       /* Reserved high bits must not bypass the filter. */
+> +       eidx &=3D SBI_PMU_EVENT_IDX_MASK;
+> +
+> +       filter =3D srcu_dereference(kvm->arch.pmu_event_filter, &kvm->src=
+u);
+> +       if (!filter)
+> +               return true;
+> +
+> +       for (i =3D 0; i < filter->nevents; i++) {
+> +               if ((unsigned long)filter->events[i] =3D=3D eidx) {
+> +                       in_list =3D true;
+> +                       break;
+> +               }
 > +       }
 > +
->         loongarch_set_cpucfg(vcpu, LOONGARCH_CPUCFG2, cfg);
->         cfg =3D read_cpucfg(LOONGARCH_CPUCFG6);
->         loongarch_set_cpucfg(vcpu, LOONGARCH_CPUCFG6, cfg);
-> @@ -338,6 +345,9 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
->
->         /* PGD page shift and width */
->         val =3D (vm->page_shift + width * (vm->mmu.pgtable_levels - 1)) |=
- width << 6;
-> +       if (has_ptw)
-> +               val |=3D CSR_PWCTL1_PTW;
+> +       /* ALLOW: permit only listed events; DENY: reject them. */
+> +       if (filter->action =3D=3D KVM_PMU_EVENT_ALLOW)
+> +               return in_list;
+> +       return !in_list;
+> +}
 > +
->         loongarch_set_csr(vcpu, LOONGARCH_CSR_PWCTL1, val);
->         loongarch_set_csr(vcpu, LOONGARCH_CSR_PGDL, vm->mmu.pgd);
+>  int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned lon=
+g ctr_base,
+>                                      unsigned long ctr_mask, unsigned lon=
+g flags,
+>                                      unsigned long eidx, u64 evtdata,
+> @@ -773,6 +799,11 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu=
+ *vcpu, unsigned long ctr_ba
+>                 goto out;
+>         }
 >
-> @@ -345,8 +355,10 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
->          * Refill exception runs on real mode
->          * Entry address should be physical address
->          */
-> -       val =3D addr_gva2gpa(vm, (unsigned long)handle_tlb_refill);
-> -       loongarch_set_csr(vcpu, LOONGARCH_CSR_TLBRENTRY, val);
-> +       if (!has_ptw) {
-> +               val =3D addr_gva2gpa(vm, (unsigned long)handle_tlb_refill=
-);
-> +               loongarch_set_csr(vcpu, LOONGARCH_CSR_TLBRENTRY, val);
+> +       if (!kvm_riscv_pmu_event_allowed(vcpu->kvm, eidx)) {
+> +               sbiret =3D SBI_ERR_NOT_SUPPORTED;
+> +               goto out;
 > +       }
->
+> +
 >         /*
->          * General exception runs on page-enabled mode
+>          * SKIP_MATCH flag indicates the caller is aware of the assigned =
+counter
+>          * for this event. Just do a sanity check if it already marked us=
+ed.
+> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+> index a9f083feeb76..a5a3a2182d1e 100644
+> --- a/arch/riscv/kvm/vm.c
+> +++ b/arch/riscv/kvm/vm.c
+> @@ -53,6 +53,8 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
+>  {
+>         kvm_destroy_vcpus(kvm);
 >
-> base-commit: 93f51579e7df248780214094418f205253383cc5
+> +       kfree(srcu_dereference_check(kvm->arch.pmu_event_filter, &kvm->sr=
+cu, 1));
+> +
+>         kvm_riscv_aia_destroy_vm(kvm);
+>  }
+>
+> @@ -187,6 +189,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, lon=
+g ext)
+>         case KVM_CAP_MP_STATE:
+>         case KVM_CAP_IMMEDIATE_EXIT:
+>         case KVM_CAP_SET_GUEST_DEBUG:
+> +       case KVM_CAP_PMU_EVENT_FILTER:
+>                 r =3D 1;
+>                 break;
+>         case KVM_CAP_NR_VCPUS:
+> @@ -265,7 +268,71 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm, struct =
+kvm_enable_cap *cap)
+>         }
+>  }
+>
+> +#define KVM_PMU_EVENT_FILTER_MAX_EVENTS        256
+> +
+> +static int kvm_riscv_vm_ioctl_set_pmu_event_filter(struct kvm *kvm,
+> +                                                  void __user *argp)
+> +{
+> +       struct kvm_pmu_event_filter __user *user_filter =3D argp;
+> +       struct kvm_pmu_event_filter *filter, tmp;
+> +       size_t size;
+> +       int r =3D 0;
+> +
+> +       if (copy_from_user(&tmp, user_filter, sizeof(tmp)))
+> +               return -EFAULT;
+> +
+> +       if (tmp.action !=3D KVM_PMU_EVENT_ALLOW &&
+> +           tmp.action !=3D KVM_PMU_EVENT_DENY)
+> +               return -EINVAL;
+> +
+> +       if (tmp.flags)
+> +               return -EINVAL;
+> +
+> +       if (tmp.pad)
+> +               return -EINVAL;
+> +
+> +       if (tmp.nevents > KVM_PMU_EVENT_FILTER_MAX_EVENTS)
+> +               return -E2BIG;
+> +
+> +       size =3D struct_size(filter, events, tmp.nevents);
+> +       filter =3D kzalloc(size, GFP_KERNEL_ACCOUNT);
+> +       if (!filter)
+> +               return -ENOMEM;
+> +
+> +       filter->action =3D tmp.action;
+> +       filter->nevents =3D tmp.nevents;
+> +       filter->flags =3D tmp.flags;
+> +
+> +       if (copy_from_user(filter->events, user_filter->events,
+> +                          flex_array_size(filter, events, filter->nevent=
+s))) {
+> +               r =3D -EFAULT;
+> +               goto cleanup;
+> +       }
+> +
+> +       mutex_lock(&kvm->lock);
+> +       filter =3D rcu_replace_pointer(kvm->arch.pmu_event_filter, filter=
+,
+> +                                    mutex_is_locked(&kvm->lock));
+> +       mutex_unlock(&kvm->lock);
+> +       synchronize_srcu_expedited(&kvm->srcu);
+> +
+> +cleanup:
+> +       kfree(filter);
+> +       return r;
+> +}
+> +
+>  int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned lo=
+ng arg)
+>  {
+> -       return -EINVAL;
+> +       struct kvm *kvm =3D filp->private_data;
+> +       void __user *argp =3D (void __user *)arg;
+> +       int r;
+> +
+> +       switch (ioctl) {
+> +       case KVM_SET_PMU_EVENT_FILTER:
+> +               r =3D kvm_riscv_vm_ioctl_set_pmu_event_filter(kvm, argp);
+> +               break;
+> +       default:
+> +               r =3D -EINVAL;
+> +       }
+> +
+> +       return r;
+>  }
 > --
-> 2.39.3
+> 2.34.1
 >
+
+Regards,
+Anup
