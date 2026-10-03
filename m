@@ -1,108 +1,314 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-206.mta1.migadu.com [95.215.58.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D51142047E;
-	Sat,  3 Oct 2026 12:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EF641D640
+	for <linux-kselftest@vger.kernel.org>; Sat,  3 Oct 2026 12:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791030609; cv=none; b=MqXAoZc3RA2Pipou2jtzA55Ufh2lHnWPVoh1ZULZ8Vrj4hj8mfdlklJSpIMcxhodXo9gfVJbcApDGuJDpXIjO0OcXGqG6cFHZp1gS3jwSpHZRn6uyg85Z8rRlRB3Y8JE8v/omRtQLBN3h6ltXk4VSpLAM3IKDUlyxhCFpORDl9w=
+	t=1791031272; cv=none; b=MAhhCxBKnvWjTjxKFaZKV3mKoEC76+gCT7alWSz3QFN/W95W0uK/tm3FSODGGlSE0/jPNoAeKy3AIVg4GGKwEMLKm6ybrBciyjdz4CF0l4THTvDhidrf977n2ErO+qb6BhHZGFphpkX0oZg95sjwv6twXNCl4YoyS/YSkON8xuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791030609; c=relaxed/simple;
-	bh=SAUWf+RZn/Bh6RldaLjMFTISIbtZl3XjUaHvS69IRek=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DbzaSj4Glkwv0o3XFJB17RpNqC02QIJl4U3eu7UAJWS72T+prv2aFYIoecFL8valPdxZliv/ZjjLit0vNhfA8jR5awKKJJHNU0DYrGqYygSrx/hjVl4dkMyLAIH2Q43y4aNVr94BhI87hE3mxKK9yRfpCd0LwcX0Lvo5AsULIQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h9P3fNIu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791031272; c=relaxed/simple;
+	bh=wGZTW7w7Z88qRANdytfmitExLAlwqeQADtPeau81tH0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Au1WGMRj0ZKvSBZN4h5tgi5h7t7U66jAhrEtCCn8ggIV6yfoq7pz5DqbV08owh/LiPculQ33k9Ta1hXyzmXVT5Gw8Lr2npdLanLL7npsCdEjD2oXeJvnsVtf8xIy32wfka6tmV9CB4O3Q4ZXwLex5eaNd5s3K+PG9ZW5RfL9wO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m4xyDTQ0; arc=none smtp.client-ip=95.215.58.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h9P3fNIu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 128AE1F0089B;
-	Sat,  3 Oct 2026 12:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791030608;
-	bh=+JZDKY8Pm+m7xlMt9GpnBgo5K7r0EZ5kqFaq0xkbApQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=h9P3fNIuaXDWPgnrzBJXr3TwwCnJIpQSYNxZlXeEHm2JqzisfBbyrtL3CknxAKyGL
-	 pFR27cXnjweG14YpvqvCpRtFBN4DmIFcOnWoqI64jOzE/cWeEHvGmTT8gNsPOjFCNN
-	 /zz6FOMCU0mAoCdVD9zMQWiDme42glgKUbek61IZiAY5Nx8nNvk+lnx6lDiEHqW7Py
-	 OvgFOYIRsaujI9O70Qp4KgCgDHhOLaEHEaifYQC1hCdwnqzHMaRAPgeJnBIDwJ8OKw
-	 sElI/OlfeRFtEa/grB5n792AP6fsopfDlAurP6TrxyrzXHOqufQdZmqfHJjXo4OOtR
-	 s6TngiAD94apA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1xCysP-0000000GWsH-3y6y;
-	Sat, 03 Oct 2026 12:30:06 +0000
-Date: Sat, 03 Oct 2026 13:30:05 +0100
-Message-ID: <86fqyn2che.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Leonardo Bras <leo.bras@arm.com>,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m4xyDTQ0"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=wGZTW7w7Z88qRANdytfmitExLAlwqeQADtPeau81tH0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791031266; v=1; x=1791636066;
+ b=m4xyDTQ0dxHv+7s/+nZ/ggDZeiitlP4DcekJ/yQKHs0Ad9lqaXMk8ZIzPZtz/fyd2z7RPGXR
+ tFaBOk19NrfyWCoyQwPKVQTCjlxYdmkbc/HatxyVsHr1E6ay56s4HdN7DGFyyy9oqZFkd3wRMRr
+ d3Tv6WVmRI70tn2Qh1Hzchv8=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 0d964513e3fa61a2;
+	Sat, 03 Oct 2026 12:41:05 +0000
+X-Mizu-Trace-ID: 0d964513e3fa61a2
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org,
+	josef@toxicopanda.com,
+	axboe@kernel.dk
+Cc: cgroups@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v21 02/15] KVM: arm64: Refuse to start a guest with S1PIE or S1POE but not TCR2
-In-Reply-To: <20260930-arm64-gcs-v21-2-3556644cd927@kernel.org>
-References: <20260930-arm64-gcs-v21-0-3556644cd927@kernel.org>
-	<20260930-arm64-gcs-v21-2-3556644cd927@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	cui.tao@linux.dev,
+	cuitao@kylinos.cn,
+	ameryhung@gmail.com,
+	alexei.starovoitov@gmail.com
+Subject: [RFC PATCH v10 0/4] blk-iocost: add BPF struct_ops cost model support
+Date: Sat,  3 Oct 2026 20:40:41 +0800
+Message-ID: <20261003124045.1289305-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, oupton@kernel.org, fuad.tabba@linux.dev, peter.maydell@linaro.org, leo.bras@arm.com, weilin.chang@arm.com, yaoyuan@linux.alibaba.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 30 Sep 2026 22:48:12 +0100,
-Mark Brown <broonie@kernel.org> wrote:
-> 
-> Since there is an architectural dependency between the features as an
-> optimisation we only context switch guest registers for FEAT_S1PIE and
-> FEAT_S1POE if the guest also has FEAT_TCR2. We do not, however, enforce
-> this as a requirement when starting a guest and only configure the traps
-> for accessing the registers based on their individual features. This means
-> that a VMM can configure a guest which can read and write the system
-> registers for FEAT_S1PIE and FEAT_S1POE without the hypervisor updating the
-> values of these registers for the guest.
-> 
-> Avoid this by refusing to create a guest with an affected configuration.
-> 
-> Rather than doing something data driven we open code the checks, I started
-> doing something data driven but it was very clear that such code should be
-> shared with the host kernel cpufeature code. Refactoring for that seemed
-> like disproportionate effort and invasiveness for the context so is
-> deferred for followup work.
+From: Tao Cui <cuitao@kylinos.cn>
 
-This *absolutely* needs to be data driven, and we're not going back to
-over two years ago. We already have most of what is needed in
-config.c, and it is only a matter of making sure that S1PxE is only
-enabled for the guest if TCR2 and ATS1A are also present. If that
-means additional sanitisation of the idregs when finalised, so be it.
+This is v10 of the RFC.  A BPF program can now take over the cost
+model of one device: attaching an iocost_model_ops struct_ops creates
+the ioc if needed and switches the device to the model, io.cost.model
+selects between the attached and the builtin model, and detaching or
+device removal restores the builtin one.  The attachment, the cgroup
+callback pairing and the removal paths are serialized with what blkg
+creation and destruction actually use.
 
-If userspace decides to expose crap in the ID registers, that's its
-own problem, and we're not in the business of enforcing idiotic
-configurations. The only thing that matters is that the state that KVM
-deals with is consistent.
+Why a pluggable model at all
+----------------------------
 
-	M.
+When iocost landed in 2019, its commit message already promised that
+"a later patch will also allow using bpf progs for cost models", and
+the code has carried the split for it ever since: calc_vtime_cost()
+is a dispatcher whose only implementation is calc_vtime_cost_builtin().
+Seven years later the builtin linear model is still the only one.
+This series fills that slot: builtin algorithms remain the default
+while new ones can be prototyped in BPF.
 
--- 
-Without deviation from the norm, progress is not possible.
+The measured problems
+---------------------
+
+The builtin model prices each IO with a binary sequential/random base
+picked by a single per-cgroup cursor and a 16MB seek threshold, plus
+a per-page cost.  On a virtio-blk device with the HDD autop profile,
+a 4k IO costs ~24us when judged sequential and ~2.7ms when judged
+random, a 112x spread, so a wrong judgement becomes a wrong price.
+Three classes of mispricing, all measured:
+
+ 1. Heuristic rigidity.  Two legitimate sequential readers in one
+    cgroup (a database with multiple tablespaces, a threaded backup)
+    ping-pong the single cursor and are all priced random: a
+    measured 89x overcharge collapses throughput under the same
+    weight.  Random IO within a hot window smaller than the 16MB
+    threshold is priced sequential: measured 107x undercharge, an
+    accounting escape for hotspot workloads.  No setting of the six
+    builtin parameters seems able to fix this: telling the streams
+    apart requires per-IO state tracking, which looks like logic
+    rather than coefficients.
+
+ 2. Device nonlinearity.  SLC-cache phases, SMR band placement and
+    shared controllers (multiple NVMe namespaces multiplexing one
+    device) make the real cost of an identical IO vary by an order
+    of magnitude over time or across namespaces.  A static
+    6-parameter linear model has no way to express that.
+
+ 3. Unpriced operations.  Flush and zone append fall through to a
+    cost of zero and bypass throttling entirely, and the same pattern
+    extends to device quirks the builtin model was never taught.
+
+Mispricing feeds directly into the control loop: vtime budgets,
+surplus donation and the vrate feedback all consume the model's
+output, so a wrong model can skew the whole controller.
+
+How
+---
+
+Attachment follows the hid_bpf_ops model: the target device is set
+in the dev member of the struct_ops from userspace before load; the
+device is looked up with blkdev_get_no_open() and disk_live() is
+checked under rq_qos_mutex, like blkg_conf_open_bdev().  Attaching
+creates the ioc if needed, like an io.cost.model write does, and
+switches the model under the same freeze and quiesce those writes
+go through; enabling stays with io.cost.qos and wbt stays with it
+too.  When the disk goes away, the model is ejected completely.
+
+Attachment is independent of the model selection and of the
+controller state: while a model is attached, "model" selects between
+it and the builtin model - "model=bpf" switches to the attached
+model, "model=linear" switches back to the builtin model, and
+neither detaches the struct_ops; only detaching removes the model,
+after which "model=bpf" fails.  "ctrl" keeps describing the builtin
+coefficients, which are kept while the BPF model is in use and take
+effect again when switched back.  Enabling and disabling the
+controller, and with it the wbt handover, remains with io.cost.qos.
+
+A bound model in use owns pricing for every charged IO on the
+device: it is called from the bio charging path and prices every
+operation including flushes.  The completion-time request sizing
+which feeds the latency met/missed accounting uses the transfer cost
+coefficients the struct_ops carries (vtime per page for reads and
+writes), so the builtin latency tracking and vrate adjustment
+follow the model's pricing while it is in use; extending the
+model to the QoS side itself is left for a later interface.
+
+The cgroup callbacks are bound to the iocg policy lifetime and pair
+up: iocg_init() is delivered to every cgroup which already has a
+blkg on the device when the model is attached, and to each one
+appearing afterwards; iocg_free() is delivered to the cgroups which
+still exist when the model is detached.  The existing iocgs are
+walked over q->blkg_list under q->blkcg_mutex, the same walk the
+blkcg policy teardown uses; cgroups without a blkg on the device
+yet are not missed, as their callbacks are delivered at blkg
+creation and destruction.
+
+    u64 calc_cost(struct bio *bio, u64 model_flags)
+
+The model reads whatever it needs from the bio itself: the
+operation flags (the operation must be extracted with a mask, and
+the REQ_* flag bits, including PREFLUSH/FUA, are part of it), the
+size, the start sector and the issuing cgroup through
+bio->bi_blkg.  model_flags carries iocost-specific metadata which
+is not a property of the bio, such as whether the cost calculation
+is for a merged request; the return value is vtime, clamped to 1
+second of device time per IO.  Per-cgroup state can be stored in
+BPF_MAP_TYPE_CGRP_STORAGE keyed by the cgroup of bi_blkg; it
+follows the cgroup lifetime.  Sleepable models are rejected at
+verification, since calc_cost() runs under RCU read lock.
+
+Patch overview:
+
+ 1/4: the BPF struct_ops cost model support: Kconfig, ops
+      definition, per-device attachment, unified dispatch and
+      verifier checks
+ 2/4: selftests with two example models (the full builtin linear
+      HDD formula at double cost, and a multi-stream sequentiality
+      model) plus a runner and the selftest kernel config entries
+ 3/4: add an iocost_ioc_tick tracepoint emitting the per-period
+      controller state, so model quality can be evaluated without
+      drgn (existing events are state-change driven and silent in
+      steady state)
+ 4/4: document the attachment in cgroup-v2.rst
+
+Does it work
+------------
+
+Mechanism, verified functionally on a virtio-blk device (HDD
+profile, sequential-read workload from a 1%-weight cgroup, builtin
+vs the 2x example model):
+
+ - per-IO charge: 2882us -> 5722us, a factor of 1.985x; the
+   completed IO count halves and total cost.usage is conserved,
+   i.e. the model output drives both charging and budgeting
+ - attachment: model=bpf readback while in use (ctrl keeps
+   describing the builtin coefficients), EBUSY for a second model
+   on the same device, a second device attaches an independent
+   model, "model=linear"/"model=bpf" switch between the attached
+   model and the builtin without detaching, detaching removes the
+   model and "model=bpf" fails afterwards
+ - edge cases: writing an unknown device fails and nothing is
+   applied; the selftest runner checks the write error and errno
+   of every step, including the restoration
+
+Workload-shape verification (same setup, 4k IOs at weight 1000,
+builtin vs the 2x example model):
+
+ - flush-heavy workload (read/write/fsync alternating): priced
+   1.99x the builtin, i.e. flushes no longer reset the cursor
+   and misjudge the following IO as random
+ - non-page-multiple IO (6 KiB): priced ~2x, matching the
+   builtin's truncating page count
+ - first IO from a high LBA (past 16 MiB): priced 2.01x, i.e.
+   a fresh cgroup's zero cursor no longer misjudges the first IO
+   as random
+
+Payoff, demonstrated with the multi-stream example model (2/4) on
+the same setup, 4k IOs at weight 1000, builtin vs the model:
+
+ - two sequential readers in one cgroup: priced 1961us/op by builtin
+   (both judged random by the single cursor) and 23us/op by the
+   model (each stream keeps its own slot); the completed IO count
+   rises by two orders of magnitude
+ - random IO inside an 8M window: priced 24us/op by builtin
+   (undercharge, an accounting escape) and 2607us/op by the model
+ - single-stream sequential and whole-disk random pricing are
+   unchanged, so the model fixes both directions of mispricing
+   without introducing a new one
+
+Non-interference, measured on enterprise NVMe: no measurable
+overhead when the BPF model is not attached.
+
+Changes in v9:
+- the attach holds rq_qos_mutex from the disk_live() check through
+  the unfreeze, like an io.cost.model write does, instead of
+  releasing it between creating the ioc and switching the model;
+  the queue reference, the second q_to_ioc() and the lockless
+  traversal it needed are gone
+- the attachment is published, cleared and the blkg list is walked
+  under blkcg_mutex and queue_lock: blkg creation runs ioc_pd_init()
+  and adds to q->blkg_list under queue_lock only, so the previous
+  blkcg_mutex-only serialization could double-deliver iocg_init() or
+  deliver iocg_free() without iocg_init().  The init walk now goes
+  parents first, like blkcg_activate_policy()
+- the device removal ejection reads ops->bdev before clearing ops->q:
+  once q is NULL .unreg returns without a lock and the map can be
+  freed, so touching ops afterwards was a use-after-free window.  The
+  ejection moved to an ioc_bpf_eject() helper
+- .unreg only detaches when the closing link is the one which owns
+  the attachment, so a map re-attached to a new device through a
+  newer link is not torn down by an old link; the v8 ops->q re-entry
+  guard at .reg is gone, a second attach of an attached map now
+  fails with -EBUSY like any other model would
+- the ioc->attached and ioc->model pointers are unconditional and
+  blk_get_queue_rcu() is declared in block/blk.h without an export,
+  which drops the local prototypes and the remaining #ifdefs
+- the unused struct_ops .init name lookup, the bdev/q cases in
+  .init_member (the core already rejects nonzero non-function members
+  it does not claim) and the unused write_cost_model() buffers are
+  gone; the -EOPNOTSUPP selftest paths call test__skip()
+- the selftest writes the dev member through the skeleton's typed
+  struct_ops access instead of assuming it is the first member, and
+  the maps are ".struct_ops.link" so closing the fd detaches; the
+  example model's seek judgement is gated on a non-zero IO size so a
+  dataless flush is priced sequentially, and write_cost_model()
+  returns the negated errno ASSERT_ERR() expects
+- the tick tracepoint's running field reports the active iocg list
+  instead of ioc->running, which has not transitioned to IOC_IDLE at
+  the emit point, so the final tick reads active=0 running=0
+- the attach and detach take the queue freeze before rq_qos_mutex,
+  like ioc_qos_write() does; taking the mutex around the freeze
+  instead formed a lockdep cycle with the io.cost.qos write path,
+  and .unreg's link recheck moved under the mutex inside
+  ioc_bpf_detach()
+- the io.cost.model documentation states that detaching restores the
+  builtin model and that ctrl only accepts "auto" and "user" and
+  never selects the model, says attaching rather than loading binds
+  the model, and that removing the device removes the model as well,
+  with the struct_ops link still having to be closed afterwards
+
+Changes in v10:
+- one map binds one device at a time: the attach rejects a second
+  attach while the ops is still bound, which the v9 owning-link
+  rework had dropped.  Without it, attaching the same map to a
+  second device clobbered the single device slot, leaked the first
+  bdev reference and left the first device pointing at the ops
+- the detach takes the queue the caller holds a reference on as an
+  argument instead of re-reading ops->q, fetches the ioc under
+  rq_qos_mutex, and re-checks the owning link under the mutex, so
+  closing an old link after an ejection and a re-attach no longer
+  tears down the newer attachment
+- iocg_free() is only delivered to a cgroup which received
+  iocg_init(), tracked per iocg, so a blkg appearing between the
+  attach walk and its own pd_init no longer gets an unpaired
+  iocg_free(); a blkg whose radix_tree_insert() failed may still
+  keep an iocg_init() without iocg_free(), which is now documented
+  in the interface comment
+
+
+Link: https://lore.kernel.org/r/20260908100143.47598-1-cui.tao@linux.dev # v1
+Link: https://lore.kernel.org/r/20260910125817.223354-1-cui.tao@linux.dev # v2
+Link: https://lore.kernel.org/r/20260914073356.791518-1-cui.tao@linux.dev # v3
+Link: https://lore.kernel.org/r/20260916072302.1068871-1-cui.tao@linux.dev # v4
+Link: https://lore.kernel.org/r/20260918031751.1255420-1-cui.tao@linux.dev # v5
+Link: https://lore.kernel.org/r/20260918055001.1273840-1-cui.tao@linux.dev # v6
+Link: https://lore.kernel.org/r/20260924054549.2271705-1-cui.tao@linux.dev # v7
+Link: https://lore.kernel.org/r/20260930075154.189958-1-cui.tao@linux.dev # v8
+Tao Cui (4):
+  blk-iocost: add BPF struct_ops cost model support
+  selftests/bpf: add iocost cost model test
+  blk-iocost: add iocost_ioc_tick tracepoint for per-period device
+    summary
+  docs: cgroup-v2: document the iocost BPF cost model attachment
+Link: https://lore.kernel.org/r/20261003013033.149288-1-cui.tao@linux.dev # v9
