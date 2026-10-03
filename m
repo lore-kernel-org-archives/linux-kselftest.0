@@ -1,175 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f35.google.com (mail-pj2-f35.google.com [74.125.227.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA42395DAA;
-	Sat,  3 Oct 2026 13:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C983F34D926
+	for <linux-kselftest@vger.kernel.org>; Sat,  3 Oct 2026 20:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791033972; cv=none; b=C18fNN9gQqlCgMS7J7uVyhRbltKGUGfOk6o1G82BTXRneqCL2wF7Z9AWPOB7P/d7hE14tDn6bNlZfoVmWW3e3s7zbPOfI2UmBZRj0c76YKTPiYYsdLFgWwPPSoUVZXSuimdGrIAY/MsFAK3VL4dhPB9m84FqSSsJwPheUmhy5XE=
+	t=1791060357; cv=none; b=GtZJOEveGGIkICIfrdbgGqAiVmPKNIt1vgpPOyOqW/BTq6yqqEzqpqldro9GxwMmYCAe9NJU+3j7jm4XaQLuJu++1R5V79WmOplVrab3/yKMJzqHxcjgcytKcn2Uol62TfBbCCUM+ksXfC3fWel2FDpihgW19A67uZ2jyMN2S/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791033972; c=relaxed/simple;
-	bh=QiaWRivoGP/Wplbe4uVdripPFFwjEzIsQT0XwHBlB7A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KiZ/k0Ue87P42ZyeyqJrmof9bd+qFChqcNCRrEUUvvaSBRYua0BiJE1BuArmBChOK75jk5ISkLwHEjzsGGMVI21nh3onhV5PvHjSrRI5sHkz/4beQK3GXFl09tKR4niVIcQoYwi0xESRx8v27CQb/Aegk9A7dUZRs32wcv2wWks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gr9kNhoh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1791060357; c=relaxed/simple;
+	bh=FRp4Cct50HXCeTViDVPkOvyv0qHQZnD+X0WubEU1Bpg=;
+	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:MIME-Version; b=KmIbL+4gp3DX44ZPqzR2tuK8j3c9JpI1ywK8/56t+XshDPcCvlPfXiAM15/i+HK04J5eGBX3CEY+wORQw8H0JoFQjfVhuGjG6qmQUp4t4ERnWbiUpqFt/CcOnBNO+1mcpeM78X4hGfmd54fvM4MTqT4ZVa60xXEubV9l3FrTtm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n8Zkw1si; arc=none smtp.client-ip=74.125.227.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gr9kNhoh"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DE2D2C2BCF4;
-	Sat,  3 Oct 2026 13:26:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1791033972;
-	bh=QiaWRivoGP/Wplbe4uVdripPFFwjEzIsQT0XwHBlB7A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=gr9kNhohnPKn4Kqmk43qPgFG1/oVWSpgoHzPhlOdUT6keof/g/ruBnkKV1ykB7hpF
-	 cKgScXwed915TBMc6frLwbumQ2XR3N9lqkfGy5iALXuhPcxsoGqptSkPpTbo0/rFCt
-	 5v4Xad00CvlvRHfVT6+K58gYg6hddLUV5ArGcBIRsyvNhUr1FIUE8rNbLB7udLHnh8
-	 hl8lFaJ2T3T87IwdawwMGD4yNOWyc0H3aZAB9OlzmF6DfaOvRciQcXt/pFaVVJrCBA
-	 /toK68emAbkGktZnlunas9IqKa/cWZUNCIAv/106giN6NjV/V/NHgUJgPVLgwOXnAd
-	 SKVjGO1p5AcMQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF59ECA5FEC;
-	Sat,  3 Oct 2026 13:26:11 +0000 (UTC)
-From: Henrik Enquist via B4 Relay <devnull+henrik.enquist.gmail.com@kernel.org>
-Date: Sat, 03 Oct 2026 15:26:11 +0200
-Subject: [PATCH 1/2] ALSA: aloop: Don't constrain playback params in notify
- mode
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n8Zkw1si"
+Received: by mail-pj2-f35.google.com with SMTP id d9443c01a7336-2dd77300825so2545835ad.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 03 Oct 2026 13:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791060355; x=1791665155; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=FRp4Cct50HXCeTViDVPkOvyv0qHQZnD+X0WubEU1Bpg=;
+        b=n8Zkw1sihXcl4/Pod6zhjI9skgCU8j8F1VKkIOWyX5CldojzAfWimmAks5nfi9OI3O
+         LbN7M7jT2pSdPqOjAibpwHGhCfkmKEeJa16o1lM2yFRjyEhm4MeQNUwLEe02xZF4vbj4
+         NeZadT6r48WSu8JRikuJCVsKoEhQMgAxyyGz7+cPMHDGRx2a07APhzA/cXMI5ZAkknsi
+         +8Qoz0NWe0WKvKeW4oFLFGxdiBrgDzayaQPcO0bTL6xSS8av6YHG6ltu0YR4yjKo1gb2
+         gbzTkclD39paWI8LoyivQfZbiFf+84u6SYhDpdYnX/ohVVesjMuxLL5xG1Uye/24m7/6
+         Ta2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791060355; x=1791665155;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FRp4Cct50HXCeTViDVPkOvyv0qHQZnD+X0WubEU1Bpg=;
+        b=2HvDnYceLyadrOyuMYeRVwUC0TM2Dak0zcvSbJNpntz+fiRRrVx5mt42le1cSlv4fP
+         0eEkVxbiBtcHzy7geMGVW99Kl6TZDgucPBIfM0rR6O0mXcunI1CKda+oMdFTzX4pLZQq
+         O+Cu7f0/ZzerwVaRycwG5p2wkFtn+ksKOOOgP+Tc9WqUKa4FuEu+3wZoyQjGt9ZF8Wz5
+         vKUirGlKyf6upFhYg/PwMfMBmAcWu2CkDZq/WfNocv22T8/tl2B2hOcpZ7EWYX8NtuGU
+         8gnrANnxp3ebos64AtKZk5gFA/a6W5m94aAjMkKLft0WO3hPuTSjz7ad+Mk7zQXwohhI
+         WSwg==
+X-Forwarded-Encrypted: i=1; AKwUvBwNrUSzY2G3/pAV95xY9Y6dA7WqWBvr7JTqomNasVsYFkmDKVJcz6da1dHrP13hOGeZTeDGzwHb7WBZYnY2JbU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJSLATXSFhuYrTecZnlTQzblYvcanbqBvr1oqUeQRHGY0MMU2nf
+	j9YbsxlZ11foZ+8faHkOrsP+z3Nh1lOnrvcSlke4CGD40bxZLzuziwsX
+X-Gm-Gg: AYBFou3ZsGi5L1oIL/Jf3WzdFt0FjuoMoDVn0t0QhfVzcOZsT0/y7+IUjX/mxhDFwnx
+	xgRtXqiXmDTi0Idfp/89gnsy718TQvB8Lv93zCTIUYnpMtWaASGlNQmXY/dbFwYNTm9MI74WMu/
+	wF/fmtcHsH/SSYVkjKUUue+BAqpASW6mFhq0vd1l28kk7Zm5oQLPlsjjCx2WM3JLhzlGpCwRUYb
+	Euv+nCVhXcI1WlZJpouG9SETQ1Y0K4YELaMuLto9fx0uts8eQCgovBSvtK93BDZN36720uJup4f
+	SDI1pr+9X598sZco8okQx2h2gO829POW001lGBpYdBNBVPaGnyW5sIgFad6kIzgsTzmxjLRLfEV
+	g/3oDmAFVrIoGvHRlQWjfBlAh+zJwzuwKNHZBNYx6KadxGV+53BjexVb246drrg5Hj7lDDZhkdM
+	Xkp65UAa1IyBBnBrI9NDKc5bOXJFrKOUMigkjZpeBn2hltAxQfC4DSHo9f0Fd3EpbQYgejuurkF
+	fL0Nwjiuk14IdjeDahaqLjqzIWHgbuhQ0ol+hdVJIXd6QkNQVdgkT7jHFrndBKCdKt2bVhchfBq
+	JGmP1x3xZ6BhrA==
+X-Received: by 2002:a17:902:da91:b0:2df:83ce:724f with SMTP id d9443c01a7336-2e49b615cf2mr61626695ad.30.1791060355061;
+        Sat, 03 Oct 2026 13:45:55 -0700 (PDT)
+Received: from localhost ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e533e8397bsm7343265ad.78.2026.10.03.13.45.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Oct 2026 13:45:54 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 03 Oct 2026 20:45:53 +0000
+Message-Id: <DLVHWNL0AVKU.NV007WEHWST8@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Tao Cui" <cui.tao@linux.dev>, <tj@kernel.org>, <josef@toxicopanda.com>,
+ <axboe@kernel.dk>
+Cc: <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <daniel@iogearbox.net>,
+ <linux-kselftest@vger.kernel.org>, <cuitao@kylinos.cn>,
+ <ameryhung@gmail.com>
+Subject: Re: [RFC PATCH v10 1/4] blk-iocost: add BPF struct_ops cost model
+ support
+In-Reply-To: <20261003124045.1289305-2-cui.tao@linux.dev>
+References: <20261003124045.1289305-1-cui.tao@linux.dev> <20261003124045.1289305-2-cui.tao@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261003-aloop-notify-fix-v1-1-ba5dfb831bf5@gmail.com>
-References: <20261003-aloop-notify-fix-v1-0-ba5dfb831bf5@gmail.com>
-In-Reply-To: <20261003-aloop-notify-fix-v1-0-ba5dfb831bf5@gmail.com>
-To: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Pavel Hofman <pavel.hofman@ivitera.com>, 
- stable@vger.kernel.org, Henrik Enquist <henrik.enquist@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791033970; l=4399;
- i=henrik.enquist@gmail.com; s=20261003; h=from:subject:message-id;
- bh=mJsEJIlV/QPq6A80rdiZ6mhKny6SlO7v9jlAYqri6pk=;
- b=iJJKSuzJgqU5oSM5B24n9BAfa+4jEq6E9cHWU1sWKrWZiMX89fwpCpqcwTHihzsxeOTRpjIH0
- YBApUUsYpT9DiqJgm1SQRes+FTlNXqZGgbjzTEJz23Iz2u6OKi3pbGf
-X-Developer-Key: i=henrik.enquist@gmail.com; a=ed25519;
- pk=ctrSXwtuuiWIZbc1qNzu+n+1PkhB/a+2nlRyXd5j2pg=
-X-Endpoint-Received: by B4 Relay for henrik.enquist@gmail.com/20261003 with
- auth_id=1105
-X-Original-From: Henrik Enquist <henrik.enquist@gmail.com>
-Reply-To: henrik.enquist@gmail.com
 
-From: Henrik Enquist <henrik.enquist@gmail.com>
+On Sat, Oct 03, 2026 at 08:40 PM Tao Cui <cui.tao@linux.dev> wrote:
 
-With notify enabled (the pcm_notify module parameter or the "PCM
-Notify" control), the playback side of a cable may change format, rate
-and channels while a capture is running. loopback_check_format() then
-stops the capture and notifies the "PCM Slave" controls, so that the
-capture application can reopen with the new parameters. For this
-reason loopback_open() still gives a notify mode playback the
-unconstrained loopback_pcm_hardware.
+v10 was sent 11 hours after v9.
+Patch 1 grew from 712 to 789 lines and device removal is still
+not tested.
+Pls slow down. Wait for Tejun before sending v11.
 
-Since commit 898dfe4687f4 ("ALSA: aloop: Fix racy hw constraints
-adjustment") the hw rules refine against the shared cable->hw instead
-of the substream's own runtime->hw. This pins the playback side to the
-parameters of an open capture whatever the notify setting is. A player
-probing the device sees only the capture's rate, format and channels,
-and the format change path in loopback_check_format() can't be reached
-by a new playback.
-
-Skip the format, rate and channels rules for the playback substream
-when notify is enabled. Skip the period bytes rule as well: with a
-sound timer source, params_change() already takes the period size from
-a notify mode playback, and keeping the old capture's period bytes
-leaves a playback at another rate with a period that doesn't match the
-timer. The capture side stays constrained to the cable parameters.
-
-The capture stop this makes reachable again was hardened by commit
-826af7fa62e3 ("ALSA: aloop: Fix racy access at PCM trigger") and
-commit e5c33cdc6f40 ("ALSA: aloop: Fix peer runtime UAF during
-format-change stop"), which need to be applied first when backporting.
-
-Reproducer, with notify enabled on the cable:
-  arecord -D hw:Loopback,1,0 -r 44100 -f S32_LE -c 2 /dev/null &
-  aplay -D hw:Loopback,0,0 96k.wav
-Before: aplay is forced to 44100 Hz and the capture keeps running.
-After: aplay runs at 96000 Hz, the capture is stopped and "PCM Slave
-Rate" reports 96000.
-
-Fixes: 898dfe4687f4 ("ALSA: aloop: Fix racy hw constraints adjustment")
-Reported-by: Pavel Hofman <pavel.hofman@ivitera.com>
-Closes: https://lore.kernel.org/all/b4af9071-f8d7-5b47-4d7a-c5743bd67394@ivitera.com/
-Cc: stable@vger.kernel.org
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Henrik Enquist <henrik.enquist@gmail.com>
----
- sound/drivers/aloop.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/sound/drivers/aloop.c b/sound/drivers/aloop.c
-index 81cb1f59f7..5f0e2dc967 100644
---- a/sound/drivers/aloop.c
-+++ b/sound/drivers/aloop.c
-@@ -1073,6 +1073,18 @@ static unsigned int get_cable_index(struct snd_pcm_substream *substream)
- 		return !substream->stream;
- }
- 
-+/*
-+ * In notify mode the playback side may change format, rate, channels and,
-+ * with a sound timer, the period size. A running capture that no longer
-+ * matches is stopped by loopback_check_format().
-+ * call in loopback->cable_lock
-+ */
-+static bool loopback_playback_unconstrained(struct loopback_pcm *dpcm)
-+{
-+	return dpcm->substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
-+	       get_notify(dpcm);
-+}
-+
- static int rule_format(struct snd_pcm_hw_params *params,
- 		       struct snd_pcm_hw_rule *rule)
- {
-@@ -1082,6 +1094,8 @@ static int rule_format(struct snd_pcm_hw_params *params,
- 
- 	snd_mask_none(&m);
- 	scoped_guard(mutex, &dpcm->loopback->cable_lock) {
-+		if (loopback_playback_unconstrained(dpcm))
-+			return 0;
- 		m.bits[0] = (u_int32_t)cable->hw.formats;
- 		m.bits[1] = (u_int32_t)(cable->hw.formats >> 32);
- 	}
-@@ -1096,6 +1110,8 @@ static int rule_rate(struct snd_pcm_hw_params *params,
- 	struct snd_interval t;
- 
- 	scoped_guard(mutex, &dpcm->loopback->cable_lock) {
-+		if (loopback_playback_unconstrained(dpcm))
-+			return 0;
- 		t.min = cable->hw.rate_min;
- 		t.max = cable->hw.rate_max;
- 	}
-@@ -1112,6 +1128,8 @@ static int rule_channels(struct snd_pcm_hw_params *params,
- 	struct snd_interval t;
- 
- 	scoped_guard(mutex, &dpcm->loopback->cable_lock) {
-+		if (loopback_playback_unconstrained(dpcm))
-+			return 0;
- 		t.min = cable->hw.channels_min;
- 		t.max = cable->hw.channels_max;
- 	}
-@@ -1128,6 +1146,8 @@ static int rule_period_bytes(struct snd_pcm_hw_params *params,
- 	struct snd_interval t;
- 
- 	scoped_guard(mutex, &dpcm->loopback->cable_lock) {
-+		if (loopback_playback_unconstrained(dpcm))
-+			return 0;
- 		t.min = cable->hw.period_bytes_min;
- 		t.max = cable->hw.period_bytes_max;
- 	}
-
--- 
-2.53.0
-
-
+pw-bot: cr
