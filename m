@@ -1,57 +1,83 @@
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B07400DE1;
-	Sat,  3 Oct 2026 10:10:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.135
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5A7332EBC
+	for <linux-kselftest@vger.kernel.org>; Sat,  3 Oct 2026 10:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791022219; cv=none; b=bWT/ZVKIk8LRy0sLOnp3sDn3stVklmS6UgE8Mmr9RNQhAbifJ4Uge32y/iSZZ6f8S8+ZXN8fED3+oMGA8k17XNqYfK2JgjNsPMnKL+xpHQl8CqOeGdbYm2dAqggNM9AiBjTwmdWr0/YDgBAA912CvF8snXiDCZxvg4I/AV9x7Wo=
+	t=1791023443; cv=none; b=MWiu9JxMySe1xgxCj0DbsDQ0iF1QjSNQoYYWF2YD3FCmXcp9J/rvexsEQZYOsQSGZ2uMpXx2SlVTByeWv6KqXLQo8hKgbTU/IzO5HG0rnvGPOrbsbLC2won2KqItZtfA8v7xsboinqBuAm1gllpnOZDZ5ykl2j/AMK0nwlYJfoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791022219; c=relaxed/simple;
-	bh=31WdfSjCWnB/HGcobwieMsmopL0/q4Qyr3sHHctciOU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cYVuDcqbXWtSooPri8X7sUa5n7shGGn6bJWf1OOk7cQ39he5HOlolTh7qwvMtifJTmSSliGHp2zbMUVAvoRzEJGNUdXiMKA5vxAXHKz+Z1oBmibaHIa47rZOGJF06gQTVwDxJA0ZeSbyKiCBkuQERPhZJtleF/SHpqRdyq/VmIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b=xbcJr4tE; arc=none smtp.client-ip=111.22.67.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	s=arc-20240116; t=1791023443; c=relaxed/simple;
+	bh=kUSPUwbix68rAzascc7JVGxipvu4edBvCRCwo/tJwIE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MZBAvGcybvq5WILyu3cvBJkpZ4/ZfgtDFpwuk7dGJJNtFT277sTGlzq9buyAvL2nawjEEuuMyy5du5U1utCe7NYh+0PZeGn71RUJgkPK8MKpeRrbERXj5+lJPWIo+sb+kJi73irieoK4AoKckyZMlMtNAifShX6lv8UVCUKy8ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N4hTKU5/; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b="xbcJr4tE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N4hTKU5/"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-39d654f02baso103690a91.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 03 Oct 2026 03:30:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=xbcJr4tEF3VrGvJDfQwlsuDoUC/n4Ro6Gzckgzg4PJfCsPFmRsoWp605c3zh/z3c+9sv5LG/DRCAA
-	 6zHsQuF5fxJYIJeAGM35kE7WLKtOoO4soROv5x8ybzxIuzs+6pvJIt4+uE3ucVpWQNekOePKIUgzS2
-	 0dsFm95Y8Ut+jHFw=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee76ac0d47f12a-9bbb1;
-	Sat, 03 Oct 2026 18:10:08 +0800 (CST)
-X-RM-TRANSID:2ee76ac0d47f12a-9bbb1
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from  (unknown[112.22.250.209])
-	by rmsmtp-syy-appsvr04-12004 (RichMail) with SMTP id 2ee46ac0d4698ac-609a1;
-	Sat, 03 Oct 2026 18:10:08 +0800 (CST)
-X-RM-TRANSID:2ee46ac0d4698ac-609a1
-From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To: netdev@vger.kernel.org
-Cc: Alice Mikityanska <alice.kernel@fastmail.im>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
+        d=gmail.com; s=20251104; t=1791023435; x=1791628235; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=wPZq7gjHJpcJmgR7EaOFKtvjMOo9Jsmtk8qeZDcxeRE=;
+        b=N4hTKU5/5E6OI45gvGrHucztR9ZOL5bDnHYQcwchRPFTkS3XxjDAsUK0PYZHisCmzz
+         9ixQaEbDRullHcW499wD5grR08/yeyt8IsY8thDrDVBCyQQl1mplWDPGlQZEJ8j4XHVD
+         w5wayrzbuG+W5k5U3ELymrhob5XUPPjsD9XuyTaloUbjUodpfexY+J808xj7S6dbVgEU
+         N/arPyFuQqnJKqw6CDi6saRHyHVC/ugjAm5fYrn/80QPsH4k6+kOZBFeg7HST4IcyNQj
+         23EXZirGCWap7QQJKsJ2AYT/riSuIUfUAtu2QQYLK04PDjXT+CeY5JcDz0xX1cilHBZP
+         p2AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791023435; x=1791628235;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=wPZq7gjHJpcJmgR7EaOFKtvjMOo9Jsmtk8qeZDcxeRE=;
+        b=MMzB3QZ2R9GKPZoreLvfskgWCSDYHNFtmwEuCxfde93b5MKD/XuL10itJ/dj6awBjC
+         zT8hsDuPkcMdJMH3NRCNm0cR6AxTKPNS9b8R9oFjhrRptITFePEVI7eR89JJ71GVTVD5
+         6Uxr41C3xgqFtNzeDXVYUR6e5oA+NVIHKPf0FwEkSRnIKxBl5cv2rtHOwqmPR4gmDjzU
+         iH/+1rYPfzFaY16zLj8stMB6rFSjtlkMPfpyKcas+osIdYtG6lR4p5XzLEEgIY8KEV32
+         +QjZQUErRdxAgD2EdTeS8STALeoqjZNbGm9qc/E+WWSN2oX82TJhjgXDOUzYsZI4VLnR
+         wFSw==
+X-Forwarded-Encrypted: i=1; AKwUvBy2/IEFwcye0GgCgQzhQZINY/N4dJptoSv9XjvQNueYnG5MDAQzmVE8A82nom738jYstGVFM5T66ncXIeHDHEI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIeDl+y5YB/ncOHfKhb0ictr4nvKkZl9IRWd6d59fijSey9KfPH
+	+DOYINDVjy7O3mdzVEvjOhHSnR0kD46PsQnDN0Al9+YGfOcASQYTXhY=
+X-Gm-Gg: AYBFou2JrfXEmlxbJo6mJ4k1vlz87gHI/PH0Ea/oCNPd5ZWxdeYVrGAsECecT55XUem
+	wNtVYILst1PQ3Ytzfsf5mkpV1Xzj1e1ka2AC7rktyjztAKkalHEUNdxydKWRrmgTbG5oy+zhThE
+	U7ynuTbp+0pW7CVyn2EAwZszInbxDOiSRqc76NlFYhYEXOV9dcO0WMq8Hk59DrhRTx7K3d8d/Xb
+	3PpcuB7mRU4RHvk2Yck84YwWo5sIQjKLY5K+elaHj+kGGroPeHdxP8r0Mj1a6GeshobnnM/bO6T
+	fhPpDr5oL2IL171fvCiUMVxz0JbPBTJFO3C+49BC2jIeyPMkulwS9FnRpNRSDPKbqev5ApOjGHB
+	qButXEBrpy0u9R8f2xuSND46lBJ+lEN4bM8S7ghkEamxnpupYJXv/nApKSAYc6+9Myui5kPoAeB
+	4f0urstU1C5YH1+V23BbmyhLSebv92A1uOBPes6lR5I7lRYfu56lUbATCFIR9KFVHPHgr/r5oEw
+	cgnSXnzGCAe0+iUPZAhNAhw6w==
+X-Received: by 2002:a17:90a:c105:b0:3a7:aa1c:476b with SMTP id 98e67ed59e1d1-3a7aa1c5b5cmr149517a91.31.1791023435221;
+        Sat, 03 Oct 2026 03:30:35 -0700 (PDT)
+Received: from ydg-Zenbook-14-UM3406GA ([211.230.25.193])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a709a4e80bsm2121961a91.4.2026.10.03.03.30.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Oct 2026 03:30:34 -0700 (PDT)
+From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+To: akpm@linux-foundation.org,
+	rppt@kernel.org
+Cc: peterx@redhat.com,
+	surenb@google.com,
+	aarcange@redhat.com,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	kas@kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [PATCH net-next v2 1/2] bareudp: Enable BIG TCP packets
-Date: Sat,  3 Oct 2026 18:09:38 +0800
-Message-ID: <20261003100939.468181-2-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261003100939.468181-1-yanhaishuang@cmss.chinamobile.com>
-References: <20261003100939.468181-1-yanhaishuang@cmss.chinamobile.com>
+	donggeunyoo.kernel@gmail.com
+Subject: [PATCH v4 0/2] userfaultfd: clear the inherited uffd bit in move_swap_pte()
+Date: Sat,  3 Oct 2026 19:30:28 +0900
+Message-ID: <20261003103030.63380-1-donggeunyoo.kernel@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,55 +86,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit f3d0f753f066 ("vxlan: Enable BIG TCP packets") and commit
-03ebe91b0f61 ("geneve: Enable BIG TCP packets") allowed BIG TCP on vxlan
-and geneve, after the preceding patches of that series made the common
-UDP tunnel transmit path handle GSO packets larger than 64KB.
+UFFDIO_MOVE on a swapped-out page installs the source PTE at the
+destination unchanged, so a uffd bit set on a write-protected or
+RWP-protected source lands in a destination VMA that was never
+registered for either, and nothing clears it afterwards.  Patch 1 clears
+the bit, then re-arms it if the destination is RWP-registered, which is
+what the present-page and zeropage move paths already do.  Patch 2 adds
+the tests that catch it.
 
-bareudp transmits through the same helpers, udp_tunnel_handle_offloads()
-followed by udp_tunnel_xmit_skb() or udp_tunnel6_xmit_skb(), and does
-not fill in any length field itself. Bump tso_max_size up to
-GSO_MAX_SIZE so that the admin can use BIG TCP with bareudp too.
+v1: https://lore.kernel.org/all/20260919004630.1159895-1-donggeunyoo.kernel@gmail.com/
+v2: https://lore.kernel.org/all/20260925042907.2330519-1-donggeunyoo.kernel@gmail.com/
+v3: https://lore.kernel.org/all/20260926124145.2878520-1-donggeunyoo.kernel@gmail.com/
 
-The default gso_max_size and gso_ipv4_max_size stay at 64KB, so nothing
-changes unless they are raised explicitly.
+Changes in v4:
+ - patch 1: add Acked-by from David Hildenbrand and Mike Rapoport; no
+   code change
+ - patch 2: protect the source right after registering it, open pagemap
+   at the top, and use a designated initializer for the move (David
+   Hildenbrand)
+ - patch 2: fail only the test case, not the whole run, when UFFDIO_MOVE
+   fails (David Hildenbrand)
 
-iperf3 TCP over bareudp (ethertype ipv4, IPv4 outer) between two netns
-connected by veth, MTU 1600 on veth, 3 runs of 20 seconds each. This
-was measured in a QEMU TCG guest, so only the relative numbers are
-meaningful:
+Changes in v3:
+ - patch 1: describe the userspace-visible effects and the backport
+   (Andrew Morton, David Hildenbrand)
+ - patch 2: drop the MADV_PAGEOUT retry loop (David Hildenbrand)
+ - patch 2: add an RWP case (David Hildenbrand)
 
-  gso_max_size/gso_ipv4_max_size 65536:
-    4380.6, 4404.2, 4354.5 Mbit/s, average 4379.8 Mbit/s
+Changes in v2:
+ - patch 1: clear the bit unconditionally (Kiryl Shutsemau)
+ - patch 1: rewrite the changelog for readability (Mike Rapoport)
+ - add Assisted-by: LLM (Mike Rapoport)
 
-  gso_max_size/gso_ipv4_max_size 196608:
-    5509.4, 5454.7, 5497.4 Mbit/s, average 5487.2 Mbit/s (+25%)
+x86_64 defconfig plus USERFAULTFD, TRANSPARENT_HUGEPAGE,
+PAGE_TABLE_CHECK_ENFORCED and a swap device, under QEMU, on
+6812ce4e4379:
 
-With 196608, about 90k to 100k packets larger than 64KB were
-transmitted on the bareudp device per run, none with 65536. Without
-this patch, setting gso_max_size to 196608 is rejected.
+  uffd-unit-tests                    before   after
+  move-swap-wp on anon               not ok   ok
+  move-swap-rwp on anon              not ok   ok
+  the other 103 unit tests           ok       ok
+  uffd-wp-mremap, 38 tests           ok       ok
 
-Assisted-by: LLM
-Acked-by: Alice Mikityanska <alice.kernel@fastmail.im>
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
- drivers/net/bareudp.c | 1 +
- 1 file changed, 1 insertion(+)
+  11 unit tests skip on both, as CONFIG_GUP_TEST is not set.
 
-diff --git a/drivers/net/bareudp.c b/drivers/net/bareudp.c
-index c3b5ed52d877..fcc33e302b9c 100644
---- a/drivers/net/bareudp.c
-+++ b/drivers/net/bareudp.c
-@@ -589,6 +589,7 @@ static void bareudp_setup(struct net_device *dev)
- 	dev->max_mtu = IP_MAX_MTU - BAREUDP_BASE_HLEN;
- 	dev->type = ARPHRD_NONE;
- 	netif_keep_dst(dev);
-+	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
- 	dev->priv_flags |= IFF_NO_QUEUE;
- 	dev->lltx = true;
- 	dev->flags = IFF_POINTOPOINT | IFF_NOARP | IFF_MULTICAST;
+With UFFDIO_MOVE forced to fail (len = page_size + 1, local change only),
+v3 aborts the run after 15 of 116 tests; v4 reports the two move-swap
+cases as failed and runs the rest.
+
+  pagemap bit 57 at the destination  before   after
+  swapped page, dst not armed        set      clear
+  swapped page, dst WP-armed         set      clear
+  swapped page, dst RWP-armed        set      set
+  resident page, dst WP-armed        clear    clear
+
+  MADV_COLLAPSE over 2 MB at dst     EINVAL   0
+  fault on the moved page at dst     WARNING  none
+
+Donggeun Yoo (2):
+  userfaultfd: clear the inherited uffd bit in move_swap_pte()
+  selftests/mm: add tests for UFFDIO_MOVE of a uffd-protected swap entry
+
+ mm/userfaultfd.c                             |  1 +
+ tools/testing/selftests/mm/uffd-unit-tests.c | 84 ++++++++++++++++++++
+ 2 files changed, 85 insertions(+)
+
 -- 
-2.43.0
-
-
+2.53.0
 
