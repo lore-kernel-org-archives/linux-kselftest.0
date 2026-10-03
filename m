@@ -1,103 +1,159 @@
-Received: from cvsmtppost24.nm.naver.com (cvsmtppost24.nm.naver.com [114.111.35.238])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18BF1FF7C8
-	for <linux-kselftest@vger.kernel.org>; Sat,  3 Oct 2026 02:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.111.35.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3241F388394
+	for <linux-kselftest@vger.kernel.org>; Sat,  3 Oct 2026 04:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790994879; cv=none; b=n3GZVxcNXBYPU9tPdKS7h079Wp0Rewkyo07vM3Hl6y6GttcZo76ql9QzCTs+kA6h1k3s0qiUeHVH2m9cS2U3xD9HFobyjdHLI9Pwgqxh8hRb4SRWgkqZ5Igc6NRaUUfy+W2WFcsoaOwUtpKy8AcJoVMJivfpBFwIMQQBijhneV8=
+	t=1791000156; cv=none; b=lHpFt3fqwhxqupZQn2A4bcoNfKOBrgp73rRaacrRQMF/Q2k2i4S5+OI2YQkYhVHWELD2ZA42QzqBteAkU/8NhPaI+eBglMAzcCwKEPHGHWaZrw45BTfleOCz6vHEKvNUGalCttMb3VbrkWLz3LmpcPC+OqaXGPUxdHu8+1gwo04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790994879; c=relaxed/simple;
-	bh=D9PsPk0gFlO9GPGaOGATZQ1D1CCazUzS3Cj41Y4mEF4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gzndv4CspyVKtd4raYk36MMOwsUbmGQIlNlpJnCJLRDzAGcAWPHTFyDvCwowFOkJg9xpfha4vstGI7gaf+PH1qgFzizhd1E2Dxmc/79bZzKdvBpdeORA5emk3DC209J5p126yz3b5fPPi/VdtdJypQEe8b8BIK99/WEUg2ulu5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=naver.com; spf=pass smtp.mailfrom=naver.com; dkim=pass (2048-bit key) header.d=naver.com header.i=@naver.com header.b=vxv1fU+V; arc=none smtp.client-ip=114.111.35.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=naver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=naver.com
+	s=arc-20240116; t=1791000156; c=relaxed/simple;
+	bh=DHf+N8sLAfAAiDtbstMHFBX0Xlx5TDyTO3nV1Op8V/8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UsvMF6NNDRBb4WX6SL0JWhT+OBJYKYr+V6HJ0jMOzKihGHzKP9tkOJ3zI5CE6W0re49jVN3yxWJm22D1FheHU5Ch2K5hqi13KxlIvOAP6lTRSXfmMPlYg1vVWp5cAxg9z9SGle0pHbGN8caYrJ/Z/CHVPAJWMbUQFisX+3wvT2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n7KYmbsi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=naver.com header.i=@naver.com header.b="vxv1fU+V"
-Received: from cvsendbo030.nm ([10.112.20.49])
-  by cvsmtppost24.nm.naver.com with ESMTP id 5aQgHx-kSeOj+n-gjsZPrg
-  for <linux-kselftest@vger.kernel.org>;
-  Sat, 03 Oct 2026 02:24:27 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=naver.com; s=s20171208;
-	t=1790994267; bh=D9PsPk0gFlO9GPGaOGATZQ1D1CCazUzS3Cj41Y4mEF4=;
-	h=From:To:Subject:Date:Message-ID:From:Subject:Feedback-ID:
-	 X-Works-Security;
-	b=vxv1fU+VzK7CdzB9+WGbCfeafTfUZpYsTitsHZlXQjXSTMcNEUwO3smYZ9gV9poY8
-	 VfJENcyq09C0fau8WJhX+fGb4sZYhr27fUkbaWDAot/a654QVsE86+JQgxoY+lPOSb
-	 HNL+cTIXr2DbAR43k5dogXW9q8ERLlqZwjAmd7G5k7YRqMgrxd7nFuVcUasd0mgVQD
-	 mu00rpZW2vHKX6b76tX5YXcy0ba24R99jaZscDQrBahyXbh37vNQT1xFWOOFTmnzPv
-	 tSIa9CeLzn/CHiAmwIpxns5/FLwT+ECOGYUf5OlZBw9PCgEHRaJcwJLk5m32bShVoQ
-	 hfZclx3aBD/5g==
-X-Session-ID: FHq34ZsPRCuc3hsR6l3now
-X-Works-Send-Opt: Os+wpzGdjHmdKHFOMr39Ko3YKHmljAudFqM9KqMqFxIYkEljxBmwjAg=
-X-Works-Smtp-Source: gdbraxglFqJZ+HmrFo2w+6E=
-Received: from localhost.localdomain ([115.136.205.4])
-  by cvnsmtp005.nm.naver.com with ESMTP id FHq34ZsPRCuc3hsR6l3now
-  for <multiple recipients>
-  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-  Sat, 03 Oct 2026 02:24:26 -0000
-From: tjdqudcks0424@naver.com
-To: brads@mainlining.org
-Cc: akpm@linux-foundation.org,
-	bsingharora@gmail.com,
-	cyyzero16@gmail.com,
-	gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	xu.xin@linux.dev
-Subject: Re: [PATCH v3 2/2] selftests: acct: test taskstats listener netns routing
-Date: Sat,  3 Oct 2026 11:24:18 +0900
-Message-ID: <20261003022418.1004081-1-tjdqudcks0424@naver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <98826F7B-9448-4585-89CA-55590AE29280@mainlining.org>
-References: <20261002105614.195370-3-tjdqudcks0424@naver.com> <98826F7B-9448-4585-89CA-55590AE29280@mainlining.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n7KYmbsi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B42A61F0089D
+	for <linux-kselftest@vger.kernel.org>; Sat,  3 Oct 2026 04:02:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791000154;
+	bh=2ShSmRUtxWEdg8PYGPavnsBraONwW1LV3c/s5yV1NCs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=n7KYmbsikhCRwDIsEDTjeuN6Zwp5d4UnP9SMGVQzLIZEz4qvkknXFTP6F7xnYkzx2
+	 LH90XwQ/O+DzlWJeDjwt/0PRFwP/0egrfoYq2YHSz//0WGzqutU2HXZnQKnmSlgBMJ
+	 wOG+ZD7/fpD2ZRthhiv3JGU6WM5vkBFQvSDBrIovn0MN/iXgy6Z/6DTQMhFP+d6v6w
+	 yokUdgl80oIErNZ6qAQ3WjY4L8EUR7iRzlNvmTHO5OcZ+4QW/EL2V9CqociQdlrdeV
+	 XXn146ME1kYjrV4ExORsZdEP0qeN9499rC75L43wgmrMlVGe9zPpZ9ej+YWyx1niv0
+	 I77qnsdfbPWJw==
+Received: by mail-ed2-f32.google.com with SMTP id 4fb4d7f45d1cf-6ad186afdf4so153420a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2026 21:02:34 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBwa6SYm3KbWIeAS/zzpJ5LaCTNN+V3YfY2+OS6bkiw1KAp9khBc2bLmg8PhqIfPWqrJUx7J/qCTsaNi5TyQ5CU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYICUZlYLzvtjnGSfiqf+mlty4DmSxpdXWjn6mIhTk6geL2v9YP1
+	kc8CQe2aj6bef9sAX7iTpkD6H1Kv4s50Zj52i2t2uLNNQGaY2KmCDjJO5k4BtoXWSD00QU62WcG
+	gIZRL0QkCo6TtiUuZGqdXkUH/AhnDM+Y=
+X-Received: by 2002:a05:6402:52c1:b0:6ae:550e:59ee with SMTP id
+ 4fb4d7f45d1cf-6af9e30f5a0mr2805647a12.36.1791000153376; Fri, 02 Oct 2026
+ 21:02:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260923012356.1058379-1-maobibo@loongson.cn>
+In-Reply-To: <20260923012356.1058379-1-maobibo@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 3 Oct 2026 12:02:21 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5+pFcSbjKzH-wHsOR2+07Q8D51S73DF6qCyUjdwMiHjA@mail.gmail.com>
+X-Gm-Features: AclHuK8QPrzkNUWV8LeYPocyeAeY7oS40yvBcmThzE45_K4ID_lbjWl7UEZ3Hfo
+Message-ID: <CAAhV-H5+pFcSbjKzH-wHsOR2+07Q8D51S73DF6qCyUjdwMiHjA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: LoongArch: selftests: Enable HW PTW by auto
+ detection method
+To: Bibo Mao <maobibo@loongson.cn>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: 성병찬 <tjdqudcks0424@naver.com>
+Applied, thanks.
 
-Hi Bradley,
+Huacai
 
-Thank you for testing the series and for the detailed feedback.
-
-I reproduced the repeated-run problem and found that the test was rejecting
-valid unsolicited exit notifications after the first one.  The kernel uses
-an increasing per-CPU nlmsg_seq for these notifications; run 1 used sequence
-zero, while later runs used nonzero sequences that receive_victim() silently
-discarded.  The normal init_net listener therefore appeared silent for the
-same userspace reason even though unicast succeeded.
-
-The test now distinguishes matched, unmatched, expected-no-record, poll
-timeout, deadline expiry, malformed, receive-error, socket-error, and
-suspected-drop outcomes.  It reports receive counters and per-socket
-/proc/net/netlink diagnostics, including Drops.  I also made registration,
-victim exit, deregistration, close, and reap ordering explicit, added bounded
-cooperative cleanup, and made closed-pipe cleanup SIGPIPE-safe.
-
-I ran the same test binary 20 times back-to-back on one vulnerable boot.
-Every run delivered the exact victim record to the colliding unprivileged
-init_net socket instead of the child-netns registrar, while the normal
-administrator and negative controls behaved as expected.  I then ran it 20
-times back-to-back on each of two fixed boots; all 40 runs passed.  After
-four induced failure modes, the post-failure recovery test passed 10/10.
-
-I also repeated the validation on current mainline: the vulnerable kernel
-reproduced 10/10, two fixed boots passed 20/20 each, and post-failure
-recovery passed 10/10.
-
-I added comments documenting the socket-private namespace lifetime and the
-intentional all-CPU listener sweep during socket destruction.
-
-I will send v4 as a separate series after allowing time for review.
-
-Thanks,
-Sung Byeongchan
+On Wed, Sep 23, 2026 at 9:31=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> wrot=
+e:
+>
+> Add HW PTW feature when VM is created. This feature is detected firstly,
+> enable it if it is available on host machine. With HW PTW feature enabled=
+,
+> refill exception will not happen and it is not necessary to set refill
+> exception entry.
+>
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>  .../selftests/kvm/include/loongarch/processor.h  |  3 +++
+>  .../selftests/kvm/lib/loongarch/processor.c      | 16 ++++++++++++++--
+>  2 files changed, 17 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/include/loongarch/processor.h b/=
+tools/testing/selftests/kvm/include/loongarch/processor.h
+> index 0e59daa8024e..8d9fabdc89e3 100644
+> --- a/tools/testing/selftests/kvm/include/loongarch/processor.h
+> +++ b/tools/testing/selftests/kvm/include/loongarch/processor.h
+> @@ -79,6 +79,7 @@
+>  #define  CPUCFG2_LASX                  BIT(7)
+>  #define  CPUCFG2_LLFTP                 BIT(14)
+>  #define  CPUCFG2_LLFTPREV              GENMASK(17, 15)
+> +#define  CPUCFG2_PTW                   BIT(24)
+>
+>  /* LoongArch Basic CSR registers */
+>  #define LOONGARCH_CSR_CRMD             0x0 /* Current mode info */
+> @@ -128,6 +129,8 @@
+>  #define LOONGARCH_CSR_PGD              0x1b
+>  #define LOONGARCH_CSR_PWCTL0           0x1c
+>  #define LOONGARCH_CSR_PWCTL1           0x1d
+> +#define  CSR_PWCTL1_PTW_SHIFT          24
+> +#define  CSR_PWCTL1_PTW                        BIT_ULL(CSR_PWCTL1_PTW_SH=
+IFT)
+>  #define LOONGARCH_CSR_STLBPGSIZE       0x1e
+>  #define LOONGARCH_CSR_CPUID            0x20
+>  #define LOONGARCH_CSR_KS0              0x30
+> diff --git a/tools/testing/selftests/kvm/lib/loongarch/processor.c b/tool=
+s/testing/selftests/kvm/lib/loongarch/processor.c
+> index 47bbde3e205a..35e35c62759f 100644
+> --- a/tools/testing/selftests/kvm/lib/loongarch/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/loongarch/processor.c
+> @@ -282,6 +282,7 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
+>         unsigned int cfg;
+>         unsigned long val;
+>         struct kvm_vm *vm =3D vcpu->vm;
+> +       bool has_ptw =3D false;
+>
+>         switch (vm->mode) {
+>         case VM_MODE_P36V47_16K:
+> @@ -300,6 +301,12 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
+>         ret =3D __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,=
+ KVM_LOONGARCH_VM_FEAT_LASX);
+>         if (!ret)
+>                 cfg |=3D CPUCFG2_LASX;
+> +       ret =3D __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,=
+ KVM_LOONGARCH_VM_FEAT_PTW);
+> +       if (!ret) {
+> +               cfg |=3D CPUCFG2_PTW;
+> +               has_ptw =3D true;
+> +       }
+> +
+>         loongarch_set_cpucfg(vcpu, LOONGARCH_CPUCFG2, cfg);
+>         cfg =3D read_cpucfg(LOONGARCH_CPUCFG6);
+>         loongarch_set_cpucfg(vcpu, LOONGARCH_CPUCFG6, cfg);
+> @@ -338,6 +345,9 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
+>
+>         /* PGD page shift and width */
+>         val =3D (vm->page_shift + width * (vm->mmu.pgtable_levels - 1)) |=
+ width << 6;
+> +       if (has_ptw)
+> +               val |=3D CSR_PWCTL1_PTW;
+> +
+>         loongarch_set_csr(vcpu, LOONGARCH_CSR_PWCTL1, val);
+>         loongarch_set_csr(vcpu, LOONGARCH_CSR_PGDL, vm->mmu.pgd);
+>
+> @@ -345,8 +355,10 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
+>          * Refill exception runs on real mode
+>          * Entry address should be physical address
+>          */
+> -       val =3D addr_gva2gpa(vm, (unsigned long)handle_tlb_refill);
+> -       loongarch_set_csr(vcpu, LOONGARCH_CSR_TLBRENTRY, val);
+> +       if (!has_ptw) {
+> +               val =3D addr_gva2gpa(vm, (unsigned long)handle_tlb_refill=
+);
+> +               loongarch_set_csr(vcpu, LOONGARCH_CSR_TLBRENTRY, val);
+> +       }
+>
+>         /*
+>          * General exception runs on page-enabled mode
+>
+> base-commit: 93f51579e7df248780214094418f205253383cc5
+> --
+> 2.39.3
+>
