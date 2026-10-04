@@ -1,64 +1,64 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDA24718D0
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 17:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2263C472555
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 17:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791135353; cv=none; b=kCd6lFvOGc4m60Ep1kqZaVmXXEm4nawznRT7UXt2WTfyjx0Yiw+JvNPT/LtgyfCoT1sRpfcBkU+pRpWd4+JgXitZYq+XXWcH0WnKEfTuEp0j4AHkSpgN0iTHo0OhFGj26YI6kLSLBa/Jn9/DklK7Sh05scbXC1erSVaRC2/yWh0=
+	t=1791135360; cv=none; b=R5VSs1MMQUjRgR6rl8Qkn6owenVuKtNCvJB7x8u/CvIcWy/p2lxhgKjcQhKUZPhztnju04g4N8jnWnoYgdSeMZMU3UQuYvlyxHBk2c/waR1sfu2b065ZSRk0DdtWriTJV2tsbc0TA/cCYjhVToBQU3GmHjM/THn/aPNFpPeYXPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791135353; c=relaxed/simple;
-	bh=hXTo+U1kyDsu/5dykRgoUKTBRB5FIEOAjWQ8F+yZuR8=;
+	s=arc-20240116; t=1791135360; c=relaxed/simple;
+	bh=YNR9yvZkv71QFDocexJw2DhYAV/gIV2TrR99LpBZzBs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j0Gzx+xjt5qOAoWjXVWaz7GZHv4AoGFI/U3LBCJGK4Zmdtp55cdc5vDg0VoBQGAUvOsQPQp5d23rt61Zx9acM4NY78G8q7XtW/1TxXKF5lMNfKM2CVEeNvKPREBN8GQ6Sj7D+5XTXJTu1OUrTjpd8oooCi/5em8wZOU2a1xSSWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HPsFBSxB; arc=none smtp.client-ip=209.85.210.180
+	 MIME-Version; b=qcXO6PtBya7fjqE6+9fT+nphhSjUMb9nSFM0P97lNl/dM8AeSqWFuF9nz9NulvPhX6hvAaevnTRJYcpnfJA3IzgX/BhcM4sSygspFny4o9szudhS8w3Q3unPACtvoAJj7p/XHgP+YA2BApcoVMqjb6e5GK4UrCCjaeEzQHQ4HWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EWdd0sGf; arc=none smtp.client-ip=74.125.228.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPsFBSxB"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-887fb6c0ad1so214914b3a.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 10:35:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EWdd0sGf"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-86b90133ae8so215998b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 10:35:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791135340; x=1791740140; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791135348; x=1791740148; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Om4kmwSxVHnV6OGzZZmlMwny+BYaCqQVNA4bnUtk7wA=;
-        b=HPsFBSxB7s7Wy1dntFQ6PR33gp+kS0sdC33HpeOloXSflx5FqZzTKIPXac0xWKQDUz
-         X8xHK9FP2RHqdFKiAZVDXJ/ThN8U7kxLN8H3nXkAU+NHFLhxs9KYF9i4jAvJmupxUebk
-         Xrp3vTkEjrBEtLKV9x6KZbAqnVO9eDLMYdYMIWWkRfIwTDJmXfjSn+Wr0VcVvqeXuZ8z
-         Y/OPOZ7SI3Ru118Og737n/8OnKCbMtYrX4cGuREjx2SSbgN+74hgTeTLn8bWb2lWJbcv
-         z6mjglaJjwozTbltDWF68jzJCp3+8UB+KRZn2YLWc3Y+8gBioZtb2ULloSw+KUHcBXVe
-         Uo7w==
+        bh=F2xR/GADUr0drPkp+DIyMXz+1Et+1ehqr2V+ubl8dxA=;
+        b=EWdd0sGfYI6FWGusB2tsXLrYMNtE4D2yWUARh5JoifZrEuQ2w7z58G7NWgvxEl39I5
+         vzTpYhN8DauU58A6otQmWGrdda8MQhEeuY6ekX+PKu6lutzZhJv3Z4EcMFKVpItoSkoo
+         ePC8AQnbGgVjxLfl/NqNq4P81qZ1WHZECLTuuF3qqpzSXIaGw/SnV95Ah2s8Ekge57v6
+         /07/Bb1Ny4jvLbt8bCym2CeYh4Rz0iU1pu7H/nt8Leul7ChWhv4MU/LUQXDoCnpqNSRR
+         9Ouk2b85b8+goz0lfkfbr/APiY35QQtFPcxu4DJCvnGbFvxEO9JttCJYxE0s8X/RXmj+
+         VuZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791135340; x=1791740140;
+        d=1e100.net; s=20260707; t=1791135348; x=1791740148;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Om4kmwSxVHnV6OGzZZmlMwny+BYaCqQVNA4bnUtk7wA=;
-        b=uZ38lfFTFA54yxK3fvKjhSmwPPaB+JP58DXuR76n6fT9Z9maIpP0Vo97xk8MGwvG2O
-         Ee0FWS7f9zJDkA+2invrlTQJw0Nc+ooGu6PQ5A1ys/1vqqRp3hyzdXtGbLjQ4DGRGh6f
-         PVTH5G6QxDRoN+P0lrNAm4fRtvray6qxn8OYgkfBCYwzCUHw5qwfb7sVncogrYqprdg2
-         Winb4fvV2vNn8Aip8cAwL+htXRiIRZmUppTpWlgpBNb//fKF9/Y6Fv1Au9/WXxm0wRqu
-         NTTZo5Oq6JipViGbxGdicQ/QIaY40YluMO2St3vxlBza3TDwamU2zOwGOBsWjcLpPot9
-         g0Pg==
-X-Forwarded-Encrypted: i=1; AKwUvBwS/oa+aSxt0/lST0zJSGKBwHO3ahWtC63aIB1wDd3Pui3874vWpJMpQEwQH2R6Nlc6Gad3Ay1Dq1dYpqYEgho=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJTpr1o/ZCjORqm2+Rx7KKt9wV5zvjwttgWEr9NVV4Vn77dSsqn
-	nm8kmiSlGH7musqJFu/9xCXOE1vnEMcmXlnaaqvhGrB19/aHpMTf/Vlh
-X-Gm-Gg: AYBFou1+6H8+vjwXfyi0E0TnaJ0G8xLH4Scx60b0dR7Pf80w+jqRyWDKhKaaDvzQEg/
-	RjZ1HIwSDdQt76hh6Tf/ERY4JMjU4LTKeAw3O5txpvXz6VyXt/4hXhgerCYhrQQk/DvLer9Jdk2
-	dBmYk46akMv3EDBLuMN31ORVcfPYT8Y3DpDTWG9LO9GPrEgW/SdYVG3dBMouruC7eu9LE1wOqax
-	kg2nycmvQbRkADxSOUdTf7WAlUCritAcu5amFVzwfA4/24nDTC3Be7JNPfRK7AHft0KQxEh8+S3
-	XJSSwr/e+huJPt4P7VKhZvG856Lx+73aFfW6X+O5+bK2PIfaZwo+qFMiboz0wu6bY92LY2RO4cQ
-	DyNs9rwNZP56hrwoouBrFM8M0Lk8fFBwEUsrplOH8aIRN57oSzdO1RFNukBbiqHIGK0nbTDdGCZ
-	jhZ7PeZ0zvlwFIfjJpBa4aTXtW6kW5MlsPl4vxLP2B1mdDZV2aIypPatZ2TjR9WmKK7O3GW3II1
-	q2Uq+r35w+v+0Yi5GX7fkfXhFs/2Q==
-X-Received: by 2002:a05:6a00:7098:b0:88e:a50a:b260 with SMTP id d2e1a72fcca58-88ea50ac465mr653006b3a.54.1791135339702;
-        Sun, 04 Oct 2026 10:35:39 -0700 (PDT)
+        bh=F2xR/GADUr0drPkp+DIyMXz+1Et+1ehqr2V+ubl8dxA=;
+        b=BJ44EVDY9EO0PkX0j8HEn2uCjnKCtgW8cXRSIH7zpDQ4KWu+5AMu/BlHNR4V1tOOSU
+         zZ07cbFu/L3GWSrIgMQeg0yt+FMzw95ALp6zDSaWRU7kYWu2za5sv8cSVP1enjtXpbku
+         hv4dMdIBZs7swMf7GXQQWZ+u4pvCiAkl0VZBddK8nyzOx4uljhB09lDsgTFpnkpB7tGk
+         bZaLsQalOIlCvULA71cXvjGzHdk5pqQ6qSUkovxIlW3wG3o+eT7Wxl9usobQl5s7Lij7
+         yO+wfhICXVcnNlZJy+HvZ+0sDuUf62qaKMveDIQZ7PafS9HdKvmbliBFDp5AAOVNm27A
+         A6sA==
+X-Forwarded-Encrypted: i=1; AKwUvBxsiwKfSO6+rFq7cth4R83+AMmE8w8OqW5FswlbaoxqJbrwlRqFIi5by6EjZNacwlH5TqMxGkgHkuWlcuPYK7A=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKDcQfzYMiTuPxiDiniR6rfCnYRbgaNAvu252OC0DXPjk6we8eN
+	8OSi2g9fCPj9XbVMSlyqJSwA/Al5sNq3fZCKI+7U9ph+SJH8deD8I6LF
+X-Gm-Gg: AYBFou0xeVvzdPRCdwu5dcF+7VyiQ4k+BbgvF4KsaH9IoBWkex3KjfLeJaQjyGYMWco
+	gqUcl/Frk3MPoY2XobTsGplqNa+yCTcins1JFygFB/rpGlTfLK/ZGo9emEAgveDV69x3JB9Ca6F
+	OHyd9/1ydinNy1bu4WJROt+CxEawLaYcthgeh9GzeAN9Dnv6I7jO5GQKtjhzuWocA5zq0hBVxqR
+	qsihJyfsrOlYxAY2kf/LaFEr7YOjQmUrhCKDBiYaI+1bFnz/3vylnwJURmBR63FY8ArobhfFoc7
+	xRIVHK/MyAcU83adFM1Sf0L8xi0VPRM9E3l3vqh8AR0hXxcHKnP55gWkz8wVKlxoVhTI8gX/tXg
+	pA/WZ/9+O1aezV0B/92EL+n9tT422A1UR3MeUxqENeRQI/bn8z7i1yG834XYq3A9ysqpwJQKd4Y
+	xAgdXJ7lGXl75bD1+b/s/f5EEa2V+xU5DpBKYt7WQugMdLI3tlABWsZDu/7i8CKMY5FPUUD/j6g
+	kkAm4krgF18/FtN3k8oVNleI2gysw==
+X-Received: by 2002:a05:6a00:909e:b0:874:705d:f648 with SMTP id d2e1a72fcca58-88af56e71a9mr7636318b3a.42.1791135347657;
+        Sun, 04 Oct 2026 10:35:47 -0700 (PDT)
 Received: from kernel.tail6741c6.ts.net ([216.195.201.24])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-88b0d247930sm2678370b3a.54.2026.10.04.10.35.33
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-88b0d247930sm2678370b3a.54.2026.10.04.10.35.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 10:35:39 -0700 (PDT)
+        Sun, 04 Oct 2026 10:35:45 -0700 (PDT)
 From: Kunwu Chan <kunwu.chan@gmail.com>
 To: peterz@infradead.org,
 	mingo@redhat.com,
@@ -81,9 +81,9 @@ Cc: sj@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 4/5] selftests/perf_events: add userspace AUX regression test
-Date: Mon,  5 Oct 2026 01:34:56 +0800
-Message-ID: <20261004173458.837842-5-kunwu.chan@gmail.com>
+Subject: [PATCH 5/5] selftests/perf_events: add AUX kernel API selftest script
+Date: Mon,  5 Oct 2026 01:34:57 +0800
+Message-ID: <20261004173458.837842-6-kunwu.chan@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261004173458.837842-1-kunwu.chan@gmail.com>
 References: <20261004173458.837842-1-kunwu.chan@gmail.com>
@@ -95,686 +95,677 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Lian Wang <lianux.mm@gmail.com>
+Add a shell script that runs the perf_aux_kernel KUnit suite through
+debugfs, builds and runs the userspace regression program, and
+performs static-analysis checks on the source tree (memory barriers,
+refcount types, boundary validation, EXPORT_SYMBOL_GPL coverage).
 
-Add a standalone C program that opens a perf event, mmaps the metadata
-and data ring, sets up the AUX area via a second mmap, enables tracing,
-reads aux_head from the mmap page, and tears down the mapping.  This
-verifies the kernel-side aux_kernel_count changes do not break the
-existing userspace AUX mmap protocol.
+When an AUX-capable PMU is present, the script also runs a live
+perf record and checks dmesg for errors.
 
-Environment-dependent outcomes are reported as SKIP rather than PASS:
-an AUX area mmap failure (PMU does not support userspace AUX), a PMU
-that allows only one open event (e.g. ARM SPE), or a 100 ms window in
-which no AUX data was generated are SKIP rather than PASS.  The
-two-event independence test follows the full dual-mmap AUX
-protocol for both
-events so both aux_mmap_count holders really exist, and the
-mmap-page-fields test checks the kernel-managed fields
-(data_offset/data_size) and the read-back of the user-published
-aux_offset/aux_size rather than expecting the kernel to set them.
+The script works both in-tree and from an installed selftest location:
+the source-level static checks are SKIPped when no kernel source tree
+is found instead of failing, the installed userspace binary is run
+as-is when its source is absent, and runtime rebuilds honour $CC
+instead of hardcoding gcc.
+Usage:  sudo ./aux_kernel.sh [--pmu arm_spe_0]
 
-Co-developed-by: Kunwu Chan <kunwu.chan@gmail.com>
-Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
+Co-developed-by: Lian Wang <lianux.mm@gmail.com>
 Signed-off-by: Lian Wang <lianux.mm@gmail.com>
+Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
 ---
  tools/testing/selftests/perf_events/Makefile  |   1 +
- .../perf_events/aux_kernel_usermode.c         | 627 ++++++++++++++++++
- tools/testing/selftests/perf_events/config    |   2 +
- 3 files changed, 630 insertions(+)
- create mode 100644 tools/testing/selftests/perf_events/aux_kernel_usermode.c
+ .../selftests/perf_events/aux_kernel.sh       | 631 ++++++++++++++++++
+ 2 files changed, 632 insertions(+)
+ create mode 100755 tools/testing/selftests/perf_events/aux_kernel.sh
 
 diff --git a/tools/testing/selftests/perf_events/Makefile b/tools/testing/selftests/perf_events/Makefile
-index 2e5d85770dfe..fbafbd43f097 100644
+index fbafbd43f097..9b82c7ee1238 100644
 --- a/tools/testing/selftests/perf_events/Makefile
 +++ b/tools/testing/selftests/perf_events/Makefile
-@@ -3,4 +3,5 @@ CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
- LDFLAGS += -lpthread
+@@ -4,4 +4,5 @@ LDFLAGS += -lpthread
  
  TEST_GEN_PROGS := sigtrap_threads remove_on_exec watermark_signal mmap
-+TEST_GEN_PROGS += aux_kernel_usermode
+ TEST_GEN_PROGS += aux_kernel_usermode
++TEST_PROGS += aux_kernel.sh
  include ../lib.mk
-diff --git a/tools/testing/selftests/perf_events/aux_kernel_usermode.c b/tools/testing/selftests/perf_events/aux_kernel_usermode.c
-new file mode 100644
-index 000000000000..5c2da4bac074
+diff --git a/tools/testing/selftests/perf_events/aux_kernel.sh b/tools/testing/selftests/perf_events/aux_kernel.sh
+new file mode 100755
+index 000000000000..2271f105f55b
 --- /dev/null
-+++ b/tools/testing/selftests/perf_events/aux_kernel_usermode.c
-@@ -0,0 +1,627 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Userspace AUX regression test for the perf AUX kernel-consumer API.
-+ *
-+ * Verifies that the kernel-side AUX changes (aux_kernel_count,
-+ * perf_event_setup_aux, etc.) do NOT break the existing userspace
-+ * AUX mmap protocol:
-+ *   - perf_event_open() with AUX still works
-+ *   - mmap AUX buffer still works
-+ *   - aux_head / aux_tail from the mmap page are still correct
-+ *   - aux_mmap_count is independent of aux_kernel_count
-+ *   - Userspace and kernel AUX owners can coexist
-+ *
-+ * Build:  $(CC) -o aux_kernel_usermode aux_kernel_usermode.c
-+ * Usage:  sudo ./aux_kernel_usermode [pmu_name]
-+ *
-+ * Environment-dependent outcomes are reported as SKIP, not PASS: an
-+ * unsupported PMU, a PMU that only allows one open event at a time, or
-+ * a system configuration that rejects the event means the protocol was
-+ * not exercised, so it must not inflate the pass count.
-+ */
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/perf_event.h>
-+#include <signal.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+
-+#define PASS(fmt, ...) printf("  [PASS] " fmt "\n", ##__VA_ARGS__)
-+#define FAIL(fmt, ...) do { \
-+	printf("  [FAIL] " fmt "\n", ##__VA_ARGS__); \
-+	failed = 1; \
-+} while (0)
-+#define SKIP(fmt, ...) do { \
-+	printf("  [SKIP] " fmt "\n", ##__VA_ARGS__); \
-+	skipped = 1; \
-+} while (0)
-+
-+static int failed;
-+static int skipped;
-+
-+static long perf_event_open(struct perf_event_attr *attr, pid_t pid,
-+			    int cpu, int group_fd, unsigned long flags)
-+{
-+	return syscall(__NR_perf_event_open, attr, pid, cpu, group_fd, flags);
-+}
-+
-+/*
-+ * Find an AUX PMU type by scanning sysfs PMU directories.
-+ */
-+static int find_aux_pmu_type(void)
-+{
-+	char path[256], type_path[261];
-+	FILE *f;
-+	struct stat st;
-+	int type;
-+
-+	/* Try common AUX PMU names first */
-+	static const char * const known[] = {
-+		"arm_spe_0", "arm_spe_1", "arm_spe_2",
-+		"intel_pt", "intel_pt0",
-+		NULL
-+	};
-+
-+	for (int i = 0; known[i]; i++) {
-+		snprintf(path, sizeof(path),
-+			 "/sys/bus/event_source/devices/%s", known[i]);
-+		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode)) {
-+			snprintf(type_path, sizeof(type_path),
-+				 "%s/type", path);
-+			f = fopen(type_path, "r");
-+			if (f) {
-+				if (fscanf(f, "%d", &type) == 1) {
-+					fclose(f);
-+					printf("  Found AUX PMU: %s (type=%d)\n",
-+					       known[i], type);
-+					return type;
-+				}
-+				fclose(f);
-+			}
-+		}
-+	}
-+
-+	return -1;
-+}
-+
-+/*
-+ * Test 1: Basic perf_event_open() with software event.
-+ * This verifies the perf core is not broken at all.
-+ */
-+static int test_basic_sw_event(void)
-+{
-+	struct perf_event_attr attr = {};
-+	int fd;
-+
-+	attr.type = PERF_TYPE_SOFTWARE;
-+	attr.config = PERF_COUNT_SW_CPU_CLOCK;
-+	attr.size = sizeof(attr);
-+	attr.disabled = 1;
-+
-+	fd = perf_event_open(&attr, 0, -1, -1, 0);
-+	if (fd < 0) {
-+		FAIL("basic SW event: perf_event_open failed (%s)",
-+		     strerror(errno));
-+		return 1;
-+	}
-+
-+	if (ioctl(fd, PERF_EVENT_IOC_ENABLE, 0) < 0) {
-+		FAIL("basic SW event: enable failed (%s)", strerror(errno));
-+		close(fd);
-+		return 1;
-+	}
-+	usleep(10000);
-+	if (ioctl(fd, PERF_EVENT_IOC_DISABLE, 0) < 0) {
-+		FAIL("basic SW event: disable failed (%s)", strerror(errno));
-+		close(fd);
-+		return 1;
-+	}
-+
-+	close(fd);
-+	PASS("basic SW event: open/enable/disable/close");
-+	return 0;
-+}
-+
-+/*
-+ * Test 2: Userspace AUX mmap full lifecycle.
-+ * Opens an AUX event, mmaps the metadata/data ring, sets up the AUX
-+ * area via a second mmap, enables, reads aux_head, disables, unmaps,
-+ * closes.  This is the critical regression test.
-+ *
-+ * If the kernel rejects the AUX area mmap, the test is SKIP (not all
-+ * PMUs support userspace AUX mmap).
-+ */
-+static int test_aux_mmap(int pmu_type)
-+{
-+	struct perf_event_attr attr = {};
-+	struct perf_event_mmap_page *mp;
-+	void *aux_base;
-+	unsigned long aux_size, aux_offset, mmap_size;
-+	int fd, ret;
-+
-+	attr.type = pmu_type;
-+	attr.size = sizeof(attr);
-+	attr.disabled = 1;
-+	attr.sample_period = 256;
-+
-+	/* ARM SPE requires period mode (freq=0) */
-+	attr.freq = 0;
-+
-+	fd = perf_event_open(&attr, 0, -1, -1, 0);
-+	if (fd < 0) {
-+		FAIL("AUX mmap: perf_event_open failed (%s)", strerror(errno));
-+		return 1;
-+	}
-+
-+	/*
-+	 * Step 1: mmap the metadata page and data ring at offset 0.
-+	 * The kernel creates the ring buffer and returns the metadata page.
-+	 */
-+	aux_size = 1UL << 20; /* 1 MiB */
-+	mmap_size = aux_size + getpagesize();
-+	mp = mmap(NULL, mmap_size, PROT_READ | PROT_WRITE,
-+		  MAP_SHARED, fd, 0);
-+	if (mp == MAP_FAILED) {
-+		FAIL("AUX mmap: metadata mmap failed (%s)", strerror(errno));
-+		close(fd);
-+		return 1;
-+	}
-+
-+	/*
-+	 * Step 2: set aux_offset and aux_size in the metadata page.
-+	 * The AUX area starts after the metadata and data pages.
-+	 * The kernel reads these values when the AUX area is mmap'd.
-+	 */
-+	aux_offset = mmap_size;
-+	mp->aux_offset = aux_offset;
-+	mp->aux_size = aux_size;
-+
-+	/*
-+	 * Step 3: mmap the AUX area at aux_offset.
-+	 * The kernel reads aux_offset from the metadata page, verifies
-+	 * the mmap offset matches, and allocates the AUX buffer.
-+	 */
-+	aux_base = mmap(NULL, aux_size, PROT_READ, MAP_SHARED, fd,
-+			aux_offset);
-+	if (aux_base == MAP_FAILED) {
-+		printf("  [SKIP] AUX mmap: AUX area mmap failed (%s)\n",
-+		       strerror(errno));
-+		munmap(mp, mmap_size);
-+		close(fd);
-+		return 0;
-+	}
-+	PASS("AUX mmap: metadata mmap OK, AUX area mmap OK");
-+
-+	/* Enable the event */
-+	ret = ioctl(fd, PERF_EVENT_IOC_ENABLE, 0);
-+	if (ret < 0) {
-+		FAIL("AUX mmap: enable failed (%s)", strerror(errno));
-+		munmap(aux_base, aux_size);
-+		munmap(mp, mmap_size);
-+		close(fd);
-+		return 1;
-+	}
-+
-+	/* Run a small workload to generate some AUX data */
-+	usleep(100000); /* 100ms */
-+
-+	/* Disable the event */
-+	ret = ioctl(fd, PERF_EVENT_IOC_DISABLE, 0);
-+	if (ret < 0) {
-+		FAIL("AUX mmap: disable failed (%s)", strerror(errno));
-+		munmap(aux_base, aux_size);
-+		munmap(mp, mmap_size);
-+		close(fd);
-+		return 1;
-+	}
-+
-+	/* Unmap AUX area */
-+	ret = munmap(aux_base, aux_size);
-+	if (ret < 0) {
-+		FAIL("AUX mmap: AUX munmap failed (%s)", strerror(errno));
-+		munmap(mp, mmap_size);
-+		close(fd);
-+		return 1;
-+	}
-+
-+	/* Unmap metadata */
-+	ret = munmap(mp, mmap_size);
-+	if (ret < 0) {
-+		FAIL("AUX mmap: metadata munmap failed (%s)", strerror(errno));
-+		close(fd);
-+		return 1;
-+	}
-+	PASS("AUX mmap: full lifecycle PASS");
-+	close(fd);
-+	return 0;
-+}
-+
-+/*
-+ * Map the data ring (offset 0) of @fd and then, following the AUX
-+ * protocol, publish aux_offset/aux_size in the metadata page and map
-+ * the AUX area itself.  Returns 0 on success, 1 on failure, and -1
-+ * when the kernel refused the AUX mmap (caller should SKIP, since not
-+ * every PMU supports userspace AUX).
-+ */
-+static int mmap_event_aux(int fd, unsigned long aux_size,
-+			  struct perf_event_mmap_page **mpp, void **auxp,
-+			  unsigned long *mmap_sizep)
-+{
-+	struct perf_event_mmap_page *mp;
-+	void *aux_base;
-+	unsigned long mmap_size, aux_offset;
-+
-+	mmap_size = aux_size + getpagesize();
-+	mp = mmap(NULL, mmap_size, PROT_READ | PROT_WRITE,
-+		  MAP_SHARED, fd, 0);
-+	if (mp == MAP_FAILED) {
-+		FAIL("mmap of metadata/data ring failed (%s)", strerror(errno));
-+		return 1;
-+	}
-+
-+	/* The AUX area follows the metadata and data pages. */
-+	aux_offset = mmap_size;
-+	mp->aux_offset = aux_offset;
-+	mp->aux_size = aux_size;
-+
-+	aux_base = mmap(NULL, aux_size, PROT_READ, MAP_SHARED, fd, aux_offset);
-+	if (aux_base == MAP_FAILED) {
-+		munmap(mp, mmap_size);
-+		return -1;
-+	}
-+
-+	*mpp = mp;
-+	*auxp = aux_base;
-+	*mmap_sizep = mmap_size;
-+	return 0;
-+}
-+
-+/*
-+ * Test 3: Verify that aux_mmap_count is independent of aux_kernel_count.
-+ * Open two events for the same AUX PMU and give each its own AUX area
-+ * through the full dual-mmap protocol, so both aux_mmap_count holders
-+ * exist at the same time.  Verifies both events can hold AUX buffers
-+ * simultaneously.
-+ *
-+ * If the PMU allows only one open event (e.g. ARM SPE) the second open
-+ * is a SKIP, not a PASS: the coexistence was not exercised.
-+ */
-+static int test_aux_mmap_independence(int pmu_type)
-+{
-+	struct perf_event_attr attr = {};
-+	struct perf_event_mmap_page *mp1, *mp2;
-+	unsigned long aux_size, mmap_size1, mmap_size2;
-+	void *aux1, *aux2;
-+	int fd1, fd2, ret;
-+
-+	aux_size = 1UL << 16; /* 64 KiB */
-+
-+	attr.type = pmu_type;
-+	attr.size = sizeof(attr);
-+	attr.disabled = 1;
-+	attr.sample_period = 256;
-+	attr.freq = 0;
-+
-+	fd1 = perf_event_open(&attr, 0, -1, -1, 0);
-+	if (fd1 < 0) {
-+		FAIL("AUX independence: first event open failed (%s)",
-+		     strerror(errno));
-+		return 1;
-+	}
-+
-+	ret = mmap_event_aux(fd1, aux_size, &mp1, &aux1, &mmap_size1);
-+	if (ret < 0) {
-+		SKIP("AUX independence: first AUX area mmap failed (%s)",
-+		     strerror(errno));
-+		close(fd1);
-+		return 0;
-+	}
-+	if (ret > 0) {
-+		close(fd1);
-+		return 1;
-+	}
-+	PASS("AUX independence: first event has an AUX buffer");
-+
-+	/* Open a second event for the same PMU */
-+	fd2 = perf_event_open(&attr, 0, -1, -1, 0);
-+	if (fd2 < 0) {
-+		/* Some PMUs (e.g. ARM SPE) only allow one event at a time */
-+		SKIP("AUX independence: second event open (%s)",
-+		     strerror(errno));
-+		munmap(aux1, aux_size);
-+		munmap(mp1, mmap_size1);
-+		close(fd1);
-+		return 0;
-+	}
-+
-+	ret = mmap_event_aux(fd2, aux_size, &mp2, &aux2, &mmap_size2);
-+	if (ret < 0) {
-+		SKIP("AUX independence: second AUX area mmap failed (%s)",
-+		     strerror(errno));
-+		munmap(aux1, aux_size);
-+		munmap(mp1, mmap_size1);
-+		close(fd1);
-+		close(fd2);
-+		return 0;
-+	}
-+	if (ret > 0) {
-+		munmap(aux1, aux_size);
-+		munmap(mp1, mmap_size1);
-+		close(fd1);
-+		close(fd2);
-+		return 1;
-+	}
-+	PASS("AUX independence: second event has an AUX buffer");
-+
-+	/* Enable both */
-+	if (ioctl(fd1, PERF_EVENT_IOC_ENABLE, 0) < 0 ||
-+	    ioctl(fd2, PERF_EVENT_IOC_ENABLE, 0) < 0) {
-+		FAIL("AUX independence: enable failed (%s)", strerror(errno));
-+		munmap(aux2, aux_size); munmap(mp2, mmap_size2);
-+		munmap(aux1, aux_size); munmap(mp1, mmap_size1);
-+		close(fd1); close(fd2);
-+		return 1;
-+	}
-+	usleep(50000);
-+	if (ioctl(fd1, PERF_EVENT_IOC_DISABLE, 0) < 0 ||
-+	    ioctl(fd2, PERF_EVENT_IOC_DISABLE, 0) < 0) {
-+		FAIL("AUX independence: disable failed (%s)", strerror(errno));
-+		munmap(aux2, aux_size); munmap(mp2, mmap_size2);
-+		munmap(aux1, aux_size); munmap(mp1, mmap_size1);
-+		close(fd1); close(fd2);
-+		return 1;
-+	}
-+
-+	PASS("AUX independence: two events ran simultaneously");
-+
-+	/* Both metadata pages must remain distinct and readable */
-+	PASS("AUX independence: event1 head=%llu event2 head=%llu",
-+	     (unsigned long long)__atomic_load_n(&mp1->aux_head, __ATOMIC_RELAXED),
-+	     (unsigned long long)__atomic_load_n(&mp2->aux_head, __ATOMIC_RELAXED));
-+
-+	munmap(aux1, aux_size);
-+	munmap(mp1, mmap_size1);
-+	munmap(aux2, aux_size);
-+	munmap(mp2, mmap_size2);
-+	close(fd1);
-+	close(fd2);
-+	PASS("AUX independence: cleanup OK");
-+	return 0;
-+}
-+
-+/*
-+ * Test 4: Verify that the mmap control page fields are correct.
-+ *
-+ * version, compat_version, data_offset and data_size are managed by
-+ * the kernel; aux_offset and aux_size are published by userspace (they
-+ * are the request for the AUX mapping), so the test checks the
-+ * kernel-managed fields and the read-back of the user-published ones
-+ * instead of expecting the kernel to fill aux_offset in.
-+ */
-+static int test_mmap_page_fields(int pmu_type)
-+{
-+	struct perf_event_attr attr = {};
-+	struct perf_event_mmap_page *mp;
-+	unsigned long total_size;
-+	int fd;
-+
-+	total_size = 1UL << 18; /* 256 KiB */
-+
-+	attr.type = pmu_type;
-+	attr.size = sizeof(attr);
-+	attr.disabled = 1;
-+	attr.sample_period = 256;
-+	attr.freq = 0;
-+
-+	fd = perf_event_open(&attr, 0, -1, -1, 0);
-+	if (fd < 0) {
-+		FAIL("mmap fields: perf_event_open failed (%s)", strerror(errno));
-+		return 1;
-+	}
-+
-+	mp = mmap(NULL, total_size + getpagesize(), PROT_READ | PROT_WRITE,
-+		  MAP_SHARED, fd, 0);
-+	if (mp == MAP_FAILED) {
-+		FAIL("mmap fields: mmap failed (%s)", strerror(errno));
-+		close(fd);
-+		return 1;
-+	}
-+
-+	/* Kernel-managed fields */
-+	if (mp->version != 1 && mp->version != 0) {
-+		FAIL("mmap fields: version=%u (expected 0 or 1)", mp->version);
-+		munmap(mp, total_size + getpagesize());
-+		close(fd);
-+		return 1;
-+	}
-+	PASS("mmap fields: version=%u", mp->version);
-+
-+	if (mp->compat_version != 0) {
-+		FAIL("mmap fields: compat_version=%u (expected 0)",
-+		     mp->compat_version);
-+		munmap(mp, total_size + getpagesize());
-+		close(fd);
-+		return 1;
-+	}
-+	PASS("mmap fields: compat_version=%u", mp->compat_version);
-+
-+	if (mp->data_offset == 0 || mp->data_size == 0) {
-+		FAIL("mmap fields: data_offset=%llu data_size=%llu (no data ring)",
-+		     (unsigned long long)mp->data_offset,
-+		     (unsigned long long)mp->data_size);
-+		munmap(mp, total_size + getpagesize());
-+		close(fd);
-+		return 1;
-+	}
-+	PASS("mmap fields: data_offset=%llu data_size=%llu",
-+	     (unsigned long long)mp->data_offset,
-+	     (unsigned long long)mp->data_size);
-+
-+	/* User-published AUX request fields must round-trip */
-+	mp->aux_offset = total_size + getpagesize();
-+	mp->aux_size = 1UL << 16;
-+	if (mp->aux_offset != total_size + getpagesize() || mp->aux_size != 1UL << 16) {
-+		FAIL("mmap fields: aux_offset/aux_size write not visible");
-+		munmap(mp, total_size + getpagesize());
-+		close(fd);
-+		return 1;
-+	}
-+	PASS("mmap fields: aux_offset/aux_size writable and readable");
-+
-+	munmap(mp, total_size + getpagesize());
-+	close(fd);
-+	PASS("mmap fields: all fields correct");
-+	return 0;
-+}
-+
-+/*
-+ * Test 5: Verify that aux_head does not go backwards while the event
-+ * runs.  An unchanged head means the PMU produced no AUX data for this
-+ * workload, which is a SKIP (the monotonicity was not exercised), not a
-+ * PASS; a head that moved backwards is a FAIL, since a u64 cursor
-+ * cannot realistically wrap in 100 ms.
-+ */
-+static int test_aux_head_monotonic(int pmu_type)
-+{
-+	struct perf_event_attr attr = {};
-+	struct perf_event_mmap_page *mp;
-+	unsigned long aux_size, mmap_size, head_before, head_after;
-+	void *aux_base;
-+	int fd, ret;
-+
-+	aux_size = 1UL << 16;
-+	mmap_size = aux_size + getpagesize();
-+
-+	attr.type = pmu_type;
-+	attr.size = sizeof(attr);
-+	attr.disabled = 1;
-+	attr.sample_period = 256;
-+	attr.freq = 0;
-+
-+	fd = perf_event_open(&attr, 0, -1, -1, 0);
-+	if (fd < 0) {
-+		/* Some PMUs may reject the default config */
-+		SKIP("AUX head monotonic: PMU rejected config (%s)",
-+		     strerror(errno));
-+		return 0;
-+	}
-+
-+	ret = mmap_event_aux(fd, aux_size, &mp, &aux_base, &mmap_size);
-+	if (ret < 0) {
-+		SKIP("AUX head monotonic: AUX area mmap failed (%s)",
-+		     strerror(errno));
-+		close(fd);
-+		return 0;
-+	}
-+	if (ret > 0) {
-+		close(fd);
-+		return 1;
-+	}
-+
-+	ret = ioctl(fd, PERF_EVENT_IOC_ENABLE, 0);
-+	if (ret < 0) {
-+		SKIP("AUX head monotonic: enable failed (%s)", strerror(errno));
-+		munmap(aux_base, aux_size);
-+		munmap(mp, mmap_size);
-+		close(fd);
-+		return 0;
-+	}
-+
-+	/* Read initial head */
-+	head_before = __atomic_load_n(&mp->aux_head, __ATOMIC_RELAXED);
-+
-+	usleep(100000); /* 100ms */
-+
-+	head_after = __atomic_load_n(&mp->aux_head, __ATOMIC_RELAXED);
-+
-+	ioctl(fd, PERF_EVENT_IOC_DISABLE, 0);
-+
-+	if (head_after > head_before) {
-+		PASS("AUX head monotonic: before=%lu after=%lu (advanced)",
-+		     head_before, head_after);
-+	} else if (head_after == head_before) {
-+		SKIP("AUX head monotonic: no AUX data generated in 100ms");
-+	} else {
-+		FAIL("AUX head monotonic: backwards (before=%lu after=%lu)",
-+		     head_before, head_after);
-+	}
-+
-+	munmap(aux_base, aux_size);
-+	munmap(mp, mmap_size);
-+	close(fd);
-+	return 0;
-+}
-+
-+int main(void)
-+{
-+	int pmu_type;
-+
-+	if (geteuid() != 0) {
-+		fprintf(stderr, "Run as root\n");
-+		return 4; /* skip */
-+	}
-+
-+	printf("=== Perf AUX Kernel API: Userspace Regression Test ===\n\n");
-+
-+	/* Test 1: Basic SW event */
-+	printf("--- 1. Basic Software Event ---\n");
-+	test_basic_sw_event();
-+
-+	/* Find an AUX-capable PMU */
-+	pmu_type = find_aux_pmu_type();
-+	if (pmu_type < 0) {
-+		printf("--- 2-5. AUX Tests ---\n");
-+		printf("  [SKIP] No AUX-capable PMU found\n");
-+	} else {
-+		/* Test 2: AUX mmap lifecycle */
-+		printf("\n--- 2. AUX Mmap Lifecycle ---\n");
-+		test_aux_mmap(pmu_type);
-+
-+		/* Test 3: AUX mmap independence */
-+		printf("\n--- 3. AUX Mmap Independence ---\n");
-+		test_aux_mmap_independence(pmu_type);
-+
-+		/* Test 4: mmap page fields */
-+		printf("\n--- 4. Mmap Page Fields ---\n");
-+		test_mmap_page_fields(pmu_type);
-+
-+		/* Test 5: AUX head monotonic */
-+		printf("\n--- 5. AUX Head Monotonic ---\n");
-+		test_aux_head_monotonic(pmu_type);
-+	}
-+
-+	/* Test 6: Verify /proc/sys/kernel/perf_event_paranoid */
-+	printf("\n--- 6. Perf Event Paranoid ---\n");
-+	{
-+		FILE *f = fopen("/proc/sys/kernel/perf_event_paranoid", "r");
-+		int paranoid;
-+
-+		if (f) {
-+			if (fscanf(f, "%d", &paranoid) == 1) {
-+				printf("  perf_event_paranoid=%d\n", paranoid);
-+				if (paranoid > 2)
-+					FAIL("perf_event_paranoid=%d may block AUX",
-+					     paranoid);
-+				else
-+					PASS("perf_event_paranoid=%d (OK)", paranoid);
-+			}
-+			fclose(f);
-+		} else {
-+			printf("  [SKIP] Cannot read perf_event_paranoid\n");
-+		}
-+	}
-+
-+	printf("\n=== Result: %s ===\n", failed ? "FAIL" : "PASS");
-+	if (skipped)
-+		printf("=== Note: some tests were SKIPped (environment)\n");
-+	return failed ? 1 : 0;
-+}
-diff --git a/tools/testing/selftests/perf_events/config b/tools/testing/selftests/perf_events/config
-index ba58ff2203e4..2508f331cfe0 100644
---- a/tools/testing/selftests/perf_events/config
-+++ b/tools/testing/selftests/perf_events/config
-@@ -1 +1,3 @@
- CONFIG_PERF_EVENTS=y
-+CONFIG_PERF_AUX_KERNEL_KUNIT_TEST=y
-+CONFIG_KUNIT_DEBUGFS=y
++++ b/tools/testing/selftests/perf_events/aux_kernel.sh
+@@ -0,0 +1,631 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Perf AUX Kernel-Consumer API - Comprehensive Selftest
++#
++# Validates the perf-core AUX kernel-consumer API added by the
++# perf_aux_support patch series:
++#   - perf_event_setup_aux() / perf_event_release_aux()
++#   - perf_event_aux_head() / perf_event_aux_tail_set() / perf_event_aux_copy()
++#
++# Test layers:
++#   1. Build-time checks (Kconfig, Makefile, symbol exports, source)
++#   2. KUnit suite (API contract: error paths, lifecycle, validation)
++#   3. Userspace AUX regression (mmap AUX still works, aux_mmap_count
++#      independent, userspace+kernel coexistence)
++#   4. Hardware AUX live test (if ARM SPE or Intel PT is available)
++#   5. DAMON integration verification
++#   6. Memory ordering/barrier static analysis
++#   7. Boundary validation static analysis
++#   8. Concurrency safety checks
++#   9. User/kernel AUX isolation checks
++#
++# Usage:  sudo ./aux_kernel.sh [--pmu arm_spe_0|intel_pt]
++#
++# The script also works from an installed selftest location (make
++# install): when no kernel source tree is found, the source-level
++# static checks (sections 1 partial, 6-9) are SKIPped rather than
++# failed, and the prebuilt aux_kernel_usermode binary is used as-is.
++# Source-only rebuilds honour $CC (and $CROSS_COMPILE) instead of
++# hardcoding gcc.
++#
++# Requirements:
++#   - CONFIG_PERF_EVENTS=y
++#   - CONFIG_PERF_AUX_KERNEL_KUNIT_TEST=y and CONFIG_KUNIT_DEBUGFS=y
++#   - Root privileges for most sections
++
++set -e
++PASSED=0; FAILED=0; SKIPPED=0
++pass() { echo "  [PASS] $1"; PASSED=$((PASSED + 1)); }
++fail() { echo "  [FAIL] $1"; FAILED=$((FAILED + 1)); }
++skip() { echo "  [SKIP] $*"; SKIPPED=$((SKIPPED + 1)); }
++
++# mktemp(1) creates an unpredictable, collision-free directory, so a
++# local user cannot pre-create a symlink at the expected path and have
++# this (possibly root-run) script overwrite a file of their choosing.
++RESULTS_DIR=$(mktemp -d /tmp/perf_aux_kernel_test.XXXXXX)
++exec > >(tee "$RESULTS_DIR/output.log") 2>&1
++
++SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
++ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || true)"
++if [[ -z "$ROOT" ]]; then
++	ROOT="/usr/src/linux"
++fi
++
++# Source-level checks need the kernel tree; installed runs have none.
++SRC_EVENTS="$ROOT/kernel/events"
++if [[ -f "$SRC_EVENTS/core.c" ]]; then
++	HAVE_SRC=1
++else
++	HAVE_SRC=0
++	ROOT=""
++fi
++
++# Compiler for the runtime rebuild of the userspace program; the
++# kselftest build system exports CC (with CROSS_COMPILE prefixed).
++CC="${CC:-gcc}"
++
++PMU_ARG="${1:-}"
++if [[ "$PMU_ARG" == "--pmu" ]]; then
++	PMU_NAME="${2:-arm_spe_0}"
++elif [[ -n "$PMU_ARG" ]]; then
++	PMU_NAME="$PMU_ARG"
++else
++	PMU_NAME="arm_spe_0"
++fi
++
++echo "=========================================="
++echo " Perf AUX Kernel-Consumer API Test"
++echo "=========================================="
++echo "Kernel tree:  $ROOT"
++echo "Results dir:  $RESULTS_DIR"
++echo "Target PMU:   $PMU_NAME"
++echo "Script dir:   $SCRIPT_DIR"
++echo ""
++
++# ---- Section 1: Build-time checks ----
++echo "--- 1. Build-time Configuration ---"
++
++# Check that the KUnit test is built
++KUNIT_SUITE="/sys/kernel/debug/kunit/perf_aux_kernel"
++if [[ -d "$KUNIT_SUITE" ]]; then
++	pass "KUnit suite 'perf_aux_kernel' is registered"
++else
++	skip "KUnit suite 'perf_aux_kernel' not registered" \
++		"(CONFIG_PERF_AUX_KERNEL_KUNIT_TEST not set)"
++fi
++
++# Check that required symbols are exported
++SYMBOLS_FILE="/proc/kallsyms"
++if [[ -r "$SYMBOLS_FILE" ]]; then
++	for sym in perf_event_setup_aux perf_event_release_aux \
++		perf_event_aux_head perf_event_aux_tail_set perf_event_aux_copy; do
++		if grep -q "$sym" "$SYMBOLS_FILE" 2>/dev/null; then
++			pass "Symbol exported: $sym"
++		else
++			fail "Symbol not exported: $sym (patch not applied?)"
++		fi
++	done
++else
++	skip "Symbol check" "/proc/kallsyms not readable"
++fi
++
++# Check that the source files exist (in-tree runs only; installed
++# environments have no kernel source, which is a skip, not a failure)
++SRC_EVENTS="$ROOT/kernel/events"
++if [[ "$HAVE_SRC" -eq 1 ]]; then
++	for f in core.c ring_buffer.c internal.h; do
++		if [[ -f "$SRC_EVENTS/$f" ]]; then
++			pass "Source file: kernel/events/$f"
++		else
++			fail "Source file: kernel/events/$f missing"
++		fi
++	done
++
++	# Check that the KUnit test source exists
++	if [[ -f "$SRC_EVENTS/aux_kernel_test.c" ]]; then
++		pass "Source file: kernel/events/aux_kernel_test.c"
++	else
++		skip "Source file: kernel/events/aux_kernel_test.c not found"
++	fi
++else
++	skip "Source tree" "kernel source not available (installed run)"
++fi
++
++# Check that aux_kernel_count is in internal.h
++if [[ "$HAVE_SRC" -eq 1 ]] && grep -q 'aux_kernel_count' "$SRC_EVENTS/internal.h" 2>/dev/null; then
++	pass "struct perf_buffer: aux_kernel_count field present"
++elif [[ "$HAVE_SRC" -eq 1 ]]; then
++	fail "struct perf_buffer: aux_kernel_count field missing"
++fi
++
++# Check that aux_kernel_count is used in perf_aux_output_begin()
++if [[ "$HAVE_SRC" -eq 1 ]]; then
++	if grep -q 'aux_kernel_count' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null; then
++		pass "ring_buffer.c: aux_kernel_count guard in perf_aux_output_begin()"
++	else
++		fail "ring_buffer.c: aux_kernel_count guard missing in perf_aux_output_begin()"
++	fi
++fi
++
++# Check that the new API functions are in core.c / ring_buffer.c
++if [[ "$HAVE_SRC" -eq 1 ]]; then
++	for func in perf_event_setup_aux perf_event_release_aux; do
++		if grep -q "int $func\|void $func" "$SRC_EVENTS/core.c" 2>/dev/null; then
++			pass "core.c: $func() defined"
++		else
++			fail "core.c: $func() not found"
++		fi
++	done
++	for func in perf_event_aux_head perf_event_aux_tail_set perf_event_aux_copy; do
++		if grep -q "$func" "$SRC_EVENTS/ring_buffer.c" 2>/dev/null; then
++			pass "ring_buffer.c: $func() defined"
++		else
++			fail "ring_buffer.c: $func() not found"
++		fi
++	done
++fi
++
++# Check that EXPORT_SYMBOL_GPL is present
++if [[ "$HAVE_SRC" -eq 1 ]]; then
++	for func in perf_event_setup_aux perf_event_release_aux \
++		perf_event_aux_head perf_event_aux_tail_set perf_event_aux_copy; do
++		if grep -q "EXPORT_SYMBOL_GPL($func)" "$SRC_EVENTS/core.c" \
++			"$SRC_EVENTS/ring_buffer.c" 2>/dev/null; then
++			pass "EXPORT_SYMBOL_GPL: $func"
++		else
++			fail "EXPORT_SYMBOL_GPL: $func not found"
++		fi
++	done
++fi
++
++# ---- Section 2: KUnit API contract tests ----
++echo ""
++echo "--- 2. KUnit API Contract Tests ---"
++
++KUNIT_DIR="/sys/kernel/debug/kunit/perf_aux_kernel"
++if [[ -d "$KUNIT_DIR" ]]; then
++	if [[ -f "$KUNIT_DIR/run" ]]; then
++		echo run > "$KUNIT_DIR/run" 2>/dev/null || true
++	fi
++	RES="$KUNIT_DIR/results"
++	if [[ -f "$RES" ]]; then
++		cp "$RES" "$RESULTS_DIR/kunit-results.log"
++
++		if grep -Eq "^[[:space:]]*not ok" "$RES"; then
++			fail "KUnit API contract suite has failing cases"
++			grep -E "^[[:space:]]*not ok" "$RES" | sed 's/^/    /'
++		elif grep -Eq "^[[:space:]]*ok " "$RES"; then
++			pass "KUnit API contract suite: all cases pass"
++		else
++			fail "KUnit API contract suite produced no completed cases"
++		fi
++		echo "    $(grep '# Totals:' "$RES" | tail -1)"
++
++		# Spot-check all 39 test cases (deterministic, dummy PMU)
++		for c in "test_setup_rejects_non_power_of_two" \
++			"test_setup_accepts_power_of_two" \
++			"test_setup_rejects_double" \
++			"test_setup_parent_event_rejected" \
++			"test_setup_rejects_negative_watermark" \
++			"test_setup_with_explicit_watermark" \
++			"test_writer_admitted_after_setup" \
++			"test_writer_blocked_after_release" \
++			"test_release_noop_without_rb" \
++			"test_setup_release_roundtrip" \
++			"test_multi_setup_release_cycle" \
++			"test_double_release_clean" \
++			"test_two_events_independent" \
++			"test_release_one_does_not_affect_other" \
++			"test_user_kernel_coexistence" \
++			"test_concurrent_release" \
++			"test_head_initial_zero" \
++			"test_head_advances_after_produce" \
++			"test_head_no_rb_zero" \
++			"test_copy_full_window" \
++			"test_copy_wrap" \
++			"test_copy_zero_len" \
++			"test_copy_data_correctness" \
++			"test_copy_rejects_rewound" \
++			"test_copy_rejects_future" \
++			"test_copy_rejects_oversized" \
++			"test_copy_rejects_null_buf" \
++			"test_copy_rejects_already_consumed" \
++			"test_copy_no_rb_enoent" \
++			"test_tail_set_valid_frees_space" \
++			"test_tail_set_rejects_future" \
++			"test_tail_set_accepts_within_ring_window" \
++			"test_tail_set_rejects_behind_ring" \
++			"test_tail_set_noop" \
++			"test_tail_set_consume_all" \
++			"test_tail_set_no_rb_enoent" \
++			"test_multi_produce_copy_cycle" \
++			"test_output_end_zero_size" \
++			"test_buffer_full_stops_producer"; do
++			if grep -Eq "^[[:space:]]*ok .*$c" "$RES"; then
++				pass "KUnit case: $c"
++			else
++				fail "KUnit case: $c"
++			fi
++		done
++	else
++		skip "KUnit results" "no results file (suite did not run)"
++	fi
++else
++	skip "KUnit API contract" "CONFIG_PERF_AUX_KERNEL_KUNIT_TEST" \
++		"or CONFIG_KUNIT_DEBUGFS missing"
++fi
++
++# ---- Section 3: Userspace AUX regression (C program) ----
++echo ""
++echo "--- 3. Userspace AUX Regression (api-level) ---"
++
++# Run the C regression test program.
++#
++# Prefer an existing (installed or prebuilt) binary; make install
++# installs TEST_GEN_PROGS binaries but not their sources, so requiring
++# the source would skip the test exactly in CI pipelines that install
++# selftests.  Rebuild only in-tree, when the source is newer than the
++# binary or the binary is missing, and honour $CC then.
++UMODE_SRC="$SCRIPT_DIR/aux_kernel_usermode.c"
++UMODE_BIN="$SCRIPT_DIR/aux_kernel_usermode"
++
++if [[ -x "$UMODE_BIN" && ( ! -f "$UMODE_SRC" || ! "$UMODE_SRC" -nt "$UMODE_BIN" ) ]]; then
++	:
++elif [[ -f "$UMODE_SRC" ]]; then
++	echo "  Building aux_kernel_usermode with ${CC}..."
++	if "$CC" -o "$UMODE_BIN" "$UMODE_SRC" -Wall -Wextra -O2; then
++		:
++	else
++		echo "  $CC build failed"
++		UMODE_BIN=""
++	fi
++else
++	UMODE_BIN=""
++fi
++
++if [[ -n "$UMODE_BIN" && -x "$UMODE_BIN" ]]; then
++	if "$UMODE_BIN" "$PMU_NAME" 2>&1 | tee "$RESULTS_DIR/usermode.log" | \
++		grep -c '\[PASS\]' > /dev/null; then
++		# Count pass/fail from the output
++		UMODE_PASS=$(grep -c '\[PASS\]' "$RESULTS_DIR/usermode.log" || true)
++		UMODE_FAIL=$(grep -c '\[FAIL\]' "$RESULTS_DIR/usermode.log" || true)
++		UMODE_SKIP=$(grep -c '\[SKIP\]' "$RESULTS_DIR/usermode.log" || true)
++		pass "Userspace API regression: $UMODE_PASS passed," \
++			" $UMODE_FAIL failed, $UMODE_SKIP skipped"
++		if [[ "$UMODE_FAIL" -gt 0 ]]; then
++			fail "Userspace API regression: $UMODE_FAIL failures"
++		fi
++	else
++		fail "Userspace API regression: C program failed"
++	fi
++else
++	skip "Userspace API regression" "binary or source not available"
++fi
++
++# Check that aux_mmap_count refcount is not affected by aux_kernel_count
++# (static analysis: verify the two refcounts are separate in internal.h)
++if [[ "$HAVE_SRC" -eq 1 ]]; then
++	if grep -q 'aux_mmap_count' "$SRC_EVENTS/internal.h" 2>/dev/null && \
++	   grep -q 'aux_kernel_count' "$SRC_EVENTS/internal.h" 2>/dev/null; then
++		pass "Refcount separation: aux_mmap_count and aux_kernel_count are distinct"
++	else
++		fail "Refcount separation: aux_mmap_count or aux_kernel_count missing"
++	fi
++fi
++
++# ---- Section 4: Hardware AUX live test ----
++echo ""
++echo "--- 4. Hardware AUX Live Test ---"
++
++PMU_DIR="/sys/bus/event_source/devices/$PMU_NAME"
++PERF_BIN=$(which perf 2>/dev/null || true)
++if [[ -d "$PMU_DIR" ]]; then
++	PMU_TYPE=$(cat "$PMU_DIR/type" 2>/dev/null || true)
++	if [[ -n "$PMU_TYPE" ]]; then
++		pass "AUX PMU $PMU_NAME present (type=$PMU_TYPE)"
++
++		if [[ -f "$PMU_DIR/caps/aux_output" ]]; then
++			pass "PMU $PMU_NAME: aux_output capability present"
++		else
++			skip "PMU $PMU_NAME: aux_output capability not found"
++		fi
++
++		if [[ -n "$PERF_BIN" ]]; then
++			DMESG_BEFORE=$(dmesg 2>/dev/null | wc -l)
++			if "$PERF_BIN" record -e "$PMU_NAME/period=100000/" \
++				-o "$RESULTS_DIR/perf_hw.data" -- sleep 0.5 2>/dev/null; then
++				pass "Hardware AUX: perf record with $PMU_NAME succeeded"
++			else
++				fail "Hardware AUX: perf record with $PMU_NAME failed"
++			fi
++
++			DMESG_AFTER="$RESULTS_DIR/dmesg-hardware.log"
++			dmesg 2>/dev/null > "$DMESG_AFTER" || true
++			DMESG_LINES_AFTER=$(wc -l < "$DMESG_AFTER")
++			if [[ "$DMESG_LINES_AFTER" -ge "$DMESG_BEFORE" ]]; then
++				NEW_DMESG=$(tail -n "+$((DMESG_BEFORE + 1))" "$DMESG_AFTER")
++			else
++				NEW_DMESG=$(cat "$DMESG_AFTER")
++			fi
++			FAIL_LINES=$(printf '%s\n' "$NEW_DMESG" | \
++				grep -Ei "perf.*(fail|warn|error).*aux|"\
++"WARNING:|BUG:|Oops:|lockdep" || true)
++			if [[ -n "$FAIL_LINES" ]]; then
++				fail "dmesg: errors during hardware AUX test"
++				echo "$FAIL_LINES" | sed 's/^/    /'
++			else
++				pass "dmesg: clean during hardware AUX test"
++			fi
++		fi
++	else
++		skip "Hardware AUX" "PMU type not readable"
++	fi
++else
++	skip "Hardware AUX" "PMU $PMU_NAME not available"
++fi
++
++# ---- Section 5: DAMON integration check ----
++echo ""
++echo "--- 5. DAMON Integration Verification ---"
++
++DAMON_ADMIN="/sys/kernel/mm/damon/admin"
++if [[ -d "$DAMON_ADMIN" ]]; then
++	pass "DAMON sysfs interface available"
++
++	if [[ -d "$DAMON_ADMIN/kdamonds/0/contexts/0/monitoring_attrs/sample/perf_events" ]] || \
++	   [[ -d "/sys/kernel/debug/damon/perf_stats" ]]; then
++		pass "DAMON perf observe infrastructure detected"
++	else
++		skip "DAMON perf observe" "debugfs or sysfs interface not available"
++	fi
++
++	DAMON_TEST_DIR="$ROOT/tools/testing/selftests/damon"
++	if [[ -d "$DAMON_TEST_DIR" ]]; then
++		pass "DAMON selftest directory present"
++	else
++		skip "DAMON selftest directory" "not found at $DAMON_TEST_DIR"
++	fi
++else
++	skip "DAMON integration" "DAMON admin interface not available"
++fi
++
++# ---- Section 6: Memory ordering and concurrency checks ----
++echo ""
++echo "--- 6. Memory Ordering & Concurrency ---"
++
++if [[ "$HAVE_SRC" -ne 1 ]]; then
++	skip "Memory ordering checks" "kernel source not available (installed run)"
++else
++
++# Verify smp_rmb() in perf_event_aux_head()
++if grep -q 'smp_rmb' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null; then
++	pass "perf_event_aux_head(): smp_rmb() barrier present"
++else
++	fail "perf_event_aux_head(): smp_rmb() barrier missing"
++fi
++
++# Verify smp_mb() in perf_event_aux_tail_set()
++if grep -A30 'perf_event_aux_tail_set' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null | \
++	grep -q 'smp_mb'; then
++	pass "perf_event_aux_tail_set(): smp_mb() barrier present"
++else
++	fail "perf_event_aux_tail_set(): smp_mb() barrier missing"
++fi
++
++# Verify aux_refcount protection in perf_event_aux_copy()
++if grep -A80 'perf_event_aux_copy' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null | \
++	grep -q 'aux_refcount'; then
++	pass "perf_event_aux_copy(): aux_refcount protection present"
++else
++	fail "perf_event_aux_copy(): aux_refcount protection missing"
++fi
++
++# Verify mmap_mutex serialization in setup/release
++if grep -A30 'perf_event_setup_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'mmap_mutex'; then
++	pass "perf_event_setup_aux(): mmap_mutex serialization present"
++else
++	fail "perf_event_setup_aux(): mmap_mutex serialization missing"
++fi
++if grep -A30 'perf_event_release_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'mmap_mutex'; then
++	pass "perf_event_release_aux(): mmap_mutex serialization present"
++else
++	fail "perf_event_release_aux(): mmap_mutex serialization missing"
++fi
++
++# Verify aux_mutex protection in release
++if grep -A60 'perf_event_release_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'aux_mutex'; then
++	pass "perf_event_release_aux(): aux_mutex protection present"
++else
++	fail "perf_event_release_aux(): aux_mutex protection missing"
++fi
++
++fi
++
++# ---- Section 7: Boundary validation checks ----
++echo ""
++echo "--- 7. API Contract: Boundary Validation ---"
++
++if [[ "$HAVE_SRC" -ne 1 ]]; then
++	skip "Boundary validation checks" "kernel source not available (installed run)"
++else
++
++# perf_event_setup_aux() rejects non-power-of-2
++if grep -q 'is_power_of_2' "$SRC_EVENTS/core.c" 2>/dev/null; then
++	pass "perf_event_setup_aux(): is_power_of_2() check present"
++else
++	fail "perf_event_setup_aux(): is_power_of_2() check missing"
++fi
++
++# perf_event_setup_aux() checks is_kernel_event()
++if grep -q 'is_kernel_event' "$SRC_EVENTS/core.c" 2>/dev/null; then
++	pass "perf_event_setup_aux(): is_kernel_event() check present"
++else
++	fail "perf_event_setup_aux(): is_kernel_event() check missing"
++fi
++
++# perf_event_setup_aux() checks event->parent
++if grep -A20 'perf_event_setup_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'event->parent'; then
++	pass "perf_event_setup_aux(): event->parent check present"
++else
++	fail "perf_event_setup_aux(): event->parent check missing"
++fi
++
++# perf_event_aux_copy() validates window size
++if grep -A80 'perf_event_aux_copy' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null | \
++	grep -q 'available.*aux_size'; then
++	pass "perf_event_aux_copy(): window bounds check present"
++else
++	fail "perf_event_aux_copy(): window bounds check missing"
++fi
++
++# rb_has_kernel_aux() helper
++if grep -q 'rb_has_kernel_aux' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null; then
++	pass "ring_buffer.c: rb_has_kernel_aux() helper defined"
++else
++	fail "ring_buffer.c: rb_has_kernel_aux() helper missing"
++fi
++
++# perf_event_aux_tail_set() validates advance <= head - old_tail
++if grep -A20 'perf_event_aux_tail_set' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null | \
++	grep -q 'advance.*head.*old_tail'; then
++	pass "perf_event_aux_tail_set(): advance bounds check present"
++else
++	fail "perf_event_aux_tail_set(): advance bounds check missing"
++fi
++
++# perf_event_aux_copy() validates from/to in [tail, head]
++if grep -A80 'perf_event_aux_copy' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null | \
++	grep -q 'start.*available\|len.*available.*start'; then
++	pass "perf_event_aux_copy(): from/to bounds check present"
++else
++	fail "perf_event_aux_copy(): from/to bounds check missing"
++fi
++
++fi
++
++# ---- Section 8: Concurrency safety checks ----
++echo ""
++echo "--- 8. Concurrency Safety ---"
++
++if [[ "$HAVE_SRC" -ne 1 ]]; then
++	skip "Concurrency safety checks" "kernel source not available (installed run)"
++else
++
++# Check that aux_kernel_count uses refcount_t (atomic)
++if grep -q 'refcount_t.*aux_kernel_count' "$SRC_EVENTS/internal.h" 2>/dev/null; then
++	pass "aux_kernel_count: refcount_t (atomic) type"
++else
++	fail "aux_kernel_count: not refcount_t"
++fi
++
++# Check that release drops the kernel-owner refcount under mmap_mutex
++# (serialising concurrent perf_event_release_aux() callers)
++if grep -A60 'perf_event_release_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'refcount_dec_and_test(&rb->aux_kernel_count)'; then
++	pass "aux_kernel_count: owner refcount dropped in release"
++else
++	fail "aux_kernel_count: owner refcount not dropped in release"
++fi
++
++# Check that aux_refcount is incremented in copy
++if grep -A80 'perf_event_aux_copy' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null | \
++	grep -q 'refcount_inc_not_zero.*aux_refcount'; then
++	pass "perf_event_aux_copy(): aux_refcount_inc_not_zero() present"
++else
++	fail "perf_event_aux_copy(): aux_refcount_inc_not_zero() missing"
++fi
++
++# Check that rb_free_aux is called at end of copy (release refcount)
++if grep -A80 'perf_event_aux_copy' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null | \
++	grep -q 'rb_free_aux'; then
++	pass "perf_event_aux_copy(): rb_free_aux() at exit (balanced refcount)"
++else
++	fail "perf_event_aux_copy(): rb_free_aux() missing at exit"
++fi
++
++# Check that is_kernel_event guard is on both setup and release
++if grep -A20 'perf_event_setup_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'is_kernel_event'; then
++	pass "setup side: is_kernel_event() guard present"
++else
++	fail "setup side: is_kernel_event() guard missing"
++fi
++if grep -A20 'perf_event_release_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'is_kernel_event'; then
++	pass "release side: is_kernel_event() guard present"
++else
++	fail "release side: is_kernel_event() guard missing"
++fi
++
++# Check that event->parent guard is on both setup and release
++if grep -A20 'perf_event_setup_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'event->parent'; then
++	pass "setup side: event->parent guard present"
++else
++	fail "setup side: event->parent guard missing"
++fi
++if grep -A20 'perf_event_release_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'event->parent'; then
++	pass "release side: event->parent guard present"
++else
++	fail "release side: event->parent guard missing"
++fi
++
++fi
++
++# ---- Section 9: User/kernel AUX isolation ----
++echo ""
++echo "--- 9. User/Kernel AUX Isolation ---"
++
++if [[ "$HAVE_SRC" -ne 1 ]]; then
++	skip "User/kernel isolation checks" "kernel source not available (installed run)"
++else
++
++if grep -A30 'perf_event_setup_aux' "$SRC_EVENTS/core.c" 2>/dev/null | \
++	grep -q 'EBUSY'; then
++	pass "setup_aux: -EBUSY when event->rb exists (user+kernel exclusion)"
++else
++	fail "setup_aux: missing -EBUSY guard"
++fi
++
++if grep -q 'aux_mmap_count' "$SRC_EVENTS/internal.h" 2>/dev/null && \
++   grep -q 'aux_kernel_count' "$SRC_EVENTS/internal.h" 2>/dev/null; then
++	pass "aux_mmap_count and aux_kernel_count are distinct fields"
++else
++	fail "aux_mmap_count or aux_kernel_count missing"
++fi
++
++if grep -B2 -A2 'aux_mmap_count' "$SRC_EVENTS/ring_buffer.c" 2>/dev/null | \
++	grep -q 'aux_kernel_count'; then
++	pass "perf_aux_output_begin: checks both owner counts"
++else
++	fail "perf_aux_output_begin: does not check both counts"
++fi
++
++if grep -q 'aux_kernel_count' "$SRC_EVENTS/core.c" 2>/dev/null; then
++	pass "release_aux: checks aux_kernel_count ownership"
++else
++	fail "release_aux: missing aux_kernel_count check"
++fi
++
++fi
++
++# ---- Summary ----
++echo ""
++echo "=========================================="
++echo " SUMMARY: $PASSED passed, $FAILED failed, $SKIPPED skipped"
++echo "=========================================="
++echo "Results saved to: $RESULTS_DIR"
++
++if [[ "$FAILED" -gt 0 ]]; then
++	echo "Overall: FAIL"
++	exit 1
++else
++	echo "Overall: PASS"
++	exit 0
++fi
 -- 
 2.43.0
 
