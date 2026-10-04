@@ -1,173 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BA244E652;
-	Sun,  4 Oct 2026 12:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06335344D91
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 14:00:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791117949; cv=none; b=GlrY7vj3n6Ao03W0uWynpyQJEqhCBL8oItN2W/FK02WJiAIZJKSUje4D6V41mG6sD3ttXosk4rBq3FoTX8OZJ3X3buA4hBUP3A3DJkAwPFK7s6uqhKL876ijT6dqOlIofLlk03gP3D9ndRbsTiwa+ADzKYRCBE8icjqssuT21gU=
+	t=1791122421; cv=none; b=oZ83VxBw3Dey/uh9pxdp9kSx1YKGQwn/mF5X275l0QVT3gi0mq85JB/5jxPeyoJw2xsTrf8FeQ8pU81wzqHTIQi6SiB2w/zNEJegU6dOHsAUcWxeTLhpawGI/1eFzL2bQhkcNLMv15z13oOJpv7IG66jxGcZJvMb9fegmJLj34I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791117949; c=relaxed/simple;
-	bh=q1YzCbaJJ6txDDEPUJITrrUK5eP6qmKcJDfx1NMphkc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BRedPT7y9bN1UqHKstUSH0g1PugEBo3Jg7fH5R+1b2+ukUxOrDu+nTI5NiPX/lfXJ9lS2KoT0bYVUWSgxxXc2JgC8uUI0qfxeu7hYjoelguCMulGlCM29dwjWE9chS3rJg3G23w+uiuIooCoFwU0CnRlY6hIQoCPQzJ2ABHBBiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RrHKcbP5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791122421; c=relaxed/simple;
+	bh=M7G/69YDl6UxRKlMCZubwH5wKehLjiqi6b/OWSUeyIE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ljCxGWzESbZVVcb5jkWnFEf2Ob8uxbp3MwZ/rkSZfUbDXSgblEr33JywBaE4opDHvz+Sk2v4df3pH+pgMxoVo79B0g//N1irjQYyCj6iDmporxOpICQH6Onfqv70AhXgFNN6IN1XPVoAdDzH9BWx/Yq04Ezrt4o4Alv+rBLUe3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net; spf=pass smtp.mailfrom=blockcast.net; dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b=a/juIQiu; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RrHKcbP5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7C91F000FF;
-	Sun,  4 Oct 2026 12:45:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1791117947;
-	bh=iVskhEtWYuFXojETC78Hke9cyCNqi4oMNvWDl+PNL+s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=RrHKcbP5O7/g/3LXqLxK5jNq7QePZHquKBg85fOL08H1uSCIWhbOfwkWcHz4mNH8h
-	 jh2XqLmgSxVow55nzWPd5q1dYag0oM4zYDqpgPemM3eaOyIjHR43tHoToI8w2oTluC
-	 ucEH3cjLpvGtdIEu77Ry+6WwG+lgQSLZNNaY2QSA=
-Date: Sun, 4 Oct 2026 14:45:42 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Akira Patafio <kokokoala4211@gmail.com>
-Cc: jirislaby@kernel.org, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] tty: pty: preserve open slaves after rejected locked
- open
-Message-ID: <2026100435-unlinked-blurry-3237@gregkh>
-References: <20261001165552.2439-1-kokokoala4211@gmail.com>
- <20261002202455.25324-1-kokokoala4211@gmail.com>
+	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b="a/juIQiu"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-4a11603310fso9812205e9.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 07:00:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blockcast.net; s=google; t=1791122417; x=1791727217; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=M7G/69YDl6UxRKlMCZubwH5wKehLjiqi6b/OWSUeyIE=;
+        b=a/juIQiu1iPkaqkVtGjm6kutc1d12T4Cow3imMH8s+i8AGaUdYSdFrFI3C7qTaRek2
+         vxCCcbqXGVqNOJdZnBr7HLl8w4o3mghMe67WvmSAc+VbNSz/OFM2RUWyhon60g4eT/7U
+         sOzO3XSnM97QwbnVbiot4zASn3EvUlSTNf2yDhX1MllEC3yCceyWKKkUQgCBWPiHuthf
+         1O8m9iVrokWaGg1YHvv3/Od6c0LewAqfxNPw2Pwvnsrww9WqzU+QxtfEiNF8U5yMI6M5
+         jCaxdHC45WP3oR4PQTK73SHEsGYFCMU/XF0fE3GlqTGV/dOL9GGtGLtOv8JyKpyk+6JD
+         whLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791122417; x=1791727217;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=M7G/69YDl6UxRKlMCZubwH5wKehLjiqi6b/OWSUeyIE=;
+        b=ZVuZEnWwwKUQn2EEcu2zagK6fgK2lheEvGfAFE7ZI2nN74EwQumInM2UE+Ew4edbhP
+         CtsChXnRfvxJWkTlmfYi7oHHysIWEwxEIQg5SIDV0bHJ6ceKNoBdU7/7xjXgxWEr3OQ2
+         WgJw6ZbR6knZQYOCDGctgCcYO1zrxks5kuJlvKVTKlfYSo8ziZF/QSZQ4O1adiCSGxa8
+         oPl2JODXspsKAXaNuYICJQ6CiDAv4rptFRB8yN62FubC6x7vx1k3swdcK3JBceSccTBg
+         nScCIxW+hUmPrFtIcaDXQtDI8qPRNSf1F5z5cUTr1zj72+wCCJ+k3LNp7U1WF540t/Cb
+         cBXg==
+X-Forwarded-Encrypted: i=1; AKwUvBySHUlpi1zuP3n7adYp3AePxCO2w0tpQPAUFqtGh4qRqoNKhlrjYSrQtlQ3ewZLzpZxMc7qwQopQ0j19jR5W24=@vger.kernel.org
+X-Gm-Message-State: AFuF++m3TxU7ayCdO8GZLmyVWCuz/XKiGO+WOBZB3MPaRF3A+vFAQWrA
+	26+LrS6l1LVlFBI6b2G0UdSkkzcSPQBEXhRdRnjHkaCiApjPJe3Rdl38WJ6NYpI8JZs=
+X-Gm-Gg: AYBFou0qcAJ9MSVyKveFM36DwNTOhY77XxpnsbYwVXDrzG/e47tdsiJ9dViSrcTSAqu
+	RFfHPi0ObvUOfUixRR06XRh2pS52YseqBEtSu5vn8tZjHMUnU7sMOCXB0/G463YuyMCqHnWodLR
+	dPkDLRKY0cf7ePTJwdoTKgKj6Vpg2Q2PwYOCFyT5dICnxen6EK8yG0MRe624Mg2Q/VS8gp2RHf4
+	0ibqfkzsZuBsjgolZ3QwbQT6y1sN3jS/0SBHW3zV8AYKcwFmHXGFJdH7ETEmUDFLesHQJVdX9O2
+	tSg8UtheUEwq+7XEguPrqVQAZKCKnFjzDf9q0/scGdrcTZAvcy595eyUaqEKtcclZfZJdKoPk0w
+	NFp8hGVp0uKRccX098Bel62bmqIDBnjT6DW55qf4c6dMnZnxCXCJ/VXYCj1LQ/+LyVQort3rbn2
+	R0DMkKy9mT5E960nec9e8pE3v6c8qSUnQRB84WZnyS8Eh3N8woFlo/mGHgA02wCoOk7GcgS6rz1
+	po4Jyk8Gko58R2m6uTcJ+qbsrUNxyM8UmtZUtpS6lTDP9DAp3Q0y/JzuhZyO0rPZVBtO8xrM618
+X-Received: by 2002:a05:600d:864b:20b0:49f:fbad:29be with SMTP id 5b1f17b1804b1-4a0276afda9mr95240495e9.34.1791122416978;
+        Sun, 04 Oct 2026 07:00:16 -0700 (PDT)
+Received: from localhost.localdomain ([197.51.72.2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b382f8ab4sm17450227f8f.35.2026.10.04.07.00.12
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 04 Oct 2026 07:00:14 -0700 (PDT)
+From: Omar Ramadan <omar@blockcast.net>
+To: netdev-bot+sashiko@kernel.org
+Cc: Taehee Yoo <ap420073@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/2] selftests: net: add an amt test for UDP_SEGMENT through the relay
+Date: Sun,  4 Oct 2026 17:00:06 +0300
+Message-ID: <20261004140006.93394-1-omar@blockcast.net>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <179106416321.434549.5874142465613964174@kernel.org>
+References: <20261002212458.34247-1-omar@blockcast.net> <20261002212458.34247-3-omar@blockcast.net> <179106416321.434549.5874142465613964174@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261002202455.25324-1-kokokoala4211@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 02, 2026 at 04:24:55PM -0400, Akira Patafio wrote:
-> Opening a locked PTY slave fails with EIO, but the failure path sets
-> TTY_IO_ERROR on the shared slave tty. Previously opened slave files then
-> fail I/O even though their master is still open.
+On Sat, Oct 3, 2026, Sashiko wrote:
+> What happens here if one of the sniffers has already died?
 
-Ok, in digging a lot, I think this is "as intended".  You MUST call
-unlockpt() in userspace to unlock a locked pty, and if you don't do
-that, this all fails as you have seen.
+Agreed, that is a real hole. A sniffer that finishes normally always
+prints its report and exits 0, so v3 waits for each capture on its own
+and fails the case if either one exits nonzero. A tx-on UDP_SEGMENT
+case in which no GSO skb reaches the driver now fails instead of
+skipping.
 
-Where in the POSIX spec say that if you attempt to open a locked PTY,
-that it's allowed to keep working?  You are in control of the pty, so
-it's not like this is some other user doing this lock/unlock stuff,
-right?  What do other Unixes do if you attempt to do this type of thing?
+> Should GRXD be passed to check_err, or should the commit message be
+> reworded to match what is actually checked?
 
-And what about the pty tests in the LTP test suite, did you run them to
-verify that your change didn't actually break anything there?
+Fixed: v3 checks amtg rx_dropped, and the changelog mentions the plain
+datagram cases.
 
-> tty_open() releases a file after the slave open callback fails. Merely
-> skipping TTY_IO_ERROR on the rejected open is insufficient: pty_close()
-> can mistake the failed file for the last slave and close the master.
-> Counting tty references is also insufficient because a real last close
-> can race the failed open and its release.
-> 
-> Track which slave files opened successfully. Ignore failed files during
-> close, and mark the master peer closed only when the last successful
-> slave file closes. In-kernel callers may pass NULL instead of a file;
-> retain the count-based close behavior for those callers. A selftest
-> checks locked opens with zero, one, and two existing slave files, plus
-> ordinary last-slave close behavior.
-> 
-> Fixes: 699390354da6 ("pty: Ignore slave pty close() if never successfully opened")
-> Assisted-by: LLM
-> Signed-off-by: Akira Patafio <kokokoala4211@gmail.com>
-> ---
-> Changes in v2:
-> - Preserve the existing NULL-file callback behavior for in-kernel TTY users.
-> - Add the Assisted-by tag requested in review.
-> 
-> Tests:
-> - The selftest failed on an unpatched Linux 6.12.69 kernel at the
->   pre-existing slave write with errno EIO (TAP fail:1).
-> - Built the patched 7.3.0-rc5 x86_64 kernel with legacy PTYs and Speakup
->   enabled, without compiler warnings. Booted it in QEMU/HVF and ran the
->   selftest in the guest: TAP pass:1 fail:0, exit status 0.
-> 
->  drivers/tty/pty.c                             |  34 +++-
->  drivers/tty/tty_io.c                          |   1 +
->  include/linux/tty.h                           |   1 +
->  .../testing/selftests/filesystems/.gitignore  |   1 +
->  tools/testing/selftests/filesystems/Makefile  |   2 +-
->  .../selftests/filesystems/pty_locked_open.c   | 187 ++++++++++++++++++
->  6 files changed, 222 insertions(+), 4 deletions(-)
->  create mode 100644 tools/testing/selftests/filesystems/pty_locked_open.c
-> 
-> diff --git a/drivers/tty/pty.c b/drivers/tty/pty.c
-> index cc7f709..4024c5d 100644
-> --- a/drivers/tty/pty.c
-> +++ b/drivers/tty/pty.c
-> @@ -46,12 +46,31 @@ static DEFINE_MUTEX(devpts_mutex);
->  
->  static void pty_close(struct tty_struct *tty, struct file *filp)
->  {
-> +	struct tty_file_private *priv = filp ? filp->private_data : NULL;
-> +	struct tty_file_private *other;
-> +	bool another_open = false;
-> +
->  	if (tty->driver->subtype == PTY_TYPE_MASTER)
->  		WARN_ON(tty->count > 1);
->  	else {
-> -		if (tty_io_error(tty))
-> +		/* tty_release() also calls close after an unsuccessful open. */
-> +		if (priv && !priv->pty_opened)
-> +			return;
-> +		/* In-kernel users have no per-file open state. */
-> +		if (!priv && tty->count > 2)
->  			return;
-> -		if (tty->count > 2)
-> +		/* tty->count includes opens that have not succeeded yet. */
-> +		spin_lock(&tty->files_lock);
-> +		if (priv)
-> +			priv->pty_opened = false;
-> +		list_for_each_entry(other, &tty->tty_files, list) {
-> +			if (other->pty_opened) {
-> +				another_open = true;
-> +				break;
-> +			}
-> +		}
-> +		spin_unlock(&tty->files_lock);
-> +		if (another_open || tty_io_error(tty))
->  			return;
->  	}
->  	set_bit(TTY_IO_ERROR, &tty->flags);
-> @@ -223,14 +242,23 @@ static int pty_open(struct tty_struct *tty, struct file *filp)
->  
->  	if (test_bit(TTY_OTHER_CLOSED, &tty->flags))
->  		goto out;
-> +	/* A rejected open must not disrupt already-open slave descriptors. */
->  	if (test_bit(TTY_PTY_LOCK, &tty->link->flags))
-> -		goto out;
-> +		return -EIO;
->  	if (tty->driver->subtype == PTY_TYPE_SLAVE && tty->link->count != 1)
->  		goto out;
->  
->  	clear_bit(TTY_IO_ERROR, &tty->flags);
->  	clear_bit(TTY_OTHER_CLOSED, &tty->link->flags);
->  	set_bit(TTY_THROTTLED, &tty->flags);
-> +	/* Record a successful open before another slave can close. */
-> +	if (filp && tty->driver->subtype == PTY_TYPE_SLAVE) {
-> +		struct tty_file_private *priv = filp->private_data;
-> +
-> +		spin_lock(&tty->files_lock);
-> +		priv->pty_opened = true;
-> +		spin_unlock(&tty->files_lock);
+> The busywait return value is also ignored here and in run_burst():
 
-It's kind of obvious that this is LLM-generated code as it loves to add
-random new booleans and doesn't know about properly locking logic in the
-kernel.
+Fixed in run_burst(): a helper that never prints READY fails the case.
+wait_tunnel() still ignores it on purpose, since a missed READY only
+costs one of the 40 tries, and probe.out is now removed before each
+try, so a stale READY cannot match.
 
-Think about why you are attempting to use a lock here, and yet the rest
-of the function didn't use a lock at all, doesn't that feel "odd" to
-you?
+> Can this multiplication wrap before the total > MAX_DGRAM check runs?
 
-Be _VERY_ careful when using a LLM to create a patch like this...
+Fixed: main() now rejects sizes that would overflow the buffer or the
+seen[] array, for both send and recv.
 
-thanks,
+> Should that be reported as a failure instead, given that this is the
+> data path the test is meant to cover?
 
-greg k-h
+Yes. A tunnel that never comes up is now a FAIL, not a SKIP.
+
+pw-bot: cr
