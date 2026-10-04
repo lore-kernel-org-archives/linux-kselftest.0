@@ -1,67 +1,67 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ej2-f41.google.com (mail-ej2-f41.google.com [74.125.228.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E0247044E
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 17:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D0746EF64
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 17:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791134200; cv=none; b=tneUHuRYKWB+B/B+F6jfhR3vuWW88a6qlWihCTINMRXd7oLjiBBWVfyQn3slYNB42mMlSwkq07O5tCvlhxBFBO6NddfYY9wrV1SqpebOLi8KlX7OfKs0Qw6PZCwu6Z6wvub400rMsLj1LWWkb7cMj+DQ792h7uA54uLNZOh2mSM=
+	t=1791134201; cv=none; b=DG4LZPbUb6qdTsk04kqqQqiAlBND14r/KN2j0VjFikCDXV3uZ/uTd5m0rUwhyiqixqjWrpIPqyZIDiDBg7LqCpJqIiPgoloHt09yApPmiFTlAkSAdHqyrx7YGNAgRPsu7HZWPRj3v71XA6DK89CZueQf08cGhhtNfV8v2sCFcD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791134200; c=relaxed/simple;
-	bh=N2fEn5naZVynWAREy9aYIddLfbC9cTCqMP6evTuQQrw=;
+	s=arc-20240116; t=1791134201; c=relaxed/simple;
+	bh=o2jtQj2OHXY/6owvSxAwiCPLhU1mv6LvtL3CrbNafTI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oABfMmdwBhCRZcR5mvaNOjmC2S+DBrPzhCw9eZUnkSvid/ZJUeAorhIMWgE66qd1xnVLrSlWcOHjhvgz48IwvTJRYz05r04IY2Sd1q6Ts4BaIpaRIgIUY6P3BFu3ePZAw6FSswhXgPt8YLriq38YfDk7sswkxFoLNJ7Q6qAx2mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=gImvn9C/; arc=none smtp.client-ip=209.85.218.46
+	 MIME-Version; b=Eo29MLDNg2yVyuCqZmV8YxEdAk4GD5fhMXidw+A0Oz6C7AOc81Xe4YDZgdH8/WLvJXEJSegf1G9vxg2FMdwP5OWZUbsTVxY0ghuAskeUuITdhLBE8IobYhGa6kckAjiFV/IcuCiNOikE3W4qVQCKhPwt6QbBvTq3560OYBC//E8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=wtHi+Nmp; arc=none smtp.client-ip=74.125.228.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="gImvn9C/"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c2e43f3d1fdso143421166b.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 10:16:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="wtHi+Nmp"
+Received: by mail-ej2-f41.google.com with SMTP id a640c23a62f3a-c2e3dcfe205so157965966b.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 10:16:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1791134191; x=1791738991; darn=vger.kernel.org;
+        d=bairaktaris.de; s=google; t=1791134193; x=1791738993; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7pciMmt6xvkKxAILLtPxurNk5XIP3aiXY2Q8mmcn43k=;
-        b=gImvn9C/gR68omXOgmOhHwB+3WO9azBAH1Vach+nKQaIJvVRbIYvjOarZ4WLaT7S6Y
-         TzIVwG6JwBYrb3MV5N4pb8MQxzeLsJASfqKYwOlbmRHjnmoXsVIqFujn1pa7eKo7ZaAb
-         m/fVlaQwrJT5hncJVqNrYVw1yc3gSpqdks04MW2Mp/RD80UABCaGODDtnzKxdrVe5dZ2
-         iEVIoXDKWuH+8HPnkYIGuk9Jsf5mhWLoAmDvFySxvE5OocbHZ6xLboBMxPZpzFIwuuWP
-         /kmUn4bPKsMsX+A3kVAUK/5+B9bYgdnfOwK5VIZaf1HzvBze2UJfi+RvhQDFQuC/E1NF
-         toxQ==
+        bh=+bqyPjoRf7iBEIUgxbf57WQODywLy9nIG08b3lo6o1E=;
+        b=wtHi+NmpZ551fCDywJJyI4la05CKLKTZBQQjTmR4d5x9DA1AUt6lvv0VPcDWFuIeaG
+         ni9NvMmw1JAAREcGSLz/4Denmv7Y6YfNeq2abzlxrACYALFiW47+FmRvPgw2uvfwtNYL
+         sT3cEWrU03xoijwLauCzEhcT+invUb28ENQof69s88FyMX5NWaYRVZRNCVZyHeqGVO2J
+         +zb6t+bZqfC7Hj6KHYfJMUKZtlPVOMDgHAUKH3nmV8sE9s/JkCNqePsJNI3yP1Tk59n5
+         ybQwhOPV4FcfETIus11kqR6huE/BoRZIl45/2DBj+5w/v82utBRFkcwYNTIl64N765rm
+         V90w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791134191; x=1791738991;
+        d=1e100.net; s=20260707; t=1791134193; x=1791738993;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7pciMmt6xvkKxAILLtPxurNk5XIP3aiXY2Q8mmcn43k=;
-        b=b7w+iVohhl5UbjJ1+WavSIPK3KhvAGRpcup5iLtVbdZl6UUP6JDCTzSvM2BrJC5BFa
-         xSAwWt4q52JdTPJ9CqauDUl6xCdfOMK76UvdhLWRcPUAQbbocT0gBnJ8BvMn299pmedq
-         e4Fh2Ld6B270cpxsgZMQaH3a02fIUUdP/GxKwyrmlbkEMpPljQZ8rRfSUPnuS132xKS+
-         ess47/rVQLe9ApcR8M0JgCGDPxFrtbuFROxKu8trLfiSZmOAfgwP+4OGaZcshk1+ripa
-         nUM8sFSSJvZ5Uqul3UUmOXXO9RRgq1JZT0NyYD6TEk4RYlmXV98Owgwipk9NH4Z/y3Pp
-         9H6g==
-X-Forwarded-Encrypted: i=1; AKwUvBzTcUwrK+jcE3Y3/+irSMuTyYJHU3+y4XH0L4Nk+qne3F/G6bbP8QkbCe/B2/W+UfVbSMgewFnPM0d9Si1onKs=@vger.kernel.org
-X-Gm-Message-State: AFuF++m3l0E2ImSfHNehhxv6ZRp3SjxRkCI3pbKHz1G/3SXgpLOCkOZj
-	YM2bRJHqKPPOUll8UZy17aGFhqx0QOA9v8HBZbeDuujabE/ojxk/4U7vmAogfkT9Jw==
-X-Gm-Gg: AYBFou32+vhM43y2uzNQHLg/5C4WgKjdST1Vt2mFX4UD6kLmxeChqT7Nz2CaDsx+msQ
-	7HBKm65pMo1PU2kDoMxK44xSDv5SK0yKS1aawsgM9M/YNdCnChiI4nmsm2Wsebuzz9xAZ47OrOs
-	TL6zmpcRU5uqs6VXMvc7IVPTBBvFR9Qxep5+9I3G05Y48GSSDYv2seB1WypbI5n3bb8LE650MIu
-	w35NWqm1lAOMLkrNSW1WKhp3lAqIvMzxBauaBCzrgZJfBVbSlHknQZ9Di31rSC2krkkV+1BWM4S
-	ZJDD2n51Gw2u8Zg+u4bpUfLmUjQooE44njNG3JmQCanBFJEuIdsu2XoXu6cLp841vlOFFyMYayY
-	jepX3N9lIzld9yvBoYGV+P4HyTqvBxIY7+/dAeeLmmh1qNb+jsJSPwwJNnP1/S/GBLVJt+4I1Ou
-	AuHxwbcZM3cSIf45JRQ9PKrEZsZ602x6Lo1wvA6V4hQVvtWTK2OosQUf+MT7nssXtmADjBOMGg9
-	HifaIFeosXiRFqFWGRQXBv09B5S1fdC8wVLt2dmu0tKQs7vWmWPKPko/ej2Zm3I0sCu6ugW3pfD
-	PhkfEcENopdpx8WqB+CfffeT5pbGl/iFrQHCA5aDMRYAdoP0rWlQSq7QY1TSeBmPkuB7PICyk1q
-	K1/9l4MWuBsBHZr+S/pRjHdSq676xy264lEWQYvN6bq7knERUErOq9rxjIhcJLezJKI4AMS+iU4
-	o6tO1eItq1l4zGexMMmH7B6nE=
-X-Received: by 2002:a17:907:3f1f:b0:c2e:317e:d711 with SMTP id a640c23a62f3a-c2e6edf32b9mr428205766b.27.1791134191269;
-        Sun, 04 Oct 2026 10:16:31 -0700 (PDT)
+        bh=+bqyPjoRf7iBEIUgxbf57WQODywLy9nIG08b3lo6o1E=;
+        b=lvkgWFaiDhpEunx+n4e3kw1PYyiTVW5KqnGIc9tMiG5yTmJbCT6qkynWqfC2OnsiH7
+         WFkT0XRBolJJ4m4P2Ah5OWze120006aa5A54Vc2ME5XYBZDska4CIgrTr1BsAQGEOiYI
+         W6hOUlLZBkn3ZZqF4j2gFDdKuePOEqGJP65hk6gfBk/A85AtKIAr/73UQ7MVtHBTlJe9
+         8hG02ozhYvLAB/oZHF01sMJIKY0NtuZFN7NEIYGRfzgIehYtHJ2/6p5HZViGjz0k/Ssz
+         yYXOWFYQn4u20+/Hj0CIFVvC7iuZZ4KDG54GxEKoMQ8WLLLU6Y0ijTbi+djpAR7TieA/
+         2y0g==
+X-Forwarded-Encrypted: i=1; AKwUvBwf3q/TP/bM+ele2xMcj+KxzOo803t7FQQA1XHW9T1CA+F5iOkjpqlPvAfNIm9H26z3N5kws5tG8VUW1M1Q3bw=@vger.kernel.org
+X-Gm-Message-State: AFuF++lx2muteidcYQ4+2hRLFfhpoE9oh2nrmvCKvHB3/IrCZUdHxBVK
+	HRGUke8Gx5+q4sXU2Sgea8irOU8bepxrF47fbJnS4VswzJqAOxVBxrQq0o5dUqMs6Q==
+X-Gm-Gg: AYBFou30MverjZsUsm02dUaL4vtpnWgX778sw7PABiERRU4vDtIQBlNlY3qRBt+gFY8
+	BWdC3gmrYx4XK2lzPV/J2gReGeOv8AFc3Av2BL7QtgWo0/vXQQ359ax7OaHsXu85ptrtiI59qFO
+	KezJJb26AxgT22PVo0Bm8pytuv2eJah9jeAa0evW6/lbcBMLv3BM8ofYKlQBoCM8cgqjbH7x6eG
+	1q90OOKYGWtGaX9Xkixm0mhPjgerWE5JilhwYvZziGYjlod82LdsdY5CgKltyrr1SdmiY0Y4F4N
+	4QvKL0ynCcc3ItxZkLTpG8CLiCRwgQslPYN6O/CRRmNRFRLKedtkg9XQXgzXsNm1DkCw/ZUYj2c
+	COr/TC34LtzW2b9tJMxdzIt0JErhDeY97hDc34jqREjbvBzdY1/HsdVInUNr+MZlchjjmFaZ4Sr
+	WrkzeUyFQrlsxsep9eo9B2UAC7uU5LOyOJa04SWSYWteGi4Pd0a3Azh5xK5ekw5bfSXhgB8a2uv
+	mcj8r81mCF7KLlXaWB2gUUlJf+rQIwxxDlgKJivYSSoDLSSURf+EqA3D7lME45Y7Hek1ghtgv2T
+	79fBV414SII6qlbbojA8IYH7WPzlQ2yM0Tn+Rg7Sk5Ft0bPlGGR5lk0lZ67LDMCWIpWqCrF+wtz
+	lv+kDVSKBqGT64SzszupfB0wVlXU21uBl0h8dHSp0VHzjKLiiJmjkp7DMuqO0jNijaWTszhIAiM
+	0nIeiSv94dtkob1UTIRkVN8Kw=
+X-Received: by 2002:a17:906:4fc5:b0:c26:1649:47b4 with SMTP id a640c23a62f3a-c2e4afee0demr740206366b.42.1791134192866;
+        Sun, 04 Oct 2026 10:16:32 -0700 (PDT)
 Received: from Desktop (pd9513667.dip0.t-ipconnect.de. [217.81.54.103])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e4cf9ddbesm317345166b.69.2026.10.04.10.16.30
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e4cf9ddbesm317345166b.69.2026.10.04.10.16.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 10:16:30 -0700 (PDT)
+        Sun, 04 Oct 2026 10:16:32 -0700 (PDT)
 From: Julius Bairaktaris <julius@bairaktaris.de>
 To: pablo@netfilter.org,
 	netfilter-devel@vger.kernel.org
@@ -72,9 +72,9 @@ Cc: kadlec@netfilter.org,
 	geldot@protonmail.com,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH nf-next v2 2/4] netfilter: flowtable: promote a flow offloaded in one direction only
-Date: Sun,  4 Oct 2026 19:16:26 +0200
-Message-ID: <20261004171628.3544978-3-julius@bairaktaris.de>
+Subject: [PATCH nf-next v2 4/4] selftests: netfilter: cover a TCP flow whose reply is never seen
+Date: Sun,  4 Oct 2026 19:16:28 +0200
+Message-ID: <20261004171628.3544978-5-julius@bairaktaris.de>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261004171628.3544978-1-julius@bairaktaris.de>
 References: <20261004171628.3544978-1-julius@bairaktaris.de>
@@ -86,85 +86,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The next patch offloads TCP flows without a reply in the original
-direction only. Keep the reply direction of such a flow on the classic
-path until the connection is assured, then offload it too, as act_ct
-does for UDP. The XDP flowtable lookup does not return that reply tuple
-either.
+Add a case where ns2 answers over a direct link, so nsr1 only sees the
+original direction. The forward hook must count less than half of the
+transferred bytes, which only happens when the flowtable takes over the
+connection.
 
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Julius Bairaktaris <julius@bairaktaris.de>
 ---
- net/netfilter/nf_flow_table_bpf.c |  4 ++++
- net/netfilter/nf_flow_table_ip.c  | 26 ++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+)
+ .../selftests/net/netfilter/nft_flowtable.sh  | 75 +++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-diff --git a/net/netfilter/nf_flow_table_bpf.c b/net/netfilter/nf_flow_table_bpf.c
-index cbd5b97a6329..7070bc600db1 100644
---- a/net/netfilter/nf_flow_table_bpf.c
-+++ b/net/netfilter/nf_flow_table_bpf.c
-@@ -50,6 +50,10 @@ bpf_xdp_flow_tuple_lookup(struct net_device *dev,
+diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
+index 449c518bd947..2c2669b8fccf 100755
+--- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
++++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
+@@ -516,6 +516,81 @@ else
+ 	ret=1
+ fi
  
- 	nf_flow = container_of(tuplehash, struct flow_offload,
- 			       tuplehash[tuplehash->tuple.dir]);
-+	if (tuplehash->tuple.dir == FLOW_OFFLOAD_DIR_REPLY &&
-+	    !test_bit(NF_FLOW_HW_BIDIRECTIONAL, &nf_flow->flags))
-+		return ERR_PTR(-ENOENT);
-+
- 	flow_offload_refresh(nf_flow_table, nf_flow, false);
- 
- 	return tuplehash;
-diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
-index c8c29a9a1684..289fe6c9e4f5 100644
---- a/net/netfilter/nf_flow_table_ip.c
-+++ b/net/netfilter/nf_flow_table_ip.c
-@@ -465,6 +465,26 @@ nf_flow_offload_lookup(struct nf_flowtable_ctx *ctx,
- 	return flow_offload_lookup(flow_table, &tuple);
- }
- 
-+/* The reply direction of a flow offloaded in one direction only stays on the
-+ * classic path so that conntrack sees it. Once the connection is assured, that
-+ * direction is offloaded too.
-+ */
-+static bool nf_flow_reply_unoffloaded(struct nf_flowtable *flow_table,
-+				      struct flow_offload *flow,
-+				      enum flow_offload_tuple_dir dir)
++# Asymmetric path test:
++# ns2 answers over a direct link, so nsr1 sees the original direction only.
++# Such a connection never becomes assured, but the flowtable is expected to
++# take over the direction that nsr1 does see.
++check_orig_offloaded()
 +{
-+	if (dir != FLOW_OFFLOAD_DIR_REPLY ||
-+	    test_bit(NF_FLOW_HW_BIDIRECTIONAL, &flow->flags))
-+		return false;
++	local what=$1
 +
-+	if (test_bit(IPS_ASSURED_BIT, &flow->ct->status)) {
-+		set_bit(NF_FLOW_HW_BIDIRECTIONAL, &flow->flags);
-+		flow_offload_refresh(flow_table, flow, true);
-+	}
++	local orig
++	orig=$(ip netns exec "$nsr1" nft reset counter inet filter routed_orig | grep packets)
++	local orig_cnt=${orig#*bytes}
 +
-+	return true;
++	local fs
++	fs=$(du -sb "$nsin")
++	local max_orig=$(( ${fs%%/*} / 2 ))
++
++	# the flowtable takes over after the first few packets, so the forward
++	# hook must see a small fraction of the transferred file.
++	if [ "$orig_cnt" -gt "$max_orig" ];then
++		echo "FAIL: $what: original counter $orig_cnt exceeds expected value $max_orig" 1>&2
++		ret=1
++		return 1
++	fi
++
++	echo "PASS: $what"
 +}
 +
- static int nf_flow_offload_forward(struct nf_flowtable_ctx *ctx,
- 				   struct nf_flowtable *flow_table,
- 				   struct flow_offload_tuple_rhash *tuplehash,
-@@ -478,6 +498,9 @@ static int nf_flow_offload_forward(struct nf_flowtable_ctx *ctx,
- 	dir = tuplehash->tuple.dir;
- 	flow = container_of(tuplehash, struct flow_offload, tuplehash[dir]);
- 
-+	if (nf_flow_reply_unoffloaded(flow_table, flow, dir))
-+		return 0;
++test_asymmetric_path()
++{
++	ip link add name eth1 netns "$ns1" type veth peer name eth1 netns "$ns2"
++	ip -net "$ns1" addr add 10.0.9.99/24 dev eth1
++	ip -net "$ns2" addr add 10.0.9.98/24 dev eth1
++	ip -net "$ns1" addr add dead:9::99/64 dev eth1 nodad
++	ip -net "$ns2" addr add dead:9::98/64 dev eth1 nodad
++	ip -net "$ns1" link set eth1 up
++	ip -net "$ns2" link set eth1 up
 +
- 	mtu = flow->tuplehash[dir].tuple.mtu + ctx->offset;
- 	if (flow->tuplehash[!dir].tuple.tun_num)
- 		mtu -= sizeof(*iph);
-@@ -1074,6 +1097,9 @@ static int nf_flow_offload_ipv6_forward(struct nf_flowtable_ctx *ctx,
- 	dir = tuplehash->tuple.dir;
- 	flow = container_of(tuplehash, struct flow_offload, tuplehash[dir]);
- 
-+	if (nf_flow_reply_unoffloaded(flow_table, flow, dir))
-+		return 0;
++	# ns1 keeps sending through nsr1, ns2 answers on the direct link.
++	ip -net "$ns2" route add 10.0.1.99 via 10.0.9.99 dev eth1
++	ip -6 -net "$ns2" route add dead:1::99 via dead:9::99 dev eth1
 +
- 	mtu = flow->tuplehash[dir].tuple.mtu + ctx->offset;
- 	if (flow->tuplehash[!dir].tuple.tun_num)
- 		mtu -= sizeof(*ip6h);
++	# with PMTU discovery the endpoints size their packets for the
++	# router's link, so the fast path forwards them unfragmented
++	ip netns exec "$ns1" sysctl -q net.ipv4.ip_no_pmtu_disc=0
++	ip netns exec "$ns2" sysctl -q net.ipv4.ip_no_pmtu_disc=0
++
++	ip netns exec "$nsr1" nft reset counters table inet filter >/dev/null
++
++	if test_tcp_forwarding "$ns1" "$ns2" 1 4 10.0.2.99 12345; then
++		check_orig_offloaded "flow offloaded for ns1/ns2 without reply"
++	else
++		echo "FAIL: flow offload for ns1/ns2 without reply" 1>&2
++		ip netns exec "$nsr1" nft list ruleset 1>&2
++		ret=1
++	fi
++
++	ip netns exec "$nsr1" nft reset counters table inet filter >/dev/null
++
++	if test_tcp_forwarding "$ns1" "$ns2" 1 6 "[dead:2::99]" 12345; then
++		check_orig_offloaded "IPv6 flow offloaded for ns1/ns2 without reply"
++	else
++		echo "FAIL: IPv6 flow offload for ns1/ns2 without reply" 1>&2
++		ip netns exec "$nsr1" nft list ruleset 1>&2
++		ret=1
++	fi
++
++	ip netns exec "$ns1" sysctl -q net.ipv4.ip_no_pmtu_disc=1
++	ip netns exec "$ns2" sysctl -q net.ipv4.ip_no_pmtu_disc=1
++
++	ip -net "$ns1" link del eth1
++	ip netns exec "$nsr1" nft reset counters table inet filter >/dev/null
++}
++
++test_asymmetric_path
++
+ # delete default route, i.e. ns2 won't be able to reach ns1 and
+ # will depend on ns1 being masqueraded in nsr1.
+ # expect ns1 has nsr1 address.
 -- 
 2.53.0
 
