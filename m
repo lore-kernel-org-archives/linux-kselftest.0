@@ -1,150 +1,155 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C127480959
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 18:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9853E4766A5;
+	Sun,  4 Oct 2026 18:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791137653; cv=none; b=TzrSiHB0ZONrQF9aUMFeAYoBIzJK6HGbrHf1pxcz+mD6Vl0pBNQeBbJsBcaQgbArJe0FUffmPxZwE6zPU34JMwzYirP23NDJdbPKdZdEazdl25nyV7YqGjeOfEDLwtK0bTKzAtmYg+flK9Ex4+aqHPKN2zRv9TbjWsBX10VcAII=
+	t=1791138176; cv=none; b=MmEhL6EhmIWZXfOrV04z592CBvNLUv4fh0d8DwtTV1BigXEOswwlKyVdBAtfin71WHYGjZSCLGvHTzzQsiVF7WZCXCibcPfZzQNx1eCu+F8fT/tsZIgKAngDGPtmX2vcAxKPlRYZLrpMqeas6CNWy0E3N68/GEL6RsnziPxoiIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791137653; c=relaxed/simple;
-	bh=sjH5S0CNZClDmqdFY8S86gTYCINMCORIQDzBcILuZbw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CqbqAQMgEk+NfjI6O+OIFyWG4dyWCehLZXpVLNxdUE2Xk0arJDz8mPHXWd26a9zkGkdO4WB/kGudYfuZ3+IfPwiO37/zsuTt+5M8wmUyjgnIPA9DrMPSFXEqLlFobnP0gKhKngVSQ+rIRDPGfY6iVQC0B0bneU6VCjJQwlqYLTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K4Sa1s33; arc=none smtp.client-ip=74.125.227.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791138176; c=relaxed/simple;
+	bh=Uryj3YYK55Fef7hErvkG5mQB+3f98WLOJHxhpnstPms=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TVkABCxh7inEeacowUXCSGuFral19zKsWCwFRJ24KKy5QzgkeV+ZFiFd6dqHrOWmdt1fv7FsjTwvZrNklf9FeEThwJE/SLB82N+Ml7rRW6lXT94hM9eU1Q85MaSA502S1bbSK7w4KDvcdA4oTSh+D/OwHmewhGleKRRr43vd3i4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=pgshJhTP; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=jnGtYkqT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=qUQKeGlc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZdA9MUje; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K4Sa1s33"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-3a4c8262465so808862a91.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 11:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791137648; x=1791742448; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=zvp184+VDrAAELa45MrIVjzHZuD6h0h7teUaAj2z138=;
-        b=K4Sa1s33e0topBLGrjJINZJoi62x44og/j03tLJmjWt2c/pJvzX2HTGqfrHcMxLOGo
-         KxzYBuopU972XPuBVEcR0ycGt415fw4raN5VEPo2z6muL17lWZ/HIG88g123LWJTPd9Q
-         rirdz9jjIW7qf6CNJ02pHhxBu7iA1urwiQXBk8Wvo5pIeMbSY2jZaZ/D1EBhVzv2BTh6
-         jqs959cePI9HiTQN5HMLqSTDbZ4rKf638sNEpvZ7ucTiJSi0gF2+JfvYODsxEmFKBRLK
-         o8+oSJ+fc86F3abO3LxElskwxBc8NX974Oso3GKIkN2Vqx+k+AED2wHfPestHNGGQ+cW
-         BnyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791137648; x=1791742448;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zvp184+VDrAAELa45MrIVjzHZuD6h0h7teUaAj2z138=;
-        b=k8F1/f++ZsAHr3u7LBAhQMXEzVscO6xLHkCrRv/WGG9yKYR+o/hEy7BlXpDGsyGmUh
-         qVS9ovtA6QqtQybESzZZ+qo4W/5DwjuMjPiNpo62m/B4MfxqnXLYChWaq/PkxbxsjyPr
-         Mgo6bVr98yeJLgaNyJRatjrOiMrvx/XRen84A44HIyZkqPiSpvm/aV76KhYT2iATBTPJ
-         1euaMu5ogS0620Yfk5D/56Lc8JFOaLI3yMlWrnNmvi2pjfmLkHx4XqemiMQDylWgvJOU
-         8H8rI3RfRGsOM8WL4uXcFkdJdLBHJ5e8KCgu1Rpg5Lnkbk+igQSZz3A1lLRqVcJhfdM5
-         D/mQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwTyJyH9nqqRucVdGj1DZRsVXFSlq92iaoKuFMmtrGyXvIVtGupSDYw1b3fPOhjLl9WAJg8kPSCs5O7zgPwV+g=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIvuJDxbPyhRL+yzPLHdw1kapC/fxiQb5howziIiMZNM+gPU0eM
-	tV8BpRUmoRmif5J+F6TxBsOcBT0h4CyBjoftyPIwZiwiUPlobfFN5sP7
-X-Gm-Gg: AYBFou2hRzVIvdYujsd3gqzukLff13RdGmhhi/bIBSeHSUd4jX+Nzzw/cZwcRui2X0K
-	MA6hCQNpfuoVqXhqdEnTAO5R3FDQowS+991Q8lkKZoo6uFfuIWSBpTRUv8vpnDzTpWulIgaYE+b
-	Cnms3SFySMt6YCdNyIDbmzTL6iEJLo4QJyjShmqmmKKhw8ARhJbMViGn1xl1lIE6hF2RCzT+hqi
-	A3U8u8GZahsyO9+fvB71YcLQX95k0a5Irr4oQxc1/STuL9lRfVXb1I0M37f7Br8ln7xn0b3Jcf0
-	U9+58jE7W1AlF2vzNJpPCkTjxCSqUl2ChGV/Q8m1smxA0XEK7oPuypmDSAN/vrBt9Qa3vCXHWbY
-	P++QeXxn1ulZBqZFKTTP77yF7/muiC5ecsjZYXpLKLie634Hq1qj+0lJwB123b86tfP247ANI2X
-	gVUnS2K9bGEUXmWoSQZkfElXz5doKYoRF0OOgBZmcfOlNeZ0hM7mHIfvKYR12MFkj+EAYV/RV6W
-	jcTAv0/kvgwQkKmH3DJrNqVjQ1edSwOkuNW/kdbQw==
-X-Received: by 2002:a17:90b:4ac3:b0:3a0:a781:2c39 with SMTP id 98e67ed59e1d1-3a6ce3a978dmr7662178a91.7.1791137648512;
-        Sun, 04 Oct 2026 11:14:08 -0700 (PDT)
-Received: from gmail.com ([220.85.166.190])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a78d59f1cdsm7460304a91.0.2026.10.04.11.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 11:14:06 -0700 (PDT)
-Date: Mon, 5 Oct 2026 03:13:58 +0900
-From: Youngjun Park <her0gyugyu@gmail.com>
-To: Matthias Goergens <matthias.goergens@gmail.com>
-Cc: Kairui Song <ryncsn@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Chris Li <chrisl@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	David Hildenbrand <david@kernel.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Nhat Pham <nphamcs@gmail.com>, Yosry Ahmed <yosry@kernel.org>,
-	Barry Song <baohua@kernel.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-api@vger.kernel.org, Alejandro Colomar <alx@kernel.org>,
-	linux-man@vger.kernel.org, Karel Zak <kzak@redhat.com>,
-	util-linux@vger.kernel.org,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, Kairui Song <kasong@tencent.com>
-Subject: Re: [RFC PATCH v2 0/4] mm/swap: reserve swap areas for deliberate
- offload
-Message-ID: <asKXZv5SxBtxQxqf@gmail.com>
-References: <20260926045517.3458413-1-matthias.goergens@gmail.com>
- <CAMgjq7B7jem_dwtUEX7ZJPQm_pKBegR6WS9+B7nFp-gZugpUng@mail.gmail.com>
- <20260928151944.2686626-1-matthias.goergens@gmail.com>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="pgshJhTP";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="jnGtYkqT";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="qUQKeGlc";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZdA9MUje"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 50BDC21D45;
+	Sun,  4 Oct 2026 18:22:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1791138162; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J8nwckF1qvE1a3gD+m22QrerO8OMZ2HquKX90YnFDdg=;
+	b=pgshJhTPOedUqg1e6VvIb3mQ/fM9FaRCFc281TTzDKr9AJSz9Gtfx7JO+iTjM2Uq5PI8Am
+	pyDnc6jU9RqW6DOXer3n2GnLnwEPJwps0IQdvofRD9gG3RG5dFp9TDGy7cpLKSVMnYzPMu
+	XAee5U8tw4/h4/hYSi55m9N940OpSSs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1791138162;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J8nwckF1qvE1a3gD+m22QrerO8OMZ2HquKX90YnFDdg=;
+	b=jnGtYkqTavfou16nN0BDatr0J5F3fr98uBSsyHDse/lcNzBy5frdBIFZHBgNPW81eSlKpZ
+	ColLyCcN5YnVh+CA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=qUQKeGlc;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=ZdA9MUje
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1791138158; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J8nwckF1qvE1a3gD+m22QrerO8OMZ2HquKX90YnFDdg=;
+	b=qUQKeGlcX/vLUl/awQrt4ru31e2AFBgRSDRC5C5Z98S7iAL5t1l8GnvLX03YM1+a8HI4hK
+	ycyv6KAqa/6HpNQRFbI8ZOa//LNiL7Ohka3lSGcQ4xMqIsKMDsddhFPhNrhpq8NfVpIY2H
+	ThiKTJ6kFZ6LtXcwWNFm7hW8S4CNhws=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1791138158;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J8nwckF1qvE1a3gD+m22QrerO8OMZ2HquKX90YnFDdg=;
+	b=ZdA9MUjeGj7tyxmovecqMPVabA9VCFKmGQg38TUgnHbdMS6+mDVIb27N4F/NiDV3F1p+YV
+	OyF/ImlgVnbOlbAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 118B0133CF;
+	Sun,  4 Oct 2026 18:22:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ZaprN22ZwmoCTwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Sun, 04 Oct 2026 18:22:38 +0000
+Date: Sun, 04 Oct 2026 20:22:33 +0200
+Message-ID: <87ece5iavq.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: HyeongJun An <sammiee5311@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] selftests/alsa: Catch writes that silently change other controls
+In-Reply-To: <20260930111534.3782264-1-sammiee5311@gmail.com>
+References: <20260930111534.3782264-1-sammiee5311@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260928151944.2686626-1-matthias.goergens@gmail.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_TO(0.00)[gmail.com];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Spam-Score: -3.51
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 50BDC21D45
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
 
-On 2026-09-28 23:19, Matthias Goergens wrote:
+On Wed, 30 Sep 2026 13:15:32 +0200,
+HyeongJun An wrote:
+> 
+> Mark asked for this in the es8316 thread [1]: have mixer-test check
+> for other controls changing when one is written. Patch 2 adds that.
+> 
+> Patch 1 fixes a bug that testing patch 2 turned up. With a driver that
+> notifies a neighbour with a value event, wait_for_event() returns on
+> the neighbour's event and the next test reports a spurious one.
+> 
+> The cost is two extra writes per control and a read of every other
+> control on the card after each. On the two cards here, 39 controls in
+> all, the run time does not move. I have no card with hundreds of
+> controls to measure against the 45 second kselftest timeout.
+> 
+> [1] https://lore.kernel.org/all/0fefbfe1-021b-46b2-8945-15956e75e37f@sirena.org.uk/
+> 
+> HyeongJun An (2):
+>   selftests/alsa: Do not take another control's event as our own
+>   selftests/alsa: Check that a write does not silently change other
+>     controls
 
-Hi Matthias !
+Applied both to for-next branch.  Thanks.
 
-> > Just like we already have a "swappiness=" parameter in the reclaim
-> > interface, perhaps adding a "swap.tier=" would be better and much
-> > cleaner to achieve the same goal? Based on Youngjun's work here:
-> > https://lore.kernel.org/all/20260916183437.2946306-1-youngjun.park@lge.com/
->
-> Thanks, I think that's the right base.  I tried it: on top of
-> Youngjun's v11, a "swap.tier=" argument to memory.reclaim is about 40
-> lines.  In a VM with zram at a higher priority than a disk swap
-> device, and a cgroup whose tier mask allowed only the disk, ordinary
-> reclaim in that cgroup stayed on the disk, while memory.reclaim with
-> "swap.tier=" pointing at zram went to zram only.
 
-There is an earlier attempt that may be worth a look.
-https://lore.kernel.org/all/20260618044857.69439-1-jiahao.kernel@gmail.com/
-
-If you go this way, the discussion in that thread worth refering too.
-
-> What it doesn't cover yet is reclaim outside any configured cgroup:
-> under global pressure, a cgroup nobody configured still reached the
-
-Right, so for now every cgroup has to be set to exclude zram, unless
-another idea or more code covers it.
-
-> zram tier.  So for v3 I'd like to add a system-wide limit on which
-> tiers pressure reclaim may use, on top of the per-cgroup settings.
-> I'll wait for Youngjun's v12 and build on that.
-
-I have looked through the whole series, and I will keep this use case
-in mind while working on v12. :)
-
-Also, to share what I had in mind, I was planning a sysfs interface
-for each swap tier, /sys/kernel/mm/swap/tiers/<tier name> (exact
-naming TBD). Maybe the system-wide limit could be handled there as one
-of its use cases?
-
-Let's discuss it in more detail after v12.
-
-Thanks,
-Youngjun
+Takashi
