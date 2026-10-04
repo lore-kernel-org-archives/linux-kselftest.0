@@ -1,128 +1,128 @@
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+Received: from pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.155.198.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A34F353A6D;
-	Sun,  4 Oct 2026 22:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B944040BCDB;
+	Sun,  4 Oct 2026 22:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.155.198.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791151567; cv=none; b=VmTC45OmyFIMDy03cqmhNFCD3YQalxYGsVCHB6uQtY6sXaYrjqew940WqOuBcwrOVwf+mAZmS4a2efAGvQRtz9BS8kEkrrhRG7xpkO8Hil1wmiuPsAXMnFE13FGtjOfbx6Szj24eTqNxXKzT8VbAkp21qkvUHRpwmfh3c/v+6O4=
+	t=1791152503; cv=none; b=hP5NcYUQLz0SEAJoHtZvA/+7a3j3G/qmQopPJYb39DFEgyPypN20ETVfDg1uIp/diGfrAe7hPCIR1NLLN+wcOb68sjQn/gDsB1HA/GmrVbKT4HGbZ9V0y9nbsH4tXVONd3KkCZ4Y8fMnUmewpU9l91961IX0f729rgW2ZwPkD5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791151567; c=relaxed/simple;
-	bh=e4/e87GJmDIAzGMrT5lDJ8Od/fqkoi5lw7yjfInlkKA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pkd0BD4cbYQmW+5p7B+mV1Td6mpOiip8ITkbsp4Mf+7/+Rl/my6uxmaE0MuuofAddyhJ3XTJAGloRiyMyVg2sb6qGN5lisvoqnkC1D01E5jDj0doZTln4O2KCsNQ06QvGy2Prv471HhmSiAaeVHut0zI0s9+6FWb6LAwidOf0GY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com; spf=unknown smtp.mailfrom=hallyn.com; dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b=s/PARN+d; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=tempfail smtp.mailfrom=hallyn.com
+	s=arc-20240116; t=1791152503; c=relaxed/simple;
+	bh=8MfZas74TP4bH2JkIBPs6F1Wj3cq6DvSuL/z6D0z5ro=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XMkpqibyn48tYhDvpD2uwRxOE32m5JsEQEzT5g3o3BwcH5c+hiC2XvWc9sP8vUr1qhDP1vGwhWhG1PR4/uHxitA0S/UmlWzxXkNwIIH903s0X2ePc5gZGzaJ6G3wzp0vNaKzDUDBF3AsBSyQ60Zm9au3e1s0xQowgkT5gDOZS0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Af33HbjK; arc=none smtp.client-ip=35.155.198.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b="s/PARN+d"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
-	t=1791151556; bh=e4/e87GJmDIAzGMrT5lDJ8Od/fqkoi5lw7yjfInlkKA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s/PARN+dX4gsnZ5GlvO1XifnTD4OWnOnsEdXvG0jq6XjlFaOJt6u4he6/fa/w9S4g
-	 4dHz0Jl3RDGGwH6Sl5uZ5wG5TvgthjXo2mugqAVF0MEczV+oDpo1TkHL9bhisP6KTH
-	 8k2PwhDT6zNY379oIlwiKmSUCNhJxTXaCSdgwYgMhybPfrDxw7CwpFD7UBLD9ncDrx
-	 9ncbTkXHPz1QPuy3wWJlJ02GmxNISiFX4eA/bdsi1KUN4T1YNwTGzobIUk+zGs0Jh3
-	 O0sM8sjM8tlxtx/fzCqTcDWJMuUA1KY4ZAb9lgGFmL976QLhM97Np+/XYtlMdYwsya
-	 vo9IbobwBg+5Q==
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id 1CF9FE1C; Sun,  4 Oct 2026 17:05:56 -0500 (CDT)
-Date: Sun, 4 Oct 2026 17:05:56 -0500
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: tjdqudcks0424@naver.com
-Cc: Micah Morton <mortonm@chromium.org>, Paul Moore <paul@paul-moore.com>,
-	linux-security-module@vger.kernel.org,
-	James Morris <jmorris@namei.org>,
-	Thomas Cedeno <thomascedeno@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	security@kernel.org
-Subject: Re: [PATCH 1/2] security: safesetid: use real GID for GID policy
- lookup
-Message-ID: <asLNxHYQ/xQ6KaWy@hallyn.com>
-References: <cover.1791023194.git.tjdqudcks0424@naver.com>
- <d7e10b50556ab3b79c7132018249f6f7c608411b.1791023194.git.tjdqudcks0424@naver.com>
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Af33HbjK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1791152497; x=1822688497;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gGkA92gKn6Umlg7Do4va51y7OdkAYyeZaeaCQws/E94=;
+  b=Af33HbjKYOCoaBHpbzVoHqqWybQPyWBlTj0a00UAD2IeqbAc3dpdQkBL
+   mh4WA9KlMwvATVJKClsCma4kaZvyhOSZmnydGJyi+AiB5AhirTES9AkYQ
+   Bl72vIFxnHNfYbAsPgH1GOuHcyRUSMDYBjuq29vnP4tVB5c9OyDTOzTox
+   dT/QMY1RX1/1ZdkuQGmEEWrRhyvs10S/rU8Ta/PeEVA/gaw1ffZkPsuR7
+   zZ+P9C+lTnTro5hq1CDTahhEnDh1GbFv9TRyjUihioWWtkcv/5u6Edvo3
+   0bXjSK8UAustB45O2nSHSJrLvOEWZLs3GVQMCXFtI0EX6dtSIEQkq8g4n
+   g==;
+X-CSE-ConnectionGUID: bhwPuL6iQoibWn7EKQVtmQ==
+X-CSE-MsgGUID: iF4tuhgNQbWGyCqDCfgFXA==
+X-IronPort-AV: E=Sophos;i="6.27,141,1787011200"; 
+   d="scan'208";a="30278872"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2026 22:21:32 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:21386]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.164:2525] with esmtp (Farcaster)
+ id 0691faea-dd80-4741-bdc2-6e25b9dd697c; Sun, 4 Oct 2026 22:21:32 +0000 (UTC)
+X-Farcaster-Flow-ID: 0691faea-dd80-4741-bdc2-6e25b9dd697c
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Sun, 4 Oct 2026 22:21:31 +0000
+Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
+ Sun, 4 Oct 2026 22:21:31 +0000
+From: Jay Wang <wanjay@amazon.com>
+To: <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+	<memxor@gmail.com>
+CC: <alan.maguire@oracle.com>, <martin.lau@linux.dev>,
+	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <qmo@kernel.org>,
+	<nathan@kernel.org>, <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
+	<linux@weissschuh.net>, <christian@heusel.eu>, <mcgrof@kernel.org>,
+	<petr.pavlu@suse.com>, <samitolvanen@google.com>,
+	<linux-modules@vger.kernel.org>, <rostedt@goodmis.org>,
+	<mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<linux-trace-kernel@vger.kernel.org>, <acme@kernel.org>,
+	<namhyung@kernel.org>, <irogers@google.com>,
+	<linux-perf-users@vger.kernel.org>, <jikos@kernel.org>, <bentiss@kernel.org>,
+	<linux-input@vger.kernel.org>, <tj@kernel.org>, <void@manifault.com>,
+	<arighi@nvidia.com>, <changwoo@igalia.com>, <sched-ext@lists.linux.dev>,
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ojeda@kernel.org>,
+	<rust-for-linux@vger.kernel.org>, <arnd@arndb.de>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<abuehaze@amazon.com>, <doebel@amazon.de>, <mpohlack@amazon.de>,
+	<jay.wang.upstream@gmail.com>
+Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
+Date: Sun, 4 Oct 2026 22:21:27 +0000
+Message-ID: <20261004222127.31128-1-wanjay@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
+References: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d7e10b50556ab3b79c7132018249f6f7c608411b.1791023194.git.tjdqudcks0424@naver.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Sat, Oct 03, 2026 at 07:34:15PM +0900, tjdqudcks0424@naver.com wrote:
-> From: Sung Byeongchan <tjdqudcks0424@naver.com>
-> 
-> SafeSetID policies constrain the ID transitions available to a task for
-> each source ID.  id_permitted_for_cred() always builds that source key
-> from the old real UID, even when it is checking a GID transition.  If the
-> real UID and real GID differ, the policy attached to the real GID is
-> therefore missed and the lookup can return the unconstrained default.
-> 
-> On current mainline, a test task with real UID 1000, real GID 2000 and
-> only CAP_SETGID obtained non-allowlisted GID 2002 despite a 2000:2001 GID
-> policy.  The bypass reproduced for setgid(), setegid(), setregid(),
-> setresgid(), setfsgid() and setgroups() across three clean QEMU boots,
-> and enabled access to a synthetic group-protected resource.  This shows
-> a SafeSetID GID policy bypass and group privilege expansion; it does not
-> show direct UID 0 elevation or a universal local privilege escalation.
-> 
-> Build the source key from the old real UID for UID policy checks and the
-> old real GID for GID policy checks.  In three fixed-kernel boots, all
-> tested non-allowlisted transitions were blocked while the allowed target,
-> existing-ID, no-policy and UID-policy controls, and the existing SafeSetID
-> selftest continued to pass.
-> 
-> Fixes: 5294bac97e12 ("LSM: SafeSetID: Add GID security policy handling")
-> Cc: stable@vger.kernel.org
-> Assisted-by: OpenAI Codex
-> Signed-off-by: Sung Byeongchan <tjdqudcks0424@naver.com>
+>    - If I know I don't need BPF on the workload, and these 5.4 MB
+>      bite me, I can just turn off BPF
 
-Seems obviously correct.  Thanks for the find and the fix.
+They cannot, even when they know they do not need it.  As the cover
+letter says, the cloud provider usually ships one kernel build to all of
+its customers.  Customers install their own packages and workloads around
+that kernel, but they do not build or customize the kernel.  Turning
+BPF off is not a switch they have.
 
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
+> What I find strange is for a user of this scale *to not know* whether
+> BPF will be used in the workload or not, which is what lazy load may
+> solve.
 
-> ---
->  security/safesetid/lsm.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
-> index d5fb949050dd8..18124fc499dbc 100644
-> --- a/security/safesetid/lsm.c
-> +++ b/security/safesetid/lsm.c
-> @@ -148,13 +148,16 @@ static int safesetid_security_capable(const struct cred *cred,
->  static bool id_permitted_for_cred(const struct cred *old, kid_t new_id, enum setid_type new_type)
->  {
->  	bool permitted;
-> +	kid_t source_id;
->  
->  	/* If our old creds already had this ID in it, it's fine. */
->  	if (new_type == UID) {
-> +		source_id.uid = old->uid;
->  		if (uid_eq(new_id.uid, old->uid) || uid_eq(new_id.uid, old->euid) ||
->  			uid_eq(new_id.uid, old->suid))
->  			return true;
->  	} else if (new_type == GID){
-> +		source_id.gid = old->gid;
->  		if (gid_eq(new_id.gid, old->gid) || gid_eq(new_id.gid, old->egid) ||
->  			gid_eq(new_id.gid, old->sgid))
->  			return true;
-> @@ -162,11 +165,10 @@ static bool id_permitted_for_cred(const struct cred *old, kid_t new_id, enum set
->  		return false;
->  
->  	/*
-> -	 * Transitions to new UIDs require a check against the policy of the old
-> -	 * RUID.
-> +	 * Transitions require a check against the policy of the old real ID.
->  	 */
->  	permitted =
-> -	    setid_policy_lookup((kid_t){.uid = old->uid}, new_id, new_type) != SIDPOL_CONSTRAINED;
-> +	    setid_policy_lookup(source_id, new_id, new_type) != SIDPOL_CONSTRAINED;
->  
->  	if (!permitted) {
->  		if (new_type == UID) {
-> -- 
-> 2.43.0
+They do know.  They run predictable workloads on a large number of
+small instances, and BPF is not part of them.  They spread the load by
+resource usage, so at that scale every byte matters: more free memory
+on each instance means fewer instances in total.
+
+>    * Compress it.
+[...]
+>      Keep zstd-compressed blob in the kernel image and decompress and
+>      parse it synchronously on first use.
+
+Thanks for putting this forward.  This compression approach is simpler 
+than loading a module.  I expect the overall code complexity to stay similar
+to v3, since both need to find the first user and defer the module BTF parsing
+until then, but it should be easier to merge into mainline because it avoids
+the request_module() deadlocks.
+
+Would you like to prepare it for a formal submission, or would you
+like me to do so?  Either works for me.  Ideally it lands in time for
+the next LTS kernel, so that we can adopt it there.
+
+From what I can see, most of the work left is in that deferral.
+Whoever needs the BTF first also parses the waiting module BTFs and
+replays the queued registrations, struct_ops ->init() included, under
+whatever locks it holds at that point, e.g. event_mutex or
+bpf_verifier_lock, or inside the module notifier.  So the
+cand_cache_mutex ABBA you found may not be the only deadlock.  Besides
+that, only x86_64 was touched so far, so it needs extending to the
+other architectures as well.
