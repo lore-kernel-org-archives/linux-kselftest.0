@@ -1,90 +1,79 @@
-Received: from mail-ej2-f42.google.com (mail-ej2-f42.google.com [74.125.228.170])
+Received: from mail-ej2-f43.google.com (mail-ej2-f43.google.com [74.125.228.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5CE3BB9FE
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 17:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D363FD96B
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 17:16:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791134189; cv=none; b=INPZAU6AVv3GCEeoDvLG1/+lYhxfT8VpzQlG5FTb6VDuea7u3o7wR+BnrV9C068JU4h9PnsQjgcdZUQIhSQsBILQosRzF/ycyOVVa+N2S8T4inD5FMUYEtyXoZv+gAT/0XwW+osAfdn4EOkCVsWahCpj5HxXscWyFI9Rc9XoaZ4=
+	t=1791134195; cv=none; b=L6oqprFMUMczyo8Xhyl8QmotajAfmkHHfXgAxWrKTZ9DURsJZRpptndrFICKSgHBWa6ETGt/AZyTCVU7DjVW35GFKi4jIofD29mBaynVeDfhu28zOBhTy0OE4tz4EBSvI2CZcdmYvynoigbbmK1vOXp8tIXiyddoj3NuwC0qXsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791134189; c=relaxed/simple;
-	bh=S806Z0hpfXTXnNB+NFCPkJEG1mGTEr4a/1c81/36Cfc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xo0vUQYu5pq8qEnzdiDzL0DctrpLhQwNTQzd6iPW+CkHWLX/yDDV6EmV/05+glTgbY+94nRjbG2lIhZ99FZOOOmEfP+qZLIjHlkFPiEdVNgdtZFBMsWxYUE3TGrTguUzS98U1yX7OLGxg7lmP1lCPzouuwyrdG7JI5HTD5X3iRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=aK/CG+Mh; arc=none smtp.client-ip=74.125.228.170
+	s=arc-20240116; t=1791134195; c=relaxed/simple;
+	bh=XNKPCkkjrU+/+BYOooemdbVwzf8j/SyM1aIVVoHZeHw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RVMCBuSyOmLJ0GsJCt7b/ycFCojgKWIYHR/MLkr0w0IBjahy3fmjQo3F/XaIfCJ8Ivnkouki3NP4TQBg1BNzFoFo0tfGBBhfsZWXkmGzxd+dTYx5jK0q4kSoZH6sPz4DhTnndOIik4DfXTyTjckzCc8OOa7TBhDqYZ9a/SzZ6As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=vR/skz6V; arc=none smtp.client-ip=74.125.228.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="aK/CG+Mh"
-Received: by mail-ej2-f42.google.com with SMTP id a640c23a62f3a-c2e61c84723so94868966b.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 10:16:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="vR/skz6V"
+Received: by mail-ej2-f43.google.com with SMTP id a640c23a62f3a-c2e227422e3so155673066b.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 10:16:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1791134183; x=1791738983; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=z21Sm0vXyjYwz54boCuRf17DcAnvOs66BHPm2naaN0E=;
-        b=aK/CG+MhHaFWHYi85wq2FUZpBY9c0iUdWZO9qj7XymE5yug2YSsjRm8A5r0sLNHE+A
-         KMdg9vlM4qJoOW44GPdwBEXaB7qn4rBQtMqQbvgBTUucs/iI2ochx6YjqZ3S0fK35E+X
-         /hpuE3UoBR9SdX7np1soJzgunHug4Hxskyql3yPvttx2L1veHeAfBf0FrWBl2SCwQjkE
-         dq/gTzamV3GYH4Amv1diO2bqrWtY9uJp8RL8+IKXgjfVgejcYH6IGIxhuLCP3UI8DyJE
-         4vMN4EggZBRsy+C3p4hWcFdvJiuWSA4W9v7ukNRVl0THHRBIhpOpXoL+z9tUDBDMgXBE
-         YsQw==
+        d=bairaktaris.de; s=google; t=1791134190; x=1791738990; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nJENsM5l+I7saOqNZzmQBdbyBOSHIfwstpe+vUaV7wA=;
+        b=vR/skz6Viza0lpJS8v/Xu4JeO814BU5D7aUlMwvPGfCOSVZTuwmklRV8arFAkjlh/3
+         mCv/r4y15Ig9+wPkBCc0X37g/F812X+IRMNiNuZapPlkHT9D6pcrM6UQU4pk5yEwnEWf
+         7POTHVTkNQk3s6RViCnvHjscjOcCcg0hyfD7mts3/kKI/Vq9HuPR1nu3SVcSBphgFVoj
+         z2kCNbT2I8pQtJAwKBMQQIRpUGo4tJZeEoXjcocYgOoeVD+G1qkADMOZeNY5Q731SPfK
+         pUbAb6mNlxLH2KS5GXjmR8QKPkjRCMZQc9/7HoEjow2ZIP+eDDfyfsD9Q4IMoPS67wAT
+         WqvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791134183; x=1791738983;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=z21Sm0vXyjYwz54boCuRf17DcAnvOs66BHPm2naaN0E=;
-        b=030/phE47rKth0JX/KwIBF7ZiT0oHO0WaSrmmPsxHyKlI28z4Dn+6YPJW5ljMr1hoH
-         9q4GajRZP+zJCav4G5IFtJxlX3RxV0JtQ+LdFIGiOJ7/AueG8DGACSt7x9voSNxbbcbv
-         j4Oic17dCSYTS6oESAo0AO//0bQfyIEFw8W2QQgAu1oVqRycRcWBxL93bD0wvZ3MEcNf
-         KS0VbUDjOTTIllueGnre5Lhdqdk21rnncvHfTV7bCoArCIbJAq776Ol38y3ZZrh4zm2a
-         EDJO/KXKdIvOSjRmHgaS8dt2JWydWS7b28zRYPpqzy1Z0LUiWqairoaUskZudkGlCIHt
-         /Bhw==
-X-Forwarded-Encrypted: i=1; AKwUvBw/rDAwd6mVytg+h9QyJv3yjWH3W/vAmzTA8sEBJNqiVjTLKkiM0vpMgVQj7Qwd8HXd3BmBwpHTGhrQ7SHyLsY=@vger.kernel.org
-X-Gm-Message-State: AFuF++l7nWcyYfm+s6BUOruLHi2KlCChFwn7xelYdP3fjdDcF/uqaHYq
-	ocGvtMMqa66z1k2MX0qze+rhW8lk+ACcn6BCW4f8zqUoDagY0ipcBoILp0Q11WgCIw==
-X-Gm-Gg: AYBFou2fuasTQ3twLBXknl2MzDWddRHmJxo3xteA8ckNsAhyrv5rxLDDvD3TdGHAVxW
-	zLZLx4CH2rbASAFLfBiHii9tmW/pRX5aYbXWWHhHEhqxMjuVwZQWjMyMMAeZFvCRmtWzunMPwrs
-	ohOFSaP/TTa2hMEr/So5EWL9SR6P5aW0JIaNUcn+GzdnuQkJ1dKp0QaJEvG4WIcUF98kX0/3oGZ
-	Qsgw0lgz5pGPrsYYbr/a3q5ALUh1HLDLyhdn7UwQIlsSQAvoSXx2SZK1B1p1a55l4BqC1SQtaxQ
-	VYq+wrCr5D2pogIQ2HqDbupUon8euEIedrTVqhJiuc0FD+mDd3LAKqGcdG7BWRcAJ6DkigyeQc0
-	RcAd14q8rMkIiPUs3ULCjaoCrLYayqwzF+U+4xpLnpNR4Rixje0GLJBQbRWqN543HGs7DRaMcJ5
-	gblSTEDM8w3e9G2PyVsjhuk6Q11NnWCTeqg6o1+Fgwjso3Mpe4bsz5Bt3I0qHXtp/r4xzlFKdp0
-	Y7GHfmS7yfG+VeNodZOgbJyxjz2GQMpW0APX87wPB4nxxpM3KveQ9IfRHwToVtPVUffb+EJWU8o
-	3IJ/2CB6ZDUiWcP03kh60fH5WcT6R+nWPr4XhAvrPpBnV/wbatwgIfy8CSITTFJacwteW1fwG6S
-	GdKacYlH12PqldJ05xJc3B5lfANp//7kkLyjPzN5bYFV2zXnGb5stCnQP54LcmSklJ+rYzrPAcW
-	fS3g36azbn/wnLIlL1p3mioRMC3Af6+8sVDg==
-X-Received: by 2002:a17:906:dc90:b0:c2d:d4dd:8b5 with SMTP id a640c23a62f3a-c2e4ad60fdamr781095366b.19.1791134183248;
-        Sun, 04 Oct 2026 10:16:23 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791134190; x=1791738990;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nJENsM5l+I7saOqNZzmQBdbyBOSHIfwstpe+vUaV7wA=;
+        b=CftonXZEOWzSBvH/yLCD+CWgJqqGuWVSWyTFFkf+r786HA+1IlZuWM03+Jqmf9I1J5
+         Gqtrcmm+pFJ/DHtp6MsVvcmPYKxqkjUf//7NwBKKc45G767sk9RRrZcxIptgq5pD/hNx
+         u1lwSta5aYVR4NHK6M/SoBdMPeCYFQ/CAZDjVJGT6jV/qiFppQF0sDebb9mnUCZH2m/P
+         MBMAVev0rK3oK9Zsp3/loyt/1DGGQxvRFPzMR5tCG7ZpP4Ml+LilS0d8rL+ZTjperzbl
+         zbquKGJVhpemRC/IGDR1wHtJ5rxnmiFZkNbl7kwryp/29Qz+Xb74B8dclKz7qtCLAPcb
+         Bfeg==
+X-Forwarded-Encrypted: i=1; AKwUvBw9t0Eph5zKHKY0NqbGf5LtZufAKH74R1aYpyo4VJPljYsd6Su73Z8nFdhFnVs+cvpODXPm92GO4Uz9QRWAbqk=@vger.kernel.org
+X-Gm-Message-State: AFuF++lAtJRP9FGec9HCNxvH1ApjKMWzlY2H85thAB2MqjXRLO+S1eKP
+	G0RNv1oNMEAQVFleEyeOWhnyTW//N2esn+81ZiNiA94hr9yRr+DRKHMR7Az9nWxuYQ==
+X-Gm-Gg: AYBFou0A8E/bOc8yjAa3/+dgWT9uBzLeLqL2uSNJk0kf6iQosFYaIdkRpf73/hnklCx
+	ZiDXXjZ2Fnot8zt3JUJqcsoCkVmzne/6gcoGsfdkfZaHU/aorC1eVRxv5a1QqZ9pk2g01ArSBON
+	iUohgR+whlseW1elPpvSI3OGgozalK7E8GYCAyosT3Ylp0Ihk1sJxWPPn2hUYweOx7z823eXjqk
+	+kfoCmORP1WEP/00Zvhh8RY/3/mH2VyF61URyuQ3YjEu+UnDOttmiVJD/XpsF1JQq7giQJ26em0
+	v5tDRkPykXAax95RTh5IzJUih1faiwJgN0D1CIzkFAvKp/h82ojiONY9APyX0Sq6FrGt6koHjHO
+	SOcHoryQDK0pV7Y0dBNEMTKyT6q8z0btRyZ11k3g6v/ejioahn4Ebq++Xns4Q+Z/1ufudGgAoup
+	xsNk6pZmObwiZduH+/PI4jfy/w6WGkZFVdOnY+sFWokdui792Bl5HpUvVnRPId9Vi9JHfB25rQ8
+	Y028RaXcqofmYDfLHCsGEfiGGhv4O7Z916vEI+Vgtyl4MaeFZhFpLS3/5CEMHOcLH89RlDDUoET
+	LxdPkkl5zNz9y3i1KXrgGyvWsqNXTjX5LMSElA4V1mgMFXnWBDjWLHiyluHHfsQR0dPfeQ1kYSV
+	Vybczpfidee4Zc3scvnGUKMdHmkZ4vJjsB9/ic5wGhzMNQoGIxeu5O/GEMa5s7UdWNwcbbDQCCA
+	Q28KqFH7e/gyncNEQcApNVgyI=
+X-Received: by 2002:a17:906:ee8d:b0:c29:f5d5:5a9b with SMTP id a640c23a62f3a-c2e4b241d8amr667125966b.37.1791134189545;
+        Sun, 04 Oct 2026 10:16:29 -0700 (PDT)
 Received: from Desktop (pd9513667.dip0.t-ipconnect.de. [217.81.54.103])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e4cd278cesm314885266b.37.2026.10.04.10.16.22
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e4cf9ddbesm317345166b.69.2026.10.04.10.16.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 10:16:22 -0700 (PDT)
+        Sun, 04 Oct 2026 10:16:29 -0700 (PDT)
 From: Julius Bairaktaris <julius@bairaktaris.de>
-To: netfilter-devel@vger.kernel.org
-Cc: pablo@netfilter.org,
+To: pablo@netfilter.org,
+	netfilter-devel@vger.kernel.org
+Cc: kadlec@netfilter.org,
 	fw@strlen.de,
-	phil@nwl.cc,
 	coreteam@netfilter.org,
 	netdev@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	andrew+netdev@lunn.ch,
+	geldot@protonmail.com,
 	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	nbd@nbd.name
-Subject: [PATCH nf-next 3/3] selftests: netfilter: nft_flowtable.sh: check upper device counters
-Date: Sun,  4 Oct 2026 19:16:16 +0200
-Message-ID: <20261004171616.3544880-4-julius@bairaktaris.de>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH nf-next v2 0/4] netfilter: offload a TCP flow whose reply is never seen
+Date: Sun,  4 Oct 2026 19:16:24 +0200
+Message-ID: <20261004171628.3544978-1-julius@bairaktaris.de>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261004171616.3544880-1-julius@bairaktaris.de>
-References: <20261004171616.3544880-1-julius@bairaktaris.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,162 +82,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The bridge and tunnel tests forward through devices above the flowtable
-device: br0, the tunnels, and the VLAN devices under them. Each test
-sends the file in both directions, twice for IPv4 (masquerade and dnat)
-and once for IPv6, so check that these devices count between n and n + 1
-times the file size on rx and on tx.
+A router that sees only one direction of a TCP connection, because the
+reply takes another path, cannot offload it: conntrack marks the
+client's ACK after the SYN invalid, and the flowtable only takes assured
+TCP connections. The setup this comes from is two subnets on one L2
+segment, with the server answering over the shared segment.
 
-Assisted-by: Claude:claude-fable-5-1
-Signed-off-by: Julius Bairaktaris <julius@bairaktaris.de>
----
- .../selftests/net/netfilter/nft_flowtable.sh  | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
+The series adds no TCP state:
+- patch 1 hands that ACK to the existing loose pickup in tcp_new(),
+  gated by nf_conntrack_tcp_loose, as if the SYN had not been seen
+- patch 2 keeps the reply direction of such a flow on the classic path
+  until the connection is assured, as act_ct does for UDP
+- patch 3 offloads the connection in the original direction and caps
+  the timeout handed back to conntrack at UNACK, as
+  nf_conntrack_tcp_packet() does
+- patch 4 adds a selftest, which fails without patches 1 to 3
 
-diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-index 449c518bd947..e89f86916f4e 100755
---- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-+++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-@@ -272,6 +272,43 @@ check_counters()
- 	fi
- }
- 
-+dev_bytes()
-+{
-+	local ns=$1
-+	local dev=$2
-+
-+	ip -net "$ns" -s link show dev "$dev" | \
-+		awk '/RX:/ { getline; rx = $1 } /TX:/ { getline; tx = $1 } END { print rx, tx }'
-+}
-+
-+# Fails if the fast path does not update the device counters.
-+check_dev_bytes()
-+{
-+	local what=$1
-+	local ns=$2
-+	local dev=$3
-+	local rx0=$4
-+	local tx0=$5
-+	local n=${6:-2}
-+	local min=$((filesize * n))
-+	local max=$((filesize * (n + 1)))
-+	local rx tx
-+
-+	read -r rx tx < <(dev_bytes "$ns" "$dev")
-+	rx=$((rx - rx0))
-+	tx=$((tx - tx0))
-+
-+	if [ "$rx" -lt "$min" ] || [ "$tx" -lt "$min" ] ||
-+	   [ "$rx" -gt "$max" ] || [ "$tx" -gt "$max" ]; then
-+		echo "FAIL: $what: $dev counted rx $rx tx $tx bytes," \
-+		     "expected $min to $max" 1>&2
-+		ret=1
-+		return
-+	fi
-+
-+	echo "PASS: $what"
-+}
-+
- check_dscp()
- {
- 	local what=$1
-@@ -626,12 +663,18 @@ ip netns exec "$nsr1" nft -a insert rule inet filter forward 'meta oif tun6 acce
- ip netns exec "$nsr1" nft -a insert rule inet filter forward \
- 	'meta oif "veth0" tcp sport 12345 ct mark set 1 flow add @f1 counter name routed_repl accept'
- 
-+read -r tun_rx tun_tx < <(dev_bytes "$nsr1" tun0)
-+
- if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IPIP tunnel"; then
- 	echo "FAIL: flow offload for ns1/ns2 with IPIP tunnel" 1>&2
- 	ip netns exec "$nsr1" nft list ruleset
- 	ret=1
- fi
- 
-+check_dev_bytes "IPIP tunnel counters" "$nsr1" tun0 "$tun_rx" "$tun_tx"
-+
-+read -r tun_rx tun_tx < <(dev_bytes "$nsr1" tun6)
-+
- if test_tcp_forwarding "$ns1" "$ns2" 1 6 "[dead:2::99]" 12345; then
- 	check_counters "flow offload for ns1/ns2 IP6IP6 tunnel"
- else
-@@ -640,6 +683,8 @@ else
- 	ret=1
- fi
- 
-+check_dev_bytes "IP6IP6 tunnel counters" "$nsr1" tun6 "$tun_rx" "$tun_tx" 1
-+
- # Create vlan tagged devices for IPIP traffic.
- ip -net "$nsr1" link add link veth1 name veth1.10 type vlan id 10
- ip -net "$nsr1" link set veth1.10 up
-@@ -686,12 +731,21 @@ ip -net "$nsr2" addr add fee1:5::2/64 dev tun6.10 nodad
- ip -6 -net "$nsr2" route delete default
- ip -6 -net "$nsr2" route add default via fee1:5::1
- 
-+read -r tun_rx tun_tx < <(dev_bytes "$nsr1" tun0.10)
-+read -r vlan_rx vlan_tx < <(dev_bytes "$nsr1" veth1.10)
-+
- if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IPIP tunnel over vlan"; then
- 	echo "FAIL: flow offload for ns1/ns2 with IPIP tunnel over vlan" 1>&2
- 	ip netns exec "$nsr1" nft list ruleset
- 	ret=1
- fi
- 
-+check_dev_bytes "IPIP tunnel counters over VLAN" "$nsr1" tun0.10 "$tun_rx" "$tun_tx"
-+check_dev_bytes "VLAN counters under IPIP tunnel" "$nsr1" veth1.10 "$vlan_rx" "$vlan_tx"
-+
-+read -r tun_rx tun_tx < <(dev_bytes "$nsr1" tun6.10)
-+read -r vlan_rx vlan_tx < <(dev_bytes "$nsr1" veth1.10)
-+
- if test_tcp_forwarding "$ns1" "$ns2" 1 6 "[dead:2::99]" 12345; then
- 	check_counters "flow offload for ns1/ns2 IP6IP6 tunnel over vlan"
- else
-@@ -700,6 +754,9 @@ else
- 	ret=1
- fi
- 
-+check_dev_bytes "IP6IP6 tunnel counters over VLAN" "$nsr1" tun6.10 "$tun_rx" "$tun_tx" 1
-+check_dev_bytes "VLAN counters under IP6IP6 tunnel" "$nsr1" veth1.10 "$vlan_rx" "$vlan_tx" 1
-+
- # Restore the previous configuration
- ip -net "$nsr1" route change default via 192.168.10.2
- ip -net "$nsr2" route change default via 192.168.10.1
-@@ -740,12 +797,16 @@ table ip nat {
- }
- EOF
- 
-+read -r br_rx br_tx < <(dev_bytes "$nsr1" br0)
-+
- if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "on bridge"; then
- 	echo "FAIL: flow offload for ns1/ns2 with bridge NAT" 1>&2
- 	ip netns exec "$nsr1" nft list ruleset
- 	ret=1
- fi
- 
-+check_dev_bytes "bridge counters" "$nsr1" br0 "$br_rx" "$br_tx"
-+
- if ip -net "$nsr1" link show tun0 > /dev/null 2>&1 &&
-    ip -net "$nsr2" link show tun0 > /dev/null 2>&1; then
- 	ip -net "$nsr1" route change default via 192.168.100.2
-@@ -819,12 +880,18 @@ ip -net "$ns1" addr add 10.0.1.99/24 dev eth0.10
- ip -net "$ns1" route add default via 10.0.1.1
- ip -net "$ns1" addr add dead:1::99/64 dev eth0.10 nodad
- 
-+read -r br_rx br_tx < <(dev_bytes "$nsr1" br0)
-+read -r vlan_rx vlan_tx < <(dev_bytes "$nsr1" veth0.10)
-+
- if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "bridge and VLAN"; then
- 	echo "FAIL: flow offload for ns1/ns2 with bridge NAT and VLAN" 1>&2
- 	ip netns exec "$nsr1" nft list ruleset
- 	ret=1
- fi
- 
-+check_dev_bytes "bridge counters with VLAN" "$nsr1" br0 "$br_rx" "$br_tx"
-+check_dev_bytes "VLAN counters under bridge" "$nsr1" veth0.10 "$vlan_rx" "$vlan_tx"
-+
- # restore test topology (remove bridge and VLAN)
- ip -net "$nsr1" link set veth0 nomaster
- ip -net "$nsr1" link set veth0 down
+Pablo, on v1 you asked how TCP tracking copes without the reply
+direction, and guessed right that the goal is flowtable offload. The
+connection is tracked like a loose mid-stream pickup today: window
+checks are off in both directions, and a FIN or RST still takes the
+flow off the flowtable.
+
+This series was written with the help of an AI coding assistant. I have
+reviewed and tested it.
+
+Changes in v2:
+- patch 2: the XDP flowtable lookup does not return the held reply tuple
+- patch 3: cap the conntrack timeout at UNACK while no reply was seen
+- rebased onto nf-next
+
+v1: https://lore.kernel.org/netfilter-devel/20260910090052.2034970-1-julius@bairaktaris.de/
+
+Gary Dotzler (2):
+  netfilter: conntrack: pick up a TCP flow whose SYN was never answered
+  netfilter: nft_flow_offload: offload a TCP flow that has no reply
+
+Julius Bairaktaris (2):
+  netfilter: flowtable: promote a flow offloaded in one direction only
+  selftests: netfilter: cover a TCP flow whose reply is never seen
+
+ include/net/netfilter/nf_conntrack_l4proto.h  |  9 +++
+ net/netfilter/nf_conntrack_proto_tcp.c        | 16 ++++
+ net/netfilter/nf_flow_table_bpf.c             |  4 +
+ net/netfilter/nf_flow_table_core.c            |  5 ++
+ net/netfilter/nf_flow_table_ip.c              | 26 +++++++
+ net/netfilter/nft_flow_offload.c              |  6 +-
+ .../selftests/net/netfilter/nft_flowtable.sh  | 75 +++++++++++++++++++
+ 7 files changed, 139 insertions(+), 2 deletions(-)
+
+
+base-commit: 87b80c2f6b05cad9f0ff9136709c62a0f59923e3
 -- 
 2.53.0
 
