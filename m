@@ -1,83 +1,57 @@
-Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23AB03F0A92
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 14:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.72
+Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0859D442370;
+	Sun,  4 Oct 2026 14:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791122499; cv=none; b=t36wZOTwzTU07EQIuaxsuiIWhJgqMAHI3yC0xGR+B5KYq2aiBOw2GKAivytARmMvnfRCCSP/IA9Oxu4LcSlhLxgeLwnKP+bvXbdxBkR1Mo3fn+PzKy+V6nwctJeU0I7Gp9mdJQECeMyRtX8TlI2mAiHI92M8MxuHfS86TnErL4o=
+	t=1791125368; cv=none; b=n4zUvZD3HnUwpQW4JCpVeBieMao9D1RNTQpU4bkbpKVW8SCeNHckrW+SNYixEiK376lBYkXT3HBX23LJ9JPE+0itcaCMPjV3P7GdEZrjYBWqVq4TiKBcBWA+VBT0LLEQVcF0gCeJ4SdZxJ3slfQ1x0rkVeylMqvgSGF89Ca8yqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791122499; c=relaxed/simple;
-	bh=KE2VmvcgzRzsohaFalSlwnQNko9IVpTrrNAyx5LHuyY=;
+	s=arc-20240116; t=1791125368; c=relaxed/simple;
+	bh=n/bsfr5Ie2mthGBcdNfgnOxf9AGJc1SSIC3qCiVBYQI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nyJv4R9iVsu7cgp7ZZf0y155EI5lH2G7QgFQdOwMxY4YXoimrEt9pnV/vMVtO+P+3+3g7h4OcjExeKOT3/Mcku3aumutozylZoLdDIr0Q9aW8PGhe9zpC76Jq3Za/MjWVCFZpQ96HGQF6bsJlFMGsnNtgl0JGABPQomV8lP/5Rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net; spf=pass smtp.mailfrom=blockcast.net; dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b=phmghlLS; arc=none smtp.client-ip=74.125.225.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
+	 MIME-Version; b=Eubk05FS6zZVgrL3uV1s/S89uIet+cZhh8+8OoZU2jhba82zX+YgSdN7m1UWEZQvAkhUKwarQIfGqOUIcbMeGd/Z67IKRBAQ4a27RjYRUzpOUG342+6Hw6lt8vemNsCEaM1YzruG8ovIbPsIvZm/fHtcuCBkKPOcVITmIu7D4vI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b=zJxtxjUu; arc=none smtp.client-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b="phmghlLS"
-Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-48b007d7d2cso359649f8f.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 07:01:37 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b="zJxtxjUu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blockcast.net; s=google; t=1791122496; x=1791727296; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+t3C+Ja2CFaTDIBFicfkFdbgjtRqzlYdCsfo/CBmKMg=;
-        b=phmghlLSJkI3H3iSSBw3OChHW2O2WhqHWlFdENK3fr46De+zJsx17yB9RStrkX643W
-         Wd4/6Z7ymdrXVFGcRkBBfKYv4YiZALeI/qJYuA6kyoimXo3QzeVm3QAYHpiFGK5waVp1
-         Y4XjP6UWXnYETtVAYu9c98c/xgvsyQvEOv109ui2GruRvG/WDmB7mQSMyL6VdGTWyefg
-         owat9LxruSd2ywuz3OmEWfUThuIo1oZ+6K/2tPcP9g27qmJWbeSwRZ4GzsWXB//eUMX7
-         PFuUTFrKdJHn75VA15oEFnF1lMULSQd/WdNHzrXorSqopkoJsPjtP5PJ8jcgj+pED3xi
-         aj2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791122496; x=1791727296;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+t3C+Ja2CFaTDIBFicfkFdbgjtRqzlYdCsfo/CBmKMg=;
-        b=vQg3Nzs+yr8Z4c+ORkjCDvaycCbdUDShsC7sPIvCv8rcaWKYONNkfo1ALz7ss4lWsI
-         zVd4uLDzhSedq2TpSQFPR4OI65OHc3zGndA0QDxXSvOrEAIBIqcPR5OCNsbwUeJkNtm/
-         LQRAoIE+iKDQMaNv5lAKcYTVLmiea6qcad2le6bDWt5PfY44KaYJRZwp8EDP/HJwgJaG
-         ReabOWEmK1neH+L/MsVRGTg5abmiFEUvXpGflIP4TcSegP+Z6d9hrZlWKvGqei7i2Kz4
-         IxEo3PGf2HNPoIfX2WZ5mxQM9SStRqmL1JhD6hRP6f4+OMPfG6bMBAVmt6LFYRKA8z+d
-         KppQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxbU8tn4FBGxM9fHUeGwuKnSKXrbtiNCydulr0oIvs1YjcOsKCgf5jlOrRhN0vF8fj2qxDBH66n1/EZ1p/SYiw=@vger.kernel.org
-X-Gm-Message-State: AFuF++mJacmlx0yXHDyqnNL9uspxMS+IS/ZopnUIifZO4gEoeurrTym0
-	fui2jBvImSfzG396sTudWN0gnfd3606qKF52etkFX+aPePqCb5dc8dReyc6/bWEu/TA=
-X-Gm-Gg: AYBFou3c/l92b/ICKFvEF+IoON7L9TiK+O8j2W9hAOM3nL0XRiX2oogliwUricvaMoy
-	Al3yi66m2Zr5o2qnvssWVMqhbcXlLjDYFJY2oyklzD90ezE5bUtl+WG5QLk5GsdIpe5atEs4MFo
-	gxgrCufkyibeAZeb5AvKYsLbeFyqRCxuiJfbDipT7Q4IwrRz4haOlUrBs8fFpSWpn+c4A9IPM2t
-	kWAu/xbIC4rlNapKqG1sYnfAbQKnYAFleFtlXoSkEAYWtDr5afA8LN6IDwMQo0UsvI7QgrhogBv
-	ds+KcdtOZ4A4Hpq+ah8CB+xuXRJL3OErou0DMil3uD7C9pmaWLSmeTQ7qUpcnLicZAIHxvn/dtu
-	alVAfL5kPCvL5oGawatGREC44G3gbGpzPs4gtpoh+edSEhMkA6Z12JRjNVJ5nCLjurz749+bZSq
-	0GkKM3nQLPRwhEo7Zb1dCen0vBzdovrUvK7LQLGPl165PM3Y+O9z0s64F19ztzJjqmyIMNo/WUq
-	F3+nx310vG1TD8oYULnHLwA5mmImqgIazOdDs8OgCQydISdO8sobp/cWQH67NEQ2am9DDd8578j
-X-Received: by 2002:a05:600c:3e14:b0:49c:fa20:cc00 with SMTP id 5b1f17b1804b1-4a027585559mr141267525e9.23.1791122496260;
-        Sun, 04 Oct 2026 07:01:36 -0700 (PDT)
-Received: from localhost.localdomain ([197.51.72.2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a039505568sm226480455e9.3.2026.10.04.07.01.30
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 04 Oct 2026 07:01:35 -0700 (PDT)
-From: Omar Ramadan <omar@blockcast.net>
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=zJxtxjUugpBDLUJveGh3LCMglc4eUIobNigrAfBGq3Qf5CFogai1x2qcuZvxRHkRyLXPdf2Zma91u
+	 ldkNb4l15Whpx6TfG9RZnBHt8+aOOvxXH8bGZTHUa0GoYu10CCNgO3QmZVpPLyrLzyzUmXmg/ueho0
+	 WbWDfz3Rd5M3xkeQ=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee66ac26764d2e-6cb07;
+	Sun, 04 Oct 2026 22:49:12 +0800 (CST)
+X-RM-TRANSID:2ee66ac26764d2e-6cb07
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from openEuler-24.03 (unknown[112.22.250.209])
+	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee36ac26756250-7f8be;
+	Sun, 04 Oct 2026 22:49:12 +0800 (CST)
+X-RM-TRANSID:2ee36ac26756250-7f8be
+From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 To: netdev-bot+sashiko@kernel.org
-Cc: Taehee Yoo <ap420073@gmail.com>,
+Cc: netdev@vger.kernel.org,
+	Alice Mikityanska <alice.kernel@fastmail.im>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/2] amt: mark relay data as a UDP tunnel packet before sending it
-Date: Sun,  4 Oct 2026 17:01:23 +0300
-Message-ID: <20261004140123.94341-1-omar@blockcast.net>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <179106416186.434549.2202047416681649119@kernel.org>
-References: <20261002212458.34247-1-omar@blockcast.net> <20261002212458.34247-2-omar@blockcast.net> <179106416186.434549.2202047416681649119@kernel.org>
+Subject: Re: [PATCH net-next v2 2/2] selftests: net: big_tcp_tunnels: Cover bareudp
+Date: Sun,  4 Oct 2026 22:48:44 +0800
+Message-ID: <20261004144844.831190-1-yanhaishuang@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <179110869274.434549.7292617532752243045@kernel.org>
+References: <179110869274.434549.7292617532752243045@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,26 +60,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Sat, Oct 3, 2026, Sashiko wrote:
-> Should this have a Fixes: tag?
+On Sun, Oct 04, 2026 at 10:11:32 +0000, netdev-bot+sashiko@kernel.org wrote:
+> [Severity: High]
+> Can the bareudp cases that use IPv6, inner or outer, with csum offload off
+> pass in this configuration?
+[...]
+> Could the bareudp inner_protocol handling be fixed first? That would mean
+> setting it from the actual inner protocol, and also setting it on the IPv6
+> path. Alternatively, the bareudp combinations could be limited to the
+> cases that work.
 
-No, on purpose. Eric asked for this to go to net-next, since the bug
-needs a non-default setting:
+Right, and this is the dependency mentioned in the cover letter. The fix
+does exactly that and is posted to net, reviewed by Willem:
 
-  "Note that tx checksum offload is off by default on amt, so the bug
-  would not trigger by default."
-  "A better fix would be (for net-next) to call
-  udp_tunnel_handle_offloads() in amt_send_multicast_data() like other
-  UDP tunnels do"
+https://lore.kernel.org/netdev/20261002153039.462663-1-yanhaishuang@cmss.chinamobile.com/
 
-https://lore.kernel.org/all/CAL4Wiiqw_7Mxa5W1EQgw2=KpJNNxG=cBLXsHvpio29GvD1UKZg@mail.gmail.com/
+With it, all the bareudp cases pass. I will repost once the fix has
+reached net-next.
 
-> This is a pre-existing issue, but it is closely related to this patch.
+> [Severity: Low]
+> Should failures from these commands be passed back to the caller?
 
-I have not reproduced it; so far this comes from reading the code. It
-would need rx-gro-list on the relay's ingress device, and tx
-checksumming plus tx-scatter-gather-fraglist on the amt device (all
-three off by default), and a GRO aggregate that passes ipmr's DF/MTU
-check. It predates this patch, and the cover letter already lists it as
-not touched and untested. I will send a separate fix for it once I have
-reproduced it.
+Yes, setup_bareudp() will create the device itself and return an error
+with a message if any step fails, and setup_tunnel() will pass it on.
+
+> [Severity: Low]
+> This isn't a bug, but the comment at the top of the file still reads:
+>
+> # Testing for IPv4 and IPv6 BIG TCP over VXLAN and GENEVE tunnels.
+>
+> Should it mention bareudp now?
+
+Yes, I will update both comments.
+
+pw-bot: cr
+
+
