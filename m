@@ -1,103 +1,88 @@
-Received: from mail-ed2-f33.google.com (mail-ed2-f33.google.com [74.125.228.97])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F214718D0
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 17:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845ED4718CF
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 17:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791134209; cv=none; b=QX1+1l3/+9mXx75cHAE/rYaJ4Aa/fUOMJSbCTgaJoKnVxCrG1AZmsTIYYIV0DhMCsHCx4YDwJ6mNi7hVCDXrNTT/eF0HUnYqXvG0hYTFgoBgFuyqvMKNHgSqaX7sHQlFbYuV1WOg3llIwDr4He9INrGnqO1JauY2esPI/0djKXo=
+	t=1791135318; cv=none; b=korWrBeBHoWx2Rez5eX6QPnH1ILVc6uuCbfJXa8M1axwwzX95ZvGGFvVbkpvlvA6qoeo20hsUnthWvgQhosg/o/2fiS4IklNwdxQ83Fh3Zz/mWXUwDCk1OhQ5cc8eI1MrbGUajVUQH+T7o3pY+EAc4ER1QA7Hq1TVSEJUnG8Juc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791134209; c=relaxed/simple;
-	bh=Y5qEOgngxBaCHA/kBWEYUs6H+TGmwJHQkFWp/hzC6bs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WyQdZmRzL1wGf1ZMoNUzA1LR2o6QB8IeCcMNBgRGdXe8fXRK4Hix+yZ+E6ChyftcVZrmxURYRtT1T1i6hho1h42riCjYKqOcYpFe9xvEijeZbSOUeaqC71M42XOrfecqs9ipbhkWBdJtbZXhMdJwz7Z0rDlG78w2+QOkyzjuo8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=kWkRmFKX; arc=none smtp.client-ip=74.125.228.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
+	s=arc-20240116; t=1791135318; c=relaxed/simple;
+	bh=bP6kDGyFt3pSjYQAf41QGrRFuGNBrE/A6VLuZxy0aRs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pWq7n9GwG9ixhs6Nw9fQ+mmJuGfvI6Xxg/Pot/0Dx/CGu32s7bCefFDRV1SKnyw9p06jCbd6kpPJhzxf4dkqX9rWq0awtjwW5DyY5jWpheMqAdpPh9ScvdcjdxsOo7o1PVYqqTiSY6oPjxiyBZksEyj9rIHbhnfTZWGfSV8HSvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hW1M8NOy; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="kWkRmFKX"
-Received: by mail-ed2-f33.google.com with SMTP id 4fb4d7f45d1cf-6ac6fa788e6so1117189a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 10:16:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hW1M8NOy"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8874539bccbso443074b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 10:35:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1791134204; x=1791739004; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dHUtQGoQ43VDmpGd3bfBB5J/hFSSTUqRFc74DU6+NPk=;
-        b=kWkRmFKXjXM0xC0FxMJnO6LoQmczqio07l6m6t4SxoS4hPuty0vr9Go9RpcM2pzb8M
-         Vub2TL42Hh8czBNXgG7kSK41MKL8rit7M0ndzb2aTmo9gNhWWQjzHO1W41FmooNv/V7S
-         sYdaVys5n3zPm7S2exm1tEhNyfTSmVOseZSG1j384ijQ5oC6upYTTEQQ/im9yp6mk22C
-         1IRRDgl9Uvs8qWXYKtWcb1eBYpznbB1Zhr11Mu31e7jESXOdA3FvJXPh2CO+ZF9w2tEz
-         JWV+m5Ib4rsI0zRyU07aWI5+pSvv3StVIWrxr2JYWQuc/qRG4guds8OXo/k/7YpZiLNW
-         Rkag==
+        d=gmail.com; s=20251104; t=1791135310; x=1791740110; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Dn1khiiBx/qPuh1ccNEwWHRK3a1yYP7lWHo8iux0ST8=;
+        b=hW1M8NOynorLTGeADroRWa0mMR78MWCWfsuGs9+pw3qRqNzAXPBnN7usRSoGV69YyP
+         L3YL7XuOR/o5yBR8yJjTQMNu3FDJQ0mopx05LXlWQ/THHM1TLvZHdQceSDoZfVH6wTre
+         e0DUXdOdbxx4UydQRkL7CAFlmrw1rFFhDgEq99u6Fz6ktxMgVF90rr7sf4294QA1Keq4
+         dsN+My6X91Bq7raS10CntJr7HJQ4tco6f/BX3ALvgM2PTl2tQOdEAIslMbhMwmgsX/uT
+         lVcP21YLuxX7gb7PiuVAk4BmWwu86mtJumF2h3g4nKjNHx1SMd2U4cB8YEW+ryfSkZBs
+         8OYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791134204; x=1791739004;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dHUtQGoQ43VDmpGd3bfBB5J/hFSSTUqRFc74DU6+NPk=;
-        b=LQre8ZrGuXg/7r7982+Nl/oXB4fDn5Vv3NJcHWqK0vMYzMdVq6rQlkz0ncWx1gP+J1
-         aV5ayMjQEOnhzd8AogI5Rp6xKttuHyeNTHzS/HSUEqQ23+D2OL8wi7ImuOTv4uKrYln7
-         b6I7mwhw9pgUANv1qu0idGe2t15GQy+7RREcWDkr4rTWOfA3pVD9lIxLJ8QlYVjchLSX
-         F4wcv8K6noO7SVvAvRUPTmiONHkACT9OJZzJlkuSka5pyILT0y7cDn/hWe9Yn2/tHiCm
-         LK2lcGkk9rh4XiJ4gY7/jRTK0fl1UQ0wN3grYXocn8H+g0HoITbrIuYPPDcSR9ISgYPa
-         7vNA==
-X-Forwarded-Encrypted: i=1; AKwUvByzqo8DgJt8uIh+3mqU4IklBw1RZ5QYvodNLc3bmLSSgv4PXiBJMxIb26S2UWVdLGavTCVCabkBUxr15bgYBJA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL+Sze+k/vfZ0BFxrNvoAigor8eOyoVVxuxoJWbqXb9Dxu0OcUv
-	+xgQ6nSyZTXKDRHd4HCUvN2IFgi0VDabBg48sXUTgBVO0IHNlYCAoy7z7ap3D231jQ==
-X-Gm-Gg: AYBFou3OEhc/Lua70WRznKG+DipBRPHkCvl5RtwcPK38YH4KYlqKik/HMIFnLHzBCbO
-	EOt591wo8BO0DWAeswZ4HBVK+mt+2YfsBWmvDPJxmzQ2ywz7n8PFDS5FZ2yklrzwTp+PS9MZItw
-	G8zL/LQreT10enj3PvWLwf4N08bO3N0rWYjpZSTJic5VESGX7zqryoRAWHLxDHrRM4mTMuJSLBl
-	/l57gN//k1NPAM/QrI+A0OyOQ4XVnWeSj4CmlIHv0eEfFGBrtynVEUNsZWBKO9LYg6+E4/QRRSE
-	2VEQe6gfXtBCpUSPFUq9h3jUYEB8aaVcJVFTp0RHfqE5y0IsqkGcWsRFVvtj8Bd+RHrqk4NQ/Ee
-	ED00SqaugNjU124sahjiZyuNps3PrJWVFmXS1R+AGoX4tYIiz272zk8pEVprkwzy7ILvio6UaCR
-	yl3tdXlJ4dELB7EOknTcrp3nqvKngqdkIpYuf/i5YJabAlnKaCcVHj8IviQv6vBBf/5Zc8Fa/AN
-	bhadlaO0slJBQeztdEgRnB7uWLdW9iGAj/34fk8ltHhJhm5Csi0VUhvCTlxFKkPuEQW6RHz5csZ
-	86qW/AxsDcNry1HYCVVz5UXdjH9LOVizVN+S05dzvul/yVRWWzuR0fUN/qBPwIoacDQVZMMizjN
-	4cfJXP0iJhTnpFfGlnysokOFuXjrVAtlySjG+WIPy7zCymq3k64zYxs5mfw2B0FnXwopLIFqz4o
-	WZJBKSRtw+lRzX+Pa5MHS5bjY=
-X-Received: by 2002:a05:6402:52c1:b0:6ac:7737:e50d with SMTP id 4fb4d7f45d1cf-6af9e2fd054mr5882545a12.29.1791134203816;
-        Sun, 04 Oct 2026 10:16:43 -0700 (PDT)
-Received: from Desktop (pd9513667.dip0.t-ipconnect.de. [217.81.54.103])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6afb014784bsm2256819a12.3.2026.10.04.10.16.42
+        d=1e100.net; s=20260707; t=1791135310; x=1791740110;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Dn1khiiBx/qPuh1ccNEwWHRK3a1yYP7lWHo8iux0ST8=;
+        b=FIYRzwBzJ+0Td7WgqvRe/pLoG5xfOZoEbDLfvDGUYMtxquCSKhpmmkItKRv/0wbp7j
+         Yte8aN7kU8HlPd8nWqtkzcVPNnAC9vyApa0mlUHiUtLYgkyHlrvROtQsgZ4jq+xo9d2d
+         37y6+JQmkKxXm/7EDFMk4lKxK1/KUJWZNyzSmtJvQrMMbmCeH+40Xe3a5fR7uLHh+TQz
+         gh5WVur0VRIhYlkBx/hlpHh9EE6PTrVuopHIjOPZjFtqkYTGZML9fid1/AMUKHx20O7Z
+         0fK9vYYIIdw1eoan8uYrQDVuULqDw+nih9CbnE+FwOv1npipQMy+y+xBYMfxalvsFO24
+         cOew==
+X-Forwarded-Encrypted: i=1; AKwUvBxnL3fNNHoEsw0AEaR6bDk/dZw3dqzjmyEH5BFNANdJTKAv6oPb/StpSH7c9SaV4tHUlevEaulKXT1fFr9US68=@vger.kernel.org
+X-Gm-Message-State: AFuF++l7BqiZfqWbOhHVHZn/9sEgkt2ASIUYlKBj3g+Lnshvw0oigWGN
+	9wGBoJEYsLYaeFv6wjyG5xFU3QpOWQZFmTYuX6q7otWEqmFdFCP4CBgt
+X-Gm-Gg: AYBFou1W/LLhE0qzH4Pb7H/2wLyORcfkeTfrZCl3IHInpgAtHwn8QMGFUvPQgvcHukp
+	wjw1N9nxHijU923dg+0NDu7rOEE93dpS2rvL/aFTJvcxnfsfW/M16NTj8J1omEGuiiolUUPM422
+	63CcLq1SvCD/GwCMHOSdS1EiUXTul+SSifYl1E9UPKMsCduCH1rJQznnpHfPtULG/8ZMf0LmFjl
+	FTbujmIMiNyfUKLdIfkUD7wWVBiTpZ5EBObQ93bo9qMHyaRVoVBsexrVGJSR0UIEyj3yUxyIUcM
+	PKaR9A8fI2lHmb/HbnMJrFOyBJhUPhqp3eyL8B9EF79QiiBjEeElShdG0uTTM31mFEKfro04DC+
+	BFawLn3xqA2r5RFo+++M3vgmq7f4liJdnuheiUhiFaDDd6vwOir/iU4Nh3Yr3v5Q2RVBcq8M0Ls
+	MHoEKiTkQoyXmhv8HyaFpFCE4+vXw1RL1JRI3FAbcuE8VVovd9Shfn/UO+TciaOOeUHn5XBBhaV
+	YD1iIpLooMNnCnEltQBd49ptG61YKh2IhJw1ebO
+X-Received: by 2002:a05:6a00:4197:b0:88b:af3d:2886 with SMTP id d2e1a72fcca58-88c6398df4bmr5157775b3a.23.1791135309729;
+        Sun, 04 Oct 2026 10:35:09 -0700 (PDT)
+Received: from kernel.tail6741c6.ts.net ([216.195.201.24])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-88b0d247930sm2678370b3a.54.2026.10.04.10.35.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 10:16:42 -0700 (PDT)
-From: Julius Bairaktaris <julius@bairaktaris.de>
-To: pablo@netfilter.org,
-	fw@strlen.de
-Cc: phil@nwl.cc,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	netdev@vger.kernel.org,
-	lorenzo@kernel.org,
-	nbd@nbd.name,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
+        Sun, 04 Oct 2026 10:35:09 -0700 (PDT)
+From: Kunwu Chan <kunwu.chan@gmail.com>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org
+Cc: sj@kernel.org,
 	corbet@lwn.net,
-	rdunlap@infradead.org,
 	skhan@linuxfoundation.org,
+	rdunlap@infradead.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org,
+	akpm@linux-foundation.org,
+	lianux.mm@gmail.com,
+	kunwu.chan@gmail.com,
 	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	saeedm@nvidia.com,
-	leon@kernel.org,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	linux-rdma@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH nf-next v3 3/3] selftests: netfilter: nft_flowtable.sh: check the priority a flow carries
-Date: Sun,  4 Oct 2026 19:16:36 +0200
-Message-ID: <20261004171636.3545085-4-julius@bairaktaris.de>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261004171636.3545085-1-julius@bairaktaris.de>
-References: <20261004171636.3545085-1-julius@bairaktaris.de>
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/5] perf/core: add AUX buffer kernel-consumer API
+Date: Mon,  5 Oct 2026 01:34:52 +0800
+Message-ID: <20261004173458.837842-1-kunwu.chan@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -106,153 +91,93 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Count the forwarded TCP packets that leave with priority 0:3 and those
-that leave with none, first without a priority and then with "meta
-priority set 0:3" ahead of "flow add". With the priority set, every
-packet must carry it, including those the flowtable forwards. Runs for
-IPv4 and IPv6.
+ARM SPE and other tracing PMUs write records directly to perf AUX
+buffers.  Unlike ordinary sampling PMUs, they do not necessarily
+generate a perf_event_overflow() callback for each record.  A kernel
+consumer therefore needs to own and drain an AUX buffer rather than
+rely on the overflow path.
 
-Assisted-by: Claude:claude-fable-5-1
-Signed-off-by: Julius Bairaktaris <julius@bairaktaris.de>
----
- .../selftests/net/netfilter/nft_flowtable.sh  | 110 ++++++++++++++++++
- 1 file changed, 110 insertions(+)
+Userspace obtains AUX storage through perf_event_open() and mmap().
+Kernel consumers created through perf_event_create_kernel_counter()
+currently have no interface to allocate and manage AUX buffers.
 
-diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-index 449c518bd947..73c7b1ec2208 100755
---- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-+++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-@@ -458,6 +458,106 @@ fi
- 	check_dscp "dscp_fwd" "$pmtu"
- }
- 
-+check_priority()
-+{
-+	local what="$1"
-+	local pmtu="$2"
-+	local ok=1
-+
-+	local counter
-+	counter=$(ip netns exec "$nsr1" nft reset counter netdev priocheck prio3 | grep packets)
-+	local pc3=${counter%*bytes*}
-+	pc3=${pc3#*packets}
-+
-+	counter=$(ip netns exec "$nsr1" nft reset counter netdev priocheck prio0 | grep packets)
-+	local pc0=${counter%*bytes*}
-+	pc0=${pc0#*packets}
-+
-+	local failmsg="FAIL: pmtu $pmtu: $what counters do not match, expected"
-+
-+	case "$what" in
-+	"prio_none")
-+		if [ "$pc3" -gt 0 ] || [ "$pc0" -eq 0 ]; then
-+			echo "$failmsg prio3 == 0, prio0 > 0, but got $pc3,$pc0" 1>&2
-+			ret=1
-+			ok=0
-+		fi
-+		;;
-+	"prio_fwd")
-+		if [ "$pc3" -eq 0 ] || [ "$pc0" -gt 0 ]; then
-+			echo "$failmsg prio3 > 0, prio0 == 0, but got $pc3,$pc0" 1>&2
-+			ret=1
-+			ok=0
-+		fi
-+		;;
-+	*)
-+		echo "FAIL: pmtu $pmtu: unknown priority check $what" 1>&2
-+		ret=1
-+		ok=0
-+	esac
-+
-+	if [ "$ok" -eq 1 ] ;then
-+		echo "PASS: $what: priority packet counters match"
-+	fi
-+}
-+
-+test_tcp_forwarding_set_priority()
-+{
-+	local pmtu="$3"
-+	local proto="$4"
-+	local dstip="$5"
-+	local dstport="$6"
-+	local lret=0
-+
-+ip netns exec "$nsr1" nft -f - <<EOF
-+table netdev priocheck {
-+   counter prio0 { }
-+   counter prio3 { }
-+
-+   chain egress0 {
-+      type filter hook egress device "veth0" priority 0; policy accept
-+      meta l4proto tcp meta priority 0:3 counter name "prio3"
-+      meta l4proto tcp meta priority none counter name "prio0"
-+   }
-+
-+   chain egress1 {
-+      type filter hook egress device "veth1" priority 0; policy accept
-+      meta l4proto tcp meta priority 0:3 counter name "prio3"
-+      meta l4proto tcp meta priority none counter name "prio0"
-+   }
-+}
-+EOF
-+	if [ $? -ne 0 ]; then
-+		echo "SKIP: Could not load netdev:egress for veth0 and veth1"
-+		return 0
-+	fi
-+
-+	if ! test_tcp_forwarding_ip "$1" "$2" "$pmtu" "$proto" "$dstip" "$dstport"; then
-+		lret=1
-+	fi
-+	check_priority "prio_none" "$pmtu"
-+
-+	# The flow stores the priority set before it is added, so the packets
-+	# the flowtable forwards leave with it too, in both directions.
-+ip netns exec "$nsr1" nft -f - <<EOF
-+table inet prioset {
-+   chain forward {
-+      type filter hook forward priority -1; policy accept
-+      meta priority set 0:3
-+   }
-+}
-+EOF
-+	if ! test_tcp_forwarding_ip "$1" "$2" "$pmtu" "$proto" "$dstip" "$dstport"; then
-+		lret=1
-+	fi
-+	check_priority "prio_fwd" "$pmtu"
-+
-+	ip netns exec "$nsr1" nft delete table inet prioset
-+	ip netns exec "$nsr1" nft delete table netdev priocheck
-+
-+	return $lret
-+}
-+
- test_tcp_forwarding_nat()
- {
- 	local nsa="$1"
-@@ -516,6 +616,11 @@ else
- 	ret=1
- fi
- 
-+if ! test_tcp_forwarding_set_priority "$ns1" "$ns2" 0 6 "[dead:2::99]" 12345; then
-+	echo "FAIL: IPv6 flow offload for ns1/ns2 with priority update" 1>&2
-+	ret=1
-+fi
-+
- # delete default route, i.e. ns2 won't be able to reach ns1 and
- # will depend on ns1 being masqueraded in nsr1.
- # expect ns1 has nsr1 address.
-@@ -572,6 +677,11 @@ if ! test_tcp_forwarding_set_dscp "$ns1" "$ns2" 1 4 10.0.2.99 12345; then
- 	exit 0
- fi
- 
-+if ! test_tcp_forwarding_set_priority "$ns1" "$ns2" 1 4 10.0.2.99 12345; then
-+	echo "FAIL: flow offload for ns1/ns2 with priority update and pmtu discovery" 1>&2
-+	ret=1
-+fi
-+
- ip netns exec "$nsr1" nft reset counters table inet filter >/dev/null
- 
- if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 ""; then
+This series adds the minimal perf-core interfaces needed for that use
+case.  It was previously posted as RFC [1]; this version incorporates
+feedback from that posting and is intended for review toward merging.
+Patches 1-2 add the AUX owner interface, lifecycle helpers, and
+cursor/copy operations without exposing perf's internal page layout.
+Patches 3-5 exercise the new interfaces with KUnit, a userspace
+regression test, and a selftest script.  The first consumer is a DAMON
+ARM SPE backend, but this series is independent of DAMON and adds no
+consumer-specific policy to perf.
+
+The API follows the existing non-overwrite AUX ring-buffer protocol.
+Setup and release serialise buffer lifetime transitions through
+event->mmap_mutex.  Cursor reads/writes use the same ordering rules as
+the userspace mmap consumer, and copy validates ranges in the absolute
+cursor domain before applying the ring mask.
+
+Testing
+=======
+
+The series builds cleanly at each step.
+
+arm64 (Kunpeng 920, 256 CPUs, SPEv1.1), Image built from this series
+and booted on the hardware:
+
+KUnit: pass:39 fail:0 skip:0.  Userspace regression (arm_spe_0): full
+pass; the producer head advances with live SPE traffic.  Selftest
+script: 92 passed, 0 failed, 2 skipped (both environment skips).
+perf record with arm_spe_0 captures data; dmesg stays clean.
+
+x86_64 (vmlinux build, qemu/kvm): KUnit pass:39 fail:0 skip:0, also
+under KASAN + lockdep (PROVE_LOCKING) and 15 repeated boots with no
+splat.  Userspace regression (Intel PT): full pass.  The selftest
+script also runs from installed selftest locations.
+
+Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
+
+Changes since RFC [1]:
+
+- Serialize AUX teardown under event->mmap_mutex and fix lifetime
+  handling around ring_buffer_attach().
+- Improve KUnit cleanup, concurrent-release coverage, and buffer-full
+  assertions.
+- Extend userspace and selftest coverage, including environment
+  handling fixes and installed selftest support.
+- Clarify AUX lifecycle, ordering, and cursor validation
+  documentation.
+
+[1] https://lore.kernel.org/linux-perf-users/20260814144927.489172-1-kunwu.chan@linux.dev/
+
+Kunwu Chan (3):
+  perf/core: add AUX buffer ownership for kernel events
+  perf/core: add AUX ring accessors for kernel consumers
+  selftests/perf_events: add AUX kernel API selftest script
+
+Lian Wang (2):
+  perf/core: add KUnit tests for AUX kernel-consumer API
+  selftests/perf_events: add userspace AUX regression test
+
+ .../userspace-api/perf_ring_buffer.rst        |   62 +-
+ include/linux/perf_event.h                    |   18 +
+ kernel/events/Makefile                        |    1 +
+ kernel/events/aux_kernel_test.c               | 1152 +++++++++++++++++
+ kernel/events/core.c                          |  164 +++
+ kernel/events/internal.h                      |    6 +
+ kernel/events/ring_buffer.c                   |  211 ++-
+ lib/Kconfig.debug                             |   14 +
+ tools/testing/selftests/perf_events/Makefile  |    2 +
+ .../selftests/perf_events/aux_kernel.sh       |  631 +++++++++
+ .../perf_events/aux_kernel_usermode.c         |  627 +++++++++
+ tools/testing/selftests/perf_events/config    |    2 +
+ 12 files changed, 2885 insertions(+), 5 deletions(-)
+ create mode 100644 kernel/events/aux_kernel_test.c
+ create mode 100755 tools/testing/selftests/perf_events/aux_kernel.sh
+ create mode 100644 tools/testing/selftests/perf_events/aux_kernel_usermode.c
+
+
+base-commit: 6350de8671b94afb7691d110f63bcda42f658a69
 -- 
-2.53.0
+2.43.0
 
