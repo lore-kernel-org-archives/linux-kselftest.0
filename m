@@ -1,138 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78A538F947;
-	Sun,  4 Oct 2026 20:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB4D47FB0F
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 Oct 2026 20:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791144474; cv=none; b=ktG08cDnXSLSdVPXN6C9c5UVM730nZP0Zp9MWMeaMCaSgAwMo8Wh7KYZFyg3ZfXqS2tKrEr8X7UZKJ51WL7oYRUoYL+mln6SQKq26rE0WhGH9Pgsj+cg7IZ0eVYvpEGDvGHj+JYsFWTT2G17wasK8wP9ZVF7d1Z0Ai26q1ibjCE=
+	t=1791147338; cv=none; b=RTYQcY6wtLhwjq07nMoZ5foZ0ixGmOqQSTs2lCpOlFYD9b+fdNqUEd447yvnThBJ/skX+IidBO7yB/zGIm+u/ISkwgq8nLgrvKChmyngVXF428qUT6BjbzXERneb/3TO5IuC1KKCH8CeXAPCC4VzprJsC9OGlb2HzG23hjSR6iM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791144474; c=relaxed/simple;
-	bh=+V5HdgvvgZEdIQsFusxwujC0aLiKZVBJO9ImZsym+DQ=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=ty/XB1dKw8key4W1MKLIah61U9+0ZY84y5NzaaWRoGCrGSXBkHOT6Z3RXKGBJJ0yX4j+AZ/ptOWrWmiQs84Dtc4HMoQV4DqAbc0N3/y7lkCR0o63AKshGM/1gbYJpP9ucZzCQC3YKj+T+fjBcnlUIaNk6R9g3R2RNrVqQnexIa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Mx3OeGyw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791147338; c=relaxed/simple;
+	bh=skJBRYLB/FR5oiV4h2qDLm5zGSWRM2OCYBFKl4Cjj18=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IaOjfDfw2jFdh3i2NDwOZDriW68a+AFvHME2/qXl8mERjEG0awj3K1Dje+EnN9OcfvZYXMVL4MMmwSXlnaT/xpbIS5x363KNrqJniG4OG3r07wYwtUrERuqLFCxv7Eh2AkCu0AYJ/IDpYin88dCyObptks+ArLX4SnvI2sr2eXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aI8zBt9R; arc=none smtp.client-ip=74.125.225.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Mx3OeGyw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE9B01F000FF;
-	Sun,  4 Oct 2026 20:07:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aI8zBt9R"
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48b05d75172so689138f8f.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 13:55:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1791144472;
-	bh=F2CprrIV1+vnrvZtv7aumlrns7J0kiy7ez1pluHWuPI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Mx3OeGyw4mBMuZbhxP+kZ8Yze1JJTWm6pV1IAfezi4CT5EdyzeaQ4TdJfJEW6VwBl
-	 p8EdqXusXxKObgj9b4Q4/xfVD61oTz+Gb23FrCuX4GO8LyEuMBBsTXivo5hQR43jZf
-	 Dw65pGexM1LNSYVm+ZFNLaFjxvakbKogJgT96vEI=
-Date: Sun, 4 Oct 2026 13:07:51 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-Cc: rppt@kernel.org, peterx@redhat.com, surenb@google.com,
- aarcange@redhat.com, david@kernel.org, ljs@kernel.org, liam@infradead.org,
- vbabka@kernel.org, mhocko@suse.com, shuah@kernel.org, kas@kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] userfaultfd: clear the inherited uffd bit in
- move_swap_pte()
-Message-Id: <20261004130751.1cdab825ae521c16e02f66ec@linux-foundation.org>
-In-Reply-To: <20261003103030.63380-1-donggeunyoo.kernel@gmail.com>
-References: <20261003103030.63380-1-donggeunyoo.kernel@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=gmail.com; s=20251104; t=1791147335; x=1791752135; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=UzFidq+NXBj47/Ep/6RIWkRxXs+9tuu6zEHYY1jeWcY=;
+        b=aI8zBt9RQKmBglc8dl7dUL7c2vAMrDKLWgeFrSWkxBT+zme5bZkglW/NZLxzh7gbRO
+         tljPQpPGocVai3+/wcpEEUEA+EXJNDOklurWGhskMmmsxai+X3JSJe/XHqrot1R4xcx8
+         wNykom+2hToA+wiBgpwwtsB2OhQHH6+fQPqcv0mgj9JKE1W7imBG5I7R8lKI9EV3i7rH
+         5MShmJRnTCk/86mImRDsQL0x/LT6/ewgUEL48CrP40vqG9bb5fWr8fOS3o52uo8tnr6V
+         AHBGLvw8ZJNrEoR015INGDiFEVIr18k1F/Roj7eGc+/6GEzZz8GHSba7C+30ToLo7qbS
+         lnZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791147335; x=1791752135;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=UzFidq+NXBj47/Ep/6RIWkRxXs+9tuu6zEHYY1jeWcY=;
+        b=SjSG9EX1OetNnotNXwa8HeBNgMQLrTD2ydQVo4kJHPROChbZdVk7SyoNRfUhvQe1bR
+         xpPjEwIBtGByxxybdecmIEljFbjDDhG/CUqevL7GrxFYBa0KIl4qpNwFzIkfDHbWwWXo
+         MUCiE4NKeM9+jpVB2dufVMsH0cLBUHjcBIJ7uISjCsDj3AHnktiIdaTybofrroauAysu
+         JUqJSjQDu81+4ijRLDubVT7+neP7bqznD45GxkNH8KD94S+7EulxMoOnUCkrJ+9LDIyN
+         qvKxI8IMIBLkpeRRPG9QLSfgu16sHfnY6VIRnOyVLUWjyn8llIjPoBMrb0BIaxBHxBsW
+         VSZw==
+X-Forwarded-Encrypted: i=1; AKwUvBx//BMsc22QK232AG+gV2luVQfN06CeNXuQMrkQ85+bEHW9T4Rs61LaRxpLh/JT5UK3K3mtxCkDdqyTB7YzQ74=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIyQ+6TYeTZWNHl0i9SX5bY7TcFdYVO0s/L295hpH1HIHZAvNBR
+	kB/rleDezPuLkYoUHwHN8FgLKoFSLzJAT9UGfbWd/ktrVsQRIiya+dYQ
+X-Gm-Gg: AYBFou3Dx82Qv8tLp5eMOPTv9KRXxAc/Qyk3BEPvvOsZ1moklviXjygna0ADlPrHL7i
+	+G8lIYGX8vtXqcKZqjt0DyQqBSm361tXQpzay+FWwHI3S4LJmgCQXP614i/9Pm2r7wTi7epkwRH
+	YAeoFDxsv7RhkN0hpxFkx95FRxBq2LP3H42ZAPxPpHaxcNHkbZEovzqE/z3gYOM01eRNClL+qzl
+	vlWhk/Yxl4ZbX9fkdCQoaI0mwszcPVm4Fl+TZLLRp1QE7oBY2G/uEWIrrBT2n5RXsM0IAvcjIoT
+	AW73ZUW+Ao6SG6dK4rfWxVD+n1QjYRk6cGdB+cvJRjHa2UmZoFgr6nKp+TXla9L5K6l77o/owkt
+	c75CNZ4KWnXkUbAuri5GQGh1nXnJh8uIb75hANYviXR2ZIN5pZEchRwxYYzNMVyU4AyoQ6oiQZF
+	StcmbSoAGOK+oDzztw3ICjvb6goTa/uKg2T38LbWiAumHwwxP5PywPa2bP5xJlZVteJ1AQMe0Cs
+	nI8aJWLCC8pzAE6Pa/CfWL/Jr67GLocg1MKxgo53wh/Y2FX9Vniz8yYCWa9q+r+3XCqeOsacfGJ
+	4LdCpfiCdAXXMbmySN4nmfhVUquVarPEFA==
+X-Received: by 2002:a05:6000:2586:b0:486:f3c0:c26b with SMTP id ffacd0b85a97d-48c4803032dmr9225013f8f.57.1791147334624;
+        Sun, 04 Oct 2026 13:55:34 -0700 (PDT)
+Received: from lima-kernel.telekom.ip (84-115-220-212.cable.dynamic.surfer.at. [84.115.220.212])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b380f0ab7sm20855638f8f.7.2026.10.04.13.55.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Oct 2026 13:55:34 -0700 (PDT)
+From: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+Subject: [PATCH] selftests/mm: hugetlb-read-hwpoison: add setup of HugeTLB pages
+Date: Sun,  4 Oct 2026 22:54:58 +0200
+Message-ID: <20261004205458.119608-1-jaeyeon.lee.dev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sat,  3 Oct 2026 19:30:28 +0900 Donggeun Yoo <donggeunyoo.kernel@gmail.com> wrote:
+Every test is expected to reserve the HugeTLB pages it needs.
+hugetlb-read-hwpoison was not converted, so on a system without
+pre-reserved huge pages the MAP_POPULATE mmap() fails with ENOMEM and
+every test case is skipped.
 
-> UFFDIO_MOVE on a swapped-out page installs the source PTE at the
-> destination unchanged, so a uffd bit set on a write-protected or
-> RWP-protected source lands in a destination VMA that was never
-> registered for either, and nothing clears it afterwards.  Patch 1 clears
-> the bit, then re-arms it if the destination is RWP-registered, which is
-> what the present-page and zeropage move paths already do.  Patch 2 adds
-> the tests that catch it.
+Reserve the pages with hugetlb_setup_default(). Each chunk size runs two
+HWPOISON tests and a poisoned huge page can't be reused, so reserve two
+pages per chunk size. The pool size is restored on exit. The poisoned
+pages remain allocated until reboot.
 
-Thanks, I updated mm-hotfixes-unstable with this version.
+With the patch, all 12 cases pass on a system with no huge pages
+reserved (tested on Fedora, x86_64, CONFIG_MEMORY_FAILURE=y).
 
-> Changes in v4:
->  - patch 1: add Acked-by from David Hildenbrand and Mike Rapoport; no
->    code change
->  - patch 2: protect the source right after registering it, open pagemap
->    at the top, and use a designated initializer for the move (David
->    Hildenbrand)
->  - patch 2: fail only the test case, not the whole run, when UFFDIO_MOVE
->    fails (David Hildenbrand)
+Assisted-by: LLM
+Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+---
+ tools/testing/selftests/mm/hugetlb-read-hwpoison.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Here's how v4 altered mm.git:
-
-
- tools/testing/selftests/mm/uffd-unit-tests.c |   36 ++++++++---------
- 1 file changed, 18 insertions(+), 18 deletions(-)
-
---- a/tools/testing/selftests/mm/uffd-unit-tests.c~b
-+++ a/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -2049,28 +2049,29 @@ static void uffd_move_swap_test_common(u
- 				       bool rwp)
- {
- 	unsigned long page_size = gopts->page_size;
--	struct uffdio_move move = { };
--	int pagemap_fd;
-+	struct uffdio_move move = {
-+		.dst = (unsigned long)gopts->area_dst,
-+		.src = (unsigned long)gopts->area_src,
-+		.len = page_size,
-+	};
-+	int pagemap_fd = pagemap_open();
+diff --git a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
+index 70b24e3660c4..31748a24448f 100644
+--- a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
++++ b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
+@@ -13,6 +13,7 @@
+ #include <signal.h>
  
- 	if (rwp) {
- 		if (uffd_register_rwp(gopts->uffd, gopts->area_src, page_size))
- 			err("register src failure");
--	} else if (uffd_register(gopts->uffd, gopts->area_src, page_size,
--				 false, true, false)) {
--		err("register src failure");
--	}
--	if (uffd_register(gopts->uffd, gopts->area_dst, page_size,
--			  true, false, false))
--		err("register dst failure");
--
--	if (rwp)
- 		rwprotect_range(gopts->uffd, (unsigned long)gopts->area_src,
- 				page_size, true);
--	else
-+	} else {
-+		if (uffd_register(gopts->uffd, gopts->area_src, page_size,
-+				  false, true, false))
-+			err("register src failure");
- 		wp_range(gopts->uffd, (unsigned long)gopts->area_src,
- 			 page_size, true);
-+	}
-+	if (uffd_register(gopts->uffd, gopts->area_dst, page_size,
-+			  true, false, false))
-+		err("register dst failure");
+ #include "kselftest.h"
++#include "vm_util.h"
  
--	pagemap_fd = pagemap_open();
- 	if (madvise(gopts->area_src, page_size, MADV_PAGEOUT))
- 		err("MADV_PAGEOUT");
- 	if (!pagemap_is_swapped(pagemap_fd, gopts->area_src)) {
-@@ -2078,11 +2079,10 @@ static void uffd_move_swap_test_common(u
- 		goto out;
- 	}
+ #define MAX_WRITE_READ_CHUNK_SIZE (getpagesize() * 16)
+ #define MAX(a, b) (((a) > (b)) ? (a) : (b))
+@@ -281,6 +282,13 @@ int main(void)
+ 	size_t i;
  
--	move.dst = (unsigned long)gopts->area_dst;
--	move.src = (unsigned long)gopts->area_src;
--	move.len = page_size;
--	if (ioctl(gopts->uffd, UFFDIO_MOVE, &move))
--		err("UFFDIO_MOVE");
-+	if (ioctl(gopts->uffd, UFFDIO_MOVE, &move)) {
-+		uffd_test_fail("UFFDIO_MOVE failed: %s", strerror(errno));
-+		goto out;
-+	}
+ 	ksft_print_header();
++
++	if (!hugetlb_available())
++		ksft_exit_skip("HugeTLB is not available\n");
++
++	if (!hugetlb_setup_default(ARRAY_SIZE(wr_chunk_sizes) * 2))
++		ksft_exit_skip("Not enough free huge pages\n");
++
+ 	ksft_set_plan(ARRAY_SIZE(wr_chunk_sizes) * 3);
  
- 	if (pagemap_get_entry(pagemap_fd, gopts->area_dst) & PM_UFFD_WP)
- 		uffd_test_fail("uffd bit moved into an area registered for missing faults only");
-_
+ 	signal(SIGBUS, sigbus_handler);
+-- 
+2.43.0
 
