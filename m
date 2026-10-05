@@ -1,285 +1,128 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3CA1531AE6
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2026 17:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E734CEE48;
+	Mon,  5 Oct 2026 17:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791220770; cv=none; b=YTGVlstuzjFksp+oIYd4FnEEarMLD+EfzHsujdKPZqgJPHDJhDRBo2X38Jlpl+g2sBWjJS++AO77UCVlZDLHR5h4FuV6bmVVW6Fbir9vQByuBidE2lnbVyxburHDc3TJrPVAfk7nKPEZR4gC0kByVumvNuHi1cFBkYMAIEbNhOM=
+	t=1791221429; cv=none; b=LNR4cvKL+g4PkBfAcF3Rnw5Pfg+Sua4oVdsA8f/n6SqUSPIZx15Jx6Mfe1DO7bCbkWfPD2vYpZHu7L/T7UBPOApMmlmWbMUE0mxDigQ61z+ap++whG31H8xEc6TAHCxFc+C/48s1q6zNOALkDegsnCz9VSlAZ9zGGqqDlWR4ShE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791220770; c=relaxed/simple;
-	bh=DSy90Vi1pYW2azdUTwrc0TT6kW6QsQGO8Rlo/8MHFWI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U+N1JdYNV9X/mE803MgeneZHxM3FZZ+6nrEwas+v8IJQQ8JCRLh/+pAbJWqj1ZO5X4P3xIbcbiT3xomSLgr5mNICRZxix9tVwW1hyWPydQ4PtQtxcPsApoj34adGVq2TsBVW9I/WZfKWWnG2+E0TgAlZkX+/iO2EtdWh5SKAJ+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gGnt2UfA; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791221429; c=relaxed/simple;
+	bh=y80eDF61NqDQ0A/qHnQbb89yvEVcB2/CncyjErSWxdY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MkVWrqoWGnyM4g8vj2LpmRcW0mQrl73PqJDQmcYUcjN5D2hg4sGqSkOIGOesD+w+CYTLnOc+XdM1DBhU4sCL1Q4Ob5tNxUWGofuxkplLHBSVnTfn+126MaoAEdxSWqMG90qyTeaODjAHB3q10VDr6Nfs8XYi+DR8BH1kQq3nWSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fnn/nFq8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gGnt2UfA"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-ccce967aa8dso617197a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 10:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791220768; x=1791825568; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=j4yfFb6320kdlQ6cch251gfqYxfn4Y6pwvS8rFGl1n0=;
-        b=gGnt2UfAUg8JGW1bFWJFnF7t2rGWUEm8RerDWNKaHe0IPoU+2PYQczquL4Y/sP1+K6
-         /xwns+zHRaVLuX5NbVo4kPcLLWJ+KSbbhC6Y9cjktEFpPYmQDegqOnRceQpPFZ3/jSgT
-         tX46Nt+1DaDU06KHwCjTq14Jmz0NeNtHge1pAmCJwUQBGx5STGlxVHxDAhuUA9lcdH2S
-         8+mYO+2lDIWMgmOIlB+CxKC9e8HogVa3aS3QaHjakCTysQQ/xT1uV7efuW0pAcKpXd2d
-         ptUfmOrUB/w9dEY8138jPEq3eazJO3NDawGjapb/04CPKcRVixg5F/hKHtE/6vRtfyp8
-         ScdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791220768; x=1791825568;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=j4yfFb6320kdlQ6cch251gfqYxfn4Y6pwvS8rFGl1n0=;
-        b=HN2IJ+5qkYWbvcCgNtqlAWe5diYPxdd99YfpXObqo8Ok7Kro+AaMzL+RGsZi0NISDQ
-         Z116cyqODQBNRwi2AYkVHLaOOpJzzfW9ilRq41xzvp2tLTG+MFV5R6YO0FnqSmmqXzpz
-         i17w6K3kRsrj2BErMtC3sw0uv4DBsyuiN2gUf70lwWint6rxGoQ3dxrWUp1l+MSOVHAA
-         /CQYlQ6VQBA4OZnQ+z2rZkw97U6zwqHyy8+nmG+7GVZCAsC9ljh3vJ9mUYj8NfhxoQdR
-         aCWDgzCQ6ItKrh0bKdNn1zpH9+MSH9QlLI6rfjmL89fBCW1D187/0qqH6YRD89FrCQGS
-         fRrQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy/SiRT0abjKjfV5QSzUKV9ZcRtcFrr8rz1ySCjdeLNnv1W7E29Ldv9eUuuRVVSEEwX3p36dqmrmAFpIb4HwjY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ1AEXBMDJisJyoUhNUMy4BM3ClnPp+/1S38oIDqjWMelkvg8Fh
-	aZywTNCKBd+17hEfyCY9ntqjV6Sa2Sd3TSBFvDhX6jOPzGFF54DO0xKZ
-X-Gm-Gg: AYBFou1RIA11/1P/f/DEmRavaDGjFT9WUBCdWgphUzX7lDBHeC0KRda1QYJ6lL6MCm1
-	8fStS/2SjhKlujRLrQiypHY8Y7hX1OUIiGYPW9ctEYTmUIHLqinY1tDYm+AXm8K4EAzvq4kArB0
-	qsMCEz4VQH+wZX3bsYNzKAfLeNXFAa+5+uUNr7GFpDZFBAWaneBQ87MW42A1Ww987/oWSwEctjB
-	MG4/KewKYPrhL6Ac4ERGIXVR0HQgXTyKQdKnha3d4DNovo1eO5b3XLp8wQNzWvCU0G9a2tmPbdX
-	+9RxXaEL7bQYlwgDOSJk+KrbthdUtIGLgDGy80F1mWrFwnJCwfBdUNlvtVco41TDxEqKJatykZJ
-	hYsDgC4It0jUeLhUm7cecJEb+F6Gb1Dn4nV+sOBH5Fq/Y8Nd3aNXql+TcckwQidKjs8TBUbmq5p
-	Hv/TW0fIPuGSYfgf5aXM3futaFjgCpFAWnrxYzJjdOo6Udok11KnyTeReSNi456tIyvyn/SvuU/
-	RqlpIaBLv9kH3m3NUjH2hDcOu3e8w==
-X-Received: by 2002:a17:90a:2cc4:b0:398:c3ca:1ebc with SMTP id 98e67ed59e1d1-3a78eca8911mr3952064a91.18.1791220767601;
-        Mon, 05 Oct 2026 10:19:27 -0700 (PDT)
-Received: from kernel.tail6741c6.ts.net ([216.195.201.24])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a853cafddesm406910a91.10.2026.10.05.10.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 10:19:26 -0700 (PDT)
-From: Kunwu Chan <kunwu.chan@gmail.com>
-To: paulmck@kernel.org,
-	corbet@lwn.net,
-	mingo@redhat.com,
-	frederic@kernel.org,
-	neeraj.upadhyay@kernel.org,
-	josh@joshtriplett.org,
-	urezki@gmail.com,
-	dave@stgolabs.net,
-	lianux.mm@gmail.com
-Cc: stern@rowland.harvard.edu,
-	parri.andrea@gmail.com,
-	will@kernel.org,
-	peterz@infradead.org,
-	boqun@kernel.org,
-	npiggin@gmail.com,
-	dhowells@redhat.com,
-	j.alglave@ucl.ac.uk,
-	luc.maranget@inria.fr,
-	akiyks@gmail.com,
-	dlustig@nvidia.com,
-	joelagnelf@nvidia.com,
-	skhan@linuxfoundation.org,
-	rdunlap@infradead.org,
-	longman@redhat.com,
-	rostedt@goodmis.org,
-	mathieu.desnoyers@efficios.com,
-	jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev,
-	kunwu.chan@gmail.com,
-	brads@mainlining.org,
-	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	lkmm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	rcu@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH RFC v3 15/15] selftests/rcutorture: add hazptr torture test script
-Date: Tue,  6 Oct 2026 01:15:29 +0800
-Message-ID: <20261005171529.1378809-16-kunwu.chan@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261005171529.1378809-1-kunwu.chan@gmail.com>
-References: <20261005171529.1378809-1-kunwu.chan@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fnn/nFq8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5AE31F000FF;
+	Mon,  5 Oct 2026 17:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791221422;
+	bh=2S8sboOkN30YQsk+3u7LYDimtoghpZTYWEdAeieFXzg=;
+	h=From:Date:Subject:To:Cc;
+	b=Fnn/nFq8gDkyi/mqILoELEuRVOYUka59OFcCA+TVO8aYMfYIBRVl3mgRwTqzcfJyl
+	 S+p04j17tqVP9i5uucXvmFQ7UInN/cHNa1vF42qT/WIigef6KNZW0XQvj6Rkh4tGFV
+	 RfOeA2pTmozB1pE3c3Xof+p8Ec8eo9e4X/P1QUstQ3IJsjZDAiQFa7En1lTxx17JGq
+	 yBrIkU66ma4MzTUdOpYN3VVKCw4nngHLl71ElCYBjjL0pWcmMolJQdfiDCFB9id6TZ
+	 jQPPLWk5aqr+o5XEYafzKbEx1TfFDWAfHDe2/bNRDV7PB/2adEaPFY+1MVq2MJz1cY
+	 hdPwMQBarB8Zg==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Date: Mon, 05 Oct 2026 19:30:12 +0200
+Subject: [PATCH kselftest v2] selftests/lib.mk: run_tests: print summary at
+ the end
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261005-sft-run-tests-print-totals-v2-1-29c45c0e2fe6@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42PQQqDMBREr1Ky7i8maEi76j2ki2h/NFUSyf9Ki
+ 3j3RnuBroaZgTfMKgiTRxK30yoSLp58DNmo80m0vQ0dgn9mL1ShdKFVBeQY0hyAkZhgSj4wcGQ
+ 7ElhpEK2RZYMoMmBKSHPzwpZ3wp70njimz7G2yCz1X+BFgoTGYWWM0lqV1/uAKeB4iakTj+035
+ fz7+FGLgXB0OyZ32xdDuGEd4gAAAA==
+X-Change-ID: 20260625-sft-run-tests-print-totals-a18eea814bee
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2472; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=y80eDF61NqDQ0A/qHnQbb89yvEVcB2/CncyjErSWxdY=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLIO31ubufPJhytPHz+NVK1hbb407U/4gXUOkouXuOaFP
+ lf34Zbz7ShlYRDjYpAVU2SRbovMn/m8irfEy88CZg4rE8gQBi5OAZjI/lmMDAcKVRkusO9IuXVp
+ Vd5qtgW3T/YvnWF/u6BvRbncDVNR8X2MDLPaDhZ/699plfl+S/RNxrP3BfOqo+xTlePbK258O+f
+ TxAQA
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Add hazptr.sh as a one-command regression test for the hazptr
-torture configs.
+When there are many tests and/or many log lines, it is difficult to
+quickly find out how the different tests went when running:
 
-Run NOPREEMPT, PREEMPT, READERS0, and READERS4, followed by
-LOCKDEP with wq_churn and SLOWPATH with CONFIG_PROVE_LOCKING=y.
-The latter two also check the console for lockdep warnings.
+    make -C tools/testing/selftests run_tests
 
-With --allcpus, repeat the PREEMPT test at CPU counts 8, 16, 32,
-and so on up to 256.
+This run_tests target executes 'run_many' from runner.sh, which relies
+on ktap_helpers.sh. At the end of the execution, the KTAP_CNT_* counters
+have been populated, and the total can then be simply printed with the
+ktap_print_totals helper.
 
-Follow the pattern of the existing srcu_lockdep.sh script.
+Now a summary is printed at the end, e.g. here with the two last lines:
 
-Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
+    $ make -sC tools/testing/selftests TARGETS=(...) run_tests
+    # timeout set to (...)
+    # selftests: (...)
+    (...)
+    ok 1 selftests: (...)
+    # timeout set to (...)
+    # selftests: (...)
+    (...)
+    ok 2 selftests: (...) # SKIP
+    # timeout set to (...)
+    # selftests: (...)
+    (...)
+    not ok 3 selftests: (...)
+    # 1 skipped test(s) detected.  Consider enabling relevant config options to improve coverage.
+    # Totals: pass:1 fail:1 xfail:0 xpass:0 skip:1 error:0
+
+This summary is printed, using '#' as prefix to be treated as a comment
+in the TAP format. The summary is also printed when summary=1 is used to
+redirect log lines in different files because it still looks useful when
+there are many tests, not to have to check each line.
+
+Note that this 'make' command will continue to exit without errors
+(returned code is 0) when the tests can be executed. I guess it is
+better not to change this behaviour to be able to continue detecting
+kselftests failures.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- .../selftests/rcutorture/bin/hazptr.sh        | 146 ++++++++++++++++++
- 1 file changed, 146 insertions(+)
- create mode 100755 tools/testing/selftests/rcutorture/bin/hazptr.sh
+Changes in v2:
+- Fix typo in the title: s/=/:/
+- Link to v1: https://patch.msgid.link/20260625-sft-run-tests-print-totals-v1-1-bfe588266249@kernel.org
+---
+ tools/testing/selftests/lib.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/rcutorture/bin/hazptr.sh b/tools/testing/selftests/rcutorture/bin/hazptr.sh
-new file mode 100755
-index 000000000000..ef636e519a55
---- /dev/null
-+++ b/tools/testing/selftests/rcutorture/bin/hazptr.sh
-@@ -0,0 +1,146 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0+
-+#
-+# Run hazptr torture tests and report any that fail.
-+#
-+# Usage: hazptr.sh [ --cpus N ] [ --allcpus ] [ --datestamp string ]
-+#
-+# Copyright (C) 2026 Kunwu Chan
-+#
-+# Authors: Kunwu Chan <kunwu.chan@gmail.com>
-+
-+usage () {
-+	echo "Usage: $scriptname optional arguments:"
-+	echo "       --cpus N       override CPU count (default: auto-detect)"
-+	echo "       --allcpus      test at CPU counts 8,16,32,...,256"
-+	echo "       --datestamp string"
-+	exit 1
-+}
-+
-+ds=`date +%Y.%m.%d-%H.%M.%S`-hazptr
-+scriptname="$0"
-+
-+RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-+PATH=${RCUTORTURE}/bin:$PATH; export PATH
-+. functions.sh
-+
-+cpus=""		# empty = let kvm.sh auto-detect
-+allcpus=0
-+
-+while test $# -gt 0
-+do
-+	case "$1" in
-+	--datestamp)
-+		checkarg --datestamp "(relative pathname)" "$#" "$2" '^[a-zA-Z0-9._/-]*$' '^--'
-+		ds=$2
-+		shift
-+		;;
-+	--cpus)
-+		checkarg --cpus "(number)" "$#" "$2" '^[0-9]\+$' '^--'
-+		cpus="$2"
-+		shift
-+		;;
-+	--allcpus)
-+		allcpus=1
-+		;;
-+	*)
-+		echo Unknown argument $1
-+		usage
-+		;;
-+	esac
-+	shift
-+done
-+
-+nerrs=0
-+
-+run_kvm () {
-+	local ds_suffix="$1"
-+	local configs="$2"
-+	local cpu_arg="$3"
-+	local kconfig="$4"
-+	local resdir="$RCUTORTURE/res/$ds/$ds_suffix"
-+
-+	mkdir -p "$resdir"
-+
-+	tools/testing/selftests/rcutorture/bin/kvm.sh \
-+		--torture hazptr \
-+		--duration 5s \
-+		--configs "$configs" \
-+		${cpu_arg:+--cpus "$cpu_arg"} \
-+		${kconfig:+--kconfig "$kconfig"} \
-+		--trust-make \
-+		--datestamp "$ds/$ds_suffix" > "$resdir/kvm.sh.out" 2>&1
-+	return $?
-+}
-+
-+check_lockdep () {
-+	local ds_suffix="$1" config_dir="$2" label="$3"
-+	local resdir="$RCUTORTURE/res/$ds/$ds_suffix"
-+	local console="$resdir/$config_dir/console.log"
-+
-+	if ! test -f "$console"
-+	then
-+		echo "Missing console.log for $label ($ds_suffix)" > "$resdir/kvm.sh.err"
-+		return 1
-+	fi
-+	if grep -qE "WARNING: possible (recursive locking|circular locking dependency)" "$console"
-+	then
-+		echo "Lockdep warning in $label" > "$resdir/kvm.sh.err"
-+		return 1
-+	fi
-+	return 0
-+}
-+
-+# Basic torture: all hazptr configs, CPU count auto-detected
-+
-+echo "--- hazptr basic torture${cpus:+ ($cpus CPUs)} ---"
-+run_kvm basic "NOPREEMPT PREEMPT READERS0 READERS4" "$cpus" || nerrs=$((nerrs+1))
-+
-+# LOCKDEP: verify no lockdep splats with PROVE_LOCKING + wq_churn
-+
-+echo "--- hazptr lockdep + wq_churn ---"
-+if run_kvm lockdep-wq LOCKDEP "$cpus"
-+then
-+	check_lockdep lockdep-wq LOCKDEP "LOCKDEP wq_churn" ||
-+		nerrs=$((nerrs+1))
-+else
-+	nerrs=$((nerrs+1))
-+fi
-+
-+# SLOWPATH + PROVE_LOCKING: verify forced-slowpath does not deadlock
-+
-+echo "--- hazptr SLOWPATH + lockdep ---"
-+if run_kvm slowpath-lockdep SLOWPATH "$cpus" \
-+	"CONFIG_PROVE_LOCKING=y"
-+then
-+	check_lockdep slowpath-lockdep SLOWPATH \
-+		"SLOWPATH+PROVE_LOCKING" ||
-+		nerrs=$((nerrs+1))
-+else
-+	nerrs=$((nerrs+1))
-+fi
-+
-+# CPU scaling: optionally test at multiple CPU counts
-+
-+if test "$allcpus" -ne 0
-+then
-+	max_cpus=`grep '^processor' /proc/cpuinfo 2>/dev/null | wc -l`
-+	for n in 8 16 32 64 128 256
-+	do
-+		if test "$n" -le "$max_cpus"
-+		then
-+		echo "--- hazptr CPU=$n ---"
-+		run_kvm "cpu$n" "PREEMPT" "$n" "CONFIG_NR_CPUS=$n" || nerrs=$((nerrs+1))
-+		fi
-+	done
-+fi
-+
-+# Report
-+
-+if test "$nerrs" -ne 0
-+then
-+	echo "hazptr.sh: $nerrs test(s) failed"
-+	exit 1
-+fi
-+echo "hazptr.sh: all tests passed"
-+exit 0
--- 
-2.43.0
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index f02cc8a2e4ae..de15e63bc6b4 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -106,7 +106,8 @@ define RUN_TESTS
+ 	if [ "X$(summary)" != "X" ]; then       \
+ 		per_test_logging=1;		\
+ 	fi;                                     \
+-	run_many $(1)
++	run_many $(1);				\
++	ktap_print_totals
+ endef
+ 
+ define INSTALL_INCLUDES
+
+---
+base-commit: 30af56a227e27b892d34bc44c23298b5274913e3
+change-id: 20260625-sft-run-tests-print-totals-a18eea814bee
+
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
