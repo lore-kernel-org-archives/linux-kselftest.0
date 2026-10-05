@@ -1,345 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2D54EFFB5;
-	Mon,  5 Oct 2026 17:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39F330AAD8;
+	Mon,  5 Oct 2026 18:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791221595; cv=none; b=rqmp5iASXi7rr1TzoOSwQexJ5ToUmNVQW7GFYbY2j/DmkZ4RB9bMUUj3JikTMpksnLzmHJb5/KJ7L4Ig8h95ZIiYHuw44E/aPqcVk49iKpCg2lWVXJsqewxppMpOYEn8Z2R2q8J44Z/lSEzc2lgJ66crmBRnoHBqo9rkJ8icRwE=
+	t=1791225227; cv=none; b=JWZ+TW1PGkg4vd0WKeOMadvdtewvwL394ZESpnIKwsP027fep8QvfyyJ8xfLlz1zIRmvbhS0vm8RffZxF0j2s8y7GKMxDhZVRCLn4Likc4Jp34YAE5NopjT1vZ2c8sOKm1boIl0DPm7aL51ptoy1K2ZoDc3kHFTu/ZGU+XfTRh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791221595; c=relaxed/simple;
-	bh=WWRrTogpoCm9jcwHZNNwWwDrAKXxnnRHkFLS0o3aEG8=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Mu7KpJimaP7+RROcbW1mt74YR2KvhhgfNZYl83XPtnYRY/GnNV6YM7oG5PYhIuJNC3eLcVutkyS+8oQweOOIx8K7Mad1991vdc82blmf6gDztrAfzJ3aX07LLllfgfO4NadkieSn4ozUZUUb8vE5sRRdu5MSB3XwYxqFUoNtJ2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODcD1z/s; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791225227; c=relaxed/simple;
+	bh=Fun/YY4Lj4ooQUInoo5MERLda9ccTkcQOBVDuFQC9sw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=oAgB3HbD42N/8VwdOkXakZz703J+IVmB1oM0wIZa/OOG5/EIWs/MTH/SarkXTsXWdh/gFXUGhXdLyPKSzqjlAz5HfIXaI5zBS4xFNhMaoiL6U60X4acMqZeQ6KdFzxdIyzHGzUPC52envRibk2haOOLvCRwSI7QO1BFKU8dL5ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=RZYRNy7X; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODcD1z/s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C50A1F000FF;
-	Mon,  5 Oct 2026 17:33:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791221593;
-	bh=X7sX2iazjw1D9MpNTPb5B5lFjvgNuPzBLZ4h+HtIiWk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ODcD1z/sucEbNUZWxF85evJ2a2CN1Hxbb5R5ZIqm+epeonNw1Ey/a5Gdov/fs8Inf
-	 bnf7vGrCFVSF5l/57DX8RRV7/qD+W5ydTBo+f7kxhTSvt/OCtCZ6cpiDHpSwHp1ij4
-	 +Jq+QImJBUNmnWvCJ2EcueiG5dEoQhIyMR5f0heA2ymwsuu6opksz6smYwDYkqgQ+M
-	 TDq+ropT03SVv/Kz0xzU1J6ziHI6cV9BpzNbpfbAQMV0m0/ApN8jGUaFWcorFcT2Q8
-	 8zeg1Iv7ShdlDkqJ1/s8T5pjzCMvvKpBz8UdHMXWis3tHgl+20pomieui8VBMDyu/Z
-	 QFi9FSC7np/Cw==
-Subject: Re: [PATCH net-next 2/2] selftests: net: add an amt test for
- UDP_SEGMENT through the relay
-From: netdev-bot+sashiko@kernel.org
-To: omar@blockcast.net
-Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Mon, 05 Oct 2026 17:33:12 +0000
-Message-ID: <179122159202.434549.13854846307232722099@kernel.org>
-In-Reply-To: <20261001171016.88208-3-omar@blockcast.net>
-References: <20261001171016.88208-3-omar@blockcast.net>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="RZYRNy7X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=BvfWz4wUp+IErnw5zVN/AdzZtRqcY8f
+	SnEXQExAZlUw=; b=RZYRNy7XKptZ48e02DwAJMnDXQb8LREf5r/v41iUPIddymB
+	Mkn3wOkMvGfnUp4L2kO2VZD4+pMvxVeP0WP1MLSOtuAJG/VuJomL4odyGPljygvz
+	nionbTFog1/kDbI1pClCpcUsEFTVvlsMPCQDEam559fzxa1/N3H3SwIzwbl0=
+Received: from [172.17.0.2] (unknown [101.6.30.195])
+	by web1 (Coremail) with SMTP id yAQGZQAXjj5z7cNqfPTAAA--.64526S4;
+	Tue, 06 Oct 2026 02:33:27 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Date: Mon, 05 Oct 2026 18:33:24 +0000
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Cover non-trusted pointer to
+ __arg_trusted subprog arg
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
-Thank you for your contribution! Sashiko AI review found 6 potential
-issue(s) to consider.
-
-Critical: 0 · High: 0 · Medium: 2 · Low: 4
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] In amt_gso.sh, a capture helper that fails is not noticed.
-- [Medium] The READY handshake in amt_gso.sh does not actually make the
-  sender wait for the listeners.
-- [Low] The new test depends on AF_PACKET, but CONFIG_PACKET is not in
-  the net selftests config fragment.
-- [Low] If the AMT tunnel never comes up, the script reports SKIP and
-  exits, so a regression in AMT discovery/request/update becomes a skip…
-- [Low] In do_send() (amt_gso.c:148), `total = c->cnt * c->seg + c->tail`
-  is computed in unsigned int and only then compared with MAX_DGRAM.
-- [Low] wait_tunnel() (amt_gso.sh:124-130) reuses $TMPD/probe.out on
-  every iteration and for both families, and never clears it in the…
-
---
-
-selftests: net: add an amt test for UDP_SEGMENT through the relay
-
-This adds amt_gso.sh and a C helper, amt_gso. The test sends a
-UDP_SEGMENT burst from a sender on the AMT relay to a listener behind the
-gateway, over IPv4 and IPv6. It checks payloads and drop and checksum
-counters, and uses AF_PACKET captures on amtr and gw_relay to check frame
-sizes and AMT message counts.
-
-> diff --git a/tools/testing/selftests/net/amt_gso.c b/tools/testing/selftests/net/amt_gso.c
-> new file mode 100644
-> index 0000000000000..96c002e585914
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/amt_gso.c
-> @@ -0,0 +1,473 @@
-
-[ ... ]
-
-> +static int do_send(const struct cfg *c)
-> +{
-> +	static uint8_t buf[MAX_DGRAM];
-> +	struct sockaddr_storage dst, src;
-> +	socklen_t dlen, slen;
-> +	unsigned int total, ifindex, i;
-> +	int fd, ttl = 8, zero = 0;
-> +
-> +	total = c->cnt * c->seg + c->tail;
-> +	if (total > MAX_DGRAM || (c->tail && c->tail < sizeof(struct chunk_hdr)) ||
-> +	    c->seg < sizeof(struct chunk_hdr)) {
-> +		fprintf(stderr, "amt_gso: bad sizes\n");
-> +		return 2;
-> +	}
-
-[Severity: Low]
-This isn't a bug for the values amt_gso.sh passes, but can this product
-wrap before it is compared with MAX_DGRAM?
-
-total is an unsigned int, so arguments such as -c 65536 -s 65536 give a
-small total that passes the check. fill_dgram() then writes the full
-cnt * seg + tail bytes into the 65507-byte static buf[].
-
-do_recv() follows the same pattern:
-
-	unsigned int per = chunks_per_dgram(c), expected = c->num * per;
-	...
-	seen = calloc(expected ? expected : 1, 1);
-	...
-	if (seen[h.seq * per + h.idx]++) {
-
-If expected wraps, seen[] is allocated too small and this index can write
-past it.
-
-This needs large values passed by hand. amt_gso.sh only uses small fixed
-sizes.
-
-[ ... ]
-
-> +static int do_sniff(const struct cfg *c)
-> +{
-> +	static uint8_t buf[MAX_DGRAM + 256];
-> +	unsigned int n = 0, max_len = 0, over = 0, amt = 0;
-> +	struct sockaddr_ll sll = { .sll_family = AF_PACKET };
-> +	struct timespec t0, last, now;
-> +	struct tpacket_stats st = { 0 };
-> +	socklen_t stlen = sizeof(st);
-> +	int fd, rcvbuf = 32 << 20;
-> +
-> +	fd = socket(AF_PACKET, SOCK_DGRAM, htons(ETH_P_ALL));
-> +	if (fd < 0)
-> +		die("socket(AF_PACKET)");
-
-[Severity: Low]
-Should CONFIG_PACKET be added to tools/testing/selftests/net/config?
-
-Both captures in run_burst() need an AF_PACKET socket here, and every
-run_case() verdict depends on them. The config fragment lists
-CONFIG_AMT=m, CONFIG_BRIDGE=y and CONFIG_VETH=y, but not CONFIG_PACKET.
-
-On a kernel built from that fragment without CONFIG_PACKET, both sniffers
-exit through die() before printing READY. The script then ends up in the
-empty field() handling in run_case() described below, and does not skip
-cleanly.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/net/amt_gso.sh b/tools/testing/selftests/net/amt_gso.sh
-> new file mode 100755
-> index 0000000000000..8b32f17b6f6b3
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/amt_gso.sh
-> @@ -0,0 +1,269 @@
-
-[ ... ]
-
-> +wait_tunnel()
-> +{
-> +	local fam=$1 v6="" grp=$GRP4 src=$SRC4 port=4999 i
-> +
-> +	[ "$fam" = 6 ] && { v6=-6; grp=$GRP6; src=$SRC6; port=6999; }
-> +
-> +	for i in $(seq 40); do
-> +		ip netns exec "$LISTENER" $AMT_GSO recv $v6 -p $port \
-> +			$PROBE_OPTS -T 1 >"$TMPD/probe.out" &
-> +		local pid=$!
-> +		busywait 5000 grep -q READY "$TMPD/probe.out"
-
-[Severity: Low]
-Can this grep match a READY line left in probe.out by an earlier receiver?
-
-probe.out is reused on every iteration and for both families. The
-truncating redirection happens in the background child. If the parent's
-grep runs before the child has opened the file, it sees the READY from an
-earlier failed attempt, or from the IPv4 run when wait_tunnel 6 starts.
-
-The probe is then sent before the new receiver has bound its socket. The
-probe is lost and the loop retries. In the worst case, repeated losses end
-in the "tunnel did not come up" skip.
-
-run_burst() avoids this by running rm -f before it starts its helpers.
-Could the same be done here?
-
-> +		ip netns exec "$RELAY" $AMT_GSO send $v6 -I amtr -g $grp \
-> +			-b $src -p $port $PROBE_OPTS >/dev/null
-
-[ ... ]
-
-> +	rm -f "$TMPD"/{recv,amtr,gw,send}.out
-> +
-> +	ip netns exec "$LISTENER" $AMT_GSO recv $v6 -p $port $opts -T 3 -S 15 \
-> +		>"$TMPD/recv.out" &
-> +	pid_r=$!
-> +	ip netns exec "$RELAY" $AMT_GSO sniff -I amtr -p $port -M "$AMTR_MTU" \
-> +		-o -T 20 >"$TMPD/amtr.out" &
-> +	pid_a=$!
-> +	ip netns exec "$GATEWAY" $AMT_GSO sniff -I gw_relay -p $PORT_AMT \
-> +		-M 1500 -i -a $v6 -T 20 >"$TMPD/gw.out" &
-> +	pid_g=$!
-> +	for f in recv amtr gw; do
-> +		busywait 5000 grep -q READY "$TMPD/$f.out"
-> +	done
-
-[Severity: Medium]
-What happens when one of these busywait calls times out?
-
-busywait() in lib.sh returns 1 after the timeout. That result is ignored
-here and in wait_tunnel(), so the counters are sampled and the sender
-starts anyway.
-
-If a capture has not bound its AF_PACKET socket yet, frames can cross
-amtr or gw_relay without being seen. That would give a spurious
-gwn != EXPECT failure. It could also leave big at 0, which turns a tx on
-GSO case into a skip.
-
-The commit message says slow helper startup on a loaded guest caused the
-earlier flakiness.
-
-There is a related ordering question later in run_burst():
-
-	kill -TERM $pid_a $pid_g
-	wait $pid_a $pid_g
-
-do_sniff() installs its handler just before printing READY:
-
-	signal(SIGTERM, sniff_sig);
-	printf("READY\n");
-
-A sniffer that is still starting up is killed by the default action and
-prints no SNIFF line. run_case() then works with empty fields, as
-described below. Since wait discards the exit status, a helper that never
-started is not reported either.
-
-[ ... ]
-
-> +	run_burst "$fam" "$gso"
-> +	big=$(field "$TMPD/amtr.out" over_mtu)
-> +
-> +	gwn=$(field "$TMPD/gw.out" amt_data)
-
-[ ... ]
-
-> +	check_err $(($(field "$TMPD/amtr.out" lost) + \
-> +		     $(field "$TMPD/gw.out" lost) != 0)) \
-> +		"a packet capture lost frames, the verdict is unreliable"
-> +	check_err $RECV_RC "listener did not get every datagram intact"
-> +	check_err $((DROPS != 0)) "relay_gw dropped $DROPS packets"
-> +	check_err $((CSUMERR != 0)) "gateway counted $CSUMERR csum errors"
-> +	check_err $((gwn != EXPECT)) \
-> +		"gateway saw $gwn AMT data messages, expected $EXPECT"
-> +	check_err $(($(field "$TMPD/gw.out" over_mtu) != 0)) \
-> +		"frames larger than the MTU were put on the wire"
-> +
-> +	if [ "$tx" = on ] && [ "$gso" = 1 ]; then
-> +		# Without this the case proves nothing about the driver.
-> +		if [ "$big" = 0 ] && [ $RET -eq 0 ]; then
-> +			RET=$ksft_skip
-> +			retmsg="no GSO skb reached amt_dev_xmit()"
-> +		fi
-> +	else
-> +		check_err $((big != 0)) \
-> +			"a frame larger than the MTU reached amt_dev_xmit()"
-> +	fi
-> +
-> +	log_test "$name"
-> +}
-
-[Severity: Medium]
-How are these checks meant to behave when a sniffer exited without
-printing its SNIFF line?
-
-do_sniff() prints SNIFF only at the very end. Every die() path leaves the
-output file empty: socket(AF_PACKET), if_nametoindex, bind, poll and
-recvfrom. So does a SIGTERM that arrives before the handler is installed.
-
-run_burst() ignores both the busywait results and the exit status from
-wait $pid_a $pid_g. In that case field() returns an empty string.
-
-If gw.out has no SNIFF line, the first check_err expands to something
-like:
-
-	$((0 +  != 0))
-
-That is a bash arithmetic syntax error. The over_mtu check on gw.out has
-the same problem.
-
-Bash then discards the whole top-level run_case command. log_test is never
-reached, no TEST line is printed, and EXIT_STATUS is not updated.
-
-With CONFIG_PACKET=n, both sniffers die in socket(AF_PACKET) and all six
-cases are dropped this way. wait_tunnel() still succeeds because it does
-not use the sniffer, so the script exits with 0.
-
-If only amtr.out has no SNIFF line, the first expression is still valid
-and gives 0, but big is empty. In the tx on GSO cases, this test is then
-false:
-
-	if [ "$big" = 0 ] && [ $RET -eq 0 ]; then
-
-So the "no GSO skb reached amt_dev_xmit()" skip is never taken, and the
-case can pass without showing that a GSO skb reached the driver.
-
-In the other cases, $((big != 0)) treats the empty variable as 0 and
-passes with no data behind it.
-
-Would it make sense for run_burst() to check the busywait results and the
-sniffers' exit status, and for run_case() to fail when a SNIFF line is
-missing?
-
-[ ... ]
-
-> +setup_topology
-> +
-> +wait_tunnel 4 || { log_test_skip "IPv4 AMT tunnel did not come up"
-> +		   exit $EXIT_STATUS; }
-> +wait_tunnel 6 || { log_test_skip "IPv6 AMT tunnel did not come up"
-> +		   exit $EXIT_STATUS; }
-
-[Severity: Low]
-Should this be reported as a failure rather than a skip?
-
-By this point the script has checked that iproute2 supports amt, and
-setup_topology() has created both amt devices. If 40 probes then fail to
-reach the listener, no prerequisite is missing. Discovery, request or
-update is not working.
-
-As written, an AMT forwarding regression shows up as SKIP and none of the
-six cases run. amt.sh reports [FAIL] in the same situation.
-
-[ ... ]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261005-a3-arg-trusted-v4-v2-2-319ce2936949@mails.tsinghua.edu.cn>
+References: <20261005-a3-arg-trusted-v4-v2-0-319ce2936949@mails.tsinghua.edu.cn>
+In-Reply-To: <20261005-a3-arg-trusted-v4-v2-0-319ce2936949@mails.tsinghua.edu.cn>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: Yonghong Song <yonghong.song@linux.dev>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Shuah Khan <shuah@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+ Song Liu <song@kernel.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791225207; l=2552;
+ i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
+ bh=Fun/YY4Lj4ooQUInoo5MERLda9ccTkcQOBVDuFQC9sw=;
+ b=9QHGlKc4z6GEWfqpCoaswPIomnvqBtkpo2OkU0CVgAtoOtb4qlHf3Ijc34M3Zz5Xgj/082foc
+ qKyAqwwGKXRAdU17H5/ZEkXdwwFjrYlfRQpCOjOMrbESwvGWMY4VCaU
+X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
+ pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
+X-CM-TRANSID:yAQGZQAXjj5z7cNqfPTAAA--.64526S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxuF4UJFyrCw4Utr4Utr1DWrg_yoW5GFW5pF
+	4kAwnxXayxtan2q34fJr47ur4SgF1rZ34rGr1fX34fuFs8JFn7Gry8KF4YqrW5Crn5KFna
+	vrWqgrZI9rnrKaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_Cr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
+	x4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1lnxkEFV
+	AIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E74AGY7Cv6cx26r4rKr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
+	kI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxE
+	wVAFwVW5MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2IqxV
+	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+	6r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+	WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
+	6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+	1UYxBIdaVFxhVjvjDU0xZFpf9x07Uh2-5UUUUU=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+
+verifier_global_ptr_args.c already covers passing an untrusted pointer
+to a __arg_trusted argument, which is rejected by the register type
+match. It does not cover the bare PTR_TO_BTF_ID or MEM_RCU flavors, both
+of which the type match accepts.
+
+Add two cases. The first walks task_struct->last_wakee out of a trusted
+current task and passes the result to a __arg_trusted subprogram
+parameter; the field has no __rcu tag and is not in
+BTF_TYPE_SAFE_RCU(task_struct), so the load yields a bare PTR_TO_BTF_ID.
+The second passes task_struct->real_parent, which is __rcu and on
+BTF_TYPE_SAFE_RCU(task_struct), so the load yields
+PTR_TO_BTF_ID | MEM_RCU. Both calls are expected to be rejected with
+"must be referenced or trusted".
+
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+---
+ .../selftests/bpf/progs/verifier_global_ptr_args.c | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
+index dcc2dd46751a4..6765fd4b4a239 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_ptr_args.c
+@@ -289,6 +289,46 @@ __weak int subprog_void_untrusted(void *p __arg_untrusted)
+ 	return *(int *)p;
+ }
+ 
++__weak int subprog_trusted_bare(struct task_struct *task __arg_trusted)
++{
++	return task->pid;
++}
++
++SEC("tp_btf/task_newtask")
++__failure
++__msg("R1 must be referenced or trusted")
++__msg("Caller passes invalid args into func#{{.*}} ('subprog_trusted_bare')")
++int bare_to_trusted(void *ctx)
++{
++	struct task_struct *cur = bpf_get_current_task_btf();
++	struct task_struct *wakee;
++
++	if (!cur)
++		return 0;
++	wakee = cur->last_wakee;
++	if (!wakee)
++		return 0;
++	return subprog_trusted_bare(wakee);
++}
++
++/*
++ * real_parent is __rcu and on BTF_TYPE_SAFE_RCU(task_struct), so the load
++ * yields PTR_TO_BTF_ID | MEM_RCU. That is neither referenced nor trusted and
++ * must not satisfy __arg_trusted.
++ */
++SEC("tp_btf/task_newtask")
++__failure
++__msg("R1 must be referenced or trusted")
++__msg("Caller passes invalid args into func#{{.*}} ('subprog_trusted_task_nullable')")
++int memrcu_to_trusted(void *ctx)
++{
++	struct task_struct *cur = bpf_get_current_task_btf();
++
++	if (!cur)
++		return 0;
++	return subprog_trusted_task_nullable(cur->real_parent);
++}
++
+ __weak int subprog_char_untrusted(char *p __arg_untrusted)
+ {
+ 	return *(int *)p;
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261001171016.88208-1-omar%40blockcast.net
+2.43.0
+
