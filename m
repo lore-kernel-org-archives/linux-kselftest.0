@@ -1,182 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B95E47DFB9;
-	Mon,  5 Oct 2026 11:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A52223DEA
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2026 11:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791200016; cv=none; b=OA6b1DOp5X+myjozcRP3MVPfqEHdbuPDuxbFrqguE8AsjXMXP0N09p6x8lfV3zJwoudtm4ZXu6DG/XjdWzvaEMHX4zCkv5uHBrtYyA/N9zJ08C84MLjCAP/aScpo0kEpIW9Z9AUgUtjBKsffwqzR9NyD53KycH3H6AQYUC95XpQ=
+	t=1791201059; cv=none; b=IkkKq1kD3U+zj9hQVyPWCh5NMx2VqSwfcAqb6+m6WNx2KDjZ71Ct2NOCIJIBYiNyuDxZ8UJG9lZghxaGWcnnU1yuTykex1uLmBno89C7UWffd5YQlxC9iojjolKsaLpvN5OEJ/KeB59gLXNL41QOBcvSr8JefHyNU0/vWJBecEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791200016; c=relaxed/simple;
-	bh=ahBIlnJEjw2sBwQJf8wwHpcKkVLVi+ixJDkQPGiwDsI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TK1thZL7s2A078pDYRxN+aKOO6rZV3pE3Yd2gZ4qXvqfYbd3qLC9/rgPnqSKBNR2Z0iGljhKpz2bTyMK6cqdVU/xmPsxKRoGO08QOUFmRAHpD7OTjw235fg5vccvTvM5Cfbu2mPPO3gxbdiqyaK3j3aZQcmIpH4LYe5lYBFNdM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=daXvwKBf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791201059; c=relaxed/simple;
+	bh=e3CuOM2eCvGmHoYcmlFPplrZp0K02m2jIXVmvukgLTM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MCobp2jAq1gykUE30d9G0tj3xWAE5PNqurbmMVOI7vGDJY2M/Jy137yLJG9JeZVoatCWeRvRdYqgPH72+gRMorLN4BAGfb4N4u1l5JkRzXPrOYF+sllLCwdl8FiQvy7+mxdarFBx0cUoxoFRFB4SxEwnkQqeWsB6ZQG+LXkd64s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HLauzBld; arc=none smtp.client-ip=74.125.227.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="daXvwKBf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9607C1F000FF;
-	Mon,  5 Oct 2026 11:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791200015;
-	bh=44k8QmXo0RbzfFYGwBkCWl1z3Rv7AbzCxmoTN/2j7jE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=daXvwKBfn45TTkPjYEogaW/8bzC7dWExtHjFuOSW+CTnZI8UZJqisOLHtEWUxdmjS
-	 WfR76xQK5ZicHJnvrYGEoLXulXVsrCIzmDyJ9lsvn8Rzme4/ipxNWMP0d8csQdQyTH
-	 qW0Up9Ia05nx3LwvkJ5rKWOUxTVuME3Q7ijIutS1DFPEMA2qqB/G/NducNpTv5StJI
-	 EuTNz1S1c7ZbizJub5Xe5DXhXe87wAdSVK6m/xr550MJVVsJXo+zptvU1KjUHk/VFy
-	 Ep4ud9da7IQSmdxwQ57Hqx3JmE1yzEUstTeqq86eR2N+WPAHxLwii/mxOSjLUaxaYk
-	 r6mFtzcpuM+QA==
-Date: Mon, 5 Oct 2026 13:32:52 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: Jay Wang <wanjay@amazon.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Christian Heusel <christian@heusel.eu>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-trace-kernel@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
-	Bjoern Doebel <doebel@amazon.de>,
-	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
-Subject: Re: [PATCH bpf-next v4 09/12] bpf, trace, net: prepare
- CONFIG_DEBUG_INFO_BTF checks for a tristate
-Message-ID: <asOK5Gl1Oe9d5bwr@derry.ads.avm.de>
-Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
-	Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Christian Heusel <christian@heusel.eu>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-trace-kernel@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
-	Bjoern Doebel <doebel@amazon.de>,
-	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
-References: <20261001225214.12351-1-wanjay@amazon.com>
- <20261001225214.12351-10-wanjay@amazon.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HLauzBld"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-3a4c8262465so1274524a91.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 04:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791201057; x=1791805857; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=e3CuOM2eCvGmHoYcmlFPplrZp0K02m2jIXVmvukgLTM=;
+        b=HLauzBld6OB1jTJcwIjaKdOQlgdQIWME9ns3a3QtMls4+FjLHqc77dM6+iQBw+xZRf
+         qG1LxV098oSnOxSZu/46qi24vR0u+ix+FlWmWbWFIkmjrp5OiO8SyQluqm05tZLTOLUP
+         BPVEHCY6jTXOe1xP47qVnCp0s0oy22jE1vGsTrZoWo8PYRfb2Klvafs73dfNg3s36RfV
+         jgTgtPuzMkqcKpf1r8zZ++G+l9+1a1EeWYifiblZPtD3Hp0o9zRBK0SzsBzdz6bPAWWt
+         Vk2yob0Eb3+Q+SVC0qwPJvJN95+EYqD0LaYpSd6gZH3w25Vi8uQQQA0lvybuT6FlljYN
+         LjWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791201057; x=1791805857;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=e3CuOM2eCvGmHoYcmlFPplrZp0K02m2jIXVmvukgLTM=;
+        b=0f2geHbI5SVMVaOXd7jJHL8v+QOySo0KcVbi1qC5ovBIeO/WNhqwQECT+6Ibge3f2t
+         PochNiJpnarddqjV+uRZl4IDFj76gfY2JXRI0p0BwM5siDMkD3ig0qQHZeOLJtd8Jehk
+         0xUFwSVcP8CTGb3bl/ebEkj585312oUUtbUS3Mfxt0E+KBM4YT4BT4iZpoUsgi20x0XJ
+         Z870EGeGExMskwnnceCf09c86wIHayyDAPpdrUXXqXdvcm+2O5yXXDDjANq5bJ40CBYq
+         B0ulY2rGqfiSxVLcKhPqIU1WeTrNGsgANCOjWWjo5fcBciF8plgBv6em5dvIJgaiw4jJ
+         FESQ==
+X-Forwarded-Encrypted: i=1; AKwUvByi356+hohNxv5IXqsW0yon407uR9yRiomBdD9THVTsmKudKoxwqxWfNkSLVotoPP1qy0J/6uj1G/EqAQM55kU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLfNCFWyTE4FlCBXJ0dFyDwO9q7s/CheUwxpl5RpCgadbERUHr4
+	6oLFHItXjskNi9PaQ7XY7/vNYaE4e6GXwon7PoOvlvjfug8UqbB2Fks=
+X-Gm-Gg: AYBFou38PAx1dMbrsy0RbLkg3zOTcY40rjSjf+V+a9IvNx3Y8ZsJiY1NwgJpv6Qm8IS
+	9OrviB/tMdBzDjOkZHqsjnSFHkbzOS1AC9VraUbrFBBN8I4DfHcRDmc21+9fX69ew0TfcBvhodR
+	fgMAFFdeEtp5izDVP6lnyW0QLn9kxb+n0liFFEBtqGEf9YoukRaE5ImtEzjX62MI93GOHPGvm98
+	keiKt11098XSkDDDYxTwk4QYh6kdQB7FzowtoPu/W5Vt+VoWWQOJBvQOG0h3YNYDMbo1BeYYVPo
+	wBXrG+wn61HaWwtMgadu43Yl7X+OQf9q4cVXb72hlq7FEh1XceZYmSEr4WdI5z8RFl0jeBsX43T
+	REHk5IdScpJJv9lRfXCx2VdRQmhRm1ucvN02YetXbYsbfiSS6s3+2p3H8IbKWVpVV9fvz10WXWt
+	Sf/j2ZC9xoG7OSftEBKfjfcs8wyEYuf9aAZA02uymNTP7vrcElkAM/PD4Wwftj0AnVryA3F3Spb
+	QazzsWzHeDKd9QEpE0PHkAofiA=
+X-Received: by 2002:a17:90b:17ca:b0:3a7:f45:5cbf with SMTP id 98e67ed59e1d1-3a70f45678amr6816057a91.28.1791201057185;
+        Mon, 05 Oct 2026 04:50:57 -0700 (PDT)
+Received: from ydg-Zenbook-14-UM3406GA ([2001:2d8:7102:e8f6:be5c:45bf:9b70:944a])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a78e4262f0sm11942752a91.4.2026.10.05.04.50.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Oct 2026 04:50:56 -0700 (PDT)
+From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+To: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: peterx@redhat.com,
+	surenb@google.com,
+	aarcange@redhat.com,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	kas@kernel.org,
+	donggeunyoo.kernel@gmail.com
+Subject: Re: [PATCH v4 2/2] selftests/mm: add tests for UFFDIO_MOVE of a uffd-protected swap entry
+Date: Mon,  5 Oct 2026 20:50:51 +0900
+Message-ID: <20261005115051.3950585-1-donggeunyoo.kernel@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <4a24f7b1-65f7-4947-a325-7c9e9f642f2a@kernel.org>
+References: <20261003103030.63380-3-donggeunyoo.kernel@gmail.com> <4a24f7b1-65f7-4947-a325-7c9e9f642f2a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261001225214.12351-10-wanjay@amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 01, 2026 at 10:52:11PM +0000, Jay Wang wrote:
-> The next patch makes CONFIG_DEBUG_INFO_BTF a tristate.  With =m, Kconfig
-> defines CONFIG_DEBUG_INFO_BTF_MODULE instead of CONFIG_DEBUG_INFO_BTF,
-> so every check that must hold for both =y and =m has to be written for
-> it:
-> 
->  - #ifdef CONFIG_DEBUG_INFO_BTF becomes #if IS_ENABLED(...) where the
->    generated BTF and its id tables must be the same for =y and =m: the
->    .BTF_ids tables (btf_ids.h), the BTF type tags (compiler_types.h), and
->    the tracepoint and syscall BTF ids (trace_events.h, trace_syscalls.c).
->    Leaving them would silently produce empty id sets with =m.
-> 
->  - obj-$(CONFIG_DEBUG_INFO_BTF) and include-$(CONFIG_DEBUG_INFO_BTF)
->    become $(subst m,y,...) where the object is built into the kernel
->    regardless: sysfs_btf.o, the netfilter and xfrm kfunc objects, and
->    scripts/Makefile.btf.  Otherwise =m would try to build them as
->    modules (xfrm_state_bpf.o fails modpost for lack of MODULE_LICENSE)
->    or skip the BTF generation flags.
-> 
->  - "depends on !DEBUG_INFO_BTF" becomes "depends on DEBUG_INFO_BTF=n"
->    for RUST and GENDWARFKSYMS: with =m the BTF is generated as with =y,
->    so the pahole restrictions they express still apply, but !m is m,
->    which a bool option takes as y.
-> 
-> No functional change: CONFIG_DEBUG_INFO_BTF is still a bool, for which
-> IS_ENABLED() and #ifdef agree, $(subst m,y,y) is y and "=n" is "!".
-> 
-> Signed-off-by: Jay Wang <wanjay@amazon.com>
-> ---
->  Makefile                       | 3 ++-
->  include/linux/btf_ids.h        | 2 +-
->  include/linux/compiler_types.h | 2 +-
->  include/trace/trace_events.h   | 2 +-
->  init/Kconfig                   | 2 +-
->  kernel/bpf/Makefile            | 2 +-
->  kernel/module/Kconfig          | 2 +-
->  kernel/trace/trace_syscalls.c  | 6 +++---
->  net/netfilter/Makefile         | 6 +++---
->  net/xfrm/Makefile              | 4 ++--
->  10 files changed, 16 insertions(+), 15 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 751a08643bf8..f561516e1735 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1208,7 +1208,8 @@ endif
->  # include additional Makefiles when needed
->  include-y			:= scripts/Makefile.warn
->  include-$(CONFIG_DEBUG_INFO)	+= scripts/Makefile.debug
-> -include-$(CONFIG_DEBUG_INFO_BTF)+= scripts/Makefile.btf
-> +# CONFIG_DEBUG_INFO_BTF is a tristate; BTF is generated for both y and m
-> +include-$(subst m,y,$(CONFIG_DEBUG_INFO_BTF)) += scripts/Makefile.btf
+On Mon, 5 Oct 2026 12:43:48 +0200, David Hildenbrand (Arm) wrote:
+> The CI complains as reply to this patch:
+> ...
+> ✗ userfaultfd(2) test failed:
+> # not ok 43 minor-collapse on shmem
 
-Please drop the comment and use the shorter 'm' to 'y' conversion:
+Thanks for passing it on. I couldn't reproduce it here. Could you share
+the full log of the failing run, or a link to it?
 
-include-$(CONFIG_DEBUG_INFO_BTF:m=y)	+= scripts/Makefile.btf
-
-and possibly also for kernel/bpf/Makefile and net/netfilter/Makefile.
-
-Thanks
-
-
--- 
-Nicolas
+Donggeun
