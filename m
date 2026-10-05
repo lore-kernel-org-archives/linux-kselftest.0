@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9A64779A4;
-	Mon,  5 Oct 2026 10:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EAE5478E2C;
+	Mon,  5 Oct 2026 10:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791196829; cv=none; b=ASqRfp9rMi82Gb5t7o4O6MgerHVTnAOSrEVrpR8C4t1SjZo//UynKtvuqvdNQWLf1W2FaZlw6kQXpPffWtxLHeWkrKV3SYy8JwRT6CrFLcY4w4E4d/WdxKDeZvnfZU59m7zrOofm0yiNM2noQL5g5LkuFpYDHTxaWYlSVh1zMLE=
+	t=1791197036; cv=none; b=YKmhjQKjKfJYgmTTZb+RZOvlT6G4MPshUsmlPfp7B0/cU8Gyh9A3Wa+JbrhYtURT/lmtTvPdUP5DJw0r7VSUnVmTpCLPqvN5JSiq1jaXWKZMAFPFDDJHc9XlrLlWsWkKn++eJ1UmEO4atC2ag/EsifPWgmwIsqEWAjtoCURkF8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791196829; c=relaxed/simple;
-	bh=cSmh6EH61T0CFtFArw8zSc7ught3d82GxCtjl8MEd0Q=;
+	s=arc-20240116; t=1791197036; c=relaxed/simple;
+	bh=+Syy2uvKFEEli46sXTLMeSFqCavE7FeW+ue6Wvoqyw8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gWtiW9lBwQIQMA1t3+bVlPb/8LoZYN1P7x/ZphGNZfgC4fCB3foo2TWYLuHjc1fkmVZ+j1yv/nehIy0w6HLZEMcH7PnOjPsyyKT7Mdxq+5tpoh1U/YgEdTvxtGx31918ojFTb5o+zyP3GD7Vq2m6AUUjBmbA6XjvDzTXy3ghzJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f3eJ61++; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=o93OZLUtZXWB9KVnR0br66YtGBxpcK42trQapyI9IXk1VFdHx6mgSEjdBJwNOevap8MFyTErP2np7LG0MYjaLIeX8yiCQ3PKIgIjOssK/1/YBBomewlCBgq8QmO/McCAqqtf7aZBJizpY6sc/a9PB+hWRPJue7NYiw/4tLWUwmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxyjbhaK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f3eJ61++"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E09B81F00893;
-	Mon,  5 Oct 2026 10:40:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxyjbhaK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6530F1F00899;
+	Mon,  5 Oct 2026 10:43:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791196828;
-	bh=Q7TZe/NCZ+icO0PKDYxJ/fuO80LCc3e577phj43P9Ck=;
+	s=k20260515; t=1791197035;
+	bh=I9YxIdWVKeJd4/bB5ayzuob5ZI8t2MLqGLq4CqLRU6E=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=f3eJ61++XadHenVLROSOXXStanh7TrTp4j93m6A8nbwmEXQO9JseyMN20VlTPGSE5
-	 b0+O+FEoqYNXYZ/tslSdjQF0wxWBovxIoZzG6B3vEzD/nVOq6Rey9gqL5X/KRQ9LeM
-	 ADcGzlOTXsV0K/2fjAgN/5MN0hW2qbiEOS00mAOXZQZw/AHx+gLb9DnPk24454anMQ
-	 49eMVveD9Uo+YhrwjuXSw9EWcCIBoCfnT4HxIvugJPOXjDzJsO+y7Yz1EyufGBybbQ
-	 9WCAkKHe6hc0HHva3YZReKW9JrAF/FXVqocKzXWJsbBYwNBN9yvw77qqDHU9ZXmb8U
-	 S+WkCAqiru4Vg==
-Message-ID: <dc44e71f-5f31-4b16-a28b-debc3e5d0f86@kernel.org>
-Date: Mon, 5 Oct 2026 12:40:20 +0200
+	b=YxyjbhaKV4J3KWq5yAbCj043IUW/HILXjLF0F3kkPCQ2WaUvIjK1eq76i4d4auCLp
+	 /KY97mHjSMrICJPPlZd+0gIWHlBgtkFYBX2OoKJwf9/LP0Qe5Ph+XThvZ5E+h0iSqK
+	 Cscwr0iirEuj04JnGdZsrnY0ROtyRGzUeLrCqG80YHmMsLm+pk0DTUxr5O1tWwS2SP
+	 VQA5MkeLjX5LRrWHE3lasxUoRzxmdTB9IROC3KXUwv1kzS5QYGNe/i2V5H21pV2fpc
+	 vVOsRAom5vq9ZevdHDyTHCPbeSp2a/sxNECVbqAGEBjIsUE+TLzx0TD+K2xZsxwGRz
+	 A2l/wGOuFT4cg==
+Message-ID: <4a24f7b1-65f7-4947-a325-7c9e9f642f2a@kernel.org>
+Date: Mon, 5 Oct 2026 12:43:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,19 +35,16 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: hugetlb_madv_vs_map: fix TAP plan
- mismatches
-To: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Guillaume Morin <guillaume@morinfr.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <aqgUdbtumaO8RiIb@bender.morinfr.org>
- <20261004230018.190880-1-jaeyeon.lee.dev@gmail.com>
+Subject: Re: [PATCH v4 2/2] selftests/mm: add tests for UFFDIO_MOVE of a
+ uffd-protected swap entry
+To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>, akpm@linux-foundation.org,
+ rppt@kernel.org
+Cc: peterx@redhat.com, surenb@google.com, aarcange@redhat.com,
+ ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, mhocko@suse.com,
+ shuah@kernel.org, kas@kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261003103030.63380-1-donggeunyoo.kernel@gmail.com>
+ <20261003103030.63380-3-donggeunyoo.kernel@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -94,28 +91,38 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20261004230018.190880-1-jaeyeon.lee.dev@gmail.com>
+In-Reply-To: <20261003103030.63380-3-donggeunyoo.kernel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/5/26 01:00, Jaeyeon Lee wrote:
-> The plan was raised from 1 to 3, but the HugeTLB setup check that may
-> call ksft_exit_skip() still runs after ksft_set_plan(), so a setup
-> failure reports one result against a plan of 3. Move ksft_set_plan()
-> below the setup check.
+On 10/3/26 12:30, Donggeun Yoo wrote:
+> Move a swapped-out page out of a write-protected or RWP-protected area into
+> a destination registered for missing faults only, and read pagemap bit 57
+> at the destination.  The destination was never protected, so the bit must
+> be clear.
 > 
-> Also, when the underflow check fails, or munmap() fails,
-> test_underflow() jumps to err_cleanup and exits without reporting the
-> remaining results. Report the munmap() failure as a test result and
-> skip the final HugePages_Rsvd check in err_cleanup, so the output
-> always contains the planned 3 results.
-> 
-> Fixes: 827149aad495 ("selftests/mm: hugetlb_madv_vs_map: add underflow test")
 > Assisted-by: LLM
-> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
 > ---
+>  tools/testing/selftests/mm/uffd-unit-tests.c | 84 ++++++++++++++++++++
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+The CI complains as reply to this patch:
+...
+Running userfaultfd(2) test
+✗ userfaultfd(2) tests failed
+Running VMA merge test
+# # Totals: pass:27 fail:0 xfail:0 xpass:0 skip:0 error:0
+# SUMMARY: PASS=1 SKIP=0 FAIL=0
+✓ VMA merge tests passed
+Running vmalloc test
+# SUMMARY: PASS=1 SKIP=0 FAIL=0
+✓ vmalloc tests passed
+==========================================
+✗ userfaultfd(2) test failed:
+# not ok 43 minor-collapse on shmem
+------------------------------------------
+
+Didn't look into the details / trying to reproduce.
 
 -- 
 Cheers,
