@@ -1,120 +1,177 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCA3B47CC8E;
-	Mon,  5 Oct 2026 11:12:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2C631F989;
+	Mon,  5 Oct 2026 11:33:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791198754; cv=none; b=B00OvLOYGEbZf9EivyPWFdT3eaD5c9QaxIm/I2gih9IcOEJs8SQKI8//7uENP/I7uGsu869sZotGnMd5jO9RwSej0xoCfYVFaY+aAozUKXUgnp7yIVpQPr2ePSWqK3SQkvJUq8FPSUuXg0Nl7gHLKmoqO3VlhnBNOSuBuUk8yyE=
+	t=1791200013; cv=none; b=nBW5HHe91frdpTjpBoYu2VeOtTD/4KQoaRmB90jUD5xR06gQgLcEYK1IguOBkmaxVGkrt2jMeot+Wuht0+VKPtfNNanbAmmS7RBUzRV1+vztcZwycKJNpfbn7X1uC7bsTCvYNBP9TR6MsjwPMkonUCEqbEoeASMbITl7PkvqVKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791198754; c=relaxed/simple;
-	bh=MEZ3+wQPyUj1ckIQWi+S/NiOG90urc2hAt/8uUoF0i4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tbyXBQNNVkSsXyFegX444TYRzjOKEksfIIlj++y7ukDQoYrNYf+pkpGjnNX0r8GSa65fVxeXKAZAvyHZm6VQueJ0TWdYBdr18rzAZA83Ep5N+HFv5Lv1pkwi4uLuTTHVVXVA7y48536qBA2RlfcEA9rm+TztVPMZ4/ixSDUNd3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=DiAmdi5c; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1791200013; c=relaxed/simple;
+	bh=Wpr48c94oU5+NvzPcit0pqXalaVgtcp9KdCZNclssVY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X8jMVXeL7TlbVEZsbJU9uWLOhXOpOt6JMsIWa0kVWvta6QAIRxZBeQp76aBGFsT410PsnH523H6O8PimdwY2XCCX2vaxYkBdzKHnPmM1AYzNH5AWj2chZzdbBs0uoPz6Y4Og8ucCp+52nC2GBBm9pyfajJQ5K1VTYvzl0HV1mqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAIHjFWA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="DiAmdi5c"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74D60152B;
-	Mon,  5 Oct 2026 04:12:28 -0700 (PDT)
-Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B1E33F86F;
-	Mon,  5 Oct 2026 04:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1791198751; bh=MEZ3+wQPyUj1ckIQWi+S/NiOG90urc2hAt/8uUoF0i4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DiAmdi5cLAEzN4qUXoEyyBne5c2jWgZqTfITHQYH+W3s110u1+BSV4Bz3tXPmX99m
-	 TJWwBfGj/ceU7duWZCm7oID2NfY4ENQhfXBNeQMwJOXRIUGM+DJ/atEaav4avPLiHY
-	 K1EmaZH8Y5GxZMy/3SsdVdjY6phLG2JyrY4LDeyw=
-Message-ID: <ef380330-b15f-412b-a517-15383913e45d@arm.com>
-Date: Mon, 5 Oct 2026 16:42:25 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAIHjFWA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B80CC1F000FF;
+	Mon,  5 Oct 2026 11:33:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791200012;
+	bh=CDSI1fzd06xogRlRsAAlSIYZUx/yG6yhOmXVab/hmYc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=DAIHjFWAxf3xmj/jwYqfZwZ3E1mfmWBY9gBGxuEz+hac12tLDEw1xFYEQai0vqGXr
+	 jv3ltiorrhLfi+YBk4d0asUZKPAWiQQzrw3Qbx9y9k0u9CBjZmqR3vQRqM0A4YxSAE
+	 iiovdQT0LoDxmYm/9q/caD/w+O/o18v1JgDKvZVuQmdQbgeZt13oSKtalEfh6pWnCq
+	 xyqUqNNRIsn3ptFwE7sm24QRwi1YS6P5LeHZxFJBCmGMhsTKS0RYmsY9vQ+HsINNyY
+	 QVInw/TGlIBjwKHGRD6i6noNqm8SLkI6cm2x1sWh+Q0ojxZRHXJIvUw0d5RPUF7AkF
+	 PYy1fF/7cq7zw==
+Date: Mon, 5 Oct 2026 13:17:12 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Jay Wang <wanjay@amazon.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Christian Heusel <christian@heusel.eu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-trace-kernel@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
+	Bjoern Doebel <doebel@amazon.de>,
+	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
+Subject: Re: [PATCH bpf-next v4 11/12] tools, samples: take the vmlinux BTF
+ from vmlinux.unstripped first
+Message-ID: <asOHOPlWCp1kKZiT@derry.ads.avm.de>
+Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
+	Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Christian Heusel <christian@heusel.eu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-modules@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-trace-kernel@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	linux-perf-users@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hazem Mohamed Abuelfotoh <abuehaze@amazon.com>,
+	Bjoern Doebel <doebel@amazon.de>,
+	Martin Pohlack <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
+References: <20261001225214.12351-1-wanjay@amazon.com>
+ <20261001225214.12351-12-wanjay@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: hugetlb_madv_vs_map: fix TAP plan
- mismatches
-To: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Guillaume Morin <guillaume@morinfr.org>
-Cc: David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Breno Leitao <leitao@debian.org>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <aqgUdbtumaO8RiIb@bender.morinfr.org>
- <20261004230018.190880-1-jaeyeon.lee.dev@gmail.com>
-Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <20261004230018.190880-1-jaeyeon.lee.dev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261001225214.12351-12-wanjay@amazon.com>
 
-Hi Jaeyeon!
-
-On 10/5/26 4:30 AM, Jaeyeon Lee wrote:
-> The plan was raised from 1 to 3, but the HugeTLB setup check that may
-> call ksft_exit_skip() still runs after ksft_set_plan(), so a setup
-> failure reports one result against a plan of 3. Move ksft_set_plan()
-> below the setup check.
+On Thu, Oct 01, 2026 at 10:52:13PM +0000, Jay Wang wrote:
+> With CONFIG_DEBUG_INFO_BTF=m, which the next patch makes possible, the
+> vmlinux BTF is not part of vmlinux: scripts/Makefile.vmlinux strips .BTF
+> from it, and only vmlinux.unstripped, from which vmlinux is made, keeps
+> it.  The tools and samples that generate vmlinux.h from a kernel build
+> tree take the first vmlinux they find, so after an =m build they would
+> pick one without BTF and fail, e.g. the bpftool skeletons when bpftool is
+> built from the kernel tree right after the kernel.
 > 
-> Also, when the underflow check fails, or munmap() fails,
-> test_underflow() jumps to err_cleanup and exits without reporting the
-> remaining results. Report the munmap() failure as a test result and
-> skip the final HugePages_Rsvd check in err_cleanup, so the output
-> always contains the planned 3 results.
+> Look for vmlinux.unstripped before vmlinux in each of these lists.  Every
+> kernel build produces it, and with =y it carries the same BTF as vmlinux,
+> so nothing changes there.  perf filters the candidates for a .BTF
+> section, but its unanchored grep also matches .BTF_ids and .BTF.link,
+> which vmlinux keeps with =m; match the section name exactly.
 > 
-> Fixes: 827149aad495 ("selftests/mm: hugetlb_madv_vs_map: add underflow test")
-> Assisted-by: LLM
-> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+> Signed-off-by: Jay Wang <wanjay@amazon.com>
 > ---
->  tools/testing/selftests/mm/hugetlb_madv_vs_map.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  samples/bpf/Makefile                       | 6 +++++-
+>  samples/hid/Makefile                       | 6 +++++-
+>  tools/bpf/bpftool/Makefile                 | 6 +++++-
+>  tools/perf/bpf_skel.mak                    | 8 ++++++--
+>  tools/sched_ext/Makefile                   | 6 +++++-
+>  tools/testing/selftests/bpf/Makefile       | 6 +++++-
+>  tools/testing/selftests/hid/Makefile       | 6 +++++-
+>  tools/testing/selftests/sched_ext/Makefile | 6 +++++-
+>  8 files changed, 41 insertions(+), 9 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-> index 1d111f42dd59..5dc44ff0a377 100644
-> --- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-> +++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-> @@ -169,6 +169,7 @@ void test_underflow(void)
->  	/* First unmap, this will close the vma */
->  	if (munmap(huge_ptr, mmap_size) != 0) {
->  		ksft_perror("munmap failed");
-> +		ksft_test_result_fail("munmap failed\n");
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index c28e65046986..fb5cd2d5b6f8 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -305,8 +305,12 @@ $(obj)/$(TRACE_HELPERS): TPROGS_CFLAGS := $(TPROGS_CFLAGS) -D__must_check=
+>  
+>  -include $(BPF_SAMPLES_PATH)/Makefile.target
+>  
+> -VMLINUX_BTF_PATHS ?= $(abspath $(if $(O),$(O)/vmlinux))				\
+> +# With CONFIG_DEBUG_INFO_BTF=m only vmlinux.unstripped has the BTF
+> +VMLINUX_BTF_PATHS ?= $(abspath $(if $(O),$(O)/vmlinux.unstripped))		\
+> +		     $(abspath $(if $(O),$(O)/vmlinux))				\
+> +		     $(abspath $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux.unstripped))	\
+>  		     $(abspath $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux))	\
+> +		     $(abspath $(objtree)/vmlinux.unstripped)			\
+>  		     $(abspath $(objtree)/vmlinux)
 
-This is duplicating the "munmap failed" message. Can we simply put a
-ksft_test_result_fail("munmap failed: %s (%d)\n", strerror(errno),
-errno) here?
+(out-of-scope for the concrete patch)
 
-Also, please send your patch in a new thread instead of replying on
-another thread from next time onwards :)
+I am surprised that of these multi-ambiguous path list.  It looks to me
+as if samples/bpf/ and samples/hid/ are always built via Kbuild, thus
+there is proper management of variables like O, KBUILD_OUTPUT and
+objtree already.  I'd expect 
 
->  		goto err_cleanup;
->  	}
->  
-> @@ -203,18 +204,20 @@ void test_underflow(void)
->  	if (waitpid(pid, NULL, 0) <= 0)
->  		ksft_exit_fail_perror("waitpid failed");
->  
-> +	ksft_test_result_skip("HugePages_Rsvd check after child exit\n");
->  	ksft_exit_fail();
->  }
->  
->  int main(void)
->  {
->  	ksft_print_header();
-> -	ksft_set_plan(3);
->  
->  	if (!hugetlb_setup_default_exact(1))
->  		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
->  			       hugetlb_free_default_pages());
->  
-> +	ksft_set_plan(3);
-> +
->  	test_madv_vs_map();
->  	test_underflow();
->  
+		     $(abspath $(objtree)/vmlinux.unstripped)			\
+  		     $(abspath $(objtree)/vmlinux)
 
+to be enough here.  But I may be missing something.
+
+
+Kind regards,
+Nicolas
