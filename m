@@ -1,128 +1,192 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E734CEE48;
-	Mon,  5 Oct 2026 17:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67084DF4AD;
+	Mon,  5 Oct 2026 17:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791221429; cv=none; b=LNR4cvKL+g4PkBfAcF3Rnw5Pfg+Sua4oVdsA8f/n6SqUSPIZx15Jx6Mfe1DO7bCbkWfPD2vYpZHu7L/T7UBPOApMmlmWbMUE0mxDigQ61z+ap++whG31H8xEc6TAHCxFc+C/48s1q6zNOALkDegsnCz9VSlAZ9zGGqqDlWR4ShE=
+	t=1791221594; cv=none; b=W+D3SJahEfukVPUuI8yIDHFwPbobGtxynR6+MxmgohBtmqRNBXMQxD2KZISXUiK7n+t5gDh+wxBdmOCoBOajkA/FS+sMs4mHwBAzI/eTC0ejcgGO+QwCACSQ47zIRDAqqaP5caUWpSeWZl6AQJbrjmRJjgYoDWBbeNMrJ9OtP0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791221429; c=relaxed/simple;
-	bh=y80eDF61NqDQ0A/qHnQbb89yvEVcB2/CncyjErSWxdY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MkVWrqoWGnyM4g8vj2LpmRcW0mQrl73PqJDQmcYUcjN5D2hg4sGqSkOIGOesD+w+CYTLnOc+XdM1DBhU4sCL1Q4Ob5tNxUWGofuxkplLHBSVnTfn+126MaoAEdxSWqMG90qyTeaODjAHB3q10VDr6Nfs8XYi+DR8BH1kQq3nWSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fnn/nFq8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791221594; c=relaxed/simple;
+	bh=NyO1MpEEqV2oCEgWZd7PHPfMsNhT/6F2ZNA85eJrmgQ=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=s+zVYM/xji6L9MHhdUpJuOjn/peSCPHJS6U442iX6Yt/qQ/6ZZk7lTC72Hwwzp04eCobJxgp5JlPR+P7hUZScXELWYc65n2GdB6QxnV3+VY+MQIQiCCgPg1zT0ORUUqgF4K2p4e89BCDzZRFEncikG/MmIbgUuZxSWcaOjESGYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bghpwev5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fnn/nFq8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5AE31F000FF;
-	Mon,  5 Oct 2026 17:30:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bghpwev5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30AF71F00898;
+	Mon,  5 Oct 2026 17:33:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791221422;
-	bh=2S8sboOkN30YQsk+3u7LYDimtoghpZTYWEdAeieFXzg=;
-	h=From:Date:Subject:To:Cc;
-	b=Fnn/nFq8gDkyi/mqILoELEuRVOYUka59OFcCA+TVO8aYMfYIBRVl3mgRwTqzcfJyl
-	 S+p04j17tqVP9i5uucXvmFQ7UInN/cHNa1vF42qT/WIigef6KNZW0XQvj6Rkh4tGFV
-	 RfOeA2pTmozB1pE3c3Xof+p8Ec8eo9e4X/P1QUstQ3IJsjZDAiQFa7En1lTxx17JGq
-	 yBrIkU66ma4MzTUdOpYN3VVKCw4nngHLl71ElCYBjjL0pWcmMolJQdfiDCFB9id6TZ
-	 jQPPLWk5aqr+o5XEYafzKbEx1TfFDWAfHDe2/bNRDV7PB/2adEaPFY+1MVq2MJz1cY
-	 hdPwMQBarB8Zg==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 05 Oct 2026 19:30:12 +0200
-Subject: [PATCH kselftest v2] selftests/lib.mk: run_tests: print summary at
- the end
+	s=k20260515; t=1791221591;
+	bh=EJwOVxDYhCW0ntc+ZXEHjunm1wwV81N7DoLgu6RBB4Y=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=bghpwev5Tkssw8OLXR11YtaAQAAlhFxSkfosn6XIl/Vpkl+s7YKXZmJx6qtaTRdpO
+	 1mXvphFICJtf2NkQ/TLJY149OLbqXgnplwHqvpEFIHa1FvEs2N4hjON4gp/woNwwnG
+	 sOImMHYuj8NPOZVp0Sm/NCvmVWMniLAkk1jyH4X80tfNXeyc5ovOUCqvap+jVgJ60u
+	 pGEbd5odq8WtYdOEY5ITMs45X01dCfg5XUOuTCKIvge7IdAU8BeYtw10olsBxCP2C5
+	 qcCo3oLICqDrwAG/eM2YRUi5EbUOYn94vMsafcmzOwSq0pOQPtfMyoy7HHuDM25Du+
+	 rAigFuJFWq6/w==
+Subject: Re: [PATCH net-next 1/2] amt: mark relay data as a UDP tunnel packet
+ before sending it
+From: netdev-bot+sashiko@kernel.org
+To: omar@blockcast.net
+Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+ horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Mon, 05 Oct 2026 17:33:10 +0000
+Message-ID: <179122159070.434549.6113316880609579101@kernel.org>
+In-Reply-To: <20261001171016.88208-2-omar@blockcast.net>
+References: <20261001171016.88208-2-omar@blockcast.net>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261005-sft-run-tests-print-totals-v2-1-29c45c0e2fe6@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42PQQqDMBREr1Ky7i8maEi76j2ki2h/NFUSyf9Ki
- 3j3RnuBroaZgTfMKgiTRxK30yoSLp58DNmo80m0vQ0dgn9mL1ShdKFVBeQY0hyAkZhgSj4wcGQ
- 7ElhpEK2RZYMoMmBKSHPzwpZ3wp70njimz7G2yCz1X+BFgoTGYWWM0lqV1/uAKeB4iakTj+035
- fz7+FGLgXB0OyZ32xdDuGEd4gAAAA==
-X-Change-ID: 20260625-sft-run-tests-print-totals-a18eea814bee
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2472; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=y80eDF61NqDQ0A/qHnQbb89yvEVcB2/CncyjErSWxdY=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLIO31ubufPJhytPHz+NVK1hbb407U/4gXUOkouXuOaFP
- lf34Zbz7ShlYRDjYpAVU2SRbovMn/m8irfEy88CZg4rE8gQBi5OAZjI/lmMDAcKVRkusO9IuXVp
- Vd5qtgW3T/YvnWF/u6BvRbncDVNR8X2MDLPaDhZ/699plfl+S/RNxrP3BfOqo+xTlePbK258O+f
- TxAQA
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-When there are many tests and/or many log lines, it is difficult to
-quickly find out how the different tests went when running:
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-    make -C tools/testing/selftests run_tests
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
-This run_tests target executes 'run_many' from runner.sh, which relies
-on ktap_helpers.sh. At the end of the execution, the KTAP_CNT_* counters
-have been populated, and the total can then be simply printed with the
-ktap_print_totals helper.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Now a summary is printed at the end, e.g. here with the two last lines:
+- [Medium] Fraglist GSO skbs that reach amt_dev_xmit() are still dropped
+  after this patch, and each attempt hits a WARN_ON_ONCE.
+- [Low] The commit is a bug fix but has no Fixes: tag.
+- [Low] The commit message presents a branch change in udp_set_csum() as
+  a result of the patch, but that change does not happen.
 
-    $ make -sC tools/testing/selftests TARGETS=(...) run_tests
-    # timeout set to (...)
-    # selftests: (...)
-    (...)
-    ok 1 selftests: (...)
-    # timeout set to (...)
-    # selftests: (...)
-    (...)
-    ok 2 selftests: (...) # SKIP
-    # timeout set to (...)
-    # selftests: (...)
-    (...)
-    not ok 3 selftests: (...)
-    # 1 skipped test(s) detected.  Consider enabling relevant config options to improve coverage.
-    # Totals: pass:1 fail:1 xfail:0 xpass:0 skip:1 error:0
+--
 
-This summary is printed, using '#' as prefix to be treated as a comment
-in the TAP format. The summary is also printed when summary=1 is used to
-redirect log lines in different files because it still looks useful when
-there are many tests, not to have to check each line.
+amt: mark relay data as a UDP tunnel packet before sending it
 
-Note that this 'make' command will continue to exit without errors
-(returned code is 0) when the tests can be executed. I guess it is
-better not to change this behaviour to be able to continue detecting
-kselftests failures.
+This patch calls udp_tunnel_handle_offloads() on the copy made in
+amt_send_multicast_data(). GSO relay traffic then has skb->encapsulation
+and SKB_GSO_UDP_TUNNEL_CSUM set before udp_tunnel_xmit_skb() gets it. It
+also resets the mac header of the copy so that inner_mac_header points at
+the inner IP header, and it replaces an earlier patch that stopped offering
+software GSO on the amt device.
 
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
-Changes in v2:
-- Fix typo in the title: s/=/:/
-- Link to v1: https://patch.msgid.link/20260625-sft-run-tests-print-totals-v1-1-bfe588266249@kernel.org
----
- tools/testing/selftests/lib.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> The call also changes what a plain, non-GSO datagram looks like when it
+> leaves amt. iptunnel_handle_offloads() sets skb->encapsulation on every
+> skb and clears it again only if ip_summed is not CHECKSUM_PARTIAL. A
+> CHECKSUM_PARTIAL datagram, which is what the stack hands to the driver
+> with tx checksum offload on, now has encapsulation set where it had
+> none before, so netif_skb_features() limits the features available for
+> it to those in hw_enc_features, and udp_set_csum() takes the local
+> checksum offload branch, which leaves the inner checksum to the lower
+> device.
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index f02cc8a2e4ae..de15e63bc6b4 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -106,7 +106,8 @@ define RUN_TESTS
- 	if [ "X$(summary)" != "X" ]; then       \
- 		per_test_logging=1;		\
- 	fi;                                     \
--	run_many $(1)
-+	run_many $(1);				\
-+	ktap_print_totals
- endef
- 
- define INSTALL_INCLUDES
+[Severity: Low]
+Is the udp_set_csum() part of this paragraph accurate? udp_set_csum()
+chooses its branch from nocheck, skb_is_gso() and ip_summed only. It never
+looks at skb->encapsulation:
 
----
-base-commit: 30af56a227e27b892d34bc44c23298b5274913e3
-change-id: 20260625-sft-run-tests-print-totals-a18eea814bee
+net/ipv4/udp.c:udp_set_csum() {
+	...
+	} else if (skb->ip_summed == CHECKSUM_PARTIAL) {
+		uh->check = 0;
+		uh->check = udp_v4_check(len, saddr, daddr, lco_csum(skb));
+	...
+}
 
-Best regards,
---  
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+lco_csum() doesn't read encapsulation either. amt passes nocheck=false to
+udp_tunnel_xmit_skb(), so a non-GSO CHECKSUM_PARTIAL datagram already went
+through the lco_csum() branch before this patch. The inner checksum was
+already left to the lower device.
 
+The real change seems to be that skb->encapsulation is now set and
+inner_mac_header has moved. As a result, the lower device's
+hw_enc_features now decide whether that checksum is offloaded.
+
+Could the message say only that?
+
+> Assisted-by: LLM
+> Signed-off-by: Omar Ramadan <omar@blockcast.net>
+
+[Severity: Low]
+Should this have a Fixes: tag? The relay data path that never calls
+udp_tunnel_handle_offloads() came in with:
+
+Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
+
+The commit message says every GSO datagram is dropped on an unpatched
+kernel once tx checksum offload is on for the amt device. amt_link_setup()
+allows that because it puts NETIF_F_HW_CSUM in hw_features.
+
+The previous amt fix in this tree, eb0c18404c89, has the same Fixes: tag.
+This patch also replaces an earlier [PATCH net] submission. Without the
+tag, stable backporters have nothing that tells them which kernels are
+affected.
+
+> diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+> index 0277e4cac39bd..1f0afc11ea0c1 100644
+> --- a/drivers/net/amt.c
+> +++ b/drivers/net/amt.c
+> @@ -1078,7 +1078,18 @@ static void amt_send_multicast_data(struct amt_dev *amt,
+>  	if (!skb)
+>  		return;
+>  
+> +	/* amt_dev_xmit() pulled the Ethernet header without moving the mac
+> +	 * header, so the copy's mac header sits 14 bytes before the inner IP
+> +	 * header. Make it coincide with it, as the inner segmentation code
+> +	 * expects for a device without a link-layer header.
+> +	 */
+> +	skb_reset_mac_header(skb);
+>  	skb_reset_inner_headers(skb);
+> +	if (udp_tunnel_handle_offloads(skb, true)) {
+> +		kfree_skb(skb);
+> +		return;
+> +	}
+
+[Severity: Medium]
+Are fraglist GSO skbs still dropped after this patch? They never reach
+this new call.
+
+amt_link_setup() advertises NETIF_F_GSO_SOFTWARE, and that mask includes
+NETIF_F_GSO_FRAGLIST. It also lets the user turn on NETIF_F_HW_CSUM and
+NETIF_F_FRAGLIST:
+
+	dev->features		|= NETIF_F_GSO_SOFTWARE;
+	dev->hw_features	|= NETIF_F_SG | NETIF_F_HW_CSUM;
+	dev->hw_features	|= NETIF_F_FRAGLIST | NETIF_F_RXCSUM;
+
+When rx-gro-list is on for the ingress device, udp_gro_complete() builds
+forwarded SKB_GSO_FRAGLIST | SKB_GSO_UDP_L4 skbs with
+CHECKSUM_UNNECESSARY. Suppose multicast routing forwards one of them to an
+amt relay that has tx checksum and fraglist turned on. skb_gso_ok()
+passes, so the skb arrives at amt_dev_xmit() unsegmented.
+
+The copy made just above this hunk then fails:
+
+amt_dev_xmit()
+  amt_send_multicast_data()
+    skb_copy_expand()
+      if (WARN_ON_ONCE(skb_shinfo(skb)->gso_type & SKB_GSO_FRAGLIST))
+          return NULL;
+
+amt_send_multicast_data() returns before udp_tunnel_handle_offloads(), so
+nothing is relayed and the WARN_ON_ONCE fires.
+
+The earlier approach ("amt: do not offer software GSO on the amt device")
+would have handled this case. The commit message lists
+NETIF_F_GSO_FRAGLIST as untested, and the selftest patch that follows does
+not touch drivers/net.
+
+Would it close the gap to drop NETIF_F_GSO_FRAGLIST from the advertised
+features (for example NETIF_F_GSO_SOFTWARE & ~NETIF_F_GSO_FRAGLIST)? The
+core would then segment these skbs before ndo_start_xmit.
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261001171016.88208-1-omar%40blockcast.net
