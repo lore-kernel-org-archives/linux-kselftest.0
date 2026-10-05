@@ -1,85 +1,101 @@
-Received: from mail-wr2-f14.google.com (mail-wr2-f14.google.com [74.125.225.78])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965E0371D01
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2026 06:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2002371D01
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2026 07:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791183192; cv=none; b=uG/Taeh+5cdq+MRtRyf2jFH6yM+ZrXcF75mKGmxsAHPvQxw4tNkwJbSqLhy3GWtARnzEdGIoWnsEl/dNzhp+xa65D0MAERcZO41Nsk2oI9GRDJT4lbR6VNbHNndrONZPVb4bIunOzutPSLzjdErThZA0v7ArgsLguXY0hkF9VvI=
+	t=1791183997; cv=none; b=bPohBc7SjMSnHOeh6NYtXhLC8A1YQzGrTHFY4sMzJrXEyB0OgAWjS0g13LjqWXg7JD2OohD0SzSePyU9fvtCzZaTVYzA+Sakj2E/lyBsxtdYXVefptz7yX6Fhm84p2i6ofu8khVymmgWJZ+AN4ZCdPkjHiWqHFOAN9wlapWFgGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791183192; c=relaxed/simple;
-	bh=i+Gr/7FMNuuEK/OKYn6DacYUD0hgLxMgnUMFQgj0oNs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ex/pw88hwGbYpx7HaXGIy0n3rMsVyAtwT/AR58Q6Vbg9nm958C5wJGYETgmagX2KYDGEdaENRpbZkO8IbUnbNcuPxeH9ehkI51hZ/xNJDrMl0Xr2nh4RRXmBUwdGcNkvgokTYCHVfP3XZW/vDQtAHf8IfOY5tVv3eGjHO5gfkuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oUiUNgaF; arc=none smtp.client-ip=74.125.225.78
+	s=arc-20240116; t=1791183997; c=relaxed/simple;
+	bh=05kHoko/nqMI072En1PJNukfGt9/4zUx6GVdib+NbNo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=j/YOAwcEFF/7FZYlU1q2dGk9nD9r4xMjvIJp9zNtC7CApoXMTto5w+KvW1+h0CkrmpjH357Wwgj/Snh4U0tl8+GsfRAb1Bbaf/H7zlDX1rB8bK2FeVbR3gQ3cdvMyZyjqTJ39v1IzRbvwMD1OP3wHgLmJjhgdUr96zhAx8zdKXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o9OikwFl; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oUiUNgaF"
-Received: by mail-wr2-f14.google.com with SMTP id ffacd0b85a97d-48b0622cc90so591925f8f.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Oct 2026 23:53:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o9OikwFl"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-4a174a3dc9dso1415295e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 00:06:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791183189; x=1791787989; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=0yZt/yuxaSBTnRC+PSxXs89gpI+W86bHXS3Qdtmgzpc=;
-        b=oUiUNgaFvjSZ/DbExzHGxGvql8bFJmpxEvZZn0TnKNcLf250wmMVjiTOY1T2yP/VOh
-         54NcFKk2Km+hBZ5SOR2U8xHpPec6/Nku3UG7ftYBl61AP+RtG07+NVszEVxCOgajAoWN
-         i7xg6gUT/1jAowV7I3PGnl5FCsrJUzwfWmBHPRxfeafZvZLGMiggIE//V8PQ56VAOC05
-         Jg0JmI4OHKOHzMcL5pSMoVs1idT9BeHyW2K/CnJUOjZtzAglTp+yo0eh7MHFxg3sU1uG
-         dopPJZeealQYcpp2m3MT/uDpvK9rexonmGF7vLaKKHnXyfgtLo7Q2jovXrxno9TCzTR3
-         Eslw==
+        d=gmail.com; s=20251104; t=1791183993; x=1791788793; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=+vg5y7TFdC/oAYFLNYNMU7By8Gx4IwKuOI2ehF5mxV8=;
+        b=o9OikwFlJm20JBMrFsPyBqtt36XEsmOcUdkVWn6tJW7rgN7ouWHKhhwSMQy6Lk7Q1m
+         c7Mre0y/sNHdNeu5+uYMrwH2rpjeMrWhlxT1lUvEC35HcuitDDK6M5WpV7Tat3f1q9x+
+         +mV7hGdHU/ZF1zVilNbW2ZTYBok5yk3kVFV6gsNb4HJ6spBmxOKCFtZgNYLwEDVKmmb5
+         2APkXVlCx6kY0E5BGdnFnL+pIElnZJC70+RFteRJtmFqtRIPBOd05bj2s1CC0waYqevD
+         RLx1LoIngjQySglANuKJS8Aehk3DC8+yL8jS5K5G7ASRplpyegIDKItLr689Lb4FcvCh
+         liZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791183189; x=1791787989;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0yZt/yuxaSBTnRC+PSxXs89gpI+W86bHXS3Qdtmgzpc=;
-        b=rnrowAAwwstx77LvXFXW+6SC6j7je4uaFAVFhGtkAClM2CoUDFrBe0tK0D1z4fit5I
-         qALw2unuE69s1n8abJ6dCTIQNacCXJMhxrX2NtCw233YiUJCwtXGftIOsLLRwdOAa+5q
-         S2CEG76x3nPYBAXGq62Nl7kiF6zXdsnotHXzFfGeIdUcIJ4ybJqQj9fow2UXYD9JVAdK
-         rzzztf+oia2QKMBO0GlbkB/g/6ktiJ0VzTH36AhXb4K2XsCcRRAZu5udLFvOJuu4tOUE
-         WoaKq95yl7ZMCr7qb5Rqghgz+k7JQnvWHmM88CGNYpbnqwuvYM7Vrer68bHVdOsXJxC+
-         xMRw==
-X-Forwarded-Encrypted: i=1; AKwUvBwEibR018UuCNmUSG3YbVzA5EUcrcj9f/FuQjCmUyYKykYem5pIN9DXx9l4u3e5hozHd3m8dkqM8UayOl74ako=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKVuHKebhXQ4DOIGSs3fB1UQ/WCx36voq9X3u7ViqcsffUrECeC
-	tJ+E05valNBBY+RD7TQ8yJsw787XbdEoDIph14SnIR2rchYwOv3Q3BlZ
-X-Gm-Gg: AYBFou1j2AH7FE1FLuxUfNkUjbtOLK65Dcb2OAfGfbiyfR+SO0Uz7JnpPpNLBx3ZsWl
-	8S6E5uPzTkp5IiYMnMjogz+Ku4nbsYlAPc92owh+bDLi/fZDNDH/qKTq0VNTMK64Z1QEp71CNJE
-	pXwBjg6Pxk5e4qc/9FGjOTsVfTuxFb+Fu017hsmhW9QuzSSk38GB/Ug45agpebCoWSA2kfI/MN3
-	GOzY9Wmyi3LOuRZGaD8pnsBRnynEoepsZdPrSfC7n6dTRIHY1rl8JrFIIKSpcDJO16LCrPP3+j9
-	ld9XdHZF+/PAg50IpxYshWIJVrz8+DhGUlpwzGdXjj9ofcF+mbDKlkzf8XDwLyWnVjN8uDu+xHv
-	uhudSnEC4zexnBnrbt8o5tMbeNZHVo3zivvZ2BuYHVQof5M3h8hUDrHahkW3KwXnxyZiui9D5IA
-	FDWLhfDk5NCIu9Dj/WDAqtVcaGbL4lUWGb+kr0kkF/p084rXKN0CHqmkI=
-X-Received: by 2002:a05:6000:40de:b0:48b:d2d:2fcc with SMTP id ffacd0b85a97d-48b1272d0c6mr16209245f8f.9.1791183188499;
-        Sun, 04 Oct 2026 23:53:08 -0700 (PDT)
-Received: from nobara ([83.231.69.9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c6308481dsm1247436f8f.3.2026.10.04.23.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2026 23:53:08 -0700 (PDT)
-From: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
+        d=1e100.net; s=20260707; t=1791183993; x=1791788793;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+vg5y7TFdC/oAYFLNYNMU7By8Gx4IwKuOI2ehF5mxV8=;
+        b=XWXYCWKzvjGZjJ8a+R0SG/pVbqUJ+QU7ywUyyZfovQCgmrj3Tju8LDtqykJGofGSxz
+         +HGilA1E5bMyKrOeGaoXzWgFs73cuWYQsypHJrb/99wgfijJYLN7QaF52pAf+g/KJFJi
+         VmITu0H4GnDP0J6GbEaTxD6G7+W4JQn00GAt3ZoFPvo5Tp4nn4O23nqZ8xE72MTdZ+mc
+         30SYOd1i27xmGTxWAD0YNJGtn1LlB7/TzFJqXC394RgsXXykx7ZEjV5O09kPt4qkIV1H
+         synRS+LLGVtiQfachv7aDeULwe/eN03V+W88Wqdc6tbTInEeyBNgYuiZeJY6/shYjNPp
+         TnyQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzbPGywy1DRWu6bYdEXUCfmZwraW1KRUgUm51+2DjODQkJBr5bylhWWvmoS6QnVYtexS+dr3LFCLUE5nvwUv54=@vger.kernel.org
+X-Gm-Message-State: AFuF++mDQKKpLz+mjDWtkfCBpV1AKeKmJtdenrA67f0TCgZ2fj2IAkpx
+	zYuc1wQkBg3jOOF8BDrApithtT1esi94k14/YhlCcnQi76TY5vIu4TnY
+X-Gm-Gg: AYBFou13p7vbTfCJnGw1IW8zNYfrlOkWcryeazGHOyGVIEkzi+ZcmMhTr/tQQNuvxK0
+	jMDnu1gt4gJeD0OuZsP7P6DOTn9YWNTYOgaoZZRXNuHM2GNFdI2/H5BmJ/PQMVT5BgrDwqK97CO
+	WMj+i3uA3VVQsXXSCwkrbiQBhkUqzZrYPN2NlPRUXJ6s1TruB9h7h6/CIdM3FJQLMTV+58BbMVk
+	5EMxw1p8oGEDA7la1xxn50ORlDQSVWCJd42kkqV7Xr/PHyEpPYTBtkmJudDeFhyw/jlCmh8w3aG
+	fYrTl/TP3GQJzDsJTfiMKSH7HsxetGK9a9zGPgAg60f4Ur9uMaw9B+OH9fEOhiuHAvHw319Qs+E
+	S4/hSs79xlRUZ+JE8FtwbDcedcdPScdb22B0jyD/iqhyq051HxXgcj8bkJCBaXiR6ybdWRs7vRZ
+	LrxKktHsCJNA2j4Bq3sPwoxquPFpS9a1iJ8yiy37FGYE+ikJcGO9aHzPA8RIz/yUa7mZ5Zc2mdD
+	WE77JwRV/zNgEFtw0WPQnx3gqrnYinGJOM9fe/8p+tmA7N166CVxNhiMluJtFvKA74ropV5gQb0
+	CfXGhQ9PT/ROecRyc4X7flI04VkQle4YRJKR/M3Y1QX8egGTKOk7V1f6Yh+X1gtGUCor3UHc8Sh
+	jeA==
+X-Received: by 2002:a05:600c:c4a6:b0:4a0:25e9:bc47 with SMTP id 5b1f17b1804b1-4a02759a443mr172676745e9.19.1791183992976;
+        Mon, 05 Oct 2026 00:06:32 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-b305-2001-39fa-3d24-821a-4eae.310.pool.telefonica.de. [2a02:3100:b305:2001:39fa:3d24:821a:4eae])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a16bcb9a21sm283461465e9.10.2026.10.05.00.06.31
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 05 Oct 2026 00:06:32 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Harry Yoo <harry@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
 	David Hildenbrand <david@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Vlastimil Babka <vbabka@kernel.org>,
-	Jann Horn <jannh@google.com>,
-	Pedro Falcato <pfalcato@suse.de>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	linux-mm@kvack.org,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	David Stevens <stevensd@google.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Amery Hung <ameryhung@gmail.com>,
+	Swaraj Gaikwad <swarajgaikwad1925@gmail.com>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
 	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-rt-devel@lists.linux.dev,
+	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	"Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-Subject: [PATCH 3/3] selftests/mm: test mlock() and munlock() range normalisation
-Date: Mon,  5 Oct 2026 08:46:31 +0200
-Message-ID: <20261005065244.6935-4-azpijr@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261005065244.6935-1-azpijr@gmail.com>
-References: <20261005065244.6935-1-azpijr@gmail.com>
+	cgroups@vger.kernel.org
+Subject: [RFC PATCH v2 0/3] locking, mm: Add atomic allocator trylocks on RT
+Date: Mon,  5 Oct 2026 09:06:22 +0200
+Message-Id: <20261005070625.8871-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,253 +104,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add mlock2-tests cases for a zero length at aligned and unaligned
-addresses, for a length that wraps when rounded to pages, and for an
-overflowing start + len, checking the return value and VmLck. The
-overflow cases expect -EINVAL with and without CAP_IPC_LOCK, so running
-the test unprivileged also covers the errno that used to depend on it.
+On PREEMPT_RT, a BPF task-storage program attached to sched_waking
+can deadlock when kmalloc_nolock() obtains an rtmutex-backed allocator
+spinlock while try_to_wake_up() holds p->pi_lock. Releasing the allocator
+lock can enter priority-inheritance or wakeup code and re-enter scheduler
+locking.
 
-The wrapping cases assume the test is built for the kernel's word size: a
-32-bit binary on a 64-bit kernel cannot pass a range that wraps.
+The first RFC [1] rejected every non-preemptible caller. That prevents the
+deadlock, but it also rejects BPF arena allocation and faults under the
+arena's ordinary raw lock.
 
-Suggested-by: David Hildenbrand <david@kernel.org>
-Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
----
- tools/testing/selftests/mm/mlock2-tests.c | 191 +++++++++++++++++++++-
- 1 file changed, 190 insertions(+), 1 deletion(-)
+This RFC instead adds an atomic owner state for bounded PREEMPT_RT spinlock
+trylocks. Atomic acquisition succeeds only from the completely free state.
+A regular waiter sets HAS_WAITERS before waiting, which prevents a later
+atomic owner from barging. Atomic release preserves HAS_WAITERS and does
+not enter priority inheritance or wake a task. Preemption and local
+interrupts remain disabled for the atomic-owner section.
 
-diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
-index 144b550813a6..3dca349c4738 100644
---- a/tools/testing/selftests/mm/mlock2-tests.c
-+++ b/tools/testing/selftests/mm/mlock2-tests.c
-@@ -2,6 +2,7 @@
- #define _GNU_SOURCE
- #include <sys/mman.h>
- #include <linux/mman.h>
-+#include <limits.h>
- #include <stdint.h>
- #include <unistd.h>
- #include <string.h>
-@@ -91,6 +92,7 @@ static bool is_vmflag_set(unsigned long addr, const char *vmflag)
- #define SIZE "Size:"
- #define RSS  "Rss:"
- #define LOCKED "lo"
-+#define VMLCK "VmLck:"
+The design tradeoff is that a regular waiter cannot boost an atomic owner
+and spins with interrupts disabled until the bounded allocator section
+finishes. I would value locking review of whether that owner state and
+handoff are acceptable, or whether the no-lock allocator should instead
+fail in these contexts.
 
- static unsigned long get_value_for_name(unsigned long addr, const char *name)
- {
-@@ -177,6 +179,27 @@ static int unlock_lock_check(char *map, bool mlock_supported)
- 	return 1;
- }
+Patch 2 uses the new operation for global SLUB and page-allocator locks. It
+avoids regular per-CPU RT local-lock slow paths and reuses centralized
+objcg credit when the per-CPU stock is unavailable. Patch 3 adds a BPF
+selftest for task-storage allocation from hrtimer_start while the hrtimer
+base raw lock is held.
 
-+static unsigned long get_vmlck(void)
-+{
-+	unsigned long vmlck;
-+	char line[1024];
-+	FILE *file;
-+
-+	file = fopen("/proc/self/status", "r");
-+	if (!file)
-+		ksft_exit_fail_msg("fopen: %s\n", strerror(errno));
-+
-+	while (fgets(line, sizeof(line), file)) {
-+		if (sscanf(line, VMLCK "\t%lu kB", &vmlck) == 1) {
-+			fclose(file);
-+			return vmlck << 10;
-+		}
-+	}
-+
-+	fclose(file);
-+	ksft_exit_fail_msg("cannot parse VmLck in /proc/self/status\n");
-+}
-+
- static void test_mlock_lock(void)
- {
- 	char *map;
-@@ -204,6 +227,167 @@ static void test_mlock_lock(void)
- 	munmap(map, 2 * page_size);
- }
+The series has one prerequisite, recorded by prerequisite-patch-id in this
+cover letter:
 
-+static void test_mlock_zero_length(void)
-+{
-+	unsigned long page_size = getpagesize();
-+	unsigned long vmlck_before, vmlck_after;
-+	char *map;
-+
-+	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap error: %s\n", strerror(errno));
-+
-+	vmlck_before = get_vmlck();
-+	ksft_test_result(!mlock(map, 0),
-+			 "%s: zero length mlock() at an aligned address\n", __func__);
-+	vmlck_after = get_vmlck();
-+	ksft_test_result(vmlck_before == vmlck_after,
-+			 "%s: zero length mlock() at an aligned address locked nothing\n",
-+			 __func__);
-+
-+	vmlck_before = get_vmlck();
-+	ksft_test_result(!mlock(map + 5, 0),
-+			 "%s: zero length mlock() at an unaligned address\n", __func__);
-+	vmlck_after = get_vmlck();
-+	ksft_test_result(vmlck_before == vmlck_after,
-+			 "%s: zero length mlock() at an unaligned address locked nothing\n",
-+			 __func__);
-+
-+	munmap(map, 2 * page_size);
-+}
-+
-+static void test_munlock_zero_length(void)
-+{
-+	unsigned long page_size = getpagesize();
-+	unsigned long vmlck_before, vmlck_after;
-+	char *map;
-+
-+	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap error: %s\n", strerror(errno));
-+
-+	if (mlock(map, 2 * page_size)) {
-+		munmap(map, 2 * page_size);
-+		ksft_exit_fail_msg("mlock(): %s\n", strerror(errno));
-+	}
-+
-+	vmlck_before = get_vmlck();
-+	ksft_test_result(vmlck_before > 0,
-+			 "%s: the range to release is accounted as locked\n",
-+			 __func__);
-+	ksft_test_result(!munlock(map + 5, 0),
-+			 "%s: zero length munlock() at an unaligned address\n", __func__);
-+	vmlck_after = get_vmlck();
-+	ksft_test_result(vmlck_before == vmlck_after,
-+			 "%s: zero length munlock() at an unaligned address released nothing\n",
-+			 __func__);
-+
-+	munmap(map, 2 * page_size);
-+}
-+
-+static void test_mlock_length_wrap(void)
-+{
-+	unsigned long page_size = getpagesize();
-+	unsigned long vmlck_before, vmlck_after;
-+	char *map;
-+	int ret;
-+
-+	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap error: %s\n", strerror(errno));
-+
-+	vmlck_before = get_vmlck();
-+	errno = 0;
-+	ret = mlock(map, ULONG_MAX);
-+	ksft_test_result(ret == -1 && errno == EINVAL,
-+			 "%s: mlock() with a wrapping length is rejected\n",
-+			 __func__);
-+
-+	vmlck_after = get_vmlck();
-+	ksft_test_result(vmlck_before == vmlck_after,
-+			 "%s: mlock() with a wrapping length locked nothing\n",
-+			 __func__);
-+
-+	vmlck_before = get_vmlck();
-+	errno = 0;
-+	ret = mlock(map + 5, ULONG_MAX);
-+	ksft_test_result(ret == -1 && errno == EINVAL,
-+			 "%s: unaligned mlock() with a wrapping length is rejected\n",
-+			 __func__);
-+
-+	vmlck_after = get_vmlck();
-+	ksft_test_result(vmlck_before == vmlck_after,
-+			 "%s: unaligned mlock() with a wrapping length locked nothing\n",
-+			 __func__);
-+
-+	munmap(map, 2 * page_size);
-+}
-+
-+static void test_mlock_addr_overflow(void)
-+{
-+	unsigned long page_size = getpagesize();
-+	unsigned long vmlck_before, vmlck_after;
-+	size_t len;
-+	char *map;
-+	int ret;
-+
-+	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap error: %s\n", strerror(errno));
-+
-+	/* addr + len wraps to 0 */
-+	len = (size_t)(0UL - (unsigned long)map);
-+
-+	/* -EINVAL with or without CAP_IPC_LOCK */
-+	vmlck_before = get_vmlck();
-+	errno = 0;
-+	ret = mlock(map, len);
-+	ksft_test_result(ret == -1 && errno == EINVAL,
-+			 "%s: mlock() with an overflowing addr + len is rejected\n",
-+			 __func__);
-+
-+	vmlck_after = get_vmlck();
-+	ksft_test_result(vmlck_before == vmlck_after,
-+			 "%s: mlock() with an overflowing addr + len locked nothing\n",
-+			 __func__);
-+
-+	munmap(map, 2 * page_size);
-+}
-+
-+static void test_munlock_range_overflow(void)
-+{
-+	unsigned long page_size = getpagesize();
-+	size_t len;
-+	char *map;
-+
-+	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap error: %s\n", strerror(errno));
-+
-+	errno = 0;
-+	ksft_test_result(munlock(map, ULONG_MAX) == -1 && errno == EINVAL,
-+			 "%s: munlock() with a wrapping length is rejected\n",
-+			 __func__);
-+
-+	errno = 0;
-+	ksft_test_result(munlock(map + 5, ULONG_MAX) == -1 && errno == EINVAL,
-+			 "%s: unaligned munlock() with a wrapping length is rejected\n",
-+			 __func__);
-+
-+	len = (size_t)(0UL - (unsigned long)map);
-+	errno = 0;
-+	ksft_test_result(munlock(map, len) == -1 && errno == EINVAL,
-+			 "%s: munlock() with an overflowing addr + len is rejected\n",
-+			 __func__);
-+
-+	munmap(map, 2 * page_size);
-+}
-+
- static int onfault_check(char *map)
- {
- 	*map = 'a';
-@@ -506,9 +690,14 @@ int main(int argc, char **argv)
+  mm/page_alloc: skip shuffling and reporting for no-lock frees
 
- 	munmap(map, size);
+That independent fix has been posted as a normal patch [2]. It keeps a
+successful no-lock page free out of allocator shuffling and page-reporting
+notification. It is separate because the issue begins with the v6.15
+free_pages_nolock() API rather than the v7.0 slab regression addressed by
+patch 2.
 
--	ksft_set_plan(15);
-+	ksft_set_plan(31);
+Patch 2 should also be evaluated with David Stevens's pending memory.high
+deferral fix [3]. There is no build dependency, but bypassing the per-CPU
+stock can make a no-lock charge reach that pre-existing schedule_work()
+hazard more often.
 
- 	test_mlock_lock();
-+	test_mlock_zero_length();
-+	test_munlock_zero_length();
-+	test_mlock_length_wrap();
-+	test_mlock_addr_overflow();
-+	test_munlock_range_overflow();
- 	test_mlock_onfault();
- 	test_munlockall0();
- 	test_munlockall1();
---
-2.55.0
+The pre-rebase version of these atomic-owner changes passed four-vCPU
+x86-64 PREEMPT_RT QEMU in release and lockdep/debug-rtmutex builds. Tests
+completed 5,000 forced waiter handoffs without barging, kept asynchronous
+IPIs out of atomic-owner sections and passed the BPF hrtimer workload.
+
+After rebasing onto current mainline and the prerequisite, the affected
+locking and MM objects build with PREEMPT_RT and lockdep. I have not
+repeated the runtime campaigns for this RFC rebase.
+
+If this direction is accepted, patches 1 and 2 would need joint stable
+backports for v7.0 and later.
+
+Changes since the RFC v1:
+
+  - replace the blanket context rejection with an atomic rtmutex owner
+  - preserve local IRQ state across a successful atomic trylock
+  - cover the global slab, page allocator and memcg-cache paths
+  - bound shared objcg credit when the per-CPU stock is skipped
+  - add forced-handoff, caller-attribution and BPF hrtimer tests
+  - keep the independent no-lock page-free fix as a prerequisite
+
+[1] https://lore.kernel.org/r/20260919171443.90512-1-kmehltretter@gmail.com
+[2] https://lore.kernel.org/r/20261005063515.6312-1-kmehltretter@gmail.com
+[3] https://lore.kernel.org/r/20260904173145.2028377-1-stevensd@google.com
+
+Karl Mehltretter (3):
+  locking/rtmutex: Support atomic PREEMPT_RT spin trylocks
+  mm: use atomic RT trylocks for no-lock allocation
+  selftests/bpf: exercise task storage from hrtimer_start
+
+ Documentation/locking/rt-mutex.rst            |  40 ++--
+ include/linux/rtmutex.h                       |   4 +-
+ include/linux/spinlock.h                      |   3 +
+ include/linux/spinlock_rt.h                   |  28 ++-
+ kernel/locking/rtmutex.c                      | 211 ++++++++++--------
+ kernel/locking/spinlock_rt.c                  |  66 +++++-
+ mm/internal.h                                 |  27 ++-
+ mm/memcontrol.c                               |  90 ++++++--
+ mm/page_alloc.c                               |  33 ++-
+ mm/slub.c                                     |  36 +--
+ .../bpf/prog_tests/task_storage_hrtimer.c     |  50 +++++
+ .../bpf/progs/task_storage_hrtimer.c          |  48 ++++
+ 12 files changed, 479 insertions(+), 157 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_storage_hrtimer.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_storage_hrtimer.c
+
+
+base-commit: e767a4ea70a3992c37ed604157d32f0dfbf9b1e3
+prerequisite-patch-id: 33838040c410e5de0aef855a2719a092b561a5c4
+-- 
+2.53.0
 
