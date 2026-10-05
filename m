@@ -1,108 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4355841BA98;
-	Mon,  5 Oct 2026 23:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6306634A76F;
+	Mon,  5 Oct 2026 23:49:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791242551; cv=none; b=u+3x/IfATeOgU1VvlvpPH8SHLjlvyU1lfxDF+mhVWShcjp1lakMHby5/2mwgFuDvbPF55DexhGLqGHcZ5Kuc4c7YV8UFBFNCSZWheeFUBN1qRRLiSiOMexD7hNVVt9MQGHwbak2h3XWf2ouzPRwKmMhO8kBBUAS16qUjs7nuxQ0=
+	t=1791244148; cv=none; b=RhTfYgwFT4yy013bCcpKzHlYuVQp8g+wBL/fphgituiEW7h+jido+Rcodopxjj9qOr1xi0uxH7OCh5T0UpoLsPoK3qXOfGtC4XQAH4XDnrObP1FKv3kGlSuQL/gIs1G0L9CXCK/IRRBg/FoB1vIfszYmL0jlIeOH0rj5IzWYYqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791242551; c=relaxed/simple;
-	bh=RssDnjtFO70FHNgHPj2mng35k8gPB1FXpmWz1t9oM6g=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S8YcB7KchyJbhcyahnjFZMbxoMjjFbH9VNLFkZLPZYHu7JHDwtgOvnugfzfXqnPvxx6WngD/z9OcbSUHLqmLy8KGSriOLkDBBNFncdxwidPKlyceH8GuA1Ac9we2pF+PD0Pe5T5hQPnvWcL8lfzYrqChDCgKnl/dODOFK1GmrwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1UZt7TL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791244148; c=relaxed/simple;
+	bh=HqLf8VVxoiTH9Udv5tH/iyyRsmrAHBfLYZ04E7n5lTY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KceicwdoE99H6HBoeFYischEz95EWlPNOol6/2fmjGlzQNFXkaerWWAORWgAwWq8z7HZASVijiWLEn9rZaOiplLG3Um25Wn+mr2gs/fx/mymE7OZluDcE4hkWMXDDemit5jBw3E9YyY+hItaoOOv0OvNqTQbRT7WrMPFKxg5sFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fCQRZMpL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1UZt7TL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F641F000FF;
-	Mon,  5 Oct 2026 23:22:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fCQRZMpL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31431F000FF;
+	Mon,  5 Oct 2026 23:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791242550;
-	bh=B37W2ggfSlaBeZulIaDwZEijuU5Z3dWtAfMqL59VIIY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=X1UZt7TLuCLEAtOmxiB0tq4ACNtEakf/WBZYWGrv661EzkgKjiRYjr0RU3Iv2YzwE
-	 L85ZFYvb+uolQWUO2A4OMKvhIHuSdM5q0E5AOpH+1EOVTaMSfBYvuPoyGTtVancPgO
-	 ThX9U0meyQH6bBb5iXf/iBTcDrltx+L0OPGdks23i1Devg8DddFciI2Hp2ooERCTlX
-	 aXDr8XrTKFqGVv3ZtVr889fGBCm5hXn35t1ak2wqQa86dDLUhz/OnT1+sEhlyDY1lE
-	 EjBbjK4oW7MDzBBn5k0WefOJLKUTxG87vXaTVdHE8ltcee37uKu0yAu/xm1cs6ZwmH
-	 Gv5kFM5OnXRrg==
-Subject: Re: [PATCH net-next v2 7/8] selftests: tls: skip the zero_len tests
- when TLS is unavailable
-From: netdev-bot+sashiko@kernel.org
-To: cel@kernel.org
-Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
- davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
- shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 05 Oct 2026 23:22:29 +0000
-Message-ID: <179124254912.434549.7790480487768819706@kernel.org>
-In-Reply-To: <20261001-tls-follow-on-v2-7-2dd1947bb642@kernel.org>
-References: <20261001-tls-follow-on-v2-7-2dd1947bb642@kernel.org>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1791244146;
+	bh=KxRdC6ToGXOVMaL534okFwCFyQQ3QITmrTk+6oG7wSQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=fCQRZMpLLTe36EySszimHDMNdG92kitSzREZ6RxbFmQ4v837toY4setf9N3QkvHuf
+	 1enXYmn30/PC2ia51vgL3oSXyCw1G1S2DSqXrEy9wRTzFDGLRQslE4jpr8d8thVNgd
+	 T+exY4EjMW7tJT4NX+xJPgv+T6QkBUH7dmw7GphEuiNL5CGUqS/ykyVMNBBDLln8BB
+	 m0iiHDVDHtYQyJ0utKHsrS9+0zNlHMcstV7hnXttt/o4U3CmaW0zRKFTkHrZZjIZFr
+	 Xqgtud/WCPgLvljEk1XRGPopwiXkG27X4G9k8rZoQtGcfqcpU0SS7uB1m9UL4MaEaQ
+	 BnR5kw5GjWOuA==
+Date: Mon, 5 Oct 2026 16:49:05 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: Ajay Singh <ajay.kathat@microchip.com>, Aleksandr Loktionov
+ <aleksandr.loktionov@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, "David S. Miller"
+ <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Donald Hunter
+ <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>, Ido Schimmel
+ <idosch@nvidia.com>, Jacob Keller <jacob.e.keller@intel.com>, Johannes Berg
+ <johannes@sipsolutions.net>, Kees Cook <kees@kernel.org>, Kory Maincent
+ <kory.maincent@bootlin.com>, Kuniyuki Iwashima <kuniyu@google.com>, Nicolas
+ Dichtel <nicolas.dichtel@6wind.com>, Nikolaos Gkarlis
+ <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>, Sabrina Dubroca
+ <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, Simon Horman
+ <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>, Vadim
+ Fedorenko <vadim.fedorenko@linux.dev>, Willem de Bruijn
+ <willemb@google.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org,
+ netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v9 3/6] net: add a generation counter for
+ dev->mc changes
+Message-ID: <20261005164905.3d5b6749@kernel.org>
+In-Reply-To: <20260930112842.21323-4-sigefriedhyy@gmail.com>
+References: <20260930112842.21323-1-sigefriedhyy@gmail.com>
+	<20260930112842.21323-4-sigefriedhyy@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+On Wed, 30 Sep 2026 20:28:39 +0900 Yuyang Huang wrote:
+>  void netif_rx_mode_init(struct net_device *dev)
+>  {
+>  	__hw_addr_init(&dev->rx_mode_addr_cache);
+> +	dev->rx_mode_addr_cache.owner = dev;
 
-Low priority / nit picks for your consideration:
+There's no need to set this?
 
-- [Low] Backport problem.
-
---
-
-selftests: tls: skip the zero_len tests when TLS is unavailable
-
-This patch makes TEST_F(zero_len, test) skip when the fixture has recorded
-notls. Without the check, all eight variants fail on a kernel built without
-CONFIG_TLS, because the raw records go over a plain TCP socket.
-
-> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-> index 419c6cc0cc5e1..e6876b8caac89 100644
-> --- a/tools/testing/selftests/net/tls.c
-> +++ b/tools/testing/selftests/net/tls.c
-> @@ -2663,6 +2663,9 @@ TEST_F(zero_len, test)
->  	int rec_off;
->  	int i;
->  
-> +	if (self->notls)
-> +		SKIP(return, "no TLS support");
-> +
->  	zero_len_send_recs(_metadata, self->fd, variant->recs);
-                ^^^^
-
-[Severity: Low]
-This isn't a bug, but will this apply cleanly when it is backported on its
-own?
-
-The Fixes: tag points at a61a3e961baf ("selftests: tls: add tests for
-zero-length records"), so stable tooling will probably try to pick this up.
-However, the trailing context line above, the zero_len_send_recs() call,
-comes from the previous patch in this series, "selftests: tls: add peek and
-splice coverage for zero-length records". That patch has no Fixes: tag.
-
-A tree that has a61a3e961baf but not that refactor still has the open-coded
-send loop at this spot in TEST_F(zero_len, test):
-
-	for (i = 0; i < 4 && variant->recs[i]; i++)
-		EXPECT_EQ(send(self->fd, variant->recs[i]->cipher_data,
-			       variant->recs[i]->cipher_len, 0),
-			  variant->recs[i]->cipher_len);
-
-So the hunk context won't match there, and someone would have to rebase the
-fix by hand. Until then, stable kernels without TLS would keep reporting the
-false zero_len failures.
-
-The missing notls check has been there since a61a3e961baf. Could this patch
-go first in the series, written against the original send loop, so it can
-be backported without the refactor?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261001-tls-follow-on-v2-0-2dd1947bb642%40kernel.org
+>  	timer_setup(&dev->rx_mode_retry_timer, netif_rx_mode_retry, 0);
