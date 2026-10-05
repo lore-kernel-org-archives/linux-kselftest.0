@@ -1,117 +1,100 @@
-Received: from mta0.migadu.com (out-26.mta0.migadu.com [91.218.175.26])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9A1305674
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2026 19:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.26
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F044C404BDD
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2026 21:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791226895; cv=none; b=ApRSxUFh0VUg2uXRWqoruC3BXKNiq6DYElZ7AZEuMFH0VBwX5kO+1m88/6D7vjH+gFUoLVakuPkGGXTQH66GTMpDfAbh32aH3WRQxKdLd82jLfwPYPd2Vc8CNjekMTSHNNQWxmCb+i3uAzktS1fQBRBsR+1rcdkod/O19QdzM0M=
+	t=1791235246; cv=none; b=ah6fLfHJi71imUskOWPdps5ENt40B7Cp4F8rolxyV7H4Vqq6f5uykAyKedeGTMOlw1HflyKxYOS4g3bNJSmtzLNxL8qPnA0nZyW+ieYSz3adKXN44xFV0tnFf6sm0uESdpmKZzuUP2NY5F48jfWPWqvjy8Dt5L7Gz2f7DqRZrvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791226895; c=relaxed/simple;
-	bh=rJT8G0sgga4UeEHY50WFHahh2k7AQRpW/V4C83LPcM4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T++hxqVn/V8H76KlBdRyIxV0VGTzLhNgZRbvHyDElImvve90Wpl2vQD1/LpMHIRlRsZh/4n1ARWt/rXwEWrZp2EOQfhkP3lpwK5FDGvXiZ2dXQyJ57m0cbBWbkib9sLdz4B+/hZjxB81xq1CL9kBoPB6CmZjYhokc62ucKeXtxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rpgOxRCu; arc=none smtp.client-ip=91.218.175.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791235246; c=relaxed/simple;
+	bh=eKEhRWg8r8lcVQlTsVVu0qrr3lXjUZhkr92zgqGRhF0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jWefqWIBnw0QrLK1+ZzAxdQub1IuSSAHZnDGVT/Ybl247lsxim0DUGs9QbJjmZ9M7dp+LJ0YscfjZqXNAWQHk4nsYRh1mZyZlBo9y8/OxgmNza0D8Zz1W3acKrZlXFDYNWebgSssozHF+j/gkZXuNcDRERLpIXX3yMdWWU3IZb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=0GW03P+/; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rpgOxRCu"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=rJT8G0sgga4UeEHY50WFHahh2k7AQRpW/V4C83LPcM4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791226891; v=1; x=1791831691;
- b=rpgOxRCuBdRBG9Cruva0qem46KyAXqHLWajd0ZjIRz0kgD8tNqxyOJ2IoAc2uiVFYp0AWqwU
- fYK9s+nOEwPq6TEVKyQTb7ZG9spRm+B0UmWQ9BG569oC3jH+5BUQFc768yIcjo1AEuCsOtbT9Nt
- bjqyL+C+m3j1OwXepyyLRNU0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3eee9485e3972e9f;
-	Mon, 05 Oct 2026 19:01:30 +0000
-X-Mizu-Trace-ID: 3eee9485e3972e9f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <7844ef03-d9b2-4a10-8f14-1b498ada9043@linux.dev>
-Date: Mon, 5 Oct 2026 12:01:17 -0700
+	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="0GW03P+/"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso21991235e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 14:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bairaktaris.de; s=google; t=1791235241; x=1791840041; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Iq44C5dsPAhwLXRlUUC1A0u7pKaUDbi940VQRcT8enY=;
+        b=0GW03P+/V2U/QA+KGvBbndvWZKaUIWR6Phs5dV4YvSuU6ihg0FOqP0ZE0fi/uKAWjn
+         fwwqAuilqXLIzbk8Xaf7eC7CuJAf+WXOkERp+4mjc/AetaXznzzyivUvp2jvBGG+4Pfr
+         Ph8kuAhlN5Vv4IkpzP6j6BQDepKu0xvoy6XNR8tNTart9H5e/Dmpm0/WnZYAqHm+NsQd
+         KJHhWMFU99Ge/YJLCs12oeqJRY5rzB8n1Pn+YxGIyGJGF1twld/hTP1FJdDBAu8w+gcP
+         UbU4F0MynG7fxh00taUBUFPo1hfQNAk6cwe9Qu6Q5vDh0lEpc8Pj35OsGGvqmyp0hlZl
+         c1dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791235241; x=1791840041;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Iq44C5dsPAhwLXRlUUC1A0u7pKaUDbi940VQRcT8enY=;
+        b=hMZv0LTm+57SXxZHdYJyXm+mAI6nkzjFVnPRBm8mUfQiTfgdrfQTgVdJTw3fyFSMMX
+         fZH1BbLOuBtu5gOOcVncMfFkJoVIYS8hbIh4APsEmFXGA3ZBQFEDn1esKnCBxXB/oLCX
+         zzrGWGrSsDQem93UTZkVcRlXNKuEQJDU8X9rAY7edBGWC/Sy9iJvWlt3ZRvdX1WJNnUh
+         S+0bmj7gHx1TOmM8k5YcdCuOHY5zrcdHck9muKDr9Jzp0g3/DkO+TLtxxrbFfR6Tfm7u
+         Q41haxgiLQew/oLaHOCOdkfiy//b+Y208+/16YUmacADT5OylkvxaZr/JiKVLezujl5s
+         n0YQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxlhSbpbZfcst0Dsz435zalwpVi/N8fSz6CZ3zmYoId//g75P3saLVRxCvsC8JTIdUqcOXG/kunEIGDzb/JW2k=@vger.kernel.org
+X-Gm-Message-State: AFuF++lhP8NWxHSiTe5T+unY/BlSiwzZ/3+HNFBzUfFdCf7yiDX9fVEM
+	ij0jK95WC51uqHfmptuiXWMpxgOnhQ3JBrXYr2cWMuHiztNeIKyMpfelTbdQyJ0qZw==
+X-Gm-Gg: AYBFou0o3VDg9oTCRoH7HFz3yvYM1z6vVOF3R8BTz+5o+pzXywRoh1QgpI9zmXN7Wiv
+	pINCZqe+eX038TSfhkhAhRW5Ju5KrzoozsSByamn/E2bQUujdbvLkmyD6883Qazp+KfCLCsAzG6
+	kZsK5UGTifXwlzczKSvf7b2Og8CThAIBX0foB0YKY8pJay1cv0uKteXZzK1GnkDTuJnC1LhjZVH
+	NKqlSEiNpU8+BIIfn2ehon0k80bk0B45NVIFRSTt09fG1KbqqzYRpSkOQorv5gO1l2g+GhbbouG
+	mGR8SVbWvtjNMosa1Dd8w242muZimzf7iv8h0m/WuUq5n2rxZS2yFFa/1Xcj4nPZQfIFGgEOzk1
+	L7nhigxGIcjT5pZnIBOWcHh0CPV4rtRneNHwazlWWzwI50QOohbgG3Y9A28QOF2qjBHLjrqtV3E
+	14tptNZAkf6TFhUvvo0L/SwuwVcJy35+8vQl1FBKeMfCpIbdwQzslXqEeaAcHUKYPy/y9u7lt+/
+	zR7oJ2ayL1lkuuxxf6r2dz36icuS0H7sL2VSNM4sUBjgVKR6+hsXK0CWnBZC6RcS41x9RgfA9Nu
+	yU48loZdvBH+YzWI0lHzsI1x0zdN03kdaoM6e43PdmADxS+ue3CvG9rxjYxAHd1UFCKoet836Hc
+	XH5mCMGHINvWgjkDSPHnyWdbZdJI7FVqmVX2hwqHrzXfQEQsGZoei4pdBsSfZKW55k1I=
+X-Received: by 2002:a05:600c:3e0a:b0:4a1:6843:eabb with SMTP id 5b1f17b1804b1-4a16843efe6mr133495455e9.1.1791235240914;
+        Mon, 05 Oct 2026 14:20:40 -0700 (PDT)
+Received: from Desktop ([187.40.54.22])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a178ca8127sm18607725e9.2.2026.10.05.14.20.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Oct 2026 14:20:40 -0700 (PDT)
+From: Julius Bairaktaris <julius@bairaktaris.de>
+To: sashiko-reviews@lists.linux.dev
+Cc: netfilter-devel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pablo@netfilter.org,
+	fw@strlen.de,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH nf-next v3 3/3] selftests: netfilter: nft_flowtable.sh: check the priority a flow carries
+Date: Mon,  5 Oct 2026 23:20:17 +0200
+Message-ID: <20261005212017.2997-1-julius@bairaktaris.de>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261005171647.3D12A1F000FF@smtp.kernel.org>
+References: <20261005171647.3D12A1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 00/12] bpf: make the vmlinux BTF an on-demand
- loadable module (CONFIG_DEBUG_INFO_BTF=m) to save ~5.4 MB memory
-To: Jay Wang <wanjay@amazon.com>, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: alan.maguire@oracle.com, martin.lau@linux.dev, yonghong.song@linux.dev,
- jolsa@kernel.org, qmo@kernel.org, nathan@kernel.org, nsc@kernel.org,
- linux-kbuild@vger.kernel.org, linux@weissschuh.net, christian@heusel.eu,
- mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com,
- linux-modules@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org,
- acme@kernel.org, namhyung@kernel.org, irogers@google.com,
- linux-perf-users@vger.kernel.org, jikos@kernel.org, bentiss@kernel.org,
- linux-input@vger.kernel.org, tj@kernel.org, void@manifault.com,
- arighi@nvidia.com, changwoo@igalia.com, sched-ext@lists.linux.dev,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ojeda@kernel.org,
- rust-for-linux@vger.kernel.org, arnd@arndb.de, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, abuehaze@amazon.com, doebel@amazon.de,
- mpohlack@amazon.de, jay.wang.upstream@gmail.com
-References: <44315425-c505-46fe-8379-f19d78ff3abb@linux.dev>
- <20261004222127.31128-1-wanjay@amazon.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20261004222127.31128-1-wanjay@amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/4/26 3:21 PM, Jay Wang wrote:
->>    - If I know I don't need BPF on the workload, and these 5.4 MB
->>      bite me, I can just turn off BPF
-> 
-> They cannot, even when they know they do not need it.  As the cover
-> letter says, the cloud provider usually ships one kernel build to all of
-> its customers. [...]
+> Could this introduce test flakiness due to a race condition?
 
-Ah, I get it now. Thanks.
+I don't think so. test_tcp_forwarding_ip() waits for both socat
+processes and compares both output files before check_priority() reads
+the counters, so the connection is closed by then.
 
-So the constraint is that the cloud provider ships a single kernel
-revision to all users, and there is currently no mechanism to on/off
-BPF other than a kernel build flag.
+check_dscp() reads and resets its counters the same way, and its
+"dscp_ingress" check also expects zero after the "dscp_none" run
+counted packets:
 
-I'd be tempted to say "just ship two kernels", it's simpler than the
-upstream change. But I understand the downsides of that as well.
+    check_dscp "dscp_none" "0"
+    ...
+    check_dscp "dscp_ingress" "$pmtu"
 
-And obviously a good upstream feature may benefit many more users.
-
-> [...]
->>      Keep zstd-compressed blob in the kernel image and decompress and
->>      parse it synchronously on first use.
-> 
-> Thanks for putting this forward.  This compression approach is simpler 
-> than loading a module.  I expect the overall code complexity to stay similar
-> to v3, since both need to find the first user and defer the module BTF parsing
-> until then, but it should be easier to merge into mainline because it avoids
-> the request_module() deadlocks.
-> 
-> Would you like to prepare it for a formal submission, or would you
-> like me to do so?  Either works for me.  Ideally it lands in time for
-> the next LTS kernel, so that we can adopt it there.
-
-Please go ahead and submit the compression approach. Looks like we are
-converging on that. Feel free to use the prototype code if it's
-useful, it uses parts of your series anyway.
-
-> 
-> From what I can see, most of the work left is in that deferral.
-> Whoever needs the BTF first also parses the waiting module BTFs and
-> replays the queued registrations, struct_ops ->init() included, under
-> whatever locks it holds at that point, e.g. event_mutex or
-> bpf_verifier_lock, or inside the module notifier.  So the
-> cand_cache_mutex ABBA you found may not be the only deadlock.  Besides
-> that, only x86_64 was touched so far, so it needs extending to the
-> other architectures as well.
-
-Yes, I think you are right that the hard part here is the deferral,
-because everything expects vmlinux BTF to just be there.  I don't
-think this is avoidable whatever memory saving approach we choose.
-
+The test passed three times out of three with the series. No change
+planned for this one.
