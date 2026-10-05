@@ -1,369 +1,194 @@
-Received: from mail-wr2-f33.google.com (mail-wr2-f33.google.com [74.125.225.97])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010013.outbound.protection.outlook.com [52.101.61.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FC74AD4AE
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2026 14:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.97
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791211086; cv=none; b=prvPAJ8xg2bxu/I6TCojFd8oaSnRVEzzfLv2IJbumWYmN9iLR1Zri4oC1U/kisGwxnitpI8PxCrw+7ZicRwaAoh2axHkWouYgXHuzYC20pQyuL0/OHlh1kbLpZSjZVOLBSoNiZjIUahJm8bWLGGRD7MguT0PTXqATRy2U8F1hko=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791211086; c=relaxed/simple;
-	bh=k2yy0i9Ozd8HQrAbA6lEnQoTA3W+0hKWx+owGdjYlHM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AALYyA2oh8rEwLc6Q8j+C8fYFZg5SMo2xeJpV2XdWPskHbpgV+90o9ucvaWQx3KAs07AN1EhbEnSK8lIhYsyFRGkrpYHCN+66hGeVEK/SZzGAG/Emk/1N1IjpRzVXPBLOp4h7Sh+IEjlfGkFq513LY1u2iabbJhzSWvhcJRMdG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kLGUumCb; arc=none smtp.client-ip=74.125.225.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8837D49A3C7;
+	Mon,  5 Oct 2026 14:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791212034; cv=fail; b=kmy5kR7ti5CICUL/8OvC4fRb8G0GDCAcvDsRebFC3zpyPFc5zSTyta7/kauLvmkpQ1qR1snmig9Tjl8trejBE0igvxPfbZRcOzohuBmUzjNbr2nk9ldvS2usz4sKsmKPHPvDx6YFVVxp7SX6YHDdl14o8BOkRQmFApqyjEsaszE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791212034; c=relaxed/simple;
+	bh=hGdULoe/W2dbSVyhiNd/guNApPkDuDmLF1WFcRKixlw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=MEZN5ucXqkSnpTSHls2irCyPEQGq5gyIoTji7Gut7yYbB9XJAR23mB9sDrsbWTfaf/H6iRs6GcEz1Qg12fYK38oCPxo5HVWHl5IA+z8a3Q5z1w1rBYoEtWka6OlpFmANM1IhaB+EvU2RV4E9G2eTs2jX7YurGW3TDVc68YOxRB8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wIGvIAAW; arc=fail smtp.client-ip=52.101.61.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kLGUumCb"
-Received: by mail-wr2-f33.google.com with SMTP id ffacd0b85a97d-48b104f6aa3so1021580f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 07:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791211066; x=1791815866; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=20HLnZEOH1hZ+Cvo4bV11ruE2Rlk30tMBQPFR9Y6Sos=;
-        b=kLGUumCbh/U+8E5t00cCFOccM3jG8qvr+umHEA5BTAKqZCIK5/Uw3WXC1NAqn/96zy
-         5kwLGjZpXtow55JMXQpCOp8dK5lBACIohdoWZz8t69313pLjEcthQCVXwwiSWKGiGD5n
-         6InzrucJPpTLACmmJSF/5jBkt5wWkyu8WfZXdalEfKG8BGfWbKR9uMsxiSv0aFqVRkg8
-         paeZerN+TBdJqCaN3m1LYwwI8QxcTAKj4JjUKQdDG4x13RybASTMv5lWa/mLG14CTpBG
-         UxGJ8W0mtcjjtOzKQlwSy/APzjmgtslYIG9A0Y3Chy6CsQjXBaC8txoDqzHP+d1/oHGr
-         hCxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791211066; x=1791815866;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=20HLnZEOH1hZ+Cvo4bV11ruE2Rlk30tMBQPFR9Y6Sos=;
-        b=wXoIKVr1zA/aDSQ/LGmy7awvXRvr67N8FQ6GkBEaeFCAtbJCLX/6ueAyaF6HGiZmgJ
-         OVEjZTBa0C09+M/N+Sol/kOnWCv9gXk34GcIyiSEIzYRRI87qhk+YUhZNvTnlxdkW631
-         AeqYuMX/FEat3SQIFb3WAuIJTKBjfawbuP0ZJ328uWc2jG9DnFCBcVtSeVrurlK958jv
-         DKqghuimggVeqwKWBzaqO9RCguHPKdSmUJFrUqqDk6MFLgpN5vB++Ai9G4HD1TQniXYs
-         MsYCpZAsPiPZikBu8QIcBRJMj87O2DB9wXOZC9QMEKIJ1pg59gGpSS4bzI+QO91iopXo
-         phDw==
-X-Forwarded-Encrypted: i=1; AKwUvBx/HGjtAXP9PtHLpKDjsCf8GbHFoLX8Zx1tdlS1DZVR7Rlj3qajoWZQvFRn10IxNjKgmP3iDRLMOzB78G63Qt0=@vger.kernel.org
-X-Gm-Message-State: AFuF++mmPZh7pWmBwQFOqZc7YDIZL2fKBp1LpKmEWBM6q67F5msY44KA
-	zklfcmFMHDC4uhwFuCko/1vqd7oQolPrO0i3M9wPOiSxjdzb8G9933Fu
-X-Gm-Gg: AYBFou1bVNRfTHFPSP2hQ/siA6uObyFUaeavQS2OPNtSfxPCMmtHMs7m4c4rA3u0ZZn
-	6rdiqZ3c4EeFrrgDHyQhcr57cI8TmXzlcl1D+q5KCvrPjkHUIDighixTVBh+mED1bzfHp0NUGPM
-	A7pjf3QSX5Kjdk9fLvU7Jp4Wo4ZJMwLrqnsp8VKFdYyqxAScjrE1rTR1mLqFjxm6at38xeHjfyy
-	xyT5tWY2hPhsqyOVbfwnqHas4irxTj4OQsPKRiqhaEqrrlC3M/mWfHQfVSXToIyG18s+q1ktD69
-	vjB9prs/8FxJy1TGU4Vd6k2j4BoJgg/kdQzFx9rmb2J2J+JIDhOgZMpg9mW3DdtDpAWy8yhRu4i
-	trMuTdLVyNL0QfoZmtovdPgPLG8lMOtOU1ZyTSXXDAs6FkW316dzxOA27L8RDJIklAMCoDif4bc
-	kV/vj5dCKFKa0sTbjkuwOMK9m9q0iSqBsH46LucXn8J12PdeJ2VFnmL92TVnSoJQbadZ4ZoIMI7
-	+UbxBCV2OTxmwrsbFBq0Qq7dYZABoeHjbCFr2CmxgeNw1Uq
-X-Received: by 2002:a05:600c:6091:b0:4a1:702f:c736 with SMTP id 5b1f17b1804b1-4a1702fc916mr70113485e9.3.1791211066464;
-        Mon, 05 Oct 2026 07:37:46 -0700 (PDT)
-Received: from andreayoga.localdomain ([80.188.242.210])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0276fa954sm348555785e9.3.2026.10.05.07.37.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 07:37:45 -0700 (PDT)
-From: Andrea Parri <parri.andrea@gmail.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Andrea Parri <parri.andrea@gmail.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] iommufd/selftest: Check dmabuf MMIO mappings filled from another domain
-Date: Mon,  5 Oct 2026 16:37:36 +0200
-Message-ID: <20261005143737.2915-3-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261005143737.2915-1-parri.andrea@gmail.com>
-References: <20261005143737.2915-1-parri.andrea@gmail.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wIGvIAAW"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Pw3lf1bFTBSStJfEdjrCIrBSNkTC6D00dtZfizWfRjPoZMA0eRKpzx2msy2tRNMK+xukBQxSlG7JzIBafsMqmMV3IVurp+FSPKTLbamM/bkPgJr8grYFsHtVJDEiGRly4a7EX2wWcXw812kxm9yNzqtPheFwa3LV+0e3pFdVwvVSf+DnpO/6/E8/HS77jfjBI7WtRyzUD8u0xw/KrcvmUeSWzSHuCskK4Y0oX7KwqMW1b3eZWQJiwcgicvXBbaWWGChJHixNSK57919HYjamRfZpOLIc4ApGaSQbpA9fm6p31E0rsiSKfIfd/IQaEXyC2ECUoGXIhLdgHltWHbOghA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xhYYD7fuqcEAqP8b+0LuUdhivoZIMdrxyhMC5z2p9gw=;
+ b=ORZq6mJpMNo8JqZweAKESr2IUbYSuWZQJX6/oC1KXTgmHsuQmF3JzhlPN1kLNI7LBmiRPybhtslCSYJlzb4jc0xVoNfmrfUvJJj/nExXl1/ON+cvwCtciD8AcsEhWg/u47z7I7aEPNB2VVKjuUZyMSnBAAW33+Fmyz/+T+ZS4Fuy5WyISTKxIGnTf2DcDmBJ1yKyoOlpabk9zH0SFJOigEtvl/ljILckBLj6RuIT8jIL0HIaqQfKwWJZcnmT2qyaFz5fX6970HgrNI6Qvs2HToD9s9ERxajS4CVBWhTYBmSKEWdplWK8JsT6/M46URq8zDd0TZ1Mx/l6xl2bJgx8yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xhYYD7fuqcEAqP8b+0LuUdhivoZIMdrxyhMC5z2p9gw=;
+ b=wIGvIAAWRpVTelaHn5Xf4TclnHJYErRu37kJxH+pnH/xAOt0jRFJFktlzFAUi2Fq0pLTUcBifmyk5OtHjOF+OZRqxas9t1uckJhfAgzdOapw3RaaKL3OBoqPUbOYu3dbM0NIvr2S9lmN4PR6M1a5ucw4jNdIOYlXouKDwLGOTEo=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by BL1PR12MB5729.namprd12.prod.outlook.com (2603:10b6:208:384::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.26; Mon, 5 Oct
+ 2026 14:53:47 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c%3]) with mapi id 15.21.0472.016; Mon, 5 Oct 2026
+ 14:53:46 +0000
+Message-ID: <f0077cec-10fe-400a-b229-f7434e297364@amd.com>
+Date: Mon, 5 Oct 2026 16:53:34 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 2/6] dma-buf: Add get_phys() to describe a physical
+ run
+To: Fred Griffoul <griffoul@gmail.com>, Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>,
+ Oliver Upton <oupton@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>
+Cc: David Woodhouse <dwmw2@infradead.org>,
+ Ackerley Tng <ackerleytng@google.com>, Joey Gouly <joey.gouly@arm.com>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
+ <yuzenghui@huawei.com>, Steffen Eiden <seiden@linux.ibm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H . Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+ Robin Murphy <robin.murphy@arm.com>, Alex Williamson <alex@shazbot.org>,
+ Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, x86@kernel.org
+References: <a04f17cc-f59a-4240-81c8-29776eee3a2e@amd.com>
+ <20261005132046.30025-1-griffoul@gmail.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20261005132046.30025-1-griffoul@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT2PR01CA0021.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:38::26) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|BL1PR12MB5729:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5180c871-a821-4b99-440d-08df22f07562
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|10067099003|11063799006|56012099006|6133799003|4143699003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	UMx0b+52OJCYLOf3oRoulDZIGT5QrLnzOPNMCapQVSyRURB5fCSysSsCDls0m/nsgU+Rewv0hwM6sGISOslSxlDf+V1525NPxJ3b6a3KpwPI2G614zfLeZpctlIy7hrtl4VH53G2goXj7KlcD2XMdgVHRRxZ+QF7cH9zYnN5PbCbBXDOLzm6a7KZuOScVS41NpxCR7fijpnvixJNIipadhiZDk4yTqIbuj+Oimh3R/UrIelVMAXFSvaLP34R+oCB7yihEiuv8FBHn1PMGc4AFBe6iGt69gntVEx7Z/f1JN53fQ+8yytRU4X91Ox3DBfYowNwGYcAtLF/40KTzNC7HH9OvoDlF33Cfc1WpX6zYDE8oW5hZ9LJK5qnBG+G1GWbbqqeKBZJmYt8Gujq7MJc1ehEJ3bscl9n8/JRFjEJmWRUaHr4mfgUzX7tBNUVkY/uj6w2DoVeeldjKURa5CE0pox0qOcLBcJRdczt6Nz+yOJsMU8QQXHjqzMwdla9J4G5BYx2QTklmlfQSiCK+hQ/6QudiHQMd+5G+J3jORC5BCXzmyU9jOdJcCYzLcFKA4X+VZCRb5UGKckeTYm6JKBj7sV0kJ5o6wm19Yv+0O1SAqpzwOkZ7Fjx3vuZGdHl8P53
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(10067099003)(11063799006)(56012099006)(6133799003)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UUZnZzlQU0J0SkJkUTdIYzlWSEhvRHJ3VlVBbE80Z1A1L0lTU1ZLTll4bmVi?=
+ =?utf-8?B?a211M0o0QkVyMWxhM0JKZGNCQnJmTEFzRk9ON0k3eTRadU1zQVZYUTB5bW8z?=
+ =?utf-8?B?eDhaQ0FnVDlsRUM2VUJWRTJZa2pBSlJMQWhrbmNWZ1Z6ZTJuNUkxdFNMeU4y?=
+ =?utf-8?B?M2hOUHY1bEtUWHNlOSt6cm5XcXNmSjByNHcwd1VvNlEvSVZsamdVdmFxS3Ax?=
+ =?utf-8?B?c05sUkQvWjhOVWV0M1ExQkoxT2ZrTzF6RmhPNVVBNWtzMFkwaDhQejllZnc3?=
+ =?utf-8?B?OXNSbG41L2hvdSs3OVlUTlo3ZmR6T29XbVNUOEwvU1BxVmNjK1V5dmhpSUEz?=
+ =?utf-8?B?OWRwNk1ubWcra3VrVitDRTNwVUtpaVhDY284RFFKc3pjdUtmcWlHQjJUVFRM?=
+ =?utf-8?B?Y2xhLzNyT0VRUDlZd3V4ai9ld0pISFl4Mi9Jc0lFcFZ0bk1QZ0d6ZVdOZjRt?=
+ =?utf-8?B?a3NBUHUxbTQyRTliZk84TktrMG1WaUFyNEdZNzcrS0trNTZLdUNJQ3hXQnh0?=
+ =?utf-8?B?Z2hHQTZNL1BwVUZaTWhXTEc3dm1hbXZ1UFZLWUNSUGRsTjcxV2FWNm9CMnBB?=
+ =?utf-8?B?WjBuUEI0VUo2YXVyUVM1UjgyZFNRMGlmUnQ2aVZNNDZsMWFvOHVDU2dYYXlp?=
+ =?utf-8?B?VzV0Sm1QRGRNQzBwNHI1aFVyaW1HQjhNRmlPcUpiZHpoWWp0cHpJUWNBYWJ4?=
+ =?utf-8?B?RjJXdW9yUmQ5ZWFKazlMSTlHZVpnMTZaV3l3VEs5czNYQitiWGJOZi9admRy?=
+ =?utf-8?B?SmpVSkphclViTldydnc3Y0VjNU5tU2l3akVSUG9TQW9qY2h4dG9uOWhBdWh0?=
+ =?utf-8?B?WEk0UjhqWHEybUpqNEl5Ly93dGVsYXJwVHU5QVAzU2puVWRxZGUvV3g3b2dp?=
+ =?utf-8?B?WkZ4a1kvc3VsSldKWUNEYXFFYkZqaDlqV1l2aDRkc3VxMmg1N2t1dEdMalhV?=
+ =?utf-8?B?a3MrRWEzL3JtdmFQYVcvY05PSmtML1VkVnk0OUt2UUJRekJybDdZSDVnS1V5?=
+ =?utf-8?B?YXJPWStxbWRyTVhyQWYwbDlkcTA5bXhEbkR2ZWRobXFuV29UVFY1c1FRbDlB?=
+ =?utf-8?B?eTg1dThBMzVwNHdldTdCM0ZsR1lQajBleEtPcUtHcW1NZnJXeFRielMwa1c5?=
+ =?utf-8?B?MkxMZFJLZ2UxeHJzRHNFL1hSY2RSSEpzMEgwRDFTakR6VGVQOFVaQS94OEhN?=
+ =?utf-8?B?WDVLMjhoNG51Uk93YWQwVGVDT1V5cGd2UlEzd0dBRkU0VmRESjRQTERrUXB6?=
+ =?utf-8?B?RVBVMDhvMER5M003RzRPVWJWNGU2ejlqZzNDR3lSWUVsVmh1dGRXdlJlWUpz?=
+ =?utf-8?B?djJRQ3QwZzNwditmVmRCZ0cvZHVQMHdqd3RvMnZDSzVPT2lMZWVJMEhTSWFz?=
+ =?utf-8?B?LzRmcFp4bGFiaXBZTENuV2VnWVJBTWpNcyttR1BCeDUzRElrc0NyL3F3eVFK?=
+ =?utf-8?B?N0ttaVJYdFNqbHRoSTVVZnA2OFBibEUwRTduR3BtU0h0NHlMaHVLZ0F3dUQ2?=
+ =?utf-8?B?bUlFM3dBakdDbEpxSWh2T1gxeFFnekFyVEZYYUxQSm5DNFhVNmxYcUpXdWxK?=
+ =?utf-8?B?dDNpV1Yray8ycXdVaVBqeFk2Qzlpd1NBclVsLzRleVJWV25nQVpkN1cwTVBJ?=
+ =?utf-8?B?OEQ4RFFqSGc2bWhuZXVCeVM1eDZWUjVPV0pkcVlmMkNOSHh5T2ZoYjd4c2Y1?=
+ =?utf-8?B?U2hxc0xBNWRhTFlrYnVpZW85ZzRGMFFNaTk0Y0V4VjdQQXd4MWNUYWtMdkNK?=
+ =?utf-8?B?UFNZMXNIS3RIN25BQWVmWVA3dGZTV3AxQnRjQTRNY3NXM2w1YmJaL1duZTBE?=
+ =?utf-8?B?VmN0LzlUVVlHWThyZm5pSFVCMG9GMDFqMWVnRWN0YkZZcmFLOUNLK2MreWtq?=
+ =?utf-8?B?RUtQaUt6TTJ5aHllWE84T3J4ZzV0T2dpaEs3a1Y1SnY3MlNxUmdxZjNNc1dP?=
+ =?utf-8?B?R0pwc1NFNnRFVzQ0VW1YVDNwVlF2eXBwelpIT3NZK3M0a2pEWUsxL3dLZU9X?=
+ =?utf-8?B?YjNpN1lVTGNIQzZMLzVCT1FqTGt1Tm5NVFhoZU1wOUtMYitMaUkzSm9LbWFz?=
+ =?utf-8?B?M2lkSzBOTkpiSHViNlR5dHBGVitrMmRBVDIySHl5LzhzQVZzUEt0R1NWbUVM?=
+ =?utf-8?B?TDVpeFQwdnZCK3dwS1N6T3RnclF0K2JJcnZUWmhoZDJ0WlVTbWJJMFdhNENZ?=
+ =?utf-8?B?L2Q1a082VHk1bGswVXdwYzdsY1VESkFOeUw2ZzlyM0pBTTluT25EcmVKN2hC?=
+ =?utf-8?B?RlVMRE9udVFBbDJLUVBkSGVURTNob1RlekNkTmFKRjR0SmRlVzhMdTNhYmF3?=
+ =?utf-8?Q?Hc0M7qWAY2qZQ8+ci9?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5180c871-a821-4b99-440d-08df22f07562
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2026 14:53:46.8740
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AmtdD0x3b82LYedWJRCPE8uRkJn8eUSChFoy8OXHpB8cABCoDWbN6dYWy0C+wQk+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5729
 
-Add tests that a dmabuf keeps IOMMU_MMIO in a domain that is filled
-from an already mapped area: a second domain added to the IOAS after
-the dmabuf has been mapped, and the domain of another IOAS the dmabuf
-is copied into.
+On 10/5/26 15:20, Fred Griffoul wrote:
+> On 10/5/26 Christian König wrote:
+>> Well filling page tables by the importer is an absolutely clear NO-GO
+>> for the DMA-buf design, we have gotten down that path already and it
+>> took us years to remove this functionality again.
+> 
+> Understood, thanks for the quick and clear answers on this patch and on
+> patch 3.
+> 
+>> The problem you are facing here is that dma_buf_mmap() doesn't work
+>> because you don't have a VMA.
+> 
+> Right: the memory has no struct page and is deliberately not mapped in
+> the host, so there is no VMA to hand to KVM.
+> 
+> I'll post a new version of this series. It drops get_phys(), the ranged
+> invalidation and the guest_memfd dma-buf import (patches 2-5), and it
+> does not touch drivers/dma-buf, as you suggested in the PAL discussion:
+> 
+>   https://lore.kernel.org/all/c413710b-4c28-4ed8-88ec-aeb8c4482011@amd.com/
+> 
+> KVM gets its frames through the KVM-private guest_memfd provider
+> interface from David's series. iommufd gets them through a private
+> interface with the exporter, as it already does for vfio-pci. The new
+> version adds a small registry in iommufd for that, which replaces the
+> symbol_get() of the sample in David's series. The dma-buf is then only
+> the handle and the existing revoke.
 
-The mock page table has no memory type bits, so a mapping made with
-IOMMU_MMIO cannot be told apart from one made with IOMMU_CACHE. Wrap the
-mock's generic_pt map_range and unmap_range ops to record, per domain,
-the pages mapped with IOMMU_MMIO, and add IOMMU_TEST_OP_MD_CHECK_MMIO to
-check that a range is recorded.
+Yeah that approach sounds totally sane to me.
 
-dmabuf_mmio_new_domain maps a mock dmabuf, checks the existing domain,
-allocates a second HWPT on the same IOAS and checks it too.
-dmabuf_mmio_copy maps a mock dmabuf, copies it with IOMMU_IOAS_COPY into
-a second IOAS that has its own mock domain, and checks that domain.
-Without the previous patch the checks on the second domain fail in the
-three mock domain variants; with it all checks pass.
+We have drivers which stuff all kind of resources, not just memory, into a DMA-buf. That ranges from MMIO BARs to trigger FW operations (doorbells) over full HW blocks (ordered appends, global wave sync etc...) where two or more applications need to share which one is used.
 
-Assisted-by: LLM
-Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
----
- drivers/iommu/iommufd/iommufd_test.h          |  5 ++
- drivers/iommu/iommufd/selftest.c              | 90 +++++++++++++++++++
- tools/testing/selftests/iommu/iommufd.c       | 51 +++++++++++
- tools/testing/selftests/iommu/iommufd_utils.h | 13 +++
- 4 files changed, 159 insertions(+)
+That you then have a exporter private interface is for accessing this is perfectly ok.
 
-diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-index 52b78cbcc920d..3c8111dfb928a 100644
---- a/drivers/iommu/iommufd/iommufd_test.h
-+++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -31,6 +31,7 @@ enum {
- 	IOMMU_TEST_OP_PASID_CHECK_HWPT,
- 	IOMMU_TEST_OP_DMABUF_GET,
- 	IOMMU_TEST_OP_DMABUF_REVOKE,
-+	IOMMU_TEST_OP_MD_CHECK_MMIO,
- };
- 
- enum {
-@@ -109,6 +110,10 @@ struct iommu_test_cmd {
- 			__aligned_u64 length;
- 			__aligned_u64 uptr;
- 		} check_map;
-+		struct {
-+			__aligned_u64 iova;
-+			__aligned_u64 length;
-+		} check_mmio;
- 		struct {
- 			__aligned_u64 length;
- 			__aligned_u64 uptr;
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index 25387969ab753..e700fd9250540 100644
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -120,6 +120,10 @@ struct mock_iommu_domain {
- 		struct pt_iommu_amdv1 amdv1;
- 	};
- 	unsigned long flags;
-+	/* map_range/unmap_range wrappers record IOMMU_MMIO pages */
-+	const struct pt_iommu_ops *pt_ops;
-+	struct pt_iommu_ops rec_ops;
-+	struct xarray mmio_pages;
- };
- PT_IOMMU_CHECK_DOMAIN(struct mock_iommu_domain, iommu, domain);
- PT_IOMMU_CHECK_DOMAIN(struct mock_iommu_domain, amdv1.iommu, domain);
-@@ -392,6 +396,7 @@ static void mock_domain_free(struct iommu_domain *domain)
- 	struct mock_iommu_domain *mock = to_mock_domain(domain);
- 
- 	pt_iommu_deinit(&mock->iommu);
-+	xa_destroy(&mock->mmio_pages);
- 	kfree(mock);
- }
- 
-@@ -423,6 +428,51 @@ static const struct iommu_dirty_ops amdv1_mock_dirty_ops = {
- 	.set_dirty_tracking = mock_domain_set_dirty_tracking,
- };
- 
-+static int mock_map_range(struct pt_iommu *iommu_table, dma_addr_t iova,
-+			  phys_addr_t paddr, dma_addr_t len, unsigned int prot,
-+			  gfp_t gfp, size_t *mapped)
-+{
-+	struct mock_iommu_domain *mock =
-+		container_of(iommu_table, struct mock_iommu_domain, iommu);
-+	unsigned long index;
-+	int rc;
-+
-+	rc = mock->pt_ops->map_range(iommu_table, iova, paddr, len, prot, gfp,
-+				     mapped);
-+	if (rc || !(prot & IOMMU_MMIO))
-+		return rc;
-+
-+	for (index = iova / MOCK_PAGE_SIZE;
-+	     index <= (iova + len - 1) / MOCK_PAGE_SIZE; index++) {
-+		rc = xa_err(xa_store(&mock->mmio_pages, index, xa_mk_value(1),
-+				     gfp));
-+		if (rc)
-+			return rc;
-+	}
-+	return 0;
-+}
-+
-+static size_t mock_unmap_range(struct pt_iommu *iommu_table, dma_addr_t iova,
-+			       dma_addr_t len,
-+			       struct iommu_iotlb_gather *iotlb_gather)
-+{
-+	struct mock_iommu_domain *mock =
-+		container_of(iommu_table, struct mock_iommu_domain, iommu);
-+	unsigned long index;
-+	size_t unmapped;
-+	void *entry;
-+
-+	unmapped = mock->pt_ops->unmap_range(iommu_table, iova, len,
-+					     iotlb_gather);
-+	if (!unmapped)
-+		return 0;
-+
-+	xa_for_each_range(&mock->mmio_pages, index, entry, iova / MOCK_PAGE_SIZE,
-+			  (iova + unmapped - 1) / MOCK_PAGE_SIZE)
-+		xa_erase(&mock->mmio_pages, index);
-+	return unmapped;
-+}
-+
- static struct mock_iommu_domain *
- mock_domain_alloc_pgtable(struct device *dev,
- 			  const struct iommu_hwpt_selftest *user_cfg, u32 flags)
-@@ -434,6 +484,7 @@ mock_domain_alloc_pgtable(struct device *dev,
- 	if (!mock)
- 		return ERR_PTR(-ENOMEM);
- 	mock->domain.type = IOMMU_DOMAIN_UNMANAGED;
-+	xa_init(&mock->mmio_pages);
- 
- 	mock->amdv1.iommu.nid = NUMA_NO_NODE;
- 
-@@ -454,6 +505,12 @@ mock_domain_alloc_pgtable(struct device *dev,
- 		if (rc)
- 			goto err_free;
- 
-+		mock->pt_ops = mock->iommu.ops;
-+		mock->rec_ops = *mock->pt_ops;
-+		mock->rec_ops.map_range = mock_map_range;
-+		mock->rec_ops.unmap_range = mock_unmap_range;
-+		mock->iommu.ops = &mock->rec_ops;
-+
- 		/*
- 		 * In huge mode userspace should only provide huge pages, we
- 		 * have to include PAGE_SIZE for the domain to be accepted by
-@@ -1180,6 +1237,35 @@ static int iommufd_test_add_reserved(struct iommufd_ucmd *ucmd,
- 	return rc;
- }
- 
-+/* Check that every page in [iova, iova + length) was mapped with IOMMU_MMIO */
-+static int iommufd_test_md_check_mmio(struct iommufd_ucmd *ucmd,
-+				      unsigned int mockpt_id,
-+				      unsigned long iova, size_t length)
-+{
-+	struct iommufd_hw_pagetable *hwpt;
-+	struct mock_iommu_domain *mock;
-+	unsigned long index;
-+	int rc = 0;
-+
-+	if (!length || iova % MOCK_PAGE_SIZE || length % MOCK_PAGE_SIZE)
-+		return -EINVAL;
-+
-+	hwpt = get_md_pagetable(ucmd, mockpt_id, &mock);
-+	if (IS_ERR(hwpt))
-+		return PTR_ERR(hwpt);
-+
-+	for (index = iova / MOCK_PAGE_SIZE;
-+	     index <= (iova + length - 1) / MOCK_PAGE_SIZE; index++) {
-+		if (!xa_load(&mock->mmio_pages, index)) {
-+			rc = -EINVAL;
-+			break;
-+		}
-+	}
-+
-+	iommufd_put_object(ucmd->ictx, &hwpt->obj);
-+	return rc;
-+}
-+
- /* Check that every pfn under each iova matches the pfn under a user VA */
- static int iommufd_test_md_check_pa(struct iommufd_ucmd *ucmd,
- 				    unsigned int mockpt_id, unsigned long iova,
-@@ -2105,6 +2191,10 @@ int iommufd_test(struct iommufd_ucmd *ucmd)
- 	case IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE:
- 		return iommufd_test_mock_domain_replace(
- 			ucmd, cmd->id, cmd->mock_domain_replace.pt_id, cmd);
-+	case IOMMU_TEST_OP_MD_CHECK_MMIO:
-+		return iommufd_test_md_check_mmio(ucmd, cmd->id,
-+						  cmd->check_mmio.iova,
-+						  cmd->check_mmio.length);
- 	case IOMMU_TEST_OP_MD_CHECK_MAP:
- 		return iommufd_test_md_check_pa(
- 			ucmd, cmd->id, cmd->check_map.iova,
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 44193d171ba98..8f68c9aee15d5 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -1599,6 +1599,57 @@ TEST_F(iommufd_ioas, dmabuf_simple)
- 	close(dfd);
- }
- 
-+TEST_F(iommufd_ioas, dmabuf_mmio_new_domain)
-+{
-+	size_t buf_size = PAGE_SIZE * 4;
-+	__u32 hwpt_id;
-+	__u64 iova;
-+	int dfd;
-+
-+	if (!variant->mock_domains)
-+		SKIP(return, "needs a mock domain");
-+
-+	test_cmd_get_dmabuf(buf_size, &dfd);
-+	test_ioctl_ioas_map_file(dfd, 0, buf_size, &iova);
-+	test_cmd_md_check_mmio(self->hwpt_id, iova, buf_size);
-+
-+	/* A domain added later is filled from the already mapped area */
-+	test_cmd_hwpt_alloc(self->device_id, self->ioas_id, 0, &hwpt_id);
-+	test_cmd_md_check_mmio(hwpt_id, iova, buf_size);
-+
-+	test_ioctl_destroy(hwpt_id);
-+	close(dfd);
-+}
-+
-+TEST_F(iommufd_ioas, dmabuf_mmio_copy)
-+{
-+	size_t buf_size = PAGE_SIZE * 4;
-+	struct iommu_ioas_copy copy_cmd = {
-+		.size = sizeof(copy_cmd),
-+		.flags = IOMMU_IOAS_MAP_WRITEABLE | IOMMU_IOAS_MAP_READABLE,
-+		.src_ioas_id = self->ioas_id,
-+		.length = buf_size,
-+	};
-+	__u32 stdev_id;
-+	__u32 hwpt_id;
-+	int dfd;
-+
-+	if (!variant->mock_domains)
-+		SKIP(return, "needs a mock domain");
-+
-+	test_cmd_get_dmabuf(buf_size, &dfd);
-+	test_ioctl_ioas_map_file(dfd, 0, buf_size, &copy_cmd.src_iova);
-+
-+	/* The copy is filled from the domain of the source IOAS */
-+	test_ioctl_ioas_alloc(&copy_cmd.dst_ioas_id);
-+	test_cmd_mock_domain(copy_cmd.dst_ioas_id, &stdev_id, &hwpt_id, NULL);
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_COPY, &copy_cmd));
-+	test_cmd_md_check_mmio(hwpt_id, copy_cmd.dst_iova, buf_size);
-+
-+	test_ioctl_destroy(stdev_id);
-+	close(dfd);
-+}
-+
- TEST_F(iommufd_ioas, dmabuf_revoke)
- {
- 	size_t buf_size = PAGE_SIZE*4;
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index b4928cbd4d9c8..4567a69de8df6 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -560,6 +560,19 @@ static int _test_cmd_destroy_access_pages(int fd, unsigned int access_id,
- 	EXPECT_ERRNO(_errno, _test_cmd_destroy_access_pages(              \
- 				     self->fd, access_id, access_pages_id))
- 
-+#define test_cmd_md_check_mmio(_hwpt_id, _iova, _length)                     \
-+	({                                                                   \
-+		struct iommu_test_cmd check_cmd = {                          \
-+			.size = sizeof(check_cmd),                           \
-+			.op = IOMMU_TEST_OP_MD_CHECK_MMIO,                   \
-+			.id = _hwpt_id,                                      \
-+			.check_mmio = { .iova = _iova, .length = _length },  \
-+		};                                                           \
-+		ASSERT_EQ(0, ioctl(self->fd,                                 \
-+				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_MD_CHECK_MMIO), \
-+				   &check_cmd));                             \
-+	})
-+
- static int _test_cmd_get_dmabuf(int fd, size_t len, int *out_fd)
- {
- 	struct iommu_test_cmd cmd = {
--- 
-2.53.0
+The problem you are facing here is more that this is not limited to one driver/module but multiple ones and you don't want module inter dependencies because of the symbols.
+
+So symbol_get() is probably the right thing to do as long as we don't have something like weak symbols or similar.
+
+Regards,
+Christian.
+
+> 
+> Thanks,
+> Fred
 
