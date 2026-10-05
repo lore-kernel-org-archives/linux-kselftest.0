@@ -1,64 +1,64 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F33D519929
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2026 17:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7258B51C35B
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2026 17:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791220692; cv=none; b=c9lwRVaG8ZWvM47BWSaHxuEhS3ArvaQBn0Q4SN7+Qjk88Jv9GoSdffTBEE2vTYClvYvQ+i1yQ3FwWMY7J1+7KD/thvQjdinFYoBirMHHkXVIGYbOPqs8rvTsN/4Zhr4ZaMp1q0dgADR8E/qHZf3tA/I7b515+HaXdvvtq2V6+IA=
+	t=1791220711; cv=none; b=qPTOnwSNtQwwnpt31ccQmZviIRlAeg3Gen34ufGFkzprlhavvZqT1B6mYIdFgop+2vo/Zp13HJtMixORI8uj150uL7k/6MM5tN5n9CM+gCLh8Ds20ajz7uDwj71iOtibYMqG64qXOpW+B9bWc7GUVJ6ozJmetvG/d143mfB/+KA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791220692; c=relaxed/simple;
-	bh=bKK6Ka9Gp+vtwgFDDZYR/jwqeinj7CuEjE6r7sAsMFE=;
+	s=arc-20240116; t=1791220711; c=relaxed/simple;
+	bh=VRRvq3zLEbjKyIt2UhIB5bfMCL6WQ+2ygOmVvN1KkXo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tCQdA3i9dpNNb6Kg2YUBgjZyUwIiZW3ZZctRY+MiT3xF6PxSxnSDtC14ka9LJoGFe42Yq6jV1GL2dK1uvqxzfoM13OeuZpYFOmOYAPpoY6qDcxfScqY3+X+zDplO0Nx9CMGM+MM8gihrk258ygU83IJVsHkYTlSaJhkqVaBTXxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CzdOK2rw; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version; b=RqK5pnu8sumpujFzaG+Po4LMahPshSYSd+gfIqP/k2y8W2D16JgbLyrea2A8GBB9dqv/EHcqvsNhBTLD0T7gSHd3PzrodnB6/7Gzkod9SR+0fCuK7ip9El9yo0PAYPc17KMrNuwWxI+peg5d+79+Vhg+b9wI0TMoZkh2UH3FVPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eZI6elm2; arc=none smtp.client-ip=74.125.227.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CzdOK2rw"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-39b2ad83dc6so1339159a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 10:18:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eZI6elm2"
+Received: by mail-pj2-f41.google.com with SMTP id 98e67ed59e1d1-3a7906f463dso1601264a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 10:18:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791220690; x=1791825490; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791220709; x=1791825509; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cJpC50bJQ46wh7HHA0CogRCPQLVQ5kdzi3EXJci6E9Q=;
-        b=CzdOK2rw2houwTVvYfMKl3+SKEK/ihH6hDvN1POzG0hHGMmj1V7diGb9/0cCdjin5z
-         wQaSvpY27r/WP24Dt9YKJmZYyPaX3kT2PV4xFmcvA9I+o/ASy7ZVytXpErgnJa/pqL4h
-         PiHA33DlgPfJ1ug4qhmQ6EftR1lwvbcWC472W0St/HXatjK0iH+ZvJuTQ9kPSpAloE63
-         1i2LkGmjv5ZOslybuTrgx6fp9wUhYeGWNQchLtLaiMuNwed7IqSLOVcZGOujP40J3cbC
-         Ry/jJZ/3HpRDZU9wtgdnR1b+18cprBnIbJ/BR2WuPbL3mk/IRJace7igt0cDQoZ8eecv
-         XCCg==
+        bh=aQJb7vr8ZMuFWHiL+RnTPMV3r43UUmwaGCJuJ+OyJv4=;
+        b=eZI6elm2ZWLe1z4EUhPXxPUuRWeyQ/T3QgF+iNd4qtEBgDAzb2HTJYrf59DX/nw8FQ
+         X19RbX693PaJwIgsX75DmJEaJpfTrh5fv//S51rijQFmw5XeffUjf7zaAM3bWekOUPWE
+         0gu8vWfbshp1mwy9aoqCV6/xVw+Fmh86nsg6b9gO8+o09QQERfnNJ9SVCfIviHKeySQ+
+         bK+fXcxo83sh9iFrAOM/QzS3mHx+h8SY9sxkgt2bijktpgkeSFwr/Zvi6U7nW+eh0VLR
+         KIl+LT8cHfi9WY6ajIbLO5KrxPemNK46ByOLotl1BWBfHU8GdCEOIiYIYtpzbfmPluAF
+         BoCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791220690; x=1791825490;
+        d=1e100.net; s=20260707; t=1791220709; x=1791825509;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cJpC50bJQ46wh7HHA0CogRCPQLVQ5kdzi3EXJci6E9Q=;
-        b=gZx8uTvizCyIqOJOqHq13guvxofKphOFsIPEPG0d+29CZWcjIV1Fz23oCLKpLtbo1V
-         pVK/9bXbtPlQygotqwIppsVPNb5CN6V1bsO4k7SC5lKwVILL9drDdEo32j5GBzeEIpzv
-         +y7jqwO3WOB5wklYQUWmsWtPo6YidAiIQ5lS9FetKOBEaUQ9LAvmMniBR4sdcN9gIw4o
-         wSSuX/5+hLRTjmh0f/VSvao8nQGzx60rHNOF6XPnKo19tE4W7FWQrWKDc4GBS9d5UEoa
-         wb0SpF9eiv11l5tcGxxBfBnbJ/1/B/cGMWz/aFFc1m5SP1nhWbP2aZthOI5Zt2hp8C7/
-         FgAQ==
-X-Forwarded-Encrypted: i=1; AKwUvByN8rFjq2agwl3ULGR7pEo9MRe1oAYmZT5JNlKF0vUkwloa2ADk8AZX+Z8e5/fXS5dzN4U/451HCP6daQunxus=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL/XuGYetfcVAes26sHJJ8GRspqaflhr0eG1PpGLAFKctVL/Jdo
-	eloHg+s7/m8nHeQLvbuUVt53n7H0mMa0MHsP6Fg2bNC7TVAd3NPO6uqk
-X-Gm-Gg: AYBFou2VVVD47DtkE307obcQmPV1UiT6FrAf26wS3Ih7CrZx7O/edYxIejmXuuDSJhc
-	7tnMB6S2ypYDcU+scI0ObK7f6eHFKbyDVqL13KkN2K3Bu1Fa2s3bj6Lw3xxeADxvnT9++lRbkfS
-	IgWBlAslGOZrvUb1tLD2Xaa9vthbyCDGBpHN7MUn+gDG+0Cpxsqmd4MTbyrPcA2U4nPj3TiSF7P
-	CgjB9toJsbjnzY4dDuVPbWeRtWYunaGWLB/Iw+gSm9OTqTxqvyWPFmx6vYdpiT2Co7W0kYWho0j
-	j4KhgSyg19ZzpQ6FFIzjSkSzoYl3h9lGwRTHKiix2vaU0HNkLOO8bN9xKerzBEh+fIRIKb8ALi1
-	jmpAtjAcwbYSwisNLY6maHChV4lpYN8tscEBDDMVOB+Vw7ZshA4FajIZswqJk9XGoSbrq66AtBd
-	N43xxlph9NBM8OP8TZcdAr3kY3LBFZabn7V20PrqaYlUMUDS19ye59KFkSJL9Wf5C+aO+KgnT6k
-	9JsHJzyTDsVBnMzz29tOIWYkhWEng==
-X-Received: by 2002:a17:90b:3846:b0:3a0:bbd8:5ba7 with SMTP id 98e67ed59e1d1-3a6ce996924mr10923539a91.62.1791220689796;
-        Mon, 05 Oct 2026 10:18:09 -0700 (PDT)
+        bh=aQJb7vr8ZMuFWHiL+RnTPMV3r43UUmwaGCJuJ+OyJv4=;
+        b=uHo/YdTwzMMrlfNaut5uWY4IfEqgXOtQwKqWP/0AQBKbwiiO59RHJkA+gd2fcz4g6E
+         VScTBsCf7ydDUxdHXaB/xDukawH8VWvaCrvO8hZniVqvHL+c1+MMCxjGuGgj1DZ4+mKz
+         r9Ico+aMMW88n4xw5o+rX/c/QcHurRvUnMaQuoPShU1/cdqXupXMBPzIAvWMEFJOUY0o
+         oESuSvevSNCY90nOmZvfzRU+SadBcxGAtzaLAW2KoaZBnsXsMriUzeUQDCF1pbmqTtHb
+         aLpCsyRN1HGbCgfmJw9RGLYwxdDcWFrG+mahfwGBekneITl9jforB37hIzjDipquw8AG
+         Qv0g==
+X-Forwarded-Encrypted: i=1; AKwUvBwHdIaZGN/LJUNnGihDmHaeaxfnieMy1LJgaenv9Q+QeU49Y+6hBJFtrhvp3sPaNJjiqnVUuM03+OgIS766o8s=@vger.kernel.org
+X-Gm-Message-State: AFq9FYItPyZfrSxAQd4pYI5g5Z7F+hGSAiBP3r2YjAeiNWI5/T5q0YEu
+	6QXDEAlbhR51eruFFDjfITiztGiCeb0Yyfn7HNr6KUZPog6tptjTp0lh
+X-Gm-Gg: AYBFou0RzQxQ7cqiHT9A1kzRPTDEHAj4gcEdUcxW/2A2uH4O5N2Ol6taKabv3XgAgvz
+	9rXctiyVBxJqqM1iQ2dCOjmxMdoBfBcZcQ5sHMzq53JKWfTLEFLDUUvAFWPbJXhdAIxvB3SwM2B
+	edGx5LPWOSitX9OXcDXtmxbc4qtRiKWfBZ91DgcR6t+/YLjxB3wO2Pb4BJlQnmjPLviYNXJdSZC
+	uWgFmE8rX07OKpuxwdOl/LXJh2naejaYIvQuiSnpNvxDkKJRG7ibQLGDSSkhVu6dTXTqDJtmFSx
+	kh8O5XYD/QMCub+UaqjxGcNeRFJ8AfsQRw7DPpuj1xr4Eak8v25z5Dh0i4nC/q8PYdumoekZ1tr
+	jgfLaZANDJQFmzwpWjOPyREEjR4fOKcA8N+vjQrF9nNmy52yh5Wb6wINObpnw8H1U+2ZUDMA2pB
+	68UyGjRZYqb+Yd8ctxfNRb0UyLpFqg5FbfPKeUxc/AYLNcDCuDetlZd9CpJGtt6/1KYZ+bReLy4
+	A9ELzftCikQCdBIJiMlv9bnN5JJiA==
+X-Received: by 2002:a17:90b:270d:b0:3a4:97ea:f0d8 with SMTP id 98e67ed59e1d1-3a6ced37137mr10733555a91.51.1791220708564;
+        Mon, 05 Oct 2026 10:18:28 -0700 (PDT)
 Received: from kernel.tail6741c6.ts.net ([216.195.201.24])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a853cafddesm406910a91.10.2026.10.05.10.17.47
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a853cafddesm406910a91.10.2026.10.05.10.18.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 10:18:09 -0700 (PDT)
+        Mon, 05 Oct 2026 10:18:28 -0700 (PDT)
 From: Kunwu Chan <kunwu.chan@gmail.com>
 To: paulmck@kernel.org,
 	corbet@lwn.net,
@@ -96,9 +96,9 @@ Cc: stern@rowland.harvard.edu,
 	linux-doc@vger.kernel.org,
 	rcu@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH RFC v3 10/15] hazptr: fix kernel-doc of hazptr_release()
-Date: Tue,  6 Oct 2026 01:15:24 +0800
-Message-ID: <20261005171529.1378809-11-kunwu.chan@gmail.com>
+Subject: [PATCH RFC v3 11/15] Documentation/litmus-tests: add hazptr acquire-before-scan test
+Date: Tue,  6 Oct 2026 01:15:25 +0800
+Message-ID: <20261005171529.1378809-12-kunwu.chan@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261005171529.1378809-1-kunwu.chan@gmail.com>
 References: <20261005171529.1378809-1-kunwu.chan@gmail.com>
@@ -110,31 +110,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The second parameter of hazptr_release() is named @addr, not
-@addr_p.  It is the address passed to the matching
-hazptr_acquire().
+Add an LKMM test for the hazard-pointer publication protocol used
+by the lockdep conversion.
 
-Fix the kernel-doc header to match the API.
+The test checks that a scan cannot miss a hazard-pointer
+publication while the reader still observes the pre-unpublish
+pointer.  The smp_mb() pair provides the required ordering.
 
-Fixes: 17969a0e7f7e ("hazptr: Upgrade kernel-doc headers")
+This covers the resolved-publication case.  The in-flight wildcard
+window of the wildcard-flip scan is covered by
+hazptr-wildcard-flip-escape.litmus.
+
+Verified with herd7: Never 0 3.
+
 Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
 ---
- include/linux/hazptr.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/litmus-tests/README             | 13 ++++++
+ .../hazptr/hazptr-acquire-before-scan.litmus  | 45 +++++++++++++++++++
+ 2 files changed, 58 insertions(+)
+ create mode 100644 Documentation/litmus-tests/hazptr/hazptr-acquire-before-scan.litmus
 
-diff --git a/include/linux/hazptr.h b/include/linux/hazptr.h
-index 4ee02d23abc9..07f5d9ef5a6d 100644
---- a/include/linux/hazptr.h
-+++ b/include/linux/hazptr.h
-@@ -293,7 +293,7 @@ static inline void hazptr_release_debug(struct hazptr_ctx *ctx, void *addr) { }
-  * hazptr_release - Release the specified hazard pointer
-  *
-  * @ctx: The hazard-pointer context that was passed to hazptr_acquire().
-- * @addr_p: The pointer that is to be hazard-pointer unprotected.
-+ * @addr: The address passed to the matching hazptr_acquire().
-  *
-  * Release the protected hazard pointer recorded in @ctx.
-  *
+diff --git a/Documentation/litmus-tests/README b/Documentation/litmus-tests/README
+index 4d4ec9c6f2cc..c2bf20fa4092 100644
+--- a/Documentation/litmus-tests/README
++++ b/Documentation/litmus-tests/README
+@@ -97,3 +97,16 @@ SRCU-fastpath-scan-before-anchor.litmus
+     period, violating the SRCU grace-period guarantee.  See
+     SRCU-fastpath-anchor-before-scan.litmus for the opposite
+     ordering.
++
++
++hazptr (/hazptr directory)
++--------------------------
++
++hazptr-acquire-before-scan.litmus
++    Test the resolved-publication ordering between hazard-pointer
++    publication and the scan.
++
++hazptr-wildcard-flip-escape.litmus
++    Test the in-flight wildcard window of the single-pass wildcard-flip
++    scan: a straggling acquire that published the old wildcard after
++    the final walk cannot still load the unpublished object.
+diff --git a/Documentation/litmus-tests/hazptr/hazptr-acquire-before-scan.litmus b/Documentation/litmus-tests/hazptr/hazptr-acquire-before-scan.litmus
+new file mode 100644
+index 000000000000..6dc13830c07c
+--- /dev/null
++++ b/Documentation/litmus-tests/hazptr/hazptr-acquire-before-scan.litmus
+@@ -0,0 +1,45 @@
++C hazptr-acquire-before-scan
++
++(*
++ * Result: Never
++ *
++ * The reclaimer unpublishes the pointer, executes smp_mb(), then
++ * scans the hazard-pointer slot.  The reader publishes the
++ * protected address, executes smp_mb(), then loads the pointer.
++ *
++ * The smp_mb() pair forbids the reclaimer from missing the
++ * publication while the reader still observes the pre-unpublish
++ * pointer.
++ *
++ * This is the publication protocol used by the lockdep
++ * is_dynamic_key()/lockdep_unregister_key() conversion.
++ *
++ * This models the resolved-publication case.  The in-flight
++ * wildcard window of the wildcard-flip scan is covered by
++ * hazptr-wildcard-flip-escape.litmus.
++ *)
++
++{
++int ptr = 1;
++int hp = 0;
++}
++
++P0(int *ptr, int *hp)
++{
++	int r0;
++
++	WRITE_ONCE(*ptr, 0);	/* Unpublish. */
++	smp_mb();
++	r0 = READ_ONCE(*hp);	/* Scan. */
++}
++
++P1(int *ptr, int *hp)
++{
++	int r0;
++
++	WRITE_ONCE(*hp, 1);	/* Publish. */
++	smp_mb();
++	r0 = READ_ONCE(*ptr);	/* Load pointer. */
++}
++
++exists (0:r0=0 /\ 1:r0=1)
 -- 
 2.43.0
 
