@@ -1,111 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE3735E92F;
-	Mon,  5 Oct 2026 07:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2149445560E;
+	Mon,  5 Oct 2026 09:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791186795; cv=none; b=M/Vn9j8vEtTPaAYutl7Uo7F7wWKwX2YO9KUB2gfovlQL0h6DCRBJxVOyQ17l8wSSArHxgpih7LNoAdDy360XsT6pjnH1dgwoBd4fgwhpDD5BzRR+qEtyuptAtSCA9BGilJVbzR4NXvkwF6xW7n/E7VF5cUbKehbapoGUfCdL648=
+	t=1791193065; cv=none; b=YbCfTpfGeZB/IPSixLhYSHhj17NkhQy9PiwNHwb2z25QjRDEY00HCixJWd05093uVrWAD3VPXOFdsBO1Q62yMCvYcLHsF5URQrKCqAAl3DDT/hQ1Yhdr+Hn69mm6S9yLmkoLhpt9IDNqH6oG1pzXz+/XHofO9PZpn7PV9YcAAgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791186795; c=relaxed/simple;
-	bh=PBXa2DuXdFqBZRICIabALpvUzRmhBpiMuPaWLmZTUGs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WzxOdAGTHAWM6xYZnoiIWysoS9mv+sipFIMWgt3rQm43yo4MkSRQMYDJ+aC0hdj9hM7lPQIYsPOBnvQ6cvkcHGo6MvVnBiYl5OCg5JwNQxjOAQO+y/jfoNj1DwQIcxt0SBAOzEUBdPwCeIX4wZ8dJilSaKSM+dPuuFtZ2u9Gjgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EEX+P8CP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791193065; c=relaxed/simple;
+	bh=wJRcErGmmgxqQicRwNkQHCxmUcyx2m11gOVwZNpW3Iw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pknKQhPI//FagvERGnQKgg8WmKMipmLPxNtqvKNDlVyPvbCulSh5ejP8664r0KQ5/w6fUgczF/wioCdqzsoEl+AX8tgYW8yFkzR7TKxNS9ABQQwkuNbM0X7QlOcHKkWKAjpMaDqDXfyw0SF85KHx71n8NcTwimnwVsOBaBAoEYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVizt7DS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EEX+P8CP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9521F000FF;
-	Mon,  5 Oct 2026 07:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791186793;
-	bh=p8pB98yXVn3emMjSSVc5iGuD87aD74hXLFXwrp1IR14=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=EEX+P8CPFeqWLSN59RzmGW3okJrWBjL6X4WZQ29o3f4Nq0tIqMaqJhXpenBYRESYX
-	 yLr/6vNkyiB/QVgs5zLCeYF1lZ/eWykY2jayP+n3JLO0BDVzLklA2oN66POyCpJ0M8
-	 ACoSS1yP91wzs2/kkXR6AGYVCW0G3/htMwHDa56r5fUmx5ZGlnI2TlDZval00GP2vd
-	 evxYEkphbACrDVnO3o/U/I9epZ0n8riPwtBTcw9qOkk/kHJh8Lw7KxjINSemSfbp9e
-	 jjBzb3UMLUYfwz81sU923vgWgmRmwclgx/rRb5kdSlzAN6+bKnYI9hvtvI9VL3OaWd
-	 EQXmRq8LXJ6Mw==
-Content-Type: multipart/mixed; boundary="===============0647874907332121866=="
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVizt7DS"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E4578C2BCC7;
+	Mon,  5 Oct 2026 09:37:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1791193064;
+	bh=wJRcErGmmgxqQicRwNkQHCxmUcyx2m11gOVwZNpW3Iw=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=aVizt7DSmad9nrbrS8y8zULrUXK9u7O32U9F7avM9590fygXTDsPbWGtdCpIra2Gw
+	 i5g0eb/MF0Ab7I9riqka7mS5jaLRYp8/qoHTH8M+8A90BFxHfSte2WJVThk5ptasQc
+	 Mfzzh7V7qgqZvnv9bb7VJcEyr7OCoIGMD2AcoMullTG+3TwY2YVtSF5Wx9cnn1ram5
+	 giaS8KFGpVKn60Vgk6j1epBUBMgi0/JvsxfZ7TGKCE/xEKuxvqTEfQtEDnMMA4W6+K
+	 2pE4vTZr0Xs7DmUApzqmC0psDCNKPV0NQ/Ozxo/u7M8Om3G8aq2pqSHS4kNh/OMoJL
+	 8rg24A9TaxJ2Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D021BCA5FF0;
+	Mon,  5 Oct 2026 09:37:43 +0000 (UTC)
+From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
+Date: Mon, 05 Oct 2026 16:37:40 +0700
+Subject: [PATCH bpf-next] selftests/bpf: Fix wq test by changing 50us sleep
+ to polling over 1s
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3a4688cd7929354339fc61a5f4e8a0109e426a83097d9d9a2357ac6e3fe2c9ea@mail.kernel.org>
-In-Reply-To: <20261005070625.8871-4-kmehltretter@gmail.com>
-References: <20261005070625.8871-4-kmehltretter@gmail.com>
-Subject: Re: [RFC PATCH v2 3/3] selftests/bpf: exercise task storage from hrtimer_start
-From: bot+bpf-ci@kernel.org
-To: kmehltretter@gmail.com,peterz@infradead.org,tglx@linutronix.de,bigeasy@linutronix.de,akpm@linux-foundation.org,vbabka@kernel.org,harry@kernel.org,ast@kernel.org
-Cc: kmehltretter@gmail.com,mingo@redhat.com,will@kernel.org,boqun@kernel.org,longman@redhat.com,corbet@lwn.net,david@kernel.org,hannes@cmpxchg.org,shakeel.butt@linux.dev,stevensd@google.com,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,shuah@kernel.org,ameryhung@gmail.com,swarajgaikwad1925@gmail.com,clrkwllms@kernel.org,rostedt@goodmis.org,linux-kernel@vger.kernel.org,linux-doc@vger.kernel.org,linux-mm@kvack.org,linux-rt-devel@lists.linux.dev,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,cgroups@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  5 Oct 2026 07:53:09 +0000 (UTC)
-
---===============0647874907332121866==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20261005-wq-poll-fix-v1-1-99ce4bac59f4@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MWwqAIBAAryL73YLaC7pK9NFjrYVQ0yghunvS5
+ wzMPBApMEXoxAOBLo7sbAZVCJi30a6EvGQGLXWjpKzxPtC7fUfDCU3VzFW7TKORJeTCB8r6v/U
+ weYOW0gnD+36q4uuHZwAAAA==
+X-Change-ID: 20261005-wq-poll-fix-f46c47dbaf03
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791193062; l=1776;
+ i=thamrinjonathan@gmail.com; s=20261005; h=from:subject:message-id;
+ bh=PyP8WYl7h3i0e+qMKJnBwJw8uVyt/3gufaH7HZJsx30=;
+ b=MV6DKh4M8wIRsCymZTo6WYAbR9zbZOVVqYVtmlHYLJIaB7/jW35tryb2G0q1SP+BfBrIUpY+G
+ ge/On1jAr9bD9u04c60PfH+kXWHItLZhUcQJ4hCqB++imEzQvYjlKZH
+X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
+ pk=QU907bIMYty/tEI/iJF2SrD1lqOf/+2B1MI1zwJ5cBw=
+X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261005
+ with auth_id=1114
+X-Original-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+Reply-To: thamrinjonathan@gmail.com
 
-> selftests/bpf: exercise task storage from hrtimer_start
+From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
 
-TL;DR: Test-organization question only: should the new hrtimer task-storage
-selftest be a subtest of task_local_storage.c instead of a separate file? The
-review finds the test logic correct and the standalone file defensible.
+wq test fails with ok_sleepable reading 0 instead of 2 as workqueue
+callback hasn't executed before check.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_storage_hrtimer.c b/tools/testing/selftests/bpf/prog_tests/task_storage_hrtimer.c
-> new file mode 100644
-> index 000000000000..216e66263bf6
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_storage_hrtimer.c
-> @@ -0,0 +1,50 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <sys/timerfd.h>
-> +#include <unistd.h>
-> +
-> +#include <test_progs.h>
-> +#include "task_storage_hrtimer.skel.h"
-> +
-> +#define TRIGGER_COUNT 1000
-> +
-> +void test_task_storage_hrtimer(void)
-> +{
+This happens as callback runs later on a kworker and 50us isn't always
+enough.
 
-A subsystem pattern flags this as potentially concerning: this adds a new
-top-level test file for a narrow variant of behavior that an existing test
-in the same directory already covers more generally.
+Change from 50us sleep to polling over 1s.
 
-prog_tests/task_local_storage.c already groups the general task-local
-storage tests as subtests, including test_nodeadlock(), backed by
-progs/task_storage_nodeadlock.c.  That subtest performs the same
-bpf_task_storage_get(..., BPF_LOCAL_STORAGE_GET_F_CREATE) followed by
-bpf_task_storage_delete() sequence and counts failures, just from a
-different hook (lsm.s/socket_post_create).
+Before (usleep(50)): 3 fails out of 5000 runs
+Diagnosing issue (usleep(0)): 23 out of 100 runs
+After (Polling): 0 out of 5000 runs
+Tested using vmtest on x86_64, test pinned to one CPU with `yes` load
 
-The only difference here is the attach point, tp_btf/hrtimer_start, which
-reaches the task storage allocator under the hrtimer base raw lock on
-PREEMPT_RT.
+Link: https://github.com/kernel-patches/vmtest/issues/455
 
-Should this be a new subtest of test_task_local_storage() instead of a
-separate prog_tests/task_storage_hrtimer.c?
+Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/wq.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-For balance, the standalone file may well be defensible.  It uses its own
-skeleton, as the existing task_local_storage.c subtests also do, so folding
-it in would mostly move the test function rather than share setup.  It also
-exercises a path that no existing selftest reaches: none of the current
-programs that use task storage attach to tracepoints emitted from inside the
-hrtimer code, and the programs that do use hrtimer tracepoints
-(timer_start_deadlock.c, test_vmlinux.c) do not use task storage.
-
-The test logic itself looks correct: the tp_btf prototype matches
-TP_PROTO(hrtimer, mode, was_armed), and timerfd_settime() with a non-zero
-it_value emits one trace_hrtimer_start under cpu_base->lock, so the counter
-assertions are consistent.
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
+index 84831eecc..b55d8547f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/wq.c
++++ b/tools/testing/selftests/bpf/prog_tests/wq.c
+@@ -7,7 +7,7 @@
+ void serial_test_wq(void)
+ {
+ 	struct wq *wq_skel = NULL;
+-	int err, prog_fd;
++	int err, prog_fd, tries;
+ 
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts);
+ 
+@@ -28,7 +28,13 @@ void serial_test_wq(void)
+ 	ASSERT_OK(err, "test_run");
+ 	ASSERT_EQ(topts.retval, 0, "test_run");
+ 
+-	usleep(50); /* 10 usecs should be enough, but give it extra */
++	/* loop check over 1 sec to make sure it doesn't fail early when busy */
++	for (tries = 1000; tries >= 0; tries--) {
++		if (wq_skel->bss->ok_sleepable == (1 << 1))
++			break;
++
++		usleep(1000);
++	}
+ 
+ 	ASSERT_EQ(wq_skel->bss->ok_sleepable, (1 << 1), "ok_sleepable");
+ clean_up:
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: b5a4aa31abd6fe90009b63e35dc18c67d041ec0c
+change-id: 20261005-wq-poll-fix-f46c47dbaf03
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37277547264
---===============0647874907332121866==--
+Best regards,
+-- 
+Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+
+
