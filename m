@@ -1,60 +1,62 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD8335F60F
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 05:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1FDB381EBB
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 05:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791263791; cv=none; b=bLuw9mb6Gmd01j8e3/mnB+87P65ojNuSxV0bcnFJh8QAuHT98jzs7qgFZtHmQJg/hJVdP1TC+zTJJhZLEk7Ixw61fG2NWbKx+uWh0mXdkMPF0HajqmxsvBSADSCdfA1CvkY40ZTuq+jNZHIwJQl2NUcYglM+huDNw5oZu88fBEg=
+	t=1791263792; cv=none; b=bBYH1ExHO4ybC88qwl3X7grhP/zagvERluzXTaUulD1rNghNgOFPC8pBaykmxsCunvMj95Q/Npgo7tqsqlIoFDkz1TiSqK8+33Dyz+ITr9Q2ttFtJiWz4hGft6XECLGCC1Pk8J8P3iBNhSbU8BAbTAh86wwpfgRag8jYJuV3Noc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791263791; c=relaxed/simple;
-	bh=r7yDJGNf3vg9Dsuvo+2fXtkz1amrdnaQFLDyMDdoBeE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mh/XhH6uCYwhIJU3V3A6xL17G2+2ayXlD9bVc/Lh9aDwRUCQCXHptlLfTnuanohudGzguOG1wliIF5gBBrOMq7Dti8lpmsMSHXWxIZHLmYS+lI1ZWnRwfh/WMHh/3btGyZ33fs5idSOpuMrWns5eA5q3C/rR4KNjFA7fYUAnYKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com; spf=pass smtp.mailfrom=openai.com; dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b=UoKaKUJL; arc=none smtp.client-ip=209.85.210.45
+	s=arc-20240116; t=1791263792; c=relaxed/simple;
+	bh=CDywOygPmrlx3R5gRwy722wB/kkMjtMnkgCl3dvZdFw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jA/bJCIFdWR6rGwFKGLgdjFJJEsjg1zpb4ekRsQCM8YmEJY01vruUwzcNCczrHnTRmAhLpljsYT4PH9tjQYQIJVk5d1Zg/zBacoPO7FkRCGwCbpUqjdk/c0EqiJgtuVjoymOh5n16AvurDKW5yQ3uflnvsdv0mWNfNLmu6adZ3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com; spf=pass smtp.mailfrom=openai.com; dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b=LHp1/dtZ; arc=none smtp.client-ip=209.85.210.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b="UoKaKUJL"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-81ae6aefdceso2398294a34.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 22:16:28 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b="LHp1/dtZ"
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-821a7bee9b2so376887a34.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 22:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openai.com; s=google; t=1791263787; x=1791868587; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IcZAWj+F2P6v02eYEvSJlSeTa5ggyC9iZf9e6Z6vbRQ=;
-        b=UoKaKUJLMoZduV6Ofexj/lX7Cze0j9UyMMCDm92Rjhm6jL2zJq4J/va7aLHeu24YAN
-         MzpRtOGD+8c3TNniiYc2Hyf42JiaXDuVZtheoZo7AkIu7Nrt2NuAoFTCFc0z8Xcl0p6q
-         Lp0ml28EpUnyx46Lc1ma4Liy1Dt1SKi+lEgWk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791263787; x=1791868587;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=openai.com; s=google; t=1791263789; x=1791868589; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IcZAWj+F2P6v02eYEvSJlSeTa5ggyC9iZf9e6Z6vbRQ=;
-        b=h2cWm6QiAoJYktbXJj01S4qnxslX+FV+cMRGAl51I/HQFmeKUQqcrvQ4CcsnVzoYZH
-         ZR6+0BiYUL7vtGhvRaaa2qvUxD/DGD10OduYV9oDWjxgVdnLkM31qhrK8ffN+GWWojG2
-         Q02KhLZKmAwEE0tQiSMkJzYJKslSssfH3QxXF2gGHIB6cxkr4P7qpzBcXUtZ25E38xlS
-         y23DhwdrHP7BxLLjkj5iQnCe1RpPw1RNGYlgje6J8xPy6dR1jRwRJ6VqpBmcJvWQCYBM
-         wBHOY6JRIkxX7jFg56kK20RyWUTOMPRwU/xUFzv4gUa4eMYDF7h5zFc9Dz/+yty6AOHi
-         WV/Q==
-X-Forwarded-Encrypted: i=1; AKwUvBy1U3Bv06yiztOItjjxf5hN4F4S+RAbMmo6F4Wa+p2HB/PRHV/rIkXUGi4LYGGleMPb11dzxWa+SIBGuPiBiJ4=@vger.kernel.org
-X-Gm-Message-State: AFuF++mnriXfshG6wE//ZInn8TW7CFYNCzpfaYYxOwHp3cGKTtQjWEsU
-	U2ayATXPn60tst2/vxPO4LvUsRSrMNIfFNzm7BfVLWLRIN5KzMh7TIuElEuF7qjGSQs=
-X-Gm-Gg: AYBFou3TvbMQNOFAWUygFADRzDnBAFQqRuPisP7gsbujAN68mwCq3OcH9sIZYQloANT
-	97dAlCW4M/7RDtooc2ngalg4jjHLBQ2/BDDFM+61tbfBzMBVxMXF2OzCVZ2mgoY5PCEvqfDD4Z5
-	bcmk41jgGo4stSlhw/S6fe1FXZ9pJYt3DY0EIcYW35IV1UIiQEghNydrqNPfvg3eocb+R0Z/DeX
-	zKtWSKxMJ1c5jCLNhUF2oHMz5E2KjpnEEOeR5BtkLsQ9JIGQ2rMuseaqIHYR2OQIYa/mvg4T7hY
-	uSa+wJlS2sbQpSOAjrOQCL/8jtQwHZeyTIwglaPp3JY47+nH2hqeD1pcSan79k6e1jf9y6jVe5R
-	X3adld2qXBF8Gsoin6et479qGzeACKXDn6lHnSS2xkB8acEpfhJeDMAyE1tV3ikrNVJSV2ogozd
-	nLwRr0vDuEdl0vqa1jLG2Jq0ykaCnUpXEYoDpBb2/ow62PrGhYwrAVHUTXobd7Utpe35uCMtU13
-	4WsokfnG3h/S2Z1QI143/IShOQj3HPOuispO26BvPqtjEbfIt8m8ghD4cgkKs/uYJeS1pp/ig45
-	1p0=
-X-Received: by 2002:a05:6830:2b0a:b0:805:9b28:87d7 with SMTP id 46e09a7af769-828a167af3amr262818a34.8.1791263787188;
-        Mon, 05 Oct 2026 22:16:27 -0700 (PDT)
+        bh=MSdwC3NRHxiBT/jc1RHLKkfmkBi6P75t29jHlr5sJqE=;
+        b=LHp1/dtZ2maaQCAJs79MCkKRUDhmVqOfm113xoMEXB1jQeKV0QawfNFnHK73xar+PD
+         pvMC0IWg5Q1pDpkshBYx/OF8kKce1aPhaBOaagDjPwuunGMRt2amFF6y2XOQUL2/dsG0
+         ZJHKrzekQYWxT1N6fBcb/tJS5nVeSarHYLjzg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791263789; x=1791868589;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=MSdwC3NRHxiBT/jc1RHLKkfmkBi6P75t29jHlr5sJqE=;
+        b=AlYTakCZJSK7JOAvGHG7KZ+p/BExsJUj2wCL/sgC/VcbUVfjRk38Jztu09ePfjeGeD
+         /lcK7yX9xXDoMWr1onNp0UY41/yOCNfvWdq/vchi4ZH+qh+hfIUt5uDo9iuaMlEfoI4X
+         19TW58TQAL2JVHO2NMks1v5l8AtPhG3DHn6sC27nakCorp25saBF+EBF4IimoHW8RyJh
+         /tjtk7m2nOD0Fhh96sxce9U+7OL7nbhJpMxEp/1JCF/BOzi/n1kZwDCWvkSocmPIf6pM
+         CGpi9G3i9lDEhkcsQuGJULoGq7T97x7pEH4QoDJRS7ubjup5uhf5jw+vQiCxTRN9TX+2
+         TDDQ==
+X-Forwarded-Encrypted: i=1; AKwUvByxuMKLDoEv0rSLV2JyKUMQCkOCO9w9cHxlzgkdzE/SVW6PcsmrC//3CxexHitWum9P9+tAdM8+gSQyAnEEgA4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lXCNIT81xHQHqOHzBcwGH0nNLbu5wXWg99NlzOo2Iz+8XRCG7X
+	XbV5iKdlTaT0Elh+mGVuNv5GbuvCDPR5ePtah/oDDj3Dyr//oeVH3WppiXhv5r3raXk=
+X-Gm-Gg: AYBFou0Jp4epZRinGzGu6kQJmuwhYocMex11Z+ba2DcfptvXf2CrXlTVxshHG0nYSMH
+	B7dkrGbiAwRhPb3ar5FJNtUmaX0r1HXX4XsAS/1ODrgugKK0s2dLagdWZzBrJZROoXZ4UbbNlyF
+	YJaoj2UcCBf0/eZNImpRaaYsh8amfWNbDdDoVIqP5OxRz9ILgCyhJMdsbPZAshApm349khjDcZV
+	f8cBeU+EjH6Iha2eTn5yR6bHHGkVT9HKIJEi8V2E1VHyBMweXwuXPtTzgkZUB8lQyZPHLJF4oFU
+	QqQxglzkhO9/m5yaLDyojqzTz52BiOESI76rlgrTL1WC4ehjF3JVdZL3TqA3b13mNGRkGhaMHeM
+	oLn7jF2yLiY4C9y9uJrb6W9g3spdyHB4sB8/PAytIXv1KXVkFEndq0lkaWR+2KsrjGGPOZYWJdv
+	zvNtws8fwzwxDB/DbxBTa1FV3kJK3jzwV+cKNJA0Kk75Wzcoo/iXr4qvMahUzgDTcVkthrKa6zi
+	nJ4H3QM4Hne3Hc4XQ9LhwBRyszc7759vngYUwPOxB5SrvXwCrLq3dRjsc0zGMe/iiu/1DMPs7p0
+	ukJYYmmzKX21dw==
+X-Received: by 2002:a05:6830:412a:b0:822:1216:d9e2 with SMTP id 46e09a7af769-828a3925be9mr218472a34.14.1791263789511;
+        Mon, 05 Oct 2026 22:16:29 -0700 (PDT)
 Received: from com-68297.corp.openai.org ([199.47.143.7])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8281fcce238sm1622898a34.6.2026.10.05.22.16.25
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8281fcce238sm1622898a34.6.2026.10.05.22.16.27
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 05 Oct 2026 22:16:26 -0700 (PDT)
+        Mon, 05 Oct 2026 22:16:29 -0700 (PDT)
 From: nramaswamy@openai.com
 To: netdev@vger.kernel.org
 Cc: Neil Ramaswamy <nramaswamy@openai.com>,
@@ -70,10 +72,12 @@ Cc: Neil Ramaswamy <nramaswamy@openai.com>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 0/2] tcp: preserve RACK tracking across partial undo
-Date: Mon,  5 Oct 2026 22:15:25 -0700
-Message-ID: <cover.1791248202.git.nramaswamy@openai.com>
+Subject: [PATCH net v2 1/2] tcp: restore RACK list membership when undoing loss
+Date: Mon,  5 Oct 2026 22:15:26 -0700
+Message-ID: <f366f5325d7eb96f0edd999b4f984213743914b8.1791248202.git.nramaswamy@openai.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <cover.1791248202.git.nramaswamy@openai.com>
+References: <cover.1791248202.git.nramaswamy@openai.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -101,27 +105,76 @@ mitigation that seemed to prevent these stalls was limiting SO_SNDBUF to
 [1]
 https://lore.kernel.org/netdev/35A4DDAA-7E8D-43CB-A1F5-D1E46A4ED42E@gmail.com/
 
-Changes in v2:
-- Added production symptoms
-- Removed the redundant TCPCB_LOST comparison
-- Fixed lint/long lines
+Fixes: 043b87d7599e ("tcp: more efficient RACK loss detection")
+Signed-off-by: Neil Ramaswamy <nramaswamy@openai.com>
+Assisted-by: LLM sparse
+---
+ net/ipv4/tcp_input.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-Patch 2 is unchanged.
-
-v1:
-https://lore.kernel.org/netdev/20260926002520.42955-4-nramaswamy@openai.com/
-
-Neil Ramaswamy (2):
-  tcp: restore RACK list membership when undoing loss
-  selftests: net: packetdrill: test RACK after partial undo
-
- net/ipv4/tcp_input.c                          | 35 ++++++++++++
- ...tcp_partial_undo-restores-to-rack-list.pkt | 54 +++++++++++++++++++
- 2 files changed, 89 insertions(+)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_partial_undo-restores-to-rack-list.pkt
-
-
-base-commit: 11536ee3d3e0b1bd35b6f3f8df55a6053eb0c71d
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 92bc60716f33..51f04c7474dc 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -69,6 +69,7 @@
+ #include <linux/module.h>
+ #include <linux/sysctl.h>
+ #include <linux/kernel.h>
++#include <linux/list_sort.h>
+ #include <linux/prefetch.h>
+ #include <linux/bitops.h>
+ #include <net/dst.h>
+@@ -2840,16 +2841,50 @@ static void DBGUNDO(struct sock *sk, const char *msg)
+ #endif
+ }
+ 
++static int tcp_rack_skb_cmp(void *priv, const struct list_head *a,
++			    const struct list_head *b)
++{
++	const struct sk_buff *skb_a = list_entry(a, struct sk_buff,
++					       tcp_tsorted_anchor);
++	const struct sk_buff *skb_b = list_entry(b, struct sk_buff,
++					       tcp_tsorted_anchor);
++
++	return tcp_skb_sent_after(tcp_skb_timestamp_us(skb_a),
++				  tcp_skb_timestamp_us(skb_b),
++				  TCP_SKB_CB(skb_a)->end_seq,
++				  TCP_SKB_CB(skb_b)->end_seq);
++}
++
+ static void tcp_undo_cwnd_reduction(struct sock *sk, bool unmark_loss)
+ {
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 
+ 	if (unmark_loss) {
++		LIST_HEAD(restored);
+ 		struct sk_buff *skb;
+ 
+ 		skb_rbtree_walk(skb, &sk->tcp_rtx_queue) {
++			if (TCP_SKB_CB(skb)->sacked & TCPCB_LOST)
++				list_move_tail(&skb->tcp_tsorted_anchor,
++					       &restored);
+ 			TCP_SKB_CB(skb)->sacked &= ~TCPCB_LOST;
+ 		}
++		if (!list_empty(&restored)) {
++			struct list_head *pos = &tp->tsorted_sent_queue;
++
++			/* Ensure lost skbs are added in transmission order */
++			list_sort(NULL, &restored, tcp_rack_skb_cmp);
++			while (!list_empty(&restored)) {
++				struct list_head *entry = restored.next;
++
++				while (pos->next != &tp->tsorted_sent_queue &&
++				       !tcp_rack_skb_cmp(NULL, pos->next,
++						 entry))
++					pos = pos->next;
++				list_move(entry, pos);
++				pos = entry;
++			}
++		}
+ 		tp->lost_out = 0;
+ 		tcp_clear_all_retrans_hints(tp);
+ 	}
 -- 
 2.55.0
 
