@@ -1,132 +1,356 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC43A3563F6
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 17:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791308933; cv=pass; b=uBhXplPukFb5751yI+px0K4Xx/Z6KfZcMQtyb4d7JvIGfNwtcpYD9rx8cv8b0WU1SHpjluLAB0/9AQJMHpCEg/fM7+lE0twQbGenFWXsso9FbFB9GKegmMkyeeyuibe4vSv69G9kOZXdRavwf3DqxhyNZ6IPuh932p9JhvSCE1k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791308933; c=relaxed/simple;
-	bh=VRSArwJcRo79n9/mlWVHLIcO/a90TTkXWTwHqj889k4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=li+U2Pr838aX+pkwYR+PH4PaxMmTLa8qyIApn1qAfYtHAlBWPRIhpnc+u7IYWhJRrQyz327LR/ZIkf4UHZM8rD5j38hqM3NK96uy5BpgWqoTRPqMpd4Sy9D8k2f26y8D1YIZNuQWgXdZ5lDuMCwyL22ouYh9W9ZsjNkLAs9x0bY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=DzuzpwTr; arc=pass smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CC34A3F26
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 18:32:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791311562; cv=none; b=FKWcOLVRI2sZMK0sY3+YZJSk/oI5eTNK8mvOAJBLvsgrQ7bGX9BFcKPPgaJmjYWf9fRiyS39u6wklj+3Gfa+nVDvsm8hROP9nAkvMkTy0/Z1Je0YnEbjnjXM0hkGL0mIKROovf/6JjPq3O1eXE0vvtmxynCE/LHG3HYjnP/9pRg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791311562; c=relaxed/simple;
+	bh=jgXTxkRGcOxxqXanLWMamOB6WtbqsYhmxTB3JYM/6xg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rOTDGStmGfmH/Hd2HdsBS4akyR+ID5q+HjVbQ5m2pFYENZ20XAOphsXglStfn6ottt4V8wHoE+zAUpd3H7oRjFkkop46hi4o5i1l/PsQNopJd14w4gOkxNn6jxdwi3/S2mjbXG92kXl0nYDaFqPTR8N2pSyB3lXxvYuqXxL3upQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TEWM3orS; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="DzuzpwTr"
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-4d7034a99a9so1761523b6e.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2026 10:48:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791308930; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RSAFUrkxYVl5F9Zb3Tk/kQwT3i7zuJqm2OY+hNKKDa7LsLgJjMytD9fxoBDr1WarEf
-         L0ynC45VCxoxiC1JAX8Z8Xw+Rrji+8YUHkKBm2pvzpv9Sr8o52MHuALxblBa+dFQeVNf
-         I1fbWkJFZ6US2HoA1gMmlnFewnMMxNZEijz2VecVFq7d0zMoz/O1wDSt1427cJRuGr1u
-         Zm8W5Su50hrH+nFKtJEBVvxWNncZWO2t0khLWn/9bCqXABOyVYxVaA3iOvaNpeeAMob8
-         rFch5FgJ4lKtqIfL4Qln3kBx2n6sb0cIpsWCaWRBDx6PY98ecnMxYkiPU+uaRONsdT1V
-         9Z3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oKkGu4MISHQEsFFjUyIjKXrjUrAiNT5vrF+iXMX4HX0=;
-        fh=fbMmsSVlzMCO1fv9DS4yUgJD3pq91xfwCpAn9im/53c=;
-        b=jHsY6h2Pz7kw1rzTzvxNUiVZ6463n08bocbk0HHRsKsQK2LsHyY07q9LE77zmgGcaG
-         6Ren5f9fiuGkUo4QY3Dy9YSar29HamQL7Bygf+zUGGBzfLi5WtWbVwc2C+8UKpNRJyHr
-         aPcJ4/EjjahGJjBqX9xJH12CKyBDT7kqdl8Gm4jWMWnjdEv/nStvK/RMKx3AhcFfjmNp
-         ubsuO+ifclz0hTEo8w3iyUVcOu481qR+RDmVAHjAC7BEJ1ZBRrY260THYYFxn6HV+0Lq
-         URRQVfo5rl0xxaJNg55quakh566ovH+DM6xP7091UWLUfNIRhszYnuwYtCMLq74ucpgr
-         0vuQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TEWM3orS"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c2e69aa07c3so466581766b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2026 11:32:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1791308930; x=1791913730; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1791311558; x=1791916358; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=oKkGu4MISHQEsFFjUyIjKXrjUrAiNT5vrF+iXMX4HX0=;
-        b=DzuzpwTrkKtcDnXxD0hn6+9TImm7VEOD/gPZJMllMEnmoAuwr3+WcTob2Gj1ovdhZL
-         eqQSSWC4WpNbmKOjz24kYhbFtsNbDp32zvh/xmzYySlovLdpd+rXQb+4d7z2f5DjXFKT
-         bxEvC+MjpsQgZj3dmWAwy9WD/Q3Fp80YQ0A3vYXYVsY1aUJ94fiexwxEpOq8SFHX1h+h
-         12ZxVGmwdAdfxYorAXNo4fHNKJfr0E2lmk3m82/4bkunhEYRaqHvEIzWftroYAsh0ecg
-         qnXhnvrF4RZ9s4iQMmZDeo32fxyCASjScRVd1sYnpQ+Y8o5g6xmvsmwetNMKYr2qyW2G
-         r+kg==
+        bh=PbNlJIjJrzwYLlIXsTciTEeuyKiagOAxZiup4TU662M=;
+        b=TEWM3orS/fFprL3/c+CR5zxDF9IlmGLJ0u3iwjVOVuCag5ih/DI18TetyGLhGL6LEQ
+         mMR7gL59E57dHc5eX6DaXVZGf5ITIurWX5eoq21sG7CPw2lNxDXvSSGH+oka+mIolWeg
+         Tk5BM8niqrrklQTmivxke3pDOD7uqY+NnMWDNftekJ05o7JAtYrMNCYdDA82R5GzASAG
+         ND3jOzfBMyj8Vk/v+02h6rCJ/bzT8WLhYBWeSHgN3rJTLLlA4zHqTQMJhJzXAYjrcaag
+         aOHrnlbsEgI/QS+D7nd+hUroK1lb+ikp3J1L1wOEsH1Unj2uX+ZBEj/tCcM+jVRLv2Wo
+         KlyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791308930; x=1791913730;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1791311558; x=1791916358;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oKkGu4MISHQEsFFjUyIjKXrjUrAiNT5vrF+iXMX4HX0=;
-        b=YAk62IdJJKMUFBTmnjowTAhqVvQpd6FmKo20i5MlmxyjKR0SypMbpVYHzNihjN9yiF
-         EEVyTsggh5w7OK+VR83eVOIELWcGtA0tOI6AfJAYcj2iMfhaoeG12/LFtmClHNvMlb1g
-         QiEEdUwodM5rbhh7LPVR/gSGYmnsVSS8CJJ6Ui3mOVrFsrpWtma7EBn6j2CSZA2POZO7
-         6opv4wDekDCG6+k10/Hu7yJWcQ0rDlIUoblRDx0FXYR1EwpMWR9wJiTEQ+q7qWwEctFH
-         ZvFulGaSDfp7+7zjjz1+/FYJyhlN4WWKrd6bFnmC4c0s7mhDayppDqYW+A2vLoNml48H
-         6a2w==
-X-Forwarded-Encrypted: i=1; AKwUvBxSrvceO4UAsba0vTeN4fPLalXR/iwucbCFSpyeLlhVlcJzHIlavP8EORuw1hzhejz6dzDNq6cA95mGisdPoIM=@vger.kernel.org
-X-Gm-Message-State: AFuF++nQWr+bkyBqxsBSPbAqAzZCNQrzH5f4EGAxf1BLnHIfO5yh+ESZ
-	i7NGaaqH7em6IPBGZLTZJpw68f4N73ngUVQxY7g85P04fmUvbw7c1ysVb5taXdj38QyNhC1KFyO
-	vgVo8Ej4wS1GzSZBR9gMo/In/KWeveomFD0RbF+HX1A==
-X-Gm-Gg: AYBFou0GDqaqDm+qPjiTK+HOfqHk1XQaBow0VXabqk/T3qXyM3PL3+sZ0PJIb8yyC/0
-	FMaF2j+TGjHxmv58MNj8fR8RPrLbRnBwCjxbAtkvHRfUaP6ZLjv7npjTwXPTV9a8BJxvJ7fflvi
-	WLjKwbsGYhNfY8Xp9MMXDMuTJ9XshpQIkiporgchcNJ9OopjnrvWxlzHkSBWuwVqwxDpZRpCTYK
-	7MFyd2Jw84EcsfvDEf8Ly/v9s0S8ZVgeCs8Nt16lD1HJG7HlGbtlrvhG6va4NZ5BKSG1sq0eXzX
-	flBJ8b27ptIC/2c1J5iCaDSsvB1BPBep97seTlbUAhDYIjN1kl5OQUtGkqS7XyGnssvqRYrmDkw
-	E1WlIMPBb2w==
-X-Received: by 2002:a05:6808:e305:10b0:4f6:a504:1897 with SMTP id
- 5614622812f47-4f6a5042d3fmr7722009b6e.13.1791308930476; Tue, 06 Oct 2026
- 10:48:50 -0700 (PDT)
+        bh=PbNlJIjJrzwYLlIXsTciTEeuyKiagOAxZiup4TU662M=;
+        b=cpiahqztGt8fIi/Yq8wBPeMMn67jC/3Lx5D8LO9jXelf50vRDOdWd/0WQ8F1zAjUe8
+         hIvpLqAH+25023kEv8Q2KzkbtJlfc7K37rMAOvyiK83WiyS0I7MteWy7U9mf2q7aGIbF
+         q0ez+2xKKKBYGMW2+wOUXxaFYq6+ruO1kvK98qnZ5wU3v/M/TzVQWIRsgDCc3HYToqCT
+         GHWlytTZQ2MsahcOKemlAXWVkYLm+OYFVQ8MI6QyD+hqdLKv1yA9Knp3+fGZw3YS5aD7
+         /L+TzW71cYAZwsScRouq183Rcx6Sch+OuG6Elyk7fIMXFkhQoWtd/zVQ4CYPFybPBV55
+         RSdA==
+X-Forwarded-Encrypted: i=1; AKwUvBxMK2cD0dXvuOI7SlIhxWC1wnx1evIkeVqC7jny1+MlY9ndPmsusCLUOqopvg3xL/4SufeWt/OlLttW2zPzBOE=@vger.kernel.org
+X-Gm-Message-State: AFuF++k8cpFLqSnzQIiT14yrZnNz38AS52xVOQbB722S5FdXM+BbMLh2
+	kU4iMYNntHgbZm/NnI92BHe7KyB786j8cTvMPE5MMp6NuQzIMV/ModSu
+X-Gm-Gg: AYBFou2pPwiMWJpF/Lu2A5APazdA8uKQ129qjZve4Zd+fzy3KybrGoD84751tZx1Nur
+	iCcvmV+A4ztY/iuqZsJwLEv5jlpAD04ltdbdxgJd50X2ji+RJ+JB8YIN3Rg3apl5G0FfZeI89T8
+	Z+fpbP9M5r0Jl7b8a4VTos27XVDIpuUORwjPQ/CBh9Vm2eB/a3DqBTf9/3HnMl3NCPG801vfD17
+	bT90donuSnKhJW1XXFsgpN3jpTElCq4ttieLFSk6cZnzyWpOINzPqHWqQ3z8VAU1kJVHtkiHMrS
+	zZoz2NIOe9fRF23jOX80xCpIY87uC/m4T60QZXN+LlEsuL6Eqxs6ctqB/WQ0FHF/j+KJhG2sXjO
+	bCiqgFLyJndsVLNSaGweDvQzBZvlb2BUY05nmBqD7I4mrY3zonHEJTjZRPOKO3fCd6XUH/N4DI3
+	+cp4pBX+5w6RY/irTtaZx/7Efu7Y8zwH5x35uFR265PT3XkbFCALOOOBuKXww2t9ZhYu86jHwAQ
+	YIdmsgfIGlqkGOaKy48+dAJsZdI/igo3N1568EjUgzIuzI/HRmd6PQQV3qN4vzLPX5lZ5WoCpe0
+	9droo/cffRDWCjNZpbVXXxr9eoG9OKLQVnN05aDn1pN7qA==
+X-Received: by 2002:a17:907:d10:b0:c2e:40a0:7978 with SMTP id a640c23a62f3a-c3169f5f01cmr247936866b.9.1791311557634;
+        Tue, 06 Oct 2026 11:32:37 -0700 (PDT)
+Received: from dev-dsk-fgriffo-1c-93421965.eu-west-1.amazon.com (54-240-197-234.amazon.com. [54.240.197.234])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c3158260f7bsm221934866b.6.2026.10.06.11.32.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Oct 2026 11:32:37 -0700 (PDT)
+From: Fred Griffoul <griffoul@gmail.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>
+Cc: David Woodhouse <dwmw2@infradead.org>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	iommu@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH 0/9] mm: Memory providers for guest_memfd and iommufd
+Date: Tue,  6 Oct 2026 18:32:26 +0000
+Message-ID: <20261006183235.16576-1-griffoul@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260720111259.122911-1-dwmw2@infradead.org>
+References: <20260720111259.122911-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261006173241.65945-1-tianyi@cloudflare.com> <179130839329.2231598.14859340679278349582@kernel.org>
-In-Reply-To: <179130839329.2231598.14859340679278349582@kernel.org>
-From: Tianyi Gao <tianyi@cloudflare.com>
-Date: Tue, 6 Oct 2026 18:48:38 +0100
-X-Gm-Features: AclHuK8tusQKzC0_fjG45JZf9NjrVrFoAQ9mJo_jQw5ddNkxc7dATehHk_JKOlk
-Message-ID: <CAG4wq-eXM-mbZ=WOzL_M3u=yYm2YMoxshCJPjDqT2GB3FL0AbQ@mail.gmail.com>
-Subject: Re: [PATCH net 0/2] veth: fix peer NETDEV_XDP_ACT_NDO_XMIT after GRO
- is toggled while down
-To: netdev-bot+sinfo@kernel.org
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, toke@redhat.com, 
-	lorenzo@kernel.org, horms@kernel.org, bpf@vger.kernel.org, shuah@kernel.org, 
-	hawk@kernel.org, kernel-team@cloudflare.com, ast@kernel.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Fred Griffoul <fgriffo@amazon.co.uk>
 
-I was testing XDP redirect from a physical NIC into a
-veth whose peer is in another network namespace, and found that the
-redirect worked or not depending on the order of enabling GRO on the
-peer and bringing the peer up.
+Some drivers manage RAM outside the page allocator: a carve-out, device
+memory, or memory that a host component moves between VMs while they
+run. This memory often has no struct page. The driver wants to lend
+pages to a VM and to its devices, and to take any of them back later.
 
-Cheers,
-Tianyi
+David Woodhouse's series "KVM: Allow alternative providers of
+guest_memfd backed by PFNMAP memory" lets such a driver back a
+guest_memfd through struct kvm_gmem_ops:
 
-On Tue, Oct 6, 2026 at 6:39=E2=80=AFPM <netdev-bot+sinfo@kernel.org> wrote:
->
-> Hi!
->
-> This is an automated message. This series looks like a fix, but its
-> commit messages seem to be missing some information:
->
->  - How the issue was discovered, e.g. hit in production, hit during
->    development, syzbot report, manual code inspection, LLM or static
->    analysis tool scan.
->
-> Please do not repost the series just to address the above. Instead,
-> reply to this email with the missing information, so that reviewers
-> can take it into account. If the series needs another revision for
-> other reasons, please include the information in the commit messages
-> then.
->
-> The evaluation is done by an LLM so it may be wrong, if you think
-> that is the case please reply and explain.
+  https://lore.kernel.org/kvm/20260720111259.122911-1-dwmw2@infradead.org/
+
+That covers the guest, but not the VM's devices, which his cover
+letter left as an open question. This series adds a small interface in
+mm: the driver that owns the memory becomes a provider, and the code
+that maps it attaches as a consumer. There are two consumers, a
+guest_memfd backend and IOMMU_IOAS_MAP_FILE in iommufd.
+
+The series is on top of David's v2 (base 0e35b9b6ec0f). Patch 1 was
+part of the earlier dma-buf RFC. The provider backend depends on it, so
+this series carries it.
+
+Why not dma-buf
+===============
+
+The earlier RFC shared the memory as a dma-buf. Christian König
+rejected that: an importer must not build its own page tables from a
+dma-buf, and the use case should stay out of drivers/dma-buf. I
+acknowledged that and dropped it; this series does not touch dma-buf.
+
+Why a new interface
+===================
+
+kvm_gmem_ops gives KVM a way in. For devices, the only option today is
+a dma-buf plus a private call that iommufd looks up with symbol_get(),
+which is how vfio-pci works. Each new owner would need another such
+lookup, and iommufd would end up knowing each owner by name. With a
+common interface, a provider module only calls into mm, and nothing
+needs symbol_get().
+
+It also means the provider revokes a range once. The VMM hands the
+same file to KVM and to iommufd; on a revoke the core forwards it to
+every consumer, so KVM clears the range from stage-2, iommufd from the
+IOMMU page tables, and guest_memfd from the VMM's own mapping, all
+before the revoke returns.
+
+The contract
+============
+
+For a page of a provider file, get_page() returns the frame, its type
+(RAM or MMIO, read-only or not), and the largest aligned block of frames
+of the same type, so that consumers can use large mappings. A page
+without a frame is a hole.
+
+Consumers take no references. A frame stays valid until the revoke that
+removes it returns. To guarantee that, a consumer either holds a lock
+across get_page() and the mapping that its revoke callback also takes,
+or detects a racing revoke and retries.
+
+The interface does not deal with folios. The native guest_memfd backend
+and memfd pinning in iommufd handle pages from the page allocator, and
+pages that can move or swap would need references. A backend that needs
+full control over the file can still write its own kvm_gmem_ops.
+
+Backends
+========
+
+The motivating user is a host-side memory manager. It reserves a region
+of host RAM, lends parts of it to VMs and their devices, moves pages
+between VMs, and has to survive a live update of the host kernel. The
+sample module in this series models it.
+
+Device-DAX could also be a provider: its range never moves, get_page()
+is short, and it only revokes on unbind.  iommufd can map MMIO, but KVM
+takes only RAM, because it picks the guest memory type itself.
+
+Neither consumer keeps state about the provider's frames, which helps
+with live update.  guest_memfd has nothing to save across kexec, since
+KVM refills stage-2 on faults. The provider saves its frames and who
+owns them. Devices cannot fault, so their mappings stay part of the
+existing iommufd live update work, and the provider only has to give
+back the same frames.
+
+Confidential VMs
+================
+
+This series does not support them yet. For now only x86 VMs of type
+KVM_X86_DEFAULT_VM can use a provider.
+
+I don't think a provider should back private pages. Revoking a private
+page loses its contents, and only guest_memfd knows which pages are
+private. The interface could still be useful there later, with
+guest_memfd acting as a provider for its own files so that iommufd only
+maps shared pages. I left that for a later series.
+
+Patches
+=======
+
+  Patch 1 lets a kvm_gmem_ops backend map a page read-only for the
+  guest.  get_pfn() gets a writable output, and a guest write to such a
+  page exits with KVM_EXIT_MEMORY_FAULT. KVM_MEM_READONLY can't be
+  used for this, because guest_memfd slots don't allow it.
+
+  Patch 2 adds the interface and the core, and the FOP_MEM_PROVIDER
+  flag in struct file_operations.
+
+  Patch 3 adds the provider backend to guest_memfd, with the
+  GUEST_MEMFD_FLAG_USE_PROVIDER flag and a provider_fd field.
+  guest_memfd also handles the userspace mapping of the file, if the
+  provider allows it, so providers don't each have to get the fault and
+  revoke handling right.
+
+  Patch 4 prepares iommufd for tracking pages it does not pin. No
+  functional change.
+
+  Patch 5 lets IOMMU_IOAS_MAP_FILE take a provider file. iommufd maps
+  one PAGE_SIZE entry per page and pins nothing. It leaves holes
+  unmapped and honours read-only and MMIO pages. On a revoke, it
+  unmaps the range and maps whatever the provider backs now.
+
+  The PAGE_SIZE entries are deliberate for now: a partial revoke then
+  never has to split a large IOMMU page. Using the block size the
+  provider reports would be better, and needs the revoke to unmap and
+  remap whole blocks. A device that accesses the range between the
+  unmap and the map faults; replacing the entries in place would avoid
+  that, but needs new support in the IOMMU drivers. Both are left for
+  later.
+
+  Patches 6 and 7 add iommufd selftests: two mock-domain queries and a
+  mock provider.
+
+  Patch 8 adds a sample provider. It gives each VM a child file, can
+  move, donate and reclaim pages, and supports read-only pages. A child
+  file is read-only to its holder; the owner changes it through the
+  control device. It only uses the mm interface.
+
+  Patch 9 adds a KVM selftest with one provider and two VMMs. After
+  each change it checks what the guest, the device and the VMM's mapping
+  see.
+
+Testing
+=======
+
+x86_64, in QEMU with KASAN, PROVE_LOCKING and DEBUG_ATOMIC_SLEEP, with
+two ranges hidden from the host with memmap=, one for each sample. No
+KASAN report, lockdep splat or warning in any run.
+
+  - mem_provider_test, the selftest in patch 9: pass.
+  - guest_memfd_test, including the USE_PROVIDER flag check: pass.
+  - iommufd_selftest, iommufd_ioas: the 12 provider tests pass in all
+    four variants. The 4 failures are access_domain_destory, which the
+    series does not touch: it needs hugetlb pages, which this VM has
+    none of.
+  - David's gmem_provider tests, which this series does not change:
+    hugepage, revoke, iommufd and readonly pass; the SNP and vfio-pci
+    tests skip for lack of hardware.
+
+Not tested: arm64, where guest_memfd refuses providers; a real IOMMU,
+since only the mock domain was used.
+
+I wrote most of this series with AI help, and I am posting it as an RFC
+to get feedback on the interface.
+
+Fred Griffoul (9):
+  KVM: guest_memfd: Add a writable result to get_pfn()
+  mm: Add memory providers
+  KVM: guest_memfd: Add a memory provider backing
+  iommufd: Track the domains of pages that are not pinned
+  iommufd: Map memory provider files
+  iommufd/selftest: Add mock-domain IOVA queries
+  iommufd/selftest: Add a mock memory provider
+  samples/kvm: Add a memory provider sample
+  KVM: selftests: Test a memory provider shared by KVM and iommufd
+
+ Documentation/virt/kvm/api.rst                |  45 +-
+ MAINTAINERS                                   |   8 +
+ arch/arm64/kvm/mmu.c                          |  13 +-
+ arch/arm64/kvm/nested.c                       |  16 +-
+ arch/x86/kvm/mmu/mmu.c                        |  18 +-
+ arch/x86/kvm/svm/sev.c                        |  13 +-
+ arch/x86/kvm/x86.c                            |  10 +
+ drivers/iommu/iommufd/Kconfig                 |   1 +
+ drivers/iommu/iommufd/io_pagetable.c          |  37 +-
+ drivers/iommu/iommufd/io_pagetable.h          |  54 +-
+ drivers/iommu/iommufd/iommufd_test.h          |  36 +
+ drivers/iommu/iommufd/pages.c                 | 340 ++++++-
+ drivers/iommu/iommufd/selftest.c              | 286 ++++++
+ include/linux/fs.h                            |   2 +
+ include/linux/kvm_host.h                      |  20 +-
+ include/linux/mem_provider.h                  | 211 +++++
+ include/uapi/linux/iommufd.h                  |  11 +-
+ include/uapi/linux/kvm.h                      |  11 +-
+ mm/Kconfig                                    |   7 +
+ mm/Makefile                                   |   1 +
+ mm/mem_provider.c                             | 177 ++++
+ samples/Kconfig                               |  17 +
+ samples/Makefile                              |   1 +
+ samples/kvm/Makefile                          |   1 +
+ samples/kvm/gmem_provider.c                   |  67 +-
+ samples/kvm/gmem_provider.h                   |  17 +
+ samples/kvm/mem_provider_sample.c             | 855 ++++++++++++++++++
+ samples/kvm/mem_provider_sample.h             | 135 +++
+ tools/include/uapi/linux/kvm.h                |  11 +-
+ tools/testing/selftests/iommu/iommufd.c       | 119 +++
+ tools/testing/selftests/iommu/iommufd_utils.h |  64 ++
+ tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+ .../testing/selftests/kvm/guest_memfd_test.c  |   6 +
+ .../kvm/x86/gmem_provider_readonly_test.c     | 150 +++
+ .../selftests/kvm/x86/mem_provider_test.c     | 582 ++++++++++++
+ virt/kvm/Kconfig                              |   1 +
+ virt/kvm/guest_memfd.c                        | 286 +++++-
+ 37 files changed, 3531 insertions(+), 100 deletions(-)
+ create mode 100644 include/linux/mem_provider.h
+ create mode 100644 mm/mem_provider.c
+ create mode 100644 samples/kvm/mem_provider_sample.c
+ create mode 100644 samples/kvm/mem_provider_sample.h
+ create mode 100644 tools/testing/selftests/kvm/x86/gmem_provider_readonly_test.c
+ create mode 100644 tools/testing/selftests/kvm/x86/mem_provider_test.c
+
+
+base-commit: 0e35b9b6ec0ffcc5e23cbdec09f5c622ad532b53
+prerequisite-patch-id: 2a0016e90f0690baef841a8c34c07b96e3f1b941
+prerequisite-patch-id: c497c1ff1e9de8e9c470c58b163ccbfce4827ae7
+prerequisite-patch-id: a16b61afd172662bde725e5c12805758f76b89fa
+prerequisite-patch-id: 0ddee6c1b48fa853e6a94f2746340e525477d287
+prerequisite-patch-id: 4dc9a395a2eb73283b20b75e2ba763ec72b2e22d
+prerequisite-patch-id: a9758d7f8f6959dae6ad154902fa1269234dbc3c
+prerequisite-patch-id: 0537bcc3ca5e3bb9b86fe7c99a245a9ff9d67831
+prerequisite-patch-id: d5feb18b6630c99973259804418243d856c37ce7
+prerequisite-patch-id: 2a08a105b6b5d46240a69f5bbf646211d44f8412
+prerequisite-patch-id: 760b34834d5d8dcdf1ae1a09cc6aae267dd7760c
+prerequisite-patch-id: dd94ecc7ae9472c2bf005c9cb1c483994eacd163
+-- 
+2.47.3
+
