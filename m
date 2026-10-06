@@ -1,123 +1,127 @@
-Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A616C2D12EC
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 01:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.204
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791248954; cv=pass; b=bbUbkPxXlMo5L584dB4XLypgzTxXhBUgUBCv3R/iA3NqbW3eM+7oOKIlOuu72E4pMb2u0i/YlHaZISeP3jzPScmHPmE8dIJcct35K4ZT7OmU+7/DDST9PgIea8w0dyfMwgIyfkhlAsb3cbuPXCM1l6D3mjvWPThkWnz9R1WOybg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791248954; c=relaxed/simple;
-	bh=FQPZMOJ4kPISPNG5soX6XJknF05kL4vWkbTpQ6PZ6YE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qp3tpysTtXTEelrAUPQeyRzsnkrLW8xviLYdupZKppA2QTNjQm96auS3vG04VHchHZU2dn0F1OF19ZmrubRsPF78LlT/fewCey8e4uEKGZE+T3RWv76U+wtdlRNk04ED3ETroFJk2uMV+068c8RnCXQh+LbYZrwttqN2g3F52fE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gD1zBwY6; arc=pass smtp.client-ip=74.125.229.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD8335F60F
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 05:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791263791; cv=none; b=bLuw9mb6Gmd01j8e3/mnB+87P65ojNuSxV0bcnFJh8QAuHT98jzs7qgFZtHmQJg/hJVdP1TC+zTJJhZLEk7Ixw61fG2NWbKx+uWh0mXdkMPF0HajqmxsvBSADSCdfA1CvkY40ZTuq+jNZHIwJQl2NUcYglM+huDNw5oZu88fBEg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791263791; c=relaxed/simple;
+	bh=r7yDJGNf3vg9Dsuvo+2fXtkz1amrdnaQFLDyMDdoBeE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mh/XhH6uCYwhIJU3V3A6xL17G2+2ayXlD9bVc/Lh9aDwRUCQCXHptlLfTnuanohudGzguOG1wliIF5gBBrOMq7Dti8lpmsMSHXWxIZHLmYS+lI1ZWnRwfh/WMHh/3btGyZ33fs5idSOpuMrWns5eA5q3C/rR4KNjFA7fYUAnYKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com; spf=pass smtp.mailfrom=openai.com; dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b=UoKaKUJL; arc=none smtp.client-ip=209.85.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gD1zBwY6"
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f16f15so2067926e87.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 18:09:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791248950; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Zp2LPF2/ydTk4uXnzNMbdLgJ7PAjEnFTaP4Bhl2WjTlJNBOqsqJqTipcj6Rj0rS+S+
-         iUc6fYwmJPTXKusw4IHemugP8psJMM40UE0Cc0YW6dheUTKqu7iroMPlTBkSwAKZw59y
-         ZVk+U+HcL0RTaCFwjs1392tPjI1KL2cMr4id0w+NlAOdb4jLUriezRt7n48e+9Mvo+3t
-         8nVWa8A4uglJ14xDWLqqjGYnYTHJS6e2sHf/0rCP7vL1H1QhuwNv66HqDH41+Rv0K9Y/
-         duhaozqPyrVMBjlj6lXFiOg4ABOYsv6/jiozBfTFenVL6JeQOFDKIqp0sZoiv/13uK7+
-         zT2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=kkoJa2a5Pb+V2YqC92sylMEECtxCIMpFTVrO4IIataM=;
-        fh=m1MVMNJd+eoXjsIccPmVKkWi90qJ3UU8VDdHtiDQD6E=;
-        b=HsGWxtn9p5O8J+GmOoUeHmMENcqekvnUIoRnKRabczz+X8fGsGbTpP+C6xL+BAifD4
-         ZWSlA0rqc1Xh7CqP1sylAmIJaCepkS4zMBfnhv7rU7ixaD+vJPT2xNQ+q+bQXQYoCJO1
-         lCz4yTWYqjdGFEmLSPZChwqVPBcNNNmG18k96zPlRScKwzQKH+6kyXPQ0LZmwrEQZJIU
-         WZ1REjMUJhwh2lNs1wGsvDScSMjHDkjtKR2WWR8qPCRK17mxHQrqIjB8CqsXrQjO3fWD
-         eN44GnDA9ucve+WvrW3e2rnLtY7Uw9jFbY36D/r0+5sI6U7DFiC0E/jHR7eEl/sHb8K+
-         MbTg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b="UoKaKUJL"
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-81ae6aefdceso2398294a34.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2026 22:16:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791248950; x=1791853750; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kkoJa2a5Pb+V2YqC92sylMEECtxCIMpFTVrO4IIataM=;
-        b=gD1zBwY63aneQEdRWI9O2+XhnWcnhenMpHkzDzfmr+2Q0LFpCQWs1J5ADzGW0KIPCt
-         TOVS/UekxLDmL8+mKDkGKcZoayDRSgPcaYe3huif6OIc4UFMTbeo/s7sE6I0e5mM7VJP
-         MLbb856XtAlNuVJ37tpT385z3EfGY9bqI7JBkRjVo2EQYN2brSintBa7xGik1bXmKiMV
-         Hj4jG50TAT6qRMV/bAcLy5cDg15aUa8iM0fI3YSrYZKXwKa/2D5HUZuiACWPFyS+n20W
-         QrSiwLGMTbXOqMLQ8na9nYcMRMPtLKzWDcZg15qjiZLozv4DR73uHJZy62lPzFmgxDja
-         3w2g==
+        d=openai.com; s=google; t=1791263787; x=1791868587; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IcZAWj+F2P6v02eYEvSJlSeTa5ggyC9iZf9e6Z6vbRQ=;
+        b=UoKaKUJLMoZduV6Ofexj/lX7Cze0j9UyMMCDm92Rjhm6jL2zJq4J/va7aLHeu24YAN
+         MzpRtOGD+8c3TNniiYc2Hyf42JiaXDuVZtheoZo7AkIu7Nrt2NuAoFTCFc0z8Xcl0p6q
+         Lp0ml28EpUnyx46Lc1ma4Liy1Dt1SKi+lEgWk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791248950; x=1791853750;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=kkoJa2a5Pb+V2YqC92sylMEECtxCIMpFTVrO4IIataM=;
-        b=0Ca3cB4ViAw+DHjErgIceojtczpWWcst7kGHDtyqQ71K9g+6BzykNqJwsHoqzfVqnf
-         aBZTGiq1EPTxkhcH/8I0jezz8FZ1oXGMhKgSBE90XO2LPMs4wBxhmSQjOjhWENbE0gNE
-         FTuXnKmjL1T3vWW9XhbMpPxG2tfDpsaz8ElRVBcaklDB0NpSW4W6/C9gZlxDI5ug4srR
-         xNNpq4nAjqVxjxnhHIN7REe2Ts4a+PATHSllX1KMvx4CIBc7XNgZVf0KcGzpY0Tcd93Q
-         i6xUQ+1npu27/wuyM8klnuSAx/ybxfUI4cKV5PFGfYsB7VDXVGqo6xXpQ0qwy2uFXbJ/
-         fpKw==
-X-Forwarded-Encrypted: i=1; AKwUvBzbSOt+LhK6vZDQE6B8eYge+VaDFn62rWhf37CXViFGQk8Xb7IyrwUmZ9JMtvgkAZuMuc856axeyPPFBOd/E8s=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIAZhn7bVNOac2pK5CH1uFajYcg7rFQBKHV/6WvPScix6kkDMzz
-	/6VFR1T0jCm99WNfMgw4bpkHi7Xeez70fiFndV05gKKhn0ZDmX+N4Eq876+Z5B7dQ5NW7ncCz1s
-	Hd/e4htM+i2q4C1cPOHu2Uw9vr+j11Cc=
-X-Gm-Gg: AYBFou1KSLoFLk6zrLmkhQmSN7hJ3G6ZJYnTT5YTtzwhJ72Kr7JDi55geef/iKhzII/
-	caX130WOHo2F4VN1QUNlTx1Y6HAenF9/iIo0vCTkHUQmB7EVmqWucMsqk3JDAK3E0Pe9IKiaYy1
-	SROYNHqzNGtvym9/o+hW9v6qQSknaivP+m5L0yhu3rRapkWLxmyvLpW6P8UGZ18u36FaumJmfU7
-	JS/ely8HdxDgabauZQr+WK8bDTMUMEHPdUUyIDxokQ7svqe4E3fVchdJ3x4qNQ15bnFqtm6gXVC
-	Q24n/farm1guO5NRkIsn3YXVz+E6e2eboyzqLbF7m0wqnlOLVB6OWcOW87CpDnRKmpRPx/plPr8
-	lLy1BwE7nqTc=
-X-Received: by 2002:a05:6512:2523:b0:5bc:b091:e78d with SMTP id
- 2adb3069b0e04-5bcb091e7e6mr4148625e87.37.1791248950470; Mon, 05 Oct 2026
- 18:09:10 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791263787; x=1791868587;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IcZAWj+F2P6v02eYEvSJlSeTa5ggyC9iZf9e6Z6vbRQ=;
+        b=h2cWm6QiAoJYktbXJj01S4qnxslX+FV+cMRGAl51I/HQFmeKUQqcrvQ4CcsnVzoYZH
+         ZR6+0BiYUL7vtGhvRaaa2qvUxD/DGD10OduYV9oDWjxgVdnLkM31qhrK8ffN+GWWojG2
+         Q02KhLZKmAwEE0tQiSMkJzYJKslSssfH3QxXF2gGHIB6cxkr4P7qpzBcXUtZ25E38xlS
+         y23DhwdrHP7BxLLjkj5iQnCe1RpPw1RNGYlgje6J8xPy6dR1jRwRJ6VqpBmcJvWQCYBM
+         wBHOY6JRIkxX7jFg56kK20RyWUTOMPRwU/xUFzv4gUa4eMYDF7h5zFc9Dz/+yty6AOHi
+         WV/Q==
+X-Forwarded-Encrypted: i=1; AKwUvBy1U3Bv06yiztOItjjxf5hN4F4S+RAbMmo6F4Wa+p2HB/PRHV/rIkXUGi4LYGGleMPb11dzxWa+SIBGuPiBiJ4=@vger.kernel.org
+X-Gm-Message-State: AFuF++mnriXfshG6wE//ZInn8TW7CFYNCzpfaYYxOwHp3cGKTtQjWEsU
+	U2ayATXPn60tst2/vxPO4LvUsRSrMNIfFNzm7BfVLWLRIN5KzMh7TIuElEuF7qjGSQs=
+X-Gm-Gg: AYBFou3TvbMQNOFAWUygFADRzDnBAFQqRuPisP7gsbujAN68mwCq3OcH9sIZYQloANT
+	97dAlCW4M/7RDtooc2ngalg4jjHLBQ2/BDDFM+61tbfBzMBVxMXF2OzCVZ2mgoY5PCEvqfDD4Z5
+	bcmk41jgGo4stSlhw/S6fe1FXZ9pJYt3DY0EIcYW35IV1UIiQEghNydrqNPfvg3eocb+R0Z/DeX
+	zKtWSKxMJ1c5jCLNhUF2oHMz5E2KjpnEEOeR5BtkLsQ9JIGQ2rMuseaqIHYR2OQIYa/mvg4T7hY
+	uSa+wJlS2sbQpSOAjrOQCL/8jtQwHZeyTIwglaPp3JY47+nH2hqeD1pcSan79k6e1jf9y6jVe5R
+	X3adld2qXBF8Gsoin6et479qGzeACKXDn6lHnSS2xkB8acEpfhJeDMAyE1tV3ikrNVJSV2ogozd
+	nLwRr0vDuEdl0vqa1jLG2Jq0ykaCnUpXEYoDpBb2/ow62PrGhYwrAVHUTXobd7Utpe35uCMtU13
+	4WsokfnG3h/S2Z1QI143/IShOQj3HPOuispO26BvPqtjEbfIt8m8ghD4cgkKs/uYJeS1pp/ig45
+	1p0=
+X-Received: by 2002:a05:6830:2b0a:b0:805:9b28:87d7 with SMTP id 46e09a7af769-828a167af3amr262818a34.8.1791263787188;
+        Mon, 05 Oct 2026 22:16:27 -0700 (PDT)
+Received: from com-68297.corp.openai.org ([199.47.143.7])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8281fcce238sm1622898a34.6.2026.10.05.22.16.25
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 05 Oct 2026 22:16:26 -0700 (PDT)
+From: nramaswamy@openai.com
+To: netdev@vger.kernel.org
+Cc: Neil Ramaswamy <nramaswamy@openai.com>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Yuchung Cheng <ycheng@google.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v2 0/2] tcp: preserve RACK tracking across partial undo
+Date: Mon,  5 Oct 2026 22:15:25 -0700
+Message-ID: <cover.1791248202.git.nramaswamy@openai.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260930112842.21323-1-sigefriedhyy@gmail.com>
- <20260930112842.21323-5-sigefriedhyy@gmail.com> <20261005164946.25da19c2@kernel.org>
-In-Reply-To: <20261005164946.25da19c2@kernel.org>
-From: Yuyang Huang <sigefriedhyy@gmail.com>
-Date: Tue, 6 Oct 2026 10:09:00 +0900
-X-Gm-Features: AclHuK-bztab4w1lM2DovGlyn5DZ8ZhMm-bLH4zjSTjG2-Wv3eC_T9ovpy0ACZk
-Message-ID: <CA+7S2v+XZjnzxpucTBAaKqLp8FtF92cyHBbrQF8G5D3uT3r8Hg@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 4/6] net: add AF_PACKET multicast dumps
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Ajay Singh <ajay.kathat@microchip.com>, 
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Jacob Keller <jacob.e.keller@intel.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	Kees Cook <kees@kernel.org>, Kory Maincent <kory.maincent@bootlin.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Nicolas Dichtel <nicolas.dichtel@6wind.com>, 
-	Nikolaos Gkarlis <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	Stanislav Fomichev <sdf.kernel@gmail.com>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
-	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-> > + err = dev_mc_fill_addr(skb, dev, ha, NETLINK_CB(cb->skb).portid,
-> > +       cb->nlh->nlmsg_seq, flags, netnsid);
-> > + if (err < 0)
-> > + break;
-> > + nl_dump_check_consistent(cb, nlmsg_hdr(skb));
->
-> Why are you checking this on every iteration?
+From: Neil Ramaswamy <nramaswamy@openai.com>
 
-Right, we don't need to check it on every iteration, I will fix it in v10.
+Partial undo can clear the TCPCB_LOST flag on segments already removed
+from RACK's list, which prevents subsequent RACK loss detection, leading
+to segments only being retransmitted after the RTO. Restoring them to
+the RACK list as part of partial undo makes sure we can properly
+reconsider them for fast retransmission in the future.
 
-> The changes still lack polish IMO.
+To do this, we first sort (by transmission time) the segments whose
+TCPCB_LOST flag is being cleared and then linearly insert those back
+into the RACK list, which is sorted by transmission time.
 
-I will go over the series again for v10. If you have something
-specific in mind, a pointer would help.
+My investigation started from seeing repeated TCP stalls in prod and the
+mitigation that seemed to prevent these stalls was limiting SO_SNDBUF to
+96 KiB. It also seems like others have seen similar symptoms before [1].
+
+[1]
+https://lore.kernel.org/netdev/35A4DDAA-7E8D-43CB-A1F5-D1E46A4ED42E@gmail.com/
+
+Changes in v2:
+- Added production symptoms
+- Removed the redundant TCPCB_LOST comparison
+- Fixed lint/long lines
+
+Patch 2 is unchanged.
+
+v1:
+https://lore.kernel.org/netdev/20260926002520.42955-4-nramaswamy@openai.com/
+
+Neil Ramaswamy (2):
+  tcp: restore RACK list membership when undoing loss
+  selftests: net: packetdrill: test RACK after partial undo
+
+ net/ipv4/tcp_input.c                          | 35 ++++++++++++
+ ...tcp_partial_undo-restores-to-rack-list.pkt | 54 +++++++++++++++++++
+ 2 files changed, 89 insertions(+)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_partial_undo-restores-to-rack-list.pkt
+
+
+base-commit: 11536ee3d3e0b1bd35b6f3f8df55a6053eb0c71d
+-- 
+2.55.0
+
