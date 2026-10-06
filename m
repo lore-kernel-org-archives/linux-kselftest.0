@@ -1,57 +1,57 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A6649EC72;
-	Tue,  6 Oct 2026 15:45:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465B449E12D;
+	Tue,  6 Oct 2026 15:46:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791301530; cv=none; b=Tc+cXb4i3lIyp4aaOb6N03hQhS2633Tr9PcLCZqJZLygRT734aZXXgWxScx9H9O2Z756VFosRiYYxLRx2beGOx8ajvuI8KglVlfuQWoy+8HOZTZBV1eiwcGqv7Km0QfusiePCN0tVziKPAXvEJ/FH0Nb6pZuoZWDtVfEAjQKD9s=
+	t=1791301571; cv=none; b=Iib/2VPTJwpn0eEPy2C/Awkko5av0IQ6PpdNepkBehe9tANann7/pzuTXMEkCSNDkKC/932737ZoVlvbUvEY4br0g/g3ZC1QJDQmw3Iog3wl7hMr4CPxqw1dGPx+t0JkkQfa33MiJurG9gvcROJNcwXzys2GtvoosZk23pJ9CRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791301530; c=relaxed/simple;
-	bh=X/O0I4LpPHtogNMYtXLD0WCzRBADDWNhnD4zHqvU3RY=;
+	s=arc-20240116; t=1791301571; c=relaxed/simple;
+	bh=5J0d/i1XPI3IJLy/7EDGhlkddszoQOLN4OMM9tmlpMU=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Yfyh/09FXQFQTlIa89NnSpl2Zu7CWqmbDZ0aakf7pc/JB8r6+AZ4RK8R9D/EPZYdJ7gPU3g6cyJ/cKuFkPrabLRLwpZr8hdhAQekoBlBDEYq0OqkAINjCp+hxqyFI209S/LoLpTu0M6OT28dD00KG3aVWwiyFZaAdaktJYIj+Mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NItb0XBr; arc=none smtp.client-ip=100.103.45.18
+	 Subject:Content-Type; b=GMm/9CymoJpLlFZbrKqnuE7y6PdboMD+y3DJyrJ1Zb0wTHgti7K2B+Fzrg/jng7HgJe+EyHM4QCeh6jzUW/5NDSEdIzM2uytkWYoQoognbjB9s/XHN8scmtf9wjYEwtkBsyJ+apyCOfWsJm0zkhLJjhwciyrwgl99KRR+zqiHMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ST4C5wtg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NItb0XBr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DA31F0089C;
-	Tue,  6 Oct 2026 15:45:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ST4C5wtg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A441F0089D;
+	Tue,  6 Oct 2026 15:46:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791301528;
-	bh=vw3zGUCrHcTccKtvmlM/qfJrydp6xrDKgIoZYr5Loyk=;
+	s=k20260515; t=1791301569;
+	bh=7chOiqnq9v4maG9RhX/zdub8LTdd6AMJr64LHMABkg8=;
 	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=NItb0XBrAt2PXTnmfB79KTCSqCwM3orsrSgIf/SvhJaRKpn1W5DWIe+Iwx2bVy3dt
-	 PiNn7siSqk0uFn9zNxSziYMVgQgHBTJcbxXzxDg6Q0+8F495n861C74W9Cef41Z8WN
-	 Sk+zRR4tlj7ogKHSuOKr44Or9SfUkwiDOj9trqzV9hLw5EyEOehb2YTahSPwftkERN
-	 wTMwHc/G3nO1m2ap3Cs+8O2yL4Ih9BcuBpoeBoTmZXL3QjCM6a5dM/UeUEM0kfEZUY
-	 joQT9lngK8I5mJXNDpy8ml7ehC+GIjLQ4FCcscwgC6upHNOPYjTEllRtFfhNcl4vhB
-	 dmPLkYDyEB/TA==
+	b=ST4C5wtgTkhUKksf7qIMmJh1Ed6fez5jBW8gW2yRTY4YcGJNEixriUToJncmbniu/
+	 4MWHNlSmqMROFMqLVJk21A2Ox0BHBZmmc5dQgc0yiR/ZY9vyXBIIa5uGjPXIrn/tw5
+	 61/qW9gcE5lDhKfTnkenuUecW5s+CvCTnzq7KA/ZpU+H/3F36e8QgBxSCpb9I6k9fQ
+	 W/enYCsO+y40FOQ9XraczdbE0iT7VT+eSF0VayW1QulR9y6pKxo3ZWnujZ8HdUnUku
+	 yGomUaqu153zd3NvPJgoccIw3K8zlhuG8yOMqWugS6NuP5RxsqLcIfa8+omK9PR1ez
+	 0ayrWENKJVKGA==
 Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 38A80F40068;
-	Tue,  6 Oct 2026 11:45:27 -0400 (EDT)
+	by mailfauth.phl.internal (Postfix) with ESMTP id 82003F40068;
+	Tue,  6 Oct 2026 11:46:08 -0400 (EDT)
 Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Tue, 06 Oct 2026 11:45:27 -0400
-X-ME-Sender: <xms:lxfFaootPAhG9MHphiDANkNpUUJgAv5262PHtq2UzK3v1l0D6iOQDQ>
-    <xme:lxfFapczUBXz-0k48pA8cT8-EbnNZQhbPJa0sx4Z_oI1gcyo-DN3m-K595mlAfJLl
-    T16gneGbmo_mKPd2mm5wrQrYvmZgIdoZHAhtvaoeUUtjz-En9w8e0A>
-X-ME-Proxy-Cause: dmFkZTEETS+GD4maES+3ru+sYQ3899595/uPTf6cj/2mYXB8gx4Uukgx9LnTRm2rITM88V
-    c2MTpgOX4mM/V1HPUSuZx8Vu61Zqx1WzwhiO1WzcD5deNHLzLmuvuVoPFSIX+6zAasJAGj
-    psvgsn8iKNmHJsVsQMqKkWILmVpDsgYaHjqoUTHk95O8lLFkSrIAs2u/+8U5UWw5ISlJEU
-    fzKpFaI5GdQsvdI95JjUVozRtE+QgEDT+Ep7hpfqq7/yHT9tFCM0f/C93sr83pcYCcZCR+
-    vDJjdoMTWBaI8pELhMlfD7V2fHiYiL540DOKLnrRucGlUiwWFEYySUPBKqk4RbTSNTFOkO
-    FCFLIwhYLKR3lDRkrmqQ4jY1+Ly1NsFTPkxFc32RAjLHE5VGIY2cWplfiJiafekuMf1G1n
-    M/QOtyGQsnoUHlFWITyAa/kYYRyZZE+9s5XwZBFBkM8uBEOz4jEENBmlNOPO5okL1SBHQV
-    WtkoLG5Zn5DtICren+qlaD03np8P4JsyQHw9yWjz+2MiecOPgZ8LsyCsp2ZHgPgyPbfBpP
-    nKDEVsUiCcqzQYhP0F4sOHQjeqpzqKjOR0SDTpKAnl/TMJa8oSv+2Wo57bK0f/cV96KegI
-    ag1cy6F/UXquqw2FtwYFfV/CZaT8EExMzXADMlL6PFBRUOGHvNrER8inKUjQ
-X-ME-Proxy: <xmx:lxfFardONSAZ0w8IGevbVn6mGVWSRZpdq6x0e5vXNJDba2kA9oE2hw>
-    <xmx:lxfFat45yeszoiqagDJF7RyhpXVx7wYtQJdMW6MP35BuaaObg3qWeg>
-    <xmx:lxfFaob6QIXx5U-Yok--slkHD4tFv--P2wk8AGVxZpfSmR3xl1SbFw>
-    <xmx:lxfFanECDeNV8_yCm4a_XFYRAUqPRugnyjEIsYE2jZ6TxHeq4tMYWw>
-    <xmx:lxfFarndXmLCpdTT6IVZrjgBFg4H6x06BJBXaHK3NkmfuU13zEABAmli>
+  by phl-compute-10.internal (MEProxy); Tue, 06 Oct 2026 11:46:08 -0400
+X-ME-Sender: <xms:wBfFanXeVgYqFRaz_k-QmM7mslvAF6ymfRCXt5D_GhKj2Aff7S-X_w>
+    <xme:wBfFaqapRCQGwsvgKedPsuR7S8beBNMtI-ONAY9uyFuMCiSYFVqB4CV2au-f4unP6
+    lbR2G5IBaRF3CqaZJxr_EgkRLPhT8vijqwFtkyHYqTdjLQmX64Bd6E>
+X-ME-Proxy-Cause: dmFkZTF5nb3PuvBnRPyUTy/2VQrslDV66X9Hj4rQAeIT+wddUBMKurk/Cna/3F/gLCPRq0
+    pBv2aTo5E3LR/SEhdKY8E1fdXI0DMWh+Z8u0toB4wOyGzbqOlATZwSg5ztRg61R3puSfxX
+    O9twr5AWOVkB6PV9MWrBTncdMuyvdwQI0jx4ItnHSrnAn/AbX5N/ENocB2qitcl/Xs6f4k
+    3Xub1IIWLhUaP4HfNUhDjKe+SbgzZs+yvgW6GsgQYAUz0H19B7uiwdlXBiwVDtlA2a6cse
+    V3S15aA4sTaoV45nzkyZrCfl5UJwanhGm+PC0MZZYEE6yhykbJYH3PA8rc6U0lp8QGLBt4
+    Cm08WJsCJLADe2qxoJ6iAMXOL7nQHcvYbqx2YSWGVL1h++VVinpIQHzwWVgYqxhZuSERSY
+    yeClcwV4UJRnHtCJcGEwT6/O+b0tMaNiFIT0+wxYDPU61jCGS9OG5KS8xCd+xbPu/lYsdq
+    OdWkF/DdeSqsdGT+eI8spFPtZlhmolIuLK+xRORocpnuGzSi5R2jKwxqmfxDld/WoUmDVL
+    n9I1NotYKGCaBpJdoT2pZhVAriPp6ksCpoSvwkL6SQjVcVnNgm7gTUYGpzs9mu3gexJY2q
+    ADp6l8SO1AX0kk1gKNqRDay3I2UDqDaxMlda5l93mtKsrKPlhxPBdHbBpANg
+X-ME-Proxy: <xmx:wBfFahLzkDR7--KzM4GPN4A1mkbs0t9clOqEGdKoPAJXwx4NKVb1GA>
+    <xmx:wBfFap32W1qHTItWa8jwDZRXDCDNPhOojmwkq17l6XvryqzJ-RcVzA>
+    <xmx:wBfFatnxYhG26AuP9NqLTfJk7FoPe-O1vGQ1QJr6J9qwfBpFRCD2eQ>
+    <xmx:wBfFasjiOwwDEbwlvudszKE2s6ceL-a2OUhTgx4FP-KC20WJYkzvoA>
+    <xmx:wBfFasSMFkuN3ZgG-XhEPIGELpN1ZJIswzFYl8jLzdSH50042o-BO5tE>
 Feedback-ID: ifa6e4810:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 1BC78780070; Tue,  6 Oct 2026 11:45:27 -0400 (EDT)
+	id 647E6780075; Tue,  6 Oct 2026 11:46:08 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,48 +59,65 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A3tzHq7RhY-3
-Date: Tue, 06 Oct 2026 11:45:06 -0400
+X-ThreadId: AyuI6YzC01r7
+Date: Tue, 06 Oct 2026 11:45:48 -0400
 From: "Chuck Lever" <cel@kernel.org>
 To: netdev-bot+sashiko@kernel.org
 Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
  davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
  shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
  netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <8f5148a2-fde2-4156-b4c6-ee573cf46539@slotpi15m67>
-In-Reply-To: <179124254296.434549.14396716806687989116@kernel.org>
-References: <20261001-tls-follow-on-v2-2-2dd1947bb642@kernel.org>
- <179124254296.434549.14396716806687989116@kernel.org>
-Subject: Re: [PATCH net-next v2 2/8] tls: check for a pending signal after an empty
- record
+Message-Id: <766e97d2-2c23-4cb9-b2da-ee0243e1b0df@slotpi15m67>
+In-Reply-To: <179124254419.434549.8522300166361298125@kernel.org>
+References: <20261001-tls-follow-on-v2-3-2dd1947bb642@kernel.org>
+ <179124254419.434549.8522300166361298125@kernel.org>
+Subject: Re: [PATCH net-next v2 3/8] tls: consume empty data records in
+ tls_sw_splice_read()
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
 On Mon, Oct 05, 2026, netdev-bot+sashiko@kernel.org wrote:
-> > +		if (nodata && signal_pending(current)) {
-> > +			long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-> > +
-> > +			err = sock_intr_errno(timeo);
-> > +			goto recv_end;
-> > +		}
+> >  		err = tls_rx_rec_wait(sk, flags & SPLICE_F_NONBLOCK,
+> > -				      true, false);
+> > +				      released, false);
 >
 > [Severity: Medium]
-> Can this errno be lost when the empty record that set nodata was decrypted
-> asynchronously?
+> With the new goto retry below, can this wait now block on a socket that
+> has O_NONBLOCK set?
 
-Yes, at this commit, with TLS 1.2 and an async AEAD. The empty
-record goes onto rx_list through the async arm, and recv_end then
-replaces err with the zero that process_rx_list() returns for
-async_copy_bytes == 0.
+Yes, between this patch and 4/8. Before this patch, a caller that
+polled and then spliced found a record ready and never reached the
+sleep. With the retry, an empty record followed by nothing sleeps
+in tls_rx_rec_wait() unless SPLICE_F_NONBLOCK is set.
 
-The same assignment already discards the -EAGAIN from
-tls_rx_rec_wait() in that configuration, so a nonblocking reader
-gets the zero return before this patch too. But the patch
-description promises -EINTR, and at this commit the reader does
-not get it.
+In v3 the O_NONBLOCK patch will be ordered ahead of this one.
 
-5/8 stops decrypting empty records asynchronously. In v3 that
-change will move into this patch.
+
+> > +		if (signal_pending(current)) {
+> > +			long timeo;
+> > +
+> > +			timeo = sock_rcvtimeo(sk, flags & SPLICE_F_NONBLOCK);
+> > +			err = sock_intr_errno(timeo);
+> > +			goto splice_read_end;
+> > +		}
+> > +		goto retry;
+>
+> [Severity: Medium]
+> How many consecutive empty records can this loop consume while it holds
+> the socket lock?
+
+As many as the peer sends back to back. I don't plan to cap it.
+
+The limit in 1/8 works because a read_sock consumer takes a zero
+return with nothing copied as "no progress". A splice read has no
+such return. Zero means EOF, which is the bug this patch fixes, and
+a blocking caller cannot be handed -EAGAIN. The retry is what
+tls_sw_recvmsg() already does with an empty record.
+
+The loop runs in the caller's own syscall and the signal test
+keeps the task killable. It ends when the peer stops sealing
+records faster than the reader opens them. Other tasks that
+call lock_sock() on the same socket do wait for that.
 
 
 -- 
