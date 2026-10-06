@@ -1,233 +1,80 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B23037757C;
-	Tue,  6 Oct 2026 06:47:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC03737E5C7;
+	Tue,  6 Oct 2026 06:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791269279; cv=none; b=kHyEib3GMXgOloYIjXX8mz7yPSYpx7niXqnbyR4k3vYGo2DmBgNgFO1tGjq9jy9n5qhXIfQsYoWwgNGkeaTwGl+BtXXYxIvD5CKvUB9ggta9e0hS9GulHtkOS+MUH4RY+fLZNGIk6XQnqe8pHCO9WMdqdmxVPDb1gZmTQ8/DgIo=
+	t=1791269536; cv=none; b=ArFvQWQ+Wz4jhe7hMxzAzq3IbCwBGD8IVBGPQXGgYbllAXPb4e469jaCHwbUu86XxgXTJJPwMHPETqxnXlI+7K4G2MX7k6UzsOw/LarwLkl4sL5LA9bViBbIM6u6Ym2ajyUg4wMAL3Ygu0jg75vUaOg2tGARRKZFBngeYJtBjbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791269279; c=relaxed/simple;
-	bh=8wKPfrIzI6GQxDMp2iaUjY0OL7Vf5zwGRNY9dkqBbdU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BjZQGmWU9N8BhEf9HMgwZ/qiPxLShgsUZRD5uINcWU1s9a2jlTBElGe7RSKSw6lDTyJIB31GzqANcfJfEqOfZCjbrdHamjWOMnBeGMbHDjVOpsbe5D4zgWASqHTkyEKwpqjcKKHQJX7tYZnefVRt4l/rb5530S4T5nZSnu7IFhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 36F56200454; Tue,  6 Oct 2026 14:47:49 +0800 (AWST)
-X-Spam-Level: 
-Received: from [172.20.4.20] (unknown [193.85.242.110])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 7571020043B;
-	Tue,  6 Oct 2026 14:47:36 +0800 (AWST)
-Message-ID: <f6cf93a1-8fce-4d7e-8f77-fd106a05647a@davidgow.net>
-Date: Tue, 6 Oct 2026 14:47:29 +0800
+	s=arc-20240116; t=1791269536; c=relaxed/simple;
+	bh=OeRalz4QFLfWg0KyCW33C6N43s4BJBow0N9XDt6oRVM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cxkaopU1oh4XUhcovjMd0W69H7nMXTIy41IiT3V39FE0asdwgUzl77DHpx1iJlo0VVJvR2fFqUQEJXaxdGun2KBoqiGeXQASSDuldvRP7vyh9YAyBfbFIl38p0CSomKr07xfuibKPSuUt9Q4Ev8pi7UPghW5nVrIsOF1BIilIqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QEPBvpoO; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QEPBvpoO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BEF41F000FF;
+	Tue,  6 Oct 2026 06:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791269535;
+	bh=PSfSoVBXGadNhagMAHG18RgSe3v5QSKmmn3n3+vo4hQ=;
+	h=From:To:Cc:Subject:Date;
+	b=QEPBvpoO5O23SJSlCo7NCFJ1p2qFiGwOekB6/LxdVAI+Te7qVga4p9nzOwdL1cCqS
+	 hKzHJKtMfbFvob8z3zLFnazHpYpP6gps5GpuT/YU8OTqHPP9YvvM5kDJW5pdyFvXSV
+	 6ppbILs25XjelKJt3I9ZXhQZ85wHn8Y2zDFxupX0WTrGbujX1m0AWIW9tZoqSQj7EG
+	 BmD+jYBHW9yixEO1Po+8aSw0G0hI8jbKW+M3BosWkY3t8z1Yw7aVatNFBk6aey8X3/
+	 BOkYzKqFedEnwp8/H3ldZ6NwYRFeWUDwqxLpm6FUhvWv9oH9yQV8qSIsdckP3sQ7RR
+	 Et39CxfPESlQA==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	Gregory Price <gourry@gourry.net>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 0/3] mm/damon: fix a minor bug, clean code, and add a test
+Date: Mon,  5 Oct 2026 23:52:04 -0700
+Message-ID: <20261006065209.41507-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] kunit: add KUnit test to assert kernel state
- before KUnit suites are run
-To: Malte Wechter <maltewechter@gmail.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
- Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot
- <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-References: <20260824-lockdep-kunit-v2-0-36a6fec9f72e@gmail.com>
- <20260824-lockdep-kunit-v2-2-36a6fec9f72e@gmail.com>
- <205be33b-362d-45cb-b3a1-cadaba87b44a@davidgow.net>
- <CAPB1BzeDC=V+jKZgX-2gucSZs8vOmZBvUgZLS8kTLvWa0x5S-Q@mail.gmail.com>
-Content-Language: en-US
-From: David Gow <david@davidgow.net>
-In-Reply-To: <CAPB1BzeDC=V+jKZgX-2gucSZs8vOmZBvUgZLS8kTLvWa0x5S-Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 01/09/2026 à 19:02, Malte Wechter a écrit :
-> Den tirs. 25. aug. 2026 kl. 13.00 skrev David Gow <david@davidgow.net>:
->>
->> Le 24/08/2026 à 21:32, Malte Wechter a écrit :
->>> add pre-defined KUnit test suite and test case that asserts both
->>> `debug_locks` and `TAINT_WARN` prior to running any (user) KUnit tests.
->>> This asserts integrity before tests are run.
->>>
->>> Signed-off-by: Malte Wechter <maltewechter@gmail.com>
->>> ---
->>
->> I'm not quite as convinced by this as I am by the first patch. While
->> ensuring the state of the system is good before tests are run is useful,
->> this does seem a bit heavy-handed in some respects.
->>
->> This could probably use a more detailed description, particularly
->> describing why such a test is useful, and why it would need to be
->> implemented in a special way.
->>
->> And I do think the implementation here is a bit _too_ special-cased. One
->> other possibility would be to prepend this suite using
->> kunit_merge_suite_sets(), so we don't need to have any special handling
->> of (e.g.) the test count. This could also allow this special suite to be
->> filtered out (which has both advantages and disadvantages).
->>
->> It might also be nice to have this configurable independently from the
->> other checks, and maybe at runtime (via a KUnit module / command-line
->> parameter), particularly if this can't be filtered on. And, as before,
->> this definitely needs to be documented. People need to know how to
->> enable it, and where all of these extra results from tests they didn't
->> enable came from.
->>
->> Thoughts?
-> I get your point, the purpose of this special test suite is to assert
-> that the kernel is in a "fine" state before any unit tests are run. If
-> this
-> check is left out the false positives could occur if the system is in
-> a bad state before the tests are run.
-> The reason that the case was handled differently compared to other was
-> because this assertion _must_ be run before any other tests,
-> and when kunit_merge_suite_sets() is called from kunit_run_all_tests()
-> it also filters the test suites, which would not give any guarentee
-> that this
-> special suite gets run first.
-> 
-> I do agree that this initial way is maybe a bit coarse, and i will see
-> if i can find a better fit for this assertion. But i dont want to
-> leave it out.
+Patch 1 from Jaeyeon Lee fixes a minor overflow issue in DAMOS.  Patch 2
+from Gregory Price (Meta) cleans up the code for handling of hugetlb
+pages.  Patch 3 from Liew Rui Yan adds a kunit test for a recently fixed
+bug.
 
-Had a chat with Andreas about this yesterday, and we think we've come up 
-with another possible option here: instead of doing one check to verify 
-the state before any KUnit tests are run, have an option to check the 
-taint before _every_ test, and to skip it if the kernel isn't clean.
+Note to Andrew.  This is a batched reposting of DAMON patches that I
+reviewed and asking for merge into mm.git.  Since there are only two
+weeks before the expected opening of the next merge window, this will be
+the last mm.git merge requesting unurgent DAMON reposting until the next
+rc1.
 
-There are a few consequences of this:
-- You'd need to be able to mask out taints you don't care about, 
-especially TAINT_TEST (as without it all tests but the first would 
-fail). Of course, that might still be useful if you really want to 
-ensure isolation between tests (e.g. --run_isolated)
-- If the kernel is already tainted, and so all tests are skipped, 
-kunit.py should report 'no tests run' as an error. I think this actually 
-only reports an error if no tests are executed at the moment, so this 
-may need looking at.
-- This will trigger if the kernel is tainted by some other part of the 
-kernel either between KUnit tests, or in another kthread. However, in 
-this case, the results will look like a series of successful tests, 
-followed by skipped ones, with no failed tests. (And hence won't trigger 
-a failure exit code from kunit.py). This is likely to be incredibly 
-rare, but we could add a fail-on-skip option or similar if needed.
+Gregory Price (1):
+  mm/damon: use damon_get_monitor_folio() for hugetlb entries
 
-Thoughts?
+Jaeyeon Lee (1):
+  mm/damon/ops-common: fix age_in_sec overflow on 32-bit
 
-Cheers,
--- David
+Liew Rui Yan (1):
+  mm/damon/tests/core-kunit: add test for unconditionally skipping the
+    last region
 
->>
->> Cheers,
->> -- David
->>
->>>    lib/kunit/executor.c |  8 +++++++-
->>>    lib/kunit/test.c     | 30 ++++++++++++++++++++++++++++++
->>>    2 files changed, 37 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
->>> index b0f8a41d61d36..0db67fe7f09f9 100644
->>> --- a/lib/kunit/executor.c
->>> +++ b/lib/kunit/executor.c
->>> @@ -290,9 +290,15 @@ void kunit_exec_run_tests(struct kunit_suite_set *suite_set, bool builtin)
->>>        size_t num_suites = suite_set->end - suite_set->start;
->>>        bool autorun = kunit_autorun();
->>>
->>> +     #ifdef CONFIG_KUNIT_EXTRA_ASSERTS
->>
->> Nit: Let's not indent the #ifdefs.
->>
->>> +     size_t num_suites_plus_extra = num_suites+1;
->>> +     #else
->>> +     size_t num_suites_plus_extra = num_suites;
->>> +     #endif
->>> +
->>
->> I'm not particularly happy with this way of adding an extra suite.
->>
->>>        if (autorun && (builtin || num_suites)) {
->>>                pr_info("KTAP version 1\n");
->>> -             pr_info("1..%zu\n", num_suites);
->>> +             pr_info("1..%zu\n", num_suites_plus_extra);
->>>        }
->>>
->>>        __kunit_test_suites_init(suite_set->start, num_suites, autorun);
->>> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
->>> index 99773e000e1b7..e64c6d1575280 100644
->>> --- a/lib/kunit/test.c
->>> +++ b/lib/kunit/test.c
->>> @@ -835,6 +835,30 @@ bool kunit_enabled(void)
->>>        return enable_param;
->>>    }
->>>
->>> +#ifdef CONFIG_KUNIT_EXTRA_ASSERTS
->>> +#define DEBUG_LOCKS_OK 1
->>> +#define TAINT_WARN_OK 0
->>
->> Not totally sold on these #defines: I think I'd prefer to just have the
->> literal 1/0.
->>
->>> +
->>> +static void pre_kunit_assert(struct kunit *test)
->>> +{
->>> +     KUNIT_EXPECT_EQ_MSG(test, debug_locks, DEBUG_LOCKS_OK,
->>> +             "debug_locks are off before any test ran");
->>> +     KUNIT_EXPECT_EQ_MSG(test, test_taint(TAINT_WARN), TAINT_WARN_OK,
->>> +             "kernel already TAINT_WARN tainted before any test ran");
->>> +}
->>
->> If we are going to generate a special suite, let's have the taint and
->> lockdep checks as separate tests.
->>
->> This would also make it easier to have them be configurable separately.
->>
->>> +
->>> +static struct kunit_case pre_kunit_assert_cases[] = {
->>> +     KUNIT_CASE(pre_kunit_assert),
->>> +     {}
->>> +};
->>> +
->>> +static struct kunit_suite pre_kunit_assert_clean_state_suite = {
->>> +     .name = "pre_kunit_extra_asserts",
->>
->> I think we could probably find a better name for this.
->> "initial_system_state" or similar might be better?
->>
->>> +     .test_cases = pre_kunit_assert_cases,
->>> +};
->>> +
->>> +#endif /* CONFIG_RUST_KUNIT_EXTRA_ASSERTS */
->>> +
->>>    int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites,
->>>                             bool run_tests)
->>>    {
->>> @@ -857,6 +881,12 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
->>>        }
->>>        static_branch_inc(&kunit_running);
->>>
->>> +     #ifdef CONFIG_KUNIT_EXTRA_ASSERTS
->>> +     kunit_init_suite(&pre_kunit_assert_clean_state_suite);
->>> +     if (run_tests)
->>> +             kunit_run_tests(&pre_kunit_assert_clean_state_suite);
->>> +     #endif
->>> +
->>>        for (i = 0; i < num_suites; i++) {
->>>                kunit_init_suite(suites[i]);
->>>                if (run_tests)
->>>
->>
-> Best regards,
-> Malte :)
+ mm/damon/ops-common.c       | 11 ++++++----
+ mm/damon/tests/core-kunit.h | 42 +++++++++++++++++++++++++++++++++++++
+ mm/damon/vaddr.c            | 10 +++++----
+ 3 files changed, 55 insertions(+), 8 deletions(-)
 
+
+base-commit: 1b1d9187f46db1efb64533dab8b8d5f4f2af0eb5
+-- 
+2.47.3
