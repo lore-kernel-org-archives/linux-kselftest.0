@@ -1,79 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA2C456E1E;
-	Mon,  5 Oct 2026 23:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CD5547062;
+	Tue,  6 Oct 2026 00:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791244189; cv=none; b=ETk0YV/runBfZNml3AWt97ibVR9pdLQwbl3mJ9zVcbMXROVANJROmuswrP52xoLl7IHQMfo4uOrVYek4AU4vtEplgCfRysXSvHHulvFrCjB55BK+VORYc373lj3YR5tiUq5DtSSN/1XzFXwp2890UlzA/58cWp/t8IB4/wdXoOM=
+	t=1791246008; cv=none; b=OyAXL6BPuvjBx9MTOmwUZDZrzFvORU5NyRvaKuBsTFgWjrvTOyP1CtjbSQRrG/kpGeuH9KwvGrFNm9hvv21alfzGDebJkhWeYcg5qMA9E/xpYZ/0PTqKAjU2Br6Yl7KGYljGXXwTkOtNWTTSPYcWo+7NE0deQ79RdItDZJNMGD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791244189; c=relaxed/simple;
-	bh=f7LOH7H2f4WUJs84cTbO3REd4wPdn1m4OYbzv5efXg8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X4dIzMarrFCR7alFGhYDaUuP5B3Pj+yWfSSKuut7dl4bChwWKqDrAVQtqpxs93RyDU8963jCP5BGYhzAQk9oB0sXB+HuryM7Yc/VmY0Ub5pZbLLWZOze/vE1bxEKIzTOASa3JkSN2xU+ttqfeMsfEo+2GuR/XIa+NAKqKyyheFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FIZkpETz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791246008; c=relaxed/simple;
+	bh=0QgLFJx7qh1jeoXpoQjm+gWrg0zxEdDQUluByRBzoI4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=LymSX0U/ZIR/2zGeao5Hn8pwI8yWvjJGalEUH1H90MTTAxklrhrVwPKqJkfeWDB0blvY/nmcNTjkZH7DJWcfAHduUeJgYrvzPXC7+MXkLpV3xFpdWY+gyjfVId1UwaY2zJYoGLKlI5PMJ+Cdu5mrFqHYjgxmv8yKXM3oth3bnAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUH+7cQM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FIZkpETz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61A041F000FF;
-	Mon,  5 Oct 2026 23:49:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUH+7cQM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC851F000FF;
+	Tue,  6 Oct 2026 00:20:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791244188;
-	bh=tncH384WWqvonNdxO2KdvDGijT7bz/Cse9qfsImGrcI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=FIZkpETz2N7G9H5jaoB6Kyw4LPn5BrEQ6J48C5kq/eA4MjcNmOIcJONgaUxUM1r2E
-	 nmTk9qspUaR0UZt9Be2Yb1CM0mUWUPnq5ud3d5iIubROwoSKdlorsO33fLpiv2oj8G
-	 +ndh3ZtrW6+pU206u1xY7eIUxuPndK/7AOWM/6ShpgfroQ8RJPwQfe1tuEixttL2ph
-	 hVrCvNdgvpK86cOSa3dE09XwbjZQqCXSg+CaNra7RrExRtNPH+sKkAYvSKwEgF1o8W
-	 Z0pYG7RLNIMtHs1dVSrnrnQmY2IxUVgzsDoTKzh36XjyQRLFZQ++aGtJw95UdGwVDR
-	 lbawhiQ5KIEkQ==
-Date: Mon, 5 Oct 2026 16:49:46 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Yuyang Huang <sigefriedhyy@gmail.com>
-Cc: Ajay Singh <ajay.kathat@microchip.com>, Aleksandr Loktionov
- <aleksandr.loktionov@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, "David S. Miller"
- <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Donald Hunter
- <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>, Ido Schimmel
- <idosch@nvidia.com>, Jacob Keller <jacob.e.keller@intel.com>, Johannes Berg
- <johannes@sipsolutions.net>, Kees Cook <kees@kernel.org>, Kory Maincent
- <kory.maincent@bootlin.com>, Kuniyuki Iwashima <kuniyu@google.com>, Nicolas
- Dichtel <nicolas.dichtel@6wind.com>, Nikolaos Gkarlis
- <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>, Sabrina Dubroca
- <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, Simon Horman
- <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>, Vadim
- Fedorenko <vadim.fedorenko@linux.dev>, Willem de Bruijn
- <willemb@google.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org,
- netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v9 4/6] net: add AF_PACKET multicast dumps
-Message-ID: <20261005164946.25da19c2@kernel.org>
-In-Reply-To: <20260930112842.21323-5-sigefriedhyy@gmail.com>
-References: <20260930112842.21323-1-sigefriedhyy@gmail.com>
-	<20260930112842.21323-5-sigefriedhyy@gmail.com>
+	s=k20260515; t=1791246006;
+	bh=IVwR6zzcDg7nV42uU1/dBeG+bego9vgJLfPHLUYsOug=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=gUH+7cQMGv3D3fGF8xmmN3/U37aKBQUAuvDvyriH71roGigRkCILZVqBpWZGS7WJ7
+	 KkAJkWJRKM/inPdfFVNUTCbqQoBnrbaYui1YExcCAJkpVgV+7g1Y77jiWV63mMzAI9
+	 YJlrNJcMU9fX4maPr+XUYKyV38m6d6QKAjoZO/6c1e/8Cen942qBExCo5yqFMA8b5k
+	 swQWcu+kzIisQNV2LQjM4ZkkgGNn9eexBhj9vXjgcBGpxI2jC4S1lDavKRAhkDnXxX
+	 JDgU2G1jWTlIbl9FGD6FLBT7jtQ/Dghlwxf6N0GEVAtC+zE2x88alvQiSVU5mMflj/
+	 TRC15eDdSnRIA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B4312392667F;
+	Tue,  6 Oct 2026 00:20:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: net: Fix minor issues in
+ cork_fragsize.py
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179124600557.1950904.6171696782618709280.git-patchwork-notify@kernel.org>
+Date: Tue, 06 Oct 2026 00:20:05 +0000
+References: <20261001124201.584805-1-alice.kernel@fastmail.im>
+In-Reply-To: <20261001124201.584805-1-alice.kernel@fastmail.im>
+To: Alice Mikityanska <alice.kernel@fastmail.im>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, alice@isovalent.com,
+ sashiko-bot@kernel.org
 
-On Wed, 30 Sep 2026 20:28:40 +0900 Yuyang Huang wrote:
-> +	netdev_for_each_mc_addr(ha, dev) {
-> +		if (addr_idx < *s_addr_idx) {
-> +			addr_idx++;
-> +			continue;
-> +		}
-> +		err = dev_mc_fill_addr(skb, dev, ha, NETLINK_CB(cb->skb).portid,
-> +				       cb->nlh->nlmsg_seq, flags, netnsid);
-> +		if (err < 0)
-> +			break;
-> +		nl_dump_check_consistent(cb, nlmsg_hdr(skb));
+Hello:
 
-Why are you checking this on every iteration?
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> +		addr_idx++;
-> +	}
+On Thu,  1 Oct 2026 15:42:01 +0300 you wrote:
+> From: Alice Mikityanska <alice@isovalent.com>
+> 
+> return None is unreachable in check_kernel_config, because the try block
+> always returns a True or False value, and the except block continues the
+> loop. The return None was supposed to be outside the for loop, to make
+> pylint happy by making all the flows of the function return a value
+> explicitly.
+> 
+> [...]
 
-The changes still lack polish IMO.
+Here is the summary with links:
+  - [net-next] selftests: net: Fix minor issues in cork_fragsize.py
+    https://git.kernel.org/netdev/net-next/c/363cf8def362
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
