@@ -1,62 +1,64 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA68F24886E
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 17:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3237E3C0A14
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 17:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791308000; cv=none; b=gAaY38zSgO7h5Xjah673SlnwVwsHvisirMwDV6itn7toQx2pTWi6jRSpwPCwANi/ae971oORv8iq4nY0tuw/0o0gSSlW/DpKBqYWXBIiNMNKzB4lzNp6RXCvprgI4qmloqnYBQh5xNhoZ4Ks56VDKZtwJqyQZoa1EI08EZoI8U4=
+	t=1791308002; cv=none; b=CPAcNS5yJeQSKleHoVo9doXWEI3JzP9siT4V1c8f8CYebaiZDM+/5Xq7ypfGG3Ja/5fJHJ6Dh8yxbf2wMa5qvf4ckbIcJibgJVYxZrEjeCgj+TvZD4+otntBWpOalpCcpv4cDtctDiYdFVZ4NcoUsqIT/QOD8JQSvwWegWXBEjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791308000; c=relaxed/simple;
-	bh=H1lfUv8lZxLYx5JGsjCazmYH2gGjI45FEj2BuG/W9QE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u5Qf/CTgxp8Fa16EdRiJ56TE6PlQkWz3ts/S6SWiVkbLXAJ4uki2w7aFPFJfUckCuGdtu1F5MMwmI7kdl+0Lvm1EWaE7Psl5zEOET/rCzOUMCpZkBZz8X7yfkO6S1KUcWD8ky7PZS4JRuph7Tn7dtJMrPrDHQg/8chu2Q2Z9y7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Fz9ZY0OR; arc=none smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1791308002; c=relaxed/simple;
+	bh=MmiFFcc/hGmmgsNmyCPIss+w1bmZuW3CzLVIRHyO9FI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mF264KIleD77b4VX5nM08neMoGlJsumnqh6HfnRLag85TsWPEW2H5wS1aAsnqJC0NB6y8+dUuYYBEJujtC/ESt8vyPoSIvPwFzl6A15BBdrzjc8oPxo8X18DzL5wQL5Cl1mhldMjYuwHEo5x7jiaqtWhJH+txM1kNM4A6fOCUVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Jkuvi/jN; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Fz9ZY0OR"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-48afbd2c386so876332f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2026 10:33:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Jkuvi/jN"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48c4649b3aaso673320f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2026 10:33:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1791307997; x=1791912797; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vI/CREtYlaKCf7QQt+Wn+NAvceTNfQIZHGOmhJieQwk=;
-        b=Fz9ZY0ORb1P2pCcSHH1kIlDpttDSuV0LwH7BU5/2eHKThNrWZNBvkRSOlxgq/SzFtK
-         blI+3usjGrdZqS5g1C4lmx5unKWCCZzl3vMmuZwRsBG+OfjqdUooxOddd1bJPorvTdWg
-         sI66JcU5SbRa5kMD81krBkCsv2yqKuL1TMEySu0P2xsVaDv6RmaNO/RQ7XUKvTW8t1y7
-         2G0oizMJNdkmJNECJuT32S9HvkfTqtyhNb12izvha9AuxtNqh046TBNZNL78DRN9Cd4M
-         qU7tC6iaKPQuQ0fCZ0X/eMA2tVtPc7LGIdsBo8CB5tMCNAH9ZexbS2ZIsYV6bPlaIi5x
-         YxKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791307997; x=1791912797;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=cloudflare.com; s=google09082023; t=1791307998; x=1791912798; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vI/CREtYlaKCf7QQt+Wn+NAvceTNfQIZHGOmhJieQwk=;
-        b=zyY4fyCAgtPysE9tJprv34QQEkzTJMCv3arohmy1ThCqGa8j+1428/CnKHOlw3CuU3
-         3U/kUHOLL8/Z64VeSZGSQ0f0HkET1u+7GC7T0+m5PDDfPLPUjWDXPRPgnVhzys2FigCE
-         JCeqfJEy9Iakhrg91YWxu1I3jUIj2+Y31ulnoPH5tW+7TukAErZpmRYFolFjilc3uMOb
-         ILN2RFxJ/JLiju8+1DBj9B56vgrzG/E3ZZR6DSebLh9PKNenUHkfw91N+rzI3Phg/ijl
-         5lNh8XDBg269yPu8Nq52I3Ivzv5cJj7eLT+VfbYoiLhwy0o1PRZ+VCRnZaXIFUNFbanP
-         o8+Q==
-X-Forwarded-Encrypted: i=1; AKwUvBz9zfunebxKihjzt8+Cmrs9MBj0VUB0CgmlvMBU7YYhN6Mp1mCfnagrh+hQ6IzpTaf3TpVEJvJuaK/brsgC8kU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKiMqD2AEHfw7KOprHILoKZFuFF3nz8b4Rs/7uim0UQn9lf0ynt
-	lgS+QkmkyMuubii/pxlvknTjzx2jqJGjcnJy6Iee9NbNffi50M9rHcLvHo/TyThCL7Q=
-X-Gm-Gg: AYBFou1IZZ+JTWA4lqV5laVYb3cb+vzj9+JkpVVaEFn2pau31NmjFZgEjs7meY1/OkV
-	6OxHgIeFi6VBEgv8Gh/jeUOnpadS/aROxi3D6VDZjdDXP/oJ3dUVRE5suOm/Vg8/z9EfJ+6WaDa
-	XwDLC6UGRf/hNRca4DP6j+rgJFWiSo5ee5hTUIIKyZ92y7HmxNKf2SEuaHBRqWlcd33xYsuIxEY
-	R8SRVwHQrPelFn8K5Usgw7I6GBSjrVCBXcQutq/s2F/s27tOHltuvvKB+UsmZThj9qPunPRPUz0
-	QNi11AtI7QoIgQk8hyttLQMALlWHRzi8mxdiJP+2U6SXvUXKdafWjxEFAEuhCZsoEVMkzTj/abj
-	wCuYjGm7Pk2oUcjJqH9wOou4s62kP3v3fdZRXlAFQjV2JolEWaFcYwC8rRhUcqX0jnjujelPGD+
-	viLolhA8rCG7FGIEys5G5tSPSDgvt1yaokvx/zlAj8GeWjplXYdDK1xY2L3kBYNcwkQAucP7jHb
-	/NISjAmQu4Qyag=
-X-Received: by 2002:a05:6000:26c6:b0:48b:10c8:2180 with SMTP id ffacd0b85a97d-48c7279001cmr297088f8f.33.1791307997130;
-        Tue, 06 Oct 2026 10:33:17 -0700 (PDT)
+        bh=uIWNtJTcNRJBABKoF5KtLQn3lLgfq4yyjFDpVkGxoNg=;
+        b=Jkuvi/jNN3/khjCpR0qYSBMsKV+M7WTlvA+vgFThdq6hebQN6ymHO/lW94gUGJj40h
+         KKPBf5axg0/rUwffLteegTPTx5T7JQawQKaQzmBPm6xdm26c92I55NgnNsh6rI9b4gI+
+         Dc0M2eTWTQhfliHV+I8d9v1zFQd/Aos57FRsbs/LpqnugxlnH4J4awFQielstpOjKWlJ
+         cqojJu0ApNt9SAmRKBRilS8t1tZ9hGPdNghw3QeJCga2E7Cq1YBU8jL/4D9VlLFW6nOE
+         LT/rqIxV9smJd3e5As1O4OC7WIvnlO0ozpIqg2OuiM2Jr1Bm7L+lRrSss4wzL0wB+GkV
+         jSWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791307998; x=1791912798;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=uIWNtJTcNRJBABKoF5KtLQn3lLgfq4yyjFDpVkGxoNg=;
+        b=obIFK08l+EGjhRrF18UUsJFatUmzqQwbAlG0a03+V2DQ6y8PPw94cAW+4gtUyC9khi
+         DbTkldoB/KDOu8tOdzkd/6qbww6ai8eDoBli1zODXdVQWAGhMsxl7OJ7lpI8cFqxGw5r
+         Vqgnz6M+4J/LVJD2wIqtE8U1pNUKDSRG3Yddtxlis6PMPOxS19nFqJMx1qmRHZdbHtsh
+         6Cc4m+Q4d6KBdyccyjLVEiTBsFAGtO+NRrMTD/gKj3qeVey5ptQFobYNu/so1xM/MKUk
+         nRdhnb/mjdRzf5fQ6tsm90+3Yrm1cf1VkJVJ7vBCCZGwoKnYNCFOsBepEp/8mn+P2Baf
+         54PA==
+X-Forwarded-Encrypted: i=1; AKwUvByz3msrdSEtqNMoTO/Ol0fFUANGzZR4wnbn2M1RlP+Vn3axHYy0KBqef2LZnvoLIffhxLY1CXVJ8zncm+rEyak=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIU2Tk0Gq7t0XBqeSeCfmogQID4Ry1HGaFHsYHzOvXXw9oS6eup
+	T1dg+nAMG72tSzA5hdW88q3l4NEX5DaEIp5DL3kB+ccW7i0Pytwk9piPSFVG/d0CNA0=
+X-Gm-Gg: AYBFou1bnRK9gQa9N7LCsqURFSRwNz2f/2BPc5zHgQK9yqWU3W7ZPTf1K3EArvB+U/C
+	Ewo++UAYqjrGRTVGGBKj7lNthNwJxorIxJZADuu9wQq/UkbP9/8+8usTYzGE1xUcBtSWE6yZLIA
+	FfFR7YZnlL++F2y2xQ2h0KpHTl5FNAatEF8iHEERT1Q5P5q1NS+hVpg3VP3ljl0PbnXEVkZiSTO
+	vFm+1iXeltJj1Em6djWde+ndGWFaJ+VX5cY74dm26P/9itxzma5KlOOnoRx/WC01fidFPhTnMiS
+	xIegZayUUaPfbC1rJCkbZBjYG4ss6SHgLoJMiNAQTPxLlHDpSPJKYS1Vi6db4vuBN5ktWit3EAl
+	7EwnYJJ2a3iURF3hC4qZYSQz0A5pzVrFC03TSVMmm7k0ZuuEwnqfrP0vVgSMt8Xw+xBqiS5L/hA
+	HkkGTQqyS+Q0glT2Ji2uefKLb0LGdoJ9/NLldu95FIngvNmpXF3VHnoc+87aebaAfcAHDgEn/W4
+	h9dVZQJQLCpsYQ=
+X-Received: by 2002:a05:6000:410e:b0:48b:ef1:3101 with SMTP id ffacd0b85a97d-48c72774be0mr211419f8f.19.1791307998349;
+        Tue, 06 Oct 2026 10:33:18 -0700 (PDT)
 Received: from D90XRJJJNQ ([2a09:bac6:37af:d2::15:413])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d1272esm714121f8f.27.2026.10.06.10.33.15
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d1272esm714121f8f.27.2026.10.06.10.33.17
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 06 Oct 2026 10:33:16 -0700 (PDT)
+        Tue, 06 Oct 2026 10:33:17 -0700 (PDT)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: netdev@vger.kernel.org
 Cc: andrew+netdev@lunn.ch,
@@ -77,10 +79,12 @@ Cc: andrew+netdev@lunn.ch,
 	sdf@fomichev.me,
 	linux-kselftest@vger.kernel.org,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net 0/2] veth: fix peer NETDEV_XDP_ACT_NDO_XMIT after GRO is toggled while down
-Date: Tue,  6 Oct 2026 18:32:35 +0100
-Message-ID: <20261006173241.65945-1-tianyi@cloudflare.com>
+Subject: [PATCH net 1/2] veth: fix peer NETDEV_XDP_ACT_NDO_XMIT after GRO is toggled while down
+Date: Tue,  6 Oct 2026 18:32:36 +0100
+Message-ID: <20261006173241.65945-2-tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261006173241.65945-1-tianyi@cloudflare.com>
+References: <20261006173241.65945-1-tianyi@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,25 +93,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Toggling GRO on a veth device while it is down leaves its peer's
-NETDEV_XDP_ACT_NDO_XMIT flag stale once the device comes up. XDP
-redirects into the peer are then rejected with -EOPNOTSUPP, or, if GRO
-was turned off, accepted and then dropped with -ENXIO. Patch 1 refreshes
-the peer's flags in veth_open().
+A veth device advertises NETDEV_XDP_ACT_NDO_XMIT only if its peer has an
+XDP program attached or GRO enabled, that is, only if the peer will have
+NAPI to receive the frames.
 
-Patch 2 extends veth.sh to check the peer's flag after GRO is toggled
-while the device is down, in both directions.
+veth_set_features() updates the peer's flag when GRO is toggled, but
+returns early if the device is down, and veth_open() only refreshes the
+flags of the device being opened. Toggling GRO while the device is down
+therefore leaves the peer's flag stale after the device comes up.
 
-Tianyi Gao (2):
-  veth: fix peer NETDEV_XDP_ACT_NDO_XMIT after GRO is toggled while down
-  selftests: net: veth: test peer ndo-xmit after GRO toggle while down
+If GRO was enabled while down, the device comes up with NAPI but the
+peer does not advertise NDO_XMIT, and devmap rejects redirects to the
+peer with -EOPNOTSUPP. If GRO was disabled while down, the device comes
+up without NAPI but the peer still advertises NDO_XMIT, so redirects are
+accepted and then dropped in veth_xdp_xmit() with -ENXIO.
 
- drivers/net/veth.c                  |  1 +
- tools/testing/selftests/net/veth.sh | 46 +++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+Commit 7a6102aa6df0 ("veth: Update XDP feature set when bringing up
+device") made veth_open() refresh the device's own flags. Refresh the
+peer's flags there too. The peer's flag depends on this device's XDP
+program and GRO setting, not on whether the peer is up, so it is
+correct to set it even if the peer is down.
 
+Fixes: 8267fc71abb2 ("veth: take into account peer device for NETDEV_XDP_ACT_NDO_XMIT xdp_features flag")
+Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
+---
+ drivers/net/veth.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-base-commit: d5a007b9b457c915ab1a53227e8939e4018aa97a
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 71227d0389aa..643b97dc5245 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1415,6 +1415,7 @@ static int veth_open(struct net_device *dev)
+ 	}
+ 
+ 	veth_set_xdp_features(dev);
++	veth_set_xdp_features(peer);
+ 
+ 	return 0;
+ }
 -- 
 2.55.0
 
