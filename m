@@ -1,215 +1,128 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AB0F4A1E0B;
-	Tue,  6 Oct 2026 16:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B6A471271
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 16:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791305259; cv=none; b=GP3HGiuwfbc6vCg4XQ96hjEKd8FhoRFcx8Y09TdV4WbABnSy/Sxyus9N6OP9COLght70tG7gm1r2eaO2H1oBst26Dx5Tdc0CtNX45esne+BkQ+NcSITS3WdD0o+rZk8c1h4Wef21qyero7EXyyl0BvxvE23BK6cHwXTV8ewC10o=
+	t=1791305826; cv=none; b=JpI92uWar28l2MYcX04GyrZtn6y6HB7zYKzioRTcYvsFbnzKYzsr9+Q5IJJgXmMei5GO7oEPpa6MHrbSWOoSqzHYLwmqyxXnHZaXZKcUDq+sZqQ6KKENjm2BGcz6Pp5u7rbPk5Xb1nyCrjojYUBTHKacQditJ4sS/zE+ly4wcKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791305259; c=relaxed/simple;
-	bh=S7/Ci4iNCC/4LxPbXH5ym+tI8d8LLyVWUE3rJubNJxA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ULtm3DWQ9oHC37e4W6x8wZieV6owyygxSl8S3rTCnILER/Ah2r6MtLZThge3deFwJJfLhybA/HtiLhWjf5cbwlFyEG9hHyBXmkpCMZ3cDySmWm8cjs4Ao+B90hIhzXX/rfsCp0mDMBorn4yhptE5fsU+izsL+1zFfp9uUuj4PmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JPeq1msS; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1791305826; c=relaxed/simple;
+	bh=2iJo9WF5vaqoUN6UGjOx69LFPjrRXH6eZvTQxfvbTOY=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=V//sVqIRohc9VTf2JMuqV0HjWFULWXtrgd1cTQ8N3Y1lsa4Z1ZqZaCOIo1ZsZT7IBZVQc/j3whoPMCt2uBo5+tDIuarRmd5x4gug4xTgj9SsaHZLyUj2xwYcxtAP+jtWLNr78y/K1eBISkSxUOqef6kTlcbffmVXam2kmH2/T0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UkcWGbKG; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JPeq1msS"
-Received: from jeffbarnes-ThinkPad-P14s-Gen-2i.corp.microsoft.com (unknown [52.177.6.198])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7764F20B7168;
-	Tue,  6 Oct 2026 09:46:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7764F20B7168
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1791305201;
-	bh=xWIFQRjVQEI4kSv2gPPutiiP0ePhm42qw7G/0EfM3EQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JPeq1msSWRcMfpomRTd3r7RU2vf37MWdC34AFkEtr2Jkre2Q0ba0AX716zqreiwx1
-	 APhmLkRIVy9Mb3XEGDO25Gd0V84IWyy51fxA6uuGR5cJhpHTJqWhSrUuoOOkreR8Gd
-	 rVWsfpcBhiS2BzabbM5RYY5MZQnZEkHd+s14Clek=
-From: Jeff Barnes <jeffbarnes@linux.microsoft.com>
-To: rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	shuah@kernel.org
-Cc: mathieu.desnoyers@efficios.com,
-	reddybalavignesh9979@gmail.com,
-	richard.weiyang@gmail.com,
-	michael.bommarito@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 3/3] selftests/user_events: Test registration from existing threads
-Date: Tue,  6 Oct 2026 12:47:20 -0400
-Message-ID: <20261006164720.3940272-4-jeffbarnes@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261006164720.3940272-1-jeffbarnes@linux.microsoft.com>
-References: <20261002153934.798176-1-jeffbarnes@linux.microsoft.com>
- <20261006164720.3940272-1-jeffbarnes@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UkcWGbKG"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-890d52c7c7bso703564b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2026 09:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791305824; x=1791910624; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2iJo9WF5vaqoUN6UGjOx69LFPjrRXH6eZvTQxfvbTOY=;
+        b=UkcWGbKG+ili90+PMqAHg/RNm8HBm+PCxSGbfIpGyfTcTES7VOnDW53seNzNnjhlF+
+         +ORQ6IMH0585mlEmkklqAtRSEjjFn2Z7YZBxYIEU5gh10etMZ8NygiPyLX90A3VMdtzO
+         5rKWuM9AwRP7QDnIytvrWfx9ITTVLtB4a8GUOxJrgqaQRhuhhvAcFhQeuJgo42iFmPYS
+         bDxBinSPyBF2DraKTXwBXawurW98jZ6sCWTb9lsxtVeNhGZuzJdgzigy9GWL+2XfnHKR
+         /FrgzZfyfAuyVYHrue4Hr9qrZCC+rSrQEDdRMhDhmFLiXs2pXmfyUfJzxDkr/mpMdmHy
+         jyXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791305824; x=1791910624;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2iJo9WF5vaqoUN6UGjOx69LFPjrRXH6eZvTQxfvbTOY=;
+        b=rhmRjjEruZWlf4C0k+KpLWlJEY5ep7IxBk+FKxOBrf5qZhUIFhFTdp2v+3V6DpYAL1
+         IdfLHGiWga5cdZOSkVL5u6zfiLgp8KqRtn0bUAT0XQ+RaaDHc//AEgPdCksY1fomCLDp
+         eGzsa0fISv8E2pz+GLjHr2XXgs4raC9lp1E1n1ezN3vS2jPqv+tyn7H8IEp8Uw+G9kjK
+         L1xdfMnDx4ojUE3QQCG6304sGSviRGQzQc+3Lb6f8Ou/YscO2YQPMtUWjbcWeNl99iib
+         x4fS70RmtjqJsoPQC8QeAz0PaYnrKkJYV7CEkWvjpL8gWZLpS29R3LZRVOqwpuhIpyQd
+         ah8g==
+X-Forwarded-Encrypted: i=1; AKwUvBzktI1aaoJMalrYoZ5P2QN2MSC89KgEgyoA8cPEAfm6uxEx4Im9F0rMnQVThvLcGX5ppvBoexhLqRhK7FRqnFo=@vger.kernel.org
+X-Gm-Message-State: AFuF++kGZ8JTKjivorKmTllgW8khpqYsjmDb1747xLJFevkZvMvfi+mb
+	89LVIXF9Xd2+J3hBFTqjUiKx/ghKIUxLi0L2NC+95+Bnk2b2Jl3jEpLI
+X-Gm-Gg: AYBFou2ITno67ufF0k9XY4zHed9ERKXaCmv7e5KK9LWgg3r4TpPHpJM9Ji7cwBYniGk
+	3bn13ng4bW8ukHOK2j6/oRu8rtnrxZ/3qAwY5iVr3TJtAqfcXFxRNFJdiKY7jGPb0gFwy6xq1Af
+	8tfieaTuHjqGP/kTCefebv4p28UCyE26XL+ylt5tfm74w4UPhBETazo2/bfZcoL5O6v9hNsr21T
+	vE/IJl2F36R9lxxjQgB1FJML9FPa8KEmAaSveleGFvnN9bdOIEwHtP2PTRe8aEDP33Qt0f39rlS
+	fp32F64HrOf7ijhJf+AbogvafERTJtIxiYjhrkF6ZqOZEeDOo7pj8YQ+h9aE7Djwc7sBpgTVWlV
+	kd4NytXE9i3oOp1z9+/sI6jBFG38lyYn9nlYQMj8scSmRszV0aI3SMvpK6YR+LLWY8VPmFbMAiI
+	sve8SXKIbh9bTby724n80RaftQjPgxHlmmLPOA3Ir3m5HpEQ5KF8CPcnkqVMfvkdxv/XvY15jyc
+	uw0mu2DcAZoN8BTwl+i6wpifQbCFnVOpir3agTZLlV29q6yKSbYM9yqToADivCVj2FX4/w8aCKX
+	onxF
+X-Received: by 2002:a05:6a00:3e03:b0:890:a777:1026 with SMTP id d2e1a72fcca58-890d8a4c09bmr1654501b3a.0.1791305824461;
+        Tue, 06 Oct 2026 09:57:04 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89186ba2d17sm325252b3a.1.2026.10.06.09.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Oct 2026 09:57:03 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 06 Oct 2026 16:57:03 +0000
+Message-Id: <DLXWX2PFUOQA.2INDMK72TFKUF@gmail.com>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, "Amery Hung" <ameryhung@gmail.com>
+Subject: Re: [PATCH bpf v3 0/2] bpf: Reject bare pointer for __arg_trusted
+ arg
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
+In-Reply-To: <20261006-a3-arg-trusted-v4-v3-0-4619daf30e1c@mails.tsinghua.edu.cn>
+References: <20261006-a3-arg-trusted-v4-v3-0-4619daf30e1c@mails.tsinghua.edu.cn>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Create two threads before either registers a user event. Have the first
-thread register an event using a shared enable address and bit while it
-remains alive, then have the second thread register a different event
-using the same address and bit.
+On Tue, Oct 06, 2026 at 04:06 PM Yiyang Chen <chenyy23@mails.tsinghua.edu.cn> wrote:
+> Reject the bare pointer while preserving referenced, trusted, and
+> RCU-protected arguments. The latter is used by sched-ext programs that pass
+> the result of an RCU-protected kfunc through trusted-and-nullable global
+> subprogram arguments.
 
-The second registration should fail with EADDRINUSE because both threads
-share the same address space.
+Which programs?
+veristat-scx failed on v2. The only one I see in scx repo is
+cake_wake_place() in scx_cake. It takes the result of scx_bpf_cpu_curr()
+as __arg_trusted __arg_nullable.
+That arg was added two weeks ago. The last scx release doesn't have it.
+On kernels without the kfunc cake_wake_place() already reads curr
+by itself. Pls send a fix to scx instead.
 
-This test fails without the accompanying kernel fix because each thread
-can create a separate user_event_mm with an independent enabler list.
+rcu_ptr_ is not trusted. The refcount can be zero.
+The callee sees trusted_ptr_ and can pass it to a kfunc that is not KF_RCU.
+bpf_cpumask_acquire() does plain refcount_inc().
+With rcu_ptr_bpf_cpumask loaded from a map it increments from zero
+and the prog holds a reference to a cpumask that is freed after GP.
+Commit e2b3c4ff5d18 says
+"only PTR_TRUSTED flavor of PTR_TO_BTF_ID is supported".
+v2 was right to reject it. Add the above to the commit log.
 
-Signed-off-by: Jeff Barnes <jeffbarnes@linux.microsoft.com>
----
- .../testing/selftests/user_events/abi_test.c  | 125 ++++++++++++++++++
- 1 file changed, 125 insertions(+)
+> This series targets bpf, which uses separate global-subprogram and kfunc
+> argument checkers.
 
-diff --git a/tools/testing/selftests/user_events/abi_test.c b/tools/testing/selftests/user_events/abi_test.c
-index b71813eaf5c0..7aef3078556e 100644
---- a/tools/testing/selftests/user_events/abi_test.c
-+++ b/tools/testing/selftests/user_events/abi_test.c
-@@ -11,6 +11,7 @@
- #include <errno.h>
- #include <linux/user_events.h>
- #include <stdio.h>
-+#include <pthread.h>
- #include <stdlib.h>
- #include <fcntl.h>
- #include <sys/ioctl.h>
-@@ -258,6 +259,130 @@ FIXTURE_TEARDOWN(user) {
- 	USER_EVENT_FIXTURE_TEARDOWN(self->umount);
- }
- 
-+struct thread_registration {
-+	pthread_mutex_t lock;
-+	pthread_cond_t cond;
-+	__u32 enable;
-+	bool start;
-+	bool first_done;
-+	bool second_done;
-+	int first_ret;
-+	int first_errno;
-+	int first_unreg_ret;
-+	int second_ret;
-+	int second_errno;
-+};
-+
-+static int reg_enable_name(void *enable, const char *name, int *saved_errno)
-+{
-+	struct user_reg reg = {0};
-+	int fd = open(data_file, O_RDWR);
-+	int ret;
-+
-+	if (fd < 0) {
-+		*saved_errno = errno;
-+		return -1;
-+	}
-+
-+	reg.size = sizeof(reg);
-+	reg.name_args = (__u64)name;
-+	reg.enable_bit = 0;
-+	reg.enable_addr = (__u64)enable;
-+	reg.enable_size = sizeof(__u32);
-+
-+	errno = 0;
-+	ret = ioctl(fd, DIAG_IOCSREG, &reg);
-+	*saved_errno = errno;
-+
-+	close(fd);
-+
-+	return ret;
-+}
-+
-+static void *register_first(void *arg)
-+{
-+	struct thread_registration *registration = arg;
-+
-+	pthread_mutex_lock(&registration->lock);
-+	while (!registration->start)
-+		pthread_cond_wait(&registration->cond, &registration->lock);
-+	pthread_mutex_unlock(&registration->lock);
-+
-+	registration->first_ret = reg_enable_name(&registration->enable,
-+						  "__abi_event_thread_a",
-+						  &registration->first_errno);
-+
-+	pthread_mutex_lock(&registration->lock);
-+	registration->first_done = true;
-+	pthread_cond_broadcast(&registration->cond);
-+
-+	while (!registration->second_done)
-+		pthread_cond_wait(&registration->cond, &registration->lock);
-+	pthread_mutex_unlock(&registration->lock);
-+
-+	if (!registration->first_ret)
-+		registration->first_unreg_ret =
-+			reg_disable(&registration->enable, 0);
-+
-+	return NULL;
-+}
-+
-+static void *register_second(void *arg)
-+{
-+	struct thread_registration *registration = arg;
-+
-+	pthread_mutex_lock(&registration->lock);
-+	while (!registration->start)
-+		pthread_cond_wait(&registration->cond, &registration->lock);
-+	while (!registration->first_done)
-+		pthread_cond_wait(&registration->cond, &registration->lock);
-+	pthread_mutex_unlock(&registration->lock);
-+
-+	registration->second_ret = reg_enable_name(&registration->enable,
-+						   "__abi_event_thread_b",
-+						   &registration->second_errno);
-+
-+	pthread_mutex_lock(&registration->lock);
-+	registration->second_done = true;
-+	pthread_cond_broadcast(&registration->cond);
-+	pthread_mutex_unlock(&registration->lock);
-+
-+	if (!registration->second_ret)
-+		reg_disable(&registration->enable, 0);
-+
-+	return NULL;
-+}
-+
-+TEST_F(user, preexisting_threads_same_address) {
-+	struct thread_registration registration = {
-+		.lock = PTHREAD_MUTEX_INITIALIZER,
-+		.cond = PTHREAD_COND_INITIALIZER,
-+	};
-+	pthread_t first;
-+	pthread_t second;
-+
-+	ASSERT_EQ(0, pthread_create(&first, NULL, register_first, &registration));
-+	ASSERT_EQ(0, pthread_create(&second, NULL, register_second, &registration));
-+
-+	pthread_mutex_lock(&registration.lock);
-+	registration.start = true;
-+	pthread_cond_broadcast(&registration.cond);
-+	pthread_mutex_unlock(&registration.lock);
-+
-+	ASSERT_EQ(0, pthread_join(first, NULL));
-+	ASSERT_EQ(0, pthread_join(second, NULL));
-+
-+	pthread_cond_destroy(&registration.cond);
-+	pthread_mutex_destroy(&registration.lock);
-+
-+	ASSERT_EQ(0, registration.first_ret);
-+	ASSERT_EQ(0, registration.first_errno);
-+	ASSERT_EQ(0, registration.first_unreg_ret);
-+
-+	ASSERT_EQ(-1, registration.second_ret);
-+	ASSERT_EQ(EADDRINUSE, registration.second_errno);
-+}
-+
- TEST_F(user, enablement) {
- 	/* Changes should be reflected immediately */
- 	ASSERT_EQ(0, self->check);
--- 
-2.43.0
+That's not an answer to Amery:
+https://lore.kernel.org/bpf/CAMB2axNnY5wxkTrd3_tHyXBzXYyjJUkqRb1uNbUquwTJ_FLVMg@mail.gmail.com/
+The loop in btf_check_func_arg_match() is gone in bpf-next. See
+commit 668a51c4ed4b ("bpf: Build argument prototypes for subprog calls").
+This patch will conflict when bpf is merged into bpf-next and the fix
+has to be written again in check_func_arg().
+The bug is there since 6.9 and the fix rejects progs that load today.
+Pls target bpf-next and do what Amery suggested.
 
+Also 12 chars of sha in the Fixes tag.
+
+pw-bot: cr
