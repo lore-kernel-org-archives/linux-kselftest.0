@@ -1,119 +1,140 @@
-Received: from mail-vs2-f1.google.com (mail-vs2-f1.google.com [74.125.227.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B69E4BE426
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 15:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.1
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791387403; cv=pass; b=JEMHW1iLotxmyTg+OgH37nDCZitJ8Fle4Z2H5UBO3bISIABxtCm7VDFWhQYf+J9e+x6QNDm501DCSovs5xDPc6hGSWZ1bSaOD9N/JslTckPQPVk2DxbXdLNZKxFfgDhivaCgyC6ZiGIaMdFVyFfnWWCuJFs5HbvbhY/4GIgIj5M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791387403; c=relaxed/simple;
-	bh=VIlwNxRfdBd5XK7k+Yn5qCHGcNB8TrH811M/2dEK2D4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rlqmLxjGgQkTJCaN3mN2BPh32IateheEFg8hbUUnQgdLugXVQf6OgAp2quimoz4V4NGKxRKAvGrqhOCnXqRGjDlMMTiZzYmHcsVZsOppttM64djpxlSQMX0/rhnF2mmd2xFiRHibz18Ccfq5RJ+oppFv7NqKirFbcC5o7X/E5jc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k7LI/huU; arc=pass smtp.client-ip=74.125.227.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.187.6.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 622C74B95A5;
+	Wed,  7 Oct 2026 16:25:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.187.6.220
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791390358; cv=none; b=EhkI6ugCbqgWlnPfh+vHYvQY9cJAn92ORp5+4uPdA7ww60DTqnRlMS/5VPcGRxsz/1XtfLG60q/cTE74RpFHWgy9F5K6e74ISVxWuFf+XLyG0OlqPuHSN8mgQptxymUdz5njDWrZJQiBNYXoKtZk2It4uu9h/6d6h9DUsPEOUGg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791390358; c=relaxed/simple;
+	bh=CgR8XemSElZEZ0qupffsAPHdIhjfSl4qcoBESu8TXtg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MWvTuRNymcQ/+jkKkohFPhHGFWY8tb26aeCg5iPf86S3i7vmpUqqYeIEW/wTRuGV7kMk1AcSYUNKTkRs+I0PED8DExxx5cf0NezgjpDHBHqQ244NvIojPk9ReSMC5zsKwxb8WxrK+8Vl7g7E8WGZirQ99mlGDAbBNB4tFel82lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=jf7LUqQ+; arc=none smtp.client-ip=52.187.6.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k7LI/huU"
-Received: by mail-vs2-f1.google.com with SMTP id ada2fe7eead31-754acd5ebe8so3362398137.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2026 08:36:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791387394; cv=none;
-        d=google.com; s=arc-20260327;
-        b=bihtbqObutF2acABZHOorl8e6I1n7QH94eSveekRNT00/1D7uno+jWLdY+QdggRKew
-         fhLeJxsKL8QwIgUEzliglffNkqfB1kYNMra27EW4UgqW9yQVsuADteTRSNqt+E8Eu0gP
-         2CK6pbplUHrFKcYYyI5Bx59vXTMEXMteJPfPxuljQ8qx87DNAfEKKGgnUQk9DuOjm6Mj
-         aGKoWnxmQrlsYU/PeSRwa9e66ldSzRa8kyX8jsDkhX5eWwDPip4F7Gx9HeMShPK6sPv/
-         KHTZ2c1K5CCbIXKdhYi/5HRnbUc4McrE2lWuldjYOe4OHchsMQncNTPHDpnyIWWGd2WL
-         iNyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VIlwNxRfdBd5XK7k+Yn5qCHGcNB8TrH811M/2dEK2D4=;
-        fh=VxXZDvCWNGyGQDy5QZvib6iTxu9YrrvzWmGjrMTK0s4=;
-        b=lCAVtujV9yad4Hil6bPmCOgwWhI2JURrGpBGFo5QMrLzqe81w3W0hkV45+s8N0noye
-         2fH2/x3uJ8aGxPYTImlrkg657pdaZ8zkawuEFdw31bvxZgunCLWspRaBdKvYCom1AMkd
-         1Y7jVTkhjVSQ6Iaixwy6UReiJNWozF/dM9RcQ2vucg+1RpkakNAueU8Z1G0F/tLDEPVe
-         MApMSu6ObL8gg3OVuPKFBgP8TgVTd2uv1cey/iRNVFfgVbzhQX+5yeUFMw7WxypfzJ69
-         c3FPv4Hqa4OxKy7pkOr3VcKuDXU8Rh6L5Mtx2APbZ+/gR95AVpZIDLvCVWEtEG3f2bfo
-         DR7Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="jf7LUqQ+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791387394; x=1791992194; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=VIlwNxRfdBd5XK7k+Yn5qCHGcNB8TrH811M/2dEK2D4=;
-        b=k7LI/huU2qDMJmkL+bBVEAg9JXf6gWlj2Ft5BFK6OrWROExNpfcfgh58pnRGDVnZaM
-         DkQRdbITh67m89tUCOWjnioK8Ei+m6VcBudKEbMx9fa4GgX92CyjWFqx41O0Y6MWOa7d
-         xfQdWeEzRpnNrUGGaTzbrFmwrin4TUjeu33VxinQcxECqrOj/1iYTCLppQJ9uO8/Mol8
-         TlL3kFrGvTrrXIJxzDCMVYl4bSNQNUALDWHlw3sJ8+WZrcyMd6awY2iRAm0cUFpLbhW/
-         bszkS20aiI3aPyU8nIhWjcPfDpow97rAv4jXtqKtJAull6hBeV3A2dKI2ZfHcIvsbZhE
-         8Ygg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791387394; x=1791992194;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VIlwNxRfdBd5XK7k+Yn5qCHGcNB8TrH811M/2dEK2D4=;
-        b=yQEYP8zBnw45QQ8Y3/RYFAQa5Ri2Xt6pJm134Ohob538haccdgllaLyQhloHNH5Q29
-         vd0dnAeuVV652p6TST7gezg5hpVyICaW+bTifBWLBOCJQuuYGzXzYv5wmjZRza6psPOb
-         cRd27dW+7wmkE6XHt0zrIQ7QCNbYqElE0qJ7SnsfNAlPZ6PBkVNGoJmg15IH7GsDeiKV
-         HobNr85qQKD+AbvjyYKm9oXl8ZrRgPbfaCfSeVFaCjW3TZRSxG3kj+xAqcQ+Otb6Oq3f
-         +hSlE2cQ1xghLqP5jey78iiZHHbmruCZiahjml5ggTbJrHYDj9EskY62b2DWV3pIwUUD
-         lRUA==
-X-Forwarded-Encrypted: i=1; AKwUvBw5F3/7BK1CJPn2it7EPmWWRsbm7T9RrzELJHMICy4H6FE9m96zkhFc1NGGVQL7y5SKqAtbcPWZjNyn135Oom0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKeaRMFd7WTteRb8RSymYScbp+3Lev8SB/+wZybrlaDCP52nSzH
-	7/ss1fJg2es4+PA3pJqlmsmaGtxwLdtP+dG6LQQlblHXB4rzXDuuOz7q6aG0eGYPOoWkQwfckIZ
-	sQwED8XVRdk6aar4vaV4jR8Iu50R+Y84=
-X-Gm-Gg: AYBFou2u51TWNoW9/WjOlNYAn/9aCXgedEvaAyGNkWgYzwT4d8wt9qgdGtruu8KKVbc
-	GlAkQONMFQDaOohKEzXZrsGgu9KZYTo5d1Grv1tw1aV3sv4kM5O9i/M15oWsd/rOWPIkmIpOcim
-	xSZQou6lr3YTNw8uk+/WKhnXjwsHDHr8I0J2N0Ux8/56Vn1iE2hVXtjyf3qCcoSxQmMzbEjcuTh
-	LZN/+dMMOWT5LPBB5hzsbLiNCQ3Wit6OiU22Fv2P8l2h2xeXp9/HtQpUlRCLCwoZ/axzdNSdNEF
-	DWnO62QVF8H2deGmWcsc23dA6H2j4WvbRrjg8akyAW8Ysg5821aHtIF+tFrreBRUDCBkeUoAHPz
-	WlqbHfhn0x0Fx
-X-Received: by 2002:a05:6102:c8d:b0:7a5:391c:37ac with SMTP id
- ada2fe7eead31-7ca38a0cc36mr934178137.10.1791387393843; Wed, 07 Oct 2026
- 08:36:33 -0700 (PDT)
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=rLsprYscUkpGpvdA8iPgNXgU1PA3+Qr33ni7MNSvGbg=; b=jf7LUq
+	Q+r1WDNlB2WkjvsjS/aP2Kxv08LC4evDg6jF389drSSkwh79JToS9ZvkeMK0Vki8
+	/iseCT80HKCz7IYJF954ZPlnvp0jitItA+PGt8k+9eTRLyP1h6h7VBFA7JkToSvr
+	vP2HBIoF3OFhhA+4HaSsg7BSJBEkGc8a2V8JI=
+Received: from [172.17.0.2] (unknown [101.6.30.195])
+	by web1 (Coremail) with SMTP id yAQGZQA3qzt6csZqskPbAA--.57300S2;
+	Thu, 08 Oct 2026 00:25:33 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf-next v4 0/2] bpf: Enforce trusted BTF ID argument
+ provenance
+Date: Wed, 07 Oct 2026 16:25:28 +0000
+Message-Id: <20261007-a3-arg-trusted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261007092801.35649-1-jaeyeon.lee.dev@gmail.com>
- <022ec915-62ab-40d9-8705-90692e75acfb@kernel.org> <ce49e816-ae77-4c64-bd28-168d8ca52d8d@arm.com>
-In-Reply-To: <ce49e816-ae77-4c64-bd28-168d8ca52d8d@arm.com>
-From: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
-Date: Wed, 7 Oct 2026 17:36:22 +0200
-X-Gm-Features: AclHuK_qZVYeP9e6a3BCk4ZuXrh1Fr29YQchvsleR4vDz7zanz3IAHpg3zmw-tk
-Message-ID: <CAD+X6aDjhCGt_Btw7pcoj8uT4-tiTHX9+wEQQ4yjFx1KQj11VA@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/mm: hugetlb_madv_vs_map: fix TAP plan mismatches
-To: Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Guillaume Morin <guillaume@morinfr.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHlyxmoC/4XNyw7CIBAF0F9pWDsNz6a48j+MC4RpS6LYACUa0
+ 3+XdOXCx/Lmzj3zJAmjx0T2zZNELD75W6hB7hpiJxNGBO9qJpzyjlGqwAgwcYQcl5TRQZGgnXJ
+ a9grV2ZC6myMO/r6ZR3KeBwh4z+RUm8mnfIuP7VlhW//DLQwoKIpYT/rBCX24Gn9JbU4+jNNiW
+ nRLa8MmF/5X41UTTFvkWnRa/tTEu9Z90kTVZMe0M4OgyOw3bV3XF+C9auNkAQAA
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Amery Hung <ameryhung@gmail.com>, 
+ Brahmajit Das <listout@listout.xyz>, 
+ Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791390334; l=2733;
+ i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
+ bh=CgR8XemSElZEZ0qupffsAPHdIhjfSl4qcoBESu8TXtg=;
+ b=Hu/tTUWVf9UUVIgHtNvJsiygjXId6+j4C0tOQJyNw2W+WC2VFx8x7xXAuaSG3adPd0YCvyWyC
+ v95uMohrunYBl7JR+HA5fGiNVSyTX/UyFQV0r3nCj3gguZy+MzdR3E4
+X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
+ pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
+X-CM-TRANSID:yAQGZQA3qzt6csZqskPbAA--.57300S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw1xXrWrJr4kuF45Gr45ZFb_yoW5Wr1fpF
+	4rJw1Yvr48Krn3Ja4ftF47ZF1Fg3s5J3yUC3Z8J34UAanxGFyxArySgayjgwn8ur98uw10
+	qFyIqrn09F1fZ3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1lnxkEFVAIw20F6cxK64vIFxWle2I262
+	IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx2
+	6r4rKr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4
+	CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY
+	02Avz4vE14v_JwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4rKr1UJr1l4I
+	8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+	xVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+	AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
+	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUnwZcUUUUU
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On Wed, Oct 7, 2026 at 2:01=E2=80=AFPM Sarthak Sharma <sarthak.sharma@arm.c=
-om> wrote:
-> Anyways, the original code also calls a ksft_exit_fail() in err_cleanup,
-> so this skip is just preserving the TAP test count, else we'll get that
-> planned tests !=3D run tests message.
+A global subprogram parameter tagged __arg_trusted is verified with
+PTR_TRUSTED, but its call-site type check also accepts bare PTR_TO_BTF_ID and
+MEM_RCU registers. This lets a callee use a pointer with weaker provenance
+under the trusted-pointer contract, including passing it to a non-KF_RCU
+kfunc.
 
-Thanks for the review.
+Encode the trusted-pointer requirement in generated kfunc prototypes and
+drive the shared provenance check from the argument contract. A KF_RCU
+kfunc additionally permits MEM_RCU, while a global __arg_trusted argument
+requires a referenced or trusted pointer. Normalize nullability when the
+argument contract permits it.
 
-The skip was only there to keep the number of reported results in line
-with the plan.
+Add rejection coverage for bare and RCU-protected global-subprogram arguments
+and acceptance coverage for a nullable kfunc receiving a trusted nullable
+pointer.
 
-I am happy to send a v3 that drops the ksft_test_result_skip() call, or
-drop this patch.
+A separate scx_cake caller fix has been prepared but is not yet submitted.
+The current veristat-scx pin still uses the old caller, which this series
+rejects.
 
-Thanks,
-Jaeyeon Lee
+Changes in v4:
+- Rebase onto bpf-next and use the shared argument checker.
+- Reject MEM_RCU for global __arg_trusted arguments.
+- Encode trusted and KF_RCU provenance in generated kfunc prototypes.
+- Add nullable-kfunc coverage and use a 12-character Fixes SHA.
+- Link to v3: https://lore.kernel.org/r/20261006-a3-arg-trusted-v4-v3-0-4619daf30e1c@mails.tsinghua.edu.cn
+
+Changes in v3:
+- Preserve RCU-protected arguments accepted by existing sched-ext programs.
+- Make the MEM_RCU case a positive regression test.
+- Use the preferred multi-line comment style.
+- Link to v2: https://lore.kernel.org/r/20261005-a3-arg-trusted-v4-v2-0-319ce2936949@mails.tsinghua.edu.cn
+
+Changes in v2:
+- Retarget the fix to btf_check_func_arg_match(), where the subprogram
+  argument check lives in this tree, instead of check_func_arg().
+- Run the check after check_reg_type() and check_func_arg_reg_off() so type
+  and offset diagnostics keep their wording.
+
+v1: https://lore.kernel.org/bpf/20261005-a3-arg-trusted-v4-v1-0-50ee0268fd39@mails.tsinghua.edu.cn/
+
+---
+Yiyang Chen (2):
+      bpf: Enforce trusted BTF ID argument provenance
+      selftests/bpf: Cover trusted BTF ID argument provenance
+
+ kernel/bpf/verifier.c                              | 27 ++++++++++++-----
+ tools/testing/selftests/bpf/progs/iters_testmod.c  | 11 +++++++
+ .../selftests/bpf/progs/verifier_global_ptr_args.c | 35 ++++++++++++++++++++++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c | 11 +++++++
+ .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |  2 ++
+ 5 files changed, 79 insertions(+), 7 deletions(-)
+
+base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+change-id: 20261005-a3-arg-trusted-v4-9d5d9485e5ba
+-- 
+Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+
