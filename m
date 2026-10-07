@@ -1,75 +1,111 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542C84D09F4
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 22:56:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655B23CF1E7
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 04:55:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791327376; cv=none; b=AOCx73P1Vk1PL6hVBdMO0+BX9lIKHS4lMreiHj/zCciQmVgxa5gjRxEUrmQCqqbM5xDiVMXCFro1rcYZ3fcu6Z+lyl+iZPkCtCsPBd9BeI5PagAgHkArFCcFcgu1g38gUcGRyboTnyS81gaVNXqEzu+64Za9U/vuCFa5KRKngsg=
+	t=1791348932; cv=none; b=bddCpRuyRwPGIY6V0YaZGAQSVzM+xVMil01pvF/klSB4Lq2kNV20OZ/7ILlbLQfkqwLsmj02DQ9CNGrY4rC9prziw5AFUsCZhLfNBlXszdlgN1QzFt4a4KH8s1e8L3VifTNOUFv/5bbNLFBWr/Xc8q8o5jAsgRxQ2cbDk4Ytzjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791327376; c=relaxed/simple;
-	bh=c4b8vJUIyHvBPnYvfzT9hEIi5nCjAL01RpiqWzEUBF0=;
+	s=arc-20240116; t=1791348932; c=relaxed/simple;
+	bh=Nhv3V2PEZv9DaIywRXpuQSuo3SZq1+RM/crAjovCZI4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nvbrL5mDKIdKr9Eqj1o2diIR6seWhSnfg+J9k9P3XWgkNEoczr8KAn6M9beOoh1wDIxta067eHHQ1To8gXO+h+qycFpQmWGGzAynQLQnl2+aNKhOqa1G/XnBfUG0ircdEKQki5vXfAcO4X4TBkWXzksoEyrOmdIsKxmxUReqguk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ST+2A727; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 MIME-Version; b=ujDpEwKrr89zVuZSk44yWWzwdwtsxTvyxQawi3q55clFpVciwtkDCZ9LFzl2tcPzboKHhcHW48MbZIOeC+LewPvQy9ygZ5WqaXsdtWS/hhEa6kBdQpIKt916hDVh/abRc/fx7TdrFSmfClcf13bpA/hEfpRy7FeZabejqgr4Z6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nv1p8xdO; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ST+2A727"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 544611477;
-	Tue,  6 Oct 2026 15:56:12 -0700 (PDT)
-Received: from localhost.localdomain (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BFAB3F86F;
-	Tue,  6 Oct 2026 15:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1791327375; bh=c4b8vJUIyHvBPnYvfzT9hEIi5nCjAL01RpiqWzEUBF0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ST+2A727f7o2+P2zUbhBzO0CJOpTe+58ldfIhmUO1ebSoDgoF6U0vPytj9xNXyORW
-	 TmjtRcj2BRyV444iAzhAAlsZ9rbc5clxQb50i7ljV1PmDCAitowztqt61YwEfFkgsm
-	 t+N6L5+rWioNTL8hSV8648UiTijO1VwJ0NEFNzlE=
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: linux-kselftest@vger.kernel.org,
-	Vladimir Murzin <vladimir.murzin@arm.com>
-Cc: Will Deacon <will@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nv1p8xdO"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48870973bddso840819f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2026 21:55:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791348929; x=1791953729; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=b3BMYKHdF12goXCIRPvU4kuoDtK1ZjXLgJnPKF5B85U=;
+        b=nv1p8xdOrJSa+fS4UFEPMKCZObdcb3VEA4/dpjO8cn+D/m1KHvU9dk6/9GtrymYrr2
+         oYrncpqYUTMy//jC9et2PLN+bNT5GgGtUvogFSZsMBZ9ygumJEUOTOKUOO4skQN/lanA
+         Q1n88xUpUJXPx9GICSvP8EUpE9twC48OJBBUlj1zqAx/Iwzvz/wmVVKY7nhz0f+XYnA7
+         SLK7/kNjOnYkWhoSWoV/lMGqnzYQ0Pf6Onmc3qT7rBKqMJ+XqxrQXXXMtg6+xUrwU9Td
+         kRCaqenkx+DI44JFC/VO5MT/mU3GLWnUQpoRNJ94JKDdHjtx/sdN9CIO6+TfqdBO8TDV
+         8i/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791348929; x=1791953729;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=b3BMYKHdF12goXCIRPvU4kuoDtK1ZjXLgJnPKF5B85U=;
+        b=SAs8nu/doVoTug96iRrTBawef/8piw9oeoXWUonNk58LQyJJAhRbbS1wytUAd6ZX3G
+         ofoqE1Zgp4qBzkiLZHcG+C6Z2vzyTJP/FThBYxz4OrYLeLcbDESkraDgoMW+lXzH6m+h
+         k8BwtQ+vgouhn/Y9suG6nDdXNjusqpaMakr3v+Eg3gSBqFPNfeiU9SZoU5E7CCB0jyoK
+         1SImwB92BecXv9MAfF+P905gcTkEJWo46EsdfYbhgzWL+dWtpV6+Oar43YC5rnH+gTYl
+         k9x25c0qp6vr8fG68LMBRkLYsVRdQPqJTVUXiSgG8cmgCbuwyZK0GoDvZsB6pIhgMyOX
+         2FkQ==
+X-Forwarded-Encrypted: i=1; AKwUvBysUXmac0wgRW89DAJNyP9vUMZI/GWBZaa30j7qibOVgF85sjFJyY7URphcAtza1xGuc81ImoYdHikn1FMEGGY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKhE5rrkpRvd6YC1zW2Fco7hBjHLeBFZnZ69Z0PKcZd+CiZAAYQ
+	l0HYBSXSjsDXrcfiwstG+XzN4MdZVP3ypPH8CyURVoZqfGZlIBb3H7pP
+X-Gm-Gg: AYBFou3lXczvtnlpbj0F/ZsNDMTvq8S89sC4DyfwwfMKKdsOx5RHsLB4PzGnOnBDnSK
+	tNgJ4Q/wuDG2ITlLUvYpewqyNvvAwNRw3KAsVe39uQKfuJNy+eUMpnTIm/HnKLy3wo7P9dKiYbK
+	Sj2vQdgk876FhPSaeHf0/pv05fRAIQzkOIB9o8h9jxL72FMSbgnt732AOtCHBFgXvmtgYf9d7ca
+	K3qSIsiVMXJO6l48R8AH3GHYr0wJoR1xzpT1iL9jnN4aQriLbDGraNzvozRPGeb67hqMjvbuMPs
+	HA57UEkZvQy+gTQebbojEpROn04L7t430j73hsNzlCU4OVSuLR0mMZZIhgt469zjWH58aU2hXd6
+	F+lqZUWZIcpDB5XXMpwn8aemydsG7ZkQoTYKnodFVnPgvm6NNTdRjxhj2wiUFZIjo0KZv4jC+uR
+	oxpXSwkPLPBNFNwn7Ea09RfezPNIAlQSoDAEbXB+R/NiA4FMml+prKuhPzwkrb3Cw=
+X-Received: by 2002:a5d:658c:0:b0:48c:4a62:9b31 with SMTP id ffacd0b85a97d-48c72749bbemr1719860f8f.5.1791348929426;
+        Tue, 06 Oct 2026 21:55:29 -0700 (PDT)
+Received: from kali ([169.224.126.44])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c75b56537sm888360f8f.59.2026.10.06.21.55.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2026 21:55:28 -0700 (PDT)
+From: Ali Firas <alishmery18@gmail.com>
+To: pabeni@redhat.com,
+	netdev@vger.kernel.org,
+	idosch@nvidia.com
+Cc: kuba@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	razor@blackwall.org,
+	roopa@nvidia.com,
 	shuah@kernel.org,
-	broonie@kernel.org,
-	usama.anjum@arm.com,
-	mark.rutland@arm.com
-Subject: Re: [PATCH 0/2] kselftest: Make MTE memory access robust
-Date: Tue,  6 Oct 2026 23:56:08 +0100
-Message-ID: <179132735993.1339931.13899856903297261117.b4-ty@b4>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260922105959.129380-1-vladimir.murzin@arm.com>
-References: <20260922105959.129380-1-vladimir.murzin@arm.com>
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 0/6] vxlan: vnifilter: bound a single request and account per-VNI memory
+Date: Wed,  7 Oct 2026 07:54:34 +0300
+Message-ID: <20261007045434.499651-1-alishmery18@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <7913b40f-f7d2-41ec-acb2-1edc7f2b833c@redhat.com>
+References: <7913b40f-f7d2-41ec-acb2-1edc7f2b833c@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Tue, 22 Sep 2026 11:59:57 +0100, Vladimir Murzin wrote:
-> Currently MTE selftests assume that they can skip (expected) MTE
-> faults by advancing the PC by 4 in mte_default_handler(), but this is
-> not generally safe, as the faults are triggered from arbitrary library
-> functions (e.g. memset() and memcpy()). For instance, memset() could
-> be implemented as simple as:
-> 
->       mov   x3, x0       // copy pointer
->       add   x4, x0, x2   // calculate end
->     loop:
->       strb  w1, [x3], #1 // faulting access
->       cmp   x3, x4
->       b.ne  loop
->       ret
-> 
-> [...]
+On 10/1/26 13:45, Paolo Abeni wrote:
+> Sashiko complain WRT partial accounting of patch 5/6 looks legit.
 
-Applied to arm64 (for-next/kselftest), thanks!
+Agreed. A VNI that carries a remote also creates an FDB entry, an rdst
+and a per-CPU dst cache, none of them accounted. v4 accounts those
+allocations on the vnifilter path, passing gfp down rather than flipping
+the shared helper, so the learning path keeps plain GFP_ATOMIC.
 
-[1/2] kselftest/arm64/mte: Introduce MTE safe memory accessors
-      https://git.kernel.org/arm64/c/1cd024f3f6ae
-[2/2] kselftest/arm64/mte: Use MTE safe memory accessors
-      https://git.kernel.org/arm64/c/9f7af3cf5cc7
+> Also it would make sense to reword a bit the commit message of patch 1 and
+> 2 to reflect the above.
+
+Will do.
+
+v4 will also bound the dump per nlmsg rather than per entry, per
+Sashiko's note on patch 4: a device holding 8192 contiguous VNIs can
+still dump as one message that replay refuses.
+
+On the Fixes: tag asked for on patch 2 -- Jakub asked for net-next
+without one, so I am not adding it:
+
+  https://lore.kernel.org/netdev/20260921150904.65a704eb@kernel.org/
+
+pw-bot: cr
