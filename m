@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A9B38D3F0;
-	Wed,  7 Oct 2026 19:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBA94E5358;
+	Wed,  7 Oct 2026 19:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791402591; cv=none; b=a53QnEDeCtE9gZFXjvLlIYrLx+inuTSTWjf8jZjDNB2jqbv6t3T43CJfkpBXBwIEs8ySec9aEzQT2K9/RQLaJ0PpB15u9+l+fkmuD95bxfzNi7zLmgPHMe6MQWrkGfXa8dtZAXeEcRgwcTMeEU47ZIA1jHrtJ6YComb5Nllv67k=
+	t=1791402593; cv=none; b=rCau+p0YV+GJ49rhbIcCrBb5QN9HXhPG3nej6nucM2m3tnPjDAvHdwI0EBGGMIgDRGIfUwk4v7gtQILVi5g0dBAN2xBZA7rv4j5QoCCfPhnqZ94/yu8/5BuH9TdypQ44zitFySIMsVo1raYgC+KBRLHC1dTPPTfM3NGfKHJm+ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791402591; c=relaxed/simple;
-	bh=Wdhb3pW7f+y7cF6TjE/est2fJddaFrDQGeAMlxf89aQ=;
+	s=arc-20240116; t=1791402593; c=relaxed/simple;
+	bh=aa0jdBTgzTuFq4kxDYKXxaFCJX/qLj1O5qF72iBDUhs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=F9xmHpTiEEVKu/VULN61P0Ac3nUnuSO3Bl1WrTl62lUuMsr3mb1SNRudPHjvjzeoJ2KU1AqM4AZiBQRk9C6BBwWU8UOrb2j53pXXw9bn9x2S5g78I0UO4mLRio5EtKdiVFiNPFdQBLw2VRA9EKYLVF9w972PJxRn9qUBqK1WqoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OXwMJV/O; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=ULhx2gq0NMkPqqMohOe9cnVOODlo1/2DlL+uZabOvv7C8FKfLipdZugCnzJAmzyMNjaaOLjnl/wFaOTJXbg6Q2xcemxybGgsH6bXWyEuvTuDuEL8IcQmxXaY4djCOOQ4sY/eAb2UTyzRiuWLqAefDF+Q82wPAQuAkq7sm5D/VtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fHLlsM3R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OXwMJV/O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B1B1F0089A;
-	Wed,  7 Oct 2026 19:49:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fHLlsM3R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF791F000FF;
+	Wed,  7 Oct 2026 19:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791402590;
-	bh=DINgOqURJ5eGbdb4g7792UX6puWOtU60lJWEbBwVUZ4=;
+	s=k20260515; t=1791402592;
+	bh=chOujoFC46mjH3bD6lz+8DRJnHv+/fsri7CRparTKGg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=OXwMJV/OVtSn4t58rnBw4QkCm9FmNgitwDT/nrD80cFtnrl/YIgQT6ij9st8BpfWQ
-	 x/eX41E67/EWeH0kTYybLKL4JbGbwR2kXTZAACkdCaEkeegVpNgqUNAiKOtJ/+cG++
-	 eNkmWnKTIqIR+SH99PZY0HZb3iGnMQcUEo3lqJEpiU2w1tOOhDlg/j2IEehtJUJ9Cr
-	 chtn3IvwikHrOogNZUC+hPDf3k41bglRN3fsPIpk4cYuQ3rRnBntMiDQdQxGqcyiWU
-	 TTqYo3+x2GGGtm4ns+wjwMEzOu4WTOnD81ac2d6R4VFPWTfSJap73I/ziKCC91tXpq
-	 SvJhV7unufvmQ==
+	b=fHLlsM3RQP+OunEsXGMp9dz8FjZEkfTvBS+RLfsZRcTzETo4b+fBXwm+nrzN22Mti
+	 Y7eQcRbbO7GUVm9b5K+gEwS6HNXrKSJr8Eebgiu9sp0lt0z6AEqtAzIWdmQBW+3XnE
+	 WKvWXAl1uuG+uKkYeWvpYSDRHt/VWEfHlkXJwauJQGyD+Bp79WjiPHsCXcStCX5tKZ
+	 1ZpQrDEd+8/bxgt+AZAFGBR42sinYrr5JskcdS7YxnlFxBO4q8PVEba318a3UAXfD4
+	 QOD6N/TgbKKv55MRRMXFXhODm0qtvU+EQuUE2kvgnyq2LbyXVjT2MFmWfrWl4/6UlP
+	 hr6FXrXZDcDFg==
 From: Chuck Lever <cel@kernel.org>
-Date: Wed, 07 Oct 2026 15:49:31 -0400
-Subject: [PATCH net-next v3 2/9] tls: Check for a pending signal after an
- empty record
+Date: Wed, 07 Oct 2026 15:49:33 -0400
+Subject: [PATCH net-next v3 4/9] tls: Consume empty data records in
+ tls_sw_splice_read()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261007-tls-follow-on-v3-2-6d52d98389b3@kernel.org>
+Message-Id: <20261007-tls-follow-on-v3-4-6d52d98389b3@kernel.org>
 References: <20261007-tls-follow-on-v3-0-6d52d98389b3@kernel.org>
 In-Reply-To: <20261007-tls-follow-on-v3-0-6d52d98389b3@kernel.org>
 To: John Fastabend <john.fastabend@gmail.com>, 
@@ -47,105 +47,101 @@ To: John Fastabend <john.fastabend@gmail.com>,
  Simon Horman <horms@kernel.org>, Chuck Lever <cel@kernel.org>, 
  Dave Watson <davejwatson@fb.com>, Shuah Khan <shuah@kernel.org>, 
  Qingfang Deng <qingfang.deng@linux.dev>, Eric Dumazet <edumazet@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- sashiko-bot <sashiko-bot@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.16-dev-da966
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3037; i=cel@kernel.org;
- h=from:subject:message-id; bh=Wdhb3pW7f+y7cF6TjE/est2fJddaFrDQGeAMlxf89aQ=;
- b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqxqJZxqM/O4r1Wisx3dGvXo/ge7CTlAGv+q/tc
- k1H+9DBdpCJAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCasaiWQAKCRAzarMzb2Z/
- l1aTD/9TLeZQjYqsWAD2rzELmUqsdQuxloSBVcaW3sbiRjdC6deh69yBsKsuEAgZxyJTNP4Sxrq
- 8pOMu3hrRookQebhwfLoPnNsoK3rODQd+kxDQIhWfihFdeVZfK+Ck6JBpcbSZoD17tc9kQuE+Ef
- GJDr1nkP7ihEsYmKbayoYI0rFtqT3aLQR6zUS9chi1tbKG+hc8a5spH3uTrkieF++diWuywPY4E
- +StsSLyAUeJwH0ai7YNG6fIYL8V22cFOPlnQEbiOiDndlVzyiZPtSsZDIeWTmOsmdoDoT9JqSql
- F04qQAb7gpJ2RCV8njdBuN/mzY4sWrgoLBf/L34NXmvj9PSIpQA0+YyzKqk7DqLXJKqnf6hhNwg
- 0hjZ1pbr5EQpdfEaKiU16PgN0OLFJlIrXXYwvhw/AqXFf3xiGPjgdkLvboXfDR+zrjEtAQ6phU3
- zSb/O0+e4QCUv038vPw/2cmXJxVkZ5RhkvLsgaIwU+MldXoZqAKnf28AqemGI0joSXyaI+KPlFR
- bHOt+uZHKr5THX8dIBoucpzz4oGXpRx9WdSwgJSzTorodtSkPpGuKplkqWeOt62de2g673y4ZrO
- tXWFixRnhUohUOhMQuhzT6J9azPFkxaL1F3vjnJyQoXXl+VnEikViPzbx6jtycbc5ODK1sNNFmd
- /amgDkyiw+fhB6A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2599; i=cel@kernel.org;
+ h=from:subject:message-id; bh=aa0jdBTgzTuFq4kxDYKXxaFCJX/qLj1O5qF72iBDUhs=;
+ b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqxqJZWZX/5j0pLRxaLVKuW4f3GMrcTTcT8+Ia5
+ QW5evX5Eh6JAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCasaiWQAKCRAzarMzb2Z/
+ l1dlEAClfEfmhytG6H6M7T0Ve1RRElDsJfZMXhyh5ZL8QVMRLBa/k/OYai9V1Kz+67JmTU9WktX
+ lVHvNLCTxVu2BZgbKiMpe+6wOn+xCiDitfrdEb7cCK8vn0KJu3SVpTTJswujnOUD6elCug+qvzU
+ nwlaZH7SoN6JWwXI6GOCo+XNVSaEfgQfuqUxB8BUasCasOYZwk9FtqE+nkykfN2jwdBuSBcqwGW
+ EjKGPVaa2wX8wX3lpaJVXx0++A64nge7+XRhJtOI1CUcLLvhbLujGkVxGUfYxOto5WxIDbAc+op
+ 6DywEEBy+stc2y5Un9ZlRGbrnwJX/YTiD7vlHWuTJxL3Cv+1FWWBXYC6oWvW8hi0i6mvnDlYAtd
+ cLNc+t8BbttPAvF5bTjAFU2n0Ulpp+HGJG2jmBpiHyDG6nchSJFc10992qkPl33he0sa4x2mRLa
+ fNULvEr3MkXmd2FUz5qIhkV013q3s71ApSwUdGuonlaV4Wy/IxDaZ2M2YptIgUTK8lu1BlnLzE2
+ zIHoxi3IWHXBw43Vdi4kO2qEdP9b/ABRADYpXCKdbkg4FSYWvsAOzMNX6lQ+ZSVkDm6TxSywxT7
+ RDIBxvx3EDFdGuntag1adg+6xITnqbKcRogzqF7mXwvmyR4qMzguaV24NqFom6C3qwHR4A733Rq
+ 2THkF071N1yBc2w==
 X-Developer-Key: i=cel@kernel.org; a=openpgp;
  fpr=28B2E5B01286DF243CF23EFE336AB3336F667F97
 
-tls_rx_rec_wait() tests signal_pending() only after it sleeps, and
-it skips the wait loop when a record is already parsed.
-tls_sw_recvmsg() calls tls_rx_rec_wait() once per record, and a
-zero-length application_data record does not advance either bound
-of the receive loop. A peer that streams such records holds the
-caller in recvmsg(), unresponsive to SIGKILL, for as long as they
-arrive. The hang has not been reproduced.
+A zero-length application_data record decrypts to full_len == 0,
+so tls_sw_splice_read() splices zero bytes and returns zero. A zero
+return from a splice read means EOF, and the caller tears down a
+connection that is still live. The zero_len_splice selftest
+reproduces the zero return.
 
-Test for a pending signal in tls_sw_recvmsg() before it fetches the
-record after an empty one. A reader that has copied data gets the
-data, and a nonblocking reader gets -EINTR. The test stays out of
-tls_rx_rec_wait() because tls_sw_read_sock() also calls
-tls_rx_rec_wait(), from callers that cannot act on a signal.
+Consume the record and fetch the next one, as tls_sw_recvmsg()
+does. Test for a pending signal before each retry, so a peer that
+streams empty records cannot make the splicing task unkillable.
 
-Decrypt an empty record synchronously. The code at recv_end
-overwrites err once any record has been decrypted asynchronously.
-With only empty records queued, the reader then gets zero, not the
-errno.
+When an empty record precedes a close_notify, splice(2) now returns
+-EINVAL from the control-record test instead of a false EOF. A
+splice that reaches an alert record already reports -EINVAL.
 
 Fixes: c46234ebb4d1 ("tls: RX path for ktls")
-Reported-by: sashiko-bot <sashiko-bot@kernel.org>
-Closes: https://sashiko.dev/#/patchset/20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org?part=1
+Reported-by: Sabrina Dubroca <sd@queasysnail.net>
+Closes: https://lore.kernel.org/netdev/akaoXcfamBp8_mYe@krikkit/
 Signed-off-by: Chuck Lever <cel@kernel.org>
 ---
- net/tls/tls_sw.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ net/tls/tls_sw.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 275a6047da9e..32be5a8f80ed 100644
+index 6c21897b03ee..ff82e2f4e9e5 100644
 --- a/net/tls/tls_sw.c
 +++ b/net/tls/tls_sw.c
-@@ -1824,6 +1824,7 @@ int tls_sw_recvmsg(struct sock *sk,
- 	bool is_peek = flags & MSG_PEEK;
- 	bool rx_more = false;
- 	bool released = true;
-+	bool nodata = false;
- 	bool zc_capable;
+@@ -2021,6 +2021,7 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+ 	struct sock *sk = sock->sk;
+ 	struct tls_msg *tlm;
+ 	struct sk_buff *skb;
++	bool released = true;
+ 	ssize_t copied = 0;
+ 	bool nonblock;
+ 	int chunk;
+@@ -2038,12 +2039,13 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+ 	if (err)
+ 		goto splice_read_end;
  
- 	if (unlikely(flags & MSG_ERRQUEUE))
-@@ -1858,6 +1859,16 @@ int tls_sw_recvmsg(struct sock *sk,
++retry:
+ 	if (!skb_queue_empty(&ctx->rx_list)) {
+ 		skb = __skb_dequeue(&ctx->rx_list);
+ 	} else {
  		struct tls_decrypt_arg darg;
- 		int to_decrypt, chunk;
  
-+		/* A run of empty records advances neither loop bound, and
-+		 * tls_rx_rec_wait() tests for a signal only after it sleeps.
-+		 */
-+		if (nodata && signal_pending(current)) {
-+			long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-+
-+			err = sock_intr_errno(timeo);
-+			goto recv_end;
-+		}
-+
- 		err = tls_rx_rec_wait(sk, flags & MSG_DONTWAIT,
- 				      released, !!(decrypted + copied));
+-		err = tls_rx_rec_wait(sk, nonblock, true, false);
++		err = tls_rx_rec_wait(sk, nonblock, released, false);
  		if (err <= 0)
-@@ -1874,9 +1885,12 @@ int tls_sw_recvmsg(struct sock *sk,
- 		    tlm->control == TLS_RECORD_TYPE_DATA)
- 			darg.zc = true;
+ 			goto splice_read_end;
  
--		/* Do not use async mode if record is non-data */
-+		/* Do not use async mode if record is non-data, or if it
-+		 * is empty: once a record has gone async, recv_end
-+		 * discards the error that ends a run of empty records.
-+		 */
- 		if (tlm->control == TLS_RECORD_TYPE_DATA)
--			darg.async = ctx->async_capable;
-+			darg.async = ctx->async_capable && to_decrypt;
- 		else
- 			darg.async = false;
+@@ -2055,6 +2057,9 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
  
-@@ -1910,6 +1924,7 @@ int tls_sw_recvmsg(struct sock *sk,
- 		/* TLS 1.3 may have updated the length by more than overhead */
- 		rxm = strp_msg(darg.skb);
- 		chunk = rxm->full_len;
-+		nodata = !chunk;
  		tls_rx_rec_done(ctx);
+ 		skb = darg.skb;
++
++		/* The retry's wait runs with the socket lock still held. */
++		released = false;
+ 	}
  
- 		if (!darg.zc) {
+ 	rxm = strp_msg(skb);
+@@ -2066,6 +2071,16 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+ 		goto splice_requeue;
+ 	}
+ 
++	/* Splicing zero bytes reads as EOF to the caller. */
++	if (rxm->full_len == 0) {
++		consume_skb(skb);
++		if (signal_pending(current)) {
++			err = sock_intr_errno(sock_rcvtimeo(sk, nonblock));
++			goto splice_read_end;
++		}
++		goto retry;
++	}
++
+ 	chunk = min_t(unsigned int, rxm->full_len, len);
+ 	copied = skb_splice_bits(skb, sk, rxm->offset, pipe, chunk, flags);
+ 	if (copied < 0)
 
 -- 
 2.55.0
