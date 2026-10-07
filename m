@@ -1,167 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69F34E781A;
-	Wed,  7 Oct 2026 19:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791402600; cv=none; b=SxmjLI3K8wU/SKrtEZyQGBfJA9nsu+8bX+s5nLsdxktJ19regqYDZfo2OjL6Yw2QWv7ObZjx+3t5HmFI0lccXOuyOP18gr3TMA/K4XNPMQ0UbKaYCZDQSCamlH7AKZzNvLublRDRUv95OfoZsg/OAfD7GaXwTwDtzMHJk75mmnI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791402600; c=relaxed/simple;
-	bh=6vwEB+jUOAvwa1H7r8hsU0XxMIdJxmXVm+BQYkDXVy0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MN5s1Cp5n+RBM929nAYbMbe1R1tvAaN6+p/uPwl5Bl0Gm/TELazqNIdAhi8lgZyvuqgKerxDhB4lCrEaVASzME3zhnGOkxgoYWsPc54jzWYBtDg0Y8/GeIKQbvEkZ1EluacWqSVA0R815Cw+XT5MJS4HXpcI1a6mLughiQ41rTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6vddJbx; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598113BCD1A
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 20:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791405183; cv=pass; b=R/IMPSs/dkr0YYX98Tu5R8alWTXxIj2/feBAvEcS5CbOaIAzCjoujd5jgFJ3U6FmHfBlx2mnQ84ywmGhBneSHo1gttDuGui1d3nqg4bwJFkiJ1gyjVLIOOAiWYdf5we+/2554OhpQdHMLL3aDNtlzruUpRcOrgShjGtyj/mIxKA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791405183; c=relaxed/simple;
+	bh=BjAy+qTW2P7zLlraadp7vFxhR13oDPht1OQi+cpdS1c=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=f4QewzxDSwGWWP8/40oRls8TdfAdYIR5JkYNdrkUVi7eLDBMuBt6tuiHc0l6mBL+1v1jupdobuef1ckO6lqGYhcxCwMyrTPUuP1rhCGxhGubzVwcMDJjsDIazOYYMhVVhxuH9Pzsi4ZWV+muOSDV6/sTwJWlc000PVzosCa/EvQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=EJpYTRMf; arc=pass smtp.client-ip=74.125.224.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.tenstorrent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6vddJbx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 890451F00899;
-	Wed,  7 Oct 2026 19:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791402598;
-	bh=37NykdREizaAMkH6IGcflJwIu7cgYM6UiNAhTQTN1C4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=K6vddJbxFJnRlQR6yY/XHHhSmOzvb4RpFU4xH8I4fpyaba/wqdgv+j8MhopByrccr
-	 JmquF9J1b/uRBFR2lBEEFHJ4rSw2K6KAq4CubtT7XaITa+M+bcPjGiKBuR7Rg1UKCd
-	 indBr2ee0cRk408oLrmEB01d9F8Eez2cfovfjIVqcBFutIyPs3cWCJABfg2er3Pzfi
-	 cxjn31CjTQz872qY+aAVukFi1aifP6D1HqssvsCGhsd4jBGSVB4ccJ7105mrFGQPRE
-	 hqaqrtU/3+qAhnXLITVTlgqNf0n7udYH2Dkkiiv26Sh+qujSRVUQ1EDg7tNwKKEX4f
-	 7AzmmEb7iu6tw==
-From: Chuck Lever <cel@kernel.org>
-Date: Wed, 07 Oct 2026 15:49:38 -0400
-Subject: [PATCH net-next v3 9/9] selftests: tls: Cover splice on a
- nonblocking socket
+	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="EJpYTRMf"
+Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-67489c8202cso4401835d50.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2026 13:33:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791405179; cv=none;
+        d=google.com; s=arc-20260327;
+        b=CJYG6mD0vs+MjWYLnP4cAwjPtqjeSQxBet79I49xAa2mmyN7N/ug5P8rMgS1QxjaQe
+         5eogDq2wolpbkxN4wuReIREwMmn68tCTEpyD0oimtatj/YLgQNNSAhrZ9WUfM7ucV3x9
+         dXUsT8jiTyzjdyxsJAitHl7gQFQo9+ccWWQuvjx2gcZ0ZVOfreHxF150PoXD4kikWx6N
+         HchLWf2bjLLMPBFtsWjUDjG0Ii3Fsn3HhOJDAXumc6U8eGANG2Qoxug/MReGdeXv7tuO
+         XkLbUDjzEr46NjxMZtBmew/HSNzuvljumHsWTTnyM1AMcAskGlW7yFmXtdHenA/VNPEe
+         +kuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=ivTJVfjUBIc9wBwqrJfBdaCwNcPxo6RneZIv1F1z4qM=;
+        fh=6Zm9V8RnDPOjbTPnDVKdJ4mhQGLLzwWg6sYN99JDV5M=;
+        b=hIsLdqA9JQ94qJjc79T9NvUT6aNRAgxCVdw7Nf9aFQMcqZhrIyr41JkAXXnss12VzP
+         gU6kQAtfUjr2TsgBGARyPalRH0Vl9l3vd4YYGII/xfVgtVTqwSdkntf+ZUf6OywfWTco
+         QK0zauqJxEGRER2HmwPKe3hLDAoV+jqIT7qOZEUX3W0irRj6CgrN0V928a/m8/UCQBTx
+         cWFYQNspS9YwjJO2uhBAS5nBni5yPZQNERXKnjAJ2T5gx5MKiSqy9J9+LWHmCsVX0uFu
+         L5r8iNyLFm3IOBdijPqjUmFYoIT9Lfa+dY2TVfSBV98KNY/hxIafUzkTGOfhPyNX4MWs
+         MTJQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tenstorrent.com; s=google; t=1791405179; x=1792009979; darn=vger.kernel.org;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=ivTJVfjUBIc9wBwqrJfBdaCwNcPxo6RneZIv1F1z4qM=;
+        b=EJpYTRMfQYssBvCcWdhqSLVbT1FDzcuZDqprPVFq0T2fzHNh7Fd50L9QLlosdJe8+M
+         kb4+BaMj3Q+xZzJN50R21N+1A1kaGfpk4PtIun9E2ApMMXJdSMfRNFk3m6b6z1KPXJtg
+         mPYwP7sBFguQsIWRefa6QXD0vJ080bcjucq23eu5DrXjRB77IjBdNwRTsnv68y/KXo+i
+         Zsq4DiuIu7YbrV9Mz9pGSEDUhdyEwTI3pgP7BqJ1GPtSTsMpTqD4OjS1+kTdzxHQ2P9y
+         FdaVkjx3qTcf7rPA3TtkRRT7ZMTOKfmEaHdRRixode6RPCR0/WlxjRDgXfSp4Ij3VNXG
+         CAgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791405179; x=1792009979;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ivTJVfjUBIc9wBwqrJfBdaCwNcPxo6RneZIv1F1z4qM=;
+        b=25VqEowi6kGP7DghWgDqhX9lYU8KaL0J8paIPwysDzdmkbigco1KrykCcV308bT8F9
+         LL4kSO3CS/anClQyF0IizhNp0eTGX2nv2o5r8ldo4RtTd95NOjQ0iSgq6TgdEf7A8gSI
+         7b5AmJXLGYgXWRC9FwYSUPir6x8Bog722wlDrNVjwP6fWQSsQKNoWnbb/TqD8gGClSu8
+         smbfr4sgCwr1/AocJYdpxF9Qv1ap0/wU7b8PgJNbxlPLYeL51hUJjpvQgoV0gV9meIKk
+         Oz53RVPVccK4VrTbj+bfL5W381kurZ8li/9gFGC60rEY4kLfG+CzkLKFYyl3s4PbdetO
+         BYLg==
+X-Gm-Message-State: AFq9FYKNr/mxPkmItqgsV+Te6/QfwhuRY2Q7V5fT7ciQI0KJfTKD4iIX
+	4UA9MAIrk3m8KnwBqTefMgRh5tIHbep42JBzxfnbmLi7lcjzxZ+9yTzHO+n7n+BWGt6oNtsQhMw
+	IHodP1dm//V3dr1eYdTDRGztPTnCe8hkhLuQZ2YdQTVeesuAYAdX0D9006w==
+X-Gm-Gg: AYBFou0KpqwhHcnGsU98DzMXX92IiGlv+mMKDfJncNPcRLUs3JaF1HrNAk0xJU8X0c9
+	Pk86DTWnRD/6EMBOsEKpXDjOeY1cOkAwZXJhlazibTuC9D3DfMPYURTjndJ3wPV3hAjcRx0/IkR
+	yU/X3Iql1a2fgqTmCxqS96JT7aUaF+0FzxzUrIWFQ9euEplPlW2eI+q6+terA2P1yo0IiFe49xA
+	t5s6COTs2LfFY7Euff0uBEhqcFxZRJtMUZCuJ7hBz1tUbJYmF0a+v9bKO/a801R87IZNPH0V27V
+	gSuKKbWIQLCTdkUju7GP2+cG2jSd4F0CtchQB/hzTkUIGjdZjuyx4tUtUn1nuoH8BiInDr9aYop
+	DEMcK8mYSELc=
+X-Received: by 2002:a05:690e:d86:b0:66f:c1be:a65d with SMTP id
+ 956f58d0204a3-6790a4c52f2mr2150347d50.79.1791405179114; Wed, 07 Oct 2026
+ 13:32:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261007-tls-follow-on-v3-9-6d52d98389b3@kernel.org>
-References: <20261007-tls-follow-on-v3-0-6d52d98389b3@kernel.org>
-In-Reply-To: <20261007-tls-follow-on-v3-0-6d52d98389b3@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, 
- "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Chuck Lever <cel@kernel.org>, 
- Dave Watson <davejwatson@fb.com>, Shuah Khan <shuah@kernel.org>, 
- Qingfang Deng <qingfang.deng@linux.dev>, Eric Dumazet <edumazet@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.16-dev-da966
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3221; i=cel@kernel.org;
- h=from:subject:message-id; bh=6vwEB+jUOAvwa1H7r8hsU0XxMIdJxmXVm+BQYkDXVy0=;
- b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqxqJaQ92tN29oo61BSojeDZbGCouiQrGAjsjM/
- 2UqEyiP/QCJAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCasaiWgAKCRAzarMzb2Z/
- l4/VEACmTe5xzez4BqOS9hX8WUSt1S1v7rQiQBQCa9bjQsJN0XQVGdKVsEbMi6az4gF7uPScnsY
- 0sHmy4zJ7d1SxT8irv9UtMW6RWJUnfcJdUkLU/tKglA9mIEGsJdrgjiYmEHPBK9SP/Qq+TWCMx2
- W2UVC8sS9RcksjFBtObKcDBaPy1DrnxELKqcQ1saCLvxjEKBZLHejBsrw8652QRkh6TCPs/6K1a
- tusOj/RhKY6Pdyig0MV9/va4N3eqEBRyXnL1KPh4q/M6GWPX7+4RYY6tG1iVXPBrNGM3uegRsot
- WV3o7gPgIRrjh7+ZAGBxmRfi1jwCuyUtqfw8hleMiSDxeIISYGK+p8RYUCSarb23EcbgBxu6Ytb
- 36dXxQAUKdf0Q+JKq9JoYTLToL3p6mwwhRF41RMmFZeDo9ZXBjuMMzrXbOBhljbHZUqr4UTNpo9
- EsG8JpA/x01twA07kCu5bd8iby7DAtTiWhtZuqDy9uFv+Ul2coYThtvYgmHx/dCS7q4Umyp/M1G
- CNiAEzSIRhbFSt+7e/3lcI0+/k12JMhFInj1JYhdK7t2GoP/iOaTfl88fDnkF/zguluLygaUC4H
- uWJaWgoF2Yu4HboWMwqWbRtlxNVKC9XykJzlc6ZlP/8ignwpM2tcDCEBFN76GstmpNl8tLEbwOi
- ULtcYgOvEsE5u6w==
-X-Developer-Key: i=cel@kernel.org; a=openpgp;
- fpr=28B2E5B01286DF243CF23EFE336AB3336F667F97
+From: Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>
+Date: Wed, 7 Oct 2026 15:32:47 -0500
+X-Gm-Features: AclHuK8P1OmqSjxw1Q8TP15n8s49AfcTPTrHW89OlIGcXgdQz488ItjpqK1Zalo
+Message-ID: <CAEev2e-6GVv45RWRLEF6LULovbiwrGE1-PxTzqKkD-zr4K=4KQ@mail.gmail.com>
+Subject: run_kselftest.sh timeouts don't work properly
+To: linux-kselftest@vger.kernel.org, kernelci@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Every existing splice call in this file either passes
-SPLICE_F_NONBLOCK or runs on a blocking socket, so nothing
-exercises the socket's own O_NONBLOCK on the splice path. A change
-that stops consulting sock->file->f_flags puts splice(2) and
-sendfile(2) back to sleeping in tls_rx_rec_wait() while a peer
-streams empty records, and the suite still reports pass.
+Hi,
 
-Run the zero-length record variants a second time with O_NONBLOCK
-set on the socket and SPLICE_F_NONBLOCK left out of the splice
-flags. Each variant expects the same result with either flag. A
-kernel that ignores the socket flag sleeps in the EAGAIN variant
-until the harness timeout rather than returning.
+I noticed some hangs while running perf_events kselftests on some
+RISC-V boards with potentially broken PMU overflow interrupts. It
+looked like the timeouts worked properly and killed the first 3 jobs,
+but the 4th one would just hang and never timeout.
 
-Signed-off-by: Chuck Lever <cel@kernel.org>
----
- tools/testing/selftests/net/tls.c | 39 +++++++++++++++++++++++++++++++++------
- 1 file changed, 33 insertions(+), 6 deletions(-)
+# timeout set to 120
+# selftests: perf_events: remove_on_exec
+# TAP version 13
+# 1..4
+# # Starting 4 tests from 1 test cases.
+# #  RUN           remove_on_exec.fork_only ...
+# # fork_only: Test terminated by timeout
+# #          FAIL  remove_on_exec.fork_only
+# not ok 1 remove_on_exec.fork_only
+# #  RUN           remove_on_exec.fork_exec_then_enable ...
+# # fork_exec_then_enable: Test terminated by timeout
+# #          FAIL  remove_on_exec.fork_exec_then_enable
+# not ok 2 remove_on_exec.fork_exec_then_enable
+# #  RUN           remove_on_exec.enable_then_fork_exec ...
+# *# enable_then_fork_exec: Test terminated by timeout
+# #          FAIL  remove_on_exec.enable_then_fork_exec
+# not ok 3 remove_on_exec.enable_then_fork_exec
+# #  RUN           remove_on_exec.exec_stress ...
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 5ff77f1c40c6..557dae37b3f1 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -2823,7 +2823,11 @@ FIXTURE_TEARDOWN(zero_len_splice)
-  * EAGAIN for a run with no payload behind it, and EINVAL for a control
-  * record behind the run.
+This hang can be simulated on any host by adding an infinite loop at
+the beginning of these 4 tests.
+
+diff --git a/tools/testing/selftests/perf_events/remove_on_exec.c
+b/tools/testing/selftests/perf_events/remove_on_exec.c
+index 89e7b06835df..d9a76351efa6 100644
+--- a/tools/testing/selftests/perf_events/remove_on_exec.c
++++ b/tools/testing/selftests/perf_events/remove_on_exec.c
+@@ -99,6 +99,7 @@ FIXTURE_TEARDOWN(remove_on_exec)
+ /* Verify event propagates to fork'd child. */
+ TEST_F(remove_on_exec, fork_only)
+ {
++       while(true);
+        int status;
+        pid_t pid = fork();
+
+@@ -120,6 +121,7 @@ TEST_F(remove_on_exec, fork_only)
   */
--TEST_F(zero_len_splice, test)
-+static void
-+zero_len_do_splice(struct __test_metadata *_metadata,
-+		   FIXTURE_DATA(zero_len_splice) *self,
-+		   const FIXTURE_VARIANT(zero_len_splice) *variant,
-+		   unsigned int splice_flags)
+ TEST_F(remove_on_exec, fork_exec_then_enable)
  {
- 	struct pollfd pfd = { .fd = self->cfd, .events = POLLIN };
- 	const struct raw_rec *payload;
-@@ -2831,16 +2835,13 @@ TEST_F(zero_len_splice, test)
- 	ssize_t ret;
- 	int p[2];
- 
--	if (self->notls)
--		SKIP(return, "no TLS support");
--
- 	ASSERT_GE(pipe(p), 0);
- 
- 	payload = zero_len_send_recs(_metadata, self->fd, variant->recs);
- 
- 	if (variant->splice_ret < 0) {
- 		ret = splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
--			     SPLICE_F_NONBLOCK);
-+			     splice_flags);
- 		EXPECT_EQ(ret, -1);
- 		EXPECT_EQ(errno, -variant->splice_ret);
- 	} else {
-@@ -2848,7 +2849,7 @@ TEST_F(zero_len_splice, test)
- 		 * below would block until the harness timeout.
- 		 */
- 		ASSERT_EQ(splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
--				 SPLICE_F_NONBLOCK), variant->splice_ret);
-+				 splice_flags), variant->splice_ret);
- 		ret = read(p[0], buf, sizeof(buf));
- 		EXPECT_EQ(ret, variant->splice_ret);
- 		if (ret == variant->splice_ret)
-@@ -2863,6 +2864,32 @@ TEST_F(zero_len_splice, test)
- 	close(p[1]);
- }
- 
-+TEST_F(zero_len_splice, test)
-+{
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
-+
-+	zero_len_do_splice(_metadata, self, variant, SPLICE_F_NONBLOCK);
-+}
-+
-+/* The socket's O_NONBLOCK governs the record wait, as on a plain TCP
-+ * socket, so a splice without SPLICE_F_NONBLOCK behaves like one that
-+ * sets it.
-+ */
-+TEST_F(zero_len_splice, nonblock_socket)
-+{
-+	int sflags;
-+
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
-+
-+	sflags = fcntl(self->cfd, F_GETFL, 0);
-+	ASSERT_GE(sflags, 0);
-+	ASSERT_EQ(fcntl(self->cfd, F_SETFL, sflags | O_NONBLOCK), 0);
-+
-+	zero_len_do_splice(_metadata, self, variant, 0);
-+}
-+
- FIXTURE(tls_err)
++       while(true);
+        pid_t pid_exec, pid_only_fork;
+        int pipefd[2];
+        int tmp;
+@@ -171,6 +173,7 @@ TEST_F(remove_on_exec, fork_exec_then_enable)
+  */
+ TEST_F(remove_on_exec, enable_then_fork_exec)
  {
- 	int fd, cfd;
++       while(true);
+        pid_t pid_exec;
+        int tmp;
 
--- 
-2.55.0
+@@ -197,6 +200,7 @@ TEST_F(remove_on_exec, enable_then_fork_exec)
 
+ TEST_F(remove_on_exec, exec_stress)
+ {
++       while(true);
+        pid_t pids[30];
+        int i, tmp;
+
+Then run like this
+./run_kselftest.sh --test perf_events:remove_on_exec
+
+Some digging around showed that there are 2 sets of timeouts, one is a
+120s timeout imposed by the runner script (run_kselftest.sh) and
+another is a 30s timer for each test process by the kselftest harness
+(kselftest_harness.h). The harness's 30s timer causes the first 3
+fails (at 30s, 60s, 90s), but neither of the timers seem to cause the
+4th job to fail when we hit 120s.
+
+It appears that the harness launches each test within its own process
+group using setpgrp(), which might prevent the kill signal from the
+runner at 120s from propagating to the test process.
+
+This bug can affect other tests that timeout too. I'm not sure what
+the best solution is here, and was hoping someone else could chime in.
+
+Regards
+Anirudh Srinivasan
