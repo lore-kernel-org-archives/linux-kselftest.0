@@ -1,118 +1,132 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D364DA9A0
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 18:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791396458; cv=pass; b=rmKmWtWEsrXG5ZTJaadLT4m23LTt+c30Wzg9uWfCyActkmRMNqZEWaSYu7vq9rdJwycbpV2GFYGhfELHoFqmQn0I7W1nmLqh/bC7PBmLf15mXFPY9HmWZzVCtuoZ5wjmoQErP7U+ROHb2KDciug71qN15jNV/JacWvAVWo/0+Wo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791396458; c=relaxed/simple;
-	bh=L7Qw7BUJ1VimfFbY8Sn93Ko7KHTCveBYAFOoFIF3XJc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jpSML7viu9zHKCalIbU/hhWd7ExSsskBnMA7ICaJtCOKYimKcBWYUj2mmZWGbS7jcT7U9ykH3stJiWLcPOjhohHcTmL7X7fP9ZAr0v/8CDtz8FbHh3uSDYSPgXSP/dGpf3G7tK2xhJK/mJ5J85nq2wsFzm0piJdkeANOzy3zycw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Z81olt6W; arc=pass smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8D34DAFA2
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 18:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791396791; cv=none; b=XXDXks/FIUyGtNxn95M8XK3CTW+huuuq+pO+UlEtdnYIoQlOlbJOKHm77+DOdNMzpWgDp9YYIQgOrw5UB7aZmfh+B9XhYTPTZZ0NEoDgyDhpgk4XgdbcnaSPnmrXsnQ0UdHm0jNkPxahok+Vu6CluNMsCCLxyb633ieL1cxL/+A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791396791; c=relaxed/simple;
+	bh=x/T2DqdlBD5F/UfxU/ovY6/23a6DBA3cvr6xy3855h0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NisUNY4ZnB4m7k5gmTq7aIlX0LX/sONAi50chdZqKqRT4FxnsWULFHl+pmrF4RSVbTg95BwtGz7KGD4Ndfr5oRPY9nDp7NkpGcD9oVyUC09UKqt9T5i1z9Nc0qoFoGnI6iTEzSHnE3V5bNuWQCGLojkwKmqdjI7ezlOUIaLXlhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g4F31zQ2; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Z81olt6W"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-487048857f6so1794090f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2026 11:07:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791396455; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jMKouY63/QLRbeEcym7vp/bmJ0V5rkg5Ea5wz/tM8XRgyf4CT8/ZU4QKz5kKT9vypZ
-         FrHsZDcT9nql+5BhdNHLESxy3HmuamMoIGCI0oV3jogGoSQDvs5ZqM9HQ705g16jYrHT
-         TJzTN32lviOYk4XF20g1ob8fXNU1jyvFl1hR38sJswWYwJm7FwesoA6Kdn1N3Ogb8HOs
-         Qx/SnlDGH655XAhD+mJV/sGPhYN8wtn9047tSnBaDl4Cl18zAY+qNCFuMBwE8QQvFXM2
-         jp9VwSumZ5DotkrgwDa9ITRf43Irk8LuirjaTbuHZPSPzliC4pYnw3abCjVFpTBP8Obe
-         E61A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=L7Qw7BUJ1VimfFbY8Sn93Ko7KHTCveBYAFOoFIF3XJc=;
-        fh=NNW1dJr0aG5W8e0c7P7CLSbZ7FIX8+TadKaqeR95XAU=;
-        b=kZZa1U85QmVuDSx3pi1QvKvbZccYJXobGCuKvP1gMk87Tf5BVnGTVWHxzL7wuFiFxZ
-         GAkKQFH3T3PAVtjDKxeQFNvfZ9vl5xtOT2c66X+oZoi1Yi7TFd+nYMoSH0vTVAil4fT1
-         uWpXJol3UtGK9NyIE4MPfFgOhSZtTx0tNYoXSQHJKdt9WjoOxFeStjeXBfKm2RIM4Clw
-         wB0JxLBwGQqO+A/CiwF2RUGYvJP8y40PbTRZB+vgxptBrFw+6b8v5ELp3GHq2gO6CtXB
-         WZYx7trbokkqfIeEpVc/GINvDxP8zYdFvX7vEtxfgzIORG+rE083hT171BNIDl0H2pcl
-         fp3A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g4F31zQ2"
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-3a7754c2471so17157851fa.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2026 11:13:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791396455; x=1792001255; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=L7Qw7BUJ1VimfFbY8Sn93Ko7KHTCveBYAFOoFIF3XJc=;
-        b=Z81olt6WwsaUy4Pj7lM0m9mtwN9m1K10WWJh2uSDI7d3M/a15jhGzsoAfBfXWNkrV+
-         YxcQlSFYA3BBKy7b0PLPuiNFiHaOg85XIRRMdgROnNSty/0rQr/8B0OYpd3jtHSMKrbk
-         oXSdIor6kGoBGm525WPNfhve633f8CaqwhbndXzIYkvEvTDREnHPJvAjOC+Jh1mEZ5mo
-         WNJ8JKWAAqJnIfpOR7/hETxUU83sPSfsHt70kq6AF+XfoW1oHQMovH6zU1FhadJ6zF7Y
-         PL5y+5XC6F1pF1SMsz8RrD41csn+Dg3B+fYbzq7qdCYaaCs4j6/mXi0TGC3NDhKXYibX
-         gMrg==
+        d=gmail.com; s=20251104; t=1791396788; x=1792001588; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=y3ZlJwU7ID9cKcEPq14oLFUHhVFnuy1r4lGgSU64Z7I=;
+        b=g4F31zQ2I25+P/7fmXo1uenCMkIX0zINLUtY1mxbkeNa6CRSyn+dSVo74M3Skpse+a
+         few+HfnqAAQQCqRFWxYHi+7mbDKYlb9xzMwOm5FUrfkcIgaQRQ/qEITHD6RcmFGHo9DQ
+         OhuWeXN8dE32xeRIXdo18PhWGsZ5h82e6t5GoWjjOFcwANwB6oQM2V7Xmuk6s49OVb14
+         BScFT6vJ+GJsfs04jN+/ANnwHEa/S8+balW+Q6xKmoFVjv+BYla/oUBO8gq0aCh9De6c
+         MhKahMxbvhy5plWTmk2s4YnUW7dc+1Pxwwa7rhreIdFfHb2vqWFYMdOprrQc4l3aruwZ
+         cJrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791396455; x=1792001255;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=L7Qw7BUJ1VimfFbY8Sn93Ko7KHTCveBYAFOoFIF3XJc=;
-        b=I5oW7bq4C2Dj5Zeivwoj3fETLgiYcwK6dEAQ1eLCndN8Df0A8nW1rt+6RbePZ/vXmi
-         qTuoBxeLsN+z2hdK8/cI6SZRt6xl3OWu70ZcWIgRp9xOahWIX+5o9JMv0nqG3P9jg4KY
-         57C1lqjeOaHeB5dL8ZcRt1cSQyiUhuI1yCV7pstXreygqwNZKIp6KdYUQB4DVGJWdZTs
-         nBLTkcYeZE9zwd/pcQ9O6IzI9m2th0pwVVU0MJLnOz4iCZ6cSwLMrc35Yv6Fly4i0YT7
-         rTm7NRJUVluXzDuItBa3b+4+86KHoxg1EvNLr4LpgCtVGUScpDM+077J6MkhifEV2ccS
-         Yv2g==
-X-Forwarded-Encrypted: i=1; AKwUvBzQvqPil37t1OW1/QLasRyZ7Zv+53bLQ6l/Adg1hykAMBokMUx1GvTdx+w1F+stXv9mkhFQjyAew8/FueHIuAY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKh0WQaNdY1lPFT44cvipEHIH+kfcyAwNzJyzprAVklOefli/lR
-	+PqYNt+TqnIjGMkqqfmJQr3B7UXPFRqXsfoT/duWhAINWCN5DvOPc/WNPlbsvTMa2IOyxtKwpv7
-	A1yjboB1QVvk6n0rDq9LU6Rcb4c1Bz7UBWfwc+Q1MK7vblTW5BVv4Iwjx1A==
-X-Gm-Gg: AYBFou1X2FCU/GYbE4aDmnUc+Mh+z8Sh9S6Ea9OjcuNAxD3mKW6luJTeR+w8Z6SUdRE
-	KF1eZHsWz6fiyshl6KGTeGocAuCaSJGwSNf2O4sNLV3VQEKGzPolQFDQLSI1wRtui7tRQt//aA0
-	hzZ/uLBBeyEiNaMPcDuaTs+nc8BllELWWHRv8QTLnoWbCTIxMjP0LmbBJck0yYkfKRbyAIK3PBX
-	2HThvoycZ32+1yzM0eITv1p1lziaf77ok9eChhitr68wP4zrtKlufuJL9Y8WvIrye7XJFlDx0A9
-	nzIQg1bpoW/xBxUVFz6zE239T7U/Y2DFfDeUDnAGqKTBrh+hxIyWKtnO2JETGHb2BPRHlz31zRQ
-	pigUNx2/sJWIhCgX2al/IGmI133ZnlwF4yyd0YYuFvgOa/kEQpC5TLg==
-X-Received: by 2002:a05:6000:4552:b0:48b:68:592e with SMTP id
- ffacd0b85a97d-48c726ed2femr4094458f8f.4.1791396454825; Wed, 07 Oct 2026
- 11:07:34 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791396788; x=1792001588;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=y3ZlJwU7ID9cKcEPq14oLFUHhVFnuy1r4lGgSU64Z7I=;
+        b=d+QUzzisZobcxcQy2jIk2tztSXBfiSqBIZNEFEOjfEcKS0/YohLJuzi0CuBAEfre/k
+         XVo+mDpE7lBQg4AwvyxZ6rYo7YXJilCSRyeacdQixFukM7/hor8le/gDC0QPDd1CcOhX
+         imXcw2OU/pxh3YUB5f0nENmBxk5ebWgBHLC/A70b0oEc7jcO9L9Pf3rQVVU2dNIt9GzV
+         DHDFy7t+VB7CZpV9LW5XV4tVqup7iP75SWd9wXf2x3Grrea8JUt74tprAfC+2++lY9DW
+         a6g1Lm2LHpTI4aME/ytsZ9DSm3KqKM+yzHb3RZ83/m6ZONGF++kQsBpCq5DENf74tpXr
+         tvOg==
+X-Forwarded-Encrypted: i=1; AKwUvBx1Tf9QTjlGeO3MmiWGc20MeG9hBhmFWjEn9BFcsp0fGVRKJwyOMfltiwo6Kqex4ie8jhvTETKfQjllajdGdRc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLAu05zyk7/Gdd670Zicd8ISHl8svejIEtKCEvV4pCA8lWCb92/
+	LQjYuVtn5SKWr+XqG51mrFENnBuuS3rLvKSm+8UFgjv6fNJlnW++X0TG
+X-Gm-Gg: AYBFou2haS65afRUuJTbE3aTVU6j8/74f7wnSuNHQ+v7Bp2WCsJHlXajH7G7ou1OGaM
+	T8FquGopTKaapZQvrluz7g4eHF9ApT3cnLNkbd14p5szOB07D2/1CqPkzv5kVKCJviLhYcGX2gO
+	3l3HwZz7vyZ0PhJ2x+xgR0aRNHrXepXzAfMRGZBcOKzWdIcrakcHs6JCvOjCCSuMCRSqL++57ta
+	hbBl0NyY7tsWovgLQayK4bewzvChY/RIlaVJ4+S/0bMZ2gwLo74SzAwlytGG94/fG1v98hXKkPd
+	1n0a08jkASdVlzl7vXntgJoMz4tVPcWfTvfwo0J9CUTcIq3vxtsl9PUck6CB/mfWh1ewwnoakw5
+	KUDmRLlu5osYlZa1HjBlFnTMKybkpw5VgAzAq73LhmbhVe9Z8yY7cGoNUAKvtKUT9eua8V/Y2LE
+	w2GToNwtC+EVxVzn2P0QLR6j9+ccBrNAlxcelEyi5sqnmxzTfcmsmVeDdI1rTudBbRj98NBVaEo
+	iQSn4idRsj30FAOXsAdr4BvWmKJNI6HASXA2I1gPgSTR9URa2Pn
+X-Received: by 2002:a05:651c:3134:b0:3a6:66ee:1179 with SMTP id 38308e7fff4ca-3a9a2cd18a0mr8684231fa.27.1791396788031;
+        Wed, 07 Oct 2026 11:13:08 -0700 (PDT)
+Received: from localhost.localdomain (95-24-167-79.broadband.corbina.ru. [95.24.167.79])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3a9a1d59661sm9000041fa.18.2026.10.07.11.13.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Oct 2026 11:13:06 -0700 (PDT)
+From: Maxim Skokov <skokovmaksimevg@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	vadim.fedorenko@linux.dev,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Maxim Skokov <skokovmaksimevg@gmail.com>
+Subject: [PATCH bpf 0/2] bpf: test_run: Fix false -EBADMSG with BPF_F_TEST_SKB_CHECKSUM_COMPLETE
+Date: Wed,  7 Oct 2026 21:12:40 +0300
+Message-ID: <20261007181249.352831-1-skokovmaksimevg@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261007111611.2086-1-syauqicode@gmail.com>
-In-Reply-To: <20261007111611.2086-1-syauqicode@gmail.com>
-From: John Stultz <jstultz@google.com>
-Date: Wed, 7 Oct 2026 20:07:23 +0200
-X-Gm-Features: AclHuK83fJ3voPI9vV8BU4O6NHyfYbWWNtcgnngue0EPEkR2NkI5EqrFbTxaoe0
-Message-ID: <CANDhNCq4G5VwNDBj5ZbZpWCQwmmgUTgBrMYdHPbK=s3NqKNLnA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: timers: skip raw_skew when adjtimex fails
-To: Daniel Syauqi <syauqicode@gmail.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, Shuah Khan <shuah@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	Miroslav Lichvar <mlichvar@redhat.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 7, 2026 at 1:16=E2=80=AFPM Daniel Syauqi <syauqicode@gmail.com>=
- wrote:
->
-> raw_skew reads frequency and offset data from adjtimex() without checking
-> whether either query succeeded. If a sandbox blocks the syscall, the
-> test can use uninitialized data and wait two minutes before producing a
-> misleading result.
->
-> Skip on either failure and report the syscall error. Preserve errno
-> across the newline printed after the second query.
->
-> Fixes: 51f91cbdf545 ("selftests/timers: Add clock skew estimation test fr=
-om timetest suite")
-> Assisted-by: LLM Codex
-> Signed-off-by: Daniel Syauqi <syauqicode@gmail.com>
+BPF_PROG_TEST_RUN with BPF_F_TEST_SKB_CHECKSUM_COMPLETE returns -EBADMSG
+for correct tc programs that call bpf_skb_change_tail(). The helper
+moves the skb to CHECKSUM_NONE and leaves skb->csum stale, but the
+post-run check added by commit a3cfe84cca28 ("bpf: Add CHECKSUM_COMPLETE
+to bpf test progs") still compares against it.
 
-Looks reasonable to me.
-Acked-by: John Stultz <jstultz@google.com>
+Patch 1 only does the check while the skb is still CHECKSUM_COMPLETE.
+Patch 2 adds selftests for a trim, a grow followed by a write, and a
+negative case that keeps the skb CHECKSUM_COMPLETE with a stale
+skb->csum.
+
+Tested in a VM on bpf, with two kernels that differ only by patch 1
+(subtest results):
+
+                           without patch 1    with patch 1
+  change_tail_trim         FAIL (-EBADMSG)    OK
+  change_tail_grow_write   FAIL (-EBADMSG)    OK
+  store_no_recompute       OK                 OK
+  test_skb_pkt_end         OK                 OK
+
+Maxim Skokov (2):
+  bpf: test_run: Fix false -EBADMSG after skb leaves CHECKSUM_COMPLETE
+  selftests/bpf: Cover test_run csum validation after
+    bpf_skb_change_tail()
+
+ net/bpf/test_run.c                            |  7 ++-
+ .../bpf/prog_tests/skb_csum_complete.c        | 39 ++++++++++++++++
+ .../selftests/bpf/progs/skb_csum_complete.c   | 44 +++++++++++++++++++
+ 3 files changed, 89 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/skb_csum_complete.c
+ create mode 100644 tools/testing/selftests/bpf/progs/skb_csum_complete.c
+
+
+base-commit: ff47652a4b66c067c765a7ad464d930b5a9367cc
+-- 
+2.47.3
+
