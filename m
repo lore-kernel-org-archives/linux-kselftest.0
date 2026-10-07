@@ -1,72 +1,98 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BA239D3FD
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 11:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668B7466B08
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 11:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791373729; cv=none; b=gp2K+MylkpBPpUbDlG2Lg/dt2XiLrb3L3ErNHXSemHPnnHVayrRXhydRKpLJlUjowCfQNewueMHifHBrny2MJzHowR4ZBhS3prIbgpgmoLbzfuK8BWifLH0YFsv2o0oYUfekyDXRY8khTnVzGqNoqdOEguo7zYLQeKe4WI/dBJc=
+	t=1791374321; cv=none; b=OVVyjNCx8vBYf9kzlsjO9vKx1nCQaGZYpSCqia83ojgiUmGgo4+mxiXOTRe7GisPVpdZka6n6hS3hEBmnrLZ34pYTWU+dcuKZNTsjVBtsDmavl3cjaU7bo8fHxLxIwBBC0QaJYSVXdLEbHEIJ2BohIlxpA6psfORuqEdsslvpcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791373729; c=relaxed/simple;
-	bh=gIaTyk5W0brwPCMp283WK+OpliUHp2YXuHMsiDXA1dw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TuQ5GmGJbYajLsHszqA46NJijp7153tdReABxlhJoYaR5YJcN7LyCWHObALr0T8Ymmyvnz+aqX1UCSfDc09yQd8vw17J/TGr60lqDO2M6fkWMn0EU0YoNS/2oZZHJl8oqWdyET1dfX/vVQFChsMCjRL5UxWvidiosYi/cMx5EH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U7l+Zla/; arc=none smtp.client-ip=209.85.210.174
+	s=arc-20240116; t=1791374321; c=relaxed/simple;
+	bh=1QxYc7EDHNuG4nVpYQSE/XwKYhWItsefX+0U1GWt1t0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WqRLDPCaGil0PC/Gc7sA4A3BYoWaFUXd0eOeJkVjgj3WmWvo3/X6Bx+yeg+J06YOehXKJ8P66zxwgxWegEpIWaH2iy34K2E3yF0kujuXOqyDsvsJflCRHKkaWFpbCMKlx5+4TubEJlWxNQjyTWfplms3QPa/x1Z/rIEwvKxCivc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jTRASdET; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U7l+Zla/"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-886e61fa30fso728863b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2026 04:48:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jTRASdET"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3a80e169311so1335745a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2026 04:58:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791373717; x=1791978517; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791374312; x=1791979112; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sWMIGXFkPMPmBZIlItDDaoveYneHjrBFtGWysWCizdk=;
-        b=U7l+Zla/CkFegdajnteKQ0W4OsIAIStkFnTTQDpCia/ohxlppXgoQjbmhDSTF+xoYq
-         lf6MRl3B6ZGSboNEgxbBNiFTyeRpMIj7LQtawSaQ0vasxlzvM/gD2zyem7aQrEj2xlBZ
-         aX+87HD1mtJTqSUE5zC4iGiuGOkIityyq7pZwr49E/z+xz1qFqHHG0PULhlhBWypFBKD
-         vFxlvCuQyGn9ydGMR/GVNP0cqXLOrQgFwVB1Z7On7XWGO4VNDUM3gWv29J4zZs9f1yUX
-         jE3U1w56cSCVgTntefARj8OPwW6QSAhhlVfuvih9Z0ODFB2Rvoi7syuO8X5G9/Gd6ox1
-         8OmA==
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mfZX49TMx4xg+lBfGFXkga09/sEL5fzSy7qIyNAFXaM=;
+        b=jTRASdETGYrYAyXHMFtukoGW8V7FFznYjaGX5NTopcvA5xbiNmoar+Ii91gBSi2XkM
+         7cDqcZNTHCEXrQSMOCF/paxyngsPwLUT9EsNSu6LQr0wrbTRnOcxeqV3Nn0E8A5Pj8E6
+         dLt5fZWbwoBcGlZhaQzxaxzGTb5SRbiojkP64ROVpTm0pneFYtTDEnEOddpItSx9W4G6
+         6ryw3AxPlUnVjhQM0Dn8iblrN0RKx6UNKEoTrlvCmEVYWT9+Ym+lDwODN3Mbc7GDGXtB
+         1dsur9cluA8yGW2Q+Tsx/IHU9GYu5g1CZLtGykB+r3+eaCsHkdDojaxybCzZtXbJXPef
+         HLBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791373717; x=1791978517;
+        d=1e100.net; s=20260707; t=1791374312; x=1791979112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=sWMIGXFkPMPmBZIlItDDaoveYneHjrBFtGWysWCizdk=;
-        b=lxcUxF+TNn+oCa/t6WaVy2SXxlXUMxHqRJPTKTwjGGhaph4r+GC/gPrSmCm8z/fV0c
-         qle4sK/2tdio+2iYhKui8Qvgxb3lrbrbgnnmr3SHYbW2TccZavRk6KiAvaMacSfmLIqI
-         ece7vI2lSxm43mIQjzhgIAowyJRMk9XcfSVs3J016w1/H9PbfcOlmGJ00fUXYXaEqMT/
-         BXgqJRMIucvIfDLZCgVFNH++3g6GKTij1q1xVRW77wgPPnaqjIQTu3AlQH1/BH2kBMtH
-         k+uSAcfdQkjhLOc47HJCFbNbs6+T3KEfddY9/4eMw1qf4SaEjHXqhiz3sleBRaPmJY6E
-         M88A==
-X-Forwarded-Encrypted: i=1; AKwUvBzkPxFRAUJKIskVFlW1pxgOu0RgvJLtb4mNKI4oF/IR90YueYY+nwi2nfOW7Id4PoAUy7S23P4DTgwgUd3witY=@vger.kernel.org
-X-Gm-Message-State: AFuF++m3DZIr+3RKRg9sDUiAdHsQUvbTp5dtlHry+A+VfD0wrxXWTdYm
-	yUxy+QmbcV4pNe3JgvW0aAEACa6mRYgx1enh4mbNjAGqVsGT3HgPRh5t
-X-Gm-Gg: AYBFou1Q+oYtM2sXlwG+hF+bNtDTSwlmhw7P9mNOyXkZo3KiCEVLuHnneDJu2PPx1TM
-	kW7NKOhaTQXBnuSvS7Tj9QW+kzGraxI2gYnRgbF3biIzYayNw7N1rCUzRd2S+V6/a5vhFNLZXmT
-	ntnbTEkwLciB9HhGeE94HrfOGVHkfhhvZ8fkD3xJ2OqOYpkOzfblg2r5HIjSl8D+joCcp4S2yh4
-	d63yFU7JGLmC4TfG+ZK2yn5oc1ZIJQ6h+pVeMJx5p3Jj6+trsp+FE4srOb157Qh/ntEY8Ud41EH
-	bFMMWw4yjTXQhHv5lNHLJLtANjPWiDIOZ5T/lxYaqw4eiAmuNdfGfDQQ8+J0zfZVnTiG+jSg3w2
-	Z2+8rMQglsT4yy5u0a2HZYVv7aDDY6oGkf5pQ/he0CXW5+BmKiLJaedYuJMhkJhXKCKunGxmoH7
-	eIhfLrX3JD/CLQXlCjZENnSWTGZW52z+3WMK3824Rkge0MLPrCyd/vTuy0vbnF8F84fIhHK1CGV
-	rZ+q7w1MxzAepC1V+/JUrB32ow=
-X-Received: by 2002:a05:6a00:9504:b0:881:ac65:715e with SMTP id d2e1a72fcca58-891b5bcd274mr1520415b3a.58.1791373717127;
-        Wed, 07 Oct 2026 04:48:37 -0700 (PDT)
-Received: from obadmin-Precision-3680.atlascopco.group ([167.103.3.1])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89188ff2376sm1192645b3a.25.2026.10.07.04.48.34
+        bh=mfZX49TMx4xg+lBfGFXkga09/sEL5fzSy7qIyNAFXaM=;
+        b=S1eVQmnd9DCeGDlxdROt8CBUA5hxbMJW+fDGZaoORbtgkW2sz80+j5xJTkHwKFvCnI
+         RGp4j6azQMjLDIsoGev0OrESh4Ozz0Px8rMi/CCFqgqS0aqIBoNvtdMEzXE+f0vyx+1w
+         dGuuHERU9uAA/fRLBU3xXxZZt/muKoZ1g4odQzL85crTBQHRklfGHbFGZ7zqlUiZU7Qa
+         BuuNP0pLzf2/SIGBdwRR/VJy6ZQKnDlHY37E4AdNiCpua251UYsD1nMAwIvsUcy8tTF9
+         OuS7KmBL35+RGjwaqif9ukhO2pI6KskhtNwsKvN3r1T3qOhii2kBGG/PlvsGt/awAjtM
+         URVg==
+X-Forwarded-Encrypted: i=1; AKwUvByTs+KrlZ7mTn0Sw9BKHF8FgVl5KBEszXOfYX3J1ZhhGuZr52BZ6n45gxmN6Aja2PEA4/Axf48FTRStaqbYX44=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI3ikHpBAeVijQWfHHdP3U8Uyk0kCtIZiN6I0+38JOL1+YjXYEc
+	KloHqY4zuCufsJHuME32y0cUd7RiOtEc90rBYdHoD3s4YcqAtjl2s9XjS9sh28qx
+X-Gm-Gg: AYBFou2bebLpKKg4NEunwFu3suLTeqji1P7D1OWZHFJjlrRLQWluaL8DUU+mA368wrh
+	V9fTLZhZTl7r8xlczc4nA5ce5mEg5fEUQTWJvEcj36zcrUrGdrbzPUywZI9DnWfn3ombq8RKLNj
+	pi2QLpkqrNWkLiN32s3Kr1/MW0vTRcepUDBGk+GmgmhRaMe8eLULFQVbwTc6zJizxI5zbbGWWed
+	uSmTDR51tLAtR6XL/TMbzJI7SL/ZYa/4i3ol+BAPhLX/5BPlPnpDGkxP9c93rZTPbAQeE6vfdi0
+	P73f1dYBuOev1mEpI//FUMgG9ZjOPpKPpXFoDhHRTFh9yfkoa/9xWI+rQZXDDIAAGz6nMTjlhe4
+	KYNrA85MNQYSYq2Wx6CYeKlyrO2seKXb9t7sCZfPvATevHsoGC7scWq9Gg9nO7FPa12qmRQjbZI
+	cC4R5gVPc79SVlPkKoTb0KpC+kFXa6qrNCWLidGeiKH9hFotVitNJeMFLqQEN+aWpaR0I2QFWmq
+	cw8TClFTGA7bZA38eUxOOuw+DVBqRhbYEm9bfMoYEV4CKyp8mBTlX/RR75cCNViyFnzQ8Ot7V/Z
+	JJWtJ2m2AG4=
+X-Received: by 2002:a17:90b:3143:b0:3a8:6e99:8044 with SMTP id 98e67ed59e1d1-3a89e8e2f3fmr1586403a91.0.1791374312103;
+        Wed, 07 Oct 2026 04:58:32 -0700 (PDT)
+Received: from m-upc-A520M-HDV.lan (oki-109-236-14-10.jptransit.net. [109.236.14.10])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a8987b09e2sm4456582a91.2.2026.10.07.04.58.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2026 04:48:36 -0700 (PDT)
-From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
-To: Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Wed, 07 Oct 2026 04:58:31 -0700 (PDT)
+Sender: Yuyang Huang <uyoko90@gmail.com>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: Ajay Singh <ajay.kathat@microchip.com>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Kees Cook <kees@kernel.org>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+	Nikolaos Gkarlis <nickgarlis@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf.kernel@gmail.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Sahaj Chaudhari <sahaj123.sc@gmail.com>
-Subject: [PATCH] selftests: pid_namespace: test fork with dead ancestor
-Date: Wed,  7 Oct 2026 17:19:14 +0530
-Message-ID: <20261007114914.1668934-1-sahaj123.sc@gmail.com>
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH net-next v10 0/6] rtnetlink: dump link-layer multicast addresses
+Date: Wed,  7 Oct 2026 20:58:15 +0900
+Message-ID: <20261007115821.11332-1-sigefriedhyy@gmail.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -76,224 +102,109 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a regression test for fork() into a PID namespace whose parent
-namespace has lost its init process. Since the kernel cannot assign the
-new process a PID in that dead ancestor, fork() must fail with ENOMEM.
+"ip maddr show" prints link-layer, IPv4 and IPv6 entries. The IPv4 and
+IPv6 ones come over netlink today, with IFA_MC_USERS for the user count.
+The link-layer list, dev->mc, is only exported via /proc/net/dev_mcast,
+so iproute2 and other users still parse procfs for it.
 
-Create the nested PID namespaces, keep the child namespace handle open
-after its init process exits, then enter it and verify fork() fails.
+This series adds the AF_PACKET family to RTM_GETMULTICAST so that the
+link-layer multicast addresses are reported the same way. Patch 4 dumps
+dev->mc in the ifaddrmsg format of the IPv4 and IPv6 dumps: IFA_MULTICAST
+carries the address, IFA_MC_USERS the reference count and a new
+IFA_F_GLOBAL flag marks entries added explicitly, the "static" column of
+/proc/net/dev_mcast. ifa_index limits the dump to one device and
+IFA_TARGET_NETNSID selects another netns. Patches 2 and 3 add a
+generation counter for dev->mc changes so a multi-part dump reports
+NLM_F_DUMP_INTR like the IPv4 and IPv6 ones. Patches 1 and 5 update the
+rt-addr spec and patch 6 adds a selftest.
 
-Register the test with the PID namespace selftests and ignore its
-generated binary. Skip when namespace operations are denied or procfs
-cannot provide the pid_for_children handle.
+AF_PACKET dumps returned -EOPNOTSUPP before, so iproute2 can keep the
+procfs fallback for older kernels. The iproute2 side is ready and will
+be posted once this is in.
 
-Signed-off-by: Sahaj Chaudhari <sahaj123.sc@gmail.com>
----
- .../selftests/pid_namespace/.gitignore        |   1 +
- .../testing/selftests/pid_namespace/Makefile  |   2 +-
- .../pid_namespace/pidns_dead_ancestor.c       | 174 ++++++++++++++++++
- 3 files changed, 176 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/pid_namespace/pidns_dead_ancestor.c
+Changes in v10:
+- Rename the list owner to mc_dev and set it for dev->mc only
+- Sample cb->seq once after the walk and check it once per round,
+  like rtnl_dump_ifinfo()
+- Read the count through netdev_hw_addr_list_count() in the helpers
+  file, note the init exception in the _count comment
+- Fix the FDB remark in the dump message, bridge and macvlan use the
+  default FDB dump
+- Say in the spec doc that AF_INET and AF_INET6 honour target-netnsid
+  with NETLINK_GET_STRICT_CHK only
+- Drop the Reviewed-by tags of patches 3 and 4 after the rework
 
-diff --git a/tools/testing/selftests/pid_namespace/.gitignore b/tools/testing/selftests/pid_namespace/.gitignore
-index c647c6eb33672..b87295802a73c 100644
---- a/tools/testing/selftests/pid_namespace/.gitignore
-+++ b/tools/testing/selftests/pid_namespace/.gitignore
-@@ -1,3 +1,4 @@
- pid_max
-+pidns_dead_ancestor
- pidns_init_via_setns
- regression_enomem
-diff --git a/tools/testing/selftests/pid_namespace/Makefile b/tools/testing/selftests/pid_namespace/Makefile
-index b01a924ac04bd..3199e6bebbdd8 100644
---- a/tools/testing/selftests/pid_namespace/Makefile
-+++ b/tools/testing/selftests/pid_namespace/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += -g $(KHDR_INCLUDES)
- 
--TEST_GEN_PROGS = regression_enomem pid_max pidns_init_via_setns
-+TEST_GEN_PROGS = regression_enomem pid_max pidns_dead_ancestor pidns_init_via_setns
- 
- LOCAL_HDRS += $(selfdir)/pidfd/pidfd.h
- 
-diff --git a/tools/testing/selftests/pid_namespace/pidns_dead_ancestor.c b/tools/testing/selftests/pid_namespace/pidns_dead_ancestor.c
-new file mode 100644
-index 0000000000000..7524d4975ec75
---- /dev/null
-+++ b/tools/testing/selftests/pid_namespace/pidns_dead_ancestor.c
-@@ -0,0 +1,174 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <sys/mman.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include "kselftest_harness.h"
-+
-+#define STACK_SIZE (1024 * 1024)
-+
-+struct pidns_init_args {
-+	int ready_read;
-+	int ready_write;
-+	int release_read;
-+	int release_write;
-+};
-+
-+static int pidns_init(void *data)
-+{
-+	struct pidns_init_args *args = data;
-+	char release;
-+	int error = 0;
-+
-+	close(args->ready_read);
-+	close(args->release_write);
-+	if (unshare(CLONE_NEWPID))
-+		error = errno;
-+	if (write(args->ready_write, &error, sizeof(error)) != sizeof(error))
-+		return 1;
-+	close(args->ready_write);
-+	if (error)
-+		return 0;
-+	if (read(args->release_read, &release, sizeof(release)) != sizeof(release))
-+		return 1;
-+	close(args->release_read);
-+	return 0;
-+}
-+
-+static int create_unborn_pidns(void)
-+{
-+	struct pidns_init_args args;
-+	char path[64], release = 0;
-+	void *stack;
-+	pid_t child;
-+	int ready[2], release_pipe[2], error, status, nsfd = -1;
-+	ssize_t n;
-+
-+	if (pipe(ready))
-+		return -1;
-+	if (pipe(release_pipe)) {
-+		error = errno;
-+		close(ready[0]);
-+		close(ready[1]);
-+		errno = error;
-+		return -1;
-+	}
-+
-+	stack = mmap(NULL, STACK_SIZE, PROT_READ | PROT_WRITE,
-+		     MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
-+	if (stack == MAP_FAILED) {
-+		error = errno;
-+		close(ready[0]);
-+		close(ready[1]);
-+		close(release_pipe[0]);
-+		close(release_pipe[1]);
-+		errno = error;
-+		return -1;
-+	}
-+
-+	args = (struct pidns_init_args) {
-+		.ready_read = ready[0],
-+		.ready_write = ready[1],
-+		.release_read = release_pipe[0],
-+		.release_write = release_pipe[1],
-+	};
-+	child = clone(pidns_init, stack + STACK_SIZE, CLONE_NEWPID | SIGCHLD,
-+		      &args);
-+	if (child < 0)
-+		goto err_munmap;
-+
-+	close(ready[1]);
-+	close(release_pipe[0]);
-+	n = read(ready[0], &error, sizeof(error));
-+	if (n != sizeof(error)) {
-+		error = n < 0 ? errno : EIO;
-+		goto release_child;
-+	}
-+	if (error)
-+		goto release_child;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/ns/pid_for_children", child);
-+	nsfd = open(path, O_RDONLY | O_CLOEXEC);
-+	if (nsfd < 0) {
-+		error = errno;
-+		goto release_child;
-+	}
-+
-+release_child:
-+	write(release_pipe[1], &release, sizeof(release));
-+	close(release_pipe[1]);
-+	close(ready[0]);
-+	if (waitpid(child, &status, 0) != child || !WIFEXITED(status) ||
-+	    WEXITSTATUS(status)) {
-+		if (!error)
-+			error = ECHILD;
-+		if (nsfd >= 0)
-+			close(nsfd);
-+		nsfd = -1;
-+	}
-+	munmap(stack, STACK_SIZE);
-+	if (error) {
-+		errno = error;
-+		return -1;
-+	}
-+	return nsfd;
-+
-+err_munmap:
-+	error = errno;
-+	munmap(stack, STACK_SIZE);
-+	close(ready[0]);
-+	close(ready[1]);
-+	close(release_pipe[0]);
-+	close(release_pipe[1]);
-+	errno = error;
-+	return -1;
-+}
-+
-+TEST(pidns_dead_ancestor_rejects_fork)
-+{
-+	int original_fd, target_fd, fork_errno, ret;
-+	pid_t child;
-+
-+	target_fd = create_unborn_pidns();
-+	if (target_fd < 0) {
-+		if (errno == ENOENT)
-+			SKIP(return, "PID namespace handle unavailable through procfs\n");
-+		if (errno == EPERM || errno == EACCES || errno == EINVAL)
-+			SKIP(return, "PID namespace creation requires privileges\n");
-+		ASSERT_GE(target_fd, 0);
-+	}
-+
-+	original_fd = open("/proc/self/ns/pid_for_children", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(original_fd, 0);
-+	ret = setns(target_fd, CLONE_NEWPID);
-+	if (ret) {
-+		if (errno == EPERM || errno == EACCES)
-+			SKIP(return, "setns into PID namespace requires privileges\n");
-+	}
-+	ASSERT_EQ(0, ret);
-+
-+	child = fork();
-+	fork_errno = errno;
-+	if (child == 0)
-+		_exit(0);
-+
-+	if (child > 0)
-+		ASSERT_EQ(child, waitpid(child, NULL, 0));
-+	ret = setns(original_fd, CLONE_NEWPID);
-+	close(original_fd);
-+	close(target_fd);
-+	ASSERT_EQ(0, ret);
-+
-+	ASSERT_EQ(-1, child);
-+	ASSERT_EQ(ENOMEM, fork_errno);
-+}
-+
-+TEST_HARNESS_MAIN
+Changes in v9:
+- Change the count of a netdev_hw_addr_list through helpers only and
+  rename it to _count, as its own patch
+- Use the count helpers in __hw_addr_splice() too
+- Note in the spec doc that the header checks are unconditional for
+  AF_PACKET only
+
+Changes in v8:
+- Set the owner of every list a device has, not only dev->mc, and
+  check for dev->mc in one place when bumping the counter
+- Add __hw_addr_count_inc/dec/reset() so a change of list->count and
+  the counter bump stay together
+
+Changes in v7:
+- Add a per netns generation counter bumped on dev->mc changes and fold
+  it into cb->seq, dev_base_seq alone did not cover the dumped entries
+- Sample cb->seq under the address lock of each device and again when a
+  dump round ends, so the NLMSG_DONE check sees a change too
+
+Changes in v6:
+- Move the dump to net/core/dev_addr_lists.c next to the dev->mc
+  helpers
+- Stamp cb->seq from dev_base_seq and check dump consistency
+- Let an unexpected dump error propagate instead of skipping
+- Check for an address only present in the peer netns in the
+  target-netnsid selftest, the peer and local ifindex can be equal
+- Document the ifa-index filter and the zero header fields in the spec
+
+Changes in v5:
+- Filter the target-netnsid selftest dump by ifa-index, a new netns
+  also contains the fallback tunnel devices
+
+Changes in v4:
+- Reset the resume offset when the device the dump stopped at is gone
+- Use a tracked netns reference (put_net_track)
+- Say ifa-family must be set in the spec doc, drop the AF_UNSPEC remark
+- Close the netlink socket and guard the checks in the selftest
+- Drop the Fixes tag
+
+Changes in v3:
+- Report the static bit as a new IFA_F_GLOBAL flag in IFA_FLAGS
+  instead of IFA_F_PERMANENT
+- Support IFA_TARGET_NETNSID and test it
+- Describe global_use accurately, it is also set by dev_mc_add_excl()
+- Fix the target-netnsid type in the rt-addr spec, as its own patch
+
+Changes in v2:
+- Always validate the request header, not only with strict checking
+- Use a single "with" statement in the selftest (ruff)
+
+Yuyang Huang (6):
+  netlink: specs: rt-addr: fix the type of target-netnsid
+  net: change netdev_hw_addr_list count through helpers
+  net: add a generation counter for dev->mc changes
+  net: add AF_PACKET multicast dumps
+  netlink: specs: rt-addr: document AF_PACKET multicast dumps
+  selftests: net: test AF_PACKET multicast dumps
+
+ Documentation/netlink/specs/rt-addr.yaml      |  21 +-
+ .../net/ethernet/cavium/octeon/octeon_mgmt.c  |   4 +-
+ .../net/wireless/microchip/wilc1000/netdev.c  |   8 +-
+ include/linux/netdevice.h                     |  11 +-
+ include/net/net_namespace.h                   |   1 +
+ include/uapi/linux/if_addr.h                  |   1 +
+ net/core/dev_addr_lists.c                     | 245 +++++++++++++++++-
+ net/core/dev_addr_lists_test.c                |  18 +-
+ net/core/rtnetlink.c                          |   2 +
+ net/mac80211/driver-ops.h                     |   2 +-
+ tools/testing/selftests/net/rtnetlink.py      |  73 +++++-
+ 11 files changed, 351 insertions(+), 35 deletions(-)
+
+-- 
+2.43.0
+
