@@ -1,166 +1,142 @@
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A044E411FB1
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 22:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791412250; cv=pass; b=dutYTUr2jnFiOSOkRwbyLLP88b+EaEzaeSB3aGR0vmTDeQ+V+RyGNxaWwTr9CHkAjXxWp+75jmkRVTVy3/9wsrrc8dWkqLY/uCpIeDxCrk+KviAVPJGsGEkh8yjRKKBqRBb5llJ4sj4rR3cYRUzFKNUH7KEG+iuQ9oa4q0Cb8AQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791412250; c=relaxed/simple;
-	bh=Lzrn3mTs/XtnEQyVE60M0pIis479rPYQCw9kscVpK0g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T0Y9xyrO+C4GdfvayIrwYNDXKFCHKqvmApndFpqLychykERNVBOifbJwLcOain5xnoJanVFsRB2LT4suD9rYszZU3k+HsvihfsJSRTlLsr5jvcyv10LdUpW8T6C8+9cZPnddmniV52iFzKfSBQbp+Sb1tJ9lk9GwdxSnTg3Cj1E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XLf+9oiw; arc=pass smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC88F4718F9
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 23:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791414894; cv=none; b=uUo07a4MdjyHOZa31sX/fcdiiffmBJFuJpkgtwOiPB2sU6ftVc5iC1FyGiGU7r+ibJf1QoCnKAlvadf9FZFdZVf5tNhC9aAqRXm5Mp/bNHf9lKCxTMfLhddolaov8lacmY2MYFJo6e+t6yJUHn8X26vcp42HjcNXSSrw8nEsGGE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791414894; c=relaxed/simple;
+	bh=5114g4GwAMLsvBYWWh4v6Uv/o65R2Ivnng+bjyX/hb0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XomFF7ZMCLwK0f1/jRGdaWltuAiKCgmmxo0sKD4J2Y+YJ1F/yiAhyooaZJG+GIXRwfYQcPOdhIoIrzAn9JwWMFq0cqVAHROBPR5NESoLroK7fsJzHYhf0H8f3ZMAlKKe8OLSurszRh6Rbv0D5ut28mMna24n9t8KI5+kO7pqCE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=erHB6NOQ; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XLf+9oiw"
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-4af81963f35so1406121b6e.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2026 15:30:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791412247; cv=none;
-        d=google.com; s=arc-20260327;
-        b=lfpjSRLzKO0ZfhW4QVtSfdmlYk00UZbJmHOVU3kxccz9PMbyTGgMTW7xMi4yAP7ahY
-         XSBg2CZIT9CG++xfhNdSx3soyauZhy/WTJr4IH+NyDfBQIcJmVej781SKEzjOkTljQsY
-         PJWIwe3U6Aeea1NO1xcdkub/mZ7IJSDEOcvZrTkVSo36HbDlRUZH2CfbfwuXGOTlOW7y
-         p61tVo92sO1GibbsgohCxa5BuWe5crOhlUK4DYX582OhljTDeo/h6Fv7R9Z7XQ6P0Wnw
-         QbQstIXfvCtSD72yvGYjO/hwgBLzj6baRaAO5VlQgI8nLE/wG+o8KIUpi1+nODkiwExj
-         BPIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3clTQCTCnnpY8hOc1jAjkF4nhO8A4cLiGYdk2Z3wF6s=;
-        fh=IhaCFz8DjRQuymfQu6K/EyCcyv7Z4s6baOHhsZZaJNM=;
-        b=K/VHP2jlRrZc6AMR2oKedBNHduHJLwDBskb7WttKpf/xmSerToAAitnmQ81/kqqyhJ
-         cdjq3induUbNMCuNsPKN386sv1+SJl+f576gHSg8BzMwZ+2uNnCrbiOGh99hgATjJxGg
-         0k8oCIMqT18YfoPQVth2UpdfieDTE9LJa0Iwz8Mq3Z0tVsd8st5L5aazWCtEj8/VH0IZ
-         ttDcA9o0BOWI14ogjtSsLSh0C27tXaFPsDQMBKVEW87/4YNt47LFNUPj6ioTzRunAO3Q
-         EL0PvLx9prtSTstp8OAjZ2BFDYO8kk5kFRb+N1fje4g7J4FHM8PuinhWVH9ZWlWNfz0t
-         aSfA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="erHB6NOQ"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2dd9ec41bc4so16024645ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2026 16:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791412247; x=1792017047; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3clTQCTCnnpY8hOc1jAjkF4nhO8A4cLiGYdk2Z3wF6s=;
-        b=XLf+9oiwblmiuAOVnOBfF0+S+cYq2AJsaW58B+uuT8R9/oaIaD+5ntKnKpWuBndhrQ
-         FdgYZYbEf4mkvFT8hyXIUfAIMtv7aLHcLTwtzG1+1W2xj08Hu+DnroZQJBHzABCZPrnu
-         Nw0sHdMgUaX0xvJkjLXMaq0cDHr8Q+XBSUgQBA9I2embkKJqsCi33gLvc5vF2r8by8ps
-         4jJouGL6vv0t7/NM64NAS9+trnmvFz7i6hPKKuZf+uhDMUZreN8xanrlRaEDEZzdYQUy
-         qT+5lBxXLMqRk+sy3PegRBUmEf3JpRFOEw4xKRydFu0QKJXpfFrqIkeJAl9Em5765cBd
-         UtRg==
+        d=gmail.com; s=20251104; t=1791414892; x=1792019692; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=3X41AIkS/dsp/EHn6K3Ci0TU6cqt5IO83pSbJ3jRHLw=;
+        b=erHB6NOQpykt8DMOwgHaBmL9deuUGIojBc/sGj9nMCGrSbnrwB98+94vhSUILiy1z7
+         Z56A0isyJoAbVBTAPqAApR0bJF7UP2mLb9/w8gTbBtIcp0EgVqyeYO6bPvU8z0d7Mj4r
+         QmnbotdOUVzQwljOUv3CZlStX0D1KDOyktTtUVEExBxQipVw+s0PqFL97fcUXIkedYdg
+         5a0Q46Jhu0dP1/d+3EQDAmGiHtksGCxn/Bw3Ez73vUhKBc6mBlsU1dw8fUgUPrVlQe1P
+         L9vl/EtfrzWpjnUJB+zXEqrheCSszlvEfo1I1TXua7Bk5aHRbNlVZJDNhpPBYzb29KW7
+         eyEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791412247; x=1792017047;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3clTQCTCnnpY8hOc1jAjkF4nhO8A4cLiGYdk2Z3wF6s=;
-        b=MUQBGE7zyB14drOpoCUvakdPoJjkHuzJQ+BJquShceKCX8UUhBetr1Tfsf2obhYOfc
-         ULX02zuewrwYT7e9Gcc/Otso/taC3aruexnJO+gPABWvsAAoZIzYQ7m36v1Q5X/B2KU8
-         BwapxLPM2+8E8UZFgbrVgsecbyJLUIeYAoeIg7p+/v9rC9T3qT6UzSOdb6wBP1Zjki+0
-         AGROgrJbko0T9cwXIxfeYR0hpwPvBFjrRrJZ/SUT794F9kl5W+jz6ayMHe7BRB+6aVil
-         stQ0DIZPEoZWc3LkKLfRbRQt9/ewNv82ud5VTUnPLhRADT2I5cRYMFUvPAy6QsZSshYr
-         gylA==
-X-Forwarded-Encrypted: i=1; AKwUvBwP7VWaqumCcHul6ZLGwEyyP+PxF96dqxiwA1qzq76UfoBIy9fJXpwWvyydyltLgMv3oAIjXCtAjPKGXfqE1Lw=@vger.kernel.org
-X-Gm-Message-State: AFuF++nznwoJ5TyhnkEht5ioORo4ujSl2Z6u3QG8TKHMfXJAVmhC7mrE
-	3UGGpylgtzDfuCmz3ke3MHpaH3BHOS9unJ/95cEACA7mPGIvB+WrgZaHGkmKl0bu/3NbAh1DOs+
-	rVoDP80/lEmhyo+v0EBLaMW3QckxxnOs=
-X-Gm-Gg: AYBFou35HNF3LfAK7glNHETFHEEuE+L5oNyr6Jv0yFq4+9k6bD044YQEfZsXdajbYQW
-	S1QXkaxl4tjfcKIooPkWkqsNSHy64s/rcyFu1mtZklXz4fr6+cTxlu4bVvrWxxHTidPXucWbL6K
-	WgkrKVReA1CjPuYrkkDgUgwCG9ORlrKfcpSahRQO5IIU4GotHhYli3J5fj4L+gr2l1xRHkM1JKc
-	xOdgIa2gitLfiCAjRVr5KXUW1H9EpwRg4zWiiVm6T7jN+EA0hGh0IpOvJKewev+z/t1viOialIo
-	xt0NODvroJ0giNVH1pZbiF8eRKCCJI1YJrXYxS9ILZFYOrMA2sYSghA=
-X-Received: by 2002:a05:6808:1388:b0:4f5:59e4:a8b with SMTP id
- 5614622812f47-4fc47abd3b1mr3579325b6e.58.1791412247204; Wed, 07 Oct 2026
- 15:30:47 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791414892; x=1792019692;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=3X41AIkS/dsp/EHn6K3Ci0TU6cqt5IO83pSbJ3jRHLw=;
+        b=Ckdlss/nN+gHPNUEwtqYQkFh3n9ZQv90y0QEF9z7TRFFsLs2qNz4vaMHm1/NMCcxSY
+         cO8L7V/G1GzrMLKen7YLwlasnUscQB11NvXjUxY+P8zYLABMvTkaP1LwnpZu1Ciybdtw
+         1J4/XG7OBmyRjkEFYYnAEp57enKdSEy67FA4kGY+aIKy9/beRTGYkumE2mJQF+5iREza
+         2+3bz7TwS36/MnRXfYewreF2fZhKM6b7T1yUa6laLIKUPFXAjXP0JfRt+L68c5ZYCpXe
+         zRDHy6nRgr6+BuqUnDNl0pyVoq74yrEvjKY6GvkmAXJum8rXGV2GtCUAxUhKdSpxITNK
+         Eqeg==
+X-Forwarded-Encrypted: i=1; AKwUvBycIF8ODU94B4AtsbZH1PibYCDmAUIbvi6Gb0GuYdodqa2P8OirbuoHkN1FUwltMiE3HhrLcxtS4XqKjiMje7Y=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKGLWmSaJAEkfzWr8+hFr8qIB5DU7OWBpdcJ16A8p9V4W/qgdu0
+	77t42/7rcNXvP9EJmME3wo4L8qJceHzGcKf2uGtElPBhYJKsCbOxtPKY
+X-Gm-Gg: AYBFou0ts3GjGMlHQ1whwV9aIT7iKb87GTcvmvnYCzfWWdlqeHO46JSwliraQEuon+i
+	tTBd1ZVvhwB5RRtT0Pr+S0R5T08KkOwpYNE8GkFkialdr8tkbp+r285uucjtR49NwfUnku2zyZD
+	BCAXF/pMDxXt0B9363UI5DoxxrVXjzFOEicWdnTXuNmKXnPxW7O/wLQX3jFtN+f+A9kGgIPnm7I
+	GU5PjQYmllXhlsds99WbFerso6mRNwKTZUDR5E0xw/A/jKFcgzAmihKTWvesxV9C/5qoOkAuYE+
+	/McGLPb5tNjP7SD5utKDOAWH5j5ozuUYZI2offurXUFXWmFLz+A5KiFDKVdNIoto2uZbLJe+zHq
+	UbthkKLPMWQqoVr08vBR+sGYipQu8C3LoUrWXT0FzPW5IGI6jGwXPNFnk6WjrGRryZhuhT60/M+
+	sD4NAlQa6Ni++47jj3ihJjUjfO5oC+eRAARC0OJtCr3HV5Stcu276ySunbWkeCcvGQK/i+l8eXH
+	/Jet8pndXNv4hNdXQ==
+X-Received: by 2002:a17:90b:3ec9:b0:3a2:b4bb:91ca with SMTP id 98e67ed59e1d1-3a8a072a99cmr3054120a91.1.1791414892110;
+        Wed, 07 Oct 2026 16:14:52 -0700 (PDT)
+Received: from [192.168.0.160] ([76.135.114.51])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a9ff7ff13esm1356270a91.7.2026.10.07.16.14.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Oct 2026 16:14:51 -0700 (PDT)
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Subject: [PATCH 0/2] fuse: support per-inode open and release suppression
+Date: Wed, 07 Oct 2026 16:14:33 -0700
+Message-Id: <20261007-fuse-per-inode-no-open-v1-0-be5229fe89f5@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261007-a3-arg-trusted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn>
- <20261007-a3-arg-trusted-v4-v4-1-253ef3a1a69a@mails.tsinghua.edu.cn>
-In-Reply-To: <20261007-a3-arg-trusted-v4-v4-1-253ef3a1a69a@mails.tsinghua.edu.cn>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 7 Oct 2026 15:30:34 -0700
-X-Gm-Features: AclHuK-f8-ePnMdo-O27CR238KSTeSYc0f2p8oscdyi9_ZwyWmVUlf-VlzP_ZyY
-Message-ID: <CAMB2axPOBx+AuQ4X=rG9cikfcVaNb1Bd2o1dHKP3RNDn2=ftmg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Enforce trusted BTF ID argument provenance
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Brahmajit Das <listout@listout.xyz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFnSxmoC/x3MMQqFMBBF0a3I1A7EICpu5WORmKdOMwkJXwRx7
+ wbLU9x7U0EWFJqbmzJOKRK1omsbWg+nO1hCNVljh86Ykbd/ASdkFo0BrJFjgnLoDazvnfeToxq
+ njE2ub/xbnucFOvqUbmgAAAA=
+To: Miklos Szeredi <miklos@szeredi.hu>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
+Cc: Robert Byrnes <byrnes@wildpumpkin.net>, fuse-devel@lists.linux.dev, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Stanislav Kinsburskii <skinsburskii@gmail.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791414890; l=2541;
+ i=skinsburskii@gmail.com; s=20260722; h=from:subject:message-id;
+ bh=5114g4GwAMLsvBYWWh4v6Uv/o65R2Ivnng+bjyX/hb0=;
+ b=n05G5uQcf4QRi9Y5MPe2UuJul9ToeFOPrxf6HhNrLuiiBDsT85iYVRHQq4oZwrzVkgMGPWViP
+ KcIj0Mvlx9mAv88eV+oqCwhzN/z4xKkgIo6zas3O5Llrp7e6TX8+vRc
+X-Developer-Key: i=skinsburskii@gmail.com; a=ed25519;
+ pk=bDpriHBYgeTdkIDweZDCemxsU93neJBOCn3YLIuJpnE=
 
-On Wed, Oct 7, 2026 at 9:25=E2=80=AFAM Yiyang Chen
-<chenyy23@mails.tsinghua.edu.cn> wrote:
->
-> A global subprogram parameter tagged __arg_trusted is verified with
-> PTR_TRUSTED, but the common call-site type check accepts bare PTR_TO_BTF_=
-ID
-> and MEM_RCU registers. The callee can consequently pass a pointer with
-> weaker provenance to a kfunc that does not accept RCU-protected pointers.
->
-> RCU protection only guarantees that the object remains allocated through =
-a
-> grace period. It does not guarantee that an object's refcount is nonzero,
-> so an RCU-protected pointer cannot satisfy the trusted-pointer contract.
-> For example, an RCU-protected bpf_cpumask loaded from a map may have a
-> zero refcount. Passing it through __arg_trusted lets the callee pass it
-> to bpf_cpumask_acquire(), whose plain refcount_inc() can retain an object
-> that will be freed after the grace period.
->
-> Make the existing provenance check contract-driven. Mark generated BTF ID
-> kfunc argument types with PTR_TRUSTED, and add MEM_RCU only for KF_RCU
-> kfuncs. Normalize PTR_MAYBE_NULL when the argument contract permits it.
-> Then use the argument flags to require trusted or referenced provenance
-> and allow MEM_RCU only when the contract says so.
->
-> Split is_trusted_reg() so the normalized type is used for type and modifi=
-er
-> checks while reference lookup still uses the original register. Conversio=
-n
-> of scalar-struct BTF ID arguments to fixed-size memory continues to
-> construct a new ARG_PTR_TO_MEM type without PTR_TRUSTED.
->
-> Fixes: e2b3c4ff5d18 ("bpf: add __arg_trusted global func arg tag")
-> Suggested-by: Amery Hung <ameryhung@gmail.com>
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> ---
->  kernel/bpf/verifier.c | 27 ++++++++++++++++++++-------
->  1 file changed, 20 insertions(+), 7 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 353bde9ae2274..a0ab793f041d8 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5327,15 +5327,17 @@ static u32 *reg2btf_ids[__BPF_REG_TYPE_MAX] =3D {
->         [CONST_PTR_TO_MAP] =3D btf_bpf_map_id,
->  };
->
-> -static bool is_trusted_reg(struct bpf_verifier_env *env, const struct bp=
-f_reg_state *reg)
-> +static bool is_trusted_reg_type(struct bpf_verifier_env *env,
-> +                               const struct bpf_reg_state *reg,
-> +                               enum bpf_reg_type type)
+For FUSE filesystems serving immutable data, warm-cache workloads can
+still spend much of their time sending OPEN/OPENDIR and RELEASE/RELEASEDIR
+requests. Data, attributes, lookups and directory entries may already be
+cached, but opening each object still requires a userspace round trip.
 
-You might want to teach your agent that the line limit is 100 columns.
-There are several unnecessary line wrapping.
+The existing connection-wide no-open support cannot distinguish these
+objects from control files that need the server's open and release
+callbacks.
 
-The fix looks good to me. Sashiko=E2=80=99s finding is real but pre-existin=
-g,
-so it does not need to block this patch. If you respin, consider
-fixing it in a separate patch with a PTR_UNTRUSTED | MEM_RCU KF_RCU
-regression test.
+This series adds negotiated per-inode suppression. A server negotiates
+FUSE_PER_INODE_NO_OPEN during INIT and marks eligible inodes with
+FUSE_ATTR_NO_OPEN in their attribute replies. The kernel then handles
+opens locally for those inodes, using a zero file handle and the existing
+no-open cache defaults. Subsequent requests identify the object by nodeid.
 
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
+Release suppression follows how each handle was opened, so changing the
+inode's hint does not create an unmatched release or lose the release of
+a server-opened handle. Atomic O_TRUNC still sends OPEN to the server,
+and CREATE retains its existing open and release lifecycle.
+
+The second patch adds a raw /dev/fuse selftest without requiring libfuse
+support for the new protocol flags. It covers capability negotiation,
+files and directories, LOOKUP and READDIRPLUS attributes, hint changes
+through GETATTR, hint preservation across STATX, atomic truncation and
+CREATE. The cases also run with writeback caching enabled.
+
+Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
+---
+Stanislav Kinsburskii (2):
+      fuse: add negotiated per-inode open and release suppression
+      selftests: fuse: test per-inode open suppression
+
+ Documentation/filesystems/fuse/fuse-no-open.rst    |  39 ++
+ Documentation/filesystems/fuse/index.rst           |   1 +
+ fs/fuse/file.c                                     |  26 +-
+ fs/fuse/fuse_i.h                                   |  17 +-
+ fs/fuse/inode.c                                    |   9 +
+ fs/fuse/ioctl.c                                    |   3 +-
+ include/uapi/linux/fuse.h                          |  11 +-
+ .../testing/selftests/filesystems/fuse/.gitignore  |   1 +
+ tools/testing/selftests/filesystems/fuse/Makefile  |   2 +
+ .../selftests/filesystems/fuse/no_open_test.c      | 511 +++++++++++++++++++++
+ 10 files changed, 612 insertions(+), 8 deletions(-)
+---
+base-commit: b018686719706a781c45a874ed51374a2dc4b767
+change-id: 20261007-fuse-per-inode-no-open-d40e2b4abb8a
+
+Best regards,
+-- 
+Stanislav Kinsburskii <skinsburskii@gmail.com>
+
