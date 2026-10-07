@@ -1,96 +1,159 @@
-Received: from oak.phenome.org (oak.phenome.org [193.110.157.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C8D400967;
-	Wed,  7 Oct 2026 10:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.110.157.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D767247D468
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 10:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791368937; cv=none; b=LjLnMdRtY0k7/J8JQZEMlTCxxqMi/2yA1M9Eda/J4huHAmffsBSIPt+63WmzeyclwkSMh6tp6B938BEvxWn+ehYtYenhmMXIEJcvCHDonlsdDF1cfjtpOfcECa3QkNPZjaV2rRQfuxpxiyBo2xQszStWLJLk9DCT3keaUuIRklM=
+	t=1791369011; cv=none; b=JiFkq0XE77GWc1UnMstRl01tB6k29tXoW8LCuiU3eMXe2LpS58CKPB558BsUWAuiw6hT5DB3S19oMGpv2sHlD+FXn9A4hpcWhpuy5u0VKMKSMLMcPjDL7X+hkoaY3GzFcZtVeM9cqKoP1Aio2t5cHRgQnjrkzF+qvbRlXVKMzxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791368937; c=relaxed/simple;
-	bh=lSYT75rM3t+cWhTlJEnKNVPvWuiA4ftgtUGUCt/tgKE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=flFiOrsjHYGHCnaot/Jx8cIeHuy964p9SSaTR6gwlUx/r8Xw+L0mUq4XMS4eFllSw49O4qYh+kMJc6sSl7dpKMlyTVjpQzgkKNFpv3QKPYy6S79Mr9Y+GPTfX9R8lSoYuexR2nnppa7//OLNOy+qqIrISSku03HpWeyF50T/PU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=phenome.org; spf=pass smtp.mailfrom=phenome.org; dkim=pass (2048-bit key) header.d=phenome.org header.i=@phenome.org header.b=TyVicfsB; arc=none smtp.client-ip=193.110.157.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=phenome.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phenome.org
+	s=arc-20240116; t=1791369011; c=relaxed/simple;
+	bh=VU+1mCWqo7+B67ddwoUD1gZe5snWq20ItfRTexL+qjo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uwbQ22vCv2d+SaK01pRix5FM46zr91JBRVqpA3FNBanEg5/HNJ+so12Devx9+7ln4vrfTUBwsNa99m3lGl5HJB7LTw9QYO0n01KlziicJo/jZaV+pEinmo4U2cM8Nbpxq5OLoj5NgDjpzfJaragUBKJ/SDYRuNzzmlKXs0fOdCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mtPPqZEF; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=phenome.org header.i=@phenome.org header.b="TyVicfsB"
-Authentication-Results: oak.phenome.org (amavisd); dkim=pass (2048-bit key)
- reason="pass (just generated, assumed good)" header.d=phenome.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=phenome.org; h=
-	in-reply-to:content-disposition:content-type:content-type
-	:mime-version:references:message-id:subject:subject:from:from
-	:date:date:received; s=oak1; t=1791368916; x=1792232917; bh=lSYT
-	75rM3t+cWhTlJEnKNVPvWuiA4ftgtUGUCt/tgKE=; b=TyVicfsBNYMZjc6Lvzp/
-	L1h/gkKqjczuqkoBYY32QGaWHlRt+ezxR8XyY1QxJeH7MdIJKaGmdm8VJsGsT3Hb
-	YpvdxppzOGoQRSjECQcdhjXa0Xef0e/ZVhKyT5rbymEV6Hzle5t+eQHp5Wc8rYXz
-	4vK7H1FVYQdZHbrVa7JQ9ojbcthX66P4iIvitYdgAyc7RF3upmaVE2I7PzkNgjNL
-	WIdKV+FfPsTAwcQaQaaF3k/GlZ5wnrVwaWI5kmTrcrQKn9Llydh867kPGWxLXPwB
-	F0k/NJ3Ry9sJR0okZHW7F4t7WGSS+YsoJZT+7lYunWF4nWdTsrsrLlpXaHWlBvCo
-	UA==
-X-Virus-Scanned: amavisd at oak.phenome.org
-Received: by oak.phenome.org (Postfix);
-	Wed, 07 Oct 2026 12:28:33 +0200 (CEST)
-Date: Wed, 7 Oct 2026 12:28:32 +0200
-From: Antony Antony <antony@phenome.org>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: Antony Antony <antony.antony@secunet.com>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Jamal Hadi Salim <hadi@cyberus.ca>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, Yan Yan <evitayan@google.com>,
-	Tobias Brunner <tobias@strongswan.org>,
-	Florian Westphal <fw@strlen.de>, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH ipsec v3 0/6] xfrm: state: exact mark/mask match for
- control-plane SA lookups
-Message-ID: <asYe0D61qDIOMhbL@Antony2201.local>
-References: <migrate-state-fixes-v3-0-836125bb53dd@secunet.com>
- <arUCAefkfEw-Jl_z@krikkit>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mtPPqZEF"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-88c72646f03so1954377b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2026 03:29:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791368997; x=1791973797; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=LSdEPaTFMwA4pJZC+adjE3HC41fXyUvfQa8u0qcPt5U=;
+        b=mtPPqZEFuEIIPgmsmct/v/UdBkffF0fMInWWUpwfyUDMCkeEKk3FSNeZjWHVmA5VQf
+         7juBjQVdfcW4OYwwCNHsqxUqo0PvGPdH8G7I+tuHcBTlA3CetKrLNQQY3KrO5h2nGLeq
+         eAow3U99eal4Ka0ZNtUVpQLngsgj2T1ku9lCTR6bnDcww7JUlJBbun90Jy30ztWNdl4J
+         OF3E4+njHtoRgsiRNXn+D7jgUlpIZMX7kHQad8HCOoVkE7GuT1I+AsM4/0T0aW2s7bAJ
+         71t7H7P8re9pV9NbZYcDCJWcoBMTT75cYyvUkj/2B4cxt8mSLLPci5vZyBU1IGofvwaj
+         0jpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791368997; x=1791973797;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LSdEPaTFMwA4pJZC+adjE3HC41fXyUvfQa8u0qcPt5U=;
+        b=bsqE2Xd39M1BHpD7sTc/98l0+3Hpfzrr7nSzARhw6FhHHwyIH+O6ItwHEcoG0TL5pz
+         +9g6Gvq0u9Iw9qfXVZqTOoGUbvWlS7i8vt393TQjIXkiJSTn2MBw0bXal/lpImwC70LW
+         6AjooPyNMEV/w29Ens2gCK2nkPFnHuWH71kVEEyb/NEyO4Dc724ZI6fvkjttwtUvFOlD
+         U/It1kpyIY4s/Kh7xACdCVNf7c5RM1y8P3HFcTjJ/aJ5bOwsTELrFUyN3fjOPEEkMzqd
+         ooplyQYa3WmlJDT8QxHHHo303pFe7dCScwSGifMhmkRmHmWOrqJIF0476apHy4foctYF
+         GU1g==
+X-Gm-Message-State: AFuF++n0H1PdIqyR0Xn7qmTCqirrBEqBee39JP+c/wo8KuZK5vSLkuFL
+	PUJMcaKTZDPTB56FTLQUxBdXqAWpCssNPP9GPkOIvUfBWuOSafOCo2sC
+X-Gm-Gg: AYBFou122JxmzW6n+okRWzwQt6bael7QAx3ybtrtSSUVdieBP9aV3l8lE2RTB/maACW
+	uGq3/ybykFmEkGiojgMmGPdp0UiiSMw/ZIs/O3ZEZQeIRbJXYPON68IHUcOpCXcTq0Jp7LGZlmU
+	2wgDyVoH56C//Vpt+oUMFP4EbMwROTdPaBzYRrOhomfOBviP079zHV32Sojl+VvVk0+SroiscRX
+	Yfn7NyXFifm5eYKht3Ha6ic4MQoEUVqjlDIPiYDkCWK34v5CFrMyscWlyjZtJUlTysr6YXPu2jK
+	+As1rjdyYU391PFHZbUe7rEMpt73hmPj5xDGWTiYB7/fy8yKT7RAjPwCEut6h4ZYxNN1++CNs8Y
+	ZK0NGqrWD3+cVuNr1bUhBqcG+Gy8Ubj3U8r5oFGTT719TsYW3Wufb48bwy7V5nKh0H4f70qz9BT
+	BO71rhbgzBXaO+qrYEqgMauP96OvevcPtPnF8yQR61CaUQUsLJJDpn8u17efEeQPvFnDjxqktJZ
+	KJXpLLISLyz59KBErTW65SnVC8=
+X-Received: by 2002:a05:6a00:852:b0:891:6aeb:84fc with SMTP id d2e1a72fcca58-891b3f28e06mr1514627b3a.22.1791368996941;
+        Wed, 07 Oct 2026 03:29:56 -0700 (PDT)
+Received: from obadmin-Precision-3680.atlascopco.group ([167.103.3.1])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-891894f75c4sm1102953b3a.38.2026.10.07.03.29.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Oct 2026 03:29:55 -0700 (PDT)
+From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+To: shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sahaj Chaudhari <sahaj123.sc@gmail.com>
+Subject: [PATCH] selftests/prctl: Test PR_SET_MM_AUXV terminator
+Date: Wed,  7 Oct 2026 16:00:33 +0530
+Message-ID: <20261007103033.1549957-1-sahaj123.sc@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <arUCAefkfEw-Jl_z@krikkit>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 24, 2026 at 12:57:05PM +0200, Sabrina Dubroca wrote:
-> 2026-09-21, 22:43:59 +0200, Antony Antony wrote:
-..
+Verify that a shortened vector supplied through PR_SET_MM_AUXV has a
+valid AT_NULL terminator when exposed through /proc/self/auxv. This
+catches stale AUXV entries left beyond the supplied vector.
 
-> The series looks good, but why did you remove the selftests you had in v1?
+Signed-off-by: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+---
+ tools/testing/selftests/prctl/.gitignore      |  1 +
+ tools/testing/selftests/prctl/Makefile        |  1 +
+ .../testing/selftests/prctl/pr_set_mm_auxv.c  | 42 +++++++++++++++++++
+ 3 files changed, 44 insertions(+)
+ create mode 100644 tools/testing/selftests/prctl/pr_set_mm_auxv.c
 
-> https://lore.kernel.org/all/migrate-state-fixes-v0-3-a69e8637ba3b@secunet.com/
+diff --git a/tools/testing/selftests/prctl/.gitignore b/tools/testing/selftests/prctl/.gitignore
+index 05d5e31661dfd..089af0296aeca 100644
+--- a/tools/testing/selftests/prctl/.gitignore
++++ b/tools/testing/selftests/prctl/.gitignore
+@@ -4,3 +4,4 @@ disable-tsc-on-off-stress-test
+ disable-tsc-test
+ set-anon-vma-name-test
+ set-process-name
++pr_set_mm_auxv
+diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/selftests/prctl/Makefile
+index e770e86fad9ac..a21811a8f6a06 100644
+--- a/tools/testing/selftests/prctl/Makefile
++++ b/tools/testing/selftests/prctl/Makefile
+@@ -6,6 +6,7 @@ override ARCH := $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ ifeq ($(ARCH),x86)
+ TEST_PROGS := disable-tsc-ctxt-sw-stress-test disable-tsc-on-off-stress-test \
+ 		disable-tsc-test set-anon-vma-name-test set-process-name
++TEST_GEN_PROGS := pr_set_mm_auxv
+ all: $(TEST_PROGS)
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/prctl/pr_set_mm_auxv.c b/tools/testing/selftests/prctl/pr_set_mm_auxv.c
+new file mode 100644
+index 0000000000000..934ff480c0f4d
+--- /dev/null
++++ b/tools/testing/selftests/prctl/pr_set_mm_auxv.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <elf.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <sys/prctl.h>
++#include <unistd.h>
++
++#include "kselftest_harness.h"
++
++TEST(set_mm_auxv_terminator)
++{
++	unsigned long auxv[] = {
++		AT_UID, 0x1111,
++		AT_GID, 0x2222,
++	};
++	unsigned long result[64];
++	ssize_t len;
++	int fd;
++
++	if (prctl(PR_SET_MM, PR_SET_MM_AUXV, (unsigned long)auxv,
++		  sizeof(auxv), 0)) {
++		if (errno == EPERM)
++			SKIP(return, "requires CAP_SYS_RESOURCE");
++		ASSERT_EQ(errno, 0);
++	}
++
++	fd = open("/proc/self/auxv", O_RDONLY);
++	ASSERT_GE(fd, 0);
++
++	len = read(fd, result, sizeof(result));
++	close(fd);
++
++	ASSERT_GE(len, (ssize_t)(6 * sizeof(unsigned long)));
++	EXPECT_EQ(result[0], (unsigned long)AT_UID);
++	EXPECT_EQ(result[1], 0x1111UL);
++	EXPECT_EQ(result[2], (unsigned long)AT_GID);
++	EXPECT_EQ(result[3], 0x2222UL);
++	EXPECT_EQ(result[4], (unsigned long)AT_NULL);
++	EXPECT_EQ(result[5], 0UL);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.43.0
 
-Thanks for the review. sorry for late response.
-
-The selftests were in v1; I dropped them from v2 on. I should have
-mentiond it in change log! I used the tests to find unusual mark configurations,
-ones that strongSwan would not set.
-As far as I know these are unlikely, or plain misconfigurations: several
-SAs with the same (SPI, daddr, proto) that differ only in mark, where
-the SA a lookup finds depends on the order they were inserted in.
-
-I did not post the script with the fixes: the tests got complicated,
-and XFRM_MSG_MIGRATE* is not supported in iproute2. Adding those tests
-would make the already big series even bigger and risk a long review
-loop.
-
-After v3, working on the fixes also reveled further problems with
-misconfigured marks, such as bits outside the mask (0x10001/0xf), in both states and
-policies. The kernel quietly sanitized them away on insert, so a later
-exact lookup, e.g. delete, could not find the SA. The extra patches in
-v4 and v5 address this. Android's test suite is good at catching such
-misconfigurations, and Yan helped me there.
-
-I could send the selftests separately as a follow-up after this series.
-
--antony
