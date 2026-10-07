@@ -1,322 +1,270 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2FB3F8232
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 06:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AD4403B00
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2026 06:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791354255; cv=none; b=VbH80v3r5bUnT60LHQgZrnp00/FKqKFVsduYPGwMki2cP2R8i90k7/l4g1ky8Dcvj94qy9xpodd/Zw3oLZGDUMVNUMacKguw0vErVMGROC5XCAc7gRZ4BxOcan1RaqPZ6D4tBT2DB25h7X+lxjCtvqBt52VArRcnonjMfy686tg=
+	t=1791354882; cv=none; b=CJZXZO88TSM9YEsVA6hjuQOYysxIT/TksnVXLm/pAOZDLqobhtWBXUHYK1odcUQT5NAtyJ1FaanPimBw+YihA047i/g3gggDOLTIDyDmPcp4TyRz3hSY3tqEp3OnvHKrUi21D97tpuGJFDjk6tRKuLb9oiLB+4aAGuL9nVkAksQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791354255; c=relaxed/simple;
-	bh=yKbAdIAk7lKrKeJFecFIjKC9cXzZzNASgcbnD3ik2g8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rGEtUKdCueavGdH5Ky3XHbYXVkEm0jA+6xUVxNHcRWlfW/NWhUbUUo6IutxdpRbmWDnGvByrXUrImHfu/+zw6GsNl80iZ2ybIxCUN7ZaCpnHtXdjUWu7rHIJfWlQzaGaJwAalGbc7lNuWd9RRDHTvpaUEIfHnAk3XwO142rxUeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YNut9uxh; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1791354882; c=relaxed/simple;
+	bh=5gdYiXsdIEdmd5/adEl+CJE03b+Owzw4GAQ5g07E9QI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cPCANXP6jPEENs5+cxWSgtzOkHWYQWW6KIi4d/Erasq5/5F4MncjrrpPACO5cP2MfFmiZ14BJDK746SD9JmPPYqgeQOF2eCl0l2fmbFcUmDcQYl7HVr5PWdUcF22uwSFGwbQkQ2EmFKwJ0K5TKUXb+BZmUJONTeCTsz4m/zZk44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e7MTs0WR; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YNut9uxh"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e61ac64ec3so328805ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2026 23:24:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e7MTs0WR"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-383b4a3755fso2616565a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2026 23:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791354254; x=1791959054; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bul8Yte339vRqTq5tYRzTAT8u64iOZDpcCOd5xkxOQM=;
-        b=YNut9uxhIwSRxHcf2orrcRCHETwBpxD9CVIMdVizKZvpE451CLIO6KTrGKkUx2f718
-         J4dH/PY+3h6jye98Hi73AtAzfVuurGxw1jAWX7A2zYnbrD0t9KmDoipIoXqdvW1pPdEg
-         isqNsCUJuj/nU4B0NPbZ/3k/KQ9srH+vygF1ldla3FGxkzGofy9+o2sQr5SzFADZqQXh
-         n0Lz4GYafkvBxRg5RlViSgyU6/Xp/uCYUdlCAbTR201TRcScwFscVxjnnhYdQumiCsmj
-         OHlhXMEJUDKipQXliuuXD3uHB+fdu31sGgAQhLkVVPwU+5vGygTT471x8P0cZxnlYM99
-         +vsQ==
+        d=gmail.com; s=20251104; t=1791354880; x=1791959680; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=x8h3RxZtf4MBoLCdyCQWKGMghw8BxjoE7AErxA1MxGw=;
+        b=e7MTs0WRyw4Lc9L624rjGdbRmwwKFUtFEBqWvYjK6q4ExnvLteIJ188fotb7EO5NWx
+         S6ELQEp18HeY6Mrwo2H7DE8k6zhsJhcOz4U8YYmxnrnYgAuaPnRvWo0PE9ST6HYe+VO8
+         kgvYCf55rCUcAULxtop/q2f7jvsJfNeaRmMRAAnEU5SmRuKqYtvj//rHJv4W+o1WBW91
+         On0jqx70cs96T1wNPhvkrn2OysOyuZTAcaRD+OAkjQQ37PJMRqPPJXUfe/s46S6Ml5F/
+         k8PrMfaryCvklGQaHxxz6M7eAbAO1MZJpWRFBd70UqfxD7537NLPniIuICx2y+nI1Pjl
+         +c8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791354254; x=1791959054;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bul8Yte339vRqTq5tYRzTAT8u64iOZDpcCOd5xkxOQM=;
-        b=1Fdnf31x2W8cElMk5c9CEXp1u7E2ELxL5Jdt9FCaGdXeJIwueysL+c6A50G0cEGaAF
-         W9JpKZPVEeC1QKS/6aDBbJV6TRZ23wRtMiArivYP1DEZsYL0HF/nY1Uxm3sY6BHSFfsO
-         eCJWyZQOQwaaBB/ujiQin0yELs+HEB91qbvq/Ti65Jl7j+m1NN3kgbHYlQUWXRL1VvyC
-         9lusRYHsVBtIb2c+r8ZovawnE14q4JhmlD+21toOEqUWf+orqua1ybaSgZJmutmRiaXq
-         q7GtFZ6RIxgHVYtKvDbllQM2//WOFq6hobhn7oDFq2xTS5Cuj7IIIsFqRFMZTFYJMHwx
-         vs0g==
-X-Forwarded-Encrypted: i=1; AKwUvBwuk74MZwvSdWt+iuyuhv4ir9e9EjJzq6bRVg9f794U8j8KXJpmsT9dLnJqB8eIBdCZVyX1OUWrxm2DYOnL4Ho=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLUP6x/EsxmU6QF7gJ0taIE4rlgNyIFvO5/7R+qDbdhYvcsdRr0
-	1BhUEcgplgaHM6s2l+3Z25v9i6m4EdrwK0e8ZjbNTTFOmAEuck5JfAlZ
-X-Gm-Gg: AYBFou0OKQU/E+85ShfMX9QPd6odH794lO9occrW84TWYs/wKEgH7bMWR//hNrxU4zm
-	wPqBc1FdmDCaIuaGbx9STHpof6pcvns8Dp48BSZk9s26wKRctHCIkhW/jJdz6bqJe9XipSbLjcB
-	5PofV+5KPrLh0zGYTKSfGabwMruP4wdIJEt1Zq+RYHYVTTwPY6ddBjaQBjavPTP15DOc7LGdoY2
-	7blkNyhYyEb+JqJTDnSPQreWaGjVT7hmbRUEc3/+qdg0kq5o51hTUYXBSgcj+Of2EVYXCdg4nJK
-	gwHIFh1NJ+Vk73xwP/6faQAPl6AHLH0D9d4oQy7fb6Bx1w2q5roqZ7BJl1YdOOLQaTT34bOjN01
-	J4kKH4Bab/y+kXbg8PNfNPzQbNvKlbIFg8oxGEykxLm5+ZJT726bcmkhELSQE46n9wfSGX7uGf3
-	aUfPJIBO/TEi9MUR5q0xYjdlkltSKRswQPRVSPdVN5UFbG6h1a9FeyBF4ojohcTPZ0JWdkqg==
-X-Received: by 2002:a17:902:f70c:b0:2d7:107c:917b with SMTP id d9443c01a7336-2e5ff8215acmr14401515ad.0.1791354253676;
-        Tue, 06 Oct 2026 23:24:13 -0700 (PDT)
-Received: from [10.1.2.130] ([67.185.120.12])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e60482ccb3sm5303515ad.51.2026.10.06.23.24.12
+        d=1e100.net; s=20260707; t=1791354880; x=1791959680;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=x8h3RxZtf4MBoLCdyCQWKGMghw8BxjoE7AErxA1MxGw=;
+        b=DtTyV7QxsLKQSu7BX7Ycmy6opzRqOq9aHeFsXgregQB8LWjZ4+H5ZvhX53S7SQPD/B
+         y+XczGagL6tPvrq+RlzJjrsOT8kbaYbBAN/oqqMcfgGJsOtJQGU09UNS0YuxJe9qrU03
+         tZaOfkA1PEj3G3Hk7vVoQmphVHAMjICOm3T1q0kpj78olpEPTHrfuCEP5jF/UOKrUzap
+         rh+O8ZrvSvAV0xTSq4EGBpe4jwP3N9/jE6TUsaW/P5ErX+BipehUJfyOpEsDJoRoMvdg
+         FoWbr0jPFxAwSSzGUKWziIKAHn7mIQSFI7lS9/fgFvwpP/gV2SIn5FN8EvGZG2RsVPZb
+         k6PQ==
+X-Forwarded-Encrypted: i=1; AKwUvByd9PrJdAx/99kheYlGY+4els8kFIRCae1AznJJ6a7pUXeIjVld2Q6PVVk8PTmAseJ1nRBMBHC+wogSkVP71OU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJYM/wQVT9N1fRQXi1YmC3d2qpU7kzwYcMItSrQXOxoNd1B+6KR
+	E+CLhOlTCrJDnhgIhTdZT1G1s6/cViz8DcD1rzyrw7o3xtiCAziB79J7
+X-Gm-Gg: AYBFou06Uyd7jdtiMnMkarbLUj8AmJOwk1wiyftP7KoqF4l1bXpZokZgxuTt9vrJlI7
+	y82vyylm/WgSeaeiZjNaPshtR0p5zcBKoxcRYcEnZ7HcXV3vbezH/3skDpW2K8bKcu4LAQ2Kfgy
+	vs2sRJASR1IgxldhW0yOjw3GsZ3SiwN2w11bmWmkferXcptVn1YBopreXn/IdGRD0E8/Ot9vq7w
+	UdkK0WPjzeKw4t7W36R3TQk43bbOkzsu4BOnN2bJLsCCTifLJIohu/tvfO0gQrkY6mSaKtogC3b
+	trSk7lHjuECp2gRWBAbd21tohYiOAzelzBXiW4p3sm46EMNvz4HDKMwQV8A6Nwdske7H6QkLvS3
+	O80ff0uS/MUzFo6mGLOReQyVh7Snml6xQwlbDGeeltLUzX0oDk9bbUDnKMUuWaR0qPwdLRSvCGe
+	DiiPukWTrh4uQ9CoKwPksO2FBWK8zBhjZp2+qk3ncqdHNUZoZFWl7dIO0e2L2IGm9rR6QOOw7Sq
+	rW5RAJMVQSPQIKJfy5bjzaqGY/SBID4ZSwjMKc=
+X-Received: by 2002:a17:90b:2ccc:b0:3a8:d71:5fda with SMTP id 98e67ed59e1d1-3a8a1c3834amr1054901a91.63.1791354879691;
+        Tue, 06 Oct 2026 23:34:39 -0700 (PDT)
+Received: from obadmin-Precision-3680.atlascopco.group ([136.226.232.164])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a89ab81320sm3029992a91.3.2026.10.06.23.34.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2026 23:24:13 -0700 (PDT)
-From: Kir Kolyshkin <kolyshkin@gmail.com>
-Date: Tue, 06 Oct 2026 23:23:57 -0700
-Subject: [PATCH v3 2/2] selftests/filesystems: test
- OPEN_TREE_DROP_MNTNS_MOUNTS
+        Tue, 06 Oct 2026 23:34:39 -0700 (PDT)
+From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+To: tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org
+Cc: cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/cgroup: test pids.events notification
+Date: Wed,  7 Oct 2026 12:05:16 +0530
+Message-ID: <20261007063516.1192279-1-sahaj123.sc@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261006-nsfs-prune-rfc-v3-2-adb97ea52868@gmail.com>
-References: <20261006-nsfs-prune-rfc-v3-0-adb97ea52868@gmail.com>
-In-Reply-To: <20261006-nsfs-prune-rfc-v3-0-adb97ea52868@gmail.com>
-To: Christian Brauner <brauner@kernel.org>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Aleksa Sarai <cyphar@cyphar.com>
-Cc: Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>, 
- "Eric W . Biederman" <ebiederm@xmission.com>, 
- David Howells <dhowells@redhat.com>, Amir Goldstein <amir73il@gmail.com>, 
- Andrei Vagin <avagin@google.com>, Shuah Khan <shuah@kernel.org>, 
- Giuseppe Scrivano <giuseppe@scrivano.org>, linux-fsdevel@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- containers@lists.linux.dev, Kir Kolyshkin <kolyshkin@gmail.com>
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: 8bit
 
-Pin a mount namespace below a tmpfs mount, the way snapd does under
-/run/snapd/ns, and attach a recursive clone of that tmpfs inside a
-younger mount namespace created with OPEN_TREE_NAMESPACE.  Without
-OPEN_TREE_DROP_MNTNS_MOUNTS move_mount(2) fails with ELOOP; with it,
-it succeeds.
+Verify that a fork rejected by pids.max increments
+pids.events and emits an IN_MODIFY notification.
 
-Also check that the flag is rejected without OPEN_TREE_CLONE or
-OPEN_TREE_NAMESPACE, and accepted with the latter.
+Run the test in a temporary cgroup v2 hierarchy with
+pids_localevents enabled.
 
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Kir Kolyshkin <kolyshkin@gmail.com>
+Signed-off-by: Sahaj Chaudhari <sahaj123.sc@gmail.com>
 ---
- .../filesystems/open_tree_ns/open_tree_ns_test.c   | 193 +++++++++++++++++++++
- 1 file changed, 193 insertions(+)
+ tools/testing/selftests/cgroup/.gitignore     |   1 +
+ tools/testing/selftests/cgroup/Makefile       |   2 +
+ .../selftests/cgroup/test_pids_local_events.c | 139 ++++++++++++++++++
+ 3 files changed, 142 insertions(+)
+ create mode 100644 tools/testing/selftests/cgroup/test_pids_local_events.c
 
-diff --git a/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c b/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c
-index 82f3c8c02c9a..438054ab6a6a 100644
---- a/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c
-+++ b/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c
-@@ -14,6 +14,7 @@
- #include <limits.h>
- #include <linux/nsfs.h>
- #include <sched.h>
-+#include <signal.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -32,6 +33,10 @@
- #define OPEN_TREE_NAMESPACE	(1 << 1)
- #endif
+diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
+index 952e4448bf070..0a00eaab14cb1 100644
+--- a/tools/testing/selftests/cgroup/.gitignore
++++ b/tools/testing/selftests/cgroup/.gitignore
+@@ -8,5 +8,6 @@ test_kill
+ test_kmem
+ test_memcontrol
+ test_pids
++test_pids_local_events
+ test_zswap
+ wait_inotify
+diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+index e01584c2189ac..e494487307418 100644
+--- a/tools/testing/selftests/cgroup/Makefile
++++ b/tools/testing/selftests/cgroup/Makefile
+@@ -16,6 +16,7 @@ TEST_GEN_PROGS += test_kill
+ TEST_GEN_PROGS += test_kmem
+ TEST_GEN_PROGS += test_memcontrol
+ TEST_GEN_PROGS += test_pids
++TEST_GEN_PROGS += test_pids_local_events
+ TEST_GEN_PROGS += test_zswap
  
-+#ifndef OPEN_TREE_DROP_MNTNS_MOUNTS
-+#define OPEN_TREE_DROP_MNTNS_MOUNTS	(1 << 2)
-+#endif
+ LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+@@ -32,4 +33,5 @@ $(OUTPUT)/test_kill: $(LIBCGROUP_O)
+ $(OUTPUT)/test_kmem: $(LIBCGROUP_O)
+ $(OUTPUT)/test_memcontrol: $(LIBCGROUP_O)
+ $(OUTPUT)/test_pids: $(LIBCGROUP_O)
++$(OUTPUT)/test_pids_local_events: $(LIBCGROUP_O)
+ $(OUTPUT)/test_zswap: $(LIBCGROUP_O)
+diff --git a/tools/testing/selftests/cgroup/test_pids_local_events.c b/tools/testing/selftests/cgroup/test_pids_local_events.c
+new file mode 100644
+index 0000000000000..fa501e2091873
+--- /dev/null
++++ b/tools/testing/selftests/cgroup/test_pids_local_events.c
+@@ -0,0 +1,139 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
 +
- static int get_mnt_ns_id(int fd, uint64_t *mnt_ns_id)
- {
- 	if (ioctl(fd, NS_GET_MNTNS_ID, mnt_ns_id) < 0)
-@@ -1004,4 +1009,192 @@ TEST_F(open_tree_ns_unbindable, recursive_skips_on_unbindable)
- 	close(fd);
- }
- 
-+/*
-+ * Pin a mount namespace at @where, the way snapd does under /run/snapd/ns.
-+ * The namespace has to be younger than ours, so a child unshares and the
-+ * parent binds the child's namespace file: binding one's own namespace is
-+ * refused by the very check this test is about.
-+ */
-+static int pin_mount_namespace(const char *where)
++#include <errno.h>
++#include <fcntl.h>
++#include <linux/limits.h>
++#include <poll.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/inotify.h>
++#include <sys/wait.h>
++#include <unistd.h>
++
++#include "cgroup_util.h"
++#include "kselftest.h"
++
++static int test_pids_events_notify(const char *root)
 +{
-+	int pipefd[2], status, ret = -1;
-+	char path[PATH_MAX];
-+	pid_t pid;
-+	char c;
++	union {
++		struct inotify_event align;
++		char bytes[sizeof(struct inotify_event) + NAME_MAX + 1];
++	} event_buf;
++	struct pollfd pfd;
++	char *cgroup = NULL, *events_path = NULL;
++	const char *reason = "pids.events did not notify after a rejected fork";
++	bool moved = false;
++	int inotify_fd = -1, ret = KSFT_FAIL, watch;
++	ssize_t n;
++	pid_t child;
 +
-+	if (pipe(pipefd))
-+		return -1;
-+
-+	pid = fork();
-+	if (pid < 0)
-+		goto out;
-+	if (pid == 0) {
-+		close(pipefd[0]);
-+		if (unshare(CLONE_NEWNS))
-+			_exit(1);
-+		/* Tell the parent the namespace exists, then hold it open. */
-+		if (write(pipefd[1], "x", 1) != 1)
-+			_exit(1);
-+		pause();
-+		_exit(0);
++	cgroup = cg_name(root, "pids_local_events_notify");
++	if (!cgroup) {
++		reason = "failed to allocate cgroup path";
++		goto cleanup;
++	}
++	if (cg_create(cgroup)) {
++		reason = "failed to create test cgroup";
++		goto cleanup;
++	}
++	if (cg_write(cgroup, "pids.max", "1")) {
++		reason = "failed to set pids.max";
++		goto cleanup;
 +	}
 +
-+	close(pipefd[1]);
-+	pipefd[1] = -1;
-+	if (read(pipefd[0], &c, 1) != 1)
-+		goto out_kill;
++	if (asprintf(&events_path, "%s/pids.events", cgroup) < 0) {
++		reason = "failed to allocate pids.events path";
++		goto cleanup;
++	}
++	inotify_fd = inotify_init1(IN_CLOEXEC | IN_NONBLOCK);
++	if (inotify_fd < 0) {
++		reason = "inotify_init1 failed";
++		goto cleanup;
++	}
++	watch = inotify_add_watch(inotify_fd, events_path, IN_MODIFY);
++	if (watch < 0) {
++		reason = "inotify_add_watch on pids.events failed";
++		goto cleanup;
++	}
 +
-+	snprintf(path, sizeof(path), "/proc/%d/ns/mnt", pid);
-+	if (mount(path, where, NULL, MS_BIND, NULL))
-+		goto out_kill;
++	if (cg_enter_current(cgroup)) {
++		reason = "failed to move test into cgroup";
++		goto cleanup;
++	}
++	moved = true;
 +
-+	ret = 0;
++	child = fork();
++	if (child == 0)
++		_exit(0);
++	if (child > 0) {
++		waitpid(child, NULL, 0);
++		reason = "fork succeeded despite pids.max";
++		goto cleanup;
++	}
++	if (errno != EAGAIN) {
++		reason = "fork failed for a reason other than pids.max";
++		goto cleanup;
++	}
 +
-+out_kill:
-+	kill(pid, SIGKILL);
-+	waitpid(pid, &status, 0);
-+out:
-+	close(pipefd[0]);
-+	if (pipefd[1] >= 0)
-+		close(pipefd[1]);
++	if (cg_read_key_long(cgroup, "pids.events", "max ") != 1) {
++		reason = "pids.events did not count the rejected fork";
++		goto cleanup;
++	}
++
++	pfd.fd = inotify_fd;
++	pfd.events = POLLIN;
++	if (poll(&pfd, 1, 1000) <= 0) {
++		reason = "timed out waiting for pids.events notification";
++		goto cleanup;
++	}
++	n = read(inotify_fd, event_buf.bytes, sizeof(event_buf.bytes));
++	if (n < sizeof(struct inotify_event) ||
++	    !(event_buf.align.mask & IN_MODIFY)) {
++		reason = "received no pids.events modify notification";
++		goto cleanup;
++	}
++	if (cg_read_key_long(cgroup, "pids.events", "max ") != 1) {
++		reason = "pids.events did not count the rejected fork";
++		goto cleanup;
++	}
++
++	ret = KSFT_PASS;
++
++cleanup:
++	if (inotify_fd >= 0)
++		close(inotify_fd);
++	if (moved)
++		cg_enter_current(root);
++	if (cgroup)
++		cg_destroy(cgroup);
++	free(events_path);
++	free(cgroup);
++	if (ret != KSFT_PASS)
++		ksft_print_msg("%s\n", reason);
 +	return ret;
 +}
 +
-+FIXTURE(open_tree_ns_drop_mntns)
++int main(void)
 +{
-+	char dir[64];
-+	char pin[PATH_MAX];
-+	bool mounted;
-+};
++	char root[PATH_MAX];
++	int ret;
 +
-+FIXTURE_SETUP(open_tree_ns_drop_mntns)
-+{
-+	int fd, ret;
++	ksft_print_header();
++	if (cg_find_unified_root(root, sizeof(root), NULL))
++		ksft_exit_skip("cgroup v2 isn't mounted\n");
++	if (proc_mount_contains("pids_localevents") <= 0)
++		ksft_exit_skip("mount cgroup2 with pids_localevents to run this test\n");
++	if (cg_read_strstr(root, "cgroup.controllers", "pids"))
++		ksft_exit_skip("pids controller isn't available\n");
++	if (cg_read_strstr(root, "cgroup.subtree_control", "pids") &&
++	    cg_write(root, "cgroup.subtree_control", "+pids"))
++		ksft_exit_skip("failed to enable pids controller\n");
 +
-+	self->mounted = false;
-+	snprintf(self->dir, sizeof(self->dir), "/tmp/open_tree_ns_drop_mntns.XXXXXX");
-+
-+	ret = sys_open_tree(-1, NULL, 0);
-+	if (ret == -1 && errno == ENOSYS)
-+		SKIP(return, "open_tree() syscall not supported");
-+
-+	/*
-+	 * Work in a private mount namespace, so whatever is mounted here,
-+	 * the pinned namespace included, goes away with the test process.
-+	 */
-+	if (unshare(CLONE_NEWNS))
-+		SKIP(return, "unshare(CLONE_NEWNS) failed: %s", strerror(errno));
-+	ASSERT_EQ(mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL), 0);
-+
-+	ASSERT_NE(mkdtemp(self->dir), NULL);
-+	if (mount("tmpfs", self->dir, "tmpfs", 0, NULL))
-+		SKIP(return, "Failed to mount tmpfs");
-+	self->mounted = true;
-+
-+	fd = sys_open_tree(AT_FDCWD, self->dir,
-+			   OPEN_TREE_CLONE | OPEN_TREE_DROP_MNTNS_MOUNTS |
-+			   AT_RECURSIVE | OPEN_TREE_CLOEXEC);
-+	if (fd < 0 && errno == EINVAL)
-+		SKIP(return, "OPEN_TREE_DROP_MNTNS_MOUNTS not supported");
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	snprintf(self->pin, sizeof(self->pin), "%s/ns", self->dir);
-+	fd = open(self->pin, O_CREAT | O_RDONLY | O_CLOEXEC, 0600);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+	ASSERT_EQ(pin_mount_namespace(self->pin), 0);
++	ksft_set_plan(1);
++	ret = test_pids_events_notify(root);
++	ksft_test_result_report(ret, "pids.events notifies on a rejected fork\n");
++	ksft_finished();
 +}
-+
-+FIXTURE_TEARDOWN(open_tree_ns_drop_mntns)
-+{
-+	if (self->mounted)
-+		umount2(self->dir, MNT_DETACH);
-+	rmdir(self->dir);
-+}
-+
-+/* Attach @clone_fd at "/" inside the namespace @ns_fd; returns errno. */
-+static int move_into_namespace(int clone_fd, int ns_fd)
-+{
-+	pid_t pid;
-+	int status;
-+
-+	pid = fork();
-+	if (pid < 0)
-+		return -1;
-+	if (pid == 0) {
-+		int target;
-+
-+		if (setns(ns_fd, CLONE_NEWNS))
-+			_exit(255);
-+		target = open("/", O_PATH | O_DIRECTORY | O_CLOEXEC);
-+		if (target < 0)
-+			_exit(255);
-+		if (sys_move_mount(clone_fd, "", target, "",
-+				   MOVE_MOUNT_F_EMPTY_PATH | MOVE_MOUNT_T_EMPTY_PATH))
-+			_exit(errno);
-+		_exit(0);
-+	}
-+	if (waitpid(pid, &status, 0) != pid || !WIFEXITED(status))
-+		return -1;
-+	return WEXITSTATUS(status);
-+}
-+
-+TEST_F(open_tree_ns_drop_mntns, move_into_younger_namespace)
-+{
-+	int clone_fd, ns_fd;
-+
-+	ns_fd = sys_open_tree(AT_FDCWD, self->dir,
-+			      OPEN_TREE_NAMESPACE | OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(ns_fd, 0);
-+
-+	/*
-+	 * Without the flag the clone carries the pinned namespace along,
-+	 * and move_mount() refuses it from inside a younger namespace.
-+	 */
-+	clone_fd = sys_open_tree(AT_FDCWD, self->dir,
-+				 OPEN_TREE_CLONE | AT_RECURSIVE | OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(clone_fd, 0);
-+	EXPECT_EQ(move_into_namespace(clone_fd, ns_fd), ELOOP);
-+	close(clone_fd);
-+
-+	/* With the flag the pinned namespace is left out. */
-+	clone_fd = sys_open_tree(AT_FDCWD, self->dir,
-+				 OPEN_TREE_CLONE | OPEN_TREE_DROP_MNTNS_MOUNTS |
-+				 AT_RECURSIVE | OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(clone_fd, 0);
-+	EXPECT_EQ(move_into_namespace(clone_fd, ns_fd), 0);
-+	close(clone_fd);
-+
-+	close(ns_fd);
-+}
-+
-+TEST_F(open_tree_ns_drop_mntns, flag_combinations)
-+{
-+	int fd;
-+
-+	/* Nothing is copied, so there is nothing to drop. */
-+	EXPECT_LT(sys_open_tree(AT_FDCWD, self->dir,
-+				OPEN_TREE_DROP_MNTNS_MOUNTS | OPEN_TREE_CLOEXEC), 0);
-+	EXPECT_EQ(errno, EINVAL);
-+
-+	/* A non-recursive clone has no submounts, so there is nothing to drop. */
-+	EXPECT_LT(sys_open_tree(AT_FDCWD, self->dir,
-+				OPEN_TREE_CLONE | OPEN_TREE_DROP_MNTNS_MOUNTS |
-+				OPEN_TREE_CLOEXEC), 0);
-+	EXPECT_EQ(errno, EINVAL);
-+	EXPECT_LT(sys_open_tree(AT_FDCWD, self->dir,
-+				OPEN_TREE_NAMESPACE | OPEN_TREE_DROP_MNTNS_MOUNTS |
-+				OPEN_TREE_CLOEXEC), 0);
-+	EXPECT_EQ(errno, EINVAL);
-+
-+	/* OPEN_TREE_NAMESPACE never copies them; the flag is a no-op there. */
-+	fd = sys_open_tree(AT_FDCWD, self->dir,
-+			   OPEN_TREE_NAMESPACE | OPEN_TREE_DROP_MNTNS_MOUNTS |
-+			   AT_RECURSIVE | OPEN_TREE_CLOEXEC);
-+	EXPECT_GE(fd, 0);
-+	if (fd >= 0)
-+		close(fd);
-+}
-+
- TEST_HARNESS_MAIN
-
 -- 
-2.55.0
+2.43.0
 
