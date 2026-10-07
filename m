@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FEA34EEFD;
-	Wed,  7 Oct 2026 10:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844643AEF4C;
+	Wed,  7 Oct 2026 10:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791367426; cv=none; b=QxXVmVlPb+5sw5Hq4H+SU3FO5g7bdAhE0JQqsGs7/OPY4LQoM20KIYCBgJ4g7TgiZ2Q8wVpxdduDshPxYtAp3Ehw1R5RKmcJPW/DjeZhWNSPaZn2wpDsVMYBie2YQiTKm74W+G+CjooSQZ42hk37ciMA/e8FnsAqpqbLES7TWVA=
+	t=1791368194; cv=none; b=tHJ7/toAUda7UVMRLropyYgID/TerdSJEzxr6FHwMtukjeubUi7Jb1ojr9Z6BfD5rMGDBvpPwYHm+kBXzWQoOJQ3A33spSGN2oK3OtBwUtlU2K3cfpdYBB9gIzXznuIlh4SNq+qxfqaxxJ0I3ZpwUL/fgFjALZf3zAevppc7xYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791367426; c=relaxed/simple;
-	bh=pARwhouY3ZDMWgQhCRyDAoxUAxVWo59eFUUp5ax1TLw=;
+	s=arc-20240116; t=1791368194; c=relaxed/simple;
+	bh=xsQoJnEGIUP79XxNea5vVYi+8CK4POSKkBxpaoLATfY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J2LiMVS8l1AWuZfouvjCWTVvfX5afOCryWt15BCCnrtkVy7RTia8OWi7erGcwOFwUWBFFME0vTSTErrK+ko3Ai57vxQOH3wG7qP4t9rZHeZrQGVczzUFAAhzBeXR0TScb0+Ki5yumj3FNXLo63m/qebOz+07qIuMOzEmjQYH8lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YD4DUuKp; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=liQnkYY7wabUVzFqmFqUf4xFzZQzNtI2IFEQt5xJULkC/7MyMXliVAMPPWgDF6qhWTiQ4WMI9BFjZzmsBIimE4a8hTiCG12aCocsInmybG6Tylr5eXZ7DfKoyR5l9E3m9bOghdzDM5jUvNPNp0TAdAndY7K504GSiy0wEfpk5E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f4meMJgd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YD4DUuKp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 608461F0089B;
-	Wed,  7 Oct 2026 10:03:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f4meMJgd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1101D1F0089B;
+	Wed,  7 Oct 2026 10:16:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791367412;
-	bh=OLIMshKXGQUE5mhCFk2wkoVfuzjryi/zbuwbzKQ67JI=;
+	s=k20260515; t=1791368182;
+	bh=ESIyTeV5wm8brFdtF/p7rC/YImFfa4MobdYy15tnWH4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=YD4DUuKpOvcHEqgusbYqalLXVEyUTc3Hw6tRbKpGd+uNiQY9XgdXqAj2zcvKjUszD
-	 I4dmbFqA2RFa13Vw8P9yZ9MejzkNV12at2Yk6g2gjCVmO1ZbT/jA1FIYO0dC1rcd57
-	 S3Rc7xv2EPjEgMTZE02qhgbdAu/tftK8sC/Y/hQLNo9wQ2Aox5Hx5qUX2JPRJabSJ+
-	 BMNjl7eYywp8Gq0bCab4sBCj/M/DP2sQFLn1dbHNZlmYvbetLGSY4yX+9o7MNYDsvO
-	 CeX/fXu6TRQpyEhF84d1F1zaD1rn8K+Y6HPeVqrI2tfEoh0Id/3S+yBifo3NaM5Pra
-	 qgLk/MJeHIK5g==
-Message-ID: <392ab85e-5a24-4d84-857c-bf7785f52490@kernel.org>
-Date: Wed, 7 Oct 2026 12:03:26 +0200
+	b=f4meMJgd4ttNeAqnos8kPXy5BxbqEVCRAG7MoJptyFvMCp9/5Gf50bRt+LOsxKH8v
+	 9ydNj6fXwfQZ8Do8udukd5QqgwPVv5s6TlXXyay4eG6xoJjQxc9QxkhC3uTxi5kamO
+	 72GQG6wjjeo0oMO6dxq62JNasJ9OhnOT2qausxqIv44y+5XNwRTCbRWuaRBrRl+aYR
+	 fgT1bYIhavBelsAAEIxdtkOsfaJ7LC39XCD7KAFE++UCNaIgtN1LTFVexZHh4I8Vn9
+	 ImzUskbC4mIxvbhhpSFw733Y+NwWuEOrFuuqba+BL3+vHVLwWzNjwp2rvJ90oH1jrF
+	 MpCb5MPi5dLTA==
+Message-ID: <022ec915-62ab-40d9-8705-90692e75acfb@kernel.org>
+Date: Wed, 7 Oct 2026 12:16:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,16 +35,18 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] selftests/mm: add tests for UFFDIO_MOVE of a
- uffd-protected swap entry
-To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>, linux-mm@kvack.org,
+Subject: Re: [PATCH v2] selftests/mm: hugetlb_madv_vs_map: fix TAP plan
+ mismatches
+To: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Guillaume Morin <guillaume@morinfr.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>,
+ Sarthak Sharma <sarthak.sharma@arm.com>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: peterx@redhat.com, surenb@google.com, aarcange@redhat.com,
- ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, mhocko@suse.com,
- shuah@kernel.org, kas@kernel.org
-References: <20261003103030.63380-3-donggeunyoo.kernel@gmail.com>
- <4a24f7b1-65f7-4947-a325-7c9e9f642f2a@kernel.org>
- <20261005115051.3950585-1-donggeunyoo.kernel@gmail.com>
+References: <20261007092801.35649-1-jaeyeon.lee.dev@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -91,23 +93,54 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20261005115051.3950585-1-donggeunyoo.kernel@gmail.com>
+In-Reply-To: <20261007092801.35649-1-jaeyeon.lee.dev@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 10/5/26 13:50, Donggeun Yoo wrote:
-> On Mon, 5 Oct 2026 12:43:48 +0200, David Hildenbrand (Arm) wrote:
->> The CI complains as reply to this patch:
->> ...
->> ✗ userfaultfd(2) test failed:
->> # not ok 43 minor-collapse on shmem
+On 10/7/26 11:28, Jaeyeon Lee wrote:
+> The plan was raised from 1 to 3, but the HugeTLB setup check that may
+> call ksft_exit_skip() still runs after ksft_set_plan(), so a setup
+> failure reports one result against a plan of 3. Move ksft_set_plan()
+> below the setup check.
 > 
-> Thanks for passing it on. I couldn't reproduce it here. Could you share
-> the full log of the failing run, or a link to it?
+> Also, when the underflow check fails, or munmap() fails,
+> test_underflow() jumps to err_cleanup and exits without reporting the
+> remaining results. Report the munmap() failure as a test result and
+> skip the final HugePages_Rsvd check in err_cleanup, so these failure
+> paths report all 3 planned results.
+> 
+> Fixes: 827149aad495 ("selftests/mm: hugetlb_madv_vs_map: add underflow test")
+> Assisted-by: LLM
+> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+> ---
+> Changes in v2:
+> - Drop the duplicate ksft_perror() and report errno in
+>   ksft_test_result_fail() (Sarthak Sharma).
+> 
+>  tools/testing/selftests/mm/hugetlb_madv_vs_map.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+> index 1d111f42dd59..0f6afb834dbf 100644
+> --- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+> +++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+> @@ -168,7 +168,7 @@ void test_underflow(void)
+>  
+>  	/* First unmap, this will close the vma */
+>  	if (munmap(huge_ptr, mmap_size) != 0) {
+> -		ksft_perror("munmap failed");
+> +		ksft_test_result_fail("munmap failed: %s (%d)\n", strerror(errno), errno);
+>  		goto err_cleanup;
+>  	}
+>  
+> @@ -203,18 +203,20 @@ void test_underflow(void)
+>  	if (waitpid(pid, NULL, 0) <= 0)
+>  		ksft_exit_fail_perror("waitpid failed");
+>  
+> +	ksft_test_result_skip("HugePages_Rsvd check after child exit\n");
+>  	ksft_exit_fail();
 
-I messed up, it was for another series :(
-
-Sorry! All looking good from the CI POV :)
+That looks odd. SKIP + fail on the same path?
 
 -- 
 Cheers,
