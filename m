@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6993CF1E4;
-	Wed,  7 Oct 2026 19:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008E03E3D92;
+	Wed,  7 Oct 2026 19:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791402589; cv=none; b=YXJFxq9APpDMcBzlOd8Omdr+lVsPWjnPPZOi6aDpfpXZkjcgQXetHiNEehwUrTOdxY7WQhWc2FxJsjEwJjLvFmQp2xNHbZIU+2MqZ5rwAEH9i7O+eWhSPMG/i8l1u6n1a15HLqV1PB9hTOaiYLvHVYc1mkdZER8SWGW9HY1065A=
+	t=1791402591; cv=none; b=HdNlbumh2M4P7rvU5MaXtBAka0EH1hErFmxTN+PF74PmMh9kIh5PhBouLEOopu550cGqiUTFAX5pDBW+XvLD7uhurCyHvm9A4k2+rAXkUZyQWAtCbyEOmhqmOrnu7fzJkZKx9dOOzsg8CLfA/JeM2xrLDVEwHOZX/aHm5FJS1rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791402589; c=relaxed/simple;
-	bh=c1VopkM7IUVLIk93aABQYe9KjIRNYiwyejP96Ne6OTE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QD72ahncYhOaApo5JnGG/qDbNDp8US9ZXxY+t/i1ojy9mfzmzkQXPa9AcUdeizFnvjKwGhpnTW64x2N9pY5YAZcIvbpRuf7Q7P3AmCTy/y0+/2O6jI8kFLXutKSCubJY1QayHAV2upjVfBYEMasm/sF0KWTO5r802xmV5VszOeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KRuMv19n; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791402591; c=relaxed/simple;
+	bh=ClzqSWLCJ0hFYn0dwL+oWMxjWqqddPdz1Pu2jKUG+UU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=mJaxvBsUP2IYeZyhZ3dbNheY2J/S6nUjDFY7iREKaWrUO1i7NIAMr/ovXpYhC7C5baRX9sUPWNrPuoSQxCrNGo0yJYZ+kLYGLdwO4ZIiVBb1Gva88zpWaoDnprT48YIDn5JvYrkI54UGN5ykngTgkDUeng8Zkv4iqD+rwf1l80A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m7bp7h0T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KRuMv19n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CAA1F000FF;
-	Wed,  7 Oct 2026 19:49:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m7bp7h0T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A671F00893;
+	Wed,  7 Oct 2026 19:49:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791402587;
-	bh=RCwrViG08gG1Wt4WrfkXXu0M9wkCYS/dAGqLxWSwyxw=;
-	h=From:Subject:Date:To:Cc;
-	b=KRuMv19nD3Y4niLIo5RKg0+kZSfWAFd5UdQ8UEEhHB30bFv+2BGRzmlXsIyplUzSu
-	 h1lpRDl4Tz6eesZuxFyo306qOLUzrBvWNgZIaEomuDWfk3JKf1ATs5JSr7nyv493bL
-	 mszE//+ydrRHaA5KRDVnQKrIh7qVZenpGk7uzNn08Cs74U1oIBj+e0eqg+zLYPLVF1
-	 kuuuZT9l8Dq9XvVU11K2AcHnCSYdRw+A2s5eiTZWFm6NJPbCYspiA8SWKLN3kPQTlO
-	 wYYxmEMNi/LrcSDgewnVVCwGpwnQBqkAyU9u/Lmyt1brV26OYiExX3YFHVA1EVbkRu
-	 H71tQM5e/GxbQ==
+	s=k20260515; t=1791402588;
+	bh=PRga6hBsx8xSqPqyknHPiMcwKGOX6nG50CJMFUKX3Qc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=m7bp7h0TRP8ExkOPagNNzT2f3UH+hAEQ6s0/iALBhswaETcxnO13clwxnXre/CEAF
+	 nci4XFRJReqx+UTJJuPRrFyqCdi8fFhyzdj4FVbejdlYutH6rnlfH41a/JVIhWphG+
+	 Ie2BIg/9qHf9/XH+fbcQci9ojlTTX17c3WUtlrWukh+5Yp8nJd/frVEMLahOs7TRSd
+	 BxguzS0NJ8TMSz9hT8e+Iek+0yZkgOZzPxOemOZckdkM/3/gn6tyvO7grRWAFWgyg/
+	 3qv231x/FLFW2xsIR6zWGY4zWexF6PGs43u0gej3RnP13NSiwA4C7FzQcZY/TO69hH
+	 Li5tupJmPQ1vQ==
 From: Chuck Lever <cel@kernel.org>
-Subject: [PATCH net-next v3 0/9] net/tls: Receive-path fixes for
- zero-length data records
-Date: Wed, 07 Oct 2026 15:49:29 -0400
-Message-Id: <20261007-tls-follow-on-v3-0-6d52d98389b3@kernel.org>
+Date: Wed, 07 Oct 2026 15:49:30 -0400
+Subject: [PATCH net-next v3 1/9] tls: Bound consecutive no-data records in
+ tls_sw_read_sock()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,132 +38,158 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WOzQ6CMBCEX4X07GpbCT+efA/joVsWqWJr2ooYw
- 7sLGE008Tg7883OgwXyhgLbJA/mqTPBODuK9SJhulH2QGCqUTPJZcZzmUFsA9Subd0NnIW0yGq
- BqkBEzkbm4qk2/dy3Y5YiWOoj27+ccMUj6TjVTVlUgQC9srqZTu/06qyMnfzGhOj8fZ7Wibnxz
- 4pOAIeyxDrVWuhcltsTeUvt0vnD/LyTH1xwLn5xOeKyqkSZ5ohZKr/wYRieU3iDRyYBAAA=
-X-Change-ID: 20260726-tls-follow-on-486f1ba8bbb0
+Message-Id: <20261007-tls-follow-on-v3-1-6d52d98389b3@kernel.org>
+References: <20261007-tls-follow-on-v3-0-6d52d98389b3@kernel.org>
+In-Reply-To: <20261007-tls-follow-on-v3-0-6d52d98389b3@kernel.org>
 To: John Fastabend <john.fastabend@gmail.com>, 
  Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, 
  "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
  Simon Horman <horms@kernel.org>, Chuck Lever <cel@kernel.org>, 
  Dave Watson <davejwatson@fb.com>, Shuah Khan <shuah@kernel.org>, 
  Qingfang Deng <qingfang.deng@linux.dev>, Eric Dumazet <edumazet@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- sashiko-bot <sashiko-bot@kernel.org>, 
- sashiko-bot <netdev-bot+sashiko@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.16-dev-da966
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4967; i=cel@kernel.org;
- h=from:subject:message-id; bh=c1VopkM7IUVLIk93aABQYe9KjIRNYiwyejP96Ne6OTE=;
- b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqxqJOxv22DTqcrs2DoxlmQRbmwoNPB8YUErIM7
- 3xFaKioHBaJAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCasaiTgAKCRAzarMzb2Z/
- l7ifEACnCMCnFaf7LKOxx36qNf2uMHuYFOa2NbtMjvEYUYDi4lMHtDZSufL+zFXWEM4FxAG4zks
- minFyoFnGci/ysAVC21wZqZC4O/6LzepwSF+81f5Vjvp3NmqgcuD+F9HM82fDN8aiV3eJV2r7gf
- A1sBmbN+Nzax3/5jUadgojwIMpgi7YzIq0ykhdARRD4UAEUbrbuKorWEn4x2pGynJR9I1jDhNEG
- +Kr3y9MWfiF7rAgf3vk5CfFgjXL1ZlzDOfy+dYJfrFNazYzPlzlVMpP9+r8YMVB6VnUQBhQ8xh3
- HiDccD3s46DGXtjW21ZHTYDFrL/Iov58Ol2gDMVETcXhwkBXTq7Tbc8tV1NrAY2eNw/UzDUGyWn
- srcsTuddrxEdEhlVsasutX3m/ghGgJ7zKQGXZ08u7Gk+xwAN+mssaGlOdOPxIl1s9vIFnMGUONz
- 5G8QPNy9p1U2jPJBMp5WeL2ilInygZfYdjcfZlniuJ5Dey+4E5Gwdpk9zvZGvZ2pHu/SC2hpoG2
- XQz2B4t8S7xMs8DwdEWXzjr0c10yfyMox0w5UyZh8XPcuu5FnVsAKU+4PdLgJZj0NJqnXEKL7+w
- uA6LQEGoJvW8U604AJ/AUlk7WKQ0pOEZt2P9kxBUqTLtT1SOopV1VAPPuqLYftnf26WUlSb1Nxw
- LnVoIVCZ5oqorSA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4489; i=cel@kernel.org;
+ h=from:subject:message-id; bh=ClzqSWLCJ0hFYn0dwL+oWMxjWqqddPdz1Pu2jKUG+UU=;
+ b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqxqJZAngukwhWHSR5i9ccODCa12LKu/WUkAZXz
+ nVqtzFAkqCJAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCasaiWQAKCRAzarMzb2Z/
+ l9KUD/0VXj64pj6uulnwo5iNoJQSK1cW0HajZyllsUP7c6sxJjtG8Wv0abzSZ2xTazab38Ix0DB
+ JSUDTkvkWJWZU7MjbNNyDXWq6AMYzkiZWDUuXe3pJZL/XBWjkzFcXYVFok6nVTFEwYC7+Bp+6kS
+ sqtKGK3wYi46pNemAtWGVeDUEJemqb4/hcQu0EUl2MBUtBZh7UBujxYfUPHNLo7MikmaK9waggz
+ MlD3aaIukSeXyD2WPxApxaxvAW/GURGEE5EQqC0BO+5aw5+pNs74grHum4svjnzPr25dpCJPQRm
+ MMPktEWVMafv5XCjL6wAgPIu+D2tgOcEN9XrPRSR1D6cDJ2P7K87T5xxv/qdXHCnXe7VOUcow8I
+ 2G0nibjoB/nNTjwRpY0lOS4bdxxXWI/9B7FAdLZ/K6hcyMLKslNnVvv72m+D41kaPbNYGkCCJpm
+ 9kPzdxdc+Tbdz5P1jEq098Zhyli0uaFE7E7nOtawh1GATvRHW3XDrmYU6Zincrh4Tg//aJBTSjH
+ ssY9g/AOeRAFUaaZtq/qVgF9RuPKHgQwdhSey04xFeB2B5rbLn8gsIHQMxA/ewQ7O3BlAhm+/TK
+ 9DvyglPEhcD1RLoT4Bl+Sz79qwEcOxRKE00RNwQceGQ/MzouQIFGMnPyHrFycGWKjlCOzqaJ0cr
+ v95vuU4cjbYZrqw==
 X-Developer-Key: i=cel@kernel.org; a=openpgp;
  fpr=28B2E5B01286DF243CF23EFE336AB3336F667F97
 
-Commit 3be28e2c9cd0 ("net/tls: Consume empty data records in
-tls_sw_read_sock()") fixed one reader. TLS 1.2 and TLS 1.3 both
-permit a zero-length application_data record as a traffic-analysis
-countermeasure (RFC 5246, Section 6.2.1; RFC 8446, Section 5.1), so
-a peer that pads its stream emits them by design. The other two
-software readers still mishandle them. splice(2) reports an empty
-record as EOF, and the caller tears down a connection that is still
-live. recvmsg(2) makes no progress on one, so a peer that streams
-them holds the caller in the kernel past SIGKILL. With MSG_PEEK or
-async decryption, each record is also queued on rx_list, which
-grows without bound.
+A zero-length application_data record does not deliver a payload, so
+tls_sw_read_sock() never runs the read_actor for one and nothing
+decrements desc->count. A peer that streams such records keeps the
+loop running, with the socket lock held, for as long as they arrive.
+The caller cannot bound the run because read_sock() has not
+returned.
 
-This series supersedes "[PATCH net] tls: skip empty data records in
-tls_sw_splice_read()", which fixes the splice case alone:
-https://lore.kernel.org/netdev/20260930052636.166007-1-qingfang.deng@linux.dev/
+An LLM audit of the TLS read paths found this defect. The defect has
+not been reproduced.
 
-Which fix a reader gets depends on its caller. splice(2) and
-recvmsg(2) are system calls, so consuming the record and testing
-signal_pending() is enough. A signal ends the call. An in-kernel
-caller of sock_recvmsg() cannot take a signal, so a flood holds
-that caller as it does today. Only tls_sw_read_sock() gets a bound
-of its own. Its callers hold the socket lock across the whole call
-and cannot act on a signal, so nothing else can stop the loop. A
-count of consecutive records that deliver no bytes supplies the
-bound (patch 1). The count is scoped to read_sock deliberately. A
-flood on the other two paths costs the caller CPU time and nothing
-else.
+Stop after TLS_RX_NODATA_LIMIT consecutive empty data records. Any
+record that delivers bytes resets the count. Stopping with nothing
+copied returns zero, which a read_sock consumer takes as no progress
+rather than EOF. Records left queued do not raise another
+sk_data_ready(), so the consumer needs one. The consumer's callback
+can call tls_sw_read_sock() itself, as strp_data_ready() does when
+the socket is not owned by user. Run the callback from a work item,
+after the reader has returned.
 
-The series changes user-visible behavior. splice(2) on a
-nonblocking socket, and sendfile(2) from one, now return -EAGAIN
-where they used to block, as they do on a plain TCP socket. A
-splice that reaches a control record behind an empty one now
-returns -EINVAL rather than the zero that was the false EOF. A
-nonblocking recvmsg(2) or splice(2) that has copied nothing and
-finds a signal pending after an empty record returns -EINTR. A
-recvmsg(2) that has copied data now returns at an empty record
-rather than reading the records that follow.
-
-SO_RCVTIMEO does not bound these calls. It is applied at the
-reader lock and again on each call to tls_rx_rec_wait(), so a call
-that keeps retrying can wait past it. recvmsg(2) behaves this way
-today. The retry added to splice(2) extends the same behavior to
-that path.
-
-Tested on x86_64. The tls selftest suite passes, 937 tests with
-no skips.
-
+Fixes: 3be28e2c9cd0 ("net/tls: Consume empty data records in tls_sw_read_sock()")
+Signed-off-by: Chuck Lever <cel@kernel.org>
 ---
-Changes in v3:
-- Run the consumer's sk_data_ready() from a work item (sashiko).
-- Move the sync decrypt of empty records to the signal patch (sashiko).
-- Put the O_NONBLOCK patch before the splice retry patch (sashiko).
-- Reword the O_NONBLOCK patch description to match (sashiko).
-- Say that the recvmsg patch does not bound the receive loop (sashiko).
-- Add a patch that returns copied data ahead of empty records (sashiko).
-- Put the zero_len skip patch before the coverage patch (sashiko).
-- Use poll() to check for records left on rx_list (sashiko).
-- Link to v2: https://patch.msgid.link/20261001-tls-follow-on-v2-0-2dd1947bb642@kernel.org
+ include/net/tls.h |  1 +
+ net/tls/tls_sw.c  | 36 +++++++++++++++++++++++++++++++-----
+ 2 files changed, 32 insertions(+), 5 deletions(-)
 
-Changes in v2:
-- Bound no-data records by count, not elapsed time (Jakub).
-- Drop the tls_rx_empty_data_rec() helper (Sabrina).
-- Keep the strparser anchor out of tls_sw.c comments (Sabrina).
-- Split the recvmsg signal test into its own patch.
-- Drop tls_rx_intr_errno(); a nonblocking reader now gets -EINTR.
-- Say why do_splice() misses the socket's O_NONBLOCK (Sabrina).
-- Point the recvmsg patch's Fixes: at the commit that added rx_list.
-- Reuse the new zero_len helpers in the existing fixture (Sabrina).
-- Check errno unconditionally in the zero_len tests (Sabrina).
-- Split the splice crypto-error fix and its test out (Jakub):
-  https://patch.msgid.link/20260806-tls-splice-crypto-fix-v1-0-a2624005a286@kernel.org
-- Link to v1: https://patch.msgid.link/20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org
+diff --git a/include/net/tls.h b/include/net/tls.h
+index e57bef58851e..42fcb9792bcc 100644
+--- a/include/net/tls.h
++++ b/include/net/tls.h
+@@ -145,6 +145,7 @@ struct tls_sw_context_rx {
+ 	atomic_t decrypt_pending;
+ 	struct sk_buff_head async_hold;
+ 	struct wait_queue_head wq;
++	struct work_struct data_ready_work;
+ };
+ 
+ struct tls_record_info {
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 312e51270f29..275a6047da9e 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -2070,6 +2070,20 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+ 	goto splice_read_end;
+ }
+ 
++#define TLS_RX_NODATA_LIMIT	16
++
++static void tls_rx_data_ready_work(struct work_struct *w)
++{
++	struct tls_sw_context_rx *ctx =
++		container_of(w, struct tls_sw_context_rx, data_ready_work);
++	struct sock *sk = ctx->strp.sk;
++
++	/* A callback that finds the socket unowned reads from it. */
++	lock_sock(sk);
++	READ_ONCE(sk->sk_data_ready)(sk);
++	release_sock(sk);
++}
++
+ int tls_sw_read_sock(struct sock *sk, read_descriptor_t *desc,
+ 		     sk_read_actor_t read_actor)
+ {
+@@ -2078,6 +2092,7 @@ int tls_sw_read_sock(struct sock *sk, read_descriptor_t *desc,
+ 	struct tls_prot_info *prot = &tls_ctx->prot_info;
+ 	struct strp_msg *rxm = NULL;
+ 	struct sk_buff *skb = NULL;
++	unsigned int nodata = 0;
+ 	struct sk_psock *psock;
+ 	size_t flushed_at = 0;
+ 	bool released = true;
+@@ -2136,14 +2151,22 @@ int tls_sw_read_sock(struct sock *sk, read_descriptor_t *desc,
+ 			goto read_sock_requeue;
+ 		}
+ 
+-		/* An empty data record (legal in TLS 1.3) gives a zero
+-		 * read_actor return, indistinguishable from the consumer
+-		 * stalling; the used <= 0 path would requeue it at the
+-		 * head of rx_list and block all later records. Consume it
+-		 * here instead.
++		/* An empty data record gives a zero read_actor return,
++		 * indistinguishable from the consumer stalling; the
++		 * used <= 0 path would requeue it at the head of rx_list
++		 * and block all later records. Consume it here instead.
+ 		 */
+ 		if (rxm->full_len == 0) {
++			err = 0;
+ 			consume_skb(skb);
++			if (++nodata >= TLS_RX_NODATA_LIMIT) {
++				/* tls_rx_reader_release() does not call the
++				 * consumer's sk_data_ready, which can re-enter
++				 * this function.
++				 */
++				schedule_work(&ctx->data_ready_work);
++				break;
++			}
+ 			continue;
+ 		}
+ 
+@@ -2154,6 +2177,7 @@ int tls_sw_read_sock(struct sock *sk, read_descriptor_t *desc,
+ 			goto read_sock_requeue;
+ 		}
+ 		copied += used;
++		nodata = 0;
+ 		if (used < rxm->full_len) {
+ 			rxm->offset += used;
+ 			rxm->full_len -= used;
+@@ -2345,6 +2369,7 @@ void tls_sw_strparser_done(struct tls_context *tls_ctx)
+ {
+ 	struct tls_sw_context_rx *ctx = tls_sw_ctx_rx(tls_ctx);
+ 
++	cancel_work_sync(&ctx->data_ready_work);
+ 	tls_strp_done(&ctx->strp);
+ }
+ 
+@@ -2476,6 +2501,7 @@ static struct tls_sw_context_rx *init_ctx_rx(struct tls_context *ctx)
+ 	crypto_init_wait(&sw_ctx_rx->async_wait);
+ 	atomic_set(&sw_ctx_rx->decrypt_pending, 1);
+ 	init_waitqueue_head(&sw_ctx_rx->wq);
++	INIT_WORK(&sw_ctx_rx->data_ready_work, tls_rx_data_ready_work);
+ 	skb_queue_head_init(&sw_ctx_rx->rx_list);
+ 	skb_queue_head_init(&sw_ctx_rx->async_hold);
+ 
 
----
-Chuck Lever (9):
-      tls: Bound consecutive no-data records in tls_sw_read_sock()
-      tls: Check for a pending signal after an empty record
-      tls: Honor O_NONBLOCK in tls_sw_splice_read()
-      tls: Consume empty data records in tls_sw_splice_read()
-      tls: Consume empty data records in tls_sw_recvmsg()
-      tls: Return copied data ahead of a run of empty records
-      selftests: tls: Skip the zero_len tests when TLS is unavailable
-      selftests: tls: Add peek and splice coverage for zero-length records
-      selftests: tls: Cover splice on a nonblocking socket
-
- include/net/tls.h                 |   1 +
- net/tls/tls_sw.c                  |  98 +++++++++++++--
- tools/testing/selftests/net/tls.c | 256 +++++++++++++++++++++++++++++++++++---
- 3 files changed, 328 insertions(+), 27 deletions(-)
----
-base-commit: a5e7d8e446af9803e37a3b6a4d416fb41178348f
-change-id: 20260726-tls-follow-on-486f1ba8bbb0
-
-Best regards,
---  
-Chuck Lever <cel@kernel.org>
+-- 
+2.55.0
 
