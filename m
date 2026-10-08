@@ -1,87 +1,106 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-108-mta66.mxroute.com (mail-108-mta66.mxroute.com [136.175.108.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E1237AA64
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 19:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0931432309
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 20:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791488904; cv=none; b=NGI71z75dpKZgVq0DEB3JeOvQTG4rA6qlEZGFSYgO6kOK2OElCfUX+GF8qEQvvbveOaQTrb0lkthhnKkadPU2Bbz9k/56G+yLn45eZbBlZo+zRErnG5gl3ho5MVTVaQ4RXmL4Fvfs4u0UrhQ8NNh7uTq9ZIrdWGNTFqXfPocAL4=
+	t=1791490629; cv=none; b=oK29PLUQBPU78lRjksFYjM8pwIWYWZRmnAZL0HMWHEqhHWLvOtjxbABVbTQaE5vFoBkfxos72mnHoOXuRJFkNCfiwJtdKW2tMSUvQwpI1sTjNFeWw/MysZZxYLDjjW1AH6EP/VYaabBHb6FQObc8347UYl/EDFPN8mpMBbKYzCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791488904; c=relaxed/simple;
-	bh=7J4bPm660j/7MfPVn1JNe1bO7wZnVvxHbsBjuPL9TUY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o5AbOP1xwMVXx/22on+kNTaR6YVr5lPBXCaK/bm8KlKo/G+oT1Gj4/JmdCh4Wk8G8gI7OlLsKnlNKQFRV19NAL3Lpwx7qMSXgVCLW+7oq3AHOUGayqrXVTL32qD92H4u84F8p/Gy65bATBsdD0V5Qmu83xUOYjltJsVu650OcdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=OtMjtbMP; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1791490629; c=relaxed/simple;
+	bh=AdewahXmQVoGFKbvFx9hrY5Lw3JRM57+R4xGi95K+WM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rUAIhsfOFt+dCqJBGowYYJAm+AU30Wv09uweqvlnnm2O+D/nvKP6XqlVPt6wNCqOGaJg6Zfub0gLN5nvztyjxOTm6kzwZ8vcsoPyquruk53rpT1LcViPsI7UZy0npHULITszSzrkg4nvviirYZNY++FsKDmYfW4Nzt3e6DecijM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=iXWOr8S1; arc=none smtp.client-ip=136.175.108.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="OtMjtbMP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=7J4b
-	Pm660j/7MfPVn1JNe1bO7wZnVvxHbsBjuPL9TUY=; b=OtMjtbMPIVJ1bQVsoNgR
-	hjEPquo5rGcpZhHXtGE/KLzcuWpISJg4YBqqjqSVOQ3JcPmpkwLuw7RIbz56Et3E
-	vHVnhcJRIiNuCXCbyIdC7yP5dl2djJq0hqQ5oJ0tWNvv8pzGJkxeCSAUCDfHTJO6
-	/tpExboMeC/sg+1IEp8Qa8zDat6XKMs3sGH1VSqIw3x5QmowmC3OmBLXk31B/50c
-	I7e3zT/nSINKT3CzD1ZUuuE1eaXKO7VQIGnw3fI4tVkC6mvje/ObuvzW6KSkEl1z
-	btTODd3eNj6WFevb/ZwSl7InajZdGBvvXUXeEI63v0KHBovPLSqdDGju8eicKNfh
-	rg==
-Received: (qmail 877567 invoked from network); 8 Oct 2026 21:48:17 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Oct 2026 21:48:17 +0200
-X-UD-Smtp-Session: l3s3148p1@6tZRg1ldRsbDesiu
-Date: Thu, 8 Oct 2026 21:48:16 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-rtc@vger.kernel.org
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 0/3] selftest: rtc: rtctest: improve handling of skipped
- tests
-Message-ID: <asfzfFuBFVKP5WQA@shikoro>
-References: <20260916213108.9234-5-wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="iXWOr8S1"
+Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
+ (Authenticated sender: mN4UYu2MZsgR)
+ by mail-108-mta66.mxroute.com (ZoneMTA) with ESMTPSA id 1a11d29832500028b2.00a
+ for <linux-kselftest@vger.kernel.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 08 Oct 2026 20:17:02 +0000
+X-Zone-Loop: c1d50d4c2bab70cfb721e980c6b493d8befdbb4b3d0f
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
+	s=x; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=98aMzkvRL5YTiN/cBhGVogLVsHcjkgm1Lg+pmTYtpdY=; b=iXWOr8S1TmSX0n/zs63uEaggXs
+	zZ6g/v6xC6YK3CFZ1qGofvUR7Exdjhdp1wlWet+7yl1Uh8329+aTsj2ItIvjKn21rvORoQu0G7LEa
+	HnSBEJRE7aNYfLy9gdtrO1shcDjffajHZ8E8fdWKQ92r69rm7FKuzqtn99rtD3DxZ5ZYk7rlSvYZz
+	DLv6+6v98vd/JllRfMRlmAOzELt9u3vwE9RqgJ5K+qWl32awob9m2miIPMBRzk6XXxkML3T/J38Jm
+	iBDeIdNbQx8U2IpB7l+KRBn9qC+FAxTYJ4zB9bARqK41e5KW9H4/dIhJdfC4cZIQYEeGdDDbu3s6G
+	df2hAXBA==;
+From: Richard Patel <ripatel@wii.dev>
+To: Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org
+Cc: "H . Peter Anvin" <hpa@zytor.com>,
+	Kees Cook <kees@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Richard Patel <ripatel@wii.dev>
+Subject: [PATCH 3/3] selftests/x86: skip shstk tests where perf_event_open() fails
+Date: Thu,  8 Oct 2026 20:16:10 +0000
+Message-ID: <20261008201610.1003569-4-ripatel@wii.dev>
+In-Reply-To: <20261008201610.1003569-1-ripatel@wii.dev>
+References: <20261008201610.1003569-1-ripatel@wii.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="k3OG2Znm/XiSq3wJ"
-Content-Disposition: inline
-In-Reply-To: <20260916213108.9234-5-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Id: ripatel@wii.dev
 
---k3OG2Znm/XiSq3wJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+perf_event_open() without caps fails with EACCES on some kernels.
+With this fix, the shadow stack selftest passes without privileges
+on a kernel with a RHEL-like config.
 
-On Wed, Sep 16, 2026 at 11:31:08PM +0200, Wolfram Sang wrote:
-> Here are some fixes for issues I found in 'rtctest' while checking RTC
-> drivers. Details are in the patch descriptions. Patches 1+2 have been
-> tested on HW. Patch 3 has not been tested, just follows the pattern of
-> patch 2, but may need more discussion in general. Please read there.
-> Looking forward to comments!
+Signed-off-by: Richard Patel <ripatel@wii.dev>
+---
+ tools/testing/selftests/x86/test_shadow_stack.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-I guess at least patches 1+2 are good to go? Who would pick them,
-Alexandre or Shuah?
+diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
+index 67baebbdbd87..e2340232a7b6 100644
+--- a/tools/testing/selftests/x86/test_shadow_stack.c
++++ b/tools/testing/selftests/x86/test_shadow_stack.c
+@@ -952,8 +952,11 @@ static int test_uretprobe(void)
+ 
+ 	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
+ 		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
+-	if (fd < 0)
++	if (fd < 0) {
++		printf("[SKIP]\tUretprobe test, perf_event_open() failed: %m\n");
++		err = 0;
+ 		goto out;
++	}
+ 
+ 	if (sigsetjmp(jmp_buffer, 1))
+ 		goto out;
+@@ -1031,8 +1034,11 @@ static int test_uprobe_call(void)
+ 
+ 	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
+ 		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
+-	if (fd < 0)
++	if (fd < 0) {
++		printf("[SKIP]\tUprobe on CALL test, perf_event_open() failed: %m\n");
++		err = 0;
+ 		goto out;
++	}
+ 
+ 	if (sigsetjmp(jmp_buffer, 1))
+ 		goto out;
+-- 
+2.52.0
 
-
---k3OG2Znm/XiSq3wJ
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmrH83wACgkQFA3kzBSg
-KbaOixAAk9tHAVJH7d/OoHdHeexUGYZCLqnplyzHosqOOHV946FqeeT2cLJT6n+4
-vJjv6Fsgucl7Hd3su6WEUwQ+rqrcpYgTgooEjQtYQraperXYX1IEeQDlgBdqdDO0
-eCrSW8On5+FC2sA77rIIO+oT4dCa6mBnimie3krqWfzsft94jALtxQQBKqu+2M47
-35hDS7V4bsT/U6iRr61xXZsV/zdsxRen9iptjnNcU3jkPIAV+TLFj32lpNyWEJ2i
-t3T7ISbpWNGmpziq/vsbO/kJWuqZE6o5IG/4RSJYDt9fFkplKbGTfaoHynIWIpq4
-iulwRruLnpQnFrYP0XTKdTsQC7RzqkCgdGLO0YsFCGtcjEti0AJunD8fhQcf3C6b
-nLaPZCYoX+NnZV/Y9pgnpYGX3Q2ZDBLd+kuSCyC9vgzJLf5azt9ln+4Wi81bzhjd
-ZvaXvmifXythkmrFxTfr6hIyW/EPOWBPzFa1yshal+dAhyZZpi66tAIdEN7P4dvD
-WWFT9k/M51mSgDN1paOpgpY4xmlG2MriGBdg2wRhk8iWDXbdtbqTU7aRex+voP5P
-V2sbnVoGslz0cvcQf60E83v71yiQwCHqTFYp8CknIN1ZAFpmXR6rYroDyI1Jro9M
-5OjRWSkSKdA1hdXN2dqRVmQt0IBWxOHao2LjVGYd2ePGofWeHWE=
-=vAWR
------END PGP SIGNATURE-----
-
---k3OG2Znm/XiSq3wJ--
