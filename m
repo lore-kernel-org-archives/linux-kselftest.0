@@ -1,31 +1,47 @@
-Received: from va-2-111.ptr.blmpb.com (va-2-111.ptr.blmpb.com [209.127.231.111])
+Received: from va-1-111.ptr.blmpb.com (va-1-111.ptr.blmpb.com [209.127.230.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A9C3B71C4
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 06:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.231.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EEF3C108D
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 06:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791439218; cv=none; b=hpSkyHFR0zG1GGrAtR7dsnXjMTC9MMe1a7Fujqv4sLOgQM6HzwTZjGPBRqRzbANG19Fu1cE9QM/yIOLo4KRnsvKQHJTxBEvO2xg/Nwyivelenzf4Zl4/j0Uc5+yKm9YhXjipt/15L6xmfkNr09gA6KmmLIYaXNs38Ug5BGVn8io=
+	t=1791439349; cv=none; b=Qog9+M926iWqLUWIxYQZwnukwWTlCDbmKUn4QJrVZIy2cjVEx9URkMh01WnJLG2DlBy5JRSW0WuOvGkHSE5Ad9kij0wYNWq+BtzFYkr7yOtDQ5sb9rBosiJkA+TxStQalAa4bm4hq8AkqldV58w0dv1DdZQWZTl4pvCVdJqkr08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791439218; c=relaxed/simple;
-	bh=atopTEU82pKWj1hIlC0ATvjBX+nda9tdm3dbSc/Tkbk=;
-	h=Cc:Mime-Version:From:Subject:Date:Message-Id:To:Content-Type; b=Flqe77/iCiZ7XogL9LOmm6zTlRRoeQqkAxqp1kZjUDXeam3lKC8bQigatwTnsplfIYHTiEQI8MGXpy00JowMy/Cek0UM78kIGszsJM26RXQwVqHjoZSj5kFWbWXQ1YruzGWlQobjtu4isjbeycrXK3lnZHwLiL11HZcwa3ffpXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=Z8Q/SoiM; arc=none smtp.client-ip=209.127.231.111
+	s=arc-20240116; t=1791439349; c=relaxed/simple;
+	bh=/7W+p5q8W7ELfsDQRoOn9L3ahbX+2yLO+RzpZxdqYD4=;
+	h=To:Message-Id:Mime-Version:From:Subject:References:Content-Type:
+	 Cc:Date:In-Reply-To; b=ml2T54Pg3L3+/1yQUZQQkqYrNqNE92jPTXa5j0o7k6vIKV5t+LSA6cQ39yQD8DNUAhXGSyIoLZfqBZc4/IqtozY2Eoh6r5RxNNojHcADAG8TL4myIVM81BioFHur+1Mk0PxyFuyG2+tsfRPGCb16zgrsnw2eQFfqiCgYZZraNJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=ZX7CDWod; arc=none smtp.client-ip=209.127.230.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Z8Q/SoiM"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="ZX7CDWod"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=2212171451; d=bytedance.com; t=1791439205; h=from:subject:
+ s=2212171451; d=bytedance.com; t=1791439342; h=from:subject:
  mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
  mime-version:in-reply-to:message-id;
- bh=IJJMdUiSpOAuCXacXIpmuvPEGQiEu8gSCHcioGm/R8A=;
- b=Z8Q/SoiMIR/bdVsaHkndDc5s8uJl8Kktv1koX/5Lb3hHJNTvXq0VOmjxcve38iDOmPMXmG
- pADjoHgkhGtQ7hJAWRTnmvw9SvTlEl29TZpcl/OrpPSdkVC4bJQOUa36qTEWHGqzANVBjz
- C+04tNFHXO07fxzxIbrCCU4s5D8t0wmPodwJkOFIy+2uhSNhMCtxuqH37xaml+gVRC8vBx
- mVrk1UBxn1UHLyz56bGWQdPUP1R+zvRoLmkEnc8jcbnIk5s6Psf61P3rFFtoGupWm8GETD
- qHju4e8S2VJC1U1xqQep6EfttS5cRpI+PVnWrH4UR4QXwA5vuYzpKb/ncvCggQ==
+ bh=9lOUfmTQUxCK7uaJg5PjGqEKKx8509Dflb3S9NiI/Lo=;
+ b=ZX7CDWodPY/2dGle1rsP8QbEcAMkCcFS1h7cUwPUKM0w36idYbPEzkXiRoCUIS8C55Gjv0
+ sDZdkekRFy/tnja4YGcTKndUPJ0v8QMGdoPE1A2X3IMPEDfsAie/OTgR7blsesJ80NDG5a
+ vNrd0MDiZu8q0ZHcnhLgvYkNVLnES/KWM/r1W/eFxZ7DoUeAcU8VLWFX68EWzQaQl/4azC
+ 7w+7FV3SrGOLRX15zFMBjBbXAmsymXs3FlL5BtLPofpLy1gLDITS0BwQ6NRyoNnT/vItdN
+ pEjun+HYN3j0Yrcf5u4E0z6Na7PG3/SdWSi6uZf0iz0nBLUDV1g+PQs9QiPIMA==
+To: <x86@kernel.org>
+Message-Id: <11ea12962bda75b3e8ef845084546647f79eca38.1791428412.git.weiguixiong@bytedance.com>
+Precedence: bulk
+X-Mailing-List: linux-kselftest@vger.kernel.org
+List-Id: <linux-kselftest.vger.kernel.org>
+List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+From: "Guixiong Wei" <weiguixiong@bytedance.com>
+Subject: [PATCH v2 2/2] selftests/x86/amx: Test dynamic fpstate cleanup across exec()
+Content-Transfer-Encoding: 7bit
+X-Mailer: git-send-email 2.55.0
+X-Lms-Return-Path: <lba+26ac731ed+e7a13a+vger.kernel.org+weiguixiong@bytedance.com>
 X-Original-From: Guixiong Wei <weiguixiong@bytedance.com>
+References: <cover.1791428412.git.weiguixiong@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
 Cc: "Guixiong Wei" <weiguixiong@bytedance.com>, 
 	"Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, 
 	"Borislav Petkov" <bp@alien8.de>, 
@@ -34,57 +50,208 @@ Cc: "Guixiong Wei" <weiguixiong@bytedance.com>,
 	"Chang S . Bae" <chang.seok.bae@intel.com>, 
 	"Shuah Khan" <shuah@kernel.org>, <linux-kernel@vger.kernel.org>, 
 	<linux-kselftest@vger.kernel.org>
-Precedence: bulk
-X-Mailing-List: linux-kselftest@vger.kernel.org
-List-Id: <linux-kselftest.vger.kernel.org>
-List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: "Guixiong Wei" <weiguixiong@bytedance.com>
-Subject: [PATCH v2 0/2] x86/fpu: Fix dynamic fpstate leak on exec()
-Date: Thu,  8 Oct 2026 13:59:34 +0800
-Message-Id: <cover.1791428412.git.weiguixiong@bytedance.com>
-Content-Transfer-Encoding: 7bit
-X-Mailer: git-send-email 2.55.0
-To: <x86@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-X-Lms-Return-Path: <lba+26ac73163+9dfaf3+vger.kernel.org+weiguixiong@bytedance.com>
+Date: Thu,  8 Oct 2026 13:59:36 +0800
+In-Reply-To: <cover.1791428412.git.weiguixiong@bytedance.com>
 
-An exec() after using an XFD-controlled xfeature resets fpu->fpstate to
-its embedded storage without freeing the dynamically allocated state.
-Fix the leak in fpstate_reset() and add an AMX regression selftest.
+An AMX task gets a dynamically allocated fpstate after requesting
+XTILEDATA permission and first loading tile data. Test that exec()
+releases this allocation instead of making it unreachable.
 
-The fix preserves the old pointer, installs and initializes the embedded
-fpstate, and then frees the detached allocation. Since fpstate_reset()
-now owns cleanup, fpu_clone() initializes dst_fpu->fpstate to NULL before
-invoking it.
+Run ten request, XRSTOR and self-exec cycles in the same task. Count the
+matching allocations in /proc/vmallocinfo before the test, while the
+first allocation is live and after the task exits. Skip the test when
+/proc/vmallocinfo is unavailable or when concurrent global vmalloc
+changes prevent an isolated measurement.
 
-The selftest performs ten XTILEDATA request, XRSTOR and self-exec cycles
-in the same task and checks the associated /proc/vmallocinfo entries.
-It fails with 10 leaked allocations on the unfixed kernel and passes
-with zero on the fixed kernel.
+The test observed 10 leaked allocations on an unfixed kernel and zero
+with the fix applied.
 
-Changes since v1:
-- Rename the fix and describe the memory leak explicitly.
-- Move cleanup into fpstate_reset().
-- Detach the old fpstate before freeing it.
-- Initialize dst_fpu->fpstate to NULL before resetting it.
-- Add the requested AMX regression selftest as a separate patch.
-
-v1: https://lore.kernel.org/r/20260929151013.81562-2-weiguixiong@bytedance.com
-
-Guixiong Wei (2):
-  x86/fpu: Fix memory leak with dynamic fpstate and exec()
-  selftests/x86/amx: Test dynamic fpstate cleanup across exec()
-
- arch/x86/include/asm/fpu/api.h    |   6 +-
- arch/x86/kernel/fpu/core.c        |   5 ++
- arch/x86/kernel/fpu/xstate.c      |  10 +--
- arch/x86/kernel/process.c         |   2 +-
+Signed-off-by: Guixiong Wei <weiguixiong@bytedance.com>
+---
  tools/testing/selftests/x86/amx.c | 144 +++++++++++++++++++++++++++++-
- 5 files changed, 156 insertions(+), 11 deletions(-)
+ 1 file changed, 143 insertions(+), 1 deletion(-)
 
-
-base-commit: 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e
+diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+index 40769c16de1bb..cf098dfbe50c0 100644
+--- a/tools/testing/selftests/x86/amx.c
++++ b/tools/testing/selftests/x86/amx.c
+@@ -3,8 +3,10 @@
+ #define _GNU_SOURCE
+ #include <err.h>
+ #include <errno.h>
++#include <limits.h>
+ #include <setjmp.h>
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include <stdbool.h>
+ #include <unistd.h>
+@@ -30,6 +32,9 @@
+ #define XFEATURE_MASK_XTILEDATA	(1 << XFEATURE_XTILEDATA)
+ #define XFEATURE_MASK_XTILE	(XFEATURE_MASK_XTILECFG | XFEATURE_MASK_XTILEDATA)
+ 
++#define EXEC_TEST_ARG		"--exec-test"
++#define EXEC_TEST_ITERS		10
++
+ struct xstate_info xtiledata;
+ 
+ /* The helpers for managing XSAVE buffer and tile states: */
+@@ -478,11 +483,144 @@ static void test_fork(void)
+ 	_exit(0);
+ }
+ 
+-int main(void)
++static int count_dynamic_fpstates(void)
++{
++	char *line = NULL;
++	size_t line_size = 0;
++	FILE *fp;
++	int count = 0;
++
++	fp = fopen("/proc/vmallocinfo", "r");
++	if (!fp)
++		return -errno;
++
++	while (getline(&line, &line_size, fp) >= 0) {
++		if (strstr(line, "__xfd_enable_feature") ||
++		    strstr(line, "fpstate_realloc"))
++			count++;
++	}
++
++	if (ferror(fp))
++		count = -EIO;
++
++	free(line);
++	fclose(fp);
++	return count;
++}
++
++static int parse_exec_arg(const char *arg)
++{
++	char *end;
++	long value;
++
++	errno = 0;
++	value = strtol(arg, &end, 10);
++	if (errno || *end || value < 0 || value > INT_MAX)
++		fatal_error("invalid exec test argument: %s", arg);
++
++	return value;
++}
++
++static int run_exec_test(int iterations, int baseline)
++{
++	char iterations_arg[16];
++	char baseline_arg[16];
++	int allocated;
++
++	if (!iterations)
++		return 0;
++
++	req_xtiledata_perm();
++	if (!load_rand_tiledata(stashed_xsave))
++		fatal_error("failed to load tiledata before exec()");
++
++	if (iterations == EXEC_TEST_ITERS) {
++		allocated = count_dynamic_fpstates();
++		if (allocated != baseline + 1)
++			return KSFT_SKIP;
++	}
++
++	snprintf(iterations_arg, sizeof(iterations_arg), "%d", iterations - 1);
++	snprintf(baseline_arg, sizeof(baseline_arg), "%d", baseline);
++	execl("/proc/self/exe", "amx", EXEC_TEST_ARG, iterations_arg,
++	      baseline_arg, NULL);
++	fatal_error("exec");
++}
++
++static void test_exec(void)
++{
++	char iterations_arg[16];
++	char baseline_arg[16];
++	int before, after, delta;
++	pid_t child;
++	int status;
++
++	printf("[RUN]\tCheck dynamic fpstate cleanup across exec().\n");
++
++	before = count_dynamic_fpstates();
++	if (before < 0) {
++		printf("[SKIP]\tCannot read /proc/vmallocinfo: %s\n",
++		       strerror(-before));
++		return;
++	}
++
++	child = fork();
++	if (child < 0)
++		fatal_error("fork");
++	if (!child) {
++		snprintf(iterations_arg, sizeof(iterations_arg), "%d",
++			 EXEC_TEST_ITERS);
++		snprintf(baseline_arg, sizeof(baseline_arg), "%d", before);
++		execl("/proc/self/exe", "amx", EXEC_TEST_ARG, iterations_arg,
++		      baseline_arg, NULL);
++		fatal_error("exec");
++	}
++
++	if (waitpid(child, &status, 0) != child)
++		fatal_error("waitpid");
++	if (WIFEXITED(status) && WEXITSTATUS(status) == KSFT_SKIP) {
++		printf("[SKIP]\tDynamic fpstate allocation was not isolated.\n");
++		return;
++	}
++	if (!WIFEXITED(status) || WEXITSTATUS(status))
++		fatal_error("exec test child");
++
++	after = count_dynamic_fpstates();
++	if (after < 0) {
++		printf("[SKIP]\tCannot read /proc/vmallocinfo after exec(): %s\n",
++		       strerror(-after));
++		return;
++	}
++
++	delta = after - before;
++	if (!delta) {
++		printf("[OK]\tDynamic fpstate allocations were freed across exec().\n");
++		return;
++	}
++
++	if (delta == EXEC_TEST_ITERS)
++		errx(1, "[FAIL]\texec() leaked %d dynamic fpstate allocations",
++		     delta);
++
++	printf("[SKIP]\tDynamic fpstate vmalloc usage changed concurrently.\n");
++}
++
++int main(int argc, char **argv)
+ {
+ 	unsigned long features;
++	int iterations = 0;
++	int baseline = 0;
++	bool exec_test;
+ 	long rc;
+ 
++	exec_test = argc == 4 && !strcmp(argv[1], EXEC_TEST_ARG);
++	if (exec_test) {
++		iterations = parse_exec_arg(argv[2]);
++		baseline = parse_exec_arg(argv[3]);
++		if (!iterations)
++			return 0;
++	}
++
+ 	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
+ 	if (rc || (features & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE) {
+ 		ksft_print_msg("no AMX support\n");
+@@ -498,6 +636,10 @@ int main(void)
+ 	init_stashed_xsave();
+ 	sethandler(SIGILL, handle_noperm, 0);
+ 
++	if (exec_test)
++		return run_exec_test(iterations, baseline);
++
++	test_exec();
+ 	test_dynamic_state();
+ 
+ 	/* Request permission for the following tests */
 -- 
 2.50.1 (Apple Git-155)
