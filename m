@@ -1,106 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-108-mta182.mxroute.com (mail-108-mta182.mxroute.com [136.175.108.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2673E40F5;
-	Thu,  8 Oct 2026 22:47:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9E133122A
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 22:53:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791499625; cv=none; b=KJjdF1LwVFjGAObmEVweW6HntCBPO7CvAdCvobtjSw3M/lUl5cVaYpPWWgrpUa93T2VconfZ/Z9H/0MuEdXp6G22nzy8uS7C72xiEgqgleJ5qzI7znFVjUdfndaCTC4g2SfcolVXxb1zKJkrqHGKsZqdKepPQ28fGu/HjdmIN5Q=
+	t=1791499994; cv=none; b=CKMinAIcn9IayO7NyyV0HQAaxhnfoaddHClUxSFPnyTDO000BjJrsfWREacuHbDwm5LIVA32a6znSRGHsnJjxQ/H6uptrIx36Eu4vLkzVZTaMlL4bA/rRwbMhbycmEszXsNw7D0MH0a3jBuwRDed3I1MOjZganU+YCSrRz8jK4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791499625; c=relaxed/simple;
-	bh=1xff5OP4JTlo3Wsm/jooTd+9avb5DjpWuRtnCb8Vg7w=;
+	s=arc-20240116; t=1791499994; c=relaxed/simple;
+	bh=Tewqs+3mxTOPi5xQ3CRQVUmoa49UdmviF7M5Ytl4S3s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iBm9dOzJYMYCfOJNZp4nxSSTAcJ1GoVYIZNwLGVuPOQQeqcHVtWcRU4uo+PKA5SWC0P06R95Cma4t0d+K2mzUWQF3oA6Eb7v1WW40rq94Pn2E3BB9xak+XVNMzwDjjZTadb6YKUDxbytezy53MAgtMBKZKsJ1uBdtL/8oKxrG5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YiWatklT; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=MjqLCguHcW/uLeEJz95K7DvfG4eJXvtVMpHeCjHxXySgQawSujvOpHHSHgULUVC/meaMWM5jxj1GAFtVJsfAIwxh57R2w96ecH6/TDEvq2DR6U/K2O2LfG8L834OQ3D5usPAX4/gvNshuBah47Dwj05KCll0VJfPRe2GPxAFzcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=qYGO9A3c; arc=none smtp.client-ip=136.175.108.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YiWatklT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0578B1F000FF;
-	Thu,  8 Oct 2026 22:47:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791499624;
-	bh=pCfJKPsNaF/SxbFsWfcA1FHSBJHgg6l/3ARJ3G8D/iE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YiWatklTha/8mDOvNOV4ymEYyqODHFwSzx3UXwKSES/mokMZYcEdudNXmJwRXrIgp
-	 6A9mrj9RUzb/nIujVnVifEXe0So7H23ze7t4egFVedFW8PnEw+9+QHzUCKsQkTz7un
-	 49AP0BiFCrDG1YPEOlqzrM61dqiynA7v4xubPo6CDj7kIxQ3QmSAtrShOAJa5JqOXC
-	 lDrLy3BXBIOC9Bju+9E42B6lrAMwQcJhhvVTZOPLaoiAVt3ANPKzlcBS5KOnVldcYD
-	 /AhFqUoAuKhZ0iqXDFAFLAq8Ow653o5CiXNcZmXm9u1K81AsiQaLBfx8tgPH9XeZJh
-	 9ius3rVPTxQ5A==
-Date: Thu, 8 Oct 2026 18:47:01 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: David Laight <david.laight.linux@gmail.com>,
-	Gregory Price <gourry@gourry.net>, linux-api@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
-	tools@kernel.org, x86@kernel.org, Thomas Gleixner <tglx@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
-	Jake Edge <jake@lwn.net>, Gabriele Paoloni <gpaoloni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v5 05/11] kernel/api: add API specification for sys_open
-Message-ID: <asgdZfjXmX3gnkfQ@laps>
-References: <20261008084956.2911790-1-sashal@kernel.org>
- <20261008084956.2911790-6-sashal@kernel.org>
- <aseRXi7hMWBBc0tB@hallyn.com>
- <aseWPV6ZRQM3JOMN@gourry-fedora-PF4VCD3F>
- <asemkQ2v0di0Eea3@hallyn.com>
- <20261008171205.7239c463@pumpkin>
- <asfB7tHWs420QkWL@hallyn.com>
+	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="qYGO9A3c"
+Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
+ (Authenticated sender: mN4UYu2MZsgR)
+ by mail-108-mta182.mxroute.com (ZoneMTA) with ESMTPSA id 1a11db3bab300128b2.00a
+ for <linux-kselftest@vger.kernel.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 08 Oct 2026 22:48:00 +0000
+X-Zone-Loop: ca108f699d39b8fc4c9ef03674c057c03757ee80c3ad
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
+	s=x; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc
+	:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=rPlFkPqk5r54yRG9oU9wRGAKBm27HiIlHGZ2VN8Qelk=; b=qYGO9A3c7jMhRNcNL6nCxjWvox
+	alaOYWV7hntjsoYiabEiKgkgWBG1lXhadqAzKeCHKKNfGOMA/FRnR7opv3slkcWuJEl5ssSDY7KaM
+	mOh7vKO0k2TisXw9ix2BGNDSadxTE/3ejxgxIWyfohPvF7KLi7Id3as/wrWiXZU7l66EPKEyiYqhZ
+	vMLesC5OplSgyvwBfi45WUB52FLV79V3qVsUe4+PhDBUx4E3E0MdakPRczCIVy40Cp/HdnE+gfnWk
+	xVTDnr6ddR5QdzktpnlNBIq6/SeDKm9UcX/bHePY29RuL4cR4l4F53DeSafV5Xtnhelg+jvCkDHVb
+	qiIpVKnA==;
+Date: Thu, 8 Oct 2026 22:47:49 +0000
+From: Richard Patel <ripatel@wii.dev>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "kees@kernel.org" <kees@kernel.org>, "x86@kernel.org" <x86@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>, "tglx@kernel.org" <tglx@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 1/3] x86/shstk: ban ia32 sigreturn when shadow stack is
+ enabled
+Message-ID: <asgdlclj3MgtGrSp@wii.dev>
+References: <20261008201610.1003569-1-ripatel@wii.dev>
+ <20261008201610.1003569-2-ripatel@wii.dev>
+ <e1a26ac75c39673d043b2860f848827fecbcb843.camel@intel.com>
+ <asgQDlpnDwu04oZc@wii.dev>
+ <6deab6fec99c65408a19b9036d67ce7f1fab54b5.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <asfB7tHWs420QkWL@hallyn.com>
+In-Reply-To: <6deab6fec99c65408a19b9036d67ce7f1fab54b5.camel@intel.com>
+X-Authenticated-Id: ripatel@wii.dev
 
-On Thu, Oct 08, 2026 at 11:16:46AM -0500, Serge E. Hallyn wrote:
->On Thu, Oct 08, 2026 at 05:12:05PM +0100, David Laight wrote:
->> On Thu, 8 Oct 2026 09:20:01 -0500
->> "Serge E. Hallyn" <serge@hallyn.com> wrote:
->>
->> ...
->> >
->> > Even if there's just a three line comment above a fn, history proves
->> > that it will not reliably stay in sync as the fn changes.  An automation
->> > step/check is needed.
->>
->> The only way it can possibly stay in step is to have the compiler process
->> the same source text.
->> Then, if you add/change a function parameter you'd be pretty much forced
->> to add/change the comment.
->> Return values would have to be documented at the C return statement and
->> really as an extra parameter to the return.
->>
->> But, IMHO, the whole thing adds too much bloat to the source files.
->> When you 'grep' a source file, you don't really want another match in
->> a big comment at the top of every function.
+On Thu, Oct 08, 2026 at 10:34:02PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2026-10-08 at 21:50 +0000, Richard Patel wrote:
+> > > How can it defeat protection? If doesn't process the shadow stack sigframe
+> > > at
+> > > all, leaving the SSP where ever it was originally. What am I missing?
+> > 
+> > The selftest demonstrates that 'int $0x80' rt_sigreturn from 64-bit mode
+> > jumps to an arbitrary %eip in the signal frame (zero-extended to %rip), \
+> > whereas the 'syscall' variant raises SIGSEGV if %rip is corrupt.
+> > 
+> 
+> It should just be restoring the SSP from the shadow stack signal frame. Perhaps
+> you saw the syscall variant fail because it was not at the restorer. Since you
+> are manually calling sigreturn instead of returning normally. So then it was was
+> not at the shadow stack signal frame and the shadow stack signal check thought
+> it was a forged SSP. And the 32 bit one succeed because there was nothing
+> checked.
+> 
+> But that doesn't have to do with checking EIP matches where the signal was
+> generated?
 
-I guess I don't mind either way: I heard both sides of this argument, and the
-spec workflow is okay with either, so if the relevant maintainer asks for
-changes here I'm more than happy to reformat this.
+I see now, sorry. Yes, I misread the code, and assumed the signal frame
+has a matching shadow stack entry that includes the RIP check.
 
-Which is, I think, the advantage here: it works just fine for the various
-"kingdoms" we have in kernel-land.
+> > I don't think it matters that SSP is still at the old place. It would
+> > only break 'ret' after sigreturn, but the problem is that the sigreturn
+> > itself is a wild jump.
+> > 
+> > "defeat protection" was badly worded, I just meant that the 'syscall'
+> > path has protections that the 'int $0x80' path doesn't have, so I
+> > thought it'd be worth fixing.
+> > 
+> > I might be missing something, maybe SHSTK never intended to defend
+> > against a wild sigreturn? Either way, it's not a security thing.
+> 
+> Hmm, I guess its kind of on the line between forward edge and backwards edge. I
+> see your point.
+> 
+> But today setting EIP to an arbitrary point is fairly easy. But even in a future
+> case of IBT enabled, shadow stack would still need enhancements for the normal
+> 64 bit runtime to prevent this. 
 
--- 
-Thanks,
-Sasha
+What do you think of creating a shadow stack frame on signal delivery
+and popping that on sigreturn? I suppose that would need siglongjmp
+modifications and probably break CRIU. :(
+
+I wonder if there are real apps that abuse sigreturn as a forward edge.
+If so, they should not be advertising their DSO as shstk-compatible.
+
+> In the past we discussed hashing some amount of the sigframe and putting it on
+> the shadow stack to give some sigframe integrity. But this runs the risk of
+> breaking apps so would need to be an opt-in enhancement.
+
+Yes that seems a bit excessive to me. At least, the 64-bit path protects
+against obviously forged signal frames, so maybe there is still a case
+for the patch?
+
+-- Richard
