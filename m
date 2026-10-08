@@ -1,1063 +1,207 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8493CB8E5
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 19:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41935348C63
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 19:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791487279; cv=none; b=gOemqalUotyY25yMO0aiTPgRf6JCXx+t/YGt7UGxUvE9r4BqlaehyE29ZIFq+lDuHzoYcMsNwFme96BuCKBFxc/XJCZPliNYt/D2ovT9lYXrcLY4xDfXMRFvU4nb+dwDV9qV/adBwgExeK437A6Gm4iOVDlcA9+hd2crOz6G5lw=
+	t=1791487315; cv=none; b=SgFAqqMVREmodpR9IvCF3WD+dPxxs5EpdJ5VFDUcRDIm1okhUpo4TqaAHlLY1BhxN75fChdRWNPk5e7JV8l28z4TJOTaKqZ21+vPBgM7iWIWVOhMt2AmMARgg/pDxegV9yhH4IJtl/8J27A9iEYlE4evVQn5mInGImnYrj3iRgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791487279; c=relaxed/simple;
-	bh=iZFX0Lfji/gTmtqP7JTNPQDKhu8Z81iS0NuAYZb6CLY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ft1IbDf+tD3pKDUie7UXl2pNjYq5zD41F5it7RdzObjEc8KPJAZtlrTtwGG0sZ1Lnyl+uVPerZLrmk1C+T39ZpUvci4whp3P/Daf8mQU9S1BN8/+MHyxPYJ4sQZEGPxBYDpiPgAThGWPpHENR3WGivRSuvSRn6B7F+CSvyMX84M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FpXd9p07; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1791487315; c=relaxed/simple;
+	bh=VpekPW+lER9wN5l4mPLLCT96aosom/Cgc2osOvqOym0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V8Cf93pl3rkwotqbLfEznPM4N+jeoYg/K5BbU3VRsUM0+/ewEAcwDyTclO5fUkWKThu6L21Rvt28JWBeHqIblupUo4UdHhi8gBfCsPjJWyMQwyjwLKPgmDWacpnBoXLoB2eBpX5YLutc/BJIDPF0BKiOdHdk6P3mZA7ypcRdZaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z425sjj6; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FpXd9p07"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2dd1dcdcf95so6006805ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 12:21:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z425sjj6"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3a7fecf8440so2205394a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 12:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791487276; x=1792092076; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3DV92gNsyU0joatjazvu4/RZiXYvrWJBdsNZ+3gW8lQ=;
-        b=FpXd9p07U+V2CVMf/psBaaI+2qoNQ38wFno5KPu6m0W5f41Dcrvtjq8nlNereOfE3Q
-         +Ou1oNtxAiPe3ub/uIsatMBZvgojTGfWw5I4wRBD0WPNwmoYC9bY07QdW1PGdVUDzdIR
-         YevZNcwE1N4L2Ov3JsdzGClMYKvs3JT+5muiRKcW1jhQx8UudpCJqUBKvDQHBjXifANZ
-         xRC0ASVwXC8x9o38DBv6W47Uefd88CrygSoRhAJux1t++CJeLwOG4u0V7YOhNa9mrGN8
-         B40lXgkZa8Fp1husdPVrtbHd8qQm8uzajlJA5TQIbcmxXNB8JxU6N8BKO1F4q1x9DexE
-         6/Bw==
+        d=gmail.com; s=20251104; t=1791487314; x=1792092114; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hyWGN8x92BFhClfZ4tQgIWkJPd/YlyiaqFtPEUdqMkg=;
+        b=Z425sjj6z0aZOL+gNs6rZhChu94+xR68lKMIRPzr7bUKpW8AkrFYG958WRZPQEhJmc
+         yCC5571oK04ZvaKBPg/15c4HPSmuforOChkzKpfXS6XKoEARqru07o+6A55DjSMRMWql
+         /kXLvHLd10bZCKKYxmeEBNmtwRs7aFFVFVRXPzKjkdnVxgdUBok+BLJhLwzLLZXYIcKs
+         obWXJWWq+q/W12TXWeleumDX0sFUldxGzIG0aoG8KmT4setvMAMaQIef17efw0XJSdoj
+         9aQft9tUlqt1HfpItSRGFDprtTdCU3ucNOHMxWWgJIJwZ1Y09waQVJ6j4fl71HzVMYYP
+         7d0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791487276; x=1792092076;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1791487314; x=1792092114;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3DV92gNsyU0joatjazvu4/RZiXYvrWJBdsNZ+3gW8lQ=;
-        b=bnY13GsMmAMmmVsnLUiYB9EuMAG5VGQ7lb88UHa5hWYrqEHwPHhb8/X7Ac2AJz/RUS
-         6igQvq2hrIO7pARFtLG2XGVZ+tBmU6cN3nryIkTDVvaiV+DNaO5AVp1AGELZ2oPI8/cJ
-         WhZHqA0t50ksHKis0JxZYQ2UY5DTK62xU6SwH5DY0rMhQSGWYCCshEE8csKGTYGsX7u/
-         NMNidxMETUd0RjniQ+jbWF60KbrsUzqBvAS+ln2iy0QlwL3BNSbbR5y+/2R9DEZDXptR
-         1SvWOOez+Ks3FLxhA7tiowgr86twCgncAGpmttlSxJk7PBXobPEwlqDQ/ORQu11kgicM
-         OI7Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwiggGQFFZvpOtcXxSzTfeQRu+UybtB+r3r3q3EppIbHBRG8srq8TblJdqPNVACrliuHkcRMnc6N4pUoIl7lHA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLEXbTfpyym4YLTLY534Oo6pIWCMDRKe8ukcFGBtk3QyEFWiHil
-	gTWX2QqUltSVJ3m+PG9+5DvYNmxlfvKXKauTA1c6VkSxzYzO97I9GdMszUknSA==
-X-Gm-Gg: AYBFou2x+hnb1Ufd72/HvkEsyETnXW3T0cIAazb73Z6C2slEvvugdv3Z1IkdQi9DxKa
-	PPEuP9uWYdfNXPyf9PpapT+0RVPpqywZOhWg3zeceQO+YPhUB9a2dDrazykVDDyyZUrAGtrYz3G
-	ouF5T2IAIVqncXV8uPkhGtnbG1o3lr873NNE+bfu0vOj0B/0vq4rZvQ+BwM2hMLfM3hhaV7Dxpg
-	2/TuKKCiUbTXa1wvxDhMMWQizJM4uzbbjQ+KXgmijWLk3+KdgqEBvX/G43JoVR2ssjvWyTHJ+hX
-	e3K2Ch+STss3XWyZZJWun/AwAZQLiZ+eeoTzzFkzoUxZqBaU8EqMUgC99SCNRMJ0/pGx8gpRbv3
-	pifi0QAd5XvjTuJDtN8UW8jacwHmG7o8YdjB8btIDTWW1uUuBC34vmVf7qIngfiZLd+8S+FubCH
-	l3yluOCW+Fcx1jALLxINNr9ayr6db6a6hWmyJntYGksmy1WMUtxZ2St6xzgKocduf4q3FtY8Jzm
-	XLl0s/LbIRwLakU
-X-Received: by 2002:a17:903:228b:b0:2df:5c13:b37c with SMTP id d9443c01a7336-2e800019ab5mr22693045ad.26.1791487276319;
-        Thu, 08 Oct 2026 12:21:16 -0700 (PDT)
-Received: from [192.168.0.160] ([76.135.114.51])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e83cd9757fsm811965ad.63.2026.10.08.12.21.15
+        bh=hyWGN8x92BFhClfZ4tQgIWkJPd/YlyiaqFtPEUdqMkg=;
+        b=gFVshwhMqrBfsSqcyDkcmmAjhVRWUaX4CEbDcV5zS3/034jnN5ruvmoSfT2lijulQ3
+         iLn6j/Bb2Ce83uEAuVZLGTYhXHCGF0AKhgAljHmNgTSPEk9mVjE0/ccpSHxiZ0QjqwZC
+         JyxYBg3//4e2yKAk35qySg7/Otb4jF12qMw1wlIrSuS094NAI1UQbIeSNZrzVEUZm0D0
+         dr3GIPea73cfc1ydKhsIjqWv2qeVdF9zaL/D9OEVrkk3WUeSvkOa+Fm6n6xPKn0jDjxU
+         fapgzJDtVMS8QvUPsuMT6vvDh1RX+WH/bBdL3n3+BoKFrNVxcDJV24mEajcQ7Rk9iCd0
+         BGSw==
+X-Forwarded-Encrypted: i=1; AKwUvBzwuWmkkvWbJnvH42a7WorOXagvDXSkP0lyVN5gjPNbir3FkBfnQN8zSW+RDU/cE7mtS5znZpsbprGvNyCdrW0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIzvP8NM/6MQ+j8dhDy6GeJctrF2zGKv7xEi9kkA3LnbzKlNryq
+	WoD94pFdJB5CYWZkDpHtPSyP8lL258PShytrwxyy0ks6+yAPdP0vUEm+
+X-Gm-Gg: AYBFou2fM/J9JDXQ0EJDA63Jv16fZ9Y0mPglapx3I60GpzQZkJz/zbrysPSOrMZHDHf
+	E5mZnNlzMtpKGc5xLCB0K3rhm0s7MhAqrGn73kbajeOF3u7HYDNGAqDp7Lg+aTlWpF541iFiz1g
+	dxjgMd09Cio4wEYUStWYOf0wm133C2kqS8LLLjZ75E05V47+AYJk8DVRkXIykgtY8n0skTfvubV
+	AnYB+9IndTFL3qtfPCEHAjxB1L8NzTptiaDCfw+SqUMcVV1Vd32wLWVgOA6a6b8zAlR5YWgK4Ho
+	UVAT2MI03o4xV2CoOuoxWMvqKoaeqeg+amJ3qy7yOlM6I+sXmHCdKK7ryaoCvlXtqqMIZxERSFS
+	VxctpB8xUF1n7XXwJ52H6XLn8vJbBeEAo7kJF6utxvlpNXqEaz8nMh8kULYynQBmPUi3ebMuxhS
+	n8mwBax6nUWWfPnJ+6CsUAr0eIt8r7Hzrfi3S1OQgCA0DNGWHOZDUxlSX2cMGJC+pjruo4OIVVk
+	A==
+X-Received: by 2002:a17:90b:3bc7:b0:3ab:22fe:b142 with SMTP id 98e67ed59e1d1-3ab22fecf9fmr1055731a91.1.1791487313011;
+        Thu, 08 Oct 2026 12:21:53 -0700 (PDT)
+Received: from skinsburskii ([76.135.114.51])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36ed053csm74973a91.4.2026.10.08.12.21.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 12:21:15 -0700 (PDT)
+        Thu, 08 Oct 2026 12:21:52 -0700 (PDT)
+Date: Thu, 8 Oct 2026 12:21:50 -0700
 From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-Date: Thu, 08 Oct 2026 12:20:24 -0700
-Subject: [PATCH v3 2/2] selftests: fuse: test per-inode open suppression
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Robert Byrnes <byrnes@wildpumpkin.net>, fuse-devel@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] fuse: add negotiated per-inode open and release
+ suppression
+Message-ID: <asftTiSldKhdNEYA@skinsburskii>
+References: <20261008-fuse-per-inode-no-open-v2-0-39c60fe97728@gmail.com>
+ <20261008-fuse-per-inode-no-open-v2-1-39c60fe97728@gmail.com>
+ <2621089d-f087-4b0d-89bf-3cd1218b5f66@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261008-fuse-per-inode-no-open-v3-2-99cfd3dbc06b@gmail.com>
-References: <20261008-fuse-per-inode-no-open-v3-0-99cfd3dbc06b@gmail.com>
-In-Reply-To: <20261008-fuse-per-inode-no-open-v3-0-99cfd3dbc06b@gmail.com>
-To: Miklos Szeredi <miklos@szeredi.hu>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
-Cc: Robert Byrnes <byrnes@wildpumpkin.net>, fuse-devel@lists.linux.dev, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Stanislav Kinsburskii <skinsburskii@gmail.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791487272; l=30472;
- i=skinsburskii@gmail.com; s=20260722; h=from:subject:message-id;
- bh=iZFX0Lfji/gTmtqP7JTNPQDKhu8Z81iS0NuAYZb6CLY=;
- b=q4/mF6dYXHgaMSSA+YL6qW4VCrycOl9gd4VdrIaym+nOrP+GJ5RI5185S2RNHhBlusPv4HGpC
- CCDgnUoWFTiDb6uEVbiQjUALAweXmpjeu36OuKTCpEQsLyK7PRRTXg6
-X-Developer-Key: i=skinsburskii@gmail.com; a=ed25519;
- pk=bDpriHBYgeTdkIDweZDCemxsU93neJBOCn3YLIuJpnE=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2621089d-f087-4b0d-89bf-3cd1218b5f66@infradead.org>
 
-Add a raw /dev/fuse server and tests for FUSE_PER_INODE_NO_OPEN, without
-requiring libfuse to support the new capability or attribute flag.
+On Thu, Oct 08, 2026 at 11:17:46AM -0700, Randy Dunlap wrote:
+> Hi,
+> 
+> On 10/8/26 11:06 AM, Stanislav Kinsburskii wrote:
+> > Filesystems serving cached content may not need per-open state for most
+> > inodes, while still relying on OPEN for control files. The connection-wide
+> > no-open behavior selected by ENOSYS cannot express this distinction.
+> > 
+> > Add FUSE_PER_INODE_NO_OPEN to INIT negotiation and FUSE_ATTR_NO_OPEN to
+> > inode attributes. For marked inodes, use the existing zero-handle defaults
+> > and normally omit OPEN/OPENDIR and the corresponding RELEASE/RELEASEDIR.
+> > Remember whether each handle was opened locally, so later attribute updates
+> > do not determine the release behavior of existing handles.
+> > 
+> > Retain RELEASE after a successful remote flock operation, even when OPEN
+> > was skipped, so FUSE_RELEASE_FLOCK_UNLOCK can clean up server-side locks.
+> > Servers negotiating remote flock must accept this RELEASE with a zero file
+> > handle and no preceding OPEN, including after an explicit unlock.
+> > 
+> > Keep the release argument allocation for regular files, which pins the
+> > inode while asynchronous I/O completes. Honor the hint for internal opens
+> > used by file-attribute ioctls as well. The capability check excludes CUSE
+> > before accessing its non-FUSE inode as a fuse_inode.
+> > 
+> > The per-inode hint does not suppress OPEN for atomic O_TRUNC, since the
+> > server must perform the truncation. CREATE retains its existing handle
+> > lifecycle. Connection-wide no-open/no-opendir behavior selected by ENOSYS
+> > continues to take precedence.
+> > 
+> > Update the cached hint from LOOKUP, GETATTR, SETATTR and READDIRPLUS
+> > attributes. Preserve it across STATX replies, which do not carry
+> > fuse_attr.flags.
+> > 
+> > Document negotiation, cache and handle semantics, and the server's
+> > responsibilities. No additional access-time or open-reference accounting
+> > is introduced.
+> > 
+> > Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
+> > ---
+> >  Documentation/filesystems/fuse/fuse-no-open.rst | 49 +++++++++++++++++++++++++
+> >  Documentation/filesystems/fuse/index.rst        |  1 +
+> >  fs/fuse/file.c                                  | 26 ++++++++++---
+> >  fs/fuse/fuse_i.h                                | 17 ++++++++-
+> >  fs/fuse/inode.c                                 |  9 +++++
+> >  fs/fuse/ioctl.c                                 |  3 +-
+> >  include/uapi/linux/fuse.h                       | 13 ++++++-
+> >  7 files changed, 110 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/Documentation/filesystems/fuse/fuse-no-open.rst b/Documentation/filesystems/fuse/fuse-no-open.rst
+> > new file mode 100644
+> > index 000000000000..4526512d358c
+> > --- /dev/null
+> > +++ b/Documentation/filesystems/fuse/fuse-no-open.rst
+> > @@ -0,0 +1,49 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +Per-inode open suppression
+> > +=========================
+> 
+> Documentation/filesystems/fuse/fuse-no-open.rst:4: WARNING: Title underline too short.
+> 
+> Per-inode open suppression
+> ========================= [docutils]
+> 
 
-Check LOOKUP hints for files and directories and hints populated by
-READDIRPLUS for files. Cover unmarked control files, zero handles on READ
-and READDIR, and hint changes through GETATTR for files and directories
-while handles remain open. Exercise file hint changes through SETATTR too.
-Verify that STATX preserves both set and cleared hints, atomic O_TRUNC
-reaches the server, and CREATE retains its release while subsequent opens
-honor the new inode's hint.
-Return an unknown OPEN reply flag to check that wire flags cannot
-suppress release of server-opened handles.
+Addresed in v3.
 
-Negotiate remote flock support and verify that closing a locked handle
-sends RELEASE with FUSE_RELEASE_FLOCK_UNLOCK and the matching lock owner,
-even when OPEN was suppressed and the file handle is zero. Cover explicit
-unlock, the last close of duplicated descriptors, and cleanup after
-SIGKILL. Verify that a failed flock leaves release suppression intact.
+Thank you,
+Stanislav
 
-Check that connection-wide ENOSYS suppression still takes precedence and
-that private file-attribute ioctl handles honor the hint for both files
-and directories.
-
-Run 17 cases across four variants: the capability disabled, enabled,
-enabled with atomic truncation, and enabled with atomic truncation and
-writeback caching, for 68 tests in total.
-Use two forced GETATTR requests to let the single-threaded server finish
-earlier I/O replies and consume RELEASEs queued by their callbacks before
-unmount aborts the connection. Join the server before checking request
-counts. Skip when mounting is unavailable or the kernel does not advertise
-the requested capability. Skip STATX-specific cases when birth time is
-unavailable, as older kernels use GETATTR instead of FUSE_STATX.
-
-Return inode ownership matching the mount owner's uid and gid in both
-attribute and STATX replies, allowing non-root users with mount permission
-to run the write and create cases with default_permissions enabled.
-
-The test needs permission to create a mount namespace and mount FUSE.
-
-Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
----
- .../testing/selftests/filesystems/fuse/.gitignore  |   1 +
- tools/testing/selftests/filesystems/fuse/Makefile  |   2 +
- .../selftests/filesystems/fuse/no_open_test.c      | 886 +++++++++++++++++++++
- 3 files changed, 889 insertions(+)
-
-diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
-index b5b03db1118c..a4cb079c4bc6 100644
---- a/tools/testing/selftests/filesystems/fuse/.gitignore
-+++ b/tools/testing/selftests/filesystems/fuse/.gitignore
-@@ -3,3 +3,4 @@ fuse_mnt
- fusectl_test
- test_syncfs
- write_extend_eof_test
-+no_open_test
-diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
-index c2de8d225447..b9682e7a2aef 100644
---- a/tools/testing/selftests/filesystems/fuse/Makefile
-+++ b/tools/testing/selftests/filesystems/fuse/Makefile
-@@ -4,6 +4,7 @@ CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
- 
- TEST_GEN_PROGS := fusectl_test test_syncfs
- TEST_GEN_PROGS += write_extend_eof_test
-+TEST_GEN_PROGS += no_open_test
- TEST_GEN_FILES := fuse_mnt
- 
- # fuse_acl_cache_test requires libfuse3; add it only when the library is present.
-@@ -16,6 +17,7 @@ endif
- include ../../lib.mk
- 
- $(OUTPUT)/write_extend_eof_test: LDLIBS += -lpthread
-+$(OUTPUT)/no_open_test: LDLIBS += -lpthread
- 
- VAR_CFLAGS := $(shell pkg-config fuse --cflags 2>/dev/null)
- ifeq ($(VAR_CFLAGS),)
-diff --git a/tools/testing/selftests/filesystems/fuse/no_open_test.c b/tools/testing/selftests/filesystems/fuse/no_open_test.c
-new file mode 100644
-index 000000000000..a9a5307b9111
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fuse/no_open_test.c
-@@ -0,0 +1,886 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Exercise the wire protocol without requiring new libfuse interfaces. */
-+#define _GNU_SOURCE
-+#include <dirent.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/fs.h>
-+#include <linux/fuse.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdatomic.h>
-+#include <stdint.h>
-+#include <sys/file.h>
-+#include <sys/ioctl.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+enum { FILE_ID = 2, DIR_ID, CONTROL_ID, CREATE_ID, NR_INODES };
-+
-+struct server {
-+	int fd;
-+	bool negotiate;
-+	bool atomic_trunc;
-+	bool writeback;
-+	atomic_bool supported;
-+	atomic_uint attr_flags;
-+	atomic_int flock_error;
-+	atomic_bool open_enosys;
-+	unsigned int opens[NR_INODES];
-+	unsigned int releases[NR_INODES];
-+	unsigned int ioctls[NR_INODES];
-+	unsigned int zero_ioctls;
-+	unsigned int zero_reads;
-+	unsigned int zero_readdirs;
-+	unsigned int statx_count;
-+	unsigned int lookup_count;
-+	unsigned int plus_count;
-+	unsigned int truncates;
-+	unsigned int flocks;
-+	atomic_uint release_unlocks;
-+	uint64_t lock_owner;
-+	uint64_t flock_release_fh;
-+	atomic_bool flock_held;
-+	unsigned int size;
-+	bool created;
-+	int error;
-+};
-+
-+static void reply(struct server *s, uint64_t unique, int error,
-+		  void *data, size_t len)
-+{
-+	struct fuse_out_header out = {
-+		.len = sizeof(out) + len,
-+		.error = error,
-+		.unique = unique,
-+	};
-+	struct iovec iov[] = { { &out, sizeof(out) }, { data, len } };
-+	ssize_t written;
-+
-+	written = writev(s->fd, iov, len ? 2 : 1);
-+	if (written != out.len) {
-+		s->error = written < 0 ? errno : EIO;
-+		fprintf(stderr, "reply to request %llu failed: %s\n",
-+			(unsigned long long)unique, strerror(s->error));
-+	}
-+}
-+
-+static void fill_attr(struct server *s, struct fuse_attr *attr, uint64_t id)
-+{
-+	bool isdir = id == FUSE_ROOT_ID || id == DIR_ID;
-+
-+	attr->ino = id;
-+	attr->mode = (isdir ? S_IFDIR : S_IFREG) | 0755;
-+	attr->nlink = isdir ? 2 : 1;
-+	attr->uid = getuid();
-+	attr->gid = getgid();
-+	attr->size = isdir ? 0 : s->size;
-+	attr->blksize = 4096;
-+	if (id != FUSE_ROOT_ID && id != CONTROL_ID)
-+		attr->flags = atomic_load(&s->attr_flags);
-+}
-+
-+static void fill_entry(struct server *s, struct fuse_entry_out *out, uint64_t id)
-+{
-+	out->nodeid = id;
-+	out->generation = 1;
-+	out->entry_valid = 3600;
-+	out->attr_valid = 3600;
-+	fill_attr(s, &out->attr, id);
-+}
-+
-+static void *serve(void *arg)
-+{
-+	struct server *s = arg;
-+	union {
-+		struct fuse_in_header header;
-+		char bytes[16384];
-+	} buf;
-+
-+	for (;;) {
-+		struct fuse_in_header *in = &buf.header;
-+		void *payload = in + 1;
-+		ssize_t len = read(s->fd, &buf, sizeof(buf));
-+		uint64_t id;
-+
-+		if (len < 0 && errno == EINTR)
-+			continue;
-+		if (len < 0 && errno == ENODEV)
-+			return NULL;
-+		if (len < (ssize_t)sizeof(*in)) {
-+			s->error = EIO;
-+			return NULL;
-+		}
-+		id = in->nodeid;
-+		if (id >= NR_INODES) {
-+			s->error = EINVAL;
-+			reply(s, in->unique, -EINVAL, NULL, 0);
-+			continue;
-+		}
-+		switch (in->opcode) {
-+		case FUSE_INIT: {
-+			struct fuse_init_in *init = payload;
-+			struct fuse_init_out out = {
-+				.major = FUSE_KERNEL_VERSION,
-+				.minor = FUSE_KERNEL_MINOR_VERSION,
-+				.max_write = 4096,
-+				.flags = FUSE_INIT_EXT | FUSE_DO_READDIRPLUS |
-+					 FUSE_FLOCK_LOCKS | FUSE_HAS_IOCTL_DIR,
-+			};
-+			uint64_t flags = init->flags;
-+
-+			if (init->flags & FUSE_INIT_EXT)
-+				flags |= (uint64_t)init->flags2 << 32;
-+			atomic_store(&s->supported, flags & FUSE_PER_INODE_NO_OPEN);
-+			if (out.minor > init->minor)
-+				out.minor = init->minor;
-+			if (s->negotiate)
-+				out.flags2 = (flags & FUSE_PER_INODE_NO_OPEN) >> 32;
-+			if (s->atomic_trunc)
-+				out.flags |= FUSE_ATOMIC_O_TRUNC;
-+			if (s->writeback)
-+				out.flags |= FUSE_WRITEBACK_CACHE;
-+			reply(s, in->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_LOOKUP: {
-+			struct fuse_entry_out out = {};
-+			const char *name = payload;
-+
-+			s->lookup_count++;
-+			if (!strcmp(name, "file")) {
-+				id = FILE_ID;
-+			} else if (!strcmp(name, "dir")) {
-+				id = DIR_ID;
-+			} else if (!strcmp(name, "control")) {
-+				id = CONTROL_ID;
-+			} else if (!strcmp(name, "created") && s->created) {
-+				id = CREATE_ID;
-+			} else {
-+				reply(s, in->unique, -ENOENT, NULL, 0);
-+				break;
-+			}
-+			fill_entry(s, &out, id);
-+			reply(s, in->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_GETATTR:
-+		case FUSE_SETATTR: {
-+			struct fuse_attr_out out = { .attr_valid = 3600 };
-+
-+			if (in->opcode == FUSE_SETATTR) {
-+				struct fuse_setattr_in *attr = payload;
-+
-+				if (attr->valid & FATTR_SIZE) {
-+					s->size = attr->size;
-+					s->truncates++;
-+				}
-+			}
-+			fill_attr(s, &out.attr, id);
-+			reply(s, in->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_STATX: {
-+			struct fuse_statx_out out = { .attr_valid = 3600 };
-+			struct fuse_attr attr = {};
-+
-+			s->statx_count++;
-+			fill_attr(s, &attr, id);
-+			out.stat.mask = STATX_BASIC_STATS | STATX_BTIME;
-+			out.stat.ino = attr.ino;
-+			out.stat.mode = attr.mode;
-+			out.stat.nlink = attr.nlink;
-+			out.stat.uid = attr.uid;
-+			out.stat.gid = attr.gid;
-+			out.stat.size = attr.size;
-+			out.stat.blksize = attr.blksize;
-+			reply(s, in->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_OPEN:
-+		case FUSE_OPENDIR: {
-+			struct fuse_open_in *open = payload;
-+			struct fuse_open_out out = {
-+				.fh = 100 + id,
-+				.open_flags = FOPEN_KEEP_CACHE,
-+			};
-+
-+			s->opens[id]++;
-+			if (atomic_load(&s->open_enosys)) {
-+				reply(s, in->unique, -ENOSYS, NULL, 0);
-+				break;
-+			}
-+			/* Unknown wire bits must not act as private release flags. */
-+			out.open_flags |= 1U << 30;
-+			if (open->flags & O_TRUNC) {
-+				s->size = 0;
-+				s->truncates++;
-+			}
-+			reply(s, in->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_CREATE: {
-+			struct {
-+				struct fuse_entry_out entry;
-+				struct fuse_open_out open;
-+			} out = {};
-+
-+			s->created = true;
-+			fill_entry(s, &out.entry, CREATE_ID);
-+			out.open.fh = 100 + CREATE_ID;
-+			out.open.open_flags = FOPEN_KEEP_CACHE;
-+			reply(s, in->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_READ: {
-+			struct fuse_read_in *read = payload;
-+			char data = 'x';
-+
-+			if (!read->fh)
-+				s->zero_reads++;
-+			reply(s, in->unique, 0, &data,
-+			      read->offset < s->size && read->size ? 1 : 0);
-+			break;
-+		}
-+		case FUSE_READDIR:
-+		case FUSE_READDIRPLUS: {
-+			struct fuse_read_in *read = payload;
-+			union {
-+				struct fuse_direntplus entry;
-+				char data[FUSE_DIRENT_ALIGN(FUSE_NAME_OFFSET_DIRENTPLUS + 4)];
-+			} out = {};
-+			struct fuse_direntplus *entry = &out.entry;
-+
-+			if (!read->fh)
-+				s->zero_readdirs++;
-+			if (id != FUSE_ROOT_ID || read->offset ||
-+			    in->opcode != FUSE_READDIRPLUS) {
-+				reply(s, in->unique, 0, NULL, 0);
-+				break;
-+			}
-+			s->plus_count++;
-+			fill_entry(s, &entry->entry_out, FILE_ID);
-+			entry->dirent.ino = FILE_ID;
-+			entry->dirent.off = 1;
-+			entry->dirent.namelen = 4;
-+			entry->dirent.type = DT_REG;
-+			memcpy(entry->dirent.name, "file", 4);
-+			reply(s, in->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_IOCTL: {
-+			struct fuse_ioctl_in *ioctl = payload;
-+			struct {
-+				struct fuse_ioctl_out header;
-+				unsigned int flags;
-+			} out = {};
-+
-+			if (ioctl->cmd != FS_IOC_GETFLAGS || ioctl->in_size ||
-+			    ioctl->out_size != sizeof(out.flags)) {
-+				reply(s, in->unique, -ENOTTY, NULL, 0);
-+				break;
-+			}
-+			s->ioctls[id]++;
-+			if (!ioctl->fh)
-+				s->zero_ioctls++;
-+			reply(s, in->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_SETLK:
-+		case FUSE_SETLKW: {
-+			struct fuse_lk_in *lk = payload;
-+			int error = atomic_load(&s->flock_error);
-+
-+			if (id != FILE_ID || !(lk->lk_flags & FUSE_LK_FLOCK))
-+				s->error = EINVAL;
-+			if (error && lk->lk.type != F_UNLCK) {
-+				reply(s, in->unique, -error, NULL, 0);
-+				break;
-+			}
-+			if (lk->lk.type == F_UNLCK) {
-+				if (lk->owner != s->lock_owner)
-+					s->error = EINVAL;
-+				atomic_store(&s->flock_held, false);
-+			} else {
-+				s->flocks++;
-+				s->lock_owner = lk->owner;
-+				atomic_store(&s->flock_held, true);
-+			}
-+			reply(s, in->unique, 0, NULL, 0);
-+			break;
-+		}
-+		case FUSE_RELEASE:
-+		case FUSE_RELEASEDIR: {
-+			struct fuse_release_in *release = payload;
-+
-+			s->releases[id]++;
-+			if (release->fh != 100 + id &&
-+			    !(s->negotiate && id == FILE_ID && !release->fh &&
-+			      (release->release_flags & FUSE_RELEASE_FLOCK_UNLOCK)))
-+				s->error = EINVAL;
-+			if (release->release_flags & FUSE_RELEASE_FLOCK_UNLOCK) {
-+				if (!s->flocks || release->lock_owner != s->lock_owner)
-+					s->error = EINVAL;
-+				atomic_fetch_add(&s->release_unlocks, 1);
-+				s->flock_release_fh = release->fh;
-+				atomic_store(&s->flock_held, false);
-+			}
-+			reply(s, in->unique, 0, NULL, 0);
-+			break;
-+		}
-+		case FUSE_FLUSH:
-+		case FUSE_FSYNC:
-+		case FUSE_ACCESS:
-+		case FUSE_DESTROY:
-+			reply(s, in->unique, 0, NULL, 0);
-+			break;
-+		case FUSE_FORGET:
-+		case FUSE_BATCH_FORGET:
-+			break;
-+		default:
-+			reply(s, in->unique, -ENOSYS, NULL, 0);
-+		}
-+	}
-+}
-+
-+FIXTURE(no_open) {
-+	struct server server;
-+	pthread_t thread;
-+	bool running;
-+	bool mounted;
-+	char dir[64];
-+	int root;
-+	pid_t child;
-+};
-+
-+FIXTURE_VARIANT(no_open) {
-+	bool negotiate;
-+	bool atomic_trunc;
-+	bool writeback;
-+};
-+
-+FIXTURE_VARIANT_ADD(no_open, unnegotiated) {};
-+
-+FIXTURE_VARIANT_ADD(no_open, negotiated) { .negotiate = true };
-+
-+FIXTURE_VARIANT_ADD(no_open, atomic_trunc) {
-+	.negotiate = true, .atomic_trunc = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(no_open, writeback) {
-+	.negotiate = true, .atomic_trunc = true, .writeback = true,
-+};
-+
-+static void cleanup(FIXTURE_DATA(no_open) * self)
-+{
-+	if (self->child > 0) {
-+		kill(self->child, SIGKILL);
-+		while (waitpid(self->child, NULL, 0) < 0 && errno == EINTR)
-+			;
-+		self->child = 0;
-+	}
-+	if (self->root >= 0) {
-+		close(self->root);
-+		self->root = -1;
-+	}
-+	if (self->mounted) {
-+		umount2(self->dir, MNT_DETACH);
-+		self->mounted = false;
-+	}
-+	if (self->running) {
-+		pthread_cancel(self->thread);
-+		pthread_join(self->thread, NULL);
-+		self->running = false;
-+	}
-+	if (self->server.fd >= 0) {
-+		close(self->server.fd);
-+		self->server.fd = -1;
-+	}
-+	if (self->dir[0]) {
-+		rmdir(self->dir);
-+		self->dir[0] = '\0';
-+	}
-+}
-+
-+FIXTURE_SETUP(no_open)
-+{
-+	struct server *s = &self->server;
-+	struct stat st;
-+	char opts[128];
-+	int err;
-+
-+	/* Setup skips bypass teardown; release acquired resources explicitly. */
-+	self->root = -1;
-+	s->fd = -1;
-+	if (unshare(CLONE_NEWNS))
-+		SKIP(return, "need a mount namespace: %s", strerror(errno));
-+	ASSERT_EQ(mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL), 0);
-+	s->fd = open("/dev/fuse", O_RDWR | O_CLOEXEC);
-+	if (s->fd < 0)
-+		SKIP(return, "cannot open /dev/fuse: %s", strerror(errno));
-+	strcpy(self->dir, "/tmp/fuse_no_open_XXXXXX");
-+	ASSERT_NE(mkdtemp(self->dir), NULL);
-+	snprintf(opts, sizeof(opts),
-+		 "fd=%d,rootmode=40000,user_id=%u,group_id=%u,default_permissions",
-+		 s->fd, getuid(), getgid());
-+	if (mount("fuse", self->dir, "fuse", MS_NOSUID | MS_NODEV, opts)) {
-+		err = errno;
-+		cleanup(self);
-+		SKIP(return, "cannot mount FUSE: %s", strerror(err));
-+	}
-+	self->mounted = true;
-+	s->negotiate = variant->negotiate;
-+	s->atomic_trunc = variant->atomic_trunc;
-+	s->writeback = variant->writeback;
-+	s->size = 1;
-+	atomic_init(&s->attr_flags, FUSE_ATTR_NO_OPEN);
-+	atomic_init(&s->supported, false);
-+	atomic_init(&s->flock_error, 0);
-+	atomic_init(&s->open_enosys, false);
-+	atomic_init(&s->release_unlocks, 0);
-+	atomic_init(&s->flock_held, false);
-+	err = pthread_create(&self->thread, NULL, serve, s);
-+	if (err) {
-+		cleanup(self);
-+		ASSERT_EQ(err, 0);
-+	}
-+	self->running = true;
-+	ASSERT_EQ(stat(self->dir, &st), 0);
-+	if (variant->negotiate && !atomic_load(&s->supported)) {
-+		cleanup(self);
-+		SKIP(return, "kernel lacks FUSE_PER_INODE_NO_OPEN");
-+	}
-+	self->root = open(self->dir, O_PATH | O_DIRECTORY);
-+	ASSERT_GE(self->root, 0);
-+}
-+
-+FIXTURE_TEARDOWN(no_open)
-+{
-+	cleanup(self);
-+}
-+
-+static void sync_requests(struct __test_metadata *_metadata,
-+			  FIXTURE_DATA(no_open) * self)
-+{
-+	struct statx st;
-+
-+	/*
-+	 * This server handles requests one at a time. The first GETATTR waits
-+	 * for earlier I/O replies and their completion callbacks. The second
-+	 * drains RELEASEs that those callbacks may have queued. Unmount alone
-+	 * would abort pending requests and could race with the server's replies.
-+	 */
-+	ASSERT_EQ(statx(self->root, ".", AT_STATX_FORCE_SYNC,
-+			STATX_BASIC_STATS, &st), 0);
-+	ASSERT_EQ(statx(self->root, ".", AT_STATX_FORCE_SYNC,
-+			STATX_BASIC_STATS, &st), 0);
-+}
-+
-+static void finish(struct __test_metadata *_metadata, FIXTURE_DATA(no_open) * self)
-+{
-+	/*
-+	 * A plain ASSERT failure tears down the fixture and aborts the test
-+	 * process, even in a helper. Callers can inspect counters only after
-+	 * the server thread has been joined successfully.
-+	 */
-+	sync_requests(_metadata, self);
-+	ASSERT_EQ(close(self->root), 0);
-+	self->root = -1;
-+	ASSERT_EQ(umount(self->dir), 0);
-+	self->mounted = false;
-+	ASSERT_EQ(pthread_join(self->thread, NULL), 0);
-+	self->running = false;
-+	ASSERT_EQ(self->server.error, 0);
-+}
-+
-+static unsigned int refresh_attr_at(struct __test_metadata *_metadata,
-+				    FIXTURE_DATA(no_open) * self, const char *name,
-+				    unsigned int mask)
-+{
-+	struct statx st;
-+
-+	ASSERT_EQ(statx(self->root, name, AT_STATX_FORCE_SYNC, mask, &st), 0);
-+	return st.stx_mask;
-+}
-+
-+static unsigned int refresh_attr(struct __test_metadata *_metadata,
-+				 FIXTURE_DATA(no_open) * self, unsigned int mask)
-+{
-+	return refresh_attr_at(_metadata, self, "file", mask);
-+}
-+
-+static void check_flock_release(struct __test_metadata *_metadata,
-+				FIXTURE_DATA(no_open) * self, bool no_open)
-+{
-+	EXPECT_EQ(self->server.opens[FILE_ID], !no_open);
-+	EXPECT_EQ(self->server.releases[FILE_ID], 1);
-+	EXPECT_EQ(self->server.flocks, 1);
-+	EXPECT_EQ(atomic_load(&self->server.release_unlocks), 1);
-+	EXPECT_EQ(self->server.flock_release_fh, no_open ? 0 : 100 + FILE_ID);
-+	EXPECT_FALSE(atomic_load(&self->server.flock_held));
-+}
-+
-+TEST_F(no_open, files_and_directories)
-+{
-+	int fd = openat(self->root, "file", O_RDONLY);
-+	DIR *dir;
-+	char data;
-+
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(read(fd, &data, 1), 1);
-+	EXPECT_EQ(data, 'x');
-+	ASSERT_EQ(close(fd), 0);
-+	fd = openat(self->root, "dir", O_RDONLY | O_DIRECTORY);
-+	ASSERT_GE(fd, 0);
-+	dir = fdopendir(fd);
-+	ASSERT_NE(dir, NULL);
-+	errno = 0;
-+	ASSERT_EQ(readdir(dir), NULL);
-+	ASSERT_EQ(errno, 0);
-+	ASSERT_EQ(closedir(dir), 0);
-+	fd = openat(self->root, "control", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.opens[FILE_ID], !variant->negotiate);
-+	EXPECT_EQ(self->server.releases[FILE_ID], !variant->negotiate);
-+	EXPECT_EQ(self->server.opens[DIR_ID], !variant->negotiate);
-+	EXPECT_EQ(self->server.releases[DIR_ID], !variant->negotiate);
-+	EXPECT_EQ(self->server.opens[CONTROL_ID], 1);
-+	EXPECT_EQ(self->server.releases[CONTROL_ID], 1);
-+	EXPECT_EQ(self->server.zero_reads, variant->negotiate);
-+	EXPECT_EQ(self->server.zero_readdirs, variant->negotiate);
-+}
-+
-+TEST_F(no_open, hint_changes_with_open_handles)
-+{
-+	int local, remote, local_again;
-+
-+	local = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(local, 0);
-+	atomic_store(&self->server.attr_flags, 0);
-+	refresh_attr(_metadata, self, STATX_BASIC_STATS);
-+	remote = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(remote, 0);
-+	/* Clearing the hint must not cause a RELEASE for the first handle. */
-+	ASSERT_EQ(close(local), 0);
-+	atomic_store(&self->server.attr_flags, FUSE_ATTR_NO_OPEN);
-+	refresh_attr(_metadata, self, STATX_BASIC_STATS);
-+	local_again = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(local_again, 0);
-+	/* Setting the hint must not lose the server's existing handle. */
-+	ASSERT_EQ(close(remote), 0);
-+	ASSERT_EQ(close(local_again), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.opens[FILE_ID], variant->negotiate ? 1 : 3);
-+	EXPECT_EQ(self->server.releases[FILE_ID], variant->negotiate ? 1 : 3);
-+}
-+
-+TEST_F(no_open, statx_preserves_hint)
-+{
-+	unsigned int mask;
-+	int fd;
-+
-+	mask = refresh_attr(_metadata, self, STATX_BASIC_STATS | STATX_BTIME);
-+	/* Older kernels use GETATTR, which cannot return birth time. */
-+	if (!(mask & STATX_BTIME))
-+		SKIP(return, "kernel lacks FUSE_STATX");
-+	fd = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.statx_count, 1);
-+	EXPECT_EQ(self->server.opens[FILE_ID], !variant->negotiate);
-+	EXPECT_EQ(self->server.releases[FILE_ID], !variant->negotiate);
-+}
-+
-+TEST_F(no_open, directory_hint_changes_with_open_handles)
-+{
-+	int local, remote, local_again;
-+
-+	local = openat(self->root, "dir", O_RDONLY | O_DIRECTORY);
-+	ASSERT_GE(local, 0);
-+	atomic_store(&self->server.attr_flags, 0);
-+	refresh_attr_at(_metadata, self, "dir", STATX_BASIC_STATS);
-+	remote = openat(self->root, "dir", O_RDONLY | O_DIRECTORY);
-+	ASSERT_GE(remote, 0);
-+	ASSERT_EQ(close(local), 0);
-+	atomic_store(&self->server.attr_flags, FUSE_ATTR_NO_OPEN);
-+	refresh_attr_at(_metadata, self, "dir", STATX_BASIC_STATS);
-+	local_again = openat(self->root, "dir", O_RDONLY | O_DIRECTORY);
-+	ASSERT_GE(local_again, 0);
-+	ASSERT_EQ(close(remote), 0);
-+	ASSERT_EQ(close(local_again), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.opens[DIR_ID], variant->negotiate ? 1 : 3);
-+	EXPECT_EQ(self->server.releases[DIR_ID], variant->negotiate ? 1 : 3);
-+}
-+
-+TEST_F(no_open, statx_preserves_cleared_hint)
-+{
-+	unsigned int mask;
-+	int fd;
-+
-+	atomic_store(&self->server.attr_flags, 0);
-+	refresh_attr(_metadata, self, STATX_BASIC_STATS);
-+	atomic_store(&self->server.attr_flags, FUSE_ATTR_NO_OPEN);
-+	mask = refresh_attr(_metadata, self, STATX_BASIC_STATS | STATX_BTIME);
-+	if (!(mask & STATX_BTIME))
-+		SKIP(return, "kernel lacks FUSE_STATX");
-+	fd = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.statx_count, 1);
-+	EXPECT_EQ(self->server.opens[FILE_ID], 1);
-+	EXPECT_EQ(self->server.releases[FILE_ID], 1);
-+}
-+
-+TEST_F(no_open, setattr_updates_hint)
-+{
-+	int local, remote, local_again;
-+
-+	local = openat(self->root, "file", O_RDWR);
-+	ASSERT_GE(local, 0);
-+	atomic_store(&self->server.attr_flags, 0);
-+	ASSERT_EQ(ftruncate(local, 0), 0);
-+	remote = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(remote, 0);
-+	atomic_store(&self->server.attr_flags, FUSE_ATTR_NO_OPEN);
-+	ASSERT_EQ(ftruncate(local, 1), 0);
-+	local_again = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(local_again, 0);
-+	ASSERT_EQ(close(local), 0);
-+	ASSERT_EQ(close(remote), 0);
-+	ASSERT_EQ(close(local_again), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.truncates, 2);
-+	EXPECT_EQ(self->server.opens[FILE_ID], variant->negotiate ? 1 : 3);
-+	EXPECT_EQ(self->server.releases[FILE_ID], variant->negotiate ? 1 : 3);
-+}
-+
-+TEST_F(no_open, truncate)
-+{
-+	int fd = openat(self->root, "file", O_WRONLY | O_TRUNC);
-+	bool server_open = !variant->negotiate || variant->atomic_trunc;
-+	struct stat st;
-+
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(fstat(fd, &st), 0);
-+	EXPECT_EQ(st.st_size, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.size, 0);
-+	EXPECT_EQ(self->server.truncates, 1);
-+	EXPECT_EQ(self->server.opens[FILE_ID], server_open);
-+	EXPECT_EQ(self->server.releases[FILE_ID], server_open);
-+}
-+
-+TEST_F(no_open, create_releases_handle)
-+{
-+	int fd = openat(self->root, "created", O_CREAT | O_EXCL | O_RDWR, 0600);
-+
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_TRUE(self->server.created);
-+	EXPECT_EQ(self->server.opens[CREATE_ID], 0);
-+	EXPECT_EQ(self->server.releases[CREATE_ID], 1);
-+}
-+
-+TEST_F(no_open, close_unlocks_flock)
-+{
-+	int fd = openat(self->root, "file", O_RDONLY);
-+
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(flock(fd, LOCK_EX), 0);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	check_flock_release(_metadata, self, variant->negotiate);
-+}
-+
-+TEST_F(no_open, reopen_created_inode)
-+{
-+	int fd = openat(self->root, "created", O_CREAT | O_EXCL | O_RDWR, 0600);
-+
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	fd = openat(self->root, "created", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.opens[CREATE_ID], !variant->negotiate);
-+	EXPECT_EQ(self->server.releases[CREATE_ID], variant->negotiate ? 1 : 2);
-+}
-+
-+TEST_F(no_open, explicit_flock_unlock_still_releases)
-+{
-+	int fd = openat(self->root, "file", O_RDONLY);
-+
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(flock(fd, LOCK_EX), 0);
-+	ASSERT_EQ(flock(fd, LOCK_UN), 0);
-+	EXPECT_FALSE(atomic_load(&self->server.flock_held));
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	check_flock_release(_metadata, self, variant->negotiate);
-+}
-+
-+TEST_F(no_open, failed_flock_keeps_release_suppressed)
-+{
-+	int fd = openat(self->root, "file", O_RDONLY);
-+
-+	ASSERT_GE(fd, 0);
-+	atomic_store(&self->server.flock_error, EAGAIN);
-+	ASSERT_EQ(flock(fd, LOCK_EX | LOCK_NB), -1);
-+	EXPECT_EQ(errno, EAGAIN);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.opens[FILE_ID], !variant->negotiate);
-+	EXPECT_EQ(self->server.releases[FILE_ID], !variant->negotiate);
-+	EXPECT_EQ(self->server.flocks, 0);
-+	EXPECT_EQ(atomic_load(&self->server.release_unlocks), 0);
-+}
-+
-+TEST_F(no_open, duplicated_flock_releases_on_last_close)
-+{
-+	int fd = openat(self->root, "file", O_RDONLY);
-+	int duplicate;
-+
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(flock(fd, LOCK_EX), 0);
-+	duplicate = dup(fd);
-+	ASSERT_GE(duplicate, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	sync_requests(_metadata, self);
-+	EXPECT_EQ(atomic_load(&self->server.release_unlocks), 0);
-+	EXPECT_TRUE(atomic_load(&self->server.flock_held));
-+	ASSERT_EQ(close(duplicate), 0);
-+	finish(_metadata, self);
-+	check_flock_release(_metadata, self, variant->negotiate);
-+}
-+
-+TEST_F(no_open, killed_process_releases_flock)
-+{
-+	int notify[2], status;
-+	char ready;
-+	pid_t pid;
-+
-+	ASSERT_EQ(pipe2(notify, O_CLOEXEC), 0);
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (!pid) {
-+		int fd;
-+
-+		close(notify[0]);
-+		alarm(30);
-+		fd = openat(self->root, "file", O_RDONLY);
-+		if (fd < 0 || flock(fd, LOCK_EX))
-+			_exit(1);
-+		if (write(notify[1], "x", 1) != 1)
-+			_exit(1);
-+		for (;;)
-+			pause();
-+	}
-+	self->child = pid;
-+	ASSERT_EQ(close(notify[1]), 0);
-+	ASSERT_EQ(read(notify[0], &ready, 1), 1);
-+	ASSERT_EQ(close(notify[0]), 0);
-+	ASSERT_EQ(kill(pid, SIGKILL), 0);
-+	ASSERT_EQ(waitpid(pid, &status, 0), pid);
-+	self->child = 0;
-+	EXPECT_TRUE(WIFSIGNALED(status));
-+	EXPECT_EQ(WTERMSIG(status), SIGKILL);
-+	finish(_metadata, self);
-+	check_flock_release(_metadata, self, variant->negotiate);
-+}
-+
-+TEST_F(no_open, connection_wide_enosys_takes_precedence)
-+{
-+	int fd;
-+	char data;
-+
-+	atomic_store(&self->server.attr_flags, 0);
-+	atomic_store(&self->server.open_enosys, true);
-+	fd = openat(self->root, "control", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	fd = openat(self->root, "control", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	fd = openat(self->root, "dir", O_RDONLY | O_DIRECTORY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	fd = openat(self->root, "dir", O_RDONLY | O_DIRECTORY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	atomic_store(&self->server.attr_flags, FUSE_ATTR_NO_OPEN);
-+	fd = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(read(fd, &data, 1), 1);
-+	EXPECT_EQ(data, 'x');
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.opens[CONTROL_ID], 1);
-+	EXPECT_EQ(self->server.opens[DIR_ID], 1);
-+	EXPECT_EQ(self->server.opens[FILE_ID], 0);
-+	EXPECT_EQ(self->server.releases[CONTROL_ID], 0);
-+	EXPECT_EQ(self->server.releases[DIR_ID], 0);
-+	EXPECT_EQ(self->server.releases[FILE_ID], 0);
-+	EXPECT_EQ(self->server.zero_reads, 1);
-+}
-+
-+TEST_F(no_open, fileattr_ioctl_uses_hint)
-+{
-+	int flags, fd;
-+
-+	fd = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(ioctl(fd, FS_IOC_GETFLAGS, &flags), 0);
-+	EXPECT_EQ(flags, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	fd = openat(self->root, "dir", O_RDONLY | O_DIRECTORY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(ioctl(fd, FS_IOC_GETFLAGS, &flags), 0);
-+	EXPECT_EQ(flags, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.ioctls[FILE_ID], 1);
-+	EXPECT_EQ(self->server.ioctls[DIR_ID], 1);
-+	EXPECT_EQ(self->server.zero_ioctls, variant->negotiate ? 2 : 0);
-+	EXPECT_EQ(self->server.opens[FILE_ID], variant->negotiate ? 0 : 2);
-+	EXPECT_EQ(self->server.releases[FILE_ID], variant->negotiate ? 0 : 2);
-+	EXPECT_EQ(self->server.opens[DIR_ID], variant->negotiate ? 0 : 2);
-+	EXPECT_EQ(self->server.releases[DIR_ID], variant->negotiate ? 0 : 2);
-+}
-+
-+TEST_F(no_open, readdirplus_populates_hint)
-+{
-+	int fd = openat(self->root, ".", O_RDONLY | O_DIRECTORY);
-+	struct dirent *entry;
-+	DIR *dir;
-+
-+	ASSERT_GE(fd, 0);
-+	dir = fdopendir(fd);
-+	ASSERT_NE(dir, NULL);
-+	entry = readdir(dir);
-+	ASSERT_NE(entry, NULL);
-+	ASSERT_STREQ(entry->d_name, "file");
-+	ASSERT_EQ(closedir(dir), 0);
-+	fd = openat(self->root, "file", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(close(fd), 0);
-+	finish(_metadata, self);
-+	EXPECT_EQ(self->server.plus_count, 1);
-+	EXPECT_EQ(self->server.lookup_count, 0);
-+	EXPECT_EQ(self->server.opens[FILE_ID], !variant->negotiate);
-+	EXPECT_EQ(self->server.releases[FILE_ID], !variant->negotiate);
-+}
-+
-+TEST_HARNESS_MAIN
-
--- 
-2.43.0
-
+> > +
+> > +A filesystem can avoid OPEN and RELEASE requests for individual inodes by
+> > +negotiating FUSE_PER_INODE_NO_OPEN in INIT and setting FUSE_ATTR_NO_OPEN in
+> > +``fuse_attr.flags``.  For directories, the flag suppresses OPENDIR and
+> > +RELEASEDIR instead.  This allows, for example, cached content files to avoid
+> > +open round trips while control files on the same connection retain their
+> > +open handlers.  Without the negotiated capability the attribute is ignored.
+> > +
+> > +The kernel updates the hint when it accepts attributes in replies such as
+> > +LOOKUP, GETATTR, SETATTR and READDIRPLUS.  STATX replies do not carry
+> > +``fuse_attr.flags`` and leave the hint unchanged.  The hint is cached inode
+> > +state; it is not independently revalidated on every open.  A server changing
+> > +the hint must arrange for fresh attributes to reach the kernel and tolerate
+> > +concurrent opens using the previous value.
+> > +
+> > +For an open served locally, the file handle is zero, FOPEN_KEEP_CACHE is
+> > +set, and directories also have FOPEN_CACHE_DIR set.  Subsequent requests
+> > +identify the object by the node ID and may carry a zero file handle.  The
+> > +server must support these requests without per-open state.  Whether OPEN was
+> > +sent is recorded for each handle and is not changed by later attribute
+> > +updates.  An existing server-opened handle still receives its matching
+> > +RELEASE if the inode hint subsequently becomes set.
+> > +
+> > +Remote flock locking is an exception to RELEASE suppression.  When
+> > +FUSE_FLOCK_LOCKS is negotiated and a handle has successfully performed a
+> > +server-side flock operation, its final close sends RELEASE with
+> > +FUSE_RELEASE_FLOCK_UNLOCK and the lock owner, even if OPEN was suppressed.
+> > +The server must accept this RELEASE with a zero file handle and no preceding
+> > +OPEN, and use the node ID and lock owner to remove any remaining flock locks.
+> > +This also applies after an explicit unlock, since the kernel records whether
+> > +a flock operation succeeded rather than tracking the server's current locks.
+> > +
+> > +When FUSE_ATOMIC_O_TRUNC is negotiated, an open with O_TRUNC still sends
+> > +OPEN and receives a matching RELEASE, so the server can perform truncation.
+> > +CREATE also retains its usual open and release semantics.  Connection-wide
+> > +no-open behavior selected by an ENOSYS response continues to take precedence.
+> > +
+> > +The hint does not make an inode immutable, grant permissions, or suppress
+> > +other operations such as FLUSH, FSYNC, locking or data I/O.  Servers supporting
+> > +remote flock must implement the RELEASE cleanup described above.  A server must
+> > +only set it when its access policy and file semantics permit the default
+> > +open behavior described above.  Servers needing per-open authorization,
+> > +nonzero handles, direct I/O, passthrough or other OPEN reply flags must keep
+> > +handling OPEN for those inodes.  No additional access-time or open-reference
+> > +accounting is performed by this feature.
+> 
+> 
+> -- 
+> ~Randy
+> 
