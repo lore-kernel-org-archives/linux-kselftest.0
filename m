@@ -1,40 +1,38 @@
 Received: from mail-108-mta66.mxroute.com (mail-108-mta66.mxroute.com [136.175.108.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0931432309
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 20:17:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D153B47EE
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 20:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791490629; cv=none; b=oK29PLUQBPU78lRjksFYjM8pwIWYWZRmnAZL0HMWHEqhHWLvOtjxbABVbTQaE5vFoBkfxos72mnHoOXuRJFkNCfiwJtdKW2tMSUvQwpI1sTjNFeWw/MysZZxYLDjjW1AH6EP/VYaabBHb6FQObc8347UYl/EDFPN8mpMBbKYzCs=
+	t=1791490927; cv=none; b=kLNpmDG46j39QHRWK/pAPDJUgOnt6uoniFl3yenm0qnNgSUWhXlErVMVdYD9Vyg3BFw2R5pxUiybvBp83/3TgziffA4+P77k8YvP56rvxHgUhpfHUnF3m7nlLV0r9RbYKEbTNJBe71OSui/kvzxdJAfgDgVlwWbCoewFzXR8EqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791490629; c=relaxed/simple;
-	bh=AdewahXmQVoGFKbvFx9hrY5Lw3JRM57+R4xGi95K+WM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rUAIhsfOFt+dCqJBGowYYJAm+AU30Wv09uweqvlnnm2O+D/nvKP6XqlVPt6wNCqOGaJg6Zfub0gLN5nvztyjxOTm6kzwZ8vcsoPyquruk53rpT1LcViPsI7UZy0npHULITszSzrkg4nvviirYZNY++FsKDmYfW4Nzt3e6DecijM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=iXWOr8S1; arc=none smtp.client-ip=136.175.108.66
+	s=arc-20240116; t=1791490927; c=relaxed/simple;
+	bh=1eghTlfDKC16Bb1T42wJ77PJTwDbvYWMjw94O1uYU84=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ki9SlN307fo/IaOf/iVMLEPj/8vCwhSCGauIFF1mEkvQwyiZN95HH5mUOP8I2PE0fqHozhO42XivkpXGhGUbn5pPIeXcSTPz/CqmEonu9IhUJhyfYAJX5CxAUv1CbAjwRc0BmdmMqGRFsSGl9YeAyofq2TdEaxhgditW8iUU/HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=bd9+ow95; arc=none smtp.client-ip=136.175.108.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="iXWOr8S1"
+	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="bd9+ow95"
 Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta66.mxroute.com (ZoneMTA) with ESMTPSA id 1a11d29832500028b2.00a
+ by mail-108-mta66.mxroute.com (ZoneMTA) with ESMTPSA id 1a11d29545d00028b2.00a
  for <linux-kselftest@vger.kernel.org>
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 08 Oct 2026 20:17:02 +0000
-X-Zone-Loop: c1d50d4c2bab70cfb721e980c6b493d8befdbb4b3d0f
+ Thu, 08 Oct 2026 20:16:50 +0000
+X-Zone-Loop: 422398f9c1000f9ad772ad4fb6f273425dd48a37fc0c
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
-	s=x; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=98aMzkvRL5YTiN/cBhGVogLVsHcjkgm1Lg+pmTYtpdY=; b=iXWOr8S1TmSX0n/zs63uEaggXs
-	zZ6g/v6xC6YK3CFZ1qGofvUR7Exdjhdp1wlWet+7yl1Uh8329+aTsj2ItIvjKn21rvORoQu0G7LEa
-	HnSBEJRE7aNYfLy9gdtrO1shcDjffajHZ8E8fdWKQ92r69rm7FKuzqtn99rtD3DxZ5ZYk7rlSvYZz
-	DLv6+6v98vd/JllRfMRlmAOzELt9u3vwE9RqgJ5K+qWl32awob9m2miIPMBRzk6XXxkML3T/J38Jm
-	iBDeIdNbQx8U2IpB7l+KRBn9qC+FAxTYJ4zB9bARqK41e5KW9H4/dIhJdfC4cZIQYEeGdDDbu3s6G
-	df2hAXBA==;
+	s=x; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:
+	From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+	References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+	List-Owner:List-Archive; bh=cKkOV3NctPJKvnb56+QurQBgeJeGLOz2lBSE0kPT9N0=; b=b
+	d9+ow95KIrukW9M1aCi850ChKTZRamIQUeVn/nyBDWrKAxlA2USZARRBBFoNzL6xZkpDZ42/mDbX/
+	/nWvNQMwEHxJOxLt/NWFboTX52iegqNTFqJ1ti2GcahVUWu/Ix5Nu1by3WkjcmAG/0OfI0dN6UvmV
+	TMYtONLc7R/g5j09T+T6ahAt/t8ayOZ8REPr/fgB/zBchTFWC96HWjzON4HXl6uSKKwbsRIscoMFO
+	B5FRXIBZ/NCjifQJ8wuvo8Rt/vyRifeAAZPtzj9UpvEwNExPiZHpZjDDzBJjiRmgSs04QhwzD/0cn
+	uKGdL3/ssIPdzlokCOJfJHd7FjPiYQbDg==;
 From: Richard Patel <ripatel@wii.dev>
 To: Rick Edgecombe <rick.p.edgecombe@intel.com>,
 	Thomas Gleixner <tglx@kernel.org>,
@@ -48,11 +46,9 @@ Cc: "H . Peter Anvin" <hpa@zytor.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Richard Patel <ripatel@wii.dev>
-Subject: [PATCH 3/3] selftests/x86: skip shstk tests where perf_event_open() fails
-Date: Thu,  8 Oct 2026 20:16:10 +0000
-Message-ID: <20261008201610.1003569-4-ripatel@wii.dev>
-In-Reply-To: <20261008201610.1003569-1-ripatel@wii.dev>
-References: <20261008201610.1003569-1-ripatel@wii.dev>
+Subject: [PATCH 0/3] x86/shstk: ban ia32 sigreturn
+Date: Thu,  8 Oct 2026 20:16:07 +0000
+Message-ID: <20261008201610.1003569-1-ripatel@wii.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,45 +58,25 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Id: ripatel@wii.dev
 
-perf_event_open() without caps fails with EACCES on some kernels.
-With this fix, the shadow stack selftest passes without privileges
-on a kernel with a RHEL-like config.
+User shadow stacks protect only the x64 and x32 rt_sigreturn syscalls.
+Calling ia32 rt_sigreturn, which lacks return address validation, is
+still possible via `int $0x80`. The bypass also requires the executable
+is mapped into low 32-bit address space. (This scenario is basically
+impossible to occur in the wild, but it's probably worth fixing
+nonetheless.)
 
-Signed-off-by: Richard Patel <ripatel@wii.dev>
----
- tools/testing/selftests/x86/test_shadow_stack.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Since user shadow stacks explicitly only support 64-bit mode, the
+simplest fix is to fault attempts to do 32-bit rt_sigreturn.
 
-diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-index 67baebbdbd87..e2340232a7b6 100644
---- a/tools/testing/selftests/x86/test_shadow_stack.c
-+++ b/tools/testing/selftests/x86/test_shadow_stack.c
-@@ -952,8 +952,11 @@ static int test_uretprobe(void)
- 
- 	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
- 		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
--	if (fd < 0)
-+	if (fd < 0) {
-+		printf("[SKIP]\tUretprobe test, perf_event_open() failed: %m\n");
-+		err = 0;
- 		goto out;
-+	}
- 
- 	if (sigsetjmp(jmp_buffer, 1))
- 		goto out;
-@@ -1031,8 +1034,11 @@ static int test_uprobe_call(void)
- 
- 	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
- 		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
--	if (fd < 0)
-+	if (fd < 0) {
-+		printf("[SKIP]\tUprobe on CALL test, perf_event_open() failed: %m\n");
-+		err = 0;
- 		goto out;
-+	}
- 
- 	if (sigsetjmp(jmp_buffer, 1))
- 		goto out;
--- 
+Richard Patel (3):
+  x86/shstk: ban ia32 sigreturn when shadow stack is enabled
+  selftests/x86: test shadow stack sigreturn protection
+  selftests/x86: skip shstk tests where perf_event_open() fails
+
+ arch/x86/kernel/signal_32.c                   |   4 +
+ .../testing/selftests/x86/test_shadow_stack.c | 120 +++++++++++++++++-
+ 2 files changed, 122 insertions(+), 2 deletions(-)
+
+--
 2.52.0
 
