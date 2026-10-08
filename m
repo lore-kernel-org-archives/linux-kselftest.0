@@ -1,144 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6913C0617
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 14:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB412E7397;
+	Thu,  8 Oct 2026 14:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791468696; cv=none; b=RzMUyyjXnETrWJXVuLm9z0MI9uelv2jIDvyvpQAUcBN/tHFe9Q5olojN3Jqz6Zy7hTEnPZ/1SocUYiTV6EZiZJpNQ/y8zqJFNDOmpqamTz2wEoAmVvbCgh5/UNBtQTRYlw4dGtu7JOaN0z0+HyTj4Xm2HFik5xXXKD7wIj++PfU=
+	t=1791469207; cv=none; b=TjEnRrmNQD08Rio42QGxPbhv7jjWSmaWU3iIwAdPJOJgjxjHxbLqTAebfzeN9z7mcTMCrgQUa0Q5ANTzs4iKMFClm0I4x3ANzU8TSQFZxRtVa/endTd7F6g2ZtUXLBdpNLgtPl3q2hwe2spHhvYFEI22XdlwMe4idAaePEWXijU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791468696; c=relaxed/simple;
-	bh=uV1ISNsf76cltfLh/o1kW0+W32CtPdo6Wesa9Lel6Ck=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LPohAOAu9yiip5IqLBsi1S/sNtA7RPo/HFy9f6j38JmQ+oJD5+9keLNANdm/fPyBVIa3Q6LoeAflfrRwqh47XtBuHAyvtJGUlOkbec8APL/8aQIElrT9pTKm9dixI7opU760IlWBokMJ3bLCX+GKddpOJNZAE/TBFJ7uWQ5r3uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zzl8qVMi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791469207; c=relaxed/simple;
+	bh=8lZWM8B0zV5VlDIHmxlzHz/fdA0/tQ95UUPWTA8m1hw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h+vfIkRv+nGTKcE8xD4TsAktbZAHP2qXhzehh+TuLp1agWVNCT2+tlzRdIpSGZFp5WAJTHReP29oYopEbDnaIGAcBQ5oh15Fl1Zz3bgLJi9f7vOo58Jm2s06t9BjRvfBBAnfrYhVUdvNSjzcOMHAxcLLkvbSL7O/0mQxQqh7iv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=hallyn.com; dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b=kVPaDT53; arc=none smtp.client-ip=178.63.66.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hallyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zzl8qVMi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DF981F000FF
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 14:11:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791468695;
-	bh=XizYEBrLIrSOkcxxEQ6z756AMwf212Lu8FYTxJPBGuU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Zzl8qVMiw/p6DERRiuXbGUGeGfLtICFLZGLkHAuc57x1tagz5+sHlCk40AtEXEhn3
-	 kDAfVHdpxbI1auSzdfo4oednIuQVkBCk1DBqFuuskuLJk3G8e8+W0FBC8EajCAyUwz
-	 7Bkk2HNg7I0nxI9BMfeeT2hVvduuKdmM0bl0PoaDfdjudrhVWPKqPRX8/WU1bml7io
-	 rxGHc55il9q3siIdYTTal1fGIAFvNab/jdBdbukYRDFSZ6my2PjWC/6euIsl5okgSo
-	 3i8Q/53QwQsB6KhZPuJiASfCLeI4Fbn/k5WO4MLksKCotUZYaJX1m6ID4M9YvupFMy
-	 ehqHuquLW7T6w==
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c2e62319cfaso546028566b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 07:11:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBxp6u4i3vH0ROkCYPZ6yZOD9ZsI2N6XKaGxLFwS+OPj6A85CYf17kN/n/oPMn9CMiwxKc8ef+290RbR9w8xx3o=@vger.kernel.org
-X-Gm-Message-State: AFuF++kU4SLHubKkQzaQYw+ARsdNWsO/mnqpUlwL2lbezOX0eoWXnOpj
-	7uzx8haosIZjSrwmWPMW9gHNM3xM30fdilAZ24ulJk7awcMXAPT9fM/a53nlEVGQFOxeMBG5Azv
-	GTIBdm2DIIoZiYVvmYC8RCCG0WET06gM=
-X-Received: by 2002:a17:907:868a:b0:c2a:fd39:f23b with SMTP id
- a640c23a62f3a-c317c08dfa9mr568535066b.24.1791468694153; Thu, 08 Oct 2026
- 07:11:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b="kVPaDT53"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
+	t=1791469202; bh=8lZWM8B0zV5VlDIHmxlzHz/fdA0/tQ95UUPWTA8m1hw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kVPaDT53ktwxUwDg6clOYeBoL76opCPs2OTL2U5/RxG+LVTqI2v3Evnus7ieHKlMU
+	 g9zb0pitb8zQftt4ZekymDdrHrsyg2HhIcKM0X4x9zfX4cVK4i8NdQfo4P5XeXGnLg
+	 AYbC9oJpeLomBNeyx1DLGdL3qw7JEgmk0UoJ7EHDn0CcOuxK0xPQKR1gN3tpypQ6jF
+	 Dz6G+9irLYtgNb1evSJ1Re3h2RG0VMTfm8Tp3D5p1XKTV3N6pzrIdE9jgygzkQYAdE
+	 k8k1JIqNXJqFpUiKGBT+hIfWbpaf/Fxbtx1FlsjansH2Aedl9u/StcGd7i6eL0D7a2
+	 ELYM6oAffQp+Q==
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+	id 0CF81196B; Thu,  8 Oct 2026 09:20:01 -0500 (CDT)
+Date: Thu, 8 Oct 2026 09:20:01 -0500
+From: "Serge E. Hallyn" <serge@hallyn.com>
+To: Gregory Price <gourry@gourry.net>
+Cc: Sasha Levin <sashal@kernel.org>, linux-api@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
+	tools@kernel.org, x86@kernel.org, Thomas Gleixner <tglx@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
+	Jake Edge <jake@lwn.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Gabriele Paoloni <gpaoloni@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v5 05/11] kernel/api: add API specification for sys_open
+Message-ID: <asemkQ2v0di0Eea3@hallyn.com>
+References: <20261008084956.2911790-1-sashal@kernel.org>
+ <20261008084956.2911790-6-sashal@kernel.org>
+ <aseRXi7hMWBBc0tB@hallyn.com>
+ <aseWPV6ZRQM3JOMN@gourry-fedora-PF4VCD3F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261008-selftests-bpf-cgroup-stats-bpffs-v1-0-76b9a6d1be34@gmail.com>
- <20261008-selftests-bpf-cgroup-stats-bpffs-v1-2-76b9a6d1be34@gmail.com>
-In-Reply-To: <20261008-selftests-bpf-cgroup-stats-bpffs-v1-2-76b9a6d1be34@gmail.com>
-From: Yosry Ahmed <yosry@kernel.org>
-Date: Thu, 8 Oct 2026 07:11:21 -0700
-X-Gmail-Original-Message-ID: <CAO9r8zORCY-3W1eLmc7ZmEjTujuHRMNxsP1=i4gg6y4Pe-WedA@mail.gmail.com>
-X-Gm-Features: AclHuK99zqsS7a3Blztb5G1oVsFTdGk6_aPODN_TJEUcyx014sLN4O1TlTaW5CY
-Message-ID: <CAO9r8zORCY-3W1eLmc7ZmEjTujuHRMNxsP1=i4gg6y4Pe-WedA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Don't stack a bpffs in cgroup_hierarchical_stats
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, Hao Luo <haoluo@google.com>, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aseWPV6ZRQM3JOMN@gourry-fedora-PF4VCD3F>
 
-On Thu, Oct 8, 2026 at 7:03=E2=80=AFAM Qiliang Yuan <odys.yuan@gmail.com> w=
-rote:
->
-> setup_bpffs() mounts a bpffs on /sys/fs/bpf even when one is already
-> there, while test_progs runs other tests that pin objects in /sys/fs/bpf
-> in parallel.
->
-> The new, empty bpffs hides the old one until the test ends, so those
-> tests lose what they pinned or the directories they pin into.
-> bpftool_maps_access then fails to pin an iterator because
-> /sys/fs/bpf/test_bpftool_map doesn't exist anymore, and bpftool_metadata
-> can't find the program it pinned in /sys/fs/bpf/test_metadata.
+On Thu, Oct 08, 2026 at 09:13:38AM -0400, Gregory Price wrote:
+> On Thu, Oct 08, 2026 at 07:49:34AM -0500, Serge E. Hallyn wrote:
+> > On Thu, Oct 08, 2026 at 04:49:45AM -0400, Sasha Levin wrote:
+> > > Add KAPI-annotated kerneldoc for the sys_open system call in fs/open.c.
+> > > 
+> > > The specification documents parameter constraints (pathname, flags
+> > > bitmask, permission mode), 24 error conditions, locking requirements,
+> > > side effects, required capabilities, and usage examples.
+> > > 
+> > > Assisted-by: LLM
+> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > 
+> > I know Kees and Jonathan and others asked for exactly this.  But one
+> > downside to this is it makes just paging through fs/open.c a lot more
+> > painful.  Maybe it's worth it.  Maybe "noone will ever do that again" bc
+> > that's why we have ai and tools.  But a) that's how I've historically
+> > done a lot of code research, b) IMO something like a manpages section 2
+> > under Documentation/ would be a great place for this, and c) we can also
+> > use tools to always sync these, or even show/edit in a single view when
+> > you want  ('kdocedit fs/open.c').
+> >
+> 
+> In many, many other projects i've worked on, these docs are placed in
+> the header as opposed to the .c file, but I understand there is some
+> pain that comes with ifdef.
+> 
+> Keeping it in the header ties the definition to exactly the location
+> external users import to find the function - so it makes sense.
+> 
+> But separating the contracts from the code guarantees they'll go stale,
 
-Seems like both of these tests do not mount bpffs, but rely on its
-existence. If it's generally expected that bpffs is mounted when the
-tests are run, should we drop the mounting code here instead?
+OTOH these descriptions are so long that IMO they are guaranteed to go
+stale anyway :)  While I'm editing a return value at the bottom of the
+fn, most or all of the description is already going to be off my
+terminal.
 
-Alternatively, should we have a common helper for creating directories
-in bpffs that mounts it if it isn't already there?
+> so I don't think shoving it in Documentation/ does anyone any good.
 
->
-> Mount a bpffs only if /sys/fs/bpf isn't one already.
->
-> Fixes: 88886309d2e8 ("selftests/bpf: add a selftest for cgroup hierarchic=
-al stats collection")
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-> ---
->  .../bpf/prog_tests/cgroup_hierarchical_stats.c        | 19 +++++++++++++=
-++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_s=
-tats.c b/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> index a93b16ed629e9..8e0b67df700bf 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> @@ -23,8 +23,10 @@
->  #include <asm-generic/errno.h>
->  #include <errno.h>
->  #include <sys/types.h>
-> +#include <linux/magic.h>
->  #include <sys/mount.h>
->  #include <sys/stat.h>
-> +#include <sys/vfs.h>
->  #include <unistd.h>
->
->  #include <test_progs.h>
-> @@ -88,13 +90,22 @@ static int read_from_file(const char *path, char *buf=
-, size_t size)
->  /* mounts bpffs and mkdir for reading stats, returns 0 on success. */
->  static int setup_bpffs(void)
->  {
-> +       struct statfs st;
->         int err;
->
-> -       /* Mount bpffs */
-> -       err =3D mount("bpf", BPFFS_ROOT, "bpf", 0, NULL);
-> -       mounted_bpffs =3D !err;
-> -       if (ASSERT_FALSE(err && errno !=3D EBUSY, "mount"))
-> +       /*
-> +        * Mount bpffs unless it is already there. Mounting another one o=
-n top
-> +        * would hide what other tests running in parallel pin in it.
-> +        */
-> +       err =3D statfs(BPFFS_ROOT, &st);
-> +       if (!ASSERT_OK(err, "statfs " BPFFS_ROOT))
->                 return err;
-> +       if (st.f_type !=3D BPF_FS_MAGIC) {
-> +               err =3D mount("bpf", BPFFS_ROOT, "bpf", 0, NULL);
-> +               if (!ASSERT_OK(err, "mount"))
-> +                       return err;
-> +               mounted_bpffs =3D true;
-> +       }
->
->         /* Create a directory to contain stat files in bpffs */
->         err =3D mkdir(BPFFS_ATTACH_COUNTERS, 0755);
->
-> --
-> 2.43.0
->
+If every build auto-generates an update and then looks for and flags
+meaningful changes (API breakages), then a) that is more reliable and b)
+it doesn't matter where the docs are.
+
+Even if there's just a three line comment above a fn, history proves
+that it will not reliably stay in sync as the fn changes.  An automation
+step/check is needed.
+
+> ~Gregory
