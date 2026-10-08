@@ -1,64 +1,64 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7463A83AC
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 16:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819803AE193
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 16:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791476013; cv=none; b=MnNhu6EIG9myIxNeaXE3N+kjnzTGmpsP3zaaf4KGKVgaRpw5WECjNGz0vP/ws2vF9C/kAafZj9cHI7ihKYkjQ8JrDnTKj0ZLFIz7QGfw1ENqXoA5a5pnbxK8IrF307Tr9uqwyILE4NzXAz/NnA7idG3+0UOspOG+bQTUZWZ1Xoc=
+	t=1791476018; cv=none; b=DnJMYv0Kkggr7+l1EjwhSk4joTCcqsyPi3ksishOehu4d8ilBTW/z1A3jbkIZRA0L+a+4PuYzVrfNCOJVVWG78N7T7HvzHN3NOOpQpHfuigZWQ/S5SUcApS+VkPFhTM1f8XktnORmLmmM7ajgq29gKTgRZcMgcWiDmNmk7TwuCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791476013; c=relaxed/simple;
-	bh=vreCvApWOinCDgRvjiXe53vKG1KPRHfHo87+JyZ86wI=;
+	s=arc-20240116; t=1791476018; c=relaxed/simple;
+	bh=ctjqrT0ClDhJ4kwgUJDSm0RQ29Lw8YZNFjREtaOVINs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HD8cInSQDkcbWPE6mGtJi2Mf9JgUKORCz4eyck/CAimLKCTTa2oC44iNej4/ZIeqWJkBBf0ODRV3C7rWep+6lyL5jNhzbKxViNysfYLPfXkEz5DuHJpEFVLlNcO4Wa3UYvfs32to30K7c6lkk4DhwP1kF1JbKn/xQI46poVNQig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rN41TpWy; arc=none smtp.client-ip=209.85.221.54
+	 MIME-Version; b=dPLSHmuL2Wi0mVnCfjdPRhFNUi34HBRo4KGr8b6oU9/YswmVUM4HVZmTWofLkEvFJC2wLwXH1mBYX63wujW+7BssyAMdN3Ykb9Q2q7lr+0gg75Ke6t0y3bm6UxpRtjknL3r/2JXTgpfO160QTaEUEVeEXICLmojMWdyMXx6T/7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bkXuoTl4; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rN41TpWy"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48c6955a7c3so980295f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 09:13:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bkXuoTl4"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-487049569b6so2286869f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 09:13:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791476007; x=1792080807; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791476011; x=1792080811; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=PU5L+eEs/MfHmLuLjuMaOq23hdNDnQ5u+me0YnyFa9M=;
-        b=rN41TpWyI+HQGD7baW7+T18VkS5wqFTm0dY1epNxz9KN3eekF9iAnzluRxE1M6NaPS
-         02dednRH1js26Uahc2biq0f5FhfKMCpxJJBE8LQHj4oLBsd8H/T6k9lbkpls0JM8Zta8
-         0aZPzROahR17J0x9H7NRpUGCU7/zlmAoFRMYXuHkdWe1DEspH78acSmlkfw0A5HQzlti
-         nIyYg2J9j7cWCyhHDetdR+AzxY3c82HXbxIeCc1O1ebFWb7W/GEc31R9TVZEoMLpAMj8
-         4gNR0qeHvViHcRlbzAMKG6xVjOiWBPWKopenXSHc4ZGt9N1forZBuSt9lOyQ9QCCtIfH
-         x7rA==
+        bh=KnRbsO40pgOKFThX66ioZGni0tsr5d/QoIBkjkvb+Kg=;
+        b=bkXuoTl4eWiSXjN2RrMA6Ib+g470o74VfdAjkePD6r5kBQO7kLhHy3biGpxsZ+X7JT
+         8SuKLeUF/IIaS31Em75cRDNMQ7CrYEuFp3/sbMZYjuDiC/kkvoD7iPZZMRInqlUDB7/2
+         Ow0wN+2qj63VMY+88d6jFl078TDdA/Svc2CWs0xRNczLwhiszHOxcnKb/lNvlG2dCiHL
+         VrzVnQoROGvGabw1QgbROCdob5Qu8Kqa7oN69Wm3KSleTtH/07AuBWXr8NTBKMSXfjXT
+         dIdwJq6mGY3Ypj9hAVan+9ydVZiiLeVq4N1Lep/lXd9Ujsc9Ydr6B4TJNpY3M8GsGovx
+         m9Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791476007; x=1792080807;
+        d=1e100.net; s=20260707; t=1791476011; x=1792080811;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PU5L+eEs/MfHmLuLjuMaOq23hdNDnQ5u+me0YnyFa9M=;
-        b=xccxhy6Fqi7AeGReEtCv12grh6ShrzpcONNoSxrmYhdpv2LeoNBveEAYlKAm795icI
-         uCNhGOCA2OBhMyzY8QzD6ONRTlUnyCclzAYkZooVAOY/esirtnjCvul7orf8MuupA54p
-         mPcXIelsqz0gF4T+Scao+GVR6qqMOGB4VewTnd7gxlpnSglBsrvvKIBXMZkudy7E8B5+
-         8+VxU115czruN66LsEI0ihVNWBNM3/PVwKOma8yjnzupxid3jnB1PlWWWpjrO/F5tb2P
-         +6oEA8ouRv2h4G7oEY0EEcggpW+WnlvQrANs/f+V4ZdjaX1CXaXRJqJIbaxHIU3qG8Bd
-         XW6Q==
-X-Forwarded-Encrypted: i=1; AKwUvBz5ZqLZFu9Joh49T4j3pcb6/15oo5uHSl1zztIqI6se3ma/MEm++p15OJwzph3Fbj/7m5Tdan0fzN1cTDLE4N4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYITq+EVcmZcyI0Kcn/Og2oroUAQ3hAmjDRO6k1BjWDDhknuxE1b
-	lBKM68t8vmSniR+4Qaji0d7jhHwjJAqweWzuKMLUUlil1Mh7JOktcxUw
-X-Gm-Gg: AYBFou34cm3ucOP9iQn9+CzM+y3oxbIEgPrBIaVh20l9i5tJCnknFrMflmm2m4NNXE5
-	pQ91tOfDyqJ0+kgE31wMdEXaf/xy9iDa8CqdtESCPEY9vSHN8oce5JiYf+rJ85M6lLu5B10mv/6
-	mqbT64xo1oTUf3FhyTxm4wXcCvT8pJmIAKlVNEqeFQ/AUbFNn+qPukD3DA+ggX9owmPNzmlqGar
-	1K0tDOTXCwhCPq0c2+KU8ZC48GQhcoERIA90fiuitNwRTAVTzh39k9npljK9ioqgPxTg1BR3pWu
-	t4Vieg9ly+aZGu+3j/n3Xe2KSrdKoXHYnbm3BjhIwElzrjjdtGd3AqQY400c1ZEmYeXKIRbo/Z4
-	tJPT3viWR5q1OxQ63RsDZk+PPIbir5WJRF39maxn8T4DOA3NP196+SRJlRtYvdzrce7FGejVun5
-	EADL0c0MRB+fL7lXHxffLul135bYYEOucRjztVFwuAth7WtZQET2Nvtvwt+gbf2pjgsUXGrbghr
-	7PcRJjto90sCxZbLkmjgUg9oavVkF0KjAdnIw==
-X-Received: by 2002:a05:6000:2505:b0:487:ae2:4d01 with SMTP id ffacd0b85a97d-48c727821b8mr11753512f8f.22.1791476007329;
-        Thu, 08 Oct 2026 09:13:27 -0700 (PDT)
+        bh=KnRbsO40pgOKFThX66ioZGni0tsr5d/QoIBkjkvb+Kg=;
+        b=n5R3DHRpyUiWnJPvt9Om+raUq4MMmCi5CBwapGzexDVViEE3SDxVApCb8TFen86sRj
+         ciI2EMek4nCYFdG3JWEfMxeP2PavP/uTBHpiPPdF6o1cFDlIj9ynCO5B/2IZ5eylQCFR
+         8rAIt2/eyUyqFSfkgkqJYMPjnKqIR4I9xcAEtksXQxl6Cl3ja34HsUQgb7sKBl1gUkqZ
+         9XrPIGrqC6a2CdbLyI19FG6vQO6mShvwuqyjzca8aSF/nFvR8GD3FHPWfC6El5Kn6AEd
+         cmkphC4H5JmQ8NlSwcM8mvi09wFuTLGk4urb7189jXjPSivBOgMRc8PksAY/Tw5/01X7
+         Otjw==
+X-Forwarded-Encrypted: i=1; AKwUvBwjjH5CocBCRoZ3MYOl5Ys4bmR6Q2gALZLLnLEulVc8TWmLjnKi4eumOMOf5kH7EM14nviJO0SEbbe9ug9VgME=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLE5ffrnXSNXHA/1MMp4yI8o9LA4gikKtOWnUOSqVWzzzFa5vr0
+	yuPGkm0g6gJXk7XSxOcSr2uHblFRfFl7kNlakf1CKyEp82DW0qs8OFH3
+X-Gm-Gg: AYBFou35sRQbqko3y3rVMTY37Js0wd9udqvEKiaHu8wskfRSL4ZwBVo8YSabFGTNE4O
+	QODaENBv3XNKT8or1ZmoknDmuxWn9qAHev5hlboBbb/ej5tHXjvk30yGrvg+BkbULYgM/NkknKw
+	zpAJXeY3HDBmmj6pUQ9ho/3UOn+ICaCNJNmHVQbKHxZcgGZ2sbMwrR+/0ID1VPbd75usTB0oy2C
+	xEyuU+1WQm/ZmpQssG50pB2R2kAXfpVS66vJUcHe2u7yo5jJ1LeIBPo+dAYNrhww8ZE8OJgwe0g
+	Y+442QWRnw/KauShIDGugtfR/e82JDLNqXHyKpqlJjzBVX8S6UZaZr9BzGObF50SpoYi6hY7l2M
+	kOxt2PNkOVAIjjuS80GifDd+2f2jnfBiBw91WJ85Z2hCNljtfsGloZu8H6zDUTczs/kPPxSlnSW
+	bOVeRRlNVVjVswhC2NNZfZPay0SJ37BDk88CmoJ7TIX6IahpBavJbwtBGlwfM506Rc4VrNJ1Kbd
+	Q/8lWLi5WXeIMqUsNsAHdCnLNnHUCDcX6ZAVA==
+X-Received: by 2002:a5d:64c8:0:b0:48a:f52d:ca47 with SMTP id ffacd0b85a97d-48c72785207mr12533471f8f.22.1791476011230;
+        Thu, 08 Oct 2026 09:13:31 -0700 (PDT)
 Received: from MacBookAir.home.tenber.ge ([2a00:6020:a725:dc00:95bf:d5d1:d7d8:747f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48db63401desm448005f8f.0.2026.10.08.09.13.19
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48db63401desm448005f8f.0.2026.10.08.09.13.28
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 08 Oct 2026 09:13:21 -0700 (PDT)
+        Thu, 08 Oct 2026 09:13:29 -0700 (PDT)
 From: Jan-Gerd Tenberge <janten@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -86,9 +86,9 @@ Cc: ast@kernel.org,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 1/2] bpf: Revalidate iterator programs on link update
-Date: Thu,  8 Oct 2026 18:13:08 +0200
-Message-ID: <20261008161309.8179-2-janten@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Test iterator link target validation
+Date: Thu,  8 Oct 2026 18:13:09 +0200
+Message-ID: <20261008161309.8179-3-janten@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261008161309.8179-1-janten@gmail.com>
 References: <20261008161309.8179-1-janten@gmail.com>
@@ -100,297 +100,131 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Iterator link creation validates constraints that depend on both the
-program and the selected target. In particular, map iterators compare
-program access sizes against the target map, and sleepable programs may
-only attach to reschedulable iterators.
+Exercise target-dependent iterator checks during BPF_LINK_UPDATE.
+Verify that updates to a program with an oversized array or socket-storage
+value access are rejected, as is an update to a sleepable program on a
+non-reschedulable hash iterator.
 
-BPF_LINK_UPDATE only checks the program type, expected attach type and
-attach BTF ID. A program rejected on direct attach can therefore be
-installed by first attaching a compatible program and then replacing it.
+Run each original program after the rejected update to ensure that it
+remains attached. Also verify that a compatible array iterator update
+succeeds.
 
-For array maps, this allows an oversized value access to cross the source
-map allocation. An isolated runtime test used the bypass to overwrite the
-refcount of a separately allocated live map. Dropping one legitimate
-reference then freed that map while a verified BPF program still held
-another reference. After a same-size map reused the slab slot, the live
-program accessed the replacement through its stale map pointer. The same
-bypass can also corrupt a live map's ops pointer and panic the kernel.
-
-Add an optional target validation callback and invoke it, together with
-the sleepability check, before replacing the program. Factor the existing
-map element, sk_storage and sockmap checks into validators shared by attach
-and update. A failed validation leaves the old program attached.
-
-Fixes: d6c4503cc296 ("bpf: Implement bpf iterator for hash maps")
-Cc: stable@vger.kernel.org
 Assisted-by: LLM
 Signed-off-by: Jan-Gerd Tenberge <janten@gmail.com>
 ---
- include/linux/bpf.h       |  3 ++
- kernel/bpf/bpf_iter.c     | 15 ++++++++++
- kernel/bpf/map_iter.c     | 58 +++++++++++++++++++++++----------------
- net/core/bpf_sk_storage.c | 24 +++++++++++-----
- net/core/sock_map.c       | 26 ++++++++++++------
- 5 files changed, 87 insertions(+), 39 deletions(-)
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 34 +++++++++++++++++--
+ .../bpf/progs/bpf_iter_bpf_array_map.c        | 17 ++++++++++
+ 2 files changed, 49 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0ecb9418dfbd..5aa786eba3ea 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3007,6 +3007,8 @@ struct bpf_iter_aux_info {
- typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
- 					union bpf_iter_link_info *linfo,
- 					struct bpf_iter_aux_info *aux);
-+typedef int (*bpf_iter_validate_target_t)(struct bpf_prog *prog,
-+					  const struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_detach_target_t)(struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_show_fdinfo_t) (const struct bpf_iter_aux_info *aux,
- 					struct seq_file *seq);
-@@ -3024,6 +3026,7 @@ enum bpf_iter_feature {
- struct bpf_iter_reg {
- 	const char *target;
- 	bpf_iter_attach_target_t attach_target;
-+	bpf_iter_validate_target_t validate_target;
- 	bpf_iter_detach_target_t detach_target;
- 	bpf_iter_show_fdinfo_t show_fdinfo;
- 	bpf_iter_fill_link_info_t fill_link_info;
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index b40eb404adab..024419b3dd0a 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -409,6 +409,9 @@ static int bpf_iter_link_replace(struct bpf_link *link,
- 				 struct bpf_prog *new_prog,
- 				 struct bpf_prog *old_prog)
- {
-+	struct bpf_iter_link *iter_link =
-+		container_of(link, struct bpf_iter_link, link);
-+	const struct bpf_iter_reg *reg_info = iter_link->tinfo->reg_info;
- 	int ret = 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+index c69080ca14f5..3ae5203d3fac 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -897,14 +897,22 @@ static void test_bpf_hash_map(void)
+ 	/* Sleepable program is prohibited for hash map iterator */
+ 	linfo.map.map_fd = map_fd;
+ 	link = bpf_program__attach_iter(skel->progs.sleepable_dummy_dump, &opts);
+-	if (!ASSERT_ERR_PTR(link, "attach_sleepable_prog_to_iter"))
++	err = libbpf_get_error(link);
++	if (!ASSERT_EQ(err, -EINVAL, "attach_sleepable_prog_to_iter")) {
++		if (!err)
++			bpf_link__destroy(link);
+ 		goto out;
++	}
  
- 	mutex_lock(&link_mutex);
-@@ -424,6 +427,18 @@ static int bpf_iter_link_replace(struct bpf_link *link,
- 		goto out_unlock;
+ 	linfo.map.map_fd = map_fd;
+ 	link = bpf_program__attach_iter(skel->progs.dump_bpf_hash_map, &opts);
+ 	if (!ASSERT_OK_PTR(link, "attach_iter"))
+ 		goto out;
+ 
++	err = bpf_link__update_program(link, skel->progs.sleepable_dummy_dump);
++	if (!ASSERT_EQ(err, -EINVAL, "update_sleepable_prog"))
++		goto free_link;
++
+ 	iter_fd = bpf_iter_create(bpf_link__fd(link));
+ 	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
+ 		goto free_link;
+@@ -1023,7 +1031,7 @@ static void test_bpf_array_map(void)
+ 	int err, i, map_fd, hash_fd, iter_fd;
+ 	struct bpf_iter_bpf_array_map *skel;
+ 	union bpf_iter_link_info linfo;
+-	struct bpf_link *link;
++	struct bpf_link *link, *bad_link;
+ 	char buf[64] = {};
+ 	int len, start;
+ 
+@@ -1049,10 +1057,24 @@ static void test_bpf_array_map(void)
+ 	linfo.map.map_fd = map_fd;
+ 	opts.link_info = &linfo;
+ 	opts.link_info_len = sizeof(linfo);
++	bad_link = bpf_program__attach_iter(skel->progs.oob_write_bpf_array_map,
++					    &opts);
++	err = libbpf_get_error(bad_link);
++	if (!ASSERT_EQ(err, -EACCES, "attach_oob_write_iter")) {
++		if (!err)
++			bpf_link__destroy(bad_link);
++		goto out;
++	}
++
+ 	link = bpf_program__attach_iter(skel->progs.dump_bpf_array_map, &opts);
+ 	if (!ASSERT_OK_PTR(link, "attach_iter"))
+ 		goto out;
+ 
++	err = bpf_link__update_program(link, skel->progs.oob_write_bpf_array_map);
++	if (!ASSERT_EQ(err, -EACCES, "update_oob_write_iter"))
++		goto free_link;
++
++	/* The rejected update must leave dump_bpf_array_map attached. */
+ 	iter_fd = bpf_iter_create(bpf_link__fd(link));
+ 	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
+ 		goto free_link;
+@@ -1092,6 +1114,9 @@ static void test_bpf_array_map(void)
+ 			goto close_iter;
  	}
  
-+	if (new_prog->sleepable &&
-+	    !bpf_iter_target_support_resched(iter_link->tinfo)) {
-+		ret = -EINVAL;
-+		goto out_unlock;
-+	}
++	err = bpf_link__update_program(link, skel->progs.noop_bpf_array_map);
++	ASSERT_OK(err, "update_valid_iter");
 +
-+	if (reg_info->validate_target) {
-+		ret = reg_info->validate_target(new_prog, &iter_link->aux);
-+		if (ret)
-+			goto out_unlock;
-+	}
+ close_iter:
+ 	close(iter_fd);
+ free_link:
+@@ -1363,6 +1388,11 @@ static void test_bpf_sk_storage_map(void)
+ 	if (!ASSERT_OK_PTR(link, "attach_iter"))
+ 		goto out;
+ 
++	err = bpf_link__update_program(link,
++				       skel->progs.oob_write_bpf_sk_storage_map);
++	if (!ASSERT_EQ(err, -EACCES, "update_oob_write_iter"))
++		goto free_link;
 +
- 	old_prog = xchg(&link->prog, new_prog);
- 	bpf_prog_put(old_prog);
- 
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-index c19b360bad9e..d038b795bf4e 100644
---- a/kernel/bpf/map_iter.c
-+++ b/kernel/bpf/map_iter.c
-@@ -97,13 +97,40 @@ static struct bpf_iter_reg bpf_map_reg_info = {
- 	.seq_info		= &bpf_map_seq_info,
- };
- 
-+static int bpf_iter_validate_map(struct bpf_prog *prog,
-+				 const struct bpf_iter_aux_info *aux)
+ 	iter_fd = bpf_iter_create(bpf_link__fd(link));
+ 	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
+ 		goto free_link;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c
+index 19710cc0f250..beb1b714f120 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c
+@@ -51,3 +51,20 @@ int dump_bpf_array_map(struct bpf_iter__bpf_map_elem *ctx)
+ 	*val = *key;
+ 	return 0;
+ }
++
++SEC("iter/bpf_map_elem")
++int noop_bpf_array_map(struct bpf_iter__bpf_map_elem *ctx)
 +{
-+	struct bpf_map *map = aux->map;
-+	u32 value_size;
-+
-+	switch (map->map_type) {
-+	case BPF_MAP_TYPE_PERCPU_HASH:
-+	case BPF_MAP_TYPE_LRU_PERCPU_HASH:
-+	case BPF_MAP_TYPE_PERCPU_ARRAY:
-+		value_size = round_up(map->value_size, 8) * num_possible_cpus();
-+		break;
-+	case BPF_MAP_TYPE_HASH:
-+	case BPF_MAP_TYPE_LRU_HASH:
-+	case BPF_MAP_TYPE_ARRAY:
-+	case BPF_MAP_TYPE_RHASH:
-+		value_size = map->value_size;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (prog->aux->max_rdonly_access > map->key_size ||
-+	    prog->aux->max_rdwr_access > value_size)
-+		return -EACCES;
-+
 +	return 0;
 +}
 +
- static int bpf_iter_attach_map(struct bpf_prog *prog,
- 			       union bpf_iter_link_info *linfo,
- 			       struct bpf_iter_aux_info *aux)
- {
--	u32 key_acc_size, value_acc_size, key_size, value_size;
- 	struct bpf_map *map;
--	bool is_percpu = false;
- 	int err = -EINVAL;
- 
- 	if (!linfo->map.map_fd)
-@@ -117,33 +144,15 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 		goto put_map;
- 	}
- 
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
--		is_percpu = true;
--	else if (map->map_type != BPF_MAP_TYPE_HASH &&
--		 map->map_type != BPF_MAP_TYPE_LRU_HASH &&
--		 map->map_type != BPF_MAP_TYPE_ARRAY &&
--		 map->map_type != BPF_MAP_TYPE_RHASH)
--		goto put_map;
--
--	key_acc_size = prog->aux->max_rdonly_access;
--	value_acc_size = prog->aux->max_rdwr_access;
--	key_size = map->key_size;
--	if (!is_percpu)
--		value_size = map->value_size;
--	else
--		value_size = round_up(map->value_size, 8) * num_possible_cpus();
--
--	if (key_acc_size > key_size || value_acc_size > value_size) {
--		err = -EACCES;
-+	aux->map = map;
-+	err = bpf_iter_validate_map(prog, aux);
-+	if (err)
- 		goto put_map;
--	}
- 
--	aux->map = map;
- 	return 0;
- 
- put_map:
-+	aux->map = NULL;
- 	bpf_map_put_with_uref(map);
- 	return err;
- }
-@@ -172,6 +181,7 @@ DEFINE_BPF_ITER_FUNC(bpf_map_elem, struct bpf_iter_meta *meta,
- static const struct bpf_iter_reg bpf_map_elem_reg_info = {
- 	.target			= "bpf_map_elem",
- 	.attach_target		= bpf_iter_attach_map,
-+	.validate_target	= bpf_iter_validate_map,
- 	.detach_target		= bpf_iter_detach_map,
- 	.show_fdinfo		= bpf_iter_map_show_fdinfo,
- 	.fill_link_info		= bpf_iter_map_fill_link_info,
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index 1d295a8769fa..0cae873f3ceb 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -846,6 +846,18 @@ static void bpf_iter_fini_sk_storage_map(void *priv_data)
- 	bpf_map_put_with_uref(seq_info->map);
- }
- 
-+static int bpf_iter_validate_map(struct bpf_prog *prog,
-+				 const struct bpf_iter_aux_info *aux)
++SEC("iter/bpf_map_elem")
++int oob_write_bpf_array_map(struct bpf_iter__bpf_map_elem *ctx)
 +{
-+	if (aux->map->map_type != BPF_MAP_TYPE_SK_STORAGE)
-+		return -EINVAL;
++	__u64 *val = ctx->value;
 +
-+	if (prog->aux->max_rdwr_access > aux->map->value_size)
-+		return -EACCES;
++	if (val)
++		val[1] = 0;
 +
 +	return 0;
 +}
-+
- static int bpf_iter_attach_map(struct bpf_prog *prog,
- 			       union bpf_iter_link_info *linfo,
- 			       struct bpf_iter_aux_info *aux)
-@@ -860,18 +872,15 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
- 
--	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
--		goto put_map;
--
--	if (prog->aux->max_rdwr_access > map->value_size) {
--		err = -EACCES;
-+	aux->map = map;
-+	err = bpf_iter_validate_map(prog, aux);
-+	if (err)
- 		goto put_map;
--	}
- 
--	aux->map = map;
- 	return 0;
- 
- put_map:
-+	aux->map = NULL;
- 	bpf_map_put_with_uref(map);
- 	return err;
- }
-@@ -898,6 +907,7 @@ static const struct bpf_iter_seq_info iter_seq_info = {
- static struct bpf_iter_reg bpf_sk_storage_map_reg_info = {
- 	.target			= "bpf_sk_storage_map",
- 	.attach_target		= bpf_iter_attach_map,
-+	.validate_target	= bpf_iter_validate_map,
- 	.detach_target		= bpf_iter_detach_map,
- 	.show_fdinfo		= bpf_iter_map_show_fdinfo,
- 	.fill_link_info		= bpf_iter_map_fill_link_info,
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 38df84284328..31f7c3a1667e 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1933,6 +1933,19 @@ int sock_map_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
- 	return ret;
- }
- 
-+static int sock_map_iter_validate_target(struct bpf_prog *prog,
-+					 const struct bpf_iter_aux_info *aux)
-+{
-+	if (aux->map->map_type != BPF_MAP_TYPE_SOCKMAP &&
-+	    aux->map->map_type != BPF_MAP_TYPE_SOCKHASH)
-+		return -EINVAL;
-+
-+	if (prog->aux->max_rdonly_access > aux->map->key_size)
-+		return -EACCES;
-+
-+	return 0;
-+}
-+
- static int sock_map_iter_attach_target(struct bpf_prog *prog,
- 				       union bpf_iter_link_info *linfo,
- 				       struct bpf_iter_aux_info *aux)
-@@ -1947,19 +1960,15 @@ static int sock_map_iter_attach_target(struct bpf_prog *prog,
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
- 
--	if (map->map_type != BPF_MAP_TYPE_SOCKMAP &&
--	    map->map_type != BPF_MAP_TYPE_SOCKHASH)
--		goto put_map;
--
--	if (prog->aux->max_rdonly_access > map->key_size) {
--		err = -EACCES;
-+	aux->map = map;
-+	err = sock_map_iter_validate_target(prog, aux);
-+	if (err)
- 		goto put_map;
--	}
- 
--	aux->map = map;
- 	return 0;
- 
- put_map:
-+	aux->map = NULL;
- 	bpf_map_put_with_uref(map);
- 	return err;
- }
-@@ -1972,6 +1981,7 @@ static void sock_map_iter_detach_target(struct bpf_iter_aux_info *aux)
- static struct bpf_iter_reg sock_map_iter_reg = {
- 	.target			= "sockmap",
- 	.attach_target		= sock_map_iter_attach_target,
-+	.validate_target	= sock_map_iter_validate_target,
- 	.detach_target		= sock_map_iter_detach_target,
- 	.show_fdinfo		= bpf_iter_map_show_fdinfo,
- 	.fill_link_info		= bpf_iter_map_fill_link_info,
 -- 
 2.54.0 (Apple Git-157)
 
