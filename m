@@ -1,372 +1,126 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A7849EC56
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 12:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71E63F0AAD
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 13:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791463950; cv=none; b=OTI3hBvOgb3h2uDb14g9b3Olibah0DNqWXHKOT3rd3FSYM2s+5EVZuzxTKCRKudLKk0sF7wCa643YZo889RbwWesx7CvkHiWFcJyjxmOKaJIFW2MKVv+QBedxcELrl0sSw9XZpl9AzBV3cgr8yJsgieTZBU7CWEts1YW/h+L6RU=
+	t=1791465226; cv=none; b=m29RuLer0xKNOtNGPUowze7PoLVv7KV8XrX3cOEiyebHlfTzf+BdIaOFOLnXK6yoTiS8AlXHH/Kl9rGwO0wBr5eS+b+T0NzVBKyS7pzXyRwtacGfgvxMzX1UOHBlfIRbdIDU+KmB0ixPJFv0xvvPKrIavqH/rM/BuP2qCDUyje4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791463950; c=relaxed/simple;
-	bh=Wk3GMpFjIDl4QJkl4IKzSh8OdV8Drwf9bMXDLiPrdTI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=beRpnGBcsYv6MUIvBux3vMz41woBLpNxVDfd+CxR31YrSrOLvnGtix04DPcNckhIGOwJ0ZUOuwvIRFuRb9snygfvnq3HvvpfCJ7It4A8w08mjZiOP0oUqvubOIbX/MDhB0Hk9F8+81X8rmpdfLjXPKeCDiw99ykKeB0DJhcv3as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lqB3PbQJ; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791465226; c=relaxed/simple;
+	bh=7qtI5gtgg8HMBmacX6qKEDXcXJKwtRBJ+yKlbMqIu+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gtnhoqorOu2eocQ85mq+fuFdHCeXIWBkwvj5ZcJafRcB/T+2u+wxXx9NWsangaPF2KbeTd5Q3cqzmiIWVilVc7wEziqkbtE8y6h285uVyOL033SGHUIDJDiXexkyB4FTZSp7U3k+n4LEME89bCkoA+7uv3ZFwGGBK+RhhY1LGuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=D1SCMzeS; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lqB3PbQJ"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-48afe75f055so4736768f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 05:52:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="D1SCMzeS"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a020e65269so23129095e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 06:13:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791463946; x=1792068746; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=oP3CoR3Js1p41C4R3FYAhUOlcXWKDV5aZYuCff3A1Zc=;
-        b=lqB3PbQJG+8T2n/jLb6Fg+LTC9wXYEVyN87bSFOBBGa37Vi/Bw8EP32tJjqQ0Mrd7y
-         4LxaYdzSf34BrJsffT2Vbxw72dQBwZOpZ5hO0aCWuNtA3t8au5Mj22k0b2Kri8rSRqEH
-         o8K4Xb8c/uWHWIgbk11NYCeTnQSGY2U1QRUjtU4w0j+TvqSerAwszh7oBkb5240BTUfI
-         fK6Hx8aLSSq1RED33byccggrT6CtJFvH7M/FsUSpcLBsFUQNZLSHUU7x+5LyARplL97V
-         apOJzSK9IVvsl3jX8EwORksSwKAScZPpBmT5rNUTFXcs3bf/THCzuRbGKpDJ5yxV0gOq
-         EqWw==
+        d=gourry.net; s=google; t=1791465223; x=1792070023; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HO3C9RpYvCSZ09L6Ew5V40K2HpvgcXSKkDoFhjI9Kx4=;
+        b=D1SCMzeSC+3lNkcoGtnd5MZUOxDZCN3wuNj/aDJI/4LcSRRqrhAqs/Hi9CUNMcqHFF
+         scv7iSSgs0pq4DXVtxK1HcP+TX2UMEUKqgjygaUCO4jjwffdRYQ35mFnULVYKtlpTSr2
+         NHsGPcZZ4Ck5RTw+UneynMefAFGqW4jY2LdZvX3S5iBQvtZZpf3hZOieucAkZf24jP9V
+         NxADxxZhMnMZ1FL/SL8HTUDY6ROMGb323/c7WVSmvIz551S/ndHuV25o7mDAi9hg1ccq
+         PKvBQP/BYKJM244I8ccBCcDKG4NhIg676rJptZyeAXQKxlYl94D2DZjm9gOjO6SQD5pl
+         U8dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791463946; x=1792068746;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oP3CoR3Js1p41C4R3FYAhUOlcXWKDV5aZYuCff3A1Zc=;
-        b=Mzgrb25jnF1LKr/wxQ/Mgx45AZ0yb3SgZmHpGmfZYqn4i9KEy5xPN5Y6Ivvydoihjt
-         mbwx+CY+BfO/mKnCLTujCAM6shvRUPCIket/vhami35AP73ZkCCedP9JUvsQuCL0EmBy
-         Bhp/JDOUqvA+Yk8ea7a1qIJmkYXPUjIW1IA5AGzFj/o6UTgVVfZyWJ+cH1RjkHpJmZkY
-         J5/60lVlEFr1+HpdY5aoY6OmijaqI415d+fP/PEptJ5phnG2D0uvkYpzvj1JmalA91uF
-         tYlfsYc9ztqG5/pzevqYVHz0yy9krpSudNofSIUQTR5fGOJl16nnVeuGdBNt/uZ12ozs
-         w56w==
-X-Forwarded-Encrypted: i=1; AKwUvBxi0DW8NroYYP0iV5kVzxVEORKsmi/BTJfut6LdBSg4OyX5Otm9SbKNoP6e6Czb+7yz2COurCdYusV5SgawJJE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL5WL5L5li1XhxQW7S4xdxZEZD54NTKtf+eSXxKhekYGjD4BZxO
-	DiAc1pq4le2ITwsHburR7mExfTQuum9iRC9GSVM3fF0RjHWCAlKwaNqGVnuiD1lc
-X-Gm-Gg: AYBFou0QaUJbxkmpqvT75FFURI2mVnjXSpf3iwmgQ3u+PzUYIDhQDZCX1md5F1hUTC6
-	SpoVxvCHAHzE2+5ldJ9Fz4KUDrrNeBznIV3zkMPd9vunUM4rFafNwSteTvudIG6p4Bfl0eVXzBO
-	z6oerERFZgi2CQTaKw3+nmWpPb5Glr+wotdkM6+ThLv2/3vJ4XmrvYL5lePG9ei/Ssryqht7blO
-	wArIMwLuiHj1H25RJOuCws/xkpuFZNa4lFQ316dPkFnk7SBshVfoeCu+r/e2kVRIRyNgVrebCl9
-	LwG3FGJsIwYhbG1cuq+PhVnmcppIL5EfICRSSN7NrflrbaQ0pDXgfmay1l8yBMJ7Db3NMuNpMzE
-	fak2YAAEqcUjBP9bcBdGngxBpu7Vp/8GwHcUY/zNJpg0PuLnd8+kZOjDiCvn+AzBy+6mM+M2jpa
-	/Bif1LW6bFY1leDzj0XXJdEZLZMtHu6K98DSFQFmWPQrFBieonKf69MFw5xZBIxbUgTzKlnhqbX
-	Kugz77yGhDWIuCq5M33y44gZmnDjPnbJrvTy/1BOuX0aaGjw6s5VqA=
-X-Received: by 2002:a05:6000:4a18:b0:48b:e25:21d6 with SMTP id ffacd0b85a97d-48c7289e37dmr9164721f8f.41.1791463946411;
-        Thu, 08 Oct 2026 05:52:26 -0700 (PDT)
-Received: from andreayoga.wind3.hub ([31.189.41.237])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d3032csm10584338f8f.45.2026.10.08.05.52.23
+        d=1e100.net; s=20260707; t=1791465223; x=1792070023;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HO3C9RpYvCSZ09L6Ew5V40K2HpvgcXSKkDoFhjI9Kx4=;
+        b=F52hTDuPmqJl61Lyy5EVMmGjMA22oqBYJQmB6nOU7l6/E+degoeamomZ7jk/yYlQHG
+         xZ3j83gCQAdbB1jC0wHYr/u9BsNqeYbNuFf0P6BheGtlQy6UGZmDpwhmzxCX15g39YFD
+         6CT14JShr+ZwDaOiqt8VoEzlL3ZNMemFQEy6ayfD080fTZb7htNxpkh7ttraI0KGj7vU
+         hA1A9Y8XRsH5heFMec8lGVc+IB9rn18cnjaYK0liAakpTJT/cJdEPTwdQA7dyt0Zmn6w
+         /oMCSq3qu/NkerZ8szzL0EHvedQZLGi5Uf/LQds7eqeEilFg+uTPyyYyjriZN/hrSYgz
+         Hm8A==
+X-Forwarded-Encrypted: i=1; AKwUvBwjuSyZlIFlr/PCHGw2PROqVFMf7aUiaTB3ksQxjlpgsq84NvE12/00div/Ru3Gbum8WoRYtNFl6rpCh+T6CKU=@vger.kernel.org
+X-Gm-Message-State: AFuF++kQ7xV1S4EpRlEbRN0U8KlS71wXurXBZufgZOQI+x2tOyEHZEyd
+	5vNC6b730i8um4FrYeMf+Qpt1a08uytYx7tAHOtOeb3306iN4rYzzQzLDldwY6dwtOo=
+X-Gm-Gg: AYBFou0wXS45OvOO4/uxwDvYobfwytIfPrntZvrt36Q+6IHMscKdh7cv6KpjtvIThr+
+	P5gYZ+UXhmVwo+gKk8+ulwHljZS0Z0ESzaMvtR/KxOUHMZsfQvZE8OsxhMp+5Owny0kD6WAltHR
+	VK7ob66gB20HCgNHAxX0CJX0EFaLuG98hehD3M6Byc9u+oLUq9ZwsE4PFGqY2+9pZwQiFtvdaGf
+	Gr4n0T+tReWD5uYNARwIaWApaINaEREzBE2jKIJGA+RqmzODGuZaA8UIt5Jm+XXdN5W252qwE4T
+	79SdgQGpS/+9xVEjJXfK+r485jPtqazBckMg9cGMdPUg9+nwv7HpDOCTpIGpIpYNuNa7vW/B9Kd
+	8Ycyz/KxvVcvWh7X3EZpkoAavwXmkOBnZAYhbTeH3qKCF/Txuh4KR7VvIRua+kaMQ4iASYS1KFN
+	qzUqbmXkwxXJPT/4kThEfao+fOsRy0uYXbxNpEzo/LpuzH1yyWT9SSZOQFq+hg++MnORQ2d0061
+	5FGDc0tMg==
+X-Received: by 2002:a05:600c:19c7:b0:4a1:70f0:ac2 with SMTP id 5b1f17b1804b1-4a180648d69mr101498205e9.24.1791465222920;
+        Thu, 08 Oct 2026 06:13:42 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F ([185.194.184.20])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a17f493761sm221404825e9.2.2026.10.08.06.13.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 05:52:24 -0700 (PDT)
-From: Andrea Parri <parri.andrea@gmail.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Andrea Parri <parri.andrea@gmail.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] iommufd/selftest: Check dmabuf MMIO mappings filled from another domain
-Date: Thu,  8 Oct 2026 14:52:04 +0200
-Message-ID: <20261008125206.11990-3-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261008125206.11990-1-parri.andrea@gmail.com>
-References: <20261008125206.11990-1-parri.andrea@gmail.com>
+        Thu, 08 Oct 2026 06:13:41 -0700 (PDT)
+Date: Thu, 8 Oct 2026 09:13:38 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Sasha Levin <sashal@kernel.org>, linux-api@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org, workflows@vger.kernel.org, 
+	tools@kernel.org, x86@kernel.org, Thomas Gleixner <tglx@kernel.org>, 
+	"Paul E . McKenney" <paulmck@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Dmitry Vyukov <dvyukov@google.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>, 
+	Jake Edge <jake@lwn.net>, David Laight <david.laight.linux@gmail.com>, 
+	Gabriele Paoloni <gpaoloni@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v5 05/11] kernel/api: add API specification for sys_open
+Message-ID: <aseWPV6ZRQM3JOMN@gourry-fedora-PF4VCD3F>
+References: <20261008084956.2911790-1-sashal@kernel.org>
+ <20261008084956.2911790-6-sashal@kernel.org>
+ <aseRXi7hMWBBc0tB@hallyn.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aseRXi7hMWBBc0tB@hallyn.com>
 
-Add tests that a dmabuf keeps IOMMU_MMIO in a domain that is filled
-from an already mapped area: a second domain added to the IOAS after
-the dmabuf has been mapped, and the domain of another IOAS the dmabuf
-is copied into.
+On Thu, Oct 08, 2026 at 07:49:34AM -0500, Serge E. Hallyn wrote:
+> On Thu, Oct 08, 2026 at 04:49:45AM -0400, Sasha Levin wrote:
+> > Add KAPI-annotated kerneldoc for the sys_open system call in fs/open.c.
+> > 
+> > The specification documents parameter constraints (pathname, flags
+> > bitmask, permission mode), 24 error conditions, locking requirements,
+> > side effects, required capabilities, and usage examples.
+> > 
+> > Assisted-by: LLM
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> 
+> I know Kees and Jonathan and others asked for exactly this.  But one
+> downside to this is it makes just paging through fs/open.c a lot more
+> painful.  Maybe it's worth it.  Maybe "noone will ever do that again" bc
+> that's why we have ai and tools.  But a) that's how I've historically
+> done a lot of code research, b) IMO something like a manpages section 2
+> under Documentation/ would be a great place for this, and c) we can also
+> use tools to always sync these, or even show/edit in a single view when
+> you want  ('kdocedit fs/open.c').
+>
 
-The mock page table has no memory type bits, so a mapping made with
-IOMMU_MMIO cannot be told apart from one made with IOMMU_CACHE. Wrap the
-mock's generic_pt map_range and unmap_range ops to record, per domain,
-the pages mapped with IOMMU_MMIO, and add IOMMU_TEST_OP_MD_CHECK_MMIO to
-check that a range is recorded. The check rejects ranges that wrap or
-do not fit in unsigned long.
+In many, many other projects i've worked on, these docs are placed in
+the header as opposed to the .c file, but I understand there is some
+pain that comes with ifdef.
 
-dmabuf_mmio_new_domain maps a mock dmabuf, checks the existing domain,
-allocates a second HWPT on the same IOAS and checks it too.
-dmabuf_mmio_copy maps a mock dmabuf, copies it with IOMMU_IOAS_COPY into
-a second IOAS that has its own mock domain, and checks that domain.
-Without the previous patch the checks on the second domain fail in the
-three mock domain variants; with it all checks pass.
+Keeping it in the header ties the definition to exactly the location
+external users import to find the function - so it makes sense.
 
-Assisted-by: LLM
-Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
----
- drivers/iommu/iommufd/iommufd_test.h          |  5 +
- drivers/iommu/iommufd/selftest.c              | 92 +++++++++++++++++++
- tools/testing/selftests/iommu/iommufd.c       | 51 ++++++++++
- tools/testing/selftests/iommu/iommufd_utils.h | 13 +++
- 4 files changed, 161 insertions(+)
+But separating the contracts from the code guarantees they'll go stale,
+so I don't think shoving it in Documentation/ does anyone any good.
 
-diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-index 52b78cbcc920d..3c8111dfb928a 100644
---- a/drivers/iommu/iommufd/iommufd_test.h
-+++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -31,6 +31,7 @@ enum {
- 	IOMMU_TEST_OP_PASID_CHECK_HWPT,
- 	IOMMU_TEST_OP_DMABUF_GET,
- 	IOMMU_TEST_OP_DMABUF_REVOKE,
-+	IOMMU_TEST_OP_MD_CHECK_MMIO,
- };
- 
- enum {
-@@ -109,6 +110,10 @@ struct iommu_test_cmd {
- 			__aligned_u64 length;
- 			__aligned_u64 uptr;
- 		} check_map;
-+		struct {
-+			__aligned_u64 iova;
-+			__aligned_u64 length;
-+		} check_mmio;
- 		struct {
- 			__aligned_u64 length;
- 			__aligned_u64 uptr;
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index 25387969ab753..920393b693f26 100644
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -120,6 +120,10 @@ struct mock_iommu_domain {
- 		struct pt_iommu_amdv1 amdv1;
- 	};
- 	unsigned long flags;
-+	/* map_range/unmap_range wrappers record IOMMU_MMIO pages */
-+	const struct pt_iommu_ops *pt_ops;
-+	struct pt_iommu_ops rec_ops;
-+	struct xarray mmio_pages;
- };
- PT_IOMMU_CHECK_DOMAIN(struct mock_iommu_domain, iommu, domain);
- PT_IOMMU_CHECK_DOMAIN(struct mock_iommu_domain, amdv1.iommu, domain);
-@@ -392,6 +396,7 @@ static void mock_domain_free(struct iommu_domain *domain)
- 	struct mock_iommu_domain *mock = to_mock_domain(domain);
- 
- 	pt_iommu_deinit(&mock->iommu);
-+	xa_destroy(&mock->mmio_pages);
- 	kfree(mock);
- }
- 
-@@ -423,6 +428,51 @@ static const struct iommu_dirty_ops amdv1_mock_dirty_ops = {
- 	.set_dirty_tracking = mock_domain_set_dirty_tracking,
- };
- 
-+static int mock_map_range(struct pt_iommu *iommu_table, dma_addr_t iova,
-+			  phys_addr_t paddr, dma_addr_t len, unsigned int prot,
-+			  gfp_t gfp, size_t *mapped)
-+{
-+	struct mock_iommu_domain *mock =
-+		container_of(iommu_table, struct mock_iommu_domain, iommu);
-+	unsigned long index;
-+	int rc;
-+
-+	rc = mock->pt_ops->map_range(iommu_table, iova, paddr, len, prot, gfp,
-+				     mapped);
-+	if (rc || !(prot & IOMMU_MMIO))
-+		return rc;
-+
-+	for (index = iova / MOCK_PAGE_SIZE;
-+	     index <= (iova + len - 1) / MOCK_PAGE_SIZE; index++) {
-+		rc = xa_err(xa_store(&mock->mmio_pages, index, xa_mk_value(1),
-+				     gfp));
-+		if (rc)
-+			return rc;
-+	}
-+	return 0;
-+}
-+
-+static size_t mock_unmap_range(struct pt_iommu *iommu_table, dma_addr_t iova,
-+			       dma_addr_t len,
-+			       struct iommu_iotlb_gather *iotlb_gather)
-+{
-+	struct mock_iommu_domain *mock =
-+		container_of(iommu_table, struct mock_iommu_domain, iommu);
-+	unsigned long index;
-+	size_t unmapped;
-+	void *entry;
-+
-+	unmapped = mock->pt_ops->unmap_range(iommu_table, iova, len,
-+					     iotlb_gather);
-+	if (!unmapped)
-+		return 0;
-+
-+	xa_for_each_range(&mock->mmio_pages, index, entry, iova / MOCK_PAGE_SIZE,
-+			  (iova + unmapped - 1) / MOCK_PAGE_SIZE)
-+		xa_erase(&mock->mmio_pages, index);
-+	return unmapped;
-+}
-+
- static struct mock_iommu_domain *
- mock_domain_alloc_pgtable(struct device *dev,
- 			  const struct iommu_hwpt_selftest *user_cfg, u32 flags)
-@@ -434,6 +484,7 @@ mock_domain_alloc_pgtable(struct device *dev,
- 	if (!mock)
- 		return ERR_PTR(-ENOMEM);
- 	mock->domain.type = IOMMU_DOMAIN_UNMANAGED;
-+	xa_init(&mock->mmio_pages);
- 
- 	mock->amdv1.iommu.nid = NUMA_NO_NODE;
- 
-@@ -454,6 +505,12 @@ mock_domain_alloc_pgtable(struct device *dev,
- 		if (rc)
- 			goto err_free;
- 
-+		mock->pt_ops = mock->iommu.ops;
-+		mock->rec_ops = *mock->pt_ops;
-+		mock->rec_ops.map_range = mock_map_range;
-+		mock->rec_ops.unmap_range = mock_unmap_range;
-+		mock->iommu.ops = &mock->rec_ops;
-+
- 		/*
- 		 * In huge mode userspace should only provide huge pages, we
- 		 * have to include PAGE_SIZE for the domain to be accepted by
-@@ -1180,6 +1237,37 @@ static int iommufd_test_add_reserved(struct iommufd_ucmd *ucmd,
- 	return rc;
- }
- 
-+/* Check that every page in [iova, iova + length) was mapped with IOMMU_MMIO */
-+static int iommufd_test_md_check_mmio(struct iommufd_ucmd *ucmd,
-+				      unsigned int mockpt_id,
-+				      u64 iova, u64 length)
-+{
-+	struct iommufd_hw_pagetable *hwpt;
-+	struct mock_iommu_domain *mock;
-+	unsigned long index;
-+	u64 last;
-+	int rc = 0;
-+
-+	if (!length || iova % MOCK_PAGE_SIZE || length % MOCK_PAGE_SIZE ||
-+	    check_add_overflow(iova, length - 1, &last) || last > ULONG_MAX)
-+		return -EINVAL;
-+
-+	hwpt = get_md_pagetable(ucmd, mockpt_id, &mock);
-+	if (IS_ERR(hwpt))
-+		return PTR_ERR(hwpt);
-+
-+	for (index = iova / MOCK_PAGE_SIZE;
-+	     index <= last / MOCK_PAGE_SIZE; index++) {
-+		if (!xa_load(&mock->mmio_pages, index)) {
-+			rc = -EINVAL;
-+			break;
-+		}
-+	}
-+
-+	iommufd_put_object(ucmd->ictx, &hwpt->obj);
-+	return rc;
-+}
-+
- /* Check that every pfn under each iova matches the pfn under a user VA */
- static int iommufd_test_md_check_pa(struct iommufd_ucmd *ucmd,
- 				    unsigned int mockpt_id, unsigned long iova,
-@@ -2105,6 +2193,10 @@ int iommufd_test(struct iommufd_ucmd *ucmd)
- 	case IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE:
- 		return iommufd_test_mock_domain_replace(
- 			ucmd, cmd->id, cmd->mock_domain_replace.pt_id, cmd);
-+	case IOMMU_TEST_OP_MD_CHECK_MMIO:
-+		return iommufd_test_md_check_mmio(ucmd, cmd->id,
-+						  cmd->check_mmio.iova,
-+						  cmd->check_mmio.length);
- 	case IOMMU_TEST_OP_MD_CHECK_MAP:
- 		return iommufd_test_md_check_pa(
- 			ucmd, cmd->id, cmd->check_map.iova,
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 44193d171ba98..8f68c9aee15d5 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -1599,6 +1599,57 @@ TEST_F(iommufd_ioas, dmabuf_simple)
- 	close(dfd);
- }
- 
-+TEST_F(iommufd_ioas, dmabuf_mmio_new_domain)
-+{
-+	size_t buf_size = PAGE_SIZE * 4;
-+	__u32 hwpt_id;
-+	__u64 iova;
-+	int dfd;
-+
-+	if (!variant->mock_domains)
-+		SKIP(return, "needs a mock domain");
-+
-+	test_cmd_get_dmabuf(buf_size, &dfd);
-+	test_ioctl_ioas_map_file(dfd, 0, buf_size, &iova);
-+	test_cmd_md_check_mmio(self->hwpt_id, iova, buf_size);
-+
-+	/* A domain added later is filled from the already mapped area */
-+	test_cmd_hwpt_alloc(self->device_id, self->ioas_id, 0, &hwpt_id);
-+	test_cmd_md_check_mmio(hwpt_id, iova, buf_size);
-+
-+	test_ioctl_destroy(hwpt_id);
-+	close(dfd);
-+}
-+
-+TEST_F(iommufd_ioas, dmabuf_mmio_copy)
-+{
-+	size_t buf_size = PAGE_SIZE * 4;
-+	struct iommu_ioas_copy copy_cmd = {
-+		.size = sizeof(copy_cmd),
-+		.flags = IOMMU_IOAS_MAP_WRITEABLE | IOMMU_IOAS_MAP_READABLE,
-+		.src_ioas_id = self->ioas_id,
-+		.length = buf_size,
-+	};
-+	__u32 stdev_id;
-+	__u32 hwpt_id;
-+	int dfd;
-+
-+	if (!variant->mock_domains)
-+		SKIP(return, "needs a mock domain");
-+
-+	test_cmd_get_dmabuf(buf_size, &dfd);
-+	test_ioctl_ioas_map_file(dfd, 0, buf_size, &copy_cmd.src_iova);
-+
-+	/* The copy is filled from the domain of the source IOAS */
-+	test_ioctl_ioas_alloc(&copy_cmd.dst_ioas_id);
-+	test_cmd_mock_domain(copy_cmd.dst_ioas_id, &stdev_id, &hwpt_id, NULL);
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_COPY, &copy_cmd));
-+	test_cmd_md_check_mmio(hwpt_id, copy_cmd.dst_iova, buf_size);
-+
-+	test_ioctl_destroy(stdev_id);
-+	close(dfd);
-+}
-+
- TEST_F(iommufd_ioas, dmabuf_revoke)
- {
- 	size_t buf_size = PAGE_SIZE*4;
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index b4928cbd4d9c8..4567a69de8df6 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -560,6 +560,19 @@ static int _test_cmd_destroy_access_pages(int fd, unsigned int access_id,
- 	EXPECT_ERRNO(_errno, _test_cmd_destroy_access_pages(              \
- 				     self->fd, access_id, access_pages_id))
- 
-+#define test_cmd_md_check_mmio(_hwpt_id, _iova, _length)                     \
-+	({                                                                   \
-+		struct iommu_test_cmd check_cmd = {                          \
-+			.size = sizeof(check_cmd),                           \
-+			.op = IOMMU_TEST_OP_MD_CHECK_MMIO,                   \
-+			.id = _hwpt_id,                                      \
-+			.check_mmio = { .iova = _iova, .length = _length },  \
-+		};                                                           \
-+		ASSERT_EQ(0, ioctl(self->fd,                                 \
-+				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_MD_CHECK_MMIO), \
-+				   &check_cmd));                             \
-+	})
-+
- static int _test_cmd_get_dmabuf(int fd, size_t len, int *out_fd)
- {
- 	struct iommu_test_cmd cmd = {
--- 
-2.53.0
-
+~Gregory
