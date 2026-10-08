@@ -1,355 +1,132 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D0447206D
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 08:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3DD484234;
+	Thu,  8 Oct 2026 09:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791449640; cv=none; b=g/FPkAFp/cb7PMwF+8yQ9VJlVOFQgWouFqhSM2cQn7WGQpy8p6ukRs4gT1us3zPLvkoC1f/Y4ywj+Hj25oYYj2bXmhZZvbUEzsQpxW4hINJFhmdcKlYUWQfjmEuYU+rQyEnSU8mNeoJ6AbfOZjWDREDoqeMZjuqWMJlj1P1OJtU=
+	t=1791450478; cv=none; b=ZU2fzyL2vSksQRx5y+9nehf7kOGbuNbLeZRghcXU7PTzG5JbKdGJ61ulD5KXZ+bCXtuH6lgqeaAtryqQ0mF+GYAsW9tIUoaDxZdaWx60E22Ha/58cakK+2w/Wr76Ofe/E660wxef2SlHEXOHHHniTc/S6ZJuD8jfDyA+22j9x8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791449640; c=relaxed/simple;
-	bh=HLefPmBX47EFFJEHrgtmj8lWN4k9/YgWGOGt+gyhx2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VWSmYAE/CFn8ZXCPbmQOax1H2G/DUsEkAUxJqA1yHDdJNDdxYDUy7LnKRtv7Bau4WxLlxP6QfRyaYKLnJddk8UE7goRWtKCVgXSePT2ESnYXZz5mem5cmaCAZTOV5NwzBliGGurqOv8eGMvojHk2wbyYcKAxA3bFaXuDbCPvURU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kVa7RWp0; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791450478; c=relaxed/simple;
+	bh=1qpII5YyVDzNLmcVmoolkkDQyT3PZfvGpwTA+YNjk5w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dekV/QrPKi7fE3AHeu8AOd9uaKQ9/GzdDo1G2tP5BFoHRGciKJs+6OAxHMQxmIDPvpS4GxmkiVy+CAVK25vqhdDait4HmZNR5o5ECOyXC8N0AoJU3ziBGLUKHXysM7i4rUa8XAp48Z2ik5DuRhcqw1MuNsvlAtCiC82q1kB1fyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IpbGAQrO; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=6mYyCF9A; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kVa7RWp0"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-35115b52125so3559064eec.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 01:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791449638; x=1792054438; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cBRVu1PhaTpNiCczbgliHEJdpmg0aCx3TB2VjXS+OlY=;
-        b=kVa7RWp0GbHwFZfi7LWMMuslV835wg93nsDbsItGFiC5KeHpXtQjeeO+mCQeUwiSEy
-         mEVGxtlYpi233BPtwQIhL6+9sqbKEiPBOaFTdehwWIKClh6M9LMNFShJm0RZzCt0uE7r
-         IArxxO/zctFDfRvigNxsuD9b+WAimwWmIvCabn0FURFkg/mnRdSSfMmEOdn23136xFut
-         d2m3a5Pds7fLa90nFiKV2ZLQ8I0DgwxDFMVENc6b3Qi8de0ER8x+BZhyyEzn3I0DNg6w
-         tyozLMjVi18b4cgSMmifkkh3LGBos1YMRPBmn6OoaQjw5IxQYE+Vr8pud39qKACCl7lN
-         EBGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791449638; x=1792054438;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=cBRVu1PhaTpNiCczbgliHEJdpmg0aCx3TB2VjXS+OlY=;
-        b=D7ZqphkuP4MMo3iujE/Wuq9mz2tGyef/OhH6H6D+wTDOALGvbZ/XsQhDU9TBUwWDw/
-         2tOIPY3d8uOzYyWMvbB96CwagaNldJux8rZ38PwRHRbyRSIGvTOVZjppnb3EPbreOs6J
-         BIznDZzD8oNq11LzoBERIg+lu9rWGGI2g6a6UQUiShKruqGhGa/fhEsF3S3yr60VL7ZI
-         VtDqI0isW5AOVTvNCWplanGfCScpdRNOrQSvoWzcp6uQUXkPQPTV53LoXA9qDEtoSLfO
-         pyJU0VQY667VuHMqW04M4YsaVeOOOLwEuRzEuREaVXBBLb7HTM6gIApn8LYQg6Px8IRX
-         jJJg==
-X-Forwarded-Encrypted: i=1; AKwUvBz291giCuasaxpLCdIQNLYiSh5/L8LtA+O6BKABazzVggkt3204sRJaFnxLCUPk3Q1bKBDuLr5hlNTX3dJQgpk=@vger.kernel.org
-X-Gm-Message-State: AFuF++kPLaDCEOBSHEsgMDj+YdUqzCyYgOtZsxQ2hY5v0gScjYSUWUu3
-	CeWlgP8hPPitZE5c/9cIjPvQ4nYJU8MR3qH2uMBMj4ive/qklvACOR+r
-X-Gm-Gg: AYBFou2G3NKYsdNgUlxYP6G0fMYKaDBPA88K8bq4dxKtONxuARmWoldx7vCdlevkfB8
-	/5ELdalUJ7ApDGFEvSSPtKU/fqjfTpISXnstTBFO9KQc5C/mnNbmpfXAkDq7kgOqdx4nRhf/LR9
-	zMcLGNccrtHBtsmwHaT2+/BnZ01VtBGOImU8vCOs3eYhFVXvMlXsJYAgI09+N/FT8BAsnWOkRqr
-	yByXvH+nu23bifEGjOLB/fR2OKb9gmU9VWrm0lIH9CAvLUcwJeFPB5Ov5cDsuvSxHCt3A6uxMOT
-	PQfhCjqgZ7G8Mha0L2gHkelXQQv29OhBr3FP+PSLQPkklPJdOrhu11Q9xbMZXneurK9O7b86YJ0
-	xU8bt1Mmxm+Ik0Vh+lTfqBmjL0wCWenOi5upTwhvp0AaqDO84BHs7DbbODNmNdlu0L6vdIkA0/5
-	kth4HY4k5Xxv+0tjVviOfDveg/Z2EK3RBy4KW/dCYuDE+aZBlXr//XnsLCtzBuu57IEPx6D1qvM
-	bsveJdbh/bedAhXVNRHfeoD1go=
-X-Received: by 2002:a05:7301:6186:10b0:351:27f0:e411 with SMTP id 5a478bee46e88-3515de5a17fmr5307836eec.20.1791449638121;
-        Thu, 08 Oct 2026 01:53:58 -0700 (PDT)
-Received: from obadmin-Precision-3680.atlascopco.group ([167.103.3.1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3515af26f10sm16351759eec.13.2026.10.08.01.53.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 01:53:57 -0700 (PDT)
-From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IpbGAQrO";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="6mYyCF9A"
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1791450466;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bHBTUr7p04AlVKtPozF+TH9Wpz/mghN4voU0hKvtxsU=;
+	b=IpbGAQrOrRyqq8Sbvm/2WqjL3A4/s66Se+gIY5fvs79qLZawVVD0QlazWOTdOk/1MHeg40
+	x4B+wVq3tX6ONZfmuRIWsElM6at1lOLyhnXvEdtvJq8zG3wv9qcH3qKS2ug2CNsGPqvk4N
+	rGL6KLIkW7CYGvcxviy0T++H0LFdyZliWURZAyqHbDEEmS6fW2OC3/VwwFA2JFm/WRAPW7
+	LK9lDQfEvkPvaOu86to3IGvIp8VqS2gOLh1ot07x/HrScolmABj+w6Qk7S3SDFSJ9j+trR
+	5HIykUr8n4jdsJbrGJ8wJgcRhvge+TovljmzszVgMSHYFQI/Ouc+lLNlMoUxYA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1791450466;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bHBTUr7p04AlVKtPozF+TH9Wpz/mghN4voU0hKvtxsU=;
+	b=6mYyCF9A0oknzRvqbFbx1hcZUZNZkjgJ0fWOqB21jMQ9bwADjdd84ZIhaOUG3B015qjXBQ
+	zVTXqv75hZqfrgDw==
+To: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/net: test generic-netlink policy dump operation ID
-Date: Thu,  8 Oct 2026 14:24:34 +0530
-Message-ID: <20261008085434.3681647-1-sahaj123.sc@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Bill Wendling <morbo@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neal Gompa <neal@gompa.dev>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Richard Purdie <richard.purdie@linuxfoundation.org>,
+	Sam James <sam@gentoo.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	=?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Tomas Glozar <tglozar@kernel.org>,
+	Willy Tarreau <w@1wt.eu>,
+	x86@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v4 2/2] x86: Start removing X86_X32_ABI
+Date: Thu,  8 Oct 2026 11:07:43 +0200
+Message-ID: <20261008-x32_removal-v4-2-d389a193c506@breakpoint.cc>
+In-Reply-To: <20261008-x32_removal-v4-0-d389a193c506@breakpoint.cc>
+References: <20261008-x32_removal-v4-0-d389a193c506@breakpoint.cc>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Check that a generic-netlink policy dump reports the requested command's
-operation ID rather than zero.
+From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
 
-Request the policy for CTRL_CMD_GETPOLICY from the control family and
-verify that the response contains operation ID 10. Register the test as
-a generated net selftest and ignore its built binary.
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-Tested: reproduces the missing operation ID on 7.0.0-34-generic and
-passes on fixed 7.3.0-rc6-00063-g0c2669a9f4a1 in QEMU.
+The x32 ABI was introduced in v3.4 to leverage the additional registers
+which were available on x86_64 but not on i386 while keeping the smaller
+32bit pointers.
 
-Signed-off-by: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+This did not take off. The memory usage usually knows no limit and the
+better performance did not reach a point where certain workloads widely
+move to x32 and use it exclusively. In the meantime Debian introduced a
+patch to disable x32 by default (so it has to be enabled at boot time on
+the command line) because they are afraid of the increased attack
+surface. Fedora as far as I tell has X32 disabled (looking at 7.0-rc5
+rpm in rawhide).
+
+The syscall range >512 used by x32 can not be reused because on earlier
+kernels (before v5.4 with x32 enabled, see commit 6365b842aae4
+("x86/syscalls: Split the x32 syscalls into their own table") it is not
+obvious if the syscall is for x86-64 and not implemented or meant for
+x32.
+What can be removed are the special compat cases due to different
+alignment.
+
+Since there is practically no real use for x32, start removing it by
+marking the symbol as BROKEN so it is not possible to enable by default.
+It will remain around in the last LTS kernel of this year and then it
+will be removed.
+
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- tools/testing/selftests/net/.gitignore        |   1 +
- tools/testing/selftests/net/Makefile          |   1 +
- .../selftests/net/netlink_policy_dump_opid.c  | 223 ++++++++++++++++++
- 3 files changed, 225 insertions(+)
- create mode 100644 tools/testing/selftests/net/netlink_policy_dump_opid.c
+ arch/x86/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index dacd36ed8455..5fa1c6024672 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -20,6 +20,7 @@ ipv6_fragmentation
- log.txt
- msg_zerocopy
- netlink-dumps
-+netlink_policy_dump_opid
- nettest
- proc_net_pktgen
- psock_fanout
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 590b33e16d9f..09960735cb1a 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -186,6 +186,7 @@ TEST_GEN_PROGS := \
- 	icmp_rfc4884 \
- 	ipv6_flowlabel_mgr \
- 	ipv6_fragmentation \
-+	netlink_policy_dump_opid \
- 	proc_net_pktgen \
- 	reuseaddr_conflict \
- 	reuseport_bpf \
-diff --git a/tools/testing/selftests/net/netlink_policy_dump_opid.c b/tools/testing/selftests/net/netlink_policy_dump_opid.c
-new file mode 100644
-index 000000000000..4b53a8853109
---- /dev/null
-+++ b/tools/testing/selftests/net/netlink_policy_dump_opid.c
-@@ -0,0 +1,223 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/socket.h>
-+#include <unistd.h>
-+
-+#include <linux/genetlink.h>
-+#include <linux/netlink.h>
-+
-+#include "kselftest.h"
-+
-+#define REQUEST_SIZE 128
-+#define REPLY_SIZE 4096
-+
-+struct genl_request {
-+	struct nlmsghdr nlh;
-+	struct genlmsghdr genl;
-+	char attrs[REQUEST_SIZE];
-+};
-+
-+static int add_attr(struct genl_request *request, size_t size, uint16_t type,
-+		    const void *data, size_t data_size)
-+{
-+	size_t offset = NLMSG_ALIGN(request->nlh.nlmsg_len);
-+	size_t attr_size = NLA_HDRLEN + data_size;
-+	size_t aligned_size = NLA_ALIGN(attr_size);
-+	struct nlattr *attr;
-+
-+	if (offset + aligned_size > size)
-+		return -E2BIG;
-+
-+	attr = (struct nlattr *)((char *)request + offset);
-+	attr->nla_len = attr_size;
-+	attr->nla_type = type;
-+	memcpy((char *)attr + NLA_HDRLEN, data, data_size);
-+	memset((char *)attr + attr_size, 0, aligned_size - attr_size);
-+	request->nlh.nlmsg_len = offset + aligned_size;
-+
-+	return 0;
-+}
-+
-+static int next_attr(const char **cursor, size_t *remaining,
-+		     struct nlattr **attr)
-+{
-+	size_t length, aligned_length;
-+
-+	if (!*remaining)
-+		return 0;
-+	if (*remaining < NLA_HDRLEN)
-+		return -EBADMSG;
-+
-+	*attr = (struct nlattr *)*cursor;
-+	length = (*attr)->nla_len;
-+	if (length < NLA_HDRLEN || length > *remaining)
-+		return -EBADMSG;
-+	aligned_length = NLA_ALIGN(length);
-+	if (aligned_length > *remaining)
-+		return -EBADMSG;
-+
-+	*cursor += aligned_length;
-+	*remaining -= aligned_length;
-+	return 1;
-+}
-+
-+static int find_op_id(const struct nlattr *op_policy, bool *found)
-+{
-+	const char *cursor = (const char *)op_policy + NLA_HDRLEN;
-+	size_t remaining = op_policy->nla_len - NLA_HDRLEN;
-+	struct nlattr *attr;
-+	int ret;
-+
-+	while ((ret = next_attr(&cursor, &remaining, &attr)) > 0) {
-+		if ((attr->nla_type & NLA_TYPE_MASK) == CTRL_CMD_GETPOLICY)
-+			*found = true;
-+	}
-+
-+	return ret;
-+}
-+
-+static int parse_policy_message(const struct nlmsghdr *nlh, bool *found)
-+{
-+	const char *cursor = (const char *)nlh + NLMSG_LENGTH(GENL_HDRLEN);
-+	size_t remaining = nlh->nlmsg_len - NLMSG_LENGTH(GENL_HDRLEN);
-+	struct nlattr *attr;
-+	int ret;
-+
-+	while ((ret = next_attr(&cursor, &remaining, &attr)) > 0) {
-+		if ((attr->nla_type & NLA_TYPE_MASK) == CTRL_ATTR_OP_POLICY) {
-+			ret = find_op_id(attr, found);
-+			if (ret < 0)
-+				return ret;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static int check_policy_dump(int fd)
-+{
-+	struct genl_request request = {
-+		.nlh = {
-+			.nlmsg_len = NLMSG_LENGTH(GENL_HDRLEN),
-+			.nlmsg_type = GENL_ID_CTRL,
-+			.nlmsg_flags = NLM_F_REQUEST | NLM_F_DUMP | NLM_F_ACK,
-+			.nlmsg_seq = 1,
-+		},
-+		.genl = {
-+			.cmd = CTRL_CMD_GETPOLICY,
-+			.version = 1,
-+		},
-+	};
-+	char reply[REPLY_SIZE];
-+	const __u16 family_id = GENL_ID_CTRL;
-+	const __u32 op = CTRL_CMD_GETPOLICY;
-+	bool found_op = false;
-+	struct sockaddr_nl kernel = {
-+		.nl_family = AF_NETLINK,
-+	};
-+	ssize_t sent;
-+	int ret;
-+
-+	ret = add_attr(&request, sizeof(request), CTRL_ATTR_FAMILY_ID,
-+		       &family_id, sizeof(family_id));
-+	if (ret)
-+		return ret;
-+	ret = add_attr(&request, sizeof(request), CTRL_ATTR_OP,
-+		       &op, sizeof(op));
-+	if (ret)
-+		return ret;
-+
-+	sent = sendto(fd, &request, request.nlh.nlmsg_len, 0,
-+		      (struct sockaddr *)&kernel, sizeof(kernel));
-+	if (sent < 0)
-+		return -errno;
-+	if (sent != request.nlh.nlmsg_len)
-+		return -EIO;
-+
-+	for (;;) {
-+		ssize_t received = recv(fd, reply, sizeof(reply), 0);
-+		size_t offset = 0;
-+
-+		if (received < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			return -errno;
-+		}
-+
-+		while (offset + NLMSG_HDRLEN <= received) {
-+			struct nlmsghdr *nlh = (struct nlmsghdr *)(reply + offset);
-+			size_t aligned_length;
-+
-+			if (nlh->nlmsg_len < NLMSG_HDRLEN ||
-+			    nlh->nlmsg_len > received - offset)
-+				return -EBADMSG;
-+			if (nlh->nlmsg_seq != 1) {
-+				offset += NLMSG_ALIGN(nlh->nlmsg_len);
-+				continue;
-+			}
-+			if (nlh->nlmsg_type == NLMSG_ERROR) {
-+				int error;
-+
-+				if (nlh->nlmsg_len < NLMSG_LENGTH(sizeof(error)))
-+					return -EBADMSG;
-+				error = *(int *)NLMSG_DATA(nlh);
-+				if (error)
-+					return error;
-+			} else if (nlh->nlmsg_type == NLMSG_DONE) {
-+				if (nlh->nlmsg_flags & NLM_F_DUMP_INTR)
-+					return -EINTR;
-+				return found_op ? 0 : -ENOENT;
-+			} else if (nlh->nlmsg_type == GENL_ID_CTRL) {
-+				if (nlh->nlmsg_len < NLMSG_LENGTH(GENL_HDRLEN))
-+					return -EBADMSG;
-+				ret = parse_policy_message(nlh, &found_op);
-+				if (ret < 0)
-+					return ret;
-+			}
-+
-+			aligned_length = NLMSG_ALIGN(nlh->nlmsg_len);
-+			if (aligned_length > received - offset)
-+				return -EBADMSG;
-+			offset += aligned_length;
-+		}
-+	}
-+}
-+
-+int main(void)
-+{
-+	struct sockaddr_nl local = {
-+		.nl_family = AF_NETLINK,
-+	};
-+	int fd, ret;
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, NETLINK_GENERIC);
-+	if (fd < 0)
-+		ksft_exit_fail_perror("opening generic-netlink socket");
-+	if (bind(fd, (struct sockaddr *)&local, sizeof(local))) {
-+		close(fd);
-+		ksft_exit_fail_perror("binding generic-netlink socket");
-+	}
-+
-+	ret = check_policy_dump(fd);
-+	if (close(fd) && !ret)
-+		ret = -errno;
-+	if (ret == -ENOENT) {
-+		ksft_test_result_fail("missing policy op id %u\n",
-+				      CTRL_CMD_GETPOLICY);
-+	} else if (ret) {
-+		errno = -ret;
-+		ksft_test_result_fail("GETPOLICY dump failed: %s\n",
-+				      strerror(errno));
-+	} else {
-+		ksft_test_result_pass("policy dump identified command id %u\n",
-+				      CTRL_CMD_GETPOLICY);
-+	}
-+	ksft_finished();
-+}
--- 
-2.43.0
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 15fd9ec5ecacb..21a6863e14e7a 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -3104,7 +3104,7 @@ config IA32_EMULATION_DEFAULT_DISABLED
+=20
+ config X86_X32_ABI
+ 	bool "x32 ABI for 64-bit mode"
+-	depends on X86_64
++	depends on X86_64 && BROKEN
+ 	# llvm-objcopy does not convert x86_64 .note.gnu.property or
+ 	# compressed debug sections to x86_x32 properly:
+ 	# https://github.com/ClangBuiltLinux/linux/issues/514
+
+--=20
+2.55.0
 
