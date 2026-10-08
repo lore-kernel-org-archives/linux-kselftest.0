@@ -1,110 +1,123 @@
-Received: from mta0.migadu.com (out-90.mta0.migadu.com [91.218.175.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from terminus.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85CCA4848AA
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 11:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8496E29B766;
+	Thu,  8 Oct 2026 12:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791460383; cv=none; b=Dj/3M7rlabjYfbRqxpnGx7+FSsr9fdGcVAZzVNo1xC4r5y2I2Osf24GoQB5pJRrtcDk+7PC267TVrZx/OlNBOyPkTc+9lM64E8jR1c45gIaW3TUmHTUHLySKbkGZkS3nrTDU7tQs63RJ3wNa3D5k6rfrcSyPGh6cIiQDldp5X40=
+	t=1791461942; cv=none; b=PocYeHM/1MwAxH8TGn4tFLrpqyN/kS2SoB+kzZGoMWR88FaLWf7bgFIL7C+N1K9FnfPFSn+RGKt95xCv370QI4Gc1ii3sdFqgaV8+4Zo5ZbIAf58oOqZq+AtixTpwVRvUv8pZNAw++Fpx22ZVdJLmFoDMfkHknCtZ5b3MHhhQi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791460383; c=relaxed/simple;
-	bh=gMqeE0xl8Ovcpe/2DG1ldO6wSB1ZHK72dsybg+woYM4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wc52frhDjxYZZH3KzZwNGY5nNuZXu46Jan6v8Wr7CUZto5Y7TnDC9B1Z1yxNAkOOZ760qrqjgKrQYYL37xRahDIhz5a5cb6/hZKWRTq4DGZwaMC0Xk5qNRMTz29pW266E/0d0h8N0EhrUa1UeNNj+Hu/yltIIOTC55NHeFjeTkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BJARY13E; arc=none smtp.client-ip=91.218.175.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791461942; c=relaxed/simple;
+	bh=5PuCP3CbXgI2IH2YwCi71AGOGwZE3Xt70lyE94ahk3c=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=av71F5Fz2sckRbwvyupRJud3svt8rHE9ALj2pgvAl3d9w6fiKZMHuCq2MVII6pyBeaAVlHTLSq5mAsaRUIPWeKS2WhJcibPcf+nKwjOLQgLyGHyWoYTm/BZoyJaJIZW3AbTqvATrI1IFSI/6QFbClRbtRrizs2/npPmgaPLt38k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=ZW8cEflJ; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BJARY13E"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=gMqeE0xl8Ovcpe/2DG1ldO6wSB1ZHK72dsybg+woYM4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791460378; v=1; x=1792065178;
- b=BJARY13EfZ+44NzQM8/bThg6o3Yawg62s6SUN5emC13vLplYQGhqm4bGhQVfVWTI3IJ08GXi
- gq+yVsXbQokwC2T2hZBjDpytmkFzl+9oTE7iBXWF/P3a0Sxb0gGX974CSs3I+h/xSqSsUOF39wx
- LE9f9L/GgnCgz0ItzNtCrHpA=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 51f5bb7d1a53d99c;
-	Thu, 08 Oct 2026 11:52:58 +0000
-X-Mizu-Trace-ID: 51f5bb7d1a53d99c
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <5862cddb-a78f-419f-a5a1-15e16a422bf5@linux.dev>
-Date: Thu, 8 Oct 2026 19:52:18 +0800
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="ZW8cEflJ"
+Received: from ehlo.thunderbird.net ([172.59.192.127])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 698CFmc62830241
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Thu, 8 Oct 2026 05:15:50 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 698CFmc62830241
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026092801; t=1791461752;
+	bh=vg1ZKcmZSmYiLGnDiNyOm2ayv4LK+74uEkyw4KKmmPM=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=ZW8cEflJDXVXYnpyK9H5g3k4nuGp0DuSVeP2bAHqAqHjxCMGXfCYZD6wDBams6Nty
+	 E4Yz5ggCffOp+Wa6x4wIXrJ1RNOkqLLi/eqj2NyhDPgWHJKO4hsZpShfNNGuvP4tRt
+	 lCrDA0UQ8vCzAc9IANdoS8iWZ+2OPTV+9dVWeR44Zx1HYFNqwq+W3DLmsPyxxuZolr
+	 gdUFcuOofFrvHUIG7O6pL1jKmoJHw31xe7UPUZtq6r74EpxaYn5WznJatDlWXKL709
+	 cSkg8vJWdDOLkd2zjZWabYAE/T0sNiHEZy0SfznUmAMRy4ztmJsdwchf0SboC0NLAZ
+	 xrY/FIIF5+fmA==
+Date: Thu, 08 Oct 2026 14:15:39 +0200
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+CC: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Justin Stitt <justinstitt@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Richard Purdie <richard.purdie@linuxfoundation.org>,
+        Sam James <sam@gentoo.org>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@kernel.org>,
+        =?ISO-8859-1?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>,
+        Tomas Glozar <tglozar@kernel.org>, Willy Tarreau <w@1wt.eu>,
+        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v4 2/2] x86: Start removing X86_X32_ABI
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20261008-x32_removal-v4-2-d389a193c506@breakpoint.cc>
+References: <20261008-x32_removal-v4-0-d389a193c506@breakpoint.cc> <20261008-x32_removal-v4-2-d389a193c506@breakpoint.cc>
+Message-ID: <2B66CB7E-2302-470F-A3B5-0566DCF2A826@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 02/19] selftests/mm: skip collapse_compound_extreme()
- where the PMD is too large
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- "David Hildenbrand (Arm)" <david@kernel.org>,
- "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Kiryl Shutsemau (Meta)" <kas@kernel.org>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Muhammad Usama Anjum <usama.anjum@arm.com>, Usama Arif
- <usama.arif@linux.dev>, "Nico Pache (Red Hat)" <nico.pache@linux.dev>,
- Zi Yan <ziy@nvidia.com>, Barry Song <baohua@kernel.org>,
- Dev Jain <dev.jain@arm.com>, Hugh Dickins <hughd@google.com>,
- Lance Yang <lance.yang@linux.dev>, "Liam R. Howlett" <liam@infradead.org>,
- Michal Hocko <mhocko@suse.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- Alexander Gordeev <agordeev@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, kernel-team@meta.com
-References: <20260919002451.496763-1-kirill@shutemov.name>
- <20260919002451.496763-3-kirill@shutemov.name>
-Content-Language: en-US
-From: Zenghui Yu <zenghui.yu@linux.dev>
-In-Reply-To: <20260919002451.496763-3-kirill@shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kiryl,
+On October 8, 2026 11:07:43 AM GMT+02:00, Sebastian Andrzej Siewior <bigeas=
+y@linutronix=2Ede> wrote:
+>From: Sebastian Andrzej Siewior <sebastian@breakpoint=2Ecc>
+>
+>From: Sebastian Andrzej Siewior <bigeasy@linutronix=2Ede>
+>
+>The x32 ABI was introduced in v3=2E4 to leverage the additional registers
+>which were available on x86_64 but not on i386 while keeping the smaller
+>32bit pointers=2E
+>
+>This did not take off=2E The memory usage usually knows no limit and the
+>better performance did not reach a point where certain workloads widely
+>move to x32 and use it exclusively=2E In the meantime Debian introduced a
+>patch to disable x32 by default (so it has to be enabled at boot time on
+>the command line) because they are afraid of the increased attack
+>surface=2E Fedora as far as I tell has X32 disabled (looking at 7=2E0-rc5
+>rpm in rawhide)=2E
+>
+>The syscall range >512 used by x32 can not be reused because on earlier
+>kernels (before v5=2E4 with x32 enabled, see commit 6365b842aae4
+>("x86/syscalls: Split the x32 syscalls into their own table") it is not
+>obvious if the syscall is for x86-64 and not implemented or meant for
+>x32=2E
+>What can be removed are the special compat cases due to different
+>alignment=2E
+>
+>Since there is practically no real use for x32, start removing it by
+>marking the symbol as BROKEN so it is not possible to enable by default=
+=2E
+>It will remain around in the last LTS kernel of this year and then it
+>will be removed=2E
+>
+>Acked-by: Arnd Bergmann <arnd@arndb=2Ede>
+>Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix=2Ede>
+>---
+> arch/x86/Kconfig | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>index 15fd9ec5ecacb=2E=2E21a6863e14e7a 100644
+>--- a/arch/x86/Kconfig
+>+++ b/arch/x86/Kconfig
+>@@ -3104,7 +3104,7 @@ config IA32_EMULATION_DEFAULT_DISABLED
+>=20
+> config X86_X32_ABI
+> 	bool "x32 ABI for 64-bit mode"
+>-	depends on X86_64
+>+	depends on X86_64 && BROKEN
+> 	# llvm-objcopy does not convert x86_64 =2Enote=2Egnu=2Eproperty or
+> 	# compressed debug sections to x86_x32 properly:
+> 	# https://github=2Ecom/ClangBuiltLinux/linux/issues/514
+>
 
-On 9/19/26 8:24 AM, Kiryl Shutsemau wrote:
-> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> 
-> collapse_compound_extreme() builds a PTE table full of distinct PTE-mapped
-> compound pages by cycling hpage_pmd_nr fault-time THPs through mremap.  It
-> therefore needs hpage_pmd_nr PMD-order allocations in a row.  That is fine
-> at a 2M PMD (4K base pages) or a 32M one (16K).  A 512M PMD -- arm64 with
-> 64K base pages -- makes each of those an order-13 allocation, which the
-> allocator cannot reliably hand out even once, let alone 8192 times.
-> 
-> The failure is not a quiet one: the case calls ksft_exit_fail_msg(), so the
-> whole binary stops and every case after it is lost.
-> 
-> Skip the case where the PMD is larger than 32M.  The MADV_COLLAPSE cases
-> still cover PMD-order collapse on those configurations, and 4K and 16K
-> PMDs are unaffected.
-
-collapse_compound_extreme() failed on an arm64 virtual machines with 16k
-pages.  The VM has 8GB of memory.  Not sure if this is the same issue that
-this patch attempts to address.
-
-[root@localhost mm]# ./khugepaged
-
-[ snipped ]
-
-# 
-# Run test: collapse_full_of_compound (madvise:anon)
-# Allocate huge page... OK
-# Split huge page leaving single PTE page table full of compound pages... OK
-# Collapse PTE table full of compound pages... OK
-ok 76 collapse_full_of_compound
-# 
-# Run test: collapse_compound_extreme (khugepaged:anon)
-# Construct PTE page table full of different PTE-mapped compound pages
-Bail out! Failed to allocate huge page
-# 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
-# Planned tests != run tests (91 != 76)
-# Totals: pass:75 fail:0 xfail:0 xpass:0 skip:1 error:0
-
-Thanks,
-Zenghui
+Acked-by: H=2E Peter Anvin (Rosaic) <hpa@zytor=2Ecom>
