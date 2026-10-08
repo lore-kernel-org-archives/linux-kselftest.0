@@ -1,122 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C293793DC
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 11:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27216443C34;
+	Thu,  8 Oct 2026 11:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791458353; cv=none; b=qddC55CBxF8hK8KGb+7+uO950rVtCWk/pNrRqFMXwVhHoTIAsRCD+Y3tpgyKoVfg5eM73XaAgVS+z0GUvy1oOZ8bWbG14NkjGuJ6Jf1aJoUXnulrG/Vg9S3Z+ptLowqVFG/xdvhkTDDwoAlPnbuKrw/iWm8CUlskXeV7tX7rliA=
+	t=1791460071; cv=none; b=k8Pv6uw8ifoqIIEJOzIoYgmmo5AopaSZYlzJSP2DAeO3Y+1XTmRfwplCc/Vn62+vuNRpvsDy7IqOLput02xyvIdEa/5SixvVPXmzbp/82zx2ebMgztGqOd9iAbyawjgE2LotRQ8lf2FpS84LQeNbAqEGC7BdjCTt9eSqyXGy1fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791458353; c=relaxed/simple;
-	bh=2iWKgdjnY/WKT1NRrSPFsVEZgqb3q8rtw1j3YXKRPfs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AIgRef65KObjPvarfAny+fOW02A1HZZ1RUaaKVwgO0Uo9E0o1TijnTN/VfjyflWM2fYGgXwF0QTagKDFDSwAhNEOJLD2QVggfViTHHKf0sK/UGrOIr0N6fPCSihx3BVo/yh9XeDRsRtF1E8eJkVwMunOS2DMZt9DY0EaKoqDEAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nC4yXMux; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791460071; c=relaxed/simple;
+	bh=OUNZ/VZ8OrrRrCTA8+5HB6ElWjtVTJ5aPjr31lVAvcA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u7BN8Ue3ZXfPAHP4kAHtQcl4N/6zfCbhw4zCycXWzPHWApjOG+sEJhKCJ5LvuXIJBDTuzHuUaciMi8jDubHuanlxDZEJvBcArVt/UUTigE6Mldg1LQJYlMQ5NKKoTrQBS+8ucrYm1J1g7kZL/k3F1mU/4WNfpI/N1wAUFm/GwT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=d9SfD7/i; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nC4yXMux"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D9E71F0089F
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 11:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791458352;
-	bh=NZcC7/xg5SS/eaNUvNNF7JTQ0EBiXnoG/PlgqRlweyg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=nC4yXMuxmMjU60Le+2fG+FqvSiQ7rKPZNcghMiB9i2JnmXYHvWr8CHGKo+cUg3eyC
-	 tyz9yAp6jv7crdC0S35QVoCksEC9JaXnDlY8BJ92Nf36FysG12iKwvFwx8xsakSXKy
-	 hHhua4yCU8H6sT3Xu229n9WyhY6PlU5iQcUSNzEwcKrCe/nMCecXfR8WB5n6dvNo6f
-	 h8epILmsasVrPcPpm7tSqZOm0INZWaRL80oyengNFl01gcPbbCiOhUsXqei+Xm4juT
-	 P43mQ9wQ4SqKMvX/hVwh7JPj7Cu8DxPF4NEFqi6yryVN3JWVxwD8OLfJSS7Q5cMgL0
-	 ipSoSLdzkMJ/g==
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-93e441e14a1so400835685a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 04:19:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvByCDl2iw0JcPOpN01euYsSp41ZCjgFIP+lQwDWBgl5htmy24vB5Jaalb7FblwkMnDpO5E63Ex8T8o09svI0CH0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kV7+xWfq9IfToOfYsWaHEnb69u/YLjD5a6Gv2O2ZfyCj+I22Wn
-	oC78Kk+QU4YtYjSAHzKW9l+hlT4PVh4bNaXQSeyYYXizss+XacnsR8Kvz4eRzEN2u9cYujBVg2J
-	xYsxE2zgABPQrLXhtQIJyr1QzoWS8MFA=
-X-Received: by 2002:a05:620a:4709:b0:939:761c:4f59 with SMTP id
- af79cd13be357-93e9b76c78amr924707585a.16.1791458351308; Thu, 08 Oct 2026
- 04:19:11 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="d9SfD7/i"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1791460059; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=2uRUiMGM/3kM5oFgvWkstit41ISjJ8dKFkmnjBOgzTY=;
+	b=d9SfD7/i3F8/7mhWPtNs4PbENsPzHePZ1tusqOfNzF5OEb5MFFoyDHTotZ1yhdHWLAPcOqQcJ7vrppp+F7wUyLx6J0Kmq+NKypSW6hYOV3xee4wMei9wClqocofEV3QaqZCjRJjxL3enc1nYpJX9r9cQ+T9pDtH57kKkJMPiO58=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0XCP.Q2W_1791459729;
+Received: from 30.246.161.100(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XCP.Q2W_1791459729 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 08 Oct 2026 19:42:10 +0800
+Message-ID: <fbdb7b4c-0f80-41b0-b6d8-a4501ff3e820@linux.alibaba.com>
+Date: Thu, 8 Oct 2026 19:42:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261008070928.113530-1-hui.zhu@linux.dev>
-In-Reply-To: <20261008070928.113530-1-hui.zhu@linux.dev>
-From: Barry Song <baohua@kernel.org>
-Date: Thu, 8 Oct 2026 19:19:00 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4wW=XXe6=1GucvA1pUSkhLCosJh+bc0-97cYGGWW=MtPw@mail.gmail.com>
-X-Gm-Features: AclHuK9Y4gxfKhBzGtl0K9V-EYLUU5MKewRW9HUXdq9571fi07WGLf_34qgAkY8
-Message-ID: <CAGsJ_4wW=XXe6=1GucvA1pUSkhLCosJh+bc0-97cYGGWW=MtPw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Add bpf_proactive_reclaim test
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	Hui Zhu <zhuhui@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/7] riscv: Add reliable stack unwinding for livepatch
+To: Martin Kaiser <martin@kaiser.cx>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <pjw@kernel.org>
+Cc: pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ linux-riscv@lists.infradead.org, oleg@redhat.com, rostedt@goodmis.org,
+ mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
+ mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org,
+ jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
+ shuah@kernel.org, mpdesouza@suse.com, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
+ <artojcJftbMIgPrj@akranes.kaiser.cx>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <artojcJftbMIgPrj@akranes.kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 8, 2026 at 3:10=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
->
-> From: Hui Zhu <zhuhui@kylinos.cn>
->
-> bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
-> unlike a write to memory.reclaim, does not retry until the goal is
-> reached.
->
-> Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
-> and check that the result is positive but well below the request: one
-> pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
-> 4K and 64K page kernels.
->
-> The test deliberately covers only the kfunc itself. A full example of
-> the intended asynchronous use, where a BPF program watches one cgroup's
-> workingset refaults and reclaims another one from bpf_wq callbacks, is
-> maintained out of tree at [1], released under GPLv2.
->
-> Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.=
-c
-> is not built at all.
->
-> [1] https://github.com/teawater/memcg-async-reclaim
->
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-[...]
 
-> +
-> +       /*
-> +        * Both candidate directories can be tmpfs (initramfs-based CI, f=
-or
-> +        * instance). That is an environment limitation, not a test failu=
-re.
-> +        */
-> +       dir =3D workload_dir();
-> +       if (!dir) {
-> +               test__skip();
-> +               return;
-> +       }
-> +
-> +       snprintf(data_file, sizeof(data_file),
-> +                "%s/memcg_proactive_reclaim_XXXXXX", dir);
-> +       data_fd =3D mkstemp(data_file);
 
-If we can't write to the directory, will `mkstemp()` fail?
-Should we check `access(dir, W_OK)` first?
+On 9/29/26 3:28 PM, Martin Kaiser wrote:
+> Thus wrote Shuai Xue (xueshuai@linux.alibaba.com):
+> 
+>> Hi,
+> 
+>> This is v6 of the RISC-V reliable stack unwinding series for livepatch.
+>> Wang Han has left our team, so I am taking over this series from now on.
+> 
+>> The series adds explicit frame-record metadata, preserves the frame
+>> pointer through dynamic ftrace, and replaces the open-coded stack walker
+>> with a conservative frame-pointer based unwinder. It then enables the
+>> RISC-V livepatch capability and adds the syscall-wrapper selftest prefix.
+> 
+>> Changes since v5:
+>> * Rebase onto the current riscv/for-next; no functional changes.
+>> * Fold in the tags collected from the v5 thread:
+>>    - Reviewed-by: Shuai Xue on 2/7, 3/7, 4/7 and 6/7
+>>    - Acked-by: Miroslav Benes on 7/7
+>> * Add my sign-off as the new sender.
+> 
+>> Since the patches are otherwise identical to v5, the v5 validation
+>> results still apply. For reference, from the v5 cover letter:
+>> * Built Linux 7.2.0-rc6 with riscv64-unknown-linux-gnu-gcc 15.2.0
+>>    and binutils 2.46.
+>> * Standard livepatch configuration built successfully, including
+>>    Image, vmlinux, modules, compile_commands.json and GDB scripts.
+>> * CONFIG_IRQ_STACKS=n variant linked successfully with GCC.
+>> * QEMU 8.2.2, 1 CPU: livepatch selftests PASS: 7, SKIP: 1,
+>>    FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+>> * QEMU 8.2.2, 4 CPUs: livepatch selftests PASS: 7, SKIP: 1,
+>>    FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+>> * No BUG, WARNING, Oops, panic, unreliable stack or Call Trace found
+>>    by the validation log scans. Expected negative livepatch errors are
+>>    part of the selftests.
+> 
+>> v5 was posted in early August and has been quiet since then. I would
+>> appreciate it if the series could be considered for the upcoming merge
+>> window. Happy to address any remaining feedback.
+> 
+>> Base:
+>> riscv/for-next 77ae27fd98f3 ("Merge tag 'printk-for-7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux")
+> 
+>> Previous versions:
+>> v5: https://lore.kernel.org/r/20260804103626.2803112-1-wanghan@linux.alibaba.com
+>> v4 RESEND: https://lore.kernel.org/r/20260629072713.3273743-1-wanghan@linux.alibaba.com
+>> v3: https://lore.kernel.org/r/cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com
+>> v2: https://lore.kernel.org/r/20260528082310.1994388-1-wanghan@linux.alibaba.com
+>> v1: https://lore.kernel.org/r/20260527123530.2593918-1-wanghan@linux.alibaba.com
+> 
+>> Assisted-by: Qoder:Qwen-3.8-MAX-Preview
+> 
+> Thanks for these patches.
+> 
+> I tried them on a standard rv64 qemu and on a rv64 cheri system
+> (cheri-linux.org). The latter needed some minor tweaks, but in
+> both cases, I could get livepatch to work.
+> 
+> Reviewed-by: Martin Kaiser <martin@kaiser.cx>
+> Tested-by: Martin Kaiser <martin@kaiser.cx>
 
-> +       if (!ASSERT_GE(data_fd, 0, "mkstemp"))
-> +               return;
-> +
 
-Best Regards
-Barry
+Hi Martin,
+
+Thank you very much for testing the series and for the tags!
+
+It is great to hear that livepatch works both on a standard rv64 QEMU
+and on the rv64 CHERI system. Could you share what the minor tweaks
+for CHERI were? If any of them are generic -- for example frame-record
+size/alignment or pointer-width assumptions in the unwinder -- it may
+be worth folding them into this series, so the cheri-linux tree has
+less to carry downstream. If they are purely CHERI-specific, a pointer
+to your tree would still be a useful reference.
+
++Palmer, Paul, gentle ping on this series.
+
+It has been under review since late May (v1 on May 27, now in its sixth
+revision) and the tags collected so far are:
+
+   * Acked-by: Miroslav Benes <mbenes@suse.cz>             (7/7, livepatch)
+   * Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com> (7/7)
+   * Reviewed-by: Martin Kaiser <martin@kaiser.cx>         (whole series)
+   * Tested-by: Martin Kaiser <martin@kaiser.cx>           (whole series,
+     rv64 QEMU and rv64 CHERI, livepatch working on both)
+   * Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>   (2/7, 3/7, 4/7, 6/7)
+
+v6 still applies cleanly onto the current riscv/for-next
+(52318cf0fa6e). If it helps, I can send a v7 that folds in Martin's
+Reviewed-by/Tested-by tags.
+
+Could the series be considered for the upcoming 7.4 merge window?
+
+Thanks,
+Shuai Xue
+
+
