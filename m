@@ -1,108 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710633B0AE4;
-	Thu,  8 Oct 2026 17:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1153B27F3
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 17:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791479609; cv=none; b=ucMSLduvp/EBoz0z99nF4+KyMQQ5+fLwHzZeqQWlONVTdyu9BgjfnUDhN+kPeaP1q0YROMu3E+E6cyD9+cPnj/B3HCbeTo3LWK+5NUfYPAMx9+bTfKedOrDbKg8KzKoFsMfWq729UTRzDcUEE8XPgArs8y78eYzclnlSNHeoHPA=
+	t=1791479860; cv=none; b=H18kZjfcmJSu7yOGjdPLK9VKipPELigyKdC81Cy81FSTDjV4KH195RBgva3E35BlIAIbB05SjydAMpoBCxgPin0g7FIL7evmFY5rBZxBYge18culQqVYzX1zuBtYan+H6VBSn/FJRzx9wi2VN7eTOB8EkO1mMXQshNMF7bdDEDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791479609; c=relaxed/simple;
-	bh=R+N9wiAO3Nd5/Cw59xWltmx5Y4wb1achXpslW/0xbEg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=JFs40zNJNvg6PhqcTsggHEFjYXiqQT7VbefsLeyM40J86e5Rm2QF3Ne0RsZxjGa3K/DKWL27b7D1eTIe4kvglgFqrJ+lVuq1iVkxUmebe4MLHWGZEunlx+cd6XhNPQk1XSlCcxmCpLEAOOkzrTzhuIsjLAwGRqQEtLM1gr1WDh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OrCCt2WM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791479860; c=relaxed/simple;
+	bh=fa57BarLa3S4MwWGljw0T6+FFl5B5HOLbc1wS80I4Pw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Aqql2NanRxHHLtG8nKWn3YBxc9Hj9+jbaU9mb/lnVjtGWcTAAeRwaPvXKeYQuuKPtxz5F51dw3chI/YbQSKacL2AndwjiPghPTd42EkrLm3d7PB71OK7t2tJmdnwHLjQiSUZZLVOUhNjoQFNbTe0kQZpZ/BdSReGtyCnAsTnZM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jS2HQWq6; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OrCCt2WM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC361F000FF;
-	Thu,  8 Oct 2026 17:13:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791479608;
-	bh=4Nab+5mJ9I+wun3TJcQDZJ7WvF2Rq36ItMB4cHrsCKw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OrCCt2WMVt+5aDSsNmHg9N/DS6J17uoRrJpnBlMklFqEPqd6ZGzjcLG6I/O7BlrNJ
-	 MPbzUTd95Bu8+j+VH9WHxvGZXAxWyb0PXJqEbbytQ7NpHX/fqqjhecraYDbXt7dYKN
-	 TyA74hSzNwedDkFNJQmrTnaZWIr0CuFaCmR23Qr0gYN723FYNnvLSeDtExfvWSu0FG
-	 ivdlD7/6gmh86JzGR27ksOQIl9LVNCAWepVxBf8gujnjZ6KUzJQeg3KYnxX7Tbgt8y
-	 e4FDcmssbPqFm9fdpvVDrcqEkxD/50Arnk6Gqn4J4Gr6PGWdp61tuMCWYCIN4c/4Jk
-	 o0TacztWTBiRg==
-Content-Type: multipart/mixed; boundary="===============6176424161200003919=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jS2HQWq6"
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5bccb867d6fso3064716e87.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 10:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791479857; x=1792084657; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=o0PLYiY/N8RhjOEjCS15BiR6ywDnnfcu/szHv5dRujk=;
+        b=jS2HQWq6xE8lq1rtpRL4VZta8mxVld5O7SU3cw6IQqEEKyXS4RgMR+SJQ9Z/KrXfPm
+         68GJx4TxlwlnDhdx8t4RjExja2OQTQ9o0R7l6ur9h9n2aCBu7zLirWVeYJyi+CrP3yFj
+         qLc02xh65SGRlfjaRem5xG1vr8Y6sKfAkc1YLxajNKWZXEpUbsh4T7gYvoDMYovjVD+8
+         gBTFALTe4ss7OVj++8BclcdTVNYjzrchsnD8LpEpyrK6k5JB78Nzxr2jny/4VJtmIRJ8
+         28HE0tPuMoeUVZT2ibOOYR9/rhQ5u/kpsFJ3GykFdMF3GkA2KVUdOkdwBUyQ+vnFpDrJ
+         3SmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791479857; x=1792084657;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=o0PLYiY/N8RhjOEjCS15BiR6ywDnnfcu/szHv5dRujk=;
+        b=c1aljxkVYmmHtokYx3x6WiSnwjOiQtTMT4WyopuAojOQJGQxnTvM1VdMoqud/UoyKM
+         fDKymHgvXyVYKZmL8HV+HEQPVAQBZOCDSkHWm3eMSZM0nTmuPDqXXlpZn4us/q1DTJiQ
+         PZnOAeWTSn86CwJJIdViUijbWu0Dgf9PQlgPM2tF5Am1K+TCBXDfuGazULHKqGaCWdkL
+         h0oTakc5Fz4xzMee3WwQ/urTzHUnB4eo2YmLqiwjgKEW62az/0VAAsRYO+9iTO1In3BN
+         9hS2t6l5YBBgRYyIOKtose4nlaX9AnpSCbB5tGo6/r+zZviDPH6DszK/tl+d8q5abShn
+         PFzw==
+X-Forwarded-Encrypted: i=1; AKwUvBxC89UBDs/Q7kARBUlXAE9UsNYnnK7Q3TtRm8pzRqcLhePbtJ+n4PbuWMxC6J32r7gfRbymc/fh85rP1TvFU9c=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJnn8svElL+E8LmwQDGk1fMZrCHxh5M60Y4BBvLAlaEyyqEOPd4
+	WX9QnURMo1A7judsS0TM2Zyw7Wi6JYpk334W/Zxupo+cmFibW8B6ZWD1
+X-Gm-Gg: AYBFou3G48TMnSNo6OBjXQiVwe6wJSisM5yxrZ7xIw/VB6Lj02wPOco/hT3zNZtCwKO
+	1XQY7t/dO7vPfwzzEf83jO+VZjM0iMs1voGgnXTmwrGqUlt0Ng5PvgHO9JCx9XYxha4GIdU4i5T
+	+Ab2d0Kzg5ZfeTt+f9P3t2o0Ao6bSJIkFIzm/XYGn3n21UwqjaEZrjo9JAa9tEXXfQqGCVce5t8
+	+7NpvAfCBn8M9n1NRKfawI8+dC/62dr2dU6bQNz+QknaWM9I929w8aBTcbx5e5aH510VX/6oa9L
+	9pKH6RXk7A8E6PTTzFEVoNKVenZKYrSITl62NBs6CindMMn8vw1aW8JZ8xINBmA5SCQArtLE1yR
+	CqPDlTL11TBS8XON/dFOimuSx/jPvBDAu0NAVjRmPqk79aztZovDchwGTGsRF5/G+QLEhi5zGgj
+	ojdsqbdpA8ZT+/F6BHxh5ZnfDdcx+fSP0HZwHfuyWmmHyy01rs3J8uU+XETfBfUDPoAh8+/mvUQ
+	X39csSAzwPSHuW1CCPgKSdR5Kj5o19yfATRhDpcTBw2NGvcCmun
+X-Received: by 2002:a05:6512:3a91:b0:5b8:bc5e:b57f with SMTP id 2adb3069b0e04-5bcd0712af5mr2293273e87.55.1791479856946;
+        Thu, 08 Oct 2026 10:17:36 -0700 (PDT)
+Received: from localhost.localdomain (95-24-167-79.broadband.corbina.ru. [95.24.167.79])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bcd3015020sm1497605e87.11.2026.10.08.10.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 10:17:36 -0700 (PDT)
+From: Maxim Skokov <skokovmaksimevg@gmail.com>
+To: bot+bpf-ci@kernel.org,
+	bpf@vger.kernel.org
+Cc: Maxim Skokov <skokovmaksimevg@gmail.com>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	martin.lau@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	vadim.fedorenko@linux.dev,
+	mason@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf: test_run: Fix false -EBADMSG after skb leaves CHECKSUM_COMPLETE
+Date: Thu,  8 Oct 2026 20:17:24 +0300
+Message-ID: <20261008171726.47795-1-skokovmaksimevg@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <6ddac0398e54f73f0d424069145c6901d8d0ff3401fb160db0a9e3b281270c06@mail.kernel.org>
+References: <6ddac0398e54f73f0d424069145c6901d8d0ff3401fb160db0a9e3b281270c06@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <960fca850e45c39ab84ddde9b0063a89dc44d9faf0e3e750fec9e9d891f773a0@mail.kernel.org>
-In-Reply-To: <20261008161309.8179-2-janten@gmail.com>
-References: <20261008161309.8179-2-janten@gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: Revalidate iterator programs on link update
-From: bot+bpf-ci@kernel.org
-To: janten@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,davem@davemloft.net,edumazet@kernel.org,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,jakub@cloudflare.com,jiayuan.chen@linux.dev,kuniyu@google.com,willemb@google.com,shuah@kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  8 Oct 2026 17:13:25 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============6176424161200003919==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Oct 07, 2026 at 06:45 PM +0000, bot+bpf-ci@kernel.org wrote:
+>> +	/* A helper such as bpf_skb_change_tail() may have downgraded the skb
+>> +	 * from CHECKSUM_COMPLETE. skb->csum is then unused by the stack and
+>> +	 * there is nothing to validate.
+>> +	 */
+>
+> This isn't a bug, but could the opening of this multi-line comment be put on
+> its own line, with the text starting on the next line, as is preferred for
+> BPF code?
 
-> bpf: Revalidate iterator programs on link update
-
-TL;DR: Nit only: Documentation/bpf/bpf_iterators.rst may need updating for the
-new validate_target callback in struct bpf_iter_reg and for when it is invoked
-(BPF_LINK_UPDATE only). No code problems reported.
-
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 0ecb9418dfbd..5aa786eba3ea 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-
-[ ... ]
-
-> @@ -3024,6 +3026,7 @@ enum bpf_iter_feature {
->  struct bpf_iter_reg {
->  	const char *target;
->  	bpf_iter_attach_target_t attach_target;
-> +	bpf_iter_validate_target_t validate_target;
->  	bpf_iter_detach_target_t detach_target;
->  	bpf_iter_show_fdinfo_t show_fdinfo;
->  	bpf_iter_fill_link_info_t fill_link_info;
-
-This isn't a bug, but should Documentation/bpf/bpf_iterators.rst be updated
-for the new member?
-
-That file carries a copy of struct bpf_iter_reg that listed attach_target
-and detach_target exactly as they appeared in this header before the patch:
-
-    bpf_iter_attach_target_t attach_target;
-    bpf_iter_detach_target_t detach_target;
-
-It now lacks validate_target.
-
-The field table in the same file also describes the callbacks as:
-
-    attach_target and detach_target
-      Allows for target specific link_create action since some targets may
-      need special processing. Called during the user space link_create
-      stage.
-
-Nothing there says that validate_target is invoked only from
-bpf_iter_link_replace() (BPF_LINK_UPDATE), and that a target's
-attach_target has to call its validator itself at link_create time, since
-bpf_iter_link_attach() does not call it generically.
-
-A new iterator author working from the documentation would not learn that
-program-dependent checks belong in validate_target as well as in
-attach_target.
-
-Should the struct listing and the field table describe validate_target and
-when it is invoked?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37809581821
---===============6176424161200003919==--
+Right, will put the opening /* on its own line in v2.
