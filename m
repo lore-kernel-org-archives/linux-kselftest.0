@@ -1,131 +1,124 @@
-Received: from mail-108-mta185.mxroute.com (mail-108-mta185.mxroute.com [136.175.108.185])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8137B364EB2
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 23:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9609A5B206
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 23:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791502482; cv=none; b=pcfyN5WHF+xhCQhq0UOJp+C7I9eUWnhR24Aij6JmiCsKRVYEXWP8BwwSKuH8DgckDK4w1xhutMDJBquQ/RcDpn3+xn3glDoAhTOI/rmGk3BOM7n1d3wfdXmZYQGcAeWuiVrRlZon+hNq01yV+qprBbBaSnhBJjabj8vGYk1T5GU=
+	t=1791502587; cv=none; b=CELuEQCBRE4f2JurBxo6eMyTAdKIAafcUms+Frdbrgf1YtSJu6li+ysO1Q74nin7GqeZUQ5LKZSnqOIPdDnu7eoxGdN3nYNxdPO6xhLs7nIr/5MHxOBOyWo4Cy+mOXV9DIi1wejhSaV/uDXvLthajQKt3lJkwsAItsmZEpaPiCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791502482; c=relaxed/simple;
-	bh=Jml+hzCinC+mK0nigKPvQH66XyJt2EgUCilcNIGlf4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=opr007mo9YvDn1H7LilQJ1oR7E8XMz6Hk/InrhikF3XS1N/Mkpzgui7rdRKBs80FjCo7Bex8/W2NJF3jT8AjlH5sNBpSopZS+F4RkyBpVhDJtJEejeOv7u9NMALuOhv/00/ZXjoYVvXQtA1xIkfTA4d49wpvCqA+MZ1XHxJlTNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=tuAOQ0OF; arc=none smtp.client-ip=136.175.108.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
+	s=arc-20240116; t=1791502587; c=relaxed/simple;
+	bh=z9XdaDwozt4DVNCBsjCCo4rkJo41je1Q1+kLf3Q23Nk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Vfda/Ar7Z0RZn4fTZ0m+WOdhNlQ7IWBsJ+4zdjNPHLuINn+Ju9cxjxZSzVdLT7BhdDeznBRq+EJ9o/BSwVGXn5Xvuu6IhQM1+InpdKkK7UhpbCliCqJlhg0W3idMqWkg1bNS0rX17wu89S5/HSxcHcR2T/fVrecxKR3vhZX53j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kKwK7lCv; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="tuAOQ0OF"
-Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta185.mxroute.com (ZoneMTA) with ESMTPSA id 1a11dd9ad3b00028b2.00a
- for <linux-kselftest@vger.kernel.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 08 Oct 2026 23:29:27 +0000
-X-Zone-Loop: 66dec502cdcd90e5fc59e4114ac1268abdd66b35a6e0
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
-	s=x; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc
-	:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=23+ZhvGSrfv+9UjXuR54FKKvpMz+PAsmhJMU+SA7Fx0=; b=tuAOQ0OFa5rSxbnawpvQgsDlxi
-	SRJnRQaa71rC8Du8yBOrxMXTyCNQNIgDHZWIydlKikbPeMeNPJq22+3yXKiDeCHx5PzWlppIFHo6A
-	uBWA/HLFsR0GzEy1SQRmA/mmZtr3J0r+YYQT0qdT6bZlm+qSrdgf4j44FRRa3E6FKlJUh7pCFOWrL
-	4qEdcm0NcahsQgan+nq2XWK9FP0le0CPFtV5Q68r97z65+D/9hIC42uLdiqfPU6dn7YRBb8Z2GX4L
-	PzEH8aQJ1qElw77xGjOnOxim3xgqiN16ZVf7Ug2CmGFu1xFgilAJpzXl+Xg32C1esM3eIqFo+3FqN
-	7Q6VY3fQ==;
-Date: Thu, 8 Oct 2026 23:29:19 +0000
-From: Richard Patel <ripatel@wii.dev>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "kees@kernel.org" <kees@kernel.org>, "x86@kernel.org" <x86@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>, "tglx@kernel.org" <tglx@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 1/3] x86/shstk: ban ia32 sigreturn when shadow stack is
- enabled
-Message-ID: <asgnT3mSOGZ4HIlX@wii.dev>
-References: <20261008201610.1003569-1-ripatel@wii.dev>
- <20261008201610.1003569-2-ripatel@wii.dev>
- <e1a26ac75c39673d043b2860f848827fecbcb843.camel@intel.com>
- <asgQDlpnDwu04oZc@wii.dev>
- <6deab6fec99c65408a19b9036d67ce7f1fab54b5.camel@intel.com>
- <asgdlclj3MgtGrSp@wii.dev>
- <f78ade122593ecdd686ec1b29340b0124b925c48.camel@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kKwK7lCv"
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-917a04338c1so41263976d6.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 16:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791502585; x=1792107385; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=H0aMo8yA757AIchUgl2zcuEjDzZI6HgSNUOupZw3Xrg=;
+        b=kKwK7lCvJz1wVTkLfGaKVKfr70dIJRtyWct7BtoHRxe3CXDSUhd4E2lyJhjnrN4m99
+         sORMFy7GVSAyMIOUouqjD03TbB0RbQBeyi4xo0ZHaeZ89XjWXO0pqcjBdWXsyiY/L3Ul
+         16zGbHDwkQYLkTKD1wiKQ0aMzufklwBVhfOWabGS6h6AcwxBU1AHPI5NTcSmhVTPYZgW
+         LD9j6b5Kwu3XZY7Caigs/5NY4keHAcTyihauPisaT+d2XHnoRGeoTqqgTXHxizQVvt9f
+         i38990xka5QM+qq/4qk2Cxabe2eQzcMXqIRb1HsWtXHeiXC7UK4W1PAoZosgMiStREX6
+         3+Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791502585; x=1792107385;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=H0aMo8yA757AIchUgl2zcuEjDzZI6HgSNUOupZw3Xrg=;
+        b=dl73BUi2KGfgOO7axUSxjbb2gnGerdL4d64Zpk2C5+LmnIOw4ttRykc3HFz4kzyQqC
+         r+sg9VWYh8XKCx1y2aj6mKkIpFQyTSt/dG2nYDJ9p4Y0Qh0eoV4QKSSudxTyoD34K6Di
+         VlftLS4/dnyPGKW/2de87vwGFZyotHpTtUoLJAmRZSGLBHGAmZhLl7SXZl7/Bmv5Pi+A
+         7QSz0YMd78A54R6tN6Dbio5NCgWruf1fqoCSs5fwCiaptxz9/Y6RYlqbVteAkJ2ky7+s
+         uTAKBdOZNsgcqrYOiswQbB8qDYJADd4bk1fm4uCaUVFQtIzVBjzfDPIJ4bkQPO4jMtN7
+         i57g==
+X-Forwarded-Encrypted: i=1; AKwUvBxlnJq2KvqBaMU/scOkPyh0dX+z60GQ+EgH/Rl4cMYhoxLDTr8G0iJA+gcGvhc+nao1mtwGsK+0t45r2w4Wyvw=@vger.kernel.org
+X-Gm-Message-State: AFuF++k9biTMVtjtkYUtIJVDF6l05lXlloCiZ22xTavO+nCDVoXE7uTg
+	CSwhVf8QZ6MdSsJmDrMuogkT0AOX+WMRvd5An5iTOuJO1j0Lxm56ogCX
+X-Gm-Gg: AYBFou1dZf6/6yniIYOu8pFYEhEwGaR/CsgnAQraE3j0HJe0ex8CGIe1VqzogZzRuCf
+	LYCjRJ9bPFG3WYitqa5Zk+BABJ1DHAMe6/7xY59nFALk5WTgb2dGTiZqr2XbNfWyMRW1kTrB8Kc
+	jVXExVeAqTXpby09uXGTHFIc5OqIuGmq3qAO6xW3wGm9sY6pVb34rJqrcCM2gtLcOzczkTj1yBn
+	M/UKHlWrDK4boDW0XHBGSHMWvOZMrEhwfkpHW/10C4e285I9Slz4O11E194NCNknF0qftYBPUjo
+	VqhlAshsxXVXUCcdmOtyVCBg5AweZG6Rw8Mp8d2eGeUmUBbXrY9hrOak9CDdyPyJjlX2lfRFy73
+	u93ILEJzGidvDehAgY2KPNA9HYxb0BOg7CAOR/I17E6sextZg4kZ5mQjnWyNbdVhiowwtIlQ/O0
+	S7NUqcHXco+pNKjoDJ/IqroX7dimQloCfgCLyZuQ6Od8krF4cO6sMyrsatrNlUdZeribGB+8K0v
+	lhy5ccHALioLpC4f+unZ87B+slgPf1oEbknBFnXA+autlg5odNbcOEiNpoER8ijHlwLnFsMeR9c
+	8/iEhN4j
+X-Received: by 2002:a05:620a:890c:b0:93b:d7a0:d9e6 with SMTP id af79cd13be357-93ebd2675e2mr26192385a.64.1791502585481;
+        Thu, 08 Oct 2026 16:36:25 -0700 (PDT)
+Received: from battery.lan (pool-138-88-31-60.washdc.fios.verizon.net. [138.88.31.60])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93eb9848702sm51693885a.12.2026.10.08.16.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 16:36:24 -0700 (PDT)
+From: David Windsor <dwindsor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	yunwei356@gmail.com,
+	David Windsor <dwindsor@gmail.com>
+Subject: [PATCH bpf 1/2] bpf: Fix state pruning regression in bpf_loop() callbacks
+Date: Thu,  8 Oct 2026 19:36:22 -0400
+Message-ID: <20261008233623.4011127-1-dwindsor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f78ade122593ecdd686ec1b29340b0124b925c48.camel@intel.com>
-X-Authenticated-Id: ripatel@wii.dev
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 08, 2026 at 11:11:41PM +0000, Edgecombe, Rick P wrote:
-> On Thu, 2026-10-08 at 22:47 +0000, Richard Patel wrote:
-> > On Thu, Oct 08, 2026 at 10:34:02PM +0000, Edgecombe, Rick P wrote: 
-> > > But today setting EIP to an arbitrary point is fairly easy. But even in a
-> > > future
-> > > case of IBT enabled, shadow stack would still need enhancements for the
-> > > normal
-> > > 64 bit runtime to prevent this. 
-> > 
-> > What do you think of creating a shadow stack frame on signal delivery
-> > and popping that on sigreturn? I suppose that would need siglongjmp
-> > modifications and probably break CRIU. :(
-> 
-> Yes I didn't know they did not parse the shadow stack signal frame
-> appropriately. That is unfortunate. But we can still evolve the shadow stack ABI
-> by adding new modes to the enable prctl if we want.
+Commit f597664454bd ("bpf: bpf_scc_visit instance and backedges
+accumulation for bpf_loop()") left dead stack slots in cached callback
+states while SCC backedges were pending, defeating state pruning and
+causing previously valid programs to hit the verifier instruction limit. On
+affected kernels, ActPlane fails to load with -E2BIG.
 
-Will send libgcc and CRIU patches for this.
+Removing the incomplete_read_marks() check from clean_live_states() is
+safe because zero-branch states have already had their stack read/write
+effects propagated into the liveness masks consumed by
+clean_verifier_state(). Pending SCC backedges only defer verifier-state
+precision propagation and cannot add stack-liveness requirements after
+cleanup.
 
-> > I wonder if there are real apps that abuse sigreturn as a forward edge.
-> > If so, they should not be advertising their DSO as shstk-compatible.
-> 
-> The wishes from the glibc/distro side were to support as many apps as possible.
-> The other way would be to create a more locked down mode where developers need
-> to carefully verify their apps.
+Fixes: f597664454bd ("bpf: bpf_scc_visit instance and backedges accumulation for bpf_loop()")
 
-I'll have an AI scan through all Debian repo sources to see if anyone
-is doing naughty sigreturns. Even if so, if we evolve the user shstk
-ABI, it might be worth breaking that (via opt-in arch_prctl), if it
-helps with security.
+Signed-off-by: David Windsor <dwindsor@gmail.com>
 
-> > > In the past we discussed hashing some amount of the sigframe and putting it
-> > > on
-> > > the shadow stack to give some sigframe integrity. But this runs the risk of
-> > > breaking apps so would need to be an opt-in enhancement.
-> > 
-> > Yes that seems a bit excessive to me. At least, the 64-bit path protects
-> > against obviously forged signal frames, so maybe there is still a case
-> > for the patch?
-> 
-> For the 32 bit signal blocking patch? I'm not sure why on the security grounds.
-> I think it depends on how much we want to deflect ia32 mischief vs just ignore
-> it.
-> 
-> To me it is a cost/benefit thing. Having to think through which syscalls matter
-> was the point of blocking 32 bit runtime in the first place, so this evaluation
-> seems too high on the cost. If we do anything more, it should be another small
-> and complete thing. Like blocking all 32 bit syscalls.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e3814152b52f8139a5565b2e4ac1b80d82d1ea65..1e300ca71a8a833eb4c2a340b4f94342f54af5f2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19791,8 +19791,6 @@ static void clean_live_states(struct bpf_verifier_env *env, int insn,
+ 		if (sl->state.cleaned)
+ 			/* all regs in this state in all frames were already marked */
+ 			continue;
+-		if (incomplete_read_marks(env, &sl->state))
+-			continue;
+ 		clean_verifier_state(env, &sl->state);
+ 	}
+ }
+-- 
+2.53.0
 
-Conceptually, I think shadow stack should authenticate all return
-addresses placed on the stack. %rip in the signal frame is a return
-address for any non-crazy use, but it's not authenticated. And IMHO that
-should be fixed.
-
-Unfortunately my patches fall short of plugging that gap, so I agree
-they don't have a security benefit.
-
-I'm eager to fix it and authenticate sigreturn rip, provided you think
-it's worth doing.
-
-Cheers,
--- Richard
