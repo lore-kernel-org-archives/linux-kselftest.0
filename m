@@ -1,116 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E8B4A4999;
-	Thu,  8 Oct 2026 13:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757C84A2A4D
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 14:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791466441; cv=none; b=AEOvk5PfQhO6Kb81Jm5utfTUiNCfWKz5r/ucQ43cj09o4SY/mQzWK21DgjLNzigAQt25U9SgIPkt2OdHTyozBz37nZhCrPow1VgvD6VM8xTUXfWv/AeZpIPzhvt/6ONUaNBBEW5Y08+EpiXfW4S3o5i5YKaThUq6GjK4s2rrBZs=
+	t=1791468169; cv=none; b=tuPFbxCgAR6oXn7kOps1z1qgD6ds+jzRipIFOMtoOAfQktdWEnyTSD0lX1DuxpsGzCfP4CKZCGvwP5uj954+6mePatE2UjavOIfRkqfSzmaNb0j7GfbVJlDvfsT1mZ4tiln/uSdCV6dHeMnRi57RcKsdqKVSYFjFOHXGKHKSmDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791466441; c=relaxed/simple;
-	bh=R4efPWziYluq5OmHpl/wJK8M1tev4TSIbMoKQK1gVyw=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=VSAuV6VJsUltNfXdA9VPRz5mT2kVsFngLeoXmBKGsgsRxE2vfLCzwLGMefOAXun8PyMTl+yR1YWX+PyffSPdIHkL5HAN+HUF7oQzdTkMq879GyOCbUcWuRxXEEklLU1IfUcz80ZfwE68eXZnPPyHcuHknV4HPGBAx0ZPltwC22Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B8eMDAx6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791468169; c=relaxed/simple;
+	bh=bahwq3zhX8Ly6A29Jjh8zxDv/0A1k+kF3/Q6NsvVg3Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=mhOe+KdP6vVGdjKOpXcq1oGUawNoTmi0vvV8wKlVo65sJDj65lH+uz1iS5mNdzS1J9bScGttQSGHfzNQ/5AsVJLdW3OWPJthNxLyy/aJ1ptn/tpL/yRwYE/0ieJHfE8MIhi/N0fDamlDHSqhvzF0tKsYQQyit8Hp/F5jU9wSSTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sOEJ2qos; arc=none smtp.client-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B8eMDAx6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15FCA1F00893;
-	Thu,  8 Oct 2026 13:33:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791466439;
-	bh=EMfIGKHZL2EcuSKE4fetcJKV4ZBxsEiNzCi6Z94i7bs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=B8eMDAx6L9M21p4L4bm3XoG0wYjiHPzh4pUoHd6zVTIn+EQ9VKNLR0Eiw41R2CCok
-	 kK30o0nyNc4Rz/9ptJ0DGGuj6nLT6LkyNLKMUx5MsbnyB6rx024+Ork7+zA8Hwlkjc
-	 TqJ7jDSVlX9mtve4DDRPH2m9RKsqIe+ldoxUZZFdD+Xj9tN6maRT17w+T3uSp/Rg4X
-	 jOUg5Nh6VeQzAmm5SGuiihTMbrU0JSq+AoPDHLUWQla8dwJrWw87TZCZdS23c0A4Cb
-	 00QqAcU8V8gVUFUzKkP9PhfPO6V8/2h7q2fA+LKzembMMVtAvPFPR91uINyDYoy6f1
-	 smig3ElBv0KAg==
-Message-ID: <sashiko-outbox-164218@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] selftests/liveupdate: Prefer KVM and HVF over TCG in
- vmtest.sh
-Reply-To: sashiko-reviews@lists.linux.dev
-To: linux-kernel@vger.kernel.org, "David Matlack" <dmatlack@google.com>, linux-kselftest@vger.kernel.org
-Cc: "Jordan Richards" <jordanrichards@google.com>, "Mike Rapoport" <rppt@kernel.org>, "Pratyush
- Yadav" <pratyush@kernel.org>, kexec@lists.infradead.org, "Pasha Tatashin" <pasha.tatashin@soleen.com>, "Shuah
- Khan" <shuah@kernel.org>
-In-Reply-To: <20261008132813.1966023-1-dmatlack@google.com>
-References: <20261008132813.1966023-1-dmatlack@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 08 Oct 2026 13:33:58 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sOEJ2qos"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1419d3416ceso9996371c88.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 07:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791468166; x=1792072966; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=xtcAtg9RPe8ybW5E9qQpidKnLoLoxeabdblRAW5zS/w=;
+        b=sOEJ2qosSo5uonVOT5O89+SV7jQ1cyqo33WIeCa3OkAdP8zOtbaU/VyCJ6nK+rJxbC
+         zAwNehqDbtal0UpjfMUZSD9XnEu3KGxfkgQPCeVSDbGOXhzapopydSiklVPfoB7JGy12
+         bvyr10bWET6bsOU1jiluE+PCyzYKzwf5JiORrQNqOo4ovrMc306NkFynVnJ08ztkGEr0
+         LgAF4q4q6cqXBXJvmJkTeoA9cTb2Dry9pcFOPEql78fqWfAsf3XFfdZ9PR7SkYOHnx63
+         s8CTgPEkGN6/d2yiECLTHUFkFWFNC+N/+D4Q1bE8ucLhBf/cJ9xATZ4N2AQZopcInm5L
+         aY+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791468166; x=1792072966;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=xtcAtg9RPe8ybW5E9qQpidKnLoLoxeabdblRAW5zS/w=;
+        b=dF9k0uJerviC9DeedTZHGwByBsrYBuNvQR1vUQ1iV9gwr8ve3+ZKea4MRClCWqYR8+
+         1oyU0AKm0KkjCzDhlod/HOx7GnBUGJbUcR85SOfp2SjumGxCM70g6xkJBqWdvdGQla8i
+         WOObyb/wIRJvOs/PBBI72H0lbf8WDYov32NQTTRJ7nIfwZtxkNk0IjaBGYG5Dh6hZHqy
+         19JOOQLZybYR/wPdE20TtxDFjDhuP2muzWx8lXswSe7B4rcRT4oWJsCoTMq5ZkWQL7i9
+         StA0rApF7SRGaqppJsY3FqZ07anLnIlUawZF5gFvt6rTdch8iPTFqShJ2s7DGyt6wxul
+         6LiA==
+X-Forwarded-Encrypted: i=1; AKwUvBzkczrlIjiZmaowVFch61Y6WKR0hpN+nTxdlVUjlKxU62mjMV1bHeXRHNXOmPNbvwjIHBmr08KI89SpTULZvpQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++nozoWlUoTOInzWqOOD0EnZx7Th3mSUxfiL9whbkizcyjtuN2a/
+	BTs8rz2D+ZSOcrSjJPmyNjJOpgnXhBNr6y+8Fayx9V0lfOPBh2fS/VmG
+X-Gm-Gg: AYBFou1+Suv6wn7sKpZLxKaIACu0sjnxZLQdcKT0SJM2GVZLN6wyiCd4eQVOl491jnJ
+	XEazG5T8VGGYsclpRI17iHAPs3J8aaE+tzhkia+N8EQrkTQ51VcZFErSePV2n/6Kwio65XF1NIc
+	nB7AKfEzvIXaGIfxQYYs4sMgprI3CyZJGzwxvVuqJGImBoBoDSn2vluAZicYqVEuA+ijNTwaxaz
+	wh3sYaNOIWA/rCQkIEw9ctD95u4iARQM7F5tvJ2QmcDXxVs4JPn0TUWxJJ2Bf3L7vwiQlYEVNN7
+	VfXsyoCA5gdYnh8qAyGFQSo2n8pFwErXAn1RgC/BQDQvfEH76lFev0aOsbxqNzWbi/uFqoqXkeB
+	1bd8O1OFg9aav+qlVpBIAAJDA2pBwgO9ecdHUh3Xfiuq2uH+KdVHLv0Kmv7rkv2z6TG90j4IdYM
+	hQsGbUJaxOY5/4b6VHja2JjRRkD/8ERmI/NGHywPXFzncH22q3pHICFPuqSjctiEWJM6am7SvNl
+	21W
+X-Received: by 2002:a05:701b:42c2:10b0:143:297c:276c with SMTP id a92af1059eb24-1620665f4f8mr7308989c88.33.1791468165887;
+        Thu, 08 Oct 2026 07:02:45 -0700 (PDT)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-16375a1f898sm11460637c88.0.2026.10.08.07.02.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 07:02:44 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Date: Thu, 08 Oct 2026 22:02:39 +0800
+Subject: [PATCH bpf-next] selftests/bpf: Use its own netns in
+ flow_dissector_skb_less_direct_attach
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261008-selftests-bpf-flow-dissector-netns-v1-1-5d9889aaad84@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAH6ix2oC/x2NzQrCMBAGX6Xs2YWk9Q9fRTxo+q0ulKRkFy2Uv
+ rvR4xxmZiVDVRhdupUq3mpacoO46yi97vkJ1rEx9aE/xhDObJjEYW78mIVlKh8e1QzJS+UMz8Z
+ p2J+SDBEHidRCc4Xo8p9c6WdlLE63bfsCqJKqc34AAAA=
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
+X-Mailer: b4 0.13.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] selftests: KVM accelerator preference breaks arm64 vmtest on GIC=
-v3 hosts
---
+test_flow_dissector_skb_less_direct_attach() and
+test_flow_dissector_skb_less_indirect_attach() each create a netns to run
+in, and test_progs may run the two at the same time.
 
-commit 5b52122d5a64c0b3471d0fed69b32ec99d464203
-Author: David Matlack <dmatlack@google.com>
+Both name their netns flow_dissector_skb_less_indirect_attach_ns. When
+the two tests overlap, one of them fails to create or open the netns, or
+loses it to the cleanup of the other one.
 
-selftests/liveupdate: Prefer KVM and HVF over TCG in vmtest.sh
+Name the netns of the direct attach test after that test.
 
-This commit reorders the QEMU accelerator options to prefer KVM and HVF over
-TCG. It aims to utilize hardware acceleration when available instead of alw=
-ays
-defaulting to TCG.
+Fixes: 2b044dd186f0 ("selftests/bpf: re-split main function into dedicated tests")
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Tested by running run-vmtests.sh and then observed that arm64 correctly
-> fell back to using TCG after trying to use KVM and HVF, and that x86
-> reported no warnings.
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index fb48926814647..f6fefb14cda3c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -706,7 +706,7 @@ void test_flow_dissector_skb_less_direct_attach(void)
+ 	struct bpf_flow *skel;
+ 	struct netns_obj *ns;
+ 
+-	ns = netns_new("flow_dissector_skb_less_indirect_attach_ns", true);
++	ns = netns_new("flow_dissector_skb_less_direct_attach_ns", true);
+ 	if (!ASSERT_OK_PTR(ns, "create and open netns"))
+ 		return;
+ 
 
-Will the arm64 test actually fall back to TCG when run natively on modern a=
-rm64
-hardware?
+---
+base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+change-id: 20261008-selftests-bpf-flow-dissector-netns-c347cf31e5f1
 
-In get_arch_conf(), the arm64 QEMU command is defined without specifying a =
-GIC
-version:
+Best regards,
+-- 
+Qiliang Yuan <odys.yuan@gmail.com>
 
-QEMU_CMD=3D"qemu-system-aarch64 -M virt -cpu max"
-
-Because the virt machine type defaults to GICv2 for backward compatibility,
-running this natively on modern arm64 hardware (which typically only suppor=
-ts
-GICv3) will cause the KVM accelerator to successfully initialize, preventing
-the fallback to TCG. However, KVM will then fail to create the default GICv2
-in-kernel interrupt controller and QEMU will abort with a fatal error.
-
-Was the observation of falling back to TCG made on a cross-compilation host
-where the KVM accelerator itself failed to initialize?
-
-> diff --git a/tools/testing/selftests/liveupdate/vmtest.sh b/tools/testing=
-/selftests/liveupdate/vmtest.sh
-> index 64fd2ab55b765..69beda6c961d7 100755
-> --- a/tools/testing/selftests/liveupdate/vmtest.sh
-> +++ b/tools/testing/selftests/liveupdate/vmtest.sh
-> @@ -180,7 +180,7 @@ function run_qemu() {
->  	echo "# Serial Log: $serial"
->  	timeout 30s \
->  	$qemu_cmd -m 1G -smp 2 -no-reboot -nographic -nodefaults \
-> -		  -accel tcg -accel hvf -accel kvm \
-> +		  -accel kvm -accel hvf -accel tcg \
-
-[Severity: Medium]
-Does this change break native arm64 execution on modern hardware?
-
-Since get_arch_conf() lacks the gic-version=3Dmax parameter for arm64, QEMU=
- will
-default to GICv2. On modern arm64 hosts, KVM won't be able to emulate GICv2,
-causing a hard failure during machine initialization rather than a fallback=
- to
-TCG.
-
-Should gic-version=3Dmax be added to the arm64 QEMU_CMD to safely enable KVM
-acceleration on modern hosts?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261008132813.1966=
-023-1-dmatlack@google.com?part=3D1
