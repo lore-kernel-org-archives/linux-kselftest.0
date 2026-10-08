@@ -1,70 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FD94734CF;
-	Thu,  8 Oct 2026 08:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D0447206D
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 08:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791449489; cv=none; b=I/FvVGphQFtTPJFMP6LoP76bDyi592WCS+kCPSez0H8vbizb8VL2Oh/E1bEHB8Cgwcjsxt4EYyuUlaSgNaQ9uE59CEphp5ot+tWNFCixcMnGbAOtreFq5GLZHjkO94D+5V9vpqGsXZvCZH7WsqqClLfxPxYcfzdjBqhJ1B+tBaw=
+	t=1791449640; cv=none; b=g/FPkAFp/cb7PMwF+8yQ9VJlVOFQgWouFqhSM2cQn7WGQpy8p6ukRs4gT1us3zPLvkoC1f/Y4ywj+Hj25oYYj2bXmhZZvbUEzsQpxW4hINJFhmdcKlYUWQfjmEuYU+rQyEnSU8mNeoJ6AbfOZjWDREDoqeMZjuqWMJlj1P1OJtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791449489; c=relaxed/simple;
-	bh=y3mksDWJ1cnx2vUcwBui9kRBD7D1m6dYAJo/BBdmKFw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YxoKqOJ3FPHlCOKCU6erPyYzDvBd9k8jcxKlS6aKcAS0rHiuBaKtciy1ph8N/NFm020E+dTVpkZPXxp+Nf3H/TUTBx904c19UkJzMK6EPVccxR0RP0i+hSta5xLKGbfJI89P7V5ravFdc5UYct23rtMw+5aBgBi6A0bFhnmz5k4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E+QZGOj7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791449640; c=relaxed/simple;
+	bh=HLefPmBX47EFFJEHrgtmj8lWN4k9/YgWGOGt+gyhx2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VWSmYAE/CFn8ZXCPbmQOax1H2G/DUsEkAUxJqA1yHDdJNDdxYDUy7LnKRtv7Bau4WxLlxP6QfRyaYKLnJddk8UE7goRWtKCVgXSePT2ESnYXZz5mem5cmaCAZTOV5NwzBliGGurqOv8eGMvojHk2wbyYcKAxA3bFaXuDbCPvURU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kVa7RWp0; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E+QZGOj7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14291F00898;
-	Thu,  8 Oct 2026 08:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791449487;
-	bh=9HBsK9JWrsaB9tSfr6Gh6KHk9xHWrytrLennN91BCx4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=E+QZGOj7Ry9R0+RX0ixIWYO29bD2e9nS/g09b8uihB6NY3mfwAg2JGWMCm4adYndW
-	 tXaVADQVVoxNQABaq0QKTeAo/HTao57IsZCrp1D57QeHg8NdR73hb2ksTz8VTIeu1W
-	 mPFAl1FYOb5Xh6+S3RZdQbF15hU1DNK+E0h6Yn/JuXBmaOrFR0sVfbdmrFw9fo39vN
-	 WGi4Df/NyfOWMnv2KD5paQx+8pL7RL39bk0T9NP3qVX+Vhi0A+9Zun0RqchYsvQoZk
-	 /gqaDj+9Ofd4O1f0UI8XbUmrGKpuw8xXZGyNWeFHAPdXGWSHQmA5x6sa0qDpsAn7kV
-	 Gvimn4EdY4pUg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-api@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Sasha Levin <sashal@kernel.org>,
-	linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	workflows@vger.kernel.org,
-	tools@kernel.org,
-	x86@kernel.org,
-	Thomas Gleixner <tglx@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Cyril Hrubis <chrubis@suse.cz>,
-	Kees Cook <kees@kernel.org>,
-	Jake Edge <jake@lwn.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Gabriele Paoloni <gpaoloni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH v5 11/11] kernel/api: add syscall enter/exit tracepoints
-Date: Thu,  8 Oct 2026 04:49:51 -0400
-Message-ID: <20261008084956.2911790-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261008084956.2911790-1-sashal@kernel.org>
-References: <20261008084956.2911790-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kVa7RWp0"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-35115b52125so3559064eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 01:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791449638; x=1792054438; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=cBRVu1PhaTpNiCczbgliHEJdpmg0aCx3TB2VjXS+OlY=;
+        b=kVa7RWp0GbHwFZfi7LWMMuslV835wg93nsDbsItGFiC5KeHpXtQjeeO+mCQeUwiSEy
+         mEVGxtlYpi233BPtwQIhL6+9sqbKEiPBOaFTdehwWIKClh6M9LMNFShJm0RZzCt0uE7r
+         IArxxO/zctFDfRvigNxsuD9b+WAimwWmIvCabn0FURFkg/mnRdSSfMmEOdn23136xFut
+         d2m3a5Pds7fLa90nFiKV2ZLQ8I0DgwxDFMVENc6b3Qi8de0ER8x+BZhyyEzn3I0DNg6w
+         tyozLMjVi18b4cgSMmifkkh3LGBos1YMRPBmn6OoaQjw5IxQYE+Vr8pud39qKACCl7lN
+         EBGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791449638; x=1792054438;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=cBRVu1PhaTpNiCczbgliHEJdpmg0aCx3TB2VjXS+OlY=;
+        b=D7ZqphkuP4MMo3iujE/Wuq9mz2tGyef/OhH6H6D+wTDOALGvbZ/XsQhDU9TBUwWDw/
+         2tOIPY3d8uOzYyWMvbB96CwagaNldJux8rZ38PwRHRbyRSIGvTOVZjppnb3EPbreOs6J
+         BIznDZzD8oNq11LzoBERIg+lu9rWGGI2g6a6UQUiShKruqGhGa/fhEsF3S3yr60VL7ZI
+         VtDqI0isW5AOVTvNCWplanGfCScpdRNOrQSvoWzcp6uQUXkPQPTV53LoXA9qDEtoSLfO
+         pyJU0VQY667VuHMqW04M4YsaVeOOOLwEuRzEuREaVXBBLb7HTM6gIApn8LYQg6Px8IRX
+         jJJg==
+X-Forwarded-Encrypted: i=1; AKwUvBz291giCuasaxpLCdIQNLYiSh5/L8LtA+O6BKABazzVggkt3204sRJaFnxLCUPk3Q1bKBDuLr5hlNTX3dJQgpk=@vger.kernel.org
+X-Gm-Message-State: AFuF++kPLaDCEOBSHEsgMDj+YdUqzCyYgOtZsxQ2hY5v0gScjYSUWUu3
+	CeWlgP8hPPitZE5c/9cIjPvQ4nYJU8MR3qH2uMBMj4ive/qklvACOR+r
+X-Gm-Gg: AYBFou2G3NKYsdNgUlxYP6G0fMYKaDBPA88K8bq4dxKtONxuARmWoldx7vCdlevkfB8
+	/5ELdalUJ7ApDGFEvSSPtKU/fqjfTpISXnstTBFO9KQc5C/mnNbmpfXAkDq7kgOqdx4nRhf/LR9
+	zMcLGNccrtHBtsmwHaT2+/BnZ01VtBGOImU8vCOs3eYhFVXvMlXsJYAgI09+N/FT8BAsnWOkRqr
+	yByXvH+nu23bifEGjOLB/fR2OKb9gmU9VWrm0lIH9CAvLUcwJeFPB5Ov5cDsuvSxHCt3A6uxMOT
+	PQfhCjqgZ7G8Mha0L2gHkelXQQv29OhBr3FP+PSLQPkklPJdOrhu11Q9xbMZXneurK9O7b86YJ0
+	xU8bt1Mmxm+Ik0Vh+lTfqBmjL0wCWenOi5upTwhvp0AaqDO84BHs7DbbODNmNdlu0L6vdIkA0/5
+	kth4HY4k5Xxv+0tjVviOfDveg/Z2EK3RBy4KW/dCYuDE+aZBlXr//XnsLCtzBuu57IEPx6D1qvM
+	bsveJdbh/bedAhXVNRHfeoD1go=
+X-Received: by 2002:a05:7301:6186:10b0:351:27f0:e411 with SMTP id 5a478bee46e88-3515de5a17fmr5307836eec.20.1791449638121;
+        Thu, 08 Oct 2026 01:53:58 -0700 (PDT)
+Received: from obadmin-Precision-3680.atlascopco.group ([167.103.3.1])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3515af26f10sm16351759eec.13.2026.10.08.01.53.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 01:53:57 -0700 (PDT)
+From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/net: test generic-netlink policy dump operation ID
+Date: Thu,  8 Oct 2026 14:24:34 +0530
+Message-ID: <20261008085434.3681647-1-sahaj123.sc@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,299 +79,277 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add two tracepoints to the CONFIG_KAPI_RUNTIME_CHECKS syscall validation
-path so the framework's behavior can be observed without the noise and
-loss of pr_warn_ratelimited():
+Check that a generic-netlink policy dump reports the requested command's
+operation ID rather than zero.
 
-  kapi_syscall_enter - the spec name, the raw argument values, and a
-                       rendered "name=value" list of the specified
-                       parameters (pointer-like values in hex, signed
-                       integers and file descriptors in decimal)
-  kapi_syscall_exit  - the spec name, the return value, and whether it
-                       matched the specification (spec_match)
+Request the policy for CTRL_CMD_GETPOLICY from the control family and
+verify that the response contains operation ID 10. Register the test as
+a generated net selftest and ignore its built binary.
 
-Both fire only for syscalls that have a KAPI specification and live
-inside the existing CONFIG_KAPI_RUNTIME_CHECKS region, so they exist
-exactly when the runtime checks do; they compile to no-ops without
-CONFIG_TRACEPOINTS and stay dormant until enabled. The parameter list
-is rendered only when the enter tracepoint is enabled.
+Tested: reproduces the missing operation ID on 7.0.0-34-generic and
+passes on fixed 7.3.0-rc6-00063-g0c2669a9f4a1 in QEMU.
 
-kapi_syscall_exit is also emitted on the parameter-validation rejection
-path -- where the validator returns -EINVAL and the real handler is
-skipped -- with spec_match=0, so every kapi_syscall_enter has a matching
-exit.
-
-Assisted-by: LLM
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Sahaj Chaudhari <sahaj123.sc@gmail.com>
 ---
- Documentation/dev-tools/kernel-api-spec.rst | 31 ++++++++
- MAINTAINERS                                 |  1 +
- include/trace/events/kapi.h                 | 74 +++++++++++++++++++
- kernel/api/kernel_api_spec.c                | 79 +++++++++++++++++----
- 4 files changed, 173 insertions(+), 12 deletions(-)
- create mode 100644 include/trace/events/kapi.h
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/netlink_policy_dump_opid.c  | 223 ++++++++++++++++++
+ 3 files changed, 225 insertions(+)
+ create mode 100644 tools/testing/selftests/net/netlink_policy_dump_opid.c
 
-diff --git a/Documentation/dev-tools/kernel-api-spec.rst b/Documentation/dev-tools/kernel-api-spec.rst
-index 95b72060f8ef8..818c9b966a0c0 100644
---- a/Documentation/dev-tools/kernel-api-spec.rst
-+++ b/Documentation/dev-tools/kernel-api-spec.rst
-@@ -312,6 +312,37 @@ specification. Kerneldoc annotations cannot set it, so it is only available to a
-     .constraint_type = KAPI_CONSTRAINT_CUSTOM,
-     .validate = validate_buffer_size,
- 
-+Tracepoints
-+-----------
-+
-+When ``CONFIG_KAPI_RUNTIME_CHECKS`` is enabled, the syscall validation path emits
-+two ftrace tracepoints (in the ``kapi`` trace system) for every syscall that has a
-+specification:
-+
-+- ``kapi_syscall_enter`` -- fired before parameter validation, recording the spec
-+  name, the raw syscall argument values, and -- when the spec provides parameter
-+  metadata -- a rendered ``name=value`` list: signed integer and file descriptor
-+  values are shown in decimal, all other values in hex, and an unnamed parameter
-+  as ``arg``.
-+- ``kapi_syscall_exit`` -- fired after the handler returns, or in place of the
-+  handler when parameter validation rejects the call (the handler is skipped and
-+  ``-EINVAL`` is returned). Records the spec name, the return value, and
-+  ``spec_match``: 0 when the parameters were rejected or a successful ``fd`` return
-+  was not a valid file descriptor, and 1 otherwise. Error codes missing from the
-+  spec do not clear it.
-+
-+Unlike the ``pr_warn_ratelimited`` violation reports, the tracepoints capture every
-+spec'd call rather than only violations, and can be filtered with the usual ftrace
-+facilities. They require ``CONFIG_TRACEPOINTS`` and stay dormant
-+until enabled::
-+
-+    # echo 1 > /sys/kernel/tracing/events/kapi/enable
-+    # cat /sys/kernel/tracing/trace
-+     ...  kapi_syscall_enter: sys_read(fd=3, buf=0x7ffd46780b58, count=0x340)
-+     ...  kapi_syscall_exit: sys_read = 832 spec_match=1
-+     ...  kapi_syscall_enter: sys_open(filename=0x480300, flags=268435456, mode=0x0)
-+     ...  kapi_syscall_exit: sys_open = -22 spec_match=0
-+
- DebugFS Interface
- =================
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1d9e55b6bf5ff..20020705921a6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14125,6 +14125,7 @@ S:	Maintained
- F:	Documentation/dev-tools/kernel-api-spec.rst
- F:	include/linux/kapi_syscall.h
- F:	include/linux/kernel_api_spec.h
-+F:	include/trace/events/kapi.h
- F:	kernel/api/
- F:	tools/kapi/
- F:	tools/lib/python/kdoc/kdoc_apispec.py
-diff --git a/include/trace/events/kapi.h b/include/trace/events/kapi.h
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index dacd36ed8455..5fa1c6024672 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -20,6 +20,7 @@ ipv6_fragmentation
+ log.txt
+ msg_zerocopy
+ netlink-dumps
++netlink_policy_dump_opid
+ nettest
+ proc_net_pktgen
+ psock_fanout
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 590b33e16d9f..09960735cb1a 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -186,6 +186,7 @@ TEST_GEN_PROGS := \
+ 	icmp_rfc4884 \
+ 	ipv6_flowlabel_mgr \
+ 	ipv6_fragmentation \
++	netlink_policy_dump_opid \
+ 	proc_net_pktgen \
+ 	reuseaddr_conflict \
+ 	reuseport_bpf \
+diff --git a/tools/testing/selftests/net/netlink_policy_dump_opid.c b/tools/testing/selftests/net/netlink_policy_dump_opid.c
 new file mode 100644
-index 0000000000000..47828f3338828
+index 000000000000..4b53a8853109
 --- /dev/null
-+++ b/include/trace/events/kapi.h
-@@ -0,0 +1,74 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM kapi
++++ b/tools/testing/selftests/net/netlink_policy_dump_opid.c
+@@ -0,0 +1,223 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+#if !defined(_TRACE_KAPI_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_KAPI_H
++#include <errno.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <unistd.h>
 +
-+#include <linux/tracepoint.h>
++#include <linux/genetlink.h>
++#include <linux/netlink.h>
 +
-+/* Max length of the rendered "name=value, ..." parameter list. */
-+#define KAPI_TP_PARAMS_LEN 256
++#include "kselftest.h"
 +
-+/*
-+ * Emitted from the CONFIG_KAPI_RUNTIME_CHECKS syscall validation path for
-+ * syscalls that have a KAPI specification: kapi_syscall_enter fires before
-+ * parameter validation, kapi_syscall_exit after the handler returns.
-+ * @name is the spec name, e.g. "sys_open".
-+ *
-+ * kapi_syscall_enter carries both the raw argument values (args[]) and, when
-+ * the spec provides parameter metadata, a rendered "name=value" list (params,
-+ * built by the caller): pointer-like values in hex, integers and fds in decimal.
-+ */
-+TRACE_EVENT(kapi_syscall_enter,
++#define REQUEST_SIZE 128
++#define REPLY_SIZE 4096
 +
-+	TP_PROTO(const char *name, int nargs, const s64 *args, const char *params),
++struct genl_request {
++	struct nlmsghdr nlh;
++	struct genlmsghdr genl;
++	char attrs[REQUEST_SIZE];
++};
 +
-+	TP_ARGS(name, nargs, args, params),
-+
-+	TP_STRUCT__entry(
-+		__string(	name,	name	)
-+		__field(	int,	nargs	)
-+		__array(	u64,	args,	6	)
-+		__string(	params,	params	)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name);
-+		__entry->nargs = nargs;
-+		memset(__entry->args, 0, sizeof(__entry->args));
-+		if (args && nargs > 0)
-+			memcpy(__entry->args, args,
-+			       min_t(int, nargs, 6) * sizeof(__entry->args[0]));
-+		__assign_str(params);
-+	),
-+
-+	TP_printk("%s(%s)", __get_str(name), __get_str(params))
-+);
-+
-+TRACE_EVENT(kapi_syscall_exit,
-+
-+	TP_PROTO(const char *name, long ret, bool spec_match),
-+
-+	TP_ARGS(name, ret, spec_match),
-+
-+	TP_STRUCT__entry(
-+		__string(	name,		name		)
-+		__field(	long,		ret		)
-+		__field(	bool,		spec_match	)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name);
-+		__entry->ret = ret;
-+		__entry->spec_match = spec_match;
-+	),
-+
-+	TP_printk("%s = %ld spec_match=%d",
-+		  __get_str(name), __entry->ret, __entry->spec_match)
-+);
-+
-+#endif /* _TRACE_KAPI_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
-diff --git a/kernel/api/kernel_api_spec.c b/kernel/api/kernel_api_spec.c
-index c3b220104c04b..993674ce67789 100644
---- a/kernel/api/kernel_api_spec.c
-+++ b/kernel/api/kernel_api_spec.c
-@@ -751,6 +751,45 @@ EXPORT_SYMBOL_GPL(kapi_export_json);
- 
- #ifdef CONFIG_KAPI_RUNTIME_CHECKS
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/kapi.h>
-+
-+/*
-+ * Render a syscall's parameters as a "name=value, ..." string for the
-+ * kapi_syscall_enter tracepoint.  Names come from the spec; pointer-like
-+ * values are shown in hex, integers and file descriptors in decimal.
-+ */
-+static void kapi_trace_format_params(const struct kernel_api_spec *spec,
-+				     const s64 *args, int nargs,
-+				     char *buf, size_t size)
++static int add_attr(struct genl_request *request, size_t size, uint16_t type,
++		    const void *data, size_t data_size)
 +{
-+	int i, used = 0;
++	size_t offset = NLMSG_ALIGN(request->nlh.nlmsg_len);
++	size_t attr_size = NLA_HDRLEN + data_size;
++	size_t aligned_size = NLA_ALIGN(attr_size);
++	struct nlattr *attr;
 +
-+	buf[0] = '\0';
-+	/* Bound by the caller-supplied arg count; the spec arity may differ. */
-+	for (i = 0; args && i < nargs && i < 6; i++) {
-+		const char *name = "arg";
-+		bool dec = false;
++	if (offset + aligned_size > size)
++		return -E2BIG;
 +
-+		if (i < spec->param_count) {
-+			const struct kapi_param_spec *ps = &spec->params[i];
++	attr = (struct nlattr *)((char *)request + offset);
++	attr->nla_len = attr_size;
++	attr->nla_type = type;
++	memcpy((char *)attr + NLA_HDRLEN, data, data_size);
++	memset((char *)attr + attr_size, 0, aligned_size - attr_size);
++	request->nlh.nlmsg_len = offset + aligned_size;
 +
-+			if (ps->name)
-+				name = ps->name;
-+			dec = ps->type == KAPI_TYPE_INT || ps->type == KAPI_TYPE_FD;
++	return 0;
++}
++
++static int next_attr(const char **cursor, size_t *remaining,
++		     struct nlattr **attr)
++{
++	size_t length, aligned_length;
++
++	if (!*remaining)
++		return 0;
++	if (*remaining < NLA_HDRLEN)
++		return -EBADMSG;
++
++	*attr = (struct nlattr *)*cursor;
++	length = (*attr)->nla_len;
++	if (length < NLA_HDRLEN || length > *remaining)
++		return -EBADMSG;
++	aligned_length = NLA_ALIGN(length);
++	if (aligned_length > *remaining)
++		return -EBADMSG;
++
++	*cursor += aligned_length;
++	*remaining -= aligned_length;
++	return 1;
++}
++
++static int find_op_id(const struct nlattr *op_policy, bool *found)
++{
++	const char *cursor = (const char *)op_policy + NLA_HDRLEN;
++	size_t remaining = op_policy->nla_len - NLA_HDRLEN;
++	struct nlattr *attr;
++	int ret;
++
++	while ((ret = next_attr(&cursor, &remaining, &attr)) > 0) {
++		if ((attr->nla_type & NLA_TYPE_MASK) == CTRL_CMD_GETPOLICY)
++			*found = true;
++	}
++
++	return ret;
++}
++
++static int parse_policy_message(const struct nlmsghdr *nlh, bool *found)
++{
++	const char *cursor = (const char *)nlh + NLMSG_LENGTH(GENL_HDRLEN);
++	size_t remaining = nlh->nlmsg_len - NLMSG_LENGTH(GENL_HDRLEN);
++	struct nlattr *attr;
++	int ret;
++
++	while ((ret = next_attr(&cursor, &remaining, &attr)) > 0) {
++		if ((attr->nla_type & NLA_TYPE_MASK) == CTRL_ATTR_OP_POLICY) {
++			ret = find_op_id(attr, found);
++			if (ret < 0)
++				return ret;
++		}
++	}
++
++	return ret;
++}
++
++static int check_policy_dump(int fd)
++{
++	struct genl_request request = {
++		.nlh = {
++			.nlmsg_len = NLMSG_LENGTH(GENL_HDRLEN),
++			.nlmsg_type = GENL_ID_CTRL,
++			.nlmsg_flags = NLM_F_REQUEST | NLM_F_DUMP | NLM_F_ACK,
++			.nlmsg_seq = 1,
++		},
++		.genl = {
++			.cmd = CTRL_CMD_GETPOLICY,
++			.version = 1,
++		},
++	};
++	char reply[REPLY_SIZE];
++	const __u16 family_id = GENL_ID_CTRL;
++	const __u32 op = CTRL_CMD_GETPOLICY;
++	bool found_op = false;
++	struct sockaddr_nl kernel = {
++		.nl_family = AF_NETLINK,
++	};
++	ssize_t sent;
++	int ret;
++
++	ret = add_attr(&request, sizeof(request), CTRL_ATTR_FAMILY_ID,
++		       &family_id, sizeof(family_id));
++	if (ret)
++		return ret;
++	ret = add_attr(&request, sizeof(request), CTRL_ATTR_OP,
++		       &op, sizeof(op));
++	if (ret)
++		return ret;
++
++	sent = sendto(fd, &request, request.nlh.nlmsg_len, 0,
++		      (struct sockaddr *)&kernel, sizeof(kernel));
++	if (sent < 0)
++		return -errno;
++	if (sent != request.nlh.nlmsg_len)
++		return -EIO;
++
++	for (;;) {
++		ssize_t received = recv(fd, reply, sizeof(reply), 0);
++		size_t offset = 0;
++
++		if (received < 0) {
++			if (errno == EINTR)
++				continue;
++			return -errno;
 +		}
 +
-+		used += scnprintf(buf + used, size - used, "%s%s=",
-+				  i ? ", " : "", name);
-+		if (dec)
-+			used += scnprintf(buf + used, size - used, "%lld",
-+					  (long long)args[i]);
-+		else
-+			used += scnprintf(buf + used, size - used, "0x%llx",
-+					  (unsigned long long)args[i]);
++		while (offset + NLMSG_HDRLEN <= received) {
++			struct nlmsghdr *nlh = (struct nlmsghdr *)(reply + offset);
++			size_t aligned_length;
++
++			if (nlh->nlmsg_len < NLMSG_HDRLEN ||
++			    nlh->nlmsg_len > received - offset)
++				return -EBADMSG;
++			if (nlh->nlmsg_seq != 1) {
++				offset += NLMSG_ALIGN(nlh->nlmsg_len);
++				continue;
++			}
++			if (nlh->nlmsg_type == NLMSG_ERROR) {
++				int error;
++
++				if (nlh->nlmsg_len < NLMSG_LENGTH(sizeof(error)))
++					return -EBADMSG;
++				error = *(int *)NLMSG_DATA(nlh);
++				if (error)
++					return error;
++			} else if (nlh->nlmsg_type == NLMSG_DONE) {
++				if (nlh->nlmsg_flags & NLM_F_DUMP_INTR)
++					return -EINTR;
++				return found_op ? 0 : -ENOENT;
++			} else if (nlh->nlmsg_type == GENL_ID_CTRL) {
++				if (nlh->nlmsg_len < NLMSG_LENGTH(GENL_HDRLEN))
++					return -EBADMSG;
++				ret = parse_policy_message(nlh, &found_op);
++				if (ret < 0)
++					return ret;
++			}
++
++			aligned_length = NLMSG_ALIGN(nlh->nlmsg_len);
++			if (aligned_length > received - offset)
++				return -EBADMSG;
++			offset += aligned_length;
++		}
 +	}
 +}
 +
- /**
-  * kapi_validate_fd - Validate that a file descriptor value is in valid range
-  * @fd: File descriptor to validate
-@@ -1211,16 +1250,24 @@ EXPORT_SYMBOL_GPL(kapi_validate_param_with_context);
- int kapi_validate_syscall_params(const struct kernel_api_spec *spec,
- 				 const s64 *params, int param_count)
- {
--	int i;
-+	int i, ret = 0;
- 
- 	if (!spec || !params)
- 		return 0;
- 
-+	if (trace_kapi_syscall_enter_enabled()) {
-+		char pbuf[KAPI_TP_PARAMS_LEN];
++int main(void)
++{
++	struct sockaddr_nl local = {
++		.nl_family = AF_NETLINK,
++	};
++	int fd, ret;
 +
-+		kapi_trace_format_params(spec, params, param_count, pbuf, sizeof(pbuf));
-+		trace_kapi_syscall_enter(spec->name, param_count, params, pbuf);
++	ksft_print_header();
++	ksft_set_plan(1);
++
++	fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, NETLINK_GENERIC);
++	if (fd < 0)
++		ksft_exit_fail_perror("opening generic-netlink socket");
++	if (bind(fd, (struct sockaddr *)&local, sizeof(local))) {
++		close(fd);
++		ksft_exit_fail_perror("binding generic-netlink socket");
 +	}
 +
- 	/* Validate that we have the expected number of parameters */
- 	if (param_count != spec->param_count) {
- 		pr_warn_ratelimited("API %s: parameter count mismatch (expected %u, got %d)\n",
- 			spec->name, spec->param_count, param_count);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 
- 	/* Validate each parameter with context */
-@@ -1230,12 +1277,22 @@ int kapi_validate_syscall_params(const struct kernel_api_spec *spec,
- 		if (!kapi_validate_param_with_context(param_spec, params[i], params, param_count)) {
- 			if (strncmp(spec->name, "sys_", 4) == 0) {
- 				/* For syscalls, we can return EINVAL to userspace */
--				return -EINVAL;
-+				ret = -EINVAL;
-+				goto out;
- 			}
- 		}
- 	}
- 
--	return 0;
-+out:
-+	/*
-+	 * Emit the exit event on the rejection path too (the wrapper
-+	 * short-circuits the handler on a non-zero return), so every
-+	 * kapi_syscall_enter has a matching kapi_syscall_exit.
-+	 */
-+	if (ret)
-+		trace_kapi_syscall_exit(spec->name, ret, false);
-+
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(kapi_validate_syscall_params);
- 
-@@ -1353,18 +1410,16 @@ EXPORT_SYMBOL_GPL(kapi_validate_return_value);
-  */
- int kapi_validate_syscall_return(const struct kernel_api_spec *spec, s64 retval)
- {
-+	bool valid = true;
-+
- 	if (!spec)
- 		return 0;
- 
--	/* Skip return validation if return spec was not defined */
--	if (spec->return_magic != KAPI_MAGIC_RETURN)
--		return 0;
-+	/* Validate against the return spec when one was defined */
-+	if (spec->return_magic == KAPI_MAGIC_RETURN)
-+		valid = kapi_validate_return_value(spec, retval);
- 
--	if (!kapi_validate_return_value(spec, retval)) {
--		/* Log the violation but don't change the return value */
--		pr_warn_ratelimited("KAPI: Syscall %s returned unspecified value %lld\n",
--				    spec->name, retval);
--	}
-+	trace_kapi_syscall_exit(spec->name, retval, valid);
- 
- 	return 0;
- }
++	ret = check_policy_dump(fd);
++	if (close(fd) && !ret)
++		ret = -errno;
++	if (ret == -ENOENT) {
++		ksft_test_result_fail("missing policy op id %u\n",
++				      CTRL_CMD_GETPOLICY);
++	} else if (ret) {
++		errno = -ret;
++		ksft_test_result_fail("GETPOLICY dump failed: %s\n",
++				      strerror(errno));
++	} else {
++		ksft_test_result_pass("policy dump identified command id %u\n",
++				      CTRL_CMD_GETPOLICY);
++	}
++	ksft_finished();
++}
 -- 
-2.53.0
+2.43.0
 
