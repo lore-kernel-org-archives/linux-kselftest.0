@@ -1,65 +1,65 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F25391842
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 14:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9242C44C4F8
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 14:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791469664; cv=none; b=fIcCsX8LFEjCAicRrz4leY6dFTeNyMu3WLiv0GUthJtwOU3DoNsoiXxd1G+NZF6HXGY/Nwqy3hFaFNx0ooIuf/BNu3TjZ0MMkQMQwksbC8Y0zc+TSL97SW1xGk0ZGhUHNZ+W9tpCwuKkFbDYl0hU7sb5laezOguc8lfIHQzm/G4=
+	t=1791469667; cv=none; b=k05gOos0jJ8fhqlBzJz7lzIZd4RSKvTJ4Xb4CnNZ6flRKNtAggJrjeF7e+ckKC8DEnu48QmWNnTDYExX+gk6Ml4RgnTs6Tg9kPZg5QnnBk8/l+ZCJM8nK+FH/mihewUHDQNAZU/ud0pYQnekSUPeP+Ip/Y55hD2Ij8S/FldzJ84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791469664; c=relaxed/simple;
-	bh=WaB0/OBi7Xz0AZ1aEUaODytn+pEkREAfIuXYAwlsKy0=;
+	s=arc-20240116; t=1791469667; c=relaxed/simple;
+	bh=m5ow1J9jdoEMi1CXJk8/S4UkgRL/ss96Vuk19sTxtY8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=j+0f2EI1HMBEbw3reGPUNNOFD5tzC/BeAeLiTlE5wQKa7WHc9jA81u0IYZqTNBp3f7s1XycS3c2n45276hkHH5VQsVq2imiHSnwB2LQrNF+VDyERXEoYjXvESPi9Nm0H6RnBWro4qBXF/L65LUWdfo0FbNjYBfPX/d5G9pQygYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XCsHPTL+; arc=none smtp.client-ip=209.85.221.51
+	 MIME-Version:Content-Type; b=Uj66rukUv1n0L/AktvjWAWTTTjL/KPbhvV/SSdFJN2lD+mK1UcpoU28L6vOXU0G5w0Agtus08xGTwyaKCLoev5DT9zuy24QuCPUNX3CPkLGNHSgHaU+kNpnkPdQZ/SeTDQaG1bxw2I8xpvMGRM8xQdtids/zTtwz4qeaoDtpUqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ei+sdUeB; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XCsHPTL+"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48c4be28b82so2783436f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 07:27:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ei+sdUeB"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a16c1608faso9452675e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 07:27:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791469661; x=1792074461; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791469664; x=1792074464; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Ny/9gEnpxHKxqOxqx4ATI59L/h/kxApeZ/xGlP7B7Q4=;
-        b=XCsHPTL++YTqy3qn7s7xabwe7/EIKkajN4MyzCc33FRltDSuYv/SURwL/s7gAJxSHA
-         SuC17+fpEN/Zr7SO0N62A54mM9gHjYP9lyPFSGXE5gqiLC2FqsFXooJdqZ48+YAZcaTB
-         TcfofNTiQFcIZ+DzbmGndHnEq6BC1Eexv0Frv8u2vrhnzekr/c3th1u5yciRXIpZqTzs
-         /o9R0tRsko4otOFgmKvriOj7/witSZLjYESyNmZc/7wM/dVcgRPyD+gxpT5GPPP82YRE
-         wBge/SdYMtB7Z+04i0DY4Fw5RgnusNLdzE5mMM9sbmFjbkPDPqTq2C+qyTel67TOisDK
-         lsPw==
+        bh=YZISr/L9O4I7MRbnn9NJb2XEWKkc1K5iiNHqgDIFDWo=;
+        b=Ei+sdUeBu1qLgwTVVj2LrRNhBdlQStMypGTqf3C7xtNblB1TVX/dUJMVb0St3F7P+g
+         acC3ay1aoyeiQQEmk2K0MTBsfRAsMcs6lKClV6zga+9EzvVL5puFUCzx5MauWIsIbG/c
+         iv+AgUdHds1ws3BQ3Re6DvazqpQ7q7G0JHY5uY+H9cUkw9ay1fGbUyDGksr5HseZAjkO
+         1PhZ8BMN1xPPdIhN1A6AcikOL/ETtIFFpFN2pmGyju0czYEmuTrmE/lFvDEzu0JaIxKA
+         ygzvNXDbt7be/Wzk85AkaysVvTSHJDgri2cPs30Bcr3OSCLJbR6WMvVuuslCXTRGvZjq
+         epXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791469661; x=1792074461;
+        d=1e100.net; s=20260707; t=1791469664; x=1792074464;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Ny/9gEnpxHKxqOxqx4ATI59L/h/kxApeZ/xGlP7B7Q4=;
-        b=lJlxEIZYGg2WoE3hgTiqrMh30EY369lQMY1EoPXZU4Xn2/YYBZClbp/SJt4MMJvsrG
-         YdtO3DRj1I/QmnNaZ9XZMKVPdmwtpXzkRDMJQNAe5xI8tx6FdPNWGKhqvzoR4lO658gS
-         YFax0NRljSi5evaVJV0LSclggsj2Fm6nMzOEI2NnnaG2cQnBd6ynZY6abOY/rY2dY5f9
-         DppthIrRdZVb2cCvU9dlw/Pv93qVAypW2rSLbxXKZjPSLkddSLOX5bk5qQ9qIRRpVQFb
-         K6q6KT3AE73GEruX/3+r1+8InjmL06JwM/Lt3DYf0oJMC8e7Of+INJQyGmONVUiljKJo
-         TXWA==
-X-Forwarded-Encrypted: i=1; AKwUvBx/Z/PPAvrJzNN03AnauxlpC6drh+PshTK4TdgMg1FUgEGaQnSEfjzosKqnK6tLTu64yBnzkPirNGfkq9HDc30=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJIBxhzfaVx1G3kf+YHPrpfMUZ8IFWQw5GpJOL5LhT293xzUME9
-	BF0T6sjlJZHDNb5kcV86qJfLsqmnNjD2fBvqTV1BbigxddX6X/rUGJKQ
-X-Gm-Gg: AYBFou3p+oUoHkcSgCyxHUuJ44Bietn2ia/w1h82w8pwREZFBjcWXbEF6vBEAwh5ElG
-	aMxNQ+CeGDug9EBjIs1ExcqX2LvpyZrb3WlnYuSjhucVOIFitgKVwCtT3KxBjDjKE8N693MTWIk
-	1PjbMTkRpe3sZGsiLnt9Iee8Lmzjyy/u/rftEG1AiV2ztb1ASPYUb2UPetp8pfUZi6e+6ItgLir
-	NnTrE2myNcedCMjTjHAgUGqGXyvltHcOuDQ5RVNTLIt4OOPQbuFtTlqBVmfSlazIT+ldszU1bfv
-	dZ8BhNZ1nAzc/gIqRZK6C6/XHaLTgFDb413o4qQGkDftrvTqBBLWJazF4OG8mpPRSuLL8WT9GYV
-	fp5LkIqkL8JwaH0qwAYYaQctX4t0JCKM9Ms7bRv2H2jpu+ZfDpMx+LeDJGTGVOJ+DyryqGyRttd
-	15vL1mo68FfAAVGgbh4/zB3KeiaN10bu+7ak8TDqBS13D9q/MZv79ThFqGM/jY5EW6BwmUwYswK
-	Rr5H1Ml3W1V3CCuFCvgW1U=
-X-Received: by 2002:adf:e19d:0:b0:488:79a2:3232 with SMTP id ffacd0b85a97d-48c7278c0e3mr12010002f8f.31.1791469660708;
-        Thu, 08 Oct 2026 07:27:40 -0700 (PDT)
+        bh=YZISr/L9O4I7MRbnn9NJb2XEWKkc1K5iiNHqgDIFDWo=;
+        b=wCBf3wID3ZwPnavSYYSGnU78K7d1uMr47xWUj/dPBrtLnMJ1lxCF8StPzuXPc4RqTU
+         ngqnuEpA+zriBvl9vDQAAdLdbxnxLL+tlsaODLq8F76qa4nSEXv6rMhgcCrlYEBUp0p0
+         udBHI4DhTBvg1joGAbcxumrKswyrvPJsh3yKQt6zrix05ZlnFnQZ5Itr/y3GeJzXD/2L
+         CVgPmJz/1+ETmITdzwdc6tHUg5/rga8bGpJk9lKIvcYgQ6qHjPvz/a6O8wRcTMrtB/cC
+         hzUB2yabEJKZ113nQ0u6ewcHNr/2mtimHIOnmMPReux99qBuILcu9tgLTMbAI+mxDIGm
+         q7jg==
+X-Forwarded-Encrypted: i=1; AKwUvBytfaA9kO3RtS6nx16Pk76pukKBkjlvykHxkzxk2FTAI7jzNf/rSQzX7hIW+KTZoU+Ls+uyUsGBgolxUx8RpGE=@vger.kernel.org
+X-Gm-Message-State: AFuF++lbPfKTCMMWRGi50YJ8F/curOr/AJ5PcgOq5SWcwjhgTpWONBhL
+	VEu6HC9QKGnpsTQFclhjvC4omOwqYOLfjymxkEsNzI0yxp1j7h7XtnUS
+X-Gm-Gg: AYBFou1n44SeTWLnKqOSG2AISC0KE4NKG2k61mEn8ppjoebzPTOiFvLRGaGM3Bi1kue
+	nanyH2m0NlxNdXUmkadAJdgkn2v0PYapMO+ctJb0WHAadzzLHuI0Ukh29NiHfilGv36jRkpcdRC
+	njnsn8APcJY9VKx9SU+bcuVf2tXPL4PvSLrWendkWFHTfyxtoQyB5ohiGTzJPgZ8kHOTkHBleU3
+	FR7QdWs6OMBOMv+IPB+PzWUF8/ej2iyj5NGHnMrVbVnB3kOVjqlWSic5UijB5Nvl0dkjJ0DOHHW
+	9C21I0wo6Yg8V6r1lxwN6o8zLaXpxubYcCFfUD8ghdYhLh6t3peXrVN23PSZl1QwSk8cukWiSMf
+	kMExz6EOLDBmy0CHoSCHe2VB0QYDUmGZUqQQLQuUyckzK7622F9y23c2AbtqObxEeiqkI0BRJez
+	Erz9nHTb4dpGP+ISdBMQyBCDcztEcg9bdqRU+y1K053WDPmMyO13Gs4dCEfXQTtkxt4j0V56npE
+	TdVs1Xlab+Eb99oW/FtF1Q=
+X-Received: by 2002:a05:600c:3e0b:b0:49f:fbad:29ae with SMTP id 5b1f17b1804b1-4a1851c7355mr52692635e9.17.1791469663731;
+        Thu, 08 Oct 2026 07:27:43 -0700 (PDT)
 Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d1e9c2sm10964964f8f.30.2026.10.08.07.27.40
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a17f4480a4sm112187905e9.0.2026.10.08.07.27.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 07:27:40 -0700 (PDT)
+        Thu, 08 Oct 2026 07:27:43 -0700 (PDT)
 From: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>
 To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 Cc: Wang Yan <wangyan01@kylinos.cn>,
@@ -69,9 +69,9 @@ Cc: Wang Yan <wangyan01@kylinos.cn>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 22/27] selftests/landlock: Fix messages and comments in helper programs
-Date: Thu,  8 Oct 2026 16:25:51 +0200
-Message-ID: <20261008142604.39107-24-gnoack3000@gmail.com>
+Subject: [PATCH 23/27] selftests/landlock: Fix stale comments in common.h and audit.h
+Date: Thu,  8 Oct 2026 16:25:52 +0200
+Message-ID: <20261008142604.39107-25-gnoack3000@gmail.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261008142604.39107-2-gnoack3000@gmail.com>
 References: <20261008142604.39107-2-gnoack3000@gmail.com>
@@ -84,115 +84,54 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-* sandbox-and-launch: Describe the actual argument order.
-* sandbox-and-launch, wait-pipe, wait-pipe-sandbox: Report failed
-  read(2) calls as read failures, not write failures.
-* wait-pipe-sandbox: Terminate error messages with a newline, and fix
-  comments naming "." instead of the opened "/".
+* _init_caps() lists more than three capabilities.
+* A 64-bit hexadecimal domain ID has at most 16 digits, not 17.  Size
+  the buffer accordingly and drop a redundant domain_id check in
+  audit_match_record().
 
 Assisted-by: LLM
 Signed-off-by: Günther Noack <gnoack3000@gmail.com>
 ---
- .../selftests/landlock/sandbox-and-launch.c      |  6 +++---
- .../selftests/landlock/wait-pipe-sandbox.c       | 16 ++++++++--------
- tools/testing/selftests/landlock/wait-pipe.c     |  2 +-
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ tools/testing/selftests/landlock/audit.h  | 7 +++----
+ tools/testing/selftests/landlock/common.h | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/sandbox-and-launch.c b/tools/testing/selftests/landlock/sandbox-and-launch.c
-index 3e32e1a51ac5..8b33ddadc63e 100644
---- a/tools/testing/selftests/landlock/sandbox-and-launch.c
-+++ b/tools/testing/selftests/landlock/sandbox-and-launch.c
-@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
- 	char buf;
+diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
+index 173dcd1088db..d23bb2ad3a30 100644
+--- a/tools/testing/selftests/landlock/audit.h
++++ b/tools/testing/selftests/landlock/audit.h
+@@ -274,15 +274,14 @@ static int audit_match_record(int audit_fd, const __u16 type,
+ 		*domain_id = 0;
+ 		if (matches[1].rm_so != -1) {
+ 			int match_len = matches[1].rm_eo - matches[1].rm_so;
+-			/* The maximal characters of a 2^64 hexadecimal number is 17. */
+-			char dom_id[18];
++			/* A 64-bit hexadecimal number has at most 16 digits. */
++			char dom_id[17];
  
- 	/*
--	 * The first argument must be the file descriptor number of a pipe.
--	 * The second argument must be the program to execute.
-+	 * The first argument must be the program to execute.  The second and
-+	 * third arguments must be the file descriptor numbers of two pipes.
- 	 */
- 	if (argc != 4) {
- 		fprintf(stderr, "Wrong number of arguments (not three)\n");
-@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
- 
- 	/* Waits for the parent to try to umount. */
- 	if (read(pipe_parent, &buf, 1) != 1) {
--		perror("Failed to write to the third argument");
-+		perror("Failed to read from the third argument");
- 		return 1;
+ 			if (match_len > 0 && match_len < sizeof(dom_id)) {
+ 				memcpy(dom_id, msg.data + matches[1].rm_so,
+ 				       match_len);
+ 				dom_id[match_len] = '\0';
+-				if (domain_id)
+-					*domain_id = strtoull(dom_id, NULL, 16);
++				*domain_id = strtoull(dom_id, NULL, 16);
+ 			}
+ 		}
  	}
- 
-diff --git a/tools/testing/selftests/landlock/wait-pipe-sandbox.c b/tools/testing/selftests/landlock/wait-pipe-sandbox.c
-index 87dbc9164430..dbc0c2747e9f 100644
---- a/tools/testing/selftests/landlock/wait-pipe-sandbox.c
-+++ b/tools/testing/selftests/landlock/wait-pipe-sandbox.c
-@@ -31,7 +31,7 @@ static int sync_with(int pipe_child, int pipe_parent)
- 
- 	/* Waits for the parent do its test. */
- 	if (read(pipe_parent, &buf, 1) != 1) {
--		perror("Failed to write to the second argument");
-+		perror("Failed to read from the second argument");
- 		return 1;
- 	}
- 
-@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
- 
- 	/* Tries to send a signal, denied by layer1. */
- 	if (!kill(getppid(), 0)) {
--		fprintf(stderr, "Successfully sent a signal to the parent");
-+		fprintf(stderr, "Successfully sent a signal to the parent\n");
- 		return 1;
- 	}
- 
-@@ -88,13 +88,13 @@ int main(int argc, char *argv[])
- 
- 	/* Tries to send a signal, denied by layer1. */
- 	if (!kill(getppid(), 0)) {
--		fprintf(stderr, "Successfully sent a signal to the parent");
-+		fprintf(stderr, "Successfully sent a signal to the parent\n");
- 		return 1;
- 	}
- 
--	/* Tries to open ., denied by layer2. */
-+	/* Tries to open /, denied by layer2. */
- 	if (open("/", O_RDONLY | O_DIRECTORY | O_CLOEXEC) >= 0) {
--		fprintf(stderr, "Successfully opened /");
-+		fprintf(stderr, "Successfully opened /\n");
- 		return 1;
- 	}
- 
-@@ -115,15 +115,15 @@ int main(int argc, char *argv[])
- 	}
- 	close(ruleset_fd);
- 
--	/* Tries to open ., denied by layer2. */
-+	/* Tries to open /, denied by layer2. */
- 	if (open("/", O_RDONLY | O_DIRECTORY | O_CLOEXEC) >= 0) {
--		fprintf(stderr, "Successfully opened /");
-+		fprintf(stderr, "Successfully opened /\n");
- 		return 1;
- 	}
- 
- 	/* Tries to send a signal, denied by layer3. */
- 	if (!kill(getppid(), 0)) {
--		fprintf(stderr, "Successfully sent a signal to the parent");
-+		fprintf(stderr, "Successfully sent a signal to the parent\n");
- 		return 1;
- 	}
- 
-diff --git a/tools/testing/selftests/landlock/wait-pipe.c b/tools/testing/selftests/landlock/wait-pipe.c
-index 0dbcd260a0fa..3cfa4dce5f35 100644
---- a/tools/testing/selftests/landlock/wait-pipe.c
-+++ b/tools/testing/selftests/landlock/wait-pipe.c
-@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
- 
- 	/* Waits for the parent do its test. */
- 	if (read(pipe_parent, &buf, 1) != 1) {
--		perror("Failed to write to the second argument");
-+		perror("Failed to read from the second argument");
- 		return 1;
- 	}
- 
+diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
+index ae6a0eb8e343..f0e8d3a498b3 100644
+--- a/tools/testing/selftests/landlock/common.h
++++ b/tools/testing/selftests/landlock/common.h
+@@ -34,7 +34,7 @@ static const char bin_wait_pipe_sandbox[] = "./wait-pipe-sandbox";
+ static void _init_caps(struct __test_metadata *const _metadata, bool drop_all)
+ {
+ 	cap_t cap_p;
+-	/* Only these three capabilities are useful for the tests. */
++	/* Only these capabilities are useful for the tests. */
+ 	const cap_value_t caps[] = {
+ 		/* clang-format off */
+ 		CAP_AUDIT_CONTROL,
 -- 
 2.56.0
 
