@@ -1,58 +1,47 @@
-Received: from mail-108-mta184.mxroute.com (mail-108-mta184.mxroute.com [136.175.108.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0447A3E40F1
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 21:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE8C44236C;
+	Thu,  8 Oct 2026 22:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791496528; cv=none; b=E6jUz+WSEwvG+pnVQTruNepXTUfnHupVvtHcFdtL0c8Ooft3xx4q8RnaCv55EGKCuREofXGGaPQ/D2DYf1qWpXoDxtwh/5dIjAKCrLjDb2A18/h+wNAzi/yn7jofd4B3hMEBe6o16IDi8/UNO/ZjSN/b0UskQ2jH3JUKdLZ7O2o=
+	t=1791498002; cv=none; b=myJ3mdghw33nRuAu2/Cu6sO8xqVgQWDmklHVM4U7HbTzBaGl5QuGH8JwP92o1PVNo2zFoczrT6QqR9eDjDQuam0bOgcb/lb92a5zp1qOmqKJO4EkYHio/D7BOVeJJhSAll0gSNmUiswpmMKs2Fq2UNWvt8DZBd9av9gM34oh5os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791496528; c=relaxed/simple;
-	bh=c4l5RBazXn6/+Pc9tySU9rlkdsVQPHHcOKBG5yyagyE=;
+	s=arc-20240116; t=1791498002; c=relaxed/simple;
+	bh=c14MBtjHNc4ACORmN1vzES6FImHwToNLRblquggXvjY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N1++/w5unR0HZvHaE9vesQPacMZGjj1WLbcLm0XadBi3ujqP1Pm1x5qraNe3ng22uSC1ZJAj8hk8cx4TkbTWGO6ewZE0dJGsvnKZihAcDzTqzvGAfcSksCgtmPmN3nZmVG/+PCWBYiD3JJbtahiSnkzvPQNFlj4mG+WR1dm0n+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=PgarrB5j; arc=none smtp.client-ip=136.175.108.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wii.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=LLPS80N9gzPpTBRHcbgyU8vGgfbDRxk7gZzxJSDbJNNNMnX4jU05Nhi0aF/ezCBx1oOztuGczox5XPeFW8pxjxD6iMQHSlQR2lr44OIPEETAI/61vOV/07SJTaF8nmjbRTUMWc3KjfVTSSQy/zVEUMkXjqWcoZ4Eee0FV3SQO0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=coJ70yLR; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="PgarrB5j"
-Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta184.mxroute.com (ZoneMTA) with ESMTPSA id 1a11d7ee08e00028b2.00a
- for <linux-kselftest@vger.kernel.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 08 Oct 2026 21:50:16 +0000
-X-Zone-Loop: 494897e1e9e4ea4baa40f4c17d44128964ecd21bd9a2
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
-	s=x; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc
-	:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=lqea7rGBKvKpY7AYlCRspZQWiphjDKygVuiDmAgiRkQ=; b=PgarrB5jyAE+Ss0Skb/ufVgpPz
-	K+gZBVCW+QkwGjsPMSD/uZNCNwojYjkFNhdy8u0+1qAAkgxl4P+t/uJK2tx8Sv13TYU74mUkgmMND
-	wIyguSxwyfhIk35X8amp/KkpMGrAhGVBYalPyKfPcLu8KDCQWgIwdM/lINrxuwD6rmAbtHlf4MX/L
-	49STTu9u/2jWi2W0iRBqlPNNO33cmyZP65H48vs38/9kHIwZ/A6OLkXCf9cNk0nD9VizZNHLmeFc9
-	riKWPCs0rNoCRVHqCgbLi5yNmCAqMiFZ5skdstt5ANHSZPLYvLanmv0mdMNNbY/32P82YaE+pslqF
-	g52DrJYQ==;
-Date: Thu, 8 Oct 2026 21:50:06 +0000
-From: Richard Patel <ripatel@wii.dev>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "x86@kernel.org" <x86@kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"tglx@kernel.org" <tglx@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"kees@kernel.org" <kees@kernel.org>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 1/3] x86/shstk: ban ia32 sigreturn when shadow stack is
- enabled
-Message-ID: <asgQDlpnDwu04oZc@wii.dev>
-References: <20261008201610.1003569-1-ripatel@wii.dev>
- <20261008201610.1003569-2-ripatel@wii.dev>
- <e1a26ac75c39673d043b2860f848827fecbcb843.camel@intel.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="coJ70yLR"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 825431A1199;
+	Thu,  8 Oct 2026 22:19:56 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A3AD76074E;
+	Thu,  8 Oct 2026 22:19:55 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0D22E11D72422;
+	Fri,  9 Oct 2026 00:19:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1791497991; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=8zuRPMu3NfvVMk5IGAQBKJmMiBz/C5HT/g3jm1/ORc8=;
+	b=coJ70yLRBS6EwEUG4kiWRitMaygmxrxkfKCz/t7niN6G2SDRWemJJ28XwWIdRjHMbrQIK/
+	946ZmiaGTHejjjadEGWfJ98nL7JtV2ELSM+uQuBokgkirm+JIamUHLoBC9n7Ph8psjxCVV
+	u8q6x35ZHGq0u2Ygrvr2s2Yb/gCmEiTXJeUF2Rruy8alZw+/iEnNdNP2CQObEbyJaR8YvZ
+	DAcfxMAOgC3OEqbOrEQrmagCWe4TocJAzKduCw4GD3qyCmIKmRuDe3+E0aN5IAvEJe2WBE
+	m6722NVeKRvmsdUdw/MJmLdZ/+QX6kSIcdLmGHeDL7Q3t8JWtCiFc1VUuQ5A+A==
+Date: Fri, 9 Oct 2026 00:19:47 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 0/3] selftest: rtc: rtctest: improve handling of skipped
+ tests
+Message-ID: <20261008221947733e6a69@mail.local>
+References: <20260916213108.9234-5-wsa+renesas@sang-engineering.com>
+ <asfzfFuBFVKP5WQA@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,34 +50,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e1a26ac75c39673d043b2860f848827fecbcb843.camel@intel.com>
-X-Authenticated-Id: ripatel@wii.dev
+In-Reply-To: <asfzfFuBFVKP5WQA@shikoro>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, Oct 08, 2026 at 08:59:57PM +0000, Edgecombe, Rick P wrote:
-> On Thu, 2026-10-08 at 20:16 +0000, Richard Patel wrote:
-> > When returning from a signal via x32 or x64 rt_sigreturn, the
-> > shadow-stack-restore token is validated, but ia32 (rt_)sigreturn
-> > do not call restore_signal_shadow_stack().
-> > 
-> > With IA32_EMULATION, 'int $0x80' allows ia32 sigreturn in 64-bit
-> > mode, which could defeat sigreturn protection.
-> > 
-> > Refuse ia32 sigreturn by forcing a SIGSEGV instead.
+On 08/10/2026 21:48:16+0200, Wolfram Sang wrote:
+> On Wed, Sep 16, 2026 at 11:31:08PM +0200, Wolfram Sang wrote:
+> > Here are some fixes for issues I found in 'rtctest' while checking RTC
+> > drivers. Details are in the patch descriptions. Patches 1+2 have been
+> > tested on HW. Patch 3 has not been tested, just follows the pattern of
+> > patch 2, but may need more discussion in general. Please read there.
+> > Looking forward to comments!
 > 
-> How can it defeat protection? If doesn't process the shadow stack sigframe at
-> all, leaving the SSP where ever it was originally. What am I missing?
+> I guess at least patches 1+2 are good to go? Who would pick them,
+> Alexandre or Shuah?
+> 
 
-The selftest demonstrates that 'int $0x80' rt_sigreturn from 64-bit mode
-jumps to an arbitrary %eip in the signal frame (zero-extended to %rip), \
-whereas the 'syscall' variant raises SIGSEGV if %rip is corrupt.
+We discussed it at LPC, I'll take the patches.
 
-I don't think it matters that SSP is still at the old place. It would
-only break 'ret' after sigreturn, but the problem is that the sigreturn
-itself is a wild jump.
-
-"defeat protection" was badly worded, I just meant that the 'syscall'
-path has protections that the 'int $0x80' path doesn't have, so I
-thought it'd be worth fixing.
-
-I might be missing something, maybe SHSTK never intended to defend
-against a wild sigreturn? Either way, it's not a security thing.
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
