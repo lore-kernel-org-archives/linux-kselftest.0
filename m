@@ -1,126 +1,112 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71E63F0AAD
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 13:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3EFA41DE0D
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 13:28:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791465226; cv=none; b=m29RuLer0xKNOtNGPUowze7PoLVv7KV8XrX3cOEiyebHlfTzf+BdIaOFOLnXK6yoTiS8AlXHH/Kl9rGwO0wBr5eS+b+T0NzVBKyS7pzXyRwtacGfgvxMzX1UOHBlfIRbdIDU+KmB0ixPJFv0xvvPKrIavqH/rM/BuP2qCDUyje4=
+	t=1791466100; cv=none; b=iLBraKPjO2JMm3F17weEXX+p8OGngnOip01HeFp+OptZIuBWkgYLP0HJlv7kDEBCjPg4QW2L+yr1ZGbm+ywIDncCPrmNdpjMQ7cuJdeFpu0xVbe+eMHMlIoG3V62QBcqU2tUYU5cPPUA2Io1Sg4l4QzVQMOJmM8bmnlpwdWIhbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791465226; c=relaxed/simple;
-	bh=7qtI5gtgg8HMBmacX6qKEDXcXJKwtRBJ+yKlbMqIu+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gtnhoqorOu2eocQ85mq+fuFdHCeXIWBkwvj5ZcJafRcB/T+2u+wxXx9NWsangaPF2KbeTd5Q3cqzmiIWVilVc7wEziqkbtE8y6h285uVyOL033SGHUIDJDiXexkyB4FTZSp7U3k+n4LEME89bCkoA+7uv3ZFwGGBK+RhhY1LGuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=D1SCMzeS; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1791466100; c=relaxed/simple;
+	bh=3R/PP0BkijAtN5s/RgbkARHKRw+0zrd1A71c6+B2xBY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=RUudluBu0E5PiXSQv3Dcwi59bqkLf631HylRc3C5kKqh+9qZt9Jz5vxiTgDzvBMLOTJyt/TYgdYUkei4LVJTY3YLUCa/rR2XVc+O/gJy01WASHgyz4YERF/OHuJrH6wFBX4qcwRJSudk1yxxdRIUFf+Q3YBiGdN66abQaxm+OzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oYh63opF; arc=none smtp.client-ip=209.85.216.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="D1SCMzeS"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a020e65269so23129095e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 06:13:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oYh63opF"
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3a4b70941efso4489241a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 06:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1791465223; x=1792070023; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=HO3C9RpYvCSZ09L6Ew5V40K2HpvgcXSKkDoFhjI9Kx4=;
-        b=D1SCMzeSC+3lNkcoGtnd5MZUOxDZCN3wuNj/aDJI/4LcSRRqrhAqs/Hi9CUNMcqHFF
-         scv7iSSgs0pq4DXVtxK1HcP+TX2UMEUKqgjygaUCO4jjwffdRYQ35mFnULVYKtlpTSr2
-         NHsGPcZZ4Ck5RTw+UneynMefAFGqW4jY2LdZvX3S5iBQvtZZpf3hZOieucAkZf24jP9V
-         NxADxxZhMnMZ1FL/SL8HTUDY6ROMGb323/c7WVSmvIz551S/ndHuV25o7mDAi9hg1ccq
-         PKvBQP/BYKJM244I8ccBCcDKG4NhIg676rJptZyeAXQKxlYl94D2DZjm9gOjO6SQD5pl
-         U8dA==
+        d=google.com; s=20251104; t=1791466098; x=1792070898; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=oVijSUeLpdQWnKER+UijEtgCAKGDAc7/NKc7zbp415Q=;
+        b=oYh63opFo16WBrejUWo6Ub1+Zgybftzl1v+Be8vZ7r0/Da40o9ItevEjhHVUJo9XvE
+         vaBF0sqD0lLjrWtpwDLVFsa+nNy5T+sokMdBW9jnObYUpN/GFbyo37ATPx/OKKi9xgfj
+         +JjFaCAuYv5D0jz0gKrvQRb8zgtpAnlrue/TRzlQZiIc5JDfx8XwqEqqBvIWmsEMHii8
+         5qLhrhQRSj7qrpeS9oHVWCbN+RrBE0o7ZAld40sples6HQGN6ihDVmKr9N1+SKB3C9VG
+         MGBxkQWJAeSzEeRwPqBsJLvm04PYvQwRs21fm8woiuiyhVWJBBaD0u77jc0+CizHZ5y1
+         UC4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791465223; x=1792070023;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1791466098; x=1792070898;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HO3C9RpYvCSZ09L6Ew5V40K2HpvgcXSKkDoFhjI9Kx4=;
-        b=F52hTDuPmqJl61Lyy5EVMmGjMA22oqBYJQmB6nOU7l6/E+degoeamomZ7jk/yYlQHG
-         xZ3j83gCQAdbB1jC0wHYr/u9BsNqeYbNuFf0P6BheGtlQy6UGZmDpwhmzxCX15g39YFD
-         6CT14JShr+ZwDaOiqt8VoEzlL3ZNMemFQEy6ayfD080fTZb7htNxpkh7ttraI0KGj7vU
-         hA1A9Y8XRsH5heFMec8lGVc+IB9rn18cnjaYK0liAakpTJT/cJdEPTwdQA7dyt0Zmn6w
-         /oMCSq3qu/NkerZ8szzL0EHvedQZLGi5Uf/LQds7eqeEilFg+uTPyyYyjriZN/hrSYgz
-         Hm8A==
-X-Forwarded-Encrypted: i=1; AKwUvBwjuSyZlIFlr/PCHGw2PROqVFMf7aUiaTB3ksQxjlpgsq84NvE12/00div/Ru3Gbum8WoRYtNFl6rpCh+T6CKU=@vger.kernel.org
-X-Gm-Message-State: AFuF++kQ7xV1S4EpRlEbRN0U8KlS71wXurXBZufgZOQI+x2tOyEHZEyd
-	5vNC6b730i8um4FrYeMf+Qpt1a08uytYx7tAHOtOeb3306iN4rYzzQzLDldwY6dwtOo=
-X-Gm-Gg: AYBFou0wXS45OvOO4/uxwDvYobfwytIfPrntZvrt36Q+6IHMscKdh7cv6KpjtvIThr+
-	P5gYZ+UXhmVwo+gKk8+ulwHljZS0Z0ESzaMvtR/KxOUHMZsfQvZE8OsxhMp+5Owny0kD6WAltHR
-	VK7ob66gB20HCgNHAxX0CJX0EFaLuG98hehD3M6Byc9u+oLUq9ZwsE4PFGqY2+9pZwQiFtvdaGf
-	Gr4n0T+tReWD5uYNARwIaWApaINaEREzBE2jKIJGA+RqmzODGuZaA8UIt5Jm+XXdN5W252qwE4T
-	79SdgQGpS/+9xVEjJXfK+r485jPtqazBckMg9cGMdPUg9+nwv7HpDOCTpIGpIpYNuNa7vW/B9Kd
-	8Ycyz/KxvVcvWh7X3EZpkoAavwXmkOBnZAYhbTeH3qKCF/Txuh4KR7VvIRua+kaMQ4iASYS1KFN
-	qzUqbmXkwxXJPT/4kThEfao+fOsRy0uYXbxNpEzo/LpuzH1yyWT9SSZOQFq+hg++MnORQ2d0061
-	5FGDc0tMg==
-X-Received: by 2002:a05:600c:19c7:b0:4a1:70f0:ac2 with SMTP id 5b1f17b1804b1-4a180648d69mr101498205e9.24.1791465222920;
-        Thu, 08 Oct 2026 06:13:42 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F ([185.194.184.20])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a17f493761sm221404825e9.2.2026.10.08.06.13.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 06:13:41 -0700 (PDT)
-Date: Thu, 8 Oct 2026 09:13:38 -0400
-From: Gregory Price <gourry@gourry.net>
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Sasha Levin <sashal@kernel.org>, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org, workflows@vger.kernel.org, 
-	tools@kernel.org, x86@kernel.org, Thomas Gleixner <tglx@kernel.org>, 
-	"Paul E . McKenney" <paulmck@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Dmitry Vyukov <dvyukov@google.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>, 
-	Jake Edge <jake@lwn.net>, David Laight <david.laight.linux@gmail.com>, 
-	Gabriele Paoloni <gpaoloni@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v5 05/11] kernel/api: add API specification for sys_open
-Message-ID: <aseWPV6ZRQM3JOMN@gourry-fedora-PF4VCD3F>
-References: <20261008084956.2911790-1-sashal@kernel.org>
- <20261008084956.2911790-6-sashal@kernel.org>
- <aseRXi7hMWBBc0tB@hallyn.com>
+        bh=oVijSUeLpdQWnKER+UijEtgCAKGDAc7/NKc7zbp415Q=;
+        b=zoj06T6pTJNnGflwm9oxRkiPnJ5TJ5brEbw40klggJmt1k4ypJ9V0l3ybrbQ7k7vWJ
+         Tc20w6/L7FTCXaoyCTwOCyvqv5rOgPpUEjMa41SrnZksli1vzh+WBb3C3hQB/54V6CgD
+         Ai5lZshH7mhpA3WzE1FIavnB6cP+4f3lIfpJ1jHC/WQF1LMM/TDU7BohYcRnMe25fWfI
+         tNQF3Hr6RACP4AifqxH4HIP/Ic3sYXmkTvRLr9P0WrZG9Q9MdJ9R+tawbPGvBEPb7IXZ
+         5Z73S/NBz0yOqwJc0v6Fc+XaJMBastMn7Qihhh/IK4LKHgkHqLOk1PjW0+nyWY7kLesM
+         /SQg==
+X-Forwarded-Encrypted: i=1; AKwUvBxIw8z+10BcY4tiz921I9caSdL2QlcaNqofGirW6vpASImu94Ea1a99D1DH7omqDe+4Wbq+TuCAiErk/ZVMqkA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIL22htyw01KG5V5OqmPuSjuiKtl6AF/uStCxdKLgGuK71+i8WO
+	eygFqVtsrS6J26YsKh6kSW+HsEiesfcOgx0HmaDSqyyyc2QsMvrSGS9wNDjQOqm7lFlrP+7IMej
+	h/+snokw5ZZJAEw==
+X-Received: from pgbd22-n2.prod.google.com ([2002:a05:6a02:64d6:20b0:cc7:ec41:d571])
+ (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:578c:b0:39d:efa9:cd1a with SMTP id 98e67ed59e1d1-3a8a04d48a8mr4379961a91.4.1791466098010;
+ Thu, 08 Oct 2026 06:28:18 -0700 (PDT)
+Date: Thu,  8 Oct 2026 13:28:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aseRXi7hMWBBc0tB@hallyn.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.360.g66cac248cb-goog
+Message-ID: <20261008132813.1966023-1-dmatlack@google.com>
+Subject: [PATCH] selftests/liveupdate: Prefer KVM and HVF over TCG in vmtest.sh
+From: David Matlack <dmatlack@google.com>
+To: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: Jordan Richards <jordanrichards@google.com>, Mike Rapoport <rppt@kernel.org>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Oct 08, 2026 at 07:49:34AM -0500, Serge E. Hallyn wrote:
-> On Thu, Oct 08, 2026 at 04:49:45AM -0400, Sasha Levin wrote:
-> > Add KAPI-annotated kerneldoc for the sys_open system call in fs/open.c.
-> > 
-> > The specification documents parameter constraints (pathname, flags
-> > bitmask, permission mode), 24 error conditions, locking requirements,
-> > side effects, required capabilities, and usage examples.
-> > 
-> > Assisted-by: LLM
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> 
-> I know Kees and Jonathan and others asked for exactly this.  But one
-> downside to this is it makes just paging through fs/open.c a lot more
-> painful.  Maybe it's worth it.  Maybe "noone will ever do that again" bc
-> that's why we have ai and tools.  But a) that's how I've historically
-> done a lot of code research, b) IMO something like a manpages section 2
-> under Documentation/ would be a great place for this, and c) we can also
-> use tools to always sync these, or even show/edit in a single view when
-> you want  ('kdocedit fs/open.c').
->
+Pass the -accel options to QEMU in the order KVM, HVF, TCG, so that
+vmtest.sh prefers to use KVM and HVF over TCG when they are available.
 
-In many, many other projects i've worked on, these docs are placed in
-the header as opposed to the .c file, but I understand there is some
-pain that comes with ifdef.
+QEMU uses the first accelerator in the list that initializes, and TCG
+always initializes, so the tests currently always run under TCG, even
+though the commit that added vmtest.sh describes "automatic accelerator
+detection (KVM, HVF, or TCG)".
 
-Keeping it in the header ties the definition to exactly the location
-external users import to find the function - so it makes sense.
+Fixes: 89dd1421c554 ("selftests/liveupdate: add end to end test infrastructure and scripts")
+Signed-off-by: David Matlack <dmatlack@google.com>
+---
+Tested by running run-vmtests.sh and then observed that arm64 correctly
+fell back to using TCG after trying to use KVM and HVF, and that x86
+reported no warnings.
 
-But separating the contracts from the code guarantees they'll go stale,
-so I don't think shoving it in Documentation/ does anyone any good.
+arm64:
+  qemu-system-aarch64: -accel kvm: invalid accelerator kvm
+  qemu-system-aarch64: -accel hvf: invalid accelerator hvf
+  qemu-system-aarch64: falling back to tcg
 
-~Gregory
+x86:
+  (not warnings)
+
+ tools/testing/selftests/liveupdate/vmtest.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/liveupdate/vmtest.sh b/tools/testing/selftests/liveupdate/vmtest.sh
+index 64fd2ab55b76..69beda6c961d 100755
+--- a/tools/testing/selftests/liveupdate/vmtest.sh
++++ b/tools/testing/selftests/liveupdate/vmtest.sh
+@@ -180,7 +180,7 @@ function run_qemu() {
+ 	echo "# Serial Log: $serial"
+ 	timeout 30s \
+ 	$qemu_cmd -m 1G -smp 2 -no-reboot -nographic -nodefaults \
+-		  -accel tcg -accel hvf -accel kvm \
++		  -accel kvm -accel hvf -accel tcg \
+ 		  -serial file:"$serial" \
+ 		  -append "$cmdline" \
+ 		  -kernel "$kernel_path" \
+
+base-commit: 80cf37169daef112b6bea9ae7d9808355a045475
+-- 
+2.56.0.360.g66cac248cb-goog
+
