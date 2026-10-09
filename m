@@ -1,74 +1,50 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m118211.qiye.163.com (mail-m118211.qiye.163.com [115.236.118.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFE34C2241
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 11:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7AF3DB333;
+	Fri,  9 Oct 2026 11:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.118.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791545555; cv=none; b=cDi/6ayBzRT0ayja40UgJBYP6dYcGCooOyfjB5HHsA6IS1FEPATVqnCnDZqo3Q73NUV0Ll1N4eWx4BoF+1x4Z0HhG9e7F2snqnhbDYeTyl23VLIuliR8gVCDjK+aPkLhGp2VK2YTsEDYpOH983xZbd1Br/m1/z3ghkjcZa5+nsg=
+	t=1791545952; cv=none; b=ob/V/7cm3xr52vx3bGpxPsq0EJG0IbzhwLQp8Ha8K/5iX9tdyMuH6Egugj8V+ftsmU89e/IdYcCZmwMiFX1aZgKP6yYfvosT/XYD3tERRzknx8lqtEFA4kRC7B60P2R9N+zcKVMbx5KCQowss3qeMDxCoBaEvjw9m6mp7/Qk+ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791545555; c=relaxed/simple;
-	bh=JOfTL5sJbEeKUPqnV8GkeCHd+99LXw7TYpKTV4o3L18=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nfE2KR9eMMxbupMZQVyCIbWfmVP0MZriZ+TGU0kUdTYNrVIhpOEccPqLwOgRR1592D4Zk4kprfFuWbgG/NlF7b9iOL/hY0SU2B5TpYIVQ6uXGn/pNxJWFKZk9i9c9C7kszeKIsphYrgcDSWpNtoTnkVg5/H5BJnCLZc/EygX1dM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/eXhsNR; arc=none smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/eXhsNR"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-351f7a0b13bso1050112eec.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 04:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791545540; x=1792150340; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=5bMlxewub9p/T2xvh3MjzZ66gKld4I4neePTrZHO9Yw=;
-        b=k/eXhsNR+usBjAXoyI5R3hSe/Tls1hLcb1FDLXE8BloAjRwR9NnUoowy4K0J4VaY+2
-         IPRF1OHh048i2B2/zHyy39954hSnu+A3kkF0or0OgBdkM0uKwI55NE7bMBEpMKcfXhe7
-         cmGrnX/2bKOTt1aSnJN8WvB9dFrf1iamKPwQyExe8oY3q+7kwg4ZpGSwj6sdsoASO7DT
-         EmHK4dQTchqXroWSTorMQEm2sjx/tYbC2lvvBmNVIbUMhpLWhaSmKt6/w2vaCtwfiDoL
-         wBcKmliggW4a54Ia3Fvbxj2fd/vhNmAWgk2yWuzwd+w/ybh/qjx7wEX1z8k9MmJQlLh1
-         inSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791545540; x=1792150340;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=5bMlxewub9p/T2xvh3MjzZ66gKld4I4neePTrZHO9Yw=;
-        b=h9q9UUBQv43fy2ZpCsk7/PRYLNZtpWNsXeCvVTeRl+X+IOuRYc3OxKBQ0JkP0FNohB
-         IHUwM0UOmRGHjmhsWVKoTzmGkIZEmjuoXcfvnRPALtw51s6sl7NBQAb3FdmQLA9DwTkE
-         j0FkyhwCQhRVsH7CgX55d6VNuojVpnnudRwLdmDYx/Vv+noiMd/sl/+s6WQgFKjs7X4v
-         mhoyxK68lISJVRs9zLMMQI5TqKvyKkglop17dvw5U3e+YB74NrJ7vtMkmUaa3b5Epbq4
-         WstnEdqs9zarClYdu6K7vYdbogwy8m1kQnh5p1hIOXWgTkl6+vrETGoxMHrmCawWJs4j
-         rExA==
-X-Forwarded-Encrypted: i=1; AKwUvBzD2OpjjG4EqUpECoDGhkdr/COl6JeFxBsG1DAdIaYnSh/gxHIRwRLOpVncFCDMKhyYzhF8QhpmHokMh9IJmxc=@vger.kernel.org
-X-Gm-Message-State: AFuF++leCmrfX/QFzfTAH1s58sl/sFx73/pb848QBIf2IlT+FWB79uay
-	b9lRPe3OP/PBjjE0XOEamsS//YVeYpSBjgsVObVIRumtc8F5/YZP86qM
-X-Gm-Gg: AYBFou3wE+0y+NMxzEVYvfg5oQYxZVf5tX7D3qZupkoe6/dhJfZJ3kqf2iG6dD683/2
-	FgO2XidcyXzjMXi0lBkl6P8wqqINlr/LePf151DTMzcV/tjV+8yHpaEkcjWNIfKReQK1QZzhXtX
-	nZB+oPImuZ2VS/qtzbMRovDUgdkpRdcep83QedNOY+k/oDA9z5tbrZEoHmRb0hbI7JtamqXpO+S
-	ytICBB7MQAAFygbnsN9WMLnYKs97Mzhnxj9uuGu5oB1/E+qF4Rh58kqnetQ3vc04MdvIeTsGIpx
-	R2N/xLN+kB1fhq5g+CqcgxKzZtuTmKGNMq7DsCMhkEDk7Nt/iPEABz8i5uQZFcRWGshPA1EKcxi
-	fCKuoH3JxZc+QZRRC+WbqNLGIpt9iBi2a6yThpdbhoD/YGECM41PJjJxGzHXvegdYH8iF2YzA7K
-	1qRGvBH78XNr4/2PHQXzFGEqlQYuH+/82MsLA8FA/aOsPcrAT4ebxMeEULnVHbqPgMIe17LrBmm
-	r2cqK2U
-X-Received: by 2002:a05:7301:dd95:b0:353:58b7:b5fa with SMTP id 5a478bee46e88-3535f48136amr3132590eec.1.1791545539457;
-        Fri, 09 Oct 2026 04:32:19 -0700 (PDT)
-Received: from amd.ban-spse ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cab27d5sm7529934eec.17.2026.10.09.04.32.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 04:32:19 -0700 (PDT)
-From: Priyanka Mani <priyankamani2100@gmail.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Ivan Orlov <iorlov@amazon.com>,
-	kvm@vger.kernel.org,
+	s=arc-20240116; t=1791545952; c=relaxed/simple;
+	bh=cOvv2AQaQEiOSaVHJ5X0j5TdSvyQhjN5cDZ17xIYu0k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aRcKYLK9LKJx9iese+a+4fQsFTt4qXjaScX872UZ4Ogwa5uFQ6P+atcF007mxuUyT3ToT3aKxVFchTUeSbPYVHL1HW4AvCByxxbacvJd0KbEJxeHhuSAlEjnmA+Kf/8+02J7KuNUBmKj+IpcAvQKwUoKcPHvXodha0MIbQs7HdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=115.236.118.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from localhost.localdomain (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1fe29019d;
+	Fri, 9 Oct 2026 19:23:24 +0800 (GMT+08:00)
+From: Zhen Ni <zhen.ni@easystack.cn>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	akpm@linux-foundation.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	brendan.jackman@linux.dev,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftests: Fix ndata size check in test_mmio_during_vectoring
-Date: Fri,  9 Oct 2026 11:30:17 +0000
-Message-ID: <eef6bc34bdf7391c5d3eb4b1ba5e97819e22ae8f.1791542392.git.priyankamani2100@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	linux-kernel@vger.kernel.org,
+	Zhen Ni <zhen.ni@easystack.cn>
+Subject: [PATCH 0/6] mm/page_owner: add bpf_iter and kfuncs
+Date: Fri,  9 Oct 2026 19:23:02 +0800
+Message-Id: <20261009112308.240769-1-zhen.ni@easystack.cn>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,40 +52,67 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa1206750320229kunmd33b3e054cb272
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCTE5OVh1NSBgaTh0eQhhOQ1YVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
+	lPT09IVUpLS1VKQktLWQY+
 
-test_mmio_during_vectoring() verifies that KVM reports the faulting GPA in
-run->internal.data[3] when an emulated MMIO access occurs during event
-vectoring.  kvm_prepare_event_vectoring_exit() always fills five entries
-(info2, reason, info1, gpa, last_vmentry_cpu), i.e. internal.ndata is 5.
+Hi all,
 
-The test, however, checks "ndata != 4" before dereferencing data[3].  That
-predicate does not actually validate the array size: it passes for ndata ==
-3, where data[3] is out of bounds yet is read just below, and it spuriously
-fails if ndata were ever exactly 4.  It only happens to work today because
-KVM returns 5.
+Introduction
+============
 
-Assert the real expected size, ndata == 5, so that the subsequent data[3]
-access is properly guarded and the test enforces the exit's contract.
+page_owner records who allocated every page and is a core memory-debug
+facility, but it currently reaches userspace as the debugfs flat dump:
+slicing allocations by pid, comm, NUMA node, cgroup or stack, etc.,
+means streaming and parsing the entire file in userspace, which is
+expensive on large hosts and hard to query live.
 
-Fixes: 62e41f6b4f36 ("KVM: selftests: Add test case for MMIO during vectoring on x86")
-Signed-off-by: Priyanka Mani <priyankamani2100@gmail.com>
----
- tools/testing/selftests/kvm/set_memory_region_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Exposing the same walk to eBPF lets a program filter and aggregate in
+the kernel and surface only the records it cares about. This series
+adds that access as a seq_file bpf_iter target and an open-coded
+iterator.
 
-diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-index dffe9654f45b..627ebc2ba024 100644
---- a/tools/testing/selftests/kvm/set_memory_region_test.c
-+++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-@@ -606,7 +606,7 @@ static void test_mmio_during_vectoring(void)
- 	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_INTERNAL_ERROR);
- 	TEST_ASSERT(run->internal.suberror == KVM_INTERNAL_ERROR_DELIVERY_EV,
- 		    "Unexpected suberror = %d", vcpu->run->internal.suberror);
--	TEST_ASSERT(run->internal.ndata != 4, "Unexpected internal error data array size = %d",
-+	TEST_ASSERT(run->internal.ndata == 5, "Unexpected internal error data array size = %d",
- 		    run->internal.ndata);
- 
- 	/* The reported GPA should be IDT base + offset of the GP vector */
+Implementation
+==============
+
+The page walk is factored into page_owner_next_eligible(), shared by
+the read path and the iterators so eligibility stays identical. Three
+kfuncs expose information that a BPF program cannot decode from the
+snapshot alone: the NUMA node, per-page memcg info including the full
+cgroup path, and the stack trace behind a stack_depot handle. Each
+record is snapshotted under the page_ext RCU lock, so consumers read
+a consistent copy.
+
+Testing
+=======
+
+The selftest exercises the seq_file and open-coded iterators, and
+validates the get_nid, stack_snprint and get_memcg_info kfuncs.
+
+Zhen Ni (6):
+  mm/page_owner: extract page_owner_next_eligible() from read loop
+  mm/page_owner: add bpf_iter target "page_owner"
+  mm/page_owner: add open-coded page_owner iterator
+  mm/page_owner: add bpf_page_owner_get_nid() kfunc
+  mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
+  selftests/bpf: add tests for the page_owner bpf_iter target
+
+ kernel/bpf/helpers.c                          |   8 +
+ mm/Makefile                                   |   3 +
+ mm/page_owner.c                               | 219 +++++++++++-------
+ mm/page_owner.h                               |  58 +++++
+ mm/page_owner_iter.c                          | 180 ++++++++++++++
+ .../bpf/prog_tests/page_owner_iter.c          | 173 ++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_page_owner.c | 161 +++++++++++++
+ 7 files changed, 722 insertions(+), 80 deletions(-)
+ create mode 100644 mm/page_owner.h
+ create mode 100644 mm/page_owner_iter.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
+
 -- 
-2.43.0
+2.20.1
 
