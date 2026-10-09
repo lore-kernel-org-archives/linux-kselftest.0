@@ -1,168 +1,123 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BFB233942
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 09:28:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AACF3CF210
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 09:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791538097; cv=none; b=jFCBDS7GlzZmk7FR4dPjuw70Hn0XadFQD45FPNOj2zomCUGRWy7goh97GY6+kctTRUk7OcNfRKLPcFS58OVjcGtzrIUe57cLpApu0VjmlKarV+p5qNKspBzXyNEmzUi05MHL9x30iTzUoIiwGkiuj3RAN18wdl4h2Q0sBLqIzqU=
+	t=1791539458; cv=none; b=t/Lfn5LQ+4MztPe22GonGQI7O/ZWKY8JrSyakiAriyx3wMbw96E5/oTIVbhZIiKUAg+q9jciWYCWymmTpOIx4ActqtdqZc8+TDswpzK5EC0VyAnE3esM1Fj4VIsRCG0GzQMVz3+Kd7FRf9QodYSEW5AUi+be1awpwymrhArc3nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791538097; c=relaxed/simple;
-	bh=C0YppfDJJ+x8kMmqVn9KuMn1DV8bXTY/luVZqkTUfpE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tGQw/6I5eyMTWPdypyFrQTxa0X+dw+5TDMBkf/yzBIUuWJ6pgxh9gG+R7h5/pydEvCW1zbAvSZQMvOIAMEK20iv5aer6N9XGVb+irN7H2gUXbvpHk84wTC0nkH2l/proBrIiZjKVdFPX1zGBBDYwylpz42ONQJe3GgwGFKf3KiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jg7RdqDM; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791539458; c=relaxed/simple;
+	bh=Yz6wuPAWR3FnxaZD/Hsy6uS1+1e7lH+YUjWeAZdItXM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s+6tEa7i/LjpzMI+Zqbmm4c3cIllpA3AMyShsV5WaUqU+Zsj5JST4Vc91MsMS1r+xo3di90yDddIsQyjfBbpAbfOtntuaVabxGk4g4lvMV2PABewDRS477T3U91nUxgxsJjI3bcdguK/H36ibTSN3DtiZPx0GfTKBbqmYlo0A3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=HJOGT9n/; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jg7RdqDM"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c20ce3c118aso327995866b.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 02:28:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="HJOGT9n/"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-49d04e4a943so1775875e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 02:50:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791538094; x=1792142894; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uoHrS9ZtPCy6LWxuJaA2Izau9PUZ68iNYzz+yH7AHt8=;
-        b=Jg7RdqDMR92cI/mO8vYSvITnLTR9uttC2GU2fbATLKtP59GkdXeOMektR6u2GbiKiL
-         HxNhstTMA0rmyPbZ5vTy1us9tP9doHxgOK0wjNrwI7+n7qK7r1Sb0TnZCkscTSgqdQKb
-         j0dRv/x8eNzQM6yk74fZDo7jJLoRva3y9XRtT3chkCn9VILSf7oLYPiMfOC4oufreO//
-         mjAEGoP4e9e9AAMO1aTmlieuA+n23D41+lRpHlbZlY19lq6nY09hSWrTvO2M9AdDzPnJ
-         JcPV+3qNuc+XiVDBpCNJArh0Ku8eXbOv2PTZZr1z66oHxE2DzcxR1qzn2OJe0okbmsDF
-         Xl4Q==
+        d=6wind.com; s=google; t=1791539455; x=1792144255; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=mkuIOGDPXPuT/7Tp+eZvAIWGyivfRf31PISNCWLWipU=;
+        b=HJOGT9n/exi7W6Ub/a7/97Ih7XhdRTGSAzdhav22oypY2OoixR7XQGTM58UD6zaq4+
+         QrUneJt1T2XlDLlvNl4oMavkpIkcdQBK4atg47nGl1y5xl17xKxJUf0ITs6t8AP2YODh
+         9emns+a+2aRnOQgamI4y/qh001sX0OMmtGYuokvfFh+ZHPY/122jQo6Qnh0BL2h8WFOb
+         D5a9OX/de3ZP6u0nd0ZLF0H9dOCTQQQtGMc/D5mfVBUhi6R2onzjhKHQIokNHEcoZkTO
+         69neR0pTzLXIXqNWuSKgX4vkeRCeUJb7zkLvZkMOR8eIbqhlM4D9qoWYonx36r8d3VSe
+         B0TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791538094; x=1792142894;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=uoHrS9ZtPCy6LWxuJaA2Izau9PUZ68iNYzz+yH7AHt8=;
-        b=HiTaGcfLuySXSTdoKRUXnMJ+i0MD7N622lc6elzMQJm4TF8vtfViQQ+1LKIbibXD4i
-         kegT5DdSZT+EoxIkzE4Fz8FX4xh4v5ZaXpezuR2cuO31V0lsSOczbArbqgRPhSdJmihI
-         dwUmPOo2Lbfn03OO6htbWFM+35G1YuhqJGBuxtcSKTPPYtQJDpaDH917TuguZoiScetX
-         d66PkPSTZglqzSVFWMNrA//D1UKQcvCOZIjZgH73OIHkstubnRhX7Xps1pCHFtJGJNhM
-         HTO9K6LRmqQu4uIrRHZupxiYMmNDhxSczazPEt528MNU7L/tGpC3lim5g/PoP1FZNpXL
-         lSCQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw+m4jjxOTjCF2poegwNfmhBoPiQHG9zXO3kDOY5Yom0fozp16TSBLQ4oTbCMYVY2dV8IH8pwS3zyx2GsZ87Pw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKZDw5vNLz7F8lmRZNdtMxecVTe6PC2BeF16BPcUPlZ1h6dsOQR
-	5pugufBMgUbxFKjpDHPfkSskqKObzDaj6a36IRJaEG++QKdfxL3PMbl8
-X-Gm-Gg: AYBFou1/fuDuqOt5Hh6bUXU9ln1dWrU5Dm7gQ5S6wlRS6daNR59G7vW7SakkLcLzk7e
-	cyGQMjW4kAs6A0ROSNzXNX1notnkILuHcm6CK5KUaGCW+XppaVhOESlAk1HNelFh3YfpsLYwcXP
-	E8BYNsfaEdlw2uJp6+S8oGgE2oc2dWTPj0vWnoKOZOFBlieyjEZ6FX3o6h4lpMlEqumq2gr3k31
-	Wt1owkLWqdw9xYooivAbTalG5bJaknw32OBnqYWpjVaOW755uwiXifq/FVLr2z/xYvFVVnjUL/z
-	CJvOya06oaLFRcYtvSGLVbtH7oj/I5l4FF9pob74hdx6zGX+8HHr1g91JcKQSyISxxFeWeXFCQ+
-	iDxpWmqIE/e7AVAP1BojW7FJ77IbT2YGAlxoKuf2Lj1TkS0HRGc4waIFabumaWk1DaFSn6NOwzr
-	DU3OaprnSHhEKaQDzcokzwHojPbbNr0zbquwKnIMgMnvOfRuCaG/MRcN/NbFbFWPBiw1R1ZRsWU
-	13jUqa6ATjggSh7/JBv4geFXZGOoIAX6OB1Ht2IaSH+rklidG4=
-X-Received: by 2002:a17:907:97c8:b0:c2e:902e:5208 with SMTP id a640c23a62f3a-c31a9d0eb2cmr140259366b.5.1791538093918;
-        Fri, 09 Oct 2026 02:28:13 -0700 (PDT)
-Received: from buildhost.darklands.se ([2001:9b1:ff:d701:51eb:176f:63d9:53f8])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c31a9767227sm67427366b.11.2026.10.09.02.28.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 02:28:13 -0700 (PDT)
-From: Magnus Lindholm <linmag7@gmail.com>
-To: kees@kernel.org,
-	shuah@kernel.org,
-	wad@chromium.org,
-	richard.henderson@linaro.org,
-	mattst88@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: linmag7@gmail.com
-Subject: [PATCH v2] selftests/seccomp: add Alpha support to seccomp_bpf
-Date: Fri,  9 Oct 2026 11:27:27 +0200
-Message-ID: <20261009092759.968521-1-linmag7@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        d=1e100.net; s=20260707; t=1791539455; x=1792144255;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=mkuIOGDPXPuT/7Tp+eZvAIWGyivfRf31PISNCWLWipU=;
+        b=LWbgPBKqhHRSt465BXBqbzqIu8phTeBHmOPxQSQFa33o0vOSTlmeBPsWYwvXiam5Vg
+         Cd+oa7Gbts34CeACHhQfU44ugaRraeHqIYfHabdX4UakkjAkdkgOL7+g9WGf8VvDFzS8
+         Q6N9ilfqLAk8AaXeVXk3kQ3dHmEDC6gY6PK/wG0hk0hM6WlE7tXEMzpf0dkK2+cqFr+t
+         qe9Fsmp3bcgJALogazoeMZbpNT+PlNj6UvuapmLJw+JjsW9wmWm/XNFDmL/VhkwPH55I
+         zau5EqKlNM/UtL6VUMGpQaILtvdwGrk337J7UyR5c3aGmqxy2gS+Kkb6B3KteHxek5IL
+         zIYg==
+X-Forwarded-Encrypted: i=1; AKwUvBzIg2FllA5G4z2noO6hosBa3gYhx9E8x16OGV12maS8YBUJ74mTT/9CDCK+ceNd31Baa+jRlRAe6ttebiOpsRk=@vger.kernel.org
+X-Gm-Message-State: AFuF++nwR5+zVcFsINC/dEdaSEiQB5nX/pFBm+hZ7i2u+rvWO5d4QfoH
+	bbtPKDKKiTK4B5hJ4lrws5syu2hd2AzCLL0fuNb/w9onHjuOk0m6QNqNe7zZhlUgJPA=
+X-Gm-Gg: AYBFou1qmX5grR3xPAa1SUv3PLlCuDesThqiosb3TG/UqjVyHUgO66CLFAWX/b4Ipmd
+	i3dVXPG3efFTqDwyfEzlJwn8woRvR2gA5D54mIlXw7NuKv02g/gqZ4N4JQyFFSUVq6ZIqSW49dt
+	/yGyqKTzPIKu/ASwQB10d989Z6xSlgzKhyv/B7ds10w32BG0pWtvPyVSCmPbkx+Gj/AlcT8JRcU
+	cTlFw4fBt7nB7QCF10dD1K4iDm26KvLyqme3L70a1ia2O5s9jd3OlBwDMHARtj7k6PQGH3pkQ+r
+	WmEcf62B5X5SXMmRZED6HfZmD+OjdSXW7KdFcWc6qkTDPW947pBGhLtIa2kRuvjkFGpJ2r+vs/T
+	iF/p/ZKzN/w5z/3uvGTQTVGmufJXTC720vhVJcQH6Cc5jsYWm5jSglmTT0FCqe3Acup+oPMMuKu
+	zObN0mSmK+Wv5J+nQHXczHkhkT/Ca0KAjyoYcVn8oHwmCuD76MtRj184yDjPbzvi81JPbk/Zj8G
+	qFQE3qqAcp1+6HIhZ0/KvVY9uYcO+TqosOrwImUA3xKmw0QJ40=
+X-Received: by 2002:a05:600c:4e45:b0:4a0:13d8:cd0c with SMTP id 5b1f17b1804b1-4a18e47e330mr25254745e9.2.1791539455518;
+        Fri, 09 Oct 2026 02:50:55 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18bea1021sm44280795e9.10.2026.10.09.02.50.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Oct 2026 02:50:55 -0700 (PDT)
+Message-ID: <5d0a21f2-0a7c-4c66-a3c8-e4290dfc0e13@6wind.com>
+Date: Fri, 9 Oct 2026 11:50:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net-next v10 3/6] net: add a generation counter for
+ dev->mc changes
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: Ajay Singh <ajay.kathat@microchip.com>,
+ Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
+ Ido Schimmel <idosch@nvidia.com>, Jacob Keller <jacob.e.keller@intel.com>,
+ Jakub Kicinski <kuba@kernel.org>, Johannes Berg <johannes@sipsolutions.net>,
+ Kees Cook <kees@kernel.org>, Kory Maincent <kory.maincent@bootlin.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>,
+ Nikolaos Gkarlis <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
+ Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
+ Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+ Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20261007115821.11332-1-sigefriedhyy@gmail.com>
+ <20261007115821.11332-4-sigefriedhyy@gmail.com>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <20261007115821.11332-4-sigefriedhyy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Enable the seccomp BPF selftests on Alpha with a fallback seccomp syscall
-number and architecture-specific syscall register accessors.
-
-Use the NT_PRSTATUS register layout rather than struct pt_regs. The
-register set contains r0-r30 followed by pc and unique. Read and update
-the syscall number in r1, and set both r0 and the r19/a3 error flag when
-synthesizing syscall results.
-
-Skip the pre-notification signal test when /proc/self/syscall is absent,
-rather than unconditionally skipping it on Alpha.
-
-Kernel support for seccomp is already upstream for alpha so this is
-for the tools selftests only.
-
-Signed-off-by: Magnus Lindholm <linmag7@gmail.com>
----
-Changes in v2:
-- Use the NT_PRSTATUS layout for PTRACE_GETREGSET/PTRACE_SETREGSET.
-- Set the Alpha return value and error flag together.
-- Check for /proc/self/syscall at runtime before creating child processes.
-
-Link to v1:
-https://lore.kernel.org/linux-alpha/20260203063357.14320-1-linmag7@gmail.com/
-
-Tested on an AlphaServer ES40 (EV67 Tsunami), running
-7.3.0-rc1-00010-g19a47cb46b82, built with GCC 15.2.1:
-  PASSED: 111 / 111 tests passed.
-  Totals: pass:99 fail:0 xfail:0 xpass:0 skip:12 error:0
-
-Applied and built on my alpha/for-next at
-29289afbc513df29f0f981d45676980ed8eb13d2.
-
- tools/testing/selftests/seccomp/seccomp_bpf.c | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 0622bc2..92d3713 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -136,6 +136,8 @@ struct seccomp_data {
- #  define __NR_seccomp 354
- # elif defined(__x86_64__)
- #  define __NR_seccomp 317
-+# elif defined(__alpha__)
-+#  define __NR_seccomp 514
- # elif defined(__arm__)
- #  define __NR_seccomp 383
- # elif defined(__aarch64__)
-@@ -1754,6 +1756,25 @@ TEST_F(TRACE_poke, getpid_runs_normally)
- # define ARCH_REGS		struct user_regs_struct
- # define SYSCALL_NUM(_regs)	(_regs).orig_eax
- # define SYSCALL_RET(_regs)	(_regs).eax
-+#elif defined(__alpha__)
-+/* NT_PRSTATUS contains r0-r30, pc and unique, not struct pt_regs. */
-+struct alpha_regs {
-+	unsigned long regs[33];
-+};
-+
-+# define ARCH_REGS		struct alpha_regs
-+/* The kernel keeps the mutable syscall number in r1. */
-+# define SYSCALL_NUM(_regs)	((_regs).regs[1])
-+# define SYSCALL_RET(_regs)	((_regs).regs[0])
-+/* Alpha returns positive errno in r0 with the r19/a3 error flag set. */
-+# define SYSCALL_RET_SET(_regs, _val)				\
-+	do {							\
-+		struct alpha_regs *__regs = &(_regs);		\
-+		long __ret = (_val);				\
-+								\
-+		__regs->regs[0] = __ret < 0 ? -__ret : __ret;	\
-+		__regs->regs[19] = __ret < 0;			\
-+	} while (0)
- #elif defined(__arm__)
- # define ARCH_REGS		struct pt_regs
- # define SYSCALL_NUM(_regs)	(_regs).ARM_r7
-@@ -4652,6 +4673,9 @@ TEST(user_notification_wait_killable_pre_notification)
- 	/* 100 ms */
- 	struct timespec delay = { .tv_nsec = 100000000 };
- 
-+	if (access("/proc/self/syscall", R_OK) != 0 && errno == ENOENT)
-+		SKIP(return, "/proc/<pid>/syscall not available on this kernel");
-+
- 	ASSERT_EQ(sigemptyset(&new_action.sa_mask), 0);
- 
- 	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
--- 
-2.43.0
-
+Le 07/10/2026 à 13:58, Yuyang Huang a écrit :
+> A multi-part RTM_GETMULTICAST dump of dev->mc resumes by position, so
+> entries added or removed between two dump rounds can be skipped or
+> repeated. The IPv4 and IPv6 dumps report that with NLM_F_DUMP_INTR by
+> stamping cb->seq from a per netns generation counter combined with
+> dev_base_seq, see inet_base_seq().
+> 
+> Add the equivalent for the device multicast lists: a per netns counter
+> bumped whenever an entry is added to or removed from any dev->mc. The
+> list helpers do not know which device a list belongs to, so give
+> netdev_hw_addr_list an mc_dev pointer, set for dev->mc only, and bump
+> the counter of dev_net(mc_dev) from the count helpers. That covers the
+> dev_mc_* helpers, both lists of a sync, the hardware sync helpers
+> drivers call from their rx mode callbacks or their own workers and the
+> reconciliation after an asynchronous rx mode update. It is atomic
+> since the writers only hold the address lock of their own device.
+> 
+> Used by the following patch for the AF_PACKET multicast dump.
+> 
+> Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
