@@ -1,152 +1,115 @@
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53864D957F
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 11:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFE34C2241
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 11:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791543629; cv=none; b=qICT4f1c+H3ZzWHGCfBg+1cZZIA5duO3WLJnZDMFaGkLILTpwQ5ILFfrBxKfgVIRIg/eNUVBpBUtG5TLjm1QB4FQfOfBSt7I7VsOuuEpM2cM0tH86u7dyqQZ3QE29rT2KL5cfJfUWY3lPiHqPLMJ6Z/PwFrM10+oq0IqX2C+IUI=
+	t=1791545555; cv=none; b=cDi/6ayBzRT0ayja40UgJBYP6dYcGCooOyfjB5HHsA6IS1FEPATVqnCnDZqo3Q73NUV0Ll1N4eWx4BoF+1x4Z0HhG9e7F2snqnhbDYeTyl23VLIuliR8gVCDjK+aPkLhGp2VK2YTsEDYpOH983xZbd1Br/m1/z3ghkjcZa5+nsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791543629; c=relaxed/simple;
-	bh=BzTR+eW3wr+Q5y1uCczUoND6CTvbG2LHZM1vzpnFyMQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=KZ36HS+mCuA1MIjyN16ahLvF1piyyq5AOvnSwlJHaS3Nxhq6KO1K8FJpnOXEfMHawo9BdPPmMpXk+Bx0xGvFGsrqkQM/LTPrEK6UULl1urgS58rvkOPLgFx3oYOxfZmxnavjnQqkqq7ke3YDs8r0rJYj/MoyxExJ/Yq3Lf+Y2s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im; spf=pass smtp.mailfrom=fastmail.im; dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b=CjLJttJm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dC7i3GMM; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.im
+	s=arc-20240116; t=1791545555; c=relaxed/simple;
+	bh=JOfTL5sJbEeKUPqnV8GkeCHd+99LXw7TYpKTV4o3L18=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nfE2KR9eMMxbupMZQVyCIbWfmVP0MZriZ+TGU0kUdTYNrVIhpOEccPqLwOgRR1592D4Zk4kprfFuWbgG/NlF7b9iOL/hY0SU2B5TpYIVQ6uXGn/pNxJWFKZk9i9c9C7kszeKIsphYrgcDSWpNtoTnkVg5/H5BJnCLZc/EygX1dM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/eXhsNR; arc=none smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b="CjLJttJm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dC7i3GMM"
-Received: from ams-compute-01.internal (ams-compute-01.internal [10.64.2.61])
-	by mailfout.stl.internal (Postfix) with ESMTP id A9ABE1D000F7
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 07:00:16 -0400 (EDT)
-Received: from ams-imap-19 ([10.64.2.39])
-  by ams-compute-01.internal (MEProxy); Fri, 09 Oct 2026 07:00:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.im; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1791543609;
-	 x=1791630009; bh=HRdD7XbZXfyzgNKs4mc5etqpgg+xB3vrcZQ8CfVm7gc=; b=
-	CjLJttJmjx3XadfMokRx9zb5US/ORFjESN64jW+QB8DM8wExJObwGrJpy7jwgwwm
-	+ga+J/sIWudj+LXVqY/rI4IR/gwdIHSWeMnZMNyj+vsUCbHN2u5zt6Ig83rCgVgV
-	7lgTcXtLvOQ6LhHm5YUSO5zqGt6Qinziif9WwDY6CPsjO231+PDalxqLfzlvdHxR
-	lIkhVoeShf8OX7fq/yw38DBg4sTJPi/dW7bJtHiF/EzzenPOMYbjeze1ZXtrjTT6
-	smmNNqDyrJ5DXqFSO9B7rM3ZHBDm1+G95fq57rHzdSoFdB6ViBSwJKubu7o1etIw
-	LzSBmAyCikUgfRYqc0jaPg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1791543609; x=
-	1791630009; bh=HRdD7XbZXfyzgNKs4mc5etqpgg+xB3vrcZQ8CfVm7gc=; b=d
-	C7i3GMM7HhJRN+1T+7EBZmPOoYzlPnW3rMSHfs5urfxUR0n3YSzYF3pFOWYXZp5E
-	J7tKOnGV+LJ+uR2KZsoF9Kjm8b0/NzaQLqE/Fd8JWppvk3/NLqIbd/O2PWJ/QOiF
-	VPuukP7igAAhsgDW0uu0fI/0w7Bh4wjJEh1/7r75e7NQO5KfgAaWs17dbB3W+rnk
-	JcYe9D/qiX3HbRLtkmoNoxRoGhQmF37HWCVbd0aFoUFX8ePnMVKCx2U5KoTtV7ta
-	cHZO59AcWMZ3QneiU4qbq1BbsHtmfDIYIxljxqMga24ecQbptR8BKhPX6zlOwkCi
-	WUBd5bqhSrIV7hsVXIS9g==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=sign d=fastmail.im a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1791543609; d=fastmail.im;
-	mf=PGFsaWNlLmtlcm5lbEBmYXN0bWFpbC5pbT4=;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:LsY9nw9KJ85MQ9+iB7a6Wpu3SH2BO1JJOcN6gDD3oUy0qs9
-	NxZyyVyTKQas8h1zSBn5dOjpKOXT3utKsVwyNf2aZWZ/IAPtceniUrrqcDyxrjjC
-	YJccmSbZ+/w8W5SWsguQMp7a+hASOeM17U9YXvj4JiMZUGulDb6U+FHlhGWkfUNs
-	zzvYTC8RkCpQcWojpwYeRAZdIMg6ETNPL6lzg2fwFVhFPhTaM6tpw3T0RFznbwgt
-	WeYGdCohBvVmO/9E7mZOMzQRo7n3P0sseFY3XUW0eVwgyCggTILQXrJnABJwAN8r
-	H53JhBu2Se5WhxwroXMqvMN/n3+aYlt6vpYOf5Q==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:cqRdEF7vO4dqzT6dpUZoD2031PsWjeHqBGUfWzYnXCQ=:BzTR+eW3wr+Q5y1uCczUoND6CTvbG2LHZM1vzpnFyMQ=;
-X-ME-Sender: <xms:NMnIanT_oa-UGuY0gfsUMaz-qIxMOfoCBA_yWHa4v9wndCvsmb_aAQ>
-    <xme:NMnIajnQ-kUNy3CapMgiEWi2clOfwa7d3B_LlY-lEwMy6FmXM6BAJ3BbYxcb8lwXi
-    B-lN9NyXE3QVz_-SrBmhTIMvANgVCC0WNoNpjTZaToD2Bj-iGB3LLza>
-X-ME-Proxy-Cause: dmFkZTGbB7RwK4ypT1uHKC2/+ph+7+jcr4ZMRMlp7fXeuD3uWp4EYF7LWsyYq9zHwHNTEN
-    k3IJQPb9bjw4BStTNk6RSUiaWikop7jTY/d2J8xv0G0tKcgzXFkUvRLj+as9vmc8AkBtpT
-    8S/KiiVMTpjJbGUM6jgjmbjemqaKq9h0UHqqLk3RiqlItkHOZY1lcktcIchZ3AlzHgaNIW
-    Tc3D04DAGmQKEut5QUlot1SdewWFLtxPBlvVaKTZUBcJABM58IkmPSdX/FSBq0qqXEglme
-    mmNPQrSIoWPfCFlnhZn15Yd7bx3LJqjKYnX636c2SbfkwgH2JDt5MJGPjFm/y5ykMjemEL
-    g21+N38EtqlzdPeDruhcs8brdwmBvP2xTzA2nlPM/R1k7j2XZpE+1wqnFWVOxgvARrUjsl
-    Qa/mT0thdy4Ga28yqijywE8zYbI5GsenoUnEeh3Jfsh2Ng6d0EKwak9NCl6w6/oBaDGCmV
-    26oj9QWAaYI1drg2sgvlOX2+++qce1vaugKYq3P1MsksHjiLO2t8kdvkzUJzy2MFn432aN
-    x47mEyphBgUUGwnx2xuQbK21aOqz0IXBu8mrUDDtaAmJ85EFBB1nKiaKTJhg0awldA0KlW
-    0vBGTx5RzPOYWW4eh+jCxrppA3wu8S7xn9M9wfcUn9sW869Qvad1YZAgMIbg
-X-ME-Proxy: <xmx:NsnIaj1m2CpLMi1ESMQpjdTsQBaKN8MOPlxOcB4-siAf5pnNLy-SvA>
-    <xmx:NsnIajqT6AJGKeT5EydclvNiQMcD4B649qoEb7-A2rrLBGQWD0bYdA>
-    <xmx:NsnIajJiT32hKKJmhZ7UHZn1XYZvfjvM8mUURnY1CTOU-W_goWUjrA>
-    <xmx:NsnIavSMHLqzqmkz1qSFAPMCGE3ioew4F-0M5_RNn3gsHnDQmiQGnA>
-    <xmx:OcnIannhju_zvyOEktgLshhr98im-EPeRF1bktUzMOF35N6KQZfDnQ-->
-Feedback-ID: i559e4809:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 478222F8005D; Fri,  9 Oct 2026 07:00:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/eXhsNR"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-351f7a0b13bso1050112eec.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 04:32:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791545540; x=1792150340; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5bMlxewub9p/T2xvh3MjzZ66gKld4I4neePTrZHO9Yw=;
+        b=k/eXhsNR+usBjAXoyI5R3hSe/Tls1hLcb1FDLXE8BloAjRwR9NnUoowy4K0J4VaY+2
+         IPRF1OHh048i2B2/zHyy39954hSnu+A3kkF0or0OgBdkM0uKwI55NE7bMBEpMKcfXhe7
+         cmGrnX/2bKOTt1aSnJN8WvB9dFrf1iamKPwQyExe8oY3q+7kwg4ZpGSwj6sdsoASO7DT
+         EmHK4dQTchqXroWSTorMQEm2sjx/tYbC2lvvBmNVIbUMhpLWhaSmKt6/w2vaCtwfiDoL
+         wBcKmliggW4a54Ia3Fvbxj2fd/vhNmAWgk2yWuzwd+w/ybh/qjx7wEX1z8k9MmJQlLh1
+         inSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791545540; x=1792150340;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5bMlxewub9p/T2xvh3MjzZ66gKld4I4neePTrZHO9Yw=;
+        b=h9q9UUBQv43fy2ZpCsk7/PRYLNZtpWNsXeCvVTeRl+X+IOuRYc3OxKBQ0JkP0FNohB
+         IHUwM0UOmRGHjmhsWVKoTzmGkIZEmjuoXcfvnRPALtw51s6sl7NBQAb3FdmQLA9DwTkE
+         j0FkyhwCQhRVsH7CgX55d6VNuojVpnnudRwLdmDYx/Vv+noiMd/sl/+s6WQgFKjs7X4v
+         mhoyxK68lISJVRs9zLMMQI5TqKvyKkglop17dvw5U3e+YB74NrJ7vtMkmUaa3b5Epbq4
+         WstnEdqs9zarClYdu6K7vYdbogwy8m1kQnh5p1hIOXWgTkl6+vrETGoxMHrmCawWJs4j
+         rExA==
+X-Forwarded-Encrypted: i=1; AKwUvBzD2OpjjG4EqUpECoDGhkdr/COl6JeFxBsG1DAdIaYnSh/gxHIRwRLOpVncFCDMKhyYzhF8QhpmHokMh9IJmxc=@vger.kernel.org
+X-Gm-Message-State: AFuF++leCmrfX/QFzfTAH1s58sl/sFx73/pb848QBIf2IlT+FWB79uay
+	b9lRPe3OP/PBjjE0XOEamsS//YVeYpSBjgsVObVIRumtc8F5/YZP86qM
+X-Gm-Gg: AYBFou3wE+0y+NMxzEVYvfg5oQYxZVf5tX7D3qZupkoe6/dhJfZJ3kqf2iG6dD683/2
+	FgO2XidcyXzjMXi0lBkl6P8wqqINlr/LePf151DTMzcV/tjV+8yHpaEkcjWNIfKReQK1QZzhXtX
+	nZB+oPImuZ2VS/qtzbMRovDUgdkpRdcep83QedNOY+k/oDA9z5tbrZEoHmRb0hbI7JtamqXpO+S
+	ytICBB7MQAAFygbnsN9WMLnYKs97Mzhnxj9uuGu5oB1/E+qF4Rh58kqnetQ3vc04MdvIeTsGIpx
+	R2N/xLN+kB1fhq5g+CqcgxKzZtuTmKGNMq7DsCMhkEDk7Nt/iPEABz8i5uQZFcRWGshPA1EKcxi
+	fCKuoH3JxZc+QZRRC+WbqNLGIpt9iBi2a6yThpdbhoD/YGECM41PJjJxGzHXvegdYH8iF2YzA7K
+	1qRGvBH78XNr4/2PHQXzFGEqlQYuH+/82MsLA8FA/aOsPcrAT4ebxMeEULnVHbqPgMIe17LrBmm
+	r2cqK2U
+X-Received: by 2002:a05:7301:dd95:b0:353:58b7:b5fa with SMTP id 5a478bee46e88-3535f48136amr3132590eec.1.1791545539457;
+        Fri, 09 Oct 2026 04:32:19 -0700 (PDT)
+Received: from amd.ban-spse ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cab27d5sm7529934eec.17.2026.10.09.04.32.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 04:32:19 -0700 (PDT)
+From: Priyanka Mani <priyankamani2100@gmail.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Ivan Orlov <iorlov@amazon.com>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: selftests: Fix ndata size check in test_mmio_during_vectoring
+Date: Fri,  9 Oct 2026 11:30:17 +0000
+Message-ID: <eef6bc34bdf7391c5d3eb4b1ba5e97819e22ae8f.1791542392.git.priyankamani2100@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 09 Oct 2026 13:59:43 +0300
-From: "Alice Mikityanska" <alice.kernel@fastmail.im>
-To: "Haishuang Yan" <yanhaishuang@cmss.chinamobile.com>,
- netdev@vger.kernel.org
-Cc: "Matthieu Baerts" <matttbe@kernel.org>,
- "David S. Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- "Shuah Khan" <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-Id: <a300a06d-89d0-4977-95aa-a0b3d375a8b4@app.fastmail.com>
-In-Reply-To: <20261007014731.1277055-1-yanhaishuang@cmss.chinamobile.com>
-References: <20261007014731.1277055-1-yanhaishuang@cmss.chinamobile.com>
-Subject: Re: [PATCH net] selftests: net: big_tcp_tunnels: Fix the IPv6 route change
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 7, 2026, at 04:47, Haishuang Yan wrote:
-> On slow machines, do_test() raises initcwnd on the route into the tunnel
-> with "ip route change". For IPv6 traffic this fails with:
->
->   RTNETLINK answers: No such file or directory
+test_mmio_during_vectoring() verifies that KVM reports the faulting GPA in
+run->internal.data[3] when an emulated MMIO access occurs during event
+vectoring.  kvm_prepare_event_vectoring_exit() always fills five entries
+(info2, reason, info1, gpa, last_vmentry_cpu), i.e. internal.ndata is 5.
 
-Thanks for the fix! It's already merged, but anyway:
+The test, however, checks "ndata != 4" before dereferencing data[3].  That
+predicate does not actually validate the array size: it passes for ndata ==
+3, where data[3] is out of bounds yet is read just below, and it spuriously
+fails if ndata were ever exactly 4.  It only happens to work today because
+KVM returns 5.
 
-Tested-by: Alice Mikityanska <alice.kernel@fastmail.im>
+Assert the real expected size, ndata == 5, so that the subsequent data[3]
+access is properly guarded and the test enforces the exit's contract.
 
-> The IPv6 prefix route of the tunnel address has metric 256, while
-> "ip -6 route change" without a metric looks for a route with the default
-> metric 1024, so nothing is changed. The test still passes, but without
-> the larger initcwnd it is meant to use.
->
-> Pass the metric of the prefix route.
->
-> Fixes: 1d62b83fb751 ("selftests: net: Fix slow configurations in 
-> big_tcp_tunnels.sh")
-> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-> ---
->  tools/testing/selftests/net/big_tcp_tunnels.sh | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh 
-> b/tools/testing/selftests/net/big_tcp_tunnels.sh
-> index cc0875e52fb9..fb43fed824e3 100755
-> --- a/tools/testing/selftests/net/big_tcp_tunnels.sh
-> +++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
-> @@ -145,7 +145,8 @@ do_test() {
->  			    route change 192.168.2.0/24 dev tun0 initcwnd 100
->  		else
->  			ip -netns "$CLIENT_NS" -6 \
-> -			    route change 2001:db8::2:0/112 dev tun0 initcwnd 100
-> +			    route change 2001:db8::2:0/112 dev tun0 initcwnd 100 \
-> +			    metric 256
->  		fi
->  	else
->  		ip netns exec "$CLIENT_NS" \
-> -- 
-> 2.43.0
+Fixes: 62e41f6b4f36 ("KVM: selftests: Add test case for MMIO during vectoring on x86")
+Signed-off-by: Priyanka Mani <priyankamani2100@gmail.com>
+---
+ tools/testing/selftests/kvm/set_memory_region_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+index dffe9654f45b..627ebc2ba024 100644
+--- a/tools/testing/selftests/kvm/set_memory_region_test.c
++++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+@@ -606,7 +606,7 @@ static void test_mmio_during_vectoring(void)
+ 	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_INTERNAL_ERROR);
+ 	TEST_ASSERT(run->internal.suberror == KVM_INTERNAL_ERROR_DELIVERY_EV,
+ 		    "Unexpected suberror = %d", vcpu->run->internal.suberror);
+-	TEST_ASSERT(run->internal.ndata != 4, "Unexpected internal error data array size = %d",
++	TEST_ASSERT(run->internal.ndata == 5, "Unexpected internal error data array size = %d",
+ 		    run->internal.ndata);
+ 
+ 	/* The reported GPA should be IDT base + offset of the GP vector */
+-- 
+2.43.0
+
