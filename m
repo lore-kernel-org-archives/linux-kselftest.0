@@ -1,82 +1,53 @@
-Received: from mail-pj2-f9.google.com (mail-pj2-f9.google.com [74.125.227.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m1973198.qiye.163.com (mail-m1973198.qiye.163.com [220.197.31.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAD34E0B70
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 12:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4B24D37B3;
+	Fri,  9 Oct 2026 12:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791548712; cv=none; b=Pdpb1yTYIf0ouCOlixkQYYoS+Gb96AaEvAWhOumbJIQaUe0kpblJmCSoCvBt+BvazPlOmfC42curzfzMkwp30/nhljT8FFM9sx0JL6YvXS7SP5DVvU8wRZc9M0c5xNNk9gxDG1VAkPKCCovL4cQ5EdLNdYXz8+9O79jDlRtgu+k=
+	t=1791549567; cv=none; b=Eq7lKQh4O3E5LZh438Sl/QD9bIZiPLlWoN+rYmh6O5ux77quEKJoonXsS8tW1MYDsoFs1CCrMsurXceAevDJ/OvhByQhNLcQToaZnyyAYkQaDoFD+2oQ1Rj6a6v3A0BNbxIt7C97eZsZ+0BNeeOiAJv8MbAhY0c80YLLdZ0NHuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791548712; c=relaxed/simple;
-	bh=bNRMeRSS2zeZl/TFXZo5Dn/7UPjVOtd2WRxC549kPzA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WO2ctpA7VX68KJWpsMJIvHwBXvgD5OsZJvHEpsOCwsmEnuncAYAjsU1nuo64VRm7PKt1i+/jnvwPBhSR0IGxAnDK5dl0p5wZeZth4WylKF6OYvrS5EGQNQ0MDhEa/UToLOnEBQ8j3+CfZivnBU4VPZVoQZQa5uD0Um1lqt72zkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net; spf=pass smtp.mailfrom=blockcast.net; dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b=RiknP3a3; arc=none smtp.client-ip=74.125.227.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b="RiknP3a3"
-Received: by mail-pj2-f9.google.com with SMTP id 98e67ed59e1d1-3a51696a650so3494627a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 05:24:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blockcast.net; s=google; t=1791548696; x=1792153496; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jBw6Y/BGPzJ2Cx3Et/3lme3MwU7zySJizDRZzvVU+T0=;
-        b=RiknP3a3g+Xo3ruK0RhuMfi4RvPiHvVGAPqDgWk98wbPe/f29BbwQDGIAGADbQYoye
-         JQbMgWf5Lgea5uBRqB+eiKjFkx7mSMoRZF3TnEocv7OgXllJ2okEgXvQOmn0KfQ5Pvsc
-         I8MJc2xqGuW16203yw0sbk4aeNzUCc973XOp2mlFxylKcXcBkUU/PC2C9fzmnZwBPVLe
-         hFkS0r1AdKsKl17tGIomCXIFR0heDeHzANmrRsvpX+11KgP6Yn1CRlXAqXXe0F6p0u6T
-         X4hN1v08Ho5RJbQFuTeanUmhO7Eu+jxw+oppeRVLyxDX64iH5KU0WTd+3sip+6v5Moi6
-         MIaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791548696; x=1792153496;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jBw6Y/BGPzJ2Cx3Et/3lme3MwU7zySJizDRZzvVU+T0=;
-        b=tBz+ffJtnjY5WwUX6Wu2sj3zWZH15gWDrHR2ErPe8r0W8AOKwY1i0KzE1Peisf4TJM
-         pN4m6HeKpcHW8ES1Rly/5qtkNVVB5FPsWjnj9ovQQCCkCjh3vuSpZii/2vIi+VbyTA7v
-         6I98x/tKz6Z2E2Hnp758n8yeGuA7MafOvduhOWp6OHlJY/UcorOBw3hdPWCxFJBEVGJ7
-         96RhdMXJgZWxl47uGUnjzg3lIXWFt9Kdzyh+WaHwBM2uaEZgJMcfJNtshnemcCxlHW9+
-         4mxVKAmzOHmINOZM+0nDrQ+j+Z5We8lB58JbhqxE9uaeL3fZD3048uyRAmvd5v9eKkgW
-         7kSg==
-X-Forwarded-Encrypted: i=1; AKwUvBwelEBS4nR+u5EJ1EJ+eW5lVdKnwyDAVqUgnG/+p7fM6X98vgBP810SaC9elWETpb4lK+91Q7ZIuDLfaoqwLRM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJphUww1XFp8Dyon9/H/QBYeHq9v01cI3GL1+ORC+g2bDn+sM4R
-	zGcMpmtQDbI+5fE6/Xz/tBdLeH+3LQdeELwS+nUAtRJ173cfzDp2VY8L5QaHpnnRZHw=
-X-Gm-Gg: AYBFou1XieqzJi3mUuC7Tb9Vqt/z9MoWMwh+FVUXBvsGDk0XjAvg/nr19K81/IMLe4H
-	wc81gAgv5t9bj9URhOHZn3w0n9/UrEow58Tvj+1MStO2H1eQ3TbvOkIQBUnqxtRKtGxQszvyraV
-	c6eNyT4Xn54maqbsiHfgeV078oDuTEkCCIUA2lq5r/k50ImZUPp3jro8V6i5KlH0IC1AFWBCVQH
-	Hr1qu3wGrOBVqqDADGCsCT7YNTg8KTNzKCC5p0AESbWrtVcfDb25/4KsJSpNDNZReeUzwLjWy3Z
-	B67vLaSqYzHY2QR7oAC4LTTMQux9H9zEBCzO9D0ZxZKdmYiRlF+Y2lp2cu86mt48ymcW5d7xXFA
-	Q52AL3PU3cn2lEIR7MMEUMytjkZj3ax/EAGZ2g46umiO3WETjM0KLmQWHXDzA4g/iztQnaeR1wk
-	D85WULiz8xLhHt6WFqqx6WT81ug3DcgZb1JrpRQWzYpjckfNI7yJz2rJw9eb8ijROIH1VXG+a2M
-	1R3PRImdMzRRbdKMkZL7CdMLkefYvBHKNWHOKRLIrNTFWaS+CM=
-X-Received: by 2002:a17:90b:3b82:b0:3ab:4f1:4f76 with SMTP id 98e67ed59e1d1-3ab3a94f426mr1862537a91.24.1791548695804;
-        Fri, 09 Oct 2026 05:24:55 -0700 (PDT)
-Received: from devbox.ts.blockcast.net ([2602:f74d:1::32])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab55e41eefsm1660502a91.10.2026.10.09.05.24.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 05:24:55 -0700 (PDT)
-From: Omar Ramadan <omar@blockcast.net>
-To: Taehee Yoo <ap420073@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
+	s=arc-20240116; t=1791549567; c=relaxed/simple;
+	bh=36R2gIevv+gNJ9JHGkNR4b0oPzf5iWxYXe0kNa1FjQY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZNYykmsk1CFgWNIqWUS2CakJD849tqt9fYE5G17LSIiuG4iAqbcydqf9Advtfy03PbZG83/q2nk6ntPBzLNHKW7ggKbAQQYh+foPvT2mHSDvCC7JhYhOWMkkw2dhHyg3/m4J/lkRBHiUgfK8TKk4fPGy5Pn3r/I+2RmGWPcBKfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=220.197.31.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from localhost.localdomain (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1fe2901a8;
+	Fri, 9 Oct 2026 19:23:32 +0800 (GMT+08:00)
+From: Zhen Ni <zhen.ni@easystack.cn>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	akpm@linux-foundation.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	brendan.jackman@linux.dev,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 13/13] selftests: net: add amt_gw_v6.sh for the IPv6 netlink attributes
-Date: Fri,  9 Oct 2026 12:24:26 +0000
-Message-ID: <20261009122426.551178-14-omar@blockcast.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261009122426.551178-1-omar@blockcast.net>
-References: <20261009122426.551178-1-omar@blockcast.net>
+	linux-kernel@vger.kernel.org,
+	Zhen Ni <zhen.ni@easystack.cn>
+Subject: [PATCH 6/6] selftests/bpf: add tests for the page_owner bpf_iter target
+Date: Fri,  9 Oct 2026 19:23:08 +0800
+Message-Id: <20261009112308.240769-7-zhen.ni@easystack.cn>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20261009112308.240769-1-zhen.ni@easystack.cn>
+References: <20261009112308.240769-1-zhen.ni@easystack.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,272 +55,379 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa12067716e0229kunmd33b3e054cb292
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCQx8fVktPGE5JGR9KQhkZH1YVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
+	lPT09IVUpLS1VKQktLWQY+
 
-amt_v6.sh builds a gateway and a relay over an IPv6 outer transport and
-checks the data plane, but only with valid attributes. The link-creation
-rules this series adds for IFLA_AMT_LOCAL_IP6 and IFLA_AMT_DISCOVERY_IP6
-are not exercised.
+Add a sleepable BPF program and a userspace runner covering the seq_file
+and open-coded page_owner iterators and the get_nid, stack_snprint and
+get_memcg_info kfuncs. The test checks:
 
-This adds a small companion without a data plane: no relay, socat or
-smcroute. It checks that the IPv6 local and discovery addresses of a
-gateway, and the local address of a relay, read back through
-amt_fill_info(), that a relay reports no discovery address, that an
-IPv4 gateway still creates and reports its IPv4 discovery address, and
-that an IPv4 relay still accepts the IPv4 discovery address it has
-always ignored. It then checks each rejection: a gateway without a
-discovery address, a gateway whose local and discovery addresses differ
-in family (both ways), an IPv6 relay given a discovery address of either
-family, an IPv4 relay given an IPv6 one, and an unspecified, loopback,
-multicast or IPv4-mapped IPv6 local or discovery address. Each rejection
-is matched on its extack message as well as on the failure, so a rule
-that fails for the wrong reason is not a pass.
+  - seq_file walk, unfiltered and pid-filtered: records read back from
+    the iterator fd match the lines the program printed.
+  - open-coded iterator parity with the seq path.
+  - the kfuncs' contracts: valid nid per page, a non-empty stack
+    trace, and memcg classification.
 
-Besides the duplicate arguments its header names, a 16-byte
-IFLA_AMT_LOCAL_IP or IFLA_AMT_DISCOVERY_IP is not built: an iproute2
-with IPv6 support never sends one. An older iproute2 puts the whole
-16-byte literal into the IPv4 attribute, which a kernel without this
-series reads as an IPv4 address from its first four bytes (32.1.13.184
-for 2001:db8:a::2), so the probe checks the readback as well as the
-result. This kernel refuses it ("IPv6 address in an IPv4 attribute"),
-which is logged as a passing test before the probe skips. The probe
-skips on an iproute2 that rejects the literal, on a kernel that ignores
-the attributes ("Local attribute is required"), and on a kernel without
-IPv6 ("IPv6 support is disabled", or no /proc/net/if_inet6); any other
-failure to create the probe link is a FAIL.
+Skipped when debugfs page_owner is unavailable.
 
-The script uses lib.sh: setup_ns for the namespace, check_err and
-log_test for reporting, and $ksft_skip when a prerequisite is missing.
-
-Assisted-by: LLM
-Signed-off-by: Omar Ramadan <omar@blockcast.net>
+Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
 ---
- tools/testing/selftests/net/Makefile     |   1 +
- tools/testing/selftests/net/amt_gw_v6.sh | 204 +++++++++++++++++++++++
- 2 files changed, 205 insertions(+)
- create mode 100755 tools/testing/selftests/net/amt_gw_v6.sh
+ .../bpf/prog_tests/page_owner_iter.c          | 173 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_page_owner.c | 161 ++++++++++++++++
+ 2 files changed, 334 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index efdc77b..4212915 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -9,6 +9,7 @@ CFLAGS += -I../
- TEST_PROGS := \
- 	altnames.sh \
- 	amt.sh \
-+	amt_gw_v6.sh \
- 	amt_v6.sh \
- 	arp_ndisc_evict_nocarrier.sh \
- 	arp_ndisc_untracked_subnets.sh \
-diff --git a/tools/testing/selftests/net/amt_gw_v6.sh b/tools/testing/selftests/net/amt_gw_v6.sh
-new file mode 100755
-index 0000000..c18ceff
+diff --git a/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c b/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+new file mode 100644
+index 000000000000..a621712272bc
 --- /dev/null
-+++ b/tools/testing/selftests/net/amt_gw_v6.sh
-@@ -0,0 +1,204 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Netlink coverage for the AMT IPv6 attributes, IFLA_AMT_LOCAL_IP6 and
-+# IFLA_AMT_DISCOVERY_IP6, and the rules that validate them. amt_v6.sh covers
-+# the data plane; this needs only one netns and one dummy device.
-+#
-+# Not covered: `discovery <v4>` together with `discovery <v6>`, or `local <v4>`
-+# together with `local <v6>`, in one command. iproute2 rejects the duplicate
-+# argument itself, so those checks are reachable only from a raw netlink
-+# client.
++++ b/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+@@ -0,0 +1,173 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 */
 +
-+source lib.sh
++#include <test_progs.h>
++#include "bpf_iter_page_owner.skel.h"
 +
-+readonly V6_LOCAL="2001:db8:a::1"
-+readonly V6_DISC="2001:db8:a::2"
-+readonly V4_LOCAL="192.168.0.1"
-+readonly V4_DISC="192.168.0.2"
++#define DEBUGFS_PAGE_OWNER	"/sys/kernel/debug/page_owner"
 +
-+# add_amt <name> <args...>: create an amt link on gw_dev, stderr in $ADD_ERR.
-+add_amt()
++static bool page_owner_available(void)
 +{
-+	local name=$1; shift
-+
-+	ADD_ERR=$(ip -n "$GW" link add "$name" type amt dev gw_dev "$@" 2>&1)
++	return access(DEBUGFS_PAGE_OWNER, R_OK) == 0;
 +}
 +
-+# amt_field <name> <key>: one attribute as amt_fill_info reports it.
-+amt_field()
++/* Count link_fd output lines; -1 on error. */
++static long iter_record_count(int link_fd)
 +{
-+	ip -n "$GW" -d -j link show "$1" 2>/dev/null |
-+		jq -r ".[0].linkinfo.info_data.$2 // empty"
++	char *line = NULL;
++	size_t len = 0;
++	long count = 0;
++	int iter_fd, err;
++	FILE *f;
++
++	iter_fd = bpf_iter_create(link_fd);
++	if (!ASSERT_GE(iter_fd, 0, "bpf_iter_create"))
++		return -1;
++
++	f = fdopen(iter_fd, "r");
++	if (!f) {
++		close(iter_fd);
++		return -1;
++	}
++	while (getline(&line, &len, f) > 0)
++		count++;
++	err = ferror(f);
++	free(line);
++	fclose(f);
++	return err ? -1 : count;
 +}
 +
-+# An iproute2 without IFLA_AMT_DISCOVERY_IP6 may not reject `discovery
-+# <v6>`: it can pack the literal into IFLA_AMT_DISCOVERY_IP, which this
-+# kernel refuses and an older one turns into a v4 gateway from the first
-+# four bytes. So probe on the readback, not only on the exit code. A
-+# kernel without the IPv6 attributes ignores them and asks for a local
-+# address. Skip in those cases only; any other failure is a failure of the
-+# code under test.
-+probe_v6_gateway()
++/* Validate bpf_page_owner_get_memcg_info() results from the open-coded run. */
++static void check_memcg_skel(struct bpf_iter_page_owner *skel)
 +{
-+	local got
++	fprintf(stderr,
++		"memcg: seen=%u charged=%u online=%u nodata=%u notsup=%u bad=%u first='%s' name='%s' flags=%u\n",
++		skel->bss->memcg_seen, skel->bss->memcg_charged,
++		skel->bss->memcg_online, skel->bss->memcg_nodata,
++		skel->bss->memcg_notsup, skel->bss->memcg_bad,
++		skel->bss->memcg_first_path, skel->bss->memcg_first_name,
++		skel->bss->memcg_first_flags);
 +
-+	if ! add_amt amtprobe mode gateway local "$V6_LOCAL" \
-+	     discovery "$V6_DISC"; then
-+		case "$ADD_ERR" in
-+		*"IPv6 address in an IPv4 attribute"*)
-+			# An older iproute2 on this kernel: the rule that
-+			# refuses the 16-byte IPv4 attribute is what ran.
-+			RET=0
-+			log_test "16-byte IPv4 address attribute is refused"
-+			echo "SKIP: iproute2 lacks IPv6 AMT support"
-+			exit "$ksft_skip"
-+			;;
-+		*"Local attribute is required"*|*"expected rather than"*|\
-+		*"IPv6 support is disabled"*)
-+			echo "SKIP: no IPv6 AMT support: $ADD_ERR"
-+			exit "$ksft_skip"
-+			;;
-+		esac
-+		echo "FAIL: cannot create an IPv6 gateway: $ADD_ERR"
-+		exit "$ksft_fail"
-+	fi
-+	got=$(amt_field amtprobe discovery)
-+	ip -n "$GW" link del amtprobe
-+	if [[ "$got" != *:* ]]; then
-+		# A kernel with the IPv6 attributes names the missing
-+		# discovery address this way, and must have refused the
-+		# 16-byte IPv4 attribute that an older iproute2 sent.
-+		add_amt amtprobe mode gateway local "$V4_LOCAL"
-+		ip -n "$GW" link del amtprobe 2>/dev/null
-+		if [[ "$ADD_ERR" == *"of the local family is required"* ]]; then
-+			echo "FAIL: 16-byte IPv4 attribute read back as '$got'"
-+			exit "$ksft_fail"
-+		fi
-+		echo "SKIP: iproute2 lacks IPv6 AMT support (read back '$got')"
-+		exit "$ksft_skip"
-+	fi
++	if (!ASSERT_GT(skel->bss->memcg_seen, 0, "memcg_seen_gt_0"))
++		return;
++
++	/* all -EOPNOTSUPP: CONFIG_MEMCG is off */
++	if (skel->bss->memcg_notsup == skel->bss->memcg_seen) {
++		ASSERT_EQ(skel->bss->memcg_bad, 0, "memcg_stub_invariants");
++		return;
++	}
++
++	if (!ASSERT_EQ(skel->bss->memcg_bad, 0, "memcg_kfunc_invariants"))
++		return;
++
++	/* Every call is either charged or nodata */
++	if (!ASSERT_EQ(skel->bss->memcg_charged + skel->bss->memcg_nodata,
++		       skel->bss->memcg_seen, "memcg_ret_classified"))
++		return;
++
++	if (!skel->bss->memcg_first_saved)
++		return;
++
++	if (!ASSERT_EQ(skel->bss->memcg_first_path[0], '/',
++		       "memcg_first_path_abs"))
++		return;
++
++	if (skel->bss->memcg_first_name[0])
++		ASSERT_OK_PTR(strstr(skel->bss->memcg_first_path,
++				    skel->bss->memcg_first_name),
++			      "memcg_name_in_path");
 +}
 +
-+test_v6_gateway_roundtrip()
++void serial_test_page_owner_iter(void)
 +{
-+	RET=0
-+	add_amt amtg6 mode gateway local "$V6_LOCAL" discovery "$V6_DISC"
-+	check_err $? "create failed: $ADD_ERR"
-+	[ "$(amt_field amtg6 discovery)" = "$V6_DISC" ] ||
-+		check_err 1 "discovery did not read back as $V6_DISC"
-+	[ "$(amt_field amtg6 local)" = "$V6_LOCAL" ] ||
-+		check_err 1 "local did not read back as $V6_LOCAL"
-+	ip -n "$GW" link del amtg6 2>/dev/null
-+	log_test "v6 gateway: discovery round-trips through fill_info"
++	struct bpf_iter_page_owner *skel = NULL;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	long iter_count, unfiltered_count, oc_diff, pid;
++	unsigned int printed_before;
++	int link_fd, prog_fd;
++
++	if (!page_owner_available()) {
++		test__skip();
++		return;
++	}
++
++	skel = bpf_iter_page_owner__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "bpf_iter_page_owner__open_and_load"))
++		return;
++
++	/* --- seq file iterator: unfiltered run --- */
++	skel->bss->filter_en = 0;
++
++	if (!ASSERT_OK(bpf_iter_page_owner__attach(skel), "skel_attach"))
++		goto destroy;
++
++	link_fd = bpf_link__fd(skel->links.dump_page_owner);
++	iter_count = iter_record_count(link_fd);
++	if (iter_count < 0)
++		goto destroy;
++	unfiltered_count = iter_count;
++
++	fprintf(stderr, "iter_count=%ld printed_lines=%u total_seen=%u\n",
++		iter_count, skel->bss->printed_lines, skel->bss->total_seen);
++
++	ASSERT_GT(iter_count, 0, "unfiltered_lines_gt_0");
++
++	ASSERT_EQ((long)skel->bss->printed_lines, iter_count,
++		  "lines_match_printed");
++
++	/* unfiltered: every visited page is printed, so the two must match */
++	ASSERT_EQ(skel->bss->total_seen, skel->bss->printed_lines,
++		  "unfiltered_all_printed");
++
++	/* --- seq file iterator: pid-filtered run --- */
++	pid = getpid();
++	skel->bss->filter_en = 1;
++	skel->bss->filter_pid = (pid_t)pid;
++
++	/* printed_lines is cumulative across runs: compare the delta */
++	printed_before = skel->bss->printed_lines;
++	iter_count = iter_record_count(link_fd);
++	if (iter_count < 0)
++		goto destroy;
++
++	fprintf(stderr,
++		"pid=%ld iter_count=%ld printed_delta=%u\n",
++		pid, iter_count, skel->bss->printed_lines - printed_before);
++
++	ASSERT_GT(iter_count, 0, "filtered_lines_gt_0");
++	ASSERT_EQ(skel->bss->printed_lines - printed_before, iter_count,
++		  "filtered_printed_match");
++
++	/* --- open-coded iterator parity --- */
++	prog_fd = bpf_program__fd(skel->progs.scan_open_coded);
++
++	ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &opts), "prog_test_run");
++	fprintf(stderr,
++		"open_coded_seen=%u nid_seen=%u first_nid=%d "
++		"stack_bytes=%u stack=[\n%s]\n",
++		skel->bss->open_coded_seen, skel->bss->nid_seen,
++		skel->data->first_nid, skel->bss->stack_bytes,
++		skel->bss->stack_text);
++
++	/* same eligibility as the seq path: counts must be close */
++	ASSERT_GT(skel->bss->open_coded_seen, 0, "oc_seen_gt_0");
++	oc_diff = (long)skel->bss->open_coded_seen - unfiltered_count;
++	if (oc_diff < 0)
++		oc_diff = -oc_diff;
++	ASSERT_LE(oc_diff, unfiltered_count / 100 + 64,
++		  "oc_seen_close_to_iter");
++
++	/* the nid kfunc returned a valid node for every page */
++	ASSERT_EQ(skel->bss->nid_seen, skel->bss->open_coded_seen,
++		  "nid_valid_all");
++	ASSERT_GE(skel->data->first_nid, 0, "first_nid_valid");
++
++	ASSERT_GT(skel->bss->stack_bytes, 0, "stack_snprint_ok");
++	ASSERT_OK_PTR(strstr(skel->bss->stack_text, "+0x"), "stack_frames");
++	ASSERT_OK_PTR(strchr(skel->bss->stack_text, '\n'), "stack_lines");
++
++	check_memcg_skel(skel);
++
++destroy:
++	bpf_iter_page_owner__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
+new file mode 100644
+index 000000000000..fada6a314a15
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
+@@ -0,0 +1,161 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++
++__u32 filter_en;
++__u32 filter_pid;
++__u32 total_seen;
++__u32 printed_lines;
++
++__u32 open_coded_seen;
++__u32 nid_seen;
++__s32 first_nid = -1;
++char stack_text[2048];
++__u32 stack_bytes;
++
++__u32 memcg_seen;
++__u32 memcg_charged;
++__u32 memcg_online;
++__u32 memcg_nodata;
++__u32 memcg_notsup;
++__u32 memcg_bad;
++__u32 memcg_first_saved;
++__u32 memcg_first_flags;	/* bit0 is_online, bit1 is_kmem */
++__u32 memcg_first_path_len;
++char memcg_pathbuf[4096];
++char memcg_first_path[4096];
++char memcg_first_name[80];
++
++#define MEMCG_ENODATA 61
++#define MEMCG_EOPNOTSUPP 95
++
++#define MEMCG_F_ONLINE	(1 << 0)
++#define MEMCG_F_OBJCG	(1 << 1)
++
++extern int bpf_iter_page_owner_new(struct bpf_iter_page_owner *it) __ksym;
++extern struct page_owner_scan *
++bpf_iter_page_owner_next(struct bpf_iter_page_owner *it) __ksym;
++extern void bpf_iter_page_owner_destroy(struct bpf_iter_page_owner *it) __ksym;
++extern int bpf_page_owner_stack_snprint(depot_stack_handle_t handle,
++					char *buf, u32 buf_size) __ksym;
++extern int bpf_page_owner_get_nid(struct page_owner_scan *scan) __ksym;
++extern int bpf_page_owner_get_memcg_info(struct page_owner_scan *scan,
++					 struct memcg_info *info,
++					 char *buf, u32 size) __ksym;
++
++static __u32 copy_str(char *dst, const char *src, const __u32 max)
++{
++	__u32 i = 0;
++
++	while (i + 1 < max && src[i]) {
++		dst[i] = src[i];
++		i++;
++	}
++	dst[i] = '\0';
++	return i;
 +}
 +
-+test_v6_relay_roundtrip()
++/*
++ * Exercise bpf_page_owner_get_memcg_info() until 32 pages charged to an
++ * ONLINE memcg have been seen, checking its per-return contract:
++ *  - 0:          buf holds an absolute cgroup path;
++ *  - -ENODATA:   buf was NUL-terminated;
++ *  - -EOPNOTSUPP: counted (CONFIG_MEMCG is off);
++ *
++ * The first online charged sample is saved for userspace to print and
++ * cross-check (name vs basename of path).
++ */
++static void check_memcg(struct page_owner_scan *scan)
 +{
-+	RET=0
-+	add_amt amtr6 mode relay local "$V6_LOCAL"
-+	check_err $? "create failed: $ADD_ERR"
-+	[ "$(amt_field amtr6 local)" = "$V6_LOCAL" ] ||
-+		check_err 1 "local did not read back as $V6_LOCAL"
-+	[ -z "$(amt_field amtr6 discovery)" ] ||
-+		check_err 1 "a relay reported a discovery address"
-+	ip -n "$GW" link del amtr6 2>/dev/null
-+	log_test "v6 relay: local round-trips, no discovery reported"
++	static struct memcg_info info;
++	int err;
++
++	err = bpf_page_owner_get_memcg_info(scan, &info, memcg_pathbuf,
++					    sizeof(memcg_pathbuf));
++	memcg_seen++;
++
++	if (err == 0) {
++		memcg_charged++;
++
++		if (memcg_pathbuf[0] != '/') {
++			memcg_bad++;
++			return;
++		}
++
++		if (!info.is_online)
++			return;
++		memcg_online++;
++
++		/* keep the first online sample for userspace */
++		if (!memcg_first_saved) {
++			memcg_first_path_len = copy_str(memcg_first_path,
++							memcg_pathbuf,
++							sizeof(memcg_first_path));
++			copy_str(memcg_first_name, info.name,
++				 sizeof(memcg_first_name));
++			memcg_first_flags = MEMCG_F_ONLINE |
++					    (info.is_kmem ? MEMCG_F_OBJCG : 0);
++			memcg_first_saved = 1;
++		}
++	} else if (err == -MEMCG_ENODATA) {
++		memcg_nodata++;
++		if (memcg_pathbuf[0] != '\0')
++			memcg_bad++;
++	} else if (err == -MEMCG_EOPNOTSUPP) {
++		memcg_notsup++;
++		if (memcg_pathbuf[0] != '\0')
++			memcg_bad++;
++	} else {
++		memcg_bad++;
++	}
 +}
 +
-+test_v4_gateway_unchanged()
++SEC("syscall")
++int scan_open_coded(const void *ctx)
 +{
-+	RET=0
-+	add_amt amtg4 mode gateway local "$V4_LOCAL" discovery "$V4_DISC"
-+	check_err $? "create failed: $ADD_ERR"
-+	[ "$(amt_field amtg4 discovery)" = "$V4_DISC" ] ||
-+		check_err 1 "discovery did not read back as $V4_DISC"
-+	ip -n "$GW" link del amtg4 2>/dev/null
-+	log_test "v4 gateway still creates (no ABI change)"
++	struct bpf_iter_page_owner it;
++	struct page_owner_scan *scan;
++
++	bpf_iter_page_owner_new(&it);
++
++	while ((scan = bpf_iter_page_owner_next(&it))) {
++		open_coded_seen++;
++		if (bpf_page_owner_get_nid(scan) >= 0)
++			nid_seen++;
++		if (memcg_online < 32)
++			check_memcg(scan);
++		/* grab the stack of the 100th page for userspace to check */
++		if (open_coded_seen == 100) {
++			first_nid = bpf_page_owner_get_nid(scan);
++			if (scan->po_snap.handle)
++				stack_bytes = bpf_page_owner_stack_snprint(
++					scan->po_snap.handle,
++					stack_text, sizeof(stack_text));
++		}
++	}
++	bpf_iter_page_owner_destroy(&it);
++	return 0;
 +}
 +
-+# An IPv4 relay has always ignored IFLA_AMT_DISCOVERY_IP, and still must.
-+test_v4_relay_unchanged()
++SEC("iter/page_owner")
++int dump_page_owner(struct bpf_iter__page_owner *ctx)
 +{
-+	RET=0
-+	add_amt amtr4 mode relay local "$V4_LOCAL" discovery "$V4_DISC"
-+	check_err $? "create failed: $ADD_ERR"
-+	ip -n "$GW" link del amtr4 2>/dev/null
-+	log_test "v4 relay still accepts a v4 discovery (no ABI change)"
++	struct page_owner *po = ctx->po;
++
++	if (!po)
++		return 0;
++
++	total_seen++;
++
++	if (filter_en && po->pid != (pid_t)filter_pid)
++		return 0;
++
++	BPF_SEQ_PRINTF(ctx->meta->seq, "pfn %llu pid %d comm %s\n",
++		       ctx->pfn, po->pid, po->comm);
++	printed_lines++;
++	return 0;
 +}
-+
-+# expect_reject <description> <extack substring> <args...>: the create must
-+# fail, and for the stated reason.
-+expect_reject()
-+{
-+	local desc=$1 want=$2; shift 2
-+
-+	RET=0
-+	add_amt amtbad "$@"
-+	check_fail $? "link was created but should have been rejected"
-+	ip -n "$GW" link del amtbad 2>/dev/null
-+	grep -qi -- "$want" <<< "$ADD_ERR"
-+	check_err $? "rejected for the wrong reason: $ADD_ERR"
-+	log_test "$desc"
-+}
-+
-+require_command jq
-+if [ ! -e /proc/net/if_inet6 ]; then
-+	echo "SKIP: the kernel has no IPv6"
-+	exit "$ksft_skip"
-+fi
-+trap cleanup_all_ns EXIT
-+setup_ns GW || exit "$ksft_skip"
-+ip -n "$GW" link add gw_dev type dummy
-+ip -n "$GW" link set gw_dev up
-+
-+probe_v6_gateway
-+
-+test_v6_gateway_roundtrip
-+test_v6_relay_roundtrip
-+test_v4_gateway_unchanged
-+test_v4_relay_unchanged
-+expect_reject "gateway without discovery is rejected" \
-+	"Discovery attribute" \
-+	mode gateway local "$V6_LOCAL"
-+expect_reject "gateway v6 local + v4 discovery is rejected" \
-+	"of the local family is required" \
-+	mode gateway local "$V6_LOCAL" discovery "$V4_DISC"
-+expect_reject "gateway v4 local + v6 discovery is rejected" \
-+	"of the local family is required" \
-+	mode gateway local "$V4_LOCAL" discovery "$V6_DISC"
-+expect_reject "v6 discovery in relay mode is rejected" \
-+	"only valid in gateway mode" \
-+	mode relay local "$V6_LOCAL" discovery "$V6_DISC"
-+expect_reject "v4 discovery on a v6 relay is rejected" \
-+	"only valid in gateway mode" \
-+	mode relay local "$V6_LOCAL" discovery "$V4_DISC"
-+expect_reject "v6 discovery on a v4 relay is rejected" \
-+	"only valid in gateway mode" \
-+	mode relay local "$V4_LOCAL" discovery "$V6_DISC"
-+expect_reject "unspecified v6 local is rejected" \
-+	"Invalid Local IPv6" \
-+	mode relay local ::
-+expect_reject "v4-mapped v6 local is rejected" \
-+	"Invalid Local IPv6" \
-+	mode relay local ::ffff:192.168.0.1
-+expect_reject "loopback v6 local is rejected" \
-+	"Invalid Local IPv6" \
-+	mode relay local ::1
-+expect_reject "multicast v6 local is rejected" \
-+	"Invalid Local IPv6" \
-+	mode relay local ff02::1
-+expect_reject "multicast v6 discovery is rejected" \
-+	"must be unicast" \
-+	mode gateway local "$V6_LOCAL" discovery ff02::1
-+expect_reject "loopback v6 discovery is rejected" \
-+	"must be unicast" \
-+	mode gateway local "$V6_LOCAL" discovery ::1
-+expect_reject "unspecified v6 discovery is rejected" \
-+	"must be unicast" \
-+	mode gateway local "$V6_LOCAL" discovery ::
-+expect_reject "v4-mapped v6 discovery is rejected" \
-+	"must be unicast" \
-+	mode gateway local "$V6_LOCAL" discovery ::ffff:192.168.0.2
-+
-+exit "$EXIT_STATUS"
 -- 
-2.43.0
+2.20.1
 
