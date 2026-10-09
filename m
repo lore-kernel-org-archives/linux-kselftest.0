@@ -1,98 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA703F1055;
-	Fri,  9 Oct 2026 06:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB363A3822
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 06:06:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791525654; cv=none; b=cETqSiI3nDz/sQP9b4zOnrWbTgB88QQii1J755ANftJRW3XleUk0q5dPcGAC1FBe4r0Hf79xT5Uh8pzzX0KgvT8EsYZRpEP+k5HpUoRLmyJFvEFU7Ae3ycCCbzNO3RJhwYcqEoSvZ0f+wISBnTrlZLLJ9w1n7VERylADk90JGAw=
+	t=1791525991; cv=none; b=DZukQ4n77ELwPwjpm5PEfbqdzFF3l5G1qG9M9TcxulPCFWOR/PmGf1z1tbpB/PsblDk7RZhi/bBxbfUB08w7QPLlcUS23n4LNPTUBLK3acM2wyYxHJNZ6qsujZGydVh+Ff4bn1UbgjQmbKyS6gZcmCOoqW+Jy3r2V6B+8YFruGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791525654; c=relaxed/simple;
-	bh=AktVquTxQWQlF2kZ7qqbaa5h3+h8P2oAsmr1aAwhhAQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=azBQnql6VbgAC631SwPaUhgjtdjnza+ax6sIvsiQa1p3K+B0ShIRT/hAdVoX7Gx7aaJsgyY4baPxfJRsrSUMR28elvfdlSPchNNo/NdpCBiwdHflwK3KzSmufoq1dGnrLAJr2sYNQocnV21Wi3ewSojR14vuzi33y2bQIF8KRLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JPDHGDhN; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1791525991; c=relaxed/simple;
+	bh=HdMdiMCe3MKVqlaCIyB0c2RfvFNaLGy9nwclIDSQHRY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sc07ifmmbcCCGzeukwS3fLcWIDSCttDQPUisIlLrX9DabsJgyTTnDHCB9xKsGVEVqVixiBqGvojacLYU2dwUEBZRpbC+wuTbMpikY/ew3XwqjTCR9KnRRVowAFDEzKQ87tclWKlcY4j2xbL/8GIzGR7iEG4WP5wGl//+xPwHRhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jLJhTOz2; arc=none smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JPDHGDhN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791525653; x=1823061653;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AktVquTxQWQlF2kZ7qqbaa5h3+h8P2oAsmr1aAwhhAQ=;
-  b=JPDHGDhN8bihjLWWBNFtGE4rSVL52FrXU680Dpbt5bX8hsP/d9OlmfWP
-   ZYCrF4dmceJDHX5vWUN7oytplgzg8qNfcPyJlZ4IVj/jFceJC/Prd/EWc
-   Z7t2sf8Er/j3f0xDfT3Qqj9OKC/xn13B34SRwOWgUddLPW/H5PncOWAZn
-   X0lBLczBrnvORDhTxkcxpGGQH8xCDp0vsmUwTtMJ4Cp8y02S6cJNJEfXf
-   GD25ebDvV6HVDncK1Ty80TZ2ky6U+REugkwS0Z+g2G8sCJHlr7DEARgP4
-   WTwsOoys9OrJRJ7GpjS4ooTUofKhHPDcdv6YRhmMZ8NNYEJyatRAQ215f
-   Q==;
-X-CSE-ConnectionGUID: DUKd5PTyT++Y/5j7QNrHSg==
-X-CSE-MsgGUID: pHMn5sUZQ1WBA9LMm3WPog==
-X-IronPort-AV: E=McAfee;i="6800,10657,11929"; a="223474"
-X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
-   d="scan'208";a="223474"
-Received: from fmviesa011.fm.intel.com ([10.60.135.151])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 23:00:53 -0700
-X-CSE-ConnectionGUID: 1ONRRhUoSwu7bky7twv/TQ==
-X-CSE-MsgGUID: sgynZKE6Q9W5kby2AgXruw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
-   d="scan'208";a="2050635"
-Received: from yizheliu-ivm.ccr.corp.intel.com (HELO [10.238.208.114]) ([10.238.208.114])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 23:00:47 -0700
-Message-ID: <43382fac-f6c4-47dd-8030-ef07b6073988@intel.com>
-Date: Fri, 9 Oct 2026 14:00:43 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jLJhTOz2"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-15168a20b47so2534558c88.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 23:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791525989; x=1792130789; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pb4Xp4D0s8TBdd/O2D9YrmHfrZaQPX0yAvwKrkVsb5Q=;
+        b=jLJhTOz2h4odG2H3v/UViuNyPp0oQubMwQKAzLqER/g8krzcFx+MbI4HhhDbzbspJT
+         REm81gvRV+a4KdZfqenjCITSZ3FCJ7JqGlYVwsP5jqssc3v5K2PiMRWpyYVB/SOReYXR
+         YbIuc+QugoemaN52mmD5+Y+vqgTvicl/S1YnGYiFf4aCzN0bXDPQpUa9vFX4MoLRlM74
+         g8QZ6vGml/eAEtQuOC6801SWcZnkEfcOqO/4UJtzHD9fYJRpQ3clQy2DbNaSWffafMwv
+         KxEXyHe5WgGF5sq97/af5SkjnVDIR4UtgtTY7+S2XwFJ/WATqJoBOOPGuMgkEOSLYqAW
+         9TBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791525989; x=1792130789;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pb4Xp4D0s8TBdd/O2D9YrmHfrZaQPX0yAvwKrkVsb5Q=;
+        b=NY72RZFRHSuYpb7J5H27sszNR+WSWzocd13WPKY0w/jWrgtYIgimVxyxdCWozn4O1F
+         8/d0SMNSF8KqM2wcQUjYm9443XBxO7WgzqwGq252egztMlg3rtLmkQQSrC7WtefGQ36q
+         Ww79sW9dZvZdcO/BOv1VXDgfkYI32+K1w+jVrM3FGrQaorIy4mvp8WD5G8FbOSVCsV6e
+         Qm/+HahgbliFpmt+r4VGuQ1KWatD9UtWb5n8JE9HNyZRtvd8ZWTlKw6YYI7nXB1mHVby
+         +BawlogKEKMj0SIHUQIaOGblNYLVH4690o8MfWAaEGLrEqDONA7UuDopeXMjOMljlZA5
+         4c7A==
+X-Forwarded-Encrypted: i=1; AKwUvBxx5bcrjkJM3c7r7IEV1LwO9rYP+LNn8kL+wTZnDuxNzji1HQH+/axOROv2JOsZ04tug4agEsQfvcVykb8UVJQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ2N39LS6iQFcoBhubQfW+yQ/5WNBmCFurxacY/IFZW77d/8/ds
+	vqivvurilRfbiQFaGwfhgvgV5apGXBKngAf7klQJ6IJLb1pd2yHYkFyl
+X-Gm-Gg: AYBFou1pGYkFCYEmES2PzfMyvQ9sHLfVRBLE1vic+IKh1Yjw5SpVOq/jfPhtXWChIPw
+	vILtFXbnH0fujgw91jMZB/xyYeunie2lvrgRw6WWJt0WYIBXMNqQiTJxBB20+mHbyVIRI1jNIZq
+	aaMDkFUuRZJdK8nuCObZt/0wWzSGs6xch94VzZrU2ylLuZez732MrlGbr8uHFiLl07U/sdbZu+5
+	u3Jn4FCs2tUYH9RNbfYJXPeELnnQCvJp1sAXbmvEbsCZToPLF8HFaN8JIjaFUWXpB2fxrGhW7t4
+	kJeZuv7EEmACfGpGPR7I8jSdnvRTTyu945gXK2HcsABKuzyYIAIvzDWoLp8g4Sm8YiInFvWXVmZ
+	vtDJKxprud/ulx1AmS7/6Uk0ea44pqtQ+ginTJ256KHzhrUbQR/iM0Uertmb5R8aW+3gKXXxZyj
+	S2yYr6ZBdIJK4nWJ2XFJ2tQQ7kQ1TMNfvRGPgapYg1m4Nyj4ADOg9IGrR2/7IExt1rIpY4/MbZZ
+	fO/piSDWcu7Ka4Sg1TwqYq+b6j0eSJNdUxzFhBgsQ4gVeJa0hlMMzWHJK4SKtsLzCrX1OskLEFT
+	8h9FcASez4LBzL5od1J3Ut6Z7gfhTH8dokvxPcyjAKw=
+X-Received: by 2002:a05:7301:1522:b0:351:6b56:6627 with SMTP id 5a478bee46e88-3537e0f5b7bmr1520841eec.40.1791525988955;
+        Thu, 08 Oct 2026 23:06:28 -0700 (PDT)
+Received: from ramen-dev-security-2.asia-south1-c.c.ramen-dev-345017.internal (90.156.200.35.bc.googleusercontent.com. [35.200.156.90])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cb6a2afsm4185544eec.31.2026.10.08.23.06.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 23:06:28 -0700 (PDT)
+From: Anil Kaushik <anilkaushikwireless@gmail.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Harald Welte <laforge@gnumonks.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Shuah Khan <shuah@kernel.org>
+Cc: osmocom-net-gprs@lists.osmocom.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v3 0/3] gtp: ynl spec for the GTP netlink family, a reply-command fix, and a selftest
+Date: Fri,  9 Oct 2026 06:06:12 +0000
+Message-Id: <20261009060615.4177402-1-anilkaushikwireless@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 03/23] KVM: selftests: Initialize the TDX VM
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
- <20261001-tdx-selftests-v15-3-7c62a5d8a992@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20261001-tdx-selftests-v15-3-7c62a5d8a992@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/2/2026 3:37 AM, Lisa Wang wrote:
-> +#define tdx_vm_ioctl(vm, cmd, flags, arg)				\
-> +({									\
-> +	u64 hw_error;							\
-> +	int ret = __tdx_vm_ioctl(vm, cmd, flags, arg, &hw_error);	\
-> +									\
-> +	TEST_ASSERT(!ret,						\
-> +		    "%s failed, rc: %d errno: %i (%s) hw_error: 0x%llx",\
-> +		    #cmd, ret, errno, strerror(errno),			\
-> +		    (unsigned long long)hw_error);			\
-> +})
+This respins the RFC "netlink: specs: add genetlink-legacy spec for GTP"
+(netdev, 2026-10-01) as a patch, and adds a driver fix the spec exposed
+plus a selftest that uses it.
 
-The cast to (unsigned long long) catches me eye. Can we use
+While writing a ynl-based selftest for the existing gtp family I found
+that the GET and dump replies put the genl family id in the command
+field instead of a GTP_CMD_* value. libgtpnl ignores the command so it
+never mattered, but ynl rejects the reply as an unknown command and
+drops it. Patch 1 fixes the driver; patches 2 and 3 then describe and
+test the family.
 
-  "hw_error: 0x%" PRIx64
+Patch 1 sets a valid command (GTP_CMD_GETPDP) in the get and dump
+replies.
 
-instead?
+Patch 2 adds a genetlink-legacy ynl spec for the gtp family
+(NEWPDP/DELPDP/GETPDP/ECHOREQ). Description only, no uapi change.
 
+Patch 3 adds a selftest built on the spec: it creates a gtp device, adds
+a PDP context with newpdp, checks getpdp lists it and delpdp removes it.
+It skips when the kernel or iproute2 lack GTP support.
+
+Changes since v2:
+ - selftest: add CONFIG_GTP to tools/testing/selftests/net/config
+   (kept in sorted order).
+ - selftest: move gtp.py to its correct alphabetical slot in the net
+   Makefile (after the gre_* entries) and mark the script executable.
+ - selftest: add docstrings to the three test functions and main();
+   ruff check is clean under tools/testing/selftests/net/ruff.toml.
+ - selftest: move GtpFamily before PSPFamily in lib/py (import and
+   __all__).
+ - Patches 1 and 2 are unchanged from v2.
+
+v2: https://lore.kernel.org/netdev/20261008181031.4129029-1-anilkaushikwireless@gmail.com/
+
+Anil Kaushik (3):
+  gtp: set a valid genl command in PDP context get and dump replies
+  netlink: specs: add genetlink-legacy spec for GTP
+  selftests: net: add a test for the gtp netlink family
+
+ Documentation/netlink/specs/gtp.yaml          | 170 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +
+ drivers/net/gtp.c                             |   4 +-
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/config            |   1 +
+ tools/testing/selftests/net/gtp.py            |  85 +++++++++
+ .../testing/selftests/net/lib/py/__init__.py  |   5 +-
+ tools/testing/selftests/net/lib/py/ynl.py     |   8 +-
+ 8 files changed, 271 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/netlink/specs/gtp.yaml
+ create mode 100755 tools/testing/selftests/net/gtp.py
+
+-- 
+2.25.1
 
