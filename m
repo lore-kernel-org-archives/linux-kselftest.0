@@ -1,105 +1,132 @@
-Received: from mta0.migadu.com (out-38.mta0.migadu.com [91.218.175.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583DE2F7F1F
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 02:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7991DDC1B;
+	Fri,  9 Oct 2026 02:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791512347; cv=none; b=akh/l1q5ovY8gZPW0rG7V3g4VvOcl84GVnVA22cgnwRFEdcU/OgzoHII2wxLY9Tv9WfvalDrPafzP7af8RAARLRc3/n3BjNbJdSQ3qc7nig6CaigId4r4Egd+GCm+ouDH/edZC5w5BCmOi+7qklKeANkIMhhpFRF8kA/7hjynLo=
+	t=1791513057; cv=none; b=SqYe8RxS/64p6D3wzPqQhjGQ19XLTOvfrU3CmvN7vhyaI5iv/OWDnhpRrS+E2mt7PNZh33K3nzXS/HHkN4XKmT5Oke7pGTPkyb2OOZLvFKzAWUvBPCF4qwYWeGLDAws7hPDz8GOSYxTRlqiLR8I4SE8aw0MTdK28mRT3PsKtjKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791512347; c=relaxed/simple;
-	bh=AXIi5l9EgmU9TpFEGlZP7Wof8wFRLyDVW5am2ssOVqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PmT7+GepD4aKE7Zjn3mjonaiAIpuowpKQDA81LTO+ZsR6DWe3Zc02Ztki4/HnTbXO+6bSfCqe0+RB+qlZl0GRFqK0tLtpjlSt2QlaFLQ1jE4xz9uuwpztbOKzcKGowByKQVBR5ls61YjbZPAqJL5fwIvaRDs5FYFBJua8iEWTqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FtLFzIbm; arc=none smtp.client-ip=91.218.175.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791513057; c=relaxed/simple;
+	bh=fOGcN6UzIi4o1Cy+F41LsQ7hqyprtLY4ArZeVW1jYls=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=vDzhZfq3bMMkWc4y4dmXdg1cImZUfCy5PNDaISo+Ox0etttAY3YSP7BdCWa38FVMnf0wEt2SAP4mtuxF3pGNhUXo00dnIEsE0e1xg/z7cDK4Cfu4M1wjexRnKe+jk/v1uxrsR5xua8RPqDvWRWxrVNnev7YSWuluSDcy7Wq1U8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=POsErKbu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FtLFzIbm"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=AXIi5l9EgmU9TpFEGlZP7Wof8wFRLyDVW5am2ssOVqk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791512341; v=1; x=1792117141;
- b=FtLFzIbm88y9d80nYvmcduWjs2s7kX+xky2BUaefrMnZ+Sp0+hpYc8uFF3p6U7DsDch5snPw
- QLOUcPnWXG3lm0406GiE8NLC4W9/w/K0WR5OCIlCo+aNWUDVt7Pt6j2hD+Xcf+rpqA75fnGhBXe
- mFcCYVdf8Y6CaDVAKg71R6so=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id b3c6c0365d398abd;
-	Fri, 09 Oct 2026 02:19:01 +0000
-X-Mizu-Trace-ID: b3c6c0365d398abd
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 9 Oct 2026 10:18:50 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: =?iso-8859-1?Q?Dar=EDo?= Hueso Gisbert <darihueso21@gmail.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: rtnetlink: skip ifalias test if
- uuidgen is missing
-Message-ID: <ashPChZWM1ZMRMjL@fedora>
-References: <20261008183742.678-1-darihueso21@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="POsErKbu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D14AC1F000FF;
+	Fri,  9 Oct 2026 02:30:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791513052;
+	bh=Y0viaUqLMu0Iy/XyHF0oELdeYqhsHiyJNe2//rvASGU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=POsErKbuF6AqC+eMVokkGYcDqXPlMNPm+Ddh8ut08YUomMuacU9QmUmhXoETAGson
+	 HNeUCMWs8o8itezh8nyyE585GbGY+pAC1IIEL4cN0riSsDBFxRZHRF621zvKBrvVia
+	 lTsRDSUCHmDhmwwuEL7+7CeSWUpI1F/1O3ZDLDXQrbu3UJ62zYyUW1JjEkNtAfjcPX
+	 b0JnTxJJ17ZsADYnH4p55jysMfxMYf4b/xLxdS0zAPotXtXoveW1LpTNsJNR34GsMt
+	 4d+8eJR9UbF7sT2K8Nr80HB1SWZde0GjJAR88JXrAASLH4euQiv/3RWlVVkGJhmXrI
+	 Mvpk8sTwafSng==
+Content-Type: multipart/mixed; boundary="===============7154618974049738489=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261008183742.678-1-darihueso21@gmail.com>
+Message-Id: <b5e8b2992ca673bba743e61f822566c6beac44e0e7e6997096f8681d1e36ef42@mail.kernel.org>
+In-Reply-To: <20261009-selftests-bpf-mmap-wait-map-free-v1-1-96d066daea2d@gmail.com>
+References: <20261009-selftests-bpf-mmap-wait-map-free-v1-1-96d066daea2d@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Wait until the .data map of test_mmap is freed
+From: bot+bpf-ci@kernel.org
+To: odys.yuan@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,odys.yuan@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  9 Oct 2026 02:30:50 +0000 (UTC)
 
-Hi Darío,
-On Thu, Oct 08, 2026 at 08:37:41PM +0200, Darío Hueso Gisbert wrote:
-> kci_test_ifalias() uses uuidgen to generate the alias names, but
-> uuidgen is not always installed on minimal systems. When it is
-> missing, the test fails with "uuidgen: command not found" instead of
-> being reported as skipped.
-> 
-> Check for uuidgen before running the test and return SKIP when it is
-> not available, as kci_test_promote_secondaries() already does for
-> ifconfig.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Darío Hueso Gisbert <darihueso21@gmail.com>
-> ---
-> The commit message and the added check were drafted with the help of
-> an LLM (Claude). I reviewed both and tested the script on a kernel
-> built from mainline, with uuidgen installed (unchanged behaviour) and
-> with it removed (the ifalias test now reports SKIP instead of FAIL).
-> 
-> On that kernel the unrelated ipsec_offload test fails with and without
-> this change.
-> 
->  tools/testing/selftests/net/rtnetlink.sh | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-> index 4843d474538f..c758efb734da 100755
-> --- a/tools/testing/selftests/net/rtnetlink.sh
-> +++ b/tools/testing/selftests/net/rtnetlink.sh
-> @@ -412,6 +412,13 @@ kci_test_addrlabel()
->  kci_test_ifalias()
->  {
->  	local ret=0
-> +
-> +	run_cmd uuidgen
-> +	if [ $ret -ne 0 ]; then
-> +		end_test "SKIP: uuidgen not installed"
-> +		return $ksft_skip
-> +	fi
+--===============7154618974049738489==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-You can use check_command, which will log test and return correctly.
+> selftests/bpf: Wait until the .data map of test_mmap is freed
 
-Thanks
-Hangbin
-> +
->  	namewant=$(uuidgen)
->  	syspathname="/sys/class/net/$devdummy/ifalias"
->  	run_cmd ip link set dev "$devdummy" alias "$namewant"
-> -- 
-> 2.53.0
-> 
+TL;DR:
+- test_mmap's new unbounded wait may hang test_progs forever if the map leaks;
+  the watchdog apparently won't kill it
+- commit message's watchdog claim and ".data map" wording may be wrong
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
+> index a271d5a0f7ab..0e297ed5da0f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/mmap.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
+> @@ -280,7 +280,7 @@ void test_mmap(void)
+>  	munmap(tmp1, map_sz);
+>
+>  	/* we need to wait for RCU grace period */
+> -	for (i = 0; i < 10000; i++) {
+> +	while (true) {
+>  		__u32 id = data_map_id - 1;
+>  		if (bpf_map_get_next_id(id, &id) || id > data_map_id)
+>  			break;
+
+Can this loop spin forever if the map is never freed?
+
+The commit message relies on the watchdog to end the test:
+
+> Poll until the map ID is gone. The watchdog of test_progs kills the
+> test if the map is never freed.
+
+Looking at watchdog_timer_func() in test_progs.c, the WD_KILL case only does:
+
+    pthread_kill(env.main_thread, SIGSEGV);
+
+It does not re-arm the timer, so it fires once.  main() installs the handler
+with:
+
+    struct sigaction sigact = {
+        .sa_handler = crash_handler,
+        .sa_flags = SA_RESETHAND,
+    };
+
+crash_handler() calls dump_crash_log(), prints a backtrace and returns.  It
+does not call exit() or abort().  Since this SIGSEGV is sent by
+pthread_kill() and is not a bad memory access, no faulting instruction runs
+again after the handler returns, and SA_RESETHAND only resets the handler to
+the default.
+
+So the thread goes back into the loop, usleep() returns early with EINTR,
+which the loop ignores, and polling carries on.  The sample output in commit
+d9d4d127e813 shows the same behaviour: after "Caught signal #11!" the
+send_signal test keeps running and reports "#292 send_signal:FAIL".  It only
+stopped there because its blocking read() returned EINTR.
+
+If the map is never freed, test_mmap would then loop forever.  That is the
+mmap/prog/map reference leak this check is meant to catch.  Before the patch,
+the same case failed after about 10000 iterations with "get_map_by_id_after
+unexpectedly succeeded".
+
+test_mmap is a parallel test, so with -j, dispatch_thread() would block in
+read_prog_test_msg() waiting for MSG_TEST_DONE from the stuck worker and the
+whole test_progs run never finishes.  In serial mode every later test is
+blocked.  With -w 0 the watchdog is disabled and there is no message at all.
+In a non-ASAN build the watchdog only prints a stack trace after 120s and the
+hang continues.
+
+Would a bounded wait with a much longer limit avoid the flake and still turn
+a leak into a test failure?  For example,
+tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c:wait_for_map_free()
+polls bpf_map_get_fd_by_id() up to 100 times, 100ms apart.
+
+Either way, should the sentence "The watchdog of test_progs kills the test if
+the map is never freed." be corrected in the commit message?
+
+This isn't a bug, but the subject and body call this "the .data map".  The
+map in question is the user-defined BPF_F_MMAPABLE array named data_map in
+SEC(".maps"), not a .data section map.  Could the wording be adjusted?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/37873564350
+--===============7154618974049738489==--
