@@ -1,78 +1,77 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5DC44E021
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 14:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BEFB3446AD
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 14:23:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791554908; cv=none; b=nTMfhjc7W88MqHVsNfXW6nrgjsS3NNDB+JaltCxqOrmEXrmrAIZ7jHkASerTue62uJ7J7EgAfI3kpf7AYBMNpdw7FQsNzekIsVRxlDecRkFYsWLWtGMPVA+P97kclF8xh8vKxVC0D6qFIYFHsVqUxyR5ZfinKbK9Jpk3aNRxsss=
+	t=1791555815; cv=none; b=oOLtxE765uITPEgv85pT8LxRcqug63T6Sm6CaK7UuSL3aRGdwj97gbjLpt7+csetMjjFSv+KYXwETUQbY5APSqFO+bwsvE7efI1qyK9xzBImOpPxTN+7DL97MVRmL/rA0NCFSuZSVT1iQ3g2kNumGv+jx34CVplguNJdSsEboOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791554908; c=relaxed/simple;
-	bh=5mSG/NBC8w5GCzj2/vawyONk6X286OkVdeh9HuVTQqc=;
+	s=arc-20240116; t=1791555815; c=relaxed/simple;
+	bh=/1UEOuZ+Ll6lf+9/1SsGFJnZKpP/B6Tg0ZL9vkY0f+k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GbYXdnT/L2Ojhf5gj/L5t1KClriX06yuy+FvBgPQVsHUq7JMOGXNCvxyWIlTtzSwvf/alP7H0BR0Trg08BJDtlpYb5XAyYrZUGvBV4NTKWfcEw0FNugv/vDLcvtE/wYP072LVV0XL45BTsRNMYXuR2hHEJCYKth1ITAEcuoP9Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UHC0hauX; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=N4YWSc6/tA8+usEhrfFrdG7bDX8krwivCtD+4K9zXhuWGsYLZ2W7qjdWdKR6veJFRwfbxKWiHzCWGHuZr5qDYh6cl6qkPkw/gDGXnpRNe/YMSwoOnSTfVr73uJIiTR0DMAxLvcuML1hwwJ2txsnwPGqNMuduLorJGA3oGaVqKho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTMGPW6R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UHC0hauX"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c2dc8cb0decso648108866b.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 07:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791554901; x=1792159701; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UHiu5xDsf5v+fCY0BZIG/GtuTiSDrErnjbooFDt37U8=;
-        b=UHC0hauXuv8K6JL3Cz1iG7f5QfHzerrC4XvyKd072iRfK8eq0qziwY1MOZzR3tw50z
-         YdFgd457fuZU2Xeo5vVMTB72OKdnHPYKdj+qr93S+P0dZQrciVFVN8CRANIhWyd2grXd
-         EEZvkNXPm2GY1Idn2bp4p2VzZStusXv3UQ3ytkAqq/NfZWx9xrRyY1eJet/4q5ikiU04
-         9qS8S+P6cPXJYpDtFeTzdETV1+triRbv+esdAZPkVjgNUYeQsli17opltLDDXIfF6Z6k
-         acNKGy0dWUEMXlsYu6YdVKivyxCsU9aCj1TLHzO4mWgd4zFi+7NJDJB22pLIr07xJh6N
-         /u/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791554901; x=1792159701;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UHiu5xDsf5v+fCY0BZIG/GtuTiSDrErnjbooFDt37U8=;
-        b=xSPAqVx9KGXDIBDHGgyqzu8pWfhWTg+ZfgYqTk1mr8TyikpIEVwpaAKfDidtqKirVw
-         bWDUSdBGCycxtBiGKFBSLV6lm2BR53lJNxIhuBuBZjLpZ7EmePbLHWAxNQEVrBHPcWyB
-         h9t9kLMhjchRfhxaWtU0TixSuuxm0xAhsz4ru1pqPJ6x/kUw9pE/Z/pJYz3fj5H94JB/
-         0GXd41ZQjltFVN1BiN9P1vnhLNwoixE6YA+JgUr4YKX/f1cvnT44GKESfist47xUKKTZ
-         bb7Z9mCh/R6bfW6gF3CVqPfEJsXpSyoDhAcJSMQLyXS+NC2vflofMDWkRYCEITYJbTd/
-         BnlQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxbzPpOLDPjcWyiMpvDkvuWZRpKwhuNve3s07YWe8X04xwTg9mz1wxczX8lXecfXlMyxRWtXc5KtSG5aCmTEQI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIHudBoQYccUn6BlcGbuntov1m8jqPv5Qrzy85sBrYH94Cd4YyR
-	zlzFhkV7Qw1LjJaIKlHkSKLQ6Yx+YyLUrvlYCxKIgV4YsY3k5OqIsrnI
-X-Gm-Gg: AYBFou1d6auCNY9LpZHy0P5BuB27ZbDi4DtqQkOWZXgj+zCHEFBYJi8RdjHrdVRlrbR
-	F27JySi5J7TUcCZ5M9qTxgfU/fl7cTm2HP0/8MEisrYJXdb4RBHjyBT5UE0SDpRPaqm0fyTqiST
-	KX0zI5/NNHtkuyirG2uGLTu2DoeelQulj5iyqczD/q3NZ93a1qyp0e2kBVXRFUnQlmhFN6s62Ua
-	ZrQTrgerka6tSb9xqHglYMS2yJ8nsdGddWG6Sif81283UNR1B2AUx9lxSeEpj5MnyjCGUuBW0cK
-	4ZdOpcz+Eg1rsT7JuaJ1fyso8lbBJyhZWw1XTBFdMm2Pdt4icKtb2nwLF15wxCCrQJ0+zzm3+9w
-	W2Q8jRyvY8CaNFeU18a/ILA7AaGS2zD5GzuiYR51nKLeMvodh/sZ3OKrOaYIfkrxQvbxzDxkPqr
-	8Vb2tn5kFEvJl1f9MnRVWjxLEd+bCHsIJnvr+6RGI2L6iDvcbNmjDHDsZSeuGJdZesekqvmpVW2
-	B+pR5EwjDOXzN2gJ0youknBZV6Uk4t3zMDXRQ3LINVPTxR8iSzJnuso5lgsBjH9+3ndGpz8i8Ws
-	SDo=
-X-Received: by 2002:a17:906:c110:b0:c2e:32d3:1b5 with SMTP id a640c23a62f3a-c31aa079e98mr201069166b.32.1791554900723;
-        Fri, 09 Oct 2026 07:08:20 -0700 (PDT)
-Received: from fedora-laptop ([172.245.82.59])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c31a9a3bbc9sm97535866b.20.2026.10.09.07.08.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 07:08:20 -0700 (PDT)
-Date: Fri, 9 Oct 2026 09:08:12 -0500
-From: Ming Lei <tom.leiming@gmail.com>
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Uday Shankar <ushankar@purestorage.com>,
-	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests: ublk: make the fault_inject delay a pure
- timeout
-Message-ID: <asj1TNs1XLIAzUQ6@fedora-laptop>
-References: <20261008-bug-ublk-selftest-fault-inject-delay-v1-0-a96af7ead06e@gmail.com>
- <20261008-bug-ublk-selftest-fault-inject-delay-v1-2-a96af7ead06e@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTMGPW6R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2CC31F00898;
+	Fri,  9 Oct 2026 14:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791555814;
+	bh=zPximgPYOjlnCBCEig1+vZE6bEGZG5a82BOf6YtVY4o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RTMGPW6Rf6jdy8aKKQGd83rIgqGX9ybuYlrgS+P/krAulZaM/2lpkjFFP2wToYlIe
+	 dGerEFluEqbmRf6AT4D8AzffOq/ct5j7B5d8a8Rsz1SNrdGIyccEfyxVa4bVwaQXC9
+	 F6QpnOYnz9rNWD537Xt+jKrNzaBnqtG+/Iqpf8WuyI515i9qLpWKCBbFpMLeDImyZu
+	 RuO4UQWVA7rwVykMRdxArVjt4GCilkbKpU7HWGRqUPoHsX4oDSjyP2S/tUIRFbNyuG
+	 IjAr9yvfN5QeubvXCvPfBkmNtqjEsIIkvgnogJnXIYfUpMD2y2DZ8TWzEq4huTpPR7
+	 rZI/KCsULASew==
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfauth.ams.internal (Postfix) with ESMTP id E84CB198003A;
+	Fri,  9 Oct 2026 10:23:26 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Fri, 09 Oct 2026 10:23:31 -0400
+X-ME-Sender: <xms:3vjIak5OfMatuMjarmix0UGXN9ymKCh7KNBSxpIeGyRvRDbxPYUFaQ>
+    <xme:3vjIajlLi65LZnGk3miWEo-WjVfhYvQPK5SxsxT1FTkhW6pZHoYYtuHKhgoTQYG24
+    Eqcm9vDXImwPiVjahIUJQjDleP4Ph8Hhdy0-Qog36u-4kLdnxACrRg>
+X-ME-Received: <xmr:3vjIargk_6s28Rg8sHa_MatlAM745MGgF8lHvjBk9D429RWzwS2XtQEEJXk>
+X-ME-Proxy-Cause: dmFkZTGO+g2zX1FiOhy8heZwWXTAz6Uw5TzxGJTmOuPIKGRaFAZhdrZAa5U7NDL1Brz9IB
+    qzfwrM+86at4iyZba1Y1MmLORr8YwJmYmkQg/zLXkc0jHlVc8E9gxrnVvqLlQ7pOzrtq07
+    Q18eInU1fNpsV0pno0Nn2WfvNFjpIc0H/FmNRVToRXNau5ypP/DrC04ygf07Al3LlsNzqP
+    rYUg4t+AJ14euEZAud0Eqbty+KzUsFTLCCYsBe19xXI3axeQGkFauh20UKs0+0DYBXXfvc
+    UUc0Ld2G8pWFta2rG3CBnvSHOxJwb7DC5URbyyyAQgUPdjnon9NEu31HqU4S0/g4U1sBh7
+    4b6fAmlbDW0OF2ApsFt7nmRBK4DudgGVCTYx8WCa9Qthu0WDZGlcRb0PFp/pjGnlpEVddG
+    3hS2xcsa+RSzRvaGsths2eiHzNr/ULe2y5+CQVGRC9RJamEJ448EE8TKOvMJRL9mGbjyLd
+    XiV/u3Ha10+NkI0m+PxmCutsZ2tjzAsCxOlUQ3VKAd6aBbM2lJz/7UF6TZlAX8pLOO3vgd
+    10jgXY0epXeynoieydnUPC6PtH7FV3/b9mL/2IE6HHHTlqSILETiYoJYQC9kD/8EWV9FZb
+    xtOEnu1G+eMtCGPu161eqRouSKMyyb04lmLLuybaDHmEjl0hShtDiIDWIkNg
+X-ME-Proxy: <xmx:3vjIahjVsBtyc936QCJzoCo7GG3N8WYZea2VQim_Bq9sfVojVVwqgw>
+    <xmx:3vjIavV3kR7ZYZBaFT6UKjVJq1KDzi7goKo7pmS0iRFcMqMIKCpLqg>
+    <xmx:3vjIav17DzBbrYPRTwErbq6gHDEkMjcvQqQtENqeQacN8CwVB8LcOA>
+    <xmx:3vjIahRpFhGjxziaVH8O-4n2ZWNYv_9RcNNWpINFxGPRjAL-C-KWGA>
+    <xmx:3vjIasDRvBq0p7trqMof6sH5LYJwF8dj_zIxSyPSo6cqmtjjcIDHHsM2>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Oct 2026 10:23:25 -0400 (EDT)
+Date: Fri, 9 Oct 2026 15:23:24 +0100
+From: Kiryl Shutsemau <kas@kernel.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, Peter Xu <peterx@redhat.com>, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: Re: [PATCH v5 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
+ macro
+Message-ID: <asj4dT2Q__SlKhgr@thinkstation>
+References: <20261009-fix_hpage_macro-v5-0-54378ae45add@arm.com>
+ <20261009-fix_hpage_macro-v5-2-54378ae45add@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,32 +80,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261008-bug-ublk-selftest-fault-inject-delay-v1-2-a96af7ead06e@gmail.com>
+In-Reply-To: <20261009-fix_hpage_macro-v5-2-54378ae45add@arm.com>
 
-On Thu, Oct 08, 2026 at 10:45:40PM +0800, Qiliang Yuan wrote:
-> ublk_fault_inject_queue_io() queues the delay of each I/O as an
-> IORING_OP_TIMEOUT with a completion count of 1. Such a timeout also
-> completes as soon as any other CQE is posted on the ring.
-> 
-> With more than one I/O in flight, the completion of one I/O ends the
-> delay of the others, and ublk_fault_inject_tgt_io_done() reports every
-> early completion as "unexpected cqe res 0".
-> 
-> Pass a count of 0 so that only the expiry of the timer completes the
-> timeout.
-> 
-> fio 4k random reads for 10 s at queue depth 4 on a fault_inject device
-> with --delay_us 1000000:
-> 
->                             before      after   expected
->   I/Os                     2263170         40         40
->   mean latency             16.3 us    1.000 s        1 s
->   "unexpected cqe res 0"   2263169          0          0
-> 
-> Fixes: 81586652bb1f ("selftests: ublk: add generic_06 for covering fault inject")
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+On Fri, Oct 09, 2026 at 02:27:33AM +0100, Yeoreum Yun wrote:
+> +uint64_t pmd_pshift(void)
+> +{
+> +	if (__pmd_pshift != -1ull)
+> +		return __pmd_pshift;
+> +
+> +	if (__pmd_psize != -1ull)
+> +		__pmd_psize = pmd_psize();
 
-Reviewed-by: Ming Lei <tom.leiming@gmail.com>
+Sashiko pointed that this check is inverted.
 
-Thanks,
-Ming
+> +
+> +	__pmd_pshift = (__pmd_psize > 0) ? ffsl(__pmd_psize) - 1 : 0;
+> +
+> +	return __pmd_pshift;
+>  }
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
