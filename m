@@ -1,53 +1,43 @@
-Received: from mail-m4920.qiye.163.com (mail-m4920.qiye.163.com [45.254.49.20])
+Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E0534D3BE;
-	Fri,  9 Oct 2026 14:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034634E2F2A;
+	Fri,  9 Oct 2026 15:02:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.136.29.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791557572; cv=none; b=gX/xGIFTrf6MEF9OIdoKnXp0Xc7ZNBUN94x8JANfFh8A1Ay+mgvyZ3dn7fQa568Is48y4+B5Sg/WdgKY9s2n7LpYMfwSYOtAQ58qMoL1fKytq+y/RYny1KpzJoCC4qb+d1Sb0kJ6l9OBgWIZ8rS3HOHRBmx9lP6YarS3z4IGDAg=
+	t=1791558181; cv=none; b=Py46gfSKpOBv2VoelI+DQSLp5sD8KZ+hCd3zNZPJ0CsTxJsKSxtCjjI4J4VdGaRYGlDHIGSaf/Ih3+Fu8O2Eo0YqW7USSgsp9BVybe0djRRH41aXDGZzgkOgj9qswtaltAPY9BK9dKEvXcHBFGQMI3jNHzAZ2tCbTWYYyqNOX8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791557572; c=relaxed/simple;
-	bh=sA/DsWao9GwTHZp1eDTeWcxf7HKsdYenxCEWajcGEu0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YnimbbQFQ/xJOrLUI2D7W9XcnvsXUkdCO979SgnQIQHNRU9594vGTchwojGyRkjTSuWFw/f00VMkTzNBN5S9UuSl+IBy61KMQZfNyn54bf2B9ypR8+hhZ/qtc98RShxDgS9pxQJ42aGmCqCBcv/Z/BgSWihz6k2eZFhCRuamlaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=45.254.49.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from localhost.localdomain (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1fe2901a0;
-	Fri, 9 Oct 2026 19:23:27 +0800 (GMT+08:00)
-From: Zhen Ni <zhen.ni@easystack.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	akpm@linux-foundation.org,
-	vbabka@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	brendan.jackman@linux.dev,
-	hannes@cmpxchg.org,
-	ziy@nvidia.com,
-	shuah@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zhen Ni <zhen.ni@easystack.cn>
-Subject: [PATCH 2/6] mm/page_owner: add bpf_iter target "page_owner"
-Date: Fri,  9 Oct 2026 19:23:04 +0800
-Message-Id: <20261009112308.240769-3-zhen.ni@easystack.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20261009112308.240769-1-zhen.ni@easystack.cn>
-References: <20261009112308.240769-1-zhen.ni@easystack.cn>
+	s=arc-20240116; t=1791558181; c=relaxed/simple;
+	bh=CKFy9RneaWo+MxLvPfi1gEFuTHVSDODhWnnSpr3hcNk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fy9St/V+GItsNLvSn4HfJ2ukrDjLqHJ8NDcRp4ecgQtRq6w08AjJc7a2j+CxYMVpigw6V4N6KpuIOXz7KblTNBgtb0qDjqKctHAN5hU6s0id/r81oQMwQ0vlLJBRfs5hKfo7BkYZjJLT1BFNU/1Np8J4pPTyAH/BmUJirXiuyJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com; spf=pass smtp.mailfrom=proxmox.com; arc=none smtp.client-ip=94.136.29.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
+Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
+	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id C4A4341878;
+	Fri, 09 Oct 2026 17:02:56 +0200 (CEST)
+From: Gabriel Goller <g.goller@proxmox.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	bridge@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH net-next] netfilter: bridge: refragment reassembled packets passed up
+Date: Fri,  9 Oct 2026 17:02:38 +0200
+Message-ID: <20261009150246.443127-1-g.goller@proxmox.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,300 +45,357 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa120675c160229kunmd33b3e054cb27e
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDTx5KVhlDT0wYTE5DHklNSFYVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
-	lPT09IVUpLS1VKQktLWQY+
+X-Bm-Milter-Handled: 55990f41-d878-4baa-be0a-ee34c49e34d2
+X-Bm-Transport-Timestamp: 1791558173869
 
-Register a bpf_iter target "page_owner" that walks the pages eligible
-for page_owner output, with the same eligibility rules as the
-/sys/kernel/debug/page_owner read path.
+A bridge can have an upper device that is a port of another bridge,
+e.g. a VLAN device on br0 that is enslaved to br1:
 
-For each eligible page the attached BPF program receives the pfn, the
-page and the page_owner record, and can freely filter and format output.
+  eth0 -- br0 -- br0.241 (VLAN device) -- br1 -- eth1
 
-The po_snap record in the scan cursor is taken inside the page_ext
-RCU window and handed to the BPF program as a copy, so no RCU window
-is needed at consumption time. Torn reads remain possible if the
-record is concurrently updated while it is copied, but this is the
-same best-effort behavior as the read path has always had.
+br0 reassembles fragments in prerouting so conntrack sees the whole
+packet. If br0 forwards the packet, postrouting splits it into the
+original fragments again. If br0 passes it up instead, it stays whole.
+br1 then cannot refragment it, because frag_max_size is kept in
+skb->cb, which br1 clears on input. Packets larger than the MTU of
+eth1 are dropped.
 
-The target is registered from pageowner_init() when both
-CONFIG_PAGE_OWNER and CONFIG_BPF_SYSCALL are enabled; a registration
-failure only disables the bpf_iter target.
+Refragment in local input as well, unless the packet is addressed to
+the bridge itself, i.e. pkt_type is PACKET_HOST. That is the case if
+the destination is the MAC address of the bridge or of the port the
+frame arrived on. Other packets reach local input if they are
+broadcast or multicast, sent to the MAC address of another port, or
+sent to any address while the bridge is promiscuous. The bridge is
+promiscuous if an upper device is a port of another bridge, has its
+own MAC address (e.g. a macvlan device), or if a packet capture is
+running.
 
-Userspace tools such as bpftrace can attach to this target like any
-other bpf_iter. For example, to count pages owned by init (pid 1):
+Passing a packet up leaves the bridge just like forwarding, so handle
+it the same way: reassemble only to track, then hand on the received
+fragments. The layer above sees the same packets as without
+conntrack, whatever kind of device it is, and nothing has to be
+looked up per packet. Packets for the bridge itself are not bridged
+again. They stay whole, so the inet stack can use their conntrack
+entry without reassembling again. Fragments are passed up without
+conntrack, as the layer above would otherwise skip reassembly and
+tracking.
 
-    bpftrace -e 'iter:page_owner / ctx->po->pid == 1 / { @ = count(); }'
+Changes for existing setups with bridge conntrack:
 
-Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
+  - Upper devices with their own MAC address and local receivers of
+    fragmented broadcast or multicast get fragments and reassemble
+    them again. (not good, but also not very common)
+  - Packet captures on the bridge see fragments, as without conntrack.
+    (not sure if this is a big issue)
+  - Packets that cannot be refragmented still stay whole: those whose
+    fragments exceed the bridge MTU, IPv6 packets with fragments below
+    IPV6_MIN_MTU, and packets that are no longer plain IP because VLAN
+    ingress moved a tag of a foreign protocol into the payload.
+
+A selftest covers bridge, VLAN, bridge and bridge, macvlan, bridge
+topologies. Fragmented IPv4 and IPv6 pings across them fail in both
+directions without the fix.
+
+Fixes: 3c171f496ef5 ("netfilter: bridge: add connection tracking system")
+Signed-off-by: Gabriel Goller <g.goller@proxmox.com>
 ---
- mm/Makefile          |   3 ++
- mm/page_owner.c      |  33 +++---------
- mm/page_owner.h      |  48 ++++++++++++++++++
- mm/page_owner_iter.c | 116 +++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 174 insertions(+), 26 deletions(-)
- create mode 100644 mm/page_owner.h
- create mode 100644 mm/page_owner_iter.c
 
-diff --git a/mm/Makefile b/mm/Makefile
-index e7245cb88c66..d7307b5a964c 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -115,6 +115,9 @@ obj-$(CONFIG_DEBUG_KMEMLEAK) += kmemleak.o
- obj-$(CONFIG_DEBUG_RODATA_TEST) += rodata_test.o
- obj-$(CONFIG_DEBUG_VM_PGTABLE) += debug_vm_pgtable.o
- obj-$(CONFIG_PAGE_OWNER) += page_owner.o
-+ifdef CONFIG_BPF_SYSCALL
-+obj-$(CONFIG_PAGE_OWNER) += page_owner_iter.o
-+endif
- obj-$(CONFIG_MEMORY_ISOLATION) += page_isolation.o
- obj-$(CONFIG_ZSMALLOC)	+= zsmalloc.o
- obj-$(CONFIG_GENERIC_EARLY_IOREMAP) += early_ioremap.o
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index bafe474f3360..eb420803a434 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -14,6 +14,7 @@
- #include <linux/sched/clock.h>
+RFC: I'm not confident in this patch. Refragmenting on local input
+affects every setup with something above a conntrack-enabled bridge,
+not just stacked bridges, and may break things I haven't foreseen.
+
+An alternative would be to keep frag_max_size with the packet in a
+new skb extension, as br_netfilter does, and let br1 restore it. That
+would avoid reassembling twice, but costs an extension id and an
+allocation per packet passed up, and the extension has to be removed
+on every path that does not use it.
+
+ net/bridge/netfilter/nf_conntrack_bridge.c    |  66 ++++++++
+ .../testing/selftests/net/netfilter/Makefile  |   1 +
+ .../net/netfilter/bridge_conntrack_frag.sh    | 157 ++++++++++++++++++
+ tools/testing/selftests/net/netfilter/config  |   1 +
+ 4 files changed, 225 insertions(+)
+ create mode 100755 tools/testing/selftests/net/netfilter/bridge_conntrack_frag.sh
+
+diff --git a/net/bridge/netfilter/nf_conntrack_bridge.c b/net/bridge/netfilter/nf_conntrack_bridge.c
+index b5444335b86f..d738ef5f6dc8 100644
+--- a/net/bridge/netfilter/nf_conntrack_bridge.c
++++ b/net/bridge/netfilter/nf_conntrack_bridge.c
+@@ -295,6 +295,41 @@ static unsigned int nf_ct_bridge_pre(void *priv, struct sk_buff *skb,
+ 	return nf_conntrack_in(skb, &bridge_state);
+ }
  
- #include "page_alloc.h"
-+#include "page_owner.h"
- 
- /*
-  * TODO: teach PAGE_OWNER_STACK_DEPTH (__dump_page_owner and save_stack)
-@@ -21,31 +22,6 @@
-  */
- #define PAGE_OWNER_STACK_DEPTH (16)
- 
--struct page_owner {
--	unsigned short order;
--	short last_migrate_reason;
--	gfp_t gfp_mask;
--	depot_stack_handle_t handle;
--	depot_stack_handle_t free_handle;
--	u64 ts_nsec;
--	u64 free_ts_nsec;
--	char comm[TASK_COMM_LEN];
--	pid_t pid;
--	pid_t tgid;
--	pid_t free_pid;
--	pid_t free_tgid;
--};
--
--/*
-- * Cursor and per-page result of page_owner_next_eligible().
-- */
--struct page_owner_scan {
--	/* resume point */
--	unsigned long pfn;
--	struct page *page;
--	struct page_owner po_snap;
--};
--
- struct stack {
- 	struct stack_record *stack_record;
- 	struct stack *next;
-@@ -741,7 +717,7 @@ void __dump_page_owner(const struct page *page)
-  * must advance scan->pfn past the hit before calling again to resume
-  * the scan.
-  */
--static bool page_owner_next_eligible(struct page_owner_scan *scan)
-+bool page_owner_next_eligible(struct page_owner_scan *scan)
- {
- 	unsigned long pfn = scan->pfn;
- 
-@@ -1196,6 +1172,11 @@ static int __init pageowner_init(void)
- 			    &stack_fops);
- 	debugfs_create_file("count_threshold", 0600, dir, NULL,
- 			    &threshold_fops);
++static unsigned int
++nf_ct_bridge_refrag(struct sk_buff *skb, const struct nf_hook_state *state,
++		    int (*output)(struct net *, struct sock *sk,
++				  const struct nf_bridge_frag_data *data,
++				  struct sk_buff *));
++static int nf_ct_bridge_refrag_in(struct net *net, struct sock *sk,
++				  const struct nf_bridge_frag_data *data,
++				  struct sk_buff *skb);
 +
-+#ifdef CONFIG_BPF_SYSCALL
-+	if (page_owner_iter_register())
-+		pr_warn("page_owner: failed to register bpf_iter target\n");
-+#endif
++/* Prerouting reassembled the packet for tracking. Unless it is for the bridge
++ * itself, an upper device may bridge it again without frag_max_size and drop
++ * it, so pass up the original fragments. Keep the packet whole if
++ * refragmenting would drop it.
++ */
++static bool nf_ct_bridge_refrag_up(const struct sk_buff *skb)
++{
++	u16 frag_max_size = BR_INPUT_SKB_CB(skb)->frag_max_size;
++
++	if (skb->pkt_type == PACKET_HOST || !frag_max_size ||
++	    frag_max_size > skb->dev->mtu)
++		return false;
++
++	/* VLAN ingress may have moved a tag of a foreign protocol into the
++	 * payload since prerouting, so the packet is no longer plain IP.
++	 */
++	switch (skb->protocol) {
++	case htons(ETH_P_IP):
++		return true;
++	case htons(ETH_P_IPV6):
++		return frag_max_size >= IPV6_MIN_MTU;
++	default:
++		return false;
++	}
++}
++
+ static unsigned int nf_ct_bridge_in(void *priv, struct sk_buff *skb,
+ 				    const struct nf_hook_state *state)
+ {
+@@ -302,6 +337,14 @@ static unsigned int nf_ct_bridge_in(void *priv, struct sk_buff *skb,
+ 	struct nf_conntrack *nfct = skb_nfct(skb);
+ 	struct nf_conn *ct;
+ 
++	if (nf_ct_bridge_refrag_up(skb)) {
++		/* Fragments carrying conntrack would make the layer above skip
++		 * reassembly and tracking.
++		 */
++		nf_reset_ct(skb);
++		return nf_ct_bridge_refrag(skb, state, nf_ct_bridge_refrag_in);
++	}
++
+ 	if (promisc) {
+ 		nf_reset_ct(skb);
+ 		return NF_ACCEPT;
+@@ -387,6 +430,29 @@ static int nf_ct_bridge_frag_restore(struct sk_buff *skb,
  	return 0;
  }
- late_initcall(pageowner_init)
-diff --git a/mm/page_owner.h b/mm/page_owner.h
-new file mode 100644
-index 000000000000..fda83be69275
---- /dev/null
-+++ b/mm/page_owner.h
-@@ -0,0 +1,48 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * mm/ internal page_owner and page_owner_iter declarations
-+ */
-+
-+#ifndef __MM_PAGE_OWNER_H
-+#define __MM_PAGE_OWNER_H
-+
-+#include <linux/page_ext.h>
-+#include <linux/sched.h>
-+#include <linux/stackdepot.h>
-+
-+/*
-+ * mm/page_owner.c
-+ */
-+struct page_owner {
-+	unsigned short order;
-+	short last_migrate_reason;
-+	gfp_t gfp_mask;
-+	depot_stack_handle_t handle;
-+	depot_stack_handle_t free_handle;
-+	u64 ts_nsec;
-+	u64 free_ts_nsec;
-+	char comm[TASK_COMM_LEN];
-+	pid_t pid;
-+	pid_t tgid;
-+	pid_t free_pid;
-+	pid_t free_tgid;
-+};
-+
-+/*
-+ * Cursor and per-page result of page_owner_next_eligible().
-+ */
-+struct page_owner_scan {
-+	/* resume point */
-+	unsigned long pfn;
-+	struct page *page;
-+	struct page_owner po_snap;
-+};
-+
-+bool page_owner_next_eligible(struct page_owner_scan *scan);
-+
-+/*
-+ * mm/page_owner_iter.c
-+ */
-+int page_owner_iter_register(void);
-+
-+#endif /* __MM_PAGE_OWNER_H */
-diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
-new file mode 100644
-index 000000000000..33dc9dcd59de
---- /dev/null
-+++ b/mm/page_owner_iter.c
-@@ -0,0 +1,116 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <linux/btf_ids.h>
-+#include <linux/memblock.h>
-+#include <linux/mm.h>
-+#include <linux/seq_file.h>
-+
-+#include "page_owner.h"
-+
-+struct bpf_iter__page_owner {
-+	__bpf_md_ptr(struct bpf_iter_meta *, meta);
-+	__bpf_md_ptr(struct page *, page);
-+	__bpf_md_ptr(struct page_owner *, po);
-+	u64 pfn;
-+};
-+
-+DEFINE_BPF_ITER_FUNC(page_owner, struct bpf_iter_meta *meta,
-+		     struct page *page, struct page_owner *po, u64 pfn)
-+
-+static void *page_owner_seq_start(struct seq_file *seq, loff_t *posp)
+ 
++static int nf_ct_bridge_refrag_in(struct net *net, struct sock *sk,
++				  const struct nf_bridge_frag_data *data,
++				  struct sk_buff *skb)
 +{
-+	struct page_owner_scan *scan = seq->private;
++	int err;
 +
-+	if (*posp == 0)
-+		scan->pfn = min_low_pfn;
++	err = nf_ct_bridge_frag_restore(skb, data);
++	if (err < 0)
++		return err;
++
++	/* The fast path reuses the reassembled head as the first fragment. Its
++	 * ignore_df from defrag would let IPv6 forwarding refragment it.
++	 */
++	skb->ignore_df = 0;
++
++	/* Unlike the transmit path, receive keeps the Ethernet header pulled. */
++	skb_set_mac_header(skb, -ETH_HLEN);
++	br_drop_fake_rtable(skb);
++	netif_receive_skb(skb);
++
++	return 0;
++}
++
+ static int nf_ct_bridge_refrag_post(struct net *net, struct sock *sk,
+ 				    const struct nf_bridge_frag_data *data,
+ 				    struct sk_buff *skb)
+diff --git a/tools/testing/selftests/net/netfilter/Makefile b/tools/testing/selftests/net/netfilter/Makefile
+index df3c20c90f5d..d3bc881deaf7 100644
+--- a/tools/testing/selftests/net/netfilter/Makefile
++++ b/tools/testing/selftests/net/netfilter/Makefile
+@@ -12,6 +12,7 @@ TEST_PROGS := \
+ 	br_netfilter.sh \
+ 	br_netfilter_queue.sh \
+ 	bridge_brouter.sh \
++	bridge_conntrack_frag.sh \
+ 	conntrack_clash.sh \
+ 	conntrack_dump_flush.sh \
+ 	conntrack_icmp_related.sh \
+diff --git a/tools/testing/selftests/net/netfilter/bridge_conntrack_frag.sh b/tools/testing/selftests/net/netfilter/bridge_conntrack_frag.sh
+new file mode 100755
+index 000000000000..04402f0f9fdf
+--- /dev/null
++++ b/tools/testing/selftests/net/netfilter/bridge_conntrack_frag.sh
+@@ -0,0 +1,157 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2026 Proxmox Server Solutions GmbH, Gabriel Goller <g.goller@proxmox.com>
++#
++# Bridge conntrack reassembles fragments. Packets passed up a bridge must be
++# refragmented, or a stacked bridge drops them if they exceed its egress MTU:
++#
++# vlan:    sender                   bridge                       receiver
++#          eth0.241 -- eth0 <-> veth0 -- br0 -- br0.241 -- br1 -- veth1 <-> eth0
++#
++# macvlan: sender             bridge                             receiver
++#          eth0 <-> veth0 -- br0 -- mv0 (passthru) -- br1 -- veth1 <-> eth0
++#
++# br0 is promiscuous because its upper device is a bridge port.
++
++source lib.sh
++
++checktool "nft --version" "run test without nft"
++
++ret=0
++
++trap cleanup_all_ns EXIT
++
++add_dev()
++{
++	if ! ip "$@"; then
++		# Do not hide failures of an earlier topology.
++		[ "$ret" -eq 0 ] || exit "$ret"
++		echo "SKIP: Cannot create required network device"
++		exit $ksft_skip
++	fi
++}
++
++setup_topology()
++{
++	local upper=$1 knob
++
++	setup_ns sender nsbr receiver || exit $ksft_skip
++
++	add_dev link add veth0 netns "$nsbr" type veth peer name eth0 netns "$sender"
++	add_dev link add veth1 netns "$nsbr" type veth peer name eth0 netns "$receiver"
++	add_dev -net "$nsbr" link add br0 type bridge
++	add_dev -net "$nsbr" link add br1 type bridge
++
++	case "$upper" in
++	vlan)
++		add_dev -net "$nsbr" link add link br0 name br0.241 type vlan id 241
++		add_dev -net "$sender" link add link eth0 name eth0.241 type vlan id 241
++		upper_dev=br0.241
++		sender_dev=eth0.241
++		;;
++	macvlan)
++		add_dev -net "$nsbr" link add link br0 name mv0 type macvlan mode passthru
++		upper_dev=mv0
++		sender_dev=eth0
++		;;
++	esac
++
++	# br1 could otherwise take over br0's address from its upper device port,
++	# and traffic to br1 would no longer reach br0 via promiscuous delivery.
++	ip -net "$nsbr" link set br1 address 02:00:00:00:00:20
++
++	# br_netfilter would call the inet hooks on bridged traffic.
++	for knob in bridge-nf-call-iptables bridge-nf-call-ip6tables; do
++		ip netns exec "$nsbr" sysctl -qw "net.bridge.$knob=0" 2>/dev/null
++	done
++
++	ip -net "$nsbr" link set veth0 master br0
++	ip -net "$nsbr" link set "$upper_dev" master br1
++	ip -net "$nsbr" link set veth1 master br1
++
++	for dev in veth0 veth1 br0 "$upper_dev" br1; do
++		ip -net "$nsbr" link set "$dev" up
++	done
++	ip -net "$sender" link set eth0 up
++	ip -net "$sender" link set "$sender_dev" up
++	ip -net "$receiver" link set eth0 up
++
++	ip -net "$sender" addr add 192.0.2.1/24 dev "$sender_dev"
++	ip -net "$receiver" addr add 192.0.2.2/24 dev eth0
++	ip -net "$nsbr" addr add 192.0.2.3/24 dev br1
++	ip -net "$sender" addr add 2001:db8:1::1/64 dev "$sender_dev" nodad
++	ip -net "$receiver" addr add 2001:db8:1::2/64 dev eth0 nodad
++	ip -net "$nsbr" addr add 2001:db8:1::3/64 dev br1 nodad
++}
++
++check_ping()
++{
++	local ns=$1 dst=$2 desc=$3
++
++	if ip netns exec "$ns" ping -q -c 2 -i 0.1 -w 3 -M dont -s 4000 "$dst" \
++		>/dev/null 2>&1; then
++		echo "PASS: $phase $desc"
 +	else
-+		scan->pfn++;
-+
-+	if (!page_owner_next_eligible(scan))
-+		return NULL;
-+	return scan->page;
++		echo "FAIL: $phase $desc"
++		ret=1
++	fi
 +}
 +
-+static void *page_owner_seq_next(struct seq_file *seq, void *v, loff_t *posp)
++check_paths()
 +{
-+	struct page_owner_scan *scan = seq->private;
++	local prefix
 +
-+	++*posp;
-+	scan->pfn++;
-+	if (!page_owner_next_eligible(scan))
-+		return NULL;
-+
-+	return scan->page;
++	for prefix in 192.0.2. 2001:db8:1::; do
++		check_ping "$sender" "${prefix}2" "sender -> receiver ${prefix}2"
++		check_ping "$receiver" "${prefix}1" "receiver -> sender ${prefix}1"
++		check_ping "$sender" "${prefix}3" "sender -> bridge host ${prefix}3"
++	done
 +}
 +
-+static void page_owner_seq_stop(struct seq_file *seq, void *v)
++run_test()
 +{
++	local upper=$1 family
++
++	setup_topology "$upper"
++
++	phase="$upper without conntrack:"
++	check_paths
++	# A broken setup must not be hidden by a later skip.
++	[ "$ret" -eq 0 ] || exit "$ret"
++
++	# The ct expression enables the bridge conntrack hooks. Count oversized
++	# packets at br0 input to make sure they were reassembled there.
++	if ! ip netns exec "$nsbr" nft -f - <<'NFT'
++table bridge br_frag {
++	counter tracked4 { }
++	counter tracked6 { }
++	chain input {
++		type filter hook input priority 0; policy accept;
++		iifname "veth0" ct state new,established meta length > 1500 \
++			ip saddr 192.0.2.1 counter name tracked4
++		iifname "veth0" ct state new,established meta length > 1500 \
++			ip6 saddr 2001:db8:1::1 counter name tracked6
++	}
++}
++NFT
++	then
++		echo "SKIP: Bridge conntrack is not available"
++		exit $ksft_skip
++	fi
++
++	phase="$upper with conntrack:"
++	check_paths
++
++	for family in 4 6; do
++		if ! ip netns exec "$nsbr" nft list counter bridge br_frag "tracked$family" |
++			grep -q 'packets [1-9]'; then
++			echo "FAIL: $phase no reassembled IPv$family packets at br0 input"
++			ret=1
++		fi
++	done
 +}
 +
-+static int page_owner_prog_seq_show(struct bpf_prog *prog,
-+				    struct bpf_iter_meta *meta, void *v)
-+{
-+	struct page_owner_scan *scan = meta->seq->private;
-+	struct bpf_iter__page_owner ctx;
++run_test vlan
++run_test macvlan
 +
-+	/* @po: hit-time snapshot, no RCU window needed. */
-+	ctx.meta = meta;
-+	ctx.page = (struct page *)v;
-+	ctx.po = &scan->po_snap;
-+	ctx.pfn = scan->pfn;
-+
-+	return bpf_iter_run_prog(prog, &ctx);
-+}
-+
-+static int page_owner_seq_show(struct seq_file *seq, void *v)
-+{
-+	struct bpf_iter_meta meta;
-+	struct bpf_prog *prog;
-+
-+	meta.seq = seq;
-+	prog = bpf_iter_get_info(&meta, false);
-+	if (!prog)
-+		return 0;
-+
-+	return page_owner_prog_seq_show(prog, &meta, v);
-+}
-+
-+static const struct seq_operations page_owner_iter_seq_ops = {
-+	.start	= page_owner_seq_start,
-+	.next	= page_owner_seq_next,
-+	.stop	= page_owner_seq_stop,
-+	.show	= page_owner_seq_show,
-+};
-+
-+static const struct bpf_iter_seq_info page_owner_iter_seq_info = {
-+	.seq_ops		= &page_owner_iter_seq_ops,
-+	.init_seq_private	= NULL,
-+	.fini_seq_private	= NULL,
-+	.seq_priv_size		= sizeof(struct page_owner_scan),
-+};
-+
-+static struct bpf_iter_reg page_owner_iter_reg_info = {
-+	.target			= "page_owner",
-+	.ctx_arg_info_size	= 2,
-+	.ctx_arg_info		= {
-+		{ offsetof(struct bpf_iter__page_owner, page),
-+		  PTR_TO_BTF_ID_OR_NULL },
-+		{ offsetof(struct bpf_iter__page_owner, po),
-+		  PTR_TO_BTF_ID_OR_NULL },
-+	},
-+	.seq_info		= &page_owner_iter_seq_info,
-+};
-+
-+BTF_ID_LIST(page_owner_btf_ids)
-+BTF_ID(struct, page)
-+BTF_ID(struct, page_owner)
-+
-+int page_owner_iter_register(void)
-+{
-+	page_owner_iter_reg_info.ctx_arg_info[0].btf_id =
-+		page_owner_btf_ids[0];
-+	page_owner_iter_reg_info.ctx_arg_info[1].btf_id =
-+		page_owner_btf_ids[1];
-+
-+	return bpf_iter_reg_target(&page_owner_iter_reg_info);
-+}
++exit "$ret"
+diff --git a/tools/testing/selftests/net/netfilter/config b/tools/testing/selftests/net/netfilter/config
+index 629b2b29ed1a..91985320c292 100644
+--- a/tools/testing/selftests/net/netfilter/config
++++ b/tools/testing/selftests/net/netfilter/config
+@@ -62,6 +62,7 @@ CONFIG_NET_SCH_HTB=m
+ CONFIG_NET_SCH_NETEM=m
+ CONFIG_NET_VRF=y
+ CONFIG_NF_CONNTRACK=m
++CONFIG_NF_CONNTRACK_BRIDGE=m
+ CONFIG_NF_CONNTRACK_EVENTS=y
+ CONFIG_NF_CONNTRACK_FTP=m
+ CONFIG_NF_CONNTRACK_MARK=y
 -- 
-2.20.1
+2.47.3
+
 
