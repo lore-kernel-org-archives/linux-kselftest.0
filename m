@@ -1,433 +1,141 @@
-Received: from mail-m1973198.qiye.163.com (mail-m1973198.qiye.163.com [220.197.31.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4B24D37B3;
-	Fri,  9 Oct 2026 12:39:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.98
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328D22931F7;
+	Fri,  9 Oct 2026 13:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791549567; cv=none; b=Eq7lKQh4O3E5LZh438Sl/QD9bIZiPLlWoN+rYmh6O5ux77quEKJoonXsS8tW1MYDsoFs1CCrMsurXceAevDJ/OvhByQhNLcQToaZnyyAYkQaDoFD+2oQ1Rj6a6v3A0BNbxIt7C97eZsZ+0BNeeOiAJv8MbAhY0c80YLLdZ0NHuI=
+	t=1791550900; cv=none; b=EGAmE4Rv/fm32t/d0AEnoDztic+9bhknDGg8YXOcWi8sv2qbsmdAsz+Tk2b+ClUEMU7SeAkINLZJvZd/cz4ff82ZzmK3vSR4T7G8AF+8aVVjh3x+eUeglnE4mSMex4NiWo/ywyWSiL0LevIWpteenJYR+bTmiT8i60KZcV3sn1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791549567; c=relaxed/simple;
-	bh=36R2gIevv+gNJ9JHGkNR4b0oPzf5iWxYXe0kNa1FjQY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZNYykmsk1CFgWNIqWUS2CakJD849tqt9fYE5G17LSIiuG4iAqbcydqf9Advtfy03PbZG83/q2nk6ntPBzLNHKW7ggKbAQQYh+foPvT2mHSDvCC7JhYhOWMkkw2dhHyg3/m4J/lkRBHiUgfK8TKk4fPGy5Pn3r/I+2RmGWPcBKfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=220.197.31.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from localhost.localdomain (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1fe2901a8;
-	Fri, 9 Oct 2026 19:23:32 +0800 (GMT+08:00)
-From: Zhen Ni <zhen.ni@easystack.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	akpm@linux-foundation.org,
-	vbabka@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	brendan.jackman@linux.dev,
-	hannes@cmpxchg.org,
-	ziy@nvidia.com,
-	shuah@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-mm@kvack.org,
+	s=arc-20240116; t=1791550900; c=relaxed/simple;
+	bh=Yr0csg8n11gSHouKR25AWi4XRz98sjteLRNEiNNgFHE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NXCiY11Z196ZD382ymYLh1qL2ufTBehh+RVB0Kr3DoXbskiEdx8zRa0NfE7CgpmNdbpvGl+mMfZoCw1Vkl15t+DCn+beu0TFcZMdE9qrTvKqLiRFrRdDFX6ZfSXG26HA5axEEEBl0ZaWKamXKvAIROos1sxaslKTY7wIPvBUAqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=QiaEZSoU; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="QiaEZSoU"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2DBB1D14;
+	Fri,  9 Oct 2026 06:01:32 -0700 (PDT)
+Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 16E293F66F;
+	Fri,  9 Oct 2026 06:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791550896; bh=Yr0csg8n11gSHouKR25AWi4XRz98sjteLRNEiNNgFHE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QiaEZSoUY3bacjAXWE8bvvHJR1nA7UlDRrWbL1smyctutQkasEHvSwcS63RvYiaxm
+	 2ktEh2CIGkVHlTOX5NJZnySVUDB3Ty5lORy7x9K3QAp8H5x5f9gc6Ni+mzurGr8D6K
+	 /P5q8L3qAQ0G6rfA2jVNoUqGD9BW/grWDcSGbzk4=
+From: Leonardo Bras <leo.bras@arm.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Matlack <dmatlack@google.com>,
+	Yosry Ahmed <yosry@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Oliver Upton <oupton@kernel.org>,
+	Leonardo Bras <leo.bras@arm.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Josh Hilke <jrhilke@google.com>,
+	Wu Fei <wu.fei9@sanechips.com.cn>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zhen Ni <zhen.ni@easystack.cn>
-Subject: [PATCH 6/6] selftests/bpf: add tests for the page_owner bpf_iter target
-Date: Fri,  9 Oct 2026 19:23:08 +0800
-Message-Id: <20261009112308.240769-7-zhen.ni@easystack.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20261009112308.240769-1-zhen.ni@easystack.cn>
-References: <20261009112308.240769-1-zhen.ni@easystack.cn>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] KVM: selftests: Add support for dirty-ring on dirty_log_perf_test
+Date: Fri,  9 Oct 2026 14:00:45 +0100
+Message-ID: <20261009130054.3312154-2-leo.bras@arm.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3485; i=leo.bras@arm.com; h=from:subject; bh=Yr0csg8n11gSHouKR25AWi4XRz98sjteLRNEiNNgFHE=; b=owGbwMvMwCX2pizjszvTwvWMp9WSGLJOPC28c+XfDqWD71OYOnUk1ne2ley9ob3tvsjxC9O/t 8gV/N/b0FHKwiDGxSArpsgi+2j+Kp7vUzKOXPmxAGYOKxPIEAYuTgGYSPUcRobN3Sbi3Nt3lS2U Pr+k40oZkz/7QftbDiWm51Ze8vX58/IxI8P/xSGinPftNjSy90Qlr5mnNsXkTnHaShH5szueb3N UOM8MAA==
+X-Developer-Key: i=leo.bras@arm.com; a=openpgp; fpr=36E6C95AE0F111CC5B6F4D2E688C33F8A0C5B0C5
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa12067716e0229kunmd33b3e054cb292
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCQx8fVktPGE5JGR9KQhkZH1YVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
-	lPT09IVUpLS1VKQktLWQY+
 
-Add a sleepable BPF program and a userspace runner covering the seq_file
-and open-coded page_owner iterators and the get_nid, stack_snprint and
-get_memcg_info kfuncs. The test checks:
+Add support to dirty-ring on dirty_log_perf_test, so we can measure
+performance differences when we change / improve the mechanism.
 
-  - seq_file walk, unfiltered and pid-filtered: records read back from
-    the iterator fd match the lines the program printed.
-  - open-coded iterator parity with the seq path.
-  - the kfuncs' contracts: valid nid per page, a non-empty stack
-    trace, and memcg classification.
+One big change in this set is that dirty-ring needs to be enabled
+after the VM was created, but before any cpu is created, so for that,
+I made a few changes on memstress so it can actually take dirty-ring
+size as a parameter for VM creation. (Patches #1 & #2)
 
-Skipped when debugfs page_owner is unavailable.
+Also added some checks in dirty-ring enable, so an error message on
+ring size is more informative.
 
-Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
----
- .../bpf/prog_tests/page_owner_iter.c          | 173 ++++++++++++++++++
- .../selftests/bpf/progs/bpf_iter_page_owner.c | 161 ++++++++++++++++
- 2 files changed, 334 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
+Please provide feedback :)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c b/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
-new file mode 100644
-index 000000000000..a621712272bc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
-@@ -0,0 +1,173 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 */
-+
-+#include <test_progs.h>
-+#include "bpf_iter_page_owner.skel.h"
-+
-+#define DEBUGFS_PAGE_OWNER	"/sys/kernel/debug/page_owner"
-+
-+static bool page_owner_available(void)
-+{
-+	return access(DEBUGFS_PAGE_OWNER, R_OK) == 0;
-+}
-+
-+/* Count link_fd output lines; -1 on error. */
-+static long iter_record_count(int link_fd)
-+{
-+	char *line = NULL;
-+	size_t len = 0;
-+	long count = 0;
-+	int iter_fd, err;
-+	FILE *f;
-+
-+	iter_fd = bpf_iter_create(link_fd);
-+	if (!ASSERT_GE(iter_fd, 0, "bpf_iter_create"))
-+		return -1;
-+
-+	f = fdopen(iter_fd, "r");
-+	if (!f) {
-+		close(iter_fd);
-+		return -1;
-+	}
-+	while (getline(&line, &len, f) > 0)
-+		count++;
-+	err = ferror(f);
-+	free(line);
-+	fclose(f);
-+	return err ? -1 : count;
-+}
-+
-+/* Validate bpf_page_owner_get_memcg_info() results from the open-coded run. */
-+static void check_memcg_skel(struct bpf_iter_page_owner *skel)
-+{
-+	fprintf(stderr,
-+		"memcg: seen=%u charged=%u online=%u nodata=%u notsup=%u bad=%u first='%s' name='%s' flags=%u\n",
-+		skel->bss->memcg_seen, skel->bss->memcg_charged,
-+		skel->bss->memcg_online, skel->bss->memcg_nodata,
-+		skel->bss->memcg_notsup, skel->bss->memcg_bad,
-+		skel->bss->memcg_first_path, skel->bss->memcg_first_name,
-+		skel->bss->memcg_first_flags);
-+
-+	if (!ASSERT_GT(skel->bss->memcg_seen, 0, "memcg_seen_gt_0"))
-+		return;
-+
-+	/* all -EOPNOTSUPP: CONFIG_MEMCG is off */
-+	if (skel->bss->memcg_notsup == skel->bss->memcg_seen) {
-+		ASSERT_EQ(skel->bss->memcg_bad, 0, "memcg_stub_invariants");
-+		return;
-+	}
-+
-+	if (!ASSERT_EQ(skel->bss->memcg_bad, 0, "memcg_kfunc_invariants"))
-+		return;
-+
-+	/* Every call is either charged or nodata */
-+	if (!ASSERT_EQ(skel->bss->memcg_charged + skel->bss->memcg_nodata,
-+		       skel->bss->memcg_seen, "memcg_ret_classified"))
-+		return;
-+
-+	if (!skel->bss->memcg_first_saved)
-+		return;
-+
-+	if (!ASSERT_EQ(skel->bss->memcg_first_path[0], '/',
-+		       "memcg_first_path_abs"))
-+		return;
-+
-+	if (skel->bss->memcg_first_name[0])
-+		ASSERT_OK_PTR(strstr(skel->bss->memcg_first_path,
-+				    skel->bss->memcg_first_name),
-+			      "memcg_name_in_path");
-+}
-+
-+void serial_test_page_owner_iter(void)
-+{
-+	struct bpf_iter_page_owner *skel = NULL;
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	long iter_count, unfiltered_count, oc_diff, pid;
-+	unsigned int printed_before;
-+	int link_fd, prog_fd;
-+
-+	if (!page_owner_available()) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = bpf_iter_page_owner__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "bpf_iter_page_owner__open_and_load"))
-+		return;
-+
-+	/* --- seq file iterator: unfiltered run --- */
-+	skel->bss->filter_en = 0;
-+
-+	if (!ASSERT_OK(bpf_iter_page_owner__attach(skel), "skel_attach"))
-+		goto destroy;
-+
-+	link_fd = bpf_link__fd(skel->links.dump_page_owner);
-+	iter_count = iter_record_count(link_fd);
-+	if (iter_count < 0)
-+		goto destroy;
-+	unfiltered_count = iter_count;
-+
-+	fprintf(stderr, "iter_count=%ld printed_lines=%u total_seen=%u\n",
-+		iter_count, skel->bss->printed_lines, skel->bss->total_seen);
-+
-+	ASSERT_GT(iter_count, 0, "unfiltered_lines_gt_0");
-+
-+	ASSERT_EQ((long)skel->bss->printed_lines, iter_count,
-+		  "lines_match_printed");
-+
-+	/* unfiltered: every visited page is printed, so the two must match */
-+	ASSERT_EQ(skel->bss->total_seen, skel->bss->printed_lines,
-+		  "unfiltered_all_printed");
-+
-+	/* --- seq file iterator: pid-filtered run --- */
-+	pid = getpid();
-+	skel->bss->filter_en = 1;
-+	skel->bss->filter_pid = (pid_t)pid;
-+
-+	/* printed_lines is cumulative across runs: compare the delta */
-+	printed_before = skel->bss->printed_lines;
-+	iter_count = iter_record_count(link_fd);
-+	if (iter_count < 0)
-+		goto destroy;
-+
-+	fprintf(stderr,
-+		"pid=%ld iter_count=%ld printed_delta=%u\n",
-+		pid, iter_count, skel->bss->printed_lines - printed_before);
-+
-+	ASSERT_GT(iter_count, 0, "filtered_lines_gt_0");
-+	ASSERT_EQ(skel->bss->printed_lines - printed_before, iter_count,
-+		  "filtered_printed_match");
-+
-+	/* --- open-coded iterator parity --- */
-+	prog_fd = bpf_program__fd(skel->progs.scan_open_coded);
-+
-+	ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &opts), "prog_test_run");
-+	fprintf(stderr,
-+		"open_coded_seen=%u nid_seen=%u first_nid=%d "
-+		"stack_bytes=%u stack=[\n%s]\n",
-+		skel->bss->open_coded_seen, skel->bss->nid_seen,
-+		skel->data->first_nid, skel->bss->stack_bytes,
-+		skel->bss->stack_text);
-+
-+	/* same eligibility as the seq path: counts must be close */
-+	ASSERT_GT(skel->bss->open_coded_seen, 0, "oc_seen_gt_0");
-+	oc_diff = (long)skel->bss->open_coded_seen - unfiltered_count;
-+	if (oc_diff < 0)
-+		oc_diff = -oc_diff;
-+	ASSERT_LE(oc_diff, unfiltered_count / 100 + 64,
-+		  "oc_seen_close_to_iter");
-+
-+	/* the nid kfunc returned a valid node for every page */
-+	ASSERT_EQ(skel->bss->nid_seen, skel->bss->open_coded_seen,
-+		  "nid_valid_all");
-+	ASSERT_GE(skel->data->first_nid, 0, "first_nid_valid");
-+
-+	ASSERT_GT(skel->bss->stack_bytes, 0, "stack_snprint_ok");
-+	ASSERT_OK_PTR(strstr(skel->bss->stack_text, "+0x"), "stack_frames");
-+	ASSERT_OK_PTR(strchr(skel->bss->stack_text, '\n'), "stack_lines");
-+
-+	check_memcg_skel(skel);
-+
-+destroy:
-+	bpf_iter_page_owner__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
-new file mode 100644
-index 000000000000..fada6a314a15
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
-@@ -0,0 +1,161 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u32 filter_en;
-+__u32 filter_pid;
-+__u32 total_seen;
-+__u32 printed_lines;
-+
-+__u32 open_coded_seen;
-+__u32 nid_seen;
-+__s32 first_nid = -1;
-+char stack_text[2048];
-+__u32 stack_bytes;
-+
-+__u32 memcg_seen;
-+__u32 memcg_charged;
-+__u32 memcg_online;
-+__u32 memcg_nodata;
-+__u32 memcg_notsup;
-+__u32 memcg_bad;
-+__u32 memcg_first_saved;
-+__u32 memcg_first_flags;	/* bit0 is_online, bit1 is_kmem */
-+__u32 memcg_first_path_len;
-+char memcg_pathbuf[4096];
-+char memcg_first_path[4096];
-+char memcg_first_name[80];
-+
-+#define MEMCG_ENODATA 61
-+#define MEMCG_EOPNOTSUPP 95
-+
-+#define MEMCG_F_ONLINE	(1 << 0)
-+#define MEMCG_F_OBJCG	(1 << 1)
-+
-+extern int bpf_iter_page_owner_new(struct bpf_iter_page_owner *it) __ksym;
-+extern struct page_owner_scan *
-+bpf_iter_page_owner_next(struct bpf_iter_page_owner *it) __ksym;
-+extern void bpf_iter_page_owner_destroy(struct bpf_iter_page_owner *it) __ksym;
-+extern int bpf_page_owner_stack_snprint(depot_stack_handle_t handle,
-+					char *buf, u32 buf_size) __ksym;
-+extern int bpf_page_owner_get_nid(struct page_owner_scan *scan) __ksym;
-+extern int bpf_page_owner_get_memcg_info(struct page_owner_scan *scan,
-+					 struct memcg_info *info,
-+					 char *buf, u32 size) __ksym;
-+
-+static __u32 copy_str(char *dst, const char *src, const __u32 max)
-+{
-+	__u32 i = 0;
-+
-+	while (i + 1 < max && src[i]) {
-+		dst[i] = src[i];
-+		i++;
-+	}
-+	dst[i] = '\0';
-+	return i;
-+}
-+
-+/*
-+ * Exercise bpf_page_owner_get_memcg_info() until 32 pages charged to an
-+ * ONLINE memcg have been seen, checking its per-return contract:
-+ *  - 0:          buf holds an absolute cgroup path;
-+ *  - -ENODATA:   buf was NUL-terminated;
-+ *  - -EOPNOTSUPP: counted (CONFIG_MEMCG is off);
-+ *
-+ * The first online charged sample is saved for userspace to print and
-+ * cross-check (name vs basename of path).
-+ */
-+static void check_memcg(struct page_owner_scan *scan)
-+{
-+	static struct memcg_info info;
-+	int err;
-+
-+	err = bpf_page_owner_get_memcg_info(scan, &info, memcg_pathbuf,
-+					    sizeof(memcg_pathbuf));
-+	memcg_seen++;
-+
-+	if (err == 0) {
-+		memcg_charged++;
-+
-+		if (memcg_pathbuf[0] != '/') {
-+			memcg_bad++;
-+			return;
-+		}
-+
-+		if (!info.is_online)
-+			return;
-+		memcg_online++;
-+
-+		/* keep the first online sample for userspace */
-+		if (!memcg_first_saved) {
-+			memcg_first_path_len = copy_str(memcg_first_path,
-+							memcg_pathbuf,
-+							sizeof(memcg_first_path));
-+			copy_str(memcg_first_name, info.name,
-+				 sizeof(memcg_first_name));
-+			memcg_first_flags = MEMCG_F_ONLINE |
-+					    (info.is_kmem ? MEMCG_F_OBJCG : 0);
-+			memcg_first_saved = 1;
-+		}
-+	} else if (err == -MEMCG_ENODATA) {
-+		memcg_nodata++;
-+		if (memcg_pathbuf[0] != '\0')
-+			memcg_bad++;
-+	} else if (err == -MEMCG_EOPNOTSUPP) {
-+		memcg_notsup++;
-+		if (memcg_pathbuf[0] != '\0')
-+			memcg_bad++;
-+	} else {
-+		memcg_bad++;
-+	}
-+}
-+
-+SEC("syscall")
-+int scan_open_coded(const void *ctx)
-+{
-+	struct bpf_iter_page_owner it;
-+	struct page_owner_scan *scan;
-+
-+	bpf_iter_page_owner_new(&it);
-+
-+	while ((scan = bpf_iter_page_owner_next(&it))) {
-+		open_coded_seen++;
-+		if (bpf_page_owner_get_nid(scan) >= 0)
-+			nid_seen++;
-+		if (memcg_online < 32)
-+			check_memcg(scan);
-+		/* grab the stack of the 100th page for userspace to check */
-+		if (open_coded_seen == 100) {
-+			first_nid = bpf_page_owner_get_nid(scan);
-+			if (scan->po_snap.handle)
-+				stack_bytes = bpf_page_owner_stack_snprint(
-+					scan->po_snap.handle,
-+					stack_text, sizeof(stack_text));
-+		}
-+	}
-+	bpf_iter_page_owner_destroy(&it);
-+	return 0;
-+}
-+
-+SEC("iter/page_owner")
-+int dump_page_owner(struct bpf_iter__page_owner *ctx)
-+{
-+	struct page_owner *po = ctx->po;
-+
-+	if (!po)
-+		return 0;
-+
-+	total_seen++;
-+
-+	if (filter_en && po->pid != (pid_t)filter_pid)
-+		return 0;
-+
-+	BPF_SEQ_PRINTF(ctx->meta->seq, "pfn %llu pid %d comm %s\n",
-+		       ctx->pfn, po->pid, po->comm);
-+	printed_lines++;
-+	return 0;
-+}
+Thanks!
+Leo
+
+Changes since v1: 
+- Converted memstress to take a memstress_params struct instead of a lot of 
+  parameters, so it could be more easily extended in the future (Sean)
+- Moved dirty-ring cap detection to a helper, so it could be used instead 
+  of open-coded options (Sean)
+- Improved the error messages in case the dirty-ring fails to setup, with
+  a more specific message on what went wrong (Sean)
+Link: https://lore.kernel.org/all/20260929113711.2064390-1-leo.bras@arm.com/
+
+Changes since RFCv4:
+- Series title 
+- Rebase on v7.3-rc5
+Link: https://lore.kernel.org/all/20260729161519.3778839-2-leo.bras@arm.com/
+
+- Using acquire/release barriers to make sure there is no reorder between
+  incrementing iteration and summing the time spent on cleaning.
+- Improved ring-size checks, although not perfect due to reserved entries
+  affecting minimum size.
+- Do not allocate bitmaps for dirty-ring tests, as they are unused.
+- Improve help text
+- Make sure ret==0 before going back to vcpu_run in dirty-ring case
+Link: https://lore.kernel.org/all/20260708152232.2568907-1-leo.bras@arm.com/
+
+Changes since RFCv2:
+- Added mutex to make sure only a single vcpu is 
+  collecting/cleaning at a time. This gets us the ability to
+  test return values, and not account for kvm.slot_lock waiting time.
+- Stuff reported by Sashiko
+  - Return value always positive, so assert was pointless
+  - Concurrency inflating the time for dirty-ring cleaning
+Link: https://lore.kernel.org/all/20260629105950.1790259-1-leo.bras@arm.com/
+
+Changes since RFCv1:
+- Stuff reported by Sashiko
+  - Fixed elements / byte size wrapping issue
+  - Removed element count due to concurrency
+  - Testing exit_reason instead of ioctl return value
+  - Some nits
+Link: https://lore.kernel.org/all/20260624171656.1737580-1-leo.bras@arm.com/
+
+Leonardo Bras (5):
+  KVM: selftests: memstress: Add struct memstress_params, make
+    memstress_create_vm() use it
+  KVM: selftests: memstress: Add option to enable dirty-ring on VM
+    creation
+  KVM: selftests: Introduce kvm_get_dirty_ring_cap()
+  KVM: selftests: Check dirty-ring size before enabling
+  KVM: selftests: dirty_log_perf_test: Add dirty-ring support
+
+ .../testing/selftests/kvm/include/kvm_util.h  |  11 ++
+ .../testing/selftests/kvm/include/memstress.h |  15 +-
+ .../selftests/kvm/access_tracking_perf_test.c |  12 +-
+ .../selftests/kvm/demand_paging_test.c        |  12 +-
+ .../selftests/kvm/dirty_log_perf_test.c       | 140 ++++++++++++++++--
+ tools/testing/selftests/kvm/dirty_log_test.c  |   3 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  20 ++-
+ tools/testing/selftests/kvm/lib/memstress.c   |  68 +++++----
+ .../kvm/memslot_modification_stress_test.c    |  14 +-
+ .../kvm/x86/dirty_log_page_splitting_test.c   |  12 +-
+ 10 files changed, 247 insertions(+), 60 deletions(-)
+
+
+base-commit: a90ee4305c4a5df72c11b31dacfdc76e00fcf78a
 -- 
-2.20.1
+2.55.0
 
