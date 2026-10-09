@@ -1,92 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D493B058F;
-	Fri,  9 Oct 2026 07:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2993BB9E3
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 07:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791530568; cv=none; b=X0tjYv8jvv/UUiKyzYtbCqguOTi+IofBMnwpxcHGZJEEMT8TkMRrMQ6UBYJNwpzFv+9DQOsCZJKzaCHV59G8z0d1tlctMj7QybnrDJMepF6IcfdHzR/cqk6fU9TKSzA+9Vf/ngRX4+rMyOa8GAXEBk7t6qWibhAgCuVZI/9pG9I=
+	t=1791531028; cv=none; b=qNnSnsl01V7ua0SLhVWad11dklPMcWtKuUF9zY8rz/XtjsNxTe/Jpay5lFpN3Xtv2LgpnBGBdi/I5+owbcZocaskSUqz1kizdRXUxc7K6DlLbKOI1iStT2xwpesoEUba5qA/5dUm7YlJJvYG1toP0T6ZaHzbchEOTMEhni7ayXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791530568; c=relaxed/simple;
-	bh=0dI3k+gxfGj9M0cvqQzcyughoM9wXOQcQMwXsBwyM+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K5WfUpBSc/AIssCcW4LnPdsRGO81JwHEQQ3jTHRZoiUoxUt0RIhDgYKzRHGJEQ1nWOJQJD5/D+QzvcRBOKwx47gUAtXCkFKmxy7aVQJUoCQmC+d/tb7v6t+eMOvH+wyB+CpZMCBIobPzyeZHYwVgDngA4sUZoShf+aiv5/pIDBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H2Jj9dPH; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1791531028; c=relaxed/simple;
+	bh=VYDZY2uGKu33vKOyYd6NW2GKWHjdqDv69Ge3kjWDmHg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GlbCuK7iZBRmfweLoxZY944MshpOlD5dwieK4FNLnzeAfTo213ixJcRDfOObnCO7vk9OudDNn1njP0MN5N8U34Y9Ptfn1Xt5HUjpohQ2Rcht82Hl7Mtmbr6qy8rGmmzoJsr+4XuXtRvN9NcbuzP21TH0q8fbYMYOnqv5DJAZKWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JwIUDr3s; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H2Jj9dPH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791530567; x=1823066567;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0dI3k+gxfGj9M0cvqQzcyughoM9wXOQcQMwXsBwyM+4=;
-  b=H2Jj9dPHOnOsGHUQOwWC2ER6i2UoTG7nyxr8HaJwIt5CtnWHQGVbM2FP
-   z1PyeP7I3IDXeY+y6uTj/hhNrBGSyoaQXXT/pCqnYjb0/FG6VY3VsFebh
-   gK2uSdtieGq2kXQhQRX3Zb4eShCAoI3gsNMWiEsn4QZO7c5PucU/OsLk3
-   EiBBmdUiVlIdFJmQ8CL8r4nPF5r61PvcKyvwEma984xLYUp56r1XOyPd7
-   EVO6/6OHnjdCL87T5yGdEnRuv98bZtlgPzIDSS9vgXbHGKt9mN3pPN+qk
-   IRJqw+6gCk/mCoI/QrFKI+T2+A7mF4u4xYC4F2D/TsWsMF852BH3cKp2w
-   A==;
-X-CSE-ConnectionGUID: TcA0FnV6Q3Slx299IZoQrg==
-X-CSE-MsgGUID: bQTL6yMuRMauAXSuNj20AA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11929"; a="212494"
-X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
-   d="scan'208";a="212494"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 00:22:46 -0700
-X-CSE-ConnectionGUID: oY1O8vM0RnW0NYXh5YrIjw==
-X-CSE-MsgGUID: qXlPkVodRJKero9ROwJfJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
-   d="scan'208";a="584103"
-Received: from yizheliu-ivm.ccr.corp.intel.com (HELO [10.238.208.114]) ([10.238.208.114])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 00:22:40 -0700
-Message-ID: <0e5ceeb8-492b-48e6-80d2-462c437a6dce@intel.com>
-Date: Fri, 9 Oct 2026 15:22:37 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JwIUDr3s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEEA1F0089B
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 07:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791531026;
+	bh=VYDZY2uGKu33vKOyYd6NW2GKWHjdqDv69Ge3kjWDmHg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=JwIUDr3s/MfSM7kcKnUID52hZC5kSpTTuEkc+3ww3rh3REqeBLTEOlZBf7UExohXk
+	 +ijBF1puacoxRVPWtk0LaU/94rCUSoT5K3cvAilB+Zz0MHDfI/Yo28jkhr2a6cRlDp
+	 V42CMcttMu55r75vyi06asWkSVicuIkNE5b+hm6t2i+9L+HUK3/9o28y1FwlHhl+dg
+	 u2FOqySJdm4iM+LdE+eyTYYNTnfmMi2tYlsNDVfxeYuj+uBbxR7Q+kNVfkGmOGYRw3
+	 +plZLYhbBRrMmbUfgBO2bGQohQRCbUuHjMNyoS/p8rlHGES0lkj/bs9zM8LUcLizOr
+	 7/kwdUfQ5x4MA==
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-9144e8021d3so88150906d6.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 00:30:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBycuO3p+moSYofxLWY+syiGD0xSWJrlZHuS3ZxrdeYWIK4OW2N6bCc90KJzT5047xVDxJJGu9h3Zyx4OERDGwk=@vger.kernel.org
+X-Gm-Message-State: AFuF++mvGKbXb3LWlbZQizyQ6ccoW8O0mnh4z+lEFp9HRR74ezJdNimj
+	MPhXRyWBSY3LdCjzbcAhvCWXRc6qVbYTzRSBoEZf796PyuywL7NtqLFbsTfVz6zN0cDl9zEH9tJ
+	1UZMB6YvhyOkm7zmdoTKtox70r3rUTN0=
+X-Received: by 2002:a05:620a:a416:20b0:93e:c12c:9b76 with SMTP id
+ af79cd13be357-93ec12c9f3cmr30877285a.81.1791531025574; Fri, 09 Oct 2026
+ 00:30:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 10/23] KVM: selftests: Set up TDX boot parameters
- region
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
- <20261001-tdx-selftests-v15-10-7c62a5d8a992@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20261001-tdx-selftests-v15-10-7c62a5d8a992@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20261009062637.176005-1-hui.zhu@linux.dev>
+In-Reply-To: <20261009062637.176005-1-hui.zhu@linux.dev>
+From: Barry Song <baohua@kernel.org>
+Date: Fri, 9 Oct 2026 15:30:14 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4xYGDXMKjbcnkvZAVf3GEd_bnjdJY=84dfyak=rmQVA1Q@mail.gmail.com>
+X-Gm-Features: AclHuK-MFYBp2Fx57JVqeSVV6ggA-SIdiDol7zrPg6odH2nr65hN0ZFPuJg2TWo
+Message-ID: <CAGsJ_4xYGDXMKjbcnkvZAVf3GEd_bnjdJY=84dfyak=rmQVA1Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4] selftests/bpf: Add bpf_proactive_reclaim test
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	Hui Zhu <zhuhui@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/2/2026 3:37 AM, Lisa Wang wrote:
-> From: Sagi Shahar <sagis@google.com>
-> 
-> Allocate memory for TDX boot parameters and define the utility functions
-> necessary to fill this memory with the boot parameters.
-> 
-> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
+On Fri, Oct 9, 2026 at 2:27=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
+>
+> From: Hui Zhu <zhuhui@kylinos.cn>
+>
+> bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
+> unlike a write to memory.reclaim, does not retry until the goal is
+> reached.
+>
+> Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
+> and check that the result is positive but well below the request: one
+> pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
+> 4K and 64K page kernels.
+>
+> The test deliberately covers only the kfunc itself. A full example of
+> the intended asynchronous use, where a BPF program watches one cgroup's
+> workingset refaults and reclaims another one from bpf_wq callbacks, is
+> maintained out of tree at [1], released under GPLv2.
+>
+> Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.=
+c
+> is not built at all.
+>
+> [1] https://github.com/teawater/memcg-async-reclaim
+>
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+Thanks very much!
+
+Reviewed-by: Barry Song <baohua@kernel.org>
