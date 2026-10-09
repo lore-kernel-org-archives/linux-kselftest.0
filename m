@@ -1,170 +1,180 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DC5489FB9
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Oct 2026 23:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67FA32F4A05;
+	Fri,  9 Oct 2026 01:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791502590; cv=none; b=BoqIw/71ji6CfogLeMhsR00tG/b6PwEXD25WoybjmVHU8yA9Dgg6Ip61wECm9fJaYlT8m4RgKUrHajdyFZqz+ExEoCpiWcMf+A5h7uiwMbritPTaVTGS6ZIhw0GCMu03nobuir+LnFkiRPn7WYMdQQRx0WFJ5FyAX2t3KE0hSLs=
+	t=1791509266; cv=none; b=M96PxqFbckSD0LeTo9xKC07jQfXDl+f0hrlhDZ5SSxibHUypgjnroS+AHED2OeBvnZnjfyz5dNzsWiwE3EUje1uVr5g/DlU9PAT882sc+cs0ZRJwcjy9k1a3+4mqjrhH+J8hm4U9N1SJQMguAP99I7ksCAjjg9vNgF+uYMZinpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791502590; c=relaxed/simple;
-	bh=M/rQ4561R6UGKHsMQcfnGPKUwVjb9tqVoXZCGSnYpGA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KN1JoZ/mteYS0AkHSEZY1d0w5bNgycPw5dHFweMLQ/ycSPFTz+LAo/A8tHoihEn2s3vK8g5pTy42VzGdfSng4Hp483Wfd2Xz7B6m1vEnixz30NanvCLv42s4kjrCjATJVty+Zat0ODYydb9vSh9pMHvFQaUmZGLxScC+jffPg1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A4bNCNlE; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791509266; c=relaxed/simple;
+	bh=8x92RroQAPCZvk/AEKgM+Uol5X3ZuGsDFtawbRLZB8s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VD+sBCYEBrc0NuCX++ipu4g6eHzHDQA0oBdBEk619QW3u20xvsHYImN5Mi7T2Jm/yDv25tzXZt6vjp0yBg7LyWB3dRWHund5J2EuhFTnUXITv8ncOdYggb0r5zKM+uQ6r+X7ONuMAVWYYIKg7oRnD8eVDRoG3leZ5TSmlFZTFKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=E2idgpOU; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4bNCNlE"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-93a40a9a01aso538331385a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 16:36:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791502588; x=1792107388; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=f5p2nTO5pz9p/mFq6enSm35xmN3QB4rNCp8nZZUu4Is=;
-        b=A4bNCNlE2cQ8mo8jkpfdFWeILTEGV69vADUlry59sokN4N5E7/BVzrWWjPS+BZwXtj
-         Rja0UnlC55PWxLIReHMXljNQsJumU+4fshNL2+GKkpqq5PATYGAkiG9T/SDlxnNeLYJ7
-         ewOLMy4tUZYi3p6FT5fm0XoN/Dq4pBunzTw80q5RuIWdjdEtiOzs7wOeiPICK28yY5Iy
-         d283p3I2r1aAAU9xorYtn9UQCZ+xOt+/6FolmrgiP0yVs76i4yoVNsJfm/089kqGTR5e
-         TO1UNH+ht9sstmfqS2UYByJH/+8IVhdl5EwROXbrt3dVPuUJ+dQfPJ2c5DlZiVRYtI9b
-         mS6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791502588; x=1792107388;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=f5p2nTO5pz9p/mFq6enSm35xmN3QB4rNCp8nZZUu4Is=;
-        b=IcXxW/RaAO6czBGnqFIPg/OWlaWtunZVO7bu4GtKqkk6woolsDGctaSVwwePVomnHf
-         6JcWjLvCg73q+KDBGvr2qSg0FLCBElIseFO0tsnjpgs/BsO3ggng4ju8DOiOLLa/lQdf
-         Y2afJne1d8tnPUGQBKmEfMlQuCk912Yl88CHiMZj2vqShbXkv5mtf4o93IbsTjqJOxRG
-         M8niwl3Qx1+7zfX2IQ5cSXd6pUdSCGrxlKC+XPom1LtsRkBDM0y1DU32ekBIG2ZsOU5h
-         d8dka4dzYr2ErTkgxOpzjDDvVob5BHkSvruTWCA+SLY8sg6jZWpekAY4U3ECNGyQ46wi
-         X1Ug==
-X-Forwarded-Encrypted: i=1; AKwUvBzo6ATsxmijvx6qI5XJQKbjYpXtoHSUtVaeqgIAqXFOn9kFtZJgu4UQnKKsWI98sVc5r/LvMO+If8URSkYPUa0=@vger.kernel.org
-X-Gm-Message-State: AFuF++ns3NknKVmgLAJxqy+DMgxr54U1H9eW0jxlv6cddudr/E22W4bu
-	ddTqupa6GmQjyHtViU38DOi99MzwEDctOfgfbe9Z/dGbapHhJ3TnRkKF
-X-Gm-Gg: AYBFou04fIYHV5bMzbX0bM8iGoDqdqaY04GFbHEq+tJYk+wJmqcNJGRc1UXgVFvLGFz
-	hN1FnlPSj6dem5P3ryx6/wTwehzUKMW73CCVqA7GdOpZT8CQr6socIkrYBmObmXWBrJAoJ1t/BM
-	HKY5SqUi9/8Ftf/epKJ/aIiJWEJdy9q0FpFWKmg+qWagh/2HlC9ouEwMHEFC90BTS6JYNyD3ZDU
-	kNH1MYR7Ina2PxU62QP2rEJ6oIuQH9NhEpRNYQPzmAiEiO09jfkmz9/5E7RYhxFISa6wklW5r6m
-	dYtR00N5IVZ0b61wVgKgvN7OOSxNez5C096OLC14MytjV2vXvzISbko0LEx20gq/BYjbB4MacGE
-	4xw59zd6EjhUtX6+63K2QUOSiCBlAjS3T6U/tWqVTcQ8WoUr2O8HltbsA6rspBtXkqJqBEXtp1e
-	ZUFrtOKyK9s/LrUFAJXwsrfpeU+Wr5A6gsVShkujCIQn2UyT+MNdYQ40hz7w9z0MnnfsAj/gW29
-	xwvMfgHmKCNM1PMkuAMV8U4UW6Q2Rr/XbPIEWiZ6rWPkn/LWZby1DNJF8AZrDtz8FFONt5QVwTB
-	0PceEULT
-X-Received: by 2002:a05:620a:1786:b0:93e:5cad:643f with SMTP id af79cd13be357-93ebdc7013dmr16445485a.29.1791502588033;
-        Thu, 08 Oct 2026 16:36:28 -0700 (PDT)
-Received: from battery.lan (pool-138-88-31-60.washdc.fios.verizon.net. [138.88.31.60])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93eb9848702sm51693885a.12.2026.10.08.16.36.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 16:36:25 -0700 (PDT)
-From: David Windsor <dwindsor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	yunwei356@gmail.com,
-	David Windsor <dwindsor@gmail.com>
-Subject: [PATCH bpf 2/2] selftests/bpf: cover bpf_loop() state pruning regression
-Date: Thu,  8 Oct 2026 19:36:23 -0400
-Message-ID: <20261008233623.4011127-2-dwindsor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261008233623.4011127-1-dwindsor@gmail.com>
-References: <20261008233623.4011127-1-dwindsor@gmail.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="E2idgpOU"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F220D1692;
+	Thu,  8 Oct 2026 18:27:37 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B99CF3F8C6;
+	Thu,  8 Oct 2026 18:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791509261; bh=8x92RroQAPCZvk/AEKgM+Uol5X3ZuGsDFtawbRLZB8s=;
+	h=From:Subject:Date:To:Cc:From;
+	b=E2idgpOU0G+B5uuUGnNecSi8PDSOzpJ3MBHxUwY6ud3X1H1pCPTZgPO8WwzQ5es6g
+	 dwuJ2jTmF5wgfOKHjNXYz2xlkS6Cj9dmOULEMUmHC/owOcHvgC3Ne8He9b1NV8JKmy
+	 x//bTXlviRAItQvF7ujrSaRcJ7UaBtHQULfEoj+4=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH v5 0/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
+ macro
+Date: Fri, 09 Oct 2026 02:27:31 +0100
+Message-Id: <20261009-fix_hpage_macro-v5-0-54378ae45add@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAANDyGoC/2WNQQqDMBBFryKzbsqYRCFd9R6lyJCMmoWmJCW0i
+ HdvlEILLt9n3psFEkfPCS7VApGzTz7MBZpTBXakeWDhXWGQKFs0aETvX934oIG7iWwMwhG2hhh
+ 1gxKK9YhcTvbi7V549OkZ4nt/kNW2flu1PrSyEiisIYUNYe2UuVKczjZMsJWy/rNlfbT1Zjsm3
+ dvWsup/9rquHzhbegzqAAAA
+To: Lorenzo Stoakes <ljs@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, 
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+ Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>, 
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+ Sarthak Sharma <sarthak.sharma@arm.com>, Yeoreum Yun <yeoreum.yun@arm.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5712; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=8x92RroQAPCZvk/AEKgM+Uol5X3ZuGsDFtawbRLZB8s=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqyEMHBUDds7eSikvsQHqtmfCgr9Mc4CwfuqQin
+ j8FJgcndZqJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCashDBwAKCRBt1cPRWsUx
+ M7GpDACDrBtukB8FSlBAVb0a/XD0FqJHPulc6DD4iMHUYYpwyakKYnmFmxMxzYZI8l6oCohvlqY
+ EiItEY3e7/RX41AILcPvjeAz9vVhHHnm8GDrUa/9dsiHgAeBm1hh0TOK9jrG9dLyB71m06Efe+v
+ 5QlepppzhMK7dMxycgizukNHhkyiRCYOTDb/c32T9Q7r92E7dZzyhh1HW9NGU2RfmCBPTNisGwL
+ cNHXPgJ6caQ1831yqwmLSpE2e7VMAhl23xHS1OuQOACCgb7v7d3MAziYiEdUrYcZwtwk49RmmBB
+ EGxtWgV8C/gMxrDYmlemydLccj0RrCwN+K6Q2Eko6/U2vNnm1r76+iehghVAUipzebmHXgwo0UE
+ DsjyN9RM5irUrXPIKeOM5Ye8bsF4GTws4V7xh+Ksy0ezi1EU5CsmL6F6BMZMPYVVx+dQzyhmDNO
+ JIDUU8JzFhwTRAB9lX9qSm40jGN7x8bL3eW7i5M7xhih+ProFO2ydBJrLmA6JsWyJ2GDU=
+X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
+ fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
-Exercise 18 independent conditional stores to dead callback stack slots,
-reproducing the verifier state explosion fixed by the preceding commit.
+HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+When this macro is used in some test, test result would be strange in
+the system where PAGE_SIZE is more then 4KB.
 
-Signed-off-by: David Windsor <dwindsor@gmail.com>
+Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-index 75dd922e4e9f87ebc947ee6e621a789cad10431e..c1c3099a6a20391c8b36b39eedd9cc6ce893d996 100644
---- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-@@ -783,4 +783,62 @@ __naked void check_add_const_regsafe_off(void)
- 	: __clobber_common);
- }
- 
-+#define DEAD_STACK_SLOT(off) \
-+	"call %[bpf_get_prandom_u32];" \
-+	"if r0 == 0 goto 1f;" \
-+	"*(u64 *)(r10 - " #off ") = 1;" /* dead stack store */ \
-+	"goto 2f;" \
-+	"1: *(u64 *)(r10 - " #off ") = 2;" /* dead stack store */ \
-+	"2:;"
-+
-+__used __naked
-+static void dead_stack_cb(void)
-+{
-+	asm volatile (
-+		DEAD_STACK_SLOT(8)
-+		DEAD_STACK_SLOT(16)
-+		DEAD_STACK_SLOT(24)
-+		DEAD_STACK_SLOT(32)
-+		DEAD_STACK_SLOT(40)
-+		DEAD_STACK_SLOT(48)
-+		DEAD_STACK_SLOT(56)
-+		DEAD_STACK_SLOT(64)
-+		DEAD_STACK_SLOT(72)
-+		DEAD_STACK_SLOT(80)
-+		DEAD_STACK_SLOT(88)
-+		DEAD_STACK_SLOT(96)
-+		DEAD_STACK_SLOT(104)
-+		DEAD_STACK_SLOT(112)
-+		DEAD_STACK_SLOT(120)
-+		DEAD_STACK_SLOT(128)
-+		DEAD_STACK_SLOT(136)
-+		DEAD_STACK_SLOT(144)
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+#undef DEAD_STACK_SLOT
-+
-+SEC("?raw_tp")
-+__success __flag(BPF_F_TEST_STATE_FREQ) __log_level(4)
-+__naked void callback_dead_stack(void)
-+{
-+	asm volatile (
-+		"r1 = 100;"
-+		"r2 = dead_stack_cb ll;"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_loop];" /* trigger state pruning */
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_loop)
-+		: __clobber_all
-+	);
-+}
-+
- char _license[] SEC("license") = "GPL";
+  transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
+    3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s       2566 succeed, 58507 failed, 2566 different pages
+    0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s          0 succeed, 61073 failed,    0 different pages
+    3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s       2566 succeed, 58507 failed, 2566 different pages
+    0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s          0 succeed, 61073 failed,    0 different pages
+    ...
+  ok 1 Completed
+
+To address this, remove the HPAGE_SIZE and HPAGE_SHIFT macro,
+introduce pmd_pshift() and rename read_pmd_pagesize() to pmd_psize()
+to keep consistency with psize() and pshift().
+
+Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
+which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
+and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
+PMD-sized units, the test may fail with the previous size of 100 MiB,
+which is not a multiple of the PMD size when the base page size is
+16 KiB or 64 KiB.
+
+After this patch, output of transhuge-stress:
+
+  transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
+    2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s       2585 succeed, 1232 failed, 2585 different pages
+    2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s       2585 succeed, 1232 failed, 2585 different pages
+    2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s       2585 succeed, 1232 failed, 2585 different pages
+    2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s       2616 succeed, 1201 failed, 2616 different pages
+    2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s       2627 succeed, 1190 failed, 2627 different pages
+    2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s       2628 succeed, 1189 failed, 2628 different pages
+    2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s       2630 succeed, 1187 failed, 2630 different pages
+    2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s       2631 succeed, 1186 failed, 2631 different pages
+    ...
+  ok 1 Completed
+
+Additionally, introduce size_to_shift() for future users that need to
+obtain shift of a huge-page which is other than pmd_psize().
+
+Patch History
+=============
+Changes in v5:
+  - rebase to mm/mm-unstable
+  - Link to v4: https://lore.kernel.org/r/20260921-fix_hpage_macro-v4-0-cdea4fc6ce3f@arm.com
+
+Changes in v4:
+  - make size_to_shift() as inline function.
+  - initialise __pmd_psize and __pmd_pshift with -1ull.
+  - Link to v3: https://lore.kernel.org/r/20260914-fix_hpage_macro-v3-0-c9a305a01d39@arm.com
+
+Change in v3:
+ - rename read_pmd_pagesize() to pmd_psize()
+ - introduce size_to_shift()
+ - Link to v2: https://lore.kernel.org/all/20260907081509.924979-1-yeoreum.yun@arm.com/
+
+Chnage in v2:
+ - rename hpage_* to pmd_page_*
+ - Link to v1: https://lore.kernel.org/all/20260902175611.1241118-1-yeoreum.yun@arm.com/#t
+
+---
+Yeoreum Yun (3):
+      kselftest: mm: rename read_pmd_pagesize() to pmd_psize()
+      kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT macro
+      kselftest: mm: introduce size_to_shift() helper
+
+ tools/testing/selftests/mm/cow.c                   |  2 +-
+ tools/testing/selftests/mm/folio_split_race_test.c |  2 +-
+ tools/testing/selftests/mm/guard-regions.c         | 11 ++++--
+ tools/testing/selftests/mm/hmm-tests.c             | 22 ++++++------
+ tools/testing/selftests/mm/khugepaged.c            |  2 +-
+ tools/testing/selftests/mm/khugepaged_race.c       |  2 +-
+ tools/testing/selftests/mm/khugepaged_sync_check.c |  2 +-
+ tools/testing/selftests/mm/ksm_tests.c             | 16 +++++----
+ tools/testing/selftests/mm/migration.c             |  4 +--
+ tools/testing/selftests/mm/mkdirty.c               |  2 +-
+ tools/testing/selftests/mm/pagemap_ioctl.c         |  2 +-
+ tools/testing/selftests/mm/prctl_thp_disable.c     |  4 +--
+ tools/testing/selftests/mm/process_madv.c          |  2 +-
+ tools/testing/selftests/mm/run_vmtests.sh          |  4 +--
+ tools/testing/selftests/mm/soft-dirty.c            |  2 +-
+ tools/testing/selftests/mm/split_huge_page_test.c  |  2 +-
+ tools/testing/selftests/mm/transhuge-stress.c      | 25 +++++++------
+ tools/testing/selftests/mm/uffd-common.c           |  6 ++--
+ tools/testing/selftests/mm/uffd-unit-tests.c       |  8 ++---
+ tools/testing/selftests/mm/uffd-wp-mremap.c        |  2 +-
+ tools/testing/selftests/mm/vm_util.c               | 42 ++++++++++++++++++----
+ tools/testing/selftests/mm/vm_util.h               | 23 ++++++++----
+ 22 files changed, 120 insertions(+), 67 deletions(-)
+---
+base-commit: 3144b955cc32a1d4b6ed308c65f70c7de73668f6
+change-id: 20260909-fix_hpage_macro-da069ae04502
+
+Best regards,
 -- 
-2.53.0
+Sincerely,
+Yeoreum Yun
 
