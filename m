@@ -1,163 +1,216 @@
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012037.outbound.protection.outlook.com [52.101.66.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377FE4A498A;
-	Fri,  9 Oct 2026 12:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791547833; cv=fail; b=pNFwYqUvloypZlotW3XY6ekZ1A+dfXv9A7Y/sglfK19wfHrbkpI/3lJ9TQ327AmQwcqfQLj6JbtAQyGev5rkMtp6+fqJK8sSL53SCLMnW9UeOKpev2vSVkXCOU+LM4YIFcBXbQsHMjx5fXR6UBOKyii6J6C4u/0JJv78RPg69ZM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791547833; c=relaxed/simple;
-	bh=cFbdo+ahiQoDvNe5sUAbSOse6Ry/a7EyI7JHe8gp10U=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ENEHJ6XGesoiJAXUhbX1mingzlgwT8GOIJoB20nzX6DgR01xRH7BM7Z6YHYrkveEiY1/6Swt6W1+TlxwhKYFtMfDWT/7/PvsWKtXS7CnjrANB33fzY+qbs+o/EE8x0QE/yLrJ/9eVvigdNKr0e+4dDRNhQiFz8vtdk33JBtEdNA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=vRSostzA; arc=fail smtp.client-ip=52.101.66.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563752D8378
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 12:24:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791548679; cv=none; b=ubYxRR8WKLlHehHDyvTj2UUUqi1O02+PZCadrcCNofQeaR+dS6FA0TqmnfBWjYr0vWGNAjnMCVq75nScaMu1SN/FBTEW/fUNWJNrHpt2ilwb3jLOLo3KHrdzpVmNscE8PGG8OW34as0lhgwtqVFmj7CJej38ju06vlMajUn9fro=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791548679; c=relaxed/simple;
+	bh=FafXNBaNk0cG2dtQWl72g13JEc6h8ghApT9Z9T1waXs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BSZcWenWQWEg6aa3jepC7zamsohQTdVRq/iVqoZ6nWlBusrywHLsqHO66+5IO/SJW++uEUC20kAkCS6cDtckxpknYDb6Q5RB8wc8OARq5qovLczqO6Sa1GWDeFx0CLxqobx6RGhwXg/3kf0CoF+XrqemSV5F95a+7Rz2ovzUhJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net; spf=pass smtp.mailfrom=blockcast.net; dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b=LEASF/i3; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="vRSostzA"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Zi6Ggp3mpA++IIz6/uzHYZ8HWe7t9zFk26WzTeOgXg3pqZpE2BSzG+4jTTS4ARC85cgHB8/3ufQYIvqV+A3ktspJVcCTnfywhhzt2AdqPjOc7JHfgAgHm2Nd0mpxK7/iMDkfCSiIUKpg8wuoKoTWy97ZLVUYDt1WmN7vNVUjgVTsM42YsmW5FcCFsNy+FkILkVXpRvaFvFae0o/R5YyiviNayUF72unFVxiq3xGUHNfNY7Fs8a6Lh+/MpkeVFMxgBLBSvJ+sPx96yUGlqqmrn3LL/uigW/I0xPoQ7bu32L4PB9XMqcrIDny5O9z1FnbzhDNUkm0EIu1EMq21wwcaMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cFbdo+ahiQoDvNe5sUAbSOse6Ry/a7EyI7JHe8gp10U=;
- b=tfMebZaLck5BBGDHfOnuyVxudkBUlg64BGGqFFRiSakCsUqxb09gt/6Sp4JKzl+24IdM0UelqGVa2wLw2gnP1TuqcN2tImpSNgW1EvlmtTa4duM6/EUusKz3nPT7TnwPMLIbZgOfkh9mpinur+6EeVSNR5+QCfEVtrxR/U1bVtQAVc+LdurrazhXhLHY2Eh2SqS78p7uQpFSwoIj5BE89GKcnjj5yJkhq6+XH65M9b8bH4Hns8Mfeluh+JwF8uti2J/0DJ+2Uk+em3MdrfHeStJuFcon3ck1WFpc9pvK/E9Eqr/fA04rr1vX0jl3wooEa1i7oRVdR96LnE+u7soeOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cFbdo+ahiQoDvNe5sUAbSOse6Ry/a7EyI7JHe8gp10U=;
- b=vRSostzAfRxAgsFxpw+fHGfeWKOBWHT1Hl0d+f1AOObQ0x1f2DMwJIpb4Uf07xYFWeIeLClE1jj1J5NUsZAkuwJRuwrDAoCTBQQgn5rFrYsIPrLQt36dU3+sqsWZWUBKgvPJgmBNC6Wox/LgQL62g9CI/WySbafNocpszbnJDzifSg/CDA9OsqDzmTbt90Kc+8+qInRaZDAgPAkHoD1N00sKX+zk+JuQmS/R3jlJhFFvJyURWz9lAIBKoDKyFakRXHr0ZWhSF4SgMpelrXfyB4hUlxLV4F1wEaVbxXf/1UJyhkiYmeQtjV7u3FGyNHDgz59JTQ6+AjIXqjJ+IYKq/Q==
-Received: from AM7P189MB1137.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:17e::23)
- by GV2P189MB3056.EURP189.PROD.OUTLOOK.COM (2603:10a6:150:26d::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.17; Fri, 9 Oct
- 2026 12:10:22 +0000
-Received: from AM7P189MB1137.EURP189.PROD.OUTLOOK.COM
- ([fe80::86f0:8ce1:a437:b2d5]) by AM7P189MB1137.EURP189.PROD.OUTLOOK.COM
- ([fe80::86f0:8ce1:a437:b2d5%4]) with mapi id 15.21.0496.015; Fri, 9 Oct 2026
- 12:10:22 +0000
-From: Tung Quang Nguyen <tung.quang.nguyen@est.tech>
-To: shike liu <liushike123@gmail.com>
-CC: "jmaloy@redhat.com" <jmaloy@redhat.com>, "davem@davemloft.net"
-	<davem@davemloft.net>, "edumazet@google.com" <edumazet@google.com>,
-	"kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>,
-	"horms@kernel.org" <horms@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
-	"tipc-discussion@lists.sourceforge.net"
-	<tipc-discussion@lists.sourceforge.net>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>
-Subject: RE: [RFC net-next 1/2] tipc: abort pending connects when the peer
- node is lost
-Thread-Topic: [RFC net-next 1/2] tipc: abort pending connects when the peer
- node is lost
-Thread-Index: AQHdT96DnkPftA1FAU2pW0pohXPOybbzPzzQgAFPkACAAJmbQA==
-Date: Fri, 9 Oct 2026 12:10:22 +0000
-Message-ID:
- <AM7P189MB113775D0F9D5E892C615FE81C6922@AM7P189MB1137.EURP189.PROD.OUTLOOK.COM>
-References: <20260929064742.576651-1-liushike123@gmail.com>
- <20260929064742.576651-2-liushike123@gmail.com>
- <AM7P189MB113766407E77EB2982690B06C6932@AM7P189MB1137.EURP189.PROD.OUTLOOK.COM>
- <CAL9mPHtH3Uy51MROGgNC8bpRisodf4_xoAiEqw=oK9Eayc_fPw@mail.gmail.com>
-In-Reply-To:
- <CAL9mPHtH3Uy51MROGgNC8bpRisodf4_xoAiEqw=oK9Eayc_fPw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM7P189MB1137:EE_|GV2P189MB3056:EE_
-x-ms-office365-filtering-correlation-id: e8a79c40-2ae1-45c6-144d-08df25fe4b54
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|1800799024|376014|23010399003|38070700021|56012099006|11063799006|4143699003|10067099003|18002099003|22082099003;
-x-microsoft-antispam-message-info:
- Oq84MsbI6ZSf06DmjwXu8j93c/nV5RUPYvW+z0GWSV3+693ip4oohDNFc2ZgsYavLcrBsUVqR8TZeiNeFkZ6SsrF1JFz+vY+qQQF0frva03G1ii27nBG1LI1iD8OxpLEEQ0+dAte5lCWAqz5dJ9sfa60rs1zQhA1ayRBrK+QiyVBP94Ytl94c2BOW3ZRufyuGPjsJBmMogs1jN+jFeSUjnQ4ps9u8rHeIpE5HSd3OateNotKwDtnz54N1MLeX1iHMwKNQsFptp21oZPpCSR4btiZilVoW5DhxIawamktb8LFv+Vy/rOTVgcJriJDdMpfPIjXjilMgsv5IoyGVXCUmLB6Wgpw330i4cu9mieuZK91JzueA9hdyYN5n99RizSarLQPAorTTO491efh0xFY4KroHdHt+uYKHhwT+unqjfXDDd6D2UQBBvx9SN2IWKd7aoLlfSyKP+R9wxVG8i5/dCSEpLtLROa0KbTrQ2Hf9xatMA2Fq4OHceAsIGFkpt97yypv7cgWqYD3us/4chn4Ak4rGUpCLajL8cH1cl8UXflAWAMfDaRvfX5XBBUmG5joPeQjC8p4tUsRh5auPkTUe/FFmvStXArbyTTsDgJfFhEGyFig+8QZpgxq4Z38jeDmg0ST1kb5Bq2d/xbCKSQx3i9R8O1IRJt0F3JtNUH6fAlP96V8vJYKBD0pf+VchxdT3mbz4drnvYjUEkAbEESSQBDymaKVVTe+mvppErcuBTs=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7P189MB1137.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(376014)(23010399003)(38070700021)(56012099006)(11063799006)(4143699003)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?NU9VbWZGaURlMk8yemVIZEM5QWdXY1VxSnN2eHIxSDBtVmtVV0JFd3VRYVJV?=
- =?utf-8?B?SE9iU0Yrb1BnbmRyczgvQVF5VHlGYnRrdFlGTDkwSmx0T0RMWk0yd05NNUZE?=
- =?utf-8?B?RVZMc2lMMXowWXZodXJnK0lab001LytndFR4SEpjUkRYVmQ3WnNEOFJqblBS?=
- =?utf-8?B?UzU3ZnZ0Z2FxRWxOdTI0TGUzOWNqam1OWGNTajZSb2grMkFQVmVDa05BOW5X?=
- =?utf-8?B?d1hqSmJBZDhzK2hHbFpxQ203UWl1Z1h4TFNCK1ZRRnNvMFZiai9uRVZpQXZO?=
- =?utf-8?B?RUk5TzJJc3JUcUxpL3pEUXlpcnZTbjBVazNrdDhlMWlybmlBb3FkTEtBRDJ1?=
- =?utf-8?B?Yk0xYVpuZjEvbWlIWUNVSlI4bFJBLy9JMS8vcDROR1U3emorUHhpMGhsb0hC?=
- =?utf-8?B?aGNYWllVRkRwUzgxOXlPNmFCZkhlVkt5dk9DeTV6Q2JPZE13YW8zNEpNT0N0?=
- =?utf-8?B?TlcybzhFUnAzUDIrRzZMcE5UK09NMXZQSmVyZFpJSllOUW5QWkd3Z1VZUC8x?=
- =?utf-8?B?SGUvMWppV1RnN1ZIK1l1bENiWUtockZmRnM2VGhEUVU2dFZ1VFZ6YlVOL1ZT?=
- =?utf-8?B?RERxR3g5UE55K2xVWk9rNjQ3L3BvczJQdjdPVWo0aFU5eDF6L0s4cTVBcmVi?=
- =?utf-8?B?ZTluQ1NRbG1rV0N6ZTFtUFdVYmdHU3Q3WVN2MHJpMXBxTTE0VytIQkRPMk9u?=
- =?utf-8?B?RU5ZZlpvNGVHUVdIRTVxMXdodU0rSGpXTXhHckpDL3d2RXlIU05ZYzNZWmRH?=
- =?utf-8?B?YUgvWFNDVkdvNnVCUlZFUFAyZ1RROUR3OUwwV0ZPTEJkanRSVGVQMHdTbjZD?=
- =?utf-8?B?cUc1ZkNyVHlZbWJEYmo2SDlZOElVODJNTUFERkk4MUtLMTE5dWZNMXdkeTlU?=
- =?utf-8?B?c3FXRmU4RkVPVDdGc3JIeFFHNFJNRGZBUTNCWFM1aklnMzhHOHovemV2SmYz?=
- =?utf-8?B?TUJraGtweU5qVGUrUlZReU0rTGQwRW5IbDQzS2Q2V1ZYVDIwMk0yUG5XZ2tX?=
- =?utf-8?B?VWRQc3Y4VDdDT3RiSWFNVzlEQ1d4dko1R0VmaTk2elNuY0UwUUpnRzQrS2g5?=
- =?utf-8?B?NkFxYjFMNDFJclpuNUFGTGdZN0p0bkNxY0dYK3ErMXp2ZVd3S2FkRkl5NVp1?=
- =?utf-8?B?WFhpUTUydDlGcVdzeXlSYlI0ak9jUVorck1QR1RPbzd4YWJkRDF0NUZmRFJG?=
- =?utf-8?B?S3JPMlJRQWM1ZXR1emFLdmtXaFhxQ3N2RzRONHdxZGtsNDRzYXpyOFJLL3Ex?=
- =?utf-8?B?K2s5Qm1kYU1MdngrdVZrZmk3SUhlRVRCZ0Z4LzloZ1BMME5TbkxYejlTYUl1?=
- =?utf-8?B?cEdWbUxPdjFHUU9mUVp0UVEyaU01eW1aNzR3cERrc2tCK3FRdjZnYStzZXRD?=
- =?utf-8?B?T29wUWtSR0oxQjBGM3NnQS9XcFlreXIxNHFYeXlQYld3VjRidnJoYUg0WG16?=
- =?utf-8?B?THVPby8yZDVTRENxOWJ3WDJ5MjZUL1Z2b0RvTGkwUmZtMURzdFd6T3Y3NGN0?=
- =?utf-8?B?M1IxQ2x3c2tRTjVQWDd3OTZ1QjU2UWlaam4yQWN2SVVtMDJkZko0bXRFdzJs?=
- =?utf-8?B?SkYrbDJQSm9raE5BYzB6L1VCbzE2bDZabDFMWUZIREh3aTVQazlkMHl2a21J?=
- =?utf-8?B?V25SdVY3YWxkTXVvMG1MQXJmbFBlbkpwS0tpcXVwWVhsNXBkUlZnYjUrL1NZ?=
- =?utf-8?B?aU5oaUcxTE5UTDkxR1NMY0lzSU5vOWpoeHp3M2RsWlFCdzIvVkVRZEMvUSth?=
- =?utf-8?B?YzVLbmJrQ3B2U0EzQytueC9ZMHBKZEJVV3lCQ3l2UEhCSy9vQW1VVHlEODhE?=
- =?utf-8?B?dndZdUo5ejU2UGVxMXJEUXFaTWFYNTZlVjA0VGJ2eVcrYkdha0RJMDhLdFBN?=
- =?utf-8?B?dS9rS0NKeDlJelpsdWxnK0hZR1ptWWZha1BGc2NHdFVRU2xuSHd1dG1tUVZi?=
- =?utf-8?B?d00rMytOTmx2ZXBQZFlUQTB5M3hqY0hweTlsUE4ycjN6MzN3Wjk3ZG4wMkVP?=
- =?utf-8?B?MFYyWnltdHBJVnZLd0g2YVRRZXNGVmhOT25QMUxXZjFVVUpYakh6RG1sTlg0?=
- =?utf-8?B?c1RGdmRQSFZtK3JxbGlqVlhuZURKZ242dmJIcUx1WTY4SUYzajhWVURmcEdU?=
- =?utf-8?B?Wjg1Q3p1d1hCZm1CdHFIL1lsTjhQRWVwZkl0NURuUEFXTE8wdnNBK0lLL011?=
- =?utf-8?B?N0tEa3lHM3NGYjdETmRVeVdJSkd3TGltdDlnZTdIemJWRldYRTBGN0x4eVg1?=
- =?utf-8?B?OVlISHh0QncxYmRLMkoxMzRaMkVpWXVTWUJjaXErOVBRRXBrRXNUZjJPR2NN?=
- =?utf-8?B?Z0x4RDF5LzZtVWN3UTZ0djhWa0pRTkFMaDArZU5peGpPSEwrNUJxQT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b="LEASF/i3"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-38e42560ebcso3627317a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 05:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blockcast.net; s=google; t=1791548672; x=1792153472; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=iuOXZ6GNDsSWzbOB5HKjThv6DdLSuE1VHNq9L4RX/IM=;
+        b=LEASF/i3sL4adn1dDsWR7DvfCdgFmhONFL3CJoDBpUNhW4yQpOi9Ku1T77yth9BS7C
+         yWmwkOVEwDMo+P5XQEvyYyt62dLLK1+A7Vy2zLVEo37TlfE9KMr6QaUXJU4a9iCBfXq6
+         s+ayYvP3QhQMeT62wH3nKssfkGLj2f1b9HiCLE0CQg6HRwrWL73ObSa9cFtU3hVtOnX0
+         ATpuHSbRrB0L6lJHK71RoipL8e1e2chtDb5Y/0l8h0d58hN/oavj+O3HnSetc7iMu98W
+         tlwPh5NNtKVSRlNlD0tct4RwBWcIL/nDuKJhFMtXcEk8HqgOEjfOEdFNE2ynwgVWS4ZT
+         NCvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791548672; x=1792153472;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=iuOXZ6GNDsSWzbOB5HKjThv6DdLSuE1VHNq9L4RX/IM=;
+        b=cVE1jfu1rMyQr9skRtC7kqE8pAg7KhGSh1wweUUSdZ+v+sQvmYR7h4lL7zLzxLcNEi
+         TnHfsUlvPZ9ratqjbrbvcrb/dq0fKTaeKb7RGr7SA4AGG69e5mo7qX8JaCIlXHMLF3LB
+         qGD9K174KMPTH4a2VgdMUjc5IbF7OhNsNDufpbJxFCZQe11Yhb+pgY2+lCTzqlbbWOHX
+         hE/HMJXDmLlVYyibrQKH2U3WgSQ6V9m1wDRFmLeTLb+ru9Yiuz4z201ULAGcqHCt/T06
+         BdFeGSZG9779sU2MScklYuYx1A7HmGbqMU/ZPCgccmJpdulnIrU4Tm3pN1IphbrjCJkt
+         1M/g==
+X-Forwarded-Encrypted: i=1; AKwUvBw66d5aRcsPu5TE1WKkQiFAVnOfeCSI4+u+H6/v/9zSp1kPD4eTDjYqTc/OpP/0vxBXS7YjizCY6w4Wu/oGEb8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI1iPes8NIBA7wbr12jlQ1DwRssYSU9m2q01ebkC9sus6ybxjQj
+	yyUrA71HVTZ9hzp/ZYEGGhmhh3IR3cnxzmI2+JHkxII+yPLkDZElphRGaQFV9AwhQGA=
+X-Gm-Gg: AYBFou3wOoZBIiRvs0Lugj/zn1HwQ2FG/082pjaX97/GM3lImkRHEfgCsPlo2pEgKhM
+	wzI6osFsWdAHiwjrDwmc2lUA2sAz4EKFMClB1Sb+rTmmVTuwWLdMF+ZtqB9JpcSofBgb+zn7HOR
+	uKKTJw/bLE25UzLDrmRn6+Tf7AgykhmTdUjnld8ijbHeUZ8lB0UwUaVXFGkQXhX1KWh2sqzANJB
+	vcfjpgH4s2vKiQyN1F5Sk80grXXYOd88l+C3uf6GK3zPou1vK9OvQXJBsyB74EBWQ6R57/hvLGL
+	aw+/mm9mGpaPQbv4WVmd+oW+HCG0K59bvtOaKKlmzZSg4NQHp/8ct8BX5SuIqx66sdHq3Gd8CJl
+	i4tdLl5j2j8jyVcsjOoBaIKpM8hhTNYvjF9GkAwX57M3jgs2+agRK01lt9memltNsASOHW/f6J7
+	AayShdoghbJl7F/y3J1NblUJVHOqJZbfedC41deUM4D87OSSIb9nwjZp/m+9LYUH9+RKQbxjxHQ
+	0x4yaB6FNvGsrt1KSK6uAY1W9xrEe7ZsAge7Lfj
+X-Received: by 2002:a17:90b:5346:b0:3a9:4e51:984b with SMTP id 98e67ed59e1d1-3ab3a747329mr1724018a91.14.1791548672432;
+        Fri, 09 Oct 2026 05:24:32 -0700 (PDT)
+Received: from devbox.ts.blockcast.net ([2602:f74d:1::32])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab55e41eefsm1660502a91.10.2026.10.09.05.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 05:24:31 -0700 (PDT)
+From: Omar Ramadan <omar@blockcast.net>
+To: Taehee Yoo <ap420073@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 01/13] amt: create an AF_INET6 encapsulation socket for an IPv6 outer address
+Date: Fri,  9 Oct 2026 12:24:14 +0000
+Message-ID: <20261009122426.551178-2-omar@blockcast.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261009122426.551178-1-omar@blockcast.net>
+References: <20261009122426.551178-1-omar@blockcast.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7P189MB1137.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8a79c40-2ae1-45c6-144d-08df25fe4b54
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2026 12:10:22.5599
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4fI8FunTREtVUxpsBYWrUASIFVgGrMavLpa5iJSydQ836VpIOe03OyF+eyu0yLRXXDShPKZaJ0fF8p2p8fXV+IDxkPFIE29Z1YTcbNwlzkg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2P189MB3056
+Content-Transfer-Encoding: 8bit
 
-PlRoZSBkaXN0aW5jdGlvbiBJIGludGVuZGVkIHRvIGFkZHJlc3MgaXMgYmV0d2VlbiBhIGNvbm5l
-Y3Rpb24gc2V0dXAgdGltZW91dA0KPmFuZCBhIGNvbmZpcm1lZCBsb3NzIG9mIGNvbnRhY3Qgd2l0
-aCB0aGUgcGVlci4gQSBzaG9ydCB0aW1lb3V0IGFsc28gZXhwaXJlcw0KPndoZW4gdGhlIHBlZXIg
-aXMgcmVhY2hhYmxlIGJ1dCBhY2NlcHRhbmNlIGlzIGRlbGF5ZWQsDQogDQpUaGF0IGNhbiBiZSBh
-ZGRyZXNzZWQgYnkgInJldHJ5IiBhcyBJIHN1Z2dlc3RlZC4NCg0KPiAgd2hlcmVhcyB0aGlzIGNo
-YW5nZQ0KPnJlcG9ydHMgRUhPU1RVTlJFQUNIIG9uY2UgdGhlIG5vZGUtbG9zcyBwYXRoIGhhcyBk
-ZXRlcm1pbmVkIHRoYXQgbm8NCj51c2FibGUgbGluayByZW1haW5zLg0KDQpJIGRvIG5vdCB0aGlu
-ayBpdCBpcyBuZWVkZWQuDQpVc2VyIGFwcGxpY2F0aW9ucyBjYW4gc3Vic2NyaWJlIGZvciBub2Rl
-LWxvc3MgZXZlbnQuIFdoZW4gbm8gbGluayBpcyB1cCwgc3Vic2NyaWJlZCBwcm9jZXNzIHdpbGwg
-cmVjZWl2ZSB0aGUgbG9zcyBldmVudC4gVGhpcyBwcm9jZXNzIGNhbiBjbG9zZSB0aGUgd2FpdGlu
-Zy9ibG9ja2luZyBzb2NrZXQuDQoNCj4NCj5BbHNvLCBmcm9tIHRoZSBjdXJyZW50IGNvZGUsIGEg
-Y29ubmVjdGlvbi13YWl0IHRpbWVvdXQgbGVhdmVzIHRoZSBzb2NrZXQgaW4NCj5USVBDX0NPTk5F
-Q1RJTkcuIENhbGxpbmcgYmxvY2tpbmcgY29ubmVjdCgpIGFnYWluIG9uIHRoYXQgc29ja2V0IGNv
-bnRpbnVlcw0KPndhaXRpbmcgZm9yIHRoZSBwZW5kaW5nIGhhbmRzaGFrZSByYXRoZXIgdGhhbiBz
-dGFydGluZyBhIGZyZXNoIGF0dGVtcHQNCg0KVGhpcyBiZWhhdmlvciBpcyBleHBlY3RlZCBhbmQg
-d2Ugd2lsbCBub3QgYWxsb3cgYSBmcmVzaCBjb25uZWN0aW9uIGZyb20gYSB3YWl0aW5nL2Jsb2Nr
-aW5nIHNvY2tldCB0byBhdm9pZCBidWZmZXItb3ZlcmxvYWQgYXQgbGlzdGVuaW5nIHNvY2tldC9z
-ZXJ2ZXIuDQoNCj5UbyBjb25maXJtIHRoZSB0ZXN0IHNjYWxlLCBkaWQgeW91IG1lYW4gNCwwMDAg
-Y29uY3VycmVudCBjb25uZWN0aW9uIGF0dGVtcHRzPw0KDQpZZXMuDQo=
+The amt device binds one AF_INET UDP socket on the relay port, so a
+relay and its gateways can only talk AMT over IPv4. RFC 7450 defines the
+protocol over either IP version: the Relay Advertisement carries an IPv4
+or an IPv6 relay address, and the relay answers in the IP version of the
+Discovery (s5.1.2.5), so an IPv6-only access network needs an IPv6 outer
+transport to reach the relay at all.
+
+Add the outer IPv6 local address to struct amt_dev, and amt_v6(), which
+reports the device's outer family from it. The inner family is
+independent of the outer one: the bool v6 arguments keep selecting IGMP
+or MLD, and a device of either outer family carries both IPv4 and IPv6
+multicast. amt_create_sock() binds an AF_INET6 socket for an IPv6
+device. The socket sends and verifies the UDP checksum, which RFC 8200
+s8.1 makes mandatory over IPv6, and it is V6ONLY, so that it does not
+also claim the IPv4 wildcard port, which an IPv4 amt device in the same
+netns may hold.
+
+The socket is also bound to the underlying link, IFLA_AMT_LINK. The
+IPv4 paths pass that link as the output interface, and an IPv4 route
+lookup then only uses routes through it. An IPv6 lookup that has a
+source address, as every AMT send does, treats the output interface as
+a preference unless the socket is bound to a device, so without the
+binding the outer IPv6 traffic could leave through another link while
+the device's MTU and headroom are derived from this one. The binding
+also keeps packets that arrive on other links away from the socket. A
+link-local address is unique only on its link, and relay tunnels are
+keyed on the gateway's address, so two gateways on different links
+with the same link-local address would otherwise share a tunnel, and
+the replies would go out the wrong link.
+
+The new socket also hands ICMPv6 errors to amt_err_lookup(). This relies
+on amt_parse_type() pulling the AMT header behind the transport header,
+as "amt: pull the AMT header behind the transport header in
+amt_parse_type()" (eb0c18404c89) makes it do, since on the error path
+skb->data points at the quoted IPv6 header.
+
+Nothing sets local_ipv6 until the netlink attribute added at the end of
+this series, once every path can use it. No functional change.
+
+Assisted-by: LLM
+Signed-off-by: Omar Ramadan <omar@blockcast.net>
+---
+ drivers/net/amt.c | 34 ++++++++++++++++++++++++++++------
+ include/net/amt.h |  2 ++
+ 2 files changed, 30 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+index 81d26ef..423ed77 100644
+--- a/drivers/net/amt.c
++++ b/drivers/net/amt.c
+@@ -80,6 +80,14 @@ static struct in6_addr mld2_all_node = MLD2_ALL_NODE_INIT;
+ static struct mld2_grec mldv2_zero_grec;
+ #endif
+ 
++/* The outer transport family is fixed when the link is created: an IPv6
++ * local address selects IPv6, otherwise the device runs over IPv4.
++ */
++static bool amt_v6(const struct amt_dev *amt)
++{
++	return IS_ENABLED(CONFIG_IPV6) && !ipv6_addr_any(&amt->local_ipv6);
++}
++
+ static void __amt_source_gc_work(void)
+ {
+ 	struct amt_source_node *snode;
+@@ -2984,19 +2992,33 @@ drop:
+ 	return 0;
+ }
+ 
+-static struct sock *amt_create_sock(struct net *net, __be16 port)
++static struct sock *amt_create_sock(const struct amt_dev *amt)
+ {
+ 	struct udp_port_cfg udp_conf;
+ 	struct socket *sock;
+ 	int err;
+ 
+ 	memset(&udp_conf, 0, sizeof(udp_conf));
+-	udp_conf.family = AF_INET;
+-	udp_conf.local_ip.s_addr = htonl(INADDR_ANY);
++	if (amt_v6(amt)) {
++		/* Bound to :: by the memset, and to the underlying link, so
++		 * that IPv6 route lookups are strict about the output
++		 * interface, as IPv4 ones are, and a link-local peer is
++		 * unique. V6ONLY leaves the IPv4 wildcard port to an IPv4
++		 * amt device.
++		 */
++		udp_conf.family = AF_INET6;
++		udp_conf.bind_ifindex = amt->stream_dev->ifindex;
++		udp_conf.use_udp6_tx_checksums = true;
++		udp_conf.use_udp6_rx_checksums = true;
++		udp_conf.ipv6_v6only = true;
++	} else {
++		udp_conf.family = AF_INET;
++		udp_conf.local_ip.s_addr = htonl(INADDR_ANY);
++	}
+ 
+-	udp_conf.local_udp_port = port;
++	udp_conf.local_udp_port = amt->relay_port;
+ 
+-	err = udp_sock_create(net, &udp_conf, &sock);
++	err = udp_sock_create(amt->net, &udp_conf, &sock);
+ 	if (err < 0)
+ 		return ERR_PTR(err);
+ 
+@@ -3008,7 +3030,7 @@ static int amt_socket_create(struct amt_dev *amt)
+ 	struct udp_tunnel_sock_cfg tunnel_cfg;
+ 	struct sock *sk;
+ 
+-	sk = amt_create_sock(amt->net, amt->relay_port);
++	sk = amt_create_sock(amt);
+ 	if (IS_ERR(sk))
+ 		return PTR_ERR(sk);
+ 
+diff --git a/include/net/amt.h b/include/net/amt.h
+index 2846dde..8df7d43 100644
+--- a/include/net/amt.h
++++ b/include/net/amt.h
+@@ -344,6 +344,8 @@ struct amt_dev {
+ 	__be16			gw_port;
+ 	/* Outer local ip */
+ 	__be32			local_ip;
++	/* Outer local IPv6 address, :: unless the outer transport is IPv6 */
++	struct in6_addr		local_ipv6;
+ 	/* Outer remote ip */
+ 	__be32			remote_ip;
+ 	/* Outer discovery ip */
+-- 
+2.43.0
+
