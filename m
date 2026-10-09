@@ -1,150 +1,148 @@
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010038.outbound.protection.outlook.com [40.93.198.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C342929B228;
-	Fri,  9 Oct 2026 01:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.38
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791509389; cv=fail; b=qdbtk1jqFGQOG9TugKsP99ImPQ+SgSf8Q1FOq3voKFKPW9/4bHS9aHcVApYRBaX13pXQtXxDN+CcL3SohR9XCXSB2+8XiRbEpOIKNxbgCWqTkOoQek/oGb8JGYWc4/L1ZwoHLOzSa8TKDCGidBkcDEgWKNy/Tey9n/11biNbzwk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791509389; c=relaxed/simple;
-	bh=6Vbk0eYFn57tTLNBcN10alFPa4STYK1AWv1/XpX++3E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UWulfCPwGhUW4/aFQegcuog9BJFhBjx7kyIUWPv4Fgz0kJ7+qHn0c0fauYMSPZhwudUbkfjWH65Dy3IuCxUYRZMUJaL7r1lYdlEdGzFFpCmK/CY5+1ysYQMM+8JsDROVgh/CjKegNPMkSkguVh8D/lGqriMBpudQeWsUVsD1rwA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FmPQogwz; arc=fail smtp.client-ip=40.93.198.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C43E2F7EF2
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 01:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791510531; cv=none; b=u2l9awKN5AIIeg1phJ4YlefofMIWDTukvaKKwxaxyTvOayzbVxAcJ5O7vOMdjpLwlRybvBG/vzZowp23hOTBXAqitTeM8amPx8YcS+eG+UaZKOr82Zh3kHr/TofAy8ciBOKaX+pisVbgHGzI7HDP8ghxBl60NglXpaHLm4GdsyA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791510531; c=relaxed/simple;
+	bh=4zQauuLYgJxsEKUHN3tTR9O77uoUU+rw59u++kdpCYo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Wzkaowmgk4sF+EMM0HaA3kgA4qgIDrYeKFcPHPnfUUdW9W8pJwdUh7+2t9ht1+Ga+9VwFcvW07T7NuXaAYXCE5te6WC2DNFENaB3fst7TXm6hd40u3QW5l5ffPedb1QEOesMNjlA2pIto1WxIfuh3r8dCYXtzFgn5Uuaruhks3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h00h1Y1p; arc=none smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FmPQogwz"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sLR3f555Ftb9MpnkId8lOGA0dUai7NtL9j9W/3mKPbd1xFHx1TDWg+N4jwsPgKbkXQ7fHwWfzPdENJ4yvvtxqGCMyVHz8VR2ou8uo1S0kvcrvPzyhuQsWyIk4K76+8pendyCb8A73PIZuudBmRqYEMYrepyxsfDSz3y+FPNjiqQCYeyiTCojMUaPK7NVf2o8aMx76u5DfYXq8uvNrUd/XujMKOn1ur+FY0RXl1aGw82UqkopYznQdrENjCQzcOQ15SAR7CgOi8AatlhSrq+DRbrdfbxAQCOZwNoHi2+lWi49c1ecmofblIPdNZs2J3W7WfbQ/BFmsEFx49LhdhD9VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yx2FT4WQ3o1sSM6Ag/+XJWKENAbx8MtlLMWktHi7nxc=;
- b=RIZUnkQbQTDDMLcuAxaJkZ4RfzzrWE3OnoWh7vHxrAvyu3KJSlgCiIR78WVsmXclCFHPFgVU2BqpNeCh7NSIsD7Gwkxh240juReHr3WU5r5F3GWeE4NT1UkEajxeJJLhMyOcc4xTzPZc3GBGKbwYXv7Vu24LJeGDzgCX8AcRr/g59g7TJbHF1VDMrf0LQLzCNLID+ne2kk+C/eMbMEwhpBfbW6J8jbwjp4VxT80h9Vn9zPlKdwRP34ZmNann3R9D/no3OCjzfd5f4ECgw0J93M77gTGoonYRkVURWeLzZrolgLcBNAeWPQS0gj4vWHcNdaT4OBlQvd7BVAn7EL4c3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yx2FT4WQ3o1sSM6Ag/+XJWKENAbx8MtlLMWktHi7nxc=;
- b=FmPQogwzbfRu/b1czCjchMboSD5Yt+Q9WV3Fg3pKr8SfN68wj4KLcSuX3sR9xZSRMzdSpngMRzUPyyR3ZyMNFqblbdS5R6ihFGf1qvvTuuHMF3T3ZGPiz/TYA9AIIAk5EwLPCOurKFZfZQJ6KzckrKiFj3djy+JaijaAUAh4o/iOGGppvtDyb4XycVBA+24a5/cs7jC59pKvkQDZ4FX4+qq59GN25L7NU0gdcTAjMO9s0QwiHarIqutCaohic9IIf+k1zpJLr2wpBVllbrIS7qqKrASaj/6XDNxCXKq74jMoEuaCvnBfvyAlY0dkCF6otEjJHAqYvqgEV2y4aZNvEQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by LV2PR12MB5894.namprd12.prod.outlook.com (2603:10b6:408:174::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.16; Fri, 9 Oct
- 2026 01:29:44 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%6]) with mapi id 15.21.0472.016; Fri, 9 Oct 2026
- 01:29:44 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: Re: [PATCH v5 3/3] kselftest: mm: introduce size_to_shift() helper
-Date: Thu, 08 Oct 2026 21:29:41 -0400
-X-Mailer: MailMate (3.0r7032)
-Message-ID: <EDCF0804-FF9D-4FDA-A2C9-FE869773C61D@nvidia.com>
-In-Reply-To: <20261009-fix_hpage_macro-v5-3-54378ae45add@arm.com>
-References: <20261009-fix_hpage_macro-v5-0-54378ae45add@arm.com>
- <20261009-fix_hpage_macro-v5-3-54378ae45add@arm.com>
-Content-Type: text/plain
-X-MS-Reactions: disallow
-X-ClientProxiedBy: BLAPR05CA0025.namprd05.prod.outlook.com
- (2603:10b6:208:335::6) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h00h1Y1p"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-3515f9a5d25so1914957eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Oct 2026 18:48:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791510529; x=1792115329; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=RK4flvPJYAEK9lSesneRcUolXiSZW1erKx163yiShyo=;
+        b=h00h1Y1p+NYY99+JyvYJlEPJel2UuhWgsf/NlkhWcJGuY/QjjNsTr2oCBmfGDS8ix7
+         ZCM+HH6BnOV8cR6ldjt7MrxxVisDLcVbN0dL0pr2NbhlpHgkrPWvQlnP24NYX2aUMR30
+         Nr7LKaYIO+HNd6tqcSozdYcM0pHQX1K2SvsfUYePX5mgy1K0gGW3WMnG/BM2VCYkESrf
+         PwroNQVygUAeNIKGoeDEYrXd3m3TLbIYSx5dvoxfvDgjkSe6fj2Xm9sj+C7jARrYOb9y
+         vK8zwsms9IFjDUGSu39hPgxbEoHTVr7DJs7oPKNiQShqRRN5nGBT1UW64ovSfaRAf1jV
+         JNcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791510529; x=1792115329;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=RK4flvPJYAEK9lSesneRcUolXiSZW1erKx163yiShyo=;
+        b=XkJY9faA8jIsis9BLQqC0GCytII7FSisnTxRCifAVFzLGinXQjofF0mQE9XsS7A/rH
+         DTQ80tKAZp3iAkG5A8w3z1gqGWBWgsD2lEH9L/R/w5hPCrcveLR0CxpUmHO1Fr3AbQk4
+         8LC2S9YoT6oVJJNfl6bCtVK48/dtFQJdcWFKzGZhV1qs3pI8CKLw4T7u6CZSBefgtSga
+         B5w5Ba0GxtejAC9/rtb+f4iqC4RJBLhVkxP7zGw4bkSJJJFi63rsvDnKOo6BiaE3VD1r
+         jVgoJhb/VVbixGnvzaHEZDddGEf6JNe6xVEtLWROv5WAwpqJ0TFQmjU+NTkPKwMeJH9I
+         isqg==
+X-Forwarded-Encrypted: i=1; AKwUvBz0Ocze5rPOLo21WITToaqVRjzyyrcsm403/iuIbVjoW0u6KlmIhZOrKfaRYKe+tvcfGmHihozTEGCHj1jdmHY=@vger.kernel.org
+X-Gm-Message-State: AFuF++lChukIlCsa5nDipnnjJJcexXO52GjNqqii+9Hf6XslF+4sjbzm
+	Ni/zeKwe8tf79tYURyMG/ruhoiXwDKJs6QV8btNB41a2kDrSrG83zhm9
+X-Gm-Gg: AYBFou0ae/f90oRKfSvl3BEhF3UGqPIKHT6tq9YJZmLrz3Z9DwaGIGLLFGU1kxjhMax
+	i3nmkSPftz9Grhf6NTO8uK+Yk8R9qYbOnEHaFCXWJ/PSfnEj/ac8BHtU8MDoPrXtr0rGWcZZdkE
+	cG08CRFm5H3E7CYJgRrTEaCuK7YT3DfTN6SVqZvx2Ck4HfR3zK0z1og6VWoeF0vtp32TveglRt3
+	J+LwNqzR7iPaPOcF2PnOvlo6AKXGbq6TUynACRq+o3W452dH2njpz302Uj+n6h6ihhlxB+CPHph
+	BH0rBPF+mpD/refK2VhWgV0CYpLV5wrextJXbXud/ijFXb30pZfAJ8S1zUGo8aXnkqXNF8PW5Qx
+	vrkhZATtKqvsfzJLn4eIUAtmgBgOZ8L5cer6iq/KRwGm4xTlHxovv/A02A2a22XJe7h60MDXR3l
+	LlaipmuJVMkza2HVv0Lad5fcvdxcnre+OD2I6QHUuLm561HpbMzQX6pkXbhHpuDuXTlw==
+X-Received: by 2002:a05:7300:d089:b0:351:55c3:6896 with SMTP id 5a478bee46e88-3537dfd8a93mr802366eec.16.1791510529366;
+        Thu, 08 Oct 2026 18:48:49 -0700 (PDT)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537ca1cc25sm2189280eec.8.2026.10.08.18.48.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 18:48:49 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Date: Fri, 09 Oct 2026 09:48:44 +0800
+Subject: [PATCH bpf-next] selftests/bpf: Create the vxlan devices of
+ test_tunnel with their MAC
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|LV2PR12MB5894:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3e5ce795-9626-45f1-42d3-08df25a4cbff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|23010399003|366016|56012099006|4143699003|11063799006|10067099003|22082099003|18002099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	ieIOorWuOIL4AvfH4fGlkfMUv/zlKUhYSiOeVQw8K3ZMTSWwn38MwMLgwRoIRsmnetomfXln2J7SXiq0WUouFih4CnggYpvwhOZLMAEtf9kfTA5K51q2e/ZcX4MZyAXdhfBCBXL1cqmDMI4okBo8P1gcns8lUnlTo2+a/hGwIFe/K5Rp5Bh8mgSXZaGeUXD3EWMx38MplB9Y/Px/rKt6/W2mW5ZCwYGvMT5Wa1/Uj4eTRVeJtBaT1REXzikb2q8IpHl3WZ5LH5gBYLTNwqS99DRoZNNh568HqAiFxwn9FdXM0yZoBkL64KUSLvfTcn55XkQSoPtuKFMq8VpVCdN3qDeClgqBhOOYW40SXVcAScIdBcMQSPpnAnWKgdY6bJAoIZCkx8S25oZj8CgRtCHURr6Xo3nNnk1ouGKc15zG10KasVvZUqSKa223R3xiwhdNiw/Mzw77mNaLEXT0oHZjDZiQpJdNp8sWpRKd2GBtYpDaOP1e3zji2cQFC62sCQ+4l7lcx7vxEYk5nHG6tcr2Y6KAzoopEd1FyPSf6gk9meixVvvBDpuv9mdAVgNnWsCO7b3MpOtGr1l1h2NPxHI+rRkuX8BAm67fLbL5ea7SFzMueiNVFyfUnEWF8im1R8SWebOX/reV/iKT+kJjCxhJVZDoiZZecBkmSFzpPz/rHo4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(23010399003)(366016)(56012099006)(4143699003)(11063799006)(10067099003)(22082099003)(18002099003)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?V1sL6BvBefdeL2XWLH9E+lCzYxrlfPfcGOhLBxidVHQpy5uVPaMkWO0nlpQe?=
- =?us-ascii?Q?Q6q3nejLCovMGjCZAKIYRwO8C7tfpvgUxDNyvsXfWbLPc/bljtXncojKORwM?=
- =?us-ascii?Q?EE3nAIEZz5QXbXkQA1AdG8kwCO5kiuF0xldH5GIhYI6lDmXlinFjO+CLmFTa?=
- =?us-ascii?Q?f/jXg2sIMaZCx58F4dM7VTRujtl9ppyawOA1cEbvd1FcRh9SuuCNW18IqoFZ?=
- =?us-ascii?Q?14IVHvpyCJK9I5JYCs+RwdVNjRXZasjlWYLvB49bnEZxMHcyye1kL0dVh6Wb?=
- =?us-ascii?Q?+XH2Cvz5Q7eSdcEjhsHxJEt2taYfQbEH+b96Jmfll9xN5QeIdhvhMYvSrTkY?=
- =?us-ascii?Q?T1I81ECDVmjvM13F87EMsdr3M26C2a0VuoP3vYsu37Cb95fKAfFmJPKnvAhV?=
- =?us-ascii?Q?0fyjUIcl2kNJqRwyzw/C5uq9YGP8IgoJ5YKPNmovznT1EFtspGLgB5ScMigj?=
- =?us-ascii?Q?LYZl7xWdTSzlESDGJrjCisiKHBC1AC9LKKGuF0OwctsZiJw8A2qggcI7GYxg?=
- =?us-ascii?Q?5daqb6DD6QTSNRoaHe/VM/xCn4C4mWhzI2p6MS7o9tjlvWvl3iR/BuvvjsQe?=
- =?us-ascii?Q?wt9rXrP0N/OM4el4uTDxZ8YNl3gkJ9145tpxcSudn3/cqDMiKQZ1wavSaR1o?=
- =?us-ascii?Q?BcF+MxSoadbGBAz/FSUHqiwBFAc0bud5brsZCylCmotHLzqtCtx4Ahxg4ozd?=
- =?us-ascii?Q?jSGsvAb2hh7LPnCdiNBUp+owfbSX4QXNfpNu/d1t+C0SDvq0xHYfxnujPrFP?=
- =?us-ascii?Q?Ax7+8hDB0O/FDtjn5gwl1D2DEJInr65sawVjXZ+NnPV/y2y07kFH24DJf1mM?=
- =?us-ascii?Q?SunR9KH4awlAkCV2RsyZRSI7IrJDZqLAfvYeZnPSxvq1VvjSUHvENobawNKn?=
- =?us-ascii?Q?7u0H8R5H7DCGdX5WUHYQqZSnT6Mzlh8CaXNgnxWvAd6DUp+Qie/RoakOaNvn?=
- =?us-ascii?Q?XkGWDhW/VPxbcizXYpFd889reh/ae9lFBVDQXALOrSzbwjWAGFAdD7FWJ3Rf?=
- =?us-ascii?Q?Y0HLGnd6beSFrDMeF2FLGWFaJeXoNxLHJUcHN1VRed7vKaL9bsiwCZCy1fmr?=
- =?us-ascii?Q?+6YGEDz4pxqWoArcSWn2UaCvUOxuGImnDwZNg+Te4zeFVXMPEUe/ERFB8zce?=
- =?us-ascii?Q?BHCbqFmp0QfYwqNe6CszrF7KTkeFXeE/ei9aMJSi/oBryPs47voOZFpi//dW?=
- =?us-ascii?Q?qRwxQKgUoinq280yGJa1vgpOw8q6oGQBE3v7I0abUlrPOGaDwZM1iydx2+LO?=
- =?us-ascii?Q?qyhKtS2UPWVYVXRyv3ZyorYHJqHCFWplJI7rzbB/yY914LwttG1y0yqHArhk?=
- =?us-ascii?Q?3QxAZ5HBI1OjGRd5ucOqFFdJVGnN6XIWktku4rpbXdO6zloioqrdOWkJIG3N?=
- =?us-ascii?Q?MOTdzzvJhTIKGyIwfo3z4a6ZMslCbXEz3ljvbE1s+keQ2m0EAV1Wi5+fiF9E?=
- =?us-ascii?Q?6bR/ydtr/6gUYQcwfWJJBD9uzOZ7ktt/S/2oi9+O7vBli/+YVBV9YZ/AqCVW?=
- =?us-ascii?Q?sbSCR1sow3MEfGGmpkb+vemuoZ0gK89R87q8czZDV+F1sxJcSf/WY63iSTl4?=
- =?us-ascii?Q?ffYpzneNQTcBZawAK6yH4+OrUSBLVyH6JS3dZq41LV7G8WRQbjFGyJ3O+/ql?=
- =?us-ascii?Q?WLaGLUgWBJMsmW39LWw+87ahbRCqQl6XufjuAsh5h8bocN+LBZ1J7sSoI4gj?=
- =?us-ascii?Q?7F35z6tWX41+xxRIr84ogFd++4oCqy1ugqzz3dZJc+61Gx0S?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e5ce795-9626-45f1-42d3-08df25a4cbff
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2026 01:29:43.8836
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SIe6YumoFqXibXl9ZJQn+5D70ntVY8/Wq+qoXyxu+oaHCntiwtAs48GD7tC0tQzj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5894
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261009-selftests-bpf-tunnel-vxlan-mac-v1-1-624dd769c334@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAPtHyGoC/x2NQQrCMBAAv1L27EISbFC/Ih6SdqMLcS3ZtARK/
+ 270OIeZ2UGpMCnchh0Kbaz8kQ72NMD0CvIk5LkzOOO8NeaKSjlV0qoYl4R1FaGMW8tB8B0m9JH
+ iJZ29s6OHHlkKJW7/wR1+hlCr8DiOL7I4gKh6AAAA
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ Kaixi Fan <fankaixi.li@bytedance.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
+X-Mailer: b4 0.13.0
 
-On 8 Oct 2026, at 21:27, Yeoreum Yun wrote:
+The vxlan tests of test_tunnel create a tunnel device in the initial
+netns with "ip link add", and then give it the MAC address that the
+static neighbor entry at the other end points to with "ip link set".
 
-> Introduce size_to_shift() for future users that need to
-> obtain shift of a huge-page which is other than pmd_psize().
->
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
->  tools/testing/selftests/mm/vm_util.c |  2 +-
->  tools/testing/selftests/mm/vm_util.h | 12 ++++++++++++
->  2 files changed, 13 insertions(+), 1 deletion(-)
->
-LGTM.
+systemd-udevd assigns new devices of the initial netns a MAC address of
+its own, following its MACAddressPolicy, when it handles their uevent.
+When it gets to that after the test set the address, the replies sent
+to the configured MAC are dropped as meant for another host, and the
+ping of vxlan_tunnel fails after 10 seconds.
 
-Reviewed-by: Zi Yan <ziy@nvidia.com>
+Pass the address to "ip link add". udevd leaves alone the address of a
+device that was created with one.
 
-Best Regards,
-Yan, Zi
+Fixes: 1ee7efd40abf ("selftests/bpf: Move vxlan tunnel testcases to test_progs")
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/test_tunnel.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
+index eb93099312720..7b35bf9498056 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
+@@ -161,9 +161,9 @@ static int add_vxlan_tunnel(void)
+ 	    IP4_ADDR2_VETH1, MAC_VETH1);
+ 
+ 	/* root namespace */
+-	SYS(fail, "ip link add dev %s type vxlan external gbp dstport 4789",
+-	    VXLAN_TUNL_DEV1);
+-	SYS(fail, "ip link set dev %s address %s up", VXLAN_TUNL_DEV1, MAC_TUNL_DEV1);
++	SYS(fail, "ip link add dev %s address %s type vxlan external gbp dstport 4789",
++	    VXLAN_TUNL_DEV1, MAC_TUNL_DEV1);
++	SYS(fail, "ip link set dev %s up", VXLAN_TUNL_DEV1);
+ 	SYS(fail, "ip addr add dev %s %s/24", VXLAN_TUNL_DEV1, IP4_ADDR_TUNL_DEV1);
+ 	SYS(fail, "ip neigh add %s lladdr %s dev %s",
+ 	    IP4_ADDR_TUNL_DEV0, MAC_TUNL_DEV0, VXLAN_TUNL_DEV1);
+@@ -198,11 +198,10 @@ static int add_ip6vxlan_tunnel(void)
+ 	    IP6VXLAN_TUNL_DEV0, MAC_TUNL_DEV0);
+ 
+ 	/* root namespace */
+-	SYS(fail, "ip link add dev %s type vxlan external dstport 4789",
+-	    IP6VXLAN_TUNL_DEV1);
+-	SYS(fail, "ip addr add dev %s %s/24", IP6VXLAN_TUNL_DEV1, IP4_ADDR_TUNL_DEV1);
+-	SYS(fail, "ip link set dev %s address %s up",
++	SYS(fail, "ip link add dev %s address %s type vxlan external dstport 4789",
+ 	    IP6VXLAN_TUNL_DEV1, MAC_TUNL_DEV1);
++	SYS(fail, "ip addr add dev %s %s/24", IP6VXLAN_TUNL_DEV1, IP4_ADDR_TUNL_DEV1);
++	SYS(fail, "ip link set dev %s up", IP6VXLAN_TUNL_DEV1);
+ 
+ 	return 0;
+ fail:
+
+---
+base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+change-id: 20261009-selftests-bpf-tunnel-vxlan-mac-6beb8f462156
+
+Best regards,
+-- 
+Qiliang Yuan <odys.yuan@gmail.com>
+
