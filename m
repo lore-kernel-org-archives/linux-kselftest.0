@@ -1,33 +1,33 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1403C3D9531;
-	Fri,  9 Oct 2026 05:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8563D953A;
+	Fri,  9 Oct 2026 05:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791522803; cv=none; b=XOvPpaS6Spv9v0xqKlJcXSXKY69uSPEbxab/SSNcGSq44r9atDGhY2DcALOC/b0sHKIfvEhj8MH4YJHVceEItnDKOjHAwAQwcFn7uKTg0z8GNKXAeoMRz3GMVrApVV69GgL+xfTJOk7e/6xXKgwh+EL2cFFGWa0ex9ysmZb1Qso=
+	t=1791523027; cv=none; b=RfYvMIsjllxSk+XPVnhMXEWzWDEl4HR1ZgBH/VhwhUVEbFugHnbLzBedFwTieOjsJ9/f+Ktu4d44nJEWs3hpPKPJRI0e1gLHNZlJHLHS0P2s5BrG2cupynR5wdoEBC2ubEIYr7VFtPwszFTR+v5MJ9rmymdkD+Bi83NMxe6504s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791522803; c=relaxed/simple;
-	bh=Up5VW3WVYfkQh6zMtdnmrrbOJdA1MRxjQ2hW3bVNq4Q=;
+	s=arc-20240116; t=1791523027; c=relaxed/simple;
+	bh=GoaoFDCjtgPq5kGR7uK1nDvJ4v8gZ15Od56/qm3XMpA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MujLhxQplOSToCeXaYa1fMqD7dJpa09M88S4WXY897SdyP9qKgyrXSX/srlFUm6tbsSE/ZKP7y/kj/rtul5LlH0EyVk9HP4tST9rFXF24Y+1gYDKZwsTq+B/7wbnA0Y/lVEr5AQo1o81UlW1vF7qDmOqUPpx381uxRbLjsbQA6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=UHYExIGv; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 In-Reply-To:Content-Type; b=ZL1go8jt4MGaH3AHs0RCpy51LWhtcslEyTgyvRfqWYE8bMN+AIhbuKRbfHntyrhexRpD+PmcLO4i0N3E04DXFrdKmmeTL+2Kf3MxkRX/h80+msgDMf0236HuDoZQvrw0IhhfNCTcrUJ8jVLJBLymbzl3C4nUcDO/vRXVlgBtVgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C6QSNnrn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="UHYExIGv"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D20B21570;
-	Thu,  8 Oct 2026 22:13:16 -0700 (PDT)
-Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 00AA63F8C6;
-	Thu,  8 Oct 2026 22:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1791522800; bh=Up5VW3WVYfkQh6zMtdnmrrbOJdA1MRxjQ2hW3bVNq4Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UHYExIGvLJG3xry06wgT+mB5czOQPwgieOVRyN5R34Wtc2hZfpp6E9BP3strDb0Ro
-	 ThxzcoTixdbzkjzZV8R6Pj5EIq8j60y9ZSdDy2rQbk8FpcD8Hqux2VmlqDpYDt/1Aq
-	 RcNK3rtmclPaeyQhmtuhkmFMK0VmstvzCEmFltU4=
-Message-ID: <9a936154-fca0-4657-80f8-dd736bed7e38@arm.com>
-Date: Fri, 9 Oct 2026 10:43:11 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C6QSNnrn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 239411F000FF;
+	Fri,  9 Oct 2026 05:17:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791523026;
+	bh=zlQzHhNYHeezv0CHWq/KQXNtURr4uK8Q/GGVJb8f6/Q=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=C6QSNnrnRQPaL1PGcClrBVcgDeBuRZvhh3NOT9UVUzpeXaJDgszbB+TITVrmSvc+B
+	 +ow72nsJaYTphs3y2ikhQplokjr7hBSBblEbjEuRbjwHTlz6NgdwqXo0Euwy6dnWp3
+	 TG7A4+hLYmMgygQE0M6yc22ICKZIbPSd8mT748KYMv8u56JesZyWTVn85RKOk6XiYc
+	 s8HVp2NCn/3oATR/z4ev6t/A1PQCtYMi6jPTJMvuwzhKh59DN/RMeCYDdUj1tXr71d
+	 lnY6EnNjlmL97HfiOlY+q27mMQveQHuWuNnrI+mSPUQ3irIOwj0rfc70/GS9KoTyRa
+	 csasvCQdS/Xeg==
+Message-ID: <5ce181b5-af31-48c4-9199-feadf24af27a@kernel.org>
+Date: Fri, 9 Oct 2026 07:17:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,42 +35,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/3] kselftest: mm: introduce size_to_shift() helper
-To: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
-References: <20261009-fix_hpage_macro-v5-0-54378ae45add@arm.com>
- <20261009-fix_hpage_macro-v5-3-54378ae45add@arm.com>
+Subject: Re: [PATCH net v3 2/3] selftests: net: packetdrill: test RACK after
+ partial undo
+To: nramaswamy@openai.com, netdev@vger.kernel.org
+Cc: Neal Cardwell <ncardwell@google.com>,
+ Neal Cardwell <ncardwell.sw@gmail.com>, Kuniyuki Iwashima
+ <kuniyu@google.com>, Yuchung Cheng <ycheng@google.com>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <cover.1791506907.git.nramaswamy@openai.com>
+ <d0c538a03fb1cabd090927cb30a3b78fb485ba72.1791506907.git.nramaswamy@openai.com>
 Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <20261009-fix_hpage_macro-v5-3-54378ae45add@arm.com>
-Content-Type: text/plain; charset=UTF-8
+From: Eric Dumazet <edumazet@kernel.org>
+In-Reply-To: <d0c538a03fb1cabd090927cb30a3b78fb485ba72.1791506907.git.nramaswamy@openai.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 10/9/26 6:57 AM, Yeoreum Yun wrote:
-> Introduce size_to_shift() for future users that need to
-> obtain shift of a huge-page which is other than pmd_psize().
+On 10/9/26 07:00, nramaswamy@openai.com wrote:
+> From: Neil Ramaswamy <nramaswamy@openai.com>
 > 
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> Reproduces a partial undo bug where a segment is unmarked as lost but is
+> never returned to RACK's timestamp sorted list, which makes it ineligible
+> for future fast retransmission.
+> 
+> Signed-off-by: Neil Ramaswamy <nramaswamy@openai.com>
+> Assisted-by: LLM sparse
 > ---
 
-LGTM.
+Was this test changed since last time?
 
-Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
-Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+I thought I already reviewed it.
+
+https://lore.kernel.org/netdev/7a977ccc-b6e5-4430-8ffa-fbde5ed9f4f9@kernel.org/
+
+You are supposed to carry the reviews from Vx to Vy if no significant 
+change happened.
+
+Please do whatever it takes to reduce our huge load.
+
+Thanks.
 
