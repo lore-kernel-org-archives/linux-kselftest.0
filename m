@@ -1,38 +1,38 @@
-Received: from mta1.migadu.com (out-28.mta1.migadu.com [95.215.58.28])
+Received: from mta0.migadu.com (out-162.mta0.migadu.com [91.218.175.162])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF39A489FBE
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 09:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288E84968FC
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 09:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.162
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791539935; cv=none; b=mGeB8x8QLu03hy6ZpNj0t1gV6eoyaLg1PtKf5R1gMpdoTW4mwXiQbba2LpQOy5P6n6nvmgdYGlD4EeVhMTBqQ8yq/frmH0dyvw/cSRBIqQlrit6fSQHJ/Xy+NaiH2th2/QHeI+aMaeuc3scuONGSlrbLHsOVLyEPobpkrICYrNI=
+	t=1791539942; cv=none; b=DqmvOcT8HA8fetV3r+u+X3po2b83uPAGpHkIAi8Bz3K/7BADweTUscHPApysSmOLEOOg6uQx3tcQ8caS1c2MSs/jm07bbdUr4AbcUAjE/1+h0kqddKSfI3dB296tLfpKewtpvI6/Y3AIwCFv1k9w5ZFXHURi/CDyuiCKWihvWNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791539935; c=relaxed/simple;
-	bh=qhW4DsstDxHDNS4FdKnEy+MnjMpUAMEn0mq0LakeoBk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Bg+PiYl40rRjRfQZ1on1qgkd3qVDFHvtqRS8dRmJTe3Xxqf5CNhFOJxO3zug9AQa09xgltG7Gx5z98AbZNSt+9diaTCrP5NWaXYHd1eF0YTE7EC0AZvdrxWxlKYq4vM6gfRx5YaAH9Vkhi5bHA+csQrk4IZO9KnDgwEFu+ruxrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LAndHGBQ; arc=none smtp.client-ip=95.215.58.28
+	s=arc-20240116; t=1791539942; c=relaxed/simple;
+	bh=Y1uVmzV2bz3CYLlsqzMYFKGNCe5FlbP0nIN2N71tN0c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=I19Wu+7mQtaxF5oqd7FtkQREVROjPVb8qQ0xnO1K8p0SSOKMXyOP1ENwL9fva0Xd8NOzTbABB4gEoG3BX9GNf6ZtRcdss+a+wXZu299ej0kjrlE6AbMFd6P/si8akdzFonM3bA8EzNKuGq1wjANmD9YHFgc79MC3LdJiSD9kbl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=W85xBscr; arc=none smtp.client-ip=91.218.175.162
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LAndHGBQ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="W85xBscr"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=qhW4DsstDxHDNS4FdKnEy+MnjMpUAMEn0mq0LakeoBk=;
+DKIM-Signature: a=rsa-sha256; bh=Y1uVmzV2bz3CYLlsqzMYFKGNCe5FlbP0nIN2N71tN0c=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791539930; v=1; x=1792144730;
- b=LAndHGBQT6am7gbAb2uYDB3ZHZspPpbQ0TQPM7X+FsyykNtc+EYMI7VDJ1iNLYiQCob4RVuK
- 4oqcwrKBiottTjAjSN5lF95ivXRdvSjm6eIX8d1DfQiV9Qu3BUU2UWdhaMfFwgcUPfy9tq90Evt
- U1EacZykec+u0GBSdJpfZKN8=
+ t=1791539938; v=1; x=1792144738;
+ b=W85xBscrD2OcZCBnBksT08TfuGb7PR0TKH9wtj/BYtyrnBHYRrFOyhk2KWPwW5T+mcF0ms4c
+ fPHLR9S4isrNRlsgej9gf860QOy/5PJBjmaZPNHJUuLmVhq74XeBEuyRocAcAlekxDisdQJbkIi
+ N+dS1HG1cm1+BiQNNKl88KQk=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id ab1867499928d1b3;
-	Fri, 09 Oct 2026 09:58:50 +0000
-X-Mizu-Trace-ID: ab1867499928d1b3
+Received: by mta10.migadu.com with ESMTPS id e08e76e40cb58c40;
+	Fri, 09 Oct 2026 09:58:58 +0000
+X-Mizu-Trace-ID: e08e76e40cb58c40
 X-Migadu-Flow: FLOW_OUT
 From: Hangbin Liu <hangbin.liu@linux.dev>
-Subject: [PATCH net-next v2 0/5] seg6: add End.X PSP flavor support and
- selftests
-Date: Fri, 09 Oct 2026 17:58:36 +0800
-Message-Id: <20261009-srv6_flavors_endx-v2-0-56ac7f838f41@kylinos.cn>
+Date: Fri, 09 Oct 2026 17:58:37 +0800
+Subject: [PATCH net-next v2 1/5] seg6: split final End process out of
+ flavor processing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,11 +41,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/32NQQqDMBBFryKzbkoSotaueo8iYpOxhsqkZCQok
- rs3eIAuH4///gGM0SPDvTogYvLsAxXQlwrsPNIbhXeFQUvdyE5rwTE1w7SMKUQekNwmOnPrlGp
- cLa2BsvtGnPx2Np9AuArCbYW+mNnzGuJ+niV1+j/dpIQUxkllZW1N+2ofn33xFPhqCfqc8w+br
- AZ6vQAAAA==
-X-Change-ID: 20260922-srv6_flavors_endx-9489116d50c4
+Message-Id: <20261009-srv6_flavors_endx-v2-1-56ac7f838f41@kylinos.cn>
+References: <20261009-srv6_flavors_endx-v2-0-56ac7f838f41@kylinos.cn>
+In-Reply-To: <20261009-srv6_flavors_endx-v2-0-56ac7f838f41@kylinos.cn>
 To: Andrea Mayer <andrea.mayer@uniroma2.it>, 
  "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
@@ -56,48 +54,73 @@ Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org,
  Hangbin Liu <liuhangbin@kylinos.cn>
 X-Mailer: b4 0.14.3
 
-This series adds End.X PSP flavor handling in seg6local and extends the
-SRv6 selftests to cover it.
+From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-Patch 1 splits the final forwarding step out of end_flv8986_core() so
-RFC8986 flavor logic can be reused outside the End path.
-Patch 2 uses that to add End.X PSP support through the same
-end_flv8986_core() path.
-Patches 3-4 refactor the PSP selftest setup/cleanup so flavor tests can
-be added more cleanly.
-Patch 5 adds End.X PSP connectivity coverage and updates the selftest
-policy parser to accept an explicit action field.
+Move the final End forwarding step out of end_flv8986_core() and return
+success to the caller instead.
 
-The goal is to make End.X PSP behavior consistent with End PSP, while
-keeping the selftest structure easier to extend for later flavors.
+Currently end_flv8986_core() performs both RFC8986 flavor processing and
+final End forwarding by calling input_action_end_finish(). That couples
+flavor handling with the End-specific forwarding path, which makes it
+hard to reuse the same flavor logic for other End variants.
 
-Run all srv6 selftests on debug kernel. All passed without error.
+Split the two steps so input_action_end() does:
+  1) end_flv8986_core() for flavor processing
+  2) input_action_end_finish() for final forwarding
+
+This keeps end_flv8986_core() focused on RFC8986/PSP flavor semantics
+and makes it easier to plug the same flavor core into End.X/T later.
 
 Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 ---
-Changes in v2:
-- rebase on Andrea's "seg6: ensure packet data is writable before modifying SRH and IPv6 DA"
-- Patch 2: Update end_flv8986_core() comment for End.X
-- Patch 3: Move ret check in this patch
-- Patch 4: Do not remove noflv route
-- Link to v1: https://lore.kernel.org/r/20260922-srv6_flavors_endx-v1-0-4d01c05c47b7@kylinos.cn
+ net/ipv6/seg6_local.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
----
-Hangbin Liu (5):
-      seg6: split final End process out of flavor processing
-      seg6: add RFC8986 flavor support for End.X
-      selftests: seg6: move SRv6 End PSP setup into its own helper
-      selftest: seg6: add explicit cleanup for SRv6 End PSP test
-      selftests: seg6: add End.X PSP selftest
+diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+index 0c3d1be7f129..4fcfcd48cfae 100644
+--- a/net/ipv6/seg6_local.c
++++ b/net/ipv6/seg6_local.c
+@@ -825,6 +825,9 @@ static bool seg6_pop_srh(struct sk_buff *skb, int srhoff)
+ 
+ /* process the packet on the basis of the RFC8986 flavors set for the given
+  * SRv6 End behavior instance.
++ *
++ * Returns with skb freed on failure. On success, the caller must complete
++ * final processing and forward the packet.
+  */
+ static int end_flv8986_core(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ {
+@@ -882,7 +885,7 @@ static int end_flv8986_core(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ 		goto drop;
+ 	}
+ 
+-	return input_action_end_finish(skb, slwt);
++	return 0;
+ 
+ drop:
+ 	kfree_skb_reason(skb, reason);
+@@ -894,6 +897,7 @@ static int input_action_end(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ {
+ 	const struct seg6_flavors_info *finfo = &slwt->flv_info;
+ 	__u32 fops = finfo->flv_ops;
++	int ret;
+ 
+ 	if (!fops)
+ 		return input_action_end_core(skb, slwt);
+@@ -907,7 +911,11 @@ static int input_action_end(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ 	 * information extracted from the packet, e.g. presence/absence of SRH,
+ 	 * Segment Left = 0, etc.
+ 	 */
+-	return end_flv8986_core(skb, slwt);
++	ret = end_flv8986_core(skb, slwt);
++	if (ret)
++		return ret;
++
++	return input_action_end_finish(skb, slwt);
+ }
+ 
+ /* regular endpoint, and forward to specified nexthop */
 
- net/ipv6/seg6_local.c                              |  27 +++-
- .../testing/selftests/net/srv6_end_flavors_test.sh | 165 +++++++++++++++++++--
- 2 files changed, 177 insertions(+), 15 deletions(-)
----
-base-commit: d8674294aefef02266c4d47ad10131f1bffbe534
-change-id: 20260922-srv6_flavors_endx-9489116d50c4
-
-Best regards,
 -- 
-Hangbin Liu <liuhangbin@kylinos.cn>
+2.55.0
 
