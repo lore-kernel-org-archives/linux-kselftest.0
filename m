@@ -1,1288 +1,205 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A465013C9
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 20:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74772D7D47
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 20:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791576820; cv=none; b=olORmNzYJTbsoLb12ZjQlyoEFefi9K1eb+q1653HgWwblKYO5Wbh0WEon5AeKEMc40bApr7Xnz5E5wnlivEA0wlsHDIWlHBYtm6Ax+IZSaMh9VXFRVTVnTzbZ/CXWX3unGCmUrVfRTHmx3kmvlZgRFHik+YOelOD3CXQHsWBZt0=
+	t=1791578817; cv=none; b=fx3T7cP5LruBwwNui6QlUKCPMdl/SldhR1FW278HuNj2sYp4NQJT2+kFjtzeoafI3WSd5H8d8YZF4gqkdCGbANM06fbKIF5vS1uebGL4FfF11urCQ6bb95KkqG5FjHA154KoEcmXVKs9c00gbhNzvNHhzaA03W9k1ACJ5FyQKXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791576820; c=relaxed/simple;
-	bh=Zh/RJgcC63v93FuLFyUMHqixyjU74+UbQtMq+5ayPFA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=noH3gQobie7vlxHXtGOJ/hn6c5sDkaWP1jEknHRp6SCeBl+31jRTzWHJz1ogKum3208s7K6AQ2dnPyWE4Fk7lrGAd0t9L8JEGw1cJcv8+PE6NDPQhojNH9vocdMrKJ7cEs5A5/VeazBc4zIpeyUuWRdtTtRrXeKIBbiz01Ft860=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NSElCyhx; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1791578817; c=relaxed/simple;
+	bh=OEoYXf594kXH/PufCoCOA5IH4kEFLBjOLJOrYOSsGHU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SL8Ts21HP9ATrotyYFqXQ9esoU3P4Vs0RwnnCMkS+U0whFQFCyX+Dg+37JrtOTrnmPe28IWyqZzjZz4BwFJNw27/2Ml3+W+s1OWm9uLaA+j4mOjA+XukmKxqn7/g/Isotw010PDe6YTBIYwAMKygscX8wjcnopnXJ/o5jqXmxxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VnXI9u1t; arc=none smtp.client-ip=209.85.161.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NSElCyhx"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-49ff639372eso203575e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 13:13:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnXI9u1t"
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6dd059478dcso208722eaf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 13:46:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791576815; x=1792181615; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=J97LaiYxwz/QmtpIAmpA7JpTDLC/fDII3wKgmA+VI6w=;
-        b=NSElCyhxSf4KMK3CSrlEdj6xTZ8cUkZmh9IN+fw/tZR2XQ5BgRQk5nRJn5EEkLzBjL
-         /HhRbylyK7IYfdLBc4BRBT8S49JuDAgZWzWpFYJklYYKFxxAU/c9KIL3YjvMYRL0hDBh
-         ji1Il8c6Gy2dinP5MeSSjWTeiaBBq7ufO1Y+B5OEsCpi2T3C7u8DcPYTX6C1QBvuRXWk
-         Tf7y2cJet1qB04itOZ4NKw2jUKSPAH5KO/8pXMfR9xRKLdOmVOJcJmVKJWG6Brds8kXK
-         /8IICYDZq6qjxqix677gWdyflpgS9ZGuj65QEG2KwaM7fVIge240x0lF4tvcaHvB+roV
-         +nUA==
+        d=gmail.com; s=20251104; t=1791578814; x=1792183614; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=L/WzjD2Sk1tXen1jf+f9JhxxyIkDVMdpUa25GlOoTn4=;
+        b=VnXI9u1tbTeOP3zVJU1NwI9bMqSzyUJ3UJmuQsknpvzDpk5RVaDxVlbp9wAlNAeEb6
+         yDV9RuayRVoGtNNqphfJtIyNMhqPeZXbZIIn6bdRyyEJMRIaAHvbiLmpcOVqgCmHK+HC
+         Tg45gAg7GgLByY7Z7exDwYal3S/VD1Sx0xfCANxBKvs7UP8UGEXVcX/OpJGr8WLSpSX0
+         miEeZISIAdFWi4EfMUB5bPrV8NISAb8Wb4TtrWDHa2rTQrKBfhpCNs2jA7rXNtvC7Q+q
+         ZaCSZ0wduvCASlcRkAJN/9A/Y/jpw4fMkRsTjWhdDMM49726+WhL3LsjX0olp5F/gdx+
+         cOxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791576815; x=1792181615;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=J97LaiYxwz/QmtpIAmpA7JpTDLC/fDII3wKgmA+VI6w=;
-        b=a7/HD6v9+9tOhTkbBkvkGuQlg6Of2QTa5pOsKpXmf1HjnUpENwkPJnibDu0TxW4ccF
-         gf4mDXcJ4uqH1BEBg8fWe00OEjhPtebXbRtoou32q2nqmXNvfXSYVC+kEg+SIJa4fxxA
-         PVvxJf9sUWulKu89F2d3SDoXZUFNvGnylpCPj6DnJryUCQlCkLaFUqpBBtkmS21Pp7oV
-         2oH6+RWzmK7F0tJ9fKf+D4Qm0nxPBzRkXSKVb1e8hseBkeojkjghOmp20y+gcI2DC+MO
-         +1TN6S4uAzFnmU8imGmtX/mNArMqJ2p4Yjov3m0m4MPvvo8m96qekOUllLmtYbWeemZv
-         n+Rw==
-X-Forwarded-Encrypted: i=1; AKwUvByxKNN0wD0wOLO3podHyElQrIm0pY3K2kF5PQ5otpzFYSzX+scqnOnPsNMvpouclww/DNiYAI/tDuEWBQ4tbcQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++l8RJ+2vipfxZ1L+z/mYaPMC0igh7lvH1h89OCNvygS0dYp7+VT
-	GV41cAMMtnRFHdCz3/j+yTzcHdzqKqUQOLgXTqu26VYE/V8FKPveGa97
-X-Gm-Gg: AYBFou1ew33dp/I7nganMZkzlpAxGTFYm4LsEHQIpMoiVvBX0C2yfawbH6yTlPX/e/B
-	FeahjEbUYu4vSAPq7vF0BYtGDw+7vQcgCS4m8gn2ao0U7LKIWD35w+xkeVMrtfCu4Q1LV+Jk6YE
-	XajI57zdv531BEcEdGljGeIh9sAw/eDMxoBKiOsepsIsvsJaOBa+S2cjmSE4PFfduWh1JOfGL+y
-	SsQt+vhfU9ubvCKljus+ePTCerh3GjavspVSmg+XAM1fXjwpIAnXe3gZdh3N858kgD4L+cH1yiu
-	qWUBxUrUxo0BjaVRbJl79sPw7yCj23nRqjif3w1BSxCIpOGytlt6ywK0ujTh0z60ycLhJx+u5o7
-	OIn70bSysZSAtNaeG9073ntCZPzpSfduZnZ0VJnm0reROnejIBS7VYYPKgdZWLqV8qLN9/9Nmcs
-	vyx1NiBlhw16dJZ00hEmF3q6Ee+E70pCLV76BGP1cN8nVI+eDXOBhqucbS2tJ5y3GNMmflLDO19
-	wCFKuljl7JveH0xZ6Efd0NRf/brZ72vRUyRmKz7K7apiVvBkgkp9Rmm8v9gU++4mefLL9wGPtxT
-	47e6ty18bNsbU3mY1ug36PMSYjaiwU+8
-X-Received: by 2002:a05:600c:a086:b0:4a0:1f9e:5f78 with SMTP id 5b1f17b1804b1-4a18e3ea887mr57623595e9.0.1791576814238;
-        Fri, 09 Oct 2026 13:13:34 -0700 (PDT)
-Received: from L-022584.energy.envision.com (dynamic-093-130-185-162.93.130.pool.telefonica.de. [93.130.185.162])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18d12fe04sm47053065e9.4.2026.10.09.13.13.32
+        d=1e100.net; s=20260707; t=1791578814; x=1792183614;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=L/WzjD2Sk1tXen1jf+f9JhxxyIkDVMdpUa25GlOoTn4=;
+        b=YN9WGzty75bKYPBWG9dtDObhHO95B7+7L4f3r4+BiTtmtu9FDqQNPoPDNa6YN8d5n0
+         +Psfx9720cq/ZaE76k4ikx9ukCbsvZYNhHAdHrcFzpkxdNVOlYlzmK5zpeqAJ2DlWwRO
+         p8xGrzQBmgUCFdaHuCE98kTNg439ctOP+gYImNXwr8etKKJxiyHQaxqMD36XFoFQGO76
+         VkK2kDR+Nk8xT1Qp6zy9QDntD1KNm6UFf6M5b708vKZ2FumJi1qu0zX6C3WQYqNpNeCT
+         UUXoRIIoAOrH6e6VMXnA8WKfON/FstaqmnsbYckETg3pAQzxR7lfuN7EpQpJ5Ra1oLoa
+         bMPw==
+X-Forwarded-Encrypted: i=1; AKwUvBxezQk5YJ8WyhRSQceoJaBmOen+1x1GZwcJ9qFevMYKk5NMGfif4kxrLA4lh8HIdHhrUJLk9GzGr4mITKmcy5E=@vger.kernel.org
+X-Gm-Message-State: AFuF++nxPW+ZQPWyZ4CNFEjARDlhztQ4fXz7gjBuxScFukQUOAOhRux+
+	yHd/+NKCWkQsvYSWbXcJIKkt+ps3CKvH/Vu73WWRF1PIjj4WV7uVtDcR
+X-Gm-Gg: AYBFou0ON+N54DMYFbQDdd9OfllQwBK4+NhvPWGtr8Ds+J5qiJJ1rJBKh8EhXeFc2dc
+	fTgH3W4+DTipacIKFRF8rJlxCimlgg2hJb1AyrRiqi4hMJZVU2fVh83fTNEjqRS6bBVvCf6xxoR
+	90y6MQwp9xMWy0s9Y+V4xUGU9YjuRBi57WBjos0K9QZqSHSU7BMlNXbe1Jdlk31B/1todCRNW4b
+	E19TV2zM4N1rsHdMrVpaCiYsoHCBTLQDGgEQZx2/GM8sybAuE5g0fiVKDmIz5phcalEUtDZJOAP
+	NuCogMmgUjaE3jRTPuuVXaiIbIxaWVY5uQSh7CkRsi620rEQ1ZU+1a3X7F4FCSSpxrrJNS1ePUQ
+	kFxE4nTMAifpyiJDLdDTIiXdKqoia0sCf0FVkXWTqg3JTZeJNvUsHxpKe/hNifcxUpJ6j1KZJLF
+	2biV3W/4PGod6eXPNoaJo7DRjVolKyKxm3/+AJirg90dCoW2+iqwX8pnGPWpV1dWgCDgs=
+X-Received: by 2002:a05:6820:1907:b0:6d8:6b04:cf2c with SMTP id 006d021491bc7-6ef08c7a69emr2385271eaf.12.1791578814263;
+        Fri, 09 Oct 2026 13:46:54 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:2::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6ef00ff3b83sm3117493eaf.6.2026.10.09.13.46.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 13:13:33 -0700 (PDT)
-From: Xin Xie <xiexinet@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	andrew+netdev@lunn.ch,
-	shuah@kernel.org,
-	kees@kernel.org,
-	petr.wozniak@gmail.com,
-	qingfang.deng@linux.dev,
-	fmaurer@redhat.com,
-	luka.gejak@linux.dev,
-	bigeasy@linutronix.de,
-	xiaoliang.yang_1@nxp.com,
-	skhawaja@google.com,
-	liuhangbin@gmail.com,
-	stable@vger.kernel.org,
-	sdf.kernel@gmail.com,
-	xiexinet@gmail.com
-Subject: [PATCH net v7 4/4] selftests: net: hsr: verify GRO policy and ordered forwarding
-Date: Fri,  9 Oct 2026 22:13:24 +0200
-Message-ID: <20261009201324.17-5-xiexinet@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261009201324.17-1-xiexinet@gmail.com>
-References: <20261009201324.17-1-xiexinet@gmail.com>
+        Fri, 09 Oct 2026 13:46:53 -0700 (PDT)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+Subject: [PATCH net-next v2 0/7] psp: support rekeying psp protected tcp
+ connections
+Date: Fri, 09 Oct 2026 13:46:40 -0700
+Message-Id: <20261009-psp-v2-0-5596ab50f677@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALFSyWoC/y2MywrDIBBFfyXMuhbji9JV/6NkIWZMBhoVDSEl+
+ O8V6ebC4VzOBQUzYYHncEHGgwrF0EDcBnCrDQsymhuD4MLwNiyVxKR7oPBGO+0UtGfK6OnslTc
+ E3FnAc4epmZXKHvO354+x+39J9dIxMs6051KhmL2V5rVslj53FzeYaq0/5F6qbqAAAAA=
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, 
+ Donald Hunter <donald.hunter@gmail.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.13.0
 
-Add member GRO policy and ordered-forwarding tests with two shell
-entry points and one installed Python helper.
+The PSP architecture spec states the need for rekeying connections in
+the event of a device key rotation. After a device key rotation has
+occurred, a new rx derived key needs to be generated and sent out to the
+other end of the connection sometime before the next device key rotation
+occurs.
 
-Exercise attach, feature requests, detach and failed attachment,
-including a busy RX handler. Check wanted-state restoration, the
-master's GSO type mask and continued delivery through the busy handler.
+Because PSP connections involve two different keys at each endpoint,
+one for decrypting ingress traffic, and one for encrypting egress
+traffic, there are two types of rekeying events that need to be
+supported. From the perspective of one endpoint of the connection:
 
-Capture actual TCP and UDP GSO traffic and compare every input with
-both LAN outputs. Count retransmitted TCP bytes separately so a retry
-cannot hide a dropped aggregate. Check payloads, tag/RCT, VLAN stack
-and sequence numbers, requiring complete captures without socket loss
-or truncation before any packet verdict.
+1. rx rekey: we need to allocate a new spi + decryption key pair to
+   provide to our peer.
 
-Cover PRP LAN-ingress local delivery, plain and VLAN traffic, local
-and proxy supervision, concurrent producers and sequence wrap.
-Concurrency tests check per-LAN ordering and contents, without claiming
-proof of a worker handoff.
+2. tx rekey: our peer has provided us with a new spi + encryption key
+   pair which we should use for encrypting traffic immediately.
 
-One process owns the namespace-bound sockets and capture. Work and
-cleanup are bounded; INT/TERM release owned resources and preserve
-failures. Missing prerequisites SKIP the affected case; feature-query
-errors and missing packet evidence FAIL.
+In the case of rx rekeying, there is a period where it makes sense to
+accept packets authenticated from either the previous or current spi. To
+deal with that, we allow a psp_assoc to remember the last spi that was
+valid on a socket due to a rekey. If authentication state does not match
+the most recent assoc, the stored state from the previous assoc will be
+tried.
 
-Signed-off-by: Xin Xie <xiexinet@gmail.com>
+In the case of tx rekeying, as soon as we install the new tx key, we
+have no use for the previous one, and it can be disposed of immediately.
+The only catch is in the case where hw uses a key handle in tx
+descriptor state, as opposed to inlining the key directly. In this
+case, psp core needs to be sure that any of these unaccounted for
+references to key state are gone by the time it tries to sync a deleted
+key to hw.
+
+To deal with this race condition, we introduce a different path to key
+deletion for psp_assocs removed from the socket during a tx rekey. psp
+core will use bql byte counters filled out by the driver to determine a
+conservative grace period where key handles can be disposed of.
+
+Lastly, some test cases for rekeying are included that go through key
+rotations and rekeying.
+
+There are some packetdrill tests that are queued for upstreaming [1].
+
+[1]: https://github.com/danieldzahka/packetdrill/commits/psp-rekey/
+
+Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+
+Changes in v2:
+- psp: support rx rekey operation
+  - copy old rx state by value instead of pointer to prev
+  - place non-datapath fields at end of struct psp_assoc
+  - disallow rx rekey when socket is not in full psp state, or
+    dev/version doesn't match
+  - require the new rx spi to have the opposite phase bit from the
+    previous one
+- psp: support tx rekey operation
+  - place new assoc on pas->assocs list instead of psd->active_assocs
+  - disallow tx rekey when socket is not in full psp state
+  - document rekeying in psp.rst
+  - reject tx rekey on SADB devices until deferred tx key deletion
+    lands
+- psp: defer tx key deletions for SADB drivers
+  - replaces "psp: add driver api for deferred tx key deletion"
+  - use bql byte counters instead of driver callback for grace periods
+  - only defer tx key deletion when socket outlives psp_assoc
+  - document driver requirements in psp.rst
+  - allow tx rekey on SADB devices
+- psp: add core tracked stat for outstanding tx keys
+  - replaces "psp: add core tracked stats for deferred key deletion"
+  - drop grace-periods stat
+  - rename tx-key-cnt to tx-key-count, only report it for SADB drivers
+  - warn about outstanding tx keys in psp_dev_unregister()
+- selftests: drv-net: psp: factor out psp connection setup
+  - split psp_responder conn_setup_psp() into rx_assoc() and tx_assoc()
+  - drop Reviewed-by from Willem due to psp_responder changes
+- selftests: drv-net: psp: add rekey tests
+  - add tests for rekeys rejected due to psp state and version
+    mismatch
+  - add test for rx rekey rejected without a device key rotation
+  - add rx-assoc, tx-assoc, and key-rotate rpcs to psp_responder
+- selftests: drv-net: psp: add a tx rekey drain test for SADB drivers
+  - new patch
+- mlx5: psp: implement deferred tx key deletion
+  - dropped, bql based grace periods need no driver callback
+- Link to v1: https://lore.kernel.org/r/20260204-psp-v1-0-5f034e2dfa36@gmail.com
+
 ---
- tools/testing/selftests/net/hsr/Makefile      |    3 +
- tools/testing/selftests/net/hsr/config        |    1 +
- .../selftests/net/hsr/hsr_gro_superpacket.py  | 1088 +++++++++++++++++
- .../selftests/net/hsr/hsr_gro_superpacket.sh  |    9 +
- .../net/hsr/hsr_ordered_forwarding.sh         |    9 +
- 5 files changed, 1110 insertions(+)
- create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.py
- create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
- create mode 100755 tools/testing/selftests/net/hsr/hsr_ordered_forwarding.sh
+Daniel Zahka (7):
+      psp: support rx rekey operation
+      psp: support tx rekey operation
+      psp: defer tx key deletions for SADB drivers
+      psp: add core tracked stat for outstanding tx keys
+      selftests: drv-net: psp: factor out psp connection setup
+      selftests: drv-net: psp: add rekey tests
+      selftests: drv-net: psp: add a tx rekey drain test for SADB drivers
 
-diff --git a/tools/testing/selftests/net/hsr/Makefile b/tools/testing/selftests/net/hsr/Makefile
-index 2150e487ac7d..81e55309ed20 100644
---- a/tools/testing/selftests/net/hsr/Makefile
-+++ b/tools/testing/selftests/net/hsr/Makefile
-@@ -8,8 +8,11 @@ TEST_PROGS := \
- 	hsr_redbox.sh \
- 	link_faults.sh \
- 	prp_ping.sh \
-+	hsr_gro_superpacket.sh \
-+	hsr_ordered_forwarding.sh \
- # end of TEST_PROGS
- 
- TEST_FILES += hsr_common.sh
-+TEST_FILES += hsr_gro_superpacket.py
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/net/hsr/config b/tools/testing/selftests/net/hsr/config
-index 205cc4d3d64b..724fbe3a6eab 100644
---- a/tools/testing/selftests/net/hsr/config
-+++ b/tools/testing/selftests/net/hsr/config
-@@ -2,5 +2,6 @@ CONFIG_BRIDGE=y
- CONFIG_HSR=y
- CONFIG_IPV6=y
- CONFIG_NET_SCH_NETEM=m
-+CONFIG_PACKET=y
- CONFIG_VETH=y
- CONFIG_VLAN_8021Q=m
-diff --git a/tools/testing/selftests/net/hsr/hsr_gro_superpacket.py b/tools/testing/selftests/net/hsr/hsr_gro_superpacket.py
-new file mode 100755
-index 000000000000..d39bf1af291f
---- /dev/null
-+++ b/tools/testing/selftests/net/hsr/hsr_gro_superpacket.py
-@@ -0,0 +1,1088 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+"""HSR/PRP GRO policy, segmentation and functional ordering regressions."""
-+
-+from array import array
-+from collections import Counter
-+from contextlib import contextmanager
-+import ctypes
-+import errno
-+import json
-+import os
-+import re
-+import selectors
-+import shutil
-+import signal
-+import socket
-+import struct
-+import subprocess
-+import sys
-+import threading
-+import time
-+import uuid
-+
-+
-+class Skip(Exception):
-+    pass
-+
-+
-+def require(condition, message):
-+    if not condition:
-+        raise ValueError(message)
-+
-+
-+def features(text):
-+    result = {}
-+    for line in text.splitlines():
-+        if ":" not in line or line.startswith("Features for"):
-+            continue
-+        name, state = line.strip().split(":", 1)
-+        match = re.fullmatch(r"\s*(on|off)((?:\s+\[[^\]]*\])*)", state)
-+        require(match is not None, "malformed feature line: " + line)
-+        result[name] = (match[1], "[fixed]" in match[2])
-+    require(result, "empty feature listing")
-+    return result
-+
-+
-+def decode(raw, ancillary=()):
-+    require(len(raw) >= 14, "short Ethernet capture")
-+    proto = struct.unpack_from("!H", raw, 12)[0]
-+    off, stack, aux, checksum_partial = 14, [], (), False
-+    for level, kind, data in ancillary:
-+        if level == 263 and kind == 8:
-+            require(len(data) >= 20, "short PACKET_AUXDATA")
-+            status, length, snap, mac, net, tci, tpid = struct.unpack("IIIHHHH", data[:20])
-+            require(length == snap, "truncated packet auxiliary length")
-+            checksum_partial = bool(status & 8)
-+            if status & 0x10:
-+                aux = ((tpid if status & 0x40 else 0x8100, tci),)
-+    while proto in (0x8100, 0x88a8):
-+        require(off + 4 <= len(raw), "short VLAN header")
-+        tci, inner = struct.unpack_from("!HH", raw, off)
-+        stack.append((proto, tci))
-+        proto, off = inner, off + 4
-+    row = dict(raw=raw, size=len(raw) + 4 * len(aux), vlans=aux + tuple(stack),
-+               aux=aux, inband=tuple(stack), src=raw[6:12], dst=raw[:6],
-+               proto=proto, seq=None, path=None, payload=b"", ports=(), tcpseq=None,
-+               supervision=None, supseq=None, tag=False, encoding="plain", checksum_partial=checksum_partial)
-+    end = len(raw)
-+    if proto == 0x892f:
-+        require(off + 6 <= end, "short HSR tag")
-+        field, seq, proto = struct.unpack_from("!HHH", raw, off)
-+        row.update(seq=seq, path=field >> 12, tag=True, encoding="hsr")
-+        expected = len(raw) - 14 - (4 if raw[12:14] == b"\x81\x00" else 0)
-+        require(field & 0xfff == expected, "HSR LSDU size differs")
-+        off += 6
-+    elif end >= off + 6 and raw[-2:] == b"\x88\xfb":
-+        seq, field, suffix = struct.unpack_from("!HHH", raw, end - 6)
-+        expected = len(raw) - 14 - (4 if raw[12:14] == b"\x81\x00" else 0)
-+        require(field & 0xfff == expected, "PRP LSDU size differs")
-+        row.update(seq=seq, path=field >> 12, tag=True, encoding="prp")
-+        end -= 6
-+    row["proto"] = proto
-+    row["network"] = raw[off:end]
-+    if raw[:3] == b"\x01\x15\x4e" and proto == 0x88fb:
-+        require(off + 12 <= end, "short supervision payload")
-+        version, seq, kind, size = struct.unpack_from("!HHBB", raw, off)
-+        require(kind in (20, 21, 22, 23) and size in (6, 12), "invalid supervision TLV")
-+        row.update(supervision=raw[off + 6:off + 12], supseq=seq)
-+        return row
-+    if proto != 0x0800:
-+        return row
-+    require(off + 20 <= end and raw[off] >> 4 == 4, "invalid IPv4 header")
-+    ihl, total = (raw[off] & 15) * 4, struct.unpack_from("!H", raw, off + 2)[0]
-+    require(ihl >= 20 and total >= ihl and off + total <= end, "invalid IP extent")
-+    protocol, l4 = raw[off + 9], off + ihl
-+    ipend = off + total
-+    row.update(ip_src=raw[off + 12:off + 16], ip_dst=raw[off + 16:off + 20])
-+    if protocol == 6:
-+        require(l4 + 20 <= ipend, "short TCP header")
-+        size = (raw[l4 + 12] >> 4) * 4
-+        require(size >= 20 and l4 + size <= ipend, "invalid TCP extent")
-+        row.update(ports=struct.unpack_from("!HH", raw, l4),
-+                   tcpseq=struct.unpack_from("!I", raw, l4 + 4)[0],
-+                   tcpflags=raw[l4 + 13], payload=raw[l4 + size:ipend])
-+    elif protocol == 17:
-+        require(l4 + 8 <= ipend, "short UDP header")
-+        size = struct.unpack_from("!H", raw, l4 + 4)[0]
-+        require(size >= 8 and l4 + size == ipend, "invalid UDP extent")
-+        row.update(ports=struct.unpack_from("!HH", raw, l4), payload=raw[l4 + 8:ipend])
-+    return row
-+
-+
-+class Capture:
-+    def __init__(self, lab, ns, dev, pkttype=None):
-+        self.lab, self.rows, self.seen = lab, [], 0
-+        self.ns, self.dev, self.packets = ns, dev, None
-+        self.pkttype, self.name = pkttype, ns + "/" + dev
-+        self.complete, self.drops, self.truncated = False, None, 0
-+        self.last_seen = time.monotonic()
-+        self.socket = lab.sock(ns, socket.AF_PACKET, socket.SOCK_RAW, socket.htons(3))
-+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 8 * 1024 * 1024)
-+        self.socket.setsockopt(263, 8, 1)
-+        self.socket.bind((dev, 0))
-+        self.socket.setblocking(False)
-+        lab.selector.register(self.socket, selectors.EVENT_READ, self)
-+
-+    def drain(self):
-+        count = 0
-+        while count < 256:
-+            self.lab.remaining()
-+            try:
-+                raw, anc, flags, addr = self.socket.recvmsg(131072, 256)
-+            except BlockingIOError:
-+                return count, True
-+            self.seen += 1
-+            self.last_seen = time.monotonic()
-+            count += 1
-+            if flags & (socket.MSG_TRUNC | socket.MSG_CTRUNC):
-+                self.truncated += 1
-+                raise ValueError(self.name + ": capture truncated")
-+            if self.pkttype is None or addr[2] == self.pkttype:
-+                self.rows.append(decode(raw, anc))
-+        return count, False
-+
-+    def validate(self):
-+        require(self.complete and self.drops == 0 and self.truncated == 0,
-+                self.name + ": incomplete/dropped/truncated capture")
-+
-+
-+class Lab:
-+    def __init__(self, deadline):
-+        self.deadline = deadline
-+        self.names, self.sockets, self.captures, self.threads = [], [], [], []
-+        self.selector = selectors.DefaultSelector()
-+        self.original = os.open("/proc/self/ns/net", os.O_RDONLY)
-+        self.token, self.restore_failed = uuid.uuid4().hex[:10], False
-+        self.stop = threading.Event()
-+        self.libc = ctypes.CDLL(None, use_errno=True)
-+
-+    def remaining(self):
-+        value = self.deadline - time.monotonic()
-+        require(value > 0, "120-second work deadline expired")
-+        return value
-+
-+    def run(self, args, check=True):
-+        require(not self.restore_failed, "network namespace restoration failed")
-+        result = subprocess.run([str(arg) for arg in args], text=True, capture_output=True,
-+                                timeout=min(5, self.remaining()))
-+        require(not check or result.returncode == 0,
-+                "%s: rc%d %s" % (args, result.returncode, result.stderr.strip()))
-+        return result
-+
-+    def ip(self, ns, *args, check=True):
-+        return self.run(["ip", "-n", ns, *args], check)
-+
-+    def cmd(self, ns, *args, check=True):
-+        return self.run(["ip", "netns", "exec", ns, *args], check)
-+
-+    def features(self, ns, dev):
-+        return features(self.cmd(ns, "ethtool", "-k", dev).stdout)
-+
-+    def ns(self, label):
-+        name = "hsrp4-%s-%d" % (self.token, len(self.names))
-+        require(not os.path.lexists("/var/run/netns/" + name), "namespace collision")
-+        self.names.append(name)
-+        self.run(["ip", "netns", "add", name])
-+        self.ip(name, "link", "set", "dev", "lo", "up")
-+        return name
-+
-+    def veth(self, ns, dev, peer_ns, peer):
-+        self.ip(ns, "link", "add", "name", dev, "type", "veth", "peer", "name", peer,
-+                "netns", peer_ns)
-+
-+    def setns(self, descriptor):
-+        if self.libc.setns(descriptor, 0x40000000):
-+            error = ctypes.get_errno()
-+            raise OSError(error, os.strerror(error))
-+
-+    @contextmanager
-+    def enter(self, ns):
-+        descriptor = os.open("/var/run/netns/" + ns, os.O_RDONLY)
-+        try:
-+            self.setns(descriptor)
-+            yield
-+        finally:
-+            try:
-+                self.setns(self.original)
-+            except BaseException:
-+                self.restore_failed = True
-+                raise
-+            finally:
-+                os.close(descriptor)
-+
-+    def sock(self, ns, family, kind, proto=0):
-+        with self.enter(ns):
-+            result = socket.socket(family, kind, proto)
-+            self.sockets.append(result)
-+        result.settimeout(min(3, self.remaining()))
-+        return result
-+
-+    def capture(self, ns, dev, pkttype=None):
-+        result = Capture(self, ns, dev, pkttype)
-+        self.captures.append(result)
-+        return result
-+
-+    def observe(self, seconds, pump=None):
-+        end = time.monotonic() + seconds
-+        while True:
-+            self.remaining()
-+            if pump is not None:
-+                pump()
-+            for key, events in self.selector.select(min(0.01, max(0, end - time.monotonic()))):
-+                key.data.drain()
-+            if time.monotonic() >= end:
-+                return
-+
-+    def finish(self):
-+        active = [cap for cap in self.captures if not cap.complete]
-+        end = min(self.deadline, time.monotonic() + 2)
-+        quiet = time.monotonic()
-+        while time.monotonic() < end:
-+            self.observe(0.01)
-+            empty = True
-+            for cap in active:
-+                count, drained = cap.drain()
-+                if count or not drained:
-+                    empty = False
-+            quiet = max([quiet] + [cap.last_seen for cap in active])
-+            if empty and time.monotonic() - quiet >= 0.1:
-+                break
-+        else:
-+            raise ValueError("capture failed to drain within fixed deadline")
-+        for ns in sorted({cap.ns for cap in active}):
-+            require(time.monotonic() < end, "capture cutoff/drain deadline expired")
-+            require(ns in self.names, "capture namespace is not owned")
-+            self.ip(ns, "link", "set", "dev", "lo", "down")
-+            require(time.monotonic() < end, "capture cutoff/drain deadline expired")
-+            state = link_state(self, ns, "lo")
-+            require(time.monotonic() < end, "capture cutoff/drain deadline expired")
-+            require("UP" not in state["flags"],
-+                    "capture cutoff loopback is still up")
-+        # Rebinding to a different down device synchronizes the old receive hook.
-+        # Its ENETDOWN socket error must be cleared before draining queued frames.
-+        for cap in active:
-+            require(time.monotonic() < end, "capture cutoff/drain deadline expired")
-+            require(cap.dev != "lo", "capture already uses the cutoff device")
-+            cap.socket.bind(("lo", 0))
-+            require(cap.socket.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR) == errno.ENETDOWN,
-+                    cap.name + ": capture cutoff did not report ENETDOWN")
-+        for cap in active:
-+            while True:
-+                require(time.monotonic() < end, "capture cutoff/drain deadline expired")
-+                if cap.drain()[1]:
-+                    break
-+            require(time.monotonic() < end, "capture cutoff/drain deadline expired")
-+            packets, cap.drops = struct.unpack("II", cap.socket.getsockopt(263, 6, 8))
-+            cap.packets = packets
-+            require(time.monotonic() < end, "capture cutoff/drain deadline expired")
-+            require(packets == cap.seen + cap.drops,
-+                    "%s: queued capture remains packets=%d seen=%d drops=%d" %
-+                    (cap.name, packets, cap.seen, cap.drops))
-+            cap.complete = True
-+            cap.validate()
-+            self.selector.unregister(cap.socket)
-+            cap.socket.close()
-+            print("# capture %s packets=%d drops=0 truncated=0 complete=1" %
-+                  (cap.name, cap.seen), flush=True)
-+
-+    def close(self):
-+        self.stop.set()
-+        end, errors = time.monotonic() + 20, []
-+        for sock in self.sockets:
-+            sock.close()
-+        for thread in self.threads:
-+            if thread.ident is not None:
-+                thread.join(max(0, end - time.monotonic()))
-+            if thread.is_alive():
-+                errors.append("sender thread did not stop")
-+        self.selector.close()
-+        if self.restore_failed:
-+            errors.append("namespace restoration failed; no namespace commands attempted")
-+        else:
-+            for name in reversed(self.names):
-+                if time.monotonic() >= end:
-+                    errors.append("cleanup deadline expired with owned namespaces remaining")
-+                    break
-+                try:
-+                    result = subprocess.run(["ip", "netns", "del", name],
-+                                            capture_output=True, text=True,
-+                                            timeout=min(3, end - time.monotonic()))
-+                    require(result.returncode == 0 and not os.path.lexists("/var/run/netns/" + name),
-+                            "namespace cleanup failed: " + name + " " + result.stderr)
-+                except BaseException as error:
-+                    errors.append(str(error))
-+        os.close(self.original)
-+        directory = os.getenv("HSR_CAPTURE_EVIDENCE")
-+        if directory:
-+            try:
-+                for number, cap in enumerate(self.captures):
-+                    require(time.monotonic() < end, "cleanup/evidence deadline expired")
-+                    path = os.path.join(directory, "%s-%d.json" % (self.token, number))
-+                    record = dict(name=cap.name, seen=cap.seen, packets=cap.packets, drops=cap.drops,
-+                                  truncated=cap.truncated, complete=cap.complete,
-+                                  pkttype=cap.pkttype, rows=cap.rows)
-+                    with open(path, "x") as stream:
-+                        json.dump(record, stream, default=lambda value: value.hex())
-+            except BaseException as error:
-+                errors.append("capture evidence: " + str(error))
-+        require(not errors, "; ".join(errors))
-+
-+
-+def coverage(frames, expected):
-+    counts = array("I", [0]) * len(expected)
-+    for offset, payload in frames:
-+        require(payload and offset >= 0 and offset + len(payload) <= len(expected),
-+                "invalid stream extent")
-+        require(payload == expected[offset:offset + len(payload)], "stream payload differs")
-+        for position in range(offset, offset + len(payload)):
-+            counts[position] += 1
-+    return counts
-+
-+
-+def protocol_order(rows, wrap=False, key="seq"):
-+    numbers = [row[key] for row in rows]
-+    require(numbers and all(value is not None for value in numbers), "missing protocol sequence")
-+    require(all(0 < ((right - left) & 0xffff) < 0x8000
-+                for left, right in zip(numbers, numbers[1:])), "protocol sequence out of order")
-+    if wrap:
-+        require(any(left > right for left, right in zip(numbers, numbers[1:])), "no actual sequence wrap")
-+
-+
-+def wire_rows(rows, port, stack, tagged=True):
-+    data = [row for row in rows if row["ports"] and row["ports"][1] == port and row["payload"]]
-+    require(data, "no captured flow payload")
-+    for row in data:
-+        require(row["tag"] == tagged, "flow tag/RCT missing or unexpected")
-+        require(row["encoding"] == ("hsr" if tagged else "plain"), "wrong protocol tag kind")
-+        require(row["vlans"] == stack, "flow VLAN stack differs")
-+        require(row["size"] <= 1520 + 4 * len(stack), "unsegmented output frame")
-+    require(len({row["src"] for row in data}) == 1 and
-+            len({row["dst"] for row in data}) == 1, "flow MAC addresses differ within lane")
-+    if tagged:
-+        protocol_order(data)
-+    return data
-+
-+
-+def copy_identity(row):
-+    # Lane/path and source substitution differ legitimately between the two ports.
-+    return (row["seq"], row["vlans"], row["dst"], row["proto"], row["network"])
-+
-+
-+def verify_stream(captures, port, payload, stack=(), local=False, inband=False, ingress=None):
-+    for cap in captures:
-+        cap.validate()
-+    source = [row for row in captures[0].rows if row["ports"] and
-+              row["ports"][1] == port and row["payload"]]
-+    require(source, "sender TCP capture empty")
-+    syn = [row for row in captures[0].rows if row["ports"] and
-+           row["ports"][1] == port and row.get("tcpflags", 0) & 2]
-+    require(syn, "missing captured TCP initial sequence")
-+    isn = (syn[0]["tcpseq"] + 1) & 0xffffffff
-+    source_counts = coverage([((row["tcpseq"] - isn) & 0xffffffff, row["payload"])
-+                              for row in source], payload)
-+    require(0 not in source_counts, "sender did not send complete stream")
-+    aggregate = [row for row in source if len(row["payload"]) > 1500]
-+    if ingress is not None:
-+        ingress.validate()
-+        inputs = [row for row in ingress.rows if row["ports"] and
-+                  row["ports"][1] == port and row["payload"]]
-+        require(all(row["vlans"] == stack and row["encoding"] == "plain" for row in inputs),
-+                "HSR/PRP ingress classification/VLAN differs")
-+        require(coverage([((row["tcpseq"] - isn) & 0xffffffff, row["payload"])
-+                          for row in inputs], payload) == source_counts,
-+                "sender/actual ingress stream occurrence differs")
-+        require(not aggregate or any(len(row["payload"]) > 1500 for row in inputs),
-+                "no actual ingress aggregate")
-+    require(all(row["vlans"] == stack for row in source), "sender VLAN stack differs")
-+    if stack:
-+        require(all(row["aux"] == (() if inband else stack[:1]) and
-+                    row["inband"] == (stack if inband else stack[1:]) for row in aggregate),
-+                "sender aggregate VLAN encoding differs")
-+    if local:
-+        outputs = [wire_rows(captures[1].rows, port, stack, tagged=False)]
-+        require(all(row["ports"][1] == port for row in outputs[0]), "unexpected local flow direction")
-+    else:
-+        outputs = [wire_rows(cap.rows, port, stack) for cap in captures[1:]]
-+        for index, rows in enumerate(outputs):
-+            require(all(row["path"] == index for row in rows), "wrong HSR lane/path")
-+        require([copy_identity(row) for row in outputs[0]] ==
-+                [copy_identity(row) for row in outputs[1]], "LAN copies differ")
-+    for rows in outputs:
-+        observed = coverage([((row["tcpseq"] - isn) & 0xffffffff, row["payload"])
-+                             for row in rows], payload)
-+        require(observed == source_counts, "lost/duplicate stream occurrence (including retransmission)")
-+    # Missing aggregation is a prerequisite gap only after transfer and all other checks.
-+    if not aggregate:
-+        raise Skip("no sender GSO aggregate observed")
-+    print("# TCP bytes=%d sent-occurrences=%d aggregates=%d outputs=%s" %
-+          (len(payload), sum(source_counts), len(aggregate), [len(rows) for rows in outputs]), flush=True)
-+
-+
-+def verify_udp(case, captures, expected, ports, vlans=(), expect_wrap=False,
-+               input_order=False, producer_order=False):
-+    lanes = []
-+    for index, cap in enumerate(captures):
-+        cap.validate()
-+        rows = [row for row in cap.rows if row["ports"] and row["ports"][1] in ports]
-+        require(Counter(row["payload"] for row in rows) == Counter(expected),
-+                case + ": UDP payload/ID set differs")
-+        if input_order:
-+            require([row["payload"] for row in rows] == expected, case + ": input order differs")
-+        if producer_order:
-+            for producer in (1, 2):
-+                observed = [row["payload"] for row in rows if row["payload"][6] == producer]
-+                require(observed == [body for body in expected if body[6] == producer],
-+                        case + ": producer order differs")
-+        for row in rows:
-+            require(row["tag"] and row["size"] <= 1520 + 4 * len(vlans),
-+                    case + ": missing tag or unsegmented frame")
-+            require(row["vlans"] == vlans, case + ": VLAN stack differs")
-+            require(row["path"] == index, case + ": wrong HSR lane/path")
-+            require(row["encoding"] == "hsr", case + ": wrong protocol tag kind")
-+        protocol_order(rows, expect_wrap)
-+        lanes.append(rows)
-+    require([copy_identity(row) for row in lanes[0]] == [copy_identity(row) for row in lanes[1]],
-+            case + ": unequal LAN copies")
-+    print("# %s expected=%d lanes=%s" % (case, len(expected), [len(rows) for rows in lanes]), flush=True)
-+    return lanes
-+
-+
-+def local_pair(lab, ns, dev):
-+    lab.veth(ns, dev, ns, dev + "p")
-+    for name in (dev, dev + "p"):
-+        lab.ip(ns, "link", "set", "dev", name, "up")
-+
-+
-+def link_state(lab, ns, dev):
-+    result = lab.ip(ns, "-j", "-d", "link", "show", "dev", dev)
-+    rows = json.loads(result.stdout)
-+    require(len(rows) == 1, "%s: missing link description" % dev)
-+    state = rows[0]
-+    require(isinstance(state.get("ifindex"), int), "missing ifindex")
-+    require(isinstance(state.get("promiscuity"), int),
-+            "%s: missing promiscuity count" % dev)
-+    return state
-+
-+
-+def set_gro(lab, ns, dev, wanted, active=None):
-+    result = lab.cmd(ns, "ethtool", "-K", dev, "gro", wanted, check=False)
-+    forced = (active == "off" and wanted == "on" and result.returncode == 1
-+              and result.stdout == "Actual changes:\nrx-gro: off [requested on]\n"
-+              and result.stderr == "Could not change any device features\n")
-+    require(result.returncode == 0 or forced,
-+            "%s: GRO setter rc%d %s" % (dev, result.returncode, result.stderr.strip()))
-+    features = lab.features(ns, dev)
-+    require("generic-receive-offload" in features,
-+            "%s: missing software GRO feature" % dev)
-+    actual = features["generic-receive-offload"][0]
-+    require(actual == (active if active is not None else wanted),
-+            "%s: requested GRO %s, observed %s" % (dev, wanted, actual))
-+
-+
-+def hsr_attach(lab, ns, master, first, second, interlink=None):
-+    args = ["link", "add", "name", master, "type", "hsr",
-+            "slave1", first, "slave2", second, "version", "1"]
-+    if interlink is not None:
-+        args.extend(("interlink", interlink))
-+    result = lab.ip(ns, *args, check=False)
-+    if result.returncode and interlink is not None:
-+        # Tool-option absence needs a successful ordinary-HSR control.
-+        control = lab.ip(ns, "link", "add", "ctl", "type", "hsr",
-+                         "slave1", first, "slave2", second,
-+                         "version", "1", check=False)
-+        if control.returncode == 0:
-+            lab.ip(ns, "link", "del", "ctl")
-+        error = result.stderr.lower()
-+        absent = ("interlink" in error and any(word in error for word in
-+                  ("unknown command", "unknown option", "unknown argument", 'what is "interlink"')))
-+        require(control.returncode == 0,
-+                "interlink failed and ordinary HSR control failed: %s / %s"
-+                % (result.stderr.strip(), control.stderr.strip()))
-+        if absent and "rtnetlink" not in error:
-+            raise Skip("iproute2 has no interlink option")
-+    require(result.returncode == 0,
-+            "HSR attach failed: " + result.stderr.strip())
-+    lab.ip(ns, "link", "set", "dev", master, "up")
-+
-+
-+def policy(lab):
-+    """All roles, initial preferences and last requests, twice each."""
-+    ns = lab.ns("policy")
-+    for dev in ("m", "p", "q"):
-+        local_pair(lab, ns, dev)
-+    for role in ("A", "B", "interlink"):
-+        for initial in ("on", "off"):
-+            for last in ("on", "off"):
-+                label = "%s initial=%s last=%s" % (role, initial, last)
-+                before = link_state(lab, ns, "m")
-+                for cycle in range(2):
-+                    set_gro(lab, ns, "m", initial)
-+                    first = "m" if role == "A" else "p"
-+                    second = "m" if role == "B" else "q"
-+                    hsr_attach(lab, ns, "hsr0", first, second,
-+                               "m" if role == "interlink" else None)
-+                    active = lab.features(ns, "m")
-+                    require(active["generic-receive-offload"][0] == "off",
-+                            label + ": GRO remained enabled after attach")
-+                    for wanted in ("on", "off", last):
-+                        set_gro(lab, ns, "m", wanted, active="off")
-+                    lab.ip(ns, "link", "del", "hsr0")
-+                    after = link_state(lab, ns, "m")
-+                    require("master" not in after,
-+                            label + ": upper remains after detach")
-+                    require(after["promiscuity"] == before["promiscuity"],
-+                            label + ": promiscuity changed after detach")
-+                    require(lab.features(ns, "m")[
-+                        "generic-receive-offload"][0] == last,
-+                        label + ": last GRO preference was not restored")
-+                print("# policy %s cycles=2" % label, flush=True)
-+
-+
-+def master_gso(lab):
-+    ns = lab.ns("master-mask")
-+    for dev in ("a", "b"):
-+        local_pair(lab, ns, dev)
-+    hsr_attach(lab, ns, "hsr0", "a", "b")
-+    features = lab.features(ns, "hsr0")
-+    names = [name for name in features if
-+             ("segmentation" in name or name in
-+              ("tx-gso-robust", "tx-gso-partial", "tx-gso-list"))
-+             and name != "generic-segmentation-offload"]
-+    require(names, "master GSO type mask is absent from feature report")
-+    enabled = [name for name in names if features[name][0] != "off"]
-+    require(not enabled, "master retains GSO types: " + ", ".join(enabled))
-+    print("# master GSO types off: " + ", ".join(sorted(names)), flush=True)
-+
-+
-+def rollback_bridge(lab):
-+    """B's existing bridge causes A's earlier attachment to unwind."""
-+    ns = lab.ns("rollback-bridge")
-+    for dev in ("a", "b", "c"):
-+        local_pair(lab, ns, dev)
-+    set_gro(lab, ns, "a", "on")
-+    before = link_state(lab, ns, "a")
-+    lab.ip(ns, "link", "add", "br0", "type", "bridge")
-+    lab.ip(ns, "link", "set", "dev", "b", "master", "br0")
-+    lab.ip(ns, "link", "set", "dev", "br0", "up")
-+    result = lab.ip(ns, "link", "add", "hsr0", "type", "hsr",
-+                    "slave1", "a", "slave2", "b", "version", "1",
-+                    check=False)
-+    require(result.returncode != 0, "second-port attachment unexpectedly passed")
-+    require(link_state(lab, ns, "b").get("master") == "br0",
-+            "failed second port lost its original bridge")
-+    after = link_state(lab, ns, "a")
-+    require("master" not in after, "rolled-back A retains an upper")
-+    require(after["promiscuity"] == before["promiscuity"],
-+            "rolled-back A retains a promiscuity reference")
-+    require(lab.features(ns, "a")["generic-receive-offload"][0] == "on",
-+            "rolled-back A did not restore GRO")
-+    # This positive control detects a residual role or RX handler on A.
-+    hsr_attach(lab, ns, "hsr1", "a", "c")
-+    lab.ip(ns, "link", "del", "hsr1")
-+    require(lab.features(ns, "a")["generic-receive-offload"][0] == "on",
-+            "GRO not restored after the rollback positive control")
-+    print("# bridge second-port rollback restored A; reattach passed", flush=True)
-+
-+
-+def multicast_flow(lab, ns, phase):
-+    """Exact multicast receipt on both lower and macvlan, with no workers."""
-+    captures = [lab.capture(ns, dev) for dev in ("m", "mv")]
-+    sender = lab.sock(ns, socket.AF_PACKET, socket.SOCK_RAW, 0)
-+    sender.bind(("mp", 0))
-+    sender.setblocking(False)
-+    source = bytes.fromhex(link_state(lab, ns, "mp")["address"].replace(":", ""))
-+    prefix = ("hsr-macvlan-%s:" % phase).encode()
-+    frames = [bytes.fromhex("01005e000009") + source + b"\x88\xb5" +
-+              prefix + struct.pack("!H", index) + b"m" * 96
-+              for index in range(50)]
-+    for frame in frames:
-+        require(sender.send(frame) == len(frame), "short multicast send")
-+        lab.observe(0.002)
-+    # finish() establishes real empty queues and valid loss/truncation stats.
-+    lab.finish()
-+    expected = Counter(frames)
-+    for dev, capture in zip(("m", "mv"), captures):
-+        observed = Counter(row["raw"] for row in capture.rows
-+                           if row["raw"][12:14] == b"\x88\xb5" and
-+                           row["raw"][14:].startswith(prefix))
-+        require(observed == expected,
-+                "%s %s multicast copies differ: missing=%d excess=%d" %
-+                (phase, dev, sum((expected - observed).values()),
-+                 sum((observed - expected).values())))
-+    print("# macvlan %s multicast lower=50/50 upper=50/50" % phase, flush=True)
-+
-+
-+def rollback_macvlan(lab):
-+    """A non-master upper occupies the RX handler; delivery survives."""
-+    ns = lab.ns("rollback-macvlan")
-+    for dev in ("m", "p"):
-+        local_pair(lab, ns, dev)
-+    result = lab.ip(ns, "link", "add", "link", "m", "name", "mv",
-+                    "type", "macvlan", "mode", "bridge", check=False)
-+    if result.returncode:
-+        error = result.stderr.lower()
-+        if "unknown device type" in error or "operation not supported" in error:
-+            raise Skip("macvlan device kind unavailable: " + result.stderr.strip())
-+        require(False, "macvlan creation failed: " + result.stderr.strip())
-+    lab.ip(ns, "link", "set", "dev", "mv", "up")
-+    lab.ip(ns, "maddress", "add", "01:00:5e:00:00:09", "dev", "mv")
-+    set_gro(lab, ns, "m", "on")
-+    before = link_state(lab, ns, "m")
-+    require("master" not in before, "macvlan lower already has a master")
-+
-+    def association():
-+        index = lab.cmd(ns, "cat", "/sys/class/net/mv/iflink").stdout.strip()
-+        require(index == str(link_state(lab, ns, "m")["ifindex"]),
-+                "macvlan no longer belongs to the original lower")
-+        membership = lab.ip(ns, "maddress", "show", "dev", "mv").stdout.lower()
-+        require("01:00:5e:00:00:09" in membership,
-+                "macvlan multicast membership missing")
-+
-+    association()
-+    multicast_flow(lab, ns, "before")
-+    result = lab.ip(ns, "link", "add", "hsr0", "type", "hsr",
-+                    "slave1", "m", "slave2", "p", "version", "1",
-+                    check=False)
-+    require(result.returncode != 0 and "busy" in result.stderr.lower(),
-+            "expected busy RX-handler failure: " + result.stderr.strip())
-+    after = link_state(lab, ns, "m")
-+    require("master" not in after, "failed attachment left an HSR upper")
-+    require(after["promiscuity"] == before["promiscuity"],
-+            "failed attachment changed promiscuity")
-+    require(lab.features(ns, "m")["generic-receive-offload"][0] == "on",
-+            "failed RX-handler attachment did not restore GRO")
-+    association()
-+    multicast_flow(lab, ns, "after")
-+
-+
-+GSO_ROWS = (
-+    ("plain", (), False, "A"),
-+    ("s-tag-inband", ((0x88a8, 100),), True, "A"),
-+    ("c-tag-accelerated", ((0x8100, 50),), False, "A"),
-+    ("s-tag-accelerated", ((0x88a8, 100),), False, "B"),
-+    ("sc-nested-accelerated", ((0x88a8, 200), (0x8100, 30)), False, "B"),
-+    ("cc-nested-inband", ((0x8100, 40), (0x8100, 20)), True, "A"),
-+)
-+
-+
-+def vlan_chain(lab, ns, parent, stack, prefix):
-+    for depth, (protocol, identifier) in enumerate(stack):
-+        dev = "%s%d" % (prefix, depth)
-+        lab.ip(ns, "link", "add", "link", parent, "name", dev,
-+               "type", "vlan", "id", str(identifier), "protocol",
-+               "802.1AD" if protocol == 0x88a8 else "802.1Q")
-+        lab.ip(ns, "link", "set", "dev", dev, "up")
-+        parent = dev
-+    return parent
-+
-+
-+def vlan_tx_mode(lab, ns, lower, stack, inband):
-+    if not stack:
-+        return
-+    aliases = (("tx-vlan-stag-hw-insert", "tx-vlan-stag-offload")
-+               if stack[0][0] == 0x88a8 else
-+               ("tx-vlan-offload", "tx-vlan-hw-insert"))
-+    features = lab.features(ns, lower)
-+    name = next((alias for alias in aliases if alias in features), None)
-+    if name is None:
-+        raise Skip("no VLAN insertion feature: " + ", ".join(aliases))
-+    wanted = "off" if inband else "on"
-+    if features[name][1] and features[name][0] != wanted:
-+        raise Skip("fixed VLAN insertion feature cannot be " + wanted)
-+    lab.cmd(ns, "ethtool", "-K", lower, name, wanted)
-+    require(lab.features(ns, lower)[name][0] == wanted,
-+            "VLAN insertion mode did not match its requested state")
-+
-+
-+def ordered_payload(producer, index, size=64):
-+    prefix = b"HSRORD" + bytes([producer]) + struct.pack("!I", index)
-+    return prefix + bytes([producer ^ 0xA5]) * (size - len(prefix))
-+
-+
-+def ordered_socket(lab, ns, address):
-+    sock = lab.sock(ns, socket.AF_INET, socket.SOCK_DGRAM)
-+    sock.bind((address, 0))
-+    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 1)
-+    sock.settimeout(1)
-+    return sock
-+
-+
-+def ordered_lanes(lab, topology):
-+    return [lab.capture(topology["dut"], lane, pkttype=4)
-+            for lane in ("da", "db")]
-+
-+
-+def ordered_send(lab, sock, producer, first, count, port, segment=0):
-+    expected = []
-+    if segment:
-+        sock.setsockopt(socket.IPPROTO_UDP, 103, segment)
-+    blocks = 16 if segment else 1
-+    size = segment or 64
-+    for number in range(count):
-+        payloads = [ordered_payload(producer, first + number * blocks + n,
-+                                    size) for n in range(blocks)]
-+        body = b"".join(payloads)
-+        require(sock.sendto(body, ("239.0.0.9", port)) == len(body),
-+                "short UDP send")
-+        expected.extend(payloads)
-+        # Keep capture receive queues bounded throughout long wrap warmups.
-+        if number % 8 == 0:
-+            lab.observe(0)
-+    lab.observe(0.1)
-+    return expected
-+
-+
-+def ordered_data(lab, gso=False):
-+    topology = topo(lab)
-+    caps = ordered_lanes(lab, topology)
-+    local = ordered_socket(lab, topology["dut"], "100.64.3.1")
-+    san = ordered_socket(lab, topology["tx"], "100.64.2.1")
-+    # Observe interlink aggregates before the two tagged LAN copies expand.
-+    sent = lab.capture(topology["tx"], "t0", pkttype=4)
-+    ingress = lab.capture(topology["dut"], "dil")
-+    expected = ordered_send(lab, local, 1, 0, 32, 5100)
-+    if gso:
-+        try:
-+            san.setsockopt(socket.IPPROTO_UDP, 103, 512)
-+        except OSError as error:
-+            if error.errno in (errno.ENOPROTOOPT, errno.EOPNOTSUPP):
-+                raise Skip("UDP GSO unavailable") from error
-+            raise
-+    expected += ordered_send(lab, san, 2, 0, 16, 5101, segment=512 if gso else 0)
-+    expected += ordered_send(lab, local, 1, 32, 32, 5100)
-+    lab.finish()
-+    verify_udp("local and aggregate boundaries", caps, expected,
-+               ports={5100, 5101}, input_order=True)
-+    inputs = [row for row in sent.rows if row["ports"] and row["ports"][1] == 5101]
-+    expected_inputs = [b"".join(ordered_payload(2, n * 16 + part, 512)
-+                               for part in range(16)) for n in range(16)] if gso else expected[32:48]
-+    aggregated = any(len(row["payload"]) > 1500 for row in inputs)
-+    if gso and not aggregated:
-+        expected_inputs = expected[32:-32]
-+    require([row["payload"] for row in inputs] == expected_inputs,
-+            "UDP sender input set/order differs")
-+    incoming = [row for row in ingress.rows if row["ports"] and row["ports"][1] == 5101]
-+    require([row["payload"] for row in incoming] == expected_inputs,
-+            "actual UDP ingress input set/order differs")
-+    require(all(row["encoding"] == "plain" and not row["vlans"] for row in inputs + incoming),
-+            "UDP input classification/VLAN differs")
-+    if gso and not aggregated:
-+        raise Skip("interlink UDP GSO aggregate not observed")
-+
-+
-+def ordered_supervision(lab):
-+    topology = topo(lab)
-+    caps = ordered_lanes(lab, topology)
-+    san = ordered_socket(lab, topology["tx"], "100.64.2.1")
-+    expected = ordered_send(lab, san, 3, 0, 8, 5110)
-+    # Both timers have time for multiple life checks; no fake worker state.
-+    lab.observe(10)
-+    lab.finish()
-+    verify_udp("proxy-learning inputs", caps, expected, ports={5110},
-+               input_order=True)
-+    verify_supervision(caps, topology["mac_master"], topology["mac_tx"])
-+
-+
-+def ordered_concurrent(lab):
-+    cpus = sorted(os.sched_getaffinity(0))[:2]
-+    if len(cpus) != 2:
-+        raise Skip("two functional producers need two allowed CPUs")
-+    topology = topo(lab)
-+    caps = ordered_lanes(lab, topology)
-+    sockets = [ordered_socket(lab, topology["tx"], "100.64.2.1"),
-+               ordered_socket(lab, topology["dut"], "100.64.3.1")]
-+    barrier = threading.Barrier(3)
-+    stop = threading.Event()
-+    errors = []
-+    windows = [None, None]
-+    until = min(lab.deadline, time.monotonic() + 15)
-+
-+    def producer(index):
-+        try:
-+            # Socket namespace binding was completed before threads existed.
-+            os.sched_setaffinity(0, {cpus[index]})
-+            barrier.wait(timeout=2)
-+            start = time.monotonic()
-+            for number in range(128):
-+                require(not stop.is_set() and not lab.stop.is_set() and time.monotonic() < until,
-+                        "producer work deadline")
-+                body = ordered_payload(index + 1, number)
-+                require(sockets[index].sendto(body,
-+                        ("239.0.0.9", 5120 + index)) == len(body),
-+                        "short producer send")
-+                time.sleep(0.001)
-+            windows[index] = (start, time.monotonic())
-+        except Exception as error:
-+            errors.append(error)
-+            stop.set()
-+            barrier.abort()
-+
-+    threads = [threading.Thread(target=producer, args=(index,))
-+               for index in range(2)]
-+    unfinished = []
-+    try:
-+        for thread in threads:
-+            lab.threads.append(thread)
-+            thread.start()
-+        barrier.wait(timeout=2)
-+        while any(thread.is_alive() for thread in threads):
-+            require(time.monotonic() < until, "producer join deadline")
-+            lab.observe(0.01)
-+    finally:
-+        stop.set()
-+        barrier.abort()
-+        join_end = min(lab.deadline, time.monotonic() + 2)
-+        for thread in threads:
-+            if thread.ident is not None:
-+                thread.join(max(0, join_end - time.monotonic()))
-+        unfinished = [thread for thread in threads if thread.is_alive()]
-+        if unfinished:
-+            print("# cleanup failure: sender thread remained alive")
-+    if errors:
-+        raise errors[0]
-+    require(not unfinished, "sender thread remained alive")
-+    require(all(windows) and windows[0][0] < windows[1][1] and
-+            windows[1][0] < windows[0][1], "producer send windows do not overlap")
-+    print("# functional producers CPUs=%s windows=%s" % (cpus, windows))
-+    lab.finish()
-+    expected = [ordered_payload(producer, number)
-+                for producer in (1, 2) for number in range(128)]
-+    verify_udp("concurrent master/interlink inputs", caps, expected,
-+               ports={5120, 5121}, producer_order=True)
-+
-+
-+def ordered_wrap(lab):
-+    topology = topo(lab)
-+    caps = ordered_lanes(lab, topology)
-+    sender = ordered_socket(lab, topology["tx"], "100.64.2.1")
-+    probe = ordered_send(lab, sender, 4, 0, 1, 5130)
-+    # This only selects the warmup count; final loss-free captures certify it.
-+    rows = [[row for row in cap.rows if row["ports"] and row["ports"][1] == 5130]
-+            for cap in caps]
-+    require(all(len(lane) == 1 for lane in rows) and
-+            rows[0][0]["seq"] == rows[1][0]["seq"], "wrap probe missing or unequal")
-+    start = rows[0][0]["seq"]
-+    warm_count = (65400 - ((start + 1) & 0xFFFF)) & 0xFFFF
-+    warm = ordered_send(lab, sender, 5, 0, warm_count, 5131)
-+    # Separate IDs/ports prevent sequence-space reuse from hiding a loss.
-+    expected = ordered_send(lab, sender, 6, 0, 256, 5132)
-+    lab.finish()
-+    verify_udp("wrap start", caps, probe, ports={5130}, input_order=True)
-+    if warm:
-+        verify_udp("wrap warmup", caps, warm, ports={5131}, input_order=True)
-+    verify_udp("actual protocol wrap", caps, expected, ports={5132},
-+               expect_wrap=True, input_order=True)
-+
-+
-+ORDERED_CASES = (("local-data-order", ordered_data),
-+                 ("local-data-aggregate-boundaries", lambda lab: ordered_data(lab, True)),
-+                 ("local-proxy-supervision", ordered_supervision),
-+                 ("two-functional-producers", ordered_concurrent),
-+                 ("actual-sequence-wrap", ordered_wrap))
-+
-+
-+def topo(lab):
-+    tx, dut, rx = [lab.ns(label) for label in ("tx", "dut", "rx")]
-+    for ns, dev, peer_ns, peer in ((tx, "t0", dut, "dil"),
-+                                  (dut, "da", rx, "ra"), (dut, "db", rx, "rb")):
-+        lab.veth(ns, dev, peer_ns, peer)
-+        for owner, link in ((ns, dev), (peer_ns, peer)):
-+            lab.ip(owner, "link", "set", "dev", link, "up")
-+    hsr_attach(lab, dut, "hm", "da", "db", "dil")
-+    attributes = link_state(lab, dut, "hm")["linkinfo"]["info_data"]
-+    require(attributes.get("proto") == 0 and attributes.get("version") == 1 and
-+            all(attributes.get(key) == value for key, value in
-+                (("slave1", "da"), ("slave2", "db"), ("interlink", "dil"))),
-+            "HSR topology has unexpected protocol/version")
-+    lab.ip(tx, "addr", "add", "100.64.2.1/24", "dev", "t0")
-+    lab.ip(dut, "addr", "add", "100.64.3.1/24", "dev", "hm")
-+    for ns, dev in ((tx, "t0"), (dut, "hm")):
-+        lab.ip(ns, "route", "add", "239.0.0.0/8", "dev", dev)
-+    return dict(tx=tx, dut=dut, rx=rx, master="hm",
-+                mac_master=bytes.fromhex(link_state(lab, dut, "hm")["address"].replace(":", "")),
-+                mac_tx=bytes.fromhex(link_state(lab, tx, "t0")["address"].replace(":", "")))
-+
-+
-+def verify_supervision(captures, master, proxy):
-+    observed = []
-+    all_frames = []
-+    for lane, cap in enumerate(captures):
-+        cap.validate()
-+        tagged = [row for row in cap.rows if row["encoding"] == "hsr"]
-+        protocol_order(tagged)
-+        all_frames.append([copy_identity(row) for row in tagged])
-+        rows = [row for row in cap.rows if row["supervision"] is not None]
-+        require(all(row["encoding"] == "hsr" and row["path"] == lane
-+                    for row in rows), "wrong supervision tag kind/path")
-+        require(all(row["supervision"] in (master, proxy) for row in rows), "unexpected supervised MAC")
-+        for mac in (master, proxy):
-+            group = [row for row in rows if row["supervision"] == mac]
-+            require(len(group) >= 2, "missing repeated local/proxy supervision TLV")
-+            protocol_order(group, key="supseq")
-+        protocol_order(rows)
-+        observed.append([copy_identity(row) for row in rows])
-+    require(observed[0] == observed[1], "supervision LAN copies differ")
-+    require(all_frames[0] == all_frames[1], "data/supervision LAN order differs")
-+    print("# supervision exact local/proxy TLV sets lanes=%s" %
-+          [len(rows) for rows in observed], flush=True)
-+
-+
-+def tcp_transfer(lab, sender_ns, receiver_ns, dev, source, destination, port, captures):
-+    payload = bytes(range(256)) * 512
-+    reply = b"HSR-TCP-REPLY"
-+    listener = lab.sock(receiver_ns, socket.AF_INET, socket.SOCK_STREAM)
-+    listener.bind((destination, port))
-+    listener.listen(1)
-+    client = lab.sock(sender_ns, socket.AF_INET, socket.SOCK_STREAM)
-+    client.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, dev.encode() + b"\0")
-+    client.bind((source, 0))
-+    client.connect((destination, port))
-+    server, address = listener.accept()
-+    lab.sockets.append(server)
-+    for sock in (client, server):
-+        sock.setblocking(False)
-+    sent, received, echoed = 0, bytearray(), bytearray()
-+    state = dict(reply=False, write_closed=False)
-+    end = min(lab.deadline, time.monotonic() + 12)
-+
-+    def pump():
-+        nonlocal sent
-+        if sent < len(payload):
-+            try:
-+                sent += client.send(payload[sent:sent + 65536])
-+            except BlockingIOError:
-+                pass
-+        elif not state["write_closed"]:
-+            client.shutdown(socket.SHUT_WR)
-+            state["write_closed"] = True
-+        try:
-+            data = server.recv(65536)
-+            received.extend(data)
-+        except BlockingIOError:
-+            pass
-+        if len(received) == len(payload) and not state["reply"]:
-+            require(server.send(reply) == len(reply), "short TCP reply")
-+            state["reply"] = True
-+        try:
-+            echoed.extend(client.recv(65536))
-+        except BlockingIOError:
-+            pass
-+
-+    while len(echoed) < len(reply) and time.monotonic() < end:
-+        lab.observe(0.01, pump)
-+    require(bytes(received) == payload and bytes(echoed) == reply,
-+            "TCP application did not receive complete expected bytes")
-+    for sock in (server, client, listener):
-+        sock.close()
-+    lab.observe(0.2)
-+    lab.finish()
-+    return payload, reply
-+
-+
-+def tcp_interlink(lab):
-+    topology = topo(lab)
-+    tx, dut, rx = (topology[key] for key in ("tx", "dut", "rx"))
-+    lab.ip(rx, "link", "add", "hr", "type", "hsr",
-+           "slave1", "ra", "slave2", "rb", "version", "1")
-+    lab.ip(rx, "link", "set", "dev", "hr", "up")
-+    lab.ip(tx, "addr", "add", "10.67.0.2/24", "dev", "t0")
-+    lab.ip(rx, "addr", "add", "10.67.0.3/24", "dev", "hr")
-+    lab.cmd(tx, "ethtool", "-K", "t0", "tso", "on", "gso", "on")
-+    caps = [lab.capture(tx, "t0", pkttype=4)] + ordered_lanes(lab, topology)
-+    ingress = lab.capture(dut, "dil")
-+    payload, reply = tcp_transfer(lab, tx, rx, "t0", "10.67.0.2", "10.67.0.3", 5200, caps + [ingress])
-+    verify_stream(caps, 5200, payload, ingress=ingress)
-+
-+
-+def tcp_prp(lab, row):
-+    name, stack, inband, side = row
-+    tx, dut = lab.ns("prp-tx"), lab.ns("prp-dut")
-+    for lane in ("a", "b"):
-+        lab.veth(tx, "t" + lane, dut, "d" + lane)
-+        lab.ip(tx, "link", "set", "dev", "t" + lane, "up")
-+        lab.ip(dut, "link", "set", "dev", "d" + lane, "up")
-+    lab.ip(dut, "link", "add", "pm", "type", "hsr", "slave1", "da", "slave2", "db", "proto", "1")
-+    lab.ip(dut, "link", "set", "dev", "pm", "up")
-+    attributes = link_state(lab, dut, "pm")["linkinfo"]["info_data"]
-+    require(attributes.get("proto") == 1 and
-+            attributes.get("slave1") == "da" and attributes.get("slave2") == "db",
-+            "PRP topology has unexpected protocol/ports")
-+    lower = "t" + side.lower()
-+    sender = vlan_chain(lab, tx, lower, stack, "txv")
-+    receiver = vlan_chain(lab, dut, "pm", stack, "rxv")
-+    lab.ip(tx, "addr", "add", "10.68.0.2/24", "dev", sender)
-+    lab.ip(dut, "addr", "add", "10.68.0.1/24", "dev", receiver)
-+    vlan_tx_mode(lab, tx, lower, stack, inband)
-+    lab.cmd(tx, "ethtool", "-K", lower, "tso", "on", "gso", "on")
-+    caps = [lab.capture(tx, lower, pkttype=4), lab.capture(dut, "pm", pkttype=0)]
-+    ingress = lab.capture(dut, "d" + side.lower())
-+    lanes = [lab.capture(dut, dev, pkttype=4) for dev in ("da", "db")]
-+    payload, reply = tcp_transfer(lab, tx, dut, sender, "10.68.0.2", "10.68.0.1", 5201, caps + lanes + [ingress])
-+    verify_stream(caps, 5201, payload, stack, local=True, inband=inband, ingress=ingress)
-+    copies = []
-+    for index, cap in enumerate(lanes):
-+        cap.validate()
-+        rows = [frame for frame in cap.rows if frame["ports"] and
-+                frame["ports"][0] == 5201 and frame["payload"]]
-+        require(len(rows) == 1 and rows[0]["payload"] == reply, "PRP reply not exactly once per LAN")
-+        require(rows[0]["tag"] and rows[0]["vlans"] == stack and
-+                rows[0]["size"] <= 1520 + 4 * len(stack), "invalid PRP reply tag/size/VLAN")
-+        require(rows[0]["path"] == 10 + index, "wrong PRP LAN identifier")
-+        require(rows[0]["encoding"] == "prp", "wrong PRP reply tag kind")
-+        copies.append(copy_identity(rows[0]))
-+    require(copies[0] == copies[1], "PRP reply LAN copies differ")
-+    print("# PRP LAN %s local data segmented; reply each LAN=1/1" % name, flush=True)
-+
-+
-+def interrupt(signum, frame):
-+    raise InterruptedError("signal %d" % signum)
-+
-+
-+def main():
-+    mode = sys.argv[1] if len(sys.argv) == 2 else ""
-+    require(mode in ("gro", "ordered"), "usage: hsr_gro_superpacket.py gro|ordered")
-+    cases = [("GRO policy", policy), ("master GSO mask", master_gso),
-+             ("bridge rollback", rollback_bridge), ("busy-handler rollback", rollback_macvlan),
-+             ("natural TCP interlink", tcp_interlink)]
-+    cases += [("PRP LAN " + row[0], lambda lab, row=row: tcp_prp(lab, row)) for row in GSO_ROWS]
-+    if mode == "ordered":
-+        cases = ORDERED_CASES
-+    print("TAP version 13\n1..%d" % len(cases), flush=True)
-+    missing = [tool for tool in ("ip", "ethtool") if shutil.which(tool) is None]
-+    if os.geteuid() or missing:
-+        for number, (name, function) in enumerate(cases, 1):
-+            print("ok %d - %s # SKIP need root/ip/ethtool %s" % (number, name, missing), flush=True)
-+        return 4
-+    for sig in (signal.SIGINT, signal.SIGTERM):
-+        signal.signal(sig, interrupt)
-+    lab = Lab(time.monotonic() + 120)
-+    failure, passed = None, 0
-+    try:
-+        for number, (name, function) in enumerate(cases, 1):
-+            try:
-+                function(lab)
-+                print("ok %d - %s" % (number, name), flush=True)
-+                passed += 1
-+            except Skip as error:
-+                print("ok %d - %s # SKIP %s" % (number, name, error), flush=True)
-+            except BaseException as error:
-+                failure = error
-+                print("not ok %d - %s: %s" % (number, name, error), flush=True)
-+                for remaining, (later, unused) in enumerate(cases[number:], number + 1):
-+                    print("not ok %d - %s: stopped after prior failure" % (remaining, later), flush=True)
-+                break
-+    finally:
-+        for sig in (signal.SIGINT, signal.SIGTERM):
-+            signal.signal(sig, signal.SIG_IGN)
-+        try:
-+            lab.close()
-+        except BaseException as error:
-+            print("# cleanup failure: " + str(error), flush=True)
-+            if failure is None:
-+                failure = error
-+    return 1 if failure is not None else (0 if passed else 4)
-+
-+
-+if __name__ == "__main__":
-+    raise SystemExit(main())
-diff --git a/tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh b/tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
-new file mode 100755
-index 000000000000..9da711ad2ab2
---- /dev/null
-+++ b/tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
-@@ -0,0 +1,9 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+if ! command -v python3 > /dev/null; then
-+	echo "SKIP: missing python3"
-+	exit 4
-+fi
-+
-+exec python3 -B "$(dirname "$0")/hsr_gro_superpacket.py" gro "$@"
-diff --git a/tools/testing/selftests/net/hsr/hsr_ordered_forwarding.sh b/tools/testing/selftests/net/hsr/hsr_ordered_forwarding.sh
-new file mode 100755
-index 000000000000..b43218709455
---- /dev/null
-+++ b/tools/testing/selftests/net/hsr/hsr_ordered_forwarding.sh
-@@ -0,0 +1,9 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+if ! command -v python3 > /dev/null; then
-+	echo "SKIP: missing python3"
-+	exit 4
-+fi
-+
-+exec python3 -B "$(dirname "$0")/hsr_gro_superpacket.py" ordered "$@"
+ Documentation/netlink/specs/psp.yaml               |   8 +
+ Documentation/networking/psp.rst                   |  64 +++-
+ include/net/psp/functions.h                        |  10 +-
+ include/net/psp/types.h                            |  34 +++
+ include/uapi/linux/psp.h                           |   1 +
+ net/psp/Kconfig                                    |   1 +
+ net/psp/Makefile                                   |   2 +-
+ net/psp/psp.h                                      |   8 +-
+ net/psp/psp_deferred_del.c                         | 231 +++++++++++++++
+ net/psp/psp_main.c                                 |  25 +-
+ net/psp/psp_nl.c                                   |   4 +
+ net/psp/psp_sock.c                                 | 113 ++++++-
+ tools/testing/selftests/drivers/net/psp.py         | 325 ++++++++++++++++++++-
+ .../testing/selftests/drivers/net/psp_responder.c  | 198 +++++++++++--
+ 14 files changed, 970 insertions(+), 54 deletions(-)
+---
+base-commit: d8674294aefef02266c4d47ad10131f1bffbe534
+change-id: 20260202-psp-3c8e2f65c5c4
+
+Best regards,
 -- 
-2.53.0
+Daniel Zahka <daniel.zahka@gmail.com>
 
