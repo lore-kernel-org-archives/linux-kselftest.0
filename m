@@ -1,158 +1,265 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE0C4CC26A
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 15:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791558488; cv=pass; b=N+PeQibBzNALnNvIh4fklyteoTnCo/B4d/BTSKCEnY9wY+EtSahto4kWwpgaJ4Mv0ukHq6r0Hvt3VX5apu56t1yxCAjL1XAAROGP4WwXdx1RlWFsydBN6FujwAmONWutuQju3E0PUpRCaJWeS0tGKbciCmr0a8maQnlEYbgU75U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791558488; c=relaxed/simple;
-	bh=8lQEuf+S9Yr+praW+GOTCf9ZwY8pq+0gPcT80hqP2nA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gOV5C/VQQhtACjhUWO2nPs0MHJWo+nandni0fJm6Cjy+l+Dtn7jLVMerL8d8XEUHz0MeRa1DcBUllZx1njccNrVoYwQNVJ5i6fwIKAaif0fXKyXO+bxUDClzyuRlxZ5Wov/HhRYYXUXwgks2RMh+NnMNDafL5B164S+UJkVDSqU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WcVFVPI1; arc=pass smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267AC3CC32D
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 15:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791559938; cv=none; b=qR+8RHreuIvtWYaEyINm8OnZbmbI8758Wjt3Xll+TS3tcAUbGYd8cwyXwdezvTqsTSH1X56KWFl0kvZmVMeFZ/8pHWiDmfImmy2ufNsNgVZsx3g6ALPZTRSIWFs8gAW2Hgm7UtZTlpJXtZJxQcxL/obcBZ739+tEvtlYnaLWVmo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791559938; c=relaxed/simple;
+	bh=iMZ/uX+ag5jz3/Kyi5t22CgDOcI9bb/p6hm7+/PLmns=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UyWP0+VzjMinc1BH94DE44Nc5leLqDFFCPucINnnOji1h3WpUlbOn0qsKV71MfrBnGUZ68tWCDXhsBL+COTwsaYY9H9Oy8M7tPyoBzw9/5slwz7youiH7/VjDUHw7CUC/oUGFJN2WD9SQ0wbzCG00fJq5vyAk0hYRKWJqH+t5h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=uaYh3Jj+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MTHoNhnL; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WcVFVPI1"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a18617ae90so68735e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 08:08:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791558484; cv=none;
-        d=google.com; s=arc-20260327;
-        b=h16acAH+ztERRKVtuSXSaIgmaeHAvOD0L8bvBeJ2YkPa/m+dNbDcGppgrsYkygf4FE
-         9j8ecCj9IQndZRF6DNVYf4NJmcGQqHmi+yUUN7dnwvp2L2rON7egMNTxg5d3hDXiN143
-         k8EuhsFyn8iGolsOhRk6UXphiie8Ox9LJMc6QjMRxDzLieODoMGBWW1fQHGbLBEGKyNg
-         97FGatE5DzbT46g7k5Ah30rI7M6Jpp4/c89E7loaVkQMb2HvWOtbXJ7PBze1VAsqqu7s
-         73PmO/oWoBNKheZSx7CT8bOhAAsmnN6bHGfIY5uIAtdyE4IdACNeKAsX4RBWUwg6pBoK
-         Xmvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5B9NDWTDoWCGkjiGw08sTP7KBdaeckYZ1pF6N1eVNno=;
-        fh=CHj2l4ZsJr2Of45+hXQ4fTuntlri8AN1bHKdZ/2z/IQ=;
-        b=bUruXl/4rWeI4iMTafaRFLyo8Dcpqa1w+7KNB8H/hfjQyfXVyL3ymtSVsFphML1Nzp
-         upbT8bW8wxopAKRWpX1wthSQXyGw8WosMtj/LdmrLsqTkaTn22FlwjOPdZd+/UZITpMg
-         6+OkCNeIplM1HnQDVvPub3AocwGp1GS3aDk0ND8BXSDJrxeAeae5PraXOJg9Js266+Hp
-         noFvA6lg8e6f04FgitiCrWy4xHEapKNQnTYdZ8AsA16b4AlG2NVqoDJKHXFPIqLxE+fc
-         UHdhz0+OQXgjAymzhoBLjXTQXXXoOp5JENJG4IopGZ5Kvv8/E20CJ8DhqcRzLfQ2RvXV
-         6hTQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791558484; x=1792163284; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5B9NDWTDoWCGkjiGw08sTP7KBdaeckYZ1pF6N1eVNno=;
-        b=WcVFVPI1Ayshs9wj3KuSa/05azM4soITeqpu/5ZCCcPHlky5DDySK1zQvvzUzKpgY0
-         MsLzeqyB7RIzslmgI1QrGNDlLSePCIN7rDLkjF8TweFE2dxFGjWnHUxzOSRvAhKrVNZ8
-         C37gRjS/h6b5u6elJ+TNdiGBC/CIlKqdiTjZWLPlN9WojoLRHucwSIyezgz71rQUbMIq
-         vWB83RZDQRewI1AQAyt1TK4CJmdpkdBV2383nePv89DVxVJOfiyi0p7au9hgUc/7M9r4
-         fiy5AThWArosba9zL2plML5WYrhWiyq/kz2qo+GYzau9TV07FEV8fslLxjJrwAgIO6MF
-         aXQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791558484; x=1792163284;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5B9NDWTDoWCGkjiGw08sTP7KBdaeckYZ1pF6N1eVNno=;
-        b=ubiFpELLuTsQvu1q2rzl08tmJED6BJKFVBMEka2O3HXl0aFyZiZCyPIeMhJLbr9Zdc
-         6S34icypSkELTr1miaW+ljRFoIG3ZoljgfByG9jHWTQ1dyW130WYyuk1R6Ih0w1dVoYG
-         O8G6a30rQOdBE6pptauxIW2R7GqfCNZcA/o0tS5czy6gIkps9bbFUTq8Z/Z8DISccB07
-         eaQVaDP9BN2gFqtYyi4EBnU/ddsM6PLy8oSVz1QxumXOnzEfAiIPDJZ5bWm8APtxyoH9
-         n/EBes/g6Fr7F0xzYUaLxFfFbtsqMPKah2z+jii0FCLU1Cmhlpy326T676z22VSHKqAx
-         QgxA==
-X-Forwarded-Encrypted: i=1; AKwUvByjzRmXu/nJFMc1r8wW5kLVhMs4KrkPqHPEH4GK7kiNeTrvCr+bWnCyDWzrVAU4ED98/sj7apUwfBEtFqZfDNs=@vger.kernel.org
-X-Gm-Message-State: AFuF++kBOBM4V6ZB43OY7bVUjB2iWL5FyYPOr7HhBZUnfWJdsITYMS11
-	GeF2di9rOgqAdmdr5kR2VKjigtmspRQF+JTc378Bt9Hi2a88CcZ/kSV2wjz1TsfSeKLzI1C98g9
-	nh9zWzmlEP/kzHw5kwl/VGwyeCH1D6GcI3uPB7UFj
-X-Gm-Gg: AYBFou0O8S8wP5K+t4t2GA0QNsYR803xTzt5AioUXeHXst7dcZmVaV0QrpH+mOIIEeP
-	kxpvl2cLUf9P4T1KGbMI0COn2zi9A1/5AGVRORBN6pJL3BpndNyTa5LakS4+Q96/BfIQI5AQD3r
-	RxU3b9APMBupIiHoDmAUuCUPEpCwaMuBj08NVLWD1v51wnr6xMvXMI+S36X4iAiLbv3I06iJAf7
-	OXGsIYqLEMOIk95/q2mwt6RPNX6W6Re1KDA3xLp+mn05bEA2wTf18Yyh/WbFfrpPLNqOO5cNQkg
-	h7DzVOIBTTIgYFROPV4gx/5GGwWx2RAXD8LfmsKzlZDLJ4lmajm33zWDiotWkMkImxF1ZknTvsC
-	RjmynRwGEE2wTqPm69uzrOA==
-X-Received: by 2002:a05:600c:2151:b0:4a1:9034:e9ac with SMTP id
- 5b1f17b1804b1-4a19034ee9fmr272115e9.14.1791558483022; Fri, 09 Oct 2026
- 08:08:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="uaYh3Jj+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MTHoNhnL"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 41F6CEC09EC
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 11:32:15 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Fri, 09 Oct 2026 11:32:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to; s=fm3; t=1791559935; x=1791646335; bh=eNkAHrZeuC
+	rzAtS02DcDIkhItOapaZSzqCl0GxmQ6J4=; b=uaYh3Jj+1H/rESeiWW1g2HnnwB
+	a78moyoAs//QmyVF7U2GFE6Ty0kYZP8/WBPEjBZP7He5+dvpGFiuN3sdzKFp9Kpu
+	eOQeR8kvvRSRp+BbUlBoeOf8qbOOz96kbjvAK9w8jPGQ+Or75k8UmJIZGkjOPuUb
+	BuvGW6AkufavVCcUXIvAJDX58sCOMNM0DtBX6qHK+ASK+6I75zAEsbEbgHH9QRIw
+	TcEcCfJQEiz8OaKkRaK4z0NTOCzTtDKyrH+Cn0Est4FqVbvxVqvwCeLtwA1qOYAQ
+	FoEtCCIEU/knZtHa56yVruP3gI1eLyP62oOeUrjrxKlNrbNa5agxJRlGqKfQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1791559935; x=1791646335; bh=eNkAHrZeuCrzAtS02DcDIkhItOapaZSzqCl
+	0GxmQ6J4=; b=MTHoNhnLRwi6L76aQvrXl9e34Zpf4FZTIe/4Z51Y+vMT/peNwts
+	HCK3YhcilOPbj2XHcKOztw5Qip0JoHa4WUl+diaCKLLZn3CNCilXJxFSXQ+AE7yn
+	rqYE1kSDBbqrWEahh/L2Dkn5InObtvj+mbTD9O3kTwj7BK8DPb+Dl2RJR9pEN6G2
+	p2uFWuBARjnAHyqXD4/CuATYsBppiqgfysuZN9ZyMAkJwq119ByXzi9C85zNI7eb
+	gbUKEC5EWkSfeqDfsKU6mnnC9NB9iquHw71Xr6kPqSlwdt3mu9UTQ4hoTrtxIWKu
+	4qqPSQwfGg/GxQ6eo+sxaUbaCuyQZdhbEwg==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
+	action=sign d=shutemov.name a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1791559935; d=shutemov.name;
+	mf=PGtpcmlsbEBzaHV0ZW1vdi5uYW1lPg==;
+	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm3:rsa-sha256:IIHRa34obzBiGDqqmiWQd2PptSd2VHbFcrRWAy8PyZvpgvE
+	nPkH+fbFGwj2q6pzCmmJeKm7oDVyusuYSMljZ1i5z2z0CTTTlM+vD55vCn8GWWS9
+	2W6EGMGvPyaAWOLlL6Fo9b2+0vqVcpxIBSIQEagg7ESlNKMwA4M+98mFHaBC0Vgl
+	s92hGe0Eb6uUvA2DrQ+ULfLv+9rxZaWV5HX3rlsjx/C9ibM/YO8Hptp4Q+z/DyR8
+	YRTZ9lzhax7Y7dh4Oc2FSEbN7pk+R6yeeG0rSCJC1wRQ4I3a9X5mkLSl61Z29wqw
+	IPQCkGMDqulSxRdLXvM3V3ck02OZXh0BcssoXrA==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
+	action=mi-m=1; hc=9;
+	hn=cc,content-transfer-encoding,date,feedback-id,from,
+	message-id,mime-version,subject,to;
+Message-Instance: m=1; h=sha256:3hpCA8iQi0r3kgj2aOfNu2B6wplYVejEYLENCZAaw8M=:iMZ/uX+ag5jz3/Kyi5t22CgDOcI9bb/p6hm7+/PLmns=;
+X-ME-Sender: <xms:_gjJapTr9Ar-ep6OuTri01E5Xfh2aFOKO4Q0ZCLQiD9kpZK4bMYL8w>
+    <xme:_gjJakZNKFAuVPltOzDrmjJQzpl-5ZpUd9Hf_XeTRhvy6Jlky9jYBuDQEy5WZzYAd
+    OHZs7_YYrXI1TVRBEs3x0k_1GW3ucL-FyBgd4WaQM2WdQYWxF6V1I0>
+X-ME-Received: <xmr:_gjJai6w363qHX6zj48lr3uzlYTpVXLPSlUOvbf-GyqyAquXzCupRFpExSU>
+X-ME-Proxy-Cause: dmFkZTEojCcQdCbQEnvG4GzFM0Gtq7SC6ZQGly27ZWNX9GO6WKU3jEBqxz5bk4ea1AP4V9
+    TPIVGx/CiMf6Y3h10lSARpqgrsgYLVoWyL+3qaFGEN8UIxZ5UNN0Zcn/AwPUJGGNYkOwsQ
+    /bXGq2esfoF2gPIa6ugHY37ND38FhjECueWLOExQaT66s1t5oGhQAo9RBdO1zLZ6svlUdv
+    ZEEo/XaVdASxtbSclv98wGLIBUYpN5cbotRrAYvLY2fR7lKVfWMYBWP//sfN6G3mMS29Oc
+    psTb54J5ZmXaENSaUsW9rb/rD1rDiProhVZFk4BmRjH5QFTp+YdwmKGW1Y6hQQ46k8CGr6
+    cjYKoIhZ1L9XHkTQOdDoIZx1aEcx5n3Z8QmNZ08lG7MtWO0m9Lzz7vEnjTwd/ZaAikTg+h
+    jyk4MDT0NCbjkZThKc9vonsuD5uIIkbQPLtiFrQzFxG+SKg9L/gvfV9xPo8iGq5DUWteIo
+    k+9w5mtlvgXg8Z5Xt3goOQ47tzb3+HEwIDc/xONBE1pW/XfCF0V2wv2k45X89aoPIZg5+5
+    qXx+vG+9qJkAFulsFHZD4bM5EGr83QuJGlTuudoRf0B4i82WMHEjfYzZz59GFsl8j8qSwI
+    OIS+f7KqgRAgBcsV+0UO/TwIvgfGr/s07roOLKiVU1/5gI8jZf/EAbyTCxPA
+X-ME-Proxy: <xmx:_gjJanf-ABUDb2WppoU4T1XMTLDMMKpnTBHDQtyW5kzSrabv4qwcwQ>
+    <xmx:_gjJahffuWsilLrBqDkdE6Aod4d_XlzV1nMiV2fKFLac7uhThBJhQw>
+    <xmx:_gjJakGaF3r6AkTzh9n0dI0768OpXteKmxP5w1g3XT8pw6-IBA2WEA>
+    <xmx:_gjJaoEkuxpxdJSG4XS_OjHi0vNULJEmBW6uKttlE9ZiM8_EVuBLPA>
+    <xmx:_wjJapD7GbOvm4B-L2klnmY89l2i-Xf0p1TAvAX9o7JmG7x2I3EqguJD>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Oct 2026 11:32:13 -0400 (EDT)
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: "Kiryl Shutsemau (Meta)" <kas@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Dev Jain <dev.jain@arm.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Usama Arif <usama.arif@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Yeoreum Yun <yeoreum.yun@arm.com>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH v2 0/4] selftests/mm: check large folio results through check_huge() only
+Date: Fri,  9 Oct 2026 16:32:04 +0100
+Message-ID: <20261009153210.236517-1-kirill@shutemov.name>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261009-selftests-bpf-dmabuf-iter-unnamed-v1-1-962ee94f7a5e@gmail.com>
-In-Reply-To: <20261009-selftests-bpf-dmabuf-iter-unnamed-v1-1-962ee94f7a5e@gmail.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Fri, 9 Oct 2026 17:07:51 +0200
-X-Gm-Features: AclHuK_t9iEbDfrbBV_kHItKsjIiOteX4n4AKqToDkA1GKSU32A56GHZ4NbXcEk
-Message-ID: <CABdmKX2VHqWrPb2O3Uqdccx=nP66gECU0kVc=4tZdGqSEZvuGQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Accept unnamed dma-bufs in the
- dmabuf_iter default test
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 9, 2026 at 3:49=E2=80=AFAM Qiliang Yuan <odys.yuan@gmail.com> w=
-rote:
->
-> The dmabuf_collector iterator prints the inode, size, name and exporter
-> of every dma-buf in the system on separate lines, with an empty name for
-> the buffers that have none. The default_iter subtest parses that output
-> and looks for the two buffers it created.
->
-> It requires a name for every buffer, and sscanf() finds none on the
-> empty line of an unnamed one. On a system that has such a buffer, like
-> one exported by udmabuf without a name, the subtest fails before it gets
-> to its own buffers.
+From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-Hi Qiliang, are you running this locally instead of with:
-tools/testing/selftests/bpf/vmtest.sh -- ./test_progs?
+The mm selftests had two ways to check that a range came out as folios
+of a given order.  check_huge_anon() and check_huge_file() counted
+folios of the order in the range.  is_range_backed_by_order() checked
+each window for a folio with its head at the window start.  Baolin found
+the two sets in khugepaged.c confusing [1], and the answer at the time
+was to merge them once Yeoreum's rewrite of check_huge_*() on top of
+pagemap and kpageflags landed.  It is in mm-new now.
 
-> Take an empty name for a buffer without one.
->
-> Fixes: ae5d2c59ecd7 ("selftests/bpf: Add test for dmabuf_iter")
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c b/tools=
-/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-> index fb2cea710db3e..1a5dc1adae735 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-> @@ -188,8 +188,9 @@ static void subtest_dmabuf_iter_check_default_iter(st=
-ruct dmabuf_iter *skel)
->                         ASSERT_EQ(sscanf(line, "%ld", &bufinfo.size), 1,
->                                   "read size");
->                 } else if (f % FIELD_COUNT =3D=3D NAME) {
-> -                       ASSERT_EQ(sscanf(line, "%s", bufinfo.name), 1,
-> -                                 "read name");
-> +                       /* Keep an empty name for a buffer without one */
-> +                       if (sscanf(line, "%s", bufinfo.name) !=3D 1)
-> +                               bufinfo.name[0] =3D '\0';
->                 } else if (f % FIELD_COUNT =3D=3D EXPORTER) {
->                         ASSERT_EQ(sscanf(line, "%31s", bufinfo.exporter),=
- 1,
->                                   "read exporter");
->
-> ---
-> base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
-> change-id: 20261009-selftests-bpf-dmabuf-iter-unnamed-217561e20d84
->
-> Best regards,
-> --
-> Qiliang Yuan <odys.yuan@gmail.com>
->
+Make check_huge() check windows below the PMD size, route every caller
+through it, and make is_range_backed_by_order() an internal of vm_util.c.
+The split test's count-based check goes the same way, which also makes
+it notice a split at the wrong offset.  On the way check_huge() stops
+reopening pagemap and kpageflags on every call, which was the other
+reason the separate helper existed.
+
+Yeoreum's HPAGE_SIZE series [2] renames read_pmd_pagesize() to
+pmd_psize(); the only overlap is the one call in __check_huge().
+
+Tested on mm-new 2589c5593c20 with KASAN, in 16G guests, x86-64/4K under
+KVM and arm64/64K under TCG: the khugepaged matrix at every order,
+split_huge_page_test, pagemap_ioctl and khugepaged all:all on tmpfs pass
+with the same counts as before.
+
+v2:
+ - Drop the PMD size caching from patch 1; Yeoreum's series caches it in
+   pmd_psize() (Zi)
+ - folio_order_check: skip again when /proc/kpageflags is not readable
+   (Sashiko)
+ - kpageflags_fd_get(): return early instead of nesting the open
+
+v1: https://lore.kernel.org/all/20260929131521.153079-1-kirill@shutemov.name/
+
+[1] https://lore.kernel.org/all/65bf1722-c1fd-452a-88c1-c030b042cfbc@linux.alibaba.com/
+[2] https://lore.kernel.org/all/20261009-fix_hpage_macro-v5-0-54378ae45add@arm.com/
+
+Kiryl Shutsemau (Meta) (4):
+  selftests/mm: open pagemap and kpageflags once for check_huge()
+  selftests/mm: check sub-PMD ranges window by window in check_huge()
+  selftests/mm: check collapse results through check_huge() only
+  selftests/mm: check split results by position, drop
+    gather_folio_orders()
+
+ .../testing/selftests/mm/folio_order_check.c  |  29 +-
+ tools/testing/selftests/mm/khugepaged.c       |  47 ++-
+ .../selftests/mm/khugepaged_sync_check.c      |   7 +-
+ .../selftests/mm/split_huge_page_test.c       | 104 +++---
+ tools/testing/selftests/mm/vm_util.c          | 314 ++++++------------
+ tools/testing/selftests/mm/vm_util.h          |   7 +-
+ 6 files changed, 173 insertions(+), 335 deletions(-)
+
+Range-diff against v1:
+1:  887d475288bf ! 1:  058de2172bde selftests/mm: open pagemap and kpageflags once for check_huge()
+    @@ Commit message
+         selftests/mm: open pagemap and kpageflags once for check_huge()
+     
+         check_huge_anon() and check_huge_file() open /proc/self/pagemap and
+    -    /proc/kpageflags on every call and read the PMD size from sysfs on top.
+    -    The khugepaged test calls them hundreds of times.
+    +    /proc/kpageflags on every call.  The khugepaged test calls them hundreds
+    +    of times.
+     
+         Open both once and keep the descriptors.  A pagemap descriptor is tied
+         to the mm of the process that opened it, and the khugepaged fork() cases
+         call check_huge() from the child, so reopen it when getpid() changes.
+     
+    -    Cache the PMD size in read_pmd_pagesize() as well.
+    -
+         Assisted-by: LLM
+         Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+     
+    @@ tools/testing/selftests/mm/vm_util.c
+     +{
+     +	static int fd = -1;
+     +
+    -+	if (fd < 0) {
+    -+		fd = open(KPAGEFLAGS_PATH, O_RDONLY);
+    -+		if (fd < 0)
+    -+			ksft_exit_fail_msg("open kpageflags fail\n");
+    -+	}
+    ++	if (fd >= 0)
+    ++		return fd;
+    ++
+    ++	fd = open(KPAGEFLAGS_PATH, O_RDONLY);
+    ++	if (fd < 0)
+    ++		ksft_exit_fail_msg("open kpageflags fail\n");
+     +
+     +	return fd;
+     +}
+    @@ tools/testing/selftests/mm/vm_util.c
+      uint64_t pagemap_get_entry(int fd, char *start)
+      {
+      	const unsigned long pfn = (unsigned long)start / getpagesize();
+    -@@ tools/testing/selftests/mm/vm_util.c: bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len)
+    - 
+    - uint64_t read_pmd_pagesize(void)
+    - {
+    -+	static uint64_t pmd_pagesize;
+    - 	int fd;
+    - 	char buf[20];
+    - 	ssize_t num_read;
+    - 
+    -+	if (pmd_pagesize)
+    -+		return pmd_pagesize;
+    -+
+    - 	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
+    - 	if (fd == -1)
+    - 		return 0;
+    -@@ tools/testing/selftests/mm/vm_util.c: uint64_t read_pmd_pagesize(void)
+    - 	buf[num_read] = '\0';
+    - 	close(fd);
+    - 
+    --	return strtoul(buf, NULL, 10);
+    -+	pmd_pagesize = strtoul(buf, NULL, 10);
+    -+	return pmd_pagesize;
+    - }
+    - 
+    - unsigned long rss_anon(void)
+     @@ tools/testing/selftests/mm/vm_util.c: static bool check_huge_type(uint64_t categories, enum check_huge_type type)
+      static bool __check_huge(void *addr, size_t len, int nr_hpages,
+      		uint64_t hpage_size, enum check_huge_type type)
+2:  e89550a21307 = 2:  a95eb5e9e2c8 selftests/mm: check sub-PMD ranges window by window in check_huge()
+3:  3988e8ff5c3b ! 3:  40aa2e377b65 selftests/mm: check collapse results through check_huge() only
+    @@ tools/testing/selftests/mm/folio_order_check.c: int main(void)
+     -	kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
+     -	if (kpageflags_fd < 0)
+     -		ksft_exit_skip("open(/proc/kpageflags) requires root\n");
+    --
+    ++	if (access("/proc/kpageflags", R_OK))
+    ++		ksft_exit_skip("/proc/kpageflags requires root\n");
+    + 
+      	orders = thp_supported_orders();
+      	if (!orders)
+    - 		ksft_exit_skip("No supported THP orders\n");
+     
+      ## tools/testing/selftests/mm/khugepaged.c ##
+     @@ tools/testing/selftests/mm/khugepaged.c: static int collapse_order;
+4:  898256c09252 = 4:  405414814409 selftests/mm: check split results by position, drop gather_folio_orders()
+
+base-commit: 2589c5593c200e5146db848730baa1d7dd0c9f4e
+-- 
+2.54.0
+
