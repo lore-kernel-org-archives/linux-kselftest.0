@@ -1,166 +1,107 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CE83B0595
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 18:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CC213A258;
+	Fri,  9 Oct 2026 20:10:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791572358; cv=none; b=WKNzfxack9yEQG1rJdwlaekF19W52RuljUxN9k3ye/VNhtUEmZhJtOHvcRKkYkkWE9TgXrw4g4Jm7Q82m9U3dIs4XXA8KR1ExQ14Q9Po9QjJ/0YCogOhiEjuCZP0hbsIdaf/z88MZ1dnkIQMxPY7Ul+t6PYmSNO2/OvtG3MOmgQ=
+	t=1791576611; cv=none; b=jVftPSZPBioCrVbIcXfknHFrsbi/dIaJi03IlyJFv9XZNzM8my2dS6B8WAhU3lOFsaO0Ma2rAPwsiIbHdJKfDkY8RYQfdFBNvIF0Ln1gjaoxUWMR0cU31X8TZLWQZ92mcryIfFKBSslaxZ9c5HndaU068RA+JLM93obrY5YyyDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791572358; c=relaxed/simple;
-	bh=MUwT80gOWfAvuW29q252L7dGK6/yoX9ij9iHwsuwjqE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ikIlIOsQM/tBbKNnP2dEXjGKw1P8oerZr0+3/njC+07HTHhnfNm4IDK4MCSyl2sx7jieLxyrLn0hTuksc15tRqeD86PAS4PTg2gst/D1OzfIUGOe+I6wP8s86kxbeoWXLyAazGSiXzx2ZiSq/GABXTCZVKDxIiOnD0W4s0lD2z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gs3oe+qs; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791576611; c=relaxed/simple;
+	bh=fdXBHBKBGOWZYHxGmnNehDYrYDgodaAYcpW8x1x9m4M=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=f2u/9bMESyAM/oy8wygSOPHO4Yhwkc0pGXpL1+lBfeG/4zNjHfcC1+MgOolNtiNPO0AhVGA0o17RGPFBOyz6ax9v4xxinM0TfxkIASnDr6GuVktbPzmVdKhFlutqrlcUtREPtcSskxHR89UouMKydsMnhOFOf8vczgO60a+lcLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KuW/M6N/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gs3oe+qs"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a1688d7769so1453015e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 11:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791572355; x=1792177155; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=pJrTXNnvNyxoPy6a05idwZooJz9oMMxcUiIT8xGCw0Y=;
-        b=Gs3oe+qsaAo6Qyb+uYz8NIy2rJdxahxKqbuXgczFYkOCY/Ta/j7CweECUa6PHIr4UH
-         CDzGNqMOibkOXYfbhSDtAL6hIXjDj4yBbm/tIKvFRjyRNSC6iK0Un2Z8NwNoF0IkNPJe
-         s+Q6qwLB6smocAz9Lpq7CvG+OrSmMSN/IigspZv5Cl5/82BNpLv+mkQU4tOhIoN4cxhP
-         LgJhYWNQyTD3vLPlOr+EAt2Yp8liPhI1VH6ZVEnFQK4c4JUf+dwpfYYU1yia5A34O7Cf
-         9DCmbiYJyWF9Em9gtkOkpEFW/G+ib+tIt+kiA3zbFEz4mCK0yMH+thWieK+osjleSYPS
-         E7yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791572355; x=1792177155;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pJrTXNnvNyxoPy6a05idwZooJz9oMMxcUiIT8xGCw0Y=;
-        b=QlY3Z1s3RvMqroCAZgfsucLouRJqaPJajI2TqFy4q2o6xfr9gvP7jONZQDuB2Zd1m9
-         J0RxOoAt3VzH3pkyJRvyCPgYr7lmzBuHPZsIKNkvpgCgo0+ZzeBFLMFbmNGy769MgNiY
-         yg4h/jrEbkyQSDzSNJghpsnp0QOuoVnzHDQR94vnkqLKLy+sA10zWmSnoyMCJrbbuaYH
-         yhr1p7fzXMmx8brfxXBq/7RUr3O7sy3PpTlN3rVxvIRVFZFDayGrFf8glGvac2hThYV4
-         0VOADACnF5heQgk+owiIh+mT2MttnjQoRDIMx1iLzEq1ZYSOrT2JVzrfjod+5h31CT4w
-         S1Aw==
-X-Forwarded-Encrypted: i=1; AKwUvBzHvc7mNzgrMg4W87vP7z+IpBz5m+NFi7cBOxjyEJPxYBSliQPYiXL0aFkz+dJ4i9KXIAi+e7txnDDU4jMV6IU=@vger.kernel.org
-X-Gm-Message-State: AFuF++lHu9M2eYG5x0yBmX2PWvz/dnXsNYDPU/3QmoJiDGEBAA6Vh+QF
-	8pYSOyLxGSta74C9ZzU55mLkJhkpNCxVdgt5FaWwNrq8hG4YmmNZXlax
-X-Gm-Gg: AYBFou3gESb6f7Ezz7461TgzaXCLcgfZ5wVr8ghRPY66h5XCCa0VPIon1JpcumxRVEv
-	Lx1Cfm/+raUMyRj5UjXbzpaD/zNbgpKVuZmWoHmvmYf4bF8aOI45XQZOGco10unds1X8HDZw/o3
-	cmcPbp0jV67HUi7DNOmYrEsxE6spE3D2p4T6iG4Mrh42nspRLFHhNyhWUUgnkzxYYOO7GjcewFq
-	AKeN+nWeUJe7+EbPSlBKT6kTtHTNGTXNbWx94YFrPf7mew5Edr4Jxk2oBXunVPu5eshIOLrU33j
-	tOFJ3fKLdZ4jS9IOPa5CEDY78SV/NxtzUwNpW/jQFM9KFPFfIYhC1GQJiO61MVkKIs7xLh1ugyz
-	w7IFifBsJsucIW2Um/U2orTv2G5KHmRGSZ9shMdwn51ZGzcezogkZxtg+BtWz8I1G2J9SaohZ4I
-	heyf7/a/c10g3QOwpMi98vGlm6ceNM8zXevDNkDlHWy73wUja/cyZWYQhrZDxdJRwZYrEfBLvPB
-	IvBFw4iiNYnnSiN5Pz75fE9and8XsrQATUuIKPoluMwlKGTND/6asR+D+SQ/bwYekGo0puPPP2O
-	bEwMrGWBAWljMwJw6Kl3Q7yuqH+LZoXwWnJsC/QIj346Kbz7D+oM0BwvMYkIaBOU85qiPjcV0ao
-	kuA==
-X-Received: by 2002:a05:600c:8708:b0:4a1:7b05:3a6d with SMTP id 5b1f17b1804b1-4a18e49881amr52257515e9.8.1791572355206;
-        Fri, 09 Oct 2026 11:59:15 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a02-3100-a128-aa01-297a-7094-853e-a20c.310.pool.telefonica.de. [2a02:3100:a128:aa01:297a:7094:853e:a20c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18bf21276sm122222075e9.8.2026.10.09.11.59.13
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 09 Oct 2026 11:59:14 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	palmer@dabbelt.com,
-	pjw@kernel.org,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	linux-riscv@lists.infradead.org,
-	oleg@redhat.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mark.rutland@arm.com,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	acme@kernel.org,
-	namhyung@kernel.org,
-	alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org,
-	irogers@google.com,
-	adrian.hunter@intel.com,
-	james.clark@linaro.org,
-	jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	shuah@kernel.org,
-	mpdesouza@suse.com,
-	oliver.yang@linux.alibaba.com,
-	zhuo.song@linux.alibaba.com,
-	jkchen@linux.alibaba.com,
-	martin@kaiser.cx,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 5/7] riscv: stacktrace: switch to frame-pointer based unwinder
-Date: Fri,  9 Oct 2026 20:59:04 +0200
-Message-Id: <20261009185904.82385-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20260914092648.51254-6-xueshuai@linux.alibaba.com>
-References: <20260914092648.51254-1-xueshuai@linux.alibaba.com> <20260914092648.51254-6-xueshuai@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KuW/M6N/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 823791F000FF;
+	Fri,  9 Oct 2026 20:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791576609;
+	bh=yAtT7Kz/cfBbECexhY2+7vMzFYjycFt1jV6uHWCe2qk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=KuW/M6N/Jv+w8fSTI5MzC+c9uyJsMxvbGXsObHMBwAHcv9THa/zJNw6bKJbAShw+b
+	 vo4r+Bin+QhP33tm/lxugoPH+tlrxXLdYq2PXG7LEpA8Rm9PbrObKEo3J/22umLOmX
+	 J6pW9AV0n+1Rxc3sdTw6eUmSMMhezq88f+/bVbtCbHU/q8rg1HMrSuZtly5bTfvCrJ
+	 pzuTkS+Nrg7nULbEPCcKpx2psI1+uWR2olv7EEwBAOUR5dHGgbiJfCwi+Dye3uNTnl
+	 3VNLX/ZtnUsgaetwYGolyY055wcRD0nTv6z49gmPJl4Lm2lABU1cDz45QS71EshN6x
+	 G/tZjYSKsz6Tg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7742D392627A;
+	Fri,  9 Oct 2026 20:10:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v8 00/11] riscv: hwprobe: Expose RVA23U64 base behavior
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <179157660809.984023.2184718764665109991.git-patchwork-notify@kernel.org>
+Date: Fri, 09 Oct 2026 20:10:08 +0000
+References: <20260920-rva23u64-hwprobe-v2-v8-0-5f14bc5c23d3@oss.qualcomm.com>
+In-Reply-To: <20260920-rva23u64-hwprobe-v2-v8-0-5f14bc5c23d3@oss.qualcomm.com>
+To: Guodong Xu <guodong.xu@oss.qualcomm.com>
+Cc: linux-riscv@lists.infradead.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, pjw@kernel.org, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu, alex@ghiti.fr, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, dlan@kernel.org, chen.wang@linux.dev,
+ inochiama@gmail.com, rdunlap@infradead.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, paul.walmsley@sifive.com, conor@kernel.org,
+ devicetree@vger.kernel.org, spacemit@lists.linux.dev, sophgo@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, tchiu@tenstorrent.com, fweimer@redhat.com,
+ bergner@oss.tenstorrent.com, zihong.plct@isrc.iscas.ac.cn,
+ mark.hsj@gmail.com, aurelien@aurel32.net, andrew.jones@oss.qualcomm.com,
+ conor.dooley@microchip.com, qingwei.hu@bytedance.com
 
-On Mon, Sep 14, 2026 at 05:26:46PM +0800, Shuai Xue wrote:
-> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
-> +				      void *cookie, struct task_struct *task,
-> +				      struct pt_regs *regs)
-> +{
-> +	struct kunwind_consume_entry_data data = {
-> +		.consume_entry = consume_entry,
-> +		.cookie = cookie,
-> +	};
-> +
-> +	kunwind_stack_walk(arch_kunwind_consume_entry, &data, task, regs);
-> +}
+Hello:
 
-Hi Shuai Xue,
+This series was applied to riscv/linux.git (for-next)
+by Paul Walmsley <pjw@kernel.org>:
 
-With this patch and FRAME_POINTER enabled, return_address() returns the
-caller one level further up than asked for.
+On Sun, 20 Sep 2026 03:18:20 -0400 you wrote:
+> This series builds on Andrew Jones's earlier RFC [1]. It lets userspace
+> check for RVA23U64 conformance in one call, instead of walking hwprobe +
+> prctl across every mandatory extension.
+> 
+> The series adds a small framework that resolves profile-class bases (IMA
+> and RVA23U64) from the kernel's ISA extension bitmap at init time, and
+> surfaces the result through both /proc/cpuinfo and hwprobe. Later patches
+> can add RVA23S64, and backward RVA22 / RVA20 detection, to
+> riscv_set_isa_bases() without changes to the surrounding code.
+> 
+> [...]
 
-return_address() in arch/riscv/kernel/return_address.c skips level + 3
-entries from arch_stack_walk(). The arm64 original skips level + 2. The
-third entry exists on mainline because the walk starts inside
-walk_stackframe() and first reports the return into arch_stack_walk().
-With 5/7 the walk starts at the caller of arch_stack_walk(), so
-level + 3 now skips a real caller. CALLER_ADDR1 and up are built on
-return_address(). The irqsoff tracer and the preemptirq tracepoints use
-them.
+Here is the summary with links:
+  - [v8,01/11] riscv: Add B to hwcap and hwprobe
+    https://git.kernel.org/riscv/c/fbab8abaac8f
+  - [v8,02/11] dt-bindings: riscv: Require block-size for Zicbom, Zicbop, and Zicboz
+    https://git.kernel.org/riscv/c/40623184c6f0
+  - [v8,03/11] dt-bindings: riscv: Add Zic64b extension description
+    https://git.kernel.org/riscv/c/3776fb1a1b6c
+  - [v8,04/11] riscv: Add Zic64b to cpufeature and hwprobe
+    https://git.kernel.org/riscv/c/7493567982b0
+  - [v8,05/11] riscv: dts: spacemit: k3: Add Zic64b ISA extension
+    https://git.kernel.org/riscv/c/7c4752c60f99
+  - [v8,06/11] riscv: dts: spacemit: k1: Add Zic64b ISA extension
+    https://git.kernel.org/riscv/c/1fc72ff0d3fc
+  - [v8,07/11] riscv: dts: sophgo: sg2044: Add Zic64b ISA extension
+    https://git.kernel.org/riscv/c/ca0c312bdf6a
+  - [v8,08/11] riscv: Add a getter for user PMLEN support
+    https://git.kernel.org/riscv/c/55458c7347a3
+  - [v8,09/11] riscv: cpufeature: Introduce ISA bases bitmap and rva23u64 detection
+    (no matching commit)
+  - [v8,10/11] riscv: cpu: Output isa bases lines in cpuinfo
+    (no matching commit)
+  - [v8,11/11] riscv: hwprobe: Introduce rva23u64 base behavior
+    (no matching commit)
 
-A KUnit test that calls ftrace_return_address() from
-leaf() <- middle() <- outer() <- check() returns:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-             af32da41b032   with series   with series, level + 2
-  level 0    middle         outer         middle
-  level 1    outer          check         outer
 
-The change to level + 2 has to depend on FRAME_POINTER. Without it the
-series keeps walk_stackframe() and the result is the same as on
-mainline. There, level + 2 makes return_address(0) return an address
-inside return_address().
-
-The same extra entry makes stack_trace_save() start one frame too early
-on mainline. 5/7 fixes that. I have a small fix for it on mainline,
-meant for stable kernels, which conflicts with 5/7. I would post it with
-you in Cc. Tell me if you would rather take the return_address.c change
-into 5/7 first.
-
-Tested with clang 22 and the series applied on 52318cf0fa6e. The
-"with series" column is the same on QEMU's virt machine and on a
-BeagleV Ahead (TH1520). Everything else ran on QEMU only.
-
-Karl
