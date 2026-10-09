@@ -1,126 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6E84E2F08;
-	Fri,  9 Oct 2026 15:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D6A4A5EAC
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 16:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791560706; cv=none; b=tqzWRDxrF0eWrNuou3QlhOP4eM9SHtEi8HsZe3vwrjBXL2WYc7wZyuGB9iQD4MwDN3rb9A1QSL/9q7+w12kms4ziaH+WWd4JVefT2LmhRGKHzHnwdwrq5TTftX1PpuP7DgroiblX9ZVZrdOu2fdEiG3OQvSaZHmcbf51G9Uril8=
+	t=1791561636; cv=none; b=l1lLEQ5C6qZHFtYbXW+MFKMSNT/uANPm2w4XP8q357rac1Uv/4UiANg2QlBUK4T48OhouQ56OuKwQ5htrV2UkIm0agZBu2t/HzW3fMydnyr+a6BtqM5iDwzVCEF8Yzk2lMd7eB8KXrzj02ZFOUA5tmo4ezc4g9SsVVN4kfJi7wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791560706; c=relaxed/simple;
-	bh=fip7VI4RxW9/THSoP5eEW65d5uAQ6PqFRVmadq9QyHw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BZFq8mJ1Hen75zExY2vka4MEUlBWQ6CEfkNHWpIF8+DcNyY3Yx9KzQT1sBw+hp8dq3CWEikLAkaoVSVlwAPBaytLk2bngZm/hW8+pOMpmf0JZBO3nMw54Kr3/AJnDQi/dfjnokNmTGddDCN3QMFpQ4J348LsuEFOJgD254P4qgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LeaELG5H; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1791561636; c=relaxed/simple;
+	bh=prfqxOhc9/KEoCJbfH19gTOOaJtyx7cKCyhJIMnt3H4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uConTzbxPVpAtE33UEEDJbLuJQVe54Wqqe4CVPqlvudaqK6A5e+/iUjWsXfj9yCG8seQbfXnY1etTnbfjWY3UAkzAyUida/qPQb9IxhLAJPDq/Fmor4PTwIfQxhN+oIlZBySNC2uO9KgRIdUdQUVz/5BzKdy3z56IW/iAavSj4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KdojuEWO; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LeaELG5H"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791560704; x=1823096704;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fip7VI4RxW9/THSoP5eEW65d5uAQ6PqFRVmadq9QyHw=;
-  b=LeaELG5HqD5C45GTEwIGUeKa7tdiq/7beayme/OjPhdpYjT5ZpI3OTyM
-   itDqdMPkUyTCnhG9tpU+LzKfz47vbwVUTGk2ioyyiRJ5J4zAe+N8X+rie
-   X3fW9qsaWL6TyduI8SazMY85WLjdO2pSCXSDmVHtUlk/M7ZxgaRK2bDs2
-   TpgB90jN4GuZh2jMT9xl/hdpADthMRAzvtSeOwdBmZy+vsr7uwWFEI3nL
-   6VTVNNuc3vi3oXK8d0zNOa9VULA2jlJzoTn6fWkUlAVL4YMycnBsmi5W8
-   D0zEViE8+bYhb2d4RbV240yR+o5Dh89Fg62/TDHE40aIviFYOhFKwluti
-   A==;
-X-CSE-ConnectionGUID: oG0CQMdNS8+yJpRqHCQFGw==
-X-CSE-MsgGUID: +EBQLUsASO2hViRPV+7+VA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="388998"
-X-IronPort-AV: E=Sophos;i="6.27,148,1787036400"; 
-   d="scan'208";a="388998"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 08:45:03 -0700
-X-CSE-ConnectionGUID: smsCV1cITQ6LLOV8QsS1Jg==
-X-CSE-MsgGUID: W+Z4XyD8SM+BeJqhZDz0Rg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,148,1787036400"; 
-   d="scan'208";a="461742"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.119]) ([10.124.240.119])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 08:44:57 -0700
-Message-ID: <7ca516ea-a931-4497-b3c8-b62110ae006a@intel.com>
-Date: Fri, 9 Oct 2026 23:44:55 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KdojuEWO"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e836252e1dso10461755ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 09:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791561634; x=1792166434; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=sYMwquPepbBZtWu4fIneDCAF+onJ2y2Mb34SckVYi9s=;
+        b=KdojuEWO+eMRfYf859UhmDlNR27LQW5za+WNR8LIJ2s9XEUnuqSddXnLvAktQT45sU
+         0R5GSbEsMyfhqHGtTojydhsgLr3PiHPNtz+2P6mKRU6RtNE0LpAv3kOEtAhz0bijj/NH
+         uc5GYDF3W5aKneraqT1svC59XKuvxdvNqtJ9ZE95pHUN734vij5B8ki14xtiAtkWh5S9
+         QREL3Zw5zLQSlz+NcjimkYTFba+djGYexL9FUczTb3MUkrHuRFrvjE/wIvy7GEaPnGYs
+         /UUjPh81r55tF0p/KZq/e0sq88jz4Z8ar52jlXLClz5LkN5ueqnGzrRSyCpqGAjY4iZF
+         27ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791561634; x=1792166434;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=sYMwquPepbBZtWu4fIneDCAF+onJ2y2Mb34SckVYi9s=;
+        b=qgs2za919AJBRyW4wWL8mRs9kIzAIzta4VEtV0OPny3uKny0Me1DZMd/MnUtH+MtXM
+         2FIZWv4GcaW1SelDs3fTB4zCCEqTpN6rrCKO++P3RPhO+0BiONLpn/L+d4RV7wTpzWsC
+         PrYPknR8BNKmgldD7zcWGWILoZH7gOU1+UY4P6qUQSwh/+QPJMTSJbfrF7pTgJ9gOPVk
+         MhEJHBtXQlMb5zMf6tSQSBnNlJL4CVShydpfKgJsQ3MncNvEorUmUCNGfdfbkzYCYZH1
+         V3j0HKphYJyHZSFKOZ3YjiUOxLQBzxSmpa/IVLeOjMm2afcHOSqYAs1ja+28eQbxeeXu
+         SaAA==
+X-Forwarded-Encrypted: i=1; AKwUvBy3krl/DEV65D3ZFOECnxJHAyzkOu/Aw4HU/zz18qVLL5jfDeiKu35U/5pjfJCg62myXo+r6+04PBpSQNEd+Oc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKIB5Ue8a08lxqZju65JInahe1M7sY4PUn5JEldiKj79ovNYfgq
+	mT3zkQZlIx9VNYn0MBDhx4d7LQ6uzxZo8KFTtwZOgcXZIlCsDJE2pGCI
+X-Gm-Gg: AYBFou33WT0XNM7bvaGeheaYbMA/OoxaAjjH7gY1CGRfY2UymgwaU7Th8l+gAmp939y
+	c3pXHWeMH0YzOg22qMeuhHJbBtqdbVoc0tg4+5K46LwmTkqYtIEuZHSViIQj6mxAmsdjXvenX1c
+	7CeNyMpm0Z7MnhYlQFZ7zJny1vW7KdTlkggqMVaxxWn9y1qKPIip2iBmOuwk2fY5cryTMd6v96d
+	epVogUV5DIw4vx2q3IpH7cfSw+Qxo9ijnf83iSYPKMBqYiSpFzZOJC5g4DnJxsyN2CEtBdn11iY
+	dJZA5YpUrn72bAEmI3Q7YkXwXrdIzn8gBmYsk+EPa69hjai+IpQfIQyPDxQFQbap82xUtP8Gdmj
+	J522x9UaWJGkDMrs+ccB01p5WqaA/NZbH91capDxu1RDOTnP1atc7RvhHIeMKh2U56HY0z5o9XK
+	PbBzyDUyfZEHDpl6qpzWYNJoi54whKwLIzLvd6vXcfg0tS3d1EgaHGYS2ewubnJ49ijWfEcmQO7
+	lfMK5AuoAL0wXWvE7ep3vqL/FQNnE0cyuDUN7qb
+X-Received: by 2002:a17:902:f541:b0:2dd:ad73:c938 with SMTP id d9443c01a7336-2e842abebd7mr21168645ad.25.1791561634324;
+        Fri, 09 Oct 2026 09:00:34 -0700 (PDT)
+Received: from kernel.tail6741c6.ts.net ([216.195.201.24])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e8422b8cb6sm12333235ad.60.2026.10.09.09.00.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 09:00:33 -0700 (PDT)
+From: Kunwu Chan <kunwu.chan@gmail.com>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org
+Cc: sj@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	rdunlap@infradead.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org,
+	akpm@linux-foundation.org,
+	lianux.mm@gmail.com,
+	kunwu.chan@gmail.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/5] perf/core: add AUX buffer kernel-consumer API
+Date: Fri,  9 Oct 2026 23:59:47 +0800
+Message-ID: <20261009160010.1829642-1-kunwu.chan@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 11/23] KVM: selftests: Set shared attributes for ucall
- guest_memfd pages
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
- <20261001-tdx-selftests-v15-11-7c62a5d8a992@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20261001-tdx-selftests-v15-11-7c62a5d8a992@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/2/2026 3:37 AM, Lisa Wang wrote:
-> The default attributes for guest_memfd pages without in-place conversion
-> is private. 
+ARM SPE and other tracing PMUs write records directly to perf AUX
+buffers.  Unlike ordinary sampling PMUs, they do not necessarily
+generate a perf_event_overflow() callback for each record.  A kernel
+consumer therefore needs to drain the AUX buffer directly.
 
-This is wrong. The default memory attribute is of a @gfn is shared without
-in-place conversion, i.e., with per-vm memory attribute.
+Userspace allocates AUX buffers through perf_event_open() and mmap().
+Kernel consumers created through perf_event_create_kernel_counter()
+currently lack an equivalent interface.
 
-We don't need this patch actually. And I have tested with reverting this patch,
-with both out of place conversion and in-place conversion. Both worked.
+This series adds perf-core APIs for kernel consumers to allocate and
+release AUX buffers, read the producer head, copy trace data, and
+advance the consumer tail.  The APIs keep perf's internal page layout
+private and follow the existing non-overwrite AUX ring-buffer
+protocol.  Setup and release serialize buffer attachment and
+detachment through event->mmap_mutex; consumers must quiesce before
+releasing the buffer.
 
-> However, the ucall pages need to be shared between the host
-> and the guest. Thus, set them as shared.
-> 
-> Signed-off-by: Lisa Wang <wyihan@google.com>
-> ---
->  tools/testing/selftests/kvm/lib/ucall_common.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-> index 029ce21f9f2f..c03dfc763172 100644
-> --- a/tools/testing/selftests/kvm/lib/ucall_common.c
-> +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-> @@ -27,6 +27,7 @@ static struct ucall_header *ucall_pool;
->  
->  void ucall_init(struct kvm_vm *vm, gpa_t mmio_gpa)
->  {
-> +	struct userspace_mem_region *region;
->  	struct ucall_header *hdr;
->  	struct ucall *uc;
->  	gva_t gva;
-> @@ -37,6 +38,13 @@ void ucall_init(struct kvm_vm *vm, gpa_t mmio_gpa)
->  	hdr = (struct ucall_header *)addr_gva2hva(vm, gva);
->  	memset(hdr, 0, sizeof(*hdr));
->  
-> +	region = vm_get_mem_region(vm, MEM_REGION_DATA);
-> +	if (region->region.flags & KVM_MEM_GUEST_MEMFD) {
-> +		size_t aligned_sz = align_up(sizeof(*hdr), vm->page_size);
-> +
-> +		vm_mem_set_shared(vm, addr_gva2gpa(vm, gva), aligned_sz);
-> +	}
-> +
->  	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
->  		uc = &hdr->ucalls[i];
->  		uc->hva = uc;
-> 
+Patches 1-2 add the ownership, lifecycle, and access APIs.  Patches
+3-5 add KUnit tests, a userspace AUX regression test, and a selftest
+script.  The first consumer is a DAMON ARM SPE backend, but this
+series is independent of DAMON and adds no consumer-specific policy
+to perf.
+
+Testing
+=======
+
+The series builds cleanly at each step.
+
+arm64 (Kunpeng 920, 256 CPUs, SPEv1.1): built and booted the Image
+from this series.  KUnit: pass:39 fail:0 skip:0.  The arm_spe_0
+userspace regression test passed, and the AUX head advanced under
+live SPE traffic.  Selftest script: 92 passed, 0 failed, 2 skipped.
+perf record with arm_spe_0 captured data; dmesg showed no warnings.
+
+x86_64 (vmlinux build, qemu/kvm): KUnit pass:39 fail:0 skip:0,
+including KASAN and lockdep (PROVE_LOCKING); 15 repeated boots
+produced no splats.  The Intel PT userspace regression test passed.
+
+Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
+
+Changes since v1 [2]:
+
+- Fix double-release in KUnit error cleanup and make the coexistence
+  test cleanup failure-safe.
+- Make failure-sensitive userspace test outcomes report SKIP rather
+  than PASS, read the AUX head after event disable to observe flushed
+  trace data, and pass the PMU name from the script to the C test.
+- Fix the selftest script exit-status handling, remove the
+  /usr/src/linux fallback, and handle Intel PT event modifiers.
+- Remove an unnecessary smp_rmb() from the tail update path.
+
+Changes since RFC [1]:
+
+- Serialize AUX teardown under event->mmap_mutex and fix lifetime
+  handling around ring_buffer_attach().
+- Improve KUnit cleanup and concurrent-release coverage.
+- Extend userspace and selftest coverage.
+- Document AUX lifecycle, ordering, and cursor validation.
+
+[1] https://lore.kernel.org/linux-perf-users/20260814144927.489172-1-kunwu.chan@linux.dev/
+[2] https://lore.kernel.org/all/20261004173458.837842-1-kunwu.chan@gmail.com/
+
+
+Kunwu Chan (3):
+  perf/core: add AUX buffer ownership for kernel events
+  perf/core: add AUX ring accessors for kernel consumers
+  selftests/perf_events: add AUX kernel API selftest script
+
+Lian Wang (2):
+  perf/core: add KUnit tests for AUX kernel-consumer API
+  selftests/perf_events: add userspace AUX regression test
+
+ .../userspace-api/perf_ring_buffer.rst        |   62 +-
+ include/linux/perf_event.h                    |   18 +
+ kernel/events/Makefile                        |    1 +
+ kernel/events/aux_kernel_test.c               | 1172 +++++++++++++++++
+ kernel/events/core.c                          |  164 +++
+ kernel/events/internal.h                      |    6 +
+ kernel/events/ring_buffer.c                   |  212 ++-
+ lib/Kconfig.debug                             |   14 +
+ tools/testing/selftests/perf_events/Makefile  |    2 +
+ .../selftests/perf_events/aux_kernel.sh       |  635 +++++++++
+ .../perf_events/aux_kernel_usermode.c         |  645 +++++++++
+ tools/testing/selftests/perf_events/config    |    2 +
+ 12 files changed, 2928 insertions(+), 5 deletions(-)
+ create mode 100644 kernel/events/aux_kernel_test.c
+ create mode 100755 tools/testing/selftests/perf_events/aux_kernel.sh
+ create mode 100644 tools/testing/selftests/perf_events/aux_kernel_usermode.c
+
+
+base-commit: 6350de8671b94afb7691d110f63bcda42f658a69
+-- 
+2.43.0
 
