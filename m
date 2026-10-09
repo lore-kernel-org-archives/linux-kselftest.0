@@ -1,109 +1,354 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m4920.qiye.163.com (mail-m4920.qiye.163.com [45.254.49.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738A03B582F
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 14:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E0534D3BE;
+	Fri,  9 Oct 2026 14:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791556670; cv=none; b=A+wdvso5yLQ7B6mQRjlpcbn+MfKJEUyqN80DYVQi3QlMOnSMbiqLGOjNcWDn1BuF2NEyJuxLgJUHZgNEJ4uX4SF38LnpED06w2aIF3s6rWRJLXCcIvfqXn9ac4OdHAqPqKGKNzi0CQYFjDji/0kLzOLctt2H2QrIFK6qewkRf5w=
+	t=1791557572; cv=none; b=gX/xGIFTrf6MEF9OIdoKnXp0Xc7ZNBUN94x8JANfFh8A1Ay+mgvyZ3dn7fQa568Is48y4+B5Sg/WdgKY9s2n7LpYMfwSYOtAQ58qMoL1fKytq+y/RYny1KpzJoCC4qb+d1Sb0kJ6l9OBgWIZ8rS3HOHRBmx9lP6YarS3z4IGDAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791556670; c=relaxed/simple;
-	bh=p1F8safINLCSBZ9wkY6CcuBdKpiRtmwSdSx4OkzmuDc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=GuG3CdBTfdyPHD8NDj0xMaRMl8uskU1Xjua180vTZ20GkYNlgmA6Ls10JVw0K485+etDINdIqfBSbf8o/3klt/4yIs6Zw+Ch8gCOjjalBJoOp0y2O1xfcGCiOhsF8FcmDShG69xpM6SCUk1YWcd1Tb8Shb0OQu2QS8Hm+mXKp6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=osYILKjJ; arc=none smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="osYILKjJ"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-14394530ec6so4354686c88.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 07:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791556668; x=1792161468; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=h9da5zk0GHj2rwz2lfan29dlM/wk/e0PgyHn2IrcmKk=;
-        b=osYILKjJnqtc0TkJ88vYBKZzNr9hTIkvA63C9nZnyMdxiK+zfxashWq0tcUZvasZKY
-         kuISinulQXkq+rOjFEk4POY3fAN4MeRQf4ek0ERdJPlbJQepFBlq5nBVd1xYXFW481Mc
-         BcNKx0VnuDOWSxjdPJtd64Ggo6eBSwJ28g8JPzny6x9rkuCMF9g0F26QjTlk1VSILKgC
-         DxJ1kQ3+9P4f7vlLVYvw3aG15OBhuC4Iovyn7LteW4NZgr1rMW+6Mpm1odD0hI6vAVeo
-         0Rc9ZRlFe4PMQbrVNCkIoknQfZyusGKvLRhwZqDMXoUvfxBvTuazkMC+UHc7hHsPWtTy
-         dIvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791556668; x=1792161468;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=h9da5zk0GHj2rwz2lfan29dlM/wk/e0PgyHn2IrcmKk=;
-        b=vrJjJ48evHiKMaVzr4u4syKcl81Dcq++IB/paRLCr900luVxA5wZrDYJeq5IXwuEzX
-         bip+3Xm7MZQXK9cgsZ4uadVlB+G1652WQ8HuDJBYv6kno3Q16ns3DvliYzIiVwmPPDsI
-         2b/RC0HHABlmko8ZGrmABVYXvBFLDQ6hDdPUd0sPSSF+p+wZPIGgBoguUHkg7fPKZbgK
-         On/en+ZARSHMYZKYOHj1nkrP0SpNJXyADAASOd21f4Qh5WdnuqpdgeCgKzBlwHQFKIbA
-         hMIhWCLOTNGBk7yoV9uyBTjsGBsb6LZBLieocoJME8V7yAU3KVzRxRtE/rLdpe9B/e01
-         CmlA==
-X-Forwarded-Encrypted: i=1; AKwUvBw1KSs/eYmtMwLI2+q2QCXKQssLJLncgLWgh+pMHuwDKYM/VKYcU47d24xhonQfwv4ankNLQRIhgKzr2qQqZgk=@vger.kernel.org
-X-Gm-Message-State: AFuF++mSMKojYCkHYt3tRrhn/rHG7sLk6H61NITsCOm0Mhws8J6dE5TU
-	7wdnI+l5nkDFOFbChtQzcyxcRwFSqstXiGl4/DdfjEStDB9ETo3nDA3U48IJID1OvKw=
-X-Gm-Gg: AYBFou1P10zi7tySPAJOUJ3RQgAu6kYj5qXVyuPZmiX/2HzNbMGTJFJh/PMej9pUfhL
-	oTtZ8ngKJRQeJkSOWUaxTB7ynRRoQzgdOLC0nsdjDFCIF2IL8VlpkVpYPyKiXw6v4s9VLKwGXUt
-	RPFqYutwuqadUi8tU2/LrdXqJ/Lm8WPy7OHJC6sBthi0ObMOBTJvSs8ADvyDmIJMwI/i//maWvd
-	3JeBvZyZLXa1I+nnmudstMBE6jbbSezlS4m+fC13uaUXpXKW/YAgbKgXFva02UZea3+aTNpAn6A
-	h4idgphY5HR00VOuC0dFDcuv0r4hVCy+5R8DM9pvE/zxnT09QBEr6COqKFQ9iMShO2p/URxa97T
-	lYYOfU3J1i9cgyjdPNK17FzpVq4M8OZ6lesIY0608HP+uCMd2F/CyktwrrkRWXrW0zX8oORNCuv
-	9vq9Ra31O7j4osJxouhGxjJi6+XTBHsDPiDYmZiKfqgdxfFKl9A5O8/WH6PMdTsgaepA/l+3qVZ
-	Edfc4oTMUivv5eI5axFYbSXe2BfFOJhDphi7kGmj1SVwvSOhGOpr409jBIuZ6W55yGPXYtTWdwH
-	NitOztE+Vw==
-X-Received: by 2002:a05:7022:7f10:b0:143:3c9f:10a6 with SMTP id a92af1059eb24-16a57734472mr2827175c88.4.1791556668232;
-        Fri, 09 Oct 2026 07:37:48 -0700 (PDT)
-Received: from xps16.local ([155.98.132.5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-169a2d2db98sm6603150c88.10.2026.10.09.07.37.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 07:37:46 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: Ming Lei <tom.leiming@gmail.com>, Shuah Khan <shuah@kernel.org>, 
- Uday Shankar <ushankar@purestorage.com>, Qiliang Yuan <odys.yuan@gmail.com>
-Cc: Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20261008-bug-ublk-selftest-fault-inject-delay-v1-0-a96af7ead06e@gmail.com>
-References: <20261008-bug-ublk-selftest-fault-inject-delay-v1-0-a96af7ead06e@gmail.com>
-Subject: Re: [PATCH 0/2] selftests: ublk: fix the fault_inject delay
-Message-Id: <179155666606.221695.3172868322177231667.b4-ty@b4>
-Date: Fri, 09 Oct 2026 08:37:46 -0600
+	s=arc-20240116; t=1791557572; c=relaxed/simple;
+	bh=sA/DsWao9GwTHZp1eDTeWcxf7HKsdYenxCEWajcGEu0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YnimbbQFQ/xJOrLUI2D7W9XcnvsXUkdCO979SgnQIQHNRU9594vGTchwojGyRkjTSuWFw/f00VMkTzNBN5S9UuSl+IBy61KMQZfNyn54bf2B9ypR8+hhZ/qtc98RShxDgS9pxQJ42aGmCqCBcv/Z/BgSWihz6k2eZFhCRuamlaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=45.254.49.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from localhost.localdomain (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1fe2901a0;
+	Fri, 9 Oct 2026 19:23:27 +0800 (GMT+08:00)
+From: Zhen Ni <zhen.ni@easystack.cn>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	akpm@linux-foundation.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	brendan.jackman@linux.dev,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhen Ni <zhen.ni@easystack.cn>
+Subject: [PATCH 2/6] mm/page_owner: add bpf_iter target "page_owner"
+Date: Fri,  9 Oct 2026 19:23:04 +0800
+Message-Id: <20261009112308.240769-3-zhen.ni@easystack.cn>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20261009112308.240769-1-zhen.ni@easystack.cn>
+References: <20261009112308.240769-1-zhen.ni@easystack.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa120675c160229kunmd33b3e054cb27e
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDTx5KVhlDT0wYTE5DHklNSFYVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
+	lPT09IVUpLS1VKQktLWQY+
 
+Register a bpf_iter target "page_owner" that walks the pages eligible
+for page_owner output, with the same eligibility rules as the
+/sys/kernel/debug/page_owner read path.
 
-On Thu, 08 Oct 2026 22:45:38 +0800, Qiliang Yuan wrote:
-> The delay set by --delay_us on the fault_inject target is lost in two
-> ways. Its timespec is read after it has gone out of scope, which makes
-> generic_06 fail, and any other completion on the ring ends it early when
-> more than one I/O is in flight. Patch 1 keeps the timespec alive until
-> the SQE is submitted, and patch 2 makes the delay a pure timeout.
-> 
-> With both patches, a 1 s delay holds every I/O for 1.000 s at queue
-> depth 4.
-> 
-> [...]
+For each eligible page the attached BPF program receives the pfn, the
+page and the page_owner record, and can freely filter and format output.
 
-Applied, thanks!
+The po_snap record in the scan cursor is taken inside the page_ext
+RCU window and handed to the BPF program as a copy, so no RCU window
+is needed at consumption time. Torn reads remain possible if the
+record is concurrently updated while it is copied, but this is the
+same best-effort behavior as the read path has always had.
 
-[1/2] selftests: ublk: don't keep the fault_inject timespec on the stack
-      commit: 955cba87d9ed334fbe0b669b35b4abcddd7f9929
-[2/2] selftests: ublk: make the fault_inject delay a pure timeout
-      commit: 69ae59173a5668d015ab2733c8628ed542f00ccc
+The target is registered from pageowner_init() when both
+CONFIG_PAGE_OWNER and CONFIG_BPF_SYSCALL are enabled; a registration
+failure only disables the bpf_iter target.
 
-Best regards,
+Userspace tools such as bpftrace can attach to this target like any
+other bpf_iter. For example, to count pages owned by init (pid 1):
+
+    bpftrace -e 'iter:page_owner / ctx->po->pid == 1 / { @ = count(); }'
+
+Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
+---
+ mm/Makefile          |   3 ++
+ mm/page_owner.c      |  33 +++---------
+ mm/page_owner.h      |  48 ++++++++++++++++++
+ mm/page_owner_iter.c | 116 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 174 insertions(+), 26 deletions(-)
+ create mode 100644 mm/page_owner.h
+ create mode 100644 mm/page_owner_iter.c
+
+diff --git a/mm/Makefile b/mm/Makefile
+index e7245cb88c66..d7307b5a964c 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -115,6 +115,9 @@ obj-$(CONFIG_DEBUG_KMEMLEAK) += kmemleak.o
+ obj-$(CONFIG_DEBUG_RODATA_TEST) += rodata_test.o
+ obj-$(CONFIG_DEBUG_VM_PGTABLE) += debug_vm_pgtable.o
+ obj-$(CONFIG_PAGE_OWNER) += page_owner.o
++ifdef CONFIG_BPF_SYSCALL
++obj-$(CONFIG_PAGE_OWNER) += page_owner_iter.o
++endif
+ obj-$(CONFIG_MEMORY_ISOLATION) += page_isolation.o
+ obj-$(CONFIG_ZSMALLOC)	+= zsmalloc.o
+ obj-$(CONFIG_GENERIC_EARLY_IOREMAP) += early_ioremap.o
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index bafe474f3360..eb420803a434 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -14,6 +14,7 @@
+ #include <linux/sched/clock.h>
+ 
+ #include "page_alloc.h"
++#include "page_owner.h"
+ 
+ /*
+  * TODO: teach PAGE_OWNER_STACK_DEPTH (__dump_page_owner and save_stack)
+@@ -21,31 +22,6 @@
+  */
+ #define PAGE_OWNER_STACK_DEPTH (16)
+ 
+-struct page_owner {
+-	unsigned short order;
+-	short last_migrate_reason;
+-	gfp_t gfp_mask;
+-	depot_stack_handle_t handle;
+-	depot_stack_handle_t free_handle;
+-	u64 ts_nsec;
+-	u64 free_ts_nsec;
+-	char comm[TASK_COMM_LEN];
+-	pid_t pid;
+-	pid_t tgid;
+-	pid_t free_pid;
+-	pid_t free_tgid;
+-};
+-
+-/*
+- * Cursor and per-page result of page_owner_next_eligible().
+- */
+-struct page_owner_scan {
+-	/* resume point */
+-	unsigned long pfn;
+-	struct page *page;
+-	struct page_owner po_snap;
+-};
+-
+ struct stack {
+ 	struct stack_record *stack_record;
+ 	struct stack *next;
+@@ -741,7 +717,7 @@ void __dump_page_owner(const struct page *page)
+  * must advance scan->pfn past the hit before calling again to resume
+  * the scan.
+  */
+-static bool page_owner_next_eligible(struct page_owner_scan *scan)
++bool page_owner_next_eligible(struct page_owner_scan *scan)
+ {
+ 	unsigned long pfn = scan->pfn;
+ 
+@@ -1196,6 +1172,11 @@ static int __init pageowner_init(void)
+ 			    &stack_fops);
+ 	debugfs_create_file("count_threshold", 0600, dir, NULL,
+ 			    &threshold_fops);
++
++#ifdef CONFIG_BPF_SYSCALL
++	if (page_owner_iter_register())
++		pr_warn("page_owner: failed to register bpf_iter target\n");
++#endif
+ 	return 0;
+ }
+ late_initcall(pageowner_init)
+diff --git a/mm/page_owner.h b/mm/page_owner.h
+new file mode 100644
+index 000000000000..fda83be69275
+--- /dev/null
++++ b/mm/page_owner.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * mm/ internal page_owner and page_owner_iter declarations
++ */
++
++#ifndef __MM_PAGE_OWNER_H
++#define __MM_PAGE_OWNER_H
++
++#include <linux/page_ext.h>
++#include <linux/sched.h>
++#include <linux/stackdepot.h>
++
++/*
++ * mm/page_owner.c
++ */
++struct page_owner {
++	unsigned short order;
++	short last_migrate_reason;
++	gfp_t gfp_mask;
++	depot_stack_handle_t handle;
++	depot_stack_handle_t free_handle;
++	u64 ts_nsec;
++	u64 free_ts_nsec;
++	char comm[TASK_COMM_LEN];
++	pid_t pid;
++	pid_t tgid;
++	pid_t free_pid;
++	pid_t free_tgid;
++};
++
++/*
++ * Cursor and per-page result of page_owner_next_eligible().
++ */
++struct page_owner_scan {
++	/* resume point */
++	unsigned long pfn;
++	struct page *page;
++	struct page_owner po_snap;
++};
++
++bool page_owner_next_eligible(struct page_owner_scan *scan);
++
++/*
++ * mm/page_owner_iter.c
++ */
++int page_owner_iter_register(void);
++
++#endif /* __MM_PAGE_OWNER_H */
+diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
+new file mode 100644
+index 000000000000..33dc9dcd59de
+--- /dev/null
++++ b/mm/page_owner_iter.c
+@@ -0,0 +1,116 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <linux/btf_ids.h>
++#include <linux/memblock.h>
++#include <linux/mm.h>
++#include <linux/seq_file.h>
++
++#include "page_owner.h"
++
++struct bpf_iter__page_owner {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct page *, page);
++	__bpf_md_ptr(struct page_owner *, po);
++	u64 pfn;
++};
++
++DEFINE_BPF_ITER_FUNC(page_owner, struct bpf_iter_meta *meta,
++		     struct page *page, struct page_owner *po, u64 pfn)
++
++static void *page_owner_seq_start(struct seq_file *seq, loff_t *posp)
++{
++	struct page_owner_scan *scan = seq->private;
++
++	if (*posp == 0)
++		scan->pfn = min_low_pfn;
++	else
++		scan->pfn++;
++
++	if (!page_owner_next_eligible(scan))
++		return NULL;
++	return scan->page;
++}
++
++static void *page_owner_seq_next(struct seq_file *seq, void *v, loff_t *posp)
++{
++	struct page_owner_scan *scan = seq->private;
++
++	++*posp;
++	scan->pfn++;
++	if (!page_owner_next_eligible(scan))
++		return NULL;
++
++	return scan->page;
++}
++
++static void page_owner_seq_stop(struct seq_file *seq, void *v)
++{
++}
++
++static int page_owner_prog_seq_show(struct bpf_prog *prog,
++				    struct bpf_iter_meta *meta, void *v)
++{
++	struct page_owner_scan *scan = meta->seq->private;
++	struct bpf_iter__page_owner ctx;
++
++	/* @po: hit-time snapshot, no RCU window needed. */
++	ctx.meta = meta;
++	ctx.page = (struct page *)v;
++	ctx.po = &scan->po_snap;
++	ctx.pfn = scan->pfn;
++
++	return bpf_iter_run_prog(prog, &ctx);
++}
++
++static int page_owner_seq_show(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++
++	meta.seq = seq;
++	prog = bpf_iter_get_info(&meta, false);
++	if (!prog)
++		return 0;
++
++	return page_owner_prog_seq_show(prog, &meta, v);
++}
++
++static const struct seq_operations page_owner_iter_seq_ops = {
++	.start	= page_owner_seq_start,
++	.next	= page_owner_seq_next,
++	.stop	= page_owner_seq_stop,
++	.show	= page_owner_seq_show,
++};
++
++static const struct bpf_iter_seq_info page_owner_iter_seq_info = {
++	.seq_ops		= &page_owner_iter_seq_ops,
++	.init_seq_private	= NULL,
++	.fini_seq_private	= NULL,
++	.seq_priv_size		= sizeof(struct page_owner_scan),
++};
++
++static struct bpf_iter_reg page_owner_iter_reg_info = {
++	.target			= "page_owner",
++	.ctx_arg_info_size	= 2,
++	.ctx_arg_info		= {
++		{ offsetof(struct bpf_iter__page_owner, page),
++		  PTR_TO_BTF_ID_OR_NULL },
++		{ offsetof(struct bpf_iter__page_owner, po),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
++	.seq_info		= &page_owner_iter_seq_info,
++};
++
++BTF_ID_LIST(page_owner_btf_ids)
++BTF_ID(struct, page)
++BTF_ID(struct, page_owner)
++
++int page_owner_iter_register(void)
++{
++	page_owner_iter_reg_info.ctx_arg_info[0].btf_id =
++		page_owner_btf_ids[0];
++	page_owner_iter_reg_info.ctx_arg_info[1].btf_id =
++		page_owner_btf_ids[1];
++
++	return bpf_iter_reg_target(&page_owner_iter_reg_info);
++}
 -- 
-Jens Axboe
-
-
+2.20.1
 
