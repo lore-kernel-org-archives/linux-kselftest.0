@@ -1,307 +1,128 @@
-Received: from mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339E635E1B0
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 06:26:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DDB3BB113;
+	Fri,  9 Oct 2026 06:55:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791527223; cv=none; b=jVVViQOcyVDiV0RHMJgir9L8GtCu4J2Yl9TvLCdAtZGnppasoKBqcJ3MGFEvTIab1f58P+oteGi99IQF90NdsAWKEXFF3aZlJYiSbvZSgxnT1N+sNGHb9l1/+ksPzbS1loQLdgTf0M/nOv/WZUC4sSnnAwgydFILqxDd322n2ro=
+	t=1791528943; cv=none; b=NH2FXGQNvuVMG5LYUNeIGWX+08dW1uWtG56juY5RZoE9tw6snrOorhqbyBVYYmdIXYNaOHl7d8che2miT9bV5GWr+hjQczUKLTyuPwwQxzAhs0lRzO83gN1Gzz4U4cStCWYQEHdNTzo7xyHeiOQz5dD5xhUDonxofiXxIWDXvb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791527223; c=relaxed/simple;
-	bh=4J2Oujq0h9Tdxh5Fs82Gko1VDMQdbho/Ty/hsMPCfKU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YciMLtHKXtoKke5L37CO5sgodb/iOEw9A8eCX9xb7NRUKwppNPOALvD1GFCYqeAdL7KqIo6Gz0fx5RsjHMY7DKwBOID1hsZBSmPkeqWWy4TF/dioXmeVR4Ofg/PsGYlYmJ2J48dodXCry+PguK6zJOVZfCd3ZuAZHg/6etl0fzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LMklH/zs; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791528943; c=relaxed/simple;
+	bh=TFly4YRi98bd3xcBpu6fw8QMIpY1nTYbC6E/AtorbGU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SN4+/NwHrxNmDaCDqpC0WDPjT6Q1nVKGkhHFh9vEBiwbQksdFaJ9YfB+CrAE2M9RPiz62VCjoXU/nDmuIwnmmBhsx9NsaToG7pAJkxEMQxvrypLC11wXuFUZkOzM22/pM8vu6yBttbnXVu16Xhau/Y3RddEVSjbidD8lXwQaJ+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=ireJgISA; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LMklH/zs"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=4J2Oujq0h9Tdxh5Fs82Gko1VDMQdbho/Ty/hsMPCfKU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791527217; v=1; x=1792132017;
- b=LMklH/zs2AewPti66CHbdlRmVAfSRS9XoIxpBqCNyNjEm0KeJhGzLORrXNop/6mC9xmqkFYD
- WeTydWE+U/YYzx4aMIOVjASDXFg4jX5hYj0ZS+4j3FLwRQ/kOzqjleyuBVewuxxJ0Q+y0wwwyi0
- O1VPy1bn91hpCpuY8buxvy1M=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 04d29327fff06515;
-	Fri, 09 Oct 2026 06:26:57 +0000
-X-Mizu-Trace-ID: 04d29327fff06515
-X-Migadu-Flow: FLOW_OUT
-From: Hui Zhu <hui.zhu@linux.dev>
-To: Roman Gushchin <roman.gushchin@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Barry Song <baohua@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next v4] selftests/bpf: Add bpf_proactive_reclaim test
-Date: Fri,  9 Oct 2026 14:26:37 +0800
-Message-ID: <20261009062637.176005-1-hui.zhu@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="ireJgISA"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
+	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=/rQu8tiHfx3yHjUrmgq/27APde4aL0+gwH1XMh/5v+0=; t=1791528939;
+	x=1792133739; b=ireJgISAmrIyQOyZKO6WijSlyeTiZ2/cMyhQYXVO1bw6HQPc8i7j3HnS4GT5W
+	T+YqcTlbwWT4c/5tflu3tZgfXyXRIugmw1hQVayZyFgpsHmNbpX5c6KzrtAfN3nPQecDh4iclV2Pn
+	eqiMofWSOPNXKlZ9uOBSRYGwYFJmOa1rEcKi/UlOQlkTUEu/GWM1fTpsrz+ROHcmfEbr/Yfzqrtm8
+	sZHkP2sGckKWLBGpGQhLluGRltL+sHEmVg+q6nS47ujPg+6aKf3uYq+EKOrgcUiQqghRWex2BBKNI
+	CXiJCTICMiQ8pNdZXaShNPp9KAHgofidT0OfyYYSpgoKoJDgLw==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.100)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1xF4Vu-00000000TCp-0DF8; Fri, 09 Oct 2026 08:55:30 +0200
+Received: from p5b13a90a.dip0.t-ipconnect.de ([91.19.169.10] helo=suse-laptop.fritz.box)
+          by inpost2.zedat.fu-berlin.de (Exim 4.100)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1xF4Vt-00000002Msd-3Pis; Fri, 09 Oct 2026 08:55:29 +0200
+Message-ID: <b9870d3274294bc7207de5637b29e55c125f6ffc.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v2 0/2] sparc64: add seccomp filter support
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Andreas Larsson <andreas@gaisler.com>, Stian Halseth <stian@itx.no>, 
+ "David S . Miller"	 <davem@davemloft.net>, Kees Cook <kees@kernel.org>,
+ sparclinux@vger.kernel.org
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+ Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
+Date: Fri, 09 Oct 2026 08:55:28 +0200
+In-Reply-To: <f32e114c-718f-46d7-9388-fdc5c382ddaa@gaisler.com>
+References: <20260902072745.3412940-1-stian@itx.no>
+	 <f32e114c-718f-46d7-9388-fdc5c382ddaa@gaisler.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-From: Hui Zhu <zhuhui@kylinos.cn>
+Hi Andreas,
 
-bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
-unlike a write to memory.reclaim, does not retry until the goal is
-reached.
+On Wed, 2026-10-07 at 08:14 +0200, Andreas Larsson wrote:
+> On 2026-09-02 09:27, Stian Halseth wrote:
+> > This adds SECCOMP_FILTER support for sparc64.
+> >=20
+> > The arch prerequisites have been in place for years, so patch 1 is
+> > mostly about the missing piece: letting seccomp veto a syscall, and
+> > returning to user space with the return value the seccomp core set in
+> > pt_regs rather than the -ENOSYS the assembler stubs used to force on
+> > any denied syscall.  Patch 2 teaches the seccomp_bpf selftest to
+> > drive sparc64's registers.
+> >=20
+> > Tested on an UltraSPARC T4-1 (sun4v):
+> >=20
+> >   - tools/testing/selftests/seccomp/seccomp_bpf: 95 passed, 0 failed,
+> >     16 skipped (uprobes and other optional features)
+> >   - libseccomp with its pending SPARC support (libseccomp PR #471)
+> >     passes its full suite, 5190 of 5190, including the live tests
+> >     that require kernel SECCOMP_FILTER
+> >   - docker containers run confined by the default profile, and a
+> >     custom SCMP_ACT_ERRNO profile denies as expected
+> >=20
+> > The libseccomp side is https://github.com/seccomp/libseccomp/pull/471,
+> > and the tracking issue is https://github.com/sparclinux/issues/issues/1=
+1.
+> >=20
+> > v2: drop the local regs-struct definition in the selftest in favour of
+> >     PTRACE_GETREGS64/PTRACE_SETREGS64 and the uapi struct pt_regs
+> >     (Kees Cook); patch 1 unchanged.
+> >=20
+> > Stian Halseth (2):
+> >   sparc64: add seccomp filter support
+> >   selftests/seccomp: add sparc64 support
+> >=20
+> >  arch/sparc/Kconfig                            |  2 +-
+> >  arch/sparc/include/asm/seccomp.h              | 15 ++++++++
+> >  arch/sparc/include/asm/syscall.h              | 11 +++---
+> >  arch/sparc/kernel/entry.h                     |  2 +-
+> >  arch/sparc/kernel/ptrace_64.c                 | 28 ++++++++++-----
+> >  arch/sparc/kernel/syscalls.S                  | 28 +++++++++++----
+> >  tools/testing/selftests/seccomp/seccomp_bpf.c | 36 +++++++++++++++++++=
++
+> >  7 files changed, 99 insertions(+), 23 deletions(-)
+> >=20
+>=20
+> Looks good to me, and selftests runs fine for me as well. Thanks! We have=
+ a soon
+> incoming patch set adding support for sparc32 as well on top of this.
+>=20
+> Kees, are you ok with the selftest changes being taken through my tree?
 
-Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
-and check that the result is positive but well below the request: one
-pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
-4K and 64K page kernels.
+I think it should be safe to take the tests through your tree although
+it would be nice if Kees could ack the changes.
 
-The test deliberately covers only the kfunc itself. A full example of
-the intended asynchronous use, where a BPF program watches one cgroup's
-workingset refaults and reclaims another one from bpf_wq callbacks, is
-maintained out of tree at [1], released under GPLv2.
+Adrian
 
-Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.c
-is not built at all.
-
-[1] https://github.com/teawater/memcg-async-reclaim
-
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
----
-Changelog:
-v4:
-According to the comment of Barry, test skips instead of failing on a
-read-only mount.
-v3:
-According to the comment of Barry, use write() + fsync() to charge the
-page cache instead of ftruncate() + read().
-According to the comment of AI, skip instead of fail when no regular
-filesystem is available for the workload file.
-v2:
-According to the comment of Alexei, remove the samples/bpf sample patch.
-Ship it out-of-tree as a standalone project.
-
- tools/testing/selftests/bpf/config            |   1 +
- .../bpf/prog_tests/memcg_proactive_reclaim.c  | 130 ++++++++++++++++++
- .../bpf/progs/memcg_proactive_reclaim.c       |  34 +++++
- 3 files changed, 165 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
-
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 2b883b388f90..5621ef94ad7e 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -57,6 +57,7 @@ CONFIG_LIRC=y
- CONFIG_LIVEPATCH=y
- CONFIG_LWTUNNEL=y
- CONFIG_LWTUNNEL_BPF=y
-+CONFIG_MEMCG=y
- CONFIG_MODULE_SIG=y
- CONFIG_MODULE_SRCVERSION_ALL=y
- CONFIG_MODULE_UNLOAD=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-new file mode 100644
-index 000000000000..c22dcfabe856
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-@@ -0,0 +1,130 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <limits.h>
-+#include <linux/magic.h>
-+#include <sys/statfs.h>
-+#include <unistd.h>
-+
-+#include "cgroup_helpers.h"
-+#include "memcg_proactive_reclaim.skel.h"
-+
-+#define CG_PATH "/memcg_proactive_reclaim"
-+
-+/*
-+ * Large enough that a single reclaim pass cannot come close to it, so that
-+ * "reclaimed less than was asked for" is not page-size noise: one pass is
-+ * capped at MEMCG_CHARGE_BATCH pages, which is 256 KiB on 4K pages but 4 MiB
-+ * on 64K pages.
-+ */
-+#define FILE_SIZE (32 * 1024 * 1024UL)
-+#define BUF_SIZE (64 * 1024)
-+
-+struct reclaim_args {
-+	__u64 cgroup_id;
-+	__u64 size;
-+};
-+
-+/*
-+ * The data file has to sit on a writable regular filesystem: tmpfs pages are
-+ * charged as shmem, so whether they can be reclaimed at all depends on swap
-+ * being available, and a read-only mount cannot host the file at all (EROFS
-+ * applies to root too). /tmp is tmpfs on many systems, and test_progs is
-+ * routinely run from a tmpfs working directory, so both candidates need the
-+ * check.
-+ */
-+static const char *workload_dir(void)
-+{
-+	static const char * const dirs[] = { "/tmp", "." };
-+	struct statfs st;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(dirs); i++)
-+		if (!statfs(dirs[i], &st) && st.f_type != TMPFS_MAGIC &&
-+		    st.f_type != RAMFS_MAGIC && !access(dirs[i], W_OK))
-+			return dirs[i];
-+
-+	return NULL;
-+}
-+
-+void test_memcg_proactive_reclaim(void)
-+{
-+	struct memcg_proactive_reclaim *skel = NULL;
-+	struct reclaim_args args = {};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, opts,
-+		    .ctx_in = &args,
-+		    .ctx_size_in = sizeof(args));
-+
-+	char data_file[PATH_MAX];
-+	static char buf[BUF_SIZE];
-+	__u64 cgroup_id;
-+	const char *dir;
-+	off_t off;
-+	int cg_fd = -1, data_fd = -1, err;
-+
-+	/*
-+	 * Both candidate directories can be unusable: tmpfs (initramfs-based
-+	 * CI, for instance) or a read-only mount. That is an environment
-+	 * limitation, not a test failure.
-+	 */
-+	dir = workload_dir();
-+	if (!dir) {
-+		test__skip();
-+		return;
-+	}
-+
-+	snprintf(data_file, sizeof(data_file),
-+		 "%s/memcg_proactive_reclaim_XXXXXX", dir);
-+	data_fd = mkstemp(data_file);
-+	if (!ASSERT_GE(data_fd, 0, "mkstemp"))
-+		return;
-+
-+	cg_fd = cgroup_setup_and_join(CG_PATH);
-+	if (!ASSERT_OK_FD(cg_fd, "cgroup_setup_and_join"))
-+		goto out;
-+
-+	cgroup_id = get_cgroup_id(CG_PATH);
-+	if (!ASSERT_GT(cgroup_id, 0, "get_cgroup_id"))
-+		goto out;
-+
-+	skel = memcg_proactive_reclaim__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto out;
-+
-+	/* Charge FILE_SIZE of clean page cache to the cgroup. */
-+	for (off = 0; off < (off_t)FILE_SIZE; off += sizeof(buf))
-+		if (!ASSERT_EQ(write(data_fd, buf, sizeof(buf)),
-+			       (ssize_t)sizeof(buf), "write"))
-+			goto out;
-+	if (!ASSERT_OK(fsync(data_fd), "fsync"))
-+		goto out;
-+
-+	args.cgroup_id = cgroup_id;
-+	args.size = FILE_SIZE;
-+	skel->bss->reclaimed = 0;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.memcg_proactive_reclaim),
-+				     &opts);
-+	if (!ASSERT_OK(err, "test_run"))
-+		goto out;
-+	if (!ASSERT_EQ(opts.retval, 0, "retval"))
-+		goto out;
-+
-+	/*
-+	 * A single call is a single bounded pass: it reclaims something, but
-+	 * stops well short of the requested size instead of retrying until the
-+	 * goal is reached the way a write to memory.reclaim does.
-+	 */
-+	ASSERT_GT(skel->bss->reclaimed, 0, "reclaimed");
-+	ASSERT_LT(skel->bss->reclaimed, (__s64)FILE_SIZE, "single pass");
-+
-+out:
-+	if (skel)
-+		memcg_proactive_reclaim__destroy(skel);
-+	if (cg_fd >= 0)
-+		close(cg_fd);
-+	if (data_fd >= 0) {
-+		close(data_fd);
-+		unlink(data_file);
-+	}
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
-new file mode 100644
-index 000000000000..b551192526fc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct reclaim_args {
-+	__u64 cgroup_id;
-+	__u64 size;
-+};
-+
-+/* Signed, because bpf_test_run_opts.retval is a __u32. */
-+__s64 reclaimed;
-+
-+SEC("syscall")
-+int memcg_proactive_reclaim(struct reclaim_args *ctx)
-+{
-+	struct mem_cgroup *memcg;
-+	struct cgroup *cgrp;
-+
-+	cgrp = bpf_cgroup_from_id(ctx->cgroup_id);
-+	if (!cgrp)
-+		return 0;
-+
-+	memcg = bpf_get_mem_cgroup(&cgrp->self);
-+	if (memcg) {
-+		reclaimed = bpf_proactive_reclaim(memcg, ctx->size, -1);
-+		bpf_put_mem_cgroup(memcg);
-+	}
-+	bpf_cgroup_release(cgrp);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
