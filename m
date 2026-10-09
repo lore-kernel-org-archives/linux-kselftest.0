@@ -1,35 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CC213A258;
-	Fri,  9 Oct 2026 20:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C08484222
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2026 20:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791576611; cv=none; b=jVftPSZPBioCrVbIcXfknHFrsbi/dIaJi03IlyJFv9XZNzM8my2dS6B8WAhU3lOFsaO0Ma2rAPwsiIbHdJKfDkY8RYQfdFBNvIF0Ln1gjaoxUWMR0cU31X8TZLWQZ92mcryIfFKBSslaxZ9c5HndaU068RA+JLM93obrY5YyyDU=
+	t=1791576812; cv=none; b=V3Z6YcCO5H9X4Hh411mVNXGo+3YzUrlyDPG964JhDZv9Qz4uIu8mfDDQFmCc36j+5ou7SO1mOyZBrNWMHCIUcS1CP09BrmzjAfjDRZlBuI/AMR6pS43vkPjuD2nO+LgMdW0kzcIaSGvvqqZdti25CkznR7e7TPpm0O89rF+QqBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791576611; c=relaxed/simple;
-	bh=fdXBHBKBGOWZYHxGmnNehDYrYDgodaAYcpW8x1x9m4M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=f2u/9bMESyAM/oy8wygSOPHO4Yhwkc0pGXpL1+lBfeG/4zNjHfcC1+MgOolNtiNPO0AhVGA0o17RGPFBOyz6ax9v4xxinM0TfxkIASnDr6GuVktbPzmVdKhFlutqrlcUtREPtcSskxHR89UouMKydsMnhOFOf8vczgO60a+lcLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KuW/M6N/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791576812; c=relaxed/simple;
+	bh=VBVCzL78Ra13MLbQJJF8TciSUPmNnFPCNfvbXK94TbQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PQ1fxb4An8bNOeEJ7zPlf+fx9WXGL7V7BeQw5C8sgOsUY52ISKm+ZwW+Ei/Gc4SWCR9yCsxDpw0LkC5osNrD3Ob2YoysSrD8ahEetWvrXnVL28tN4Faa6WmM32sQHdTuzw52jFVWtsWz7W3v5iIeBbIHUJE9v4BktJD2/AYKhus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H1/iwbJN; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KuW/M6N/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 823791F000FF;
-	Fri,  9 Oct 2026 20:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791576609;
-	bh=yAtT7Kz/cfBbECexhY2+7vMzFYjycFt1jV6uHWCe2qk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=KuW/M6N/Jv+w8fSTI5MzC+c9uyJsMxvbGXsObHMBwAHcv9THa/zJNw6bKJbAShw+b
-	 vo4r+Bin+QhP33tm/lxugoPH+tlrxXLdYq2PXG7LEpA8Rm9PbrObKEo3J/22umLOmX
-	 J6pW9AV0n+1Rxc3sdTw6eUmSMMhezq88f+/bVbtCbHU/q8rg1HMrSuZtly5bTfvCrJ
-	 pzuTkS+Nrg7nULbEPCcKpx2psI1+uWR2olv7EEwBAOUR5dHGgbiJfCwi+Dye3uNTnl
-	 3VNLX/ZtnUsgaetwYGolyY055wcRD0nTv6z49gmPJl4Lm2lABU1cDz45QS71EshN6x
-	 G/tZjYSKsz6Tg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7742D392627A;
-	Fri,  9 Oct 2026 20:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H1/iwbJN"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a16d39964bso192675e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 13:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791576808; x=1792181608; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6c98E3bQDB/GO0f+bN2P00CEjl+2+qvBif5l3vTdniU=;
+        b=H1/iwbJNg2TfAAn2+qNLuo2m9LEqLr/Vhxp0uO2WHc9PWl5G3ABJO5iqZYOIt6awXY
+         BFteL5NPRtRdewYm7H+/9yvRK68F6jX8a7SwYMBfe1mciWRGbtL9pIzdP3WyAjooWOXE
+         kbb2qE3V96hGcg0zD//pP/xhaFQ9oZdGNfoxDdwRESLJFlf/KcglmQKoNv6IVpWM68H0
+         u1lCy7JECa2FCl0d8ydWj229KZNsHpc7qVc3/TQGOvkOjrX5AX5vMItl48pUS0TwrnnM
+         hASi+qjsAt1K1Rwg5adiBvoGX3YoLa7Vykmj0vWaIPHKmFiAI8yuYxljtYkqF5gJu9kc
+         iFyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791576808; x=1792181608;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6c98E3bQDB/GO0f+bN2P00CEjl+2+qvBif5l3vTdniU=;
+        b=W6sOVA7Vt6aLqRWN0t6ivCy1xZGQk4KBAG8GPBlUUg8XLHsYX6+2FU15ssc6XYT09P
+         dywCkfdSR23r4ODhKq3V4waCRNzaJ+XulDHNS+y9AkLAyI14NQpHwloGgWwRkLGTMRQo
+         0cDXQYXx01qNblpZCtJU3/orj5888JkM1V61DWWX/h/sRu8v9rfP7vHbuaZlRlJjQrSr
+         EZPNwCtLLPmdorb07S4ESfZKa+1eHJwn9GtrU3QI/dILmsKw88s4/oaOABCEC4hqRpvy
+         3yDhAeH5yDM8B1gi3KJPTRTOsLlsOgBnIPGyPiyVt5pxDneDs01rJCt8g6qjGmmLf1vW
+         KaVw==
+X-Forwarded-Encrypted: i=1; AKwUvBzqt/ToNsR/K+ud+NMs8nMFhNruBamOPA3qKod34dUxM+dxKQ1o1RKVK37Ty2oROU4OdtbuIqd6rCN09Qtd22Q=@vger.kernel.org
+X-Gm-Message-State: AFuF++n21xGxDjiykvigbAxtjwHij/Cq9VtKICzBjHaUAxfJ38spIvtY
+	x7i0Phm7VxB94B9whdKnyNXDktD47q9/KcbOei6TGnzhEmHByx/cUUCE
+X-Gm-Gg: AYBFou199xI+1rSH8agnZtQL9piSwcx6/NrHJLvfTaBdwwCYRiOGo1Glo/OW7UAqEZF
+	lr6qlh+/K9eg0alGJ1l1OfljKpKwAV9OtWoqb26P6+kajtxVChLBO1HFLWRvSQV/DT2mPcMdQ21
+	Nzo0c0rnG0UWnlYZJhJBl5LdUSn0ml/8cJkCOTcAgwPrWwAQ+11002kEe0vgtveWnif1CATj9e5
+	fU30cUPHVX0IVamnzbPGbDdB0x1bHaKb9ki5ApWNj8t56sAHfd4ikN3kFdKNjmE4Oif8TA4a45r
+	/waDrkWYInmaIvXYD+h62nelE69EyOy7WLtLZGqvw4Y+HDOz4V2elN8kIxk5ry0NcIHYxL38l5w
+	d4FSiHST+rF0OCGoOahGhwrDBp7SK4/tTcgG9k69grYcADiil30ZsUMyPJolvR5ejfDT1p0vsZ0
+	hL6679A9J2YKv96KYX32CUaIfZdc2833sXzQUf8OT1Ge42AyfmaD//PMYgCZwYS5mzVyGn8Cq3T
+	w8lsgdYmTMS8iP3EvCVlhJA27TCr/w78nDm9DR75MccCflcLrA/F+R49n0u0dwHyHwnm+ta9MQq
+	yoR8m5RdNZVchSXudsXXCDd1Ux5Q+oG/9n9GgNRZXMk=
+X-Received: by 2002:a05:600c:4e04:b0:4a1:8dc1:7a4e with SMTP id 5b1f17b1804b1-4a18e47d752mr55640965e9.2.1791576807953;
+        Fri, 09 Oct 2026 13:13:27 -0700 (PDT)
+Received: from L-022584.energy.envision.com (dynamic-093-130-185-162.93.130.pool.telefonica.de. [93.130.185.162])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18d12fe04sm47053065e9.4.2026.10.09.13.13.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 13:13:26 -0700 (PDT)
+From: Xin Xie <xiexinet@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	shuah@kernel.org,
+	kees@kernel.org,
+	petr.wozniak@gmail.com,
+	qingfang.deng@linux.dev,
+	fmaurer@redhat.com,
+	luka.gejak@linux.dev,
+	bigeasy@linutronix.de,
+	xiaoliang.yang_1@nxp.com,
+	skhawaja@google.com,
+	liuhangbin@gmail.com,
+	stable@vger.kernel.org,
+	sdf.kernel@gmail.com,
+	xiexinet@gmail.com
+Subject: [PATCH net v7 0/4] net: hsr: fix super-packet forwarding and ordering
+Date: Fri,  9 Oct 2026 22:13:20 +0200
+Message-ID: <20261009201324.17-1-xiexinet@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,71 +92,147 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v8 00/11] riscv: hwprobe: Expose RVA23U64 base behavior
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <179157660809.984023.2184718764665109991.git-patchwork-notify@kernel.org>
-Date: Fri, 09 Oct 2026 20:10:08 +0000
-References: <20260920-rva23u64-hwprobe-v2-v8-0-5f14bc5c23d3@oss.qualcomm.com>
-In-Reply-To: <20260920-rva23u64-hwprobe-v2-v8-0-5f14bc5c23d3@oss.qualcomm.com>
-To: Guodong Xu <guodong.xu@oss.qualcomm.com>
-Cc: linux-riscv@lists.infradead.org, corbet@lwn.net,
- skhan@linuxfoundation.org, pjw@kernel.org, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, dlan@kernel.org, chen.wang@linux.dev,
- inochiama@gmail.com, rdunlap@infradead.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, paul.walmsley@sifive.com, conor@kernel.org,
- devicetree@vger.kernel.org, spacemit@lists.linux.dev, sophgo@lists.linux.dev,
- linux-kselftest@vger.kernel.org, tchiu@tenstorrent.com, fweimer@redhat.com,
- bergner@oss.tenstorrent.com, zihong.plct@isrc.iscas.ac.cn,
- mark.hsj@gmail.com, aurelien@aurel32.net, andrew.jones@oss.qualcomm.com,
- conor.dooley@microchip.com, qingwei.hu@bytedance.com
 
-Hello:
+HSR/PRP requires per-wire-frame tags/RCTs and sequence numbers, and
+duplicate discard is per frame. RX GRO and TX GSO can present multiple
+frames as one skb and violate that assumption: a super-skb is either
+rejected by a constrained lower device, or forwarded without valid
+per-frame trailers and sequence numbers. An oversized PRP aggregate
+can also truncate the RCT's 12-bit LSDU size field.
 
-This series was applied to riscv/linux.git (for-next)
-by Paul Walmsley <pjw@kernel.org>:
+Patch 1 keeps software GRO off while devices are direct HSR/PRP
+members, without rewriting wanted features. Fixed-on or driver-required
+GRO_HW may remain enabled.
 
-On Sun, 20 Sep 2026 03:18:20 -0400 you wrote:
-> This series builds on Andrew Jones's earlier RFC [1]. It lets userspace
-> check for RVA23U64 conformance in one call, instead of walking hwprobe +
-> prctl across every mandatory extension.
-> 
-> The series adds a small framework that resolves profile-class bases (IMA
-> and RVA23U64) from the kernel's ISA extension bitmap at init time, and
-> surfaces the result through both /proc/cpuinfo and hwprobe. Later patches
-> can add RVA23S64, and backward RVA22 / RVA20 detection, to
-> riscv_set_isa_bases() without changes to the surrounding code.
-> 
-> [...]
+Patch 2 replaces the forwarding lock with one consumer to avoid
+stacked-HSR deadlocks. It preserves per-lower submission order for
+locally numbered frames, so old HSR peers that drop late sequence
+numbers keep working. Only sequence allocation holds the short counter
+lock; forwarding runs after it is released.
 
-Here is the summary with links:
-  - [v8,01/11] riscv: Add B to hwcap and hwprobe
-    https://git.kernel.org/riscv/c/fbab8abaac8f
-  - [v8,02/11] dt-bindings: riscv: Require block-size for Zicbom, Zicbop, and Zicboz
-    https://git.kernel.org/riscv/c/40623184c6f0
-  - [v8,03/11] dt-bindings: riscv: Add Zic64b extension description
-    https://git.kernel.org/riscv/c/3776fb1a1b6c
-  - [v8,04/11] riscv: Add Zic64b to cpufeature and hwprobe
-    https://git.kernel.org/riscv/c/7493567982b0
-  - [v8,05/11] riscv: dts: spacemit: k3: Add Zic64b ISA extension
-    https://git.kernel.org/riscv/c/7c4752c60f99
-  - [v8,06/11] riscv: dts: spacemit: k1: Add Zic64b ISA extension
-    https://git.kernel.org/riscv/c/1fc72ff0d3fc
-  - [v8,07/11] riscv: dts: sophgo: sg2044: Add Zic64b ISA extension
-    https://git.kernel.org/riscv/c/ca0c312bdf6a
-  - [v8,08/11] riscv: Add a getter for user PMLEN support
-    https://git.kernel.org/riscv/c/55458c7347a3
-  - [v8,09/11] riscv: cpufeature: Introduce ISA bases bitmap and rva23u64 detection
-    (no matching commit)
-  - [v8,10/11] riscv: cpu: Output isa bases lines in cpuinfo
-    (no matching commit)
-  - [v8,11/11] riscv: hwprobe: Introduce rva23u64 base behavior
-    (no matching commit)
+Patch 3 segments valid GSO before per-frame processing, so each wire
+frame gets its own tag/RCT and sequence number. Patch 4 tests member
+GRO policy, GSO forwarding and local submission order.
 
-You are awesome, thank you!
+A typical GSO source is a container connected to a PRP RedBox
+interlink through veth. An existing TCP/UDP GSO skb can reach the
+interlink with GRO disabled:
+
+  container/netns                  host PRP RedBox
+  prp0-peer ---- veth ---- prp0-int (interlink RX)
+                                  |
+                           split GSO into frames
+                                  |
+                           sequence number + RCT
+                              /          \
+                           LAN A        LAN B
+
+Compatibility with older PRP senders:
+
+Valid PRP frames from older senders remain supported. Patch 2
+preserves submission order for locally numbered frames without
+changing the PRP frame format or requiring peers to upgrade.
+
+Some old Linux PRP senders incorrectly append one RCT to an entire
+GSO skb. This violates the per-frame PRP requirement. Patch 3 drops
+such intact aggregates when trailing bytes extend past a known,
+nonzero IP length; zero lengths and GSO_PARTIAL are not covered by
+that check.
+
+The mixed-version test uses two PRP VMs; the host runs no PRP.
+On virtio-net/TAP paths, disabling GRO_HW in patch 1 can make the
+host segment an old sender's malformed aggregate before it reaches
+the receiving VM. The RCT then becomes transport payload, which the
+receiver cannot reliably identify or remove. In our QEMU 8.2.2 UDP
+test this produced an extra six-byte datagram; the base receiver
+delivered the original data correctly. Upgrade the sender or disable
+GSO/TSO on its HSR/PRP master; the latter avoided the failure in the
+test.
+
+Validation:
+
+On the net test kernel (7.3.0-rc5-gb0fe53dd6370), the installed
+ordered selftest passed 5/5 cases, including supervision, concurrent
+producers and sequence wrap, with complete, loss-free captures.
+
+GRO passed 11/11 with the preceding helper. The later cleanup-only
+fix does not affect GRO cases. Failure-injection checks confirmed
+error reporting and cleanup.
+
+Earlier queue-stress and PREEMPT_RT results are retained. Paired W=1
+builds had no additional diagnostics. These checks were not repeated
+for the helper update.
+
+Based on net 6dc989ea46b9 (2026-10-05). Integration preserves the
+upstream interlink promiscuous-mode exception and setup-failure
+cleanup. The series applies directly to this base.
+
+Patch 3 depends on patch 2; no stable backport is requested here.
+The remaining HSR dev->stats races are left to a separate series,
+as Paolo suggested [1]. Pre-existing shared-skb mutations are also
+handled separately.
+
+[1] https://lore.kernel.org/netdev/4fc3b9f1-4bef-4b34-ae7a-e89037cce829@redhat.com/
+
+Changes since v6, including the NIPA and Gemini review responses:
+
+- Replace recursive, one-time GRO disabling with persistent member
+  policy and restoration of the latest wanted state.
+- Preserve submission order with one consumer; remove the bitmap
+  prerequisite and use core per-CPU counters for new RX/TX drops.
+- Handle bounded 802.1Q/802.1AD VLAN stacks and reject trailing data
+  beyond a known nonzero IP length before segmentation.
+- Replace child-process signalling and fixed readiness sleeps with
+  namespace-bound sockets registered before traffic. Bound cleanup
+  under signals and preserve failures.
+- Check packet contents, retransmissions and capture completeness,
+  rather than throughput or average sizes. Use a standalone Python
+  helper, with no embedded Python in the shell entries.
+
+Veth tests do not validate hardware GRO_HW. The generic GSO bit need
+not be off, so tests now check GSO_MASK member types. The claim that
+the old test always failed was not supported by its actual feature
+state and recorded passing runs. Shared-skb mutation is a separate
+existing issue; both reports about new drop accounting are addressed
+by the per-CPU counters.
+
+Previous postings (earlier design, newest first):
+v6: https://lore.kernel.org/netdev/20260809121455.1745-1-xiexinet@gmail.com/
+v5: https://lore.kernel.org/netdev/20260807140751.1351-1-xiexinet@gmail.com/
+v4: https://lore.kernel.org/netdev/20260803222211.877-1-xiexinet@gmail.com/
+v3: https://lore.kernel.org/netdev/20260731090224.18-1-xiexinet@gmail.com/
+v2: https://lore.kernel.org/netdev/20260724161253.79-1-xiexinet@gmail.com/
+v1: https://lore.kernel.org/netdev/20260722171836.196-1-xiexinet@gmail.com/
+
+Xin Xie (4):
+  net: hsr: keep GRO disabled on HSR/PRP ports
+  net: hsr: preserve submission order without a forwarding lock
+  net: hsr: segment GSO before per-frame forwarding
+  selftests: net: hsr: verify GRO policy and ordered forwarding
+
+ .../networking/net_cachelines/net_device.rst      |    1 +
+ include/linux/netdevice.h                         |    6 +
+ net/core/dev.c                                    |   10 +
+ net/hsr/Makefile                                  |    3 +-
+ net/hsr/hsr_device.c                              |   66 +-
+ net/hsr/hsr_forward.c                             |  233 +++-
+ net/hsr/hsr_forward.h                             |   37 +
+ net/hsr/hsr_forward_queue.c                       |  294 +++++
+ net/hsr/hsr_main.h                                |   18 +
+ net/hsr/hsr_netlink.c                             |    4 +-
+ net/hsr/hsr_slave.c                               |   60 +-
+ tools/testing/selftests/net/hsr/Makefile          |    3 +
+ tools/testing/selftests/net/hsr/config            |    1 +
+ .../selftests/net/hsr/hsr_gro_superpacket.py      | 1088 +++++++++++++++++++
+ .../selftests/net/hsr/hsr_gro_superpacket.sh      |    9 +
+ .../selftests/net/hsr/hsr_ordered_forwarding.sh   |    9 +
+ 16 files changed, 1784 insertions(+), 58 deletions(-)
+ create mode 100644 net/hsr/hsr_forward_queue.c
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.py
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_ordered_forwarding.sh
+
+
+base-commit: 6dc989ea46b96ce170840174b4a38c4a387fb005
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+2.43.0
