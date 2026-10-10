@@ -1,32 +1,50 @@
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B9F382387;
-	Sat, 10 Oct 2026 03:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DEA3D6CD6;
+	Sat, 10 Oct 2026 03:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791603545; cv=none; b=MNYBfbInpfBxPO9PDVQ22ae7pngN/5deQAWaodkgjuXhp50KJkFb0+W8Xw1pgF9sH3JTDRqXECAtKaOmUlhM2wXleQ0wPcAa3YMuNhBZhQul9iISbw2NRQJp568lmqp2XU1OTupEMr8zDXvSPAhb5VK+GiZk3ovcsQVI3+i04lo=
+	t=1791604497; cv=none; b=Z7X3ugzzt33BeQwamzOCm9bRCNWoo43M2E8HmLJOs9ulY7bRUd1Qm8QOv+aMNIMij24AadYdrFrgUD0YoRM3zvnkEVZbRlT3KnSUGeulQobXs7+LnH3/Q4JNTkPForODhcvCVPuT7YvgJHijHObRUKeS+FBq1tsDxcCoH6zzFrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791603545; c=relaxed/simple;
-	bh=ypmEU6kQKeao3mRXaldZjjVkM83muqmZMU5NsPKJLR0=;
+	s=arc-20240116; t=1791604497; c=relaxed/simple;
+	bh=vao8T0ntCrZ65nxL5fkeRY2wkDgW73C1nkNvuLDdxXo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G4lj2eSq8wvwOW2P2zyvwTcT2Xm9dGBcuu1RmhPv6NQ2MWcLzqgOxrZDfy1lcft6tOneM+udU1vU7gwaUa5mA6ZS+8zFA99rIgo/AVHhEPuO/N+oEglN3edvyoYmtwHLKhyj4o9atACUBVTBkp41t/dTPF8UzoU1nEsV0HjQGvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=A7q/o2Av; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	 In-Reply-To:Content-Type; b=aXnTk3iCWc/d4hxHkwTCYsNir12YDs29yzEuY2p9y2kkVTmGz+A7hPE/iGhcY8J2Em6E+iSd8kP9/9/qpUmG9pr01L05gidPV8Uq4AmlJCMfDIVqbKdV2nibbK8eP4jI5XMWgYTGq+4gmakZ/fbUeXnbF8GzMwhCEsYFY+8bb8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g8nWeZRv; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="A7q/o2Av"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1791603530; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=SBB6AWvERMNQNcnv8IpcOyFkUIlmwIKsnK5k1h4Id5s=;
-	b=A7q/o2AvOzEhw+XVOO+FKT/EhKev/5wGvR/VpaRI9XdOIHZBcd1UW+dbdK0h45sB7wCUdNjd3SXx/jaB6FwkBHmtKKkp6k1TZG4AnvnuTJJwNPdAnAUOyeJ09kfc++FAYP5CM51jh3dlCAMgIHK6CpzBoaulHpYCWiupwm3Y4Yc=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=35;SR=0;TI=SMTPD_---0XCUukT6_1791603526;
-Received: from 30.246.161.155(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XCUukT6_1791603526 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Sat, 10 Oct 2026 11:38:47 +0800
-Message-ID: <2650577a-a359-495c-a6bf-47a825e9282a@linux.alibaba.com>
-Date: Sat, 10 Oct 2026 11:38:45 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g8nWeZRv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791604491; x=1823140491;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vao8T0ntCrZ65nxL5fkeRY2wkDgW73C1nkNvuLDdxXo=;
+  b=g8nWeZRvealF1YHbmmouskzWmSNaAUbgb2dx2aY/+FnFlbcpwRF+oLJc
+   ai1HG4cPALenPk51WXQey3vlXaQKb9z9UEzQhaOR3w+DzizmGnl1VsFoq
+   wLpvV8CTPyThHwazPM6CUm0e2KUNJBw458kSqTQHhHW2bnI9Q9W98NL6i
+   NdmAA8JjrfctMdZRNHMxTQhM/LMUtgEyJih16BJHOEmPFCftmJrAA+Fhl
+   7mfYXQpRaGnGON4nHgImsfQKHvSiOXfbQmYiQQD28WEG/nMmfyPg+F7R2
+   koHsnUeS+8oP3ySz1DnHarXnjH4JoKvV+/n/V+Kc+90ouiaG8mrS++MUR
+   w==;
+X-CSE-ConnectionGUID: YIrtv94KTrS9g3EnIUInpQ==
+X-CSE-MsgGUID: Vj18sfGnQFGWsxrxNP4k1Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="407433"
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="407433"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 20:54:51 -0700
+X-CSE-ConnectionGUID: GLD/bdgAS4WSKp88uBXzDw==
+X-CSE-MsgGUID: K+HpcyrdQ8i8dSSlCWQEGQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="2288765"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 20:54:45 -0700
+Message-ID: <932ec219-5951-489b-bda9-1f6e9a605a9b@linux.intel.com>
+Date: Sat, 10 Oct 2026 11:54:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,104 +52,132 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/7] riscv: stacktrace: switch to frame-pointer based
- unwinder
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr,
- linux-riscv@lists.infradead.org, oleg@redhat.com, rostedt@goodmis.org,
- mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
- mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org,
- jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
- shuah@kernel.org, mpdesouza@suse.com, oliver.yang@linux.alibaba.com,
- zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com, martin@kaiser.cx,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
- <20260914092648.51254-6-xueshuai@linux.alibaba.com>
- <20261009185904.82385-1-kmehltretter@gmail.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20261009185904.82385-1-kmehltretter@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v15 14/23] KVM: selftests: Expose function to allocate
+ vCPU stack
+To: Xiaoyao Li <xiaoyao.li@intel.com>, Lisa Wang <wyihan@google.com>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org,
+ Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng
+ <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
+ <20261001-tdx-selftests-v15-14-7c62a5d8a992@google.com>
+ <b2143700-da36-418c-af63-0b50b33f080e@intel.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <b2143700-da36-418c-af63-0b50b33f080e@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 10/10/26 2:59 AM, Karl Mehltretter wrote:
-> On Mon, Sep 14, 2026 at 05:26:46PM +0800, Shuai Xue wrote:
->> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
->> +				      void *cookie, struct task_struct *task,
->> +				      struct pt_regs *regs)
->> +{
->> +	struct kunwind_consume_entry_data data = {
->> +		.consume_entry = consume_entry,
->> +		.cookie = cookie,
->> +	};
+On 10/9/2026 3:56 PM, Xiaoyao Li wrote:
+> On 10/2/2026 3:37 AM, Lisa Wang wrote:
+>> From: Sagi Shahar <sagis@google.com>
+>>
+>> Introduce kvm_allocate_vcpu_stack() to allocate a vCPU's stack
+>> in preparation for TDX to allocate a vCPU's stack and initialize
+>> its stack pointer.
+>>
+>> TDX VMs' registers are protected state and cannot be initialized
+>> using the KVM_SET_REGS ioctl() that is used for normal VMs. A TDX
+>> vCPU's stack address will be a property of the TDX specific boot code
+>> that initializes the vCPUs' stack pointers at boot.
+>>
+>> Signed-off-by: Sagi Shahar <sagis@google.com>
+>> Signed-off-by: Lisa Wang <wyihan@google.com>
+>> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+>> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+>> Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+>> ---
+>>  .../testing/selftests/kvm/include/x86/processor.h  |  2 ++
+>>  tools/testing/selftests/kvm/lib/x86/processor.c    | 25 +++++++++++++++++++---
+>>  2 files changed, 24 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+>> index 8854ee052d29..1eb380dd216c 100644
+>> --- a/tools/testing/selftests/kvm/include/x86/processor.h
+>> +++ b/tools/testing/selftests/kvm/include/x86/processor.h
+>> @@ -1212,6 +1212,8 @@ static inline void vcpu_clear_cpuid_feature(struct kvm_vcpu *vcpu,
+>>  	vcpu_set_or_clear_cpuid_feature(vcpu, feature, false);
+>>  }
+>>  
+>> +gva_t kvm_allocate_vcpu_stack(struct kvm_vm *vm);
 >> +
->> +	kunwind_stack_walk(arch_kunwind_consume_entry, &data, task, regs);
->> +}
+>>  u64 vcpu_get_msr(struct kvm_vcpu *vcpu, u64 msr_index);
+>>  int _vcpu_set_msr(struct kvm_vcpu *vcpu, u64 msr_index, u64 msr_value);
+>>  
+>> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+>> index da430d4e7765..4a753fb43007 100644
+>> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+>> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+>> @@ -851,12 +851,31 @@ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
+>>  	vcpu_regs_set(vcpu, &regs);
+>>  }
+>>  
+>> -struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+>> +gva_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
 > 
-> Hi Shuai Xue,
-> 
-> With this patch and FRAME_POINTER enabled, return_address() returns the
-> caller one level further up than asked for.
-> 
-> return_address() in arch/riscv/kernel/return_address.c skips level + 3
-> entries from arch_stack_walk(). The arm64 original skips level + 2. The
-> third entry exists on mainline because the walk starts inside
-> walk_stackframe() and first reports the return into arch_stack_walk().
-> With 5/7 the walk starts at the caller of arch_stack_walk(), so
-> level + 3 now skips a real caller. CALLER_ADDR1 and up are built on
-> return_address(). The irqsoff tracer and the preemptirq tracepoints use
-> them.
-> 
-> A KUnit test that calls ftrace_return_address() from
-> leaf() <- middle() <- outer() <- check() returns:
-> 
->               af32da41b032   with series   with series, level + 2
->    level 0    middle         outer         middle
->    level 1    outer          check         outer
-> 
-> The change to level + 2 has to depend on FRAME_POINTER. Without it the
-> series keeps walk_stackframe() and the result is the same as on
-> mainline. There, level + 2 makes return_address(0) return an address
-> inside return_address().
+> Besides what Sashiko pointed out[1], this patch was just messed up during the
+> rebase and it even doesn't compile.
 
-Hi, Karl,
 
-Nice point. Thank you for the thorough review and the KUnit test.
-The analysis is spot on, and your table matches my reading of the code
-exactly.
+Yes.
+
+And since the upstream code already has vm_alloc_stack(), which basically does
+the same thing.
+
+I think this patch can be dropped. 
 
 > 
-> The same extra entry makes stack_trace_save() start one frame too early
-> on mainline. 5/7 fixes that. I have a small fix for it on mainline,
-> meant for stable kernels, which conflicts with 5/7. I would post it with
-> you in Cc. Tell me if you would rather take the return_address.c change
-> into 5/7 first.
-
-Please go ahead with your mainline/stable fix for the
-stack_trace_save() off-by-one as an independent patch. You are right
-that this is a separate mainline bug: stack_trace_save() hardcodes
-.skip = skipnr + 1, i.e. it expects the first entry reported by
-arch_stack_walk() to be the return into stack_trace_save() itself, and
-mainline's walk_stackframe() breaks that contract by reporting the
-return into arch_stack_walk() first. A 7-patch series is not a vehicle
-for stable, so the minimal fix is the right approach there.
-
-Please keep me in Cc when you post it, I will review and test it.
-
+> [1] https://lore.kernel.org/all/20261002091331.BA23F1F00893@smtp.kernel.org/
 > 
-> Tested with clang 22 and the series applied on 52318cf0fa6e. The
-> "with series" column is the same on QEMU's virt machine and on a
-> BeagleV Ahead (TH1520). Everything else ran on QEMU only.
-
-Thanks again for testing on real hardware (BeagleV Ahead) in addition
-to QEMU, that is much appreciated.
-
-Best regards,
-Shuai Xue
-
+>>  {
+>>  	struct kvm_mp_state mp_state;
+>>  	struct kvm_regs regs;
+>> +	gva_t stack_gva;
+>>  	struct kvm_vcpu *vcpu;
+>>  
+>> +	stack_gva = __vm_alloc(vm, DEFAULT_STACK_PGS * getpagesize(),
+>> +			       DEFAULT_GUEST_STACK_VADDR_MIN, MEM_REGION_DATA);
+>> +
+>> +	stack_gva += DEFAULT_STACK_PGS * getpagesize();
+>> +
+>> +	/*
+>> +	 * Align stack to match calling sequence requirements in section "The
+>> +	 * Stack Frame" of the System V ABI AMD64 Architecture Processor
+>> +	 * Supplement, which requires the value (%rsp + 8) to be a multiple of
+>> +	 * 16 when control is transferred to the function entry point.
+>> +	 *
+>> +	 * If this code is ever used to launch a vCPU with 32-bit entry point it
+>> +	 * may need to subtract 4 bytes instead of 8 bytes.
+>> +	 */
+>> +	TEST_ASSERT(IS_ALIGNED(stack_gva, PAGE_SIZE),
+>> +		    "__vm_alloc() did not provide a page-aligned address");
+>> +	stack_gva -= 8;
+>> +
+>>  	vcpu = __vm_vcpu_add(vm, vcpu_id);
+>>  	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+>>  	vcpu_init_sregs(vm, vcpu);
+>> @@ -864,8 +883,8 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+>>  
+>>  	/* Setup guest general purpose registers */
+>>  	vcpu_regs_get(vcpu, &regs);
+>> -	regs.rflags = regs.rflags | X86_EFLAGS_FIXED;
+>> -	regs.rsp = vm_alloc_stack(vm, DEFAULT_STACK_PGS);
+>> +	regs.rflags = regs.rflags | 0x2;
+>> +	regs.rsp = kvm_allocate_vcpu_stack(vm);
+>>  	vcpu_regs_set(vcpu, &regs);
+>>  
+>>  	/* Setup the MP state */
+>>
+> 
 
