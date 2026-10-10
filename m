@@ -1,135 +1,208 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C22536A009
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 19:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3178C2EB5A6;
+	Sat, 10 Oct 2026 20:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791660562; cv=none; b=RqlAWf9asNmgdCYWBy7q3iPklbNqKkkeTnn7c07AErNnpNq1MrpaEr+HpAdeOXcSaMkUrGgEJqAWfMtjUsfidMF4tpM9BftdQrOZ9ehqCTHfRGjdMLvWPiCMoOpXdSYDVq8fxAsaOFOY/FODBp/T18EgXi2E3sitkx8kulVV3TE=
+	t=1791663597; cv=none; b=pvLemkzT9sn5f31Hu8BXcmLeZLuhnE0BKmRQGzEK7mFjJrgsS8Vt+xNwbiABIInlVf2NQXfrjbiO/5Jszf0C8djWQbJmgiVCiYf+IDGvh2y22evvBsVSnj8E5sPpSMIOTgD8hVsI1jFaAGAohw5ZxxblvWqvHekwj9E2h2KWocg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791660562; c=relaxed/simple;
-	bh=FHammez+ru5X1OzUn5iEe21COb3PmhudSPB3aCrXcYQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D5cHrc63f1hmPodC+j8iIaUafMms0iiy7wOoer3leBkcUkYg3C3wYr2mM37yY/IhRkG24gVjSJU0JAZt9W4BcDFlK50m5yheXkSSfzs69kvOufhLabbQzwypsGdqOl6MpWl7sTAUGtnyrPrJyQTKOP18Wq3Gg3iweohQicE5bEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=CKrZfCY2; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1791663597; c=relaxed/simple;
+	bh=7XSXNGUel4gBLywYKxEWYma73/CfzHyMow6wLNKvRzo=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Z6By8WYqc41eq9cWZy4rQjjcwHqrTQcfgql3ofqejT23iz+gEDVqrzuMsrxfx6TxphJcBhjwhucGWipNa2fVL5cHa24t9t1X4jBdayx4u+Mwl0hpGrGiFhrlgEyOiLc2nDxdCxPOrO2lXnOXwnMcNIaPpwmyS0d9fpaUFDVfV0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDRXk7Zf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="CKrZfCY2"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a02753c04fso3815385e9.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 12:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1791660559; x=1792265359; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mSJDmADZtNyWrQqxKhYzkqnU1qutd4BzGMBm9BmhF80=;
-        b=CKrZfCY215PDRh0N9e9iPEMwselnt+6edarHfFAaSf2U3D6QSGyexp3u5PrFLEyNt1
-         UbpX4XXiyj8vXedURLYbOUJ77rLRyE9yBdSrSpGIbu5FQlK7d0Nwk6uuOydBYbsVghXo
-         dLL0OQaS//8N0c3msO/uoKTvB2AKuNX/wKoboqjuTrTOlC2gjR5825JMw+CqhcCqh13t
-         tIbxlE6H29onnzRCPJmca6INwMxQ3ylJc+AAgNhw8VE8K89KIAPWkQ/d2o+p0uim8gOa
-         7n9t0DvE8epeoomCcOFTYHp0ecsJTAsGffCDJp6pF/YA32yX33JaeIUEEFgkSjf16gkr
-         RPRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791660559; x=1792265359;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mSJDmADZtNyWrQqxKhYzkqnU1qutd4BzGMBm9BmhF80=;
-        b=WFmelB9ae1VxJ+z5EP4t2zWHcb/DbMReX+bgN9Xp4BjW/MXqvljd/u9C+1CMtE6GNU
-         08kMeXR86DzY5kGmCZp3FNy9Cyh1nXs57pGVTBlH9eZdxVtGGKNQv+drPty3o5Lo1Rzq
-         AnFZrqT0TCXmJCTeTLgRBLVn6NHjbPSx7f02MkQKPOy6bf1iHuxOewS9ybYUIm4kpsxo
-         h1noKVpkQSfszbYDlvnAskAnQPBog07+T6BiQ44hqMeYz5AIIBPYWDwzdZNUqw+0abO+
-         hYIb19ZV30G/cz8waZFZ3fVaYEjEG52wDfKx8LvtqObjZl6d23BFWCD9kuYdAg7RMsb3
-         edWw==
-X-Forwarded-Encrypted: i=1; AKwUvBzZ3B66DhLHh6w7SXl1H3rQALkoVGIoPjt+z7Jss3a2cgg2M04xd23vfSgkaVUaIFXwth2GOuWZY4vEbi1Y2dc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLMSQ5dgsvpMUDnbCOc6HafLaz9jKiOEbc/NffjiNujxNgoeHwu
-	HoEQic6tAew1GnxtloATuoq1HPJ8k7refVIX6MoHddW4Qm/ACOCjkpNRHLwaFlt0JkA=
-X-Gm-Gg: AYBFou1BklgJ4faELEneJ52Q1Nwq2DP0q1jUQN0Hi0XKF/sXUPvuwqUTXBufZA8F2KL
-	O8Joa1ChzkyGCB0JYwMN3hDHbaEtncCbvii0SUcxHy3Vrrt4A3McWL3D4iwwKVffLeJGOkCqOJ+
-	RrU3qxGSxTrtvVetPHoQYsP/eJLr8kCC7QK0kzOTe9bSV19bvnnQ50i41VCVbZM5ap4rjiPQE3S
-	D0SIfOSw2xAOrS5Z4lt4e148COMiw4V3OEfEbyv8kuDQe9bgibEb5T0bamyxxdlsDpTwdAP28gi
-	KFnwDdXzOVx73JeNqcc3A2MAo9IhWw4WG6uPqCNd6pKBy19MiAit9kx2Oo0CS/QxSymwONuMoKZ
-	DVckjeH4xFObCp/QsvrvIOmKLvA8IwQ45gkj0DVO56xcsxtjArNL6OHPcXqrpBiZxY3savnpClK
-	HKVWNTgGamWRMX3Pb8AolON1geeJeFFXkZOpV3N3glKpYHVGBfZPCiI0XJX330W4Gn/f5sWsMdW
-	dV/5Hjk6mqsR2AQpsVN26KVTNm6
-X-Received: by 2002:a05:600c:4ecc:b0:49c:fa21:e749 with SMTP id 5b1f17b1804b1-4a18e4d55f2mr118580455e9.31.1791660559467;
-        Sat, 10 Oct 2026 12:29:19 -0700 (PDT)
-Received: from D90XRJJJNQ ([2a09:bac6:37af:26d2::3de:5a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18be97d1esm236394285e9.8.2026.10.10.12.29.18
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 10 Oct 2026 12:29:18 -0700 (PDT)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	toke@toke.dk,
-	lorenzo@kernel.org,
-	hawk@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next] selftests: net: veth: test own ndo-xmit after peer GRO toggle while down
-Date: Sat, 10 Oct 2026 20:29:14 +0100
-Message-ID: <20261010192914.83651-1-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDRXk7Zf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51DB81F000FF;
+	Sat, 10 Oct 2026 20:19:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791663595;
+	bh=gSqyHzqVLh6H3eHx5dwm5uOnxVfuLcQn/cTriI1PRO0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=KDRXk7Zf1VOsdpohEb0nGXV2P3KVOwEPaQiRXCWqYyNKZSqt9pPtZcmQkyCNwZP4i
+	 jLjD2FL9JFMEGq4FwJ9msjdUFjPUugkj8FpmvE+33UuygpS7b3/MxsYGZTEZnsqrEt
+	 fI38LlrItq1ZOCIv5XpQYU/0WeUn6M+qGpAH28kbWJTj3SrF/tCoq5f+FBOjx/t0Yt
+	 Aatq33YST6wVJzOXnn0cmhfL+IHnh+o10mD0OVOYaJ8j/X0Pr+2GbT2+ByPGH5OKpr
+	 M/EAu9INxpQBqxorJ3YQgkEni8A4K1Yd34pO5diFmCdNCxbuVTUpUl4GodwXKtgB44
+	 F0re1/ibhNdow==
+Subject: Re: [PATCH net v7 1/4] net: hsr: keep GRO disabled on HSR/PRP ports
+From: netdev-bot+sashiko@kernel.org
+To: xiexinet@gmail.com
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
+ shuah@kernel.org, kees@kernel.org, petr.wozniak@gmail.com,
+ qingfang.deng@linux.dev, fmaurer@redhat.com, luka.gejak@linux.dev,
+ bigeasy@linutronix.de, xiaoliang.yang_1@nxp.com, skhawaja@google.com,
+ liuhangbin@gmail.com, stable@vger.kernel.org, sdf.kernel@gmail.com
+Date: Sat, 10 Oct 2026 20:19:53 +0000
+Message-ID: <179166359381.434549.275581842542112020@kernel.org>
+In-Reply-To: <20261009201324.17-2-xiexinet@gmail.com>
+References: <20261009201324.17-2-xiexinet@gmail.com>
+X-sashiko-severity: Critical
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Test that a veth device advertises ndo-xmit when GRO is enabled on its
-peer while both are down and only the device is brought up.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Commit 7a6102aa6df0 ("veth: Update XDP feature set when bringing up
-device") made veth_open() set the flag in this case, and selftests were
-requested in its review [1].
+Critical: 1 · High: 0 · Medium: 0 · Low: 1
 
-The block now ends with GRO enabled while the peer is down, so the
-aggregation check that follows covers NAPI enabled by veth_open() again.
-Commit c017800af5c7 ("selftests: net: veth: test peer ndo-xmit after GRO
-toggle while down") had moved it to veth_set_features() [2].
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Link: https://lore.kernel.org/all/155aabf8b873bb8cdcafbd6139c42b08513e5fe6.camel@redhat.com/ [1]
-Link: https://lore.kernel.org/all/179165459278.434549.1711113374323842550@kernel.org/ [2]
-Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
----
-The new check fails with veth_set_xdp_features(dev) removed from
-veth_open().
+- [Critical] The new HSR filter in __netdev_update_features()
+  (net/core/dev.c) removes NETIF_F_GRO from dev->features but leaves it…
+- [Low] (Baseline: not confirmed as a remaining bug.) The GRO policy only
+  clears NETIF_F_GRO on the device directly enslaved to HSR/PRP.
 
- tools/testing/selftests/net/veth.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+--
 
-diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-index 8b867e0675a7..60d0754928bf 100755
---- a/tools/testing/selftests/net/veth.sh
-+++ b/tools/testing/selftests/net/veth.sh
-@@ -327,7 +327,12 @@ if [ -f "$YNL" ]; then
- 	ip netns exec $NS_DST ethtool -K veth$DST gro off
- 	ip -n $NS_DST link set dev veth$DST up
- 	chk_xdp_feature "        - peer ndo-xmit cleared" $SRC 0 ndo-xmit
-+	ip -n $NS_SRC link set dev veth$SRC down
-+	ip -n $NS_DST link set dev veth$DST down
- 	ip netns exec $NS_DST ethtool -K veth$DST gro on
-+	ip -n $NS_SRC link set dev veth$SRC up
-+	chk_xdp_feature "        - own ndo-xmit" $SRC 1 ndo-xmit
-+	ip -n $NS_DST link set dev veth$DST up
- fi
- ip netns exec $NS_SRC ethtool -K veth$SRC tx-udp-segmentation off
- ip netns exec $NS_DST ethtool -K veth$DST rx-udp-gro-forwarding on
+net: hsr: keep GRO disabled on HSR/PRP ports
 
-base-commit: d8674294aefef02266c4d47ad10131f1bffbe534
+This patch adds a hsr_port role bit to struct net_device. While the bit
+is set, __netdev_update_features() filters NETIF_F_GRO and configurable
+NETIF_F_GRO_HW out of the computed features and leaves wanted_features
+alone. HSR sets the role before it registers the RX handler and rejects
+the port if software GRO stays on. On failure or detach it clears the
+role and recomputes features.
+
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 18dc88990510a..0c53b59af439a 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -11111,6 +11111,16 @@ int __netdev_update_features(struct net_device *dev)
+>  
+>  	features = netdev_get_wanted_features(dev);
+>  
+> +	/* A direct HSR/PRP port needs per-frame metadata: filter
+> +	 * software GRO and configurable GRO_HW requests before the
+> +	 * driver fix runs, keeping the existing driver and core
+> +	 * feature coupling.
+> +	 */
+> +	if (dev->hsr_port) {
+> +		features &= ~NETIF_F_GRO;
+> +		features &= ~(dev->hw_features & NETIF_F_GRO_HW);
+> +	}
+
+[Severity: Critical]
+Can this leave veth's NAPI state out of sync? After this filter runs,
+NETIF_F_GRO is clear in dev->features but still set in
+dev->wanted_features. veth depends on those two agreeing.
+
+veth_set_features() adds or deletes NAPI when the effective GRO bit
+changes:
+
+drivers/net/veth.c:veth_set_features() {
+    ...
+	if (!(changed & NETIF_F_GRO) || !(dev->flags & IFF_UP) || priv->_xdp_prog)
+		return 0;
+    ...
+	} else {
+		...
+		veth_napi_del(dev);
+	}
+}
+
+veth_open() and veth_close() (and the xdp enable/disable paths) decide
+whether NAPI exists from wanted_features instead:
+
+drivers/net/veth.c:veth_gro_requested() {
+	return !!(dev->wanted_features & NETIF_F_GRO);
+}
+
+drivers/net/veth.c:veth_close() {
+    ...
+	else if (veth_gro_requested(dev))
+		veth_napi_del(dev);
+}
+
+Take veth0 that is up with gro on and gets added as an HSR slave. This
+call chain deletes the NAPIs:
+
+hsr_portdev_role_set()->netdev_change_features()->veth_set_features()
+
+A later "ip link set veth0 down" or "ip link del veth0" then reaches
+veth_close(). veth_gro_requested() is still true, so veth_napi_del() runs
+a second time.
+
+Wouldn't napi_disable_locked() then spin forever while holding RTNL and
+the instance lock? The first disable left NAPIF_STATE_SCHED and
+NAPIF_STATE_NPSVC set.
+
+The reverse order looks like a problem as well. Suppose veth0 has gro on
+while it is down, gets attached, and is then brought up. veth_open()
+enables NAPI because of wanted_features. On detach,
+hsr_portdev_role_clear() restores NETIF_F_GRO in features, and
+veth_set_features() calls veth_napi_enable() again.
+
+Would that hit the WARN_ON for an already listed NAPI in
+netif_napi_add(), overwrite and leak the existing page_pool and
+ptr_ring, and then hit BUG_ON(!test_bit(NAPI_STATE_SCHED, &val)) in
+napi_enable_locked()?
+
+Both sequences only need CAP_NET_ADMIN in a network namespace, and the
+HSR selftests use veth slaves. No later patch in the series touches veth
+or this filter.
+
+[ ... ]
+
+> diff --git a/net/hsr/hsr_slave.c b/net/hsr/hsr_slave.c
+> index a546f70f9cc8b..1afcacac6b3c8 100644
+> --- a/net/hsr/hsr_slave.c
+> +++ b/net/hsr/hsr_slave.c
+
+[ ... ]
+
+> @@ -169,6 +197,19 @@ static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
+>  	if (res)
+>  		goto fail_upper_dev_link;
+>  
+> +	/* Enable the member role and recompute before the RX handler
+> +	 * is published: software GRO must be off before frames can
+> +	 * arrive.  A still-active software GRO rejects the port, a
+> +	 * remaining GRO_HW alone does not.
+> +	 */
+> +	hsr_portdev_role_set(dev);
+> +	if (dev->features & NETIF_F_GRO) {
+
+[Severity: Low]
+Does this check cover stacked members such as bond, team, macvlan or
+ipvlan, which hsr_check_dev_ok() accepts? For those devices GRO runs on
+the lower physical device. NETIF_F_UPPER_DISABLES is only NETIF_F_LRO,
+so nothing pushes GRO-off down to the lower device.
+
+GRO-merged skbs can then still reach hsr_handle_frame() when
+bond_handle_frame() or macvlan_handle_frame() returns
+RX_HANDLER_ANOTHER, and this check still passes. For stacked members,
+the comment's statement that "software GRO must be off before frames can
+arrive" does not hold.
+
+The commit message already says GSO skbs may still arrive. The later
+commit "net: hsr: segment GSO before per-frame forwarding" adds
+hsr_forward_input(), which segments any skb_is_gso() input before
+per-frame processing. By the end of the series the merged frames are
+therefore handled.
+
+Could the comment say that only direct members are covered?
+
+> +		NL_SET_ERR_MSG_MOD(extack,
+> +				   "software GRO still on after feature update, cannot join");
+> +		res = -EBUSY;
+> +		goto fail_role_policy;
+> +	}
+
+[ ... ]
+
 -- 
-2.55.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009201324.17-1-xiexinet%40gmail.com
