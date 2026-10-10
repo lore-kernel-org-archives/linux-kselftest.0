@@ -1,360 +1,172 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83267381AF1
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 03:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791601627; cv=pass; b=rZmZwltropalc8xtUxeM2r1g4vDUmiO7JoAaIZFSomAnXXtX72abrlltLSfRN6QxcbEYcpXOQOQ5ggz8jy0txmFaWP7EmxmPoNbq0agfrn+woTbo0rftT0+pOgKBs7XSlngGFwOWdj4QDZydSJNT6UGo/t5ZR0SHoQrKRPOGv94=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791601627; c=relaxed/simple;
-	bh=R6kdKGPzHjoG5KZKNq2uo8LKEj9Go4FuT1d2+2J7s5E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LIkdy6kJOvPGo3Q0p4RaVK/xD0Sv9hl9gd2whhJTJCVvlkmdcKTWX2Mul8B3bL1iuUDfl/JcnoPyPhpDNH4ovyCR60r0JHmdZ4JIMi6b53HrDk3OIfNwGDp+uDcueFgChW1bELdCN8NJy9i1ltchB9n/TUIKOqKO2IKwwJdZolw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sPUNvBga; arc=pass smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549F1298CC4;
+	Sat, 10 Oct 2026 03:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791603169; cv=none; b=ds3PEd/QNd0kjCIW79I6FvVtqaAXLrYYR8B5eWsJ4a5VX1YjUZcTQt/kM1KAiwF6ckdhmhoZRKOqn2mJBegzW5yWKKHlxCPTd7gWOeEDmIEnYfB63gE3C275IopB6q+Y7HrTAeotbgsf96vLDCeWjr3Y+w1gQs8mqFsrWs4j4+c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791603169; c=relaxed/simple;
+	bh=L1xvLFtuvT5GKWDgJ3c/DJEPvPiVYnbScbik8/+g7n0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Jg/f8Fj9oYhqZl+GB4H1RCaYeCNuhqys+QXVgoRw8eqb7xhLB1DT+kne46fqDxf783sG7/NZTNDWB+gzAut+fGVw5aLZOKBG22heUsZ7+pflRojeUDfdWXd6ZMXmo6av0t0BAH+iWs8jYAeu9q1yHDz8OuUNpxHeJ+FBtEQ73EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QuN+CprY; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sPUNvBga"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a161d9b8c7so2217725e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 20:07:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791601623; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IftDx2wcRQKbYTCZLRh35tLmupC68FSLahA9nnBquBWS1Xogro3Jm8pGh4C4RAJWNa
-         lSIIU9e/vfsu4+OeGq2UkrvUsw9i4mystcFKTu3CBxW2PtnnCDqzkqPuDSEyXdimUK6a
-         gHZerjN6hffnK4Y12PXp7BnA/Vd1zmCegRhOS7m8TvyKNBfCvpEs70O0W4SGoPYqiiru
-         ny/y8g7KrDrjv4echboRW1dSspKCr3vsfdJOzUNu6Q5yzchYmvF/Y2XzG/69WHIQdv2g
-         FqcRcjFMG+fqq8RQ6D5vx2khNI5EkllZAtdfpKxML43jYZqyIz+aT4dq7jacrujr7UHc
-         TZow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=DqBvVGuFj0GZrAgGWRG+Z1DSJ+1TnkbYLAFeT5xo12I=;
-        fh=I4j6N7mmEnKM9DM3sRay96GvIPBVBRJsS6qBGMKfZGw=;
-        b=noInAguuUHvDK/j/KoK6pODA/5jP3QSnlNzPKPNH6uUfuxLuLPmuTmS2hjRm9wAaht
-         gkJy0jwDR3TSkCNU45T8VXNC/ugK1KpLlQLJqEVeMiXhTanx6Fus12SSjV0ThCtdFnQt
-         JYxgfpcGtxrZKx+W5zsJDFpGKEHFXHCtfPdZUOgq8Bb6cahKZ9WnfTl5ParzWrKuh4iA
-         K/sXhI06aJ+0oBL7hyR6hjRixoDhVsZugQSWjM8rmbk0BiAl69OXBHE3BFIT4Frax2Ht
-         Gw3q7N9uOd+x7NkT6Lfik7mFDxod+/aspLLujyvI+zlh8TqSLkY//tC7hyVqZHYbZd6Q
-         Q/hA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791601623; x=1792206423; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=DqBvVGuFj0GZrAgGWRG+Z1DSJ+1TnkbYLAFeT5xo12I=;
-        b=sPUNvBgaLCkSRBNytttrTwdYEnhRQ60ZUO3A6pleOplw9/XkWo7FWyZNWmpEAXsLje
-         nnT9jAG+grc2Oq6wAx2spJfQSYGXEhDzHQwn2ZzufM5xHmhaZZrI8BpqYb2uKreRza4e
-         bRCMO5OVUe2QsPBkdDO/7V16ATF7++ASWdc+IL8rvxw99OBhmin/OhONkHvuQ7y67okf
-         dOYc/adrro23l8tJ/CwiMoXJ628GXT+BhN12OQMGsTO48tVErBA6wHqL3zwnNAtGmd26
-         E9SBAG4AVluaIgJ6RsZjj99r3zM+9i/P9ESp3/ayJT12EfAWnfue27NP4JG/szw7tF9i
-         D/EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791601623; x=1792206423;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DqBvVGuFj0GZrAgGWRG+Z1DSJ+1TnkbYLAFeT5xo12I=;
-        b=NeQ0qbD44oyTAxJ2kJ457LeopemI+oEDnMZIm6whU2q56DeNb8xg38qkJUNRUsSuip
-         0hNpR5Owp1y4pHEgCJX2meQDV01jIQwmPX7aCV2rnRbTF9Z6HliRf3uxzYsjNdK4G9d3
-         rG0twTacLXCRKV2MvRdKfc5xsNrMpCx3mcEzHbjQKG/6V0aoGWUyityy3rro6jvspSC6
-         4EecSuxDo7ssLLRq/oG9VlYdwNH/1LkuCyD45jUERkjHrvzRtskylV/dQUptboFl2CpR
-         7udGP+w9YUz6k6FzOL9+DvVV8FOq5+5JQamXawAO9sotnjZR/rio5J6ubjDCNRHLpGUD
-         IiFg==
-X-Forwarded-Encrypted: i=1; AKwUvByWRWcFwMgvDQIlO+kNDrL8P/yqTqe3+Qzf5IZ9+pKJ5s4GH9mw15HBLhg2wf9Sw52uG2P2NWFMLgb57DXNDow=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIM92LsbEbwJDxHIMsvTDdkSCPWIsQ9/fXRqkpvXHNfvoL4hQfz
-	p2z8Pgm9Ok+aD2hkQefazEhK41rYgCCiM8PhwDx9rtLXVGilBZAKHNgPsutJqtoOANW9W3dXU3s
-	cirm0E0NguPmjkGI1sFIL3WDESX5OlpU=
-X-Gm-Gg: AYBFou1io+ftImAr/du392oqsRSes27virZT6fRZhSrD/JT5XGKiKz3AYgFyNOW9LtC
-	4tXFz6BW8AnOV+qPoSd+aX/ZpYl02pheZeZSsgKk72tXTZvubxGRlHnU04g8x5ZoCYlZj7tG8YW
-	vGA2JpXDDsOVe2DZDxuaB4ymUXyUz0FRdtKgOtKArFPpcJ31Vs13lkucGR3TJPKoDrcVXY6rtR+
-	Yfn7qRG6Wi9acotj+OPCmD/WfZ9YIHoNjpWKNyZWSOpqTtnZliVL1xWd/1keJN12Q9X0GVUY5uj
-	eCFAH75z6a7/pYQ8pxquVYgasCrXePpufHz2CyNqgFCqmfhXAv1EKtgc
-X-Received: by 2002:a05:600c:548e:b0:4a0:1aa0:7cfa with SMTP id
- 5b1f17b1804b1-4a18e4aa724mr72284475e9.12.1791601623170; Fri, 09 Oct 2026
- 20:07:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QuN+CprY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791603169; x=1823139169;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=L1xvLFtuvT5GKWDgJ3c/DJEPvPiVYnbScbik8/+g7n0=;
+  b=QuN+CprYDK1kgcGcRUFzSUPCPVlz/u6v9Tzf+e9NpCWS0ENHeYJeqJmK
+   kl/XPB+jK3uy9jGKh01gKpOGEEzpAJlB0MTLOLyUIxneDrpiVYp6JP92O
+   SxUptgCZU21KvS4bbFEQ6+Yp+Oyd35QgIrX/6CkJApzQ7lzl4Kz3NkvsR
+   hK9Pm0tujlFYHvEMDWM6NUz6SwCQaLWAX3sWIlTLaV4zajij7kuvqUwDm
+   2XbmJUOLAvmEHRzAlzauwoupzNI9otXN74Rh6iSqjV1QLewGE+AU1FFnQ
+   6Y2TMCn7c7VGzJtY4q2vz0wEK0RAULZZYOrB1Voh6l/yrrd1GjwFw6Sw0
+   w==;
+X-CSE-ConnectionGUID: 5yvbENDaTWCn9BUJN7udOA==
+X-CSE-MsgGUID: nkv2gRXGRI+OoqfqqEtBAA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="404479"
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="404479"
+Received: from fmviesa013.fm.intel.com ([10.60.135.153])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 20:32:48 -0700
+X-CSE-ConnectionGUID: 3lYJoxIFQmKA4unwBVQFlg==
+X-CSE-MsgGUID: h4ITtYXwQ3OYJZS+UVq/lA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="2199563"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 20:32:42 -0700
+Message-ID: <4d57c0f7-5ed9-4a1f-b401-a1072af5dd6c@linux.intel.com>
+Date: Sat, 10 Oct 2026 11:32:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261005171529.1378809-1-kunwu.chan@gmail.com>
- <20261005171529.1378809-3-kunwu.chan@gmail.com> <bedc399a-151c-42e5-b33e-d78221702fa5@efficios.com>
-In-Reply-To: <bedc399a-151c-42e5-b33e-d78221702fa5@efficios.com>
-From: KunWu Chan <kunwu.chan@gmail.com>
-Date: Sat, 10 Oct 2026 11:06:52 +0800
-X-Gm-Features: AclHuK8NpqoYHGNF8qem9_9ttNaOwl-7fp6vIe9jVutVGCveZrXPQMrRKkOozbM
-Message-ID: <CAN_Opa99g5MiWp6L8d_c=eUNcfxH8eb1Am6MKRjx+zjUTYXs0w@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 02/15] hazptr: use Bloom filter for shared scan waiters
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: paulmck@kernel.org, corbet@lwn.net, mingo@redhat.com, frederic@kernel.org, 
-	neeraj.upadhyay@kernel.org, josh@joshtriplett.org, urezki@gmail.com, 
-	dave@stgolabs.net, lianux.mm@gmail.com, stern@rowland.harvard.edu, 
-	parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org, 
-	boqun@kernel.org, npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk, 
-	luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com, 
-	joelagnelf@nvidia.com, skhan@linuxfoundation.org, rdunlap@infradead.org, 
-	longman@redhat.com, rostedt@goodmis.org, jiangshanlai@gmail.com, 
-	qiang.zhang@linux.dev, brads@mainlining.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, lkmm@lists.linux.dev, linux-doc@vger.kernel.org, 
-	rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v15 13/23] KVM: selftests: Support guest_memfd in-place
+ conversion
+To: Lisa Wang <wyihan@google.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
+ Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
+ kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
+ <20261001-tdx-selftests-v15-13-7c62a5d8a992@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20261001-tdx-selftests-v15-13-7c62a5d8a992@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 6, 2026 at 1:51=E2=80=AFPM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> On 2026-10-05 13:15, Kunwu Chan wrote:
-> > Replace the per-waiter exact-match scan with a shared Bloom filter
-> > built during the second drain pass: each observed non-wildcard
-> > address sets three bits, so a waiter whose address hashes to an
-> > unset bit can be completed without another slot walk.
-> >
-> > A Bloom filter has no false negatives, so an address absent from
-> > the final drain scan cannot be held by an observed slot; false
-> > positives only delay completion to a later scan cycle.
-> >
-> > The filter uses a one-page bitmap with three multiply-shift hash
-> > functions.  It lives in the hazptr_scan_state and is only touched
-> > by the scan kthread, so waiter state remains on the caller's stack
-> > and no dynamic allocation is needed.
-> >
-> > Suggested-by: Boqun Feng <boqun@kernel.org>
->
-> I actually suggested that to Boqun in the first place. Feel
-> free to add my suggested-by tag as well. :)
->
-> Did you run your Bloom filter in a test program on the side to
-> see how it behaves with pointers, and confirm that the false
-> positive rate is not too high due to hashing algorithm/constants
-> concerns ?
->
+On 10/2/2026 3:37 AM, Lisa Wang wrote:
+> With guest_memfd in-place conversion, the memory region can be set as
+> shared, eliminating the need for dual-backed memory.
+> 
+> By setting the region to shared initially, the KVM selftest framework
+> can populate the mmap()-ed guest_memfd memory just like any standard
+> memory provider.
+> 
+> For CoCo VMs, pages that need to be private are explicitly set to
+> private before executing the VM.
+> 
+> Signed-off-by: Lisa Wang <wyihan@google.com>
+> ---
+>  tools/testing/selftests/kvm/lib/kvm_util.c         | 20 ++++++++++++++------
+>  tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c |  6 +++++-
+>  2 files changed, 19 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 7625908caf21..f474664b5d92 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -494,8 +494,10 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
+>  	u64 nr_pages = vm_nr_pages_required(shape.mode, nr_runnable_vcpus,
+>  						 nr_extra_pages);
+>  	struct userspace_mem_region *slot0;
+> +	u64 gmem_flags = 0;
+>  	struct kvm_vm *vm;
+> -	int i, flags;
+> +	int flags = 0;
+> +	int i;
+>  
+>  	kvm_set_files_rlimit(nr_runnable_vcpus);
+>  
+> @@ -505,14 +507,20 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
+>  	vm = ____vm_create(shape);
+>  
+>  	/*
+> -	 * Force GUEST_MEMFD for the primary memory region if necessary, e.g.
+> -	 * for CoCo VMs that require GUEST_MEMFD backed private memory.
+> +	 * Force GUEST_MEMFD for the primary memory region if necessary, and
+> +	 * initialize it as shared if in-place conversion is supported, so the
+> +	 * selftest framework can populate it exactly like other memory
+> +	 * providers.
+>  	 */
+> -	flags = 0;
+> -	if (is_guest_memfd_required(shape))
+> +	if (is_guest_memfd_required(shape)) {
+>  		flags |= KVM_MEM_GUEST_MEMFD;
+> +		if (kvm_has_gmem_attributes)
+> +			gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED |
+> +				      GUEST_MEMFD_FLAG_MMAP;
+> +	}
+>  
+> -	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, flags);
+> +	vm_mem_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, flags,
+> +		   -1, 0, gmem_flags);
 
-Hi Mathieu,
+This is common for both TDX and SNP, does it break SNP?
 
-I ran a standalone test using the hash functions and constants from
-the patch, with random,
-page-aligned, cacheline-aligned, sequential, and two synthetic
-kernel-like address patterns.
 
-With 768 inserted addresses, the measured false-positive rates were
-0.025%=E2=80=930.034% across
-these patterns, compared with an ideal Bloom-filter estimate of about
-0.031%. I also tested larger
- insertion counts as stress cases. The results were consistent across
-three seeds,
-with only minor variation for the random distribution.
+>  	for (i = 0; i < NR_MEM_REGIONS; i++)
+>  		vm->memslots[i] = 0;
+>  
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> index e348507a6be8..40ee9b1951c2 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> @@ -23,6 +23,8 @@ void tdx_vm_setup_boot_code_region(struct kvm_vm *vm)
+>  	gpa_t gpa;
+>  	u8 *hva;
+>  
+> +	if (kvm_has_gmem_attributes)
+> +		gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED | GUEST_MEMFD_FLAG_MMAP;
+>  	vm_mem_add(vm, VM_MEM_SRC_SHMEM, alloc_gpa, TD_BOOT_CODE_SLOT,
+>  		   nr_pages, KVM_MEM_GUEST_MEMFD, -1, 0, gmem_flags);
+>  
+> @@ -44,9 +46,11 @@ void tdx_vm_setup_boot_parameters_region(struct kvm_vm *vm, u32 nr_runnable_vcpu
+>  	size_t boot_params_size = sizeof(struct td_boot_parameters) +
+>  		nr_runnable_vcpus * sizeof(struct td_per_vcpu_parameters);
+>  	int npages = DIV_ROUND_UP(boot_params_size, PAGE_SIZE);
+> -	const u64 gmem_flags = 0;
+> +	u64 gmem_flags = 0;
+>  	gpa_t gpa;
+>  
+> +	if (kvm_has_gmem_attributes)
+> +		gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED | GUEST_MEMFD_FLAG_MMAP;
+>  	vm_mem_add(vm, VM_MEM_SRC_SHMEM, TD_BOOT_PARAMETERS_GPA,
+>  		   TD_BOOT_PARAMETERS_SLOT, npages,
+>  		   KVM_MEM_GUEST_MEMFD, -1, 0, gmem_flags);
+> 
 
-These are synthetic address distributions rather than measurements
-from actual kernel waiter
- addresses, but they provide an initial check of the hash functions
-against several structured
-address patterns.
-
-Thanks,
-Kunwu
-
-> Thanks!
->
-> Mathieu
->
-> > Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
-> > ---
-> >   kernel/hazptr.c | 93 +++++++++++++++++++++++++++++++++++++++++++-----=
--
-> >   1 file changed, 83 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/kernel/hazptr.c b/kernel/hazptr.c
-> > index 9e274a691af5..900ba35de2cb 100644
-> > --- a/kernel/hazptr.c
-> > +++ b/kernel/hazptr.c
-> > @@ -7,6 +7,7 @@
-> >    */
-> >
-> >   #include <linux/hazptr.h>
-> > +#include <linux/bitops.h>
-> >   #include <linux/percpu.h>
-> >   #include <linux/spinlock.h>
-> >   #include <linux/mutex.h>
-> > @@ -16,6 +17,7 @@
-> >   #include <linux/kthread.h>
-> >   #include <linux/swait.h>
-> >   #include <linux/sched.h>
-> > +#include <linux/bitmap.h>
-> >
-> >   /*
-> >    * The current hazard pointer wildcard. Flips between 1UL and 2UL to =
-guarantee
-> > @@ -213,6 +215,55 @@ void hazptr_scan_period(void *addr, void *scan_wil=
-dcard)
-> >       }
-> >   }
-> >
-> > +/* Number of hash functions for the Bloom filter. */
-> > +#define HAZPTR_BLOOM_HASHES 3
-> > +
-> > +/* Number of bits in the Bloom filter bitmap: one page. */
-> > +#define HAZPTR_BLOOM_NBITS (PAGE_SIZE * 8)
-> > +
-> > +struct hazptr_bloom {
-> > +     unsigned long map[PAGE_SIZE / sizeof(unsigned long)];
-> > +};
-> > +
-> > +/*
-> > + * Multiply @addr by a per-hash odd constant and use the high bits
-> > + * as the Bloom filter index.
-> > + */
-> > +static unsigned long hazptr_bloom_hash(void *addr, unsigned int i)
-> > +{
-> > +     static const u64 mult[HAZPTR_BLOOM_HASHES] =3D {
-> > +             0x9E3779B97F4A7C15ULL,
-> > +             0xC2B2AE3D27D4EB4FULL,
-> > +             0x165667B19E3779F9ULL,
-> > +     };
-> > +     u64 hash =3D (u64)(unsigned long)addr * mult[i];
-> > +
-> > +     return hash >> (64 - ilog2(HAZPTR_BLOOM_NBITS));
-> > +}
-> > +
-> > +static void hazptr_bloom_reset(struct hazptr_bloom *bloom)
-> > +{
-> > +     bitmap_zero(bloom->map, HAZPTR_BLOOM_NBITS);
-> > +}
-> > +
-> > +static void hazptr_bloom_add(struct hazptr_bloom *bloom, void *addr)
-> > +{
-> > +     unsigned int i;
-> > +
-> > +     for (i =3D 0; i < HAZPTR_BLOOM_HASHES; i++)
-> > +             __set_bit(hazptr_bloom_hash(addr, i), bloom->map);
-> > +}
-> > +
-> > +static bool hazptr_bloom_contains(const struct hazptr_bloom *bloom, vo=
-id *addr)
-> > +{
-> > +     unsigned int i;
-> > +
-> > +     for (i =3D 0; i < HAZPTR_BLOOM_HASHES; i++)
-> > +             if (!test_bit(hazptr_bloom_hash(addr, i), bloom->map))
-> > +                     return false;
-> > +     return true;
-> > +}
-> > +
-> >   struct hazptr_waiter {
-> >       struct list_head node;
-> >       void *addr;
-> > @@ -226,17 +277,26 @@ struct hazptr_scan_state {
-> >       struct mutex lock;
-> >       struct list_head pending;
-> >       struct list_head scanning;      /* kthread only */
-> > +     struct hazptr_bloom bloom;      /* kthread only */
-> >   };
-> >   static struct hazptr_scan_state hazptr_scan;
-> >
-> >   /*
-> > - * Check per-CPU slots before overflow-list slots to match the
-> > - * acquisition ordering of promoted slots.
-> > + * Walk all slots and return true if @watch is present.  If @bloom
-> > + * is non-NULL, record observed non-wildcard addresses in it.
-> > + *
-> > + * Per-CPU slots are examined before overflow-list slots on each CPU
-> > + * to preserve the acquisition ordering required by the promote path:
-> > + * synchronize must observe the per-CPU slot release before the
-> > + * overflow-list entry can be missed.
-> >    */
-> > -static bool hazptr_value_present(void *val)
-> > +static bool hazptr_scan_walk(void *watch, struct hazptr_bloom *bloom)
-> >   {
-> >       int cpu;
-> >
-> > +     if (bloom)
-> > +             hazptr_bloom_reset(bloom);
-> > +
-> >       for_each_possible_cpu(cpu) {
-> >               struct hazptr_percpu_slots *percpu_slots =3D per_cpu_ptr(=
-&hazptr_percpu_slots, cpu);
-> >               struct hazptr_overflow_list_flip *overflow_list_flip =3D =
-per_cpu_ptr(&percpu_overflow_list_flip, cpu);
-> > @@ -244,10 +304,14 @@ static bool hazptr_value_present(void *val)
-> >
-> >               for (idx =3D 0; idx < NR_HAZPTR_PERCPU_SLOTS; idx++) {
-> >                       struct hazptr_slot_item *item =3D &percpu_slots->=
-items[idx];
-> > +                     void *v;
-> >
-> >                       /* Pairs with smp_store_release in hazptr_release=
-(). */
-> > -                     if (smp_load_acquire(&item->slot.addr) =3D=3D val=
-)
-> > +                     v =3D smp_load_acquire(&item->slot.addr);
-> > +                     if (v =3D=3D watch)
-> >                               return true;
-> > +                     if (bloom && v && !is_wildcard(v))
-> > +                             hazptr_bloom_add(bloom, v);
-> >               }
-> >               for (int i =3D 0; i < 2; i++) {
-> >                       struct hazptr_overflow_list *list =3D &overflow_l=
-ist_flip->array[i];
-> > @@ -256,11 +320,16 @@ static bool hazptr_value_present(void *val)
-> >
-> >                       raw_spin_lock_irqsave(&list->lock, flags);
-> >                       hlist_for_each_entry(b, &list->head, overflow_nod=
-e) {
-> > +                             void *v;
-> > +
-> >                               /* Pairs with smp_store_release in hazptr=
-_release(). */
-> > -                             if (smp_load_acquire(&b->slot.addr) =3D=
-=3D val) {
-> > +                             v =3D smp_load_acquire(&b->slot.addr);
-> > +                             if (v =3D=3D watch) {
-> >                                       raw_spin_unlock_irqrestore(&list-=
->lock, flags);
-> >                                       return true;
-> >                               }
-> > +                             if (bloom && v && !is_wildcard(v))
-> > +                                     hazptr_bloom_add(bloom, v);
-> >                       }
-> >                       raw_spin_unlock_irqrestore(&list->lock, flags);
-> >               }
-> > @@ -276,7 +345,7 @@ static bool hazptr_value_present(void *val)
-> >    */
-> >   static void hazptr_drain_wildcard(void *wc)
-> >   {
-> > -     while (hazptr_value_present(wc))
-> > +     while (hazptr_scan_walk(wc, NULL))
-> >               cond_resched();
-> >   }
-> >
-> > @@ -309,12 +378,16 @@ static void hazptr_scan_do_cycle(void)
-> >       WRITE_ONCE(hazptr_wildcard, scan_wildcard);
-> >       old_wildcard =3D flip_wildcard(scan_wildcard);
-> >
-> > -     /* Pass 2: drain the old wildcard. */
-> > -     hazptr_drain_wildcard(old_wildcard);
-> > +     /*
-> > +      * Pass 2: drain the old wildcard while collecting observed
-> > +      * addresses into the Bloom filter.
-> > +      */
-> > +     while (hazptr_scan_walk(old_wildcard, &hazptr_scan.bloom))
-> > +             cond_resched();
-> >
-> > -     /* Complete waiters whose address is no longer held by any slot. =
-*/
-> > +     /* Complete waiters whose address is not in the filter. */
-> >       list_for_each_entry_safe(w, n, &hazptr_scan.scanning, node) {
-> > -             if (!hazptr_value_present(w->addr))
-> > +             if (!hazptr_bloom_contains(&hazptr_scan.bloom, w->addr))
-> >                       list_move(&w->node, &done);
-> >       }
-> >
->
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> https://www.efficios.com
