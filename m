@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192003A1687;
-	Sat, 10 Oct 2026 21:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920973A9605;
+	Sat, 10 Oct 2026 21:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791668628; cv=none; b=UCsyiyYLNOUK30PDvrueS3yw27l4l6zeKHeejc59tLjHdk+Y0bUnEouRxoaMfuCnk4fQ1JrfC/cN71LUblU7O6i2/drP0wyc3Y3YUcIEAYpoyrPPE3MzPaQ3DV/vZQ9FQzJm76icEY9GLsaKp1CEHAlED9Hdf+wWNunBwFMvURA=
+	t=1791668629; cv=none; b=LQW7XG764iPseu4tkHk+G/Yoq1ZASQmU44/YKrlGu8NjSobgtjXs7eegaEKKzBOQkk/8PWzyZJ4CjNNCpd7Bo1ghXUm7SpBHexQTr/4Xx252AWZubxLCO9n9kyc7/mka1fgKYG37fe38bcxUVbtEEVFo4RxC6cDb4f2Vpxode34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791668628; c=relaxed/simple;
-	bh=aC59iIni46oA6M4NH2YNFUMq4Ie8JtxCvLc9HFdkKCo=;
+	s=arc-20240116; t=1791668629; c=relaxed/simple;
+	bh=NbUrmVssgXMsM7yNqV4HMEjrvQ52EOsTagul1fXshRk=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QEFnsfs07p+3eSBBknXm2xz2Ww6Km6pEWFygp6Haz5tzJZtNBpF1fr5CdDYLXqhq9Fm/VPhvAWJNBV0BFtVX4jkF/hMZg/wNQLTXwnuGB47sX1STP9axvMpuytrnM9EZzMVB7dLbaVAy4WNANTKubv2UPuXTt2SCpQYlw99fwEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oGCV/ksZ; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=BALqzOks7XH63Z8pUIBNPyLivJbIqABWxAT3wXVqjK3HfJySgMG9G++3Ymmj4RvBJ+fLNpeBrno8bkfsNatEHvGy7cre2FfwuCkqyVY/VLh62DiIP8UrFIe0S1R4AwJekOkYNskQIOUcpDNpi4YVF1c5msyXtHmHVRv+eKNCXlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hvf9ruWk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oGCV/ksZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8C01F00893;
-	Sat, 10 Oct 2026 21:43:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hvf9ruWk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7564D1F000FF;
+	Sat, 10 Oct 2026 21:43:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791668626;
-	bh=po7STztVxdmjeFKOSSAFKvoqBdHgLSGwV5Bl7PgmJpc=;
+	s=k20260515; t=1791668628;
+	bh=fWuNCPcEuBax8HBlFNHcHxPKX0VK8F8nWp4HtQxVG/4=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=oGCV/ksZWDbIRpykHf9JQH1e9Ovv85wdTi5tOL3jIEqBS+aSxG3F3FQJmw5jCIJfe
-	 xb4EX7YHH2/kKIJIbxf+l1rwR2bQLR9TveswlhM6xKeP8XagOqTiZLU/QqoJhC9IJv
-	 C/gNMZD2UIvJIelMddZQlP4TyHQ4isg+zZMqyTWFbnTMyV6oQRIZHyE2+BiC0Jy5Jp
-	 Lu4RtzfEs77aNvGI1+yxGwUHVIpLPVyHDSLVHLH/ozHDnqYHwKzdF8MBbFqwWCOEW0
-	 Z59ShduU7racKboiqR/FnhFk7Yt/rugByrMHPWYS3ORSvnq5VxIy9uJdf3zRkOqjfB
-	 LyZ/tciLKUmjA==
-Subject: Re: [PATCH net-next v2 4/7] psp: add core tracked stat for
- outstanding tx keys
+	b=hvf9ruWkrBLpWxQ1EX/dZzt7Ld0Dipu4wacCNrSaG9/hU/oKoHHX6UDKmvTs6Bs3M
+	 faH7GwEcnX5DhK/AkbSZJtiMKxL8ySuH4VMi6TzxxoZyPsBSQez2sFjeDMOvftAu6/
+	 AY7v8z1yLGJCR/v5W8tLMR0C0Xm9pzydsTeePNcMSYn13iWD29V6FCQ21G/IXFYaBn
+	 wtKIxyLlLyCOM+8VNJwU3u6kOUr4ezgxO+RCKvCGhzCyLLHOVwmv+TxefPwjFx7hSs
+	 5WEnnTV42zjDu7v/60mZaXat/7HnDSi5eJxSVyPaojlTE+tfoqlpkT1IC+9RYczkYe
+	 n1THjANukzreA==
+Subject: Re: [PATCH net-next v2 5/7] selftests: drv-net: psp: factor out psp
+ connection setup
 From: netdev-bot+sashiko@kernel.org
 To: daniel.zahka@gmail.com
 Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
@@ -36,10 +36,10 @@ Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
  andrew+netdev@lunn.ch, shuah@kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Sat, 10 Oct 2026 21:43:45 +0000
-Message-ID: <179166862537.434549.3280314687131205952@kernel.org>
-In-Reply-To: <20261009-psp-v2-4-5596ab50f677@gmail.com>
-References: <20261009-psp-v2-4-5596ab50f677@gmail.com>
+Date: Sat, 10 Oct 2026 21:43:46 +0000
+Message-ID: <179166862699.434549.1168361771089629782@kernel.org>
+In-Reply-To: <20261009-psp-v2-5-5596ab50f677@gmail.com>
+References: <20261009-psp-v2-5-5596ab50f677@gmail.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,90 +56,131 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] psp_dev_tx_key_del() (net/psp/psp_sock.c) calls
-  psd->ops->tx_key_del(psd, pas) and then always decrements…
+- [Low] In psp_responder.c, conn_setup_psp() fills and exchanges key data
+  sized for the Rx version, then hands the same buffer to the new…
 
 --
 
-psp: add core tracked stat for outstanding tx keys
+selftests: drv-net: psp: factor out psp connection setup
 
-This commit adds a core-maintained tx_key_cnt to psd->stats. The counter
-goes up when tx_key_add() succeeds and down in psp_dev_tx_key_del(). It is
-reported to userspace as tx-key-count, but only for drivers that use an
-SADB, and psp_dev_unregister() warns if any keys are still outstanding.
+This commit moves the PSP Rx and Tx association code in psp_responder.c
+into new rx_assoc() and tx_assoc() helpers. It also moves the psp.py key
+exchange into _establish_psp_conn(), so other tests can reuse the key
+exchange and then do more assoc calls.
 
-> diff --git a/Documentation/netlink/specs/psp.yaml b/Documentation/netlink/specs/psp.yaml
-> index f3266763c3253..d14c11d098914 100644
-> --- a/Documentation/netlink/specs/psp.yaml
-> +++ b/Documentation/netlink/specs/psp.yaml
-> @@ -190,6 +190,13 @@ attribute-sets:
->          doc: |
->            Number of PSP packets for transmission with errors.
->            Device statistic (from the PSP spec).
-> +      -
-> +        name: tx-key-count
-> +        type: uint
-> +        doc: |
-> +          Current number of Tx keys installed on the device.
-> +          Only visible if the driver stores keys on device.
-> +          Kernel statistic.
+> diff --git a/tools/testing/selftests/drivers/net/psp_responder.c b/tools/testing/selftests/drivers/net/psp_responder.c
+> index a26e7628bbb13..57425ecb9561f 100644
+> --- a/tools/testing/selftests/drivers/net/psp_responder.c
+> +++ b/tools/testing/selftests/drivers/net/psp_responder.c
 
 [ ... ]
 
-> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
-> index d21f7afd830a3..c458bc551b4b9 100644
-> --- a/net/psp/psp_sock.c
-> +++ b/net/psp/psp_sock.c
+> @@ -64,29 +68,34 @@ static int conn_setup_psp(struct ynl_sock *ys, struct opts *opts, int data_sock)
+>  		return -1;
+>  	}
+>  
+> -	// SPI exchange
+> -	key_len = rsp->rx_key._len.key;
+> -	memcpy(info, &rsp->rx_key.spi, sizeof(spi));
+> -	memcpy(&info[sizeof(spi)], rsp->rx_key.key, key_len);
+> -	sz = sizeof(spi) + key_len;
+> +	if (rsp->rx_key._len.key != key_len) {
+> +		fprintf(stderr, "ERROR: unexpected Rx key length %u\n",
+> +			rsp->rx_key._len.key);
+> +		psp_rx_assoc_rsp_free(rsp);
+> +		return -1;
+> +	}
 
 [ ... ]
 
-> @@ -105,6 +107,8 @@ static int psp_dev_tx_key_add(struct psp_dev *psd, struct psp_assoc *pas,
->  void psp_dev_tx_key_del(struct psp_dev *psd, struct psp_assoc *pas)
->  {
->  	psd->ops->tx_key_del(psd, pas);
-> +	if (!WARN_ON_ONCE(!psd->stats.tx_key_cnt))
-> +		psd->stats.tx_key_cnt--;
+> -	// Setup Tx assoc
+>  	teq = psp_tx_assoc_req_alloc();
+>  
+>  	psp_tx_assoc_req_set_sock_fd(teq, data_sock);
+> -	psp_tx_assoc_req_set_version(teq, psp_vers.tx);
+> +	psp_tx_assoc_req_set_version(teq, version);
+>  	psp_tx_assoc_req_set_tx_key_spi(teq, spi);
+> -	psp_tx_assoc_req_set_tx_key_key(teq, &info[sizeof(spi)], key_len);
+> +	psp_tx_assoc_req_set_tx_key_key(teq, key, psp_key_len(version));
+
+[ ... ]
+
+> @@ -99,6 +108,34 @@ static int conn_setup_psp(struct ynl_sock *ys, struct opts *opts, int data_sock)
+>  	return 0;
 >  }
+>  
+> +static int conn_setup_psp(struct ynl_sock *ys, struct opts *opts, int data_sock)
+> +{
+> +	unsigned int key_len = psp_key_len(psp_vers.rx);
+> +	char info[300];
+> +	ssize_t sz;
+> +	__u32 spi;
+> +
+> +	dbg("create PSP connection\n");
+> +
+> +	if (rx_assoc(ys, &spi, &info[sizeof(spi)], data_sock))
+> +		return -1;
+> +
+> +	// SPI exchange
+> +	memcpy(info, &spi, sizeof(spi));
+> +	sz = sizeof(spi) + key_len;
+> +
+> +	send(data_sock, info, sz, MSG_WAITALL);
+> +
+> +	sz = recv(data_sock, info, sz, MSG_WAITALL);
+> +	if (sz < 0) {
+> +		perror("ERROR: failed to read PSP key from sock");
+> +		return -1;
+> +	}
+> +	memcpy(&spi, info, sizeof(spi));
+> +
+> +	return tx_assoc(ys, psp_vers.tx, spi, &info[sizeof(spi)], data_sock);
 
 [Severity: Low]
-Is tx-key-count really the number of keys installed on the device? The
-YAML doc says "Current number of Tx keys installed on the device". The
-commit message says it counts keys "from the hw's perspective" and can show
-whether "a device is approaching its SADB capacity".
+Can tx_assoc() read uninitialized bytes from info[] here if psp_vers.tx
+and psp_vers.rx have different key sizes?
 
-struct psp_dev_ops::tx_key_del returns void, so psp_dev_tx_key_del()
-decrements the counter whether or not the device actually freed the entry.
+conn_setup_psp() sizes the exchange from the Rx version:
 
-In mlx5, which is the only SADB driver, the delete path drops any firmware
-error:
+	unsigned int key_len = psp_key_len(psp_vers.rx);
+	...
+	sz = sizeof(spi) + key_len;
 
-drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp.c:mlx5e_psp_assoc_del() {
-    ...
-	nkey = (struct psp_key *)pas->drv_data;
-	mlx5_destroy_encryption_key(priv->mdev, nkey->id);
-	atomic_dec(&psp->tx_key_cnt);
-}
+So rx_assoc() and recv() fill only key_len bytes after the SPI. Then
+tx_assoc() copies a length based on the Tx version:
 
-drivers/net/ethernet/mellanox/mlx5/core/lib/crypto.c:mlx5_crypto_destroy_dek_key() {
-    ...
-	mlx5_cmd_exec(mdev, in, sizeof(in), out, sizeof(out));
-}
+	psp_tx_assoc_req_set_tx_key_key(teq, key, psp_key_len(version));
 
-The call path is psp_assoc_free(), psp_deferred_del_work() or
-psp_deferred_del_uninit(), then psp_dev_tx_key_del(), then
-mlx5e_psp_assoc_del(), then mlx5_destroy_encryption_key().
+The two versions are separate bytes read in run_session(), and nothing
+checks that they match:
 
-If MLX5_CMD_OP_DESTROY_GENERAL_OBJECT fails (bad status or timeout), the
-DEK can stay allocated on the device while tx_key_cnt still goes down. In
-that case the stat would read lower than real SADB occupancy.
+	memcpy(&psp_vers, buf, 2);
 
-The counter still catches missing tx_key_del calls in the core. It does
-not catch failed deletes on the device side.
+With a 256-bit Tx version and a 128-bit Rx version, 16 bytes of the
+uninitialized info[] stack array would go into the tx-key attribute.
+Before this patch, the Tx key length was rsp->rx_key._len.key, which is
+the same length used for the exchange.
 
-Should the doc and commit message describe this as a count of keys the
-stack believes are installed? The alternative would be for tx_key_del to
-return an error, so the core can skip the decrement when the device-side
-delete fails.
+The kernel should reject that request in psp_sock_assoc_set_tx() because
+the versions don't match. Also, the only in-tree sender, _make_psp_conn()
+in psp.py, always sends equal versions. Later patches in the series pass a
+fully initialized 32-byte key to tx_assoc() from handle_tx_assoc(), but
+they leave conn_setup_psp() as is. So the mismatch is still there at the
+end of the series.
+
+Would it make sense to reject Tx/Rx versions with different key sizes in
+conn_setup_psp(), or to pass the valid key length to tx_assoc()?
+
+Separately, the commit message calls this a factor-out. However,
+rx_assoc() now fails when rsp->rx_key._len.key doesn't match
+psp_key_len(psp_vers.rx), and the Tx key length is now computed
+differently. Could the commit message mention these behaviour changes?
+
+> +}
+> +
+>  static void send_ack(int sock)
+>  {
+>  	send(sock, "ack", 4, MSG_WAITALL);
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009-psp-v2-0-5596ab50f677%40gmail.com
