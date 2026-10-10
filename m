@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B84737DE85;
-	Sat, 10 Oct 2026 12:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4464A49A6;
+	Sat, 10 Oct 2026 12:41:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791636094; cv=none; b=UmzXdo5B3lawvNpnz1ZNW1z61WvIIFGwKwW0nN1lTcsi6776U5FDhPzWaJQsmQc9mVE3bEw7WHcFQ2qT1RJbwZFdf3pmeOhIYnhahYUQzP85Mk49SfUueezJRu4LcDpdwZj/6hK/qy7+Uw0KmacbUuRSacvkHOuKYygo92ML6bU=
+	t=1791636095; cv=none; b=ek1Ya6rGLISrf367TcXtpiSFBantcZL1vVBdPWbICDnipTuPkC98MCvscqe9XdBpffZhXAKMdgnLzT0HTepVgxrAjWt/V0eplkkG59eMCWHD97/ntjqJfbohv4yuUIeW4rfQ18ks/AzAIWETB0vqbfeez8W6xZHAitWX8zyI1DE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791636094; c=relaxed/simple;
-	bh=JEl0YoL2TeSHI4E5MqSlkMUDZSX/pDftDGk07n2JP5k=;
+	s=arc-20240116; t=1791636095; c=relaxed/simple;
+	bh=PMz3ndj/dYnL6Gkz5thUnJr47r+WeegaHAqu4y/FaSY=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FPy3Bfyv25tbyXidl0MkALjMvIUlwoqKQec6jCs9r05NcBY2BFwaHak8+dX/Qinge7z8cj2wDg2TUMQNOQ/m4x8cWVElpyW5tRsnU9moPDzE7zgp6N5frKe6c10dJonuTuSLcuVC92YkTYHXb6i4NyLTa794L2ytUT8mx7QUjAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nh4gSph6; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=EY4/m5SyVHLGvyn/iUNfB3VE0Z8P8Ak2tre/Delr7RE2SQKtv9YOQXTgF74z8Utx1Of0/ndWz8Sc830NXw09nx+5BSDK/WcAU6XKxB11Dz4OvG8WG/wiWrfa5SFVvvmWFX67HCdN4x/Hun/Yiq4X2WtWNPNSJwxpFFD60WTO2HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMvLE3GN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nh4gSph6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E05E81F00898;
-	Sat, 10 Oct 2026 12:41:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMvLE3GN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161131F00893;
+	Sat, 10 Oct 2026 12:41:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791636088;
-	bh=Xf6uSj2i1EAG50KNIrB/xvfGSfWxMZZZpKa8hGMx5Ps=;
+	s=k20260515; t=1791636092;
+	bh=+Sg476JVCrbPcGPS/k7VULk5EVY8Y9jYGQn/AErUnFg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Nh4gSph6FCV1cdZq6m2P0fsijFyljMsLZc0itwBx9SQKGEAy+dvR/Wq58EQxQXASA
-	 sfwyztdVxVtLT21JIz8fTtIQQLx9mHRdb9hM1OS9TDWOP0awiW26iJT3ukO16XIgul
-	 dylG75CCkUz3hXWNY107MgmR0AyTrTzsX7ESCi5EXLt/F+wVuvQNMFCIZWbwGlfMYm
-	 baxmh42d5WO4IYdmRzUlHrxqD1ZtC65YXsoS2OrFGF9AxFgCb1E0s1LW+JmblradFi
-	 sb14SP9cAOsa7wzbf815JtOi2/zi7ht9OfvviTnQ2PefvgaotgQO/aEyCL/u/WRUDP
-	 YZuwW/j9GsRnw==
-Subject: Re: [PATCH net-next 04/13] amt: send the Membership Query over IPv6
+	b=YMvLE3GNrPwXDDgnK5HS1YIwHdnNH/4P7pNvFIXBbRfciE5fjaEMBuF0H70n6m7UF
+	 OPGE+qHhRsnmM/GAZSYi9bFwWfnxRJLn09rH/K4MrtxjTCkcl6oNuYo1mY4+zq8FZ8
+	 al05fPN3tvtcEoDE6ugLWYw3V7HtXY6BkNT3lRtRfqBP+VUSLxU2ssTqygwTPlpApy
+	 TJmZt2OxfDXn5PW1oMSe08T3qkSERE+Rb/A8QSTM5PaEfce/PB78ICbp+Sv7+9fU7k
+	 N92ltGSH4F3c/ifXVf+FA7FVMhmAjg4EhK6YhWdRPQPVoLLFfwKV2C2S09/hgJKiDA
+	 NlVNLhUGnYM3A==
+Subject:
+ Re: [PATCH net-next 08/13] amt: send the AMT gateway control plane over IPv6
 From: netdev-bot+sashiko@kernel.org
 To: omar@blockcast.net
 Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
  horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Sat, 10 Oct 2026 12:41:27 +0000
-Message-ID: <179163608739.434549.2136224322943831238@kernel.org>
-In-Reply-To: <20261009122426.551178-5-omar@blockcast.net>
-References: <20261009122426.551178-5-omar@blockcast.net>
-X-sashiko-severity: Medium
+Date: Sat, 10 Oct 2026 12:41:31 +0000
+Message-ID: <179163609160.434549.7351587240997160050@kernel.org>
+In-Reply-To: <20261009122426.551178-9-omar@blockcast.net>
+References: <20261009122426.551178-9-omar@blockcast.net>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -47,127 +48,125 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The IPv6 branch of amt_udp_xmit() routes Membership Queries
-  without a traffic class but sends them with AMT_TOS.
+- [Low] Commit-message concern for "amt: send the AMT gateway control
+  plane over IPv6": none of the new IPv6 gateway sender code can run at…
+- [Low] At this commit the new IPv6 gateway senders use discovery_ipv6
+  and remote_ipv6, but the receive side is still IPv4-only.
 
 --
 
-amt: send the Membership Query over IPv6
+amt: send the AMT gateway control plane over IPv6
 
-This patch moves the route and transmit step of
-amt_send_membership_query() into a new helper, amt_udp_xmit(). The helper
-sends over the device's outer family: ip_route_output_key() and
-udp_tunnel_xmit_skb() for IPv4, and amt_route6() and
-udp_tunnel6_xmit_skb() for IPv6. The relay's General Query now uses the
-IPv6 path when the device has an IPv6 outer transport.
+This commit adds amt_send_discovery_v6() and amt_send_request_v6(). They
+send the gateway Relay Discovery and Request over an IPv6 outer header
+through amt_send_ctrl_v6(). It also changes amt_send_membership_update() to
+size its headroom for the outer family and send through amt_udp_xmit(), and
+adds discovery_ipv6, remote_ipv6 and the remote_ipv6_lock seqlock to struct
+amt_dev.
 
-> diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-> index eaa5637674694..5e8a74cc0700e 100644
-> --- a/drivers/net/amt.c
-> +++ b/drivers/net/amt.c
+> Send the Discovery and the Request of a gateway with an IPv6 local
+> address from amt_send_discovery_v6() and amt_send_request_v6(). Both
+> messages are a few bytes with no payload, so they are built on the stack
+> and sent with amt_send_ctrl_v6(), the helper that already sends the
+> relay's IPv6 Advertisement, rather than with a copy of the IPv4 skb
+> construction. The Membership Update carries the gateway's IGMP or MLD
+> report, so amt_send_membership_update() keeps building on that skb: it
+> sizes the headroom for the outer family and sends through
+> amt_udp_xmit(), like the relay's Membership Query and Multicast Data,
+> which avoids an IPv6 copy of the function.
 
-[ ... ]
+[Severity: Low]
+This isn't a bug, but could the commit message say that none of the new
+IPv6 sender code can run yet?
 
-> @@ -1098,6 +1103,65 @@ static void amt_req_work(struct work_struct *work)
->  				 msecs_to_jiffies(100));
->  }
->  
-> +/* Route an AMT-encapsulated skb to @daddr and send it over the device's
-> + * outer family. The caller has already pushed the AMT header.
-> + */
-> +static int amt_udp_xmit(struct amt_dev *amt, struct sock *sk,
-> +			struct sk_buff *skb, const union amt_addr *daddr,
-> +			__be16 sport, __be16 dport)
-> +{
-> +	struct rtable *rt;
-> +	struct flowi4 fl4;
-> +
-> +	if (amt_v6(amt)) {
-> +		struct dst_entry *dst;
-> +
-> +		dst = amt_route6(amt, sk, &amt->local_ipv6, &daddr->ip6,
-> +				 sport, dport);
+At this commit nothing writes local_ipv6, so amt_v6() is always false:
 
-[ ... ]
-
-> +		skb_scrub_packet(skb, false);
-> +		udp_tunnel6_xmit_skb(dst, sk, skb, amt->dev, &amt->local_ipv6,
-> +				     &daddr->ip6, AMT_TOS,
-> +				     ip6_dst_hoplimit(dst), 0, sport, dport,
-> +				     false, 0);
-
-[Severity: Medium]
-Should the IPv6 route lookup also use AMT_TOS? The packet goes out with
-AMT_TOS as its traffic class, but the route is looked up with a traffic
-class of 0.
-
-amt_route6() clears the flowi6 and never sets the flowlabel:
-
-drivers/net/amt.c:amt_route6() {
-	memset(&fl6, 0, sizeof(fl6));
-	fl6.flowi6_oif		= amt->stream_dev->ifindex;
-	fl6.flowi6_proto	= IPPROTO_UDP;
-	fl6.daddr		= *daddr;
-	fl6.saddr		= *saddr;
-	fl6.fl6_dport		= dport;
-	fl6.fl6_sport		= sport;
-
-	return ip6_dst_lookup_flow(amt->net, sk, &fl6, NULL);
+drivers/net/amt.c:amt_v6() {
+	return IS_ENABLED(CONFIG_IPV6) && !ipv6_addr_any(&amt->local_ipv6);
 }
 
-IPv6 policy routing takes the DSCP from fl6->flowlabel in
-fib6_rule_match():
+Nothing writes discovery_ipv6 or remote_ipv6 here either. Later patches
+fill them in: "amt: receive the AMT gateway control plane over IPv6" and
+"amt: add netlink attributes for an IPv6 outer transport".
 
-	if ((r->dscp ^ ip6_dscp(fl6->flowlabel)) & r->dscp_mask)
-		return 0;
+Earlier patches in the series include a line like "No functional change:
+amt_v6() is still false for every device". The first patch also says
+"Nothing sets local_ipv6 until the netlink attribute added at the end of
+this series". Would a similar line fit here?
 
-So a rule such as "ip -6 rule add dsfield 0xc0 table X" would never match
-these Membership Queries. The lookup could then use a different table or
-fail.
+The message also leaves out that the IPv4 path of
+amt_send_membership_update() now goes through amt_udp_xmit(). As far as I
+can tell the behaviour is the same:
 
-The IPv4 branch of the same helper does pass the DSCP into the lookup:
+- With data=false, amt_udp_xmit() builds the same flowi4 as the removed
+  code and calls udp_tunnel_xmit_skb() with the same arguments.
+- amt_ip_hlen() still reserves sizeof(struct iphdr).
+- amt_dev_xmit() frees the skb on a true return, whether the route lookup
+  fails before or after the skb_push().
 
-	fl4.flowi4_dscp        = inet_dsfield_to_dscp(AMT_TOS);
+Could this be described as a refactor with no IPv4 behaviour change?
 
-udp_tunnel6_dst_lookup() also puts the dsfield into the lookup:
+> diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+> index 969ecfe81d7ad..148d1fb369154 100644
+> --- a/drivers/net/amt.c
+> +++ b/drivers/net/amt.c
+> @@ -715,6 +715,50 @@ static int amt_send_ctrl_v6(struct amt_dev *amt, const struct in6_addr *saddr,
+>  	return err;
+>  }
+>  
+> +/* The learned IPv6 relay address is written in process context and read
+> + * on transmit and receive. A struct in6_addr is not read in one access, so
+> + * readers take a snapshot under the seqlock.
+> + */
 
-	fl6.flowlabel = ip6_make_flowinfo(dsfield, key->label);
+[Severity: Low]
+Is the "read on transmit and receive" part accurate at this commit?
 
-The commit message says:
+The only readers added here are amt_send_request_v6() and the IPv6 branch
+of amt_send_membership_update(). In gateway mode, amt_rcv() still checks
+the outer source against the IPv4 addresses only:
 
-    Both use AMT_TOS, as the IPv4 path and the IPv6 control
-    messages do.
+drivers/net/amt.c:amt_rcv() {
+    ...
+	if (saddr != amt->discovery_ip) {
+    ...
+	if (saddr != remote_ip) {
+    ...
+}
 
-That is true for the transmitted header, but not for route selection.
+amt_advertisement_handler() also learns only the IPv4 relay address:
 
-amt_send_ctrl_v6() (Advertisement, Discovery, Request) has the same
-mismatch, since it also routes through amt_route6(). The mismatch is
-still there at the end of the series.
+	WRITE_ONCE(amt->remote_ip, amta->ip4);
 
-Could amt_route6() set something like
-fl6.flowlabel = ip6_make_flowinfo(AMT_TOS, 0) so the lookup matches the
-header that is sent?
+So nothing writes remote_ipv6 yet, and nothing on the receive side reads
+it.
 
-> +		return 0;
-> +	}
-> +
-> +	memset(&fl4, 0, sizeof(struct flowi4));
-> +	fl4.flowi4_oif         = amt->stream_dev->ifindex;
-> +	fl4.daddr              = daddr->ip4;
-> +	fl4.saddr              = amt->local_ip;
-> +	fl4.flowi4_dscp        = inet_dsfield_to_dscp(AMT_TOS);
-> +	fl4.flowi4_proto       = IPPROTO_UDP;
+The next patch, "amt: receive the AMT gateway control plane over IPv6",
+adds amt_from_relay() and amt_set_remote_ipv6(). After that patch the
+comment is accurate.
+
+amt_v6() stays false until the netlink patch, which comes after the
+receive patch. So this can't be hit in any bisectable state. The comment
+just describes code that arrives one commit later. Would it be clearer to
+add the receive part of the comment in the next patch?
+
+> +static struct in6_addr amt_get_remote_ipv6(const struct amt_dev *amt)
+> +{
+> +	struct in6_addr addr;
+> +	unsigned int seq;
+
+[ ... ]
+
+> +/* IPv6-outer variant of amt_send_request(); @v6 is the inner family. */
+> +static void amt_send_request_v6(struct amt_dev *amt, bool v6)
+> +{
+> +	const struct in6_addr remote = amt_get_remote_ipv6(amt);
 
 [ ... ]
 
