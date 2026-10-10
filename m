@@ -1,149 +1,132 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8313D3CC303
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 11:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D642354704F
+	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 12:16:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791631884; cv=pass; b=FWWPQCNHYC/FabL5JoDyKLwl8fgxhNn+9VOxlMzE8RDQPYIuKD2tyPZObqQg6jsmNW2NMiq5n8t9m0rwnxKH2s1DAxDhp72gbQmFzS0BoRjrtx6FzNHA4TQSBmLaIidTaoIO7Rx3VmKG71nzN3qgr2JhVyeqIAeniLj8IxuQha4=
+	t=1791634613; cv=pass; b=DCqofwUDLhd2eKjhQdKYoAWjnGAcSHiUV8donACpUhXh+FDQTCfYCSrYwUJ77pAG3wtcuN3nMgMBhSPwuyogOIcdSQ4i02JEheRlFZCUAkkinhxfOGhV766A2xQnekuFp5jdCuPD3SwRl8oRSjngBlZcrVwZ0fdCTBGwcUnS3CY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791631884; c=relaxed/simple;
-	bh=gv4uWDfgFmz9WVtkNmwJAWshwTrVyFn/VfmnlB7WXT0=;
+	s=arc-20240116; t=1791634613; c=relaxed/simple;
+	bh=ZGJygfgJ1vZiogBEUmUhMjrRiIMouFDNzOqzYt/kMEQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qg3ncFJ1bWE5KsrlKI7UIyXhuIp7DdNSL04WeW5rW/DwBiRlIcS5nD4VssIAeY11EK+MW5QaIgRLE+7vxY7uJePGbQuSNWE1/8D4iKJ4TAZudcj/AarmnNObsRPJi+Vy1vRC0rpXIvBPqfYWoqi+pPI/aoiE4kmMI4+EzeSJvn0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ty+929uB; arc=pass smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=NZz5D/+NAUiInwtYm0VpF14urKMc7/+lUiPHqmC2d/8vIrbqe2/45LusvzZJvfk/lFQB/ZMtPTkoM0ejT2Oj6qj0kZqJH/97qrXqIQvzhOyKg5z0+rMF+qSstunooQTO2IyZxbdSgXk5j66g0TT4L9+YRoVKb+xQtwyqmYoP9EE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SLzotch2; arc=pass smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ty+929uB"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6aa9164072cso821932a12.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 04:31:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791631881; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SLzotch2"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a18617ae90so17385e9.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 05:16:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791634610; cv=none;
         d=google.com; s=arc-20260327;
-        b=Hqg2DGAnmFhK10tlyw1NJYGa6atgFiV2Ev+LK+C2IG3OCmt9dmI4SJdXhgrHP2wdeI
-         rlAfH6e4bcZzRyiJLeQzNWHYZv9HVUNr9+is67OJcyIDdfuNJN882zH5KsgYyZmtD/Qr
-         uRnzNkKyFSgb5E9DpnQ2bsHs0aXKcriHX5WwHJKdCC9GcDAq4yrqB6/Mwf5W8E+eI3MC
-         QSrLFAdFzhlw+ZoHYg83E1R4Vk5v/9/7/Uf6AkoZzbNHtn3W9rM0zzX2pGDmdY2FHsDd
-         YU3bO5nHKKF1MKqg/n/r6e4FNkgTFJfYpmj/6GfP6v8LWWU36oOH+mgU25lb3I4Ejgv0
-         lZXg==
+        b=FyD0JweFjWFEC38MWDykSbQmsPG5oigsFjuxXe7WIs91gtPmsUuMeeiW/dmNc7P803
+         Yw06A/puh4usvTqmAz2IycIdwiopaJ85CuAkcFoHoAoj+D7MAxeYUOmM616Wq/E3EXUX
+         Jbmz7RqElar/1s05hl5HwB7mhqDGQMuxnWyq70IxboXhKAJPuRalHJI6pvD8RuBAQ101
+         ZXRKE0rRsngero2qW/VoLHCZ4Ije9wzC2uJgIL9pXbMxapBD1kZRPCD2fUsksz9/84T0
+         XNdUlbxZke/3gu3QFY1p+PIHKyovXgwxF0Jx9HiEiRC5bHfu0oS1O/m9NhEV5cnzmqqo
+         8KdA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=gUQ+lGifeXqqAlciKTopFGFnd8gQ9mlyrmzyDz9aPAM=;
-        fh=rqvDzmb4Fe1SKrIwvOVcISfS9mHOj0fvGmrYizEm5D4=;
-        b=o7VJU181sW2547JnbH0mEra9GZL964byY7gtPbvpv1uf2IK404zN6JfTuk4MxHgUWm
-         o2tkL63y9b7Zo3dsJhNVRAENJdpcBt89GaDT/vPivd/d4rdN42DwxSsIvLSP9i+fTTt2
-         zpEbuu4pYNBlx4yoFwa0Jf7DroXOgRoXCN4mgmtpSO+54+mAEOYAKjUAcuP87JKhGL1R
-         5m+DaJUGq/P4f3o6f8/hoVQW2H4ObI/DohxLbR/M5z7gIxwI/wFNn7wVcBKjaa3/o8Ke
-         wkLmNAnnJ3cXr2vlXvx2m3syR9mfET+5985HMZv2PnbhmW3NwzcpwP3azHXw9lzQk2Ke
-         BoRA==;
+        bh=ZGJygfgJ1vZiogBEUmUhMjrRiIMouFDNzOqzYt/kMEQ=;
+        fh=02vfsVivNjbaO0MVeqoHcWLSk3lP5Q6guttUs9GnIkE=;
+        b=L96ciwXnQXibdH9lwEoWQucwJXbI+5MPc1hrgnMFLisPDxjk2dNHwPs8mtNLRbuW6R
+         ec8IEib484jVIbvCRKr99LhNadxhr66WM73lZqurStwtXEsRxnuDJpyWOvueBBjevMzs
+         otihZ92gKC3g+mLe0z+VZ4F789ZYA1Q51epA06IpuK5cP89GsSKlmqnpi06NKUFCFkoz
+         ChJ3ogA75t4L+m8BFtZiRlS/NprK7t26d2pyJb5oEkog36jWE9XQlNN/uiu0TpV2xrb4
+         yhxCjTeolDPeW1cccDnWuXUyoa0m/vJ2PTPZUHPF8PXWeZV7+Fm+j34iJAqBZzz6BIVP
+         MyyA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791631881; x=1792236681; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1791634610; x=1792239410; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=gUQ+lGifeXqqAlciKTopFGFnd8gQ9mlyrmzyDz9aPAM=;
-        b=Ty+929uBFE6ZVVF6ZS+zXaFPyt9i69Hh1w7OmIJOIg9KnXJ7USpRZkNTAp33g1wslU
-         XsPOehdqC1fk4lPlGSf32B+J6tdsKmPWxbyJ1qJUTDfNcD2gsQQV7JxWqnmywrMRbUHv
-         oz2qG3y9F2lkwMQeE+E2zTqteIvOYdAaHOrTVqw+d/b6ZCVfZeOPwxTXPlXrT+qkqxVs
-         j2PMuOqOhBCdcX1A/3AyeTzMwPa8GQBqUdExTRQ2E3Cp3AOaxI6pwTJ1eJvHTsoNWeyu
-         h54Q7AQjhdteX1QxjQYvF6RNw1rDsY30hIAmyxWQyJHxsQlUJzcyjdwRs1G3REwT4U6m
-         UHEQ==
+        bh=ZGJygfgJ1vZiogBEUmUhMjrRiIMouFDNzOqzYt/kMEQ=;
+        b=SLzotch267cSplIFK/3jOGd2uYZhN2LkMIowWcOp2gwgO8AfsKn45zcr0lLMYeW+NH
+         /XcTIARa8COLG6FrUJIn5H5ZynRIoKUPPcOejFhIJCM3pb6LNaMKoFPDBwtPNaDDEhLV
+         4yHDHF4wXgQmZtp+g0avsyh6UmpteQxwzs9je44ybM2qydvCFEPGgT6P7LMA2+6FD2vd
+         83vJXIJZ5PdSwJB1NtvOy3vqts1q9HskoOq0XJDLhJHYTzqcCbQjAyMfBP3O/ahEJDw/
+         t58CusoJuXmpGU8sMqK3wDIqFOJdg7OHbWQYIWKJ8sPqw/a/7LcRYIHejnp587v7Kb48
+         lddg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791631881; x=1792236681;
+        d=1e100.net; s=20260707; t=1791634610; x=1792239410;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gUQ+lGifeXqqAlciKTopFGFnd8gQ9mlyrmzyDz9aPAM=;
-        b=cNpDKOamGoEFIkckWGphK6U/P2aBOL89QHZeqh8B6J/js7SZa8pVVKIrqrq+Uhbcuc
-         dVkUIVifXss5TYAcTYJXlsibQagTZNmk7AYqrkI1GFzlc5gtgBuQJrmsfg80TSC52xtP
-         53wqMipHEOTpP7lNXOf44Ewg2rOaC2uUUmY5OGlMOuBuR+aIjQ9l8pESTJWjMah5GIT7
-         QyHoXD08dXPOZGEzlZ4EKcPB+XmpF87J6OVosHWwq4KxKo5UFBBVNqnoEGoZujBZRUeT
-         cng9zqyXAiAmAgSUYTX3zPyNX/5polkjHRfvDuE+rM8dkNVQ4SlzOtYNkXJX/oa6vvQS
-         BDwQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxhEeUKQZUNxT6gzhI9Y/zuIp0Bp8DAsKTgk+ohkKeujkQonU0WSAxDOKyrNrzo4tpT+h+jJWJPP4VxARzEILA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIO6yUus06U9miGHNeAy+fXgEhn5EsBd/3UYPvw2UfsPWcCEvPu
-	c7JIdvhoT8p1xWQy+4EBf2ANLgD+zsiXrRa6VOFxUmbLBGLvA9yqoaOnVbXxzaQ3kUtCQcwwAlJ
-	Knvgp7wKZfL8u6ZR07cThFRWYrdVjEgE=
-X-Gm-Gg: AYBFou0LqSNOvj2BvvCEQzXDeF6PtoVrJ3ihOPKA2JFd5BuQ49EmfhIoV9mHhNPfVpY
-	W4w+D2mAsCoJMQ3gH2xtWR7eJw6s78m0ghbYBNIjzo6woodCjjPi2B4yNiLgRL2QAz0CPP6w1rh
-	vvom1DL6BUA6bycuNplQnQt7Z1tEdeugf1Snj1E5MrsvYgnwAhTqO6VFWZwMQ4p1jsnBjCGl4kR
-	I8Nf4FrbYWoCUg81UqbwGT0xTMM7y1ZNLu88jCf7ZuGus8rREru04Ghn+yrtIfjzb/FoRq1ut0f
-	OJ7LLE7j2NKlvNaDFm3s7abs2zwLWFU5NIMhNlpRn4exQwRjua+TSd7Bh6dxga/oeKxhmBBsCEt
-	LGhUN1Ja0WPyw6h/PBj8ApOnQk2xLTcMfRTm6HLuq8A==
-X-Received: by 2002:a05:6402:501e:b0:6aa:7ff:4ebf with SMTP id
- 4fb4d7f45d1cf-6b17c23d561mr4283966a12.15.1791631881629; Sat, 10 Oct 2026
- 04:31:21 -0700 (PDT)
+        bh=ZGJygfgJ1vZiogBEUmUhMjrRiIMouFDNzOqzYt/kMEQ=;
+        b=2i7EWUxFyF6QnVS+7AZZHcHBkLPi0PUx9GkOU1kV3urZSR5PW6735FVamUuuJK8ADd
+         vbpQXtzdsPX8q/jfgFJK6xRRuovtgVoIPbkkBTu+yIFYNyo/6+D5eyurF9yMEOLDEbhs
+         wVzf6sVKqK42iFLBXzXYHrh4u6zHe1z5CMDkZ7xcJ4XAjNETLuIwY7ktnwflET8gt0dt
+         fWcOqxBIyJjZpmRD6pr9bp2ietyQYXAysWWSn1iH/T5ElnSIqIPqinVbtFD3LZHsYJRZ
+         bYAHgpNiR1P/rmCs9ep/YmsbKoy64JtMaNqpSHvm2AsbdgXKV4MX6hRm46NrGKeYy45G
+         kmLw==
+X-Forwarded-Encrypted: i=1; AKwUvBzvz0kTc5A4pY3/1kkYCzaW+DhHDJPRbVKtkerr7bI03BcjsHvkpqzoJcFmxTnMGUYgE/UIb66sOrDNKMEnxuM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIU40C+SSKkoexMmbFWPSgUxuxevkOonaEdjBt/zYsjVY/QcspJ
+	6i4xZegnueO9Gu5W4QIbWE7T3DAZ3ZjF7E9MrJKcmzQ1lANXcartE+DZg29DrwqMWk6nKxxE5Q0
+	JhbrEYcQMeUX96lkACZKh47T8h3bdW4tUb3Vo9UzB
+X-Gm-Gg: AYBFou3WpoIXo6x7qrjmFcMDMwibL6caF0Ys2MkMuZ0O8Y1zf0nj3h7uJ8hLjl9yyfQ
+	JgQMOrFOg6Qdi/9MIBmmv/xMZNaRDPNk4tr1ITuj+F3ogn4S/Wuax4IXXzZ5T6njKytc8fI2fa+
+	ByONdAcsLg4jPV1pM/myneDzPTzdp6V2NkczZP/HqBVW8jjuHMpQS2IMiI069Cba6byUhNTtvke
+	s2BpKWeaL6lkZTCz4q3r9uubI9GbM2AVxRDTm0DLQw7tF1+ncydnQBzz/B5D0as+5fmXrjfsgOw
+	bUgl4kkoQu26rC0KIsD1pdsalSft9pFPjHpQh77AhRCFcTJTLz1P2Xtz+I3EgILMTzK9S5vw+YT
+	pobMp3mUyXms=
+X-Received: by 2002:a05:600c:a10e:b0:4a1:80d4:55ce with SMTP id
+ 5b1f17b1804b1-4a195b30c84mr305755e9.4.1791634609468; Sat, 10 Oct 2026
+ 05:16:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261009092759.968521-1-linmag7@gmail.com> <CAEdQ38FEDRnc6DR0mTtiAfct2WwvSVjrFWtTzQrN-DtECaS-MQ@mail.gmail.com>
-In-Reply-To: <CAEdQ38FEDRnc6DR0mTtiAfct2WwvSVjrFWtTzQrN-DtECaS-MQ@mail.gmail.com>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Sat, 10 Oct 2026 13:31:10 +0200
-X-Gm-Features: AclHuK-k44Zg3lCAgQHkrzNsPm8zibwWe2DLtPLR_2BC02_lZn9oOvK_TySUOe8
-Message-ID: <CA+=Fv5QCu4W0msvg9Wx4koVtiiu6GKNWji1vJOmzveD6PX9hLg@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/seccomp: add Alpha support to seccomp_bpf
-To: Matt Turner <mattst88@gmail.com>
-Cc: kees@kernel.org, shuah@kernel.org, wad@chromium.org, 
-	richard.henderson@linaro.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20261009-selftests-bpf-dmabuf-iter-unnamed-v1-1-962ee94f7a5e@gmail.com>
+ <CABdmKX2VHqWrPb2O3Uqdccx=nP66gECU0kVc=4tZdGqSEZvuGQ@mail.gmail.com> <20261010025252.3716641-1-odys.yuan@gmail.com>
+In-Reply-To: <20261010025252.3716641-1-odys.yuan@gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Sat, 10 Oct 2026 05:16:37 -0700
+X-Gm-Features: AclHuK-buTBub6GSvkPbrPC0OJrukJaaCD5TTns2vZsTz9QpTX-JSgssQ-hs3Wg
+Message-ID: <CABdmKX2CkaBzSqeaDHYUC594wiwjJ0edjZyGp6uSD+5GeDk_zA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Accept unnamed dma-bufs in the
+ dmabuf_iter default test
+To: Qiliang Yuan <odys.yuan@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Matt,
+On Fri, Oct 9, 2026 at 7:53=E2=80=AFPM Qiliang Yuan <odys.yuan@gmail.com> w=
+rote:
+>
+> On Fri, Oct 9, 2026 at 5:07 PM T.J. Mercier <tjmercier@google.com> wrote:
+> > Hi Qiliang, are you running this locally instead of with:
+> > tools/testing/selftests/bpf/vmtest.sh -- ./test_progs?
+>
+> Yes, I ran ./test_progs directly in a Debian testing VM, not through
+> vmtest.sh. The VM runs a GNOME desktop on virtio-gpu, and gnome-shell,
+> mutter-x11-frames and ibus-x11 each hold a 4 KiB udmabuf without a name
+> (their fdinfo shows exp_name udmabuf and no name line). As the
+> iterator walks every dma-buf in the system, default_iter fails on such
+> a machine before it gets to the two buffers it created. The minimal VM
+> of vmtest.sh has no such buffers, so it doesn't show up there.
+>
+> The subtest only checks its own two buffers, so skipping over the name
+> of any other buffer seemed safer than relying on all of them having
+> one.
+>
+> Thanks,
+> Qiliang
 
-On Sat, Oct 10, 2026 at 3:28=E2=80=AFAM Matt Turner <mattst88@gmail.com> wr=
-ote:
->
-> On Fri, Oct 9, 2026 at 11:27 AM Magnus Lindholm <linmag7@gmail.com> wrote=
-:
-> > Skip the pre-notification signal test when /proc/self/syscall is absent=
-,
-> > rather than unconditionally skipping it on Alpha.
->
-> Nothing in the tree skips it on Alpha; that was only in v1.
->
-> > +/* Alpha returns positive errno in r0 with the r19/a3 error flag set. =
-*/
-> > +# define SYSCALL_RET_SET(_regs, _val)                                \
->
-> r19 is still the fourth syscall argument at an entry stop, so this
-> relies on the callers also setting the syscall number to -1. Worth
-> saying so in the comment.
->
-> > +     if (access("/proc/self/syscall", R_OK) !=3D 0 && errno =3D=3D ENO=
-ENT)
-> > +             SKIP(return, "/proc/<pid>/syscall not available on this k=
-ernel");
->
-> Alpha selects HAVE_ARCH_TRACEHOOK, so the file is there and this never
-> triggers. I guess that is why you have 12 skips now instead of 13.
-> Please drop the hunk, or send it separately for UML and friends.
->
-> With that:
->
-> Reviewed-by: Matt Turner <mattst88@gmail.com>
->
-> Build-tested only, with a cross compiler.
->
+Thanks for the explanation and the fix.
 
-Thanks for taking the time to review this, will put out a v3 asap
-
-> Unrelated to this patch: with the selftest setting a3 itself, do we
-> still need the fixup at the end of alpha_elf_gregs_set()? As it stands a
-> tracer cannot skip a syscall and have it return a small positive value;
-> it comes back as an errno. The r0 =3D=3D syscall_saved_nr check in
-> alpha_finish_syscall_to_user_mode() has the same kind of problem.
->
-
-Interesting, I'll make a note on this and look into it later, you may be
-on to something here.
-
-Magnus
+Reviewed-by: T.J. Mercier <tjmercier@google.com>
