@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAB33C3BEE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8207F3F3262;
 	Sat, 10 Oct 2026 10:23:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791627782; cv=none; b=OEPTjbbLDozIorFNInDcOHNNsg+o6/QdoZ4arGZgBXXlQnYN4GXkl+t4Yd8LNRnNCZFmtMjdvwt8YnDZZqoJY1263bUEasSveeUZ30T3nDCvrSv23HDLXtsyVyo6MOtI8SRRXyA44a8qztnn53BnD5BxgiCIHDmOu4JZsLE2XYU=
+	t=1791627782; cv=none; b=JaN/nWvxqvwVf+sIIYGBmY8VheWcBDmiLd4suyF7PzOR8HkHGFrLKwCVNgT7NhOi63uetUDv1oOqLSezla1+LZzLpsR3i/MVJrceciNJpGZ/j/9EnLLt2m55jFG4cVuCz2K2zMHpkT0idWbyQ20XeWsKoxBRUnXfBzimajam8xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791627782; c=relaxed/simple;
-	bh=sxbs6liGrD8ZkSrOdf49Ao4U0SOekNl/dLfGqEVKcCk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=asFCuBCNi6vytQo/5xxD6DRH21fsOpsvzTtpPuqEImzeV3yJbHUAXz0fIEyYYhB3rcrNyfNIlPouBqSqXXrDUG6GN+vO7W93Td8dngvTRumRVY/eLFKrRuoaLYDG8WjpcTj1EAYHWVytn7HWMoxlxpj3lMFsWycLZ7mrYoX2FtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gs0tndwr; arc=none smtp.client-ip=10.30.226.201
+	bh=7hfEC9oaAq+7aoWna5BvdDByxSvjrO8XgJy2N33PkDw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Be5/vHBFVyNm2igTLbmLcNrBAd9bm4a+elob6J30y47Z4tzP3dGlu81csTLfwn1QrXJ6QIBWHGBjLljK4oichST4r8PLQesfuIL9HTYRqpjK9mU7YkgDPQL9ADZxytMQPUEmrqgdm/eApNvpFUs12MBSKvS2kDFK4MbV/JJnaRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ve8ZWB1b; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gs0tndwr"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DFCB8C2BCF7;
-	Sat, 10 Oct 2026 10:23:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ve8ZWB1b"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 31E81C2BCFF;
+	Sat, 10 Oct 2026 10:23:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1791627782;
-	bh=sxbs6liGrD8ZkSrOdf49Ao4U0SOekNl/dLfGqEVKcCk=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=gs0tndwr1td1hV6leDSDwDKwu+mQ1DfGToqf6YHR1c0j9SOzywr9b0eO7nJKJ7D/o
-	 RMnrGXF40kbQQJOcEILLsNGXnzra2gpxXf/jrqPJDi/fdPSK0hjtu5ZXg0wJp6Z4sj
-	 CU54bJ1m4Bi38l5t9QThja2ABT1ibS9feZIsPl8BQlW2D4WNriRbHyQ8FH7cARHlS7
-	 ZKBJMC4Vgv9UYh0jSbwVuKpj95gu9Xfynuf97ov2dSlAZ0bk5JSmlX1JPUpVuYZMQu
-	 Bi/LXSZ3m0DFKaDMjRidVOALi2wiuPfU/DRsKu4NcMn5s/3NQebASm/xcebKAVPnUL
-	 tPayo9kAqJIyg==
+	bh=7hfEC9oaAq+7aoWna5BvdDByxSvjrO8XgJy2N33PkDw=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=Ve8ZWB1bvK4gCHmiLLA0ZSNIzi/DUaNOOZtNt7JzZf492tuZHyNkDUQs0vG31ygu7
+	 XzKJYUZelutSGN8RNSpa2R8P1puG3D28ljdQEWQpuaxFSrSvS84CPumM+2bLGhCYeK
+	 OyI5vVatXJ928BpmbTL0SOiCe/Q9YxBmWzl7CaZGjwtTtZAFtl6Qp9m3RWthpdjPJ/
+	 x+6219Ran5yXBQiw7h01axt57MnzrubXDL5hbh9Pi5X921pPx5JEtUG5SDkhzxCZo3
+	 NHc7/Wt8Bn3ZriJeIuwUx82FGIKVz8VMsIl38pejlS9r2S8sMK2+mEoIuMssEhSzCM
+	 DMgftYazQESGg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4260CA6004;
-	Sat, 10 Oct 2026 10:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DE10CA9EC7;
+	Sat, 10 Oct 2026 10:23:02 +0000 (UTC)
 From: Bochao Cao via B4 Relay <devnull+bochaolucky.gmail.com@kernel.org>
-Subject: [PATCH net-next v5 0/5] selftests: Fix and migrate the XDP feature
- test
-Date: Sat, 10 Oct 2026 18:22:44 +0800
-Message-Id: <20261010-xdp-v5-send-20261008-v5-0-de687cb67c40@gmail.com>
+Date: Sat, 10 Oct 2026 18:22:48 +0800
+Subject: [PATCH net-next v5 4/5] selftests/net: Add a shared BPF skeleton
+ rule
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,10 +41,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/z2MSwrDMAxErxK0rsBOcCi9SunCH7VxF2qw3GAIu
- Xvs9LOcNzNvBaEUSeDSrZBoiRJfXIM5deAnyw/CGGqGXvWjVuqMJcy4GBTigH84KB0U6TDo0UC
- 9zonusRzaKzBlZCoZbp9G3u5JPjdr2zorhC5Z9lNDX/9Bf37Yth2U8ST1qQAAAA==
-X-Change-ID: 20261008-xdp-v5-send-20261008-301d0e1d3165
+Message-Id: <20261010-xdp-v5-send-20261008-v5-4-de687cb67c40@gmail.com>
+References: <20261010-xdp-v5-send-20261008-v5-0-de687cb67c40@gmail.com>
+In-Reply-To: <20261010-xdp-v5-send-20261008-v5-0-de687cb67c40@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -67,11 +66,11 @@ Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
  Petr Machata <petrm@nvidia.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791627780; l=2823;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791627780; l=1820;
  i=bochaolucky@gmail.com; s=default; h=from:subject:message-id;
- bh=sxbs6liGrD8ZkSrOdf49Ao4U0SOekNl/dLfGqEVKcCk=;
- b=Y1DNpURTWdp6/AqlI8SUI4jn/kNsdcLd5oOS93OWZL1Aw3m7y7Wg9pVAdyDKCZtgd8IsKv8/Y
- DJnbVIOdMM1C8Vpn2nhSOgjJLS3A7b6WhZzFrLYQph9lHED6wLfcQ3K
+ bh=eipfzjTKrG/cSjQ4DLusR7Ju6IxV+23WYHtr5ArWkFc=;
+ b=hGNOtzAJoRautGuG7BoOuUZCNeoZfkBYKv60IQbIsjZHPZPvAcQIlOBRd+Qs3gTC+dTQjDHK3
+ elSyxSeHIi7B3bTyB80bUltw3+BKLRqric4dDvGbZdrJKaBjs3SHW7u
 X-Developer-Key: i=bochaolucky@gmail.com; a=ed25519;
  pk=ZYp7O2eXSIrJ9YmKrl0iHDoulPYSG+1lzICsicAvld0=
 X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/default with
@@ -79,63 +78,56 @@ X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/default with
 X-Original-From: Bochao Cao <bochaolucky@gmail.com>
 Reply-To: bochaolucky@gmail.com
 
-This series fixes the XDP feature test and moves it to drivers/net/hw.
-The tester uses AF_PACKET, so the remote host does not need native XDP.
-Existing remote XDP programs and offload settings are left unchanged.
+From: Bochao Cao <bochaolucky@gmail.com>
 
-Changes since v4:
-- Rebase onto net-next 8df0638138d3.
-- Split the helper fixes, packet probes, build rules and framework move
-  into five patches.
-- Move the common BPF rules, including %.skel.h, into net/bpf.mk.
-- Use installed kernel headers and register the helper in TEST_GEN_FILES.
-- Handle short control messages, EOF and helper timeouts. Use XDP links
-  on the DUT to release the test's attachment when the process exits.
-- Skip unsupported native XDP and veth XDP_TX without a peer XDP program.
+Add %.skel.h to net/bpf.mk. Build a host bpftool bootstrap when BPFTOOL is
+not supplied.
 
-Tested on x86_64 Ubuntu with Linux 6.8.0-124-generic:
-- headers_install and the xdp_features build passed.
-- Three veth setups: 17 PASS, 1 expected XDP_TX SKIP, no failures.
-- Nine error and cleanup checks passed. Existing programs and offload
-  settings were unchanged, with no helpers or namespaces left behind.
-- Patch 2: two concurrent runs passed all six cases each; repeated TERM
-  also left no helpers or namespaces.
-- Protocol framing checks, Ruff, pylint and git diff --check passed.
-
-These tests used veth devices. Physical-NIC testing remains unverified.
-
-Previous version:
-https://lore.kernel.org/all/20260921-xdp-features-v4-send-v4-0-a0d4ec392cb7@gmail.com/
+Write the skeleton to a temporary file and rename it on success, so a
+failed command does not leave a partial header.
 
 Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
-
 ---
-Bochao Cao (5):
-      selftests/bpf: Fix XDP feature test setup and teardown
-      selftests/bpf: Track XDP test processes and isolate namespaces
-      selftests/bpf: Send XDP feature probes with AF_PACKET
-      selftests/net: Add a shared BPF skeleton rule
-      selftests/net: Move the XDP feature test to drivers/net/hw
+ tools/testing/selftests/net/bpf.mk | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
- tools/testing/selftests/bpf/Makefile               |   11 +-
- tools/testing/selftests/bpf/test_xdp_features.sh   |  107 ---
- tools/testing/selftests/bpf/xdp_features.c         |  719 --------------
- tools/testing/selftests/drivers/net/README.rst     |   18 +
- tools/testing/selftests/drivers/net/hw/.gitignore  |    3 +
- tools/testing/selftests/drivers/net/hw/Makefile    |   15 +-
- tools/testing/selftests/drivers/net/hw/config      |    3 +
- .../net/hw/xdp_features.bpf.c}                     |   42 +-
- .../selftests/drivers/net/hw/xdp_features.c        | 1003 ++++++++++++++++++++
- .../{bpf => drivers/net/hw}/xdp_features.h         |    1 +
- .../selftests/drivers/net/hw/xdp_features.py       |  137 +++
- tools/testing/selftests/net/bpf.mk                 |   25 +
- 12 files changed, 1212 insertions(+), 872 deletions(-)
----
-base-commit: 8df0638138d3e0344fd1fb36cf2d1ca1cf5028f0
-change-id: 20261008-xdp-v5-send-20261008-301d0e1d3165
+diff --git a/tools/testing/selftests/net/bpf.mk b/tools/testing/selftests/net/bpf.mk
+index a4f6755dd8941..2ded0f65dafa9 100644
+--- a/tools/testing/selftests/net/bpf.mk
++++ b/tools/testing/selftests/net/bpf.mk
+@@ -49,5 +49,30 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
+ 	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
+ 		    EXTRA_CFLAGS='-g -O0'				       \
+ 		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
+ 
+ EXTRA_CLEAN += $(SCRATCH_DIR)
++
++# Build a host bpftool only when a test needs a generated skeleton.
++BPFTOOL_BUILD := $(BUILD_DIR)/bpftool
++ifeq ($(origin BPFTOOL),undefined)
++BPFTOOL := $(BPFTOOL_BUILD)/bootstrap/bpftool
++BPFTOOL_DEP := $(BPFTOOL)
++else
++BPFTOOL_DEP := $(shell command -v $(BPFTOOL))
++endif
++
++$(BPFTOOL_BUILD)/bootstrap/bpftool: \
++	$(wildcard $(top_srcdir)/tools/bpf/bpftool/*.[ch]) \
++	$(top_srcdir)/tools/bpf/bpftool/Makefile \
++	$(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)
++	$(call msg,MAKE,,$@)
++	$(Q)mkdir -p $(BPFTOOL_BUILD)
++	$(Q)$(MAKE) $(submake_extras) -C $(top_srcdir)/tools/bpf/bpftool \
++		OUTPUT=$(BPFTOOL_BUILD)/ ARCH= CROSS_COMPILE= bootstrap
++
++$(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o $(BPFTOOL_DEP)
++	$(call msg,GEN-SKEL,,$@)
++	$(Q)$(BPFTOOL) gen skeleton $< name $(notdir $*) > $@.tmp
++	$(Q)mv $@.tmp $@
++
++EXTRA_CLEAN += $(wildcard $(OUTPUT)/*.skel.h $(OUTPUT)/*.skel.h.tmp)
 
-Best regards,
---  
-Bochao Cao <bochaolucky@gmail.com>
+-- 
+Git-155)
 
 
