@@ -1,638 +1,362 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88CD23F326D;
-	Sat, 10 Oct 2026 10:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791627782; cv=none; b=BFDqFTmH84AVbXggiO+P441a7q3kclJGYo4asOnQW1BjVcDU5ItM95FhzeP/CZgfZrqyrYOwvFGlYU+DoKwYUg8qUKkQC/xksZZlAj5ArpqSi2ekN0QC3UVHYIFpC9P7HxUHnSb0IYjiM1CVYh6Tyfm91BAgoD0FhWayQWanilc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791627782; c=relaxed/simple;
-	bh=DiPjH0cF9QkLaFrQ7dxcgIr01cQH+90Z8BMuEqtdhPM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=N2V53yT1o5Xv/I0NMJbUuTGaJMk3AU33OWf1mWVQnQQ7m1dyYYUQSmP/Na9gQYVsdJCJ9kPYV/bgwR1iMHMYC29fphU8ipOwSdY+DP4yqGQ9YStx+928iLNuLlX1X4s+iE1ug3MQGlPvYz06ujoLEVcF+co89qFZDAqUpFJOVT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jeg5Is+G; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394CE3546EB
+	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 10:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791629776; cv=pass; b=tppL/Fi1h5QhUDYOTROm48023vmBBVp0OvefSYg1BT7BZFJlWtViFP8Rfn7D+3n/AlaZkvzqk+w8BKgaSZkB9h3ipdwNEp1ZOSGyN9iiu5ONqIwAASWxlw7uud2rS7NgsPv0v+Pxvrmq6FN+MFeclHZnRxQ/l8jYSWyLJic6Cpg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791629776; c=relaxed/simple;
+	bh=9Da5eq+pRwjTyaxE9GFmRf9JfALHj2GCu1WwH27Zlfw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=riHbMYwGjyiWmLK+OhF9lsgXXNEtYg8tg0BdNFEebAjMWVs8WIRtwYfVAdeux83B1EDqSVhb2Iity04P14Ro93Jl5JpkiWqkdsJrg2mwY02DUmGdFb8z8qTdZd4JrTYzCfMULDIl7z09FykLjpN3mBVq12ipg61OB/U3IX3zDls=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a597uHwh; arc=pass smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jeg5Is+G"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 47F29C4AF62;
-	Sat, 10 Oct 2026 10:23:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1791627782;
-	bh=DiPjH0cF9QkLaFrQ7dxcgIr01cQH+90Z8BMuEqtdhPM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Jeg5Is+GTLc1o9x9SKuAe3pwmRdVTalvoHK9Qnpzie0gCs/lynNrMC+Zq+9QMx9QF
-	 DDz1fbf/OPaeN+SLfG9qlqiM4DeejRo1FYYD1PGmiqR/7DszWOsRH9nddelmvjDABg
-	 zZo0o98Mv95rk9TWbzq95T8e+F3/WcCjeywzqiTQ/lagkqMKRAO6TIiZGM9Z4c4mrS
-	 6mG8yt9I5sUj4FiIZOeH4L4SlesOvCxLePu0Sk8J2HtQXe2Ne5482jFria88p6GpfI
-	 1fek9VSTPbL4qISJK2rN9FWLRljNGTk9VngSNMS1JmT+zlx7H0DWAGw6tmwvMYORck
-	 QQ+ajm1I/7Cmw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30DC0CA9EC5;
-	Sat, 10 Oct 2026 10:23:02 +0000 (UTC)
-From: Bochao Cao via B4 Relay <devnull+bochaolucky.gmail.com@kernel.org>
-Date: Sat, 10 Oct 2026 18:22:49 +0800
-Subject: [PATCH net-next v5 5/5] selftests/net: Move the XDP feature test
- to drivers/net/hw
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a597uHwh"
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3a98f260f85so4478971fa.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 03:56:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791629773; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WyRcmzvnyJrQrDoL8YctAFEQHoUCGVF4J92FTuHFdHdz0JNk+XpGURFl13LRdarrrY
+         KkZlXgaafD9YgRN26FvEFEiHj0lxUeMZPDKyIZZdf3Zd3WGlwqgtkjSTvJXT+GKTYyDr
+         Gcx0K4gSC3ymVJaQ5Qe0lBVlx/CYZX+fz7h+y088U+akSfFmPkNzPkVx+6Ek/3+1mNjX
+         XvfY2WZrW/ZnQsLNb/5IW2xHA71mYdHhKY2yBOtrumKFY6pe6BKNQBZFkh57ensxhtqS
+         o31Dbv1GTlLAochQq3X77l1+hvUwHCQRdO0ETh/tHh/R8Xn+EvZSalBVylfM9Gjp5gHL
+         JzaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=EwmyYZEcY+97z3QJa2K7jtougNvphO7bThJRIJdzTsA=;
+        fh=ZIz3KBhWlmQTeQ/Bf7DgxoClYl1YwJJI4yTkR8p3MvU=;
+        b=LZlFEiiAdzrKm/dhqxVtS91snuh+jyifRgWS3dbUxrPQREtqqG4o/nkcvRURK6CDcx
+         n56miyj7/Dlb5ounJCtl1tk4RiLChaLfrK0Ihzy7nS6oSsLwxcCskU29nCMzJOK1ws5i
+         xfDI9Ug+vHRMu1nVdVbrjXnkzQU5yYJRNm8qoeG1vryhwibPo2hlt1xygd2PSGicSSMz
+         gLOdPof5oFGRYxJSBNfFVltsRlNSh/ib5USKrmQm7y/qQ/NlwlPMtkYx4e7a6rArfZRv
+         ztUYhqzqp/yhjaXGA0ddiRbZa9ZcT8wrlzhByuhyUPyiI6OJ+tDBUQ+froXEN5FWriV6
+         rxlA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791629773; x=1792234573; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EwmyYZEcY+97z3QJa2K7jtougNvphO7bThJRIJdzTsA=;
+        b=a597uHwhemTeZWR8sW7j7wO4elKu5/odxYLtDLwiU3q3sywQp11Am+cIG9UWWblagp
+         mgit9EbAm1VXqBg2zuXykjpBEr85kBVsthgoMjfw+HJCebJGhyNFwIXnoLwcGqr62sR8
+         vHiR3AZVGd52+oELnNB3qCwRRRuJWsSsmsosvm/C19SO1vMi8C/NqCkmdwWKbtb0v+EX
+         t2iM6Pq1vI36kJmbKJ3dJof+PFlpICpnnV1Evg7WwBQXJrFf7sdtMLjikxl7eFfQWyT+
+         7iC7RfiXTdYTsvm9nIjzdfEV1/kn1jVvUmNA/T6VSnrVBUeCHg4uPzfcQVSJ6sleTSIM
+         KWDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791629773; x=1792234573;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EwmyYZEcY+97z3QJa2K7jtougNvphO7bThJRIJdzTsA=;
+        b=JEZMXFGdwiIdoxGlcnFzwxdKitSF6Gw+1g6Qz6vf5B+5i4+T+77UKLvCIFC4IAlaXb
+         MEVAr/W6HQXWgQreIuJoZM/NQycK141kDHYaemZZJDzVPxdEWPIazbkEtcvgh4NSZJNG
+         GXuZGY7Efjnz1AR84HduCF8U+y5sH9+MLLBUXPkswJxy5QZ2ALaNaxZTo9qfmIAa4sYs
+         o82UgaB+3Rf/y2fojPJuvRnGIJrq9gO9CqY4NGmSH8GvP2rnLgvrOhiyjtFGp98G4bXg
+         b6rSaSQ/cpf5LwgXKsAJB77Re6ZVFDh4rTFcgtGtW+8jNMC7cjdyEUxCixbDZPYir2Gy
+         ukmA==
+X-Forwarded-Encrypted: i=1; AKwUvBzCsohS4VCfh8ltyv/RTl0NbqlbYOU5wxag4V/Big+4SgrpZDWWCw2bHnKZ4PFIoPzdMbY5UxxmyPP/Zbo4L6M=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKvZpG2ci3spJkcHj8L25vx+N9+1EM/9Gf/DBoMxD/xnrNUz9Ug
+	kO+G3CqX+EIJiuzIwcDR5sm/C3qxKTWc+N01z6C1snj5QykzNkPXM7UtJPjpprRdTz4o8qm1H7W
+	vY5j88noIPPCUGbXqayxiTUtpnSqZzr8=
+X-Gm-Gg: AYBFou0ur3crllK37qwy8kGzKt55qSyN27wu1cM9jUxIP/j4sARN7Dx0AqBdRuHOrOi
+	x2CJv82nByCuYZF+rJQylQAgkpWZK7fayNTmHib0jsonshcA/1535gwYI9XHk8r3t+pVxn1l5Y7
+	5eYo2r56qBdgB9aUNx6nkteKxtjD+92GlfAdZPff6Vkp9KW74elpWjjFKyBwwgMNFX6NqyHPMIg
+	CSOkPBX3dE0s/kO7TQa8cK8lf+t6aHakS5Kha34XzMf3NTMKo+8iXeuK/RHUrIt9DncCihXtTOG
+	Htp79mHQMWXgbG+pcq0/ZdNA4iMiuor0VAkrgCbO2hbIQc6pM+v/6hDA
+X-Received: by 2002:a05:651c:2221:b0:3a9:9a2e:27fd with SMTP id
+ 38308e7fff4ca-3a9c484ed2emr11869651fa.0.1791629772770; Sat, 10 Oct 2026
+ 03:56:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261010-xdp-v5-send-20261008-v5-5-de687cb67c40@gmail.com>
-References: <20261010-xdp-v5-send-20261008-v5-0-de687cb67c40@gmail.com>
-In-Reply-To: <20261010-xdp-v5-send-20261008-v5-0-de687cb67c40@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
- Lorenzo Bianconi <lorenzo@kernel.org>, 
- Tiezhu Yang <tiozhang@didiglobal.com>, Bochao Cao <bochaolucky@gmail.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Petr Machata <petrm@nvidia.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791627780; l=19096;
- i=bochaolucky@gmail.com; s=default; h=from:subject:message-id;
- bh=pqso4AVXoPi+9kxs99MPWGMShGSc0/24fbtC32buU4s=;
- b=XTIGISG8z1XFr0mEP426o6oHP55ngVUSIZeAMrCiNQSA6fPZnsFrvxzaAh9zznQSeH0zF/J9p
- LT2A2XF8C6xBITv/MUC7Vpv0T/aBsR79HpSLyTu6fdsndeomucY8vec
-X-Developer-Key: i=bochaolucky@gmail.com; a=ed25519;
- pk=ZYp7O2eXSIrJ9YmKrl0iHDoulPYSG+1lzICsicAvld0=
-X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/default with
- auth_id=1042
-X-Original-From: Bochao Cao <bochaolucky@gmail.com>
-Reply-To: bochaolucky@gmail.com
+References: <20261009060615.4177402-4-anilkaushikwireless@gmail.com> <179161330683.434549.12632469070516169474@kernel.org>
+In-Reply-To: <179161330683.434549.12632469070516169474@kernel.org>
+From: Anil Kaushik <anilkaushikwireless@gmail.com>
+Date: Sat, 10 Oct 2026 16:26:00 +0530
+X-Gm-Features: AclHuK_l6q0YlCGBbgtN1vn_svru5QUEHDq6mx7AewQXMeHmNf5JgT_liWwt9KM
+Message-ID: <CAG0Mgm8mh=xv5_dT_kLewnQYEhxsZ0bR38F3cQHW9BQ8VwOXgg@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 3/3] selftests: net: add a test for the gtp
+ netlink family
+To: netdev-bot+sashiko@kernel.org
+Cc: pablo@netfilter.org, laforge@gnumonks.org, donald.hunter@gmail.com, 
+	kuba@kernel.org, davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, 
+	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org, 
+	osmocom-net-gprs@lists.osmocom.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Bochao Cao <bochaolucky@gmail.com>
+Thanks, all four are valid and fixed in v4
+The echoreq request now matches gtp_genl_send_echo_req() and link is
+in the getpdp reply
+The test creates the gtp device before the family handle (and skips
+without GTP).
+And del_unknown_pdp checks ENOENT for both the TEI and MS-address lookups.
 
-Replace the private-veth script with a NetDrvEpEnv test for a local DUT
-and remote tester. Build the helper with the shared BPF rules and
-installed kernel headers.
-
-Check detected features against advertised support. Skip unsupported
-native XDP and veth XDP_TX without a peer XDP program. Wait for DUT
-readiness and run the remote helper under timeout.
-
-Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
----
- tools/testing/selftests/bpf/Makefile               |   9 +-
- tools/testing/selftests/bpf/test_xdp_features.sh   | 169 ---------------------
- tools/testing/selftests/drivers/net/README.rst     |  18 +++
- tools/testing/selftests/drivers/net/hw/.gitignore  |   3 +
- tools/testing/selftests/drivers/net/hw/Makefile    |  15 +-
- tools/testing/selftests/drivers/net/hw/config      |   3 +
- .../net/hw/xdp_features.bpf.c}                     |   0
- .../{bpf => drivers/net/hw}/xdp_features.c         |   2 +
- .../{bpf => drivers/net/hw}/xdp_features.h         |   0
- .../selftests/drivers/net/hw/xdp_features.py       | 137 +++++++++++++++++
- 10 files changed, 178 insertions(+), 178 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 883c92701b9f1..cb76b68c97dbb 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -124,11 +124,11 @@ TEST_FILES = xsk_prereqs.sh $(wildcard progs/btf_dump_test_case_*.c)
- TEST_PROGS := test_kmod.sh \
- 	test_lirc_mode2.sh \
- 	test_bpftool_build.sh \
- 	test_doc_build.sh \
- 	test_xsk.sh \
--	test_xdp_features.sh
-+	#
- 
- TEST_PROGS_EXTENDED := \
- 	ima_setup.sh verify_sig_setup.sh
- 
- TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
-@@ -140,11 +140,10 @@ TEST_GEN_PROGS_EXTENDED = \
- 	bench \
- 	flow_dissector_load \
- 	test_cpp \
- 	test_lirc_mode2_user \
- 	veristat \
--	xdp_features \
- 	xdp_hw_metadata \
- 	xdp_synproxy \
- 	xskxceiver
- 
- TEST_GEN_FILES += $(TEST_KMODS) liburandom_read.so urandom_read sign-file uprobe_multi
-@@ -542,11 +541,10 @@ linked_maps.skel.h-deps := linked_maps1.bpf.o linked_maps2.bpf.o
- test_subskeleton.skel.h-deps := test_subskeleton_lib2.bpf.o test_subskeleton_lib.bpf.o test_subskeleton.bpf.o
- test_subskeleton_lib.skel.h-deps := test_subskeleton_lib2.bpf.o test_subskeleton_lib.bpf.o
- test_usdt.skel.h-deps := test_usdt.bpf.o test_usdt_multispec.bpf.o
- xsk_xdp_progs.skel.h-deps := xsk_xdp_progs.bpf.o
- xdp_hw_metadata.skel.h-deps := xdp_hw_metadata.bpf.o
--xdp_features.skel.h-deps := xdp_features.bpf.o
- tracing_multi.skel.h-deps := tracing_multi_attach.bpf.o tracing_multi_check.bpf.o
- tracing_multi_module.skel.h-deps := tracing_multi_attach_module.bpf.o tracing_multi_check.bpf.o
- tracing_multi_intersect.skel.h-deps := tracing_multi_intersect_attach.bpf.o tracing_multi_check.bpf.o
- tracing_multi_session.skel.h-deps := tracing_multi_session_attach.bpf.o tracing_multi_check.bpf.o
- 
-@@ -945,15 +943,10 @@ $(OUTPUT)/xdp_hw_metadata: xdp_hw_metadata.c xsk.c network_helpers.c \
- 			   xsk.h network_helpers.h test_progs.h bpf_util.h \
- 			   $(OUTPUT)/xdp_hw_metadata.skel.h $(BPFOBJ) | $(OUTPUT)
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
- 
--$(OUTPUT)/xdp_features: xdp_features.c xdp_features.h \
--			   $(OUTPUT)/xdp_features.skel.h $(BPFOBJ) | $(OUTPUT)
--	$(call msg,BINARY,,$@)
--	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
--
- # Make sure we are able to include and link libbpf against c++.
- CXXFLAGS += $(CFLAGS)
- CXXFLAGS := $(subst -D_GNU_SOURCE=,,$(CXXFLAGS))
- CXXFLAGS := $(subst -std=gnu11,-std=gnu++11,$(CXXFLAGS))
- $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
-diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
-deleted file mode 100755
-index a28021ba74726..0000000000000
---- a/tools/testing/selftests/bpf/test_xdp_features.sh
-+++ /dev/null
-@@ -1,169 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--
--readonly NS="ns1-$(mktemp -u XXXXXX)"
--readonly DUT_NS="dut-${NS}"
--readonly V0_IP4=10.10.0.11
--readonly V1_IP4=10.10.0.1
--readonly V0_IP6=2001:db8::11
--readonly V1_IP6=2001:db8::1
--
--ret=1
--dut_pid=""
--peer_created=false
--dut_created=false
--setup_in_progress=true
--pending_signal=0
--
--setup() {
--	{
--		ip netns add "${NS}"
--		peer_created=true
--		ip netns add "${DUT_NS}"
--		dut_created=true
--
--		ip -n "$DUT_NS" link add v1 type veth peer name v0 netns ${NS}
--
--		ip -n "$DUT_NS" link set v1 up
--		ip -n "$DUT_NS" addr add $V1_IP4/24 dev v1
--		ip -n "$DUT_NS" addr add $V1_IP6/64 nodad dev v1
--		ip -n ${NS} link set dev v0 up
--		ip -n ${NS} addr add $V0_IP4/24 dev v0
--		ip -n ${NS} addr add $V0_IP6/64 nodad dev v0
--
--		# Enable XDP mode and disable checksum offload
--		ip netns exec "$DUT_NS" ethtool -K v1 gro on
--		ip netns exec "$DUT_NS" ethtool -K v1 tx-checksumming off
--		ip netns exec ${NS} ethtool -K v0 gro on
--		ip netns exec ${NS} ethtool -K v0 tx-checksumming off
--	} > /dev/null 2>&1
--	setup_in_progress=false
--	[ "$pending_signal" -eq 0 ] || exit "$pending_signal"
--}
--
--terminate_dut_server() {
--	local pid
--
--	# Use the shell job instead of dut_pid, which may not have been assigned
--	# yet if a signal arrived immediately after the server was started.
--	pid=$(jobs -pr %% 2> /dev/null) || true
--	if [ -z "$pid" ]; then
--		dut_pid=""
--		return
--	fi
--
--	kill -KILL %% 2> /dev/null || true
--	wait "$pid" 2> /dev/null || true
--	dut_pid=""
--}
--
--cleanup() {
--	trap - EXIT
--	trap '' HUP INT QUIT ABRT TERM
--	terminate_dut_server
--	if "$dut_created"; then
--		ip netns del "$DUT_NS" 2> /dev/null || true
--	fi
--	if "$peer_created"; then
--		ip netns del "$NS" 2> /dev/null || true
--	fi
--}
--
--wait_for_dut_server() {
--	while true; do
--		if [ "$(jobs -pr %% 2> /dev/null)" != "$dut_pid" ]; then
--			echo "xdp_features server $dut_pid exited before readiness" >&2
--			return 1
--		fi
--
--		if ip netns exec "$DUT_NS" ss -tlp 2> /dev/null |
--		   grep -q "pid=$dut_pid,"; then
--			return 0
--		fi
--
--		sleep 1
--	done
--}
--
--start_dut_server() {
--	ip netns exec "$DUT_NS" ./xdp_features "$@" &
--	dut_pid=$!
--	wait_for_dut_server
--}
--
--reap_dut_server() {
--	local status=0
--
--	wait "$dut_pid" || status=$?
--	dut_pid=""
--	return "$status"
--}
--
--test_xdp_features() {
--	setup
--
--	## XDP_PASS
--	start_dut_server -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1
--	ip netns exec ${NS} ./xdp_features -t -f XDP_PASS \
--					   -D $V1_IP6 -C $V1_IP6 \
--					   -T $V0_IP6 v0
--	[ $? -ne 0 ] && exit
--	reap_dut_server
--
--	## XDP_DROP
--	start_dut_server -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
--	ip netns exec ${NS} ./xdp_features -t -f XDP_DROP \
--					   -D ::ffff:$V1_IP4 \
--					   -C ::ffff:$V1_IP4 \
--					   -T ::ffff:$V0_IP4 v0
--	[ $? -ne 0 ] && exit
--	reap_dut_server
--
--	## XDP_ABORTED
--	start_dut_server -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1
--	ip netns exec ${NS} ./xdp_features -t -f XDP_ABORTED \
--					   -D $V1_IP6 -C $V1_IP6 \
--					   -T $V0_IP6 v0
--	[ $? -ne 0 ] && exit
--	reap_dut_server
--
--	# veth only flushes XDP_TX to a peer with native XDP attached.
--	echo "SKIP: XDP_TX needs a peer native XDP program"
--
--	## XDP_REDIRECT
--	start_dut_server -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1
--	ip netns exec ${NS} ./xdp_features -t -f XDP_REDIRECT \
--					   -D $V1_IP6 -C $V1_IP6 \
--					   -T $V0_IP6 v0
--	[ $? -ne 0 ] && exit
--	reap_dut_server
--
--	## XDP_NDO_XMIT
--	start_dut_server -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
--	ip netns exec ${NS} ./xdp_features -t -f XDP_NDO_XMIT \
--					   -D ::ffff:$V1_IP4 \
--					   -C ::ffff:$V1_IP4 \
--					   -T ::ffff:$V0_IP4 v0
--	ret=$?
--	reap_dut_server
--}
--
--handle_signal() {
--	if "$setup_in_progress"; then
--		pending_signal=$1
--	else
--		exit "$1"
--	fi
--}
--
--set -e
--trap cleanup EXIT
--trap 'handle_signal 129' HUP
--trap 'handle_signal 130' INT
--trap 'handle_signal 131' QUIT
--trap 'handle_signal 134' ABRT
--trap 'handle_signal 143' TERM
--
--test_xdp_features
--
--exit $ret
-diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
-index 3fe49bce4f3a5..0791f02ba44b4 100644
---- a/tools/testing/selftests/drivers/net/README.rst
-+++ b/tools/testing/selftests/drivers/net/README.rst
-@@ -308,5 +308,23 @@ The code should be clean, avoid disabling pylint warnings explicitly!
- Running tests CI-style
- ======================
- 
- See https://github.com/linux-netdev/nipa/wiki for instructions on how
- to easily run the tests using ``virtme-ng``.
-+
-+XDP feature test
-+===============
-+
-+``hw/xdp_features.py`` compares the DUT's advertised XDP capabilities with
-+packet observations. The endpoints must be directly connected at layer 2.
-+The remote helper needs packet-socket privileges and GNU ``timeout``, but
-+does not load BPF, attach XDP, or change interface/offload settings.
-+Probe checksums are computed in software; TX checksum offload may remain
-+at its configured value on both endpoints.
-+
-+A DUT without advertised native XDP support is skipped. On veth,
-+``XDP_TX`` additionally requires an existing native XDP program on the
-+peer, because veth only flushes its peer receive ring in that case.
-+Without this prerequisite the TX subtest is skipped; the test does not
-+change the shared remote endpoint to enable it. Other advertised versus
-+observed mismatches are failures, including unsupported features that
-+unexpectedly work.
-diff --git a/tools/testing/selftests/drivers/net/hw/.gitignore b/tools/testing/selftests/drivers/net/hw/.gitignore
-index 46540468a7753..a0cd8bc3739d8 100644
---- a/tools/testing/selftests/drivers/net/hw/.gitignore
-+++ b/tools/testing/selftests/drivers/net/hw/.gitignore
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- iou-zcrx
- ncdevmem
- toeplitz
-+tools/
-+xdp_features
-+xdp_features.skel.h
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 18ce235a77f84..bd818e8625c23 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -49,10 +49,11 @@ TEST_PROGS = \
- 	toeplitz.py \
- 	tso.py \
- 	userns_devmem.py \
- 	uso.py \
- 	vlan.py \
-+	xdp_features.py \
- 	xdp_metadata.py \
- 	xsk_reconfig.py \
- 	#
- 
- TEST_PROGS_EXTENDED := \
-@@ -77,11 +78,11 @@ TEST_INCLUDES := \
- YNL_GEN_FILES := \
- 	ncdevmem \
- 	toeplitz \
- 	$(COND_GEN_FILES) \
- # end of YNL_GEN_FILES
--TEST_GEN_FILES += $(YNL_GEN_FILES)
-+TEST_GEN_FILES += $(YNL_GEN_FILES) xdp_features
- TEST_GEN_FILES += $(patsubst %.c,%.o,$(wildcard *.bpf.c))
- 
- include ../../../lib.mk
- 
- # YNL build
-@@ -92,8 +93,20 @@ YNL_GENS := \
- 
- include ../../../net/ynl.mk
- 
- include ../../../net/bpf.mk
- 
-+$(OUTPUT)/xdp_features.bpf.o: xdp_features.h
-+
-+$(OUTPUT)/xdp_features: CFLAGS += -I$(OUTPUT) -I$(SCRATCH_DIR)/include
-+$(OUTPUT)/xdp_features: CFLAGS += -I../../../net/lib
-+$(OUTPUT)/xdp_features: LDLIBS += -lelf -lz -lpthread
-+$(OUTPUT)/xdp_features: xdp_features.c xdp_features.h \
-+			   $(OUTPUT)/xdp_features.skel.h $(BPFOBJ)
-+	$(call msg,BINARY,,$@)
-+	$(Q)$(CC) $(CFLAGS) $(CPPFLAGS) $(KHDR_INCLUDES) \
-+		$(filter %.c %.o,$^) $(BPFOBJ) \
-+		$(LDFLAGS) $(LDLIBS) -o $@
-+
- ifeq ($(HAS_IOURING_ZCRX),y)
- $(OUTPUT)/iou-zcrx: LDLIBS += -luring -lpthread
- endif
-diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testing/selftests/drivers/net/hw/config
-index c6c2b64bb7124..14a8041b468ba 100644
---- a/tools/testing/selftests/drivers/net/hw/config
-+++ b/tools/testing/selftests/drivers/net/hw/config
-@@ -1,6 +1,8 @@
-+CONFIG_BPF_EVENTS=y
- CONFIG_BPF_SYSCALL=y
-+CONFIG_DEBUG_INFO_BTF=y
- CONFIG_FAIL_FUNCTION=y
- CONFIG_FAULT_INJECTION=y
- CONFIG_FAULT_INJECTION_DEBUG_FS=y
- CONFIG_FUNCTION_ERROR_INJECTION=y
- CONFIG_HUGETLBFS=y
-@@ -19,10 +21,11 @@ CONFIG_NET_DEVMEM=y
- CONFIG_NET_IPGRE=y
- CONFIG_NET_IPGRE_DEMUX=y
- CONFIG_NET_IPIP=y
- CONFIG_NETKIT=y
- CONFIG_NET_SCH_INGRESS=y
-+CONFIG_PACKET=y
- CONFIG_SYNC_FILE=y
- CONFIG_UDMABUF=y
- CONFIG_USER_NS=y
- CONFIG_VLAN_8021Q=m
- CONFIG_VXLAN=y
-diff --git a/tools/testing/selftests/bpf/progs/xdp_features.c b/tools/testing/selftests/drivers/net/hw/xdp_features.bpf.c
-similarity index 100%
-rename from tools/testing/selftests/bpf/progs/xdp_features.c
-rename to tools/testing/selftests/drivers/net/hw/xdp_features.bpf.c
-diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/drivers/net/hw/xdp_features.c
-similarity index 99%
-rename from tools/testing/selftests/bpf/xdp_features.c
-rename to tools/testing/selftests/drivers/net/hw/xdp_features.c
-index 521c0e24a27ca..6aa5ac902448a 100644
---- a/tools/testing/selftests/bpf/xdp_features.c
-+++ b/tools/testing/selftests/drivers/net/hw/xdp_features.c
-@@ -27,10 +27,11 @@
- #include <unistd.h>
- #include <arpa/inet.h>
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
- 
-+#include "ksft.h"
- #include "xdp_features.skel.h"
- #include "xdp_features.h"
- 
- #define RED(str)	"\033[0;31m" str "\033[0m"
- #define GREEN(str)	"\033[0;32m" str "\033[0m"
-@@ -478,10 +479,11 @@ static int dut_run(struct xdp_features *skel)
- 	if (sockfd < 0) {
- 		fprintf(stderr,
- 			"Failed creating control socket on device %s\n", env.ifname);
- 		return -errno;
- 	}
-+	ksft_ready();
- 
- 	/* Allow remote startup and BPF loading on slow test machines. */
- 	ctrl_sockfd = -1;
- 	for (attempt = 0; attempt < 20 && !should_exit(); attempt++) {
- 		addrlen = sizeof(ctrl_addr);
-diff --git a/tools/testing/selftests/bpf/xdp_features.h b/tools/testing/selftests/drivers/net/hw/xdp_features.h
-similarity index 100%
-rename from tools/testing/selftests/bpf/xdp_features.h
-rename to tools/testing/selftests/drivers/net/hw/xdp_features.h
-diff --git a/tools/testing/selftests/drivers/net/hw/xdp_features.py b/tools/testing/selftests/drivers/net/hw/xdp_features.py
-new file mode 100755
-index 0000000000000..1d59772b2a4d0
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/xdp_features.py
-@@ -0,0 +1,137 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""Check that a device's advertised XDP features match its behavior."""
-+
-+import ipaddress
-+from pathlib import Path
-+import re
-+import shlex
-+
-+from lib.py import bkg, cmd, ip, ksft_eq, ksft_exit, ksft_run, NetDrvEpEnv
-+from lib.py import KsftFailEx, KsftSkipEx
-+
-+
-+ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*m")
-+RESULT = re.compile(
-+    r"Feature .*: \[(NOT )?DETECTED\]\[(NOT )?ADVERTISED\]"
-+)
-+
-+
-+def mapped_address(address):
-+    """Return an IPv6 or IPv4-mapped IPv6 address for xdp_features."""
-+    address = ipaddress.ip_address(address)
-+    if address.version == 4:
-+        return f"::ffff:{address}"
-+    return str(address)
-+
-+
-+def feature_command(binary, feature, dut_addr, tester_addr, ifname,
-+                    tester=False):
-+    """Build the helper command with the configured endpoint addresses."""
-+    args = [str(binary)]
-+    if tester:
-+        args.append("-t")
-+    args += ["-f", feature, "-D", dut_addr]
-+    if tester:
-+        args += ["-C", dut_addr]
-+    args += ["-T", tester_addr, ifname]
-+    return shlex.join(args)
-+
-+
-+def run_feature(cfg, feature, ipver):
-+    """Run one feature with bounded helper lifetimes and verify its result."""
-+    cfg.require_cmd("timeout", local=False, remote=True)
-+    probe = cmd(shlex.join([str(cfg.xdp_features), "-q", cfg.ifname]),
-+                fail=False)
-+    if probe.ret == 4:
-+        raise KsftSkipEx(f"{cfg.ifname} does not advertise native XDP")
-+    if probe.ret:
-+        raise KsftFailEx(f"Unable to query XDP support: {probe}")
-+    if feature == "XDP_TX":
-+        link = ip(f"-d link show dev {cfg.ifname}", json=True)[0]
-+        if link.get("linkinfo", {}).get("info_kind") == "veth":
-+            peer = ip(f"-d link show dev {cfg.remote_ifname}", json=True,
-+                      host=cfg.remote)[0]
-+            # veth_xdp_flush() only schedules a peer with native XDP.
-+            if peer.get("xdp", {}).get("mode") != 1:
-+                raise KsftSkipEx("veth XDP_TX needs an existing peer native "
-+                                 "XDP program to flush its receive ring")
-+    if not cfg.addr_v[ipver]:
-+        ipver = "4" if ipver == "6" else "6"
-+    cfg.require_ipver(ipver)
-+    dut_addr = mapped_address(cfg.addr_v[ipver])
-+    tester_addr = mapped_address(cfg.remote_addr_v[ipver])
-+
-+    dut_cmd = feature_command(cfg.xdp_features, feature, dut_addr,
-+                              tester_addr, cfg.ifname)
-+    tester_cmd = feature_command(cfg.remote_xdp_features, feature, dut_addr,
-+                                 tester_addr, cfg.remote_ifname, tester=True)
-+
-+    with bkg(dut_cmd, exit_wait=True, ksft_ready=True):
-+        # Bound the remote process itself, not just the local SSH wait.
-+        result = cmd(f"timeout --signal=TERM --kill-after=5 90 {tester_cmd}",
-+                     host=cfg.remote, timeout=100)
-+
-+    output = ANSI_ESCAPE.sub("", result.stdout)
-+    match = RESULT.search(output)
-+    if not match:
-+        raise KsftFailEx(f"Unable to parse xdp_features output: {output}")
-+
-+    detected = match.group(1) is None
-+    advertised = match.group(2) is None
-+    ksft_eq(detected, advertised,
-+            comment=f"{feature}: detected and advertised support")
-+
-+
-+def test_xdp_pass(cfg):
-+    """Check XDP_PASS detection against the advertised capability."""
-+    run_feature(cfg, "XDP_PASS", "6")
-+
-+
-+def test_xdp_drop(cfg):
-+    """Check XDP_DROP detection against the advertised capability."""
-+    run_feature(cfg, "XDP_DROP", "4")
-+
-+
-+def test_xdp_aborted(cfg):
-+    """Check XDP_ABORTED detection against the advertised capability."""
-+    run_feature(cfg, "XDP_ABORTED", "6")
-+
-+
-+def test_xdp_tx(cfg):
-+    """Check XDP_TX detection against the advertised capability."""
-+    run_feature(cfg, "XDP_TX", "4")
-+
-+
-+def test_xdp_redirect(cfg):
-+    """Check XDP_REDIRECT detection against the advertised capability."""
-+    run_feature(cfg, "XDP_REDIRECT", "6")
-+
-+
-+def test_xdp_ndo_xmit(cfg):
-+    """Check XDP_NDO_XMIT detection against the advertised capability."""
-+    run_feature(cfg, "XDP_NDO_XMIT", "4")
-+
-+
-+def main():
-+    """Deploy the helper and run the six feature checks."""
-+    with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
-+        cfg.xdp_features = (Path(__file__).parent / "xdp_features").resolve()
-+        cfg.remote_xdp_features = cfg.remote.deploy(
-+            cfg.xdp_features.as_posix()
-+        )
-+
-+        ksft_run([
-+            test_xdp_pass,
-+            test_xdp_drop,
-+            test_xdp_aborted,
-+            test_xdp_tx,
-+            test_xdp_redirect,
-+            test_xdp_ndo_xmit,
-+        ], args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-
--- 
-Git-155)
-
-
+On Sat, Oct 10, 2026 at 11:51=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wr=
+ote:
+>
+> Thank you for your contribution! Sashiko AI review found 4 potential
+> issue(s) to consider.
+>
+> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 2 =C2=B7 Low: 2
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwor=
+k
+> know by including "pw-bot: cr" as a separate line at the end of your repl=
+y
+> (one such reply per series is enough).
+>
+> - [Medium] The new test aborts with a traceback instead of running or
+>   skipping whenever the 'gtp' genl family is not already registered.
+> - [Medium] The `echoreq` operation in
+>   Documentation/netlink/specs/gtp.yaml (lines 159-165) declares its=E2=80=
+=A6
+> - [Low] del_unknown_pdp() in tools/testing/selftests/net/gtp.py uses
+>   `with ksft_raises(NlError)` without checking the errno, so any netlink=
+=E2=80=A6
+> - [Low] The getpdp `&pdp-reply` attribute set in
+>   Documentation/netlink/specs/gtp.yaml (lines 138-149, used by getpdp do=
+=E2=80=A6
+>
+> --
+>
+> selftests: net: add a test for the gtp netlink family
+>
+> This adds a Python selftest that drives the gtp generic netlink family
+> through its ynl spec. It covers newpdp, getpdp and delpdp, a two-context
+> dump, and a delete of an unknown context. It also adds a GtpFamily ynl
+> wrapper, CONFIG_GTP=3Dm in the net selftest config, and Makefile and
+> MAINTAINERS entries.
+>
+> > diff --git a/tools/testing/selftests/net/gtp.py b/tools/testing/selftes=
+ts/net/gtp.py
+> > new file mode 100755
+> > index 0000000000000..fcc9bf57a663f
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/net/gtp.py
+> > @@ -0,0 +1,85 @@
+>
+> [ ... ]
+>
+> > +def add_del_pdp(gtp, ns) -> None:
+> > +    """Add a PDP context, query it, then delete it.
+> > +
+> > +    The query must return the context with the TEIDs and addresses
+> > +    it was created with, and it must be gone after the delete.
+> > +    """
+> > +    link =3D _add_gtp_dev(ns)
+> > +
+> > +    gtp.newpdp({"link": link, "version": 1,
+> > +                "i-tei": 0x100, "o-tei": 0x200,
+> > +                "ms-address": "10.0.0.1", "peer-address": "192.0.2.1"}=
+)
+> > +
+> > +    pdp =3D [c for c in gtp.getpdp({}, dump=3DTrue) if c.get("i-tei") =
+=3D=3D 0x100]
+>
+> [Severity: Low]
+> This dump is decoded with Documentation/netlink/specs/gtp.yaml. That spec
+> was added earlier in this series by "netlink: specs: add genetlink-legacy
+> spec for GTP", and its getpdp reply leaves out link:
+>
+>         reply: &pdp-reply
+>           attributes:
+>             - version
+>             - tid
+>             - peer-address
+>             - peer-addr6
+>             - ms-address
+>             - ms-addr6
+>             - flow
+>             - i-tei
+>             - o-tei
+>             - family
+>
+> But gtp_genl_fill_info() always emits it, in every getpdp reply, dump ent=
+ry
+> and notification:
+>
+>         if (nla_put_u32(skb, GTPA_VERSION, pctx->gtp_version) ||
+>             nla_put_u32(skb, GTPA_LINK, pctx->dev->ifindex) ||
+>             nla_put_u8(skb, GTPA_FAMILY, pctx->af))
+>
+> Should link be added to the reply attributes? Without it, consumers
+> generated from the spec can't tell which gtp device a dumped context
+> belongs to.
+>
+> On a related note, this filter matches only on i-tei, not on the link the
+> test just created.
+>
+> > +    ksft_eq(len(pdp), 1)
+> > +    ksft_eq(pdp[0]["o-tei"], 0x200)
+> > +    ksft_eq(pdp[0]["ms-address"], "10.0.0.1")
+> > +    ksft_eq(pdp[0]["peer-address"], "192.0.2.1")
+> > +
+> > +    gtp.delpdp({"link": link, "version": 1,
+> > +                "i-tei": 0x100, "ms-address": "10.0.0.1"})
+> > +    ksft_not_in(0x100, _iteis(gtp.getpdp({}, dump=3DTrue)))
+>
+> [ ... ]
+>
+> > +def del_unknown_pdp(gtp, ns) -> None:
+> > +    """Deleting a context that was never added must fail."""
+> > +    link =3D _add_gtp_dev(ns)
+> > +    with ksft_raises(NlError):
+> > +        gtp.delpdp({"link": link, "version": 1,
+> > +                    "i-tei": 0x999, "ms-address": "10.9.9.9"})
+>
+> [Severity: Low]
+> Should this check the errno too? ksft_raises(NlError) accepts any netlink
+> error. For example, -EINVAL or -ENODEV from gtp_find_pdp_by_link() or
+> gtp_genl_del_pdp() would also pass. The real lookup miss in gtp_find_pdp(=
+)
+> is -ENOENT.
+>
+> Also, both delpdp requests in this test send ms-address, and
+> gtp_find_pdp_by_link() checks that before the TEI branch:
+>
+> drivers/net/gtp.c:gtp_find_pdp_by_link() {
+>     ...
+>         if (nla[GTPA_MS_ADDRESS]) {
+>                 __be32 ip =3D nla_get_be32(nla[GTPA_MS_ADDRESS]);
+>                 if (family !=3D AF_INET)
+>                         return ERR_PTR(-EINVAL);
+>                 return ipv4_pdp_find(gtp, ip);
+>     ...
+> }
+>
+> That means the i-tei values passed to delpdp are ignored, and delete by
+> TEI through gtp1_pdp_find() is never tested.
+>
+> With the current kernel this request does return -ENOENT, so the test
+> passes for the right reason today. It just checks less than the docstring
+> suggests.
+>
+> > +
+> > +
+> > +def main() -> None:
+> > +    """Run the PDP context tests in a temporary netns."""
+> > +    with NetNS() as ns:
+> > +        with NetNSEnter(str(ns)):
+> > +            gtp =3D GtpFamily()
+> > +        ksft_run([add_del_pdp, add_two_pdp, del_unknown_pdp], args=3D(=
+gtp, ns))
+>
+> [Severity: Medium]
+> Can GtpFamily() succeed here if gtp.ko isn't loaded yet?
+>
+> GtpFamily() -> YnlFamily.__init__() -> GenlProtocol('gtp') looks up the
+> family id with _genl_load_families(). That sends CTRL_CMD_GETFAMILY with
+> NLM_F_DUMP, which the kernel answers from ctrl_dumpfamily(). Only the
+> non-dump ctrl_getfamily() path autoloads the module:
+>
+> net/netlink/genetlink.c:ctrl_getfamily() {
+>     ...
+>         request_module("net-pf-%d-proto-%d-family-%s",
+>                        PF_NETLINK, NETLINK_GENERIC, name);
+>     ...
+> }
+>
+> This patch adds CONFIG_GTP=3Dm to the selftest config. On a fresh boot wi=
+th
+> that config, the "gtp" family isn't registered yet, so
+> genl_family_name_to_id['gtp'] raises KeyError. YnlFamily.__init__()
+> turns that into:
+>
+>     YnlException(f"Family '{self.yaml['name']}' not supported by the kern=
+el")
+>
+> That exception isn't a KsftSkipEx and is raised outside ksft_run(). Won't
+> the whole script abort with a traceback before any case runs?
+>
+> gtp.ko would only be autoloaded later, through the rtnl link alias, when
+> _add_gtp_dev() runs "ip link add gtp0 type gtp". For the same reason, wit=
+h
+> CONFIG_GTP unset the KsftSkipEx in _add_gtp_dev() is never reached, and t=
+he
+> test fails instead of skipping.
+>
+> Would it work to create the gtp device, or otherwise load the module,
+> before constructing GtpFamily(), and to treat a missing family as a skip?
+>
+> > +    ksft_exit()
+> > +
+> > +
+> > +if __name__ =3D=3D "__main__":
+> > +    main()
+>
+> [ ... ]
+>
+> > diff --git a/tools/testing/selftests/net/lib/py/ynl.py b/tools/testing/=
+selftests/net/lib/py/ynl.py
+> > index 08deff756f29b..7edb749710231 100644
+> > --- a/tools/testing/selftests/net/lib/py/ynl.py
+> > +++ b/tools/testing/selftests/net/lib/py/ynl.py
+>
+> [ ... ]
+>
+> > @@ -85,3 +85,9 @@ class PSPFamily(YnlFamily):
+> >      def __init__(self, recv_size=3D0):
+> >          super().__init__((SPEC_PATH / Path('psp.yaml')).as_posix(),
+> >                           schema=3D'', recv_size=3Drecv_size)
+> > +
+> > +
+> > +class GtpFamily(YnlFamily):
+> > +    def __init__(self, recv_size=3D0):
+> > +        super().__init__((SPEC_PATH / Path('gtp.yaml')).as_posix(),
+> > +                         schema=3D'', recv_size=3Drecv_size)
+>
+> [Severity: Medium]
+> This wrapper loads the gtp.yaml added earlier in this series by
+> "netlink: specs: add genetlink-legacy spec for GTP". Does that spec's
+> echoreq request match the driver? The spec lists:
+>
+>         request:
+>           attributes:
+>             - link
+>             - version
+>             - peer-address
+>             - peer-addr6
+>             - family
+>
+> gtp_genl_send_echo_req() requires GTPA_MS_ADDRESS, which isn't listed:
+>
+>         if (!info->attrs[GTPA_VERSION] ||
+>             !info->attrs[GTPA_LINK] ||
+>             !info->attrs[GTPA_PEER_ADDRESS] ||
+>             !info->attrs[GTPA_MS_ADDRESS])
+>                 return -EINVAL;
+>
+> The handler is also IPv4-only and never reads GTPA_PEER_ADDR6 or
+> GTPA_FAMILY.
+>
+> A client generated from the spec would never send ms-address, so its
+> echoreq would always fail with -EINVAL.
+>
+> That spec commit says it is "derived directly from include/uapi/linux/gtp=
+.h
+> and the gtp_genl_policy / gtp_genl_ops tables in drivers/net/gtp.c". That
+> doesn't seem to hold for echoreq.
+>
+> Should ms-address be added to the echoreq request, and peer-addr6 and
+> family removed?
+>
+> --
+> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
+set/20261009060615.4177402-1-anilkaushikwireless%40gmail.com
