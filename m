@@ -1,50 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DEA3D6CD6;
-	Sat, 10 Oct 2026 03:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFC536197B;
+	Sat, 10 Oct 2026 04:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791604497; cv=none; b=Z7X3ugzzt33BeQwamzOCm9bRCNWoo43M2E8HmLJOs9ulY7bRUd1Qm8QOv+aMNIMij24AadYdrFrgUD0YoRM3zvnkEVZbRlT3KnSUGeulQobXs7+LnH3/Q4JNTkPForODhcvCVPuT7YvgJHijHObRUKeS+FBq1tsDxcCoH6zzFrc=
+	t=1791606710; cv=none; b=q6VtTBcANLgZy3Q6ff/uqUc40Boz8akXK2+++WyE1R79qmuIXcja+UwEL3+BCYCjojY/deERqcNJEDMnAM/lQ1AGcXqIkrEelALnd0yRPWNgBUYKvzOJ+MFRcT7DCuQeP6vxIBXDoUX3BAXwAM3CWTxz4pOsZ6R2lWeYqL63KOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791604497; c=relaxed/simple;
-	bh=vao8T0ntCrZ65nxL5fkeRY2wkDgW73C1nkNvuLDdxXo=;
+	s=arc-20240116; t=1791606710; c=relaxed/simple;
+	bh=i1mDO9OXtrByT870IBFcGqKn43mp18xmYd7LU6yt6yo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aXnTk3iCWc/d4hxHkwTCYsNir12YDs29yzEuY2p9y2kkVTmGz+A7hPE/iGhcY8J2Em6E+iSd8kP9/9/qpUmG9pr01L05gidPV8Uq4AmlJCMfDIVqbKdV2nibbK8eP4jI5XMWgYTGq+4gmakZ/fbUeXnbF8GzMwhCEsYFY+8bb8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g8nWeZRv; arc=none smtp.client-ip=198.175.65.20
+	 In-Reply-To:Content-Type; b=uNL05jE35Qq90vcdt+LUWWKq2eDP8wtbkbKRGVwpGQEefkt8NlUi4NIZzxFVDXR8X1FKqyvr5pTzyDbEtkp5SnKv3xCt7ibe+ZACr8Ogoy8QZ82jZHZrJ9Abl8YmM7M1qvFErWHVQxVyMNKPX4550qAVAA1Q1gx2/ijLWXTU/YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J30N+WdQ; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g8nWeZRv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J30N+WdQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791604491; x=1823140491;
+  t=1791606709; x=1823142709;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=vao8T0ntCrZ65nxL5fkeRY2wkDgW73C1nkNvuLDdxXo=;
-  b=g8nWeZRvealF1YHbmmouskzWmSNaAUbgb2dx2aY/+FnFlbcpwRF+oLJc
-   ai1HG4cPALenPk51WXQey3vlXaQKb9z9UEzQhaOR3w+DzizmGnl1VsFoq
-   wLpvV8CTPyThHwazPM6CUm0e2KUNJBw458kSqTQHhHW2bnI9Q9W98NL6i
-   NdmAA8JjrfctMdZRNHMxTQhM/LMUtgEyJih16BJHOEmPFCftmJrAA+Fhl
-   7mfYXQpRaGnGON4nHgImsfQKHvSiOXfbQmYiQQD28WEG/nMmfyPg+F7R2
-   koHsnUeS+8oP3ySz1DnHarXnjH4JoKvV+/n/V+Kc+90ouiaG8mrS++MUR
-   w==;
-X-CSE-ConnectionGUID: YIrtv94KTrS9g3EnIUInpQ==
-X-CSE-MsgGUID: Vj18sfGnQFGWsxrxNP4k1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="407433"
+  bh=i1mDO9OXtrByT870IBFcGqKn43mp18xmYd7LU6yt6yo=;
+  b=J30N+WdQuaPPhyTwuLAOD7vVYKNjPr6DqxgMGGphxtdZtwvOhcH+pCXR
+   EqtXsynePxClR7VJWzs5DLG4wen+h8b2/jDXLuI9SbgiMbAq3RrtHYgKB
+   LVmTC7d7b5G2G1B2UZhl2UGOj+fzo2lQxzjnrKXJIx//a2vKPvsRMhPCM
+   TnfEyNHt/onHPY5YvAucZT/ltPEI+UPy5t9JeL/5w9FUCunCsdOS/6E8q
+   U/kV4AdiSG3UEG25TcaDTHF1aZDk7YeQAQs9msmI5YNgbY6CkrTKWlQWE
+   WgQInPN5oKRzvnmZuB+t8r9pdpCThH5YKE6OrrN9tXHBn/X0XkC1gcP0P
+   A==;
+X-CSE-ConnectionGUID: 09Y1z9t9QSC7oATAU2SU0w==
+X-CSE-MsgGUID: QkCSbozaRQW9ThXLQvcfgg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="412230"
 X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
-   d="scan'208";a="407433"
-Received: from fmviesa011.fm.intel.com ([10.60.135.151])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 20:54:51 -0700
-X-CSE-ConnectionGUID: GLD/bdgAS4WSKp88uBXzDw==
-X-CSE-MsgGUID: K+HpcyrdQ8i8dSSlCWQEGQ==
+   d="scan'208";a="412230"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 21:31:45 -0700
+X-CSE-ConnectionGUID: 14WZTIDARDSkC7L9mP/8sg==
+X-CSE-MsgGUID: 283OkiZjSSOF8+ljcBphgA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
-   d="scan'208";a="2288765"
+   d="scan'208";a="648064"
 Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 20:54:45 -0700
-Message-ID: <932ec219-5951-489b-bda9-1f6e9a605a9b@linux.intel.com>
-Date: Sat, 10 Oct 2026 11:54:42 +0800
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 21:31:40 -0700
+Message-ID: <7b4c79cd-848f-4472-a528-a4259a7a6882@linux.intel.com>
+Date: Sat, 10 Oct 2026 12:31:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,13 +52,11 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 14/23] KVM: selftests: Expose function to allocate
- vCPU stack
-To: Xiaoyao Li <xiaoyao.li@intel.com>, Lisa Wang <wyihan@google.com>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org,
- Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng
- <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
+Subject: Re: [PATCH v15 15/23] KVM: selftests: Call KVM_TDX_INIT_VCPU when
+ creating a new TDX vcpu
+To: Lisa Wang <wyihan@google.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
  Chenyi Qiang <chenyi.qiang@intel.com>,
  Dave Hansen <dave.hansen@linux.intel.com>,
  Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
@@ -69,115 +67,140 @@ Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
  Rick Edgecombe <rick.p.edgecombe@intel.com>,
  Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
  Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+ Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
+ Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
+ kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org
 References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
- <20261001-tdx-selftests-v15-14-7c62a5d8a992@google.com>
- <b2143700-da36-418c-af63-0b50b33f080e@intel.com>
+ <20261001-tdx-selftests-v15-15-7c62a5d8a992@google.com>
 Content-Language: en-US
 From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <b2143700-da36-418c-af63-0b50b33f080e@intel.com>
+In-Reply-To: <20261001-tdx-selftests-v15-15-7c62a5d8a992@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/9/2026 3:56 PM, Xiaoyao Li wrote:
-> On 10/2/2026 3:37 AM, Lisa Wang wrote:
->> From: Sagi Shahar <sagis@google.com>
->>
->> Introduce kvm_allocate_vcpu_stack() to allocate a vCPU's stack
->> in preparation for TDX to allocate a vCPU's stack and initialize
->> its stack pointer.
->>
->> TDX VMs' registers are protected state and cannot be initialized
->> using the KVM_SET_REGS ioctl() that is used for normal VMs. A TDX
->> vCPU's stack address will be a property of the TDX specific boot code
->> that initializes the vCPUs' stack pointers at boot.
->>
->> Signed-off-by: Sagi Shahar <sagis@google.com>
->> Signed-off-by: Lisa Wang <wyihan@google.com>
->> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
->> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
->> Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
->> ---
->>  .../testing/selftests/kvm/include/x86/processor.h  |  2 ++
->>  tools/testing/selftests/kvm/lib/x86/processor.c    | 25 +++++++++++++++++++---
->>  2 files changed, 24 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
->> index 8854ee052d29..1eb380dd216c 100644
->> --- a/tools/testing/selftests/kvm/include/x86/processor.h
->> +++ b/tools/testing/selftests/kvm/include/x86/processor.h
->> @@ -1212,6 +1212,8 @@ static inline void vcpu_clear_cpuid_feature(struct kvm_vcpu *vcpu,
->>  	vcpu_set_or_clear_cpuid_feature(vcpu, feature, false);
->>  }
->>  
->> +gva_t kvm_allocate_vcpu_stack(struct kvm_vm *vm);
->> +
->>  u64 vcpu_get_msr(struct kvm_vcpu *vcpu, u64 msr_index);
->>  int _vcpu_set_msr(struct kvm_vcpu *vcpu, u64 msr_index, u64 msr_value);
->>  
->> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
->> index da430d4e7765..4a753fb43007 100644
->> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
->> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
->> @@ -851,12 +851,31 @@ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
->>  	vcpu_regs_set(vcpu, &regs);
->>  }
->>  
->> -struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
->> +gva_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
+On 10/2/2026 3:37 AM, Lisa Wang wrote:
+> From: Sagi Shahar <sagis@google.com>
 > 
-> Besides what Sashiko pointed out[1], this patch was just messed up during the
-> rebase and it even doesn't compile.
-
-
-Yes.
-
-And since the upstream code already has vm_alloc_stack(), which basically does
-the same thing.
-
-I think this patch can be dropped. 
-
+> TDX VMs need to issue the KVM_TDX_INIT_VCPU ioctl for each vcpu after
+> vcpu creation.
 > 
-> [1] https://lore.kernel.org/all/20261002091331.BA23F1F00893@smtp.kernel.org/
+> KVM_TDX_INIT_VCPU has a strict prerequisite for the CPUID state. To
+> satisfy this requirement, call KVM_TDX_GET_CPUID and KVM_SET_CPUID2 to
+> pull the CPUID configuration from the TDCS and commit it into KVM,
+> allowing KVM_TDX_INIT_VCPU to succeed.
 > 
->>  {
->>  	struct kvm_mp_state mp_state;
->>  	struct kvm_regs regs;
->> +	gva_t stack_gva;
->>  	struct kvm_vcpu *vcpu;
->>  
->> +	stack_gva = __vm_alloc(vm, DEFAULT_STACK_PGS * getpagesize(),
->> +			       DEFAULT_GUEST_STACK_VADDR_MIN, MEM_REGION_DATA);
->> +
->> +	stack_gva += DEFAULT_STACK_PGS * getpagesize();
->> +
->> +	/*
->> +	 * Align stack to match calling sequence requirements in section "The
->> +	 * Stack Frame" of the System V ABI AMD64 Architecture Processor
->> +	 * Supplement, which requires the value (%rsp + 8) to be a multiple of
->> +	 * 16 when control is transferred to the function entry point.
->> +	 *
->> +	 * If this code is ever used to launch a vCPU with 32-bit entry point it
->> +	 * may need to subtract 4 bytes instead of 8 bytes.
->> +	 */
->> +	TEST_ASSERT(IS_ALIGNED(stack_gva, PAGE_SIZE),
->> +		    "__vm_alloc() did not provide a page-aligned address");
->> +	stack_gva -= 8;
->> +
->>  	vcpu = __vm_vcpu_add(vm, vcpu_id);
->>  	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
->>  	vcpu_init_sregs(vm, vcpu);
->> @@ -864,8 +883,8 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
->>  
->>  	/* Setup guest general purpose registers */
->>  	vcpu_regs_get(vcpu, &regs);
->> -	regs.rflags = regs.rflags | X86_EFLAGS_FIXED;
->> -	regs.rsp = vm_alloc_stack(vm, DEFAULT_STACK_PGS);
->> +	regs.rflags = regs.rflags | 0x2;
->> +	regs.rsp = kvm_allocate_vcpu_stack(vm);
->>  	vcpu_regs_set(vcpu, &regs);
->>  
->>  	/* Setup the MP state */
->>
+> Additionally, unlike tdx_vm_ioctl(), tdx_vcpu_ioctl() doesn't check
+> hw_error. KVM's vCPU-scoped TDX ioctl handlers don't propagate SEAMCALL
+> errors into hw_error: the error is handled in the kernel and only an
+> errno is returned. Checking the ioctl's return value and errno is
+> therefore sufficient.
+> 
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
+> ---
+>  .../selftests/kvm/include/x86/tdx/tdx_util.h       | 20 +++++++++
+>  tools/testing/selftests/kvm/lib/x86/processor.c    | 48 ++++++++++++++++++----
+>  2 files changed, 60 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> index e529c587aeae..f5b2f32f2118 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> @@ -46,6 +46,26 @@ static inline bool is_tdx_vm(struct kvm_vm *vm)
+>  		    (unsigned long long)hw_error);			\
+>  })
+>  
+> +#define __tdx_vcpu_ioctl(vcpu, cmd, _flags, arg)			\
+> +({									\
+> +	union {								\
+> +		struct kvm_tdx_cmd c;					\
+> +		unsigned long raw;					\
+> +	} tdx_cmd = { .c = {						\
+> +		.id = (cmd),						\
+> +		.flags = (u32)(_flags),					\
+> +		.data = (u64)(arg),					\
+> +	} };								\
+> +									\
+> +	__vcpu_ioctl(vcpu, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd.raw);	\
+> +})
+> +
+> +#define tdx_vcpu_ioctl(vcpu, cmd, flags, arg)				\
+> +({									\
+> +	int ret = __tdx_vcpu_ioctl(vcpu, cmd, flags, arg);		\
+> +	TEST_ASSERT(!ret, "%s failed, errno: %d (%s)",			\
+> +		     #cmd, errno, strerror(errno));			\
+> +})
+
+tdx_vm_ioctl() prints ret, tdx_vcpu_ioctl() doesn't.
+Better to be consistent.
+
+>  void tdx_init_vm(struct kvm_vm *vm);
+>  void tdx_vm_setup_boot_code_region(struct kvm_vm *vm);
+>  void tdx_vm_setup_boot_parameters_region(struct kvm_vm *vm, u32 nr_runnable_vcpus);
+> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+> index 4a753fb43007..4af9cbf3fabb 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+> @@ -876,16 +876,48 @@ gva_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
+>  		    "__vm_alloc() did not provide a page-aligned address");
+>  	stack_gva -= 8;
+>  
+> +	return stack_gva;
+> +}
+> +
+> +static void tdx_vcpu_init(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_cpuid2 *cpuid;
+> +
+> +	cpuid = allocate_kvm_cpuid2(MAX_NR_CPUID_ENTRIES);
+> +	tdx_vcpu_ioctl(vcpu, KVM_TDX_GET_CPUID, 0, cpuid);
+> +	vcpu_init_cpuid(vcpu, cpuid);
+> +	free(cpuid);
+> +	tdx_vcpu_ioctl(vcpu, KVM_TDX_INIT_VCPU, 0, NULL);
+> +}
+
+Should this function better to be in tdx_util.c, like other tdx specific helpers?
+
+> +
+> +struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+> +{
+> +	struct kvm_mp_state mp_state;
+> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_regs regs;
+> +
+>  	vcpu = __vm_vcpu_add(vm, vcpu_id);
+> -	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+> -	vcpu_init_sregs(vm, vcpu);
+> -	vcpu_init_xcrs(vm, vcpu);
+>  
+> -	/* Setup guest general purpose registers */
+> -	vcpu_regs_get(vcpu, &regs);
+> -	regs.rflags = regs.rflags | 0x2;
+> -	regs.rsp = kvm_allocate_vcpu_stack(vm);
+> -	vcpu_regs_set(vcpu, &regs);
+> +	/*
+> +	 * Both kvm_get_supported_cpuid() (for legacy VMs) and KVM_TDX_GET_CPUID
+> +	 * (for TDX VMs) return VM-scoped CPUID. e.g. the APIC ID isn't
+> +	 * populated per vCPU. This is fine because KVM selftests don't
+> +	 * currently test CPUID topology enumeration.
+> +	 */
+> +	if (is_tdx_vm(vm)) {
+> +		tdx_vcpu_init(vm, vcpu);
+> +	} else {
+> +		vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+> +
+> +		vcpu_init_sregs(vm, vcpu);
+> +		vcpu_init_xcrs(vm, vcpu);
+> +
+> +		/* Setup guest general purpose registers */
+> +		vcpu_regs_get(vcpu, &regs);
+> +		regs.rflags = regs.rflags | 0x2;
+> +		regs.rsp = kvm_allocate_vcpu_stack(vm);
+> +		vcpu_regs_set(vcpu, &regs);
+> +	}
+>  
+>  	/* Setup the MP state */
+>  	mp_state.mp_state = 0;
 > 
 
