@@ -1,152 +1,119 @@
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75057381C4;
-	Sat, 10 Oct 2026 07:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4635F379C23;
+	Sat, 10 Oct 2026 07:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791617614; cv=none; b=igVaEJdKmy3jHzoSMCqziU/WAuri2L+ifnVwpgh//oLItiqjTuslczf7k2llwpDSDV9eVrN7RqeeTi1W5SXie3fwGE2gHm+WZDQzXWbiIJH20sHfwTdL7eigsntcGXROEveYIRLf5jzLON4ABBFxkG+nSDKNQvqJeO3MWti6vHI=
+	t=1791617788; cv=none; b=Yy4pTwyLBz1WoZ24UcJMCMHei6Tbjei4d7Zmgau1zzcBrtdCLXitBw5/iEwGPbfH6xUcn33RDsTReSJBRodZHDJtL/m33zT0C5+cbzHesplY9C5vzMRyUq9KuvSL8QLW3TyDyrRPDycffzXWiQ8PWAjkMSe/BBJVbRBrY/0NzMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791617614; c=relaxed/simple;
-	bh=GKPQLYHgPhr0xMzDC5riZ8+OBSue8Yjv7P3BvUk1Cjg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cvzw5octAWAXR6/uUUcE2ojfdDT20OKVWdqeIn1ZLi8kI96QoPdbIjZJhsOdNpd/dTvLzomAaGChM5VCvR/WKQAqFmYqAKNWSs098m1EnacTWWo3SDGHAKtWRiHG0ubZwdE8I10hzy2ldArXLfoESuwEEGqnd0F4n+vdEwhko6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=XsgnrXt4; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+	s=arc-20240116; t=1791617788; c=relaxed/simple;
+	bh=4ko9gSj+vxgBtEJWFjbBisBasVf3lndbjG7WDoYLcn4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=D5I0rc97HVDeTKyClYObvvdQ6vwGbokclXCQLXY4X/y+ZQynOoYSBVqU6LAwFly2sqH0PBKmBuJGMsLFZmXH2Hir91qxZiCaqQ9vAec44RIx7S/O90NByIBF0Hm1UtYmcXwdwKX54bNhP/VHkBFao+SJUwJhUKwXdHLTY+hlUXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O1scjIDh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="XsgnrXt4"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=teqaia83Ord3oLShXQ9VqNIYfVBNpiZYGph0SbHqQqQ=; t=1791617611;
-	x=1792222411; b=XsgnrXt4zDNSR9nXDPEy5XovRcq4yVyf/msM7n5wngSHSy3YfnvM7sblqs0WX
-	j9Lweb3/ZFtzxjJEBWmdLBlsPuBS+0YO24MXPsCI0vpmnyw1UL0Iq+WIgF0u+xnmoyTYDykaOMoXV
-	SGntPFdNpEz7ZTAMgJQhR5GXeLPjyMKnZlAf54UGmPiT85CPspQV1RpwOmSUoztjB+/lSMlpjYDz3
-	t2Ne82See02y0nv+rfnkp8rdyUZ/CC9N2qGr5+JqMSKR6ZUaHp0iHz9W2ZQuBaAar6sO+mDyYO9mv
-	PxeFnndJ9LMi36H3COfARJ5pjEDp3Q2Ylt0ucIoAeDZchbbTCw==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.100)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1xFRVQ-00000002eEW-2cO9; Sat, 10 Oct 2026 09:28:32 +0200
-Received: from dynamic-077-183-246-238.77.183.pool.telefonica.de ([77.183.246.238] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.100)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1xFRVQ-00000002Hil-1T1n; Sat, 10 Oct 2026 09:28:32 +0200
-Message-ID: <6ab95ddaaa19f224b07a2001e03ec002ca2938e2.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v4 2/2] x86: Start removing X86_X32_ABI
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: "H. Peter Anvin" <hpa@zytor.com>, Tancred <alex@narraduct.com>, 
- Sebastian Andrzej Siewior
-	 <bigeasy@linutronix.de>, linux-kernel@vger.kernel.org, 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1scjIDh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F321F000FF;
+	Sat, 10 Oct 2026 07:36:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791617786;
+	bh=lvHacGZHOil6n8X8TWo3a/lv5iJ2YDY90NDrBy/yA4U=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=O1scjIDh9Idq26MCPYxo0nalUPgIQV8jPHjj9EAukOJzrIDI+14xcWHlQyw+RQW+z
+	 c7bfG0uCWt+vPb6LQbz83ilcKuAN5wvPqekwmSW/kUbYPHVXoZV+KlJYXQjZTB81Cd
+	 VxJqf2JFBOtbzVjZ6kkqAF7Dde+UtRdu4nMX+IrjnQrHWWwBN0ZbwR7o5StsVqvnKd
+	 ReygXOyiuezuAqNAnHRGyM99QlGFGSNZttQJtO1GHCBElzQxgme2m+vwsQ9rz5XRWx
+	 5hiOXKqAE2c85h3nDndjJe1iif63W9teMNiLmh+O8rOw6WU6umu3Kx2kzmp/rr7N7n
+	 V56r/87rFYK1A==
+X-Mailer: emacs 31.1 (via feedmail 11-beta-1 I)
+From: Aneesh Kumar K.V <aneesh.kumar@kernel.org>
+To: Fred Griffoul <griffoul@gmail.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>
+Cc: David Woodhouse <dwmw2@infradead.org>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev, iommu@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Cc: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>, "Maciej W. Rozycki"
-	 <macro@orcam.me.uk>, Bill Wendling <morbo@google.com>, Borislav Petkov	
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, Ingo Molnar	
- <mingo@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Justin Stitt	
- <justinstitt@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa
-	 <neal@gompa.dev>, Nick Desaulniers <ndesaulniers@google.com>, Richard
- Purdie	 <richard.purdie@linuxfoundation.org>, Sam James <sam@gentoo.org>,
- Shuah Khan	 <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Thomas
- =?ISO-8859-1?Q?Wei=DFschuh?=	 <linux@weissschuh.net>, Tomas Glozar
- <tglozar@kernel.org>, Willy Tarreau	 <w@1wt.eu>, x86@kernel.org, Arnd
- Bergmann <arnd@arndb.de>
-Date: Sat, 10 Oct 2026 09:28:30 +0200
-In-Reply-To: <AEFD8F3A-0692-4090-B3F7-A6AD34A24819@zytor.com>
-References: <20261008-x32_removal-v4-0-d389a193c506@breakpoint.cc>
-	 <20261008-x32_removal-v4-2-d389a193c506@breakpoint.cc>
-	 <7f315c7a-0fd1-4f7e-93bb-703d4107aa5a@narraduct.com>
-	 <AEFD8F3A-0692-4090-B3F7-A6AD34A24819@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 
+Subject: Re: [RFC PATCH 0/9] mm: Memory providers for guest_memfd and iommufd
+In-Reply-To: <20261006183235.16576-1-griffoul@gmail.com>
+References: <20260720111259.122911-1-dwmw2@infradead.org>
+ <20261006183235.16576-1-griffoul@gmail.com>
+Date: Sat, 10 Oct 2026 13:06:09 +0530
+Message-ID: <yq5ald8680t2.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+Content-Type: text/plain
 
-On Sat, 2026-10-10 at 08:51 +0200, H. Peter Anvin wrote:
-> On October 10, 2026 4:13:55 AM GMT+02:00, Tancred <alex@narraduct.com> wr=
-ote:
-> >=20
-> >=20
-> > On 10/8/26 03:07, Sebastian Andrzej Siewior wrote:
-> > > where certain workloads widely
-> > > move to x32 and use it exclusively. In the meantime Debian introduced=
- a
-> > > patch to disable x32 by default (so it has to be enabled at boot time=
- on
-> > > the command line) because they are afraid of the increased attack
-> > > surface. Fedora as far as I tell has X32 disabled (looking at 7.0-rc5
-> > > rpm in rawhide).
-> > >=20
-> > > Since there is practically no real use for x32
-> >=20
-> > I only recently discovered x32 and built a Desktop (with all daemons an=
-d utilities running 10-30% smaller and some a bit faster, with 64 bit libra=
-ries for eg. Firefox.) My experiment should definitely not decide anything,=
- but how much real-world use would be sufficient to justify continued prese=
-nce (more complex compat code)?
-> >=20
-> > If left behind a flag like Debian (like the 2014 proposal https://lore.=
-kernel.org/lkml/1415245982.3398.53.camel@decadent.org.uk/), there are no se=
-curity risks so I understand the benefit is reduced code complexity and mai=
-ntenance burden. Older threads critiqued the implementation. What's the sma=
-llest kernel support which would keep 32-bit pointers possible? Could a sma=
-ll design (eg. just 32-bit pointers on x86-64 with i386's type layout, so n=
-o 3rd compat case (cf. MIPS n32 and o32)) work?
-> >=20
-> > - Alex Alejandre
->=20
-> The thing is, we don't actually know. Therefore, if we are to keep x32, w=
-e need ***real users*** to speak up ***now*** and explain why they are usin=
-g it and what the benefit to them is. With actual performance numbers.
+Fred Griffoul <griffoul@gmail.com> writes:
 
-Real users usually aren't subscribed to Linux kernel mailing lists. If you =
-want
-to figure out whether anyone is using a certain kernel feature, you have to=
- ask
-within the communities.
+> From: Fred Griffoul <fgriffo@amazon.co.uk>
+>
+> Some drivers manage RAM outside the page allocator: a carve-out, device
+> memory, or memory that a host component moves between VMs while they
+> run. This memory often has no struct page. The driver wants to lend
+> pages to a VM and to its devices, and to take any of them back later.
+>
+> David Woodhouse's series "KVM: Allow alternative providers of
+> guest_memfd backed by PFNMAP memory" lets such a driver back a
+> guest_memfd through struct kvm_gmem_ops:
+>
+>   https://lore.kernel.org/kvm/20260720111259.122911-1-dwmw2@infradead.org/
+>
+> That covers the guest, but not the VM's devices, which his cover
+> letter left as an open question. This series adds a small interface in
+> mm: the driver that owns the memory becomes a provider, and the code
+> that maps it attaches as a consumer. There are two consumers, a
+> guest_memfd backend and IOMMU_IOAS_MAP_FILE in iommufd.
+>
+> The series is on top of David's v2 (base 0e35b9b6ec0f). Patch 1 was
+> part of the earlier dma-buf RFC. The provider backend depends on it, so
+> this series carries it.
+>
 
-In any case, we're still building Debian unstable for x32:
 
-https://buildd.debian.org/status/architecture.php?a=3Dx32&suite=3Dsid
+I have been working on something similar for confidential computing use
+cases. There is likely some overlap between this series and what I posted
+at [1].
 
-> Otherwise it is not worth maintaining, partly because it apparently inter=
-feres with the convergence of the 32-bit ABIs, and the handful of x32-speci=
-fic pieces of code do represent an additional attack surface.
+I have not reviewed this series in detail yet, but I will compare the two
+approaches and identify what can be shared between the use cases. Please
+let me know how you would like to proceed.
 
-Aren't the attack surfaces disabled when x32 ABI support is turned off?
+[1] https://lore.kernel.org/all/20261010072504.536230-1-aneesh.kumar@kernel.org/
 
-> The desktop distros generally chafe under the 4 GB process limit, which m=
-eans that an all-x32 desktop distro isn't very useful; having both x32 and =
-x64 libraries defeats much of the x32 benefit, so the real use case is embe=
-dded or self-managed code bases.
-
-Well, you can also run x32 code inside a chroot or containers, can't you?
-
-> We are not going to go back in 2026 and redoing the *in retrospect* rathe=
-r unfortunate choices made due to "Hinc Dictat Linus" early on (the origina=
-l plan was to simply provide a fast way to access 32-bit syscalls from 64-b=
-it mode and let the evolution of the compat ABI deal with things like time_=
-t, but Linus objected to introducing a new ABI with 32-bit time_t, and at t=
-he time the time64_t interfaces were not yet there, so it ended up being an=
- ad hoc implementation.)
-
-Adrian
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+-aneesh
