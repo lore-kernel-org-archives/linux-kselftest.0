@@ -1,207 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4414A8FC0;
-	Sat, 10 Oct 2026 12:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791636100; cv=none; b=hpbUg93vImCY6DiUo4kAauw1F2sobrx/ATRAl2BLUg/BmqEyUJ9gWNKlHaawDFIk8CZZw8IWBUxo/Sbq7EcBQAKKXytSQJlHHrZJwmoOvTHiW21+rcaUINwRmDqVx9H+TYwE5TxVxeOpOIE3qFzb/k5xM+Y9H4QjY1JtfB54TeQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791636100; c=relaxed/simple;
-	bh=DOWLk2KPhGuBqGjqbbjZhS/X5KEgI8YhdKCMda6sp3I=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tuCRCgtMRylp80Tef3Lh47xoWM8ZFPa/WumbJWYbBaKLHzzxI3wLiAd/Ss098W065nplVHXZxuFpCty/FCj3KEWyNTjk5d+NKJJGMmBpcptdLElkaFsl5xJvwTREG4pJNG2Ia392lOrawo9dCZr+WR/wPNt/m6sXYcWw9IREJrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULzQbh4v; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94FA4A68BC
+	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 13:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791637688; cv=pass; b=sMEk8oqbKokVT9WuXS+nSQM3ChI72BfpHDJm+em//xZ7dnlvMd097tInhhxkFZBz8206kw5uHBoDF4Rvz+4LgHweT3J4XJrqcsTunLyNbqDfatWL3TkNU0maJ3Fjo/L1Bckl7hWJPlDtE/j+JukAoFMIkh/mTYLJYDCJRcwWf5U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791637688; c=relaxed/simple;
+	bh=Peoepvw/CV4v2nNzhaOWVLf6PtcCki7ZSzzGuOeWGYs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iFucjT0YC1si/EFZ7bDhjG/Zhz3iti/vNZEBFE2NFkmgKR3sIy7zUqlv75wMPJYCN4qQwdKeoFtmLSdeJ/jNg/JNUitYOaLN6CcWQTko8b2vhAiRZUV8a7pJ7eWuAnYw8oS1/7nAmGgef/Es7EoYTg7fktU/6NQFqbOUOZAVldI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GFtnxtnM; arc=pass smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ULzQbh4v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30EBA1F00893;
-	Sat, 10 Oct 2026 12:41:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791636096;
-	bh=zeJbWA0x80spfrEHaqYLJB//IGbEAAErNMgbYI6cTIQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ULzQbh4v/YnfTiq0mLmW60Swx3+waIjQXLq1r6YI6oe4tZYnKADiVYrKDLhu+AqeS
-	 scY5snJ/dr2FqY4tVtcnP7Yxme0nDESaS9xNSLerlK30HVnde1euGRt7LJHA1PVOlR
-	 rsbFgFwKU05djcPO4ciUCGHiUhbDfkbrXy3hGuqgllGbPkv7GzgUdbHFiIGOJ7uH/N
-	 xGLu964B+Ve5PTuxM1unHbm2sBPHveBySV9Lqy2zlTnLst2HviHer+szScWVb7Skpl
-	 9Itgnr4L1eYl+wy12ejIwjjjX+h4VG75yMBsVzkwcIbrqwUy6nFFh+QvZ26mxEZxtf
-	 9jEIgWMKeaEig==
-Subject: Re: [PATCH net-next 12/13] selftests: net: add amt_v6.sh for an IPv6
- outer transport
-From: netdev-bot+sashiko@kernel.org
-To: omar@blockcast.net
-Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Sat, 10 Oct 2026 12:41:35 +0000
-Message-ID: <179163609571.434549.12748049029587713249@kernel.org>
-In-Reply-To: <20261009122426.551178-13-omar@blockcast.net>
-References: <20261009122426.551178-13-omar@blockcast.net>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GFtnxtnM"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-3a7754c2471so5522101fa.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 06:08:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791637685; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Z9ZicKi2qFNroV6wA4quohFMhlZ0jRrYCODXWPBW5J8dW9sfyh47Vz4rt5YnXdDsRS
+         c34nLWtKdC+R8oe/n4Ae9rUdWxd2PUznh98LOTsCJ0U6e5rCZHJ2UPlbxNWkgo5s8CE5
+         jhwm2r1N+amv5f/fDn72FGUQSIIp9eiZQ+qp+Q68U/qcUuaS4g1giGT3+8eD/fQUYGmv
+         JGnNbnTf8ul6+NA5cST7qNnAsqQcCYWZxNoUYsnXbz0jL6v6/hGAkg5e6aDAD9HjHwV1
+         bZZ25QtIFPvNnhdpDwaxw0gkctHFRDqC7WLqCG1jnrhaF0iOmgO0MH0w6xGHDimLpHX5
+         zwmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Peoepvw/CV4v2nNzhaOWVLf6PtcCki7ZSzzGuOeWGYs=;
+        fh=i62gFjzhZvpUhgxnEdGT3hD4U/If0x6RDPikiV9TQiU=;
+        b=IpLP/Fp2b0bK/LvtWowvk8zNd4BEw9gvdPBWRLR+V2pPaew+lcpp/Qh1xOgL9ik2Nt
+         VU2pwE1eUP7vcSAPZEt2NoJ0o1Oe5rQFXEG1jARRJJ3Tj7DpNNq9f3Io1DRrW6v2eIC3
+         d83F/h8NiSHmP2my6HnfKapzwPE1gbOLvbinArzUJdx0lDigAlKAzdmzfskStU/TMFXz
+         USqn2nYK7klS1jOEfBYRJHyIKYmeGGBEtY/2Z7LJSNRo+m03K79d1wb15xblSxYlQtGt
+         N4JJEtPa4B/Sl04F53Xq7G4sQZdS1UbfZf/XtJvdewXw/BExMRuRFMeztf6DE9Sngb4M
+         L+Og==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791637685; x=1792242485; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Peoepvw/CV4v2nNzhaOWVLf6PtcCki7ZSzzGuOeWGYs=;
+        b=GFtnxtnMvNaq4SJ1WOB/2/nknKlK/HIOBMPtnwnullEMOFW50Ww9QBWYCmB7X+EGIm
+         pSLQif0Qbv3ZdpFrntpTwOaGWMdG2C2o0JkHvV8sXZbSN4R8XnWffx3vOLx9Dwokeqbo
+         RDvwQ5hWGi4WdxmfelLKMloPxsce1/vqYNjqYxy507UttrM7ivmtQ86x9kDDa1k/sZoz
+         tAZO3IZWS6q7oTC041c3vaFT/UaYF0XMJmFX4Ni9CfgYrAWUdyoE+/YprAdKvfUG9Sy3
+         t3Cu2WHAEEx/gI2LXBurteS1cJLERNUo02TzfcKj6ZsXzVAnsbbIT/u8w9dCMfKb64iT
+         dd2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791637685; x=1792242485;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Peoepvw/CV4v2nNzhaOWVLf6PtcCki7ZSzzGuOeWGYs=;
+        b=Gwtu7ayHuLKXrZqqIbwxFGMLe3Z0QO8LlMYOwngGN0x+V8nuD7pC/87psv5TybsLAq
+         SpJU3VPPi3J62WR6d9sqKGGL/PV5nJL5eD7MyuSXOd0D6qm25xWO0hiL/u+0hZC/pFrA
+         GZg0KHmUq9uL7irg5pc90yR4HhlVRmC8jKzOP3AIU7j8dWFJT58LnjL2CUtCXtrxeWSM
+         2hRUdIE1lqRCNWjdCIbrW03ORLUqK30Nx+6t0haXuPf/yYjlNvlaLrjjFqnKcXDrNwxP
+         dRWHgqz3UCnkvDaq4XQnmXVxrtji/IpUGu9qjE/sHTshMU8utFIIKnv0VyQbqh4pjTOf
+         +ktw==
+X-Forwarded-Encrypted: i=1; AKwUvBzFEvQxKENgd3DGmzEgcpgoxes5rIliAaCCQ0vlNY66uv9T81uwWhQzYfMmVHp+cRh45HxgOEf4HcMCepaPrBg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIgvYcPZtDiClOJ/oKtiYWZ9PG6K61dU9RV25NQZFNUXa4PWGtj
+	x0+gIq3c/C1oV9PkVNKg/TlIBVopJ/jFaT6zkIxC7EHEhBoGwhJ2bXnYxm29wR3Wl1YR2zfCP/M
+	zjnGa5QITvgZOHfGxjJSjBH0kOitRjM0=
+X-Gm-Gg: AYBFou0b7vmhXHvDR9RmW/z2YszZacXZdEIvJXpd8dRCZV8ovyLkGh8NXdCONZ6Tzm8
+	A1zmOrBPfEDt6reVE3mbFrB7/Vq61ALbIm7eBGIW3Hz8iSql6tD+gcc5ZTasM/ksmjzAgqQBkgn
+	x+LduTOvQWJQnIAGXMlRBP48Uiw8KgOLb+te4JLW6bw0ajR82AcYnGIwAJy7cfWsxUG9NbYKMnW
+	xltT4Pax4o26YPpACILB7KeGV49JnRkk3S5fu/EWUuqfx/NC1flmqRsYwLHxa9skbMN8x9skvqO
+	fxHtxSHHfvHWWyQXHvXlzS+oliMiVHHf1SBjoN7jZJJngst74GS/nVgr8HYWTjsPtYwT9TgcadI
+	ngdJMj6GpSXyO9H2OZHsTcBAX9de4tds2sFgDqy2pfeDx
+X-Received: by 2002:a05:651c:54d:b0:3a4:8913:a259 with SMTP id
+ 38308e7fff4ca-3a9c56def06mr10678081fa.29.1791637684541; Sat, 10 Oct 2026
+ 06:08:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20261007115821.11332-2-sigefriedhyy@gmail.com> <179154712848.434549.1887332518398499959@kernel.org>
+In-Reply-To: <179154712848.434549.1887332518398499959@kernel.org>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+Date: Sat, 10 Oct 2026 22:07:54 +0900
+X-Gm-Features: AclHuK-XNxBmVqaX_AVuTKFXpvUqvVpdQ0iJJw8t3L0zVc4v9El00m3OF_1B3Gs
+Message-ID: <CA+7S2v+hTzSacfnSJi4V2A-oj5woKA+0ffOA2cY1-7iC_LDX8w@mail.gmail.com>
+Subject: Re: [PATCH net-next v10 1/6] netlink: specs: rt-addr: fix the type of target-netnsid
+To: netdev-bot+sashiko@kernel.org
+Cc: ajay.kathat@microchip.com, aleksandr.loktionov@intel.com, 
+	andrew+netdev@lunn.ch, claudiu.beznea@tuxon.dev, davem@davemloft.net, 
+	dsahern@kernel.org, donald.hunter@gmail.com, edumazet@google.com, 
+	idosch@nvidia.com, jacob.e.keller@intel.com, kuba@kernel.org, 
+	johannes@sipsolutions.net, kees@kernel.org, kory.maincent@bootlin.com, 
+	kuniyu@google.com, nicolas.dichtel@6wind.com, nickgarlis@gmail.com, 
+	pabeni@redhat.com, sd@queasysnail.net, shuah@kernel.org, horms@kernel.org, 
+	sdf.kernel@gmail.com, vadim.fedorenko@linux.dev, willemb@google.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+> Should this have a Fixes: tag?
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] disc_answer() in tools/testing/selftests/net/amt_v6.sh (lines
-  269-292) ignores two exit statuses.
-- [Low] In tools/testing/selftests/net/amt_v6.sh, the `*"IPv6 support is
-  disabled"*` branch in probe_v6_relay() (line 117) can never run.
-
---
-
-selftests: net: add amt_v6.sh for an IPv6 outer transport
-
-This adds amt_v6.sh, a variant of amt.sh where the gateways and the relay
-run AMT over IPv6, with two extra gateways on the outer link. It covers
-discovery, IPv4 and IPv6 multicast forwarding, the tunnel limit, tunnel MTU
-handling, zero UDP checksum handling, Discovery sent to ff02::1, and link
-down/up. It also enables CONFIG_IP_MROUTE in the net selftest config.
-
-> diff --git a/tools/testing/selftests/net/amt_v6.sh b/tools/testing/selftests/net/amt_v6.sh
-> new file mode 100755
-> index 0000000000000..d2732945a3c7b
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/amt_v6.sh
-> @@ -0,0 +1,535 @@
-
-[ ... ]
-
-> +setup_links()
-> +{
-> +	local ns
-> +
-> +	# No DAD: the relay sources its MLD General Query from amtr's
-> +	# link-local address, which must not be tentative when it is sent.
-> +	for ns in "$LISTENER" "$GATEWAY" "$GATEWAY2" "$GATEWAY3" "$RELAY" \
-> +		  "$SOURCE"; do
-> +		ip netns exec "$ns" sysctl -wq \
-> +			net.ipv6.conf.all.accept_dad=0 \
-> +			net.ipv6.conf.default.accept_dad=0
-> +	done
-
-[ ... ]
-
-> +probe_v6_relay()
-> +{
-> +	local err got
-> +
-> +	if ! err=$(ip -n "$RELAY" link add amtprobe type amt mode relay \
-> +		   local "$RELAY6" dev br_gw 2>&1); then
-> +		case "$err" in
-> +		*"Local attribute is required"*|*"expected rather than"*|\
-> +		*"IPv6 address in an IPv4 attribute"*|\
-> +		*"IPv6 support is disabled"*)
-> +			echo "SKIP: no IPv6 AMT support: $err"
-> +			exit "$ksft_skip"
-> +			;;
-
-[Severity: Low]
-
-Can the "IPv6 support is disabled" branch ever match?
-
-In drivers/net/amt.c, amt_validate() returns that extack only when
-CONFIG_IPV6 is off:
-
-    if (data[IFLA_AMT_LOCAL_IP6] && !IS_ENABLED(CONFIG_IPV6)) {
-        NL_SET_ERR_MSG_ATTR(extack, data[IFLA_AMT_LOCAL_IP6],
-                            "IPv6 support is disabled");
-
-On a kernel like that, the script never gets to the probe. The main body
-runs setup_links() under the ERR trap before probe_v6_relay() runs:
-
-    set -E
-    trap 'setup_fail $LINENO' ERR
-    setup_links
-    trap - ERR
-    probe_v6_relay
-
-setup_links() starts with the net.ipv6.conf.*.accept_dad sysctl writes
-quoted above, then adds IPv6 addresses. Without IPv6, those commands fail,
-and setup_fail() exits with ksft_fail.
-
-The commit message says:
-
-    A probe creates a throwaway IPv6 relay first and skips only when the
-    kernel or iproute2 cannot create one
-
-Would a kernel built without CONFIG_IPV6 report FAIL here rather than the
-intended SKIP? The net selftest config sets CONFIG_IPV6=y, so this only
-affects configurations that don't use it.
-
-[ ... ]
-
-> +disc_answer()
-> +{
-> +	local dst=$1 filter=$2 opts=${3:-} pid i rc log
-> +	local to="UDP6-SENDTO:[$dst]:2268,sourceport=40000"
-> +
-> +	log=$(mktemp)
-> +	ip netns exec "$GATEWAY" timeout 6 \
-> +		tcpdump -nni gw_relay -c 1 "$filter" > /dev/null 2> "$log" &
-> +	pid=$!
-> +	# Send nothing before the capture is live, or a missed packet would
-> +	# pass the negative check.
-> +	busywait 5000 grep -q "listening on" "$log"
-> +	# Type 1 (Relay Discovery), version 0, then a nonce.
-> +	for i in 1 2 3; do
-> +		printf '\x01\x00\x00\x00\x12\x34\x56\x78' |
-> +			ip netns exec "$GATEWAY" socat -u - \
-> +			"$to,so-bindtodevice=gw_relay$opts"
-> +		sleep 0.5
-> +	done
-> +	wait "$pid"
-> +	rc=$?
-> +	rm -f "$log"
-> +	return "$rc"
-> +}
-
-[Severity: Medium]
-
-Can test_mcast_discovery() pass its negative check when no Discovery was
-ever captured or sent?
-
-The exit status of busywait is thrown away, and loopy_wait() in lib.sh
-returns 1 on timeout. The status of each socat send is thrown away too.
-
-The function returns only tcpdump's status. That status is non-zero when
-no matching packet was seen (124 from timeout 6), and also when tcpdump
-itself failed (1).
-
-test_mcast_discovery() then does:
-
-    disc_answer ff02::1 "udp and src port 2268 and dst port 40000"
-    check_fail $? "the relay answered a Discovery sent to ff02::1"
-
-So if the capture isn't live within 5 seconds, tcpdump fails to start, or
-the send to ff02::1 fails, the check records a pass. This is the case the
-comment above the busywait says must not happen.
-
-The unicast positive control runs its own tcpdump and its own send. It
-doesn't show that the second capture went live or that the ff02::1 send
-worked.
-
-test_zero_relay() calls disc_answer() in the same way, though its
-Udp6InCsumErrors check limits the effect there.
-
-Should disc_answer() return a separate failure when the busywait or the
-socat sends fail, so the negative checks can tell that apart from no reply?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009122426.551178-1-omar%40blockcast.net
+It is working as intended, already discussed in the previous patch review.
