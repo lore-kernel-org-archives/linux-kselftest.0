@@ -1,178 +1,203 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6A713B58C;
-	Sat, 10 Oct 2026 17:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2A730CD95;
+	Sat, 10 Oct 2026 17:49:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791651864; cv=none; b=HahPEPKR6vrPMCKGq8lnqJkx3EVr4RXNVTdGt0pYohF8UyP8snPOZ1sbo75SqrfARdgtHurb/V6dochHi/Fnin1wSiV5KV3HO5NnAc4bCaARtmfI+HB4/TbsGCI4cvaO+aFoA5D1clpxxqeMbwFKXnAlxDwIyu+DPcOpa6TXOnk=
+	t=1791654596; cv=none; b=Mcezb5UyRbcXgkn1d5yHqOEOwjBvqpKEboqfjtECzu6cqzgAyBbd27+Ai1qEWupY2q9dPhFcB5eHjqB3m/phSjr30c71D24pXo6ShtxO51dAWWnkuFsOpn4eZYQuT/pXzdDQzhfNFDiqaiVhyEmgEi5QG9TQWCvvEr+orqPtaQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791651864; c=relaxed/simple;
-	bh=SZdAjBAi5kGrfqPWhTvqDNs0hBXrk1IaL6ZV22ncRBc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=WhCLCzgz/ByfXD9w4gFfHJXKQ+zURGzLUfy4UoTNjJAwXheaeC7HpFdBWdwO7mMFjCB606OLwvYC7fqQP4Nc0iiUHJJ4GRmlx0HMzbR/k4tMoyiqDD6sbcOGu04t7MvFuB9huTMO9zlCDEW7xqRN5w1J8rbfPdK0IOoo2MJ/2r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=glK4w4WW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791654596; c=relaxed/simple;
+	bh=fs5k0pvJgDbTNkExW0JBTz50XVWD538Gkz2Y2kHhfiw=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KzI/eSj9rwplSHzCjaquXI8T6rbGbn4aCvkpLwsfY33EqIBDv51ss3J5qWQJ69SgMz/SY2cft4IO92PkYsWfizt5yow45gYGxfnIEr8hOhu6aEDYkRHMJ/b7l9fwOZa4qBxBLYiHcwR6YQXDAOyQ//v1y9m9EyNM/d42cm8aTfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oLZfYyLs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="glK4w4WW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 475051F000FF;
-	Sat, 10 Oct 2026 17:04:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oLZfYyLs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A41B1F000FF;
+	Sat, 10 Oct 2026 17:49:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791651863;
-	bh=6Bgc4G61GPBNcGeONqOBL1vjWQ26O0Slr1Q2H5a5uQA=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References;
-	b=glK4w4WW92RImIebYdTw9ZeGHrODTW47hec/S/dJZlGvJAUlELo5auUI5IrXBr1wt
-	 TnubOHw5gGUpZ7RzUp+++e0NVFhwuJ097nMH7IHr6CHA5RR0UuQxgRMOKbipEilLU3
-	 Tdspl9pLFN2Ep+qU/AYVzCf7vpyC6WUMHLPEue2Q4b+qOcJrE1LhCFTQB3IRpKNRUO
-	 Ms5HcCeviL9/Lu9YvqmFM6P2TZ5dLDMOjllHISfg+aLoOg3I+Zv3tfVTnZBJz6UTz4
-	 cvDk/143pIPoscB1QbWfx4fm6JKmAB2pa41OwPk2gQZasc3UjRGfKRN+IqnUg3HWtx
-	 1PkJGmIcoHRAg==
-Date: Sat, 10 Oct 2026 10:04:21 -0700
-From: Kees Cook <kees@kernel.org>
-To: Magnus Lindholm <linmag7@gmail.com>, richard.henderson@linaro.org,
- mattst88@gmail.com, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org
-CC: Shuah Khan <shuah@kernel.org>, wad@chromium.org,
+	s=k20260515; t=1791654594;
+	bh=+DORvwKAxTHj8vZPkv/MgjfYqRNJlJ7MuPcIfWOckwc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=oLZfYyLs+ZNVBIFSYnpTqz36DZDNQcouBC7H3gCXi4j3bhSbHWPE81cJ3hxr3paSw
+	 21550auM/hVG8XB1HfYEbAy3TswTQIgxC44c+uKmRNYw51JSrGcJCzvhRHsyarI2Os
+	 Ww+kh/7rJQYqrG7grn4qJ726tGIOF8B+dMwrgtHNcLTj8ZSKUnnzCq+F/yUxCdDMqD
+	 5p9i2aQL3gUjMV7yhKzloyB4q04pyAII8tfWLQIldMJQUtO9aCrBIDlNQEPWTlBDf1
+	 NjlUuzG0J1rAhg6pP0/oDYBIE2T868ZoqQjWq7QfC5QPqeW3sPkIITFUbNkzNyd+pp
+	 CBR8ONcA/1Gfg==
+Subject: Re: [PATCH net 2/2] selftests: net: veth: test peer ndo-xmit after
+ GRO toggle while down
+From: netdev-bot+sashiko@kernel.org
+To: tianyi@cloudflare.com
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, toke@redhat.com,
+ lorenzo@kernel.org, horms@kernel.org, bpf@vger.kernel.org, shuah@kernel.org,
+ hawk@kernel.org, kernel-team@cloudflare.com, ast@kernel.org,
+ daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/seccomp: add Alpha support to seccomp_bpf
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CA+=Fv5R0fiZuzDLPOZcZt6p1CtSnATELgvns_nKA1qwemKHvWA@mail.gmail.com>
-References: <20261010134214.974565-1-linmag7@gmail.com> <CA+=Fv5R0fiZuzDLPOZcZt6p1CtSnATELgvns_nKA1qwemKHvWA@mail.gmail.com>
-Message-ID: <3866F071-9B50-4712-B640-EB757068C1B5@kernel.org>
+Date: Sat, 10 Oct 2026 17:49:52 +0000
+Message-ID: <179165459278.434549.1711113374323842550@kernel.org>
+In-Reply-To: <20261006173241.65945-3-tianyi@cloudflare.com>
+References: <20261006173241.65945-3-tianyi@cloudflare.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
+Critical: 0 · High: 0 · Medium: 2 · Low: 0
 
-On October 10, 2026 9:24:16 AM PDT, Magnus Lindholm <linmag7@gmail=2Ecom> =
-wrote:
->Hi all,
->
->On Sat, Oct 10, 2026 at 3:42=E2=80=AFPM Magnus Lindholm <linmag7@gmail=2E=
-com> wrote:
->>
->> Enable the seccomp BPF selftests on Alpha with a fallback seccomp sysca=
-ll
->> number and architecture-specific syscall register accessors=2E
->>
->> Use the NT_PRSTATUS register layout rather than struct pt_regs=2E The
->> register set contains r0-r30 followed by pc and unique=2E Read and upda=
-te
->> the syscall number in r1, and set both r0 and the r19/a3 error flag whe=
-n
->> synthesizing syscall results=2E
->>
->> At syscall entry, r19 still contains the fourth syscall argument, so
->> callers setting a synthetic return value must also set the syscall
->> number to -1 to skip execution=2E
->>
->> Signed-off-by: Magnus Lindholm <linmag7@gmail=2Ecom>
->> Reviewed-by: Matt Turner <mattst88@gmail=2Ecom>
->> ---
->> Changes in v3:
->> - Drop the /proc/self/syscall availability check and its commit-message
->>   paragraph=2E Alpha selects HAVE_ARCH_TRACEHOOK=2E
->> - Document that setting r19/a3 at syscall entry requires callers to als=
-o
->>   set the syscall number to -1=2E
->> - Add Matt Turner's Reviewed-by after addressing his review comments=2E
->>
->> Changes in v2:
->> - Use the NT_PRSTATUS layout for PTRACE_GETREGSET/PTRACE_SETREGSET=2E
->> - Set the Alpha return value and error flag together=2E
->> - Check for /proc/self/syscall at runtime (removed in v3)=2E
->>
->> Validation on AlphaServer ES40, GCC 15=2E2=2E1, running
->> 7=2E3=2E0-rc1-es40-tsunami-v5a+:
->> - Standard v3 and the original baseline binary both report 98 pass,
->>   1 fail, 12 skip=2E The common failure is the 30-second timeout in
->>   user_notification_wait_killable_after_reply=2E
->> - A separate diagnostic build extending only that test's timeout to
->>   180 seconds completes it in 34=2E938 seconds=2E The full diagnostic r=
-un
->>   reports 99 pass, 0 fail, 12 skip=2E No timeout change is in this patc=
-h=2E
->>
->>  tools/testing/selftests/seccomp/seccomp_bpf=2Ec | 26 +++++++++++++++++=
-++
->>  1 file changed, 26 insertions(+)
->>
->> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf=2Ec b/tools/te=
-sting/selftests/seccomp/seccomp_bpf=2Ec
->> index 0622bc2=2E=2E79e8eb3 100644
->> --- a/tools/testing/selftests/seccomp/seccomp_bpf=2Ec
->> +++ b/tools/testing/selftests/seccomp/seccomp_bpf=2Ec
->> @@ -136,6 +136,8 @@ struct seccomp_data {
->>  #  define __NR_seccomp 354
->>  # elif defined(__x86_64__)
->>  #  define __NR_seccomp 317
->> +# elif defined(__alpha__)
->> +#  define __NR_seccomp 514
->>  # elif defined(__arm__)
->>  #  define __NR_seccomp 383
->>  # elif defined(__aarch64__)
->> @@ -1754,6 +1756,30 @@ TEST_F(TRACE_poke, getpid_runs_normally)
->>  # define ARCH_REGS             struct user_regs_struct
->>  # define SYSCALL_NUM(_regs)    (_regs)=2Eorig_eax
->>  # define SYSCALL_RET(_regs)    (_regs)=2Eeax
->> +#elif defined(__alpha__)
->> +/* NT_PRSTATUS contains r0-r30, pc and unique, not struct pt_regs=2E *=
-/
->> +struct alpha_regs {
->> +       unsigned long regs[33];
->> +};
->> +
->> +# define ARCH_REGS             struct alpha_regs
->> +/* The kernel keeps the mutable syscall number in r1=2E */
->> +# define SYSCALL_NUM(_regs)    ((_regs)=2Eregs[1])
->> +# define SYSCALL_RET(_regs)    ((_regs)=2Eregs[0])
->> +/*
->> + * Alpha returns positive errno in r0 with the r19/a3 error flag set=
-=2E
->> + * At a syscall-entry stop, r19 is still the fourth syscall argument=
-=2E
->> + * Callers must also set the syscall number to -1 to skip the syscall
->> + * before replacing r19 with the error flag=2E
->> + */
->> +# define SYSCALL_RET_SET(_regs, _val)                          \
->> +       do {                                                    \
->> +               struct alpha_regs *__regs =3D &(_regs);           \
->> +               long __ret =3D (_val);                            \
->> +                                                               \
->> +               __regs->regs[0] =3D __ret < 0 ? -__ret : __ret;   \
->> +               __regs->regs[19] =3D __ret < 0;                   \
->> +       } while (0)
->>  #elif defined(__arm__)
->>  # define ARCH_REGS             struct pt_regs
->>  # define SYSCALL_NUM(_regs)    (_regs)=2EARM_r7
->> --
->> 2=2E43=2E0
->>
->
->Kees,
->Would you be OK with me taking this patch through my Alpha tree?
->The Alpha kernel support is already upstream=2E
->
->v3 carries Matt's Reviewed-by=2E On my ES40, it matches the baseline:
->98 passes, 12 skips and one timeout=2E Extending that timeout gives
->99 passes and 12 skips; that adjustment is not part of the patch=2E
->
->Link:
->https://lore=2Ekernel=2Eorg/linux-alpha/20261010134214=2E974565-1-linmag7=
-@gmail=2Ecom/
->
->Thanks,
->Magnus
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Yup, totally fine=2E Thank you!=20
+- [Medium] The new ndo-xmit checks in tools/testing/selftests/net/veth.sh
+  are only skipped when cli.py is missing.
+- [Medium] The new `if [ -f "$YNL" ]` block (veth.sh lines 320-331) is
+  inserted between the 'with gro enabled on link down' setup and the…
 
--Kees
+--
 
---=20
-Kees Cook
+selftests: net: veth: test peer ndo-xmit after GRO toggle while down
+
+This adds chk_xdp_feature() to veth.sh. It reads xdp-features through the
+ynl CLI and checks that toggling GRO on a veth device while it is down
+updates the peer's ndo-xmit XDP feature once the device comes up. The new
+checks are skipped when cli.py is not found.
+
+> diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
+> index 9709dd067c728..8b867e0675a7c 100755
+> --- a/tools/testing/selftests/net/veth.sh
+> +++ b/tools/testing/selftests/net/veth.sh
+
+[ ... ]
+
+> @@ -74,6 +76,37 @@ chk_tso_flag() {
+>  	__chk_flag "$1" $2 $3 tcp-segmentation-offload
+>  }
+>  
+> +chk_xdp_feature() {
+
+[ ... ]
+
+> +	ifindex=`ip netns exec $BASE$target cat /sys/class/net/veth$target/ifindex`
+> +	out=`ip netns exec $BASE$target "$YNL" --family netdev --do dev-get \
+> +		--output-json --json "{\"ifindex\": $ifindex}" 2>&1`
+> +	st=$?
+> +
+> +	printf "%-60s" "$msg"
+> +	if [ $st -ne 0 ]; then
+> +		echo " fail - ynl cli error: $out"
+> +		ret=1
+> +		return
+> +	fi
+
+[Severity: Medium]
+If cli.py is present but can't run, should that be a skip instead of a
+failure?
+
+The only checks on the environment just test whether the file exists:
+
+    [ ! -f "$YNL" ] && echo "ynl cli not found, ndo-xmit tests will be skipped"
+    ...
+    if [ -f "$YNL" ]; then
+
+The CLI's library always imports PyYAML, in
+tools/net/ynl/pyynl/lib/nlspec.py:
+
+    import yaml as pyyaml
+
+The CLI also has to find the netdev spec through specdir.find_spec(). That
+raises FileNotFoundError if the spec directory is missing.
+
+Suppose veth.sh runs from a kernel source tree on a host that has no
+python3-yaml, no python3, or no spec directory. Each chk_xdp_feature() call
+then exits non-zero, prints "fail - ynl cli error" and sets ret=1. Before
+this patch, veth.sh needed only iproute2 and ethtool and passed on such a
+host.
+
+The commit message says the checks are skipped "if the CLI is not found".
+The code does that. Could the script also do a trial run of the CLI before
+it enables the ndo-xmit checks, and skip them if that run fails?
+
+[ ... ]
+
+> @@ -283,6 +317,18 @@ chk_gro_flag "        - peer gro flag" $SRC off
+>  chk_tso_flag "        - tso flag" $SRC on
+>  chk_tso_flag "        - peer tso flag" $DST on
+>  ip -n $NS_DST link set dev veth$DST up
+> +if [ -f "$YNL" ]; then
+> +	chk_xdp_feature "        - peer ndo-xmit" $SRC 1 ndo-xmit
+> +	# make sure the peer flag is set before disabling gro while down
+> +	ip netns exec $NS_DST ethtool -K veth$DST gro off
+> +	ip netns exec $NS_DST ethtool -K veth$DST gro on
+> +	chk_xdp_feature "        - peer ndo-xmit re-armed" $SRC 1 ndo-xmit
+> +	ip -n $NS_DST link set dev veth$DST down
+> +	ip netns exec $NS_DST ethtool -K veth$DST gro off
+> +	ip -n $NS_DST link set dev veth$DST up
+> +	chk_xdp_feature "        - peer ndo-xmit cleared" $SRC 0 ndo-xmit
+> +	ip netns exec $NS_DST ethtool -K veth$DST gro on
+> +fi
+>  ip netns exec $NS_SRC ethtool -K veth$SRC tx-udp-segmentation off
+>  ip netns exec $NS_DST ethtool -K veth$DST rx-udp-gro-forwarding on
+>  chk_gro "        - aggregation with TSO off" 1
+
+[Severity: Medium]
+Does this block change which code path the chk_gro "aggregation with TSO
+off" check below it tests?
+
+Before this patch, the "with gro enabled on link down" section ran link
+down, gro on, link up, and then chk_gro. veth_set_features() returns early
+when the device is down:
+
+drivers/net/veth.c:veth_set_features() {
+    ...
+	if (!(changed & NETIF_F_GRO) || !(dev->flags & IFF_UP) || priv->_xdp_prog)
+		return 0;
+    ...
+}
+
+So GRO NAPI was enabled only by veth_open():
+
+drivers/net/veth.c:veth_open() {
+    ...
+	} else if (veth_gro_requested(dev)) {
+		err = veth_napi_enable(dev);
+    ...
+}
+
+When cli.py exists, the new block ends with link down, gro off, link up.
+veth_open() enables no NAPI there. The block then runs ethtool -K veth$DST
+gro on while the device is up, so NAPI is enabled in veth_set_features()
+instead:
+
+drivers/net/veth.c:veth_set_features() {
+    ...
+	if (features & NETIF_F_GRO) {
+		err = veth_napi_enable(dev);
+    ...
+}
+
+The final chk_gro now tests the "GRO enabled while up" path, which the
+earlier "with gro on" section already covers. The GRO NAPI path in
+veth_open() is no longer covered by any aggregation check. Which path is
+tested also depends on whether cli.py exists.
+
+The ndo-xmit checks don't fill this gap. veth_set_xdp_features() looks at
+veth_gro_requested(), not at whether NAPI actually started.
+
+Could the block end by restoring the down-state setup (link down, gro on,
+link up) instead of turning GRO on while the device is up?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261006173241.65945-1-tianyi%40cloudflare.com
