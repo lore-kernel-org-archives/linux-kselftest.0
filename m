@@ -1,162 +1,193 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C896136F911;
-	Sat, 10 Oct 2026 07:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A63D23BD06;
+	Sat, 10 Oct 2026 07:20:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791616369; cv=none; b=mWg+/FYcRdtCzvtqlM2wqZF1eFzCghgMYjJA2ve4xrYunq1x0WXBQzaNNRPij/+tixgk4kKWk8NbZuPWeCB3V2H99CTL3ZNhObRvfAzLFp+9bldXZwY30YIkehVWNHnZpwL5aRHv+e5OolAwvw4qsiLk4oD0mjzWB4AN47vuoa4=
+	t=1791616822; cv=none; b=YTfEaV7svNVlYZR3kUDuLRPtFfo3yWhXCe2jLcnobmyMgmCdqhqaqChBMOkJdMHPybJkx2fvB3c3GhNHU7j7LW/p1TkpnFrD3F4dsnaS1Mfv5RDqnJb02gD9QRLhzmGl0W/uww3oGKXPec7OlBBNM3SJ1kioXZOu/uUlsxbCORY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791616369; c=relaxed/simple;
-	bh=RhAjYseecgmquDdNkSU+RBLZLf9ZvOzPVrFTM8UdEhI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=E+Tm0fEVvbbqtF92FuR/fEFiqmVdRoifMDJFliMUQD4qQlKtqXHlAI24Cb3TN7Zlid7UCcknUWQtCcjmSp31KJu9ataMx/rcdN4Afjmuf/71ZSIhafE7n8xZi+xP3y9+ZtnrByxuIl26jXXXwT7/L75WJukSKdvl4CAlt2ZFn38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YNC84y/l; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791616822; c=relaxed/simple;
+	bh=SxZahj2M0pkILz+8LQ66ut8KQqmDtMw1YA4+sXd3cRA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LDlj6pvsywC7l43trUHthuvPkpmwCXk0BdbF2T5vTTMjfrXADpReho60hFg9sdptblIL9nik0TJJ1za10xPY73zNlsq33h6DVB2hKE4lUpo/rGXy/pf+ol66hI2xDZg00j0ulp6dxdXbPX6/5XZ8TqRq7oFLwLZGi03R+4h+ZUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sc1N6Wch; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YNC84y/l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBEA1F000FF;
-	Sat, 10 Oct 2026 07:12:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791616368;
-	bh=QMcgnnuWgqpbS2VoYj7i+y0eQKVMONCmXNCk4hNAjoM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=YNC84y/lmQV5ndDsmGdJW70Oj+7t80giQMLxNGmVDFey2oVsrGz0c5tQwatXGiCCl
-	 Hj54RY4/SoFDbwCnfbwA3WtsUnGbiBeNxyKQrRJK8BCMCOZ7nmzbbTw5kSpHft3xtX
-	 OzIkUThGW76okfhTTqxIHHGPSLrugXT1RCIF2Pup14U0q76qua0t2xrR2GcT7hy3UW
-	 kMoWrDvZGh9jZ5aywnAWEJiX9hyFCt2RIf8WdfVI2SX5rQrLxfnwk/PQdmv4qbACH+
-	 vbjRo+udCVN7ledr3LWCVnGsfU2CShj50xVEAbY1OG4ZkVwrJVgVyK07oFm8sXsgHn
-	 Zc8WuE5E6kKOQ==
-Content-Type: multipart/mixed; boundary="===============1321710191781011159=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sc1N6Wch"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791616819; x=1823152819;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SxZahj2M0pkILz+8LQ66ut8KQqmDtMw1YA4+sXd3cRA=;
+  b=Sc1N6WchdYZOtyAaOAeJwbA74I9N5yy/Y4L13jflN4VEIzoUS/v+meqr
+   PKfOrQHxRTEtZnWccdWoXtw4TDEfEomlVKDEU9xtn6oupdk0NMomm5F7l
+   z/71158gIxq4Y0WgJa59DeKepKHok7boht+gOWF+jzw1Sg12Ob05w/ghk
+   rqtufLodjDmf97kF0L1fZUG4c1MLHYt3FqLQZ28ik1VndYinIT6U8TFRZ
+   acEDeGgLbk+SBakABmcn2Z0IQJybI2ue5YGl9UYXxdUyl+x5O6z6IrLh2
+   hObOi63PmpPqzcxX/3d01iNZuAEKOe/Xn/Mds7KH2iRnTxfBCS/n9HEvT
+   w==;
+X-CSE-ConnectionGUID: nQCThWgoQn6O8+eDPlZ3XQ==
+X-CSE-MsgGUID: 9gIN8NN0RGGS6ahbKzrteA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="310013"
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="310013"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2026 00:20:19 -0700
+X-CSE-ConnectionGUID: kSgZJGy7R/KW+R6dNA8sMQ==
+X-CSE-MsgGUID: oEunnaLkR2iQtAsvJmKL1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="468770"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2026 00:20:14 -0700
+Message-ID: <7ad0011c-6f8a-4a76-aaec-f73b76bbc517@linux.intel.com>
+Date: Sat, 10 Oct 2026 15:20:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9588d40e70791e4231860ceda453a8fa80c46a5c841107ab59ad0ca7c5d03c38@mail.kernel.org>
-In-Reply-To: <20261010-selftests-bpf-struct-ops-assoc-timer-v2-1-d7a43896dbf1@gmail.com>
-References: <20261010-selftests-bpf-struct-ops-assoc-timer-v2-1-d7a43896dbf1@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Defer freeing a struct_ops map until its progs are done
-From: bot+bpf-ci@kernel.org
-To: odys.yuan@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,ameryhung@gmail.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,odys.yuan@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 10 Oct 2026 07:12:46 +0000 (UTC)
-
---===============1321710191781011159==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v15 22/23] KVM: selftests: Add support for TDX ucalls, via
+ TDVMCALL_REPORT_FATAL_ERROR
+To: Lisa Wang <wyihan@google.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
+ Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
+ kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
+ <20261001-tdx-selftests-v15-22-7c62a5d8a992@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20261001-tdx-selftests-v15-22-7c62a5d8a992@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> bpf: Defer freeing a struct_ops map until its progs are done
 
-TL;DR: Possible use-after-free of struct_ops kdata/trampoline: the deferred
-free uses call_rcu(), which doesn't wait for rcu_read_lock_trace readers
-(bpf_wq, task_work, sleepable progs); always using call_rcu_tasks_trace() may
-fix it.
+On 10/2/2026 3:37 AM, Lisa Wang wrote:
+> From: Sean Christopherson <seanjc@google.com>
+> 
+> Add support for doing ucalls on TDX by abusing TDVMCALL_REPORT_FATAL_ERROR
+> to pass the address of the payload to the host.  The "fatal error" TDVMCALL
+> is perfectly suited for passing information to host userspace, is both the
+                                                                  ^
+                                                                 as
 
-> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> --- a/kernel/bpf/bpf_struct_ops.c
-> +++ b/kernel/bpf/bpf_struct_ops.c
+> TDX Module and KVM allow the guest to pass (almost) all registers to the
+> host, i.e. provide enough of a data payload to make a collision with a real
+> fatal error practically impossible.
+> 
+> TDX can't use port I/O, as the TDX ABI doesn't allow the guest to share
+> arbitrary register state with the host on a port I/O exit, and the port I/O
+> data payload is limited to 4 bytes, i.e. would potentially truncate the
+> ucall address.
+> 
+> Alternatively, TDX could use MMIO, but using a magic emulated MMIO address
+> is fragile (see the TODO in __vm_create()), especially for TDX since TDX
+> doesn't support read-only memslots, i.e. doesn't have line of sight towards
+> addressing the TODO.  E.g. TDX could hardcode the address to something that
+> is all but guaranteed to be unused on x86, e.g. the I/O APIC base address
+> or the HPET address, but that doesn't truly address the fragility concerns,
+> and it's ugly because ucall_arch_init() would completely ignore the passed
+> in @mmio_gpa despite obviously utilizing emulated MMIO.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
 
-[ ... ]
+Also one nit below.
 
-> @@ -1050,7 +1070,15 @@ static void bpf_struct_ops_map_free(struct bpf_map *map)
->  	if (tasks_rcu && IS_ENABLED(CONFIG_TASKS_RCU))
->  		synchronize_rcu_tasks();
->
-> -	__bpf_struct_ops_map_free(map);
-> +	/*
-> +	 * A prog may have read the association before it was cleared above,
-> +	 * e.g. from a timer callback, and may still be running the struct_ops.
-> +	 * Free the map only after a grace period that waits for such a prog.
-> +	 */
-> +	if (map->free_after_mult_rcu_gp)
-> +		call_rcu_tasks_trace(&st_map->free_rcu, bpf_struct_ops_map_free_rcu_gp);
-> +	else
-> +		call_rcu(&st_map->free_rcu, bpf_struct_ops_map_free_rcu_gp);
-                ^^^^
+otherwise,
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
-Does this grace period wait for every reader of the association?
+> ---
+>  tools/testing/selftests/kvm/include/x86/tdx/tdx.h |  7 ++++++
+>  tools/testing/selftests/kvm/lib/x86/ucall.c       | 27 ++++++++++++++++++++++-
+>  2 files changed, 33 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> index d41a1efc8a63..9982aaaba885 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+> @@ -4,6 +4,13 @@
+>  
+>  #include <linux/types.h>
+>  
+> +/* TDX hypercall Leaf IDs */
+> +#define TDVMCALL_GET_TD_VM_CALL_INFO		0x10000
+> +#define TDVMCALL_MAP_GPA			0x10001
+> +#define TDVMCALL_GET_QUOTE			0x10002
+> +#define TDVMCALL_REPORT_FATAL_ERROR		0x10003
+> +#define TDVMCALL_SETUP_EVENT_NOTIFY_INTERRUPT	0x10004
+> +
+>  u64 __tdvmcall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15);
+>  
+>  #endif /* SELFTEST_KVM_TDX_TDX_H */
+> diff --git a/tools/testing/selftests/kvm/lib/x86/ucall.c b/tools/testing/selftests/kvm/lib/x86/ucall.c
+> index c003df3c7b8a..c1cd32d68464 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/ucall.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/ucall.c
+> @@ -5,8 +5,28 @@
+>   * Copyright (C) 2018, Red Hat, Inc.
+>   */
+>  #include "kvm_util.h"
+> +#include "tdx/tdx.h"
+> +#include "tdx/tdx_util.h"
+>  
+> -#define UCALL_PIO_PORT ((u16)0x1000)
+> +#define UCALL_PIO_PORT		((u16)0x1000)
+> +#define UCALL_TDX_MAGIC		0xabacadabaULL
+> +
+> +static void ucall_tdx_do_ucall(gva_t uc)
+> +{
+> +	__tdvmcall(TDVMCALL_REPORT_FATAL_ERROR, UCALL_TDX_MAGIC, uc, 0, 0);
+> +}
+> +
+> +static void *ucall_tdx_get_ucall(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_run *run = vcpu->run;
+> +
+> +	if (run->exit_reason == KVM_EXIT_SYSTEM_EVENT &&
+> +	    run->system_event.type == KVM_SYSTEM_EVENT_TDX_FATAL &&
+> +	    run->system_event.data[12] == UCALL_TDX_MAGIC)
+> +		return (void *)(run->system_event.data[13]);
 
-The commit message says the grace period is "a tasks trace one if the progs
-of the map may sleep", but the code does not look at whether the progs may
-sleep.  It tests map->free_after_mult_rcu_gp, which is copied from
-st_ops->free_after_mult_rcu_gp in bpf_struct_ops_map_alloc().  git grep
-finds no in-tree struct_ops that sets that flag (bpf_tcp_ca only sets
-free_after_tasks_rcu_gp), so every in-tree struct_ops map, including
-bpf_testmod's multi_st_ops and sched_ext, takes the call_rcu() branch.
+Nit:
+It's more readable to have comment for data[12] and data[13] to
+indicate they are the R12 and R13 passed.
 
-bpf_prog_get_assoc_struct_ops() reads aux->st_ops_assoc under
-bpf_rcu_lock_held(), which also accepts rcu_read_lock_trace().  Async
-callbacks of a struct_ops prog run with only that lock held:
+> +
+> +	return NULL;
+> +}
+>  
+>  static void ucall_x86_do_ucall(gva_t uc)
+>  {
+> @@ -37,6 +57,11 @@ static struct {
+>  
+>  void ucall_arch_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+>  {
+> +	if (is_tdx_vm(vm)) {
+> +		ucall_x86_ops.do_ucall = ucall_tdx_do_ucall;
+> +		ucall_x86_ops.get_ucall = ucall_tdx_get_ucall;
+> +	}
+> +
+>  	sync_global_to_guest(vm, ucall_x86_ops);
+>  }
+>  
+> 
 
-  static void bpf_wq_work(struct work_struct *work)
-  {
-      ...
-      rcu_read_lock_trace();
-      migrate_disable();
-      callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
-      migrate_enable();
-      rcu_read_unlock_trace();
-  }
-
-bpf_task_work_callback() works the same way (guard(rcu_tasks_trace)() plus
-migrate_disable()), and is_async_cb_sleepable() in verifier.c says "bpf_wq
-and bpf_task_work callbacks are always sleepable".  The bpf_wq kfuncs are
-in common_btf_ids, which is registered for BPF_PROG_TYPE_UNSPEC, and
-bpf_kfunc_multi_st_ops_test_1_assoc() is registered for
-BPF_PROG_TYPE_STRUCT_OPS.
-
-Can this sequence occur on a CONFIG_PREEMPT_RCU kernel, with the
-st_ops_assoc_in_timer_free test written with bpf_wq_start() instead of
-bpf_timer_start()?
-
-kworker (bpf_wq_work, rcu_read_lock_trace only)
-    st_ops = bpf_prog_get_assoc_struct_ops(aux)
-        -> &S->kvalue.data
-    <preempted, or after __bpf_prog_exit()'s rcu_read_unlock() in the
-     trampoline tail>
-
-free path
-    bpf_map_put(S) -> ... -> bpf_struct_ops_map_free()
-        dissoc_progs();
-        call_rcu(&st_map->free_rcu)
-    GP ends: this reader is not an RCU reader
-    bpf_struct_ops_map_free_rcu_gp() -> queue_work()
-        __bpf_struct_ops_map_free()
-            bpf_struct_ops_map_free_image();
-            bpf_map_area_free(st_map)
-
-kworker
-    st_ops->test_1(args)    <- reads freed kdata, or returns into the
-                               freed trampoline
-
-sched_ext looks affected the same way, since scx_prog_sched() reads
-ops->priv from the kdata that bpf_prog_get_assoc_struct_ops() returns.
-
-struct_ops progs take no reference on the map when they are associated;
-bpf_prog_assoc_struct_ops() calls bpf_map_inc() only for non-struct_ops
-progs.  So the grace period here is the only thing keeping the map alive,
-and call_rcu() does not wait for rcu_read_lock_trace() sections.
-
-This also seems to fix less than the code before the Fixes: commit.  Before
-5db69b0fbdc8, bpf_struct_ops_map_free() ran
-synchronize_rcu_mult(call_rcu, call_rcu_tasks) after the dissoc, which also
-waited for preempted tasks and so covered the trampoline tail for these
-preemptible readers.
-
-Since 57b23c0f612d ("bpf: Retire rcu_trace_implies_rcu_gp()") a tasks trace
-grace period implies a regular RCU grace period.  Would always using
-call_rcu_tasks_trace() here cover all of the readers: BH (bpf_timer), plain
-RCU, and tasks trace (bpf_wq, bpf_task_work, sleepable progs)?
-
-The two later commits in the series (49210cd1ca6f and 17c1f2ff6e23) only
-change selftests and do not address this.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38031235772
---===============1321710191781011159==--
