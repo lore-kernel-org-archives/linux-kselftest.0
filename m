@@ -1,50 +1,32 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549F1298CC4;
-	Sat, 10 Oct 2026 03:32:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B9F382387;
+	Sat, 10 Oct 2026 03:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791603169; cv=none; b=ds3PEd/QNd0kjCIW79I6FvVtqaAXLrYYR8B5eWsJ4a5VX1YjUZcTQt/kM1KAiwF6ckdhmhoZRKOqn2mJBegzW5yWKKHlxCPTd7gWOeEDmIEnYfB63gE3C275IopB6q+Y7HrTAeotbgsf96vLDCeWjr3Y+w1gQs8mqFsrWs4j4+c=
+	t=1791603545; cv=none; b=MNYBfbInpfBxPO9PDVQ22ae7pngN/5deQAWaodkgjuXhp50KJkFb0+W8Xw1pgF9sH3JTDRqXECAtKaOmUlhM2wXleQ0wPcAa3YMuNhBZhQul9iISbw2NRQJp568lmqp2XU1OTupEMr8zDXvSPAhb5VK+GiZk3ovcsQVI3+i04lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791603169; c=relaxed/simple;
-	bh=L1xvLFtuvT5GKWDgJ3c/DJEPvPiVYnbScbik8/+g7n0=;
+	s=arc-20240116; t=1791603545; c=relaxed/simple;
+	bh=ypmEU6kQKeao3mRXaldZjjVkM83muqmZMU5NsPKJLR0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jg/f8Fj9oYhqZl+GB4H1RCaYeCNuhqys+QXVgoRw8eqb7xhLB1DT+kne46fqDxf783sG7/NZTNDWB+gzAut+fGVw5aLZOKBG22heUsZ7+pflRojeUDfdWXd6ZMXmo6av0t0BAH+iWs8jYAeu9q1yHDz8OuUNpxHeJ+FBtEQ73EY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QuN+CprY; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 In-Reply-To:Content-Type; b=G4lj2eSq8wvwOW2P2zyvwTcT2Xm9dGBcuu1RmhPv6NQ2MWcLzqgOxrZDfy1lcft6tOneM+udU1vU7gwaUa5mA6ZS+8zFA99rIgo/AVHhEPuO/N+oEglN3edvyoYmtwHLKhyj4o9atACUBVTBkp41t/dTPF8UzoU1nEsV0HjQGvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=A7q/o2Av; arc=none smtp.client-ip=115.124.30.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QuN+CprY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791603169; x=1823139169;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=L1xvLFtuvT5GKWDgJ3c/DJEPvPiVYnbScbik8/+g7n0=;
-  b=QuN+CprYDK1kgcGcRUFzSUPCPVlz/u6v9Tzf+e9NpCWS0ENHeYJeqJmK
-   kl/XPB+jK3uy9jGKh01gKpOGEEzpAJlB0MTLOLyUIxneDrpiVYp6JP92O
-   SxUptgCZU21KvS4bbFEQ6+Yp+Oyd35QgIrX/6CkJApzQ7lzl4Kz3NkvsR
-   hK9Pm0tujlFYHvEMDWM6NUz6SwCQaLWAX3sWIlTLaV4zajij7kuvqUwDm
-   2XbmJUOLAvmEHRzAlzauwoupzNI9otXN74Rh6iSqjV1QLewGE+AU1FFnQ
-   6Y2TMCn7c7VGzJtY4q2vz0wEK0RAULZZYOrB1Voh6l/yrrd1GjwFw6Sw0
-   w==;
-X-CSE-ConnectionGUID: 5yvbENDaTWCn9BUJN7udOA==
-X-CSE-MsgGUID: nkv2gRXGRI+OoqfqqEtBAA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="404479"
-X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
-   d="scan'208";a="404479"
-Received: from fmviesa013.fm.intel.com ([10.60.135.153])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 20:32:48 -0700
-X-CSE-ConnectionGUID: 3lYJoxIFQmKA4unwBVQFlg==
-X-CSE-MsgGUID: h4ITtYXwQ3OYJZS+UVq/lA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
-   d="scan'208";a="2199563"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 20:32:42 -0700
-Message-ID: <4d57c0f7-5ed9-4a1f-b401-a1072af5dd6c@linux.intel.com>
-Date: Sat, 10 Oct 2026 11:32:39 +0800
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="A7q/o2Av"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1791603530; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=SBB6AWvERMNQNcnv8IpcOyFkUIlmwIKsnK5k1h4Id5s=;
+	b=A7q/o2AvOzEhw+XVOO+FKT/EhKev/5wGvR/VpaRI9XdOIHZBcd1UW+dbdK0h45sB7wCUdNjd3SXx/jaB6FwkBHmtKKkp6k1TZG4AnvnuTJJwNPdAnAUOyeJ09kfc++FAYP5CM51jh3dlCAMgIHK6CpzBoaulHpYCWiupwm3Y4Yc=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=35;SR=0;TI=SMTPD_---0XCUukT6_1791603526;
+Received: from 30.246.161.155(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XCUukT6_1791603526 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Sat, 10 Oct 2026 11:38:47 +0800
+Message-ID: <2650577a-a359-495c-a6bf-47a825e9282a@linux.alibaba.com>
+Date: Sat, 10 Oct 2026 11:38:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,121 +34,104 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 13/23] KVM: selftests: Support guest_memfd in-place
- conversion
-To: Lisa Wang <wyihan@google.com>
-Cc: Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
- Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
- kvm@vger.kernel.org, linux-coco@lists.linux.dev,
- linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
- <20261001-tdx-selftests-v15-13-7c62a5d8a992@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20261001-tdx-selftests-v15-13-7c62a5d8a992@google.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v6 5/7] riscv: stacktrace: switch to frame-pointer based
+ unwinder
+To: Karl Mehltretter <kmehltretter@gmail.com>
+Cc: palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ linux-riscv@lists.infradead.org, oleg@redhat.com, rostedt@goodmis.org,
+ mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
+ mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org,
+ jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
+ shuah@kernel.org, mpdesouza@suse.com, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com, martin@kaiser.cx,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
+ <20260914092648.51254-6-xueshuai@linux.alibaba.com>
+ <20261009185904.82385-1-kmehltretter@gmail.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20261009185904.82385-1-kmehltretter@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/2/2026 3:37 AM, Lisa Wang wrote:
-> With guest_memfd in-place conversion, the memory region can be set as
-> shared, eliminating the need for dual-backed memory.
-> 
-> By setting the region to shared initially, the KVM selftest framework
-> can populate the mmap()-ed guest_memfd memory just like any standard
-> memory provider.
-> 
-> For CoCo VMs, pages that need to be private are explicitly set to
-> private before executing the VM.
-> 
-> Signed-off-by: Lisa Wang <wyihan@google.com>
-> ---
->  tools/testing/selftests/kvm/lib/kvm_util.c         | 20 ++++++++++++++------
->  tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c |  6 +++++-
->  2 files changed, 19 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 7625908caf21..f474664b5d92 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -494,8 +494,10 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
->  	u64 nr_pages = vm_nr_pages_required(shape.mode, nr_runnable_vcpus,
->  						 nr_extra_pages);
->  	struct userspace_mem_region *slot0;
-> +	u64 gmem_flags = 0;
->  	struct kvm_vm *vm;
-> -	int i, flags;
-> +	int flags = 0;
-> +	int i;
->  
->  	kvm_set_files_rlimit(nr_runnable_vcpus);
->  
-> @@ -505,14 +507,20 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
->  	vm = ____vm_create(shape);
->  
->  	/*
-> -	 * Force GUEST_MEMFD for the primary memory region if necessary, e.g.
-> -	 * for CoCo VMs that require GUEST_MEMFD backed private memory.
-> +	 * Force GUEST_MEMFD for the primary memory region if necessary, and
-> +	 * initialize it as shared if in-place conversion is supported, so the
-> +	 * selftest framework can populate it exactly like other memory
-> +	 * providers.
->  	 */
-> -	flags = 0;
-> -	if (is_guest_memfd_required(shape))
-> +	if (is_guest_memfd_required(shape)) {
->  		flags |= KVM_MEM_GUEST_MEMFD;
-> +		if (kvm_has_gmem_attributes)
-> +			gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED |
-> +				      GUEST_MEMFD_FLAG_MMAP;
-> +	}
->  
-> -	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, flags);
-> +	vm_mem_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, flags,
-> +		   -1, 0, gmem_flags);
-
-This is common for both TDX and SNP, does it break SNP?
 
 
->  	for (i = 0; i < NR_MEM_REGIONS; i++)
->  		vm->memslots[i] = 0;
->  
-> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> index e348507a6be8..40ee9b1951c2 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> @@ -23,6 +23,8 @@ void tdx_vm_setup_boot_code_region(struct kvm_vm *vm)
->  	gpa_t gpa;
->  	u8 *hva;
->  
-> +	if (kvm_has_gmem_attributes)
-> +		gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED | GUEST_MEMFD_FLAG_MMAP;
->  	vm_mem_add(vm, VM_MEM_SRC_SHMEM, alloc_gpa, TD_BOOT_CODE_SLOT,
->  		   nr_pages, KVM_MEM_GUEST_MEMFD, -1, 0, gmem_flags);
->  
-> @@ -44,9 +46,11 @@ void tdx_vm_setup_boot_parameters_region(struct kvm_vm *vm, u32 nr_runnable_vcpu
->  	size_t boot_params_size = sizeof(struct td_boot_parameters) +
->  		nr_runnable_vcpus * sizeof(struct td_per_vcpu_parameters);
->  	int npages = DIV_ROUND_UP(boot_params_size, PAGE_SIZE);
-> -	const u64 gmem_flags = 0;
-> +	u64 gmem_flags = 0;
->  	gpa_t gpa;
->  
-> +	if (kvm_has_gmem_attributes)
-> +		gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED | GUEST_MEMFD_FLAG_MMAP;
->  	vm_mem_add(vm, VM_MEM_SRC_SHMEM, TD_BOOT_PARAMETERS_GPA,
->  		   TD_BOOT_PARAMETERS_SLOT, npages,
->  		   KVM_MEM_GUEST_MEMFD, -1, 0, gmem_flags);
+On 10/10/26 2:59 AM, Karl Mehltretter wrote:
+> On Mon, Sep 14, 2026 at 05:26:46PM +0800, Shuai Xue wrote:
+>> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>> +				      void *cookie, struct task_struct *task,
+>> +				      struct pt_regs *regs)
+>> +{
+>> +	struct kunwind_consume_entry_data data = {
+>> +		.consume_entry = consume_entry,
+>> +		.cookie = cookie,
+>> +	};
+>> +
+>> +	kunwind_stack_walk(arch_kunwind_consume_entry, &data, task, regs);
+>> +}
 > 
+> Hi Shuai Xue,
+> 
+> With this patch and FRAME_POINTER enabled, return_address() returns the
+> caller one level further up than asked for.
+> 
+> return_address() in arch/riscv/kernel/return_address.c skips level + 3
+> entries from arch_stack_walk(). The arm64 original skips level + 2. The
+> third entry exists on mainline because the walk starts inside
+> walk_stackframe() and first reports the return into arch_stack_walk().
+> With 5/7 the walk starts at the caller of arch_stack_walk(), so
+> level + 3 now skips a real caller. CALLER_ADDR1 and up are built on
+> return_address(). The irqsoff tracer and the preemptirq tracepoints use
+> them.
+> 
+> A KUnit test that calls ftrace_return_address() from
+> leaf() <- middle() <- outer() <- check() returns:
+> 
+>               af32da41b032   with series   with series, level + 2
+>    level 0    middle         outer         middle
+>    level 1    outer          check         outer
+> 
+> The change to level + 2 has to depend on FRAME_POINTER. Without it the
+> series keeps walk_stackframe() and the result is the same as on
+> mainline. There, level + 2 makes return_address(0) return an address
+> inside return_address().
+
+Hi, Karl,
+
+Nice point. Thank you for the thorough review and the KUnit test.
+The analysis is spot on, and your table matches my reading of the code
+exactly.
+
+> 
+> The same extra entry makes stack_trace_save() start one frame too early
+> on mainline. 5/7 fixes that. I have a small fix for it on mainline,
+> meant for stable kernels, which conflicts with 5/7. I would post it with
+> you in Cc. Tell me if you would rather take the return_address.c change
+> into 5/7 first.
+
+Please go ahead with your mainline/stable fix for the
+stack_trace_save() off-by-one as an independent patch. You are right
+that this is a separate mainline bug: stack_trace_save() hardcodes
+.skip = skipnr + 1, i.e. it expects the first entry reported by
+arch_stack_walk() to be the return into stack_trace_save() itself, and
+mainline's walk_stackframe() breaks that contract by reporting the
+return into arch_stack_walk() first. A 7-patch series is not a vehicle
+for stable, so the minimal fix is the right approach there.
+
+Please keep me in Cc when you post it, I will review and test it.
+
+> 
+> Tested with clang 22 and the series applied on 52318cf0fa6e. The
+> "with series" column is the same on QEMU's virt machine and on a
+> BeagleV Ahead (TH1520). Everything else ran on QEMU only.
+
+Thanks again for testing on real hardware (BeagleV Ahead) in addition
+to QEMU, that is much appreciated.
+
+Best regards,
+Shuai Xue
+
 
