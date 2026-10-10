@@ -1,118 +1,284 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C08D3806D9
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 06:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AD237CD33;
+	Sat, 10 Oct 2026 06:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791612931; cv=none; b=TkxKc8Bn/3pNT9uBItVcieWvJIldxgDH6QT9HAp4/EFfw4Or0bC4Hwd0C5SCTMTviiEAyh5Tg+rOvMqSV3oseAewBIfqOb2JlcqhT5UsJh3/LYOTEv/ngz1FuptNfj59lQdDAtXab2jsvfRSdvGeuJKWDo2ZoMDotcKWdQEryNo=
+	t=1791613310; cv=none; b=X+I0UhCgPJWcgSX32/w9nXifjFfzimD2Wbc/BaZAWZjbNUdq96cMOGdKRK2+MuFW2Ex9mKA4DD5BcLLrF75Oj48efPk+YRjicIS9Y7kjDH4mf5TkmEk3yFtul61UoHaQ7Zc/sHiDUwrnpjpbc/X1qOEiiUzP9iBi4qI9u0P/Sws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791612931; c=relaxed/simple;
-	bh=TwIv1NPnf52ZhmM9XXPm7/XDI2xCes9eFdq058g6a0c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rFr/4qotF8WoZKH069IzL5U35jWEf4VmjcUYh2xRUCTrWc1wZS2ZgoI/r2+hOOS4aBAziD1ayjP4Qu8jyTdjrYMXAu/BVGodRMa7HJShEY5y908TvnrrExJXcfn9ZPBGoe6SAJcCvEtMQWhtCD+o7BuPqnFLkLXS4AidJWwotZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ReOM6zCU; arc=none smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791613310; c=relaxed/simple;
+	bh=tbUJWeponWEHaBlz51aGOx26ToVVeCc4B2JZCZGaqMk=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=M1avy9ba8sLIyHgSb9ODsTomcLgpTmS05SyrdC9YfzOlgSlTpONFr8LDq4CO4YsmRsv/7dyF04R8m5n5cA0GoH0+CIjYeogu1XSWNGiWXi/XLoXl2X3m8GJG1t6pPIAhsBTbWkd1EPJgi+8muEmSn3EdvTn1akpPG3LZlON2zeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWQyhtN5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ReOM6zCU"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-35829219da8so305512eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 23:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791612929; x=1792217729; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=TwIv1NPnf52ZhmM9XXPm7/XDI2xCes9eFdq058g6a0c=;
-        b=ReOM6zCUr1d/uLU0JtgRsmO4/DWvuivI6csPKx0XZl+y0MTlYovYnyNA3+heFaopnf
-         /u+ggKhLuKr8qNdLfhN/xeebnnRtXPcFIOfvlgBTU8/fsIgLYB8/KMZB8FDXBn1HTYPw
-         SOI6hG35a5aQJr4q1tIlpo9QM7flZ+49+NoWmy1OjCRuAy7JRn2RIWENbHzI0S20nLTn
-         RwIL81H+XoteWNXiBdcnpc9GhkDZ0mnpYq4XVo0aUQOs0w7ntZJoVwFFThKA2tzQ8W2k
-         BmClaZRPWDnfNEZa/Tf/cH4TzeEGn1lpQBxAkX1UyjwJA0XozOs9EJ7D9RfofETW/fvl
-         IV5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791612929; x=1792217729;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TwIv1NPnf52ZhmM9XXPm7/XDI2xCes9eFdq058g6a0c=;
-        b=kU2iPVsySiJhSKdTEzy9n7w+38FpUSq8kFkInexK6DN6ILAcOOmJHe0Tou/kiE0tn+
-         THqrTNwOUzp2YqMf4A1lIWXyg38J/zZshI+6hLCKxiNJQebvxAiM3SwWLYZri5Y4C4gC
-         ZD+9pi+bPze4n1M++uawDB6cJ0d2Td6O29593rhl27vuIYiP6PuOh3/OgiwFXQZ85Rok
-         whZFi2LQOv2B4tPS1dnqo4HuIoAZXgvdYN659kx+1qIjDz4y8Sn1j9Gxm2tpQcfPUouq
-         5cQtb63iX3sV/2ATpv9EkwfdeHrJidGcfV59z6wIcL/JoYq59QjQ37XkVVKFGcM4eZI0
-         KqGQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzMdSoAikyj8DGlwP0L6Rgwnmjfj5E+zX6RpWbo3u6+hZEB+0Uq3Z3edBR+mGQKXH5b5AJtTOOh6FgZ9UD1qxI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKkygKIUqveoUwEcQ7PWl1hcTQs2DZBzjEwztjCE2ZI7nAKYDjE
-	n8HpCubNokN2SYVF0j9OQSidtdm30W+mzjl86zFxD4IyAtDueqerrPYC
-X-Gm-Gg: AYBFou0WokBHErDmHQKIlSuYnlp1yuA51H+OR88K4R8TlxeH0TtFMSLzwTAXFd81Mzq
-	IQ7SYL++HYaQts3cmgSpv1YqPHoUZ6ZeiQluJhRTLxdrp3X/7JBXIVzbm91RHGDHGOkXCOVEoa/
-	Kapp8FkNX9xK8lrVhF3SoBNCmWcMsM8kJFR19V7Wyf35xM8/9Z/Dwpu7ZVttBJGO03E3N4NtA7E
-	0pXHvObrdhvDxaQApxyd9ykomke+kaaUgHc8ThvxyOG2Ax0QrKj0BxDZQfge0jV74NcsKSVb2Io
-	Xbd0z0wmAHTsgHf6Cl4E93zoyc3rHKCskyIjS7i2anXdWhhnuIjG2sSwXjHgODgFKW7/2qsjKhI
-	TBWQzmziCU35NzZ/nCV9lbRVIySTWlN4rgyMEkFXg6gp4kSZFlIiQji5LgxcrMEWgXJp4nEY/ju
-	pS1ii0/dNTBr/BiBW4gwUUu8gn+hHNgh1Ppi/DWS9SfS3FdVYODRRH0efpxFc+3w==
-X-Received: by 2002:a05:701b:2405:b0:155:734:9cc9 with SMTP id a92af1059eb24-16a131cf188mr4972254c88.16.1791612929280;
-        Fri, 09 Oct 2026 23:15:29 -0700 (PDT)
-Received: from ubuntu.. ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cacb5e9sm12663786eec.20.2026.10.09.23.15.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 23:15:28 -0700 (PDT)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-To: bot+bpf-ci@kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Amery Hung <ameryhung@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>
-Cc: martin.lau@kernel.org,
-	mason@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Wait for the struct_ops map to be freed in assoc_in_timer
-Date: Sat, 10 Oct 2026 14:15:21 +0800
-Message-ID: <20261010061521.390089-1-odys.yuan@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <7c1af496987bd30766e332358e26b3e1256fb0cdc72e2f0412ef0e116b0c5223@mail.kernel.org>
-References: <20261009-selftests-bpf-struct-ops-assoc-timer-v1-1-9a97a9b3d1db@gmail.com> <7c1af496987bd30766e332358e26b3e1256fb0cdc72e2f0412ef0e116b0c5223@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWQyhtN5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51EA21F00893;
+	Sat, 10 Oct 2026 06:21:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791613308;
+	bh=+oqNHryUFynMf7AFicaYDQ4gVv7GHnBVjWXA33yLCIk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=hWQyhtN5+FNOwB0OKHrQkaBIjlz/ABF6LY60aEtQe4JOO7RdjtlPeB2kkVqdwkYXU
+	 pdbFEG86f9tnUCNZLtppJgsDlZnUFsCJurauPCTX3M9QKy3BkrQyKH93ko4C28E2CG
+	 GrvW9DKgtcFqFDhnpDZ0BJTXEyc1buL5m+blFwj+neDn0ufuU7z9J/pANNn5W1nquj
+	 EM2VHLFIsbJZ5+kfP4eHN7uZ3yqtZDJaUQMVL9FdxIpYQjCVT6TW9PbBErfRKU5/Jd
+	 +kaDQRnmWT/gGIHQYXbAIos8D5mtAiGJGJs4I3IyNSp1TmMXxmMN8mh6PXFdMxW0Ln
+	 eyt5wl8Ol5GaA==
+Subject: Re: [PATCH net-next v3 3/3] selftests: net: add a test for the gtp
+ netlink family
+From: netdev-bot+sashiko@kernel.org
+To: anilkaushikwireless@gmail.com
+Cc: pablo@netfilter.org, laforge@gnumonks.org, donald.hunter@gmail.com,
+ kuba@kernel.org, davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+ osmocom-net-gprs@lists.osmocom.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Sat, 10 Oct 2026 06:21:46 +0000
+Message-ID: <179161330683.434549.12632469070516169474@kernel.org>
+In-Reply-To: <20261009060615.4177402-4-anilkaushikwireless@gmail.com>
+References: <20261009060615.4177402-4-anilkaushikwireless@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 9, 2026 at 02:36 AM bot+bpf-ci@kernel.org wrote:
-> Should the late dissociation be fixed in bpf_struct_ops_map_free() instead
-> of only making the test wait longer, for example with a grace period after
-> bpf_struct_ops_map_dissoc_progs() or by dissociating before the call_rcu()?
->
-> If the flakiness started with 5db69b0fbdc8, is the Fixes: tag pointing at
-> the right commit?
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
-Yes to both. With the window widened, a timer callback of the struct_ops
-prog returns into the freed trampoline and the kernel hits an int3 Oops,
-on the first run.
+Critical: 0 · High: 0 · Medium: 2 · Low: 2
 
-v2 [1] frees the map after a grace period that follows clearing the
-association, since dissociating before the call_rcu() would take a mutex
-where bpf_map_put() may run in softirq. It adds a test that catches the
-map being freed under a running .test_1, and keeps the test fix of v1
-with Fixes pointing at 5db69b0fbdc8.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-[1] https://lore.kernel.org/r/20261010-selftests-bpf-struct-ops-assoc-timer-v2-0-d7a43896dbf1@gmail.com
+- [Medium] The new test aborts with a traceback instead of running or
+  skipping whenever the 'gtp' genl family is not already registered.
+- [Medium] The `echoreq` operation in
+  Documentation/netlink/specs/gtp.yaml (lines 159-165) declares its…
+- [Low] del_unknown_pdp() in tools/testing/selftests/net/gtp.py uses
+  `with ksft_raises(NlError)` without checking the errno, so any netlink…
+- [Low] The getpdp `&pdp-reply` attribute set in
+  Documentation/netlink/specs/gtp.yaml (lines 138-149, used by getpdp do…
 
-Thanks,
-Qiliang
+--
+
+selftests: net: add a test for the gtp netlink family
+
+This adds a Python selftest that drives the gtp generic netlink family
+through its ynl spec. It covers newpdp, getpdp and delpdp, a two-context
+dump, and a delete of an unknown context. It also adds a GtpFamily ynl
+wrapper, CONFIG_GTP=m in the net selftest config, and Makefile and
+MAINTAINERS entries.
+
+> diff --git a/tools/testing/selftests/net/gtp.py b/tools/testing/selftests/net/gtp.py
+> new file mode 100755
+> index 0000000000000..fcc9bf57a663f
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/gtp.py
+> @@ -0,0 +1,85 @@
+
+[ ... ]
+
+> +def add_del_pdp(gtp, ns) -> None:
+> +    """Add a PDP context, query it, then delete it.
+> +
+> +    The query must return the context with the TEIDs and addresses
+> +    it was created with, and it must be gone after the delete.
+> +    """
+> +    link = _add_gtp_dev(ns)
+> +
+> +    gtp.newpdp({"link": link, "version": 1,
+> +                "i-tei": 0x100, "o-tei": 0x200,
+> +                "ms-address": "10.0.0.1", "peer-address": "192.0.2.1"})
+> +
+> +    pdp = [c for c in gtp.getpdp({}, dump=True) if c.get("i-tei") == 0x100]
+
+[Severity: Low]
+This dump is decoded with Documentation/netlink/specs/gtp.yaml. That spec
+was added earlier in this series by "netlink: specs: add genetlink-legacy
+spec for GTP", and its getpdp reply leaves out link:
+
+        reply: &pdp-reply
+          attributes:
+            - version
+            - tid
+            - peer-address
+            - peer-addr6
+            - ms-address
+            - ms-addr6
+            - flow
+            - i-tei
+            - o-tei
+            - family
+
+But gtp_genl_fill_info() always emits it, in every getpdp reply, dump entry
+and notification:
+
+	if (nla_put_u32(skb, GTPA_VERSION, pctx->gtp_version) ||
+	    nla_put_u32(skb, GTPA_LINK, pctx->dev->ifindex) ||
+	    nla_put_u8(skb, GTPA_FAMILY, pctx->af))
+
+Should link be added to the reply attributes? Without it, consumers
+generated from the spec can't tell which gtp device a dumped context
+belongs to.
+
+On a related note, this filter matches only on i-tei, not on the link the
+test just created.
+
+> +    ksft_eq(len(pdp), 1)
+> +    ksft_eq(pdp[0]["o-tei"], 0x200)
+> +    ksft_eq(pdp[0]["ms-address"], "10.0.0.1")
+> +    ksft_eq(pdp[0]["peer-address"], "192.0.2.1")
+> +
+> +    gtp.delpdp({"link": link, "version": 1,
+> +                "i-tei": 0x100, "ms-address": "10.0.0.1"})
+> +    ksft_not_in(0x100, _iteis(gtp.getpdp({}, dump=True)))
+
+[ ... ]
+
+> +def del_unknown_pdp(gtp, ns) -> None:
+> +    """Deleting a context that was never added must fail."""
+> +    link = _add_gtp_dev(ns)
+> +    with ksft_raises(NlError):
+> +        gtp.delpdp({"link": link, "version": 1,
+> +                    "i-tei": 0x999, "ms-address": "10.9.9.9"})
+
+[Severity: Low]
+Should this check the errno too? ksft_raises(NlError) accepts any netlink
+error. For example, -EINVAL or -ENODEV from gtp_find_pdp_by_link() or
+gtp_genl_del_pdp() would also pass. The real lookup miss in gtp_find_pdp()
+is -ENOENT.
+
+Also, both delpdp requests in this test send ms-address, and
+gtp_find_pdp_by_link() checks that before the TEI branch:
+
+drivers/net/gtp.c:gtp_find_pdp_by_link() {
+    ...
+	if (nla[GTPA_MS_ADDRESS]) {
+		__be32 ip = nla_get_be32(nla[GTPA_MS_ADDRESS]);
+		if (family != AF_INET)
+			return ERR_PTR(-EINVAL);
+		return ipv4_pdp_find(gtp, ip);
+    ...
+}
+
+That means the i-tei values passed to delpdp are ignored, and delete by
+TEI through gtp1_pdp_find() is never tested.
+
+With the current kernel this request does return -ENOENT, so the test
+passes for the right reason today. It just checks less than the docstring
+suggests.
+
+> +
+> +
+> +def main() -> None:
+> +    """Run the PDP context tests in a temporary netns."""
+> +    with NetNS() as ns:
+> +        with NetNSEnter(str(ns)):
+> +            gtp = GtpFamily()
+> +        ksft_run([add_del_pdp, add_two_pdp, del_unknown_pdp], args=(gtp, ns))
+
+[Severity: Medium]
+Can GtpFamily() succeed here if gtp.ko isn't loaded yet?
+
+GtpFamily() -> YnlFamily.__init__() -> GenlProtocol('gtp') looks up the
+family id with _genl_load_families(). That sends CTRL_CMD_GETFAMILY with
+NLM_F_DUMP, which the kernel answers from ctrl_dumpfamily(). Only the
+non-dump ctrl_getfamily() path autoloads the module:
+
+net/netlink/genetlink.c:ctrl_getfamily() {
+    ...
+	request_module("net-pf-%d-proto-%d-family-%s",
+		       PF_NETLINK, NETLINK_GENERIC, name);
+    ...
+}
+
+This patch adds CONFIG_GTP=m to the selftest config. On a fresh boot with
+that config, the "gtp" family isn't registered yet, so
+genl_family_name_to_id['gtp'] raises KeyError. YnlFamily.__init__()
+turns that into:
+
+    YnlException(f"Family '{self.yaml['name']}' not supported by the kernel")
+
+That exception isn't a KsftSkipEx and is raised outside ksft_run(). Won't
+the whole script abort with a traceback before any case runs?
+
+gtp.ko would only be autoloaded later, through the rtnl link alias, when
+_add_gtp_dev() runs "ip link add gtp0 type gtp". For the same reason, with
+CONFIG_GTP unset the KsftSkipEx in _add_gtp_dev() is never reached, and the
+test fails instead of skipping.
+
+Would it work to create the gtp device, or otherwise load the module,
+before constructing GtpFamily(), and to treat a missing family as a skip?
+
+> +    ksft_exit()
+> +
+> +
+> +if __name__ == "__main__":
+> +    main()
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/net/lib/py/ynl.py b/tools/testing/selftests/net/lib/py/ynl.py
+> index 08deff756f29b..7edb749710231 100644
+> --- a/tools/testing/selftests/net/lib/py/ynl.py
+> +++ b/tools/testing/selftests/net/lib/py/ynl.py
+
+[ ... ]
+
+> @@ -85,3 +85,9 @@ class PSPFamily(YnlFamily):
+>      def __init__(self, recv_size=0):
+>          super().__init__((SPEC_PATH / Path('psp.yaml')).as_posix(),
+>                           schema='', recv_size=recv_size)
+> +
+> +
+> +class GtpFamily(YnlFamily):
+> +    def __init__(self, recv_size=0):
+> +        super().__init__((SPEC_PATH / Path('gtp.yaml')).as_posix(),
+> +                         schema='', recv_size=recv_size)
+
+[Severity: Medium]
+This wrapper loads the gtp.yaml added earlier in this series by
+"netlink: specs: add genetlink-legacy spec for GTP". Does that spec's
+echoreq request match the driver? The spec lists:
+
+        request:
+          attributes:
+            - link
+            - version
+            - peer-address
+            - peer-addr6
+            - family
+
+gtp_genl_send_echo_req() requires GTPA_MS_ADDRESS, which isn't listed:
+
+	if (!info->attrs[GTPA_VERSION] ||
+	    !info->attrs[GTPA_LINK] ||
+	    !info->attrs[GTPA_PEER_ADDRESS] ||
+	    !info->attrs[GTPA_MS_ADDRESS])
+		return -EINVAL;
+
+The handler is also IPv4-only and never reads GTPA_PEER_ADDR6 or
+GTPA_FAMILY.
+
+A client generated from the spec would never send ms-address, so its
+echoreq would always fail with -EINVAL.
+
+That spec commit says it is "derived directly from include/uapi/linux/gtp.h
+and the gtp_genl_policy / gtp_genl_ops tables in drivers/net/gtp.c". That
+doesn't seem to hold for echoreq.
+
+Should ms-address be added to the echoreq request, and peer-addr6 and
+family removed?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009060615.4177402-1-anilkaushikwireless%40gmail.com
