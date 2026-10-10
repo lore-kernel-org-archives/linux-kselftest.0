@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74986388E7E
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 22:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E93356767
+	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 22:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791670821; cv=none; b=IDKPbfWD3h2RGthpbQjyfHCxGSSfCZwnLS6mjsbu6X46lnX4AJQCfgX7pzfgFCgSNPukNvy7a2lkyoZiUvt4fKq2ZA4CVpMGuRpLpJMCIIpocmcDLmaCOOMG1WYyBcO32S3m6R1i3OxVsxKBCrBzvVosKkk3CeBP9eEQkiOdcHk=
+	t=1791670827; cv=none; b=UGHM7RR9a9oQHrD5Eaw586yLi0DaNYz84mLfq21FWUO4xjNtzE/9uQZzYBt2ZYjIFw8qt17nseAsosXfjFqRtZy8YiRZycSxuoo10YPn/ZS6vXQRRxT5McKa3nlEci76f3Kl+sbbuWGFiHA3zibYYrcewEi+8wdgTwZbkn6Xuzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791670821; c=relaxed/simple;
-	bh=sEJSSYm1pDBnnokCg8ILR9hMgvVje2eTkQp2q/G4hLc=;
+	s=arc-20240116; t=1791670827; c=relaxed/simple;
+	bh=VqhUmzwrgKPfE5pBHaM+esOvZJYDu+QRd/LkWy8dDj8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L4TAim2KyN9s0/fc2vIk2JaHUL8UZdqqm5jxEmW5b7UJD1Slm5g9L2MfGDCC8rqE2VKZdzQWmwJBwkz4PRuN9Zdou0Agb1iy96WLp/2V5Fzq8DFkph3xQTKudrN3JiRhJ/bfQhEXnhywWU6rVtHmJjMznGRuCNabTSWUosWpb3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XXpTZnNJ; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=c7QD3NSnRl9MqlkmVjltvpo9aJpV5gzjfI5fBAXb+GnOMXimHv40IYQEMY/iHpECaMq/HqXhayNvrjxwDBzigDYH9aOBs2OhSuOB8Hd5sNGFMbhhC9MWetilAEH3p+1oTqS8xsuImiReLeRf3ERsHjoe4iYOhf/k8lg7XsViKGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CehY7GG2; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XXpTZnNJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CehY7GG2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791670817;
+	s=mimecast20190719; t=1791670824;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PomvpSh0nZEAh/f/qBOy12NCtYdVqGfFVKpPbxTp5eU=;
-	b=XXpTZnNJPF8ijiY+E3AX/NEEthnZS3LtAkTSBA9eQBweaSSA6D4KAggPyBeRXiLfKs36U5
-	NgogqF0gIgNBSfIE60h4yyvOLPpP6w/SwkkWnGfsBVc5jURHcK+/tbuOQeT8s/0o3Vpl72
-	c6L+wtGk96rqUxnXMnF1zmsHtvD7bn0=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=XxpScX6DN1b+9VfzAdMJq36FU2Z4Pa62BOcKgqYMGUA=;
+	b=CehY7GG25wFQ1BJMN500VM8nEg38fjO+Jy8a6uW8b0FzAIE4DQsjBI7qJ0Nj1X/ozNwIRf
+	JjvueIdeqtVJ0CWXPWC51ctC/JbFfRka4tPQyg+OvUt6EA/5A6Pd9l5idQKqCXINxwZida
+	pHP213bp2P46ZKVvZoDWq6+eC0RUJ/U=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-207-h3wbTMjTPHGFYCntpH6ibg-1; Sat,
- 10 Oct 2026 22:20:14 +0000
-X-MC-Unique: h3wbTMjTPHGFYCntpH6ibg-1
-X-Mimecast-MFC-AGG-ID: h3wbTMjTPHGFYCntpH6ibg_1791670812
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-80-wT2EUwStNGeyhzbxRW2XrQ-1; Sat,
+ 10 Oct 2026 22:20:20 +0000
+X-MC-Unique: wT2EUwStNGeyhzbxRW2XrQ-1
+X-Mimecast-MFC-AGG-ID: wT2EUwStNGeyhzbxRW2XrQ_1791670818
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 85DB518007EB;
-	Sat, 10 Oct 2026 22:20:12 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D0A4D18002E6;
+	Sat, 10 Oct 2026 22:20:18 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.redhat.corp (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8C6151800473;
-	Sat, 10 Oct 2026 22:20:09 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 039DC18004D4;
+	Sat, 10 Oct 2026 22:20:15 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Ridong Chen <ridong.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
@@ -54,9 +54,9 @@ Cc: cgroups@vger.kernel.org,
 	Hui Peng <benquike@gmail.com>,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v2 4/6] cgroup/cpuset: Properly disabling partition when partition state switching fails
-Date: Sat, 10 Oct 2026 18:19:36 -0400
-Message-ID: <20261010221938.243859-5-longman@redhat.com>
+Subject: [PATCH-next v2 6/6] selftests/cgroup: Skip test_cpuset_prs.sh test if some required CPUs are offline
+Date: Sat, 10 Oct 2026 18:19:38 -0400
+Message-ID: <20261010221938.243859-7-longman@redhat.com>
 In-Reply-To: <20261010221938.243859-1-longman@redhat.com>
 References: <20261010221938.243859-1-longman@redhat.com>
 Precedence: bulk
@@ -68,118 +68,47 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Before commit 103b08709e8a ("cgroup/cpuset: Fail if isolated and nohz_full
-don't leave any housekeeping"), the partition state can be freely switched
-from "root" to "isolated" and vice versa. After that commit, the switch
-from "root" to "isolated" can fail if it exhausts all the housekeeping
-CPUs. Later on, the switch from "isolated" to "root" can also fail if
-some of the partition CPUs are boot-time isolated by "isolcpus".
+The test_cpuset_prs.sh test assumes that all the relevant CPUs being
+tested are online. If some of them are offline, some of the test cases
+may fail. So skip the test if the required CPUs are either offline or
+not present.
 
-A local or remote partition is made invalid when the switch fails.
-However there are 2 problems with the existing invalidation code.
-
- 1) Both the subpartitions_cpus and isolated_cpus are not properly
-    updated.
- 2) In the case of remote partition with remote_partition flag set, it
-    is not cleared.
-
-Fix this by calling the proper partition disabling function in this case.
-
-On an x86 test system with boot option "isolcpus=10 cgroup_debug" set
-and more than 16 cores, the following commands were executed after boot.
-
-  # cd /sys/fs/cgroup
-  # echo +cpuset > cgroup.subtree_control
-  # cat cpuset.cpus.isolated
-  10
-  # mkdir A
-  # echo 10-12 > A/cpuset.cpus
-  # echo isolated > A/cpuset.cpus.partition
-  # cat A/cpuset.cpus.partition
-  isolated
-
-Before the patch:
-
-  # echo root > A/cpuset.cpus.partition
-  # cat A/cpuset.cpus.partition
-  root invalid (partition config conflicts with housekeeping setup)
-  # cat cpuset.cpus.isolated .__DEBUG__.cpuset.cpus.subpartitions
-  10-12
-  10-12
-
-After the patch:
-
-  # echo root > A/cpuset.cpus.partition
-  # cat A/cpuset.cpus.partition
-  root invalid (partition config conflicts with housekeeping setup)
-  # cat cpuset.cpus.isolated .__DEBUG__.cpuset.cpus.subpartitions
-  10
-
-Reported-by: Tejun Heo <tj@kernel.org>
-Link: https://lore.kernel.org/lkml/7f4c57b26ad120ab30adf35653f1dd94@kernel.org/
-Fixes: 4a74e418881f ("cgroup/cpuset: Check partition conflict with housekeeping setup")
-Fixes: 103b08709e8a ("cgroup/cpuset: Fail if isolated and nohz_full don't leave any housekeeping")
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ .../selftests/cgroup/test_cpuset_prs.sh       | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index fb41cd76add6..df1619d7a701 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -2863,6 +2863,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 	struct cpuset *parent = parent_cs(cs);
- 	struct tmpmasks tmpmask;
- 	bool isolcpus_updated = false;
-+	bool disable_partition = false;
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 3d392e8c66aa..f57971ebb90e 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -118,6 +118,26 @@ TEST_ISOLCPUS=
+ 		skip_test "Current isolated CPUs ($CURRENT_ISOLCPUS) don't match boot isolated CPUs!"
+ }
  
- 	if (old_prs == new_prs)
- 		return 0;
-@@ -2920,15 +2921,21 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 		 */
- 		compute_excpus(cs, tmpmask.new_cpus);
- 		if (prstate_housekeeping_conflict(new_prs, parent_prs,
--						  tmpmask.new_cpus, NULL))
-+						  tmpmask.new_cpus, NULL)) {
-+			disable_partition = true;
- 			err = PERR_HKEEPING;
--		else
-+		} else {
- 			isolcpus_updated = true;
-+		}
- 	} else {
- 		/*
- 		 * Switching back to member is always allowed even if it
- 		 * disables child partitions.
- 		 */
-+		disable_partition = true;
-+	}
++#
++# This test assumes that all the relevant CPUs being tested are online.
++# If some of them are offline, some of the tests may fail. So we are going to
++# skip running this test script if some of the required CPUs may be offline.
++# The required CPUs include CPUs 0-7 and the first boot time isolated CPU if
++# present. However the check below is not exhaustive and can be a false
++# positive, but users should not run this test if some CPUs are offline.
++#
++ONLINE_CPUS=$(cat /sys/devices/system/cpu/online | sed -e "s/,.*//")
++ONLINE_FIRST=$(echo $ONLINE_CPUS | sed -e "s/-.*//")
++ONLINE_LAST=$(echo $ONLINE_CPUS | sed -e "s/.*-//")
++if [[ -n "$FIRST_ISOLCPUS" ]]
++then
++	LAST_REQUIRED_CPU=$FIRST_ISOLCPUS
++else
++	LAST_REQUIRED_CPU=7
++fi
++[[ $ONLINE_FIRST != 0 || $ONLINE_LAST -lt $LAST_REQUIRED_CPU ]] &&
++	skip_test "Some of the required CPUs are offline or not present!"
 +
-+	if (disable_partition) {
- 		if (is_remote_partition(cs))
- 			remote_partition_disable(cs, &tmpmask);
- 		else
-@@ -2937,7 +2944,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 
- 		/*
- 		 * Invalidation of child partitions will be done in
--		 * update_cpumasks_hier().
-+		 * update_cpumasks_hier() below.
- 		 */
- 	}
- out:
-@@ -2956,8 +2963,8 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 		isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
- 	spin_unlock_irq(&callback_lock);
- 
--	/* Force update if switching back to member & update effective_xcpus */
--	update_cpumasks_hier(cs, &tmpmask, !new_prs);
-+	/* Force update if partition is disabled & update effective_xcpus */
-+	update_cpumasks_hier(cs, &tmpmask, disable_partition);
- 
- 	/* A newly created partition must have effective_xcpus set */
- 	WARN_ON_ONCE(!old_prs && (new_prs > 0)
+ cleanup()
+ {
+ 	online_cpus
 -- 
 2.55.0
 
