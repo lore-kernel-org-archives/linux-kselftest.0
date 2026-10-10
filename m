@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554B949DB90;
-	Sat, 10 Oct 2026 12:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DAA4A0142;
+	Sat, 10 Oct 2026 12:41:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791636089; cv=none; b=rKtgPi0QvQaxmWsfD59lg+M1/1jtO5mvGZtZTO12GVmzEhfdneNN/LGOqjESdwVS5IU1Q4lYQpRwLpd7MCKxMzHBRovPEB+RZIoSwpKiJNnTC+5y/PZJO/9WS6fGLjkslSOOxi27ub6IE1yTcrFS7+CBvYHlik0CCjg7jma8XB4=
+	t=1791636089; cv=none; b=Tow1corLM+ICrt80Pu826sO8XRm7N9YAQYCuDUUx15dbMOxTI21rUR1qYRI8RDJT5WwJMEAI7OCk1QyR7t8t2+iMBqeagqaxpXf8aYHEZvZvGxLdtzBgbSjxhuWTivusUhJpepjjEEyxnGY+1dBMamClRS3VqUQVUE8yRQSvgcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791636089; c=relaxed/simple;
-	bh=xXYpfe5z16VtFbCawIMGakd+kWOsBcYVn0BEYTtmdto=;
+	bh=s5Lql2uqVar7Mo1oZ0KadqLV4WVljh3/vmghbJ6o6mI=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jz/+jaXpuVblOMiV29D+HCMTv0nz0feYCBbSHvDX8bJDcvuYaqG4fan6b0/SMchlaIrJkagZApAASY1SXrBvkn1lwDkbgQXGCweXdpb3rfmYgW31iY58tvHhWLxya9REIbY2gfUbLw0yuSYM/DlNbFJMT3WwuIz9ahOyre3kZ5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YEedFhxK; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=TkO2vCfAlN9+8o4mtYO27x4HmXKSsnu0X8GA9CzQvTyZ9IJsqf46WqN3I8tp8ZROBRPnJOLrtzo3MNe44nljrA9RTWiN6L8mFf4IxV5pX0cUQ0kgts7feLDCUh/iJi0FGoX3wXOUgUdGlLb50NV3QrwKGXsIdTyjs+uCgp1Yywg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ByEj8JcQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YEedFhxK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FFB1F000FF;
-	Sat, 10 Oct 2026 12:41:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ByEj8JcQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809061F00893;
+	Sat, 10 Oct 2026 12:41:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791636085;
-	bh=UMaO4w/vEEoHlY2RncBAvUxKcgvEEQIglb4beZx56Ho=;
+	s=k20260515; t=1791636087;
+	bh=b8dxuFLgJtZF417hED3puwABzhUfTvsA0w+Vj2BdDYY=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YEedFhxKyV7KlyifqggDcCTmkBmMplfEg6XoWM9fMyxrQVWbF462M1URQUIZqMqso
-	 wHcdAtjVzL+fqBHrCOqUCP9GMUMpq0x+4G9llOMATa3mbIVkCNIbq6Wm5yQuwqef+c
-	 9YZLZ9KWT+GxFTEYJLa283XfrMAK8YxOCJ3pIqEfgJcDMSPYQKGK9jhgHNoZsVEEQa
-	 BCnSgf90qaQzapZdB7ZtmqWg9P1XHIo4GjCOzhUP//nhBjxk/lFPaw6JKsyx/Njgo+
-	 GiiKvVTd9WIGPGs+8uMfS+RuKej8+3JhjBXYyu2xnyAZ4ABIZQ1ljA2xGh0NHouBbz
-	 Ik5LUSCM+TcZw==
-Subject:
- Re: [PATCH net-next 02/13] amt: send the Relay Advertisement over IPv6
+	b=ByEj8JcQU+yA7N0viDOuK1R3Kfnt6rW4uZDEFJoJSg44Ut7ZX5QjnmVU6STWU3P7C
+	 Sn8LiHFfe+kOMOIdq74igeE60xRd+642rf0Ox9EBliQPTpahxFa0xynr+CBl89Rxdn
+	 37e0m6FPxcGbqBfxH0qsEI1rEsiCWjbez2BHv33EkXPvnU5gBpGG94AfTc9pwSZ57u
+	 NeLtCsGE/tatC8KGOSBzQ6KdXG4C/r5Jls89qVU/gYsfWuVUPYdYCI8w0P7wckJluq
+	 cHj3LSltblBFY8qKiym+uPeOmbCd656WpShonO7CF4NbzZ5Zvnv6O1rrG2adX5XF/z
+	 MpuMUpopFmA/w==
+Subject: Re: [PATCH net-next 03/13] amt: key relay tunnels on a union amt_addr
+ endpoint
 From: netdev-bot+sashiko@kernel.org
 To: omar@blockcast.net
 Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
  horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Sat, 10 Oct 2026 12:41:24 +0000
-Message-ID: <179163608450.434549.15930085032781839497@kernel.org>
-In-Reply-To: <20261009122426.551178-3-omar@blockcast.net>
-References: <20261009122426.551178-3-omar@blockcast.net>
+Date: Sat, 10 Oct 2026 12:41:26 +0000
+Message-ID: <179163608605.434549.15713885412785793967@kernel.org>
+In-Reply-To: <20261009122426.551178-4-omar@blockcast.net>
+References: <20261009122426.551178-4-omar@blockcast.net>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,183 +54,179 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] amt_send_ctrl_v6() in drivers/net/amt.c never counts a transmit
-  failure after the route lookup.
-- [Low] amt_route6() builds the flowi6 for ip6_dst_lookup_flow() with
-  memset() and never sets fl6.flowlabel.
-- [Low] The new IPv6 branch of amt_discovery_handler() rejects a
-  Discovery whose outer destination is multicast, so that it does not…
+- [Low] In this commit, amt_update_handler() (drivers/net/amt.c) still
+  finds the tunnel with `saddr = ip_hdr(skb)->saddr` (line 2588) and…
+- [Low] In this commit, amt_send_multicast_data() (line 1195) and
+  amt_send_membership_query() (line 1250) in drivers/net/amt.c always…
+
+Pre-existing issues:
+- [Medium] amt_request_handler() in drivers/net/amt.c searches
+  amt->tunnel_list under RCU only (lines 2863-2865).
+- [Medium] In amt_request_handler() (drivers/net/amt.c), the new tunnel
+  is published with list_add_tail_rcu() at line 2905 before `tunnel->key…
 
 --
 
-amt: send the Relay Advertisement over IPv6
+amt: key relay tunnels on a union amt_addr endpoint
 
-This adds the 24-byte IPv6 form of the Relay Advertisement. It also adds a
-new amt_send_ctrl_v6() helper, which routes with ip6_dst_lookup_flow() via
-amt_route6() and sends with udp_tunnel6_xmit_skb(). On an IPv6 device,
-amt_discovery_handler() answers a Discovery from the Discovery's destination
-address, and drops a Discovery whose destination is multicast.
+This commit replaces the IPv4-only __be32 ip4 endpoint in struct
+amt_tunnel_list with a union amt_addr, and makes the union's ip6 member
+unconditional. amt_request_handler() now records and matches tunnels
+through a new amt_outer_saddr() helper and amt_addr_equal(), sends ICMPv6
+when the tunnel limit is hit on an IPv6 device, and computes the response
+MAC with siphash() over a packed {address, port, nonce} tuple. The commit
+message states there is no functional change because amt_v6() is still
+false for every device.
 
 > diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-> index 423ed7745fc7d..a550f84e86344 100644
+> index a550f84e86344..eaa5637674694 100644
 > --- a/drivers/net/amt.c
 > +++ b/drivers/net/amt.c
-> @@ -609,6 +609,78 @@ static void amt_update_relay_status(struct amt_tunnel_list *tunnel,
->  	spin_unlock_bh(&tunnel->lock);
->  }
+
+[ ... ]
+
+> @@ -1173,12 +1192,12 @@ static void amt_send_multicast_data(struct amt_dev *amt,
 >  
-> +static struct dst_entry *amt_route6(struct amt_dev *amt, struct sock *sk,
-> +				    const struct in6_addr *saddr,
-> +				    const struct in6_addr *daddr,
-> +				    __be16 sport, __be16 dport)
-> +{
-> +	struct flowi6 fl6;
-> +
-> +	memset(&fl6, 0, sizeof(fl6));
-> +	fl6.flowi6_oif		= amt->stream_dev->ifindex;
-> +	fl6.flowi6_proto	= IPPROTO_UDP;
-> +	fl6.daddr		= *daddr;
-> +	fl6.saddr		= *saddr;
-> +	fl6.fl6_dport		= dport;
-> +	fl6.fl6_sport		= sport;
-
-[Severity: Low]
-fl6.flowlabel stays at zero here, so the route lookup uses DSCP 0.
-amt_send_ctrl_v6() then sends the packet with AMT_TOS (0xc0, DSCP 48) as
-the traffic class. Would a DSCP-based IPv6 policy rule match this traffic?
-
-fib6_rule_match() in net/ipv6/fib6_rules.c checks the flow key:
-
-	if ((r->dscp ^ ip6_dscp(fl6->flowlabel)) & r->dscp_mask)
-		return 0;
-
-A rule like "ip -6 rule add dscp 48 table X" would therefore not match. The
-Advertisement could then be routed by another table, or fail to route,
-even though the packet on the wire carries DSCP 48. The later IPv6 senders
-in the series share amt_route6() and would behave the same way.
-
-udp_tunnel6_dst_lookup() in net/ipv6/ip6_udp_tunnel.c builds the key from
-the traffic class it sends:
-
-	fl6.flowlabel = ip6_make_flowinfo(dsfield, key->label);
-
-Should amt_route6() do the same with AMT_TOS? The existing IPv4 amt
-control senders have the same mismatch: they pass tos 0 to
-ip_route_output_ports() and then write iph->tos = AMT_TOS.
-
-> +
-> +	return ip6_dst_lookup_flow(amt->net, sk, &fl6, NULL);
-> +}
-> +
-> +/* Send an AMT control message from @saddr over the IPv6 outer transport.
-> + * Returns 0 once the message is handed to the IPv6 stack.
-> + */
-> +static int amt_send_ctrl_v6(struct amt_dev *amt, const struct in6_addr *saddr,
-> +			    const struct in6_addr *daddr,
-> +			    __be16 sport, __be16 dport,
-> +			    const void *msg, unsigned int len)
-> +{
+>  	memset(&fl4, 0, sizeof(struct flowi4));
+>  	fl4.flowi4_oif         = amt->stream_dev->ifindex;
+> -	fl4.daddr              = tunnel->ip4;
+> +	fl4.daddr              = tunnel->addr.ip4;
+>  	fl4.saddr              = amt->local_ip;
+>  	fl4.flowi4_proto       = IPPROTO_UDP;
+>  	rt = ip_route_output_key(amt->net, &fl4);
 
 [ ... ]
 
-> +	skb_reserve(skb, hlen);
-> +	skb_put_data(skb, msg, len);
-> +	skb->priority = TC_PRIO_CONTROL;
-> +	udp_tunnel6_xmit_skb(dst, sk, skb, NULL, saddr, daddr, AMT_TOS,
-> +			     ip6_dst_hoplimit(dst), 0, sport, dport, false, 0);
-> +	err = 0;
+> @@ -1228,13 +1247,13 @@ static bool amt_send_membership_query(struct amt_dev *amt,
+>  	skb_reset_inner_headers(skb);
+>  	memset(&fl4, 0, sizeof(struct flowi4));
+>  	fl4.flowi4_oif         = amt->stream_dev->ifindex;
+> -	fl4.daddr              = tunnel->ip4;
+> +	fl4.daddr              = tunnel->addr.ip4;
+>  	fl4.saddr              = amt->local_ip;
 
 [Severity: Low]
-Do output-path drops go uncounted in tx_errors here? dev is passed as NULL,
-and ip6tunnel_xmit() in include/net/ip6_tunnel.h only looks at the
-ip6_local_out() result when dev is set:
+include/net/amt.h now documents tunnel->addr like this:
 
-	err = ip6_local_out(skb_dst_dev_net(skb), sk, skb);
+	/* Gateway endpoint, in the device's outer family */
 
-	if (dev) {
-		if (unlikely(net_xmit_eval(err)))
-			pkt_len = -1;
-		iptunnel_xmit_stats(dev, pkt_len);
-	}
+However, amt_send_multicast_data() and amt_send_membership_query() still
+always route over IPv4 with fl4.daddr = tunnel->addr.ip4.
 
-err is then set to 0 here whatever happened.
+On a device where amt_v6() is true, would these send to an IPv4 address
+built from the first 4 bytes of the gateway's IPv6 address?
 
-The IPv4 sender of the same message, amt_send_advertisement(), counts
-these drops:
+This can't happen at this commit, because nothing assigns
+amt->local_ipv6 yet, so amt_v6() is false for every device.
 
-	err = ip_local_out(amt->net, sk, skb);
-	if (unlikely(net_xmit_eval(err)))
-		amt->dev->stats.tx_errors++;
-
-So these drops raise tx_errors on an IPv4 relay but not on an IPv6 one: a
-netfilter OUTPUT drop, a neighbour or qdisc drop, or the ip6tunnel_xmit()
-recursion-limit drop. On IPv6 only route lookup and skb allocation failures
-are counted.
-
-amt_send_discovery_v6() and amt_send_request_v6(), added later in the
-series, reuse this helper. They would also get err == 0 for every packet
-that reaches udp_tunnel6_xmit_skb().
-
-The commit message says the NULL netdev is deliberate, to keep control
-traffic out of the tunnel stats. Could the ip6_local_out() result still be
-checked here so tx_errors behaves the same as on IPv4?
-
-> +out:
-> +	rcu_read_unlock_bh();
-> +	return err;
-> +}
+Later in the series, "amt: send the Membership Query over IPv6" and
+"amt: forward multicast data over IPv6" switch both senders to
+amt_udp_xmit(), which branches on amt_v6(). Both patches land before the
+netlink attribute that can set local_ipv6.
 
 [ ... ]
 
-> @@ -2701,6 +2791,26 @@ static bool amt_discovery_handler(struct amt_dev *amt, struct sk_buff *skb)
->  	if (amtd->reserved || amtd->version)
+> @@ -2585,7 +2604,7 @@ static bool amt_update_handler(struct amt_dev *amt, struct sk_buff *skb)
+>  	skb_reset_network_header(skb);
+>  
+>  	list_for_each_entry_rcu(tunnel, &amt->tunnel_list, list) {
+> -		if (tunnel->ip4 == saddr) {
+> +		if (tunnel->addr.ip4 == saddr) {
+
+[Severity: Low]
+amt_request_handler() now records the endpoint with amt_outer_saddr() and
+matches it with amt_addr_equal(). amt_update_handler() still reads the
+outer source as IPv4:
+
+	saddr = ip_hdr(skb)->saddr;
+	...
+	if (tunnel->addr.ip4 == saddr) {
+
+On an IPv6 relay, wouldn't this compare bytes 0-3 of the stored IPv6
+address with bytes 4-7 of the received IPv6 source? That would drop
+every Membership Update.
+
+As with the senders, this can't happen at this commit, because amt_v6()
+is always false.
+
+The later patch "amt: match the Membership Update tunnel by outer family"
+converts amt_update_handler() to amt_outer_saddr() and amt_addr_equal().
+That happens before local_ipv6 becomes settable.
+
+[ ... ]
+
+> @@ -2837,12 +2861,24 @@ static bool amt_request_handler(struct amt_dev *amt, struct sk_buff *skb)
 >  		return true;
 >  
+>  	list_for_each_entry_rcu(tunnel, &amt->tunnel_list, list)
+> -		if (tunnel->ip4 == iph->saddr)
+> +		if (amt_addr_equal(&tunnel->addr, &saddr))
+>  			goto send;
+>  
+>  	spin_lock_bh(&amt->lock);
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but this lookup runs under RCU
+only. On a miss, the new tunnel is added under amt->lock without
+searching the list again:
+
+	spin_lock_bh(&amt->lock);
+	...
+	list_add_tail_rcu(&tunnel->list, &amt->tunnel_list);
+
+amt_rcv() runs as a UDP encap_rcv in softirq. Two Requests from the same
+gateway address can therefore be handled at the same time on different
+CPUs, for example when different source ports are steered to different
+RX queues.
+
+Can both miss the RCU lookup, so that each adds an amt_tunnel_list entry
+for the same endpoint?
+
+Later lookups stop at the first match, so the second entry would never
+be found. It would still hold a max_tunnels slot and a pending gc_wq
+until amt_tunnel_expire() removes it.
+
+The Update that answers the Query sent from the duplicate could also be
+checked against the first entry's nonce and MAC and rejected.
+
+This patch only changes the comparison to amt_addr_equal().
 
 [ ... ]
 
-> +	if (amt_v6(amt)) {
-> +		const struct ipv6hdr *ip6h = ipv6_hdr(skb);
-> +
-> +		/* The socket bound to :: also receives a Discovery sent to
-> +		 * a group, and a multicast address can never be a source
-> +		 * (RFC 4291 s2.7), so such a Discovery is not answered.
-> +		 */
-> +		if (ipv6_addr_is_multicast(&ip6h->daddr))
-> +			return true;
-> +
-> +		amt_send_advertisement_v6(amt, amtd->nonce, &ip6h->daddr,
-> +					  &ip6h->saddr, udph->source);
-
-[Severity: Low]
-What happens when the Discovery's outer source is ::? Only the destination
-is checked, so ip6h->saddr becomes the Advertisement's destination without
-any check.
-
-ip6_rcv_core() drops a multicast or loopback source, but not an
-unspecified one. UDPv6 delivery to the relay socket bound to :: does not
-check it either. The path would be:
-
-amt_discovery_handler()
-  amt_send_advertisement_v6(..., daddr = ::, ...)
-    amt_send_ctrl_v6()
-      amt_route6()               fl6.daddr = ::
-        ip6_dst_lookup_flow()
-      udp_tunnel6_xmit_skb()     outer daddr = ::
-
-ip6_dst_lookup_tail() treats a zero daddr as the default router. So the
-lookup succeeds whenever stream_dev has a default route, and the relay
-sends a packet with destination ::, which RFC 4291 s2.5.2 forbids.
-
-Should a Discovery with ipv6_addr_any(&ip6h->saddr) be dropped too, like
-the multicast destination case?
-
-> +		return false;
-> +	}
-> +
->  	amt_send_advertisement(amt, amtd->nonce, iph->saddr, udph->source);
+> @@ -2876,10 +2912,13 @@ static bool amt_request_handler(struct amt_dev *amt, struct sk_buff *skb)
 >  
->  	return false;
+>  send:
+>  	tunnel->nonce = amtrh->nonce;
+> -	mac = siphash_3u32((__force u32)tunnel->ip4,
+> -			   (__force u32)tunnel->source_port,
+> -			   (__force u32)tunnel->nonce,
+> -			   &tunnel->key);
+> +	/* The MAC is opaque to the gateway, which only echoes it, so one
+> +	 * siphash over the zero-padded endpoint serves both families.
+> +	 */
+> +	mac_in.addr = tunnel->addr;
+> +	mac_in.port = tunnel->source_port;
+> +	mac_in.nonce = tunnel->nonce;
+> +	mac = siphash(&mac_in, sizeof(mac_in), &tunnel->key);
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but amt_request_handler()
+publishes the new tunnel before it sets the key:
+
+	list_add_tail_rcu(&tunnel->list, &amt->tunnel_list);
+	tunnel->key = amt->key;
+
+Another CPU running amt_request_handler() can match this address under
+RCU, jump to send:, and read tunnel->key here without holding amt->lock.
+
+Could it compute tunnel->mac with the all-zero key left by kzalloc(), or
+with a partly written key?
+
+If that CPU's nonce and MAC stores end up as the final values, the
+response MAC would come from a predictable key.
+
+This patch reads the same key as before. It only replaces siphash_3u32()
+with siphash() over the packed tuple.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009122426.551178-1-omar%40blockcast.net
