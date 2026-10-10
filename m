@@ -1,132 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA1428B7EA;
-	Sat, 10 Oct 2026 06:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267CD3D1A8E;
+	Sat, 10 Oct 2026 06:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791615150; cv=none; b=JKSItv9ZG3ov3SipbCscjI/mc/SjHRLI9qcDQcNzjjM6idG7x7uqHntWSHmVEdWEHxFmGobDlkpEe+SKmMlapI6hsP+vSTknOF9NpdeLFrhP2WNTbuOgONOSrjsJEWlgw9B61n7Iv3IpAM3YhGqFdoaVEi37b79J2oD4cpej+Cw=
+	t=1791615317; cv=none; b=EDb0LIghkqwEAEA/F2qjd8VCSR2T8uKlmtAgGf5u0McoKTMnMmPpG/+h2BAr1XlsecoDhnI3eOd4o24vSy5JemqfY/YffilNLzgfLxq3ZhE4M3VVfIb5MhFJNoPnXA/z4OdrRmTqfa81IprIqOyamDrygcIlwuuWwAuxW7sVfbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791615150; c=relaxed/simple;
-	bh=Gbi6SFAjCtvXAIgPfIiBdeKs+atE7HsSQwa26RJssGc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WvBvV0lv5H5bORbZWbUSxvy8vL+9JIreLmI3UVlvPCdwgi1Mji1Ju1wqLmjUXABaf6ytGE3L2HOI9ND4veAxflSraKFUC4AXmT/dacMeZm8Xbjg6is972lWWM66hpeCufRduZj/YWT8B4XOCqXqiRmcADCWwb0+aBDSi18PyTzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KEKmtWz7; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1791615317; c=relaxed/simple;
+	bh=dds94h2tCpUAEqZmdvAVHIAH3c44CSGmgK9M0PtEawc=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=C8slQpBdB7iGDAZaRrFqruKP8I6AeTFtH3KjfvCFe0fwHgLUzRT/euVOUF6c+amPrruwDUMR/TCldV1gACjw0kFKhyqAA3rXUatW5WB6KArjuxWtO67ilbXRX7atFSzWDSZjpSu5+wQxFXRj2UoWzGoduUuul2C/xP+P0IzJdCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=oq/zBHgi; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KEKmtWz7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791615149; x=1823151149;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Gbi6SFAjCtvXAIgPfIiBdeKs+atE7HsSQwa26RJssGc=;
-  b=KEKmtWz7HdVdaQ3JoDOkTRPbOLfxENxwCp5Mr2nRAIovQhTHuADgPPeM
-   MTWVlP2g8DOHMldfGwIStSPtU9fYPtrHHrG6R/GFdXaY5pRgGDZDz/swz
-   pc87p8Hy0f4QOD98xoEQ1yzKa2f4dInk+PT2J9YQ7+MUVfhPO15QSmigY
-   zIQrXhiWhPBpXLH2Nrhx8VwgrfqJQvilOBmYHFTjdHAVpoGZx1TpSqNZI
-   B8P1ZS8oTrGzNvBDkD/D81FLKHS8GZD64q6Px2091KqcaigpCLvicX/9d
-   V11qrhht2roEmL34xQEHhaJFXT2EYpGkGdEh0pcLr2Y8NKKrP6dAjrAU6
-   Q==;
-X-CSE-ConnectionGUID: 4wUP0QmORQqN0BXw2tuWiA==
-X-CSE-MsgGUID: AefNCr95QXiod8Wt54NfBg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="414002"
-X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
-   d="scan'208";a="414002"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 23:52:28 -0700
-X-CSE-ConnectionGUID: yDVySbpMSaac64jOG9rtiQ==
-X-CSE-MsgGUID: P9aXaF++SryqIPqk2Y82BA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
-   d="scan'208";a="574047"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 23:52:22 -0700
-Message-ID: <cf9de0e9-e2e5-415f-a0f3-9613cbbcd5b8@linux.intel.com>
-Date: Sat, 10 Oct 2026 14:52:20 +0800
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="oq/zBHgi"
+Received: from ehlo.thunderbird.net ([172.59.192.99])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 69A6qu8k3096797
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 9 Oct 2026 23:52:58 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 69A6qu8k3096797
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026092801; t=1791615180;
+	bh=gIbyT1LJ8E+Wsr69yQQkhxyJsSBPI7cWD8OlwVgQw4M=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=oq/zBHgiCjdM3u/+7hEQB9sYTGpxgP2hcwAA4i0Ad9GWnoQM/ylfGB0Eo07g1tCjM
+	 FQuaSulokt8wZ0Ng41RA5blYNTh/lqIAm41rIMOy9cyFFcDcRR0IUhDYmCQANeI8yR
+	 1df1ok8DAJI3yo4CzOe4MYfzX/3cIl+Zn/e6mXGpkmLDa0wkrhR94wPJL04IKaNUip
+	 La8idiwmqfUdESxcQqaTUEfIyqk+GJoN7HlPwJndzuplRdL4/B5Gx6/azMVU+wXA5b
+	 fcHbhb/5D/B6YLLRepLIccB8y79PsI+faAgwpebkkkYKXgI+TdYtJtxAjjENNguzQM
+	 wm18eOzLL3rag==
+Date: Sat, 10 Oct 2026 08:38:23 +0200
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+CC: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Justin Stitt <justinstitt@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Richard Purdie <richard.purdie@linuxfoundation.org>,
+        Sam James <sam@gentoo.org>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@kernel.org>,
+        =?ISO-8859-1?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>,
+        Tomas Glozar <tglozar@kernel.org>, Willy Tarreau <w@1wt.eu>,
+        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v4 2/2] x86: Start removing X86_X32_ABI
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20261008-x32_removal-v4-2-d389a193c506@breakpoint.cc>
+References: <20261008-x32_removal-v4-0-d389a193c506@breakpoint.cc> <20261008-x32_removal-v4-2-d389a193c506@breakpoint.cc>
+Message-ID: <C64A956C-15BE-483F-ACA4-0E9A56699A61@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 21/23] KVM: selftests: Add support for per-VM ucall
- ops on x86
-To: Lisa Wang <wyihan@google.com>
-Cc: Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
- Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
- kvm@vger.kernel.org, linux-coco@lists.linux.dev,
- linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
- <20261001-tdx-selftests-v15-21-7c62a5d8a992@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20261001-tdx-selftests-v15-21-7c62a5d8a992@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 10/2/2026 3:37 AM, Lisa Wang wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Add a layer of indirection to x86's ucall infrastructure to allow wiring up
-> a different set of {do,get}_ucall() operations for TDX VMs.  TDX can't use
-> port I/O (at least, not robustly), as the TDX ABI doesn't allow the guest
-> to share arbitrary register state with the host on a PIO exit, and the PIO
-> data payload is limited to 4 bytes, i.e. would potentially truncate the
-> address of the per-ucall structure.
-> 
-> No functional change intended, as the ops are still hardwired to the common
-> x86 ucall functions.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
-> ---
->  tools/testing/selftests/kvm/include/x86/ucall.h |  6 +-----
->  tools/testing/selftests/kvm/lib/x86/ucall.c     | 27 +++++++++++++++++++++++--
->  2 files changed, 26 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86/ucall.h b/tools/testing/selftests/kvm/include/x86/ucall.h
-> index 0e4950041e3e..3639f03a4da9 100644
-> --- a/tools/testing/selftests/kvm/include/x86/ucall.h
-> +++ b/tools/testing/selftests/kvm/include/x86/ucall.h
-> @@ -2,12 +2,8 @@
->  #ifndef SELFTEST_KVM_UCALL_H
->  #define SELFTEST_KVM_UCALL_H
->  
-> -#include "kvm_util.h"
-> +#include "linux/kvm.h"
+On October 8, 2026 11:07:43 AM GMT+02:00, Sebastian Andrzej Siewior <bigeas=
+y@linutronix=2Ede> wrote:
+>From: Sebastian Andrzej Siewior <sebastian@breakpoint=2Ecc>
+>
+>From: Sebastian Andrzej Siewior <bigeasy@linutronix=2Ede>
+>
+>The x32 ABI was introduced in v3=2E4 to leverage the additional registers
+>which were available on x86_64 but not on i386 while keeping the smaller
+>32bit pointers=2E
+>
+>This did not take off=2E The memory usage usually knows no limit and the
+>better performance did not reach a point where certain workloads widely
+>move to x32 and use it exclusively=2E In the meantime Debian introduced a
+>patch to disable x32 by default (so it has to be enabled at boot time on
+>the command line) because they are afraid of the increased attack
+>surface=2E Fedora as far as I tell has X32 disabled (looking at 7=2E0-rc5
+>rpm in rawhide)=2E
+>
+>The syscall range >512 used by x32 can not be reused because on earlier
+>kernels (before v5=2E4 with x32 enabled, see commit 6365b842aae4
+>("x86/syscalls: Split the x32 syscalls into their own table") it is not
+>obvious if the syscall is for x86-64 and not implemented or meant for
+>x32=2E
+>What can be removed are the special compat cases due to different
+>alignment=2E
+>
+>Since there is practically no real use for x32, start removing it by
+>marking the symbol as BROKEN so it is not possible to enable by default=
+=2E
+>It will remain around in the last LTS kernel of this year and then it
+>will be removed=2E
+>
+>Acked-by: Arnd Bergmann <arnd@arndb=2Ede>
+>Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix=2Ede>
+>---
+> arch/x86/Kconfig | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>index 15fd9ec5ecacb=2E=2E21a6863e14e7a 100644
+>--- a/arch/x86/Kconfig
+>+++ b/arch/x86/Kconfig
+>@@ -3104,7 +3104,7 @@ config IA32_EMULATION_DEFAULT_DISABLED
+>=20
+> config X86_X32_ABI
+> 	bool "x32 ABI for 64-bit mode"
+>-	depends on X86_64
+>+	depends on X86_64 && BROKEN
+> 	# llvm-objcopy does not convert x86_64 =2Enote=2Egnu=2Eproperty or
+> 	# compressed debug sections to x86_x32 properly:
+> 	# https://github=2Ecom/ClangBuiltLinux/linux/issues/514
+>
 
-Nit:
-#include <linux/kvm.h>
+I want to make one change to this=2E=20
 
-[...]
+The commit message states this as a fait accompli, but what it should say =
+is:=20
 
-> +
-> +void ucall_arch_do_ucall(gva_t uc)
-> +{
-> +	return ucall_x86_ops.do_ucall(uc);
-
-return should be dropped.
-
-> +}
-> +
-> +void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
-> +{
-> +	return ucall_x86_ops.get_ucall(vcpu);
-> +}
-> 
-
+** If you have a legitimate use case for x32, this is your last chance to =
+speak up=2E Otherwise it will=2E=2E=2E **
