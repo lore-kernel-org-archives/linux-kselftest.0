@@ -1,206 +1,151 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CA73914EE
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 16:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791649472; cv=pass; b=lJ0vDYbrdP178pI1f6iHF6J1Iy3BDJbGUAGQL046A3q5Nes8nXf+qsQD8H7t7KMljXjj65uyr4oMPozAArzX0LWW2ZvAF05TSshomN3ijbmpufKwdXCuHAKoujz93g4oAzNFKhDDQZjkHTjAA6G3k95ficbBWf1Cm89gSkyoRFg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791649472; c=relaxed/simple;
-	bh=twLfEwV6ObJQ/5FqVixRMsFK7uHd6mkaxdtnB+fAdKg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YO43X0e9x/Hf6lnBczmzYuMgaNCzz+yWogsjxBALTLiK0wgC95Xx4Nb9y4RfJy9G2LRGLZdty2LruzJUvXfw2NLRVd7hJr/kX13zFAc6+EDgsUoWv2laTdRWZ/amrMNHjNg7fy0QWpdNlild5eBVb299yWH5VbNiG9R9J8XcNF4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q/EdPuDp; arc=pass smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3216F37B41E
+	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 16:51:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791651065; cv=none; b=R/qVTMEsm0BGSbhXx0NAqlumtVOP4Y34wEPywJwEFv+RWAcZyEB0tM92dltApRRftz1AOuWZ1mbcWhcbyVZvk9Tf1+80ppczlP/nBbIFCCb2y4iezcxSluteZ3LiUcc/8m6YQ3IIoIG3RuK9gjzImtU7dgalQzM+8LxMUmPBZBY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791651065; c=relaxed/simple;
+	bh=mkgVRX9YuyhUq2vsRjUuGhTE9wKrEeana7ye+Aj7TLE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xkx0K8V3Jo2A+kxZ76v+8DT3rK1pbQzrS9NnPc292leYpt9ynxsWwdgxI4bhVNxGUhk9awu5GRvdmXi5/26Gx7zlOrK8nHgboRzzTWH6FQ+bBBmLMAbtaZa6Qn2d7AUgo2u2Tcdxr7hGMDAFAbHkOzJhc496k6rd1rfO22wJ8fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oNR5HjXd; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q/EdPuDp"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c2e69aa07c3so88600066b.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 09:24:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791649469; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NOWkNch5qSBCFSnRM5Uh+t/BDkSKXZb8de8CPloJTWxwDfddPSFx12ycG1uso6QTBJ
-         tMqn5FgRwvpzXIUomjc561sW1TbuR3o6asvwDJRBd2leWRH1HnrjQgyXbuG440COIMTb
-         YlK/7PJ4Zp4YXEUzwhepAvQuJWShU7uiORcEchhxjnibUs4U5l7oyeSQNNQq3ByYtMWy
-         7N+RrXWRe3WBflHvARmcedhbRdbutU6kI13+hxB9IKK1S2Sh/YSQGNLHYEgWZyv3EJMP
-         oqoh2NhqUfuq6Za7oq7nVMANaddsTAmSsGsZ6Ieq/6A6m0K6Pj9k3aQyCaJ/wiNC1Gh0
-         KbDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OaXanGBebs9+G2VzyCDD+GE40p6rSCcLN7l/Dz8kZY8=;
-        fh=xwuAAvdX85gH49odU5PUS9w1Bzz3zFjnrz4Tp5d8hfU=;
-        b=RBwVfwcd+mfUAk8loHFLI8rhlOO8/l0fZcnlqt2PKq81FHKqDGK+kNLz8MNT6KGpox
-         T7dzGhdIhHr4VR8OvFigviXGY8JSyUZIoGLhT8VFeYTSttHsdyCcQOf0+1NV2kqk0OOx
-         PWmCSzoBx5DVPN3vlGZEiWYF02aCMC23oaRvSzgRqfSpHemMvfbiWNNMB2/nPa6Hfx+W
-         VJ1LzkFB0uJrkTJ1I95kpNy0cfFKq/6pj4u0sprj4lWqGR+j65WA+DKhYp4a3QAYPwyE
-         6R5YNUgHJR9QYhYoi+lyp+Wy3dzE9pObYI95HiQWUBYikATB8i57oP8aRhDBYorbpVls
-         yeVA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oNR5HjXd"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48b00aa033bso72963f8f.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 09:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791649469; x=1792254269; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OaXanGBebs9+G2VzyCDD+GE40p6rSCcLN7l/Dz8kZY8=;
-        b=Q/EdPuDpsppIZsS08ciipGnVpR2ZcZK8ayh+kEPs5guBp8vGh7jdTZN240hhShAQvc
-         jFEEt7sL/ZbqqSt+w2HKzYXyFVtm2Y9DrZsqXXLSWcFtNT0vBkdXRPzw0XVzhNrYECAJ
-         z3Ua0KIwYEClYNnF01ejR++0ldf8x2EvzLW4lYa1IfgY6W2tlNHhe44M4xJqLV3Z2bVC
-         PDerhAW/YMgZIwRrh62cBTxyjIivFBfU9iraiWifDXa85ty3YAst9GeFkxOzGGAgz1Nn
-         mID0fQKo2SL1EH6XaRzpjVuMYgT2neB2V+j83voB8fFtDVOKx2GWG+I3Oz/PenEkA2L6
-         DFcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791649469; x=1792254269;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1791651062; x=1792255862; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OaXanGBebs9+G2VzyCDD+GE40p6rSCcLN7l/Dz8kZY8=;
-        b=xU70gyST+/GMbpRzoQCOP5AcVIDoCB9H/gCYwjWwQrtva+BwyrOC8/XxpT2+sgN3fv
-         7Ojwk/Ad7v/Lrc0YpXUD364q+dmI7+WzCqboNpHqq0P7miUzw3fQsC5kg5zI9F6pcDw1
-         dyL3pwyTYYIwVk3y3R2md4K5GPFvcmFWe4kHGszetJZfw2f5I0Cqm63iClnaKHzi2mmR
-         x28jAEXY7gKWri20QxZDskH9MnH54rphplfp6cBBHLvraopjRF1my7IAe8/keLWUVcGK
-         AqXx27xWKJura4R7Ac2PUF8FyG24uSXO4ArP0/x1mxDZoD0acoYlBHSNK0hRqNdztZ8Z
-         wdPw==
-X-Forwarded-Encrypted: i=1; AKwUvBxnALgepXa49vV1pMi8WBk/E2GhovGMoa1bqpxEp8vDCfRKsXFmcjJiznebLXwLkfidAHcO/a2NHdaJjBxJD3I=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL18xGW+jnQ6coQWiZztzM9t6FCbWdp7YXMOtsXePUtWsQXsLEi
-	W/jI0vC0+lgIbQsT7hBsLjBJnKJQP/XoJmtgUluWfHOVbaDRp1i+EuA3MGgzv0qymzVwCJBXHQ4
-	O0NJXz6F2oHRxCpPkUtfE1Wc5rtq6jWc=
-X-Gm-Gg: AYBFou2S04ePBICS1Z9QNV8jN+1UmMZFHbnp8I9umY55LALiVwJPDMVMLKE1my2GKn7
-	LAIya1lpSVtFOoXWFxOZ2OWIwpUuaXgWWVKYzWMhTQhs49gN9OxxK6f7USSWiPDg2D4zIe7Lv0z
-	m+tq+kAGc8fo/njs+znXWQsMybv8RJBs6eCelG9gqjokqeaOsoRQRxvHxgriPwEmK71L/rMYwgq
-	PAG5DO0meBwIw5Rh0856Fy0iP4NAqREbS780VjAol+iA7vst+FKByOwvbAfJL3bryS3jU3V1Udh
-	4VkG+EnXImDDJMw/rtatwSNoDrkxyjpTe9Gw/ytHmI7goIJatAbmJ0bVL25tVnBiGxtTbcSNOSV
-	lEpOtxW3fAejTdA0BkqgPtDajrVXMTUhHJ0xgaHKX2y4=
-X-Received: by 2002:a17:907:97c2:b0:c27:420b:7c79 with SMTP id
- a640c23a62f3a-c31aa0e3cd3mr536202066b.48.1791649468591; Sat, 10 Oct 2026
- 09:24:28 -0700 (PDT)
+        bh=8EeIjRVizR1PJsy6PguhlaW7zpk67FRvd3p6xP3V+QY=;
+        b=oNR5HjXdJRqD22pGWlU03tfBMRuK90f8VFpsiWRTtvxqe8v/FcGxucckRE3fuP6Zu7
+         0KhDq0gFGNnAFbpaI4Gr0hLWTjlEB5anKkZZj/SGger1Y3b7l5zQW6LxrOpmcTx6WaR0
+         AC3CNVG3xngVwGbJ513L75ZNh6mS72CKKco0/SRFFLSy8yH6gOwTmINC0gzIfAIbPPSr
+         vSxvFk2B/5bH4Obvxd3OiQDq84qUXMZihNgbEDBuJIqmtXA2p92Nb1336Q04I6L7UT0C
+         yYEVxUvtdP/DPvYFZeEdXjxf9ca1Ejkov7E9MBMYHShBvVdGwiMP+ETf/Ap0UoS0Z++/
+         HWtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791651062; x=1792255862;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=8EeIjRVizR1PJsy6PguhlaW7zpk67FRvd3p6xP3V+QY=;
+        b=Sj6nuXab1bOomhBc/vf6yV0pcZ3bkOO6jhUGhW0ba7w0oqp6RVpNsH2uhEfv/5tN/i
+         65hBE+F6tJP8HJXXnoRX4fBalOxR7kvD9HC2MjT18c59VJBr8a1yXJfgzwyifercaYKH
+         /rROYB8gWpuYZLAd++IQzfOTy3G18AWMWNF1NjgxGyGPjfTn9NaGCnbYsE62uA4dqFFp
+         SKg6j3VdqaiQCel7LuHlSIrJ5Wb6ScqG4owVTHhfPouU29qRtIhX8DLkT5BOmCb+rLzc
+         CB/cvCTC+pt4FDSuihuGMSu51GvjS0QkPmkwNgap+yi3PNQapB7wcasIaQ+OTEigBfX6
+         VcuA==
+X-Forwarded-Encrypted: i=1; AKwUvBzp3w8fhbyvBP6MOxVCVwAMGz+cnCHbCtNtaXb8YTGg4S02wl245KoBISOVGTXrhlpUKF7Yzy5CvBWxx/2AtDU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLOqocCRkZKGjIsiuP2Xtq7axC247lipc6e5lyJ5NLCQ+rW7G2Y
+	fM+gugFS66g+cDBxXwv9O32TnAbS1J7dVZgHTk2TdqdUPAHZeiNoaM7/
+X-Gm-Gg: AYBFou22rbKy+k5SMD35x/ZP4wbpAcHppEJFEwwil9SD0PYAeugqSvY4b/bXL15EKbl
+	P1+l1onCYcW+gyHcnQDrpSmlNkCFH9Y+WtkY9qpKZVLyazkGFwQiGFZO5kSqnGetEOjvC7jtiTr
+	WnsLqWte7RkJkeL6N694R+5RIM3T5fwwhZjxAw5HDj0/4cpMJOGtaxgwgl7fkGU6MuMSbQWbvm4
+	uKiUFtYlZnPYpH7FzUgcIMkBPbMJdNgyvQMUEpkzq5LQedMW//r8/ShnlNWnm3ml5Klq09EomIW
+	a27xmOCyzd2q/d1lvagkgTNafKVjj32HD/86rczX687831Rz1zlLHyQAWRQ9dkALVUv/FqVGWk4
+	xoNznAc5ER+/4slU8o3jM/ImDOzNAmbTahoSvES3PLNGqbyHX0s5ZWdhviCprFBN52ZkdvU3c7m
+	nnOzj9CHuhUFodF7qRV9TnG7m3C/XAAWqPVZzuaZ99eWxlsdPq+kSZTU8P4vcgHlm5rmRERLgoe
+	az4059L8hy2QeGI/jMKjfGevnI4zHD07gqgTDrefww9Q8wejvyXDWGfKciu4RTPIz/x0AvPyhKZ
+	vweQTe+ZBxpq0Nz5OHgoNrCt9rmMCM5xuVr2YpB5vlU2aoBOYrRmSqqDbkypYRspyAVO6wYkeoA
+	0dB0D5LXr3cSNZMstD4A=
+X-Received: by 2002:a5d:5f92:0:b0:48c:4dba:5612 with SMTP id ffacd0b85a97d-48dbad3077cmr8429506f8f.5.1791651062011;
+        Sat, 10 Oct 2026 09:51:02 -0700 (PDT)
+Received: from ?IPV6:2a02:3100:5eef:f0fc:594b:8efc:4396:6984? (dynamic-2a02-3100-5eef-f0fc-594b-8efc-4396-6984.310.pool.telefonica.de. [2a02:3100:5eef:f0fc:594b:8efc:4396:6984])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48dba033a0fsm8412327f8f.14.2026.10.10.09.51.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Oct 2026 09:51:01 -0700 (PDT)
+Message-ID: <4b70af58-559c-4e6f-98fd-3b1da3c01998@gmail.com>
+Date: Sat, 10 Oct 2026 18:51:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261010134214.974565-1-linmag7@gmail.com>
-In-Reply-To: <20261010134214.974565-1-linmag7@gmail.com>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Sat, 10 Oct 2026 18:24:16 +0200
-X-Gm-Features: AclHuK8E16LmFWC8Rwocxl7k5fzsA-InTEpONC_qPKrw8IjRgNUYjmtwqIv4ayQ
-Message-ID: <CA+=Fv5R0fiZuzDLPOZcZt6p1CtSnATELgvns_nKA1qwemKHvWA@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests/seccomp: add Alpha support to seccomp_bpf
-To: richard.henderson@linaro.org, mattst88@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	Kees Cook <kees@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, wad@chromium.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v7 2/4] net: hsr: preserve submission order without a
+ forwarding lock
+To: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
+ shuah@kernel.org, kees@kernel.org, petr.wozniak@gmail.com,
+ qingfang.deng@linux.dev, fmaurer@redhat.com, luka.gejak@linux.dev,
+ bigeasy@linutronix.de, xiaoliang.yang_1@nxp.com, skhawaja@google.com,
+ liuhangbin@gmail.com, stable@vger.kernel.org, sdf.kernel@gmail.com,
+ syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
+References: <20261009201324.17-1-xiexinet@gmail.com>
+ <20261009201324.17-3-xiexinet@gmail.com>
+Content-Language: en-GB
+From: Xin Xie <xiexinet@gmail.com>
+Autocrypt: addr=xiexinet@gmail.com; keydata=
+ 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
+ sNySbH3veZ/55EtlXA==
+In-Reply-To: <20261009201324.17-3-xiexinet@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+One integration note for net-next:
 
-On Sat, Oct 10, 2026 at 3:42=E2=80=AFPM Magnus Lindholm <linmag7@gmail.com>=
- wrote:
->
-> Enable the seccomp BPF selftests on Alpha with a fallback seccomp syscall
-> number and architecture-specific syscall register accessors.
->
-> Use the NT_PRSTATUS register layout rather than struct pt_regs. The
-> register set contains r0-r30 followed by pc and unique. Read and update
-> the syscall number in r1, and set both r0 and the r19/a3 error flag when
-> synthesizing syscall results.
->
-> At syscall entry, r19 still contains the fourth syscall argument, so
-> callers setting a synthetic return value must also set the syscall
-> number to -1 to skip execution.
->
-> Signed-off-by: Magnus Lindholm <linmag7@gmail.com>
-> Reviewed-by: Matt Turner <mattst88@gmail.com>
-> ---
-> Changes in v3:
-> - Drop the /proc/self/syscall availability check and its commit-message
->   paragraph. Alpha selects HAVE_ARCH_TRACEHOOK.
-> - Document that setting r19/a3 at syscall entry requires callers to also
->   set the syscall number to -1.
-> - Add Matt Turner's Reviewed-by after addressing his review comments.
->
-> Changes in v2:
-> - Use the NT_PRSTATUS layout for PTRACE_GETREGSET/PTRACE_SETREGSET.
-> - Set the Alpha return value and error flag together.
-> - Check for /proc/self/syscall at runtime (removed in v3).
->
-> Validation on AlphaServer ES40, GCC 15.2.1, running
-> 7.3.0-rc1-es40-tsunami-v5a+:
-> - Standard v3 and the original baseline binary both report 98 pass,
->   1 fail, 12 skip. The common failure is the 30-second timeout in
->   user_notification_wait_killable_after_reply.
-> - A separate diagnostic build extending only that test's timeout to
->   180 seconds completes it in 34.938 seconds. The full diagnostic run
->   reports 99 pass, 0 fail, 12 skip. No timeout change is in this patch.
->
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
->
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testin=
-g/selftests/seccomp/seccomp_bpf.c
-> index 0622bc2..79e8eb3 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -136,6 +136,8 @@ struct seccomp_data {
->  #  define __NR_seccomp 354
->  # elif defined(__x86_64__)
->  #  define __NR_seccomp 317
-> +# elif defined(__alpha__)
-> +#  define __NR_seccomp 514
->  # elif defined(__arm__)
->  #  define __NR_seccomp 383
->  # elif defined(__aarch64__)
-> @@ -1754,6 +1756,30 @@ TEST_F(TRACE_poke, getpid_runs_normally)
->  # define ARCH_REGS             struct user_regs_struct
->  # define SYSCALL_NUM(_regs)    (_regs).orig_eax
->  # define SYSCALL_RET(_regs)    (_regs).eax
-> +#elif defined(__alpha__)
-> +/* NT_PRSTATUS contains r0-r30, pc and unique, not struct pt_regs. */
-> +struct alpha_regs {
-> +       unsigned long regs[33];
-> +};
-> +
-> +# define ARCH_REGS             struct alpha_regs
-> +/* The kernel keeps the mutable syscall number in r1. */
-> +# define SYSCALL_NUM(_regs)    ((_regs).regs[1])
-> +# define SYSCALL_RET(_regs)    ((_regs).regs[0])
-> +/*
-> + * Alpha returns positive errno in r0 with the r19/a3 error flag set.
-> + * At a syscall-entry stop, r19 is still the fourth syscall argument.
-> + * Callers must also set the syscall number to -1 to skip the syscall
-> + * before replacing r19 with the error flag.
-> + */
-> +# define SYSCALL_RET_SET(_regs, _val)                          \
-> +       do {                                                    \
-> +               struct alpha_regs *__regs =3D &(_regs);           \
-> +               long __ret =3D (_val);                            \
-> +                                                               \
-> +               __regs->regs[0] =3D __ret < 0 ? -__ret : __ret;   \
-> +               __regs->regs[19] =3D __ret < 0;                   \
-> +       } while (0)
->  #elif defined(__arm__)
->  # define ARCH_REGS             struct pt_regs
->  # define SYSCALL_NUM(_regs)    (_regs).ARM_r7
-> --
-> 2.43.0
->
+This series targets net. Contest reports conflicts in three files.
+We handled the differences in those files as follows in our
+net-next integration:
 
-Kees,
-Would you be OK with me taking this patch through my Alpha tree?
-The Alpha kernel support is already upstream.
+- In send_hsr_supervision_frame() and handle_std_frame(), net-next
+  already uses WRITE_ONCE() for hsr->sequence_nr. Remove the old
+  numbering blocks as this patch does, and keep the new consumer-side
+  numbering and WRITE_ONCE() updates. The supervision builder keeps
+  the zero sequence placeholder.
 
-v3 carries Matt's Reviewed-by. On my ES40, it matches the baseline:
-98 passes, 12 skips and one timeout. Extending that timeout gives
-99 passes and 12 skips; that adjustment is not part of the patch.
+- In hsr_fill_info(), net-next already has READ_ONCE() and the updated
+  RCU handling. Omit only this patch's redundant sequence-read hunk
+  and keep the net-next RCU handling unchanged.
 
-Link:
-https://lore.kernel.org/linux-alpha/20261010134214.974565-1-linmag7@gmail.c=
-om/
+This resolution was included in the previously built and reviewed
+integration series based on net-next cfb7793d1bc0. I also confirmed
+that net/hsr is byte-for-byte identical in
+net-next-2026-10-10--00-00, so the same resolution applies to these
+conflicts. I have not rebuilt the series on that snapshot.
 
-Thanks,
-Magnus
+-- 
+Xin
