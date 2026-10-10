@@ -1,134 +1,118 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1223CA48E
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 06:13:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C08D3806D9
+	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 06:15:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791612822; cv=none; b=oL9L7q+pC0VpMdMD/jjBE3t3wp6m+wIrz3lkZGVgbK9mSlfwrgzIEO2G4b6/zbM5vKMccuiZmSrgg82ql0I1xwwvrZOcsRl2ga7OVbgfk9p5WRv8PPYEg5zNLp/iu+bwABviOi1R2GRsGCcz0PEPDuOmgrNeOQxlAzAR1GV/2Qk=
+	t=1791612931; cv=none; b=TkxKc8Bn/3pNT9uBItVcieWvJIldxgDH6QT9HAp4/EFfw4Or0bC4Hwd0C5SCTMTviiEAyh5Tg+rOvMqSV3oseAewBIfqOb2JlcqhT5UsJh3/LYOTEv/ngz1FuptNfj59lQdDAtXab2jsvfRSdvGeuJKWDo2ZoMDotcKWdQEryNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791612822; c=relaxed/simple;
-	bh=3tC0qAT+CVd+RF8Hct750EjxKbKvOcD4v47TlmDBV+w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=He0jgSSjO281fYhYMW0cqjI8gtkMk/h0lMT+n+lHtftJL+qCti5IBtyONPtiIiKa79yqtabUye0zs95j9xGx4ehI5K+SsbrPHADQ8Oa9KLLyLHCK4wXqXYRgz6HCpmV8UUEFsbGXsR9UkwPuqnitdF0hVm6GkFn4CLNISqcMjJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OS+Qzkte; arc=none smtp.client-ip=74.125.82.44
+	s=arc-20240116; t=1791612931; c=relaxed/simple;
+	bh=TwIv1NPnf52ZhmM9XXPm7/XDI2xCes9eFdq058g6a0c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rFr/4qotF8WoZKH069IzL5U35jWEf4VmjcUYh2xRUCTrWc1wZS2ZgoI/r2+hOOS4aBAziD1ayjP4Qu8jyTdjrYMXAu/BVGodRMa7HJShEY5y908TvnrrExJXcfn9ZPBGoe6SAJcCvEtMQWhtCD+o7BuPqnFLkLXS4AidJWwotZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ReOM6zCU; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OS+Qzkte"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-150f88d22aeso1075573c88.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 23:13:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ReOM6zCU"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-35829219da8so305512eec.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2026 23:15:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791612820; x=1792217620; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UQ5e6FUZGJtnIHOPKyZPtYyAv+tm/f3CHm8oVn7shbM=;
-        b=OS+QzkteZco3lw2I5sD5P7eQWlzaymwC+FZd7g/EnAUHjMRSbRfxZVKt0oOYRP0sL6
-         8Nsd5mePni8qOvo3V6bCSaStsXYVoSUdUoogY/FI0wQoosY5EpSEoDU8c3NzGLuF1qjX
-         vcNq+1LBmLEw1HGWExvQiBv1KHRxIkHHAPgGLWgDnKT4zL1+XksO4TDHIJKeaRKY3WQ7
-         Go1zUlP8NyNSsYzVkFJDBzGMOin8fMLC1jwICe9K2ijHX7IA51ibdQDir1GGw/5pWKBN
-         aqNAfshdpDw6bQWGpkj6YLmlMb2pDBzHiVQkU9PCvIJS0ZsA1xrtduch6CXJJ5ih7ean
-         oenw==
+        d=gmail.com; s=20251104; t=1791612929; x=1792217729; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=TwIv1NPnf52ZhmM9XXPm7/XDI2xCes9eFdq058g6a0c=;
+        b=ReOM6zCUr1d/uLU0JtgRsmO4/DWvuivI6csPKx0XZl+y0MTlYovYnyNA3+heFaopnf
+         /u+ggKhLuKr8qNdLfhN/xeebnnRtXPcFIOfvlgBTU8/fsIgLYB8/KMZB8FDXBn1HTYPw
+         SOI6hG35a5aQJr4q1tIlpo9QM7flZ+49+NoWmy1OjCRuAy7JRn2RIWENbHzI0S20nLTn
+         RwIL81H+XoteWNXiBdcnpc9GhkDZ0mnpYq4XVo0aUQOs0w7ntZJoVwFFThKA2tzQ8W2k
+         BmClaZRPWDnfNEZa/Tf/cH4TzeEGn1lpQBxAkX1UyjwJA0XozOs9EJ7D9RfofETW/fvl
+         IV5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791612820; x=1792217620;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1791612929; x=1792217729;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=UQ5e6FUZGJtnIHOPKyZPtYyAv+tm/f3CHm8oVn7shbM=;
-        b=rsd6AtTvrywSqvfmtRR9V3iZNWg1DrxPAq9rR4QSBMAB69VKDxNFcMg2nXNsjxgs+g
-         PBCY9c22Q/4nX8JUSwobybJ045kcBaCXLQzE2d77661QDI76NGoUhs6GWftZmHusHnbg
-         UZ4zj35yHmCP0JlccM2Tafgmt0ij4q164WQy8NhqIe04rs5fLCwvcesPaO+1lVdtpdjL
-         INW6ZvJcxauHsOMH5A4PytveYePYBpJxiSz+pD4X6YVbjfs9sly6jibdw65oI2Wj7hSK
-         toFEnxwaNQ3YufWcIhG15So1FKaOnF/JqvZZYCLV64BLl0QMBP5odc3TOpkl8Vkgg/Ju
-         BVHA==
-X-Forwarded-Encrypted: i=1; AKwUvBwKqg8equdtVnwMvwOwg1w7s+wmME7k0a31Bp2gZDhQypt0S3geVCpuMiBaUzC6UzVQaQqw90Ihph4TxRo8fIU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIZq4Of8LhrF03NoDEf3L48YDDPqafha1rU3RDYP1ilMFbD6A4m
-	2Y4pu2FQSJP+v3AvaypHqL/S7i+XSXcK404s8EgVy4pOopPaY97/zh69
-X-Gm-Gg: AYBFou1EGeyFAJiQIWU2jiv2vMJAHIE5t/MDKZbez23HLQGs/8Sg3A66DRX7r9O1wIR
-	FhB43jH+7EaKJLbu60NtlrP+SoNq3TEPgH6upxKEoEyPknjuZKWUBdmuEBU9hbikgnkV5M3Q+hb
-	wl++cLDfQXvoZ0DZYNeCAS3NpdkWYcy7kvfK8slNb8pCKrBTpVo8UnFKUS3B7j43cl7E4CE0sFu
-	qtrI8E7HDXtO9SPyydDt8bRsRvtsrRFyJAz71jM3iIc1TWHfu+t+y14GEoKfjfRlTOqx0Xp6olQ
-	znlFwWFNAht0z77IGo0IrmRKg0ymRDHSPdrO3VyK2okcf4NEj2y1ykpfz0azkaHgZ1Cilt2CYda
-	U/6s4kLVWtK32im6/v9w2yDpPT91lykMYlsm0+jd78IO1ZBvxihdWfS1zkZrdz02JzOrymN4xg4
-	DrcdPz+ltS3eec0hdSbo4QG0zsR6zP6cDL+X/M2/+BJyJg8mzTQoRUZmreSeEmtGgFLg==
-X-Received: by 2002:a05:701b:450b:20b0:14d:cb67:afc4 with SMTP id a92af1059eb24-16a65356abfmr5200067c88.41.1791612820363;
-        Fri, 09 Oct 2026 23:13:40 -0700 (PDT)
-Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-169a5866477sm10558036c88.22.2026.10.09.23.13.35
+        bh=TwIv1NPnf52ZhmM9XXPm7/XDI2xCes9eFdq058g6a0c=;
+        b=kU2iPVsySiJhSKdTEzy9n7w+38FpUSq8kFkInexK6DN6ILAcOOmJHe0Tou/kiE0tn+
+         THqrTNwOUzp2YqMf4A1lIWXyg38J/zZshI+6hLCKxiNJQebvxAiM3SwWLYZri5Y4C4gC
+         ZD+9pi+bPze4n1M++uawDB6cJ0d2Td6O29593rhl27vuIYiP6PuOh3/OgiwFXQZ85Rok
+         whZFi2LQOv2B4tPS1dnqo4HuIoAZXgvdYN659kx+1qIjDz4y8Sn1j9Gxm2tpQcfPUouq
+         5cQtb63iX3sV/2ATpv9EkwfdeHrJidGcfV59z6wIcL/JoYq59QjQ37XkVVKFGcM4eZI0
+         KqGQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzMdSoAikyj8DGlwP0L6Rgwnmjfj5E+zX6RpWbo3u6+hZEB+0Uq3Z3edBR+mGQKXH5b5AJtTOOh6FgZ9UD1qxI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKkygKIUqveoUwEcQ7PWl1hcTQs2DZBzjEwztjCE2ZI7nAKYDjE
+	n8HpCubNokN2SYVF0j9OQSidtdm30W+mzjl86zFxD4IyAtDueqerrPYC
+X-Gm-Gg: AYBFou0WokBHErDmHQKIlSuYnlp1yuA51H+OR88K4R8TlxeH0TtFMSLzwTAXFd81Mzq
+	IQ7SYL++HYaQts3cmgSpv1YqPHoUZ6ZeiQluJhRTLxdrp3X/7JBXIVzbm91RHGDHGOkXCOVEoa/
+	Kapp8FkNX9xK8lrVhF3SoBNCmWcMsM8kJFR19V7Wyf35xM8/9Z/Dwpu7ZVttBJGO03E3N4NtA7E
+	0pXHvObrdhvDxaQApxyd9ykomke+kaaUgHc8ThvxyOG2Ax0QrKj0BxDZQfge0jV74NcsKSVb2Io
+	Xbd0z0wmAHTsgHf6Cl4E93zoyc3rHKCskyIjS7i2anXdWhhnuIjG2sSwXjHgODgFKW7/2qsjKhI
+	TBWQzmziCU35NzZ/nCV9lbRVIySTWlN4rgyMEkFXg6gp4kSZFlIiQji5LgxcrMEWgXJp4nEY/ju
+	pS1ii0/dNTBr/BiBW4gwUUu8gn+hHNgh1Ppi/DWS9SfS3FdVYODRRH0efpxFc+3w==
+X-Received: by 2002:a05:701b:2405:b0:155:734:9cc9 with SMTP id a92af1059eb24-16a131cf188mr4972254c88.16.1791612929280;
+        Fri, 09 Oct 2026 23:15:29 -0700 (PDT)
+Received: from ubuntu.. ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cacb5e9sm12663786eec.20.2026.10.09.23.15.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 23:13:40 -0700 (PDT)
+        Fri, 09 Oct 2026 23:15:28 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Sat, 10 Oct 2026 14:13:20 +0800
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Wait for the struct_ops map
- to be freed in assoc_in_timer
+To: bot+bpf-ci@kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Amery Hung <ameryhung@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>
+Cc: martin.lau@kernel.org,
+	mason@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: Wait for the struct_ops map to be freed in assoc_in_timer
+Date: Sat, 10 Oct 2026 14:15:21 +0800
+Message-ID: <20261010061521.390089-1-odys.yuan@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <7c1af496987bd30766e332358e26b3e1256fb0cdc72e2f0412ef0e116b0c5223@mail.kernel.org>
+References: <20261009-selftests-bpf-struct-ops-assoc-timer-v1-1-9a97a9b3d1db@gmail.com> <7c1af496987bd30766e332358e26b3e1256fb0cdc72e2f0412ef0e116b0c5223@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261010-selftests-bpf-struct-ops-assoc-timer-v2-3-d7a43896dbf1@gmail.com>
-References: <20261010-selftests-bpf-struct-ops-assoc-timer-v2-0-d7a43896dbf1@gmail.com>
-In-Reply-To: <20261010-selftests-bpf-struct-ops-assoc-timer-v2-0-d7a43896dbf1@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-st_ops_assoc_in_timer_no_uref runs .test_1, which starts a timer to
-call it again 500ms later, drops every reference to the struct_ops map,
-and expects the timer callback to find no struct_ops associated with
-its program anymore.
+On Fri, Oct 9, 2026 at 02:36 AM bot+bpf-ci@kernel.org wrote:
+> Should the late dissociation be fixed in bpf_struct_ops_map_free() instead
+> of only making the test wait longer, for example with a grace period after
+> bpf_struct_ops_map_dissoc_progs() or by dissociating before the call_rcu()?
+>
+> If the flakiness started with 5db69b0fbdc8, is the Fixes: tag pointing at
+> the right commit?
 
-The association goes away only when the map is freed, which happens in
-a work item after an RCU grace period. With other tests running in
-parallel, that can take longer than 500ms, and the callback still
-reaches the struct_ops and gets MAP_MAGIC instead of -1.
+Yes to both. With the window widened, a timer callback of the struct_ops
+prog returns into the freed trampoline and the kernel hits an int3 Oops,
+on the first run.
 
-Have the timer callback restart the timer until the map is gone, as it
-does for st_ops_assoc_in_timer_free. Calling the struct_ops through the
-association until then is safe, as the map is freed only after a grace
-period that follows clearing the association.
+v2 [1] frees the map after a grace period that follows clearing the
+association, since dissociating before the call_rcu() would take a mutex
+where bpf_map_put() may run in softirq. It adds a test that catches the
+map being freed under a running .test_1, and keeps the test fix of v1
+with Fixes pointing at 5db69b0fbdc8.
 
-st_ops_assoc_in_timer_no_uref run 100 times with test_progs -j32 running
-in the background, on a KASAN kernel with the fix, x86_64 VM with 32
-vCPUs, before and after this patch:
+[1] https://lore.kernel.org/r/20261010-selftests-bpf-struct-ops-assoc-timer-v2-0-d7a43896dbf1@gmail.com
 
-              before                       after
-  outcome     2 of 100 failed (MAP_MAGIC)  100 of 100 passed
-
-Fixes: 5db69b0fbdc8 ("bpf: Make struct_ops tasks_rcu grace period optional")
-Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-index 987117091c676..10fd294a0af3c 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-@@ -184,7 +184,7 @@ static void run_st_ops_assoc_in_timer_no_uref(int timer_ns, int wait_map_free,
- 
- static void test_st_ops_assoc_in_timer_no_uref(void)
- {
--	run_st_ops_assoc_in_timer_no_uref(500000000, 0, 0);
-+	run_st_ops_assoc_in_timer_no_uref(500000000, 1, 0);
- }
- 
- /*
-
--- 
-2.43.0
-
+Thanks,
+Qiliang
