@@ -1,79 +1,79 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094C13A8FE1
-	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 23:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A4F3546E4
+	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 23:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791762578; cv=pass; b=HN3FlcfykhwMY1osz2ISadFcIYqzT00I52mpk6HC3TaoxULeFjX7exFchA7zGNTqZ3NMbPgrQMgh1GSzG27taqgXMQQbvO7QQOuBerC5egKAa+SvA35QChfApgYtGUJdgaPnaQvXEDzP1/DzbA4hyqkWgNbtFDRIRee1f2Sa+AM=
+	t=1791762623; cv=pass; b=ryMOSRCiJFDCLiZg6jeCPlCd+xab5dt/OuVTixcPIGgD9GnGBbvoP2M/KiH7ICnTKxR5Y5cl+tRwoLoSGi47HryV0NM0v28ocOB90DPC4B4njt8UBrDnEQ1mv2VbJQOO0YYv1gPkdUUbZnTtUAAiNVkAZzzKoHI4SnX5nrvPnqk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791762578; c=relaxed/simple;
-	bh=HrfKmn9qs6fAPDd1wR5ofdTOe/bVER6zo8Nme2pwZT4=;
+	s=arc-20240116; t=1791762623; c=relaxed/simple;
+	bh=/VSk4aRzpW/Ssz5gd6omr3QOx2ETjVACkmFQtXQwvb0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YVp1eiZS5BEg9Tk0oSO8HurHLPqohrmfqrjnMD/A/UQ7tCIY2NdDRXyI1LsjZmKptCon7YwjQbftOtIyHruOggF5J+x3jjM3mcad63j7LfHhX68HbywMnrIsj+/G1jpXn9pRrY2L0Ae0s5J0sOatjMDBtBiAKIAfffOGh0XsXuo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=Q5zAirmr; arc=pass smtp.client-ip=209.85.210.173
+	 To:Cc:Content-Type; b=PofYOQsrClFMrZAgLBMQoxPy+NdykCUA0T+B8p/uJxSqynoBoYbK858f9oa9jM9DSuO55EFtMu4fJebAK/8CyhMnv3kvOFmimqz5RmbYt+JqI+OXJrbYLmuBM70Tx/xMgvSAW64sTK4unH6xwlVKbVzcxFl0rCPMTtXjyA8hYp0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=TCwU+p+x; arc=pass smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="Q5zAirmr"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-88c72646f03so563886b3a.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 16:49:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791762576; cv=none;
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="TCwU+p+x"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-88cfa501c5cso318097b3a.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 16:50:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791762621; cv=none;
         d=google.com; s=arc-20260327;
-        b=IqHQJIV7yAa/daB1fe+YNsnBeJMmhd0z7OdU6O7+kr2P7iJrjQFO5XPHuMQ/r7qWhc
-         pRKOWxhherpPOYm1yvMrp2hcYNgIQTI8DYy2et6/7Cs+jLegcwI1Ni8U3omz54eUUm9O
-         lT+iul0NHfB9cirmBdgHe+6DU80vEFjJbsQ0JZz/PVe0DDs+DrwB8KU6/QsK58Ci3hMv
-         HWHVv/ibtsXiAtfdaw9MwZG7ArTlY7FRzR4gFGqNUVgcEYREfoFAsaIr3cnW5NheQeEJ
-         YPLM36FmTFPfm9vWuNv/yCjpHI00mFt56Or4cnlcF+5Pkk5TlUi1e8GQEnbD1UnItmuw
-         QO7Q==
+        b=CyWSYkmadwtXX6b5AMcwinaM5rA59kztidFyM8E5KeBTw0tXoNIH8iaS+FbJRlEqFc
+         I9ztLUcj+k7hqA7bVhaZL370olLk9gONeM5vw9U6uF/vuL6vs72MSWYpVGq0j8iUG6nU
+         8bJgQZYqgEk3+2UL2juoyLvqPxiiM3khoyFEmg54qbiBCyYTn66KScFqsVtGG58nayIM
+         H2JoLSOfTlHGtIxSu1zi81aIx+bU+PNU7vEji14bAqbXcA9956d85Xokrqi+xoJB3q5u
+         y8AqG+MiyRHBqN7bhe83kgLIgqZKmNiGqPVqNoOToYta/urwS3qcR/hG2jf52g2Hx6EJ
+         fvLw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=xxVsFCn2koVdZeQBwo5grIeecj1lz6W9qtXamdCYuig=;
-        fh=DYcLvLxqNTFs1n22Gx7kEcqHZ+X6aFkrnWfYscdE20c=;
-        b=mu5iBayG48j1dThf5hKliXPAsqtH4HXbsZy2//TpPix3GTZw3duXk6SQGpgBWiWllf
-         i6BHZaMb5ckeRMUwVrt5ElOT9XMZVowmxHTmeVJqxgkUN9SeiMJiV6pKx86ASaRF7l57
-         iiuyhMOt/JyM071eISIOO1Z2/n8KCMMTYgWYyXf7lK/eJ/uhnczFSOKVMVlV/9ztP/Lg
-         6UPp3zJCECOiGmpFmk2EN0PB0w/ZWbSgPQVnlP9spbEw96PKb3dSp+OEbsLdMqkEhe2s
-         2GDsh5Z867NKbDpx9V5g+Vzum48ERkBaYfW8pNoDbEgFfiD7RpU7B5pQ6vzgriucGtoW
-         bEAA==;
+        bh=u4PqpVrpatImFkzFg+aGm6oTuO6TBHSKdUouwf1g6s0=;
+        fh=VV+afZfd75abcLn/ue6z3pIur5qO5frYRP3Z/HCCaqE=;
+        b=mJR7t1alTA5Ce6+eq8oSrKCZGho27x3xBzWnORK6zFisqonBjofbDKDXKc4OqaGIIP
+         kEgJuWiY+fu7TnrePB5wJpxvA72nbl/H3VHSSOT3Ny6ErMe8uu5mvZZzkVO8/ierWrS4
+         awE+gFYpL1ykdqliGVLE+RChnggZbilV4Rf74fo0nDcjx+JgW6xuTgkEC1wdwWLcYD2b
+         0ObeqPRjP2t4ixKq09r4VCQx+nJzSq1Nnni3gyX1nLEAcnVYT8bhBpRSqiaxeKtp7Qsm
+         d3Md/9miLa3N3HuJvFgSyWKaN8DMt+dKOSwb/t8rgo2ITqu8ZacDMbhS1TrCunEI4rUH
+         2FYA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1791762576; x=1792367376; darn=vger.kernel.org;
+        d=mojatatu.com; s=google; t=1791762621; x=1792367421; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=xxVsFCn2koVdZeQBwo5grIeecj1lz6W9qtXamdCYuig=;
-        b=Q5zAirmr+gXzC0ETmZMqiyZVkzoc8f23J5VyDIbk6pam+NKhMqUp7IEH7n4xhPywwm
-         BcKTLkGmczehSN09PkvFdxii/foh5U9U7E2EmWzjwK+/Neoe8SUbnqRec4u8X26Sxl09
-         xfKjruH8u0gD4CurZ2dcL6AhStsMVWKpiuw0o=
+        bh=u4PqpVrpatImFkzFg+aGm6oTuO6TBHSKdUouwf1g6s0=;
+        b=TCwU+p+xvjRy+mUwrVvwIlIHbhL+xsRm33ofEcOzUhPfQ447YQHFo5WAXcCBr+5Uzv
+         Nbl0g3McLQqVGt9KmhJIW75zWrYEr6HWD/davtHDki3iG7WhYrwozKyx/hJBEBIzklOa
+         mKH3nJd/j3+c8SdKDwUARpAbu3y05p2LDRHsU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791762576; x=1792367376;
+        d=1e100.net; s=20260707; t=1791762621; x=1792367421;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xxVsFCn2koVdZeQBwo5grIeecj1lz6W9qtXamdCYuig=;
-        b=2vSg47HLF+BsaGdm4dEtFFFQjQHTeIeVw9XOzzLHX+WxfLunOBMz+6M+klDJqJApt9
-         1i4BKfqKRw5PraBktkuhwmG5Q2EcA7g3tfE+8qdPdATnu1bBg4XV7z2Z2L7ntMjmlEfe
-         pOguwFY9B25lyfjFMjDUtx8WQd5shvhmlB/Wx+gf4GhdfTFBQl7eQ1pG3s/SWRrAAlQT
-         jaaiWC/QWitQYdLh7xFd+eGZEXDN87OWSwNFbjTieB5Ja9t0Ybfy2jLmcB8QQIW0JXZU
-         6Wr4G6DyEs1QXUq/33EeqS/0AtGlJY5oR3gGypOpnouHphAw8j563CTTWX4IaXSO1/wi
-         uAsg==
-X-Forwarded-Encrypted: i=1; AKwUvBzkzBc9CxiaWkYAyQ3craignuVXjL9IFwDZ7SHvRW5M75wObxiQOJ/9rrV7NK5yB+bSQm5FsT3gVlcYHkIP82g=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLSV8S92vniMQu8SGVUJ+9idwOVIv/1c+NmLzesAPud79rE1FpR
-	xgM5tSf4FoVhdfX0PPFcqfLi8zht5QCbLw6qM8ncvB3Fq9F/RCzoTa9ymMw3+v4IAuTbiiOQ5Uf
-	r6UdtwNGFK76ymMH7Fg5WypnDlZdYyZed/zM2ZdLw
-X-Gm-Gg: AYBFou1Z132yfeKX2L052Kx9opkeAWTt5TNKwE++1Eza3iFUxjPvsbqaepXQT3tvprn
-	s44/3PAf7/vh59zH81B2EaslMFohyJ43ql7S71QwuupXsS/3rbcvxGF+POYWYE6UUoVF2PmsvAp
-	TyT3idJkhfyBkKUZG8oO2kDRfEkLapw8RZXEplVOpgTaPpaLV1s0jcDUL/GRPfVDbHKTil6bX0e
-	aq2zhQENFiA0dsqzjcr+4UmvEsjp5wyKSNZNh2DoXwW4e/9aSmSIfvQwPstF7qB6x1BZmSTK22g
-	YGiARDp7DAqG+thDNmhqTr/LqJbDslrplupznfIx8+T+h0T5TBdlUxt5diozUHqJ8w2BWXseq38
-	fmzxA2DKFUHHrAEgEn4MvwdZBQ4Zcyj0abw==
-X-Received: by 2002:a05:6a00:9284:b0:890:e1ff:3bac with SMTP id
- d2e1a72fcca58-897c3ef925emr6357823b3a.8.1791762576250; Sun, 11 Oct 2026
- 16:49:36 -0700 (PDT)
+        bh=u4PqpVrpatImFkzFg+aGm6oTuO6TBHSKdUouwf1g6s0=;
+        b=N76zyLgFuQorRQz2gh4PduG6PDgV7/LgrpsOkWKgyYtWUGPmPS9FMGZx5N4yLSCdiy
+         luv3+qDNyXo7Ej8tnEcGzKbKFCSlLhyvn73+dPv1OcBl96YeWsjON1PP845NNGwbeFFs
+         eXwRNZ013LSLCc9x4YCK/N0e5JJPZJOjGcd05+CzY3OWlUmjMqCcT0K717YLF+BGGO88
+         sEHKZsuRTP5zVn0cY3Z3oTjpITGN/nEVpicrzgdVzYSPdOGhiw/wuBCSg7wcKlE31Dxe
+         E8W6nkrxmO19heSNxAMbe1N9dlZFKPKndLocOBhNleW7fUDz7h3fsDFYcN7CyESUbRH1
+         3JAw==
+X-Forwarded-Encrypted: i=1; AKwUvBxWgis4cYz0577F7tPTW1t+pe07rPjFmH0GdkPonzVWqOV3lwmTnCrVDV/E85TSXHxh3Zgyztuk9vZfDkmvz/0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJc8mAQ49py95hm42VW+AEFuGlmLXOiLTRGMIbQmU87ICTNTaU7
+	yzUv12URfgGXAZZhw1mbNTBfEWKKpS8Bxbyk2dBwQhrbXaCf3DhvvfLtuQQYw2rTDkQkRRRnrbs
+	mbaq3xQe858s8dG7bqTzHslnSZJM7j8uz/eOrM0pP
+X-Gm-Gg: AYBFou35BFKdT3QDYRx8W8dfMTq4vj2yRjnDbXM7W29AkZZDx1XcVMKoSzlsQ6YF4jz
+	MALDnfmNJjFFJXes8+6vPDmPFCi8ynnLLaYqd9dtZmiD8MhAPUMoxuIDStBEfudO5c0I+ib68iM
+	XsYW85tsxLnORMShdG1fqHkg2v3bUjBWsfYDYX5knkVGqydttWNG8cSKSfeoHQ3SMnSfyhH0hkZ
+	v3bYtg+9Shm0ozyj1gIIJxEpPdjoamVtzziUjQP8GZFZJ3s8drxs2PBsMT6NFUii4sLRx+mZmok
+	fQscYhiMbD5M0wvcitTSrfkv/nJpkHk1n62msw8skZCS2mGs5Thu5pHmvhI1npdknybP7n2hgCk
+	YlKXZV/r5zaV+o8FiGdhoUAwj0ubZ+/8n11oaxBVgtNo2
+X-Received: by 2002:a05:6a00:3404:b0:886:15e3:df99 with SMTP id
+ d2e1a72fcca58-897c6539615mr7207916b3a.17.1791762621027; Sun, 11 Oct 2026
+ 16:50:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,9 +83,9 @@ MIME-Version: 1.0
 References: <QDISC-PYC7.v2.20261010165947-4@mojatatu.com> <179175260755.434549.1147971569759277746@kernel.org>
 In-Reply-To: <179175260755.434549.1147971569759277746@kernel.org>
 From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Sun, 11 Oct 2026 19:49:24 -0400
-X-Gm-Features: AclHuK8d5drO7j5c0DGAq8NuaCDnyn2xqFpgj8CthGJvTQntklzqnOT6cxSg2Cc
-Message-ID: <CAM0EoMk2X9JdHUop7yh0s6jphZXF+LJFZ+Fnfy6LHxmiLFVpoQ@mail.gmail.com>
+Date: Sun, 11 Oct 2026 19:50:09 -0400
+X-Gm-Features: AclHuK9B1zchKndOELbR-p8m58k1P0GSs3loNtgJNnwoB0tm_ovetI9ZvXiCm3o
+Message-ID: <CAM0EoMmUzCnH92G22XMpqudQeNx-Bqm2QLHds-oUSK2CHYafnA@mail.gmail.com>
 Subject: Re: [PATCH net v2 3/3] selftests: net: exercise dev-bound cls_bpf on
  shared blocks
 To: netdev-bot+sashiko@kernel.org
@@ -130,7 +130,6 @@ sending an update to this patch.
 
 cheers,
 jamal
-
 > --
 >
 > selftests: net: exercise dev-bound cls_bpf on shared blocks
