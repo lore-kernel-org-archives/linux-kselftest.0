@@ -1,64 +1,66 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A5F36B932
-	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 05:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D5422A7F6
+	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 05:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791695992; cv=none; b=cms6Vi3nOGna2dp3O0URdt3LMXIyq0zxK2ICtKDnbZI2vUol5hhD7Ib3eIM+xAPDFVSpR2saaoUdOij92FH5mg/9LDRNOzzA6j2DRBiDL4Mcm39YUCsvSAhDdK/ON1hYrLiwOtoZhTCqkfS8acTk+ac/EMHjIDZba+KVTU/lVS4=
+	t=1791695996; cv=none; b=UPsGhdr+UMHmVCZ3Oui1Tbp2bK6gOBw1WJdF8upSG0S+jJ9+MWEpSbIjAT713q0MeNPC1w05iozxCSJ+U2JdaBrc8//NAcXb7bbUhi09h503WSJ5Te5Si2FgNU4cw41dU16XwzrLBBxwyt1/9YV7JU4zP4/KcNrR5hzJbGhOBg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791695992; c=relaxed/simple;
-	bh=3EC2AKJPqO2dWNFkwtLYRoUWCIHRMEUtDSUDwKh+jrY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fsSKZ7jlHVwjZNbFOzOAKaZvk0x0Z2TSIbm8tRQtVnQE2ZR0DUy8YQrDJ6syWA29KCWER5Pc0xD4wFK5D5QehMztlSV9/Fv8RqO88B93W5q6XCRz5CSC4GmqkftLV9nHTwtQB4RAf4WA78DfNqc27By9fCdO+XDmlphRzJqtxoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N/T6cEV1; arc=none smtp.client-ip=74.125.82.177
+	s=arc-20240116; t=1791695996; c=relaxed/simple;
+	bh=tG89sWYyAbOnaq6ywWnvzI8gk/YxHYUmNEMgUrfR6BM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FxN+8xbG9hnHWS8p1jGwTaz+XITXN8BQmuKFYXojgy5ts3hNBFH4LWYmduKmF1vs7BI5YPq+n43adQLZYQHsoTOonL8u8rVLrqLE2m/9jl/iuGokgEMSihmo0PnQWKIvtaBubO5YTQv/gPx51KN2rTuSqxSVDFn/KDl7DZI1u0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UFFk2P7J; arc=none smtp.client-ip=74.125.82.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N/T6cEV1"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-35829219da8so841003eec.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 22:19:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UFFk2P7J"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-15168a20b47so594836c88.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 22:19:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791695990; x=1792300790; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Q6Tgx4xiKNqVnyjDiNrZlwqV4pQ45w0gqpDsmg6e6t4=;
-        b=N/T6cEV1Y2nwwjdfwfga+8R2nHOItwqFfy6ccxnHavMaRmimqztzDStdh7ZgKlQtX0
-         sptzAC/mBvfWR3I77QhFg8yEhJbVAEiRtclkV/nJzbK95dah0F+celA960lmSKuO5IN1
-         x5Xwz45JNjyMhRf6aNFJEnG4q6K1DVUuaSrcdKzkZR+jSIyhJtbeOxPX2LXhy4e+ISAm
-         RzjvOUKnBv5Fg0FstLm2SeP1TWA2RZsD3nKgLMyMFbwjf5GFqaYHQlGpY34Hs4G4krhk
-         eapuLt59jAMxL1ojgR2sjiW0jBlZ/koOijWIH3C8ZaI/mMKpQQfz6zgdR+HZBXR9p/Fr
-         ZeBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791695990; x=1792300790;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1791695994; x=1792300794; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Q6Tgx4xiKNqVnyjDiNrZlwqV4pQ45w0gqpDsmg6e6t4=;
-        b=rI3zm9IWbp4jk35X6aZ/v/PsCwFyEENH2R3M7v8cP0JysenoAtGE41yenAGO4BWOU3
-         IN+TW1NYVJ4A+XJ2ammjlUQumNpGjkha29ntFZJOy5wd0ZpJ3kV+D/RDDj0vQyaCTvxV
-         xrFscXhrGYc3eAKfRatajbJVADKdaV6RpswF4FU+uuxV9Foal7Lmf1RxcCFzq2f/9KS4
-         Y5ZS392ljKZ3lH7JrkZiIKM9PD1rXbikXJvaK1Cc+/Vjsgp+nm1maiv2SNKnI96NuGZq
-         5OBH8i3c40Im/LFmBL2lY9s+aWKhoOvUl+CMEiFTU/fcT7j4yhQKOyASkghDzCYUjpOk
-         EyZA==
-X-Forwarded-Encrypted: i=1; AKwUvBxdAVFJHfcDs2XZUMC09zgfZHpxuEyAC6lpWXHi2ylk/qU53I1ze7wf/gt4x3dAL5pPSje3+eKP6mODxjriYUA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJAXOKS1gjM04j6i6AH+O6qXmut6utF5qynjOvLuym8TnQKtjJH
-	c6L78rn7TpAFChgfsPWNdPOEHDop6wOHyi5+ubJ3tq/1Zo4JtUyk2XRq
-X-Gm-Gg: AYBFou29j46+E6ANMN80c2ytkpzXk69/RFEkRkKJr0jzMuiRqkPSsGcbvUXRylDE8TR
-	S+vWgW56pP1QhVClPtAZQ9U1dyZP+LCwzZZgs7ZG/MdifSKzVLQcFKXEiNIPDCf6ivTSALaWUQ0
-	LkbR0ZfpOG3c3qGpIwN+rZxGKrHbqdMCVtdowsIIofg31TfylGWOQkAqHI8Qn935/QMF6W9EFl7
-	Cg1vkeyg7A/jQNCCtg/Ub+YjCcHwrTJeYk2zdPPox2FqpwjXp0nlNYxz27Iv3FejWcqibFRqNuV
-	Scfoc1dlkpFcTNGtoWTgns4TopQsWQ/B1llGtZ5d23NCUv1OyOjhpCZ56wd8T023h+fB+FKW4vT
-	dwzlgjbCnLgfQSA0r9f2UFtap6YgpSI+vn7rIge2lk+e4GaSRUdQfYbpt/CGViKF9U+Ey+JN4EJ
-	/gS70Z+5REqbyJf4VeHwj3sijdPSDcBMmKIglxlIlM6Au2C3H4D+lLJm418P5xgu6xuW1ebYMPE
-	vKm/a1uLLrVrMCjhpM3DOOOg9Tx6iIvOXFhITPcOLvOeGcAqIXBOkBiAZsNly+yaVF0JaXr6x58
-	PRgh1+3RuYaiDdmMCaxOAGRShZrQS1oH9qbAbT+lgu8ImeFgVxJLtuppeqDkqhPPThx7jTW8T1F
-	xZS0lfOa+aeh/SzKHg7OlsTMeyiVS1ptZ8b95leAVoszAy5eHmNoCme4=
-X-Received: by 2002:a05:7022:b048:20b0:158:b944:b15 with SMTP id a92af1059eb24-16a5ec48b20mr8682593c88.22.1791695989665;
-        Sat, 10 Oct 2026 22:19:49 -0700 (PDT)
+        bh=rjWHSnWSNtYL8KmLIAR/JgMym2NLB8gm5KijyHaQy+o=;
+        b=UFFk2P7JVP1IOcxUlYKw8b2Lg89vGQL5oU0gdSgpyRshFee0foEZzfTPwAYWxvN6S0
+         dedAF3qLWl5NoNqusgyHTNiu3VlyAi14VlGSW9uaTu0Zqt4B+hP8HjKKOUVsbXx8YcYW
+         YIpqbP58QEaurW7PqL3ihRlABWzpEu6o3A0CdEU0xgfV+30FZOYTYikhFOVAGb9fAi8H
+         j8qpYQ8/PQ6bP7tlcHSOe3jBf8ob/aSn2WbPfHWlAmGhNE0TKJNXIraZKilvI31c3mg3
+         kUbJX5rFHmnGIIRdi2Y2s9NdRyaiCqxl7RNOIJAZvUoyrlzr9NVhsLoxLjgFwB+SQmCj
+         OK5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791695994; x=1792300794;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rjWHSnWSNtYL8KmLIAR/JgMym2NLB8gm5KijyHaQy+o=;
+        b=HPNDmj9eyLEF0X4ZM3Eo+GKbeh3ExGVZntOsVwVKjVcqtvXeZd0QfqVtNLFefmgdSG
+         7ErXMMDCexXXXScdXz+/sGs3rxUNlniE+/fsRjfwtQdPFJKxL6BfK+zw7lJI/VgutyQ2
+         qHsy2HJXU9FB2K5vHYs/zakcgcSBZ6KkKt4DFPD4qK/xZ/aEOqsv12Z4etIRLB4XqD5f
+         Ltz5JicUjJden0RIkKZvhAo/qPQqx3F2Y5g43ERWQDObiGNkfGrvxUR85QEjnRl8ZwHf
+         mpdpUzVFVYSSvD6okHD8YFtSDz815kp9ndZoaoaTD8b+vmv+L0LtbwweUTONwUbPkd+K
+         hMnQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwL9ipXKI/rkO8zZ5p4pIqQhH05XSy0xLM3G5c0/09pXNZ/UtFUJ6X6Z2/W5hr4w7EOU/DSay8/hZVQgiuUdfU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI4UfEVZAGCIzaAHTu7wuD2eYw5AGmTX39DwK67hxRwxGXdR8u/
+	02E66hXy9K5bzQGgdRpvOvxrajBIjiUYPeKd5zZXNd7IsEss848QbgZa
+X-Gm-Gg: AYBFou2lF6fRMvt43ic2BXfwKZbhJ0cA5wT0kIuu4Xlk5PhoX+TdD1Z5CsIGHEIdRd+
+	9Sm4a8ehtcw/kJq7Hru0rpKoQFkGc2xZKPfERsARn0wDxaKWNUokzRlV0tbGesV3ZxPlKCVROhU
+	au74ZmfVfey6gokC7s0WO6OTYHsXbK5O8ooj85T9KG+CWlwO2SrTtcmImeiiwcwISkGUdHo4F8Z
+	/eGBXdg5IoJ2o/1H4BeCyIFDhxQUwbe9LuFIlhVfchi5feSEcoQQjBErtfGHtVjAP3QyRwaaT0b
+	A8+J+HLQJYOyu0AuXLYpHCY5+c4mtbTHrzUKQqltRqGJZnsShY1WAikPVuEMilBhZUG4NAne5mQ
+	fbV3Ja5xnMDeOHtGzXcZu2u8UJyKFW1QscUarEyh4bDJ4z1xJteQ8djBkHk89OsyZImZfW3steV
+	5QtVywYKCVazmwBPlQqp+oTYeL9y0aa3IQZAAaUhRftFKOKY1Mmhvy9sFyuxFMuaJjBOHyILptW
+	y80dVasD11Xrpi+Om3SaWaWhkaroM30zAMdlJd2R06l1DPO5mZe/5x4qZoSKl/CARzRcegSEhq4
+	Ztz0+ki1k/bT0d9GrP1XDWwH2gyVJb44oLSikrJLtUI26yE/2KJdBkHRfzGDR9ycNX+bYmHQVSK
+	a+/J4zXWZaBvRxt2eLCJsGxmExRWaU9JyWOnXU7DXBIdXeVmEGpGeYHk=
+X-Received: by 2002:a05:7022:b058:20b0:166:37d2:3b72 with SMTP id a92af1059eb24-16a5fc9170cmr8838969c88.27.1791695993887;
+        Sat, 10 Oct 2026 22:19:53 -0700 (PDT)
 Received: from FT6N242TWK ([223.181.119.248])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-169a1becf08sm20673698c88.5.2026.10.10.22.19.45
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-169a1becf08sm20673698c88.5.2026.10.10.22.19.50
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 10 Oct 2026 22:19:49 -0700 (PDT)
+        Sat, 10 Oct 2026 22:19:53 -0700 (PDT)
 From: Shashank Mohan Jain <jain.sm@gmail.com>
 To: Thomas Gleixner <tglx@kernel.org>,
 	John Stultz <jstultz@google.com>,
@@ -70,10 +72,12 @@ Cc: Stephen Boyd <sboyd@kernel.org>,
 	Todd Poynor <toddpoynor@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 0/3] timers: Report disarmed alarm timerfds and SIGEV_NONE timers as disarmed
-Date: Sun, 11 Oct 2026 10:49:40 +0530
-Message-ID: <20261011051943.60520-1-jain.sm@gmail.com>
+Subject: [PATCH 1/3] alarmtimer: Reset the expiry time in alarm_init()
+Date: Sun, 11 Oct 2026 10:49:41 +0530
+Message-ID: <20261011051943.60520-2-jain.sm@gmail.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20261011051943.60520-1-jain.sm@gmail.com>
+References: <20261011051943.60520-1-jain.sm@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,53 +86,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Two interfaces keep reporting the remaining time of the previous
-setting after a timer was disarmed with a zero it_value, until the old
-expiry time has passed:
+timerfd_gettime() on a CLOCK_REALTIME_ALARM or CLOCK_BOOTTIME_ALARM
+timerfd keeps reporting the remaining time of the previous setting
+after the timer has been disarmed:
 
- - timerfd_gettime() for timerfds on CLOCK_REALTIME_ALARM and
-   CLOCK_BOOTTIME_ALARM (patch 1). The timerfds on the hrtimer based
-   clocks report zero.
+	struct itimerspec arm = { .it_value.tv_sec = 100 };
+	struct itimerspec disarm = { }, cur;
 
- - timer_gettime() for SIGEV_NONE timers on CLOCK_MONOTONIC,
-   CLOCK_BOOTTIME, CLOCK_REALTIME and the alarm clocks (patch 2).
-   Timers with signal delivery and the CPU time clocks report zero.
+	fd = timerfd_create(CLOCK_BOOTTIME_ALARM, 0);
+	timerfd_settime(fd, 0, &arm, NULL);
+	timerfd_settime(fd, 0, &disarm, NULL);
+	timerfd_gettime(fd, &cur);
 
-In both cases the stale expiry time of a timer which is not queued is
-used to compute the remaining time. Patch 1 resets it in alarm_init(),
-patch 2 moves it into the past when a SIGEV_NONE timer is disarmed.
-Patch 3 adds a test for the second case to the posix_timers selftest.
+leaves 99.99... seconds in cur.it_value, and the value counts down
+until the old expiry time has passed. The same value is returned as
+old_value by the next timerfd_settime() and shown as it_value in
+/proc/<pid>/fdinfo/<fd>. A zero it_value is how timerfd_gettime()
+tells user space that a timer is disarmed, and the timerfds on the
+hrtimer based clocks report zero here.
 
-The first problem was found by reading fs/timerfd.c, the second one
-when the test program for the first was extended to POSIX timers.
-Both are old: the first exists since timerfd got alarm clock support,
-the second is also there in a v6.8 based distribution kernel.
+timerfd_setup() initializes the timer again on every
+timerfd_settime(). For the hrtimer based clocks hrtimer_setup() clears
+the expiry time, so timerfd_get_remaining() finds an expiry time in
+the past for a disarmed timer and returns 0. alarm_init() does not
+touch alarm->node.expires, timerqueue_init() only clears the rbtree
+node, and alarm_expires_remaining() computes the remaining time from
+the expiry time of the previous setting.
 
-Patch 2 uses the timer_arm() callback with an expiry time of 0 to
-reset the stored expiry time, because that needs no new callback. If
-a dedicated callback or a different place is preferred, I can redo it
-that way.
+Reset the expiry time in alarm_init(), like hrtimer_setup() does for
+a hrtimer. The other callers of alarm_init() start the alarm, which
+sets the expiry time, before anything reads it.
 
-Tested in qemu (x86_64) on top of mainline a5ebb76233b7 (v7.3-rc6+)
-with a program which runs the arm/disarm/gettime sequence on all five
-clocks for timerfd and for POSIX timers with SIGEV_SIGNAL and
-SIGEV_NONE: 9 wrong results without the series, none with it. The
-posix_timers selftest with patch 3 fails the new CLOCK_MONOTONIC test
-without patch 2 and passes all 21 tests with it. The patches also
-apply to next-20261009.
+Tested in qemu with a program doing the above for both alarm clocks
+(the VM has an RTC, which timerfd does not need for these clocks):
+it_value, old_value and fdinfo are zero after the disarm with this
+change.
 
-Shashank Mohan Jain (3):
-  alarmtimer: Reset the expiry time in alarm_init()
-  posix-timers: Report a disarmed SIGEV_NONE timer as disarmed
-  selftests/timers: Test timer_gettime() on a disarmed SIGEV_NONE timer
+Fixes: 11ffa9d6065f ("timerfd: Add alarm timers")
+Assisted-by: LLM
+Signed-off-by: Shashank Mohan Jain <jain.sm@gmail.com>
+---
+Prepared with Claude Code (Anthropic), model Claude Opus 5.5
+(claude-opus-5-5).
 
- kernel/time/alarmtimer.c                      |  1 +
- kernel/time/posix-timers.c                    | 12 +++++-
- tools/testing/selftests/timers/posix_timers.c | 38 ++++++++++++++++++-
- 3 files changed, 48 insertions(+), 3 deletions(-)
+ kernel/time/alarmtimer.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-base-commit: a5ebb76233b79db01e82e061173cb73c6d2b5c6b
+diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+index ea5be5870e..d6dc6e8272 100644
+--- a/kernel/time/alarmtimer.c
++++ b/kernel/time/alarmtimer.c
+@@ -316,6 +316,7 @@ __alarm_init(struct alarm *alarm, enum alarmtimer_type type,
+ 	     void (*function)(struct alarm *, ktime_t))
+ {
+ 	timerqueue_init(&alarm->node);
++	alarm->node.expires = 0;
+ 	alarm->function = function;
+ 	alarm->type = type;
+ 	alarm->state = ALARMTIMER_STATE_INACTIVE;
 -- 
 2.43.0
 
