@@ -1,38 +1,38 @@
-Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910F5374187;
-	Sun, 11 Oct 2026 10:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
+Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA498381AF0;
+	Sun, 11 Oct 2026 10:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791714055; cv=none; b=eFHeb4nUqSzqEy/K6pbM8I3S17HXZ32cFY+QvHNX9zpGPo1+99/NxG7hLYBkFdWxpJyAnPz/lV5n8KX5w5/uaGbYCHHlsGxmvS4LM9r4PWkQRDsD219RkuqDZmiKwkRxBHsQBEbT2gDLE3xSm4UyhIBIGU9LWEHdoNtE/L0Jc/c=
+	t=1791714058; cv=none; b=JyWMuSOrHnsuhj0eUiqDJlf9Rdq6QInWgvp1+V/cgsKAcmhqEr7XXf2zmIo06pwvOS5sSEZ8YcFbsYfhMrxMEt6WrnqOOOwxeC/j0xjkKmh94o5mOpt4iHt/IfGTM/E5krbvRnjy6Rxj33kP3SSHQHUOhOd+tL9UE5tOhMYCgQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791714055; c=relaxed/simple;
-	bh=31WdfSjCWnB/HGcobwieMsmopL0/q4Qyr3sHHctciOU=;
+	s=arc-20240116; t=1791714058; c=relaxed/simple;
+	bh=Q+g4WhmwnLmhCKc60tyF+PntyP2NwOL+YxVxm026Q74=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BYyvIBIiUhhojSmIjtKrmixXIp7M9U+tNbAKCZzZ2z1HG2m3at6eIZrGp90sLlXsHHny4kvK0Df9OeNDYX5kiqt44RbddvJFhkFfOFQbYomY/x4Jolj1SeMuv2FoX5wR6Ss+8Hz+ibVuw2+9O5f/cfk2uGCu3LRQIFVGQ0NyXPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b=vnoZGCua; arc=none smtp.client-ip=111.22.67.151
+	 MIME-Version; b=T/XMJZ15Gv0AqfTq39PcmZK4B7iY2KDJWAz+qnGhCv6KIqGTVB86MlaTu+kM3aleLoVFICAsdzfsRW6durexL+qqG1t6Nk492bIJ6dTJicIz261BntkHb/lxA4b3elLp300/qh7mkrFCryDq1nrCLRIz+o32TP7QBa0EUZx0bEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b=wVhlMG1T; arc=none smtp.client-ip=111.22.67.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b="vnoZGCua"
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b="wVhlMG1T"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=vnoZGCuaF6V2kxPPfEv/brA13fZwHrn86P8Qbc/jMaqC4XNKrghRQeLoJrvqub0A29qdP1cWnJNPy
-	 ykIF/JAZ4ymVqdMAYCQns2OvY37qoutiMPkpGf5S94RpalSfhhKz5+wIUab9rUS8aApGqP6sB1nmf+
-	 UcBs6NQEKCWL27f0=
+	b=wVhlMG1TVduUEQZwrqH//4ntbz5GATn7DjwwgBZgHm3EqpaDlCwS1l2q8XYyM9UPdPqB+98N3RTlg
+	 YSRy/Z3yf/dOf68aXdgMWBHVn2hKY3QlX8zm2nLuDflEBByG05Tizj0bEtjBch+5DA6RqaaPGUpEWT
+	 irzrwl5NDwknAayQ=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee66acb62fa6cf-9bb1b;
-	Sun, 11 Oct 2026 18:20:44 +0800 (CST)
-X-RM-TRANSID:2ee66acb62fa6cf-9bb1b
+	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee56acb62fc1b2-cd0fb;
+	Sun, 11 Oct 2026 18:20:46 +0800 (CST)
+X-RM-TRANSID:2ee56acb62fc1b2-cd0fb
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from  (unknown[112.22.251.201])
-	by rmsmtp-syy-appsvr05-12005 (RichMail) with SMTP id 2ee56acb62eb578-a27a3;
-	Sun, 11 Oct 2026 18:20:44 +0800 (CST)
-X-RM-TRANSID:2ee56acb62eb578-a27a3
+	by rmsmtp-syy-appsvr05-12005 (RichMail) with SMTP id 2ee56acb62eb578-a27ac;
+	Sun, 11 Oct 2026 18:20:46 +0800 (CST)
+X-RM-TRANSID:2ee56acb62eb578-a27ac
 From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 To: netdev@vger.kernel.org
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -47,9 +47,9 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [PATCH net-next v4 1/2] bareudp: Enable BIG TCP packets
-Date: Sun, 11 Oct 2026 18:20:22 +0800
-Message-ID: <20261011102023.1603595-2-yanhaishuang@cmss.chinamobile.com>
+Subject: [PATCH net-next v4 2/2] selftests: net: big_tcp_tunnels: Cover bareudp
+Date: Sun, 11 Oct 2026 18:20:23 +0800
+Message-ID: <20261011102023.1603595-3-yanhaishuang@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261011102023.1603595-1-yanhaishuang@cmss.chinamobile.com>
 References: <20261011102023.1603595-1-yanhaishuang@cmss.chinamobile.com>
@@ -61,53 +61,137 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit f3d0f753f066 ("vxlan: Enable BIG TCP packets") and commit
-03ebe91b0f61 ("geneve: Enable BIG TCP packets") allowed BIG TCP on vxlan
-and geneve, after the preceding patches of that series made the common
-UDP tunnel transmit path handle GSO packets larger than 64KB.
+Now that bareudp allows BIG TCP too, run the same checks over bareudp as
+for vxlan and geneve.
 
-bareudp transmits through the same helpers, udp_tunnel_handle_offloads()
-followed by udp_tunnel_xmit_skb() or udp_tunnel6_xmit_skb(), and does
-not fill in any length field itself. Bump tso_max_size up to
-GSO_MAX_SIZE so that the admin can use BIG TCP with bareudp too.
-
-The default gso_max_size and gso_ipv4_max_size stay at 64KB, so nothing
-changes unless they are raised explicitly.
-
-iperf3 TCP over bareudp (ethertype ipv4, IPv4 outer) between two netns
-connected by veth, MTU 1600 on veth, 3 runs of 20 seconds each. This
-was measured in a QEMU TCG guest, so only the relative numbers are
-meaningful:
-
-  gso_max_size/gso_ipv4_max_size 65536:
-    4380.6, 4404.2, 4354.5 Mbit/s, average 4379.8 Mbit/s
-
-  gso_max_size/gso_ipv4_max_size 196608:
-    5509.4, 5454.7, 5497.4 Mbit/s, average 5487.2 Mbit/s (+25%)
-
-With 196608, about 90k to 100k packets larger than 64KB were
-transmitted on the bareudp device per run, none with 65536. Without
-this patch, setting gso_max_size to 196608 is rejected.
+bareudp only works in external mode, so attach the tunnel metadata to
+all packets sent through the device with a tc tunnel_key action on
+egress. The device uses ethertype ipv4 with multiproto, so that both
+IPv4 and IPv6 traffic can go through it. Its MTU does not account for
+the encapsulation, so lower it to leave room for the IPv6 and UDP
+headers, otherwise the encapsulated packets would be fragmented.
 
 Assisted-by: LLM
-Acked-by: Alice Mikityanska <alice.kernel@fastmail.im>
 Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 ---
- drivers/net/bareudp.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../testing/selftests/net/big_tcp_tunnels.sh  | 55 ++++++++++++++++---
+ 1 file changed, 46 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/bareudp.c b/drivers/net/bareudp.c
-index c3b5ed52d877..fcc33e302b9c 100644
---- a/drivers/net/bareudp.c
-+++ b/drivers/net/bareudp.c
-@@ -589,6 +589,7 @@ static void bareudp_setup(struct net_device *dev)
- 	dev->max_mtu = IP_MAX_MTU - BAREUDP_BASE_HLEN;
- 	dev->type = ARPHRD_NONE;
- 	netif_keep_dst(dev);
-+	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
- 	dev->priv_flags |= IFF_NO_QUEUE;
- 	dev->lltx = true;
- 	dev->flags = IFF_POINTOPOINT | IFF_NOARP | IFF_MULTICAST;
+diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh b/tools/testing/selftests/net/big_tcp_tunnels.sh
+index cc0875e52fb9..b0390b2c9f11 100755
+--- a/tools/testing/selftests/net/big_tcp_tunnels.sh
++++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env bash
+ # SPDX-License-Identifier: GPL-2.0
+ #
+-# Testing for IPv4 and IPv6 BIG TCP over VXLAN and GENEVE tunnels.
++# Testing for IPv4 and IPv6 BIG TCP over VXLAN, GENEVE and bareudp tunnels.
+ 
+ source "$(dirname "$0")/lib.sh"
+ 
+@@ -53,6 +53,24 @@ setup() {
+ 	DEFAULT_TCP_MIN_TSO_SEGS=$(ip netns exec "$CLIENT_NS" sysctl -n net.ipv4.tcp_min_tso_segs)
+ }
+ 
++# Create a bareudp device. bareudp only works in external mode: attach the
++# tunnel metadata to all packets sent through the device. Its MTU does not
++# account for the encapsulation either, so leave room for IPv6 and UDP
++# headers.
++# $1: netns, $2: device, $3: local underlay address, $4: remote one
++setup_bareudp() {
++	ip -netns "$1" link add "$2" type bareudp \
++		dstport 6635 ethertype ipv4 multiproto &&
++	ip -netns "$1" link set "$2" mtu 1452 &&
++	tc -netns "$1" qdisc add dev "$2" clsact &&
++	tc -netns "$1" filter add dev "$2" egress matchall \
++		action tunnel_key set src_ip "$3" dst_ip "$4" id 0 ttl 64 &&
++	return 0
++
++	echo "Failed to set up bareudp device $2" >&2
++	return 1
++}
++
+ setup_tunnel() {
+ 	if [ "$2" = 4 ]; then
+ 		SERVER_IP="$SERVER_IP4"
+@@ -64,26 +82,40 @@ setup_tunnel() {
+ 		echo "Setting up ${1^^} over IPv6, veth tx csum offload $3"
+ 	fi
+ 
+-	if [ "$1" = vxlan ]; then
++	case "$1" in
++	vxlan)
+ 		ip -netns "$CLIENT_NS" link add tun0 type vxlan \
+ 			id 5001 remote "$SERVER_IP" local "$CLIENT_IP" dev link0 dstport 4789
+-	else
++		;;
++	geneve)
+ 		ip -netns "$CLIENT_NS" link add tun0 type geneve \
+ 			id 5001 remote "$SERVER_IP"
+-	fi
++		;;
++	bareudp)
++		setup_bareudp "$CLIENT_NS" tun0 "$CLIENT_IP" "$SERVER_IP" ||
++			return 1
++		;;
++	esac
+ 	ip -netns "$CLIENT_NS" link set tun0 up
+ 	ip -netns "$CLIENT_NS" addr replace "$CLIENT_IP4_TUN/24" dev tun0
+ 	ip -netns "$CLIENT_NS" addr replace "$CLIENT_IP6_TUN/112" dev tun0 nodad
+ 	ip -netns "$CLIENT_NS" link set tun0 \
+ 		gso_max_size 196608 gso_ipv4_max_size 196608 \
+ 		gro_max_size 196608 gro_ipv4_max_size 196608
+-	if [ "$1" = vxlan ]; then
++	case "$1" in
++	vxlan)
+ 		ip -netns "$SERVER_NS" link add tun1 type vxlan \
+ 			id 5001 remote "$CLIENT_IP" local "$SERVER_IP" dev link1 dstport 4789
+-	else
++		;;
++	geneve)
+ 		ip -netns "$SERVER_NS" link add tun1 type geneve \
+ 			id 5001 remote "$CLIENT_IP"
+-	fi
++		;;
++	bareudp)
++		setup_bareudp "$SERVER_NS" tun1 "$SERVER_IP" "$CLIENT_IP" ||
++			return 1
++		;;
++	esac
+ 	ip -netns "$SERVER_NS" link set tun1 up
+ 	ip -netns "$SERVER_NS" addr replace "$SERVER_IP4_TUN/24" dev tun1
+ 	ip -netns "$SERVER_NS" addr replace "$SERVER_IP6_TUN/112" dev tun1 nodad
+@@ -112,7 +144,7 @@ do_test() {
+ 	local packets_threshold="$PACKETS_THRESHOLD"
+ 
+ 	# When tx csum offload is off, software GSO is performed before passing the
+-	# packet to veth. Check BIG TCP packets inside the VXLAN tunnel to verify
++	# packet to veth. Check BIG TCP packets inside the tunnel to verify
+ 	# the software checksum path: if the checksum code is broken, these packets
+ 	# will be dropped.
+ 	if [ "$3" = on ]; then
+@@ -192,6 +224,11 @@ if ! iptables --version &> /dev/null; then
+ 	exit "$ksft_skip"
+ fi
+ 
++if ! tc -V &> /dev/null; then
++	echo "SKIP: Could not run test without tc tool"
++	exit "$ksft_skip"
++fi
++
+ if ! ethtool --version &> /dev/null; then
+ 	echo "SKIP: Could not run test without ethtool tool"
+ 	exit "$ksft_skip"
+@@ -205,7 +242,7 @@ fi
+ WORKDIR=$(mktemp -d)
+ trap cleanup EXIT
+ setup
+-for tunnel in vxlan geneve; do
++for tunnel in vxlan geneve bareudp; do
+ 	for tun_family in 4 6; do
+ 		for traffic_family in 4 6; do
+ 			for csum_offload in on off; do
 -- 
 2.43.0
 
