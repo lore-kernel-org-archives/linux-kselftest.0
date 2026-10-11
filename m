@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB195468C3A;
-	Sun, 11 Oct 2026 20:35:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BAB2469837;
+	Sun, 11 Oct 2026 20:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791750924; cv=none; b=j3pA3AgNjgWR1lkxhNFCFxWhzEBEO53Tusfv3Er3/wB6b6nq3HjIWADQ+OoFklUouBMOJfJWfUEYtl3F/hmis92pD2MUBG+3Yo3FxUNrYVzhPsvaO36xd3S2u6nzoirleDmAFkufGpDyn2dMWC7gdVtwJ9zsNErC2DIMG39Zows=
+	t=1791750926; cv=none; b=gx2EQFcsWpkKMLBlr8qrJYgV8Hqcvw55z6Nb/w1j8YmwdM9RNQrcGUrDC/oN0sr/EUe1kk8XOf0eTRhGodbtxKvtyrlauwQTVmQ4O2+IRHCfY8KppHbFvhNIae3kOA4wt5vcfCad4f0TTdHpV3Z49kk/0Shl70+9tnLz4ZAu3IQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791750924; c=relaxed/simple;
-	bh=MdhBSWMkH5B0g/syQmzrzTRP4k36Iu4mtTHjUVJgaOI=;
+	s=arc-20240116; t=1791750926; c=relaxed/simple;
+	bh=e7QT3SsYr0JHQ9H9umJ2k17iSH4izfr6KKE/hIwlQ2g=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=r1T8cMHxByFojAsh9Y+lcD6L948t/T6RS3CWHfT+tdcBtcu4HNdWaeXpHXP2a9xKg7+0wyblPG/dzS97NdRAtlxleImj81BIv95bhKfDAYsEQ6deMIsTokEgmzOgDvxDdanQ7JoDJaFn3UNUZwFoZFoPcskAzc4iTK+aUVpvnSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lE+DKoBB; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=jhbXl5nvL3UX3LA4YNK9bLXU/WJlqe1JCyJ76NpbV3s0T6e0wAl2h7yTW5NwdbBsO7pDCP04olI1KQE/V0tajgRIELrEQzkk5ywfF7HlA+zXpGkVGuNL+jBEqVOcnkD3R+xdHtkddE15YNmkY7bmqf/p1lBDhhvI/RZkHmvPajQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OOXYtlzB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lE+DKoBB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73831F0089C;
-	Sun, 11 Oct 2026 20:35:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OOXYtlzB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E281F0089B;
+	Sun, 11 Oct 2026 20:35:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791750923;
-	bh=lzGqfdN5Tzs+Y8CjpI3gQJFIpm5Za23/5/CBYGFbB5w=;
+	s=k20260515; t=1791750924;
+	bh=8FE/7thoXkP2rxSPSe4s5tC4CjAPnwzchcLCubm2LTk=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=lE+DKoBBa61M2jwRH3LaF2CJV9wF5WyydwyozGJg4iNBGAdlPaDZ9LPR8+SXD8WGZ
-	 d+P4s5K9nwDjuHIsgS9h2yLOXeJuaOAfWDXs/y4c8zkAbqWSHM29fXsqLzeC9ZkD2+
-	 9JkdWXm5MrtKMsO5bSIuydDkbbjD/LhE8+O/5isu1dBZYSzD9p3Td1j2L9lExRS4I4
-	 Ms+wYbNTVOlpz8x5uIGl9k3K3akinqfwF0dhB/jYpDsbz5X12xTErXBufp+ZVfN+/3
-	 PjRpQKHdV8u2Nj213qRUJU22SI947/7KJWJA0KbN47gbJbL5r2Pb/HIlaEwT5kV0Fx
-	 NsHtNi/ebJr7A==
-Subject: Re: [PATCH net-next v3 5/9] tls: Consume empty data records in
- tls_sw_recvmsg()
+	b=OOXYtlzB8d46QBzxHL/c3BUsiNWmMfBz1mAVA8YY9Am4AVVl+Qu9oYi7SlCp6Kobx
+	 rXHO0IL1F3P7vkf/ZwnWrI1Sxcn1XcBHayKFnOv6SqJLA6itK1CcV29K8UgWeBNRGa
+	 XDm0S3vJrDxdZcVW9y+XuGgJTBhC8LS+pMQFZXa0WnScDzrXYtmXLfDQlQreOjRD6t
+	 RM/lGUcNKt7ehISEUf8drbQ+pvk8MMTU8NrmZRT2FHgB61B4boWQ8VXzx05zyKTp5f
+	 eVrj3s7GNOcuwoQkHiFWMKu4BwBN4Pl+FO4yN1LE1zBaSIlcoihscOB7cDdBVXOW2P
+	 8LuoacN1kLXgw==
+Subject: Re: [PATCH net-next v3 6/9] tls: Return copied data ahead of a run of
+ empty records
 From: netdev-bot+sashiko@kernel.org
 To: cel@kernel.org
 Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
  davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
  shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
  netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Sun, 11 Oct 2026 20:35:22 +0000
-Message-ID: <179175092232.434549.18278320872097507378@kernel.org>
-In-Reply-To: <20261007-tls-follow-on-v3-5-6d52d98389b3@kernel.org>
-References: <20261007-tls-follow-on-v3-5-6d52d98389b3@kernel.org>
+Date: Sun, 11 Oct 2026 20:35:23 +0000
+Message-ID: <179175092355.434549.9915477729935214479@kernel.org>
+In-Reply-To: <20261007-tls-follow-on-v3-6-6d52d98389b3@kernel.org>
+References: <20261007-tls-follow-on-v3-6-6d52d98389b3@kernel.org>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,133 +54,113 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] The concern: with MSG_PEEK, the new empty-record branch in
-  tls_sw_recvmsg() (line 1934) consumes the empty record and sets…
-- [Low] At this commit, the only zero-length-record selftest,
-  TEST_F(zero_len, test) in tools/testing/selftests/net/tls.c, uses TLS…
+- [Low] The commit "tls: Return copied data ahead of a run of empty
+  records" fixes a delay a remote peer can cause in tls_sw_recvmsg(),…
 
 Pre-existing issues:
-- [Medium] tls_sw_recvmsg() (net/tls/tls_sw.c) can return 0, which
-  userspace reads as EOF, on a connection that is still live.
-- [Medium] In tls_sw_recvmsg() (net/tls/tls_sw.c), a reader keeps
-  consuming empty application_data records with the socket lock held for…
+- [Medium] This problem wasn't introduced by this patch, but the new
+  early exit in tls_sw_recvmsg() only fires when `decrypted + copied >=…
 
 --
 
-tls: Consume empty data records in tls_sw_recvmsg()
+tls: Return copied data ahead of a run of empty records
 
-This patch adds a branch to tls_sw_recvmsg() that consumes zero-length
-application_data records as soon as they are decrypted. Before this, the
-peek and async arms queued every empty record on rx_list. The new branch
-sets MSG_EOR itself and continues the receive loop.
+This patch makes tls_sw_recvmsg() leave the receive loop at a zero-length
+application_data record once the receive low-water mark has been met. Data
+that has already been copied then goes back to the reader. Before this, it
+stayed in the loop while a peer kept sending empty records.
 
-> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> index ff82e2f4e9e52..b7f3edf9828e0 100644
-> --- a/net/tls/tls_sw.c
-> +++ b/net/tls/tls_sw.c
+Link: https://lore.kernel.org/r/179124254665.434549.12245680127262431659@kernel.org
 
-[ ... ]
-
-> @@ -1927,6 +1927,19 @@ int tls_sw_recvmsg(struct sock *sk,
->  		nodata = !chunk;
->  		tls_rx_rec_done(ctx);
->  
-> +		/* Keep an empty record off rx_list. On the zero-copy path
-> +		 * the strparser owns darg.skb, and tls_rx_rec_done() has
-> +		 * released it.
-> +		 */
-> +		if (!chunk && control == TLS_RECORD_TYPE_DATA) {
-> +			if (!darg.zc)
-> +				consume_skb(darg.skb);
+> Suggested-by: sashiko-bot <netdev-bot+sashiko@kernel.org>
+> Link: https://lore.kernel.org/r/179124254665.434549.12245680127262431659@kernel.org
+> Signed-off-by: Chuck Lever <cel@kernel.org>
 
 [Severity: Low]
-This isn't a bug, but at this commit the only zero-length record selftest
-is TEST_F(zero_len, test) in tools/testing/selftests/net/tls.c. It receives
-on a zc-capable TLS 1.2 socket with a user buffer and without MSG_PEEK:
+Should this commit carry a Fixes: tag?
 
-	EXPECT_EQ(__tls_recv_cmsg(_metadata, self->cfd, NULL,
-				  buf, sizeof(buf), MSG_DONTWAIT), ret);
+The commit message describes a delay that a remote peer can cause, but the
+trailers only contain Suggested-by and Link.
 
-So every empty record takes the darg.zc arm, and this consume_skb() call
-never runs in that test.
+Every other kernel patch in this series has a Fixes: tag. That includes
+"tls: Check for a pending signal after an empty record", which is also
+described as not reproduced and uses Fixes: c46234ebb4d1.
 
-A later patch in the series, "selftests: tls: Add peek and splice coverage
-for zero-length records", adds TEST_F(zero_len_peek, test). That test uses
-MSG_DONTWAIT | MSG_PEEK, which covers this non-zc path. The async arm is
-still not covered, because that needs an async crypto driver.
+The behavior predates the series. Before "tls: Consume empty data records
+in tls_sw_recvmsg()", an empty record went through the normal path with
+decrypted += 0 and len -= 0. The || tls_strp_msg_ready(ctx) loop condition
+then kept the reader in the loop.
 
+That parent commit carries Fixes: 692d7b5d1f91. It also adds the
+!chunk && control == TLS_RECORD_TYPE_DATA branch that this patch changes.
+
+Without a tag here, would stable backports that take the parent commit
+miss this follow-up?
+
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index b7f3edf9828e0..fd6f944ffd677 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -1937,6 +1937,12 @@ int tls_sw_recvmsg(struct sock *sk,
+>  
+>  			/* An empty record still marks a boundary. */
+>  			msg->msg_flags |= MSG_EOR;
 > +
-> +			/* An empty record still marks a boundary. */
-> +			msg->msg_flags |= MSG_EOR;
-> +			continue;
-> +		}
+> +			/* Return data already copied instead of holding it
+> +			 * through a run of empty records.
+> +			 */
+> +			if (decrypted + copied >= target)
+> +				break;
+>  			continue;
+>  		}
 
 [Severity: Medium]
-This is a pre-existing issue, but can tls_sw_recvmsg() return 0 on a live
-connection? This would happen when an empty application_data record is
-followed directly by a non-data record, such as an alert or a TLS 1.3
-NewSessionTicket or KeyUpdate.
+This is a pre-existing issue and was not introduced by this patch. What
+happens to a reader that has copied some data but is still below target?
 
-For the empty record, tls_record_content_type() sets control to
-TLS_RECORD_TYPE_DATA and emits the TLS_GET_RECORD_TYPE cmsg. This branch
-then consumes the record and continues.
+In tls_sw_recvmsg(), target comes from:
 
-For the next record, tls_record_content_type() finds a type mismatch:
+	target = sock_rcvlowat(sk, flags & MSG_WAITALL, len);
 
-	} else if (*control != tlm->control) {
-		return 0;
+Under MSG_WAITALL, including MSG_DONTWAIT | MSG_WAITALL, that is the full
+len. With SO_RCVLOWAT set, it can also be larger than what was copied.
+
+Such a reader still takes the continue on every empty DATA record.
+Neither decrypted nor len advances.
+
+The timeout doesn't seem to limit this. tls_rx_rec_wait() recomputes the
+timeout on every call, but only checks it inside the wait loop:
+
+	timeo = sock_rcvtimeo(sk, nonblock);
+
+	while (!tls_strp_msg_ready(ctx)) {
+		...
+		if (!timeo)
+			return -EAGAIN;
+		...
 	}
 
-The err <= 0 arm in tls_sw_recvmsg() then queues that skb on rx_list and
-jumps to recv_end with err == 0. Since copied == 0, this returns 0:
+When a record is already parsed, the loop body never runs. So neither the
+zero MSG_DONTWAIT timeout nor SO_RCVTIMEO is checked.
 
-	return copied ? : err;
+The backlog also keeps refilling. tls_read_flush_backlog() calls
+sk_flush_backlog() whenever tcp_inq() is small:
 
-An application that does not check the cmsg would read that as EOF. One
-example is OpenSSL's ktls_read_record path.
+	if (done - *flushed_at < SZ_128K && tcp_inq(sk) > max_rec)
+		return false;
 
-The zc and sync non-zc arms already behaved this way before this patch.
-The zero_len 0data_0data_ctrl variant in tools/testing/selftests/net/tls.c
-also expects this result:
+	*flushed_at = done;
+	return sk_flush_backlog(sk);
 
-	.recs = { &id0_data_l0, &id1_data_l0, &id2_ctrl_l11, },
-	.recv_ret = { 0, 11, -EAGAIN, },
+Could a peer that keeps sending empty records hold a nonblocking
+MSG_WAITALL reader with partial progress in tls_sw_recvmsg()
+indefinitely?
 
-Is a 0 return with a DATA cmsg the intended behaviour here?
+It looks like the call only ends on one of these:
 
-[Severity: Medium]
-This is a pre-existing issue, but this branch always continues. An empty
-record changes neither bound in the loop condition:
-
-	while (len && (decrypted + copied < target || tls_strp_msg_ready(ctx))) {
-
-So with the socket lock held, a reader keeps consuming empty records for
-as long as the peer streams them. Only the nodata && signal_pending()
-check at the top of the loop ends the run.
-
-Take a MSG_DONTWAIT reader that has copied nothing. tls_rx_rec_wait()
-returns -EAGAIN only when no record is ready, so that reader can stay in
-the kernel while the peer keeps records coming. Other users of the socket
-wait in lock_sock() during that time. tls_read_flush_backlog() can reach
-__release_sock() and cond_resched(), so this is a stall rather than a
-lockup.
-
-The commit message mentions this: "still reads empty records for as long
-as they arrive, until a signal is pending". The sibling reader,
-tls_sw_read_sock(), caps a run of empty records:
-
-	if (++nodata >= TLS_RX_NODATA_LIMIT) {
-		schedule_work(&ctx->data_ready_work);
-		break;
-	}
-
-Would a similar cap make sense in tls_sw_recvmsg()?
-
-At this commit the branch also keeps going after the rcvlowat target has
-been met. Data already copied is then held back while empty records keep
-arriving. The next patch in the series, "tls: Return copied data ahead of
-a run of empty records", adds a "decrypted + copied >= target" break to
-this branch, which fixes that part.
+  - a pending signal (the nodata && signal_pending(current) check)
+  - an error
+  - the peer stops sending empty records
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261007-tls-follow-on-v3-0-6d52d98389b3%40kernel.org
