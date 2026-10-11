@@ -1,44 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04F946D0B1;
-	Sun, 11 Oct 2026 22:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA8F46D548;
+	Sun, 11 Oct 2026 22:34:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791758053; cv=none; b=b8u8L658kmqbYjFG4qzxYiWGwDMT75cRNzT98CjcTywlytuGOp+OMrWShdSgqYFl6ooJX5XPvP97qk7AcEXY/9php06kcWvscrBkUlxjMI2c1ctMgc5z6NX7z2Y622uoLUIYJQ0uddL74czXLHttLbh0KC3YcXzQBZSD0oWB1pE=
+	t=1791758056; cv=none; b=O/rybnCzTxSEQMSy6C6vveKoUzfyanIPp2lXGl9HhIysi/UsoKlk399V2RvFch9HWA5CrdRFdK9j6diJw1lOLO2HQugH0Dnck2mv2W+417CIaxho5wGTmGmBFKifMCMR9Dhi2Z89RSzqARLndopcbuGBbmvday6aVR4OwuWy9q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791758053; c=relaxed/simple;
-	bh=Kc9DmJSBFLurxMClSmavCXYgaAe/+NlK9ylk9KsSpbE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QmGpPaPUjpo9SenW/IH0vMdl2IwJEsDBvMo4IKyJosTFK8HX43nVJDcqqjKNa7QAbUNj0n5y92efBwD3NORn34ttS+tfd0G6XWySIhaGV3ZRwnCfBvpXyTJzv/cZvJUdHGjyQMfyi7xA751AfVPAU47LouyvOdJXPdtEJGzuuw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ua32L9UR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791758056; c=relaxed/simple;
+	bh=a4MtRTQD61rrt5cIJ+YeGGJui563x843TEp8gtfWjtQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gZPH4fC/SC8n02b1rwreu9UGXO9BnYe/+Jw5a+LNZZzUp0Es1EIn0CSXTsKwOin/D8rgAEnMFFdUV0Vzz76PxbIZRioef5VKbczT/A9GaR+DpMUOcE26ww7Xkems4vhYNHs4Dxui5BmVzaquq/PPy4grK3R7TQmQo0n1msoYcQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSmr3l51; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ua32L9UR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4545F1F0089C;
-	Sun, 11 Oct 2026 22:34:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSmr3l51"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC2B1F0089B;
+	Sun, 11 Oct 2026 22:34:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791758052;
-	bh=MtBrUZk9L4rkfwDGHCQBcgRtyBALUY+U/RwYmPk4KOo=;
+	s=k20260515; t=1791758054;
+	bh=t2DhM25p21o9l/pAEnbyFweMWw8kprCFEPxQvQWjcwA=;
 	h=From:To:Cc:Subject:Date;
-	b=Ua32L9URjZTITJTZSFrFmYMwiIL3GwAVFKD2SgoXL1sBgdPqFxYujI7GSQQ4smK5/
-	 271mrUUOg75peDejLzBzpCEPS/GseYF/8aXgIG8hkDTYs9HUNg1avSUvfpvq7y4qQt
-	 OHRv5nv7ifR3Fh16NgWfYEo9414JiXVYDcrW8o8nAtJW/H1BrWFP7Muw/7RSGKVyQP
-	 zaoYwT1EtGEXFd39Pmqez7nIGlZkZnl/Gq7tE0ijSCGd0GghZNcL2qCayTwN83Dorb
-	 Lt2uKwiDgJD+3GcUsQ8t7weBnSqYUURyg+gWezylWP1o7IAO1x/pvzkBUi67bB8N7G
-	 jxHAYvgsPjtFA==
+	b=LSmr3l51lthtMvJi8aVNJWp0jwcUvk+VTu+inraxbd/ojKljXfYXe9XKifZCe5WTs
+	 DvkjaztRqbAnTyVeOGZbEkTF1QUrjX9k8OxpRrTCvTWcEnYZ16iLBELXxxRH7BkL3U
+	 rQGCHJF7DWB+vsgtxw3kje7NbpQQr9PCiY1S+dwMnfQwctxfr0YMWXj4QeHRFNvFQ5
+	 /XClYjxZXSJ78AHtOiw4xd9SWKrLbHcw57t3iT+X+1za7qm/gtCcE0ynqpbs9/k3Oc
+	 LkUyqHPH66IV78cNZNfeV3ifQmPHPJztDT+3kJATX4v5Pp7IKafD/zUQKNNeOyJuYr
+	 7qyy2fyoY05Tg==
 From: Sasha Levin <sashal@kernel.org>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Peter Zijlstra <peterz@infradead.org>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
 	Boqun Feng <boqun@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
 	Thomas Gleixner <tglx@kernel.org>,
-	Mark Brown <broonie@kernel.org>
+	Dmitry Vyukov <dvyukov@google.com>
 Cc: Sasha Levin <sashal@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/rseq: depend on librseq.so only
-Date: Sun, 11 Oct 2026 18:33:35 -0400
-Message-ID: <20261011223358.2327625-7-sashal@kernel.org>
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] selftests/rseq: avoid an ordered comparison of function pointers
+Date: Sun, 11 Oct 2026 18:33:36 -0400
+Message-ID: <20261011223358.2327625-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -48,74 +53,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Each test program lists $(TEST_GEN_PROGS_EXTENDED) as a prerequisite to
-pick up librseq.so. Since that list also holds the test programs built by
-the same rules, every build prints a page of
+ASSERT_NE() compares its arguments with the relational operators when
+printing a failure, which clang flags for function pointers:
 
-  make: Circular <prog> <- <prog> dependency dropped.
+  legacy_check.c:41:2: warning: ordered comparison of function pointers [-Wordered-compare-function-pointers]
 
-Depend on $(OUTPUT)/librseq.so, which is what the rules need.
+Check the result of signal() with ASSERT_TRUE() instead.
 
-Fixes: cb48828f06afa ("selftests/rseq: Don't run tests with runner scripts outside of the scripts")
+Fixes: fdf4eb632683b ("selftests/rseq: Validate legacy behavior")
 Assisted-by: LLM
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/rseq/Makefile | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ tools/testing/selftests/rseq/legacy_check.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index aba6317f6cb8e..977da558fa2f5 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -40,38 +40,38 @@ include ../lib.mk
- $(OUTPUT)/librseq.so: rseq.c rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
+diff --git a/tools/testing/selftests/rseq/legacy_check.c b/tools/testing/selftests/rseq/legacy_check.c
+index 3f7de4e283033..b59c4cb874ea1 100644
+--- a/tools/testing/selftests/rseq/legacy_check.c
++++ b/tools/testing/selftests/rseq/legacy_check.c
+@@ -38,7 +38,7 @@ FIXTURE_SETUP(legacy)
+ 		ASSERT_EQ(res, 0);
+ 	}
  
--$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
-+$(OUTPUT)/%: %.c $(OUTPUT)/librseq.so rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
+-	ASSERT_NE(signal(SIGUSR1, sigfn), SIG_ERR);
++	ASSERT_TRUE(signal(SIGUSR1, sigfn) != SIG_ERR);
+ }
  
--$(OUTPUT)/basic_percpu_ops_mm_cid_test: basic_percpu_ops_test.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
-+$(OUTPUT)/basic_percpu_ops_mm_cid_test: basic_percpu_ops_test.c $(OUTPUT)/librseq.so rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
-+$(OUTPUT)/param_test_benchmark: param_test.c $(OUTPUT)/librseq.so \
- 					rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) -DBENCHMARK $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
-+$(OUTPUT)/param_test_compare_twice: param_test.c $(OUTPUT)/librseq.so \
- 					rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_mm_cid: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
-+$(OUTPUT)/param_test_mm_cid: param_test.c $(OUTPUT)/librseq.so \
- 					rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_mm_cid_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
-+$(OUTPUT)/param_test_mm_cid_benchmark: param_test.c $(OUTPUT)/librseq.so \
- 					rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID -DBENCHMARK $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_mm_cid_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
-+$(OUTPUT)/param_test_mm_cid_compare_twice: param_test.c $(OUTPUT)/librseq.so \
- 					rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/syscall_errors_test: syscall_errors_test.c $(TEST_GEN_PROGS_EXTENDED) \
-+$(OUTPUT)/syscall_errors_test: syscall_errors_test.c $(OUTPUT)/librseq.so \
- 					rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/slice_test: slice_test.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
-+$(OUTPUT)/slice_test: slice_test.c $(OUTPUT)/librseq.so rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/check_optimized: check_optimized.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
-+$(OUTPUT)/check_optimized: check_optimized.c $(OUTPUT)/librseq.so rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
+ FIXTURE_TEARDOWN(legacy)
 -- 
 2.53.0
 
