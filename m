@@ -1,304 +1,202 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69EE43A5452;
-	Sun, 11 Oct 2026 11:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3277739CD08;
+	Sun, 11 Oct 2026 12:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791717647; cv=none; b=rD95Ym1B34KErG1PG6qGftcDYFlFd0VsxfsPyEUHwvdP9F54nl6al6dnhteaFeNASegZeEAJJi4edsjErKtTrNHZlLXQTmQ/Pa+6AE/dFGV3bQjVn2YFZi3gYxX5NHAqMnw8Ti7O/AD6etGq4PcIyNv6KQ8w7AcKZcaj4QbeJ24=
+	t=1791723189; cv=none; b=bMdNJTjn3apfvuT4xmB0sBxz10tLSTwdGg0YKTTt+ttS3W5nSEUQb5sp0EOblUXYMhjwCLdHOY40bNRRJJv/DsRT0WtUtI9QmVdRqKTbiHjG4F/N/AXbvqC+aY3lbxEsQwrLDDRIkNEFX/LbuBsZGgopYavgVSlypbqu0plKeMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791717647; c=relaxed/simple;
-	bh=93anWR0QRvC1TPZtlQpGbUarjuCPa7VNWdnnkkw+QyM=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jrsN6Kl+qyHO/jLPK8Pw6A04dqZZaubdiSdEDNfGSdRdBVVY2t1atQSpTktfMUGC1DDZuhaEvlN82OKWAaDQ4+8ir73XDSL9D2pYuY0PO6Wrn1HDwO2/Pipkc1FLUNvwsTvzujRatPUy8u1ia8dxYRr0rME+r5ZesszEJAgLsxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4VSJLp4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791723189; c=relaxed/simple;
+	bh=ltM38puMFweObhkPk2+jAoqwDneuuHsqc/rfWWFdm6s=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=oE3zwCparbDsJYzs3laeQ8Eww2SwkXlUg3JcnKDupgUwO3s/hvW/8EJYd5K8sfAPUrteZmLdm79SyFV5dlfZW8f0xURSe2KihTD88mKUhrjxthSKHP3rYysZ0YL2+Si+mVt1Ybr22rfI9H+nwyFgF2U5P42BhlF+udZHYCV2nyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=JH/Qlwi4; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4VSJLp4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570B11F0089B;
-	Sun, 11 Oct 2026 11:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791717643;
-	bh=iSs83iSREzQg06O1RKEiD9nw1lQO3OyXcoZLEwK7/aU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=H4VSJLp4NCAzsS6Khs5FpeZiNFLBUHJcb/hfuanyUxuknyM15LR+wUoyMsBF86EnH
-	 wGbqrd1aNt1RHNKzdgkiJBtwabasFdPzdNDcELdcWUqVyTkshDOMHYpS0OiyUmqlVf
-	 jOSsnjnRc12PcpAqRYtfxeZUAzxzPoqt8CdLMdSETS9yjfz4A3PWJbCopnKdf4VYDZ
-	 YTqgHDd9ZKat0q78nnhi7SsAunEFOzrSeU3Opmy3dau1KFCVFAW2GvbMyQ+OWM31lk
-	 b8OL2s5Cd6Wh6Woym6yb5VKxHhEAOkieYyqAidkDYdQ67yZFD76MFpI1khzTtkhNmQ
-	 ABJ18wK4X9uvQ==
-Subject:
- Re: [PATCH net-next v4 2/3] netlink: specs: add genetlink-legacy spec for GTP
-From: netdev-bot+sashiko@kernel.org
-To: anilkaushikwireless@gmail.com
-Cc: pablo@netfilter.org, laforge@gnumonks.org, donald.hunter@gmail.com,
- kuba@kernel.org, davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
- osmocom-net-gprs@lists.osmocom.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Sun, 11 Oct 2026 11:20:41 +0000
-Message-ID: <179171764187.434549.3465200115197033124@kernel.org>
-In-Reply-To: <20261010105740.223992-3-anilkaushikwireless@gmail.com>
-References: <20261010105740.223992-3-anilkaushikwireless@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="JH/Qlwi4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1791723178;
+	bh=ltM38puMFweObhkPk2+jAoqwDneuuHsqc/rfWWFdm6s=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=JH/Qlwi4KWvyGkAOrLZhYizUurtSZ6PVYlOtVPi+YR6/3nfpzElfFfGifOfN7igAi
+	 GfUO2KxDI2w6SziXHxiVwcXhl0lJWy+Nu46LX86fqUTZ/etC6fqwa4D5gzAuZmkxI7
+	 e2S8UHei8gS4qNifVNzVqI1ctVC1F5rHIlwzNsEQ=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Sun, 11 Oct 2026 14:52:26 +0200
+Subject: [PATCH RFC 02/11] rust: sync: atomic: Add Atomic<u{8,16}>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261011-rust-dyndbg-v1-2-832e4039b71f@weissschuh.net>
+References: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
+In-Reply-To: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
+To: Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+ Andrew Morton <akpm@linux-foundation.org>, Will Deacon <will@kernel.org>, 
+ Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Lyude Paul <lyude@redhat.com>, Yury Norov <yury.norov@gmail.com>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, driver-core@lists.linux.dev, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791723177; l=4599;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=ltM38puMFweObhkPk2+jAoqwDneuuHsqc/rfWWFdm6s=;
+ b=KacfSUzLxUTfSpNb3KNKB+bdejnjWLAEwokqYM61iHbJUi/zOd+4O4wnMJxt1F5uwoseV07u3
+ oJT8f/P96HYAJs2RBr6T3eGbueyvzazQ/My9/e3tlFcs/9XqvvCK35C
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Thank you for your contribution! Sashiko AI review found 6 potential
-issue(s) to consider.
+Add generic atomic support for small unsigned integers that have an
+`AtomicImpl` with the same size and alignment.
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 4
+Also extend the unit tests.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ rust/kernel/sync/atomic/predefine.rs | 44 ++++++++++++++++++++++++++++--------
+ 1 file changed, 35 insertions(+), 9 deletions(-)
 
-- [Medium] The spec in Documentation/netlink/specs/gtp.yaml lists the
-  "gtp" multicast group (lines 168-171), but it never says what the…
-- [Medium] Adding gtp.yaml pulls a new compile unit, gtp-user.o, into the
-  tools/net/ynl library build.
-- [Low] drivers/net/gtp.c registers gtp_genl_family with `.version = 0`
-  (line 2483).
-- [Low] gtp.yaml declares `checks: exact-len: 16` for peer-addr6 and ms-
-  addr6 (lines 71-72 and 79-80).
-- [Low] gtp.yaml documents ms-address only as "IPv4 address of the mobile
-  subscriber served by the context." (line 48).
-- [Low] gtp.yaml documents ms-addr6 as "IPv6 address of the mobile
-  subscriber served by the context." (line 83), and its exact-len: 16…
-
---
-
-netlink: specs: add genetlink-legacy spec for GTP
-
-This adds a genetlink-legacy YAML spec for the existing GTP generic
-netlink family. It covers the NEWPDP, DELPDP, GETPDP and ECHOREQ
-commands, the GTPA_* attribute set and the "gtp" multicast group. The
-spec is also added to the GTP entry in MAINTAINERS.
-
-> diff --git a/Documentation/netlink/specs/gtp.yaml b/Documentation/netlink/specs/gtp.yaml
-> new file mode 100644
-> index 0000000000000..2c61c4353c89a
-> --- /dev/null
-> +++ b/Documentation/netlink/specs/gtp.yaml
-> @@ -0,0 +1,171 @@
-> +# SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
-> +---
-> +name: gtp
-> +
-> +protocol: genetlink-legacy
-
-[Severity: Low]
-Should the spec state the family's real version? With no version key, the
-genetlink-legacy schema default of 1 applies. The kernel registers the
-family as version 0:
-
-drivers/net/gtp.c:
-static struct genl_family gtp_genl_family __ro_after_init = {
-	.name		= "gtp",
-	.version	= 0,
-
-Documentation/netlink/genetlink-legacy.yaml documents "Default is 1" and
-sets minimum: 1, so the spec can't say version: 0 unless the schema
-changes.
-
-Nothing fails at runtime. ynl hard-codes version 1 in requests and the
-genetlink core doesn't check it. Still, the spec gives a different version
-from the one the kernel reports in CTRL_ATTR_VERSION and in message
-headers.
-
-Could the schema minimum be relaxed so version: 0 can be added? If not,
-could the mismatch be documented?
-
-[ ... ]
-
-> +      -
-> +        name: ms-address
-> +        type: u32
-> +        byte-order: big-endian
-> +        display-hint: ipv4
-> +        doc: IPv4 address of the mobile subscriber served by the context.
-
-[Severity: Low]
-Is this description right for echoreq, which also lists ms-address in its
-request? gtp_genl_send_echo_req() uses the attribute as the outer IPv4
-source address:
-
-	dst_ip = nla_get_be32(info->attrs[GTPA_PEER_ADDRESS]);
-	src_ip = nla_get_be32(info->attrs[GTPA_MS_ADDRESS]);
-	...
-	rt = ip4_route_output_gtp(&fl4, sk, dst_ip, src_ip);
-	if (IS_ERR(rt)) {
-		...
-		return -ENODEV;
-	}
-
-So the value is the local GSN tunnel endpoint, not a subscriber address.
-The echo response notification works the same way: gtp0_handle_echo_resp_ip()
-fills ms-address from the local address (iph->daddr).
-
-A user who follows the spec and passes the subscriber's IPv4 address gets
-a route lookup with a non-local source, and the command returns -ENODEV.
-
-Could the attribute doc, or the echoreq operation doc, mention this legacy
-overloading?
-
-[ ... ]
-
-> +      -
-> +        name: peer-addr6
-> +        type: binary
-> +        checks:
-> +          exact-len: 16
-
-[Severity: Low]
-Does the kernel actually enforce an exact length here? gtp_genl_policy
-has:
-
-	[GTPA_PEER_ADDR6]	= { .len = sizeof(struct in6_addr), },
-	[GTPA_MS_ADDR6]		= { .len = sizeof(struct in6_addr), },
-
-Neither entry sets .type, so both are NLA_UNSPEC. For NLA_UNSPEC,
-validate_nla() only checks attrlen < pt->len, which is a minimum length.
-Every gtp op also sets GENL_DONT_VALIDATE_STRICT. As a result the kernel
-accepts longer attributes, and nla_get_in6_addr() reads the first 16
-bytes.
-
-Should the spec say min-len: 16 instead? The other option is to tighten
-the kernel policy to NLA_POLICY_EXACT_LEN(sizeof(struct in6_addr)). The
-same question applies to ms-addr6 below.
-
-[ ... ]
-
-> +      -
-> +        name: ms-addr6
-> +        type: binary
-> +        checks:
-> +          exact-len: 16
-> +        byte-order: big-endian
-> +        display-hint: ipv6
-> +        doc: IPv6 address of the mobile subscriber served by the context.
-
-[Severity: Low]
-The driver treats ms-addr6 as a /64 prefix whose lower 64 bits must be
-zero. ipv6_pdp_fill() rejects NEWPDP otherwise:
-
-	pctx->ms.addr6 = nla_get_in6_addr(info->attrs[GTPA_MS_ADDR6]);
-	if (pctx->ms.addr6.s6_addr32[2] ||
-	    pctx->ms.addr6.s6_addr32[3])
-		return false;
-
-gtp_find_pdp_by_link() applies the same check and returns -EADDRNOTAVAIL
-for GETPDP and DELPDP lookups:
-
-		if (addr.s6_addr32[2] ||
-		    addr.s6_addr32[3])
-			return ERR_PTR(-EADDRNOTAVAIL);
-
-The current text suggests a full subscriber IPv6 address. A context can't
-be created, queried or deleted with one.
-
-Could the doc say this attribute carries the subscriber's /64 prefix with
-the low 64 bits zeroed?
-
-> +      -
-> +        name: family
-> +        type: u8
-> +        doc: Address family (AF_INET or AF_INET6) of the context addresses.
-
-[Severity: Medium]
-Will this spec break the tools/net/ynl build on hosts with older uapi
-headers?
-
-tools/net/ynl/generated/Makefile builds every spec except conntrack and
-nftables, so gtp-user.c is now generated and compiled. It includes
-<linux/gtp.h> and is built with:
-
-	-I../lib/ -idirafter $(UAPI_PATH)
-
-Because of -idirafter, the installed /usr/include/linux/gtp.h takes
-precedence over include/uapi/linux/gtp.h. The only way around that is a
-CFLAGS_gtp entry in tools/net/ynl/Makefile.deps, and there isn't one.
-Later patches in the series don't seem to add one either.
-
-GTPA_PEER_ADDR6, GTPA_MS_ADDR6, GTPA_FAMILY and GTP_CMD_ECHOREQ are
-fairly recent. On hosts with 5.x or 6.1-era linux-libc-dev, the generated
-code would refer to undefined enumerators. The policy array sized by
-GTPA_MAX would also be too small, and make -C tools/net/ynl would fail.
-
-Would adding something like this to Makefile.deps fix it?
-
-CFLAGS_gtp:=$(call get_hdr_inc,_LINUX_GTP_H_,gtp.h)
-
-The guard name assumes headers_install strips _UAPI from
-_UAPI_LINUX_GTP_H_.
-
-[ ... ]
-
-> +    -
-> +      name: echoreq
-> +      doc: Send a GTP-U echo request to a peer.
-> +      attribute-set: gtp
-> +      dont-validate: [strict, dump]
-> +      flags: [admin-perm]
-> +      do:
-> +        request:
-> +          attributes:
-> +            - link
-> +            - version
-> +            - peer-address
-> +            - ms-address
-> +            - net-ns-fd
-> +
-> +mcast-groups:
-> +  list:
-> +    -
-> +      name: gtp
-
-[Severity: Medium]
-The gtp multicast group is declared, but which messages go out on it? No
-operation has notify, event or mcgrp. The driver multicasts three kinds of
-message on GTP_GENL_MCGRP. The first two come from these paths:
-
-gtp_genl_new_pdp()->gtp_tunnel_notify(pctx, GTP_CMD_NEWPDP, GFP_KERNEL)
-gtp_genl_del_pdp()->gtp_tunnel_notify(pctx, GTP_CMD_DELPDP, GFP_ATOMIC)
-
-gtp_genl_fill_info() builds both, so they carry the same content as the
-getpdp reply.
-
-The third is the echo response. gtp0_handle_echo_resp() and the GTPv1-U
-handler both send it:
-
-	ret = gtp_genl_fill_echo(msg, 0, 0, 0, GTP_CMD_ECHOREQ, echo);
-	...
-	return genlmsg_multicast_netns(&gtp_genl_family, dev_net(gtp->dev),
-				       msg, 0, GTP_GENL_MCGRP, GFP_ATOMIC);
-
-It carries version, peer-address and ms-address. The echoreq doit,
-gtp_genl_send_echo_req(), only ACKs, so this multicast is the only way
-user space learns the echo result.
-
-nlspec only treats ops with notify or event as asynchronous, so
-async_msg_ids is empty for gtp. After ntf_subscribe('gtp'), check_ntf() in
-ynl.py prints "Unexpected msg id while checking for ntf". It then drops
-every PDP add, PDP delete and echo response.
-
-ynl_gen_c doesn't generate notification parsers for these messages
-either, and the rendered docs don't mention them. The commit message says
-the spec describes "the existing family", but this part of the uAPI is
-missing.
-
-Could newpdp and delpdp notifications be described by reusing the getpdp
-reply (notify: getpdp, mcgrp: gtp)? The echo response could be an event
-with version, peer-address and ms-address that keeps the legacy command
-value. Otherwise, could the spec say explicitly that notifications are not
-covered?
+diff --git a/rust/kernel/sync/atomic/predefine.rs b/rust/kernel/sync/atomic/predefine.rs
+index 3d63f40791fa..4c1fb5e08dc2 100644
+--- a/rust/kernel/sync/atomic/predefine.rs
++++ b/rust/kernel/sync/atomic/predefine.rs
+@@ -113,6 +113,32 @@ fn rhs_into_delta(rhs: isize) -> isize_atomic_repr {
+     }
+ }
+ 
++// SAFETY: `u8` and `i8` has the same size and alignment, and `u8` is round-trip transmutable to
++// `i8`.
++unsafe impl super::AtomicType for u8 {
++    type Repr = i8;
++}
++
++// SAFETY: The wrapping add result of two `i8`s is a valid `u8`.
++unsafe impl super::AtomicAdd<u8> for u8 {
++    fn rhs_into_delta(rhs: u8) -> i8 {
++        rhs as i8
++    }
++}
++
++// SAFETY: `u16` and `i16` has the same size and alignment, and `u16` is round-trip transmutable to
++// `i16`.
++unsafe impl super::AtomicType for u16 {
++    type Repr = i16;
++}
++
++// SAFETY: The wrapping add result of two `i16`s is a valid `u16`.
++unsafe impl super::AtomicAdd<u16> for u16 {
++    fn rhs_into_delta(rhs: u16) -> i16 {
++        rhs as i16
++    }
++}
++
+ // SAFETY: `u32` and `i32` has the same size and alignment, and `u32` is round-trip transmutable to
+ // `i32`.
+ unsafe impl super::AtomicType for u32 {
+@@ -170,13 +196,13 @@ macro_rules! for_each_type {
+ 
+     #[test]
+     fn atomic_basic_tests() {
+-        for_each_type!(42 in [i8, i16, i32, i64, u32, u64, isize, usize] |v| {
++        for_each_type!(42 in [i8, i16, i32, i64, u8, u16, u32, u64, isize, usize] |v| {
+             let x = Atomic::new(v);
+ 
+             assert_eq!(v, x.load(Relaxed));
+         });
+ 
+-        for_each_type!(42 in [i8, i16, i32, i64, u32, u64, isize, usize] |v| {
++        for_each_type!(42 in [i8, i16, i32, i64, u8, u16, u32, u64, isize, usize] |v| {
+             let x = Atomic::new(v);
+             let ptr = x.as_ptr();
+ 
+@@ -187,14 +213,14 @@ fn atomic_basic_tests() {
+ 
+     #[test]
+     fn atomic_acquire_release_tests() {
+-        for_each_type!(42 in [i8, i16, i32, i64, u32, u64, isize, usize] |v| {
++        for_each_type!(42 in [i8, i16, i32, i64, u8, u16, u32, u64, isize, usize] |v| {
+             let x = Atomic::new(0);
+ 
+             x.store(v, Release);
+             assert_eq!(v, x.load(Acquire));
+         });
+ 
+-        for_each_type!(42 in [i8, i16, i32, i64, u32, u64, isize, usize] |v| {
++        for_each_type!(42 in [i8, i16, i32, i64, u8, u16, u32, u64, isize, usize] |v| {
+             let x = Atomic::new(0);
+             let ptr = x.as_ptr();
+ 
+@@ -208,7 +234,7 @@ fn atomic_acquire_release_tests() {
+ 
+     #[test]
+     fn atomic_xchg_tests() {
+-        for_each_type!(42 in [i8, i16, i32, i64, u32, u64, isize, usize] |v| {
++        for_each_type!(42 in [i8, i16, i32, i64, u8, u16, u32, u64, isize, usize] |v| {
+             let x = Atomic::new(v);
+ 
+             let old = v;
+@@ -218,7 +244,7 @@ fn atomic_xchg_tests() {
+             assert_eq!(new, x.load(Relaxed));
+         });
+ 
+-        for_each_type!(42 in [i8, i16, i32, i64, u32, u64, isize, usize] |v| {
++        for_each_type!(42 in [i8, i16, i32, i64, u8, u16, u32, u64, isize, usize] |v| {
+             let x = Atomic::new(v);
+             let ptr = x.as_ptr();
+ 
+@@ -233,7 +259,7 @@ fn atomic_xchg_tests() {
+ 
+     #[test]
+     fn atomic_cmpxchg_tests() {
+-        for_each_type!(42 in [i8, i16, i32, i64, u32, u64, isize, usize] |v| {
++        for_each_type!(42 in [i8, i16, i32, i64, u8, u16, u32, u64, isize, usize] |v| {
+             let x = Atomic::new(v);
+ 
+             let old = v;
+@@ -245,7 +271,7 @@ fn atomic_cmpxchg_tests() {
+             assert_eq!(new, x.load(Relaxed));
+         });
+ 
+-        for_each_type!(42 in [i8, i16, i32, i64, u32, u64, isize, usize] |v| {
++        for_each_type!(42 in [i8, i16, i32, i64, u8, u16, u32, u64, isize, usize] |v| {
+             let x = Atomic::new(v);
+             let ptr = x.as_ptr();
+ 
+@@ -263,7 +289,7 @@ fn atomic_cmpxchg_tests() {
+ 
+     #[test]
+     fn atomic_arithmetic_tests() {
+-        for_each_type!(42 in [i32, i64, u32, u64, isize, usize] |v| {
++        for_each_type!(42 in [i32, i64, u64, isize, usize] |v| {
+             let x = Atomic::new(v);
+ 
+             assert_eq!(v, x.fetch_add(12, Full));
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261010105740.223992-1-anilkaushikwireless%40gmail.com
+2.56.0
+
