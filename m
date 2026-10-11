@@ -1,119 +1,240 @@
-Received: from mta1.migadu.com (out-75.mta1.migadu.com [95.215.58.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28A429B8E1
-	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 02:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A1E2EEE65;
+	Sun, 11 Oct 2026 03:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791684377; cv=none; b=Knka6txRPl7ZcmTk57SM51uDC9wljQt9oRjt/Z04yLP/h44ukLPKNYH7qyd4qAxCsDq83kvyPKGblwzBt9HXSxvR1xA86gtIqmQPb98vt0Y1HQeGPmRAu2Wa0lb0JQVzE3n5Khdl5dUPjG9JELRMf1RdxyFQe8pRJQOaexkOqSY=
+	t=1791689899; cv=none; b=Obmse/WL8K3W/H7v49sQ6ahXvqBlwpxwApuHrhO0bZWW2zdb8mOcqEOJi/U2++HkAoH8dYNnPAwhKQnI0NXucDuRR80pq7d71Ky3PSDiCKPe8f34r9Wcs/VJgkA1YtO9Z0yIuksNyOBqApt75HZJyJKS0y4tEjMicEfoq2z94sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791684377; c=relaxed/simple;
-	bh=DyIzXaWXtpsPsdJQSjLyhXE678QOzRrRW3Pw3KeUonM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XfDW9w/BvJeI2iEKrdNaMBbXp2OhEmvOuNb7uZi5XXJHy7gvRyLvKUdS7ndqhvvbetq/lnCW1Mgyn5Cm2rfXSp/oxW59MloA0xT+FtKPHwuPfdQ08xgNHbuWbuCzyqUpOvztD8bi+IbGS9kbkzqJ1Gs3xzrEdKnRRRfLPai4Cts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OUmuY73Q; arc=none smtp.client-ip=95.215.58.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791689899; c=relaxed/simple;
+	bh=5xKbhOaGID9Pwo5cuLWrKk/sfw0dg/1AYDf7kuhse+4=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZiV7/lmYz0OANS2MBH+n5GqRamviIamYDSdia7Q6uTYdET19bzzOlZaMdOyUeU2Awxebf0h2vsYiWN4la9642ay1WqeLkKI9Q3pOygWwD7+mJ2s97zzVLcbRuxd7yvoCPF5dn5jlGXNZGUwiMYqtggcY+CyIyBxN1NvfV4C/XPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EGinSXvX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OUmuY73Q"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=DyIzXaWXtpsPsdJQSjLyhXE678QOzRrRW3Pw3KeUonM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791684373; v=1; x=1792289173;
- b=OUmuY73Q+bbOZG2rWzPKFC4NQH/PUiKPYm/oaQR6/EdrIglBf3XhoSx12jCUShYn0fhf2hRN
- omJzx+FgIM9pLa1ZL0jTParysWe4I7yXibVmTYN+U0PI2X+ITKwthFV6kIMKHCb4r1+PdsJnEwp
- 0Jmrmy6A7TF/kgqDRKXYKKa4=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b7449e92942161f2;
-	Sun, 11 Oct 2026 02:06:12 +0000
-X-Mizu-Trace-ID: b7449e92942161f2
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <be5ee7da-75ba-44c7-bfeb-77abff47fca9@linux.dev>
-Date: Sun, 11 Oct 2026 10:06:07 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EGinSXvX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2501F000FF;
+	Sun, 11 Oct 2026 03:38:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791689898;
+	bh=IHiq471lI34tMV6DI159H0HPk05JOLQKG1SqobU79J0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=EGinSXvXpMfm+BKNZSmdSSntxAhl9mXZyU1CvvbHybYYrOFEAUplRFw93WoCpsrlz
+	 AE6R27g5xwx8YepMEIMSbWA4MwPWl6/taP2phdnYblY4lplz5F39EL9vjm/NrzR0vH
+	 5njyL8cZX7SFm8XCVC5pmp8CEKTWplmCsErFuEaqeCI+hDWFWthMtmM3gm1kEyxdA1
+	 QvgS9q1lBn6fRVzg44hJMFcLIz/pQbeSsYyWqnYyTtgVvZZ9DEFPX14XgsIaC6kigN
+	 vtr+AQJHdwJ+AFq19iQsmjkgkujLMqg0eVkTKkHpIgcK7BzaBC5kvk+hKgJTakkwig
+	 CU7u0yQ6Sk14Q==
+Subject: Re: [PATCH net v1 1/4] net: devmem: unmap dma_buf synchronously on
+ queue uninstall
+From: netdev-bot+sashiko@kernel.org
+To: almasrymina@google.com
+Cc: kuba@kernel.org, dw@davidwei.uk, asml.silence@gmail.com,
+ ap420073@gmail.com, sdf@fomichev.me, pabeni@redhat.com, kaiyuanz@google.com,
+ bobbyeshleman@meta.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, horms@kernel.org, shuah@kernel.org,
+ sumit.semwal@linaro.org, christian.koenig@amd.com, daniel@iogearbox.net,
+ razor@blackwall.org, tariqt@nvidia.com, kaifengw@google.com
+Date: Sun, 11 Oct 2026 03:38:16 +0000
+Message-ID: <179168989611.434549.16378879758158058625@kernel.org>
+In-Reply-To: <20261010025532.839559-2-almasrymina@google.com>
+References: <20261010025532.839559-2-almasrymina@google.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2 3/6] cgroup/cpuset: Do housekeeping check before
- converting invalid partition to valid
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Hui Peng <benquike@gmail.com>,
- Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20261010221938.243859-1-longman@redhat.com>
- <20261010221938.243859-4-longman@redhat.com>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20261010221938.243859-4-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
+Critical: 0 · High: 2 · Medium: 0 · Low: 2
 
-On 10/11/2026 6:19 AM, Waiman Long wrote:
-> When a hotplug event happens or when update_cpumasks_hier() is called, an
-> invalid partition may be converted back to valid. However check against
-> housekeeping conflict isn't being done which can lead to a partition
-> state that violates the housekeeping rules. Update the code to allow
-> reviving an invalid partition only if it can pass the housekeeping check.
-> 
-> Fixes: 4a74e418881f ("cgroup/cpuset: Check partition conflict with housekeeping setup")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   kernel/cgroup/cpuset.c | 18 ++++++++++++++++--
->   1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 1c0441fa3bea..fb41cd76add6 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1374,6 +1374,13 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
->   	cpumask_var_t full_hk_cpus;
->   	int res;
->   
-> +	/*
-> +	 * For a currently invalid partition state, do the check assuming that
-> +	 * it may be converted back to valid.
-> +	 */
-> +	if (new_prs < 0)
-> +		new_prs = -new_prs;
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] Incomplete fix: a binding that has already been unbound (netlink
+  socket closed) but is still alive because a TCP socket or page pool…
+- [High] The patch unmaps and detaches the dma-buf in
+  mp_dmabuf_devmem_uninstall() as soon as bound_rxqs becomes empty.
+- [Low] The comment on struct net_devmem_dmabuf_binding::lock in
+  net/core/devmem.h still reads '/* Protect dev */'.
+- [Low] The comment on struct net_devmem_dmabuf_binding::ref in
+  net/core/devmem.h still says 'The binding undos itself and unmaps the…
+
+--
+
+net: devmem: unmap dma_buf synchronously on queue uninstall
+
+This patch adds net_devmem_dmabuf_binding_unmap(), which runs under
+binding->lock and clears binding->sgt and binding->attachment so that
+unmapping is idempotent. It is called from mp_dmabuf_devmem_uninstall()
+when the last bound RX queue is uninstalled, so the dma_buf is no longer
+unmapped against a freed dma_dev after device unregister.
+
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index f4d60654ce7fd..5e4070b82df44 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+> @@ -58,6 +58,21 @@ static void net_devmem_dmabuf_binding_release(struct percpu_ref *ref)
+>  	schedule_work(&binding->unbind_w);
+>  }
+>  
+> +static void
+> +net_devmem_dmabuf_binding_unmap(struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	lockdep_assert_held(&binding->lock);
+
+[Severity: Low]
+This isn't a bug, but the comment on binding->lock in net/core/devmem.h
+still reads:
+
+	/* Protect dev */
+	struct mutex lock;
+
+The lock now also protects binding->sgt and binding->attachment, and the
+lockdep_assert_held() here enforces that. Should the comment in the header
+be updated as well?
+
 > +
+> +	if (!binding->sgt)
+> +		return;
 
-Personally, I don't like this. I think it should be certain what new_prs really 
-is when prstate_housekeeping_conflict() is called; otherwise, it makes the code 
-unreadable.
+[ ... ]
 
-So I think when new_prs < 0, we should return false.
+> @@ -74,9 +89,10 @@ void __net_devmem_dmabuf_binding_free(struct work_struct *wq)
+>  		  size, avail))
+>  		gen_pool_destroy(binding->chunk_pool);
+>  
+> -	dma_buf_unmap_attachment_unlocked(binding->attachment, binding->sgt,
+> -					  binding->direction);
+> -	dma_buf_detach(binding->dmabuf, binding->attachment);
+> +	mutex_lock(&binding->lock);
+> +	net_devmem_dmabuf_binding_unmap(binding);
+> +	mutex_unlock(&binding->lock);
 
->   	if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT) && (new_prs == PRS_ROOT) &&
->   	    !cpumask_subset(add_cpus, housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT)))
->   		return true;
-> @@ -1956,9 +1963,16 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->   			bool exclusive = true;
->   
->   			/*
-> -			 * Convert invalid partition to valid has to
-> -			 * pass the cpu exclusivity test.
-> +			 * Convert invalid partition to valid has to pass the
-> +			 * cpu exclusivity test as well as the housekeeping
-> +			 * check.
->   			 */
-> +			if (prstate_housekeeping_conflict(cs->partition_root_state,
-> +							  parent->partition_root_state,
-> +							  xcpus, NULL)) {
-> +				part_error = PERR_HKEEPING;
-> +				goto write_error;
-> +			}
->   			rcu_read_lock();
->   			cpuset_for_each_child(child, css, parent) {
->   				if (child == cs)
+[Severity: High]
+Can this deferred unmap still run against a freed dma_dev when the binding
+was already unbound before the device went away?
+
+The commit message says the fix covers unregister "while userspace still
+holds a netlink or TCP socket reference". However, the only synchronous
+unmap is in mp_dmabuf_devmem_uninstall(), and dev_memory_provider_uninstall()
+only reaches that for RX queues whose rxq->mp_params is still set.
+
+Closing the netlink socket does this, with no unmap:
+
+netdev_nl_sock_priv_destroy()
+  net_devmem_unbind_dmabuf()
+    xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+    netif_mp_close_rxq()
+      __netif_mp_close_rxq()
+        memset(&rxq->mp_params, 0, sizeof(rxq->mp_params));
+    percpu_ref_kill(&binding->ref);
+
+Other references can keep the binding alive past that point. On RX,
+unreturned devmem tokens keep the old page pool alive. On TX, unacked
+devmem skbs in a TCP retransmit queue hold refs taken via
+net_devmem_get_net_iov(). The TX binding can be created through
+netdev_nl_bind_tx_doit(), which does not check for CAP_NET_ADMIN.
+
+A later unregister then finds no installed provider, so
+mp_dmabuf_devmem_uninstall() is never called for this binding. After the
+parent device is freed (for example in nsim_bus_dev_release()), dropping
+the last reference goes through:
+
+__net_devmem_dmabuf_binding_free()
+  net_devmem_dmabuf_binding_unmap()
+    dma_buf_unmap_attachment_unlocked()
+      unmap_udmabuf()
+        dma_unmap_sg_attrs()    <-- freed attach->dev
+
+That looks like the same KASAN report quoted in the commit message.
+
+The follow-up commit "net: devmem: detach TX bindings on NETDEV_UNREGISTER"
+fixes the TX case while the netlink socket is still open. Its
+net_devmem_dev_unregister() only walks net_devmem_dmabuf_bindings, though,
+and unbound bindings are no longer in that xarray.
+
+A narrower variant needs no extra references. The unbind_w work queued by
+net_devmem_dmabuf_binding_release() runs asynchronously, and nothing makes
+it run before device removal.
+
+Would a complete fix need to track every binding that is still mapped
+against a device, and not only the ones installed on an RX queue?
+
+> +
+>  	dma_buf_put(binding->dmabuf);
+>  	xa_destroy(&binding->bound_rxqs);
+>  	percpu_ref_exit(&binding->ref);
+> @@ -535,6 +551,7 @@ static void mp_dmabuf_devmem_uninstall(void *mp_priv,
+>  				mutex_lock(&binding->lock);
+>  				ASSERT_EXCLUSIVE_WRITER(binding->dev);
+>  				WRITE_ONCE(binding->dev, NULL);
+> +				net_devmem_dmabuf_binding_unmap(binding);
+
+[Severity: High]
+Is it safe to unmap here just because bound_rxqs became empty? Nothing
+here checks whether the hardware queue has actually stopped using the
+binding.
+
+On queue lease teardown the physical NIC is still registered and running:
+
+netkit_queue_unlease()
+  netdev_rx_queue_unlease()
+    netif_rxq_cleanup_unlease()
+      __netif_mp_close_rxq(phys_rxq->dev, rxq_idx, &p);
+      __netif_mp_uninstall_rxq(virt_rxq, &p);
+        mp_dmabuf_devmem_uninstall()
+          net_devmem_dmabuf_binding_unmap()
+
+If the reconfig fails, __netif_mp_close_rxq() only warns:
+
+	err = netdev_rx_queue_reconfig(dev, rxq_idx, &qcfg[0], &qcfg[1]);
+	WARN_ON(err && err != -ENETDOWN);
+
+netdev_rx_queue_reconfig() can fail in ndo_queue_mem_alloc() before
+ndo_queue_stop() is called. It can also fail in stop or start, with the
+old queue restored. In both cases the old devmem page pool keeps running,
+and its ring holds DMA addresses from binding->sgt.
+
+netif_rxq_cleanup_unlease() still calls uninstall unconditionally. The
+virtual rxq is the one recorded in bound_rxqs, so removing it empties the
+xarray. The dma-buf is then unmapped and detached while the NIC can still
+DMA into those IOVAs, and the pool can keep refilling from
+binding->chunk_pool.
+
+Before this patch the mapping lasted until __net_devmem_dmabuf_binding_free()
+ran, which only happens after every page pool has dropped its binding ref.
+The commit message only talks about unregistration. Was the lease
+teardown path also meant to unmap synchronously here?
+
+[Severity: Low]
+This isn't a bug, but the comment on the ref field of struct
+net_devmem_dmabuf_binding in net/core/devmem.h still says:
+
+	 * The binding undos itself and unmaps the underlying dmabuf once all
+	 * those refs are dropped and the binding is no longer desired or in
+	 * use.
+
+With this call, the mapping can go away while netlink, page pool or
+net_iov refs are still held. The follow-up commit "net: devmem: detach TX
+bindings on NETDEV_UNREGISTER" adds another early unmap in
+net_devmem_dev_unregister(). Should this comment be updated to match?
+
+>  				mutex_unlock(&binding->lock);
+>  			}
+>  			break;
 
 -- 
-Best regards
-Ridong
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261010025532.839559-1-almasrymina%40google.com
