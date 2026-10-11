@@ -1,319 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E623BFADD;
-	Sun, 11 Oct 2026 03:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A5F36B932
+	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 05:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791689910; cv=none; b=iBRS7Sqlf4CWsLRySYBJH9kHz4CS7RlOD3OfZIp/tyovuboFR9hNJn+A9l9r08M2ZbFml95HBCLL/BJyxel/bkMS4CqlnOaIRfnC8gEA1e4/A56QenemIbChn0JnqoDP4tdd+LV+fWYPA24btVnCDyko+XhzxsTVnxdTr03K3/E=
+	t=1791695992; cv=none; b=cms6Vi3nOGna2dp3O0URdt3LMXIyq0zxK2ICtKDnbZI2vUol5hhD7Ib3eIM+xAPDFVSpR2saaoUdOij92FH5mg/9LDRNOzzA6j2DRBiDL4Mcm39YUCsvSAhDdK/ON1hYrLiwOtoZhTCqkfS8acTk+ac/EMHjIDZba+KVTU/lVS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791689910; c=relaxed/simple;
-	bh=2xrZX45iucc6IrSrbF9YcOlGiPMVSZSHJtoWydcngZ4=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=R/RMAy7mJpAYAlSvgaAz/fIpzZubOUzoAMk/8GsQcCfPzVq/icX9GMO9KLP2l5aLiMI42kuMIxEdlFY+xmQB1EsFt8wUpCYuqvLNYFpg5yGuieCobCvTDRZ2DSj5SaN5hxK6gdeSOCoBRIXr0YdcrLsjr7ud1Yypou8D6W+tdbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSHJfP/I; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791695992; c=relaxed/simple;
+	bh=3EC2AKJPqO2dWNFkwtLYRoUWCIHRMEUtDSUDwKh+jrY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fsSKZ7jlHVwjZNbFOzOAKaZvk0x0Z2TSIbm8tRQtVnQE2ZR0DUy8YQrDJ6syWA29KCWER5Pc0xD4wFK5D5QehMztlSV9/Fv8RqO88B93W5q6XCRz5CSC4GmqkftLV9nHTwtQB4RAf4WA78DfNqc27By9fCdO+XDmlphRzJqtxoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N/T6cEV1; arc=none smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSHJfP/I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E54211F00893;
-	Sun, 11 Oct 2026 03:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791689904;
-	bh=DhT2Sc1qZOsPqVuOtTlejOzafSl9/+wC5w47v4hyl3w=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=LSHJfP/IDboyc/VdiFW0S5vIbArmrOGlWGu/rf8Sh8b+nve3NdVCJHXsysp4l9xaH
-	 tD4nZz3H2ZukItiafHfTQjAnJmrAdmTRwxKLV3nJR4XGcpWcLGef/wR8PqhWRPI5HR
-	 muaHaCh6nYMsarMSJlbuwA114GYKMFTPCUSkucosh0wzaDPMJgqlyUFHLFhy2jma/j
-	 a2KBtbQ/hC3yjjj2yu6EILi7ByOptub1AdzKbl62tWxeRgpvpM3S5S6OD0a0VY2PAV
-	 obgXc63PF1EQDAttMzuZo4oAgEmdZUlABXqaqErfF06EHfxtqUsjKEqS31zb4sEcD6
-	 FIqE/AFVbfJMg==
-Subject: Re: [PATCH net v1 4/4] selftests: net: add devmem RX and TX netdev
- unregister tests
-From: netdev-bot+sashiko@kernel.org
-To: almasrymina@google.com
-Cc: kuba@kernel.org, dw@davidwei.uk, asml.silence@gmail.com,
- ap420073@gmail.com, sdf@fomichev.me, pabeni@redhat.com, kaiyuanz@google.com,
- bobbyeshleman@meta.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, horms@kernel.org, shuah@kernel.org,
- sumit.semwal@linaro.org, christian.koenig@amd.com, daniel@iogearbox.net,
- razor@blackwall.org, tariqt@nvidia.com, kaifengw@google.com
-Date: Sun, 11 Oct 2026 03:38:22 +0000
-Message-ID: <179168990244.434549.3313221235274785716@kernel.org>
-In-Reply-To: <20261010025532.839559-5-almasrymina@google.com>
-References: <20261010025532.839559-5-almasrymina@google.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N/T6cEV1"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-35829219da8so841003eec.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 22:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791695990; x=1792300790; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Q6Tgx4xiKNqVnyjDiNrZlwqV4pQ45w0gqpDsmg6e6t4=;
+        b=N/T6cEV1Y2nwwjdfwfga+8R2nHOItwqFfy6ccxnHavMaRmimqztzDStdh7ZgKlQtX0
+         sptzAC/mBvfWR3I77QhFg8yEhJbVAEiRtclkV/nJzbK95dah0F+celA960lmSKuO5IN1
+         x5Xwz45JNjyMhRf6aNFJEnG4q6K1DVUuaSrcdKzkZR+jSIyhJtbeOxPX2LXhy4e+ISAm
+         RzjvOUKnBv5Fg0FstLm2SeP1TWA2RZsD3nKgLMyMFbwjf5GFqaYHQlGpY34Hs4G4krhk
+         eapuLt59jAMxL1ojgR2sjiW0jBlZ/koOijWIH3C8ZaI/mMKpQQfz6zgdR+HZBXR9p/Fr
+         ZeBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791695990; x=1792300790;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Q6Tgx4xiKNqVnyjDiNrZlwqV4pQ45w0gqpDsmg6e6t4=;
+        b=rI3zm9IWbp4jk35X6aZ/v/PsCwFyEENH2R3M7v8cP0JysenoAtGE41yenAGO4BWOU3
+         IN+TW1NYVJ4A+XJ2ammjlUQumNpGjkha29ntFZJOy5wd0ZpJ3kV+D/RDDj0vQyaCTvxV
+         xrFscXhrGYc3eAKfRatajbJVADKdaV6RpswF4FU+uuxV9Foal7Lmf1RxcCFzq2f/9KS4
+         Y5ZS392ljKZ3lH7JrkZiIKM9PD1rXbikXJvaK1Cc+/Vjsgp+nm1maiv2SNKnI96NuGZq
+         5OBH8i3c40Im/LFmBL2lY9s+aWKhoOvUl+CMEiFTU/fcT7j4yhQKOyASkghDzCYUjpOk
+         EyZA==
+X-Forwarded-Encrypted: i=1; AKwUvBxdAVFJHfcDs2XZUMC09zgfZHpxuEyAC6lpWXHi2ylk/qU53I1ze7wf/gt4x3dAL5pPSje3+eKP6mODxjriYUA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJAXOKS1gjM04j6i6AH+O6qXmut6utF5qynjOvLuym8TnQKtjJH
+	c6L78rn7TpAFChgfsPWNdPOEHDop6wOHyi5+ubJ3tq/1Zo4JtUyk2XRq
+X-Gm-Gg: AYBFou29j46+E6ANMN80c2ytkpzXk69/RFEkRkKJr0jzMuiRqkPSsGcbvUXRylDE8TR
+	S+vWgW56pP1QhVClPtAZQ9U1dyZP+LCwzZZgs7ZG/MdifSKzVLQcFKXEiNIPDCf6ivTSALaWUQ0
+	LkbR0ZfpOG3c3qGpIwN+rZxGKrHbqdMCVtdowsIIofg31TfylGWOQkAqHI8Qn935/QMF6W9EFl7
+	Cg1vkeyg7A/jQNCCtg/Ub+YjCcHwrTJeYk2zdPPox2FqpwjXp0nlNYxz27Iv3FejWcqibFRqNuV
+	Scfoc1dlkpFcTNGtoWTgns4TopQsWQ/B1llGtZ5d23NCUv1OyOjhpCZ56wd8T023h+fB+FKW4vT
+	dwzlgjbCnLgfQSA0r9f2UFtap6YgpSI+vn7rIge2lk+e4GaSRUdQfYbpt/CGViKF9U+Ey+JN4EJ
+	/gS70Z+5REqbyJf4VeHwj3sijdPSDcBMmKIglxlIlM6Au2C3H4D+lLJm418P5xgu6xuW1ebYMPE
+	vKm/a1uLLrVrMCjhpM3DOOOg9Tx6iIvOXFhITPcOLvOeGcAqIXBOkBiAZsNly+yaVF0JaXr6x58
+	PRgh1+3RuYaiDdmMCaxOAGRShZrQS1oH9qbAbT+lgu8ImeFgVxJLtuppeqDkqhPPThx7jTW8T1F
+	xZS0lfOa+aeh/SzKHg7OlsTMeyiVS1ptZ8b95leAVoszAy5eHmNoCme4=
+X-Received: by 2002:a05:7022:b048:20b0:158:b944:b15 with SMTP id a92af1059eb24-16a5ec48b20mr8682593c88.22.1791695989665;
+        Sat, 10 Oct 2026 22:19:49 -0700 (PDT)
+Received: from FT6N242TWK ([223.181.119.248])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-169a1becf08sm20673698c88.5.2026.10.10.22.19.45
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 10 Oct 2026 22:19:49 -0700 (PDT)
+From: Shashank Mohan Jain <jain.sm@gmail.com>
+To: Thomas Gleixner <tglx@kernel.org>,
+	John Stultz <jstultz@google.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>,
+	Miroslav Lichvar <mlichvar@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Todd Poynor <toddpoynor@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/3] timers: Report disarmed alarm timerfds and SIGEV_NONE timers as disarmed
+Date: Sun, 11 Oct 2026 10:49:40 +0530
+Message-ID: <20261011051943.60520-1-jain.sm@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 7 potential
-issue(s) to consider.
+Two interfaces keep reporting the remaining time of the previous
+setting after a timer was disarmed with a zero it_value, until the old
+expiry time has passed:
 
-Critical: 0 · High: 0 · Medium: 5 · Low: 2
+ - timerfd_gettime() for timerfds on CLOCK_REALTIME_ALARM and
+   CLOCK_BOOTTIME_ALARM (patch 1). The timerfds on the hrtimer based
+   clocks report zero.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+ - timer_gettime() for SIGEV_NONE timers on CLOCK_MONOTONIC,
+   CLOCK_BOOTTIME, CLOCK_REALTIME and the alarm clocks (patch 2).
+   Timers with signal delivery and the CPU time clocks report zero.
 
-- [Medium] In devmem_bind_rx_unregister_check() and
-  devmem_bind_tx_unregister_check()…
-- [Medium] The new tests need /dev/udmabuf (CONFIG_UDMABUF) and debugfs
-  (CONFIG_DEBUG_FS, for the bufinfo assertions).
-- [Medium] _dmabuf_attached_devs() (nl_netdev.py:390-408) collects the
-  'Attached Devices' entries of every dma_buf in the system, not only…
-- [Medium] devmem_bind_rx_unregister_check() (lines 413-439) and
-  devmem_bind_tx_unregister_check() (lines 444-466) do not use `with…
-- [Medium] _create_udmabuf() (nl_netdev.py:384) passes the hardcoded
-  number 0x40187542 as UDMABUF_CREATE.
-- [Low] In both new tests, the only check for the behaviour the
-  docstrings claim ('Verify RX devmem bindings detach dma_buf…
-- [Low] _create_udmabuf() (nl_netdev.py:379-387) closes memfd and devfd
-  only on the success path.
+In both cases the stale expiry time of a timer which is not queued is
+used to compute the remaining time. Patch 1 resets it in alarm_init(),
+patch 2 moves it into the past when a SIGEV_NONE timer is disarmed.
+Patch 3 adds a test for the second case to the posix_timers selftest.
 
---
+The first problem was found by reading fs/timerfd.c, the second one
+when the test program for the first was extended to POSIX timers.
+Both are old: the first exists since timerfd got alarm clock support,
+the second is also there in a v6.8 based distribution kernel.
 
-selftests: net: add devmem RX and TX netdev unregister tests
+Patch 2 uses the timer_arm() callback with an expiry time of 0 to
+reset the stored expiry time, because that needs no new callback. If
+a dedicated callback or a different place is preferred, I can redo it
+that way.
 
-This adds two tests to nl_netdev.py. Each one creates a udmabuf, binds it
-to a netdevsim device for devmem RX or TX through the netdev netlink
-family, and then removes the netdevsim device. The tests check debugfs
-dma_buf/bufinfo to confirm that the attachment is gone, and expect the
-netlink socket to close cleanly afterwards.
+Tested in qemu (x86_64) on top of mainline a5ebb76233b7 (v7.3-rc6+)
+with a program which runs the arm/disarm/gettime sequence on all five
+clocks for timerfd and for POSIX timers with SIGEV_SIGNAL and
+SIGEV_NONE: 9 wrong results without the series, none with it. The
+posix_timers selftest with patch 3 fails the new CLOCK_MONOTONIC test
+without patch 2 and passes all 21 tests with it. The patches also
+apply to next-20261009.
 
-> diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-> index ceb44c8e1fec5..bad230ee9dcd2 100755
-> --- a/tools/testing/selftests/net/nl_netdev.py
-> +++ b/tools/testing/selftests/net/nl_netdev.py
+Shashank Mohan Jain (3):
+  alarmtimer: Reset the expiry time in alarm_init()
+  posix-timers: Report a disarmed SIGEV_NONE timer as disarmed
+  selftests/timers: Test timer_gettime() on a disarmed SIGEV_NONE timer
 
-[ ... ]
+ kernel/time/alarmtimer.c                      |  1 +
+ kernel/time/posix-timers.c                    | 12 +++++-
+ tools/testing/selftests/timers/posix_timers.c | 38 ++++++++++++++++++-
+ 3 files changed, 48 insertions(+), 3 deletions(-)
 
-> @@ -366,6 +370,102 @@ def page_pool_stats_ifindex_check(nf) -> None:
->      ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.info.id')
->  
->  
-> +def _create_udmabuf(num_pages=64) -> int:
-> +    """Create a sealed memfd-backed udmabuf fd for devmem tests."""
-> +    if not os.path.exists("/dev/udmabuf"):
-> +        raise KsftSkipEx("/dev/udmabuf is not available")
 
-[Severity: Medium]
-Will these tests ever run in CI that builds from the net config fragment?
-
-The only related entry in tools/testing/selftests/net/config is:
-
-CONFIG_NETDEVSIM=m
-
-It enables neither CONFIG_UDMABUF nor CONFIG_DEBUG_FS. So
-_create_udmabuf() would always raise KsftSkipEx here, and both new tests
-would always skip.
-
-tools/testing/selftests/drivers/net/hw/config and drivers/dma-buf/config
-both set CONFIG_UDMABUF=y. Should the net config fragment add
-CONFIG_UDMABUF=y and CONFIG_DEBUG_FS=y too?
-
-> +
-> +    size = num_pages * mmap.PAGESIZE
-> +    memfd = os.memfd_create("devmem-ksft", os.MFD_ALLOW_SEALING)
-> +    os.ftruncate(memfd, size)
-> +    fcntl.fcntl(memfd, 1033, 0x0002)  # F_ADD_SEALS, F_SEAL_SHRINK
-> +    devfd = os.open("/dev/udmabuf", os.O_RDWR)
-> +    req = bytearray(struct.pack("IIQQ", memfd, 0, 0, size))
-> +    dmabuf_fd = fcntl.ioctl(devfd, 0x40187542, req)  # UDMABUF_CREATE
-
-[Severity: Medium]
-Is 0x40187542 the right request number on every architecture?
-
-The uapi header defines it as:
-
-include/uapi/linux/udmabuf.h:
-#define UDMABUF_CREATE       _IOW('u', 0x42, struct udmabuf_create)
-
-0x40187542 is the asm-generic encoding. Alpha, mips, powerpc and sparc
-define _IOC_WRITE as 4U with 13 size bits, and parisc defines it as 2U.
-On all of these the write bit lands at 0x80000000, so the request number
-becomes 0x80187542.
-
-On those architectures udmabuf_ioctl() hits its default case:
-
-	default:
-		ret = -ENOTTY;
-
-Nothing catches the resulting OSError from fcntl.ioctl(), so both devmem
-tests would fail instead of running or skipping.
-
-> +    os.close(devfd)
-> +    os.close(memfd)
-> +    return dmabuf_fd
-
-[Severity: Low]
-Does this leak memfd and devfd on the error paths?
-
-If os.ftruncate(), the F_ADD_SEALS fcntl() or os.open() raises, memfd is
-never closed. If the UDMABUF_CREATE ioctl raises (the ENOTTY case above,
-for example), both memfd and devfd stay open. ksft_run() catches the
-exception and keeps the process running.
-
-A try/finally around these calls would close both.
-
-> +
-> +
-> +def _dmabuf_attached_devs():
-> +    """Return attached device names from debugfs dma_buf/bufinfo if available."""
-> +    path = "/sys/kernel/debug/dma_buf/bufinfo"
-> +    if not os.path.exists(path):
-> +        return None
-
-[Severity: Low]
-What happens when bufinfo is missing (CONFIG_DEBUG_FS off, or debugfs not
-mounted)?
-
-Both tests guard every assertion with:
-
-    if attached is not None:
-
-With None they run no assertions at all. ksft_run() then records them as
-pass, not skip.
-
-The tests still exercise nsimdev.remove(), but they would pass even if
-the dma_buf stayed attached after unregister. Should this raise
-KsftSkipEx instead of returning None?
-
-> +    with open(path, "r", encoding="utf-8") as f:
-> +        text = f.read()
-> +    attached = []
-> +    in_attached = False
-> +    for line in text.splitlines():
-> +        if line.strip() == "Attached Devices:":
-> +            in_attached = True
-> +            continue
-> +        if in_attached:
-> +            if line.startswith("\t") and line.strip():
-> +                attached.append(line.strip())
-> +            else:
-> +                in_attached = False
-> +    return attached
-
-[Severity: Medium]
-Does this count attachments from every dma_buf in the system, rather than
-only the udmabuf this test created?
-
-dma_buf_debug_show() walks the whole dmabuf_list and prints one block for
-each buffer:
-
-drivers/dma-buf/dma-buf.c:dma_buf_debug_show() {
-    ...
-		seq_puts(s, "\tAttached Devices:\n");
-		attach_count = 0;
-
-		list_for_each_entry(attach_obj, &buf_obj->attachments, node) {
-			seq_printf(s, "\t%s\n", dev_name(attach_obj->dev));
-    ...
-}
-
-The parser collects entries after every header, so the result is a total
-for the whole host.
-
-This has two effects:
-
-- ksft_eq(len(attached), 0) after nsimdev.remove() fails whenever any
-  other dma_buf (GPU, display, V4L2) has an attachment, even if the
-  kernel detached this one correctly.
-- ksft_ge(len(attached), 1) passes even if this binding never attached.
-
-An attachment left behind by the RX test would also make the TX test
-fail.
-
-Could this filter on the inode of dmabuf_fd (os.fstat(dmabuf_fd).st_ino)
-or on the netdevsim device name?
-
-> +
-> +
-> +def devmem_bind_rx_unregister_check(_nf) -> None:
-> +    """Verify RX devmem bindings detach dma_buf synchronously on netdev unregister."""
-> +    dmabuf_fd = _create_udmabuf()
-> +    nf_priv = NetdevFamily()
-> +    ef = EthtoolFamily()
-> +    nsimdev = NetdevSimDev(queue_count=2)
-> +    nsim = nsimdev.nsims[0]
-
-[Severity: Medium]
-What happens to the netdevsim device if anything between here and
-nsimdev.remove() raises?
-
-The ip link set call, ef.rings_set(), nf_priv.bind_rx() or ksft_ge()
-could all raise. ksft_run() catches the exception and moves on, but
-nsimdev.remove() is never reached.
-
-NetdevSimDev only cleans up through remove() or __exit__ and has no
-__del__. So the device stays in the kernel after the selftest exits.
-dmabuf_fd stays open, and if the bind succeeded, the dma_buf attachment
-stays live too.
-
-The other netdevsim tests in this file use "with NetdevSimDev(...)" or
-defer(). Could these do the same? devmem_bind_tx_unregister_check() has
-the same pattern.
-
-> +
-> +    ip(f"link set dev {nsim.ifname} up")
-> +    ef.rings_set({"header": {"dev-index": nsim.ifindex},
-> +                  "tcp-data-split": "enabled"})
-> +    nf_priv.bind_rx({
-> +        "ifindex": nsim.ifindex,
-> +        "fd": dmabuf_fd,
-> +        "queues": [{"id": 1, "type": "rx"}],
-> +    })
-> +
-> +    attached = _dmabuf_attached_devs()
-> +    if attached is not None:
-> +        ksft_ge(len(attached), 1)
-> +
-> +    nsimdev.remove()
-> +
-> +    attached = _dmabuf_attached_devs()
-> +    if attached is not None:
-> +        ksft_eq(len(attached), 0)
-> +
-> +    del nf_priv
-> +    os.close(dmabuf_fd)
-
-[Severity: Medium]
-Does del nf_priv actually close the netlink socket that holds the
-binding?
-
-YnlFamily.__init__() stores, on self, a partial for every op that refers
-back to self:
-
-tools/net/ynl/pyynl/lib/ynl.py:YnlFamily.__init__() {
-    ...
-        for op_name, op in self.ops.items():
-            bound_f = functools.partial(self._op, op_name)
-            setattr(self, op.ident_name, bound_f)
-    ...
-}
-
-That is a reference cycle, so refcounting never frees the object. del
-only drops the local name, and self.sock stays open until the cyclic GC
-happens to run. That could be during the next test, or at process exit
-after ksft_exit() has already printed the results.
-
-So the step the commit message describes, closing the socket after
-unregister and reaching netdev_nl_sock_priv_destroy(), does not happen
-at a fixed point inside this test. A failure on that path could be
-blamed on another test, or show up after this one already reported ok.
-
-YnlFamily already provides close() and __enter__/__exit__. Would
-nf_priv.close(), or "with NetdevFamily() as nf_priv:", be better here?
-The same applies to devmem_bind_tx_unregister_check().
-
-[ ... ]
-
+base-commit: a5ebb76233b79db01e82e061173cb73c6d2b5c6b
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261010025532.839559-1-almasrymina%40google.com
+2.43.0
+
