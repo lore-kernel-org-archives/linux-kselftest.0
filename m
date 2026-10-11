@@ -1,38 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749CF46C847;
-	Sun, 11 Oct 2026 22:34:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04F946D0B1;
+	Sun, 11 Oct 2026 22:34:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791758051; cv=none; b=fU7OTwKivSm7cxvymUE29Gykvu1ZU5/N/EVdBNU+InDnnxJfIc9TOxqyp4AlWBu9+2tL04FCNTojXsXtv+IV5gijO1ekMKXHsoBZfq0caWHFJE4hB6AcMTALMIsvYYRNSlE3yQT7wv4/2EXPKdJ8QkJhb1BhI5txexDJA3Byy5Q=
+	t=1791758053; cv=none; b=b8u8L658kmqbYjFG4qzxYiWGwDMT75cRNzT98CjcTywlytuGOp+OMrWShdSgqYFl6ooJX5XPvP97qk7AcEXY/9php06kcWvscrBkUlxjMI2c1ctMgc5z6NX7z2Y622uoLUIYJQ0uddL74czXLHttLbh0KC3YcXzQBZSD0oWB1pE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791758051; c=relaxed/simple;
-	bh=8rGpt82kgwwLCsrLmySaLIVFFjJfxX/Ubj+h9UYIsec=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LUi8BGz542y3BTPvX8ghR9JbgTMTVQq+GizFowrQ75m0mOCXncQdqb4jT64bHXl8bsZUCB42jHYk7BHDNLR/xwulbytUtc7j2IfwxZJWsYdLmL01azAAPt1P8+7nkOtKtRjIN9oJXoApzS/QybFn2pPIIgd1qLBllxaEoqczpFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E2UP8Qu8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791758053; c=relaxed/simple;
+	bh=Kc9DmJSBFLurxMClSmavCXYgaAe/+NlK9ylk9KsSpbE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QmGpPaPUjpo9SenW/IH0vMdl2IwJEsDBvMo4IKyJosTFK8HX43nVJDcqqjKNa7QAbUNj0n5y92efBwD3NORn34ttS+tfd0G6XWySIhaGV3ZRwnCfBvpXyTJzv/cZvJUdHGjyQMfyi7xA751AfVPAU47LouyvOdJXPdtEJGzuuw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ua32L9UR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E2UP8Qu8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22431F0089B;
-	Sun, 11 Oct 2026 22:34:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ua32L9UR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4545F1F0089C;
+	Sun, 11 Oct 2026 22:34:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791758050;
-	bh=FJNgqeyrtcChHCRm43OZyYdn0ycOLDFYrjVOm0QMJ1M=;
+	s=k20260515; t=1791758052;
+	bh=MtBrUZk9L4rkfwDGHCQBcgRtyBALUY+U/RwYmPk4KOo=;
 	h=From:To:Cc:Subject:Date;
-	b=E2UP8Qu8CxgLtOCRvRAi7p74Iz0HVOZUKJRfo137h6PkQh4PfAt6NEHyYgnIxbi61
-	 yaV0SqsWZFgZ7c9zfJTM3WNxMKmpkthJngQMNFT/7Iw/unUOlcAmDP4310UgIkmZ/J
-	 7RoBloTM9bf6FkCEQQYGFBieOgLCJrsZqKtlMq20sfuNvL6IzUDKA7V0GyyTRHzcdQ
-	 1cp+lynuiC44aQKhuZymfDdiRayt2BQrQwuBZ0FtKMJhbubuQ/0rq1LOJ2MUhDQpY5
-	 +sXFHCEARGxlFzJwOcdjusTAiuGIhtEbn9Yuxf1FZ1FxwnW5+yBsglhFVSUWSpPEy1
-	 svmfXkHYmuA7w==
+	b=Ua32L9URjZTITJTZSFrFmYMwiIL3GwAVFKD2SgoXL1sBgdPqFxYujI7GSQQ4smK5/
+	 271mrUUOg75peDejLzBzpCEPS/GseYF/8aXgIG8hkDTYs9HUNg1avSUvfpvq7y4qQt
+	 OHRv5nv7ifR3Fh16NgWfYEo9414JiXVYDcrW8o8nAtJW/H1BrWFP7Muw/7RSGKVyQP
+	 zaoYwT1EtGEXFd39Pmqez7nIGlZkZnl/Gq7tE0ijSCGd0GghZNcL2qCayTwN83Dorb
+	 Lt2uKwiDgJD+3GcUsQ8t7weBnSqYUURyg+gWezylWP1o7IAO1x/pvzkBUi67bB8N7G
+	 jxHAYvgsPjtFA==
 From: Sasha Levin <sashal@kernel.org>
-To: Shuah Khan <shuah@kernel.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Mark Brown <broonie@kernel.org>
 Cc: Sasha Levin <sashal@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: lib.mk: define LINK.c, COMPILE.S and LINK.S when make has none
-Date: Sun, 11 Oct 2026 18:33:34 -0400
-Message-ID: <20261011223358.2327625-6-sashal@kernel.org>
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/rseq: depend on librseq.so only
+Date: Sun, 11 Oct 2026 18:33:35 -0400
+Message-ID: <20261011223358.2327625-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -42,50 +48,74 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The kernel build runs make with -rR, which removes make's built-in rules
-and variables. tools/testing/selftests/Makefile copes by clearing
-MAKEFLAGS for its sub-makes, and lib.mk defines LINK.c, COMPILE.S and
-LINK.S again, but only when building_out_of_srctree is set. A selftest
-directory built directly by a make that inherited -R gets neither, so
-LINK.c is empty and the generic rule tries to execute the source file:
+Each test program lists $(TEST_GEN_PROGS_EXTENDED) as a prerequisite to
+pick up librseq.so. Since that list also holds the test programs built by
+the same rules, every build prints a page of
 
-  make[4]: acct_syscall.c: No such file or directory
+  make: Circular <prog> <- <prog> dependency dropped.
 
-Define them whenever make does not provide them, as make itself defines
-them, so that they are the same with and without -R. The definitions
-lib.mk used for O= builds until now differed from make's only in using
-TARGET_ARCH instead of TARGET_MACH for assembly, which no selftest sets.
+Depend on $(OUTPUT)/librseq.so, which is what the rules need.
 
+Fixes: cb48828f06afa ("selftests/rseq: Don't run tests with runner scripts outside of the scripts")
 Assisted-by: LLM
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/lib.mk | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ tools/testing/selftests/rseq/Makefile | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index f02cc8a2e4ae3..4de034f3e9d34 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -207,14 +207,11 @@ CFLAGS += -I${top_srcdir}/tools/testing/selftests
- CFLAGS += $(USERCFLAGS)
- LDFLAGS += $(USERLDFLAGS)
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index aba6317f6cb8e..977da558fa2f5 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -40,38 +40,38 @@ include ../lib.mk
+ $(OUTPUT)/librseq.so: rseq.c rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
  
--# When make O= with kselftest target from main level
--# the following aren't defined.
--#
--ifdef building_out_of_srctree
--LINK.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
--COMPILE.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
--LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
--endif
-+# Make's built-in variables are not defined when run with -R, which kbuild
-+# passes down when a test is built from the main level.
-+LINK.c ?= $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-+COMPILE.S ?= $(CC) $(ASFLAGS) $(CPPFLAGS) $(TARGET_MACH) -c
-+LINK.S ?= $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_MACH)
+-$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
++$(OUTPUT)/%: %.c $(OUTPUT)/librseq.so rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
  
- # Selftest makefiles can override those targets by setting
- # OVERRIDE_TARGETS = 1.
+-$(OUTPUT)/basic_percpu_ops_mm_cid_test: basic_percpu_ops_test.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
++$(OUTPUT)/basic_percpu_ops_mm_cid_test: basic_percpu_ops_test.c $(OUTPUT)/librseq.so rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID $< $(LDLIBS) -lrseq -o $@
+ 
+-$(OUTPUT)/param_test_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++$(OUTPUT)/param_test_benchmark: param_test.c $(OUTPUT)/librseq.so \
+ 					rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) -DBENCHMARK $< $(LDLIBS) -lrseq -o $@
+ 
+-$(OUTPUT)/param_test_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++$(OUTPUT)/param_test_compare_twice: param_test.c $(OUTPUT)/librseq.so \
+ 					rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -o $@
+ 
+-$(OUTPUT)/param_test_mm_cid: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++$(OUTPUT)/param_test_mm_cid: param_test.c $(OUTPUT)/librseq.so \
+ 					rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID $< $(LDLIBS) -lrseq -o $@
+ 
+-$(OUTPUT)/param_test_mm_cid_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++$(OUTPUT)/param_test_mm_cid_benchmark: param_test.c $(OUTPUT)/librseq.so \
+ 					rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID -DBENCHMARK $< $(LDLIBS) -lrseq -o $@
+ 
+-$(OUTPUT)/param_test_mm_cid_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++$(OUTPUT)/param_test_mm_cid_compare_twice: param_test.c $(OUTPUT)/librseq.so \
+ 					rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -o $@
+ 
+-$(OUTPUT)/syscall_errors_test: syscall_errors_test.c $(TEST_GEN_PROGS_EXTENDED) \
++$(OUTPUT)/syscall_errors_test: syscall_errors_test.c $(OUTPUT)/librseq.so \
+ 					rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
+ 
+-$(OUTPUT)/slice_test: slice_test.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
++$(OUTPUT)/slice_test: slice_test.c $(OUTPUT)/librseq.so rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
+ 
+-$(OUTPUT)/check_optimized: check_optimized.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
++$(OUTPUT)/check_optimized: check_optimized.c $(OUTPUT)/librseq.so rseq.h rseq-*.h
+ 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
 -- 
 2.53.0
 
