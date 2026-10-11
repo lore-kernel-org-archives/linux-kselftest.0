@@ -1,288 +1,122 @@
-Received: from mta0.migadu.com (out-7.mta0.migadu.com [91.218.175.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717D8421237
-	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 08:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8988B346777
+	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 08:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791708512; cv=none; b=HALFBJjwYlw/KRdG/HTVabaWG2ZS0ecJ4z3iyocDOi3Zuij0uM3Gl6Lx1NS7MNRqoVURrozlcWcPZYOFNZZ8xJ1bZSMZn9ylojFLQ8iEDHNcolYMwMxLToLLUqOElVVuGz4k62+Wofvwt7mR9ZSPjd40tT45T2h//TiVl3Sjst8=
+	t=1791708951; cv=none; b=IjYV9LXuTDt/xjPbcFb6Kv55Df/pq6ZuIFXVM0f555zgeKnPN1JamEo6RaaTRUU0X9WPFFk9my7/w0mZIvn+D8ebPmmb4/e+2kjr1GzF5WMO4HmNufBJ6/6QTBuG5S3o1rEM+6DXRdHNOAkljm4auroqapcB4uf9C9wjps/gfkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791708512; c=relaxed/simple;
-	bh=1ZJ270N9Cvuns/rw/5cTxT6UtYYld8470xg4Xu8WE8s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oQb+8PNr/V4orq4IuHcilkd80DySzjWGkEfIUyLpimOXEVEw47gEm+SJHrV9yhmzq97OmvW2d9USSVg8w4g0QTVUECa773msMIebDKpaFH4LOjpqP+mczyKQ48egEifayTdM0Ml8RQS5bA2KzgEkCTVg4Jw+PCAfyz+iJ6eCo7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SHpRMGX4; arc=none smtp.client-ip=91.218.175.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791708951; c=relaxed/simple;
+	bh=c71GV9Em8N83Q/onaYF06piMYm9Sy1RKY9G8jl/civ0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aSvVbscQ3Nm+EvTpKn5ZikMuGZE/Zqm9z7q1IYQX1hBEOQZFJBhf55ItX1jaUpHFWM+dlclFPNgZpfwjb1xJSoLkLrx8mSV7JDh6Ch+vYmlFIkGYmyPm/mHimZHxzhSEN3PEXCFgLFfQAdQNMj+mmw+zqUgWWRMD73wnkVkrpMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TtGem5H/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SHpRMGX4"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1ZJ270N9Cvuns/rw/5cTxT6UtYYld8470xg4Xu8WE8s=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791708505; v=1; x=1792313305;
- b=SHpRMGX4rgCZ52EUlfe+oQnGwdFYoj+pN8PHiSKZ+6alROGp+RwVr3Wd8GCmNO/hJgz3N4gX
- mSEjj+V0haOCubtxhPpXeTXNu6kjOM0WK+T6jtzU4YW7sqaX9/34xRBYU8hTivlR0iNTzwpOg6A
- Q1/3ciSfZx4VZ2XXLJ4RogBc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c162570d02b52201;
-	Sun, 11 Oct 2026 08:48:25 +0000
-X-Mizu-Trace-ID: c162570d02b52201
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c7bf4584-0a47-445b-af10-4b1a29e9cdec@linux.dev>
-Date: Sun, 11 Oct 2026 16:48:20 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TtGem5H/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A2FB1F008A1
+	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 08:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791708950;
+	bh=bq8owGPAlvuzDobHhVTg9562ILbptQRMiB+o1O0+JE0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=TtGem5H/n9sfe4HkWONB9kN5HHL3KAmk9Iei//tLjScYYPayiVeNl7PIVSuyHQspQ
+	 FL1kgEdzoJ5UUN26eeHlTQMl4I6HbobjPwKnwgrVoqqB1xHRNmmboU5wZrj4ju6Goq
+	 YX2i7Qa2/3uxO/tti6wro2aIfMPf73eaARb2Fooq63Qp2VuaGcsStuG8Za0OtuE3Nd
+	 Uftiwf8QTNcjElt3UTNQ7pJa4OfbMGyRrqTbt8ZHPUzmpwlIeMXB7hfeTf40UZOv9H
+	 BIgZKxhAoXGlJwkJsx/ZdwWz7HtkUHf5NnpWaVz0RN5w4DVwQRCdYuqbbsNzYIdO/B
+	 IU4R3NqBrbsFQ==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6df5e315bd1so710879eaf.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 01:55:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvByMZ1C3Rxv9ONZ1fkpzYQ1xKvqgL/SsjCkMC9UYUntR+c8FdMcYjeT4zLLHFI6d/T2OVxnbEwQAwBhmLKMIW/8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL49Qaumfap+uHUOZryuUjotqXm0d+bVuv+jIdlQY17MBlfPii2
+	SIIzxcRSHYNsbpgOXAE7z1vRcsF3iCe8anynW/xAWtMkUH9WDLWs4BoieYrHTGkT/Y+a4bA6/FP
+	1GfaOoPatgegq01pdpkgxIfxluIGH8iQ=
+X-Received: by 2002:a05:6820:c2d3:10b0:6f4:ae96:c596 with SMTP id
+ 006d021491bc7-6f4ae96ccc1mr351008eaf.2.1791708949482; Sun, 11 Oct 2026
+ 01:55:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2 5/6] selftests/cgroup: Add tests for housekeeping
- check
-To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Hui Peng <benquike@gmail.com>
-References: <20261010221938.243859-1-longman@redhat.com>
- <20261010221938.243859-6-longman@redhat.com>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <20261010221938.243859-6-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20261011-bradfitz-gre-fou-gro-b4-v1-0-df713aad1531@tailscale.com> <20261011-bradfitz-gre-fou-gro-b4-v1-1-df713aad1531@tailscale.com>
+In-Reply-To: <20261011-bradfitz-gre-fou-gro-b4-v1-1-df713aad1531@tailscale.com>
+From: Eric Dumazet <edumazet@kernel.org>
+Date: Sun, 11 Oct 2026 10:55:38 +0200
+X-Gmail-Original-Message-ID: <CAL4WiioRu30CJBTDo6UhnJCb8jmzYUZaDZ9UQAZ0+rpxtANH0g@mail.gmail.com>
+X-Gm-Features: AclHuK_2L6gfWdm0daVBvQD8sLKYxLb2fL9PO6B1lw50qvYQOGtJGmvz7CgB9gg
+Message-ID: <CAL4WiioRu30CJBTDo6UhnJCb8jmzYUZaDZ9UQAZ0+rpxtANH0g@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] gre: keep the UDP tunnel GSO type when completing GRO
+To: bradfitz@tailscale.com
+Cc: "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Antoine Tenart <atenart@kernel.org>, Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-在 2026/10/11 06:19, Waiman Long 写道:
-> Whenever a partition is enabled or the cpumask of a valid partition
-> changes, a housekeeping check will be performed to ensure that the
-> change won't violate the imposed housekeeping constraints. One of the
-> constraints is that a boot-time isolated CPU will not be used to form
-> a non-isolated root partition.  This requires the presence of boot-time
-> isolated CPUs when a test is run.
-> 
-> The test_cpuset_prs.sh test script is now updated to run a set a
-> special housekeeping check tests that will only be run if a suitable
-> boot-time isolated CPU is present. This will enable us to detect bugs
-> or regressions in the housekeeping checking code though a "isolcpus="
-> boot parameter with CPUs beyond CPU 8 must be present.
-> 
-> Adding test to check for exhaustion of all the housekeeping CPUs is
-> much harder and so will not be attempted at this time.
-> 
-> This patch also includes a minor fix to the REMOTE_TEST_MATRIX to avoid
-> test failure when the -v option is used.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+Le dim. 11 oct. 2026 =C3=A0 03:41, Brad Fitzpatrick via B4 Relay
+<devnull+bradfitz.tailscale.com@kernel.org> a =C3=A9crit :
+>
+> From: Brad Fitzpatrick <bradfitz@tailscale.com>
+>
+> gre_gro_complete() assigns SKB_GSO_GRE to gso_type rather than OR-ing
+> it in. When GRE is carried over UDP by FOU or GUE, udp_gro_complete()
+> has already set SKB_GSO_UDP_TUNNEL{,_CSUM} before calling into the FOU
+> or GUE gro_complete handler and then gre_gro_complete(), so that bit is
+> lost.
+>
+> That has broken forwarding of such packets since FOU gained GRO: if a
+> host with a FOU or GUE socket on the tunnel's port merges transit
+> packets and then forwards them out a device that can't segment them
+> itself, udp4_ufo_fragment() finds neither tunnel bit and fails, and
+> the packets are dropped. Since commit 3d010c8031e3 ("udp: do not accept
+> non-tunnel GSO skbs landing in a tunnel"), local receive is broken too:
+> udp_unexpected_gso() considers the merged skb, which reaches the
+> encapsulation socket without either UDP tunnel bit, unexpected and
+> hands it to udp_rcv_segment(). Segmenting fails, so the packet is
+> freed and counted in UdpInErrors. Either way, only packets GRO didn't
+> merge get through, so TCP over FOU or GUE GRE tunnels slows to about
+> one segment per round trip whenever the receiving device has GRO
+> enabled.
+>
+> OR in SKB_GSO_GRE instead, as ipip_gro_complete() and
+> sit_gro_complete() do for SKB_GSO_IPXIP4. For plain GRE, gso_type is
+> still zero at this point unless the driver set it, so nothing changes
+> there in the usual case.
+>
+> The assignment dates to commit bf5a755f5e91 ("net-gre-gro: Add GRE
+> support to the GRO stack"), but nothing set gso_type before it until
+> FOU GRO came along, so the Fixes tag points there.
+>
+> Tested under virtme-ng with bulk TCP over a GRE tunnel between two
+> network namespaces joined by a veth, with GRO on the receiving veth and
+> segmentation off on the sending one, so GRO sees wire-sized packets.
+> 32 MiB took:
+>
+>                   before                  after
+>   FOU over IPv4   26.0s, 9658 UDP errors  0.28s, 0 errors
+>   GUE over IPv4   26.1s, 9686 UDP errors  0.39s, 0 errors
+>   FOU over IPv6   26.4s, 9860 UDP errors  0.16s, 0 errors
+>   plain GRE       0.17s                   0.15s
+>
+> Forwarding the same FOU traffic through a third namespace with its own
+> FOU socket on the port, GRO on its ingress and segmentation off on its
+> egress, took 26.0s with 4826 egress drops before and 0.31s with none
+> after. On v6.8, before 3d010c8031e3, local receive was fine but
+> forwarding failed the same way (25.7s, 4764 drops).
+>
+> With GRO off on the receiver, all took under 0.2s both before and
+> after. The gre_gso.sh and fou_mcast_encap.sh selftests give the same
+> results before and after.
+>
+> Fixes: afe93325bc02 ("fou: Add GRO support")
+> Assisted-by: LLM
+> Signed-off-by: Brad Fitzpatrick <bradfitz@tailscale.com>
 > ---
->  .../selftests/cgroup/test_cpuset_prs.sh       | 109 ++++++++++++++----
->  1 file changed, 87 insertions(+), 22 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index 7efd5e645767..3d392e8c66aa 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -86,26 +86,37 @@ echo "" > test/cpuset.cpus
->  
->  #
->  # If isolated CPUs have been reserved at boot time (as shown in
-> -# cpuset.cpus.isolated), these isolated CPUs should be outside of CPUs 0-8
-> -# that will be used by this script for testing purpose. If not, some of
-> -# the tests may fail incorrectly. Wait a bit and retry again just in case
-> -# these isolated CPUs are leftover from previous run and have just been
-> -# cleaned up earlier in this script.
-> +# /sys/devices/system/cpu/isolated), these isolated CPUs should be outside of
-> +# CPUs 0-8 that will be used by this script for testing purpose. If not, some
-> +# of the tests may fail incorrectly.
->  #
-> -# These pre-isolated CPUs should stay in an isolated state throughout the
-> +# The current set of isolated CPUs (as shown in cpuset.cpus.isolated) should
-> +# be the same as the boot value. If not, wait a bit and retry again just in
-> +# case these isolated CPUs are leftover from previous run and have just been
-> +# cleaned up earlier in this script. If they still don't match, we report an
-> +# warning and skip the test.
-> +#
-> +# These boot isolated CPUs should stay in an isolated state throughout the
->  # testing process for now.
->  #
-> -BOOT_ISOLCPUS=$(cat $CGROUP2/cpuset.cpus.isolated)
-> +BOOT_ISOLCPUS=$(cat /sys/devices/system/cpu/isolated)
-> +CURRENT_ISOLCPUS=$(cat $CGROUP2/cpuset.cpus.isolated)
-> +FIRST_ISOLCPUS=
-> +TEST_ISOLCPUS=
-> +
->  [[ -n "$BOOT_ISOLCPUS" ]] && {
-> +	FIRST_ISOLCPUS=$(echo $BOOT_ISOLCPUS | sed -e "s/[,-].*//")
-> +	[[ $FIRST_ISOLCPUS -le 8 ]] &&
-> +		skip_test "Boot-isolated CPUs ($BOOT_ISOLCPUS) overlap CPUs to be tested"
-> +	echo "Boot-isolated CPUs: $BOOT_ISOLCPUS"
-> +}
-> +
-> +[[ "$BOOT_ISOLCPUS" != "$CURRENT_ISOLCPUS" ]] && {
->  	sleep 0.5
-> -	BOOT_ISOLCPUS=$(cat $CGROUP2/cpuset.cpus.isolated)
-> +	CURRENT_ISOLCPUS=$(cat $CGROUP2/cpuset.cpus.isolated)
-> +	[[ "$BOOT_ISOLCPUS" != "$CURRENT_ISOLCPUS" ]] &&
-> +		skip_test "Current isolated CPUs ($CURRENT_ISOLCPUS) don't match boot isolated CPUs!"
->  }
-> -if [[ -n "$BOOT_ISOLCPUS" ]]
-> -then
-> -	[[ $(echo $BOOT_ISOLCPUS | sed -e "s/[,-].*//") -le 8 ]] &&
-> -		skip_test "Pre-isolated CPUs ($BOOT_ISOLCPUS) overlap CPUs to be tested"
-> -	echo "Pre-isolated CPUs: $BOOT_ISOLCPUS"
-> -fi
->  
->  cleanup()
->  {
-> @@ -202,7 +213,7 @@ test_add_proc()
->  #
->  # ECPUs    - effective CPUs of cpusets
->  # Pstate   - partition root state
-> -# ISOLCPUS - isolated CPUs (<icpus>[,<icpus2>])
-> +# ISOLCPUS - isolated CPUs (<icpus>[,<icpus2>] or .)
->  #
->  # Note that if there are 2 fields in ISOLCPUS, the first one is for
->  # sched-debug matching which includes offline CPUs and single-CPU partitions
-> @@ -444,6 +455,35 @@ TEST_MATRIX=(
->  	"   C0-3     .      .    C4-5   X3-5     .      .      .     1 A1:0-3|B1:4-5"
->  )
->  
-> +# Test matrix with boot time isolated CPUs present for housekeeping check testing
-> +ISOLCPUS_TEST_MATRIX=(
-> +	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
-> +	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
-> +	# A local isolated partition containing boot isolated CPU cannot be
-> +	# switched to root partition.
-> +	" C1-2,I:P2  .      .      .      P1     .      .      .     0 A1:1-2,I A1:P-1 ."
-> +
-> +	# A remote isolated partition containing boot isolated CPU cannot be
-> +	# switched to root partition.
-> +	" X1-2,I CX1-2,I:P2 .      .       .    P1      .      .     0 A2:1-2,I A2:P-1 ."
-> +
-> +	# A local isolated partition with a boot isolated CPU distributed to a
-> +	# child isolated partition also cannot be switched to a root partition.
-> +	" C1-3,I:P2 C1,I:P2 .      .      P1     .      .      .     0 A1:1-3,I|A2:1,I A1:P-1|A2:P-2 ."
-> +
-> +	# A remote isolated partition with a boot isolated CPU distributed to a
-> +	# child isolated partition also cannot be switched to a root partition.
-> +	" X1-3,I C1-3,I:P2 C1,I:P2 .       .    P1      .      .     0 A2:1-3,I|A3:1,I A2:P-1|A3:P-2 ."
-> +
-> +	# The cpumask of a local root partition cannot be changed to include a
-> +	# boot isolated CPU.
-> +	" C1-2:P1    .      .      .     C2,I    .      .      .     0 A1:2,I A1:P-1 ."
-> +
-> +	# The cpumask of a remote root partition cannot be changed to include a
-> +	# boot isolated CPU.
-> +	" CX1-2,I  CX1-2:P1 .      .       .   CX2,I    .      .     0 A1:1-2,I|A2:2,I A2:P-1 ."
-> +)
 
-Could we add two invalid-root revival cases with an explicit exclusive
-mask here? For example:
+Nice catch, thanks.
 
-        # An invalid root must stay invalid when cpus grows but exclusive
-        # still contains a boot isolated CPU.
-        " CX1,I:P1        .  .  .  C1-2,I   .  .  .  0 A1:1-2,I A1:P-1 ."
-
-        # Growing exclusive must not revive it either.
-        " C1-2,I:X1,I:P1 .  .  .  X1-2,I   .  .  .  0 A1:1-2,I A1:P-1 ."
-
-Thanks,
-Guopeng
-
-> +
->  #
->  # Cpuset controller remote partition test matrix.
->  #
-> @@ -496,8 +536,8 @@ REMOTE_TEST_MATRIX=(
->  							 p1:P1|c11:P1|c12:P-1"
->  	# Narrowing cpuset.cpus to previously sibling-excluded CPUs should
->  	# not return CPUs that were never actually owned.
-> -	"  C1-4:P1   .   C1-2:P1  C1-3:P2  .       .  \
-> -	      .      .     .       C3      .       .     p1:4|c11:1-2|c12:3 \
-> +	"  C1-5:P1   .   C1-2:P1  C1-3:P2  .       .  \
-> +	      .      .     .       C3      .       .     p1:4-5|c11:1-2|c12:3 \
->  							 p1:P1|c11:P1|c12:P2 3"
->  	# Expanding cpuset.cpus to include a previously sibling-excluded CPU
->  	# after the sibling has become a member should correctly request it.
-> @@ -541,6 +581,27 @@ write_cpu_online()
->  	pause 0.05
->  }
->  
-> +#
-> +# Set the CPUS values
-> +#  $1 - the passed in cpu parameter
-> +#
-> +# The special ",I" suffix if present is being replaced by the first boot CPU
-> +# and assigned to the "CPUS" variable when the TEST_ISOLCPUS flag is set.
-> +# If not, the program will exit with an error.
-> +#
-> +set_cpus()
-> +{
-> +	local cpus=$1
-> +	if [[ $(expr "$cpus" : .*,I) -gt 0 ]]
-> +	then
-> +		[[ -z "$TEST_ISOLCPUS" ]] &&
-> +			skip_test "',I' added to non-isolcpus testing matrix!"
-> +		CPUS=$(echo $cpus | sed -e "s/,I/,$FIRST_ISOLCPUS/")
-> +	else
-> +		CPUS=$cpus
-> +	fi
-> +}
-> +
->  #
->  # Set controller state
->  #  $1 - cgroup directory
-> @@ -575,16 +636,16 @@ set_ctrl_state()
->  		}
->  		case $CMD in
->  		    X*)
-> -			CPUS=${CMD#?}
-> +			set_cpus ${CMD#?}
->  			COMM="echo $CPUS > $XFILE"
->  			eval $COMM $REDIRECT
->  			;;
->  		    CX*)
-> -			CPUS=${CMD#??}
-> +			set_cpus ${CMD#??}
->  			COMM="echo $CPUS > $CFILE; echo $CPUS > $XFILE"
->  			eval $COMM $REDIRECT
->  			;;
-> -		    C*) CPUS=${CMD#?}
-> +		    C*) set_cpus ${CMD#?}
->  			COMM="echo $CPUS > $CFILE"
->  			eval $COMM $REDIRECT
->  			;;
-> @@ -978,8 +1039,11 @@ run_state_test()
->  	I=0
->  	eval CNT="\${#$TEST[@]}"
->  
-> +	# Skip isolcpus specific test matrix if FIRST_ISOLCPUS not defined
-> +	[[ -n "$TEST_ISOLCPUS" && -z "$FIRST_ISOLCPUS" ]] && return
-> +
->  	reset_cgroup_states
-> -	console_msg "Running state transition test ..."
-> +	console_msg "Running state transition test for $TEST ..."
->  
->  	while [[ $I -lt $CNT ]]
->  	do
-> @@ -998,7 +1062,7 @@ run_state_test()
->  		NEW_A3=$7
->  		NEW_B1=$8
->  		RESULT=$9
-> -		ECPUS=${10}
-> +		ECPUS=$(echo ${10} | sed -e "s/,I/,${FIRST_ISOLCPUS}/g")
->  		STATES=${11}
->  		ICPUS=${12}
->  
-> @@ -1284,6 +1348,7 @@ test_inotify()
->  trap cleanup 0 2 3 6
->  run_state_test TEST_MATRIX
->  run_remote_state_test REMOTE_TEST_MATRIX
-> +TEST_ISOLCPUS=1 run_state_test ISOLCPUS_TEST_MATRIX
->  test_isolated
->  test_boot_isolated
->  test_inotify
-
+Reviewed-by: Eric Dumazet <edumazet@kernel.org>
