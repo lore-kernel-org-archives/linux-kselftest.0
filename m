@@ -1,45 +1,45 @@
-Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.37])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9C61799F;
-	Sun, 11 Oct 2026 19:24:22 +0000 (UTC)
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C002F3403E8;
+	Sun, 11 Oct 2026 19:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791746667; cv=none; b=m7A5f20wI6wSWktdqjNSaEIAjrBCeM1MZUnuvPk/MNqAqi33XQB390mXotgoWoTYYyEOqPqMjNG6CA8UhoRlvlNf0se/5n+YJw29ECyunC86+B4shtx9G+0w+z/74lftLKQMYxH14Jp5+GFrZ6ElyTdnCV11rK6kiHHOcW47q3w=
+	t=1791746667; cv=none; b=R4RlzvCfa++7vzdd039STsvUlPUZtfzsTlovBQ12GgRjdi5Dnu0gtQYmSoccb17S9ZwCabBSqLRQabyYCVl7ty+/0EChGDEV7cYVOqVMEVFkGG0lHPbUpYNm/RMzu7fyPzVmuybqqvL6zNL7hqqoqE3HRNH/FLyakTWL0QLg2q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791746667; c=relaxed/simple;
-	bh=9IaWpDWJk5Gbi278t0rT7Lai/uFkUewnHTJkpfN79Fg=;
+	bh=wVvs34JXYAOct3wsRjx11NKKpF08OFkBXGvyFNoM6bs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=afno5lvKO82SvOfwX/8ihTNvx5IYGLyG9Zm8AOnpON/LMYcLdoJFPj4zwMA8llRWhnudQ1/aY0UwI3MRffXDRznILLa50nLCvNTLrk20KUX4HUD9asjRlMeO1r25zivamV25x0Tzl8PtvN4TyU9t9oUZhaha+4Yr3DhJGi2iTsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=F9KXUcur; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=HESeCpbu; arc=none smtp.client-ip=160.80.4.37
+	 MIME-Version; b=pCPFMnKhzjxEIJxg/E/WjiOfNWn9/bBIwv0y2I+8lPOI4VPgeEdKqwqFdx7qu0hQuF1YRxwjU0R8eSPo1Y3evBB+5zCrCmFCeUIQ7Y2RL6603ZLyrhe9VcHWNRzBxMMz0MoPzYp2JL9xLOY1oNa/nfuXLI+LXKvzsctRn2YVUeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=q41pPjgx; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=Qv7d/UXj; arc=none smtp.client-ip=160.80.4.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="F9KXUcur";
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="HESeCpbu"
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 69BJNmLK010979;
-	Sun, 11 Oct 2026 21:23:53 +0200
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="q41pPjgx";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="Qv7d/UXj"
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 69BJNbOw010948;
+	Sun, 11 Oct 2026 21:23:42 +0200
 Received: from localhost.localdomain (unknown [160.80.105.87])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 0A24C122951;
-	Sun, 11 Oct 2026 21:23:33 +0200 (CEST)
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id D314C12294F;
+	Sun, 11 Oct 2026 21:23:32 +0200 (CEST)
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1791746613; h=from:from:sender:reply-to:subject:subject:date:date:
+	s=ed201904; t=1791746612; h=from:from:sender:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3khTIdJtKuzUeBNVkUrLUTx/1NTsYsHs6hwG6zduTg0=;
-	b=F9KXUcurreqFlPdVhGXHkkFbdch7Dd8Tk2R2JqLMPzgvRgwZDsGs2nbGTPaZ1/4/+69Ip/
-	KprCOtHzjuebjkCA==
+	bh=gOIZzI8MoZpC+ul484Q1c2neV7O0L3gKo49Mhwr/msk=;
+	b=q41pPjgxop9hYMTS4p34WkJThxQmMQOtWCx+zSvVG7c/V4/LmCGc0xX9afiXfdfbF24VdS
+	DZtrBkWoeJxrllDg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1791746613; h=from:from:sender:reply-to:subject:subject:date:date:
+	t=1791746612; h=from:from:sender:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3khTIdJtKuzUeBNVkUrLUTx/1NTsYsHs6hwG6zduTg0=;
-	b=HESeCpbuWWCToS8veXEQSWGB7XVC0zlyP4Xcp8FwoDbvel9GRSGxtQvAn5yC81Z6UPUuu4
-	pvoiypOFc87C5rZVoufpYUu21pnp72MYi3e0aqKvEbqRsrzep6bxuCfm+ioZ0seaTTmpTv
-	Eqg2kNpQJ0we3OOAFvFsWBldxUhGt6jkqClM8aOesTsTajv/+aJiBSQLVp/avqo4mhCvwv
-	k3FktKo3+eCimsvgrqaNaTHqnmqPmAH5/Wx4RxrNVfSsnNrTm9pJpqZU9vitqiKMW9WLhh
-	GvCQBdAwz0LMYaBjiDFOYvzJ2LumkQ2glzRgkWcHfEoFynXiiiUXYCvhE119rw==
+	bh=gOIZzI8MoZpC+ul484Q1c2neV7O0L3gKo49Mhwr/msk=;
+	b=Qv7d/UXjE4d5QFZOa/lGjIq1mxiEh2+JrEnA2ixkxUqxF+p2HGEU3RRZRm4PY+HprN8cYw
+	76H/L65HC9ydNCt8Ss4i2m0bTfxj5HDcxXSNKZ5RMezbFKPcTbd31eksw4xecYl2p5UGL6
+	HqfCV55WvQjTeiZHrKwoQ95CVASKo6R3Wnu9q/So18tj5Hr23ZWc1dIfrdEjvtlxMoqdBM
+	7fYzzSMc7dw04ysnM0UTAVSrdffckzQ0fLLs0+l9zyLjPSlehkcjvV67Yhuiy5KoJYdzKY
+	Aa5GQJiu9iH8rM8nE3OGMCs6UP3o1pQA4IC0HUsU/MWI6sjIP0e10HyVSzUKzg==
 From: Andrea Mayer <andrea.mayer@uniroma2.it>
 To: "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
@@ -53,9 +53,9 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Ahmed Abdelsalam <ahabdels@cisco.com>,
         Stefano Salsano <stefano.salsano@uniroma2.it>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [PATCH net-next 5/5] selftests: seg6: add tests for PSP with a consumed SRH
-Date: Sun, 11 Oct 2026 21:23:10 +0200
-Message-Id: <20261011192310.55-6-andrea.mayer@uniroma2.it>
+Subject: [PATCH net-next 3/5] seg6: apply the PSP flavor together with NEXT-C-SID in SRv6 End
+Date: Sun, 11 Oct 2026 21:23:08 +0200
+Message-Id: <20261011192310.55-4-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261011192310.55-1-andrea.mayer@uniroma2.it>
 References: <20261011192310.55-1-andrea.mayer@uniroma2.it>
@@ -69,200 +69,122 @@ Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
 X-Virus-Status: Clean
 
-Extend srv6_end_flavors_test.sh with tests for the SRv6 End behavior
-with the PSP flavor, alone and together with NEXT-C-SID, on packets that
-carry a consumed SRH in front of the SRH to process.
+Since commit bdf3c0b9c10b ("seg6: add PSP flavor support for SRv6 End
+behavior"), an SRv6 End route can be set up with both the NEXT-C-SID and
+the PSP flavors, e.g.:
 
-Each test sends a ping along an existing SRv6 Policy, and a router on
-the path inserts an extra SRH in front of the Policy's SRH. An End
-behavior on another router consumes the extra SRH, and the router
-connected to the host must then remove only the Policy's SRH. A test
-passes if the ping succeeds.
+  ip -6 route add fcbb:0:100::/48 encap seg6local action End \
+          flavors next-csid,psp lblen 32 nflen 16 dev dum0
 
-These tests set seg6_enabled to 1 on the hosts, which must accept the
-extra SRH, and set it back to 0 at the end. PSP itself is checked
-by the other PSP tests, which run with seg6_enabled set to 0.
+In RFC 9800, the NEXT-C-SID flavor (NEXT-CSID in the RFC) changes the
+End processing only when the Argument is not zero [1]. With a zero
+Argument (i.e. when the IPv6 DA carries no further C-SID), End is
+processed as in RFC 8986, and the PSP flavor (when set) applies
+unchanged [2]. If the packet arrives with Segments Left 1, PSP must
+then remove the SRH.
 
+However, on a route with both the NEXT-C-SID and PSP flavors,
+input_action_end() always uses the NEXT-C-SID processing. The
+NEXT-C-SID processing handles a packet with a zero Argument as End
+without flavors, ignoring PSP. Therefore, if this packet arrives with
+Segments Left 1, the SRH is not removed.
+
+Fix this by using the NEXT-C-SID processing only when the Argument is
+not zero or the route has no RFC 8986 flavor. Otherwise, the packet is
+processed as End with its RFC 8986 flavors, in end_flv8986_core(). With
+a zero Argument and Segments Left 1, PSP now removes the SRH before the
+packet is forwarded. If seg6_pop_srh() cannot remove the SRH, the packet
+is dropped, as on a route with the PSP flavor alone.
+
+Found by manual code inspection and reproduced in a VM without kernel
+changes or error injection. A following commit adds tests for this case
+to srv6_end_flavors_test.sh. The tests reproduce the issue: they fail
+without this change and pass with it.
+
+[1] - https://datatracker.ietf.org/doc/html/rfc9800#section-4.1.1
+[2] - https://datatracker.ietf.org/doc/html/rfc9800#section-4.1.7
+
+Fixes: bdf3c0b9c10b ("seg6: add PSP flavor support for SRv6 End behavior")
 Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 ---
- .../selftests/net/srv6_end_flavors_test.sh    | 144 +++++++++++++++++-
- 1 file changed, 142 insertions(+), 2 deletions(-)
+ net/ipv6/seg6_local.c | 50 ++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 47 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-index baa1b09a1aab..b5dbf53a7f23 100755
---- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-@@ -22,8 +22,7 @@
- # flavors will be supported in the kernel.
- #
- # The purpose of the PSP flavor consists in instructing the penultimate node
--# listed in the SRv6 policy to remove (i.e. pop) the outermost SRH from the IPv6
--# header.
-+# listed in the SRv6 policy to remove (i.e. pop) the SRH from the IPv6 header.
- # A PSP enabled SRv6 End behavior instance processes the SRH by:
- #  - decrementing the Segment Left (SL) value from 1 to 0;
- #  - copying the last SID from the SID List into the IPv6 Destination Address
-@@ -258,6 +257,60 @@
- # the hosts). The loopback address of a host is reached only through the
- # router connected to that host: the ping succeeds only if the SRH is removed
- # by that router.
-+#
-+# Traffic with a consumed SRH
-+# ---------------------------
-+#
-+# A packet can carry more than one SRH. The SRv6 End behavior skips an SRH with
-+# SL=0 and processes the next header [1].
-+#
-+# The traffic of this section reuses the Policies (i.a), (i.b), (i.c) and (i.d).
-+# A router on the path inserts an extra SRH in front of the Policy's SRH, and
-+# another router then consumes the extra SRH.
-+#
-+# The Policy (i.a) has SID List=fcff:3::e,fcff:4::ef1,fcff:2::ef1,cafe::2. A
-+# packet from hs-1 to hs-2 goes as follows:
-+#
-+#  - rt-1 applies the Policy and sends the packet to rt-3:
-+#      IPv6 DA=fcff:3::e | Policy's SRH, SL=3 | Payload
-+#
-+#  - rt-3 (End) processes the Policy's SRH and sends the packet to rt-4:
-+#      IPv6 DA=fcff:4::ef1 | Policy's SRH, SL=2 | Payload
-+#
-+#  - rt-4 (End with PSP and SL>1, acting as End) processes the Policy's SRH.
-+#    The new DA is fcff:2::ef1:
-+#      IPv6 DA=fcff:2::ef1 | Policy's SRH, SL=1 | Payload
-+#    On rt-4, the route added by the test for fcff:2::ef1 then inserts the
-+#    extra SRH, with SID List=fcff:3::e,fcff:2::ef1, and the packet goes back to
-+#    rt-3:
-+#      IPv6 DA=fcff:3::e | extra SRH, SL=1 | Policy's SRH, SL=1 | Payload
-+#
-+#  - rt-3 (End) consumes the extra SRH and sets the DA back to fcff:2::ef1:
-+#      IPv6 DA=fcff:2::ef1 | extra SRH, SL=0 | Policy's SRH, SL=1 | Payload
-+#
-+#  - rt-2 (End with PSP) skips the extra SRH, processes the Policy's SRH and
-+#    removes it:
-+#      IPv6 DA=cafe::2 | extra SRH, SL=0 | Payload
-+#
-+# The extra SRH reaches hs-2, which skips it as its SL is 0. The other
-+# Policies work in the same way:
-+#
-+#   (i.b) hs-2 -> hs-1: on the packets with DA=fcff:1::ef1, rt-2 inserts the
-+#         extra SRH with SID List=fcff:3::e,fcff:1::ef1, and rt-3 consumes it.
-+#   (i.c) hs-1 -> hs-2: on the packets with DA=fcbb:0:02a1::, rt-4 inserts the
-+#         extra SRH with SID List=fcff:3::e,fcbb:0:02a1::, and rt-3 consumes it.
-+#   (i.d) hs-2 -> hs-1: on the packets with DA=fcbb:0:01a1::, rt-3 inserts the
-+#         extra SRH with SID List=fcff:4::e,fcbb:0:01a1::, and rt-4 consumes it.
-+#
-+# The Policy (i.b) has no router between rt-2 and rt-1. For this reason, rt-2
-+# applies the Policy, inserts the extra SRH and sends the packet to rt-3:
-+#      IPv6 DA=fcff:3::e | extra SRH, SL=1 | Policy's SRH, SL=1 | Payload
-+# rt-3 consumes the extra SRH, and rt-1 removes the Policy's SRH.
-+#
-+# The hosts need seg6_enabled set to 1 to accept the extra SRH, and it is set
-+# back to 0 at the end. These tests only check that the ping succeeds: PSP
-+# itself is checked by the PSP flavor and NEXT-C-SID,PSP tests, which run with
-+# seg6_enabled set to 0.
- 
- # shellcheck source=lib.sh
- source lib.sh
-@@ -967,6 +1020,92 @@ host_srv6_end_flv_next_csid_psp_tests()
- 	check_and_log_hs_lo_addr_connectivity 2 1 "${END_CSID_PSP_FUNC}"
+diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+index 26cd4facbe36..427d12fedfc3 100644
+--- a/net/ipv6/seg6_local.c
++++ b/net/ipv6/seg6_local.c
+@@ -551,6 +551,47 @@ static bool seg6_next_csid_enabled(__u32 fops)
+ 	return fops & SEG6_F_LOCAL_FLV_NEXT_CSID;
  }
  
-+# On a router, add a route for a SID with seg6 encap in inline mode. The packets
-+# that the router forwards to that SID get an extra SRH with the End SID of the
-+# router that consumes it.
-+# args:
-+#  $1 - router on which the route is added
-+#  $2 - SID of the route
-+#  $3 - router with the SRv6 End behavior that consumes the extra SRH
-+setup_rt_consumed_srh()
++static bool seg6_flv8986_enabled(__u32 fops)
 +{
-+	local rt="$1"
-+	local sid="$2"
-+	local end_rt="$3"
-+	local nsname
-+
-+	nsname="$(get_rtname "${rt}")"
-+
-+	ip -netns "${nsname}" -6 route \
-+		add "${sid}" table "${LOCALSID_TABLE_ID}" \
-+		encap seg6 mode inline \
-+		segs "${LOCATOR_SERVICE}:${end_rt}::${END_FUNC}" \
-+		dev "${DUMMY_DEVNAME}"
++	return fops & SEG6_LOCAL_FLV8986_SUPP_OPS;
 +}
 +
-+cleanup_rt_consumed_srh()
++/* check whether the NEXT-C-SID processing has to be used for the packet,
++ * instead of the RFC8986 flavors set for the given SRv6 End* behavior
++ * instance.
++ *
++ * This function returns:
++ *  - true, when the packet has to go through the NEXT-C-SID processing;
++ *  - false, when NEXT-C-SID is not configured or the packet has to be
++ *    processed on the basis of the RFC8986 flavors.
++ */
++static bool seg6_use_next_csid(struct sk_buff *skb,
++			       const struct seg6_flavors_info *finfo)
 +{
-+	local rt="$1"
-+	local sid="$2"
-+	local nsname
++	const struct in6_addr *addr;
++	__u32 fops = finfo->flv_ops;
 +
-+	nsname="$(get_rtname "${rt}")"
++	if (!seg6_next_csid_enabled(fops))
++		return false;
 +
-+	ip -netns "${nsname}" -6 route \
-+		del "${sid}" table "${LOCALSID_TABLE_ID}"
++	addr = &ipv6_hdr(skb)->daddr;
++
++	/* NEXT-C-SID and the RFC8986 flavors combine according to the
++	 * DA.Argument (see RFC9800, sections 4.1.1 and 4.1.7):
++	 *
++	 *       DA.Argument   RFC8986 flavors   processing
++	 *   (1) != 0          any               NEXT-C-SID only, SL unchanged
++	 *   (2) == 0          none              the behavior, e.g. End
++	 *   (3) == 0          one or more       the behavior with its flavors,
++	 *                                       e.g. End with PSP
++	 *
++	 * In (2), the packet still goes through the NEXT-C-SID processing,
++	 * which runs the behavior (e.g. End) when the DA.Argument is zero.
++	 */
++	return !seg6_flv8986_enabled(fops) ||
++	       !seg6_next_csid_is_arg_zero(addr, finfo);
 +}
 +
-+set_hs_seg6_enabled()
-+{
-+	local val="$1"
-+	local hsname
-+	local hs
-+
-+	for hs in ${HOSTS}; do
-+		hsname="$(get_hsname "${hs}")"
-+
-+		ip netns exec "${hsname}" \
-+			sysctl -wq net.ipv6.conf.all.seg6_enabled="${val}"
-+		ip netns exec "${hsname}" \
-+			sysctl -wq net.ipv6.conf.veth0.seg6_enabled="${val}"
-+	done
-+}
-+
-+host_srv6_end_flv_consumed_srh_tests()
-+{
-+	local sid
-+
-+	log_section "SRv6 connectivity test hosts (h1 <-> h2, consumed SRH)"
-+
-+	set_hs_seg6_enabled 1
-+
-+	# Policy (i.a): rt-4 inserts the extra SRH consumed by rt-3
-+	sid="${LOCATOR_SERVICE}:2::${END_PSP_FUNC}"
-+	setup_rt_consumed_srh 4 "${sid}" 3
-+	check_and_log_hs_connectivity 1 2
-+	cleanup_rt_consumed_srh 4 "${sid}"
-+
-+	# Policy (i.b): rt-2 inserts the extra SRH consumed by rt-3
-+	sid="${LOCATOR_SERVICE}:1::${END_PSP_FUNC}"
-+	setup_rt_consumed_srh 2 "${sid}" 3
-+	check_and_log_hs_connectivity 2 1
-+	cleanup_rt_consumed_srh 2 "${sid}"
-+
-+	# Policy (i.c): rt-4 inserts the extra SRH consumed by rt-3
-+	sid="$(build_csid_container 2 "${END_CSID_PSP_FUNC}")"
-+	setup_rt_consumed_srh 4 "${sid}" 3
-+	check_and_log_hs_lo_addr_connectivity 1 2 "${END_CSID_PSP_FUNC}"
-+	cleanup_rt_consumed_srh 4 "${sid}"
-+
-+	# Policy (i.d): rt-3 inserts the extra SRH consumed by rt-4
-+	sid="$(build_csid_container 1 "${END_CSID_PSP_FUNC}")"
-+	setup_rt_consumed_srh 3 "${sid}" 4
-+	check_and_log_hs_lo_addr_connectivity 2 1 "${END_CSID_PSP_FUNC}"
-+	cleanup_rt_consumed_srh 3 "${sid}"
-+
-+	set_hs_seg6_enabled 0
-+}
-+
- test_iproute2_supp_or_ksft_skip()
- {
- 	local flavor="$1"
-@@ -1071,5 +1210,6 @@ router_tests
- host2gateway_tests
- host_srv6_end_flv_psp_tests
- host_srv6_end_flv_next_csid_psp_tests
-+host_srv6_end_flv_consumed_srh_tests
+ /* Processing of SRv6 End, End.X, and End.T behaviors can be extended through
+  * the flavors framework. These behaviors must report the subset of (flavor)
+  * operations they currently implement. In this way, if a user specifies a
+@@ -865,7 +906,10 @@ static int end_flv8986_core(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ 	if (srh && !seg6_hmac_validate_skb(skb, srh))
+ 		goto drop;
+ #endif
+-	flvmask = finfo->flv_ops;
++	/* NEXT-C-SID, when configured, has already been evaluated by the
++	 * caller. Only the RFC8986 flavors are left here.
++	 */
++	flvmask = finfo->flv_ops & ~SEG6_F_LOCAL_FLV_NEXT_CSID;
+ 	if (unlikely(flvmask & ~SEG6_LOCAL_FLV8986_SUPP_OPS)) {
+ 		pr_warn_once("seg6local: invalid RFC8986 flavors\n");
+ 		goto drop;
+@@ -919,8 +963,8 @@ static int input_action_end(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ 	if (!fops)
+ 		return input_action_end_core(skb, slwt);
  
- print_log_test_results
+-	/* check for the presence of NEXT-C-SID since it applies first */
+-	if (seg6_next_csid_enabled(fops))
++	/* NEXT-C-SID is evaluated first, when configured */
++	if (seg6_use_next_csid(skb, finfo))
+ 		return end_next_csid_core(skb, slwt);
+ 
+ 	/* the specific processing function to be performed on the packet
 -- 
 2.43.0
 
