@@ -1,112 +1,215 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A233B2AD00;
-	Sun, 11 Oct 2026 20:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2054035C68D;
+	Sun, 11 Oct 2026 20:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791749441; cv=none; b=ORjQhmN/MHb/9g1PuTHB+hCaxItwlvOqot8x93u9B7xXfAfvCXZoeP1MoCRi6LC6Ae7LB8aLpDifaykNeNN/mhcTX0s+9EdHqH2MIlWe03FBgK+mC3SzVVCpl1JzeOxQgPiEMLer4SniVEae/swVkypj72HPvig90+ABFsA9RRE=
+	t=1791750921; cv=none; b=HZ4/wnc/ojuzQ/hr/RuJKPYjj1noaH2/RjdrMoby67ZlFhVElyW7NCHyT+0XeINY51djqfxuO6eEXs7Iz3W1GXAaTD9+KS3PvgcrbPx0HUFEmBDfSdB3ke3Aw7jFiMDG/xm/LriqRHw3GVDrbLl1gcfre8cMoggMdwNbZAgg8Lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791749441; c=relaxed/simple;
-	bh=0lW7NXlLWcW3JHmAsxnYfuMkROJlPGhMtERY68ouGdY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FKLJxEe28TcoU3fpl5T2ApGYlDqytHBl8KibColGlHfijtlqaLRZfFzYGOhlWEdnfxHDP2AywnXwmX6Cj7eersBdSELuwGWDmwe84BUhRtTpgOle2Dm0JEHuu3f8LHlRw7DbRjcuCGKdruelXkuYc888LAexYjNxicfRdMSqUcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=PFEG18UE; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1791750921; c=relaxed/simple;
+	bh=NOTqc4jLHqIZ2R0yahfyW8eKb8GSDxSmLGpwenvOYMM=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=USRKoT8zUtd7jSt5pxQ6cN/Zh3lQSUFxtCttWhAWGqhkka9Vuc4R7Mqv76TknH/BjYUm1S62FyMbnYVmDDwcapxWOKuk+f7STdSjq9Z7eap9+C+AJLIpzDrdWeLkxBuOS3+vSQeEGnZKPu3u56mrrf1r5NGim9/SQpG1pAuEoTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxPMj3oL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="PFEG18UE"
-Received: from [IPV6:2601:646:8003:f231:99ff:bd5:ac70:6da0] ([IPv6:2601:646:8003:f231:99ff:bd5:ac70:6da0])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 69BK83d82753795
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Sun, 11 Oct 2026 13:08:04 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 69BK83d82753795
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026092801; t=1791749287;
-	bh=38kwe/MM4HFYzJyg54GfyoGLCPo81FIpxmyL9rCu+jU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PFEG18UEjBlsJ1Kx+OxwBMu4T1HzMqDczww7DDQYUMOjd4B+hI6krRm5lZJAUOFWA
-	 U6G+DKWwJx2GI6jNoTsSgBKTdm6G+YSIZAamT1i/qJnCVKfbcgSKCarMGGm00SIbR7
-	 ra7QFi0GrMJMU5/1zw2at3uJ6a7sE5FkQkkJQbzn/uJxhbg4jjRaLikmXiSNwGM4mT
-	 wLp/O73yY0PsviG8OH5mV1uk0H6UrBVEuf3Khr5U66PceZ0eGvA41fbS+MxmCQIrdv
-	 QuAKyzpy051ZzZeVqZPho8kJ3TfSBinSckjQ6t5eBHu0vUFFljMJI1AojWyVRLAhJm
-	 H6P3IkA5oFDWA==
-Message-ID: <1d34d990-fe55-4bb7-99b9-82ca201a031d@zytor.com>
-Date: Sun, 11 Oct 2026 13:07:58 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxPMj3oL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108B71F0089B;
+	Sun, 11 Oct 2026 20:35:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791750919;
+	bh=xhnuKwa6ZzypXCErad0gx6ScBd79TlcFxNQAJVk6U/o=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=YxPMj3oLSyfqYhAKpjQ1sBRVHlSDuyn+db0vF5wM6sSTuG0spYUV2dgPR8OmBbWQr
+	 KtPPTZ9lb5cM9PqI4N1S0YDcod1iYuJ3GD5Bh9UspQpB/E13F9c/O46v9dL+lp2Wf7
+	 32SVrCGzTQzOhcCJwMnzFLem1/K9kpqonbN83dwF8cCnXCIS9s3rYrxouBQ6+sYOno
+	 AhD79GNq9h+wXm71kjgRvs6PdGdbKJ/G6Xw0QBqclgHhXACLOoKjA3oVqC/46SHKRg
+	 186H+isD36EATXBCnVvPpfFdmewqrUdDKrAgf47x7JXSXIMRdT0XZDK1LEZ0OX3GfO
+	 wtBYYCrgBQE9A==
+Subject: Re: [PATCH net-next v3 1/9] tls: Bound consecutive no-data records in
+ tls_sw_read_sock()
+From: netdev-bot+sashiko@kernel.org
+To: cel@kernel.org
+Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
+ davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
+ shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Sun, 11 Oct 2026 20:35:18 +0000
+Message-ID: <179175091859.434549.6003999701782227362@kernel.org>
+In-Reply-To: <20261007-tls-follow-on-v3-1-6d52d98389b3@kernel.org>
+References: <20261007-tls-follow-on-v3-1-6d52d98389b3@kernel.org>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] x86: Start removing X86_X32_ABI
-To: Willy Tarreau <w@1wt.eu>,
-        Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-Cc: Tancred <alex@narraduct.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Justin Stitt <justinstitt@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Richard Purdie <richard.purdie@linuxfoundation.org>,
-        Sam James <sam@gentoo.org>, Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@kernel.org>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>,
-        Tomas Glozar <tglozar@kernel.org>, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20261008-x32_removal-v4-0-d389a193c506@breakpoint.cc>
- <20261008-x32_removal-v4-2-d389a193c506@breakpoint.cc>
- <7f315c7a-0fd1-4f7e-93bb-703d4107aa5a@narraduct.com>
- <20261011171946.gMv8V9Ck@breakpoint.cc> <asvJlVyfxMVqw2E2@1wt.eu>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <asvJlVyfxMVqw2E2@1wt.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 2026-10-11 10:38, Willy Tarreau wrote:
-> On Sun, Oct 11, 2026 at 07:19:46PM +0200, Sebastian Andrzej Siewior wrote:
->> On 2026-10-09 20:13:55 [-0600], Tancred wrote:
->>>
->>>
->>> On 10/8/26 03:07, Sebastian Andrzej Siewior wrote:
->>>> where certain workloads widely
->>>> move to x32 and use it exclusively. In the meantime Debian introduced a
->>>> patch to disable x32 by default (so it has to be enabled at boot time on
->>>> the command line) because they are afraid of the increased attack
->>>> surface. Fedora as far as I tell has X32 disabled (looking at 7.0-rc5
->>>> rpm in rawhide).
->>>>
->>>> Since there is practically no real use for x32
->>>
->>> I only recently discovered x32 and built a Desktop (with all daemons and
->>> utilities running 10-30% smaller and some a bit faster, with 64 bit
->>> libraries for eg. Firefox.) My experiment should definitely not decide
->>> anything, but how much real-world use would be sufficient to justify
->>> continued presence (more complex compat code)?
->>
->> "a bit faster" needs actual numbers to justify. One examples was quicker
->> gcc but I don't see a x32 compile farm leveraging this benefit.
-> 
-> FWIW I do build my ARM cross-compilers in a32 because they're generally
-> ~10-15% faster than in a64. I wouldn't be surprised if that was the same
-> on x86 because tools such as compilers very likely use pointers a lot. In
-> a build farm it certainly makes a difference, possibly not sufficient to
-> justify keeping a kernel port, but it's just to illustrate one valid use
-> case.
-> 
-Compilers is known to be significantly faster with x32, because compilers use
-a *lot* of pointers. However, even compilers are starting to need > 4 GiB of
-memory in many configurations, especially when using LTO.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-	-hpa
+Critical: 0 · High: 1 · Medium: 0 · Low: 1
 
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] In net/tls/tls_sw.c:tls_sw_read_sock(), the new budget exit
+  rests on a false premise.
+- [Low] When tls_sw_read_sock() hits TLS_RX_NODATA_LIMIT, the only thing
+  that restarts the read_sock consumer is a work item queued with…
+
+--
+
+tls: Bound consecutive no-data records in tls_sw_read_sock()
+
+This commit limits how many zero-length application_data records in a
+row tls_sw_read_sock() will consume in one call. The limit is
+TLS_RX_NODATA_LIMIT. When the limit is reached, the loop breaks and
+schedules a work item that calls sk->sk_data_ready() under lock_sock(),
+so the read_sock consumer can resume.
+
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 312e51270f293..275a6047da9e3 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -2070,6 +2070,20 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+>  	goto splice_read_end;
+>  }
+>  
+> +#define TLS_RX_NODATA_LIMIT	16
+> +
+> +static void tls_rx_data_ready_work(struct work_struct *w)
+> +{
+> +	struct tls_sw_context_rx *ctx =
+> +		container_of(w, struct tls_sw_context_rx, data_ready_work);
+> +	struct sock *sk = ctx->strp.sk;
+> +
+> +	/* A callback that finds the socket unowned reads from it. */
+> +	lock_sock(sk);
+> +	READ_ONCE(sk->sk_data_ready)(sk);
+> +	release_sock(sk);
+> +}
+
+[ ... ]
+
+> @@ -2136,14 +2151,22 @@ int tls_sw_read_sock(struct sock *sk, read_descriptor_t *desc,
+
+[ ... ]
+
+>  		if (rxm->full_len == 0) {
+> +			err = 0;
+>  			consume_skb(skb);
+> +			if (++nodata >= TLS_RX_NODATA_LIMIT) {
+> +				/* tls_rx_reader_release() does not call the
+> +				 * consumer's sk_data_ready, which can re-enter
+> +				 * this function.
+> +				 */
+
+[Severity: High]
+Is this comment accurate? tls_rx_reader_release() begins by calling
+tls_rx_msg_maybe_announce(). That function calls the consumer's callback
+synchronously, and reader_present is still set when it does:
+
+net/tls/tls_sw.c:tls_rx_reader_release() {
+	tls_rx_msg_maybe_announce(&ctx->strp);
+	...
+	WRITE_ONCE(ctx->reader_present, 0);
+}
+
+net/tls/tls_sw.c:tls_rx_msg_maybe_announce() {
+	if (!READ_ONCE(strp->msg_ready) || strp->msg_announced)
+		return;
+	strp->msg_announced = 1;
+	...
+	ctx->saved_data_ready(strp->sk);
+}
+
+The same concern applies to this part of the commit message:
+
+  "Records left queued do not raise another sk_data_ready(), so the
+  consumer needs one."
+
+The new break seems to produce exactly that state. By the 16th empty
+record, tls_rx_rec_done() has already run tls_strp_msg_consume(), which
+clears msg_ready and msg_announced. It has also run
+tls_strp_check_rcv(strp, false), which can parse the next fully received
+record without announcing it. The loop then breaks while the consumer's
+strparser is not paused.
+
+Take a consumer such as KCM that installed psock_data_ready before TLS
+RX was armed. tls_sw_strparser_arm() saves psock_data_ready as
+saved_data_ready and installs tls_data_ready. In softirq, under
+bh_lock_sock(), the outer reader is reached like this:
+
+tcp_data_ready()
+  tls_data_ready()
+    tls_strp_data_ready()
+      tls_strp_check_rcv()
+        tls_rx_msg_maybe_announce()
+          psock_data_ready()
+            strp_data_ready()
+              strp_read_sock()
+                tls_sw_read_sock()
+
+When that call takes the new break:
+
+tls_rx_reader_release()
+  tls_rx_msg_maybe_announce()
+    psock_data_ready()
+      strp_data_ready()          /* socket unowned, strp not paused */
+        strp_read_sock()
+          tls_sw_read_sock()     /* nested */
+            tls_rx_reader_acquire()   /* reader_present == 1 */
+              sk_wait_event()
+                release_sock()   /* spin_lock_bh(&sk->sk_lock.slock) */
+
+Can this self-deadlock on sk_lock.slock, which this CPU already holds
+through bh_lock_sock()? It looks like a peer only has to send 17 or more
+consecutive empty data records that arrive together in the receive
+queue.
+
+Before this patch the loop ran until no record was ready, so msg_ready
+was clear when the reader was released.
+
+In this configuration, does tls_rx_data_ready_work() reach the consumer
+at all? There sk->sk_data_ready is tls_data_ready, not psock_data_ready.
+Under lock_sock(), tls_data_ready only queues the tls_strp work, and
+tls_strp_check_rcv() then returns early because msg_ready is already
+set. The release-time announce goes to saved_data_ready while the work
+item goes to sk->sk_data_ready, so the two notification paths seem to
+disagree.
+
+> +				schedule_work(&ctx->data_ready_work);
+
+[Severity: Low]
+schedule_work() queues this on system_wq, which lacks WQ_MEM_RECLAIM.
+The existing TLS RX deferral uses tls_strp_wq instead:
+
+net/tls/tls_strp.c:tls_strp_dev_init() {
+	tls_strp_wq = create_workqueue("tls-strp");
+	...
+}
+
+Some read_sock consumers, such as nvme-tcp over kTLS, sit in the memory
+reclaim I/O path. After a burst of empty records, this work item is the
+only thing that restarts the consumer. Could RX stall under memory
+pressure until another event, such as new TCP data, arrives?
+
+Would tls_strp_wq, or another WQ_MEM_RECLAIM workqueue, be a better
+place for this work?
+
+> +				break;
+> +			}
+>  			continue;
+>  		}
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261007-tls-follow-on-v3-0-6d52d98389b3%40kernel.org
