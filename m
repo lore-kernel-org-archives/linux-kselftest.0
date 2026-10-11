@@ -1,50 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD7E39CCFF;
-	Sun, 11 Oct 2026 11:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F383A382B;
+	Sun, 11 Oct 2026 11:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791717437; cv=none; b=dzBrGX1+7pobEMwpu9iTJ3Q5vs1CGiTVa/bQDN6xuJJyMjzDBBP4QVY6dnif1WEX988K2vpUn1XK0YM4Z60LPHvcWI+pX81J9d0unln2LVcdhIBFuvHskRQ6dojfsUH0q9o8pdK8+RBL8zMYzhc9aX06eA4pedZlerVk6Ux0hSU=
+	t=1791717646; cv=none; b=MbyW7brhRLIRr5m7xndWUmIxgztfM2dbbjhGJ4oZL50rdyUZP1BERyHWyfzYvrOAdfDSxlZ8WHhfdhgdyB0ah2F+e14nVFVzpmMfc1Iy4zZIdBVt/TA+M4aX/VWmAMfpGjZYY9BiPw7bgLS2za5AxwFX46fMrfmhkAyQiNeTqGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791717437; c=relaxed/simple;
-	bh=E2P0hBoRI2/vcgFZgvc7u/D3Wv6gazBILmNlJPvVorE=;
+	s=arc-20240116; t=1791717646; c=relaxed/simple;
+	bh=wlf7nsUliOWIWbjtkTQ1W4deN/zMC5EUiykRWzU3Hno=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=juUtFP2WrpHNbwxpIKGavYLZCVtAOYdm0Pwpflwnm3tAEgZ/CAeohPqMgo/k9r89f1OiYy1SJUBGvJlnykj5CbcOMBWjK0F4lc5ZTJ6x33HekzuNXo2Ue3K/585sMGOaLO4W3kw0XJAjCt5y8jvUxK9NVTjE02DFA/rq6YRrWYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=daU/sgeb; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=NeVTAlU57k01gYbQWjGt0ayK0wfdhuyc6I2TvOJ1UQWNBEDTHBh8ZMNgEK8luxfstRhutJpZAOkEY8UaCZizHa3UO5doLaL8RvchV2JA4Wh0ih+asCGCUj6W2NhlABzHk/y/oRX7dOkvi9O2nJ53v1BECv9jGR7ICqHIFZyENHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRt64lxb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="daU/sgeb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 193B01F0089E;
-	Sun, 11 Oct 2026 11:17:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRt64lxb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A464D1F0089C;
+	Sun, 11 Oct 2026 11:20:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791717433;
-	bh=/uCK/vlyqu6zpQ72l6lOprgq1YvuOYsvSDBZcgDR8UU=;
+	s=k20260515; t=1791717644;
+	bh=MRGNEMdVEZ/pe2HQ8uuM1oqnOADaMzPiTnjNzvu0fJo=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=daU/sgeb/5c8xfir1gLLkjTmnVM8LfVQnsMJWDSClQAaZV9HQRRWZGn5eQQFRuZHG
-	 yuBXHlGbkelukxQwDmxN0yBELwhrv0vYfeWJlQnGSLnGkiDfqxBNQbcs0L7VZGwukk
-	 i3IuuF8LaA0gnD8KLWd1I4QrLz9kM0WmEFY/FcPEBsDXCW4QL5uFHpy4A48jxJYmDk
-	 EvswAoEyK3TIGb3UBtRnq5/G25qcwq9NuRw8Veq3Tmz5YwFqEdezsAbc6vvv8Q8uC+
-	 brxR86XH4JkVUqumk3LqS+xbNoW6RhaALlR0ocdqDBxpQWAtzKFn/Fk8RDvOjDNgOQ
-	 hkFjxsG/WmBRg==
-Subject: Re: [PATCH net-next v5 5/5] selftests/net: Move the XDP feature test
- to drivers/net/hw
+	b=JRt64lxbzgPrQMsWKsjP7Y9ULmS/yetSQ1HEkTTyvV/m/3cJNEUbdu1DZrzNiMOMk
+	 B7MaLaUNWvEnvpTSN2fUzfGb4JeHnq042YWrq3A6OKX0e8C6FBSMp/QU0WgABzPf4w
+	 1Xzh2JPnu3Z9NcrA/xScMJJUWzgxgmWI4aj5KuMutqoVJmM5DOwFXKyonMyWYLbWyR
+	 MZUq73AV3bUzHgkrY0VhYPEqyNzLx8Rkwn/5xQPNjP4F9e+PIEisgP+z/nf3BXvoeO
+	 AkJDpkujJwePK7Q4W7ftlxAMBSb9LT0Vst8Wjs0/xZdWGTXZQCsugi2ELly5/bHVy7
+	 +zZD8lqGiWffg==
+Subject: Re: [PATCH net-next v4 3/3] selftests: net: add a test for the gtp
+ netlink family
 From: netdev-bot+sashiko@kernel.org
-To: bochaolucky@gmail.com
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, davem@davemloft.net,
- kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- andrew+netdev@lunn.ch, edumazet@kernel.org, pabeni@redhat.com,
- horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- alexis.lothore@bootlin.com, lorenzo@kernel.org, tiozhang@didiglobal.com,
- willemdebruijn.kernel@gmail.com, petrm@nvidia.com
-Date: Sun, 11 Oct 2026 11:17:11 +0000
-Message-ID: <179171743168.434549.11373662965992474852@kernel.org>
-In-Reply-To: <20261010-xdp-v5-send-20261008-v5-5-de687cb67c40@gmail.com>
-References: <20261010-xdp-v5-send-20261008-v5-5-de687cb67c40@gmail.com>
-X-sashiko-severity: Medium
+To: anilkaushikwireless@gmail.com
+Cc: pablo@netfilter.org, laforge@gnumonks.org, donald.hunter@gmail.com,
+ kuba@kernel.org, davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+ osmocom-net-gprs@lists.osmocom.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Sun, 11 Oct 2026 11:20:43 +0000
+Message-ID: <179171764325.434549.3580917696239237625@kernel.org>
+In-Reply-To: <20261010105740.223992-4-anilkaushikwireless@gmail.com>
+References: <20261010105740.223992-4-anilkaushikwireless@gmail.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -54,231 +49,101 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 5 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 4
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The XDP_NDO_XMIT subtest fails on many drivers even when they
-  work correctly, because the advertised mask is read before the XDP…
-- [Low] The moved BPF object xdp_features.bpf.o is built by the shared
-  rule in tools/testing/selftests/net/bpf.mk.
-- [Low] run_feature() builds the local commands with shlex.join() (the
-  probe at line 45, and the DUT command from feature_command() at line…
-- [Low] tools/testing/selftests/bpf/.gitignore still has an
-  `xdp_features` entry at line 44.
-- [Low] The new README section heading 'XDP feature test' (16 characters)
-  at tools/testing/selftests/drivers/net/README.rst:314 has a…
+- [Low] In tools/testing/selftests/net/gtp.py, _setup() catches every
+  CmdExitFailure from `ip link add gtp0 type gtp role ggsn` and raises…
+- [Low] _setup() in tools/testing/selftests/net/gtp.py creates a new
+  GtpFamily handle inside the test netns for each test case (`with…
 
 --
 
-selftests/net: Move the XDP feature test to drivers/net/hw
+selftests: net: add a test for the gtp netlink family
 
-This moves the xdp_features helper and its BPF program from selftests/bpf
-to drivers/net/hw. It replaces the private veth shell script with a
-NetDrvEpEnv Python test that runs the DUT locally and the tester remotely.
-The new test compares detected features against the advertised mask with
-ksft_eq().
+This adds a Python selftest that uses the gtp generic netlink family
+through its ynl spec. It creates a gtp device, then adds, dumps and
+deletes PDP contexts by TEI and by MS address. It also checks that
+deleting an unknown context returns ENOENT, and it adds a GtpFamily ynl
+wrapper.
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 883c92701b9f1..cb76b68c97dbb 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-
-[ ... ]
-
-> @@ -142,7 +142,6 @@ TEST_GEN_PROGS_EXTENDED = \
->  	test_cpp \
->  	test_lirc_mode2_user \
->  	veristat \
-> -	xdp_features \
->  	xdp_hw_metadata \
->  	xdp_synproxy \
->  	xskxceiver
-
-[Severity: Low]
-This isn't a bug, but tools/testing/selftests/bpf/.gitignore still has an
-xdp_features entry. This patch removes the binary and its build rule from
-this Makefile, and the ignore entry is now in drivers/net/hw/.gitignore.
-Should the old entry be removed as well?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
-> index 3fe49bce4f3a5..0791f02ba44b4 100644
-> --- a/tools/testing/selftests/drivers/net/README.rst
-> +++ b/tools/testing/selftests/drivers/net/README.rst
-> @@ -310,3 +310,21 @@ Running tests CI-style
->  
->  See https://github.com/linux-netdev/nipa/wiki for instructions on how
->  to easily run the tests using ``virtme-ng``.
-> +
-> +XDP feature test
-> +===============
-
-[Severity: Low]
-This isn't a bug, but the underline is one character shorter than the
-title. "XDP feature test" is 16 characters and the underline is 15.
-docutils warns "Title underline too short" for this.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-> index 18ce235a77f84..bd818e8625c23 100644
-> --- a/tools/testing/selftests/drivers/net/hw/Makefile
-> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
-
-[ ... ]
-
-> @@ -94,6 +95,18 @@ include ../../../net/ynl.mk
->  
->  include ../../../net/bpf.mk
->  
-> +$(OUTPUT)/xdp_features.bpf.o: xdp_features.h
-> +
-> +$(OUTPUT)/xdp_features: CFLAGS += -I$(OUTPUT) -I$(SCRATCH_DIR)/include
-> +$(OUTPUT)/xdp_features: CFLAGS += -I../../../net/lib
-> +$(OUTPUT)/xdp_features: LDLIBS += -lelf -lz -lpthread
-> +$(OUTPUT)/xdp_features: xdp_features.c xdp_features.h \
-> +			   $(OUTPUT)/xdp_features.skel.h $(BPFOBJ)
-> +	$(call msg,BINARY,,$@)
-> +	$(Q)$(CC) $(CFLAGS) $(CPPFLAGS) $(KHDR_INCLUDES) \
-> +		$(filter %.c %.o,$^) $(BPFOBJ) \
-> +		$(LDFLAGS) $(LDLIBS) -o $@
-
-[Severity: Low]
-Only the userspace helper gets KHDR_INCLUDES here. Can xdp_features.bpf.o
-fail to build in an O= build?
-
-The BPF object is built by the shared rule in
-tools/testing/selftests/net/bpf.mk:
-
-CCINCLUDE += -I$(selfdir)/bpf
-CCINCLUDE += -I$(top_srcdir)/usr/include/
-CCINCLUDE += -I$(SCRATCH_DIR)/include
-...
-	$(Q)$(CLANG) -O2 -g --target=bpf $(CCINCLUDE) $(CLANG_SYS_INCLUDES) \
-	-c $< -o $@
-
-With make O=<objdir> headers, tools/testing/selftests/Makefile sets
-KHDR_INCLUDES to ${abs_objtree}/usr/include. That leaves
-$(top_srcdir)/usr/include empty in a clean source tree.
-
-The #include <linux/netdev.h> in xdp_features.bpf.c then falls back to the
-system headers. Those don't have linux/netdev.h on distros whose UAPI
-headers predate 6.3, for example Ubuntu 22.04.
-
-The old selftests/bpf build passed -I$(APIDIR), and that directory has
-tools/include/uapi/linux/netdev.h. Should the BPF compile for this object
-also get KHDR_INCLUDES or -I$(APIDIR)?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/drivers/net/hw/xdp_features.py b/tools/testing/selftests/drivers/net/hw/xdp_features.py
+> diff --git a/tools/testing/selftests/net/gtp.py b/tools/testing/selftests/net/gtp.py
 > new file mode 100755
-> index 0000000000000..1d59772b2a4d0
+> index 0000000000000..b307699b3c1ed
 > --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/hw/xdp_features.py
+> +++ b/tools/testing/selftests/net/gtp.py
+> @@ -0,0 +1,115 @@
 
 [ ... ]
 
-> +def feature_command(binary, feature, dut_addr, tester_addr, ifname,
-> +                    tester=False):
-> +    """Build the helper command with the configured endpoint addresses."""
-> +    args = [str(binary)]
-> +    if tester:
-> +        args.append("-t")
-> +    args += ["-f", feature, "-D", dut_addr]
-> +    if tester:
-> +        args += ["-C", dut_addr]
-> +    args += ["-T", tester_addr, ifname]
-> +    return shlex.join(args)
+> +def _setup(ns):
+> +    """Return a gtp family handle, and the ifindex of a new gtp device.
 > +
-> +
-> +def run_feature(cfg, feature, ipver):
-> +    """Run one feature with bounded helper lifetimes and verify its result."""
-> +    cfg.require_cmd("timeout", local=False, remote=True)
-> +    probe = cmd(shlex.join([str(cfg.xdp_features), "-q", cfg.ifname]),
-> +                fail=False)
-
-[ ... ]
-
-> +    dut_cmd = feature_command(cfg.xdp_features, feature, dut_addr,
-> +                              tester_addr, cfg.ifname)
-> +    tester_cmd = feature_command(cfg.remote_xdp_features, feature, dut_addr,
-> +                                 tester_addr, cfg.remote_ifname, tester=True)
-> +
-> +    with bkg(dut_cmd, exit_wait=True, ksft_ready=True):
+> +    Create the device first: that loads gtp.ko through its rtnl link
+> +    alias. ynl resolves the family ids once per process, with a
+> +    CTRL_CMD_GETFAMILY dump which does not autoload modules, so the
+> +    family must be registered before the first family handle is created.
+> +    """
+> +    try:
+> +        ip("link add gtp0 type gtp role ggsn", ns=str(ns))
+> +    except CmdExitFailure as e:
+> +        raise KsftSkipEx("no gtp support (CONFIG_GTP, iproute2)") from e
 
 [Severity: Low]
-Is shlex.join() right for the local probe and dut_cmd? The local path of
-cmd() in tools/testing/selftests/net/lib/py/utils.py does not use a shell:
+Is this skip broader than intended? CmdExitFailure is raised for any
+non-zero exit from ip. That covers old iproute2 and a missing gtp.ko,
+but it also covers a real failure in the gtp newlink path. Examples are
+gtp_newlink() failing to create or bind its UDP sockets, an -EINVAL
+regression, or -EEXIST if an earlier case left a gtp0 behind.
 
-            if shell is None and isinstance(comm, str) and ' ' in comm:
-                comm = comm.split()
+add_del_pdp(), add_two_pdp() and del_unknown_pdp() all go through
+_setup(). If gtp link creation regresses, every case would be reported
+as SKIP instead of FAIL.
 
-Suppose the resolved path to xdp_features contains a character that
-shlex.quote() escapes, such as a space, '~', '$', '(' or '!'. The added
-quotes are then passed to execve() as literal characters.
+The patch also adds CONFIG_GTP=m to tools/testing/selftests/net/config,
+so a correctly configured run should not need this skip. Would it make
+sense to check e.cmd.stderr for the specific "not supported" messages
+and re-raise anything else? drivers/net/lib/py/env.py already uses that
+pattern:
 
-Would Popen() then raise FileNotFoundError and crash every subtest?
+            except CmdExitFailure as e:
+                if "Operation not supported" not in e.cmd.stderr:
+                    raise
 
-Only tester_cmd goes through a shell, over ssh. Could the local commands
-pass an argument list instead?
-
-> +        # Bound the remote process itself, not just the local SSH wait.
-> +        result = cmd(f"timeout --signal=TERM --kill-after=5 90 {tester_cmd}",
-> +                     host=cfg.remote, timeout=100)
+> +    defer(ip, "link del gtp0", ns=str(ns))
+> +    ip("link set gtp0 up", ns=str(ns))
+> +    link = ip("-d link show gtp0", ns=str(ns), json=True)[0]["ifindex"]
 > +
-> +    output = ANSI_ESCAPE.sub("", result.stdout)
-> +    match = RESULT.search(output)
-> +    if not match:
-> +        raise KsftFailEx(f"Unable to parse xdp_features output: {output}")
+> +    with NetNSEnter(str(ns)):
+> +        gtp = GtpFamily()
 > +
-> +    detected = match.group(1) is None
-> +    advertised = match.group(2) is None
-> +    ksft_eq(detected, advertised,
-> +            comment=f"{feature}: detected and advertised support")
+> +    return gtp, link
 
-[Severity: Medium]
-Can this report a false failure for XDP_NDO_XMIT on drivers that only
-advertise it after an XDP program is attached?
+[Severity: Low]
+This isn't a functional bug, but should the GtpFamily handle be closed
+when each case ends?
 
-tester_run() in xdp_features.c reads the advertised mask before it asks
-the DUT to attach its program:
+YnlFamily.__init__() opens a netlink socket. It also stores a
+functools.partial(self._op, op_name) on self for every op, which makes a
+reference cycle:
 
-	err = send_and_recv_msg(sockfd, CMD_GET_XDP_CAP, &advertised_feature,
-				sizeof(advertised_feature));
-	...
-	err = send_and_recv_msg(sockfd, CMD_START, NULL, 0);
+        for op_name, op in self.ops.items():
+            bound_f = functools.partial(self._op, op_name)
+            setattr(self, op.ident_name, bound_f)
 
-dut_run() answers CMD_GET_XDP_CAP with a live bpf_xdp_query(). It only
-calls dut_attach_xdp_prog() when CMD_START arrives.
+Because of that cycle, reference counting alone never frees the socket.
+It is freed only by the cyclic GC or at process exit. Each case creates
+a new handle, so up to three netlink sockets in the test netns stay
+open. Each one keeps the namespace alive after NetNS.__exit__() deletes
+it.
 
-Several drivers set NETDEV_XDP_ACT_NDO_XMIT in their XDP attach path. One
-example is virtnet_xdp_set() in drivers/net/virtio_net.c:
+YnlFamily already has close() and __enter__()/__exit__(). Would adding
+defer(gtp.close) in _setup() be cleaner?
 
-		if (!old_prog)
-			xdp_features_set_redirect_target(dev, true);
-
-ixgbe, i40e, ice, igb, igc, stmmac, funeth, libeth and bnxt do something
-similar.
-
-On those drivers the tester sees NOT ADVERTISED. Once the program is
-attached, though, the redirected frames still come back through
-ndo_xdp_xmit, so the output is:
-
-Feature XDP_NDO_XMIT: [DETECTED][NOT ADVERTISED]
-
-The removed shell script only checked the helper's exit code. Wouldn't
-this ksft_eq() now fail on a driver that works correctly? Could the
-capability query be moved after CMD_START?
+[ ... ]
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261010-xdp-v5-send-20261008-v5-0-de687cb67c40%40gmail.com
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261010105740.223992-1-anilkaushikwireless%40gmail.com
