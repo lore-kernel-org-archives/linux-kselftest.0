@@ -1,95 +1,95 @@
-Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04D8223DE5;
-	Sun, 11 Oct 2026 10:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7920338E8CA
+	for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 10:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791714629; cv=none; b=rAAttjsZtRBU5ZtBErX77yFFoXh8LSPiFCvncqCbPAgTUfqGT+TTRsJW18z2A1ZzyaZ8pXFXelMg+abG8vGDvdOM7/WkmUxXRz8HCBzjDybU3PXMVNSt0uhz5bhi1PWXQfstgCGYcuyKu76EefpMHIBRLXDlLKQDK5AAZQq4xUw=
+	t=1791715306; cv=none; b=FEzCgGetrxExm0DwI77W9npvHYA+BhT/E9gzN6ZPj3PXLQ5NZln0BMymda37gnJQw1kQt0wPl1EQ6WTw1pjKIaAYZsYWh+Eg/7Hfy01JgvXaMVCt2JI9lXI4ptm0mPJkCioyXJ5Jk9VFJTV8Sq2hpKVnWaSHil0ZOVChtzAWmcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791714629; c=relaxed/simple;
-	bh=VaVUIa6xV/Mgc5QCMYUmP1Ndx8oEMQyTc8zc9KgNkfM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hkM7Ga98Mzlu4yQH+8ZHAkCv6Np7mhZkjhJdfXjrw5Avaeo5LLR2zG+u1QZ1v7cwyFTKYWdVP6mp8UQGJrK/+0bGg0qwZwoBVs7PsIrUSFgiL9VhPl8Gqi+cqV0TTc8xkYBKuYXfovpYb/y7wA1FCqmFzbvtx6hiiL3MJ5UApNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b=jK/CA/8x; arc=none smtp.client-ip=111.22.67.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	s=arc-20240116; t=1791715306; c=relaxed/simple;
+	bh=qjhWHIzbLO2yDn9fEOpHiCs1+H596BfQIi5qxCi+tKw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=RopZ+7MZmE5DuIJ458itttPrWWkEfT228EZGzYfHukuvgAbntNc8th6HdDLK9o7tsWNOk6hOF+603S9SZz0QL9XJ7kfD8Wkd65YrfpilLMLUSDDeXNDudjVUWB/OoOXg7cs+q3qYc6N4stY55Dr4qXEWPfi/6yumi+sH+OzAJk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mudrb7+D; arc=none smtp.client-ip=209.85.216.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b="jK/CA/8x"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mudrb7+D"
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3a47617a0b3so832357a91.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 03:41:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=jK/CA/8xg3M465P+mkUbZCrvspjKvGyerE9JuBg1cu+tloxTauuX6t+S+3byomWX8eBdWWp9mEaqM
-	 rHzpFMJqBTn/IIRa57dVOWgf6pvGbnFzeLwfSaVmAVBb8h5XiYT2O9uoNvr9vcx92dtxT4qIHHc5c9
-	 GuNghhy1eSFQZ+Q4=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee56acb653f213-cd15c;
-	Sun, 11 Oct 2026 18:30:24 +0800 (CST)
-X-RM-TRANSID:2ee56acb653f213-cd15c
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from openEuler-24.03 (unknown[112.22.251.201])
-	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76acb6537077-676d3;
-	Sun, 11 Oct 2026 18:30:24 +0800 (CST)
-X-RM-TRANSID:2ee76acb6537077-676d3
-From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org,
-	willemb@google.com,
-	martin.varghese@nokia.com,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: net: bareudp: Add stream tests with software GSO
-Date: Sun, 11 Oct 2026 18:30:14 +0800
-Message-ID: <20261011103014.1605368-1-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <179168180510.434549.891701914488385708@kernel.org>
-References: <179168180510.434549.891701914488385708@kernel.org>
+        d=google.com; s=20251104; t=1791715305; x=1792320105; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qjhWHIzbLO2yDn9fEOpHiCs1+H596BfQIi5qxCi+tKw=;
+        b=Mudrb7+DOVsx/WHdLb/Gl3lCHugOnk6XFxjjJKqOXvga5BUPv+7PAEAzBiMM9LkLmO
+         I6awrpa1FGCUT8ls5cZzHM6e592sLMH6+/PPRO9cq55jp3Db7mnEPkwRCIxaAOqMrKqR
+         cFRKTv5V+MQqIV0c81EmmLXLBpQCw9EYETwCEY4j+tTwGnQ9bWAy9TDdlz4Mnf0+ZE3d
+         2h7HQe2WrdGc1Fx0FH2KkvMKEJuFRRgAbK1Jd80nwi+CXnMlWxJ69aghV5gDY3qE4907
+         c6eCQpLd4kVPHcJECt1ABCG95PetXLcf/nV8BTfYzc2/ZkVNBWPUDvb4a0NZ+K2DNIP/
+         pOUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791715305; x=1792320105;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=qjhWHIzbLO2yDn9fEOpHiCs1+H596BfQIi5qxCi+tKw=;
+        b=zd+y+fKSH9aytOorB0kVQa271ju4M5BFLtbk6ZuRZTDM8gmyoigEb/UWek+8CeGAac
+         LWjDGMl7rY6f3VmnzU6rzecl7p9z4NYqyuHH4Uo+22H9KvD+1oY1r5Mz6JXqfAZbIH55
+         ks72TIEhgqFZ8S4J20vxbEvU4NHSW0m1zpunOHb42erw49wOelRoMTQJnDsedRdvWmSh
+         Ho4rqBhZm5Lz5ZNVKzKD1vNgBKvNXOevNdiFtBi6zo5PuG8Tlqe7Go/tKgyVTDUdotys
+         Hw9Mx8SzBG4QIlR5U1Xek+9MrWDiULwBxn1b5zV3Qdqo+Wou5ARVT6X5SF8gW2PFUEDo
+         5+Bg==
+X-Forwarded-Encrypted: i=1; AKwUvBwUvktjnrfHKSNRK18nb5u+OdcxJq5dc0ryMHVPwSJTnMppE8eHWHayZjdsARnxm2d/bE6wyC1JTwXwkEw0i/s=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIm4MEWuJNmlpX1s5zVLZOeSI+NAQf+UT0/v6AeOr03poT6J5P8
+	by3vX3cC4vDmY8zpnXBMqjw7GYA2OwwvIwx1yA2NP+M9LzbkfMop/aOLBBWUrTF8jMxHB8sYII5
+	ONw==
+X-Received: from pgbd17-n2.prod.google.com ([2002:a05:6a02:64d1:20b0:cc7:eb8b:50e3])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3c8c:b0:3a4:967c:6947
+ with SMTP id 98e67ed59e1d1-3ab3a99b4d0mr5011802a91.21.1791715304719; Sun, 11
+ Oct 2026 03:41:44 -0700 (PDT)
+Date: Sun, 11 Oct 2026 10:41:42 +0000
+In-Reply-To: <20260910034821.2935214-1-wakel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260910034821.2935214-1-wakel@google.com>
+X-Mailer: git-send-email 2.56.0.385.gd3acb90ef8-goog
+Message-ID: <20261011104142.1225275-1-wakel@google.com>
+Subject: Re: [PATCH] selftests: rtc: Support harness test filtering and arguments
+From: Wake Liu <wakel@google.com>
+To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Oct 11, 2026 at 01:23:25 +0000, netdev-bot+sashiko@kernel.org wrote:
-> [Severity: Medium]
-> The new header comment says:
->
->   so that the GSO packets encapsulated by bareudp are segmented in software.
->
-> Does that hold for the two Unicast MPLS stream tests?
-[...]
-> Should the MPLS stream tests be dropped? Alternatively, the header comment
-> and commit message could be updated and CONFIG_NET_MPLS_GSO added to the
-> selftests config.
+Hi Shuah,
 
-Right. Counting calls with the function profiler, the MPLS streams only
-go through mpls_gso_segment() and never reach skb_udp_tunnel_segment(),
-while the IPv4 streams do. With mpls_gso blocked from loading, both
-MPLS streams fail. (When it is a module, it does get loaded here, as a
-softdep of mpls_iptunnel, but the tests do not reach the tunnel GSO
-path anyway.)
+Gentle ping on this patch. Alexandre has acked it from the RTC
+side [1], and it still applies cleanly on top of both
+kselftest/next and v7.3-rc6.
 
-I will drop the MPLS stream tests in v2.
+With this change, rtctest accepts the standard kselftest harness
+options, so a test runner can select a subset of the cases with
+e.g. "rtctest -t date_read -t date_read_loop". This would let
+Android VTS drop a local #ifdef that it currently carries in
+rtctest.c.
 
-> [Severity: Low]
-> exit_cleanup() calls cleanup_all_ns before the new `[ -n
-> "${TMPFILE}" ] && rm -f "${TMPFILE}"`.
-[...]
-> Would it help to remove TMPFILE before calling cleanup_all_ns, or to
-> tolerate its failure?
+There is no rush; picking it up for the next cycle is perfectly
+fine. Alexandre, if you would rather take it through the rtc tree,
+that works for me as well.
 
-Yes, v2 will remove it first.
+FWIW, the pending date_read_loop fix [2] touches the same file.
+The two patches are independent and apply in either order.
 
-pw-bot: cr
+[1] https://lore.kernel.org/all/2026092119312953871857@mail.local/
+[2] https://lore.kernel.org/all/20260929152212.2092062-1-wakel@google.com/
 
-
+Thanks,
+Wake
