@@ -1,156 +1,182 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D63C349CE7
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 23:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B285523D2B1;
+	Sun, 11 Oct 2026 01:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791676019; cv=none; b=tg/v7S6PdEyrIJ0v7EtuglCCz8ODvRQmjLmzorcihiukn2/ZF8Gjpz7lrVlDM8XBZzymqNB1jALcMhTd+HmhDWXx3t9Qd6r0qJtx4+cplc23NG0QukoyT7VSzM8wZ/KpbPg3StcMNpMFyfBnXsVqiKSmJYRvx7yY+cv1dIoTit4=
+	t=1791681807; cv=none; b=qKQcJzTEIUaNpm8nOv3Yni9OsVk2NPGEyQ9uMaylmnVSyJaXt7Lfau4GPkeHzOcsOx0oUvieTkI5OP17jvvRpH9B0cFnMMqFM0w+MuuQdXiyJCJ9os7NgBqgV5LWYXzx4jtqNS/nYWsgMwovbKmttn5xft0zdHL0njkNBwkkSXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791676019; c=relaxed/simple;
-	bh=2hvFsAf8JAV1vNTH5rf2/2G92H15dI0BJwMTejjyruw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KENyD5bSYUHCPY1ybA4lh8fAcn4gkmQSUZRCzzCglTW2WVc2qp364zt35XUvGc44iy1wP1rBnbSnXY+Lxulgyab0GWQz0fdU4tB/orkjJ/drC3DJHBscTpypmAgPnHhcxIz5MUCwHoM1CTPzjzzgwcWbKCTSzm5E+l7Mk5qYvuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=IzTA7/Vf; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1791681807; c=relaxed/simple;
+	bh=S/iR5ZwEHwlqso+EA2qul9oFNcD0effkoti8sZFvXcA=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D1/BbTZLgN7RfTaTdatKt/y8kTn9TYrIIH3oRk6hZQQLVDoWTW3iujXu8dcfVd8yaZSa8n357Sc9F+kTs8oSm8YUYoae+4Gxqb9W/EbOcfEEbactTzIY1K9/vq8gFApW62AsGHLwA6IOD2MbsZngrU94FPVITN5vmnfaWppQf+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JH2Q9sOp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="IzTA7/Vf"
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C490F3F290
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 23:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1791676007;
-	bh=pQvssHYBZZeCPq+XUhxAF5bUl+NBotKc8Bo70aaWCyo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=IzTA7/Vf1/0N+9t2h+6/OwgKSN2rskBtFqQQi2wZjjnLYH4nACZsOrNpP/4fNih2y
-	 /fw26622i6x6z0rpUKCpYT4/gkE5bx4Jdei5vTBu76uMjZ/9gpEfYlY9LyVdCJGI0r
-	 zhA89dC5riH8yHcij7hQwrqIVeqMyuOQNPvPGofrJd7mh8950/C2Nz/9t5r2xRX65J
-	 E9pBszcyeSwLZDnSXQJsQfT6jz8HwNuCRFnzR+M2oGb41aSY9Fy5hiQ25kcWz2oHVK
-	 JKLa7RhodFvFDPB74B93BnS0TIhsE/1kIfD0s1Vyd5b0Be8v68wgOzkU599/hxFbC/
-	 j2dYbc66cMkcvUsBQ1KjIl2vjo+y5Xc/yqf73XzUjP0r0NitDau2+vj3HU8ZbeLTk1
-	 CHOJDtoMATOiLlZR4hjFL73Nxb17JYypxVn9xebec0oKB3GSUEd0/Zq3Yduhzj49zZ
-	 8bTux80FK44MJvhJDZX0Sx7Pbn2Rx3kIdQM91EcvNZExTqcyWPmxSizd21vQ+A4Oy7
-	 kkujupwwzcA5lU/i89Lns+bNoviKQJTL2OE+IpD6qKrTeoSR+KfCAZdzqTQJU5My6Y
-	 y1pAu0Hqrhw1Tgm6jpnNQUbTLMb0kUkCSxO+IFV9awYBKWzUu7W7cMhWzQmtKJhog7
-	 Ff/XIWNfGMi6Dq6R+m7YX4Cw=
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4a01b112fa2so12713515e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 Oct 2026 16:46:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791676007; x=1792280807;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pQvssHYBZZeCPq+XUhxAF5bUl+NBotKc8Bo70aaWCyo=;
-        b=U/8HJFmi8fFJbrDQSPg5ZU95WgFvhIun3OGJJtOmpQkvGBjARiARbcAoPOu0DAe/ZR
-         V6onrwz5q7kpluslbcjUEJzLh9wHYfFOGJ0MBezwXek2CQqzQJAkRwJpxOHTHh+16buK
-         ldDtpUnogfm2MhhO11EXtnIVo1ewCVrbCqzlNrJ4XFIPcxSiie7hGK+dT+sXt6NHln+F
-         yomB0OJ/Rpl1jUFMYyB5c3Je1+GPVIFD1+SWed9QzDogfmcaQd8+bPvN2xZBwCK1xMp4
-         dHmDHJniYx12YLBQ/a4yIaHw3prsEkm9IMYqToKPwzl6ZXbQMKNPk+x53KeaAy3SI1IX
-         EALA==
-X-Forwarded-Encrypted: i=1; AKwUvBxNJBUSscY7vdqz6EszbZfFGNc59LW+mHLZ+q0r0Vr1rA1u7pf9mJH53xNqEdu0nrmu9f6DuNgYl8545Aex1FM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJMVZk0ada6LeRGE6kfz67nZZtZbDmzN/iYHnZHWwtbyhq1SQrh
-	fckgagZuGnsaIEyeBHRb7jrJSfu0danOBXqyCIxNbdwUwi+6GHp2fugC2tvUSuxnrYtuLXhozdc
-	pizsV7z8PFeEsMFooGOtEJBMuOvaxD/bZZb3Qv1yXn4gpWz8Xk3ab9RASNswsxLAGBlkzh+6kK+
-	HDcF+un3C5tw==
-X-Gm-Gg: AYBFou2yNq59kh+FNIZxAoobkY+HY3vFR2yWDAVbyq4MlNwfCWSZ9L5gEcOgdav7Rqy
-	ZXHci9qAIFxakO9kCvnHSiGwUiK3Oe3IZPPydUeKQXpPl9s0sQtLSi76MuI0S8N+NcDLZ9ljFFI
-	pf5/8HXJBbH7eybKJRb6Q9hdls28OsNobKu4tFsW3pubxGVjA24M8BFUBG+GTebSnLPPVMciP91
-	ErzOu+s/rM/zgNcmi11pNwW/TGszO8E2dirDzk1p5FWzuofC+x8QA9Bxtj63xJCzwZAkf5ZH6wv
-	h/iOrZEflfaS6uf83uQZREGAc5GbJYAivFK1KIQDBCsbr5bh6oVn7EJpKSFSleMaDB3ovw==
-X-Received: by 2002:a05:600c:8708:b0:4a1:7b05:3a6d with SMTP id 5b1f17b1804b1-4a18e49881amr99936315e9.8.1791676007285;
-        Sat, 10 Oct 2026 16:46:47 -0700 (PDT)
-X-Received: by 2002:a05:600c:8708:b0:4a1:7b05:3a6d with SMTP id 5b1f17b1804b1-4a18e49881amr99936095e9.8.1791676006955;
-        Sat, 10 Oct 2026 16:46:46 -0700 (PDT)
-Received: from localhost ([2001:67c:1560:8007::aac:cab2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a192d3efb6sm85743135e9.1.2026.10.10.16.46.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Oct 2026 16:46:46 -0700 (PDT)
-From: Sarah Emery <sarah.emery@canonical.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Cc: Sarah Emery <sarah.emery@canonical.com>,
-	Hui Wang <hui.wang@canonical.com>
-Subject: [PATCH v2] selftests/ftrace: Account for 8-byte aligned trace_marker_raw events
-Date: Sun, 11 Oct 2026 01:46:45 +0200
-Message-ID: <20261010234645.173550-1-sarah.emery@canonical.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JH2Q9sOp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2811F000FF;
+	Sun, 11 Oct 2026 01:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791681806;
+	bh=n7E0hFoL1L830TCgQ2PQGlQVAtS4G3r4ObSfPqRqlew=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=JH2Q9sOpWLqAHEdnkOrBhwueQLGpriY7wxXHmohKvxswT6LRjHGTnFtS0pKBVvg9e
+	 jFtXzovBvMHYzNCSmyaf2uyjDvjOy8OGC9LXbyoouzvGD3jqnBtTAnh9kHZx50IT8K
+	 D/pH9AnacF8aGj8VLUYOIr49SLnXMsmBI2aJw1p8ojpukXUjC5Jvvs3eAJfLGY+q93
+	 h4Xb1cqqBECwqh1/AqSD4nJqJoJsobM0Z74SAEy8doFoFYesIy5ctukmemI9NjzTUs
+	 4nW0VDHedqYiUt7ODN8U0yOCJ8Ca+Z2aBOVJxrUeF60NseFFIbcmiVXLEJRl1MtITD
+	 zmNr0xzqj98dA==
+Subject: Re: [PATCH net-next] selftests: net: bareudp: Add stream tests with
+ software GSO
+From: netdev-bot+sashiko@kernel.org
+To: yanhaishuang@cmss.chinamobile.com
+Cc: netdev@vger.kernel.org, willemb@google.com, martin.varghese@nokia.com,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Sun, 11 Oct 2026 01:23:25 +0000
+Message-ID: <179168180510.434549.891701914488385708@kernel.org>
+In-Reply-To: <20261008055920.1560930-1-yanhaishuang@cmss.chinamobile.com>
+References: <20261008055920.1560930-1-yanhaishuang@cmss.chinamobile.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-trace_marker_raw.tc expects the length of each raw event to be rounded
-up to a multiple of 4 bytes. That is not the case when the ring buffer
-forces 8-byte alignment of events (CONFIG_HAVE_64BIT_ALIGNED_ACCESS):
-the id plus the data is rounded up to a multiple of 8 bytes instead, so
-trace_pipe shows 8 * N + 4 items. This was seen on riscv64.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Make the test accept either rounding.
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-Fixes: 37f46601383a ("selftests/tracing: Add basic test for trace_marker_raw file")
-Reported-by: Hui Wang <hui.wang@canonical.com>
-Closes: https://lore.kernel.org/all/20260607072431.125633-3-hui.wang@canonical.com/
-Signed-off-by: Sarah Emery <sarah.emery@canonical.com>
----
-Original v1 patch from Hui Wang was posted in June and only patch 1/2
-was merged (commit c37e0a4b79a6).
-This is a v2 for commit 2/2, addressing reviews.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Changes since v1:
- - Drop kconfig_enabled() and the CONFIG_HAVE_64BIT_ALIGNED_ACCESS
-   lookup. The review of v1 objected that it depends on the kernel config
-   being readable from the test environment. The test now accepts the
-   4 and 8 byte roundings based on what trace_pipe prints.
- - The expected length for the 8 byte case is unchanged (8 * N + 4).
- - Rebase on 65f26d15f7db ("selftests/ftrace: Fix trace_marker_raw test
-   on 64K page kernels"), which changed how the test writes its events.
+- [Medium] The two new "Unicast MPLS stream over UDPv4/UDPv6" tests never
+  push a GSO packet through bareudp's UDP-tunnel software segmentation.
+- [Low] exit_cleanup() calls cleanup_all_ns before the new `[ -n
+  "${TMPFILE}" ] && rm -f "${TMPFILE}"`.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-index f985ff391463..dd2b94be0947 100644
---- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-@@ -67,7 +67,8 @@ test_multiple_writes() {
- 	# add a little buffer
- 	echo stop > trace_marker
- 
--	# Check to make sure the number of entries is the id (rounded up by 4)
-+	# Check to make sure the number of entries is the id (rounded up by 4,
-+	# or by 8 on architectures forcing 8 byte alignment of ring buffer events)
- 	awk '/.*: # [0-9a-f]* / {
- 			print;
- 			cnt = -1;
-@@ -77,9 +78,12 @@ test_multiple_writes() {
- 					i++;
- 					cnt = strtonum("0x" $i);
- 					num = NF - (i + 1);
--					# The number of items is always rounded up by 4
-+					# The number of items is rounded up by 4
--					cnt2 = int((cnt + 3) / 4) * 4;
-+					cnt4 = int((cnt + 3) / 4) * 4;
--					if (cnt2 != num) {
-+					# With forced 8 byte alignment, the id (4 bytes) plus the data
-+					# is rounded up to a multiple of 8, and the id is not counted
-+					cnt8 = int((cnt + 3) / 8) * 8 + 4;
-+					if (num != cnt4 && num != cnt8) {
- 						exit 1;
- 					}
- 					break;
+--
+
+selftests: net: bareudp: Add stream tests with software GSO
+
+This patch adds TCP stream tests to bareudp.sh. After each ping test, a
+16 MiB file is copied with socat from NS0 to NS3. UDP tunnel segmentation
+offload is turned off on the underlay veths so that bareudp's GSO packets
+are segmented in software.
+
+> diff --git a/tools/testing/selftests/net/bareudp.sh b/tools/testing/selftests/net/bareudp.sh
+> index d9e5b967f8151..4b6d3a64f3c3f 100755
+> --- a/tools/testing/selftests/net/bareudp.sh
+> +++ b/tools/testing/selftests/net/bareudp.sh
+> @@ -105,17 +105,27 @@
+
+[ ... ]
+
+>  # Exit the script after having removed the network namespaces it created
+>  exit_cleanup()
+>  {
+>  	cleanup_all_ns
+> +	[ -n "${TMPFILE}" ] && rm -f "${TMPFILE}"
+
+[Severity: Low]
+exit_cleanup() runs from the EXIT trap, and set -e is still active at that
+point. cleanup_all_ns can return non-zero. For example, cleanup_ns() in
+lib.sh sets ret=1 when it hits this path:
+
+tools/testing/selftests/net/lib.sh:cleanup_ns() {
+    ...
+		if ! busywait $BUSYWAIT_TIMEOUT ip netns list \| grep -vq "^$ns$" &> /dev/null; then
+			echo "Warn: Failed to remove namespace $ns"
+			ret=1
+    ...
+}
+
+When that happens, does the shell exit before the rm? That would leave the
+16 MiB file that setup_underlay() created with mktemp and dd in $TMPDIR.
+
+Would it help to remove TMPFILE before calling cleanup_all_ns, or to
+tolerate its failure?
+
+[ ... ]
+
+> @@ -307,12 +380,18 @@ ping_test()
+
+[ ... ]
+
+>  	if [ $MPLS_UC ]; then
+>  		ping_test_one "${PING6}" "2001:db8::203" "Unicast MPLS packets over ${UNDERLAY}${MODE}"
+> +		stream_test_one "TCP6:[2001:db8::203]:${STREAM_PORT}" \
+> +			"Unicast MPLS stream over ${UNDERLAY}${MODE}"
+>  	fi
+>  }
+
+[Severity: Medium]
+The new header comment says:
+
+  so that the GSO packets encapsulated by bareudp are segmented in software.
+
+Does that hold for the two Unicast MPLS stream tests?
+
+In NS0, mpls_xmit() sets skb->protocol to ETH_P_MPLS_UC. veth01 advertises
+GSO in its MPLS features:
+
+drivers/net/veth.c:veth_setup() {
+    ...
+	dev->mpls_features = NETIF_F_HW_CSUM | NETIF_F_GSO_SOFTWARE;
+    ...
+}
+
+So the TSO skb reaches NS1 unsegmented, and the veth10 ingress rule
+redirects it to bareudp_ns1. There, validate_xmit_skb() masks the features
+through netif_skb_features()->harmonize_features()->net_mpls_features():
+
+net/core/dev.c:net_mpls_features() {
+    ...
+	features &= skb->dev->mpls_features;
+    ...
+}
+
+bareudp_setup() sets dev->features and dev->hw_features but never
+dev->mpls_features. That field only holds NETIF_F_SG, which
+register_netdevice() adds, so all the TSO bits are cleared.
+
+If mpls_gso is loaded, mpls_gso_segment() splits the skb before
+bareudp_xmit(). bareudp then only encapsulates single segment packets, and
+software UDP tunnel segmentation on veth12/veth21 never runs for MPLS.
+
+If no ETH_P_MPLS_UC offload is registered, skb_mac_gso_segment() returns
+-EPROTONOSUPPORT and the skb is dropped. With CONFIG_NET_MPLS_GSO=n, the
+drop happens later instead, in skb_udp_tunnel_segment() at veth12, because
+the inner protocol is MPLS.
+
+tools/testing/selftests/net/config doesn't list CONFIG_NET_MPLS_GSO. It
+only ends up =m through CONFIG_OPENVSWITCH=m, and nothing loads
+mpls_gso.ko automatically. In those setups, could the MPLS stream tests
+time out on a correct kernel?
+
+The commit message also suggests these tests don't reach the tunnel GSO
+path:
+
+  Without commit c57b2e60d4bf ("bareudp: set the inner protocol to the
+  protocol of the packet"), the IPv4 and IPv6 streams over UDPv6, and the
+  IPv6 stream over UDPv4 in multiproto mode, time out.
+
+Before that commit, an MPLS GSO skb reaching UDPv6 tunnel segmentation
+would have kept the stale ETH_P_IPV6 inner protocol from mpls_xmit(). Yet
+the MPLS stream over UDPv6 isn't listed as timing out.
+
+Should the MPLS stream tests be dropped? Alternatively, the header comment
+and commit message could be updated and CONFIG_NET_MPLS_GSO added to the
+selftests config.
+
 -- 
-2.43.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261008055920.1560930-1-yanhaishuang%40cmss.chinamobile.com
