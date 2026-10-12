@@ -1,152 +1,192 @@
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-62.mta0.migadu.com [91.218.175.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9748181334;
-	Mon, 12 Oct 2026 08:08:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5527E448CEC
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 08:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791792504; cv=none; b=fPt3Vep8UsVz7eR+KAzjYXrF8BvIE4grYLItL0qYHpSYDvFZro6cPBj5QS7QO1wFNdK6jVnoA+wAj5QtNPT9kmNJM+3sO05j8XhcW5WHbGKJY1NwVY55vOSmyJLlvRuhPovBrTz7XmaTKh2+x3N/G4idoBiHFjJztU27lLAOojg=
+	t=1791793073; cv=none; b=XyNHfTXrme45wzbW0Jx2npLG1mMzo1pYm9B7Bj2bOZlhuAz9HOmzPTYZDr9wX/MBK9mDQ3uyNDsSzlz9m9RsyP8gFHCyvxEH04mwBaBIojvn2IcOcxun3LwvNyPNJ+s7kfyiTU2HvbCNSUk1IafV78HOBKI4kKCn7o73SncPm8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791792504; c=relaxed/simple;
-	bh=VbuUVwRa3q6ixYB746kpqiYxA2CyHawQzNHWHac3nxM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T88cYGKA9t+NvSUE6giqsGFY4qO0yvMugr8YCDdZojYo+yg/54rCRT6E/YwKaX1U2mnG1J1Li3LJw3RJ962rpfhI5N3YLmV4tiJFUH0tmBN+I7Tn93Ly4AYsEA4vIrziZiENZi2D7A5Ia+ame+0ythtEHsaXYKs6UseCv3Rp3yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=GyxBNE8K; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1791793073; c=relaxed/simple;
+	bh=oiQs+XaAPXnhj3q2rBXJEJ5pvTTgbC4S2aepl5uzLe4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SCu8g1qPhdUFwWh7s5fmM03Sq7ZcWm1GI3giZzo4/BLgC85KCYDrlYhT1PCzlFCBe7H88mqK9dYTUbm1C39DYB+o0m1FnCMN1W8M94uEVOdDwonFxpgX0ZI9ajAxLI8Y0S10DhV5yhqZ40wBIYco1gQv2wRX6iwKhaqoHmMWF0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r9Yw1yA4; arc=none smtp.client-ip=91.218.175.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="GyxBNE8K"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1791792499; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=D6ifv6a4KKoIiKYJezBRkAhE1P/vLkjB6GL3KBtF0js=;
-	b=GyxBNE8KhdanRPo3VkDWe7EFz/VNszpZhjCzradaIH8Q6Vddf1lROiuLQV+DAMSt2/SRXfe+jQ2zhTfA5RLb6SoNifykA1QEqie2YpfpnBoMyfCab0BCMgifVmH9DRVOTFBnl0riFqlwizkTMMLzHdyyDUUojf/m0/gQGU83zLo=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R561e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0XCd0ksa_1791792496;
-Received: from 30.246.160.148(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XCd0ksa_1791792496 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 12 Oct 2026 16:08:17 +0800
-Message-ID: <882701c0-9016-4fe3-93d0-40853f34f19d@linux.alibaba.com>
-Date: Mon, 12 Oct 2026 16:08:16 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r9Yw1yA4"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=oiQs+XaAPXnhj3q2rBXJEJ5pvTTgbC4S2aepl5uzLe4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791793069; v=1; x=1792397869;
+ b=r9Yw1yA480UQrT66imwaLswS7CZn4oX+fMt7jmieYKMuZU4LQfE6oIIP5C7UCcXkKcDfehT8
+ eM10ev1x6JvfVP7/6/Jh8lDIFp3VxXpSVvFudxcXJc30IS+bKgxBOPdB7RHAXQ4xwDaPteHRUDn
+ YO0wSWfo61PmlygbqCjc0ZCc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 108c7064bb8ec50c;
+	Mon, 12 Oct 2026 08:17:49 +0000
+X-Mizu-Trace-ID: 108c7064bb8ec50c
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 12 Oct 2026 16:17:41 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>, Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+	Justin Iurman <justin.iurman@gmail.com>,
+	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+	Ahmed Abdelsalam <ahabdels@cisco.com>,
+	Stefano Salsano <stefano.salsano@uniroma2.it>
+Subject: Re: [PATCH net-next 3/5] seg6: apply the PSP flavor together with
+ NEXT-C-SID in SRv6 End
+Message-ID: <asyXpWXMeKnPw9U6@fedora>
+References: <20261011192310.55-1-andrea.mayer@uniroma2.it>
+ <20261011192310.55-4-andrea.mayer@uniroma2.it>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] riscv: stacktrace: do not report the walker's own
- frame from arch_stack_walk()
-To: Karl Mehltretter <kmehltretter@gmail.com>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Changbin Du <changbin.du@intel.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Mark Rutland <mark.rutland@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
- Rae Moar <raemoar63@gmail.com>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20261010132712.46931-1-kmehltretter@gmail.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20261010132712.46931-1-kmehltretter@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261011192310.55-4-andrea.mayer@uniroma2.it>
 
-
-
-On 10/10/26 9:27 PM, Karl Mehltretter wrote:
-> stack_trace_save() uses skipnr + 1 because arch_stack_walk() is expected
-> to first report the return into stack_trace_save(). With FRAME_POINTER,
-> the RISC-V arch_stack_walk() calls walk_stackframe(), which starts from
-> its own frame and first reports the return into arch_stack_walk().
-> stack_trace_save() therefore starts one frame too early. For example,
-> page_owner records begin at __set_page_owner() instead of the allocation
-> site.
+On Sun, Oct 11, 2026 at 09:23:08PM +0200, Andrea Mayer wrote:
+> Since commit bdf3c0b9c10b ("seg6: add PSP flavor support for SRv6 End
+> behavior"), an SRv6 End route can be set up with both the NEXT-C-SID and
+> the PSP flavors, e.g.:
 > 
-> Move the walker into an always-inlined helper and call it directly from
-> arch_stack_walk(). Keep walk_stackframe() as a wrapper for its existing
-> callers.
+>   ip -6 route add fcbb:0:100::/48 encap seg6local action End \
+>           flavors next-csid,psp lblen 32 nflen 16 dev dum0
 > 
-> return_address() skips level + 3 entries, while the arm64 implementation
-> skips level + 2. After removing the extra frame, use level + 2 so
-> ftrace_return_address() and CALLER_ADDR results do not shift by one caller.
+> In RFC 9800, the NEXT-C-SID flavor (NEXT-CSID in the RFC) changes the
+> End processing only when the Argument is not zero [1]. With a zero
+> Argument (i.e. when the IPv6 DA carries no further C-SID), End is
+> processed as in RFC 8986, and the PSP flavor (when set) applies
+> unchanged [2]. If the packet arrives with Segments Left 1, PSP must
+> then remove the SRH.
 > 
-> Fixes: 6a00ef449370 ("riscv: eliminate unreliable __builtin_frame_address(1)")
-> Assisted-by: LLM
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+> However, on a route with both the NEXT-C-SID and PSP flavors,
+> input_action_end() always uses the NEXT-C-SID processing. The
+> NEXT-C-SID processing handles a packet with a zero Argument as End
+> without flavors, ignoring PSP. Therefore, if this packet arrives with
+> Segments Left 1, the SRH is not removed.
+> 
+> Fix this by using the NEXT-C-SID processing only when the Argument is
+> not zero or the route has no RFC 8986 flavor. Otherwise, the packet is
+> processed as End with its RFC 8986 flavors, in end_flv8986_core(). With
+> a zero Argument and Segments Left 1, PSP now removes the SRH before the
+> packet is forwarded. If seg6_pop_srh() cannot remove the SRH, the packet
+> is dropped, as on a route with the PSP flavor alone.
+> 
+> Found by manual code inspection and reproduced in a VM without kernel
+> changes or error injection. A following commit adds tests for this case
+> to srv6_end_flavors_test.sh. The tests reproduce the issue: they fail
+> without this change and pass with it.
+> 
+> [1] - https://datatracker.ietf.org/doc/html/rfc9800#section-4.1.1
+> [2] - https://datatracker.ietf.org/doc/html/rfc9800#section-4.1.7
+> 
+> Fixes: bdf3c0b9c10b ("seg6: add PSP flavor support for SRv6 End behavior")
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 > ---
-
-Hi, Karl,
-
-> Tested with the KUnit suite from patch 2 on QEMU's virt machine, clang 22
-> (LLVM=1), on af32da41b032:
+>  net/ipv6/seg6_local.c | 50 ++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 47 insertions(+), 3 deletions(-)
 > 
->    mainline                        stack_trace_save 0/3, return_address 2/2
->    stacktrace.c change alone       stack_trace_save 3/3, return_address 0/2
->    this patch                      stack_trace_save 3/3, return_address 2/2
+> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+> index 26cd4facbe36..427d12fedfc3 100644
+> --- a/net/ipv6/seg6_local.c
+> +++ b/net/ipv6/seg6_local.c
+> @@ -551,6 +551,47 @@ static bool seg6_next_csid_enabled(__u32 fops)
+>  	return fops & SEG6_F_LOCAL_FLV_NEXT_CSID;
+>  }
+>  
+> +static bool seg6_flv8986_enabled(__u32 fops)
+> +{
+> +	return fops & SEG6_LOCAL_FLV8986_SUPP_OPS;
+> +}
+> +
+> +/* check whether the NEXT-C-SID processing has to be used for the packet,
+> + * instead of the RFC8986 flavors set for the given SRv6 End* behavior
+> + * instance.
+> + *
+> + * This function returns:
+> + *  - true, when the packet has to go through the NEXT-C-SID processing;
+> + *  - false, when NEXT-C-SID is not configured or the packet has to be
+> + *    processed on the basis of the RFC8986 flavors.
+> + */
+> +static bool seg6_use_next_csid(struct sk_buff *skb,
+> +			       const struct seg6_flavors_info *finfo)
+> +{
+> +	const struct in6_addr *addr;
+> +	__u32 fops = finfo->flv_ops;
+> +
+> +	if (!seg6_next_csid_enabled(fops))
+> +		return false;
+> +
+> +	addr = &ipv6_hdr(skb)->daddr;
+> +
+> +	/* NEXT-C-SID and the RFC8986 flavors combine according to the
+> +	 * DA.Argument (see RFC9800, sections 4.1.1 and 4.1.7):
+> +	 *
+> +	 *       DA.Argument   RFC8986 flavors   processing
+> +	 *   (1) != 0          any               NEXT-C-SID only, SL unchanged
+> +	 *   (2) == 0          none              the behavior, e.g. End
+> +	 *   (3) == 0          one or more       the behavior with its flavors,
+> +	 *                                       e.g. End with PSP
+> +	 *
+> +	 * In (2), the packet still goes through the NEXT-C-SID processing,
+> +	 * which runs the behavior (e.g. End) when the DA.Argument is zero.
+> +	 */
+> +	return !seg6_flv8986_enabled(fops) ||
+> +	       !seg6_next_csid_is_arg_zero(addr, finfo);
+
+nit: based on the comment, maybe we can change the order to
+
+	return !seg6_next_csid_is_arg_zero(addr, finfo) ||
+	       !seg6_flv8986_enabled(fops);
+
+No need to change if there is no new version patch.
+
+> +}
+> +
+>  /* Processing of SRv6 End, End.X, and End.T behaviors can be extended through
+>   * the flavors framework. These behaviors must report the subset of (flavor)
+>   * operations they currently implement. In this way, if a user specifies a
+> @@ -865,7 +906,10 @@ static int end_flv8986_core(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+>  	if (srh && !seg6_hmac_validate_skb(skb, srh))
+>  		goto drop;
+>  #endif
+> -	flvmask = finfo->flv_ops;
+> +	/* NEXT-C-SID, when configured, has already been evaluated by the
+> +	 * caller. Only the RFC8986 flavors are left here.
+> +	 */
+> +	flvmask = finfo->flv_ops & ~SEG6_F_LOCAL_FLV_NEXT_CSID;
+>  	if (unlikely(flvmask & ~SEG6_LOCAL_FLV8986_SUPP_OPS)) {
+>  		pr_warn_once("seg6local: invalid RFC8986 flavors\n");
+>  		goto drop;
+> @@ -919,8 +963,8 @@ static int input_action_end(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+>  	if (!fops)
+>  		return input_action_end_core(skb, slwt);
+>  
+> -	/* check for the presence of NEXT-C-SID since it applies first */
+> -	if (seg6_next_csid_enabled(fops))
+> +	/* NEXT-C-SID is evaluated first, when configured */
+> +	if (seg6_use_next_csid(skb, finfo))
+>  		return end_next_csid_core(skb, slwt);
+>  
+>  	/* the specific processing function to be performed on the packet
+> -- 
+> 2.43.0
 > 
-> A BeagleV Ahead (TH1520) booted with this patch passes all five cases.
-> The stack_trace_save() result on mainline (0/3) was also reproduced with
-> GCC 15.2 and QEMU 10.2.1.
-> 
-> Without CONFIG_FRAME_POINTER the walker scans the stack for anything that
-> looks like a text address and its start frame is not exact before or
-> after this patch. What return_address() returns there is unchanged: the
-> walk loses one leading entry and the skip count goes down by one.
 
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
 
-Hi Karl,
-
-As promised in the other thread, here are test results for this series.
-
-Short version: the fix is correct, the KUnit suite reproduces the bug
-precisely, and the whole series passes here.
-
-Testing
--------
-
-Your numbers were collected with clang 22, plus the mainline
-reproduction with GCC 15.2 you noted in the commit message, so I
-re-ran the full matrix with gcc: riscv64 cross-gcc 16.2.0 for the
-first three configurations below and a native gcc 14.3 for the last
-one, all under QEMU (qemu-system-riscv64 11.1.1, -machine virt,
--cpu rv64) on top of your base af32da41b032.
-
-A. base + 2/2 only (tests, no fix): pass:2 fail:3, i.e. exactly the
-    "stack_trace_save 0/3, return_address 2/2" you reported for
-    mainline.  The failures show the off-by-one shift nicely; with
-    skip = 0 the first recorded symbol is the walker itself:
-
-        # riscv_stacktrace_skip_zero: skip=0 first=stack_trace_save count=11
-        #     symbol == "stack_trace_save"
-        #     expected[skip] == "riscv_stacktrace_leaf"
-
-    The two return_address() cases still pass on unpatched mainline,
-    which is consistent with the analysis: the current "level + 3" is
-    calibrated for the buggy frame layout, so ftrace_return_address()
-    keeps working while stack_trace_save() - and everything built on
-    top of it - records one bogus leading entry.
-
-B. base + 1/2 + 2/2: pass:5 fail:0.
-
-C. My v6 reliable stack unwinding series [1] + your 2/2, with the
-    level constant in return_address.c adjusted to the same
-    unconditional "level + 2" as in your 1/2: pass:5 fail:0, with
-    per-case results identical to B (skip=0/1/2 first =
-    leaf/middle/outer, count = 10/9/8).
-
-D. Cross-toolchain check: I rebuilt the C tree with a native riscv64
-    gcc 14.3 inside an Anolis OS 23.4 riscv64 guest - no cross
-    toolchain involved at any step - using the same Kconfig options,
-    and booted the resulting Image under the same QEMU: pass:5 fail:0
-    again, identical output.  The result does not depend on one
-    particular compiler's frame layout.
-
-Please feel free to add
-
-     Tested-by: Shuai Xue <xueshuai@linux.alibaba.com>
-     Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-
-Thanks.
-Shuai
+Thanks
+Hangbin
