@@ -1,63 +1,63 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983A139A070
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 02:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B80839A070
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 02:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791773301; cv=none; b=FBKJNekZz0abKCqC7ie02q91bpDKictWwlstrx1PkxMzN6k21FLfQnPjlcy0507t2SrKdbljJI8epNkuRTHGgPw2IA2aCaFeP+4M6j0yobDp3IvG2fR/Gzr7Vjyzgfpq/8HbUSkb60nKXCSvXpqlYC9QAFeeomrkHtbTMfYEAOo=
+	t=1791773304; cv=none; b=dhKtS6431lUCEGQYh/xnFFCWJbCbh8TD3Cyv0XUw0QjuN2uvIkR/Lmu1FvotZWU5MiSqJoxHpsHWxHktyd0z3KkmXj4yGXYLbieMK3hmvrOJB3jyskCSRCXD0ORAeppaGjGJekUpshl9sbq+eC1Qx9QVQUCseQ4X0BvSuivNDhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791773301; c=relaxed/simple;
-	bh=/3PjWfkzM/efN0wGN7Z5YGi740qr4COct1iZN2vYT3A=;
+	s=arc-20240116; t=1791773304; c=relaxed/simple;
+	bh=/TI/F3FF9JO9ukV0i4JufUs30694px5Zwa4tJVvmNck=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=H/5PXGeP9avacmTMb3wQtVh+odU2QrX3TxTL1ImRabKINhwDiIhG+ir+/G6izSZnce3c0FNVeSm6ScUJQDuka8YhyPnb08h37bwHhPLYFuYU0fbVXXETwtF4r+4b/LItZRIYDZifkvzHWH2niEc5AYMZjkg+YlwScPVy1yMQ170=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LcpWS2L6; arc=none smtp.client-ip=74.125.82.171
+	 MIME-Version; b=RiISUntYrGmMc7wFDCZlG3OOggL8HicvJeH2lSUeiZoZtguhO3iMvgDIqB+0WFLl2R9d6PjV/0Y9vGE421os/FQLbfZOAAY95ObAvlKnhpxvNaOhtWM4BuU1u0OqexyfG4uNLq9R1i2ipqxQt3SvStMmpSjyGr9ZaJSr9A20J24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kL9Qz6+4; arc=none smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LcpWS2L6"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-35834f72d94so2342685eec.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 19:48:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kL9Qz6+4"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-354ba08cfd1so2584838eec.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 19:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791773298; x=1792378098; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791773302; x=1792378102; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=TRzywdSur3zmqfmDlLuRL61gI+LM9+nqup6UgMDQquQ=;
-        b=LcpWS2L6hydH6PkijkfyBHFBNDFgB/sX+jrdykRt8TJH+vtv4hl7mLM3t1b1vH+7BG
-         6eGBCvEd0LfElSg4T4sm7XxdoK+RxQbbUyfoM+gsCCFdAriLQWRCh5H9IwHWKLLWa1df
-         2Ti7JwvDz/vj5N4TgcxNVSrM1ckPbXXpJZsIObZ8EsMP5QHGGbk282mC8sC1XSjjUssR
-         tqt/7iHXWC3b3ruDCwQ3xQL5aprFy/0WA8V6rNNfOoRIs++L3gYa/hAAZc7mqjmyyBoN
-         1MhdXbD+OlHYIr0RuuNy+5JkOlqopmInf8U3DLD9VFeuwaVwQH6BHZWaSYQ5p5ShNmQF
-         fOfg==
+        bh=K4paDxoIITi61KNSLOFKPmDlHO1cv1pKbtjNPgmcPaw=;
+        b=kL9Qz6+4k+4ITBTzn2WQeM6GWSqpdA2CtvdcZlPr833x6xL9ApzjCL/t6dZz94VJgK
+         r5UXR3KxSYPc6i/Tr/4Ap8YwoiQMg9l7LIJgME26Ph1W8ichPSX8toZJ/qVXkyINJIW3
+         rrKppf9PE2GVawz2fjhX0dXe/l2FQ8mloANBGNynA9qOlfSXFNt1copbEFAlly1TLFBO
+         i/ex63s1yLh1aEYsPV3F1CHn+qiONPP+eQTK3K4HVgXvCf4hGNvAAUP87Uo6uEi00iG2
+         XRcsYJg1hIB+6Lx3x5SM49WA7Io+SlvCzLs3+SpSkcmhFXz2Ss9JCKvELOvz5mNKIbAq
+         GbTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791773298; x=1792378098;
+        d=1e100.net; s=20260707; t=1791773302; x=1792378102;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TRzywdSur3zmqfmDlLuRL61gI+LM9+nqup6UgMDQquQ=;
-        b=vHVehbH8VI2wQFwfCO2kuZiARAaJtQe67CGC2Yy+puv7Fd204uPi+1n9ixqsH+2xC6
-         MI+AV5kc8YprKhncYIM9V5vCH7x5p79u2D0EVCq46TbfAO4aNeEGeKT42dS8TztPbO8I
-         cwyITvVDDrOQSwCnPgFBhN1SwNan1Vev3ylJIWAqpxIDMiT39moKQosmc8XvQLw4Rbuo
-         Lwcaqo6Al9DXIs8oM2U2d4s5opcGpGBx7z1JWuMb+ZutX8Cp13StkrUJsjTC2ZbMRZ0S
-         EkEqu7xMu6HuL3qeV8rSvadzaKcnfZO2BwFHOsWSZ0Zsbh0es7tUS8aIziY+hp25pknW
-         tX4Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwoBJcoZRQuZUSkHfH8Eq9IW4LWdYvTt3TnINS2YI3qm2DXyl+DNNeZNci6k2f4hr1zYacho/0yCVXXCsN5qn8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJuaVo3GQLhQuGMQqiz4hX0CoBgeGtPnhiKobQqDwZZB4FG/D9a
-	hFAmqLdJ0TsY54kI0+ow+aXVqy12p4wFnhCVqpMXTjocGUOWA8PuHhZT
-X-Gm-Gg: AYBFou3m/z2vkmJke93s5LHHc7DYBz55W8hDIlRe1Ko1slzKgLomM8KON7iCVS+V6Tx
-	OZ8mBDmMuOzuOZhtvx/lBMrDZ5wH5akQI5evjjvFy1Y1rZJAmGOadb4mAM/j1/t0FH0/XnZE1+c
-	+7TObhWBgnT4Wk6NSBx3RFTlkebWXLIuYSzdRvVex/d3uwTKFysok0TTQXkN0nx/DB/U1GDni/Q
-	hV4/0yTy0a/r8gmQKMHDLlTpb2MRUGR9C+iE77kZbRdpnHp0KrxNmaifmd+vljWcG0lijcg5QI4
-	5lm0JCLjO1ZMc8TZMRTYyvTh9sFimcifmqZ0dVV/+nhEYlTjddN3CnwZ4PKqUIJz9Hu1hSkPTCY
-	ypwQui5BU3J0a9+bvjc1JYiZnLpYi0WMfOlrp9V8gAVrPuc6T3qfjdnwnEER4e4sCEhJ1LwK3/6
-	fhJIuptdFUDhbdbdLJXkng5bgB6ViG4crP3id8+tyRo/85fHchOSQipK9QCnPbtshHwF6VkJgX1
-	6XjPiBCQqppPl3Ob62b2cdxng8IdS9enfOff5qp8EXj2N6mJOtYu47yPg6jGkp1Ikj1LW0luOei
-	BWq/Yv3KU1Vrn0PZYIhHt2SAmt0JDiYC9216OCeXh5udqBiWD0XNmQ==
-X-Received: by 2002:a05:693c:8954:20b0:351:8cc4:e18b with SMTP id 5a478bee46e88-3537dfb8632mr10825080eec.20.1791773297259;
-        Sun, 11 Oct 2026 19:48:17 -0700 (PDT)
+        bh=K4paDxoIITi61KNSLOFKPmDlHO1cv1pKbtjNPgmcPaw=;
+        b=05hn03e73QUKxzQSfhOS1ZEJ3WpMG09pH0Uss//WMjr0vhCOf6O44KQG0HdM44fDou
+         Al7KtwyUs7amwfeZuXTibokhyj9o7pbmJp33BoxCXUhTD0myUKCi1KBXURra1kiamgEb
+         7om/EDzPJT0Krviw8tuwpNFxQrd3Njt/AmORY3O4tMwjmNO0nu3vtcu+swDcXahMyVJU
+         y5um+EKkPHSeC/vdPofUcWoU8xhmoAJgIvcIRdDqBpdsxGD0S0yNWUKYBWlfiDxnuD9a
+         csWOKMcY62LcEZWmGVU6CCZ6OC48Z0mKvw8rnV3ezGUbiIUpdXdJ1nkLRZGM5AScNw3J
+         Nf2Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzMf0sZzxKFHhsq3jRWybbQ6JZCHYi+bR75ZOflT7YDWZuDBxtUy9hp2Zt3QYnTE1sE2fuDhnFJ3+p07IQoxoQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJnflkcWsgT9NUfZI3QVtkqTpLw280dIjzldMZKtHVEfVVx0dIr
+	MHTuyeztHzfgmw+hXMP39l9vvzz1DfrSNuDgDWONuDhPLSQbjiibaAwf
+X-Gm-Gg: AYBFou1jLFqulZgfmRgX9Iozc3a84/gxdJMZz1VpejrE6XBfr4nPDFjwbT3Yg1fi90A
+	QShNI0mTslyoikk/+/aiFpHe3T2Z0pt2uRRKrnEj+2gj98xJnT2GEMRDpfnsveEQAZd0MLp+x6g
+	cjVRQfp/MwbqwJmOmMFsDPpzkUmpnu4dkB+9MahOo40LKHkiNjpi9ShiAYg0nb9o0QcXdlkND65
+	2gzbDpe8Lhop40ge7mZUuRcRg6kt0zYrYiWHPNrtD+ZPKKkPjSKPQm892TntseykT4leEsWYzRU
+	dgEeCLGaRbnBA0TZvsYGwbQyAoE+0neV/bE8xtFsql44PWP01NVtQkuUvYU33eVrVR1Es4Asl0C
+	1G/oNY2sV1A3mCbf3gLHWJ4E+YBEBm6XoaJlWLqcFLaNycjhWvW62V7fxmfd09Y8H+p/P0S+eik
+	00MGPUiMI35TuL167KPMyD1dIYlW+GX6c3T/i2epoP46HHkBJPyxhIT+ui6u6fwlV44xjytNoHO
+	y/iMD5geKA6189lDMcxcA2FzTS7Fg5OSkqYXD5pqgQ5NU14wkRiwOqwO1lBYdweMnzDGaMONxNu
+	FerII8MSJjDo9gJmyQYipzXsEcnr16BktVEo7iRx8s4=
+X-Received: by 2002:a05:693c:69cc:b0:351:4a53:ddbd with SMTP id 5a478bee46e88-3537dede999mr12464402eec.1.1791773302121;
+        Sun, 11 Oct 2026 19:48:22 -0700 (PDT)
 Received: from ramen-dev-security-2.asia-south1-c.c.ramen-dev-345017.internal (90.156.200.35.bc.googleusercontent.com. [35.200.156.90])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537ca1b53dsm26075299eec.6.2026.10.11.19.48.12
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537ca1b53dsm26075299eec.6.2026.10.11.19.48.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Oct 2026 19:48:16 -0700 (PDT)
+        Sun, 11 Oct 2026 19:48:21 -0700 (PDT)
 From: Anil Kaushik <anilkaushikwireless@gmail.com>
 To: Pablo Neira Ayuso <pablo@netfilter.org>,
 	Harald Welte <laforge@gnumonks.org>,
@@ -74,9 +74,9 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Anil Kaushik <anilkaushikwireless@gmail.com>
-Subject: [PATCH net-next v5 2/3] netlink: specs: add genetlink-legacy spec for GTP
-Date: Mon, 12 Oct 2026 02:47:59 +0000
-Message-Id: <20261012024800.400616-3-anilkaushikwireless@gmail.com>
+Subject: [PATCH net-next v5 3/3] selftests: net: add a test for the gtp netlink family
+Date: Mon, 12 Oct 2026 02:48:00 +0000
+Message-Id: <20261012024800.400616-4-anilkaushikwireless@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20261012024800.400616-1-anilkaushikwireless@gmail.com>
 References: <20261012024800.400616-1-anilkaushikwireless@gmail.com>
@@ -88,252 +88,241 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The GTP (GPRS Tunnelling Protocol, user plane) generic netlink family
-has no YAML specification under Documentation/netlink/specs/, so it
-cannot be consumed by the ynl tooling used for user-space clients,
-documentation and selftests.
+Exercise the gtp generic netlink family through its ynl spec: create a
+gtp device, add a PDP context with newpdp, check getpdp dumps it on that
+device with the expected TEIDs and addresses, and that delpdp by TEI
+removes it. Two more cases check that two contexts are dumped and one
+can be deleted by its MS address, and that deleting an unknown context
+fails with ENOENT, both by TEI and by MS address.
 
-Add a genetlink-legacy spec describing the existing family: the PDP
-context management commands (NEWPDP, DELPDP, GETPDP) and the GTP-U echo
-request (ECHOREQ), the GTPA_* attribute set, and the "gtp" multicast
-group. Command and attribute values are taken from
-include/uapi/linux/gtp.h and match it one-to-one. The request
-attributes of each command are the ones its handler in
-drivers/net/gtp.c reads, and the reply attributes the ones
-gtp_genl_fill_info() emits.
+ynl resolves the family ids once per process, with a CTRL_CMD_GETFAMILY
+dump which does not autoload modules, so the gtp device is created
+before the family handle: that loads gtp.ko through its rtnl link alias.
+The test is skipped when the kernel or iproute2 lack GTP support; any
+other failure to create the device fails it.
 
-The notifications sent on the "gtp" group are not described: they reuse
-the command values of the NEWPDP, DELPDP and ECHOREQ requests, which
-the ynl code generator cannot express with the existing uapi header.
-The family doc says so.
-
-Add the matching CFLAGS_gtp entry to tools/net/ynl/Makefile.deps, so
-the generated code is built against the tree's gtp.h instead of an
-older one installed on the host.
-
-This only adds the description; there is no kernel code or uapi change.
+Add a GtpFamily ynl wrapper and register the test.
 
 Signed-off-by: Anil Kaushik <anilkaushikwireless@gmail.com>
 ---
- Documentation/netlink/specs/gtp.yaml | 183 +++++++++++++++++++++++++++
- MAINTAINERS                          |   1 +
- tools/net/ynl/Makefile.deps          |   1 +
- 3 files changed, 185 insertions(+)
- create mode 100644 Documentation/netlink/specs/gtp.yaml
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/config            |   1 +
+ tools/testing/selftests/net/gtp.py            | 122 ++++++++++++++++++
+ .../testing/selftests/net/lib/py/__init__.py  |   5 +-
+ tools/testing/selftests/net/lib/py/ynl.py     |   8 +-
+ 6 files changed, 135 insertions(+), 3 deletions(-)
+ create mode 100755 tools/testing/selftests/net/gtp.py
 
-diff --git a/Documentation/netlink/specs/gtp.yaml b/Documentation/netlink/specs/gtp.yaml
-new file mode 100644
-index 000000000000..6a6b49ad2f06
---- /dev/null
-+++ b/Documentation/netlink/specs/gtp.yaml
-@@ -0,0 +1,183 @@
-+# SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
-+---
-+name: gtp
-+
-+protocol: genetlink-legacy
-+
-+doc: |
-+  GPRS Tunnelling Protocol, user plane (GTP-U).
-+
-+  The gtp netdevice encapsulates and decapsulates user plane packets in
-+  GTP-U tunnels (GTPv0 and GTPv1-U, see 3GPP TS 29.060 and TS 29.281).
-+  This family manages the PDP contexts that describe the tunnels and
-+  triggers GTP-U echo requests. It is driven by user space control planes
-+  such as those built on libgtpnl.
-+
-+  The kernel registers the family with version 0, which the
-+  genetlink-legacy schema cannot express.
-+
-+  The notifications multicast on the "gtp" group are not described: PDP
-+  context additions and deletions, and GTP-U echo responses, reuse the
-+  NEWPDP, DELPDP and ECHOREQ command values of the requests.
-+
-+kernel-policy: global
-+
-+attribute-sets:
-+  -
-+    name: gtp
-+    name-prefix: gtpa-
-+    attributes:
-+      -
-+        name: link
-+        type: u32
-+        doc: ifindex of the gtp netdevice the context is attached to.
-+      -
-+        name: version
-+        type: u32
-+        doc: GTP version of the context, 0 for GTPv0 or 1 for GTPv1-U.
-+      -
-+        name: tid
-+        type: u64
-+        doc: Tunnel identifier, GTPv0 only.
-+      -
-+        name: peer-address
-+        type: u32
-+        byte-order: big-endian
-+        display-hint: ipv4
-+        doc: |
-+          IPv4 address of the remote GSN peer (GGSN or SGSN). Also known
-+          as GTPA_SGSN_ADDRESS, kept for legacy user space.
-+      -
-+        name: ms-address
-+        type: u32
-+        byte-order: big-endian
-+        display-hint: ipv4
-+        doc: IPv4 address of the mobile subscriber served by the context.
-+      -
-+        name: flow
-+        type: u16
-+        doc: Flow label, GTPv0 only.
-+      -
-+        name: net-ns-fd
-+        type: u32
-+        doc: File descriptor of the network namespace of the gtp netdevice.
-+      -
-+        name: i-tei
-+        type: u32
-+        doc: Ingress Tunnel Endpoint Identifier, GTPv1-U only.
-+      -
-+        name: o-tei
-+        type: u32
-+        doc: Egress Tunnel Endpoint Identifier, GTPv1-U only.
-+      -
-+        name: pad
-+        type: pad
-+      -
-+        name: peer-addr6
-+        type: binary
-+        checks:
-+          min-len: 16
-+        byte-order: big-endian
-+        display-hint: ipv6
-+        doc: IPv6 address of the remote GSN peer (GGSN or SGSN).
-+      -
-+        name: ms-addr6
-+        type: binary
-+        checks:
-+          min-len: 16
-+        byte-order: big-endian
-+        display-hint: ipv6
-+        doc: |
-+          IPv6 prefix of the mobile subscriber served by the context: a /64
-+          prefix, with the lower 64 bits set to zero.
-+      -
-+        name: family
-+        type: u8
-+        doc: Address family (AF_INET or AF_INET6) of the context addresses.
-+
-+operations:
-+  list:
-+    -
-+      name: newpdp
-+      doc: Create or update a PDP context.
-+      attribute-set: gtp
-+      value: 0
-+      dont-validate: [strict, dump]
-+      flags: [admin-perm]
-+      do:
-+        request: &pdp-attrs
-+          attributes:
-+            - link
-+            - version
-+            - tid
-+            - peer-address
-+            - peer-addr6
-+            - ms-address
-+            - ms-addr6
-+            - flow
-+            - i-tei
-+            - o-tei
-+            - family
-+            - net-ns-fd
-+    -
-+      name: delpdp
-+      doc: Delete a PDP context.
-+      attribute-set: gtp
-+      dont-validate: [strict, dump]
-+      flags: [admin-perm]
-+      do:
-+        request: &pdp-find
-+          attributes:
-+            - link
-+            - version
-+            - tid
-+            - ms-address
-+            - ms-addr6
-+            - i-tei
-+            - family
-+            - net-ns-fd
-+    -
-+      name: getpdp
-+      doc: Get or dump one or more PDP contexts.
-+      attribute-set: gtp
-+      dont-validate: [strict, dump]
-+      flags: [admin-perm]
-+      do:
-+        request: *pdp-find
-+        reply: &pdp-reply
-+          attributes:
-+            - link
-+            - version
-+            - tid
-+            - peer-address
-+            - peer-addr6
-+            - ms-address
-+            - ms-addr6
-+            - flow
-+            - i-tei
-+            - o-tei
-+            - family
-+      dump:
-+        reply: *pdp-reply
-+    -
-+      name: echoreq
-+      doc: |
-+        Send a GTP-U echo request to a peer. ms-address is not a mobile
-+        subscriber address here, but the local IPv4 address used as source
-+        of the request.
-+      attribute-set: gtp
-+      dont-validate: [strict, dump]
-+      flags: [admin-perm]
-+      do:
-+        request:
-+          attributes:
-+            - link
-+            - version
-+            - peer-address
-+            - ms-address
-+            - net-ns-fd
-+
-+mcast-groups:
-+  list:
-+    -
-+      name: gtp
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 51873349ba91..a6e43995ea58 100644
+index a6e43995ea58..8ac817a78bb0 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -11421,6 +11421,7 @@ M:	Harald Welte <laforge@gnumonks.org>
- L:	osmocom-net-gprs@lists.osmocom.org
- S:	Maintained
+@@ -11423,6 +11423,7 @@ S:	Maintained
  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pablo/gtp.git
-+F:	Documentation/netlink/specs/gtp.yaml
+ F:	Documentation/netlink/specs/gtp.yaml
  F:	drivers/net/gtp.c
++F:	tools/testing/selftests/net/gtp.py
  
  GUID PARTITION TABLE (GPT)
-diff --git a/tools/net/ynl/Makefile.deps b/tools/net/ynl/Makefile.deps
-index 1e746e25e2bc..9fd8f3321680 100644
---- a/tools/net/ynl/Makefile.deps
-+++ b/tools/net/ynl/Makefile.deps
-@@ -24,6 +24,7 @@ CFLAGS_ethtool:=$(call get_hdr_inc,_LINUX_TYPELIMITS_H,typelimits.h) \
- 	$(call get_hdr_inc,_LINUX_ETHTOOL_H,ethtool.h) \
- 	$(call get_hdr_inc,_LINUX_ETHTOOL_NETLINK_H_,ethtool_netlink.h) \
- 	$(call get_hdr_inc,_LINUX_ETHTOOL_NETLINK_GENERATED_H,ethtool_netlink_generated.h)
-+CFLAGS_gtp:=$(call get_hdr_inc,_LINUX_GTP_H_,gtp.h)
- CFLAGS_handshake:=$(call get_hdr_inc,_LINUX_HANDSHAKE_H,handshake.h)
- CFLAGS_lockd_netlink:=$(call get_hdr_inc,_LINUX_LOCKD_NETLINK_H,lockd_netlink.h)
- CFLAGS_mptcp_pm:=$(call get_hdr_inc,_LINUX_MPTCP_PM_H,mptcp_pm.h)
+ M:	Davidlohr Bueso <dave@stgolabs.net>
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index d4ca82fec0b4..6b54e04a6430 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -46,6 +46,7 @@ TEST_PROGS := \
+ 	fq_band_pktlimit.sh \
+ 	gre_gso.sh \
+ 	gre_ipv6_lladdr.sh \
++	gtp.py \
+ 	icmp.sh \
+ 	icmp_redirect.sh \
+ 	io_uring_zerocopy_tx.sh \
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 737e7e6327b3..c4534e15fb7a 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -15,6 +15,7 @@ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_DEBUG_INFO_BTF_MODULES=n
+ CONFIG_DUMMY=y
+ CONFIG_GENEVE=m
++CONFIG_GTP=m
+ CONFIG_IFB=y
+ CONFIG_INET_DIAG=y
+ CONFIG_INET_ESP=y
+diff --git a/tools/testing/selftests/net/gtp.py b/tools/testing/selftests/net/gtp.py
+new file mode 100755
+index 000000000000..199bc4409190
+--- /dev/null
++++ b/tools/testing/selftests/net/gtp.py
+@@ -0,0 +1,122 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""Tests for the gtp netlink family."""
++
++import errno
++
++from lib.py import ksft_run, ksft_exit
++from lib.py import ksft_eq, ksft_in, ksft_not_in, ksft_raises
++from lib.py import KsftSkipEx
++from lib.py import NetNS, NetNSEnter
++from lib.py import GtpFamily, NlError
++from lib.py import CmdExitFailure
++from lib.py import ip, defer
++
++_NO_GTP_ERRORS = ("Operation not supported", "Garbage instead of arguments")
++
++
++def _setup(ns):
++    """Return a gtp family handle, and the ifindex of a new gtp device.
++
++    Create the device first: that loads gtp.ko through its rtnl link
++    alias. ynl resolves the family ids once per process, with a
++    CTRL_CMD_GETFAMILY dump which does not autoload modules, so the
++    family must be registered before the first family handle is created.
++    """
++    try:
++        ip("link add gtp0 type gtp role ggsn", ns=str(ns))
++    except CmdExitFailure as e:
++        # gtp.ko not available, or iproute2 without gtp support: any other
++        # failure to create the device is a real error.
++        if not any(msg in e.cmd.stderr for msg in _NO_GTP_ERRORS):
++            raise
++        raise KsftSkipEx("no gtp support (CONFIG_GTP, iproute2)") from e
++    defer(ip, "link del gtp0", ns=str(ns))
++    ip("link set gtp0 up", ns=str(ns))
++    link = ip("-d link show gtp0", ns=str(ns), json=True)[0]["ifindex"]
++
++    with NetNSEnter(str(ns)):
++        gtp = GtpFamily()
++    defer(gtp.close)
++
++    return gtp, link
++
++
++def _contexts(gtp, link):
++    return [c for c in gtp.getpdp({}, dump=True) if c.get("link") == link]
++
++
++def _iteis(contexts):
++    return [c.get("i-tei") for c in contexts]
++
++
++def add_del_pdp(ns) -> None:
++    """Add a PDP context, query it, then delete it by TEI.
++
++    The dump must return the context with the link, TEIDs and addresses
++    it was created with, and it must be gone after the delete. The delete
++    only identifies the context by its TEI, to use the GTPv1 TEI lookup.
++    """
++    gtp, link = _setup(ns)
++
++    gtp.newpdp({"link": link, "version": 1,
++                "i-tei": 0x100, "o-tei": 0x200,
++                "ms-address": "10.0.0.1", "peer-address": "192.0.2.1"})
++
++    pdp = [c for c in _contexts(gtp, link) if c.get("i-tei") == 0x100]
++    ksft_eq(len(pdp), 1)
++    ksft_eq(pdp[0]["o-tei"], 0x200)
++    ksft_eq(pdp[0]["ms-address"], "10.0.0.1")
++    ksft_eq(pdp[0]["peer-address"], "192.0.2.1")
++
++    gtp.delpdp({"link": link, "version": 1, "i-tei": 0x100})
++    ksft_not_in(0x100, _iteis(_contexts(gtp, link)))
++
++
++def add_two_pdp(ns) -> None:
++    """Add two PDP contexts, check both are dumped, delete one by address.
++
++    The delete identifies the context by its MS address, and must leave
++    the other context in place.
++    """
++    gtp, link = _setup(ns)
++
++    for i_tei, o_tei, ms in ((0x111, 0x211, "10.0.1.1"),
++                             (0x112, 0x212, "10.0.1.2")):
++        gtp.newpdp({"link": link, "version": 1,
++                    "i-tei": i_tei, "o-tei": o_tei,
++                    "ms-address": ms, "peer-address": "192.0.2.5"})
++
++    iteis = _iteis(_contexts(gtp, link))
++    ksft_in(0x111, iteis)
++    ksft_in(0x112, iteis)
++
++    gtp.delpdp({"link": link, "version": 1, "ms-address": "10.0.1.1"})
++    iteis = _iteis(_contexts(gtp, link))
++    ksft_not_in(0x111, iteis)
++    ksft_in(0x112, iteis)
++
++
++def del_unknown_pdp(ns) -> None:
++    """Deleting a context that was never added must fail with ENOENT.
++
++    Both lookups are checked: by TEI, and by MS address.
++    """
++    gtp, link = _setup(ns)
++
++    for attrs in ({"i-tei": 0x999}, {"ms-address": "10.9.9.9"}):
++        with ksft_raises(NlError) as cm:
++            gtp.delpdp({"link": link, "version": 1, **attrs})
++        ksft_eq(cm.exception.error, errno.ENOENT)
++
++
++def main() -> None:
++    """Run the PDP context tests in a temporary netns."""
++    with NetNS() as ns:
++        ksft_run([add_del_pdp, add_two_pdp, del_unknown_pdp], args=(ns,))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
+index 71df5880b356..e269a260d58e 100644
+--- a/tools/testing/selftests/net/lib/py/__init__.py
++++ b/tools/testing/selftests/net/lib/py/__init__.py
+@@ -18,7 +18,7 @@ from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
+ from .bpf import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+ from .ynl import NlError, NlctrlFamily, YnlFamily, \
+     EthtoolFamily, NetdevFamily, RtnlFamily, RtnlAddrFamily, RtnlRouteFamily
+-from .ynl import NetshaperFamily, DevlinkFamily, PSPFamily, Netlink
++from .ynl import NetshaperFamily, DevlinkFamily, GtpFamily, PSPFamily, Netlink
+ 
+ __all__ = ["KSRC",
+            "KsftFailEx", "KsftSkipEx", "KsftXfailEx", "ksft_pr", "ksft_eq",
+@@ -32,6 +32,7 @@ __all__ = ["KSRC",
+            "wait_port_listen", "ctl_file_write", "wait_file", "tool", "tc",
+            "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
+            "NetdevSim", "NetdevSimDev",
+-           "NetshaperFamily", "DevlinkFamily", "PSPFamily", "NlError",
++           "NetshaperFamily", "DevlinkFamily", "GtpFamily", "PSPFamily",
++           "NlError",
+            "YnlFamily", "EthtoolFamily", "NetdevFamily", "RtnlFamily",
+            "NlctrlFamily", "RtnlAddrFamily", "RtnlRouteFamily", "Netlink"]
+diff --git a/tools/testing/selftests/net/lib/py/ynl.py b/tools/testing/selftests/net/lib/py/ynl.py
+index 08deff756f29..7edb74971023 100644
+--- a/tools/testing/selftests/net/lib/py/ynl.py
++++ b/tools/testing/selftests/net/lib/py/ynl.py
+@@ -31,7 +31,7 @@ __all__ = [
+     "NlError", "NlPolicy", "Netlink", "YnlFamily", "SPEC_PATH",
+     "EthtoolFamily", "RtnlFamily", "RtnlAddrFamily", "RtnlRouteFamily",
+     "NetdevFamily", "NetshaperFamily", "NlctrlFamily", "DevlinkFamily",
+-    "PSPFamily",
++    "GtpFamily", "PSPFamily",
+ ]
+ 
+ #
+@@ -85,3 +85,9 @@ class PSPFamily(YnlFamily):
+     def __init__(self, recv_size=0):
+         super().__init__((SPEC_PATH / Path('psp.yaml')).as_posix(),
+                          schema='', recv_size=recv_size)
++
++
++class GtpFamily(YnlFamily):
++    def __init__(self, recv_size=0):
++        super().__init__((SPEC_PATH / Path('gtp.yaml')).as_posix(),
++                         schema='', recv_size=recv_size)
 -- 
 2.25.1
 
