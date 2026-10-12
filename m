@@ -1,41 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AB847142D;
-	Mon, 12 Oct 2026 09:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0455347043E;
+	Mon, 12 Oct 2026 09:24:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791797045; cv=none; b=gliX+NjgdxUcub/E2A5o0xcU7Kur/YoQp340gviWrNpVdhFtELoASEO4U3JXEmOykzvH2kxYH4tZslUqUM4oXAjcT6mpHvd4ll4pr4p+aA3FK0yE0RRT40N/Uxt0ZIQAhqmyJVox+9leEkoWC5sllrhKckNKptXnCQbgexqp2Jc=
+	t=1791797079; cv=none; b=ng9QM6+tXNaGgmPnPIfvBj9Fr8k54eKLE67ymtvJ51PJERSSSxMM03lRsUN00zwLEv3rGGwgbYTRYrMGvC5PSFglyM8QTzd/HBh1kOHMR+5aEcM3AYopFQggpY4tcWYUgZk7h7ooQUU8QnuCVKn9YS4st/7EGYJo56ACNIsFnE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791797045; c=relaxed/simple;
-	bh=6Nq32IxKaSbnIN7AOyL/EtEd436x8WABsN5LZyrDx+8=;
+	s=arc-20240116; t=1791797079; c=relaxed/simple;
+	bh=rMzvUhZfnJf77GR/1JzrflBpRbX3BSl8iOkHwhcID3g=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=st7sTIILHsiDZpYX3wsL12LoK3VTIdKQyy/Ly3Brw5xgykSAC5zsOD1Ipzh9gR+htBnJyFB11Imgr7qrcglD8286SOnr/KmNu5So1g5d2CEc/L8Z9WyHWC1hhab948xjgtOhJa+BLWkU95Nuqlms8cApX0XBHAf689hCCuYIxkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ioEHbV4h; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=mRqh9sYagwI3JumtQSunI7gKgMUXeF3+SXLffPLhmkGe/YQdrOFqtsmt6iQYGjpnAMK5TPgcGalPIcwNSXJtUab32I2OXa4lXMTkfb8LktFzpOCMNIpKQltMSDpt+JzHgLTRjihuN2K/mw3ZTX8QkRbHDvoeOeZfpvQxfezapOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TMGkHUYQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ioEHbV4h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E98BC1F0089B;
-	Mon, 12 Oct 2026 09:23:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TMGkHUYQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 365A91F0089B;
+	Mon, 12 Oct 2026 09:24:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791797039;
-	bh=QOL90pIjqycVxCWaLvkQOh41we7TPJcH3IJeyyik2B8=;
+	s=k20260515; t=1791797076;
+	bh=M1/m/qtUDDLY19nWrHaMU7JoKzidKShEHRKqV/Cj+zY=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=ioEHbV4hbbEZwtSh42QC5wyHvnt6noLgGplegyuxEfB5AmAIBXl/Jq2KLRg9QckE+
-	 w92WcFG0F6RgTwX9KFQhhPWXf+4jE8We82ZrGoaC+pbjSe/OgvitsE1gFHaE8CQNpx
-	 cltnMtlNUIrUnX0QsPMxHLJZkjXW+ekWW8Co9d6J/7UqI23yW6aVRi155z+itF8lWj
-	 qHKuf6utc4n0bGc8a/fO6bTwY+f4bIBZ24lseqwSOe1VVWg62bTngZk5EEx90nK3xg
-	 +eqF1vzbs0J8LCEAY/INMJOIlSBKfia3UAyVG04dc9kXqcQ9FOV/O/+XvUJgnkdiJd
-	 PKL7E59TGX2oA==
+	b=TMGkHUYQfpKjxMgR0K2ALYdrhppHBxYXd8yRrwpARq6hXGm3dJ0E9dl0bHA9IgURn
+	 qMoUcrQalA5xlRTCDq9F76vDMXxGIPSZCEWkIuk+D330dK6UJABitB1fYLw7/nTKIL
+	 1bTVw3dwXrINFLR5nlIIMKmngczY9ZDi0PY+Cb/A132oqT+KBihCnH6kj1AETfWsoY
+	 UN5ih1VuDkQZoYCzBAvLBH30ZNw0fTw6+7l/fyMqheI+TotSI+Q6cY/6dZ+zFdKXKT
+	 98Sfby03oZrNGeQj+5uHbK5T3QnFZWDRfMI7cRytoIwIIAveNPZ7/LsGk+Zzzy6xzC
+	 XHAcNUEmJvRkA==
 From: Christian Brauner <brauner@kernel.org>
-To: Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20261001-selftests-namespaces-nsid_race-v1-1-25f542cf0b9c@marliere.net>
-References: <20261001-selftests-namespaces-nsid_race-v1-1-25f542cf0b9c@marliere.net>
-Subject: Re: [PATCH] selftests/namespaces: Wait for thread exit via pidfd
- in active-ref tests
-Message-Id: <20261012-sprachen-unwahr-zuflucht-04b2ef783ffa@brauner>
-Date: Mon, 12 Oct 2026 11:23:56 +0200
+To: Shuah Khan <shuah@kernel.org>, Bjoern Doebel <doebel@amazon.de>
+Cc: Jan Kara <jack@suse.cz>, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+In-Reply-To: <20261001082411.1493072-1-doebel@amazon.de>
+References: <20261001082411.1493072-1-doebel@amazon.de>
+Subject: Re: [PATCH] selftests/filesystems: Fix idmapped_tmpfile layer dir
+ ownership
+Message-Id: <20261012-kennst-sattbekommen-wolfram-595fd09c32f1@brauner>
+Date: Mon, 12 Oct 2026 11:24:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,16 +43,18 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.17-dev-3d1b8
 
-On Thu, 01 Oct 2026 09:21:56 -0300, Ricardo B. Marlière (SUSE) wrote:
-> pthread_join() returns once exit_mm() wakes the CLEARTID futex, but the
-> exiting thread drops its namespace reference later, in
-> exit_nsproxy_namespaces(). The joining thread can therefore still see the
-> namespace as active, making the final open_by_handle_at() check in
-> thread_ns_inactive_after_exit and thread_ns_fd_keeps_active fail
-> intermittently.
+On Thu, 01 Oct 2026 08:24:11 +0000, Bjoern Doebel wrote:
+> The recent idmapped_tmpfile selftest creates a new directory in tmpfs
+> owned by user ID 0. It then idmaps the mount as caller [0,10000) to disk
+> [10000,20000). The original uid 0 owner does not exist in the mapped
+> range. As a result, mapped_caller_creates_and_links fails at the
+> O_TMPFILE open because inode_permission() rejects MAY_WRITE access:
+> 
+>   idmapped_tmpfile.c:145:mapped_caller_creates_and_links:
+>   Expected fd (-1) >= 0 (0)
 > 
 > [...]
 
@@ -71,6 +73,6 @@ trailer updates or similar. If in doubt, please check the listed branch.
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
 branch: vfs-7.4.misc
 
-[1/1] selftests/namespaces: Wait for thread exit via pidfd in active-ref tests
-      https://git.kernel.org/vfs/vfs/c/123dcfe87d5f
+[1/1] selftests/filesystems: Fix idmapped_tmpfile layer dir ownership
+      https://git.kernel.org/vfs/vfs/c/9ba6627ef6b1
 
