@@ -1,61 +1,54 @@
-Received: from mta1.migadu.com (out-251.mta1.migadu.com [95.215.58.251])
+Received: from mta1.migadu.com (out-137.mta1.migadu.com [95.215.58.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CDF3CEB9E
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 13:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.251
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4C8388396
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 14:02:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791813448; cv=none; b=AyOLhINDxXGVAvohfuAvft8v2zALSRM7Xr3ET5RbRSH5cjWbOO4H4dotHzBF6K7lgM/gW/6x+w61nnwZOy/ddo5mqTd2sbDBPieG7j7TEtITahoSSAaCiyDL6BbnLWiE8aUR+STitNP01oS7cp7UM3QEqMXFFrUxr73bpiTAK/c=
+	t=1791813752; cv=none; b=hyG5l8Ej+ljfSqolENIZKnLyFk6LW8852rAkZvS9RyifSlu68FAFPSn9PY1Gtf0vOcOm8dDyCvCz0Ouw/7oSms/ULznnyyH9RnoBKQOi/qm1d/aT7iBtToii1mcQsBxEPfTn0TNZPXu6uMWU0gGLiX3EXq/fnk9sgd8j+SaCc04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791813448; c=relaxed/simple;
-	bh=x6wBnpNMUdYNXU0gqwEl8PQ7hY4EkntWRDU828VTuOY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fWze3Krw1bfLb5XXRv3M1pQYpjNNeYrIbNjUnJ6d70krYKlDpBLidO5m+ZiW9pmrDbccy3R0ljJeOQrj5MdAqbIVrp4f17QC8ROUs6BW1ME/KhfWcLUVvUliHJGYGvy6Hni1gbYeuGNMmTJP0BF/ufnMQTBi7lm+KkqujMup+WE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vrxvn3+Q; arc=none smtp.client-ip=95.215.58.251
+	s=arc-20240116; t=1791813752; c=relaxed/simple;
+	bh=T1KEXbx4Yz9GAO6E3Pv8Mav6Z4XB2c8W/TEdwAmBmpQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=tfqatDQ4NI7gCHIdI4I2antAoJTpPpbYO6FRzLIC1IVpTPJiZZhzGyd2RZtfBfD8/vnYKjf7kVlcnO4b9UuBj//TC3NZnr3D+x+3D8T8TkN7zfRi63IZk6tgzap+Z6R7q6dLIcjdeHxbKGefAuDdqE8Rs7u774aylvLgJSeMwSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qMyNuDw+; arc=none smtp.client-ip=95.215.58.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vrxvn3+Q"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qMyNuDw+"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=x6wBnpNMUdYNXU0gqwEl8PQ7hY4EkntWRDU828VTuOY=;
+DKIM-Signature: a=rsa-sha256; bh=T1KEXbx4Yz9GAO6E3Pv8Mav6Z4XB2c8W/TEdwAmBmpQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791813443; v=1; x=1792418243;
- b=vrxvn3+Q+ds8vw3lPoTlz4TGkW2K6r5QQ68mgXDaRPV19sO6QMRSFumWsX60JHhnwUiv1rSR
- 9lixhWfWMj8fA2dIBHiDnXq5FLB9UGqul2WUxMdwVCR6WWC/E3g+Xjht3feMCN68ruUQw+necOM
- 90oRH+AdEABQsohw9hlQyPlg=
+ t=1791813749; v=1; x=1792418549;
+ b=qMyNuDw+5gtSX+sjlV4fSBuZZnZ64xQYkjEsG1efjaTm9/FGPTkUfCPcRtj0o4jBfyhfF5i8
+ fUXee7COQq82ZFN0x/5HcuZCPXpSkbYN6KDxTyTXvCdvA1+klxmz6ZDa/7SW1e1621UCp93DTEq
+ ClJoMfYaMwgQfYz13BqmF4uM=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 34a32a671e085a21;
-	Mon, 12 Oct 2026 13:57:23 +0000
-X-Mizu-Trace-ID: 34a32a671e085a21
+Received: by mta10.migadu.com with ESMTPS id e984e808a0ba7d6d;
+	Mon, 12 Oct 2026 14:02:29 +0000
+X-Mizu-Trace-ID: e984e808a0ba7d6d
 X-Migadu-Flow: FLOW_OUT
 From: KaFai Wan <kafai.wan@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
+To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
+	KaFai Wan <kafai.wan@linux.dev>,
+	Mykola Lysenko <mykolal@fb.com>,
 	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: KaFai Wan <kafai.wan@linux.dev>
-Subject: [PATCH bpf-next 1/1] bpf: Determine freplace staticness from BTF linkage
-Date: Mon, 12 Oct 2026 21:56:24 +0800
-Message-ID: <20261012135624.2749743-1-kafai.wan@linux.dev>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/3] selftests/bpf: Fix prog_tests framework self-tests
+Date: Mon, 12 Oct 2026 22:01:58 +0800
+Message-ID: <20261012140202.2754552-1-kafai.wan@linux.dev>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,78 +58,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_check_attach_target() rejects a freplace whose target is a static
-function, using the subprog "unreliable" flag as a proxy for "static".
-That flag is raised whenever a subprogram's BTF prototype disagrees with
-the registers at its call site.
+Three prog_tests framework self-tests fail depending on how test_progs
+is invoked:
 
-`147400e9c27c ("bpf: Compute parameters liveness in
-bpf_compute_live_registers()")` made that work for static callees: a
-static function with an unused argument no longer matches its BTF
-prototype at the call site and is marked unreliable.
+- ./test_progs -t prog_tests_framework/test_fail -v
+  test_prog_tests_framework:FAIL:skip_cnt_check
+  unexpected skip_cnt_check: actual 0 != expected 2
 
-Since LLVM commit `29b36a16f111 ("[BPF] Emit ABI-accurate BTF
-prototypes for DW_CC_nocall")` in 23.1.0 [1] that premise is gone:
-BTFDebug may now drop arguments removed by the optimizer, so for
+- ./test_progs -t prog_tests_framework_expected_msgs -v
+  Caught signal #11!
+  Stack trace:
+  ./test_progs(crash_handler+0x38)[0x55620006fbb0]
 
-	__noinline static int subprog(struct __sk_buff *ctx)
-	{
-		return bpf_ktime_get_ns();
-	}
+- ./test_progs -t prog_tests_framework_compare_text -v
+  test_prog_tests_framework_compare_text:PASS:mismatch_rc 0 nsec
+  Caught signal #11!
+  Stack trace:
+  ./test_progs(crash_handler+0x38)[0x564ddbfcfbb0]
 
-compiled with clang 23 the BTF describes subprog() as
+Patch #1 counts the subtests that actually ran, so the skip and error
+count checks no longer fail when -t or -n filters out some subtests.
 
-	[75] FUNC_PROTO '(anon)' ret_type_id=2 vlen=0
-	[76] FUNC 'subprog' type_id=75 linkage=static
+Patches #2 and #3 skip the subtests that inspect the log buffer when the
+output is not captured, such as with -v in non-parallel mode, instead of
+crashing on a NULL log_buf.
 
-There is then no argument left to compare, the subprog stays reliable,
-and the check in bpf_check_attach_target() is skipped. The freplace is
-then rejected by the later linkage check instead, reporting "subprog()
-is not a global function", and the selftest "exceptions" fails.
-
-Determine staticness from the BTF linkage instead, and keep the
-unreliable check for global functions whose BTF does not match their
-call site.
-
-There is no functional change: freplacing a static function was rejected
-before and is still rejected with the same -EINVAL. Selftest "exceptions"
-is updated to match.
-
-[1] https://github.com/llvm/llvm-project/pull/198426
-Fixes: 147400e9c27c ("bpf: Compute parameters liveness in bpf_compute_live_registers()")
-Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
- kernel/bpf/verifier.c                               | 3 ++-
- tools/testing/selftests/bpf/prog_tests/exceptions.c | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+KaFai Wan (3):
+  selftests/bpf: Fix prog_tests framework subtest count checks
+  selftests/bpf: Skip expected_msgs subtests when stdout is not saved
+  selftests/bpf: Skip compare_text subtest when stdout is not saved
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2f190abe3448..e9814e3ac370 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22079,7 +22079,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 		}
- 		conservative = aux->func_info_aux[subprog].unreliable;
- 		if (prog_extension) {
--			if (conservative) {
-+			if (aux->func_info_aux[subprog].linkage != BTF_FUNC_GLOBAL ||
-+			    conservative) {
- 				bpf_log(log,
- 					"Cannot replace static functions\n");
- 				return -EINVAL;
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-index cea01d638f6f..1bd15c4c125b 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -333,7 +333,7 @@ static void test_exceptions_success(void)
- 				       bpf_program__fd(skel->progs.exception_throw_subprog),
- 				       "throwing_subprog"), "set_attach_target"))
- 				goto done;
--		}), "throwing_subprog() is not a global function", 0);
-+		}), "Cannot replace static functions", 0);
- 
- 	if (test__start_subtest("non-throwing extension -> non-throwing subprog"))
- 		/* non-throwing extension -> non-throwing global subprog : OK */
+ .../bpf/prog_tests/prog_tests_framework.c     | 34 ++++++++++++++-----
+ 1 file changed, 25 insertions(+), 9 deletions(-)
+
 -- 
 2.43.0
-
