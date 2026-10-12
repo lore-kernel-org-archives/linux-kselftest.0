@@ -1,218 +1,157 @@
-Received: from mta0.migadu.com (out-198.mta0.migadu.com [91.218.175.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7AC23B63E
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 00:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.198
+Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.37])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522573451A7;
+	Mon, 12 Oct 2026 00:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791766061; cv=none; b=ZhxDwW3N+BpBvEExwLwXKQZbUhdU9qcZ9NM5G4ScZN7zdifaQ4s1A7niEk+d8IkmFWgkIiCqW+5Nn5M+n9wJwwmUYvMzyoRR3sO56rO1NyU7aO/5dOltQRATeqC0e1/NSQao7p8w94reI50HfGa0JG+1uT6H4E4hHYErGmFBFBQ=
+	t=1791766781; cv=none; b=cttGzCxGa4VxjIRHw0VHol6nkHWjui6tH9IHV1FYFEMXa49FUB28l+kmOiHzZ5tyfXScfh0jhdckYnkAEGAaYaKNN/zB3T/LF8sWh+mK9/h/DhEfZCh02JfX8N0G83vmUjNJYxrSHTqilwMizriyIb6+ig3XUV+X7UwJ/6xWYMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791766061; c=relaxed/simple;
-	bh=uLDIHtTGtKJMeI22WvBWZ0DTbQYsdKHE85AgVsYvkr8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MrvLh6ZqKL0GJfW/+TOvTTkDi89XHr97P1xhVZGTKx+yHnZx7B273RtuG3nYfD7dWnCyktafv0oXx9KTVQ/vwdttEwjv1SQhREzhCMwd8vfeQA83JjieCuTpfn5nASOzJf59WxyCDXE1ZgjkwrU2+0fE7nuaQL3wvklHe05B+g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c5604gzn; arc=none smtp.client-ip=91.218.175.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791766781; c=relaxed/simple;
+	bh=YSyZHAB6Vtxc17lVBX2ybA+plNkuA8JrLtQTp8bDBgE=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=se+6sIvOBNuYX0OLm1QbOVQURdicIw0J1mYRpDaLU/aslI+bHMNV3lPRdgk+0PkJfSxM+wp8IOmxVjR/bPvZZ3BqB2n3PrZUfxxKZp5tSgjwIlhzG4FACCbFxKUTBbPdBhN1OH/8i35xt7LSFeOA6qm8oZfA9caDLHxXx2kz7n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=XBUq+SEh; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=c6KDWHV+; arc=none smtp.client-ip=160.80.4.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c5604gzn"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uLDIHtTGtKJMeI22WvBWZ0DTbQYsdKHE85AgVsYvkr8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791766056; v=1; x=1792370856;
- b=c5604gznyv7rJmjNjbeG2+I/wISJHLo1SRhQPLU3H9nfktZ2RA0bd346XqCdxBzJrSsF9F9T
- 58tYebHfO66yxMpXpT8aHOsosqFBtJMfsYh1w+A9WHcGQ7ZIC8JWfMvRxlgyxsT+5GiiYXjPHab
- SLvTHPeOMEU6xhRnPiWRsTWQ=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 3a7ede247dd09fed;
-	Mon, 12 Oct 2026 00:47:36 +0000
-X-Mizu-Trace-ID: 3a7ede247dd09fed
-X-Migadu-Flow: FLOW_OUT
-Date: Mon, 12 Oct 2026 08:47:23 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: netdev-bot+sashiko@kernel.org
-Cc: andrea.mayer@uniroma2.it, davem@davemloft.net, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	edumazet@kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	liuhangbin@kylinos.cn
-Subject: Re: [PATCH net-next v2 5/5] selftests: seg6: add End.X PSP selftest
-Message-ID: <aswuG5CZUWFRQF_t@fedora>
-References: <20261009-srv6_flavors_endx-v2-5-56ac7f838f41@kylinos.cn>
- <179162766537.434549.5701666016384409279@kernel.org>
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="XBUq+SEh";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="c6KDWHV+"
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 69C0x4p6020545;
+	Mon, 12 Oct 2026 02:59:09 +0200
+Received: from lubuntu-18.04 (host-79-32-222-240.retail.telecomitalia.it [79.32.222.240])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 16DEB12289F;
+	Mon, 12 Oct 2026 02:59:01 +0200 (CEST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1791766741; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HhHmgfXv1JVxKVN/OgXAPIowjeub0F9/DIzebdwQqM0=;
+	b=XBUq+SEhqYcghbD7qdyo0maRVL7BbGREUMT/gdyTYMHv4U7TV4yTc03NrQMEfChU5g2oUh
+	a6aeON6CkqLEhQDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1791766741; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HhHmgfXv1JVxKVN/OgXAPIowjeub0F9/DIzebdwQqM0=;
+	b=c6KDWHV+exO5JQp+6M+3mEhExto4Uv2V9y5cMK1u8p9WkcUwf8J5PdEREJqMxKhwnHxFQU
+	Wg553JMvACVFkDzwlXj8TvW5NDmdWWDlIt6UFfzxPl0QbZc8HAux9ZVKAY7x77GZQuZe7E
+	1lP0bwfXXiNINAyD0tlPBkWyDOyJ1BuWk2KY+3PaU3OTRbc66CY4IxEJCeQ7erPE7lHUWd
+	68/HfDJbAFUZqK/aA361YgJjLSsXJaaPKNG2p2hPcWNJPpKW7UkLOFbKQcYDNOPqDv1BFd
+	3RugaG6ENhsHWWGMj8VFdE1+dP8wNToBg+vEHpDPWVRbF4+cUeKp8tZPlBLfrg==
+Date: Mon, 12 Oct 2026 02:59:00 +0200
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: "David S. Miller" <davem@davemloft.net>, Jakub Kicinski
+ <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Eric Dumazet
+ <edumazet@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Hangbin Liu
+ <liuhangbin@kylinos.cn>,
+        stefano.salsano@uniroma2.it, Andrea Mayer
+ <andrea.mayer@uniroma2.it>,
+        andrea@common-net.org
+Subject: Re: [PATCH net-next v2 2/5] seg6: add RFC8986 flavor support for
+ End.X
+Message-Id: <20261012025900.c2321bfa92c5863d21efdba3@uniroma2.it>
+In-Reply-To: <20261009-srv6_flavors_endx-v2-2-56ac7f838f41@kylinos.cn>
+References: <20261009-srv6_flavors_endx-v2-0-56ac7f838f41@kylinos.cn>
+	<20261009-srv6_flavors_endx-v2-2-56ac7f838f41@kylinos.cn>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <179162766537.434549.5701666016384409279@kernel.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-On Sat, Oct 10, 2026 at 10:21:05AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 1 · Low: 1
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] The End.X PSP test in
->   tools/testing/selftests/net/srv6_end_flavors_test.sh does not check…
+On Fri, 09 Oct 2026 17:58:38 +0800
+Hangbin Liu <hangbin.liu@linux.dev> wrote:
 
-This patch is a series of the End.X PSP support. I don't think anyone will
-only backport this selftest without the kernel support.
+> From: Hangbin Liu <liuhangbin@kylinos.cn>
+> 
+> Previously End.X only supported NEXT-C-SID, with a plain fallback to
+> input_action_end_x_core(). Add PSP End.X processing by reusing
+> end_flv8986_core().
+> 
+> Add SEG6_LOCAL_FLV8986_SUPP_OPS to SEG6_LOCAL_END_X_FLV_SUPP_OPS so
+> End.X advertises PSP flavor support.
+> 
+> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> ---
+> 
+> For Sashiko:
+> 
+> With the SEG6_LOCAL_END_X_FLV_SUPP_OPS mask widened, parse_nla_flavors()
+> now accept the combination next-csid plus psp for an End.X instance. And
+> the current code is unable to handle this combination. The End instance
+> also has this issue. Andrea is preparing a fix for this bug.
 
-> - [Low] The patch adds an `<id:op:act>` descriptor syntax and an End.X
->   PSP scenario, but the script's documentation was not updated.
+Hi Hangbin,
 
-Low priority. If there is a new version. I will update the documents.
+thanks for v2, and for your work.
 
-Thanks
-Hangbin
+The End fix is now posted, to net-next and not to net as I wrote on
+v1, since the issues it fixes have been there since PSP was added:
 
-> 
-> --
-> 
-> selftests: seg6: add End.X PSP selftest
-> 
-> This commit adds an End.X PSP test to srv6_end_flavors_test.sh. A new
-> helper, __get_srv6_rtcfg_act(), lets __setup_rt_policy() parse an
-> optional action field in the router description, e.g. "4:psp:End.X,4,2".
-> 
-> > diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> > index a57e92541a046..4ba93ace86563 100755
-> > --- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> > +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> > @@ -397,6 +397,36 @@ __get_srv6_rtcfg_op()
-> >  		xargs | sed 's/ /,/g'
-> >  }
-> >  
-> > +# Given the description of a router <id:op:act> as an input, the function
-> > +# returns the <act> token which represents the action (e.g. End, End.X,
-> > +# End.T behavior with or without route table, out interface) configured
-> > +# for the node.
-> > +#
-> > +# Support End, End.X at present. When omit, return default End behavior.
-> > +# i.e. input: "1:psp:End.X,1,3"
-> > +#      output: "End.X nh6 fcf0:0:1:3::3 oif veth-rt-1-3"
-> > +__get_srv6_rtcfg_act()
-> > +{
-> > +	local element="$1"
-> > +	local net_prefix
-> > +	local acts
-> > +	local out
-> > +
-> > +	acts="$(echo "${element}" | cut -d':' -f3)"
-> > +	act="$(echo "${acts}" | cut -d',' -f1)"
-> > +	act="${act:-"End"}"
-> > +
-> > +	rt="$(echo "${acts}" | cut -d',' -f2)"
-> > +	neigh="$(echo "${acts}" | cut -d',' -f3)"
-> > +
-> > +	if [ "$act" == "End" ]; then
-> > +		echo "End"
-> > +	elif [ "$act" == "End.X" ]; then
-> > +		net_prefix="$(get_network_prefix "${rt}" "${neigh}")"
-> > +		echo "End.X nh6 ${net_prefix}::${neigh} oif veth-rt-${rt}-${neigh}"
-> > +	fi
-> > +}
-> 
-> [Severity: Low]
-> What should happen when act is something other than End or End.X? The
-> comment above mentions End.T, but there is no else branch. For End.T, a
-> typo, or a case mismatch, the function prints an empty string, and
-> __setup_rt_policy() builds:
-> 
->     encap seg6local action  flavors psp
-> 
-> Under set -e that shows up as an environment setup SKIP, not as a clear
-> error in the test description.
-> 
-> A few smaller points in the same helper:
-> 
-> act, rt and neigh are not declared local, but the unused out is.
-> 
-> The End.X form repeats the node id ("4:psp:End.X,4,2") and never checks
-> that the two ids match.
-> 
-> Some existing comments in the file also look stale after this change:
-> 
-> The file header still says "Currently in this selftest we consider only
-> the PSP flavor for the SRv6 End behavior."
-> 
-> The Local SID table still says "fcff:x::ef1 is associated with the SRv6
-> End behavior with PSP flavor". In the new test, fcff:3::ef1 and
-> fcff:4::ef1 are End.X PSP.
-> 
-> The $3 description for __setup_rt_policy() still talks only about
-> <nodeid:op> elements and does not mention the new act field.
-> 
-> [ ... ]
-> 
-> > @@ -819,6 +875,22 @@ host_srv6_end_flv_psp_tests()
-> >  	cleanup_end_flv_psp
-> >  }
-> >  
-> > +host_srv6_endx_flv_psp_tests()
-> > +{
-> > +	set -e
-> > +	SETUP_ERR=1
-> > +	setup_endx_flv_psp
-> > +	SETUP_ERR=0
-> > +	set +e
-> 
-> [Severity: Medium]
-> Does this need a kernel support check for End.X with the PSP flavor?
-> The only kernel probe is "test_kernel_supp_or_ksft_skip psp", and it only
-> installs "action End flavors psp". It never tries End.X, End.X with
-> flavors, or End.X with oif.
-> 
-> Before the series commit "seg6: add RFC8986 flavor support for End.X",
-> net/ipv6/seg6_local.c had:
-> 
->     #define SEG6_LOCAL_END_X_FLV_SUPP_OPS	SEG6_F_LOCAL_FLV_NEXT_CSID
-> 
-> On those kernels parse_nla_flavors() rejects "flavors psp" on End.X with
-> -EOPNOTSUPP.
-> 
-> When that happens, the End.X route add from setup_endx_flv_psp() fails
-> under set -e and the EXIT trap runs cleanup(). The earlier test groups
-> passed, so ret is still ksft_skip, and cleanup() takes this path:
-> 
-> 	if [ "${SETUP_ERR}" -ne 0 ] && [ "$ret" -ne "$ksft_fail" ]; then
-> 		echo "SKIP: Setting up the testing environment failed"
-> 		exit "${ksft_skip}"
-> 	fi
-> 
-> Would this turn a previous PASS on older or stable kernels into a SKIP
-> for the whole script? print_log_test_results() never runs, so the End
-> PSP results that already passed are dropped.
-> 
-> On a kernel that is supposed to support End.X PSP, a regression that
-> breaks this route install would also be reported as SKIP rather than
-> FAIL.
-> 
-> Could End.X PSP support be checked up front, so that only this test
-> group is skipped when the kernel lacks it?
-> 
-> > +
-> > +	log_section "SRv6 connectivity test hosts (h1 <-> h2, End.X flavor PSP)"
-> > +
-> > +	check_and_log_hs_connectivity 1 2
-> > +	check_and_log_hs_connectivity 2 1
-> > +
-> > +	cleanup_endx_flv_psp
-> > +}
-> 
-> [ ... ]
-> 
-> -- 
-> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009-srv6_flavors_endx-v2-0-56ac7f838f41%40kylinos.cn
+  https://lore.kernel.org/netdev/20261011192310.55-1-andrea.mayer@uniroma2.it/
+
+> ---
+>  net/ipv6/seg6_local.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>
+> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+> index 4fcfcd48cfae..521a9b0c0929 100644
+> --- a/net/ipv6/seg6_local.c
+> +++ b/net/ipv6/seg6_local.c
+> @@ -121,7 +121,8 @@ struct bpf_lwt_prog {
+>  
+>  #define SEG6_LOCAL_END_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
+>  					 SEG6_LOCAL_FLV8986_SUPP_OPS)
+> -#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	SEG6_F_LOCAL_FLV_NEXT_CSID
+> +#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
+> +					 SEG6_LOCAL_FLV8986_SUPP_OPS)
+>  
+>  struct seg6_flavors_info {
+>  	/* Flavor operations */
+> [snip]
+> @@ -923,12 +924,20 @@ static int input_action_end_x(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+>  {
+>  	const struct seg6_flavors_info *finfo = &slwt->flv_info;
+>  	__u32 fops = finfo->flv_ops;
+> +	int ret;
+> +
+> +	if (!fops)
+> +		return input_action_end_x_core(skb, slwt);
+>  
+>  	/* check for the presence of NEXT-C-SID since it applies first */
+>  	if (seg6_next_csid_enabled(fops))
+>  		return end_x_next_csid_core(skb, slwt);
+
+Here End.X could do what End does in the fix: call
+seg6_use_next_csid() instead of seg6_next_csid_enabled(), so that a
+packet with a zero Argument is processed as End.X with PSP.
+
+Does it work for you to rebase this series on top of the End fix,
+once it is merged, and make that change in this patch? Then End.X
+handles the combination from the beginning.
+
+The selftests of the two series conflict in srv6_end_flavors_test.sh,
+and they set up the test environment differently. If you want a hand
+with that part, I am glad to help.
+
+Side note: I received only part of this series. Could you please also
+Cc andrea@common-net.org, in this thread and on the next versions?
+
+Ciao,
+Andrea
