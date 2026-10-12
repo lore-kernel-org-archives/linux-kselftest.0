@@ -1,109 +1,110 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85ECD34AB14
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 04:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317A529E10F;
+	Mon, 12 Oct 2026 04:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791779192; cv=none; b=PiXazgbaALB8XmBj1a7aAC13yMsEwfEqe1SLJ2QrP4GTE/by9ynYhZsf1GkwpNWv7cRfCvBWtaZGxKTZBg9zqjJIxtkU1ByU5OVM42uBa2AXKC8+odAu5YRK0qCQU6QX/zgEkJ5VJM8aOkEiXYfFoFggjGNMmvB95QEvrsu90bE=
+	t=1791780656; cv=none; b=uYtY3NqBHwuGB0xRZM28pCnPzlWdd1XgIR3Co8Yrfc7JqqKzmU675WiHrHkMNuMXkq+L9GhHxcgjyyuJweMRfk4XP7Y6fWYPlXUCtc+T/o1toWAeWTCR030ZG9V5N+izQ9zjSOv579lTBzDR4zrD2tRtBonBUsu5kq+LPnAydlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791779192; c=relaxed/simple;
-	bh=aiBAhlv2Ev/TS2fJoaSo8lPZ16KTHkhhUdlu5+WAv2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DAhZ07HjmoO2/oC5+q3fHZd2j2irHuckia9NFgx6TVqsO60Cx70G9B6svyj7t2WhxVwEwOAS3zZmRf2qUkrNeBTR31fRFZYHdirn+LOiU8xpCQcnZo2BCZRTMy8wCWtgnKDOZNZhv2mbDMclBBesfJwpGXRBYlLVcQHLJmQixZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fwfP72/U; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1791780656; c=relaxed/simple;
+	bh=FEORMkWV+LnpnKU8/SJTAtz/HqigUBNwPx9HlqlR0bI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s25tnuE2i04uxvYsnBb7Kh1kGbjlCHqu1ektr1HIH7vZOHFvnB8jaI7HwoBDBho1kXTMrROcPhBG/pjgMQiScXbrLgV8e8P8L9BQaZ8yEuX/0tAczVqr1rbpjt2GLODtwGkIVIg1NryF6YTg2H/JDOLDnvXf9WtzdS7vnKSpnzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=AYXMvyrK; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fwfP72/U"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-3550c917fd3so2195267eec.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 21:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1791779189; x=1792383989; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7HtE6pXgrE7ezeCTTTPF8rtN8BUz+TwVSZ4PqyPsxjA=;
-        b=fwfP72/USZqDt0/SJslKhbUX9vdNj2ckCWvHsMlLtG0IrYkVzRItznHLmmhNF9q7Zp
-         f3yEUZl7xwaut6bI/yqwyMtLHNhqX87+ixG1akNsyESDRYuXrVdvNmiq+Lyw6385Frus
-         lamLXcQZuV2aMJ1xl/0fmDDHiaqwlE6Fd0XTX2aWHFG3mhqJMp2EOo9+HZx5hZ8Tj2II
-         Ked4bKgqeJm1f5aaINtJLbvGB6BJH9vl52HdtgAeCF4BScdeG8IjwN9qFEW4s9kMD+HO
-         RiKWIxn/hZn3sIhWdBXLZ5CqNZC6WP+7Q8E+QbMOSPz1xKEIh1w6ppYGzlLmXDbTdIeM
-         O9zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791779189; x=1792383989;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7HtE6pXgrE7ezeCTTTPF8rtN8BUz+TwVSZ4PqyPsxjA=;
-        b=2eMj2J4eKKjs5OfCR9+OfxUhou4TmfGAtzzSeKgmvQZYrivQBZo1t/mDKn1F0FT2Ks
-         yla3m1v3AWqB7rXmZ12GYbMuIyjzaqroOH40eRvXiHSJKbNNNcm2hpQdPZ/IGBfZ4PXc
-         WBD5niBItoWHWwJxVGlx8oGA32FbOOJYSKtl4sWKq8T247yv1Nu0JcAaC88ykdI9cN45
-         Sfhcl/fUPnJrxb32liGyRSM3f1jsrQaADbdIVgpH5QQJjZlyE0w9t/oXqOSD+NET1p9D
-         1YOxXjBoH/xOLm+tqn4+qni3OsOutp1PZ0WIXl01MVEekPU85QR7/2jLDsBLTs1ko5T9
-         PAxw==
-X-Forwarded-Encrypted: i=1; AKwUvBzE2YvlmK0bYwG4jQsRy+L85uQNu7RHv6Vzo0S8EJSlBJFE92ZTqqAiDxFKE6J0zJMxPqcScdOKHdL3OXlyTkQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL6ArpyR1NEId67lFL6Iil8kDZV6epfQFjNPkHJe+CDZk5qh7Zs
-	LrDHAYdso+iNsXsS5ccrdfSd+PFnUeVCOcMH586NzYCQulhoNo+hB56pVvg3kIv1WsM=
-X-Gm-Gg: AYBFou3dqdJ9+FZWkCD9aEYixOy96UpgSMTHStQ0o8tdzZeUKQ1HZYbICNUzpLpD5Fw
-	/S2ppXJxZ0noxPWfUkRnCkYkrLoXMTaOb1yQE3E0ficzlhJw85aUDhQmQB6UA7iR2ntWfldKQ1f
-	zjo4P407lOOUEPuVPbm4ckUEmT5rGPm2KSKO6HxMDAXigxAUsHOPrc3p1RD6th+tSV2KsxjmssA
-	BsPPZuHCEujqYaTQQmT9S4Y/D+nTgi/StlPW6XeJigkgqRAyhTF+qEGBC5gMP9gyxOy3wXpt0OV
-	z3hOfitTF4Y+QH7/kgLDk9CMsv1/whQxdL+3g+gHPTYgSNMH8pGhdvTAzcqKDxcymxDDos3vZ8S
-	Wc5Hiw2A1BDG47FvA2ZIQGMZvZcWVo8i7NWfA1czDh7hQlC5zITq++JjKskoMr+LnQJx+6Mbjzm
-	6fAcmDCytU+giZIf1JRAdG5hzyQovdqgMVl//xu85NmvtBaPrwyEIjCZUZRo9YGwnk2Xz10jZmS
-	w==
-X-Received: by 2002:a05:7300:ce94:b0:345:84eb:7153 with SMTP id 5a478bee46e88-3537e033341mr12296308eec.11.1791779189344;
-        Sun, 11 Oct 2026 21:26:29 -0700 (PDT)
-Received: from localhost ([122.172.82.240])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537c61eaa0sm32289042eec.0.2026.10.11.21.26.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Oct 2026 21:26:28 -0700 (PDT)
-Date: Mon, 12 Oct 2026 09:56:25 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: xiong yining <xiongyining1480@phytium.com.cn>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, chenbaozi@phytium.com.cn
-Subject: Re: [PATCH] selftests: cpufreq: stop CPU hotplug loop after cpufreq
- update test
-Message-ID: <asxhcagRL3myS3m_@vireshk-B250M-D3H>
-References: <20261010100148.297720-1-xiongyining1480@phytium.com.cn>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="AYXMvyrK"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA7EB1655;
+	Sun, 11 Oct 2026 21:50:48 -0700 (PDT)
+Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5DA163F66F;
+	Sun, 11 Oct 2026 21:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791780652; bh=FEORMkWV+LnpnKU8/SJTAtz/HqigUBNwPx9HlqlR0bI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AYXMvyrKhr5Zj0P28YCOLqmo8ytyuBDkbpk3gtbZAtI6nU4R10S+rUjM508pvVH6N
+	 seUQ6f5BOKSHaKAoiv5viWr0ulK+vKgbebp09HDBYPg8Gagv6FBLoZ8oA1p8c+sqXy
+	 9Qp55iOsUA9A8u1ubIds4WOMmRIjmVNEmRzi0l1c=
+Message-ID: <3a0673a6-744b-45a1-80fd-737a366fafc4@arm.com>
+Date: Mon, 12 Oct 2026 10:20:45 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261010100148.297720-1-xiongyining1480@phytium.com.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/12] selftests/mm: improve mremap_test
+To: akpm@linux-foundation.org, david@kernel.org
+Cc: ljs@kernel.org, liam@infradead.org, vbabka@suse.com, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, shuah@kernel.org, jhubbard@nvidia.com,
+ kaleshsingh@google.com, anshuman.khandual@arm.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261006092511.145776-1-sarthak.sharma@arm.com>
+Content-Language: en-US
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <20261006092511.145776-1-sarthak.sharma@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 10-10-26, 18:01, xiong yining wrote:
-> Original test uses a fixed 5000 iteration loop to trigger CPU hotplug
-> for verifying cpufreq synchronization between CPU hotplug and sysfs
-> writes.
+On 10/6/26 2:54 PM, Sarthak Sharma wrote:
+> This series fixes correctness issues in mremap_test, simplifies its
+> test infrastructure and strengthens validation of remapped mappings.
 > 
-> Two issues exist:
-> 1. Background hotplug task keeps running after test completes, causing
-> redundant CPU on/offline operations.
-> 2. When cpufreq frequency setup is slow, the hotplug loop may exit
-> before frequency updates finish, which breaks test purpose.
+> Patches 1-3 remove unused command line handling, unnecessary cleanup
+> checks and redundant errno handling. Patch 4 converts the test to use
+> kselftest helpers and removes manual failure tracking.
 > 
-> Introduce a file-based stop flag to control the infinite hotplug loop.
-> After all cpufreq updates complete, create the stop flag file and
-> wait for the hotplug task to exit.
+> Patches 5-8 fix handling of unavailable userfaultfd support, unexpected
+> mremap() successes, data-corruption failures and cleanup after mmap()
+> failures. Patch 9 removes perf tests and timing infrastructure.
 > 
-> This makes hotplug run only during cpufreq sysfs write test,
-> align with test objective.
-> 
-> Signed-off-by: xiong yining <xiongyining1480@phytium.com.cn>
+> Patches 10 and 11 replace threshold-based random-data validation with
+> sampled validation and a deterministic data pattern. Patch 12
+> strengthens multi VMA validation by also checking the mapping state
+> of holes after remapping.
+
+[...]
+
 > ---
->  tools/testing/selftests/cpufreq/special-tests.sh | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+> Sarthak Sharma (12):
+>   selftests/mm: mremap_test: remove command line options
+>   selftests/mm: mremap_test: drop munmap() checks from cleanup paths
+>   selftests/mm: mremap_test: simplify errno handling
+>   selftests/mm: mremap_test: use kselftest helpers
+>   selftests/mm: mremap_test: skip test when userfaultfd is unavailable
+>   selftests/mm: mremap_test: fail unexpected mremap successes
+>   selftests/mm: mremap_test: fail on data corruption
+>   selftests/mm: mremap_test: handle cleanup after mmap failures
+>   selftests/mm: mremap_test: remove perf tests and timing
+>   selftests/mm: mremap_test: replace validation threshold with sampled
+>     checks
+>   selftests/mm: mremap_test: replace random data with deterministic
+>     pattern
+>   selftests/mm: mremap_test: strengthen multi VMA validation
+> 
+>  tools/testing/selftests/mm/mremap_test.c | 701 ++++++++++-------------
+>  1 file changed, 291 insertions(+), 410 deletions(-)
+> 
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+I wanted to address the concern Sashiko has over this patch series [1].
+It says that mremap(..., MAP_FIXED) over a range containing multiple
+VMAs should unmap the whole range first and then map the VMAs.
 
--- 
-viresh
+But this is not the case, as was discussed on the list earlier as well.
+We iterate over the VMAs in the range and only unmap and then map the
+region that the VMAs occupy. IOW, as quoted by Lorenzo [2], "the
+sematics are such that gaps are not propagated (i.e. it is as if you
+mremap()'d each individually)". So if we remap over an existing mapping,
+the mapping region on which a hole is remapped should not be affected at
+all. So this is a false positive.
+
+While here, requesting for some feedback on this series, if anyone has
+had a chance to look at it :).
+
+[1]
+https://sashiko.dev/#/patchset/20261006092511.145776-1-sarthak.sharma%40arm.com
+
+[2] https://lore.kernel.org/linux-mm/agH1ZSdX_7QF8P_I@lucifer/
+
