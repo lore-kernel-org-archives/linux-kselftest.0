@@ -1,97 +1,156 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B1C413D99
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 11:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57053489FC7
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 11:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791804358; cv=none; b=tGD8wMEEIKfezxkYYnqRabV8WE88uqrEiZr9olbRM/JzP9Qz+W9/MIraNpo5EqmPM46NVxnoosLXRgPOuwn7W/g7UrnJdg8/jxyxe3Q2OGfOStNdwoGyDCZsJhcl6TYhDxVk+ecl4G1ieH1x/eGu4ThY2a5sflDuG53vVI1493I=
+	t=1791805642; cv=none; b=Y2xLKsEud9i+l+LRWf3M/tyRspZMWGYs++PyX70ocCUtiFYXpdn54tQ8vFv+ScUllvzE46IOlHCVeeJyKWlhbvnLDopV77IFrKtG8lnBdpka2Loyxkn5hNyXHwjSgUiBt7XcwxjF7TY3BX5iHNLaDUJqAIIp+uNr0n4QrxeomAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791804358; c=relaxed/simple;
-	bh=jJZ2weKHhkNfXMFJ22b0RW7OCDsQCS4qAKK3lUmiR4I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HS4O91p72Y7KDeNpZC8RZJ/k7CBbbPfydSC64DTTWx0lBHtJIqXODjS9UZhsL3mVQZFaT+soSv0ttVX2YxJfKZbfM4tMuWjOmUlFbkMXeLNpW2rM7zoZu6jUTc98VR7Q0J/SDlQFqdxwE1N2v+1iFRcZcfbpBVoJAdLjVeCDaVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JIeYh1xA; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791805642; c=relaxed/simple;
+	bh=tTAuW5YXvrWgMERGBm9kuawMACX/4fAn9/TDnPNtVXc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Zkc5Vs7ufEzA3baHPfOeIsxo1E6yPlJFduECv3FJ3mwnm6hnI67Zy5nP7xm6F9fC1xKqiZkb3sC0hlyG1Ow6g11Y9X67NqT6zNMV1ucn46n9TXHrzU59MskqQIMqAlyJ9OnfTrtWnVMMCioUB4D/K3P0MMjXxYypURRIVotMVXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hd6rVcEt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=DwhPinWH; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JIeYh1xA"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ab8309dcbaso1215342a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 04:25:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hd6rVcEt";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="DwhPinWH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1791805635;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tTAuW5YXvrWgMERGBm9kuawMACX/4fAn9/TDnPNtVXc=;
+	b=hd6rVcEtaRUmu5RK8CPCAGYginbIJyeuKbzcYz7iaNqy0LoeIbzTKz+06qcYiupGxhB2Fq
+	KjQ3Mva3tYPHG8oTwyr9hqIES2ZUZQJXejdEL2uPRnj2UQEnIXMdqyk0V37WoXXoa//pLx
+	E91BEK1Y01L4d88v0miPrS9q7KuyRUQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-333-6o_Q_26BOaavPEN5SF1QkQ-1; Mon, 12 Oct 2026 11:47:13 +0000
+X-MC-Unique: 6o_Q_26BOaavPEN5SF1QkQ-1
+X-Mimecast-MFC-AGG-ID: 6o_Q_26BOaavPEN5SF1QkQ_1791805633
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-48b028d93c5so1274126f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 04:47:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791804356; x=1792409156; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jJZ2weKHhkNfXMFJ22b0RW7OCDsQCS4qAKK3lUmiR4I=;
-        b=JIeYh1xAiGNjN3AvWL5yfzL4h6yWxGfQ9uPB4TCUAM+4I6Czbd92KK/k5SRCsJSJ7F
-         +Sf269kZD8JHzaXxFPfqGtgpsrDXvi8j5LvK98zEFbudKpPYNZcfSNjtCr5TkXcYtdJq
-         5+yqVmD5mtpFwX/My0N02WK64WpE8UgcJ9SyzCoPLg8jjM1m3+wt1E9aP+vqwul4fk+b
-         j+deKZCm1bWFXAPmiBN4LX5k8CqQdEb4ueotrF1rxUUuKwZ7SOtbKho3qrNKFJkzfVg+
-         tzKHgzR4Houc6hGo0FQYDto2Gc/W3lfETkKkogUg0RgSzt1JklA6FKUHCYHp5OiQHsEL
-         HwaQ==
+        d=redhat.com; s=google; t=1791805632; x=1792410432; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tTAuW5YXvrWgMERGBm9kuawMACX/4fAn9/TDnPNtVXc=;
+        b=DwhPinWHnjRRDfLT5ckCnhVZT3MPyvPSWXh5sniv2vWCZum9F7r+HebR4oIyqjXbSX
+         ll2WI60GCsS8WnlJhzi9j1dT6jmuZP2K24uQd08ajf0Gnjt27psE6Oc6fSLSvFQhcgEu
+         ds+BVWhLccTTup362o59/FIQjer7IYcBNZN50dP1OhkNhKdHTG4RJiRmuxdZypftlK1m
+         hDYQGOIhQqd0CLtIG53+4CqTFqFZMtlWllHLPdPMqcO+tXq95HP/upXcjW11vto3KsRO
+         23LGAOCInT2Du/0rNrYXKlHlIrQ03LX07ovEeYVwhJUdw6zL7iDw3uGNvknuqKKFZlDC
+         zONA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791804356; x=1792409156;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jJZ2weKHhkNfXMFJ22b0RW7OCDsQCS4qAKK3lUmiR4I=;
-        b=dte4vwt7iCXZ5PoW8xkQ2xPYlqUFZx+pd/UaN+iQ6NdKWz9ynRuJVx7Y4fSLXU7jyR
-         JtYMOfha7DyrEp3MYUQK+dnkkwR/2222+d3Xd0YAjF2cVQTsL5D2k2VG+cA0mOCUtnqo
-         caynzSFp+QyDdQiCVnV3euZconuNa4ur9gotEy8XCXVKFq5JA6d3IBV2dTDRqgvVup6k
-         1w11FnnghljPYC1afo3w0ayKw6GS2pjLOnSiU0Rh3qixy0bt7CpP09ft5klkc6veIviE
-         7NQ3ezOCFSHMrwPToXFNI6QepPRBgpyYQ/mumbcL4VBjMSOTOxSo9VYvSTAjIPU1ayQF
-         rjFg==
-X-Forwarded-Encrypted: i=1; AKwUvBysHdq/dRD5pAtr6T3Gbg3InB/VpKRlXZKW85qo2lIEpWyJ4V7/PMBDIW5wze+GsQhAoqYm+LMQxyDn6JlbLA0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJrAweqBHwIkFO7QWYtn9fY4owGgFCV6T9751yeFYgaOAIQeT9B
-	NFVNiebI+rB9fZpYn829+543eBItYYABoWr0/NdCkEwK4WU2nC5GZ72D
-X-Gm-Gg: AYBFou3aGsD08wUW72ImU5E41RE84CKEMV/T37LHBBKhIE/JY3k+XPYjbfRohufqjsO
-	CUq8OLYibC8dteivFu1Z0i9JxO/Nam+kmU6r84eDDJxUl2js1yTCdY15AJX7s2Bj2Pxz0UprcmZ
-	HI3LECpGWedWu66qUG/8De9SXNt6Jn4u4JqYQhX6mjHOATGrWKqcy0RIDS6acyEkYibQfiO3Y2v
-	D5pw53hTcJcKR6pEVxmBGROC1gVdEy3lFtgIywKZySEo68S8wr3Fx6hrSqdh74/6aVMDKBGPzOy
-	4l2h5JOgsZ9d5zdzb7U064FUG+v4XvkV9Yo7IIo9medaqQX/CVW3jzzMsm+3CjZgOHWKrLSNIvJ
-	J+OJwi/antm1k3DyVIYOToMl5K8ide2SrFNFvX9qO3Sqr1T6VPS1qq4jr9OBZwLV4+fBr6pNU6p
-	bmFF49MP2PB6Bsa1zcIGbm6ihWYCeHtYgOhXaqcavNDZYgG15167UFvZnb0yxqDnA84uq0Lswxg
-	5R8Izp88SS18tX2CXqLff5W/kE=
-X-Received: by 2002:a17:90a:e70c:b0:3ab:1a5:cd2 with SMTP id 98e67ed59e1d1-3ab3ac9b310mr5103674a91.35.1791804356368;
-        Mon, 12 Oct 2026 04:25:56 -0700 (PDT)
-Received: from obadmin-Precision-3680.atlascopco.group ([167.103.3.1])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab396620e2sm9808526a91.3.2026.10.12.04.25.53
+        d=1e100.net; s=20260707; t=1791805632; x=1792410432;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=tTAuW5YXvrWgMERGBm9kuawMACX/4fAn9/TDnPNtVXc=;
+        b=RNRglNTE/BNbQFC2MZ9YjlSDWdiw1PEpau0UGdD4zfMJCv5NNubxLusjmlUwl7hRFs
+         nxn4xnBvh5rMoOS/BImeWiKtgtI/yz1YJqNEG1JjfKWagFTC/uY2Bh0lrPBf5ItXaoxq
+         JHA30HRQXqNC9ICzSOWqa5k3uew9YScmwXYrGWxEes6RnDskfib3SKkP3nLdwhXSEf5p
+         ZOeeIT75OQdTZjoSKxDXElppXp2uQcg2t54SVgTCPSjtOqdI7OZ37jX+/2Iy8y+sRlHP
+         D5rD1axl27iMSb/+BR081O1tLPh3goSw8u0huwf2pBnJgkVdsw6x4mlrty3NgKgjvoiC
+         Tsqw==
+X-Forwarded-Encrypted: i=1; AKwUvByRnT/nIfrZqjvzq3bI1NqMAIG9t3qXKWpG8rwLB4t08ez61Te0cx3zuJdYOi/4KNvOzetgCmp5com5f0LfP58=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKpuBRnbZQvxTCZxO7IgSjOWoFRMgTTDqE+G5Wd2SmxvYzSe/Yg
+	1OgU6cXgrEkty4yALarw5GaFagarsnN0D5rkhtRWg81IWSZTNBdSzVNa/TMJOahm2u1H/2gg3YR
+	+M3siMGSVzwz0W/s3tG4CTWz5g3IxnFVxfAHUMm5UYl2BKwBSER5I4Oa4VASkoX4x5D3ahg==
+X-Gm-Gg: AYBFou2m1ky3/gJospfN7PdUdlrxX8fvUYMGstmz5m06cj5vg2zHYbbV3I1t9HVeAN5
+	GGDRpUJ9ZEaB25dmXNNHVuzc3GDYOVmyGkKrvnTRGb6/cLXBWhXD5lNomfvOhhrG0vMHVrWPmO6
+	guWC9kEJlobBqeKWyuOLRJx9zDwwPqbTRv6Bw9DDhSC1bVk9cUqWile4lhI9Cha6uvy+w2PULSD
+	stw9NHUrmuZi9YUujxmr3pyXy31DXpsPRRiDYY3sKBkbEflnknxSY3HYZl5w7/TB0d7xRJGT7u8
+	w1rHY1HgTRSpGlCacPGkR+vQHQZ/WWO+4Ujm7vR4MyVtkMyriPIAnuBxiy7frQHn6wQ8lOeDXDu
+	gw+C3EmwAOJaH1ctfKSmQgHDEr7p+
+X-Received: by 2002:a05:6000:2f82:b0:487:1662:cf4c with SMTP id ffacd0b85a97d-48dba78459bmr21037791f8f.7.1791805632465;
+        Mon, 12 Oct 2026 04:47:12 -0700 (PDT)
+X-Received: by 2002:a05:6000:2f82:b0:487:1662:cf4c with SMTP id ffacd0b85a97d-48dba78459bmr21037732f8f.7.1791805632034;
+        Mon, 12 Oct 2026 04:47:12 -0700 (PDT)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([195.174.135.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48db9abd57fsm18489239f8f.37.2026.10.12.04.47.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2026 04:25:55 -0700 (PDT)
-From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
-To: Eric Dumazet <edumazet@kernel.org>
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/net: test tcp_rmem lower bound
-Date: Mon, 12 Oct 2026 16:56:34 +0530
-Message-ID: <20261012112634.3371756-1-sahaj123.sc@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <9b4b59ac-6e64-4dd2-88c1-c3f7844bbd36@kernel.org>
-References: <20261007054508.1059927-1-sahaj123.sc@gmail.com> <9b4b59ac-6e64-4dd2-88c1-c3f7844bbd36@kernel.org>
+        Mon, 12 Oct 2026 04:47:11 -0700 (PDT)
+Message-ID: <4759c9b0dacdf1f9c0cf47158895860dbd0ec401.camel@redhat.com>
+Subject: Re: [PATCH v2 0/3] rv: per-edge dwell-time statistics for per-cpu
+ monitors
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: Tobias Schaffner <tobias.schaffner@siemens.com>, Steven Rostedt
+	 <rostedt@goodmis.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>,  Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rpm@xenomai.org, 	jan.kiszka@siemens.com
+Date: Mon, 12 Oct 2026 13:47:09 +0200
+In-Reply-To: <20260911123439.463052-1-tobias.schaffner@siemens.com>
+References: <20260911123439.463052-1-tobias.schaffner@siemens.com>
+Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
+ keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
+ 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
+ Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
+ cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
+ T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
+ eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
+ 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hi Eric,
+On Fri, 2026-09-11 at 14:34 +0200, Tobias Schaffner wrote:
+> Hi Steven, Gabriele,
+>=20
+> I am using the RV system for a downstream project called EVL (aka Xenomai=
+4).
+> It is a small co-kernel system, small enough that I can model the whole
+> co-kernel with RV instead of just a fragment of it.
+>=20
+> The patches in this series add a per-monitor "stats" file that exposes ho=
+w
+> often an edge has been visited and the dwell time in the prior state for
+> per-cpu monitors.
+>=20
+> This allows me to not only check if the model is correct but also to see =
+if
+> all paths are exercised by my stress tooling and to decompose the latency=
+ of
+> the co-kernel's wakeup path.
+>=20
+> I think that some of the upstream monitors like e.g. the sts monitor coul=
+d
+> also profit from this.
 
-Thanks for the review. I agree that a separate test for each sysctl bound
-does not scale and that this focused tcp_rmem test is not the right fit. I
-won't send a v2 of it.
+Hi Tobias,
 
-Your points about the non-portable 4096 assumption and partial updates are
-also noted. The generic network-sysctl test you described is broader work;
-I'll treat it separately rather than expanding this patch.
+there's been a conversation at LPC about completely migrating RV to BPF.
+While we aren't sure of its feasibility yet, and it will take time, it's
+something to keep in mind for new contributions.
+
+First of all, would dropping RV in-kernel support negatively affect your cu=
+rrent
+workflow?
+
+About this series, I believe we could implement the same using BPF maps wit=
+hout
+too much effort, then the rv userspace tool could display them nicely.
+
+What do you think?
 
 Thanks,
-Sahaj
+Gabriele
+
