@@ -1,73 +1,83 @@
-Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D238645198A;
-	Mon, 12 Oct 2026 08:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.136.29.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BFC449988;
+	Mon, 12 Oct 2026 09:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791795154; cv=none; b=eyTg0wohgPpwYUsknh41MO614RJJ+lL+XOVWd88ZdFFlTyFi+MnKKxoB9tPDpNthfy7kbao/iOWVmCZ9KySLx9nCB1ok+Yxk4Wc/dIxlTz3SuvCXtTzUGX2Go5/+Ovo3pL39zQ2zOa4Su/SGitMvri35zWYaDSPwvRDC18u//jM=
+	t=1791795842; cv=none; b=YfzcQ5aDgGA4PerKM1puNzPFPMpudKk88V3FT1s+rxuiV0UfQ0HiKss5PDiUn4ZQIveMan1efemxAjmxsLx61yJyEY0MpJeSJEK6lf2r97yqOKFC+Td788TMRjtVJEtZMgvbyG40I2fnE5JBfM3W1hld+9Dg0RCS0q+vJkaKDrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791795154; c=relaxed/simple;
-	bh=G0TvSqZWMzuaHQkc4LLKgNtXBuK7C/XR62simfDeyGs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u67RMDspwMPlQG5sar8Nb4wUfBDJrcz3ZZypG9+UGXKv1Dx8cVKotk6Z4VKAsMLAY4c0NurDMw6EH3vlDnphnCUth5zflqS1cHGrZ8owcn5/2D+srHtT8cxynSxqbxM3XIqwYeW4UCXrBsT7yCi2OmyS2Z7BjdMb3iH3+TL9rS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com; spf=pass smtp.mailfrom=proxmox.com; arc=none smtp.client-ip=94.136.29.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 62A4F47F91;
-	Mon, 12 Oct 2026 10:52:29 +0200 (CEST)
-Date: Mon, 12 Oct 2026 10:52:27 +0200
-From: Gabriel Goller <g.goller@proxmox.com>
-To: netdev-bot+sinfo@kernel.org
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>, 
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
-	coreteam@netfilter.org, bridge@lists.linux.dev, netdev@vger.kernel.org, 
+	s=arc-20240116; t=1791795842; c=relaxed/simple;
+	bh=TEvgbz6xc3bVn27NE4ZkLWXS3RI8C+n7+ZHHt7fzj3o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PbgMfYtR8dUShBhSeo+UcKwpC38GsgnyYuH3srpHBpmpW/UQ50uzrkOJ7+IEKVl2NBijdxlE+pXaIk3wHD5lwmAf2FfZaSAMBiNDplnZFoWcMHr2HyySp4E6XEmlMcjDNDGqubXABGERJlsBJxr7Q+BGaBqufSL9iKNZJcaoD2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nyxoF0N4; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nyxoF0N4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358B01F0089B;
+	Mon, 12 Oct 2026 09:03:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791795841;
+	bh=4tWDLuqe5/j9UzXGW/UBDTqVzuJKGCKePiwUYO5Ajv8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=nyxoF0N4/QJOeqcU9DsMLkgw9AeQnSK06fm1Zu8mL/7dMEeirIScrtpSeR2M6nkko
+	 5TuPph8WyFExIs0lbEs/dDbEJ5GA3Gs4iWrJ09UAPKKI0t8jzheeRDfF2ijTLQSFe3
+	 37wk9WLjXSk71QIdOyIpe4ZgY3U13IwZEVxZgjfpQKAqm+Fwk5qYNziBo4ENTqtZGc
+	 bXqtrW4oOmcoqJw2hfG+h0QDNXb1cGDF4GEJj+t0ZZQtnftSjTmVrL9aviiNWy4KJB
+	 9zf45zynDnCvgcuvo7LOA1vKa6rGCtgEyW+yMSzYANThJBHZNJ5RhsSS6R8GB5MP1o
+	 7gI6dDbeFonxQ==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: Christian Brauner <brauner@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	"Eric W . Biederman" <ebiederm@xmission.com>,
+	Natasha Klaus <natalie.klaus@runtimeverification.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH net-next] netfilter: bridge: refragment reassembled
- packets passed up
-Message-ID: <asyew3iKfV_yEX-e@luna.proxmox.com>
-References: <20261009150246.443127-1-g.goller@proxmox.com>
- <179155828067.2527009.9838753386350423335@kernel.org>
+Subject: Re: [PATCH v2 0/2] userns: reject out-of-range uid_map/gid_map values
+Date: Mon, 12 Oct 2026 11:02:05 +0200
+Message-ID: <20261012-molch-teigtaschen-kennt-af50b0539cdc@brauner>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260930112854.373184-1-natalie.klaus@runtimeverification.com>
+References: <20260930112854.373184-1-natalie.klaus@runtimeverification.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <179155828067.2527009.9838753386350423335@kernel.org>
-User-Agent: NeoMutt/20260504
-X-Bm-Milter-Handled: 55990f41-d878-4baa-be0a-ee34c49e34d2
-X-Bm-Transport-Timestamp: 1791795148774
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1376; i=brauner@kernel.org; h=from:subject:message-id; bh=TEvgbz6xc3bVn27NE4ZkLWXS3RI8C+n7+ZHHt7fzj3o=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSdWSSQHdQS+1pYeOHOTuWMx9a8c3fHRIdO/JOQefLJn WdF9jf4OkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACYifJ3hv99dlst/z5vo1H29 OHHe5Y74R67z4hq8X++eu5tLznDLpFsM/8OmvEnxcjn6f6vjQXXRat9Arp8LLpduDP2vVp2VmFN 3hgcA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-On 09.10.2026 15:04, netdev-bot+sinfo@kernel.org wrote:
-> Hi!
+On Wed, 30 Sep 2026 14:28:52 +0300, Natasha Klaus wrote:
+> map_write() silently truncates uid_map/gid_map/projid_map values above
+> U32_MAX modulo 2^32 on 64-bit kernels, so e.g. "4294967301 1000 1" is
+> installed as "5 1000 1" without an error. Patch 1 parses each field
+> with kstrtou32() so such values fail with -EINVAL. Patch 2 adds
+> selftests for out-of-range and negative values in each field and for
+> the unchanged in-range path.
 > 
-> This is an automated message. This series looks like a fix, but its
-> commit messages seem to be missing some information:
-> 
->  - How the issue was discovered, e.g. hit in production, hit during
->    development, syzbot report, manual code inspection, LLM or static
->    analysis tool scan.
-> 
-> Please do not repost the series just to address the above. Instead,
-> reply to this email with the missing information, so that reviewers
-> can take it into account. If the series needs another revision for
-> other reasons, please include the information in the commit messages
-> then.
-> 
-> The evaluation is done by an LLM so it may be wrong, if you think
-> that is the case please reply and explain.
+> [...]
 
-The issue was hit in production when bigger udp packets get ip-fragmented
-and then hit a bridge with conntrack enabled. The bridge then reassembles the
-packets for conntrack, but doesn't fragment them again (pass up instead of
-forward, LOCAL_IN instead of POST_ROUTING hook), so they are dropped at the next
-bridge because of the mtu.
+Applied to the namespace-7.4.misc branch of the vfs/vfs.git tree.
+Patches in the namespace-7.4.misc branch should appear in linux-next soon.
 
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: namespace-7.4.misc
+
+[1/2] userns: reject uid_map/gid_map values that do not fit in u32
+      https://git.kernel.org/vfs/vfs/c/09a71b58a25d
+[2/2] selftests/namespaces: add uid_map/gid_map range tests
+      https://git.kernel.org/vfs/vfs/c/8b7b7739ea6a
