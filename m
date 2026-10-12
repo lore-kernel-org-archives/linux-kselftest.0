@@ -1,46 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BFC449988;
-	Mon, 12 Oct 2026 09:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6305442FCD;
+	Mon, 12 Oct 2026 09:06:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791795842; cv=none; b=YfzcQ5aDgGA4PerKM1puNzPFPMpudKk88V3FT1s+rxuiV0UfQ0HiKss5PDiUn4ZQIveMan1efemxAjmxsLx61yJyEY0MpJeSJEK6lf2r97yqOKFC+Td788TMRjtVJEtZMgvbyG40I2fnE5JBfM3W1hld+9Dg0RCS0q+vJkaKDrI=
+	t=1791795968; cv=none; b=UWx9mP+9vO4/lD0C8gO6ms5644U5aXCRI+H4AJ3A5TCvTYIxDkrvRom9K6pgObnCFU2KHmJKCtc2J2k3VUABFJ/yjdIO2b7ZRII2zT8vBM/+e/zP0JjZvc1c7nebkFg1Dhvf4TGdXgOfjClldnahQ9lpyBkzcs6M9htwflW2BUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791795842; c=relaxed/simple;
-	bh=TEvgbz6xc3bVn27NE4ZkLWXS3RI8C+n7+ZHHt7fzj3o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PbgMfYtR8dUShBhSeo+UcKwpC38GsgnyYuH3srpHBpmpW/UQ50uzrkOJ7+IEKVl2NBijdxlE+pXaIk3wHD5lwmAf2FfZaSAMBiNDplnZFoWcMHr2HyySp4E6XEmlMcjDNDGqubXABGERJlsBJxr7Q+BGaBqufSL9iKNZJcaoD2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nyxoF0N4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791795968; c=relaxed/simple;
+	bh=2JYIR4kdmdUMpW51PqVrxKJvj21Ol+khAPDX++557VE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=qiI7e7OlvMaPsFe5l14VyHZFfhsVuVP8RZavhVR4l/1wq0VDHnhntJ7emUmzXW2+qBOUTUmg30/LD/CStpZy/fzhYk5IrVf7mkyUUlq0GWq58dRT8ovgPtnvpggRArmki5SUD1wYn3PN/8Lc04SisqDfCCvWrNFG3NFybLupYn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJQRhGIs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nyxoF0N4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358B01F0089B;
-	Mon, 12 Oct 2026 09:03:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJQRhGIs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5CB1F0089B;
+	Mon, 12 Oct 2026 09:06:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791795841;
-	bh=4tWDLuqe5/j9UzXGW/UBDTqVzuJKGCKePiwUYO5Ajv8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=nyxoF0N4/QJOeqcU9DsMLkgw9AeQnSK06fm1Zu8mL/7dMEeirIScrtpSeR2M6nkko
-	 5TuPph8WyFExIs0lbEs/dDbEJ5GA3Gs4iWrJ09UAPKKI0t8jzheeRDfF2ijTLQSFe3
-	 37wk9WLjXSk71QIdOyIpe4ZgY3U13IwZEVxZgjfpQKAqm+Fwk5qYNziBo4ENTqtZGc
-	 bXqtrW4oOmcoqJw2hfG+h0QDNXb1cGDF4GEJj+t0ZZQtnftSjTmVrL9aviiNWy4KJB
-	 9zf45zynDnCvgcuvo7LOA1vKa6rGCtgEyW+yMSzYANThJBHZNJ5RhsSS6R8GB5MP1o
-	 7gI6dDbeFonxQ==
+	s=k20260515; t=1791795967;
+	bh=o4J0rAOC6ATNcAor2O0Ze/mrGGuRO7Iyonpg+eu5oHE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=TJQRhGIsDWeUhA0R1lrux7ZoHINqF+Nr7PQ+yAbz1l2Ncx+yc+SAOM/2T/9pUhT6c
+	 DW2uYorp9ucnZB50HYeSNn8en21obusILVUqTJJe4EeEBNRJ0ziJQ9/Ylg5UQ/k733
+	 ZQ8bb9Yf6G7SEhgy8F1pn7gE/haj11apMhluLFl6fLpZCUx08b9/GayjLifzivxrsz
+	 BWlqy9e55gersKOylO0U2hfHtE7NJGSCQAq1DV9b8s/8t7W6W8bJH2osQDEvR4nyi5
+	 qXk9y0GLzDwnqTeJ9BQYjDt6Y4fMMOahzOyyTbKW7zyr50xiFHwcGz7hIHdDaRp7re
+	 GzCXq2TEsJglA==
 From: Christian Brauner <brauner@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Christian Brauner <brauner@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	"Eric W . Biederman" <ebiederm@xmission.com>,
-	Natasha Klaus <natalie.klaus@runtimeverification.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] userns: reject out-of-range uid_map/gid_map values
-Date: Mon, 12 Oct 2026 11:02:05 +0200
-Message-ID: <20261012-molch-teigtaschen-kennt-af50b0539cdc@brauner>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260930112854.373184-1-natalie.klaus@runtimeverification.com>
-References: <20260930112854.373184-1-natalie.klaus@runtimeverification.com>
+To: Shuah Khan <shuah@kernel.org>, Sahaj Chaudhari <sahaj123.sc@gmail.com>
+Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+In-Reply-To: <20261007114914.1668934-1-sahaj123.sc@gmail.com>
+References: <20261007114914.1668934-1-sahaj123.sc@gmail.com>
+Subject: Re: [PATCH] selftests: pid_namespace: test fork with dead ancestor
+Message-Id: <20261012-ausformuliert-einnimmt-filmhochschule-fe395369d5dc@brauner>
+Date: Mon, 12 Oct 2026 11:06:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,22 +42,21 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1376; i=brauner@kernel.org; h=from:subject:message-id; bh=TEvgbz6xc3bVn27NE4ZkLWXS3RI8C+n7+ZHHt7fzj3o=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSdWSSQHdQS+1pYeOHOTuWMx9a8c3fHRIdO/JOQefLJn WdF9jf4OkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACYifJ3hv99dlst/z5vo1H29 OHHe5Y74R67z4hq8X++eu5tLznDLpFsM/8OmvEnxcjn6f6vjQXXRat9Arp8LLpduDP2vVp2VmFN 3hgcA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.17-dev-3d1b8
 
-On Wed, 30 Sep 2026 14:28:52 +0300, Natasha Klaus wrote:
-> map_write() silently truncates uid_map/gid_map/projid_map values above
-> U32_MAX modulo 2^32 on 64-bit kernels, so e.g. "4294967301 1000 1" is
-> installed as "5 1000 1" without an error. Patch 1 parses each field
-> with kstrtou32() so such values fail with -EINVAL. Patch 2 adds
-> selftests for out-of-range and negative values in each field and for
-> the unchanged in-range path.
+On Wed, 07 Oct 2026 17:19:14 +0530, Sahaj Chaudhari wrote:
+> Add a regression test for fork() into a PID namespace whose parent
+> namespace has lost its init process. Since the kernel cannot assign the
+> new process a PID in that dead ancestor, fork() must fail with ENOMEM.
+> 
+> Create the nested PID namespaces, keep the child namespace handle open
+> after its init process exits, then enter it and verify fork() fails.
 > 
 > [...]
 
-Applied to the namespace-7.4.misc branch of the vfs/vfs.git tree.
-Patches in the namespace-7.4.misc branch should appear in linux-next soon.
+Applied to the kernel-7.4.signal branch of the vfs/vfs.git tree.
+Patches in the kernel-7.4.signal branch should appear in linux-next soon.
 
 Please report any outstanding bugs that were missed during review in a
 new review to the original patch series allowing us to drop it.
@@ -75,9 +68,8 @@ Note that commit hashes shown below are subject to change due to rebase,
 trailer updates or similar. If in doubt, please check the listed branch.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: namespace-7.4.misc
+branch: kernel-7.4.signal
 
-[1/2] userns: reject uid_map/gid_map values that do not fit in u32
-      https://git.kernel.org/vfs/vfs/c/09a71b58a25d
-[2/2] selftests/namespaces: add uid_map/gid_map range tests
-      https://git.kernel.org/vfs/vfs/c/8b7b7739ea6a
+[1/1] selftests: pid_namespace: test fork with dead ancestor
+      https://git.kernel.org/vfs/vfs/c/2ec5a0709461
+
