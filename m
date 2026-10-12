@@ -1,55 +1,52 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177F84C33F1;
-	Mon, 12 Oct 2026 17:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528024BF947;
+	Mon, 12 Oct 2026 18:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791827676; cv=none; b=JgATCM+mhX52NxmnPUBod4svm2TFxyGwmGj4hZC2dMEp6Mer21LmdtbNq4Akq5kXrrvKo7FTT2CM+Evk2mzvZe96s8eLv4dGp+4/A683J8GkMMJE1CphUBEDfpg6SnHIJ/WzYd7vYskOproCL3AZoTN6xsTGqesvRM5mI4u5rU4=
+	t=1791828093; cv=none; b=XrrcvtO7xAJ6j7m8otEVdB1zu2nPCf8wEbei7FaAeHlO22YmlQ4G+FzN0OluxwOyOGz9yUADztQZcCQtv2qWpKNOrbXTwAg3oxwOXRJ1blrsu2aSbSU3dTeFkpO7HKTMR4RDTb0vj9fMRvdJafqZr6e/lOzbbSHMb8s8XmRGIng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791827676; c=relaxed/simple;
-	bh=B5RR7Ey4vV2Dlrj0MhG2cTVJB0KBVADu4Dn7PSMrVcM=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=mj5TOtkAz0BL9gm1TX20u5yiM3vlrdWLljvQvVoVEETngqAv6KE1hsgUGCpKLpa72xWsQx0qk6AliugXCaMIK7w62TzquUhWpeKLGjnk6rXcyaDGjb6dv9NAS9XMtSLAIe9w1cXxe2F750u/gs3Tuk5bw7IkRnjrcA/HKxIgxHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o1FbeeFF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791828093; c=relaxed/simple;
+	bh=CNNqk74Jk+Qv/97fbMaYeKcgzQGo0orFovFeNDyOiWA=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=NiLnEMgT7IdQ7BZD2cuRFDuJ7lAsEIyasPw+vizdIYaSUPVdt6celeSgehnMgg3o16Z3PkYOVoWhJzM/hA+urHdgNCBFuvbdXBKTHLdGZtHdHIoZxcnQNUddduYz9Ogwm+J5tJt/IZyuuO0/NOZ8KYmF7+vPLuni0APPqEyLEHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RkMV645A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o1FbeeFF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4C5A1F008A1;
-	Mon, 12 Oct 2026 17:54:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RkMV645A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1D7F1F0089B;
+	Mon, 12 Oct 2026 18:01:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791827674;
-	bh=I9xvBB0EtKpUtLwHcLsg7GSToVO2MIO1az/h4fxZuAE=;
+	s=k20260515; t=1791828092;
+	bh=fV2FLDgogyj32n1VoiMHeyfDBFQAFIKSAAd+vaJDMrg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=o1FbeeFFWmxOOA5cl2s9SM+1Y8td8Gx3+QJtIiSilityfthUAzLTcM1/H0+s/YNXt
-	 Wg4ghxMw9pF9ehwollFtfq5218JUI+0v35w952+mcQxLWY3azT6iZqYOhTPvVMPFzG
-	 fzVMQ2Wr2d54uW9g9+jEhVZSgJKlDD+MkafTMjg36rRRE8sjWpbLv4Fiahsrp+5Hhj
-	 rZN+O2+vkO87Axs632TnLkmvOdYI9/XuGNsqzkTbQ7jURCGvVjYqkqsc+2UoLTse6G
-	 xl2C8RsHS7EZ3DBEn+mxChgZEyZosOEWdjgfFZyVIH7Vfn64TmKprHy74TAU1am3CZ
-	 BWFdpT42HwY7w==
-Date: Mon, 12 Oct 2026 07:54:34 -1000
-Message-ID: <a8c28761bfd1fe281b7ef4225464b708@kernel.org>
+	b=RkMV645Ah/f/j5dWG+v34P7F9oVUlMJERnIW0EWNL1E9gXQpdn6dQ4Y8LbUsVtig+
+	 xp/yjTbbKq+YawDsVxb8ocNc2ckbTFCTgayTL3v49pgsBPCkzj7FOmTSAU4Qi20tdz
+	 3jZIwp46ndmY1Md5IoWTxf/hah9lXhnKLPxF9vRaMkA/uf0ZAlDWmiMwwpil2R8GZG
+	 qaP3QH2nKo4O3AX9oK5TM74zf+LV7YvRm6vW5kGdeeU5dW1QJplROSWmrXawQgkuMn
+	 NTMFRD1qdwbkczs0SBE4xWbntMsNn5ofheDIq3IS6zBAnmoroBGCzk0zjVbrIz01XK
+	 HZZ5s65/DnLsQ==
+Date: Mon, 12 Oct 2026 08:01:31 -1000
+Message-ID: <467bae1dc17e2d0a56e226f3c756fc0c@kernel.org>
 From: Tejun Heo <tj@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Amir Goldstein <amir73il@gmail.com>, "T.J. Mercier" <tjmercier@google.com>,
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] selftests/cgroup: free the paths returned by cg_control()
-In-Reply-To: <20261011223358.2327625-10-sashal@kernel.org>
-References: <20261011223358.2327625-10-sashal@kernel.org>
+To: Samuele Mariotti <smariotti@disroot.org>
+Cc: void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
+    jpiecuch@google.com, shuah@kernel.org, sched-ext@lists.linux.dev,
+    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/sched_ext: Fix build error in dequeue_remote selftest
+In-Reply-To: <20261012115928.1372317-1-smariotti@disroot.org>
+References: <20261012115928.1372317-1-smariotti@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 
-Applied to cgroup/for-7.4 with the subject capitalized and the Fixes tags
-dropped.
+Applied to sched_ext/for-7.4 with the Fixes tag dropped and the following
+tag added:
+
+    Reviewed-by: Kuba Piecuch <jpiecuch@google.com>
 
 Thanks.
 
--- 
+--
 tejun
