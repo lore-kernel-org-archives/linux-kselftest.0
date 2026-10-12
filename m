@@ -1,166 +1,179 @@
 Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9778A48F827
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 15:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FF049A3CB
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 15:13:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791817641; cv=none; b=j2VWwGSCxmUT5fN2FdDLMkLk+HvMhu1MrSWOpwiuAS2TZm6xzanaNCniqbxuzijz3jHfql7oOrLNwNjzSIPwsYo1+9dx+i+3sNTvay1p1TdvW0oxNWaOtfiWiOjoqSRQkXQ0H6Cco340hkwbYAcOVN4jUweBH1+dF7TI4mQ75go=
+	t=1791818017; cv=none; b=TfVMi3siGQpmyg/q+a4G5O+leAo1364sNfPbo7GAX0ugBqQRPsxkb7wDvmBB4N/KX9m9GVIBNJEh+K6Z/Ujq6xDmoFxT/kR+S6z3L8CMHMgFmnguCEDp6FPnX6+ODahBaUwrhmhd2DRC89jKjuSUxivf6wUlFEO+IS6qQqeKvbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791817641; c=relaxed/simple;
-	bh=tsVU21nxAD5GAzHrBR7QE3ds3Y9VaK8s6sj4rTQ/imc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qebWM676FN+VP+PDyMcPvmqvdjIrQaylz2LbjGNkuk+2AykUe3+fTe/Srhy/RvY1p/zgpN7XzBu1/Z4OsQyAf6RV1rPbcT6WPDx3U36J6YkSXet6pphD7z+5d9w4y4u0SZBKF09CQhpHSxIcE7RHfUjIwZ/GebNmqIdMu1Lmspk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LyAGQb79; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791818017; c=relaxed/simple;
+	bh=umGqnCHZ555YbWy+AD6Im0/YlCEfdWkGC5Y0UR1kwVc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nGQurIonuzQkfhByg5d1mOH9bv/BnWKGaZ951eN6ihfyFUl0IxAV1Mjq6bscnRtdSH1qCSqyew37m77eyBNPo2ByOZBnPFalqqoAOoFbOnTBPyIeFeCvELKris8zP2dyOHmfAOAVyTMZmQtU94kNen8xchYJpxQYiunCRoA/6qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GiIsn1Lr; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LyAGQb79"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48b042c0759so1505393f8f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 08:07:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GiIsn1Lr"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48b0ef9c76eso1675350f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 08:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791817638; x=1792422438; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+        d=suse.com; s=google; t=1791818014; x=1792422814; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=tsVU21nxAD5GAzHrBR7QE3ds3Y9VaK8s6sj4rTQ/imc=;
-        b=LyAGQb79u9R7nttKMdtpi1fPGlIprpgO1689zl1kD4q9v/P9aIA9FyvLTNRzqFikU7
-         8UfrtJ1F/z64nyCqVP0vEykm1I6IDNUbhx1wn/yIoe1qlAJZPW9am9eb0WhXzBoIelI9
-         MSQN3ORBsfYyhEGem0TxoFRCGo+DpjeD8jZky4EUJd2YlQM9fP/ot1eoVbYVgTXbzZAv
-         1KD35A+sZ8s7hz3Kp8xCb/QKo1KxZJpqUHvJ7KQh/yyxVN0VPIzmyAp6t/3M1rKnbCIC
-         4FKfRV21UWUFXOBiSPlE+P+hrxUgmDQUgKr1tD3j0PtJTepy1r/oRPq/Vx7RhLCy8f0e
-         glpQ==
+        bh=0r5ZIRxJicrpwO18Ig2AHoe77ANyyN2+mXpKTZzO6Rs=;
+        b=GiIsn1Lrp0cPDPfjeIYIyoWI8hYnEYJu1tkaNax7crpy4wRox2QAo3iM3f3odwD4lc
+         YgMIbZKozdQc4e+JLl72zk1oGcSMnOWYbhWf5tUbJQ3Xptic2M45LM/btRJIZFJQ5dDW
+         78sAcnsi3H4dLkY3nAHDOFfs6Yf/4AH3E0vyN/nwkG8FT//uA5j7HR7ErtnqYtWxk/KH
+         PrDvrak7mh7NUUy9RDuE+PK9YEJ7mVSWYWJv9HLyrYYQgSRNw5ycZJ1CjVUpisr+KlxR
+         pu7Van4C/MnW20ZDwBzYe/p7l1GU8dhLbOEG9HyeFd26AM/DCGCnwN/IukUbeVbEBQbr
+         98eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791817638; x=1792422438;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1791818014; x=1792422814;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tsVU21nxAD5GAzHrBR7QE3ds3Y9VaK8s6sj4rTQ/imc=;
-        b=14lNumGJPlcQ9c2ZbbwDltgxsAznzDixtnsMRAv2q1qCUq4ea0mtaFWU+Mz5HnT4Tz
-         ugfz63CqGCbiLVTPexUmEFs3UyBACQTKCCVKGUWKk3zbpqc8blgtuYs2lv53/3FtJrJN
-         ncfDVzIUX2CC4J71nOwL9pXQc0Hc9/Di6Igl4vHaDBZNQ04RSUKMlPFkTU4OJdim5ln1
-         70wrLBTgWbWB/lsB9zwgUoUgrnQTsA7y7Yzr8BsOtMycyW0ZGdWoyTePJ72Lb02cpGHk
-         WiQ9mjpSbapyMJp75XXPy2cJFYIG9OfVn0PsxLy3RCDS3bi4fIuEilTRxBHRXgNivq2M
-         EdDA==
-X-Forwarded-Encrypted: i=1; AKwUvByj3pzjGKEp0ercGQJOxxNTynrfPBnX8mrjAVmRv2shnVd13Soyo/qSkB8OzmcnsKoNqzAYQ9A0gAU3PwfcyUA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI8A25ZpXMao7lvKPEEOynGDM1U96f4CfXh8iihrl4w4H9DvaLB
-	fiRWv4RXamIc5ieyRvQVvQfmO/p/n8iw9FKiFUO7xZF4BTc9iTz4QsE/
-X-Gm-Gg: AYBFou0iXkXRptX3ylksNu2eSR+ucIT+fhkYVeCylgwYKtw5WlZFpYa6heNy42xS+9a
-	87c2Gm3c8rnjKcdGWTRPtVAHkpzEG+waSX/hHnuc0kBwacX3hBKGYN8Rr0Q3s+lNdU3c8FkxL+m
-	/qMhjOr0WXfnnNSFXsPpT7Pij/YnS/cxXddGoKB2tWiLRwBIOANZQ99m0Mx9mFhlF/tz4KaNWX0
-	zvkkuuEn3AH3l2rnRdObyTBCsxZ4ya5FIjyX02GOorBSV9e+QrOcUBDIBNduKRv+Gj2K90446Lg
-	cAEK5k7xOTsIoraZF5IUB8Hk0f7RJgRb/sNiFDh+QOoQ3KPOJVLAKOwEOjxRKkMVjd11GBpmOsc
-	eEzGYOr5FdlQcT7Yi8jPYzN1tvCdY3VvVcuEX3Sd6JA2zTvxnXlaTSdph71MDeU0554e4e2SBRB
-	5OlCBy7oKcAoZzozxb+82CFXfSAlPvxB79UHz3B3v9jXK60aMTJqDx4UgYCSQKIIzURneI+p0dQ
-	5bHoWjyQxvkwuBJMd4+ub18y4CesALT5Q6e35ny4FTSszIoI11vQ2J4vBczApyKk7hzOg7z0ZKn
-	1sSMkgyVdDmPYO4AHEpGSoD93yycnwBAgkDfScmprQNyRw==
-X-Received: by 2002:a05:6000:29ce:b0:48c:6fa4:fc89 with SMTP id ffacd0b85a97d-48dbaadb050mr12203015f8f.12.1791817637606;
-        Mon, 12 Oct 2026 08:07:17 -0700 (PDT)
-Received: from dev-dsk-fgriffo-1c-93421965.eu-west-1.amazon.com (54-240-197-234.amazon.com. [54.240.197.234])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48ddaefa06esm3451088f8f.20.2026.10.12.08.07.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Oct 2026 08:07:16 -0700 (PDT)
-From: Fred Griffoul <griffoul@gmail.com>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Ackerley Tng <ackerleytng@google.com>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
-Cc: David Woodhouse <dwmw2@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	iommu@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 0/9] mm: Memory providers for guest_memfd and iommufd
-Date: Mon, 12 Oct 2026 15:07:15 +0000
-Message-ID: <20261012150715.25132-1-griffoul@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <CAEvNRgF1hMz+4ivH6WhsEOLTJGOegYO9AYK6OByYysPp_nVJ=g@mail.gmail.com>
-References: <20260720111259.122911-1-dwmw2@infradead.org> <20261006183235.16576-1-griffoul@gmail.com> <yq5ald8680t2.fsf@kernel.org> <20261012095800.50250-1-griffoul@gmail.com> <CAEvNRgF1hMz+4ivH6WhsEOLTJGOegYO9AYK6OByYysPp_nVJ=g@mail.gmail.com>
+        bh=0r5ZIRxJicrpwO18Ig2AHoe77ANyyN2+mXpKTZzO6Rs=;
+        b=isuUVAEcd1lEqm3k0e62u71pXrNoHjvFA2FFGTA6H/ZI7LrV3R11Iww4jjXvwKBwD4
+         S4uR/UM6Cz4WGlI4vFJEKg8t2jTO6FXs+S044FD2hJ5yOJSEj5/6e4d1T0JQN/t+tgO0
+         AgR0v8mdj/p/98P88i/+/HH5cAqB90eQSxkuBmVIwE+rPCUYS/5vvzkjJnb9GN+nRAK6
+         XwTzMrsrN9TvWq5IQ5rz+PSUIARi68QEovIBvuAY8pQdAkQPAjvUfEwvnpIguJt+OlwM
+         Fh3kSLe3iIXTDEGMrrZsnnewfs5fl6MJ/l/gyIKfzj2zI8PSvczHALRPhCSKJqEavX+y
+         VD1A==
+X-Forwarded-Encrypted: i=1; AKwUvBwUc7/Fd64wre0GyCMomH+d1vG7RS4JjthxG0KI0zKeoLN5Jmvfnn3Az8afWwPmDqoYu2vlJUApbklvSsjzPlk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKXZBQ0FijwKovZX1MG7T3fBn8AMevgG2XeAYXzH0zk9vIwjuuq
+	Rek30N99It4Y4FRyvkzLJfJnRo8raaQjcUpJTFm9MD55yHuRUls9i6HYpu2NCBSPPzw=
+X-Gm-Gg: AYBFou32POTaGnMS703gA9muOUF8xnc+Z14v1UPjuccYxjLy+rfeY41JjCKykc4JNsM
+	jIkPn2rF6hFId38w/mmoWYeibe/p+rKZYzNAEIr/zXx+bQak7cysQU3eP/I9iu51Lu3j7oUkJCp
+	OIyIpLB/GsxcsYoSKcZ9Trx/QP7218X54eMa7fBJfX6n/NUWFo1ca7np3Ux8fBUM969m+bOu52T
+	0z37AREP894w9nfS24mKYx9HaZDyJrk1b8IvR/nWop3fKEi0AZ/gGPjJ1aE5b+xMMu502nyAp0K
+	fgrY75RLawZt3I9Kwi6szIfiPbEWIw1fzWuk5od2QMakdSP+VqG8ywHCUs73ZhGGr/ggp8YenZZ
+	LZsxa0uFs3L/v3j8uzZ9naPr5mlkACG5Ur2vdQvF8QZD8ntU3Uq+gsfvds6jH7lDBz7lXTaWYDx
+	iPh8BtYVuIOwNdrtjlRK3/E5ASoSP83QCvT4WMiWMszWctsWNvBt6ZDYxa5/nuDuuY0ML0AiRcM
+	g==
+X-Received: by 2002:a05:600c:3d96:b0:4a1:746e:5898 with SMTP id 5b1f17b1804b1-4a18e4835e7mr165297275e9.13.1791818013897;
+        Mon, 12 Oct 2026 08:13:33 -0700 (PDT)
+Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a19f318c31sm78961655e9.3.2026.10.12.08.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2026 08:13:31 -0700 (PDT)
+Date: Mon, 12 Oct 2026 17:13:29 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Sebastian Chlad <sebastianchlad@gmail.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Shuah Khan <shuah@kernel.org>, Sebastian Chlad <sebastian.chlad@suse.com>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] selftests: cgroup: Report failed checks in
+ test_memcontrol
+Message-ID: <20261012-blend-diner-c6361d00b9f1@there>
+References: <20260926055152.1684-1-sebastian.chlad@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="u5gbdmp2bzg3luyu"
+Content-Disposition: inline
+In-Reply-To: <20260926055152.1684-1-sebastian.chlad@suse.com>
 
-Ackerley Tng <ackerleytng@google.com> writes:
 
-> Wait, is there some magic done to make struct pages represent different
-> frames, as in PFNs? In your model, the struct page <=> PFN mapping
-> doesn't stay constant?
+--u5gbdmp2bzg3luyu
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 0/2] selftests: cgroup: Report failed checks in
+ test_memcontrol
+MIME-Version: 1.0
 
-No, our memory has no struct page: it is a carve-out hidden from the
-host with memmap=. I meant the mapping from guest_memfd file offset to
-PFN. The PFNs never change, only which file and offset they back.
+Hi Sebastian.
 
-> Do multiple VMs map the same physical memory at the same time, or is it
-> a move like below?
+On Sat, Sep 26, 2026 at 07:51:46AM +0200, Sebastian Chlad <sebastianchlad@g=
+mail.com> wrote:
+> test_memcontrol fails intermittently, but most of its checks fail
+> silently, so a "not ok" line gives no indication of how far off the
+> measured value was. This series makes those failures print the observed
+> and expected values. It does not change any threshold or pass/fail
+> behaviour.
+>=20
+> Patch 1 converts the terminal tolerance checks to values_close_report(),
+> as was done for test_cpu in commit 4cdde87d723a ("selftests: cgroup: Use
+> values_close_report in test_cpu"). values_close() is kept where it is a
+> loop or retry condition, where a mismatch is expected.
+>=20
+> Patch 2 reports the "memory.current < 50M" check in
+> alloc_pagecache_50M_check(). Because test_memcg_high() calls the same
+> helper expecting it to fail, it gets a quiet variant. An alternative
+> would be to pass the flag through the currently unused void *arg of
+> the cg_run() callback; I am happy to switch to that if preferred.
+>=20
+> With patch 1 applied, we observe at times failures like these:
+>=20
+>   not ok 3 test_memcg_min
+>   [FAIL] actual=3D18722816 expected=3D30408704 | diff=3D11685888 | limit=
+=3D7369725 | tolerance=3D15% | actual_error=3D23.78%
+>=20
+>   not ok 4 test_memcg_low
+>   [FAIL] actual=3D20852736 expected=3D30408704 | diff=3D9555968 | limit=
+=3D7689210 | tolerance=3D15% | actual_error=3D18.64%
+>=20
+>   not ok 4 test_memcg_low
+>   [FAIL] actual=3D14364672 expected=3D22020096 | diff=3D7655424 | limit=
+=3D7276940 | tolerance=3D20% | actual_error=3D21.04%
+>=20
+> These are the child memory.current checks in test_memcg_protection()
+> (expected ~29M and ~21M). Their tolerances were already raised in commit
+> d2def68ae06a ("selftests: memcg: increase error tolerance of child
+> memory.current check in test_memcg_protection()"), and the values above
+> still fall outside them. In the first case the child is about 38% below
+> the expected 29M. This series only makes such failures visible; whether
+> the expectations or the tolerances should change is left for a separate
+> discussion.
+>=20
+> Changes in v2:
+> - Patch 1: pass the measured value first in the alloc_anon_50M_check()
+>   values_close_report() call, so that a failure prints actual and
+>   expected the right way round (reported by Sashiko AI review).
+>=20
+> v1: https://lore.kernel.org/all/20260926034923.31718-1-sebastian.chlad@su=
+se.com/
+>=20
+> Sebastian Chlad (2):
+>   selftests: cgroup: Use values_close_report in test_memcontrol
+>   selftests: cgroup: Report memory.current shortfall in
+>     alloc_pagecache_50M_check
+>=20
+>  .../selftests/cgroup/test_memcontrol.c        | 50 +++++++++++++------
+>  1 file changed, 36 insertions(+), 14 deletions(-)
 
-Mostly moves: a page has one owner at a time. There is also a share,
-where a parent keeps a range and gives a child a view of it, so two VMs
-can map the same frames for a while.
+AFAIU, the test is catching two types of errors:
+a) running under global pressure (preparations already fail),
+b) mismatches in expected values of protection tests (after
+   preparation).
 
-> I'm thinking that if guest_memfd wraps your provider, then your provider
-> can issue a revocation to guest_memfd (ctrl-f for
-> kvm_gmem_provider_revoke in [1]) on the move source guest_memfd inode,
-> then wait for an allocation request from the move target guest_memfd
-> inode.
-
-For the guest, this series works the same way: the provider revokes the
-range on the source, and the target's next guest fault asks the provider
-for the frame. Devices are different, because a device may not support
-faults. So the provider also revokes the range on the target once it
-owns the frames, and iommufd maps them right away. In other words, a
-revoke means that the frames behind a range changed, whether they went
-away or arrived.
-
-> guest_memfd is going to support preservation [2]. Tarun's series just
-> preserves memory from guest_memfd's default provider (buddy allocator)
-> now. For your provider, I imagine the preservation flow would preserve
-> whatever metadata in guest_memfd (like the attributes in the maple tree)
-> and then go on to notify the provider to preserve some range of PFNs (or
-> folios). Your provider would then basically do nothing, since those PFNs
-> already survive a live update.
-
-Yes, that would work for us, as long as guest_memfd does not also have
-to save the offset to PFN layout: the provider keeps it across the
-update, and guest_memfd can ask again afterwards.
+I like the reporting of the latter -- with (only) that all consequent
+silent failures would imply^H strongly hint the error of type a), no?
+:-)
 
 Thanks,
-Fred
+Michal
+
+--u5gbdmp2bzg3luyu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCasz5FRsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AhGygEA+E0rmCsu6Ho27N1p5NB3
+Lk11r2ujJozxMdTi3dbS1r0BAK1DXnSYhASHxLY7xCWsydP9u68Z2lTjRkyysntj
+W8gI
+=dP/j
+-----END PGP SIGNATURE-----
+
+--u5gbdmp2bzg3luyu--
