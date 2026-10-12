@@ -1,109 +1,139 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E928A3E6DF4;
-	Mon, 12 Oct 2026 10:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CB63AD531;
+	Mon, 12 Oct 2026 10:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791801747; cv=none; b=K+3oDY8km+KpO2PvFo6eYQ8BcHWyPzuSh0jOv0wQaTZQV2pJDWm/irNrAvgAI8Kr1miS9Vp5JEcwUre6jCb7WztwT/QOhtlM0CAO6f4gPMKQxCLemWI1/4BME08WD2uxhc8AWeejQgFQNZ3AAP2JABl+B6Gr0TYYK3yKaiQaGRk=
+	t=1791802397; cv=none; b=LO23FOffCzQrGPjf1B9jHbJMq/pi97kPbSbcyarWHfwI40S9y/vVw3IN0A2fyyxTwOHeyV4hNb1HgHmw85ug02HaVcEUK102FXJRrnyrh6m/sJNUW/Graf9aLqpnjXQjhfmKV0zTZMBwkvJghpeX8l2tFX7P8dSS1dVB73SyB4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791801747; c=relaxed/simple;
-	bh=g17MXktF2GmX0zJd05Qf+GdkiWrqsJ8LPSoQLvkRA98=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JvrAjTA5T3W+o4kcYEsTEHj+Xp18f80a/b2aLKlYFBLE7fDxKHX6mtXBfyrB7OEwfNMw5YrigX+Qk144Er7fovBxjccM3TDvdz1lrfFJN8R2ILCwgh8y37bREvFkFRVPz5W7S4mI1g13tlRz/f209lxvJWEv53DItWzwRM0aIT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vMGFuu61; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1791802397; c=relaxed/simple;
+	bh=AspnRt3va9jO5eO1dyXEyhIvOyy4WYFbRV9hx/IeDN0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=br5v/ZXYj5h6+dY39GDy7XQv3dN0RdxLbso6AMbmn7/Fw/CyQ9S4nwVyD4Fcm5kisJX3Vgy0P7V+CMprAeECmyu8Iaxwbj0HztMMz58jISSL3msDRMe56ySRfRaWnQzMsYB8/Vv7GTH1YuBp01m1G8vqZqAeDFCdAgbOZvjcZf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5EVE02N; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vMGFuu61"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=d6ADhB5BJ6rgYWInDuDWi+047e4zYVau+QWZM7M+Y50=; b=vMGFuu614SZZfq5TH+UQelPyIf
-	hh7EWQHdaWai5c1I9lUD7tDzd4TUCw8ipNXDfB8XZ2xkvNhrUllHvZPVr0QdB3Qw1XjDztwE7IB1k
-	4UZmz3aiNjExhvStzLNE1ykTkBBrOVTeSTpbrCKcTBDSly7/wMJHWfTWR+iV6U8dpYK2kQu1mvSWM
-	RQl/IiOAi3WnFbJOzdafRRjcuPe1MjJrwNXSTIh9Mgrq3V+xjSn9hrVzDuThCMhXCK0u7O0ocOVRD
-	pOcDNAAtH9/jqwplmjDX20mbsvc+WMeP+fJcbnhpL6od48Ubr5nq4eAhHurUmrGuRdHb9D+CA0TUg
-	1V4iSong==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1xGDTt-00000004NDI-3XU4;
-	Mon, 12 Oct 2026 10:42:09 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C58A430063F; Mon, 12 Oct 2026 12:42:08 +0200 (CEST)
-Date: Mon, 12 Oct 2026 12:42:08 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kunwu Chan <kunwu.chan@gmail.com>
-Cc: mingo@redhat.com, acme@kernel.org, namhyung@kernel.org, sj@kernel.org,
-	corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org,
-	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-	james.clark@linaro.org, akpm@linux-foundation.org,
-	lianux.mm@gmail.com, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] perf/core: add AUX buffer ownership for kernel
- events
-Message-ID: <20261012104208.GQ4121339@noisy.programming.kicks-ass.net>
-References: <20261009160010.1829642-1-kunwu.chan@gmail.com>
- <20261009160010.1829642-2-kunwu.chan@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5EVE02N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ABC51F0089B;
+	Mon, 12 Oct 2026 10:53:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791802396;
+	bh=CC57uKcDR0yMt0YX70szlcAbUkKDMnCloDnAJYvGq2w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Q5EVE02NohPnIUih3XOl6WsHQMSjW28zaZUVSzyxg8aLIyULRakHHfy2HnR0T+FhM
+	 cyLCoNeyGKyB40/mtvF8sYKtdQRZAGF7vpt3NVcAgG8D3TQ3DlZtXlVQSyO+Ufpv9D
+	 +T+weqMCN2uunVDg2k9qh1XENWvtCtR3ul/hDGWH6yp/QDrSFX5krakKqbScPulhQU
+	 C83TJ9PQviF84jPmnpsekyl4egL4QBIvrcq8v9J0uT+CFTSYwetpd4T0XORbAhSXwa
+	 /dSXFUMLplr98tjwU1dXyNcMMZhX5AUYcDzz+fxs+8lUGsJ+HwIKZZTA7+U+2oaxVa
+	 fWxfDeiB3tgqg==
+Message-ID: <b971a37e-9425-4acc-b868-682cc9480273@kernel.org>
+Date: Mon, 12 Oct 2026 12:53:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261009160010.1829642-2-kunwu.chan@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/2] selftests: run tests on nommu architecture
+To: Hajime Tazaki <thehajime@gmail.com>, linux-mm@kvack.org,
+ liam@infradead.org, rbm@suse.com, akpm@linux-foundation.org,
+ luto@amacapital.net, brendan.jackman@linux.dev, liuhangbin@gmail.com,
+ corbet@lwn.net, kees@kernel.org, ljs@kernel.org, broonie@kernel.org,
+ mhocko@suse.com, rppt@kernel.org, shuah@kernel.org, surenb@google.com,
+ vbabka@kernel.org, wad@chromium.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org
+Cc: geert@linux-m68k.org, daniel@thingy.jp
+References: <20261006085642.3852152-1-thehajime@gmail.com>
+ <20261006085642.3852152-2-thehajime@gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
+ ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
+ AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
+ 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
+ g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
+ ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
+ 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
+ /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
+ jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
+ DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
+ HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
+ 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
+ LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
+ 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
+ VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
+ /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
+ iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
+ 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
+ zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
+ azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
+ FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
+ sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
+ 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
+ EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
+ IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
+ 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
+ Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
+ sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
+ yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
+ 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
+ r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
+ 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
+ CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
+ qIws/H2t
+In-Reply-To: <20261006085642.3852152-2-thehajime@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 09, 2026 at 11:59:48PM +0800, Kunwu Chan wrote:
-> Add an in-kernel AUX owner reference and setup/release helpers for
-> kernel-created perf events that need an AUX buffer without a userspace
-> mmap.  The setup path validates that the event is a kernel event with
-> no parent, rejects non-power-of-two page counts and negative watermark
-> values, allocates the perf buffer and AUX pages, records the kernel
-> owner, and attaches the buffer under the same lock.
+On 10/6/26 10:56, Hajime Tazaki wrote:
+> Architectures lacking MMU don't support fork(2) syscall and only
+> vfork(2) is available with limitations.  Thus, we cannot run kselftest
+> on nommu architecture as is.
 > 
-> perf_event_release_aux() stops AUX writers, frees AUX storage, and
-> detaches the buffer, in that order, matching the AUX teardown ordering
-> of perf_mmap_close(): perf_pmu_output_stop() walks event->rb->event_list
-> and rb_free_aux() must run while the buffer is still referenced by the
-> event.  The single event->rb reference is dropped by
-> ring_buffer_attach(event, NULL) itself, so the release path does not
-> put it again.
+> This commit addresses this issue with the following changes:
 > 
-> Both functions run under event->mmap_mutex, the lock that already
-> serialises ring-buffer attach/detach transitions for an event:
-> perf_mmap(), perf_mmap_close(), _perf_event_set_output() and
-> _free_event() all hold it around ring_buffer_attach().  Concurrent
-> perf_event_release_aux() callers therefore go through the same
-> serialisation point, and a second release call, or a release of a
-> buffer this API does not own, is a no-op.
+> - Detect NOMMU at runtime from the MmapCopy field in /proc/meminfo
+>   and avoid timeout, which requires fork(2).
+> - Document how to build and run the NOMMU tests, including the procfs
+>   prerequisite for runtime detection.
 > 
-> Keep aux_mmap_count dedicated to userspace mappings.
-> perf_aux_output_begin() accepts a writer while either a userspace or kernel
-> owner remains, preserving the existing teardown ordering.
+> Build and run the tests with:
+> 
+>  $ make ARCH=um O=build kselftest-all TARGETS=nommu
+>  $ make ARCH=um O=build kselftest-install TARGETS=nommu
+>  $ ./build/kselftest/kselftest_install/run_kselftest.sh -p -c nommu
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Kees Cook <kees@kernel.org>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: Will Drewry <wad@chromium.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Brendan Jackman <brendan.jackman@linux.dev>
+> Cc: Hangbin Liu <liuhangbin@gmail.com>
+> Cc: "Ricardo B. Marliere" <rbm@suse.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-um@lists.infradead.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-doc@vger.kernel.org
+> Closes: https://sashiko.dev/#/patchset/20260813063401.1786548-1-thehajime%40gmail.com
+> Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
 > 
 
-> diff --git a/kernel/events/internal.h b/kernel/events/internal.h
-> index c03c4f2eea57..760b7659ad87 100644
-> --- a/kernel/events/internal.h
-> +++ b/kernel/events/internal.h
-> @@ -48,6 +48,12 @@ struct perf_buffer {
->  	int				aux_nr_pages;
->  	int				aux_overwrite;
->  	refcount_t			aux_mmap_count;
-> +	/*
-> +	 * In-kernel AUX owner reference, set by perf_event_setup_aux():
-> +	 * admits writers and ties the AUX teardown to
-> +	 * perf_event_release_aux() when no userspace mmap holds the buffer.
-> +	 */
-> +	refcount_t			aux_kernel_count;
->  	unsigned long			aux_mmap_locked;
->  	void				(*free_aux)(void *);
->  	refcount_t			aux_refcount;
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
-This doesn't make sense to me. If the even is a kernel event, then there
-cannot be mmap users, so adding another refcount is just for giggles?
+-- 
+Cheers,
+
+David
