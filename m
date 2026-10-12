@@ -1,146 +1,97 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64E981DF261;
-	Mon, 12 Oct 2026 11:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B1C413D99
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 11:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791803336; cv=none; b=O6q1SayTRts7lh4B+4scKzkBJrAzv8cz1WThYdZcO1ugxxdrr35z/0LnCP8ubHfqSu51tul547Sp54CScURY5YzD6a49p2f7WBxQ/TfRVQv9PtydMcXfge0rG8An5j9Jh+Of3hzCa3Je9ufTG6UN4l8uaftxB3KFP0ciqsqwJ/k=
+	t=1791804358; cv=none; b=tGD8wMEEIKfezxkYYnqRabV8WE88uqrEiZr9olbRM/JzP9Qz+W9/MIraNpo5EqmPM46NVxnoosLXRgPOuwn7W/g7UrnJdg8/jxyxe3Q2OGfOStNdwoGyDCZsJhcl6TYhDxVk+ecl4G1ieH1x/eGu4ThY2a5sflDuG53vVI1493I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791803336; c=relaxed/simple;
-	bh=1Hcxmhs7YzpUmvxySV5KGDi41fGrFGMMIIK6BavKtUw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=keJACp3NJtkAX+89wVlMfExhAR9TxSxXL2hA/qgrpA+cv00W8AUk8nOJ/wND9kVNdegqxIjYYy9DwEyh/qlr4QgCkXpWPMFF3M7rc6+1sz7sn1sS4c9pu/fBYMxv7IUuTlWqlWfUYLCSBKCjn3x5mY2BNyrRWoFsW3Tal0yPqPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qcB4a4H/; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1791804358; c=relaxed/simple;
+	bh=jJZ2weKHhkNfXMFJ22b0RW7OCDsQCS4qAKK3lUmiR4I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HS4O91p72Y7KDeNpZC8RZJ/k7CBbbPfydSC64DTTWx0lBHtJIqXODjS9UZhsL3mVQZFaT+soSv0ttVX2YxJfKZbfM4tMuWjOmUlFbkMXeLNpW2rM7zoZu6jUTc98VR7Q0J/SDlQFqdxwE1N2v+1iFRcZcfbpBVoJAdLjVeCDaVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JIeYh1xA; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="qcB4a4H/"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5510E1655;
-	Mon, 12 Oct 2026 04:08:50 -0700 (PDT)
-Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C4EB93F882;
-	Mon, 12 Oct 2026 04:08:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1791803333; bh=1Hcxmhs7YzpUmvxySV5KGDi41fGrFGMMIIK6BavKtUw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qcB4a4H/e3/zyLeuwjBKRzIOz4KxK8O9Pd/mFnszBix80X4+DM9h5gXTQz46PIE2D
-	 651GcNke9l8jveaCHusuOFxFKeF58ksUFNEKrLgjZwKzSEFzYqvOyW4gNDMCICpMjF
-	 4EDe/ST+m/BnWzEW7xfx0XwwZ7y4TdR597OBef9M=
-Message-ID: <68905ee7-83b1-4d5f-a1e6-8ddd2ae291d1@arm.com>
-Date: Mon, 12 Oct 2026 16:38:47 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JIeYh1xA"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ab8309dcbaso1215342a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 04:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791804356; x=1792409156; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jJZ2weKHhkNfXMFJ22b0RW7OCDsQCS4qAKK3lUmiR4I=;
+        b=JIeYh1xAiGNjN3AvWL5yfzL4h6yWxGfQ9uPB4TCUAM+4I6Czbd92KK/k5SRCsJSJ7F
+         +Sf269kZD8JHzaXxFPfqGtgpsrDXvi8j5LvK98zEFbudKpPYNZcfSNjtCr5TkXcYtdJq
+         5+yqVmD5mtpFwX/My0N02WK64WpE8UgcJ9SyzCoPLg8jjM1m3+wt1E9aP+vqwul4fk+b
+         j+deKZCm1bWFXAPmiBN4LX5k8CqQdEb4ueotrF1rxUUuKwZ7SOtbKho3qrNKFJkzfVg+
+         tzKHgzR4Houc6hGo0FQYDto2Gc/W3lfETkKkogUg0RgSzt1JklA6FKUHCYHp5OiQHsEL
+         HwaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791804356; x=1792409156;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jJZ2weKHhkNfXMFJ22b0RW7OCDsQCS4qAKK3lUmiR4I=;
+        b=dte4vwt7iCXZ5PoW8xkQ2xPYlqUFZx+pd/UaN+iQ6NdKWz9ynRuJVx7Y4fSLXU7jyR
+         JtYMOfha7DyrEp3MYUQK+dnkkwR/2222+d3Xd0YAjF2cVQTsL5D2k2VG+cA0mOCUtnqo
+         caynzSFp+QyDdQiCVnV3euZconuNa4ur9gotEy8XCXVKFq5JA6d3IBV2dTDRqgvVup6k
+         1w11FnnghljPYC1afo3w0ayKw6GS2pjLOnSiU0Rh3qixy0bt7CpP09ft5klkc6veIviE
+         7NQ3ezOCFSHMrwPToXFNI6QepPRBgpyYQ/mumbcL4VBjMSOTOxSo9VYvSTAjIPU1ayQF
+         rjFg==
+X-Forwarded-Encrypted: i=1; AKwUvBysHdq/dRD5pAtr6T3Gbg3InB/VpKRlXZKW85qo2lIEpWyJ4V7/PMBDIW5wze+GsQhAoqYm+LMQxyDn6JlbLA0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJrAweqBHwIkFO7QWYtn9fY4owGgFCV6T9751yeFYgaOAIQeT9B
+	NFVNiebI+rB9fZpYn829+543eBItYYABoWr0/NdCkEwK4WU2nC5GZ72D
+X-Gm-Gg: AYBFou3aGsD08wUW72ImU5E41RE84CKEMV/T37LHBBKhIE/JY3k+XPYjbfRohufqjsO
+	CUq8OLYibC8dteivFu1Z0i9JxO/Nam+kmU6r84eDDJxUl2js1yTCdY15AJX7s2Bj2Pxz0UprcmZ
+	HI3LECpGWedWu66qUG/8De9SXNt6Jn4u4JqYQhX6mjHOATGrWKqcy0RIDS6acyEkYibQfiO3Y2v
+	D5pw53hTcJcKR6pEVxmBGROC1gVdEy3lFtgIywKZySEo68S8wr3Fx6hrSqdh74/6aVMDKBGPzOy
+	4l2h5JOgsZ9d5zdzb7U064FUG+v4XvkV9Yo7IIo9medaqQX/CVW3jzzMsm+3CjZgOHWKrLSNIvJ
+	J+OJwi/antm1k3DyVIYOToMl5K8ide2SrFNFvX9qO3Sqr1T6VPS1qq4jr9OBZwLV4+fBr6pNU6p
+	bmFF49MP2PB6Bsa1zcIGbm6ihWYCeHtYgOhXaqcavNDZYgG15167UFvZnb0yxqDnA84uq0Lswxg
+	5R8Izp88SS18tX2CXqLff5W/kE=
+X-Received: by 2002:a17:90a:e70c:b0:3ab:1a5:cd2 with SMTP id 98e67ed59e1d1-3ab3ac9b310mr5103674a91.35.1791804356368;
+        Mon, 12 Oct 2026 04:25:56 -0700 (PDT)
+Received: from obadmin-Precision-3680.atlascopco.group ([167.103.3.1])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab396620e2sm9808526a91.3.2026.10.12.04.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2026 04:25:55 -0700 (PDT)
+From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+To: Eric Dumazet <edumazet@kernel.org>
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/net: test tcp_rmem lower bound
+Date: Mon, 12 Oct 2026 16:56:34 +0530
+Message-ID: <20261012112634.3371756-1-sahaj123.sc@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <9b4b59ac-6e64-4dd2-88c1-c3f7844bbd36@kernel.org>
+References: <20261007054508.1059927-1-sahaj123.sc@gmail.com> <9b4b59ac-6e64-4dd2-88c1-c3f7844bbd36@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/12] selftests/mm: improve mremap_test
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: akpm@linux-foundation.org, david@kernel.org, liam@infradead.org,
- vbabka@suse.com, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- shuah@kernel.org, jhubbard@nvidia.com, kaleshsingh@google.com,
- anshuman.khandual@arm.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261006092511.145776-1-sarthak.sharma@arm.com>
- <3a0673a6-744b-45a1-80fd-737a366fafc4@arm.com> <asyxQbp8EfVE9yQs@gremlin>
-Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <asyxQbp8EfVE9yQs@gremlin>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Lorenzo!
+Hi Eric,
 
-On 10/12/26 3:43 PM, Lorenzo Stoakes (ARM) wrote:
-> On Mon, Oct 12, 2026 at 10:20:45AM +0530, Sarthak Sharma wrote:
->> On 10/6/26 2:54 PM, Sarthak Sharma wrote:
->>> This series fixes correctness issues in mremap_test, simplifies its
->>> test infrastructure and strengthens validation of remapped mappings.
->>>
->>> Patches 1-3 remove unused command line handling, unnecessary cleanup
->>> checks and redundant errno handling. Patch 4 converts the test to use
->>> kselftest helpers and removes manual failure tracking.
->>>
->>> Patches 5-8 fix handling of unavailable userfaultfd support, unexpected
->>> mremap() successes, data-corruption failures and cleanup after mmap()
->>> failures. Patch 9 removes perf tests and timing infrastructure.
->>>
->>> Patches 10 and 11 replace threshold-based random-data validation with
->>> sampled validation and a deterministic data pattern. Patch 12
->>> strengthens multi VMA validation by also checking the mapping state
->>> of holes after remapping.
->>
->> [...]
->>
->>> ---
->>> Sarthak Sharma (12):
->>>   selftests/mm: mremap_test: remove command line options
->>>   selftests/mm: mremap_test: drop munmap() checks from cleanup paths
->>>   selftests/mm: mremap_test: simplify errno handling
->>>   selftests/mm: mremap_test: use kselftest helpers
->>>   selftests/mm: mremap_test: skip test when userfaultfd is unavailable
->>>   selftests/mm: mremap_test: fail unexpected mremap successes
->>>   selftests/mm: mremap_test: fail on data corruption
->>>   selftests/mm: mremap_test: handle cleanup after mmap failures
->>>   selftests/mm: mremap_test: remove perf tests and timing
->>>   selftests/mm: mremap_test: replace validation threshold with sampled
->>>     checks
->>>   selftests/mm: mremap_test: replace random data with deterministic
->>>     pattern
->>>   selftests/mm: mremap_test: strengthen multi VMA validation
->>>
->>>  tools/testing/selftests/mm/mremap_test.c | 701 ++++++++++-------------
->>>  1 file changed, 291 insertions(+), 410 deletions(-)
->>>
->>
->> I wanted to address the concern Sashiko has over this patch series [1].
->> It says that mremap(..., MAP_FIXED) over a range containing multiple
->> VMAs should unmap the whole range first and then map the VMAs.
-> 
-> I don't think you need to spend time worrying about sashiko stuff about
-> mremap() behaviour in a test series :)
+Thanks for the review. I agree that a separate test for each sysctl bound
+does not scale and that this focused tcp_rmem test is not the right fit. I
+won't send a v2 of it.
 
-:)
+Your points about the non-portable 4096 assumption and partial updates are
+also noted. The generic network-sysctl test you described is broader work;
+I'll treat it separately rather than expanding this patch.
 
-> 
->>
->> But this is not the case, as was discussed on the list earlier as well.
->> We iterate over the VMAs in the range and only unmap and then map the
->> region that the VMAs occupy. IOW, as quoted by Lorenzo [2], "the
->> sematics are such that gaps are not propagated (i.e. it is as if you
->> mremap()'d each individually)". So if we remap over an existing mapping,
->> the mapping region on which a hole is remapped should not be affected at
->> all. So this is a false positive.
-> 
-> I will be removing the gaps stuff in any case (as discussed elsewhere
-> too).
-> 
-> It's problematic, more so for the fact stuff can get mapped in gaps before
-> the mremap() operation.
-
-Yup, makes sense.
-
-> 
->>
->> While here, requesting for some feedback on this series, if anyone has
->> had a chance to look at it :).
-> 
-> Thanks for the series, this cycle has been very busy so I think this is one
-> for the next cycle (i.e. targeting 7.5).
-> 
-> So I'd recommend resending at 7.4-rc1?
-
-Sure, I'll resend around that time.
-
-> 
->>
->> [1]
->> https://sashiko.dev/#/patchset/20261006092511.145776-1-sarthak.sharma%40arm.com
->>
->> [2] https://lore.kernel.org/linux-mm/agH1ZSdX_7QF8P_I@lucifer/
->>
-> 
-> --
-> Cheers, Lorenzo
-
+Thanks,
+Sahaj
