@@ -1,366 +1,148 @@
-Received: from mta0.migadu.com (out-8.mta0.migadu.com [91.218.175.8])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4B1336883
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 15:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00B44A2608
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 15:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791819968; cv=none; b=kX3pehH7aZfoK640cX58nU9EVsLkcbQm54n4ITc8QKI6pADJS/Ua88//hI7sHCE7v5/6J0RpJRMPZDcRQ6GdrlDErBVo9t7xe/yt9aDvgwKoh3n2L0+3k5Eg0C9ZolHWguaHqw4CwMCwZKTnjBZw0imep/dSDMN/J7dGXI25/z8=
+	t=1791820136; cv=none; b=vAVrrKGJz9q91ptWEDQe4SoCYa64ccncMLLKZHPtlzLe1NMPZ0L+8eiALUhfF7jqheA11/GkpLw2NjXHdBOvhS+LYfh9QZmQwf8bX4wnYHxBskWKOOhXOOFkfXCxf1bYQjRAiG82yXjC4ZeQGT0H6lsubibu6t/unAl0SDrXkZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791819968; c=relaxed/simple;
-	bh=KvRZvRz3NhpBkGwqE7ktqm26nu6cQsva4SgdJGpByuc=;
+	s=arc-20240116; t=1791820136; c=relaxed/simple;
+	bh=IBQngc9E6IMptShoUCo5yKbFcmdbP8vVNx4ur1yYVnU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XV7gKrZYSVGJ7PXMn8H5MawZB1mgg90vJxYlVwgttd4zt7h4cmIem5Jm1ack74Qin/BB6dJ23CvnBCDKID/qZbPZfvWUd7Lb7YquFPuJ8kz685vEDxsNTixlYkEmBw2c2PQhs4zJJUznldo5PkXAgqZnbAXj9l8mZWwcLcYqrMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m1QCQGEj; arc=none smtp.client-ip=91.218.175.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 MIME-Version:Content-Type; b=EwOuBDMR2TsSNxvy4xVJ/YXQXg+B2zKZEbhX6bUCW9WyuHxwKE3bcxoucVwkrzEM0DwK1iYb7XILfqjsbznZEBUxpM+pum/oOlG18adVZ2SjmZx0RIrRn/H3s5QRi55qjJe/VV0sC4PkG5ZJvI+NhLS7dHbNuI4TNTdqy5VF4D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YTOZbUeL; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m1QCQGEj"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=KvRZvRz3NhpBkGwqE7ktqm26nu6cQsva4SgdJGpByuc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791819964; v=1; x=1792424764;
- b=m1QCQGEjbWdqoB4CBTtFOaGtLR6t0gKlDZH13S7iu6m+Ie/G6syucTqPTBs/o6mz9E1NYgJh
- HE3rMkoVksIGeCYub1Z1DQ7/8vXSoFVS5IvzJVBjdgKnOqbDMR/GJpAvKH2WgfYcDtmQe22Nlv6
- ttFtWIug0dsyJtZfZ5A/kFHE=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2e51c42e85681683;
-	Mon, 12 Oct 2026 15:46:04 +0000
-X-Mizu-Trace-ID: 2e51c42e85681683
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YTOZbUeL"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49d05d51553so13288685e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 08:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791820133; x=1792424933; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=bz+XxQbQvV9Rkz3jiplflbfyEnwSo6hWkWyEVkUNcs8=;
+        b=YTOZbUeLKKbxksGFl3X9SRUSILmTkpQbdG3/S2suV36u4ulO3yQ/CwHt61806PNp5E
+         ow1LIvzCLHvBVYVWmAmeQ1RiutgtMpmbxUDWdEjr6PFBU1zADRngD4F+c+O7y6MZhm/3
+         OItOxC8zgX+czXK6nwSGzK6l1xcFKyZeSAWPwH8q57IlU999l80A21QlkgPoZSEjYEnn
+         NiKCYOISk2rKQl2PIGpBTQvP7cCSXCSckUsWWFfSd9auGOrmLG9yxlXBvUZyDmZcMNOU
+         VLDRbI6HZj7h66MzgD/3RF7W5NxrdXdj8IQCBfXNj9fscpFDo3QVJL+Bbcu8DwuKHmVw
+         CdeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791820133; x=1792424933;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bz+XxQbQvV9Rkz3jiplflbfyEnwSo6hWkWyEVkUNcs8=;
+        b=wSehBGO0/MvOt6fsFpdarQ3NceUqLJ29hQFrfvhYOxU21zefWeBHqpK/eK5pkr6/ZZ
+         1l5H2YXILB6H8AZjQGGiGL+BMWwWS8bh1KEvJ5eSX4XYT7INAENC6PaOSE3xATExOkYI
+         5bWDS3zguJ4XF8vT30OelHIEvGNNmanIGx0XAc1VmuBcfLCtGYIpOKihyUAvJdXQcX/O
+         fJS64onV02k6vPhSrVo0AudlBT5AtFQ1Ppg8S5sTTWdsmx+fCxehqKPUNjSanemFxrCY
+         MQPa7CbEysarFzU7oJhYEo/DFfPRZqZbUjpHgK6/LcGB8LUDvzElizY+nbJalrMZ8TZw
+         /MkQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz/hyCqK2FlbxBhRBy+VCYyGBU42g02hfIu8fd6wQdG/RNJGlNTeS3fTRYKFFOkQcoWibhhwUIik0drBveZz9g=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKA4cboEuEJxAVtLnvkvhxcGSro5Zp3Q5jlgPPRWVKHwosms8D8
+	nTHK9gdELC1/8VqHlnfDpZ0jjhikmGVXvdW5jXVgu5T0TT00wSC10r4J
+X-Gm-Gg: AYBFou2jWEPNVQ0lWAVSYNUBL/wquahhT8gzmITc+IJQpuYxeG3EWoHi4DgYVY5lN0o
+	hkQpzI1+8atfTy/FctxH8XVR6zXLFBmBCTIi1kuWiN6IFn9xbK2XpGod9KPDQCaQg3z2bdNcBXL
+	YkoFEMm4f0Zsznv8sp2jncxm+QXaRr5WVTLodfXJxXyd7m2geObgD8uFipzawTcaamFm/Pzrz2b
+	Q9SBGrZfg1qABuOBPTUd4fhnIY5Gd+4JPE5MnLLmlzEE8csG9RdznAWO/1XeFVv9stCoThF7MeJ
+	+W0wFLFo8zv8YWzqD+3/mURMTsgsQeYzSXfHEKMGc+JvLVdoRkPF8Qs9JpOgiJ/lvWsULP1RbZ3
+	w6MH7D0KmMBIrbb3jlII19v9IBa1jQBi3amShttUqiAdZ9tBz+K6D8KPGkkEx3IEmynlnVpgt8E
+	YXpMoLVSJBW20yxajsBf7x4K1/TZR4C0PkNS7j+R8cuekdOhLGAmei+COC3DlMLjmp/tECqaxnB
+	hJiExGqWZHQew/HerYaN8Y3OrGrbhzopxSYGao1wczx5B465+4L+gSQOAy8c7rs9kXPpWRHM4nt
+	husplZl4FI3He9i0TpL84ReSci06BzIkK5Y=
+X-Received: by 2002:a05:600c:699b:b0:4a0:4a8:d444 with SMTP id 5b1f17b1804b1-4a18e4af334mr195124235e9.33.1791820132890;
+        Mon, 12 Oct 2026 08:48:52 -0700 (PDT)
+Received: from dev-dsk-fgriffo-1c-93421965.eu-west-1.amazon.com (54-240-197-234.amazon.com. [54.240.197.234])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a193f2c992sm210228205e9.5.2026.10.12.08.48.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Oct 2026 08:48:52 -0700 (PDT)
+From: Fred Griffoul <griffoul@gmail.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Avinash Duduskar <avinash.duduskar@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Jordan Rife <jordan@jrife.io>,
-	Rong Tao <rongtao@cestc.cn>,
-	Eyal Birger <eyal.birger@gmail.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Jingguo Tan <tanjingguo@huawei.com>,
-	Lin Ma <malin89@huawei.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Ackerley Tng <ackerleytng@google.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
 	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	iommu@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 21/21] selftests/bpf: Benchmark tracing_multi bpf progs attachment
-Date: Mon, 12 Oct 2026 23:40:23 +0800
-Message-ID: <20261012154024.29423-22-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261012154024.29423-1-leon.hwang@linux.dev>
-References: <20261012154024.29423-1-leon.hwang@linux.dev>
+Subject: Re: [RFC PATCH 0/9] mm: Memory providers for guest_memfd and iommufd
+Date: Mon, 12 Oct 2026 15:48:50 +0000
+Message-ID: <20261012154850.96716-1-griffoul@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <0ae3d92ef99c264cfd76d3c1ddef357e96c98d93.camel@infradead.org>
+References: <20260720111259.122911-1-dwmw2@infradead.org> <20261006183235.16576-1-griffoul@gmail.com> <yq5ald8680t2.fsf@kernel.org> <20261012095800.50250-1-griffoul@gmail.com> <CAEvNRgF1hMz+4ivH6WhsEOLTJGOegYO9AYK6OByYysPp_nVJ=g@mail.gmail.com> <20261012150715.25132-1-griffoul@gmail.com> <0ae3d92ef99c264cfd76d3c1ddef357e96c98d93.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add an x86-64 one-shot generic benchmark comparing 1000 individual
-fentry link creations with one fentry.multi link creation for the same
-1000 bpf prog targets.
+On Mon, 2026-10-12 at 16:13 +0100, David Woodhouse wrote:
+> On Mon, 2026-10-12 at 15:07 +0000, Fred Griffoul wrote:
+> >  Devices are different, because a device may not support
+> > faults. So the provider also revokes the range on the target once it
+> > owns the frames, and iommufd maps them right away. In other words, a
+> > revoke means that the frames behind a range changed, whether they went
+> > away or arrived.
+>
+> That would map to the IOMMUFD 'REPLACE' operation that hitlessly
+> replaces a PTE, but does anyone actually need that?
 
-fentry.multi is much faster than fentry when attaching to 1000 targets
-on a 16c16g QEMU VM on an AMD EPYC 9745 server.
+No, not on the target. Before the move the child has nothing mapped
+in that range, so when the frames arrive iommufd just maps them. That
+is a plain map, not a REPLACE.
 
-./bench tracing-multi-attach-progs
-Setting up benchmark 'tracing-multi-attach-progs'...
-tracing-multi-attach-progs: prepared 1000 identical BPF program targets
-tracing-multi-attach-progs: fentry created and attached 1000 programs/links in 338.171ms
-tracing-multi-attach-progs: fentry.multi created one program and attached one 1000-target link in 47.345ms
-tracing-multi-attach-progs: fentry.multi creation/attachment speedup is 7.14x
+> As I said, assume that the "crappy devices can't take faults and need a
+> scratch patch" issue is dealt with *elsewhere* and not relevant to the
+> guest_memfd/memprovider work. That's purely a quirk on a given IOAS
+> within iommufd.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- tools/testing/selftests/bpf/Makefile          |   1 +
- tools/testing/selftests/bpf/bench.c           |   5 +
- .../benchs/bench_tracing_multi_attach_progs.c | 193 ++++++++++++++++++
- .../bpf/progs/tracing_multi_attach_progs.c    |  24 +++
- 4 files changed, 223 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_tracing_multi_attach_progs.c
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_attach_progs.c
+Agreed. The replace is only needed on the source, where the frames go
+away and a device that cannot fault must see the scratch page instead.
+With that quirk on the IOAS, iommufd does it, and the provider does not
+need to know about it.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 80d8bbbc3084..23bed732d1bd 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -625,6 +625,7 @@ $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
- $(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
- $(OUTPUT)/bench_bpf_for.o: $(OUTPUT)/bpf_for_bench.skel.h
- $(OUTPUT)/bench_strncmp.o: $(OUTPUT)/strncmp_bench.skel.h
-+$(OUTPUT)/bench_tracing_multi_attach_progs.o: $(OUTPUT)/tracing_multi_attach_progs.skel.h
- $(OUTPUT)/bench_bpf_hashmap_full_update.o: $(OUTPUT)/bpf_hashmap_full_update_bench.skel.h
- $(OUTPUT)/bench_local_storage.o: $(OUTPUT)/local_storage_bench.skel.h
- $(OUTPUT)/bench_local_storage_rcu_tasks_trace.o: $(OUTPUT)/local_storage_rcu_tasks_trace_bench.skel.h
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index d5f494184f9d..c7502187e654 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -529,6 +529,9 @@ extern const struct bench bench_trig_fmodret;
- extern const struct bench bench_trig_tp;
- extern const struct bench bench_trig_rawtp;
- 
-+/* tracing_multi link attachment benchmark */
-+extern const struct bench bench_tracing_multi_attach_progs;
-+
- /* uprobe/uretprobe benchmarks */
- extern const struct bench bench_trig_uprobe_nop;
- extern const struct bench bench_trig_uretprobe_nop;
-@@ -615,6 +618,8 @@ static const struct bench *benchs[] = {
- 	&bench_trig_fmodret,
- 	&bench_trig_tp,
- 	&bench_trig_rawtp,
-+	/* tracing_multi */
-+	&bench_tracing_multi_attach_progs,
- 	/* uprobes */
- 	&bench_trig_uprobe_nop,
- 	&bench_trig_uretprobe_nop,
-diff --git a/tools/testing/selftests/bpf/benchs/bench_tracing_multi_attach_progs.c b/tools/testing/selftests/bpf/benchs/bench_tracing_multi_attach_progs.c
-new file mode 100644
-index 000000000000..6cc6851eb488
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_tracing_multi_attach_progs.c
-@@ -0,0 +1,193 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <string.h>
-+#include "bench.h"
-+#include "testing_helpers.h"
-+#include "tracing_multi_attach_progs.skel.h"
-+#include "bpf/libbpf_internal.h"
-+
-+#define TARGET_CNT 1000
-+
-+static struct ctx {
-+	struct tracing_multi_attach_progs *targets[TARGET_CNT];
-+	struct tracing_multi_attach_progs *fentries[TARGET_CNT];
-+	struct tracing_multi_attach_progs *fentry_multi;
-+	int target_fds[TARGET_CNT];
-+	__u32 target_btf_ids[TARGET_CNT];
-+	int fentry_prog_fds[TARGET_CNT];
-+	int fentry_multi_prog_fd;
-+} ctx;
-+
-+static void prepare(void)
-+{
-+	int err, i;
-+
-+	setup_libbpf();
-+
-+	for (i = 0; i < TARGET_CNT; i++) {
-+		struct tracing_multi_attach_progs *target;
-+		int btf_id, fd, obj_token_fd;
-+
-+		target = tracing_multi_attach_progs__open();
-+		if (!target) {
-+			fprintf(stderr, "failed to open target program %d\n", i);
-+			exit(1);
-+		}
-+
-+		bpf_program__set_autoload(target->progs.dummy_fentry, false);
-+		bpf_program__set_autoload(target->progs.dummy_fentry_multi, false);
-+		err = tracing_multi_attach_progs__load(target);
-+		if (err) {
-+			fprintf(stderr, "failed to load target program %d: %s\n",
-+				i, strerror(-err));
-+			exit(1);
-+		}
-+
-+		fd = bpf_program__fd(target->progs.target);
-+		obj_token_fd = bpf_object__token_fd(target->obj);
-+		obj_token_fd = obj_token_fd < 0 ? 0 : obj_token_fd;
-+		btf_id = libbpf_find_prog_btf_id("target", fd, obj_token_fd);
-+		if (btf_id <= 0) {
-+			fprintf(stderr, "failed to find target BTF ID: %s\n",
-+				strerror(-btf_id));
-+			exit(1);
-+		}
-+
-+		ctx.targets[i] = target;
-+		ctx.target_fds[i] = fd;
-+		ctx.target_btf_ids[i] = btf_id;
-+	}
-+}
-+
-+static long create_and_attach_fentry(void)
-+{
-+	int link_fds[TARGET_CNT];
-+	long start_ns, end_ns;
-+	int err, i, j;
-+
-+	start_ns = get_time_ns();
-+
-+	/* An ordinary fentry program is bound to one target when it is loaded. */
-+	for (i = 0; i < TARGET_CNT; i++) {
-+		struct tracing_multi_attach_progs *fentry;
-+
-+		fentry = tracing_multi_attach_progs__open();
-+		if (!fentry) {
-+			fprintf(stderr, "failed to open fentry program %d\n", i);
-+			exit(1);
-+		}
-+
-+		bpf_program__set_autoload(fentry->progs.target, false);
-+		bpf_program__set_autoload(fentry->progs.dummy_fentry_multi, false);
-+		err = bpf_program__set_attach_target(fentry->progs.dummy_fentry, ctx.target_fds[i],
-+						     "target");
-+		err = err ?: tracing_multi_attach_progs__load(fentry);
-+		if (err) {
-+			fprintf(stderr, "failed to load fentry program %d: %s\n",
-+				i, strerror(-err));
-+			exit(1);
-+		}
-+
-+		ctx.fentries[i] = fentry;
-+		ctx.fentry_prog_fds[i] = bpf_program__fd(fentry->progs.dummy_fentry);
-+	}
-+
-+	for (i = 0; i < TARGET_CNT; i++) {
-+		link_fds[i] = bpf_link_create(ctx.fentry_prog_fds[i], 0, BPF_TRACE_FENTRY, NULL);
-+		if (link_fds[i] < 0) {
-+			err = errno;
-+			for (j = 0; j < i; j++)
-+				close(link_fds[j]);
-+			fprintf(stderr, "failed to create fentry link %d: %s\n",
-+				i, strerror(err));
-+			exit(1);
-+		}
-+	}
-+	end_ns = get_time_ns();
-+
-+	for (i = 0; i < TARGET_CNT; i++)
-+		close(link_fds[i]);
-+
-+	return end_ns - start_ns;
-+}
-+
-+static long create_and_attach_fentry_multi(void)
-+{
-+	LIBBPF_OPTS(bpf_link_create_opts, opts);
-+	long start_ns, end_ns;
-+	int err, link_fd;
-+
-+	opts.tracing_multi.ids = ctx.target_btf_ids;
-+	opts.tracing_multi.fds = ctx.target_fds;
-+	opts.tracing_multi.cnt = TARGET_CNT;
-+
-+	start_ns = get_time_ns();
-+
-+	ctx.fentry_multi = tracing_multi_attach_progs__open();
-+	if (!ctx.fentry_multi) {
-+		fprintf(stderr, "failed to open fentry.multi program\n");
-+		exit(1);
-+	}
-+
-+	bpf_program__set_autoload(ctx.fentry_multi->progs.target, false);
-+	bpf_program__set_autoload(ctx.fentry_multi->progs.dummy_fentry, false);
-+	err = tracing_multi_attach_progs__load(ctx.fentry_multi);
-+	if (err) {
-+		fprintf(stderr, "failed to load fentry.multi program: %s\n",
-+			strerror(-err));
-+		exit(1);
-+	}
-+
-+	ctx.fentry_multi_prog_fd = bpf_program__fd(ctx.fentry_multi->progs.dummy_fentry_multi);
-+	link_fd = bpf_link_create(ctx.fentry_multi_prog_fd, 0, BPF_TRACE_FENTRY_MULTI, &opts);
-+	end_ns = get_time_ns();
-+	if (link_fd < 0) {
-+		err = errno;
-+		fprintf(stderr, "failed to create fentry.multi link: %s\n",
-+			strerror(err));
-+		exit(1);
-+	}
-+
-+	close(link_fd);
-+	return end_ns - start_ns;
-+}
-+
-+static void cleanup(void)
-+{
-+	int i;
-+
-+	tracing_multi_attach_progs__destroy(ctx.fentry_multi);
-+	for (i = 0; i < TARGET_CNT; i++) {
-+		tracing_multi_attach_progs__destroy(ctx.fentries[i]);
-+		tracing_multi_attach_progs__destroy(ctx.targets[i]);
-+	}
-+}
-+
-+static void setup(void)
-+{
-+	double fentry_multi_ms, fentry_ms;
-+	long fentry_multi_ns, fentry_ns;
-+
-+	prepare();
-+	fentry_ns = create_and_attach_fentry();
-+	fentry_multi_ns = create_and_attach_fentry_multi();
-+	fentry_ms = fentry_ns / 1000000.0;
-+	fentry_multi_ms = fentry_multi_ns / 1000000.0;
-+
-+	printf("%s: prepared %d identical BPF program targets\n",
-+	       bench->name, TARGET_CNT);
-+	printf("%s: fentry created and attached %d programs/links in %-.3lfms\n",
-+	       bench->name, TARGET_CNT, fentry_ms);
-+	printf("%s: fentry.multi created one program and attached one %d-target link in %-.3lfms\n",
-+	       bench->name, TARGET_CNT, fentry_multi_ms);
-+	printf("%s: fentry.multi creation/attachment speedup is %-.2lfx\n",
-+	       bench->name, fentry_ms / fentry_multi_ms);
-+
-+	cleanup();
-+	exit(0);
-+}
-+
-+const struct bench bench_tracing_multi_attach_progs = {
-+	.name = "tracing-multi-attach-progs",
-+	.setup = setup,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_attach_progs.c b/tools/testing/selftests/bpf/progs/tracing_multi_attach_progs.c
-new file mode 100644
-index 000000000000..0ea4513904cd
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tracing_multi_attach_progs.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("syscall")
-+int target(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("fentry")
-+int BPF_PROG(dummy_fentry)
-+{
-+	return 0;
-+}
-+
-+SEC("fentry.multi")
-+int BPF_PROG(dummy_fentry_multi)
-+{
-+	return 0;
-+}
--- 
-2.55.0
-
+Thanks,
+Fred
