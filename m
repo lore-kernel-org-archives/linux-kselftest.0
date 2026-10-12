@@ -1,131 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170F6175A85;
-	Mon, 12 Oct 2026 10:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA00D41A50B;
+	Mon, 12 Oct 2026 10:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791800010; cv=none; b=Q0Z/7zEQEnd0lcCXtTKujMxVJw1KnyuXKVWqcSBC+ACBYP1F7RZlYoqclBPOOvTkU+ZOdg5LD95+LExx+eUb4GBiqBgWAs8KiC/a88CLI3Q5HBV6qFpSmGq/HnRmVB2iQxWmuUAIkEXo4eIRVAPirj0cvsn2/XQceVP5qCjWqyE=
+	t=1791800757; cv=none; b=eCLMK81FxYj3vQVmLAzAp4ajCseplIUWOhBKKypaaU8xbB/bhOIsAs88P1XtuMY3lW+tOTKNH+/ony/4in5SKqLpDgiSlaa0AU5OQXo9enm0H92SnGdmQXRQDyPQqmeCguuD9paa+nf2Zbw4hhOc99iL/z0rCIh6VBd8ehUYaBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791800010; c=relaxed/simple;
-	bh=WbsJ+VVJv8PRArnVKz6VpTkUlNDlxU6p0nj4wdwxnbw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mYL8kPT6J48yKrkzmeKX1VXi2icufVIbhYTTpqPDBRyiPsKc7sEmrCzh5pGdRjS/Z3CS0aj+qaXIDbtKYyUbsL8cdYdArgV6MRKxyTtAyfhOJu95GG+2yTy8gaQP6JX7D3K6PnfXLxF9eH082u/1wVemypKhzigu5c0e1f01FDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cn9Ff8MY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791800757; c=relaxed/simple;
+	bh=mzrYFH3CpfUkd38PYRJaOW6C62pyLbdeCdal8MeLj8k=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=PrZuNPfHk8hDEUYWBrMpd5VQCfvp8hoaCAKK+YK4Cppv0NT8cARh0YSGE8aSnakknZuhSmFmvtnE+TFr03WVNMKpTCT6SEiFeupUOI4+7L0dp46eJc1AuiKwZVT5oO89jJh7tBa6qYubysXZHorOLLzgqnIV2Xklv45+Fe+6EP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EQy4hJlN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cn9Ff8MY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D081F0089B;
-	Mon, 12 Oct 2026 10:13:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EQy4hJlN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F21E1F0089C;
+	Mon, 12 Oct 2026 10:25:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791800000;
-	bh=D/l6twGSi8Tv/lid+YWGIvfrNTjgFzfBWWIeKTSOErY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Cn9Ff8MYQe3UISF+r6gBfLnNaTTS3i4pISLKlqevgMMMdI/reW+MnkisEzP0Z+uKr
-	 9GzUCM3j3Qlz7LXc8jVMVKjqitJ4dff3tMidZR92hhpCB4/JY+iBDFCRVwb5NFjqd0
-	 KIPN4n1CzvRQ3hjufLnbYuVsHOyM9Vujen3zS+pLqTKuCpNw8WxFFvqBr3Lnb7gdFO
-	 V/5VppGwhqd895q06Ud4OYjLVamaDNFCMLT3y9mGimR3Kb2op5iW2Q7QAr51lQR45J
-	 X5TfRRPPYTkmA81t92iZjPnpC0WNZvy5mJZfaDfiVAQyhH7D1k27EQYGtjp2MKzgWe
-	 pGJV9/deaxAmg==
-Date: Mon, 12 Oct 2026 11:13:13 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, liam@infradead.org, 
-	vbabka@suse.com, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
-	shuah@kernel.org, jhubbard@nvidia.com, kaleshsingh@google.com, 
-	anshuman.khandual@arm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/12] selftests/mm: improve mremap_test
-Message-ID: <asyxQbp8EfVE9yQs@gremlin>
-References: <20261006092511.145776-1-sarthak.sharma@arm.com>
- <3a0673a6-744b-45a1-80fd-737a366fafc4@arm.com>
+	s=k20260515; t=1791800746;
+	bh=jvkm/WTwdOssOISWC9CLiLOFK4k8ZC+6Oi2fNMGz2fE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=EQy4hJlNc/cKXyiXkkMmd+jFWDnN8Msgu6RqEPD2WCSL4sT3MjaFNeUMwsqBL7X9s
+	 h00RZIfThNv+FHIDFCINf4L10brPG3zmbWcihqzp+EVIKIyhnJmAC5VSYOszL6U89K
+	 w5rWoO74c8id87ezjyNbEu9iotLad71ZyvuzWashnsBHYX3jLlAN9tS0UJtfZhQosq
+	 87KqYyScxj2flaCCs54Y0pUqjfgf5ECZDfkcoMuJQvMqevDUCPZgej7qj46llRp5FP
+	 oHFYD7EhsqaIiCDvFJV7eOQ9zfErqaq3sLbUB6a0h9k9ZV46uojLr/aRfPm4CsR+z3
+	 0ieZAboFIawaQ==
+From: Christian Brauner <brauner@kernel.org>
+To: Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Aleksa Sarai <cyphar@cyphar.com>, Kir Kolyshkin <kolyshkin@gmail.com>
+Cc: Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>, 
+ "Eric W . Biederman" <ebiederm@xmission.com>, 
+ David Howells <dhowells@redhat.com>, Amir Goldstein <amir73il@gmail.com>, 
+ Andrei Vagin <avagin@google.com>, Shuah Khan <shuah@kernel.org>, 
+ Giuseppe Scrivano <giuseppe@scrivano.org>, linux-fsdevel@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ containers@lists.linux.dev
+In-Reply-To: <20261006-nsfs-prune-rfc-v3-0-adb97ea52868@gmail.com>
+References: <20261006-nsfs-prune-rfc-v3-0-adb97ea52868@gmail.com>
+Subject: Re: [PATCH v3 0/2] mount: add OPEN_TREE_DROP_MNTNS_MOUNTS
+Message-Id: <20261012-einnimmt-sukzessiv-mildern-32236d226f83@brauner>
+Date: Mon, 12 Oct 2026 12:25:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a0673a6-744b-45a1-80fd-737a366fafc4@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.17-dev-3d1b8
 
-On Mon, Oct 12, 2026 at 10:20:45AM +0530, Sarthak Sharma wrote:
-> On 10/6/26 2:54 PM, Sarthak Sharma wrote:
-> > This series fixes correctness issues in mremap_test, simplifies its
-> > test infrastructure and strengthens validation of remapped mappings.
-> >
-> > Patches 1-3 remove unused command line handling, unnecessary cleanup
-> > checks and redundant errno handling. Patch 4 converts the test to use
-> > kselftest helpers and removes manual failure tracking.
-> >
-> > Patches 5-8 fix handling of unavailable userfaultfd support, unexpected
-> > mremap() successes, data-corruption failures and cleanup after mmap()
-> > failures. Patch 9 removes perf tests and timing infrastructure.
-> >
-> > Patches 10 and 11 replace threshold-based random-data validation with
-> > sampled validation and a deterministic data pattern. Patch 12
-> > strengthens multi VMA validation by also checking the mapping state
-> > of holes after remapping.
->
+On Tue, 06 Oct 2026 23:23:55 -0700, Kir Kolyshkin wrote:
+> crun, a container runtime, recently started using OPEN_TREE_NAMESPACE to
+> set up the container's mount namespace, and open_tree(OPEN_TREE_CLONE)
+> for the sources of its bind mounts.  This turns out not to work on hosts
+> that have a mount namespace pinned anywhere below such a source: the
+> recursive clone picks the pinned namespace up, and move_mount(2) then
+> refuses to attach the tree with ELOOP from check_for_nsfs_mounts().
+> 
 > [...]
->
-> > ---
-> > Sarthak Sharma (12):
-> >   selftests/mm: mremap_test: remove command line options
-> >   selftests/mm: mremap_test: drop munmap() checks from cleanup paths
-> >   selftests/mm: mremap_test: simplify errno handling
-> >   selftests/mm: mremap_test: use kselftest helpers
-> >   selftests/mm: mremap_test: skip test when userfaultfd is unavailable
-> >   selftests/mm: mremap_test: fail unexpected mremap successes
-> >   selftests/mm: mremap_test: fail on data corruption
-> >   selftests/mm: mremap_test: handle cleanup after mmap failures
-> >   selftests/mm: mremap_test: remove perf tests and timing
-> >   selftests/mm: mremap_test: replace validation threshold with sampled
-> >     checks
-> >   selftests/mm: mremap_test: replace random data with deterministic
-> >     pattern
-> >   selftests/mm: mremap_test: strengthen multi VMA validation
-> >
-> >  tools/testing/selftests/mm/mremap_test.c | 701 ++++++++++-------------
-> >  1 file changed, 291 insertions(+), 410 deletions(-)
-> >
->
-> I wanted to address the concern Sashiko has over this patch series [1].
-> It says that mremap(..., MAP_FIXED) over a range containing multiple
-> VMAs should unmap the whole range first and then map the VMAs.
 
-I don't think you need to spend time worrying about sashiko stuff about
-mremap() behaviour in a test series :)
+Applied to the vfs-7.4.mount branch of the vfs/vfs.git tree.
+Patches in the vfs-7.4.mount branch should appear in linux-next soon.
 
->
-> But this is not the case, as was discussed on the list earlier as well.
-> We iterate over the VMAs in the range and only unmap and then map the
-> region that the VMAs occupy. IOW, as quoted by Lorenzo [2], "the
-> sematics are such that gaps are not propagated (i.e. it is as if you
-> mremap()'d each individually)". So if we remap over an existing mapping,
-> the mapping region on which a hole is remapped should not be affected at
-> all. So this is a false positive.
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-I will be removing the gaps stuff in any case (as discussed elsewhere
-too).
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-It's problematic, more so for the fact stuff can get mapped in gaps before
-the mremap() operation.
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
->
-> While here, requesting for some feedback on this series, if anyone has
-> had a chance to look at it :).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.4.mount
 
-Thanks for the series, this cycle has been very busy so I think this is one
-for the next cycle (i.e. targeting 7.5).
+[1/2] mount: add OPEN_TREE_DROP_MNTNS_MOUNTS
+      https://git.kernel.org/vfs/vfs/c/73b40395c71c
+[2/2] selftests/filesystems: test OPEN_TREE_DROP_MNTNS_MOUNTS
+      https://git.kernel.org/vfs/vfs/c/e6e54e7117f6
 
-So I'd recommend resending at 7.4-rc1?
-
->
-> [1]
-> https://sashiko.dev/#/patchset/20261006092511.145776-1-sarthak.sharma%40arm.com
->
-> [2] https://lore.kernel.org/linux-mm/agH1ZSdX_7QF8P_I@lucifer/
->
-
---
-Cheers, Lorenzo
