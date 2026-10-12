@@ -1,148 +1,144 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00B44A2608
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 15:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348733EAC8D;
+	Mon, 12 Oct 2026 15:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791820136; cv=none; b=vAVrrKGJz9q91ptWEDQe4SoCYa64ccncMLLKZHPtlzLe1NMPZ0L+8eiALUhfF7jqheA11/GkpLw2NjXHdBOvhS+LYfh9QZmQwf8bX4wnYHxBskWKOOhXOOFkfXCxf1bYQjRAiG82yXjC4ZeQGT0H6lsubibu6t/unAl0SDrXkZA=
+	t=1791820222; cv=none; b=X9QP5QH1AdwytKHJqERHN3QoiCj65cpVMpFaeiOFJEdZVAZHUWDPnotUVKPlL5Fe13Sb/kwtQ+Lq/tM5I7yjtgZ6bTAO5WX1znKBKLEdyr/tjg1tnefYcKlwv/kljAqt4vKWOBmpB1dy+RRSfieXYNQUh6xrOoUncsMHVOhjEdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791820136; c=relaxed/simple;
-	bh=IBQngc9E6IMptShoUCo5yKbFcmdbP8vVNx4ur1yYVnU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EwOuBDMR2TsSNxvy4xVJ/YXQXg+B2zKZEbhX6bUCW9WyuHxwKE3bcxoucVwkrzEM0DwK1iYb7XILfqjsbznZEBUxpM+pum/oOlG18adVZ2SjmZx0RIrRn/H3s5QRi55qjJe/VV0sC4PkG5ZJvI+NhLS7dHbNuI4TNTdqy5VF4D0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YTOZbUeL; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791820222; c=relaxed/simple;
+	bh=4Ly/f7Y4JBgF4sXV9yUVKtDR+vJFEanSiyB/mSBOITk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=P/2G9p+oiYdLkSbMJcWzLeQmAn+7tiVg5bdhZcJyc766CTon+MQfkHyHvZdEAkfAaTXx79WKNnIzjfVaLJ5FBdkTC89Ry6w4i+rH5yi8dxYQSoTm5YFWCjYxa2EjE41xUTy/J5VRQzDtrJXKKoOAcLnzwLYssI+mb0nO0p0bN7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R3dX9MUs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YTOZbUeL"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49d05d51553so13288685e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 08:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791820133; x=1792424933; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bz+XxQbQvV9Rkz3jiplflbfyEnwSo6hWkWyEVkUNcs8=;
-        b=YTOZbUeLKKbxksGFl3X9SRUSILmTkpQbdG3/S2suV36u4ulO3yQ/CwHt61806PNp5E
-         ow1LIvzCLHvBVYVWmAmeQ1RiutgtMpmbxUDWdEjr6PFBU1zADRngD4F+c+O7y6MZhm/3
-         OItOxC8zgX+czXK6nwSGzK6l1xcFKyZeSAWPwH8q57IlU999l80A21QlkgPoZSEjYEnn
-         NiKCYOISk2rKQl2PIGpBTQvP7cCSXCSckUsWWFfSd9auGOrmLG9yxlXBvUZyDmZcMNOU
-         VLDRbI6HZj7h66MzgD/3RF7W5NxrdXdj8IQCBfXNj9fscpFDo3QVJL+Bbcu8DwuKHmVw
-         CdeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791820133; x=1792424933;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bz+XxQbQvV9Rkz3jiplflbfyEnwSo6hWkWyEVkUNcs8=;
-        b=wSehBGO0/MvOt6fsFpdarQ3NceUqLJ29hQFrfvhYOxU21zefWeBHqpK/eK5pkr6/ZZ
-         1l5H2YXILB6H8AZjQGGiGL+BMWwWS8bh1KEvJ5eSX4XYT7INAENC6PaOSE3xATExOkYI
-         5bWDS3zguJ4XF8vT30OelHIEvGNNmanIGx0XAc1VmuBcfLCtGYIpOKihyUAvJdXQcX/O
-         fJS64onV02k6vPhSrVo0AudlBT5AtFQ1Ppg8S5sTTWdsmx+fCxehqKPUNjSanemFxrCY
-         MQPa7CbEysarFzU7oJhYEo/DFfPRZqZbUjpHgK6/LcGB8LUDvzElizY+nbJalrMZ8TZw
-         /MkQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz/hyCqK2FlbxBhRBy+VCYyGBU42g02hfIu8fd6wQdG/RNJGlNTeS3fTRYKFFOkQcoWibhhwUIik0drBveZz9g=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKA4cboEuEJxAVtLnvkvhxcGSro5Zp3Q5jlgPPRWVKHwosms8D8
-	nTHK9gdELC1/8VqHlnfDpZ0jjhikmGVXvdW5jXVgu5T0TT00wSC10r4J
-X-Gm-Gg: AYBFou2jWEPNVQ0lWAVSYNUBL/wquahhT8gzmITc+IJQpuYxeG3EWoHi4DgYVY5lN0o
-	hkQpzI1+8atfTy/FctxH8XVR6zXLFBmBCTIi1kuWiN6IFn9xbK2XpGod9KPDQCaQg3z2bdNcBXL
-	YkoFEMm4f0Zsznv8sp2jncxm+QXaRr5WVTLodfXJxXyd7m2geObgD8uFipzawTcaamFm/Pzrz2b
-	Q9SBGrZfg1qABuOBPTUd4fhnIY5Gd+4JPE5MnLLmlzEE8csG9RdznAWO/1XeFVv9stCoThF7MeJ
-	+W0wFLFo8zv8YWzqD+3/mURMTsgsQeYzSXfHEKMGc+JvLVdoRkPF8Qs9JpOgiJ/lvWsULP1RbZ3
-	w6MH7D0KmMBIrbb3jlII19v9IBa1jQBi3amShttUqiAdZ9tBz+K6D8KPGkkEx3IEmynlnVpgt8E
-	YXpMoLVSJBW20yxajsBf7x4K1/TZR4C0PkNS7j+R8cuekdOhLGAmei+COC3DlMLjmp/tECqaxnB
-	hJiExGqWZHQew/HerYaN8Y3OrGrbhzopxSYGao1wczx5B465+4L+gSQOAy8c7rs9kXPpWRHM4nt
-	husplZl4FI3He9i0TpL84ReSci06BzIkK5Y=
-X-Received: by 2002:a05:600c:699b:b0:4a0:4a8:d444 with SMTP id 5b1f17b1804b1-4a18e4af334mr195124235e9.33.1791820132890;
-        Mon, 12 Oct 2026 08:48:52 -0700 (PDT)
-Received: from dev-dsk-fgriffo-1c-93421965.eu-west-1.amazon.com (54-240-197-234.amazon.com. [54.240.197.234])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a193f2c992sm210228205e9.5.2026.10.12.08.48.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Oct 2026 08:48:52 -0700 (PDT)
-From: Fred Griffoul <griffoul@gmail.com>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R3dX9MUs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3871F0089C;
+	Mon, 12 Oct 2026 15:50:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791820220;
+	bh=limYlGucbLfnD6/B196ITj8VoydVRIr6Jy1/waZAj8E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=R3dX9MUsVzFhlYf/JqRbrpziAFTT8EEiwanDofQ6t1q9WwenOmpt1fVFkJUPT+47G
+	 3lErBIH1u84D0EZMGlqFMTQeNlZZqb2G0b1RRiAPF4OW9tzDoNivyUlI4HpZUnkFJG
+	 1Ti1bf0m0jNEcdfwrcs5V4FBNRKh32yB48B1ce7q4tdqsLmXHxsldH/zFbs/Pc7rih
+	 F36v9vtzv2tfJKPVow3s/k1FfBcfY1cFIJLjttqNj/TJsktXXxEyIdabIU75U2PWVh
+	 7XP+Vt8BMKKZ1Z1YzXzMS3bYkyAf6iamntYUztBn6CE9+P0CPSDin5qNPLh3mq369j
+	 VQ8RJ4+xIJvng==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: David Matlack <dmatlack@google.com>
+Cc: kexec@lists.infradead.org,  linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
 	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Ackerley Tng <ackerleytng@google.com>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
 	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	iommu@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 0/9] mm: Memory providers for guest_memfd and iommufd
-Date: Mon, 12 Oct 2026 15:48:50 +0000
-Message-ID: <20261012154850.96716-1-griffoul@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <0ae3d92ef99c264cfd76d3c1ddef357e96c98d93.camel@infradead.org>
-References: <20260720111259.122911-1-dwmw2@infradead.org> <20261006183235.16576-1-griffoul@gmail.com> <yq5ald8680t2.fsf@kernel.org> <20261012095800.50250-1-griffoul@gmail.com> <CAEvNRgF1hMz+4ivH6WhsEOLTJGOegYO9AYK6OByYysPp_nVJ=g@mail.gmail.com> <20261012150715.25132-1-griffoul@gmail.com> <0ae3d92ef99c264cfd76d3c1ddef357e96c98d93.camel@infradead.org>
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <shuah@kernel.org>, Tarun Sahu <tarunsahu@google.com>,
+	Vipin Sharma <vipinsh@google.com>
+Subject: Re: [RFC PATCH 0/5] liveupdate: LIVEUPDATE_SESSION_RETRIEVE_INTO_FD
+In-Reply-To: <20260901180713.4185641-1-dmatlack@google.com> (David Matlack's
+	message of "Tue, 1 Sep 2026 18:07:08 +0000")
+References: <20260901180713.4185641-1-dmatlack@google.com>
+Date: Mon, 12 Oct 2026 17:50:17 +0200
+Message-ID: <2vxz7bjmkjeu.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Mon, 2026-10-12 at 16:13 +0100, David Woodhouse wrote:
-> On Mon, 2026-10-12 at 15:07 +0000, Fred Griffoul wrote:
-> >  Devices are different, because a device may not support
-> > faults. So the provider also revokes the range on the target once it
-> > owns the frames, and iommufd maps them right away. In other words, a
-> > revoke means that the frames behind a range changed, whether they went
-> > away or arrived.
+Hi,
+
+On Tue, Sep 01 2026, David Matlack wrote:
+
+> This series adds support for LIVEUPDATE_SESSION_RETRIEVE_INTO_FD, a new
+> UAPI to enable preserved files to be restored into a userspace-provided
+> file instead of a kernel-allocated file, and uses this to support
+> preserving tmpfs files in-place without any changes to the LUO ABI.
 >
-> That would map to the IOMMUFD 'REPLACE' operation that hitlessly
-> replaces a PTE, but does anyone actually need that?
+> The Live Update Orchestrator (LUO) API currently explicitly returns a
+> new struct file for every preserved file during retrieve() (e.g. via
+> memfd_alloc_file()). This then forces userspace to use anonymous memfds
+> for all in-memory files it wants to preserve. This works reasonably well
+> for VM guest memory but does not work well for other types of files that
+> userspace may want to preserve (e.g. in-memory logs, binaries,
+> configuration files, etc.).
+>
+> Preserving entire tmpfs mounts in-place would require a large amount of
+> kernel support and would effectively make tmpfs an ABI, which is a
+> non-starter (or so I hear). Instead, we can delegate the reconstruction
+> of the tmpfs mounts (directory structure, permissions, etc.) post-kexec
+> to userspace. The kernel just needs to preserve the contents of tmpfs
+> files and provide userspace a mechanism to restore those contents back
+> into a specific file on the filesystem after the kexec. Hence,
+> LIVEUPDATE_SESSION_RETRIEVE_INTO_FD.
 
-No, not on the target. Before the move the child has nothing mapped
-in that range, so when the frames arrive iommufd just maps them. That
-is a plain map, not a REPLACE.
+Based on the discussion at LPC, we came to the conclusion that this is
+the path forward.
 
-> As I said, assume that the "crappy devices can't take faults and need a
-> scratch patch" issue is dealt with *elsewhere* and not relevant to the
-> guest_memfd/memprovider work. That's purely a quirk on a given IOAS
-> within iommufd.
+Before reviewing the code, here's an idea that Pasha briefly brought up
+briefly at LPC, and I more or less agree. I'd like other opinions on
+this.
 
-Agreed. The replace is only needed on the source, where the frames go
-away and a device that cannot fault must see the scratch page instead.
-With that quirk on the IOAS, iommufd does it, and the provider does not
-need to know about it.
+Should we make the interface more generic by allowing userspace to pass
+extra arguments to PRESERVE_FD and RETRIEVE_FD? This effectively gives
+each file handler an additional uAPI of its own. The upside is that it
+would be more extensible and we should be able to accommodate more use
+cases with this. The memfd/shmem extra uAPI will take an optional target
+file to retrieve into.
 
-Thanks,
-Fred
+For example, the guest_memfd patches might use this to tell the KVM FD
+to retrieve the guest_memfd into. Of course, KVM needs to see if this
+makes sense (alternative being preserving the KVM FD too), but this is
+just an example of how it might be used. I think VFIO also does some
+workarounds by using an anon inode on retrieve. It perhaps might be
+useful there too, though I don't understand that problem well enough to
+talk in more detail.
+
+>
+> An alternative approach to restoring data to a named file would be
+> supporting a zero-copy sendfile() that can be used to convert named
+> tmpfs files to/from memfds across the kexec. But this poses significant
+> challenges on the *preserve* side since the preserved file might still
+> be actively in use. The benefit of the retrieve-into approach introduced
+> in this series is that it does not require dealing with two different
+> files. There is only ever one file that owns the preserved memory.
+>
+> By leaving file and metadata allocation purely in the purview of
+> userspace, programs can create the target files where they want, with
+> the names and security permissions they desire, before directing the
+> kernel to restore the preserved folios into them.
+>
+> Currently, only tmpfs shmem files are allowed as valid target receptors.
+> Attempting to target populated files, or anything other than an empty
+> shmem file, will trigger -EINVAL. HugeTLBfs files could be supported in
+> the future.
+
+I suppose we should rename all the memfd_luo_* stuff to shmem_luo_*?
+
+>
+> The coding work for this series was done with assistance from Gemini. I
+> am not sure what is the latest recommendation is with respect to adding
+> Assisted-by tags, but I can add them when I send out the real patches if
+> this RFC looks acceptable.
+
+The latest guidelines per Documentation/process/coding-assistants.rst
+seem to be "Assisted-by: LLM".
+
+Although in _my_ opinion, I'd reckon most patches these days are
+assisted by an LLM. The code might not necessarily be generated by an
+LLM, but I think a large majority of developers use LLMs in some
+capacity during patch development. So "Assisted-by: LLM" doesn't add any
+value to me. Other people seem to find it useful, so please do feel free
+to add it to your patches.
+
+[...]
+
+-- 
+Regards,
+Pratyush Yadav
