@@ -1,157 +1,215 @@
-Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.37])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522573451A7;
-	Mon, 12 Oct 2026 00:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F2B1A9FA0
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 01:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791766781; cv=none; b=cttGzCxGa4VxjIRHw0VHol6nkHWjui6tH9IHV1FYFEMXa49FUB28l+kmOiHzZ5tyfXScfh0jhdckYnkAEGAaYaKNN/zB3T/LF8sWh+mK9/h/DhEfZCh02JfX8N0G83vmUjNJYxrSHTqilwMizriyIb6+ig3XUV+X7UwJ/6xWYMA=
+	t=1791767839; cv=none; b=Jvzam3Q/nLIiLnJGDUHglu2ub3hIEqdlv0eLXPYh75k8Z703kvLJxNaGDy+YWMTmhym8Vav2TwYqRTJPv9a1DWaeS2KfdB4McxWkcSQM/BQTGhI0+LkJiozdawF88soiDTvDQMNHL8K4ewBxuy1OftLJOK3QBbpYx9J27aCd8x0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791766781; c=relaxed/simple;
-	bh=YSyZHAB6Vtxc17lVBX2ybA+plNkuA8JrLtQTp8bDBgE=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=se+6sIvOBNuYX0OLm1QbOVQURdicIw0J1mYRpDaLU/aslI+bHMNV3lPRdgk+0PkJfSxM+wp8IOmxVjR/bPvZZ3BqB2n3PrZUfxxKZp5tSgjwIlhzG4FACCbFxKUTBbPdBhN1OH/8i35xt7LSFeOA6qm8oZfA9caDLHxXx2kz7n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=XBUq+SEh; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=c6KDWHV+; arc=none smtp.client-ip=160.80.4.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
+	s=arc-20240116; t=1791767839; c=relaxed/simple;
+	bh=f9OqVQRTl+RsOTJdCEieHRhe20rLRHVgPk2WCcq/hCk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KZQrWLq9Daqbz6y2esdXkcXazUzkjRZyc6JO206Xt4EE4qmgWl0UC/EiXo1GSB2ATk4C4wJmOQHf/Ac2cWI5EzFRgDt7x3GuSckO9AkKPAc6n3d7bvy3g5P1bUwAnAswjWxZfS6agc1jsy2hWa5KIap3HZdgG4gVVtpPxQ6wVpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D5ntySTK; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="XBUq+SEh";
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="c6KDWHV+"
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 69C0x4p6020545;
-	Mon, 12 Oct 2026 02:59:09 +0200
-Received: from lubuntu-18.04 (host-79-32-222-240.retail.telecomitalia.it [79.32.222.240])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 16DEB12289F;
-	Mon, 12 Oct 2026 02:59:01 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1791766741; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HhHmgfXv1JVxKVN/OgXAPIowjeub0F9/DIzebdwQqM0=;
-	b=XBUq+SEhqYcghbD7qdyo0maRVL7BbGREUMT/gdyTYMHv4U7TV4yTc03NrQMEfChU5g2oUh
-	a6aeON6CkqLEhQDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1791766741; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HhHmgfXv1JVxKVN/OgXAPIowjeub0F9/DIzebdwQqM0=;
-	b=c6KDWHV+exO5JQp+6M+3mEhExto4Uv2V9y5cMK1u8p9WkcUwf8J5PdEREJqMxKhwnHxFQU
-	Wg553JMvACVFkDzwlXj8TvW5NDmdWWDlIt6UFfzxPl0QbZc8HAux9ZVKAY7x77GZQuZe7E
-	1lP0bwfXXiNINAyD0tlPBkWyDOyJ1BuWk2KY+3PaU3OTRbc66CY4IxEJCeQ7erPE7lHUWd
-	68/HfDJbAFUZqK/aA361YgJjLSsXJaaPKNG2p2hPcWNJPpKW7UkLOFbKQcYDNOPqDv1BFd
-	3RugaG6ENhsHWWGMj8VFdE1+dP8wNToBg+vEHpDPWVRbF4+cUeKp8tZPlBLfrg==
-Date: Mon, 12 Oct 2026 02:59:00 +0200
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>, Jakub Kicinski
- <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Eric Dumazet
- <edumazet@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Hangbin Liu
- <liuhangbin@kylinos.cn>,
-        stefano.salsano@uniroma2.it, Andrea Mayer
- <andrea.mayer@uniroma2.it>,
-        andrea@common-net.org
-Subject: Re: [PATCH net-next v2 2/5] seg6: add RFC8986 flavor support for
- End.X
-Message-Id: <20261012025900.c2321bfa92c5863d21efdba3@uniroma2.it>
-In-Reply-To: <20261009-srv6_flavors_endx-v2-2-56ac7f838f41@kylinos.cn>
-References: <20261009-srv6_flavors_endx-v2-0-56ac7f838f41@kylinos.cn>
-	<20261009-srv6_flavors_endx-v2-2-56ac7f838f41@kylinos.cn>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D5ntySTK"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ab868eb9cfso560581a91.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 18:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791767836; x=1792372636; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HVAtScMA0Gu/eshIKxcJc5e1pXYr3Zfr1cY3+NzAluM=;
+        b=D5ntySTKjsCKR9SWPN5mC0aJGtfG1mongNfzmqMze+dEp4bgg5KGHxyg5MTDnhVQYN
+         pgD0rR1wWRshCKSSZvzeRXORLc6AZr0J8Ylil7waBNsgCHoGnLp6cObdtV2/sQTFAB1I
+         X0OCwxpgDwDxCWrjWXjnnngyvOfBrAMrUVDMQVM7MUTQfYqQlf0gtl4cKGElHmt2JHtj
+         sAm4+QtflqQPfZlJ7+NS3yl+TXA5+Cnqix4/PgS4R2G/cbAHKQIT6LfKvg68QQs1NhDk
+         nOFpQ3t6NSYspvRPn0OCt5XBjHiaEchYwgq4TYWdTcA/2OWlugm1J34Nxj9BE0HoT7bj
+         KA0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791767836; x=1792372636;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=HVAtScMA0Gu/eshIKxcJc5e1pXYr3Zfr1cY3+NzAluM=;
+        b=jYkitEq0TnlVNp5UaBpcNveDxYchfozWFtCGqpnT1oa41C/83POt87OAXY/kUS7icc
+         1rH9g1CXb9OZjNSeUAG0Je0N9AtaLzwIDwx7n+/dgZ4D9MNgCXSb0EpO8ocnaXQRvpJU
+         BNnCuWIX7ieWul0GaNTmyfmD1Jn/m1n4qV3/NI5Ta8NdHDukWSwLG8v7W/jDBwbhj7H6
+         bwTd3wMMlpYC+kK8X8LYJXNebBaYgO99paTF6N2VTtq3SmEE6xRE5vIdMfqETCaVq9tp
+         yQ4dmBIr0FgVnVHkeVqnc5mC7Avr5mRJXJyUyasHkCEK+GsxG8VnPOPPefwitcvI++xd
+         pw0A==
+X-Forwarded-Encrypted: i=1; AKwUvBymHHwnMLg/Q/V4MmCF2IWniAJVmPL/XM8TcRbbBQAL8guonrg+03DZ2l90Tum6U0krhxQT36fdmZfQUEaJLfc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJDjdF5qHln2nmMp7AsQ0xcqB5oo0ELW5KjkjDVazez3n6JNKE+
+	KhKUebsBsj1b5KNvvpY9b8+fjda8Ivq3KEejZ+tAZrB3hKBrix+VrgFr
+X-Gm-Gg: AYBFou1TPPChR7yGG1PwlGzsqOSyXH9ysCm9Byt2wEh+Y/JHxaXyrCl7DdnKOKFj2xm
+	QFmOPbYxa7kxh27uQcWeuswQoEVRduij2FecQ+HMTnmZQ+X/skYsj0QEtfPv/w6aUlfQUNQpVDQ
+	MiSWANEFbXvBF1ukvzu6UrIoeMJlToqclgK7y01uV/PtcNArF7bamXnXAE6t9Zi1DdnKtD0hBB/
+	ItRt/v1xShEzPS9i2KyXu+HF8jtJeJC7+MhoqrDXksI3xRGcnvSnibh077ieFJr+g7nIalNhIhI
+	LJyi9wWZRAUbq/J9BeG8nmBmbwFbCWP+xfdaLUWfvgY3UbOrCnO6feZFLJSUnSMhxsIPdmtp1ky
+	gxvNaIc+84U4o9xYhlUBhMiF4dkLi9RZIGWyZslMg3ZTTRqWoGeSSQduwRl4wrz4qque8PmHBBC
+	D/Dqer9ENPJhqXifPnPNfPVQR3eb54prUCR3B0RgaIlQF8Ktdd3U1Yoa0PgHOfs3tKOiWyRevFW
+	yMSiDK/0TSSPqD9EnxkCs0EEfh2WktJQORKYsB0f7J0qVaF2RHN1yZo2poPUh0m2RiAyqqBwXX2
+	6Mxo+eywRC0=
+X-Received: by 2002:a17:90b:3b84:b0:3a9:8482:420 with SMTP id 98e67ed59e1d1-3ab3a8e55aamr6706622a91.40.1791767836191;
+        Sun, 11 Oct 2026 18:17:16 -0700 (PDT)
+Received: from m-upc-A520M-HDV.lan (oki-109-236-14-10.jptransit.net. [109.236.14.10])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab38dd5864sm13743307a91.8.2026.10.11.18.17.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Oct 2026 18:17:15 -0700 (PDT)
+Sender: Yuyang Huang <uyoko90@gmail.com>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: Ajay Singh <ajay.kathat@microchip.com>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Kees Cook <kees@kernel.org>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+	Nikolaos Gkarlis <nickgarlis@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf.kernel@gmail.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH net-next v11 0/6] rtnetlink: dump link-layer multicast addresses
+Date: Mon, 12 Oct 2026 10:17:01 +0900
+Message-ID: <20261012011707.3378-1-sigefriedhyy@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 09 Oct 2026 17:58:38 +0800
-Hangbin Liu <hangbin.liu@linux.dev> wrote:
+"ip maddr show" prints link-layer, IPv4 and IPv6 entries. The IPv4 and
+IPv6 ones come over netlink today, with IFA_MC_USERS for the user count.
+The link-layer list, dev->mc, is only exported via /proc/net/dev_mcast,
+so iproute2 and other users still parse procfs for it.
 
-> From: Hangbin Liu <liuhangbin@kylinos.cn>
-> 
-> Previously End.X only supported NEXT-C-SID, with a plain fallback to
-> input_action_end_x_core(). Add PSP End.X processing by reusing
-> end_flv8986_core().
-> 
-> Add SEG6_LOCAL_FLV8986_SUPP_OPS to SEG6_LOCAL_END_X_FLV_SUPP_OPS so
-> End.X advertises PSP flavor support.
-> 
-> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
-> ---
-> 
-> For Sashiko:
-> 
-> With the SEG6_LOCAL_END_X_FLV_SUPP_OPS mask widened, parse_nla_flavors()
-> now accept the combination next-csid plus psp for an End.X instance. And
-> the current code is unable to handle this combination. The End instance
-> also has this issue. Andrea is preparing a fix for this bug.
+This series adds the AF_PACKET family to RTM_GETMULTICAST so that the
+link-layer multicast addresses are reported the same way. Patch 4 dumps
+dev->mc in the ifaddrmsg format of the IPv4 and IPv6 dumps: IFA_MULTICAST
+carries the address, IFA_MC_USERS the reference count and a new
+IFA_F_GLOBAL flag marks entries added explicitly, the "static" column of
+/proc/net/dev_mcast. ifa_index limits the dump to one device and
+IFA_TARGET_NETNSID selects another netns. Patches 2 and 3 add a
+generation counter for dev->mc changes so a multi-part dump reports
+NLM_F_DUMP_INTR like the IPv4 and IPv6 ones. Patches 1 and 5 update the
+rt-addr spec and patch 6 adds a selftest.
 
-Hi Hangbin,
+AF_PACKET dumps returned -EOPNOTSUPP before, so iproute2 can keep the
+procfs fallback for older kernels. The iproute2 side is ready and will
+be posted once this is in.
 
-thanks for v2, and for your work.
+Changes in v11:
+- Sample cb->seq before each round and again after it, and skip the
+  check in a round without a message, so a change after the walk or
+  before an empty round sets NLM_F_DUMP_INTR
 
-The End fix is now posted, to net-next and not to net as I wrote on
-v1, since the issues it fixes have been there since PSP was added:
+Changes in v10:
+- Rename the list owner to mc_dev and set it for dev->mc only
+- Sample cb->seq once after the walk and check it once per round,
+  like rtnl_dump_ifinfo()
+- Read the count through netdev_hw_addr_list_count() in the helpers
+  file, note the init exception in the _count comment
+- Fix the FDB remark in the dump message, bridge and macvlan use the
+  default FDB dump
+- Say in the spec doc that AF_INET and AF_INET6 honour target-netnsid
+  with NETLINK_GET_STRICT_CHK only
+- Drop the Reviewed-by tags of patches 3 and 4 after the rework
 
-  https://lore.kernel.org/netdev/20261011192310.55-1-andrea.mayer@uniroma2.it/
+Changes in v9:
+- Change the count of a netdev_hw_addr_list through helpers only and
+  rename it to _count, as its own patch
+- Use the count helpers in __hw_addr_splice() too
+- Note in the spec doc that the header checks are unconditional for
+  AF_PACKET only
 
-> ---
->  net/ipv6/seg6_local.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
->
-> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 4fcfcd48cfae..521a9b0c0929 100644
-> --- a/net/ipv6/seg6_local.c
-> +++ b/net/ipv6/seg6_local.c
-> @@ -121,7 +121,8 @@ struct bpf_lwt_prog {
->  
->  #define SEG6_LOCAL_END_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
->  					 SEG6_LOCAL_FLV8986_SUPP_OPS)
-> -#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	SEG6_F_LOCAL_FLV_NEXT_CSID
-> +#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
-> +					 SEG6_LOCAL_FLV8986_SUPP_OPS)
->  
->  struct seg6_flavors_info {
->  	/* Flavor operations */
-> [snip]
-> @@ -923,12 +924,20 @@ static int input_action_end_x(struct sk_buff *skb, struct seg6_local_lwt *slwt)
->  {
->  	const struct seg6_flavors_info *finfo = &slwt->flv_info;
->  	__u32 fops = finfo->flv_ops;
-> +	int ret;
-> +
-> +	if (!fops)
-> +		return input_action_end_x_core(skb, slwt);
->  
->  	/* check for the presence of NEXT-C-SID since it applies first */
->  	if (seg6_next_csid_enabled(fops))
->  		return end_x_next_csid_core(skb, slwt);
+Changes in v8:
+- Set the owner of every list a device has, not only dev->mc, and
+  check for dev->mc in one place when bumping the counter
+- Add __hw_addr_count_inc/dec/reset() so a change of list->count and
+  the counter bump stay together
 
-Here End.X could do what End does in the fix: call
-seg6_use_next_csid() instead of seg6_next_csid_enabled(), so that a
-packet with a zero Argument is processed as End.X with PSP.
+Changes in v7:
+- Add a per netns generation counter bumped on dev->mc changes and fold
+  it into cb->seq, dev_base_seq alone did not cover the dumped entries
+- Sample cb->seq under the address lock of each device and again when a
+  dump round ends, so the NLMSG_DONE check sees a change too
 
-Does it work for you to rebase this series on top of the End fix,
-once it is merged, and make that change in this patch? Then End.X
-handles the combination from the beginning.
+Changes in v6:
+- Move the dump to net/core/dev_addr_lists.c next to the dev->mc
+  helpers
+- Stamp cb->seq from dev_base_seq and check dump consistency
+- Let an unexpected dump error propagate instead of skipping
+- Check for an address only present in the peer netns in the
+  target-netnsid selftest, the peer and local ifindex can be equal
+- Document the ifa-index filter and the zero header fields in the spec
 
-The selftests of the two series conflict in srv6_end_flavors_test.sh,
-and they set up the test environment differently. If you want a hand
-with that part, I am glad to help.
+Changes in v5:
+- Filter the target-netnsid selftest dump by ifa-index, a new netns
+  also contains the fallback tunnel devices
 
-Side note: I received only part of this series. Could you please also
-Cc andrea@common-net.org, in this thread and on the next versions?
+Changes in v4:
+- Reset the resume offset when the device the dump stopped at is gone
+- Use a tracked netns reference (put_net_track)
+- Say ifa-family must be set in the spec doc, drop the AF_UNSPEC remark
+- Close the netlink socket and guard the checks in the selftest
+- Drop the Fixes tag
 
-Ciao,
-Andrea
+Changes in v3:
+- Report the static bit as a new IFA_F_GLOBAL flag in IFA_FLAGS
+  instead of IFA_F_PERMANENT
+- Support IFA_TARGET_NETNSID and test it
+- Describe global_use accurately, it is also set by dev_mc_add_excl()
+- Fix the target-netnsid type in the rt-addr spec, as its own patch
+
+Changes in v2:
+- Always validate the request header, not only with strict checking
+- Use a single "with" statement in the selftest (ruff)
+
+Yuyang Huang (6):
+  netlink: specs: rt-addr: fix the type of target-netnsid
+  net: change netdev_hw_addr_list count through helpers
+  net: add a generation counter for dev->mc changes
+  net: add AF_PACKET multicast dumps
+  netlink: specs: rt-addr: document AF_PACKET multicast dumps
+  selftests: net: test AF_PACKET multicast dumps
+
+ Documentation/netlink/specs/rt-addr.yaml      |  21 +-
+ .../net/ethernet/cavium/octeon/octeon_mgmt.c  |   4 +-
+ .../net/wireless/microchip/wilc1000/netdev.c  |   8 +-
+ include/linux/netdevice.h                     |  11 +-
+ include/net/net_namespace.h                   |   1 +
+ include/uapi/linux/if_addr.h                  |   1 +
+ net/core/dev_addr_lists.c                     | 251 +++++++++++++++++-
+ net/core/dev_addr_lists_test.c                |  18 +-
+ net/core/rtnetlink.c                          |   2 +
+ net/mac80211/driver-ops.h                     |   2 +-
+ tools/testing/selftests/net/rtnetlink.py      |  73 ++++-
+ 11 files changed, 357 insertions(+), 35 deletions(-)
+
+-- 
+2.43.0
+
