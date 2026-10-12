@@ -1,117 +1,162 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj2-f7.google.com (mail-pj2-f7.google.com [74.125.227.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF91A40B6E2
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 16:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136434B403F
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 16:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791824056; cv=none; b=WQQBvWhl0fLbQFonTphH81iFRUPJQNjPHp2VQh0AGXrVceKC2lXEgvCjvP8ebdivTAgQWmXQDbpD939Y1G908bCG81z1rjIuU2U00eeqDW/6lcT4K8UTLWK6BOc/G3zyTYxfJUdLcmX09BAa2CclYWw8vKRdYLrynZqZXelO7aA=
+	t=1791824283; cv=none; b=Ph3zzssYy0Ta872Hh3KgdEKZmwIYdWhiDI1rOF6O3IU/uGYHdq9B2V2yMsYxZMEXZLG8hbYiwCJykU/TIco/yCN8eHvTUjIbevekDhH/18qbmk57mqiYdn1kDLtZ9y111S53OMdOQNny3OOtkTLvQ+sqs4BGx+yN/IsPzEHVYfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791824056; c=relaxed/simple;
-	bh=A56OfPZZVFGIDpDQ9XCz9cgezTjnSLv3WNc7P02MjjU=;
+	s=arc-20240116; t=1791824283; c=relaxed/simple;
+	bh=jCrJHhg9LmoI7hpxLeknAoCWjFflwD4GcffxqEOx+x8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jx5OApOFU30+QqGWnbsGNL+udE7FWxXSDLvkJz+BNacihJx1fzjasjSBeBVcZXCKtSpUTSPJe3HhxK+x0vke89A472fCVf72jLWOyhQxizbWx30KuO/sR2MGVNh4/A/FtAskf+cn3qE/IR50L/EP1E7F8+woLg+aLKcIPlVRH2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jUlJiwTo; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=g4/ddKGLB6AwdQWIdfdtt9tLe+/Kggu7B9pWEgnRK4hq0E9gitmi1xsMJ2dGr4n02GWz0sCBsJGUufpcZjVjB5z9oXFQ37rEMgmp8eHrnnUWy0bP6Lf9J7UVcJMcRefR54fDQ6NQ+cYYdsUf7wisuyJ+qcNcFmtK1KegJKKyZHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n7nzLGjr; arc=none smtp.client-ip=74.125.227.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jUlJiwTo"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d8fd7a3f38so83005ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 09:54:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n7nzLGjr"
+Received: by mail-pj2-f7.google.com with SMTP id d9443c01a7336-2d561173f9fso15171185ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 09:57:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791824054; x=1792428854; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791824276; x=1792429076; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=a0L3N3ZtqaociPWUQTHB7mjZkgiRjSPFirVt2JXOStg=;
-        b=jUlJiwToZneaFf/XGv1R2b7NkTk1TgB+tXTehhHw307Qv2oKSmrHNZet9etW+rUfny
-         I2CMVT85kM5moXip9hbDWl3gXnWNZatvQqcbpcvXksr1k8QhPIXdzO0K7+YsHS6+Y0H3
-         DnkcoK5jzq6ZOVXv6tHPEzo4ictXebQXXxNtRXcoBYkMt4ontokiL6JSZw5Fp2rZ9dws
-         tDcLd05pSJFRxH0/kKxcQZXOeVJ1kGtRlSd9tuREy0KmoslOoccfWJ4GTYHesX6N3H5P
-         jrQIThL6I4gWvyjwwq1oYyLS2oHF2MfUxabg4rPS5x6tTxJqb/rfLH9mzayGn4ZH/3g1
-         jdMA==
+        bh=lk3jyk+L25op/gK9ZsPi7IfvbejvW+IuaDGcTZaRnIE=;
+        b=n7nzLGjr0vi3iGJrn3PYjtRXP1XDVcaHTCsmZ78sppuyb0NJxCIh6daMJ07t8bPUSc
+         wVTr1p6r19yo6LrzbFaiMu5uP+P11/zoW7ldVBNCzspn0Yy4rrVWuS6qg95JnUBxDA6u
+         bQUiTt/BiOAKLzChwveHcWtvMox8QCJ23WUApozwGSMrZoC72VwAU/QQVCt4t1luncho
+         Ku8y2mNq0ZQyzZVZZOAXIAsaPq7HGXVzLhanZU5HdBNPQ3WNv69WjAfobctAWRTJrJjk
+         0UdL5RhO706ecw8NBJ40noo48dCZFL8PdgMN7Q0JUjmsWXfwd9vuLhnBcIDlitYFD9CS
+         LZ5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791824054; x=1792428854;
+        d=1e100.net; s=20260707; t=1791824276; x=1792429076;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=a0L3N3ZtqaociPWUQTHB7mjZkgiRjSPFirVt2JXOStg=;
-        b=eJTgPAr1ei9dH6R2P9MshvDK0Q/+VL/VdbUZOnif8TgAAx0NzmM+ob0yppCau7gCSK
-         B9owoI0v0Z9IKizcqQjU+HdTLXWSG4vYwQqdGYESjnIEfJvK5A6pA0Yv+MR56V0Uv4mJ
-         PZfCN6XyAz22h5HakpHGtEOhxgmuKkq4nNEJ5OFWoYoIrTB2kfjqodovZgiD+SaVKtvz
-         Ma/CK/gX2TL5zdzAJE7UJgWliFIeaKhgXE8hPeR/60rakRS4J8CO7xH151ZJJBJ41KCU
-         50Tx9TvpjyL/bNkb4LiAHsDCRX3Tyd6PLBCXwQKwMWtZF0P7MLb3+w5h1a8UVTR0G5hH
-         D2eQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzukULscjMhZk38QIl4VGR7Qy1sRZARN5S1qlSdIa9JKY5+r9fr7Qsu+zGo2qCkX6fK43k51rwqmdFT9aDMIc8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLreHzDYaERvh/47NkQz5QsW2apykBHRnbEsZ+JoNGR/GbRsPQA
-	keNhNQvGKCLwyVPsj+NpN2uKNj7m7gRG/27XuPJiB+7/ZsFK4zBIVcMOUtfLSXD4MQ==
-X-Gm-Gg: AYBFou1zDhrhq6XBkzM/P5MGU4mAqQLlD+IGt17hzLMlGdgdTmLTWynhhJGAeDNvh15
-	k42RxKR/6ZjxU3K+9E5m/JastXOIzPqpbXX0B7Bx3uEbMvuOkU06SHLyUF2wSG6M/scLRFnENG9
-	SuPP+BiVWVQXtr1W3n0Gapz0YQZTZwBEnTJmFEHj6XAmc9zgkdLS3MIoeg6h552SAwhjw5vmp92
-	YqgBqcCAhxwBUOF9+LTSd/XdCPu0LXwDIcLhdq09iLYJuzmUSWgnSoCxwd4/rWB2R+IQNJDkynE
-	TJLvJvzeLx5tDp/OJWydvSaH09uev5M7n3pyZU8v6n10VKuniiilCUdeg1nYSLLT9RbQzslo3bL
-	O5J2uRywNtaeUPDYEskLrRY2B1m4ISHmkBQnXIDUfUQS8TgDcgcGkkgcJ05HposGttBLGm4/jzI
-	4ZL+QivaxZzUiCd8m3OBq5aV4M0MU7di2YbpT27qESxcmrihwoYM5tS+6Br4/jyLLNuzyYiecUB
-	f11OdJgI3YMEiOAFec/YG/IdlhRSKO4
-X-Received: by 2002:a17:903:390b:b0:2e6:1917:fa with SMTP id d9443c01a7336-2e87e2f872bmr6833435ad.7.1791824053720;
-        Mon, 12 Oct 2026 09:54:13 -0700 (PDT)
-Received: from google.com (75.57.168.34.bc.googleusercontent.com. [34.168.57.75])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab393efd88sm10301280a91.3.2026.10.12.09.54.12
+        bh=lk3jyk+L25op/gK9ZsPi7IfvbejvW+IuaDGcTZaRnIE=;
+        b=fwZ4v8RtMhu6hTqTOH8pf3eeBRSl4A2uLT6z054mAF2wxcvnyJL85+WbPM3A0Q/o8g
+         3yjLE050YyJ4WPEJ+LKFqxsmRItUYjjeL9EZ3j8BKuhPscqHmGbh9mXlSMH2TkIU5fEa
+         x+nz0SqKnbtqacboA+S0uXtq3PMDeu9128RrqRtdv0/nGl7vVfqjDCflChS+xbn5nqkd
+         KN6sut0RrdEBuZUT03uYW/fPlwHNVdq9V2TYGl5Qu+Fyh3ZgNSVuI2q0M4NOyV5fkUzr
+         Y2ZBBqBjAvPit6aKP6ySmv8xX7ppN1DLRmVjaAIkwUuHOtJRcJQKIJJlTAvp1c2fyDZI
+         gNcw==
+X-Forwarded-Encrypted: i=1; AKwUvBwK2VbqV0YFPoji0/G4qjuyzG2/Pt1C0eqspQ+fKk+pBk1KADaSO98mIhDLtMsOvMfmWAl/mdEVbS5mgRyUnfo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIUhcC96erZ+wrAe/w5/9LfPEk4yenZi034yjvBF5CbQaz6wIOE
+	soC4/FeiqKOvSJdS6Oku8sy2ncBN8MvBhxL9iJSH+ovL6/crR8mY7MLU
+X-Gm-Gg: AYBFou1djg6640AJRD49oz5p02SjiWu9/kN6UpRYQQu3ycMHE9vN5/fPQpNmg0Dk6dD
+	0WeKugcsgFsYMLSYeSHnoDUmpjcegVamCAQDuyObC11U+Zb1SJp8qAA8CtnRCC7iSmlRWXI1QE5
+	sSFmuflz1qCqU2Scq6gPxFjJjOAomDS3BU1iMvJP2nYt4prwAVMTR+81m5+OJTCN/My6dDxdhuq
+	/90MEa5R8jCNR9yd/VIyrvtrhFF+UPExlEBmR+ppoxt7ia1Woi/0nSX/TzgdGZ7ogxrb/d6JVxS
+	hpr60Up5wxP7blNLvIK75zkvQh38nMLU3BwJ+WGSwvI2PnmWxA4/rfaka9cIQJ8ru+2DUSHA5V+
+	tYA5xPyz34MmBWclesKFjGulAVr51dJpYJPrZMIg9Bl1ximbLBWyO0kZgUKtkN+4ZqG+mEPJoe/
+	v7tKCdpV9Wz3okIOvYTQ7qM0Il8k1VThfSMoxsAUbyLsFgR0t3XgcJ5H/bcufhLo1a
+X-Received: by 2002:a17:903:1b6d:b0:2db:39da:90f2 with SMTP id d9443c01a7336-2e84280aed6mr90426765ad.8.1791824276254;
+        Mon, 12 Oct 2026 09:57:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:5e::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e8422b8dd5sm46996085ad.55.2026.10.12.09.57.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2026 09:54:13 -0700 (PDT)
-Date: Mon, 12 Oct 2026 16:54:09 +0000
-From: Lisa Wang <wyihan@google.com>
-To: Xiaoyao Li <xiaoyao.li@intel.com>
-Cc: Andrew Jones <ajones@ventanamicro.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Binbin Wu <binbin.wu@linux.intel.com>,
-	Chao Gao <chao.gao@intel.com>,
-	Chenyi Qiang <chenyi.qiang@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
-	Isaku Yamahata <isaku.yamahata@intel.com>,
-	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Roger Wang <runanwang@google.com>,
-	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
-	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v15 11/23] KVM: selftests: Set shared attributes for
- ucall guest_memfd pages
-Message-ID: <as0QsZtRAEEq5Tpw@google.com>
-References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
- <20261001-tdx-selftests-v15-11-7c62a5d8a992@google.com>
- <7ca516ea-a931-4497-b3c8-b62110ae006a@intel.com>
+        Mon, 12 Oct 2026 09:57:55 -0700 (PDT)
+Date: Mon, 12 Oct 2026 09:57:50 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, David Wei <dw@davidwei.uk>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Taehee Yoo <ap420073@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Paolo Abeni <pabeni@redhat.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>, Bobby Eshleman <bobbyeshleman@meta.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Tariq Toukan <tariqt@nvidia.com>, Kaifeng Wang <kaifengw@google.com>
+Subject: Re: [PATCH net v1 2/4] net: devmem: detach TX bindings on
+ NETDEV_UNREGISTER
+Message-ID: <as0LL7IcZas6IPY2@devvm7509.cco0.facebook.com>
+References: <20261010025532.839559-1-almasrymina@google.com>
+ <20261010025532.839559-3-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7ca516ea-a931-4497-b3c8-b62110ae006a@intel.com>
+In-Reply-To: <20261010025532.839559-3-almasrymina@google.com>
 
-On Fri, Oct 09, 2026 at 11:44:55PM +0800, Xiaoyao Li wrote:
-> On 10/2/2026 3:37 AM, Lisa Wang wrote:
-> > The default attributes for guest_memfd pages without in-place conversion
-> > is private. 
+On 10/10, Mina Almasry wrote:
+> TX devmem bindings (NETDEV_CMD_BIND_TX) have no bound RX queues, so
+> mp_dmabuf_devmem_uninstall() never runs when binding->dev or
+> binding->vdev unregisters. As a result, binding->dev and binding->vdev
+> dangle pointing to freed struct net_device memory, and the dma_buf
+> remains attached and mapped after device removal.
 > 
-> This is wrong. The default memory attribute is of a @gfn is shared without
-> in-place conversion, i.e., with per-vm memory attribute.
+> Closing the netlink socket after netdev unregistration dereferences the
+> freed struct net_device in netdev_nl_sock_priv_destroy():
 > 
-> We don't need this patch actually. And I have tested with reverting this patch,
-> with both out of place conversion and in-place conversion. Both worked.
->
+>   BUG: unable to handle page fault for address: ffff88824ca9b000
+>   Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+>   RIP: 0010:netdev_nl_sock_priv_destroy+0xbd/0x1e0
+>   Call Trace:
+>    genl_release+0xf5/0x190
+>    netlink_release+0xd01/0x18d0
+>    __sock_release+0xb0/0x270
+>    sock_close+0x18/0x20
+> 
+> Add net_devmem_dev_unregister() called on NETDEV_UNREGISTER:
+> - When binding->dev (the physical DMA-capable device) unregisters,
+>   erase the binding ID, clear both binding->dev and binding->vdev, wait
+>   for in-flight RCU/TX readers via synchronize_net(), and unmap the
+>   dma_buf under binding->lock.
+> - When only binding->vdev (virtual device) unregisters while
+>   binding->dev lives, only clear binding->vdev so no new TX sends match
+>   the virtual device while allowing in-flight TX packets on binding->dev
+>   to finish DMA safely.
+> 
+> Fixes: bd61848900bf ("net: devmem: Implement TX path")
+> Fixes: 1abe839b34ae ("net: devmem: support TX over NETMEM_TX_NO_DMA devices")
+> Cc: Kaiyuan Zhang <kaiyuanz@google.com>
+> Cc: Stanislav Fomichev <sdf@fomichev.me>
+> Cc: Bobby Eshleman <bobbyeshleman@meta.com>
+> Cc: Tariq Toukan <tariqt@nvidia.com>
+> Cc: Kaifeng Wang <kaifengw@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> ---
+>  net/core/devmem.c      | 45 ++++++++++++++++++++++++++++++++++++++++++
+>  net/core/devmem.h      |  5 +++++
+>  net/core/netdev-genl.c |  1 +
+>  3 files changed, 51 insertions(+)
+> 
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index 5e4070b82df44..da7b3e8abaa13 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+> @@ -169,6 +169,51 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+>  	percpu_ref_kill(&binding->ref);
+>  }
+>  
+> +void net_devmem_dev_unregister(struct net_device *dev)
+> +{
+> +	struct net_devmem_dmabuf_binding *binding;
+> +	unsigned long xa_idx;
+> +
 
-oh yes, I misunderstood the default memory attribute without in-place
-conversion. I will drop this patch in the next series. Thanks!
+[..]
 
-Lisa
+> +	rcu_read_lock();
+> +	xa_for_each(&net_devmem_dmabuf_bindings, xa_idx, binding) {
+> +		if (!percpu_ref_tryget(&binding->ref))
+> +			continue;
+> +		rcu_read_unlock();
+
+You use net_devmem_dmabuf_binding_put below but do not use
+net_devmem_dmabuf_binding_get here.
+
+Also, I feel like rcu_read_lock/rcu_read_unlock dance is confusing. bindings
+are not following rcu lifetimes. Can we race with __net_devmem_dmabuf_binding_free
+here? (xa_for_each returns a valid binding, then before we do try_get it
+gets kfree'd)
