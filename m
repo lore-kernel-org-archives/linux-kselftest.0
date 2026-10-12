@@ -1,167 +1,542 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439404A4993;
-	Mon, 12 Oct 2026 15:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0882449E132
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 15:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791819017; cv=none; b=hypynTXJORcSQZcDsW6yXJAcqA+o/lC5r7lUXOBRtqLKvfvFGPyVGUD2CeA+5OtvpgRLixz0zkkji8UnafDKDq6Bihj0dLKp8zDwmqyXIKEufitzIGSnFgem7nT9OuLjQ3toDNPDuwdvlfWUYRlPl9LKNqZ7vlzsnH+j4V/ckOk=
+	t=1791819048; cv=none; b=qJyQwGSO1nqLuBrsVacTJDgXAbwcZ2FpKc600EeMOGwYOubEVClXnMv5OrJRDOZnvpuA06hDPbtFoXV/NNBXpdmvnB8aqVcezfjgjqgwUvrNGlL6dOJ6vbkQHqzQmUIqGza6bIMQmtN6h633QEhNas8ezHVtK2uEmOxNmKxPtrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791819017; c=relaxed/simple;
-	bh=5JefvHpiY0ExCFItfFzC7Cg7MQcEg2ZpB/C1lSxifio=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oyJwSWNDShw21F8kplpdl0y2Vw58qWi3asM6H4T7kly6kPAX06/EkVKemIkgMsB8FOrlJzqeKjNTb2Yg6I2tLjHHczpVl/ZoiZoSC7k7Bb2ISvF3X6XtyetU6yAuw2Bm6923t4Bwl05Y/6sHsn230pYrVht0qMtHeH3y++XvnUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NbIPq4EK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791819048; c=relaxed/simple;
+	bh=uOUkI7Pn301MmOow0/zWk9CTObR6DMC9i0xGpkDezcQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eJpGnanIiJLzs3E8cW8y5B5HMgTfxENBD7AxWteWRIY3sZqVSW6r9HXospBO8tugLh7kYxXgBRfBgv7HMJHQMy7Do/v/XvRcZ4DrHL0siLMXg6yvJhrd6dCAuXzMONJpe9xHlTTa0oJQppYe7sJBw0tohkXf//478oTzTPgbG6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jLfjPOrL; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NbIPq4EK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D46EA1F0089C;
-	Mon, 12 Oct 2026 15:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791819015;
-	bh=c08m0SSz8yv0yXkDgRUfof/w7MPLAwAuVJD4b/swrNQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=NbIPq4EKfSrBOKxBnnjo8MxzWYp9YSVXgHNHM6h4E/jeiTXL4tOfU1V+p5FK88JI+
-	 9X/OZCdLVY1knuuAzr03uBk0zTl1ZRnnCau+4dY7MYXhSrWYpKN+Zv7j62icR5iLgE
-	 lPhZPnGO8dSn5ynmGG0k80n3xoeAuIUO2FMb5d2JsCZw4Y2y7Cb2QS8/XCvZ58+uPw
-	 iGB9/spQmnKCBX39vPQ3MGBT86DAZK64kQJ8oRdySFtAH0RSvrKyZ33xXLcRxW29Xf
-	 +EjYdzrqdcy/3+OEsa1do1upOltaEKJjRNn/CVtwQ7Cg+MoZ78jZOCueQ0xgRTesd9
-	 Q56qH251MYgIw==
-From: Chuck Lever <cel@kernel.org>
-Date: Mon, 12 Oct 2026 11:29:57 -0400
-Subject: [PATCH net-next v4 9/9] selftests: tls: Cover splice on a
- nonblocking socket
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jLfjPOrL"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-890d52c7c7bso1645422b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 08:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791819045; x=1792423845; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=E3EuGWrlhUS9T5pwiNRggm3bCV5FxTSYaQuv91oJthA=;
+        b=jLfjPOrL8jqvxTRfItbiWah0Fm7PEkRIWbKI04KcIxojDPOJIiMhUirCljO8JLJPK2
+         9ZX9PpEwqUh3a7eo/fFubsZ29FaFjIQITg2bwsqdAhPnBTXpYxMofVHpv/fBQk8eWzgO
+         G3Yh6RndgLi2h/C1KGJTdRizCXLbrIJs1yjW89lBb/vn7487YhnCkntjnCvfDHjeKpwI
+         eMN1m/jpLLdomH1P5ttupSQfB35orEC2m4A+mlIhDkZtsGF0SBG8akw0i+dWO4gtb4/4
+         +Riu9YTfbdFTilti0aIkhcHYSD8/vKDl/P/8ewN9898XhmyeAWut+RL1ncG30OWkSm3c
+         vHFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791819045; x=1792423845;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=E3EuGWrlhUS9T5pwiNRggm3bCV5FxTSYaQuv91oJthA=;
+        b=sZ/xETWRC38RGMONNrsRlUV7c4sUvFz2b5tdjcJCdU528ShwjMSwy504SMc0hw4W4G
+         JK6jx8WgouTqv/jgSJxF+j/A5QM+xbNNajNaqlNWo/Gw2eObuDGp9fAO3Ej0RwTVtk0J
+         ysuY3Tux9QEOD1170/DHuxt9hN0CaBZ6wPuG+YghXo7Nj3jOf4Hy0DGJ04tKZY7cIVo1
+         JZlQ7QNZ7sOoFAXsUbXkY6Cwg0yzOKsURLOiHLoUruKCE++yC7e2agCWXu5zcD44n88f
+         XBPDxNjYVYZhoLfuSYzSBrgFOV/avsY+qouzSCO5Tcn8XPuwTpWb74fwN49UFnYTWifX
+         3HEg==
+X-Forwarded-Encrypted: i=1; AKwUvBx//uaUNeyENBK9nkssorpsY10vLq/WMvA9zEn2rbllcopJdYbU6omybYHv9KlpQDVgSbOupuUiUT5BAzZ1JF8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJSnnMScSpoICcVf6a5QXd2LcVJ3Q7J22WQRSWHCLdTraJ+i87Z
+	rQswxH2PQ81W+QOBafAnu1kcevXJGOPqt5eThFZ5nhsV/imCRoIJ1K5Y
+X-Gm-Gg: AYBFou2Jc2jM0v4v06M/FSvTfnyOrQXAUILlJuGyVfUBsNNaQrv0wQH3m0gEgUCPIET
+	3w0yw3o1Cd+C/h6n2O869Mb2/fCcqKy1XP97r9PhUdLL8ajGbw0vUo+ms3VV9fhPLnfsT7e7HU5
+	CnTw3qdJuwCEKMlUVhu/84TnfbVQB3DiJCcddEK50jMs12cVqqqhanV4wvzsT7myWJCsmSsx31p
+	MxGTgsET7ApQC38rTEVS2A5m/Jqgl6Ekh5SgZzmmg+pVeIlN7gm/EwQwh1BTu91vX+0wPbR/xIB
+	fJS4YwOOlSigIv/h17ZJGKhdJtvAaPTssO+gQNRmhdu2v6utpD4YM4NvCdqMSL6B96ZYgF7PO3o
+	a7zI0IORQ+BABorPlxzyF8EsXV9AKJL+FGXDI0JYRcBlYXBhvDqCxbOXYplUbklDRG57o1mIZ7V
+	xarmDqccW6rtacN4+y6zqxL+PEbAHypPjdNTvD4S2F9jIkxxIhGX9nJb1ObO5I8p1oKT0RdhbGd
+	RcoWuiXOUKRfCJfr9Gbq/o=
+X-Received: by 2002:a05:6a00:8013:b0:880:78ca:8400 with SMTP id d2e1a72fcca58-897c7010842mr9203207b3a.12.1791819044978;
+        Mon, 12 Oct 2026 08:30:44 -0700 (PDT)
+Received: from fedora ([61.74.238.173])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-896c37de994sm4229997b3a.26.2026.10.12.08.30.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2026 08:30:44 -0700 (PDT)
+From: SeungJu Cheon <suunj1331@gmail.com>
+To: Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andrew Jones <andrew.jones@oss.qualcomm.com>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Wang Yechao <wang.yechao255@zte.com.cn>,
+	Wu Fei <wu.fei9@sanechips.com.cn>,
+	kvm-riscv@lists.infradead.org,
+	kvm@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	SeungJu Cheon <suunj1331@gmail.com>
+Subject: [PATCH] KVM: riscv: selftests: Add G-stage dirty logging transition test
+Date: Tue, 13 Oct 2026 00:30:24 +0900
+Message-ID: <20261012153024.390554-1-suunj1331@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261012-tls-follow-on-v4-9-8cea429565da@kernel.org>
-References: <20261012-tls-follow-on-v4-0-8cea429565da@kernel.org>
-In-Reply-To: <20261012-tls-follow-on-v4-0-8cea429565da@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, 
- "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Chuck Lever <cel@kernel.org>, 
- Dave Watson <davejwatson@fb.com>, Shuah Khan <shuah@kernel.org>, 
- Qingfang Deng <qingfang.deng@linux.dev>, Eric Dumazet <edumazet@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.17-dev-9c833
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3221; i=cel@kernel.org;
- h=from:subject:message-id; bh=5JefvHpiY0ExCFItfFzC7Cg7MQcEg2ZpB/C1lSxifio=;
- b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqzPz6usYc4kDrWOd1+afDy6uLkdOwKHzK43rg8
- Rr2QJSlB92JAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCasz8+gAKCRAzarMzb2Z/
- l4TxD/0efozl7p96Am42aAaLoCEht8V4jx7ME3+fi3nE9uUfpagOmdYSq9RLgaPAc/qHb9lPwvN
- i5CHEer48scnuGqC5QTIg0n/qdKIzEh8sCwgYdG6WXD0mjl5qPQeggqA+tsNJgzlPl3h3NuKo69
- iCbpg48Eotv8AlgqGQ9KommzffFFufD9wGkIFUCK7S2V+W7LXlM1/ngHoVBlU1Db5YewBnLFN1q
- /V7VdnIcMK00PNxz+o1FLCynpdW278dmHrSpukwGgtK6ix0goCjJhOTxznKMwo+AA1JXLOzTTDl
- H+N/owFH6PS3El6hpOOFwBqRHdr3cj8/+iHUHn8z5xTc+CMP5laiCZbR9rBXX7egMIvKyvmJ2hd
- gNPgqaB03Q3B2Oj8/tzNyNX7cvOb4tiXC44/fJFqkVbxpE34aP+p6epYE1smP91tvVdclKUMHOt
- Hu5a0gg6yIWNoL4cWVaKA11F6r/UDS+zgA+OGRCmzNezyAsZMhIJ7DCwtxHWIRjcbqX6nIB5gej
- 1+3pkSE4GXnuhzDtXnIP8wIdZkWKXSxlB9WAeXQqOsoOZFxHqxgRf/sjcoRDoEbb90VyzhZtCAZ
- jYPgKiyCdfSQottTium6qFf7i9RygEsZPNqygBjtnuEEhBrcoMLFsaNIzYAxmt72hc7g3HoxIUY
- yUntJQS5TQ9jNMg==
-X-Developer-Key: i=cel@kernel.org; a=openpgp;
- fpr=28B2E5B01286DF243CF23EFE336AB3336F667F97
+Content-Transfer-Encoding: 8bit
 
-Every existing splice call in this file either passes
-SPLICE_F_NONBLOCK or runs on a blocking socket, so nothing
-exercises the socket's own O_NONBLOCK on the splice path. A change
-that stops consulting sock->file->f_flags puts splice(2) and
-sendfile(2) back to sleeping in tls_rx_rec_wait() while a peer
-streams empty records, and the suite still reports pass.
+Add a selftest to verify 4K dirty tracking and data integrity across
+G-stage hugepage splitting and dirty logging transitions. Since KVM
+RISC-V cannot track 4K writes inside a 2M leaf, an exact dirty bitmap
+also shows that the huge mapping was split.
 
-Run the zero-length record variants a second time with O_NONBLOCK
-set on the socket and SPLICE_F_NONBLOCK left out of the splice
-flags. Each variant expects the same result with either flag. A
-kernel that ignores the socket flag sleeps in the EAGAIN variant
-until the harness timeout rather than returning.
+Cover single and repeated transitions, manual dirty log protection,
+and a regression for commit 0d9dc20842db ("RISC-V: KVM: Fix skip of
+valid pages in kvm_riscv_gstage_wp_range") using an unaligned memslot.
 
-Signed-off-by: Chuck Lever <cel@kernel.org>
+Signed-off-by: SeungJu Cheon <suunj1331@gmail.com>
 ---
- tools/testing/selftests/net/tls.c | 39 +++++++++++++++++++++++++++++++++------
- 1 file changed, 33 insertions(+), 6 deletions(-)
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../kvm/riscv/gstage_dirty_log_transitions.c  | 412 ++++++++++++++++++
+ 2 files changed, 413 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/riscv/gstage_dirty_log_transitions.c
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 8ce5a9032960..57edf6e6640f 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -2829,7 +2829,11 @@ FIXTURE_TEARDOWN(zero_len_splice)
-  * EAGAIN for a run with no payload behind it, and EINVAL for a control
-  * record behind the run.
-  */
--TEST_F(zero_len_splice, test)
-+static void
-+zero_len_do_splice(struct __test_metadata *_metadata,
-+		   FIXTURE_DATA(zero_len_splice) *self,
-+		   const FIXTURE_VARIANT(zero_len_splice) *variant,
-+		   unsigned int splice_flags)
- {
- 	struct pollfd pfd = { .fd = self->cfd, .events = POLLIN };
- 	const struct raw_rec *payload;
-@@ -2837,16 +2841,13 @@ TEST_F(zero_len_splice, test)
- 	ssize_t ret;
- 	int p[2];
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 4cfb6385495..4fe50fceb5e 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -225,6 +225,7 @@ TEST_GEN_PROGS_s390 += pre_fault_memory_test
  
--	if (self->notls)
--		SKIP(return, "no TLS support");
--
- 	ASSERT_GE(pipe(p), 0);
- 
- 	payload = zero_len_send_recs(_metadata, self->fd, variant->recs);
- 
- 	if (variant->splice_ret < 0) {
- 		ret = splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
--			     SPLICE_F_NONBLOCK);
-+			     splice_flags);
- 		EXPECT_EQ(ret, -1);
- 		EXPECT_EQ(errno, -variant->splice_ret);
- 	} else {
-@@ -2854,7 +2855,7 @@ TEST_F(zero_len_splice, test)
- 		 * below would block until the harness timeout.
- 		 */
- 		ASSERT_EQ(splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
--				 SPLICE_F_NONBLOCK), variant->splice_ret);
-+				 splice_flags), variant->splice_ret);
- 		ret = read(p[0], buf, sizeof(buf));
- 		EXPECT_EQ(ret, variant->splice_ret);
- 		if (ret == variant->splice_ret)
-@@ -2869,6 +2870,32 @@ TEST_F(zero_len_splice, test)
- 	close(p[1]);
- }
- 
-+TEST_F(zero_len_splice, test)
-+{
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
-+
-+	zero_len_do_splice(_metadata, self, variant, SPLICE_F_NONBLOCK);
-+}
-+
-+/* The socket's O_NONBLOCK governs the record wait, as on a plain TCP
-+ * socket, so a splice without SPLICE_F_NONBLOCK behaves like one that
-+ * sets it.
+ TEST_GEN_PROGS_riscv = $(TEST_GEN_PROGS_COMMON)
+ TEST_GEN_PROGS_riscv += riscv/sbi_pmu_test
++TEST_GEN_PROGS_riscv += riscv/gstage_dirty_log_transitions
+ TEST_GEN_PROGS_riscv += riscv/ebreak_test
+ TEST_GEN_PROGS_riscv += access_tracking_perf_test
+ TEST_GEN_PROGS_riscv += arch_timer
+diff --git a/tools/testing/selftests/kvm/riscv/gstage_dirty_log_transitions.c b/tools/testing/selftests/kvm/riscv/gstage_dirty_log_transitions.c
+new file mode 100644
+index 00000000000..f518cf3cbde
+--- /dev/null
++++ b/tools/testing/selftests/kvm/riscv/gstage_dirty_log_transitions.c
+@@ -0,0 +1,412 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * gstage_dirty_log_transitions - Exercise G-stage huge-page/page
++ * granularity changes caused by dirty logging, and verify that
++ * dirty tracking and guest memory contents remain correct.
++ *
++ * With hugetlb backing and a 2M-aligned slot, G-stage faults install
++ * 2M mappings while dirty logging is disabled. Enabling dirty logging
++ * requires 4K-granularity tracking, so KVM splits existing huge
++ * mappings either eagerly when logging is enabled (eager_page_split=1)
++ * or on the first write fault (eager_page_split=0).
++ *
++ * Since KVM RISC-V cannot track individual 4K writes within a 2M
++ * leaf, a dirty bitmap that identifies exactly the written 4K pages
++ * provides evidence that the huge mapping was split into 4K mappings.
++ *
++ * The asserted properties are that the guest completes the sequence,
++ * every KVM_RUN succeeds, the dirty bitmap identifies exactly the
++ * 4K pages written by the guest, and guest data is preserved across
++ * the transitions.
++ *
++ * Scenario 1 - Transitions on aligned blocks:
++ *   Fault in NR_BLOCKS hugetlb-backed 2M blocks with dirty logging
++ *   disabled, then enable logging and write selected 4K pages in
++ *   each block. Verify the dirty bitmap, disable logging, and write
++ *   again while checking that guest data remains intact.
++ *
++ * Scenario 2 - Repeated transitions:
++ *   Repeat the Scenario 1 sequence over several rounds on the same
++ *   blocks, verifying the dirty bitmap and guest data after each
++ *   round.
++ *
++ * Scenario 3 - Manual dirty log protect:
++ *   Repeat the transitions with KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2
++ *   enabled. After each GET_DIRTY_LOG, KVM_CLEAR_DIRTY_LOG clears
++ *   the reported dirty bits and re-protects the corresponding pages.
++ *   The guest then writes a second set of pages, which must be
++ *   reported independently. That set overlaps the first in one page,
++ *   so the second bitmap also verifies that the cleared pages were
++ *   write-protected again. Skipped if the capability is unavailable.
++ *
++ * Scenario 4 - Unaligned slot with an empty leading block:
++ *   Regression test for commit 0d9dc20842db ("RISC-V: KVM: Fix skip of
++ *   valid pages in kvm_riscv_gstage_wp_range"). The slot starts 4K
++ *   past a 2M boundary and the first block is never touched.
++ *   The next block uses 4K anonymous backing to ensure that it is
++ *   mapped with 4K leaves.
++ *
++ *   Enabling dirty logging walks from the unaligned start, encounters
++ *   the empty block, and must resume at the next 2M boundary. The
++ *   broken walker advanced by 2M from the unaligned start, skipping
++ *   write protection of the first 4K page in the next block. A guest
++ *   write to that page then went unreported. This scenario does not
++ *   require hugepages.
 + */
-+TEST_F(zero_len_splice, nonblock_socket)
++#include <linux/bitmap.h>
++#include <linux/sizes.h>
++#include <sys/mman.h>
++
++#include "kvm_util.h"
++#include "processor.h"
++#include "test_util.h"
++#include "ucall_common.h"
++
++#define DATA_SLOT		1
++#define TEST_GVA		0xc0000000UL
++#define BLOCK_SIZE		SZ_2M
++#define PAGES_PER_BLOCK		(BLOCK_SIZE / SZ_4K)
++
++/* Exercise dirty-log transitions across multiple 2M blocks. */
++#define NR_BLOCKS		16
++
++/* Two page sets with one shared page to exercise repeated dirty writes. */
++static const unsigned int sel_a[] = { 0, 3, 257, PAGES_PER_BLOCK - 1 };
++static const unsigned int sel_b[] = { 1, 3, 128, 400 };
++#define NR_SEL_A		ARRAY_SIZE(sel_a)
++#define NR_SEL_B		ARRAY_SIZE(sel_b)
++
++#define PATTERN(blk, pg)	(0x1000000000000000ULL | ((u64)(blk) << 32) | (pg))
++#define PATTERN_LOGGED		0x5a5a5a5a5a5a5a5aULL
++#define PATTERN_LOGGED2		0x5b5b5b5b5b5b5b5bULL
++#define PATTERN_AFTER		0xa5a5a5a5a5a5a5a5ULL
++
++/* Guest -> host stages. */
++#define STAGE_BLOCKS_READY	1
++#define STAGE_LOGGED_WRITES	2
++#define STAGE_LOGGED_WRITES2	3
++#define STAGE_ROUND_DONE	4
++
++static u64 *page_addr(u64 base, unsigned int blk, unsigned int pg)
 +{
-+	int sflags;
-+
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
-+
-+	sflags = fcntl(self->cfd, F_GETFL, 0);
-+	ASSERT_GE(sflags, 0);
-+	ASSERT_EQ(fcntl(self->cfd, F_SETFL, sflags | O_NONBLOCK), 0);
-+
-+	zero_len_do_splice(_metadata, self, variant, 0);
++	return (u64 *)(base + (u64)blk * BLOCK_SIZE + (u64)pg * SZ_4K);
 +}
 +
- FIXTURE(tls_err)
- {
- 	int fd, cfd;
++static bool page_in_set(unsigned int pg, const unsigned int *sel, unsigned int nsel)
++{
++	unsigned int i;
++
++	for (i = 0; i < nsel; i++)
++		if (sel[i] == pg)
++			return true;
++	return false;
++}
++
++static void guest_fill_blocks(u64 base, u64 nblocks)
++{
++	unsigned int blk, pg;
++
++	for (blk = 0; blk < nblocks; blk++)
++		for (pg = 0; pg < PAGES_PER_BLOCK; pg++)
++			WRITE_ONCE(*page_addr(base, blk, pg), PATTERN(blk, pg));
++}
++
++static void guest_write_selected(u64 base, u64 nblocks,
++				 const unsigned int *sel, unsigned int nsel, u64 val)
++{
++	unsigned int blk, i;
++
++	for (blk = 0; blk < nblocks; blk++)
++		for (i = 0; i < nsel; i++)
++			WRITE_ONCE(*page_addr(base, blk, sel[i]), val);
++}
++
++static void guest_restore_selected(u64 base, u64 nblocks,
++				   const unsigned int *sel, unsigned int nsel)
++{
++	unsigned int blk, i;
++
++	for (blk = 0; blk < nblocks; blk++)
++		for (i = 0; i < nsel; i++)
++			WRITE_ONCE(*page_addr(base, blk, sel[i]),
++				   PATTERN(blk, sel[i]));
++}
++
++static void guest_check_blocks(u64 base, u64 nblocks, u64 val_a, u64 val_b)
++{
++	unsigned int blk, pg;
++	u64 expect;
++
++	for (blk = 0; blk < nblocks; blk++) {
++		for (pg = 0; pg < PAGES_PER_BLOCK; pg++) {
++			if (page_in_set(pg, sel_b, NR_SEL_B))
++				expect = val_b;
++			else if (page_in_set(pg, sel_a, NR_SEL_A))
++				expect = val_a;
++			else
++				expect = PATTERN(blk, pg);
++			GUEST_ASSERT_EQ(READ_ONCE(*page_addr(base, blk, pg)), expect);
++		}
++	}
++}
++
++static void guest_one_round(u64 base, u64 nblocks)
++{
++	/* Logging on: first page set. */
++	guest_write_selected(base, nblocks, sel_a, NR_SEL_A, PATTERN_LOGGED);
++	GUEST_SYNC(STAGE_LOGGED_WRITES);
++
++	/* Host checked set A and reset dirty tracking for the next writes. */
++	guest_write_selected(base, nblocks, sel_b, NR_SEL_B, PATTERN_LOGGED2);
++	GUEST_SYNC(STAGE_LOGGED_WRITES2);
++
++	/* Host verified set B and disabled logging. */
++	guest_check_blocks(base, nblocks, PATTERN_LOGGED, PATTERN_LOGGED2);
++	guest_write_selected(base, nblocks, sel_a, NR_SEL_A, PATTERN_AFTER);
++	guest_write_selected(base, nblocks, sel_b, NR_SEL_B, PATTERN_AFTER);
++	guest_check_blocks(base, nblocks, PATTERN_AFTER, PATTERN_AFTER);
++
++	/* Restore the base pattern while logging is still off. */
++	guest_restore_selected(base, nblocks, sel_a, NR_SEL_A);
++	guest_restore_selected(base, nblocks, sel_b, NR_SEL_B);
++
++	GUEST_SYNC(STAGE_ROUND_DONE);
++}
++
++static void transitions_guest_code(u64 base, u64 nblocks, u64 nrounds)
++{
++	u64 r;
++
++	guest_fill_blocks(base, nblocks);
++	GUEST_SYNC(STAGE_BLOCKS_READY);
++
++	for (r = 0; r < nrounds; r++)
++		guest_one_round(base, nblocks);
++
++	GUEST_DONE();
++}
++
++static void expect_sync(struct kvm_vcpu *vcpu, u64 stage)
++{
++	struct ucall uc;
++
++	vcpu_run(vcpu);
++	switch (get_ucall(vcpu, &uc)) {
++	case UCALL_SYNC:
++		TEST_ASSERT(uc.args[1] == stage, "Expected stage %lu, got %lu",
++			    stage, uc.args[1]);
++		return;
++	case UCALL_ABORT:
++		REPORT_GUEST_ASSERT(uc);
++	default:
++		TEST_FAIL("Unexpected ucall %lu (wanted stage %lu)", uc.cmd, stage);
++	}
++}
++
++static void expect_done(struct kvm_vcpu *vcpu)
++{
++	struct ucall uc;
++
++	vcpu_run(vcpu);
++	switch (get_ucall(vcpu, &uc)) {
++	case UCALL_DONE:
++		return;
++	case UCALL_ABORT:
++		REPORT_GUEST_ASSERT(uc);
++	default:
++		TEST_FAIL("Unexpected ucall %lu (wanted done)", uc.cmd);
++	}
++}
++
++static unsigned int count_dirty(const unsigned long *bmap, unsigned int nbits)
++{
++	unsigned int i, n = 0;
++
++	for (i = 0; i < nbits; i++)
++		if (test_bit(i, bmap))
++			n++;
++	return n;
++}
++
++static void check_selected_dirty(unsigned long *bmap, unsigned int nblocks,
++				 const unsigned int *sel, unsigned int nsel)
++{
++	unsigned int blk, i, idx;
++
++	TEST_ASSERT_EQ(count_dirty(bmap, nblocks * PAGES_PER_BLOCK), nblocks * nsel);
++	for (blk = 0; blk < nblocks; blk++) {
++		for (i = 0; i < nsel; i++) {
++			idx = blk * PAGES_PER_BLOCK + sel[i];
++			TEST_ASSERT(test_bit(idx, bmap),
++				    "Block %u page %u not dirty", blk, sel[i]);
++		}
++	}
++}
++
++static void run_transitions(unsigned int nblocks, unsigned int nrounds, bool manual)
++{
++	size_t npages = nblocks * PAGES_PER_BLOCK;
++	struct kvm_vcpu *vcpu;
++	unsigned long *bmap;
++	struct kvm_vm *vm;
++	unsigned int r;
++	u64 gpa;
++
++	vm = vm_create_with_one_vcpu(&vcpu, transitions_guest_code);
++	if (manual)
++		vm_enable_cap(vm, KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2,
++			      KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE);
++
++	gpa = (vm_compute_max_gfn(vm) * vm->page_size) - nblocks * BLOCK_SIZE;
++	gpa = align_down(gpa, BLOCK_SIZE);
++
++	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB, gpa,
++				    DATA_SLOT, npages, 0);
++	virt_map(vm, TEST_GVA, gpa, npages);
++	vcpu_args_set(vcpu, 3, TEST_GVA, (u64)nblocks, (u64)nrounds);
++
++	bmap = bitmap_zalloc(npages);
++
++	/* Logging off: fault in hugetlb-backed blocks before enabling logging. */
++	expect_sync(vcpu, STAGE_BLOCKS_READY);
++
++	for (r = 0; r < nrounds; r++) {
++		vm_mem_region_set_flags(vm, DATA_SLOT, KVM_MEM_LOG_DIRTY_PAGES);
++
++		/* Writes under logging: split (eager or at fault) + 4K tracking. */
++		expect_sync(vcpu, STAGE_LOGGED_WRITES);
++
++		bitmap_zero(bmap, npages);
++		kvm_vm_get_dirty_log(vm, DATA_SLOT, bmap);
++		check_selected_dirty(bmap, nblocks, sel_a, NR_SEL_A);
++
++		if (manual)
++			kvm_vm_clear_dirty_log(vm, DATA_SLOT, bmap, 0, npages);
++
++		expect_sync(vcpu, STAGE_LOGGED_WRITES2);
++
++		bitmap_zero(bmap, npages);
++		kvm_vm_get_dirty_log(vm, DATA_SLOT, bmap);
++		check_selected_dirty(bmap, nblocks, sel_b, NR_SEL_B);
++
++		if (manual)
++			kvm_vm_clear_dirty_log(vm, DATA_SLOT, bmap, 0, npages);
++
++		vm_mem_region_set_flags(vm, DATA_SLOT, 0);
++
++		/* Logging off: writes must complete on the existing 4K leaves, data intact. */
++		expect_sync(vcpu, STAGE_ROUND_DONE);
++	}
++
++	expect_done(vcpu);
++
++	free(bmap);
++	kvm_vm_free(vm);
++}
++
++static void test_aligned_transitions(void)
++{
++	run_transitions(NR_BLOCKS, 1, false);
++}
++
++static void test_repeated_transitions(void)
++{
++	run_transitions(2, 4, false);
++}
++
++static void test_manual_protect_transitions(void)
++{
++	run_transitions(2, 2, true);
++}
++
++#define UNALIGNED_NPAGES	(2 * PAGES_PER_BLOCK)
++/* Guest offset of the next 2M boundary past the unaligned slot start. */
++#define UNALIGNED_BLOCK1_OFF	(BLOCK_SIZE - SZ_4K)
++
++static void unaligned_guest_code(u64 base)
++{
++	u64 *first = (u64 *)(base + UNALIGNED_BLOCK1_OFF);
++	unsigned int pg;
++
++	/* Fault in the second 2M block only, as 4K leaves. The first stays empty. */
++	for (pg = 0; pg < PAGES_PER_BLOCK; pg++)
++		WRITE_ONCE(*(first + pg * (SZ_4K / sizeof(u64))), 0x1);
++	GUEST_SYNC(STAGE_BLOCKS_READY);
++
++	/* Logging on: this is the page the broken walker never write-protected. */
++	WRITE_ONCE(*first, 0x2);
++	GUEST_SYNC(STAGE_LOGGED_WRITES);
++
++	GUEST_DONE();
++}
++
++static void test_unaligned_slot(void)
++{
++	struct kvm_vcpu *vcpu;
++	unsigned long *bmap;
++	struct kvm_vm *vm;
++	u64 gpa;
++
++	vm = vm_create_with_one_vcpu(&vcpu, unaligned_guest_code);
++
++	gpa = (vm_compute_max_gfn(vm) * vm->page_size) - 3 * BLOCK_SIZE;
++	gpa = align_down(gpa, BLOCK_SIZE) + SZ_4K;
++
++	/* Plain anonymous backing: the library disables THP on it. */
++	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, gpa, DATA_SLOT,
++				    UNALIGNED_NPAGES, 0);
++	virt_map(vm, TEST_GVA, gpa, UNALIGNED_NPAGES);
++	vcpu_args_set(vcpu, 1, TEST_GVA);
++
++	bmap = bitmap_zalloc(UNALIGNED_NPAGES);
++
++	expect_sync(vcpu, STAGE_BLOCKS_READY);
++
++	/* wp_range() starts at the unaligned slot base and meets an empty 2M block. */
++	vm_mem_region_set_flags(vm, DATA_SLOT, KVM_MEM_LOG_DIRTY_PAGES);
++
++	expect_sync(vcpu, STAGE_LOGGED_WRITES);
++
++	kvm_vm_get_dirty_log(vm, DATA_SLOT, bmap);
++	TEST_ASSERT_EQ(count_dirty(bmap, UNALIGNED_NPAGES), 1);
++	TEST_ASSERT(test_bit(UNALIGNED_BLOCK1_OFF / SZ_4K, bmap),
++		    "First page of the second block was not write-protected");
++
++	vm_mem_region_set_flags(vm, DATA_SLOT, 0);
++	expect_done(vcpu);
++
++	free(bmap);
++	kvm_vm_free(vm);
++}
++
++static bool hugepages_available(size_t bytes)
++{
++	void *mem = mmap(NULL, bytes, PROT_READ | PROT_WRITE,
++			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB | MAP_HUGE_2MB,
++			-1, 0);
++
++	if (mem == MAP_FAILED)
++		return false;
++	munmap(mem, bytes);
++	return true;
++}
++
++int main(void)
++{
++	if (hugepages_available(NR_BLOCKS * BLOCK_SIZE)) {
++		test_aligned_transitions();
++		test_repeated_transitions();
++		if (kvm_has_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2))
++			test_manual_protect_transitions();
++		else
++			ksft_print_msg("SKIP manual protect: capability unsupported\n");
++	} else {
++		ksft_print_msg("SKIP hugetlb scenarios: need %d reserved 2M hugepages\n",
++			       NR_BLOCKS);
++	}
++
++	test_unaligned_slot();
++
++	ksft_print_msg("All ok!\n");
++	return 0;
++}
 
+base-commit: bae99073549aba7c3d79685a4640a46aa5c55340
 -- 
-2.55.0
+2.52.0
 
