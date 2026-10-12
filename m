@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-150.mta1.migadu.com [95.215.58.150])
+Received: from mta1.migadu.com (out-158.mta1.migadu.com [95.215.58.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6D140B0FA
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 14:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4396B427F8F
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 14:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791813763; cv=none; b=bF+SViK8QTMrBOpBsODwFqemTcidDdZATSda6NIsY/84I3BN0o/QqLuqBp4+5asIrF5GNULwm2UoIBMmAxSBG7HAbI2BoBl7laB993Je4UMEKkROviHqtNgSjdGFM1uwXWLax90mLik14XLjVVvo/Cucb0DBe2GvAPLRj4u9jSY=
+	t=1791813771; cv=none; b=MlBFtgIUdYQ5kK6yei5Q5/kGbfG7gZU1u19LE/LwnotaoyIxHRthkQowood5q8LOU2x0CuZnArZibgxc7wrBFOcrgPwH5i21gXHfeuYpHqyA9P4V6yYbQ3vIuBW4i6Cz4t9sDNFq8LQgTu75SLjHh1pNndKjai47plNEPGFbxTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791813763; c=relaxed/simple;
-	bh=rOBeC0UygHARM0kn1ptuUKSyyn7TzM9JJoJzZ49+TdA=;
+	s=arc-20240116; t=1791813771; c=relaxed/simple;
+	bh=lL5ZR2PgGHAxQPANSgaERaDouH6EiWuLA6v56Civr7s=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K2kkd6pAi/3wI9gGA6OCZ3RrMPuG75kU3nzlgI3Jj2QwgO+nGcYyQGOjHzfvZFl/YKJKfkRt9iExVdP7ZqnZplicl9gKiWYlZ0hVRgkJLItbu9IWQri5MGN72863ukeVUsHe4DtVcAKBWT7fjH6TOUDgBngL1Bs1cDk9ZarRCG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hVuoTGEr; arc=none smtp.client-ip=95.215.58.150
+	 MIME-Version; b=clvq/W9miKbL94KVplTUb22QI174pGVWdsaMCF1hDSHZvdkabL6tBplBmJQU7/Uve2TZ700hCgiiCQUMiKBFH6ZnvYiLsMLMcR6PMTZhe8fQdPxgM3TrnlajOYkXnIkenRVaS58FHB1OxUSACylurMhcXfxssCaUmnyoECOV1/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SKL5UPxk; arc=none smtp.client-ip=95.215.58.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hVuoTGEr"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SKL5UPxk"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=rOBeC0UygHARM0kn1ptuUKSyyn7TzM9JJoJzZ49+TdA=;
+DKIM-Signature: a=rsa-sha256; bh=lL5ZR2PgGHAxQPANSgaERaDouH6EiWuLA6v56Civr7s=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791813760; v=1; x=1792418560;
- b=hVuoTGErps+6UbjoIybOLFj0qJS8n7wjEHTpbQWyZZ1tWdn9LdnTbcpFMJBEl9UqIS0buKxX
- 0HaaU1gG2clAtEqdfzVfxrjkYx35h5ICXjw0GqbLjgT7GKdY9p0QOCW74IciA7qN1z9Mzz45tjc
- cMyglz6kKtFohiVWGE5KKAaY=
+ t=1791813768; v=1; x=1792418568;
+ b=SKL5UPxkx8oz0EoHPjsxreEQ4aJOBGpsYshhD0Sc1E22FlTVspaBersNtpHjIrgHVIeKisQQ
+ ivlamR6M3fh4EAwgC2VKMnzhn9+BaqXO+HcrQY6IBNdMKXd4/XUHXX9yY3l6DyQz2G8ZiOtHMja
+ QWwTE/KA9mTsyLZrUnXslBv4=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 3f5002008a70a5e4;
-	Mon, 12 Oct 2026 14:02:39 +0000
-X-Mizu-Trace-ID: 3f5002008a70a5e4
+Received: by mta10.migadu.com with ESMTPS id 01321d116cb14331;
+	Mon, 12 Oct 2026 14:02:47 +0000
+X-Mizu-Trace-ID: 01321d116cb14331
 X-Migadu-Flow: FLOW_OUT
 From: KaFai Wan <kafai.wan@linux.dev>
 To: Andrii Nakryiko <andrii@kernel.org>,
@@ -47,9 +47,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 1/3] selftests/bpf: Fix prog_tests framework subtest count checks
-Date: Mon, 12 Oct 2026 22:01:59 +0800
-Message-ID: <20261012140202.2754552-2-kafai.wan@linux.dev>
+Subject: [PATCH bpf-next 2/3] selftests/bpf: Skip expected_msgs subtests when stdout is not saved
+Date: Mon, 12 Oct 2026 22:02:00 +0800
+Message-ID: <20261012140202.2754552-3-kafai.wan@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261012140202.2754552-1-kafai.wan@linux.dev>
 References: <20261012140202.2754552-1-kafai.wan@linux.dev>
@@ -61,62 +61,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The hardcoded expected skip_cnt/error_cnt in test_prog_tests_framework()
-mismatch the real count when the binary is run with -t or -n filters,
-since some subtests are not selected. Count the executed subtests and
-compare against that value instead.
+stdio_hijack_init() does not set subtest_state->stdout_saved when
+running with -v in non-parallel mode, since output goes straight to
+stdout. In that case subtest_state->log_buf is left NULL, so the
+expected-messages subtests crash when inspecting it. Skip them when
+stdout was not saved.
 
-Fixes: 2324257dbd68 ("selftests/bpf: Refactor prog_tests logging and test execution")
+Fixes: 34c513be3dad ("selftests/bpf: __not_msg() tag for test_loader framework")
 Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
- .../selftests/bpf/prog_tests/prog_tests_framework.c    | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ .../testing/selftests/bpf/prog_tests/prog_tests_framework.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-index d111fe105447..53347f379924 100644
+index 53347f379924..b4cd7c7ff439 100644
 --- a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
 +++ b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-@@ -13,6 +13,7 @@ static void clear_test_state(struct test_state *state)
- void test_prog_tests_framework(void)
- {
- 	struct test_state *state = env.test_state;
-+	int subtest_cnt;
+@@ -169,6 +169,12 @@ void test_prog_tests_framework_expected_msgs(void)
  
- 	/* in all the ASSERT calls below we need to return on the first
- 	 * error due to the fact that we are cleaning the test state after
-@@ -30,25 +31,30 @@ void test_prog_tests_framework(void)
- 		return;
- 	clear_test_state(state);
- 
-+	subtest_cnt = 0;
- 	if (test__start_subtest("test_skip_subtest")) {
- 		test__skip();
- 		test__end_subtest();
-+		subtest_cnt++;
- 	}
- 	if (test__start_subtest("test_skip_subtest")) {
- 		test__skip();
- 		test__end_subtest();
-+		subtest_cnt++;
- 	}
--	if (!ASSERT_EQ(state->skip_cnt, 2, "skip_cnt_check"))
-+	if (!ASSERT_EQ(state->skip_cnt, subtest_cnt, "skip_cnt_check"))
- 		return;
- 	if (!ASSERT_EQ(state->subtest_num, 3, "subtest_num_check"))
- 		return;
- 	clear_test_state(state);
- 
-+	subtest_cnt = 0;
- 	if (test__start_subtest("test_fail_subtest")) {
- 		test__fail();
- 		test__end_subtest();
-+		subtest_cnt++;
- 	}
--	if (!ASSERT_EQ(state->error_cnt, 1, "error_cnt_check"))
-+	if (!ASSERT_EQ(state->error_cnt, subtest_cnt, "error_cnt_check"))
- 		return;
- 	if (!ASSERT_EQ(state->subtest_num, 4, "subtest_num_check"))
- 		return;
+ 	for (i = 0; i < ARRAY_SIZE(cases); i++) {
+ 		if (test__start_subtest(cases[i].name)) {
++			if (!env.subtest_state->stdout_saved) {
++				test__skip();
++				test__end_subtest();
++				continue;
++			}
++
+ 			error_cnt = env.subtest_state->error_cnt;
+ 			msgs.patterns = cases[i].pats;
+ 			msgs.cnt = 0;
 -- 
 2.43.0
 
