@@ -1,106 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76074718EC;
-	Mon, 12 Oct 2026 10:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E928A3E6DF4;
+	Mon, 12 Oct 2026 10:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791800991; cv=none; b=F6wKFRV4ckxVs5SQTFx9gd8fbqKaHVl4F4t9UlseUCQN+eHh+EB49gfgs5ZVHYrRz6mMBSn0/5bkJ+mg/ts2z17Tv50TcXLtmKJnJmhiZoB3YjVclAJ2/nW3M4HVBj2xauBUmFDAJsIbuMGC2nn0lya+Is0wQi99Wkn+ebVsEtc=
+	t=1791801747; cv=none; b=K+3oDY8km+KpO2PvFo6eYQ8BcHWyPzuSh0jOv0wQaTZQV2pJDWm/irNrAvgAI8Kr1miS9Vp5JEcwUre6jCb7WztwT/QOhtlM0CAO6f4gPMKQxCLemWI1/4BME08WD2uxhc8AWeejQgFQNZ3AAP2JABl+B6Gr0TYYK3yKaiQaGRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791800991; c=relaxed/simple;
-	bh=5zbNkMtb7e6SKEtLVkUM2VXhlBRXbHTju/tTSHxlOGo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QXrKH9I+mGfAh7ZDA04XuIynZbyUuoOEgcoNn+Q/O/SK1oWXoTw1kJpvTgX25jV21lSmOWgNeNF+xHxsPMzmJtC6zcGVJouz2P03Sx1VU2Yn3pBOHvvE1lXDJfteDQxz6/L2GIOHghLCfMJNMHknvtkDwbco/e3kfFjtfbyvK6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kRu+XuQM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791801747; c=relaxed/simple;
+	bh=g17MXktF2GmX0zJd05Qf+GdkiWrqsJ8LPSoQLvkRA98=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JvrAjTA5T3W+o4kcYEsTEHj+Xp18f80a/b2aLKlYFBLE7fDxKHX6mtXBfyrB7OEwfNMw5YrigX+Qk144Er7fovBxjccM3TDvdz1lrfFJN8R2ILCwgh8y37bREvFkFRVPz5W7S4mI1g13tlRz/f209lxvJWEv53DItWzwRM0aIT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vMGFuu61; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kRu+XuQM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9109C1F0089B;
-	Mon, 12 Oct 2026 10:29:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791800985;
-	bh=li1gWyf1yXK2Y0+8Y+XJI0fZtOcno0yy1qKJ4a5DFLQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=kRu+XuQMs2afadLx1E/dMzg4UjakTRJyFch11x+nKfuPjfky+k/kNXDOoDhj3rW1N
-	 Vcpq9nfCc9DtqvN2BFOChx3riMtqSRoHOsOtlczK6tjDBlBNZWL8KKX3xlnOBCDDL3
-	 f0F01h3Oo3jSMMsgotPXe5Mff0ELWO78/1SvG8M9Qog5tkbflus98C/kST/AEaxLSY
-	 7gci+2byo1HErx2KJwEYiBm2aPoPPkW3jNs7jEj83RLZ6dvGnB88+MnD2lTvgkxSqC
-	 2jkjTNzSBrbhEVkFdz/snNWEEAzPObgs0kY49vAdZiiBAIcFYl31oeTesZd6W9y1UO
-	 lLKap5XQ8vVGA==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: David Matlack <dmatlack@google.com>
-Cc: kexec@lists.infradead.org,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  Jordan Richards
- <jordanrichards@google.com>,  Mike Rapoport <rppt@kernel.org>,  Pasha
- Tatashin <pasha.tatashin@soleen.com>,  Pratyush Yadav
- <pratyush@kernel.org>,  Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH] selftests/liveupdate: Prefer KVM and HVF over TCG in
- vmtest.sh
-In-Reply-To: <20261008132813.1966023-1-dmatlack@google.com> (David Matlack's
-	message of "Thu, 8 Oct 2026 13:28:13 +0000")
-References: <20261008132813.1966023-1-dmatlack@google.com>
-Date: Mon, 12 Oct 2026 12:29:42 +0200
-Message-ID: <2vxzv777jjop.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vMGFuu61"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=d6ADhB5BJ6rgYWInDuDWi+047e4zYVau+QWZM7M+Y50=; b=vMGFuu614SZZfq5TH+UQelPyIf
+	hh7EWQHdaWai5c1I9lUD7tDzd4TUCw8ipNXDfB8XZ2xkvNhrUllHvZPVr0QdB3Qw1XjDztwE7IB1k
+	4UZmz3aiNjExhvStzLNE1ykTkBBrOVTeSTpbrCKcTBDSly7/wMJHWfTWR+iV6U8dpYK2kQu1mvSWM
+	RQl/IiOAi3WnFbJOzdafRRjcuPe1MjJrwNXSTIh9Mgrq3V+xjSn9hrVzDuThCMhXCK0u7O0ocOVRD
+	pOcDNAAtH9/jqwplmjDX20mbsvc+WMeP+fJcbnhpL6od48Ubr5nq4eAhHurUmrGuRdHb9D+CA0TUg
+	1V4iSong==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1xGDTt-00000004NDI-3XU4;
+	Mon, 12 Oct 2026 10:42:09 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id C58A430063F; Mon, 12 Oct 2026 12:42:08 +0200 (CEST)
+Date: Mon, 12 Oct 2026 12:42:08 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kunwu Chan <kunwu.chan@gmail.com>
+Cc: mingo@redhat.com, acme@kernel.org, namhyung@kernel.org, sj@kernel.org,
+	corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	james.clark@linaro.org, akpm@linux-foundation.org,
+	lianux.mm@gmail.com, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] perf/core: add AUX buffer ownership for kernel
+ events
+Message-ID: <20261012104208.GQ4121339@noisy.programming.kicks-ass.net>
+References: <20261009160010.1829642-1-kunwu.chan@gmail.com>
+ <20261009160010.1829642-2-kunwu.chan@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261009160010.1829642-2-kunwu.chan@gmail.com>
 
-On Thu, Oct 08 2026, David Matlack wrote:
+On Fri, Oct 09, 2026 at 11:59:48PM +0800, Kunwu Chan wrote:
+> Add an in-kernel AUX owner reference and setup/release helpers for
+> kernel-created perf events that need an AUX buffer without a userspace
+> mmap.  The setup path validates that the event is a kernel event with
+> no parent, rejects non-power-of-two page counts and negative watermark
+> values, allocates the perf buffer and AUX pages, records the kernel
+> owner, and attaches the buffer under the same lock.
+> 
+> perf_event_release_aux() stops AUX writers, frees AUX storage, and
+> detaches the buffer, in that order, matching the AUX teardown ordering
+> of perf_mmap_close(): perf_pmu_output_stop() walks event->rb->event_list
+> and rb_free_aux() must run while the buffer is still referenced by the
+> event.  The single event->rb reference is dropped by
+> ring_buffer_attach(event, NULL) itself, so the release path does not
+> put it again.
+> 
+> Both functions run under event->mmap_mutex, the lock that already
+> serialises ring-buffer attach/detach transitions for an event:
+> perf_mmap(), perf_mmap_close(), _perf_event_set_output() and
+> _free_event() all hold it around ring_buffer_attach().  Concurrent
+> perf_event_release_aux() callers therefore go through the same
+> serialisation point, and a second release call, or a release of a
+> buffer this API does not own, is a no-op.
+> 
+> Keep aux_mmap_count dedicated to userspace mappings.
+> perf_aux_output_begin() accepts a writer while either a userspace or kernel
+> owner remains, preserving the existing teardown ordering.
+> 
 
-> Pass the -accel options to QEMU in the order KVM, HVF, TCG, so that
-> vmtest.sh prefers to use KVM and HVF over TCG when they are available.
->
-> QEMU uses the first accelerator in the list that initializes, and TCG
-> always initializes, so the tests currently always run under TCG, even
-> though the commit that added vmtest.sh describes "automatic accelerator
-> detection (KVM, HVF, or TCG)".
->
-> Fixes: 89dd1421c554 ("selftests/liveupdate: add end to end test infrastructure and scripts")
-> Signed-off-by: David Matlack <dmatlack@google.com>
+> diff --git a/kernel/events/internal.h b/kernel/events/internal.h
+> index c03c4f2eea57..760b7659ad87 100644
+> --- a/kernel/events/internal.h
+> +++ b/kernel/events/internal.h
+> @@ -48,6 +48,12 @@ struct perf_buffer {
+>  	int				aux_nr_pages;
+>  	int				aux_overwrite;
+>  	refcount_t			aux_mmap_count;
+> +	/*
+> +	 * In-kernel AUX owner reference, set by perf_event_setup_aux():
+> +	 * admits writers and ties the AUX teardown to
+> +	 * perf_event_release_aux() when no userspace mmap holds the buffer.
+> +	 */
+> +	refcount_t			aux_kernel_count;
+>  	unsigned long			aux_mmap_locked;
+>  	void				(*free_aux)(void *);
+>  	refcount_t			aux_refcount;
 
-IIUC HVF is only for MacOS. I don't think we care to run this script on
-MacOS.
-
-Anyway, thanks for the fix
-
-Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
-
-> ---
-> Tested by running run-vmtests.sh and then observed that arm64 correctly
-> fell back to using TCG after trying to use KVM and HVF, and that x86
-> reported no warnings.
->
-> arm64:
->   qemu-system-aarch64: -accel kvm: invalid accelerator kvm
->   qemu-system-aarch64: -accel hvf: invalid accelerator hvf
->   qemu-system-aarch64: falling back to tcg
->
-> x86:
->   (not warnings)
->
->  tools/testing/selftests/liveupdate/vmtest.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/liveupdate/vmtest.sh b/tools/testing/selftests/liveupdate/vmtest.sh
-> index 64fd2ab55b76..69beda6c961d 100755
-> --- a/tools/testing/selftests/liveupdate/vmtest.sh
-> +++ b/tools/testing/selftests/liveupdate/vmtest.sh
-> @@ -180,7 +180,7 @@ function run_qemu() {
->  	echo "# Serial Log: $serial"
->  	timeout 30s \
->  	$qemu_cmd -m 1G -smp 2 -no-reboot -nographic -nodefaults \
-> -		  -accel tcg -accel hvf -accel kvm \
-> +		  -accel kvm -accel hvf -accel tcg \
->  		  -serial file:"$serial" \
->  		  -append "$cmdline" \
->  		  -kernel "$kernel_path" \
->
-> base-commit: 80cf37169daef112b6bea9ae7d9808355a045475
-
--- 
-Regards,
-Pratyush Yadav
+This doesn't make sense to me. If the even is a kernel event, then there
+cannot be mmap users, so adding another refcount is just for giggles?
