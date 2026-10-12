@@ -1,226 +1,155 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92501E51E0
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 01:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C652F12C5
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 01:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791767876; cv=none; b=t/ySpYfYPUafYuZS1aj1l9ga3fk8kGjESxoxEDS3mnNiO4CUbaFQjjiSapdXUb033AMrbnNfITizvTIUJPe6QS+UXZa2dRTgq6MpoHR7rVk3o2PRqUs6nppr1lwv0iwO0n2L7kd3wSchnjz29gCOCRb7a6XoPPleewXF2CLgOiU=
+	t=1791768370; cv=none; b=G8E9sJH4Lmbyx9R/RaLQQZv/2WF1jpzmmMQa/CsYWB0odSrbqv+ZkPy6KG9tgooJMYynwliwxxgRGzTQBJt8d1+/QE0DL9MIO1Ro+HV5Xd6Dhz4GK6mdhF69gPUC9JR5rylW8Id43EpTEQe434H2hq+MhdIQKACHWm1OGA9HPtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791767876; c=relaxed/simple;
-	bh=6I9/o2fsb95RZ/cdcrjocTXvh86feiHHlbzI4OFSZMY=;
+	s=arc-20240116; t=1791768370; c=relaxed/simple;
+	bh=tzLBJAojfuIfb94wAwFqFt4eYKDn0B41zIhjFfxqZYI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IuEd2IHrP3ccwHK8Ep1TpIwdyJ86cPZTuYSjt9XmK7/nOc0UlVm5s/v7W1iiMGc2QGQ0Msvh21VE8TnHD4wtUrl2Dr8RYyKBUbQGw9L2hg50JplVdne/3i8L5HACyZJXBVES4Ead2FHTm2PatJ5RXtyAC4HU8VF0HIovKOeUlRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KygHaENb; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 MIME-Version:Content-Type; b=OO4zaSE2n+Wz08h3LwkKRIKLgUrUjdE8vTz71yVwFS0tY+lH8vS2kAD1V3GlrwgvsaCMol9xdiE05nJ7irhSZep+dElE7P09HWPB3OBzQYHbHrS2vDu24bGBUNcxIyrrVSJ/Gl4GlvGbwaeXCE6NoFdQHPd6yCG5J3EDKHNU3Oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com; spf=pass smtp.mailfrom=openai.com; dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b=fqJfeVfz; arc=none smtp.client-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KygHaENb"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-ccce6d9abfeso801591a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 18:17:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b="fqJfeVfz"
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6dd7070699eso1101574eaf.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 18:26:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791767873; x=1792372673; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8tVHCGk2Xwqu+yf2mIq4Pai4+4x8BJRwBsQH1o/snK8=;
-        b=KygHaENb2fxkCWmR9OsxI/hUXRS91DrD7vgPECd+1Xzf3rvB1DQYwTXhRWtc3fyIpO
-         fvHw6dJ/peyFQt/xTyAdlbIbdd+ekW4r2+LQNhoQNA66QgyrINczMJpitY8gHcK2H4T7
-         cVZ7UaSXDBNjWP/QpTuA0KdhWZOYwN0IdXnaw+WRlakuplgXdsCpHA/LbQzoqwVznnVR
-         xqT4Xn/MLz/+1Y30Yax9R5j3uH/BNASk+3688Wsg+GfwdBAqNHMowsPFbmSX0KCN8HEr
-         qr3ZaO54bcfkVszVaiiyFDeXXT9mwPGvKpMjjnfzTwes9oPBu6tk4ATvmQqzMF2L6pfJ
-         6IXw==
+        d=openai.com; s=google; t=1791768368; x=1792373168; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=u+eNfrR0vfA3cM3B1uHRjef6pcqbiMOdYjlGJEphPzc=;
+        b=fqJfeVfzt5JtzZaWbAfim+Ssh6Ae2D3P2+oW/WoKq/4DcxS1AElmYqy9w8gxbbDYxz
+         MK/2DZ0iryEtEnvxgBw9qjCKGhcztaoccq6RXQRmTcKmZdbFv5MlHe41jUJs80vtSlb3
+         wSzkW9d37OOSJ4rG9M5CIv2KfCGcXvbOqWoh0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791767873; x=1792372673;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-gg
+        d=1e100.net; s=20260707; t=1791768368; x=1792373168;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8tVHCGk2Xwqu+yf2mIq4Pai4+4x8BJRwBsQH1o/snK8=;
-        b=tcwL4nfD9bOHLQCxGCEhIbNJfNgPZB+izIPLr/MUf5AwqCPidXZ0Jr4/fSnUXFF0Iw
-         j4hKvroVMdyO5q7o5JkNNWKgg+mzKu9AwVfiXeMjqgfmwkr1LyeEhI/+LJ30BGfnAq0G
-         LLVh/72wGHFtND+8qfcFy4eoa+L3db2nOy8+VQE8Lc+B032anHopw6flRkh7n41B8HNs
-         KRVW4bqxXfelk1inU8s8gODpK/j1dORhMx0Lwrato/pPqxVeA4k4o58zyX76h/oQugva
-         WmYZ7j5OsgpijSQHEhFtPonrV8J8SDZftr6r5FmGAz7ORO3XmMtE5Uia5uoCL4hQsfs7
-         0LRw==
-X-Forwarded-Encrypted: i=1; AKwUvBx1JPbuqBM6qQDAER22PWlPInKSlLFbLWdjhoSETIfzKSgYgzp9GppRQNZ7K8d2/FJUPax96A3rcAJj9wR8IXs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKVoLAH7j28HmAD+m6P7+ukZRkGqG2UMqNce5UCKYycCaRy7YqR
-	BlDX+8YxSzmqLxUob1jObZBjm1e+AyOtmTTacaLGEUrCIl1U9NNi8Yoy
-X-Gm-Gg: AYBFou2b9nv3sfEuCJcP/HVy+61tLMwwW8EZMjFPNzRi+z0d0Etcyp4Pp9ZU4ybeeYb
-	r0sR8bQ0SGinTNbOnzGD7gbkZyYbsw3pXLw+Z/Jxyy8NHwWD1H2FtUIzc1f8IEkFE1G+9EMmF5G
-	C9TPd30zf9FcSVy6b8X1FAtNmh4tB7JQwFc8/IgZ+uKxsfJGpLWNN3SxxKHSb6dXfZMkULkbGNf
-	eRw3sj1XvYNxvvS+1rgM48sggK0XwWcbhNqIYJpassFboxyIyi1OMbWNWlMYdIPuVwn97T6pLds
-	4dVGph3kpYUjm2ZPki3+DWqn3PgPnqEagRTjm+UNpWu9wdjEiAX6GqES9MLeQCARIdbidjPmQoS
-	cGB9kxf/+NJ5mITy4qaTEoAQtDjxhfwZ3AunJn7s1G54NvVxS4TzKq1sOBXxwUj4BARxmpNXvWP
-	JYsYJNmA/g0gvvcas/wp82uqnmx6CJjRxOu2uXFIU0nhKBhmq1XUMbl6HKEfjHl0LqOqK44Lb4n
-	UrDutDAYiEtNzOrr8V07miwRARlVdv8G58g56Ef6bbKq0aoBRrNxFKY8m8nnC8h2Uz6WOlr5xPq
-X-Received: by 2002:a17:90a:d006:b0:39e:53a:c8d4 with SMTP id 98e67ed59e1d1-3ab3a90e57amr5759375a91.12.1791767872977;
-        Sun, 11 Oct 2026 18:17:52 -0700 (PDT)
-Received: from m-upc-A520M-HDV.lan (oki-109-236-14-10.jptransit.net. [109.236.14.10])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab38dd5864sm13743307a91.8.2026.10.11.18.17.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Oct 2026 18:17:52 -0700 (PDT)
-Sender: Yuyang Huang <uyoko90@gmail.com>
-From: Yuyang Huang <sigefriedhyy@gmail.com>
-To: Yuyang Huang <sigefriedhyy@gmail.com>
-Cc: Ajay Singh <ajay.kathat@microchip.com>,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Kees Cook <kees@kernel.org>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-	Nikolaos Gkarlis <nickgarlis@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Stanislav Fomichev <sdf.kernel@gmail.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Willem de Bruijn <willemb@google.com>,
+        bh=u+eNfrR0vfA3cM3B1uHRjef6pcqbiMOdYjlGJEphPzc=;
+        b=zfCnj9UNCknyTh7AZFb1rNhZHztC23AW7f+BHFAUlJSrYk2pWE8Z6I7zwiHFzPCOKT
+         w3xoXVkUkPl8Q8jE2Gu1bojs8omsXVLCd4BuvMEfmKU2vS+J7Bmw0xmJfqZm9nuVGcIl
+         p/F07OrQW8XepMBh7DJw9HGB+QSMtoYrDED1m/SMcUkwiQSLckzp15akVkkWWi5aYroU
+         mwYTFcqHVmnrwofoTE1Tq/ngqDeg7V/DTB3Y6ykUqlF4nssQH/EMdXSRKvgaV/srp3zv
+         iYHkOrHICaY8DJpmeJkohA+CbapqLC9zC/6ksR+qLhUrlbP8CCENxnqBydR7nMlve3EN
+         yL1w==
+X-Forwarded-Encrypted: i=1; AKwUvBxViNXiCppc7MGqnHVgV/orVx2CsMltVf3oo3R+F/LZb7OoTSzH04e2MDVXHllJWj2ZeLNLo5J4lcoDaI7n+kE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIsiRxMpl21Gs5U9RcCLwOH0X4wuPF23deiJxEqRlcHVHf8Djjo
+	mLOpbsiTMACpkvAmHVpTHEN5twEjW+OISm3tPiIMfin2rXvgefhqQ1BFomfptErPZN4=
+X-Gm-Gg: AYBFou3mU/tDOA/lWyGsdtxAJLXbHVz8WxYxoDfe/vm1YFBGJNvwxID8NHfrppmYsuF
+	VUa5NrAhKzHiUqqIP8wOmdqX80oVnJYY739Y/E2xCIvxC6zxqdcAP1o9NLoxoDBmzc0QoeO3qXh
+	bPihQ5MZUeqwA3WpSHj/J0FnAWKIIHfzBeqNTJ9V5ubZXDp8OOGrHmek1nRGx1U2UYjndUVrQ6X
+	eQBtvmDZ0pyYEdBvOZprchAE+xFwZB32TcD2Iz+ETAMcLm8yp2v8snidzFjzqsUVOlJJL+0UEEC
+	paWaIHGzDVa9EJOlRUTvxABoRlqj3NNGzXqwYvXZtvfTFfvQ5LIgUIEA5eR459QuvYuIQmiUKIA
+	0vWclKGkjeCrCXlZ9zCgqPfQ4R+MByQU0MYnTXI7l2GASBxl8+9+tbVxqN6M6YYXqmmqqiPdFdz
+	7PLKJhSO66M4CHYlpvPY4IFf4TH58HZCdmRXHOu7LCijARNjE2JeDF/pyWh5xVM3wfEAzqAJGcL
+	UllCLq+CryFpnoCVrrexWwwchGScFJkVevxo+N2JfshskjFNpWDy8hIsyMObrODznDW8HEtwiTJ
+	WcfRtkdkhPZfpZFim3XtMYz6qJ1X7HkWJQ7oWw==
+X-Received: by 2002:a05:6820:f031:b0:6cd:3ffc:e330 with SMTP id 006d021491bc7-6ef129e2d89mr6079783eaf.78.1791768367710;
+        Sun, 11 Oct 2026 18:26:07 -0700 (PDT)
+Received: from com-68297.corp.openai.org (vpn-centralus-01.tradc-corp.com. [172.169.249.3])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6f634860481sm1584254eaf.13.2026.10.11.18.26.05
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 11 Oct 2026 18:26:07 -0700 (PDT)
+From: nramaswamy@openai.com
+To: Neal Cardwell <ncardwell.sw@gmail.com>,
+	Eric Dumazet <edumazet@kernel.org>
+Cc: Neil Ramaswamy <nramaswamy@openai.com>,
+	davem@davemloft.net,
+	horms@kernel.org,
+	jiayuan.chen@linux.dev,
+	kuba@kernel.org,
+	kuniyu@google.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH net-next v11 6/6] selftests: net: test AF_PACKET multicast dumps
-Date: Mon, 12 Oct 2026 10:17:07 +0900
-Message-ID: <20261012011707.3378-7-sigefriedhyy@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261012011707.3378-1-sigefriedhyy@gmail.com>
-References: <20261012011707.3378-1-sigefriedhyy@gmail.com>
+	ncardwell@google.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	ycheng@google.com
+Subject: Re: [PATCH net v3 3/3] selftests: net: packetdrill: test RTO fallback after partial undo
+Date: Sun, 11 Oct 2026 18:25:56 -0700
+Message-ID: <20261012012601.27658-1-nramaswamy@openai.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261009171447.291802-1-ncardwell.sw@gmail.com>
+References: <CAL4Wiip9RyA-2=p0SVwBcn-oe0864FqqF3QMTCX_7=+ErcJp6Q@mail.gmail.com> <20261009171447.291802-1-ncardwell.sw@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Dump the link-layer multicast addresses of a dummy device and verify
-that ifa_index restricts the dump to that device, that the all-hosts
-address joined on link up is listed without IFA_F_GLOBAL, that an
-address added with SIOCADDMULTI is listed with IFA_F_GLOBAL and
-IFA_MC_USERS, and that IFA_TARGET_NETNSID dumps another netns.
+From: Neil Ramaswamy <nramaswamy@openai.com>
 
-Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
-Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
----
- tools/testing/selftests/net/rtnetlink.py | 73 +++++++++++++++++++++++-
- 1 file changed, 71 insertions(+), 2 deletions(-)
+Thanks for the feedback Eric and the patch Neal. I took some time to read 
+through the code, and I have a few questions.
 
-diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selftests/net/rtnetlink.py
-index dc8c77db48974..5534ade056a5c 100755
---- a/tools/testing/selftests/net/rtnetlink.py
-+++ b/tools/testing/selftests/net/rtnetlink.py
-@@ -5,13 +5,18 @@ import socket
- import struct
- import time
- from lib.py import bkg, ip, ksft_exit, ksft_run, ksft_eq, ksft_ge, ksft_true, KsftSkipEx
--from lib.py import ksft_not_in, ksft_not_none
-+from lib.py import ksft_in, ksft_not_in, ksft_not_none
- from lib.py import CmdExitFailure, NetNS, NetNSEnter, RtnlAddrFamily, RtnlRouteFamily
- from lib.py import defer
- 
- IPV4_ALL_HOSTS_MULTICAST = b'\xe0\x00\x00\x01'
- IPV4_TEST_MULTICAST = b'\xef\x01\x01\x01'
- IPV6_TEST_MULTICAST = bytes.fromhex('ff020000000000000000000000000123')
-+ETH_ALL_HOSTS_MULTICAST = bytes.fromhex('01005e000001')
-+ETH_TEST_MULTICAST_STR = '01:00:5e:01:01:01'
-+ETH_TEST_MULTICAST = bytes.fromhex(ETH_TEST_MULTICAST_STR.replace(':', ''))
-+ETH_PEER_MULTICAST_STR = '01:00:5e:02:02:02'
-+ETH_PEER_MULTICAST = bytes.fromhex(ETH_PEER_MULTICAST_STR.replace(':', ''))
- 
- 
- def _users_for(rtnl: RtnlAddrFamily, family: int, grp: bytes, ifindex: int):
-@@ -105,6 +110,69 @@ def dump_mcaddr6_check() -> None:
-                 s2.close()
- 
- 
-+def dump_mcaddr_l2_check() -> None:
-+    """
-+    Verify link-layer multicast addresses in an AF_PACKET RTM_GETMULTICAST
-+    dump: the ifa-index filter, mc-users, the global flag and
-+    target-netnsid.
-+    """
-+
-+    with NetNS() as ns, NetNSEnter(str(ns)):
-+        for ifname in ("dummy1", "dummy2"):
-+            ip(f"link add name {ifname} type dummy")
-+            ip(f"link set {ifname} up")
-+        dev_idx = socket.if_nametoindex("dummy1")
-+        ip(f"maddr add {ETH_TEST_MULTICAST_STR} dev dummy1")
-+
-+        rtnl = RtnlAddrFamily()
-+        defer(rtnl.close)
-+        addresses = rtnl.getmulticast(
-+            {"ifa-family": socket.AF_PACKET, "ifa-index": dev_idx},
-+            dump=True)
-+
-+        # dummy2 has entries as well, only dummy1 may be listed
-+        ksft_eq({addr['ifa-index'] for addr in addresses}, {dev_idx},
-+                "AF_PACKET multicast dump ignored ifa-index filter")
-+
-+        entries = {addr['multicast']: addr for addr in addresses}
-+
-+        # Bringing an Ethernet device up joins 224.0.0.1, which maps
-+        # to 01:00:5e:00:00:01 in the device multicast list.
-+        all_hosts = entries.get(ETH_ALL_HOSTS_MULTICAST)
-+        ksft_not_none(all_hosts,
-+                      "dummy1 does not have the all-hosts link-layer address")
-+        if all_hosts is not None:
-+            ksft_not_in('global', all_hosts['flags'],
-+                        "protocol entry is global")
-+
-+        static = entries.get(ETH_TEST_MULTICAST)
-+        ksft_not_none(static, "dummy1 does not have the SIOCADDMULTI address")
-+        if static is not None:
-+            ksft_eq(static['mc-users'], 1,
-+                    "unexpected mc-users for the SIOCADDMULTI address")
-+            ksft_in('global', static['flags'],
-+                    "SIOCADDMULTI entry is not global")
-+
-+        # target-netnsid dumps another netns, ifa-index is relative to it
-+        with NetNS() as peer:
-+            ip(f"netns set {peer} 5")
-+            ip("link add name dummy3 type dummy", ns=peer)
-+            ip("link set dummy3 up", ns=peer)
-+            ip(f"maddr add {ETH_PEER_MULTICAST_STR} dev dummy3", ns=peer)
-+            peer_idx = ip("link show dummy3", json=True, ns=peer)[0]['ifindex']
-+
-+            addresses = rtnl.getmulticast(
-+                {"ifa-family": socket.AF_PACKET, "target-netnsid": 5,
-+                 "ifa-index": peer_idx}, dump=True)
-+            ksft_eq({(addr['ifa-index'], addr['target-netnsid'])
-+                     for addr in addresses}, {(peer_idx, 5)},
-+                    "target-netnsid did not dump the peer netns")
-+            # dummy1 in this netns can have the same ifindex as dummy3
-+            ksft_in(ETH_PEER_MULTICAST,
-+                    {addr['multicast'] for addr in addresses},
-+                    "target-netnsid did not dump the peer device")
-+
-+
- def ipv4_devconf_notify() -> None:
-     """
-     Configure an interface and set ipv4-devconf values through netlink
-@@ -424,7 +492,8 @@ def ipv6_verify_inter_scope_addr_order() -> None:
- 
- 
- def main() -> None:
--    ksft_run([dump_mcaddr_check, dump_mcaddr6_check, ipv4_devconf_notify,
-+    ksft_run([dump_mcaddr_check, dump_mcaddr6_check, dump_mcaddr_l2_check,
-+              ipv4_devconf_notify,
-               ipv6_route_del_reason_expired,
-               ipv6_route_del_reason_ra_withdrawn,
-               ipv6_route_del_reason_absent,
--- 
-2.43.0
+First, I think the core invariant we're trying to maintain is that
+tsorted_sent_queue and tsorted_lost_queue are always themselves sorted by
+transmission timestamp. A nice property to have would be that all the
+skbs in tsorted_lost_queue precede everything in tsorted_sent_queue in
+transmission order so that partial undo can always list splice these
+together, but there's the edge case you point out:
 
+> The "often" is the RTO case: tcp_timeout_mark_lost() leaves the skbs it
+> marks in tsorted_sent_queue, and they can be older than what RACK moves
+> to the lost queue afterwards.
+
+I'm struggling to see why RACK cannot move all LOST (going to use this as
+shorthand instead of TCPCB_LOST) and RACK-eligible segments from
+tsorted_sent_queue to the lost queue; I think that this would actually
+maintain the simpler invariant that tsorted and tlost are both sorted and
+that all of tlost precedes tsorted, allowing for O(1) splice. To do
+this, I believe that we would have to remove:
+
+		/* Skip ones marked lost but not yet retransmitted */
+		if ((scb->sacked & TCPCB_LOST) &&
+		    !(scb->sacked & TCPCB_SACKED_RETRANS))
+			continue;
+
+from tcp_rack_detect_loss, and instead continue to check whether remaining
+<= 0; if it is, we add the segment to a local queue, which we then can
+splice to the end of the lost queue at the end of the function. We would
+probably want to retain the skip for LOST segments without SACKED_RETRANS
+when remaining > 0 to avoid updating reo_timeout.
+
+It seems like this would also prevent subsequent RACK scans from having to
+ever reconsider this segment, since it would have been moved out to the
+LOST list. But mostly, this seems like a conceptual simplification. Perhaps
+it's undesirable to have RACK be moving around segments marked LOST by the
+RTO, but I will leave that call to someone else. 
+
+Finally, I handed the invariant that both lists are always sorted to an LLM
+and asked it to try to find exceptions. I think it provided a plausible
+suggestion that the RTX scan for retransmission can see a segment that is
+LOST, attempt to retransmit it in __tcp_transmit_skb, update its
+transmission timestamp, and then fail with -ENOBUFS, leaving the new
+timestamp there. This could cause either list to have a timestamp that's
+out-of-order which can cause a subsequent RACK scan to stop early and miss
+segements.
+
+I'm not sure if restoring the timestamp to what it was before the failure
+is safe. I also couldn't figure out how to get packetdrill to simulate an
+error like this so I'm not sure how to create a repro for you. Let me know
+if I should write out a sequence of events.
+
+> in case that is useful for discussion or using. It also proposed 2 packetdrill
+> tests (one that claims "This is the case that Eric suggested for segments with
+> TCPCB_EVER_RETRANS."), which I can post if there is interest.
+
+Did it propose 2 different packetdrill tests? If I understand Eric's
+suggestion correctly, he's proposing to just take the test from 3/3 and
+modify its final lines to ensure prompt retransmission without an RTO. Are
+your LLM's proposed tests covering cases beyond this? 
+
+Thanks.
