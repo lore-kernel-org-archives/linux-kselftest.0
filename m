@@ -1,127 +1,109 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5EC3932DA;
-	Mon, 12 Oct 2026 03:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85ECD34AB14
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 04:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791775916; cv=none; b=kEykwxJgPZ1CdP5US9cvmpWDLhMISylKi1WrmQriJdDB9eyeDmbnfDP4/BholFImQpWJlvTAYMggubnjInYZ3xGdpFVrMvweuQ/GzQmMApOkfsRCpeesWuiiAOitXcm28FWisjvAeYCxmkDAudpSaVqL01cL9VXlSBnLUNJx1B0=
+	t=1791779192; cv=none; b=PiXazgbaALB8XmBj1a7aAC13yMsEwfEqe1SLJ2QrP4GTE/by9ynYhZsf1GkwpNWv7cRfCvBWtaZGxKTZBg9zqjJIxtkU1ByU5OVM42uBa2AXKC8+odAu5YRK0qCQU6QX/zgEkJ5VJM8aOkEiXYfFoFggjGNMmvB95QEvrsu90bE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791775916; c=relaxed/simple;
-	bh=pUx/u+ewmePs6CGYnzFZ4UMZHVfgyQmJNQj3BtH+42E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bj3nxzU9VrCUToyHNnV/nC0vC0kx14A9cBQrtLcCVGWwuixwqTyxXD7aro1boiLIPpLIoSWmL0pP67qHUpmzMjcaTLVwiDel3WEXfNB3143woeGXoumfLxFU68FpL5GZ5+yz+WCiVffl6GdDGWoWyKL0BNpBTZASq7WEDaRU2vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=F0sfyZSx; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1791779192; c=relaxed/simple;
+	bh=aiBAhlv2Ev/TS2fJoaSo8lPZ16KTHkhhUdlu5+WAv2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DAhZ07HjmoO2/oC5+q3fHZd2j2irHuckia9NFgx6TVqsO60Cx70G9B6svyj7t2WhxVwEwOAS3zZmRf2qUkrNeBTR31fRFZYHdirn+LOiU8xpCQcnZo2BCZRTMy8wCWtgnKDOZNZhv2mbDMclBBesfJwpGXRBYlLVcQHLJmQixZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fwfP72/U; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="F0sfyZSx"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69C2EfNr3017674;
-	Mon, 12 Oct 2026 03:31:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ytjfGa
-	FasxKFRVRaAiMZ4nRRUtTJ4xxx7wJVG+cpLYU=; b=F0sfyZSxlPxPwLgn7WMYmo
-	VSkD232GjPh7UVOyfhtkYKGLA2/OB6zo3pWu1boCtKW1+RG7qWT/3ZpXu6ZakNfF
-	3d7gwJ3tWi+wu4evrYYJR/f8GTDLl3QBtgTw4KaYKY8G0eG/OIG+qMtLYDw4+fO+
-	hsrfdYESfW1ERidTvIHtriJDf1YCqmDAP1KhANqYQ9x4ADrtd7BDl5ZB/WRRPEuK
-	Hw2H2N9WpXShL8foHBFvjOyYoKMddikj8pAcA/PdbHcrTZIm6YBIb/XJD57YfmkA
-	8L7B1JByQLC43DuIhP5IPsUVJrwPQz4qAj0KDbe/mgVS/1DzhCtoesxsuREAnfqQ
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4h7dv370bu-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 12 Oct 2026 03:31:36 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 69C252cT563558;
-	Mon, 12 Oct 2026 03:31:35 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4h802vknrm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Oct 2026 03:31:34 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 69C3VVlj49086938
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Oct 2026 03:31:31 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0A1272004E;
-	Mon, 12 Oct 2026 03:31:31 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 42C1020040;
-	Mon, 12 Oct 2026 03:31:28 +0000 (GMT)
-Received: from Linuxdev.bl1-in.ibm.com (unknown [9.123.8.83])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 12 Oct 2026 03:31:28 +0000 (GMT)
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Saket Kumar Bhaskar <skb99@linux.ibm.com>
-Cc: hbathini@linux.ibm.com, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        venkat88@linux.ibm.com, yeswanth@linux.ibm.com
-Subject: Re: [PATCH v14 0/5] powerpc/bpf: address missing verifier selftest coverage
-Date: Mon, 12 Oct 2026 09:01:27 +0530
-Message-ID: <179177344604.763259.17482742440271847221.b4-ty@linux.ibm.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1789982239.git.skb99@linux.ibm.com>
-References: <cover.1789982239.git.skb99@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fwfP72/U"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-3550c917fd3so2195267eec.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2026 21:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1791779189; x=1792383989; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7HtE6pXgrE7ezeCTTTPF8rtN8BUz+TwVSZ4PqyPsxjA=;
+        b=fwfP72/USZqDt0/SJslKhbUX9vdNj2ckCWvHsMlLtG0IrYkVzRItznHLmmhNF9q7Zp
+         f3yEUZl7xwaut6bI/yqwyMtLHNhqX87+ixG1akNsyESDRYuXrVdvNmiq+Lyw6385Frus
+         lamLXcQZuV2aMJ1xl/0fmDDHiaqwlE6Fd0XTX2aWHFG3mhqJMp2EOo9+HZx5hZ8Tj2II
+         Ked4bKgqeJm1f5aaINtJLbvGB6BJH9vl52HdtgAeCF4BScdeG8IjwN9qFEW4s9kMD+HO
+         RiKWIxn/hZn3sIhWdBXLZ5CqNZC6WP+7Q8E+QbMOSPz1xKEIh1w6ppYGzlLmXDbTdIeM
+         O9zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791779189; x=1792383989;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7HtE6pXgrE7ezeCTTTPF8rtN8BUz+TwVSZ4PqyPsxjA=;
+        b=2eMj2J4eKKjs5OfCR9+OfxUhou4TmfGAtzzSeKgmvQZYrivQBZo1t/mDKn1F0FT2Ks
+         yla3m1v3AWqB7rXmZ12GYbMuIyjzaqroOH40eRvXiHSJKbNNNcm2hpQdPZ/IGBfZ4PXc
+         WBD5niBItoWHWwJxVGlx8oGA32FbOOJYSKtl4sWKq8T247yv1Nu0JcAaC88ykdI9cN45
+         Sfhcl/fUPnJrxb32liGyRSM3f1jsrQaADbdIVgpH5QQJjZlyE0w9t/oXqOSD+NET1p9D
+         1YOxXjBoH/xOLm+tqn4+qni3OsOutp1PZ0WIXl01MVEekPU85QR7/2jLDsBLTs1ko5T9
+         PAxw==
+X-Forwarded-Encrypted: i=1; AKwUvBzE2YvlmK0bYwG4jQsRy+L85uQNu7RHv6Vzo0S8EJSlBJFE92ZTqqAiDxFKE6J0zJMxPqcScdOKHdL3OXlyTkQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL6ArpyR1NEId67lFL6Iil8kDZV6epfQFjNPkHJe+CDZk5qh7Zs
+	LrDHAYdso+iNsXsS5ccrdfSd+PFnUeVCOcMH586NzYCQulhoNo+hB56pVvg3kIv1WsM=
+X-Gm-Gg: AYBFou3dqdJ9+FZWkCD9aEYixOy96UpgSMTHStQ0o8tdzZeUKQ1HZYbICNUzpLpD5Fw
+	/S2ppXJxZ0noxPWfUkRnCkYkrLoXMTaOb1yQE3E0ficzlhJw85aUDhQmQB6UA7iR2ntWfldKQ1f
+	zjo4P407lOOUEPuVPbm4ckUEmT5rGPm2KSKO6HxMDAXigxAUsHOPrc3p1RD6th+tSV2KsxjmssA
+	BsPPZuHCEujqYaTQQmT9S4Y/D+nTgi/StlPW6XeJigkgqRAyhTF+qEGBC5gMP9gyxOy3wXpt0OV
+	z3hOfitTF4Y+QH7/kgLDk9CMsv1/whQxdL+3g+gHPTYgSNMH8pGhdvTAzcqKDxcymxDDos3vZ8S
+	Wc5Hiw2A1BDG47FvA2ZIQGMZvZcWVo8i7NWfA1czDh7hQlC5zITq++JjKskoMr+LnQJx+6Mbjzm
+	6fAcmDCytU+giZIf1JRAdG5hzyQovdqgMVl//xu85NmvtBaPrwyEIjCZUZRo9YGwnk2Xz10jZmS
+	w==
+X-Received: by 2002:a05:7300:ce94:b0:345:84eb:7153 with SMTP id 5a478bee46e88-3537e033341mr12296308eec.11.1791779189344;
+        Sun, 11 Oct 2026 21:26:29 -0700 (PDT)
+Received: from localhost ([122.172.82.240])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537c61eaa0sm32289042eec.0.2026.10.11.21.26.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Oct 2026 21:26:28 -0700 (PDT)
+Date: Mon, 12 Oct 2026 09:56:25 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: xiong yining <xiongyining1480@phytium.com.cn>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chenbaozi@phytium.com.cn
+Subject: Re: [PATCH] selftests: cpufreq: stop CPU hotplug loop after cpufreq
+ update test
+Message-ID: <asxhcagRL3myS3m_@vireshk-B250M-D3H>
+References: <20261010100148.297720-1-xiongyining1480@phytium.com.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OXpZ8aF7X_uM02GK6JY6Y7mnegw4Ghv6
-X-Proofpoint-ORIG-GUID: OXpZ8aF7X_uM02GK6JY6Y7mnegw4Ghv6
-X-Authority-Analysis: v=2.4 cv=aqInmiZV c=1 sm=1 tr=0 ts=6acc5498 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8
- a=ydiBeFUZ71z4b7spNMUA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEyMDAxMiBTYWx0ZWRfXy+fWT1PX/84q
- AJ0tuj9knUr0rK9R9fXqIRxxiGdcwUDYrB/mRedMkHyK8FTfg0j/1i1yaX0XLcjfNpa0LBHWzZO
- 55L6tf/9G32ypXka4Y6EtG4LQ3N3XYE=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEyMDAxMiBTYWx0ZWRfXzhvhtCbnDfY1
- OMUR0RkXX86s6bZ/xgptStJ7Dhuh6Zf1ijVpExyks2Byv6DzaL2dfZP1JJwhEqvqn3eVVAtpplU
- m4Nm4xvF51nudz8M4VyBLAVoSsUeE8ZB5CEGQhwOxKDbNl9EbB0tQsFm41KK7DvDwyG4Wjf0DxJ
- L0LXqVqu8diX1KGSNQsWHKy+VN+96trhpMHej5QX4QXySraAccgrZahF0JvpbF4FHm4O8JqzoQD
- pC59AOlyBVlvJPamWGIdu+W5Od9rEbLTlffg2aRudrNstusp72gvcypk2PhiyeSCv2U4YnHZeh+
- biCWfgRbGPhruhx4Tn+xFmpifiaFpFGz8DmSeS7DaD/UYv2S5a/6T/MBjOFUZifHg2xlE+EQzrO
- o6mqH09k5zZ0fA+WlI42foyg2a+ZlmmbFzIN8FHgCxfiFHW/yE7N5uoiCT3/IbHknltde2FpiLD
- BrKWBjjZAQF6PjVypbA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-12_01,2026-10-09_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 clxscore=1011 spamscore=0 malwarescore=0 suspectscore=0
- bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610080000
- definitions=main-2610120012
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261010100148.297720-1-xiongyining1480@phytium.com.cn>
 
-On Mon, 28 Sep 2026 10:43:49 +0530, Saket Kumar Bhaskar wrote:
-> The verifier selftest validates JITed instructions by matching expected
-> disassembly output. The first two patches fix issues in powerpc instruction
-> disassembly that were causing test flow failures. The fix is common for
-> 64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
-> architecture tag in the third patch, enabling proper test filtering in
-> verifier test files. Introduce verifier testcases for tailcalls on powerpc64.
+On 10-10-26, 18:01, xiong yining wrote:
+> Original test uses a fixed 5000 iteration loop to trigger CPU hotplug
+> for verifying cpufreq synchronization between CPU hotplug and sysfs
+> writes.
 > 
-> [...]
+> Two issues exist:
+> 1. Background hotplug task keeps running after test completes, causing
+> redundant CPU on/offline operations.
+> 2. When cpufreq frequency setup is slow, the hotplug loop may exit
+> before frequency updates finish, which breaks test purpose.
+> 
+> Introduce a file-based stop flag to control the infinite hotplug loop.
+> After all cpufreq updates complete, create the stop flag file and
+> wait for the hotplug task to exit.
+> 
+> This makes hotplug run only during cpufreq sysfs write test,
+> align with test objective.
+> 
+> Signed-off-by: xiong yining <xiongyining1480@phytium.com.cn>
+> ---
+>  tools/testing/selftests/cpufreq/special-tests.sh | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 
-Applied to powerpc/next.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-[1/5] powerpc64/bpf: fix compare instruction emitted for tailcall
-      https://git.kernel.org/powerpc/c/3ebf4ae6d8afac11fe6732418dd378e031f8f4ed
-[2/5] powerpc64/bpf: fix percpu private stack leak on JIT failure
-      https://git.kernel.org/powerpc/c/24affb84d98e6b37b276aa57e5dd25ad93458cea
-[3/5] powerpc/bpf: fix buffer overflow in JIT for large BPF programs
-      https://git.kernel.org/powerpc/c/78ce55b7913a78e1687306668e078b86bc6508ee
-[4/5] powerpc/bpf: fix alignment of long branch trampoline address
-      https://git.kernel.org/powerpc/c/04001e8ddb979f463f1c3ca8ac4d6ac59fb48921
-[5/5] powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
-      https://git.kernel.org/powerpc/c/6652b9941a6c9b6814ca6d2eb153dbf162b89a02
-
-cheers
+-- 
+viresh
