@@ -1,117 +1,142 @@
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+Received: from mta1.migadu.com (out-251.mta1.migadu.com [95.215.58.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B33393DE9
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 13:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CDF3CEB9E
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 13:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791811063; cv=none; b=WHxeM3hdkBXbboa2/rY57baFI5cKjrFEcQfl0EEXKiWwTWns9WzS163MhqxQV1iSZrTnIC/IxSTdMcJfaTwcjIYtsLAN09NO57ieK8KcK5QNgS8k/p6+Kr/+A383GOlKnBaA4UhTmtLNUkpXwXjBRJ/eHyIXAS84KCJ5pB/6PGA=
+	t=1791813448; cv=none; b=AyOLhINDxXGVAvohfuAvft8v2zALSRM7Xr3ET5RbRSH5cjWbOO4H4dotHzBF6K7lgM/gW/6x+w61nnwZOy/ddo5mqTd2sbDBPieG7j7TEtITahoSSAaCiyDL6BbnLWiE8aUR+STitNP01oS7cp7UM3QEqMXFFrUxr73bpiTAK/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791811063; c=relaxed/simple;
-	bh=sWZj4fi9PchIWq6iTv6FoJJcUWY4ROJjikopBkr9icg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fp4pEVlyT57rhUFuCJCPEM6OGjtin8WEpcrBMhuGS7qlMRxH1w1mGqRcHC7m7UVYJhh5RIaJWY3arIHS+wggxRHk5ZUNhmhvFkPE+iV+/t7KK17250E68ltB+IqVKO/E2C24e/0FRAb+6QXLE6dlD+cBQRN/HPb8/1RMFzgJYEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jpiecuch.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gyFHEdYS; arc=none smtp.client-ip=209.85.128.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jpiecuch.bounces.google.com
+	s=arc-20240116; t=1791813448; c=relaxed/simple;
+	bh=x6wBnpNMUdYNXU0gqwEl8PQ7hY4EkntWRDU828VTuOY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fWze3Krw1bfLb5XXRv3M1pQYpjNNeYrIbNjUnJ6d70krYKlDpBLidO5m+ZiW9pmrDbccy3R0ljJeOQrj5MdAqbIVrp4f17QC8ROUs6BW1ME/KhfWcLUVvUliHJGYGvy6Hni1gbYeuGNMmTJP0BF/ufnMQTBi7lm+KkqujMup+WE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vrxvn3+Q; arc=none smtp.client-ip=95.215.58.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gyFHEdYS"
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4a17b4c613fso9167355e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 06:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791811060; x=1792415860; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=+fEAaRgfVTrd4ivzqjJHoxub+cLoCC1NeXyWvtmvqHk=;
-        b=gyFHEdYStsj+LBr9NGC7a1w2pOu/0BpTT7rrJLqnUMTFuP4gQzld2wMQaPLXFyx9eQ
-         SyaiOIIz/N6aHSi4Ykh0Lw8MZX7I8NWsbkFVMS6CjiaUz7XMEvZ/lrqsljWiHBwF5Z4I
-         CxMAWnsaF3Kzx3GpPPCCRDWLUv+2Hsf1DmkeMeov2iAE+dwU6xTTC3fJPXq8XlQuPDZE
-         HADKt6GkqgXddLHoL9FJg/pgwLj8gQezXCbP/bYFFQq9jOmhRaLhs+Ztt9lwx5qifkZz
-         fj6kLCF5ub1LQUqaWvFqpNJWGKf6/7p9ol7OSsrDAVRgcJb7HMGUFvXtFMMGzCvtgqvZ
-         Q+2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791811060; x=1792415860;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+fEAaRgfVTrd4ivzqjJHoxub+cLoCC1NeXyWvtmvqHk=;
-        b=ZAKCpahV26K4kAfF6mS1gIBRmJamnPk0LnM7R22YBNtNUBf4ni2MNFKnpf/FabeOCC
-         bA9Mch2Sprql7rlLImOofA6EFKz5KMWcDrijR6sqi3fyq305T0/Sg54LZL+xHiRz5Qou
-         rMv5oDoPeI2ei9E2s8mqIbEQKkIuZGrgVV3cCELTf/8A+3ORkFhoglr4p9AYZiud/2wM
-         A541DznQjXcas79F2fjrXM7xifQC4vEoXv0fP4AnrhWquGJcJUA2yBVYS9xfCOWJpba/
-         BPHENb18jvJnNI9Yh7KCP2Q2iowqGJ0gqGWBOSRLesPwDw1p4vsFNnpr4UZVgVys9kye
-         Y8Mw==
-X-Forwarded-Encrypted: i=1; AKwUvBxrJhzdmxZk0NSB3h3QZrifY4KGiHPj9toiEvYvTJvn8A5OBYM/KQNVFZbwX1DjHRVlWn1F7t1uwDiObpEcCpw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJv5Hh3UO0nTn0vF8euYmhBfv/AHfJUbzMrbq17TPA87ZoVWkt0
-	VrtcbBVkrRUDvLR00+8IRIWTPT3XeE+hrO7DgKU3pFDfCD+s1G2KXN0w2yRRmsjIabUIdCeL8ga
-	sWGEux3oxwN3Ukg==
-X-Received: from wmoo9.prod.google.com ([2002:a05:600d:109:b0:4a1:8741:47d4])
- (user=jpiecuch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:8b28:b0:49f:ff7b:f056 with SMTP id 5b1f17b1804b1-4a18e4a3c24mr156632435e9.9.1791811060039;
- Mon, 12 Oct 2026 06:17:40 -0700 (PDT)
-Date: Mon, 12 Oct 2026 13:17:39 +0000
-In-Reply-To: <20261012115928.1372317-1-smariotti@disroot.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vrxvn3+Q"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=x6wBnpNMUdYNXU0gqwEl8PQ7hY4EkntWRDU828VTuOY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791813443; v=1; x=1792418243;
+ b=vrxvn3+Q+ds8vw3lPoTlz4TGkW2K6r5QQ68mgXDaRPV19sO6QMRSFumWsX60JHhnwUiv1rSR
+ 9lixhWfWMj8fA2dIBHiDnXq5FLB9UGqul2WUxMdwVCR6WWC/E3g+Xjht3feMCN68ruUQw+necOM
+ 90oRH+AdEABQsohw9hlQyPlg=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 34a32a671e085a21;
+	Mon, 12 Oct 2026 13:57:23 +0000
+X-Mizu-Trace-ID: 34a32a671e085a21
+X-Migadu-Flow: FLOW_OUT
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: KaFai Wan <kafai.wan@linux.dev>
+Subject: [PATCH bpf-next 1/1] bpf: Determine freplace staticness from BTF linkage
+Date: Mon, 12 Oct 2026 21:56:24 +0800
+Message-ID: <20261012135624.2749743-1-kafai.wan@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20261012115928.1372317-1-smariotti@disroot.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-Message-ID: <DM2W05XKJT97.2ATHPA28J84ZH@google.com>
-Subject: Re: [PATCH] selftests/sched_ext: Fix build error in dequeue_remote selftest
-From: Kuba Piecuch <jpiecuch@google.com>
-To: Samuele Mariotti <smariotti@disroot.org>, <tj@kernel.org>
-Cc: <void@manifault.com>, <arighi@nvidia.com>, <changwoo@igalia.com>, 
-	<jpiecuch@google.com>, <shuah@kernel.org>, <sched-ext@lists.linux.dev>, 
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon Oct 12, 2026 at 11:59 AM UTC, Samuele Mariotti wrote:
-> Building the dequeue_remote selftest with newer compilers (e.g., gcc 16)
-> triggers the following error:
->
-> dequeue_remote.c:39:32: error: variable =E2=80=98sum=E2=80=99 set but not=
- used
->
-> The 'volatile' qualifier prevents the writes from being optimized away,
-> but does not silence the warning, since 'sum' is indeed only written and
-> never read.
->
-> Consume 'sum' via an empty asm() with a register input constraint, as
-> already done for the dequeue selftest in commit 3788e3251653
-> ("selftests/sched_ext: Fix build error in dequeue selftest"). This forces
-> the compiler to keep the accumulated value (preserving the CPU stress loo=
-p)
-> and avoids the build error.
->
-> Fixes: cc07fae1de5d ("selftests/sched_ext: Add a test for ops.dequeue() o=
-n remote local DSQ moves")
->
-> Signed-off-by: Samuele Mariotti <smariotti@disroot.org>
-> ---
->  tools/testing/selftests/sched_ext/dequeue_remote.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/sched_ext/dequeue_remote.c b/tools/t=
-esting/selftests/sched_ext/dequeue_remote.c
-> index f2c1901030de..af344581d5f1 100644
-> --- a/tools/testing/selftests/sched_ext/dequeue_remote.c
-> +++ b/tools/testing/selftests/sched_ext/dequeue_remote.c
-> @@ -43,6 +43,7 @@ static void worker_fn(int id)
-> =20
->  		for (j =3D 0; j < 20000 + id * 1000; j++)
->  			sum +=3D j;
-> +		asm volatile("" : : "r"(sum));
->  		if (id & 1)
->  			usleep(100);
->  		else
+bpf_check_attach_target() rejects a freplace whose target is a static
+function, using the subprog "unreliable" flag as a proxy for "static".
+That flag is raised whenever a subprogram's BTF prototype disagrees with
+the registers at its call site.
 
-LGTM, thank you Samuele!
+`147400e9c27c ("bpf: Compute parameters liveness in
+bpf_compute_live_registers()")` made that work for static callees: a
+static function with an unused argument no longer matches its BTF
+prototype at the call site and is marked unreliable.
 
-Reviewed-by: Kuba Piecuch <jpiecuch@google.com>
+Since LLVM commit `29b36a16f111 ("[BPF] Emit ABI-accurate BTF
+prototypes for DW_CC_nocall")` in 23.1.0 [1] that premise is gone:
+BTFDebug may now drop arguments removed by the optimizer, so for
+
+	__noinline static int subprog(struct __sk_buff *ctx)
+	{
+		return bpf_ktime_get_ns();
+	}
+
+compiled with clang 23 the BTF describes subprog() as
+
+	[75] FUNC_PROTO '(anon)' ret_type_id=2 vlen=0
+	[76] FUNC 'subprog' type_id=75 linkage=static
+
+There is then no argument left to compare, the subprog stays reliable,
+and the check in bpf_check_attach_target() is skipped. The freplace is
+then rejected by the later linkage check instead, reporting "subprog()
+is not a global function", and the selftest "exceptions" fails.
+
+Determine staticness from the BTF linkage instead, and keep the
+unreliable check for global functions whose BTF does not match their
+call site.
+
+There is no functional change: freplacing a static function was rejected
+before and is still rejected with the same -EINVAL. Selftest "exceptions"
+is updated to match.
+
+[1] https://github.com/llvm/llvm-project/pull/198426
+Fixes: 147400e9c27c ("bpf: Compute parameters liveness in bpf_compute_live_registers()")
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+---
+ kernel/bpf/verifier.c                               | 3 ++-
+ tools/testing/selftests/bpf/prog_tests/exceptions.c | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2f190abe3448..e9814e3ac370 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -22079,7 +22079,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 		}
+ 		conservative = aux->func_info_aux[subprog].unreliable;
+ 		if (prog_extension) {
+-			if (conservative) {
++			if (aux->func_info_aux[subprog].linkage != BTF_FUNC_GLOBAL ||
++			    conservative) {
+ 				bpf_log(log,
+ 					"Cannot replace static functions\n");
+ 				return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+index cea01d638f6f..1bd15c4c125b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
++++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+@@ -333,7 +333,7 @@ static void test_exceptions_success(void)
+ 				       bpf_program__fd(skel->progs.exception_throw_subprog),
+ 				       "throwing_subprog"), "set_attach_target"))
+ 				goto done;
+-		}), "throwing_subprog() is not a global function", 0);
++		}), "Cannot replace static functions", 0);
+ 
+ 	if (test__start_subtest("non-throwing extension -> non-throwing subprog"))
+ 		/* non-throwing extension -> non-throwing global subprog : OK */
+-- 
+2.43.0
 
