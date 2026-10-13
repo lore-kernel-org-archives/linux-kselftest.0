@@ -1,62 +1,64 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B23412C04
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 10:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37970421251
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 10:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791887953; cv=none; b=mUzwIJt+V51i/MER8X3rU/9hCZXNLctUU3ATHz4tjYnIwGIp0ULU0nGtk+wtz+tZMfGsGwZcGr93S71flo2PyDNrWQzAJf+bYaXCOiy/eNcZnfa4EKQSCsa1hW7fQRwGg5m/coQlIyuTOiPofk6Oze8JQHz7ejzpYsUESQJY72Y=
+	t=1791887956; cv=none; b=DFiwjKurQADR+41jAdkJTmJb519w+hegZNhWqFZnlJcesUmS0o15LHEDeQ065s/lRYAMLU+SlNVsgiqCbBXg8pJy9nhrWDKEq8xwW/jm8Ie2RXlokOiQgyTvBFbjtRhJ8K5Hs5t9yL8PTOFwmypmhEJJairFuZYV4SBOBYM+cfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791887953; c=relaxed/simple;
-	bh=MOY5s2x3l4fytmxVNA6OCa/Ehzog/oyOEDrzzWNi6Sk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JkQhu+ILCdf4hMahlNHPHZJCQJSu5ZGQBLiqF8uqWfzucKtabhvaWM4qIIPLO8nPfdrqegUgL4cSCUtDCtpluEI5OlObAZr2djzRJA9r+uON2P4rR8cxarp87JovugO41pUXs8GSck7yOlR7kUwobyMggQqJl9opRhWU2SaV5EE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=TulhF8ZL; arc=none smtp.client-ip=209.85.218.48
+	s=arc-20240116; t=1791887956; c=relaxed/simple;
+	bh=rdxX9JWiJCz56g3RXrIsC57x7SZkT34oPjrdRMZCo8A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=g9pzOIID9iwrNGAPNpmiUA2MApp6D0BDjshuFEhUqC6HmnhPC7O4HfgeKTBKZKGb7ihrvIJ57GsCLLjhpe6pNHlqY+Cr4xjfmh7tGpbW7SubtS+uqt9Jw/kPedccPdDNfsTwR39O6o0ugkuvPQAsfzc6DGSEHisZnV5SlYonx/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=VdmdlkiV; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="TulhF8ZL"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c2e36c3478aso359402866b.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 03:39:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="VdmdlkiV"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6b1f4d8e09aso505184a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 03:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1791887950; x=1792492750; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wcYYVZ6kSKJctnaWoWaxCg0rByraUo6R00V4/dmaqd0=;
-        b=TulhF8ZLWNLi5QeGBlU09Ro2DeB9hAwVs8xy8pVe2nNNEkU6CkuLCswr/HJJx6wtJd
-         XJ6rarYF8ez5C3K/qHUUgXy1djsQTFD9J1U6S+hZfcMCunN9OeUOZ6mT6OoQh33IzV6b
-         qT5uYIXfPth1fh5huaLE2RFWKnTyDJsRBwAjE0amrOW8bVdO/vhVxbvTMQSV1h765m0v
-         EMLxhFNWS0C1qicwfht8b2nyD5lsWUsIg2o0TDOqM6FFhkEMYYOKjsOcxfN7FxnF96mK
-         RA2vGdt/pNdKNg0fl6BWEaOANUYtYbemV3sfYIJ8CYTx+o0wBuFKnhZvyPDX8EiVh+XS
-         MsGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791887950; x=1792492750;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=cloudflare.com; s=google09082023; t=1791887951; x=1792492751; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=wcYYVZ6kSKJctnaWoWaxCg0rByraUo6R00V4/dmaqd0=;
-        b=jWl7P0pMGGUdvOm981omPrioknLzZ4K/8q6MDvUE0zNbF1J4HoxUq+cBUB9N77P5Vp
-         Yd9m8XnwZPNjlgpitp5Lit0lYQCMuYFkZclVaXOcrRPtlKc7Ojx3TrZM5yOrEYUPNjdg
-         YrQ7aE2G0gUX/zRfdQ63KWq7a1eOC6CERPHgfmEyLfhPPzgVlO6h0rQvcBpzdrur1b4/
-         u2YmSHbKlbOx2XhXmn9bZ/wJ2Vsy2fOaXMhDNYt1xCHdYF4gr64ttMsPL8gPaj1O8vZP
-         U/SrBEXKEhqTDAlOPe5mMvmCfljPKnTqG0GdA5ijjw4a6FzwVId7YAj/rAATVq0dCufU
-         Xp0A==
-X-Forwarded-Encrypted: i=1; AKwUvBzVoNr8GXCPoiyXgR4jhg8295kOJJ9T2rIvvrMl4GR7KajXvrpZnPvcjJMxSgPiRSO394zbTl8IFSvIBLxayuI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ5yGW0vzcQJgWFUokCot/5aEiM2kRqGq6cUE6Gh0PzUznmBga5
-	XyVqata2TzjU2xeYbC7lgwJteEEt+2KKVGP03L+BAfoBfO6tC2FJb3CpKxrgSIyO6Wg=
-X-Gm-Gg: AYBFou3375tWHKN6XvDCi0BC+ULI/zsP5XQBMn1TpqvGLIaI+AUjg8NcbtM0OShr1v4
-	luihAe+fb4Q0GZ9jkPKrc5eTouV7oD7lQZEUPk8URgv29kmsxprdWrI0q5bgYr+RKQL9HAt2Dt/
-	uGjQJiwGxnwiO+W/EnxUvP37Y2WZXwsOO070jUAifgupwy76aLi3sR4I99QmkRxTWft/ir4mBjj
-	napWwedE0zRvLHqnqnMfEsyPKvAkc3Us8pxVO4M1hCLMqrbRd11j0JB9cVQFo/NZ6v46BgoXrAh
-	JtQgDKWQTVICGjV4HsShriYXkVGJ19qAKeZ51L5NCzBfBM4wF+QjZnSlKIvL7UPWob298bVVc6U
-	5XU3SfGGN/72BdwaodNXRKv66FcaFcp79ClSbk20QZQsWoIkYsjRfR10+Hm3y2XzXBjx4xR4ej3
-	llOwALQ2jbJ1mqEK7lN27rKJ29Na3DaYeZ52eGiYcnpBLaCzywYAw14tAZXLdRRiQcbzAZwPDU/
-	4u3jYQG/cUJr5bKRJOeGnoI7gHJOLvu8uIK
-X-Received: by 2002:a17:906:dc8e:b0:c29:4513:f6fd with SMTP id a640c23a62f3a-c31aa081b78mr1169935566b.35.1791887949584;
-        Tue, 13 Oct 2026 03:39:09 -0700 (PDT)
+        bh=WyKvG/UsN9GvqpGc7SZmiuGWM6lyPp30SlFVhoegAfI=;
+        b=VdmdlkiVguHphn2VfNrO2Ks53q4oL+ZOo02xPSaOZaqjOqsVKIhawuwNPoE0eZFCot
+         4luJb352x7oRsfrInWh3Yiv79ngHCCXQWqfNAcgvWyG54TNgECqLIY/MR+7a6wIwTA0S
+         gtUvi4WViIYpwPYTIBkKsGd0/bwtm0473Z1tl0seXgwGy8v6/j+IWu1/jaYcIzCMhAwd
+         hsZKJGW96LeMKDQqYtlI0Lzul7QEHJwIJCGgwIS9kDfwpG4EdUbhoaVUMKo/Ie5w/63v
+         SL7tJ/m2Vr5CF766BUpBBnf5JLzx7S/Xmq9aWAMQc2uHopncSmly9smTdR4+lEbQVzTx
+         p2Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791887951; x=1792492751;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=WyKvG/UsN9GvqpGc7SZmiuGWM6lyPp30SlFVhoegAfI=;
+        b=ocRVzHI1UAFHows1VDDMmLSeUJUBH4172lZDH06IVjR933W0Cml0Ervk0+WJJHaRNs
+         yLNEn/OzLdNPs6p9ryYPL+62aA/ej8PJHSHHTTHJOlMD2I+ufV2fnum0KBkwQueuhYVd
+         GooR4cpUeDIz9OZvCqJFDM9xuBLklj+8wJ04c9XmGkknE2+j+/K+eoWYO8YqpMhcgP2J
+         0Em+nNpMexa1FrbhE4JhcuiDyzq/UWyr2GIRyA8Pqpvi1q4e9CQVIS48Pjq1imT3qL/8
+         0STqQoBa7OJyu76Uzax/KAKpxb2JDoUkJeTGQYJtBsseSASEzOxa5m772z8yAoLZ3Tyh
+         TIag==
+X-Forwarded-Encrypted: i=1; AKwUvBzvf6Qlc4fSXfGFqdCJy5oYws1uEjT7l+SyW7uq06uM6X+N3OoU0Lb5iUkQGlSco1q/Ayay8Msq7tj7C2JFJD0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK08MwT32o10sqeMvO4xXAzrUTNaFmKsfEPM4fJAx/mwMFN/K6n
+	5CVsDF7OdV83fgMxcpr0ZWvtMKAUVwQH99fM/mYjDe4LdFfl5a0MneQX2xFt4Uwjb2k=
+X-Gm-Gg: AYBFou26kYXTckB1+hJP4InmOqPND+Irn4fi5eXqW3O4qg2tK/fz8onuZatoDyCJfmg
+	yTRKwzTjM1IrtGqT78L2mfpHZ4IdFHX+Df+e4qt8zJwT3wNbjLm+bfeId/pIpipVpdtO5D3Hi6+
+	YmBTQ+VQk/vJyeXalBxfOP1YfM5MHH+TDwerN0wqynKXIHT2QeXgOik9/BPfzybTjTBUriwlSp2
+	p99rO+BX1MsYpKf0wFEbox10s0RduzmXH9dWit0kQYWigv4qYCySwlRJChIoMXV53Z/wtMf/eXn
+	16uuEI328uIsrPcpXnJVypN0sFXSv6RsZHUe0if5yYQT82b+eP4SaGlJASGOfRvF0xOp7fWldBw
+	SX+W/AwXgkrja5dUuk4H/dB0oz+Q0JTj9YwqmIUU6tbtFHUWyDAqFF181z1Bg+YPpXcmuWI+Ilv
+	vicfbGJlcjK/qJUdauaLO4Cajmw8r5WcA/alWX+dMO6cY1xuieGMpvfug6FVxMBaQkA5Vz++ZMZ
+	RqKda9drASYSpe20PYb2Xne0CqHepVKF1LO
+X-Received: by 2002:a17:907:3eaa:b0:c2b:4142:2db1 with SMTP id a640c23a62f3a-c31aa0d82b6mr1290703466b.40.1791887951171;
+        Tue, 13 Oct 2026 03:39:11 -0700 (PDT)
 Received: from 8951987238ab.arnhem.chello.nl ([104.28.187.84])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c31a9ac62a7sm552462166b.63.2026.10.13.03.39.08
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c31a9ac62a7sm552462166b.63.2026.10.13.03.39.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 03:39:09 -0700 (PDT)
+        Tue, 13 Oct 2026 03:39:10 -0700 (PDT)
 From: Willem Ferguson <wferguson@cloudflare.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -76,10 +78,12 @@ Cc: davem@davemloft.net,
 	shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@cloudflare.com
-Subject: [RFC PATCH net-next 0/4] tcp: carry a BPF-chosen identifier in TSval low bits
-Date: Tue, 13 Oct 2026 10:39:02 +0000
-Message-ID: <20261013103906.2660384-1-wferguson@cloudflare.com>
+Subject: [RFC PATCH net-next 1/4] tcp: add plumbing to carry an identifier in TSval low bits
+Date: Tue, 13 Oct 2026 10:39:03 +0000
+Message-ID: <20261013103906.2660384-2-wferguson@cloudflare.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261013103906.2660384-1-wferguson@cloudflare.com>
+References: <20261013103906.2660384-1-wferguson@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,113 +92,369 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series lets a listener encode a small per-connection identifier in
-the low bits of the TCP timestamp values it sends. The peer echoes TSval
-back in TSecr, so every segment the peer sends after the handshake
-carries the identifier in its TSecr.
+Add per-connection state that lets the low bits of locally generated
+TSvals carry a small identifier, and teach the receive side to strip it
+from echoed TSecr values:
 
-In Anycast networks, mid-stream path changes caused by BGP route flapping
-or ECMP shifts frequently deliver active TCP packets to an ingress Point
-of Presence (PoP) that lacks the flow's socket state, resulting in abrupt
-connection resets (RST). While protocols like QUIC avoid this using explicit
-Connection IDs, TCP lacks an in-band routing token to help ingress
-nodes identify where a flow actually lives. To address this problem,
-we propose embedding an N-bit data center ID into the lower-order bits
-of the TCP Timestamp option (TSval, RFC 7323), allowing edge load balancers
-to recognize misdirected packets and steer them to the correct origin data
-center holding the active session.
+ - tcp_request_sock, tcp_sock and tcp_timewait_sock gain ts_id and
+   ts_id_bits. They are copied from the request socket to the child and
+   from the child to the timewait socket, and cleared on every path that
+   creates a request socket without going through tcp_openreq_init()
+   (SYN cookies and bpf_sk_assign_tcp_reqsk()).
 
-How it works:
+ - tcp_tsval_encode() shifts the timestamp clock left by ts_id_bits and
+   ORs in ts_id. It is used for SYN-ACK, established, request socket and
+   timewait TSvals. The SYN-ACK path keeps the identifier when it
+   replaces a zero TSval with ~0U.
 
- - tcp_ts_id_bits (per netns, 0..8, default 0) sets how many low TSval
-   bits are reserved. The millisecond clock is shifted up by that many
-   bits.
- - A sock_ops program opts a listener in with
-   BPF_SOCK_OPS_TCP_TS_ID_CB_FLAG and is called with
-   BPF_SOCK_OPS_TCP_TS_ID_CB for each SYN, before the SYN-ACK is sent.
-   It sees the SYN and optionally returns the identifier
- - The identifier and width are stored in the request socket, then in
-   the full and timewait sockets. Incoming TSecr values are decoded
-   before RTT estimation and PAWS use them.
- - TCP_TS_ID reads back the identifier, and /proc/net/netstat gains
-   TCPTSIdAssigned, TCPTSIdDeclined, TCPTSIdSkipped and
-   TCPTSIdEchoMismatch.
+ - tcp_tsecr_decode() undoes the encoding. The shift drops ts_id_bits of
+   clock range, so the decoded echo is re-centred on the current clock
+   with sign_extend32() before RTT estimation and PAWS consume it.
 
-RTT estimation on the encoding host sees the same decoded timestamps
-as before, so they are unchanged. On the peer, PAWS keeps working too;
-the only effects are a shorter idle limit and a narrower tolerance for
-reordered segments, both described below.
+A BUILD_BUG_ON() checks that, at the widest identifier allowed, an
+encoded TSval cannot advance by 2^31 within TCP_PAWS_WRAP, the idle
+period after which Linux stops enforcing PAWS against ts_recent.
 
-Scope and limitations:
+Nothing sets ts_id_bits yet, so this patch does not change behaviour.
+With ts_id_bits == 0, tcp_tsval_encode() returns its input and the
+established receive path adds a single likely() branch before the
+existing tsoffset subtraction.
 
- - Passive opens only. SYN cookies, microsecond timestamps and peers
-   without timestamps are left unencoded.
- - The peer sees a clock running 2^bits times faster. That narrows the
-   real-time span of its PAWS window, so the width should be no larger
-   than the identifiers need.
- - Peers that keep ts_recent for the RFC 7323 24 days (e.g. FreeBSD,
-   macOS) stall connections that stay idle longer than 24.8/2^bits days
-   (about 37 hours at 4 bits). Linux peers stop enforcing PAWS after
-   TCP_PAWS_WRAP and are unaffected.
- - TCP_REPAIR cannot restore the identifier, so hosts that migrate
-   established connections should leave the feature off.
+Signed-off-by: Willem Ferguson <wferguson@cloudflare.com>
+---
+ .../networking/net_cachelines/tcp_sock.rst    |  2 +
+ include/linux/tcp.h                           |  8 +++
+ include/net/tcp.h                             | 50 ++++++++++++++++++-
+ net/core/filter.c                             |  2 +
+ net/ipv4/syncookies.c                         |  2 +
+ net/ipv4/tcp.c                                | 13 +++++
+ net/ipv4/tcp_input.c                          | 11 ++--
+ net/ipv4/tcp_minisocks.c                      | 18 ++++++-
+ net/ipv4/tcp_output.c                         | 15 ++++--
+ 9 files changed, 110 insertions(+), 11 deletions(-)
 
-All of this is documented under tcp_ts_id_bits in ip-sysctl.rst. With
-the sysctl at 0 (the default) the only new cost on the established fast
-path is one likely() branch when parsing TSecr.
-
-Questions for reviewers:
-
- 1. Is encoding an identifier in the low bits of TSval acceptable in
-    principle, given the trade-offs above?
- 2. If so, what feedback do you have on the implementation?
-
-Patch 1 adds the encoding and decoding, which stay inert until patch 2
-lets BPF set an identifier. Patch 3 adds the TCP_TS_ID read-back, and
-patch 4 adds a BPF selftest.
-
-Testing:
-
- - A kernel with this series and tcp_ts_id_bits=7 is serving production
-   traffic on a few Cloudflare hosts and assigning ids to all CDN
-   connections. Key TCP metrics on those hosts show no difference from
-   hosts without the series.
-
-Willem Ferguson (4):
-  tcp: add plumbing to carry an identifier in TSval low bits
-  tcp: add BPF_SOCK_OPS_TCP_TS_ID_CB to assign a TSval identifier
-  tcp: add TCP_TS_ID socket option
-  selftests/bpf: add tcp_ts_id test
-
- Documentation/networking/ip-sysctl.rst        |  38 +++++
- .../net_cachelines/netns_ipv4_sysctl.rst      |   1 +
- .../networking/net_cachelines/tcp_sock.rst    |   2 +
- include/linux/tcp.h                           |   8 +
- include/net/netns/ipv4.h                      |   1 +
- include/net/tcp.h                             |  58 ++++++-
- include/uapi/linux/bpf.h                      |  15 +-
- include/uapi/linux/snmp.h                     |   4 +
- include/uapi/linux/tcp.h                      |   8 +
- net/core/filter.c                             |   2 +
- net/ipv4/proc.c                               |   4 +
- net/ipv4/syncookies.c                         |   2 +
- net/ipv4/sysctl_net_ipv4.c                    |  10 ++
- net/ipv4/tcp.c                                |  16 ++
- net/ipv4/tcp_input.c                          |  61 ++++++-
- net/ipv4/tcp_ipv4.c                           |   1 +
- net/ipv4/tcp_minisocks.c                      |  27 +++-
- net/ipv4/tcp_output.c                         |  15 +-
- tools/include/uapi/linux/bpf.h                |  15 +-
- .../selftests/bpf/prog_tests/tcp_ts_id.c      | 150 ++++++++++++++++++
- .../selftests/bpf/prog_tests/tcpbpf_user.c    |   2 +-
- .../selftests/bpf/progs/test_tcp_ts_id_kern.c |  32 ++++
- .../selftests/bpf/progs/test_tcpbpf_kern.c    |   2 +-
- 23 files changed, 459 insertions(+), 15 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tcp_ts_id.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_tcp_ts_id_kern.c
-
-
-base-commit: d8674294aefef02266c4d47ad10131f1bffbe534
---
+diff --git a/Documentation/networking/net_cachelines/tcp_sock.rst b/Documentation/networking/net_cachelines/tcp_sock.rst
+index 103328dc409e..91a00194ad3a 100644
+--- a/Documentation/networking/net_cachelines/tcp_sock.rst
++++ b/Documentation/networking/net_cachelines/tcp_sock.rst
+@@ -32,6 +32,8 @@ u32                           lsndtime                read_write
+ u32                           last_oow_ack_time
+ u32                           compressed_ack_rcv_nxt
+ u32                           tsoffset                read_mostly         read_mostly         tcp_established_options(tx);tcp_fast_parse_options(rx)
++u8                            ts_id                   read_mostly         read_mostly         tcp_established_options(tx);tcp_fast_parse_options(rx)
++u8                            ts_id_bits              read_mostly         read_mostly         tcp_established_options(tx);tcp_fast_parse_options(rx)
+ struct list_head              tsq_node
+ struct list_head              tsorted_sent_queue      read_write                              tcp_update_skb_after_send
+ u32                           snd_wl1                                     read_mostly         tcp_may_update_window
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index e4d1720f49f0..6de7ace4b016 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -145,6 +145,8 @@ static inline void tcp_clear_options(struct tcp_options_received *rx_opt)
+  * only four options will fit in a standard TCP header */
+ #define TCP_NUM_SACKS 4
+ 
++#define TCP_TS_ID_BITS_MAX	8
++
+ struct tcp_request_sock_ops;
+ 
+ struct tcp_request_sock {
+@@ -154,6 +156,8 @@ struct tcp_request_sock {
+ 	bool				tfo_listener;
+ 	bool				is_mptcp;
+ 	bool				req_usec_ts;
++	u8				ts_id;
++	u8				ts_id_bits;
+ #if IS_ENABLED(CONFIG_MPTCP)
+ 	bool				drop_req;
+ #endif
+@@ -220,6 +224,8 @@ struct tcp_sock {
+ 	/* TXRX read-mostly hotpath cache lines */
+ 	__cacheline_group_begin(tcp_sock_read_txrx);
+ 	u32	tsoffset;	/* timestamp offset */
++	u8	ts_id;		/* identifier encoded in TSval low bits */
++	u8	ts_id_bits;	/* number of identifier bits in TSval */
+ 	u32	snd_wnd;	/* The window we expect to receive	*/
+ 	u32	mss_cache;	/* Cached effective mss, not including SACKS */
+ 	u32	snd_cwnd;	/* Sending congestion window		*/
+@@ -575,6 +581,8 @@ struct tcp_timewait_sock {
+ 	u32			  tw_rcv_wnd;
+ 	u32			  tw_ts_offset;
+ 	u32			  tw_ts_recent;
++	u8			  tw_ts_id;
++	u8			  tw_ts_id_bits;
+ 
+ 	/* The time we sent the last out-of-window ACK: */
+ 	u32			  tw_last_oow_ack_time;
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 0265c27a5fd7..85d3038f41af 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1074,14 +1074,60 @@ static inline u32 tcp_skb_timestamp_ts(bool usec_ts, const struct sk_buff *skb)
+ 	return div_u64(skb->skb_mstamp_ns, NSEC_PER_MSEC);
+ }
+ 
++static inline u32 tcp_ts_id_mask(u8 ts_id_bits)
++{
++	return BIT(ts_id_bits) - 1;
++}
++
++static inline u32 tcp_ts_clock_mask(u8 ts_id_bits)
++{
++	return U32_MAX >> ts_id_bits;
++}
++
++static inline u32 tcp_tsval_encode(u32 tsval, u8 ts_id, u8 ts_id_bits)
++{
++	if (!ts_id_bits)
++		return tsval;
++
++	return ((tsval & tcp_ts_clock_mask(ts_id_bits)) << ts_id_bits) |
++	       ts_id;
++}
++
++static inline u32 tcp_tsecr_decode(u32 tsecr, u32 tsoffset, u8 ts_id_bits,
++				   u32 now)
++{
++	if (!ts_id_bits)
++		return tsecr - tsoffset;
++
++	tsecr = ((tsecr >> ts_id_bits) - tsoffset) &
++		tcp_ts_clock_mask(ts_id_bits);
++
++	return now + sign_extend32(tsecr - now, 31 - ts_id_bits);
++}
++
++/* Keeps the timestamp clock read behind the branch: it is only needed to
++ * re-center an echo that was truncated to make room for an identifier.
++ */
++static inline u32 tcp_tsecr_decode_tp(u32 tsecr, const struct tcp_sock *tp)
++{
++	if (likely(!tp->ts_id_bits))
++		return tsecr - tp->tsoffset;
++
++	return tcp_tsecr_decode(tsecr, tp->tsoffset, tp->ts_id_bits,
++				tcp_time_stamp_ts(tp));
++}
++
+ static inline u32 tcp_tw_tsval(const struct tcp_timewait_sock *tcptw)
+ {
+-	return tcp_clock_ts(tcptw->tw_sk.tw_usec_ts) + tcptw->tw_ts_offset;
++	return tcp_tsval_encode(tcp_clock_ts(tcptw->tw_sk.tw_usec_ts) +
++				tcptw->tw_ts_offset, tcptw->tw_ts_id,
++				tcptw->tw_ts_id_bits);
+ }
+ 
+ static inline u32 tcp_rsk_tsval(const struct tcp_request_sock *treq)
+ {
+-	return tcp_clock_ts(treq->req_usec_ts) + treq->ts_off;
++	return tcp_tsval_encode(tcp_clock_ts(treq->req_usec_ts) + treq->ts_off,
++				treq->ts_id, treq->ts_id_bits);
+ }
+ 
+ #define tcp_flag_byte(th) (((u_int8_t *)th)[13])
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 70dc621672f2..a0a74c7e2e3d 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12579,6 +12579,8 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __sk_buff *s, struct sock *sk,
+ 
+ 	treq->req_usec_ts = !!attrs->usec_ts_ok;
+ 	treq->ts_off = tsoff;
++	treq->ts_id = 0;
++	treq->ts_id_bits = 0;
+ 
+ 	skb_orphan(skb);
+ 	skb->sk = req_to_sk(req);
+diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
+index 73e129768184..f0d164846a5d 100644
+--- a/net/ipv4/syncookies.c
++++ b/net/ipv4/syncookies.c
+@@ -280,6 +280,8 @@ static int cookie_tcp_reqsk_init(struct sock *sk, struct sk_buff *skb,
+ 	treq->snt_synack = 0;
+ 	treq->snt_tsval_first = 0;
+ 	treq->tfo_listener = false;
++	treq->ts_id = 0;
++	treq->ts_id_bits = 0;
+ 	treq->rcv_isn = ntohl(th->seq) - 1;
+ 	treq->snt_isn = ntohl(th->ack_seq) - 1;
+ 	/* The request socket was freed after the SYN-ACK; use the cookie
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index f4c9101e5996..af994edde7f7 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -462,6 +462,8 @@ void tcp_init_sock(struct sock *sk)
+ 	tcp_assign_congestion_control(sk);
+ 
+ 	tp->tsoffset = 0;
++	tp->ts_id = 0;
++	tp->ts_id_bits = 0;
+ 	tp->rack.reo_wnd_steps = 1;
+ 
+ 	sk->sk_write_space = sk_stream_write_space;
+@@ -3429,6 +3431,8 @@ int tcp_disconnect(struct sock *sk, int flags)
+ 	tp->window_clamp = 0;
+ 	tp->delivered = 0;
+ 	tp->delivered_ce = 0;
++	tp->ts_id = 0;
++	tp->ts_id_bits = 0;
+ 	tp->accecn_fail_mode = 0;
+ 	tp->saw_accecn_opt = TCP_ACCECN_OPT_NOT_SEEN;
+ 	tcp_accecn_init_counters(tp);
+@@ -5212,6 +5216,8 @@ static void __init tcp_struct_check(void)
+ 
+ 	/* TXRX read-mostly hotpath cache lines */
+ 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_read_txrx, tsoffset);
++	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_read_txrx, ts_id);
++	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_read_txrx, ts_id_bits);
+ 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_read_txrx, snd_wnd);
+ 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_read_txrx, mss_cache);
+ 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_read_txrx, snd_cwnd);
+@@ -5302,6 +5308,13 @@ void __init tcp_init(void)
+ 	BUILD_BUG_ON(sizeof(struct tcp_skb_cb) >
+ 		     sizeof_field(struct sk_buff, cb));
+ 
++	/* An encoded TSval must not advance by 2^31 within the window that
++	 * Linux PAWS keeps ts_recent valid; peers using RFC 7323's 24 day
++	 * window are not covered (see tcp_ts_id_bits in ip-sysctl.rst).
++	 */
++	BUILD_BUG_ON(((u64)TCP_PAWS_WRAP * MSEC_PER_SEC) <<
++		     TCP_TS_ID_BITS_MAX >= (1ULL << 31));
++
+ 	tcp_struct_check();
+ 
+ 	percpu_counter_init(&tcp_sockets_allocated, 0, GFP_KERNEL);
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 1ddce9c4b7e8..68af0283742e 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -4717,7 +4717,8 @@ static bool tcp_parse_aligned_timestamp(struct tcp_sock *tp, const struct tcphdr
+ 		tp->rx_opt.rcv_tsval = ntohl(*ptr);
+ 		++ptr;
+ 		if (*ptr)
+-			tp->rx_opt.rcv_tsecr = ntohl(*ptr) - tp->tsoffset;
++			tp->rx_opt.rcv_tsecr = tcp_tsecr_decode_tp(ntohl(*ptr),
++								   tp);
+ 		else
+ 			tp->rx_opt.rcv_tsecr = 0;
+ 		return true;
+@@ -4749,7 +4750,8 @@ static bool tcp_fast_parse_options(const struct net *net,
+ 
+ 	tcp_parse_options(net, skb, &tp->rx_opt, 1, NULL);
+ 	if (tp->rx_opt.saw_tstamp && tp->rx_opt.rcv_tsecr)
+-		tp->rx_opt.rcv_tsecr -= tp->tsoffset;
++		tp->rx_opt.rcv_tsecr =
++			tcp_tsecr_decode_tp(tp->rx_opt.rcv_tsecr, tp);
+ 
+ 	return true;
+ }
+@@ -6881,7 +6883,8 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
+ 
+ 	tcp_parse_options(sock_net(sk), skb, &tp->rx_opt, 0, &foc);
+ 	if (tp->rx_opt.saw_tstamp && tp->rx_opt.rcv_tsecr)
+-		tp->rx_opt.rcv_tsecr -= tp->tsoffset;
++		tp->rx_opt.rcv_tsecr =
++			tcp_tsecr_decode_tp(tp->rx_opt.rcv_tsecr, tp);
+ 
+ 	if (th->ack) {
+ 		/* rfc793:
+@@ -7512,6 +7515,8 @@ static void tcp_openreq_init(struct request_sock *req,
+ 	tcp_rsk(req)->rcv_nxt = TCP_SKB_CB(skb)->seq + 1;
+ 	tcp_rsk(req)->snt_synack = 0;
+ 	tcp_rsk(req)->snt_tsval_first = 0;
++	tcp_rsk(req)->ts_id = 0;
++	tcp_rsk(req)->ts_id_bits = 0;
+ 	tcp_rsk(req)->last_oow_ack_time = 0;
+ 	tcp_rsk(req)->accecn_ok = 0;
+ 	tcp_rsk(req)->saw_accecn_opt = TCP_ACCECN_OPT_NOT_SEEN;
+diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+index 0ddfd5af6e58..43580b395bff 100644
+--- a/net/ipv4/tcp_minisocks.c
++++ b/net/ipv4/tcp_minisocks.c
+@@ -122,7 +122,11 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+ 
+ 		if (tmp_opt.saw_tstamp) {
+ 			if (tmp_opt.rcv_tsecr)
+-				tmp_opt.rcv_tsecr -= tcptw->tw_ts_offset;
++				tmp_opt.rcv_tsecr =
++					tcp_tsecr_decode(tmp_opt.rcv_tsecr,
++							 tcptw->tw_ts_offset,
++							 tcptw->tw_ts_id_bits,
++							 tcp_clock_ts(tw->tw_usec_ts));
+ 			tmp_opt.ts_recent	= READ_ONCE(tcptw->tw_ts_recent);
+ 			tmp_opt.ts_recent_stamp	= ts_recent_stamp;
+ 			paws_reject = tcp_paws_reject(&tmp_opt, th->rst);
+@@ -347,6 +351,8 @@ void tcp_time_wait(struct sock *sk, int state, int timeo)
+ 		tcptw->tw_ts_recent	= tp->rx_opt.ts_recent;
+ 		tcptw->tw_ts_recent_stamp = tp->rx_opt.ts_recent_stamp;
+ 		tcptw->tw_ts_offset	= tp->tsoffset;
++		tcptw->tw_ts_id		= tp->ts_id;
++		tcptw->tw_ts_id_bits	= tp->ts_id_bits;
+ 		tw->tw_usec_ts		= tp->tcp_usec_ts;
+ 		tcptw->tw_last_oow_ack_time = 0;
+ 		tcptw->tw_tx_delay	= tp->tcp_tx_delay;
+@@ -639,6 +645,8 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
+ 		newtp->total_rto_recoveries = 1;
+ 	}
+ 	newtp->tsoffset = treq->ts_off;
++	newtp->ts_id = treq->ts_id;
++	newtp->ts_id_bits = treq->ts_id_bits;
+ #ifdef CONFIG_TCP_MD5SIG
+ 	newtp->md5sig_info = NULL;	/*XXX*/
+ #endif
+@@ -705,11 +713,17 @@ struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
+ 		if (tmp_opt.saw_tstamp) {
+ 			tmp_opt.ts_recent = req->ts_recent;
+ 			if (tmp_opt.rcv_tsecr) {
++				u32 now = tcp_clock_ts(tcp_rsk(req)->req_usec_ts);
++
+ 				if (inet_rsk(req)->tstamp_ok && !fastopen)
+ 					tsecr_reject = !between(tmp_opt.rcv_tsecr,
+ 							tcp_rsk(req)->snt_tsval_first,
+ 							READ_ONCE(tcp_rsk(req)->snt_tsval_last));
+-				tmp_opt.rcv_tsecr -= tcp_rsk(req)->ts_off;
++				tmp_opt.rcv_tsecr =
++					tcp_tsecr_decode(tmp_opt.rcv_tsecr,
++							 tcp_rsk(req)->ts_off,
++							 tcp_rsk(req)->ts_id_bits,
++							 now);
+ 			}
+ 			/* We do not store true stamp, but it is not required,
+ 			 * it can be estimated (approximately)
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index c8865205cdc8..966adebc9154 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -1101,11 +1101,15 @@ static unsigned int tcp_synack_options(const struct sock *sk,
+ 		opts->options |= OPTION_TS;
+ 		opts->tsval = tcp_skb_timestamp_ts(tcp_rsk(req)->req_usec_ts, skb) +
+ 			      tcp_rsk(req)->ts_off;
+-		if (!tcp_rsk(req)->snt_tsval_first) {
+-			if (!opts->tsval)
+-				opts->tsval = ~0U;
++		opts->tsval = tcp_tsval_encode(opts->tsval,
++					       tcp_rsk(req)->ts_id,
++					       tcp_rsk(req)->ts_id_bits);
++		if (!tcp_rsk(req)->snt_tsval_first && !opts->tsval)
++			opts->tsval = tcp_tsval_encode(~0U,
++						       tcp_rsk(req)->ts_id,
++						       tcp_rsk(req)->ts_id_bits);
++		if (!tcp_rsk(req)->snt_tsval_first)
+ 			tcp_rsk(req)->snt_tsval_first = opts->tsval;
+-		}
+ 		WRITE_ONCE(tcp_rsk(req)->snt_tsval_last, opts->tsval);
+ 		opts->tsecr = req->ts_recent;
+ 		remaining -= TCPOLEN_TSTAMP_ALIGNED;
+@@ -1171,6 +1175,9 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
+ 		opts->options |= OPTION_TS;
+ 		opts->tsval = skb ? tcp_skb_timestamp_ts(tp->tcp_usec_ts, skb) +
+ 				tp->tsoffset : 0;
++		if (skb)
++			opts->tsval = tcp_tsval_encode(opts->tsval, tp->ts_id,
++						       tp->ts_id_bits);
+ 		opts->tsecr = tp->rx_opt.ts_recent;
+ 		size += TCPOLEN_TSTAMP_ALIGNED;
+ 	}
+-- 
 2.47.3
 
