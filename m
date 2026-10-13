@@ -1,84 +1,33 @@
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F77E383C83;
-	Tue, 13 Oct 2026 09:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.152.168
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791885385; cv=fail; b=Ey1cayvToRhhsdKKhbR+CS83Sfo++7esrW4Gz0anVuDNdCRqls0mA8nuixVHvBJwqNmqTvDbXUf+rSh4QbpQFJ9MykvwMhmlsdCUjjf8DKPmMtwDzGDYoFEnwGXIwJOjrsaC3t5kwPDKTRyWl2kAjM5BXznPWHjxZUzCZURwafc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791885385; c=relaxed/simple;
-	bh=gEFyM5FCgVOpRZcqQx8jSv0l3tXeOSM4ZhCvlLqxH2c=;
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F4B3B8BC4;
+	Tue, 13 Oct 2026 09:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791885411; cv=none; b=l46Osy25MpbprFeY0AuL1sRmLfsZ0/g0N8n33o14rzy5RVDFBeoOsVQOD+AS7I8H9Uev7FThqu3fi3igdHhBqCKqsshzh7Cx406HqbMrWY1EGGsM27YxPF+LN4v2AiClD+J9RM2juC9MqYdtTHA/on/XK5BM41xeEHL0fmFdDmc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791885411; c=relaxed/simple;
+	bh=2YBI+HNExmRWYOZipFDby651m/YqSXmPK4RnpA+3yK8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CZa/JQHkKeX4V3bTrWQmangqORMZZCpiEK1TWtHu7pOXq0d4AisuEMUT03T+L0H/7+diuFnwGyalWPYddb/QUOXItP1tam8FypfC/S6fUuGFo2QldxiWDGGBdxMi3TtXEGiXtq39m2+hOiT4MU4PCCYJ+LGyFmpMWyxhUrtVemE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=l+InptRW; dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b=ZFZJBKCZ; arc=fail smtp.client-ip=67.231.152.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+	 In-Reply-To:Content-Type; b=ntfmTnCFlTPblsypHDRWtI87zBzkpmO6+HgBCsHX+valyfm2lorNhfrE8/m/LYdheayQzy+mwDNwSovJbUAzTEo21qvUqyBDJrs2V4ikhKPwiiD3GT4kC3f6OStwuHaEjU8ymzika7YGyjRZNgwzSrAT92NonmKzEadeuez3PHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=EFfKnIxB; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="l+InptRW";
-	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b="ZFZJBKCZ"
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69D4m4pO3590564;
-	Tue, 13 Oct 2026 04:55:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	PODMain02222019; bh=bygHCLtXDI14WP2FnFyAoAOobR9PB0fEsb9yr9fNOfE=; b=
-	l+InptRW2wTvPwJBTMq1mFmezGIcpAZO9lUM09Iom9sy4SD6vMVpf0ALkdZHIyq9
-	zYaMhBwAvD3hsoRnnHKcTrLNtRGcVgymSMq3Dmpl4buMa1VuxegS9x5WiKm7N+nZ
-	0g0D7Ei66D2yoS+a2tCOBHE6N5H0qC4skxAvh1KlbZy2LnPhCHGqF5i8qmxaUnF+
-	r8dNmG1qC94fQPTZd8on8Lzm0odW0DzRkC+7VfQDWub5uzM0Y/tIHpZDghsC46NO
-	Lol0nlXZ5ckwgvoaEJTnLNncRR4JTV/ZY9osHvTSijOOez9/Q4Mt1TvVG1u7QYJl
-	VBmJb9oRXasbZ2ytZ7ksRw==
-Received: from co1pr03cu002.outbound.protection.outlook.com (mail-westus2azon11020103.outbound.protection.outlook.com [52.101.46.103])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 4h7hsg3hyd-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 13 Oct 2026 04:55:45 -0500 (CDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=daK0RbWcqtlK/cIKN1Sg8LPNW0uGlgn9FhUs2unm4eJGPeHBAMRQtJRvma43xeUAGCaSeEAjfd9Cji4OUtrJaa+f+RELi/qv9hE+zdTfLLVULwCzCkS6T/GX+kFHq43GeRmvO8idcJZsS1/1brDZp19XRDSa4itnM4sCG2tlW/xzMLFpVfSZNd07s1URSv2/jwPd+q1hHn+/ur9HfQl/elT2C2rEM3mWF/suMJwk6wLme9iMiL5VX29/YgKAV/Xo1ZFXl+feRp4PBYMoK2Q89coO3DbF+/7kNplLf6dc8iBpLOngeH5GujM/kPFLfBOk+c1cs6I+anXVSgfHICo1Ag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bygHCLtXDI14WP2FnFyAoAOobR9PB0fEsb9yr9fNOfE=;
- b=HO7w+hR700u8g0IiFkYDh2TKX9wItCRo9oxtg93XHe6VxoISu1nJPD5d4zBZPPP1f8cxY3HxnGF1aNAE84F+yP5koyxv97h/e3FhLS4gdoUoDOeqZu4qQx+eyhfz2mziV88cYVwaH/JycEtarshRWLCJaq4hbHikCInVUFHbniBW+QfCSIrP+2TW9APskYw0k5BAkfXdJmaoH4NujreUr39yuZMP6X9WdLMVx8VimvyCOTTyDMxiBjwg/T5XZEuP7hITlo+oqi1Lt8kKkbueLr8PZok5WnEQFRvt/ncGUleho0zYXcLPCO/mVI1YXi6UAf/5n/XF+d2UbxI4E3CAxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 84.19.233.75) smtp.rcpttodomain=cirrus.com
- smtp.mailfrom=opensource.cirrus.com; dmarc=fail (p=reject sp=reject pct=100)
- action=oreject header.from=opensource.cirrus.com; dkim=none (message not
- signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bygHCLtXDI14WP2FnFyAoAOobR9PB0fEsb9yr9fNOfE=;
- b=ZFZJBKCZzDwGcqpt8RmALl6V92NnXkxBFzmWz0wf7a01MS1BSgAtsr3hkoSDHjiw783iB6Eu8uJPCbUSWiE7fAadbykf+KWkA6wzxBnQzQ9F/XsFf9RhL9YNn8x09zCzih4TmBptjH1lX9oj5NMoNR2z043Muynvoc7oE5nvt44=
-Received: from CH5P220CA0014.NAMP220.PROD.OUTLOOK.COM (2603:10b6:610:1ef::15)
- by EAYPR19MB614695.namprd19.prod.outlook.com (2603:10b6:303:2dc::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.23; Tue, 13 Oct
- 2026 09:55:41 +0000
-Received: from BN2PEPF0000A803.namprd02.prod.outlook.com
- (2603:10b6:610:1ef:cafe::41) by CH5P220CA0014.outlook.office365.com
- (2603:10b6:610:1ef::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.472.20 via Frontend Transport; Tue,
- 13 Oct 2026 09:55:41 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=softfail (sender
- IP is 84.19.233.75) smtp.mailfrom=opensource.cirrus.com; dkim=none (message
- not signed) header.d=none;dmarc=fail action=oreject
- header.from=opensource.cirrus.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- opensource.cirrus.com discourages use of 84.19.233.75 as permitted sender)
-Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
- BN2PEPF0000A803.mail.protection.outlook.com (10.167.245.164) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.522.6
- via Frontend Transport; Tue, 13 Oct 2026 09:55:40 +0000
-Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
-	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id A7850406544;
-	Tue, 13 Oct 2026 09:55:39 +0000 (UTC)
-Received: from [198.90.208.11] (ediswws06.ad.cirrus.com [198.90.208.11])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPSA id 885F382024B;
-	Tue, 13 Oct 2026 09:55:39 +0000 (UTC)
-Message-ID: <b2bdcc88-5689-470a-ae71-7907a3d6a750@opensource.cirrus.com>
-Date: Tue, 13 Oct 2026 10:55:39 +0100
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="EFfKnIxB"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A88B7169C;
+	Tue, 13 Oct 2026 02:56:45 -0700 (PDT)
+Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7BFA3F7B4;
+	Tue, 13 Oct 2026 02:56:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791885409; bh=2YBI+HNExmRWYOZipFDby651m/YqSXmPK4RnpA+3yK8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=EFfKnIxBAePjQOmGwBCkTqFItC93LDqs/Ft5OLc1jDoCy03l/oyZ3xq3p/rErMXXf
+	 0VdGLyhM7eOk7ZyJTtVs8aIFAsg/9wEyCHieUebxsFY1M8DIyJVDY6i6nuZECOaCSS
+	 X1pb39YTxXfeN8zlu5iZYlhP9/6/v3k+kFfc4om4=
+Message-ID: <40f95078-4d3c-48da-9262-afadf231014f@arm.com>
+Date: Tue, 13 Oct 2026 15:26:40 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,94 +35,136 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/9] firmware: cs_dsp: Give the control cache KUnit cases
- distinct names
-To: Mark <broonie@kernel.org>, Simon Trimmer <simont@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap
- <rdunlap@infradead.org>, Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Baokun Li <libaokun@linux.alibaba.com>, Jan Kara <jack@suse.cz>,
-        Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Zhang Yi <yi.zhang@huawei.com>, David Rhodes <david.rhodes@cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>
-Cc: patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-sound@vger.kernel.org
-References: <20261013-kunit-param-names-v1-0-4b22ec5b85b9@kernel.org>
- <20261013-kunit-param-names-v1-5-4b22ec5b85b9@kernel.org>
-Content-Language: en-GB
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <20261013-kunit-param-names-v1-5-4b22ec5b85b9@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v6 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
+ macro
+To: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
+References: <20261013-fix_hpage_macro-v6-0-2c52d0484de3@arm.com>
+ <20261013-fix_hpage_macro-v6-2-2c52d0484de3@arm.com>
+Content-Language: en-US
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <20261013-fix_hpage_macro-v6-2-2c52d0484de3@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF0000A803:EE_|EAYPR19MB614695:EE_
-X-MS-Office365-Filtering-Correlation-Id: d688b169-8975-4bc9-7907-08df291023df
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|36860700016|61400799027|82310400026|376014|7416014|10067099003|3023799007|261009223027099003|921020|11063799006|4143699003|22082099003|18002099003|56012099006|16102099003;
-X-Microsoft-Antispam-Message-Info:
-	bEa5wKBnkXQ4ah+Tqk56XpL18ObBTIsvgoo0zpi3S3LGC4bDXcxEg4lUq7NvQ2BylxPRA5WzCWiHiz+M/Z9X/dUO/xXjOG0a6w86t1HMwByl2JJ+0o5pQtpyZtyPr1O3bMMGGWQbwdXEtQUPeMG9pXV+MtRS2VrBzvS30FlzeAZQ3d4GPaGAo3+FLQ8D2N9Bhv9klK1LyH1pI8Tb+in26Q6UAH5DXVYaJTHQiRBfW4KOZDeLuO/a3F5zdTYi37WspgHH6+RHwdyNjzUx/zImf5Vj09/+6S8CI0HEqdA+Yo6ARtVkEEddoSge5zxw+BkE+UbfITprLgTQNy35n9lNoDcOjOeu2NjtK41230/Lxuv7ZX1J9z3QihE+55US0R+TZRCBKvIFRQcU1yGPbQBcM6Ym0Wo/l15ELAKEFaXW3217ARYubp/cOlgVI0xzlBKvq2HaD1qRWFQ9iQKIRVrpS+WdoVWjN66bUJzN1/s/S1tX9r3c5rZyi6E4zwMrVLDvovtkFD2fJU9d2wDhFEG2eayVbc7QdmFO6gtwPtR9tKk2xxhSg+Fqd1n/bkXedM79r7guWmAP9ZuP5RC4acZ8rOtHQyu3PIJs0kIBEhA9edJHy2SgX08zIajBE1j19yztxYvDohuLAye3EPCBIQ8LIiM7ehtqQ603nDOHZvNEeh+gyM7XTGPweTmJLcOE4ZjoBwjwGqQleGqq7+gd6hefz7LuHYjG0OK034jA12spxptwN/cUZ+IQ8Ci2cOx0qIDO
-X-Forefront-Antispam-Report:
-	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(36860700016)(61400799027)(82310400026)(376014)(7416014)(10067099003)(3023799007)(261009223027099003)(921020)(11063799006)(4143699003)(22082099003)(18002099003)(56012099006)(16102099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	9H76IMLdI1+9kA5HUez44+rg3GFCBiT3K0Ag8l90R4g46mqiNBqMflMwsm8waIworT52niKDFgOyMOVXqdHJsqYi2huVqicjNzCvTQaynktB2y2pPWZWism6yfJYE+XxULyg3zM7o8NSy5Yp/a5WRXYbyAL7DCgjBqkYsK/bPEzAB6YmUa6baAsOgUwOK8a8+LC8TALvaF8lYNkmhn9qqKZYmzXzsPXTZhPcsmdbVhBhllcxDA+tWP/OjxuXgikRFZakDD3XaXRLUBgjuwDBHhms80hgWJbpHutPw0utTS/PR4wB2MQ8IrB/PA6CyySXC7fyinU7MLyvoT8/TBYX1w6qUAuaN/0nH5/sEeXG1rIyGA43wm5naAPUOHRPumVwPG+C4pQPEsHOgtWvLFR9TFOmGJ+5Bw6Hi+GIswIFz6Neth6N0gSMbG2dRo4C6epZ
-X-Exchange-RoutingPolicyChecked:
-	4+UdzpezdK6jIQII+d+MC5ejWC7k+z7htyWKR/et1fXjnNtAKapDqwAaHaLolTJmXUY+Nu/BBxwivVXo4jBhd6ZjsnAatW4hnhg+LRaNUTp7vrOgQCj8jG/8R/jbiNGM8D4+36fg6dZlT0/U7grFxYeTF1EM7dlpqreHonq55q6a8sunofWULQBOmKr2Ttr6ogQ+9LAQdqnp7Q+G9tDFP3SYMC900sLARV3KanIDwL8RZuTROjq7eG57DRfHXgEhyeB/5aGtivKcUrHj7lEJYS4jQQdPQXXslDBsVizhI7MsAh2w6wDAwMA/D9oHMDYhSs6W76CsdHko22pZv/dwVQ==
-X-OriginatorOrg: opensource.cirrus.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2026 09:55:40.5826
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d688b169-8975-4bc9-7907-08df291023df
-X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-BN2PEPF0000A803.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: EAYPR19MB614695
-X-Proofpoint-ORIG-GUID: vYxmn76MBQ06_3J_WsEymzqaQkKTtCPt
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEzMDAzOSBTYWx0ZWRfX9wjRA4kKeqKo
- zZaSLK4lXdcZc/rIgLQXNA8rrODLYKfvD1Z+4IJfgWPIJXS7uoWEeNWDyRTA2h9p6iGWvkrM3zI
- KiHbFE2+ohPdGuaVKhIbZ+Y89iL8NY4=
-X-Proofpoint-GUID: vYxmn76MBQ06_3J_WsEymzqaQkKTtCPt
-X-Authority-Analysis: v=2.4 cv=QufLTlyd c=1 sm=1 tr=0 ts=6ace0021 cx=c_pps
- a=85R27yqqIDOPhBwKPsrjTg==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s63m1ICgrNkA:10 a=RWc_ulEos4gA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=iX4cTi3TZMoOKdANLEfx:22 a=KfkQE9S9VqCBgivYGm0O:22
- a=w1d2syhTAAAA:8 a=Hlguj6pl-HWLELH-vwcA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEzMDAzOSBTYWx0ZWRfX4v5qs9/hIgJx
- n5oDLR7OEDoFA7YI8lYtnebZ/bFwnTxd7EanewojvxZqHfZl8CLeu9NhzZPksuZ0Rg5Ftzlhnb/
- KDfIU0+fVWKMe5FpQ8oLMtdNWZbp+rOtM3xhcUsXaW/TaEo5apv0bl80jNn+0/4m3uCkOtiCzXI
- i/lp06zHA45I8xw1YjVSzM33hFAPuH3YNgE3rMPzUDLRVx2Bspted1AJ3BXCv0DEGxP15ATPXaa
- lL2k3T3+qHfizpm+1DA6ONscQEcu94VrFR2+BqvvCHZkwefSAiNYWO7OE0MRIsUtrJNxAfyy66T
- loNfjhhiQh4sOYa85OYjEaFhfVdnGVZiB6sQQ1zOXRRnjQITRd6BT3+O0MVHybDcE9LF+SRjr11
- m+yfJvGqzFkXwuWvPgyfU0RE4Vk3j+8u5Zvzrlzufb6gBFqmVaE3Xq93+54swxKXz6YQMjjcIgn
- hWZM1VXAAbiyypC1wkw==
-X-Proofpoint-Spam-Reason: safe
 
-On 13/10/2026 12:10 am, Mark wrote:
-> The cs_dsp_ctl_cache suites run cs_dsp_ctl_cache_init(),
-> cs_dsp_ctl_cache_writethrough() and
-> cs_dsp_ctl_cache_writethrough_unchanged() against several sets of
-> parameters by listing each function several times with
-> KUNIT_CASE_PARAM(), which names the case after the function. The
-> resulting cases all share a name, so they cannot be told apart in the
-> results.
+Hi Yeoreum!
+
+On 10/13/26 3:16 PM, Yeoreum Yun wrote:
+> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+> When this macro is used in some test, test result would be strange in
+> the system where PAGE_SIZE is more then 4KB.
 > 
-> Use KUNIT_CASE_PARAM_UNIQUE() for these entries so that each case is
-> also named for the parameter generator it is run with, for example
-> cs_dsp_ctl_cache_init-all_pop_varying_len_gen_params.
+> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
+> 
+>   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
+>     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
+>     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     ...
+>   ok 1 Completed
+> 
+> Remove the HPAGE_SIZE and HPAGE_SHIFT macro and introduce pmd_pshift()
+> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
+> helper, pmd_psize().
+> 
+> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
+> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
+> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
+> PMD-sized units, the test may fail with the previous size of 100 MiB,
+> which is not a multiple of the PMD size when the base page size is
+> 16 KiB or 64 KiB.
+> 
+> After this patch, output of transhuge-stress:
+> 
+>   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
+>     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
+>     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
+>     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
+>     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
+>     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
+>     ...
+>   ok 1 Completed
+> 
+> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
 
-Reviewed-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+[...]
+
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 5f2fb5b819c4a..efd99298be135 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -21,6 +21,8 @@
+>  
+>  unsigned int __page_size;
+>  unsigned int __page_shift;
+> +uint64_t __pmd_psize = -1ull;
+> +uint64_t __pmd_pshift = -1ull;
+>  
+>  uint64_t pagemap_get_entry(int fd, char *start)
+>  {
+> @@ -161,19 +163,40 @@ uint64_t pmd_psize(void)
+>  	char buf[20];
+>  	ssize_t num_read;
+>  
+> +	if (__pmd_psize != -1ull)
+> +		return __pmd_psize;
+> +
+>  	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
+> -	if (fd == -1)
+> +	if (fd == -1) {
+> +		__pmd_psize = 0;
+>  		return 0;
+> +	}
+>  
+>  	num_read = read(fd, buf, 19);
+>  	if (num_read < 1) {
+> +		__pmd_psize = 0;
+>  		close(fd);
+>  		return 0;
+>  	}
+>  	buf[num_read] = '\0';
+>  	close(fd);
+>  
+> -	return strtoul(buf, NULL, 10);
+> +	__pmd_psize = strtoul(buf, NULL, 10);
+> +
+> +	return __pmd_psize;
+> +}
+> +
+> +uint64_t pmd_pshift(void)
+> +{
+> +	if (__pmd_pshift != -1ull)
+> +		return __pmd_pshift;
+> +
+> +	if (__pmd_psize != -1ull)
+> +		__pmd_psize = pmd_psize();
+
+Kiryl pointed this out in v5 [1], you might have missed it. This check
+seems to be inverted.
+
+[1] https://lore.kernel.org/all/asj4dT2Q__SlKhgr@thinkstation/
 
