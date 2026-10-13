@@ -1,127 +1,298 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DACB53FD51
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 22:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA7E55D895;
+	Tue, 13 Oct 2026 22:51:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791931431; cv=none; b=Y3BreyyOJPXW/0euF+WevWOI4Gxl+MVTA0TFbniOBhFCFAcoS/NJgED9+g4gZBiM1MpwZxb5PO2m3hdxMbI6KGhHiSkjU8xyYuuXIiupYa4gjBO0pAQs5uvFEWmSqRBCUuPnTkDvNzNW3rGZ+/rNiPLJDODs66zWf7iR/WwBXjI=
+	t=1791931925; cv=none; b=DMfoKs9WRO2QnNmVJG6ke7HCnIwhon/TvE+JdPz6opmiqHrMtdSe0Mub5Qceoz7puSGev167R2r4AbC5kEtVIfJcsIiqyqjU5GAeEWwSkcg18uZjAqk4tdU7Ba2d/uW4tCufTMdedOI2sdgsUSj0jOjYTbjGM1pNIMXEPqifUuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791931431; c=relaxed/simple;
-	bh=IGuvyB5PbhIzeePVFzAtrlhGsL24P9yuKC8V+/pp3+s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YzXJQ4gDRxVaKeLeREftmtwxf8W2af1OxqlJjn+qCASPNhEVcnAMzUNGmc5fuNSNYF1C/slLc40uRvB4FbaHpry/shEJqAa2Ek43xbGBiwDX7BGcjelOz5jwr12X9ATaKcJfZ0X1SM/U6vkQAvsBim57gEueAezgmAPOAKhAz3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ek4P1YRl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1791931925; c=relaxed/simple;
+	bh=CCVIN8tDxFjyce8Qxi3ujZwuOTphI4nRXCsdICLjqTQ=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=M8exj/xgdgULt7DQFzJnP8De4D2yppNgP636F2XNWkMLkhF9ZR7waOUx69eDWrHCqAybPey4l53RwR/NwrW8luzlyboeLNlnmzkVYIxy/4S7O5gRa64umXa6/UeFbuPoeBQIn+DkDq5WgRymgJjfZZmgR67HM8rRrU1jyRmo2Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EgY35Fiy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ek4P1YRl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791931428;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tTgDO4Q2/ydtZMP24HXgy3ERsMnbYlaCJjw/o3smb7I=;
-	b=Ek4P1YRlRwY7rAcO1JHQFqNIySLiukTzTo2ykJNqqi96363ND7v3IvqBOoKbWt74pAD/Rz
-	v5c4SV3CWm+zPxequPYJvzqDEt5jXzHKpIMO0N1nv/aw3g3d/lBRD74tG8uwZoiDk5Ucxx
-	UTWuj1DjGerHshvfVESy7VsmLMauBMo=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-649-8UUp0W2wPiGbeECf08Uxow-1; Tue,
- 13 Oct 2026 22:43:44 +0000
-X-MC-Unique: 8UUp0W2wPiGbeECf08Uxow-1
-X-Mimecast-MFC-AGG-ID: 8UUp0W2wPiGbeECf08Uxow_1791931421
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 404061956077;
-	Tue, 13 Oct 2026 22:43:41 +0000 (UTC)
-Received: from [100.91.18.181] (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 314881800345;
-	Tue, 13 Oct 2026 22:43:38 +0000 (UTC)
-Message-ID: <4dbdc6ab-7c3a-4c8b-ba88-f5089f2b619b@redhat.com>
-Date: Tue, 13 Oct 2026 18:43:38 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EgY35Fiy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 356E41F000FF;
+	Tue, 13 Oct 2026 22:51:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791931917;
+	bh=ihtthPd1qtSs1WqvN2e62G8drpORFvU+QPjdaQHYU1I=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=EgY35Fiy4gFlNd/j2QzMrfvZOmCd1Mow8KC4gkJuxPq0As1NPJTKrMYqAIGHbaIOS
+	 WxPEdEuXrFqZmxczkmTC5afQqTsY9qap0A/vcPAZznhqcC/pwt48j22bZodK7wkIho
+	 mLDU9zBXfFq8lI7vLrgb6yti2rM9LsL7ywQ0N32ejy5oxCQHpX5dXOvg2lQjNUH/YO
+	 pAdJ+RGGi0pjG/Yi3jVU4ha3U4GVd6sXhn/1mxdL+jwarwFL0+mrX2GEa3a2b2IHkk
+	 WApXmNWLuPkQ6+ZKj/JwnB1WiXeyHQrwSbPvD0e0+TQNbLS+Iz/rm2HXRiuX0Yf29X
+	 JV1ZDQ7gV3JYQ==
+Subject: Re: [PATCH net-next v3 4/7] vsock: add a netlink command to assign
+ the g2h device to a netns
+From: netdev-bot+sashiko@kernel.org
+To: bobbyeshleman@meta.com
+Cc: sgarzare@redhat.com, davem@davemloft.net, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, stefanha@redhat.com, mst@redhat.com,
+ jasowangio@gmail.com, xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
+ shuah@kernel.org, rdunlap@infradead.org, donald.hunter@gmail.com,
+ edumazet@kernel.org, virtualization@lists.linux.dev, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com,
+ bobbyeshleman@gmail.com
+Date: Tue, 13 Oct 2026 22:51:55 +0000
+Message-ID: <179193191574.434549.17107426250790354528@kernel.org>
+In-Reply-To: <20261012-vsock-guest-ns-v3-4-b32447c66b23@meta.com>
+References: <20261012-vsock-guest-ns-v3-4-b32447c66b23@meta.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2 6/6] selftests/cgroup: Skip test_cpuset_prs.sh
- test if some required CPUs are offline
-To: Guopeng Zhang <guopeng.zhang@linux.dev>,
- Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Hui Peng <benquike@gmail.com>
-References: <20261010221938.243859-1-longman@redhat.com>
- <20261010221938.243859-7-longman@redhat.com>
- <27675c88-061c-4f84-9387-324071a16b45@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <27675c88-061c-4f84-9387-324071a16b45@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
-On 10/11/26 5:00 AM, Guopeng Zhang wrote:
->
-> 在 2026/10/11 06:19, Waiman Long 写道:
->> The test_cpuset_prs.sh test assumes that all the relevant CPUs being
->> tested are online. If some of them are offline, some of the test cases
->> may fail. So skip the test if the required CPUs are either offline or
->> not present.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   .../selftests/cgroup/test_cpuset_prs.sh       | 20 +++++++++++++++++++
->>   1 file changed, 20 insertions(+)
->>
->> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> index 3d392e8c66aa..f57971ebb90e 100755
->> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> @@ -118,6 +118,26 @@ TEST_ISOLCPUS=
->>   		skip_test "Current isolated CPUs ($CURRENT_ISOLCPUS) don't match boot isolated CPUs!"
->>   }
->>   
->> +#
->> +# This test assumes that all the relevant CPUs being tested are online.
->> +# If some of them are offline, some of the tests may fail. So we are going to
->> +# skip running this test script if some of the required CPUs may be offline.
->> +# The required CPUs include CPUs 0-7 and the first boot time isolated CPU if
->> +# present. However the check below is not exhaustive and can be a false
->> +# positive, but users should not run this test if some CPUs are offline.
->> +#
->> +ONLINE_CPUS=$(cat /sys/devices/system/cpu/online | sed -e "s/,.*//")
->> +ONLINE_FIRST=$(echo $ONLINE_CPUS | sed -e "s/-.*//")
->> +ONLINE_LAST=$(echo $ONLINE_CPUS | sed -e "s/.*-//")
->> +if [[ -n "$FIRST_ISOLCPUS" ]]
->> +then
->> +	LAST_REQUIRED_CPU=$FIRST_ISOLCPUS
->> +else
->> +	LAST_REQUIRED_CPU=7
->> +fi
->> +[[ $ONLINE_FIRST != 0 || $ONLINE_LAST -lt $LAST_REQUIRED_CPU ]] &&
->> +	skip_test "Some of the required CPUs are offline or not present!"
->> +
-> Could this check run before the setup that creates the test cgroup and
-> changes sched/verbose?
->
-> skip_test() exits directly, and the cleanup trap hasn't been installed
-> here. We have already created test; with -v, sched/verbose has also been
-> set to Y. This exit leaves the cgroup behind and bypasses restoring
-> verbose.
+Critical: 0 · High: 0 · Medium: 2 · Low: 2
 
-Good point. I am going to move the trap statement earlier to make sure 
-that it will be run when there is an early abort.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Cheers,
-Longman
+- [Medium] Take a namespace that cannot reach the assigned G2H device, on
+  a system with vhost-vsock (H2G) and vsock_loopback loaded.
+- [Medium] `vsock_g2h_reset_unreachable()` in net/vmw_vsock/af_vsock.c
+  resets sockets without lock_sock() while the device stays live.
+- [Low] No in-tree transport sets the new capability at this commit.
+- [Low] `vsock_g2h_net_assign()` in net/vmw_vsock/af_vsock.c sends the
+  success reply before it commits the assignment.
 
+--
+
+vsock: add a netlink command to assign the g2h device to a netns
+
+This patch adds a vsock generic netlink family with two commands.
+VSOCK_CMD_DEV_NETNS_SET moves the guest's G2H vsock device into the
+caller's network namespace, and VSOCK_CMD_DEV_NETNS_GET reports where the
+device is. After a move, connected sockets that can no longer reach the
+device are closed with ECONNRESET, and the assignment holds a reference on
+the target namespace.
+
+Link: https://lore.kernel.org/all/20200427142518.uwssa6dtasrp3bfc@steredhat/
+
+> diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
+> index fe43e85959583..9276479004c0f 100644
+> --- a/Documentation/admin-guide/sysctl/net.rst
+> +++ b/Documentation/admin-guide/sysctl/net.rst
+> @@ -529,6 +529,43 @@ their hosts. The behavior of VSOCK sockets in a network namespace is determined
+
+[ ... ]
+
+> +Support is transport dependent. A G2H transport that does not implement the
+> +move refuses the command with ``EOPNOTSUPP``. Of the in-tree guest transports,
+> +only virtio-vsock implements it.
+
+[Severity: Low]
+This is a minor point. Is this sentence accurate at this commit?
+
+No in-tree transport sets netns_assign_allow yet, so this check in
+vsock_g2h_net_assign() always fails:
+
+	if (!vsock_net_assignable(transport_g2h)) {
+
+As a result, VSOCK_CMD_DEV_NETNS_SET returns -EOPNOTSUPP (or -ENODEV) for
+every G2H transport. The new exports vsock_g2h_net_get(), vsock_g2h_net_eq()
+and vsock_maybe_set_connected() also have no callers yet.
+
+The next patch in the series, "vsock/virtio: support guest device network
+namespace", adds .netns_assign_allow = true to virtio_transport and calls
+those helpers. So the mismatch only exists at bisect points between the two
+patches. Could this sentence move into that patch?
+
+> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> index 8f34bf68f9164..e663be3bbfa0b 100644
+> --- a/net/vmw_vsock/af_vsock.c
+> +++ b/net/vmw_vsock/af_vsock.c
+
+[ ... ]
+
+> @@ -564,7 +632,12 @@ static bool vsock_use_local_transport(unsigned int remote_cid)
+>  		return true;
+>  
+>  	if (transport_g2h) {
+> -		return remote_cid == transport_g2h->get_local_cid();
+> +		u32 cid = __vsock_registered_transport_cid(&transport_g2h, net);
+> +
+> +		/* The device may be unreachable from @net, in which case
+> +		 * @remote_cid is not the local CID.
+> +		 */
+> +		return cid != VMADDR_CID_ANY && remote_cid == cid;
+>  	} else {
+>  		return remote_cid == VMADDR_CID_HOST;
+>  	}
+
+[Severity: Medium]
+Suppose the G2H device has been assigned to a local mode namespace, and
+vhost-vsock and vsock_loopback are also loaded. What happens in a namespace
+that can no longer reach the device?
+
+In that namespace, IOCTL_VM_SOCKETS_GET_LOCAL_CID in vsock_dev_do_ioctl()
+gets VMADDR_CID_ANY from transport_g2h and falls back to transport_h2g:
+
+	cid = vsock_registered_transport_cid(&transport_g2h, net);
+	if (cid == VMADDR_CID_ANY)
+		cid = vsock_registered_transport_cid(&transport_h2g,
+						     net);
+
+vhost_transport_get_local_cid() returns VHOST_VSOCK_DEFAULT_HOST_CID, so the
+namespace is told its local CID is 2. __vsock_find_cid(net, 2) is also true
+through the transport_h2g && cid == VMADDR_CID_HOST check, so bind() to
+CID 2 succeeds.
+
+A connect() to CID 2 then enters the transport_g2h branch above, because the
+pointer is non-NULL. It returns false because cid is VMADDR_CID_ANY, so the
+remote_cid == VMADDR_CID_HOST loopback fallback in the else branch is never
+reached.
+
+vsock_assign_transport() then picks transport_g2h for
+remote_cid <= VMADDR_CID_HOST and fails at the new check:
+
+	if (vsock_g2h_unreachable(new_transport, sock_net(sk))) {
+		ret = -ENETUNREACH;
+
+Should an unreachable G2H transport be treated the same as an absent one
+here, so that connecting to the namespace's own reported CID uses loopback?
+The later virtio patch in the series makes this path reachable and does not
+change this logic.
+
+[ ... ]
+
+> @@ -742,8 +823,267 @@ bool vsock_find_cid(unsigned int cid)
+
+[ ... ]
+
+> +/* Close every connected socket of @t that can no longer reach the g2h device.
+> + */
+> +static void vsock_g2h_reset_unreachable(const struct vsock_transport *t)
+> +{
+> +	struct vsock_sock *vsk, *tmp;
+> +	struct sock *sk;
+> +	int i;
+> +
+> +	lockdep_assert_held(&vsock_register_mutex);
+> +
+> +	spin_lock_bh(&vsock_table_lock);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(vsock_connected_table); i++) {
+> +		list_for_each_entry_safe(vsk, tmp, &vsock_connected_table[i],
+> +					 connected_table) {
+> +			sk = sk_vsock(vsk);
+> +
+> +			if (vsk->transport != t ||
+> +			    sk->sk_state == TCP_CLOSE ||
+> +			    vsock_g2h_reachable_sk(vsk))
+> +				continue;
+> +
+> +			/* If close has already been scheduled for this socket,
+> +			 * we can skip.
+> +			 */
+> +			if (vsk->close_work_scheduled)
+> +				continue;
+> +
+> +			sk->sk_state = TCP_CLOSE;
+> +			sk->sk_err = ECONNRESET;
+> +			sk_error_report(sk);
+> +
+> +			__vsock_remove_connected(vsk);
+
+[Severity: Medium]
+Can these writes race with the socket's own state machine?
+
+Only vsock_register_mutex and vsock_table_lock are held here, and neither
+one excludes lock_sock() holders. close_work_scheduled is read the same way.
+
+The existing lockless resets, virtio_vsock_reset_sock() and
+vhost_vsock_reset_orphans(), only run when the device is going away. Here
+the device keeps running, so its RX path can work on the same socket at the
+same time.
+
+With the later virtio patch, virtio_transport_rx_work() checks
+vsock_g2h_net_eq(net) for each packet but does not synchronize with the
+swap. That patch's commit message also notes that an assign can land while
+rx_work is draining a batch:
+
+CPU1 (assign)                      CPU2 (rx_work)
+                                   vsock_g2h_net_eq(net) returns true
+vsock_g2h_net_swap()
+                                   virtio_transport_recv_pkt()
+                                     lock_sock(sk)
+                                     sk_state is TCP_ESTABLISHED
+vsock_g2h_reset_unreachable()
+  sk->sk_state = TCP_CLOSE
+  sk->sk_err = ECONNRESET
+  __vsock_remove_connected(vsk)
+                                     virtio_transport_recv_connected()
+                                       virtio_transport_do_close()
+                                         sk->sk_state = TCP_CLOSING
+
+If an incoming SHUTDOWN or RST arrives at that point, doesn't the socket end
+up in TCP_CLOSING with ECONNRESET set and outside the connected table?
+
+There is a similar window on the send side. vsock_connectible_sendmsg() may
+already have passed its sk_err check and could enqueue one more chunk
+through the device after the sweep. KCSAN would also likely report these
+unannotated stores against the locked writers.
+
+Refcounting looks balanced, because vsock_remove_connected() re-checks table
+membership. So the effect appears to be limited to inconsistent socket
+state.
+
+[ ... ]
+
+> +static int vsock_g2h_net_assign(struct net *net, struct sk_buff *msg,
+> +				struct genl_info *info)
+> +{
+
+[ ... ]
+
+> +	ret = -EMSGSIZE;
+> +	hdr = genlmsg_iput(msg, info);
+> +	if (!hdr)
+> +		goto unlock;
+> +	genlmsg_end(msg, hdr);
+> +
+> +	ret = genlmsg_reply(msg, info);
+> +	msg = NULL;
+> +	if (ret)
+> +		goto unlock;
+> +
+> +	old = vsock_g2h_net_swap(net, &old_tracker);
+> +
+> +	/* See vsock_maybe_set_connected() comment about synchronizing with
+> +	 * connecting sockets.
+> +	 */
+> +	vsock_g2h_reset_unreachable(transport_g2h);
+
+[Severity: Low]
+Is this ordering intended? The success reply goes out before
+vsock_g2h_net_swap() and vsock_g2h_reset_unreachable() run.
+
+This means userspace can see VSOCK_CMD_DEV_NETNS_SET succeed while
+vsock_g2h_net still points at the old namespace and the established sockets
+there are still open. Those sockets' send and receive paths take lock_sock(),
+not vsock_register_mutex, so the mutex does not hold them off.
+
+The move also depends on the reply being delivered. genlmsg_reply() does a
+MSG_DONTWAIT unicast, so if the requester's receive buffer is full it
+returns -EAGAIN and the swap is skipped. Neither the commit message nor the
+docs mention this failure mode.
+
+Could the swap and the sweep run first, with the reply sent after them?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012-vsock-guest-ns-v3-0-b32447c66b23%40meta.com
