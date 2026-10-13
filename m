@@ -1,142 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453F33FE347;
-	Tue, 13 Oct 2026 16:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0D751EDFF;
+	Tue, 13 Oct 2026 16:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791907905; cv=none; b=n2InxgkhAxOEBFV6kAOPvz7AXWmqtrknYg0dg4maWT6uEC4Gfux6b+YkcOdyxsj5Xh6pH+fne7wIXu9G4vHUmDbYG6Gk7PxggCTTtWf5Q529oObfr4+aOua+39cBoGiLfpQ+QgjunWXWq6fPXGduONTlTOrIbadDcxf/LcTeAG0=
+	t=1791910758; cv=none; b=GdMCD/SNXqTcjjxaIsnTjqwyq8jrynwkkI/VLChemtXSMBM0VgHecrk4Y5Ysz7Km+eAkVZAgl23puq9PUwLcF0l2NeTrjWt7p6sbMQMFSk+g2OQz4kgaR7pTkaApR5a65hEWLKKtc+BhOYo/IFYL+2Lz9UtAYKoNQBEBDOxJ280=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791907905; c=relaxed/simple;
-	bh=seZ5jYBkFFDj6LzktqK84G593VFjwTFFSPdG+PcZfLg=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=b4jd5rv5aUz+O5N34oyWsBOQ1JMSyb2thRJ9lLnQ3EFTQZBl41yUu2bHwfqOtFJa7MA2V2Me/2rTc/VniM+YCAl4O5Wo1nEhSkBU2pFrb/4HPFMA223rMYrckGN0Q/AMWVz/O1+ej6CW+uHtCLumsgofSDECVZ3pZUgGHcSe8wY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CfhftFFG; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CfhftFFG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D821F00893;
-	Tue, 13 Oct 2026 16:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791907904;
-	bh=xvlHbLOS9Yw6gWGukPkO6rgjjMSKMlO6OYRVK0OS9yM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=CfhftFFGF8x9LJqgEAjyCMZ+KqqtKXmzfp2pTOwbWAseX2zFoMhY75p5u3YwJGhIh
-	 vCnYH9T9d5O2G4nXYiaXDdIPqQ3VEXnrRUYCzyHHpHYfm9A3sph6UESVjKPJtQ610U
-	 oH7UCEPis317NBMe2baYizwP8dFqx5wKmTVlyXh2uecLXugd1lrAZ6rto+JtnlzVNe
-	 nvbAZjCmi7qZQNms7zTNPCWkgleo9BieX5W7vg/T0fCELv3v/alPqV6Dvg7ib9v2J8
-	 1JM+9QDVtDWcLNUNew9jQnaAorTeW62A0ySA2+MtgwfRuUOm6ZCfF1K2VgI0zqX1vv
-	 mRbGbIvxXFDMQ==
-Subject: Re: [PATCH net-next v4 8/9] selftests: tls: Extend coverage for
- zero-length records
-From: netdev-bot+sashiko@kernel.org
-To: cel@kernel.org
-Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
- davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
- shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 13 Oct 2026 16:11:43 +0000
-Message-ID: <179190790310.434549.10358607982241497690@kernel.org>
-In-Reply-To: <20261012-tls-follow-on-v4-8-8cea429565da@kernel.org>
-References: <20261012-tls-follow-on-v4-8-8cea429565da@kernel.org>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1791910758; c=relaxed/simple;
+	bh=lEe7KbytEHzaEoCODO1wTdqBvTA4GasLhTbtZ7LMJfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R4mRUrCpIWgOHDDTwesTEx2dlAv8ZwGRnmJkIJ7Qi3gU3ed7XUSq7rsW0naeRne+/5oGiviCZ8ulcVbgJv/A+mjRWJepfibi4AbwMCXbKvSxLA4nrRivcwmmvJy09tq/0/vE7J5aRhUAnClUYAVPIBmjkc3qgK6j4K8QW81yZDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; arc=none smtp.client-ip=80.241.56.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=listout.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4j40t64msCz8vLc;
+	Tue, 13 Oct 2026 18:59:10 +0200 (CEST)
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of listout@listout.xyz designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=listout@listout.xyz
+Date: Tue, 13 Oct 2026 22:29:00 +0530
+From: Brahmajit Das <listout@listout.xyz>
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, bdas@suse.de, andrii@kernel.org, 
+	eddyz87@gmail.com, ihor.solodrai@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, shuah@kernel.org, roman.gushchin@linux.dev, 
+	shakeel.butt@linux.dev, jp.kobryn@linux.dev, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Add tests for memcg kfuncs
+Message-ID: <as5irmeQHNMe6vzT@neptune>
+References: <20261013151621.1526699-1-listout@listout.xyz>
+ <ba00839fdba6a3a8c0f6061d38f6036efdcc806b21c73c2a78c750d4f4a2cbd3@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ba00839fdba6a3a8c0f6061d38f6036efdcc806b21c73c2a78c750d4f4a2cbd3@mail.kernel.org>
+X-Rspamd-Queue-Id: 4j40t64msCz8vLc
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+On 13.10.2026 15:53, bot+bpf-ci@kernel.org wrote:
+> > selftests/bpf: Add tests for memcg kfuncs
+> 
+> TL;DR:
+> - Test issue: the "reclaim clamped" upper-bound assertion in test_reclaim()
+>   likely fails, since only the reclaim request is clamped, not the result;
+>   commit message is also inaccurate
+> - Minor: silent test__skip() with no message
+> 
+...
+> So someone reading a SKIP for memcg_kfuncs/memory_events or
+> memcg_kfuncs/reclaim cannot tell why it was skipped.  The arena_memcg test
+> that this helper resembles prints "%s:SKIP:no disk-backed O_TMPFILE in cwd"
+> before calling test__skip().
+> 
+> On the other side, this is minor: the skip is correctly a skip rather than a
+> failure, and the commit message documents the skip condition.
+> 
+> Could a similar message be printed here before test__skip()?
+> 
+> [ ... ]
+> 
+> > +static void test_reclaim(struct memcg_kfuncs *skel)
+> > +{
+> > +	long ret = 0;
+> > +	int fd, i;
+> > +
+> > +	fd = alloc_pagecache_or_skip(PAGECACHE_SIZE);
+> > +	if (fd < 0)
+> > +		return;
+> > +
+> > +	/* Ask for more than one batch to check the clamp. */
+> > +	for (i = 0; i < RECLAIM_RETRIES && ret <= 0; i++)
+> > +		ret = do_reclaim(skel, 4 * MEMCG_CHARGE_BATCH * page_size, 0);
+> > +
+> > +	ASSERT_GT(ret, 0, "reclaimed");
+> > +	ASSERT_LE(ret, MEMCG_CHARGE_BATCH * page_size, "reclaim clamped");
+>                     ^^^^
 
-Low priority / nit picks for your consideration:
+Will do, for both the O_TMPFILE and the missing memory controller case.
 
-- [Low] Concern: TEST_F(zero_len_splice, test) in
-  tools/testing/selftests/net/tls.c passes SPLICE_F_NONBLOCK to every…
+> 
+> Does the "reclaim clamped" assertion hold?  bpf_proactive_reclaim() only
+> clamps the reclaim target:
+> 
+>     nr_pages = min(size / PAGE_SIZE, (unsigned long)MEMCG_CHARGE_BATCH);
+>     nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages, ...);
+>     return nr_reclaimed * PAGE_SIZE;
+> 
+> Nothing limits what try_to_free_mem_cgroup_pages() actually returns to that
+> target.  do_try_to_free_pages() checks sc->nr_reclaimed >= sc->nr_to_reclaim
+> only after each full priority pass:
+> 
+>     do {
+>         ...
+>         shrink_zones(zonelist, sc);
+>         if (sc->nr_reclaimed >= sc->nr_to_reclaim)
+>             break;
+>         ...
+>     } while (--sc->priority >= 0);
+> 
+> In the classic LRU path, shrink_lruvec() checks a local nr_reclaimed
+> (starting at 0) against the full sc->nr_to_reclaim, so one pass can add up
+> to the whole target on top of what earlier passes already reclaimed.
+> 
+> The MGLRU path is the same: try_to_shrink_lruvec() calls should_abort_scan()
+> only after each evict_folios() batch of up to MIN_LRU_BATCH (64) pages.
+> Both paths compute the per-pass scan target as lruvec_size >> priority.
+> 
+> With the 32MB (8192 x 4K pages) of clean page cache that test_reclaim()
+> creates, and swappiness 0 (SCAN_FILE), priorities 12 through 8 reclaim
+> 2 + 4 + 8 + 16 + 32 = 62 pages.  That is below nr_to_reclaim = 64, so the
+> loop drops to priority 7.  There, nr[LRU_INACTIVE_FILE] = 64 and the pass
+> reclaims another 64 pages, for a total of about 126 pages (~504KB).
+> ASSERT_LE(ret, 64 * page_size) then fails.
+> 
+> For any page cache size around 32MB, the running total jumps from at most 63
+> pages straight past 64, so this is not a rare edge case.  Large page cache
+> folios make it worse: isolate_lru_folios() takes a whole folio even when
+> nr_to_scan is smaller, so a single folio bigger than 64 pages already
+> exceeds the bound in the first pass.  The same arithmetic applies with 64K
+> pages.
+> 
+> The commit message says "bpf_proactive_reclaim() reclaims clean page cache
+> and the result is clamped to MEMCG_CHARGE_BATCH pages", but only the request
+> is clamped, not the result.  The kfunc's own kernel-doc describes @size as
+> the amount to reclaim (clamped), not as an upper bound on the return value.
+> 
+> Should the upper-bound assertion be dropped or relaxed, and the commit
+> message fixed?
+> 
 
---
+Right, only the request is clamped, and reclaim can overshoot it
+(cgroup-v2.rst says as much for memory.reclaim). I'll drop the upper
+bound and fix the commit message in v3.
 
-selftests: tls: Extend coverage for zero-length records
+> > +	ASSERT_EQ(ret % page_size, 0, "reclaim page aligned");
+> > +
+> > +	close(fd);
+> > +}
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38421980805
 
-This adds two fixtures to tls.c, zero_len_splice and zero_len_peek. They
-check splice() and MSG_PEEK against runs of zero-length application_data
-records. It also adds a data_0data_data variant to zero_len, which checks
-that the first recv() stops at the empty record.
-
-> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-> index 0bc43728262e0..8ce5a90329600 100644
-> --- a/tools/testing/selftests/net/tls.c
-> +++ b/tools/testing/selftests/net/tls.c
-
-[ ... ]
-
-> @@ -2671,6 +2698,177 @@ TEST_F(zero_len, test)
-
-[ ... ]
-
-> +TEST_F(zero_len_splice, test)
-> +{
-> +	struct pollfd pfd = { .fd = self->cfd, .events = POLLIN };
-> +	const struct raw_rec *payload;
-> +	unsigned char buf[128];
-> +	ssize_t ret;
-> +	int p[2];
-> +
-> +	if (self->notls)
-> +		SKIP(return, "no TLS support");
-> +
-> +	ASSERT_GE(pipe(p), 0);
-> +
-> +	payload = zero_len_send_recs(_metadata, self->fd, variant->recs);
-> +
-> +	if (variant->splice_ret < 0) {
-> +		ret = splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
-> +			     SPLICE_F_NONBLOCK);
-> +		EXPECT_EQ(ret, -1);
-> +		EXPECT_EQ(errno, -variant->splice_ret);
-> +	} else {
-> +		/* ASSERT so a zero return stops the test here; the read
-> +		 * below would block until the harness timeout.
-> +		 */
-> +		ASSERT_EQ(splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
-> +				 SPLICE_F_NONBLOCK), variant->splice_ret);
-
-[Severity: Low]
-This isn't a bug, but it is a gap in test coverage. Both splice() calls in
-TEST_F(zero_len_splice, test) pass SPLICE_F_NONBLOCK, and nothing sets
-O_NONBLOCK on self->cfd.
-
-Can this test reach the socket O_NONBLOCK check in tls_sw_splice_read()?
-
-net/tls/tls_sw.c:tls_sw_splice_read() {
-    ...
-	nonblock = (flags & SPLICE_F_NONBLOCK) ||
-		   (sock->file->f_flags & O_NONBLOCK);
-    ...
-}
-
-The commit "tls: Honor O_NONBLOCK in tls_sw_splice_read()" adds the
-sock->file->f_flags check. Its message gives "the zero_len_splice selftest,
-run on a nonblocking socket" as the reproducer. In this version, every
-splice() call in the test is nonblocking because of SPLICE_F_NONBLOCK alone.
-
-A later patch in the series, "selftests: tls: Cover splice on a nonblocking
-socket", moves this body into zero_len_do_splice(), which takes a
-splice_flags argument. That patch also adds TEST_F(zero_len_splice,
-nonblock_socket), which sets O_NONBLOCK on self->cfd and passes 0 as the
-splice flags. The pipe comes from a plain pipe(), so the socket's O_NONBLOCK
-is the only thing that makes those calls nonblocking.
-
-So the path is covered by the end of the series. The gap only shows up when
-the series is applied up to this patch and no further.
-
-> +		ret = read(p[0], buf, sizeof(buf));
-> +		EXPECT_EQ(ret, variant->splice_ret);
-
-[ ... ]
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012-tls-follow-on-v4-0-8cea429565da%40kernel.org
+Regards,
+listout
