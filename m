@@ -1,185 +1,130 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9D44AA418;
-	Tue, 13 Oct 2026 18:54:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F0D5349C5;
+	Tue, 13 Oct 2026 18:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791917672; cv=none; b=OG75B3Gc8lYGKTrlD1kHkDZdry/MUXu5Rk3TRQPsWjh+YCeU2W1rZNRkIPfkt7k3k9F2+Q3RNGxNPN2KnQlmfTIW95tpzzXusnrIWaifhwrPs0Omdm7eQNoH9qhDyiy2BnAyU51jcqPVPyZxyGhCpjQp3p9WtEKDmLWhKjytNX8=
+	t=1791917739; cv=none; b=lDN2VoTHl9O3NAGKEk5TSnIQydzD2uKgJbEb1rUOT+xBsSEcXJVrhil4Adqi782SwpudDmqakq3b7C/T3XO2Iytm2pLNP3cIQQqZNyU1CHvubmxLHqPDAjQaRqsymkVZ0+vwQIKDwRhbXxVFn4tESvOaeVFV25Q8UxQbWHzHA8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791917672; c=relaxed/simple;
-	bh=YFp+jFsa7KANQNnGGNEj69jjzzJF2NN4Y6hPFMQdVbw=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=g4K0EzbMgOpY/mekLwOYXtAgA0gBiNpHeDhUAhJgmZW685LFGHBHkIqG3mIIfJSIY8QuGXBMfQR6IeTuDvagacjdxLANdjmolzns2E5ZwYmOs2ZpSxpML2Rxhub7X4ZGZIryYde1Czis0cIw7j36TVYP6WbctiZS80dJ+8w+pFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Xz9M4NYP; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1791917739; c=relaxed/simple;
+	bh=RU4YgXZngQ4UQhrqQlFB9hI5h3QCAwD9AR7EpHyA/A8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=APKo28GveOStjYg1I1vnKkMEVar2qZYwKu2i4zv3gN5BfP548o+Y99+SxFqzd7wvOad99EXjfYVZJI/7rAbunA2N3oXfEr3PbGmUqt4YPZpcpXbM2/XfimYypSm9xKI9QzuJZCweQKZq9Lc3h6q+9M4XfTsINRW76M/d+2hhj5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iu0Zp5Ld; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Xz9M4NYP"
-Received: from [IPV6:2601:646:8003:f231:356f:4b4f:2ec9:d15a] ([IPv6:2601:646:8003:f231:356f:4b4f:2ec9:d15a])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 69DIs5Ov3401961
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 13 Oct 2026 11:54:05 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 69DIs5Ov3401961
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026092801; t=1791917646;
-	bh=oYmpP+4TITEiCyfQDXkqoB/XLVHuxWmAeDx4l6PscqI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Xz9M4NYPsu3fVJkRyYCyktAzLRTEL3VhDNsbfzcQA9Ffq6l0fl5CEWy3+BuFIz0wi
-	 QvoNYMPiePMGenUxlzEp8VnEFL6dJptYXgtShd5X3+TaYIvRTywUejTBDQOFgCDJpE
-	 4IHgzAY3Bb7IQU0IqYiCxWxiBhZhZRRanyYWBBdn8MEGQJ2HL2BAeHWSBHhWjtOmwi
-	 9i8PTm4oBqchowiLwLXQLbYRm7QbuQ8NFkuBkMcyvwHK16Pbu1c4CwOQUhy8gA+rXp
-	 gcVLWlPj1N6Vt4rEPYWMbXzcqF9acHxbWHalvG1sTbkt3vfZ3URTVE15vjgLbyzPmQ
-	 8QC/vEToBdc0g==
-Content-Type: multipart/mixed; boundary="------------fEc5ZnJrVUT2KPrkUgG4qgrt"
-Message-ID: <b6cee0b8-c5cf-4136-928f-96cb0a58eaa3@zytor.com>
-Date: Tue, 13 Oct 2026 11:54:00 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iu0Zp5Ld"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 618851F000FF;
+	Tue, 13 Oct 2026 18:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791917738;
+	bh=9KBRiB/jxJOo2yUyG8r9joCH90adgDB2oF8tSnxf3J8=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=iu0Zp5Ld3288Sk6M4lvRVezLiLvg4KssIKe519xGPXVVmP5qfUAJnwZ0CUlglqViB
+	 HLHVhjZxtN8KqRJTPEPaoUBRr/LGLvUXTh4l7kK7uoN+OxlkcuKbZLWuptMt3YKAE/
+	 3h3yGxmR3MvD+zD6RwOo8i8fTcpKfaqefiwwcbCL/PEnb2jCfPRuNg3E9wGRZpSq56
+	 Z5oI7ycCVKCCNYhK7EKpvmSGtVIAZN6dXo+KKgXjQ/CIeoOqPdA7wWA58InGq2uNoo
+	 GBjpc3DRIeEwPWdi6NzBoS0Hv7hDhhPeswryHfuEDhS/zEHVtRUH3Ayvj1btv7VTfQ
+	 vjtR/0r5IndxQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 191F6CE0877; Tue, 13 Oct 2026 11:55:38 -0700 (PDT)
+Date: Tue, 13 Oct 2026 11:55:38 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Boqun Feng <boqun@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+	Kunwu Chan <kunwu.chan@gmail.com>, corbet@lwn.net, mingo@redhat.com,
+	frederic@kernel.org, neeraj.upadhyay@kernel.org,
+	josh@joshtriplett.org, urezki@gmail.com, dave@stgolabs.net,
+	lianux.mm@gmail.com, stern@rowland.harvard.edu,
+	parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+	npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+	luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+	joelagnelf@nvidia.com, skhan@linuxfoundation.org,
+	rdunlap@infradead.org, longman@redhat.com, rostedt@goodmis.org,
+	qiang.zhang@linux.dev, brads@mainlining.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	lkmm@lists.linux.dev, linux-doc@vger.kernel.org,
+	rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v3 08/15] locking/lockdep: use hazptr to wait for
+ dynamic key lookups
+Message-ID: <397580f0-f07c-4ee1-ab8f-d933c3d7dd9b@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20261005171529.1378809-1-kunwu.chan@gmail.com>
+ <20261005171529.1378809-9-kunwu.chan@gmail.com>
+ <as3aMmPdCHCXW6Ci@U-YXDQC754-96.local>
+ <as4ooZSWA2lAIceu@tardis.local>
+ <ef3fd68d-f35e-4071-9523-0cd14396d860@efficios.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/x86: Add a test for LASS enforcement
-To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>, Binbin Wu <binbin.wu@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Chang S . Bae" <chang.seok.bae@intel.com>,
-        Kishen Maloor <kishen.maloor@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini
- <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261009020025.4175228-1-sohil.mehta@intel.com>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20261009020025.4175228-1-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef3fd68d-f35e-4071-9523-0cd14396d860@efficios.com>
 
-This is a multi-part message in MIME format.
---------------fEc5ZnJrVUT2KPrkUgG4qgrt
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 2026-10-08 19:00, Sohil Mehta wrote:
+On Tue, Oct 13, 2026 at 09:04:50AM -0400, Mathieu Desnoyers wrote:
+> On 2026-10-13 08:48, Boqun Feng wrote:
+> > On Tue, Oct 13, 2026 at 03:40:36PM +0800, Lai Jiangshan wrote:
+> [...]
+> > > 
+> > > This breaks the forward-progress argument used by the underlying
+> > > hazptr implementation: after removing an object from publication,
+> > > there should not be a continuing stream of new readers acquiring
+> > > that same object. Here, the bucket is never unpublished.
+> > > 
+> > > For example, let B be the bucket containing key K:
+> > > 
+> > >    Updater                    Reader                 Scan kthread
+> > >    -------                    ------                 ------------
+> > >    Unlink K from B
+> > >    hazptr_synchronize(B)
+> > >                               Acquire B
+> > >                                                      Observe B;
+> > >                                                      retain waiter
+> > >                               Release B
+> > >                               Acquire B again
+> > >                                                      Observe B;
+> > >                                                      retain waiter
+> > >                               Release B
+> > >                               ...                    ...
+> > > 
+> > 
+> > This is more of an implementation issue,
+> I agree with Boqun about the point that this is really an implementation
+> issue.
 > 
-> Note, the CPUID bit does not reflect whether the kernel enabled LASS;
-> only the cpuinfo flag does. But parsing cpuinfo is cumbersome, and the
-> kernel enables LASS whenever the CPU supports it unless the command line
-> opts out (vsyscall=emulate or clearcpuid=lass). To keep it simple, rely
-> on the CPUID bit and accept a failure in these unusual cases.
+> If we care about forward progress in the scenario of a repeated
+> address reuse, we just need to wire up a "0/1" low bit phase tag and
+> make hazptr acquire pick it up and set it within its hazptr slot. This
+> will ensure forward progress in that scenario. hazptr synchronzie
+> would therefore flip this phase between 0 and 1, and check that the
+> pointer it's looking for is not set in the other phase, in alternance,
+> handling both phases within one synchronize. Indeed, this phase concept
+> comes from the realm of RCU implementations.
 > 
-Cumbersome, really?
+> I think that the overall mindset so far has been "RCU does this" and
+> "Hazard pointers do this" as if those were entirely predefined
+> mechanisms. I think the way forward is not "one or the other", but
+> rather to combine the strengths of each of those mechanisms into
+> something better.
 
-Here is a set of parsing functions -- tested, even! -- that you can make
-available as library routines. Integrating them into the selftests build
-framework has been left as an exercise for the reader ;-)
+There have been a number of academic attempts to do just that, all of
+which ended up providing the worst of both worlds.  Large memory footprint
+*and* conditional pointer traversal being the usual suboptimal outcome.  :-(
 
-Signed-off-by: H. Peter Anvin (Rosaic) <hpa@zytor.com>
+However, I don't see a problem with use of hazard pointers for static
+addresses, at least assuming use of something like the above low-bit
+trick to ensure forward progress.
 
-	-hpa
+							Thanx, Paul
 
---------------fEc5ZnJrVUT2KPrkUgG4qgrt
-Content-Type: text/x-csrc; charset=UTF-8; name="cpuinfo.c"
-Content-Disposition: attachment; filename="cpuinfo.c"
-Content-Transfer-Encoding: base64
-
-I2luY2x1ZGUgPGVycm5vLmg+CiNpbmNsdWRlIDxmY250bC5oPgojaW5jbHVkZSA8c3RkbGli
-Lmg+CiNpbmNsdWRlIDxzdHJpbmcuaD4KI2luY2x1ZGUgPHVuaXN0ZC5oPgoKI2RlZmluZSBs
-aWtlbHkoeCkJX19idWlsdGluX2V4cGVjdCghISh4KSwgMSkKI2RlZmluZSB1bmxpa2VseSh4
-KQlfX2J1aWx0aW5fZXhwZWN0KCEhKHgpLCAwKQoKc3RhdGljIGNoYXIgKnJlYWRfY3B1aW5m
-byh2b2lkKQp7Cgljb25zdCBzaXplX3QgYnVmc3RlcCA9IDY0KjEwMjQ7CglzaXplX3QgYnVm
-c2l6ZSA9IDA7CglzaXplX3QgbGVuID0gMDsKCXNzaXplX3QgcmxlbjsKCWNoYXIgKmJ1ZiA9
-IE5VTEw7CgljaGFyICpuZXdidWY7CglpbnQgZmQ7CglpbnQgZXJyOwoJY2hhciAqcDsKCglm
-ZCA9IG9wZW4oIi9wcm9jL2NwdWluZm8iLCBPX1JET05MWSk7CglpZiAoZmQgPCAwKQoJCXJl
-dHVybiBOVUxMOwoKCWRvIHsKCQlpZiAobGVuID49IGJ1ZnNpemUpIHsKCQkJYnVmc2l6ZSAr
-PSBidWZzdGVwOwoJCQluZXdidWYgPSByZWFsbG9jKGJ1ZiwgYnVmc2l6ZSk7CgkJCWlmICgh
-bmV3YnVmKQoJCQkJZ290byBlcnJvcjsKCQkJYnVmID0gbmV3YnVmOwoJCX0KCgkJcmxlbiA9
-IHJlYWQoZmQsIGJ1ZiArIGxlbiwgYnVmc2l6ZSAtIGxlbik7CgkJaWYgKHJsZW4gPCAwKSB7
-CgkJCWlmIChlcnJubyA9PSBFSU5UUiB8fCBlcnJubyA9PSBFQUdBSU4pCgkJCQljb250aW51
-ZTsKCQkJZWxzZQoJCQkJZ290byBlcnJvcjsKCQl9CgoJCWxlbiArPSBybGVuOwoJfSB3aGls
-ZSAocmxlbik7CgoJLyoKCSAqIFRoZXJlIHNob3VsZCBhbHdheXMgYmUgYSBibGFuayBsaW5l
-IGFmdGVyIGVhY2ggQ1BVLAoJICogaW5jbHVkaW5nIGF0IHRoZSBlbmQuCgkgKi8KCWlmIChs
-ZW4gPCAyIHx8IG1lbWNtcChidWYgKyBsZW4gLSAyLCAiXG5cbiIsIDIpKSB7CgkJZXJybm8g
-PSBFUFJPVE87CgkJZ290byBlcnJvcjsKCX0KCgljbG9zZShmZCk7CgoJLyoKCSAqIGJ1ZiB3
-aWxsIGhhdmUgYXQgbGVhc3Qgb25lIGZyZWUgYnl0ZSBhdCB0aGUgZW5kLiBBcyBhIHJlc3Vs
-dDoKCSAqIC0gRWFjaCBwcm9jZXNzb3IgZGF0YSBibG9jayBpcyB0ZXJtaW5hdGVkIGJ5IGFu
-IGVtcHR5IHN0cmluZy4KCSAqIC0gVGhlIGVudGlyZSBmaWxlIGlzIHRlcm1pbmF0ZWQgYnkg
-dHdvIGVtcHR5IHN0cmluZ3MgaW4gYSByb3cuCgkgKi8KCWJ1ZltsZW5dID0gJ1wwJzsKCgkv
-KiBNYWtlIGVhY2ggbGluZSBhIHNlcGFyYXRlIHN0cmluZyAqLwoJZm9yIChwID0gYnVmOyBw
-IDwgYnVmICsgbGVuOyBwKyspIHsKCQlpZiAoKnAgPT0gJ1xuJykKCQkJKnAgPSAnXDAnOwoJ
-fQoKCW5ld2J1ZiA9IHJlYWxsb2MoYnVmLCBsZW4rMSk7CglpZiAobmV3YnVmKQoJCWJ1ZiA9
-IG5ld2J1ZjsKCglyZXR1cm4gYnVmOwoKZXJyb3I6CgllcnIgPSBlcnJubzsKCWNsb3NlKGZk
-KTsKCWZyZWUoYnVmKTsKCWVycm5vID0gZXJyOwoJcmV0dXJuIE5VTEw7Cn0KCmNvbnN0IGNo
-YXIgKmdldF9jcHVpbmZvKHZvaWQpCnsKCXN0YXRpYyBjaGFyICpjcHVpbmZvOwoKCWlmICh1
-bmxpa2VseSghY3B1aW5mbykpCgkJY3B1aW5mbyA9IHJlYWRfY3B1aW5mbygpOwoKCXJldHVy
-biBjcHVpbmZvOwp9CgovKgogKiBTZXRzICp2YWx1ZSB0byB0aGUgY29udGVudHMgb2YgdGhl
-IGZpZWxkIGZvciBhIHNwZWNpZmljIENQVSBvciBOVUxMLgogKiBSZXR1cm5zIDAgb24gc3Vj
-Y2VzcyBvcjoKICoJLWVycm5vCS0gYW55IGZpbGUgSS9PIGVycm9yCiAqCS1FUFJPVE8JLSBw
-YXJzaW5nIGVycm9yCiAqCS1FU1JDSAktIG5vIHN1Y2ggQ1BVCiAqCS1FTk9NU0cJLSBubyBz
-dWNoIHRhZwogKi8KaW50IGNwdWluZm9fZ2V0X2ZpZWxkKGNvbnN0IGNoYXIgKip2YWx1ZSwg
-Y29uc3QgY2hhciAqZmllbGQsIHVuc2lnbmVkIGxvbmcgY3B1KQp7CglzdGF0aWMgY29uc3Qg
-Y2hhciBwcm9jZXNzb3JfcHJlZml4W10gPSAicHJvY2Vzc29yXHQ6ICI7Cgljb25zdCBzaXpl
-X3QgcGZ4bGVuID0gc2l6ZW9mIHByb2Nlc3Nvcl9wcmVmaXggLSAxOwoJc2l6ZV90IGZpZWxk
-bGVuOwoJY29uc3QgY2hhciAqcDsKCgkqdmFsdWUgPSBOVUxMOwoJcCA9IGdldF9jcHVpbmZv
-KCk7CglpZiAoIXApCgkJcmV0dXJuIC1lcnJubzsKCgl3aGlsZSAoMSkgewoJCS8qIEJsYW5r
-IGxpbmUgYXQgc3RhcnQgLT4gbm8gbW9yZSBwcm9jZXNzb3JzICovCgkJaWYgKCEqcCkKCQkJ
-cmV0dXJuIC1FU1JDSDsKCgkJLyogRmlyc3QgbGluZSBtdXN0IGJlIHByb2Nlc3NvciAqLwoJ
-CWlmIChzdHJuY21wKHAsIHByb2Nlc3Nvcl9wcmVmaXgsIHBmeGxlbikpCgkJCXJldHVybiAt
-RVBST1RPOwoKCQlpZiAoc3RydG91bChwICsgcGZ4bGVuLCBOVUxMLCAxMCkgPT0gY3B1KQoJ
-CQlicmVhazsJLyogRm91bmQgb3VyIENQVSAqLwoKCQkvKgoJCSAqIFNraXAgdG8gdGhlIG5l
-eHQgcHJvY2Vzc29yLgoJCSAqIEVhY2ggcHJvY2Vzc29yIGJsb2NrIGlzIHRlcm1pbmF0ZWQg
-YnkgYSBibGFuayBsaW5lLgoJCSAqLwoJCWRvIHsKCQkJcCA9IHN0cmNocihwLCAnXDAnKSAr
-IDE7CgkJfSB3aGlsZSAoKnApOwoJCXArKzsJCS8qIFNraXAgdGhlIGJsYW5rIGxpbmUgKi8K
-CX0KCgkvKiBMb29rIGZvciB0aGUgcmVxdWVzdGVkIGZpZWxkIGluc2lkZSB0aGUgcHJvY2Vz
-c29yIGJsb2NrLiAqLwoJZmllbGRsZW4gPSBzdHJsZW4oZmllbGQpOwoKCXdoaWxlICgqcCkg
-ewoJCWlmICghc3RybmNtcChwLCBmaWVsZCwgZmllbGRsZW4pKSB7CgkJCXAgKz0gZmllbGRs
-ZW47CgkJCWlmICghKnApCgkJCQlyZXR1cm4gLUVQUk9UTzsgLyogTm8gZmllbGQgZGF0YSBw
-cmVzZW50ICovCgoJCQlpZiAoKnAgPT0gJ1x0JyB8fCAqcCA9PSAnOicpIHsKCQkJCS8qIEZp
-ZWxkIG1hdGNoZXMgKi8KCgkJCQl3aGlsZSAoKnAgPT0gJ1x0JykKCQkJCQlwKys7CgkJCQlp
-ZiAoKnAgIT0gJzonKQoJCQkJCXJldHVybiAtRVBST1RPOyAvKiBDb2xvbiBtaXNzaW5nICov
-CgkJCQlwKys7CgoJCQkJLyogU2tpcCBzcGFjZSBhZnRlciBjb2xvbiAqLwoJCQkJaWYgKCpw
-ID09ICcgJykKCQkJCQlwKys7CgkJCQkqdmFsdWUgPSBwOwoJCQkJcmV0dXJuIDA7CQkvKiBG
-aWVsZCBmb3VuZCAqLwoJCQl9CgkJfQoJCXAgPSBzdHJjaHIocCwgJ1wwJykgKyAxOwkvKiBO
-ZXh0IGZpZWxkICovCgl9CgoJcmV0dXJuIC1FTk9NU0c7CQkvKiBDUFUgZm91bmQgYnV0IG5v
-IHN1Y2ggZmllbGQgKi8KfQoKLyoKICogTG9vayBmb3IgYSBzcGVjaWZpYyBmbGFnIGluc2lk
-ZSBhIHNwZWNpZmljIG11bHRpLXRva2VuIGZpZWxkOwogKiB0aGlzIGN1cnJlbnRseSBhcHBs
-aWVzIHRvIHRoZSAiZmxhZ3MiIG9yICJidWdzIiBmaWVsZHMuCiAqCiAqIFJldHVybiAxIGlm
-IHRoZSBnaXZlbiBmbGFnIGlzIHByZXNlbnQsIDAgaWYgaXQgaXMgbm90LCBvcgogKiBhIG5l
-Z2F0aXZlIGVycm9yIGNvZGUgcmV0dXJuZWQgZnJvbSBjcHVpbmZvX2dldF9maWVsZCgpLgog
-Ki8KaW50IGNwdWluZm9faGFzX2ZsYWcoY29uc3QgY2hhciAqZmxhZywgY29uc3QgY2hhciAq
-ZmllbGQsIHVuc2lnbmVkIGxvbmcgY3B1KQp7Cgljb25zdCBjaGFyICpwOwoJc2l6ZV90IGZs
-YWdsZW47CglpbnQgZXJyOwoKCWVyciA9IGNwdWluZm9fZ2V0X2ZpZWxkKCZwLCBmaWVsZCwg
-Y3B1KTsKCWlmIChlcnIpCgkJcmV0dXJuIGVycjsKCglmbGFnbGVuID0gc3RybGVuKGZsYWcp
-OwoJd2hpbGUgKCpwKSB7CgkJaWYgKCFzdHJuY21wKHAsIGZsYWcsIGZsYWdsZW4pICYmCgkJ
-ICAgICghcFtmbGFnbGVuXSB8fCBwW2ZsYWdsZW5dID09ICcgJykpCgkJICAgIHJldHVybiAx
-OwkvKiBGbGFnIGZvdW5kICovCgoJCS8qIFNraXAgdG8gdGhlIG5leHQgZmxhZyAqLwoJCXAg
-PSBzdHJjaHIocCwgJyAnKTsKCQlpZiAoIXApCgkJCWJyZWFrOwoJCXArKzsKCX0KCglyZXR1
-cm4gMDsJCS8qIE5vdCBmb3VuZCAqLwp9CgojaWZkZWYgVEVTVF9DUFVJTkZPCgojaW5jbHVk
-ZSA8c3RkaW8uaD4KI2luY2x1ZGUgPHN5c2V4aXRzLmg+CgppbnQgbWFpbihpbnQgYXJnYywg
-Y2hhciAqKmFyZ3YpCnsKCWNvbnN0IGNoYXIgKmZpZWxkLCAqZmxhZzsKCXVuc2lnbmVkIGxv
-bmcgY3B1OwoJaW50IHJ2OwoKCWlmIChhcmdjIDwgMykgewoJCWZwcmludGYoc3RkZXJyLCAi
-VXNhZ2U6ICVzIGNwdSBmaWVsZFxuIiwgYXJndlswXSk7CgkJZXhpdChFWF9VU0FHRSk7Cgl9
-CgoJY3B1ID0gc3RydG91bChhcmd2WzFdLCBOVUxMLCAxMCk7CglmaWVsZCA9IGFyZ3ZbMl07
-CglmbGFnID0gYXJndlszXTsKCglpZiAoZmxhZykgewoJCXJ2ID0gY3B1aW5mb19oYXNfZmxh
-ZyhmbGFnLCBmaWVsZCwgY3B1KTsKCQlpZiAocnYgPj0gMCkgewoJCQlwcmludGYoIkNQVSAl
-bHUgJXMoJXMpID0gJWRcbiIsIGNwdSwgZmllbGQsIGZsYWcsIHJ2KTsKCQkJZXhpdChydik7
-CgkJfQoJfSBlbHNlIHsKCQljb25zdCBjaGFyICpkYXRhOwoJCXJ2ID0gY3B1aW5mb19nZXRf
-ZmllbGQoJmRhdGEsIGZpZWxkLCBjcHUpOwoJCWlmICghcnYpIHsKCQkJcHJpbnRmKCJDUFUg
-JWx1ICVzID0gJXNcbiIsIGNwdSwgZmllbGQsIGRhdGEpOwoJCQlleGl0KDApOwoJCX0KCX0K
-CgkvKgoJICogT24gZXJyb3IuIEVycm9ycyB0aGF0IHNob3VsZCBuZXZlciBoYXBwZW4gbm8g
-bWF0dGVyIHdoYXQgdGhlCgkgKiBpbnB1dCBhcmUgc2VudCB0byBzdGRlcnIuCgkgKi8KCXN3
-aXRjaCAocnYpIHsKCWNhc2UgLUVTUkNIOgoJCXByaW50ZigiQ1BVICVsdSBkb2VzIG5vdCBl
-eGlzdFxuIiwgY3B1KTsKCQlleGl0KEVYX05PVVNFUik7CgljYXNlIC1FTk9NU0c6CgkJcHJp
-bnRmKCJDUFUgJWx1ICVzIDogZmllbGQgZG9lcyBub3QgZXhpc3RcbiIsIGNwdSwgZmllbGQp
-OwoJCWV4aXQoRVhfTk9JTlBVVCk7CgljYXNlIC1FUFJPVE86CgkJZnByaW50ZihzdGRlcnIs
-ICIlczogY291bGQgbm90IHBhcnNlIC9wcm9jL2NwdWluZm9cbiIsIGFyZ3ZbMF0pOwoJCWV4
-aXQoRVhfUFJPVE9DT0wpOwoJZGVmYXVsdDoKCQlmcHJpbnRmKHN0ZGVyciwgIi9wcm9jL2Nw
-dWluZm86ICVzXG4iLCBzdHJlcnJvcigtcnYpKTsKCQlleGl0KEVYX09TRklMRSk7Cgl9Cn0K
-CiNlbmRpZiAvKiBURVNUX0NQVUlORk8gKi8K
-
---------------fEc5ZnJrVUT2KPrkUgG4qgrt--
+> Thanks,
+> 
+> Mathieu
+> 
+> -- 
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
