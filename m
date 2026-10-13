@@ -1,197 +1,253 @@
-Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021103.outbound.protection.outlook.com [40.107.192.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E357211A09;
-	Tue, 13 Oct 2026 13:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.192.103
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791896697; cv=fail; b=POsgHW7oBsiH9zqy6KrHw+jCZhlgbQ6jTYFFKkSiQdMM7oQ7gCYI+FdguR8ko04i/AS3K4yhQU7fkOM80Y5m3j+h6hWE6nc3o2Kh7z6szGXQQtt2b1gvLNbZJ6wBl49LAYh3r3VGx2IxYdzWLkFvIt5sUAF54rkA+k/PGQ3V6CM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791896697; c=relaxed/simple;
-	bh=iJQByb/FGtIvqZEowcW2Ol8T4c8MLXForMorpqwwQUw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=HJ+xYGm3m2G+XQqvL05n6xHt5i4qKw2HVhSRSVvHKw96VB+eqPQJc/c9Vjt7W95pnRToS9pUCt8jVpjdihz8g0yDsYYv65s0cXTZGjMno6ZXyKZR33St2kYzTTJ6c0SWNCeO1b7YnSEPQiM5VJA7QXzseTYftLsvRdw/FSdyUfI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=XxIL5EHq; arc=fail smtp.client-ip=40.107.192.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 967F34F052A;
+	Tue, 13 Oct 2026 13:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791897748; cv=none; b=aKOSdTESAnbj5icyDTkF1VCfDX1IlbllljweafXdm09XOW+gmfal5XSnV3xHxIhd8cWJf0lSoo+uPiQj/nujYvFdlJKTQvQDRmltT+CeKMyPUYRU+RvQjX1gEBAHpvypBC8k6B9t8nmoCaRKcBuTK8Iob0sNRDEATJGxQSeihqo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791897748; c=relaxed/simple;
+	bh=KvSmlKFbjkTRQEKMvGdx6JVkm0ni6XVXzbdGKQPPi0Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a+d8SPa26nbJal4tIHWH/E0g6AFYRVycNOjh+oWBBv3DYxxoUJIuAu/62ji7HuDB3iwetNrfH8wXYZK//a+rHHycgp2Q8ubLXl9fw5YgiLhINEeti7we443lb9/BJuvMUWvEE3XR89WVeaFdG6wCvHNPuhkZoeYVOVKZ5jf34MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=KDCWdy1G; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="XxIL5EHq"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qCC3Ujuv6lZnjDCuphaNQCnnaumL32SSRrAUUxZKyXF3pI5zjG6+qwwn2qdj+lfzKCwc6RRwB7MHHhVLIanZveGRA5ccpcbcoMpNsJ6fu5Nt85W1SiHlD12Tfl7BtFfFihfeb65l/Oi1v/0/tn6/gaiy7/3eZDc4kRiopm45u8qn61NmG0hDDx/0q6Bh1lMNyyDCuA3dLLyZ1Y3sF05/sq6cJc1bRWkTfcI4aVk1NzW3M6S5trFcidLDHr62g7TFZ3c/5UJGbPKZ/GNJSVKjibItI8I7ccaHFyOwrz3I6PsUxwBHRfWO0dZAOvJJ6p1u9OLeB/4OS1z4eLyevotHqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ppw/9csHXW4Hf416blW0GQFBukeiGeB7uSSv0wd2VMg=;
- b=OI3vXV/lJJaaxgzmZ6PHpkguuZccFT2XhlBs0VMUqDzJEaKFMgBWw0cSl6gpznSWchGvtk2+3fwPoDNvXMK7hauN/ISPddlLgTKELcSeebCQQcJ8XmzjqSMtrxSbmTAr30aKJL5EFzOAs9OQQjCEcr5HvK9YVm5OFd/ezc/G+667H0MZibNTjIeZUoFmUM5xWEIWmpso70oOoXEZzPqt9i/EV6FAlzPIdQKBCLZFa74w0sixxTwkFn/iMT2KcyOyNVn3bADXNvtwGl8Cyan9edhdtrNZuB1jgHYvWW+F4a31rT45TCLMj5gvc6BbW+q5d83D05JKwdf/2IIq3bwn7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ppw/9csHXW4Hf416blW0GQFBukeiGeB7uSSv0wd2VMg=;
- b=XxIL5EHqHOpOCJmF64W+driyI2oWqtgEnj1TpXGaNfDvdCVeWOrRgA/PRYQJ4P4vvuObWkZOwRR3vcSpr8p8AElPdBpg4KnyB2zQC62YH4nt6QWUbr2OME2kySuSSDp0rAwNl4AAwVlAzP4jy00bc1WRLi2GvC/FMwS38BorYjCAWLCrr14AgJ788mzQov4sw8lW13WwX2rd24d2K5NxRtk5rgN798SlsVsEHucjQnPyFNcMeyXw0R07oRDnvc5BNB8AzgV8I54W7wrK0JKSiU4D1vjW9rNkInI6f43rwUXXl3YBt5latgq9sxqpppzi1ZK4hcd7mRgfzLfmykh89A==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by YT3PR01MB987975.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1c6::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.12; Tue, 13 Oct
- 2026 13:04:52 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0522.011; Tue, 13 Oct 2026
- 13:04:51 +0000
-Message-ID: <ef3fd68d-f35e-4071-9523-0cd14396d860@efficios.com>
-Date: Tue, 13 Oct 2026 09:04:50 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v3 08/15] locking/lockdep: use hazptr to wait for
- dynamic key lookups
-To: Boqun Feng <boqun@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>
-Cc: Kunwu Chan <kunwu.chan@gmail.com>, paulmck@kernel.org, corbet@lwn.net,
- mingo@redhat.com, frederic@kernel.org, neeraj.upadhyay@kernel.org,
- josh@joshtriplett.org, urezki@gmail.com, dave@stgolabs.net,
- lianux.mm@gmail.com, stern@rowland.harvard.edu, parri.andrea@gmail.com,
- will@kernel.org, peterz@infradead.org, npiggin@gmail.com,
- dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
- akiyks@gmail.com, dlustig@nvidia.com, joelagnelf@nvidia.com,
- skhan@linuxfoundation.org, rdunlap@infradead.org, longman@redhat.com,
- rostedt@goodmis.org, qiang.zhang@linux.dev, brads@mainlining.org,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- lkmm@lists.linux.dev, linux-doc@vger.kernel.org, rcu@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261005171529.1378809-1-kunwu.chan@gmail.com>
- <20261005171529.1378809-9-kunwu.chan@gmail.com>
- <as3aMmPdCHCXW6Ci@U-YXDQC754-96.local> <as4ooZSWA2lAIceu@tardis.local>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <as4ooZSWA2lAIceu@tardis.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4P288CA0024.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:d4::25) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="KDCWdy1G"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57DA1169E;
+	Tue, 13 Oct 2026 06:22:22 -0700 (PDT)
+Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 64F173F66F;
+	Tue, 13 Oct 2026 06:22:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791897745; bh=KvSmlKFbjkTRQEKMvGdx6JVkm0ni6XVXzbdGKQPPi0Q=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KDCWdy1GI4NRVe6JVzl0CtXO+z8Nl+hsvTWJVf6t8wulzADsasUz4vk5dozXfWCN6
+	 3/B3T2qrdMMn681P9l673j7NAxA/BVnnjZjBFu6hvJf3hDTdlrZpQ6pXfib61qKQIC
+	 Sby+v6WNBWnsl/VX4FC4982TYbdwqnv5rTpKMo2I=
+Message-ID: <b3f2a0bf-7b41-4cc9-958e-34f1a88ff5bf@arm.com>
+Date: Tue, 13 Oct 2026 18:52:16 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT3PR01MB987975:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7199de45-24a2-4eeb-9a65-08df292a914f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|56012099006|4143699003|10067099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	I1byIJCGpjxpVXbBr6X8z0v8cmhYOqApp6OjyeMjUzLMP8OQ+d5CrVuM2ABsUN3AAx5WZv6/HrUAnlhMyLwP79Fqb0aGZ0JbUbwmLs65x3YlxJp4UxrG/KGZK34sEe4Yv+4YJwpF6660NFdEE2IiDVPrC7Cq6OALGr2oaLEHiqMdl5lME8xCQ3ABnqv39sVRtph3DvrRLHtOiyz/ducTSGRghivtjl4VTMEKzet1i/+MKzfeKC8Kwy13SXT+pMyffsDfKz/OHfu8Vob85c+FW39Q+p8vgSpaBxaYLq7F8ZYQ+fcRqyPplk2Gkhwon34TvwnmD7YM7G83sLl05A+Sa4W9BLnYr7LlvGWD3TjlTBRfMrc8EDrGOy85XS3hxaTZ69HtpWyfMG5V2bZ0Eja01xsXtqn+e4pbKIO6KF1XfFHUORljijj+auspTGqFzW5FJGABh8HjHhW4AHVVF5o9JPAdbF606gjM5SlYmLnyWkV9zf/WhHZFZWIFrVdHrBYuq9C+zRyH58ylNHGyklrzSLNPpAKnUI/1a43KFgVtlqMDUhhHae/egaIOGsyo37eMeoiE+L1+9CGaTbyqTmOMhmruE/d4zA+wkPaOXpbTEgg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(56012099006)(4143699003)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TDB4VGVDSmwxMysyc3BSR2MveDYya0FuU1JMQTNhYVY3Si9YZnhPMSt0YmE2?=
- =?utf-8?B?WkNKY3VxeHUzcnR3Rkt3VEFEZ1VESHliOGUwYVE2cGJtbG5VbEhWbVFNZ1NG?=
- =?utf-8?B?TEdnUTBCdG5XZ1FPeEFrVkJSODlVb0c0MWVhK1ZkT1ltRG9aN1h3aWRWQzZL?=
- =?utf-8?B?ZUJFN1EzTlFISzZ2bHJiWVFPaG5RaXIzMnd5aEZTRER3Y0pvbTVxcDJYaExW?=
- =?utf-8?B?bTNYcWZmbnBnLzVhRmtQOXU2S3hsNE9JUXdvZTVlaCt5Vm1Icnc1VWVFSExo?=
- =?utf-8?B?WG05c3JBeEdsYnoreXUrZW9xMEk4Ym40a1J0MGVTcEtSV1doYVoxUE9yalhH?=
- =?utf-8?B?ZDFsV2FDT2dFcGovM09odzBDM3dXSGpiRVpvRFl3djErWWgzRkh5WEhXUFAw?=
- =?utf-8?B?NWpNMHJoLzFjTlpvUDNHMVloMUQ5d0VPTmlZckJmdU52a0NCaG1ULzRSTXp3?=
- =?utf-8?B?NnBjbHZ4YVp0VzR2MzRtNFBUSk95V3BQcisyQWE4bjlBNXRtOFRJd1Q0QXdp?=
- =?utf-8?B?VWJra01HY0xkVnFlTjF5azdrSGtxcm5nd2w3Zyt1c3hxRG5USFpwbFBZZm53?=
- =?utf-8?B?b3FRNzBmclFBd2VEOEhvOFZoNDRjQk4xNmdPUFJtVFdhYzRUcG45NjRDUGc4?=
- =?utf-8?B?OEdVT1Y1MzE2MFc5Q21jV2tndXdlQlRFSmduQmFUWWo1QXFscENRaDhzOTM3?=
- =?utf-8?B?dVQ0Mndwd2Y1U2loNStPcHFnOHR4UGF3R0c5TDUrc202ZzJDM0JoL2dKc0VK?=
- =?utf-8?B?QXRGUFpGMzBZSml4VTJ1WnkwZGo0KzJNcERKNDBnVWUzS3hkNHFYNS9rTFNU?=
- =?utf-8?B?b2NQZXVVck9aY3VjV3grRG12aDQvVHhDOTI3YTlNNWdFcy96RjR1Wk8yRkR6?=
- =?utf-8?B?YVNlekM1UHhscWRveE5XQk4xZXErQlBadjdxZk9vUldZd3Q0ajNESDdJUFJT?=
- =?utf-8?B?aWVzbkMxa3lvUUJFSXVNUnY2WE1qNk9rNndBSm1VSlArZWRxQm1uME8xZkpi?=
- =?utf-8?B?OE1ZQzVsYWE4TGVUZHlnN2VuUllsWksyWUM4cHE0QVFkeU1mc0ZLNjBldFBD?=
- =?utf-8?B?MXg1RmhlVnRXSi83NkZYVTVhQ1hDRHFRZHZRUHM4OWlIS01YcEdTNWFsWGhD?=
- =?utf-8?B?MnRUVWw4QmRxUU5jZ1VmRFRlNlFuRTdMdGxRTklUOGVKb1BSZnovMlR4WUVs?=
- =?utf-8?B?RkxtMHlpTGpjSFI5T3dJTWZSZ3B1Z1dxUWlsOGlIbitpVmQxeFl2Szg1Mitn?=
- =?utf-8?B?UloyeHd0a0ZESU5iWnN1VktiRUNtZ2VRa1lSRHJETHhtWCtCV1kwS3RQUWRt?=
- =?utf-8?B?RForcXZtR1UrYlBndXRZSFlYRVBxY2lWQXZFL2xERXp1Y1V5TktJeVkvSGxS?=
- =?utf-8?B?cXk5R1UwMS9GdC9hZjlmNjVGZzdBbmdEMDZlWVVuYzdpalFkcmJNdXNqeEU3?=
- =?utf-8?B?M0p1M2ZyREF0ejdEMDY3ZHFDTjdVL1lZcGpiV2h3UkczdjVDS3ZrZmNZRkhZ?=
- =?utf-8?B?c0IyU1dZY1lZSkZwdE9KT08vczI5Q0pib0pCRGgxNWVMTTIzSEthM1hTajdO?=
- =?utf-8?B?Q0QrQXoxbWdVUkdpVHY4ZG9UYmRIWnl0YUxXcFU3MFJpMzkyNStjUlNaTE9W?=
- =?utf-8?B?YkFEV0ZUdGFMZVhGMnB0SGJDeXo2YmdITlRFZGtGcUxGdzRLcUprQlBmZkJX?=
- =?utf-8?B?bTVLRlMwSVR2a01qVGRHTU93MDYvNytKY283VTV6aG93ZnhYYzAxcEpjRlYw?=
- =?utf-8?B?YTZpVktBYXhMNjJhSC85a3FsVzFDUjN2SG9vZWFla2tHUVIzWFRrWUlDa3BE?=
- =?utf-8?B?cnFmbVpXSzNjNERpa0pKMnNlSjhZcTIvempvdFllenlHK0VTRE94Rk0zbzdS?=
- =?utf-8?B?MXZuYUJtUzZYU2o0SDh0QlJSdE1ndkxRK01DcGxDYTlQVytrenAvR1I3QXJ5?=
- =?utf-8?B?bFMvZjRhc1RMWTBKdDk0WTNZWDNBSHY1RDdHVTNaZ2FIemFURDNBY3lybVJH?=
- =?utf-8?B?d2xPNXVuSTdTMVBTNFB2ZldQeTNiK0hVb3poUTUwb3EvbW1iQnI5THlaVzhZ?=
- =?utf-8?B?ZGpzam0xQXBOSEZsM2ZIejlPaHNFbmt3ZW4ycmF1eWdHSVgzTjREaFJ3TUh5?=
- =?utf-8?B?akp6VnZWMW1PbmQ1WXp4Qm8yT3dnVVI2WCtZTGVDdldUclZHWVlwQytPb2RJ?=
- =?utf-8?B?NDJlVWVwMFh3dHlGS0dnZ1ovRVNCTzNUcnFJS3UwZllrbHIzQW5vV3E0RkVs?=
- =?utf-8?B?ZTh5aDg4aHU1Z2ZZSU5SdVdXYTQrekJLVmNhMFVyWTVmNXBuZ1ZNaFZqTE1s?=
- =?utf-8?B?Z3RYenYyYjFnYlp3TjExaEZYMzd1WlJQN0FwaGdSc3lzd0pwd3VFUCt4VEdH?=
- =?utf-8?Q?f7OX2JhGQSR33u8Y=3D?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7199de45-24a2-4eeb-9a65-08df292a914f
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2026 13:04:51.7621
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RG6+KS5/8sqxcPd9N+1hGMSDIzzBc0vBq1qqjcIX+8Bwd+WPcN/2UmhCaw79opLznWXKaVONxO0klNliMpbKHTRjCHkOGlA/JVWqlavg6dk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB987975
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
+ macro
+To: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
+References: <20261013-fix_hpage_macro-v7-0-3d77129e0557@arm.com>
+ <20261013-fix_hpage_macro-v7-2-3d77129e0557@arm.com>
+Content-Language: en-US
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <20261013-fix_hpage_macro-v7-2-3d77129e0557@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 2026-10-13 08:48, Boqun Feng wrote:
-> On Tue, Oct 13, 2026 at 03:40:36PM +0800, Lai Jiangshan wrote:
-[...]
->>
->> This breaks the forward-progress argument used by the underlying
->> hazptr implementation: after removing an object from publication,
->> there should not be a continuing stream of new readers acquiring
->> that same object. Here, the bucket is never unpublished.
->>
->> For example, let B be the bucket containing key K:
->>
->>    Updater                    Reader                 Scan kthread
->>    -------                    ------                 ------------
->>    Unlink K from B
->>    hazptr_synchronize(B)
->>                               Acquire B
->>                                                      Observe B;
->>                                                      retain waiter
->>                               Release B
->>                               Acquire B again
->>                                                      Observe B;
->>                                                      retain waiter
->>                               Release B
->>                               ...                    ...
->>
+Hi Yeoreum!
+
+On 10/13/26 4:07 PM, Yeoreum Yun wrote:
+> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+> When this macro is used in some test, test result would be strange in
+> the system where PAGE_SIZE is more then 4KB.
 > 
-> This is more of an implementation issue,
-I agree with Boqun about the point that this is really an implementation
-issue.
+> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
+> 
+>   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
+>     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
+>     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     ...
+>   ok 1 Completed
+> 
+> Remove the HPAGE_SIZE and HPAGE_SHIFT macro and introduce pmd_pshift()
+> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
+> helper, pmd_psize().
+> 
+> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
+> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
+> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
+> PMD-sized units, the test may fail with the previous size of 100 MiB,
+> which is not a multiple of the PMD size when the base page size is
+> 16 KiB or 64 KiB.
+> 
+> After this patch, output of transhuge-stress:
+> 
+>   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
+>     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
+>     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
+>     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
+>     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
+>     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
+>     ...
+>   ok 1 Completed
+> 
+> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
+>  tools/testing/selftests/mm/guard-regions.c    | 10 +++++--
+>  tools/testing/selftests/mm/ksm_tests.c        | 16 ++++++-----
+>  tools/testing/selftests/mm/run_vmtests.sh     |  4 +--
+>  tools/testing/selftests/mm/transhuge-stress.c | 25 +++++++++++-------
+>  tools/testing/selftests/mm/vm_util.c          | 38 +++++++++++++++++++++++----
+>  tools/testing/selftests/mm/vm_util.h          |  9 +++----
+>  6 files changed, 71 insertions(+), 31 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> index f7d53ea3c2527..02f69244f9a42 100644
+> --- a/tools/testing/selftests/mm/guard-regions.c
+> +++ b/tools/testing/selftests/mm/guard-regions.c
+> @@ -2194,14 +2194,20 @@ TEST_F(guard_regions, pagemap_scan)
+>  TEST_F(guard_regions, collapse)
+>  {
+>  	const unsigned long page_size = self->page_size;
+> -	const unsigned long size = 2 * HPAGE_SIZE;
+> -	const unsigned long num_pages = size / page_size;
+> +	const uint64_t hpage_size = pmd_psize();
+> +	unsigned long size, num_pages;
+>  	char *ptr;
+>  	int i;
+>  
+>  	if (!thp_available())
+>  		SKIP(return, "Transparent Hugepages not available\n");
+>  
+> +	if (!hpage_size)
+> +		ksft_exit_fail_msg("reading hpage_size failed\n");
 
-If we care about forward progress in the scenario of a repeated
-address reuse, we just need to wire up a "0/1" low bit phase tag and
-make hazptr acquire pick it up and set it within its hazptr slot. This
-will ensure forward progress in that scenario. hazptr synchronzie
-would therefore flip this phase between 0 and 1, and check that the
-pointer it's looking for is not set in the other phase, in alternance,
-handling both phases within one synchronize. Indeed, this phase concept
-comes from the realm of RCU implementations.
+I'm sorry for not catching this earlier, but I don't think calling a
+ksft_exit_fail_msg() for not being able to calculate PMD size is a good
+idea. Maybe call an ASSERT*() here, something like
 
-I think that the overall mindset so far has been "RCU does this" and
-"Hazard pointers do this" as if those were entirely predefined
-mechanisms. I think the way forward is not "one or the other", but
-rather to combine the strengths of each of those mechanisms into
-something better.
+ASSERT_NE(hpage_size, 0);
 
-Thanks,
+so that just this test fails, instead of the whole run exiting with a
+bail out?
 
-Mathieu
+> +
+> +	size = 2 * hpage_size;
+> +	num_pages = size / page_size;
+> +
+>  	/* Need file to be correct size for tests for non-anon. */
+>  	if (variant->backing != ANON_BACKED)
+>  		ASSERT_EQ(ftruncate(self->fd, size), 0);
+> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+> index 6711f4c613711..9e6e1633d0b53 100644
+> --- a/tools/testing/selftests/mm/ksm_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_tests.c
+> @@ -520,19 +520,23 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
+>  	struct timespec start_time, end_time;
+>  	unsigned long scan_time_ns;
+>  	int pagemap_fd, n_normal_pages, n_huge_pages;
+> +	const uint64_t hpage_size = pmd_psize();
+>  
+>  	if (!thp_is_enabled()) {
+>  		ksft_print_msg("Transparent Hugepages not available\n");
+>  		return KSFT_SKIP;
+>  	}
+>  
+> +	if (!hpage_size)
+> +		ksft_exit_fail_msg("reading hpage_size failed\n");
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Similarly here, maybe this would be better?
+
+if (!hpage_size) {
+	ksft_print_msg("Reading hpage_size failed\n");
+	return KSFT_FAIL;
+}
+
+> +
+>  	map_size *= MB;
+>  	size_t len = map_size;
+>  
+> -	len -= len % HPAGE_SIZE;
+> -	map_ptr_orig = mmap(NULL, len + HPAGE_SIZE, PROT_READ | PROT_WRITE,
+> +	len -= len % hpage_size;
+> +	map_ptr_orig = mmap(NULL, len + hpage_size, PROT_READ | PROT_WRITE,
+>  			MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE, -1, 0);
+> -	map_ptr = map_ptr_orig + HPAGE_SIZE - (uintptr_t)map_ptr_orig % HPAGE_SIZE;
+> +	map_ptr = map_ptr_orig + hpage_size - (uintptr_t)map_ptr_orig % hpage_size;
+>  
+>  	if (map_ptr_orig == MAP_FAILED)
+>  		err(2, "initial mmap");
+> @@ -546,7 +550,7 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
+>  
+>  	n_normal_pages = 0;
+>  	n_huge_pages = 0;
+> -	for (void *p = map_ptr; p < map_ptr + len; p += HPAGE_SIZE) {
+> +	for (void *p = map_ptr; p < map_ptr + len; p += hpage_size) {
+>  		if (allocate_transhuge(p, pagemap_fd) < 0)
+>  			n_normal_pages++;
+>  		else
+> @@ -577,11 +581,11 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
+>  	ksft_print_msg("Average speed:  %.3f MiB/s\n", (map_size / MB) /
+>  					       ((double)scan_time_ns / NSEC_PER_SEC));
+>  
+> -	munmap(map_ptr_orig, len + HPAGE_SIZE);
+> +	munmap(map_ptr_orig, len + hpage_size);
+>  	return KSFT_PASS;
+>  
+>  err_out:
+> -	munmap(map_ptr_orig, len + HPAGE_SIZE);
+> +	munmap(map_ptr_orig, len + hpage_size);
+>  	return KSFT_FAIL;
+>  }
+>  
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index a1b45a3dedaee..f3ec767f562b8 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -343,8 +343,8 @@ fi
+>  CATEGORY="memfd_secret" run_test ./memfd_secret
+>  fi
+>  
+> -# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
+> -CATEGORY="ksm" run_test ./ksm_tests -H -s 100
+> +# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 512
+> +CATEGORY="ksm" run_test ./ksm_tests -H -s 512
+>  # KSM KSM_MERGE_TIME test with size of 100
+>  CATEGORY="ksm" run_test ./ksm_tests -P -s 100
+>  # KSM MADV_MERGEABLE test with 10 identical pages
+> diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
+> index 96f72898ebe0a..ad2831c864dc3 100644
+> --- a/tools/testing/selftests/mm/transhuge-stress.c
+> +++ b/tools/testing/selftests/mm/transhuge-stress.c
+> @@ -34,12 +34,17 @@ int main(int argc, char **argv)
+>  	size_t map_len;
+>  	int pagemap_fd;
+>  	int duration = 0;
+> +	const uint64_t hpage_size = pmd_psize();
+> +	const uint64_t hpage_shift = pmd_pshift();
+>  
+>  	ksft_print_header();
+>  
+>  	if (!thp_is_enabled())
+>  		ksft_exit_skip("Transparent Hugepages not available\n");
+>  
+> +	if (!hpage_size || !hpage_shift)
+> +		ksft_exit_fail_msg("reading hpage_size failed\n");
+
+Makes sense to call an ksft_exit_fail_msg() here since it requires PMD
+size to run its one and only test.
+
