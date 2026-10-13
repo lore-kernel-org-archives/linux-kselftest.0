@@ -1,253 +1,174 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05E2477998;
-	Tue, 13 Oct 2026 19:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791919062; cv=none; b=LzUrNT65Cu5rJcGbjpIKw7cso/II+0tv58ChO7aX7E5mun+eOUAZiuvl/ETFIYsNlI9p3gArTmDktHgQO0d3OSUd8y7LFR90LHsFnz19/vqIkqpw2RRxMMr5bXW9+x0mgdQzT5371SQ3d++W5fQ4+JOeM9KSxlW8b/+26M7RjX4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791919062; c=relaxed/simple;
-	bh=tRmtvDD+61LFKfAJ/yki7gSA1SbAatoyJ8YHNw34tdE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G2lLLduqbqQnRTGcjWDRq81p2akbTba81VKg8as53SaTi9RdNpIb1AU/69hEFDFnCtCPKiNlxGg7JIsnxuLUndXLA49OjB6rIwJWQCn7ife0FQGfq40tkobvPxtstiAxY3e+pjzjQKqp2DZW/TXOLXvGs/k34qsFpfy0JP0wQkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=WZ+WynWL; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from mail-pz2-f6.google.com (mail-pz2-f6.google.com [74.125.228.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BE24A4F04
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 19:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.6
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791919610; cv=pass; b=FhwHtVpz6F3eFH+R12FH4smMN9N3Ev8HdCX5fZIFwuAZODfDx5dfpWKvg22EKjtji/Zk8++gvjbjJjvX1HKMZG2n8Gc16ElkPGSWQdluJQT1TZHf8F9qpnxs+h9qc5vNvONpbMGeRwP3ApRCp80+dJbXvBEC8YDYYzNysde+jys=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791919610; c=relaxed/simple;
+	bh=8ka4q1KK0fW/BGTp7rl53tFGJzuhjINRBDv+MXNJkdI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=E3qdV0X5lJvCZgHsxVgJx0qsqjPFXGLoQGxJn0xYQoRJAZlAy1VzZnBq01pcrTVUgLpYqmAppVMpInkF1cl4TYbJ9ZsuAsC0H12ZQm4YaU1ipTYn1FuDT70mlzqraUgGeshGzevmvmP7+qC4tFU5SYgLM/NzkSxeu3ltzsGMaLc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=USHKady8; arc=pass smtp.client-ip=74.125.228.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="WZ+WynWL"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3042169E;
-	Tue, 13 Oct 2026 12:17:29 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09EDC3F673;
-	Tue, 13 Oct 2026 12:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1791919053; bh=tRmtvDD+61LFKfAJ/yki7gSA1SbAatoyJ8YHNw34tdE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WZ+WynWLIZdtuXPjx12fDmi2/pks5e8wzTiXdv+ov6cMjm4fRm1eMnLdkSsZ8IEPJ
-	 EXYq7kH/LMqkn111w8u5DtTR7w/3k1Q2UIt9wTEvxCdftys8LM/frPxDZgJCF0vZj1
-	 nhAA2D+UAS9mmZIYpHPo5U1fPCjJ+I8OEGC+DUB0=
-Date: Tue, 13 Oct 2026 20:17:27 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
-Subject: Re: [PATCH v7 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
- macro
-Message-ID: <as6Dx5WkvTQty9K5@e129823.arm.com>
-References: <20261013-fix_hpage_macro-v7-0-3d77129e0557@arm.com>
- <20261013-fix_hpage_macro-v7-2-3d77129e0557@arm.com>
- <b3f2a0bf-7b41-4cc9-958e-34f1a88ff5bf@arm.com>
- <as48D1SnImCro_Cb@e129823.arm.com>
- <aca0492c-f0d3-4ba7-8671-32952ceff913@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="USHKady8"
+Received: by mail-pz2-f6.google.com with SMTP id 41be03b00d2f7-cc73514ac7dso1548279a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 12:26:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791919608; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gzeBJgYnTNsaSBy/kVgbyodFyaHbxDQF62u4zk7nVMruHGion38ptCVM3YLwSDK7UL
+         V5PIf1t3O24qYhaGhzKsdUdpyRcXk/gtPlyZVBzwvIRbntkBIIxq6rDeHs4VX5ueYykv
+         LsbtzutOWZtsBw7LmwzX94AJHiupGVkWNmJmHRcMoXdOs7hCjaCCH2VazR/O6rgOJZpy
+         KvbEiQE5RdtviDGru1O19gmh8vvW3Wby2pYGAwHzQRRAR+yslerLZ8ITlUuWTRs+5+rh
+         edIebmrqw5O5R/fnR+6U8XQzWTbVrBG6N5PLr1wJrkcAHDFHLYB9p3n5Mmw1kkdkl+wQ
+         W/KQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=yGO2CkNY642DwHHU7AtKwsaD6YR1oevFy+Ta3M7wXgU=;
+        fh=nHBjajGBWCLtZ/glAuryi5vidEBFHLq71NQ9dYzl8Rw=;
+        b=PvnahHSnFqGZfV95EE42wZhREJw3beTWEX0HSQQ0kpQN5rXm11oQVYSqyND5L7/W/P
+         gjUFpPiJO4UWnHD18ttRT5joNvlX4HNg/kHFTKtpooEiCnjBSJADmeEYU3sY4tPPnR6f
+         n8U1SLQ5SZEEo+bzUOGDNI76HYFGpa1NLv9R+pvCAAEdLqWqRDn/l2uaQQ3XwkvmwEEY
+         0LXglwWUR/ldPL4aJJzKnwC6n9wBcR8Shm0iqR7ty13659aI6sATq1Mnwym8yi7B4hyu
+         3L9AtCnjzDY251RSSGv/6M/EhYV55F1rAygLhX+TEXfRemWvysYxilWdMJRihPye4F1W
+         QmZQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791919608; x=1792524408; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=yGO2CkNY642DwHHU7AtKwsaD6YR1oevFy+Ta3M7wXgU=;
+        b=USHKady84enV074drcCnQDqZ+csD0M302pGSSLlH0fd+9bfIN1gWcAxIwDiGMr+GIo
+         0pi/j6SoLVPxfRWwabXcoJUUjK950N3EMu/HKYBK2GcmqEzMyxc4rATrc3pfOiCmoQeF
+         211GkOAKKkOiIdKUnDKIzKwqqvcJdSh968TsxLMryjDwueTduwXTaWQy0aGrtsBZ6cBW
+         QPMX0/ng5nKpTeZWiiWrUPr/1fiJCy4WTPN+PrMUZWk5xn4hRNEmcI8fioaLDAmlTdcn
+         0WMPZqxYq5il6hZDYjqF6bP22l5tsYt+gDGX2U834PPAR2Qr4byR4MSWenZQiyxEr0Dc
+         PHOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791919608; x=1792524408;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=yGO2CkNY642DwHHU7AtKwsaD6YR1oevFy+Ta3M7wXgU=;
+        b=rzRm+mxaxEwPHTVgqulm650Dx6/G20R7EbjaLZkkid351kSuFVBQymmqLC+G/vSiZo
+         JiCWSNRwnBRwwGMShWf3xoT3kTqRACg6x5gmN6/a7WCBouno8qqSLB2GumNothCngHEt
+         QNJf5390AL0u7fnvK5fORw2pzUVWVpwgjkMl3ELPYiR0Jtjl7D5gDOZsZ5pOb5o5vQ9m
+         k/wQ+ex7dsWHbEgRXDDMSa7afTBlGJZnfIl5DbnIjSuKSqzV/NC99kwpFmVQ4ISt9D10
+         fyqw6UPGbO5CfX4ggtUgrrkfqEYpssjg64WrTyAUxoSpD6efEvOtbLyI+LGx67ZlNOUn
+         FWfw==
+X-Forwarded-Encrypted: i=1; AKwUvBzDMdlPqseouIsApCTS5UgBjYqI1x6em4T+V4YMsFQe7b+clk90D5I+1eBHNm7OqHHyogVBN9wMj24mHOtL7AU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIiXa2goFVmy4fzpXyt7Fb/zAZccqJI6r3Hm/3YvV8+7Xl+AIqY
+	610xEW2z08ivoweAC5nuKv2sKTMRRLbI6YjVT6fM8HDs/q8UOZGNCxIJrZioClPpuPFbcm8Y8yZ
+	zsBjUpMfGsAvXa4jLZhdNlk9uUhVWbS4=
+X-Gm-Gg: AYBFou3bis/+az1EJKDeW6SnWQUVh75SBLlYlV+L58nXNmusWaLGzBXxBX4Qi50Exv1
+	9hQVScr35p4cKvzJYO3U5lTCXB65qSMsQDOHtMtgUNjQfi5ZewZ42/cUFWgGbhOUmbRdb5ooqee
+	jGpOYaRVxXLBtpWY2EuT/LpkBVYQCZBbslV6e95WR/Odh1xBMLcgroke9WGuGIF9k1gANnaFodJ
+	jl2JCVwNLgjIWQ1uHn9GDmpRjI1gLtsn61yvyVNfGZfUaTnUtKpA6j094omT4X5CisL6Q7LO3jb
+	PvSiiAOPZfRm+Q7Q4qekxtOAincSZWgKIDKUrKMRbjpyd4qUEmuK
+X-Received: by 2002:a05:6a21:3b8d:b0:3e0:ca2a:f9e with SMTP id
+ adf61e73a8af0-3e1d25889b8mr863599637.39.1791919608114; Tue, 13 Oct 2026
+ 12:26:48 -0700 (PDT)
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Tue, 13 Oct 2026 12:26:47 -0700
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Tue, 13 Oct 2026 12:26:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aca0492c-f0d3-4ba7-8671-32952ceff913@arm.com>
+From: Rowan Vale <i46475812@gmail.com>
+Date: Tue, 13 Oct 2026 12:26:47 -0700
+X-Gm-Features: AclHuK8z0f5f-xNogq-tJPITNRjWjPlgjKDkJ5DRXZAhxM0OyQGM9LJKmluhxb0
+Message-ID: <CA+yQJ6mTGC-e8O1g-wtz1Gvb1+dHG0apkatg9Bzp6wPetYfuuw@mail.gmail.com>
+Subject: [PATCH] kunit: tool: Treat all-skipped results as success when parsing
+To: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>
+Cc: Rae Moar <raemoar63@gmail.com>, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Sarthak,
-> 
-> 
-> On 10/13/26 7:41 PM, Yeoreum Yun wrote:
-> >> Hi Yeoreum!
-> >>
-> >> On 10/13/26 4:07 PM, Yeoreum Yun wrote:
-> >>> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
-> >>> When this macro is used in some test, test result would be strange in
-> >>> the system where PAGE_SIZE is more then 4KB.
-> >>>
-> >>> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
-> >>>
-> >>>   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
-> >>>     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
-> >>>     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     ...
-> >>>   ok 1 Completed
-> >>>
-> >>> Remove the HPAGE_SIZE and HPAGE_SHIFT macro and introduce pmd_pshift()
-> >>> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
-> >>> helper, pmd_psize().
-> >>>
-> >>> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
-> >>> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
-> >>> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
-> >>> PMD-sized units, the test may fail with the previous size of 100 MiB,
-> >>> which is not a multiple of the PMD size when the base page size is
-> >>> 16 KiB or 64 KiB.
-> >>>
-> >>> After this patch, output of transhuge-stress:
-> >>>
-> >>>   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
-> >>>     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >>>     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >>>     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >>>     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
-> >>>     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
-> >>>     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
-> >>>     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
-> >>>     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
-> >>>     ...
-> >>>   ok 1 Completed
-> >>>
-> >>> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> >>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> >>> ---
-> >>>  tools/testing/selftests/mm/guard-regions.c    | 10 +++++--
-> >>>  tools/testing/selftests/mm/ksm_tests.c        | 16 ++++++-----
-> >>>  tools/testing/selftests/mm/run_vmtests.sh     |  4 +--
-> >>>  tools/testing/selftests/mm/transhuge-stress.c | 25 +++++++++++-------
-> >>>  tools/testing/selftests/mm/vm_util.c          | 38 +++++++++++++++++++++++----
-> >>>  tools/testing/selftests/mm/vm_util.h          |  9 +++----
-> >>>  6 files changed, 71 insertions(+), 31 deletions(-)
-> >>>
-> >>> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
-> >>> index f7d53ea3c2527..02f69244f9a42 100644
-> >>> --- a/tools/testing/selftests/mm/guard-regions.c
-> >>> +++ b/tools/testing/selftests/mm/guard-regions.c
-> >>> @@ -2194,14 +2194,20 @@ TEST_F(guard_regions, pagemap_scan)
-> >>>  TEST_F(guard_regions, collapse)
-> >>>  {
-> >>>  	const unsigned long page_size = self->page_size;
-> >>> -	const unsigned long size = 2 * HPAGE_SIZE;
-> >>> -	const unsigned long num_pages = size / page_size;
-> >>> +	const uint64_t hpage_size = pmd_psize();
-> >>> +	unsigned long size, num_pages;
-> >>>  	char *ptr;
-> >>>  	int i;
-> >>>  
-> >>>  	if (!thp_available())
-> >>>  		SKIP(return, "Transparent Hugepages not available\n");
-> >>>  
-> >>> +	if (!hpage_size)
-> >>> +		ksft_exit_fail_msg("reading hpage_size failed\n");
-> >>
-> >> I'm sorry for not catching this earlier, but I don't think calling a
-> >> ksft_exit_fail_msg() for not being able to calculate PMD size is a good
-> >> idea. Maybe call an ASSERT*() here, something like
-> >>
-> >> ASSERT_NE(hpage_size, 0);
-> >>
-> >> so that just this test fails, instead of the whole run exiting with a
-> >> bail out?
-> > 
-> > No. The failure would occur if open() or read() fails, and subsequent
-> > attempts would likely fail for the same reason.
-> 
-> I think I couldn't clearly explain my concern. Let me put it again,
-> please let me know if I am missing something.
-> 
-> I was mistaken, on checking I found that guard_regions runs each test in
-> a separate child process. So calling ksft_exit_fail_msg() won't exit the
-> whole test run.
-> 
-> To reproduce the case, I bind mounted /dev/null over
-> /sys/kernel/mm/transparent_hugepage/hpage_pmd_size in a QEMU so that
-> pmd_psize() returns 0. Then on running ./guard_regions (your patches
-> applied), I got this output (putting relevant section of that since the
-> log is quite long):
-> 
-> 
-> #  RUN           guard_regions.anon.collapse ...
-> Bail out! reading hpage_size failed
-> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> # collapse: Test failed
-> #          FAIL  guard_regions.anon.collapse
-> not ok 29 guard_regions.anon.collapse
-> .
-> .
-> ok 58 guard_regions.shmem.pagemap_scan
-> #  RUN           guard_regions.shmem.collapse ...
-> Bail out! reading hpage_size failed
-> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> # collapse: Test failed
-> #          FAIL  guard_regions.shmem.collapse
-> not ok 59 guard_regions.shmem.collapse
-> .
-> .
-> #  RUN           guard_regions.file.collapse ...
-> Bail out! reading hpage_size failed
-> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> # collapse: Test failed
-> #          FAIL  guard_regions.file.collapse
-> not ok 89 guard_regions.file.collapse
-> #  RUN           guard_regions.file.smaps ...
-> #            OK  guard_regions.file.smaps
-> ok 90 guard_regions.file.smaps
-> # FAILED: 87 / 90 tests passed.
-> # 19 skipped test(s) detected. Consider enabling relevant config options
-> to improve coverage.
-> # Totals: pass:68 fail:3 xfail:0 xpass:0 skip:19 error:0
-> 
-> 
-> which looks weird with all the bailouts. On the other hand, if we
-> replace the ksft_exit_fail_msg() with ASSERT_NE(), here's the output we get:
-> 
-> 
-> #  RUN           guard_regions.anon.collapse ...
-> # guard-regions.c:2205:collapse:Expected hpage_size (0) != 0 (0)
-> # collapse: Test terminated by assertion
-> #          FAIL  guard_regions.anon.collapse
-> not ok 29 guard_regions.anon.collapse
-> .
-> .
-> ok 58 guard_regions.shmem.pagemap_scan
-> #  RUN           guard_regions.shmem.collapse ...
-> # guard-regions.c:2205:collapse:Expected hpage_size (0) != 0 (0)
-> # collapse: Test terminated by assertion
-> #          FAIL  guard_regions.shmem.collapse
-> not ok 59 guard_regions.shmem.collapse
-> .
-> .
-> #  RUN           guard_regions.file.collapse ...
-> # guard-regions.c:2205:collapse:Expected hpage_size (0) != 0 (0)
-> # collapse: Test terminated by assertion
-> #          FAIL  guard_regions.file.collapse
-> not ok 89 guard_regions.file.collapse
-> #  RUN           guard_regions.file.smaps ...
-> #            OK  guard_regions.file.smaps
-> ok 90 guard_regions.file.smaps
-> # FAILED: 87 / 90 tests passed.
-> # 19 skipped test(s) detected. Consider enabling relevant config options
-> to improve coverage.
-> # Totals: pass:68 fail:3 xfail:0 xpass:0 skip:19 error:0
-> 
-> So the issue is not as severe as I'd thought. It can be argued that this
-> is very less likely to happen. But yeah, I feel changing it would be
-> better as it is more suitable with the ksefltest_harness and would give
-> a cleaner TAP output incase this happens. Rest I leave it to you and
-> other folks to decide whether this needs to be changed :).
+Parsing a log where every test is skipped exits with status 1, even
+though the summary reports no failures. This can cause a CI job that
+parses results collected separately to fail solely because all tests
+were skipped. The run and exec commands already treat this outcome as
+success.
 
-Still I don't think it would be more suitable with kselftest_harness.
-Anyway what I can see it's a only difference of the *message* --
-"Bail out! reading hpage_size failed" vs "Expected hpage_size (0) != 0 (0)"
+Reuse _map_to_overall_status() in parse_tests() so the parse command
+handles skipped results consistently with exec_tests(). Keep failures,
+crashes and missing test results unsuccessful.
 
-TBH, I don't think this difference makes the TAP output any cleaner.
-I think it's sufficient as long as the message clearly explains the reason
-for the failure.
+Add command-line regression coverage using the existing log fixtures.
 
+Fixes: 5acaf6031f53 ("kunit: tool: Support skipped tests in kunit_tool")
+Signed-off-by: Rowan Vale <i46475812@gmail.com>
+---
+Validation: all 94 kunit_tool_test.py tests pass on Python 3.12.14.
+The added all-skipped regression fails before the fix. CLI checks keep
+failed, crashed and missing-test logs unsuccessful, and preserve skipped
+counts in JSON and JUnit exports. Only the Python tool was tested; no
+full kernel build or hardware run was performed.
+
+ tools/testing/kunit/kunit.py           |  6 ++----
+ tools/testing/kunit/kunit_tool_test.py | 20 ++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 91d234ac3..eb660b46c 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -277,10 +277,8 @@ def parse_tests(request: KunitParseRequest,
+metadata: kunit_json.Metadata, input
+ 			kunit_junit.write_junit_result(test=test,filename=request.junit)
+ 			stdout.print_with_timestamp(f"Test results stored in
+{os.path.abspath(request.junit)}")
+
+-	if test.status != kunit_parser.TestStatus.SUCCESS:
+-		return KunitResult(KunitStatus.TEST_FAILURE, parse_time), test
+-
+-	return KunitResult(KunitStatus.SUCCESS, parse_time), test
++	kunit_status = _map_to_overall_status(test.status)
++	return KunitResult(kunit_status, parse_time), test
+
+ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	      request: KunitRequest) -> KunitResult:
+diff --git a/tools/testing/kunit/kunit_tool_test.py
+b/tools/testing/kunit/kunit_tool_test.py
+index 85ae21754..1e65b36d4 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -747,6 +747,26 @@ class KUnitMainTest(unittest.TestCase):
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
+
++	def test_parse_skipped_all_tests(self):
++		kunit.main(['parse', _test_data_path('test_skip_all_tests.log')])
++		self.print_mock.assert_any_call(StrContains('skipped: 5'))
++
++	def test_parse_passed_tests(self):
++		for log in ('test_is_test_passed-all_passed.log',
++			    'test_skip_tests.log'):
++			with self.subTest(log=log):
++				kunit.main(['parse', _test_data_path(log)])
++
++	def test_parse_failed_tests(self):
++		for log in ('test_is_test_passed-failure.log',
++			    'test_kernel_panic_interrupt.log',
++			    'test_is_test_passed-no_tests_run_with_header.log',
++			    'test_is_test_passed-no_tests_run_no_header.log'):
++			with self.subTest(log=log):
++				with self.assertRaises(SystemExit) as e:
++					kunit.main(['parse', _test_data_path(log)])
++				self.assertEqual(e.exception.code, 1)
++
+ 	def test_build_passes_args_pass(self):
+ 		kunit.main(['build'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+
+base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
 -- 
-Sincerely,
-Yeoreum Yun
+2.51.1
