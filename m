@@ -1,180 +1,105 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3A5357CE0
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 14:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791900323; cv=pass; b=vAric6rUi7gbf/vukU+kGEHfD6zhSI9q4WWiOqrxPDJCLksIvGBryx/3OLeTSQ7PgZu4jbvhh5gqy3ukXWuql3kHwjvwlQM4u9PU4oujilKUlY2rmt93RXiAEbD1JqbZ4sdQYfTlU70PxAooh4JkVNgYrF+b1wEo6Ouiy15Mgi8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791900323; c=relaxed/simple;
-	bh=efwpqbn4KqWJ83/+b8Z3Sx2CVCm9Kiqp5MA7PhTFAxo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kVWrFuLIyCVWWHjI6X2oBB5HiOnwUGLvT6YPdOVDDZATaE6TCa+CVyGcmXVOmnC/3DWtVO4uKDVkxKrXv91nh8wxPkbE/FUx8lloALl8AY3IABTpUbXNX1tj3jqJVU29js9NoD2RgC+210Qd/vLtyD+4g4xnV7gBQtPv9emmFrI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OILuzQQN; arc=pass smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9355370ADA;
+	Tue, 13 Oct 2026 14:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791900558; cv=none; b=A07iVOSjs9pNL43r0Zx+oB5l42cwbVvvn+5VNyHf+Iuc1+jm+RonG+7CjeQjnh3xJA4IrhyqwCVvFS2Y/GCOEyNeFq2CbGTWDG3Hc+Mi3fZh3AbER4g+FiSRBqg0gwJF25Tm5Ys3QuU+CNdFZB0sWpa2JeZh3m64wKUG1xEZlrc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791900558; c=relaxed/simple;
+	bh=Suo0YfCYPtCoLBJ8iZXRfc+dw40jvIHLkG13JRnjZUY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SBhfoX/PxLWKD3CamJYY8SUFS7v796gXmZuA7p7WY/dsQHAiTFzzCcntDSp7OD9YeECQrTphJx5lwmcSi+TGysqSWP5mAVhs0AUZC8oco7ucy1IsxYwzpCpwJ7HzT5qESobCaFddKAFDcqM+OLcaQZemvF6CHyOhDAIWw2QuMWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com; spf=unknown smtp.mailfrom=hallyn.com; dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b=kL9ibrJg; arc=none smtp.client-ip=178.63.66.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=tempfail smtp.mailfrom=hallyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OILuzQQN"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-92ed3993c1eso191484685a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 07:05:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791900320; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ca7mAD0OdVIh0vij/HkZwRlDU1DpzR9O3mdZktZDS/MXjNso0C6kJpKMeHhAY2W3ld
-         Gvxt638ENYtbKnIRlpfmJFmMhttWAc9CaiaCpC0PUpAJef6HEeAke2c0Twj/tj9sYej4
-         4ZV1Q6D3fqESp0i+abL11UqYDCNazeQromkthJGysXOmfkV2mDVqMbX8YamWOD9RzIRy
-         DwoazmJI+4yR5aNdd5K+glj4PJKMtT4K1pMW094ja3G+jQrhA3bMmaEg9HiPcTceY5ta
-         eAFm/Z0O198RIy6wvgVYpH17iI9cV2GZVKDYeLX5tdVGVrdex7U1gBRMh1M4cf6uyOfG
-         gvZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GPXKi2ja3hfSSIKvSqSAyf4VTe85ag1sZhdhO7l5KOM=;
-        fh=h0r4GsLZykFU8icr/tfaUXPpF3GirlQAHrhFWWk6/t8=;
-        b=RwKLP0KjLLv2DjUnb90rLZvTpjGcHg3T7c6NvJWprn6fMU2YlMFp0xw8hS+PaRi0bz
-         DgOVXk5P87vo9yGjw/VKdQo7ExNUpkV1/yU/YefwMmn5q656PJcT+tX29fkPsMoTgI6A
-         bmPN5L6xyW9pWqxgB1lfkaxE1wvMDUW/AhnNzGUf26mIM710FXvXRnwhb7IpoShOoS1W
-         a1IoCv9gqnyLyrIUSHnFTWpqzKVwqu1bFChlv/20jOPacQWu3D4PFFbSbLnYH3Z1KIgV
-         cJ0m7pW0YX+UUu6JoJoCczbcPwPNJp+cAfDrY+pj8N5UShoGMmkLbldEZkO68p7IyNvK
-         6AtA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791900320; x=1792505120; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GPXKi2ja3hfSSIKvSqSAyf4VTe85ag1sZhdhO7l5KOM=;
-        b=OILuzQQNGHitUqKN6lSOHQRrLS5lHihOw7H22eT0VBoJwPqFgkweGJNKLeMOqKAjf4
-         zvfkgJfM+GXapEQwdQkKBKXeJCp5lVdeKdkQnQ8CeODyN6OfoFsrNvgqGBwLJndNn3yv
-         lsdEd0lkmZcaMkxR7sHIQeCzd7PdTPDXo5C8Z2oelqXgQbv7VmWVf94YaXpUjQD9N/I9
-         VlniGbbz3zrOHWwP2aVA8tc5tsr72LpZ7gfdg2fJlXEhly2gmVTsSLGJGZfwpb5dI321
-         pwTxc8xC7xTcvLqstvZghpwoK/b2LINceM4Sla6EoH8sec8hDHYlfhL1h1W8J28OVIG9
-         71iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791900320; x=1792505120;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GPXKi2ja3hfSSIKvSqSAyf4VTe85ag1sZhdhO7l5KOM=;
-        b=mM7tB4Ai4TENQPA66RBeqgjOk0lxNwrmXWHWWT3nDmMD+uGNAz5bnPuroHxIydH0EI
-         8L+2s8BeiixC5dZHASB7Hd0c+fH7ZXrPI6SY09zqgqQSoeGHOOjnzb7nTCptKeEvtymU
-         tNI49b6ywU2EhWLSTPpIxTvUcwF7LkX9tAVQYuYLb4NPP3Gn6jxtcRrIvdOUZ64gvSvP
-         qp6E4D7gsSM1/NowHla/6dKtMwjp9RRQjAAqg7qe27EQOpEZWU1YOhqOBBsum7fMGFxW
-         wf1y7g1itE3aIaF63myL2+fksROs1vIvEXn/lwy/NBGMvCOXVDXX6vj8NF8bbdhNawNG
-         ryig==
-X-Forwarded-Encrypted: i=1; AKwUvBwk8ODEx0blCnMmDuq4AYU4qIJSZpRIvj6xw4R6LxtwgISUaGqdgg02OSoky962yGLef0xBrB/bjjtcLTkkUbc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJLXnnhbPHEeFysX5SqI2ydZKCnIEYnLXRuxoJFzaqN6uehCpCo
-	gEsh2VrKpxNvpxKQUl60YtRAC/2PWC+2nU8t3WNw/K5LDeyHPMXl5BE6dUfhHFde3DLDFuXyKwg
-	OBScIb5l6esorjSHxLLRofZzDD7Dfg+Y=
-X-Gm-Gg: AYBFou2Z4QmZsTcC/R5mJscH1oHhLYsq8bpD4Y72eIhsUjsOgcZ1E2r7Pia8Xaaiv6j
-	T4UNABSmdiXhpUAyNkhvCPiDwggurgbKY53KU2MPcUuQolxD1vwP5FgpL4H6L1+kquvxkbypnKC
-	AQHh2lF2OXiU1J/Q5+YpY8wMBzPRaYJIc//T2los8JAd4is3hzc3YPo1vkToBdK638R733UGhsW
-	DSb6afu/VlHKYtsMaOXfulz0OwqR6tJbIFW8Yl8SpA2YBlrof5FR65ijWIDuNs5BhALCZ5nnCP+
-	lSZxTXSnNXx4A4d4zDUntpdIkpcDA1pIGCWF87Ml+JubdZD1jFCKcSXT9h+j4zfMaDaIiqW8ESD
-	0oD4TeCU95t5ege8G6Z6VC0c=
-X-Received: by 2002:a05:620a:3947:b0:93e:78b7:fa4e with SMTP id
- af79cd13be357-93ebd24b2fcmr2220976385a.37.1791900320079; Tue, 13 Oct 2026
- 07:05:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b="kL9ibrJg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
+	t=1791900547; bh=Suo0YfCYPtCoLBJ8iZXRfc+dw40jvIHLkG13JRnjZUY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kL9ibrJga4YY3RAquWvtOegRsAK6JNwI4zXpQH4mv6j2Vsk9CY8qfIhLg/GbWf10M
+	 DeXquRyTooElnL5wcZ6eBAgd3kldWf1/1DVrk/QnE7SSW6X/eN/0nBES3D+BgjTlUU
+	 C/Rx2MZe3C0Slal4i45wXX+ZGEjf9NEkolx65kLPAJurAwcIqT7Fgf9sZxk/YpgtAy
+	 XDKHXmjY/8nxliaKEOZl8gn/L8ISgxycaCqcVMdYGSSfKRj3VaBKUpf5cLXmVPw2xG
+	 o/e7XKeKzb8AwNvzLFiFE90IPPcFzQuMfwogAUoL6N27g/9+hdqYmLbjfnu+6mI3om
+	 KyZ826JuJNe2w==
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+	id 2638A6FA; Tue, 13 Oct 2026 09:09:07 -0500 (CDT)
+Date: Tue, 13 Oct 2026 09:09:07 -0500
+From: "Serge E. Hallyn" <serge@hallyn.com>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: kees@kernel.org, akpm@linux-foundation.org, david@kernel.org,
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	vschneid@redhat.com, kprateek.nayak@amd.com, paul@paul-moore.com,
+	jmorris@namei.org, shuah@kernel.org, oleg@redhat.com,
+	brauner@kernel.org, alexjlzheng@tencent.com, jannh@google.com,
+	jaime.saguillo@gmail.com, elver@google.com, blbllhy@gmail.com,
+	bvanassche@acm.org, pjw@kernel.org, broonie@kernel.org,
+	debug@rivosinc.com, tglx@kernel.org, aleksey.oladko@virtuozzo.com,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, morgan@kernel.org
+Subject: Re: [RFC PATCH v2 0/3] security: Add PR_CAPBSET_DROP_MASK
+Message-ID: <as47g9Ofa7hgDDLp@hallyn.com>
+References: <20260929130200.1638343-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261005171529.1378809-1-kunwu.chan@gmail.com>
- <20261005171529.1378809-9-kunwu.chan@gmail.com> <as3aMmPdCHCXW6Ci@U-YXDQC754-96.local>
- <as4ooZSWA2lAIceu@tardis.local> <ef3fd68d-f35e-4071-9523-0cd14396d860@efficios.com>
-In-Reply-To: <ef3fd68d-f35e-4071-9523-0cd14396d860@efficios.com>
-From: Lai Jiangshan <jiangshanlai@gmail.com>
-Date: Tue, 13 Oct 2026 22:05:08 +0800
-X-Gm-Features: AclHuK9Y6wjNtKPnooCMgRZOapMzF0kyKCufRscUU_wsuFWoqVB6jP59bjMM3m0
-Message-ID: <CAJhGHyBd5wuLO9H7bHJDO==2=z8MGQ3ehvszLiB1brztpRXu8A@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 08/15] locking/lockdep: use hazptr to wait for
- dynamic key lookups
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Boqun Feng <boqun@kernel.org>, Kunwu Chan <kunwu.chan@gmail.com>, paulmck@kernel.org, 
-	corbet@lwn.net, mingo@redhat.com, frederic@kernel.org, 
-	neeraj.upadhyay@kernel.org, josh@joshtriplett.org, urezki@gmail.com, 
-	dave@stgolabs.net, lianux.mm@gmail.com, stern@rowland.harvard.edu, 
-	parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org, 
-	npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk, 
-	luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com, 
-	joelagnelf@nvidia.com, skhan@linuxfoundation.org, rdunlap@infradead.org, 
-	longman@redhat.com, rostedt@goodmis.org, qiang.zhang@linux.dev, 
-	brads@mainlining.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, lkmm@lists.linux.dev, linux-doc@vger.kernel.org, 
-	rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260929130200.1638343-1-ruanjinjie@huawei.com>
 
-On Tue, Oct 13, 2026 at 9:04=E2=80=AFPM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> On 2026-10-13 08:48, Boqun Feng wrote:
-> > On Tue, Oct 13, 2026 at 03:40:36PM +0800, Lai Jiangshan wrote:
-> [...]
-> >>
-> >> This breaks the forward-progress argument used by the underlying
-> >> hazptr implementation: after removing an object from publication,
-> >> there should not be a continuing stream of new readers acquiring
-> >> that same object. Here, the bucket is never unpublished.
-> >>
-> >> For example, let B be the bucket containing key K:
-> >>
-> >>    Updater                    Reader                 Scan kthread
-> >>    -------                    ------                 ------------
-> >>    Unlink K from B
-> >>    hazptr_synchronize(B)
-> >>                               Acquire B
-> >>                                                      Observe B;
-> >>                                                      retain waiter
-> >>                               Release B
-> >>                               Acquire B again
-> >>                                                      Observe B;
-> >>                                                      retain waiter
-> >>                               Release B
-> >>                               ...                    ...
-> >>
-> >
-> > This is more of an implementation issue,
-> I agree with Boqun about the point that this is really an implementation
-> issue.
->
-> If we care about forward progress in the scenario of a repeated
-> address reuse, we just need to wire up a "0/1" low bit phase tag and
-> make hazptr acquire pick it up and set it within its hazptr slot. This
-> will ensure forward progress in that scenario. hazptr synchronzie
-> would therefore flip this phase between 0 and 1, and check that the
-> pointer it's looking for is not set in the other phase, in alternance,
-> handling both phases within one synchronize. Indeed, this phase concept
-> comes from the realm of RCU implementations.
+On Tue, Sep 29, 2026 at 09:01:57PM +0800, Jinjie Ruan wrote:
+> PR_CAPBSET_DROP only affects the calling thread, so dropping capabilities
+> for a whole process means one call per capability per thread.  For a
+> long-lived, multi-threaded process such as gVisor's sentry this is
+> stop-the-world signal delivery and costs milliseconds per sandbox on a
+> many-core host.
+> 
+> This series adds PR_CAPBSET_DROP_MASK, which removes a 64-bit mask of
+> capabilities from the whole thread group in a single call.  The drop is
+> recorded per thread group and folded into the bounding set wherever it
+> gates gaining a capability, so already-running, concurrently-created and
+> later-created threads -- as well as children forked by a sibling -- all
+> observe it.
+> 
+> Trimming 41 capabilities in an arm64 KVM guest goes from ~8.5-23.6ms with
+> the per-thread loop to ~11-14us, independent of the thread count.
+> 
+> Changes in RFC v2:
+> - Solve concurrently clone and concurrently drop mask problem.
+> - Solove sashiko problems in [1].
+> - Link to RFC v1: https://lore.kernel.org/all/20260922095816.1191799-1-ruanjinjie@huawei.com/
+> [1] https://sashiko.dev/#/patchset/20260922095816.1191799-1-ruanjinjie%40huawei.com
 
-Regardless of which implementation approach is adopted, this would effectiv=
-ely
-introduce a new read-side synchronization mechanism based on hazard pointer=
-s.
-I would prefer to see it introduced under a distinct name in the
-kernel, so that its
-semantics and intended usage can be clearly distinguished from those of
-conventional hazard pointers.
+Sorry, somehow I didn't notice this version until today.  I will take
+a close look later this week.  Thanks.
 
-Thanks,
-Lai
-
->
-> I think that the overall mindset so far has been "RCU does this" and
-> "Hazard pointers do this" as if those were entirely predefined
-> mechanisms. I think the way forward is not "one or the other", but
-> rather to combine the strengths of each of those mechanisms into
-> something better.
->
-> Thanks,
->
-> Mathieu
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> https://www.efficios.com
+> Jinjie Ruan (3):
+>   capability: Move mk_kernel_cap() to header
+>   security: Add PR_CAPBSET_DROP_MASK for process-wide bounding-set drops
+>   selftests: prctl: add process-wide bounding-set drop tests
+> 
+>  fs/proc/array.c                               |   3 +-
+>  include/linux/capability.h                    |  10 +
+>  include/linux/sched/signal.h                  |   8 +
+>  include/uapi/linux/prctl.h                    |   1 +
+>  kernel/capability.c                           |   5 -
+>  kernel/fork.c                                 |   1 +
+>  security/commoncap.c                          |  91 ++-
+>  tools/testing/selftests/prctl/Makefile        |  12 +-
+>  .../selftests/prctl/cap-bset-drop-test.c      | 641 ++++++++++++++++++
+>  9 files changed, 759 insertions(+), 13 deletions(-)
+>  create mode 100644 tools/testing/selftests/prctl/cap-bset-drop-test.c
+> 
+> -- 
+> 2.34.1
