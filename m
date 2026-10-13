@@ -1,68 +1,68 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B004BD35B
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 10:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907894BEE23
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 10:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791886957; cv=none; b=e7OtZwjL4K4OBvkTgX/sZWMSzVih4Q9tR9KdcnoUYkK2bqnywT6kYPiWH+/pwiASGObEXQaU9rW8JVufy8lBfYWL2EZk5jAq8XtWY7Q4fK7vX+43PPgurQ6nXj6I0sK/V+zsAiB4rMcdffROg+JGRTYZGflNYHt7jajaXpgbVJ0=
+	t=1791886959; cv=none; b=Gvk778WvDhwYa8KqQBH2j671zaXiRnZ5XgtiUWcyMBkgA1LXrmedj4wdcwhOHzXVxmmAJEsFcCO2kZaIuMoBzejSdYSrVhYOQq6SATvyQ5Ox9Yx6kHxljW5tkWXA4s2afRGk8HQhJ6CS2zdxgoi6agJCT9hkBNEEThsJc7Rqpis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791886957; c=relaxed/simple;
-	bh=93xC3/upfsa/twJxPDQzew/ko1gX/yS9rNw89pYITeg=;
+	s=arc-20240116; t=1791886959; c=relaxed/simple;
+	bh=aXw1L7g/upf/F3tnOXBS/dAE7Az9MAaw8sM83XMWJFM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CVZY7XOf8lDK1LXEcJXOPl3UQXcacah3syQXuCeQCM/YJy4Cof4Vvyd3anmMa3Escgw0f6y3mgoTJDSqCEr7P3bWkH26b9CmFKkzYKw54IUKqnL1MoDH+hX8/6HMW0Scbd5sAN2b7eN73ffKO0CUkE3E7MKS+e+Q8xuiIYDXBZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SfIh5/+S; arc=none smtp.client-ip=209.85.208.48
+	 In-Reply-To:To:Cc; b=iKXP++IySTVS6VJ1h2nU8KEJ4rh1zqZCzjuoUSw34ioDDMpblkV9zmKn6gpZmQO4qviHw0B6HMgMuRCPLCKWIJ64S/zAemiAK3+CxQSPau08KCTrugsrfHx8pvx66lEacbRXfF79MTTv1QFRrCQzsGXGSINC+sVPjN1x26ZK9BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XbaTtQFQ; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SfIh5/+S"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6b1af232df4so2168401a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 03:22:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XbaTtQFQ"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6b1ab2ad719so3074258a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 03:22:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791886954; x=1792491754; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791886956; x=1792491756; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=q7clhEis3l5vh76pGdzr3b2EmsBU2JfvAO16ToGyoS0=;
-        b=SfIh5/+SkjKmQ2Jh7X15wUMX2+aJ1bixo8jnJPeY889SzYyu8GNbSYLL9RzQzyTGL2
-         ksTsiI6J/b46ZKJhH0WtyJhc84U7JQl+V34r08MkvpceFaGo7wj75d8oIm/jeGQLIcN0
-         KPdkF1WdMPMBQDXPHg+5+2rFWo8YYX2Nc+02gQkjriD5vpLQr4jIzvJ22/b2w+RNfLqA
-         fsCCNE6ga+td5Uwt1vDvJYm7RuvDri4MKTpcBofZAzaNFnoCPV58JrdossKDtLn2IC2p
-         3vv8g7QDpEpHcZRYx20lIuS+LHMqCxMAW8vIMMtScKkY/HkUUCxm2hj86w4yC7dvyN1B
-         +b7g==
+        bh=kNO0S4V3NLwBUeXdjMEGGTCuH76HrYE6Qlz+uekWGHI=;
+        b=XbaTtQFQpmJeNKVahdkVQpkwCQt8mF9fF2MisEpwkYSWbeeXxYJjCIIe9iJ7NzcP2r
+         F8hmSHiBT7NI5yqhaRMXio83I7th11+8Z/IjyVYpzYLO+BL6A3N309/YsTD08UO/jg/k
+         LyYLWGDQ4z+MXuAujoYfzBCRFrCH+Rq9ZeiCJkmIaocky64U0OSQBElarD1EdGfj8e3h
+         qI3uC8jyrPbneUf95gJmz1bF9JmplE8miSTAFZqCcIVt+ZQlc+aMB0ZB6FUJ6DQmIZNx
+         byiEZzYgEdootKWbC3yie6ScWhEMcONLSXJIeWYu6VCv9I9IXUBtsKjdqvP0+gb4jTYM
+         p1WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791886954; x=1792491754;
+        d=1e100.net; s=20260707; t=1791886956; x=1792491756;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=q7clhEis3l5vh76pGdzr3b2EmsBU2JfvAO16ToGyoS0=;
-        b=PXiaoetnGIRDq2UJ43Tm09qufOlfVz0ErAfXQ8Nn+mp8V4wP/jR0yQHY9s4fG8SokK
-         /Rz8XrFtKT0HNQXYYszLpzbwuCaXTjL1XCSbfJyTAeb7sjR4WkKT9xHX9OzJ7t9dThbm
-         hq5N94vOfbfJzcLtpuB2APhtLX9DwPM1Eiv5KLXSa7onmOYItsnP+XKVWlydkDw+Qx+4
-         kzX7plfrRsc8+cRc4ZY8kTe1agb4DFNgDP46aXrrCxPZXVupwPkiZFmbSJ6AXHRemmio
-         e0fi9BzamVbdypFlFjwlIKhaC6jAYFNUvEMcglLNZm5V4CzgAU1LgBpC8yVXbJCvhjXp
-         0CdA==
-X-Gm-Message-State: AFq9FYJ6V2wR0jXuZu6sAwqrBScyH5tZAEZERsHjPn0FyvSu4zWTiJSH
-	PZQhvBplvTcCPsxgRWCJ+GV2NYOYa5MkK6H/ba0DLmSxKj4Qp0umT8oe
-X-Gm-Gg: AYBFou30Q6tBY4gDPI0S+F64lEjC9B49CrYkfJUvip8GPhhjuc1BWRDcAYzQrPQXuvn
-	C4zt7wtcqWnO8Dd5rVXj8HSv+AtW6yyd7KOvcUjnJ/EEcOBJRHu6NQmq4dXTbj3Fb5TKCxZFeOn
-	1tL11Fd98rpnNYCXkIjjXaqqQi8v92iLVuXX5jCwmtknPNLkEybyyNxYSUz2yZ9Ag+Fp8ekoFUo
-	CC0degOMViUDQgVut82eaPXMs/CzR+AqwbCVQLMHwC56aZB09ioTEhVGy/iNfGKA0ENLtSeJ3L6
-	AHs8pcmYEVAqn/aVJx4UOiJRLiH8jkTY7NUWq7+wTCLkt+wQBCvAptrDYyizdLqDBBCwXYPk9Yx
-	/nDnaH/zinxmL4DAc6y3kOR7tunY+JYreU0qsCmhJ4jer4gfPvC5nNTob3853zAA1L3G1AxO4Du
-	QRcX7V3zhHt/JtHzt1LELRXPgWu8zv7xZcrQ9h4rqmldsBb40qDhdC2l2ksezQS3GC/dFH5nlf1
-	c/3Dcs3rla+bZplc3a8V7FmPcMsaFLq5To=
-X-Received: by 2002:a17:907:2da9:b0:c31:82aa:dd47 with SMTP id a640c23a62f3a-c31aa017e24mr1179807566b.44.1791886953580;
-        Tue, 13 Oct 2026 03:22:33 -0700 (PDT)
+        bh=kNO0S4V3NLwBUeXdjMEGGTCuH76HrYE6Qlz+uekWGHI=;
+        b=Ib88f5tZtXvqm2JgXqXTeazlLwLCOWRAqMi9CsG0xpyHkn2hZB005ixkrknMhHEQ61
+         1ashgeQnCg42EroxEZDn34oJrLD+916Ob0SMdgGIA5OwzCNqnOyR7zsdWVlrE/CdMZDu
+         kBCvQl1dJ9l7luHwVSQT21ltdxywstS+m2p6op4LXn5mg5UtRtwQQ9+4UT/K6Q/nMI1q
+         1IYkeEuoLOWpKAZVncjfkj5sDJ8K6xn2TyVYh7ciI6XgxYAEdvMj8hofC6uMaE4aXMWS
+         QNhJKHR73+CCvM7EAtDZ8RbohtZ58ZZbYCzln5GCqYHzh1dXyQGQgO6H+XazCF6ZctxQ
+         H/gQ==
+X-Gm-Message-State: AFq9FYIZTuFtQN+ZQvnfHzgKloud95w2R0JEVWaHldIoc49wNwW3fAW8
+	YGEuhi3es/WSm97PIDjy7hYqylOFD2Be7dHunLWGPLYxJJwswHb62Z/i
+X-Gm-Gg: AYBFou2FpnPRiRK3xv4a7RVClBztOiW6Zl5yp5DzsEb386Z2NT86ljJnHgZ3YUNqII5
+	dyZLAY6nXgnCdY+FaDKffc3xYfmxA2v+K2sg1b+ANbU7ABlU0dHH48fjyJX1P8wvxUv7uxmGrXB
+	zCzBG4UenjIkgxX1kaNtIL/cGLQvTJrY1fMlwjnugAmFLW6kf7qSLfSzN+LT2dZuDuxKDKdutug
+	sebdwHBBtUpleEf8f4LJsXTNTebpJ4Ffi2FWh8bOdfQ/bzIN9I7kEyEpWJGzwNdOcecipW/OfHl
+	Ps5WKMeG4F2GEivJVFRtONgTwY0tNXq72+ayWtD6wR2woWLeciFn1H0hQ6SF9Smi1b6NuolhoAR
+	C/KykfRPc7OLXyChZX4rnEL+Oj346c2QXX+n7+q39I71GqGa1bztng64IQYMLaVJM5ZNbyoEGci
+	cdl3aZypTldZzQgl9bEe8WBp+c5Viwks2X4QiBops2ufHHNuv2T5XXggj/2eZEHxlkAnEK+IC/n
+	ZZCtGZfb4OnJxgdMDrh0/RWT5U4sQ7Thg==
+X-Received: by 2002:a05:6402:2348:b0:6ae:a675:62dd with SMTP id 4fb4d7f45d1cf-6b17c2bfb46mr10924005a12.42.1791886955466;
+        Tue, 13 Oct 2026 03:22:35 -0700 (PDT)
 Received: from [127.0.0.2] ([2a05:f6c4:d34b:0:eb4c:5610:e9e4:9d1e])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c34d011dfccsm230739766b.42.2026.10.13.03.22.31
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c34d011dfccsm230739766b.42.2026.10.13.03.22.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 03:22:32 -0700 (PDT)
+        Tue, 13 Oct 2026 03:22:34 -0700 (PDT)
 From: Malte Wechter <maltewechter@gmail.com>
-Date: Tue, 13 Oct 2026 12:22:23 +0200
-Subject: [PATCH v3 3/4] kunit: add assertions for TAINT_WARN inside of
- kunit
+Date: Tue, 13 Oct 2026 12:22:24 +0200
+Subject: [PATCH v3 4/4] Documentation: kunit: add documentation and
+ examples to kunit documentation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261013-lockdep-kunit-v3-3-cdb8ff720c1f@gmail.com>
+Message-Id: <20261013-lockdep-kunit-v3-4-cdb8ff720c1f@gmail.com>
 References: <20261013-lockdep-kunit-v3-0-cdb8ff720c1f@gmail.com>
 In-Reply-To: <20261013-lockdep-kunit-v3-0-cdb8ff720c1f@gmail.com>
 To: Brendan Higgins <brendan.higgins@linux.dev>, 
@@ -93,87 +93,121 @@ Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
  workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
  Malte Wechter <maltewechter@gmail.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791886944; l=2647;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791886944; l=4664;
  i=maltewechter@gmail.com; s=20260812; h=from:subject:message-id;
- bh=93xC3/upfsa/twJxPDQzew/ko1gX/yS9rNw89pYITeg=;
- b=E4/SRkMIxWTOqpH4QGDb4bSD8sDdigI2DpKpj0JtUUCDX40gIqrqWG97Yt2KATqvDlHYDk5dB
- oaUWhab4BnzARRDlv8e6XKVuv0jCqx4cBBdD2bwv/9iyL4HDhSSiFpD
+ bh=aXw1L7g/upf/F3tnOXBS/dAE7Az9MAaw8sM83XMWJFM=;
+ b=197PL5sRImc434TSktPNDLm91sYqlCMcYaOqmobuwHoZ5KhTY6cLKelkof6ky+vRYJbqrT+m1
+ xtS9GuurHSRCR2QUeq6SU8ntr6qrQ23Suo3a5TjE/CC+RL85z9iqllK
 X-Developer-Key: i=maltewechter@gmail.com; a=ed25519;
  pk=Ta/JQQMOW0Cbxp+yEwWqWFEyKFRyuQeSoYicwD7yvWI=
 
-Assert that the kernel is not tainted with `TAINT_WARN` prior to running
-a KUnit test case, and assert that it has not become tainted with
-`TAINT_WARN` while the test has run. If this is not enabled,
-writing and running KUnit test cases that trigger a `WARN()` does not
-fail the test if the test itself passes. If enabled, it marks any test
-that triggers a warning as failed, and forcefully skips all proceeding
-test cases, since the taint cannot be cleared and the kernel is now seen
-as unreliable.
-The assertions are gated behind `CONFIG_KUNIT_FAIL_TEST_ON_WARN=y`
+add documentation section to Documentation/dev-tools/kunit
+named "Failing Tests on Lockdep Reports and Kernel Warnings", which
+explains the additional configurations namely:
+CONFIG_KUNIT_FAIL_TEST_ON_LOCKDEP and CONFIG_KUNIT_FAIL_TEST_ON_WARN,
+when and how they are useful as well as an example of an invocation.
 
 Signed-off-by: Malte Wechter <maltewechter@gmail.com>
 ---
- lib/kunit/test.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ .../dev-tools/kunit/failing_on_warnings.rst        | 78 ++++++++++++++++++++++
+ Documentation/dev-tools/kunit/index.rst            |  1 +
+ 2 files changed, 79 insertions(+)
 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 1292a0799c33..6d6f1e947db5 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -81,6 +81,30 @@ void __printf(3, 4) __kunit_fail_current_test_impl(const char *file, int line, c
- 	kunit_kfree(current->kunit_test, buffer);
- }
- 
-+/*
-+ * Fails current test if TAINT_WARN has been set (changed) after the test has run.
-+ */
-+static void kunit_check_taint_warn(struct kunit *test, unsigned long tainted_before)
-+{
-+	if (IS_ENABLED(CONFIG_KUNIT_FAIL_TEST_ON_WARN) &&
-+		test_taint(TAINT_WARN) && !tainted_before) {
-+		kunit_err(test, "Test triggered a kernel WARN");
-+		kunit_set_failure(test);
-+	}
-+}
+diff --git a/Documentation/dev-tools/kunit/failing_on_warnings.rst b/Documentation/dev-tools/kunit/failing_on_warnings.rst
+new file mode 100644
+index 000000000000..cf502995368b
+--- /dev/null
++++ b/Documentation/dev-tools/kunit/failing_on_warnings.rst
+@@ -0,0 +1,78 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+/*
-+ * Skip a KUnit test if the kernel is tainted with TAINT_WARN.
-+ */
-+static void kunit_skip_if_taint_warn(struct kunit *test, struct kunit_suite *suite)
-+{
-+	if (IS_ENABLED(CONFIG_KUNIT_FAIL_TEST_ON_WARN) && test_taint(TAINT_WARN)) {
-+		suite->forced_skip = true;
-+		test->forced_skip = true;
-+		kunit_skip(test, "force skip: kernel is tainted with TAINT_WARN");
-+	}
-+}
++====================================================
++Failing Tests on Lockdep Reports and Kernel Warnings
++====================================================
 +
- /*
-  * Fails current test if test turns off debug_locks.
-  */
-@@ -487,6 +511,7 @@ static void kunit_run_case_internal(struct kunit *test,
- 	struct timespec64 start, end;
++By default, a KUnit test only fails if one of its own expectations or
++assertions fails. If the code under test triggers a lockdep report or a
++``WARN()``, the problem is printed to the kernel log, but the test still
++passes and a bug is easily missed.
++
++KUnit provides two optional config options that turn these problems into
++test failures.
++
++Config options
++==============
++
++``CONFIG_KUNIT_FAIL_TEST_ON_LOCKDEP``
++	Fail a test case if lockdep reports a problem (and turns off
++	``debug_locks``) while the test runs, which is useful for any test
++	that takes locks. Locking bugs are reported by the test that
++	triggered them. Requires lockdep, e.g. ``CONFIG_PROVE_LOCKING=y``.
++
++``CONFIG_KUNIT_FAIL_TEST_ON_WARN``
++	Fail a test case if the kernel becomes tainted with ``TAINT_WARN``
++	while the test runs, i.e. if the test triggered a ``WARN()``. Since
++	a warning usually indicates a bug, this is useful for any test that
++	does not intentionally trigger a ``WARN()``. If you trigger a ``WARN()``
++	on purpose use ``kunit_warning_suppress(test)`` otherwise your test
++	will be marked as a failure.
++
++Forcefully skipped tests
++========================
++
++Once lockdep has reported a problem, ``debug_locks`` stays off, and the
++``TAINT_WARN`` taint cannot be cleared. The kernel is therefore considered
++unreliable for the rest of the run, so after the failing test, all
++remaining test cases are *forcefully skipped* instead of being run.
++
++A forcefully skipped test case is reported as a skip with a
++``force skip:`` reason, for example:
++
++.. code-block:: none
++
++	ok 2 foo_test # SKIP force skip: debug_locks are off
++
++Unlike an ordinary skip, a forced skip does not mean the test does not
++apply; it means the test could not be trusted to run. A suite in which
++at least one test case was forcefully skipped is reported as follows:
++
++- **Failed**, if a test case failed, and the remaining test cases were
++  forcefully skipped as a result. This is the common case.
++- **Passed**, if the forcefully skipped test cases only follow passing
++  ones. This is rare, and implies that something other than the test
++  cases themselves triggered the lockdep report or ``TAINT_WARN``.
++- **Forced skipped**, if all test cases in the suite were forcefully
++  skipped, typically because an earlier suite already left the kernel
++  unreliable. In the KTAP output, such a suite is reported as
++  ``not ok``.
++
++The suite statistics count forced skips separately as ``forced_skip``,
++and ``kunit.py`` shows such test cases as ``[FORCE SKIPPED]``.
++
++Running tests with the options enabled
++======================================
++
++The options can be added to a ``kunit.py`` run with ``--kconfig_add``,
++options CONFIG_KUNIT_FAIL_TEST_ON_WARN and CONFIG_KUNIT_FAIL_TEST_ON_LOCKDEP
++are independent of each other. Here is an example of running kunit tests with both configs:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run \
++		--kconfig_add CONFIG_DEBUG_KERNEL=y \
++		--kconfig_add CONFIG_PROVE_LOCKING=y \
++		--kconfig_add CONFIG_KUNIT_FAIL_TEST_ON_WARN=y \
++		--kconfig_add CONFIG_KUNIT_FAIL_TEST_ON_LOCKDEP=y
++
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+index b3593ae29ace..bdef2913da36 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -17,6 +17,7 @@ KUnit - Linux Kernel Unit Testing
+ 	style
+ 	faq
+ 	running_tips
++	failing_on_warnings
  
- 	kunit_skip_if_lockdep(test, suite);
-+	kunit_skip_if_taint_warn(test, suite);
- 
- 	if (suite->init) {
- 		int ret;
-@@ -539,6 +564,7 @@ static void kunit_try_run_case(void *data)
- 	struct kunit_suite *suite = ctx->suite;
- 	struct kunit_case *test_case = ctx->test_case;
- 	int debug_locks_snapshot = debug_locks;
-+	unsigned long tainted_warn_snapshot = test_taint(TAINT_WARN);
- 
- 	current->kunit_test = test;
- 
-@@ -549,6 +575,7 @@ static void kunit_try_run_case(void *data)
- 	 */
- 	kunit_run_case_internal(test, suite, test_case);
- 
-+	kunit_check_taint_warn(test, tainted_warn_snapshot);
- 	kunit_check_lockdep(test, debug_locks_snapshot);
- }
+ This section details the kernel unit testing framework.
  
 
 -- 
