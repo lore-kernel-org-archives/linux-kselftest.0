@@ -1,227 +1,126 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010026.outbound.protection.outlook.com [52.101.46.26])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B3E5208D7;
-	Tue, 13 Oct 2026 17:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.26
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791911878; cv=fail; b=oZr/5Ku4ZCD2VgZ/VfBmzzB67iW8Zei8Gs2JEWZEoH7sCq7YA5JL20MqrCthXWJVT+U7r7qkI7mzA6zhOmZn0bJiAddLCPG72eKJ3NCqnUUN2l0wVTtYRllpvbsu10Xf2zXW2uf5gbkRcEkrc7TcMYRFuEGY3e6xtNpXdrCDZIM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791911878; c=relaxed/simple;
-	bh=MdSNJ9xn/AIltuvpW67ApOACr80tqV4mfYxMTv5rcPU=;
-	h=Content-Type:Date:Message-Id:Cc:To:From:Subject:References:
-	 In-Reply-To:MIME-Version; b=XhdWVeUKpynquSVmaauBc2r+7lC3fNWvS8ohPsjgjEHmFvktw8M3Os5SH28MO7lHqIOXaaRx7l0N4p3xqvAzbqAikjYTdaZnMrhCNjv9HSlPheC7fBrw9jtNxv/99VOZVcxIhyjhDqjeRKYe+oC8vvBCnQ8uu5Cf8RZbly/ys7M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tJ72ARPb; arc=fail smtp.client-ip=52.101.46.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936B44825B1
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 17:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791912829; cv=none; b=UONF1s/3Z4S8dP7ceRCnIAYn+5VBoIUjPvP+iGTEs3QyJWzOaYjWh8oZpwKnE34jsfdDCuPHL90d2NJ49j+LdJrXytzox4fNYJx45g3YEBMNRB84Ozb5EC93O5X4oggfLM/s+kYOX1KkJWyFFtM3pylHgeRV/rT5NYR49p/zUzw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791912829; c=relaxed/simple;
+	bh=m+i5mTlUxTCnrCi8WzAtmzzFXQV0rJfs+5MtNGiKS8Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b7msHMnpsrjgMNrpztv0PdjPZivxVoHKt9KIpjChrmLaR/c93rVTqtlail472Ln4AZkCf3cdbT6zSS9NUx/oNdm+oeq2Xy/EzbEwhZ3JBCF9E8Dce51LfRpNfYje7TG2/CX+8r3HVpYAQTL1N1/LcDTfawwhJBNyGKSuSOO9q64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L5Vy0NpU; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tJ72ARPb"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jQRzIy+O21g5hrFKihTfV5zuDt1JgK5sRXVgte8NiemklFZut/rG1ZIQPLDjVRZlD1loXtdnWgdvdMqq62ycyleK0gi0VnOf+kns6LX0nW4VEg2AUunIDKFaIPSCcooGg/79wtD8NNtJi8yNEqo5AnIJZz0t2k0rKfmsD4vqJb2+X7+VxRAT5Lc2WmezpRSYkLWqL9cytpKM53vYdPOZEDkq2fhBSYH4ungGXnTyv6OVZJdVStc+YByGl4mOw3BPDUTKFvyLIKnT6ai66JxVCfJeX483TFHFSV8Iu9PpkSRmCyNpseswjAFUPFI/V6U4BDteTJxIV1PExSUHlnakrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wH++rHX5RJ8pU1kte9xB9stYVy5Z8Gq/JolXseyDHUA=;
- b=M3TLkg20gv0YAyVfIpOtfjv1SLgNB0NLU0CqUioWdUTJXRncjJeblFpgjaJ2d9wNNB7+j0N/Mhakovy341ywY3lbf0U2/nO8tTDYGfXfWFW+K2ThEQQ1VDVXPU9aaAwlw2kqHQ/jGKPrTKjdKgy1Ow7USfN+l3KE+WP1w2vJYqI0H57ib83OEVbuKGzIZfi3ToRA/mn6OC3jNLgZPTz+fXeo+VSzIbOZzpenEhoLUr254+9ufPfeTg3XPOyQoPdOOrzFl3OZkcWjo7/KqxfdXJv2RfVbtkcuBfxD0znMqbef+JxocrK8DC8o8pmCYYUsAuY1hsQuBndPv19KcCRmCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wH++rHX5RJ8pU1kte9xB9stYVy5Z8Gq/JolXseyDHUA=;
- b=tJ72ARPbLa2GG7OMlxdTaHIYiHFYF2jx0+AUaAyKsCWitqy79nc3/m3kjxscuOUrbsIBbvjXD80YVG92UoIYp9S0uZRvrAQpZ5sQzMWcGrwBkIgfNz87FtdbbVjFJcoT2ta+0324EHdWhsYO59u0Su+4gX6nx3P8DPEIRVIVIsABemvBoCp6MriITL8ynsUoAt06uvq+9NtOjYLd+l8DY4wpgwelDglEKR/EU+Gf3UvouJ+i0sJ8TtFLxgacI3QlB5YGYFxg9GlPM3O1BlVC3JxtWcw783y5iSGCPnILraJQaqYoV8uqEaExcsk52KqQzK6oLFS3Z/CxfCcFnK/Kxw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by CH2PR12MB4230.namprd12.prod.outlook.com (2603:10b6:610:aa::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.23; Tue, 13 Oct
- 2026 17:17:47 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%6]) with mapi id 15.21.0472.016; Tue, 13 Oct 2026
- 17:17:46 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 13 Oct 2026 13:17:44 -0400
-Message-Id: <DM3VQQ8KZGGF.FODPE8YAHBE7@nvidia.com>
-Cc: <bpf@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-To: "Zhen Ni" <zhen.ni@easystack.cn>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <akpm@linux-foundation.org>,
- <vbabka@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
- <brendan.jackman@linux.dev>, <hannes@cmpxchg.org>, <shuah@kernel.org>
-From: "Zi Yan" <ziy@nvidia.com>
-Subject: Re: [PATCH v2 0/6] mm/page_owner: add bpf_iter and kfuncs
-X-Mailer: aerc 0.22.0
-References: <20261013122125.843451-1-zhen.ni@easystack.cn>
-In-Reply-To: <20261013122125.843451-1-zhen.ni@easystack.cn>
-X-ClientProxiedBy: YQBPR0101CA0259.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:68::20) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L5Vy0NpU"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d8fd7a3f38so164675ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 10:33:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1791912828; x=1792517628; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=qsfJHJAdVQ83GKISdOFSgeXuIu/91TZW8ltTQ/2oo/k=;
+        b=L5Vy0NpUII7ewM/cx4UM0kPWRO2ApbVBxPubGhJKJoRK8E4G23eV28CZ5n2zGZgqCT
+         kWH6aZcup0sUVpj7m+mtINUa9yqzqOfc0Vtdrd5Bsxq0iDa1tJ5a0YvV1bJO+QGxcWF6
+         DWSlHUYrim965MKghcbksimcpWRqKQQG0o6DYAw6BUkoidplq7AQbUdXs4AhDtLzTVeh
+         9zQFu7w+bEvc6/vthrZHX0tCPIK/2anhyYgtUN2ySiCFOHQjHNw4xJBYMuI9aBL6UvkX
+         srwM0xJqVYQq7P7jFtgFh5BM8Kt1PMSJdybasoucH8Rayt8/qW2BviKwHa0ZWQP0sJoO
+         cyVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791912828; x=1792517628;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qsfJHJAdVQ83GKISdOFSgeXuIu/91TZW8ltTQ/2oo/k=;
+        b=LPjzyLRZpIjoJjyIIjDmP1cTOHx5u3zMI3z3u2pResGA/CwI66rX3yKZIY4VAtmnKf
+         WHIJjusEppcX7Pn/JsZATEK5FLe5fRF2DHxdxE+7hof2zFy8xJfne1uEA1nmbyWTXDom
+         eb/8vLCCTOnaKeHgbkqBuLvMA08Zvwpy2qKraDZe/kFTTYyKRzlGdHJBH6TEvE9FwYJH
+         ywjCpAm0TZiGqB9oqBZtqZYxYmsRBbZD58NAyOyLN9JyrU0/ZwnlGahv2by2U6+dK/Ew
+         mFSlD+shDz/vaMWqbdPxYHh6Q1tBJKOs9WVp2tJKD2igXY25iiECO2Gq7nsj72jE25+5
+         E3bA==
+X-Forwarded-Encrypted: i=1; AKwUvBxSi8IWkRcUnxnuBdgF3qtPMDmLFhMqEidlcQMBRNM7G5Zs0OZ9wnHDj4xo3Hw63pmgzfB0NW2JvqvhRjXX3FU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLeaHL/vybx1PgN00JviHgH02wybqClWkCAUfAm3qVSL0V9+R3A
+	7Ww0zPytQeOpnSTVFN1URfhFl3oOypicrjFCUP4BeWfDbA/G4Kmjv10dIzH2Bw+yIQ==
+X-Gm-Gg: AYBFou15o97R8zPm4arS++eNti9TSwqhRvm+nbELr+Hpq9z0Of22dDz+e8TBGTQEgIm
+	1ctmgecMucovcDdv9BsMlWXVjCTVHhtmJ2MSPw9NMgCwmS3LOaxjGIt1eJM3cWKGp1N+PAlfuYv
+	V+N0+W6TOOcQEvwDb9gcDFECHSZqm32kzN4PCg0fFDbCaiLl2FD2Pgb6GrThFQQZUHyMkVOq+Ar
+	XPbKQ1CaX/Dp+n9P1g+uhE2rcdwKcJYnCDhhsoAIky61Ty5/xbz/wf1Axh6bVNigzgQs6/RQFb/
+	qp+ZWa+rlbuZmkfcNXwbNIfb7ZXD8NuYJHGFneQMseLa3azrF6eH5ql/JIuB2nKAWsUqenNLj3J
+	XrDSqVLYwgcXOsg8+e9BgleSOI3SXZkhkdRLXhaZcndAlGUsqRJVRrRpaVJPCVyTc4lxE0jzC+1
+	d1Uprrsy6FP4vT9r0BgNCJV3knQdz4x7WejCbGH6/c8JKxrjMBU4deYM81g/FEkiFkntjymfQEg
+	tbsTkJWAQ9yZsEVlOCTlptA57pJ+k9i
+X-Received: by 2002:a17:902:ebc6:b0:2e2:d665:6ad8 with SMTP id d9443c01a7336-2e87bc2190fmr12955725ad.4.1791912827258;
+        Tue, 13 Oct 2026 10:33:47 -0700 (PDT)
+Received: from google.com (75.57.168.34.bc.googleusercontent.com. [34.168.57.75])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac600a0619sm637262a91.7.2026.10.13.10.33.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 10:33:46 -0700 (PDT)
+Date: Tue, 13 Oct 2026 17:33:43 +0000
+From: Lisa Wang <wyihan@google.com>
+To: Binbin Wu <binbin.wu@linux.intel.com>
+Cc: Xiaoyao Li <xiaoyao.li@intel.com>,
+	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org, Andrew Jones <ajones@ventanamicro.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Chao Gao <chao.gao@intel.com>,
+	Chenyi Qiang <chenyi.qiang@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
+	Isaku Yamahata <isaku.yamahata@intel.com>,
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Roger Wang <runanwang@google.com>,
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Subject: Re: [PATCH v15 14/23] KVM: selftests: Expose function to allocate
+ vCPU stack
+Message-ID: <as5rd8F3pLmimtGe@google.com>
+References: <20261001-tdx-selftests-v15-0-7c62a5d8a992@google.com>
+ <20261001-tdx-selftests-v15-14-7c62a5d8a992@google.com>
+ <b2143700-da36-418c-af63-0b50b33f080e@intel.com>
+ <932ec219-5951-489b-bda9-1f6e9a605a9b@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|CH2PR12MB4230:EE_
-X-MS-Office365-Filtering-Correlation-Id: 890d9bdc-a891-45e5-18e8-08df294de663
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|7416014|376014|366016|6133799003|22082099003|18002099003|10067099003|11063799006|921020|261009223027099003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	VUjnwpW+IBisauPGGqJfjPbCGTagrIF9wrCi4kshjzMC1UADgGhYzbklqyg9+OeWcyJIOb7+7EKcoHsGnzMHVWNEPluOldXj3jXu+IFvOczd8NLt6z8jbatT0Mx7W5PO9ul3o+OUyu/Ve6q80i7OJyOsw5D2gvTDj1it0GAnJ1ilUROFa29Yax6EUKfqV3ZAy8OFjWeQJLM6O7Zwa3qOv2e4TSCz3lIk+bBvX1tio0LQiKJhSwzU8ANTYaUUsxw1+F8+0vVcXXCp25H52b1AUuenJvb8gc8Qx6OOn0bRLB5Ii0E1VlxUHyuTFaeRgPRgAC1ZRB8KT11euZmSHAlkJTWLSmh1fEo+l2r0rjwsXHFAAExxYL9n+cMWLOuIisUg4K3oNQDRJ9HVD4QHzMfn8rlKiYbzdlXQVZrAr1daOetwZW/zIdhu65fWLhvO1rrnR+khgqlKQhAHYBMNyQzS67VA9GrQ4CsFU8WVdftVe3iiHD8ZXuS++SvreOAo1iSfXVS7kYbM7ft4CTGuLIvAHuZT3xk7Asvlz3DR/bpTJG+8AmhJxc4qIHfnqfUopt04W8pE3kP7y0vbTGWyLp6ib0VzdtBoWMAUybGPcAH2VoqPS+UaHGhpTo+b4j1PgXmEC/00fPlDMnAsN1rynKUqOE56A6be3uSyqrHL5PV/ptfrSb5XwIHnOmjVvJvQutOHMZ5fhnflwIC3Clki2VqEqQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(7416014)(376014)(366016)(6133799003)(22082099003)(18002099003)(10067099003)(11063799006)(921020)(261009223027099003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cjY2dVdpYitHV3IxZEpvdE5YcVNGMWZycW5TZHVyTi93QlBJZkpNY2t4K096?=
- =?utf-8?B?NkNaamthbmJ2MXZpRS90M3VSalVlbUhtMWNIQlpaVTRFUnMxeEpqcGh1VVVn?=
- =?utf-8?B?N0FjOW5uNzIwczc0bTdUem5adHhEb09SbytmTjlFUlNQcERoTndObXhhQlph?=
- =?utf-8?B?WU0zMUdDejZlZGR5SFRDZXhHdERCVk82SjI3SkExM09FTHdLdTkyOFEvaEZx?=
- =?utf-8?B?SUYrKzFHa3hTOTlwVlpNUC9qbldaak42WFcraTM0clZISnFkaFQyZ3k3TUM4?=
- =?utf-8?B?bjU3L2J0ZXQwTEpYb0ZWQ3B5RWN5bEt3L0poS1pQZDk2MnFYMk50QmR4ZUJZ?=
- =?utf-8?B?VEl2bmxxaStpcXVTaTVkMGVIWm1xWVZFS1JYOWx0RUxLZitiV1RBMEx3QjBn?=
- =?utf-8?B?ck5HeTBxdUNhRXYzdjVNT0xrL3RwU0xSY1pFUWQybFIrQUF1U0lGTm1BY3BO?=
- =?utf-8?B?dmFnU2Q1bjJOVVhjMmt3YlNSNVQ0UXNKcm45R1BIMmthclRNOGJIOWZnbWQy?=
- =?utf-8?B?M1VxeFdFK3M0c1RvcW9mTElwV3BWMmVTNnNRbkdHQjFROTRMK1liNktiNXdX?=
- =?utf-8?B?T2dwUTZsV0IwVWYybnJCVlA0VTh0SXFZNWZzLzFJV3dCK1RjSHA0TENOTEhh?=
- =?utf-8?B?R2JyYUI1ZzNTcXdXZ1NDek1Jc3FMSGdDMDlrMEYwMXJaNWVaVHZpL0xCNEdh?=
- =?utf-8?B?SlVpQjEya1NIclRNTVFKaVgzQ2xEdmRCN0NwR0F0RHVuRmNjcnlhczRuQ3Rv?=
- =?utf-8?B?emhzaTE1Nkk2WXEyRTZycXRWTzFsVU1pSWVpNmphQ0dzQXZOSHVRNkpOOXJE?=
- =?utf-8?B?VmJSMlZ3YWY0NkVtRzV4ZjhtV3BHdlIvMlJ0bFF2bjBSdmFhS0FnQVdsTTgy?=
- =?utf-8?B?aTNNNDA2Z3FqR2JucTkwbHU1Wm5pc1NyaGh5MXNET3JvQ0tiMGQrLzBESXIz?=
- =?utf-8?B?VkJLZ2NzNlRXS2Ruc1JrQ2tkWVNhYkNhUUlOR0pXSkh2NHJRL2Y2MW5lS2tl?=
- =?utf-8?B?R3hJVE4xcTE0MUZDZ0VzNDdEV1hYdFQvSG52VlNGQlpaMFJSZFgrZHgzTGRZ?=
- =?utf-8?B?OS9obmFhKzVFN3hNWERFWE03Tko1QXVOQnJIUmdqV1dOME9BVVoya1pQNUZR?=
- =?utf-8?B?cFFxUmtkY0VCemluTEI2dTB3MlpGcWhSVE1IT0o0WnA1angzK2RJNit2Snd5?=
- =?utf-8?B?eXZDM3E1eC9oMjhSTkFVYXhxNGtIR1VPNVRpVVRaMVlndG5iVDFVR3V1ellE?=
- =?utf-8?B?bGtJRXlzT2d4aDdvTGVDUE5TSWdLbWQ4L2k2UWdzTG1ZamdkUDhIMU0zK0xX?=
- =?utf-8?B?QmpoTUdCZGhpZ2NhaVRJZkk4TXMvNTVRNFpBRVBDL0NUeDdNdTluM0trbFFo?=
- =?utf-8?B?QThaakRMMUJkVG1JdVphY1VhNFA4Z2U2UUo4Q2NaMHFCMFdUVzBSM0hOSGZG?=
- =?utf-8?B?dzN4VzRIVHJDRnNuTTNudkZEeTQvOURoNVpJYmN1emxva041NnFoMEZ4Tk9Z?=
- =?utf-8?B?WWM5NTFVOG9RTmpRS1g4V01tbWhROWQvdmM0NnE4NHV0MkVNR29ia3ZMcmdj?=
- =?utf-8?B?Yjg2aHdKUUJReFdrZ1JYenJGOHh2SUpRYnlyLy9sb0wzVnFTd2ZtamIyZlpv?=
- =?utf-8?B?Sk1NMnc4UjV5S0RJQ3RQVFd5aC94eHM0UENXZ0JlcllSTjlUQXI5a3gzbHNV?=
- =?utf-8?B?cEFLNmNrZG5SenhZazhzeHcxWGlpMG55U29zQko0VTFENFM4WHNiYjZDaWt0?=
- =?utf-8?B?MXlQTGJyQThZQlVNaWJWRDlHc0k5VFFSd0JjaWtGUGRGbU5GVEJnU3FKNmJO?=
- =?utf-8?B?enFjZWJYYzY3b2FSS1I0QWRoMUxRU0syc0Y5Sm9LMDFienNVOFZNVHErYWJ4?=
- =?utf-8?B?Nm1xQXdZOWwxd0R1ZFQrTFErTXZ2M3FJTnJoQVJRSmQ5RnF5ZmVYT3RzdDhY?=
- =?utf-8?B?dFpsM3lUWW1KWk85c2JrTzJWbG1ZajJzUDRzUW1WVGtpUzJ0WXVKdXdFWHhs?=
- =?utf-8?B?NXEvZDQ1UVBjcnhIWDdERFdoRytkSWgwMTZvZ3B3MS8ydTBUdWpUbnFDamxX?=
- =?utf-8?B?SHZsRW1SVjIwMTZ0UG12dXBGNUZMNUNqbFNSYjd2b0puaG1sYkUyRjYvaWJZ?=
- =?utf-8?B?b0FpQ3RLMEs1RWVpUzRrVGowa3ZIbWlybWwzUm1OUjhVa3VBOVhUOHNZOGZE?=
- =?utf-8?B?cWVHcEFiUEo5QjNWb2VvWEZuZFFiMXVOM0NuSjQ4cWk0alJYYUY2RzlXbDhL?=
- =?utf-8?B?N1RWbUtBRFJpUW1KRklUYXZZVTBjaWhzWS85UlZRZkNiejVYNVNoSXFvb0da?=
- =?utf-8?Q?iUm+aElHqw0969tiJW?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 890d9bdc-a891-45e5-18e8-08df294de663
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2026 17:17:46.6494
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eMSQfLI8W/dLoQ8aKZLldWjoD9wQPWQJi+Mhc+jM/wKwveFdf/Bu+dGIngCjtS7e
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4230
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <932ec219-5951-489b-bda9-1f6e9a605a9b@linux.intel.com>
 
-On Tue Oct 13, 2026 at 8:21 AM EDT, Zhen Ni wrote:
-> Hi all,
->
-> Introduction
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> page_owner records who allocated every page and is a core memory-debug
-> facility, but it currently reaches userspace as the debugfs flat dump:
-> slicing allocations by pid, comm, NUMA node, cgroup or stack, etc.,
-> means streaming and parsing the entire file in userspace, which is
-> expensive on large hosts and hard to query live.
->
-> Exposing the same walk to eBPF lets a program filter and aggregate in
-> the kernel and surface only the records it cares about. This series
-> adds that access as a seq_file bpf_iter target and an open-coded
-> iterator.
->
-> Implementation
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> The page walk is factored into page_owner_next_eligible(), shared by
-> the read path and the iterators so eligibility stays identical. Two
-> kfuncs expose information that a BPF program cannot decode from the
-> snapshot alone: per-page memcg info including the full cgroup path,
-> and the stack trace behind a stack_depot handle. Each record is
-> snapshotted under the page_ext RCU lock, so consumers read a
-> consistent copy.
->
-> Testing
-> =3D=3D=3D=3D=3D=3D=3D
->
-> The selftest exercises the seq_file and open-coded iterators, and
-> validates the stack_snprint and get_memcg_info kfuncs.
->
-> Changes in v2
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> - Route the zero-handle case through ext_put_continue.
-> - Drop the scan->pfn++.
-> - Fill page/po/pfn only when v is non-NULL.
-> - Implement page_owner_seq_stop().
-> - bpf_page_owner_stack_snprint() now takes the scan cursor.
-> - Buffer args renamed to buf__uninit/buf__sz.
-> - Removes the v1 get_nid() kfunc. The node is now stored in scan->nid.
-> - bpf_page_owner_get_memcg_info() now resolves the page with
->   pfn_to_online_page() for an offline or removed pfn.
-> - Buffer/info args renamed to info__uninit/buf__uninit/buf__sz.
-> - Drop the get_nid kfunc coverage.
-> - Enable CONFIG_PAGE_OWNER in the bpf selftests config.
+On Sat, Oct 10, 2026 at 11:54:42AM +0800, Binbin Wu wrote:
+> >>  
+> >> -struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+> >> +gva_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
+> > 
+> > Besides what Sashiko pointed out[1], this patch was just messed up during the
+> > rebase and it even doesn't compile.
+> 
+> 
+> Yes.
+> 
+> And since the upstream code already has vm_alloc_stack(), which basically does
+> the same thing.
+> 
+> I think this patch can be dropped. 
+> 
+> > 
+> > [1] https://lore.kernel.org/all/20261002091331.BA23F1F00893@smtp.kernel.org/
 
-Hi Zhen,
+Yes.
 
-Thank you for your patches. Review focus is currently on hotfixes and
-patches already in mm tree. Please ping us on this after the merge
-window is close, if no one still has not looked at it by then.
+vm_alloc_stack() can replace kvm_allocate_vcpu_stack(). I will drop this
+patch in the next version.
 
-Thanks.
-
->
-> v1: https://lore.kernel.org/linux-mm/20261009112308.240769-1-zhen.ni@easy=
-stack.cn/
->
-> Zhen Ni (6):
->   mm/page_owner: extract page_owner_next_eligible() from read loop
->   mm/page_owner: add bpf_iter target "page_owner"
->   mm/page_owner: add open-coded page_owner iterator
->   mm/page_owner: record the NUMA node in the scan cursor
->   mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
->   selftests/bpf: add tests for the page_owner bpf_iter target
->
->  kernel/bpf/helpers.c                          |   7 +
->  mm/Makefile                                   |   3 +
->  mm/page_owner.c                               | 219 +++++++++++-------
->  mm/page_owner.h                               |  58 +++++
->  mm/page_owner_iter.c                          | 197 ++++++++++++++++
->  tools/testing/selftests/bpf/config            |   2 +
->  .../bpf/prog_tests/page_owner_iter.c          | 193 +++++++++++++++
->  .../selftests/bpf/progs/bpf_iter_page_owner.c | 159 +++++++++++++
->  8 files changed, 758 insertions(+), 80 deletions(-)
->  create mode 100644 mm/page_owner.h
->  create mode 100644 mm/page_owner_iter.c
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_ite=
-r.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner=
-.c
-
-
-
-
---=20
-Best Regards,
-Yan, Zi
-
+Thanks!
