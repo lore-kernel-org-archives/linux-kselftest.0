@@ -1,171 +1,185 @@
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6014F3FA5CC
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 09:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B89DC4D0A11;
+	Tue, 13 Oct 2026 09:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791884289; cv=none; b=sIUDYRi4kzLUOMai2v3rmVUzNJZJ+os4tsARnuc2gX/xQNOuqyqtE810eTwpuHvbcFAXD4r+bBmfDXgE/uAEXBLeQK1NvpSJUC+Ga13+kcdqpk52NJt01ILCEgnclItRFrJNF0bVpFAoslfvdFQqmOCZvdfgXm7V/MtR8WnVmkk=
+	t=1791884785; cv=none; b=aTm9sYP0OiN4GeNaZyr+Wjto0r7GtnOD7oKlqqc9CQ7nFc4OGektv0kkDzb3JL314EfB6oEiAKqo/r8zMnM3NEevxjjnltjeCnEHm9YrW4X9O+w2DgiF4mb5Fuutc+OU0MS/U+ULZSsWNpmiN1l75s1v2r/V1UGrhvZzaboc6RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791884289; c=relaxed/simple;
-	bh=7CTQPPO2qQ2ZoSuCsvkYLKcbd9ZRQEFN8AaPBnDBHcU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a0LPC3yhUF2cpnltZdvuLdLwb7f5Bs1BehJCgFPyZ4N8+YWbiGg7wQ2i8yqye+hdFq3qS7EsAjN7bTKXmJQ/puEJlAmMUyUakYEWLUvBLt1AGul+1DofBNtsPLZ4YWJ4m1srPC1cMeBZViKtn+wMI0kNDIcXuSTBUUvo0QiPASc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=d7Pj2hLV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DMS5V+0H; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1791884785; c=relaxed/simple;
+	bh=Dvxi4UcnV8EfMkMwlagrsaj+FJ236sNPUc/9icWdcFk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cLEuJimafMkA28SM5bCcUgHABSvJZBK2vGmysrubXRT667PikRCGfTZnOk61Y5XbvtjHSwzDY1Bt2kRql6pkfgWciHo4wfn99LC7TkB7TPK4J9SEPW9eNtmNUYYTxtmlDffGdzN9ALDazvLWlNZXRMAIwEs7McFXs261ivpAjNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=fpMCc4pA; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="d7Pj2hLV";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DMS5V+0H"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 6DC42140016B
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 05:38:04 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Tue, 13 Oct 2026 05:38:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1791884284; x=
-	1791970684; bh=LQCntHHIX/z5AYDFTk7naJrzWzZHIxRMf2UeBMyYXa0=; b=d
-	7Pj2hLVNapNGRQ7wnzfXMXOgvRCR1WjokoAkJKXpfrqCNjb0EilV7mT4pbpdZ5SO
-	j7TZjIt2+iFi4ofhRFbOhKsFH6xTicEHXV6NTQ91Gs+clfytuuhpBNiDfkzWE8Vg
-	8EhpiQ3U2fufHakCY/sNtmIdfCZCPLWacUkSMCFrLvxv95LykjiaUP9vo3WnZCQV
-	+qXhpnGCPU2WHUZ4tu2MO7bdIeIOTS/vC9pdZpYPAMoHPU9LU9vDJhVH338tdnHj
-	FsmYXfTyq79KQqVHT1rL6yQ5WTnP6OsyopRi/xn/iHkPX86lVT/OU/vAn9N8Th3M
-	OA/YnAxWJOc/aiJ95h4zg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1791884284; x=1791970684; bh=LQCntHHIX/z5AYDFTk7naJrzWzZHIxRMf2U
-	eBMyYXa0=; b=DMS5V+0Hiq7+a/wm86w/K4lryF6eUVIC4wItQvci7eekzLMu/xn
-	BMRRurukeP/ZBa+BuLl10YYWknmYIzJc8JURAZbkfz5uiY9pXa2k2pYGwha53DcG
-	8+zS0A4+RrLlX62uCo83HNoNOt+zMfSlTPK5hhCiUfAi2BsehfLOiA7cw32IMMKc
-	ENwMtPXGG1Yqt8FwuWIA7x9h7eHclb2BlaHPMxHEluPSTJdiUXK4rwMe9LzKpBMP
-	ZBiKPzzhXWv4v41DySz/ijO0ACESyUTjfsDShAcUAIgXtrAwsMxrTrbNU2N/CnLn
-	Iee5iRLTcteLRkeR6hzv/20d/wv/fze1fZQ==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=sign d=queasysnail.net a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1791884284; d=queasysnail.net;
-	mf=PHNkQHF1ZWFzeXNuYWlsLm5ldD4=;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm3:rsa-sha256:nTGdZx3T3JO+p1fh3kaKT9s8I/+VVabaXBW+6LyrzR38Qnc
-	ysLXuOVyJAMmoNsX+WL01j6vLATNPwDD/QuYtMZWZ9Xng8zHMDlP0ZXAmG1fiuEc
-	XEm4iM7AMaJs4GrFrk+nnfhLfaV+yTwnfeneOyjvbENMnMj08dBYPQQOwtZin6e4
-	J2ZKvt+8iKqgzwZ5LM+YkuNNj8XVelwsyddc0y8a49YqIybm0zvwq5Kutm3Zrccz
-	uSgVQYF/FlnY7lLr1uvE4ARx/6STUpTDsmWzc9h5jrdgY7PVALehQYyiZ0sG6Qi1
-	RrVfLqh5N8W3Y/QRfeEEAK37QKHx1Cg3lox1Zrw==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-disposition,content-type,date,feedback-id,from,
-	in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:jq0AKZ0ZMZ52TQNweCflPClrPKpb6HhVfjSHA8skpjQ=:7CTQPPO2qQ2ZoSuCsvkYLKcbd9ZRQEFN8AaPBnDBHcU=;
-X-ME-Sender: <xms:-_vNaoUP1I29ZAE6SA9h4duVAo4gWSN7xbQykyKxTLowaiASwcmwlA>
-    <xme:-_vNagQNniucjAaY1V91uLTPzl51hcLHEBdKWFmpPgLdXocwDP336v7MRf84fi2Ya
-    U7Ivc1vM8ayA-uJF5Hbtdno6WMzxkelrTfc024lx8En12lSayOKxqJ->
-X-ME-Received: <xmr:-_vNalBwJNG9-akjHytwU_FWsobZlC47zpDxbofme75B90VO9-N2hQRGPaU>
-X-ME-Proxy-Cause: dmFkZTFa1h1u84m4cXgOhRTv63380DK+WDI1GkNmDzoEUq/xf5UHejNkra0evyB7asAR31
-    yn52SZAx2R9zdjUsHRnU9dp8FBIRzp+3dss2aUTpXsHANFdqRa9s0CRlyph3O/AR0EG/0S
-    OvM+gxGdAGvnMupgXXHufHuhCLzO7dI8JowinfWoYu2FmnDh6QBC8xDY56TTkCwp0J9BLz
-    /Q0mzHIFM5k5cMTOBIKgtjpRj3oJxfMFc7tyrR1r+v9vVo8moXn1pVhf9FGKnCXk5v2bIh
-    sXbkx/RpKyqeZ7XHuScTQXNYNuJWHsnAvwR2cpAKQqPxAsL72H6CTRPrZqXSwa8ew2EKAj
-    mqIeCbJngjEh2q0qCF3H1ZY5+GpKJSLhskAYzhgIrep+B/md2bmkbEia4wx9DLxqZrO/7Q
-    tTnJFsvv4TApfNaiPQecG5t69AWVJ1kzJtS7m/QAXeE98E1NJS0PNYYtq/vQRUd+QG5UgJ
-    U53e8oVlEN2TlnZKJUTvlDMykV0KtxoHV9r3CK3aUkvtk1XEQbKereA78SQkRQVIfN6X+m
-    fq3+g84a8TKl5pqwFIwUSly7oOq11mutNBbnW/B62YEt+7aNVaOmXHfA3xzStB3hCMQ2Cb
-    18zxwMp9fx2I4Z9gMQS8ELb0FheOxj8uEb3LzR9mJSpE/Ilh+itEHZwEA/og
-X-ME-Proxy: <xmx:-_vNaov5q-NbIGtN8DF-e5p4EYRbk7cay6Mqwv92RB9TBLidOitTBA>
-    <xmx:-_vNaj-q-iepGO2biJ0HTir1qhMX1sfxEuaVjAiap2qp2xxp7WH0fg>
-    <xmx:-_vNavRV4Ww0K_egHdmo8LHEcN96JtmTBMhqjWWZXNO6rOXh8Y9OfA>
-    <xmx:-_vNalVkloa3BASndxzqEFYGka7Rb8tnmdb_YYw6z72EGSw8pO9GIQ>
-    <xmx:_PvNakNbSIQX86AxZJ3DY9bUZugZ_TXWHVYGTn4dWQOhJ-FK5N-BNel2>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Oct 2026 05:38:03 -0400 (EDT)
-Date: Tue, 13 Oct 2026 11:38:00 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Rishikesh Jethwani <rjethwani@purestorage.com>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] tls: refuse RX records after record-number exhaustion
-Message-ID: <as37-A3DKONrFuxs@krikkit>
-References: <20261013002701.1957686-1-rjethwani@purestorage.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="fpMCc4pA"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75711169C;
+	Tue, 13 Oct 2026 02:46:15 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35DA83F7B4;
+	Tue, 13 Oct 2026 02:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791884778; bh=Dvxi4UcnV8EfMkMwlagrsaj+FJ236sNPUc/9icWdcFk=;
+	h=From:Subject:Date:To:Cc:From;
+	b=fpMCc4pADCI0HrdE+ZF9uvoVHRBECnNlp2ZP7hfrVwJxvzQOaG4GipyUglyz/Smk8
+	 wGcZ1FdG7swfYPiEJe1TGJYfewAT5qP2vAN91b8fcSHQahPB+wkvpE5U+Y/NMrZQLr
+	 q4iIkQLF47fM4CHscSQglHFA8C7l2ZMktS7Fm8I0=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH v6 0/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
+ macro
+Date: Tue, 13 Oct 2026 10:46:03 +0100
+Message-Id: <20261013-fix_hpage_macro-v6-0-2c52d0484de3@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261013002701.1957686-1-rjethwani@purestorage.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANv9zWoC/23PywrCMBAF0F8pWRuZNkk1rvwPkTIk0zaLPkgkK
+ KX/blrEB3V5hzl3mIkF8o4CO2UT8xRdcEOfQrnLmGmxb4g7mzIroChBg+a1u1ftiA1VHRo/cIt
+ QaiSQCgqW1OgprayNl2vKrQu3wT/WA1Es01dXLjddUXDgRqMAhZBboc/ou70ZOrY0Rfmli3yr5
+ aItoaxNaUjUv1q9dQ5//ogqaSXF4YgkFVr70fM8PwEGfqPsKAEAAA==
+To: Lorenzo Stoakes <ljs@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, 
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+ Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>, 
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+ Sarthak Sharma <sarthak.sharma@arm.com>, Yeoreum Yun <yeoreum.yun@arm.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5863; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=Dvxi4UcnV8EfMkMwlagrsaj+FJ236sNPUc/9icWdcFk=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqzf3k5yZXNxhcjn69gl72vzxL2PDv8otU5cYDj
+ pJUiOBTpKWJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCas395AAKCRBt1cPRWsUx
+ M1glC/9Senkz41a/iONu85NMt4pbyr3nsZaJ1YqwpUDkc8RJPaX3JXZvXWqkSyGQFDscQq8fR7s
+ GiMDFWQNqEcHKhKUbPOgMAbJKWChoGTpGg+Vorvor2Yn0u7k4htFeGX/AJAUGlezOEy6y/BCKjd
+ 5SI8H5sYvALoDb2ZhhC87xcgFvkc7I9WHs4qvjhwO88Y4PRffkuPGWBHix41o1rMTMNXE0pumni
+ sLUA3vOm8pNMWWNlp7puZZonQhCeySD5tUdCRLr1/JpNcPpDeF4H0BYHHd8Dy6bUF45lII27y7E
+ cYitYQmOvoptgSpEqSJ2HFURKDDnB4hZU4VO0uJD2gUxM2pyUDjqfXLa6fXXIQjUeubeckKZRz1
+ gDhKeqy+lEkvX935rxXjv2GWWoYOelcDn8ESXWrA4rSOboQnJKcPPyZQupv0UDphAsbl+b1426a
+ M9BVMwlze4wiMSZ1bB+ai5LJSrTpll7GcuVY4J60kHoZYokPHSJQYuSX08sreCpcQoG6Q=
+X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
+ fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
-2026-10-12, 18:27:01 -0600, Rishikesh Jethwani wrote:
-> A receive socket records sequence-number exhaustion only in sk_err.
-> After processing record UINT64_MAX, it advances the counter to zero and
-> reports EBADMSG, but SO_ERROR or sock_error() can clear that error.
+HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+When this macro is used in some test, test result would be strange in
+the system where PAGE_SIZE is more then 4KB.
 
-I vaguely remember a discussion around making some fatal errors more
-permanent (ie not use sk_err).
+Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
 
-> parser-ready record also bypasses the socket-error check in the record
-> wait. The receiver can then accept a record authenticated for sequence
-> zero under the same exhausted key.
+  transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
+    3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s       2566 succeed, 58507 failed, 2566 different pages
+    0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s          0 succeed, 61073 failed,    0 different pages
+    3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s       2566 succeed, 58507 failed, 2566 different pages
+    0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s          0 succeed, 61073 failed,    0 different pages
+    0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s          0 succeed, 61073 failed,    0 different pages
+    ...
+  ok 1 Completed
 
-I guess, but what's the problem with wrapping as long as we don't
-reuse the same record number?
+To address this, remove the HPAGE_SIZE and HPAGE_SHIFT macro,
+introduce pmd_pshift() and rename read_pmd_pagesize() to pmd_psize()
+to keep consistency with psize() and pshift().
 
-> Getting there needs an initial record number installed close to the
-> limit, since 2^64 records cannot be exchanged in practice, and a peer
-> that sends the wrapped record, which the Linux TX path refuses to do.
-> 
-> Mark the RX key exhausted when its record number wraps, and refuse to
-> wait for or decrypt another record under it, or to replace the key.
-> Plaintext that is already decrypted can still be read. RFC 8446 lets a
-> sender retire a key with a KeyUpdate as its last record, so in that
-> case leave sk_err alone, report the pending key update as usual and
-> let the new TLS_RX key clear the mark.
-> 
-> Add fixed AES-GCM wire vectors and TLS 1.2/1.3 selftests for queued
-> wrapped records, SO_ERROR clearing, splice, peek, partial reads, TLS
-> 1.3 key replacement and a KeyUpdate in the last record. Every case
-> first verifies the penultimate record succeeds. The vectors avoid a
-> userspace crypto dependency and the TX path's refusal to generate the
-> maximum-number record.
+Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
+which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
+and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
+PMD-sized units, the test may fail with the previous size of 100 MiB,
+which is not a multiple of the PMD size when the base page size is
+16 KiB or 64 KiB.
 
-For 1.3, just do a "silent rekey" (change the key but don't send a
-keyupdate) on the TX side to record number 0 with the same key? And it
-should be enough to test this with just 1.3.
+After this patch, output of transhuge-stress:
 
-> diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-> index fbb274287aa5..63bef0153182 100644
-> --- a/net/tls/tls_main.c
-> +++ b/net/tls/tls_main.c
-> @@ -730,6 +730,15 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
->  			conf = TLS_SW;
->  		}
->  	} else {
-> +		struct tls_sw_context_rx *rx_ctx = tls_sw_ctx_rx(ctx);
-> +
-> +		/* Only a KeyUpdate may follow the last record number */
-> +		if (update && rx_ctx->rec_seq_exhausted &&
-> +		    !rx_ctx->key_update_pending) {
+  transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
+    2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s       2585 succeed, 1232 failed, 2585 different pages
+    2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s       2585 succeed, 1232 failed, 2585 different pages
+    2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s       2585 succeed, 1232 failed, 2585 different pages
+    2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s       2616 succeed, 1201 failed, 2616 different pages
+    2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s       2627 succeed, 1190 failed, 2627 different pages
+    2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s       2628 succeed, 1189 failed, 2628 different pages
+    2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s       2630 succeed, 1187 failed, 2630 different pages
+    2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s       2631 succeed, 1186 failed, 2631 different pages
+    ...
+  ok 1 Completed
 
-I'm really confused by this.
+Additionally, introduce size_to_shift() for future users that need to
+obtain shift of a huge-page which is other than pmd_psize().
 
-> +			rc = -EBADMSG;
-> +			goto err_crypto_info;
-> +		}
-> +
+Patch History
+=============
+Changes in v6:
+- add r-b tags.
+- small change for declaration order.
+- Link to v5: https://lore.kernel.org/r/20261009-fix_hpage_macro-v5-0-54378ae45add@arm.com
 
+Changes in v5:
+- rebase to mm/mm-unstable
+- Link to v4: https://lore.kernel.org/r/20260921-fix_hpage_macro-v4-0-cdea4fc6ce3f@arm.com
+
+Changes in v4:
+- make size_to_shift() as inline function.
+- initialise __pmd_psize and __pmd_pshift with -1ull.
+- Link to v3: https://lore.kernel.org/r/20260914-fix_hpage_macro-v3-0-c9a305a01d39@arm.com
+
+Change in v3:
+- rename read_pmd_pagesize() to pmd_psize()
+- introduce size_to_shift()
+- Link to v2: https://lore.kernel.org/all/20260907081509.924979-1-yeoreum.yun@arm.com/
+
+Chnage in v2:
+- rename hpage_* to pmd_page_*
+- Link to v1: https://lore.kernel.org/all/20260902175611.1241118-1-yeoreum.yun@arm.com/#t
+
+---
+Yeoreum Yun (3):
+      kselftest: mm: rename read_pmd_pagesize() to pmd_psize()
+      kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT macro
+      kselftest: mm: introduce size_to_shift() helper
+
+ tools/testing/selftests/mm/cow.c                   |  2 +-
+ tools/testing/selftests/mm/folio_split_race_test.c |  2 +-
+ tools/testing/selftests/mm/guard-regions.c         | 10 ++++--
+ tools/testing/selftests/mm/hmm-tests.c             | 22 ++++++------
+ tools/testing/selftests/mm/khugepaged.c            |  2 +-
+ tools/testing/selftests/mm/khugepaged_race.c       |  2 +-
+ tools/testing/selftests/mm/khugepaged_sync_check.c |  2 +-
+ tools/testing/selftests/mm/ksm_tests.c             | 16 +++++----
+ tools/testing/selftests/mm/migration.c             |  4 +--
+ tools/testing/selftests/mm/mkdirty.c               |  2 +-
+ tools/testing/selftests/mm/pagemap_ioctl.c         |  2 +-
+ tools/testing/selftests/mm/prctl_thp_disable.c     |  4 +--
+ tools/testing/selftests/mm/process_madv.c          |  2 +-
+ tools/testing/selftests/mm/run_vmtests.sh          |  4 +--
+ tools/testing/selftests/mm/soft-dirty.c            |  2 +-
+ tools/testing/selftests/mm/split_huge_page_test.c  |  2 +-
+ tools/testing/selftests/mm/transhuge-stress.c      | 25 +++++++------
+ tools/testing/selftests/mm/uffd-common.c           |  6 ++--
+ tools/testing/selftests/mm/uffd-unit-tests.c       |  8 ++---
+ tools/testing/selftests/mm/uffd-wp-mremap.c        |  2 +-
+ tools/testing/selftests/mm/vm_util.c               | 42 ++++++++++++++++++----
+ tools/testing/selftests/mm/vm_util.h               | 23 ++++++++----
+ 22 files changed, 119 insertions(+), 67 deletions(-)
+---
+base-commit: 7186f1bd21b9094cc063c10f8492fd135522d3cb
+change-id: 20260909-fix_hpage_macro-da069ae04502
+
+Best regards,
 -- 
-Sabrina
+Sincerely,
+Yeoreum Yun
+
