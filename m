@@ -1,163 +1,173 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856A83E1D05
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 02:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3653E3179;
+	Tue, 13 Oct 2026 02:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791857081; cv=none; b=oyixOXRoMRF5nfrj8f+59dlvLv8RfaTMg2TTOZRCQwDw1u1tjE1/yY6P33NvoRtILBbNw/Q3W231Fd6q6jRa6XIQphcIw0imr7Py+Lk/j0fMFwivAPNwi8CQ7DMBegDFe1BWWuAmAqK7l/H+hQ6dIbTqWWKXaxzmCpimWIVS7wQ=
+	t=1791857100; cv=none; b=my8qHU6/NOxSCevLIdj9OF5DoYq429fPsISr9VlHyyo96b3XL3Q4WR18vGeSjsHKIF+Z2XlfEhTmOH0Jr8folcv0apg5BfsHwJvofOBssybGlnHJqT3iRwtC0hIWyAH2CK5+AJwPxWz/6TxLodvm1BoGPOHBV3q0d03UuYTP1Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791857081; c=relaxed/simple;
-	bh=oATe/xxxHzH49/OQqmRsmMYhqHwx9MSd6ebsr9VOjqg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eVlHanfQtbgf8AT4ow515IvuqEbOlhe7UvPIVrXzuaK1zBNCqhabNs+HB6AoRZuHmFNtLRZ1lHppfe4PFm1a2O0z9WFfeYzzlZP5NzHa0xfvrLPq2z/Ov637GCT5VGOzzcy/KyqD8WwFJ7YmBCMnv20F3x9MjfGPJ63Ewvv4MQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M3l0JufC; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791857100; c=relaxed/simple;
+	bh=Ni9xdFQRsu7xhU2pHZcPfawAA3TKlxPNiaw/TvoTEz0=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OSBbcWRbusdh7k/rgD7mkyQPf1BnB9pfLhgsdHNLSlirQ5gFLrfA282d13IIqUuiak2N/t1KgsBRQWrfraOHxQvTcMdAHhnZYQErRkZ6Okz7U4V1Iy8ewBMpXgAxy6jGq34IEb6/R4SQ/CXt8gcJ31ZzxghCUgzwMFUNxdLsJUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oG45VgRO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M3l0JufC"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3a7cfe8f761so2673421a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2026 19:04:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791857080; x=1792461880; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3UKeflbCZ+vlTZlszfvtV7zcKynCF0qJdVDrDvGRXCc=;
-        b=M3l0JufC0pIt1aBGeAFZ3NUfc0uQsj3qO/TnKDAF9tQb21bckvHtNnpPpYB/a4WEFG
-         DgQSyaHfAK/guAkzKRrRbQKjeupwGoC5cOV6hAlHvYKLYHkoH39EnY/ciAXEAriNAqyD
-         TB+iiyG4cewE4fh+qfCziXN35z1fEzRyKuesgo+SolKO0h1CMpXOnleaChNhTdoyytFR
-         3GpjH5Kw4cRheD0xk9X+p7l7j3khnYX85xwS6nU8MmqYmBAFEFofjk/Bw1fRSiZhlFfZ
-         3JHq1HjYu64fRvzpyPok4DQOjsF/ECdfgBhufrAfUtHOxYlaZV1RxaHTMs9YKGbWaDXg
-         Y0GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791857080; x=1792461880;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3UKeflbCZ+vlTZlszfvtV7zcKynCF0qJdVDrDvGRXCc=;
-        b=XKfVSKDSlURaaJ9Ie7ozsUsIuSV3bnEf3Xu+H85pgOm/P6OdVgi2//m6/8OX7Sx9hC
-         x7V1ZnWhDO7N6ThEV/FtEbDOHyTrgeFRP+GQ/PQ+B5OyFlR9MeqVBUA1kqYv8gJfBNfM
-         1G1gW2XJTXeN3h1N3O35x8wrcJBDBhWC+OeOFPurpXlQK4ih9bSfkKyPy+gZPtfpC8yr
-         ubShp90f3mwPNHycSYCXrev/QcRwVpH1TSVDJn8GGqtW0zgQ9yqrn6bF+/H6EnBdQ0F7
-         9Vw7/QzTAQKq2qzRJHDgIQuHssoeQQGjg5VItP4eGeAeNLPTO8WgtoSUZ073QYc0HXk6
-         +i6A==
-X-Forwarded-Encrypted: i=1; AKwUvBydf+QUbHOfP0GPdeROPlrzDflP6C+5SFJmVcVXNYvlbMBbaIudYNYSAoH3yw0ZN8oYUZKuBu9kuTRkMwkaFf4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ1x11s62y8Cpz0as7elitl2H/E98IKiBw0tNAtZpImbBSGajKV
-	Zgc1XHSuJZUN1Cq2IGmgxpVAzXwrCYd/a6uxAx+J11ch5h1d/m+8c1YHCuHPKw==
-X-Gm-Gg: AYBFou30c1j8rxMLpgN/5UfDPRyWri6EPkmjpGnLjC6HGFEkezj+eHpGS7cbruBVejr
-	PayLF6b4uNkH/O8iHlc9HmnEoNE+kUUUrIKVmRHnsPhcTtoqJxxw220rjyLng+Elby7PjS3SGEZ
-	QkoK58GFyzkaqSdnwBPbccRCJOiZEMJKncdKvmrD5FtSuzsvGogFAwFzW8qBf4HRpUES57UPyT+
-	/dR9ATy7n1cnuqeCs80yzxGVqVXEhvOdgSHUnwsKfJ3XNLiW0lJdtAFXf2lvtJv6EFt86ZuYfmR
-	9rlHZGgvhsWxSBE4CK5c9QoJTRlqndQPaEaFhhbiU48P1qu/Wl6hikYhDEjEQdUpwggTgZELHT6
-	eP6a3RAwo+buigU4SxotbImdHtZfs45Nm0bXUABdONTLmrhw369PmB2EWMzQlBzCbt2lDmBts6Y
-	NAuX7kcXqWDmaZGgUo797c+J9vN95M/+SaQ5/9FkXAVqUgfi+YIntqSoYE8ezN2YWEcf7CRAgLV
-	oCEeR8DV0cu5IY2STzQfSXvzqWphxNFG9iEW1DE
-X-Received: by 2002:a17:90b:498f:b0:3ab:d26b:c2df with SMTP id 98e67ed59e1d1-3abd26bc4e0mr2979609a91.27.1791857079794;
-        Mon, 12 Oct 2026 19:04:39 -0700 (PDT)
-Received: from lipengfei28-ThinkStation-P368.mioffice.cn ([2408:8607:1b00:8:bf57:67b8:4e15:46a1])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab38dd5864sm18450258a91.8.2026.10.12.19.04.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2026 19:04:38 -0700 (PDT)
-From: Li Pengfei <ljdlns1987@gmail.com>
-X-Google-Original-From: Li Pengfei <lipengfei28@xiaomi.com>
-To: rostedt@goodmis.org,
-	mhiramat@kernel.org
-Cc: mathieu.desnoyers@efficios.com,
-	mark.rutland@arm.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	zhangbo56@xiaomi.com
-Subject: Re: [RFC PATCH v7 00/10] trace: stack trace deduplication for ftrace ring buffer
-Date: Tue, 13 Oct 2026 10:03:21 +0800
-Message-Id: <20261013020321.1898006-1-lipengfei28@xiaomi.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260912083753.3426176-1-lipengfei28@xiaomi.com>
-References: <20260912083753.3426176-1-lipengfei28@xiaomi.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oG45VgRO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E64A1F00893;
+	Tue, 13 Oct 2026 02:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791857099;
+	bh=v1rjribMsJ9Sp01nQ2z04+fvF4TfD4+dw4GlsPuNIAw=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=oG45VgRO3L9zJ+JGVTKuU5NYr+E/cMK7JpMs3egdzEtuvicj1bhbZmOY8+0MCJ3Pf
+	 V22oopBNlj+i295+XXsigWc2JCd1Bfa4Qsso1u+73oNCp4TJizeQAOeXrODHZgSq1V
+	 BD+rfbk/u9OWl7cNJBLPKglusa4QelucZNCzrQ6/LZzbIjZ9eHIetItRnt8G/JP/bA
+	 mWB0O+PIU4vke9xnAMCuvgoM71J+MkwXD6nxWd+Yo1lCZWehkzBWNgdnolhRgePrpl
+	 cWYM5oVzyDhyD22cj+4e2OGRcHRUohyS8ep8lsKe9a7V0KdMG7VBeODZXqqdEJcEb1
+	 HAtHvafyfWJkQ==
+Subject: Re: [PATCH net-next v11 1/6] netlink: specs: rt-addr: fix the type of
+ target-netnsid
+From: netdev-bot+sashiko@kernel.org
+To: sigefriedhyy@gmail.com
+Cc: ajay.kathat@microchip.com, aleksandr.loktionov@intel.com,
+ andrew+netdev@lunn.ch, claudiu.beznea@tuxon.dev, davem@davemloft.net,
+ dsahern@kernel.org, donald.hunter@gmail.com, edumazet@google.com,
+ idosch@nvidia.com, jacob.e.keller@intel.com, kuba@kernel.org,
+ johannes@sipsolutions.net, kees@kernel.org, kory.maincent@bootlin.com,
+ kuniyu@google.com, nicolas.dichtel@6wind.com, nickgarlis@gmail.com,
+ pabeni@redhat.com, sd@queasysnail.net, shuah@kernel.org, horms@kernel.org,
+ sdf.kernel@gmail.com, vadim.fedorenko@linux.dev, willemb@google.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Date: Tue, 13 Oct 2026 02:04:57 +0000
+Message-ID: <179185709784.434549.17899680533305071231@kernel.org>
+In-Reply-To: <20261012011707.3378-2-sigefriedhyy@gmail.com>
+References: <20261012011707.3378-2-sigefriedhyy@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hi Steven, Masami,
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Open question 2 in the v7 cover letter was whether the map generation
-should be part of the ABI. I think it has to be, and I would rather
-settle the record format with you before sending a v8.
+Low priority / nit picks for your consideration:
 
-The problem is that reset clears the map and resets the element cursor to
-zero, so a new stack takes slot 42 immediately afterwards. A stack_id 42
-recorded before the reset is still sitting in the ring buffer, and
-resolving it now yields the new occupant of that slot. Userspace cannot
-tell that apart from a correct lookup - it gets a plausible stack, not an
-error.
+- [Low] The commit fixes a real type mismatch in
+  Documentation/netlink/specs/rt-addr.yaml.
 
-I first tried to fix it in the table, storing the generation per slot and
-comparing it with the current one on lookup. That does not work: the
-comparison tells you which generation the slot now holds, not which
-generation the caller's id came from, and the case that matters is
-exactly when those differ and the slot has already been refilled. The
-identity has to travel with the record.
+Pre-existing issues:
+- [Low] This problem wasn't introduced by this patch, but the getaddr
+  operation in Documentation/netlink/specs/rt-addr.yaml still doesn't…
+- [Low] This problem wasn't introduced by this patch, but
+  Documentation/netlink/specs/ovs_vport.yaml has the same kind of…
 
-So for v8:
+--
 
-	struct stack_id_entry {
-		struct trace_entry	ent;
-		u64			stack_cookie;	/* gen << 32 | id */
-	};
+netlink: specs: rt-addr: fix the type of target-netnsid
 
-A single opaque 64-bit cookie, high half generation, low half slot. An id
-is still only valid within its own generation; the cookie makes crossing
-that boundary detectable.
+This patch changes the type of target-netnsid in the rt-addr YNL spec from
+binary to s32. That matches the NLA_S32 policy the kernel uses for
+IFA_TARGET_NETNSID and the s32 type rt-link.yaml already uses.
 
-stack_map_bin reports the generation of the dump in the header word that
-is currently reserved (ABI version 1 -> 2), so a dump and a record can be
-paired. Text output splits the cookie rather than printing it raw:
+> The kernel parses IFA_TARGET_NETNSID as NLA_S32 and rt-link.yaml
+> declares its target-netnsid as s32, but rt-addr.yaml has it as binary.
+>
+> Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+> Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+> Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
 
-	<stack_id 42 gen 3>
+[Severity: Low]
+Should this have a Fixes: tag? The type: binary line comes from the
+commit that first added the spec. The later rename commit only changed the
+attribute name:
 
-Cost, against the workload measured in the v7 cover letter:
+Fixes: dfb0f7d9d979 ("doc/netlink: Add spec for rt addr messages")
 
-	full stack, ~20 frames   trace_entry + size + 8*20 = 172 B
-	v7, 4-byte id            trace_entry + 4           =  12 B
-	v8, 8-byte cookie        trace_entry + 8           =  16 B
+> diff --git a/Documentation/netlink/specs/rt-addr.yaml b/Documentation/netlink/specs/rt-addr.yaml
+> index 0ecbd24c890c6..17ead22034515 100644
+> --- a/Documentation/netlink/specs/rt-addr.yaml
+> +++ b/Documentation/netlink/specs/rt-addr.yaml
+> @@ -119,7 +119,7 @@ attribute-sets:
+>          type: u32
+>        -
+>          name: target-netnsid
+> -        type: binary
+> +        type: s32
 
-Retention on that workload drops from about 2.17x to about 2.0x. I will
-re-measure rather than quote that from arithmetic.
+[Severity: Low]
+This is a pre-existing issue and was not introduced by this patch. The
+getaddr operation in this spec still doesn't list target-netnsid anywhere:
 
-Two alternatives I rejected, in case you would have picked one:
+      name: getaddr
+      doc: Dump address information.
+      attribute-set: addr-attrs
+      dump:
+        request:
+          value: 22
+          attributes: []
+        reply:
+          value: 20
+          attributes: *ifaddr-all
 
-Packing the generation into the existing 32-bit id keeps the record at 4
-bytes, but with FTRACE_STACKMAP_BITS_MAX at 18 the slot index needs 19
-bits, leaving 12 bits of generation in a signed field. 4096 resets wrap,
-and a wrapped generation passes the check - the same failure, only
-rarer. It also ties the id layout to the capacity limit.
+Here *ifaddr-all contains only address, label, local and cacheinfo.
 
-Two separate u32 fields come to the same 16 bytes and would make the
-format file self-describing, so an event filter could match the slot
-directly. I went with the cookie because an opaque value says the whole
-thing is the identifier - two fields invite userspace to read the slot
-number on its own, which is exactly what is not meaningful without its
-generation. If the filtering matters more, that is an easy change.
+The kernel accepts the attribute in RTM_GETADDR dump requests. This is
+from net/ipv4/devinet.c:inet_valid_dump_ifaddr_req():
 
-One consequence I had not expected. If a trace spans several resets,
-dumping stack_map_bin before each one keeps the whole timeline resolvable
-afterwards: every record says which generation it belongs to and every
-dump header says which generation it is. Without the tag, saving several
-dumps is pointless, since nothing says which dump a given record should
-be read against.
+	if (i == IFA_TARGET_NETNSID) {
+		struct net *net;
 
-Does that format look right?
+		fillargs->netnsid = nla_get_s32(tb[i]);
 
-v7 split the series into 10 focused patches following Masami's review of
-v6, and the design is otherwise unchanged.
+The IPv6 dump request handling in net/ipv6/addrconf.c does the same. The
+kernel also puts the attribute in replies, from inet_fill_ifaddr() and
+inet6_fill_ifaddr():
 
-Thanks,
-Pengfei
+	if (args->netnsid >= 0 &&
+	    nla_put_s32(skb, IFA_TARGET_NETNSID, args->netnsid))
+
+The spec also has no do block for getaddr. IPv6 registers RTM_GETADDR
+with .doit = inet6_rtm_getaddr, and inet6_rtm_valid_getaddr_req() accepts
+IFA_TARGET_NETNSID, IFA_ADDRESS and IFA_LOCAL.
+
+Could target-netnsid be added to the getaddr request and reply lists,
+along with a do block? Right now, generated per-op C code can't set or
+parse the attribute whose type this patch fixes. The Python YNL tools
+still work because they encode and decode against the whole attribute set.
+
+A later patch in this series fixes the getmulticast case: "netlink: specs:
+rt-addr: document AF_PACKET multicast dumps" adds target-netnsid to the
+getmulticast dump request and to &mcaddr-attrs. getaddr is still
+unchanged at the end of the series.
+
+>        -
+>          name: proto
+>          type: u8
+
+[Severity: Low]
+This isn't a bug introduced by this patch, but
+Documentation/netlink/specs/ovs_vport.yaml seems to have the same kind of
+netnsid type mismatch. Should it be s32 as well? That spec declares the
+attribute as unsigned:
+
+        name: netnsid
+        type: u32
+
+But vport_policy in net/openvswitch/datapath.c uses a signed type:
+
+	[OVS_VPORT_ATTR_NETNSID] = { .type = NLA_S32 },
+
+ovs_vport_cmd_fill_info() sends the value with nla_put_s32(). The value
+comes from peernet2id_alloc(), which can return NETNSA_NSID_NOT_ASSIGNED
+(-1). A YNL client using the ovs_vport spec would decode -1 as 4294967295.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012011707.3378-1-sigefriedhyy%40gmail.com
