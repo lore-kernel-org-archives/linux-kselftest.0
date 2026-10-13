@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F194543BDDD;
-	Tue, 13 Oct 2026 02:48:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D50F471422;
+	Tue, 13 Oct 2026 02:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791859739; cv=none; b=l9k8ZV5r2B6HvTtfIgamgeyMcZcFoi1Ti6JAqBHn7A4Y99ugnabNHZ6fJ97nEnlZ+tmLpwlEMUDU4sRN4PxQss0yD66Af1VHZKYb93Ac03vzKzde50hF7pfhRkMNnuZzXMRUZuvNB8I3JvxNb4YT2z5PYKPPHovmka3T5Utrq58=
+	t=1791859740; cv=none; b=cnA52X7jRCm8VWAKqF8bnlVFDJkhdz32L4iABSt4RakgF9SGUOHY6k64BA8W11gkT+0Xg5ppqrkLmlHBsDHb3xdl8sEA1awrB8qZIZCx//r5oQMXy8rOsHTC9+3PwiefAVmVcJV2JCOAaulniNUOfq8TQeIPUsMbuN4ZrQfQCpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791859739; c=relaxed/simple;
-	bh=YT7rhyZPn2QFWBPFePyF/e9vBCVAxt6ZXGK2xJFk6O0=;
+	s=arc-20240116; t=1791859740; c=relaxed/simple;
+	bh=xx/0C7V5lSsu1SJZQPWv/nB52Eqqvb8P+RDAqaBBUGY=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MAlMTznSRGpV7Pbvd8yp2X7uUHTjrc4RGhyrFyBUUw6CO96xbj54dmbeUqPBr+btIpnWqO7uu9k2C98QmzMXUi2d9A1eElG62D/F5rRNGAemNR3ZnbDzf8snbwaXxzbqIkJY31AubwfUGC4fflDP18Yc9b2fc4lxmUp+KT6TNUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l14PO/Tw; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=Ww0iYtVuxi9UHbzBwBEPI3X6MEX6TmerxE3nhtSdfwq3pB8YQ9fzYhp0CYbcA3BnOL0P6cMzSFx8DS//khCci4wwo7LriM4FT+5T9zHWoxsV7mJ2+1HN65TcLOLbVICPPfa4YdFVURQItfAER0ggPE9yFgiT0vqqPQqVfRMLQgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O/RkucCS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l14PO/Tw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B15B91F000FF;
-	Tue, 13 Oct 2026 02:48:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O/RkucCS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 225FB1F00893;
+	Tue, 13 Oct 2026 02:48:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791859737;
-	bh=yjo+sSuB0PitU7qef/nAlZsau4lxf6ulbjPzEJAM21c=;
+	s=k20260515; t=1791859739;
+	bh=zXq4C2rVp1oXkpjFcds+hIlD+z3dKEns35PhsHfo54Y=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=l14PO/TwDhr2EjgZ99X+/FMRZheqX7gRVnCpF1hnKTy5HWq30xWY2yAZ6X+UaXspm
-	 PlCeCEsJmLRra4XLX8ToQKme7uu8udks44bVByr8NGiHmkXuhCBS9eyl1REV653hIT
-	 6DZckbYuc9w5je9PmWcfHXJ5sTmgitUvQdbGp9g902JXess7gYbWkMNRDB6vIVXIeQ
-	 DTO2RxeMGTRk/WNmbx2JWW0O3KPDiLi4URryt+Ls6g10OJr1+aT5PgedkhZV9X8/0W
-	 UVWDAf+lz2ddIgyh8arpkReWMY1kfEhEAfLd5h3/SlVhjk0kdMtoTCQGQ9e6AIbfgp
-	 9IuJpYnPFelCQ==
-Subject:
- Re: [PATCH net-next v5 2/3] netlink: specs: add genetlink-legacy spec for GTP
+	b=O/RkucCSMFlDTrrg1ThuOq5O4gEyruD46T5wmc3/IPLkmHwgbXIHHVFKvVtN70p8X
+	 02EomRZqkxb9x+mq9QPD73PotcK1XbUUWUeoCorwICEMwshxg9rg3OH+W7PcMZsWfT
+	 rOy7jKpXKJKdPJYJ6hGp3OTXQLC31aXDyUSaFEJ6ZA2aJ5qIeLuWZu8jjzkhMmc1sJ
+	 4kqFNyW6k3nyBk8+D8+D3Ct4i9qovA4GdSXefbYpTDvCD+ks0/4+VnbefDuCXyadkW
+	 8leYR4L0u81QpsIz85+lhZIdEiPBnL+Q5Wz8zR6YceCskGUYaZNWIf25uOTs5fG0zN
+	 euFd6Kf/avkuA==
+Subject: Re: [PATCH net-next v5 3/3] selftests: net: add a test for the gtp
+ netlink family
 From: netdev-bot+sashiko@kernel.org
 To: anilkaushikwireless@gmail.com
 Cc: pablo@netfilter.org, laforge@gnumonks.org, donald.hunter@gmail.com,
@@ -35,11 +35,11 @@ Cc: pablo@netfilter.org, laforge@gnumonks.org, donald.hunter@gmail.com,
  horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
  osmocom-net-gprs@lists.osmocom.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 13 Oct 2026 02:48:56 +0000
-Message-ID: <179185973624.434549.6410423241897043806@kernel.org>
-In-Reply-To: <20261012024800.400616-3-anilkaushikwireless@gmail.com>
-References: <20261012024800.400616-3-anilkaushikwireless@gmail.com>
-X-sashiko-severity: Low
+Date: Tue, 13 Oct 2026 02:48:57 +0000
+Message-ID: <179185973768.434549.10719134041790779224@kernel.org>
+In-Reply-To: <20261012024800.400616-4-anilkaushikwireless@gmail.com>
+References: <20261012024800.400616-4-anilkaushikwireless@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -49,129 +49,86 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-- [Low] include/uapi/linux/gtp.h defines `enum gtp_version { GTP_V0 = 0,
-  GTP_V1, }` for GTPA_VERSION values, and drivers/net/gtp.c compares…
-- [Low] The `family` attribute doc in
-  Documentation/netlink/specs/gtp.yaml (line 96) reads "Address family…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The test does not skip when the kernel lacks GTP support,
+  although the commit message says it will.
 
 --
 
-netlink: specs: add genetlink-legacy spec for GTP
+selftests: net: add a test for the gtp netlink family
 
-This commit adds a genetlink-legacy YAML spec for the existing GTP
-generic netlink family. The spec covers the NEWPDP, DELPDP, GETPDP and
-ECHOREQ commands, the GTPA_* attribute set and the "gtp" multicast group.
-It also adds a CFLAGS_gtp entry to tools/net/ynl/Makefile.deps.
+This adds a Python selftest that uses the gtp ynl spec to exercise the gtp
+generic netlink family. It creates a gtp device, then adds, dumps and
+deletes PDP contexts by TEI and by MS address. It also adds a GtpFamily
+ynl wrapper and registers the test.
 
-> diff --git a/Documentation/netlink/specs/gtp.yaml b/Documentation/netlink/specs/gtp.yaml
-> new file mode 100644
-> index 0000000000000..6a6b49ad2f067
+> diff --git a/tools/testing/selftests/net/gtp.py b/tools/testing/selftests/net/gtp.py
+> new file mode 100755
+> index 0000000000000..199bc44091909
 > --- /dev/null
-> +++ b/Documentation/netlink/specs/gtp.yaml
+> +++ b/tools/testing/selftests/net/gtp.py
 
 [ ... ]
 
-> +attribute-sets:
-> +  -
-> +    name: gtp
-> +    name-prefix: gtpa-
-> +    attributes:
-> +      -
-> +        name: link
-> +        type: u32
-> +        doc: ifindex of the gtp netdevice the context is attached to.
-> +      -
-> +        name: version
-> +        type: u32
-> +        doc: GTP version of the context, 0 for GTPv0 or 1 for GTPv1-U.
-
-[Severity: Low]
-Should this attribute reference an enum? include/uapi/linux/gtp.h already
-defines the values for GTPA_VERSION:
-
-include/uapi/linux/gtp.h:
-enum gtp_version {
-	GTP_V0 = 0,
-	GTP_V1,
-};
-
-drivers/net/gtp.c compares against these values, for example in
-gtp_pdp_add() and gtp_genl_fill_info():
-
-	switch (pctx->gtp_version) {
-	case GTP_V0:
-	...
-	case GTP_V1:
-
-The spec has no definitions section, so the valid values only appear in
-the doc string. That means ynl clients see version as a raw integer and
-cannot encode or decode it by name.
-
-Other legacy specs reference their uapi enums like this, for example
-fou.yaml uses "enum: encap-type". Would a definitions entry for
-gtp-version plus an enum reference on this attribute work here?
+> +_NO_GTP_ERRORS = ("Operation not supported", "Garbage instead of arguments")
+> +
+> +
+> +def _setup(ns):
 
 [ ... ]
 
-> +      -
-> +        name: family
-> +        type: u8
-> +        doc: Address family (AF_INET or AF_INET6) of the context addresses.
+> +    try:
+> +        ip("link add gtp0 type gtp role ggsn", ns=str(ns))
+> +    except CmdExitFailure as e:
+> +        # gtp.ko not available, or iproute2 without gtp support: any other
+> +        # failure to create the device is a real error.
+> +        if not any(msg in e.cmd.stderr for msg in _NO_GTP_ERRORS):
+> +            raise
+> +        raise KsftSkipEx("no gtp support (CONFIG_GTP, iproute2)") from e
 
-[Severity: Low]
-Is this description accurate? In drivers/net/gtp.c, GTPA_FAMILY only
-selects the family of the mobile subscriber address, and it defaults to
-AF_INET when the attribute is absent.
+[Severity: Medium]
+Will this skip when the kernel has no GTP support? The commit message says
+"The test is skipped when the kernel or iproute2 lack GTP support".
 
-In gtp_pdp_add(), family only picks between GTPA_MS_ADDRESS and
-GTPA_MS_ADDR6. The peer address is checked against the socket family
-instead:
+With CONFIG_GTP=n, or with gtp.ko not installed, request_module() for
+rtnl-link-gtp finds nothing and ops stays NULL. The request then reaches
+this branch in __rtnl_newlink() in net/core/rtnetlink.c:
 
-drivers/net/gtp.c:gtp_pdp_add() {
-    ...
-	family = nla_get_u8_default(info->attrs[GTPA_FAMILY], AF_INET);
-    ...
-	if ((info->attrs[GTPA_PEER_ADDRESS] &&
-	     sk->sk_family == AF_INET6) ||
-	    (info->attrs[GTPA_PEER_ADDR6] &&
-	     sk->sk_family == AF_INET))
-		return ERR_PTR(-EAFNOSUPPORT);
+	if (!ops) {
+		NL_SET_ERR_MSG(extack, "Unknown device type");
+		return -EOPNOTSUPP;
+	}
 
-	switch (family) {
-	case AF_INET:
-		if (!info->attrs[GTPA_MS_ADDRESS] ||
-    ...
-}
+iproute2 requests extended ACKs. When an extack message is present it
+prints only "Error: Unknown device type." and returns early, so it never
+prints the "RTNETLINK answers: Operation not supported" line.
 
-The reply side uses the same split. gtp_genl_fill_info() picks the MS
-attribute by pctx->af and the peer attribute by pctx->sk->sk_family:
+Neither string in _NO_GTP_ERRORS matches that output. _setup() then
+re-raises CmdExitFailure, and add_del_pdp, add_two_pdp and del_unknown_pdp
+each report a failure instead of a skip.
 
-drivers/net/gtp.c:gtp_genl_fill_info() {
-    ...
-	    nla_put_u8(skb, GTPA_FAMILY, pctx->af))
-    ...
-	switch (pctx->af) {
-	case AF_INET:
-		if (nla_put_be32(skb, GTPA_MS_ADDRESS, pctx->ms.addr.s_addr))
-    ...
-	switch (pctx->sk->sk_family) {
-	case AF_INET:
-		if (nla_put_be32(skb, GTPA_PEER_ADDRESS, pctx->peer.addr.s_addr))
-    ...
-}
+The iproute2-without-gtp case ("Garbage instead of arguments") looks like
+it is handled correctly. The "Operation not supported" string seems to
+match only iproute2 builds without extack support.
 
-As a result, a valid context with an IPv4 subscriber over IPv6 transport
-reports family=AF_INET together with peer-addr6. "of the context
-addresses" does not describe that case.
+Could "Unknown device type" be added to _NO_GTP_ERRORS? Another option is
+to check whether the gtp link kind is available before creating the
+device.
 
-Could the doc say that family applies to the ms-address / ms-addr6
-attribute only, and that it defaults to AF_INET when absent?
+> +    defer(ip, "link del gtp0", ns=str(ns))
+> +    ip("link set gtp0 up", ns=str(ns))
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012024800.400616-1-anilkaushikwireless%40gmail.com
