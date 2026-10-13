@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85537515888;
-	Tue, 13 Oct 2026 16:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7AB50B8DB;
+	Tue, 13 Oct 2026 16:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791907900; cv=none; b=WN4Ja7flXqsJYKhwFPk/yxLAgpBQFUq58ZhSw/lcdZxrYwDNOVfHWnsWllqDBB/+1OTBc4dTG5gxdLYzqlQw8UWrYi97/Rkh3J9FtlP0fOssh3Li8nuhC2SuUBAg11/hROMWp/R3jHpm2WZoYrNIAC9bh/QpmR7a5OTFJQtBQpQ=
+	t=1791907901; cv=none; b=LYXSn7xrbLPkUUd/cWaxnTtm0xCOjQfhxpcZlzNpvnrNnWwCkSO0uVl/Gk7FqfSVssvV4jyaShUFAIZYvqe+l9JygWjOXLoRNWlK/pXm7Z1y33tEdrAKGSxsfz4L2WEo070GvDkR2v5lGVHkfwUSs26ZLmDWqsfX3suK9dOXmT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791907900; c=relaxed/simple;
-	bh=cAEZzZgR7Fepl0SIOj7WeyqXGvhC6eWsgu41O/qVakE=;
+	s=arc-20240116; t=1791907901; c=relaxed/simple;
+	bh=/aKWQ8icT6FR8c5sZWQQrY4dxlCZ4JQcuOfnwccfaJg=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fFCAtILLXcU7XPBXsofib006h81fZFJ087yfXpDHzc3F+tiNZLIRwnqZ1+FiFwNGVhVepEvfZb8DSqmtg/9hYw/vnfj9ZiOJO7BPnb5JYBO7hsr+mnAnbrjJ7Qj9U5lvhJWOITmzJMapqClUehzWCnNLkw6RGAx2qGhLc/U0M/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gF4pufeM; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=rEURaSoI3M2tusnXbZeKYTf1dDUjuI0ACRJTe7XLQPHbnrNogFQfp7VFiD27ukkIdOfciIZsSDATBkyrKiclUHGboGhkmlD4Jx6Gdv24i1Aydf2DKGn7TFDjIxOJU0MKYpSe1JbKhED0Vh9iQbzMDBeP2Tmukaba8lTwrwK3hyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jursb735; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gF4pufeM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8365A1F00893;
-	Tue, 13 Oct 2026 16:11:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jursb735"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF751F000FF;
+	Tue, 13 Oct 2026 16:11:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791907899;
-	bh=XSKcX9vUBn5iF+ncEVBlqT78Ess0cKMzIW7/045pST0=;
+	s=k20260515; t=1791907900;
+	bh=hgER89ZqCG0UMvDPfUqicWk5mAF6XbUv6Bque0n6Jk0=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=gF4pufeMiF9UMkuW2QqMFfdXCD7yLoEkFPU5bckMwqE1jGT5XYr4LeZSv7youoxA5
-	 BmdRy1zg7OjE9n2YCfrFDkrE9zuWLWnDwa484K5l5Tkufb0Cv+cQYX1v5KLiTbnq+/
-	 SGlXLw9zG7XTn0CK7YepSvJBP6sf7AOYW8dEnAfIk8bYXkiGQh3DiT4mjhlqAkci1m
-	 wOWmxWAKuIDChXCCw0qIcOcG/Zqb4pVGIWB7apASILqVDapjoT039IBAojsknC+tYT
-	 zhWNh8aiWU5KOFo9GN6VBtJcp5Qhi3f+z/JAAdvz42mtvyt5P6ScM4GgcbxKTIhZuY
-	 Sg3mca8gCf12w==
-Subject: Re: [PATCH net-next v4 2/9] tls: Check for a pending signal after an
- empty record
+	b=Jursb7359uV/DMCA1wx5n4CiLan0/1erjdYA/58cTd7/2R+sny/iLFc3Xqd9p0nt9
+	 r3qqPHFnBY/hlqfyKHkwl4ABUuxdCMqJNL2TF4kUSwSAefSuq2ze/pb8HP/GYXnm1P
+	 tGr/NPZ2fxIh2ErKqOzMObchvsPkiyv7kwsQWKOB4GyCn+cbObjjIZi+7bx6RFZVSs
+	 fLZzyFSHWFMkAYoRTBsnI+mJtVXFyI2vlfBK73ATHFaTO5My8euGKF7f2xk6Jh4Fwq
+	 QXsobM03AbS5qAu86XT/IlT8YWy4o4pGvbGe0rTl+cufIcZuJK6n1RfS7kRuzO1+ZO
+	 xPab0eH3UKdLQ==
+Subject:
+ Re: [PATCH net-next v4 3/9] tls: Honor O_NONBLOCK in tls_sw_splice_read()
 From: netdev-bot+sashiko@kernel.org
 To: cel@kernel.org
 Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
  davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
  shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
  netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 13 Oct 2026 16:11:38 +0000
-Message-ID: <179190789812.434549.8665010768729351575@kernel.org>
-In-Reply-To: <20261012-tls-follow-on-v4-2-8cea429565da@kernel.org>
-References: <20261012-tls-follow-on-v4-2-8cea429565da@kernel.org>
-X-sashiko-severity: High
+Date: Tue, 13 Oct 2026 16:11:39 +0000
+Message-ID: <179190789933.434549.342786122614239566@kernel.org>
+In-Reply-To: <20261012-tls-follow-on-v4-3-8cea429565da@kernel.org>
+References: <20261012-tls-follow-on-v4-3-8cea429565da@kernel.org>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -48,116 +48,142 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+- [Low] The commit message of "tls: Honor O_NONBLOCK in
+  tls_sw_splice_read()" describes a poll-then-splice stall and names a…
+- [Low] At this commit no selftest covers the new behavior in
+  tls_sw_splice_read(): splice(2) without SPLICE_F_NONBLOCK on a TLS…
 
-- [High] In tls_sw_recvmsg() (net/tls/tls_sw.c), the patch adds one way
-  out of a run of zero-length application_data records: `if (nodata &&…
+Pre-existing issues:
+- [Medium] At this commit, tls_sw_splice_read() splices a zero-length
+  decrypted DATA record as chunk = 0.
 
 --
 
-tls: Check for a pending signal after an empty record
+tls: Honor O_NONBLOCK in tls_sw_splice_read()
 
-This patch adds a signal_pending() check to tls_sw_recvmsg(). The check
-runs before the next record is fetched whenever the previous record was
-empty, so a stream of zero-length application_data records no longer
-leaves the caller unresponsive to signals. It also forces empty records
-to be decrypted synchronously, so the error that ends such a run is not
-overwritten at recv_end.
+This commit makes tls_sw_splice_read() treat the socket's O_NONBLOCK flag
+as nonblocking, in addition to SPLICE_F_NONBLOCK. The combined value is
+passed to tls_rx_reader_lock() and tls_rx_rec_wait(). As a result,
+splice(2) and sendfile(2) on a nonblocking TLS socket return -EAGAIN
+instead of sleeping, the same way tcp_splice_read() does.
 
-Closes: https://sashiko.dev/#/patchset/20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org?part=1
+> Polling first does not avoid the sleep once tls_sw_splice_read()
+> consumes zero-length records. tls_sw_sock_is_readable() reports
+> the socket readable while any record sits on rx_list, including a
+> zero-length record that delivers no bytes to the pipe. The
+> strparser announces a record before decryption, when the record's
+> plaintext length is unknown, so the readiness test cannot screen
+> such a record out. A splice that consumes the record and waits for
+> the next stalls every connection an event loop multiplexes.
+>
+> An LLM audit of the TLS read paths found this defect. With empty
+> records consumed, the zero_len_splice selftest, run on a
+> nonblocking socket, reproduces the sleep.
+
+[Severity: Low]
+This isn't a bug, but do these paragraphs describe code that exists at
+this commit?
+
+At this commit tls_sw_splice_read() has no retry loop. It splices a
+zero-length record as zero bytes, consumes it, and returns 0. That means
+there is no second wait in tls_rx_rec_wait() that could stall.
+
+Also, tools/testing/selftests/net/tls.c has no zero_len_splice fixture
+yet.
+
+Both come later in the series:
+
+- "tls: Consume empty data records in tls_sw_splice_read()" adds the
+  retry loop.
+- "selftests: tls: Extend coverage for zero-length records" adds
+  zero_len_splice.
+
+The current wording ("once ...", "With empty records consumed ...")
+already hints at this. Would it be clearer to say that the stall only
+appears once the following patch is applied?
 
 > diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> index a64244566af44..f2062e141512c 100644
+> index f2062e141512c..f5e329b75976b 100644
 > --- a/net/tls/tls_sw.c
 > +++ b/net/tls/tls_sw.c
-
-[ ... ]
-
-> @@ -1858,6 +1859,18 @@ int tls_sw_recvmsg(struct sock *sk,
->  		struct tls_decrypt_arg darg;
->  		int to_decrypt, chunk;
+> @@ -2024,10 +2024,14 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+>  	struct tls_msg *tlm;
+>  	struct sk_buff *skb;
+>  	ssize_t copied = 0;
+> +	bool nonblock;
+>  	int chunk;
+>  	int err;
 >  
-> +		/* A run of empty records advances neither loop bound, and
-> +		 * tls_rx_rec_wait() tests for a signal only after it sleeps.
-> +		 */
-> +		if (nodata && signal_pending(current)) {
-> +			long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> -	err = tls_rx_reader_lock(sk, ctx, flags & SPLICE_F_NONBLOCK);
+> +	nonblock = (flags & SPLICE_F_NONBLOCK) ||
+> +		   (sock->file->f_flags & O_NONBLOCK);
+
+[Severity: Low]
+This isn't a bug, but does any selftest at this commit cover the new
+condition? That would be splice(2) without SPLICE_F_NONBLOCK on a TLS
+socket that has O_NONBLOCK set.
+
+TEST_F(tls, nonblocking) sets O_NONBLOCK on cfd but only calls recv().
+TEST_F(zero_len, test) never calls splice().
+
+Later in the series, "selftests: tls: Cover splice on a nonblocking
+socket" adds TEST_F(zero_len_splice, nonblock_socket). That test sets
+O_NONBLOCK on cfd and calls zero_len_do_splice() with splice_flags = 0,
+which closes this gap.
+
 > +
-> +			err = -EAGAIN;
-> +			if (timeo)
-> +				err = sock_intr_errno(timeo);
-> +			goto recv_end;
-> +		}
-> +
->  		err = tls_rx_rec_wait(sk, flags & MSG_DONTWAIT,
->  				      released, !!(decrypted + copied));
+> +	err = tls_rx_reader_lock(sk, ctx, nonblock);
+>  	if (err < 0)
+>  		return err;
+>  
+> @@ -2041,8 +2045,7 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+>  	} else {
+>  		struct tls_decrypt_arg darg;
+>  
+> -		err = tls_rx_rec_wait(sk, flags & SPLICE_F_NONBLOCK,
+> -				      true, false);
+> +		err = tls_rx_rec_wait(sk, nonblock, true, false);
 >  		if (err <= 0)
+>  			goto splice_read_end;
+>  
 
-[Severity: High]
-Can callers that never get a signal still be held in tls_sw_recvmsg()
-for as long as the peer keeps sending empty records?
+[Severity: Medium]
+This is a pre-existing issue and was not introduced by this patch. What
+happens later in tls_sw_splice_read() when the decrypted DATA record has
+zero length?
 
-An empty record changes neither len nor decrypted, so the loop condition
-stays true:
+net/tls/tls_sw.c:tls_sw_splice_read() {
+    ...
+	chunk = min_t(unsigned int, rxm->full_len, len);
+	copied = skb_splice_bits(skb, sk, rxm->offset, pipe, chunk, flags);
+	if (copied < 0)
+		goto splice_requeue;
 
-    while (len && (decrypted + copied < target || tls_strp_msg_ready(ctx))) {
+	if (copied < rxm->full_len) {
+    ...
+	consume_skb(skb);
 
-tls_rx_rec_done() then parses the next queued record. That means
-tls_rx_rec_wait() skips its while (!tls_strp_msg_ready(ctx)) loop and
-returns 1 straight away.
+splice_read_end:
+	tls_rx_reader_unlock(sk, ctx);
+	return copied ? : err;
+}
 
-The !timeo -EAGAIN exit, the SO_RCVTIMEO sleep and the signal check in
-tls_rx_rec_wait() all sit inside that skipped loop.
+When rxm->full_len == 0, chunk and copied are both 0. The record is
+consumed and the function returns 0.
 
-The commit message says:
+Will splice(2) and sendfile(2) callers read that 0 as EOF? RFC 5246 and
+RFC 8446 both allow empty application_data records, so a remote peer
+could send one and make a live connection look closed to the reader.
 
-    A nonblocking reader gets -EAGAIN rather than -EINTR.
-
->From the code, though, a MSG_DONTWAIT reader that has copied nothing gets
--EAGAIN here only if a signal happens to be pending. With no signal, the
-loop keeps consuming empty records. A blocking reader also never has its
-SO_RCVTIMEO enforced.
-
-Some in-kernel callers use MSG_DONTWAIT from contexts that do not take
-signals:
-
-    svc_tcp_sock_recvmsg()
-        sock_recvmsg(sock, msg, MSG_DONTWAIT)    (nfsd threads)
-
-    nvmet_tcp_try_recv_pdu() / nvmet_tcp_try_recv_data()
-        kernel_recvmsg(..., MSG_DONTWAIT)        (nvmet-tcp io_work)
-
-    xs_sock_recvmsg()                            (sunrpc client receive)
-
-For these callers, nodata && signal_pending(current) is never true. While
-they are stuck, ctx->reader_present stays set, so every other reader of
-the socket waits in tls_rx_reader_acquire(). The peer only needs to
-finish a handshake and then stream zero-length application_data records.
-
-The earlier patch in this series, "tls: Bound consecutive no-data records
-in tls_sw_read_sock()", limits the same kind of run with
-TLS_RX_NODATA_LIMIT, and that limit works whether or not a signal is
-pending.
-
-Would a similar count limit in tls_sw_recvmsg() cover the callers that
-the signal test misses?
-
-The later patch "tls: Return copied data ahead of a run of empty records"
-adds a break once decrypted + copied >= target. Its commit message says
-"A reader that has copied nothing still reads empty records for as long
-as they arrive", so the case where nothing has been copied still seems
-open at the end of the series.
-
-[ ... ]
+The next patch in the series, "tls: Consume empty data records in
+tls_sw_splice_read()", fixes this by consuming the zero-length record
+and jumping back to retry.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012-tls-follow-on-v4-0-8cea429565da%40kernel.org
