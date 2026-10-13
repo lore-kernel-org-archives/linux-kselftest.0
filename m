@@ -1,115 +1,210 @@
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6084968EF
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 19:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CF751AEC9;
+	Tue, 13 Oct 2026 19:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791919768; cv=none; b=Nzh9lXraim5MY1hOFN4wju/lITz9Yca5wsv5ikExGg0bZtQW+KQPT3rBxpjA+YLIAwZnC5r4ijEkWx6vf806C5O80guWuoYtYWYILK/NcrKKcuKCA7vai/NYc0mHLHhvgIZLcMWdh8ga6LxDhykjHHwVe31rmkyrQy86p6t9694=
+	t=1791920428; cv=none; b=tFYMYngN9gWbG5DQ8wUXjtXKe1h46HUGnsw+JdFcjwerm/gTdYHkKx/Jd4t15wcZA2qibGZX/d9CeqFzRc8zYmfblNPmof/yOkInVYLKGxFXTy6qIXZ3LTtw7fa4N0M5XM1gTY/CvjWvr851KHyoCyFSvkIhcniKT+OdoVdXeRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791919768; c=relaxed/simple;
-	bh=HFB6DyseJTdbQfG1DZ6MXg0hnr9XmayZmDxutEscNow=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pA38dcBaQ6rXm1XV9DTWy/t3gXG8WfjtVufKGn4uONlrD0yDWA3NJy0a+C2pkw1+2A7W9Sxs3tkvAcZLL33T0mN58hTVJjnfQlp6TAO+I1SaoKh4nQogqylV8Zye5Q84d7XufvZ3g9xLFBnsbfMq6X+uEm8WVA0Y3oi+aLGBoSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SkTvqIiA; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1791920428; c=relaxed/simple;
+	bh=9ziVJdy+b1bhW1y6oYHX9sOcF9xtQOEucBLYSrTtguA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=EBBy/pN2tuT2rTKnsHh29MpzrF4aBCvML3fkEgrxQyutJq2fDPyqSrUKVURF5X+dx2oha0tKwqZr6yBtggSyhBJoqMXRmwBfJO5GdpBbpE7J+ePAFiLb1A5s+hY/g+EtqAqDirm2kAh74Ahm7NXnFW5PiUwKtEtVdDnVFFAUeqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hl2UzerT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SkTvqIiA"
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-6df5e315bd1so2291494eaf.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 12:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1791919765; x=1792524565; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FOxgkNuwHKNgVFVQaM+OBUUFEqO0M0muHBMxUHjrBmQ=;
-        b=SkTvqIiA7vr8JdA7bRhOV0Ijo+RNsveUSQpUJqUqmTESqBbZfENP2lD88rRRillW15
-         ys2GG5hsB9vHt97BdHz1tW9LWRvwEOUPVKEfgXonYSTYSs4zZ8/h6ww8ZLBIo4CM+1i0
-         rTS6kswASnjWNcuXNpBD8nI+kll1UZ7FC7Ka4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791919765; x=1792524565;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=FOxgkNuwHKNgVFVQaM+OBUUFEqO0M0muHBMxUHjrBmQ=;
-        b=Zq9hrEMMlXYvWSRb/YcyUYQw7jQWbbWMlIgfwEMEUdIu4ojRcppApHxOYD5ph18Mbn
-         bDMakJNg4oy+NyLKKADfB1V9sf+xV5v46xlyKuFwyM1EK9O5y3zQ8PKtpCXXnn1eV6W8
-         MwEaAjXje+9j1UQ+Epa6IP9M5kjT92rC1xXDbNAJ+TkdYVyufeEcJaCsMIOepBpI2LuO
-         FXmG0mOI2nCNcZu/u8R/Zs2vdB61eqR+IMAQRwIM4sefzzwjSQeDMgUApgbKH985cmKd
-         ZKmJX+TcPpl8kcLLeWAYY4CtCYDJTvTpdqZ1FUMrZAfISPnGXFRtif/rkIsyTi2RhGDM
-         vZew==
-X-Forwarded-Encrypted: i=1; AKwUvBwo7EzlTZ75jw9nhI5cTQ3oOnbl+A9iJDspFA88zYuUpCDMFXhUBs2VYNKX+Mj6Rs8wxrR6z/0QKwBAgpU+xHI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIdFxf91ojzZ9S/vdjYrERlT6DbwvxLZOpJPOU/7csCcoLn+F4b
-	sYsuy+vvh8NO1SkEOBo7nmn+qqRBbKjBN6KSYEgRLNUGrZIq0Pkij+PsIZaVnRJ3Cxo=
-X-Gm-Gg: AYBFou1ZufzpbrSG+SW4XdsY/b0ulxgjriy2TolHMlhqjzfEpY4lItGP4pSLHkwL6Cp
-	XB7h44tHBPxz7UzL8Vk9DAOq/He3Qw0Nth79+W0tX38c7Iv/Mfz/rqXTeoZyDMss5jlxcdacz09
-	eLQ+AGNv6gvaXyOzLaNQz3UKPSoZNSf7v1ZhDjTMwgpQJm3LS7LOgbCVp32P7QXj05zhxG7tqYf
-	KdCmHbohMs1+h1BqGB7wrsSFdIRdBtdTcVBjuvmDKrNzYO7E8b2YQ+vSraI0w7RbrE3zBUszEmI
-	s0nOouQ02AdfNEq4FPumjTkYoSLyXZKJhqM+OZrG/U2TL/d+tB9Ur+ns1ue74c9qb6YlReDm2XL
-	H4Do/VEHrdt3HTpTGQefw49MEQgd2KMce79dRwF8252RrF5q4qUZ5DgwceMvaIYXLZeYgHP2tzO
-	SNFowYZS6GZ7VBpAlgIVAHpwJgBi0MafG4skJyHEAmhPsZXGPHVl3t/5ypMCtz1OlEen8evwKFM
-	3D+z/e6
-X-Received: by 2002:a05:6820:198a:b0:6ca:3ce1:ed36 with SMTP id 006d021491bc7-6ef100968e7mr11004632eaf.47.1791919765182;
-        Tue, 13 Oct 2026 12:29:25 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a6dfd0b149sm437488fac.18.2026.10.13.12.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2026 12:29:24 -0700 (PDT)
-Message-ID: <08e8e221-4e46-41a1-baa5-bade8ee20730@linuxfoundation.org>
-Date: Tue, 13 Oct 2026 13:29:22 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hl2UzerT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E11F1F000FF;
+	Tue, 13 Oct 2026 19:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791920426;
+	bh=gGEdva0B7T4OPQRwnKbjRWDsGnhVZMphnfZfZ2crsUI=;
+	h=From:Date:Subject:To:Cc;
+	b=Hl2UzerTz2USfL3Kc3QJ1bMmVsF3b/JgbrRDUwBSQTwWw0zSiWogUCweQZHj02pWC
+	 +kHGupVx42+5sPAdrsC8GHec5SpT93GO5EiE2vJHfYfxiix4YWmgUblwSUsMxBo+85
+	 h+jcmmyYIa6TE3/XRE73zg3Mg3Lx+GfIAkfey5eY9XCv/4YImMalZyk0dmAkyP+VAn
+	 QyZ71KABka1yufikFOazJH/almB3cpCler6IhSAR9lhhyO6RmOfdzmebvzYaPXJunL
+	 DsNihtOm6V2XoMeKwrLB+WTD65UqLFNAe4gWbWwS7y2PLkibO+kY7xbrrSKwcmiOXX
+	 mdN03K0sEsuiA==
+From: Mark Brown <broonie@kernel.org>
+Date: Tue, 13 Oct 2026 20:40:00 +0100
+Subject: [PATCH] selftests: kselftest_deps.sh: Support LLVM
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 4/6] tools: build kernel selftests in tools_build
-To: Sasha Levin <sashal@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20261011233647.2454648-1-sashal@kernel.org>
- <20261011233647.2454648-5-sashal@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20261011233647.2454648-5-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20261013-kselftest-deps-llvm-v1-1-f2ee70ae1b79@kernel.org>
+X-B4-Tracking: v=1; b=H4sIABCJzmoC/yXMQQ6CQAxG4auQrm3SYiTEqxgXwvxodUQyHYgJ4
+ e6OuvwW763kSAanY7VSwmJur7FAdxX1t8t4BVsoplrqRkX3/HDEIcMzB0zOMS5PPmiHNmgjIi2
+ VckoY7P27ns5/+9zd0efvirbtA6D3TXt3AAAA
+X-Change-ID: 20261013-kselftest-deps-llvm-51be8d160008
+To: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4820; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=9ziVJdy+b1bhW1y6oYHX9sOcF9xtQOEucBLYSrTtguA=;
+ b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLOdape8zpSsHXFwXlu93Y9+Ra4ct/GJH3XebHrZ2fsz
+ xd9t3m3QEcpC4MYF4OsmCJLXBb3y/qS12v4Di5sg5nDygQyhIGLUwAmYvSRkeF8hyfnrk3xvnFC
+ viqd7Z+OrOaOE/pn+kdqY5Qrx/ao9wyMDKuWbWX4I/da9uWT1AozAwUdkcgXJ1as5TQv3sPOcmT
+ +bQYA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 10/11/26 17:36, Sasha Levin wrote:
-> Add a "Kernel selftests" sub-menu with one entry per selftests directory
-> that builds with only a C library and does not write into the source
-> tree. Each is built as "make kselftest-all" builds it, with KHDR_INCLUDES
-> pointing at the UAPI headers installed in the object tree, but by its own
-> make, so the selected ones build in parallel. Selftests whose Makefile
-> does not use KHDR_INCLUDES still build against the C library's copy of
-> the UAPI headers.
-> 
-> The selftests do not track header dependencies, so a selftest is built
-> again from scratch when its own directory, a header or makefile any
-> selftest may share, or a kernel source it includes directly (the vDSO
-> test includes the architecture's vDSO code) is newer than its last
-> build.
+The kselftest_deps.sh script currently takes a compiler as the first
+argument and uses it to check that libraries needed by the selftests
+are installed.  This works well for GCC where a separate binary is
+provided for each target architecture but is less of a good fit for
+LLVM where a single compiler binary can target all of the supported
+architetures.  Extend the script to accept "LLVM" as the compiler with
+an additional optional ARCH= argument so that it can be used when
+building with LLVM in a similar fashion to how the actual build works.
 
-Is there a way you can fold in kselftest_deps.sh run into this
-so users know why some tests didn't build. Also we want to make
-sure kselftest build doesn't fail if a test fails to build to
-keep the current kselftest build behavior.
+The duplication with the main Makefile isn't ideal here.
 
-tools/testing/selftests/kselftest_deps.sh
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/kselftest_deps.sh | 83 +++++++++++++++++++++++++++++--
+ 1 file changed, 80 insertions(+), 3 deletions(-)
 
-> 
-> Selftests that need libraries beyond the C library, a vmlinux with BTF,
-> or a sanitizer runtime are left out for now.
+diff --git a/tools/testing/selftests/kselftest_deps.sh b/tools/testing/selftests/kselftest_deps.sh
+index 487e49fdf2a6..70b834361cb7 100755
+--- a/tools/testing/selftests/kselftest_deps.sh
++++ b/tools/testing/selftests/kselftest_deps.sh
+@@ -10,13 +10,20 @@
+ usage()
+ {
+ 
+-echo -e "Usage: $0 -[p] <compiler> [test_name]\n"
++echo -e "Usage: $0 -[p] <compiler> [ARCH=<arch>] [test_name]\n"
+ echo -e "\tkselftest_deps.sh [-p] gcc"
+ echo -e "\tkselftest_deps.sh [-p] gcc mm"
+ echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc"
+-echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc mm\n"
++echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc mm"
++echo -e "\tkselftest_deps.sh [-p] LLVM"
++echo -e "\tkselftest_deps.sh [-p] LLVM ARCH=arm64 mm\n"
+ echo "- Should be run in selftests directory in the kernel repo."
+ echo "- Checks if Kselftests can be built/cross-built on a system."
++echo "- Compiler can be given as LLVM to use clang, as with LLVM=1 in"
++echo "  the kselftest build. LLVM=<prefix>/ and LLVM=-<suffix> select"
++echo "  the clang binary as in the kselftest build. ARCH=<arch> selects"
++echo "  the clang target architecture, defaulting to the host; it is"
++echo "  ignored for other compilers."
+ echo "- Parses all test/sub-test Makefile to find library dependencies."
+ echo "- Runs compile test on a trivial C file with LDLIBS specified"
+ echo "  in the test Makefiles to identify missing library dependencies."
+@@ -53,13 +60,32 @@ while getopts "p" arg; do
+ 	esac
+ done
+ 
++# Pull an optional ARCH=<arch> out of the remaining arguments. The
++# environment is used if it is not given on the command line, as with
++# make.
++args=()
++for arg in "$@"; do
++	case "$arg" in
++		ARCH=*)
++		ARCH=${arg#ARCH=};;
++		*)
++		args+=("$arg");;
++	esac
++done
++set -- "${args[@]}"
++
+ if [ $# -eq 0 ]
+ then
+ 	usage
+ fi
+ 
+ # Compiler
+-CC=$1
++case "$1" in
++	LLVM|LLVM=*)
++	setup_llvm "${1#LLVM}";;
++	*)
++	CC=$1;;
++esac
+ 
+ tmp_file=$(mktemp).c
+ trap "rm -f $tmp_file.o $tmp_file $tmp_file.bin" EXIT
+@@ -178,6 +204,56 @@ exit $?
+ }
+ # end main()
+ 
++# Mirror the LLVM handling in lib.mk: LLVM=<prefix>/ or LLVM=-<suffix>
++# select the clang binary, and ARCH selects the target triple with the
++# host as the default.
++setup_llvm()
++{
++	local llvm=${1#=}
++	local llvm_prefix=""
++	local llvm_suffix=""
++	local clang
++	local target
++
++	declare -A clang_target
++	clang_target[arm]=arm-linux-gnueabi
++	clang_target[arm64]=aarch64-linux-gnu
++	clang_target[hexagon]=hexagon-linux-musl
++	clang_target[i386]=i386-linux-gnu
++	clang_target[m68k]=m68k-linux-gnu
++	clang_target[mips]=mipsel-linux-gnu
++	clang_target[powerpc]=powerpc64le-linux-gnu
++	clang_target[riscv]=riscv64-linux-gnu
++	clang_target[s390]=s390x-linux-gnu
++	clang_target[x86]=x86_64-linux-gnu
++	clang_target[x86_64]=x86_64-linux-gnu
++
++	case "$llvm" in
++		*/)
++		llvm_prefix=$llvm;;
++		-*)
++		llvm_suffix=$llvm;;
++	esac
++	clang=${llvm_prefix}clang${llvm_suffix}
++
++	if [ -z "$ARCH" ]; then
++		target=$($clang -print-target-triple 2>/dev/null)
++		if [ -z "$target" ]; then
++			echo -e "\tUnable to run $clang ..."
++			exit 1
++		fi
++	else
++		target=${clang_target[$ARCH]}
++		if [ -z "$target" ]; then
++			echo -e "\tUnknown ARCH $ARCH for LLVM, supported:"
++			echo -e "\t$(echo "${!clang_target[*]}" | xargs -n1 | sort | xargs)"
++			exit 1
++		fi
++	fi
++
++	CC="$clang --target=$target -fintegrated-as"
++}
++
+ all_tests()
+ {
+ 	for test in $l1_tests; do
+@@ -285,6 +361,7 @@ print_results()
+ {
+ 	echo -e "========================================================";
+ 	echo -e "Kselftest Dependency Check for [$0 $1 $2] results..."
++	echo -e "Compiler: $CC"
+ 
+ 	if [ $print_targets -ne 0 ]
+ 	then
 
-Great. That is good for this round.
+---
+base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm master
+change-id: 20261013-kselftest-deps-llvm-51be8d160008
 
-thanks,
--- Shuah
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
+
