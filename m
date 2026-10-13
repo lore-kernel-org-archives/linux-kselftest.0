@@ -1,178 +1,107 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8564340A6B;
-	Tue, 13 Oct 2026 10:14:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791886454; cv=none; b=gSdHZw6YDNgS3/niHtrsGRL4l7u9APzx8ojVRrK0UPOasLRpuwA0rY8jdHHI4r8cuSWALP17FehdvA/OEDYxXzwgsdCqRhh+8Z3qVt8rwjBezscPy/AfJ+TYTqmgAEC0eiDU9KSM/HR0EDaHHAyrWsGDivWITxLMc/VIxbSVpgs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791886454; c=relaxed/simple;
-	bh=CwIINxwYMx735E6F8s9ep3Xem7KHZ4ZBlh/HyIgAbgg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=unzBtXx32uSq1vdCr4JPrEpmEEeHdTeANrVMkiYc6pym7ere0ySPNk/CE2GEagPnzgCJWWGiDeJuaAP2cfs0IZ7N4pINXgRdyACqZdnke9dHEr0VfzxCvE8mJUoiJiH6YHdRyhYBV6rtAsAkoKQsZRwrCQub+44mvcMKPD0DyHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=EwlAFwkD; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4E53FE35F
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 10:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791886912; cv=pass; b=bTlitCPS7/6pwFG4Qocd/4xfyh8SET9+yTIMZpWc7ZESIHkRA+iSlrrTuRjpAHXufDaKPB2kVFtOmMG1YdLGK79CYf+jG46JOCAZCh2Jd1Z9chRRhtd7OFn6MWNId2AOQ+hRy2/dXR5X1qEU1sHbZz+VxPaTIHQHDlSKDC1OySA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791886912; c=relaxed/simple;
+	bh=kw30L9v26HRhBA7ngRHFl25NBDemgZ3UJ42WGs6r17k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PjPSjCqXug2JdXpD460cBoz28xXS6kqtyh71ge4JdAnyYo3+NlQwYNvc2l95kXVPPSAXChuBxkYHapkCCc8a8UOQHvK9NbdAUQPCJOKl3BLVl65Akl2owTmbVKcte8qopMfjE7qUpkH3s4rCNGgIFh5kmmAQzIDotWZy+H6m0d8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GMb/PDFr; arc=pass smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="EwlAFwkD"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2D21169C;
-	Tue, 13 Oct 2026 03:14:08 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 75FB13F7B4;
-	Tue, 13 Oct 2026 03:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1791886452; bh=CwIINxwYMx735E6F8s9ep3Xem7KHZ4ZBlh/HyIgAbgg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EwlAFwkDH3DXPIhTH/r3Gq7gzfPEvks0fkmwjKTIIEU8lU7V9m+CEaFGUJ2qIKkcH
-	 LBg1oIHubi4Bc3NZ0+tI90c3UVa78sskD/3IZOdXFNrnVPDx4Ice2OAwYQT3Uerlxg
-	 RYruN74ALtEB3aq/oz+lABH3jelhu/OBkGnIJslI=
-Date: Tue, 13 Oct 2026 11:14:05 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
-Subject: Re: [PATCH v6 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
- macro
-Message-ID: <as4Ebb8GQmAfRb5r@e129823.arm.com>
-References: <20261013-fix_hpage_macro-v6-0-2c52d0484de3@arm.com>
- <20261013-fix_hpage_macro-v6-2-2c52d0484de3@arm.com>
- <40f95078-4d3c-48da-9262-afadf231014f@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GMb/PDFr"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5bcb2eceb3eso2298690e87.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 03:21:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791886909; cv=none;
+        d=google.com; s=arc-20260327;
+        b=kA7UnvHS70PTJKcgVKSAGasuiZZpKnEUOmHlGId+cKY8Uft4oayebj64VvnnUiOj1V
+         GTWmhjOj0kL1soBkUSwRHNGURoqiA1a0qQHEo27+efcrPK2cg4FMV2viyDbTpCN9HE5j
+         ud9FPNrHfoaQ+cWgcws7dA4RCX0ZDiBsWpSkm290ycUY2g+ABWR0503J+/7hCz7sxtGB
+         VXw/ct6e0CZCFoUqwfsGe4RUgCnMgQsuSvwBGdd9v10SO3HftTBzAgmBiu5EQUDDJi6r
+         MRtp3J9w10/80SMnyC3c7GDURoVgKxIy17kTveIvpZ550eTIjdM+nkF6XdhClxH9PrLb
+         EtoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=kw30L9v26HRhBA7ngRHFl25NBDemgZ3UJ42WGs6r17k=;
+        fh=BzKswxdRqOFF8HFb5sv06RnlIDHR7h2stvR6fXFKXKA=;
+        b=qc8IUMC/toitrwduP9KJLlpvfSvKwRxxFu0Z2WmcJklR5KK+5/4f9aROr+E6IvzJIK
+         UYZGmWaj0BVuf1ozyAEJcgtRmA1y473q1rS6pFYN4SFFJsDLXvu/QIWRufI2dZ+RYjyA
+         XZ556rIFrs8kxMJgmwVih7uqwSqsr3ja92X2Du3VHrUUyq2PxE6MhYO4HS36HUgS5V5Z
+         fG+4zFemZJdh5AiKwlBFXtOZeWLFwXOwfbbD4UsyWGFjYCqEmx3QEl0Il58a6/KZ70oC
+         qqoR7xFOGjw58jXeSWPycboJvHipCN5BqqbpGhtPf67Tu0WbepcKLDVr6i1FFZltQ0i8
+         rb2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791886909; x=1792491709; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kw30L9v26HRhBA7ngRHFl25NBDemgZ3UJ42WGs6r17k=;
+        b=GMb/PDFrWoHJRy9pBHdTZo0/lj8Cg472bjve20axVR+DmIqGmLXL/J5FQr2lH0o+sk
+         5nydQS0hHGSFh2Fixw7CV3fCrG9ZVkJGzEqLYfvS/LIdZ8DGZrSMGnRB3V0e5dQrb0tj
+         GnKR8QJs/8IJhdGLSXgNcOPq/1dAUtyr/t//GhSGYxA62aGyTxtptqRuQaQizH6AhrAr
+         kjX3vMYK3hx2QiF0x8qlGFTRSmXLHANPyVFQfkxR1QLP1iU/z1cZMX6f53hd6grXJFm4
+         q7Pm2e2riBVfBSIWE8dgwbwNViO+K3MY2IsiG7XqfI2KUVZgdArq5OMNNUp5FmvsI6ky
+         nUrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791886909; x=1792491709;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=kw30L9v26HRhBA7ngRHFl25NBDemgZ3UJ42WGs6r17k=;
+        b=c8AHFin8DYZ7rp+D8ghqXmRbaC6QApECbs8ZpLVaMng2OkCmo9TSzvuS9N5umYGPv2
+         E63070O2fU0pjYn8TsnZctuTKYKmN4eJ0KVwj4Dnm5fGjV13mZqBiLabAtF6CtgozYZS
+         dOm/pu6WhgpG7fDDjQxV9SaSAOsNrbl89V7fuJUMkn85plSJSefXWrLeKrpVpj8aOkBl
+         RxovjZXngQG9xqEJ7/bqWu1ihz1bw3jjR9kM7p2tMTGOsQchiOCtN7sIFN46ayotkLcx
+         7pwY3tLFHSrS7aNH1o4Lkte7zRH/a9gMd82Vae+FVn+cqsBM9qR1O1CCA+M3+pe/prl2
+         rLvQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzQdx+5qpJa0Jc4yPDPAMMod+fNwqYgA9SSXPIWOJj0RwDjVt9MXdNYfY+6gyx2sT6xbH7hfHbgtUKm4bT5nFU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLC2odFFw8gg8a+QuNJwFLXwhaL0HbT4HS9g5aimqMEPYTqfNOG
+	Btjs22D5cHh/5dTgCrhhwqmpm7uS53GUqyoiqriMl1jg7OtRc3krwZbvBRh8WlXsLkQhZTI8RB7
+	0ZC0mb/myMhPVh03CCYGVo613SRRczW0=
+X-Gm-Gg: AYBFou0xCvh+n9VwIqvBaGJMbA+rZlq7HQB7lNU67Jgk4TRXvtiZjmPed9kNFCOxLzc
+	DkumnOMX2z4vSk47N/ZZYbZ0x0w46ELatNjKekSVAUr3QApQLgtnh3FGwMLINnEj+h3VGoz4Dht
+	IRXY4kMJEKxcaeeCUjeveTYdFm8wis39IWP3SaeIWEWMbONNadOspKF65tobQdL+7N0e1mF/xZ1
+	bs4r07aLc1W6Ww1Ixb5xIxt2axRsD9yiP5dr97w54LDdAXFEuJmHVZ5bWsjLPSkfT7jfnMQYKa+
+	TuNDHDY0oz1d3mTNUQigkCmJpJ4HOezGDUlgqVDNCDDY/7h4P6oThuM9/AP4OF6ARbayUge96gv
+	oBwQSyqsXYLU=
+X-Received: by 2002:a05:6512:1302:b0:5b7:593c:244a with SMTP id
+ 2adb3069b0e04-5bcde6cb1b4mr4214429e87.44.1791886909214; Tue, 13 Oct 2026
+ 03:21:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <40f95078-4d3c-48da-9262-afadf231014f@arm.com>
+References: <20261012011707.3378-2-sigefriedhyy@gmail.com> <179185709784.434549.17899680533305071231@kernel.org>
+In-Reply-To: <179185709784.434549.17899680533305071231@kernel.org>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+Date: Tue, 13 Oct 2026 19:21:38 +0900
+X-Gm-Features: AclHuK9g3jw3wKxZcfUo-DjkbmbxBzgQ-U86o5Pm5ByOHON1wyGjQ9qc2fnRD5A
+Message-ID: <CA+7S2v+LjXscrjWYE6kTu0uBR8co7G4xqXaHq30Za32rbg5FDg@mail.gmail.com>
+Subject: Re: [PATCH net-next v11 1/6] netlink: specs: rt-addr: fix the type of target-netnsid
+To: netdev-bot+sashiko@kernel.org
+Cc: ajay.kathat@microchip.com, aleksandr.loktionov@intel.com, 
+	andrew+netdev@lunn.ch, claudiu.beznea@tuxon.dev, davem@davemloft.net, 
+	dsahern@kernel.org, donald.hunter@gmail.com, edumazet@google.com, 
+	idosch@nvidia.com, jacob.e.keller@intel.com, kuba@kernel.org, 
+	johannes@sipsolutions.net, kees@kernel.org, kory.maincent@bootlin.com, 
+	kuniyu@google.com, nicolas.dichtel@6wind.com, nickgarlis@gmail.com, 
+	pabeni@redhat.com, sd@queasysnail.net, shuah@kernel.org, horms@kernel.org, 
+	sdf.kernel@gmail.com, vadim.fedorenko@linux.dev, willemb@google.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Oct 13, 2026 at 03:26:40PM +0530, Sarthak Sharma wrote:
-> Hi Yeoreum!
-> 
-> On 10/13/26 3:16 PM, Yeoreum Yun wrote:
-> > HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
-> > When this macro is used in some test, test result would be strange in
-> > the system where PAGE_SIZE is more then 4KB.
-> > 
-> > Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
-> > 
-> >   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
-> >     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
-> >     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     ...
-> >   ok 1 Completed
-> > 
-> > Remove the HPAGE_SIZE and HPAGE_SHIFT macro and introduce pmd_pshift()
-> > helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
-> > helper, pmd_psize().
-> > 
-> > Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
-> > which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
-> > and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
-> > PMD-sized units, the test may fail with the previous size of 100 MiB,
-> > which is not a multiple of the PMD size when the base page size is
-> > 16 KiB or 64 KiB.
-> > 
-> > After this patch, output of transhuge-stress:
-> > 
-> >   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
-> >     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
-> >     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
-> >     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
-> >     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
-> >     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
-> >     ...
-> >   ok 1 Completed
-> > 
-> > Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> > Reviewed-by: Zi Yan <ziy@nvidia.com>
-> > Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> > ---
-> 
-> [...]
-> 
-> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> > index 5f2fb5b819c4a..efd99298be135 100644
-> > --- a/tools/testing/selftests/mm/vm_util.c
-> > +++ b/tools/testing/selftests/mm/vm_util.c
-> > @@ -21,6 +21,8 @@
-> >  
-> >  unsigned int __page_size;
-> >  unsigned int __page_shift;
-> > +uint64_t __pmd_psize = -1ull;
-> > +uint64_t __pmd_pshift = -1ull;
-> >  
-> >  uint64_t pagemap_get_entry(int fd, char *start)
-> >  {
-> > @@ -161,19 +163,40 @@ uint64_t pmd_psize(void)
-> >  	char buf[20];
-> >  	ssize_t num_read;
-> >  
-> > +	if (__pmd_psize != -1ull)
-> > +		return __pmd_psize;
-> > +
-> >  	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
-> > -	if (fd == -1)
-> > +	if (fd == -1) {
-> > +		__pmd_psize = 0;
-> >  		return 0;
-> > +	}
-> >  
-> >  	num_read = read(fd, buf, 19);
-> >  	if (num_read < 1) {
-> > +		__pmd_psize = 0;
-> >  		close(fd);
-> >  		return 0;
-> >  	}
-> >  	buf[num_read] = '\0';
-> >  	close(fd);
-> >  
-> > -	return strtoul(buf, NULL, 10);
-> > +	__pmd_psize = strtoul(buf, NULL, 10);
-> > +
-> > +	return __pmd_psize;
-> > +}
-> > +
-> > +uint64_t pmd_pshift(void)
-> > +{
-> > +	if (__pmd_pshift != -1ull)
-> > +		return __pmd_pshift;
-> > +
-> > +	if (__pmd_psize != -1ull)
-> > +		__pmd_psize = pmd_psize();
-> 
-> Kiryl pointed this out in v5 [1], you might have missed it. This check
-> seems to be inverted.
-> 
-> [1] https://lore.kernel.org/all/asj4dT2Q__SlKhgr@thinkstation/
+> Should this have a Fixes: tag?
 
-Oh. Thanks. I've missed. 
-
--- 
-Sincerely,
-Yeoreum Yun
+Already discussed in previous thread.
