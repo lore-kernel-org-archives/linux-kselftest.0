@@ -1,296 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-m12736.qiye.163.com (mail-m12736.qiye.163.com [115.236.127.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225654ED19E
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 12:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE56236B927;
+	Tue, 13 Oct 2026 12:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791895718; cv=none; b=g1DuXCIMTR6tdQpc8f8gT2ZIFqCqv3ooz8q/LsCY+gNQ1GnQ+kgisDCgN8560EQHzD9Um91CO1LnE5kIFoiadVM9pl2q8/m3DGZ552p1klAmnrsNf3MDF5/EXhL3z69OMMaeMa1hdVIftMEEIRSvFxyKz2txotcZhhPjRSCTRCE=
+	t=1791896244; cv=none; b=cBLOH24RsNLJ11Fq064KH82DTasMZfaLlY8WaWdDw0mmAb7EemJHK5UUmps9DjhyWCBnAJQEmqJYML/NfEcN8vCAAMszhYlwTQdR2600khOtwGQ8Tdo4iKMiv78Bpfjp6/RZ6tJgMlKJ69m747ymrhm4Sk3ZtPOfJhfv7dxzcaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791895718; c=relaxed/simple;
-	bh=oLV5bYYNqBJtMZGXHUGsTftA7iDmuDBBkFIsyHgIRQk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aKsPWFJEUO/sims2KUegthseeMKRLhQ0TaEqo5nZhwMAGRw8gjJ/ejSivx6hqIVCbiUZ5kS0ipALT6d1kIZgiWfAs2wT6nONkp4R15iG09Z9kr+r1ikq6Q3EDhnnGOL+GFyPNuoqy5DTOXmLgNM5ndbZxsg5OkqyCgtZKljssm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FTkDGMF9; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FTkDGMF9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D131F000FF;
-	Tue, 13 Oct 2026 12:48:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791895717;
-	bh=2qRTik8GEJlB5ZX27jmNcmkZ0CNCqqj8RXCnZ4IaHcs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=FTkDGMF92xz3ARoU847mw9nW+598QkPEzcNVLZqNqB1sb3RQFxS/0su8J1/2qzgWh
-	 kBofZixjw7jYJ6Kw7aV3gKQapf4gplqNP1d10FmOGRF/MiHntutoXB99YgrMa1b4Z8
-	 VM3WOee3yFLD8QQ4g1bz3W/4nhwcBG64WdZBVRTygYOfnzGw8cUUmGlevj3SN2Urqm
-	 HAqZSHVcNa7i6YUBYjqeuRo72JJWk0EEM57yRzSnMImq7EiojxYS+ZGnFdu6EH7nfC
-	 mLncIc5kHbf4CTkEwSegkf4yAIwuszRGHJb9cOT507oDb4i2EKVFLhovtcmnYkJnu9
-	 jgecGhQz2OYbA==
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfauth.phl.internal (Postfix) with ESMTP id F1ED7F40066;
-	Tue, 13 Oct 2026 08:48:34 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Tue, 13 Oct 2026 08:48:35 -0400
-X-ME-Sender: <xms:oijOap3TVDTu_5loFwQITlOvPLzbraJWkFzOCWyfQgb48rJo-r7QYg>
-    <xme:oijOaum8Wfcu9NIcX6AjBRt__ZHoNQzdixAWaBWgXtg1LC8artULg7Xt9Hotvxh6f
-    Shdf9RTbFZVsDcl0gr9LdjLKsw0FP5Z-ADaAbAz8hZ0v68l2HjaxQs>
-X-ME-Received: <xmr:oijOagH-q8HxOINcCSKZuke0U5pH_vthi8BfKQ5itL2EYBKYmg4RDSmNUTd9NBx-gYa0GBIoMZNOVnm59r8w-U1ySgtwHlrn>
-X-ME-Proxy-Cause: dmFkZTFQxdGgm5pu/Hef3mE4+Kt1axzL/LFmUKKZM328NfNKX0+Hk7CGHW2ienRh+lcJSJ
-    anCeCNA7AVlmc/k8szEtMpKqX69BnxAKeoFVjMHhlIPDHwzw6ovgIdaFyB075ymGgnmUxR
-    d54mIW7HjTLxZmNJIZu1La4d0E0VptVQRvnYfuriOsH9x+ampWVmieO1VtE4MHK1lp6Enb
-    opHjOy6C3TlADcdSv+ErnoefUAzrGdeIWJhnn8kDxbBCohNDuuEUVL3iYOcD7SWynkGTFS
-    Q5s4JcNHCHFe7cI5vZNxIQkRdEkeWPkuJPlkPt/ObAHoNFc2ZvNbCvLVijadlm5Jp3riGp
-    yMsHABJ/EcTP8wxw/AY8RC1KgFWI+nNfldg7Y2lI922CCWMorY/XDbPh+69RxUxpMHYUnf
-    5w8g63heNx2UD3uaJi26gzBvf3JMWZgmaVIWuLssF/Y0xKVqvh2hA2t1dFOy/J4FF8vQVv
-    kuE+Jp4TBEWl6vVkAwbEYcwjNMI7U//cljEEVqDjNtPk/DCkl4MaqyzOguM+gXC8CQZ989
-    1j1Ad9gAFbOJaU21u4Ls3TeeObv3Iac8dT2uFMHPjDiVB4hDfAFuq9dC72PtV8Fhbkm/TR
-    bTeCXbde8KuNUbL99FqskIh3zHbj2HYNsjWGFdfIdYqzosw7UeGQ8pSMwQug
-X-ME-Proxy: <xmx:oijOarm4oADCkeAwvjq-oRVoylma9xhvuXoj9zDW6YV6LlaWR8NFIg>
-    <xmx:oijOaqP7L4GnYrNJIPJtMZ8Vg4RczEkoN8uyeKOotVOoA9TSpMH35g>
-    <xmx:oijOarCcd54Ji8lroj-YhRWLccy_K7-R01auKkyl5x6lsNT9tKxXng>
-    <xmx:oijOarUeX3VNU0L5MDHIuQ3Fgx_I2DjXFPkunLZSqQ8PD_kYY7mnvw>
-    <xmx:oijOalacm7m2zjhHfow_OYEG_MK8MTH4G2NWmxaLs7nBt93I6h6yxKLB>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Oct 2026 08:48:34 -0400 (EDT)
-Date: Tue, 13 Oct 2026 05:48:33 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Lai Jiangshan <jiangshanlai@gmail.com>
-Cc: Kunwu Chan <kunwu.chan@gmail.com>, paulmck@kernel.org, corbet@lwn.net,
-	mingo@redhat.com, frederic@kernel.org, neeraj.upadhyay@kernel.org,
-	josh@joshtriplett.org, urezki@gmail.com, dave@stgolabs.net,
-	lianux.mm@gmail.com, stern@rowland.harvard.edu,
-	parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-	npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-	luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
-	joelagnelf@nvidia.com, skhan@linuxfoundation.org,
-	rdunlap@infradead.org, longman@redhat.com, rostedt@goodmis.org,
-	mathieu.desnoyers@efficios.com, qiang.zhang@linux.dev,
-	brads@mainlining.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, lkmm@lists.linux.dev,
-	linux-doc@vger.kernel.org, rcu@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v3 08/15] locking/lockdep: use hazptr to wait for
- dynamic key lookups
-Message-ID: <as4ooZSWA2lAIceu@tardis.local>
-References: <20261005171529.1378809-1-kunwu.chan@gmail.com>
- <20261005171529.1378809-9-kunwu.chan@gmail.com>
- <as3aMmPdCHCXW6Ci@U-YXDQC754-96.local>
+	s=arc-20240116; t=1791896244; c=relaxed/simple;
+	bh=7+OQzYzv3SbWX+2533YRdRXLs2xaO0eiv3KbK0o/ZRc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gWnyTbdNcEmXq9ZqD0AWbwpJ1nqjGMvgIUEmcStGjsc5Rc4zsOM9CMkhuB1hCKgLOOKU40ksiZZCoCP1hOQKLJwXKbeVNM4raYsv2vlHgyaOpTOeetyRdb2g7SthNHusB/d5mT8ftaCq86nSfoVz7WSxvzD+juMgqCk/4KCjFd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=115.236.127.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from localhost.localdomain (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 200407ee7;
+	Tue, 13 Oct 2026 20:21:41 +0800 (GMT+08:00)
+From: Zhen Ni <zhen.ni@easystack.cn>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	akpm@linux-foundation.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	brendan.jackman@linux.dev,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhen Ni <zhen.ni@easystack.cn>
+Subject: [PATCH v2 0/6] mm/page_owner: add bpf_iter and kfuncs
+Date: Tue, 13 Oct 2026 20:21:19 +0800
+Message-Id: <20261013122125.843451-1-zhen.ni@easystack.cn>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <as3aMmPdCHCXW6Ci@U-YXDQC754-96.local>
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa135361ed30229kunm0bc94a6a5244
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCSBlNVh9MGBofTEodGB9LS1YVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
+	lPT09IVUpLS1VKQktLWQY+
 
-On Tue, Oct 13, 2026 at 03:40:36PM +0800, Lai Jiangshan wrote:
-> On Tue, Oct 06, 2026 at 01:15:22AM +0800, Kunwu Chan wrote:
-> > lockdep_unregister_key() waits for is_dynamic_key() callers with
-> > synchronize_rcu_expedited(), which requires system-wide coordination.
-> > Make is_dynamic_key() protect the hash bucket with a hazard pointer
-> > and use hazptr_synchronize() to wait for traversals of that bucket.
-> > 
-> > The hash bucket returned by keyhashentry() has a stable address, so
-> > it can be used as the hazptr synchronization target.  Keep the key
-> > hashlist lifetime RCU-based with hlist_del_rcu() and call_rcu().
-> > 
-> > Protect the traversal with the hazptr scoped_guard() added earlier
-> > in this series.
-> > 
-> > This adapts the lockdep use case from Boqun Feng's shazptr series
-> > to the current hazptr API.
-> > 
-> > Link: https://lore.kernel.org/lkml/20250625031101.12555-1-boqun.feng@gmail.com/
-> 
-> Hello,
-> 
-> I think this is a misuse of hazard pointers.
-> 
+Hi all,
 
-I disagree.
+Introduction
+============
 
-Is this usage a typical hazard pointer usage, maybe not. But it's a
-valid usage IMO.
+page_owner records who allocated every page and is a core memory-debug
+facility, but it currently reaches userspace as the debugfs flat dump:
+slicing allocations by pid, comm, NUMA node, cgroup or stack, etc.,
+means streaming and parsing the entire file in userspace, which is
+expensive on large hosts and hard to query live.
 
-> The bucket has a permanent, static address; its lifetime does not
-> need hazard-pointer protection. Instead, this patch combines a
-> hazard pointer with that address to construct a read-side/synchronize
-> mechanism in the same category as RCU. However, this construction
-> lacks the generation distinction needed to separate pre-existing
-> readers from subsequent readers.
-> 
+Exposing the same walk to eBPF lets a program filter and aggregate in
+the kernel and surface only the records it cares about. This series
+adds that access as a seq_file bpf_iter target and an open-coded
+iterator.
 
-The "power" of hazard pointer allows you to use it protect almost
-anything, it happens to be the pointer of the object to free in the
-major use cases, but as long as readers and updaters use some address in
-their synchronization protocol, it's fine, because the synchronization
-works.
+Implementation
+==============
 
-> The object being removed is the key, but the synchronization target
-> is the bucket. Unlinking the key does not prevent new lookups from
-> acquiring the same bucket address, including lookups for unrelated
-> keys that hash to that bucket.
-> 
-> This breaks the forward-progress argument used by the underlying
-> hazptr implementation: after removing an object from publication,
-> there should not be a continuing stream of new readers acquiring
-> that same object. Here, the bucket is never unpublished.
-> 
-> For example, let B be the bucket containing key K:
-> 
->   Updater                    Reader                 Scan kthread
->   -------                    ------                 ------------
->   Unlink K from B
->   hazptr_synchronize(B)
->                              Acquire B
->                                                     Observe B;
->                                                     retain waiter
->                              Release B
->                              Acquire B again
->                                                     Observe B;
->                                                     retain waiter
->                              Release B
->                              ...                    ...
-> 
+The page walk is factored into page_owner_next_eligible(), shared by
+the read path and the iterators so eligibility stays identical. Two
+kfuncs expose information that a BPF program cannot decode from the
+snapshot alone: per-page memcg info including the full cgroup path,
+and the stack trace behind a stack_depot handle. Each record is
+snapshotted under the page_ext RCU lock, so consumers read a
+consistent copy.
 
-This is more of an implementation issue, and luckily the readers in
-lockdep are less frequent, so we don't have this issue at the moment.
-Even if we do, there are pretty ways we can duel with it. E.g. the scan
-thread can identify a "sticky" address like B, and publish it to all the
-readers, so they will notify the scan thread when they finish release
-it:
+Testing
+=======
 
-	hazptr_release():
-	  if (steady_address != NULL && steady_address == *slot)
-	    notify_scan_thread();
-	  smp_store_release(slot, NULL);
+The selftest exercises the seq_file and open-coded iterators, and
+validates the stack_snprint and get_memcg_info kfuncs.
 
-in this way, scan kthread will be able to track down each reader of the
-steady address (with a bitmap or something), and make the necessary
-forward progress if the updater waits for too long.
+Changes in v2
+=============
+- Route the zero-handle case through ext_put_continue.
+- Drop the scan->pfn++.
+- Fill page/po/pfn only when v is non-NULL.
+- Implement page_owner_seq_stop().
+- bpf_page_owner_stack_snprint() now takes the scan cursor.
+- Buffer args renamed to buf__uninit/buf__sz.
+- Removes the v1 get_nid() kfunc. The node is now stored in scan->nid.
+- bpf_page_owner_get_memcg_info() now resolves the page with
+  pfn_to_online_page() for an offline or removed pfn.
+- Buffer/info args renamed to info__uninit/buf__uninit/buf__sz.
+- Drop the get_nid kfunc coverage.
+- Enable CONFIG_PAGE_OWNER in the bpf selftests config.
 
-And more importantly, even without this, the constant stream of readers
-of B can only block a hazptr_synchronize(B), but not a
-hazptr_synchronize(C), that's exactly the point of hazptr: readers don't
-block the hazptr_synchronize() on other addresses.
+v1: https://lore.kernel.org/linux-mm/20261009112308.240769-1-zhen.ni@easystack.cn/
 
-> Every reader critical section can finish, and the scan kthread
-> can keep running, while the updater waits indefinitely. Readers
-> that could have observed K may already have completed; later
-> lookups alone can keep the waiter pending.
-> 
-> RCU does not need the reader population to become empty. Its
-> generation (grace-period) machinery allows pre-existing readers to
-> drain without letting a continuous stream of subsequent readers
-> indefinitely extend that wait. This address-based construction has
-> no equivalent distinction.
-> 
+Zhen Ni (6):
+  mm/page_owner: extract page_owner_next_eligible() from read loop
+  mm/page_owner: add bpf_iter target "page_owner"
+  mm/page_owner: add open-coded page_owner iterator
+  mm/page_owner: record the NUMA node in the scan cursor
+  mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
+  selftests/bpf: add tests for the page_owner bpf_iter target
 
-It can be added as a slowpath as I mentioned above, surely it comes with
-a cost, but it makes the API usage simpler: you can use hazptr to
-protect something that is about to free and you can also use it to
-protect something that your readers and updaters have agreed on an value
-for synchronization.
+ kernel/bpf/helpers.c                          |   7 +
+ mm/Makefile                                   |   3 +
+ mm/page_owner.c                               | 219 +++++++++++-------
+ mm/page_owner.h                               |  58 +++++
+ mm/page_owner_iter.c                          | 197 ++++++++++++++++
+ tools/testing/selftests/bpf/config            |   2 +
+ .../bpf/prog_tests/page_owner_iter.c          | 193 +++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_page_owner.c | 159 +++++++++++++
+ 8 files changed, 758 insertions(+), 80 deletions(-)
+ create mode 100644 mm/page_owner.h
+ create mode 100644 mm/page_owner_iter.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
 
-> So this is not merely protecting a different object with hazptr:
-> it is using hazptr as a different synchronization primitive without
-> providing the corresponding progress guarantee.
-> 
+-- 
+2.20.1
 
-To me it's still the same, mainly because how readers protect something.
-
-> I think we should retain the RCU wait here. If the intention is to
-
-Nope. synchronize_rcu() is too slow according to Breno's usage, and
-synchronize_rcu_expedited() is way more IPI. Hope you got the conclusion
-from AI, because it may lack some context here.
-
-
-Don't make me wrong, if the main argument is "hey this is not a typical
-hazptr usage, so we need more proper usages to upstream hazptr", then I
-agree. It's just in a world where hazptr is in the kernel, such a
-non-typical usage should be supported.
-
-> implement bucket-scoped read-side synchronization, that needs an
-> explicit protocol to distinguish the readers being drained from
-> new arrivals; a permanent bucket address is not sufficient.
-> 
-> Sorry for the lengthy reply, which was written with the help of an AI
-> agent. I noticed this issue when this use case was first proposed, but
-> I struggled to articulate my concerns clearly back then. Well, now we
-> have AI. :)
-> 
-
-Thank for sharing the concern, it's valuable. If you or the AI have a
-proper hazptr usage in kernel, that'll be great!
-
-Regards,
-Boqun
-
-> Thanks
-> Lai
-> 
-> > Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
-> > ---
-> >  kernel/locking/lockdep.c | 25 +++++++++++++++----------
-> >  1 file changed, 15 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-> > index c56a7f91d72e..d1ce5ace7fbf 100644
-> > --- a/kernel/locking/lockdep.c
-> > +++ b/kernel/locking/lockdep.c
-> > @@ -58,6 +58,7 @@
-> >  #include <linux/context_tracking.h>
-> >  #include <linux/console.h>
-> >  #include <linux/kasan.h>
-> > +#include <linux/hazptr.h>
-> >  
-> >  #include <asm/sections.h>
-> >  
-> > @@ -1280,14 +1281,19 @@ static bool is_dynamic_key(const struct lock_class_key *key)
-> >  
-> >  	hash_head = keyhashentry(key);
-> >  
-> > -	rcu_read_lock();
-> > -	hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
-> > -		if (k == key) {
-> > -			found = true;
-> > -			break;
-> > +	{
-> > +		struct hazptr_ctx ctx;
-> > +		void *bucket = hash_head;
-> > +
-> > +		scoped_guard(hazptr, &ctx, &bucket) {
-> > +			hlist_for_each_entry_rcu(k, hash_head, hash_entry, 1) {
-> > +				if (k == key) {
-> > +					found = true;
-> > +					break;
-> > +				}
-> > +			}
-> >  		}
-> >  	}
-> > -	rcu_read_unlock();
-> >  
-> >  	return found;
-> >  }
-> > @@ -6683,11 +6689,10 @@ void lockdep_unregister_key(struct lock_class_key *key)
-> >  	 *
-> >  	 * Some operations like __qdisc_destroy() will call this in a debug
-> >  	 * kernel, and the network traffic is disabled while waiting, hence
-> > -	 * the delay of the wait matters in debugging cases. Currently use a
-> > -	 * synchronize_rcu_expedited() to speed up the wait at the cost of
-> > -	 * system IPIs. TODO: Replace RCU with hazptr for this.
-> > +	 * the delay of the wait matters in debugging cases. Replace the
-> > +	 * expedited RCU wait with hazptr_synchronize().
-> >  	 */
-> > -	synchronize_rcu_expedited();
-> > +	hazptr_synchronize(keyhashentry(key));
-> >  }
-> >  EXPORT_SYMBOL_GPL(lockdep_unregister_key);
-> >  
-> > -- 
-> > 2.43.0
-> > 
