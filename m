@@ -1,53 +1,56 @@
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9355370ADA;
-	Tue, 13 Oct 2026 14:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 949493C1991;
+	Tue, 13 Oct 2026 14:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791900558; cv=none; b=A07iVOSjs9pNL43r0Zx+oB5l42cwbVvvn+5VNyHf+Iuc1+jm+RonG+7CjeQjnh3xJA4IrhyqwCVvFS2Y/GCOEyNeFq2CbGTWDG3Hc+Mi3fZh3AbER4g+FiSRBqg0gwJF25Tm5Ys3QuU+CNdFZB0sWpa2JeZh3m64wKUG1xEZlrc=
+	t=1791900702; cv=none; b=VzZPqDfFsIZDo7z077GbwyPyIvTLgI6Kn9767V/FGYWgKpuFFXMKnHFnNlvBeoMSl/nGor9FAsBK3q3mCpX40W/uKXs2Q+l4/0F35hcgTid/YiYTegAWaTVbdusM04CONIhqN04UhqskgBlWdPQX9rblrzSCvpbBVWOI2C5iR58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791900558; c=relaxed/simple;
-	bh=Suo0YfCYPtCoLBJ8iZXRfc+dw40jvIHLkG13JRnjZUY=;
+	s=arc-20240116; t=1791900702; c=relaxed/simple;
+	bh=d/DaViX6waQjEqKz+BRXBRyPDQzNzOaSHBwWJqd0NxU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SBhfoX/PxLWKD3CamJYY8SUFS7v796gXmZuA7p7WY/dsQHAiTFzzCcntDSp7OD9YeECQrTphJx5lwmcSi+TGysqSWP5mAVhs0AUZC8oco7ucy1IsxYwzpCpwJ7HzT5qESobCaFddKAFDcqM+OLcaQZemvF6CHyOhDAIWw2QuMWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com; spf=unknown smtp.mailfrom=hallyn.com; dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b=kL9ibrJg; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=tempfail smtp.mailfrom=hallyn.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=RXQspUCiz0fhhXcP5VqPCunFam8B2bpDyy8Tfqk9yjYpa12J1uQTTLEpxy+2dQtky4TIK25QeoEgEB0u7HL3nmky6ib8WVcjwapRC2T7BVSpUKeuODwULnMdpn9/gg7Iagy5a1zTbOagJTTohhjJRtRreh/k2GfvrhAGSxYh/X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=COwDhIpl; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b="kL9ibrJg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
-	t=1791900547; bh=Suo0YfCYPtCoLBJ8iZXRfc+dw40jvIHLkG13JRnjZUY=;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="COwDhIpl"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4EE65169E;
+	Tue, 13 Oct 2026 07:11:36 -0700 (PDT)
+Received: from e129823.arm.com (unknown [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 77F1F3F7B4;
+	Tue, 13 Oct 2026 07:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791900699; bh=d/DaViX6waQjEqKz+BRXBRyPDQzNzOaSHBwWJqd0NxU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kL9ibrJga4YY3RAquWvtOegRsAK6JNwI4zXpQH4mv6j2Vsk9CY8qfIhLg/GbWf10M
-	 DeXquRyTooElnL5wcZ6eBAgd3kldWf1/1DVrk/QnE7SSW6X/eN/0nBES3D+BgjTlUU
-	 C/Rx2MZe3C0Slal4i45wXX+ZGEjf9NEkolx65kLPAJurAwcIqT7Fgf9sZxk/YpgtAy
-	 XDKHXmjY/8nxliaKEOZl8gn/L8ISgxycaCqcVMdYGSSfKRj3VaBKUpf5cLXmVPw2xG
-	 o/e7XKeKzb8AwNvzLFiFE90IPPcFzQuMfwogAUoL6N27g/9+hdqYmLbjfnu+6mI3om
-	 KyZ826JuJNe2w==
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id 2638A6FA; Tue, 13 Oct 2026 09:09:07 -0500 (CDT)
-Date: Tue, 13 Oct 2026 09:09:07 -0500
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: kees@kernel.org, akpm@linux-foundation.org, david@kernel.org,
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	vschneid@redhat.com, kprateek.nayak@amd.com, paul@paul-moore.com,
-	jmorris@namei.org, shuah@kernel.org, oleg@redhat.com,
-	brauner@kernel.org, alexjlzheng@tencent.com, jannh@google.com,
-	jaime.saguillo@gmail.com, elver@google.com, blbllhy@gmail.com,
-	bvanassche@acm.org, pjw@kernel.org, broonie@kernel.org,
-	debug@rivosinc.com, tglx@kernel.org, aleksey.oladko@virtuozzo.com,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, morgan@kernel.org
-Subject: Re: [RFC PATCH v2 0/3] security: Add PR_CAPBSET_DROP_MASK
-Message-ID: <as47g9Ofa7hgDDLp@hallyn.com>
-References: <20260929130200.1638343-1-ruanjinjie@huawei.com>
+	b=COwDhIplXug+N3BUuVPymIIemCYgZM0nKYl9fW62zWUEPhoodm3dfc3SR2KbznwZQ
+	 bp/+qoTUhaPqE9NjEKwpjEc//4nUaIr178J2towXpIWOLnN8fLkTRXjv8G42EAfYfG
+	 HNOM35+vziAgrZiRfnh7+ikSiq9x0SsbfOk0c7qs=
+Date: Tue, 13 Oct 2026 15:11:27 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Sarthak Sharma <sarthak.sharma@arm.com>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+	Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
+Subject: Re: [PATCH v7 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
+ macro
+Message-ID: <as48D1SnImCro_Cb@e129823.arm.com>
+References: <20261013-fix_hpage_macro-v7-0-3d77129e0557@arm.com>
+ <20261013-fix_hpage_macro-v7-2-3d77129e0557@arm.com>
+ <b3f2a0bf-7b41-4cc9-958e-34f1a88ff5bf@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,50 +59,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260929130200.1638343-1-ruanjinjie@huawei.com>
+In-Reply-To: <b3f2a0bf-7b41-4cc9-958e-34f1a88ff5bf@arm.com>
 
-On Tue, Sep 29, 2026 at 09:01:57PM +0800, Jinjie Ruan wrote:
-> PR_CAPBSET_DROP only affects the calling thread, so dropping capabilities
-> for a whole process means one call per capability per thread.  For a
-> long-lived, multi-threaded process such as gVisor's sentry this is
-> stop-the-world signal delivery and costs milliseconds per sandbox on a
-> many-core host.
+> Hi Yeoreum!
 > 
-> This series adds PR_CAPBSET_DROP_MASK, which removes a 64-bit mask of
-> capabilities from the whole thread group in a single call.  The drop is
-> recorded per thread group and folded into the bounding set wherever it
-> gates gaining a capability, so already-running, concurrently-created and
-> later-created threads -- as well as children forked by a sibling -- all
-> observe it.
+> On 10/13/26 4:07 PM, Yeoreum Yun wrote:
+> > HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+> > When this macro is used in some test, test result would be strange in
+> > the system where PAGE_SIZE is more then 4KB.
+> > 
+> > Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
+> > 
+> >   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
+> >     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
+> >     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >     ...
+> >   ok 1 Completed
+> > 
+> > Remove the HPAGE_SIZE and HPAGE_SHIFT macro and introduce pmd_pshift()
+> > helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
+> > helper, pmd_psize().
+> > 
+> > Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
+> > which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
+> > and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
+> > PMD-sized units, the test may fail with the previous size of 100 MiB,
+> > which is not a multiple of the PMD size when the base page size is
+> > 16 KiB or 64 KiB.
+> > 
+> > After this patch, output of transhuge-stress:
+> > 
+> >   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
+> >     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+> >     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+> >     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+> >     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
+> >     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
+> >     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
+> >     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
+> >     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
+> >     ...
+> >   ok 1 Completed
+> > 
+> > Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > ---
+> >  tools/testing/selftests/mm/guard-regions.c    | 10 +++++--
+> >  tools/testing/selftests/mm/ksm_tests.c        | 16 ++++++-----
+> >  tools/testing/selftests/mm/run_vmtests.sh     |  4 +--
+> >  tools/testing/selftests/mm/transhuge-stress.c | 25 +++++++++++-------
+> >  tools/testing/selftests/mm/vm_util.c          | 38 +++++++++++++++++++++++----
+> >  tools/testing/selftests/mm/vm_util.h          |  9 +++----
+> >  6 files changed, 71 insertions(+), 31 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> > index f7d53ea3c2527..02f69244f9a42 100644
+> > --- a/tools/testing/selftests/mm/guard-regions.c
+> > +++ b/tools/testing/selftests/mm/guard-regions.c
+> > @@ -2194,14 +2194,20 @@ TEST_F(guard_regions, pagemap_scan)
+> >  TEST_F(guard_regions, collapse)
+> >  {
+> >  	const unsigned long page_size = self->page_size;
+> > -	const unsigned long size = 2 * HPAGE_SIZE;
+> > -	const unsigned long num_pages = size / page_size;
+> > +	const uint64_t hpage_size = pmd_psize();
+> > +	unsigned long size, num_pages;
+> >  	char *ptr;
+> >  	int i;
+> >  
+> >  	if (!thp_available())
+> >  		SKIP(return, "Transparent Hugepages not available\n");
+> >  
+> > +	if (!hpage_size)
+> > +		ksft_exit_fail_msg("reading hpage_size failed\n");
 > 
-> Trimming 41 capabilities in an arm64 KVM guest goes from ~8.5-23.6ms with
-> the per-thread loop to ~11-14us, independent of the thread count.
+> I'm sorry for not catching this earlier, but I don't think calling a
+> ksft_exit_fail_msg() for not being able to calculate PMD size is a good
+> idea. Maybe call an ASSERT*() here, something like
 > 
-> Changes in RFC v2:
-> - Solve concurrently clone and concurrently drop mask problem.
-> - Solove sashiko problems in [1].
-> - Link to RFC v1: https://lore.kernel.org/all/20260922095816.1191799-1-ruanjinjie@huawei.com/
-> [1] https://sashiko.dev/#/patchset/20260922095816.1191799-1-ruanjinjie%40huawei.com
+> ASSERT_NE(hpage_size, 0);
+> 
+> so that just this test fails, instead of the whole run exiting with a
+> bail out?
 
-Sorry, somehow I didn't notice this version until today.  I will take
-a close look later this week.  Thanks.
+No. The failure would occur if open() or read() fails, and subsequent
+attempts would likely fail for the same reason.
+This is also why __pmd_size is set to 0 after a failed attempt.
 
-> Jinjie Ruan (3):
->   capability: Move mk_kernel_cap() to header
->   security: Add PR_CAPBSET_DROP_MASK for process-wide bounding-set drops
->   selftests: prctl: add process-wide bounding-set drop tests
-> 
->  fs/proc/array.c                               |   3 +-
->  include/linux/capability.h                    |  10 +
->  include/linux/sched/signal.h                  |   8 +
->  include/uapi/linux/prctl.h                    |   1 +
->  kernel/capability.c                           |   5 -
->  kernel/fork.c                                 |   1 +
->  security/commoncap.c                          |  91 ++-
->  tools/testing/selftests/prctl/Makefile        |  12 +-
->  .../selftests/prctl/cap-bset-drop-test.c      | 641 ++++++++++++++++++
->  9 files changed, 759 insertions(+), 13 deletions(-)
->  create mode 100644 tools/testing/selftests/prctl/cap-bset-drop-test.c
-> 
-> -- 
-> 2.34.1
+We don't need to produce useless failure log anymore.
+
+[...snip...]
+
+
+-- 
+Sincerely,
+Yeoreum Yun
