@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9184F393E;
-	Tue, 13 Oct 2026 15:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F805349A5;
+	Tue, 13 Oct 2026 15:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791906723; cv=none; b=rUIulx5RAqSkMWn/h+EQSLYpG62KpvSBnbcUoEpnaUSKNUzdXvNM7YTf6ru6bZ3BURxbbJB7qC+seoROUFM6d02bQDpdo7uAvW+n4Al/PSvZheuTNj90zUTgadlxaSwWiBpoVOR7cyU1nToMMGHKKfT1PRY2TUrd2a/9ot3xE5E=
+	t=1791906726; cv=none; b=fcZ7w1j0WsMBXFuLhl0NLOhN2MiEY+BsNjN3/5su3r21VNJaBY7Py5UHpfU+75nFZy5rKptp/g9ioOrSUH7SuFx+540VpbDNWCwhsYS6T3xSBR39rytsHQAmR8mxztnwbpI71w7BpSTIk9ebKW67D9E9dzwsAjq72xTrdgowAfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791906723; c=relaxed/simple;
-	bh=o0udMlqUIfAznzMuinvP8zQVnSnw1dlQ3/LfRtrt4IE=;
+	s=arc-20240116; t=1791906726; c=relaxed/simple;
+	bh=cXd+WW/FwqTOdRuY2BWdty+JQCn54Oy/6vpztjlwqdM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rcDBpfSmop1e3856mxiYT/U7xdtOSxM8P3+EtrmOuAlp/FGRbhuTN9B8jFeoMUOfLjlnWbRyl6hXtA1xAVLE6e9D1DBzNDItPcpX43Hx6pTGy2hRCjLik2OlBkOj0aHvIuccbu6Dzw+Z9XfxXSR6vvhPVrtSJPvUNa2l3uRtJEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kz7yq3fn; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=GDz4pT8zgSd2e3wNOJSXmCQdtHjUNExmqr4EEHoxREXy/XTRVMEm7tuhCA4pBsmbeXarUaqkOR9zgztwvoQMN+7jO0ULeLxDujofB05wn7ihx0KvUUABOAXNsuTp5r+AEFwmvJ06nuamHgBNUCimx3dQnK0rW+yeUym0peqRBto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RlYW8tib; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kz7yq3fn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746591F00898;
-	Tue, 13 Oct 2026 15:51:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RlYW8tib"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA64B1F0089A;
+	Tue, 13 Oct 2026 15:52:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791906721;
-	bh=Nf7/alv68IXjWnlt4DekDFFd76Dlk/dK2BFAvWipGHg=;
+	s=k20260515; t=1791906725;
+	bh=bVae4teEAY5lN0cAm+GuxPC0EcqQhfJZCICDDMYyghA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Kz7yq3fnofuV99ds1hQW6LFEjhW9UDdL2PfAn7+4pUWmoJ1+z3yUlGa5w82dPnCT6
-	 Kb1vF+l9ZlXwTHWOlmNTSq6oXfhdi5/jlcNlCaMgS4pt1v4xxmfHEEnUnc+rIrZZNu
-	 njuVHkFHKwqi5Z2olBsEWuIR1W+mIH3Xp33rNXfn2+tC90bSeoB+LT7sWzF8VSlwZ3
-	 DBgO7n+Adq8r0/dZOdANR74KcDaTJdpF3h7XC4tvoeigTW03qHDotU788Z5kXGC0ah
-	 6dAsHfiWAm69SLPQdK6dkX0OCsMJESAm67AHhdIV3b/QipAvptaxl8tDUAjyyWLoZc
-	 GAZdiErHCkZ8Q==
+	b=RlYW8tibMBY/75e5YyFt2LS953wQIthiG3tEe+skjfKKUwyN0wTUv1s6/xS33yZ4T
+	 bPmkf9ztBg8pCF4dVi8HhEpwIjb7U1pRHNvp+OfNTEN31YLUACJPE6Y2ERsX7h5gkL
+	 krIwvyqd6teWhnLdqyVbcL49j0tNNn4GlWVkCjaLRVL0V8XwgU+QCav1epgZavW6ZI
+	 YjPbB9LTylQiY7kqAp439lpOf0wMTlsr7jfqjv/u9REvlQFTr0fLZA/0I8LWP03QPI
+	 hasIWM0R7O+ZwfZvIMshhcs/p9Q2GU+WZDnSfcjCFhUVjtBB+7Ho2OK9pcQ53Zy7Bl
+	 LrUsBq4vOCUlw==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 13 Oct 2026 16:43:24 +0100
-Subject: [PATCH 5/7] kunit: tool: Allow several run_kernel() calls to be in
- flight at once
+Date: Tue, 13 Oct 2026 16:43:25 +0100
+Subject: [PATCH 6/7] kunit: tool: Serialise output written from multiple
+ threads
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261013-kunit-parallel-v1-5-f4be28c895e5@kernel.org>
+Message-Id: <20261013-kunit-parallel-v1-6-f4be28c895e5@kernel.org>
 References: <20261013-kunit-parallel-v1-0-f4be28c895e5@kernel.org>
 In-Reply-To: <20261013-kunit-parallel-v1-0-f4be28c895e5@kernel.org>
 To: Brendan Higgins <brendan.higgins@linux.dev>, 
@@ -50,180 +50,151 @@ Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6673; i=broonie@kernel.org;
- h=from:subject:message-id; bh=o0udMlqUIfAznzMuinvP8zQVnSnw1dlQ3/LfRtrt4IE=;
- b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLOBbcq1O3blSHE6DSfb9lcy/un+aMWiBW9vf1h/pfP9
- Wq/ZBZ/7ChlYRDjYpAVU2SJy+J+WV/yeg3fwYVtMHNYmUCGMHBxCsBESmYw/JVUd7U22vSu8ECW
- SXhTxzW5e6H3q1YY/7jxVqDhWRdP8mqG/76/02tDNG/Wxv0QmxgQLrm+5LVt28fj8bInri18c2j
- 2JB4A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5630; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=cXd+WW/FwqTOdRuY2BWdty+JQCn54Oy/6vpztjlwqdM=;
+ b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLOBbcemlR07lxz5X+ftSpWzYFtB5dn2pnUWOSqBS7V2
+ +JXLBHfUcrCIMbFICumyBKXxf2yvuT1Gr6DC9tg5rAygQxh4OIUgImw6TL8D3D5Z7Rx8a2dojpx
+ jK5eK1YdSe59+X+FUrlKhfdzbp0MUYb/Me5nVuc1ahi+FivrOPPiveoCrjvLjlvWNny735cUu9a
+ RDwA=
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-run_kernel() records the kernel it starts in a single self._process
-attribute, which the timeout thread, the cleanup at the end of the
-output and the SIGINT handler all read back. That only works while one
-kernel is running at a time, which rules out running suites in
-parallel guests from multiple threads.
+Python's text streams are not thread safe. If two threads write to
+sys.stdout at the same time the stream's internal buffer can be
+corrupted, resulting in lost output and runs of NUL bytes or heap
+garbage being written in its place. This isn't an issue currently, but
+will be when we implement support for parallel test execution.
 
-Track running kernels in a list protected by a lock instead, with each
-run_kernel() invocation only adding and removing its own entry. The
-timeout thread and the cleanup code work on a local reference to their
-own process rather than going via self, so one kernel timing out can no
-longer terminate a different one. The SIGINT handler terminates every
-kernel that is still running.
+Add a lock to kunit_printer which Printer.print() takes around each
+write, and route the other prints that can run concurrently with the
+test results through the printer: the kernel start banners and timeout
+message in kunit_kernel, and the raw, JSON and JUnit output to stdout.
+Prints that only happen before any kernel is started, such as during
+configuration and build, are left alone.
 
-No functional change when a single kernel is run at a time.
+No change in output when a single kernel is run at a time.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/kunit/kunit_kernel.py    | 45 ++++++++++++++++++++--------------
- tools/testing/kunit/kunit_tool_test.py | 27 ++++++++++++++++++++
- 2 files changed, 53 insertions(+), 19 deletions(-)
+ tools/testing/kunit/kunit.py         | 4 ++--
+ tools/testing/kunit/kunit_junit.py   | 3 ++-
+ tools/testing/kunit/kunit_kernel.py  | 7 ++++---
+ tools/testing/kunit/kunit_printer.py | 9 ++++++++-
+ 4 files changed, 16 insertions(+), 7 deletions(-)
 
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 971e70b0fb1a..0132687cdd43 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -272,7 +272,7 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
+ 		elif request.raw_output == 'kunit':
+ 			output = kunit_parser.extract_tap_lines(output)
+ 		for line in output:
+-			print(line.rstrip())
++			stdout.print(line.rstrip())
+ 		parse_time = time.time() - parse_start
+ 		return KunitResult(KunitStatus.SUCCESS, parse_time), fake_test
+ 
+@@ -302,7 +302,7 @@ def _write_test_results(request: KunitParseRequest, metadata: kunit_json.Metadat
+ 					test=test,
+ 					metadata=metadata)
+ 		if request.json == 'stdout':
+-			print(json_str)
++			stdout.print(json_str)
+ 		else:
+ 			with open(request.json, 'w') as f:
+ 				f.write(json_str)
+diff --git a/tools/testing/kunit/kunit_junit.py b/tools/testing/kunit/kunit_junit.py
+index 3622070358e7..a15c6061003f 100644
+--- a/tools/testing/kunit/kunit_junit.py
++++ b/tools/testing/kunit/kunit_junit.py
+@@ -6,6 +6,7 @@
+ 
+ from xml.sax.saxutils import quoteattr, XMLGenerator
+ import xml.etree.ElementTree as ET
++import kunit_printer
+ from kunit_parser import Test, TestStatus
+ from typing import Optional
+ 
+@@ -51,7 +52,7 @@ def get_junit_result(test: Test) -> str:
+ def print_junit_result(test: Test) -> None:
+ 	root_element = get_test_suite(test, None)
+ 	ET.indent(root_element)
+-	ET.dump(root_element)
++	kunit_printer.stdout.print(ET.tostring(root_element, encoding='unicode'))
+ 
+ # Write an entire XML file for the test structure starting at test
+ def write_junit_result(test: Test, filename: str) -> None:
 diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 2641db9eddba..1d3226f5a136 100644
+index 1d3226f5a136..508bd62eaa40 100644
 --- a/tools/testing/kunit/kunit_kernel.py
 +++ b/tools/testing/kunit/kunit_kernel.py
-@@ -277,7 +277,11 @@ class LinuxSourceTree:
- 		if kconfig_add:
- 			kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
- 			self._kconfig.merge_in_entries(kconfig)
--		self._process : Optional[subprocess.Popen[Any]] = None
-+		# Kernels currently running. There can be several when
-+		# run_kernel() is called concurrently from multiple threads.
-+		self._processes : List[subprocess.Popen[Any]] = []
-+		# SIGINT can interrupt the main thread while it holds this lock.
-+		self._processes_lock = threading.RLock()
+@@ -21,6 +21,7 @@ from typing import Iterator, List, Optional, Tuple, Any
+ from types import FrameType
  
- 	def arch(self) -> str:
- 		return self._arch
-@@ -368,7 +372,9 @@ class LinuxSourceTree:
- 		"""Boots the kernel and yields its console output line by line.
+ import kunit_config
++import kunit_printer
+ import qemu_config
  
- 		The output is also written to `outfile`, which defaults to
--		test.log in the build directory.
-+		test.log in the build directory. This may be called from
-+		several threads at once to run kernels concurrently, in which
-+		case each caller must supply a distinct `outfile`.
- 		"""
- 		# Copy to avoid mutating the caller-supplied list. exec_tests() reuses
- 		# the same args across repeated run_kernel() calls (e.g. --run_isolated),
-@@ -385,37 +391,36 @@ class LinuxSourceTree:
- 		if outfile is None:
- 			outfile = get_outfile_path(build_dir)
- 
--		self._process = self._ops.start(args, build_dir)
--		assert self._process is not None # tell mypy it's set
--		assert self._process.stdout is not None  # tell mypy it's set
-+		process = self._ops.start(args, build_dir)
-+		assert process is not None # tell mypy it's set
-+		assert process.stdout is not None  # tell mypy it's set
-+		with self._processes_lock:
-+			self._processes.append(process)
- 
- 		# Enforce the timeout in a background thread.
- 		def _wait_proc() -> None:
+ KCONFIG_PATH = '.config'
+@@ -132,7 +133,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+ 				'-accel', 'tcg',
+ 				'-serial', self._serial] + self._extra_qemu_params
+ 		# Note: shlex.join() does what we want, but requires python 3.8+.
+-		print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
++		kunit_printer.stdout.print('Running tests with:\n$ ' + ' '.join(shlex.quote(arg) for arg in qemu_command))
+ 		return subprocess.Popen(qemu_command,
+ 					stdin=subprocess.PIPE,
+ 					stdout=subprocess.PIPE,
+@@ -154,7 +155,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+ 		"""Runs the Linux UML binary. Must be named 'linux'."""
+ 		linux_bin = os.path.join(build_dir, 'linux')
+ 		params.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+-		print('Running tests with:\n$', linux_bin, ' '.join(shlex.quote(arg) for arg in params))
++		kunit_printer.stdout.print('Running tests with:\n$ ' + linux_bin + ' ' + ' '.join(shlex.quote(arg) for arg in params))
+ 		return subprocess.Popen([linux_bin] + params,
+ 					   stdin=subprocess.PIPE,
+ 					   stdout=subprocess.PIPE,
+@@ -402,7 +403,7 @@ class LinuxSourceTree:
  			try:
--				if self._process:
--					self._process.wait(timeout=timeout)
-+				process.wait(timeout=timeout)
+ 				process.wait(timeout=timeout)
  			except Exception as e:
- 				print(e)
--				if self._process:
--					self._process.terminate()
--					self._process.wait()
-+				process.terminate()
-+				process.wait()
+-				print(e)
++				kunit_printer.stdout.print(str(e))
+ 				process.terminate()
+ 				process.wait()
  		waiter = threading.Thread(target=_wait_proc)
- 		waiter.start()
+diff --git a/tools/testing/kunit/kunit_printer.py b/tools/testing/kunit/kunit_printer.py
+index ca119f61fe79..440aa7667ece 100644
+--- a/tools/testing/kunit/kunit_printer.py
++++ b/tools/testing/kunit/kunit_printer.py
+@@ -8,10 +8,16 @@
  
- 		output = open(outfile, 'w')
- 		try:
- 			# Tee the output to the file and to our caller in real time.
--			for line in self._process.stdout:
-+			for line in process.stdout:
- 				output.write(line)
- 				yield line
- 		# This runs even if our caller doesn't consume every line.
- 		finally:
- 			# Flush any leftover output to the file
--			if self._process:
--				if self._process.stdout:
--					output.write(self._process.stdout.read())
--					self._process.stdout.close()
--				self._process = None
-+			output.write(process.stdout.read())
-+			process.stdout.close()
-+			with self._processes_lock:
-+				self._processes.remove(process)
- 			output.close()
- 
- 			waiter.join()
-@@ -423,7 +428,9 @@ class LinuxSourceTree:
- 
- 	def signal_handler(self, unused_sig: int, unused_frame: Optional[FrameType]) -> None:
- 		logging.error('Build interruption occurred. Cleaning console.')
--		if self._process:
--				self._process.terminate()
--				self._process.wait()
-+		with self._processes_lock:
-+			processes = list(self._processes)
-+		for process in processes:
-+			process.terminate()
-+			process.wait()
- 		self._restore_terminal_if_tty()
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 4e8068dce918..c4999273e491 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -18,6 +18,7 @@ import os
- import signal
- import subprocess
+ import datetime
  import sys
-+import textwrap
- from typing import Iterable
- import xml.etree.ElementTree as ET
++import threading
+ import typing
  
-@@ -538,6 +539,8 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 			with open(outfile, 'rt') as f:
- 				self.assertEqual(f.read(), 'hi\n')
- 			self.assertFalse(os.path.exists(kunit_kernel.get_outfile_path(build_dir)))
-+			# The kernel has exited so should no longer be tracked.
-+			self.assertEqual(tree._processes, [])
+ _RESET = '\033[0;0m'
  
- 	def test_run_kernel_args_not_mutated(self):
- 		"""Verify run_kernel() copies args so callers can reuse them."""
-@@ -607,6 +610,30 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 			mock_error.assert_called_once()
- 			mock_call.assert_called_once_with(['stty', 'sane'])
- 
-+	def test_signal_handler_during_process_update(self):
-+		# Run in a subprocess so a deadlock fails with a timeout rather
-+		# than hanging the test runner. Deliver a real signal while the
-+		# main thread holds the lock used to update the process list.
-+		code = textwrap.dedent('''\
-+			import os
-+			import signal
-+			from unittest import mock
-+			import kunit_kernel
++# Python's text streams aren't thread safe: concurrent writes to
++# sys.stdout from several threads can lose output or write garbage. All
++# output from the tool should go through this lock.
++print_lock = threading.Lock()
 +
-+			tree = kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[os.devnull])
-+			process = mock.Mock()
-+			with tree._processes_lock:
-+				tree._processes.append(process)
-+				os.kill(os.getpid(), signal.SIGINT)
-+			process.terminate.assert_called_once_with()
-+			process.wait.assert_called_once_with()
-+		''')
-+		result = subprocess.run([sys.executable, '-c', code],
-+			cwd=os.path.dirname(os.path.abspath(__file__)),
-+			stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
-+			stderr=subprocess.STDOUT, text=True, timeout=5)
-+		self.assertEqual(result.returncode, 0, msg=result.stdout)
-+
- 	def test_build_reconfig_no_config(self):
- 		with tempfile.TemporaryDirectory('') as build_dir:
- 			with open(kunit_kernel.get_kunitconfig_path(build_dir), 'w') as f:
+ class Printer:
+ 	"""Wraps a file object, providing utilities for coloring output, etc."""
+ 
+@@ -25,7 +31,8 @@ class Printer:
+ 
+ 	def print(self, message: str) -> None:
+ 		if self._print:
+-			print(message, file=self._output)
++			with print_lock:
++				print(message, file=self._output)
+ 
+ 	def print_with_timestamp(self, message: str) -> None:
+ 		ts = datetime.datetime.now().strftime('%H:%M:%S')
 
 -- 
 2.47.3
