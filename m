@@ -1,47 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FBD38F230;
-	Wed, 14 Oct 2026 20:01:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5AC385D75;
+	Wed, 14 Oct 2026 20:01:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792008090; cv=none; b=cW7giGMrR18J9Xhj97zPu4xpdl50i2NVWiM4wQEfgk0NgeuWE3oKJskML8YNa29hFdgeQ36PQLCRMEsdRWghuMBF2Rr/407ZsdX7sGGyo+sTW13EOFQr4ywXv0/I/H5TqZM8h3lUemxNfZqY8teydLjSnZpYVOiYEU32C4fx5HM=
+	t=1792008091; cv=none; b=UtMiQ8TmPFlX24ISCTaVxuyyyCmrgHB7i6qD4kfkgMR1dfeOXssNIgElO0V3vgubgftUU7zk14vkE5ZJTZgzAyjmOw3p1QCNmDqnQqsFO2MmyDiA/J0jIQN/0JXlXl65dXSN+nLhWbIGnlSdSyB05yJL4sdIfzbDPYogPyEeUJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792008090; c=relaxed/simple;
-	bh=3qD11HPFDagKzU1nuRAB1h462Tj/nX0V511tu8vCtRE=;
+	s=arc-20240116; t=1792008091; c=relaxed/simple;
+	bh=ArcZQi3GV5i2s5T+FwHYuBpIizUOuke7BUhtttXRNjQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mhqnV+B25yg4BMAd85piGc7ueWc27wOZXl0MHwMX78h9hzoNWCVcHc3dnm4zRgeE9p0GkyV/FFmGZi/0tPXVWfAUtVERu0xmFoWxUELsZomNhJ/4V2ET1vdf/Ce2YYYrb/KVZAF7iGk0nxNtBZYkPS0j4uCgkdFM8ZxUArk14wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QGJi8nD0; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=IYywTpdh2xHKNOhF7lTUOn2B6mPzzyOg38R3VLdjLRdAcQ3Txh5K/0CdZ2//neqdreiJXTUTbLxikJJhL3BfyjXrwN+TyWlED3NLu6I6FbMY/BZsiI4w8Uues9+YodFEh0odo512V0G3FhW0Z5L+W0/TWsuyiLHJ03zgaIdgk40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NncGK1Cq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QGJi8nD0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C60C1F000C5;
-	Wed, 14 Oct 2026 20:01:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NncGK1Cq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 404A91F000C7;
+	Wed, 14 Oct 2026 20:01:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792008082;
-	bh=mRexem4KV6KHScvbzz77XFjOE74k7LslCRLFHgVfnyc=;
+	s=k20260515; t=1792008086;
+	bh=OJJRzw35bezfBVy0Bke8Qe4M2f3C2NI3f1X/6Jbh83U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=QGJi8nD0vPoSQK0Trc2JLAFR6KIfisA6bKNAFgQdjKbhPdng/sPYcn1mfNZn4Lx4Q
-	 onBNeMJVT/Q00j278e+4Jkd5CJAzyUAKNelpUTS4XPylK8wsvCME3p9QHDSZg89n0T
-	 sX0FXeDlfCwSkLMvi+U7MIeAwuHaFyFWTwJdcaG0ADZQBAx1iyqjxfpuehQUaN8vrC
-	 0b+XjluOw0cU4/h4efjrmm1N7v8mAG9ZvgWAdY1/OK8HtaQaqkwymhkM/PV0wUYDh+
-	 A0pj1lcjeZt7UPrfROdHFuY6S/qwj7G76wdxyjJKvN/1heJEJs8XVJ3Eqc7zRKaPt5
-	 3qWidvsJMpFuA==
+	b=NncGK1CqR0+mAIK9AVAUBCGrocJSygrgvpKE25CvKZxnWSjZC/+GYxV5d06a3Rt6I
+	 VkgOTkq6fvaiHKIuLluO1YjYatNJd19PXvV4m2GSsUvQlOql44eUiOri45wVhwwKS5
+	 zDkPFq6/3hKto5o7WOyUFro1pNCX6viZUB+ntyB7CFg7QiWQXmzEVjCtdDncbt3tAR
+	 FCBXvuLvjs25+TYMj/OedLfctCx583E/3uaz6pSGlS4MPMshOv/RnmGOKM63NTNk1m
+	 eYHOEa9HyS+ng18WP2J5MrQhSARGRUc7LkqFNyvOvoFqn6I3iRzvJZtpwKD1CrsUSw
+	 VkSislgVtq3XQ==
 From: Sasha Levin <sashal@kernel.org>
 To: Shuah Khan <shuah@kernel.org>
 Cc: Sasha Levin <sashal@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	linuxppc-dev@lists.ozlabs.org,
 	Mark Brown <broonie@kernel.org>,
 	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/7] selftests/futex: report failures of the functional subdirectory
-Date: Wed, 14 Oct 2026 16:01:11 -0400
-Message-ID: <20261014200115.1363363-4-sashal@kernel.org>
+Subject: [PATCH 6/7] selftests/powerpc: report the outcome of each subdirectory
+Date: Wed, 14 Oct 2026 16:01:14 -0400
+Message-ID: <20261014200115.1363363-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261014200115.1363363-1-sashal@kernel.org>
 References: <20261014200115.1363363-1-sashal@kernel.org>
@@ -53,78 +52,130 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The futex suite builds its tests in the functional subdirectory and then
-copies run.sh into the output directory. The copy is the last command of
-the loop, so its status replaces that of the build, and "make all"
-succeeds even when the functional tests fail to compile.
+The powerpc suite and its pmu subdirectory install and list their tests
+in shell loops whose status is that of the last subdirectory, so a
+failure in any other subdirectory is lost and FORCE_TARGETS has no
+effect on them.
 
-Fold the copy into the status of the subdirectory, count a failure to
-create the output directory as well, and let the build and installation
-loops return failure when no subdirectory succeeds, which matches how the
-top-level selftests Makefile treats its targets, or as soon as one fails
-when FORCE_TARGETS is set. When a build report is requested, record each
-subdirectory as futex/<subdir> so that a failure is visible even when
-make itself succeeds.
+Make the installation and runlist loops fail only when no subdirectory
+succeeds, which matches how the top-level selftests Makefile treats its
+targets, and stop at the first failure when FORCE_TARGETS is set. When a
+build report is requested, record each subdirectory as powerpc/<subdir>
+or powerpc/pmu/<subdir>, including the builds of the subdirectories, so
+that a failure is visible even when make itself succeeds.
 
-Fixes: 9c3340ea7f5d ("selftests: futex: copy sub-dir test scripts for make O=dir run")
-Fixes: 9705315b7562 ("selftests/futex: Update Makefile to use lib.mk")
+The subdirectories are still built as prerequisites of "all", so a
+subdirectory that fails to build still fails the build of the suite as
+before; only the reporting of that failure is added.
+
+Fixes: 6faeeea44b84 ("selftests: Add install support for the powerpc tests")
+Fixes: 822a04957cc5 ("selftests/powerpc: Convert pmu Makefile to for loop style")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/futex/Makefile | 32 +++++++++++++++++---------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ tools/testing/selftests/powerpc/Makefile     | 20 +++++++++++++++-----
+ tools/testing/selftests/powerpc/pmu/Makefile | 20 +++++++++++++++-----
+ 2 files changed, 30 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
-index 78ab2cd111f60..d6923775b8d49 100644
---- a/tools/testing/selftests/futex/Makefile
-+++ b/tools/testing/selftests/futex/Makefile
-@@ -4,26 +4,36 @@ SUBDIRS := functional
- TEST_PROGS := run.sh
+diff --git a/tools/testing/selftests/powerpc/Makefile b/tools/testing/selftests/powerpc/Makefile
+index b175e94e1901d..8349196c934d5 100644
+--- a/tools/testing/selftests/powerpc/Makefile
++++ b/tools/testing/selftests/powerpc/Makefile
+@@ -37,9 +37,11 @@ endif
+ all: $(SUB_DIRS)
+ 
+ $(SUB_DIRS):
+-	BUILD_TARGET=$(OUTPUT)/$@; mkdir -p $$BUILD_TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $@ all
++	BUILD_TARGET=$(OUTPUT)/$@; mkdir -p $$BUILD_TARGET && $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $@ all; \
++	status=$$?; $(call ksft_record_build_status,all,powerpc/$@); exit $$status
  
  include ../lib.mk
 +include $(selfdir)/build_report.mk
+ include ./flags.mk
  
- all:
--	@for DIR in $(SUBDIRS); do		\
--		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
--		mkdir $$BUILD_TARGET  -p;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
--		if [ -e $$DIR/$(TEST_PROGS) ]; then \
--			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
--		fi \
--	done
-+	@ret=$(if $(SUBDIRS),1,0); for DIR in $(SUBDIRS); do	\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		mkdir -p $$BUILD_TARGET &&			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;	\
-+		status=$$?;					\
-+		if [ -e $$DIR/$(TEST_PROGS) ]; then		\
-+			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/ || \
-+				[ $$status -ne 0 ] || status=1;	\
-+		fi;						\
-+		$(call ksft_record_build_status,all,futex/$$DIR); \
-+		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
-+		[ $$status -eq 0 ] && ret=0;			\
-+	done; exit $$ret
+ override define RUN_TESTS
+@@ -50,17 +52,25 @@ override define RUN_TESTS
+ endef
  
  override define INSTALL_RULE
- 	mkdir -p $(INSTALL_PATH)
- 	install -t $(INSTALL_PATH) $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)
- 
--	@for SUBDIR in $(SUBDIRS); do \
-+	@ret=$(if $(SUBDIRS),1,0); for SUBDIR in $(SUBDIRS); do \
- 		BUILD_TARGET=$(OUTPUT)/$$SUBDIR;	\
--		mkdir $$BUILD_TARGET  -p;	\
-+		mkdir -p $$BUILD_TARGET &&		\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$SUBDIR INSTALL_PATH=$(INSTALL_PATH)/$$SUBDIR install; \
+-	+@for TARGET in $(SUB_DIRS); do \
++	+@ret=$(if $(SUB_DIRS),1,0); for TARGET in $(SUB_DIRS); do \
+ 		BUILD_TARGET=$(OUTPUT)/$$TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET INSTALL_PATH=$$INSTALL_PATH/$$TARGET -C $$TARGET install;\
 -	done;
 +		status=$$?;				\
-+		$(call ksft_record_build_status,install,futex/$$SUBDIR); \
++		$(call ksft_record_build_status,install,powerpc/$$TARGET); \
 +		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
 +		[ $$status -eq 0 ] && ret=0;		\
 +	done; exit $$ret
  endef
  
+ emit_tests:
+-	+@for TARGET in $(SUB_DIRS); do \
++	+@ret=$(if $(SUB_DIRS),1,0); for TARGET in $(SUB_DIRS); do \
+ 		BUILD_TARGET=$(OUTPUT)/$$TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET COLLECTION=$(COLLECTION)/$$TARGET -s -C $$TARGET $@;\
+-	done;
++		status=$$?;				\
++		$(call ksft_record_build_status,install,powerpc/$$TARGET); \
++		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
++		[ $$status -eq 0 ] && ret=0;		\
++	done; exit $$ret
+ 
  override define CLEAN
+ 	+@for TARGET in $(SUB_DIRS); do \
+diff --git a/tools/testing/selftests/powerpc/pmu/Makefile b/tools/testing/selftests/powerpc/pmu/Makefile
+index 7e9dbf3d0d092..7b3ef1decbfbb 100644
+--- a/tools/testing/selftests/powerpc/pmu/Makefile
++++ b/tools/testing/selftests/powerpc/pmu/Makefile
+@@ -7,6 +7,7 @@ EXTRA_SOURCES := ../harness.c event.c lib.c ../utils.c
+ 
+ top_srcdir = ../../../../..
+ include ../../lib.mk
++include $(selfdir)/build_report.mk
+ include ../flags.mk
+ 
+ SUB_DIRS := ebb sampling_tests event_code_tests
+@@ -26,7 +27,8 @@ $(OUTPUT)/count_stcx_fail: loop.S $(EXTRA_SOURCES)
+ $(OUTPUT)/per_event_excludes: ../utils.c
+ 
+ $(SUB_DIRS):
+-	BUILD_TARGET=$(OUTPUT)/$@; mkdir -p $$BUILD_TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $@ all
++	BUILD_TARGET=$(OUTPUT)/$@; mkdir -p $$BUILD_TARGET && $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $@ all; \
++	status=$$?; $(call ksft_record_build_status,all,powerpc/pmu/$@); exit $$status
+ 
+ DEFAULT_RUN_TESTS := $(RUN_TESTS)
+ override define RUN_TESTS
+@@ -42,18 +44,26 @@ emit_tests:
+ 		BASENAME_TEST=`basename $$TEST`;	\
+ 		echo "$(COLLECTION):$$BASENAME_TEST";	\
+ 	done
+-	+@for TARGET in $(SUB_DIRS); do \
++	+@ret=$(if $(SUB_DIRS),1,0); for TARGET in $(SUB_DIRS); do \
+ 		BUILD_TARGET=$(OUTPUT)/$$TARGET; \
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET COLLECTION=$(COLLECTION)/$$TARGET -s -C $$TARGET emit_tests; \
+-	done;
++		status=$$?; \
++		$(call ksft_record_build_status,install,powerpc/pmu/$$TARGET); \
++		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
++		[ $$status -eq 0 ] && ret=0; \
++	done; exit $$ret
+ 
+ DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
+ override define INSTALL_RULE
+ 	$(DEFAULT_INSTALL_RULE)
+-	+@for TARGET in $(SUB_DIRS); do \
++	+@ret=$(if $(SUB_DIRS),1,0); for TARGET in $(SUB_DIRS); do \
+ 		BUILD_TARGET=$(OUTPUT)/$$TARGET; \
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET INSTALL_PATH=$$INSTALL_PATH/$$TARGET -C $$TARGET install; \
+-	done;
++		status=$$?; \
++		$(call ksft_record_build_status,install,powerpc/pmu/$$TARGET); \
++		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
++		[ $$status -eq 0 ] && ret=0; \
++	done; exit $$ret
+ endef
+ 
+ DEFAULT_CLEAN := $(CLEAN)
 -- 
 2.53.0
 
