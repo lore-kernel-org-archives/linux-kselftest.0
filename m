@@ -1,99 +1,90 @@
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8113D1702
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 22:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2B84A8FF4
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 23:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792017787; cv=none; b=E6l8ekE35RX7KXyQkFynfBMe2VOrnmImPYD1p6ueCheQiNEQERatYuQIyGwmvNU5gI3d3JmtW9MlZliGli+pK6NrorUK4aWGXLjtKnaYB1dl7Bk353RSbcvOCS1lIiS6b59p5jydNZSQyx3rMtvszNNJQAiBcaVBBSdClN1JhKs=
+	t=1792022194; cv=none; b=T/QR8nUn2F8ttXA5uF6j0rmHiawwTTr6mG5vxcmJkAU5JHkq5se3GXWYyxm2aOYpJ6KEiryIK5IWpdiHr0l1sGRxf8/BDI0wgGjaEcwW2m1viVPfVPascWXi+GtIreS+iq66dITCz4VdwpkCoBLKVapIndxjhS9z1JC9tG3en3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792017787; c=relaxed/simple;
-	bh=6QMveXXpEj5QdPkVXKozi90KLuYOCVhf9Jhu27z3Jvw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lf/t0PkQwWBmQorvhsZ2uhSOjvxJka/biFev1sMPzKXh6Q4dtFsUuy4etvTduMOAGFJIqltAxgYHGJAnj/P2Baazw/S3uDBTEmVSbNiGzgE4D5JnHm4LxxoDV4VQxeOzxEaclvPxEdBD+97LeHiA2KC/09krf0oHDFKiTSb7Nis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=mCyY4jhJ; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1792022194; c=relaxed/simple;
+	bh=nLu9+jS/Cn6oFT3DAy2pgKLYerUk78AHPFMk+9gkrY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a2HqA0GZbcPgN1GQOYUR8MloJSswPKKCUuo+q9Qfpj0skB8CzCnrtLEbjwmR68Y4qr5NT0NUNPOaJIiseXb6pugFREHkXYWIhLo91yHGzj3QBlXQ90mSH4af4rh4kVE9NO7fQ1TZrD03udzreJvhKxjXW7qEsSiZbAtOIRlUKn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=bJCCdWS3; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="mCyY4jhJ"
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E965640275
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 22:42:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1792017775;
-	bh=ZdiR6FLWYbNv8HRJW/cp7ACv/gfnAQ2Xl+ab8eRDEmc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version;
-	b=mCyY4jhJ7ZcI7KPXDeIzGwVCxBKUoI8uwCSvNUnOhKAYsNVzpRR9r9FqHliqmWXKf
-	 dFVEB9WbdK01k4cUqfzyCxA4rbN082iwp7XLjkQlz2RBKs7XQo0SHVtHi6zwfTaq9z
-	 SB96uLSzcDkQ7j0yAUe5BG6yW5Uz0q8fICfoBfiWRzQqtd8e9gZkg9SgGsplvAnLL/
-	 h0SmUegl/FQUlh8C7P9YYUuwo+Iua1kYDG/e/yWXJAxAZIBpOD3ZoekPMbwqG+IwVd
-	 c7M470grJn5VLBCN6EsJVekDdMn6lkVahne/zwy9VkM7UweXNTW5atP35ekL+ywOau
-	 IqZsR42PozLpTqtkaOcrbpRhDQ3rExDNpYFyc22kt9lj74V4qvbrqhkf+OPDsu5BAP
-	 dDr1JAPEFz0jhdaA8gZJEb3K/yeFVQ1BSN/W00EeP4Ldwf/1u8hafSbyjmmo4JLrQ0
-	 5b0c+GU1YTViyNA9Gb6MPzmbBKOzY94XuaNhGYVXIqCqlJQwsM0m0g+6FWqner9S5G
-	 u+SvEChXqIQqVmHC9B6dd0eUrgNdaQLOvZc8DVO51uuMpI/mutqKoKRM4FLdFO5vWg
-	 bmP3Wr0j3x9GqrL6Eva/FfRos6F1cnVzKERcg2n/NXK4giXX4aYXDoVrYQKSOlH9CP
-	 X9slncHwmwTTkpH8JZX7HGBM=
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-48589603501so691678f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 15:42:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="bJCCdWS3"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c350db5a761so619235766b.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 16:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bairaktaris.de; s=google; t=1792022191; x=1792626991; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ujWOXhajkBZtlCmsZmCoVumMM+X/QUn/djLaiVsONPE=;
+        b=bJCCdWS3SAPVptxJycLn5yScFOncCfpXu+inchndA6M1vZCtSnwKPoxvEnuEhrLLHr
+         F86HqEXS5wP1bKUC+C+MffUT9VA7+fLrXZDZibZz5Tf61HlVHt1Jh10Mx8WjykwBvVHx
+         PWXTNj4DHwTNfgz+9nx+32yGY4Q/BCQGmsC4zK0EWkIocoTkU+QppCGu41JHJqoEKDFo
+         ctpDdkJ8TO0L22nPejk4mF94+ND9ukR8xzhM9Qt6FTYQ2A+oNHIWmhwOUYx956uW3oS5
+         wmLPx36n6syhNVOIFA+khBnb0lRUS9tKMbfr9/33VgB4P8oopaeBmMyrSaNE6iMN1r/a
+         /FpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792017775; x=1792622575;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZdiR6FLWYbNv8HRJW/cp7ACv/gfnAQ2Xl+ab8eRDEmc=;
-        b=Uq3cGDPMAHGARlS/3SR4E1+QUUE1/SzN60g0K3UoTTw7Y2gSqsoJIMgWd+2V3vge0b
-         Z4PIiDgErwstVEkyFnwxOrTEAxiPInrqSk4GYnCiB0QOhdB67o0xPfikjd+5/iDpRTjx
-         JCmUMXfkEp7/EDD849vnWApw/3pLVgCA3E8JgEWDI9E+rF21T5P6k5qLjkExNt1qtR4j
-         zSWSg7r0KBqKBddZpWskx+X9rqzB+LQ6jUcovF1KHkwOzP2WsjaZ0YRJF2trtLnWb5es
-         GZQwzZipo1Gk0nmcaxhZaFJS18kBrTFki0oANX55El9k7FdN/uavuBzIC6WnggJ1r6Qz
-         eXNg==
-X-Forwarded-Encrypted: i=1; AKwUvBwuyFvIW+EA/Yf5+MnOjUut/0CyFSS4gYVlliHF1IRIFkCKmmN2+5dQ+Lcih3aZztwTWfWW6dHsKFPARABSShY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLUqnzXKizGzIrUSe5XHh0NckXZRr0MDXt8owf3ikpyFV/UG+u/
-	k82di2BBuN9dcJKdKoAeBKL/VxK8Y8pYvLyqtvC998nN2bey+XSxUbx6RVxtbM3iPpPEjFVurGG
-	rWbOyD5XZEzROlEzg0YY0gDWjUcfGS7aT5uDmZtYo9dmzRT8u4Ywef8fMow3WqoA2ZcJc63I0XB
-	GRQ9RgNCMVAQ==
-X-Gm-Gg: AYBFou3vRfh0nFffPQWubCTifclMZwiu4v6ApIzwQlHrU+Ft0Iut1pjGdddmnC9EXc4
-	WjI552+qBdpIyEdSST81Ab980fQjTw7oZ94bb2JCF7imak2Yj8UP5hfCgvWpgspjXEpH08L9aAE
-	N251veMlqo59nZbZR9IZWp0Ko9BQeFNAMmfC8klJdSlmK1q68iKGdY6yqS9+8L0CYBwZxoHG4IB
-	krotVbAFXMaGtFj4KQc9bbZKez5RCsWq0ZMX2B4FyZEjbWnIKc5OTS+Lyy5KZ+hiQitH5mwgTJ1
-	cCcyI2EO0wQ+hd0gMyCPO4MJ/FYj92ADNetEJKs6GrECs3fmhMvVeoVJI5d7cAznJzVQd6pkJi/
-	0adVeXgRaHyQ+oQuxmd75nPqLiVUH+UMag7686vjOc3U5AZR7xbjnA+a3
-X-Received: by 2002:a05:600c:4747:b0:4a1:77db:45d9 with SMTP id 5b1f17b1804b1-4a18e47aa9amr359760895e9.6.1792017775554;
-        Wed, 14 Oct 2026 15:42:55 -0700 (PDT)
-X-Received: by 2002:a05:600c:4747:b0:4a1:77db:45d9 with SMTP id 5b1f17b1804b1-4a18e47aa9amr359760415e9.6.1792017774558;
-        Wed, 14 Oct 2026 15:42:54 -0700 (PDT)
-Received: from workstation5 ([2a02:908:1242:30e0:513f:8595:22d1:d25d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1bf63567esm23227965e9.10.2026.10.14.15.42.53
+        d=1e100.net; s=20260707; t=1792022191; x=1792626991;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ujWOXhajkBZtlCmsZmCoVumMM+X/QUn/djLaiVsONPE=;
+        b=jFuzi9jKVPccFXVKrWOm92JfX/tyDGyYqKtR4oryMGdpvoTnqiMtFXokGkFRAVJoah
+         0EO+ZLX+q1VbuxRR7NcqKNtYxS0Cvhnsm68fguftTTWyjQT+vNl6PyaBBLZtSyJIVPiQ
+         B+Ee+z0sFnSbXDuzX530+xVeBBTE0DX715opvKMM8JRwM3YdPOruWqTo60Fa60o2yiLL
+         qUls6KPEHPLjP0oqpOdtG+TRNzYGdUP5sVA2R/WNRUXB+cmBHEKI6+EQKapjfFHrS0Rx
+         oBCQcQV8e0aJkb0eqQWvWcuTTDYSN9dWIjSZ+QO3oPXVG5qMiIiYOkNsofCsXYlWYjA1
+         JX/g==
+X-Forwarded-Encrypted: i=1; AKwUvBwXFPZQQI+hzqcWx8WweCt+Vsk1DWtpW1wzkfcqQ2yhRdHO47I02iMF+GnoQRtqU3n+8mpcPRg9R8RD4tDNHGM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI7STASBuLOjMOFssK9uvMoXFvv4IUBt5GYjgAd1F6ZX8mLn/wO
+	bTkjtbCd8zhWWfPZPCDvjmaUtEsNySsHQ6Y4cUMaZtJutTG0i0A7C3Oq5KeeU2D6pw==
+X-Gm-Gg: AYBFou1xfUCbo4c8FeRSK8VEsODBXPjh4jYeTP+ZPXniKrjokpPUno2xlOkx3XuvOoc
+	H4rf+UznsdvELRAWme6e5EPEwknTQly1YjokJJMuR7kdxbSgXeFHvj+bCgaWCfFRlQltf/kgSX6
+	B9DlyixXhfvIuKHKY5rX0MwTZYButUwMkDNJ/TVEmCxPuQAQRVFq8AT4xyiPGfzhp/IOHp5cuqI
+	lN2Jy246Bl9QH8tXw1iMOTnehvx2mJTc3LhSMJxAwWL4kvlAEkbiVIAwZGgqdfKMbulDM+ZASaD
+	tXcEeFcIpG1fzdGDjjhxcC+6BcenZE5h3uQFG2sIZ+VbvUu0+D/E5QFcKE/CRXkKrgBbHNaj2dn
+	ERM9n4nCUYmD6VszZ2nKZWR0wUkl0AQFzOb7DIryBNGlTHd9je/4BN81Qeh1d6DYDZhIIY1JUG1
+	DXwrPKyG2FO6+xOZjA+punvJW1qJeDwa11rC1mFTPI81aRxIOA2prMKgvKQHuDixxZgaUndQtyb
+	7azjJPdiOnFEWBSpCjDEu2fVYzLuFUUzt0Z1S20RUaUC5UdV8bt9IgZIvS51naBLDgBaQIlXwCe
+	GrEF5mTR804pB4nO5MTCzEuJZI8XWA28Eb1vVqvkySAcpsXPirOH4SmBVbkdKyfElN4QJfSc1hO
+	Ri07ayoPSjRB0/jE5PuQpqDVeHIn7zbQz8etbGyy2vvh6ETLffn9bdfSUhilGFPu92We4zLwa54
+	9H5dYFS+5Ky2TzKQ5L8PbQmeI=
+X-Received: by 2002:a17:907:3d52:b0:c26:1648:a076 with SMTP id a640c23a62f3a-c31aa0e93bdmr1626520966b.49.1792022191008;
+        Wed, 14 Oct 2026 16:56:31 -0700 (PDT)
+Received: from Desktop (p54affd5a.dip0.t-ipconnect.de. [84.175.253.90])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c3edab12007sm46101666b.82.2026.10.14.16.56.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 15:42:54 -0700 (PDT)
-From: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-To: Anup Patel <anup@brainfault.org>,
-	Atish Patra <atish.patra@linux.dev>
-Cc: Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sarah Emery <sarah.emery@canonical.com>,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
+        Wed, 14 Oct 2026 16:56:30 -0700 (PDT)
+From: Julius Bairaktaris <julius@bairaktaris.de>
+To: netfilter-devel@vger.kernel.org
+Cc: pablo@netfilter.org,
+	fw@strlen.de,
+	kadlec@netfilter.org,
+	phil@nwl.cc,
+	horms@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	razor@blackwall.org,
+	idosch@nvidia.com,
+	ericwouds@gmail.com,
+	dqfext@gmail.com,
+	netdev@vger.kernel.org,
+	coreteam@netfilter.org,
 	linux-kselftest@vger.kernel.org,
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Subject: [PATCH 2/2] KVM: riscv: selftest: add Zicclsm, Ziccamoa, Ziccif, Za64rs
-Date: Thu, 15 Oct 2026 00:42:39 +0200
-Message-ID: <20261014224239.963635-3-heinrich.schuchardt@canonical.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261014224239.963635-1-heinrich.schuchardt@canonical.com>
-References: <20261014224239.963635-1-heinrich.schuchardt@canonical.com>
+	bridge@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH nf-next v7 0/2] netfilter: flowtable: tear down bridged flows on layer 2 roaming
+Date: Thu, 15 Oct 2026 01:56:25 +0200
+Message-ID: <20261014235628.197976-1-julius@bairaktaris.de>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -102,90 +93,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-KVM supports extensions Zicclsm, Ziccamoa, Ziccif, Za64rs for the guest.
-Add these extensions to the get-reg-list test.
+A flowtable flow that transmits straight to a bridge port keeps sending
+to the old port when the host moves to another port, for example a
+Wi-Fi station roaming between access points.
 
-Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
----
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Patch 1 makes the gc tear such a flow down, using the bridge fdb lookup
+from Pablo's patch. Patch 2 adds selftest cases.
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index bf3980e9db127..71e5969142b30 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -63,6 +63,7 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVNAPOT:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVPBMT:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVVPTC:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZA64RS:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZAAMO:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZABHA:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZACAS:
-@@ -89,6 +90,9 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICBOM:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICBOP:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICBOZ:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICCAMOA:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICCIF:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICCLSM:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICCRSE:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICFILP:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZICFISS:
-@@ -576,6 +580,7 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
- 		KVM_ISA_EXT_ARR(SVNAPOT),
- 		KVM_ISA_EXT_ARR(SVPBMT),
- 		KVM_ISA_EXT_ARR(SVVPTC),
-+		KVM_ISA_EXT_ARR(ZA64RS),
- 		KVM_ISA_EXT_ARR(ZAAMO),
- 		KVM_ISA_EXT_ARR(ZABHA),
- 		KVM_ISA_EXT_ARR(ZACAS),
-@@ -602,6 +607,9 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
- 		KVM_ISA_EXT_ARR(ZICBOM),
- 		KVM_ISA_EXT_ARR(ZICBOP),
- 		KVM_ISA_EXT_ARR(ZICBOZ),
-+		KVM_ISA_EXT_ARR(ZICCAMOA),
-+		KVM_ISA_EXT_ARR(ZICCIF),
-+		KVM_ISA_EXT_ARR(ZICCLSM),
- 		KVM_ISA_EXT_ARR(ZICCRSE),
- 		KVM_ISA_EXT_ARR(ZICFILP),
- 		KVM_ISA_EXT_ARR(ZICFISS),
-@@ -1238,6 +1246,7 @@ KVM_ISA_EXT_SIMPLE_CONFIG(svinval, SVINVAL);
- KVM_ISA_EXT_SIMPLE_CONFIG(svnapot, SVNAPOT);
- KVM_ISA_EXT_SIMPLE_CONFIG(svpbmt, SVPBMT);
- KVM_ISA_EXT_SIMPLE_CONFIG(svvptc, SVVPTC);
-+KVM_ISA_EXT_SIMPLE_CONFIG(za64rs, ZA64RS);
- KVM_ISA_EXT_SIMPLE_CONFIG(zaamo, ZAAMO);
- KVM_ISA_EXT_SIMPLE_CONFIG(zabha, ZABHA);
- KVM_ISA_EXT_SIMPLE_CONFIG(zacas, ZACAS);
-@@ -1264,6 +1273,9 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zfhmin, ZFHMIN);
- KVM_ISA_EXT_SUBLIST_CONFIG(zicbom, ZICBOM);
- KVM_ISA_EXT_SUBLIST_CONFIG(zicbop, ZICBOP);
- KVM_ISA_EXT_SUBLIST_CONFIG(zicboz, ZICBOZ);
-+KVM_ISA_EXT_SIMPLE_CONFIG(ziccamoa, ZICCAMOA);
-+KVM_ISA_EXT_SIMPLE_CONFIG(ziccif, ZICCIF);
-+KVM_ISA_EXT_SIMPLE_CONFIG(zicclsm, ZICCLSM);
- KVM_ISA_EXT_SIMPLE_CONFIG(ziccrse, ZICCRSE);
- KVM_ISA_EXT_SIMPLE_CONFIG(zicfilp, ZICFILP);
- KVM_ISA_EXT_SUBLIST_CONFIG(zicfiss, ZICFISS);
-@@ -1372,6 +1384,7 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_svnapot,
- 	&config_svpbmt,
- 	&config_svvptc,
-+	&config_za64rs,
- 	&config_zaamo,
- 	&config_zabha,
- 	&config_zacas,
-@@ -1398,6 +1411,9 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_zicbom,
- 	&config_zicbop,
- 	&config_zicboz,
-+	&config_ziccamoa,
-+	&config_ziccif,
-+	&config_zicclsm,
- 	&config_ziccrse,
- 	&config_zicfilp,
- 	&config_zicfiss,
+Tested on nf-next a5e7d8e446af in an x86 guest: nft_flowtable.sh passes,
+including all seven roaming cases, and ftrace shows no
+flow_offload_teardown during 10 s of steady traffic in any of them.
+flow_offload grows by 16 bytes (296 to 312 on x86_64).
+
+Changes in v7:
+- look up the fdb entry through a bridge hook instead of walking the
+  forward path again (from Pablo's patch)
+- save the vid of the fdb lookup; the encap stack does not have it for
+  untagged ports of a vlan_filtering bridge
+- build br_nf_utils.o only with CONFIG_NF_FLOW_TABLE
+- selftest: vlan_filtering case
+
+v6: https://lore.kernel.org/netfilter-devel/20261004171605.3544792-1-julius@bairaktaris.de/
+Pablo's patch: https://lore.kernel.org/netfilter-devel/20261014210256.1573072-1-pablo@netfilter.org/
+
+Julius Bairaktaris (2):
+  netfilter: flowtable: tear down direct xmit flows when the fdb entry
+    moves
+  selftests: netfilter: nft_flowtable.sh: roam a host between two bridge
+    ports
+
+ include/linux/netfilter.h                     |   8 +
+ include/net/netfilter/nf_flow_table.h         |   4 +
+ net/bridge/Makefile                           |   2 +
+ net/bridge/br.c                               |   2 +
+ net/bridge/br_nf_utils.c                      |  40 ++++
+ net/bridge/br_private.h                       |  13 ++
+ net/netfilter/core.c                          |   3 +
+ net/netfilter/nf_flow_table_core.c            |  27 +++
+ net/netfilter/nf_flow_table_path.c            |   9 +
+ .../selftests/net/netfilter/nft_flowtable.sh  | 204 ++++++++++++++++++
+ 10 files changed, 312 insertions(+)
+ create mode 100644 net/bridge/br_nf_utils.c
+
+
+base-commit: a5e7d8e446af9803e37a3b6a4d416fb41178348f
 -- 
-2.55.0
+2.53.0
 
