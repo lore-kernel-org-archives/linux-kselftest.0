@@ -1,117 +1,113 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC2437CD42
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 21:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792013058; cv=pass; b=tuWeWJtqkIivVRsWMQaqlu2PdZGPW/Uc+Os7jvIOncigGYgRDUI/fanwXvKB5oeWu+RHeoLiQ9KHHSrrJc/wRpO2Yr3c0SIMOoJUOQD0TKuH4JEKODYsRfJMcLPU6U5rtCoKO1OTAUpNTuMiPilrpDB5VS//GmF597ScAMQRXMw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792013058; c=relaxed/simple;
-	bh=r63gPEMvPL46RQn5CZ3hAGQZunKTStReh88mSxqbHk4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ueWq+RrzigshYnIWupAuBEVkSJpLP0vizj7TK9A1uTaevdUCMxoSjvoKcq96ELP1tOX55vLUg0bs3d6NXya/f4F1Uj1zj0LuJZCVT7dDKpuVgadAgqDvlQ6Kp1zJFmo+0F44WWsPWW6REOmfjOeCnGLB8boyHCHg3ci+DzyF2Ug=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=OWdpkyxE; arc=pass smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0508910785
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 21:26:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792013203; cv=none; b=CSWQ/LXY2zg8cfsS//Brb3qWiTm1F9vNGbHWPOXHS9bMV4B7f2YSV2hvzcsGPaJo5LYq10WHx7XmOB/QYetvY780CS22wq65FGC9T4hrcgsx5E466aZKFpGKt+oSIqcO0L39Gp8HDu9ZRMTsfHX6gt8k+fQ+ixjnKmqlD0+cUj4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792013203; c=relaxed/simple;
+	bh=+tmS02gDA463BcaTtTeQCviX6MTFBVXJ76TXlGdnOMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hhFgY/xZvoH5JuTFij3XPDcIXJ8X/F7/PjzyPTGLn7MJ5ar6zGwm5evvc/2NeNymGkuOf9xwTh6cQRPFxdZ++UEplZP0nn4B6tTjW7G6OfciLMd0AkTRcm4rw561krJ3UNdusoksATe0qAJz4TkWjQtSdX0j8mvjF1omwvwF0eM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=eDUVeyO3; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="OWdpkyxE"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-6798d4ab549so1081066d50.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:24:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792013056; cv=none;
-        d=google.com; s=arc-20260327;
-        b=d1VxIJI4A5tn39Uz1zMix4EM4ly/l7hysbJeIYCv2yEt/5Nq7OppxoZXv2AX4FwX7W
-         JID1W5rYLvyLuTbqzOnRhAEWiuTzIehZHTEn9ctPKfR5Jec6SsDinIiuqgSemX9Ft/Xm
-         zpyFAxyobs6d7HzdtW8JMlTiRxW8n1axYd+SZBX4V7K/mB4awKjFNarJ+i4QHWO3R9YM
-         Qq8OZkAl/bOsC0J2LhBoIdzEwUmbaqxgiJMvghMMtQ0sbHIxxJxUT1u6UhakVZlhAtfK
-         KW9SQbRAW9rRzi6HxcJPGCKcaMbpqiHi6KX84FXs3BHPoQMNcAaj5MEjt2lXHR1TgqfP
-         GLFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2r+3eSWI2QRQlHxhWBBPMAcUqGg26+JgtcOo3f8da98=;
-        fh=BCrQLOJYGGAokubuArKgp9w32Fkql4wo55SjeOgxNBo=;
-        b=QL8aPhgdR3Vxs8czBnqNHP+Xf0PmnY8oJVjTHW9PXILI1O918Z1buydOI+gAkF1aSL
-         kQjxlE1ZrQucUSi64YW+JcJ5dUkX+jBwh3gfF2Qi/iGBqLeYNVoRpyZt9+LUo5952ogc
-         2k8+oXmoeyFH/MLy7fHRTSShYEQphZKeWwy25dhJqRcAUiCOYjgF/kIWPf6I0InmlJGC
-         xab/+ncOdnHKtketdw2+haKRgqdGZkwXrGmW4nc0zrkINcR/MDazgfUDEatbJs0Gazou
-         nDIzNdxes//94hAhuyNZDNO+N/wEFnsATyye4c2tO5ngdttdq5bCD8LvRuq6v2LIR1Iv
-         9Iaw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="eDUVeyO3"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-91ba8fcc684so17270586d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:26:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1792013056; x=1792617856; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gourry.net; s=google; t=1792013201; x=1792618001; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=2r+3eSWI2QRQlHxhWBBPMAcUqGg26+JgtcOo3f8da98=;
-        b=OWdpkyxEJ5TnzcjENDcaA+a7fHg35oYRafNUrZqSlKGyEEAngECYDjQOTtuf923wJI
-         uXITMvx3ZKGLV9MB06KrFKv6lglH9cRt4rd1U/ajJRCL5CCq9VJ399wc7jml892IunRH
-         otivvuTloqHrLmKPDITwXC7mnD9NG6kl0RBPY=
+        bh=SgefoZU/7a8w/FLm1udAZKNsvens6D/F+qkIP8OB5hQ=;
+        b=eDUVeyO3s9Qc5qzmBBBtDyb7LXpY4L5s0xbNXEnMuoyEIcbTp+Eqs6shtp6K/sOngZ
+         jUdEXS449bMwREPxD8bsNOYRUaDOoFXX6WPoVNgkPRwZ5JYgyeDSDYUOuwsMsu1uIdSM
+         my/UgugHixpUY8vKsG+R4bYmmKw6OHOYOylYD8NfajpuaMNHLwb3wC/8fsBWyuxz1lgD
+         0tY1IeCnMn3aMEEWuhwlO7HaiEnJODENfo9yE+Ihm5c25y0KtT0FoYoTV0BQiHj+Q5JJ
+         4yRNxI3ff22Bdm+tG6rXyT6nJnuqzG7n3SnLmbaJTOnHpQAusvasrB1ZauQjT+E0u0VI
+         QrgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792013056; x=1792617856;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792013201; x=1792618001;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2r+3eSWI2QRQlHxhWBBPMAcUqGg26+JgtcOo3f8da98=;
-        b=LRx+kdcsBQrmUVgh1BeRlUH687GgyGVXJum8YBDV9OzzVt5lseGdwcN8YnaS6m7a6W
-         zIedkuHAE0zcngadFvZ030ZUuiPQsd8g7vqPK/QetJ53shZePsEZdPX4hgl1Zd0TXpOK
-         IDikKIydDbW9RqrMc+NTuUGm5HNRSd2UZpvjDWmj/GOGJn/BAbUE4P05SoUzhGGOYquu
-         1BCRPhGERYiluxTqU4xSH7k/DQAq3nCQq8FQkA6QqW2SZT5hcjVTME7Ih7tBGmkUmpSt
-         fxfx58UOYMM9hqfb1vAQMIf+RHbeuoU3OfVr+uk7qJIMbNdvJA67jxX1D+UzwgQhzSoK
-         ZW7Q==
-X-Forwarded-Encrypted: i=1; AKwUvBxi/abTEyOOBM+2SeNENfUmqqvGxrkuJ8MzQzJs8HzkvNICo7rtOu5+5X1JZlLn68kZI25KvKtWCFKujU4ZpAk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJbixw1Q6yntwriDVkpHwhth1VxNP1hv9E75WuZ5W3+yA9/ina5
-	hzZRTdJyyfZSHoDG3N9He2IH5wpFX+7XGirvjym/TekDhGLhbZg/8a4MFC5drhW2RB7hDkdvzLK
-	IFqk2wiN5tSDkTRGzC1Q8wIYtKV+gL8ZVH8dLXiZp
-X-Gm-Gg: AYBFou0yNrq324ziS8M94EjeQHJlb2hvZH/wMK5JAacKMbUuPjBxLuiNWvbHK14xp5t
-	fPERraU6uAAe4Ub1M17XhD+hgGFpgr9W2QUDfUVm9wZaD1OhiQqhuCNL9YIJ/g5/RGZACKerWFK
-	nY1TqwYxWMfzBzIeA3fHz/5G/JnZBaCLO2Cpl5yv9NpxMudubv3IPh2GoNTVpcUmQLrf1hLtlj1
-	64edPdwtgfyWbxZJWZU5DrGNmpqRg5LhfTcfFzSNmRA+6IyNLjMNeIZJTetD0Fs25LdgzWp0cuK
-	5JXSF4hEExam+IBFc1xJggkVp6ooTLyCwWKhmh6FkwiPVMdP4jI/wcBkufUPPqbNPbsd6Q==
-X-Received: by 2002:a05:690e:d43:b0:675:3f33:b183 with SMTP id
- 956f58d0204a3-679362745a0mr6171135d50.24.1792013056258; Wed, 14 Oct 2026
- 14:24:16 -0700 (PDT)
+        bh=SgefoZU/7a8w/FLm1udAZKNsvens6D/F+qkIP8OB5hQ=;
+        b=jTxI6ItKwfBxwr5T8vUkEdInHXw/C4Q0NN0/JeTbIGwrQpbjQJ+sUeRnusTVsbiFta
+         zUS8/xDHhz0jwACXkCqYvAzzwKKtPHNcTw8Ox9ag951MS3oCttNtFy4zbnd+tUB3BmgJ
+         plpwty0DjxS0LmkO8XTEDPRVsoHt1cmsnCIJNDGQguqSvPn1fCf+tpDmFvlbSaIC6Lzd
+         eR+AUnnnB1vZYmU5OrIaxzweorbiEgWRWP3IKS5bnFTuFMh1UiLSn9Y4epVuML+w8BQX
+         5TNQE0tIwrUtb5M2WWXUWrYkdIzWT7EreHxS1U6IRacuSks4q4i5IChNkuNQWDA1EayN
+         9mTw==
+X-Gm-Message-State: AFq9FYLo54S17lE/fTY+NJmPQ0CtZGJpWnqTGWBywN/9nNa7UXZQI1TE
+	x6Y4BbeSEB6xwpVEPnHY4ktnXULPzhNQG24BEKwwbYkiMowGJ/6G4ZL2z709jkyRuX39kHixiG8
+	y0FZbZqo=
+X-Gm-Gg: AYBFou2eR4GEkZfllH/c7nO6WT8RW9Bni0oDG/CaT4pT/u5oxk2WIcKSjJW1ojuzFHs
+	igUm1UCVZAC0jj3AYeryBWFbu2NfAoSU4kzL6vde359c80TN6/aboPHHaIg8lj5ycwnvx51GfP7
+	X+zhbGhRLLyNgHbsHK5ZsAum8BKK0SODhMhU2ndc48R6fdA8ZFwaUcazZ65TR2593ECcVqs8SEn
+	JeArkcLl5cO54Jy9Fz9qDFjDVF1ew81SQ4Nc3+h7CbVux45fwkFFHK5HrWGA2R0XOVHrRYijmI4
+	vHXBH9zYt+1poTRxVQaA9TYhyBrfjlP9W0EagUUQ++2AhTirjTBgobKQErMdMwZzQPZNRcFpMmf
+	a8p+JoGDZCeR4bjVBrszTJ3sdOanVqAT8+i6iSdutoWipOFu263NhKndD4YoAMdiMpTG8LCaN9M
+	PJI/tTTyz2hd0hVJx21iM4dNLFUnJ0AEQQh1AmERLz3bqhh65uskCt41hwZ5eM5pMETAPGqa1dM
+	v3pjmOd3b+ZXBHmi1E1PEA4s1AqivHNYrZNlFsLc+dXkTulYEafY6I=
+X-Received: by 2002:a05:620a:40d2:b0:93e:4d07:14db with SMTP id af79cd13be357-93ebd1e0133mr2853002885a.24.1792013200873;
+        Wed, 14 Oct 2026 14:26:40 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91b97b95847sm62808216d6.32.2026.10.14.14.26.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 14:26:40 -0700 (PDT)
+Date: Wed, 14 Oct 2026 17:26:38 -0400
+From: Gregory Price <gourry@gourry.net>
+To: linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org, kernel-team@meta.com, 
+	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, liam@infradead.org, 
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	shuah@kernel.org
+Subject: Re: [PATCH 8/8] selftests/mm: check that unauthorized MADV_PAGEOUT
+ skips large file folios
+Message-ID: <as_yViNexNHzdD7l@gourry-fedora-PF4VCD3F>
+References: <20261014175756.2035176-1-gourry@gourry.net>
+ <20261014175756.2035176-9-gourry@gourry.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261014121414.2373985-1-ivecera@redhat.com>
-In-Reply-To: <20261014121414.2373985-1-ivecera@redhat.com>
-From: Victor Nogueira <victor@mojatatu.com>
-Date: Wed, 14 Oct 2026 18:24:05 -0300
-X-Gm-Features: AclHuK_VTAdZZkQW0BtcsHxlVRXv9pULtYyY-Xyg2W4k_wvNoU0bv1qIgpz4UTg
-Message-ID: <CA+NMeC_dh5k-WQ52q8JOqYW46=dzT5EKnwuc=kLs7Mr4g25ZuA@mail.gmail.com>
-Subject: Re: [PATCH net] selftests: tc-testing: use $IP in hfsc test 8c39 setup
-To: Ivan Vecera <ivecera@redhat.com>
-Cc: netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>, 
-	Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261014175756.2035176-9-gourry@gourry.net>
 
-On Wed, Oct 14, 2026 at 9:14=E2=80=AFAM Ivan Vecera <ivecera@redhat.com> wr=
-ote:
+On Wed, Oct 14, 2026 at 01:57:56PM -0400, Gregory Price (Meta) wrote:
+> A caller that neither owns nor may write a file may page out the COW pages
+> of a private mapping of it, but not its file pages. When the advised range
+> only partly covers a large file folio, the folio must be filtered out
+> before it is split or reclaimed, on separate paths for PMD- and PTE-mapped
+> folios.
+> 
+> Check that partial MADV_PAGEOUT by such a caller leaves every page of a
+> PMD-sized shmem folio resident, both when a PMD maps it and when a mapping
+> of half of it maps it with PTEs.
 >
-> Test 8c39 brings up lo with a bare "ip" command. nsPlugin runs it as
-> "$IP netns exec <ns> ip ...", and as tdc runs commands with an empty
-> environment, "ip netns exec" searches only the default execvp() path
-> (/bin:/usr/bin). On systems that install ip only in /sbin, like Fedora,
-> the setup fails:
->
->   # ./tdc.py -e 8c39
->   Test 8c39: HFSC classify walk still reaches leaf after lateral drift
->   -----> prepare stage *** Could not execute: "ip link set lo up"
->   -----> prepare stage *** Error message: "exec of "ip" failed: No such f=
-ile or directory
->
-> Use $IP like all other tdc tests do.
->
-> Fixes: 1e24c4f2ee44 ("selftests: tc-testing: add a lateral-drift hfsc cla=
-ssify-walk test")
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+... snip ...
+> +	ASSERT_EQ(madvise(mapping, pmd_size / 2, MADV_PAGEOUT), 0);
+> +	for (offset = 0; offset < pmd_size; offset += page_size)
+> +		ASSERT_TRUE(page_is_present(self->pagemap_fd,
+> +					    mapping + offset));
+> +	assert_filled(_metadata, mapping, pmd_size);
 
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+Sashiko reported:
+
+  The commit message states that the folio must be filtered out before it is
+  split or reclaimed. Since page_is_present() only confirms the pages were not
+  reclaimed, should this test also verify that the underlying folio was not
+  split by the partial-range madvise?
+
+I'm fairly sure this is a false-positive. Splitting a file folio unmaps it
+entirely, so the page_is_present assert would fail.
+
+~Gregory
