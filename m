@@ -1,107 +1,91 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B12C30D3FD
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 12:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328001DF980;
+	Wed, 14 Oct 2026 13:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791982802; cv=none; b=o2sFcNcGj5PQdEKY2WmR5tnM5Avs3IdTuJOVh0hIgUzcaiQnsK0HJVdMV6hFuUin1DUMVazu6vVehpdUIhPV+3o5FEHdpebQAnFAW0IaidE4iTyQluZniUwwNwItrp0MBFAG5gqBmzCEn4wo8TFBzNdWZucP1dXYW9H/SEh4G5U=
+	t=1791983072; cv=none; b=PbyFSJMK4LG6iQJKEZs+Zgx7dMIn0kAcTnfh2dPKjpCsF0Qb+qlOVRj28oe22Tj8JwML4ywistSm7564tCeYI0/l0O9AfYlR+gYc8eCaZU5GlznVGQ21RXWq9c6xUqAgsLEN3VYUpqI0SvjRDxHIHr1GkNu9/9ZyL72emlCl1HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791982802; c=relaxed/simple;
-	bh=9yk6zMUB9FUlkphNWRIxPU6GBt18cBIBDMGvC3Wc76U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fAutQppv1F2TaSTh7RbhwfQPEQkRrQqe5VynlqaoEUoYXWBwKI/BDv4IS+ItHLQRU07md3dJBK58hww1mGgu6zNMcJrt5mCvh9aaKry38GAwcRw7q2ejCd01O35jvfjYgG5HNSJ6M9rybHV/m8bwO8wCXexFAvqd6EqM1TF9vPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d0xxH7o0; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791983072; c=relaxed/simple;
+	bh=DfdG8Mv3+zufx8SrlKKlpFST8xc1hAD2q3bZ3e6KRPc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=V+3O2yI8vIwphj/FNdGh2VyCYVmMUxRpxCMs5UoclGCqyFaIGR0VjyjMIg2vht6FWKcYU7ct8kojovqAMBWfQmYaauFYTZPEQL9Ye7K2rCcwfMPfusRILh4XUJlZqOZOCPDXsJeU+wSW6cpY+EsmpqSWAppbU20r+3G4hy7NBGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0n7EgOf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d0xxH7o0"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a180fbeef5so37173435e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 05:59:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791982790; x=1792587590; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6OgXMBMEg+uoBGiGA0DSTy1cFGCRIK3xSJyq5hnxZeo=;
-        b=d0xxH7o0MQwjSlJemvZqnBlEknt0U/DvdZ2q2/u4gejhAFp4bQlHDp6BH6dXvzbti0
-         tOxC6iKhNyfaHpno6rnYRegfAH9WHq2BGoh4jQdj+4e0wZt8ifGaEVxgv1Rh52RrI69D
-         Ug4p07Q3EMCZ+ta7RzzCLDciHi8J/GuiOHtJnnRDH09f+57B5r8z9S8qqnDkNrCtjzFq
-         kEP17D3A3P+gFgfGmWfScuKJ2px5oevqWeX6fXmhul2H5sIdqHv5vRgHrHcO4fEpcchj
-         6yyQWFr3EOin/qRDQkXbuOmqQi4p8i9Eb1yzsWs+SSFhjmU9KfGebg0ZT87TzPB36Gh8
-         PtTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791982790; x=1792587590;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6OgXMBMEg+uoBGiGA0DSTy1cFGCRIK3xSJyq5hnxZeo=;
-        b=YCn164VvrdXz5/s7HKJ4iQa9ILxA/5Noyn1kQ9n7SBf7ZikC+hierLmgknT9IJS+x6
-         mkaH2nqZwERgeKRWBeKCKBE9SOObI77pnroumJRayFc4UUItcVKfracngdYhnOWLnYsf
-         8vLgsRZNDhHrk66iFqOgLr58pv6gsISJyEFAAZ1i5MsSv05fElnY0P+0mCZtUOOPsiTU
-         7DnbQYnXYwveW0Q4/u4UzWySlV1iWQgmXxCiFX3lbOTlmEErO9FqyNRLS9ofB6eoysew
-         lb7eySRMgSJtDyHLJ5zyLovqPn5wedcKoU5tkxg9x0GW0h1FKd1Wv7FwIxGvJ1JssSxq
-         dl6Q==
-X-Forwarded-Encrypted: i=1; AKwUvBznjhH2W1d4SipFWxJBsF6bXr0CIpxDpHApx5P0R5nWltwEDRSqPrHNe5o2aKwRLzk58hCdxefjCJB958aYpIM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK+WPK4qEfshsz7DwJIRNURTvGgaBL3T87a6Fwyn5JcoqS9snEf
-	SGfrZgyoKQlc0EvclSE4LYoN15SLkL+C5IKTIih8SeIbu7GEC60QdZOq
-X-Gm-Gg: AYBFou3+1nm7zwBjWXjBgImOumXhDhNXC9hOh2g4EIwc85J7H86t3BpBOiRPWJEVBXI
-	vi7lJUTbmKT1yiiYr5gXTdjbA7CVUYNaPHNHYgeOKsKWe55vmO0FADe3+38ZcFoMFY5U7+UWNdN
-	Ca9uymCaJNUnh0uqbI8ShLLwJKjEi/wV3zEgu6kK4xMwaJSI9OONmORE6ESMb8BNy5GuXyEvUiE
-	ziUPUBdQPlA1ajLpE+A1B6nn0ZGwZNnLUZm9ODJms3yRiha9RLKmpAU/mGrZiEGb7Vn9Qf7j6+M
-	gr7XA1Mo6qhk0K78ubHkYP7lhe55XYKjJm8I/VRDbiRmVRC4xJLr5yiEuKWcIdJtaCMs36as5OE
-	knzu6ebtv5Q8vMnQVgJu3ctV9yCj0FrnIcJElL4cy5CKay654Mxlqe8o8jFlzyb0IMF8wvVn2Ee
-	q3oITFIHNy8KrTTRvCr3hw0I//iTYpjFCWzwqvmIKTuFmLfK56qsAApzt1puh8untVy1yod9aqy
-	A==
-X-Received: by 2002:a05:600c:820d:b0:4a1:65d2:7912 with SMTP id 5b1f17b1804b1-4a18e47b302mr284790065e9.8.1791982790508;
-        Wed, 14 Oct 2026 05:59:50 -0700 (PDT)
-Received: from kali ([169.224.126.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1b481b7f8sm53105485e9.3.2026.10.14.05.59.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 05:59:49 -0700 (PDT)
-From: Ali Firas <alishmery18@gmail.com>
-To: netdev@vger.kernel.org,
-	idosch@nvidia.com
-Cc: kuba@kernel.org,
-	pabeni@redhat.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	razor@blackwall.org,
-	roopa@nvidia.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v4 0/7] vxlan: vnifilter: bound a single request and account per-VNI memory
-Date: Wed, 14 Oct 2026 15:59:34 +0300
-Message-ID: <20261014125934.413864-1-alishmery18@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <179198195143.320699.130100546123857623120@kernel.org>
-References: <179198195143.320699.130100546123857623120@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0n7EgOf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B3B1F000FF;
+	Wed, 14 Oct 2026 13:04:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791983070;
+	bh=PGYA60mHnTCioRjOgFXdMUTLxHyhzPZTPJY/+n4H04A=;
+	h=From:Date:Subject:To:Cc;
+	b=Y0n7EgOfFva5Ex6qRYM1AWszr3H1j/kRXd+Y1uV0yRYqNKbBogTslSrGDCb73OMc+
+	 3lvZv4xPxXZbR105xlHsa04m13L9OP3Vl3EL7pai/EcWhPt9fipd5F/ILPNxT17hJM
+	 Q7wJ9KDUbGblyFqESc+ZQdisJTYPDLKgIgMd1+ojZh9YWDPPgSp8kaeKG07I97FC0h
+	 UtQQICFMJeShVovNdXAVQ6gisMaDOdMVZAT19oE7bUrRAbRA5sdFt8DaK1TESZ+76N
+	 +J3T+O6GF62tB5efsDeloyKLIYKgbX6Ielyu1Cr8G04apLtBIL0GYGRBh5mc7Ln/bu
+	 UMxbjZxwnkMMQ==
+From: Mark Brown <broonie@kernel.org>
+Date: Wed, 14 Oct 2026 14:03:33 +0100
+Subject: [PATCH] selftests: lib.mk: Don't fail install if no modules were
+ built
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261014-kselftest-lib-no-modules-v1-1-e4f7208dcb56@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKV9z2oC/yXMQQ6CMBBA0auQWTsJhQDqVYwLOx10tLamU4wJ4
+ e4WWL7F/zMoJ2GFczVD4q+oxFBgDhXQ4xbujOKKoamb3tSmxZeyHzNrRi8WQ8R3dJNnRXt0Q0c
+ DdSdqoeSfxKP8tvXlulsn+2TK6w+W5Q/U0onzfAAAAA==
+X-Change-ID: 20261013-kselftest-lib-no-modules-b8d75c7c59c3
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1324; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=DfdG8Mv3+zufx8SrlKKlpFST8xc1hAD2q3bZ3e6KRPc=;
+ b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLO197uOTrNdauldgw7a43B6tC4Vz+2NRikJuVG1XdHB
+ F99VLO7o5SFQYyLQVZMkSUui/tlfcnrNXwHF7bBzGFlAhnCwMUpABOZc4ORoeXKAdOZvHnf9mi5
+ 3ZNm7+F4u7HpTUfBrxnlG47+T5tu9Zzhf9n7m8n7Pl8LsLgv3Jl9M/1igC7flQdFSekZpREZG5+
+ 28wIA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 10/14/26 15:45, netdev-bot+sinfo@kernel.org wrote:
-> - How the issue was discovered
+The install rule for TEST_GEN_MODS_DIR copies *.ko from the directory
+with rsync which fails if there are no modules, for example because the
+directory's Makefile skipped building them. Only run rsync if there is
+something to install. This currently affects the livepatch suite but it
+seems sensible to fix here for added robstness.
 
-Manual source review of the vnifilter netlink path, after noticing that
-vxlan_mdb.c range-validates its VNI attributes while vxlan_vnifilter.c
-does not. Prepared with LLM assistance, as the Assisted-by: tags say.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/lib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> - Whether the issue was actually triggered, or is only theoretical
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index f02cc8a2e4ae..7841bd4239c7 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -155,7 +155,7 @@ endef
+ 
+ define INSTALL_MODS_RULE
+ 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH)/$(INSTALL_LIST))
+-	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
++	$(if $(wildcard $(INSTALL_LIST)/*.ko),rsync -a --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
+ endef
+ 
+ define INSTALL_RULE
 
-Triggered and measured in QEMU, from a user namespace holding
-CAP_NET_ADMIN only inside it. There is no stack trace to quote: the
-symptoms are rtnl hold time and uncharged memory growth, not a crash.
-The changelogs carry the numbers.
+---
+base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm master
+change-id: 20261013-kselftest-lib-no-modules-b8d75c7c59c3
 
-The cover letter states this is a policy and hardening change rather
-than a fix, targeting net-next with no Fixes tag, at Jakub's request:
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
-  https://lore.kernel.org/netdev/20260921150904.65a704eb@kernel.org/
