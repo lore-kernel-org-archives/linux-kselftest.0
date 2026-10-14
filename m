@@ -1,52 +1,52 @@
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010031.outbound.protection.outlook.com [40.93.198.31])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010063.outbound.protection.outlook.com [52.101.46.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03594B44BF;
-	Wed, 14 Oct 2026 12:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3041313E2C;
+	Wed, 14 Oct 2026 12:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.63
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791980906; cv=fail; b=K/nuANrLy0MyLvAIGOjhU8f4J67e8CRKyEVK+iTaTKoeX7fVUPJ2WqQ0pEoPKLQIxaovMEuUNe+X0bhF/gcumJsKHJT5zr/dW1gRtdyxsFQvHAcptmhMgCdj7lQ2V2AWG+dDPHVR8EYuBSG3fLD9bMJ+GzCbGniAtHR1DvoNpfQ=
+	t=1791981221; cv=fail; b=Ptp4y2RLh4FBdhaC3cLbxl1y15peTupnzAZ2094Nms38rZeIvDPuDZMoR3aToOm7UE0FTDIzma9/Da/vz70i4V0Yl93I16jmPOaB4tjlnzbSNgN9LhxyVj4d09wnL7Uerjogu6zdhWc7kEljfwY32GalrKIEDnQMIvhQ2J0yYlY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791980906; c=relaxed/simple;
-	bh=uJ4nNlEwpls5I/Pk2InsSFcp6ATRJOTYrYqYdQFFHtM=;
+	s=arc-20240116; t=1791981221; c=relaxed/simple;
+	bh=qNwGvmM9KHBYncxYePUdUpcIo9R3d2hrzLViYSYOe1I=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=gkrW0TrHsh5/+uywewH3WPwKvvwOGjlkrABZ+dPU/wlgREvFeE8oYfT0d9H0oWNMmi5YksTGHufkv7tuPTo0Bm5yqMXVxwUIArusRtnoY5lv8mPIsVkStw7VNTzbR0ftU8rFHg3s9cxEKsj6zXNLcBGZT/V5tzZ01QysX96YTec=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=AWVsIqRV; arc=fail smtp.client-ip=40.93.198.31
+	 Content-Type:MIME-Version; b=CeOv6hQ/RjlIu9JyQljjl9Yo9EPkMPwcfsTbzNFDz7964a0Eb1FqqmyufV4cvSFCoCvZlFTnCtwkR/kY56XLgMxmm6JqD8tLBKcQqgss3GPMb2756g5VpsiJolGAn9Mh0jAJEWPEBvpigPk7KnlMFo06RqY+MvpMQwonW0iNGQw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Epifzy4s; arc=fail smtp.client-ip=52.101.46.63
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AWVsIqRV"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Epifzy4s"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Bhpd71fFxtWzcTvRTkkUXezDwviTHvWge6OD+uPBmyBc5bvZmehpghG5Owct2a9UjF6FoeNYIezSy3hl4Bn61dEj0L6i7vcpknlEJYNApu0JAPjXXvxPOXOZY+C3JuTSmWJPFmjSczAfszX4TVB/JZ0k3UM05u8A9Gt4ZtKhZGejy1p7H0ATYhWe0lzVnRafuIibPDXSEHZzpJHPkzokDrlUvZX/ye6RJboZlr6bfCZlnnLig8OSU716sdemX2iqsES2wgl3JzgpznehRdOw9++RMcOork14D/CA5/ai09XPDB4ldCEbEJxa9bScZiFDX1a9aujM5w3xRUgCEjnIyw==
+ b=HL32y1WdZnSVNSQFZuoadFRe7ebZdqbJLsQr72hMCFP2hVRMcq8IOtzl0L3x3xlR5cRxu8NhB0K55DJZL3rtQTrizXuocXlw5ovkOq8zRXdzjNfXZSWRNp6KMbPEBh2nIuO4oVuoEF91F+v0zTr1cTaarplJG2ztAhYYxptz0gXHA6H7WH0a7ayJqzTF2V/Z3sZ+k+H8oVnt9I2qD2kWrL9GHubFLUpL5fc1GvvA2fm9ObIkM9o+qFQdh3NXVBvURbVrjYK/IRbL17Tk4Q/XLq7wjbF/828dpdPmETG17HE6K1aeoVKNQ1mhm9NRiCuOLX2HY6d+tCoMpJArPKJDxw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I1pg1AxKKYhFfFGDjVBXFHtpWUt2zaTbTJYbKrkJ170=;
- b=EwlgcHSIf3Q1FL2VrNl9588ZNaZB7tg57jpnaceI68vh+lESy1LIO9c4g6Qj/kpH/jbEQGCVz+8dbeWyzBIkGyvcPn7IExcUObUEYwlf+RK5aKu/GLtU13VnhxRMemy6xxRPjdEwOU/hVQbJmKCmI97uKrT+JsdQtUTILbdHLwle8XfTvY2oRawCx/WqTFX5RnH+uAryBVbAHTdXg2ZTfGLSZrbZMjmVKHADT4WNaYQqAUhuAr6Li+SyCrCSnXh5QP9gYWlnElCv42Au21xBllaSxonMGRyS7yJPI8z/83xfoOaW/V2wWOymVLk4gOXXb0WpCOoExDwfB/DAVCkFPg==
+ bh=xvxkm4rSNh7RtMSRGfkfRa7xPJlWbYJjmFytknBiwyQ=;
+ b=agiZoGzIPc1WcUdFumH0iuMpPUAPRQZnhCOd+qbRqjTOoP0dC+i9Xy03euuFX9TuaIPvxtLq+/7s+w70mSdfjg5oO8rHzmsq+mrbFcS510dciPvROprV3Vo6YAZBS9qeFnX+UQk/w1w9M03klkflbr+7Q1yft7GKjFvSh8SInc5bFkDCWeR67tyaXfpVXOj01uYCQYDO6lcdBkCvHZSyDdsA3n9gOsV/mzDanzABemzZ/tkcZbAjNC0EezjXVYo3UfgY2o3YTqMbxDC0vL+QwQmIuIZd52It6bohGulqyEl40gglqBke643aPKUi0T7sVCTB1EUi8ExxL7qF1I16aA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I1pg1AxKKYhFfFGDjVBXFHtpWUt2zaTbTJYbKrkJ170=;
- b=AWVsIqRV12T/0rN+xqUNoJQ4STOTZop+TdzA/Kpg/ayoQ9j3DXviTAGPZO7WwJYkmstJttzBSEqyB3vui36K2/NQ0xohhcWy/RAi6KJgR763wu/WfU8hgVdjdAFCegKe77iVQZgLETm2f4B+H5RyMyMYnrPyp+DmJxNu1Gv8RhQoSTwUmvwBl2RdZ+fjpVyRFRpPZonI4gWY0Hl+QB8oxyjwNGeHoL+jwWkwF6dMADQdYrgh1i4HkRFq+Crm0Fccbk0L3KpGgX2C9txcc2YF91DxcTAMKgyS8U6bi1PT9ldhrF31pqTvYPRtlQmYtNAL3Pn++FKYYIjeo02Z/tRqHA==
+ bh=xvxkm4rSNh7RtMSRGfkfRa7xPJlWbYJjmFytknBiwyQ=;
+ b=Epifzy4ss602yRqv1zmIbZGvQr8UbZ2c5BPrI37TUKqjgQ7b/RM9TZ5HjQiHYkAjkRIXA3Z6kjqCxMez1pR5t9ldGIpv+Me8JxXairoH0aARJsqWA7W9lbpkPyrld40ef2HErlUhxNyNog+4DGBJFwBMkGVvyYrYfcDOHeadCXv3YxjLCzpctvGgmrpHX4j2Z3BuGrgXG3cKCdPdQPqMHUhOQ5XBz5EVnEBtKvJAi4vKEBShxytnpNp7lJFJTMXx2TnMz/e5JJqQLdH5DUObDCL9it9v6tBSRNFeVqfVJcKXdAucHa1S32UGbFdR+/VkPgNwoEnBwCX4ML8MQDvNzg==
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CH1PR12MB9647.namprd12.prod.outlook.com (2603:10b6:610:2b0::10)
- by CY5PR12MB6456.namprd12.prod.outlook.com (2603:10b6:930:34::12) with
+ by LV8PR12MB9690.namprd12.prod.outlook.com (2603:10b6:408:296::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.19; Wed, 14 Oct
- 2026 12:28:14 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.13; Wed, 14 Oct
+ 2026 12:33:35 +0000
 Received: from CH1PR12MB9647.namprd12.prod.outlook.com
  ([fe80::228c:766a:191d:77b2]) by CH1PR12MB9647.namprd12.prod.outlook.com
  ([fe80::228c:766a:191d:77b2%3]) with mapi id 15.21.0522.012; Wed, 14 Oct 2026
- 12:28:14 +0000
-Message-ID: <68a658f2-ccf6-4af4-bbdb-0f8384802a40@nvidia.com>
-Date: Wed, 14 Oct 2026 14:28:07 +0200
+ 12:33:35 +0000
+Message-ID: <ff7cd77d-a7c6-42ec-a1bc-3790aee8b727@nvidia.com>
+Date: Wed, 14 Oct 2026 14:33:28 +0200
 User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v2 4/4] selftests: net: add devmem RX and TX netdev
- unregister tests
+Subject: Re: [PATCH net v2 0/4] net: devmem: fix RX and TX binding teardown on
+ device unregistration
 To: Mina Almasry <almasrymina@google.com>, Jakub Kicinski <kuba@kernel.org>,
  David Wei <dw@davidwei.uk>, Pavel Begunkov <asml.silence@gmail.com>,
  Taehee Yoo <ap420073@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
@@ -63,14 +63,13 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
  Daniel Borkmann <daniel@iogearbox.net>, Tariq Toukan <tariqt@nvidia.com>,
  Kaifeng Wang <kaifengw@google.com>
 References: <20261012174300.2338784-1-almasrymina@google.com>
- <20261012174300.2338784-5-almasrymina@google.com>
 Content-Language: en-US
 From: Dragos Tatulea <dtatulea@nvidia.com>
-In-Reply-To: <20261012174300.2338784-5-almasrymina@google.com>
+In-Reply-To: <20261012174300.2338784-1-almasrymina@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0055.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:93::14) To CH1PR12MB9647.namprd12.prod.outlook.com
+X-ClientProxiedBy: FR2P281CA0057.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:93::17) To CH1PR12MB9647.namprd12.prod.outlook.com
  (2603:10b6:610:2b0::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -79,226 +78,135 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH1PR12MB9647:EE_|CY5PR12MB6456:EE_
-X-MS-Office365-Filtering-Correlation-Id: f0783d26-b078-4e3f-7f07-08df29ee9dee
+X-MS-TrafficTypeDiagnostic: CH1PR12MB9647:EE_|LV8PR12MB9690:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1dfe72f8-912c-4284-6793-08df29ef5d8a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|366016|23010399003|1800799024|11063799006|4143699003|921020|18002099003|56012099006|22082099003|6133799003|261009223027099003|10067099003;
+	BCL:0;ARA:13230040|376014|1800799024|23010399003|7416014|366016|56012099006|11063799006|5023799004|261009223027099003|10067099003|18002099003|22082099003|6133799003|921020;
 X-Microsoft-Antispam-Message-Info:
-	xWVeOmmEYX8Myt3jMgH7RLy9niDLy2tTzYiJbUTIIOv74Lqsd+ze+bM9OJOhGt1gug1y4zJKT9zah5AqbP4NgCrzZcmNYsqRwExAMWMTK0XHkP8EgUGXVLBCw4jOL7s5Oq2wYk7YRqdd3bADkt7maIOOLC2YzfcxJ5sy+06cSvvctoVCPbASry3NV8Yxjg4IPDnhrk8ZbU9HbYKk6qeBQcnrc5IZPpX0snKBITNY48kXJvirvoDoTgBHVHZWdLriXGwx5XZ1htMzEtgO3w2nlE3/jUL5vZ0xnM6dy8fBNOULsanQE0a054Z+Voyz9Qvkb7wRILYiu1374tO/2ra41azLdxbxw7eG/Uua/Cse8YrZT6tnzEZVDuSf0if+o/GkgDzm9cUTr5/OApZ1YYk9voJJmhR35kn+T9zNXQaTWwThTUzV/8L5I0qfVziY0oFA9GpFeiAt9z1qO1tR7r/Zn9iPZIdOMR1TDERTgzDgxeTq2UD4oWbk1/FRIOjXdI5/f9lntTZg4GRB3Q4Y/DWpXh8KoGdYPf7czkkEQO9qbKINH4ntSwoN+NSMyHl4Nvb/cVSvNNK3OQ60mS/XpkitNtw9m5sryAYb4qmV9x6GY+uePruL/Q3zUJP6XCunm6b/8LqgeI4vfgu1gCMUuv8lF54Ni3q8O9lVKW7+d+YzRcub3LAGsiLo8tnT4jnbGP+n1T8e9a7vMJCGxdVBAIt1/A==
+	NbNeZXCm+gdHwETjAqi4vvt6koUpcvJqYKyVHnLfJbKrxWS8Aqj6051aHWPeuqkkTLGHUrdH3gMMWvNj2VV1R44FjVUtQXZLQPLEyKEtL3pI0Vu5QypDWs/HvqwCfl15BZGpzzNCRNkpiZjloV6hP1JvhZguXwUGT91kd5QL6EKscFnumpt4aJ4XDPw2D4mC66yoU1qUYLM1WYSR6vOiR0F5MIdGEw9avM8xg+sPilOMkQKDEbG5vMXQvn49pcZmYElMgy4OulF0/tRq3Pj8ci2/ToKsy6yCmpuhxWO18/s1CGnD4mEaKzCEZhRhOeDIHDVFwKn8UOlxIVDDi2eIHff3HcKdZedY+cdw+RH8X5h0OgDXcFbMj2E6MwopRpEHwrbQpxy+sjjhDMZVQlQnaQtgdJbgbgl4hC5vUvfa1tE7bmeWuHMwxbjDePe7O7xzgU97UYt3QCCmG8uA95BuKe2Jkps0vSRy8Z6FZ69uPDmpqqMh07UoMesx2m4iDXRzUY62IoKqorJ+JesgS2pEQAASFKfXiV2msJ+W28Vi6q3oY0+H5pw2xU/UH85CRzDymAlDJGoJMUmokt1xEZJUZvhGiEJi3DHEB1rWNt+/6epOKZSAK+r02OXWdAB2C3xV8yG4lr69BaBvN80YuSVV0qfQVYYAK9G5K7WZg+Wg0WeENNSwccjXBT67VFCHlkOnV1pUjEzzFOX7ZR1+agWbWA==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH1PR12MB9647.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(23010399003)(1800799024)(11063799006)(4143699003)(921020)(18002099003)(56012099006)(22082099003)(6133799003)(261009223027099003)(10067099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH1PR12MB9647.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(7416014)(366016)(56012099006)(11063799006)(5023799004)(261009223027099003)(10067099003)(18002099003)(22082099003)(6133799003)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Y1NEVXM0bTBIRHZXcTBnZzVJaE1MMHJacitqcDhNNnZlTVlrQWc1MVc3VDhG?=
- =?utf-8?B?UnR1TUxRQWhKelZPYi81UStIb1hBUnM4WHRKZkVCcTU2TVIrY1FjQkNrRWpY?=
- =?utf-8?B?dGVNT09EQjc1RUk4NWVZdWZ3SnZwSEVuQjRQVTg4S2kvdkNZQW02Vk5vRUc3?=
- =?utf-8?B?dTQ4ZEM0ZTNOWGZPb1J0eEhxclp0TEU5d2hMc3BPMkwxZnQ2OFhiLzZLdWNR?=
- =?utf-8?B?cnVBcFZreUtaVkg1QURYKzVvYzRFUXo5TFZpcEljQnV3cVFHTURGWXBFWkVz?=
- =?utf-8?B?THNQQVBoT0VoY0kvUHUwOEMyTklpQ3RkbEU0V0JMVzg3NmtjM2RuSEFweWxG?=
- =?utf-8?B?b1Y0ZlRyUjg5MjY3UUUyNFI1QnRuSXFsbWZQUE9jQkdPQURNdjNaT3FBeUVq?=
- =?utf-8?B?TExaTUNDczNpVkdLdThsZllXRnpFbGMxUi8rZFhpSHRSQVVyTm11YlJ3clV6?=
- =?utf-8?B?NFloYi9JSGZVK0ZwWlh1eW5MSGxiTEc0Nk45THlINDBPS1B4eUpFOXlldDd5?=
- =?utf-8?B?c1dLVnQxRE9KZ013VzFrdzkxS0lld2kzZmg0dGxSeHpDWXNWZEk3SnhNQ29k?=
- =?utf-8?B?VnZuVVdHelhNTlJuZ1BidmJEaUNHeUZSSCtmWDFBaEU0NmRtS1FIbWZ3TE1l?=
- =?utf-8?B?TFIrRVVvbDNKV3RSK0x3NlZYUFZHUG5kZDNKVkxOSHlRNWVGM2xQci9NVXk0?=
- =?utf-8?B?OTZMRGxvbWpDbVNCNTc0ekZrZDFKdVg3UUNrbjl2YXR0T1BtdXNwNFA3cGsy?=
- =?utf-8?B?K3lZbmlEcEt5bHpyRmFKOUpzTmlnK21SQ2tEUlVGeXZ0MUJGNW1uZS9VZlV2?=
- =?utf-8?B?VXhWZjBHMktTWVE3VVo1QlhoR1FoMWwzcUsrVVlqUjNsWlJBTTRER3Q3ZjUy?=
- =?utf-8?B?OEM3MmJxM241eW1ZTWlOVUFOY2xWY0kzcGVUd2N3Qk16RjQ2MEZ5bnQ1K0hU?=
- =?utf-8?B?d3MySEIwMDFCSGVCc1p4SVhYdEJVUitWQ2xMSTFJK2JUT3dnWjFpdGdBZHlK?=
- =?utf-8?B?THYxU1NPekhmWUhlN1UxL3BKcXBlRGlJdGhyVDc1MWJMV0M1WHhOUnlWelJq?=
- =?utf-8?B?UCtFdUI2ZzRyajJ2NHpRaGdnRnB0NDJpczZNSWhWTjJFeFAyQXBVSG9TOStQ?=
- =?utf-8?B?NmlKRzJKTXA4VVFKSFBHcW1SUTBGcnBrWExRbFRkTkluNzVZL0N2M3h6ellN?=
- =?utf-8?B?Y0VmQ25ML0JkS29EaGZSUy94cndib08vWS9yNVZGampUa0hoeVBPZm9Hbitj?=
- =?utf-8?B?QThxMmRZR1N0aEZMUnltNTBqK0d0dHJOMjRIMWEwVmwvazFpR0FUNzMzOGs4?=
- =?utf-8?B?MmNmbVJ0a0NjSGMzL0VnNHlPRUY4dk9aTjFURkhEVEFMUS9OcHJvMHJGd2lz?=
- =?utf-8?B?OXgrbmtjQW9wOW5WUnlBSmpHbFQ1NUxNT1FveU5MOG5hek1nQWhTclZhNjdj?=
- =?utf-8?B?UERQN0wyaGtkTng4VURKeUpvRVlrR1NNTkZnL1dWN0JNNTRvNHZicjFXemF3?=
- =?utf-8?B?MnJ0SDlTR3lPVWZGYWdmU2JNL2JXaTlzUmlOWUVpTXdza3h6eXRSMUVQenEw?=
- =?utf-8?B?bHRVQy9ldzhHMTNEMXE5VGVHdmdIQTIrcC9ZUGoxeTRqM2J6UzF2YnNXQWkx?=
- =?utf-8?B?UmVIdDgvOW0zWlFTZ2p6a3BqMmVOemd6bTRydG5nT3ZJL3kyU0c5bUowdGpG?=
- =?utf-8?B?QWo5VFJ0MzRWUm9jR2c0YWY1VENSK1g0WFUycnByd3FZZnJtRnhCOWR5RkNW?=
- =?utf-8?B?K09uWEt1TWp1bURxY1NDSGs2c2l5eXRKWE1rRFIrRllmb1BldVh0NUlxQ3dj?=
- =?utf-8?B?SFpRT3VUUyt6WXNPZ2ZoK01ENnRqSlVEcjR1ZHdHY29PMDJJMGJYOWZMc2FQ?=
- =?utf-8?B?ai9vVFlwMW4vMlhUTndGNDEzZ0VqM3dDNUdBMC9rSy82UTNkYkFzc0MzMnZi?=
- =?utf-8?B?ZHI0Sjk1YWpPeXpMV0J5NUNHaTR0U2hUcFF0Z3laelBSTkJIcUh1OXloN05Z?=
- =?utf-8?B?cEQrbUdvSkpTWDRTWVE1amxEa1NUVnRaZnMvdlhRNU00WGFmTlV5Z3kwakFP?=
- =?utf-8?B?elBtbVM2UENzMDFhVzZrSzBKM29SN2hJZ05CcG5JcWpQYTZzL2FUMUpjT3F5?=
- =?utf-8?B?UzBBUWgrWnA0eUhIbW9xR0lZMUFjUGxmaVFyMkZqYS9MUjJpalBzMEpzTHgy?=
- =?utf-8?B?S3NXZ0hvRnFSRTRiNmh0V1Z1SGsrcyt0dEtRY3c2NWoxMDg5RzEvR25Od3Nk?=
- =?utf-8?B?b3lnMXhKRjBWYW92bHN6S3RHbFZFRGtUSENZcHhPTmYvOFBkcldXejBVODY3?=
- =?utf-8?B?a1d2c29RZzFETXVuUHREWjZ3S3BNemJ4aHVicUppUXpmNVJXSlJxQT09?=
+	=?utf-8?B?c1RTUTFSQVZOUU5hU0kvNU9GNTREeVY4RGM4SVJTalBnRHF1SEJFZGwxb3Ni?=
+ =?utf-8?B?VlhnUmhmTEZ5d3NlelcvU3hON01JQjkwdll1V2h2ZEhlcU8vdDk3ZE1Sc0d1?=
+ =?utf-8?B?Tys0aFNsNzN0YlNDcDFkYnJRcFpZeU9jSWZjNzZhUmtwRDRIcFlQQ1pPOXVx?=
+ =?utf-8?B?Q1BnUlI0emNEWmlOODlzTE5PanZLOWNJcEJ4aDk0OHpHWjh0cDdxMmdqNG9F?=
+ =?utf-8?B?VDBlUmQzTTF4VlgrWk9rWVV1SEwrdlpSa05rUVhJOUdMdmdBUDhlellVM3JN?=
+ =?utf-8?B?VW1kcHROWEZvQUVJK01oY3A3OXdRRXp3Vm1Sd2F6Q3NHbGM4dVh2azRocVRM?=
+ =?utf-8?B?SDJtVkhQNHQ0UXRPUXRHQmxnMWxvNjFoaXhQTTZvaStqWjBQU2U5Zk5uYmQ4?=
+ =?utf-8?B?RWlmd2daOVhLMXovTjFYYnN5Q0ZRNEVIa04xMUtkdzVBZ3o4VitnN1E3c1Ni?=
+ =?utf-8?B?ME1Vakl1STl1ZkRPV2pnQ3VJU1cxM0Myd01rNUx1OUVSd0pMVEZUOXFJcVZI?=
+ =?utf-8?B?blAzeUVFa1VFU3BKTVRaMkdLVXdmRmdWak55U3duOW1pQ1JlOVlxSjF0cHZ3?=
+ =?utf-8?B?MVdzay9sT3hXakpRZE5FOWROcTVCb3RMT3lUdnoydzZvNzJIdkt3WW5WdkpU?=
+ =?utf-8?B?a3RaN3k4L3RoWVJ4LzFXYkY2ZFZaYnhwb1hxRTM3L252TmdzeCtRekRNQ05G?=
+ =?utf-8?B?a3p3c05jSmROZGk1VS9IZ3VBOUdTWXV5YUZPYVNiVE5KVFhWYkIxWWQ5b2M3?=
+ =?utf-8?B?Z3UrMThLQW5yakNIYVdXbmd4aFRlQkUvOTFMTS9penEwUS9vT1lCZDl6Y1lW?=
+ =?utf-8?B?bkp3UGhtRjlEWFlLcDJQTlI3QUJsejA4bVlzbE50SWduaEZSOTVVVnI0NmRF?=
+ =?utf-8?B?UzU1a1phZzEvWDBoNDZNamtpc0x2dlF1T1NNbTZvMnJuRzFUUXZsOGlmNVdv?=
+ =?utf-8?B?b2M1SjJRU05pQVpNb1lzSUlQeVpyM0dud056bGJVVElGNFQvc2l2V0JtaFlN?=
+ =?utf-8?B?UkhzQVRlVFJoUVkwNktTUTdERkY1NlNUbGowL1ZFZjBLcXdEM2JnK3M4Q05S?=
+ =?utf-8?B?Y1MwTTVtalVPOHBHdWtUL3JNb1ZUNFcyZGJTZkJzcGRVYnQ5cmd5TUJrdmJj?=
+ =?utf-8?B?V015ZGk1MDZhMzhuTkpXMTRkOVdWeUsvVHV2WEQ5Y1E2T1pzL211V01FNmJp?=
+ =?utf-8?B?NG1mY0Y1L3YrS3VsOHVqWER1eVg3UTF0aFN0RkxTVXJtQXEwcFdCN21rZG1t?=
+ =?utf-8?B?akJ4QWlIUnI3MWh1Z1ZkQXVUeHJGMFJSbExkMC9md21JcEhxWmUrZHRkV2ZS?=
+ =?utf-8?B?R1Q5SVJGK0o4OHFQREJRWFErdDNzcWFkMFErVkJ3RXRscGVuN3FXVDdvV1VX?=
+ =?utf-8?B?Wituelcvdk5HTCszRXMxMlRTY1l4czFQd0EzZUhBcEhEM2xIVzA1d3VMbGNh?=
+ =?utf-8?B?V1MzaDVaMkFLbyszQlQyU0FiOVZ0bTI4c1JMdHF3bTF1NGY4R3VhT0NzbnNo?=
+ =?utf-8?B?YnVoWW4vcTlLWlo3T1IvQnpaQkRrZzNXVEJGcnhlQnBSVFFaQjh5M1dncmFx?=
+ =?utf-8?B?REh6V3ZZMG9vZW1TSHpSWmZEd1dyMDhtK3pjR2tQZ3FuQjU5bmFreHZHTXZh?=
+ =?utf-8?B?MGpQbDdBeWdSc0tKb2hoRE5mQjhXaTcxVmRxcDNVb0Y3S2h6bWdITlNFNld2?=
+ =?utf-8?B?UkxtRHFVaGJFNWVyb1ROR3NacTRxaGVRNld2Smh4TWhDWE9aM2RQZFFjcm1h?=
+ =?utf-8?B?cElsTGh3VXZ0Q1JWL05zR2QyNzkxeHlPUGd0RWEvOHdEV0RhejBqMC9xOHdN?=
+ =?utf-8?B?VGN5ZlF1OUpsenZTN3JZdHU5VmpCVjhGTE5YWlFFYWdpa2dUWnFLeTJRWGMx?=
+ =?utf-8?B?eDBGSnVsOHNtQ0p4dytyc2toRGk4SU4rSFJ6TWZRRStHVzJ6UVF4bXJlQzI1?=
+ =?utf-8?B?UUxyY2hzNmV2d3dxaStta0VMaG5oQ1BOdTlsbjMrcFJaUS9LSUpIakl4YTYv?=
+ =?utf-8?B?QWFPNFJXTzZqMWQ3TllSdFQ1Qzc3TXp1ZTJDOFJUWkdlbHpHaitWV0lHR3Ex?=
+ =?utf-8?B?U2RNQUZhMEtUNnFKS1pDbnpUKzh4aXM0dExDYjR3SkkwNVloYlo3Snkra2Qy?=
+ =?utf-8?B?V1J0TG9PRlNwRTdFSTJkczNlQVpTeXVvOXkyQ0phb1crdHVZa2FGS0h1MVE4?=
+ =?utf-8?B?d3Q2Sjk1dTQ1WWQ2Mm4wYUEzcmZWT0R2NUFuaVdyMFVQcWlzbldTWHFHaWd0?=
+ =?utf-8?B?RUUwTTRCb1lVeDZwM0VLcGVGc0E2SXBRRVpwWmJtOXoyQXhTTC8yRGI4MHli?=
+ =?utf-8?B?RGtlSGovNlkxV3dwT1hIVFFHaXhTSXplZmpLUnRObldHRkRYODlvdz09?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0783d26-b078-4e3f-7f07-08df29ee9dee
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1dfe72f8-912c-4284-6793-08df29ef5d8a
 X-MS-Exchange-CrossTenant-AuthSource: CH1PR12MB9647.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2026 12:28:14.1046
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2026 12:33:35.5387
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F2aYd3Ty47alJPew0cR4UmIhsCR7lAywJBrw8SOEB5o4P6+aOQ635L8PbOe2udLkwgezSY1NVD+jpRFi6i1Ufw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6456
+X-MS-Exchange-CrossTenant-UserPrincipalName: LaM9HOonUnyNMJhYfSPtVd1jzrGW0g/WrFjJ8OU1J/zAKrT3ho9OQUYY/HJAN8jhrKujrT5dzP5u+zaIdCPnTg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9690
 
 
 
-On 12.10.26 19:43, Mina Almasry wrote:
-> Add devmem_bind_rx_unregister_check and devmem_bind_tx_unregister_check
-> to nl_netdev.py to verify that unregistering a netdevsim device while a
-> netlink socket holds an active RX or TX devmem binding synchronously
-> detaches the dma_buf attachment and cleanly closes the netlink socket
-> without use-after-free or page faults.
+On 12.10.26 19:42, Mina Almasry wrote:
+> Fix two device-unregistration lifecycle bugs in devmem TCP bindings and
+> add netdevsim support plus selftests covering both RX and TX device
+> unregistration:
+> 
+> 1. net: devmem: unmap dma_buf synchronously on queue uninstall
+>    Synchronously unmap and detach binding->attachment under binding->lock
+>    when the last RX queue is uninstalled in mp_dmabuf_devmem_uninstall(),
+>    and unmap RX bindings that were already unbound on NETDEV_UNREGISTER,
+>    preventing slab-use-after-free in dma_unmap_sg_attrs() when the binding
+>    is freed after dma_dev.
+> 
+> 2. net: devmem: detach TX bindings on NETDEV_UNREGISTER
+>    Extend net_devmem_dev_unregister() to fully detach and unmap TX
+>    bindings when binding->dev unregisters, or clear binding->vdev alone
+>    when only a virtual device unregisters while binding->dev lives.
+> 
+> 3. netdevsim: support devmem RX and TX bindings
+>    Enable PP_FLAG_DMA_MAP | PP_FLAG_ALLOW_UNREADABLE_NETMEM, 64-bit DMA mask
+>    on nsim_bus_dev, and NETMEM_TX_DMA on netdevsim so devmem RX/TX bindings
+>    can be exercised in software selftests.
+> 
+> 4. selftests: net: add devmem RX and TX netdev unregister tests
+>    Add devmem_bind_rx_unregister_check and devmem_bind_tx_unregister_check
+>    to tools/testing/selftests/net/nl_netdev.py.
 > 
 > Cc: Tariq Toukan <tariqt@nvidia.com>
 > Cc: Kaifeng Wang <kaifengw@google.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> ---
->  tools/testing/selftests/net/nl_netdev.py | 108 ++++++++++++++++++++++-
->  1 file changed, 105 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-> index ceb44c8e1fec5..bad230ee9dcd2 100755
-> --- a/tools/testing/selftests/net/nl_netdev.py
-> +++ b/tools/testing/selftests/net/nl_netdev.py
-> @@ -6,10 +6,14 @@ Tests for the netdev netlink family.
->  """
->  
->  import errno
-> +import fcntl
-> +import mmap
-> +import os
-> +import struct
->  from os import system
-> -from lib.py import ksft_run, ksft_exit
-> +from lib.py import ksft_run, ksft_exit, KsftSkipEx
->  from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
-> -from lib.py import NetdevFamily, NetdevSimDev, NlError, defer, ip
-> +from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, NlError, defer, ip
->  
->  
->  def empty_check(nf) -> None:
-> @@ -366,6 +370,102 @@ def page_pool_stats_ifindex_check(nf) -> None:
->      ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.info.id')
->  
->  
-> +def _create_udmabuf(num_pages=64) -> int:
-> +    """Create a sealed memfd-backed udmabuf fd for devmem tests."""
-> +    if not os.path.exists("/dev/udmabuf"):
-> +        raise KsftSkipEx("/dev/udmabuf is not available")
-> +
-> +    size = num_pages * mmap.PAGESIZE
-> +    memfd = os.memfd_create("devmem-ksft", os.MFD_ALLOW_SEALING)
-> +    os.ftruncate(memfd, size)
-> +    fcntl.fcntl(memfd, 1033, 0x0002)  # F_ADD_SEALS, F_SEAL_SHRINK
-> +    devfd = os.open("/dev/udmabuf", os.O_RDWR)
-> +    req = bytearray(struct.pack("IIQQ", memfd, 0, 0, size))
-> +    dmabuf_fd = fcntl.ioctl(devfd, 0x40187542, req)  # UDMABUF_CREATE
-Nit: this could be a constant
+> ---
+> v2:
+> - 1/4: Don't unmap when a leased queue is unleased. Keep bindings in
+>   net_devmem_dmabuf_bindings until freed, hidden from TX lookups by an
+>   xarray mark, and unmap unbound RX bindings on NETDEV_UNREGISTER. Update
+>   the binding->lock and binding->ref comments. (Sashiko)
+> - 2/4: Detach TX bindings from the same net_devmem_lock-protected walk,
+>   which now also covers unbound TX bindings, and clear the LIVE mark
+>   instead of erasing the ID. The walk no longer uses RCU or takes
+>   binding references (Stanislav).
+> - Link to v1: https://lore.kernel.org/netdev/20261010025532.839559-1-almasrymina@google.com/
+> 
+> Mina Almasry (4):
+>   net: devmem: unmap dma_buf synchronously on queue uninstall
+>   net: devmem: detach TX bindings on NETDEV_UNREGISTER
+>   netdevsim: support devmem RX and TX bindings
+>   selftests: net: add devmem RX and TX netdev unregister tests
+> 
+>  drivers/net/netdevsim/bus.c              |   1 +
+>  drivers/net/netdevsim/netdev.c           |  21 ++--
+>  net/core/devmem.c                        | 121 ++++++++++++++++++++---
+>  net/core/devmem.h                        |  10 +-
+>  net/core/netdev-genl.c                   |   1 +
+>  tools/testing/selftests/net/nl_netdev.py | 108 +++++++++++++++++++-
+>  6 files changed, 236 insertions(+), 26 deletions(-)
+> 
+> 
+> base-commit: 4f6ac74fa594a918d41255c941256e1d51592d3b
 
-> +    os.close(devfd)
-> +    os.close(memfd)
-> +    return dmabuf_fd
-> +
-> +
-> +def _dmabuf_attached_devs():
-> +    """Return attached device names from debugfs dma_buf/bufinfo if available."""
-> +    path = "/sys/kernel/debug/dma_buf/bufinfo"
-> +    if not os.path.exists(path):
-> +        return None
-> +    with open(path, "r", encoding="utf-8") as f:
-> +        text = f.read()
-> +    attached = []
-> +    in_attached = False
-> +    for line in text.splitlines():
-> +        if line.strip() == "Attached Devices:":
-> +            in_attached = True
-> +            continue
-> +        if in_attached:
-> +            if line.startswith("\t") and line.strip():
-> +                attached.append(line.strip())
-> +            else:
-> +                in_attached = False
-> +    return attached
-> +
-> +
-> +def devmem_bind_rx_unregister_check(_nf) -> None:
-> +    """Verify RX devmem bindings detach dma_buf synchronously on netdev unregister."""
-> +    dmabuf_fd = _create_udmabuf()
-> +    nf_priv = NetdevFamily()
-> +    ef = EthtoolFamily()
-> +    nsimdev = NetdevSimDev(queue_count=2)
-> +    nsim = nsimdev.nsims[0]
-> +
-> +    ip(f"link set dev {nsim.ifname} up")
-> +    ef.rings_set({"header": {"dev-index": nsim.ifindex},
-> +                  "tcp-data-split": "enabled"})
-> +    nf_priv.bind_rx({
-> +        "ifindex": nsim.ifindex,
-> +        "fd": dmabuf_fd,
-> +        "queues": [{"id": 1, "type": "rx"}],
-> +    })
-> +
-> +    attached = _dmabuf_attached_devs()
-> +    if attached is not None:
-> +        ksft_ge(len(attached), 1)
-> +
-> +    nsimdev.remove()
-> +
-> +    attached = _dmabuf_attached_devs()
-> +    if attached is not None:
-> +        ksft_eq(len(attached), 0)
-> +
-> +    del nf_priv
-> +    os.close(dmabuf_fd)
-> +
-> +
-> +def devmem_bind_tx_unregister_check(_nf) -> None:
-> +    """Verify TX devmem bindings detach cleanly on netdev unregister without UAF."""
-> +    dmabuf_fd = _create_udmabuf()
-> +    nf_priv = NetdevFamily()
-> +    nsimdev = NetdevSimDev(queue_count=2)
-> +    nsim = nsimdev.nsims[0]
-> +
-> +    ip(f"link set dev {nsim.ifname} up")
-> +    nf_priv.bind_tx({
-> +        "ifindex": nsim.ifindex,
-> +        "fd": dmabuf_fd,
-> +    })
-> +
-> +    attached = _dmabuf_attached_devs()
-> +    if attached is not None:
-> +        ksft_ge(len(attached), 1)
-> +
-> +    nsimdev.remove()
-> +
-> +    attached = _dmabuf_attached_devs()
-> +    if attached is not None:
-> +        ksft_eq(len(attached), 0)
-> +
-> +    del nf_priv
-> +    os.close(dmabuf_fd)
-> +
-> +
->  def main() -> None:
->      """ Ksft boiler plate main """
->      nf = NetdevFamily()
-> @@ -379,7 +479,9 @@ def main() -> None:
->                page_pool_check,
->                page_pool_dump_ifindex,
->                page_pool_ifindex_leak_check,
-> -              page_pool_stats_ifindex_check
-> +              page_pool_stats_ifindex_check,
-> +              devmem_bind_rx_unregister_check,
-> +              devmem_bind_tx_unregister_check
->                ],
->               args=(nf, ))
->      ksft_exit()
+Went through the series and it looks good to my feeble human brain:
 
-Other than the above nit:
 Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+
+I am biased though because I need Mina's code to add support for
+unbinding the dma device for data-direct.
 
 Thanks,
 Dragos
-
