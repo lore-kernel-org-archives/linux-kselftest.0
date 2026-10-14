@@ -1,24 +1,24 @@
 Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46856560ADE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469A3560ADF;
 	Wed, 14 Oct 2026 15:44:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.203.200.13
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791992687; cv=pass; b=V4u60AooTVuvvZMmAvW1F2jCzlUsiIhq1n7yH5axivWw2u8M5C8k/NvRmln1+4kC3MxvOKKwSIsGzJHSfv2lLOw5FQ571gOQ6OmGfdlMACdg7Uxq2xdYUbrsog/950l1cvxWZWn+r9yqyC1KBdiMSTPcnGl9zWlVkPZw3U33Dlo=
+	t=1791992688; cv=pass; b=q9J2Fx1zR3Mzs27DaVG8vseMhPvGbpqurCzubXV6CkWOvquUrWWvGjaS4ltKEkXSGr4tCZ8r19Jw7GdwdtDpQJlCvYcxlb7JWM2kONQAbMGJmvrl4HvQsy31bhuB62gH7eusxF1hEYqcqfDlzif8wCHsG6sRsu5/SfPFCqKdbrc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791992687; c=relaxed/simple;
-	bh=1w6VnA93kmZ4XZ7LNht9nWmp/y/4b4G8FYh8vZuRD3o=;
+	s=arc-20240116; t=1791992688; c=relaxed/simple;
+	bh=tKzyj9W+uPVY2IK4fUOJ0naRkm2q54GXdnrymUaXeY8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lz2jewg8wJqkzbYoSzHTFn0D54VKI2TWMm+NU3zrqKUbgiISwETgxNTRoi3qg3r90etCzbLXkoj4PrEdZqoyvAnrmK2Ki4Ln4AvCY893rBNlRhM3pOMeexOk9ZNty2z9HRnJz5Y9jXqhYzkauYlwBVOI0VAJ6ke604GkVwwJkro=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.b=gPdQzSIe; arc=pass smtp.client-ip=185.203.200.13
+	 MIME-Version; b=Vzddxbx6dshKm9B+gPU4C/WOTqnr63kSEFoFdZk8yM0Oz4JMll9/vx2fYztqaHfIB9h+HA+01vDrmLSRPjLUFg1Cew4O/DBemn1hLyT5UgBVHKsAK7BO4uzB2jDB2eOUG/8sGKKfU97LGOjMYLYMVnac+RxT6DQ0aQcMu+AqUJ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.b=Dzu8Maih; arc=pass smtp.client-ip=185.203.200.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.b="gPdQzSIe"
+	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.b="Dzu8Maih"
 Received: from dude04.red.stw.pengutronix.de (dude04.red.stw.pengutronix.de [IPv6:2a0a:edc0:0:1101:1d::ac])
 	(Authenticated sender: relay-from-dude04.red.stw.pengutronix.de)
-	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 44A262027D4;
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 42BBD2027D2;
 	Wed, 14 Oct 2026 17:44:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
 	s=20260414; t=1791992677;
@@ -26,19 +26,19 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=i5AnQXGsoqTI6+R2LvsudVA4c8wt6zip2KzS2kCMT7A=;
-	b=gPdQzSIeQBpH1wMW/Ax2z0QmQfwJJENAlDSjE3HlHWG4AnWjjZS5ou78Xk7k50y13J5WrK
-	hdjd1WjqnODPNFltM+Dm/gg3AAT7ImuD0s6P/9FBXD1vRRxevoy+2NTVEhR2bAOKlB8QAr
-	0m1UcHo3Cc+ZcAE5kGOaP7J0+5PeRpfXYcX4ykriK5Te3PZxSBsniQW7fZEJa4BsySiRMG
-	Ea+3XFdtTrN6lYv3tPCWo3XayDyF2H8fhdd2UAT+lYnNYz8yR0tSlFDO3i8NmTNpKJSEWh
-	1KbN8r6lPF36UWaGtpk+Ovg4gO4RFFtz2bogfI/bbBIytVrbK1biv6E54PH9gQ==
+	bh=L+Kagxn8q2Nbx/IGnW/1iAYVlR6Ha3ifvH95hb9XOsM=;
+	b=Dzu8MaihO8MW3oP4Rm13Dszs5e6ifAc1fbvPqlTkwdKSnEgfgIvZbsj+4QJjXBUfcS66Ys
+	S2407wn7JMmr7h7SQg4Zros9V2wGaPJo9GhGzdILEjkX6lE2B0FXBXhZCxrj6yk8O8N9wC
+	TpyPAl+hRmVSjWHW6DIQ4ryfog2CzfTZNERS1Xux3ZVlh8X0Q1PbH74XnWq3EXnX8P12C9
+	m67sls42M7SfUVuAm5eptX9g7pv8HrCl4J9uPcs1vNhLBTg2KcCeYznkUFCl/h5WJy1Smf
+	smXkG9UQsE0ImXoEe2oCqL8GyRDlDgMsllusTuXCzL6VOZWHxoKrjzhQ4jEg3g==
 ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1791992677; a=rsa-sha256;
 	cv=none;
-	b=XT1RvVhmLmX9E3Zyg9fcKjCbyojXPDrTPUMqrc3iTp/TDQVkzw/OTc1BqN74IbBa4FDQTE
-	5SJJn6eLCvbNCRtTfXn5kT4d5Iy8udm0Q8r4ry2npL1IQt5LLKcEZDikUEX9os21z6CK/L
-	twmE3WaDkcnJ1rS0v1GvZwD53BCkBSV4yF0+G+MMyh/BEMw6M3kqg2brk5THrLtLzJT3F2
-	wIsy8e92ovRjA+YAoScH1jvKnwgR0XmM6wOJaFTDZoPbsJ78M43u+8+aXZVEwrb2m0AYwc
-	GKYtim6PD5hAPsjldtJeXgps8FWIYrKUAsH0Ijw7y0grKijGmX/cJNcuTZgpGw==
+	b=aAGCBwpD3EI5tb//b3Trvus7+JrycqSwigEx8OUm8jc98eL4rVI7nLbcLocYHxUU8ayhqK
+	FUCFt5Nm4fqMHMQ9grBZf+XEKeoPY3zvip9Z79HUQyzxO0FXkhfASWW0VB3zjECBasTHxS
+	jdPM9LmTHdI3G92FPYYRlLH1gqUPR3RJ4UPHpavWDc4/J49tdDiRoDYG/reSAnQ7vs1btM
+	sMSIlCWxe7bvmKVFYcrQL15fA3pSa4mdk5HNnBnNG4IVWRPFkFkTDc6Ji57ejQMQHfLb8A
+	mY9UsCRLJ2f6m1D2UtCLPuVVbILd75nB97A88mPPYGQ2BTRZOfhTsXCaQMMogw==
 ARC-Authentication-Results: i=1;
 	ORIGINATING;
 	auth=pass smtp.auth=relay-from-dude04.red.stw.pengutronix.de smtp.mailfrom=ore@pengutronix.de
@@ -48,14 +48,14 @@ ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=i5AnQXGsoqTI6+R2LvsudVA4c8wt6zip2KzS2kCMT7A=;
-	b=BevjoHmCCYesrK/2vTRxiZoArAAGgpBAOnH2K0kMlG9FImdM3hZshY7Xa/GRSOCBWZ8BQn
-	imBbhYO+EVUu5WsT1ThCJaMCvwds5UAc1pJZaSjBnORLELoyAyBPLOiMH3vNGBFJ60B+dO
-	n7CsNKEc5xpmv66nPoCnnCybeOE2DKtWabUHsopzRxRODLtCxWHi4K182VExp3Ve2gIkZt
-	EHd0sQer8n10iQRi9FJ82WebrlqS0b3MJ7upkq5OosqliLlPBHPZ8ru+WOknky5tDuJMVP
-	s+xJYGGjMyqQB6yHrfFRWgz5b//u4Ei6T/bvd/rdDjSP0G/LTP6qz3SgJhvNsg==
+	bh=L+Kagxn8q2Nbx/IGnW/1iAYVlR6Ha3ifvH95hb9XOsM=;
+	b=FBVe1S6T6JATMLhtoCKCBppzoAY4hiysN5i2UlxYfCN69bOtkW6rKb0ZrGBySCMu9YD2Hb
+	DH7FXatO4Q1liy18JbdIB9iHk6lfm9x3+Dayu2uSaK5tNqVMvof05tmUM4+f+0oYDy/9oz
+	9VRdesN8cc4uPYV9hi3gmRAZDd0ea5F4PFsTwn0Z0QS9xatauh1mV3Ez1a33KXrCruCIGB
+	P/h0nFfaEc/P8fqwjMz1X9Mwi5GduXrVO8HZLZyF6X/arMrMuZxce2PQK79WzV68I43o77
+	125Yo5nnseEHyxpdGIDoNu17MgP9o6JYEFTruA7n21aid+0SzblBQ+RkxKgvnQ==
 Received: by dude04.red.stw.pengutronix.de (Postfix, from userid 1058)
-	id 2A40E389273; Wed, 14 Oct 2026 17:44:37 +0200 (CEST)
+	id 1CB8E380BA7; Wed, 14 Oct 2026 17:44:37 +0200 (CEST)
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Robin van der Gracht <robin@protonic.nl>,
 	Oliver Hartkopp <socketcan@hartkopp.net>,
@@ -69,9 +69,9 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	=?UTF-8?q?Alexander=20H=C3=B6lzl?= <alexander.hoelzl@gmx.net>,
 	Quchaosheng <quchaosheng000406@163.com>,
 	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH can-next v1 8/8] selftests: can: check SO_J1939_PROMISC receive effect
-Date: Wed, 14 Oct 2026 17:44:34 +0200
-Message-ID: <20261014154435.3577983-9-o.rempel@pengutronix.de>
+Subject: [PATCH can-next v1 5/8] selftests: can: add J1939 wire-format tests against CAN_RAW
+Date: Wed, 14 Oct 2026 17:44:31 +0200
+Message-ID: <20261014154435.3577983-6-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261014154435.3577983-1-o.rempel@pengutronix.de>
 References: <20261014154435.3577983-1-o.rempel@pengutronix.de>
@@ -83,92 +83,241 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test that exercises the SO_J1939_PROMISC receive effect. The
-existing coverage only round-trips the flag through set/getsockopt, so a
-kernel that stores it but never acts on it in the RX path stays green.
-
-The test binds an rx socket to a specific (address, PGN), checks that a
-frame to a different destination address and PGN is not delivered, then
-enables SO_J1939_PROMISC and checks the same otherwise-unmatched frame is
-now delivered unchanged.
+Add a test that pairs a J1939 socket with a CAN_RAW socket so the actual
+CAN frames on the wire are checked in both directions: a J1939 send
+produces the expected CAN id (priority, PGN, source and destination) and
+payload, and an injected CAN frame is parsed and delivered to the J1939
+socket. The base test only exercises J1939-socket-to-J1939-socket
+transfers, which stay on the local delivery path inside one netdevice, so
+the on-wire format is otherwise unchecked. Both PDU1 (destination
+specific) and PDU2 (broadcast) single frames are covered.
 
 Assisted-by: LLM
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- .../selftests/net/can/test_j1939_opts.c       | 46 ++++++++++++++++++-
- 1 file changed, 44 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/can/.gitignore    |   1 +
+ tools/testing/selftests/net/can/Makefile      |   2 +
+ .../selftests/net/can/test_j1939_wire.c       | 170 ++++++++++++++++++
+ .../selftests/net/can/test_j1939_wire.sh      |   5 +
+ 4 files changed, 178 insertions(+)
+ create mode 100644 tools/testing/selftests/net/can/test_j1939_wire.c
+ create mode 100755 tools/testing/selftests/net/can/test_j1939_wire.sh
 
-diff --git a/tools/testing/selftests/net/can/test_j1939_opts.c b/tools/testing/selftests/net/can/test_j1939_opts.c
-index f761a42db213..3afda9b4e4a8 100644
---- a/tools/testing/selftests/net/can/test_j1939_opts.c
-+++ b/tools/testing/selftests/net/can/test_j1939_opts.c
-@@ -5,8 +5,8 @@
-  * On top of the basic transport, cover the user-visible J1939 socket options and
-  * addressing: the SO_J1939_FILTER PGN whitelist, the SO_J1939_SEND_PRIO send
-  * priority seen in the CAN id (via a CAN_RAW peer, including the default of 6),
-- * unconnected sendto(2), a wrong-family bind rejection, and SO_J1939_ERRQUEUE
-- * TX-completion notifications.
-+ * unconnected sendto(2), a wrong-family bind rejection, SO_J1939_ERRQUEUE
-+ * TX-completion notifications, and the SO_J1939_PROMISC receive effect.
-  *
-  * The vcan interface is set up by the caller (see test_j1939_opts.sh); its name
-  * is passed via the CANIF environment variable.
-@@ -22,6 +22,7 @@
+diff --git a/tools/testing/selftests/net/can/.gitignore b/tools/testing/selftests/net/can/.gitignore
+index 7ca63a19472c..3f31fa5b7438 100644
+--- a/tools/testing/selftests/net/can/.gitignore
++++ b/tools/testing/selftests/net/can/.gitignore
+@@ -3,3 +3,4 @@ test_raw_filter
+ test_j1939_base
+ test_j1939_opts
+ test_j1939_addr
++test_j1939_wire
+diff --git a/tools/testing/selftests/net/can/Makefile b/tools/testing/selftests/net/can/Makefile
+index 6e4176a1b985..d80fa114a0cd 100644
+--- a/tools/testing/selftests/net/can/Makefile
++++ b/tools/testing/selftests/net/can/Makefile
+@@ -11,6 +11,7 @@ TEST_PROGS := \
+ 	test_j1939_base.sh \
+ 	test_j1939_opts.sh \
+ 	test_j1939_addr.sh \
++	test_j1939_wire.sh \
  
- #define SA_TX			0x80
- #define SA_RX			0x90
-+#define SA_OTHER		0x50
- #define PGN_A			0x0ab00
- #define PGN_B			0x0cd00
- #define PRIO_SET		3
-@@ -123,6 +124,47 @@ TEST_F(j1939_opts, filter_pgn)
- 		TH_LOG("PGN_B was received but should have been filtered out");
- }
+ TEST_FILES := j1939_lib.sh
  
-+/* SO_J1939_PROMISC delivers a frame that does not match the bound (addr,pgn). */
-+TEST_F(j1939_opts, promisc_receive)
+@@ -19,5 +20,6 @@ TEST_GEN_FILES := \
+ 	test_j1939_base \
+ 	test_j1939_opts \
+ 	test_j1939_addr \
++	test_j1939_wire \
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/can/test_j1939_wire.c b/tools/testing/selftests/net/can/test_j1939_wire.c
+new file mode 100644
+index 000000000000..8f5113394f99
+--- /dev/null
++++ b/tools/testing/selftests/net/can/test_j1939_wire.c
+@@ -0,0 +1,170 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * J1939 wire-format selftests: a J1939 socket against CAN_RAW.
++ *
++ * Where test_j1939_base keeps transfers on the local path between two J1939
++ * sockets, these pair a J1939 socket with a CAN_RAW socket and check the actual
++ * CAN frames on the wire both ways: a J1939 send produces the expected CAN id
++ * (priority, PGN, source and destination) and payload, and an injected CAN frame
++ * is parsed and delivered to the J1939 socket. Both destination-specific (PDU1)
++ * and broadcast (PDU2) single frames are covered.
++ *
++ * The vcan interface is set up by the caller (see test_j1939_wire.sh); its name
++ * is passed via the CANIF environment variable.
++ */
++#include <errno.h>
++
++#include "kselftest_harness.h"
++#include "j1939_tests.h"
++
++#define SA_LOCAL		0x90	/* the J1939 socket under test */
++#define SA_PEER			0x20	/* the CAN_RAW peer */
++#define PGN_PDU1		0x0ab00	/* PF 0xab (< 240): destination specific */
++#define PGN_PDU2		0x0feee	/* PF 0xfe (>= 240): broadcast */
++#define PRIO			J1939_PRIO_DEFAULT
++
++FIXTURE(j1939_wire)
 +{
-+	uint8_t tx_buf[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-+	uint8_t rx_buf[8];
-+	int enable = 1;
-+	int ret;
++	int ifindex;
++	int j1939;
++	int raw;
++};
 +
-+	self->rx = j1939_open(self->ifindex, SA_RX, PGN_A);
-+	ASSERT_GE(self->rx, 0);
-+	self->tx = j1939_open(self->ifindex, SA_TX, J1939_NO_PGN);
-+	ASSERT_GE(self->tx, 0);
++FIXTURE_SETUP(j1939_wire)
++{
++	self->j1939 = -1;
++	self->raw = -1;
 +
-+	/*
-+	 * This frame uses a different address and PGN than rx is bound to.
-+	 * Without promisc, rx must not receive it.
-+	 */
-+	ret = j1939_sendto(self->tx, tx_buf, sizeof(tx_buf), self->ifindex,
-+			   J1939_NO_NAME, SA_OTHER, PGN_B);
-+	ASSERT_EQ(ret, (int)sizeof(tx_buf))
-+		TH_LOG("sendto unmatched frame failed: %d", errno);
-+	EXPECT_EQ(recv_timeout(self->rx, rx_buf, sizeof(rx_buf),
-+			       J1939_NEG_RECV_TIMEOUT_MS), -1)
-+		TH_LOG("unmatched frame was received without promisc");
++	J1939_SETUP_IFINDEX(self);
 +
-+	/* SO_J1939_PROMISC returns the flag value (1), not 0, on success. */
-+	ASSERT_GE(setsockopt(self->rx, SOL_CAN_J1939, SO_J1939_PROMISC,
-+			     &enable, sizeof(enable)), 0)
-+		TH_LOG("SO_J1939_PROMISC failed: %d", errno);
-+
-+	/* The same otherwise-unmatched frame must now be delivered. */
-+	ret = j1939_sendto(self->tx, tx_buf, sizeof(tx_buf), self->ifindex,
-+			   J1939_NO_NAME, SA_OTHER, PGN_B);
-+	ASSERT_EQ(ret, (int)sizeof(tx_buf))
-+		TH_LOG("sendto unmatched frame failed: %d", errno);
-+	ASSERT_EQ(recv_timeout(self->rx, rx_buf, sizeof(rx_buf),
-+			       J1939_RECV_TIMEOUT_MS), (int)sizeof(tx_buf))
-+		TH_LOG("unmatched frame not received despite promisc");
-+	EXPECT_EQ(memcmp(tx_buf, rx_buf, sizeof(tx_buf)), 0);
++	J1939_SETUP_RAW(self, 0);
 +}
 +
- /* without SO_J1939_SEND_PRIO the J1939 default priority (6) is used. */
- TEST_F(j1939_opts, send_prio_default)
- {
++FIXTURE_TEARDOWN(j1939_wire)
++{
++	if (self->j1939 >= 0)
++		close(self->j1939);
++	if (self->raw >= 0)
++		close(self->raw);
++}
++
++/*
++ * Inject one CAN frame from the raw peer and confirm the J1939 socket receives
++ * the identical 8-byte payload. Opens the J1939 RX socket into self->j1939 (the
++ * fixture teardown closes it). @bcast selects a broadcast (PDU2) socket and
++ * frame; @pgn and @da address the injected frame. Returns 0 on success, -1
++ * otherwise; the caller ASSERTs the result.
++ */
++static int rx_single_frame_check(FIXTURE_DATA(j1939_wire) *self, bool bcast,
++				 pgn_t pgn, uint8_t da, const uint8_t payload[8])
++{
++	uint8_t rx_buf[8];
++
++	if (bcast)
++		self->j1939 = j1939_open_flags(self->ifindex, J1939_NO_NAME,
++					       SA_LOCAL, pgn, J1939_OPEN_BCAST);
++	else
++		self->j1939 = j1939_open(self->ifindex, SA_LOCAL, pgn);
++	if (self->j1939 < 0)
++		return -1;
++
++	if (send_raw8(self->raw, PRIO, pgn, da, SA_PEER, payload))
++		return -1;
++
++	if (recv_timeout(self->j1939, rx_buf, sizeof(rx_buf),
++			 J1939_RECV_TIMEOUT_MS) != (int)sizeof(rx_buf))
++		return -1;
++
++	return memcmp(rx_buf, payload, sizeof(rx_buf)) == 0 ? 0 : -1;
++}
++
++/*
++ * Send one 8-byte payload from the J1939 socket to the raw peer and return the
++ * CAN frame seen on the wire via *frame, so each caller can assert the id fields
++ * it cares about. Opens the J1939 TX socket into self->j1939 (the fixture
++ * teardown closes it) and connects it to (@da, @pgn); @bcast opens a broadcast
++ * (PDU2) socket. Returns 0 on success, -1 otherwise; the caller ASSERTs the
++ * result.
++ */
++static int tx_to_raw_send_recv(FIXTURE_DATA(j1939_wire) *self, bool bcast,
++			       pgn_t pgn, uint8_t da, const uint8_t payload[8],
++			       struct can_frame *frame)
++{
++	if (bcast)
++		self->j1939 = j1939_open_flags(self->ifindex, J1939_NO_NAME,
++					       SA_LOCAL, J1939_NO_PGN,
++					       J1939_OPEN_BCAST);
++	else
++		self->j1939 = j1939_open(self->ifindex, SA_LOCAL, J1939_NO_PGN);
++	if (self->j1939 < 0)
++		return -1;
++
++	if (j1939_connect(self->j1939, self->ifindex, da, pgn))
++		return -1;
++
++	if (send(self->j1939, payload, 8, 0) != 8)
++		return -1;
++
++	if (recv_timeout(self->raw, frame, sizeof(*frame),
++			 J1939_RECV_TIMEOUT_MS) <= 0)
++		return -1;
++
++	return 0;
++}
++
++/* J1939 TX -> CAN_RAW: destination-specific (PDU1) single frame. */
++TEST_F(j1939_wire, tx_pdu1_to_raw)
++{
++	uint8_t payload[8] = { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
++	struct can_frame frame;
++	canid_t id;
++
++	ASSERT_EQ(tx_to_raw_send_recv(self, false, PGN_PDU1, SA_PEER, payload,
++				      &frame), 0);
++	id = frame.can_id & CAN_EFF_MASK;
++
++	EXPECT_EQ(J1939_ID_PRIO(id), PRIO);
++	EXPECT_EQ(J1939_ID_SA(id), SA_LOCAL);			/* source address */
++	EXPECT_EQ(J1939_ID_PS(id), SA_PEER);		/* destination (PS) */
++	EXPECT_EQ(J1939_ID_PF(id), J1939_PF(PGN_PDU1));
++	ASSERT_EQ(frame.can_dlc, sizeof(payload));
++	EXPECT_EQ(memcmp(frame.data, payload, sizeof(payload)), 0);
++}
++
++/* CAN_RAW -> J1939 RX: destination-specific (PDU1) single frame. */
++TEST_F(j1939_wire, rx_pdu1_from_raw)
++{
++	uint8_t payload[8] = { 0xde, 0xad, 0xbe, 0xef, 0x01, 0x02, 0x03, 0x04 };
++
++	ASSERT_EQ(rx_single_frame_check(self, false, PGN_PDU1, SA_LOCAL,
++					payload), 0);
++}
++
++/* J1939 TX -> CAN_RAW: broadcast (PDU2) single frame. */
++TEST_F(j1939_wire, tx_pdu2_to_raw)
++{
++	uint8_t payload[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
++	struct can_frame frame;
++	canid_t id;
++
++	ASSERT_EQ(tx_to_raw_send_recv(self, true, PGN_PDU2, J1939_NO_ADDR,
++				      payload, &frame), 0);
++	id = frame.can_id & CAN_EFF_MASK;
++
++	EXPECT_EQ(J1939_ID_PRIO(id), PRIO);
++	EXPECT_EQ(J1939_ID_SA(id), SA_LOCAL);			/* source address */
++	EXPECT_EQ((id >> 8) & J1939_PGN_MAX, PGN_PDU2);	/* full broadcast PGN */
++	ASSERT_EQ(frame.can_dlc, sizeof(payload));
++	EXPECT_EQ(memcmp(frame.data, payload, sizeof(payload)), 0);
++}
++
++/* CAN_RAW -> J1939 RX: broadcast (PDU2) single frame. */
++TEST_F(j1939_wire, rx_pdu2_from_raw)
++{
++	uint8_t payload[8] = { 0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7 };
++
++	ASSERT_EQ(rx_single_frame_check(self, true, PGN_PDU2, J1939_NO_ADDR,
++					payload), 0);
++}
++
++J1939_TEST_MAIN();
+diff --git a/tools/testing/selftests/net/can/test_j1939_wire.sh b/tools/testing/selftests/net/can/test_j1939_wire.sh
+new file mode 100755
+index 000000000000..77a1bddb5854
+--- /dev/null
++++ b/tools/testing/selftests/net/can/test_j1939_wire.sh
+@@ -0,0 +1,5 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++J1939_TEST_PROG=test_j1939_wire
++source "$(dirname "$0")/j1939_lib.sh"
 -- 
 2.47.3
 
