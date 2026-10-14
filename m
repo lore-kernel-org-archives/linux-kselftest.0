@@ -1,148 +1,88 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9B6541444
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA29545DA6;
+	Wed, 14 Oct 2026 14:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791986802; cv=none; b=i2aV0c0wONt7N21HGbAYgT0h0el/kM5Ujk/IXfZIDEY4KTChMiHPoY/995PKuQZbUlhureaYevtHyLy748wKfJF8OXuwh6hNwBYQTbNIVhS8t8+9PwxUwEk8zswwF3nQV6TAOdHXjLctc9vc/6SehEk8N7wjH4wMQWM07s1DT34=
+	t=1791987710; cv=none; b=XiKQ+jIbhGhyLYoYKHZAzZ5wUEnytqMvb+xk2mGGoD0JZHGReb6TlHCgy9S/jC8qVzVAVpN6qyaTh1FyaAmLh8yPgAtdJjfyJDYYd7egZApbvmlq5omNrrHT3oXuGs260aKW5KZS02ecyZOAJl7il37DT5cGW29RfRljgH1hSwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791986802; c=relaxed/simple;
-	bh=sLM+d/afnm9lvK0+kiSdP3q0DvNVsU3pkhnyYdTWfVQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AGYxcW3asr2xY37UVcHAPHKFsgsKN1T8TW46+P2MIS30v2ECW/CTIFrlweEjOYsYw2UAClca8lK1Op8IiMv1y0SDw92oYaeVVGTsB4y5cugHNMfPL1+JYojOu5///fzRQ6rgF6SQ1O8XMsALkqHj12x1tl4pIOnMaVjSp9i1uHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BsjOlmNc; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1791987710; c=relaxed/simple;
+	bh=5NHPAF97DkL0X/gfzlrd0HF5Qcde9OlYHKVXK2myTmA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-Id; b=WaBRIBRq60KnX7mRThR8rE7UJ08v3mO4tD0doaeQ68TTJAhmc07SVh/3nsMgyP7JYKd0eKLVxHF7C4AFaOULv+0Y998AQeA+tpciUCFVEPekWPdYt1wPqfgiZJexbTuqiDfWqnPocFRQ8oWIk+gGexoKSQRSIYRAMBqG3zm97dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a4TqzVGm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BsjOlmNc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791986791;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QTzp8VnlCd8dfqsE91Djisu8typghT8lpYfIn2jEIjg=;
-	b=BsjOlmNckIFPZV/OlgYrI3xSerwI3oiUKhKoO7gO2FxrDDsT5FW2YaTIuFlgGAbsAYproA
-	4vWIDZ1eZS7A/A2td2vwj2Fn+ngDxF9tm9rT5sLKOT4e1tDPlTjhJ95o+FWdGiMh/ieY2e
-	zhAKix1WROz8Oimh9QniPcd07WdUXGY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-288-wBE7XJLZP5ClEggcvTou1w-1; Wed,
- 14 Oct 2026 14:06:27 +0000
-X-MC-Unique: wBE7XJLZP5ClEggcvTou1w-1
-X-Mimecast-MFC-AGG-ID: wBE7XJLZP5ClEggcvTou1w_1791986785
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9908619560B6;
-	Wed, 14 Oct 2026 14:06:25 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.rmtusnh.csb (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9BE12418;
-	Wed, 14 Oct 2026 14:06:23 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>
-Cc: cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hui Peng <benquike@gmail.com>,
-	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v3 8/9] selftests/cgroup: Add tests for nohz_full housekeeping check
-Date: Wed, 14 Oct 2026 10:05:47 -0400
-Message-ID: <20261014140548.575122-9-longman@redhat.com>
-In-Reply-To: <20261014140548.575122-1-longman@redhat.com>
-References: <20261014140548.575122-1-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a4TqzVGm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95DB11F000C4;
+	Wed, 14 Oct 2026 14:21:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791987708;
+	bh=xunAHGE3LO+JTpQuCM/8AZSo9Z4HbtBsbAtFSeVBs5Y=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=a4TqzVGmrMZE60Z/e+IL2DVpGIiPA2rlkvLDPy71/PURvbf2w8wq7w8oEfjXKI891
+	 kiNNDIUCKI+cV+20hR9nqMSmh3YAsc3PieyPzDf1VWxVATzGmknj6rYSvP68gj0QJv
+	 ppjI7bF2ohEoU7vpABMfePUUsql3pYV1zEngpvfJaXLisOFUAXWA8q2eGs/R93Q3lj
+	 z08BjImqz4je10/wv60swCEbjom5h+aQ4n9NsC8mDgpdgEwimemnKbiRTuSQx/szLJ
+	 Csx9HvIyPJNhMLKZm8vJf8Qwz5S3MUFkEbpVsztzTwWbM6ncGVAsK/jK8VhEF+YW7t
+	 6AkDFgeA0YFDw==
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Jaewon Jung <jaewon8868@gmail.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: Avoid unlink error on first run
+Date: Wed, 14 Oct 2026 23:21:45 +0900
+X-Mailer: UndineD 0.1
+In-Reply-To: <20261014114839.6258-1-jaewon8868@gmail.com>
+References: <20261014114839.6258-1-jaewon8868@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Message-Id: <20261014142147.95DB11F000C4@smtp.kernel.org>
 
-When a boot time nohz_full CPUs are present and they cover CPUs 0-7,
-some of the test cases may fail.  So the test run will be skipped with
-a warning message in this case. On the other hand, if the boot time
-nohz_full CPUs cover all the CPUs except 0-7, a special set of nohz_full
-specific housekeeping check related tests could be run to make sure the
-housekeeping check are behaving properly. The test_cpuset_prs.sh test
-script is now updated to do exactly that.
+On Wed, 14 Oct 2026 20:48:25 +0900, Jaewon Jung <jaewon8868@gmail.com> wrote:
+> On the first run, ftracetest tries to unlink a symlink that does not
+> exist.
+> Use rm -f to avoid the "No such file or directory" error.
+>
+> Fixes: 7dc1e125f07a ("ftrace/selftests: Add softlink to latest log directory")
+> Signed-off-by: Jaewon Jung <jaewon8868@gmail.com>
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- .../selftests/cgroup/test_cpuset_prs.sh       | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Looks good to me. 
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 5aac0df86593..ea0ebbdf4bb3 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -84,6 +84,29 @@ echo member > test/cpuset.cpus.partition
- echo "" > test/cpuset.cpus
- [[ $RESULT -eq 0 ]] && skip_test "Child cgroups are using cpuset!"
- 
-+#
-+# If nohz_full CPUs have been reserved at boot time, they should not include
-+# CPUs 0-7 as that may fail some of the test cases. On the other hand if the
-+# set of nohz_full CPUs includes all the CPUs except 0-7, we can run a special
-+# set of housekeeping CPUs exhaustion tests to see if the cpuset code will
-+# reject them.
-+#
-+NOHZ_FULL_CPUS=$(cat /sys/devices/system/cpu/nohz_full)
-+FIRST_NOHZ_FULL_CPU=
-+LAST_NOHZ_FULL_CPU=
-+RUN_NOHZ_FULL_TESTS=
-+LAST_PRESENT_CPU=$(cat /sys/devices/system/cpu/present | sed -e "s/.*[,-]//")
-+[[ -n "$NOHZ_FULL_CPUS" ]] && {
-+	FIRST_NOHZ_FULL_CPU=$(echo $NOHZ_FULL_CPUS | sed -e "s/[,-].*//")
-+	LAST_NOHZ_FULL_CPU=$(echo $NOHZ_FULL_CPUS | sed -e "s/.*[,-]//")
-+	echo "Boot nohz_full CPUs: $NOHZ_FULL_CPUS"
-+}
-+[[ -n "$FIRST_NOHZ_FULL_CPU" && "$FIRST_NOHZ_FULL_CPU" -le 7 ]] &&
-+	skip_test "Boot NOHZ_FULL CPUs overlap CPUs to be tested!"
-+
-+[[ -n "$FIRST_NOHZ_FULL_CPU" && "$FIRST_NOHZ_FULL_CPU" = 8 &&
-+   "$LAST_NOHZ_FULL_CPU" = $LAST_PRESENT_CPU ]] && RUN_NOHZ_FULL_TESTS=1
-+
- #
- # If isolated CPUs have been reserved at boot time (as shown in
- # /sys/devices/system/cpu/isolated), these isolated CPUs should be outside of
-@@ -497,6 +520,16 @@ ISOLCPUS_TEST_MATRIX=(
- 	" CX1-2,I:X1,I:P1 . .      .     X1,2,I  .      .      .     0 A1:1-2,I|XA1:1-2,I A1:P-1 ."
- )
- 
-+# Test matrix to be run when boot time nohz_full CPUs cover all CPUs except CPUs 0-7
-+NOHZ_FULL_TEST_MATRIX=(
-+	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
-+	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
-+	# Using all the nohz_full HK CPUs 0-7 in isolated partition is not allowed
-+	" C0-7       .      .      .      P2     .      .      .     0 A1:0-7 A1:P-2 ."
-+	" C1-7:P2 C5-7:P2   .      .       .     .      .    C0:P2   0 A1:1-4|A2:5-7|B1:0
-+								       A1:P2|A2:P2|B1:P-2 1-7"
-+)
-+
- #
- # Cpuset controller remote partition test matrix.
- #
-@@ -1362,6 +1395,7 @@ trap cleanup 0 2 3 6
- run_state_test TEST_MATRIX
- run_remote_state_test REMOTE_TEST_MATRIX
- TEST_ISOLCPUS=1 run_state_test ISOLCPUS_TEST_MATRIX
-+[[ -n "$RUN_NOHZ_FULL_TESTS" ]] && run_state_test NOHZ_FULL_TEST_MATRIX
- test_isolated
- test_boot_isolated
- test_inotify
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Shuah, will you pick this? 
+
+Thank you,
+
+> ---
+>  tools/testing/selftests/ftrace/ftracetest | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+> index 246d7e1d015c..95804610e079 100755
+> --- a/tools/testing/selftests/ftrace/ftracetest
+> +++ b/tools/testing/selftests/ftrace/ftracetest
+> @@ -243,7 +243,7 @@ else
+>    mkdir -p $LOG_DIR || errexit "Failed to make a log directory: $LOG_DIR"
+>    date > $LOG_FILE
+>    if [ "x-$LINK_PTR" != "x-" ]; then
+> -    unlink $LINK_PTR
+> +    rm -f $LINK_PTR
+>      ln -fs $LOG_DATE $LINK_PTR
+>    fi
+>  fi
+> -- 
+> 2.43.0
+>
+
 -- 
-2.55.0
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
