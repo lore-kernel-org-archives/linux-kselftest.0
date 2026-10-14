@@ -1,46 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40BA3484246;
-	Wed, 14 Oct 2026 20:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFED843C7D0;
+	Wed, 14 Oct 2026 20:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792008094; cv=none; b=WyGtVN7zGb5HsLF01dUQn4Z32yVKNaqQWET0inhtFACVYn/sjP2ntmRwaGAs3Jrvvx4u2pZv5TqCGGmG2e8qXKCz8XYguIzgkK+qLd3bV4QqX14pwHXe/ZQvexor/H/anUH2MGcI5csI0aO66ZXw7QWUXRr6XtgekaxQiq66kDc=
+	t=1792008100; cv=none; b=pmVr5HX5ShYbV0HFz+JsS4/GWQLjYM14vbPG5PLY3rpAbQdsYc8z/PN8ZL9nQrN+jzyS64F29Z9KB7Ja0MUvkdmjtWOepEXvGppy24u8Mx0FW+lbMQpb9AIvmPHYQSA3PMk0D9OfBEkvJ92PaRLFZqgCIk8OzLE776N8giPwioA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792008094; c=relaxed/simple;
-	bh=bbKB5pLydT8mVBMAJ+1iBWrVSm6WgdUY2bRQ5ZPyjb8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aQ/reTFWCRCmWtdnFxKOM48S5aSv6wZ00h2/LAghSbNf+E3IZjk5TL1YZBq4Cmyk+kufKzCOUNkvmDYCWNkcs838g5DOX9hW+2hKHhZzZ6tFJI45g2vcrpfzRwVYTEGtllCg5B2bLZ1doKGK8L53jDKwZY0QqOdrAqj3XFG2Lo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oxwinNoV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792008100; c=relaxed/simple;
+	bh=PomOeAZ7Yogn0MCCe9ihbSz9f17vEZjkkPSjLCXz5dA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WofGvzLG6c9mGCKBCUccaf+ddefRi6RhYRKf+hMmIcOYSGgRoHjOnhi8JWYW/e6I/pqfLoyw4AJcd2tTU0c+5p+W9OcSa6qzpt5PLrEjoKh9fsuMJtlxMPsOGrL9J0pT36NDkCkoLgovzLSKI2+iZwx0olvj5DUuzYMD/P7XpCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fxvqOx1t; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oxwinNoV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B8F1F000C9;
-	Wed, 14 Oct 2026 20:01:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fxvqOx1t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C436B1F000C4;
+	Wed, 14 Oct 2026 20:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792008093;
-	bh=LIMv34cDJqzlLVhQT11taTszU7soywSUu9ZIVJ/8ciI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=oxwinNoV4XFgOGvrDWkmcFnZpsEtVhwE9ew5uAMZDedi6Nzg6RbKJ5L7Oya+xdVpy
-	 l1VrhaLN4+OLLbMFt4Mf2N+oRZ4ZV8VYVq5eFLmwE9l1J9M39Y5Sa6EnMSIai16Fbx
-	 SMoDMKjywPOGX58VLoNSg7Uu8BhIYtQ85iSLunGeuW0cX6ZJj0iaWaqQ8Ck7Ims91h
-	 +8AXUqzIp4WYXv/ATgPTZ/QyglyCR5vGxjMXd2Vc3rlBBPwzKGSJFWGit+KvV+83Cb
-	 kHVPBQfTiyQ4+MyPqfgjlXFUMr7xyuzvhDIl1Ly/s6rCO3c9iYbbYDwafsxc5av+HQ
-	 zhEbbRoJCCLQg==
+	s=k20260515; t=1792008097;
+	bh=iLkP8vnDUW9ZlMok4Q2CsS89E/vjvuztRiGD0DVNLnY=;
+	h=From:To:Cc:Subject:Date;
+	b=fxvqOx1tZxtbBA12TqYuhlWyLcwaf5KCmkqlxau4XUntk+36D2inS+Co/m4/4VOSv
+	 ZG4mNZz4BZfsF2YP9/5phOWSEpmiuSd7TrkFKu6Y0qU7ytUezwd8kmzJFlauMUoHZY
+	 HX61ECIgh2egtKL7V1cwHhS/KPb5sRRBmwf3qfdA4OmN8mjmnKheUpcaYoFD4Yym9c
+	 Mm3w4oAhXAVqWHu4wa5l/AK1gxvOpsMwNjCKDmWdn94K6wniSAHouwSLGFmcLlxfde
+	 1JA+wWaB0ITkFGjPwLN3tOCOGqgagzKSloDPIdMc5/4fLBxtwmmiBNAVB2Jo3QZsq/
+	 dd9HecXI7/bPw==
 From: Sasha Levin <sashal@kernel.org>
-To: Shuah Khan <shuah@kernel.org>
+To: Kees Cook <kees@kernel.org>
 Cc: Sasha Levin <sashal@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	linux-pm@vger.kernel.org,
+	Farid Zakaria <farid.m.zakaria@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] selftests/thermal: allow cross builds of the Intel tests
-Date: Wed, 14 Oct 2026 16:01:25 -0400
-Message-ID: <20261014200127.1363472-4-sashal@kernel.org>
+Subject: [PATCH] selftests/exec: report the skipped binfmt_misc_bpf test on stderr
+Date: Wed, 14 Oct 2026 16:01:35 -0400
+Message-ID: <20261014200135.1364053-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261014200127.1363472-1-sashal@kernel.org>
-References: <20261014200127.1363472-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,75 +46,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The power_floor and workload_hint Makefiles build nothing when
-CROSS_COMPILE is set, even for an x86 target, and they include lib.mk
-only on x86. Other architectures therefore have no install or
-emit_tests rules for these suites, and their installation fails with a
-missing target.
+The exec Makefile announces that binfmt_misc_bpf is skipped with
+$(info), which writes to standard output whenever the Makefile is
+parsed. The selftests install target appends the standard output of
+"make -s emit_tests" to kselftest-list.txt, so on systems without the
+BPF toolchain the runlist gains a line that is not a test entry:
 
-Select the x86 tests from the target ARCH when it is given and from the
-host's SUBARCH otherwise, and include lib.mk unconditionally so that the
-suites install and emit an empty runlist on other architectures. Use a
-private ARCH_PROCESSED instead of the ARCH override added by
-commit 5a1292137e89 ("selftests: fix ARCH normalization to handle
-command-line argument"): the override changed the value lib.mk uses to
-pick the clang target, whereas leaving ARCH unset lets lib.mk use the
-compiler's native triple. A command-line ARCH such as x86_64 is still
-normalized for the selection, while an ARCH spelling that lib.mk does
-not know, such as i686 with LLVM=1, is rejected as in other selftests.
+  exec selftests: skipping binfmt_misc_bpf, needs clang, bpftool, ...
 
-Fixes: 27801542b2b8 ("selftests/thermel/intel: Add test to read workload hint")
-Fixes: d4d27e5a1a88 ("selftests/thermel/intel: Add test to read power floor status")
+run_kselftest.sh and CI systems that parse the runlist then treat it as
+a malformed test entry.
+
+Use $(warning) so that the notice still appears in build logs but goes
+to standard error.
+
+Fixes: 277d787feb2e ("selftests/exec: add binfmt_misc bpf-backed handler test")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/thermal/intel/power_floor/Makefile     | 12 +++++-------
- .../selftests/thermal/intel/workload_hint/Makefile   | 12 +++++-------
- 2 files changed, 10 insertions(+), 14 deletions(-)
+ tools/testing/selftests/exec/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/thermal/intel/power_floor/Makefile b/tools/testing/selftests/thermal/intel/power_floor/Makefile
-index 07463c2160e09..16d26eab55652 100644
---- a/tools/testing/selftests/thermal/intel/power_floor/Makefile
-+++ b/tools/testing/selftests/thermal/intel/power_floor/Makefile
-@@ -1,12 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0
--ifndef CROSS_COMPILE
--ARCH ?= $(shell uname -m 2>/dev/null || echo not)
--override ARCH := $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+top_srcdir = ../../../../../..
-+include $(top_srcdir)/scripts/subarch.include
-+ARCH_PROCESSED := $(shell echo $(or $(ARCH),$(SUBARCH)) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index 2220ed345e920..91decfa8ff2c1 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -67,7 +67,7 @@ TEST_GEN_FILES += bpf_interp.bpf.o nix_origin.bpf.o transparent.bpf.o
+ TEST_GEN_FILES += loader.bpf.o interp_bind.bpf.o
+ TEST_GEN_FILES += binfmt_bpf_interp binfmt_bpf_app binfmt_bind_interp
+ else
+-$(info exec selftests: skipping binfmt_misc_bpf, needs clang, bpftool, vmlinux BTF and libbpf)
++$(warning exec selftests: skipping binfmt_misc_bpf, needs clang, bpftool, vmlinux BTF and libbpf)
+ endif
  
--ifeq ($(ARCH),x86)
-+ifeq ($(ARCH_PROCESSED),x86)
- TEST_GEN_PROGS := power_floor_test
-+endif
- 
- include ../../../lib.mk
--
--endif
--endif
-diff --git a/tools/testing/selftests/thermal/intel/workload_hint/Makefile b/tools/testing/selftests/thermal/intel/workload_hint/Makefile
-index 49e3bc2b20f9d..e53d6ecd9f8de 100644
---- a/tools/testing/selftests/thermal/intel/workload_hint/Makefile
-+++ b/tools/testing/selftests/thermal/intel/workload_hint/Makefile
-@@ -1,12 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0
--ifndef CROSS_COMPILE
--ARCH ?= $(shell uname -m 2>/dev/null || echo not)
--override ARCH := $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+top_srcdir = ../../../../../..
-+include $(top_srcdir)/scripts/subarch.include
-+ARCH_PROCESSED := $(shell echo $(or $(ARCH),$(SUBARCH)) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
--ifeq ($(ARCH),x86)
-+ifeq ($(ARCH_PROCESSED),x86)
- TEST_GEN_PROGS := workload_hint_test
-+endif
- 
- include ../../../lib.mk
--
--endif
--endif
+ EXTRA_CLEAN := $(OUTPUT)/subdir.moved $(OUTPUT)/execveat.moved $(OUTPUT)/xxxxx*	\
+
+base-commit: 4eb2586bd40db27d77cc5b724ca9386ed0c71d53
 -- 
 2.53.0
 
