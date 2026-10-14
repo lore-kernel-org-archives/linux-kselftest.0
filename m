@@ -1,42 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E02747F771;
-	Wed, 14 Oct 2026 20:01:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20C24915B1;
+	Wed, 14 Oct 2026 20:01:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792008108; cv=none; b=U5W89hAqkNMNCDije8THxuG2EnJc0eanjzB1QR/q2YtkhLZtmb5y16bv/K3AV6syNgzwTTlX6wXGnahQmz/yc+BukLAdoKfntwXgtqSfZwb6q/BJ3lDac6WcJXVsVKuhiBrRohgvQM/enBJOgtxjlkevCb/pkTBtOxPEXW24DkY=
+	t=1792008110; cv=none; b=PWc0YMepNwCHnWctzuoIgGR3+qVkz1xAZPQibzt3gURJ6IxmPDbxVe2GnQnEOV8BA1+PVLHEhlPdXeeiA1Wxt42MIkKppZFRzSssjIf3vaC3ncYCRW6Ui7M3U35VVxV08VtdLZTZC/xIQeHiOj0WrQk9gMj9stbiRVy+vs7xmgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792008108; c=relaxed/simple;
-	bh=DgzexdvCeSP1i/H+Ue0+EZSaQXyBZ6e0vBQ9GEJNOuw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gpvpd0IxcQKstxyvKXl2edJ/wTOPv7iSnYrNIG6niwTm6TGQ3XJ967Sv+Q15YUjKndBmY1pULV3v5YojjYOzTLJFCyaltVqYQ/cjG7Ikw/9mWI632WE5GpTiGytpr6MpgNkUhEIP6tFCqg/Z5POXTVoQrn1j4oI55KCkglN3p94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDvtWvHz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792008110; c=relaxed/simple;
+	bh=AgqGlu2BY5ng4eYmRHOahKYpcbdK8lw45IMQ2tv0I9o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hj1yVSBL/k2fEOHtyaq8gTmYtfiZixf95peQj73xL3bWMzzZ+4jwl06qm54F3/VUKxyvquCg4f0qiX8EhQOM2h0oPDt4/7Qs45AFhGkpgglhrAtI8HCRS+IOg2yKcGTQAnjP12PhKSJNlPHBSi9DOAeU+Fj9Nz0G+xx0Y+9Rlf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eX39hvwZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDvtWvHz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 176FE1F000C5;
-	Wed, 14 Oct 2026 20:01:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eX39hvwZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DBA21F000C7;
+	Wed, 14 Oct 2026 20:01:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792008106;
-	bh=Z2c/x8kRyLdWlfUlyIfJHSMvGwSExpTZySUxGdeub3k=;
+	s=k20260515; t=1792008109;
+	bh=OI39lvz58b0+E1hyecTZu8SYZkDLpmgMHlgI5k8XVSI=;
 	h=From:To:Cc:Subject:Date;
-	b=BDvtWvHz2a2m/WfCOeAC7NI4udN0I22y8qTt8xI4h0nJpI1ZRHPlV9n4NthYZn7Ka
-	 TXa8hPnqcRLoMHVZEknzSjgT3CLIXUyrjQt+FgRjLw+oa5wQpzgPjwgB7+zLpu+HCR
-	 OwGXEsH4n2Ic5DEXjjFKYoD2NjISnjggwOv6xNXHnTlL2U34wYrmDR9OsxSuQ+J8Cj
-	 0FeEK/m9LOt/yozHgndeM6c/zxKqPvrmLx7Se4VfRAbDeKgtO1owXn/r/FXLPzxwd8
-	 pAoIqMn9r3QWGxLScL9UZKu74vQozCVPgjgrSZs3fJfFwjVe2TdhKhus59y4QcTBUl
-	 OWzV4ouKUlGjA==
+	b=eX39hvwZFBEVAx5tqiKZkBYt/20L3u56k8dNdVC8zjHWQ9Rd5OioY33qttVX6bo4Y
+	 bVte+R8d6xWe9KbIQkriPasj7RF2zwIzejjiV33TRu6AnUEWkaIZmBEObbDGbs6v5o
+	 Ybb52aBN70PKlTIzUTbELuXbQ5jHXm6VPZGkmiohretv79oFd66N9Hg/JtzVcuuJh+
+	 48Ax9M5cA9481DLZuFIeuI7SOMVN/A8NrL7QAlIOJ48bNAd+yv0p5wMQf03B3Vg5He
+	 gliCrQ8XqxZkcIb8xZ8D4xWILngTQ7PCincvkxuTv0KXbMiECv1bVa5cCje93lQ2bd
+	 NWqIQqAVPEQSQ==
 From: Sasha Levin <sashal@kernel.org>
-To: Ming Lei <tom.leiming@gmail.com>,
-	Jens Axboe <axboe@kernel.dk>
+To: Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>
 Cc: Sasha Levin <sashal@kernel.org>,
-	Uday Shankar <ushankar@purestorage.com>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-block@vger.kernel.org,
+	llvm@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/ublk: use the configured kernel UAPI headers
-Date: Wed, 14 Oct 2026 16:01:44 -0400
-Message-ID: <20261014200144.1364828-1-sashal@kernel.org>
+Subject: [PATCH] selftests/futex: load atomic values before harness comparisons
+Date: Wed, 14 Oct 2026 16:01:47 -0400
+Message-ID: <20261014200147.1364987-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -46,43 +50,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With generated headers in an output directory, the hardcoded source-tree
-include path falls through to distribution headers. New ublk flags and
-structure members, including UBLK_F_IO_DESC_SIZE, are then missing.
+Clang 21 rejects the harness comparison because typeof(*futex) preserves
+the atomic qualification. Load the value explicitly in the three affected
+assertions so the harness compares unsigned integers. Atomic access and
+its existing sequentially consistent ordering are preserved.
 
-Use KHDR_INCLUDES to consume the headers from the kernel under test, and
-add the headers target as an order-only prerequisite of the ublk
-programs, as nolibc-test does, so that a standalone build installs them
-first. Baseline builds fail on the missing definitions; GCC 14 and Clang
-21 builds succeed with the output-directory headers and target liburing
-development files available.
+The baseline produces three invalid-operands errors. The complete futex
+suite builds with Clang 21 and GCC 14 after the change.
 
-Fixes: e371b9d3368c ("selftests: ublk: kublk: fix include path")
+Fixes: 608323bf7bb8 ("selftests: futex: Add tests for robust release operations")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/ublk/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/futex/functional/robust_list.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
-index 37883e9d50ec3..37db1ebcc7fb7 100644
---- a/tools/testing/selftests/ublk/Makefile
-+++ b/tools/testing/selftests/ublk/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
+index 87217c5493619..895e6cfe59bcd 100644
+--- a/tools/testing/selftests/futex/functional/robust_list.c
++++ b/tools/testing/selftests/futex/functional/robust_list.c
+@@ -669,7 +669,7 @@ TEST_F(vdso_unlock, test_robust_try_unlock_uncontended)
+ 	ret = self->vdso(futex, tid, &head.list_op_pending);
  
--CFLAGS += -O3 -Wl,-no-as-needed -Wall -I $(top_srcdir)/usr/include
-+CFLAGS += -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
- ifneq ($(WERROR),0)
- 	CFLAGS += -Werror
- endif
-@@ -83,6 +83,7 @@ LOCAL_HDRS += $(wildcard *.h)
- include ../lib.mk
+ 	ASSERT_EQ(ret, tid);
+-	ASSERT_EQ(*futex, 0);
++	ASSERT_EQ(atomic_load(futex), 0);
  
- $(OUTPUT)/kublk: $(filter-out $(STANDALONE_UTILS),$(wildcard *.c))
-+$(TEST_GEN_PROGS_EXTENDED): | headers
+ 	/* Check only the lower 32 bits for the 32-bit entry point */
+ 	if (variant->is_32) {
+@@ -709,7 +709,7 @@ TEST_F(vdso_unlock, test_robust_try_unlock_contended)
+ 	ret = self->vdso(futex, tid, &head.list_op_pending);
  
- check:
- 	shellcheck -x -f gcc *.sh
+ 	ASSERT_EQ(ret, tid | FUTEX_WAITERS);
+-	ASSERT_EQ(*futex, tid | FUTEX_WAITERS);
++	ASSERT_EQ(atomic_load(futex), tid | FUTEX_WAITERS);
+ 	ASSERT_EQ(head.list_op_pending, &lock.list);
+ }
+ 
+@@ -793,7 +793,7 @@ TEST_F(futex_op, test_futex_robust_unlock)
+ 				      &head.list_op_pending, variant->val3);
+ 
+ 	ASSERT_EQ(ret, 0);
+-	ASSERT_EQ(*futex, 0);
++	ASSERT_EQ(atomic_load(futex), 0);
+ 
+ 	if (variant->op & FUTEX_ROBUST_LIST32) {
+ 		exp = (uint64_t)(unsigned long)&lock.list;
 
 base-commit: 4eb2586bd40db27d77cc5b724ca9386ed0c71d53
 -- 
