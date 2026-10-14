@@ -1,82 +1,46 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263392DF717
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 01:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F721FC0;
+	Wed, 14 Oct 2026 01:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791939977; cv=none; b=EfdGXGGubuZ4dxC2nBHgdLYZuSvH6SyqPh36WjBLkVs1lWL5pi1daZFWAOQcUftFfstUKvwZ6FTx5riY2iCvh/jQMfdpI593Z/FA0rWmZOurWUP9/6L13uc75m9IsNOGJT3WDnQMxYC3K5IuTsQPU69w0tUcxxZSqIeE+sSt7m8=
+	t=1791940904; cv=none; b=RUaB74YAqa5oP1yh+mj3r5AZKs2hQA4ARmyG9nGWKDdxZ6Cyepe1oig6OPGWz7CKhqGiHMMrtNoSoJ1c3iUowpqw7OaN8pyWmjSj33b/inpJJlksIqdx8UTIBlGFQWaiBCwr5AlXMU7blIfsjlRCQkk9yuAtfA9Ru8qh2KqP6z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791939977; c=relaxed/simple;
-	bh=71/PvvAb7WSmpjfyFsK5RUK37uILXm+z52T/Z/Dn6Dc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pB6bBduzjwVGlpZiCB4bE6WB7PTzsswY9EFLe1llAUzoUcWfEhmtryxV/mPXJKrRkqnp055WWkHO18o8wQF0UYle/ajPQ/NqEjRyiEXP3zjBh/byBC5tjj/+tTo1I9dKWTHilzRqbjjmKO30ldyvGwn84PWyJJMELthKloz+/vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YnTSesYZ; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791940904; c=relaxed/simple;
+	bh=E06UaZEEYDOqLXIg2z3poDlld5rlZXnb1hMTYy5iu90=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NhIqZT4MnEDdvQfSbdklWFEBbSpTZYhJX10lN62Yxrzuho+EqWqudYJw5qGb4gMT4C8XkoIgilHTjsPp4DoA/4Y50u4d+I1Kv/HgqrVmy8xs3P+iO3JDHSqYMfSuVTLONPzbn7Qf0RQI+vQR2yC2kH8DKZSMBKFO8IWFhe4hffE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DUbay7Jc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YnTSesYZ"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ac397836fbso1136619a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 18:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791939975; x=1792544775; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=a017O8OGvPiZ3PtcPvdafG3s+KiqjGCu5jaYmz2r3MI=;
-        b=YnTSesYZmUPxDL3ZOX7iQEscaZgAns5xYVIi6KODVK3mDQmXAAZNCeot9rcy5jlQNy
-         CG5JDtBbAGwzKqIdraaQ6a1yAG4JTNQ2EDqxo7cBOvUdlvDPtvQZoPe8P7TzjNBjs3qA
-         TWglIuNKC0aEXYerTn2Lu9ixmjiUXjWwIsRGF58tEbAX5Na/aBALqsdcWX/Xabm93JbK
-         xjEn/h5kxbuAUJ1bS8J+ey40o5KJ+BgrHDtmTd1W0OOo35JcZOWGkl2WYw/D0735g4Ho
-         mziLdmtVML8klkHigrOAa1Q+OC4umQGXf8qysFzVG2zBHQvrsklmapZbVNizW/lKpldL
-         jtrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791939975; x=1792544775;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=a017O8OGvPiZ3PtcPvdafG3s+KiqjGCu5jaYmz2r3MI=;
-        b=QENQ9OiySwcxB5JVDagUnN3V2oVWGUVuRqN6Sn0FDh1BYyvgpMv1QUPqKLYlfOXfph
-         jkFCbIpWUJGY943E4m4N3dW4YWZGBPwG1MB52fqeCMlvGNqvznNdxF4WLP7gnqDrTf3U
-         de0wPa6WpFczbcg4VwAeytCCLHRPqyG9VWqZQ4Oig95Kyynbhb+GjqKbv/ONo9dsYNeP
-         4HO1/Zl7ODGKBHPbB3+1JBYJAuNG9UusP0aQSpdVgsHJ/Ms5xRW7cIpBtgMVe7k9FlKA
-         iNZvHvhtNzpT6XNEiGx72jmP2tIDYFTUGV7DFplkB5CIVuMOZg1lyq+ytvDuY7LHHL7U
-         bYfw==
-X-Forwarded-Encrypted: i=1; AKwUvByNGpafOnPAeOHyBdQVkV1Pn4ontv91osbDIGRHuaFIXAXnXbAzPlesNM2Z6XzLud5xkg0bgvnTa+qUNaIgMns=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK/TokKfrrd391d/XGUzxRRlVLNAxTdcGEGM9qWM3EUHuZXy7HG
-	ctnpuVWfI/PKplzqRVoCLrPwqgBEHPnAp90fY/CVmI9buQ6Z3Bg3JZDZ
-X-Gm-Gg: AYBFou2RWfYlCLxUuV8AqsadRdXU3gdovFu8NQft5YoMY9a6kZjXMRG/KwFhG6zQ/UL
-	m3deqczoUuXUWQGb5XNp8qrPl4HzRU54qCAOZQT3VPNDkprNKO/aWwkr5OxVfGZl6j5EB9puKW8
-	GTdsP6V2d7rHyzySKxWdMkJtmKRLpeW9aIORTSUv/DgcNYKNv+QIQP4ZNZ8LJOGUu8ttluOWwgQ
-	6OKRLnNX0Fr1Yua9hc+gR18+/ckN4TXwdSlWTWahAqC7UZ2dKrmBMNcIu7QByYPV3linMBY6nmr
-	w2xO4S0jwQVj1izg3EGxKc6c05aFFvELIDnyWPluKRSDDIBauPnm0vJC8TPZMzyKiA8/e3Zf16a
-	PJC5v3P/kxs3QXaz8/fGGuCKFODeOmW9FFluO4q1Ji+655MqxUDHZ+g1bvJ3cSCiK6hQ9GrVXod
-	NBoHgc3Hx6nMRQr/uMQr9NAc6UkZWXHl5x9WZJ7/9DXYuoSg+G5lu4VVLjGYdyfA7TA/u2F+2V4
-	gnGmcsfpFkD6dUKtd/SL0igLg==
-X-Received: by 2002:a17:90b:1d4f:b0:3a4:a592:4cfa with SMTP id 98e67ed59e1d1-3ab3a79d9f8mr11670070a91.45.1791939975320;
-        Tue, 13 Oct 2026 18:06:15 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac60e83ccdsm1867436a91.15.2026.10.13.18.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 18:06:14 -0700 (PDT)
-Message-ID: <e55e3220b1dc438bf3ba3363730bb1d927c2a27a.camel@gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: Fix state pruning regression in bpf_loop()
- callbacks
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: David Windsor <dwindsor@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, 	kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, 	shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	yunwei356@gmail.com
-Date: Tue, 13 Oct 2026 18:06:12 -0700
-In-Reply-To: <20261008233623.4011127-1-dwindsor@gmail.com>
-References: <20261008233623.4011127-1-dwindsor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DUbay7Jc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 085661F00893;
+	Wed, 14 Oct 2026 01:21:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791940902;
+	bh=gY0DyDgCYnNR0H8Emy8FKMcqfudo14vB5dAjOuB72j4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=DUbay7JcXMiM4P+Kj7zukFfAScfofLOGawlMHV2gHHD8itushbLpZGittJYapk5Dp
+	 pccFnTxKh6B896qbId0SAHh58+Bym5mwUyTRnXk49pGJx6ByB4IKWpWBv6zjfyprbR
+	 l5YyVgdTAXtz5qgpNs+KQ3izlm00VSgEaAKxUdOxsNlWk8z27wRmicjYgWG+iGvgp3
+	 6Mz/Hn2vTga1qP0TMAYe6p/3DbbpRsuYh2S/yWx7LkUfZDZTlFGPGRS5qtj79ikgfw
+	 lj5Cc9a18wU01bOA7QtoXJu3PraNK0p6JrUECwFLpCl3xtzP8KV/fBd/KamqebSC9D
+	 4O34XUACLrhVA==
+Subject: Re: [PATCH net] tls: refuse RX records after record-number exhaustion
+From: netdev-bot+sashiko@kernel.org
+To: rjethwani@purestorage.com
+Cc: kuba@kernel.org, sd@queasysnail.net, john.fastabend@gmail.com,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
+ corbet@lwn.net, skhan@linuxfoundation.org, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Wed, 14 Oct 2026 01:21:41 +0000
+Message-ID: <179194090158.434549.7645021195460838677@kernel.org>
+In-Reply-To: <20261013002701.1957686-1-rjethwani@purestorage.com>
+References: <20261013002701.1957686-1-rjethwani@purestorage.com>
+X-sashiko-severity: Critical
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,51 +48,268 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, 2026-10-08 at 19:36 -0400, David Windsor wrote:
-> Commit f597664454bd ("bpf: bpf_scc_visit instance and backedges
-> accumulation for bpf_loop()") left dead stack slots in cached callback
-> states while SCC backedges were pending, defeating state pruning and
-> causing previously valid programs to hit the verifier instruction limit. =
-On
-> affected kernels, ActPlane fails to load with -E2BIG.
->=20
-> Removing the incomplete_read_marks() check from clean_live_states() is
-> safe because zero-branch states have already had their stack read/write
-> effects propagated into the liveness masks consumed by
-> clean_verifier_state(). Pending SCC backedges only defer verifier-state
-> precision propagation and cannot add stack-liveness requirements after
-> cleanup.
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
-The patch does not apply, clean_live_states() no longer exists.
-Also, before submitting v2, please re-read the series [1] in order to
-understand the motivation for the change. States w/o branches can
-still contribute their precision marks to their parent states,
-in case if these states form a loop on a state graph.
-The loops are formed on e.g. iterator or callback-based loops convergence.
+Critical: 1 · High: 0 · Medium: 2 · Low: 1
 
-[1] https://lore.kernel.org/bpf/20251229-scc-for-callbacks-v1-0-ceadfe67990=
-0@gmail.com/
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-pw-bot: cr.
+- [Critical] tls: AES-GCM IV reuse on TX sequence number exhaustion via
+  SO_ERROR bypass
+- [Medium] The new KeyUpdate exemption in tls_rx_one_record() decides
+  whether the final record 'retires the key' by checking only…
+- [Medium] The new rule that blocks replacing an exhausted key ('Only a
+  KeyUpdate may follow the last record number') depends on…
+- [Low] The new section in Documentation/networking/tls.rst says that
+  after receive record-number exhaustion (unless the final record is a…
 
->=20
-> Fixes: f597664454bd ("bpf: bpf_scc_visit instance and backedges accumulat=
-ion for bpf_loop()")
->=20
-> Signed-off-by: David Windsor <dwindsor@gmail.com>
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e3814152b52f8139a5565b2e4ac1b80d82d1ea65..1e300ca71a8a833eb4c2a340b=
-4f94342f54af5f2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19791,8 +19791,6 @@ static void clean_live_states(struct bpf_verifier=
-_env *env, int insn,
-> =C2=A0		if (sl->state.cleaned)
-> =C2=A0			/* all regs in this state in all frames were already marked */
-> =C2=A0			continue;
-> -		if (incomplete_read_marks(env, &sl->state))
-> -			continue;
-> =C2=A0		clean_verifier_state(env, &sl->state);
-> =C2=A0	}
-> =C2=A0}
+--
+
+tls: refuse RX records after record-number exhaustion
+
+This patch adds a per-key rec_seq_exhausted flag. The flag is set when
+the RX record number wraps. Once it is set, tls_rx_rec_wait() refuses to
+wait for or decrypt more records, and do_tls_setsockopt_conf() refuses
+to replace the key, unless the final record was a KeyUpdate. It also
+documents the behaviour and adds AES-GCM wire-vector selftests for TLS
+1.2 and 1.3.
+
+> diff --git a/Documentation/networking/tls.rst b/Documentation/networking/tls.rst
+> index 980c442d7161a..4b3c7a5a07806 100644
+> --- a/Documentation/networking/tls.rst
+> +++ b/Documentation/networking/tls.rst
+
+[ ... ]
+
+> +Unless the final record is a TLS 1.3 KeyUpdate, the condition is
+> +terminal: the socket error is also set to ``EBADMSG``, and a ``TLS_RX``
+> +key replacement fails with ``EBADMSG``. A KeyUpdate in the final record
+> +retires the key the usual way: receives fail with ``EKEYEXPIRED`` until a
+> +new ``TLS_RX`` key is installed, after which receiving continues.
+
+[Severity: Low]
+Is the TLS_RX replacement errno accurate for TLS 1.2 sockets?
+
+On TLS 1.2, do_tls_setsockopt_conf() returns -EBUSY for any second
+TLS_RX setsockopt. That happens before the new exhaustion check runs:
+
+net/tls/tls_main.c:do_tls_setsockopt_conf() {
+    ...
+	if (TLS_CRYPTO_INFO_READY(crypto_info)) {
+		if (crypto_info->version != TLS_1_3_VERSION) {
+			...
+			return -EBUSY;
+		}
+
+		update = true;
+    ...
+}
+
+The new EBADMSG check needs update to be true, and that only happens for
+TLS 1.3. The rekey selftest skips the TLS 1.2 variant for this reason.
+
+Could the documentation limit the EBADMSG statement to TLS 1.3, or say
+that TLS 1.2 returns EBUSY?
+
+> diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+> index fbb274287aa5f..63bef0153182b 100644
+> --- a/net/tls/tls_main.c
+> +++ b/net/tls/tls_main.c
+> @@ -730,6 +730,15 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
+>  			conf = TLS_SW;
+>  		}
+>  	} else {
+> +		struct tls_sw_context_rx *rx_ctx = tls_sw_ctx_rx(ctx);
+> +
+> +		/* Only a KeyUpdate may follow the last record number */
+> +		if (update && rx_ctx->rec_seq_exhausted &&
+> +		    !rx_ctx->key_update_pending) {
+> +			rc = -EBADMSG;
+> +			goto err_crypto_info;
+> +		}
+
+[Severity: Medium]
+Can this check reject a valid KeyUpdate?
+
+key_update_pending is set only when the first handshake byte of the
+record is TLS_HANDSHAKE_KEYUPDATE:
+
+net/tls/tls_sw.c:tls_check_pending_rekey() {
+    ...
+	err = skb_copy_bits(skb, rxm->offset, &hs_type, 1);
+    ...
+	if (hs_type == TLS_HANDSHAKE_KEYUPDATE) {
+    ...
+}
+
+RFC 8446 section 5.1 allows several handshake messages in one record, as
+long as the messages before a key change end at a record boundary. So a
+KeyUpdate can be the last message in a record that starts with something
+else, for example a NewSessionTicket.
+
+Say the record at UINT64_MAX is such a coalesced record:
+
+- key_update_pending stays false.
+- tls_rx_one_record() sets rec_seq_exhausted and calls
+  tls_err_abort(sk, -EBADMSG).
+- Userspace parses the KeyUpdate from the handshake record and calls
+  setsockopt(TLS_RX).
+- This check returns -EBADMSG, so the connection cannot continue.
+
+Before this patch, userspace could still install the new key after
+reading SO_ERROR.
+
+The commit message says "RFC 8446 lets a sender retire a key with a
+KeyUpdate as its last record". Should the coalesced case be handled
+too?
+
+> +
+>  		rc = tls_set_device_offload_rx(sk, ctx);
+>  		conf = TLS_HW;
+>  		if (!rc) {
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index d1ad31986cf2c..cd1590e1f20fa 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+
+[ ... ]
+
+> @@ -1580,9 +1585,18 @@ static int tls_rx_one_record(struct sock *sk, struct msghdr *msg,
+>  	rxm = strp_msg(darg->skb);
+>  	rxm->offset += prot->prepend_size;
+>  	rxm->full_len -= prot->overhead_size;
+> -	tls_advance_record_sn(sk, prot, &tls_ctx->rx);
+> +	err = tls_check_pending_rekey(sk, tls_ctx, darg->skb);
+> +	if (__tls_advance_record_sn(prot, &tls_ctx->rx)) {
+> +		/* sk_err alone can't stop the next record, SO_ERROR clears
+> +		 * it. A KeyUpdate in the last record properly retires the
+> +		 * key, so don't treat that one as an error.
+> +		 */
+> +		ctx->rec_seq_exhausted = true;
+> +		if (!ctx->key_update_pending)
+> +			tls_err_abort(sk, -EBADMSG);
+
+[Severity: Medium]
+Should this exemption also check prot->version == TLS_1_3_VERSION?
+
+tls_check_pending_rekey() sets key_update_pending for any handshake
+record whose first plaintext byte is TLS_HANDSHAKE_KEYUPDATE. It does not
+check the protocol version:
+
+net/tls/tls_sw.c:tls_check_pending_rekey() {
+    ...
+	if (hs_type == TLS_HANDSHAKE_KEYUPDATE) {
+		struct tls_sw_context_rx *rx_ctx = ctx->priv_ctx_rx;
+
+		WRITE_ONCE(rx_ctx->key_update_pending, true);
+    ...
+}
+
+Say a TLS 1.2 socket receives, at UINT64_MAX, a handshake record that
+starts with 0x18:
+
+- rec_seq_exhausted is set, but tls_err_abort() is skipped.
+- sk_err stays zero, so poll() does not report EPOLLERR and SO_ERROR
+  returns 0.
+- tls_rx_rec_wait() checks key_update_pending before rec_seq_exhausted,
+  so every later recv returns EKEYEXPIRED.
+- setsockopt(TLS_RX) returns EBUSY, because TLS 1.2 cannot rekey.
+
+Such a record already left a TLS 1.2 socket stuck in EKEYEXPIRED before
+this patch. However, the wrap still set sk_err to EBADMSG then.
+
+The new documentation says "Unless the final record is a TLS 1.3
+KeyUpdate, the condition is terminal: the socket error is also set to
+EBADMSG". Is the TLS 1.2 behaviour here meant to differ from that?
+
+> +	}
+>  
+> -	return tls_check_pending_rekey(sk, tls_ctx, darg->skb);
+> +	return err;
+>  }
+
+[ ... ]
+
+> diff --git a/net/tls/tls.h b/net/tls/tls.h
+> --- a/net/tls/tls.h
+> +++ b/net/tls/tls.h
+> @@ -307,17 +307,26 @@ static inline void tls_bigint_subtract(unsigned char *seq, int  n)
+>  	*p = cpu_to_be64(rcd_sn - n);
+>  }
+>  
+> -static inline void
+> -tls_advance_record_sn(struct sock *sk, struct tls_prot_info *prot,
+> -		      struct cipher_context *ctx)
+> +/* Returns true if the record number wrapped */
+> +static inline bool
+> +__tls_advance_record_sn(struct tls_prot_info *prot, struct cipher_context *ctx)
+>  {
+> -	if (tls_bigint_increment(ctx->rec_seq, prot->rec_seq_size))
+> -		tls_err_abort(sk, -EBADMSG);
+> +	bool overflow = tls_bigint_increment(ctx->rec_seq, prot->rec_seq_size);
+>  
+>  	if (prot->version != TLS_1_3_VERSION &&
+>  	    prot->cipher_type != TLS_CIPHER_CHACHA20_POLY1305)
+>  		tls_bigint_increment(ctx->iv + prot->salt_size,
+>  				     prot->iv_size);
+> +
+> +	return overflow;
+> +}
+> +
+> +static inline void
+> +tls_advance_record_sn(struct sock *sk, struct tls_prot_info *prot,
+> +		      struct cipher_context *ctx)
+> +{
+> +	if (__tls_advance_record_sn(prot, ctx))
+> +		tls_err_abort(sk, -EBADMSG);
+>  }
+>  
+>  static inline void
+
+[Severity: Critical]
+Does the TX side keep the same SO_ERROR bypass that this patch closes
+on RX?
+
+The TX callers still go through tls_advance_record_sn(), which only
+records the wrap in sk_err. tls_do_encryption() calls it for
+tls_ctx->tx, and the device path in tls_push_record() in
+net/tls/tls_device.c does the same. The send loop only checks sk_err:
+
+net/tls/tls_sw.c:tls_sw_sendmsg_locked() {
+    ...
+	while (msg_data_left(msg)) {
+		if (sk->sk_err) {
+			ret = -sk->sk_err;
+			goto send_end;
+		}
+    ...
+}
+
+Say the TX key was installed close to the limit:
+
+- tls_do_encryption() encrypts the record at UINT64_MAX, and the
+  advance wraps tls_ctx->tx.rec_seq to zero. For TLS 1.2 AES-GCM the
+  explicit IV in tls_ctx->tx.iv wraps with it.
+- tls_err_abort() sets sk_err to EBADMSG and send() fails.
+- The application reads SO_ERROR, which clears sk_err.
+- The next sendmsg() passes the check above and encrypts new records
+  from sequence zero under the same key.
+
+For AES-GCM that reuses nonces under one key, which breaks both
+confidentiality and integrity for those records. A Linux receiver with
+this patch would reject them, but other peers need not.
+
+The commit message says the Linux TX path refuses to send the wrapped
+record, but that refusal also rests only on sk_err. Should TX get a
+persistent exhaustion mark too, checked wherever records are pushed in
+both the software and device offload paths? If that is better as a
+separate patch, could the commit message at least avoid implying the
+TX side is already safe?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261013002701.1957686-1-rjethwani%40purestorage.com
