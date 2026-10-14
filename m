@@ -1,91 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328001DF980;
-	Wed, 14 Oct 2026 13:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C71B4E36D2;
+	Wed, 14 Oct 2026 13:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791983072; cv=none; b=PbyFSJMK4LG6iQJKEZs+Zgx7dMIn0kAcTnfh2dPKjpCsF0Qb+qlOVRj28oe22Tj8JwML4ywistSm7564tCeYI0/l0O9AfYlR+gYc8eCaZU5GlznVGQ21RXWq9c6xUqAgsLEN3VYUpqI0SvjRDxHIHr1GkNu9/9ZyL72emlCl1HY=
+	t=1791983408; cv=none; b=YMvs8yI8hHBnqcLgtNemHYr687qAAnnBXCE3nrmJ2Ttb/mliC5NtA/9H4gYSzrz8o89RiPDNGvR4Gw/7dP82qkjkM7BwLtKs991ggGFvs7lXYDIjsIURpmaIjtCESsJJ2rorTLRVRqnVrbSU62pci5ybVDQJ93DTegahvsskVIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791983072; c=relaxed/simple;
-	bh=DfdG8Mv3+zufx8SrlKKlpFST8xc1hAD2q3bZ3e6KRPc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=V+3O2yI8vIwphj/FNdGh2VyCYVmMUxRpxCMs5UoclGCqyFaIGR0VjyjMIg2vht6FWKcYU7ct8kojovqAMBWfQmYaauFYTZPEQL9Ye7K2rCcwfMPfusRILh4XUJlZqOZOCPDXsJeU+wSW6cpY+EsmpqSWAppbU20r+3G4hy7NBGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0n7EgOf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791983408; c=relaxed/simple;
+	bh=Cvx4lOh9Q81VjksKJoawg6eN+66LrK3LWXSnIiPRD38=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mOdGlcoLFuyVbwq5M110eaWIStqs5jkRPl0CHLsa397UtSyhfBxuLt9RUNeXMuXhZzPKtI++jbHr3by4HQRqXEhaXSYPO9hYRGz+ZzXzzLuLhXNRlw4RaYyPTz8Gk4l1E5GVPCMQGJaDmE93a9jIy0lhgP3N1HroDRYWgpvnJ6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=iSixPOae; arc=none smtp.client-ip=115.124.30.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0n7EgOf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B3B1F000FF;
-	Wed, 14 Oct 2026 13:04:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791983070;
-	bh=PGYA60mHnTCioRjOgFXdMUTLxHyhzPZTPJY/+n4H04A=;
-	h=From:Date:Subject:To:Cc;
-	b=Y0n7EgOfFva5Ex6qRYM1AWszr3H1j/kRXd+Y1uV0yRYqNKbBogTslSrGDCb73OMc+
-	 3lvZv4xPxXZbR105xlHsa04m13L9OP3Vl3EL7pai/EcWhPt9fipd5F/ILPNxT17hJM
-	 Q7wJ9KDUbGblyFqESc+ZQdisJTYPDLKgIgMd1+ojZh9YWDPPgSp8kaeKG07I97FC0h
-	 UtQQICFMJeShVovNdXAVQ6gisMaDOdMVZAT19oE7bUrRAbRA5sdFt8DaK1TESZ+76N
-	 +J3T+O6GF62tB5efsDeloyKLIYKgbX6Ielyu1Cr8G04apLtBIL0GYGRBh5mc7Ln/bu
-	 UMxbjZxwnkMMQ==
-From: Mark Brown <broonie@kernel.org>
-Date: Wed, 14 Oct 2026 14:03:33 +0100
-Subject: [PATCH] selftests: lib.mk: Don't fail install if no modules were
- built
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="iSixPOae"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1791983396; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=NfvwyHiH13gScZyLRyJ1bRdwmOqWUvSNVK5u+We9JrM=;
+	b=iSixPOaemVe3z3Yi4IgI0ylhSBaW79McGva8sjz5K2ApcHgRTgDtuhXpB9Pta0nH4gdMfEdgYrK0ROzbeSUBjsvyPoyA1vALDg+D0pzXhM5kq2d+3dE2/kJ2rT+FmiGOk7gnSofyXnoUJv/XeCEKRFXhZGTr/y2muvJ88akLbCY=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0XCp3Qsf_1791983391;
+Received: from 30.246.161.148(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XCp3Qsf_1791983391 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 14 Oct 2026 21:09:54 +0800
+Message-ID: <3bd83dc6-1206-4af2-bfcf-5894b1029907@linux.alibaba.com>
+Date: Wed, 14 Oct 2026 21:09:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 5/7] riscv: stacktrace: switch to frame-pointer based
+ unwinder
+To: Martin Kaiser <martin@kaiser.cx>
+Cc: palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ linux-riscv@lists.infradead.org, oleg@redhat.com, rostedt@goodmis.org,
+ mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
+ mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org,
+ jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
+ shuah@kernel.org, mpdesouza@suse.com, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
+ <20260914092648.51254-6-xueshuai@linux.alibaba.com>
+ <as6SEF4v6wt5GmVD@nb282.user.codasip.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <as6SEF4v6wt5GmVD@nb282.user.codasip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261014-kselftest-lib-no-modules-v1-1-e4f7208dcb56@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKV9z2oC/yXMQQ6CMBBA0auQWTsJhQDqVYwLOx10tLamU4wJ4
- e4WWL7F/zMoJ2GFczVD4q+oxFBgDhXQ4xbujOKKoamb3tSmxZeyHzNrRi8WQ8R3dJNnRXt0Q0c
- DdSdqoeSfxKP8tvXlulsn+2TK6w+W5Q/U0onzfAAAAA==
-X-Change-ID: 20261013-kselftest-lib-no-modules-b8d75c7c59c3
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1324; i=broonie@kernel.org;
- h=from:subject:message-id; bh=DfdG8Mv3+zufx8SrlKKlpFST8xc1hAD2q3bZ3e6KRPc=;
- b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLO197uOTrNdauldgw7a43B6tC4Vz+2NRikJuVG1XdHB
- F99VLO7o5SFQYyLQVZMkSUui/tlfcnrNXwHF7bBzGFlAhnCwMUpABOZc4ORoeXKAdOZvHnf9mi5
- 3ZNm7+F4u7HpTUfBrxnlG47+T5tu9Zzhf9n7m8n7Pl8LsLgv3Jl9M/1igC7flQdFSekZpREZG5+
- 28wIA
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-The install rule for TEST_GEN_MODS_DIR copies *.ko from the directory
-with rsync which fails if there are no modules, for example because the
-directory's Makefile skipped building them. Only run rsync if there is
-something to install. This currently affects the livepatch suite but it
-seems sensible to fix here for added robstness.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/lib.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index f02cc8a2e4ae..7841bd4239c7 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -155,7 +155,7 @@ endef
- 
- define INSTALL_MODS_RULE
- 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH)/$(INSTALL_LIST))
--	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
-+	$(if $(wildcard $(INSTALL_LIST)/*.ko),rsync -a --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
- endef
- 
- define INSTALL_RULE
+On 10/14/26 4:18 AM, Martin Kaiser wrote:
+> Thus wrote Shuai Xue (xueshuai@linux.alibaba.com):
+> 
+>> From: Wang Han <wanghan@linux.alibaba.com>
+> 
+>> Replace the open-coded frame-pointer walker in arch_stack_walk() with a
+>> robust kunwind state machine, modelled on arch/arm64/kernel/stacktrace.c
+>> and retargeted to the RISC-V {fp, ra} frame record convention. The new
+>> walker tracks stack bounds, consumes frame records monotonically,
+>> understands the metadata pt_regs records added in the previous frame
+>> record metadata patch, and recovers return addresses replaced by
+>> function graph tracing and kretprobes.
+> 
+>> This commit introduces arch_stack_walk_reliable() but does not yet
+>> select HAVE_RELIABLE_STACKTRACE; that is done in a follow-up Kconfig
+>> patch so this commit can be reviewed and bisected as a pure unwinder
+>> replacement. Until that Kconfig change lands, livepatch is not yet
+>> enabled and arch_stack_walk_reliable() has no in-tree caller.
+> 
+>> Three related callers are updated to keep the same frame-record
+>> assumptions everywhere:
+> 
+>>    * Function graph tracing: the old RISC-V unwinder matched function
+>>      graph return-stack entries by the saved return-address slot. That
+>>      was consistent with the static mcount path, but not with the dynamic
+>>      ftrace path where the parent slot is ftrace_regs::ra. Use the
+>>      architectural frame pointer as the function graph return-address
+>>      cookie, matching the kunwind walker.
+> 
+>>    * Perf callchains: route kernel callchain collection through
+>>      arch_stack_walk() so perf sees the same frame-pointer unwind
+>>      behaviour as dump_stack() and the upcoming livepatch path.
+> 
+>>    * dump_backtrace() / __get_wchan() / show_stack(): these now go
+>>      through arch_stack_walk(); the explicit "Call Trace:" header is
+>>      moved into dump_backtrace() to preserve the original output.
+> 
+>> The non-frame-pointer fallback walker is kept untouched for
+>> !CONFIG_FRAME_POINTER builds.
+> 
+>> Assisted-by: Qoder:Qwen-3.8-MAX-Preview
+>> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>> ---
+>>   arch/riscv/kernel/ftrace.c         |   6 +-
+>>   arch/riscv/kernel/perf_callchain.c |   2 +-
+>>   arch/riscv/kernel/stacktrace.c     | 561 ++++++++++++++++++++++++-----
+>>   3 files changed, 473 insertions(+), 96 deletions(-)
+> 
+>> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+>> index be8b685144174..0facd824c911d 100644
+>> --- a/arch/riscv/kernel/ftrace.c
+>> +++ b/arch/riscv/kernel/ftrace.c
+>> @@ -245,7 +245,8 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
+>>   	 */
+>>   	old = *parent;
+> 
+>> -	if (!function_graph_enter(old, self_addr, frame_pointer, parent))
+>> +	if (!function_graph_enter(old, self_addr, frame_pointer,
+>> +				  (void *)frame_pointer))
+>>   		*parent = return_hooker;
+>>   }
+> 
+>> @@ -267,7 +268,8 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>>   	 */
+>>   	old = *parent;
+> 
+>> -	if (!function_graph_enter_regs(old, ip, frame_pointer, parent, fregs))
+>> +	if (!function_graph_enter_regs(old, ip, frame_pointer,
+>> +				       (void *)frame_pointer, fregs))
+>>   		*parent = return_hooker;
+>>   }
+> 
+> 
+> Are these two changes fixing a bug in the current code (that is independent
+> from the rest of this patch)?
+> 
+> Without your changes, function_graph_enter_regs writes a struct ftrace_ret_stack
+> with retp == the saved ra.
+> 
+> And the only place where retp is fetched and checked is
+> 
+> function_get_true_parent_ip
+>     ftrace_graph_ret_addr(..., (uintptr_t *)ftrace_regs_get_stack_pointer(fregs));
+> 
+> The stored retp is checked against the stack pointer.
+> 
+> Your changes store fp instead of ra, this seems the right thing to do. (And
+> it's in line with other archs.)
+> 
+> Should those two changes be in a separate patch (that can be backported to
+> stable kernels)?
 
----
-base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
-base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm master
-change-id: 20261013-kselftest-lib-no-modules-b8d75c7c59c3
+Hi, Martin,
 
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+Thanks for the sharp question.
 
+You are right that the stored cookie is broken. What
+ftrace_graph_func() passes as retp is &arch_ftrace_regs(fregs)->ra,
+i.e. the slot inside the transient ftrace trampoline frame, which is
+popped as soon as the callback returns. That has been the case since
+35e61e8827ee8 ("riscv: ftrace: Make function graph use ftrace
+directly") introduced ftrace_graph_func() in v6.8. (The code was
+copied from arm64's ftrace_graph_func(), but arm64 passes
+(void *)frame_pointer there - see 41705c4262aac for the current
+shape.)
+
+Since distro kernels only ever use the dynamic path, the net effect
+is that the shadow stack is never consulted during unwinding:
+whenever the function graph tracer is running, dump_stack(), perf
+callchains and __get_wchan() report return_to_handler instead of the
+real caller.
+
+I will split these two changes into a separate patch and cc stable.
+
+Thanks.
+Shuai
