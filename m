@@ -1,114 +1,100 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581E15326C4;
-	Wed, 14 Oct 2026 13:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7E95326AA;
+	Wed, 14 Oct 2026 13:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791985646; cv=none; b=U1OGzdicZ1daP6WypdBBQIM0OJhp/KjvkklNhYddVzL88HlocdcajHgMXkKibSH9rhvf5aDncoXrYLpRAn1YjbGunAESqDI1isp/OBBVo5IgmAZRWPhmMFCLD6thzRRKaKHchKbK1qtxCEu6WqO8e4GgzjimDwco5kh+/IkAJ9w=
+	t=1791985697; cv=none; b=OUDj685/5jouGLui3lx9hbWO51dm8QfAUdMpWttikQCsTQSyEjpQzQJOw47EzamIXusu9uTV0qTKzRJnlwsvz7g704hdTk+mHjikMRiZ1PvFHKTA9adeVxXXdOOMI3szxLVpFGngTQZxpihQTAf6qz1zabnp4hdHhKK4gPsh8bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791985646; c=relaxed/simple;
-	bh=6ASFf07XweXSERXGnO7twNJTmQ8Y8HezJlmn/kBZMII=;
+	s=arc-20240116; t=1791985697; c=relaxed/simple;
+	bh=TmOHkYRuvrUgagwVcOvIbXXfLOe4v1DZSdUWKMO7u28=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HbAbOcTy3fw4t5SS8Mnv4fTmNV0J7+Wi6f5tI/uIjEmLMDbs4OaepQUcBaPR8ERp7RIAbOIUCkFkOaff1e1moUnpP8JrYEquDlUsC47HU5G6v6L2AaL13II+LKmWWhoAaGCamheVhcEOT4G3mSl9B0jyJHbo2t5iEQVTP8gy6xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=boO1QOH1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IZqfWmao; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=lIUBbrC2aBhu8rcVxRZHIELZllICfuSFbD6BkTA+i7uLiJ1IAdcbjl1wqxn3GigtZ5OKGBgXSZMzbQqCGs/aGrujW5f2UXgCAh0NdUW96hHPzl4PKD7LmmZEY7LPxnsBj/ReOguXUY2dok8gE7pG79gsiTKtYq+DWqpAyFZjMQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+Wp8E3K; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="boO1QOH1";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IZqfWmao"
-Date: Wed, 14 Oct 2026 15:47:18 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1791985640;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1uVgl9VYfCbdSHLAssk4hvktk7d7dQKYFOwGQqB2NYo=;
-	b=boO1QOH1cBIu7/DEtSP8qOicZRXgqc0B3025RrJrJiD+5eTuR6cBBmANJQiQrOtoyIWKMF
-	i8dl5wZ67J9vEPw6UFsR38Cc70G6JbDCn4H9BuBpGmVQXetydRz0PIyuK3Br8dS3RKcf7r
-	CzQJQnJHFrdH/mchTJa18kpcx9aWx1xiRtiDD03UiTcbRc8sWXpOT9e/TIjDTwffqPcf6I
-	NuAx1dv9xy5Vv8IGZs7oJlBs4q4dDSUOhjEOupPrJ/4pqDwg6TbPEO0KaGogK/7g7z6J2i
-	4iL+SrrNM/u3QQ1iaWi14xPVMlqzfekNSwjwHopgeT9vb3ymgK/iNOji4GU9fg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1791985640;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1uVgl9VYfCbdSHLAssk4hvktk7d7dQKYFOwGQqB2NYo=;
-	b=IZqfWmaoyGoHLcJIbk9Xj/hGNsfvedsiTtoUeI+aH3a8qcMqFIdR8qOyER3Eqac+Fqmp4r
-	CibG956GlCHZrbDA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Xin Xie <xiexinet@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
-	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
-	fmaurer@redhat.com, luka.gejak@linux.dev, xiaoliang.yang_1@nxp.com,
-	skhawaja@google.com, liuhangbin@gmail.com, stable@vger.kernel.org,
-	sdf.kernel@gmail.com,
-	syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
-Subject: Re: [PATCH net v7 2/4] net: hsr: preserve submission order without a
- forwarding lock
-Message-ID: <20261014134718.YGcKmfB9@linutronix.de>
-References: <20261009201324.17-1-xiexinet@gmail.com>
- <20261009201324.17-3-xiexinet@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+Wp8E3K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 025671F00A2F;
+	Wed, 14 Oct 2026 13:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791985694;
+	bh=1qQSURO19kIhXzArX2xPf4oTamNn87j/Xtfb5YjYQeg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=V+Wp8E3KHj5HfarmjhHe8oPbVzrZV+mSoVlO20FAUrZAtZZUSAvDZDvEdIUnMOfWs
+	 PdNFGYrmWub+NN20ADFsWODAqJ3aIsrh+e0rqf6NEtKzTnDVGbFIftvtvYw9KUmM8v
+	 iGP4otTdzMyc8eRi+SNMBLMAdH4SVyy9ZPMTN8W3SsuNA2PnirUtJbaab3cG+2c8ym
+	 dWi6Wa9WJU73sMqDniudv0FvXOFPy9nXKJHHb2eTUks3yFfMZcFaeA1bARgEjo5TrC
+	 r+DoskInDcsRaq/0vcO9ButTC3Nw8nmVHd613gX+AutImHQNrGT4cq/NfYOUWyHI/m
+	 oXmBkDNyfnpXg==
+Date: Wed, 14 Oct 2026 14:48:02 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Mark Rutland <mark.rutland@arm.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	David Hildenbrand <david@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Jack Thomson <jackabt@amazon.com>, Jack Thomson <jackabt.amazon@gmail.com>, 
+	Alexandru Elisei <alexandru.elisei@arm.com>, Vincent Donnefort <vdonnefort@google.com>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Sean Christopherson <seanjc@google.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Leo Soares Passos <Leo.Bras@arm.com>, 
+	Wei-Lin Chang <weilin.chang@arm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v4 01/14] KVM: Allow architectures to disallow pre-fault
+Message-ID: <as-H1zaslO-Bwf5q@gremlin>
+References: <20260923-kvm-arm-prefault-v4-0-d4b0b4dfa8c3@kernel.org>
+ <20260923-kvm-arm-prefault-v4-1-d4b0b4dfa8c3@kernel.org>
+ <CA+EHjTzDYSuBVEc+SMdDa41sq-ET=m_oWW0gL9dYf+AumPYPUg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261009201324.17-3-xiexinet@gmail.com>
+In-Reply-To: <CA+EHjTzDYSuBVEc+SMdDa41sq-ET=m_oWW0gL9dYf+AumPYPUg@mail.gmail.com>
 
-On 2026-10-09 22:13:22 [+0200], Xin Xie wrote:
-> Holding seqnr_lock across dev_queue_xmit() serializes numbering and
-> submission, but creates transmit-lock dependencies that can deadlock
-> stacked HSR devices. Merely shrinking the lock to the counter lets
-> one CPU send frame N after another has sent N+1; old HSR peers discard
-> the late N as stale.
+On Wed, Sep 23, 2026 at 07:52:27PM +0100, Fuad Tabba wrote:
+> Hi Lorenzo,
+>
+> On Wed, 23 Sep 2026 16:15:44 +0100, "Lorenzo Stoakes (ARM)"
+> <ljs@kernel.org> wrote:
+> [...]
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> [...]
+> > +int kvm_arch_pre_fault_allowed(struct kvm_vcpu *vcpu)
+> > +{
+> > +        if (!vcpu->kvm->arch.pre_fault_allowed)
+> > +                return -EOPNOTSUPP;
+> > +
+> > +        return 0;
+> > +}
+>
+> nit: the comment above the smp_rmb() in tdx_sept_map_leaf_spte() still
+> says pre_fault_allowed is read by kvm_arch_vcpu_pre_fault_memory(),
+> but after this patch it's read here.
 
-What are stacked HSR devices? Looking from the setup in the referenced
-report this is a bridge device attached to a HSR ring. 
-An announce frame is sent and this goes to hsr_dev_xmit(). This does not
-look like a normal setup. Is this something you use or is this something
-the bot came up with?
+Ack, will chase that up!
 
-> Use one consumer for master TX, interlink RX and internally generated
-> supervision frames. An idle caller processes its own input inline;
-> contended inputs wait in a FIFO drained by one BH work item. Allocate
-> sequence numbers only when the consumer executes a frame, and submit
-> it to every lower before numbering the next frame. The short counter
-> lock is released before forwarding.
-> 
-> Limit queued inputs to 1024 jobs and 8 MiB, reserving capacity for
-> internal supervision. Carry transmit recursion depth across deferred
-> execution, cancel the worker and purge the queue on teardown, and count
-> queue drops once through core per-CPU statistics. LAN A/B reception
-> stays synchronous and tagged frames retain their received numbers.
-> The ordering guarantee is per-lower submission, not physical wire
-> order across multiple TX queues.
-> 
-> On PREEMPT_RT, high-priority load preempted both the inline consumer
-> and BH worker while another CPU continued to enqueue inputs. All
-> 2118 inputs completed without drops; the finite data workload
-> completed 4.07 seconds after the load ended.
+>
+> Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
 
-This looks very complex and I am not a big fan of it. I would prefer to
-break lock chain early assuming the setup is valid/ sane (see above).
+Thanks!
 
-The ID by itself can be assigned with an atomic_inc() but then you don't
-have the transmit ordering. So you introduce the workqueue for the
-ordering which is ugh. I'm not sure how this works if you get
-submissions from two CPUs given the lock is gone and the workqueue is
-per-CPU.
+>
+> Cheers,
+> /fuad
+>
 
-> Reported-by: syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
-> Link: https://syzkaller.appspot.com/bug?extid=fbf74291c3b7e753b481
-> Fixes: 06afd2c31d33 ("hsr: Synchronize sending frames to have always incremented outgoing seq nr.")
-> Fixes: 430d67bdcb04 ("net: hsr: Use the seqnr lock for frames received via interlink port.")
-> Signed-off-by: Xin Xie <xiexinet@gmail.com>
-
-Sebastian
+--
+Cheers, Lorenzo
