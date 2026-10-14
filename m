@@ -1,67 +1,67 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E091147DFA9
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 21:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB76492E5A
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 21:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792014220; cv=none; b=shHNpaK0hfYSP4kazfpwPUQhrKi49Nyv70pNjXwehGk5OlzeI5MCCi/SZ1AmqJZwxDNNi9vLp6Klqew4IGXb3Cf/W5grFPZIaXwzZ5BKpu9P0wB05qtcTDC/2gh4gUlY6e9n4NYVm5HxCqjQaEdRcnrFsn8W6veZ28F4IyQVP6I=
+	t=1792014234; cv=none; b=NGe9IdLmUXbW0/rJMNNJFOwWieXrTEQTRBcXRGuQ8+pMDsDGZWY9qghU3cXOK6hliYAZ59tmHjX8uNDQKmFLgMl0iQ8a+Z/PEuiAKa7IC5lMypb4Lb9WwbnLT80yIGLYEvehtJDc9Tezry8QTbg+gICTCX7l5kw7dRC1VrfR7XA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792014220; c=relaxed/simple;
-	bh=e+rpqIT4zirx0GVPRZ66xQhWi5rRXE9U3uulpMKKe1I=;
+	s=arc-20240116; t=1792014234; c=relaxed/simple;
+	bh=EtI4ggX6siZdDxX9QVbhUXdUUm5AbMI5AMTmaI9v0aE=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jbeCI+ATFnPmhUlNschatDL6O3XxWhn0kRRvvwnY9yg4qJQYbFtddLjTe4VxBxwmQnCw5rFK4oZH/+N75lKwPdp1Ovv4u0rqu6G6iMQcVlRw6VG1V4ATdSD+w+R4538MI0I0PoMd+QtrYoWHrRYNtUFhMak/Ytkl2GbkXHWLTqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=snNf3p3b; arc=none smtp.client-ip=209.85.128.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=NUDL8aqcdqkQaLook0q/vkFrmY28WgPvVBNoY4vURhHceX4ewX6h5lJZ4AO/zjXnjJCpdq8m6bCmeTKOfRlJIrEB+FiizFbaTnrrKze7umYDB0IxHiAN8zlCJUiUP6btvd+iyntia2SKLEBWy1jHRmtoIxYrqCcMzzDll+IXPjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GcOmMhs5; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="snNf3p3b"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a161d9b8c7so32638155e9.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:43:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GcOmMhs5"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48c5358fc28so762418f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:43:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792014217; x=1792619017; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792014231; x=1792619031; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:date:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=QUGjx1llrTDfPWrErlxQ+ApKB29LYnD9ZO445JdHHZk=;
-        b=snNf3p3bwGCR4dibLc5GAnYl0JJ8iBqp4C3q8RW03SuUcXZF/DYo0LnZLawnx2k2Ly
-         gfPghXSwhfEtF2744wIEevr3crQUeAvM/6czt4/bbPw5Hs8oKrmFciQt+sPXPnodnkQf
-         SWl9KZ3RZtHOINKufPtYUDVwPEk9kzlBtDCnhTWz/Ngk4L8WL9/cMeL8UDsBiRmaAvCC
-         AHelCPEPJjeN+acE1M0QmhEQEgNoGgWX71zflMM+sQ7cbiFTh7Un/uPW3gBqTE/5Fjqz
-         p7O33utQWOc1XXpUosagySu/VZNmWa04LR0cYXsSNDzAmJ9GX5BtYgqMfyrMAW1pW9rx
-         XMOQ==
+        bh=8tvaxXme3A+GDB6mr5zX35hOYWPVi2nagWE6JeKbsfg=;
+        b=GcOmMhs5w4i7JvGV6NVgmD99o62uNFPFKbnY3cxij55UKVRb3igVj9Z0wpJpDUQya8
+         csg8cJRJ9zGgHChl+8ssUEa6AiVVOTQRkeIyiOl2iXel95aApeq9BCWKtIUtnX1ywGSy
+         5FS3Sx2prEye6NwGo32GBgO4ZL2H3ApJOdXz1g4RlcV3tuPbfoSuZX90XhZnliJYBsF9
+         cRStg173NunbpLtSm1KsIkDvbNaRrTpLcrwZNVrIn+SrAq50CP9Y9bLOtpyTlI/0FY/5
+         qI0ltlP91IT0rP/65aVLV3z6dxlDz3H9EmFrC7FsDmqwwiBqIWtXdywq4SEyfd8zSN2l
+         MSXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792014217; x=1792619017;
+        d=1e100.net; s=20260707; t=1792014231; x=1792619031;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=QUGjx1llrTDfPWrErlxQ+ApKB29LYnD9ZO445JdHHZk=;
-        b=dQYiNFVGSxmAoZ3VG0BpgfSpiPQQDNSDy0Kaq+OgHf0PIgFDDoP8LyO70maAQjWqLU
-         98PAQ23/PNRBR4vHFt4+jEJ9w9kNooKa701Yhd5oib5zmOURXvF4ulSEuElOiJYKNxYz
-         i/J3eiF2R9QEWcmSme8CJ/mPBj6KZF/ZwBtECmRkrEcc/J2aTJpYoSe+zsk2QCBuk/Ym
-         R9olyM751SZ4uazcJAf4FYdaNHq/FCQRLJsyMlNwXAhBy/wKXxx74v9VkVxjTRbYMnnR
-         erY6/LhDoAphYzrtelDuqK/7wkD3teLUr6y7uVWl0T+kcshyEZbpqClwhHT/LxYzeVN9
-         y6jg==
-X-Forwarded-Encrypted: i=1; AKwUvByyLrDKdNf4CVMXC3lrjjW9XG//g6vA6Da2NbFYXU1+4uSLZYZFimg4KRUz+X7/OGHAdVCiH8wlciFMQwvf4Qo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKaII+6mXN/2nLUtWe+9MUZVQV2LCXO1RQMNFa0WIOVq9mAp7np
-	0Z38vnbMQ71FYCP+9yHnoCV4V0aoy0TUsADVESJAWsVCT19E4MongdQL
-X-Gm-Gg: AYBFou3gmm5Sb4kRokLtSeR4R8boN9Mkpm5eHrBSlMB/3m+9m9SvhZP2RJHsPKQTMn6
-	IsHqt1vMPjpXsqwIyLObkAUWBzlrK4e1+izhH3m9X5m4VDxdySnF+qCqP9Lwi7NBczmd/2EH+nB
-	/IAGRycnzLJJ4X1H8NuaNsMZHd+P+up8LcR7Z465lxE08u01IOqsVh+ZJhExPuNK6Acv5+TImGt
-	Xx3ZBK9LoUxbx5FKCwL9SnbeACiiKP2b1f+3U21F8WhMrdGN9E2Aug8R9Gioaaqie9n1RBwHyhJ
-	ZvZm6irHNIZV6/7gHH0S4NrSaYgavOMKoxDyHrbSgB2CkQLQ+eJqQ56En/HXA9FjmvNH7Z6TGBp
-	myn2HXa+lfYNLtPahfoY8+DFvjY6Q4DgO/shood7jGnTLr78IwULLUkCCjBdfDwyoQdZLX3Tduk
-	CjQpJ2DpxzA52azug6sJ9VqAUdkFbQMvkb8DqrEw2zHNgrjZ0wcbXcRciyAsWt9yVQSZ1z
-X-Received: by 2002:a05:600c:4708:b0:4a0:258a:b25c with SMTP id 5b1f17b1804b1-4a18e4da3c8mr339297955e9.29.1792014216881;
-        Wed, 14 Oct 2026 14:43:36 -0700 (PDT)
+        bh=8tvaxXme3A+GDB6mr5zX35hOYWPVi2nagWE6JeKbsfg=;
+        b=ZFVOTWizT7elPkuzSTmgxPP9LKDtj6EOC9tom0eeHPVsZ/dKrbmQy2Z2fyDB9heuIl
+         i/ILQma/opeOX23ikOPWHTAGXzA73Qw4P1zPQlAVUhC94Psn7pDlIpFoJ0ZYbAULQ1dY
+         goLnsoll3k4dfDtFbVQy5AAg5gvWvJ60CHdQI9VTdY3BkBZ59f9RThdRo28exShgTiq/
+         9sjHS9Um+FuKPgnpDdOKxbKJk5kTo3a6oy/ixUP7fIPYV6FWFOeI+Dfxmbia3JDk7KBh
+         zlGMn8ertD0fHMqip4dZXWDK2CbSNo2twW5qMHqfEe8kPn6ZxxKGkqO/145Tv6Zuh+K0
+         ShLA==
+X-Forwarded-Encrypted: i=1; AKwUvBzE2DtBld6SDpb+XcUjPrEzjNfHD1bDzd9X/nhmozZI0M9eTDpX5aFYQBxzQDTjaJ2Utz1oMEMnyV3aWybyKl8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIlNRizXq0iYuFoYXjGtXw0tk0EX3lE+xcTsm8eItMseMkHjv4n
+	gWTAcfg3Kd3Z/1OMn4GmMPHWikEpBB8m+Ht9v1O/WDTOUwbvLc+Dcgxx
+X-Gm-Gg: AYBFou234czL768MO4UYHURUAEJYsoYSRig8uuwQpb5uKl0AO9IRKG2VEFzSQMqMez4
+	QgWGyKQwKCee4khouzlJG23rz9PA6yCdIv4Z3ftuIx6rBt0zZkEekUyFLpwqsc0AR0vVfvtD6YR
+	byy4wsz6pi8NOWCSLxUUooifSzmYck7d3FI7+Kukupl8JQ97IXZrlRtWKmcYcphbtvWjSQAXL3G
+	WWhUW/M2nN78DdowQMhtlfiWfxp3wa1f27aizy3heJxzkn2tD1OUH5KMHzDQXcZXyKrRjazbEMa
+	xqH+dlLQXi12XyboYJSsPB/GCW2pqTaXj8liM39QK/HuiiNlrnObv7/GcG7i3xcEht//RRFeHkl
+	qbVg1uZR3tKlARppR99t8BaJMI0eUslJGu0ECNN3W1fZRvodnjyWjrUnH/QpKDmfXmcn23aPg0q
+	/m7AZt3hnb13j2bSXGvczds+3gKa3qT6U+h7t9uI18CvLqsm616HN7s2cYKA==
+X-Received: by 2002:a05:6000:2686:b0:48d:f3f8:f910 with SMTP id ffacd0b85a97d-48df3f8f995mr500636f8f.34.1792014231493;
+        Wed, 14 Oct 2026 14:43:51 -0700 (PDT)
 Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1bd66ab3dsm20882205e9.2.2026.10.14.14.43.34
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48df2619703sm1681492f8f.24.2026.10.14.14.43.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 14:43:36 -0700 (PDT)
+        Wed, 14 Oct 2026 14:43:51 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 14 Oct 2026 23:43:33 +0200
+Date: Wed, 14 Oct 2026 23:43:48 +0200
 To: Leon Hwang <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -82,11 +82,11 @@ Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 	Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
 	Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 02/21] bpf: Drop unnecessary
- ftrace_location() in register/unregister/modify_fentry_multi()
-Message-ID: <as_3hf7hfmaQjBFd@krava>
+Subject: Re: [PATCH bpf-next v2 14/21] bpf: Add tracing_multi link info
+ support for bpf progs
+Message-ID: <as_3lHuqBSVQMiB5@krava>
 References: <20261012154024.29423-1-leon.hwang@linux.dev>
- <20261012154024.29423-3-leon.hwang@linux.dev>
+ <20261012154024.29423-15-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,69 +95,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261012154024.29423-3-leon.hwang@linux.dev>
+In-Reply-To: <20261012154024.29423-15-leon.hwang@linux.dev>
 
-On Mon, Oct 12, 2026 at 11:40:04PM +0800, Leon Hwang wrote:
-> Since 'tr->ip' is already a 'ftrace_location()'-ed IP in
-> bpf_trampoline_lookup(), it is unnecessary to call ftrace_location() again
-> in register/unregister/modify_fentry_multi().
+On Mon, Oct 12, 2026 at 11:40:16PM +0800, Leon Hwang wrote:
+> Show bpf prog info in the link info.
 > 
-> No functional changes intended.
+> $ bpftool link
+> 9: tracing_multi  prog 25
+> 	attach_type trace_fsession_multi  btf_obj_id 1  count 2
+> 	prog_id          func_btf_id      addr             cookie           func [module]
+> 	21               4                ffffffffc080064c 16706819         target_1 [bpf]
+> 	22               5                ffffffffc08006d4 16706819         target_2 [bpf]
+> 	pids test_progs(98)
 > 
 > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  include/uapi/linux/bpf.h       |  7 +++-
+>  kernel/trace/bpf_trace.c       | 26 ++++++++++----
+>  tools/bpf/bpftool/link.c       | 63 +++++++++++++++++++++++++++-------
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+I think you should split the bpftool change into separate patch
 
 jirka
-
-> ---
->  kernel/bpf/trampoline.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index 17f2a8133f61..21d460866dfe 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -1629,8 +1629,8 @@ static void ftrace_hash_add(struct ftrace_hash *hash, struct ftrace_func_entry *
->  static int register_fentry_multi(struct bpf_trampoline *tr, struct bpf_tramp_image *im, void *ptr)
->  {
->  	unsigned long addr = (unsigned long) im->image;
-> -	unsigned long ip = ftrace_location(tr->ip);
->  	struct bpf_tracing_multi_data *data = ptr;
-> +	unsigned long ip = tr->ip;
->  
->  	/*
->  	 * Different BTF ids get different trampolines, but they can still
-> @@ -1651,13 +1651,12 @@ static int register_fentry_multi(struct bpf_trampoline *tr, struct bpf_tramp_ima
->  static int unregister_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags, void *ptr)
->  {
->  	unsigned long addr = (unsigned long) tr->cur_image->image;
-> -	unsigned long ip = ftrace_location(tr->ip);
->  	struct bpf_tracing_multi_data *data = ptr;
->  
->  	if (bpf_trampoline_use_jmp(tr->flags))
->  		addr = ftrace_jmp_set(addr);
->  
-> -	ftrace_hash_add(data->unreg, data->entry, ip, addr);
-> +	ftrace_hash_add(data->unreg, data->entry, tr->ip, addr);
->  	tr->cur_image = NULL;
->  	return 0;
->  }
-> @@ -1666,13 +1665,12 @@ static int modify_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags, struct
->  			       bool lock_direct_mutex, void *ptr)
->  {
->  	unsigned long addr = (unsigned long) im->image;
-> -	unsigned long ip = ftrace_location(tr->ip);
->  	struct bpf_tracing_multi_data *data = ptr;
->  
->  	if (bpf_trampoline_use_jmp(tr->flags))
->  		addr = ftrace_jmp_set(addr);
->  
-> -	ftrace_hash_add(data->modify, data->entry, ip, addr);
-> +	ftrace_hash_add(data->modify, data->entry, tr->ip, addr);
->  	tr->cur_image = im;
->  	return 0;
->  }
-> -- 
-> 2.55.0
-> 
