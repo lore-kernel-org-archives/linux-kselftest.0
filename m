@@ -1,173 +1,213 @@
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208A83EC832
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 13:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA7651C07D
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 13:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791984031; cv=none; b=FJ9D/V/2487Yg3/UU9UAJGbg3nvgu8Bscj5pmuesBPhI2w5ZFUoGHvrlnJxCO9qUd2DKKNfF0Xm0m+mVmGpeRhvNtf/ZM3HdOVra82gpCaNiQAx53eZFEILirKDYhaVsxdHEHFtNj4LeIs4Ewj38wuoqx9A9Y8THKmC4Y16MCBo=
+	t=1791984611; cv=none; b=XvhxYkP7fD5jUgK5XI2+lM8AdNlI1eCo7FmxOmf0QCwMS6SlJzFDlU23Nz7GrtuZCAKecC/bNf7Q13ae1Y+rnlg7frmFisVMEeW8oNzQotVzINuzZXXFEPmDmYUSEPPP2E4FdORf7RqTcaVpiyB+hDRpFXM4xKsuJGB6yWmFJr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791984031; c=relaxed/simple;
-	bh=MjCRgyE9WkWJ7iNVJLmJilLk/S+9l7gZMXgxjwM9n/c=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=rAFaIf9hcOHH1fiQ9KX8GCmZbELTKtvmTBGUkifFRc5N1fOZbt3bKFLPT+M2LBzCFRyBiRZJR2KriNMoOyMX58oAEAFYoBmDQHnSRa5yBI4Tq8+xqQAgs2yktcyPKCKtu5OryTTfwg/ycHhacfDLGDxEYADNE59cCqskvrCiIjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DwBxtAjq; arc=none smtp.client-ip=209.85.208.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	s=arc-20240116; t=1791984611; c=relaxed/simple;
+	bh=EEpQQXTpbdUJ+1/mnq+YxrOugKWaUV+eeCGWAFt7+4Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Eq7/jPxRe4ArUaBBQvfmyZckMqu4dBO5j4hUcHV+pQNqb89FM0l20/N6yasBUnnZpt6n8iFm+BWoWq+dlLKO09X6nkxirHph9Ur5IcojCi/NVKmAbozCUbk0PPvHIIx0IdjplFCFMteu53BZwKq9IfZTK8XIkqfKHHsswqqaDlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fz2SB2G/; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DwBxtAjq"
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-6afa6850207so1084477a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 06:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791984027; x=1792588827; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4n9LUBp/94FrA7OEAIK6wGrf06ppdChh63JRq9nGxWk=;
-        b=DwBxtAjqUw+Q/FMDhubhETeedq+ybXsKZFd4FbX4UTmZVxzIJDbhQ8T2nkNCoW8a6p
-         wpB0VORLqumQsg1JaVBCebAgScoGUgRAFlcmgEG7DRWYRy755c6m0Rs4BMBE4Vc0Lch1
-         T70IniOpzea6agz8Nn4NUtGtPnqA4slllxLzr3bxEzTSvJk7FhiAsOAJUeOUpsMa0vn+
-         pdyvJxsOKfRMu1iEOxupl8sR6QNA9ueMWRQ9XKMV+7TN/mvGcL2+ReodZgI9M8QbBhDn
-         ZFb8wfE0ck0SvaXBTe6icHhn9cqwf86T1ck9HUrR9FDSL2wwOU5X1EEQ1wBvazWWi9HQ
-         RiBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791984027; x=1792588827;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=4n9LUBp/94FrA7OEAIK6wGrf06ppdChh63JRq9nGxWk=;
-        b=S2qD/Uu5FCjN8VF7D9Z2Rtm6spOnpq2WQSOKuvvAxkhAC6EzajMBrJfkuXT0fOKPMT
-         RPpOfo//Tzsx8aHHqfvwnkA5KMsGgOUyN9KSDpBcb6YDXk2CudTz76aV6Jg+9+YNTyxY
-         H2S2RpaNY4eDWcSpgtn3/jAaDtnDGRRwNQuDUteTbdc8qvYnsTObF2iaA+KxREWh/svi
-         X2F3jcn3A0CrlXgtp4KpZjX6r2F0qrlblUO6T/F3PzGjA2Wr/4ehgRoEcoJoWnQh13Di
-         r3xGWRXKGfQJFslaRoWYy3W06+Dcl0vIZ+gwAVqYYU7b9WukxUCY0nfyn+6cNrWi8Ehu
-         5IPQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzA5Mgk50KJc1nPpQSt/NlvlNww+i8sZiTctR+G/YeMrTkOP7Gi8D/QZwS/c8V/+I8HPXLFU4chKHXolsWGB9s=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKQ5hfaeoXxjvWTWpV1rFTaJo715NKLyFDtCjoe8BmnGXqsjTSE
-	FwPZTjf+PWARmO769A9K4sfjEc2c9XNatETiawRK5muaCIBuKU3c09ZMwOavXMgYHj6P7ucbQji
-	2eVcE6DJHnnvITgz8Ug==
-X-Received: from edcpr25.prod.google.com ([2002:a05:6402:c1d9:b0:6ae:21f4:c371])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:320c:b0:6b1:df89:7e11 with SMTP id 4fb4d7f45d1cf-6b1df899325mr5347239a12.36.1791984026642;
- Wed, 14 Oct 2026 06:20:26 -0700 (PDT)
-Date: Wed, 14 Oct 2026 13:20:25 +0000
-In-Reply-To: <2vxz7bjmkjeu.fsf@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fz2SB2G/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1791984603;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dAxtnhhZyiSlwHzc+JDGOuJa80/PIHSiPBPuiBDzo5s=;
+	b=Fz2SB2G/REdO4eNUsZiXlQUNlMpNJFIyJhhusCqX8LdAd/I88U/P2fxZlNzgm+8HJerPCP
+	sopWiN5lSqlUmmsjmG5Gq3EqPzzyU3Y9NzxVzH7BTwMji072XHLLGSPYMvPO/VT1HPHKTR
+	dqiNwDFTo+YtlYXZbLzAQ0ZdD4wtSSI=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-546-pDcCujAfPiGCcCsVEq8cWw-1; Wed,
+ 14 Oct 2026 13:29:58 +0000
+X-MC-Unique: pDcCujAfPiGCcCsVEq8cWw-1
+X-Mimecast-MFC-AGG-ID: pDcCujAfPiGCcCsVEq8cWw_1791984597
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B970719560AF;
+	Wed, 14 Oct 2026 13:29:56 +0000 (UTC)
+Received: from [100.91.18.181] (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E2F171955F01;
+	Wed, 14 Oct 2026 13:29:54 +0000 (UTC)
+Message-ID: <8a71bf13-d715-4caa-aca9-487a6c625969@redhat.com>
+Date: Wed, 14 Oct 2026 09:29:53 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260901180713.4185641-1-dmatlack@google.com> <2vxz7bjmkjeu.fsf@kernel.org>
-Message-ID: <9huz7bjkmnae.fsf@tarunix.c.googlers.com>
-Subject: Re: [RFC PATCH 0/5] liveupdate: LIVEUPDATE_SESSION_RETRIEVE_INTO_FD
-From: tarunsahu@google.com
-To: Pratyush Yadav <pratyush@kernel.org>, David Matlack <dmatlack@google.com>
-Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v2 1/6] cgroup/cpuset: Consolidate
+ isolated_cpus_can_update() into prstate_housekeeping_conflict()
+To: Guopeng Zhang <guopeng.zhang@linux.dev>,
+ Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Hui Peng <benquike@gmail.com>
+References: <20261010221938.243859-1-longman@redhat.com>
+ <20261010221938.243859-2-longman@redhat.com>
+ <7ec04fe0-994e-44d3-8c20-6732c9f20afd@linux.dev>
+ <37481345-f80b-4b28-8519-15c396fc7942@redhat.com>
+ <a0739252-5d96-4e73-825d-4d97f5be41f4@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <a0739252-5d96-4e73-825d-4d97f5be41f4@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Pratyush Yadav <pratyush@kernel.org> writes:
+On 10/14/26 2:58 AM, Guopeng Zhang wrote:
+>
+> 在 2026/10/14 02:59, Waiman Long 写道:
+>> On 10/11/26 1:49 AM, Guopeng Zhang wrote:
+>>> Hi，Longman,
+>>> 在 2026/10/11 06:19, Waiman Long 写道:
+>>>> The isolated_cpus_can_update() and prstate_housekeeping_conflict() are
+>>>> checking different aspects of upcoming cpumask changes that may conflict
+>>>> with the current setting of the housekeeping cpumasks. There are places
+>>>> where both are called together. There are also places where only one
+>>>> of them is called. That inconsistency can contribute to missing check
+>>>> where invalid cpumask changes may be allowed to move forward.
+>>>>
+>>>> Fix that by consolidating isolated_cpus_can_update() into
+>>>> prstate_housekeeping_conflict() and call prstate_housekeeping_conflict()
+>>>> in all the places where either one of them or both are called. The
+>>>> exception is the validate_partition() function where the
+>>>> prstate_housekeeping_conflict() call is removed. It is because
+>>>> validate_partition() is called only from partition_cpus_change()
+>>>> where prstate_housekeeping_conflict() will be called from either
+>>>> remote_cpus_update() or update_parent_effective_cpumask() with
+>>>> partcmd_update if not for partition invalidatation or disablement.
+>>>>
+>>>> Now prstate_housekeeping_conflict() will be called in the following
+>>>> locations:
+>>>>    - when a partition is enabled in remote_partition_enable() or in
+>>>>      update_parent_effective_cpumask() with partcmd_enable*.
+>>>>    - when a cpumask is updated in remote_cpus_update() or in
+>>>>      update_parent_effective_cpumask() with partcmd_update.
+>>>>    - when a partition state changes from root to isolated or vice versa
+>>>>      in update_prstate().
+>>>>
+>>>> Fixes: 4a74e418881f ("cgroup/cpuset: Check partition conflict with housekeeping setup")
+>>>> Fixes: 103b08709e8a ("cgroup/cpuset: Fail if isolated and nohz_full don't leave any housekeeping")
+>>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>>> ---
+>>>>    kernel/cgroup/cpuset.c | 123 +++++++++++++++++------------------------
+>>>>    1 file changed, 52 insertions(+), 71 deletions(-)
+>>>>
+>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>>> index 0ebba2d646c3..f3cebb277a68 100644
+>>>> --- a/kernel/cgroup/cpuset.c
+>>>> +++ b/kernel/cgroup/cpuset.c
+>>>> @@ -1353,65 +1353,62 @@ static void partition_xcpus_del(int old_prs, struct cpuset *parent,
+>>>>    }
+>>>>      /*
+>>>> - * isolated_cpus_can_update - check for isolated & nohz_full conflicts
+>>>> - * @add_cpus: cpu mask for cpus that are going to be isolated
+>>>> - * @del_cpus: cpu mask for cpus that are no longer isolated, can be NULL
+>>>> - * Return: false if there is conflict, true otherwise
+>>>> - *
+>>>> - * If nohz_full is enabled and we have isolated CPUs, their combination must
+>>>> - * still leave housekeeping CPUs.
+>>>> + * prstate_housekeeping_conflict - check for partition & housekeeping conflicts
+>>>> + * @new_prs: new partition root state to be checked
+>>>> + * @parent_prs: Parent partition root state
+>>>> + * @add_cpus: additional CPUs to be added to current cpuset
+>>>> + * @del_cpus: CPUs to be removed from current cpuset, can be NULL
+>>>> + * Return: true if there is conflict, false otherwise
+>>>>     *
+>>>> - * TBD: Should consider merging this function into
+>>>> - *      prstate_housekeeping_conflict().
+>>>> + * There are two different housekeeping conflicts to be checked:
+>>>> + * 1) If new_prs is PRS_ROOT, none of the @add_cpus can be a boot-time isolated
+>>>> + *    CPU. IOW, the whole @add_cpus must be a subset of HK_TYPE_DOMAIN_BOOT.
+>>>> + * 2) If nohz_full is enabled and we have isolated CPUs, their combination must
+>>>> + *    still leave housekeeping CPUs. This check is only needed if new_prs
+>>>> + *    differs from parent_prs and one of them is PRS_ISOLATED.
+>>>>     */
+>>>> -static bool isolated_cpus_can_update(struct cpumask *add_cpus,
+>>>> -                     struct cpumask *del_cpus)
+>>>> +static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
+>>>> +                      struct cpumask *add_cpus,
+>>>> +                      struct cpumask *del_cpus)
+>>>>    {
+>>>>        cpumask_var_t full_hk_cpus;
+>>>> -    int res = true;
+>>>> +    int res;
+>>>>    -    if (!housekeeping_enabled(HK_TYPE_KERNEL_NOISE))
+>>>> +    if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT) && (new_prs == PRS_ROOT) &&
+>>>> +        !cpumask_subset(add_cpus, housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT)))
+>>>>            return true;
+>>>>    -    if (del_cpus && cpumask_weight_and(del_cpus,
+>>>> -            housekeeping_cpumask(HK_TYPE_KERNEL_NOISE)))
+>>>> -        return true;
+>>>> +    if (!housekeeping_enabled(HK_TYPE_KERNEL_NOISE) ||
+>>>> +        (new_prs == parent_prs) ||
+>>>> +        (!del_cpus && (new_prs != PRS_ISOLATED)) ||
+>>>> +        ((new_prs != PRS_ISOLATED) && (parent_prs != PRS_ISOLATED)))
+>>>> +        return false;
+>>>>    
+>>> When a child partition switches from root to isolated under an isolated
+>>> parent, this returns false even though the child's CPUs were not isolated
+>>> before the switch.
+>>>
+>>> On a fresh boot with CPUs 0-15 online and nohz_full=2-15:
+>>>
+>>>       # cd /sys/fs/cgroup
+>>>       # echo +cpuset > cgroup.subtree_control
+>>>       # mkdir A B
+>>>       # echo 1-2 > A/cpuset.cpus
+>>>       # echo isolated > A/cpuset.cpus.partition
+>>>       # echo +cpuset > A/cgroup.subtree_control
+>>>       # mkdir A/C
+>>>       # echo 1 > A/C/cpuset.cpus
+>>>       # echo root > A/C/cpuset.cpus.partition
+>>>       # echo 0 > B/cpuset.cpus
+>>>       # echo isolated > B/cpuset.cpus.partition
+>>>       # cat cpuset.cpus.isolated
+>>>       0,2
+>>>       # echo isolated > A/C/cpuset.cpus.partition
+>>>       # cat A/C/cpuset.cpus.partition
+>>>       isolated
+>>>       # cat cpuset.cpus.isolated
+>>>       0-2
+>>>
+>>> CPU 1 was the last remaining housekeeping CPU: it was in neither the
+>>> nohz_full mask nor the cpuset.cpus.isolated mask. The final write isolates
+>>> CPU 1 as well, leaving no housekeeping CPU.
+>>>
+>>> Should this check also take the child's previous partition state into
+>>> account, rather than just comparing its new state with the parent's state?
+>> This is actually a problem that is hard to fix without introducing a lot of complexity. After spending a day or so trying to find a possible fix from 2 different perspectives, I realize that either one will introduce quite a lot of complexity into the existing cpuset partition code. When looking at it again from a higher level, I think we may have allowed too much freedom to create a complicated nested partition hierarchy. If we simply don't allow the creation of root partition under an isolated partition parent, this problem will not exist. It is indeed a new limitation imposed on the existing cpuset partition functionality, but it is a simple solution and I don't believe there is a real use case in the creation of a root partition under isolated partition. Please correct me if my use case assumption is wrong.
+>>
+> Thanks for taking the time to look into this.
+> Your suggestion to disallow root partitions under isolated parents gives us a different perspective on some of the issues we've encountered in our product.
+> As part of our transition from cgroup v1 to v2, we've been testing various cpuset configurations allowed by the current rules.
+> Some of these tests have uncovered corner cases, including the one reported here.
+> So far, we haven't received any customer reports of a use case that requires a root partition under an isolated parent.
 
-> Hi,
->
-> On Tue, Sep 01 2026, David Matlack wrote:
->
->> This series adds support for LIVEUPDATE_SESSION_RETRIEVE_INTO_FD, a new
->> UAPI to enable preserved files to be restored into a userspace-provided
->> file instead of a kernel-allocated file, and uses this to support
->> preserving tmpfs files in-place without any changes to the LUO ABI.
->>
->> The Live Update Orchestrator (LUO) API currently explicitly returns a
->> new struct file for every preserved file during retrieve() (e.g. via
->> memfd_alloc_file()). This then forces userspace to use anonymous memfds
->> for all in-memory files it wants to preserve. This works reasonably well
->> for VM guest memory but does not work well for other types of files that
->> userspace may want to preserve (e.g. in-memory logs, binaries,
->> configuration files, etc.).
->>
->> Preserving entire tmpfs mounts in-place would require a large amount of
->> kernel support and would effectively make tmpfs an ABI, which is a
->> non-starter (or so I hear). Instead, we can delegate the reconstruction
->> of the tmpfs mounts (directory structure, permissions, etc.) post-kexec
->> to userspace. The kernel just needs to preserve the contents of tmpfs
->> files and provide userspace a mechanism to restore those contents back
->> into a specific file on the filesystem after the kexec. Hence,
->> LIVEUPDATE_SESSION_RETRIEVE_INTO_FD.
->
-> Based on the discussion at LPC, we came to the conclusion that this is
-> the path forward.
->
-> Before reviewing the code, here's an idea that Pasha briefly brought up
-> briefly at LPC, and I more or less agree. I'd like other opinions on
-> this.
->
-> Should we make the interface more generic by allowing userspace to pass
-> extra arguments to PRESERVE_FD and RETRIEVE_FD? This effectively gives
-> each file handler an additional uAPI of its own. The upside is that it
-> would be more extensible and we should be able to accommodate more use
-> cases with this. The memfd/shmem extra uAPI will take an optional target
-> file to retrieve into.
->
-> For example, the guest_memfd patches might use this to tell the KVM FD
-> to retrieve the guest_memfd into. Of course, KVM needs to see if this
-> makes sense (alternative being preserving the KVM FD too), but this is
-> just an example of how it might be used. I think VFIO also does some
-> workarounds by using an anon inode on retrieve. It perhaps might be
-> useful there too, though I don't understand that problem well enough to
-> talk in more detail.
+Thanks for the quick reply. Creation of an isolated partition is usually 
+a leaf or terminal node that has latency sensitive application running. 
+Even creating a child isolated partition underneath it will not be 
+common. By imposing this new limitation, we won't need to spend effort 
+to address corner cases that are highly unlikely to be used at all. So I 
+am going to impose this new restriction on the next version.
 
-I agree, While developing the guest_memfd preservation support, I also
-felt the need of upgrading the preservation and retrieval ioctl to have
-arguments which will make it flexible. And help decouple the VM
-preservation and guest_memfd preservation. I would love to see where
-this argument idea goes.
+Cheers,
+Longman
 
-~Tarun
->
->>
->> An alternative approach to restoring data to a named file would be
->> supporting a zero-copy sendfile() that can be used to convert named
->> tmpfs files to/from memfds across the kexec. But this poses significant
->> challenges on the *preserve* side since the preserved file might still
->> be actively in use. The benefit of the retrieve-into approach introduced
->> in this series is that it does not require dealing with two different
->> files. There is only ever one file that owns the preserved memory.
->>
->> By leaving file and metadata allocation purely in the purview of
->> userspace, programs can create the target files where they want, with
->> the names and security permissions they desire, before directing the
->> kernel to restore the preserved folios into them.
->>
->> Currently, only tmpfs shmem files are allowed as valid target receptors.
->> Attempting to target populated files, or anything other than an empty
->> shmem file, will trigger -EINVAL. HugeTLBfs files could be supported in
->> the future.
->
-> I suppose we should rename all the memfd_luo_* stuff to shmem_luo_*?
->
->>
->> The coding work for this series was done with assistance from Gemini. I
->> am not sure what is the latest recommendation is with respect to adding
->> Assisted-by tags, but I can add them when I send out the real patches if
->> this RFC looks acceptable.
->
-> The latest guidelines per Documentation/process/coding-assistants.rst
-> seem to be "Assisted-by: LLM".
->
-> Although in _my_ opinion, I'd reckon most patches these days are
-> assisted by an LLM. The code might not necessarily be generated by an
-> LLM, but I think a large majority of developers use LLMs in some
-> capacity during patch development. So "Assisted-by: LLM" doesn't add any
-> value to me. Other people seem to find it useful, so please do feel free
-> to add it to your patches.
->
-> [...]
->
-> -- 
-> Regards,
-> Pratyush Yadav
