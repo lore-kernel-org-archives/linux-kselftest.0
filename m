@@ -1,118 +1,117 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C6F356772
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 21:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792012580; cv=none; b=i1jhKRSUNzUTAPnGVTH/aObe2iJdTrCu2U4AApDLdEmlW/ggB5xPp/n/8G8aCcf3c7kO1G1QPWX820IW4/3m/qGz9tMog/L/tAghYgZPz1/t93FPpfeXhkzevwsiN7zzrvty3x2oW8qJ5TO0Mhsuts1orAKptdkNh1q2eZ67Yo8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792012580; c=relaxed/simple;
-	bh=xFG6x/caOplP2tyXgSPYkFagvy3LI/93+6sftU7tLJw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aVb7M6G3syaUJ8hr6YMsFUeq8TKnDMsMrel+x/lI0/xtVhJfz57xM5fIJSGXnZSujFzzvQMVnw6mADAlc3/BS+6ShEa5P0V8BuWUriOr+RA/kEwYmqb3VH8btnHdK3PKHeRma8Ex0G8DRhZRPHzfHZUSj5G/q3oAjCHLouwRUNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RSrG4gmV; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC2437CD42
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 21:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792013058; cv=pass; b=tuWeWJtqkIivVRsWMQaqlu2PdZGPW/Uc+Os7jvIOncigGYgRDUI/fanwXvKB5oeWu+RHeoLiQ9KHHSrrJc/wRpO2Yr3c0SIMOoJUOQD0TKuH4JEKODYsRfJMcLPU6U5rtCoKO1OTAUpNTuMiPilrpDB5VS//GmF597ScAMQRXMw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792013058; c=relaxed/simple;
+	bh=r63gPEMvPL46RQn5CZ3hAGQZunKTStReh88mSxqbHk4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ueWq+RrzigshYnIWupAuBEVkSJpLP0vizj7TK9A1uTaevdUCMxoSjvoKcq96ELP1tOX55vLUg0bs3d6NXya/f4F1Uj1zj0LuJZCVT7dDKpuVgadAgqDvlQ6Kp1zJFmo+0F44WWsPWW6REOmfjOeCnGLB8boyHCHg3ci+DzyF2Ug=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=OWdpkyxE; arc=pass smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RSrG4gmV"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48c14a06c95so3652504f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:16:18 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="OWdpkyxE"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-6798d4ab549so1081066d50.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:24:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792013056; cv=none;
+        d=google.com; s=arc-20260327;
+        b=d1VxIJI4A5tn39Uz1zMix4EM4ly/l7hysbJeIYCv2yEt/5Nq7OppxoZXv2AX4FwX7W
+         JID1W5rYLvyLuTbqzOnRhAEWiuTzIehZHTEn9ctPKfR5Jec6SsDinIiuqgSemX9Ft/Xm
+         zpyFAxyobs6d7HzdtW8JMlTiRxW8n1axYd+SZBX4V7K/mB4awKjFNarJ+i4QHWO3R9YM
+         Qq8OZkAl/bOsC0J2LhBoIdzEwUmbaqxgiJMvghMMtQ0sbHIxxJxUT1u6UhakVZlhAtfK
+         KW9SQbRAW9rRzi6HxcJPGCKcaMbpqiHi6KX84FXs3BHPoQMNcAaj5MEjt2lXHR1TgqfP
+         GLFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2r+3eSWI2QRQlHxhWBBPMAcUqGg26+JgtcOo3f8da98=;
+        fh=BCrQLOJYGGAokubuArKgp9w32Fkql4wo55SjeOgxNBo=;
+        b=QL8aPhgdR3Vxs8czBnqNHP+Xf0PmnY8oJVjTHW9PXILI1O918Z1buydOI+gAkF1aSL
+         kQjxlE1ZrQucUSi64YW+JcJ5dUkX+jBwh3gfF2Qi/iGBqLeYNVoRpyZt9+LUo5952ogc
+         2k8+oXmoeyFH/MLy7fHRTSShYEQphZKeWwy25dhJqRcAUiCOYjgF/kIWPf6I0InmlJGC
+         xab/+ncOdnHKtketdw2+haKRgqdGZkwXrGmW4nc0zrkINcR/MDazgfUDEatbJs0Gazou
+         nDIzNdxes//94hAhuyNZDNO+N/wEFnsATyye4c2tO5ngdttdq5bCD8LvRuq6v2LIR1Iv
+         9Iaw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792012577; x=1792617377; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mbxQS/IGQfFShnzjZAFBRrockgDU/h/fKnsW13Xq4Es=;
-        b=RSrG4gmVIuzlz8FJe/tb1fU9GWZkKBHSqeo64XKBG+hx0wutDgLbnN/5Oc2i3vNd8b
-         oR8jd//2g9cPB7CkUKlxvcxE+ekigC1Ao6+tABHjoznjnahxzNJOE9ocIhduSvzOEvOu
-         h5sJzw7UJN0L25oyLCK3ycdjmBmV+fhlB2gQooUOCEc/fkBiogNRjsQu1l18aOcADvbH
-         LOjS5FDPFCweruHJ9MQs0kjtmMP1ag0/vqK9Hkabyvd9E/wz+u4AGM2TAnjdO3Ajn8wy
-         tW4SJ4YchB8Jgjc9pwVV5ck3UC2dypWMwAmvAFujVOwi+FmWAPKxdQRUBSJozZKxrVJx
-         Pg9w==
+        d=mojatatu.com; s=google; t=1792013056; x=1792617856; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2r+3eSWI2QRQlHxhWBBPMAcUqGg26+JgtcOo3f8da98=;
+        b=OWdpkyxEJ5TnzcjENDcaA+a7fHg35oYRafNUrZqSlKGyEEAngECYDjQOTtuf923wJI
+         uXITMvx3ZKGLV9MB06KrFKv6lglH9cRt4rd1U/ajJRCL5CCq9VJ399wc7jml892IunRH
+         otivvuTloqHrLmKPDITwXC7mnD9NG6kl0RBPY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792012577; x=1792617377;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mbxQS/IGQfFShnzjZAFBRrockgDU/h/fKnsW13Xq4Es=;
-        b=mQduSCpTqm2ep6/T5EY9ssQZQS85pQEzEB4ZQAq+IJ6KH5nnMF8LzZKPo0A96dg+I7
-         x51SAbR7DqLRsjWlhfnuZqJ+oGbqxmjMcSV1/xRqkBoGziou8pLRrLMdc0TxZHMlunr/
-         pqPKd4S4wdPnbZZpVaDlfCH+fDFVYzEHyAp1er/ZMUAXT40OsV0Sk8mHKTnQTs4zoSBJ
-         hlj/aEoCf1Rkm52Eo14H4pXSj9SeVM2HtdKpS95UiOexuCiuG75rIXQQ4gVhE+GQxImq
-         fiwG+Hd99DTOX+k5vfOEbZ39kuLrrTiycLTPRpG9MMwgomWPhPiHzlQlSCAoCZlm+e3T
-         G8Ww==
-X-Forwarded-Encrypted: i=1; AKwUvBx3zwjy8Kl+0UOTADgazg+D8EbpCeCSYogDr+QGXsWmqefltAYTuwU5O5M1sEtOhEOWxr7+ikdRVdvwO9yov+w=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKjZ/xKALWoFvzl8pDWsijgqteIPnZYrCgk5XpM/k5c3a3/llXO
-	xeps6RTwO9YN6I+YF+fv6Ba4Wx/XAQq2MUJOsJjdcrpfkwhCNboUtNei
-X-Gm-Gg: AYBFou1R+pKngSLPZ+NQDFVk9wL1i8ZX4yZ+Rp9T3SdqLY0a+LAHfbPALtG0eYyUVgb
-	R3mEMxDULXXW0C/RGJ7O9Uqbeu5I1ty0SVyv4YfMGk5xr9n3Sus/UvNvNLEkJvgWxd/FF2H4g5+
-	MGpHUPEwbcvIee0GR9pwMRqgmu24w50mbIePxqhYMu5hJ+LgR6FXzM9MSWptQ01sQdhIsExLs/6
-	qsZuWVgJa9QPl+FXq+bHKSMuhQ/VG8ZGnJwb9tgmlM8vuc1seQKdFYm/w+H/+vziS6Wj1Xg/wXq
-	2ibOQO9+VwLQx+Huu6x6UYU10XC9ldcxPwJxuM7CEJCQp/T/7BCuuK2lMD9H2G3TKiIaRhPnGg8
-	yzmgUOlFcawj2rASGPjc8zZH+t4eA9nVrbKBYBLCJfCDQdww3W+BxE9Ba46TUO9Uz7vGaB4LNtt
-	wrQDlGzAV+bPuSnRnO43pR9D3SksUiEO46UeByuPnPRrzDU8GR/wsCyVM6N3x1rm2WfzFMOlffy
-	x19Icnh7L1FwtF+dmRAJNfR/qLt02YS7nqaQurOmDlRVw==
-X-Received: by 2002:a05:6000:4683:b0:48d:df82:26ec with SMTP id ffacd0b85a97d-48ddf8227c2mr11468268f8f.11.1792012576642;
-        Wed, 14 Oct 2026 14:16:16 -0700 (PDT)
-Received: from andreayoga.wind3.hub ([31.189.109.133])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de0bc6ddcsm13832288f8f.52.2026.10.14.14.16.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 14:16:16 -0700 (PDT)
-From: Andrea Parri <parri.andrea@gmail.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] iommufd/selftest: Check dmabuf MMIO mappings filled from another domain
-Date: Wed, 14 Oct 2026 23:16:07 +0200
-Message-ID: <20261014211608.291608-1-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <179200036595.15213.9864724554843977359.b4-review@b4>
-References: 
+        d=1e100.net; s=20260707; t=1792013056; x=1792617856;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2r+3eSWI2QRQlHxhWBBPMAcUqGg26+JgtcOo3f8da98=;
+        b=LRx+kdcsBQrmUVgh1BeRlUH687GgyGVXJum8YBDV9OzzVt5lseGdwcN8YnaS6m7a6W
+         zIedkuHAE0zcngadFvZ030ZUuiPQsd8g7vqPK/QetJ53shZePsEZdPX4hgl1Zd0TXpOK
+         IDikKIydDbW9RqrMc+NTuUGm5HNRSd2UZpvjDWmj/GOGJn/BAbUE4P05SoUzhGGOYquu
+         1BCRPhGERYiluxTqU4xSH7k/DQAq3nCQq8FQkA6QqW2SZT5hcjVTME7Ih7tBGmkUmpSt
+         fxfx58UOYMM9hqfb1vAQMIf+RHbeuoU3OfVr+uk7qJIMbNdvJA67jxX1D+UzwgQhzSoK
+         ZW7Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxi/abTEyOOBM+2SeNENfUmqqvGxrkuJ8MzQzJs8HzkvNICo7rtOu5+5X1JZlLn68kZI25KvKtWCFKujU4ZpAk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJbixw1Q6yntwriDVkpHwhth1VxNP1hv9E75WuZ5W3+yA9/ina5
+	hzZRTdJyyfZSHoDG3N9He2IH5wpFX+7XGirvjym/TekDhGLhbZg/8a4MFC5drhW2RB7hDkdvzLK
+	IFqk2wiN5tSDkTRGzC1Q8wIYtKV+gL8ZVH8dLXiZp
+X-Gm-Gg: AYBFou0yNrq324ziS8M94EjeQHJlb2hvZH/wMK5JAacKMbUuPjBxLuiNWvbHK14xp5t
+	fPERraU6uAAe4Ub1M17XhD+hgGFpgr9W2QUDfUVm9wZaD1OhiQqhuCNL9YIJ/g5/RGZACKerWFK
+	nY1TqwYxWMfzBzIeA3fHz/5G/JnZBaCLO2Cpl5yv9NpxMudubv3IPh2GoNTVpcUmQLrf1hLtlj1
+	64edPdwtgfyWbxZJWZU5DrGNmpqRg5LhfTcfFzSNmRA+6IyNLjMNeIZJTetD0Fs25LdgzWp0cuK
+	5JXSF4hEExam+IBFc1xJggkVp6ooTLyCwWKhmh6FkwiPVMdP4jI/wcBkufUPPqbNPbsd6Q==
+X-Received: by 2002:a05:690e:d43:b0:675:3f33:b183 with SMTP id
+ 956f58d0204a3-679362745a0mr6171135d50.24.1792013056258; Wed, 14 Oct 2026
+ 14:24:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261014121414.2373985-1-ivecera@redhat.com>
+In-Reply-To: <20261014121414.2373985-1-ivecera@redhat.com>
+From: Victor Nogueira <victor@mojatatu.com>
+Date: Wed, 14 Oct 2026 18:24:05 -0300
+X-Gm-Features: AclHuK_VTAdZZkQW0BtcsHxlVRXv9pULtYyY-Xyg2W4k_wvNoU0bv1qIgpz4UTg
+Message-ID: <CA+NMeC_dh5k-WQ52q8JOqYW46=dzT5EKnwuc=kLs7Mr4g25ZuA@mail.gmail.com>
+Subject: Re: [PATCH net] selftests: tc-testing: use $IP in hfsc test 8c39 setup
+To: Ivan Vecera <ivecera@redhat.com>
+Cc: netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>, 
+	Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 14, 2026 at 02:52:45PM -0300, Jason Gunthorpe wrote:
-> > The mock page table has no memory type bits, so a mapping made with
-> > IOMMU_MMIO cannot be told apart from one made with IOMMU_CACHE. Wrap the
-> > mock's generic_pt map_range and unmap_range ops to record, per domain,
-> > the pages mapped with IOMMU_MMIO, and add IOMMU_TEST_OP_MD_CHECK_MMIO to
-> > check that a range is recorded. The check rejects ranges that wrap or
-> > do not fit in unsigned long.
+On Wed, Oct 14, 2026 at 9:14=E2=80=AFAM Ivan Vecera <ivecera@redhat.com> wr=
+ote:
 >
-> I'm not keen on this, the special mock amd domain is just for mock
-> usage, we should probably just add a mmio bit if we want to do this
-> test.
+> Test 8c39 brings up lo with a bare "ip" command. nsPlugin runs it as
+> "$IP netns exec <ns> ip ...", and as tdc runs commands with an empty
+> environment, "ip netns exec" searches only the default execvp() path
+> (/bin:/usr/bin). On systems that install ip only in /sbin, like Fedora,
+> the setup fails:
+>
+>   # ./tdc.py -e 8c39
+>   Test 8c39: HFSC classify walk still reaches leaf after lateral drift
+>   -----> prepare stage *** Could not execute: "ip link set lo up"
+>   -----> prepare stage *** Error message: "exec of "ip" failed: No such f=
+ile or directory
+>
+> Use $IP like all other tdc tests do.
+>
+> Fixes: 1e24c4f2ee44 ("selftests: tc-testing: add a lateral-drift hfsc cla=
+ssify-walk test")
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
 
-Makes sense, thanks.  For v3 I have:
-
-- AMDV1PT_FMT_MOCK_MMIO (bit 52) in amdv1.h under AMDV1_IOMMUFD_SELFTEST,
-  set by amdv1pt_iommu_set_prot() for IOMMU_MMIO and kept by
-  amdv1pt_attr_from_entry();
-
-- pt_iommu_amdv1_mock_iova_is_mmio() in fmt/iommu_mock.c, a walk like
-  iova_to_phys() that returns the bit, exported in GENERIC_PT_IOMMU for
-  IOMMU_TEST_OP_MD_CHECK_MMIO to use.
-
-The op wrappers and the xarray in mock_iommu_domain are gone.  Is the
-extra export from iommu_mock.c OK with you, or would you rather the
-selftest read the PTE some other way?
-
-Patch 1 is unchanged; if it looks right to you, it could go in ahead of
-the test.
-
-Thanks,
-  Andrea
+Reviewed-by: Victor Nogueira <victor@mojatatu.com>
