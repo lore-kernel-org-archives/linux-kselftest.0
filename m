@@ -1,35 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79F156E07D;
-	Wed, 14 Oct 2026 18:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5957C5650E2
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 18:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792002544; cv=none; b=F6nca60C1xEq46nuX01KhIvBfugKCoI8M6jaRKmPbBR/V6sxxtXkwlXa3G8qtHRM/5wHb/JN+AD8CB9KCFS7jiPX+E3QCFtZ/fWTedJ9ZVJgk2Lct7OfFiIPOzCeeX1TyBj0PtkHauXGKfIoURMKkXzGp292jr6PYbnWDOgZPjI=
+	t=1792003630; cv=none; b=daRv/Rwp3rj08Y3n4s6ApDx8TlF8XeE06uza93MBJ32spFZy0RKA8oVfpvMfhkqueopXOT36AglXn/wBTYhFwmhOGVFXRhM8/myMCGbOtDr4uIfjlgAHdzkjyx7ykwfwcjwmmbqGj3C8dRkkhV6F85xP2oSJeD0wUxHaA13W1N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792002544; c=relaxed/simple;
-	bh=OpbgIP3wg/GRjvF4rxOMcjFrr5/7I6aCoikZaEiwLG4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=f8fhLvRTHhe59otuAR40hoxrJNumCvrybDZ9O/ckuF+MmhSZ8EP35TH4WE+1zWAnpA9yskatOY8YpzOFDJuWBx8ez4SGxfL/lRE6ibkAxxid3MtHf88pLwESzZEAcGOWcTSlXR7VN3OAlmEPGLRJBXulZ8iLcsfxxHSLpcbiyUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cStc3Mwh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792003630; c=relaxed/simple;
+	bh=suiRUnyroocuk12grD5LSkD20Wp++sZxWYm4G3hH8zM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=SRBJVQXBrKk9jIZ69z5A/u9A/2CxABlDtRW6Rs54N38CAv7/Ja+rfiyXufOD8X8V/+wer0yDTAfkvzA0cqRrR7qpGnXoLvlJFyDg97/Z7BHon89vZQ4iY6yShW2cebmYSUrYXgQQ1t+2yTIcMu9XjXQvvRbeoW1+sW9F5ub8Y64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=FPIOsqjv; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cStc3Mwh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1BF1F000C7;
-	Wed, 14 Oct 2026 18:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792002540;
-	bh=X3Io63uUCeUu2STTp01qgK43STX9Whh0l5LRb3nJ3Cs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=cStc3MwhBwsMW8Q59v65+g3xyqZGiNCasYsmqr8X58PTdPwusemNsh9TW7UfIJoWS
-	 2WUA8Zfr/X23PpzWdMKkFD1E6iC7EsMbNi9LIMGe51qTvQrSFd9KU99ckcfwJPG4XZ
-	 jqERJ75ZQgzw8N7P0jg7Wam1KomtkLXmmywx+JsNxk/h8fC3B2sqsMJcZclYNCfWzT
-	 ia6b96SoU1GB6r1195d/WcBzLoN32bGjDKWDb3R+f+H64NlU2UtdjSrKRVKEQXd48y
-	 LULko2LwlZ5tdQAaUz/vkm70ChD1JyhTQTeYLisrutkq6k43k8L2lpZVuOWynVV3AS
-	 8Not/juT87Vjg==
-From: Chuck Lever <cel@kernel.org>
-Date: Wed, 14 Oct 2026 14:28:40 -0400
-Subject: [PATCH net-next v5 10/10] selftests: tls: Cover the empty-record
- cap in splice
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="FPIOsqjv"
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-6fe4372c5f3so260891eaf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 11:47:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792003628; x=1792608428;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:dkim-signature:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ud4UQpU7GXwKVtHEzNn/aXQljAT04341tSRIlnW7qwM=;
+        b=bZUEGn1SrL8JF4AzwFqYyCEypGGPc93cMUsLW0MTB5laUbgn/qNp46VR/zPT+SJisz
+         0TN1+pNzv97noLbrsV/sf+MwB1Z2H1zL8xEcaNLHl0J4VFK6LEZFADD7lv2bDG+zqKIF
+         bPwmDv5E3Y/fF8rrp8IJM8A+ki3vNlZqIVEP/7EKFqr+SITDKKVZIDLl1SJSKGavpcgB
+         +QsDUh7dJyqIprt2pzNWqtH9ZMQ8FcDejFc7Ul0fQlRVOqHSgd79uIka+cE34Ny6c/0D
+         ZPrdD0MDhswTkf60A1mTzG/mY3RY/qXf2gSWp3lSGAn9+G9HVM0/w6t0Kffi5CnjX2NH
+         Eohg==
+X-Forwarded-Encrypted: i=1; AKwUvBy9PzBFD9SxQLtHkuXw+VmLz3Z+/gQnOzKf/2Js5yQ6RcXnmzufuhUPFqGbjVjn7RLT0K8yZwmhAG7czG0uwvM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL3i8QrkGA0tBjEtVDefd3ZBVz3vvTuf9t6tDcG/CHRDDhGmt7r
+	cXbZsOHKyI1FhRHSDXzIflv4MOq1LXkPs7Z70QQGTMtar7/NUlpYHnqoOGkY1JtPMtU=
+X-Gm-Gg: AYBFou3ffpqFlwHOqiH2WlRxW737QRWzKQbuSS5gieZ85v712qF/KW7L/gxZGTlK+cO
+	an6L6H3N63SxvolD8xiuVUgrpPTJ5w7CfLPCIK+Hds525zsNxKRBos6bVQXdhHo1h2Hxoixq7iC
+	k2kM7OI5QF/LaFQ5O5p61WkytVGTtvEtZgfyqYTfSYmlMcCmQDcfZYZmQwXEgd26Fi9co6clYNB
+	D9VjrratLNQwtXg+ql5dg/jI4SFEyVy5MmUddk7oayCeSd/G8LHI5pv/7VHQL7vrXT13769A1DW
+	DsJ5gHUvWPpMrKp/6RJvHw8cI7mHXNFDFq7/W2znVRxVPv4MRlX/B94uRPVHR/0wRRZjyTwS7fx
+	Rq3+YW/PsUXJrbiFcVfX6wN5aTKUVRFMJN6hPSLW9KhW2BoVun153K1rTVnbtTQw0Ypk16J2u4E
+	q7Qcty/epKq9V+ebwjp7eHhz3l+V7u3tfgNk2LYxr8ZdVNPPXW8xrTUquBYsUmyrsAhck9xTsDZ
+	8nB/+7LKDZEDjiuf+dTQricd9iOGIlKD6oBvxBD0oeCyvwKVMrUrt9D02YwSdCgIyhGPV1/H95w
+X-Received: by 2002:a05:6820:c2c8:20b0:6f4:ae96:c59b with SMTP id 006d021491bc7-6f4ae96ccdcmr6553693eaf.5.1792003628127;
+        Wed, 14 Oct 2026 11:47:08 -0700 (PDT)
+Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6f47500ae30sm9548549eaf.1.2026.10.14.11.47.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 11:47:06 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 283216061E;
+	Wed, 14 Oct 2026 18:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=dkim; t=1792003624;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=ud4UQpU7GXwKVtHEzNn/aXQljAT04341tSRIlnW7qwM=;
+	b=FPIOsqjvI9KwWd8TDkBUXyQASuIwYvkymEHQbt7eA3vYTcc+QbYh7fpFXA2/SeJxafJZBR
+	GH0srJnkwqT3w9MGG/AnWN8R7TzJNy63q76UWYHjemYZ2I3zvJrLqJQiktQGgOeppwuQNE
+	fC9R2T24tUdjYBOSe7RPPbih2dytIgLjsq50IzNB7mVtUrISDQBn0JD2U3S1/aml8H5jzH
+	f3iz9SHZ7TICCUk8Y8Zq8ZF7BKNuCy7ro6pJdUQp7fdNchflAtapa0RePn3gwoKKx25O5V
+	Aqeyrw5iu3ur3zcR5BFZnoEcRSn3/VGrNTuREDwAIw4pxK/n6TyJoVeOrdX34w==
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+Date: Wed, 14 Oct 2026 15:46:46 -0300
+Subject: [PATCH] selftests/mm: mremap_test: Validate the preamble region
+ before mapping it
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,222 +69,78 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261014-tls-follow-on-v5-10-e76c301d4f05@kernel.org>
-References: <20261014-tls-follow-on-v5-0-e76c301d4f05@kernel.org>
-In-Reply-To: <20261014-tls-follow-on-v5-0-e76c301d4f05@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, 
- "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Chuck Lever <cel@kernel.org>, 
- Dave Watson <davejwatson@fb.com>, Shuah Khan <shuah@kernel.org>, 
- Qingfang Deng <qingfang.deng@linux.dev>, Eric Dumazet <edumazet@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.17-dev-9c833
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7015; i=cel@kernel.org;
- h=from:subject:message-id; bh=OpbgIP3wg/GRjvF4rxOMcjFrr5/7I6aCoikZaEiwLG4=;
- b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqz8ndiQNSbjDUuupKy0++qhbue9ZOkLR1KMeIF
- 7T6iTJeyD2JAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCas/J3QAKCRAzarMzb2Z/
- l+XbEACWyM+5O7RHuH+R/XT0SwDITY4REcIzTE8grblkkQN09AEaOnqa2b8qkN3ckrWXWFeZzQo
- qNXOwnJLU/4YmLAeof8C/eWNOxD3W8kJCDmfoJAfg/2c/aesKML5qGoPOkJcwsANdRYswHE7drn
- B9AG1q8bVvmc1hPJcq9nmfvcKJ4iJljdnrpDzbeoSTyh2slI9bfts01SHQhYYR8sgb3WBaJEfGh
- o+LLuyz9rKWA7mL+mXPfUGp3goduNalxSxET3EdlRxB+1pKr050AG2uMBf3JfzSS0VeyLsjYM+c
- kcJHQ3hwWQh2vVrBOW2Xirrl2tlZobxSUppS5TjMJLJNtJ56vTvb11vuETX7euyunqM0mJG9RSp
- I8Pxlhkbe08KmWv/jdf6XwaVfUDzsEiOn3KkymXIC74DQgkG4DzeO/UgtTYvzaVYP6R5cfGd1Xw
- eQ1D33gyjIPCX02fKYzhD4aCPaujJPAMj19u+o8jg4ILFRO6DJu9oyC+HMR/Fc04pjzPZVBFaE6
- zOd68QUsnbeVlo0NZq241OYTeaVbosaMvyqQpUI3ZFaNfK04hWllmMaomKeboLcbFOnagOHAz+I
- ZC7e3TbCem6ZGHL8Xu/tdSIIaD3Nnj1gcdvIMv7u3emsmt5oAPcPN0KYhwjktPAaQjUQo7gRhoa
- OEcZb6r4ViU1rjg==
-X-Developer-Key: i=cel@kernel.org; a=openpgp;
- fpr=28B2E5B01286DF243CF23EFE336AB3336F667F97
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261014-selftests-mm-mremap_preamble-v1-1-2e97f501cb56@marliere.net>
+X-B4-Tracking: v=1; b=H4sIABXOz2oC/yWMUQrCMBBEr1L222ATtahXEZFNu2lXmrTsRhFK7
+ 26qX8ObGd4CSsKkcK0WEHqz8pQK2F0F7YCpJ8NdYXC1a2xtj0ZpDJk0q4nRRKGI82MWwuhHMqd
+ wOWPXuJIHKIoyBP789Lf7n/Xln9Tmzbk9PCoZL5jaYasm4Z7TPqJmEljXL+N+uOGgAAAA
+X-Change-ID: 20261014-selftests-mm-mremap_preamble-5f98ad625f93
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792003619; l=2090;
+ i=ricardo@marliere.net; h=from:subject:message-id;
+ bh=suiRUnyroocuk12grD5LSkD20Wp++sZxWYm4G3hH8zM=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QMvzTA1Be/AaPv+icYSQObP6ZSepseS099c1IS7GWL5yRAlaiDjRXKqF7qK+kLROsQ0b2JWSCxZ
+ Qwfn01UPNwg8=
+X-Developer-Key: i=ricardo@marliere.net; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+X-Last-TLS-Session-Version: TLSv1.3
 
-tls_sw_splice_read() stops after TLS_RX_NODATA_LIMIT consecutive
-empty data records and reports EAGAIN with the next record still
-queued. No zero_len_splice variant reaches the cap: the raw_rec
-fixtures carry empty records at sequence numbers 0 to 2 only.
+remap_region() checks that the destination region is free before mapping
+it, but not the preamble region placed right before it, so mapping the
+preamble can intermittently fail with EEXIST:
 
-Add a variant that sends sixteen empty records ahead of a payload
-record. The empty records differ only in sequence number and AEAD
-tag, so a table of tags and a sender that fills in the header and
-nonce stand in for sixteen raw_rec fixtures. The first splice
-reports EAGAIN at the cap, and the second splices the payload.
+  # Failed to map dest preamble region: File exists
+  not ok 15 5MB mremap - Source 1MB-aligned, Dest 1MB-aligned with 40MB Preamble
 
-Signed-off-by: Chuck Lever <cel@kernel.org>
+This happens when the kernel's heap ASLR (arch_randomize_brk()) lands the
+process heap inside that unchecked range. Confirmed by correlating
+brk(NULL) at startup with pass/fail across 60 runs: every failure had brk
+land inside that range.
+
+Fix it by including the preamble in the free-region check.
+
+Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 ---
- tools/testing/selftests/net/tls.c | 116 ++++++++++++++++++++++++++++++++------
- 1 file changed, 100 insertions(+), 16 deletions(-)
+Hi, this sporadic issue has been found in openSUSE CI:
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 57edf6e6640f..38443675bc2f 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -2549,6 +2549,61 @@ static const struct raw_rec id2_data_l0 = {
- 	},
- };
- 
-+/* TLS 1.2, AES_CCM, data, seqno:16, plaintext: 'Hello world' */
-+static const struct raw_rec id16_data_l11 = {
-+	.plain_len = 11,
-+	.plain_data = {
-+		0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x77, 0x6f,
-+		0x72, 0x6c, 0x64,
-+	},
-+	.cipher_len = 40,
-+	.cipher_data = {
-+		0x17, 0x03, 0x03, 0x00, 0x23, 0x00, 0x00, 0x00,
-+		0x00, 0x00, 0x00, 0x00, 0x10, 0xd3, 0x50, 0x90,
-+		0xe1, 0x2a, 0x77, 0xc9, 0x38, 0x95, 0xef, 0xa4,
-+		0x6f, 0x5e, 0xb6, 0x52, 0x05, 0x4b, 0x01, 0x44,
-+		0x06, 0xc2, 0x51, 0x3f, 0x5e, 0xa5, 0x3e, 0x65,
-+	},
-+};
-+
-+/* TLS 1.2, AES_CCM, data, seqno:0-15, plaintext: '' -- the AEAD tag
-+ * of each; the header and explicit nonce are built at send time
-+ */
-+static const unsigned char nodata_tags[16][16] = {
-+	{ 0xc5, 0x37, 0x90, 0x70, 0x45, 0x89, 0xfb, 0x5c,
-+	  0xc7, 0x89, 0x03, 0x68, 0x80, 0xd3, 0xd8, 0xcc, },
-+	{ 0xce, 0xfc, 0x86, 0xc8, 0xf0, 0x55, 0xf9, 0x47,
-+	  0x3f, 0x74, 0xdc, 0xc9, 0xbf, 0xfe, 0x5b, 0xb1, },
-+	{ 0xc3, 0xca, 0x26, 0x22, 0xe4, 0x25, 0xfb, 0x5f,
-+	  0x6d, 0xbf, 0x83, 0x30, 0x48, 0x69, 0x1a, 0x47, },
-+	{ 0x4d, 0xfc, 0xe2, 0xc3, 0xfe, 0x11, 0x80, 0x85,
-+	  0x94, 0x53, 0x79, 0x1d, 0x31, 0x14, 0x39, 0xec, },
-+	{ 0x1e, 0x63, 0xa1, 0xfa, 0xef, 0xf1, 0x9e, 0x5c,
-+	  0xee, 0x39, 0xcf, 0x41, 0x27, 0x36, 0xf5, 0x69, },
-+	{ 0xa3, 0x49, 0x72, 0x01, 0x1a, 0xff, 0x1f, 0x71,
-+	  0x51, 0x57, 0x80, 0xd2, 0x81, 0xee, 0xef, 0x75, },
-+	{ 0x95, 0x92, 0x72, 0xda, 0x7a, 0x4e, 0x68, 0x91,
-+	  0x02, 0x09, 0xfc, 0xe8, 0x2b, 0x3a, 0x54, 0x05, },
-+	{ 0x41, 0x00, 0x73, 0xcf, 0xd3, 0xb3, 0xa7, 0x19,
-+	  0x7d, 0x0f, 0x6d, 0x9d, 0xf6, 0x57, 0xee, 0xdd, },
-+	{ 0xb5, 0x24, 0x17, 0x2d, 0xac, 0xcf, 0x5f, 0xac,
-+	  0x2d, 0x24, 0xf2, 0x8c, 0xaf, 0xf3, 0xd7, 0x78, },
-+	{ 0xf8, 0x23, 0xde, 0x09, 0x08, 0x7c, 0x75, 0x7c,
-+	  0x23, 0x3a, 0xb6, 0x46, 0xc2, 0xfc, 0xac, 0xdb, },
-+	{ 0x72, 0x01, 0x24, 0x35, 0x9f, 0x13, 0x92, 0xb2,
-+	  0x93, 0xd9, 0xb4, 0x2e, 0xfc, 0xfc, 0x95, 0xa7, },
-+	{ 0x2f, 0x0f, 0x94, 0xcf, 0x1a, 0x0f, 0x1a, 0xf1,
-+	  0xe2, 0x6a, 0x97, 0x21, 0x12, 0x5f, 0x24, 0x39, },
-+	{ 0xb4, 0xb9, 0xe1, 0x0a, 0x9c, 0x28, 0xbb, 0xf6,
-+	  0xd9, 0xd7, 0x39, 0xf6, 0xfa, 0xcd, 0x47, 0xd6, },
-+	{ 0xe8, 0xb9, 0x01, 0x90, 0x2e, 0x72, 0xa1, 0xd5,
-+	  0x13, 0xdc, 0x28, 0xa7, 0x91, 0x04, 0x9b, 0xcb, },
-+	{ 0x73, 0x67, 0x17, 0x6e, 0x50, 0xee, 0x28, 0x3b,
-+	  0x6e, 0x2b, 0x32, 0xdd, 0xa1, 0x55, 0x97, 0x7a, },
-+	{ 0xaf, 0xd4, 0xed, 0x91, 0xc3, 0x91, 0x21, 0x55,
-+	  0xd8, 0xef, 0x23, 0xbe, 0xbf, 0x7b, 0xf2, 0x36, },
-+};
-+
- static void zero_len_sock_pair(struct __test_metadata *_metadata,
- 			       int *fd, int *cfd, bool *notls)
- {
-@@ -2585,6 +2640,21 @@ zero_len_send_recs(struct __test_metadata *_metadata, int fd,
- 	return payload;
- }
- 
-+/* Send @count empty data records with sequence numbers 0 to @count - 1 */
-+static void
-+zero_len_send_nodata(struct __test_metadata *_metadata, int fd,
-+		     unsigned int count)
-+{
-+	unsigned char rec[29] = { 0x17, 0x03, 0x03, 0x00, 0x18, };
-+	unsigned int seq;
-+
-+	for (seq = 0; seq < count; seq++) {
-+		rec[12] = seq;
-+		memcpy(rec + 13, nodata_tags[seq], 16);
-+		EXPECT_EQ(send(fd, rec, sizeof(rec), 0), sizeof(rec));
-+	}
-+}
-+
- FIXTURE(zero_len)
- {
- 	int fd, cfd;
-@@ -2785,6 +2855,7 @@ FIXTURE(zero_len_splice)
- 
- FIXTURE_VARIANT(zero_len_splice)
- {
-+	unsigned int nodata;
- 	const struct raw_rec *recs[4];
- 	ssize_t splice_ret;
- };
-@@ -2813,6 +2884,14 @@ FIXTURE_VARIANT_ADD(zero_len_splice, 0data_0ctrl)
- 	.splice_ret = -EINVAL,
- };
- 
-+/* TLS_RX_NODATA_LIMIT empty records ahead of the payload */
-+FIXTURE_VARIANT_ADD(zero_len_splice, 0data_x16_data)
-+{
-+	.nodata = 16,
-+	.recs = { &id16_data_l11, },
-+	.splice_ret = -EAGAIN,
-+};
-+
- FIXTURE_SETUP(zero_len_splice)
- {
- 	zero_len_sock_pair(_metadata, &self->fd, &self->cfd, &self->notls);
-@@ -2827,7 +2906,8 @@ FIXTURE_TEARDOWN(zero_len_splice)
- /* Splicing must skip a run of empty data records to reach the payload
-  * behind it, since a zero-byte splice reads as EOF. Splice reports
-  * EAGAIN for a run with no payload behind it, and EINVAL for a control
-- * record behind the run.
-+ * record behind the run. A run at the cap reports EAGAIN with the
-+ * payload left for the next splice.
-  */
- static void
- zero_len_do_splice(struct __test_metadata *_metadata,
-@@ -2843,29 +2923,33 @@ zero_len_do_splice(struct __test_metadata *_metadata,
- 
- 	ASSERT_GE(pipe(p), 0);
- 
-+	zero_len_send_nodata(_metadata, self->fd, variant->nodata);
- 	payload = zero_len_send_recs(_metadata, self->fd, variant->recs);
- 
-+	ret = splice(self->cfd, NULL, p[1], NULL, sizeof(buf), splice_flags);
- 	if (variant->splice_ret < 0) {
--		ret = splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
--			     splice_flags);
- 		EXPECT_EQ(ret, -1);
- 		EXPECT_EQ(errno, -variant->splice_ret);
--	} else {
--		/* ASSERT so a zero return stops the test here; the read
--		 * below would block until the harness timeout.
--		 */
--		ASSERT_EQ(splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
--				 splice_flags), variant->splice_ret);
--		ret = read(p[0], buf, sizeof(buf));
--		EXPECT_EQ(ret, variant->splice_ret);
--		if (ret == variant->splice_ret)
--			EXPECT_EQ(memcmp(buf, payload->plain_data,
--					 variant->splice_ret), 0);
-+		if (!payload)
-+			goto out;
- 
--		/* The empty records were consumed, not left queued */
--		EXPECT_EQ(poll(&pfd, 1, 0), 0);
-+		ret = splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
-+			     splice_flags);
- 	}
- 
-+	/* ASSERT so a zero return stops the test here; the read
-+	 * below would block until the harness timeout.
-+	 */
-+	ASSERT_EQ(ret, payload->plain_len);
-+	ret = read(p[0], buf, sizeof(buf));
-+	EXPECT_EQ(ret, payload->plain_len);
-+	if (ret == payload->plain_len)
-+		EXPECT_EQ(memcmp(buf, payload->plain_data, ret), 0);
-+
-+	/* The empty records were consumed, not left queued */
-+	EXPECT_EQ(poll(&pfd, 1, 0), 0);
-+
-+out:
- 	close(p[0]);
- 	close(p[1]);
- }
+https://openqa.opensuse.org/tests/6270334/logfile?filename=serial_terminal.txt#line-6760
+---
+ tools/testing/selftests/mm/mremap_test.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
--- 
-2.55.0
+diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
+index 131d9d6db867..8d4fa3025a9d 100644
+--- a/tools/testing/selftests/mm/mremap_test.c
++++ b/tools/testing/selftests/mm/mremap_test.c
+@@ -1006,8 +1006,10 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 	if (!((unsigned long long) addr & c.dest_alignment))
+ 		addr = (void *) ((unsigned long long) addr | c.dest_alignment);
+ 
+-	/* Don't destroy existing mappings unless expected to overlap */
+-	while (!is_remap_region_valid(addr, c.region_size) && !c.overlapping) {
++	/* Don't destroy existing mappings unless expected to overlap. */
++	while (!is_remap_region_valid(addr - c.dest_preamble_size,
++				      c.dest_preamble_size + c.region_size) &&
++	       !c.overlapping) {
+ 		/* Check for unsigned overflow */
+ 		tmp_addr = addr + c.dest_alignment;
+ 		if (tmp_addr < addr) {
+
+---
+base-commit: 0fcb05b72344f40806cbe810de8872f1698bf053
+change-id: 20261014-selftests-mm-mremap_preamble-5f98ad625f93
+
+Best regards,
+--  
+Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 
