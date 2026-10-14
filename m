@@ -1,103 +1,140 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+Received: from mta1.migadu.com (out-152.mta1.migadu.com [95.215.58.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E284137B2
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 04:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE56237BE7F
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 05:32:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791951321; cv=none; b=GLoru8NJdcRhkFPbHfOdWMNISmcRJS/Vb4knxEVybGWxQ1owou2pQyAK6BoJ0HpSoaD3DOL+WsTqRDfg5QH19vYYSkf3ujDxGDVBCWTMJZI5XIMEQKxlB4P/3kGZYiuv2j3YHS56TVyja7O7lCPCuukl60ZaNPNr+lwSFYAJFEc=
+	t=1791955963; cv=none; b=kL/gXUGfLCgWtiZdvAsxwjWVm+V6XsmdwK0Z5QhBxJVApOljy9p+BqHZpXg0C0xX6Wqaz8c0+8rQ+LiRmz/ZA1gMHwWH1RpahoUxAFF0G1t4NefrXyET16WvXLPeLugdFjXG5FJ+P9EVcseXP48VoFIOTrDXxhXHmHwTBjVU05w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791951321; c=relaxed/simple;
-	bh=xYywkRsBSKjw8Axa27YEpGjbg1zDhSx4yyXEIskgcM4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GpzKXSkuuRjfRBo72na7spZNPgckKeDy206xdlOvSlW/StJCIRa6ZdAcyXYzdTRaZ+IlFKJSmYr1hixXla9iep3uYOUp1zTskA5p9FGjIqjI/OmpmvV6OUhMRSuhZcdPwFw9f1co8Y8fGZWAqol9DdvUaW/VotGYhumLDvgMao4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KoFq64Yv; arc=none smtp.client-ip=74.125.82.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791955963; c=relaxed/simple;
+	bh=DeeQ1mnSlJJadwW9+vWEJShMOdLCTlYD4T0We+pBlNo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jrkIXe4wjeTVNWSQqLGAbfL2fGZ/uvrSAjOxx0cAQcPe8mnERUfkEcfzgjfyTfsVMR2y+HEHeN9Wz+i0iHRS5Mw+i+yL2vhAcHscW/+Y+24UGIw4OAEkwxbf60BWHYALdjsMwIqQCHVL5V4qUDsFG9gtY3ud/ODb1O5ojZ0wt2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U6RqeYfQ; arc=none smtp.client-ip=95.215.58.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KoFq64Yv"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-3282db206d3so1670356eec.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 21:15:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791951319; x=1792556119; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=VyFJXztVLdc/Rg7vt5oGO3PCAQKi6BcjvQhwTuC+hUc=;
-        b=KoFq64YvmdzxHhMl1Q3DX7bzK+wqvOgl474QleMapmgZvviyz9u8jO2bx5huxNH86t
-         X4qNP7acdv9ZeiiPH8IUvW5aJ/IJczEe57vwF01j4tzBOYQaounLJAnuEdxjPPfHxqDB
-         zK3a0aN5zjySohwsDF+LaNnDXncOm2NsyIJXtfxMLa/PwK70KBaiHvRoogBXgmNpKaUQ
-         ew9TRSCk04vRx+edY53Z/PbQO0kteNLPY8SvxM876v3Lcsp3Yi0NCHiNvi2B9FTIl8LF
-         tyiGwsFYpFd1/HwBAsKEYjmTo0EC6FKmtmcc60a55f8BOHDbBWfyLQq/kjZOtanxh0pq
-         1CWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791951319; x=1792556119;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VyFJXztVLdc/Rg7vt5oGO3PCAQKi6BcjvQhwTuC+hUc=;
-        b=VJeIY68mFl4Pq5XFCnWvEANrJqHiwgiP50BWOxwwhLjYDX/VZsaP9EdBY8Kx0JK6VU
-         3UGnAz2AJyDpyMIM6uU6uCowKR8TozxbgfNK30smm1T0VPkvDGn/W12FaOfZ/+vuol0G
-         tBwOzYAD6gBuXkZvO/dtktzpdMtaSC6vk1OfUaEfLkuQb4ZJ4HIbgi0iLTpz6AS7aOEO
-         tELRMRsxyEAFZk2j9rcUvY1mNkJnHkb0A/qdUUPIIq6Pi/rlC/SUqewvips24GX8qmm/
-         43zkfJY6X/6xzf6TBweMfeiN313ULdOceh2uU0k+adUeGEmZAunl3TAWfBGcLscqxLXN
-         KwTg==
-X-Forwarded-Encrypted: i=1; AKwUvBxOzSC2toY8gKo72WMEOvLyLEDUndrywceIfqs4Cpa3I2QLsUs9sa2l337gQs20zqXq8Ojg7vJFkrrn+c22vYg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKP+Q14my0rFWGuA8NOic0V6T7m2cbF/RQ4DCpV5ssu6Iph35Wo
-	UsYvLrT6E9N7Yv9J8fj9LP56ztTBIAD2oJ6+G+abNMo1nN/ca44ODxFj
-X-Gm-Gg: AYBFou1u4ftz6JGg2NHqyplK4hkIJvF6ZF84B9ch3EeTYfJXbVWqcLTP2irQ+LrZz0W
-	yrs6WTcGKn7c/yIvoAU0dEGhulJ95hGIX6J49jtoDrmHVrI1PeefK8WcUqg3k63z3mB5rgEhrO5
-	VT0BbXw36AHIhaBicY1PSTZPIIw5D1ULzbL/G44k2VKz4CMHPKpJRMkqnI6Fnhxx3d8Nt7En4zJ
-	M6AJTYhbw5wszY297SJpCJPs4wL8+SV1Hzke4jQFiP3OB7pJlG5C7O1xkH8QVUvql52rIcocew4
-	ZbrdyOpAbvIe7BA7JNizRJLIso42mzxEHv5cg3R+tKi+r/TdQqe3pzkVVU6cT1bLVUEyJ8f3RA3
-	K8edLDoxSwC8268yfUwXdmXDBMD/2nBKhGbsWL/jA0uya7AcETOqZ29VFZgiGuJti1os/+3vATT
-	93nCHN42tZFxouTKLhvzZp6G5AypKHd2jlhUrXK5Wtjkje7OJNTktuiFkKiJH6zNSsjflsp5CjY
-	sQMQNr5iTXm99B+YqDZDXJKiRhRRYfDr6kG1as=
-X-Received: by 2002:a05:7300:e9c5:10b0:359:f28:412d with SMTP id 5a478bee46e88-3590f28533cmr16964482eec.36.1791951317953;
-        Tue, 13 Oct 2026 21:15:17 -0700 (PDT)
-Received: from obadmin-Precision-3680.atlascopco.group ([136.226.232.200])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-359789fde97sm33110980eec.20.2026.10.13.21.15.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 21:15:17 -0700 (PDT)
-From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
-To: netdev-bot+sashiko@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] selftests/net: test network sysctl extremes
-Date: Wed, 14 Oct 2026 09:45:55 +0530
-Message-ID: <20261014041555.2823108-1-sahaj123.sc@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <179190711505.434549.1991031349414256009@kernel.org>
-References: <179190711505.434549.1991031349414256009@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U6RqeYfQ"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=DeeQ1mnSlJJadwW9+vWEJShMOdLCTlYD4T0We+pBlNo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791955960; v=1; x=1792560760;
+ b=U6RqeYfQsa9t8wcGp8m2XqD4BFIwN3noHxt+ui1QMNky1qOcLUTGIpQP8c9S96r+DEeAo4cD
+ pi0/F/aykZmwCCeWKINE0jRj8HV2StoSlH6NZi8HWGdAVsApDiP3cVI1s9jwZbXmrP94M/CFWPl
+ M7FujYHPWrzRM495bG4c7Au8=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 172f82703bb1138b;
+	Wed, 14 Oct 2026 05:32:39 +0000
+X-Mizu-Trace-ID: 172f82703bb1138b
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Date: Wed, 14 Oct 2026 13:32:24 +0800
+Subject: [PATCH net-next] selftests: net: exit with test failure status
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261014-self_ret-v1-1-6b5a95ba6106@kylinos.cn>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MWwqAIBBA0a3IfCf4iIi2EhFaYw2EhUoI4t6TP
+ i8cboGIgTDCxAoEfCnS7VvIjsF2Gn8gp701KKEGKWTPI15uDZj4qK3QwmlljYbGn4CO8r+awTf
+ gMSdYav0AissFWWQAAAA=
+X-Change-ID: 20261014-self_ret-83b030f32ba3
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>, 
+ Ido Schimmel <idosch@nvidia.com>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Hangbin Liu <liuhangbin@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-Thanks for the review. All three findings are valid.
+From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-1. [Medium] nf_hooks_lwtunnel cannot be disabled once enabled, so
-   restoring the original value after a probe failed in --all mode.
-   v2 drops --all and the full /proc/sys/net scan, and documents that
-   only per-netns, restorable sysctls belong in the list.
+fdb_flush.sh, fib-onlink-tests.sh and l2tp.sh can print [FAIL]
+subtests while still exiting with status 0. Their log_test(), aka
+log_test_expected() in lib.sh, helpers record a failure in ret, but
+the scripts never propagate ret to the exit code, so a kselftest runner
+treats the run as a pass.
 
-2. [Medium] The rounding problem applied to sysctls that only --all
-   reached (ms/jiffies conversions). The four remaining sysctls do not
-   round, so find_bound() is not affected for them.
+Initialize ret and exit with it at the end of each script so failed
+subtests are reflected in the exit status.
 
-3. [Low] check_kernel_log() now ignores /dev/kmsg records whose facility
-   is not LOG_KERN.
+Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+---
+The patch doesn't fix a regression, nothing is failing (or passing when it
+shouldn't) because of it. So target the patch to net-next.
+---
+ tools/testing/selftests/net/fdb_flush.sh        | 3 +++
+ tools/testing/selftests/net/fib-onlink-tests.sh | 3 +++
+ tools/testing/selftests/net/l2tp.sh             | 3 +++
+ 3 files changed, 9 insertions(+)
 
-v2: https://lore.kernel.org/r/20261014041446.2821085-1-sahaj123.sc@gmail.com
+diff --git a/tools/testing/selftests/net/fdb_flush.sh b/tools/testing/selftests/net/fdb_flush.sh
+index 4965e52d5ef5..0827fdd60f8c 100755
+--- a/tools/testing/selftests/net/fdb_flush.sh
++++ b/tools/testing/selftests/net/fdb_flush.sh
+@@ -6,6 +6,7 @@
+ # some combinations of arguments.
+ 
+ source lib.sh
++ret=0
+ 
+ FLUSH_BY_STATE_TESTS="
+ 	vxlan_test_flush_by_permanent
+@@ -778,3 +779,5 @@ for t in $TESTS
+ do
+ 	setup; $t; cleanup;
+ done
++
++exit $ret
+diff --git a/tools/testing/selftests/net/fib-onlink-tests.sh b/tools/testing/selftests/net/fib-onlink-tests.sh
+index a26075abf7d2..325da693c918 100755
+--- a/tools/testing/selftests/net/fib-onlink-tests.sh
++++ b/tools/testing/selftests/net/fib-onlink-tests.sh
+@@ -6,6 +6,7 @@
+ source lib.sh
+ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
+ VERBOSE=0
++ret=0
+ 
+ # Network interfaces
+ # - odd in current namespace; even in peer ns
+@@ -473,3 +474,5 @@ if [ "$TESTS" != "none" ]; then
+ 	printf "\nTests passed: %3d\n" ${nsuccess}
+ 	printf "Tests failed: %3d\n"   ${nfail}
+ fi
++
++exit $ret
+diff --git a/tools/testing/selftests/net/l2tp.sh b/tools/testing/selftests/net/l2tp.sh
+index 41e8b19d1bd3..de4b5da2da1b 100755
+--- a/tools/testing/selftests/net/l2tp.sh
++++ b/tools/testing/selftests/net/l2tp.sh
+@@ -16,6 +16,7 @@
+ source lib.sh
+ VERBOSE=0
+ PAUSE_ON_FAIL=no
++ret=0
+ 
+ which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
+ 
+@@ -357,3 +358,5 @@ cleanup
+ 
+ printf "\nTests passed: %3d\n" ${nsuccess}
+ printf "Tests failed: %3d\n"   ${nfail}
++
++exit $ret
 
-pw-bot: cr
+---
+base-commit: d8674294aefef02266c4d47ad10131f1bffbe534
+change-id: 20261014-self_ret-83b030f32ba3
+
+Best regards,
+-- 
+Hangbin Liu <liuhangbin@kylinos.cn>
+
