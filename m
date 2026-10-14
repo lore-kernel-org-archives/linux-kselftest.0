@@ -1,152 +1,151 @@
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011013.outbound.protection.outlook.com [52.101.52.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE643FF8A5;
-	Wed, 14 Oct 2026 17:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792000374; cv=fail; b=IeJg8qOprKQWKF9N+kITwgyA7EjwnXcc0LU52gzj8dIJM990ASTFreEzzfESC03F52TbDCfleP65ZywPCRS/UbawFSsTb7ez3YGoVcSsZDr98YmI1TPrTygKwdi3H64JtyBCjJlJrDNnWtqitLMQNIsJttOKVNje6EhmN6W5Fbc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792000374; c=relaxed/simple;
-	bh=wbEDvSItGvzLrFRecvmCgu7QtfA+B9sR+3/bWXYB+a8=;
-	h=Content-Type:Subject:From:To:Cc:In-Reply-To:References:Date:
-	 Message-Id:MIME-Version; b=LIyyRYreTxSCBulyPP0Wu3i79UcF0yRPRO/KbCgi45HItOrzniGlHviJnx9nWSI8a+EMquSWcM/d4TO8mjv/uszjDmbcn36g2ByB1CqrReu/kykRsKrUJIwvZczAYhc3zY4Sec+r+QbxTODwFVE/pqZjoXCZyPmVajKjuZ45Gno=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sfuawVEY; arc=fail smtp.client-ip=52.101.52.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B6453A8B2
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 17:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792000687; cv=none; b=SgfRt9IEjGpUnYXLxj8Nkzgqpi5gSYm8ar6exRWVrBxAx9RrePfcTHkYpVJzC0HjUnKbQxUh1XPaqAgsxgbAV6Xjq0f/TPNv1HzavEMB0zQUKQ1B9DU7wsThCom6HYx4y6DwX3OT13KmNrJdw90cnrU3hygJqa3ZShVh5/7AhDs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792000687; c=relaxed/simple;
+	bh=FBmwn916LLSSRyJnKsX/civGmonRB7otzki+K0LJS1Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NnajuHSr3Wa6u9H8MhoZAwit/Oce1LNAkTKEOj68NwSNWPPO/lvN53xi69vsmA9HcPgGyZlFQZq2qZifSbtBEGiSNKqGFbh+7qps8etYR0OMfrD/VsHHTalIEUTAFzIh4gMkpXp3edV6xpWf/KUwty+Wdw0/NvBt54m2S8SHwFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=fao2PTrQ; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sfuawVEY"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gHkvf2xEt0mySm3+kAXhlm3IChyhZOfE8r4//JUvqGjn1N6l1Ii4P8nEF8DkM8LnPcnipFQ4OqFMlUqajeRBykwblttJUco1CUi24241Yw/XvMyicwPxKlSAh2nexsjsw5FcfgMCR6pjyFfSGKTJ7kSCu6UMlikN8RdzvoFRdEQk0SmtEdhfYvI3O2X+XmDLvJyxyznFwvgp8ALbR0HDKj40+0BLKy3rB4kU8Y1Na1CZgu7z7FgIWwHe7rRozHch0YWJjeL9g4yRa7kQl+gxKCosHSZg/1qNONWNXi+eIxg0c1cOcRlDEpF/F0DpHNNQgVxTYoyLUA4oW1kjzm1FOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+r0ZoB8+yfKVtXhWGi/AzAhr/Gd3bzMJ1kVo1128BYI=;
- b=BJaSuAhbQdK2IUvi1MMw4Te33fWAEpEJdqmSlVvgZ007n+F4sx0tuSId7t5ON09ARapSvYfo7QmbsHrS5eQHkk1WTUbUc4GyqNw14rZ+4DbzN+vLiev9WLtRAWxVZvhm+rx9Xw+PLVoFa4PMm3zTo+UQyzPoQmR9Wh5yt31jHg1iQ4B3j4uwVmpiJJXY4TKBq6qoCn8u7F6rpzeDRg7pf3fR4lF4/hkJ2ze/xxO0ZoJRh2kyrCBp4/Xqtcfvq+luehynVNr4HjUdd6rSfNgz2CmZw9Lng99D9GdoAjUqrV/lHOCMgCjscGjjIkv1Gt17sVkvksZlYrH4jNoKZkbz2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+r0ZoB8+yfKVtXhWGi/AzAhr/Gd3bzMJ1kVo1128BYI=;
- b=sfuawVEYtW1vkYh6+EtdRLPUN8kyisBgcUExqZWzQfMqsNoQlM0QBvYVx5wPFeBB+BM3oqsAYLwtazE557jkE1tfIwNBeU2LuJ7bnozTgfbpJN/yPx4+9BHTZ8taO8sIN9A0pLUAIbE6n9HVQO8dH1fVmn74/E2KyRadx+Xz97fV8OSkskr8D3zo572vfkxznK9jSTGL+S3gyrwt1tbm8FKLtbcCal9Gq1MYrSuP+SGUW4fslaie+ajHnP/ICszAv6jaM4ci5OTHd1vT27BCkYMMrPWAU5Zo7Aq4U0UWOvDpa3lywTBWpWVN8Ad/pnEXZ7+x/ROC6N2MVb0wrGZ/LA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CHBPR12MB731189.namprd12.prod.outlook.com
- (2603:10b6:610:33d::12) by PH0PR12MB7959.namprd12.prod.outlook.com
- (2603:10b6:510:282::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.20; Wed, 14 Oct
- 2026 17:52:49 +0000
-Received: from CHBPR12MB731189.namprd12.prod.outlook.com
- ([fe80::b0e5:123d:fe06:e10d]) by CHBPR12MB731189.namprd12.prod.outlook.com
- ([fe80::b0e5:123d:fe06:e10d%6]) with mapi id 15.21.0522.012; Wed, 14 Oct 2026
- 17:52:49 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 2/2] iommufd/selftest: Check dmabuf MMIO mappings
- filled from another domain
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Andrea Parri <parri.andrea@gmail.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>, 
- Shuah Khan <shuah@kernel.org>, Joerg Roedel <joro@8bytes.org>, 
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
- Nicolin Chen <nicolinc@nvidia.com>, iommu@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20261008125206.11990-3-parri.andrea@gmail.com>
-References: <20261008125206.11990-1-parri.andrea@gmail.com>
- <20261008125206.11990-3-parri.andrea@gmail.com>
-Date: Wed, 14 Oct 2026 14:52:45 -0300
-Message-Id: <179200036595.15213.9864724554843977359.b4-review@b4>
-X-Mailer: b4 0.17-dev
-X-ClientProxiedBy: CH0PR03CA0017.namprd03.prod.outlook.com
- (2603:10b6:610:b0::22) To CHBPR12MB731189.namprd12.prod.outlook.com
- (2603:10b6:610:33d::12)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="fao2PTrQ"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-93e63ee7b4cso375830385a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 10:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1792000685; x=1792605485; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SbfLgUW9jzchO6/pfPCWGcSWUMfF0/SvwGcRabdT2ZQ=;
+        b=fao2PTrQIGOZZDrGj0BIAoz7Dd0wBLVLC94ArSJGwbDPL8S6jFudHQzHh++jh6TAB8
+         nO6VSD/LRCiVd+iY+RkhpMRunVWbpfPUTVUgyzchCAwyLI7hKgqVwEgmZ0cijLTdVnNH
+         KnPRzXA8oVuUOH/8TXjyH3tVfZyOwlvq2T7XU+28/ruQ4ZocZvnHEGdQJb+XOvjCzlQf
+         aXM9cTPk0LN+oKc5DTDeqbdHGq5fM3B3RZXUuCr5YPBCz42DsEFKzX/d4WNfhlneI6a3
+         KY23ub7yTLpjguOufRZQj75RPTorF8cFhf2hB3rBFsdSBDACCfC7aCyTi5Vq778Gaz20
+         gcqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792000685; x=1792605485;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=SbfLgUW9jzchO6/pfPCWGcSWUMfF0/SvwGcRabdT2ZQ=;
+        b=HCoPuDi4bPUczUVIi/WqFDUDJnoRVNOIKy42gfqC0nSmk0L9SxuhzNGTGBvVj2a04V
+         LXSfNrV4CyYeW/4XrbkVtvYc3BE9hlmlvphx8r9+qTjP87uRHSaFWFNvzouLBAdYt0YG
+         ciuXto9l4mrC+R1G+59EtP2YqpR1p/cGp0R7Zjp5cjJdRFY1Rdcr6y1ys3e8aBAOd7p5
+         2CavDHhlq73pR2OXclrlPcQmKPdRuH/9q94MFAriBSn1vrP5CUsXZaBXBvxA3VCCIifp
+         N/k1fMOjfwYwh4UxKYRu1dgqSF4QLqG/IBdAy0j9VKvmzKssOwT66w54NYKt034tB+3s
+         PaOA==
+X-Gm-Message-State: AFq9FYLFOlMH46VqoQUdtSkiKUJs7VSS+V2WCs3b4HZ0auIb6ZPSbgmn
+	f7nBxImyxRq/T1MpyYNTqkvKBuuyzqzNyDmv6PFU9e/NNG3KFOY4J2lYWDEI7lD7uUlj1WIJNa2
+	L02SuwpM=
+X-Gm-Gg: AYBFou0Z+KWdJIeaeCPupyRK1TWVesckTMLKwJovYEzsxcfVYqcBrkCuRAkXj8i/hCe
+	RBpbgdFN+JYqO/x3m5WV48v27yyThCkTn4v54DH+cDv3zf7zRGwXb5OolWqrElHWT0/iLx2+vOG
+	Jwk0p7oUZi+ah5trsL52Vj1eLNZR7AU4Lf0IBcZXNswiXKa7KqPTvQM+S+AL+uyGso6IES8zXXS
+	p3wULTj/AZoqtiMv1ZzYjdUmBwg6zT3fk0Fm/XiYzLJdDvkR99PsPpjydYzabN6D9wGuC29IoA5
+	xIPP/k+xPOuOmd+5BafbcJsdIFBDZSnjZ5BerGhr5tOTT5iGe1fMqJeTf1cuacFa7jwqHqD9wjA
+	MyRyA8JbGiwQ42LOcjXVIIhlH8qnp+jAFWpEfnOeZ4hDgMJyCFNSKLQGPL94YWCyF9iyqAaK4l+
+	MkcujHCYxWbN/vu0gM8dA0diuvnpID++/hWbevnDLBVmthrb/RaUPSYQ9TOCxeRhMOxMNZzDrYL
+	WmKxR9fQQgbeTmwgRQgCEhO2LrVBlFvEG5FMGrNgGQod4Myx25Hc8pFXzIZJ190+Sjp9jk=
+X-Received: by 2002:a05:620a:4591:b0:939:6dfa:48fd with SMTP id af79cd13be357-93ebd23398emr2633773185a.51.1792000684921;
+        Wed, 14 Oct 2026 10:58:04 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91b97b95847sm58498006d6.32.2026.10.14.10.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 10:58:04 -0700 (PDT)
+From: "Gregory Price (Meta)" <gourry@gourry.net>
+To: linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org,
+	kernel-team@meta.com,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org
+Subject: [PATCH 0/8] selftests/mm: add MADV_COLD and MADV_PAGEOUT contract tests
+Date: Wed, 14 Oct 2026 13:57:48 -0400
+Message-ID: <20261014175756.2035176-1-gourry@gourry.net>
+X-Mailer: git-send-email 2.56.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CHBPR12MB731189:EE_|PH0PR12MB7959:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb82eb0d-c862-4d3c-f7d2-08df2a1bf5fb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|23010399003|7416014|1800799024|366016|4143699003|10067099003|56012099006|18002099003|11063799006|261009223027099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	o+a1a1fOAdPsn33hcKDcVerizAtuHkGkZrojq9K/abab4cOe+/GktSEbyfNbtGJ0hjLY6lf/qEiaRIkuKhdBaK4++T5wdeWoZNyYq8KyWMvPW5Awj45YyNXG+dvFZcGbjPjGAuT/5UyG1rARBNeiS/HgRoQpPW+9xcUpvoF4w6au3S+/cavxwHhLFZqZmRlhdyb2lS/RC5hqSLw8IAcOtSEkAlFp4Q7mE+EsEiYPbqO1CsHspcK5l+G/8YqiwgcjNEi0B02fmt4l/F5QTQxsPzTpbhRreojO9PwVNGhLJ1LKgi7g0zBiD0bHrkJgSpykbGn8V788njC29xO2CA9JssfQiHbTkLc3Gwhrixh6cu9YxsJHxXEoku29IJ5A0xYGCiC9Y5iUZXJZcT2Ta3pTGMj8QvLhxD7ZMljX8vZquhtKWnSPAppZETx2TZOph01yZMGAH60tXNSPxVitPQ4rd2u6xZXPZvQeVpI7+Gtp1R8T4p9Dn0iBXZnCjDb5NbzQVlYgMRucbeY8AYuZqrGw51Ht1HtcCvpMvT0Z5w855lLQHqkuaREAi/66gvGCiohW8uhuXtmQfJr+av6L6W2vwNfLVElN5T5byFO/Il/aUdZZYBiMAW3hoD7+2mxJeHaU7HKEV+MRMw0y95356zDxuuZxFOtxmTAjfBsrec7ohXg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHBPR12MB731189.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(7416014)(1800799024)(366016)(4143699003)(10067099003)(56012099006)(18002099003)(11063799006)(261009223027099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S1hzSEQxSFlqR1RWM3dQcjQ1ZmlWdit0dmZ2SmduSGtnQUw5dUtLWU1MT0FH?=
- =?utf-8?B?SFNvbkNnNjNjMWkwR2xpUVk5UGZDZkRTTWgzVlQrcnRCQU5UaGIyZ09UVXZ5?=
- =?utf-8?B?T0pxVzd6MExBdStYaHl4ZnN5M1JZV0YzMjkvYmlISUo1Y1pmVGRBQnlNc1d0?=
- =?utf-8?B?VVhnS0I4VExSU1lCVGc3SVo5aUtGRGF4T25STms2cHp2Sys2NjRoTExZNkJy?=
- =?utf-8?B?NnMzanZCblZpZkh3YXhpclc4Sjl6eVg5Z3p2Q00wUUZTZ3BUeHhXc0l6dVor?=
- =?utf-8?B?bjhoN2cxN0ErcHpjdHY5b1FLTFdQai81V3d2N1c0dUtwNE9SVDdrcUJnb0Rv?=
- =?utf-8?B?WXNWYWoxemdyNUhHeEhreVdDVi9OYzdOUGM5TFJDNldXMkhicHQ5Wmo1ODAw?=
- =?utf-8?B?QjRKY3lOcjB3bU1NWGVjMGl4Sm9EL1Zhb2U5WTc4OVhjMDExRlBneTlTeUdR?=
- =?utf-8?B?WTV5OTRmL0YxSytDdnl1QXdMTXl4RHhBaEJWQlBTSHdTSHIxcTJ6dUMvODJq?=
- =?utf-8?B?ZlExUUtJbUxxbDQxU0hzN0tlV2tjK3BVS3krYVlZaWk5TFY0dWZOejhzSlU1?=
- =?utf-8?B?b0ZvOXZzUVFLUEdlZUVVRFY0MGlobFlraW1CNWhRQnZpREFsZVoySmMwQXFQ?=
- =?utf-8?B?SlZLSWI3Q3BWMlMwWitkQng2U3VCZGRzTExLb2c4bHloWjhKQkhnZXRabHg1?=
- =?utf-8?B?WTAzOExuUW9sVTlDemhMNFRvcEdRNmxWanBBV3N5NzBuZVJ3d2VSYjNGbmt2?=
- =?utf-8?B?TzYxaGlYaWtiYWFKTjd6WXlaVExMNUdVQS9vVHEyZmN4V3ZsTUJFSXZlQi92?=
- =?utf-8?B?c2duZEt1dEh5T0JINWlnNE9nZEdteTZMY0lRYUJLSkZBS2Z2Sm1sUVVNTG5Z?=
- =?utf-8?B?L0lhNHJxL1FQV0VuVWNXZEM4RGVEbFQ0MkwyTzBZd1h4U2ZXdEFCVmh0S3dF?=
- =?utf-8?B?MnVrMGwwc2kxOVJqRXV4U1dIMHp3ZFp3bHRDbmsvb1YrVTJxTFN5Z0pRRU5Y?=
- =?utf-8?B?OXlEcHgwSCthQ2RINkh5cU9oRnFEL2o3WnBqbG9LcEJ2SG1iaUNlNFQ0U2VV?=
- =?utf-8?B?aWhHbFVTWGU5V2x2dTNob3hKRXhUYVlaNzh2ZEhSNmtpWTV2OWxkWXYwb3E5?=
- =?utf-8?B?WW9Wd3ROV3dLYmhEY2FFdWxiUjk0eTdhcENXYlVPaUdpUUtha0pkbmNtRkJN?=
- =?utf-8?B?Q3VPM2J5cnpTU1ZQdWlGRWtTVXRBOFNhdG9aVUxsanlPaE4vRDM4UFdPRXE2?=
- =?utf-8?B?SnBTZ2VocFFFMjcranpOOGM3SlgvS2wxZjh4SnU4V2VpNGt6U1NjVTZjOHdY?=
- =?utf-8?B?Q3pxUW5PbUhTY3lvNzhpK2ovVXBUM1lFd2xJUGNEb1lFelRwMVFZT1hXZHNm?=
- =?utf-8?B?aUpjVEpjY1VCMlhXU0Y1YS9EdGo1MGMxOEliQzJIMU45NXNicU85T1dyRjBR?=
- =?utf-8?B?WjRyRWVNUi9ha0RpZEo1SG9KNlBoV0hBcjA4QjI5UjJwR2lFczRNUE1mV1VV?=
- =?utf-8?B?Qk5lVUFxak94bUF5WEl5dFVHbG1LYTU2T01PSTJVWXVKMGxjNHAweDNqYW4y?=
- =?utf-8?B?MmU4MzUzWDZHb3JXSjFJeTJaQWNHWTVaKzhTZzFjbmpwbm53VVl1QmRSS005?=
- =?utf-8?B?SERxZm92UjR5MFdMOW8yRStaejJTU1YydjJ4bDRiSEErZGxSaFpTWHRtQVo1?=
- =?utf-8?B?YTFaL1ZnZzlkQlZCbmtzMzY4MVJ5NjUzLzF5Qm1LUkdhMTFJYUIyd1ZOdG1J?=
- =?utf-8?B?ek5rUU91TWxaZ2doNzE2Y05qQlE5UlZzcVQ2ODVWOER1WFBqYWxWaHE2RXQr?=
- =?utf-8?B?WlpyWWJrSEZObEVBNERsTjRKNVNmMFpYaDdhLzI2b3NWWHVrK0d2QWZNdWhs?=
- =?utf-8?B?U0p1SzhZL3V2aEVxVkhBeEpqMldHZXdmL1pwejBLSkhLVk5sWkhRQmVSWFR5?=
- =?utf-8?B?N2lYK2Q5dDRWT0poY3hjTlRWcU9JeC9pSURHWEc1SEUvQkZ4Y29EbnZoSnpY?=
- =?utf-8?B?SlN6VS9IUjliNEhhUzA2QnZvL3hBWHFqQ0p1SlAxRHphUGNjMURYak5QYlhi?=
- =?utf-8?B?RFpIbUJqQUpxbWhKczVFRG11VWJ0cC9uc1phUDJaSlgrekU2cWl1SlNlMDBz?=
- =?utf-8?B?WktJcThNb1RFcEpINUU1c05tTzEzZjdnejB2SzFubTBQVTRvT00xYXNGNVZs?=
- =?utf-8?B?M1lwZEsxKzNCcGk0V2gwL0t5R1dwdTNOVG43MFVzaWx4SDEzV21qTWJUZldy?=
- =?utf-8?B?ODdJYjVhTVNZU0ZCc2ZBT205Nk9yY1p0RE9SU1BOZ0g2UjlSbGtTc0hPSVg4?=
- =?utf-8?Q?ZqpdhnyB3ui4z7WWOT?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb82eb0d-c862-4d3c-f7d2-08df2a1bf5fb
-X-MS-Exchange-CrossTenant-AuthSource: CHBPR12MB731189.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2026 17:52:49.0454
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YletgOflagWlI3li2dp0hyZuUHB0bBkDK9GOmwEqTl6kxVPiVw3BOcthi5Zv2oAl
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7959
+Content-Transfer-Encoding: 8bit
 
-> Add tests that a dmabuf keeps IOMMU_MMIO in a domain that is filled
-> from an already mapped area: a second domain added to the IOAS after
-> the dmabuf has been mapped, and the domain of another IOAS the dmabuf
-> is copied into.
-> 
-> The mock page table has no memory type bits, so a mapping made with
-> IOMMU_MMIO cannot be told apart from one made with IOMMU_CACHE. Wrap the
-> mock's generic_pt map_range and unmap_range ops to record, per domain,
-> the pages mapped with IOMMU_MMIO, and add IOMMU_TEST_OP_MD_CHECK_MMIO to
-> check that a range is recorded. The check rejects ranges that wrap or
-> do not fit in unsigned long.
+MADV_COLD and MADV_PAGEOUT share a page-table walker in mm/madvise.c
+that handles ordinary PTEs, PTE-mapped large folios and huge PMDs.
+Existing selftests cover little of its range, folio and permission
+handling.
 
-I'm not keen on this, the special mock amd domain is just for mock
-usage, we should probably just add a mmio bit if we want to do this
-test.
+The walker has needed several fixes recently, and it's clear we need
+to refactor this walker to make it maintainable.  Ahead of that, lets
+add some selftests to at least cover contractual behaviors.
+
+This series adds tools/testing/selftests/mm/madvise.c to test only
+behaviors userspace can rely on, so that it stays valid across changes
+to the walker's implementation.
+
+Each patch adds one group of tests, simplest first:
+
+  1. MADV_COLD skips PTE holes and swapped pages.
+     both hints reject locked VMAs
+  2. the same hole and swap checks for MADV_PAGEOUT
+  3. zero-length, unaligned and partly unmapped ranges
+  4. hugetlb VMAs are rejected
+  5. shared file, shared anonymous and SHM_LOCK'd memory is preserved
+  6. whole and partly advised THPs, including that MADV_PAGEOUT never
+     reclaims pages outside the advised range
+  7. the file permission rule in can_do_file_pageout()
+  8. the same rule for large file folios mapped by a PMD or by PTEs
+
+Tests that need root, swap, THPs or hugetlb pages skip when those are
+unavailable, and tests that need a page to be reclaimed skip when reclaim
+does not happen. Where a skip would hide the bug a test looks for, it first
+checks with a control page that reclaim works at all.
+
+All 24 tests pass over three consecutive runs, with no skips and no
+warnings in dmesg, as root in a virtme-ng guest with 4 CPUs, two NUMA
+nodes, a 2G swap disk, 16 hugetlb pages, THP set to always,
+CONFIG_DEBUG_VM and CONFIG_PROVE_LOCKING.
+
+Run unprivileged on a host with swap, 18 pass and 6 skip:
+  - 5 need root
+  - 1 needs reserved hugetlb pages
+
+original set: https://lore.kernel.org/linux-mm/20260922235830.2350770-2-gourry@gourry.net/
+
+Gregory Price (Meta) (8):
+  selftests/mm: add MADV_COLD and MADV_PAGEOUT contract tests
+  selftests/mm: check that MADV_PAGEOUT skips holes and swapped pages
+  selftests/mm: check MADV_COLD and MADV_PAGEOUT range handling
+  selftests/mm: check that MADV_COLD and MADV_PAGEOUT reject hugetlb
+  selftests/mm: check that MADV_COLD and MADV_PAGEOUT preserve shared
+    memory
+  selftests/mm: check MADV_COLD and MADV_PAGEOUT on partly advised THPs
+  selftests/mm: check MADV_PAGEOUT file permissions
+  selftests/mm: check that unauthorized MADV_PAGEOUT skips large file
+    folios
+
+ tools/testing/selftests/mm/Makefile        |   2 +
+ tools/testing/selftests/mm/ksft_madvise.sh |   4 +
+ tools/testing/selftests/mm/madvise.c       | 846 +++++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh  |   5 +
+ tools/testing/selftests/mm/vm_util.h       |   1 +
+ 5 files changed, 858 insertions(+)
+ create mode 100755 tools/testing/selftests/mm/ksft_madvise.sh
+ create mode 100644 tools/testing/selftests/mm/madvise.c
 
 -- 
-Jason
+2.56.0
+
