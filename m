@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D09653ED0A
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF5B541E57
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:06:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791986792; cv=none; b=lo84Qfep9ER7V8m6IGQFxXiuNCFGISA0wqNGNiGvBv0VXHELojW94M5EeCywd+0HxyX8yz3clS52ddIW99YMRy/96icCWRlfTKcQhYt6QB3vIFm1XLzZlC0YeIt3uVUEVw4BwgRlnsInf4/DxXKK//tDk+jdsWXKsbKa6ed6tH0=
+	t=1791986795; cv=none; b=dcFy9sO/nUhTWfG4cQs0EqIfBev50OUPPRKFODb5aYSxQUuGxoemvW97vlhl0M7pvSUoAsXUSxoYUEa+PWlLa/YVdTxBaIit/rc/EnCIohBwQQGLCWJ2Z91/MOki1k7rEua5mBvXv3U1ZQbxhcWZ2iEguFU/PYHclDKPuJZR4aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791986792; c=relaxed/simple;
-	bh=Zockp4ShyfTmLHMgWEgJndAZNpFDwTZr2DR5+nDBQh0=;
+	s=arc-20240116; t=1791986795; c=relaxed/simple;
+	bh=1S6V3BBmV/FRBQZzigWlCu+O7+/Gj7IFuk0w6N/11FY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G6IJ8JV6SduEbgSit52JFeIPJ75BkxsUVXiWEvZphzqaE2H63NDmQY0mwMoAaB5fTLhiIlESfeHQwCjphPeXLVyHdc2dpALRION2nnYKoOS9AqKZBnU14bOzKiCb9SJDZsG8GTtiIH0G0KvQRoKRCIK5C1+RxMc21D+Bpjb/hVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CTkviwt3; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=t59Hqkqq8v+F3o23Rpa/m55zWd8N0yHgC+ugQhpo4pZm+v2YBnb6pf35T4ReBEumHXc7aR7b5nsEurefN1JesR2gSvBuaOuh18VCvZXkJ+uVrFU/bfHETXP62uYg/Jb9D4T5dotXI+Fy1Yk7lEAh4fXeHZbqTCXV4tDXwXaEI6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TVO0l1Db; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CTkviwt3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TVO0l1Db"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791986783;
+	s=mimecast20190719; t=1791986789;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AhRKgET+QHEaZgszCaPSofIEfleRkehZ8m6XTDCfRWM=;
-	b=CTkviwt3Z6M9SJ0eUQb5Tm731V6gBb6eKEHomEIZkXvQsP9sGb+c2L/gs+ETTJ526jfj0L
-	dI+ozIQU8hldokuUs04Mgc+il65swPFXwUV97gEQfGmutqmQc3e5yKMz8NNG/Az4RzEVpw
-	j3KZwm4MVewTGJlsnvQKg6CuyKvsHQ4=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=9wGU+yhb3bVje6hDfkLGUe+XAk9XLTdvAsG9YvpbpH4=;
+	b=TVO0l1Db7Yz5nzTd5WQoR9e4t6dBpVxr+tY/0SE5j1F3EOI1MZMAxg+GYFbgoj8sXiPLXa
+	ra0P3R/J93iNfZcrl3cHGDHY8++V3xKCe+mashQ9yMrQAyuZyEdZ6wxlk9erX1ASzCbckT
+	mPxq/IPN8PkD+gv2LNSQro/4c8Mb4/w=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-677-fkkE0kVkOyeucqhF_3w9Yg-1; Wed,
- 14 Oct 2026 14:06:18 +0000
-X-MC-Unique: fkkE0kVkOyeucqhF_3w9Yg-1
-X-Mimecast-MFC-AGG-ID: fkkE0kVkOyeucqhF_3w9Yg_1791986776
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-355-NwWOrrnEN5OMaDF-hulfig-1; Wed,
+ 14 Oct 2026 14:06:23 +0000
+X-MC-Unique: NwWOrrnEN5OMaDF-hulfig-1
+X-Mimecast-MFC-AGG-ID: NwWOrrnEN5OMaDF-hulfig_1791986780
 Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 15EE019560BA;
-	Wed, 14 Oct 2026 14:06:16 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A85931800772;
+	Wed, 14 Oct 2026 14:06:20 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.rmtusnh.csb (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F0D9F418;
-	Wed, 14 Oct 2026 14:06:13 +0000 (UTC)
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AD62C418;
+	Wed, 14 Oct 2026 14:06:18 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Ridong Chen <ridong.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
@@ -57,9 +57,9 @@ Cc: cgroups@vger.kernel.org,
 	Hui Peng <benquike@gmail.com>,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v3 4/9] cgroup/cpuset: Do housekeeping check before converting invalid partition to valid
-Date: Wed, 14 Oct 2026 10:05:43 -0400
-Message-ID: <20261014140548.575122-5-longman@redhat.com>
+Subject: [PATCH-next v3 6/9] cgroup/cpuset: Don't allow a child root partition under an isolated parent
+Date: Wed, 14 Oct 2026 10:05:45 -0400
+Message-ID: <20261014140548.575122-7-longman@redhat.com>
 In-Reply-To: <20261014140548.575122-1-longman@redhat.com>
 References: <20261014140548.575122-1-longman@redhat.com>
 Precedence: bulk
@@ -71,39 +71,145 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-When a hotplug event happens or when update_cpumasks_hier() is called, an
-invalid partition may be converted back to valid. However check against
-housekeeping conflict isn't being done which can lead to a partition
-state that violates the housekeeping rules. Update the code to allow
-reviving an invalid partition only if it can pass the housekeeping check.
+Although it is not typical for real users to create a complicated nested
+partition hierarchy, it is currently allowed to create nested root and
+isolated partitions. In addition, disabling or invalidating a partition
+should always be allowed especially when the cpuset is being deleted.
 
-Fixes: 4a74e418881f ("cgroup/cpuset: Check partition conflict with housekeeping setup")
+With a nested root and isolated partition hierarchy, it is possible
+that all active housekeeping CPUs can be exhausted when disabling or
+invalidating a root partition and returning its CPUs to the isolated
+parent.
+
+One way to avoid this problem is to disallow the creation of a root
+partition under an isolated parent. It is indeed a new limitation imposed
+on the existing cpuset partition functionality. However an isolated
+partition is usually a left node where scheduling and some other kernel
+noises are disabled. It doesn't make much sense to create a child root
+partition under an isolated parent and remove some CPUs from the set
+of isolated CPUs again. Creation of a child isolated partition under a
+root or isolated parent is still allowed.
+
+The cgroup-v2 documentation is also updated to reflect this new
+limitation. New test cases are added to test_cpuset_prs.sh to verify
+this new behavior. Some existing test cases are also updated accordingly.
+
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ Documentation/admin-guide/cgroup-v2.rst           |  4 +++-
+ kernel/cgroup/cpuset-internal.h                   |  1 +
+ kernel/cgroup/cpuset.c                            | 13 +++++++++++++
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 14 ++++++++------
+ 4 files changed, 25 insertions(+), 7 deletions(-)
 
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index bd8c80f3bbc9..2c445829e24d 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2767,7 +2767,9 @@ Cpuset Interface Files
+ 	be retained, but behaves more like a "member".
+ 
+ 	All possible state transitions among "member", "root" and
+-	"isolated" are allowed.
++	"isolated" are allowed with the exception that a local child
++	"root" partition is not allowed to be created under an "isolated"
++	parent partition.
+ 
+ 	On read, the "cpuset.cpus.partition" file can show the following
+ 	values.
+diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+index 5da9c91295b0..2e44dc8634dc 100644
+--- a/kernel/cgroup/cpuset-internal.h
++++ b/kernel/cgroup/cpuset-internal.h
+@@ -35,6 +35,7 @@ enum prs_errcode {
+ 	PERR_HKEEPING,
+ 	PERR_ACCESS,
+ 	PERR_REMOTE,
++	PERR_ISOPARENT,
+ };
+ 
+ /* bits in struct cpuset flags field */
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index b2684c98d8c0..51723c299ca5 100644
+index 40c004386af0..681701ba46e1 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -1959,9 +1959,14 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 			bool exclusive = true;
+@@ -60,6 +60,7 @@ static const char * const perr_strings[] = {
+ 	[PERR_HKEEPING]  = "partition config conflicts with housekeeping setup",
+ 	[PERR_ACCESS]    = "Enable partition not permitted",
+ 	[PERR_REMOTE]    = "Have remote partition underneath",
++	[PERR_ISOPARENT] = "Root partition is not allowed with isolated parent",
+ };
  
- 			/*
--			 * Convert invalid partition to valid has to
--			 * pass the cpu exclusivity test.
-+			 * Convert invalid partition to valid has to pass the
-+			 * cpu exclusivity test as well as the housekeeping
-+			 * check.
- 			 */
-+			if (prstate_housekeeping_conflict(cs->partition_root_state, xcpus)) {
-+				part_error = PERR_HKEEPING;
-+				goto write_error;
+ /*
+@@ -2865,6 +2866,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 	int err = PERR_NONE, old_prs = cs->partition_root_state;
+ 	struct cpuset *parent = parent_cs(cs);
+ 	struct tmpmasks tmpmask;
++	int parent_prs = parent->partition_root_state;
+ 	bool isolcpus_updated = false;
+ 	bool disable_partition = false;
+ 
+@@ -2910,6 +2912,14 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 			enum partition_cmd cmd = (new_prs == PRS_ROOT)
+ 					       ? partcmd_enable : partcmd_enablei;
+ 
++			/*
++			 * It is not allowed to create a root partition under
++			 * an isolated parent partition.
++			 */
++			if ((new_prs == PRS_ROOT) && (parent_prs == PRS_ISOLATED)) {
++				err = PERR_ISOPARENT;
++				goto out;
 +			}
- 			rcu_read_lock();
- 			cpuset_for_each_child(child, css, parent) {
- 				if (child == cs)
+ 			err = update_parent_effective_cpumask(cs, cmd, NULL, &tmpmask);
+ 		} else {
+ 			err = remote_partition_enable(cs, new_prs, &tmpmask);
+@@ -2922,6 +2932,9 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 		if (prstate_housekeeping_conflict(new_prs, cs->effective_xcpus)) {
+ 			disable_partition = true;
+ 			err = PERR_HKEEPING;
++		} else if (parent_prs == PRS_ISOLATED) {
++			disable_partition = true;
++			err = PERR_ISOPARENT;
+ 		} else {
+ 			isolcpus_updated = true;
+ 		}
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 874a8a161236..85a4f87840b4 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -288,16 +288,12 @@ TEST_MATRIX=(
+ 								       A1:P0|A2:P1|A3:P0|B1:P1"
+ 	"   C0-3    C1-3   C3     C4    X2-3  X2-3:P1   P2     P1    0 A1:0-1|A2:2|A3:3|B1:4 \
+ 								       A1:P0|A2:P1|A3:P2|B1:P1 2-4|3"
+-	"   C0-4    C1-4  C2-4     .    X2-4  X2-4:P2  X4:P1    .    0 A1:0-1|A2:2-3|A3:4 \
+-								       A1:P0|A2:P2|A3:P1 2-4|2-3"
+-	"   C0-4    C1-4  C2-4     .    X2-4  X2-4:P2 X3-4:P1   .    0 A1:0-1|A2:2|A3:3-4 \
+-								       A1:P0|A2:P2|A3:P1 2"
+ 	" C0-4:X2-4 C1-4:X2-4:P1 C2-4:X4:P2 \
+ 				   .      .      X5      .      .    0 A1:0-4|A2:1-4|A3:2-4 \
+ 								       A1:P0|A2:P-1|A3:P-2 ."
+-	" C0-4:X2-4 C1-4:X2-4:P2 C2-4:X4:P1 \
++	" C0-4:X2-4 C1-4:X2-4:P1 C2-4:X4:P2 \
+ 				   .      .      .      X1      .    0 A1:0-1|A2:2-4|A3:2-4 \
+-								       A1:P0|A2:P2|A3:P-1 2-4"
++								       A1:P0|A2:P1|A3:P-2 ."
+ 	" CX1-3:P1 CX1-3  CX1-3    .      .      .      P1      .    0 A1:1-3|A2:1-3|A3:1-3 \
+ 								       A1:P1|A2:P0|A3:P-1"
+ 
+@@ -430,6 +426,12 @@ TEST_MATRIX=(
+ 	# cpuset.cpus can become empty with task in it as it inherits parent's effective CPUs
+ 	"   C1-3    C2      .      .       .    T:C     .      .     0 A1:1-3|A2:1-3"
+ 
++	# Creation of root partition under an isolated partition is not allowed
++	"  C1-3:P2  C2      .      .       .     P1     .      .     0 A1:1-3|A2:2 A1:P2|A2:P-1 1-3"
++	"  C1-3:P2  C2      .      .       .     P2     .      .     0 A1:1,3|A2:2 A1:P2|A2:P2  1-3"
++	"  C1-3:P2 C2:P2    .      .       .     P1     .      .     0 A1:1-3|A2:2 A1:P2|A2:P-1 1-3"
++
++	#
+ 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+ 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+ 	# Failure cases:
 -- 
 2.55.0
 
