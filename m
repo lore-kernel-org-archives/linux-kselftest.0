@@ -1,49 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5AC385D75;
-	Wed, 14 Oct 2026 20:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D936640801E;
+	Wed, 14 Oct 2026 20:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792008091; cv=none; b=UtMiQ8TmPFlX24ISCTaVxuyyyCmrgHB7i6qD4kfkgMR1dfeOXssNIgElO0V3vgubgftUU7zk14vkE5ZJTZgzAyjmOw3p1QCNmDqnQqsFO2MmyDiA/J0jIQN/0JXlXl65dXSN+nLhWbIGnlSdSyB05yJL4sdIfzbDPYogPyEeUJI=
+	t=1792008092; cv=none; b=Z4ijidLRzbNaqzSAnIwEwtR5BIybclcbsHvXn8TDsBiaZWWvjLhdwImBoJYDmR28GJp/d6d2s2xraRe2SGusK3cOtIyuAQJdXBG7EUgMtIDJxOjK0AtN9oKkjk48wrCELRnNWTQdW0Ew1JdWSAKDqF3C8rC+aZW99xy+ujTa1xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792008091; c=relaxed/simple;
-	bh=ArcZQi3GV5i2s5T+FwHYuBpIizUOuke7BUhtttXRNjQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IYywTpdh2xHKNOhF7lTUOn2B6mPzzyOg38R3VLdjLRdAcQ3Txh5K/0CdZ2//neqdreiJXTUTbLxikJJhL3BfyjXrwN+TyWlED3NLu6I6FbMY/BZsiI4w8Uues9+YodFEh0odo512V0G3FhW0Z5L+W0/TWsuyiLHJ03zgaIdgk40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NncGK1Cq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792008092; c=relaxed/simple;
+	bh=I9paKZ1Ye2RkYWWqdc7aKtlvSvifmN+BX4TRFnwiuwQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b9kt2oC2zgkqEpkBPRvspYaMZGF1WO3V01z0y8EmAnky+GZeQMbaNLQztN8qU/lKIOjH9602Whx/mK1Sq3bAS0Uny1MAnAFM/RQbD6JUihwo8iLLOmv3FiCuWLOpTABVSdhMbIrfYmG6gmpOYKRJgTkdTCiY3jYQWkSQ/Q4spEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oFCcMWV7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NncGK1Cq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 404A91F000C7;
-	Wed, 14 Oct 2026 20:01:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFCcMWV7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 083F21F000C6;
+	Wed, 14 Oct 2026 20:01:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792008086;
-	bh=OJJRzw35bezfBVy0Bke8Qe4M2f3C2NI3f1X/6Jbh83U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=NncGK1CqR0+mAIK9AVAUBCGrocJSygrgvpKE25CvKZxnWSjZC/+GYxV5d06a3Rt6I
-	 VkgOTkq6fvaiHKIuLluO1YjYatNJd19PXvV4m2GSsUvQlOql44eUiOri45wVhwwKS5
-	 zDkPFq6/3hKto5o7WOyUFro1pNCX6viZUB+ntyB7CFg7QiWQXmzEVjCtdDncbt3tAR
-	 FCBXvuLvjs25+TYMj/OedLfctCx583E/3uaz6pSGlS4MPMshOv/RnmGOKM63NTNk1m
-	 eYHOEa9HyS+ng18WP2J5MrQhSARGRUc7LkqFNyvOvoFqn6I3iRzvJZtpwKD1CrsUSw
-	 VkSislgVtq3XQ==
+	s=k20260515; t=1792008090;
+	bh=7ObxhoVmcKp7FKwThZtHmmrAzt8O/xJpkopjoaCninw=;
+	h=From:To:Cc:Subject:Date;
+	b=oFCcMWV7wOyX42GATyWunKk75YTi91sNND+7gNW6ldFdngx3ChvCgjOZCVg2C5O2b
+	 xUr0AQhwRUizBrgIs5Oo5VPeIDG6JkfqIvzBV7PGp4JH1oGuhboqEKn7SE1/I3KPDS
+	 Z8N917B3hVPbLaZlZrB5FCMq7caOTunxTHAY33cOYDgEFTW69Wk1C7zGw8VQjGu7T8
+	 PflYlj7gOWp4oWkRdzwZdnWTqfq/csi9GpzhpKeFc1Ml4JWVWULzx/kORCNetiZcVT
+	 1/09pLEYgp8n/GcH3AAbU6nsNpZgO7dtJtDJyOBjwZmseMaSycm3FF60ilBsVd5wzG
+	 qJSy56ZPk+WaQ==
 From: Sasha Levin <sashal@kernel.org>
 To: Shuah Khan <shuah@kernel.org>
 Cc: Sasha Levin <sashal@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	linuxppc-dev@lists.ozlabs.org,
-	Mark Brown <broonie@kernel.org>,
-	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
+	Ivan Orlov <ivan.orlov0322@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	linux-pm@vger.kernel.org,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Nageswara R Sastry <rnsastry@linux.ibm.com>,
+	kexec@lists.infradead.org,
+	Willy Tarreau <w@1wt.eu>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Wake Liu <wakel@google.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 6/7] selftests/powerpc: report the outcome of each subdirectory
-Date: Wed, 14 Oct 2026 16:01:14 -0400
-Message-ID: <20261014200115.1363363-7-sashal@kernel.org>
+Subject: [PATCH 0/5] selftests: target selection fixes for cross and LLVM builds
+Date: Wed, 14 Oct 2026 16:01:22 -0400
+Message-ID: <20261014200127.1363472-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261014200115.1363363-1-sashal@kernel.org>
-References: <20261014200115.1363363-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,130 +53,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The powerpc suite and its pmu subdirectory install and list their tests
-in shell loops whose status is that of the last subdirectory, so a
-failure in any other subdirectory is lost and FORCE_TARGETS has no
-effect on them.
+A few suites select their tests from the build host instead of the
+target, or depend on the host C library in ways that break cross
+builds. This series fixes the ones found while building the selftests
+for several architectures:
 
-Make the installation and runlist loops fail only when no subdirectory
-succeeds, which matches how the top-level selftests Makefile treats its
-targets, and stop at the first failure when FORCE_TARGETS is set. When a
-build report is requested, record each subdirectory as powerpc/<subdir>
-or powerpc/pmu/<subdir>, including the builds of the subdirectories, so
-that a failure is visible even when make itself succeeds.
+ - prctl and the Intel thermal suites build nothing when CROSS_COMPILE
+   is set, even for x86, and prctl restricts two generic tests to x86.
 
-The subdirectories are still built as prerequisites of "all", so a
-subdirectory that fails to build still fails the build of the suite as
-before; only the reporting of that failure is added.
+ - set-anon-vma-name-test fails instead of skipping on kernels built
+   without CONFIG_ANON_VMA_NAME.
 
-Fixes: 6faeeea44b84 ("selftests: Add install support for the powerpc tests")
-Fixes: 822a04957cc5 ("selftests/powerpc: Convert pmu Makefile to for loop style")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/powerpc/Makefile     | 20 +++++++++++++++-----
- tools/testing/selftests/powerpc/pmu/Makefile | 20 +++++++++++++++-----
- 2 files changed, 30 insertions(+), 10 deletions(-)
+ - kexec only recognizes the ppc64le spelling of PowerPC and decides
+   about the x86-64 jump test from the build host.
 
-diff --git a/tools/testing/selftests/powerpc/Makefile b/tools/testing/selftests/powerpc/Makefile
-index b175e94e1901d..8349196c934d5 100644
---- a/tools/testing/selftests/powerpc/Makefile
-+++ b/tools/testing/selftests/powerpc/Makefile
-@@ -37,9 +37,11 @@ endif
- all: $(SUB_DIRS)
- 
- $(SUB_DIRS):
--	BUILD_TARGET=$(OUTPUT)/$@; mkdir -p $$BUILD_TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $@ all
-+	BUILD_TARGET=$(OUTPUT)/$@; mkdir -p $$BUILD_TARGET && $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $@ all; \
-+	status=$$?; $(call ksft_record_build_status,all,powerpc/$@); exit $$status
- 
- include ../lib.mk
-+include $(selfdir)/build_report.mk
- include ./flags.mk
- 
- override define RUN_TESTS
-@@ -50,17 +52,25 @@ override define RUN_TESTS
- endef
- 
- override define INSTALL_RULE
--	+@for TARGET in $(SUB_DIRS); do \
-+	+@ret=$(if $(SUB_DIRS),1,0); for TARGET in $(SUB_DIRS); do \
- 		BUILD_TARGET=$(OUTPUT)/$$TARGET;	\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET INSTALL_PATH=$$INSTALL_PATH/$$TARGET -C $$TARGET install;\
--	done;
-+		status=$$?;				\
-+		$(call ksft_record_build_status,install,powerpc/$$TARGET); \
-+		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
-+		[ $$status -eq 0 ] && ret=0;		\
-+	done; exit $$ret
- endef
- 
- emit_tests:
--	+@for TARGET in $(SUB_DIRS); do \
-+	+@ret=$(if $(SUB_DIRS),1,0); for TARGET in $(SUB_DIRS); do \
- 		BUILD_TARGET=$(OUTPUT)/$$TARGET;	\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET COLLECTION=$(COLLECTION)/$$TARGET -s -C $$TARGET $@;\
--	done;
-+		status=$$?;				\
-+		$(call ksft_record_build_status,install,powerpc/$$TARGET); \
-+		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
-+		[ $$status -eq 0 ] && ret=0;		\
-+	done; exit $$ret
- 
- override define CLEAN
- 	+@for TARGET in $(SUB_DIRS); do \
-diff --git a/tools/testing/selftests/powerpc/pmu/Makefile b/tools/testing/selftests/powerpc/pmu/Makefile
-index 7e9dbf3d0d092..7b3ef1decbfbb 100644
---- a/tools/testing/selftests/powerpc/pmu/Makefile
-+++ b/tools/testing/selftests/powerpc/pmu/Makefile
-@@ -7,6 +7,7 @@ EXTRA_SOURCES := ../harness.c event.c lib.c ../utils.c
- 
- top_srcdir = ../../../../..
- include ../../lib.mk
-+include $(selfdir)/build_report.mk
- include ../flags.mk
- 
- SUB_DIRS := ebb sampling_tests event_code_tests
-@@ -26,7 +27,8 @@ $(OUTPUT)/count_stcx_fail: loop.S $(EXTRA_SOURCES)
- $(OUTPUT)/per_event_excludes: ../utils.c
- 
- $(SUB_DIRS):
--	BUILD_TARGET=$(OUTPUT)/$@; mkdir -p $$BUILD_TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $@ all
-+	BUILD_TARGET=$(OUTPUT)/$@; mkdir -p $$BUILD_TARGET && $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $@ all; \
-+	status=$$?; $(call ksft_record_build_status,all,powerpc/pmu/$@); exit $$status
- 
- DEFAULT_RUN_TESTS := $(RUN_TESTS)
- override define RUN_TESTS
-@@ -42,18 +44,26 @@ emit_tests:
- 		BASENAME_TEST=`basename $$TEST`;	\
- 		echo "$(COLLECTION):$$BASENAME_TEST";	\
- 	done
--	+@for TARGET in $(SUB_DIRS); do \
-+	+@ret=$(if $(SUB_DIRS),1,0); for TARGET in $(SUB_DIRS); do \
- 		BUILD_TARGET=$(OUTPUT)/$$TARGET; \
- 		$(MAKE) OUTPUT=$$BUILD_TARGET COLLECTION=$(COLLECTION)/$$TARGET -s -C $$TARGET emit_tests; \
--	done;
-+		status=$$?; \
-+		$(call ksft_record_build_status,install,powerpc/pmu/$$TARGET); \
-+		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
-+		[ $$status -eq 0 ] && ret=0; \
-+	done; exit $$ret
- 
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
--	+@for TARGET in $(SUB_DIRS); do \
-+	+@ret=$(if $(SUB_DIRS),1,0); for TARGET in $(SUB_DIRS); do \
- 		BUILD_TARGET=$(OUTPUT)/$$TARGET; \
- 		$(MAKE) OUTPUT=$$BUILD_TARGET INSTALL_PATH=$$INSTALL_PATH/$$TARGET -C $$TARGET install; \
--	done;
-+		status=$$?; \
-+		$(call ksft_record_build_status,install,powerpc/pmu/$$TARGET); \
-+		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
-+		[ $$status -eq 0 ] && ret=0; \
-+	done; exit $$ret
- endef
- 
- DEFAULT_CLEAN := $(CLEAN)
+ - size links a custom _start against the static C library, which
+   fails on ARM with clang and on LoongArch; it now uses nolibc.
+
+The patches are independent of each other.
+
+Sasha Levin (5):
+  selftests/prctl: build generated tests for the target architecture
+  selftests/prctl: skip the anonymous VMA naming test when unsupported
+  selftests/thermal: allow cross builds of the Intel tests
+  selftests/kexec: select tests using the target compiler
+  selftests/size: use nolibc startup and syscall wrappers
+
+ tools/testing/selftests/kexec/Makefile        | 26 ++++++++-------
+ tools/testing/selftests/prctl/Makefile        | 18 +++++-----
+ .../selftests/prctl/set-anon-vma-name-test.c  |  3 ++
+ tools/testing/selftests/size/Makefile         |  9 ++++-
+ tools/testing/selftests/size/get_size.c       | 33 +++++--------------
+ .../thermal/intel/power_floor/Makefile        | 12 +++----
+ .../thermal/intel/workload_hint/Makefile      | 12 +++----
+ 7 files changed, 52 insertions(+), 61 deletions(-)
+
+
+base-commit: 4eb2586bd40db27d77cc5b724ca9386ed0c71d53
 -- 
 2.53.0
 
