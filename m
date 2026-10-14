@@ -1,140 +1,195 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8734E325C
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 09:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791971129; cv=pass; b=hUEWsqZMv3ikJfXmEwhiOop+mMNuGPy0dfgrv3n/DfVCSEH3Ack6HfR89a5//Z6BZMihzXS8eFs527MG57pqolABxi9XsRtr1OUTPn5kc82g3G7iT/inYYP4XtaDVXoAZrS37gTrgGwopPVvNebO3ZHe4xVz+isyi7jVyYVryp4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791971129; c=relaxed/simple;
-	bh=gusoHEwTYtpIMo9jbvB0sb5YbKOtm4Z6P3NaNg27eS0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XgA1bJD5pPqTD5L9zY0Fb6Ij9mYshAogOVv5dZg6bVipJmCp1XTBT7IzUegngKFNrQAfFm4jMZQhgxi4+3dgqkMnhUgRITjO13PDN6cc4PyvBMxAQcVyVhIqcuGLFaABpUK5fOwy/WtXhiLEU/OwrZblle37BJhU0y5mHkJdEYE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=PK1r923x; arc=pass smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A6A4CA27E
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 09:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791971828; cv=none; b=LGc13H5ZRyG6jdZouC3zeGlxBmF1+blB9Z9YF++5ghwk2aU7XdDWfslcVKEPsPme2oCnG1UGmux/qfgYGyaahJEWowK2FkpWQnn7LtD/OY7SAKeeX5Go00q3QqNVVKltYk6g/SZjzvuixYHOEto7AicnTiUk5ynDMapj3729P6Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791971828; c=relaxed/simple;
+	bh=qA69ri66dsMoSQKZKokr8N+gVHGTbzuvnNDHG21QYWg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LugUKf3stvemOovbPr2kHC5mpZs2Yu4ViKCEjRCCookNBWZ3A9VGCQdADzUYaVBYT6Uj44821Yoiic6+J7fNivjiM6pJG4hhOZW9c5PwnPECnAZbNj8Q8irEd+Iu/V/Zk4whqUZSSrQTPp4tEaMGq8TJWJv0m/PkRYUHqKU08EQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dc59VUkB; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="PK1r923x"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-87ab6e5f91eso25138387b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 02:45:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791971126; cv=none;
-        d=google.com; s=arc-20260327;
-        b=npbazNA70hMInAyLHRkzbNrFPvjg62nAzxWUeYZwdWW4v6l84snhO2kTLLrmhTOKpF
-         RapSpJo+Sut9IYMM3oa5dPiSQytWWFobuQR1i+fTC2FEtkL/lqoYZW9jXH3BhcQA+Ll/
-         7aHSG7OQGLkA4mpLIBn3MJX0xIpJBTH/3Vbe1umuhDhEDpck0o9bwl8WszM4uwPlkcrt
-         NUGLhRjRAmtWLsWykd6DkDA7ZM2tde9Kq1hOWZ84GJhEvUkDw17y+AwH+IET5Mus2Hdt
-         otJ170P/TpZGatbe1qSMGPm9o8AZhKSr+KMjOcQlKADGxrOFc2RvlsRshHjlWZk9LylS
-         8znQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=gusoHEwTYtpIMo9jbvB0sb5YbKOtm4Z6P3NaNg27eS0=;
-        fh=4U88+ANAAWNzllpjH2h67gr8uY/crS9DtOmVqpgYIwE=;
-        b=aUggXOwmWDTAVN3xtnOk6dbW088CvTWkfkfcCUh6kZfwMQa2s+G7vFNCFyJX3Oqkwp
-         0KMUrcAjUpwxvNV3yHQq7JmigcirLyDGtV2t9QQshyx2IDOxreixmdHx+/cVtvasrCIN
-         4+CrOWq69E2YYQi79H9XdWPhgizuF+LnRJ0ZHzznNa7+9HdeLzA0pm5oIY4fACLy6dFq
-         Mljg7wkocyOzKTGvwIepGRK8P9EZTPpoO5pqU+AOJ+21me5AURIPAoYmw86JHoJsitvu
-         MsUKvE7JSeNcbIERciIBIbBt9op4wBPRE7ATkKpTJIWG+yV1f3T9XFhxoGiF1637HWe3
-         3zXQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dc59VUkB"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-48c411d6615so2812929f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 02:57:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1791971126; x=1792575926; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gusoHEwTYtpIMo9jbvB0sb5YbKOtm4Z6P3NaNg27eS0=;
-        b=PK1r923xhU7qDZUbZmXe0yFUiSBca3J8XHIHs9qS+//TYB4Fft+Qo2Ljqk3oG6sPvs
-         ExQCXNC1AHfaOK+vCwWLnwkjAKTf2UBbROgtrQXr86a/xPPl6cnW8uxv3/TF1HaeunIL
-         WDiDbbme6gyhDZGG95JeVXsSEylcaz4DknthCfgSWs5Ausu5ByUHgSsm7wIUQRywIF7U
-         6L6dKDQwf2C+Dc83KQaib+KmDPGD3y03epzqW/Cg6zX34bmKNG+1EutwDxzYAA5TyPdM
-         vvgnoK8SarlTBCqLg0ZTdzmtuFchV5igeEa4cykI2Ygktz2Ux2qUDOT2+uGnWf2ewKNE
-         z44g==
+        d=gmail.com; s=20251104; t=1791971824; x=1792576624; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JhQ5yirY83poEzPx8x3H8aN7RnWItIKkuGofgEQwLq8=;
+        b=Dc59VUkBcSJFKU18k1Zdcfw9Tf8Ab9IjtxWZ1jGUTSdA1hd5a4N8uqA2K4v57Wv4nY
+         V8ekyZ8hhlwFrY4vnrZY4HGRoPDeJrKaU30YxzNdlsp8lpynXfhtD3xqnmAhFA9rSFBO
+         8Wd2cX+4PO9Byo5uk+aIRM+jGSeYDbdyAOI3zrabmZ+5Xng1YNHjUZxItGtqIEKyKc2/
+         Sf/j8su775EkNfg9ODWxCVCdwtxK9WsGVmsEGcferUQizct8kDgI0lcEF76Zi5pg72XZ
+         li1szsWIVM6I6UKuPhRImv5uHFNVC3/uPopohVohBuToxHsaqtg0vbq3XCsNRZ+FS0Yo
+         n6pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791971126; x=1792575926;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=gusoHEwTYtpIMo9jbvB0sb5YbKOtm4Z6P3NaNg27eS0=;
-        b=HBDnqUHtpHmpxOcwZLunGPlwqyDEzx1bGeBBCirGd+4e5pGgLLvxq1S2RoIRwE/yVq
-         k7YjGIGyjvb88ikFW0Cy88Q63uze1S7kRhuo1drbsgt6AMgN5/L8nj7jZmdLizkdI61V
-         vQJO1DT1FrdwEwRUzwlLk7a7q3Iwr02G7h8X6m4zhV9vG4sz3IomzCAhTtAiJ9rYnt2/
-         xsZQElAPlX2wHVBOy37L77nKfW3ul44oRDixNAucurWCaENNKtB5axpjkwX358XkwfDw
-         caTwXM4PS6nq8mHdfKC5Tlj4KhBqyzo7gGWjEosBcTCBzGfWOyjQD+IFF0NU64sACuTH
-         7Wsw==
-X-Forwarded-Encrypted: i=1; AKwUvByH6PvucW3GS8beI/RElj4iAab/mq1QkREgRTHdCUZn+eIRI1WCO0a93MxemEeONaL0o+NR6NU8pmdVvCTa+Hw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLtnamLN9Yw5zPAf30VlOToskbg2qo9r34bmOau6UGKuOQeA6qE
-	TupDw+axD7nWm16MrDlAxZlXNcJKHnjKzL0QPapmt0MRm8rXiVAvfWtPtVp1jvWJw5PcAjvcFaz
-	YpYqv5AYTjxHPDTBGjnn6B4sATY3U8NIv7HR6vVhzYTMCObdxRPtiMWba93q0JQ==
-X-Gm-Gg: AYBFou1RMl/bw6aaQfh3BK5dFKVwUb6MpL5/A8Yw4ib/4qj8BbTlKDLFN65ppnDzevS
-	98f8BjrAnRTTBKvOg3Xps8elnecCLSMkm9AD5ffTXh9GKHZ1HOjiV7N9IoH0LuGo3uMHNyneOv4
-	AowfA2hzalTfowVnuyZdEApNW3+KuN7XAtDZAxz9adNtaQ5ezpBbA2V0PgpdsPhpE4vp1OYEe1g
-	72YcxOC2/kqHvlWZcnRtzwWpl9Vxw53Gkl3fp+fhC0fiJd18lwXShi10mkdG4rqs6KMxyTs5N8e
-	t1vy7NDIVrJQTH6wWjua6PCfqtaWl/GVjDq0LJdfnKBYPvK7Ws+/58W/+cwes5Y5+JykzNpB8Nz
-	MKa63NYZHIlJI6mavPKnHV2XR8LyVtLsW+OeUABOcvJD1EGTIU9wli0d2nE0LzH3fnAHCQ37NAU
-	Y72mB6vILXDjtq7bzHQJsmLXxfH0ZUKNj+rFRNu2JtIXUVt1iWTpHR6JpygaOrBn0C/a/zkP/7o
-	4SIScjSNcxlp4KewCnhftVW5gJVjYmDL5k1z2d6CH6wvyEV8+ZDayyJ2Nf5fRVzJSY3p0PDr76M
-	0JXrKafbSX9uPg==
-X-Received: by 2002:a05:690c:c4e5:b0:8b0:9e22:2651 with SMTP id
- 00721157ae682-8b09e22273cmr36219317b3.7.1791971126209; Wed, 14 Oct 2026
- 02:45:26 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791971824; x=1792576624;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JhQ5yirY83poEzPx8x3H8aN7RnWItIKkuGofgEQwLq8=;
+        b=AX9upyVSiMLXHJZaGb0QuPjfXYF+zVgWr3fkMt8g+Tu5KTBOA245YmJUfunbqNSSuo
+         iNonwmk4gxkE0LcCNVLvxK7kRJp+VcXudWL4H9774HXa4cfhtNT1T1lWodIZJSxh9i0U
+         uWY+v1b+54Aqlp6KnHvGY5TgFyrxj2iz3zBk4Al9R9JOidwxMO0ZkXb9sXP+pzVJDEhK
+         DNCd/BkIv6zvcFE3XUBdSCeYJWniCwn0z34+Mil5A1tEt9Gk6qj7gaL7MNidD9TORSck
+         llkY5d08VMIE6jT3PhNLnCX/zhdsGuvVzioiiuj6sge0N5wPVnel23hhwDma/WBaXLNE
+         juoQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzMCuFB/2tZ7k3ukqqI2iXEQ+HqJjagCNBIekJwXdXMNVx52K7Hs/0myEIiwjeCK11IeEGg7eMStF7UEVUVLKo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKf8bEQmyv3IZ++7vQ6EhPcCcOH0qaWtvRwvBoeLcJsI81jrteD
+	AS35rUFweXiJ2L2+rgDhb/JixAUzeClsFGvykR0FYUpbvyJZfEuIXo8v
+X-Gm-Gg: AYBFou0ULVLXFgJjmBL8tKjjXxT6Xc+zMKPwrfiaoL/wnMkrcrhWCUF4wl8bIMEyXt8
+	svVlAVXDGfgQD58EVdRe/OcBmbzaQSUDqEbpF5AO/BzeIzwQCW/mNZYzlkK3AN1lVoMex6GZElf
+	1XX+Rs+FVGVZtP48x5uy4jsc97PUm3vbmgb/U+r0zmXXIZYOs8z04MlzaYPND8KbnKjGHafzaP6
+	bpWSHm+HIORQVW9px8HiCGVAIqrb0Y+Hjs6SDNNJdS4zFFc1dPWimG9GSGFm5IHxRPaoWumMvNl
+	Sd3AUuCAdz7NT2VdAkZPJywhhJn4RBeTOYAzspWEvs/LYXUr1yoPPL2zSn0ZkAxg4klS6OrJvOL
+	1+VrAhFL8qHopaAgXapGNlMzNWbZe2nQ3cVpnoDArIaAwk1yawZsN2zRVj9IY5hFg6W/olGF2bb
+	3b34sOEMG8dWiQoe83hpxJOiN/XlPAXaWnwHnn2Wq4Fb9wGmPDrIlo8cXsB3HOcRcMx/Dw53dO7
+	TYdq5aaEgNL4cbXB2ecx0cfUyrivtqkDyWfLe8kt80BMdJGoOurGsl0Zel0Kq1mth4X00YmaOWz
+	s52DZb6doBs4sscLEDJODx9Fs3U1Uo4sdS7l
+X-Received: by 2002:a05:600c:4747:b0:4a1:80d8:aed0 with SMTP id 5b1f17b1804b1-4a18e4a9862mr311763425e9.15.1791971824195;
+        Wed, 14 Oct 2026 02:57:04 -0700 (PDT)
+Received: from dev-dsk-fgriffo-1c-93421965.eu-west-1.amazon.com (54-240-197-234.amazon.com. [54.240.197.234])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de0ac5257sm11206338f8f.42.2026.10.14.02.57.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 14 Oct 2026 02:57:03 -0700 (PDT)
+From: Fred Griffoul <griffoul@gmail.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Ackerley Tng <ackerleytng@google.com>
+Cc: David Woodhouse <dwmw2@infradead.org>,
+	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	iommu@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [RFC PATCH 0/9] mm: Memory providers for guest_memfd and iommufd
+Date: Wed, 14 Oct 2026 09:57:02 +0000
+Message-ID: <20261014095702.39676-1-griffoul@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <CAEvNRgEseLO+LbkwXrEit0H2LH5Wx-srSvHEMpt0=upPL3tF=g@mail.gmail.com>
+References: <20260720111259.122911-1-dwmw2@infradead.org> <20261006183235.16576-1-griffoul@gmail.com> <CAEvNRgEseLO+LbkwXrEit0H2LH5Wx-srSvHEMpt0=upPL3tF=g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261004171636.3545085-1-julius@bairaktaris.de>
- <20261004171636.3545085-2-julius@bairaktaris.de> <b4aa46a5-dd8a-4520-8574-d008a3877f28@nvidia.com>
-In-Reply-To: <b4aa46a5-dd8a-4520-8574-d008a3877f28@nvidia.com>
-From: Julius Bairaktaris <julius@bairaktaris.de>
-Date: Wed, 14 Oct 2026 09:44:49 +0000
-X-Gm-Features: AclHuK_at13xJpgBNhwlZvLzlUVxJXDvkN0LGkLWSuS73Rn7U8oFN9DIXlg-t_w
-Message-ID: <CAC1t37K0tEMzxmRhLeHnH-TPx61pZmCHt0xxTJ5Wq2Wxvzv8Jw@mail.gmail.com>
-Subject: Re: [PATCH nf-next v3 1/3] net/mlx5e: Ignore FLOW_ACTION_PRIORITY on
- flowtable offload
-To: Jianbo Liu <jianbol@nvidia.com>
-Cc: pablo@netfilter.org, fw@strlen.de, phil@nwl.cc, 
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
-	netdev@vger.kernel.org, lorenzo@kernel.org, nbd@nbd.name, 
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net, 
-	rdunlap@infradead.org, skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, saeedm@nvidia.com, leon@kernel.org, 
-	tariqt@nvidia.com, mbloch@nvidia.com, linux-rdma@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 14, 2026 at 03:17:00AM +0200, Jianbo Liu wrote:
-> The handler is only in tc_acts_fdb[] and only accepts flowtable flows,
-> so NIC mode and tc flower rules are rejected as before. Looks good.
+Ackerley Tng <ackerleytng@google.com> writes:
+
+> When the provider wants to revoke the page, the notifications/function
+> calls flow this way, the last [ENTITY] in the chain actually does the
+> zapping.
 >
-> The comment says what the code does, but the consequence is worth a line
-> in the commit message. Because the action is ignored, the priority only
-> reaches packets still on the software fast path, where
-> nf_flow_offload_forward() sets skb->priority. Once the flow is offloaded
-> to the FDB, mlx5 forwards it without touching skb->priority, so the
-> offloaded packets do not carry it. Refusing the flow to honor the
-> priority would keep it in software, so ignoring the action and keeping
-> the offload is the better tradeoff, it is just not obvious from the code.
->
-> I checked this on ConnectX-7: with the series the priority-carrying
-> flows stay offloaded to the FDB like plain flows, and without patch 1/3
-> they fallback to software.
->
-> Nit: "prio" already means flow table priority in mlx5; skbedit_prio
-> would be clearer. Not a blocker.
->
-> Reviewed-by: Jianbo Liu <jianbol@nvidia.com>
+> + [PROVIDER] -> [KVM]
+> + [PROVIDER] -> [DMABUF] -> [IOMMU]
+> + [PROVIDER] -> [GUEST_MEMFD] -> [USERSPACE] (AFAICT this was not
+>   implemented in the RFC.)
 
-Hi Jianbo,
+Thanks for going through it. I have just posted v2:
 
-Thanks a lot for the review and for testing this on ConnectX-7!
+  https://lore.kernel.org/all/20261014093733.90312-1-griffoul@gmail.com/
 
-I will send v4 with your suggestions this weekend.
+It changes two of these chains. dma-buf is gone: iommufd attaches to
+the provider file itself, through a small interface in mm. And
+guest_memfd now maps the file into userspace from the provider's
+frames, so a revoke also zaps the VMM's mapping:
 
-Best,
-Julius
+  [PROVIDER] -> [GUEST_MEMFD] -> [KVM], [USERSPACE]
+  [PROVIDER] -> [IOMMU]
+
+> IIUC guest_memfd conversions was not illustrated in the RFC: what
+> happens on a shared -> private conversion?
+
+There are none yet. Only VMs of type KVM_X86_DEFAULT_VM can use a
+provider, so all their memory is shared.
+
+> Does your provider need to know if some memory was transitioned between
+> shared/private states? The provider can be notified too, if
+> necessary. If not, then isn't guest_memfd doing all the coordination
+> better than going via the provider?
+
+Our provider does not need to know, and I agree: once there is private
+memory, guest_memfd converts the pages, so it should tell the others
+what to zap.
+
+I think the two models meet there, and the v2 cover letter now says so.
+The iommufd side of v2 does not pin and keeps no references: it asks for
+the frame behind each page, treats a page with no frame as a hole, and
+maps again on a revoke. guest_memfd can offer that for its own file:
+shared pages return their frames, private pages are holes, and
+guest_memfd revokes a range whenever it converts it, in either
+direction. That is your [GUEST_MEMFD] -> [IOMMU], and it should work for
+folio-backed guest_memfd without memfd_pin_folios() or refcounts, as
+long as guest_memfd also revokes a range before it frees its folios.
+
+The one difference is that v2 also lets iommufd map a provider file
+directly. Going through guest_memfd would add nothing without private
+memory: it would only pass each revoke on. And memory that only devices
+use, such as MMIO, does not go through guest_memfd at all. Both paths
+would use the same iommufd code.
+
+> Does the revocation model work for you? If it helps, I can rebuild the
+> sample provider to illustrate how the revocation can be done.
+
+Yes, the revocation model works for us. v2 replaces David's sample
+with one that moves, donates and makes pages read-only, and a selftest
+that checks the guest, the device and the VMM's mapping after each
+change. It may be a good base if you want to try guest_memfd as the
+provider for iommufd on top of it.
+
+> 4. [DIRECTMAP] Kernel direct map.
+
+Agreed, that is separate. The memory we have in mind is a range hidden
+from the host with memmap=, so it is not in the direct map.
+
+Thanks,
+Fred
