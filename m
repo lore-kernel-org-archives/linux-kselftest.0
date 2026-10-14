@@ -1,197 +1,158 @@
-Received: from mta1.migadu.com (out-61.mta1.migadu.com [95.215.58.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0173DC4D3
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 06:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF523D7A01;
+	Wed, 14 Oct 2026 07:40:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791961101; cv=none; b=uzbs1PyTjnIQzbMfA0ljXKKDVr+4dCLQ5FDzNRzShqCFtu9xP47hsUIgNTaH7tap/CyMExz5f0hBK2Ko3txI+EY0MB42L0Poy8lBm6/xtMVB9dR3xPEvpX+IJwJErcdS124iveKsL/T4Jv0ldXoyHmP+H1IhIPO/pt1JXi4aZZ4=
+	t=1791963627; cv=none; b=EuSdOi5M4tiHb12kiVofARK768oHn0NyPXRLNlflYkKgidhCABdTko6Xr4BCC+P9ZTd+jeBqSbMBFSZY7cSb8hk3phLYB8UJldjxcEoRpJmLvzplSdopBQu3ieufwq4ByOVDV4mxqSGqgXOzqgK4dNjXGQtQ3jwslbfghJOOKS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791961101; c=relaxed/simple;
-	bh=yfed7VdbcjS1SYYYrpngOFPiBqGUy+y6aRotqy033rI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RYVwgSsVm3cNGL3u00qP3idS9odIJ7bwu4lSeiM3sWCGSZljo91wLaivvpq17yQ7+iaXdct/g9WMbjgL05delJY4kwt2d8oqB1I4BPxRX9ltXj3wEGvLGMeUnoD9OEnvik+Sgk9fGkwKe22f9JjyTcTlAMlnOaKeb5XD+YDbRbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RJ/AFPj8; arc=none smtp.client-ip=95.215.58.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791963627; c=relaxed/simple;
+	bh=8DNqwTDkyG/HzDA3Nlvx/HSSupKQoyoupiHktAu3TRQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ce0QmjmJlAobpFkMvIGrYxmheNRhjl2HpG1ETmXDvIkSPGv6at5E5eeQo4zTi0SlNgULYlofyfyBgjExWruSpsTINaWI+dwF8CaN7F6azZSwKVDUYSXXG44x9CVI/vVpZSm9+TqGsE74ZP1NEuEPhZeUhsBLaCPxxZX28bQz1U8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=bP1w0Tdf; arc=none smtp.client-ip=207.54.90.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RJ/AFPj8"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=yfed7VdbcjS1SYYYrpngOFPiBqGUy+y6aRotqy033rI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791961096; v=1; x=1792565896;
- b=RJ/AFPj8Yc4XxGVs6ygQtLmKkK3C43KRUpkSQ58mLfDD01tgjASwWu6wROnerdwRORKZwoF3
- oe7OoKmx2yhpnQ7C5W/k91EouC3o4CzRaBGC2fwZs5zbhQLj7QONd3HFTh7dMF0X9/WjDs5dE7q
- o5wF36+QCrjfiW/DGluzR0hc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 935e00c1cceda272;
-	Wed, 14 Oct 2026 06:58:16 +0000
-X-Mizu-Trace-ID: 935e00c1cceda272
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a0739252-5d96-4e73-825d-4d97f5be41f4@linux.dev>
-Date: Wed, 14 Oct 2026 14:58:09 +0800
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="bP1w0Tdf"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1791963632; x=1823499632;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8DNqwTDkyG/HzDA3Nlvx/HSSupKQoyoupiHktAu3TRQ=;
+  b=bP1w0TdfEimOYI7Q9WtUMKwZ+GgVT2ebtI12TYDyRcefpKbmHLeK9OGV
+   wfUvon/07o6Yqe1mhyJdk9XvfszgFYhLHmnsp7m++kFS3YasrQDPPS84I
+   22nb+3nkB1VE0dTsr8tbR5znKCYtABl9VGxqKQf5iPT0RO93dzjxyoelH
+   xCdnUH27dAEkUV5D66jI5Bp6iIaaEPMeFVzbw+iCpZ/TrusFaC1WpmDgX
+   x5YViXtRtLhYUPmB59HY2HLzu7s4bjHK/ZEL+SVRY9DEtVglDelrpee++
+   Q+GpS8PEfxnCcihfof5V7sqDDgcYrEHyI7R4zI0U8ox+OK6TiA5/JIiG9
+   Q==;
+X-CSE-ConnectionGUID: YrjmsRJFTGGoTgakHAVB6g==
+X-CSE-MsgGUID: nUADrrfVTQuct8uRexfxYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11934"; a="258142034"
+X-IronPort-AV: E=Sophos;i="6.27,157,1786978800"; 
+   d="scan'208";a="258142034"
+Received: from gmgwnl01.global.fujitsu.com (HELO mgmgwnl01.global.fujitsu.com) ([52.143.17.124])
+  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 16:40:29 +0900
+Received: from az2nlsmgm1.o.css.fujitsu.com (unknown [10.150.26.203])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mgmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id B787D7A49;
+	Wed, 14 Oct 2026 07:40:23 +0000 (UTC)
+Received: from az2uksmom4.o.css.fujitsu.com (unknown [10.151.22.204])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2nlsmgm1.o.css.fujitsu.com (Postfix) with ESMTPS id 6FDD4C013DA;
+	Wed, 14 Oct 2026 07:40:23 +0000 (UTC)
+Received: from sm-arm-grace07 (unknown [10.124.178.20])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2uksmom4.o.css.fujitsu.com (Postfix) with ESMTPS id 66FEA402666;
+	Wed, 14 Oct 2026 07:40:18 +0000 (UTC)
+Date: Wed, 14 Oct 2026 16:40:15 +0900
+From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Subject: Re: [PATCH v8 0/3] KVM: selftests: arm64: Improve diagnostics from
+ set_id_regs
+Message-ID: <as8x38o9taXgKZym@sm-arm-grace07>
+References: <20260929-kvm-arm64-set-id-regs-aarch64-v8-0-58aabe2c2fac@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2 1/6] cgroup/cpuset: Consolidate
- isolated_cpus_can_update() into prstate_housekeeping_conflict()
-To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Hui Peng <benquike@gmail.com>
-References: <20261010221938.243859-1-longman@redhat.com>
- <20261010221938.243859-2-longman@redhat.com>
- <7ec04fe0-994e-44d3-8c20-6732c9f20afd@linux.dev>
- <37481345-f80b-4b28-8519-15c396fc7942@redhat.com>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <37481345-f80b-4b28-8519-15c396fc7942@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260929-kvm-arm64-set-id-regs-aarch64-v8-0-58aabe2c2fac@kernel.org>
 
-
-
-在 2026/10/14 02:59, Waiman Long 写道:
+Hi Mark,
+On Tue, Sep 29, 2026 at 05:16:51PM +0100, Mark Brown wrote:
+> While debugging issues related to aarch64 only systems I ran into
+> speedbumps due to the lack of detail in the results reported when the
+> guest register read and reset value preservation tests were run, they
+> generated an immediately fatal assert without indicating which register
+> was being tested. Update these tests to non-fatally report a standard
+> kselftest result per register, making it much easier to see what the
+> problem being reported is.
 > 
-> On 10/11/26 1:49 AM, Guopeng Zhang wrote:
->> Hi，Longman,
->> 在 2026/10/11 06:19, Waiman Long 写道:
->>> The isolated_cpus_can_update() and prstate_housekeeping_conflict() are
->>> checking different aspects of upcoming cpumask changes that may conflict
->>> with the current setting of the housekeeping cpumasks. There are places
->>> where both are called together. There are also places where only one
->>> of them is called. That inconsistency can contribute to missing check
->>> where invalid cpumask changes may be allowed to move forward.
->>>
->>> Fix that by consolidating isolated_cpus_can_update() into
->>> prstate_housekeeping_conflict() and call prstate_housekeeping_conflict()
->>> in all the places where either one of them or both are called. The
->>> exception is the validate_partition() function where the
->>> prstate_housekeeping_conflict() call is removed. It is because
->>> validate_partition() is called only from partition_cpus_change()
->>> where prstate_housekeeping_conflict() will be called from either
->>> remote_cpus_update() or update_parent_effective_cpumask() with
->>> partcmd_update if not for partition invalidatation or disablement.
->>>
->>> Now prstate_housekeeping_conflict() will be called in the following
->>> locations:
->>>   - when a partition is enabled in remote_partition_enable() or in
->>>     update_parent_effective_cpumask() with partcmd_enable*.
->>>   - when a cpumask is updated in remote_cpus_update() or in
->>>     update_parent_effective_cpumask() with partcmd_update.
->>>   - when a partition state changes from root to isolated or vice versa
->>>     in update_prstate().
->>>
->>> Fixes: 4a74e418881f ("cgroup/cpuset: Check partition conflict with housekeeping setup")
->>> Fixes: 103b08709e8a ("cgroup/cpuset: Fail if isolated and nohz_full don't leave any housekeeping")
->>> Signed-off-by: Waiman Long <longman@redhat.com>
->>> ---
->>>   kernel/cgroup/cpuset.c | 123 +++++++++++++++++------------------------
->>>   1 file changed, 52 insertions(+), 71 deletions(-)
->>>
->>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>> index 0ebba2d646c3..f3cebb277a68 100644
->>> --- a/kernel/cgroup/cpuset.c
->>> +++ b/kernel/cgroup/cpuset.c
->>> @@ -1353,65 +1353,62 @@ static void partition_xcpus_del(int old_prs, struct cpuset *parent,
->>>   }
->>>     /*
->>> - * isolated_cpus_can_update - check for isolated & nohz_full conflicts
->>> - * @add_cpus: cpu mask for cpus that are going to be isolated
->>> - * @del_cpus: cpu mask for cpus that are no longer isolated, can be NULL
->>> - * Return: false if there is conflict, true otherwise
->>> - *
->>> - * If nohz_full is enabled and we have isolated CPUs, their combination must
->>> - * still leave housekeeping CPUs.
->>> + * prstate_housekeeping_conflict - check for partition & housekeeping conflicts
->>> + * @new_prs: new partition root state to be checked
->>> + * @parent_prs: Parent partition root state
->>> + * @add_cpus: additional CPUs to be added to current cpuset
->>> + * @del_cpus: CPUs to be removed from current cpuset, can be NULL
->>> + * Return: true if there is conflict, false otherwise
->>>    *
->>> - * TBD: Should consider merging this function into
->>> - *      prstate_housekeeping_conflict().
->>> + * There are two different housekeeping conflicts to be checked:
->>> + * 1) If new_prs is PRS_ROOT, none of the @add_cpus can be a boot-time isolated
->>> + *    CPU. IOW, the whole @add_cpus must be a subset of HK_TYPE_DOMAIN_BOOT.
->>> + * 2) If nohz_full is enabled and we have isolated CPUs, their combination must
->>> + *    still leave housekeeping CPUs. This check is only needed if new_prs
->>> + *    differs from parent_prs and one of them is PRS_ISOLATED.
->>>    */
->>> -static bool isolated_cpus_can_update(struct cpumask *add_cpus,
->>> -                     struct cpumask *del_cpus)
->>> +static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
->>> +                      struct cpumask *add_cpus,
->>> +                      struct cpumask *del_cpus)
->>>   {
->>>       cpumask_var_t full_hk_cpus;
->>> -    int res = true;
->>> +    int res;
->>>   -    if (!housekeeping_enabled(HK_TYPE_KERNEL_NOISE))
->>> +    if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT) && (new_prs == PRS_ROOT) &&
->>> +        !cpumask_subset(add_cpus, housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT)))
->>>           return true;
->>>   -    if (del_cpus && cpumask_weight_and(del_cpus,
->>> -            housekeeping_cpumask(HK_TYPE_KERNEL_NOISE)))
->>> -        return true;
->>> +    if (!housekeeping_enabled(HK_TYPE_KERNEL_NOISE) ||
->>> +        (new_prs == parent_prs) ||
->>> +        (!del_cpus && (new_prs != PRS_ISOLATED)) ||
->>> +        ((new_prs != PRS_ISOLATED) && (parent_prs != PRS_ISOLATED)))
->>> +        return false;
->>>   
->> When a child partition switches from root to isolated under an isolated
->> parent, this returns false even though the child's CPUs were not isolated
->> before the switch.
->>
->> On a fresh boot with CPUs 0-15 online and nohz_full=2-15:
->>
->>      # cd /sys/fs/cgroup
->>      # echo +cpuset > cgroup.subtree_control
->>      # mkdir A B
->>      # echo 1-2 > A/cpuset.cpus
->>      # echo isolated > A/cpuset.cpus.partition
->>      # echo +cpuset > A/cgroup.subtree_control
->>      # mkdir A/C
->>      # echo 1 > A/C/cpuset.cpus
->>      # echo root > A/C/cpuset.cpus.partition
->>      # echo 0 > B/cpuset.cpus
->>      # echo isolated > B/cpuset.cpus.partition
->>      # cat cpuset.cpus.isolated
->>      0,2
->>      # echo isolated > A/C/cpuset.cpus.partition
->>      # cat A/C/cpuset.cpus.partition
->>      isolated
->>      # cat cpuset.cpus.isolated
->>      0-2
->>
->> CPU 1 was the last remaining housekeeping CPU: it was in neither the
->> nohz_full mask nor the cpuset.cpus.isolated mask. The final write isolates
->> CPU 1 as well, leaving no housekeeping CPU.
->>
->> Should this check also take the child's previous partition state into
->> account, rather than just comparing its new state with the parent's state?
+> A similar issue exists with the validation of the individual bitfields
+> in registers due to the use of immediately fatal asserts. Update those
+> asserts to be standard kselftest reports.
 > 
-> This is actually a problem that is hard to fix without introducing a lot of complexity. After spending a day or so trying to find a possible fix from 2 different perspectives, I realize that either one will introduce quite a lot of complexity into the existing cpuset partition code. When looking at it again from a higher level, I think we may have allowed too much freedom to create a complicated nested partition hierarchy. If we simply don't allow the creation of root partition under an isolated partition parent, this problem will not exist. It is indeed a new limitation imposed on the existing cpuset partition functionality, but it is a simple solution and I don't believe there is a real use case in the creation of a root partition under isolated partition. Please correct me if my use case assumption is wrong.
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> Changes in v8:
+> - Convert another assert.
+> - Link to v7: https://patch.msgid.link/20260901-kvm-arm64-set-id-regs-aarch64-v7-0-7b065b0bda9a@kernel.org
 > 
+> Changes in v7:
+> - Rebase onto v7.3-rc1.
+> - Link to v6: https://patch.msgid.link/20260719-kvm-arm64-set-id-regs-aarch64-v6-0-724287f5f108@kernel.org
+> 
+> Changes in v6:
+> - Rebase onto v7.2-rc3.
+> - Drop changes to handling of aarch32 related registers on 64 bit only
+>   systems, an in kernel solution is preferred for those.
 
-Thanks for taking the time to look into this.
-Your suggestion to disallow root partitions under isolated parents gives us a different perspective on some of the issues we've encountered in our product.
-As part of our transition from cgroup v1 to v2, we've been testing various cpuset configurations allowed by the current rules. 
-Some of these tests have uncovered corner cases, including the one reported here.
-So far, we haven't received any customer reports of a use case that requires a root partition under an isolated parent.
+I’ve reproduced the set_id_regs failure under QEMU with kvm-arm.mode=nested on 
+a host that supports AArch32. KVM advertises the NV-capable L1 vCPU as AArch64-only, 
+but aa32_id_visibility() still permits the inner KVM to expose ID_DFR0_EL1.CopDbg = 0xa 
+to the selftest vCPU. The test expects zero because it skips setting expected 
+values for AArch32 ID registers.
+
+In v6 you mentioned preferring an in-kernel solution. What did you have in mind, 
+given that changing the value returned by GET_ONE_REG may affect the userspace ABI?
 
 Thanks,
-Guopeng
+Itaru.
 
-> Thanks,
-> Longman
-
+> - Use a define to count the non-test_regs registers.
+> - Link to v5: https://patch.msgid.link/20260317-kvm-arm64-set-id-regs-aarch64-v5-0-a60f2b956e22@kernel.org
+> 
+> Changes in v5:
+> - Rebase onto v7.0-rc1.
+> - Link to v4: https://patch.msgid.link/20260106-kvm-arm64-set-id-regs-aarch64-v4-0-c7ef4551afb3@kernel.org
+> 
+> Changes in v4:
+> - Correct check for 32 bit ID registers.
+> - Link to v3: https://patch.msgid.link/20251219-kvm-arm64-set-id-regs-aarch64-v3-0-bfa474ec3218@kernel.org
+> 
+> Changes in v3:
+> - Rebase onto v6.19-rc1.
+> - Link to v2: https://patch.msgid.link/20251114-kvm-arm64-set-id-regs-aarch64-v2-0-672f214f41bf@kernel.org
+> 
+> Changes in v2:
+> - Add a fix for spurious failures with 64 bit only guests.
+> - Link to v1: https://patch.msgid.link/20251030-kvm-arm64-set-id-regs-aarch64-v1-0-96fe0d2b178e@kernel.org
+> 
+> ---
+> Mark Brown (3):
+>       KVM: selftests: arm64: Report set_id_reg reads of test registers as tests
+>       KVM: selftests: arm64: Report register reset tests individually
+>       KVM: selftests: arm64: Make set_id_regs bitfield validity checks non-fatal
+> 
+>  tools/testing/selftests/kvm/arm64/set_id_regs.c | 130 ++++++++++++++++++------
+>  1 file changed, 98 insertions(+), 32 deletions(-)
+> ---
+> base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+> change-id: 20251028-kvm-arm64-set-id-regs-aarch64-ebb77969401c
+> 
+> Best regards,
+> --  
+> Mark Brown <broonie@kernel.org>
+> 
