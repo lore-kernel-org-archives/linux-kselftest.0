@@ -1,46 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B39E3D1713;
-	Wed, 14 Oct 2026 20:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FBD38F230;
+	Wed, 14 Oct 2026 20:01:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792008086; cv=none; b=HF9X9j9noeURXWuzLhlGcUqNRjQvUnI1k50FMmSVd2JW6efVYE2pZqBgEpOgL88VFI3VoLHpmtBOLDbhZT33zO1SfNiQSpMXbkq+cdrL+YhKe+D1fzYPScgt85/502ZCCvhFdtB1ZMhGxWoXv6nXg9Vi9ClCSQTgcrAwkfqqz5U=
+	t=1792008090; cv=none; b=cW7giGMrR18J9Xhj97zPu4xpdl50i2NVWiM4wQEfgk0NgeuWE3oKJskML8YNa29hFdgeQ36PQLCRMEsdRWghuMBF2Rr/407ZsdX7sGGyo+sTW13EOFQr4ywXv0/I/H5TqZM8h3lUemxNfZqY8teydLjSnZpYVOiYEU32C4fx5HM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792008086; c=relaxed/simple;
-	bh=BS6H1M3oTphls87vDbJhnd9QtrKEVx3/XuigcvFPVpw=;
+	s=arc-20240116; t=1792008090; c=relaxed/simple;
+	bh=3qD11HPFDagKzU1nuRAB1h462Tj/nX0V511tu8vCtRE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fhs0/zggTglM1ANjzpWRLUwghS3WKrIKdF1JC/AUz4+PhwRLSmrwLY+LcC0QM79wQ/O8Yg0TE4uCMH9i/RrA7FzH0YpJmmJfisgE3H7ZSxtJEm7sipHdNtvLA8l8x9U9nSAhq6w7Uj4MKKWD4WJo6LTFuVjZagD3Naim9XYOtgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PVjx+ehW; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=mhqnV+B25yg4BMAd85piGc7ueWc27wOZXl0MHwMX78h9hzoNWCVcHc3dnm4zRgeE9p0GkyV/FFmGZi/0tPXVWfAUtVERu0xmFoWxUELsZomNhJ/4V2ET1vdf/Ce2YYYrb/KVZAF7iGk0nxNtBZYkPS0j4uCgkdFM8ZxUArk14wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QGJi8nD0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PVjx+ehW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBACC1F000C4;
-	Wed, 14 Oct 2026 20:01:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QGJi8nD0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C60C1F000C5;
+	Wed, 14 Oct 2026 20:01:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792008085;
-	bh=cQ1kewUL52K9zpMDeh2ONUK6G+L48N3I/Lb6qZvfwLg=;
+	s=k20260515; t=1792008082;
+	bh=mRexem4KV6KHScvbzz77XFjOE74k7LslCRLFHgVfnyc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=PVjx+ehWybamuJ4XnmVcra5Skw2WuFdP/it84zbL6FfZpOhMnPQtkGf41lQsU5Atq
-	 sdt20SlueVSNrpwjYIj+EYJ6/H44cdw97bb2Y5Hai9xyUlKdI9RePkFMB9nc0MLN8A
-	 oTgij/H838Zs9uB6Ged8wcj2Tv8NuHZUptrkI/jskH/IoF8YXPB2uFgGJMcZGN11tM
-	 pHqosn7dzbz9eG1eRDX/LaFha6VKG0wCNh1R/JH+boAKEfcGTQFcAVksppOy06l1Jq
-	 NhZ9WCvG2qY9TzJVBL8sE/3/7PMBFtVEi85kJMrX1+6TCNFMotiZIjygonDs2wzQy2
-	 JzbwRjhsDgs9w==
+	b=QGJi8nD0vPoSQK0Trc2JLAFR6KIfisA6bKNAFgQdjKbhPdng/sPYcn1mfNZn4Lx4Q
+	 onBNeMJVT/Q00j278e+4Jkd5CJAzyUAKNelpUTS4XPylK8wsvCME3p9QHDSZg89n0T
+	 sX0FXeDlfCwSkLMvi+U7MIeAwuHaFyFWTwJdcaG0ADZQBAx1iyqjxfpuehQUaN8vrC
+	 0b+XjluOw0cU4/h4efjrmm1N7v8mAG9ZvgWAdY1/OK8HtaQaqkwymhkM/PV0wUYDh+
+	 A0pj1lcjeZt7UPrfROdHFuY6S/qwj7G76wdxyjJKvN/1heJEJs8XVJ3Eqc7zRKaPt5
+	 3qWidvsJMpFuA==
 From: Sasha Levin <sashal@kernel.org>
 To: Shuah Khan <shuah@kernel.org>
 Cc: Sasha Levin <sashal@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	linux-riscv@lists.infradead.org,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
 	Mark Brown <broonie@kernel.org>,
 	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 5/7] selftests/riscv: keep building and installing after a subdirectory fails
-Date: Wed, 14 Oct 2026 16:01:13 -0400
-Message-ID: <20261014200115.1363363-6-sashal@kernel.org>
+Subject: [PATCH 3/7] selftests/futex: report failures of the functional subdirectory
+Date: Wed, 14 Oct 2026 16:01:11 -0400
+Message-ID: <20261014200115.1363363-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261014200115.1363363-1-sashal@kernel.org>
 References: <20261014200115.1363363-1-sashal@kernel.org>
@@ -52,92 +53,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The RISC-V suite builds and installs its subdirectories in shell loops
-whose status is that of the last subdirectory. A failure in any other
-subdirectory is lost, while a failure in the last one fails "make all"
-and, through "install: all", drops the installation of every other
-RISC-V test as well. FORCE_TARGETS has no effect on the loops either.
+The futex suite builds its tests in the functional subdirectory and then
+copies run.sh into the output directory. The copy is the last command of
+the loop, so its status replaces that of the build, and "make all"
+succeeds even when the functional tests fail to compile.
 
-Make each loop fail only when no subdirectory succeeds, which matches
-how the top-level selftests Makefile treats its targets, and stop at the
-first failure when FORCE_TARGETS is set. When a build report is
-requested, record each subdirectory as riscv/<subdir> so that a
-partially built suite is visible even though make succeeds. Default
-OUTPUT to the current directory, as the arm64 suite does, so that the
-loops also work when the suite is built directly.
+Fold the copy into the status of the subdirectory, count a failure to
+create the output directory as well, and let the build and installation
+loops return failure when no subdirectory succeeds, which matches how the
+top-level selftests Makefile treats its targets, or as soon as one fails
+when FORCE_TARGETS is set. When a build report is requested, record each
+subdirectory as futex/<subdir> so that a failure is visible even when
+make itself succeeds.
 
-Fixes: 287dcc2b0c83 ("selftests: Test the new RISC-V hwprobe interface")
+Fixes: 9c3340ea7f5d ("selftests: futex: copy sub-dir test scripts for make O=dir run")
+Fixes: 9705315b7562 ("selftests/futex: Update Makefile to use lib.mk")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/riscv/Makefile | 39 +++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 10 deletions(-)
+ tools/testing/selftests/futex/Makefile | 32 +++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-index 5671b4405a129..52d1228be8d03 100644
---- a/tools/testing/selftests/riscv/Makefile
-+++ b/tools/testing/selftests/riscv/Makefile
-@@ -20,21 +20,35 @@ CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
+diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
+index 78ab2cd111f60..d6923775b8d49 100644
+--- a/tools/testing/selftests/futex/Makefile
++++ b/tools/testing/selftests/futex/Makefile
+@@ -4,26 +4,36 @@ SUBDIRS := functional
+ TEST_PROGS := run.sh
  
- CFLAGS += $(KHDR_INCLUDES)
+ include ../lib.mk
++include $(selfdir)/build_report.mk
  
-+OUTPUT ?= $(CURDIR)
-+
- export CFLAGS
- export top_srcdir
- 
-+include $(top_srcdir)/tools/testing/selftests/build_report.mk
-+
  all:
--	@for DIR in $(RISCV_SUBTARGETS); do				\
-+	@ret=$(if $(RISCV_SUBTARGETS),1,0);				\
-+	for DIR in $(RISCV_SUBTARGETS); do				\
- 		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
--		mkdir -p $$BUILD_TARGET;			\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+-	@for DIR in $(SUBDIRS); do		\
+-		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
+-		mkdir $$BUILD_TARGET  -p;	\
+-		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
+-		if [ -e $$DIR/$(TEST_PROGS) ]; then \
+-			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
+-		fi \
 -	done
++	@ret=$(if $(SUBDIRS),1,0); for DIR in $(SUBDIRS); do	\
++		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
 +		mkdir -p $$BUILD_TARGET &&			\
 +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;	\
 +		status=$$?;					\
-+		$(call ksft_record_build_status,all,riscv/$$DIR); \
++		if [ -e $$DIR/$(TEST_PROGS) ]; then		\
++			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/ || \
++				[ $$status -ne 0 ] || status=1;	\
++		fi;						\
++		$(call ksft_record_build_status,all,futex/$$DIR); \
 +		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
 +		[ $$status -eq 0 ] && ret=0;			\
 +	done; exit $$ret
  
- install: all
--	@for DIR in $(RISCV_SUBTARGETS); do				\
-+	@ret=$(if $(RISCV_SUBTARGETS),1,0);				\
-+	for DIR in $(RISCV_SUBTARGETS); do				\
- 		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
--	done
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;	\
-+		status=$$?;					\
-+		$(call ksft_record_build_status,install,riscv/$$DIR); \
+ override define INSTALL_RULE
+ 	mkdir -p $(INSTALL_PATH)
+ 	install -t $(INSTALL_PATH) $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)
+ 
+-	@for SUBDIR in $(SUBDIRS); do \
++	@ret=$(if $(SUBDIRS),1,0); for SUBDIR in $(SUBDIRS); do \
+ 		BUILD_TARGET=$(OUTPUT)/$$SUBDIR;	\
+-		mkdir $$BUILD_TARGET  -p;	\
++		mkdir -p $$BUILD_TARGET &&		\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$SUBDIR INSTALL_PATH=$(INSTALL_PATH)/$$SUBDIR install; \
+-	done;
++		status=$$?;				\
++		$(call ksft_record_build_status,install,futex/$$SUBDIR); \
 +		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
-+		[ $$status -eq 0 ] && ret=0;			\
++		[ $$status -eq 0 ] && ret=0;		\
 +	done; exit $$ret
+ endef
  
- run_tests: all
- 	@for DIR in $(RISCV_SUBTARGETS); do				\
-@@ -44,10 +58,15 @@ run_tests: all
- 
- # Avoid any output on non riscv on emit_tests
- emit_tests:
--	@for DIR in $(RISCV_SUBTARGETS); do				\
-+	@ret=$(if $(RISCV_SUBTARGETS),1,0);				\
-+	for DIR in $(RISCV_SUBTARGETS); do				\
- 		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
--	done
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;	\
-+		status=$$?;					\
-+		$(call ksft_record_build_status,install,riscv/$$DIR); \
-+		$(if $(FORCE_TARGETS),[ $$status -eq 0 ] || exit $$status;) \
-+		[ $$status -eq 0 ] && ret=0;			\
-+	done; exit $$ret
- 
- clean:
- 	@for DIR in $(RISCV_SUBTARGETS); do				\
+ override define CLEAN
 -- 
 2.53.0
 
