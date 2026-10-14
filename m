@@ -1,98 +1,304 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010031.outbound.protection.outlook.com [40.93.198.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386EF4E5356
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 12:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791980460; cv=none; b=TK9cZJVz7odSucIZJ3AjGfAwNKdACxWEPyfnjl8axWGe7BdkMCgoYfjmgVV+YABB1Qor8H4jGyw4Yhokb0FNwBBRNg2bf0year45V5nnpLqgUXl6ozAmOowi904I+bGlCninv3uz2l7gRVOszJGxUXHLhKOn0+UHrTho7U5biyM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791980460; c=relaxed/simple;
-	bh=f+BUHnK/frwIHFyquu1ForUX5GeELZYEY++DjzTBIvA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bT+oDBndjo9wrqsusf+P0xoUt5rSqyJSneFDTYwWNi4t695sfKfFMtS7AF6g2kkFDtm37T09TjyyaEeBpmJ/cymuuJno7Zw2wbT7peUBhlT3FUAdhO/C6BTu1JDxaxumu5FUSEA+4cqrebw40Gr0JZtCCC/Kejcqkt1t039fYf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G1y7HTb/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03594B44BF;
+	Wed, 14 Oct 2026 12:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.31
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791980906; cv=fail; b=K/nuANrLy0MyLvAIGOjhU8f4J67e8CRKyEVK+iTaTKoeX7fVUPJ2WqQ0pEoPKLQIxaovMEuUNe+X0bhF/gcumJsKHJT5zr/dW1gRtdyxsFQvHAcptmhMgCdj7lQ2V2AWG+dDPHVR8EYuBSG3fLD9bMJ+GzCbGniAtHR1DvoNpfQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791980906; c=relaxed/simple;
+	bh=uJ4nNlEwpls5I/Pk2InsSFcp6ATRJOTYrYqYdQFFHtM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=gkrW0TrHsh5/+uywewH3WPwKvvwOGjlkrABZ+dPU/wlgREvFeE8oYfT0d9H0oWNMmi5YksTGHufkv7tuPTo0Bm5yqMXVxwUIArusRtnoY5lv8mPIsVkStw7VNTzbR0ftU8rFHg3s9cxEKsj6zXNLcBGZT/V5tzZ01QysX96YTec=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=AWVsIqRV; arc=fail smtp.client-ip=40.93.198.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G1y7HTb/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791980458;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TQQ7+6eqouwNYuZ8PPxKwjYfkQfJbfvOS8GflEQeFdw=;
-	b=G1y7HTb/YXSEZZCnvKOalkTd4/1QTO0+qsvVV8U0N9e16PS+6UHqNX7ZiyPGSPVzUfUftu
-	3Zf5RpCaM5RSMW8VgdhJmlz89fTvu05A2g7CM6x3X64o6RNTWhLTVBCL+kSCxNZw7TKtIj
-	3eJ9l1Q7+QH1CtS3lMGbZY48o6HY0Nk=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-516-ChKVqJ01Pee7H1bxfjnpJw-1; Wed,
- 14 Oct 2026 12:20:50 +0000
-X-MC-Unique: ChKVqJ01Pee7H1bxfjnpJw-1
-X-Mimecast-MFC-AGG-ID: ChKVqJ01Pee7H1bxfjnpJw_1791980449
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 09DFD195606A;
-	Wed, 14 Oct 2026 12:20:49 +0000 (UTC)
-Received: from ivecera-thinkpadp16vgen1.tpbc.csb (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2FA731800446;
-	Wed, 14 Oct 2026 12:20:46 +0000 (UTC)
-From: Ivan Vecera <ivecera@redhat.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next] selftests: tc-testing: preload all qdisc modules enabled in config
-Date: Wed, 14 Oct 2026 14:20:45 +0200
-Message-ID: <20261014122045.2375722-1-ivecera@redhat.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AWVsIqRV"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Bhpd71fFxtWzcTvRTkkUXezDwviTHvWge6OD+uPBmyBc5bvZmehpghG5Owct2a9UjF6FoeNYIezSy3hl4Bn61dEj0L6i7vcpknlEJYNApu0JAPjXXvxPOXOZY+C3JuTSmWJPFmjSczAfszX4TVB/JZ0k3UM05u8A9Gt4ZtKhZGejy1p7H0ATYhWe0lzVnRafuIibPDXSEHZzpJHPkzokDrlUvZX/ye6RJboZlr6bfCZlnnLig8OSU716sdemX2iqsES2wgl3JzgpznehRdOw9++RMcOork14D/CA5/ai09XPDB4ldCEbEJxa9bScZiFDX1a9aujM5w3xRUgCEjnIyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I1pg1AxKKYhFfFGDjVBXFHtpWUt2zaTbTJYbKrkJ170=;
+ b=EwlgcHSIf3Q1FL2VrNl9588ZNaZB7tg57jpnaceI68vh+lESy1LIO9c4g6Qj/kpH/jbEQGCVz+8dbeWyzBIkGyvcPn7IExcUObUEYwlf+RK5aKu/GLtU13VnhxRMemy6xxRPjdEwOU/hVQbJmKCmI97uKrT+JsdQtUTILbdHLwle8XfTvY2oRawCx/WqTFX5RnH+uAryBVbAHTdXg2ZTfGLSZrbZMjmVKHADT4WNaYQqAUhuAr6Li+SyCrCSnXh5QP9gYWlnElCv42Au21xBllaSxonMGRyS7yJPI8z/83xfoOaW/V2wWOymVLk4gOXXb0WpCOoExDwfB/DAVCkFPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I1pg1AxKKYhFfFGDjVBXFHtpWUt2zaTbTJYbKrkJ170=;
+ b=AWVsIqRV12T/0rN+xqUNoJQ4STOTZop+TdzA/Kpg/ayoQ9j3DXviTAGPZO7WwJYkmstJttzBSEqyB3vui36K2/NQ0xohhcWy/RAi6KJgR763wu/WfU8hgVdjdAFCegKe77iVQZgLETm2f4B+H5RyMyMYnrPyp+DmJxNu1Gv8RhQoSTwUmvwBl2RdZ+fjpVyRFRpPZonI4gWY0Hl+QB8oxyjwNGeHoL+jwWkwF6dMADQdYrgh1i4HkRFq+Crm0Fccbk0L3KpGgX2C9txcc2YF91DxcTAMKgyS8U6bi1PT9ldhrF31pqTvYPRtlQmYtNAL3Pn++FKYYIjeo02Z/tRqHA==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH1PR12MB9647.namprd12.prod.outlook.com (2603:10b6:610:2b0::10)
+ by CY5PR12MB6456.namprd12.prod.outlook.com (2603:10b6:930:34::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.19; Wed, 14 Oct
+ 2026 12:28:14 +0000
+Received: from CH1PR12MB9647.namprd12.prod.outlook.com
+ ([fe80::228c:766a:191d:77b2]) by CH1PR12MB9647.namprd12.prod.outlook.com
+ ([fe80::228c:766a:191d:77b2%3]) with mapi id 15.21.0522.012; Wed, 14 Oct 2026
+ 12:28:14 +0000
+Message-ID: <68a658f2-ccf6-4af4-bbdb-0f8384802a40@nvidia.com>
+Date: Wed, 14 Oct 2026 14:28:07 +0200
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net v2 4/4] selftests: net: add devmem RX and TX netdev
+ unregister tests
+To: Mina Almasry <almasrymina@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ David Wei <dw@davidwei.uk>, Pavel Begunkov <asml.silence@gmail.com>,
+ Taehee Yoo <ap420073@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ Paolo Abeni <pabeni@redhat.com>, Kaiyuan Zhang <kaiyuanz@google.com>,
+ Bobby Eshleman <bobbyeshleman@meta.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Nikolay Aleksandrov <razor@blackwall.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Tariq Toukan <tariqt@nvidia.com>,
+ Kaifeng Wang <kaifengw@google.com>
+References: <20261012174300.2338784-1-almasrymina@google.com>
+ <20261012174300.2338784-5-almasrymina@google.com>
+Content-Language: en-US
+From: Dragos Tatulea <dtatulea@nvidia.com>
+In-Reply-To: <20261012174300.2338784-5-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0055.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:93::14) To CH1PR12MB9647.namprd12.prod.outlook.com
+ (2603:10b6:610:2b0::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PR12MB9647:EE_|CY5PR12MB6456:EE_
+X-MS-Office365-Filtering-Correlation-Id: f0783d26-b078-4e3f-7f07-08df29ee9dee
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|23010399003|1800799024|11063799006|4143699003|921020|18002099003|56012099006|22082099003|6133799003|261009223027099003|10067099003;
+X-Microsoft-Antispam-Message-Info:
+	xWVeOmmEYX8Myt3jMgH7RLy9niDLy2tTzYiJbUTIIOv74Lqsd+ze+bM9OJOhGt1gug1y4zJKT9zah5AqbP4NgCrzZcmNYsqRwExAMWMTK0XHkP8EgUGXVLBCw4jOL7s5Oq2wYk7YRqdd3bADkt7maIOOLC2YzfcxJ5sy+06cSvvctoVCPbASry3NV8Yxjg4IPDnhrk8ZbU9HbYKk6qeBQcnrc5IZPpX0snKBITNY48kXJvirvoDoTgBHVHZWdLriXGwx5XZ1htMzEtgO3w2nlE3/jUL5vZ0xnM6dy8fBNOULsanQE0a054Z+Voyz9Qvkb7wRILYiu1374tO/2ra41azLdxbxw7eG/Uua/Cse8YrZT6tnzEZVDuSf0if+o/GkgDzm9cUTr5/OApZ1YYk9voJJmhR35kn+T9zNXQaTWwThTUzV/8L5I0qfVziY0oFA9GpFeiAt9z1qO1tR7r/Zn9iPZIdOMR1TDERTgzDgxeTq2UD4oWbk1/FRIOjXdI5/f9lntTZg4GRB3Q4Y/DWpXh8KoGdYPf7czkkEQO9qbKINH4ntSwoN+NSMyHl4Nvb/cVSvNNK3OQ60mS/XpkitNtw9m5sryAYb4qmV9x6GY+uePruL/Q3zUJP6XCunm6b/8LqgeI4vfgu1gCMUuv8lF54Ni3q8O9lVKW7+d+YzRcub3LAGsiLo8tnT4jnbGP+n1T8e9a7vMJCGxdVBAIt1/A==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH1PR12MB9647.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(23010399003)(1800799024)(11063799006)(4143699003)(921020)(18002099003)(56012099006)(22082099003)(6133799003)(261009223027099003)(10067099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Y1NEVXM0bTBIRHZXcTBnZzVJaE1MMHJacitqcDhNNnZlTVlrQWc1MVc3VDhG?=
+ =?utf-8?B?UnR1TUxRQWhKelZPYi81UStIb1hBUnM4WHRKZkVCcTU2TVIrY1FjQkNrRWpY?=
+ =?utf-8?B?dGVNT09EQjc1RUk4NWVZdWZ3SnZwSEVuQjRQVTg4S2kvdkNZQW02Vk5vRUc3?=
+ =?utf-8?B?dTQ4ZEM0ZTNOWGZPb1J0eEhxclp0TEU5d2hMc3BPMkwxZnQ2OFhiLzZLdWNR?=
+ =?utf-8?B?cnVBcFZreUtaVkg1QURYKzVvYzRFUXo5TFZpcEljQnV3cVFHTURGWXBFWkVz?=
+ =?utf-8?B?THNQQVBoT0VoY0kvUHUwOEMyTklpQ3RkbEU0V0JMVzg3NmtjM2RuSEFweWxG?=
+ =?utf-8?B?b1Y0ZlRyUjg5MjY3UUUyNFI1QnRuSXFsbWZQUE9jQkdPQURNdjNaT3FBeUVq?=
+ =?utf-8?B?TExaTUNDczNpVkdLdThsZllXRnpFbGMxUi8rZFhpSHRSQVVyTm11YlJ3clV6?=
+ =?utf-8?B?NFloYi9JSGZVK0ZwWlh1eW5MSGxiTEc0Nk45THlINDBPS1B4eUpFOXlldDd5?=
+ =?utf-8?B?c1dLVnQxRE9KZ013VzFrdzkxS0lld2kzZmg0dGxSeHpDWXNWZEk3SnhNQ29k?=
+ =?utf-8?B?VnZuVVdHelhNTlJuZ1BidmJEaUNHeUZSSCtmWDFBaEU0NmRtS1FIbWZ3TE1l?=
+ =?utf-8?B?TFIrRVVvbDNKV3RSK0x3NlZYUFZHUG5kZDNKVkxOSHlRNWVGM2xQci9NVXk0?=
+ =?utf-8?B?OTZMRGxvbWpDbVNCNTc0ekZrZDFKdVg3UUNrbjl2YXR0T1BtdXNwNFA3cGsy?=
+ =?utf-8?B?K3lZbmlEcEt5bHpyRmFKOUpzTmlnK21SQ2tEUlVGeXZ0MUJGNW1uZS9VZlV2?=
+ =?utf-8?B?VXhWZjBHMktTWVE3VVo1QlhoR1FoMWwzcUsrVVlqUjNsWlJBTTRER3Q3ZjUy?=
+ =?utf-8?B?OEM3MmJxM241eW1ZTWlOVUFOY2xWY0kzcGVUd2N3Qk16RjQ2MEZ5bnQ1K0hU?=
+ =?utf-8?B?d3MySEIwMDFCSGVCc1p4SVhYdEJVUitWQ2xMSTFJK2JUT3dnWjFpdGdBZHlK?=
+ =?utf-8?B?THYxU1NPekhmWUhlN1UxL3BKcXBlRGlJdGhyVDc1MWJMV0M1WHhOUnlWelJq?=
+ =?utf-8?B?UCtFdUI2ZzRyajJ2NHpRaGdnRnB0NDJpczZNSWhWTjJFeFAyQXBVSG9TOStQ?=
+ =?utf-8?B?NmlKRzJKTXA4VVFKSFBHcW1SUTBGcnBrWExRbFRkTkluNzVZL0N2M3h6ellN?=
+ =?utf-8?B?Y0VmQ25ML0JkS29EaGZSUy94cndib08vWS9yNVZGampUa0hoeVBPZm9Hbitj?=
+ =?utf-8?B?QThxMmRZR1N0aEZMUnltNTBqK0d0dHJOMjRIMWEwVmwvazFpR0FUNzMzOGs4?=
+ =?utf-8?B?MmNmbVJ0a0NjSGMzL0VnNHlPRUY4dk9aTjFURkhEVEFMUS9OcHJvMHJGd2lz?=
+ =?utf-8?B?OXgrbmtjQW9wOW5WUnlBSmpHbFQ1NUxNT1FveU5MOG5hek1nQWhTclZhNjdj?=
+ =?utf-8?B?UERQN0wyaGtkTng4VURKeUpvRVlrR1NNTkZnL1dWN0JNNTRvNHZicjFXemF3?=
+ =?utf-8?B?MnJ0SDlTR3lPVWZGYWdmU2JNL2JXaTlzUmlOWUVpTXdza3h6eXRSMUVQenEw?=
+ =?utf-8?B?bHRVQy9ldzhHMTNEMXE5VGVHdmdIQTIrcC9ZUGoxeTRqM2J6UzF2YnNXQWkx?=
+ =?utf-8?B?UmVIdDgvOW0zWlFTZ2p6a3BqMmVOemd6bTRydG5nT3ZJL3kyU0c5bUowdGpG?=
+ =?utf-8?B?QWo5VFJ0MzRWUm9jR2c0YWY1VENSK1g0WFUycnByd3FZZnJtRnhCOWR5RkNW?=
+ =?utf-8?B?K09uWEt1TWp1bURxY1NDSGs2c2l5eXRKWE1rRFIrRllmb1BldVh0NUlxQ3dj?=
+ =?utf-8?B?SFpRT3VUUyt6WXNPZ2ZoK01ENnRqSlVEcjR1ZHdHY29PMDJJMGJYOWZMc2FQ?=
+ =?utf-8?B?ai9vVFlwMW4vMlhUTndGNDEzZ0VqM3dDNUdBMC9rSy82UTNkYkFzc0MzMnZi?=
+ =?utf-8?B?ZHI0Sjk1YWpPeXpMV0J5NUNHaTR0U2hUcFF0Z3laelBSTkJIcUh1OXloN05Z?=
+ =?utf-8?B?cEQrbUdvSkpTWDRTWVE1amxEa1NUVnRaZnMvdlhRNU00WGFmTlV5Z3kwakFP?=
+ =?utf-8?B?elBtbVM2UENzMDFhVzZrSzBKM29SN2hJZ05CcG5JcWpQYTZzL2FUMUpjT3F5?=
+ =?utf-8?B?UzBBUWgrWnA0eUhIbW9xR0lZMUFjUGxmaVFyMkZqYS9MUjJpalBzMEpzTHgy?=
+ =?utf-8?B?S3NXZ0hvRnFSRTRiNmh0V1Z1SGsrcyt0dEtRY3c2NWoxMDg5RzEvR25Od3Nk?=
+ =?utf-8?B?b3lnMXhKRjBWYW92bHN6S3RHbFZFRGtUSENZcHhPTmYvOFBkcldXejBVODY3?=
+ =?utf-8?B?a1d2c29RZzFETXVuUHREWjZ3S3BNemJ4aHVicUppUXpmNVJXSlJxQT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0783d26-b078-4e3f-7f07-08df29ee9dee
+X-MS-Exchange-CrossTenant-AuthSource: CH1PR12MB9647.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2026 12:28:14.1046
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: F2aYd3Ty47alJPew0cR4UmIhsCR7lAywJBrw8SOEB5o4P6+aOQ635L8PbOe2udLkwgezSY1NVD+jpRFi6i1Ufw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6456
 
-tdc.sh preloads only some of the qdisc modules that the tc-testing
-config enables. Add the missing ones: ingress, mqprio, multiq, netem,
-pie, plug, prio, qfq, red, sfb, sfq, skbprio, taprio and tbf.
 
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- tools/testing/selftests/tc-testing/tdc.sh | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
 
-diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
-index dae19687912d..25cdc256287d 100755
---- a/tools/testing/selftests/tc-testing/tdc.sh
-+++ b/tools/testing/selftests/tc-testing/tdc.sh
-@@ -65,6 +65,20 @@ try_modprobe sch_gred
- try_modprobe sch_hfsc
- try_modprobe sch_hhf
- try_modprobe sch_htb
-+try_modprobe sch_ingress
-+try_modprobe sch_mqprio
-+try_modprobe sch_multiq
-+try_modprobe sch_netem
-+try_modprobe sch_pie
-+try_modprobe sch_plug
-+try_modprobe sch_prio
-+try_modprobe sch_qfq
-+try_modprobe sch_red
-+try_modprobe sch_sfb
-+try_modprobe sch_sfq
-+try_modprobe sch_skbprio
-+try_modprobe sch_taprio
-+try_modprobe sch_tbf
- try_modprobe sch_teql
- try_modprobe sch_dualpi2
- ./tdc.py -J"$(nproc)"
--- 
-2.56.0
+On 12.10.26 19:43, Mina Almasry wrote:
+> Add devmem_bind_rx_unregister_check and devmem_bind_tx_unregister_check
+> to nl_netdev.py to verify that unregistering a netdevsim device while a
+> netlink socket holds an active RX or TX devmem binding synchronously
+> detaches the dma_buf attachment and cleanly closes the netlink socket
+> without use-after-free or page faults.
+> 
+> Cc: Tariq Toukan <tariqt@nvidia.com>
+> Cc: Kaifeng Wang <kaifengw@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> ---
+>  tools/testing/selftests/net/nl_netdev.py | 108 ++++++++++++++++++++++-
+>  1 file changed, 105 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
+> index ceb44c8e1fec5..bad230ee9dcd2 100755
+> --- a/tools/testing/selftests/net/nl_netdev.py
+> +++ b/tools/testing/selftests/net/nl_netdev.py
+> @@ -6,10 +6,14 @@ Tests for the netdev netlink family.
+>  """
+>  
+>  import errno
+> +import fcntl
+> +import mmap
+> +import os
+> +import struct
+>  from os import system
+> -from lib.py import ksft_run, ksft_exit
+> +from lib.py import ksft_run, ksft_exit, KsftSkipEx
+>  from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
+> -from lib.py import NetdevFamily, NetdevSimDev, NlError, defer, ip
+> +from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, NlError, defer, ip
+>  
+>  
+>  def empty_check(nf) -> None:
+> @@ -366,6 +370,102 @@ def page_pool_stats_ifindex_check(nf) -> None:
+>      ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.info.id')
+>  
+>  
+> +def _create_udmabuf(num_pages=64) -> int:
+> +    """Create a sealed memfd-backed udmabuf fd for devmem tests."""
+> +    if not os.path.exists("/dev/udmabuf"):
+> +        raise KsftSkipEx("/dev/udmabuf is not available")
+> +
+> +    size = num_pages * mmap.PAGESIZE
+> +    memfd = os.memfd_create("devmem-ksft", os.MFD_ALLOW_SEALING)
+> +    os.ftruncate(memfd, size)
+> +    fcntl.fcntl(memfd, 1033, 0x0002)  # F_ADD_SEALS, F_SEAL_SHRINK
+> +    devfd = os.open("/dev/udmabuf", os.O_RDWR)
+> +    req = bytearray(struct.pack("IIQQ", memfd, 0, 0, size))
+> +    dmabuf_fd = fcntl.ioctl(devfd, 0x40187542, req)  # UDMABUF_CREATE
+Nit: this could be a constant
+
+> +    os.close(devfd)
+> +    os.close(memfd)
+> +    return dmabuf_fd
+> +
+> +
+> +def _dmabuf_attached_devs():
+> +    """Return attached device names from debugfs dma_buf/bufinfo if available."""
+> +    path = "/sys/kernel/debug/dma_buf/bufinfo"
+> +    if not os.path.exists(path):
+> +        return None
+> +    with open(path, "r", encoding="utf-8") as f:
+> +        text = f.read()
+> +    attached = []
+> +    in_attached = False
+> +    for line in text.splitlines():
+> +        if line.strip() == "Attached Devices:":
+> +            in_attached = True
+> +            continue
+> +        if in_attached:
+> +            if line.startswith("\t") and line.strip():
+> +                attached.append(line.strip())
+> +            else:
+> +                in_attached = False
+> +    return attached
+> +
+> +
+> +def devmem_bind_rx_unregister_check(_nf) -> None:
+> +    """Verify RX devmem bindings detach dma_buf synchronously on netdev unregister."""
+> +    dmabuf_fd = _create_udmabuf()
+> +    nf_priv = NetdevFamily()
+> +    ef = EthtoolFamily()
+> +    nsimdev = NetdevSimDev(queue_count=2)
+> +    nsim = nsimdev.nsims[0]
+> +
+> +    ip(f"link set dev {nsim.ifname} up")
+> +    ef.rings_set({"header": {"dev-index": nsim.ifindex},
+> +                  "tcp-data-split": "enabled"})
+> +    nf_priv.bind_rx({
+> +        "ifindex": nsim.ifindex,
+> +        "fd": dmabuf_fd,
+> +        "queues": [{"id": 1, "type": "rx"}],
+> +    })
+> +
+> +    attached = _dmabuf_attached_devs()
+> +    if attached is not None:
+> +        ksft_ge(len(attached), 1)
+> +
+> +    nsimdev.remove()
+> +
+> +    attached = _dmabuf_attached_devs()
+> +    if attached is not None:
+> +        ksft_eq(len(attached), 0)
+> +
+> +    del nf_priv
+> +    os.close(dmabuf_fd)
+> +
+> +
+> +def devmem_bind_tx_unregister_check(_nf) -> None:
+> +    """Verify TX devmem bindings detach cleanly on netdev unregister without UAF."""
+> +    dmabuf_fd = _create_udmabuf()
+> +    nf_priv = NetdevFamily()
+> +    nsimdev = NetdevSimDev(queue_count=2)
+> +    nsim = nsimdev.nsims[0]
+> +
+> +    ip(f"link set dev {nsim.ifname} up")
+> +    nf_priv.bind_tx({
+> +        "ifindex": nsim.ifindex,
+> +        "fd": dmabuf_fd,
+> +    })
+> +
+> +    attached = _dmabuf_attached_devs()
+> +    if attached is not None:
+> +        ksft_ge(len(attached), 1)
+> +
+> +    nsimdev.remove()
+> +
+> +    attached = _dmabuf_attached_devs()
+> +    if attached is not None:
+> +        ksft_eq(len(attached), 0)
+> +
+> +    del nf_priv
+> +    os.close(dmabuf_fd)
+> +
+> +
+>  def main() -> None:
+>      """ Ksft boiler plate main """
+>      nf = NetdevFamily()
+> @@ -379,7 +479,9 @@ def main() -> None:
+>                page_pool_check,
+>                page_pool_dump_ifindex,
+>                page_pool_ifindex_leak_check,
+> -              page_pool_stats_ifindex_check
+> +              page_pool_stats_ifindex_check,
+> +              devmem_bind_rx_unregister_check,
+> +              devmem_bind_tx_unregister_check
+>                ],
+>               args=(nf, ))
+>      ksft_exit()
+
+Other than the above nit:
+Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+
+Thanks,
+Dragos
 
