@@ -1,174 +1,358 @@
-Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010010.outbound.protection.outlook.com [52.101.85.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D2118B0A;
-	Wed, 14 Oct 2026 03:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791947868; cv=fail; b=APBMFhITEK3n2Y3iziTxVAnFKORuBHbDKPR/p9ZUBuc/rtTz6o44uzxErmWzNK5jgaR54HLlFaK3ZZNV3xBHlk+KTB6QhdFi2xucBHWqfb1YB2crL40xAELES5zj2a8KnqEkOwQQSn7Ss5WAbRrIEvA/7gZHry3lmrGdVCdoPP4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791947868; c=relaxed/simple;
-	bh=HrXJweVyqGY8PMwJYn+Z447iu+/0+Ha/NuBX4IY6egA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=a3bEod+rObPS4AbeROhXOSNav0QlhMRU4BPekDpaNBu5DjsolAq/0E7HM2xxBS790h/h4GWxiAqouungE/ovcZ9RHN7SPr558hEnwAuw9/T1y/b0s2lUyIVSQK7E3BQkgeHYZD/ZajtQ0DL4afHDqUUJwu66V0UBPzErsxaZQIs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FukwMs5c; arc=fail smtp.client-ip=52.101.85.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629F137E5E7
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 03:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791949312; cv=none; b=OR0TUD7QEh/gZ74bV7fZJgTCAnOJdVR0XsZr4IFKwVc8h7ah/BmGkVfRrlQM8KBD/f2TVKLmK5haoiJTCVAewdoVudWL3m85s5h79yHn8m6d8gBqevsxkLAJUTDzV8BA7gkx6eKlOAqYgKl00z9Wa+g38axSZRSka1VnI/L1fik=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791949312; c=relaxed/simple;
+	bh=bdTqmskz5mv1jWPsF+CXZc/LhkLs8AwiNen2A2fppFM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tLQvv1c66MMFqRuXfHWdnfX2Gv52GS5HPTsgVYlzLrySBGNU1rB6uvugd8P7w1QcpIOmHVBO0fbq7TZ3Gf8kT4wfwIICYLuUPXYJ+pqQ+DTzGiuB7qQwF/iyiOHLWwzS3aI6v8CmnpuvCN2lDmmoHm6vzofAhPUYVFt2/olS9DM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aeU+Gee6; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FukwMs5c"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=B9lEVvDgYYmxMfeYB8rxEywFZY8N8Ujt7oRL+OYJnlA3oJ5gSTTKr/rFxJxNkqqviCQ3FrfSxK+CWoT6Lwb/zHJzNJyTMBetBcHfytswrh9PG/Mv/lRe1vOAR/9sSPJ+XK+PQ6nlDrY7YKZCOo4iZymRfR4FCBRN/XhHvBMv9tk6ZqOh40jw4gTMV4Y6NJofmJADLzg+Xw/b7zqBbg7yNAtAPc06pgruX8+mA8KNdcx9tr336gzmIfiJIczgQTKWxqUMbVJWgibM3rWzxmM+PzpYtQmb4C+kXmxAewryt3I5NcazdccA//H6MnoMQitj4CcBd2GXsYlHTW58r8jU7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7kL8oBs/1JPwv1vs8iPTM+H3vHOob8w+C+Ebxc7ulJk=;
- b=PtrEx2l6Q/IhcrtAXbsxvQHvn3DkXagd5E6uXLMLmvL2Xx/kWuhk/lP10P6HMpf05H3QmXirxX7h3r4Un5gSdNoRlrGDZ6eAHZ5aXJIwFv1w6/ks83fbMcdsqiEIoXuM/hk384b0F85BdGFKeeSksn3SWULGaa+y7LDAhtwXD5+ObUr/G7bQo42HnvdgXrjgJU3TEOA5pgkF63k7wh8kK5qyrLVSJBDd+s0X+7YSmQ/qDCp5wyTC5dHwDjIkpjwfXOyjSzf+tRrbIwinnCy/wkqoe7n3DV2XgIDXO7X4ipIAbCS+fJqciuzhWrSb7xcZSL7HTxgDSD3MRX7dZl8EBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7kL8oBs/1JPwv1vs8iPTM+H3vHOob8w+C+Ebxc7ulJk=;
- b=FukwMs5co0TsVm1Qjnwn8EDCw+ZAStWsrK5eFWtL0IRtTFUyYL68CIgo2IqcAzgd6LfxyyT/+SmIRBdCF+nh3dDtp+HRTW6oywNnGE/mqPwQK19N59D/ivnn2EQblYtoVizHDP9mFxZmx/5Y3C0fDutu6OWWZlNWo6w6VselhbJrNtZpYjaN9ygpTLQPN70X6orn5DUE79X0puYkH8cdhpw5oxBHaKOn0fx2TOCqJW+DalYRhDbLbpMVYnl3wN7MdYw927+PngVr83A/5JdsaP9UTIhm7tDCMUk2vqkmT2CBdRGkrlzGDfYpGotDZwTtnI5CBYKjdQ83LgSzFwuv9A==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SAVPR12MB999143.namprd12.prod.outlook.com
- (2603:10b6:806:4e5::21) by DS7PR12MB5909.namprd12.prod.outlook.com
- (2603:10b6:8:7a::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.23; Wed, 14 Oct
- 2026 03:17:41 +0000
-Received: from SAVPR12MB999143.namprd12.prod.outlook.com
- ([fe80::219e:6553:2ec0:3761]) by SAVPR12MB999143.namprd12.prod.outlook.com
- ([fe80::219e:6553:2ec0:3761%4]) with mapi id 15.21.0496.021; Wed, 14 Oct 2026
- 03:17:41 +0000
-Message-ID: <b4aa46a5-dd8a-4520-8574-d008a3877f28@nvidia.com>
-Date: Wed, 14 Oct 2026 11:17:29 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH nf-next v3 1/3] net/mlx5e: Ignore FLOW_ACTION_PRIORITY on
- flowtable offload
-To: Julius Bairaktaris <julius@bairaktaris.de>, pablo@netfilter.org,
- fw@strlen.de
-Cc: phil@nwl.cc, netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- netdev@vger.kernel.org, lorenzo@kernel.org, nbd@nbd.name,
- matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
- rdunlap@infradead.org, skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mediatek@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, saeedm@nvidia.com, leon@kernel.org,
- tariqt@nvidia.com, mbloch@nvidia.com, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261004171636.3545085-1-julius@bairaktaris.de>
- <20261004171636.3545085-2-julius@bairaktaris.de>
-Content-Language: en-US
-From: Jianbo Liu <jianbol@nvidia.com>
-In-Reply-To: <20261004171636.3545085-2-julius@bairaktaris.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR02CA0022.apcprd02.prod.outlook.com
- (2603:1096:4:195::23) To SAVPR12MB999143.namprd12.prod.outlook.com
- (2603:10b6:806:4e5::21)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aeU+Gee6"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3ab9268d90eso1792767a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 20:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791949310; x=1792554110; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=PXQRvsOLSS4hbxhThmysqIOy/isWX8urpf5ih/mZZSE=;
+        b=aeU+Gee65Xxng6XIRjLQAzSjHhhgyvzjOf+9tfNByf/0rbyN7TsRbi1dIAZJLEC0d2
+         su4zlCWXUy2dZJzTyRp/2huVPhA1hmHtISgLYmRWRJtFL0ANLgeZCijYMUn8f9arUwGo
+         4f533y/Ehlx9XDSDk959NExO9EOGwIfb8g8NquUjclkCOzH50+mg34qIG2p3/jOM0D8o
+         tum7B8rw4pSD/jZy/X6qTWNDGlF58W9f50pCcbKaiEB1HElXHWuKfhxwV2d2VEq24eDk
+         TFUwr7YO5oByyhKAAmwKAVgrBNTX2brgheL2WFyfk/sUqNH1aFRNiVsPk1QZVzDbiU9E
+         y7Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791949310; x=1792554110;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PXQRvsOLSS4hbxhThmysqIOy/isWX8urpf5ih/mZZSE=;
+        b=s9Rx4Q2CdtP8dSBDQSAu94E3lUjuhvEoVzCadsw+wwjb62mE5NQQ/aqQJFuJA0Qq+j
+         wfmaFqii714k3Kv/DYGZYBFDvaF6gJQjq0/8eODbMgSL1wJDhPe8h3Noy4prutaRz4so
+         PydOnibRHXQfioj0IB8w/VOQCnfjIjLOk0ypyh4qXPv+E5rxhQZIR2k2AfzH8e0h409x
+         bDNfelWeewdGQcGNLdHHfU7s2oOsDsDTuOvZXpgyjdZr9sQD8YIdwextNmPVOn7ahZXF
+         FaiyFb0sUOsh/mPnshBqGy6gBXBheS19emp1WYIHFQtnmU9lFGYF/ZP/9ceFfsR9nCgn
+         iL4w==
+X-Forwarded-Encrypted: i=1; AKwUvBzTdHbMrE9n781WAD1dqqE8gpN3CdFlTZeAc/7XRMj7FV4LW4+ThCcc5A9vZBdxTCO4VkI4QVv4K1ZdZ9HOYq8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJIuKWoYdbjbs5a2UlBkUL2ttn0kiD+r0hy83+DnrS5pA1EBEET
+	ewqSW+fKZe8CxBzw6xVDxOjIouww42agBEfdUqak1O3SOwhA9vjIORw=
+X-Gm-Gg: AYBFou2Ud0j1s0TA4os/aNbB0mpHeyFMfIDjrT15ZvcSUrpgYH4HHTO6+Y11HX1IiB+
+	hx1NbFr3NCy3PRJcgEx+ZMs8IE14XPVn66CxEaljEzPOlh6zz2czg/RCmRuUiNfQcxpcXG9RBZl
+	KSLjiKIR1LHQhYWAtizq5pCSIifcBlE2bxWUXnp1ZBFcgvrLWFi261/J/Q43TST/PZ7jImBVTlH
+	8cTz4Qcu6Y8LnfpOqS6j4ftFVt55abD3gttfFsAZBc7+kjlIBxmWrhbX/JWQEnSx5YAYmvyNxzS
+	D9K2GuHTTR7tU3iWIX9RweUweNsgrJwwt9b8BAgfTJTFjz1dqCYgsRK6uq22iNC54vozHdQ9bbO
+	XRJnuB2yJAAiFztp4vp6J8E0SfNDIlus9rf3rgfLWjEG1tjcf3JHTeheqEPQRjSvwrLvN8Xoggq
+	WOLzRkHnOPW4VuZIPCklsEXdIE1Jys8Biz30y3H6uy+j8M2nW6Iheuf5OI0ZSlkffZzgTIcyIiC
+	/cs/oDi
+X-Received: by 2002:a17:90b:5343:b0:3ab:188b:c5bc with SMTP id 98e67ed59e1d1-3ab3a94f0dcmr11857100a91.14.1791949309086;
+        Tue, 13 Oct 2026 20:41:49 -0700 (PDT)
+Received: from localhost.localdomain ([185.220.238.36])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac5f24af99sm2406443a91.8.2026.10.13.20.41.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 20:41:48 -0700 (PDT)
+From: Wang Yibo <szwyb123@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Gow <david@davidgow.net>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] lib/tests: convert test_memcat_p module to KUnit
+Date: Wed, 14 Oct 2026 11:41:43 +0800
+Message-Id: <20261014034143.551624-1-szwyb123@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SAVPR12MB999143:EE_|DS7PR12MB5909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5dc0b751-8545-4b35-ea38-08df29a1b4c1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|366016|1800799024|376014|23010399003|56012099006|4143699003|11063799006|22082099003|18002099003|6133799003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	kA8f/qsQS36PB7mSdciJr1MEQjR9QaammDV/YaeJZ0bk4Luia2GQREKKY6e+kw6LlWWoWPYyanzIYbORr0MBh69CxV6LMmN3peVwVw2/uXmHbO2r4FeumSa4t4ULwN1mnaGNx+f0FpaTVXaB0QiAB4mEUWviKyCcCd2H8Ccyn/GybmgfCrjhpddbRZJZdO57OLE7EIQTazVqVoSw7JIiKc2POw+2bNmP+/UzfU7hiquldjJfel0LXHclYdGPdfe+FQAeSG29Yc2302DJzDwGLuXtd1TT9DKVjvXO4Q90YkeuLVeRUsuTo58w5daURiJVKdWQnInRwbjDCGJlN0i68B5K+wG9XYmmpL1wAoUBc35s14ndYpUn2ymgg4jhIABFW8dmTP/OuG9He0W86TQOOv3DOw5FBH2XWO9cIhvc+Epis1F4BvbpOwqTunndsShlVfYN6F6+MqWb+x/lU/gHko8B46AellhYGB6GQ5RxhgNiPGtNWhrdZxLxtLJ0fEQ82qNIrFGvN7KHFub28JHepbwQuhoytmxWYPNYX2CLNOSDRh6eIBwHMkMGrlHqWEJFYblrSrzGOocAi4yTQ6sNmCO9ggFnZOfsz5BZr4MnKkKYDf80eMNDyY9JXq4uzsGCBTV8tw55bHK/HCsx26husA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SAVPR12MB999143.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(1800799024)(376014)(23010399003)(56012099006)(4143699003)(11063799006)(22082099003)(18002099003)(6133799003)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?djJWTEtkTUMwU3IxWTRwTHZ4dy9mU3RzOEZ4L0NQN2lnc05NMjJ1S0xpM2d6?=
- =?utf-8?B?MFF0M1pMUDNZZkhvbi9jbUJnSnBNYm1ZbHJTcGRmbi9obG9jUU5idnUrWkNN?=
- =?utf-8?B?SVVjaitHYW5JbklaRVE2L0JOL2p0SGM4TU02dkxWbEZENU1wVzUvTFZESmFK?=
- =?utf-8?B?YmNUZ0QzOWlUdFJoMUlObVlpRStERXdBd3c0VTIvWFZLdDlFNDhtcU1TakQx?=
- =?utf-8?B?WlgvMTJLMGk1bXdTTExqYmd6VDJ4UmNCbFY0bXhGaEVMNThjeTYrY254Sk1w?=
- =?utf-8?B?a3NweS9ydW5DNXByR1FqS1ZHYlpMUWY5T2pUcmV2NkpISTN5TnFsY0tsSWpz?=
- =?utf-8?B?S0NBYUxseG9nNElyRWxiNjI5YXJ5VUx4TmR5dTFWV3hSNUZWK0ZTM2ljbkcw?=
- =?utf-8?B?N0IxNXpTL0JIZG8zTUJBYUJxRERIOGlZcERLMFY0dTFhMTFNN2VPOVVkNzNs?=
- =?utf-8?B?bmVtYUh4c1B3QlNjNEttWmdMTmx5d2hYamI3N0R5Y0NHK25TdGFqMlc0Mmhq?=
- =?utf-8?B?M3N3bGVHc0RYQ1M1TzlUaFVvY0pUUCtTSTYxa0g2YUNHR3U5OHRjcHo3cERT?=
- =?utf-8?B?eDQwVHdjK2UvZTVOcGNRdGRoT2dqVnVEOUFKMERHUCtYeG5sSk13SVhESElt?=
- =?utf-8?B?bG1IVTFLSVBZQkZzYTRhN1JuK1J3b3pIelRQNHdIUTJkV0ZBaVkzYjdzR2Mx?=
- =?utf-8?B?L1VmV2xhYXhQYVR2a1RKanMrUy9LSmk1TWVQZFZVWDRlZCtlUUZZMnpVRjlx?=
- =?utf-8?B?QWF5cno5Nk9POVVBdW4yaEQ5T1pVMWZnRGhCMGttYlFETDRRTXl1cFUreHFT?=
- =?utf-8?B?Sk81NnVmYXRzVmlwc0Vna1pVcGhwZ1FobjYvOGlsaUN3SW5SNXE0aHhQY09D?=
- =?utf-8?B?VE05cEtZN2lxbHpLY3JHVUR3WEQ3Z1ZOVXJWZEFyOTc2WXE5aXJiUWUzYmxJ?=
- =?utf-8?B?MG1ObzB5ZFJOUUVzYjc3RWZPTVlHQ0JVM3c0THJiR0NMb1JvZ0J6UjlWZ295?=
- =?utf-8?B?OGJoMjVPcU90RXVhaUJEbEJjcVNzRnVQb2FsL1ZBNTVnZXQ2ZHE4SER1MzlN?=
- =?utf-8?B?emd0dm82YVdVVVR4amE4OHZqS2QvV1B6MTNYQ2lxMElRbk5za2RQYm5XUXM1?=
- =?utf-8?B?MWIyaUtsYXVKa1gzNVBRcUxGOUZSL1RySXRFRHdGQ0FCbEVFcGZ2Yk9pOWla?=
- =?utf-8?B?MGFEWE5vdHkxUDBiejVaMnlseHJLMkRGVklHdXNqYW5INldTL0VQOGNReWlO?=
- =?utf-8?B?UDdYUkVDMUp2NUZwS1gxTlo1M1V0WTZiNGlYVVR1Mkd6MGxYdDc1TEM3S2J4?=
- =?utf-8?B?Wm1YZnlOcFppQlpiSGdOZnc4cWovVFJsT1VqaUczUys4b0pmT3UwdTIrT0JL?=
- =?utf-8?B?Q2oyM1RoaWU3VElQeDZPYkFKdTR1Z3VzNDR3bGJGNHpLWnd6WnFPbGwwT0tW?=
- =?utf-8?B?ZktnbXVmVU9EZlZVYkNOREQwYktueTdDRm5yZ3o0bHFCT3JkazFqTG16N1c5?=
- =?utf-8?B?UmZxMzcvQ21TcFlrVDFZazV0ckdrRE1VWTZvclpQL0RFdlB1NklMSXZzRXBF?=
- =?utf-8?B?QnhpNXVBdDl2Snl5ZlpBSWtKcXN5U1ZieWRYbTZ1bHFWYXArSmJWUnB0VjQ3?=
- =?utf-8?B?REpoUmxtaFNOaUlha1lMMGVRUVlpNzVRWlI3L0JybVZHa082am95b080bG1p?=
- =?utf-8?B?S3oyT05oNHFFWmt1Y0V5WnpMblVLQzhCVkprQk4wZ0VHZnFOVEFkeFdPcnd5?=
- =?utf-8?B?L1V0aFdhSXo0NUhjR1hiQWJpSWtQazYzRVhHS2VrODhCUUEzVXlFR3F3MFBI?=
- =?utf-8?B?czRtSmZ1OU9XOXp2T2RTQkYrNWtBS0FVZlAxUGJHT0lnbCtuZG5YZmR5OHdN?=
- =?utf-8?B?OHdOTU9SaUV2cDlBaTlCaVFadytveG96MnlUY0ljd3h6OHhvUTIzWDVBenla?=
- =?utf-8?B?OVd4MUJLSGM2dVRmUEl2Z3JUakJva1NUS3d1M1d1cTBlYkdZT1VtNWxCR0lm?=
- =?utf-8?B?YUNlZnZnSHJ5L2YwWFFZYklwMXhEdS96L0JWTnpNR3BWaDhMQThpTFQxRWVK?=
- =?utf-8?B?dUtrQzNiM3hPZWhCS2ZVR1JYUW5HMGoxWHlNaWVEZnNPTDhKbU96WDFlMVd2?=
- =?utf-8?B?L09uMG1pdTNncUhTYnBvS2VzV3RoelZocUlCRWRFVURSbEdpeXlwU1ZXNW95?=
- =?utf-8?B?aUtOdFZtSUJ0dXYvbUpLUUFwQTd0cVZLSUg2OExIQjAwNWs1MWdvTEtrSlFx?=
- =?utf-8?B?UjhjOTNBTmNzNmxKTDFtSjRpaVJ4c2haem1zeW1LT1lDMmc0bEdqeVJOVERK?=
- =?utf-8?B?VE9UMDZidVhjUjJCbDE4WUovbzN5VEVIckhNUWZrRzZQa093ZURwUT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5dc0b751-8545-4b35-ea38-08df29a1b4c1
-X-MS-Exchange-CrossTenant-AuthSource: SAVPR12MB999143.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2026 03:17:41.0156
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ADuRsCGrOiriwqV0vWjcxR1hNuzm0gqdRffuL7ryKcXnwmwidk503AdJTK3X4oUhbdn2aKF/j9tJEoJ9tk0D6A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5909
+Content-Transfer-Encoding: 8bit
 
+Move lib/test_memcat_p.c to lib/tests/memcat_p_kunit.c and convert it to
+use KUnit.
 
+This change switches the ad-hoc test code to standard KUnit test cases.
+The test data remains the same, but the verification logic is updated to
+use KUNIT_EXPECT_* macros.  All allocations are made test managed, so the
+manual error unwinding paths and the empty module exit hook are no longer
+needed, and a failure now reports which element mismatched instead of a
+single pr_err() message.
 
-On 10/5/2026 1:16 AM, Julius Bairaktaris wrote:
-> The next patch makes the flowtable emit FLOW_ACTION_PRIORITY for flows
-> with a non-zero skb->priority, which on IPv4 includes the priority
-> ip_forward() derives from the TOS by default. mlx5 would reject these
-> rules and stop offloading flows it offloads today.
-> 
-[...]
-> +	/* The eswitch does not apply skb->priority to flowtable flows. */
-> +	if (mlx5e_is_ft_flow(parse_state->flow))
-> +		return 0;
+CONFIG_TEST_MEMCAT_P keeps its name so that the defconfigs enabling it
+stay valid; it now depends on KUNIT and defaults to KUNIT_ALL_TESTS, like
+the other lib KUnit tests.  Those defconfigs already select KUNIT and
+KUNIT_ALL_TESTS, so they keep turning the test on unchanged.
 
-The handler is only in tc_acts_fdb[] and only accepts flowtable flows,
-so NIC mode and tc flower rules are rejected as before. Looks good.
+Signed-off-by: Wang Yibo <szwyb123@gmail.com>
+---
+ lib/Kconfig.debug          |   4 +-
+ lib/Makefile               |   1 -
+ lib/test_memcat_p.c        | 116 -------------------------------------
+ lib/tests/Makefile         |   1 +
+ lib/tests/memcat_p_kunit.c |  83 ++++++++++++++++++++++++++
+ 5 files changed, 87 insertions(+), 118 deletions(-)
+ delete mode 100644 lib/test_memcat_p.c
+ create mode 100644 lib/tests/memcat_p_kunit.c
 
-The comment says what the code does, but the consequence is worth a line
-in the commit message. Because the action is ignored, the priority only
-reaches packets still on the software fast path, where
-nf_flow_offload_forward() sets skb->priority. Once the flow is offloaded
-to the FDB, mlx5 forwards it without touching skb->priority, so the
-offloaded packets do not carry it. Refusing the flow to honor the
-priority would keep it in software, so ignoring the action and keeping
-the offload is the better tradeoff, it is just not obvious from the code.
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 6b24a2c89b84..66dfffa48fc3 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -3314,7 +3314,9 @@ config TEST_DEBUG_VIRTUAL
+ 	  If unsure, say N.
+ 
+ config TEST_MEMCAT_P
+-	tristate "Test memcat_p() helper function"
++	tristate "KUnit test for memcat_p() helper function" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  Test the memcat_p() helper for correctly merging two
+ 	  pointer arrays together.
+diff --git a/lib/Makefile b/lib/Makefile
+index dfab958327c5..d0e8dd7e364c 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -97,7 +97,6 @@ obj-$(CONFIG_TEST_MAPLE_TREE) += test_maple_tree.o
+ obj-$(CONFIG_TEST_PARMAN) += test_parman.o
+ obj-$(CONFIG_TEST_KMOD) += test_kmod.o
+ obj-$(CONFIG_TEST_DEBUG_VIRTUAL) += test_debug_virtual.o
+-obj-$(CONFIG_TEST_MEMCAT_P) += test_memcat_p.o
+ obj-$(CONFIG_TEST_OBJAGG) += test_objagg.o
+ obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
+ obj-$(CONFIG_TEST_LOCKUP) += test_lockup.o
+diff --git a/lib/test_memcat_p.c b/lib/test_memcat_p.c
+deleted file mode 100644
+index 62f1633b30f8..000000000000
+--- a/lib/test_memcat_p.c
++++ /dev/null
+@@ -1,116 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Test cases for memcat_p() in lib/memcat_p.c
+- */
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/string.h>
+-#include <linux/slab.h>
+-#include <linux/module.h>
+-
+-struct test_struct {
+-	int		num;
+-	unsigned int	magic;
+-};
+-
+-#define MAGIC		0xf00ff00f
+-/* Size of each of the NULL-terminated input arrays */
+-#define INPUT_MAX	128
+-/* Expected number of non-NULL elements in the output array */
+-#define EXPECT		(INPUT_MAX * 2 - 2)
+-
+-static int __init test_memcat_p_init(void)
+-{
+-	struct test_struct **in0, **in1, **out, **p;
+-	int err = -ENOMEM, i, r, total = 0;
+-
+-	in0 = kzalloc_objs(*in0, INPUT_MAX);
+-	if (!in0)
+-		return err;
+-
+-	in1 = kzalloc_objs(*in1, INPUT_MAX);
+-	if (!in1)
+-		goto err_free_in0;
+-
+-	for (i = 0, r = 1; i < INPUT_MAX - 1; i++) {
+-		in0[i] = kmalloc_obj(**in0);
+-		if (!in0[i])
+-			goto err_free_elements;
+-
+-		in1[i] = kmalloc_obj(**in1);
+-		if (!in1[i]) {
+-			kfree(in0[i]);
+-			goto err_free_elements;
+-		}
+-
+-		/* lifted from test_sort.c */
+-		r = (r * 725861) % 6599;
+-		in0[i]->num = r;
+-		in1[i]->num = -r;
+-		in0[i]->magic = MAGIC;
+-		in1[i]->magic = MAGIC;
+-	}
+-
+-	in0[i] = in1[i] = NULL;
+-
+-	out = memcat_p(in0, in1);
+-	if (!out)
+-		goto err_free_all_elements;
+-
+-	err = -EINVAL;
+-	for (i = 0, p = out; *p && (i < INPUT_MAX * 2 - 1); p++, i++) {
+-		total += (*p)->num;
+-
+-		if ((*p)->magic != MAGIC) {
+-			pr_err("test failed: wrong magic at %d: %u\n", i,
+-			       (*p)->magic);
+-			goto err_free_out;
+-		}
+-	}
+-
+-	if (total) {
+-		pr_err("test failed: expected zero total, got %d\n", total);
+-		goto err_free_out;
+-	}
+-
+-	if (i != EXPECT) {
+-		pr_err("test failed: expected output size %d, got %d\n",
+-		       EXPECT, i);
+-		goto err_free_out;
+-	}
+-
+-	for (i = 0; i < INPUT_MAX - 1; i++)
+-		if (out[i] != in0[i] || out[i + INPUT_MAX - 1] != in1[i]) {
+-			pr_err("test failed: wrong element order at %d\n", i);
+-			goto err_free_out;
+-		}
+-
+-	err = 0;
+-	pr_info("test passed\n");
+-
+-err_free_out:
+-	kfree(out);
+-err_free_all_elements:
+-	i = INPUT_MAX;
+-err_free_elements:
+-	for (i--; i >= 0; i--) {
+-		kfree(in1[i]);
+-		kfree(in0[i]);
+-	}
+-
+-	kfree(in1);
+-err_free_in0:
+-	kfree(in0);
+-
+-	return err;
+-}
+-
+-static void __exit test_memcat_p_exit(void)
+-{
+-}
+-
+-module_init(test_memcat_p_init);
+-module_exit(test_memcat_p_exit);
+-
+-MODULE_DESCRIPTION("Test cases for memcat_p() in lib/memcat_p.c");
+-MODULE_LICENSE("GPL");
+diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+index 3cac3b63a752..8ba5fb73dc0b 100644
+--- a/lib/tests/Makefile
++++ b/lib/tests/Makefile
+@@ -38,6 +38,7 @@ CFLAGS_longest_symbol_kunit.o += $(call cc-disable-warning, missing-prototypes)
+ obj-$(CONFIG_LONGEST_SYM_KUNIT_TEST) += longest_symbol_kunit.o
+ 
+ obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
++obj-$(CONFIG_TEST_MEMCAT_P) += memcat_p_kunit.o
+ obj-$(CONFIG_MIN_HEAP_KUNIT_TEST) += min_heap_kunit.o
+ CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
+ obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+diff --git a/lib/tests/memcat_p_kunit.c b/lib/tests/memcat_p_kunit.c
+new file mode 100644
+index 000000000000..261ec2e69787
+--- /dev/null
++++ b/lib/tests/memcat_p_kunit.c
+@@ -0,0 +1,83 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test cases for memcat_p() in lib/memcat_p.c
++ */
++
++#include <kunit/test.h>
++
++#include <linux/slab.h>
++#include <linux/string.h>
++
++struct test_struct {
++	int		num;
++	unsigned int	magic;
++};
++
++#define MAGIC		0xf00ff00f
++/* Size of each of the NULL-terminated input arrays */
++#define INPUT_MAX	128
++/* Expected number of non-NULL elements in the output array */
++#define EXPECT		(INPUT_MAX * 2 - 2)
++
++static void memcat_p_test(struct kunit *test)
++{
++	struct test_struct **in0, **in1, **out, **p;
++	int i, r, total = 0;
++
++	in0 = kunit_kcalloc(test, INPUT_MAX, sizeof(*in0), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, in0);
++
++	in1 = kunit_kcalloc(test, INPUT_MAX, sizeof(*in1), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, in1);
++
++	for (i = 0, r = 1; i < INPUT_MAX - 1; i++) {
++		in0[i] = kunit_kmalloc(test, sizeof(**in0), GFP_KERNEL);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, in0[i]);
++
++		in1[i] = kunit_kmalloc(test, sizeof(**in1), GFP_KERNEL);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, in1[i]);
++
++		/* lifted from test_sort.c */
++		r = (r * 725861) % 6599;
++		in0[i]->num = r;
++		in1[i]->num = -r;
++		in0[i]->magic = MAGIC;
++		in1[i]->magic = MAGIC;
++	}
++
++	in0[i] = NULL;
++	in1[i] = NULL;
++
++	out = memcat_p(in0, in1);
++	KUNIT_ASSERT_NOT_NULL(test, out);
++
++	for (i = 0, p = out; *p && (i < INPUT_MAX * 2 - 1); p++, i++) {
++		total += (*p)->num;
++		KUNIT_EXPECT_EQ(test, (*p)->magic, MAGIC);
++	}
++
++	KUNIT_EXPECT_EQ(test, total, 0);
++	KUNIT_EXPECT_EQ(test, i, EXPECT);
++
++	for (i = 0; i < INPUT_MAX - 1; i++) {
++		KUNIT_EXPECT_PTR_EQ(test, out[i], in0[i]);
++		KUNIT_EXPECT_PTR_EQ(test, out[i + INPUT_MAX - 1], in1[i]);
++	}
++
++	kunit_kfree(test, out);
++}
++
++static struct kunit_case memcat_p_test_cases[] = {
++	KUNIT_CASE(memcat_p_test),
++	{}
++};
++
++static struct kunit_suite memcat_p_test_suite = {
++	.name = "memcat_p",
++	.test_cases = memcat_p_test_cases,
++};
++
++kunit_test_suite(memcat_p_test_suite);
++
++MODULE_DESCRIPTION("Test cases for memcat_p() in lib/memcat_p.c");
++MODULE_LICENSE("GPL");
 
-I checked this on ConnectX-7: with the series the priority-carrying 
-flows stay offloaded to the FDB like plain flows, and without patch 1/3 
-they fallback to software.
+base-commit: 4056b3c9d3c92ea45955641dbafeb9b960e146ef
+-- 
+2.25.1
 
-Nit: "prio" already means flow table priority in mlx5; skbedit_prio
-would be clearer. Not a blocker.
-
-Reviewed-by: Jianbo Liu <jianbol@nvidia.com>
