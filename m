@@ -1,201 +1,218 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1434A0EF6
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 21:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792014313; cv=none; b=ELUvvdVRRVW1raSxU7FamBRn/Ou9aIMKMGSL9M4WmfMIMeT8B701O0pn9GW8nSwiDgBbRf7iSYOZ4FEoZRY6QNmxLQupdJLuhRMLrZja2ux/vuhdQ5ai9nha5Mx4GGIL/ld9rv7YrK/fnZu5YolOwbd8m40O0Uz9NUDRY3nZ6yI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792014313; c=relaxed/simple;
-	bh=0ZTSOvLPpcGRwqyN5BDZjWGpfTwuRbDfqUoQiVm6QnM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V4pgMSlyHjpFAATNfpg6p/NitjljChhKP0JREs3o7XNv6TzwF82Cx9rhB275b/+HgpGPnQBA66lM3wfe3W0m2eZIfp6kstEAP0O8tvIlBrtbXoSlgezE2LZqoCswOzSTSqFNfjn0o30/DPGFbna5dXz07UT7Hp1ZEkxI7aAqOcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m8e8L0hB; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9D0481AB3
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 21:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792014431; cv=pass; b=TB3xiR2PlXWTGAq2eyhHVgDGBSU+1ZoXQm1URLSZlhrEz55dQJRH+V4FfddrWEfthJNmat2PJkCOgUWS8WVCsJrAiGZgydX8jRZTFxXxwzjPFzRz95gk9RhEkbwPBza2nEulP3GPFN3EPp/++Z6DxkBdFz2FA5C3uJ38sZFR95c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792014431; c=relaxed/simple;
+	bh=MCaOs6wYNSB4LFrsDrFCk/QlJZrshEPv8X72I3y+9V4=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IfEv6SFTqlVOr59mKWeUiUwxGUDF2CnNOymUD/KKuvTK/mJ/q3Ppy2LC8FXIFOgpFgZaYlZSNFAwKDcU6RuItGgPiUDhIIWy/63iGdNRY1bG0+4PHjX16yd0nV0xRsT4vcjIJzFJWaUKFximEImY875Ox+Gl/Q9SKJUWGdShd24=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JSlx6hcL; arc=pass smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m8e8L0hB"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48c6f764f82so436498f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:45:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JSlx6hcL"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-917bab38b14so9558656d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 14:47:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792014428; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ihdK88j+5Uk4nkn32UxNxbdr0pFR32lPR1Ww6OKCI/s7Xr1OAA17GLiADN+JkgZEXV
+         AanhQCnXhejGZUwj/MfgTndketBYG+ptJFsb3f5QqIc9x/iUqFXsB4vpWG8Rfy7/M2QL
+         6MdPugjrcLXKI7o26sVoE/ZkmJhEmUDKUIH1MFP3OmU9onCEI142PtmbFChHhcOQLyrH
+         7Bw2w4asw08gdXuAUMAlvN66B+atm3YL3yaCj5ZR7ahlLqdMzLIqC4a8Xs/7aYPOhLjH
+         xcNu2tlBaQSvlb0uyIMBEmo+uDpHThOcOShpJkCWxzNHV9J7+e1gexw8XFvy+By/62iO
+         FJgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=OmdjCtO0BT/G+HosYDOiIQ+MFbY+P6PHIY8xmD++EWw=;
+        fh=XN4YKBsxM7xx81fycX2tIaunJu2yI2ACgG67tgyecrg=;
+        b=KQ7HGK4QVNXH9bzGI59g3tB6uWMOpYQ2bgtAABQBWrIf3wolZnSi8VM4jfQml99zIz
+         rJwJ/11T0aQ/ZwcBwL4O91fUftoYmbrnh61fZmtM28oabMiwzrE3Ltqra2rU2ndyeR8y
+         blOk0dmuHtU9nKiSdonLK0TMwFna6r0VjPs4yHtkbAKLsFIr8ORQIJ2uPivsq/gV/mAe
+         i/8cKkYGwAEz85s8GIFLwC1gEqfFb1nZa24gSylYqTzZD6b93p77aRCibVGsgv3fT4n8
+         pPk2/miPR3JipUqF1+LGXEBTWNEzkVcx4xoeF3ydRrgbL3aqliW2HA6yr4Chog53p+yg
+         4azw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792014310; x=1792619110; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=DYwmofQDCDn8korfzzaOGpjDzGREvYtvvSRPaGLYBs4=;
-        b=m8e8L0hBlfEHnHvgXcPV1GkVMzjSyVPjEtxx6TFqKwbY5VDtgk8+iWpTVp4WxYKwaV
-         vN46WE69yXf4FXxSyCU+KmpNms37zDVcHKJuNNVUpTfCHvvTunyg5w5iuOPMwLyY+0bo
-         wVGwkjYNeAqt8eBGfwLliW5i2HEy91xXcB7HX+BjtWbYJ7aEt9UKm46is0HhCEu5LdMp
-         MIGulu0aVMtLlkEI9pr/v/wlhBOAr+3XPejxKuXPLzVLlCv0Wl/WAt6Uh+pET9jH2LQ+
-         PmymPGJop0y2VzOfWb0bkrSqXe9Gsu6M7Ro4JfzZZoIBANHz1KcLAXItQRXxgsK/8yio
-         dsNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792014310; x=1792619110;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1792014428; x=1792619228; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DYwmofQDCDn8korfzzaOGpjDzGREvYtvvSRPaGLYBs4=;
-        b=kzlqXfnyD4YT2dNc+yu0v9QiF5/6fKBsO1TXWorFmdP/VjYuGlPKFsp/hTNbEqEmF7
-         lS5mI1JehSKXf6qif9xqkAh9qUzlirJoVlqNRULAKVV8oyAriiOFOCshPNxD+jwoFfyb
-         RoHV9rSJuwC/M/LaQjgfNgt6XB7NX7H4LiJ6po3zMBaF9mZRlf8skD9shG6BkhyC31DO
-         QuZbYfgffXACUcTOogSp7jrwFtJoOZiK6zP9ztw2/5lxdzXkbxmxFJI2tIptOXxvA093
-         6RFSZ9V9ZuAT4EbwWdGZfLnjWlGN6zDhavvXyOoy1N/HpDi/GtmknGZ6NwAaosZabbfw
-         Z3WQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxJJkSLpnp/hPdwDK1iOkRKTtDcVvmPtmxCpQ8i9DOhE2yBi5aNNN7hlIh/Y1DX0xDxdzneD4x3bHjy4ALD0OM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKYKTQwNDLBBS6npn0UtdyffJrEptyv1gsxgUDlkt8Sf9wV4XvG
-	9RuamcjMn3FWVxZBm2sfYxUMWxSQHWhlcRlvxgHhd3QY7us6adhyRN4I
-X-Gm-Gg: AYBFou1Ybsxwc1zAqYI3f4nCTmT0zJx9JtkN0u/EI/FI1sA8BALAYy0U9ykTZHo9/Yp
-	P5hnIPv2ZmdUMI8DXXz5UVtFcdFwls8iM+bdzV/51CLLKB+iAE+I9fT0sUT+lY9JEb2fGF+D3Xz
-	KHLOdka6mRsrvPqXQ9CuENN4giFEBWS6Fg2XEDjof9RJdaMZAlP4l/5bG1LtoEJ//qxZQcHWOf9
-	ieHGy88vU7n3OLvQzsOCFiPYDOAlcqJik7EF5q/W25gPA0reCjXWJ657k9CgODUhnGSrkAeyxOX
-	lZzYVSWdjeisOp2nK/LemRUPk3PdoqNmppIBGTe8fo5/4DT+9f4DiTzd19s2JlhxujZQTDZp/SP
-	9TNdkrBl3/H3Iu2tOWBHAZaHUkcdXdUkxwkuxmd2xYz/c34olB1muBTV1sQj1FZPQxDB+Lddgni
-	ieUVSS+xqGi3dW/PXPjaCHAfaAIl6l/7O8AtkNmTncTCLKkU8bbVPuhafJVg==
-X-Received: by 2002:adf:f549:0:b0:487:489:7af0 with SMTP id ffacd0b85a97d-48dbaadde34mr25680625f8f.17.1792014309866;
-        Wed, 14 Oct 2026 14:45:09 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de0514ab1sm18967193f8f.0.2026.10.14.14.45.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 14:45:09 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 14 Oct 2026 23:45:07 +0200
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Avinash Duduskar <avinash.duduskar@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
-	Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
-	Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
-	Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 11/21] bpf: Add tracing_multi link support
- for bpf progs
-Message-ID: <as_349cckxgUQM2U@krava>
-References: <20261012154024.29423-1-leon.hwang@linux.dev>
- <20261012154024.29423-12-leon.hwang@linux.dev>
+        bh=OmdjCtO0BT/G+HosYDOiIQ+MFbY+P6PHIY8xmD++EWw=;
+        b=JSlx6hcLclOXuJ5rv3+BmT4OEpImG6UFCv/raPoxbZEOidM0DzSBwdQXAGriIr5Edi
+         TX49nUQL9NtrVe4u+GPwa7n6xU/AhixY0AegBACIRbdRq28mgasEndHIualDvFy5LTPR
+         Yd3gXeECBDYDxwABK6N/c2Y5Bd569usZ9CnVMiPRnI9BCDNLO669UbiMbWpWoG0hybMP
+         Fg3j32XupqTXaDb2z4g+fRVyyR+vUo4P5ieSz11ab59S9VrUJWGyQvPd537Na+l0XY/n
+         aR8oZ+YeefMeUY6gOU5UGsAW0Pf7GZUucXuC3HiPHqoHE81Qasn/aee2qAy7sGopm65T
+         szew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792014428; x=1792619228;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=OmdjCtO0BT/G+HosYDOiIQ+MFbY+P6PHIY8xmD++EWw=;
+        b=Wu71cRamZ/CNEArhvo9o/xVhMT3NQJs7Sky2T1uMYZ9AfOJ2nZR4rmsKWg3EhVR3pI
+         pPkIx8H5uI/REtt+gJMD/jdnxQ8A6wjlWcitq1maNddmm/l/cvdKdQbj+K1fIxNMhYh9
+         fFCCWlayUZhe7EB7CH9NDaD9Wu13bBNilSjJvqXlgSDsRQ7V8kxnCk+n78q/VGcb8TFQ
+         KloAA9c5hxRkBa2mrSN2J2nPalhNm2OMfP6xlR2CUip2LwD0qxOr1yFDP6wKiwueWozG
+         RmXgU81EkBpkM9aly4sWWolAxvfwCJzEG+KOJPAKNt4WkX7F7apGZlSklSzQ4yaS2wYM
+         CVGA==
+X-Forwarded-Encrypted: i=1; AKwUvBxxpeNeC3guatNLr3H0ax01sRJlA8LuEx9v6NGcqtw7bN4XJdlhYcYG5dfqJ4GZbOv9vYkrnX4odmmN+hc2R1A=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLXw1hlJ5dNf/QX/q+Sg5GsqcZb16GbhNGjJGNoKXmiN8QMo0Mm
+	sJSC2i2pBs1aK6Izk/G/3O+fcJmKyTh+1zVR3ghnp9MOC8NkiaL5jUaQbOUgSGi7FcEMkNRsVe6
+	w5f/R2dJp13nQ4QVVhPVay1kGcjbh12yvkZITU4JV
+X-Gm-Gg: AYBFou0001yuRX7JIT/UOQHiQa7odVWlwm1EhDuK6+QI7Zem8hUSFno5SE+m4MLV12K
+	Pvw4UpyeGU0p5r0RMvCcuBc5Jf6u5dlMLNS28ju6E4Rf/BsZAFly0+leJaf47Ul76Up1oV5e41Y
+	m22UZWbzQnbBdztHBHpE3NN3xYflSITuUuQe0hCd8YGwthvMHAo1kWQakJfDLTwL8MBftgccOBm
+	9Ka+7NwJLp6fAlq0aM6cRzRs7QAibopK/RUOtk4PeEHqG+yAty8nplC/f4/YeYNZlY3UbZlRSLe
+	EpxiQdfHdi5x0yBMZOljU3gCHET6MSDjPXnknQ2mi8EETTObWPkfcXpeSM7M2haB2FYcytsvhlU
+	H2sbIn8Ae/A8pGE2GXATaJEG/tyACd4zc5FtULwAQy7qE7fK3Mr3p
+X-Received: by 2002:a05:6214:43c1:b0:91b:8e06:73f5 with SMTP id
+ 6a1803df08f44-91b8e0680ffmr139578016d6.15.1792014427625; Wed, 14 Oct 2026
+ 14:47:07 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 14 Oct 2026 14:47:06 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 14 Oct 2026 14:47:06 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20261014095702.39676-1-griffoul@gmail.com>
+References: <20260720111259.122911-1-dwmw2@infradead.org> <20261006183235.16576-1-griffoul@gmail.com>
+ <CAEvNRgEseLO+LbkwXrEit0H2LH5Wx-srSvHEMpt0=upPL3tF=g@mail.gmail.com> <20261014095702.39676-1-griffoul@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261012154024.29423-12-leon.hwang@linux.dev>
+Date: Wed, 14 Oct 2026 14:47:06 -0700
+X-Gm-Features: AclHuK_bDoENPFsEJnePb9piUrHFuROo5b9vCnTZ7F3PMjuUH-N1Jl6pvQGbDQg
+Message-ID: <CAEvNRgHtB8j6=9r=txjsKvQM0F85nRN4KW5sdnuv_-Og=cWEfg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/9] mm: Memory providers for guest_memfd and iommufd
+To: Fred Griffoul <griffoul@gmail.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: David Woodhouse <dwmw2@infradead.org>, "Aneesh Kumar K . V" <aneesh.kumar@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Steffen Eiden <seiden@linux.ibm.com>, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 12, 2026 at 11:40:13PM +0800, Leon Hwang wrote:
+Fred Griffoul <griffoul@gmail.com> writes:
 
-SNIP
+> Ackerley Tng <ackerleytng@google.com> writes:
+>
+>> When the provider wants to revoke the page, the notifications/function
+>> calls flow this way, the last [ENTITY] in the chain actually does the
+>> zapping.
+>>
+>> + [PROVIDER] -> [KVM]
+>> + [PROVIDER] -> [DMABUF] -> [IOMMU]
+>> + [PROVIDER] -> [GUEST_MEMFD] -> [USERSPACE] (AFAICT this was not
+>>   implemented in the RFC.)
+>
+> Thanks for going through it. I have just posted v2:
+>
+>   https://lore.kernel.org/all/20261014093733.90312-1-griffoul@gmail.com/
+>
+> It changes two of these chains. dma-buf is gone: iommufd attaches to
+> the provider file itself, through a small interface in mm. And
+> guest_memfd now maps the file into userspace from the provider's
+> frames, so a revoke also zaps the VMM's mapping:
+>
+>   [PROVIDER] -> [GUEST_MEMFD] -> [KVM], [USERSPACE]
+>   [PROVIDER] -> [IOMMU]
+>
 
-> @@ -3787,64 +3796,129 @@ static const struct bpf_link_ops bpf_tracing_multi_link_lops = {
->  #endif
->  };
->  
-> -static int ids_cmp_r(const void *pa, const void *pb, const void *priv __maybe_unused)
-> +struct tracing_multi_sort_data {
-> +	u64 *keys;
-> +	struct bpf_prog **progs;
-> +	u32 *ids;
-> +	u64 *cookies;
-> +};
-> +
-> +static int keys_cmp_r(const void *pa, const void *pb, const void *priv __maybe_unused)
->  {
-> -	u32 a = *(u32 *) pa;
-> -	u32 b = *(u32 *) pb;
+Thanks :)
 
-I think you could just s/32/64/ and keep the rest in here and have simpler diff
+>> IIUC guest_memfd conversions was not illustrated in the RFC: what
+>> happens on a shared -> private conversion?
+>
+> There are none yet. Only VMs of type KVM_X86_DEFAULT_VM can use a
+> provider, so all their memory is shared.
+>
 
-> +	const u64 *key_a = pa, *key_b = pb;
->  
-> -	return (a > b) - (a < b);
-> +	return (*key_a > *key_b) - (*key_a < *key_b);
->  }
->  
-> -static void ids_swap_r(void *a, void *b, int size __maybe_unused,
-> -		       const void *priv __maybe_unused)
-> +static void keys_swap_r(void *a, void *b, int size __maybe_unused,
-> +			const void *priv __maybe_unused)
->  {
-> +	const struct tracing_multi_sort_data *data = priv;
-> +	struct bpf_prog **prog_a, **prog_b;
->  	u64 *cookie_a, *cookie_b, *cookies;
-> -	u32 *id_a = a, *id_b = b, *ids;
-> -	void **data = (void **) priv;
-> +	u64 *key_a = a, *key_b = b, *keys;
-> +	u32 *id_a, *id_b, *ids;
-> +
-> +	keys    = data->keys;
-> +	ids     = data->ids;
-> +	cookies = data->cookies;
-> +	id_a    = ids + (key_a - keys);
-> +	id_b    = ids + (key_b - keys);
->  
-> -	ids     = data[0];
-> -	cookies = data[1];
-> +	if (data->progs) {
+To borrow David's words, the part about this that makes me itch is
+conversion. We have to support conversions. Even if it doesn't merge in
+the first patch series, we have to have line of sight to how conversions
+would work.
 
-nit, let's unify with the rest of the code and have progs variable for data->progs ?
+Conversion requests originate from the guest and then the host handles
+the guest request by making calling an ioctl on guest_memfd. Hopefully
+this part doesn't change with alternative provider support.
 
-SNIP
+Suppose guest_memfd still gets the conversion request first, in RFCv2,
+to reach all the mappings in various page tables, it would have to be
 
-> -	err = check_dup_ids(ids, cookies, cnt);
-> +	keys = kvmalloc_objs(*keys, cnt);
-> +	if (!keys) {
-> +		err = -ENOMEM;
-> +		goto error;
-> +	}
-> +
-> +	for (int i = 0; i < cnt; i++)
-> +		keys[i] = bpf_trampoline_compute_key(progs ? progs[i] : NULL, btf, ids[i]);
-> +
-> +	err = check_dup_keys(keys, progs, ids, cookies, cnt);
->  	if (err)
->  		goto error;
->  
-> @@ -3908,19 +4022,32 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
->  	link->nodes_cnt = cnt;
->  	link->cookies = cookies;
->  	link->fexits = fexits;
-> +	link->tgt_progs = progs;
-> +	link->pokes = pokes;
->  
-> -	err = bpf_trampoline_multi_attach(prog, ids, link);
-> +	if (progs)
-> +		err = bpf_trampoline_multi_prog_attach(prog, ids, keys, link);
++ [GUEST_MEMFD] -> [KVM], [USERSPACE]
++ [GUEST_MEMFD] -> [PROVIDER] -> [IOMMU]
 
-you need keys computed ahead for dups check, so let's the above
-bpf_trampoline_compute_key calls be the single place we compute keys
-and pass keys to bpf_trampoline_multi_attach below as well?
+since guest_memfd must ensure no IOMMU mappings to guest private pages?
+There's that extra step through the [PROVIDER]...
 
-> +	else
-> +		err = bpf_trampoline_multi_attach(prog, ids, link);
+>> Does your provider need to know if some memory was transitioned between
+>> shared/private states? The provider can be notified too, if
+>> necessary. If not, then isn't guest_memfd doing all the coordination
+>> better than going via the provider?
+>
+> Our provider does not need to know, and I agree: once there is private
+> memory, guest_memfd converts the pages, so it should tell the others
+> what to zap.
+>
+> I think the two models meet there, and the v2 cover letter now says so.
+> The iommufd side of v2 does not pin and keeps no references: it asks for
+> the frame behind each page, treats a page with no frame as a hole, and
+> maps again on a revoke. guest_memfd can offer that for its own file:
+> shared pages return their frames, private pages are holes, and
+> guest_memfd revokes a range whenever it converts it, in either
+> direction. That is your [GUEST_MEMFD] -> [IOMMU], and it should work for
+> folio-backed guest_memfd without memfd_pin_folios() or refcounts, as
+> long as guest_memfd also revokes a range before it frees its folios.
+>
 
-nit, let's add empty line in here?
+This part makes sense, if I'm understanding you correctly.
 
->  	kvfree(ids);
-> +	kvfree(keys);
-> +	kvfree(fds);
->  	if (err) {
-> +		bpf_put_progs(progs, cnt);
->  		bpf_link_cleanup(&link_primer);
->  		return err;
->  	}
->  	return bpf_link_settle(&link_primer);
+> The one difference is that v2 also lets iommufd map a provider file
+> directly. Going through guest_memfd would add nothing without private
+> memory: it would only pass each revoke on. And memory that only devices
+> use, such as MMIO, does not go through guest_memfd at all. Both paths
+> would use the same iommufd code.
+>
+>> Does the revocation model work for you? If it helps, I can rebuild the
+>> sample provider to illustrate how the revocation can be done.
+>
+> Yes, the revocation model works for us. v2 replaces David's sample
+> with one that moves, donates and makes pages read-only, and a selftest
+> that checks the guest, the device and the VMM's mapping after each
+> change. It may be a good base if you want to try guest_memfd as the
+> provider for iommufd on top of it.
+>
 
-thanks,
-jirka
+Thanks, I will prototype what I have in mind too to make sure things
+work as I think they will :)
+
+>> 4. [DIRECTMAP] Kernel direct map.
+>
+> Agreed, that is separate. The memory we have in mind is a range hidden
+> from the host with memmap=, so it is not in the direct map.
+>
+> Thanks,
+> Fred
