@@ -1,317 +1,255 @@
-Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FE3551982;
-	Wed, 14 Oct 2026 15:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.203.200.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791992688; cv=pass; b=sYZtzbJ7xFeITb233vF9/5a0mnSNUwQ7plBNRcRCaeCKD9r44QmHYrV5jTw0OTeib6wVqH2t4O8Au6nsFB3INb+Njwwq5QZkLgXjT9xm3bL1f/4q2DdcA4UsTq2qQKO974IkdH4IXGSnizFPu8oI2/mB7ljAPr6LePkW6ooCSKw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791992688; c=relaxed/simple;
-	bh=RYczT0jpIKv4gSVjltuj56H+yF9aSE0icJvm3zDfm9k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OkSftGP4w1nnhJ0kOrvi0VtNHEdGHooQygCIIKJ0r8lnrZc9FHidyrJR+S29RU8yiBCVV9loBswrpj/jTBIoXAKqYS4JuQPoMXDmOw+K2/4KMzHhv5wt/0/1pxaU8TLSBMQdkplFEPastwS2/IyyrAI5yq2hTj3+1f5abDplS/8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.b=Zn8a4kNQ; arc=pass smtp.client-ip=185.203.200.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C26B51D539;
+	Wed, 14 Oct 2026 15:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791992851; cv=none; b=KM5tgNoZfIRKoK/XgScK4KrvAhNefsQsHwZWlA/ED2Eoer3qv/2oUyoGsVHbxUm/FflfSROILA17B1oovp/aZdvEueL5RY9UzbPr0eb80bKzve1VtLVoW1wyAZupCiQt8J7BnwM3hXoNkMdaUf3QOoOEPlZUoe7VqsLEQ0WRzoE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791992851; c=relaxed/simple;
+	bh=6otGIeKfClWjbQUXS/YyaNpFrgvGvcQY03U9FnQykwg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EkQN5ZVIAJqX6UQeJTMsB9OERin1dWYAAJZT50OAxavW3NNth14GBIz4H9XN2TClFd+D1/5toE5xb2vs7henP0Z8bFkheXolyPEtlj6oUYtw6ISKFO4YhOeCvxLZmDrkgCvLywDHo9ip3TFQr7PseYPi1TVDpF0dtO/n1RIMFlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqfG4WfF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.b="Zn8a4kNQ"
-Received: from dude04.red.stw.pengutronix.de (dude04.red.stw.4.pengutronix.de [10.17.1.12])
-	(Authenticated sender: relay-from-dude04.red.stw.pengutronix.de)
-	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 410EE202657;
-	Wed, 14 Oct 2026 17:44:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1791992677;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qIYJzwLOPLap8rU/gvfWwHDxXpiVkla7ymStypmhGns=;
-	b=Zn8a4kNQ3N0dojFaHeBt42Gcn/UnBSZMBAmdAwNu4v/71JuBWJ7Mm3s7g6RyOTDyFKoeiz
-	aKJFa+2GppvAEczlH7bOZ5y8Ie6h8/X9ic9FOxEoQshzzk6Is5KCFchjxowcARhFlOJfUt
-	1jYfiODrzUVWTqP2Iy3jBZucmnRvOtdvfMJdlsRTE2uitC0aMAf+UFJBFIeoNj2sX6i1HB
-	p9M3mVxL2njxEyf22FVEBZ1H5j3s+fSbZp0xmY5PZ+0aD8StcGlRiuER2T2tpxjlPs1hEp
-	DwRUWuOy9O2th8dDGL9ZYMtl8zDbV25jPAKwOEiSxoGmak8dUoqXSoIK7PeE7A==
-ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1791992677; a=rsa-sha256;
-	cv=none;
-	b=CHgS4WMArDXVidG5lSWkefsdHcw2YP8bbs4FtlbsbKzS2xqJwxmsR3BZwj/cQ/3tDz4FfC
-	RJqykDBhlC2cRqkmQ0HhEv8mw1LWJVk4wecLYeKcKJH64e+vD6tpc6AX92dFeSbiLSs8oo
-	a9khk+uypkSkHtprkqhfXZydVkWZdkRHR49QhbMBOrjCMLEBKf2YmxwOJngY82Dvzz03Wl
-	KZhp+m5LrKBI5bNKjZ4yiR1cjekFUq2zTPYweTZr/w4nSjPRIomho8j9Y44kW2fHw0z8/e
-	Ya9uBX6UX8awwNT85ViVxw6wDrharLDhnMEGZwbVgeII63nwW+Y2JEmtlKz/ZA==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=relay-from-dude04.red.stw.pengutronix.de smtp.mailfrom=ore@pengutronix.de
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1791992677;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qIYJzwLOPLap8rU/gvfWwHDxXpiVkla7ymStypmhGns=;
-	b=FUWO0bcJ3C3hTCrL2wJg2IL3flol1BPy8Yhix4SaDUXIOHivblflxx12cJsA7QpNxwY15p
-	dbhjcRneEhFakm9n4JSX+pducaPwAtpSx69+nAwtKDJLhS8vfR2mBWyDowa9kfWR6PUXIy
-	Tem0NNX28k5VueO3m/2AvxpYtQBgP+U0/fhH8VluEZ8J2Y5IM8o8h4Xy54d7hD2BPhR0AE
-	8cPXPJWtm8OkWl2StmDVVOOzMddibBA1g5zxnwqD12BLFCv5esC19FNxLSynjxSF45RvUS
-	cP4aEQOSgz+jdWBQvF8wSYCpWO2B6RQ03dPK9EXxvKeYPUng9M5Qq/19ovNtvA==
-Received: by dude04.red.stw.pengutronix.de (Postfix, from userid 1058)
-	id 25DFF389263; Wed, 14 Oct 2026 17:44:37 +0200 (CEST)
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Robin van der Gracht <robin@protonic.nl>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
-	kernel@pengutronix.de,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	=?UTF-8?q?Alexander=20H=C3=B6lzl?= <alexander.hoelzl@gmx.net>,
-	Quchaosheng <quchaosheng000406@163.com>,
-	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH can-next v1 7/8] selftests: can: cover J1939 transport abort and timeout paths
-Date: Wed, 14 Oct 2026 17:44:33 +0200
-Message-ID: <20261014154435.3577983-8-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261014154435.3577983-1-o.rempel@pengutronix.de>
-References: <20261014154435.3577983-1-o.rempel@pengutronix.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqfG4WfF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164EA1F000C4;
+	Wed, 14 Oct 2026 15:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791992849;
+	bh=rbTaxtGNsGO6dgPReDaWD0CM9kndZbKd1uV53a/NSu8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=dqfG4WfFMKJxZ9jShdl7o7hbScb8EXezBJoZoHAJjMY2QTexCj+pstW54eXAMefef
+	 BSVJN+lUooUHBK45XcGSqxC8+gBs3YCZQ92pDIzpDYCor00KsGZ+4IvBNV4Z3WGLt7
+	 IHcxFy9I+aWxO4XI8VFjoxlM89KAywkvlNJIl98I5ruCdg1QAskpAgdvTGjmxhN4nI
+	 ObTi0HuPUkkmLi3dAB8FWD3vYG7MRvb9xCkjz+UUI7J1B+eXAwPZN7/UALyAKl38wB
+	 XQuFsrlqIy5YaU9BOo7SHmJrNCQYxpsSLRpk0YsWZ1G7sl5keIuMcC+RZfF61CN+/2
+	 Ieqc9taOqzpFw==
+Date: Wed, 14 Oct 2026 16:47:22 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Fuad Tabba <fuad.tabba@linux.dev>, Peter Maydell <peter.maydell@linaro.org>, 
+	Leonardo Bras <leo.bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, 
+	Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v21 02/15] KVM: arm64: Refuse to start a guest with S1PIE
+ or S1POE but not TCR2
+Message-ID: <as-f1JfUy38Xt9QA@gremlin>
+References: <20260930-arm64-gcs-v21-0-3556644cd927@kernel.org>
+ <20260930-arm64-gcs-v21-2-3556644cd927@kernel.org>
+ <86fqyn2che.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86fqyn2che.wl-maz@kernel.org>
 
-Extend the multi-frame tests with the transport edge cases the round-trip
-tests do not reach: a per-CTS block limit smaller than the message, the
-RTS/CTS and rx timeouts that must end a stalled session with a Connection
-Abort, and a received Connection Abort that cancels an incoming session.
+On Sat, Oct 03, 2026 at 01:30:05PM +0100, Marc Zyngier wrote:
+> This *absolutely* needs to be data driven, and we're not going back to
+> over two years ago. We already have most of what is needed in
+> config.c, and it is only a matter of making sure that S1PxE is only
+> enabled for the guest if TCR2 and ATS1A are also present. If that
+> means additional sanitisation of the idregs when finalised, so be it.
+>
+> If userspace decides to expose crap in the ID registers, that's its
+> own problem, and we're not in the business of enforcing idiotic
+> configurations. The only thing that matters is that the state that KVM
+> deals with is consistent.
 
-Assisted-by: LLM
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+As I understand it: don't return an error for a configuration that doesn't
+make sense, enforce RES0 instead.
+
+So I'm guessing something like the below against the series (+ obviously
+adjusting tests to reflect that)?
+
+Cheers, Lorenzo
+
+----8<----
+From b10625d0147f74504141da1f0c837b3b2bdd3d37 Mon Sep 17 00:00:00 2001
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Date: Wed, 14 Oct 2026 16:31:13 +0100
+Subject: [PATCH] tmp
+
 ---
- .../selftests/net/can/test_j1939_multi.c      | 187 +++++++++++++++++-
- 1 file changed, 186 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/kvm_host.h |  7 ++++++-
+ arch/arm64/kvm/config.c           | 35 ++++++++++++++++++++++---------
+ arch/arm64/kvm/sys_regs.c         | 24 ---------------------
+ 3 files changed, 31 insertions(+), 35 deletions(-)
 
-diff --git a/tools/testing/selftests/net/can/test_j1939_multi.c b/tools/testing/selftests/net/can/test_j1939_multi.c
-index 1f27ee58f48c..069a9c8690b5 100644
---- a/tools/testing/selftests/net/can/test_j1939_multi.c
-+++ b/tools/testing/selftests/net/can/test_j1939_multi.c
-@@ -5,7 +5,18 @@
-  * A CAN_RAW socket plays the transport peer and drives the full handshake
-  * against the kernel J1939 stack over the wire, in both directions: for TP the
-  * raw side answers RTS/CTS and exchanges DT frames with EOMA; ETP does the same
-- * with a payload spanning several CTS blocks (DPO windows).
-+ * with a payload spanning several CTS blocks (DPO windows). The tests also
-+ * cover the CTS block limit and the abort and timeout paths. Those edge cases
-+ * are TP only; ETP has no equivalents here yet.
-+ *
-+ * Timing limitation: the abort/timeout tests wait with wide receive windows
-+ * rather than tight bounds, because timing over vcan under QEMU is not tightly
-+ * bounded. They catch a gross timer regression (e.g. a doubled timeout) but not
-+ * a subtle shift; see the per-test comments.
-+ *
-+ * Coverage limitation: a received Connection Abort is exercised RX-side only;
-+ * there is no kernel-as-transmitter received-abort test, matching the known
-+ * net-next limitation that a TX session ignores an incoming Connection Abort.
-  *
-  * The vcan interface is set up by the caller (see test_j1939_multi.sh); its name
-  * is passed via the CANIF environment variable.
-@@ -39,6 +50,14 @@
- #define ETP_CMD_DPO		0x16
- #define ETP_CMD_EOMA		0x17
- 
-+/* TP.Abort reason codes (not durations), from the kernel's enum j1939_xtp_abort */
-+#define ABORT_REASON_TIMEOUT	3	/* J1939_XTP_ABORT_TIMEOUT */
-+#define ABORT_REASON_BUSY	1	/* J1939_XTP_ABORT_BUSY */
-+
-+/* TP responder T2: wait for the next DT after CTS (ISO 11783-3:1998 §3.10.2.4). */
-+#define TP_T2_MS		1250
-+#define TP_RX_ABORT_WAIT_MS	(TP_T2_MS * 2)	/* generous; floor check is the real test */
-+
- #define TP_SIZE			200
- #define ETP_SIZE		6000		/* > TP max 1785 (255*7); several blocks */
- 
-@@ -313,6 +332,69 @@ TEST_F(j1939_multi, tp_tx_to_raw)
- 	EXPECT_EQ(memcmp(payload, rx_buf, sizeof(payload)), 0);
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index 0eee9845324b..d5ba9867927f 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -1626,10 +1626,14 @@ void kvm_set_vm_id_reg(struct kvm *kvm, u32 reg, u64 val);
+ 	(kvm_has_feat((k), ID_AA64MMFR3_EL1, TCRX, IMP))
+
+ #define kvm_has_s1pie(k)				\
+-	(kvm_has_feat((k), ID_AA64MMFR3_EL1, S1PIE, IMP))
++	(kvm_has_tcr2(k) &&				\
++	 kvm_has_feat((k), ID_AA64ISAR2_EL1, ATS1A, IMP) &&	\
++	 kvm_has_feat((k), ID_AA64MMFR3_EL1, S1PIE, IMP))
+
+ #define kvm_has_s1poe(k)				\
+ 	(system_supports_poe() &&			\
++	 kvm_has_tcr2(k) &&				\
++	 kvm_has_feat((k), ID_AA64ISAR2_EL1, ATS1A, IMP) &&	\
+ 	 kvm_has_feat((k), ID_AA64MMFR3_EL1, S1POE, IMP))
+
+ #define kvm_has_ras(k)					\
+@@ -1640,6 +1644,7 @@ void kvm_set_vm_id_reg(struct kvm *kvm, u32 reg, u64 val);
+
+ #define kvm_has_gcs(k)					\
+ 	(system_supports_gcs() &&			\
++	 kvm_has_s1pie(k) &&				\
+ 	 kvm_has_feat((k), ID_AA64PFR1_EL1, GCS, IMP))
+
+ static inline bool kvm_arch_has_irq_bypass(void)
+diff --git a/arch/arm64/kvm/config.c b/arch/arm64/kvm/config.c
+index 1053676551af..58dab9cb2c04 100644
+--- a/arch/arm64/kvm/config.c
++++ b/arch/arm64/kvm/config.c
+@@ -232,6 +232,21 @@ static bool not_feat_aa64el3(struct kvm *kvm)
+ 	return !kvm_has_feat(kvm, FEAT_AA64EL3);
  }
- 
-+/*
-+ * TP RX, per-CTS block limit: the RTS advertises a "max packets per CTS"
-+ * (RTS data byte 4, 0-based; the spec's byte 5) smaller than the total packet
-+ * count. The kernel must never request more than that many packets in a
-+ * single CTS.
-+ */
-+TEST_F(j1939_multi, tp_rx_cts_block_limit)
+
++static bool feat_s1pie(struct kvm *kvm)
 +{
-+	const unsigned int limit = 3;
-+	unsigned int num_pkts = J1939_NUM_PKTS(TP_SIZE);
-+	struct can_frame frame;
-+	int max_want;
-+
-+	ASSERT_GT(num_pkts, limit)
-+		TH_LOG("test needs more packets than the CTS limit");
-+
-+	/* advertise a max packets/CTS (limit) smaller than the total */
-+	ASSERT_EQ(tp_rx_roundtrip(self, limit, &max_want, &frame), 0)
-+		TH_LOG("TP RX round-trip against the raw peer failed");
-+
-+	EXPECT_LE(max_want, (int)limit)
-+		TH_LOG("kernel CTS requested %d packets, sender limit was %u",
-+		       max_want, limit);
++	return kvm_has_s1pie(kvm);
 +}
 +
-+/*
-+ * TP TX, RTS->CTS timeout: the J1939 socket starts a TP transmit; the raw peer
-+ * receives the RTS but never answers with a CTS. The kernel must give up (spec
-+ * T3 = 1250 ms, SAE J1939-21:2001 §5.12.3) and send a Connection Abort.
-+ *
-+ * The abort must arrive within 2000 ms (a doubled T3 would miss this window) but
-+ * no sooner than 800 ms, safely below the 1250 ms timer, so an instant-fire
-+ * regression (an abort emitted immediately on a zeroed timer) is caught too. The
-+ * bounds are wide, not tight, to stay reliable over vcan, so a subtle shift
-+ * (e.g. 1250->1800 ms) still escapes.
-+ */
-+TEST_F(j1939_multi, tp_tx_rts_cts_timeout)
++static bool feat_s1poe(struct kvm *kvm)
 +{
-+	uint8_t payload[TP_SIZE];
-+	struct timespec t0, t1;
-+	struct can_frame frame;
-+	long elapsed_ms;
-+
-+	fill_pattern(payload, sizeof(payload));
-+
-+	ASSERT_EQ(tx_start_session(&self->j1939, self->ifindex, payload,
-+				   sizeof(payload), self->raw, J1939_PF(TP_CTL),
-+				   TP_CMD_RTS, &frame), 0);
-+
-+	/* Deliberately send no CTS; expect the kernel to abort within 2000 ms. */
-+	clock_gettime(CLOCK_MONOTONIC, &t0);
-+	ASSERT_EQ(recv_ctl_cmd(self->raw, J1939_PF(TP_CTL), SA_PEER, &frame,
-+			       2000, TP_CMD_ABORT), 0)
-+		TH_LOG("kernel did not send a Connection Abort within 2000 ms");
-+	clock_gettime(CLOCK_MONOTONIC, &t1);
-+	elapsed_ms = timespec_diff_ms(&t0, &t1);
-+	/* must not fire instantly: the T3 timer has to run before the abort */
-+	ASSERT_GE(elapsed_ms, 800)
-+		TH_LOG("abort fired after only %ld ms, timer did not run", elapsed_ms);
-+	/* the T3 expiry must be reported as a timeout abort */
-+	EXPECT_EQ(frame.data[1], ABORT_REASON_TIMEOUT);
++	return kvm_has_s1poe(kvm);
 +}
 +
++static bool feat_gcs(struct kvm *kvm)
++{
++	return kvm_has_gcs(kvm);
++}
++
+ static bool feat_nv2(struct kvm *kvm)
+ {
+ 	return ((kvm_has_feat(kvm, ID_AA64MMFR4_EL1, NV_frac, NV2_ONLY) &&
+@@ -393,17 +408,17 @@ static const struct reg_bits_to_feat_map hfgrtr_feat_map[] = {
+ 	NEEDS_FEAT(HFGRTR_EL2_nS2POR_EL1, FEAT_S2POE),
+ 	NEEDS_FEAT(HFGRTR_EL2_nPOR_EL1		|
+ 		   HFGRTR_EL2_nPOR_EL0,
+-		   FEAT_S1POE),
++		   feat_s1poe),
+ 	NEEDS_FEAT(HFGRTR_EL2_nPIR_EL1		|
+ 		   HFGRTR_EL2_nPIRE0_EL1,
+-		   FEAT_S1PIE),
++		   feat_s1pie),
+ 	NEEDS_FEAT(HFGRTR_EL2_nRCWMASK_EL1, FEAT_THE),
+ 	NEEDS_FEAT(HFGRTR_EL2_nTPIDR2_EL0	|
+ 		   HFGRTR_EL2_nSMPRI_EL1,
+ 		   FEAT_SME),
+ 	NEEDS_FEAT(HFGRTR_EL2_nGCS_EL1		|
+ 		   HFGRTR_EL2_nGCS_EL0,
+-		   FEAT_GCS),
++		   feat_gcs),
+ 	NEEDS_FEAT(HFGRTR_EL2_nACCDATA_EL1, FEAT_LS64_ACCDATA),
+ 	NEEDS_FEAT(HFGRTR_EL2_ERXADDR_EL1	|
+ 		   HFGRTR_EL2_ERXMISCn_EL1	|
+@@ -474,17 +489,17 @@ static const struct reg_bits_to_feat_map hfgwtr_feat_map[] = {
+ 	NEEDS_FEAT(HFGWTR_EL2_nS2POR_EL1, FEAT_S2POE),
+ 	NEEDS_FEAT(HFGWTR_EL2_nPOR_EL1		|
+ 		   HFGWTR_EL2_nPOR_EL0,
+-		   FEAT_S1POE),
++		   feat_s1poe),
+ 	NEEDS_FEAT(HFGWTR_EL2_nPIR_EL1		|
+ 		   HFGWTR_EL2_nPIRE0_EL1,
+-		   FEAT_S1PIE),
++		   feat_s1pie),
+ 	NEEDS_FEAT(HFGWTR_EL2_nRCWMASK_EL1, FEAT_THE),
+ 	NEEDS_FEAT(HFGWTR_EL2_nTPIDR2_EL0	|
+ 		   HFGWTR_EL2_nSMPRI_EL1,
+ 		   FEAT_SME),
+ 	NEEDS_FEAT(HFGWTR_EL2_nGCS_EL1		|
+ 		   HFGWTR_EL2_nGCS_EL0,
+-		   FEAT_GCS),
++		   feat_gcs),
+ 	NEEDS_FEAT(HFGWTR_EL2_nACCDATA_EL1, FEAT_LS64_ACCDATA),
+ 	NEEDS_FEAT(HFGWTR_EL2_ERXADDR_EL1	|
+ 		   HFGWTR_EL2_ERXMISCn_EL1	|
+@@ -674,7 +689,7 @@ static const struct reg_bits_to_feat_map hfgitr_feat_map[] = {
+ 	NEEDS_FEAT(HFGITR_EL2_nGCSEPP		|
+ 		   HFGITR_EL2_nGCSSTR_EL1	|
+ 		   HFGITR_EL2_nGCSPUSHM_EL1,
+-		   FEAT_GCS),
++		   feat_gcs),
+ 	NEEDS_FEAT(HFGITR_EL2_nBRBIALL		|
+ 		   HFGITR_EL2_nBRBINJ,
+ 		   FEAT_BRBE),
+@@ -913,7 +928,7 @@ static const struct reg_bits_to_feat_map hcrx_feat_map[] = {
+ 	NEEDS_FEAT(HCRX_EL2_SRMASKEn, FEAT_SRMASK),
+ 	NEEDS_FEAT(HCRX_EL2_PACMEn, feat_pauth_lr),
+ 	NEEDS_FEAT(HCRX_EL2_EnFPM, FEAT_FPMR),
+-	NEEDS_FEAT(HCRX_EL2_GCSEn, FEAT_GCS),
++	NEEDS_FEAT(HCRX_EL2_GCSEn, feat_gcs),
+ 	NEEDS_FEAT(HCRX_EL2_EnIDCP128, FEAT_SYSREG128),
+ 	NEEDS_FEAT(HCRX_EL2_EnSDERR, feat_aderr),
+ 	NEEDS_FEAT(HCRX_EL2_TMEA, FEAT_DoubleFault2),
+@@ -1062,8 +1077,8 @@ static const struct reg_bits_to_feat_map tcr2_el2_feat_map[] = {
+ 	NEEDS_FEAT(TCR2_EL2_AIE, FEAT_AIE),
+ 	NEEDS_FEAT(TCR2_EL2_POE		|
+ 		   TCR2_EL2_E0POE,
+-		   FEAT_S1POE),
+-	NEEDS_FEAT(TCR2_EL2_PIE, FEAT_S1PIE),
++		   feat_s1poe),
++	NEEDS_FEAT(TCR2_EL2_PIE, feat_s1pie),
+ 	FORCE_RES0(TCR2_EL2_RES0),
+ 	FORCE_RES1(TCR2_EL2_RES1),
+ };
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index 3e016ac40427..de48d2d1d761 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -5938,27 +5938,6 @@ void kvm_calculate_traps(struct kvm_vcpu *vcpu)
+ 	mutex_unlock(&kvm->arch.config_lock);
+ }
+
+-/*
+- * Some optimisations in fast paths would be broken by architecturally
+- * invalid feature combinations, reject those.
+- *
+- * This should share code with the host kernel cpufeature code, and
+- * make use of the MRS to generate dependencies.
+- */
+-static bool kvm_validate_id_regs(struct kvm *kvm)
+-{
+-	if (kvm_has_s1pie(kvm) && !kvm_has_tcr2(kvm))
+-		return false;
+-
+-	if (kvm_has_s1poe(kvm) && !kvm_has_tcr2(kvm))
+-		return false;
+-
+-	if (kvm_has_gcs(kvm) && !kvm_has_s1pie(kvm))
+-		return false;
+-
+-	return true;
+-}
+-
  /*
-  * ETP RX: the CAN_RAW peer transmits an ETP message to the J1939 socket.
-  * The kernel requests blocks with ETP.CTS; raw answers each with a DPO and
-@@ -450,4 +532,107 @@ TEST_F(j1939_multi, etp_tx_to_raw)
- 	free(rx_buf);
- }
- 
-+/* Send a TP.CM_Abort control frame. */
-+static int send_abort(int raw, uint8_t da, uint8_t sa, uint8_t reason)
-+{
-+	uint8_t dat[8];
-+
-+	ctl_dat_init(dat, TP_CMD_ABORT);
-+	dat[1] = reason;
-+	return send_ctl_frame(raw, PRIO, TP_CTL, da, sa, dat, PGN_DATA);
-+}
-+
-+/* Open a TP RX j1939 socket, send a full RTS, consume the first CTS. */
-+static int tp_rx_start_session(int *j1939, int raw, int ifindex,
-+			       unsigned int num_pkts, struct can_frame *cts)
-+{
-+	if (tp_rx_open_and_send_rts(j1939, raw, ifindex, num_pkts,
-+				   num_pkts /* no per-CTS cap */))
-+		return -1;
-+	return recv_ctl_cmd(raw, J1939_PF(TP_CTL), SA_PEER, cts,
-+			    J1939_RECV_TIMEOUT_MS, TP_CMD_CTS);
-+}
-+
-+/*
-+ * TP RX timeout: the CAN_RAW peer opens a session with RTS but never sends the
-+ * data; the kernel's rx timer must abort the session and emit a TP.CM_Abort.
-+ * The wait uses wide bounds (not a tight window) to stay reliable over vcan: the
-+ * lower bound catches an instant-fire regression; the upper bound is a generous
-+ * T2 multiple, so timer shifts within it escape.
-+ */
-+TEST_F(j1939_multi, tp_rx_timeout)
-+{
-+	unsigned int num_pkts = J1939_NUM_PKTS(TP_SIZE);
-+	struct timespec t0, t1;
-+	struct can_frame frame;
-+	long elapsed_ms;
-+
-+	ASSERT_EQ(tp_rx_start_session(&self->j1939, self->raw, self->ifindex,
-+				      num_pkts, &frame), 0)
-+		TH_LOG("failed to open and start the TP rx session");
-+
-+	/*
-+	 * No data follows the CTS; the kernel's rx timer (T2, see TP_T2_MS) must
-+	 * fire and abort; the wait is a generous TP_T2_MS * 2, the floor below is
-+	 * the real check.
-+	 */
-+	clock_gettime(CLOCK_MONOTONIC, &t0);
-+	ASSERT_EQ(recv_ctl_cmd(self->raw, J1939_PF(TP_CTL), SA_PEER, &frame,
-+			       TP_RX_ABORT_WAIT_MS, TP_CMD_ABORT), 0)
-+		TH_LOG("kernel did not abort the stalled rx session");
-+	clock_gettime(CLOCK_MONOTONIC, &t1);
-+	elapsed_ms = timespec_diff_ms(&t0, &t1);
-+	/*
-+	 * Must not fire instantly: the T2 timer (1250 ms) has to run before the
-+	 * abort, so 800 ms is a floor safely below it.
-+	 */
-+	ASSERT_GE(elapsed_ms, 800)
-+		TH_LOG("abort fired after only %ld ms, timer did not run", elapsed_ms);
-+	EXPECT_EQ(frame.data[1], ABORT_REASON_TIMEOUT);
-+}
-+
-+/*
-+ * TP RX abort: the CAN_RAW peer aborts an open session; the kernel must cancel
-+ * it and deliver nothing to the J1939 socket.
-+ */
-+TEST_F(j1939_multi, tp_rx_abort_from_raw)
-+{
-+	uint8_t payload[TP_SIZE];
-+	unsigned int num_pkts = J1939_NUM_PKTS(TP_SIZE);
-+	struct can_frame frame;
-+	struct pollfd pfd;
-+	unsigned int i;
-+
-+	fill_pattern(payload, sizeof(payload));
-+
-+	ASSERT_EQ(tp_rx_start_session(&self->j1939, self->raw, self->ifindex,
-+				      num_pkts, &frame), 0)
-+		TH_LOG("failed to open and start the TP rx session");
-+
-+	ASSERT_EQ(send_abort(self->raw, SA_LOCAL, SA_PEER, ABORT_REASON_BUSY), 0);
-+	/* let the kernel process the abort first; 100 ms is a generous
-+	 * empirical margin, not a spec value.
-+	 */
-+	usleep(100000);
-+
-+	/*
-+	 * Send the full DT burst anyway. A kernel that honoured the abort has
-+	 * torn the session down and drops these; one that ignored it would
-+	 * reassemble them and deliver, so POLLIN below means the abort was not
-+	 * honoured.
-+	 */
-+	for (i = 1; i <= num_pkts; i++)
-+		ASSERT_EQ(send_dt(self->raw, PRIO, TP_DAT, SA_LOCAL, SA_PEER,
-+				  i, payload, (i - 1) * 7, TP_SIZE), 0);
-+
-+	pfd.fd = self->j1939;
-+	pfd.events = POLLIN;
-+	/*
-+	 * Short negative-check window: nothing should arrive after the abort,
-+	 * so this is deliberately shorter than J1939_RECV_TIMEOUT_MS.
-+	 */
-+	EXPECT_EQ(poll(&pfd, 1, J1939_NEG_RECV_TIMEOUT_MS), 0)
-+		TH_LOG("socket delivered data despite the abort");
-+}
-+
- J1939_TEST_MAIN();
--- 
-2.47.3
+  * Perform last adjustments to the ID registers that are implied by the
+  * configuration outside of the ID regs themselves, as well as any
+@@ -6027,9 +6006,6 @@ int kvm_finalize_sys_regs(struct kvm_vcpu *vcpu)
+ 		kvm_vgic_finalize_idregs(kvm);
+ 	}
 
+-	if (!kvm_validate_id_regs(vcpu->kvm))
+-		return -EINVAL;
+-
+ 	return 0;
+ }
+
+--
+2.56.0
