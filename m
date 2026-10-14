@@ -1,137 +1,197 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mta1.migadu.com (out-61.mta1.migadu.com [95.215.58.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D375468C23
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 06:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791960564; cv=pass; b=HFctvO7XNF+1CVYt8sZdrPV9H7jL07Gz2YysuWiLZ+jlM6E/whekfYVLVeYNolO23BvH917ZGnqKWXSRtNh/oO4ikOmpBQyJ6TlsUrZPtt/+Q7rWKLaEAq2fNZ6xuTmJ0FD13+XP+6rUBGvc2/CqZo7uQN5xAxPYW0NYaKfAFIU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791960564; c=relaxed/simple;
-	bh=aQp8oRIAczotXzqSiIFfwp9CnFohJGLCpjPmm7TR0FU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uUxyv+WYDLVu11qD4g6lj9ydyp2Cy4RDec7+OfWO1IiIrFiewq9dy9Ir+qQnFMNGCmCjmzBKZ85VABIbHRPb0ACi27QLnyrzspn0SmBSFjik3KTdYDAyYzAAgzNsTKphBxwsA21T6Tjcj0XluWm8UV/FI/uPNp8ERpLDysFeaTU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FWjG486G; arc=pass smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0173DC4D3
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 06:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.61
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791961101; cv=none; b=uzbs1PyTjnIQzbMfA0ljXKKDVr+4dCLQ5FDzNRzShqCFtu9xP47hsUIgNTaH7tap/CyMExz5f0hBK2Ko3txI+EY0MB42L0Poy8lBm6/xtMVB9dR3xPEvpX+IJwJErcdS124iveKsL/T4Jv0ldXoyHmP+H1IhIPO/pt1JXi4aZZ4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791961101; c=relaxed/simple;
+	bh=yfed7VdbcjS1SYYYrpngOFPiBqGUy+y6aRotqy033rI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RYVwgSsVm3cNGL3u00qP3idS9odIJ7bwu4lSeiM3sWCGSZljo91wLaivvpq17yQ7+iaXdct/g9WMbjgL05delJY4kwt2d8oqB1I4BPxRX9ltXj3wEGvLGMeUnoD9OEnvik+Sgk9fGkwKe22f9JjyTcTlAMlnOaKeb5XD+YDbRbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RJ/AFPj8; arc=none smtp.client-ip=95.215.58.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FWjG486G"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b1aa36fc0eso34500a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2026 23:49:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791960561; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jBjY4uN7ntHZLw/Npz2zaJuM1aNq+bwuRjNlFuGmpdGUp4VzWxCZs3i8AHp/Ey8ghO
-         9poOe6dTTWff1o1Bw+K0RzJXIEqQU3l4URm3V0VvxVyGLcQoKR/vllmsIrPX+fAl2m6X
-         6sUW3vRPCLiMfJYyCJhqAVExzT8H4hE1b31/+BpP/GiccmDwJV2DV62V94+RU10ghjls
-         hb9cK4MZ9CKuUSQzS1nr8dkOtT+zuPY7V3qUDf6zovURF61S0kVH+kBAQCsenIxaGpAq
-         YbQLLT0bVGBLj2p0Eo4LJ4WnmadTgafB1OWpYP5noy2WldHEiYda7/mlrt5yLIu16jOu
-         BfUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hzNLroY1rGs3lSGbTgXAw9YTjwc3chJEBfBH/eKMZdc=;
-        fh=cQOwcye5wKmwojYbicjRgs/MGV+dnWNLjXigQz5tXkY=;
-        b=rUHmh5ehHnWnErjrjOu/gcXakF3w2H9juMXKYyytPVRF525kj973Tpg/c85oX4qzid
-         eK+Wj6E5J1mEVfE3O5ZkOVHuCjO/ax2em6OcotE6s3ZErXTCloW0A5xyhf+mx00SRVaJ
-         BqS26T2CN7GSuC3zNoKrR5LPmI4NIFf9MgCoxoHhsgtrhpmKZdwgcV5YI4WFqS0/bRCA
-         ViVum6CXjFblhmhiSPCi04qss5y3z95Oox1KaRSrOmQK8RsnCVKo3y6ZYwTL9+sAR9on
-         p4sb1IH1QssOdXk9hM8p0Ohc5d7Liuw/D848kV9MCTfrbIHpexcwUPtanSmGdbeQWY0I
-         N6bg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791960561; x=1792565361; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=hzNLroY1rGs3lSGbTgXAw9YTjwc3chJEBfBH/eKMZdc=;
-        b=FWjG486GXpUj3e0LVRi171FwusyIn1i2DWnpGEyaMq+NBB3vJ7TXGW8YOo4NESEwKH
-         NnM8/VstPFYQSSmxXk29eryt8gJqYU7TcvpCjQHIp5nDdbtVNS8z4nN2qQuLVMLjBJEe
-         RftBCs5N5t9gTiQD/x4Pfz1y2tsTVVhME9abr0Ojz/5zinIIM1chaolYT1Knnq5W8kin
-         XoSl/Svo2qYyKhi4qM6NGqhWgXHB15Vf83Y7CYbzwtLQQILvrZ03BoYIQcv8ndJSfTDu
-         dN7prpwJxctDbR7LNdkOyzJMxx8k72dE4q8d0BUxi9tSu1CDcWkJ+kQyMwWOqjmqrmgL
-         tFgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791960561; x=1792565361;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hzNLroY1rGs3lSGbTgXAw9YTjwc3chJEBfBH/eKMZdc=;
-        b=HKEVoWPvKI1NC6CeoVWzFbP7UWnDWHNnsLYGEDwtETQxsRzGfWVEbov5SvOJWr7FqH
-         F+LuFD5MrnDLjn5Yl9+yrqPvD1cutTxuCeRcFv+Qv5SahDv16R0Jlb8uONiV7pwxVM3N
-         +8bGByyLmlFTksx9o8lfQncgUF+SQ++or0wGKPQ966OZr8crJlPAbA4DrmFAKskTkcMG
-         9yYHE4jvBzj6SNZFtpXaYTlU1zYE2eYHoRUlHnLc4O30hArsXbt+LnHWtGzNUL+G1mnO
-         Gt3M62GrLiATJChKeGoDhV6N/LNgDTmkRhTOcFnu4Xe1AU62kW+URwv0w66DwM6b1G7A
-         A56Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwBOyJLd3iHr+5/VEGlSlzRsdYkINrfXRWod3tEkbHDF1uBr7L9zcn3oNqZ6eJMgt6ujGuqooHCDsm4AYkb2YA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJgdJ+uU9DuOBN0Lkeb0fNl/Zo9Lw4qw7/oqFWCwh99vzDtXmG7
-	m7MpN0r7xvFKMjsfacj42X4b2h6Jfem9C/wvDQwWp0boCdqS5tqnxzSsw5rbHLd8s+H1qSx3ttP
-	4Tla2oYjwv9s+BstC30iPnDLkKWIB8nRXhDB72PIz
-X-Gm-Gg: AYBFou1ddWnrp3D2Ekcbc6z6icgogyZ3mPjuQv1Dsxc4CZyasRgHQb8SrjeIEmrdGmX
-	kHCyaH94HftMeTolVsWfWYUbOyozvNbXc2BRU3giTVkzNynrd1qAf6Oc2kcNQfX7NV3E4iWmVHI
-	o7BXGbd5ZlbleyBNLMT8RK8LQFIEnppfbikDnYKH19XmpyMpHnO04Upm0RzpYigjYJNAKSN2A9W
-	zEXBEu4m0BXnMZ6uVt3Mar1Q0m0JOFmJ5uWScbVQg9ko4Qh2tYNuQGCiCMbR1rB803XCEbu+7CB
-	5ldoF7QtYOrenjGeppgPuqwn8nBMQk4d8SNkdwZ9T9imUFJWH/8fX4XA6FGV9F51
-X-Received: by 2002:a05:6402:683:b0:6b1:d80d:396b with SMTP id
- 4fb4d7f45d1cf-6b20ab049f4mr17118a12.14.1791960560065; Tue, 13 Oct 2026
- 23:49:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RJ/AFPj8"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=yfed7VdbcjS1SYYYrpngOFPiBqGUy+y6aRotqy033rI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791961096; v=1; x=1792565896;
+ b=RJ/AFPj8Yc4XxGVs6ygQtLmKkK3C43KRUpkSQ58mLfDD01tgjASwWu6wROnerdwRORKZwoF3
+ oe7OoKmx2yhpnQ7C5W/k91EouC3o4CzRaBGC2fwZs5zbhQLj7QONd3HFTh7dMF0X9/WjDs5dE7q
+ o5wF36+QCrjfiW/DGluzR0hc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 935e00c1cceda272;
+	Wed, 14 Oct 2026 06:58:16 +0000
+X-Mizu-Trace-ID: 935e00c1cceda272
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a0739252-5d96-4e73-825d-4d97f5be41f4@linux.dev>
+Date: Wed, 14 Oct 2026 14:58:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261012174300.2338784-2-almasrymina@google.com> <179191526299.434549.7888465945343049764@kernel.org>
-In-Reply-To: <179191526299.434549.7888465945343049764@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 13 Oct 2026 23:49:07 -0700
-X-Gm-Features: AclHuK_pUGXFUw5Tdds7zQVYPdcRbxQWbgDPdlpfKDTpq7eymZUOA6XtUrz1B90
-Message-ID: <CAHS8izOppdgVxeHrUpR6zVxfdTHw1Bv4JEoYGYGodAjyijB+ZA@mail.gmail.com>
-Subject: Re: [PATCH net v2 1/4] net: devmem: unmap dma_buf synchronously on
- queue uninstall
-To: netdev-bot+sashiko@kernel.org
-Cc: kuba@kernel.org, dw@davidwei.uk, asml.silence@gmail.com, 
-	ap420073@gmail.com, sdf@fomichev.me, pabeni@redhat.com, kaiyuanz@google.com, 
-	bobbyeshleman@meta.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@kernel.org, horms@kernel.org, shuah@kernel.org, 
-	sumit.semwal@linaro.org, christian.koenig@amd.com, razor@blackwall.org, 
-	daniel@iogearbox.net, tariqt@nvidia.com, kaifengw@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v2 1/6] cgroup/cpuset: Consolidate
+ isolated_cpus_can_update() into prstate_housekeeping_conflict()
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Hui Peng <benquike@gmail.com>
+References: <20261010221938.243859-1-longman@redhat.com>
+ <20261010221938.243859-2-longman@redhat.com>
+ <7ec04fe0-994e-44d3-8c20-6732c9f20afd@linux.dev>
+ <37481345-f80b-4b28-8519-15c396fc7942@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <37481345-f80b-4b28-8519-15c396fc7942@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 13, 2026 at 11:14=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wr=
-ote:
->
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
->
-> Critical: 0 =C2=B7 High: 2 =C2=B7 Medium: 0 =C2=B7 Low: 0 (1)
->
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwor=
-k
-> know by including "pw-bot: cr" as a separate line at the end of your repl=
-y
-> (one such reply per series is enough).
->
-> - [High] The same dma_unmap_sg_attrs() slab-use-after-free the patch
->   claims to fix can still happen for RX bindings made on a virtual=E2=80=
-=A6
-> - [High] net_devmem_dev_unregister_rx() adds a new writer of binding->dev
->   (and a new unmap).
->
 
-For both of these, they're issues with leased devices AFAIU. My LLM
-found just too many issues with the leased devices. I'm hoping to have
-this series merged to fix the lifetime/revoke issues with the physical
-devices binding->dev =3D=3D binding->vdev, and rework how the leasted
-devices work properly in another series. It was just too much to fix
-all the bugs in one go.
 
---=20
+在 2026/10/14 02:59, Waiman Long 写道:
+> 
+> On 10/11/26 1:49 AM, Guopeng Zhang wrote:
+>> Hi，Longman,
+>> 在 2026/10/11 06:19, Waiman Long 写道:
+>>> The isolated_cpus_can_update() and prstate_housekeeping_conflict() are
+>>> checking different aspects of upcoming cpumask changes that may conflict
+>>> with the current setting of the housekeeping cpumasks. There are places
+>>> where both are called together. There are also places where only one
+>>> of them is called. That inconsistency can contribute to missing check
+>>> where invalid cpumask changes may be allowed to move forward.
+>>>
+>>> Fix that by consolidating isolated_cpus_can_update() into
+>>> prstate_housekeeping_conflict() and call prstate_housekeeping_conflict()
+>>> in all the places where either one of them or both are called. The
+>>> exception is the validate_partition() function where the
+>>> prstate_housekeeping_conflict() call is removed. It is because
+>>> validate_partition() is called only from partition_cpus_change()
+>>> where prstate_housekeeping_conflict() will be called from either
+>>> remote_cpus_update() or update_parent_effective_cpumask() with
+>>> partcmd_update if not for partition invalidatation or disablement.
+>>>
+>>> Now prstate_housekeeping_conflict() will be called in the following
+>>> locations:
+>>>   - when a partition is enabled in remote_partition_enable() or in
+>>>     update_parent_effective_cpumask() with partcmd_enable*.
+>>>   - when a cpumask is updated in remote_cpus_update() or in
+>>>     update_parent_effective_cpumask() with partcmd_update.
+>>>   - when a partition state changes from root to isolated or vice versa
+>>>     in update_prstate().
+>>>
+>>> Fixes: 4a74e418881f ("cgroup/cpuset: Check partition conflict with housekeeping setup")
+>>> Fixes: 103b08709e8a ("cgroup/cpuset: Fail if isolated and nohz_full don't leave any housekeeping")
+>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>> ---
+>>>   kernel/cgroup/cpuset.c | 123 +++++++++++++++++------------------------
+>>>   1 file changed, 52 insertions(+), 71 deletions(-)
+>>>
+>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>> index 0ebba2d646c3..f3cebb277a68 100644
+>>> --- a/kernel/cgroup/cpuset.c
+>>> +++ b/kernel/cgroup/cpuset.c
+>>> @@ -1353,65 +1353,62 @@ static void partition_xcpus_del(int old_prs, struct cpuset *parent,
+>>>   }
+>>>     /*
+>>> - * isolated_cpus_can_update - check for isolated & nohz_full conflicts
+>>> - * @add_cpus: cpu mask for cpus that are going to be isolated
+>>> - * @del_cpus: cpu mask for cpus that are no longer isolated, can be NULL
+>>> - * Return: false if there is conflict, true otherwise
+>>> - *
+>>> - * If nohz_full is enabled and we have isolated CPUs, their combination must
+>>> - * still leave housekeeping CPUs.
+>>> + * prstate_housekeeping_conflict - check for partition & housekeeping conflicts
+>>> + * @new_prs: new partition root state to be checked
+>>> + * @parent_prs: Parent partition root state
+>>> + * @add_cpus: additional CPUs to be added to current cpuset
+>>> + * @del_cpus: CPUs to be removed from current cpuset, can be NULL
+>>> + * Return: true if there is conflict, false otherwise
+>>>    *
+>>> - * TBD: Should consider merging this function into
+>>> - *      prstate_housekeeping_conflict().
+>>> + * There are two different housekeeping conflicts to be checked:
+>>> + * 1) If new_prs is PRS_ROOT, none of the @add_cpus can be a boot-time isolated
+>>> + *    CPU. IOW, the whole @add_cpus must be a subset of HK_TYPE_DOMAIN_BOOT.
+>>> + * 2) If nohz_full is enabled and we have isolated CPUs, their combination must
+>>> + *    still leave housekeeping CPUs. This check is only needed if new_prs
+>>> + *    differs from parent_prs and one of them is PRS_ISOLATED.
+>>>    */
+>>> -static bool isolated_cpus_can_update(struct cpumask *add_cpus,
+>>> -                     struct cpumask *del_cpus)
+>>> +static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
+>>> +                      struct cpumask *add_cpus,
+>>> +                      struct cpumask *del_cpus)
+>>>   {
+>>>       cpumask_var_t full_hk_cpus;
+>>> -    int res = true;
+>>> +    int res;
+>>>   -    if (!housekeeping_enabled(HK_TYPE_KERNEL_NOISE))
+>>> +    if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT) && (new_prs == PRS_ROOT) &&
+>>> +        !cpumask_subset(add_cpus, housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT)))
+>>>           return true;
+>>>   -    if (del_cpus && cpumask_weight_and(del_cpus,
+>>> -            housekeeping_cpumask(HK_TYPE_KERNEL_NOISE)))
+>>> -        return true;
+>>> +    if (!housekeeping_enabled(HK_TYPE_KERNEL_NOISE) ||
+>>> +        (new_prs == parent_prs) ||
+>>> +        (!del_cpus && (new_prs != PRS_ISOLATED)) ||
+>>> +        ((new_prs != PRS_ISOLATED) && (parent_prs != PRS_ISOLATED)))
+>>> +        return false;
+>>>   
+>> When a child partition switches from root to isolated under an isolated
+>> parent, this returns false even though the child's CPUs were not isolated
+>> before the switch.
+>>
+>> On a fresh boot with CPUs 0-15 online and nohz_full=2-15:
+>>
+>>      # cd /sys/fs/cgroup
+>>      # echo +cpuset > cgroup.subtree_control
+>>      # mkdir A B
+>>      # echo 1-2 > A/cpuset.cpus
+>>      # echo isolated > A/cpuset.cpus.partition
+>>      # echo +cpuset > A/cgroup.subtree_control
+>>      # mkdir A/C
+>>      # echo 1 > A/C/cpuset.cpus
+>>      # echo root > A/C/cpuset.cpus.partition
+>>      # echo 0 > B/cpuset.cpus
+>>      # echo isolated > B/cpuset.cpus.partition
+>>      # cat cpuset.cpus.isolated
+>>      0,2
+>>      # echo isolated > A/C/cpuset.cpus.partition
+>>      # cat A/C/cpuset.cpus.partition
+>>      isolated
+>>      # cat cpuset.cpus.isolated
+>>      0-2
+>>
+>> CPU 1 was the last remaining housekeeping CPU: it was in neither the
+>> nohz_full mask nor the cpuset.cpus.isolated mask. The final write isolates
+>> CPU 1 as well, leaving no housekeeping CPU.
+>>
+>> Should this check also take the child's previous partition state into
+>> account, rather than just comparing its new state with the parent's state?
+> 
+> This is actually a problem that is hard to fix without introducing a lot of complexity. After spending a day or so trying to find a possible fix from 2 different perspectives, I realize that either one will introduce quite a lot of complexity into the existing cpuset partition code. When looking at it again from a higher level, I think we may have allowed too much freedom to create a complicated nested partition hierarchy. If we simply don't allow the creation of root partition under an isolated partition parent, this problem will not exist. It is indeed a new limitation imposed on the existing cpuset partition functionality, but it is a simple solution and I don't believe there is a real use case in the creation of a root partition under isolated partition. Please correct me if my use case assumption is wrong.
+> 
+
+Thanks for taking the time to look into this.
+Your suggestion to disallow root partitions under isolated parents gives us a different perspective on some of the issues we've encountered in our product.
+As part of our transition from cgroup v1 to v2, we've been testing various cpuset configurations allowed by the current rules. 
+Some of these tests have uncovered corner cases, including the one reported here.
+So far, we haven't received any customer reports of a use case that requires a root partition under an isolated parent.
+
 Thanks,
-Mina
+Guopeng
+
+> Thanks,
+> Longman
+
