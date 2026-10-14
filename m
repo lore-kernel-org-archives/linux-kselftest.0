@@ -1,699 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9590D3A5E87;
-	Wed, 14 Oct 2026 16:01:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A99474246
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 16:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791993720; cv=none; b=WsNI5xoHQxhxgsJiUdlQOkJmRcm+hfnf5C+6kvnxjEO/jXxNKZnlauqv7INJK5bpqhiESP5qnKxi+FNRimuD7k4VBNvpqtmGtWLFpnE5+mK2ujQHU+LsDBjQJGugvMrl32bU1AkuJlOKVfK/9UelDWlgJMNMDw6jIqlrysDb8Pg=
+	t=1791994683; cv=none; b=tpAVS9j6N3yXbB/cqdHVLdA0vPEefEAB7xstUda/99xlhqUpv+UHRlGXxN3zNaUmAFm8s02TfTB0/sH3owXinFeQ7MN8hbMeDVCtrIzqDBsnCmuXvzLo8OWAgi/2o8kh0kovAvnTeYbCJXJzj/R/DGzMBn7NaG/eUfUrcJGJx+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791993720; c=relaxed/simple;
-	bh=j44yq0zaHhmcG8C94wliOaeox3WE86EMI6gQSQIzK+0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NDIMC1ZnSRQXR5Tk6B6cbQhXk9VHtTc61V/Pv9KUAu54AHx8aP1fcZ3NhDz6G9Yoem+CBAyLKYZtsJR/IyQbZCvG5EJn3VTOx4KS6XztrHqnlzmL7mfzp16EpIQA3yDEvvr+EorkF/CD/WikczShW8Hif1RRTYfinNpS6QE8Qfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cD8TrTh6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791994683; c=relaxed/simple;
+	bh=J2MF0CGvDZI2j5xp2f4Y/WWR7jUQb6b1+xx9/N78hek=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=I8ikr9XzB6UQfJtLerHKX4nw1QgxoagABLxe5/50Tt7oPr/QFmj2pdFyqoWdUjLKBnsMvWs+9eYYQmtzODtlra8ozijTTKwD1A2HoRIqdEs7kiYeXhvKICi4GNuF0OVAsW1xVMnOiBlh5c0E8CqarJKqvOOCPNiudnp1w+7bXd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=shVCgafj; arc=none smtp.client-ip=74.125.82.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cD8TrTh6"
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 9B7C01F000C4;
-	Wed, 14 Oct 2026 16:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791993718;
-	bh=onZOSGBZ2q+IAeaj4lhP92AA9KPucyMX6J+jm+4IGyw=;
-	h=From:To:Cc:Subject:Date;
-	b=cD8TrTh6WIiVAbFJq3uThix78gOnhiFEecE7XT3Q3/2rTgdDSG1Mny6T0BYmmNlGX
-	 SyNTHLaextatJCyeFcUVAvzBTQatb8CuL0ixV4IkOPKiiAWaN7h3VfRVlFDKdMzXh4
-	 D/LwC9onMV1wA0zCp3kKWoTRvTPT+pClsflddPybP94eFEQ70kjC5P0fpy4aBtq2zN
-	 M7TN4pzCysCEz9OwJHu5xMo7bdh9n8sAxGO0SqvDeEzDR9ZdByuWugo6ZM4QE3tor4
-	 /zqXOIgQ5FFoqRLaNxY9f4bVG38jy+ziqkZ8lwLTiltK8BFvnElPZ1wNbax9AJ2wY2
-	 bxY2AHtWSO1iw==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: keyrings@vger.kernel.org,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Rae Moar <raemoar63@gmail.com>,
-	Ryota Sakamoto <sakamo.ryota@gmail.com>,
-	Kuan-Wei Chiu <visitorckw@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Kir Chou <note351@hotmail.com>,
-	Petr Mladek <pmladek@suse.com>,
-	Dmitry Antipov <dmantipov@yandex.ru>,
-	Guan-Chun Wu <409411716@gms.tku.edu.tw>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)),
-	kunit-dev@googlegroups.com (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit))
-Subject: [PATCH] lib/tests: kunit for associative array
-Date: Wed, 14 Oct 2026 19:01:38 +0300
-Message-ID: <20261014160144.1835860-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="shVCgafj"
+Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-151dcfb1569so69309c88.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 09:17:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1791994676; x=1792599476; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BNYbIRDhdg/bji4iVF4z4GKSYuqq0SGaMYsIsVzbu+Y=;
+        b=shVCgafj6S7XxdeceaVQhwMGAdCYXxntKgyPwAzI+goiDOwO+xHN+i3yPCmFLoF/+b
+         0j3m4dWQPpJdUToFha/OJUg0wuNYaR0XReNsqaYBiZM412xsImvrfLhYPFIOhHOrbgJk
+         918Cgw5aBQbLwCzAoDYFmHVnLGiXOtyT0s/cPl9RohPNc8wh1HfcICC7MkCe60TDWZHI
+         SBpwvtWrHmF438drp/gn9qFJ98VyRkSS0rI73eKKMGWm9EnFQzuBnbH/LeKTaZec5HgQ
+         E4l+30cQQXwEB0RWNJP1D+nsTwKI5ovLQ8iZUESA1Q/IhuaBVktxst4s6LwWypfYkb3m
+         OxvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791994676; x=1792599476;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BNYbIRDhdg/bji4iVF4z4GKSYuqq0SGaMYsIsVzbu+Y=;
+        b=NRk+tFquIPg5doQdty7ku4ko/RH5b9Hwj8E73tTtD+/lnR2RVmyllCiYTr9Bc/ivR2
+         ARZT80zO98yXEbojc+WLFi1hgB1bbShXUirT4b0Racaw9yfwlxi7MPIcKI66vSeoVBYz
+         QRD3F7PIJGgZ0NtVvhnh0LBhZjWuy8W8qyA4Os1OIJnkJ0NQMlGHKwxqrH9T5my95/H6
+         zzhoxwDMOzYVNyKROWX8uj9qKxlULZmtgXBs+AnVu3nTxPyczYvDiwjtHpny4RgN1Fhq
+         9cYbSLt7hgF1g6jWosoDnpU3L3jk/j4kkC3Ur9GcHxSsNoUf2Gs4ktYd4NhDSRBN9pte
+         0foQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzNeuVRdkc4yetJ+87i99Jb4Rsfl2Ig40xEa6lNbmzJJuGmU2QUEDrdkvCkWWqS8981uYO/UI8lVXGhzDcFYY8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKCneQxVJaIcm1NileAAH+d2mPPObpSDm1WL9s9OXX5GXtRL3+R
+	qSe7e96Y0RbhNtOSzIJKlPg0cZOQ6qa2wwTzlqF+8pFlfE6W7jsjT8jY5bR1zjxcyHXSPKxwoND
+	WFndnL1D8JW94Vc6LUtnOnyB7iA==
+X-Received: from dli6-n1.prod.google.com ([2002:a05:7022:286:10b0:15e:bc16:429a])
+ (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7022:c84:b0:146:5f73:d45b with SMTP id a92af1059eb24-16a54fab691mr20502668c88.3.1791994675581;
+ Wed, 14 Oct 2026 09:17:55 -0700 (PDT)
+Date: Wed, 14 Oct 2026 16:17:50 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.176.g3575e65682-goog
+Message-ID: <20261014161754.3782346-1-almasrymina@google.com>
+Subject: [PATCH net v3 0/4] net: devmem: fix RX and TX binding teardown on
+ device unregistration
+From: Mina Almasry <almasrymina@google.com>
+To: Jakub Kicinski <kuba@kernel.org>, Mina Almasry <almasrymina@google.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Taehee Yoo <ap420073@gmail.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>, Bobby Eshleman <bobbyeshleman@meta.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Tariq Toukan <tariqt@nvidia.com>, 
+	Kaifeng Wang <kaifengw@google.com>, Dragos Tatulea <dtatulea@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 
-This is a kunit test for lib/assoc_array.c, which maintains a shadow model
-across assoc_array operations, and checks its integrity after every
-operation.
+Fix two device-unregistration lifecycle bugs in devmem TCP bindings and
+add netdevsim support plus selftests covering both RX and TX device
+unregistration:
 
-I wrote a draft version so that I could properly test 'assoc-array-fixes'
-tag at Linus' tree, and spent today rewriting a new more polished version
-with as good description as I could possibly could on how the seeded test
-keys were cherry-picked. Along the way I also tweaked the numbers to be
-a bit less messier set than in my original version.
+1. net: devmem: unmap dma_buf synchronously on queue uninstall
+   Synchronously unmap and detach binding->attachment under binding->lock
+   when the last RX queue is uninstalled in mp_dmabuf_devmem_uninstall(),
+   and unmap RX bindings that were already unbound on NETDEV_UNREGISTER,
+   preventing slab-use-after-free in dma_unmap_sg_attrs() when the binding
+   is freed after dma_dev.
 
-The transcripts that follow were executed with this command-line:
+2. net: devmem: detach TX bindings on NETDEV_UNREGISTER
+   Extend net_devmem_dev_unregister() to fully detach and unmap TX
+   bindings when binding->dev unregisters, or clear binding->vdev alone
+   when only a virtual device unregisters while binding->dev lives.
 
-    ./tools/testing/kunit/kunit.py run --raw_output assoc_array
+3. netdevsim: support devmem RX and TX bindings
+   Enable PP_FLAG_DMA_MAP | PP_FLAG_ALLOW_UNREADABLE_NETMEM, 64-bit DMA mask
+   on nsim_bus_dev, and NETMEM_TX_DMA on netdevsim so devmem RX/TX bindings
+   can be exercised in software selftests.
 
-With 'assoc-array-fixes' commits and its subsequent tag iterations all
-eight tests pass, and without them all of them fail.
+4. selftests: net: add devmem RX and TX netdev unregister tests
+   Add devmem_bind_rx_unregister_check and devmem_bind_tx_unregister_check
+   to tools/testing/selftests/net/nl_netdev.py.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Tariq Toukan <tariqt@nvidia.com>
+Cc: Kaifeng Wang <kaifengw@google.com>
+Cc: Dragos Tatulea <dtatulea@nvidia.com>
+
 ---
- lib/Kconfig.debug             |  15 +
- lib/tests/Makefile            |   1 +
- lib/tests/assoc_array_kunit.c | 570 ++++++++++++++++++++++++++++++++++
- 3 files changed, 586 insertions(+)
- create mode 100644 lib/tests/assoc_array_kunit.c
+v3:
+- 1/4: Run the NETDEV_UNREGISTER walk under the netdev instance lock,
+  and skip it when the device only moves to another netns. (Sashiko)
+- 2/4: Detach all matching TX bindings, then synchronize_net() once
+  before unmapping them. (Sashiko)
+- 3/4: Only request page pool DMA mapping with CONFIG_HAS_DMA, refuse
+  pp_hold on memory provider pools, and drop unreadable skbs in the
+  software PSP checksum path. (Sashiko)
+- 4/4: Check only the test's dma-buf in debugfs, skip instead of passing
+  silently, clean up on errors, compute UDMABUF_CREATE per arch, and
+  add the needed config options. (Sashiko, Dragos)
+- Link to v2: https://lore.kernel.org/netdev/20261012174300.2338784-1-almasrymina@google.com/
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 6b24a2c89b84..3e8d3852f53c 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2857,6 +2857,21 @@ config HASHTABLE_KUNIT_TEST
+v2:
+- 1/4: Don't unmap when a leased queue is unleased. Keep bindings in
+  net_devmem_dmabuf_bindings until freed, hidden from TX lookups by an
+  xarray mark, and unmap unbound RX bindings on NETDEV_UNREGISTER. Update
+  the binding->lock and binding->ref comments. (Sashiko)
+- 2/4: Detach TX bindings from the same net_devmem_lock-protected walk,
+  which now also covers unbound TX bindings, and clear the LIVE mark
+  instead of erasing the ID. The walk no longer uses RCU or takes
+  binding references (Stanislav).
+- Link to v1: https://lore.kernel.org/netdev/20261010025532.839559-1-almasrymina@google.com/
 
- 	  If unsure, say N.
+Mina Almasry (4):
+  net: devmem: unmap dma_buf synchronously on queue uninstall
+  net: devmem: detach TX bindings on NETDEV_UNREGISTER
+  netdevsim: support devmem RX and TX bindings
+  selftests: net: add devmem RX and TX netdev unregister tests
 
-+config ASSOC_ARRAY_KUNIT_TEST
-+	tristate "KUnit test for assoc_array" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	select ASSOCIATIVE_ARRAY
-+	help
-+	  This builds the assoc_array KUnit test suite.
-+	  It tests the basic functionality of the API defined in
-+	  include/linux/assoc_array.h.
-+
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config LINEAR_RANGES_TEST
- 	tristate "KUnit test for linear_ranges"
- 	depends on KUNIT
-diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-index 3cac3b63a752..107e16b4ebc1 100644
---- a/lib/tests/Makefile
-+++ b/lib/tests/Makefile
-@@ -4,6 +4,7 @@
+ drivers/net/netdevsim/bus.c              |   1 +
+ drivers/net/netdevsim/netdev.c           |  27 ++++-
+ drivers/net/netdevsim/psp.c              |   5 +
+ net/core/devmem.c                        | 143 ++++++++++++++++++++---
+ net/core/devmem.h                        |  10 +-
+ net/core/netdev-genl.c                   |   1 +
+ tools/testing/selftests/net/config       |   4 +
+ tools/testing/selftests/net/nl_netdev.py | 125 +++++++++++++++++++-
+ 8 files changed, 290 insertions(+), 26 deletions(-)
 
- # KUnit tests
- CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
-+obj-$(CONFIG_ASSOC_ARRAY_KUNIT_TEST) += assoc_array_kunit.o
- obj-$(CONFIG_BASE64_KUNIT) += base64_kunit.o
- obj-$(CONFIG_BITOPS_KUNIT) += bitops_kunit.o
- obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
-diff --git a/lib/tests/assoc_array_kunit.c b/lib/tests/assoc_array_kunit.c
-new file mode 100644
-index 000000000000..aeaab366daac
---- /dev/null
-+++ b/lib/tests/assoc_array_kunit.c
-@@ -0,0 +1,570 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (C) 2026 Jarkko Sakinen
-+ *
-+ * This is a model based test and has a model invariant that is called after each
-+ * and every operation accessing an associative array.
-+ */
-+
-+#include <kunit/test.h>
-+#include <linux/assoc_array.h>
-+#include <linux/bitmap.h>
-+#include <linux/rcupdate.h>
-+#include <linux/refcount.h>
-+#include <linux/slab.h>
-+
-+#define ASSOC_ARRAY_TEST_NR_KEYS	64
-+#define ASSOC_ARRAY_TEST_STOP_AFTER	5
-+#define ASSOC_ARRAY_TEST_STOP_STATUS	123
-+
-+/*
-+ * As a quick remainder, these are the basic building blocks of an associative
-+ * array:
-+ *
-+ * - struct assoc_array_node: a tree node representing a nibble of the search
-+ *   key.
-+ * - struct assoc_array_shortcut: a tree node representing a sequence of nibbles
-+ *   shared by multiple search keys with no divergence among them.
-+ *
-+ * The keys in array will be created in order in tests, and is a constructed in
-+ * a way that splits reach the level 8:
-+ *
-+ * - 0..16:  Share prefix 0x21 at levels 0 and 4.
-+ * - 17:     Splits root shortcut at level 4.
-+ * - 18..34: Share chunk 0.
-+ * - 35:     Splits shortcut at chunk boundary.
-+ * - 36..46: Share prefix 0xbeef at levels 0..12.
-+ * - 47:     Splits shortcut at level 8.
-+ * - 48..63: Distinct leaves at level 0.
-+ *
-+ * The numbers were picked partly based on trial and error, and partly trying to
-+ * find smallest possible numbers reaching the level 8.
-+ */
-+static const unsigned long assoc_array_test_keys[ASSOC_ARRAY_TEST_NR_KEYS * 2] = {
-+	0x0000000000000121UL, 0x0000000000000000UL,
-+	0x0000000000000221UL, 0x0000000000000000UL,
-+	0x0000000000000321UL, 0x0000000000000000UL,
-+	0x0000000000000421UL, 0x0000000000000000UL,
-+	0x0000000000000521UL, 0x0000000000000000UL,
-+	0x0000000000000621UL, 0x0000000000000000UL,
-+	0x0000000000000721UL, 0x0000000000000000UL,
-+	0x0000000000000821UL, 0x0000000000000000UL,
-+	0x0000000000000921UL, 0x0000000000000000UL,
-+	0x0000000000000a21UL, 0x0000000000000000UL,
-+	0x0000000000000b21UL, 0x0000000000000000UL,
-+	0x0000000000000c21UL, 0x0000000000000000UL,
-+	0x0000000000000d21UL, 0x0000000000000000UL,
-+	0x0000000000000e21UL, 0x0000000000000000UL,
-+	0x0000000000000f21UL, 0x0000000000000000UL,
-+	0x0000000000001021UL, 0x0000000000000000UL,
-+	0x0000000000001121UL, 0x0000000000000000UL,
-+	0x0000000000000001UL, 0x0000000000000000UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000010UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000020UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000030UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000040UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000050UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000060UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000070UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000080UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000090UL,
-+	0xdeadbeefcafebabeUL, 0x00000000000000a0UL,
-+	0xdeadbeefcafebabeUL, 0x00000000000000b0UL,
-+	0xdeadbeefcafebabeUL, 0x00000000000000c0UL,
-+	0xdeadbeefcafebabeUL, 0x00000000000000d0UL,
-+	0xdeadbeefcafebabeUL, 0x00000000000000e0UL,
-+	0xdeadbeefcafebabeUL, 0x00000000000000f0UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000100UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000110UL,
-+	0xdeadbeefcafebabeUL, 0x0000000000000001UL,
-+	0x000000000001beefUL, 0x0000000000000000UL,
-+	0x000000000002beefUL, 0x0000000000000000UL,
-+	0x000000000003beefUL, 0x0000000000000000UL,
-+	0x000000000004beefUL, 0x0000000000000000UL,
-+	0x000000000005beefUL, 0x0000000000000000UL,
-+	0x000000000006beefUL, 0x0000000000000000UL,
-+	0x000000000007beefUL, 0x0000000000000000UL,
-+	0x000000000008beefUL, 0x0000000000000000UL,
-+	0x000000000009beefUL, 0x0000000000000000UL,
-+	0x00000000000abeefUL, 0x0000000000000000UL,
-+	0x00000000000bbeefUL, 0x0000000000000000UL,
-+	0x00000000000000efUL, 0x0000000000000000UL,
-+	0x0000000000001000UL, 0x0000000000000000UL,
-+	0x0000000000001001UL, 0x0000000000000000UL,
-+	0x0000000000001002UL, 0x0000000000000000UL,
-+	0x0000000000001003UL, 0x0000000000000000UL,
-+	0x0000000000001004UL, 0x0000000000000000UL,
-+	0x0000000000001005UL, 0x0000000000000000UL,
-+	0x0000000000001006UL, 0x0000000000000000UL,
-+	0x0000000000001007UL, 0x0000000000000000UL,
-+	0x0000000000001008UL, 0x0000000000000000UL,
-+	0x0000000000001009UL, 0x0000000000000000UL,
-+	0x000000000000100aUL, 0x0000000000000000UL,
-+	0x000000000000100bUL, 0x0000000000000000UL,
-+	0x000000000000100cUL, 0x0000000000000000UL,
-+	0x000000000000100dUL, 0x0000000000000000UL,
-+	0x000000000000100eUL, 0x0000000000000000UL,
-+	0x000000000000100fUL, 0x0000000000000000UL,
-+};
-+
-+struct assoc_array_test_object {
-+	unsigned long key[2];
-+	unsigned long value;
-+	refcount_t usage;
-+};
-+
-+static unsigned long assoc_array_test_get_key_chunk(const void *index_key, int level)
-+{
-+	const unsigned long *key = index_key;
-+	int chunk = level / ASSOC_ARRAY_KEY_CHUNK_SIZE;
-+
-+	return chunk < 2 ? key[chunk] : 0;
-+}
-+
-+static unsigned long assoc_array_test_get_object_key_chunk(const void *object, int level)
-+{
-+	const struct assoc_array_test_object *obj = object;
-+
-+	return assoc_array_test_get_key_chunk(obj->key, level);
-+}
-+
-+static bool assoc_array_test_compare_object(const void *object, const void *index_key)
-+{
-+	const struct assoc_array_test_object *obj = object;
-+
-+	return !memcmp(obj->key, index_key, sizeof(obj->key));
-+}
-+
-+static int assoc_array_test_diff_objects(const void *object, const void *index_key)
-+{
-+	const struct assoc_array_test_object *obj = object;
-+	const unsigned long *key = index_key;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(obj->key); i++) {
-+		unsigned long diff = obj->key[i] ^ key[i];
-+
-+		if (diff)
-+			return i * ASSOC_ARRAY_KEY_CHUNK_SIZE + __ffs(diff);
-+	}
-+
-+	return -1;
-+}
-+
-+static void assoc_array_test_free_object(void *object)
-+{
-+	struct assoc_array_test_object *obj = object;
-+
-+	if (refcount_dec_and_test(&obj->usage))
-+		kfree(obj);
-+}
-+
-+static const struct assoc_array_ops assoc_array_test_ops = {
-+	.get_key_chunk = assoc_array_test_get_key_chunk,
-+	.get_object_key_chunk = assoc_array_test_get_object_key_chunk,
-+	.compare_object = assoc_array_test_compare_object,
-+	.diff_objects = assoc_array_test_diff_objects,
-+	.free_object = assoc_array_test_free_object,
-+};
-+
-+struct assoc_array_test_model {
-+	struct kunit *test;
-+	struct assoc_array array;
-+	unsigned long values[ASSOC_ARRAY_TEST_NR_KEYS];
-+	bool present[ASSOC_ARRAY_TEST_NR_KEYS];
-+	int nr_present;
-+};
-+
-+struct assoc_array_test_iter {
-+	const struct assoc_array_test_model *m;
-+	DECLARE_BITMAP(visited, ASSOC_ARRAY_TEST_NR_KEYS);
-+	int count;
-+	int bad;
-+};
-+
-+static void assoc_array_test_model_release(void *data)
-+{
-+	struct assoc_array_test_model *m = data;
-+
-+	assoc_array_destroy(&m->array, &assoc_array_test_ops);
-+	rcu_barrier();
-+}
-+
-+static int assoc_array_test_model_iterate(const void *object, void *data)
-+{
-+	const struct assoc_array_test_object *obj = object;
-+	struct assoc_array_test_iter *it = data;
-+	int i;
-+
-+	it->count++;
-+	for (i = 0; i < ASSOC_ARRAY_TEST_NR_KEYS; i++) {
-+		if (!assoc_array_test_compare_object(obj, &assoc_array_test_keys[i * 2]))
-+			continue;
-+		if (it->m->present[i] && obj->value == it->m->values[i] &&
-+		    !__test_and_set_bit(i, it->visited))
-+			return 0;
-+		break;
-+	}
-+
-+	it->bad++;
-+	return 0;
-+}
-+
-+static void assoc_array_test_invariant(struct assoc_array_test_model *m)
-+{
-+	struct assoc_array_test_iter it = { .m = m };
-+	const struct assoc_array_test_object *obj;
-+	int i;
-+
-+	KUNIT_EXPECT_EQ(m->test, m->array.nr_leaves_on_tree, m->nr_present);
-+
-+	for (i = 0; i < ASSOC_ARRAY_TEST_NR_KEYS; i++) {
-+		obj = assoc_array_find(&m->array, &assoc_array_test_ops,
-+				       &assoc_array_test_keys[i * 2]);
-+		if (!m->present[i]) {
-+			KUNIT_EXPECT_NULL(m->test, obj);
-+			continue;
-+		}
-+
-+		KUNIT_EXPECT_NOT_NULL(m->test, obj);
-+		if (obj)
-+			KUNIT_EXPECT_EQ(m->test, obj->value, m->values[i]);
-+	}
-+
-+	KUNIT_EXPECT_EQ(m->test,
-+			assoc_array_iterate(&m->array, assoc_array_test_model_iterate, &it),
-+			0);
-+	KUNIT_EXPECT_EQ(m->test, it.count, m->nr_present);
-+	KUNIT_EXPECT_EQ(m->test, it.bad, 0);
-+}
-+
-+static struct assoc_array_test_model *assoc_array_test_model_create(struct kunit *test)
-+{
-+	struct assoc_array_test_model *m;
-+	int ret;
-+
-+	m = kunit_kzalloc(test, sizeof(*m), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, m);
-+	m->test = test;
-+	assoc_array_init(&m->array);
-+
-+	ret = kunit_add_action_or_reset(test, assoc_array_test_model_release, m);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+	assoc_array_test_invariant(m);
-+
-+	return m;
-+}
-+
-+static void assoc_array_test_model_insert(struct assoc_array_test_model *m,
-+					  int i, unsigned long value)
-+{
-+	struct assoc_array_edit *edit;
-+	struct assoc_array_test_object *obj;
-+
-+	obj = kzalloc_obj(*obj, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(m->test, obj);
-+	memcpy(obj->key, &assoc_array_test_keys[i * 2], sizeof(obj->key));
-+	obj->value = value;
-+	refcount_set(&obj->usage, 1);
-+
-+	edit = assoc_array_insert(&m->array, &assoc_array_test_ops, obj->key, obj);
-+	if (IS_ERR_OR_NULL(edit)) {
-+		kfree(obj);
-+		KUNIT_FAIL_AND_ABORT(m->test, "insert failed: %ld", PTR_ERR(edit));
-+	}
-+	assoc_array_apply_edit(edit);
-+
-+	if (!m->present[i]) {
-+		m->present[i] = true;
-+		m->nr_present++;
-+	}
-+	m->values[i] = value;
-+
-+	assoc_array_test_invariant(m);
-+}
-+
-+static void assoc_array_test_model_delete(struct assoc_array_test_model *m, int i)
-+{
-+	struct assoc_array_edit *edit;
-+
-+	edit = assoc_array_delete(&m->array, &assoc_array_test_ops,
-+				  &assoc_array_test_keys[i * 2]);
-+	KUNIT_ASSERT_FALSE(m->test, IS_ERR(edit));
-+
-+	if (edit)
-+		assoc_array_apply_edit(edit);
-+	if (m->present[i]) {
-+		m->present[i] = false;
-+		m->nr_present--;
-+	}
-+
-+	assoc_array_test_invariant(m);
-+}
-+
-+static void assoc_array_test_model_clear(struct assoc_array_test_model *m)
-+{
-+	struct assoc_array_edit *edit;
-+
-+	edit = assoc_array_clear(&m->array, &assoc_array_test_ops);
-+	KUNIT_ASSERT_FALSE(m->test, IS_ERR(edit));
-+
-+	if (edit)
-+		assoc_array_apply_edit(edit);
-+
-+	memset(m->present, 0, sizeof(m->present));
-+	m->nr_present = 0;
-+
-+	assoc_array_test_invariant(m);
-+}
-+
-+static void assoc_array_test_model_destroy(struct assoc_array_test_model *m)
-+{
-+	assoc_array_destroy(&m->array, &assoc_array_test_ops);
-+	assoc_array_init(&m->array);
-+
-+	memset(m->present, 0, sizeof(m->present));
-+	m->nr_present = 0;
-+
-+	assoc_array_test_invariant(m);
-+}
-+
-+static void assoc_array_test_model_fill(struct assoc_array_test_model *m)
-+{
-+	int i;
-+
-+	for (i = 0; i < ASSOC_ARRAY_TEST_NR_KEYS; i++)
-+		assoc_array_test_model_insert(m, i, i);
-+}
-+
-+struct assoc_array_test_gc_ctx {
-+	bool (*keep)(const struct assoc_array_test_object *obj, void *data);
-+	void *data;
-+};
-+
-+static bool assoc_array_test_model_gc_filter(void *object, void *data)
-+{
-+	struct assoc_array_test_object *obj = object;
-+	struct assoc_array_test_gc_ctx *ctx = data;
-+
-+	if (!ctx->keep(obj, ctx->data))
-+		return false;
-+	refcount_inc(&obj->usage);
-+	return true;
-+}
-+
-+static void assoc_array_test_model_gc(struct assoc_array_test_model *m,
-+				      bool (*keep)(const struct assoc_array_test_object *obj,
-+						   void *data),
-+				      void *data)
-+{
-+	struct assoc_array_test_gc_ctx ctx = { .keep = keep, .data = data };
-+	int i, ret;
-+
-+	ret = assoc_array_gc(&m->array, &assoc_array_test_ops,
-+			     assoc_array_test_model_gc_filter, &ctx);
-+	KUNIT_ASSERT_EQ(m->test, ret, 0);
-+
-+	for (i = 0; i < ASSOC_ARRAY_TEST_NR_KEYS; i++) {
-+		if (m->present[i]) {
-+			struct assoc_array_test_object obj = {
-+				.value = m->values[i],
-+			};
-+
-+			memcpy(obj.key, &assoc_array_test_keys[i * 2], sizeof(obj.key));
-+
-+			if (!keep(&obj, data)) {
-+				m->present[i] = false;
-+				m->nr_present--;
-+			}
-+		}
-+	}
-+
-+	assoc_array_test_invariant(m);
-+}
-+
-+static void assoc_array_test_model_cancel_insert(struct assoc_array_test_model *m,
-+						 int i, unsigned long value)
-+{
-+	struct assoc_array_edit *edit;
-+	struct assoc_array_test_object *obj;
-+
-+	obj = kzalloc_obj(*obj, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(m->test, obj);
-+	memcpy(obj->key, &assoc_array_test_keys[i * 2], sizeof(obj->key));
-+	obj->value = value;
-+	refcount_set(&obj->usage, 1);
-+
-+	edit = assoc_array_insert(&m->array, &assoc_array_test_ops, obj->key, obj);
-+	if (IS_ERR_OR_NULL(edit)) {
-+		kfree(obj);
-+		KUNIT_FAIL_AND_ABORT(m->test, "insert failed: %ld", PTR_ERR(edit));
-+	}
-+	assoc_array_cancel_edit(edit);
-+	kfree(obj);
-+
-+	assoc_array_test_invariant(m);
-+}
-+
-+static void assoc_array_test_model_cancel_delete(struct assoc_array_test_model *m, int i)
-+{
-+	struct assoc_array_edit *edit;
-+
-+	edit = assoc_array_delete(&m->array, &assoc_array_test_ops,
-+				  &assoc_array_test_keys[i * 2]);
-+	KUNIT_ASSERT_FALSE(m->test, IS_ERR(edit));
-+
-+	if (edit)
-+		assoc_array_cancel_edit(edit);
-+
-+	assoc_array_test_invariant(m);
-+}
-+
-+static void assoc_array_test_model_cancel_clear(struct assoc_array_test_model *m)
-+{
-+	struct assoc_array_edit *edit;
-+
-+	edit = assoc_array_clear(&m->array, &assoc_array_test_ops);
-+	KUNIT_ASSERT_FALSE(m->test, IS_ERR(edit));
-+
-+	if (edit)
-+		assoc_array_cancel_edit(edit);
-+
-+	assoc_array_test_invariant(m);
-+}
-+
-+static int assoc_array_test_stop_iterator(const void *object, void *data)
-+{
-+	int *count = data;
-+
-+	if (++(*count) == ASSOC_ARRAY_TEST_STOP_AFTER)
-+		return ASSOC_ARRAY_TEST_STOP_STATUS;
-+
-+	return 0;
-+}
-+
-+static void assoc_array_test_model_iterate_stop(struct assoc_array_test_model *m)
-+{
-+	int count = 0;
-+
-+	KUNIT_EXPECT_EQ(m->test,
-+			assoc_array_iterate(&m->array, assoc_array_test_stop_iterator, &count),
-+			ASSOC_ARRAY_TEST_STOP_STATUS);
-+	KUNIT_EXPECT_EQ(m->test, count, ASSOC_ARRAY_TEST_STOP_AFTER);
-+
-+	assoc_array_test_invariant(m);
-+}
-+
-+static bool assoc_array_test_keep_even(const struct assoc_array_test_object *obj, void *data)
-+{
-+	return !(obj->value & 1);
-+}
-+
-+static bool assoc_array_test_keep_none(const struct assoc_array_test_object *obj, void *data)
-+{
-+	return false;
-+}
-+
-+static void assoc_array_test_fill_and_drain(struct kunit *test)
-+{
-+	struct assoc_array_test_model *m = assoc_array_test_model_create(test);
-+	int i;
-+
-+	assoc_array_test_model_fill(m);
-+
-+	for (i = ASSOC_ARRAY_TEST_NR_KEYS - 1; i >= 0; i--)
-+		assoc_array_test_model_delete(m, i);
-+}
-+
-+static void assoc_array_test_replace(struct kunit *test)
-+{
-+	struct assoc_array_test_model *m = assoc_array_test_model_create(test);
-+	int i;
-+
-+	assoc_array_test_model_fill(m);
-+
-+	for (i = 0; i < ASSOC_ARRAY_TEST_NR_KEYS; i++)
-+		assoc_array_test_model_insert(m, i, i + ASSOC_ARRAY_TEST_NR_KEYS);
-+}
-+
-+static void assoc_array_test_collapse(struct kunit *test)
-+{
-+	struct assoc_array_test_model *m = assoc_array_test_model_create(test);
-+	int i;
-+
-+	assoc_array_test_model_fill(m);
-+
-+	for (i = ASSOC_ARRAY_TEST_NR_KEYS - 1; i >= 16; i--)
-+		assoc_array_test_model_delete(m, i);
-+
-+	for (i = 16; i < 32; i++)
-+		assoc_array_test_model_insert(m, i, i * 2);
-+}
-+
-+static void assoc_array_test_iterate_stop(struct kunit *test)
-+{
-+	struct assoc_array_test_model *m = assoc_array_test_model_create(test);
-+
-+	assoc_array_test_model_fill(m);
-+	assoc_array_test_model_iterate_stop(m);
-+}
-+
-+static void assoc_array_test_gc(struct kunit *test)
-+{
-+	struct assoc_array_test_model *m = assoc_array_test_model_create(test);
-+
-+	assoc_array_test_model_fill(m);
-+	assoc_array_test_model_gc(m, assoc_array_test_keep_even, NULL);
-+	assoc_array_test_model_gc(m, assoc_array_test_keep_none, NULL);
-+}
-+
-+static void assoc_array_test_cancel(struct kunit *test)
-+{
-+	struct assoc_array_test_model *m = assoc_array_test_model_create(test);
-+
-+	assoc_array_test_model_fill(m);
-+
-+	assoc_array_test_model_delete(m, 0);
-+	assoc_array_test_model_cancel_insert(m, 0, 999);
-+	assoc_array_test_model_cancel_delete(m, 1);
-+	assoc_array_test_model_cancel_clear(m);
-+}
-+
-+static void assoc_array_test_clear(struct kunit *test)
-+{
-+	struct assoc_array_test_model *m = assoc_array_test_model_create(test);
-+
-+	assoc_array_test_model_fill(m);
-+	assoc_array_test_model_clear(m);
-+	assoc_array_test_model_fill(m);
-+}
-+
-+static void assoc_array_test_destroy(struct kunit *test)
-+{
-+	struct assoc_array_test_model *m = assoc_array_test_model_create(test);
-+
-+	assoc_array_test_model_fill(m);
-+	assoc_array_test_model_destroy(m);
-+	assoc_array_test_model_fill(m);
-+}
-+
-+static struct kunit_case assoc_array_test_cases[] = {
-+	KUNIT_CASE(assoc_array_test_fill_and_drain),
-+	KUNIT_CASE(assoc_array_test_replace),
-+	KUNIT_CASE(assoc_array_test_collapse),
-+	KUNIT_CASE(assoc_array_test_iterate_stop),
-+	KUNIT_CASE(assoc_array_test_gc),
-+	KUNIT_CASE(assoc_array_test_cancel),
-+	KUNIT_CASE(assoc_array_test_clear),
-+	KUNIT_CASE(assoc_array_test_destroy),
-+	{}
-+};
-+
-+static struct kunit_suite assoc_array_test_suite = {
-+	.name = "assoc_array",
-+	.test_cases = assoc_array_test_cases,
-+};
-+
-+kunit_test_suites(&assoc_array_test_suite);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("KUnit test for assoc_array");
---
-2.47.3
+
+base-commit: 513444cc62e231a11c9b15ea88de0890da9b2b4f
+-- 
+2.56.0.176.g3575e65682-goog
 
