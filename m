@@ -1,212 +1,271 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010063.outbound.protection.outlook.com [52.101.46.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3041313E2C;
-	Wed, 14 Oct 2026 12:33:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791981221; cv=fail; b=Ptp4y2RLh4FBdhaC3cLbxl1y15peTupnzAZ2094Nms38rZeIvDPuDZMoR3aToOm7UE0FTDIzma9/Da/vz70i4V0Yl93I16jmPOaB4tjlnzbSNgN9LhxyVj4d09wnL7Uerjogu6zdhWc7kEljfwY32GalrKIEDnQMIvhQ2J0yYlY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791981221; c=relaxed/simple;
-	bh=qNwGvmM9KHBYncxYePUdUpcIo9R3d2hrzLViYSYOe1I=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=CeOv6hQ/RjlIu9JyQljjl9Yo9EPkMPwcfsTbzNFDz7964a0Eb1FqqmyufV4cvSFCoCvZlFTnCtwkR/kY56XLgMxmm6JqD8tLBKcQqgss3GPMb2756g5VpsiJolGAn9Mh0jAJEWPEBvpigPk7KnlMFo06RqY+MvpMQwonW0iNGQw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Epifzy4s; arc=fail smtp.client-ip=52.101.46.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333CC4DEC3B
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 12:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791981600; cv=none; b=cxRnxipAfKL4Sgv37xIkslF4zQckACuQ0K2oi4+9Ec+pYF6I7XAJ+o3nW6W5Utykmfc93sIjIW1KOhgLQWy4iw2WQV5yle72TdIqVQlY+uH/5tiYS+D/IbhNafoaoBxCUkHmWfY8sMQNxdX2uNGz2SJkNaVXxE3K758FvDERQzc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791981600; c=relaxed/simple;
+	bh=ueZWchNj/Lz3TiOXq+clvkm8rqxC7TxpZzgWXvnFqeA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uI2lCHW7b4pVKWHs20L1ukyLFhP/Jy7gAqcYfhnn/dKsoPrLiXlQM2KWFXymG4v18XJ4AKWwtc47OvSfj9oR16lwUFqMNdoeb8fsyWL3uevBDI6PurfQ4XS1mZqfcaakfeJiQForDhpz5JTRaL4n7i3oW1u8HyRi2jLP+YUl/84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i9wgFdfx; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Epifzy4s"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HL32y1WdZnSVNSQFZuoadFRe7ebZdqbJLsQr72hMCFP2hVRMcq8IOtzl0L3x3xlR5cRxu8NhB0K55DJZL3rtQTrizXuocXlw5ovkOq8zRXdzjNfXZSWRNp6KMbPEBh2nIuO4oVuoEF91F+v0zTr1cTaarplJG2ztAhYYxptz0gXHA6H7WH0a7ayJqzTF2V/Z3sZ+k+H8oVnt9I2qD2kWrL9GHubFLUpL5fc1GvvA2fm9ObIkM9o+qFQdh3NXVBvURbVrjYK/IRbL17Tk4Q/XLq7wjbF/828dpdPmETG17HE6K1aeoVKNQ1mhm9NRiCuOLX2HY6d+tCoMpJArPKJDxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xvxkm4rSNh7RtMSRGfkfRa7xPJlWbYJjmFytknBiwyQ=;
- b=agiZoGzIPc1WcUdFumH0iuMpPUAPRQZnhCOd+qbRqjTOoP0dC+i9Xy03euuFX9TuaIPvxtLq+/7s+w70mSdfjg5oO8rHzmsq+mrbFcS510dciPvROprV3Vo6YAZBS9qeFnX+UQk/w1w9M03klkflbr+7Q1yft7GKjFvSh8SInc5bFkDCWeR67tyaXfpVXOj01uYCQYDO6lcdBkCvHZSyDdsA3n9gOsV/mzDanzABemzZ/tkcZbAjNC0EezjXVYo3UfgY2o3YTqMbxDC0vL+QwQmIuIZd52It6bohGulqyEl40gglqBke643aPKUi0T7sVCTB1EUi8ExxL7qF1I16aA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xvxkm4rSNh7RtMSRGfkfRa7xPJlWbYJjmFytknBiwyQ=;
- b=Epifzy4ss602yRqv1zmIbZGvQr8UbZ2c5BPrI37TUKqjgQ7b/RM9TZ5HjQiHYkAjkRIXA3Z6kjqCxMez1pR5t9ldGIpv+Me8JxXairoH0aARJsqWA7W9lbpkPyrld40ef2HErlUhxNyNog+4DGBJFwBMkGVvyYrYfcDOHeadCXv3YxjLCzpctvGgmrpHX4j2Z3BuGrgXG3cKCdPdQPqMHUhOQ5XBz5EVnEBtKvJAi4vKEBShxytnpNp7lJFJTMXx2TnMz/e5JJqQLdH5DUObDCL9it9v6tBSRNFeVqfVJcKXdAucHa1S32UGbFdR+/VkPgNwoEnBwCX4ML8MQDvNzg==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH1PR12MB9647.namprd12.prod.outlook.com (2603:10b6:610:2b0::10)
- by LV8PR12MB9690.namprd12.prod.outlook.com (2603:10b6:408:296::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.13; Wed, 14 Oct
- 2026 12:33:35 +0000
-Received: from CH1PR12MB9647.namprd12.prod.outlook.com
- ([fe80::228c:766a:191d:77b2]) by CH1PR12MB9647.namprd12.prod.outlook.com
- ([fe80::228c:766a:191d:77b2%3]) with mapi id 15.21.0522.012; Wed, 14 Oct 2026
- 12:33:35 +0000
-Message-ID: <ff7cd77d-a7c6-42ec-a1bc-3790aee8b727@nvidia.com>
-Date: Wed, 14 Oct 2026 14:33:28 +0200
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v2 0/4] net: devmem: fix RX and TX binding teardown on
- device unregistration
-To: Mina Almasry <almasrymina@google.com>, Jakub Kicinski <kuba@kernel.org>,
- David Wei <dw@davidwei.uk>, Pavel Begunkov <asml.silence@gmail.com>,
- Taehee Yoo <ap420073@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Paolo Abeni <pabeni@redhat.com>, Kaiyuan Zhang <kaiyuanz@google.com>,
- Bobby Eshleman <bobbyeshleman@meta.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Nikolay Aleksandrov <razor@blackwall.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Tariq Toukan <tariqt@nvidia.com>,
- Kaifeng Wang <kaifengw@google.com>
-References: <20261012174300.2338784-1-almasrymina@google.com>
-Content-Language: en-US
-From: Dragos Tatulea <dtatulea@nvidia.com>
-In-Reply-To: <20261012174300.2338784-1-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0057.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:93::17) To CH1PR12MB9647.namprd12.prod.outlook.com
- (2603:10b6:610:2b0::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i9wgFdfx"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49ff680331aso10649455e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 05:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791981596; x=1792586396; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ru12IB60eacMB9ePCFsbXWKxugJjfmaSHcqsAJxz9P8=;
+        b=i9wgFdfxWPBXsrB79Q8OZ5WRdc1LQkqWvn4B7bua+M9JogioTevC+H9UjWJsXMhSAb
+         L0WWprWXGzhW5fZ483z9tFU7R0uEsQqk1+vhtrwEY69KJPuqC0M2E+K5S6nEOOMMpkB9
+         DzD1jHv7vEV/ibFUUmviMItIPvWk6LiRow27K+GB8xnkhA/p+aNsJc+AELlixXHzr0g7
+         1Q2N4+VdCTf2JMV/N/RazOX/urI552Oo2/vFgp11UgE32yjUoZRp+MkK+fj9Iggq2w/z
+         ZAb+q34QcHoA/HtydJWbQ6vHQ+RdkRYJtldemmFeOYzJ/xDSJghDeUfY0dU5nIQtR1ul
+         +fqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791981596; x=1792586396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ru12IB60eacMB9ePCFsbXWKxugJjfmaSHcqsAJxz9P8=;
+        b=UHi8v6yBvBnFNKzs22hNNYE6U8R0xmOKBDTnAjkObId+K56Kp8zF/OrNWbbp6kw9yj
+         euvv3A/nqUpZqDAhErrvWUP4HuDGkraCpL4tvpvSTUlyOxKBolh+f0Sm9kVuZMTtaXGF
+         m+y3LGPOGAYPJenVktjSCBVH7E4icLGIfgTz7HARe9mdC4kQRpaMOLJ+cGrFGj3PCPGa
+         RNzEQbUPbpoN6lR9jaPUN/THzGY4vggfU5FnE1eS/HMMz2Qkw/Ij6DAQu8PdlYcCY2qJ
+         XKXKNdN8dNGdiTSFxDF5s2XVYoHcoHEybWSBecUlNxlJKEXTDm32B7vMbUFseHYMU56b
+         1jqA==
+X-Forwarded-Encrypted: i=1; AKwUvBzFrfzdxpYicGB/OGNURgFd8cv0EUjST8t9SJtQ+uoTzmEW4uvbeY+DIADrb1WPrQyYNX6hmzvxbx/AcPZxzRo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLYrQ6vB4ZCTgI5qBUbt8s4BRzQSENU60/ANIOBvervxrxJq6s2
+	VpfhRNIA99a3YHfYpvMMzWrRpj8hAlDcGNJA1EL4se9ClwXAVHAAxRpMn9Ey0zUDl/I=
+X-Gm-Gg: AYBFou3K/cvs1lzLUiixsVKnWkZ6Hjg2AWqWkZjBJ+XuSDY6b0kM+4RZCJ/hGQs7NRo
+	yHwZbNasUsgFzN+zjY1i/1onGVkgeSgq/VpZVC4dYku7w5/ZIS8VIkupDhcjmnGXnxc7P8KxEsL
+	0EydyHHq7wDgXHZYssDjgrzMFyVFsamgq4D6fTQqLAxmnhBNrQOKnXCAzd40CZka1YKIiBGAuiE
+	62c+qj2B4eLtatY3gfEtkYes2fqIjhKtmO/Vdbcwy/fhkfk8xJPC2/8JSUvZyQNlWgB30W0L+k2
+	5HEKqy/lm39LHopmIy6mzOG5CWrb2qSTTq+wfKGaM+0nvesO5YLH1bUsuOaOdE0bl7D/MkcFKUC
+	T3rBy2DwYSolfV28FQTkDNIqIJlFMlaPM0NxTJHF3wLZAhu76VELXqo3AC4Jl4aM675+6knYh1x
+	Vq0OFk1LYAVCLdKPprEvdUWFhBYL2j4eBgU4YKOiBsl67S/SVrdskjUZnF92dIVe0=
+X-Received: by 2002:a05:600c:4fd5:b0:4a0:5b:7bc0 with SMTP id 5b1f17b1804b1-4a18e49a7e3mr323462585e9.21.1791981596093;
+        Wed, 14 Oct 2026 05:39:56 -0700 (PDT)
+Received: from kali ([169.224.126.44])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1b2ec47fcsm54163165e9.1.2026.10.14.05.39.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 05:39:55 -0700 (PDT)
+From: Ali Firas <alishmery18@gmail.com>
+To: netdev@vger.kernel.org,
+	idosch@nvidia.com
+Cc: kuba@kernel.org,
+	pabeni@redhat.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	razor@blackwall.org,
+	roopa@nvidia.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ali Firas <alishmery18@gmail.com>
+Subject: [PATCH net-next v4 0/7] vxlan: vnifilter: bound a single request and account per-VNI memory
+Date: Wed, 14 Oct 2026 15:38:07 +0300
+Message-ID: <20261014123814.388557-1-alishmery18@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH1PR12MB9647:EE_|LV8PR12MB9690:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1dfe72f8-912c-4284-6793-08df29ef5d8a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|23010399003|7416014|366016|56012099006|11063799006|5023799004|261009223027099003|10067099003|18002099003|22082099003|6133799003|921020;
-X-Microsoft-Antispam-Message-Info:
-	NbNeZXCm+gdHwETjAqi4vvt6koUpcvJqYKyVHnLfJbKrxWS8Aqj6051aHWPeuqkkTLGHUrdH3gMMWvNj2VV1R44FjVUtQXZLQPLEyKEtL3pI0Vu5QypDWs/HvqwCfl15BZGpzzNCRNkpiZjloV6hP1JvhZguXwUGT91kd5QL6EKscFnumpt4aJ4XDPw2D4mC66yoU1qUYLM1WYSR6vOiR0F5MIdGEw9avM8xg+sPilOMkQKDEbG5vMXQvn49pcZmYElMgy4OulF0/tRq3Pj8ci2/ToKsy6yCmpuhxWO18/s1CGnD4mEaKzCEZhRhOeDIHDVFwKn8UOlxIVDDi2eIHff3HcKdZedY+cdw+RH8X5h0OgDXcFbMj2E6MwopRpEHwrbQpxy+sjjhDMZVQlQnaQtgdJbgbgl4hC5vUvfa1tE7bmeWuHMwxbjDePe7O7xzgU97UYt3QCCmG8uA95BuKe2Jkps0vSRy8Z6FZ69uPDmpqqMh07UoMesx2m4iDXRzUY62IoKqorJ+JesgS2pEQAASFKfXiV2msJ+W28Vi6q3oY0+H5pw2xU/UH85CRzDymAlDJGoJMUmokt1xEZJUZvhGiEJi3DHEB1rWNt+/6epOKZSAK+r02OXWdAB2C3xV8yG4lr69BaBvN80YuSVV0qfQVYYAK9G5K7WZg+Wg0WeENNSwccjXBT67VFCHlkOnV1pUjEzzFOX7ZR1+agWbWA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH1PR12MB9647.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(7416014)(366016)(56012099006)(11063799006)(5023799004)(261009223027099003)(10067099003)(18002099003)(22082099003)(6133799003)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?c1RTUTFSQVZOUU5hU0kvNU9GNTREeVY4RGM4SVJTalBnRHF1SEJFZGwxb3Ni?=
- =?utf-8?B?VlhnUmhmTEZ5d3NlelcvU3hON01JQjkwdll1V2h2ZEhlcU8vdDk3ZE1Sc0d1?=
- =?utf-8?B?Tys0aFNsNzN0YlNDcDFkYnJRcFpZeU9jSWZjNzZhUmtwRDRIcFlQQ1pPOXVx?=
- =?utf-8?B?Q1BnUlI0emNEWmlOODlzTE5PanZLOWNJcEJ4aDk0OHpHWjh0cDdxMmdqNG9F?=
- =?utf-8?B?VDBlUmQzTTF4VlgrWk9rWVV1SEwrdlpSa05rUVhJOUdMdmdBUDhlellVM3JN?=
- =?utf-8?B?VW1kcHROWEZvQUVJK01oY3A3OXdRRXp3Vm1Sd2F6Q3NHbGM4dVh2azRocVRM?=
- =?utf-8?B?SDJtVkhQNHQ0UXRPUXRHQmxnMWxvNjFoaXhQTTZvaStqWjBQU2U5Zk5uYmQ4?=
- =?utf-8?B?RWlmd2daOVhLMXovTjFYYnN5Q0ZRNEVIa04xMUtkdzVBZ3o4VitnN1E3c1Ni?=
- =?utf-8?B?ME1Vakl1STl1ZkRPV2pnQ3VJU1cxM0Myd01rNUx1OUVSd0pMVEZUOXFJcVZI?=
- =?utf-8?B?blAzeUVFa1VFU3BKTVRaMkdLVXdmRmdWak55U3duOW1pQ1JlOVlxSjF0cHZ3?=
- =?utf-8?B?MVdzay9sT3hXakpRZE5FOWROcTVCb3RMT3lUdnoydzZvNzJIdkt3WW5WdkpU?=
- =?utf-8?B?a3RaN3k4L3RoWVJ4LzFXYkY2ZFZaYnhwb1hxRTM3L252TmdzeCtRekRNQ05G?=
- =?utf-8?B?a3p3c05jSmROZGk1VS9IZ3VBOUdTWXV5YUZPYVNiVE5KVFhWYkIxWWQ5b2M3?=
- =?utf-8?B?Z3UrMThLQW5yakNIYVdXbmd4aFRlQkUvOTFMTS9penEwUS9vT1lCZDl6Y1lW?=
- =?utf-8?B?bkp3UGhtRjlEWFlLcDJQTlI3QUJsejA4bVlzbE50SWduaEZSOTVVVnI0NmRF?=
- =?utf-8?B?UzU1a1phZzEvWDBoNDZNamtpc0x2dlF1T1NNbTZvMnJuRzFUUXZsOGlmNVdv?=
- =?utf-8?B?b2M1SjJRU05pQVpNb1lzSUlQeVpyM0dud056bGJVVElGNFQvc2l2V0JtaFlN?=
- =?utf-8?B?UkhzQVRlVFJoUVkwNktTUTdERkY1NlNUbGowL1ZFZjBLcXdEM2JnK3M4Q05S?=
- =?utf-8?B?Y1MwTTVtalVPOHBHdWtUL3JNb1ZUNFcyZGJTZkJzcGRVYnQ5cmd5TUJrdmJj?=
- =?utf-8?B?V015ZGk1MDZhMzhuTkpXMTRkOVdWeUsvVHV2WEQ5Y1E2T1pzL211V01FNmJp?=
- =?utf-8?B?NG1mY0Y1L3YrS3VsOHVqWER1eVg3UTF0aFN0RkxTVXJtQXEwcFdCN21rZG1t?=
- =?utf-8?B?akJ4QWlIUnI3MWh1Z1ZkQXVUeHJGMFJSbExkMC9md21JcEhxWmUrZHRkV2ZS?=
- =?utf-8?B?R1Q5SVJGK0o4OHFQREJRWFErdDNzcWFkMFErVkJ3RXRscGVuN3FXVDdvV1VX?=
- =?utf-8?B?Wituelcvdk5HTCszRXMxMlRTY1l4czFQd0EzZUhBcEhEM2xIVzA1d3VMbGNh?=
- =?utf-8?B?V1MzaDVaMkFLbyszQlQyU0FiOVZ0bTI4c1JMdHF3bTF1NGY4R3VhT0NzbnNo?=
- =?utf-8?B?YnVoWW4vcTlLWlo3T1IvQnpaQkRrZzNXVEJGcnhlQnBSVFFaQjh5M1dncmFx?=
- =?utf-8?B?REh6V3ZZMG9vZW1TSHpSWmZEd1dyMDhtK3pjR2tQZ3FuQjU5bmFreHZHTXZh?=
- =?utf-8?B?MGpQbDdBeWdSc0tKb2hoRE5mQjhXaTcxVmRxcDNVb0Y3S2h6bWdITlNFNld2?=
- =?utf-8?B?UkxtRHFVaGJFNWVyb1ROR3NacTRxaGVRNld2Smh4TWhDWE9aM2RQZFFjcm1h?=
- =?utf-8?B?cElsTGh3VXZ0Q1JWL05zR2QyNzkxeHlPUGd0RWEvOHdEV0RhejBqMC9xOHdN?=
- =?utf-8?B?VGN5ZlF1OUpsenZTN3JZdHU5VmpCVjhGTE5YWlFFYWdpa2dUWnFLeTJRWGMx?=
- =?utf-8?B?eDBGSnVsOHNtQ0p4dytyc2toRGk4SU4rSFJ6TWZRRStHVzJ6UVF4bXJlQzI1?=
- =?utf-8?B?UUxyY2hzNmV2d3dxaStta0VMaG5oQ1BOdTlsbjMrcFJaUS9LSUpIakl4YTYv?=
- =?utf-8?B?QWFPNFJXTzZqMWQ3TllSdFQ1Qzc3TXp1ZTJDOFJUWkdlbHpHaitWV0lHR3Ex?=
- =?utf-8?B?U2RNQUZhMEtUNnFKS1pDbnpUKzh4aXM0dExDYjR3SkkwNVloYlo3Snkra2Qy?=
- =?utf-8?B?V1J0TG9PRlNwRTdFSTJkczNlQVpTeXVvOXkyQ0phb1crdHVZa2FGS0h1MVE4?=
- =?utf-8?B?d3Q2Sjk1dTQ1WWQ2Mm4wYUEzcmZWT0R2NUFuaVdyMFVQcWlzbldTWHFHaWd0?=
- =?utf-8?B?RUUwTTRCb1lVeDZwM0VLcGVGc0E2SXBRRVpwWmJtOXoyQXhTTC8yRGI4MHli?=
- =?utf-8?B?RGtlSGovNlkxV3dwT1hIVFFHaXhTSXplZmpLUnRObldHRkRYODlvdz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1dfe72f8-912c-4284-6793-08df29ef5d8a
-X-MS-Exchange-CrossTenant-AuthSource: CH1PR12MB9647.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2026 12:33:35.5387
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LaM9HOonUnyNMJhYfSPtVd1jzrGW0g/WrFjJ8OU1J/zAKrT3ho9OQUYY/HJAN8jhrKujrT5dzP5u+zaIdCPnTg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9690
+Content-Transfer-Encoding: 8bit
+
+The VNI filter interface accepts a START/END range with no bound on
+either endpoint and no bound on how many VNIs one message may ask for,
+and the memory it allocates per VNI is not charged to the caller's
+cgroup.
+
+Patch 1 links the VXLAN_VNIFILTER_ENTRY nest to its policy with
+NLA_POLICY_NESTED(), as Jakub asked in v2:
+
+  https://lore.kernel.org/netdev/20260921150904.65a704eb@kernel.org/
+
+Without it the entry attributes were validated only as each entry was
+dispatched, so a multi-entry message whose later entry was invalid had
+the earlier entries applied and notified before the message was
+rejected. With the nest linked, an entry the policy rejects refuses the
+message as a unit; faults the policy does not cover are still handled
+one entry at a time, as before.
+
+Patch 2 range-validates both endpoints to the 24-bit VNI space.
+
+Patch 3 makes the dump re-enterable, and does so before patch 4 caps the
+input, so no commit in the series reports a range its own input path
+would reject. vxlan_vnifilter_dump_dev() coalesces a contiguous run of
+VNIs, and packs as many entries into a netlink message as the skb holds,
+with no bound on either. It introduces VXLAN_VNI_FILTER_MSG_MAX and
+bounds both: it ends a coalesced run at the limit, and carries a
+per-message VNI budget that ends the message once its entries would sum
+past the limit, the same way the loop already ends it when the skb is
+full. The same resume path (cb->args[1], counting nodes dumped) drives
+both; the dump does not drop or repeat a VNI.
+
+Patch 4 caps the number of VNIs one request may add or delete, summed
+over its entries, at VXLAN_VNI_FILTER_MSG_MAX. Both add and delete walk
+the span one VNI at a time under rtnl_lock, so both are bounded; that
+walk is the cost, not the memory.
+
+Patch 5 charges the per-VNI node and its per-CPU stats block to the
+cgroup of the task that created the VNI, the way the device's own struct
+and its Tx/Rx queues already are (commit c948f51c1654 ("memcg: enable
+accounting for net_device and Tx/Rx queues")).
+
+Patch 6 charges the default FDB entry a VNI with a group or remote
+installs -- the vxlan_fdb, its vxlan_rdst and the per-CPU dst cache. It
+threads a gfp argument through vxlan_fdb_update() down to
+vxlan_fdb_alloc()/vxlan_fdb_append(), on both the create and the
+remote-change paths, and a second gfp through
+vxlan_update_default_fdb_entry() so each caller picks it. A per-request
+add or change (RTM_NEWTUNNEL) passes GFP_NOWAIT | __GFP_ACCOUNT, which
+is non-blocking like GFP_ATOMIC but hard-bounded by the memcg: at its
+limit the request fails with -ENOMEM instead of charging past
+memory.max, and because the new entry is allocated before the old is
+freed, a failed add leaves the existing entry intact. The device-wide
+default-remote change (RTM_NEWLINK, via vxlan_vnilist_update_group())
+keeps GFP_ATOMIC | __GFP_ACCOUNT; that pre-existing walk is not bounded
+here ("Not addressed" below). Every non-vnifilter caller --
+vxlan_fdb_add(), vxlan_snoop(), vxlan_dev_create(), vxlan_changelink()
+and the switchdev vxlan_fdb_external_learn_add() -- keeps plain
+GFP_ATOMIC, so the data path and unrelated callers are untouched.
+
+Patch 7 adds the selftests.
+
+This is the reasoning of commit e2c8d550a973 ("netfilter: ebtables:
+account ebt_table_info to kmemcg") and of the net_device accounting
+above: memory whose lifetime is tied to the net namespace rather than to
+the allocating task cannot be relieved by the OOM killer, so a
+container's netadmin must not be able to grow it outside the memcg that
+bounds the container.
+
+What this series does and does not account, measured on production
+builds (no lockdep/KASAN) in a memcg at 2 and 8 vCPU:
+
+  - every persistent per-VNI allocation the vnifilter path creates is
+    attributed to the cgroup of the task whose request allocates it, and
+    bounded by it on the per-request path. Patch 5's node (128 B) and
+    per-CPU stats (64 B/CPU), and patch 6's FDB entry -- vxlan_fdb
+    (128 B), vxlan_rdst (96 B) and a per-CPU dst cache -- on the
+    per-request path (RTM_NEWTUNNEL) are hard-bounded: the node and stats
+    use GFP_KERNEL_ACCOUNT and the FDB entry uses
+    GFP_NOWAIT | __GFP_ACCOUNT, so a cgroup at its limit fails the
+    create, the first remote, or a remote change with -ENOMEM, and
+    memory.current does not exceed memory.max (measured at 2 and 8 vCPU
+    in an 8 MiB cgroup). Failure is clean: the new entry is allocated
+    before the old is freed, so a failed add leaves the existing entry
+    intact and returns the error -- no established state is destroyed and
+    no false success is returned. The at-rest footprint is one node, its
+    stats and one FDB entry per VNI; this memory has device and net
+    namespace lifetime, not task lifetime (killing the cgroup's tasks did
+    not release it, only deleting the device did), so it must be charged
+    rather than left to the OOM killer;
+  - the rhashtable bucket tables backing the VNI and FDB hashes are not
+    charged. That is ~32 bytes per VNI across both tables, generic
+    infrastructure shared by every rhashtable user, O(entries) with
+    automatic shrinking (an add/delete cycle returns it, measured), and
+    the series does not address it.
+
+The cap is symmetric, applied to add and delete alike, which is what Ido
+asked for when he agreed to a 4k limit. Patch 3 is what makes that safe:
+no dumped message carries more VNIs than one request may ask for, so a
+device holding more than the limit can still be torn down by replaying
+what "bridge vni show" reports. Device teardown itself
+(vxlan_vnigroup_uninit()) is not a netlink message and is not subject to
+the cap.
+
+uAPI changes, all of them:
+
+  - a VNI at or above 2^24, previously accepted and stored (and
+    truncated on the wire), is now rejected with -ERANGE;
+  - a single request asking to add or delete more than 4096 VNIs, summed
+    over its entries, is now rejected with -EINVAL -- "bridge vni add
+    dev X vni 1-10000" used to be accepted;
+  - a request rejected by the entry policy, aimed at a missing or
+    non-vnifilter device, now returns that policy error rather than
+    -ENODEV or -EOPNOTSUPP, because the nest is validated before the
+    device is resolved (patch 1);
+  - "bridge vni show" now splits a contiguous run longer than the limit
+    into several entries, and across several messages, instead of one;
+    the set of VNIs it reports is unchanged;
+  - in a cgroup at its memory limit, adding a VNI, or adding or changing
+    a VNI's remote (RTM_NEWTUNNEL), now returns -ENOMEM instead of
+    charging past the limit; the existing entry, if any, is left intact.
+
+This is a policy and hardening change, not a fix for a crash or
+corruption; it targets net-next and should not be backported.
+
+One pre-existing semantic is worth review: an entry that carries only
+END and no START is treated as the range [0, END], so a lone END near
+the top of the space is a whole-space request that the cap now rejects;
+whether END-without-START should mean that is left as an open question.
+
+Not addressed here:
+
+  - the device-wide default-remote change (RTM_NEWLINK) reaches the same
+    per-VNI FDB entries outside the request cap and force-charges them
+    rather than hard-bounding, so this series narrows the exposure to
+    the per-request route rather than closing it. Patch 6 does charge
+    those entries to the requesting task's cgroup, where before the
+    series they grew unaccounted host memory; bounding the walk is left
+    to a follow-up.
+  - vxlan_vni_add_del() still leaves the earlier VNIs of a range
+    installed if an allocation fails partway through it; with the cap
+    that is now bounded to fewer than 4096 VNIs. A fix needs a
+    transaction and is left to a follow-up.
+  - the rhashtable bucket memory described above.
+
+Changes since v3:
+  - rebased onto current net-next.
+  - the dump patch (now patch 3) is ordered before the input cap (patch
+    4) and introduces VXLAN_VNI_FILTER_MSG_MAX, so every commit is
+    self-consistent; it also carries a per-message VNI budget, not only a
+    per-entry clamp, so a dump of a run longer than the limit splits into
+    messages the input path accepts (demonstrated with raw netlink).
+  - new patch 6 accounts the default FDB entry, scoped to the vnifilter
+    call site via a gfp argument so the data path stays on GFP_ATOMIC;
+    the gfp is threaded on both the create and the remote-change paths.
+    The per-request path (RTM_NEWTUNNEL) uses GFP_NOWAIT | __GFP_ACCOUNT
+    so the charge is hard-bounded (fails with -ENOMEM at the cgroup
+    limit); the pre-existing device-default walk (RTM_NEWLINK) keeps
+    GFP_ATOMIC | __GFP_ACCOUNT.
+  - patch 5 reworded to cover the node and stats only, with its
+    net_device-accounting reference narrowed to net_device and its Tx/Rx
+    queues.
+  - patch 1 reworded to scope the "rejected as a unit" claim to entries
+    the policy rejects.
+
+Changes since v2:
+  - add patch 1 linking the nest to its policy (Jakub);
+  - the request cap applies to both add and delete (Ido).
+
+Ali Firas (7):
+  vxlan: vnifilter: validate the VXLAN_VNIFILTER_ENTRY nest
+  vxlan: vnifilter: reject VNIs outside the 24-bit space
+  vxlan: vnifilter: clamp the dumped VNI range to the request limit
+  vxlan: vnifilter: bound the number of VNIs one request may touch
+  vxlan: vnifilter: account per-VNI memory to memcg
+  vxlan: vnifilter: account the default FDB entry to memcg
+  selftests: net: test the vxlan vnifilter request limit and dump replay
+
+ drivers/net/vxlan/vxlan_core.c                |  47 +++---
+ drivers/net/vxlan/vxlan_private.h             |   5 +-
+ drivers/net/vxlan/vxlan_vnifilter.c           | 132 +++++++++++++++---
+ .../selftests/net/test_vxlan_vnifiltering.sh  | 119 +++++++++++++++-
+ 4 files changed, 270 insertions(+), 46 deletions(-)
 
 
-
-On 12.10.26 19:42, Mina Almasry wrote:
-> Fix two device-unregistration lifecycle bugs in devmem TCP bindings and
-> add netdevsim support plus selftests covering both RX and TX device
-> unregistration:
-> 
-> 1. net: devmem: unmap dma_buf synchronously on queue uninstall
->    Synchronously unmap and detach binding->attachment under binding->lock
->    when the last RX queue is uninstalled in mp_dmabuf_devmem_uninstall(),
->    and unmap RX bindings that were already unbound on NETDEV_UNREGISTER,
->    preventing slab-use-after-free in dma_unmap_sg_attrs() when the binding
->    is freed after dma_dev.
-> 
-> 2. net: devmem: detach TX bindings on NETDEV_UNREGISTER
->    Extend net_devmem_dev_unregister() to fully detach and unmap TX
->    bindings when binding->dev unregisters, or clear binding->vdev alone
->    when only a virtual device unregisters while binding->dev lives.
-> 
-> 3. netdevsim: support devmem RX and TX bindings
->    Enable PP_FLAG_DMA_MAP | PP_FLAG_ALLOW_UNREADABLE_NETMEM, 64-bit DMA mask
->    on nsim_bus_dev, and NETMEM_TX_DMA on netdevsim so devmem RX/TX bindings
->    can be exercised in software selftests.
-> 
-> 4. selftests: net: add devmem RX and TX netdev unregister tests
->    Add devmem_bind_rx_unregister_check and devmem_bind_tx_unregister_check
->    to tools/testing/selftests/net/nl_netdev.py.
-> 
-> Cc: Tariq Toukan <tariqt@nvidia.com>
-> Cc: Kaifeng Wang <kaifengw@google.com>
-> 
-> ---
-> v2:
-> - 1/4: Don't unmap when a leased queue is unleased. Keep bindings in
->   net_devmem_dmabuf_bindings until freed, hidden from TX lookups by an
->   xarray mark, and unmap unbound RX bindings on NETDEV_UNREGISTER. Update
->   the binding->lock and binding->ref comments. (Sashiko)
-> - 2/4: Detach TX bindings from the same net_devmem_lock-protected walk,
->   which now also covers unbound TX bindings, and clear the LIVE mark
->   instead of erasing the ID. The walk no longer uses RCU or takes
->   binding references (Stanislav).
-> - Link to v1: https://lore.kernel.org/netdev/20261010025532.839559-1-almasrymina@google.com/
-> 
-> Mina Almasry (4):
->   net: devmem: unmap dma_buf synchronously on queue uninstall
->   net: devmem: detach TX bindings on NETDEV_UNREGISTER
->   netdevsim: support devmem RX and TX bindings
->   selftests: net: add devmem RX and TX netdev unregister tests
-> 
->  drivers/net/netdevsim/bus.c              |   1 +
->  drivers/net/netdevsim/netdev.c           |  21 ++--
->  net/core/devmem.c                        | 121 ++++++++++++++++++++---
->  net/core/devmem.h                        |  10 +-
->  net/core/netdev-genl.c                   |   1 +
->  tools/testing/selftests/net/nl_netdev.py | 108 +++++++++++++++++++-
->  6 files changed, 236 insertions(+), 26 deletions(-)
-> 
-> 
-> base-commit: 4f6ac74fa594a918d41255c941256e1d51592d3b
-
-Went through the series and it looks good to my feeble human brain:
-
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-
-I am biased though because I need Mina's code to add support for
-unbinding the dma device for data-direct.
-
-Thanks,
-Dragos
+base-commit: 05b5019b01fb9443b09ae4ed34af1135a80a84c8
+--
+2.53.0
