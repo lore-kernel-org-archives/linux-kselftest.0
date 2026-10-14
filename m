@@ -1,143 +1,91 @@
-Received: from mail-pz2-f7.google.com (mail-pz2-f7.google.com [74.125.228.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65E455C339
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 16:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C518D55D876;
+	Wed, 14 Oct 2026 16:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791995641; cv=none; b=BIYAhoxf0uXCoju2vnpe8bNy3kQUooJUK4cnjNG3FarBwdMBrcHtC09qG7OrJVIIXysSTJULyVfLqOF6yvMFOa4qrZ+J3jitCPaIDN3MyzXtXjeK/JGzsYfrnr9GvJZPxr/FkOr+pFWByTn/75zHq2RRVLa0OunbPOyba1FOHX8=
+	t=1791995776; cv=none; b=tUVFBVfMdD/cRDo9uRIKMC4ftEUhzX45B/NDOmPvSWoEDMvZo+oQfMd0RtWInSuM3kUDvSV4w6bl9w/daAVblAkjsrIRsflb2qYSTMuwtwFLYQ+APwbibppExH9KWmu0EzMnENjG7RrPPytMWdcf7hIH43+Ug8rd6EzCNLx/tVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791995641; c=relaxed/simple;
-	bh=03prvWYuPM9S8kmgrWoC3fCmFozkGleIo9XhNkVgCtI=;
+	s=arc-20240116; t=1791995776; c=relaxed/simple;
+	bh=KMD7Towbunxb3x83kvj/jlmrKN5cUKVMsO6ERTpi9Wg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fObCg0D8lArG65xoZHpdWNn5uUbM31W55Q8mj1U9v3kMDK7QmGr8Bt73rGGN/bkWb6eUSWG757HHUGa+6xf/7SGI8Xlzxke5a6LTx9HewLpKh7RzQSc6AUkqWfIRbOZYVVU9dDd5B7VV1H5h2Go1NMO1hbEuV+Xi2UsAuOu+/RY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pd7irBGa; arc=none smtp.client-ip=74.125.228.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=sTYvnAtVW4x1kcPnDdXy3+0ekCP7NqrVNzjYGCqy5Em6xqeb1HhvoFKmlxkKVyxgseJ69fNcxUeW4TjAuBAHMKaDHv6+Plbr8aEsHAIu1ZqLmvc5ktEdEQ1D0LaJ18xfmfHLLqhgLxDPz85IyrBxJxRnUBZV77r9AH+ddsVmBG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MflMOJU3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pd7irBGa"
-Received: by mail-pz2-f7.google.com with SMTP id 41be03b00d2f7-cc7c6cc3513so289930a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 09:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791995639; x=1792600439; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Gzw9aMKz/xODwzz6jPerfVV+ZDaTeiwtt+GIjli64uI=;
-        b=Pd7irBGaIfGk47A4W8byWcdXxiyBIqvKEbA9YhOh3SRQ6mJyIKIRRLuIPMYQAvnKMs
-         TiiQbQe1X9LW8PMlgREmTed2G73VpjPu9b/hQC6M7174NlPobQQvYC7JbWww84NvkGVc
-         jaPpkkunMPeYYbs7LRpYE1NB3orJeiitk5w+ztYeo5vRK1StrQIIlrqN8LPbbwn/q7pl
-         LyTa9PdacwnhwmfVzvAYeCHjMCxA/kI1BexjubiZ4KYMJIByLay2i2hNOuiNpYiGNnZr
-         oredyfHyKPao1I1MMDdfl/UgbblGTGEjrFSK49edHqKhn/nAtTq070F5HAFN7V6SOwU9
-         2M8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791995639; x=1792600439;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Gzw9aMKz/xODwzz6jPerfVV+ZDaTeiwtt+GIjli64uI=;
-        b=p3ds1zCBbX6lY4EZxda3DHpoGxRdF2wB8PJFOmorl69imjVnjcphbNLOkBPlwqVzhu
-         /CrI0GhJvmupTnldklT9H+HArQuizRA1NgF9BMfTcNl5Apx3CEadTy6GzpkSfw45B6In
-         v4hW0qpeHN3dXMeCV9H6fU1CWkHlu2QKJ3JAsk6FxnmlEO7XpO0Ft9qlIrno0wVPMcql
-         sDR25DWw+R5ZuQlnh2ivHljXUi/e17t6uHwQULvSCPRzdz2T8P1odR81+LwqnzwkxDnG
-         L59VUfnXVvISKURQJq3eFK16craCWtUOsg9Gwl1puDBh4ayYuo96jzdf1nkxHhm3DccZ
-         V+vw==
-X-Forwarded-Encrypted: i=1; AKwUvBzlAUIh4kuU7Vdk3WNHT9KekqEVQpXT2O6h+jjO3qqi1a3lYbaocIwfSzvY9CwT/dWcHWbSM2IXfNXkbhvckqo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLoIwkPL3h/pQuYtRJON/S8N0EICXa9xFzuX00migfQU/kuwY6/
-	wQMwpQ15N7L3SxsjJMVSNbLJ3NZ+jUtDH/GWd0jxpBwTmr54aMDt/TEu
-X-Gm-Gg: AYBFou2ep7FEASuNJCMF0fYuhcLqvog1E2duZ9i5mj5PYYGgWoAL6aFcMVxd6YotfGG
-	bZTVtJgyJcsfsvMaATSrkXiXtaC8fRgSNHG0rRaMrd6RgS8gld4neXKIZLAdsPxSevmx5qVP3YZ
-	8A8OitwY/DTzWsgIYxvzDmGkD9gwr9nD7Dhq5XEMkvqdNScaJQgzPL+umr4DThlKPjCJJmWo0Kr
-	rg2prxBDOCS3JbkwYcZOLoGg0cFMEFp/Jpo+hU15p6QVL3mISDkwMXPPquUIN9ZLJVl3ob5wPdY
-	w18m3j3qwRknIgjldZgJGmMQpc1mopeXNLgDoshPHYPb1yify0lipacD7sFdq41xBDncTyQpD98
-	gFXt94s6wuBvhXfnf9toZ387OA4ZCdlUUvyZkP5m/GiuhABFxHGKwdPM+HirKLBm+z2GNTYJnQC
-	e6J0mkhfHrUy8jhvriVH2BMTlFjZxm+PoHiSuAQVSDOY7HcKgXulmzM0JCAPSA1cS1
-X-Received: by 2002:a05:6a00:8c4:b0:891:a63c:df97 with SMTP id d2e1a72fcca58-897c6443681mr15560946b3a.15.1791995639007;
-        Wed, 14 Oct 2026 09:33:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:59::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89d80511d47sm1291926b3a.54.2026.10.14.09.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 09:33:58 -0700 (PDT)
-Date: Wed, 14 Oct 2026 09:33:38 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, David Wei <dw@davidwei.uk>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Taehee Yoo <ap420073@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Paolo Abeni <pabeni@redhat.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>, Bobby Eshleman <bobbyeshleman@meta.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Tariq Toukan <tariqt@nvidia.com>, Kaifeng Wang <kaifengw@google.com>
-Subject: Re: [PATCH net v2 1/4] net: devmem: unmap dma_buf synchronously on
- queue uninstall
-Message-ID: <as-uBvRisS7HxLHJ@devvm7509.cco0.facebook.com>
-References: <20261012174300.2338784-1-almasrymina@google.com>
- <20261012174300.2338784-2-almasrymina@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MflMOJU3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 409121F000C4;
+	Wed, 14 Oct 2026 16:35:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791995775;
+	bh=Xe9rAmILOBAL5qEj1m6Rs0cQGMnFcSwviGw+I+tsq5w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=MflMOJU3bk3HTx5E7LUnFFqipXcK3PLvRbYVWE3DAujLB3A1pXCXiq9xHaowtrCy7
+	 AjtOoVn1r1aqkfe2T0GR90AIHVRy7RuUIZ48zl8jG2KBqzpuNvHcUOYa6g2AapxTHF
+	 mXTm95TzOTXQ+QjdFVvo8cDYEj1f46B+dWAr8QTvqBLJl+tfhwFMZVgoGvrlUjSio3
+	 YhOI4GlwscYjapvN0pgu2FKrEV7gDnrELztWh7aROP+6Ug97kKJJU4lY8vteV54ga5
+	 HM619bjWjlR7lGv/t6c5RLO4fYGQbsBg1OTwI9HNaevoJj65PVCUQRewQJ0YBgmtxj
+	 PaXqN8FpNMICg==
+Date: Wed, 14 Oct 2026 18:35:50 +0200
+From: Eric Biggers <ebiggers@kernel.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: keyrings@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Rae Moar <raemoar63@gmail.com>,
+	Ryota Sakamoto <sakamo.ryota@gmail.com>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Kir Chou <note351@hotmail.com>, Petr Mladek <pmladek@suse.com>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	Guan-Chun Wu <409411716@gms.tku.edu.tw>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <linux-kselftest@vger.kernel.org>,
+	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <kunit-dev@googlegroups.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] lib/tests: kunit for associative array
+Message-ID: <20261014163550.GA327771@quark>
+References: <20261014160144.1835860-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261012174300.2338784-2-almasrymina@google.com>
+In-Reply-To: <20261014160144.1835860-1-jarkko@kernel.org>
 
-On 10/12, Mina Almasry wrote:
-> When a bound net_device is unregistered while userspace still holds a
-> netlink or TCP socket reference on a devmem binding,
-> mp_dmabuf_devmem_uninstall() clears binding->dev to NULL so
-> netdev_nl_sock_priv_destroy() will not touch the unregistered
-> net_device, but leaves the dma_buf attachment mapped until
-> __net_devmem_dmabuf_binding_free() runs later on socket close.
+On Wed, Oct 14, 2026 at 07:01:38PM +0300, Jarkko Sakkinen wrote:
+> This is a kunit test for lib/assoc_array.c, which maintains a shadow model
+> across assoc_array operations, and checks its integrity after every
+> operation.
 > 
-> Because dma_buf_attach() does not take a reference on dma_dev, device
-> removal frees dma_dev while the attachment is still mapped. Closing the
-> netlink socket afterwards triggers a slab use-after-free in
-> dma_unmap_sg_attrs():
+> I wrote a draft version so that I could properly test 'assoc-array-fixes'
+> tag at Linus' tree, and spent today rewriting a new more polished version
+> with as good description as I could possibly could on how the seeded test
+> keys were cherry-picked. Along the way I also tweaked the numbers to be
+> a bit less messier set than in my original version.
 > 
->   BUG: KASAN: slab-use-after-free in dma_unmap_sg_attrs+0x76/0x2b0
->   Read of size 8 at addr ffff88810fae64b0 by task kworker/3:1/53
->   Workqueue: events __net_devmem_dmabuf_binding_free
->   Call Trace:
->    dma_unmap_sg_attrs+0x76/0x2b0
->    unmap_udmabuf+0x8e/0x100
->    dma_buf_unmap_attachment+0x145/0x330
->    dma_buf_unmap_attachment_unlocked+0x96/0x130
->    __net_devmem_dmabuf_binding_free+0x156/0x2e0
->   Freed by task 9:
->    kfree+0x1b8/0x550
->    nsim_bus_dev_release+0xe/0x60
->    device_release+0xcf/0x250
+> The transcripts that follow were executed with this command-line:
 > 
-> Add net_devmem_dmabuf_binding_unmap() serialized under binding->lock
-> and null out binding->sgt and binding->attachment after unmapping so
-> unmapping is idempotent across queue uninstall and deferred binding
-> destruction. Call it synchronously when the last bound RX queue is
-> uninstalled in mp_dmabuf_devmem_uninstall(), except when a leased
-> queue is unleased: the physical device is still registered and, if
-> restarting its queue failed, may still be using the binding.
+>     ./tools/testing/kunit/kunit.py run --raw_output assoc_array
 > 
-> The same use-after-free happens when the netlink socket is closed
-> before the device is removed but RX tokens or the pending release work
-> keep the binding alive. Such bindings are no longer installed on any
-> queue and were already erased from net_devmem_dmabuf_bindings. Keep
-> bindings in net_devmem_dmabuf_bindings until they are freed, hide
-> unbound ones from TX lookups with an xarray mark, and on
-> NETDEV_UNREGISTER clear binding->dev of unbound RX bindings for the
-> device and unmap them, unless the device is a virtual device leasing
+> With 'assoc-array-fixes' commits and its subsequent tag iterations all
+> eight tests pass, and without them all of them fail.
+> 
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-[..]
+Would this effort (and Linus's effort) be better spent on converting
+keyrings to use an rhashtable?
 
-> queues, for the same reason as above. net_devmem_lock serializes that
-> walk with the final free.
+keyrings is the only user of assoc_array.  So if it's made to use
+something else, assoc_array (all 1724 lines of it!) can just be deleted.
 
-Can you explain net_devmem_lock a bit more? In
-net_devmem_dev_unregister, why can you not net_devmem_lookup_dmabuf and
-then rely on the binding->lock? The rest looks good, but the
-new lock seems a bit excessive?
+I understand assoc_array.c was intended to be for general use.  But
+clearly that hasn't happened in the 13 years it's been in the kernel.
+Keyrings has always been its only user.  All other kernel code needing a
+map data structure uses something else.
+
+- Eric
