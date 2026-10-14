@@ -1,178 +1,89 @@
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C71B4E36D2;
-	Wed, 14 Oct 2026 13:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F15A518136;
+	Wed, 14 Oct 2026 13:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791983408; cv=none; b=YMvs8yI8hHBnqcLgtNemHYr687qAAnnBXCE3nrmJ2Ttb/mliC5NtA/9H4gYSzrz8o89RiPDNGvR4Gw/7dP82qkjkM7BwLtKs991ggGFvs7lXYDIjsIURpmaIjtCESsJJ2rorTLRVRqnVrbSU62pci5ybVDQJ93DTegahvsskVIE=
+	t=1791984007; cv=none; b=ujs3zoGRXbbpZWw8wHhPkq3BM1VkxAdGhD5bsIkIv/LnhuZZkAVWGwXWvQlVHqsOQtZLtFrOK3vGXb439PZ+29mtTXa0xUQ6439zMrTRKCgYt4IQeGQaspl7HFN+PWAdGfY3dk3NgsTHh84S/jA9o+gwZk/03/irx76jmU8rGH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791983408; c=relaxed/simple;
-	bh=Cvx4lOh9Q81VjksKJoawg6eN+66LrK3LWXSnIiPRD38=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mOdGlcoLFuyVbwq5M110eaWIStqs5jkRPl0CHLsa397UtSyhfBxuLt9RUNeXMuXhZzPKtI++jbHr3by4HQRqXEhaXSYPO9hYRGz+ZzXzzLuLhXNRlw4RaYyPTz8Gk4l1E5GVPCMQGJaDmE93a9jIy0lhgP3N1HroDRYWgpvnJ6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=iSixPOae; arc=none smtp.client-ip=115.124.30.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1791984007; c=relaxed/simple;
+	bh=c0PI4xFFoY2Ofu/8qn+CX74d3EunIVd2HRI7DK65jSA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YFlv3mizNX8fnD73cnt+tscuGLFxpOCWEDDEOvbJTs+aVY+mQnhbkIkYcsX8E9BHaoy2ThZGxsileKcNK1Su24ricX1TPikmcZfJF+d5JqSkZU+wujiWV176hrxke8FsF65q+vZMvGKvTZNBt2x4Y6Zu6NkSM0Mt9AsOqkm71JQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=m5cmBY5E; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XUQDcmM5; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="iSixPOae"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1791983396; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=NfvwyHiH13gScZyLRyJ1bRdwmOqWUvSNVK5u+We9JrM=;
-	b=iSixPOaemVe3z3Yi4IgI0ylhSBaW79McGva8sjz5K2ApcHgRTgDtuhXpB9Pta0nH4gdMfEdgYrK0ROzbeSUBjsvyPoyA1vALDg+D0pzXhM5kq2d+3dE2/kJ2rT+FmiGOk7gnSofyXnoUJv/XeCEKRFXhZGTr/y2muvJ88akLbCY=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0XCp3Qsf_1791983391;
-Received: from 30.246.161.148(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XCp3Qsf_1791983391 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 14 Oct 2026 21:09:54 +0800
-Message-ID: <3bd83dc6-1206-4af2-bfcf-5894b1029907@linux.alibaba.com>
-Date: Wed, 14 Oct 2026 21:09:51 +0800
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="m5cmBY5E";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XUQDcmM5"
+Date: Wed, 14 Oct 2026 15:20:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1791984003;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FpLyD2E61bMYpA7x55WQay0cIIjyZAd7xfQmMzmeynk=;
+	b=m5cmBY5EkBOIf9pAyHtg4k/v7Nij0hJ8INNVtxU4Yx/70cUgDVKVs6j3wSnEfNneR/lpWk
+	Z9bdq5i1fBubeqBN3OuJQLlYlLMElZa/jTdhIKHnIzpqyjntF0DCSGwbywX62g+Mv0IP8F
+	B4OH8HSjy4oZtUbPYAbIrsWu3OjX+FRXEOJVlx3Ay/3U22nGxQqtuYQfBImmEhFRycitJp
+	dqLFJYYU4ZLVc135bToDoUpKeoENliaVQ3Rrzd7GbQEZTRRDg2FXJj+sWyPVG4e/pUOrgr
+	aDtxhLE6jha1R6Jf3CtwCvatkuryXgdiENCIQ2dWMqljscj4HT3OxYJVB+GGAA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1791984003;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FpLyD2E61bMYpA7x55WQay0cIIjyZAd7xfQmMzmeynk=;
+	b=XUQDcmM5X0vDcCR6uyqIu01cI2160NmU8WR2A2Dy9/0LykJ2fyGZcJ5ZbdfbaZMs2HmTGv
+	vbFqo6E8vsePrgAA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Xin Xie <xiexinet@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
+	fmaurer@redhat.com, luka.gejak@linux.dev, xiaoliang.yang_1@nxp.com,
+	skhawaja@google.com, liuhangbin@gmail.com, stable@vger.kernel.org,
+	sdf.kernel@gmail.com
+Subject: Re: [PATCH net v7 1/4] net: hsr: keep GRO disabled on HSR/PRP ports
+Message-ID: <20261014132001.BzOkgyrC@linutronix.de>
+References: <20261009201324.17-1-xiexinet@gmail.com>
+ <20261009201324.17-2-xiexinet@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/7] riscv: stacktrace: switch to frame-pointer based
- unwinder
-To: Martin Kaiser <martin@kaiser.cx>
-Cc: palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr,
- linux-riscv@lists.infradead.org, oleg@redhat.com, rostedt@goodmis.org,
- mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
- mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org,
- jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
- shuah@kernel.org, mpdesouza@suse.com, oliver.yang@linux.alibaba.com,
- zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
- <20260914092648.51254-6-xueshuai@linux.alibaba.com>
- <as6SEF4v6wt5GmVD@nb282.user.codasip.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <as6SEF4v6wt5GmVD@nb282.user.codasip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261009201324.17-2-xiexinet@gmail.com>
 
+On 2026-10-09 22:13:21 [+0200], Xin Xie wrote:
+> HSR/PRP add tags and sequence numbers per wire frame. GRO can merge
+> plain interlink traffic before those fields are added, and userspace
+> can re-enable GRO after the port is attached.
+> 
+> Mark slave A/B and interlink devices with a kernel role bit. Filter
+> software GRO and configurable GRO_HW requests before ndo_fix_features()
+> without changing wanted_features. Filtering before the driver keeps
+> feature dependencies intact; fixed-on or driver-required GRO_HW is
+> left enabled.
+> 
+> Apply the policy before registering the RX handler and reject attach
+> if software GRO remains enabled. On failure or detach, unlink the
+> upper before clearing the role and recomputing features, restoring
+> the user's last request.
+> 
+> GSO skbs may still arrive. A later patch segments valid GSO before
+> HSR/PRP processing.
+> 
+> Fixes: 5055cccfc2d1 ("net: hsr: Provide RedBox support (HSR-SAN)")
+> Signed-off-by: Xin Xie <xiexinet@gmail.com>
 
+This looks better than what I remember from the previous version. Are
+the bot's complains legitime?
 
-On 10/14/26 4:18 AM, Martin Kaiser wrote:
-> Thus wrote Shuai Xue (xueshuai@linux.alibaba.com):
-> 
->> From: Wang Han <wanghan@linux.alibaba.com>
-> 
->> Replace the open-coded frame-pointer walker in arch_stack_walk() with a
->> robust kunwind state machine, modelled on arch/arm64/kernel/stacktrace.c
->> and retargeted to the RISC-V {fp, ra} frame record convention. The new
->> walker tracks stack bounds, consumes frame records monotonically,
->> understands the metadata pt_regs records added in the previous frame
->> record metadata patch, and recovers return addresses replaced by
->> function graph tracing and kretprobes.
-> 
->> This commit introduces arch_stack_walk_reliable() but does not yet
->> select HAVE_RELIABLE_STACKTRACE; that is done in a follow-up Kconfig
->> patch so this commit can be reviewed and bisected as a pure unwinder
->> replacement. Until that Kconfig change lands, livepatch is not yet
->> enabled and arch_stack_walk_reliable() has no in-tree caller.
-> 
->> Three related callers are updated to keep the same frame-record
->> assumptions everywhere:
-> 
->>    * Function graph tracing: the old RISC-V unwinder matched function
->>      graph return-stack entries by the saved return-address slot. That
->>      was consistent with the static mcount path, but not with the dynamic
->>      ftrace path where the parent slot is ftrace_regs::ra. Use the
->>      architectural frame pointer as the function graph return-address
->>      cookie, matching the kunwind walker.
-> 
->>    * Perf callchains: route kernel callchain collection through
->>      arch_stack_walk() so perf sees the same frame-pointer unwind
->>      behaviour as dump_stack() and the upcoming livepatch path.
-> 
->>    * dump_backtrace() / __get_wchan() / show_stack(): these now go
->>      through arch_stack_walk(); the explicit "Call Trace:" header is
->>      moved into dump_backtrace() to preserve the original output.
-> 
->> The non-frame-pointer fallback walker is kept untouched for
->> !CONFIG_FRAME_POINTER builds.
-> 
->> Assisted-by: Qoder:Qwen-3.8-MAX-Preview
->> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> ---
->>   arch/riscv/kernel/ftrace.c         |   6 +-
->>   arch/riscv/kernel/perf_callchain.c |   2 +-
->>   arch/riscv/kernel/stacktrace.c     | 561 ++++++++++++++++++++++++-----
->>   3 files changed, 473 insertions(+), 96 deletions(-)
-> 
->> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
->> index be8b685144174..0facd824c911d 100644
->> --- a/arch/riscv/kernel/ftrace.c
->> +++ b/arch/riscv/kernel/ftrace.c
->> @@ -245,7 +245,8 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
->>   	 */
->>   	old = *parent;
-> 
->> -	if (!function_graph_enter(old, self_addr, frame_pointer, parent))
->> +	if (!function_graph_enter(old, self_addr, frame_pointer,
->> +				  (void *)frame_pointer))
->>   		*parent = return_hooker;
->>   }
-> 
->> @@ -267,7 +268,8 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
->>   	 */
->>   	old = *parent;
-> 
->> -	if (!function_graph_enter_regs(old, ip, frame_pointer, parent, fregs))
->> +	if (!function_graph_enter_regs(old, ip, frame_pointer,
->> +				       (void *)frame_pointer, fregs))
->>   		*parent = return_hooker;
->>   }
-> 
-> 
-> Are these two changes fixing a bug in the current code (that is independent
-> from the rest of this patch)?
-> 
-> Without your changes, function_graph_enter_regs writes a struct ftrace_ret_stack
-> with retp == the saved ra.
-> 
-> And the only place where retp is fetched and checked is
-> 
-> function_get_true_parent_ip
->     ftrace_graph_ret_addr(..., (uintptr_t *)ftrace_regs_get_stack_pointer(fregs));
-> 
-> The stored retp is checked against the stack pointer.
-> 
-> Your changes store fp instead of ra, this seems the right thing to do. (And
-> it's in line with other archs.)
-> 
-> Should those two changes be in a separate patch (that can be backported to
-> stable kernels)?
-
-Hi, Martin,
-
-Thanks for the sharp question.
-
-You are right that the stored cookie is broken. What
-ftrace_graph_func() passes as retp is &arch_ftrace_regs(fregs)->ra,
-i.e. the slot inside the transient ftrace trampoline frame, which is
-popped as soon as the callback returns. That has been the case since
-35e61e8827ee8 ("riscv: ftrace: Make function graph use ftrace
-directly") introduced ftrace_graph_func() in v6.8. (The code was
-copied from arm64's ftrace_graph_func(), but arm64 passes
-(void *)frame_pointer there - see 41705c4262aac for the current
-shape.)
-
-Since distro kernels only ever use the dynamic path, the net effect
-is that the shadow stack is never consulted during unwinding:
-whenever the function graph tracer is running, dump_stack(), perf
-callchains and __get_wchan() report return_to_handler instead of the
-real caller.
-
-I will split these two changes into a separate patch and cc stable.
-
-Thanks.
-Shuai
+Sebastian
