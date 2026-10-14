@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from mta0.migadu.com (out-87.mta0.migadu.com [91.218.175.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90183B7B71
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 11:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B200B4B2CCE
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 11:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791977515; cv=none; b=dedb7fNkOOtQGCo37w/TeEz0Tpljr9jzl9wLFoEq2VT88Cvojj3vqPZ1NIgmnz+bPVlZcqssloFXF6lr0xa2l0enfmkKZDRDNKHybIMf89RPwSHcbgLBpWZ8tVkPm4AZ9WLQuc7RiTIGDpPZQlrlKEzlbodmbRJ/sRNPiKQP4wU=
+	t=1791977524; cv=none; b=g6HIFCng9PKhQsOQopxdac/D8GFTQZ8erw1tCsDgNO8k3rBkLthMFmVUOemHTh5lYqAvA2fvv/wt3fLtQcHw7XIATk0OEskFmuxOQFTd9fKjzWfo5RyjaX3y9SGj9nOfofnLKEqD7sxs0qeFHRJLk0jQ7hjvAm8cCOxiCxejgBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791977515; c=relaxed/simple;
-	bh=MfJUipPRTHw3gZTbDsC5m8NYm0QnN8o8oob2FVBubUw=;
+	s=arc-20240116; t=1791977524; c=relaxed/simple;
+	bh=HKl8BtwrGEdbKND/Li3gr4MtxNocGx9qEL6mblvf5R8=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RXJJ/n3sVDBFnAbCML0zH+ufrQ9NtI5UQlvy1KUTvOsokCMWRY83VpTMIl4VCDKR9og8cFwLBF/8IFiQBLIqc+Wp+frRtyi9SoNuZzH9C0ZlO7lZ+mCZod63DCrP4OkLK7ObGXG/H5w2kOP9qOycX4QarMV18qD97U9tKjudX78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FbpFPVeC; arc=none smtp.client-ip=95.215.58.182
+	 MIME-Version; b=GCLCd7cQHQL4fiz9C6gyr+7ZDYDqM35bI61GVzHG458k7fRDhKgcTj3Qh7yifvXVmeit27rJDhDcrey7l2m/MrYUngBmPDQbpYLOBVxfvD3AfI+BwdGeItumprd6oWoGuKtv9yAFyCnxHjK0DKvJhdbXxDujD6wE/nVKtAaupxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EpY1vrR7; arc=none smtp.client-ip=91.218.175.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FbpFPVeC"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EpY1vrR7"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=MfJUipPRTHw3gZTbDsC5m8NYm0QnN8o8oob2FVBubUw=;
+DKIM-Signature: a=rsa-sha256; bh=HKl8BtwrGEdbKND/Li3gr4MtxNocGx9qEL6mblvf5R8=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791977511; v=1; x=1792582311;
- b=FbpFPVeCm6T+sWTiK30iAdz4TqEe/kFg+UxufZOFwGy+nmeuX2Yel2hmGZkdumHW8rK3h6sZ
- Crf/XBCVuB63t3NPGQae75jcV7Nx4wwyaDwKssXFt9Ia4O2NDRuSB+AEbR1muDsAQiSX/UPwzjG
- 8w2cebvNT+4ZJDwCARd56Zgw=
+ t=1791977520; v=1; x=1792582320;
+ b=EpY1vrR77z+BM2bkeMFbBCEF8HiYxN0oSLpzsfzFk3RGI3ZCZtey4OALzYTTk0kVGi6cyIOw
+ VpzByW6/VadnY+p1FzFfn3zrXVp0mCqrQIh1Tmdw9k7Rmn/y1dxS4fxmJv/pLU99R5yQlNjVCvS
+ lgSGv5DrMiBiaQlyy0TJdg8k=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 4a99d5c6d2f0ae41;
-	Wed, 14 Oct 2026 11:31:50 +0000
-X-Mizu-Trace-ID: 4a99d5c6d2f0ae41
+Received: by mta12.migadu.com with ESMTPS id d40ef85041f235d7;
+	Wed, 14 Oct 2026 11:31:59 +0000
+X-Mizu-Trace-ID: d40ef85041f235d7
 X-Migadu-Flow: FLOW_OUT
 From: KaFai Wan <kafai.wan@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -61,9 +61,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v2 1/7] bpf: Determine freplace staticness from BTF linkage
-Date: Wed, 14 Oct 2026 19:30:37 +0800
-Message-ID: <20261014113043.640435-2-kafai.wan@linux.dev>
+Subject: [PATCH bpf-next v2 2/7] selftests/bpf: Fix stack_arg precision backtracking log expectation
+Date: Wed, 14 Oct 2026 19:30:38 +0800
+Message-ID: <20261014113043.640435-3-kafai.wan@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261014113043.640435-1-kafai.wan@linux.dev>
 References: <20261014113043.640435-1-kafai.wan@linux.dev>
@@ -75,78 +75,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_check_attach_target() rejects a freplace whose target is a static
-function, using the subprog "unreliable" flag as a proxy for "static".
-That flag is raised whenever a subprogram's BTF prototype disagrees with
-the registers at its call site.
+Commit 147400e9c27c ("bpf: Compute parameters liveness in
+bpf_compute_live_registers()") stopped assuming that a call to a static
+subprogram reads r1..r5 and now uses the callee's entry live-in. R1-R5 are
+not live at these call insns, so __clean_func_state() clears them from the
+caller state and the backtracked parent state prints as:
 
-`147400e9c27c ("bpf: Compute parameters liveness in
-bpf_compute_live_registers()")` made that work for static callees: a
-static function with an unused argument no longer matches its BTF
-prototype at the call site and is marked unreliable.
+  mark_precise: frame0: parent state regs= stack=:  R10=fp0
 
-Since LLVM commit `29b36a16f111 ("[BPF] Emit ABI-accurate BTF
-prototypes for DW_CC_nocall")` in 23.1 [1] that premise is gone:
-BTFDebug may now drop arguments removed by the optimizer, so for
+Update both expectations accordingly.
 
-	__noinline static int subprog(struct __sk_buff *ctx)
-	{
-		return bpf_ktime_get_ns();
-	}
-
-compiled with clang 23 the BTF describes subprog() as
-
-	[75] FUNC_PROTO '(anon)' ret_type_id=2 vlen=0
-	[76] FUNC 'subprog' type_id=75 linkage=static
-
-There is then no argument left to compare, the subprog stays reliable,
-and the check in bpf_check_attach_target() is skipped. The freplace is
-then rejected by the later linkage check instead, reporting "subprog()
-is not a global function", and the selftest "exceptions" fails.
-
-Determine staticness from the BTF linkage instead, and keep the
-unreliable check for global functions whose BTF does not match their
-call site.
-
-There is no functional change: freplacing a static function was rejected
-before and is still rejected with the same -EINVAL. Selftest "exceptions"
-is updated to match.
-
-[1] https://github.com/llvm/llvm-project/pull/198426
 Fixes: 147400e9c27c ("bpf: Compute parameters liveness in bpf_compute_live_registers()")
 Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
- kernel/bpf/verifier.c                               | 3 ++-
- tools/testing/selftests/bpf/prog_tests/exceptions.c | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/progs/stack_arg_precision.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2f190abe34489..e9814e3ac370e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22079,7 +22079,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 		}
- 		conservative = aux->func_info_aux[subprog].unreliable;
- 		if (prog_extension) {
--			if (conservative) {
-+			if (aux->func_info_aux[subprog].linkage != BTF_FUNC_GLOBAL ||
-+			    conservative) {
- 				bpf_log(log,
- 					"Cannot replace static functions\n");
- 				return -EINVAL;
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-index cea01d638f6fc..1bd15c4c125ba 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -333,7 +333,7 @@ static void test_exceptions_success(void)
- 				       bpf_program__fd(skel->progs.exception_throw_subprog),
- 				       "throwing_subprog"), "set_attach_target"))
- 				goto done;
--		}), "throwing_subprog() is not a global function", 0);
-+		}), "Cannot replace static functions", 0);
- 
- 	if (test__start_subtest("non-throwing extension -> non-throwing subprog"))
- 		/* non-throwing extension -> non-throwing global subprog : OK */
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
+index 7baa9c1c8e31e..c9564776d7333 100644
+--- a/tools/testing/selftests/bpf/progs/stack_arg_precision.c
++++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
+@@ -74,7 +74,7 @@ __msg("mark_precise: frame1: parent state regs= stack=:  frame1: R10=fp0")
+ __msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
+ __msg("mark_precise: frame1: last_idx 11 first_idx 11 subseq_idx 13")
+ __msg("mark_precise: frame1: regs= stack= before 11: (85) call pc+1")
+-__msg("mark_precise: frame0: parent state regs= stack=:  R1=1 R2=2 R3=3 R4=4 R5=5 R10=fp0")
++__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
+ __msg("mark_precise: frame0: last_idx 9 first_idx 7 subseq_idx 11")
+ __msg("mark_precise: frame0: regs= stack= before 9: (05) goto pc+1")
+ __msg("mark_precise: frame0: regs= stack= before 8: (7a) *(u64 *)(r11 -8) = 4")
+@@ -95,7 +95,7 @@ __msg("mark_precise: frame1: parent state regs= stack=:  frame1: R10=fp0")
+ __msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
+ __msg("mark_precise: frame1: last_idx 11 first_idx 11 subseq_idx 13 ")
+ __msg("mark_precise: frame1: regs= stack= before 11: (85) call pc+1")
+-__msg("mark_precise: frame0: parent state regs= stack=:  R1=1 R2=2 R3=3 R4=4 R5=5 R10=fp0")
++__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
+ __msg("mark_precise: frame0: last_idx 10 first_idx 10 subseq_idx 11 ")
+ __msg("mark_precise: frame0: regs= stack= before 10: (7a) *(u64 *)(r11 -8) = 6")
+ __naked void stack_arg_precision_bpf2bpf(void)
 -- 
 2.43.0
 
