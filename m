@@ -1,117 +1,190 @@
-Received: from mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7DE1FF5E3
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 01:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B131C3AB5C3;
+	Thu, 15 Oct 2026 02:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792028922; cv=none; b=s8/9LQKzkPNBKOVexmaMrCx7JWOdRX94y7//FoTx9NUoekC6jBr2iTaMkOp5i2FShZhBQq4QmjQ8Ub/Gp1UvXVdJKyUM3Uh01brKVQ5b56Fg9KOBOi5VfNH9Z4+y/6wYwuGzCJMc9xghMFMapBEaeDs7PoXfVe+ZLzhHONNLhmA=
+	t=1792030396; cv=none; b=SgwsYx3+JMhbAMkgL5iDBlYyDFgImtMC1DUFcTEHM/3PKmGfynD3zAWnciNb1bHDrl7tXDdxmLoTk5z4d4Ms0uQRzi4O0WO1iERtNC10nGM50Ymg7ANMT4sk3/ZZmh5T6b+i8rd8EwGNIWLxNu2F1/K7peDdki47T8G0iYkgqp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792028922; c=relaxed/simple;
-	bh=fTRqCKsgbkVlenS8t/rKet3TpxPNvpKHeqHtYLlfkcU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BSxR3k2ObdFVmX6wToJKtKFJph0TlQE5tCWB13lVn7ZJfXCA35CszJvK3Ag2T2CS0z+I2LL+IjQcrEXiWrAl3ZvF/iaynl3WdpZ4YjrUl1j7gGrQ0OamzAN4MhY+MTiuwMxS+Ti0qhRyg8UhJuhi/BNShXluJLV1xZq0siEIWis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HxdYmTRy; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792030396; c=relaxed/simple;
+	bh=FKA2jSXqX0dagfIFgcM698bHdO4XEa7qsIc/R/FB9Xs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=urzV9mWt0lS0w4Os2LVgEkJb+df7CuvN2VohVgFuH1zvoTXaSmEqvygpzwvawNeq3LMX9bbrvmbbeoO0EAxnHtZQoXpOykvRuskFa4cczsHQcRl2oAHhc6j1N7hsfkPyiruYvN1sa2DzNZIg6tEGJWPtK2iB0dp5JM91Qi7obFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=vD0/0J66; arc=none smtp.client-ip=115.124.30.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HxdYmTRy"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=fTRqCKsgbkVlenS8t/rKet3TpxPNvpKHeqHtYLlfkcU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792028918; v=1; x=1792633718;
- b=HxdYmTRySsuGGyPH+tqYTXI0JZzf27RX6PUu66rgyHh1vSSr9eOyqdWCpH3J8iedwkFTzBrM
- 7GvGgoEOVNBLs4tq9EmGHfzMffm5U+QbYYK+XkbAy2f6+t0bEZ5FvW+VcAQDdLT+8A7yWbF1YZ6
- /Wws1Ki47RBWkm2/O+zmCGg0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 57570c4f35a5311a;
-	Thu, 15 Oct 2026 01:48:38 +0000
-X-Mizu-Trace-ID: 57570c4f35a5311a
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <09db7d70-b7d4-4cf5-9447-6d16bac10794@linux.dev>
-Date: Thu, 15 Oct 2026 09:48:30 +0800
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="vD0/0J66"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1792030388; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=fmE+Ta62ZCw4xFw2n1IQJCmp7u5EmXNXXoXF3v2gT1Q=;
+	b=vD0/0J66FDnfVABLLXRqe7I4corEEyoHcHMp60VVbyftKDSsJ3lzQs9UUjvh7WsV4J0f4XwaQlembW1HsISYQyHcnATO/ttWrNSfF/AzjpoNAOLl+TAhtClvLcWuy6v3+taJxtoJbeRd6PEclJY+n4dc9XFdhqzLjJ/ofYzS3Bg=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0XCqJ087_1792030385;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XCqJ087_1792030385 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Oct 2026 10:13:06 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	bjorn@kernel.org,
+	puranjay@kernel.org
+Cc: eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	pulehui@huawei.com,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	luke.r.nels@gmail.com,
+	xi.wang@gmail.com,
+	shuah@kernel.org,
+	rgbi3307@gmail.com,
+	guoren@kernel.org,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 2/3] selftests/bpf: Enable private stack tests for riscv64
+Date: Thu, 15 Oct 2026 10:12:37 +0800
+Message-ID: <20261015021238.5657-3-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261015021238.5657-1-cp0613@linux.alibaba.com>
+References: <20261015021238.5657-1-cp0613@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 00/21] bpf: Add tracing_multi link support for
- bpf progs
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
- Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
- Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
- Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261012154024.29423-1-leon.hwang@linux.dev>
- <as_7Jgy_sdTE9M5O@krava>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <as_7Jgy_sdTE9M5O@krava>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 15/10/26 05:59, Jiri Olsa wrote:
-> On Mon, Oct 12, 2026 at 11:40:02PM +0800, Leon Hwang wrote:
->> Similar to the tracing_multi link support for kernel functions [1], add
->> support for bpf progs.
->>
->> With this support, I'll be able to enhance the function-graph feature of
->> bpfsnoop [2]. It will trace all bpf progs, including their subprogs, to
->> draw a full function call graph including bpf prog call sites.
->>
->> The attachment could speed-up when there are hundreds of targets. For
->> example, on high CPU core count servers, it probably runs 200 tc-bpf
->> progs as Kubernetes CNI, and each tc-bpf prog might have 4 subprogs.
->> Hence, there will be 1000 targets to trace for bpfsnoop's function-graph
->> feature.
->>
->> With tracing_multi link support for bpf progs, bpfsnoop will be able to
->> attach to all targets quickly.
->>
->> When attaching to 1000 targets, fentry.multi is much faster than fentry
->> on a 16c16g QEMU VM on an AMD EPYC 9745 server.
->>
->> ./bench tracing-multi-attach-progs
->> Setting up benchmark 'tracing-multi-attach-progs'...
->> tracing-multi-attach-progs: prepared 1000 identical BPF program targets
->> tracing-multi-attach-progs: fentry created and attached 1000 programs/links in 338.171ms
->> tracing-multi-attach-progs: fentry.multi created one program and attached one 1000-target link in 47.345ms
->> tracing-multi-attach-progs: fentry.multi creation/attachment speedup is 7.14x
-> 
-> it's faster, but the original attachment is under 1s,
-> so not really a problem imo
-> 
-> I guess the api is better for your use case, like having
-> less file descriptors open ?
+The RV64 JIT now supports the private stack. Allow the existing
+verifier and struct_ops private-stack tests to run on riscv64 and add
+the expected RV64 JITed instruction patterns.
 
-Correct.
+Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+---
+ .../bpf/prog_tests/struct_ops_private_stack.c |  3 +-
+ .../bpf/progs/verifier_private_stack.c        | 41 ++++++++++++++++++-
+ 2 files changed, 42 insertions(+), 2 deletions(-)
 
-The original attachment is fast enough. So there is no need to improve
-attachment performance with a large patch series.
-
-Even though the series brings two benefits:
-
-* One bpf link for multiple bpf prog targets.
-* Support for all archs that have trampoline support.
-
-But, I also doubt the value of this series.
-
-Thanks,
-Leon
+diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+index 2b3ec2b79091..103179ff8733 100644
+--- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
++++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+@@ -6,7 +6,8 @@
+ #include "struct_ops_private_stack_recur.skel.h"
+ #include "struct_ops_private_stack_large.skel.h"
+ 
+-#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
++#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__) || \
++	(defined(__riscv) && __riscv_xlen == 64)
+ static void test_private_stack(void)
+ {
+ 	struct struct_ops_private_stack *skel;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+index 3d9994a52464..d9cebbc7355d 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+@@ -8,7 +8,8 @@
+ /* From include/linux/filter.h */
+ #define MAX_BPF_STACK    512
+ 
+-#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
++#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)
+ 
+ struct elem {
+ 	struct bpf_timer t;
+@@ -42,6 +43,14 @@ __jited("	mov	x0, #0x2a")
+ __jited("	str	x0, [x27]")
+ __jited("...")
+ __jited("	ldp	x25, x27, [sp], {{.*}}")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x20")
++__jited("...")
++__jited("	sd	s5, 0x10(sp)")
++__jited("...")
++__jited("	sd	a0, -0x100(s5)")
++__jited("...")
++__jited("	ld	s5, 0x10(sp)")
+ __naked void private_stack_single_prog(void)
+ {
+ 	asm volatile ("			\
+@@ -60,6 +69,10 @@ __jited("	subq	$0x8, %rsp")
+ __arch_arm64
+ __jited("	mov	x25, sp")
+ __jited("	sub	sp, sp, #0x10")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x30")
++__jited("...")
++__jited("	addi	s5, sp, 0x10")
+ __naked void no_private_stack_nested(void)
+ {
+ 	asm volatile ("			\
+@@ -113,6 +126,14 @@ __jited("	str	x0, [x27]")
+ __jited("	bl	{{.*}}")
+ __jited("...")
+ __jited("	ldp	x25, x27, [sp], {{.*}}")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x20")
++__jited("...")
++__jited("	sd	s5, 0x8(sp)")
++__jited("...")
++__jited("	sd	a0, -0x200(s5)")
++__jited("...")
++__jited("	ld	s5, 0x8(sp)")
+ __naked void private_stack_nested_1(void)
+ {
+ 	asm volatile ("				\
+@@ -183,6 +204,16 @@ __jited("	bl	0x{{.*}}")
+ __jited("	mov	x8, x0")
+ __jited("	mov	x8, #0x0")
+ __jited("	ldp	x25, x27, [sp], {{.*}}")
++__arch_riscv64
++__jited("func #1")
++__jited("...")
++__jited("	addi	sp, sp, -0x20")
++__jited("...")
++__jited("	sd	s5, 0x8(sp)")
++__jited("...")
++__jited("	sd	a0, -0x200(s5)")
++__jited("...")
++__jited("	ld	s5, 0x8(sp)")
+ __naked void private_stack_callback(void)
+ {
+ 	asm volatile ("			\
+@@ -313,6 +344,10 @@ __arch_arm64
+ __jited("	mrs	x10, TPIDR_EL{{[0-1]}}")
+ __jited("	add	x27, x27, x10")
+ __jited("	add	x25, x27, {{.*}}")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x20")
++__jited("...")
++__jited("	sd	s5, 0x8(sp)")
+ int private_stack_async_callback_1(void)
+ {
+ 	struct bpf_timer *arr_timer;
+@@ -342,6 +377,10 @@ __arch_x86_64
+ __jited("	subq	$0x100, %rsp")
+ __arch_arm64
+ __jited("	sub	sp, sp, #0x100")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x120")
++__jited("...")
++__jited("	addi	s5, sp, 0x100")
+ int private_stack_async_callback_2(void)
+ {
+ 	struct bpf_timer *arr_timer;
+-- 
+2.50.1
 
