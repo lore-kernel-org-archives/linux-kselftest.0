@@ -1,94 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D4D3C872C;
-	Thu, 15 Oct 2026 02:59:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C6535E950;
+	Thu, 15 Oct 2026 04:34:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792033148; cv=none; b=QJOB5gIPbjQqQRhJU6z0dAV7KM11KD2SysUDSI/hycru7k/5FxIdReo4BruBTUdvxSmTNf03tswvVF0bhaYbdZkSDtu2/mQNJIqxLaJMdgyydPHJZsHJleSUCEultfYNtP4wC6iYJkHqzxqR28+wDG5KuMtc2uzXd7AQ0u/s5eI=
+	t=1792038884; cv=none; b=eOlpnU0lyIwliCZY75XUyyMAl65p4TZ98Z9PZVCbrAAP1fTotMuXhc05ZXLMNFqKb+/h6+hANsN0iu9t98qQwV1myxKgv0hj4dBKj9x1CAKHPN/rR3MgTKhAsvuI/UpLKLDttjSMi4q+nhtfKUY98pcZuXP6ehG7y+7C4/xzd50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792033148; c=relaxed/simple;
-	bh=65cFJqlE0dnr79eN1YWPSz9NkZPgd3p/LElMzQexptA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RBb127I1j4ex/eQFHugQWL0A+fTLAxgTVkzzD1V34tOBJAfjkXLc5Reu8LDI65q3f5H4mO3EftjoyX20tTD5HSXMUaErLQ/2bXqghVRLRh6cKjuragVriSqe5p2lLnCQ1L6kKMElpVEqF73AN72nygYvruntO/8mwwcMA1xhAvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CS3EaB/t; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792038884; c=relaxed/simple;
+	bh=cWFUAZ58f1ijGKwcE/D69i7CZfwsEloqc8lfavSSIMo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O5n/SNH/jVHHgLCBIOrwYyF29dhnu5Zc6JFt/b7kgrkaJJ9mLLtB1d3XRCkUAuvraxt86c5lQducYl5qtB1CYdvOd8juBG6ypDqRd4SgNN2lTa6UGkxPREm92OS1eYLbp5rI17ia72XhmSsXMKwxP2uQCzrzyjj1/MXgnhYEi8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ly+xXjT3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CS3EaB/t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38BF1F000C5;
-	Thu, 15 Oct 2026 02:59:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ly+xXjT3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F401F000C4;
+	Thu, 15 Oct 2026 04:34:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792033143;
-	bh=gfDjOBLmxrlrBy8q3VjBAy3QGHQDlpDU+Qz9C9H7BZI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=CS3EaB/tIK1WQyuloanL69f8rx3TfAB+dijR+TAdHTMGW6GYcQMQWfvBqM2+pOR9t
-	 OQClVC/NMH9TdUncLsifO8KJT+bdNWCrjWPVTOhXBRlvzF6BrGMRiZ9RL50V1Z0mb+
-	 Rpv+FlzkshFfKdX0ZkLkEP6Eok8Um+axZENoVC9dXl+ZGrDJgAPlMi0nuo+6N30cHW
-	 T2SK3VUBTShncU6DyaaEYAdWh7SiPPoSO1ZQyYChTTyLlx6+ZDy1DagGeHqOjjEaxN
-	 szTZA42C5OZ6R5D00Tg8wPbY3AKkURFNOknlWjhwhS7hm/XV6cMZM1siPfjy+VMx0N
-	 NwvCNx6cGCPTg==
-Content-Type: multipart/mixed; boundary="===============8938492152272236540=="
+	s=k20260515; t=1792038882;
+	bh=CDCR3zTq4gu5VssH7XXKdr+KOGhe+b5fWjQKW9Pd8mo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ly+xXjT31/uiIN5iO0IJyZQ4l6WbE1kf6GCDYEJ7hESL9rU/0PjG1znObm/Qrv9vN
+	 pwodBmsKnx72FjNDNYKmj0FnTw+jvxHSDdOpakFJWTLt9MGNA0DYKVUTBSgqAD8jUm
+	 LdVN6h38/kD6/OfC6s6PMwaIgw+yUfn5uYuyoKoJ/R4L+FEYkIjs6Hw787qYI02BDv
+	 rSAQZ1wrJqb7IsATBXwx1qpafQkJAKcg8XGfFPUcoC8JoqXk8yxoYla8k35fMSszLR
+	 qmO05lc/YZxxF9WhLNZ3aD2x2C5rREmclR4biyPu9Lpc97PbD/wi002ozBjXwAD60U
+	 yhtji0mr+Y9BA==
+From: Kees Cook <kees@kernel.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Farid Zakaria <farid.m.zakaria@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/exec: report the skipped binfmt_misc_bpf test on stderr
+Date: Wed, 14 Oct 2026 21:34:38 -0700
+Message-ID: <179203887733.2951657.8311886793376077466.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261014200135.1364053-1-sashal@kernel.org>
+References: <20261014200135.1364053-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <721cefcbf3b4af0f1201432225ebcf6fe25a35948a581b9da360a43b6a102810@mail.kernel.org>
-In-Reply-To: <20261015021238.5657-4-cp0613@linux.alibaba.com>
-References: <20261015021238.5657-4-cp0613@linux.alibaba.com>
-Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add a runtime test for private stack and stack arguments
-From: bot+bpf-ci@kernel.org
-To: cp0613@linux.alibaba.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,memxor@gmail.com,bjorn@kernel.org,puranjay@kernel.org
-Cc: eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,pulehui@huawei.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,luke.r.nels@gmail.com,xi.wang@gmail.com,shuah@kernel.org,rgbi3307@gmail.com,guoren@kernel.org,bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 15 Oct 2026 02:59:00 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
---===============8938492152272236540==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, 14 Oct 2026 16:01:35 -0400, Sasha Levin wrote:
+> The exec Makefile announces that binfmt_misc_bpf is skipped with
+> $(info), which writes to standard output whenever the Makefile is
+> parsed. The selftests install target appends the standard output of
+> "make -s emit_tests" to kselftest-list.txt, so on systems without the
+> BPF toolchain the runlist gains a line that is not a test entry:
+> 
+>   exec selftests: skipping binfmt_misc_bpf, needs clang, bpftool, ...
+> 
+> [...]
 
-> selftests/bpf: Add a runtime test for private stack and stack arguments
+Applied to for-next/execve, thanks!
 
-TL;DR: Test issue only: the new private stack selftest calls test__skip()
-without printing a reason, so a SKIP doesn't show why. The review says this
-may be acceptable, since other tests do the same.
+[1/1] selftests/exec: report the skipped binfmt_misc_bpf test on stderr
+      https://git.kernel.org/kees/c/b36b990c50b1
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/private_stack_runtime.c b/tools/testing/selftests/bpf/prog_tests/private_stack_runtime.c
-> new file mode 100644
-> index 000000000000..3af24ca8009f
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/private_stack_runtime.c
-> @@ -0,0 +1,83 @@
+Take care,
 
-[ ... ]
+-- 
+Kees Cook
 
-> +	if (!skel->rodata->has_stack_args) {
-> +		test__skip();
-> +		goto out;
-> +	}
-
-A subsystem pattern flags this as potentially concerning: a selftest that
-skips without printing a reason.  Both skip paths call test__skip() bare,
-this one when the compiler lacks __BPF_FEATURE_STACK_ARGUMENT
-(has_stack_args is false), and the other in the non-riscv64 branch:
-
-    #else
-        test__skip();
-    #endif
-
-Without a message, the test shows up as SKIP with no hint whether clang
-needs to be upgraded or the test is only built for riscv64.  Would a
-printf() before test__skip(), like the "%s:SKIP: ..." message that
-test_loader's run_subtest() prints, make the cause visible?
-
-This may be acceptable as is: test_progs does report the test as SKIP, and
-prog_tests/stack_arg.c and prog_tests/struct_ops_private_stack.c also call
-test__skip() without a message.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38671177164
---===============8938492152272236540==--
