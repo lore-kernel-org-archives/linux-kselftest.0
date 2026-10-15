@@ -1,66 +1,92 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1426252269E;
-	Thu, 15 Oct 2026 18:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB89F3D6CCF;
+	Thu, 15 Oct 2026 18:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792087938; cv=none; b=XyG5cpqrRNOhfTx0r2wcEcLZ01br0clX6kVKuG07Ovevscqj/+QCnC0kUxY1FXB2dP7wtt/NyLdmTJJakktIqDN8XLz/EUb1iNCxmLfD5offxa769kFG5yqs3RJhH8DLYDm4Lf7oOkDE3nNEcOjfdqW5v+DPJpezYyRqNEgvmFs=
+	t=1792088236; cv=none; b=rMOFI2SGzYtq4k15V+kKhTzY5CRG/H/vH77ICkMSoQDYH11PhdjE1camSpV3s5XynMYdYKpMmhpkYDwWvla4UmRASMsAcKFgOdlegMqgOP3P98PXyoNFu1CtsOXw/R/pkChUXIsNDtY9czINskYNpdo0y6F354VO8eDr+i4BkIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792087938; c=relaxed/simple;
-	bh=s3cfgIWhdHIxDrJgWLCdvB1wawB3jHD/bU2OUWznot0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lZJ81CtPIey9WQ2fcpjcfquUDfPOjIl0JDQsABtl27SJd4Yflxw6QnPGvTt5ksvKVrq3scoVuMw62uilISSDX1uO7BaCcjdHFqpsMqxwAF2h1ChZ7nTv6POXi+O/fLbDRpRMcAJEFLSY6gThAW+y+xSKt0BUpvhDADfN+5uNFZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=lbI7xIhB; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1792088236; c=relaxed/simple;
+	bh=4Wpd8ZaDIqKTRZJeEXKKKlTMACDQQ6OKalAajIFnFWE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y4wDHGWQvFDXeBdSdhFeAE1sNfdhbC9TSoFiZTXlYJY3HsEEbUQ9rHbK9dEQoOyO3/Jl7zNjiqqyC7LpaOnMDWmHFjvIkZrRogHmHbpLzppmxH4vpgdZ1suCLZLQMeAcoufqIv1kMXNJhM1Q+pEhbBtGSf5U6JDFLXgzcuAP+VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpsdpARh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="lbI7xIhB"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C995A14BF;
-	Thu, 15 Oct 2026 11:12:08 -0700 (PDT)
-Received: from gaia.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D51103F871;
-	Thu, 15 Oct 2026 11:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1792087932; bh=s3cfgIWhdHIxDrJgWLCdvB1wawB3jHD/bU2OUWznot0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lbI7xIhBM0XvZcv2h3iQ43C5ZjXLqBq+ITxu53qEdtLPC6V1wnzVIh8Pq3uGYv37o
-	 dCxy09k464L68Skd3910ki4OJd1eGTVGXO53MAlScf9oxs/sRjL+zNh9goRaVilTNy
-	 b/lizPJHky2WhKjhZHG9LfB6BWIeROHlpDFB2Nnk=
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Will Deacon <will@kernel.org>,
-	Sasha Levin <sashal@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: signal: copy each test binary only once
-Date: Thu, 15 Oct 2026 19:12:02 +0100
-Message-ID: <179208792227.161414.10905688398757679860.b4-ty@b4>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261014200140.1364282-1-sashal@kernel.org>
-References: <20261014200140.1364282-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpsdpARh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FA21F000C4;
+	Thu, 15 Oct 2026 18:17:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792088223;
+	bh=4Wpd8ZaDIqKTRZJeEXKKKlTMACDQQ6OKalAajIFnFWE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=LpsdpARhGYr41eV1EMUdnUedxaFou091rS8T/+A9xI9vvMiuDo7Q7bm5AZ3zfwa4/
+	 /Nia4CIz5t5Pqq5sRM42kJz2JQ464mDT5N/7nt/a6WtfZVhAJThnsZuUgcGIC94Ea8
+	 lIiZJlIBRjd3GjqzzOuvmNji2D2WSHaPfBCdVFTjDe6Y9kPFY/KINkpzGW+hw0+Y9Y
+	 wBmonE1Q0sJBBQermpHDmPOmASiofJENOWA4KnMvCVREzqZ6VbUotRZgcaKFm//YPM
+	 6f+eajbxaQ6L2kaXprbfwzrzp6sdDlkhcJU+bYQrsJ4aTaurHlMSCygxFqHY3DK8we
+	 QRwe954fzEauw==
+Date: Thu, 15 Oct 2026 19:16:58 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] kselftest/arm64: keep building and installing after
+ a subdirectory fails
+Message-ID: <5527ee60-e0bd-46d5-b63e-8a39fbdf2ad7@sirena.org.uk>
+References: <20261014200115.1363363-1-sashal@kernel.org>
+ <20261014200115.1363363-5-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="NYWNnkWlSL6zYjFJ"
+Content-Disposition: inline
+In-Reply-To: <20261014200115.1363363-5-sashal@kernel.org>
+X-Cookie: Tax and title extra.
 
-On Wed, 14 Oct 2026 16:01:40 -0400, Sasha Levin wrote:
-> The signal tests are built in testcases/ and then copied to the output
-> directory. The copy rule lists every generated program as a target and
-> copies all of them in each recipe:
-> 
->   $(TEST_GEN_PROGS): $(PROGS)
->           cp $(PROGS) $(OUTPUT)/
-> 
-> [...]
 
-Applied to arm64 (for-next/kselftest), thanks!
+--NYWNnkWlSL6zYjFJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[1/1] kselftest/arm64: signal: copy each test binary only once
-      https://git.kernel.org/arm64/c/7b3b147c4104
+On Wed, Oct 14, 2026 at 04:01:12PM -0400, Sasha Levin wrote:
+> The arm64 suite builds and installs its subdirectories in shell loops
+> whose status is that of the last subdirectory. A failure in an earlier
+> subdirectory is therefore lost unless FORCE_TARGETS is set, while a
+> failure in the last one fails "make all" and, through "install: all",
+> drops the installation of every other arm64 test as well.
+
+> Make each loop fail only when no subdirectory succeeds, which matches
+> how the top-level selftests Makefile treats its targets, and keep
+> stopping at the first failure when FORCE_TARGETS is set. When a build
+> report is requested, record each subdirectory as arm64/<subdir> so that
+> a partially built suite is visible even though make succeeds.
+
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+I can't help but think it might be less annoying to convert these into
+separate TARGETS but that disrupts everyone's results which isn't ideal.
+
+--NYWNnkWlSL6zYjFJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmrRGJkACgkQJNaLcl1U
+h9DQFQf+LiGBnxMlC8Nft/57njPqtSr4IrbEOYXfDtnVtE8C/qIDTms81g1IsDl9
+ZsD5vzOSkVbGBsoFyWpurQfTf8ryWE0FlSxsSXC7S++ewunXZ+RLG5s7cVDHdqEt
+45DtK73sods62xPWOohEwTf3GWlxEupQs3GuRmbFbC4qsuUSRrygBDa74bGUMOdD
+v5LdfkpZmVnR71bi9zkcLkUPPhd7G6PfktHl9l9u4eN1U8c52tCYrgaqvkkoY+8f
+oWzMotzmNe2M7/GZ/yV9WNtAYwsWk11/3XLzpg0AdrvNzaqUrivQqKN1Wb1IRfaB
+amVPv/R1ZMmYwXbDArYC+mEi+syHtQ==
+=SPc5
+-----END PGP SIGNATURE-----
+
+--NYWNnkWlSL6zYjFJ--
