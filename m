@@ -1,360 +1,230 @@
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFDF50C2B9
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 09:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2294ED18A;
+	Thu, 15 Oct 2026 10:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792057129; cv=none; b=GQkPQyc8af0E41UsUOCiyZsw3yXcR3f3MGRy9+BvDb4O9cyHVEn+ao6ynYQCibscx1QcvY3cr0PdoLSdV9L3wHgZ+tmN5DcC4Kdv4Nhw9KW545TnrSStA7sQzPKgnrWbc/alJiSmfhrA/uMMBKhhSpDHIcFsfOU7BcIIym2KSVk=
+	t=1792058755; cv=none; b=mNf1eFjhR60YUg317NHccdCx7xXZRuwl1bXYnnx9JKByd1dLJRUVvG+d/enmhp6dwdw/zpWNfNSThOHNbEA0ca7MkYfyi2k+Z2485g8O361zeGswy4gXjzydtDEVxgpjqNzmiUGnUSadGXAhoxqB9RPxUAdDtFIF/LlXaJRF95s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792057129; c=relaxed/simple;
-	bh=uwYU0vyY7jBxTkYD57tEKF76LhbCufiagl093haOXQw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZHooxJ5PsYpdAoZ1kifI8VxUUC7HZ1yOgzX3sa/N0sHDEBzjsI+klDe2P3ZbDRI/RQxeedsOY4loB05WW3wxU8ErAx0aY5I7XI/hZ/2ZcPqHyYjc8I+uQrea6OHw80LLOUThRAkD1kk94hLw180AzEegt/i6H/7K1gNPcRLxWuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Kdv1rLWu; arc=none smtp.client-ip=209.85.221.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1792058755; c=relaxed/simple;
+	bh=RScIEV0hfbD2tBW5CXzHJowq1kQbypZEdCwsy1w6XV8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cIapqC0s9JCTadMFfbA26D5sNkAECr0cGLsa9xJHlnB1X+1rhOkJN8LMLeU+OkJBO3B5TCG/fbQ/oPP0uQjVvZUYEFKjSuWyKdWXWfQNky1RLfzEngI+nO1p2tL3qaUo6DLoxVoDBOG0XpccZWoIt4G+E6CQedlUsNTd6mrbo0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ODsSXgr1; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Kdv1rLWu"
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-5e4d95e3e55so474306e0c.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 02:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1792057122; x=1792661922; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=IPTzG9yeWgp2JFe+s9iO1cWtEwA5iuP2nn+kITzaTP4=;
-        b=Kdv1rLWu56UD0xotR7hdJq+7hBb0jMvUAQ46vaunYpTX2UpIq3xjWEGIZkVyH9K+ec
-         nSfNReK4CfcbXZP9j8lreAW3SuLdtjqhtl7mC+dyrnrADNA2FL1EP4D4yaJtzkxdlRgL
-         Y7Sw22MtYtkzFtnQIqqmwpxOO4ZY2uzA4bYukyRwBEJ9fEoDnUD64nR/CKD3JHzGfDV1
-         q4IFVCmxP6Gq4SMC1K5itp5MOTqIjZEHmpHJDLzUg19BB65IG+II3rUf3DBMYdsjPK/q
-         a0l/Er0riJXxLtWLwp16QmvI1jHJ8V4oVTT/OHJw5aH3rYJHcA1HrCew+BsxcC/tzQfa
-         rs6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792057122; x=1792661922;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=IPTzG9yeWgp2JFe+s9iO1cWtEwA5iuP2nn+kITzaTP4=;
-        b=S8ssBtByU2HoYYqrHfgLtlE/i2AOGARWVPcDDg47Y2BobUJExrKJ/+gCJ+lWCu4mqq
-         dTmaT2tgCEh1+/wRRuAU68Sa6bFz8Fwo7ozEnLEG84D8mqqe/BogltT0YTk9Em+OU1Pz
-         V+vc2JkhdnGao0ysIK1SWIi6YkRKkh9b+vUShZUTKw0W7v+4OgcVUJVJGC9PVXQV5GrS
-         7GF8rguEVjg/jncdBcE3Ig5wQGE2ZqMMaTBTpLRG8t+oI3ndtmK4CiKiU+9n1cPoNvz0
-         5/xUJrubJjHitCuhFTstlbc/M2yxNuidaFcgqTmXnmN59e+Kl7ntRkF10sxOT17iMY6i
-         Qp6Q==
-X-Gm-Message-State: AFq9FYLLXaiWilVvTaiIyz8+6FWPV18+lprCcWtWr20mTVmnh8i2iIPw
-	u1pv4+TdggUKXO1IYZATOKUiU1hbiUReUnP+rcNNDuGBaBKm2U54iPI0EiF1GcX+Qa+hMCNg8XR
-	GfI1J
-X-Gm-Gg: AYBFou2HZxolpif4kZaU6vt0u8HIKSkI9T9gdyzxkTkr2/zUuD+hn69ukn3oE2yPNH0
-	EFW6P0RJK9uFm534S0GlVYmPoA/76P1/8CDq5pqDKSNnd6z4CTUhRBzXzFzFhtzc2SPBzJnqrfs
-	JEfW4WYpcRCHb7517A0V3sCo7e2y1cMt/cCB/sc4VRZHDTvbkqQF05yM/St5ITplrySuBTKTYL3
-	sIHwQVL3A8hyXXc5Ga0/cvA3xk+j0/dMJA8a+mm4h/dj2rS02F3uUGMY/yaWK31FtitZjKDxfCm
-	kE4jLbsYC/TyWToOR6KnSNNgKrlXMPevoI9fw9omnRhuclRLqiiHaVyweQTtsQkCQO7+BUg0Ss5
-	Q5BlNbt8abeIXPB4RDxSRRtdf8oygqBshg162ljW17EOKcBAc5nvLoHIajTyZ8JjzIi6t9hH+Bv
-	8i0A4db6GP4cc0PbPpy5Z7eLfWiQEjhP1y8Fk2QMwmfG4dIRg+0FM8BhRYci3YnCBSCXYWT6FL8
-	JXWCWHRwousEbGAmD5tetrAEOeWAvFvHWI5xRAemyPIQMz7VvzwzOruJ59SIqOrc0Lp2Q2/pKIy
-	qnZmhjKdlL8Zcq+AeCY=
-X-Received: by 2002:a05:6122:4b8c:b0:5cf:1e68:6015 with SMTP id 71dfb90a1353d-5e91f4cc080mr5669513e0c.15.1792057122304;
-        Thu, 15 Oct 2026 02:38:42 -0700 (PDT)
-Received: from soleen.c.googlers.com.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-99003d37009sm12275672241.2.2026.10.15.02.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 02:38:36 -0700 (PDT)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: linux-kselftest@vger.kernel.org,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	akpm@linux-foundation.org,
-	linux-mm@kvack.org,
-	vipinsh@google.com,
-	linux-kernel@vger.kernel.org,
-	pasha.tatashin@soleen.com,
-	dmatlack@google.com,
-	kexec@lists.infradead.org,
-	pratyush@kernel.org,
-	graf@amazon.com
-Subject: [PATCH v1 7/7] selftests: liveupdate: Add test coverage for tmpfs preservation and retrieval
-Date: Thu, 15 Oct 2026 05:38:16 -0400
-Message-ID: <20261015093816.2438942-8-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.56.0.385.gd3acb90ef8-goog
-In-Reply-To: <20261015093816.2438942-1-pasha.tatashin@soleen.com>
-References: <20261015093816.2438942-1-pasha.tatashin@soleen.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ODsSXgr1"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=hEveyat88KTY+fewpr8cR1EEbZqPDDgPFGX/+adKZM8=; b=ODsSXgr1mSQp3iQy8TG3FLkAuW
+	dik6kGqYeNe4MLUmGa8vPsCjnJ8NNHSZN6QF01lgm/7VWhqloGmdECdvRA+N6DCT/jkM2Hp69T2yU
+	wk5hGPl7pZTStfiLz9jDv+PICPfg3wGHMbtvOdzzC6gyH/iyZJ+sHRz3+XZnZa+BFf4HaLzN3wcOH
+	/MIY4xZfMdsIgWNmPKwVakWIQOiGQIn6Q8u+X5ITlt8VNhqkTc9ZHMd30X+St2PN7gWJyrel6p/Lb
+	A5D6yZVBcXNEJwW1QDJ9QglDKBAZHCRNLXbIKrZb6WpzWaOaH5Sfjm50OO+fAqW9D+AUe7XTPlMaG
+	Hd0lJD4w==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xHILL-0057Ay-0Q;
+	Thu, 15 Oct 2026 10:05:48 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v3 0/7] ipv4,ipv6: convert the getsockopt switches
+ to sockopt_t
+Date: Thu, 15 Oct 2026 03:05:29 -0700
+Message-Id: <20261015-sockopt_expand_out_v2-v3-0-7d05ef2df448@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGql0GoC/3XNTQqDMBBA4auEWZsS40/VVe9RiiTjqKGQSJIGi
+ 3j3gpRCF64ffG+DQN5QgI5t4CmZYJyFjhUZA5yVnYibAToGUshatLLkweHTLbGndVF26N0r9kl
+ yolLjVasSSUHGYPE0mvVw72ApcktrhEfGYDYhOv8+hik/+teuTuyUc8GxoFFSoXWF4jaQNspen
+ J8OMskfkwvRnjGSC94oFA2WdUuo/5h93z/SaZk0DAEAAA==
+X-Change-ID: 20260924-sockopt_expand_out_v2-ee4bc7ba4cea
+To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, 
+ Eric Dumazet <edumazet@kernel.org>, Eric Dumazet <edumazet@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ david.laight.linux@gmail.com, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.16-dev-f8e9d
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6214; i=leitao@debian.org;
+ h=from:subject:message-id; bh=RScIEV0hfbD2tBW5CXzHJowq1kQbypZEdCwsy1w6XV8=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBq0KV0Ob2/3ovUI7RK+I9viSGeWc99/HSI3gJDN
+ axTr+tE5OaJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCatCldAAKCRA1o5Of/Hh3
+ bXEZD/0co0m6Dq9lKVgbOlFrpdzQuPEInc5bTLt9H8bBQ+qUffm9YeVq2IF5sq/eMvSs2Ichmvb
+ xn5HlAlSjhdFWFtMG53rg6eYP0cOHBnaQseEOyEEu3h8W6mpPIJrjV++NB+dXVSVEsVOroW7RF2
+ Q+qXvrUXLtGt/lUeUEY7woAVyIz7fKO6Gv3ERnPyNPGdyKsMQIupO2v/aBcT4PzecRL7TM3NJMs
+ N8WkFN6FyP9D1C/mbn9Ijwpyl5YbI1KHk1dFzSxhj8X1y0LgNBDjQHGToAe4rLPBNIJNjJd0Sk7
+ USr+LWWdM0HaCVfWRp/Xvo+JI3I5t192wwz9/VKW5m69deoHtkLkCYOhLBtmd6OupTqzNwuL2SA
+ 79EkPHQet8+SHl1wh9oTrfo04eGh3drrWZ+OKh6vni1OGqpxmqELcU1wNc1OzgUCgcuMBGhWifF
+ yJZbQKecbyexre/R0fWJ/irc8sRNl6/jtQjVlUXSTtwxq1z/xenZL/8XL5o4B2b2si/vbYVvrVm
+ t6SDjHEcno3aYZ8GTeIVRst6fto8bxeU6FVa4Sb50hcBi4ikWEIbBUHOeTqaSmw/ablbN1UzDqP
+ Nthx8hEEVKw/9L+vqwtUX7hH74Y2V+bd3CZD6e9X6DguE2WpS45cjADTzBeKmsCGEhoJlvfd2dJ
+ F/iO4wYSe/LKUaw==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-From: David Matlack <dmatlack@google.com>
+This series continues the migration to sockopt_t, as described in [1].
+do_ip_getsockopt() and do_ipv6_getsockopt() still take a sockptr_t pair,
+and everything they forward to now takes a sockopt_t, so convert them
+both.
 
-Extend the multi-session LUO test to verify preserving a path-backed
-tmpfs file and retrieving its contents to a newly created empty tmpfs
-file post-kexec using struct liveupdate_memfd_retrieve_arg with
-LIVEUPDATE_SESSION_RETRIEVE_FD. Also verify that retrieve argument
-validation errors (passing an argument when retrieving a memfd, omitting
-the argument when retrieving a tmpfs file, or passing a read-only target
-tmpfs FD) are retryable and allow a subsequent valid retrieve call to
-succeed.
+Patch 1 settles what a negative optlen means on SOL_IPV6 before the
+conversion makes it matter. do_ip_getsockopt() rejects it, but
+do_ipv6_getsockopt() never has, and the int options answer it as 4.
+Treat it as 4, as David Laight suggested, instead of failing callers
+that rely on it.
 
-Signed-off-by: David Matlack <dmatlack@google.com>
-Co-developed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Patch 2 fixes a latent bug in sockopt_expand_out() [2] itself: it caps
+the expansion at INT_MAX, but iov_iter_revert() refuses to unroll past
+the smaller MAX_RW_COUNT.
+
+MCAST_MSFILTER has to move before the switches above it. It is the last
+option with the quirk sockopt_expand_out() was added for [2]: optlen only
+covers the fixed part, and the real reply size comes from the gf_numsrc
+field inside it. Patches 3 and 4 convert it on both families, and store
+the reply length only after the final copy succeeds, so a copy failure
+can't report a changed optlen.
+
+Patches 5 and 6 convert the switches themselves. Each wrapper keeps its
+__user prototype and builds the sockopt_t, so the proto layer is
+untouched. ipv6_getsockopt() cannot use sockopt_init_user(), which
+rejects a negative optlen, so patch 6 moves the clamp of patch 1 up
+there and builds the sockopt_t after it.
+
+Patch 7 grows the selftest with an ip and an ipv6 fixture, pinning the
+returned length, errno and reply bytes.
+
+The temporary sockptr_t-to-sockopt_t glue can go away once the higher
+level callers take sockopt_t too. For now, the series keeps the proto
+callbacks unchanged and converts only the leaf helpers.
+
+Link: https://lore.kernel.org/all/20260401-getsockopt-v2-0-611df6771aff@debian.org/ [1]
+Link: https://lore.kernel.org/all/20260914-getsockopt_phase6-v2-0-e48befc9602e@debian.org/ [2]
+
+To: David Ahern <dsahern@kernel.org>
+To: Ido Schimmel <idosch@nvidia.com>
+To: David S. Miller <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: david.laight.linux@gmail.com
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- .../liveupdate/lib/include/libliveupdate.h    |   2 +
- .../selftests/liveupdate/lib/lu_utils.c       |  44 +++++++
- .../selftests/liveupdate/luo_multi_session.c  | 110 ++++++++++++++++--
- 3 files changed, 147 insertions(+), 9 deletions(-)
+Changes in v3:
+- Fix sashiko findings:
+  - MRT6_* keeps rejecting a negative optlen instead of answering 4
+  - Selftest: add CONFIG_IP_MROUTE=y and an IPV6_PATHMTU negative optlen
+    test
+  - Fixing random commit message issues reported by sashiko. Trying to
+    get sashiko happy.
+- Link to v2: https://patch.msgid.link/20261009-sockopt_expand_out_v2-v2-0-8ac08c469ecb@debian.org
 
-diff --git a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-index 8a38268e89dee..dc5c01408462d 100644
---- a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-+++ b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-@@ -37,6 +37,8 @@ int luo_session_retrieve_fd_arg(int session_fd, __u64 token, __u64 user_arg);
- 
- int create_and_preserve_memfd(int session_fd, int token, const char *data);
- int restore_and_verify_memfd(int session_fd, int token, const char *expected_data);
-+int restore_and_verify_tmpfs(int session_fd, int token, int fd,
-+			     const char *expected_data);
- 
- void create_state_file(int luo_fd, const char *session_name, int token,
- 		       int next_stage);
-diff --git a/tools/testing/selftests/liveupdate/lib/lu_utils.c b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-index 5c6f8bf80b297..1b1a556287d3a 100644
---- a/tools/testing/selftests/liveupdate/lib/lu_utils.c
-+++ b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-@@ -347,3 +347,47 @@ int luo_test(int argc, char *argv[],
- 
- 	return 0;
- }
-+
-+int restore_and_verify_tmpfs(int session_fd, int token, int fd,
-+			     const char *expected_data)
-+{
-+	struct liveupdate_memfd_retrieve_arg rarg = {
-+		.size = sizeof(rarg),
-+		.fd = fd,
-+	};
-+	long page_size = getpagesize();
-+	void *map = MAP_FAILED;
-+	struct stat st;
-+	int ret_fd;
-+
-+	ret_fd = luo_session_retrieve_fd_arg(session_fd, token,
-+					     (unsigned long)&rarg);
-+	if (ret_fd < 0) {
-+		ksft_print_msg("luo_session_retrieve_fd_arg failed: %d\n",
-+			       ret_fd);
-+		return ret_fd;
-+	}
-+	close(ret_fd);
-+
-+	if (fstat(fd, &st) < 0)
-+		return -errno;
-+	if (st.st_size != page_size) {
-+		ksft_print_msg("Size mismatch! Expected %ld, Got %lld\n",
-+			       page_size, (long long)st.st_size);
-+		return -EINVAL;
-+	}
-+
-+	map = mmap(NULL, page_size, PROT_READ, MAP_SHARED, fd, 0);
-+	if (map == MAP_FAILED)
-+		return -errno;
-+
-+	if (expected_data && strcmp(expected_data, map) != 0) {
-+		ksft_print_msg("Data mismatch! Expected '%s', Got '%s'\n",
-+			       expected_data, (char *)map);
-+		munmap(map, page_size);
-+		return -EINVAL;
-+	}
-+
-+	munmap(map, page_size);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/liveupdate/luo_multi_session.c b/tools/testing/selftests/liveupdate/luo_multi_session.c
-index aac24a5f5ce3c..46889676d9f52 100644
---- a/tools/testing/selftests/liveupdate/luo_multi_session.c
-+++ b/tools/testing/selftests/liveupdate/luo_multi_session.c
-@@ -9,7 +9,15 @@
-  * files.
-  */
- 
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <sys/mman.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
-+
- #include <libliveupdate.h>
-+#include <linux/liveupdate.h>
- 
- #define SESSION_EMPTY_1 "multi-test-empty-1"
- #define SESSION_EMPTY_2 "multi-test-empty-2"
-@@ -23,6 +31,7 @@
- #define MFD1_DATA "Data for session files 1"
- #define MFD2_DATA "First file for session files 2"
- #define MFD3_DATA "Second file for session files 2"
-+#define MFD3_POS 42
- 
- #define STATE_SESSION_NAME "kexec_multi_state"
- #define STATE_MEMFD_TOKEN 998
-@@ -31,6 +40,8 @@
- static void run_stage_1(int luo_fd)
- {
- 	int s_empty1_fd, s_empty2_fd, s_files1_fd, s_files2_fd;
-+	int tmpfs_fd;
-+	void *map;
- 
- 	ksft_print_msg("[STAGE 1] Starting pre-kexec setup for multi-session test...\n");
- 
-@@ -53,25 +64,50 @@ static void run_stage_1(int luo_fd)
- 	s_files1_fd = luo_create_session(luo_fd, SESSION_FILES_1);
- 	if (s_files1_fd < 0)
- 		fail_exit("luo_create_session for '%s'", SESSION_FILES_1);
-+	ksft_print_msg("  -> Preserving memfd (token %#x, content: \"%s\")\n",
-+		       MFD1_TOKEN, MFD1_DATA);
- 	if (create_and_preserve_memfd(s_files1_fd, MFD1_TOKEN, MFD1_DATA) < 0) {
- 		fail_exit("create_and_preserve_memfd for token %#x",
- 			  MFD1_TOKEN);
- 	}
- 
--	ksft_print_msg("[STAGE 1] Creating session '%s' with two memfds...\n",
-+	ksft_print_msg("[STAGE 1] Creating session '%s' with memfd and tmpfs file...\n",
- 		       SESSION_FILES_2);
- 
- 	s_files2_fd = luo_create_session(luo_fd, SESSION_FILES_2);
- 	if (s_files2_fd < 0)
- 		fail_exit("luo_create_session for '%s'", SESSION_FILES_2);
-+	ksft_print_msg("  -> Preserving memfd (token %#x, content: \"%s\")\n",
-+		       MFD2_TOKEN, MFD2_DATA);
- 	if (create_and_preserve_memfd(s_files2_fd, MFD2_TOKEN, MFD2_DATA) < 0) {
- 		fail_exit("create_and_preserve_memfd for token %#x",
- 			  MFD2_TOKEN);
- 	}
--	if (create_and_preserve_memfd(s_files2_fd, MFD3_TOKEN, MFD3_DATA) < 0) {
--		fail_exit("create_and_preserve_memfd for token %#x",
--			  MFD3_TOKEN);
--	}
-+
-+	ksft_print_msg("  -> Populating tmpfs file at /mnt/mfd3...\n");
-+	if (mkdir("/mnt", 0777) < 0 && errno != EEXIST)
-+		fail_exit("mkdir /mnt");
-+	if (mount("tmpfs", "/mnt", "tmpfs", 0, NULL) < 0)
-+		fail_exit("mount tmpfs");
-+	tmpfs_fd = open("/mnt/mfd3", O_CREAT | O_RDWR, 0666);
-+	if (tmpfs_fd < 0)
-+		fail_exit("failed to open tmpfs_fd");
-+	ksft_print_msg("  -> Preserving generic tmpfs file (token %#x, content: \"%s\")\n",
-+		       MFD3_TOKEN, MFD3_DATA);
-+	if (ftruncate(tmpfs_fd, getpagesize()) < 0)
-+		fail_exit("ftruncate tmpfs_fd");
-+	map = mmap(NULL, getpagesize(), PROT_WRITE, MAP_SHARED, tmpfs_fd, 0);
-+	if (map == MAP_FAILED)
-+		fail_exit("mmap tmpfs_fd");
-+	strcpy(map, MFD3_DATA);
-+	munmap(map, getpagesize());
-+	if (lseek(tmpfs_fd, MFD3_POS, SEEK_SET) != MFD3_POS)
-+		fail_exit("lseek tmpfs_fd");
-+
-+	if (luo_session_preserve_fd(s_files2_fd, tmpfs_fd, MFD3_TOKEN) < 0)
-+		fail_exit("preserve tmpfs fd");
-+
-+	close(tmpfs_fd);
- 
- 	close(luo_fd);
- 	daemonize_and_wait();
-@@ -81,7 +117,10 @@ static void run_stage_1(int luo_fd)
- static void run_stage_2(int luo_fd, int state_session_fd)
- {
- 	int s_empty1_fd, s_empty2_fd, s_files1_fd, s_files2_fd;
--	int mfd1, mfd2, mfd3, stage;
-+	struct liveupdate_memfd_retrieve_arg rarg = {
-+		.size = sizeof(rarg),
-+	};
-+	int mfd1, mfd2, mfd3, ro_fd, ret, stage;
- 
- 	ksft_print_msg("[STAGE 2] Starting post-kexec verification...\n");
- 
-@@ -110,6 +149,8 @@ static void run_stage_2(int luo_fd, int state_session_fd)
- 
- 	ksft_print_msg("[STAGE 2] Verifying contents of session '%s'...\n",
- 		       SESSION_FILES_1);
-+	ksft_print_msg("  -> Retrieving memfd (token %#x) from session...\n",
-+		       MFD1_TOKEN);
- 	mfd1 = restore_and_verify_memfd(s_files1_fd, MFD1_TOKEN, MFD1_DATA);
- 	if (mfd1 < 0)
- 		fail_exit("restore_and_verify_memfd for token %#x", MFD1_TOKEN);
-@@ -118,14 +159,65 @@ static void run_stage_2(int luo_fd, int state_session_fd)
- 	ksft_print_msg("[STAGE 2] Verifying contents of session '%s'...\n",
- 		       SESSION_FILES_2);
- 
-+	ksft_print_msg("  -> Creating empty tmpfs file at /mnt/mfd3...\n");
-+	if (mkdir("/mnt", 0777) < 0 && errno != EEXIST)
-+		fail_exit("mkdir /mnt");
-+	if (mount("tmpfs", "/mnt", "tmpfs", 0, NULL) < 0)
-+		fail_exit("mount tmpfs");
-+	mfd3 = open("/mnt/mfd3", O_CREAT | O_RDWR, 0666);
-+	if (mfd3 < 0)
-+		fail_exit("open tmpfs file");
-+	ro_fd = open("/mnt/mfd3", O_RDONLY);
-+	if (ro_fd < 0)
-+		fail_exit("open read-only tmpfs file");
-+
-+	ksft_print_msg("  -> Verifying retryable retrieve errors for memfd and tmpfs...\n");
-+	rarg.fd = mfd3;
-+	ret = luo_session_retrieve_fd_arg(s_files2_fd, MFD2_TOKEN,
-+					  (uintptr_t)&rarg);
-+	if (ret != -EINVAL)
-+		fail_exit("expected -EINVAL when passing arg to memfd retrieve, got %d",
-+			  ret);
-+
-+	ksft_print_msg("  -> Retrieving memfd (token %#x) from session...\n",
-+		       MFD2_TOKEN);
- 	mfd2 = restore_and_verify_memfd(s_files2_fd, MFD2_TOKEN, MFD2_DATA);
- 	if (mfd2 < 0)
- 		fail_exit("restore_and_verify_memfd for token %#x", MFD2_TOKEN);
- 	close(mfd2);
- 
--	mfd3 = restore_and_verify_memfd(s_files2_fd, MFD3_TOKEN, MFD3_DATA);
--	if (mfd3 < 0)
--		fail_exit("restore_and_verify_memfd for token %#x", MFD3_TOKEN);
-+	ret = luo_session_retrieve_fd(s_files2_fd, MFD3_TOKEN);
-+	if (ret != -EINVAL)
-+		fail_exit("expected -EINVAL when retrieving tmpfs without arg, got %d",
-+			  ret);
-+
-+	rarg.fd = ro_fd;
-+	ret = luo_session_retrieve_fd_arg(s_files2_fd, MFD3_TOKEN,
-+					  (uintptr_t)&rarg);
-+	if (ret != -EACCES)
-+		fail_exit("expected -EACCES when retrieving tmpfs into read-only fd, got %d",
-+			  ret);
-+	close(ro_fd);
-+
-+	if (ftruncate(mfd3, 1) < 0)
-+		fail_exit("ftruncate non-empty tmpfs file");
-+	rarg.fd = mfd3;
-+	ret = luo_session_retrieve_fd_arg(s_files2_fd, MFD3_TOKEN,
-+					  (uintptr_t)&rarg);
-+	if (ret != -EBUSY)
-+		fail_exit("expected -EBUSY when retrieving tmpfs into non-empty fd, got %d",
-+			  ret);
-+	if (ftruncate(mfd3, 0) < 0)
-+		fail_exit("ftruncate empty tmpfs file");
-+
-+	ksft_print_msg("  -> Retrieving tmpfs file (token %#x) from session...\n",
-+		       MFD3_TOKEN);
-+	if (restore_and_verify_tmpfs(s_files2_fd, MFD3_TOKEN, mfd3,
-+				     MFD3_DATA) < 0)
-+		fail_exit("restore_and_verify_tmpfs for token %#x",
-+			  MFD3_TOKEN);
-+	if (lseek(mfd3, 0, SEEK_CUR) != MFD3_POS)
-+		fail_exit("expected f_pos %d on restored tmpfs file", MFD3_POS);
- 	close(mfd3);
- 
- 	ksft_print_msg("[STAGE 2] Test data verified successfully.\n");
--- 
-2.56.0.385.gd3acb90ef8-goog
+Changes in v2:
+- Treat a negative optlen as 4 instead of rejecting it with
+  -EINVAL as v1 did, per David Laight and Stanislav Fomichev. 
+- Fix sashiko findings
+- Link to v1: https://patch.msgid.link/20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org
+
+To: David Ahern <dsahern@kernel.org>
+To: Ido Schimmel <idosch@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+---
+Breno Leitao (7):
+      ipv6: treat a negative optlen as 4 in do_ipv6_getsockopt()
+      net: cap sockopt_expand_out() at MAX_RW_COUNT
+      ipv6: mcast: convert ip6_mc_msfget() to sockopt_t
+      ipv4: igmp: convert ip_mc_gsfget() to sockopt_t
+      ipv4: convert do_ip_getsockopt() to sockopt_t
+      ipv6: convert do_ipv6_getsockopt() to sockopt_t
+      selftests: net: getsockopt_iter: cover ip and ipv6
+
+ include/linux/igmp.h                          |   2 +-
+ include/linux/mroute.h                        |   4 +-
+ include/linux/mroute6.h                       |   5 +-
+ include/linux/net.h                           |  30 ++-
+ include/net/ip.h                              |   3 +-
+ include/net/ipv6.h                            |   4 +-
+ net/core/filter.c                             |  36 ++-
+ net/ipv4/igmp.c                               |  23 +-
+ net/ipv4/ip_sockglue.c                        | 118 ++++----
+ net/ipv4/ipmr.c                               |  11 +-
+ net/ipv6/ip6mr.c                              |  13 +-
+ net/ipv6/ipv6_sockglue.c                      | 120 +++++----
+ net/ipv6/mcast.c                              |  19 +-
+ tools/testing/selftests/net/config            |   1 +
+ tools/testing/selftests/net/getsockopt_iter.c | 372 ++++++++++++++++++++++++++
+ 15 files changed, 596 insertions(+), 165 deletions(-)
+---
+base-commit: d419d682257d813f6cb7a28e42b35d0edf4ad038
+change-id: 20260924-sockopt_expand_out_v2-ee4bc7ba4cea
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
