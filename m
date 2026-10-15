@@ -1,56 +1,56 @@
-Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
+Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B203FB7E0
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 16:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01A345C6FD
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 16:39:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792082374; cv=none; b=s1AHSxm7M8HzYVd5Y+7SfmTeJC0ti+WBCuGy06BRfhIhv9Qc3Alx3EGeDa028NRA5qaUEHI7fOx0ZlupmDQ5wnwhuNbcax0fBdVRrQtocEF/a134rik5FqUC/yJvYkuTRRJ8pTPI0DtVx2CVCeUdgHaHEA7M00MU9rWDSHGp56w=
+	t=1792082380; cv=none; b=GVFlF85MuiI6fSNvY88u+NHdz22V0L8B4glo89YAaFA8VdNF6k2AEzy6RCybiHn7UyT1cWT6wHbu4ZKrKA4OP1FjukuW/J23+I+ITLcXqIbC4VhbbKfwmSKQOPv4kgZSbqdfb1C3ALFEL1ExQZM7PPN9SMHSYeIpKAE8ufZJeXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792082374; c=relaxed/simple;
-	bh=vO6YEQIMsSYDbMWgTeXfd0RkPWpXF5baIQZyZXdCBFU=;
+	s=arc-20240116; t=1792082380; c=relaxed/simple;
+	bh=7+ZuMQGm1WqmYa/SemsnkHIbC/OIMDMcJFeU+26oqOg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lWXbSiLDXLMzH0fN7+KLnCmQ1AJMu68DmGfASutwk2+pq39hfLXcrv6m8Vpd4grhbKCqLKtqrlrEt+1D8DRd6lWFrt2BL1bbSMRkA+j9oMF7v8xCUTDuI/I5Sh86kTJXZdAHB5LNKEor6GevnUaERYdqIpwoSLmLvsIqYpncM+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bRJsHChG; arc=none smtp.client-ip=74.125.82.69
+	 To:Cc:Content-Type; b=TEmrisDk7AAbxekZElexi7hR0zVPmPTrqO0GBL4QortnKKcaNOAsfGO63TArBg1egnQksxpGw/6fQHjCa8/eERFova1pHKOwn0mZ5YzJxFhPjIPA9PgRYUgVnCiTwEi5/mUTx1gv3f7mO2FCNXhU/qWmQw9XM2aUsfOHV9CLEDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v/3NrS3t; arc=none smtp.client-ip=74.125.82.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bRJsHChG"
-Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-151ba226e1bso6653261c88.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 09:39:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v/3NrS3t"
+Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-1663fb7e005so6962507c88.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 09:39:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792082361; x=1792687161; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1792082362; x=1792687162; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=01xy5PseRVpPPje1JnCly3s3YIplU78ERdCkYH+3Kds=;
-        b=bRJsHChG3DrA2JmAqi7FcqG0MVg1r6kxt044hD9wtVlIdbMpnkUxKkAblAiN4r1flV
-         xij0PTsh5Eh6D+q0waI+U4nY6IHaHvzsWMofjue2FjDjRJBPu5GkkwggJOrBOicw8nEn
-         M0VYywW1HI82zr8Q741/o6akGR+h/YOvLGZ814yhIQhkv4rFJeMnwI5Y9FJHtnccZdsO
-         tqEVCYSkWDwOmuEHxrEKu+AdA3Z72dKlVIuxvBLFtiQAMmMCaDAmHJdokqjZWiwxgnAU
-         1+rNiKMqUuMAwO2zHXIUUR1FFaLdM3i8xTtY5yYW/pF8URP1u1pzuO1ooeKe4ryud1Q9
-         xT8A==
+        bh=wON/Y5KE9qpxqraW/pAdp0YZ1NlG3ckfd93a0Oe+XQc=;
+        b=v/3NrS3tAXlYq5GGohccUKrdWvYYYa5ZPCL3pwov1dZr3Sn46aASVdM/LkM8erPWcP
+         xyUKgdaSj7Cnfb20/ihUatWKcAnX4ajUr4rl2D1DghOzwNiRl3Vuitp6oZbDaT2Zhmkv
+         MRRR2LxKloftFxrDulx7MPNWPG/g7FHXuY2nZhJNF68ulo51AUBI56FntfJGBXQin1hJ
+         FunBwnWWw17cLauAXiD86BGF79dN2uE4vLidEyJcrvTUnUm5NRGLEcALoE1ac1q+HuR/
+         +4aHdcge51bpIo9KAaqwIPMxLXJC/BZdtxoq/nCFsCBZQZ/5lM4jQx6AjPr1qlOaRSxP
+         he/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792082361; x=1792687161;
+        d=1e100.net; s=20260707; t=1792082362; x=1792687162;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=01xy5PseRVpPPje1JnCly3s3YIplU78ERdCkYH+3Kds=;
-        b=BduIAZlayN9Vm5rbU9HEu8bSkDi5hBRUDmFKgfAWbBydmqTiVrGemMwrnA62h5Ur60
-         gVK7GoCUuR1HNmx1AxRqQlQeZbbfFLR9vgz5r/fiOh51NYnPn7PQqI8GyTO1LDrihrC3
-         Ce9/7v87bIKDjryZuXLpuSfOA1zDtzwBVXsf/66hy6q95gDmi0kNinEsTxzZLfHpJ1E+
-         gPTaPTaiEbpC2IIL+Bgp2G6vhQN+FsBcTBNIMKNw3ZdtDnGtV4GA3Bha0AG+wF9EwpnP
-         Sqi7yNVZYNNT/Ze4JGBwDCc0mPtU1xQxXPwR/q6QrUDDqoKyJAxsiFvPO94ZGOGkwXAC
-         nAOQ==
-X-Forwarded-Encrypted: i=1; AKwUvByOrfttNi/YdniLQwFHJHJ69QGjbBTsSmuf0sW/N620os+8iybOAJ60phgohs1sJ0JE15/FQJo5sCf4a+TcsnQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYInVu1JXEvVasn+QCMFPXAHazEvS/uVoT2Ug69l8rzuT2l5+bjf
-	SQ2RAZ7J2O58w1SJI8WUJudYLrnXILLCdvKKpJ1kaJEPQl8kuAhByANsgTPBWsckyirclBd4WXt
-	lGUp7KFqE06bLyC9m4TSUrGnvPA==
-X-Received: from dlbts20-n1.prod.google.com ([2002:a05:7022:b054:10b0:17e:d816:7855])
+        bh=wON/Y5KE9qpxqraW/pAdp0YZ1NlG3ckfd93a0Oe+XQc=;
+        b=OKVKxzQ39tg6gQkhkjDBWbDb/EyHYWL/auZtzXvz4M0G6Il3/PaHeSmXGfBt83ZqbM
+         WFu4KnFcaInTW8htvN/6gmpwD5ghTQJntTKrY5+XE8I3F1CgrK8EsgwLO1RynRC8S5lj
+         iKixzi5uo2lcNrbLZVkIhFGaJAqYwtvzHKALzjKVaFQL64a+on748lUFQFGW8n2m7ROE
+         sa5R5Aefbcv2mYnvKmUTT+WVa6GO0LtQa2Mwyoe7gaaRS61c5mnJLr4jWeUQqPka7YQy
+         hib9SUfJFK+YMqYoPv4OjoaJNms+jlWzHFfaYYoK9EBixVtQUDllusu3Ow1dUUazn0b7
+         kF1w==
+X-Forwarded-Encrypted: i=1; AKwUvBy3CkqbvSXdITjp3fs+1RMs/0m/IQTruzugXBUlohb3ioWKN+NvribC20dxvdEALiix04m9ZMcZK5ZYGDYG4j8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLuWCJ1Njcnjp8likz6o3QocOmirE2wTT550+4TEIHqwyzIVC9D
+	wxXLyUJX0LXidRGFNlpuCi2rY3E2puHUOyTJvNnkWivR7Y+VE037kqYYFz8On2hGUI7VJqvz2W1
+	zIR1NS7qMGXJsHihDUb6Oz9EOzw==
+X-Received: from dldyq4-n2.prod.google.com ([2002:a05:701b:4544:20b0:15f:4035:64c7])
  (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:701b:2088:20b0:143:2719:566e with SMTP id a92af1059eb24-16a61a6e5f3mr27037111c88.42.1792082360355;
- Thu, 15 Oct 2026 09:39:20 -0700 (PDT)
-Date: Thu, 15 Oct 2026 16:39:14 +0000
+ 2002:a05:7023:c00a:b0:149:1feb:6da4 with SMTP id a92af1059eb24-18111a09757mr2320444c88.32.1792082361807;
+ Thu, 15 Oct 2026 09:39:21 -0700 (PDT)
+Date: Thu, 15 Oct 2026 16:39:15 +0000
 In-Reply-To: <20261015163915.1166043-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -60,8 +60,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20261015163915.1166043-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.56.0.176.g3575e65682-goog
-Message-ID: <20261015163915.1166043-4-almasrymina@google.com>
-Subject: [PATCH net v4 3/4] netdevsim: support devmem RX and TX bindings
+Message-ID: <20261015163915.1166043-5-almasrymina@google.com>
+Subject: [PATCH net v4 4/4] selftests: net: add devmem RX and TX netdev
+ unregister tests
 From: Mina Almasry <almasrymina@google.com>
 To: Jakub Kicinski <kuba@kernel.org>, Mina Almasry <almasrymina@google.com>, 
 	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
@@ -78,18 +79,14 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>
 	Tariq Toukan <tariqt@nvidia.com>, Kaifeng Wang <kaifengw@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Set a 64-bit DMA mask on nsim_bus_dev, enable NETMEM_TX_DMA on the
-netdevsim net_device, and configure page_pool instances with
-PP_FLAG_ALLOW_UNREADABLE_NETMEM and queue_idx, plus PP_FLAG_DMA_MAP |
-PP_FLAG_DMA_SYNC_DEV when CONFIG_HAS_DMA is set, so devmem bind-rx and
-bind-tx netlink operations can be tested against netdevsim in software
-selftests.
+Add devmem_bind_rx_unregister_check and devmem_bind_tx_unregister_check
+to nl_netdev.py to verify that unregistering a netdevsim device while a
+netlink socket holds an active RX or TX devmem binding synchronously
+detaches the dma_buf attachment and cleanly closes the netlink socket
+without use-after-free or page faults.
 
-The pp_hold debugfs file allocates pages from the queue 0 page pool, so
-refuse it when that pool is backed by a memory provider, and take the
-netdev instance lock there so a concurrent bind-rx cannot swap the pool
-in between. The software PSP path checksums the payload when the peer
-does not decapsulate, so drop unreadable skbs there.
+Add the dma-buf, udmabuf and devmem options the tests need to
+tools/testing/selftests/net/config.
 
 Cc: Tariq Toukan <tariqt@nvidia.com>
 Cc: Kaifeng Wang <kaifengw@google.com>
@@ -98,141 +95,207 @@ Signed-off-by: Mina Almasry <almasrymina@google.com>
 Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
 ---
 v3:
-- Only request page pool DMA mapping when CONFIG_HAS_DMA is set
-  (Sashiko).
-- Refuse pp_hold on a page pool backed by a memory provider, under the
-  netdev instance lock (Sashiko).
-- Drop unreadable skbs in the software PSP path when it would have to
-  checksum the payload (Sashiko).
+- Count attachments of the test's own dma-buf only, and skip instead of
+  passing when debugfs bufinfo is not readable (Sashiko).
+- Close the netlink socket after removing the device, clean up with
+  defer(), and skip on EOPNOTSUPP from bind-rx/bind-tx (Sashiko).
+- Replace the hardcoded UDMABUF_CREATE value with a helper that computes
+  it for the running architecture (Sashiko, Dragos), and close the memfd
+  and /dev/udmabuf fds on errors (Sashiko).
+- Add the needed options to tools/testing/selftests/net/config (Sashiko).
 ---
- drivers/net/netdevsim/bus.c    |  1 +
- drivers/net/netdevsim/netdev.c | 27 +++++++++++++++++++++------
- drivers/net/netdevsim/psp.c    |  5 +++++
- 3 files changed, 27 insertions(+), 6 deletions(-)
+ tools/testing/selftests/net/config       |   4 +
+ tools/testing/selftests/net/nl_netdev.py | 125 ++++++++++++++++++++++-
+ 2 files changed, 126 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/netdevsim/bus.c b/drivers/net/netdevsim/bus.c
-index 5c55c308487b4..f87f5e037b6fb 100644
---- a/drivers/net/netdevsim/bus.c
-+++ b/drivers/net/netdevsim/bus.c
-@@ -462,6 +462,7 @@ nsim_bus_dev_new(unsigned int id, unsigned int port_count, unsigned int num_queu
- 	nsim_bus_dev->port_count = port_count;
- 	nsim_bus_dev->num_queues = num_queues;
- 	nsim_bus_dev->initial_net = current->nsproxy->net_ns;
-+	dma_coerce_mask_and_coherent(&nsim_bus_dev->dev, DMA_BIT_MASK(64));
- 	/* Disallow using nsim_bus_dev */
- 	smp_store_release(&nsim_bus_dev->init, false);
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 737e7e6327b37..1e21f0055a2c0 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -11,6 +11,7 @@ CONFIG_CRYPTO_ARIA=y
+ CONFIG_CRYPTO_CHACHA20POLY1305=m
+ CONFIG_CRYPTO_SHA1=y
+ CONFIG_CRYPTO_SM4_GENERIC=y
++CONFIG_DEBUG_FS=y
+ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_DEBUG_INFO_BTF_MODULES=n
+ CONFIG_DUMMY=y
+@@ -76,6 +77,7 @@ CONFIG_NET_CLS_BPF=m
+ CONFIG_NET_CLS_FLOWER=m
+ CONFIG_NET_CLS_MATCHALL=m
+ CONFIG_NET_CLS_U32=m
++CONFIG_NET_DEVMEM=y
+ CONFIG_NETDEVSIM=m
+ CONFIG_NET_DROP_MONITOR=m
+ CONFIG_NETFILTER=y
+@@ -120,6 +122,7 @@ CONFIG_OPENVSWITCH=m
+ CONFIG_PAGE_POOL_STATS=y
+ CONFIG_PSAMPLE=m
+ CONFIG_RPS=y
++CONFIG_SYNC_FILE=y
+ CONFIG_SYN_COOKIES=y
+ CONFIG_SYSCTL=y
+ CONFIG_SYSFS=y
+@@ -131,6 +134,7 @@ CONFIG_TEST_BPF=m
+ CONFIG_TLS=m
+ CONFIG_TRACEPOINTS=y
+ CONFIG_TUN=y
++CONFIG_UDMABUF=y
+ CONFIG_USER_NS=y
+ CONFIG_VETH=y
+ CONFIG_VLAN_8021Q=y
+diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
+index ceb44c8e1fec5..988878b71358c 100755
+--- a/tools/testing/selftests/net/nl_netdev.py
++++ b/tools/testing/selftests/net/nl_netdev.py
+@@ -6,10 +6,14 @@ Tests for the netdev netlink family.
+ """
  
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index b4a99f3ceac60..357ea9e5623b3 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -414,19 +414,27 @@ static int nsim_poll(struct napi_struct *napi, int budget)
- 	return done;
- }
+ import errno
++import fcntl
++import mmap
++import os
++import struct
+ from os import system
+-from lib.py import ksft_run, ksft_exit
++from lib.py import ksft_run, ksft_exit, KsftFailEx, KsftSkipEx
+ from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
+-from lib.py import NetdevFamily, NetdevSimDev, NlError, defer, ip
++from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, NlError, defer, ip
  
--static int nsim_create_page_pool(struct page_pool **p, struct napi_struct *napi)
-+static int nsim_create_page_pool(struct net_device *dev, struct page_pool **p,
-+				 struct napi_struct *napi, int idx)
- {
-+	struct netdevsim *ns = netdev_priv(dev);
- 	struct page_pool_params params = {
- 		.order = 0,
- 		.pool_size = NSIM_RING_SIZE,
-+		.flags = PP_FLAG_ALLOW_UNREADABLE_NETMEM,
-+		.max_len = PAGE_SIZE,
- 		.nid = NUMA_NO_NODE,
--		.dev = &napi->dev->dev,
-+		.dev = &ns->nsim_bus_dev->dev,
- 		.napi = napi,
- 		.dma_dir = DMA_BIDIRECTIONAL,
--		.netdev = napi->dev,
-+		.netdev = dev,
-+		.queue_idx = idx,
- 	};
- 	struct page_pool *pool;
  
-+	if (IS_ENABLED(CONFIG_HAS_DMA))
-+		params.flags |= PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV;
+ def empty_check(nf) -> None:
+@@ -366,6 +370,119 @@ def page_pool_stats_ifindex_check(nf) -> None:
+     ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.info.id')
+ 
+ 
++def _udmabuf_create_ioctl() -> int:
++    """Return UDMABUF_CREATE, _IOW('u', 0x42, struct udmabuf_create)."""
++    machine = os.uname().machine
++    if machine.startswith(("alpha", "mips", "ppc", "powerpc", "sparc")):
++        ioc_write = 4 << 29
++    elif machine.startswith("parisc"):
++        ioc_write = 2 << 30
++    else:
++        ioc_write = 1 << 30
++    return ioc_write | 24 << 16 | ord("u") << 8 | 0x42
 +
- 	pool = page_pool_create(&params);
- 	if (IS_ERR(pool))
- 		return PTR_ERR(pool);
-@@ -450,7 +458,7 @@ static int nsim_init_napi(struct netdevsim *ns)
- 	for (i = 0; i < dev->num_rx_queues; i++) {
- 		rq = ns->rq[i];
- 
--		err = nsim_create_page_pool(&rq->page_pool, &rq->napi);
-+		err = nsim_create_page_pool(dev, &rq->page_pool, &rq->napi, i);
- 		if (err)
- 			goto err_pp_destroy;
- 	}
-@@ -762,14 +770,16 @@ nsim_queue_mem_alloc(struct net_device *dev,
- 	if (ns->rq_reset_mode == 1) {
- 		if (!netif_running(ns->netdev))
- 			return -ENETDOWN;
--		return nsim_create_page_pool(&qmem->pp, &ns->rq[idx]->napi);
-+		return nsim_create_page_pool(dev, &qmem->pp,
-+					     &ns->rq[idx]->napi, idx);
- 	}
- 
- 	qmem->rq = nsim_queue_alloc();
- 	if (!qmem->rq)
- 		return -ENOMEM;
- 
--	err = nsim_create_page_pool(&qmem->rq->page_pool, &qmem->rq->napi);
-+	err = nsim_create_page_pool(dev, &qmem->rq->page_pool, &qmem->rq->napi,
-+				    idx);
- 	if (err)
- 		goto err_free;
- 
-@@ -929,12 +939,15 @@ nsim_pp_hold_write(struct file *file, const char __user *data,
- 		return ret;
- 
- 	rtnl_lock();
-+	netdev_lock(ns->netdev);
- 	ret = count;
- 	if (val == !!ns->page)
- 		goto exit;
- 
- 	if (!netif_running(ns->netdev) && val) {
- 		ret = -ENETDOWN;
-+	} else if (val && page_pool_is_unreadable(ns->rq[0]->page_pool)) {
-+		ret = -EOPNOTSUPP;
- 	} else if (val) {
- 		ns->page = page_pool_dev_alloc_pages(ns->rq[0]->page_pool);
- 		if (!ns->page)
-@@ -946,6 +959,7 @@ nsim_pp_hold_write(struct file *file, const char __user *data,
- 	}
- 
- exit:
-+	netdev_unlock(ns->netdev);
- 	rtnl_unlock();
- 	return ret;
- }
-@@ -1051,6 +1065,7 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
- 	ns->netdev->netdev_ops = &nsim_netdev_ops;
- 	ns->netdev->stat_ops = &nsim_stat_ops;
- 	ns->netdev->queue_mgmt_ops = &nsim_queue_mgmt_ops;
-+	ns->netdev->netmem_tx = NETMEM_TX_DMA;
- 	netdev_lockdep_set_classes(ns->netdev);
- 
- 	err = nsim_udp_tunnels_info_create(ns->nsim_dev, ns->netdev);
-diff --git a/drivers/net/netdevsim/psp.c b/drivers/net/netdevsim/psp.c
-index 6b3532b5e360d..908cc0d391dc6 100644
---- a/drivers/net/netdevsim/psp.c
-+++ b/drivers/net/netdevsim/psp.c
-@@ -86,6 +86,11 @@ nsim_do_psp(struct sk_buff *skb, struct netdevsim *ns,
- 		__wsum csum;
- 		int udplen;
- 
-+		if (!skb_frags_readable(skb)) {
-+			rc = SKB_DROP_REASON_PSP_OUTPUT;
-+			goto out_unlock;
-+		}
 +
- 		/* Do not decapsulate. Receive the skb with the udp and psp
- 		 * headers still there as if this is a normal udp packet.
- 		 * psp_dev_encapsulate() sets udp checksum to 0, so we need to
++def _create_udmabuf(num_pages=64) -> int:
++    """Create a sealed memfd-backed udmabuf fd for devmem tests."""
++    if not os.path.exists("/dev/udmabuf"):
++        raise KsftSkipEx("/dev/udmabuf is not available")
++
++    size = num_pages * mmap.PAGESIZE
++    memfd = os.memfd_create("devmem-ksft", os.MFD_ALLOW_SEALING)
++    try:
++        os.ftruncate(memfd, size)
++        fcntl.fcntl(memfd, fcntl.F_ADD_SEALS, fcntl.F_SEAL_SHRINK)
++        devfd = os.open("/dev/udmabuf", os.O_RDWR)
++        try:
++            req = bytearray(struct.pack("IIQQ", memfd, 0, 0, size))
++            return fcntl.ioctl(devfd, _udmabuf_create_ioctl(), req)
++        finally:
++            os.close(devfd)
++    finally:
++        os.close(memfd)
++
++
++def _dmabuf_attach_count(dmabuf_fd) -> int:
++    """Return the number of devices attached to dmabuf_fd, from debugfs."""
++    path = "/sys/kernel/debug/dma_buf/bufinfo"
++    try:
++        with open(path, "r", encoding="utf-8") as f:
++            lines = f.read().splitlines()
++    except OSError as e:
++        raise KsftSkipEx(f"{path} is not readable: {e}") from e
++
++    ino = os.fstat(dmabuf_fd).st_ino
++    found = False
++    for line in lines:
++        fields = line.split("\t")
++        if not found:
++            found = (len(fields) == 7 and fields[5].isdigit() and
++                     int(fields[5]) == ino)
++        elif line.startswith("Total "):
++            return int(line.split()[1])
++    raise KsftFailEx(f"dma-buf {ino} not found in {path}")
++
++
++def _devmem_bind(bind, attrs) -> None:
++    """Run a devmem bind op, skip the test if the device can't do devmem."""
++    try:
++        bind(attrs)
++    except NlError as e:
++        if e.error == errno.EOPNOTSUPP:
++            raise KsftSkipEx(f"devmem binding not supported: {e}") from e
++        raise
++
++
++def devmem_bind_rx_unregister_check(_nf) -> None:
++    """Verify RX devmem bindings detach dma_buf synchronously on netdev unregister."""
++    dmabuf_fd = _create_udmabuf()
++    defer(os.close, dmabuf_fd)
++    nf_priv = NetdevFamily()
++    defer(nf_priv.close)
++    nsimdev = NetdevSimDev(queue_count=2)
++    defer(nsimdev.remove)
++    nsim = nsimdev.nsims[0]
++
++    ip(f"link set dev {nsim.ifname} up")
++    with EthtoolFamily() as ef:
++        ef.rings_set({"header": {"dev-index": nsim.ifindex},
++                      "tcp-data-split": "enabled"})
++    _devmem_bind(nf_priv.bind_rx, {
++        "ifindex": nsim.ifindex,
++        "fd": dmabuf_fd,
++        "queues": [{"id": 1, "type": "rx"}],
++    })
++    ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
++
++    nsimdev.remove()
++    ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
++
++    nf_priv.close()
++
++
++def devmem_bind_tx_unregister_check(_nf) -> None:
++    """Verify TX devmem bindings detach cleanly on netdev unregister without UAF."""
++    dmabuf_fd = _create_udmabuf()
++    defer(os.close, dmabuf_fd)
++    nf_priv = NetdevFamily()
++    defer(nf_priv.close)
++    nsimdev = NetdevSimDev(queue_count=2)
++    defer(nsimdev.remove)
++    nsim = nsimdev.nsims[0]
++
++    ip(f"link set dev {nsim.ifname} up")
++    _devmem_bind(nf_priv.bind_tx, {
++        "ifindex": nsim.ifindex,
++        "fd": dmabuf_fd,
++    })
++    ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
++
++    nsimdev.remove()
++    ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
++
++    nf_priv.close()
++
++
+ def main() -> None:
+     """ Ksft boiler plate main """
+     nf = NetdevFamily()
+@@ -379,7 +496,9 @@ def main() -> None:
+               page_pool_check,
+               page_pool_dump_ifindex,
+               page_pool_ifindex_leak_check,
+-              page_pool_stats_ifindex_check
++              page_pool_stats_ifindex_check,
++              devmem_bind_rx_unregister_check,
++              devmem_bind_tx_unregister_check
+               ],
+              args=(nf, ))
+     ksft_exit()
 -- 
 2.56.0.176.g3575e65682-goog
 
