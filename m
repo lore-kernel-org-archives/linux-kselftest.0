@@ -1,166 +1,290 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B08E55821F;
-	Thu, 15 Oct 2026 18:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296584F4733
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 18:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792090364; cv=none; b=maG2sLVnpgr2cXe4qNRgV2oNrkZLX65d82NDqQKEDMYZM1XUN03y5qbytfP/Yq3XOJnK0rP5cgM84nttSQ3zpOaH/VJAcBa0J/v0VL6c2J12h57MIMgSDH9jEaotGgk9phCVAg0vydZCY1fhH1PqSWtcZzFf3PhIaBjJ+ImkrIY=
+	t=1792090494; cv=none; b=RGhZtsJqtkw2Iyj7iGy3k0yljhayyRRnFC6QujuQuX7o7dUEE74YC3SMJPedfD1Ibx92rxaBe7QeIcstjTGdnyG6PGQHby/DSwQi2GV+v3alIOHrsfMDiOyUeu+VsqOsmwqCMwgMr58IWe0M7HUp0NKbSOSvQoxAeHHrfHDJUKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792090364; c=relaxed/simple;
-	bh=LgJdMkuY3CxbGVuvdie+11He70UGUab1eNFyeH50fm8=;
+	s=arc-20240116; t=1792090494; c=relaxed/simple;
+	bh=V+5DobUGwWgbn/wQY1pIDzWIHCihSxw4xDJxND8YeZU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qoIZig0c/46iw4rB/trP6mB6vuegX7lHqk0ykPsrzeR15CUdZwrdzsX19sWE81149DBcmFlXkdaB3u2g9HpKLmjgNA8Spl/oR/8z7d1LaQmkH78cw/GAZnHYwh01cVfzHZEt0ScdF7RyOvX7QviXSUZVbjKHgm92PdKVuyTc5Bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1AuxVCD; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=LJHMKo8XmxCm0UdaJ0D2Un2xPWP/8aZnF/nPyxHkg2Irr+a55aq7Zqt73PSBamSaueR3DxvaSl8Qh8UtTrjZHBMmEht0qbQS+Szz0VbBDHVPIjZcM5+vZXCbSwIVYlMTlvke3dejqCzT5PhXmLwnOtypObFiPXyMDGjTAvUTSwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lSC/+Mic; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1AuxVCD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 890EE1F000C4;
-	Thu, 15 Oct 2026 18:52:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792090361;
-	bh=Njl37LUDsIFdauFRHaWsmyFWughBb0HjtnFZLbKLBCE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=P1AuxVCDtDzaGD11WMuGAROblSXSvHwJzTIeUkyME2nRdttFU8BqQK4gd06lSoVgJ
-	 BSKir+YvMkcP3sUCmVFoWK002WP6TaGDJjYScyXJsogEjlK1GF9FbftB7jwkb+g94x
-	 J3z2GIUt3tmQNhqR8zPJBxBvlgfcxC0riohLZzywTgqR+8yKIiEOdaeb2v8XX3xulz
-	 FmD0I06pVbbShRA0qaHLoHPHaG8s80Rn4P0+g4cku4CehU1ehH0s0iwJ6gPGZOPlW8
-	 sDg0/o3II8mhfzE6WDm7efCnGeXGcpIGILczqkcB1PIVo96O9fzicYw5GsjyIikCeQ
-	 kVqqAYCLnDTgg==
-Date: Thu, 15 Oct 2026 14:52:40 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	linux-kbuild@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH 2/6] kbuild: add "make tools_build" to build
- userspace tools from tools/
-Message-ID: <atEg-E51MHBHL8Ju@laps>
-References: <20261011233647.2454648-1-sashal@kernel.org>
- <20261011233647.2454648-3-sashal@kernel.org>
- <b0fa30a6-9f41-4c9a-a3fb-2634322e2bd1@t-8ch.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lSC/+Mic"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3a4cdc9025bso3176927a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 11:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792090489; x=1792695289; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=IltlA15ffn2teEWgoeALmwOWBDbtdgaPXsnTGsD5rwo=;
+        b=lSC/+MicDWmDczibKQWLZPWUWT5H2X44ERqtu9QO/Y7ZdZ8f7ETJJkJGEFC3vpeZ4G
+         5jHK2or2b0YV5ZPBMaL/hxIqcRX55wxNaNWP7KHcqUPF7/A/JOv93c2L4yzwtopk4se7
+         ub9p0lSbmXDFwIp9Y4JFBQbIKBxJomgq4TRLzf35IYP9F8iZS8yNCkXs9dvfACdFpPc3
+         3v/Z+6HNwSDDPS7VAR0XUxScf5xwN9gtokw/5X/K/9xj/CpaSX6YXxLQDnNWs0+H++EU
+         1z8Z+UcJFErTsdp6bquy83PrR/t4NNeRb6Bk9AZsSL914AlRYgI0BmyORn1q3dWhDmtU
+         Dflw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792090489; x=1792695289;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IltlA15ffn2teEWgoeALmwOWBDbtdgaPXsnTGsD5rwo=;
+        b=CHmKlRZPlAztfFbAIhzL8zD724/6dCqUm7ERuMLjBmjB15UN3XDEa4cklB9NhT8Rpt
+         HbjL5y52n1B6qVtazqytDhIjHkUVXUMH2nzD6n2+Sk9dUxhHYNHPJytzYPyLKYq0FAFY
+         NkLwII2vfdCmGXtPMgFvcTBDUYxjKj/deVdm5pHKP9gFEKE0rlahJJCEddYMaL1+Ly3r
+         jBlbrx7alXYevxyAoLSl7g+tzw4WEM8qN/9Hlenbh734xGEm6nQCV5CECxNEJsj5GWo2
+         2+RJFDfmjM4U9gxG+8xvm/YzAT2KGvH/xWiOu/L3a/g/g/HAHVx2yJ/qM+L3G0uYmG+3
+         mtaQ==
+X-Gm-Message-State: AFq9FYIejTY9YUcWja4s5NpQV2M6t02tcPrOmzMb19IJbPscTvPtqbDf
+	PWFRbjuDEU1Jg7RC1ZHNVZ/n1Ou8kJcTYqyGn6eo7ZfKGm5FITpQZ0CgeJBsMDLYyA==
+X-Gm-Gg: AYBFou2dylyY8n0LlsZQgjgMXSzwZbESm8fPTmjPli6NW+uFZ9fr1jkurJ8XGJq1p62
+	7LpGx/lQBEvb/v9cfDrcxRtQsf9O1sBHrXeQRltDZ0o2BpK6TywdQc8p/G+uGG8F57X7s2wX3eU
+	GbsF2ZsntP8lAd7hCLKRiXVBPpppc1UN7w7uMxQmR1HnswDsm+3L4WNdNGnHUAfcyjqQU/VzeWL
+	aDn8v/M6+ShpIQEe9s98yhVakeKptti0LlPPV+7hEVFSrr5SZxYeyV7ki8dd5nvTB/lrowVZZKB
+	s8MosNzc5HXX18p7poMM0WjTbThPXUQVZfKu8mLWRX5dCphc/bfRuY11xWUwUG4Uz2ETUUeN0vW
+	8fqRxnoYpTxBsNltAY8bh51CzyIIayT2fStwC3u8bnWER0xghHiSFnfwms8lURWcRDmRZUAebcV
+	V3QFt539+NKrakeFqEK/XX8oxnIejOOzOFfTIwHy6l5HyMqgcJDyKIrG8dGruc6mL6LnBXPSdv5
+	ZZ42jnW7crvhVzKMOXgu/uBurhttD2lWfQ=
+X-Received: by 2002:a17:90b:390d:b0:3ac:b6eb:e0d4 with SMTP id 98e67ed59e1d1-3acb6ebe1c9mr959297a91.63.1792090488544;
+        Thu, 15 Oct 2026 11:54:48 -0700 (PDT)
+Received: from google.com (64.75.127.34.bc.googleusercontent.com. [34.127.75.64])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc46ecd32sm452704a91.3.2026.10.15.11.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2026 11:54:47 -0700 (PDT)
+Date: Thu, 15 Oct 2026 18:54:43 +0000
+From: David Matlack <dmatlack@google.com>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org,
+	akpm@linux-foundation.org, linux-mm@kvack.org, vipinsh@google.com,
+	linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+	pratyush@kernel.org, graf@amazon.com
+Subject: Re: [PATCH v1 0/7] liveupdate: tmpfs preservation and early freeze
+Message-ID: <atEhc20Zawj4D62x@google.com>
+References: <20261015093816.2438942-1-pasha.tatashin@soleen.com>
+ <atESAwf17pJ11S9U@google.com>
+ <atEaPuWNOm5VLc7A@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b0fa30a6-9f41-4c9a-a3fb-2634322e2bd1@t-8ch.de>
+In-Reply-To: <atEaPuWNOm5VLc7A@google.com>
 
-On Tue, Oct 13, 2026 at 10:38:37PM +0200, Thomas Weißschuh wrote:
->On 2026-10-11 19:36:41-0400, Sasha Levin wrote:
->(...)
->
->> Assisted-by: LLM
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  .gitignore            |  5 +++
->>  Makefile              |  8 ++++-
->>  lib/Kconfig.debug     |  2 ++
->>  tools/Kconfig         | 72 +++++++++++++++++++++++++++++++++++++++
->>  tools/Makefile.kbuild | 79 +++++++++++++++++++++++++++++++++++++++++++
->>  5 files changed, 165 insertions(+), 1 deletion(-)
->>  create mode 100644 tools/Kconfig
->>  create mode 100644 tools/Makefile.kbuild
->
->(...)
->
->> diff --git a/tools/Kconfig b/tools/Kconfig
->> new file mode 100644
->> index 0000000000000..bf0643b39b86e
->> --- /dev/null
->> +++ b/tools/Kconfig
->> @@ -0,0 +1,72 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +
->> +config TOOLS_BUILD_ABI
->> +	def_bool X86_64 || ARM64
->> +
->> +config TOOLS_BUILD_GLIBC
->> +	def_bool $(success,echo '#include <features.h>' | $(CC) $(CLANG_FLAGS) $(USERCFLAGS) -E -dM -x c - | grep -q __GLIBC__)
->> +
->> +menuconfig TOOLS_BUILD
->> +	bool "Build userspace tools from tools/"
->> +	depends on CC_CAN_LINK && !UML
->
->Why !UML?
+On 2026-10-15 02:23 PM, Pasha Tatashin wrote:
+> On 10-15 17:48, David Matlack wrote:
+> > On 2026-10-15 05:38 AM, Pasha Tatashin wrote:
+> > > This series allows preserving files in tmpfs via LUO to survive across a
+> > > live update, and allows userspace to decide when to freeze a session
+> > > instead of delaying until auto-freeze at kexec time. Once userspace is
+> > > done with a session, it can freeze the session immediately (and across
+> > > multiple sessions in parallel), reducing blackout time by not postponing
+> > > this operation to kexec shutdown where all sessions are frozen serially:
+> > > 
+> > > 1. Early session freeze (LIVEUPDATE_SESSION_FREEZE):
+> > >    Currently, LUO sessions are frozen automatically only inside the
+> > >    reboot(LINUX_REBOOT_CMD_KEXEC) path, where luo_session_serialize()
+> > >    iterates through all outgoing sessions under global write locks and
+> > >    freezes them serially during shutdown.
+> > > 
+> > >    Add the LIVEUPDATE_SESSION_FREEZE ioctl on session file descriptors so
+> > >    userspace can freeze a session as soon as it is done with it (and freeze
+> > >    multiple sessions concurrently, since luo_session_freeze() only acquires
+> > >    the per-session mutex). During kexec, already-frozen sessions skip the
+> > >    late auto-freeze step; if an early-frozen session is closed before
+> > >    kexec, its files are rolled back via .unfreeze() before being
+> > >    unpreserved.
+> > 
+> > Thanks for putting this together. I'm on board with driving
+> > retrieve-into through a per-handler argument instead of a LUO-level
+> > flag. It's what Pratyush suggested on the RFC too (sorry Pratyush, I
+> > never replied to that). I still need to review the actual patch but
+> > I think the idea is fine.
+> 
+> Yeah, Pratyush and I discussed this at LPC. I've been using this extra
+> argument in my cpu_preserve series to launch jobs at a given entry
+> address on a preserved CPU, and figured it would be a useful, generic
+> interface for others as well. So I decided to send this series now to
+> reduce the extra infrastructure I carry in my cpu_preserve series, and
+> your tmpfs work was a good reason to land it now :-)
+> 
+> > However, nothing ties the arg struct to a handler, it's interpreted by
+> > whichever handler owns the token. At LPC we discussed letting userspace
+> > pick the handler in PRESERVE_FD/RETRIEVE_FD, so that it controls which
+> > one is used when more than one can take a file. If we do that, the
+> > handler name would also be the natural key for which arg struct is
+> > expected.
+> > 
+> > > 3. Tmpfs file preservation and retrieval:
+> > >    Using the file handler retrieve argument, extend mm/memfd_luo to allow
+> > >    preserving generic shmem-backed tmpfs files (not just unlinked memfd
+> > >    pseudofiles), recording MEMFD_LUO_FLAG_TMPFS in
+> > >    struct memfd_luo_ser.flags so that preserved tmpfs files must be
+> > >    retrieved as tmpfs files and preserved memfd files must be retrieved as
+> > >    memfd files.
+> > 
+> > I've been working on a v1 of the tmpfs preservation since LPC. v1 fixes
+> > a number of problems in the RFC that I think this series still has
+> > (sorry for the wall of text, it is LLM-generated):
+> > 
+> >  - Failures that userspace can fix lose the file. The folios are
+> >    restored, charged and added one at a time, so if the target's mount
+> >    is too small (ENOSPC/quota) or the caller hits its memcg limit
+> >    partway through, the target is truncated, the folios are freed, and
+> >    the failure is permanent. Only bad-argument errors are retryable.
+> >    v1 restores all the folios first, charges all the blocks and memcg
+> >    up front, and adds all the folios to the page cache or none of them.
+> >    It keeps the restored folios in private_data between attempts (LUO
+> >    needs to pass private_data to .retrieve() and keep it on failure),
+> >    so the only permanent failure left is losing the KHO state itself.
+> 
+> I think the current behavior is fine: if the file doesn't fit when
+> restoring, I think it is okay to lose the file permanently. We shouldn't
+> keep preserved data around in private_data once we have started
+> retrieving folios.
 
-Building with ARCH=um was reaching the tools, which then set "-I
-tools/arch/um/include" but that dir doesn't exist.
+Ok I think we can omit keeping restore folios in private_data across
+retry attempts. It is a bit subtle.
 
-I worked around this for the RFC, but I think I can address it when I resent
-the patches.
+> >  - memfd_pin_folios() doesn't require the inode lock, so iommufd can
+> >    pin folios of the target while they're being added or truncated
+> >    away. v1 starts with two patches that make iommufd take the lock
+> >    and make memfd_pin_folios() assert it.
+> 
+> Hm, isn't this mostly orthogonal to the change we're making here?
 
->> +	depends on TOOLS_BUILD_ABI && TOOLS_BUILD_GLIBC
->
->These dependencies could be on separate lines, it will reduce churn when
->they get modified.
+Kind of. Today .retrieve() fills a brand-new memfd that nobody else can
+reach until the ioctl returns. Retrieve-into fills a file that other
+processes can already open by path and pass to iommufd, so pinning can
+now race with the folios being added, or truncated away on failure.
 
-ack
+In the failure case a folio can stay pinned (and mapped for DMA) after
+it's been removed from the file. Retrieve-into introduces the race, and
+the fix is two small prep patches.
 
->> +	help
->> +	  Build the selected programs under tools/ for the target together
->> +	  with the kernel, as part of "make all", or alone with
->> +	  "make tools_build". Each program is built by its own build system
->> +	  into tools-build/ in the object tree. The tools then always match
->> +	  the kernel they were built with, and a change that breaks one of
->> +	  them shows up in the same build that compiles the kernel.
->> +
->> +	  This needs a compiler that can link glibc programs for the target,
->> +	  and is currently limited to x86_64 and arm64.
->> +
->> +	  If unsure, say N.
->
->(...)
->
->> diff --git a/tools/Makefile.kbuild b/tools/Makefile.kbuild
->> new file mode 100644
->> index 0000000000000..820a2d9a3893b
->> --- /dev/null
->> +++ b/tools/Makefile.kbuild
->> @@ -0,0 +1,79 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +#
->> +# Builds the userspace programs selected in tools/Kconfig for the target.
->> +# Invoked by "make tools_build", which "make all" runs when CONFIG_TOOLS_BUILD
->> +# is set. Each program is built by its own build system, the way it is built
->> +# standalone, into $(objtree)/tools-build/.
->> +
->> +PHONY := __tools_build
->> +__tools_build:
->> +
->> +include include/config/auto.conf
->> +
->> +abs_srctree := $(realpath $(srctree))
->> +toolsdir := $(abs_srctree)/tools
->> +outdir := $(CURDIR)/tools-build
->> +
->> +# kbuild's state and the user's compiler flags, from the environment or the
->> +# command line, would change how these build
->> +unexport srctree objtree srcroot VPATH building_out_of_srctree sub_make_done
->> +unexport CLANG_FLAGS INSTALL_HDR_PATH O
->> +unexport CFLAGS CPPFLAGS LDFLAGS EXTRA_CFLAGS EXTRA_LDFLAGS USERCFLAGS USERLDFLAGS
->> +space := $(subst ,, )
->> +overrides := $(subst \$(space),\@space@,$(MAKEOVERRIDES))
->> +MAKEOVERRIDES := $(subst \@space@,\$(space),$(filter-out O=% CFLAGS=% CPPFLAGS=% \
->> +	LDFLAGS=% EXTRA_CFLAGS=% EXTRA_LDFLAGS=% USERCFLAGS=% USERLDFLAGS=%,$(overrides)))
->> +
->> +# Keep Python's bytecode caches out of the source tree
->> +export PYTHONDONTWRITEBYTECODE := 1
->
->This should just be done in the toplevel Makefile IMO.
+> >  - The target has to be opened for writing (FMODE_WRITE). Since LUO
+> >    holds a reference to it until finish, that means a restored binary
+> >    can't be executed until the session is finished (-ETXTBSY). v1
+> >    instead requires mnt_want_write_file() and file_permission(MAY_WRITE)
+> >    under the inode lock, like FS_IOC_ENABLE_VERITY. That also rejects
+> >    immutable files, which a fd opened for writing before chattr +i
+> >    doesn't.
+> 
+> Ah, good point.
+> 
+> >  - There's no file_modified() or fsnotify_modify(), so setuid/setgid
+> >    bits aren't cleared and timestamps aren't updated. The normal write
+> >    path does both.
+> 
+> That is true, though I'm not sure fsnotify_modify() is really needed
+> since the whole file is restored at once and I doubt anyone is watching
+> for modifications during restore (clearing setuid/setgid via
+> file_modified() makes sense, though).
+> 
+> >  - f_pos is set through fget() + vfs_setpos() without f_pos_lock, which
+> >    races with read()/lseek() on the same open file. v1 uses
+> >    fdget_pos(). (Sashiko called this an ABBA deadlock. I don't think it
+> >    is one, since vfs_setpos() doesn't take the lock, but the race is
+> >    real.)
+> 
+> Right, this was reported by Sashiko; I haven't looked into it yet.
+> 
+> > 
+> >  - Early failures leak the preserved folios. The seals/flags check
+> >    frees ser and records a permanent error, so .finish() skips the file
+> >    and the folios are never freed. Sashiko flagged this as well. The
+> >    new MEMFD_LUO_ALL_FLAGS check adds another way to get there. In v1,
+> >    early failures don't consume anything and aren't permanent, so
+> >    .finish() cleans up.
+> 
+> We originally agreed that if retrieve() fails, we fail permanently and
+> leak resources until reboot to avoid memory corruption from ongoing DMA
+> activity. However, now that we have the retryable option, we can start
+> relaxing what is considered a permanent failure vs. a recoverable/early
+> failure that .finish() can clean up.
 
-I originally added this because perf was silly, but apparently that was a bug
-instead of intended behavior, which was fixed in 5479e1a13b759 ("perf tools:
-Put Python bytecode in output directory"), so I think I can just drop this
-altogether.
+Ok I think we are ligned that we need to keep the preserved folios
+around until finish(). I think this point was saying there are bugs in
+the existing memfd_luo code and in this series that leak the folios even
+after finish(). Either way I'll fix them up.
 
--- 
-Thanks,
-Sasha
+> 
+> >  - If a token was already retrieved, luo_retrieve_file() returns the
+> >    existing file and ignores arg. Userspace that asks to retrieve into
+> >    X gets success and an fd for a different file. I think LUO should
+> >    fail with -EBUSY if an arg is passed for a token that was already
+> >    retrieved.
+> 
+> Agreed, if an arg is passed for a token that was already retrieved,
+> failing with -EBUSY (or -EINVAL if the target file doesn't match the
+> originally retrieved struct file) makes sense.
+> 
+> 
+> >  - Sashiko's WARN_ON(liveupdate_claim_file()) report on 3/7 is valid:
+> >    xa_insert() can fail with -ENOMEM there, and userspace can trigger
+> >    that.
+> 
+> Yeah, we can address that.
+> 
+> > One place our series are not aligned is MEMFD_LUO_FLAG_TMPFS. My
+> > thinking has been that RETRIEVE_FD should support retrieving into any
+> > shmem file (including linked files, memfds, and O_TMPFILE). It is
+> > userspace's choice at retrieve time. The only thing the kernel enforces
+> > are the fundamental requirements such as exceeding the file's mount's
+> > limit.  When I think about it that way there is nothing special about
+> > retrieving into a memfd and MEMFD_LUO_FLAG_TMPFS is just artificially
+> > limiting how a shmem file can be retrieved. WDYT?
+> 
+> I do not want LUO to change the type of a preserved file across live
+> update. Take seals, for example: a memfd can be sealed with the
+> guarantee that it will never be modified, whereas a regular tmpfs file
+> does not support sealing. Allowing a preserved memfd to be retrieved
+> into a tmpfs file would create a loophole to strip seals (or bypass
+> mount/superblock boundaries). I strongly prefer keeping the file type
+> strictly the same across preserve and retrieve.
+
+I agree that seals must not be strippable. I am not proposing to allow
+that. Regular tmpfs files are created with F_SEAL_SEAL, and v1 refuses
+to retrieve into a target that has F_SEAL_SEAL if the preserved file has
+any seals the target doesn't have. So a sealed memfd can only be
+retrieved into a memfd that allows sealing, and gets its seals back
+there the same way F_ADD_SEALS would add them. Only unsealed memfds can
+be retrieved into regular tmpfs files.
+
+On mount boundaries, retrieving into a tmpfs file charges the blocks
+to that mount, so its size limit and quota apply. That's stricter than
+the unlimited internal shm mount that memfds live on, not looser.
+
+This is what I mean about enforcing the fundamental requirements, rather
+than enforcing something artifical like MEMFD_LUO_FLAG_TMPFS.
+
+BTW, MEMFD_LUO_FLAG_TMPFS is set based on i_nlink, so it doesn't really
+track the file type. An O_TMPFILE or unlinked tmpfs file gets preserved
+without the flag and comes back as an anonymous memfd on the internal
+shm mount. That changes its type and drops its mount's size limit and
+quota, which is the boundary crossing you're worried about.
+
+If you still want the type to stay the same, we can define it by
+superblock instead of i_nlink:
+
+ - memfds (on the internal shm mount): plain retrieve only, as today.
+ - files on a tmpfs mount, linked or not: retrieve-into only, into any
+   empty tmpfs file, including O_TMPFILE files.
+
+That keeps your guarantee, fixes the O_TMPFILE case above, and still
+lets userspace restore into an O_TMPFILE file and linkat() it into
+place once it's verified.
+
+But my preference is still to enforce the fundamental requirements,
+since we have to enforce them either way and MEMFD_LUO_FLAG_TMPFS adds
+ABI.
