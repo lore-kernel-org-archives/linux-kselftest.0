@@ -1,154 +1,222 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D1C51EDED;
-	Thu, 15 Oct 2026 10:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677D13A1E8C
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 11:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792061831; cv=none; b=LAG67xj1Y9gJkHGG0JXACKJbdCIxqRyhQIxoAZ8VpQFIiAx51f081VnmMQ1zQpLDuLE2a7ajXWFzJ62bnadfig4QI8lar1CkmO0oUPk/wXNGteEJzFpUYAmI/i9LXniuFD3p79fbEdFdHFbpecpAu4t7CL9VCG7ahMm/oeI1Yaw=
+	t=1792062727; cv=none; b=qnbu7yYHNFtntgOzfA9OanYu6O83y3JtY4zpt7DT8ykxqBP0v/c6InZvM/N6eZdcdGa22LAUV1OimSie8n0F7RmqMm6I4aSz7OE81lTPwQthmbNU4ssaL4BfwL3cah0HTxZ1d1cki90ylkCDvKUGrQht0iKBAWVs/CcnrL3HtrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792061831; c=relaxed/simple;
-	bh=0REL/m2y6i647azVBbE6Hi6dOXqodNeRc9FI3vDDqwE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LRWChcdRCvdPan6wQ2IESr9Su/kbqbns2cTI9Xls1d1cMWBN+xunWKWIz7SU63p1nyWVN7bsfLzxu/ITNTJFwjSKFtROdUBRHmG3EZagK9BRfN71xH5M8fe0viLfaRqEtnp4jkVBbtoCgZWFybOrAwZdhWvfhSKLM0yVQUwy5JQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DkbyaOS/; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1792062727; c=relaxed/simple;
+	bh=souBc5LM+ZP8bJKYxVLBa3N/cFi5YYK6F4kM1fz93jg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AQZ0dZyd0jztD+FWATA6ud3AtCZqFOYXzknB2WshRQzzNWHVQfNeydVmKGvjO4EMe6FaVGbY0B1aJ0HpkiLT05vQ2+5hWesX9c2dWgVXIT3G+9H9G/JGLeU7HzPQSusRuTUiFsgBqhn46klQctt7a+FQS4KlVyl3UaTc+W82qWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Edmfl/ug; arc=none smtp.client-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DkbyaOS/"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69F9kTNi3000992;
-	Thu, 15 Oct 2026 10:56:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ucUN5G
-	ZcjIlprFag9xgUmIk1e0Wn9pgsi38X6K0yHso=; b=DkbyaOS/6ejhVntQdg5DjF
-	3cWGoHcnlgeOQpWGWcOQRGR5PlFLaI++rEneBcuqnNe8jd2/sd4F5NYMFi2jAAgj
-	2QePkkYW2oO3RNe/umLJT9NNw5eVkxWSjF9ne0FGEP4YVGswDQGRr/rG0rapCmXR
-	Ju8PgXHQUcn0omHPLOkUyrzY1S047VkDWKAF76MDKuIN+BbxiQ8vnFBqDiqH9XqN
-	tnOxCjrrskKJKhhWzW09Kkot3VZMOoqkwPuyKEkRhSRQZBbNPunABvF0nw5LcqkJ
-	8z66uzVQ4lPZUWXpxjm+4KwaoVmYhIotMZapQjJeois4lXyxVeFjGR1Aij4lEnYw
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4h7dwhsg33-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 15 Oct 2026 10:56:59 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 69F9nx3J1891223;
-	Thu, 15 Oct 2026 10:56:58 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4h9q2ys3kd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Oct 2026 10:56:58 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 69FAus6m49938712
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Oct 2026 10:56:54 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0BED02004B;
-	Thu, 15 Oct 2026 10:56:54 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BD7CB20043;
-	Thu, 15 Oct 2026 10:56:53 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.224.75.30])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with SMTP;
-	Thu, 15 Oct 2026 10:56:53 +0000 (GMT)
-Date: Thu, 15 Oct 2026 12:56:51 +0200
-From: Claudio Imbrenda <imbrenda@linux.ibm.com>
-To: Gautam Gala <ggala@linux.ibm.com>
-Cc: borntraeger@linux.ibm.com, kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        frankja@linux.ibm.com, david@kernel.org, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com, svens@linux.ibm.com,
-        pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org
-Subject: Re: [PATCH v2 0/2] KVM: s390: fix ESSA addressing exception
- injection in migration mode
-Message-ID: <20261015125651.558f2d85@p-imbrenda>
-In-Reply-To: <20261015104822.77062-1-ggala@linux.ibm.com>
-References: <20261015104822.77062-1-ggala@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Edmfl/ug"
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-15168a20b47so3438260c88.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 04:12:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792062725; x=1792667525; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6Qizvs/lAA8DOR5ycYqynzWycuQET1RhOhDF12u5Cew=;
+        b=Edmfl/ugV82J4/VO+IXtix9zNicjfBXsa8aRqgFxv5untoSnqpikEEgTmQHh/l172U
+         Gs7fHj17C3ZUFy3IltxrbNYMKO7dcm728IVTuT/B5G8RrpFudQOX1Vk5cy4N6ol3WCac
+         f1vY4yggZOVhLtpmwikh+vU/0IU4Pn6pcTS0RXmfDolDVZQ1q2FNCVkzSKcBVw7hpToD
+         7gnBfifIp0n9sxUQ/dSDdO3EGG5nKO9g3JUS0KjselU9svlwcfY1GuF3TOtmeIV0Mpln
+         k4lkYs2whvV3MEcScV8pS0C9CGoP2cYbj2Y5b0jHuUHZxoZkFee3LjLpSTP/S1AspyQK
+         icMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792062725; x=1792667525;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6Qizvs/lAA8DOR5ycYqynzWycuQET1RhOhDF12u5Cew=;
+        b=YtFFV0tmSBxhTSk0cIgCu1iiSoHlCajR0qfvBSKbrQWFkvDPiqIKNLmEuTOTWHNii7
+         zsLnuJujgqdrtxxF74x9FWOWRKeeLO8n25P775RGBCFOmg2vClJRxnK7UjtO326I/Q9P
+         y9uGdr+4F7r97T+xrt2FuDgpLZTrVTCwnGcPUheJM8PBCW06Xo8EzYPwwlHD/hyK6DD1
+         /zSpWLNq5dNEZ4UxiHIRSmmzynhoQ0FYH4A8ShTqg2VRNgE+heRNjkKG6qy/I1TnHcY7
+         J5s7vO5+BamzmwKr2pP+3qqs94xzz/LUBbDHvEqJYj4e6BWF/KsPhmAkfVKANozQ28FU
+         ZquQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwPcqgPfipKAKkYnU7PIs74z/p0aWa8GV/g0DBDpoqd+AXcmSRYibbUkvYyl4hVah10jvFh6CaMS+NRLvitXwI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJQDDJRR3fvFIXpG6+232lt+cjg6pL/36Sgyw0HJ9J0rntQxsCn
+	9z3fW7IyC5GU4gQZXtvzTyL+vU6dq62FYvqwBKXPRrrzR8mc3A1Ck4oO
+X-Gm-Gg: AYBFou0STRQrSpFaUmHoPDU5m7qy3wUiIEU79F9cw6wl5vGAj1N/4WxZ2H2fzOX8Wmx
+	P1dNCdbDCs45BnDQfgaflU73J5KAQnsfbDJGkCbfAvxvyyUWy3SbqI5V25ek+1K3R3ocIoixfQL
+	5pjOB1y0R3kLRtn/x7r12ByNLDWh+WIAOLKkG0SkIHpOopBRTGKvpS9QOlHlh4ogm0CVdtRpzvj
+	IPUpCbYsL5wF/HahaHJNYVBxZbHMK7Cg15uSheckWdmn5AmlTNpkCSiK9OI5tHa+0WcQSSBRwAS
+	aVf5P5FhdEJXMgMPZK2yVIG9Rfs5Vb0ixEB5s0wxazHmAK9lJGLU/NQfEuDRzrJjLypY3/Ye1wG
+	7OfaEjVg4oZE9oyeYGU+z2v3ir79qfN8SHBnznhvR6WQUYRDtQHD68jj2H+oSkaSvyMTaerSVhK
+	FKHXsBR0memrkAStaeHOn9+c6bRO+XWA8sz8P0TD0G9fClBrfrMd4+Pm69uWb6TD/eRgs/mXkRk
+	KvimJ/KeZhNs7oVSCXo7BLpojR4YehzIZ4JP6w=
+X-Received: by 2002:a05:701b:4343:b0:15e:e4e7:20f with SMTP id a92af1059eb24-16a5f01dfaamr26153079c88.25.1792062725109;
+        Thu, 15 Oct 2026 04:12:05 -0700 (PDT)
+Received: from obadmin-Precision-3680.atlascopco.group ([136.226.232.200])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-16997c21ff3sm54696473c88.2.2026.10.15.04.12.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2026 04:12:03 -0700 (PDT)
+From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sahaj Chaudhari <sahaj123.sc@gmail.com>
+Subject: [PATCH v4] selftests/cgroup: test pids.events notification
+Date: Thu, 15 Oct 2026 16:42:43 +0530
+Message-ID: <20261015111243.1551387-1-sahaj123.sc@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE1MDA0MiBTYWx0ZWRfX4ZyS7OqVAWSF
- 1ZXGb878dkh5Ee062NngWGCkeo9CJ8OyWe39ibOdAmQzp+CW58y4XsjYGCb1QnJW/Fp3s7cGNNw
- mGq+xJqC+dTYVONj29Aoi9DBUWK/khI=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE1MDA0MiBTYWx0ZWRfXw//mw/py3z63
- g+EJ7d6sZG5eYVVMsknrRfikJsv2U5sMG+uNFe3KW26E1aNpFli+XCLftaifAF9rT0hTK46CHHj
- FA6zVGBgpXp1IQIZcL3u7U07JlFKb2r75b1eCuskRJOrY7BJcLEVssnj/OLs2KQ5mXwwbWD+1Qi
- tNzVpKp3S0kMePGrii2M8ZyTi5qXsRdOOM6tL8EAqdjWCsiBzVqTYwAociwW0RkH1HUr5FXhDyG
- ilv4vGdMZYdZBLVo5brIzTyyFkjZoR9Nm0ylV/trZP1niMW8i9YGNOGGzQFF7IIRyn4omSTx812
- 15432BxoHM0M5OEChQ88eL3Z5GPHsttjS3MFNSBH7/9kGeQBhMCZbYYMwRCJfIa4W6GSvo3JhC+
- 9J3wm/VCwXzl2x68iomvsDYtg6eyZ/i4YitQQGi6cSCV7ivDcGniLNMHP+/YzAqsnbSJZ23A5Dc
- mFim9oUYSBREc3bzllg==
-X-Proofpoint-GUID: aNoMplhT1Du88ynDkgR4FIHOSyQP-0N_
-X-Authority-Analysis: v=2.4 cv=RoFQvymK c=1 sm=1 tr=0 ts=6ad0b17b cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
- a=ce-6K0IsK1CbvpNoDM0A:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: g9BzTdoVznsDwq7RDixPsVqEac5E2Q6h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-14_01,2026-10-14_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 phishscore=0 adultscore=0 bulkscore=0
- impostorscore=0 suspectscore=0 malwarescore=0 clxscore=1011
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610080000
- definitions=main-2610150042
+Content-Transfer-Encoding: 8bit
 
-On Thu, 15 Oct 2026 12:48:20 +0200
-Gautam Gala <ggala@linux.ibm.com> wrote:
+Add a test to test_pids.c that checks a fork rejected by pids.max
+increments pids.events and generates an IN_MODIFY inotify event on that
+file. The test cgroup is the one over the limit, so the notification is
+expected both on a default mount and with pids_localevents.
 
-> ESSA emulation in migration mode silently dropped addressing exceptions
-> when the guest page-table walk failed, so the guest never received the
-> expected PGM_ADDRESSING interrupt during live migration.
-> 
-> Patch 1 fixes dat_perform_essa() to return PGM_ADDRESSING on a walk 
-> failure, and __do_essa() to inject the program interrupt when it sees 
-> that return value.
-> 
-> Patch 2 adds a regression test integrated into the existing cmma_test
-> selftest.
+This covers the fix in commit 1765a153d985 ("cgroup/pids: Restore
+pids.events notifications in local mode"), where a rejected fork changed
+pids.events without waking its pollers when pids_localevents was enabled.
 
-Whole series:
+Tested on x86_64 under QEMU without KVM, on kernels built from the
+cgroup for-7.4 branch (eb69e955de7b) and from the same tree with that
+fix reverted. With the fix, the new test passes on a default cgroup2
+mount and on a pids_localevents mount. With the fix reverted, it passes
+on a default mount and fails on a pids_localevents mount. No kernel
+warnings were logged.
 
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Link: https://lore.kernel.org/r/20261013064812.875787-1-sahaj123.sc@gmail.com
+Signed-off-by: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+---
+Changes in v4:
+- Move the test into test_pids.c as test_pids_events_notify(), using
+  cg_run_nowait() and cg_control(), instead of a separate program. This
+  drops the Makefile and .gitignore changes.
+- Drop the pids_localevents skip. The test cgroup is the one over the
+  limit, so the rejected fork notifies it on both mount types.
+- Drop the duplicate pids.events check after reading the inotify event.
+- Cite 1765a153d985 as the fix the test covers.
+- Move the read() error-handling note from the commit message to this
+  changelog.
+- Rebase onto the cgroup for-7.4 branch.
 
-> 
-> Changes since v1:
->  - dat_perform_essa() now returns +PGM_ADDRESSING instead of
->    -PGM_ADDRESSING; kvm_s390_inject_program_int() takes an unsigned u16
->    so passing -5 would have wrapped to 0xFFFB and injected a bogus PIC.
->    __do_essa() comparison and inject call updated accordingly. The
->    kernel-doc return-value entry is corrected to %PGM_ADDRESSING.
->  - Selftest: pgm_handler_c() now reads the actual PIC from lowcore
->    (__LC_PGM_INT_CODE) instead of hard-coding PGM_ADDRESSING, so the
->    test would have caught the sign error above had it been in v1.
->  - Selftest: virt_map(vm, 0, 0, 1) added so the DAT-on guest can
->    access the lowcore to read the PIC.
->  - Selftest: PGM_ADDRESSING, __LC_PGM_INT_CODE and __LC_PGM_NEW_PSW
->    constants moved to the shared s390/processor.h header.
->  - Selftest: SIGALRM/alarm() timeout wrapper removed.
-> 
-> Gautam Gala (2):
->   KVM: s390: fix ESSA addressing exception injection in migration mode
->   KVM: s390: selftests: add ESSA migration mode PGM_ADDRESSING
->     regression test
-> 
->  arch/s390/kvm/gmap/dat.c                      |  5 +-
->  arch/s390/kvm/s390/priv.c                     |  2 +
->  .../selftests/kvm/include/s390/processor.h    |  7 ++
->  tools/testing/selftests/kvm/s390/cmma_test.c  | 69 +++++++++++++++++++
->  4 files changed, 82 insertions(+), 1 deletion(-)
-> 
+Changes in v3:
+- Check for a failed read() of the inotify event before comparing its
+  signed result with sizeof(struct inotify_event).
+
+v3: https://lore.kernel.org/r/20261013064812.875787-1-sahaj123.sc@gmail.com
+ tools/testing/selftests/cgroup/test_pids.c | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+
+diff --git a/tools/testing/selftests/cgroup/test_pids.c b/tools/testing/selftests/cgroup/test_pids.c
+index 710109b53dfe..e775c5510cf2 100644
+--- a/tools/testing/selftests/cgroup/test_pids.c
++++ b/tools/testing/selftests/cgroup/test_pids.c
+@@ -3,8 +3,11 @@
+ 
+ #include <errno.h>
+ #include <linux/limits.h>
++#include <poll.h>
+ #include <signal.h>
++#include <stdlib.h>
+ #include <string.h>
++#include <sys/inotify.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+@@ -133,6 +136,75 @@ static int test_pids_events(const char *root)
+ 
+ 
+ 
++/*
++ * This test checks that a fork rejected by pids.max increments pids.events
++ * and notifies pollers of that file, with or without pids_localevents.
++ */
++static int test_pids_events_notify(const char *root)
++{
++	union {
++		struct inotify_event align;
++		char bytes[sizeof(struct inotify_event) + NAME_MAX + 1];
++	} event;
++	int ret = KSFT_FAIL;
++	int inotify_fd = -1;
++	char *cg_pids = NULL, *events_path = NULL;
++	struct pollfd pfd;
++	ssize_t n;
++
++	cg_pids = cg_name(root, "pids_notify_test");
++	if (!cg_pids)
++		goto cleanup;
++
++	if (cg_create(cg_pids))
++		goto cleanup;
++
++	if (cg_write(cg_pids, "pids.max", "1"))
++		goto cleanup;
++
++	events_path = cg_control(cg_pids, "pids.events");
++	if (!events_path)
++		goto cleanup;
++
++	inotify_fd = inotify_init1(IN_CLOEXEC | IN_NONBLOCK);
++	if (inotify_fd < 0)
++		goto cleanup;
++
++	if (inotify_add_watch(inotify_fd, events_path, IN_MODIFY) < 0)
++		goto cleanup;
++
++	if (cg_enter_current(cg_pids))
++		goto cleanup;
++
++	if (cg_run_nowait(cg_pids, run_success, NULL) != -1 || errno != EAGAIN)
++		goto cleanup;
++
++	if (cg_read_key_long(cg_pids, "pids.events", "max ") != 1)
++		goto cleanup;
++
++	pfd.fd = inotify_fd;
++	pfd.events = POLLIN;
++	if (poll(&pfd, 1, 1000) <= 0)
++		goto cleanup;
++
++	n = read(inotify_fd, event.bytes, sizeof(event.bytes));
++	if (n < (ssize_t)sizeof(event.align) || !(event.align.mask & IN_MODIFY))
++		goto cleanup;
++
++	ret = KSFT_PASS;
++
++cleanup:
++	cg_enter_current(root);
++	if (inotify_fd >= 0)
++		close(inotify_fd);
++	if (cg_pids)
++		cg_destroy(cg_pids);
++	free(events_path);
++	free(cg_pids);
++
++	return ret;
++}
++
+ #define T(x) { x, #x }
+ struct pids_test {
+ 	int (*fn)(const char *root);
+@@ -140,6 +212,7 @@ struct pids_test {
+ } tests[] = {
+ 	T(test_pids_max),
+ 	T(test_pids_events),
++	T(test_pids_events_notify),
+ };
+ #undef T
+ 
+-- 
+2.43.0
 
