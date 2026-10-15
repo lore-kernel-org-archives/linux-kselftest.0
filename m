@@ -1,62 +1,64 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677D13A1E8C
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 11:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBD44D796C
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 11:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792062727; cv=none; b=qnbu7yYHNFtntgOzfA9OanYu6O83y3JtY4zpt7DT8ykxqBP0v/c6InZvM/N6eZdcdGa22LAUV1OimSie8n0F7RmqMm6I4aSz7OE81lTPwQthmbNU4ssaL4BfwL3cah0HTxZ1d1cki90ylkCDvKUGrQht0iKBAWVs/CcnrL3HtrE=
+	t=1792062739; cv=none; b=PsrO9R+kfty83XCXyp/X3XXbLgCjEa1S3ELAN2umU+UsMsN2odWQi8GLj+nek+Ek1a1c5YVbkWlfkh1XTHS84Ric1M9awRoK1qDQFg7ArmWGjI/tGChibO5fB+EKagpKsHv33Gxl0DNcknxnMJund82Y602pPQpLjX1Y9L4wwI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792062727; c=relaxed/simple;
-	bh=souBc5LM+ZP8bJKYxVLBa3N/cFi5YYK6F4kM1fz93jg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AQZ0dZyd0jztD+FWATA6ud3AtCZqFOYXzknB2WshRQzzNWHVQfNeydVmKGvjO4EMe6FaVGbY0B1aJ0HpkiLT05vQ2+5hWesX9c2dWgVXIT3G+9H9G/JGLeU7HzPQSusRuTUiFsgBqhn46klQctt7a+FQS4KlVyl3UaTc+W82qWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Edmfl/ug; arc=none smtp.client-ip=74.125.82.45
+	s=arc-20240116; t=1792062739; c=relaxed/simple;
+	bh=GfSfulDlANmtg1D1eMp1tdJTvpZbf++7/H8np/gPaKk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sjFfaqJqREV54D7KiSQCQdOySyVbtWZ3mFzWsu+ae8We8BWaj8uMuK3+97KGc/mnDlMVsOOGPRJgqDhhJeIFHdHr4MSKhjUymCk75Cmj44KJLJdSS/zZdp8zqO3HC58mfU5P1fpTVojCUmVWqV0axvoLXQPQFr0z6cW0BlTgYwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JzUyr8ga; arc=none smtp.client-ip=74.125.82.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Edmfl/ug"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-15168a20b47so3438260c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 04:12:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JzUyr8ga"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-353804b591eso9041360eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 04:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792062725; x=1792667525; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6Qizvs/lAA8DOR5ycYqynzWycuQET1RhOhDF12u5Cew=;
-        b=Edmfl/ugV82J4/VO+IXtix9zNicjfBXsa8aRqgFxv5untoSnqpikEEgTmQHh/l172U
-         Gs7fHj17C3ZUFy3IltxrbNYMKO7dcm728IVTuT/B5G8RrpFudQOX1Vk5cy4N6ol3WCac
-         f1vY4yggZOVhLtpmwikh+vU/0IU4Pn6pcTS0RXmfDolDVZQ1q2FNCVkzSKcBVw7hpToD
-         7gnBfifIp0n9sxUQ/dSDdO3EGG5nKO9g3JUS0KjselU9svlwcfY1GuF3TOtmeIV0Mpln
-         k4lkYs2whvV3MEcScV8pS0C9CGoP2cYbj2Y5b0jHuUHZxoZkFee3LjLpSTP/S1AspyQK
-         icMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792062725; x=1792667525;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1792062737; x=1792667537; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6Qizvs/lAA8DOR5ycYqynzWycuQET1RhOhDF12u5Cew=;
-        b=YtFFV0tmSBxhTSk0cIgCu1iiSoHlCajR0qfvBSKbrQWFkvDPiqIKNLmEuTOTWHNii7
-         zsLnuJujgqdrtxxF74x9FWOWRKeeLO8n25P775RGBCFOmg2vClJRxnK7UjtO326I/Q9P
-         y9uGdr+4F7r97T+xrt2FuDgpLZTrVTCwnGcPUheJM8PBCW06Xo8EzYPwwlHD/hyK6DD1
-         /zSpWLNq5dNEZ4UxiHIRSmmzynhoQ0FYH4A8ShTqg2VRNgE+heRNjkKG6qy/I1TnHcY7
-         J5s7vO5+BamzmwKr2pP+3qqs94xzz/LUBbDHvEqJYj4e6BWF/KsPhmAkfVKANozQ28FU
-         ZquQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwPcqgPfipKAKkYnU7PIs74z/p0aWa8GV/g0DBDpoqd+AXcmSRYibbUkvYyl4hVah10jvFh6CaMS+NRLvitXwI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJQDDJRR3fvFIXpG6+232lt+cjg6pL/36Sgyw0HJ9J0rntQxsCn
-	9z3fW7IyC5GU4gQZXtvzTyL+vU6dq62FYvqwBKXPRrrzR8mc3A1Ck4oO
-X-Gm-Gg: AYBFou0STRQrSpFaUmHoPDU5m7qy3wUiIEU79F9cw6wl5vGAj1N/4WxZ2H2fzOX8Wmx
-	P1dNCdbDCs45BnDQfgaflU73J5KAQnsfbDJGkCbfAvxvyyUWy3SbqI5V25ek+1K3R3ocIoixfQL
-	5pjOB1y0R3kLRtn/x7r12ByNLDWh+WIAOLKkG0SkIHpOopBRTGKvpS9QOlHlh4ogm0CVdtRpzvj
-	IPUpCbYsL5wF/HahaHJNYVBxZbHMK7Cg15uSheckWdmn5AmlTNpkCSiK9OI5tHa+0WcQSSBRwAS
-	aVf5P5FhdEJXMgMPZK2yVIG9Rfs5Vb0ixEB5s0wxazHmAK9lJGLU/NQfEuDRzrJjLypY3/Ye1wG
-	7OfaEjVg4oZE9oyeYGU+z2v3ir79qfN8SHBnznhvR6WQUYRDtQHD68jj2H+oSkaSvyMTaerSVhK
-	FKHXsBR0memrkAStaeHOn9+c6bRO+XWA8sz8P0TD0G9fClBrfrMd4+Pm69uWb6TD/eRgs/mXkRk
-	KvimJ/KeZhNs7oVSCXo7BLpojR4YehzIZ4JP6w=
-X-Received: by 2002:a05:701b:4343:b0:15e:e4e7:20f with SMTP id a92af1059eb24-16a5f01dfaamr26153079c88.25.1792062725109;
-        Thu, 15 Oct 2026 04:12:05 -0700 (PDT)
+        bh=GfSfulDlANmtg1D1eMp1tdJTvpZbf++7/H8np/gPaKk=;
+        b=JzUyr8gazr1tTMu0P2xNsDtZ0ml0rpJkXqiSB8vP0bxeSSSM4HYIE0yWES6X3NoTVD
+         UAfTLJ0LpL0CAc6iDiOp/JftX1cn6SL2B1KuPGSY1kvuIMM4HNAr9YwuVuUyswLhxFCW
+         +5IyKykn8FSdtWQ4/nGo8fWAJK5CaavgolBAtu9gNM+Fa/lfkYJr4iJS0HANvV14tjfi
+         6nGUeJYtRKzPgbojNV9XZixpQR+hRjKEF4Wh+0W3KBSxfNvg/0Ply/yCfIZMj6Rg2d2Z
+         n4b7Zv8wP8kFBmLFwCmjf9NQLKou73+nsO0B1ReRcXi6ob23+I9iOxNDpHk5/7CtVNeV
+         cPAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792062737; x=1792667537;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GfSfulDlANmtg1D1eMp1tdJTvpZbf++7/H8np/gPaKk=;
+        b=Hwbk0Z+XYV9RyGI8PeV9LdFFpKgI75MvqqIPYtL4xmCNOe7ES3LZCdpsN5eJ7Idytl
+         ajMRYywQF2gT3F5pMZqn2lP7U9OhIuYIMPKmBgSTy6F7RclkVBsg30dpAIWnWAl0VvQA
+         E8Gz1cPeGEyUPN7hbzCb90IKX+fvp8Rbly1UdnN6v8/SGyGVuKf6JuJ2gNjqVgBFmOHS
+         M43KEq43qby87Cexgx03OFkE6DLIQKr/GKa14jmgXiek6jrT2pUGkCkYTaB39quFfnCx
+         IJ/J/1NuAndq+EHSwX1F4+MovZ2hzw7r3bbZCDVlB+/xZIgoejak/f8aRcbgfuxR+1NT
+         5/JQ==
+X-Forwarded-Encrypted: i=1; AKwUvBysHZAppAvBCjFuNQEL53oqCxnyVaD0U+VQiupBjGl6Kg9/F4tvyRVObZxuoha8kdiqH6XXGn/YIUK3Ut8G0vw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJgo7It4A1yyJ5DPHAVsaAJEnu5YtxcaqrqeMacQknI7UWFZt8y
+	YJFUk/zB5IncReiiwmtXfdDMnQxQuLQdMODpvUTtWdvu+1Kpi8INFFqV
+X-Gm-Gg: AYBFou2H4Zn7PrKLUpvuBaSprn0oNRWPWkA5UgQV0KWVY9QJ3LN3+bx47CemIuLQydD
+	1TAXwF5FKE/zIn288PE6s5Ys2uoJ+tQpY+1LH938ZnFrl2m91zRd2c0SeC2w8Ac/jtQX9T851ki
+	C6+L2qWOd0/m5hfvTK6Oq0IOYVfTyQ1iKVgLRgz9+TyaCGyKGy9XZowzJvmsQqN6ma5gmyx0E5G
+	rD3a0HP5fOEH6jVagAH7eSAb7R1P3ZsyceE46K0YC5H9/T6nP244K2/UcjUacWP7lvEESAWc1fF
+	Drq4VY7alpC2cLt8C/qMp64YafqCvzGdA60GAnoxpsdYuAtUEK6RWzlHOJrLAHYUfT6ssnjl9tv
+	1K4F6jCHBl4S2wbqsFrX/qtoss2s7ZSqwt4eLDdhOze2EZPcBMeAExyoNaZlc3jCWmvVPtvoXEo
+	3YTnK6qKy+M28R5Im59FPUayxcIYx+xjgLJxb3kofUyO6erNmdRuFtSo4dVs6bcrM+yIAcqUVkD
+	0+0RrU4mZL3IRwSOGa1dnpinFtWezZE
+X-Received: by 2002:a05:7300:ac81:b0:353:7e33:664c with SMTP id 5a478bee46e88-3537e3369c5mr35858267eec.37.1792062737176;
+        Thu, 15 Oct 2026 04:12:17 -0700 (PDT)
 Received: from obadmin-Precision-3680.atlascopco.group ([136.226.232.200])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-16997c21ff3sm54696473c88.2.2026.10.15.04.12.01
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537ca0e64csm68338413eec.10.2026.10.15.04.12.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 04:12:03 -0700 (PDT)
+        Thu, 15 Oct 2026 04:12:16 -0700 (PDT)
 From: Sahaj Chaudhari <sahaj123.sc@gmail.com>
 To: Tejun Heo <tj@kernel.org>
 Cc: Johannes Weiner <hannes@cmpxchg.org>,
@@ -66,10 +68,12 @@ Cc: Johannes Weiner <hannes@cmpxchg.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Sahaj Chaudhari <sahaj123.sc@gmail.com>
-Subject: [PATCH v4] selftests/cgroup: test pids.events notification
-Date: Thu, 15 Oct 2026 16:42:43 +0530
-Message-ID: <20261015111243.1551387-1-sahaj123.sc@gmail.com>
+Subject: Re: [PATCH v3] selftests/cgroup: test pids.events notification
+Date: Thu, 15 Oct 2026 16:42:56 +0530
+Message-ID: <20261015111256.1551933-1-sahaj123.sc@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <81a8a0d64d269851ce4b48a240aa673c@kernel.org>
+References: <20261013064812.875787-1-sahaj123.sc@gmail.com> <81a8a0d64d269851ce4b48a240aa673c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,145 +82,18 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test to test_pids.c that checks a fork rejected by pids.max
-increments pids.events and generates an IN_MODIFY inotify event on that
-file. The test cgroup is the one over the limit, so the notification is
-expected both on a default mount and with pids_localevents.
+Hello Tejun,
 
-This covers the fix in commit 1765a153d985 ("cgroup/pids: Restore
-pids.events notifications in local mode"), where a rejected fork changed
-pids.events without waking its pollers when pids_localevents was enabled.
+Thanks for the review. All five points are addressed in v4:
+https://lore.kernel.org/r/20261015111243.1551387-1-sahaj123.sc@gmail.com
 
-Tested on x86_64 under QEMU without KVM, on kernels built from the
-cgroup for-7.4 branch (eb69e955de7b) and from the same tree with that
-fix reverted. With the fix, the new test passes on a default cgroup2
-mount and on a pids_localevents mount. With the fix reverted, it passes
-on a default mount and fails on a pids_localevents mount. No kernel
-warnings were logged.
+The test is now test_pids_events_notify() in test_pids.c, runs on both
+mount types, drops the skip and the duplicate counter check, and cites
+1765a153d985. The v1 to v2 note moved to the changelog.
 
-Link: https://lore.kernel.org/r/20261013064812.875787-1-sahaj123.sc@gmail.com
-Signed-off-by: Sahaj Chaudhari <sahaj123.sc@gmail.com>
----
-Changes in v4:
-- Move the test into test_pids.c as test_pids_events_notify(), using
-  cg_run_nowait() and cg_control(), instead of a separate program. This
-  drops the Makefile and .gitignore changes.
-- Drop the pids_localevents skip. The test cgroup is the one over the
-  limit, so the rejected fork notifies it on both mount types.
-- Drop the duplicate pids.events check after reading the inotify event.
-- Cite 1765a153d985 as the fix the test covers.
-- Move the read() error-handling note from the commit message to this
-  changelog.
-- Rebase onto the cgroup for-7.4 branch.
+I tested it in QEMU on the cgroup for-7.4 branch. It passes on a default
+mount and on a pids_localevents mount, and it fails on a
+pids_localevents mount with 1765a153d985 reverted.
 
-Changes in v3:
-- Check for a failed read() of the inotify event before comparing its
-  signed result with sizeof(struct inotify_event).
-
-v3: https://lore.kernel.org/r/20261013064812.875787-1-sahaj123.sc@gmail.com
- tools/testing/selftests/cgroup/test_pids.c | 73 ++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
-
-diff --git a/tools/testing/selftests/cgroup/test_pids.c b/tools/testing/selftests/cgroup/test_pids.c
-index 710109b53dfe..e775c5510cf2 100644
---- a/tools/testing/selftests/cgroup/test_pids.c
-+++ b/tools/testing/selftests/cgroup/test_pids.c
-@@ -3,8 +3,11 @@
- 
- #include <errno.h>
- #include <linux/limits.h>
-+#include <poll.h>
- #include <signal.h>
-+#include <stdlib.h>
- #include <string.h>
-+#include <sys/inotify.h>
- #include <sys/stat.h>
- #include <sys/types.h>
- #include <unistd.h>
-@@ -133,6 +136,75 @@ static int test_pids_events(const char *root)
- 
- 
- 
-+/*
-+ * This test checks that a fork rejected by pids.max increments pids.events
-+ * and notifies pollers of that file, with or without pids_localevents.
-+ */
-+static int test_pids_events_notify(const char *root)
-+{
-+	union {
-+		struct inotify_event align;
-+		char bytes[sizeof(struct inotify_event) + NAME_MAX + 1];
-+	} event;
-+	int ret = KSFT_FAIL;
-+	int inotify_fd = -1;
-+	char *cg_pids = NULL, *events_path = NULL;
-+	struct pollfd pfd;
-+	ssize_t n;
-+
-+	cg_pids = cg_name(root, "pids_notify_test");
-+	if (!cg_pids)
-+		goto cleanup;
-+
-+	if (cg_create(cg_pids))
-+		goto cleanup;
-+
-+	if (cg_write(cg_pids, "pids.max", "1"))
-+		goto cleanup;
-+
-+	events_path = cg_control(cg_pids, "pids.events");
-+	if (!events_path)
-+		goto cleanup;
-+
-+	inotify_fd = inotify_init1(IN_CLOEXEC | IN_NONBLOCK);
-+	if (inotify_fd < 0)
-+		goto cleanup;
-+
-+	if (inotify_add_watch(inotify_fd, events_path, IN_MODIFY) < 0)
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg_pids))
-+		goto cleanup;
-+
-+	if (cg_run_nowait(cg_pids, run_success, NULL) != -1 || errno != EAGAIN)
-+		goto cleanup;
-+
-+	if (cg_read_key_long(cg_pids, "pids.events", "max ") != 1)
-+		goto cleanup;
-+
-+	pfd.fd = inotify_fd;
-+	pfd.events = POLLIN;
-+	if (poll(&pfd, 1, 1000) <= 0)
-+		goto cleanup;
-+
-+	n = read(inotify_fd, event.bytes, sizeof(event.bytes));
-+	if (n < (ssize_t)sizeof(event.align) || !(event.align.mask & IN_MODIFY))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	cg_enter_current(root);
-+	if (inotify_fd >= 0)
-+		close(inotify_fd);
-+	if (cg_pids)
-+		cg_destroy(cg_pids);
-+	free(events_path);
-+	free(cg_pids);
-+
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct pids_test {
- 	int (*fn)(const char *root);
-@@ -140,6 +212,7 @@ struct pids_test {
- } tests[] = {
- 	T(test_pids_max),
- 	T(test_pids_events),
-+	T(test_pids_events_notify),
- };
- #undef T
- 
--- 
-2.43.0
-
+Separately, the existing test_pids_events fails on a pids_localevents
+mount, with and without this patch. I have not looked into it further.
