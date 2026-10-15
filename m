@@ -1,154 +1,122 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012043.outbound.protection.outlook.com [40.93.195.43])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51F530675F;
-	Thu, 15 Oct 2026 17:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792083854; cv=fail; b=BrCKHzR+m6Rt42APmNOUOhjNOMi1guIFI7UozP2+uWEM5kihEoqUd9w6HWKbKS/GvZghJGClqOImTFW10zo1b8xqcKv7GrqOvKo9gvaZFaO5M/ww6Gki+GvIvp3GtZF/8s4UaQtEzBE0EqP6U0An9N7SmHMrtrzTl6F5CjKTNhs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792083854; c=relaxed/simple;
-	bh=XIb6vOeFbVoO6usa8Vr5r/wCCoDkPbU/5vKVZh7LaKw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 Content-Type:MIME-Version; b=hlgmLCiUe5lR03pzC0BEIREmb2FKlXnxuR9rjsNZqlw7K5plFd+7GHzSHTjltcs7sF5Qv4pNUh+LC4FTQuNqsfQvhVEySaE6zWOUoDaM2NS4nFGINvRPNxd7N+zESxE2F+MITCVPiVMcljjdtniAaBDk4r2PW2X7shm9uReIUEo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eI9GNgKo; arc=fail smtp.client-ip=40.93.195.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE37A541444;
+	Thu, 15 Oct 2026 17:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792084066; cv=none; b=ijmpQfCFxxAFVoR3UnaK8MJu5kIm3SexjJi2qNP0g1+YCKj7mPGeP0+EH64pg3IbQ0FoTdACVSqFMIhue9wEG3/iBln5Vro2bGsBBdLzmH2BgkblPugTzN9NVCFjPATFbk1viWb8O03ScaMTK26wUHJLV21v+66UkKzemNTXWfc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792084066; c=relaxed/simple;
+	bh=Rq4rz8ejG4MzNUFw2LynldTsZt0A4pwMuMglCCBru1E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fIT3jB4ZLuW7gl7Vx85V+evx0L4QkiGn0rg7q1hG646obMtsNu2C38B0Wv7fpvizdVYA2tKmMGqYXsgL/BRslHgXJeHE9eZLlGrt8PIUoGb+fu+Rf7OlZGF4UsgP9o175r1VpMCr+/QbCPZagPk+ZD+NrEuD9B5S85MNntQ+v9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=qihKUJuQ; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eI9GNgKo"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=B0dbR/OjhNCwYEJm89FSEWIq4pSyqggaHHZ2SjNAhxWWTc8+Zg5b/7shedlyDrI7JN+ohKFFeG2v0HgH1nkiKb+MBALEHc88XtmvUdagoJluTryqX10EHqh4VloDABsVtpxmEmqK7Jwo7HkRTCd6Jksd8qDyawMDtiXGcfY0HsXoYITJgUY/2f/SvvwPomqOAgyhJgMdUDcwiJHXtdGS4CBaiu5GZiK2vGBpPflCp/rXegD9LcdMd0F4t9GuXPn38t0AsAc3pDLZ36VZqiP7FTUb/vWSC5G0ptt6mAoN/s+NQwmyNPt/5C4LNg2Xyx8pOPWIIRiuFnYGQZezUaEU3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BVTCCxA5/LaKpDe3nl3FE0vSfuFzVG5I7D8Fjt30Pak=;
- b=aq9rnd+BH1ex6Ofx1W/unQBOxfQfcg6f6FOzk4GeQjh8oclz+vEEx8v5XtWAzsp0pm/ChTT4XugOLi9ObI6s3ILVGdUlEcKtkEEAW8lywMtYQ2qH1Je1M/QUuGw4LYmxaN0DcS6JLUVIgqRvkNaMgnl8H7jtveSsmEV0LyITsUTtwSyvLFRs9e9rdXAezhw3ZsLinZ9VSonMDt1xCjBfM/MPq9Wr680Oc/UFOXzvdnc9JBGY4qDxzSLerarvLsa2YctxtiYnGdcSAMCpRayrDvT4iIF+WR6Px0IA6lxcCs8YemVW65xGFkaskV8JBhXc9+pf6IX3ooHH3pnbE6xXug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BVTCCxA5/LaKpDe3nl3FE0vSfuFzVG5I7D8Fjt30Pak=;
- b=eI9GNgKo933kD1iMIIqvmLHomq6r/fxmAyUh25KTtAFPWmgkG4x7bSIYwyznEcXbpPVNLfIsAWLdDL/Xyv/6d/KnOsiRNZBy0zYVZgNxAUK9Vc0sT8UyY6HeTq/+Vd+oVtT/7fPuCBxKNDCkJi9mCHqhtfc1KRnn6nTquwbpk/xO+mDmJz8IvKeeMUbff4c/kyg0gieeUCMj4PF8P7LU80gi2oewq///mlmjbvp6IShl1DTbgpndeJfzCtqdcCdBcT+kN/2K7aPJplRWtsH7ZtT75Kvykow06zpvwkUa/tlDeqvX+eeAKPhMUIiD9dKcawQ8Hm0WCe88kiHUMnCvwA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CHBPR12MB731189.namprd12.prod.outlook.com
- (2603:10b6:610:33d::12) by DS7PR12MB6069.namprd12.prod.outlook.com
- (2603:10b6:8:9f::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.15; Thu, 15 Oct
- 2026 17:03:39 +0000
-Received: from CHBPR12MB731189.namprd12.prod.outlook.com
- ([fe80::b0e5:123d:fe06:e10d]) by CHBPR12MB731189.namprd12.prod.outlook.com
- ([fe80::b0e5:123d:fe06:e10d%6]) with mapi id 15.21.0522.013; Thu, 15 Oct 2026
- 17:03:39 +0000
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>, 
- Shuah Khan <shuah@kernel.org>, Andrea Parri <parri.andrea@gmail.com>
-Cc: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
- Robin Murphy <robin.murphy@arm.com>, Nicolin Chen <nicolinc@nvidia.com>, 
- iommu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20261008125206.11990-1-parri.andrea@gmail.com>
-References: <20261008125206.11990-1-parri.andrea@gmail.com>
-Subject: Re: (subset) [PATCH v2 0/2] iommufd: Keep dmabuf MMIO attributes
- in domains added later
-Message-Id: <179202508944.3602487.15486364906703222388.b4-ty@b4>
-Date: Wed, 14 Oct 2026 21:44:49 -0300
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.17-dev
-X-ClientProxiedBy: YT4PR01CA0110.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d7::6) To CHBPR12MB731189.namprd12.prod.outlook.com
- (2603:10b6:610:33d::12)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="qihKUJuQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=+5NkBZFtpa5VrgsGwb1KrVE2QUF4HGyypdi0JGeLIZs=; b=qihKUJuQxoagOGyM4ypddrq/9k
+	pE5orJdNiwal9Os/IU/NF19LeMxmNFJCcFUq+9rERYDj9kgGQul/zgi6cXMBeOel9BQLk8hZ6DEPX
+	9W8/xYT3uU1hr6St/EF2CuuRgJSVPHi4shbHNAtzLh29EiWs12v8IRIiPvPKGSx4fxcO4I6QOeRhn
+	7d46p39aa9gsiaZCE/xRohnvXUcNnT2h/8+8UMIAy5/PcYx5YBh7JH3UyK7lL+/E0NIZRyRxDna95
+	smBGQQF+zR8u1G9gxX9keBZUF/1Y/9/VkDnco01me1HQ+FvSQq+tS66ykgFR+D9qV/ncpuECDyvix
+	GFRpBcvQ==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xHOvU-0001r6-02;
+	Thu, 15 Oct 2026 19:07:32 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xHOvS-0005nx-2c;
+	Thu, 15 Oct 2026 19:07:30 +0200
+Message-ID: <c1492f78-5229-4cc1-b4f6-691199a0e521@iogearbox.net>
+Date: Thu, 15 Oct 2026 19:07:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CHBPR12MB731189:EE_|DS7PR12MB6069:EE_
-X-MS-Office365-Filtering-Correlation-Id: 06b106dc-d7b8-4284-3264-08df2ade4196
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|23010399003|7416014|366016|56012099006|11063799006|18002099003|10067099003|22082099003|261009223027099003;
-X-Microsoft-Antispam-Message-Info:
-	VQ4jLqGIVsZd0I4aKsWsFQAsff9Mc0W+LSNBW7Mnehnj8ViNbd9fgIWfzjsiLg9A0MMMsV1ZSJ9GYFmuHQ51c+Mclu1LZ1dUCz2ZbM14kXegFskly/FmN5HRhWje/ZN5Tw2qs2BegmFuwVBRVvm6Q9vXsn0B4um+KiueWuayy0Ay0Xksp59Tr84hDnp8q5SW0Cy1y1crawLenunawj23iv5d7zW2M3uul6TuvH3jx6ve88ODhMBK8FfPyaFyMerZ+fYnIOD9DqTZ+7IGmaRej5csd7AIDXQUPtP677DJuzUqF9bv6zi/kBq0MLK4lNCpkW2nY8tVb1WiGm/vX+hlZ+AytUdeDDMRqXp+oIPuGUxU6/85ta87SY2oOA6Q3dOHuwWPHgyPpQ5pXSUaq9stYdyHbiJ+s8S62UPuNDGvTb9DtP7nW27Cig4Uz6UA8BKucXoKgwaOffyqIIuzPBN+TcoosYoDAthEZENq4icMtVCQ7Dwd+sTn7ZoX2u/tMpyyJH1sJ7VlM6XY9zTsd1oHHgaRegFaExPxO+HNPjIg8uMuhd6dkrus/UikMKTrSt14v3iv6LiJ3d3rVosP6Naxvac3iqnS3j1c0LWVPS43WeZlJcsoOp2ygY9pBdPXR1bcEvZg+W50GPhn8wQCZU/dVt8Zxa1dSfj9PVCY37MS+pM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHBPR12MB731189.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(23010399003)(7416014)(366016)(56012099006)(11063799006)(18002099003)(10067099003)(22082099003)(261009223027099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cTR0RStKQkJLSjRDSnFUcS8xUFovWmE4STBQcm8vc3V6TGJDZDFVQ042WXFy?=
- =?utf-8?B?WE80RDBvR1F5ejJ3R0JoY1BJcFAyd2hYdFNMWnlCNTJSUEdneXQySnhhT1pL?=
- =?utf-8?B?TkRBVHplcGJQZklzRUZjSWlXaGFiNHhGUkxXNnFtZ1d1RHBSeWM2L3N5MEZF?=
- =?utf-8?B?blc2L3hwQldXYlBWYjJ6Y2VqU3g4SEdtd1FtS2cybXAzc3NMdGpvTXVLK0F4?=
- =?utf-8?B?enJITk8rRHZwZUFEZVMzYjgrZE00c29HajhNWlRxR0d3d3FFWk5hVEs2OThh?=
- =?utf-8?B?OWVGMzV1NC9BSVdOWkxPK2JoTU5qcG9YbUd0VFJWVXg0MGpvRmZWZUY2UmNQ?=
- =?utf-8?B?cmM2VzIvUlR2VDZBOHVoTDlmUlRRS0h2UmQ5RFJPN3R1S2JmSVFYQ2JLSTY0?=
- =?utf-8?B?enoyVUM0ZGJMbjhKTkRYVTEwcW40S1pmVXQ4TnZvSkI2TUF6YVVMY0lhTjg4?=
- =?utf-8?B?elhoakNxY0xaU05DQy9FeXF1cjh2SHlFUnNTWGRvS29IK1ZZajZxb3VNN1k3?=
- =?utf-8?B?Um9kSHMwWW5xTkh6VDVXSS9nWit0Z0VRN0FvZERrQXdYa2Q5VjdLRGh3YXY5?=
- =?utf-8?B?Zk5TdWJOTnVtUXVwakorL2J1UmdLbHZpbW11UXU4TjE0SGs3OE9UYk5RcVJF?=
- =?utf-8?B?ekxla2xMZnUvS01YMWtjSEdTVnFBNlc5Z2gwaW05YVJ0czdrc0NrOXgrQloy?=
- =?utf-8?B?RVlRL2ROSkt4RVpjNERidFFQcVNuenovWlErSGZtNTNRajFueDNVaEkxV0Q3?=
- =?utf-8?B?dk1LbTZjR2JWdE81U3JOcGtabHdWVmxjL21ZK3hJSUFvdjRHTzR4dkZNeXVO?=
- =?utf-8?B?Zm1RamFoemtqNUp4TlZNNEdYc2dyOU9MdW01bTA0RXViRW93YzMyT1JJL3VV?=
- =?utf-8?B?SjB6VWdPYWovV1ZWamFUR2UvTndPUlBJZGxSSEUwcDdSaDF2WXdvVnpYUGRr?=
- =?utf-8?B?aVFaQTRyclpQazFicXNjdHhlamk4bW9Da1VNR2pqVjI0ZzR0QmZXMlo0cFlo?=
- =?utf-8?B?c29ZM1IwdDd2UkprWG81OGNuclpRTFpNVHdCTmZUL0xRQkhmSjZJMGdJcENp?=
- =?utf-8?B?cVh3SzA5QUhVQkxKWGVFNGJ4MDZ2R2tURitUOWJlNFBuMDUxcVFxcmVWVVUv?=
- =?utf-8?B?c2xtTVU1RjZWeHhtNTBPaFVrTXVHRldzSUlkZ25IRUQrbUdvZUVzU0Y4Q3lK?=
- =?utf-8?B?aUlIQm00dnFldFhibkFoeEx5WW9kV3BDZGtFZ0RJalJ4WXdmL1dNOG1lNWpu?=
- =?utf-8?B?aVhQU0tSKzNIdjhsN1JGS1hWS2tXLzRFVkZmS2tBRnk1SjZWcUFybk00MS9u?=
- =?utf-8?B?aTNxeDR3YXRwVG1GQXB3dmNFcjA5OG9kZ0ZFOW95dUVDQitYWStMVHRyMkdt?=
- =?utf-8?B?OEsvYkEreGN5Vk9xblhQeFZCS1JQbWZYYnd6VGlpQm9hMjY1YndYVzEvL3RO?=
- =?utf-8?B?V2kybGpzRllJQWZaRDYxUFJhQVA2VjV3d0I4VDNqRkh1VnVmNU1VQm9mT2Mv?=
- =?utf-8?B?ZXVGNFlCTGZnQ1BtNGlQVGI5eXZtWU5Bd1JaWFVka2xyaUdhTEtsMWFoOGQv?=
- =?utf-8?B?c2VpTXBKeExQSWkrK20xcGJlY2UvWExTWFZtaEFUZllXdEs3ank1MHhBVDdY?=
- =?utf-8?B?Q29XTW5CQ3BaWUZmOXFzMldvS3A3TEZkNGRhL2k3MXdYZjZOejQza3l5R0c5?=
- =?utf-8?B?V2VtM2JnamJQYktlYllEL3BldDJMTTl4dVlYTUFtRnBSZFRuOEpackc5bEx0?=
- =?utf-8?B?Um1FTTVUdGtobmM0SWFrWkw2VWNiNHFORVdXMzJXamM4QlR6MTVYOUF5U1gr?=
- =?utf-8?B?SmcwVDVrUytFaW1CbWZJVUluNllzeHQ0UzlLYkhTNHdtb2lpcmpyMDRnM0Vs?=
- =?utf-8?B?V2c1ZUErSHJ4Njh6WVNEc0p6ZVg3NTFtL09Kc3d6K1NQbUYxZ2NjT0lqMDNq?=
- =?utf-8?B?N1BaNkkzb3hPMEVUVk9BcklxdjRSK3RsZVJGZVR0czJPcnNVMXZpRlo4OTF4?=
- =?utf-8?B?a2FIRm5uTE9ETDBDYVZ1VjJjS3ZUU1BuZGV5eml2MjBUb1NlQTZmQzVGN0Js?=
- =?utf-8?B?YlFMc3Z5NXlGR2R3b21uMGNEdFZTSUZGTjBTWkdiSnZTdlViV3ducE1KQ2tu?=
- =?utf-8?B?bkxCRjZXY1cxNGhVTkdQLzhRa2FqZ1NrUHh3OUZIaCtRR2ZjM1pmYmNzZWU2?=
- =?utf-8?B?U2lwK1RmZFFwZUtFYlVWNW1FRHFyZ3NjSmZRcXFzaElzUE1KY3ZlcVBwODZZ?=
- =?utf-8?B?R3MxL2hXSFYrQlVLVDZLSngwaVF1Wmw3aTljbEY1THZtbVQ5K1VnM1BldWtU?=
- =?utf-8?Q?GTJIqL7AD30muhKwBm?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06b106dc-d7b8-4284-3264-08df2ade4196
-X-MS-Exchange-CrossTenant-AuthSource: CHBPR12MB731189.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2026 17:03:38.2260
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OcnGP1viSz2ea68blBIFxj7HVFp8YCfM3XPmw09K+oHFmO8/8fdusJdxNx2HhVN3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6069
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] selftests/bpf: Record only the test ICMP echo in
+ tc8 of tc_netkit_scrub
+To: Qiliang Yuan <odys.yuan@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Nikolay Aleksandrov <razor@blackwall.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261009-selftests-bpf-tc-netkit-scrub-v1-1-f46c07a40e7c@gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+In-Reply-To: <20261009-selftests-bpf-tc-netkit-scrub-v1-1-f46c07a40e7c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28154/Thu Oct 15 08:24:22 2026)
 
-
-On Thu, 08 Oct 2026 14:52:02 +0200, Andrea Parri wrote:
-> iommufd: Keep dmabuf MMIO attributes in domains added later
+On 10/9/26 3:49 AM, Qiliang Yuan wrote:
+> tc_netkit_scrub attaches tc8 to the primary netkit device, sends an ICMP
+> echo with a mark and a priority through it, and checks the mark and the
+> priority that tc8 saw against what the scrub mode lets through.
 > 
-> A VFIO PCI dmabuf mapped into an IOAS gets IOMMU_MMIO only in the domains
-> that exist when it is mapped. A domain attached afterwards, or an
-> IOMMU_IOAS_COPY of the area, reads the PFNs back from the existing
-> domain and maps the BAR as cacheable CPU memory. Patch 1 always takes
-> dmabuf PFNs from the recorded phys range instead.
+> tc8 records the mark and priority of every packet it sees, and the
+> device also carries what the system sends on its own once the device
+> is up, like IPv6 neighbor discovery or the mDNS of avahi-daemon. When
+> such a packet goes out after the echo, it overwrites what tc8 recorded,
+> and the test finds a mark and a priority of 0.
 > 
-> [...]
+> Record only IPv4 ICMP packets in tc8.
+> 
+> Fixes: 716fa7dadf11 ("selftests/bpf: Extend netkit tests to validate skb meta data")
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+> ---
+>   tools/testing/selftests/bpf/progs/test_tc_link.c | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/test_tc_link.c b/tools/testing/selftests/bpf/progs/test_tc_link.c
+> index 630f12e51b075..3c44ee06cfae8 100644
+> --- a/tools/testing/selftests/bpf/progs/test_tc_link.c
+> +++ b/tools/testing/selftests/bpf/progs/test_tc_link.c
+> @@ -4,6 +4,8 @@
+>   
+>   #include <linux/bpf.h>
+>   #include <linux/if_ether.h>
+> +#include <linux/in.h>
+> +#include <linux/ip.h>
+>   #include <linux/stddef.h>
+>   #include <linux/if_packet.h>
+>   #include <bpf/bpf_endian.h>
+> @@ -119,6 +121,14 @@ SEC("tc/egress")
+>   int tc8(struct __sk_buff *skb)
+>   {
+>   	struct net_device *dev = BPF_CORE_READ((struct sk_buff *)skb, dev);
+> +	__u8 proto;
+> +
+> +	/* Look only at the ICMP echo of the test, not at IPv6 ND or mDNS */
+> +	if (skb->protocol != bpf_htons(ETH_P_IP) ||
+> +	    bpf_skb_load_bytes(skb, sizeof(struct ethhdr) + offsetof(struct iphdr, protocol),
+> +			       &proto, sizeof(proto)) ||
+> +	    proto != IPPROTO_ICMP)
+> +		return TCX_PASS;
+>   
+>   	seen_tc8 = true;
+>   	mark = skb->mark;
+Could you streamline this a bit to be more in existing style?
+__bpf_constant_htons, and make the checks/error paths similar.
 
-Applied, thanks!
-
-[1/2] iommufd: Keep dmabuf PFNs MMIO when filling another domain
-      https://git.kernel.org/pub/scm/linux/kernel/git/jgg/iommufd.git/commit/?id=769f2cd9226c96619d77fa16af84de74cae41b6b
-
-Best regards,
--- 
-Jason
-
+Thanks,
+Daniel
