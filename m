@@ -1,152 +1,467 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3CAC52E06C;
-	Thu, 15 Oct 2026 14:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20328439F75;
+	Thu, 15 Oct 2026 14:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792072897; cv=none; b=dOoPjt303LdgbTzNDjagQQAwi+bRQ2NijNJ3TMrIlxK0Ffr7dj9pm0Vq9nLkXXQ78hJqZ/xGS1pfNeHINT7X6wc3UQ952Rjp9cdDROKwEjdwKp9jr8OlKIQil3GyETu5D0wK/uinLSAJfwN86Zgn2BP5Kb3GFcSmf+GLbec0rpM=
+	t=1792073542; cv=none; b=q2Jf9CgwfrfnM+hZ2QB8NNE9FLcRVyJugSkYZLbq/UNuXAxxnL9Mse6nL30VGgtpv+MpkQhuEAA/2DqwpFqvt7iRpUWpYFtrzaTn9+lB1IszWdESKvKa4a7WyoF8PpFQI0qPwkIqS/f7xULmibX95LKnyO8tXl6H970AQejuAY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792072897; c=relaxed/simple;
-	bh=MRWJzDmZfOIX+6SwKBA7Q9Thl3Ve3G71+oC7m2qMfmw=;
+	s=arc-20240116; t=1792073542; c=relaxed/simple;
+	bh=zQjClWTlRSrEDvf3v/4znzjDecAtN82hnrlhsDrNbkw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=foRbxhK3iY2WULqTrBM16+c+4OSrpQPH8Xg7fl1sZSntSzOHu8mlR0ssFWMuaNBZMlT98SNq+SX8BeA0rcdp68dVM7eR8Npml3k9RqtzKzA6OkR423Cs9o0tz7zRuf/qvWQJJYtVAlaJlHVAr4wE3E/VQbXOIoM2IgC50lqaLGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YkOoqUHU; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YkOoqUHU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 895DE1F000C4;
-	Thu, 15 Oct 2026 14:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792072896;
-	bh=5ulS8NQxFQP/kjVlfDwDazI1Uh2rE4FyGhxgfgeM2cY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=YkOoqUHUxgrqQqsu/pAL1PU+LCPKfyEDKkf/X65fhkqER8Eg90Oui4HAj2vH1t3aM
-	 0bBO4jnW8cdc/LivOYt6QTTOscnIkYN9hLxyWMMKClinpFu8XvbYDDzGXLxYTX/db2
-	 c12MXgyyA0OZXo7TScMsTROJWKDFsFPYdIORQMmWw0hZMHaty63PEz5oQNN8ZFb2ES
-	 1nQW9Bk/ARErv8znZMKqI75eQeYux9WcWvA55wB2wBFXmqg7Z4Tn1bTI50sx7Vwlvo
-	 fsepg3FfKS6Z4rgmL8u2tQ2kKZsZYxWDq0AqizFJRvA0mBCoOiDmMJyujL5rplYJGg
-	 nUmad8fDVlhog==
-Message-ID: <59c8b34f-4cf8-4747-a884-306115c32d59@kernel.org>
-Date: Thu, 15 Oct 2026 16:01:28 +0200
+	 In-Reply-To:Content-Type; b=Fifkz3ZFe+s29sSOBdXIQvQVudTpezBtxIB09Xg+R6q6hrOeDpUsfMWSpYnB/bR3QalMke0kecQRpi9psLPZeLQeb9elHSoRhH32x4rW5/9xrc45SZe3rrVzyLzSjIoRsRW8Lj9fMVqGQ8J0ecwxOmItQEhLLF4rSD0uVIW4sqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id DBDE9200617; Thu, 15 Oct 2026 22:05:05 +0800 (AWST)
+X-Spam-Level: 
+Received: from [192.168.11.49] (ip-178-027-179-026.vkd86.pools.vodafone-ip.de [178.27.179.26])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 4D784200611;
+	Thu, 15 Oct 2026 22:04:57 +0800 (AWST)
+Message-ID: <d6ea208a-0b53-4da8-998f-817a0e0b7c61@davidgow.net>
+Date: Thu, 15 Oct 2026 22:04:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next 4/4] selftests: mptcp: convert iptables to
- nftables for mptcp_join.sh
-Content-Language: fr
-To: netdev-bot+sashiko@kernel.org
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- cpaasch@openai.com, netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kernel@vger.kernel.org, liuhangbin@kylinos.cn, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- Hangbin Liu <hangbin.liu@linux.dev>
-References: <20261013-net-next-mptcp-misc-feat-7-4-part2-v1-4-1181e5d2fda4@kernel.org>
- <179201140983.434549.4591346402914779226@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <179201140983.434549.4591346402914779226@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] lib/sbitmap: add KUnit test suite
+To: Wang Yibo <szwyb123@gmail.com>, Jens Axboe <axboe@kernel.dk>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com
+References: <20261014082704.33667-1-szwyb123@gmail.com>
+Content-Language: en-US
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20261014082704.33667-1-szwyb123@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 14/10/2026 22:56, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider.
+Le 14/10/2026 à 16:27, Wang Yibo a écrit :
+> sbitmap is the tag allocator used by blk-mq and the I/O schedulers
+> built on top of it, but the plain, synchronous part of its API has no
+> test coverage at all.
 > 
-> Critical: 0 · High: 0 · Medium: 1 · Low: 0
+> Add a KUnit suite covering initialisation, allocation and exhaustion,
+> deferred clears, round-robin ordering, resize, the bitmap helpers and
+> sbitmap_for_each_set(), so that the behaviour is checked on every boot.
 > 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
+> The new file is added to the BLOCK LAYER entry in MAINTAINERS, next to
+> lib/sbitmap.c, so that it does not end up without a maintainer.
 > 
-> - [Medium] mptcp_join.sh init() now calls `mptcp_lib_check_tools ip tc ss
->   nft` (mptcp_join.sh:192).
+> Signed-off-by: Wang Yibo <szwyb123@gmail.com>
+> ---
 
-TL;DR not an issue.
+Thanks for the test. I'll give it a closer look when I'm back from my 
+post-plumbers travel, but it seems that this is failing on a number of 
+architectures.
 
-> --
-> 
-> selftests: mptcp: convert iptables to nftables for mptcp_join.sh
-> 
-> This converts the iptables/ip6tables rules in mptcp_join.sh to nftables.
-> The cBPF bytecode matches are replaced with native nft matching, and
-> hard-coded offsets are used for RM_ADDR. The config file is updated to
-> match, and the iptables/ip6tables tool check is removed from
-> mptcp_lib.sh.
-> 
->> diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
->> index 18ce7136a2b0e..f4d8afaeda4f3 100755
->> --- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
->> +++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-> 
-> [ ... ]
-> 
->> @@ -196,7 +189,7 @@ init() {
->>  
->>  	mptcp_lib_check_mptcp
->>  	mptcp_lib_check_kallsyms
->> -	mptcp_lib_check_tools ip tc ss "${iptables}" "${ip6tables}"
->> +	mptcp_lib_check_tools ip tc ss nft
-> 
-> [Severity: Medium]
-> Will this skip the whole mptcp_join.sh suite when nft has no JSON
-> support?
+In partciular, sb.alloc_hint is annotated __percpu, which alas doesn't 
+work with KUNIT_EXPECT_NOT_NULL on, e.g., x86 where it uses a different 
+address space (__seg_fs or __seg_gs). This is probably something we 
+should work out how to address in KUnit, but for now you may be better 
+off with a different assertion.
 
-Yes, but really, who has nft without JSON support? If a CI doesn't have
-that, better to skip everything to be clear that something important is
-missing instead of just skipping some subtests which might be unnoticed.
+Equally, sbitmap_test_iterate_set is failing here on 32-bit UML (but 
+only when built with gcc, not clang):
+
+# sbitmap_test_iterate_set: EXPECTATION FAILED at 
+lib/tests/sbitmap_kunit.c:273
+  Expected ctx.nr_visited == (unsigned int)(sizeof(bits) / 
+sizeof((bits)[0]) + ((int)sizeof(struct 
+{_Static_assert(!(!(!__builtin_types_compatible_p(typeof((bits)), 
+typeof(&(bits)[0])))), "must be array");}))), but
+      ctx.nr_visited == 5 (0x5)
+      (unsigned int)(sizeof(bits) / sizeof((bits)[0]) + 
+((int)sizeof(struct 
+{_Static_assert(!(!(!__builtin_types_compatible_p(typeof((bits)), 
+typeof(&(bits)[0])))), "must be array");}))) == 6 (0x6)
+  [FAILED] sbitmap_test_iterate_set
+      # module: sbitmap_kunit
+  # sbitmap: pass:7 fail:1 skip:0 total:8
+# Totals: pass:7 fail:1 skip:0 total:8
+===================== [FAILED] sbitmap =====================
+
+Not sure what's causing that yet: it may not be an issue with the test 
+itself.
 
 Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+-- David
+>   MAINTAINERS               |   1 +
+>   lib/Kconfig.debug         |  13 ++
+>   lib/tests/Makefile        |   1 +
+>   lib/tests/sbitmap_kunit.c | 300 ++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 315 insertions(+)
+>   create mode 100644 lib/tests/sbitmap_kunit.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f53047aa8d3c..c8510e6f1817 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4726,6 +4726,7 @@ F:	include/uapi/linux/blk*
+>   F:	include/uapi/linux/ioprio.h
+>   F:	kernel/trace/blktrace.c
+>   F:	lib/sbitmap.c
+> +F:	lib/tests/sbitmap_kunit.c
+>   
+>   BLOCK LAYER DEVICE DRIVER API [RUST]
+>   M:	Andreas Hindborg <a.hindborg@kernel.org>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 6b24a2c89b84..f5fe7f5a0a4d 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2456,6 +2456,19 @@ config PRINTF_KUNIT_TEST
+>   
+>   	  If unsure, say N.
+>   
+> +config SBITMAP_KUNIT_TEST
+> +	tristate "KUnit test for sbitmap" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT
+> +	depends on SBITMAP
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  Enable to turn on sbitmap tests, running at boot or module load time.
+> +
+> +	  For more information on KUnit and unit tests in general, please refer
+> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +	  If unsure, say N.
+> +
+>   config SCANF_KUNIT_TEST
+>   	tristate "KUnit test scanf() family of functions at runtime" if !KUNIT_ALL_TESTS
+>   	depends on KUNIT
+> diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+> index 3cac3b63a752..1f49555f94c3 100644
+> --- a/lib/tests/Makefile
+> +++ b/lib/tests/Makefile
+> @@ -44,6 +44,7 @@ obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+>   obj-$(CONFIG_PRANDOM_KUNIT_TEST) += random32_kunit.o
+>   obj-$(CONFIG_PRINTF_KUNIT_TEST) += printf_kunit.o
+>   obj-$(CONFIG_RANDSTRUCT_KUNIT_TEST) += randstruct_kunit.o
+> +obj-$(CONFIG_SBITMAP_KUNIT_TEST) += sbitmap_kunit.o
+>   obj-$(CONFIG_SCANF_KUNIT_TEST) += scanf_kunit.o
+>   obj-$(CONFIG_SEQ_BUF_KUNIT_TEST) += seq_buf_kunit.o
+>   obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
+> diff --git a/lib/tests/sbitmap_kunit.c b/lib/tests/sbitmap_kunit.c
+> new file mode 100644
+> index 000000000000..4f3a588d15df
+> --- /dev/null
+> +++ b/lib/tests/sbitmap_kunit.c
+> @@ -0,0 +1,300 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * KUnit tests for the scalable bitmap (sbitmap) implementation.
+> + *
+> + * sbitmap is the tag allocator used by blk-mq and the I/O schedulers built on
+> + * top of it, but it has no tests.  These tests pin down the observable
+> + * behaviour of the plain, synchronous parts of the API.
+> + *
+> + * Copyright (C) 2026 Wang Yibo <szwyb123@gmail.com>
+> + */
+> +
+> +#include <linux/bitmap.h>
+> +#include <linux/gfp.h>
+> +#include <linux/sbitmap.h>
+> +
+> +#include <kunit/test.h>
+> +
+> +/*
+> + * Big enough to span several words for any plausible BITS_PER_LONG, and not a
+> + * power of two so that the last word is partially used.
+> + */
+> +#define SBITMAP_TEST_DEPTH	(3 * BITS_PER_LONG + 5)
+> +
+> +static void sbitmap_test_init(struct kunit *test)
+> +{
+> +	const unsigned int depth = 97;
+> +	struct sbitmap sb;
+> +	int ret;
+> +
+> +	ret = sbitmap_init_node(&sb, depth, -1, GFP_KERNEL, NUMA_NO_NODE,
+> +				false, true);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +	KUNIT_EXPECT_EQ(test, sb.depth, depth);
+> +	KUNIT_EXPECT_EQ(test, sb.shift,
+> +			(unsigned int)sbitmap_calculate_shift(depth));
+> +	KUNIT_EXPECT_EQ(test, sb.map_nr, DIV_ROUND_UP(depth, 1U << sb.shift));
+> +	KUNIT_EXPECT_FALSE(test, sb.round_robin);
+> +	KUNIT_EXPECT_NOT_NULL(test, sb.alloc_hint);
+
+alloc_hint is declared __percpu, which is incompatible with 
+KUNIT_EXPECT_NOT_NULL() on x86.
+
+> +	KUNIT_EXPECT_FALSE(test, sbitmap_any_bit_set(&sb));
+> +	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), 0U);
+> +	sbitmap_free(&sb);
+> +
+> +	/* An explicitly requested shift is honoured. */
+> +	ret = sbitmap_init_node(&sb, depth, 3, GFP_KERNEL, NUMA_NO_NODE,
+> +				false, true);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +	KUNIT_EXPECT_EQ(test, sb.shift, 3U);
+> +	KUNIT_EXPECT_EQ(test, sb.map_nr, DIV_ROUND_UP(depth, 1U << 3));
+> +	sbitmap_free(&sb);
+> +
+> +	/* BITS_PER_LONG bits per word is the largest representable granularity. */
+> +	ret = sbitmap_init_node(&sb, depth, ilog2(BITS_PER_LONG), GFP_KERNEL,
+> +				NUMA_NO_NODE, false, true);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +	KUNIT_EXPECT_EQ(test, sb.shift, (unsigned int)ilog2(BITS_PER_LONG));
+> +	KUNIT_EXPECT_EQ(test, sb.map_nr, DIV_ROUND_UP(depth, BITS_PER_LONG));
+> +	sbitmap_free(&sb);
+> +
+> +	/* Anything above that cannot be represented and must be rejected. */
+> +	ret = sbitmap_init_node(&sb, depth, ilog2(BITS_PER_LONG) + 1,
+> +				GFP_KERNEL, NUMA_NO_NODE, false, true);
+> +	KUNIT_EXPECT_EQ(test, ret, -EINVAL);
+> +}
+> +
+> +static void sbitmap_test_calculate_shift(struct kunit *test)
+> +{
+> +	/* Maps too small to spread over several words keep the default. */
+> +	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(0), ilog2(BITS_PER_LONG));
+> +	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(1), ilog2(BITS_PER_LONG));
+> +	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(3), ilog2(BITS_PER_LONG));
+> +
+> +	/* Four bits map to one bit per word. */
+> +	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(4), 0);
+> +
+> +	/* The shift grows back as the depth increases. */
+> +	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(4 * BITS_PER_LONG - 1),
+> +			ilog2(BITS_PER_LONG) - 1);
+> +	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(4 * BITS_PER_LONG),
+> +			ilog2(BITS_PER_LONG));
+> +}
+> +
+> +static void sbitmap_test_get_exhaust(struct kunit *test)
+> +{
+> +	DECLARE_BITMAP(seen, SBITMAP_TEST_DEPTH) = { 0 };
+> +	struct sbitmap sb;
+> +	unsigned int i;
+> +	int bit;
+> +
+> +	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, SBITMAP_TEST_DEPTH, -1,
+> +						GFP_KERNEL, NUMA_NO_NODE,
+> +						false, true), 0);
+> +
+> +	/* Every bit is handed out exactly once, then the map is empty. */
+> +	for (i = 0; i < SBITMAP_TEST_DEPTH; i++) {
+> +		bit = sbitmap_get(&sb);
+> +		KUNIT_ASSERT_GE(test, bit, 0);
+> +		KUNIT_ASSERT_LT(test, bit, (int)SBITMAP_TEST_DEPTH);
+> +		KUNIT_ASSERT_FALSE(test, test_bit(bit, seen));
+> +		__set_bit(bit, seen);
+> +	}
+> +
+> +	KUNIT_EXPECT_TRUE(test, sbitmap_any_bit_set(&sb));
+> +	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb),
+> +			(unsigned int)SBITMAP_TEST_DEPTH);
+> +	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
+> +
+> +	sbitmap_free(&sb);
+> +}
+> +
+> +static void sbitmap_test_put_reuse(struct kunit *test)
+> +{
+> +	struct sbitmap sb;
+> +	unsigned int i;
+> +	int bit;
+> +
+> +	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, BITS_PER_LONG, -1,
+> +						GFP_KERNEL, NUMA_NO_NODE,
+> +						true, true), 0);
+> +
+> +	for (i = 0; i < BITS_PER_LONG; i++)
+> +		KUNIT_ASSERT_GE(test, sbitmap_get(&sb), 0);
+> +
+> +	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), (unsigned int)BITS_PER_LONG);
+> +	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
+> +
+> +	/*
+> +	 * Freeing a single bit must make exactly that bit available again, no
+> +	 * matter which bit it was.
+> +	 */
+> +	for (i = 0; i < BITS_PER_LONG; i++) {
+> +		sbitmap_put(&sb, i);
+> +		KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb),
+> +				(unsigned int)BITS_PER_LONG - 1);
+> +		bit = sbitmap_get(&sb);
+> +		KUNIT_EXPECT_EQ(test, bit, (int)i);
+> +		KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb),
+> +				(unsigned int)BITS_PER_LONG);
+> +		KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
+> +	}
+> +
+> +	sbitmap_free(&sb);
+> +}
+> +
+> +static void sbitmap_test_round_robin(struct kunit *test)
+> +{
+> +	struct sbitmap sb;
+> +	unsigned int i;
+> +	int bit, prev = -1;
+> +
+> +	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, SBITMAP_TEST_DEPTH, -1,
+> +						GFP_KERNEL, NUMA_NO_NODE,
+> +						true, true), 0);
+> +
+> +	/*
+> +	 * round_robin must hand out strictly increasing bit numbers while the
+> +	 * map fills up from empty.
+> +	 */
+> +	for (i = 0; i < SBITMAP_TEST_DEPTH; i++) {
+> +		bit = sbitmap_get(&sb);
+> +		KUNIT_ASSERT_GE(test, bit, 0);
+> +		KUNIT_ASSERT_LT(test, bit, (int)SBITMAP_TEST_DEPTH);
+> +		if (prev != -1)
+> +			KUNIT_ASSERT_GT(test, bit, prev);
+> +		prev = bit;
+> +	}
+> +
+> +	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb),
+> +			(unsigned int)SBITMAP_TEST_DEPTH);
+> +	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
+> +
+> +	sbitmap_free(&sb);
+> +}
+> +
+> +static void sbitmap_test_resize(struct kunit *test)
+> +{
+> +	const unsigned int depth = 4 * BITS_PER_LONG;
+> +	struct sbitmap sb;
+> +	unsigned int i;
+> +
+> +	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, depth, -1, GFP_KERNEL,
+> +						NUMA_NO_NODE, true, true), 0);
+> +
+> +	for (i = 0; i < depth; i++)
+> +		KUNIT_ASSERT_GE(test, sbitmap_get(&sb), 0);
+> +	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), depth);
+> +
+> +	/* Shrinking hides the bits past the new depth. */
+> +	sbitmap_resize(&sb, depth / 2);
+> +	KUNIT_EXPECT_EQ(test, sb.depth, depth / 2);
+> +	KUNIT_EXPECT_EQ(test, sb.map_nr,
+> +			DIV_ROUND_UP(depth / 2, 1U << sb.shift));
+> +	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), depth / 2);
+> +	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
+> +
+> +	/* Growing makes them visible again; they are still allocated. */
+> +	sbitmap_resize(&sb, depth);
+> +	KUNIT_EXPECT_EQ(test, sb.depth, depth);
+> +	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), depth);
+> +	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
+> +
+> +	sbitmap_free(&sb);
+> +}
+> +
+> +static void sbitmap_test_set_clear_bit(struct kunit *test)
+> +{
+> +	static const unsigned int bits[] = {
+> +		0, 1, BITS_PER_LONG - 1, BITS_PER_LONG,
+> +		2 * BITS_PER_LONG + 3, SBITMAP_TEST_DEPTH - 1
+> +	};
+> +	struct sbitmap sb;
+> +	unsigned int i;
+> +
+> +	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, SBITMAP_TEST_DEPTH, -1,
+> +						GFP_KERNEL, NUMA_NO_NODE,
+> +						false, true), 0);
+> +
+> +	KUNIT_EXPECT_FALSE(test, sbitmap_any_bit_set(&sb));
+> +
+> +	for (i = 0; i < ARRAY_SIZE(bits); i++) {
+> +		sbitmap_set_bit(&sb, bits[i]);
+> +		KUNIT_EXPECT_TRUE(test, sbitmap_test_bit(&sb, bits[i]));
+> +	}
+> +	KUNIT_EXPECT_TRUE(test, sbitmap_any_bit_set(&sb));
+> +	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), (unsigned int)ARRAY_SIZE(bits));
+> +
+> +	for (i = 0; i < ARRAY_SIZE(bits); i++) {
+> +		sbitmap_clear_bit(&sb, bits[i]);
+> +		KUNIT_EXPECT_FALSE(test, sbitmap_test_bit(&sb, bits[i]));
+> +	}
+> +	KUNIT_EXPECT_FALSE(test, sbitmap_any_bit_set(&sb));
+> +	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), 0U);
+> +
+> +	sbitmap_free(&sb);
+> +}
+> +
+> +struct sbitmap_iter_ctx {
+> +	struct kunit *test;
+> +	DECLARE_BITMAP(visited, SBITMAP_TEST_DEPTH);
+> +	unsigned int nr_visited;
+> +};
+> +
+> +static bool sbitmap_iter_collect(struct sbitmap *sb, unsigned int bitnr,
+> +				 void *data)
+> +{
+> +	struct sbitmap_iter_ctx *ctx = data;
+> +
+> +	KUNIT_ASSERT_LT(ctx->test, bitnr, SBITMAP_TEST_DEPTH);
+> +	__set_bit(bitnr, ctx->visited);
+> +	ctx->nr_visited++;
+> +
+> +	return true;
+> +}
+> +
+> +static void sbitmap_test_iterate_set(struct kunit *test)
+> +{
+> +	static const unsigned int bits[] = {
+> +		0, 5, BITS_PER_LONG - 1, BITS_PER_LONG, 130,
+> +		SBITMAP_TEST_DEPTH - 1
+> +	};
+> +	struct sbitmap_iter_ctx ctx = { .test = test };
+> +	struct sbitmap sb;
+> +	unsigned int i;
+> +
+> +	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, SBITMAP_TEST_DEPTH, -1,
+> +						GFP_KERNEL, NUMA_NO_NODE,
+> +						false, true), 0);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(bits); i++)
+> +		sbitmap_set_bit(&sb, bits[i]);
+> +
+> +	sbitmap_for_each_set(&sb, sbitmap_iter_collect, &ctx);
+> +
+> +	KUNIT_EXPECT_EQ(test, ctx.nr_visited, (unsigned int)ARRAY_SIZE(bits));
+
+This fails on 32-bit UML w/ gcc 16.2.1 (SUSE): nr_visited == 5, 
+ARRAY_SIZE(bits) == 7.
+
+Seems to be passing with clang 23.1.2, though.
+
+> +	for (i = 0; i < ARRAY_SIZE(bits); i++)
+> +		KUNIT_EXPECT_TRUE(test, test_bit(bits[i], ctx.visited));
+> +
+> +	sbitmap_free(&sb);
+> +}
+> +
+> +static struct kunit_case sbitmap_test_cases[] = {
+> +	KUNIT_CASE(sbitmap_test_init),
+> +	KUNIT_CASE(sbitmap_test_calculate_shift),
+> +	KUNIT_CASE(sbitmap_test_get_exhaust),
+> +	KUNIT_CASE(sbitmap_test_put_reuse),
+> +	KUNIT_CASE(sbitmap_test_round_robin),
+> +	KUNIT_CASE(sbitmap_test_resize),
+> +	KUNIT_CASE(sbitmap_test_set_clear_bit),
+> +	KUNIT_CASE(sbitmap_test_iterate_set),
+> +	{}
+> +};
+> +
+> +static struct kunit_suite sbitmap_test_suite = {
+> +	.name = "sbitmap",
+> +	.test_cases = sbitmap_test_cases,
+> +};
+> +
+> +kunit_test_suite(sbitmap_test_suite);
+> +
+> +MODULE_DESCRIPTION("KUnit test for sbitmap");
+> +MODULE_LICENSE("GPL");
+> 
+> base-commit: 4056b3c9d3c92ea45955641dbafeb9b960e146ef
 
