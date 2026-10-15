@@ -1,113 +1,152 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706EB45FFB0;
-	Thu, 15 Oct 2026 06:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEDB3515C8
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 06:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792044887; cv=none; b=EyrO+2zYNdPk+5gvRA9Niy7xFd3FRtdoB3Su8j1Z3u5jDcPPGuIatGvv0yYHILqivS7h8dwdXSrRK9kV90y4GkhFmTuhHl/9levgaPHMExWQHJRuyGO28GtAL+VvZwzCPnA9yFwpeenEwnEZgmIOjFbo+8sWoHJpGPxTaknHYoY=
+	t=1792045909; cv=none; b=f2+802ZbxjAeClssry/WakBbVdgOPYWLZKq4nd24iIGAakqAj2Hru+pEKlu8faW/H32Ul0C/jt1EERJw/aQTrebwb9PrWSUCI90HuuXdI+xJmvbfhm3a4GVJgWy0tdJKiXZ6pX7XR5GKF9QqHqyxLAs3V5oAMvd2KQCaFVEi1rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792044887; c=relaxed/simple;
-	bh=ZjHmUvD814tjkhysjYalQNoKk/0MhRSls02vcp1OVtw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ePT78EWDC+rQ3tRL8uXJ/8aixo+8y6MG1pV7MguSfrtKkyMfQ3aQgKqy0MahvwwwCZ4s3uvRUBotLcrBG2pHHc4tZGrHUl6iog0GNfk7dpyR4pfj6juYQ0r0y8WcgU5yaVliZUMAekckY+xzYz94YkIuvw28j9rKfVFEUY/r24I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=FvNgevAo; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="FvNgevAo"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBB0F1516;
-	Wed, 14 Oct 2026 23:14:31 -0700 (PDT)
-Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C38BB3F871;
-	Wed, 14 Oct 2026 23:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1792044875; bh=ZjHmUvD814tjkhysjYalQNoKk/0MhRSls02vcp1OVtw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FvNgevAoTv232YZhVkEm7d++ZVEKA0pJhUSWt3GosYUbkm5hDIEIx75W5Y33f7zs7
-	 3ACuYSJGmk4lkTHG2VDI1rwU/6nPZByOqb8lICdTFpcigp3s+5oWcWe/dzvpsQIf+m
-	 vTyW5mgvnVnn0rY2YOjrQFigPYkrjRFPF6rZ7Vio=
-Message-ID: <3d43e4bd-7065-4ae1-bbc9-b034a9de531f@arm.com>
-Date: Thu, 15 Oct 2026 11:44:29 +0530
+	s=arc-20240116; t=1792045909; c=relaxed/simple;
+	bh=B8S0LlkmJ7EjMISZNd7v7BcToBZJiQKXzNCR1/0gNH8=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=dpDMtnYVzMDWWYh2UonNzp1Ro2ueS+Dj+7Qxzxrb9lAfmg9Je1EiDJaGfqhiM+f4lb0l5qPaJsnGt/uF8X/b63+3PFqgYwo+WCw/AYdQ2oOPE6VelQfG0HvSnNn60tYfk2JJUYd5g3e9IKazt49mEM8UtEgnBdf1FdUc1e/O1pE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4c307941971so7433396b6e.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 23:31:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792045907; x=1792650707;
+        h=content-type:cc:to:from:subject:message-id:in-reply-to:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=3F35E4jPIx7RMMTCdlc4Vo4sGi0Ur0Tkpp/QXlSGOsg=;
+        b=fPbso6e9cmKcsK2vS+VGYgmU/QiNuuh4Km3pnKBfEzkLVjn7IPZuyNuhqOygRnmbdh
+         RLVujDVOjSYAjm/vJoxf0k3USQJ7OPVaJVIBYpGqmEmd8mnHSX5K9fHE6Oye5EP2vsNW
+         S40kAsRb1RhQTAKjdnfCfCJGiKYGCYgvt3rOPRgpQRzCnPacqApt0/lrjfWvNOl4H3yv
+         CID9rqC0Y7bW/19w117eqal2i6II1mLFdZr/+kqAN06tWQtl4I7jEgXVIh8Y6XmOswTr
+         fiIieOkb0VS+LXGWn0w0GSBYDO4iZj2IBLk/vtwCAEUVq25ehD9dqBSLkH6Ga2U/mlJ+
+         msTQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxwBiDT3jGYuAd/b0yPF8Lc6nuoA10JxQNCm8btCnjdv6J/m2HD6Xjrc4865nfoyvf3hK8DYOlrrbfAogv9ik0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKkJ2gDC9Vngna5crtBf4wf1H0GSNh89cYs//T1cPZgJcz1Duf/
+	WVn4UzgH91ych6o4wJDSX3wcbTmhvVsfK8vDWfkVgOCetGAbiwjgCgMs4OzrMNXy4goagMLSv2N
+	JxXvLClOZt/sb86FJ+hX0bLfN7cQqouRq2HkVTOrjYu1rz5GDJ13Ouile3b0=
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: mremap_test: Validate the preamble region
- before mapping it
-To: =?UTF-8?B?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261014-selftests-mm-mremap_preamble-v1-1-2e97f501cb56@marliere.net>
-Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <20261014-selftests-mm-mremap_preamble-v1-1-2e97f501cb56@marliere.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6808:4f28:b0:4b3:7b31:8df7 with SMTP id
+ 5614622812f47-50c524711f0mr20489692b6e.14.1792045907183; Wed, 14 Oct 2026
+ 23:31:47 -0700 (PDT)
+Date: Wed, 14 Oct 2026 23:31:47 -0700
+In-Reply-To: <20261014220508.518772-1-dwmw2@infradead.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6ad07353.5f317f00.247b6.0062.GAE@google.com>
+Subject: [syzbot ci] Re: KVM: x86/xen: Don't drop event deliveries which race
+ memslot updates
+From: syzbot ci <syzbot+ci189dc6e331dcf349@syzkaller.appspotmail.com>
+To: dwmw2@infradead.org, dwmw@amazon.co.uk, fgriffo@amazon.co.uk, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, paul@xen.org, pbonzini@redhat.com, 
+	seanjc@google.com, vkuznets@redhat.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+syzbot ci has tested the following series
+
+[v2] KVM: x86/xen: Don't drop event deliveries which race memslot updates
+https://lore.kernel.org/all/20261014220508.518772-1-dwmw2@infradead.org
+* [PATCH v2 01/11] KVM: pfncache: Return -EAGAIN for a lookup which hits an invalid memslot
+* [PATCH v2 02/11] KVM: pfncache: Add a 'wait' argument to the refresh and activate functions
+* [PATCH v2 03/11] KVM: x86/xen: Don't block on xen_lock within the vCPU's kvm->srcu section
+* [PATCH v2 04/11] KVM: x86/xen: Wait out memslot updates in the Xen attribute ioctls
+* [PATCH v2 05/11] KVM: x86/xen: Don't lose the timer event when delivery fails transiently
+* [PATCH v2 06/11] KVM: x86/xen: Retry event channel delivery which races a memslot update
+* [PATCH v2 07/11] KVM: x86/xen: Extract delivery of event to vCPU into a separate helper
+* [PATCH v2 08/11] KVM: x86/xen: Explicitly tag "shared info" page as never being dirty tracked
+* [PATCH v2 09/11] KVM: x86/xen: Don't dirty track "vCPU info" page
+* [PATCH v2 10/11] KVM: x86: Request the guest TLB flush from record_steal_time()
+* [PATCH v2 11/11] KVM: selftests: Add Xen evtchn vs memslot-update race test
+
+and found the following issue:
+WARNING: suspicious RCU usage in kvm_gpc_check
+
+Full report is available here:
+https://ci.syzbot.org/series/cde10220-9f8c-48fe-a62d-36d3df4d9a0b
+
+***
+
+WARNING: suspicious RCU usage in kvm_gpc_check
+
+tree:      kvm-next
+URL:       https://kernel.googlesource.com/pub/scm/virt/kvm/kvm/
+base:      d4b7fb647204f0c81dfeae2d1a708e4d858e0c94
+arch:      amd64
+compiler:  Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+config:    https://ci.syzbot.org/builds/dbdeec8a-a092-44d6-96b1-12ae99a6a0ce/config
+
+=============================
+WARNING: suspicious RCU usage
+syzkaller #0 Not tainted
+-----------------------------
+./include/linux/kvm_host.h:1094 suspicious rcu_dereference_check() usage!
+
+other info that might help us debug this:
 
 
+rcu_scheduler_active = 2, debug_locks = 1
+locks held by syz.0.18064/14640: 3, last CPU#0:
+ #0: ffff8881133851a8 (&vcpu->mutex){+.+.}-{4:4}, at: kvm_vcpu_ioctl+0x27f/0xfd0
+ #1: ffff8880201d5d30 (&kvm->arch.xen.xen_lock){+.+.}-{4:4}, at: kvm_xen_vcpu_set_attr+0x4d/0x1250
+ #2: ffff8881133861e0 (&gpc->lock){....}-{3:3}, at: xen_get_guest_pvclock+0x29/0x260
 
-On 10/15/26 12:16 AM, Ricardo B. Marlière (SUSE) wrote:
-> remap_region() checks that the destination region is free before mapping
-> it, but not the preamble region placed right before it, so mapping the
-> preamble can intermittently fail with EEXIST:
-> 
->   # Failed to map dest preamble region: File exists
->   not ok 15 5MB mremap - Source 1MB-aligned, Dest 1MB-aligned with 40MB Preamble
-> 
-> This happens when the kernel's heap ASLR (arch_randomize_brk()) lands the
-> process heap inside that unchecked range. Confirmed by correlating
-> brk(NULL) at startup with pass/fail across 60 runs: every failure had brk
-> land inside that range.
-> 
-> Fix it by including the preamble in the free-region check.
-> 
-> Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
-> ---
+stack backtrace:
+CPU: 0 UID: 0 PID: 14640 Comm: syz.0.18064 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150
+ lockdep_rcu_suspicious+0x140/0x1d0
+ kvm_gpc_check+0x325/0x380
+ xen_get_guest_pvclock+0x3e/0x260
+ kvm_xen_start_timer+0x160/0x5f0
+ kvm_xen_vcpu_set_attr+0xbb2/0x1250
+ kvm_arch_vcpu_ioctl+0x1485/0x23a0
+ kvm_vcpu_ioctl+0x7e3/0xfd0
+ __se_sys_ioctl+0xfc/0x170
+ do_syscall_64+0x166/0x520
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f3c49f9e559
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f3c4ae4a028 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f3c4a226090 RCX: 00007f3c49f9e559
+RDX: 00002000000000c0 RSI: 000000004048aecb RDI: 000000000000000a
+RBP: 00007f3c4a0358b0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f3c4a226128 R14: 00007f3c4a226090 R15: 00007ffed7dff5b8
+ </TASK>
 
-Just wondering, should this have a Fixes: tag as well?
 
-Other than that, LGTM.
+***
 
-Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
 
-> Hi, this sporadic issue has been found in openSUSE CI:
-> 
-> https://openqa.opensuse.org/tests/6270334/logfile?filename=serial_terminal.txt#line-6760
-> ---
->  tools/testing/selftests/mm/mremap_test.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-> index 131d9d6db867..8d4fa3025a9d 100644
-> --- a/tools/testing/selftests/mm/mremap_test.c
-> +++ b/tools/testing/selftests/mm/mremap_test.c
-> @@ -1006,8 +1006,10 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
->  	if (!((unsigned long long) addr & c.dest_alignment))
->  		addr = (void *) ((unsigned long long) addr | c.dest_alignment);
->  
-> -	/* Don't destroy existing mappings unless expected to overlap */
-> -	while (!is_remap_region_valid(addr, c.region_size) && !c.overlapping) {
-> +	/* Don't destroy existing mappings unless expected to overlap. */
-> +	while (!is_remap_region_valid(addr - c.dest_preamble_size,
-> +				      c.dest_preamble_size + c.region_size) &&
-> +	       !c.overlapping) {
->  		/* Check for unsigned overflow */
->  		tmp_addr = addr + c.dest_alignment;
->  		if (tmp_addr < addr) {
-> 
-> ---
-> base-commit: 0fcb05b72344f40806cbe810de8872f1698bf053
-> change-id: 20261014-selftests-mm-mremap_preamble-5f98ad625f93
-> 
-> Best regards,
-> --  
-> Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
+To test a fix for this bug, please reply with `#syz test`
+(on a separate line) and attach the patch to the email.
+
+Notes:
+- The patch will be applied on top of the tested series (as an
+  incremental fix).
+- To test a new version of the whole series, please send it directly
+  to syzbot@lists.linux.dev.
+- Arguments like custom git repos and branches are not supported.
