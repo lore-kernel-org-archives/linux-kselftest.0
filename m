@@ -1,266 +1,165 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F25499F00
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 21:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792099146; cv=none; b=B6rskSmL13XixobYV0zVDc07hBh9gdP8e9WWYkr5tXJoiY1XVkB4jZdE7NgVQ13OFp9DNvCXxh3qASy4DHra36zsyFwYm7ZbuC9ansSDQYMBIABD2pSkaOVIryNQv/NdBeCouJxqMFP9PDNt/4g2SCdKpfCj1Y/f4fe1F1rqayU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792099146; c=relaxed/simple;
-	bh=oeYngTyq3Ev3WvOE1U+b+V8UDfrNsq2eGndjscFug2U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cZPANCtIFwl7/y2FaMS31TwBSB3EpnrBgJEhYE4qYguF+QExkq9g0vao9j1EGWjiU+UDw0OpvFRF9vZi10uvWQT15XHpZBXJy+NcAyT8HvLBxXoAFhmEdvH1T6az6hNp9zLRjdbsIdOqiT60sRSY/8baGfdKU+qR1D9VKZ8O1eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=BxMePcAC; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872C9446C19
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 21:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792099601; cv=pass; b=cPPrCmBtJgXBaErr25jgmoNJoLoMmVWEIDP58cFHMHheYl4/DXBmwDG1/henKzvRlXsLDBUyAfymLQY11ZDZqMeIpk9jopBd88wEshzDbYuSoJxvBZWd7fQQkuPn6Eq4tdE8fXL9sndAo6cpo7mW/LaLlaiBmrxrALXpbJJd2CI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792099601; c=relaxed/simple;
+	bh=S24dOVcDoMu01ibSOw1+bNFyN8uZ1WIV5X5lG+8sUTM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ttcNj5MKmK9ioM+ErZyGhu6/6/7pjgwvPFo3IMP+c18/j1a3Y5OO/kuzFejVG9tinsiOjx9c6lK9+f0XTwowo6kd6o7ch0l0Uidrjy6/CYpX/BW1jWY6a4lE2jqnwVkaHPjQnkKIuGoq11HS/PTYQ2d8paaWkTVEXLT+PD8Ju1g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oKrckloV; arc=pass smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="BxMePcAC"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso597011eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 14:19:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oKrckloV"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-533202fe429so105591cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 14:26:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792099598; cv=none;
+        d=google.com; s=arc-20260327;
+        b=bz28pUnh2DXa/RZ++jM6NFPK0CtIVcJ6Lrrj+lWyGEii7sLLBsyCBAFOsZ3sZsaPAN
+         Yad5H99AeI//kBQe4JQVFL1/nhp3bYA9YBwpHGez5vNNVk1KHAcVnD7PqNfNsmFxQYSt
+         TlsPQ/w7fTTr5o/5uOkHiSmr/JBccoDT+uqK0RwtUEyo7EIe0vsKiqpA9dI9TIF4sC3q
+         7TxUXssZfP3bHbL9KdBP89HFgJGDo4FzdKX7Gd+yKkjIZKef9dh9AIulL2S/ZRBHu+M+
+         /1Wh5eiwuyJksI1+yMnSCY+L5ugS3BgQu43KWpMt6W0IQVl+BKdwRFEUDIaqfCXRBFpL
+         0KxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=OgcgdziUoCAQVTSOyr0xkG5j6Rc5FznnZ78bB8A0JZM=;
+        fh=LMJsKRRshrT9n2R7ortRKhCxGS9KyC5H53r0oglu9qg=;
+        b=jjqQHnIFFEuywbbSp5IcH/PPUxb1rYMNSYk/rt329wcv3ADAoJKMZIhxzVA5MVJQyU
+         VbNTQw/Oj42tnaF4MEL8wqiF4oILO2Z2rXQ1cciV+Lnyyt8dHXAfYJ4FLrq6jsFo1vlv
+         o9+l6k/tuSGH5FtVgReA0Dajp9oRT6uivPLAe06k2gyRxlW7RCvy2P9cx3fc9OHU7swR
+         Z80jfaoF9LB0ETY3TBnolTTviImkQQ7Jfs0KGRZmqLAMPYeNQy7lIchRaNkYzcSRK6Pa
+         LpgezFdwV+anQksxJAP+K0QM2C1yMu+0vqO1qxWaOgB6trR2Wsbi4voltjWK65iAjXSH
+         GoZg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1792099140; x=1792703940; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=CvMlhhM1H4/8r2Sp7w6cymrnI6hcruDQchS3uGp3QP8=;
-        b=BxMePcAC9rPmzu52tbsWsKmVyNqv8SgjCC0jfhLKqDfhEvDTqITPwZKlO2VVDGCn+T
-         ug1XLOOafS/tlRT7sFVF0t+fsY3U+TgXp3CKZtK6Ty14TOyJ/6x+xC7CSflIlJchq4lC
-         /747QPNnE6DZW+ihPHNJcoTukXuHp0Pal7STI=
+        d=google.com; s=20251104; t=1792099598; x=1792704398; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=OgcgdziUoCAQVTSOyr0xkG5j6Rc5FznnZ78bB8A0JZM=;
+        b=oKrckloVPBkqU275fV0Dp0vswVpn9xI3pbBF0luDu5tSShg5dkG2YFZkgn8FRW6zce
+         SC6ce0/U2RwBMT7UdzqImKj7Zwk5S0nhq6OPLHt7tgXeMAaz7CD4ePFHyCr43fJxXA0Y
+         2jw5Oyrx7g+KPlc3TkA9w3oG2VFtEizziz3jHzVGNBWpDorHwNjHlbHymuYcu8CVQyzI
+         mvaz+FJ/xCsHJnZ4uSZEhOWijfOu6wwnL3wJ1s+dxyrL6peIWJod70X2U1Wzemtm1L0N
+         CFqg8wwGGvxXUvAYmKzgnxuDknpyeEjx5L1091lujDB82PDgTH1VZb4IgR3IDFsb64PI
+         K/BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792099140; x=1792703940;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CvMlhhM1H4/8r2Sp7w6cymrnI6hcruDQchS3uGp3QP8=;
-        b=eLDFV+aOmNS2sE/drV/0ztMkLLFzbNqQUGUckEQXhP0qrdIqa/6DJ/ZtB6wO9qvD/0
-         mhzBCDyMDHzkPxZMNlXVWlrLcl8eaCsN0QZuFvGqOjsye4MiE3p9hc5To9s2qOHWt15c
-         sLWsdI2RQQBa9yCu53Lz9RFFkvhOd5cURv3WhC4vjsL9sN9J0+gMeMJdQmcMDOMdI//n
-         +B3/z2xDVehZ7ZJJMInHkD9iIk9ppCtYsw58l9/+YkuAyVnx9jXRXLtxcF1oGp+oJSAe
-         t3pjTpswZ5Pz/4SxgVdFpIGNwopYBV0L+hUc1fFdu+ymv5Ibre9QE/xk3FSpnm2ihEX9
-         Wo8w==
-X-Forwarded-Encrypted: i=1; AKwUvBzg5Xm1igQ+bmA9oTYbo3SU4vF9XYat40JOJD2WP+GNWCdK4H4le2I6ijK4G1wGiMVYj6/eyQXTT2uY1Peb1N0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKushhd1+UV8+oQDbVNvg6dkvArZUPLglqhlhuRPol5UgdwX++1
-	UpR63R5+j8SBam5+Eq3A28z3/SJAySRSAE/BDmJB9nzd4tFJEWcCc3cmLDXVUX3S9Q==
-X-Gm-Gg: AYBFou0n5GwKra3zitegDTr/rudYq9XAZ1k6RdOhkh5PmQDaMqv4j/7YBBhnn0D1k8v
-	6x45OEU6dGkclIbxag+Dl0l9HD662MfszPOwfQZLfptwcaNciNRwnzMtyNn7tk2Bm5CICvqw49X
-	s5Odmjna15qa0A7U7fTI4TGTPlfCWE1q9X97a+KKWC5VwZhkZw7Di+hYKTvKaCDAgKxTR3iH16J
-	pCZrGOSb7LZDhlarjriz3oxlCUk7HXO3CHmagEGv+TYnwTk1y34vluhhy23lZoYoOo+G54hmBlX
-	J8Aq1nq5PXv+ZWG9cHRnB9OKzyfRm8ZsZy8nA23AsZoAR8vd8V+Bp0KswqEtmoPFp9UDxJJ4EPJ
-	TxwaoAsKcpwD6CWNvCOE5RFzkHeaBrV66KJ5Q3f7ZOxyFZNVYDOFgmGVxrYBsidwKEo3PKlSM98
-	kbOoZ5RI3RRskEfnnYb2SoAQd/O7M0XwvKNVzBDKwIkq30U8FYPyz0CgX72/rUJA==
-X-Received: by 2002:a05:7022:e27:b0:171:a066:938e with SMTP id a92af1059eb24-171a0669487mr25825245c88.21.1792099140011;
-        Thu, 15 Oct 2026 14:19:00 -0700 (PDT)
-Received: from exu-caveira.tail33bf8.ts.net ([2804:14d:5c54:4d67::2000])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831b859142sm216711c88.18.2026.10.15.14.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 14:18:58 -0700 (PDT)
-From: Victor Nogueira <victor@mojatatu.com>
-To: davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	jhs@mojatatu.com,
-	jiri@resnulli.us,
-	netdev@vger.kernel.org
-Cc: horms@kernel.org,
-	sashiko-bot <sashiko-bot@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2 3/3] selftests: tc-testing: pin DRR and ETS deficit refill semantics
-Date: Thu, 15 Oct 2026 18:18:31 -0300
-Message-ID: <QDISC-TIAE.v2.r0.20261015163454-3@mojatatu.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <QDISC-TIAE.v2.r0.20261015163454@mojatatu.com>
-References: <QDISC-TIAE.v2.r0.20261015163454@mojatatu.com>
+        d=1e100.net; s=20260707; t=1792099598; x=1792704398;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=OgcgdziUoCAQVTSOyr0xkG5j6Rc5FznnZ78bB8A0JZM=;
+        b=iBW3VUqKgf/+XVSp7MFUw3ztlJhWpQOjH/bBE15I5oIMHvA2S/a5euY39wZGDPa3JH
+         +FrHAmS0cs6hWeeiWa2UECvL59ladFMR+3Vg0P+p4Xwr40VCfMknCX8MhXGouVvgiOLm
+         ImvvWKy6VmL5Kq5WsckXt3UXDOpNVERTfrAx9eoZtbdPRD1/5kCPhTBAWf0gLLp32QbD
+         3PxNyaJv2zfPhffNv5q3AtIzyGIZTIVsiuFYzCJWpeYXmq1A9KZvW7dXVAFPru/rL/p0
+         smgJY+NHsGxSwoxtz/CcLv0WJPvbVy03fNKjdQ4YBMx9N8QyMfVLcjhtGHSfWiprGJ7R
+         Y+Rg==
+X-Forwarded-Encrypted: i=1; AKwUvBzwUR+3OWnEpdzcCas7IuTzQq9xDdPIjf/Lorc3AwhS8zh9xio1qzUgz9QVlyS5N1MQV3jWDssX4o5SIrxCGTY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKXFd+4wTel3ab2jUfASCmNKy+nekhkOVvCVXgrM0yGJZqI/63d
+	lscyrPPK+Nxiww9AdXxjaSYcyjP+8LFguvalFC3GQLBxWuOmUboWdj3UnG+myhbYhyuarKfxOAh
+	5jI8OfBF3RNx7BT33L1xvV+KNfjTqUwNr4ddR4068
+X-Gm-Gg: AYBFou3Kf/JBtWnIAcXjcFj/LRt1UveNvMdjEIr/oUowh0a0FSMxeTBKQpBo9WycLmw
+	TMSKLNRRbbT+HVjU0z8DGN8NeGaNJv/DGSA637XZox3A3NOTN1OPZREUCh1AQ3g16QX2pQNKEV0
+	ETToRzakY88pikQRcmmQG5o+5FNYCPyN5+WPRTXx1CZKWDg0aTQK0YjfexYJkMTSzdXUk3aQpj6
+	AHG4ubzyzx8jqX08oElC7vVnLECLkYrdc2dkyxwB5iCmQWZaoUC0qn4kPudUdxfddYgBiaeLc0F
+	Aule0qVVpgO3rPqkIzx1xQpmj+HCYxv/JRQOf+5+qz+KvhaECagKyw97xaL6SKsQJRlbo7NxigO
+	eh3S7S0zxGA==
+X-Received: by 2002:a05:622a:580a:b0:535:cee9:78ee with SMTP id
+ d75a77b69052e-5362b4d91b9mr2154821cf.15.1792099597789; Thu, 15 Oct 2026
+ 14:26:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261011233647.2454648-1-sashal@kernel.org> <20261011233647.2454648-4-sashal@kernel.org>
+ <CAP-5=fWFY-tpJz2vcBZvurwdZY5gwd8cuTemE9q1rtZ0Vi0dng@mail.gmail.com>
+ <20261013170854.647305-1-sashal@kernel.org> <as6SxXELnoIJenIX@x2> <atEo6aIQbgww4G0y@laps>
+In-Reply-To: <atEo6aIQbgww4G0y@laps>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 15 Oct 2026 14:26:26 -0700
+X-Gm-Features: AclHuK-FmTfmnNngMCTHGyBJ-W37rLbDe_VKRvUNDuHeCzq-aOwVNF9WYcEKmR8
+Message-ID: <CAP-5=fVq9rpDm2v8EjrQBVz6aV7SLaYzAwncQBwut0QDnFJ-kA@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/6] tools: build perf in tools_build
+To: Sasha Levin <sashal@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, linux-perf-users@vger.kernel.org, 
+	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	linux-kbuild@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add tests that check the DRR and ETS deficit refill, so a change to the
-refill loop can't silently alter the result.
+On Thu, Oct 15, 2026 at 12:26=E2=80=AFPM Sasha Levin <sashal@kernel.org> wr=
+ote:
+>
+> On Tue, Oct 13, 2026 at 05:21:25PM -0300, Arnaldo Carvalho de Melo wrote:
+> >Why is that difficult to run:
+> >
+> >make -C tools/perf install-build-deps
+> >
+> >To do a recommended perf build deps install?
+> >
+> >That would be useful as it is what we expect users to do.
+>
+> That's what users do, but it wants to install packages.
+>
+> We need a path for unprivileged builds on bots and CI machines that can't
+> install packages, and many of those builds are cross builds, where perf n=
+eeds
+> the target's libelf and libtraceevent rather than the host's.
+>
+> >If that is too difficult, for some reason, there is a minimal build in
+> >tools/perf/tests/make, that is tested since forever:
+> >
+> ># all the NO_* variable combined
+> >make_minimal        :=3D NO_PYTHON_MODULE=3D1
+> >make_minimal        +=3D NO_DEMANGLE=3D1 NO_LIBELF=3D1 NO_BACKTRACE=3D1
+> >make_minimal        +=3D NO_LIBNUMA=3D1 NO_LIBBIONIC=3D1 NO_LIBDW=3D1
+> >make_minimal        +=3D NO_LIBBPF=3D1
+> >make_minimal        +=3D NO_SDT=3D1 NO_JVMTI=3D1 NO_LIBZSTD=3D1
+> >make_minimal        +=3D NO_CAPSTONE=3D1
+>
+> I tried make_minimal on perf-tools-next. It still requires libtraceevent,=
+ so an
+> arm64 cross build without the arm64 libtraceevent installed stops at that
+> check. With NO_LIBTRACEEVENT=3D1 added, it then fails building the Rust t=
+est
+> workload. Natively it still enables aio, libLLVM, libslang, libtraceevent=
+,
+> lzma, zlib and Rust when they are installed, so the result depends on the
+> machine.
+>
+> I'd like to go with Ian's suggestion then: a MINIMAL=3D1 knob in perf tha=
+t turns
+> off every optional feature, which tests/make can use for make_minimal as =
+well.
 
-The cases:
-- 3f3e: one DRR class, quantum 256, sends a 1514-byte packet; the
-  deficit ends at 22.
-- 57a1: two DRR classes with 1514- and 514-byte packets; the 514-byte
-  packet goes first.
-- 2177: the same as 57a1 under ETS. IPv6 is disabled on the device so
-  its router solicitation doesn't land in a band.
+I can put a patch together for that. Just for discussion, I did do
+some work to break perf dependencies with libraries using dlopen/dlsym
+like:
+https://lore.kernel.org/linux-perf-users/20260130233439.647447-1-irogers@go=
+ogle.com/
+An area of controbversy with this approach is that it is still nice to
+use the header files for the library as library authors are bad and
+will do things like change function APIs over time. If the build uses
+the header files, why use dlopen when you can just link against the
+library? I could imagine using dlopen/dlsym for libtraceevent, but it
+would end up repeating this header file and library argument.
 
-57a1 and 2177 put netem under the classful qdisc, so they log the usual
-"non-work-conserving?" warning. All three pass with and without the
-previous patches.
+Thanks,
+Ian
 
-Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Signed-off-by: Victor Nogueira <victor@mojatatu.com>
----
-v1 -> v2:
-- DRR cases reworded, ETS case added.
- .../tc-testing/tc-tests/qdiscs/drr.json       | 82 +++++++++++++++++++
- .../tc-testing/tc-tests/qdiscs/ets.json       | 54 ++++++++++++
- 2 files changed, 136 insertions(+)
-
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
-index 2b61d8d79bde..d7ac32294738 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
-@@ -86,5 +86,87 @@
-         "teardown": [
-             "$TC qdisc del dev $DUMMY root"
-         ]
-+    },
-+    {
-+        "id": "3f3e",
-+        "name": "DRR deficit after refilling a 1514-byte packet at quantum 256",
-+        "category": [
-+            "qdisc",
-+            "drr"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP addr add 10.10.11.10/24 dev $DUMMY",
-+            "$TC qdisc add dev $DUMMY root handle 1: drr",
-+            "$TC class add dev $DUMMY parent 1: classid 1:1 drr quantum 256",
-+            "$TC qdisc add dev $DUMMY parent 1:1 handle 10: netem delay 2s limit 10",
-+            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match u32 0 0 flowid 1:1",
-+            "ping -c 2 -s 1472 -i 1 10.10.11.11 -I $DUMMY -W 0.01 >/dev/null 2>&1 &"
-+        ],
-+        "cmdUnderTest": "sleep 2.5",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -s class show dev $DUMMY",
-+        "matchPattern": "deficit 22b",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root"
-+        ]
-+    },
-+    {
-+        "id": "57a1",
-+        "name": "DRR serves the class that fits its deficit first",
-+        "category": [
-+            "qdisc",
-+            "drr"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP addr add 10.10.11.10/24 dev $DUMMY",
-+            "$TC qdisc add dev $DUMMY root handle 1: drr",
-+            "$TC class add dev $DUMMY parent 1: classid 1:1 drr quantum 256",
-+            "$TC class add dev $DUMMY parent 1: classid 1:2 drr quantum 256",
-+            "$TC qdisc add dev $DUMMY parent 1:1 handle 10: netem delay 3s limit 10",
-+            "$TC qdisc add dev $DUMMY parent 1:2 handle 20: netem delay 3s limit 10",
-+            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match ip dport 1111 0xffff flowid 1:1",
-+            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match ip dport 2222 0xffff flowid 1:2",
-+            "python3 -c \"import socket; a=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); b=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); a.sendto(b'A'*1472,('10.10.11.11',1111)); b.sendto(b'B'*472,('10.10.11.11',2222))\" >/dev/null 2>&1 &",
-+            "sleep 1",
-+            "python3 -c \"import socket; a=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); b=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); a.sendto(b'A'*1472,('10.10.11.11',1111)); b.sendto(b'B'*472,('10.10.11.11',2222))\" >/dev/null 2>&1 &"
-+        ],
-+        "cmdUnderTest": "sleep 2.5",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -j -s class show dev $DUMMY",
-+        "matchJSON": [
-+            {
-+                "class": "drr",
-+                "handle": "1:1",
-+                "root": true,
-+                "stats": {
-+                    "bytes": 0,
-+                    "packets": 0,
-+                    "backlog": 3028,
-+                    "qlen": 2
-+                }
-+            },
-+            {
-+                "class": "drr",
-+                "handle": "1:2",
-+                "root": true,
-+                "stats": {
-+                    "bytes": 514,
-+                    "packets": 1,
-+                    "backlog": 514,
-+                    "qlen": 1
-+                }
-+            }
-+        ],
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root"
-+        ]
-     }
- ]
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-index d2eab61c099a..ea3adba2f06c 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-@@ -1007,5 +1007,59 @@
-         "teardown": [
-             "echo \"1\" > /sys/bus/netdevsim/del_device"
-         ]
-+    },
-+    {
-+        "id": "2177",
-+        "name": "ETS serves the band that fits its deficit first",
-+        "category": [
-+            "qdisc",
-+            "ets"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP addr add 10.10.11.10/24 dev $DUMMY",
-+            "sh -c 'echo 1 > /proc/sys/net/ipv6/conf/$DUMMY/disable_ipv6' || true",
-+            "$TC qdisc add dev $DUMMY root handle 1: ets bands 2 quanta 256 256",
-+            "$TC qdisc add dev $DUMMY parent 1:1 handle 10: netem delay 3s limit 10",
-+            "$TC qdisc add dev $DUMMY parent 1:2 handle 20: netem delay 3s limit 10",
-+            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match ip dport 1111 0xffff flowid 1:1",
-+            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match ip dport 2222 0xffff flowid 1:2",
-+            "python3 -c \"import socket; a=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); b=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); a.sendto(b'A'*1472,('10.10.11.11',1111)); b.sendto(b'B'*472,('10.10.11.11',2222))\" >/dev/null 2>&1 &",
-+            "sleep 1",
-+            "python3 -c \"import socket; a=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); b=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); a.sendto(b'A'*1472,('10.10.11.11',1111)); b.sendto(b'B'*472,('10.10.11.11',2222))\" >/dev/null 2>&1 &"
-+        ],
-+        "cmdUnderTest": "sleep 2.5",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -j -s class show dev $DUMMY",
-+        "matchJSON": [
-+            {
-+                "class": "ets",
-+                "handle": "1:1",
-+                "root": true,
-+                "stats": {
-+                    "bytes": 1514,
-+                    "packets": 1,
-+                    "backlog": 3028,
-+                    "qlen": 2
-+                }
-+            },
-+            {
-+                "class": "ets",
-+                "handle": "1:2",
-+                "root": true,
-+                "stats": {
-+                    "bytes": 514,
-+                    "packets": 1,
-+                    "backlog": 514,
-+                    "qlen": 1
-+                }
-+            }
-+        ],
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root"
-+        ]
-     }
- ]
--- 
-2.43.0
-
+> --
+> Thanks,
+> Sasha
