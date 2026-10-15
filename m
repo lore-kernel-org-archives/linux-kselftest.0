@@ -1,154 +1,154 @@
-Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454E92DC791
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 21:45:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CB444A409
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 21:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792100713; cv=none; b=HPFShIdcQpJAkDj1e3csLPsfN0Ire/aiURe2Lz6GO0RsZPWD4btO/zrlIZQDoD+e+E+2MSgPNXuuqVE6E4g4zh/oztkEvGgJFDiJtQinfOW8w4BXNAJWaJ3J03wPweWl3uqJb8IqAVrr9LWIRX+Ksy1Gft2uBI651QFLbfSOqSA=
+	t=1792101214; cv=none; b=htR3oxruf7Ct33z2LztJFik5Bjqg+UdmjpaNShivRbYiQ8/swZ6Gm/ecFZ2kgrou6VHk3GbBURcZG10/PiaDDmq1l3KL0i94ic9gZN9LvZleX6n91ZhV8WPqSODeAeiTPCIsXZX1TNK9II3mr7PCDD2KlLTHy+lz3q4sho06UFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792100713; c=relaxed/simple;
-	bh=GPNQqOJAOgBKAauyZt2tdDWFLSk/zJ+iARLWqBubi6s=;
+	s=arc-20240116; t=1792101214; c=relaxed/simple;
+	bh=zCjxxsBd1lLCN9AtDXr7N1K+VmtxxJp0k9WMXBnArPo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sqI3qyGSTVo3gb0CmouTSZ+x0g8notlekK0+/t4MdGbN6kitNLiRoRIGXiU9zyHBbk5G2Ffi6FFNmvaPCC3ZMcDnoBMzNTkgLSgiKTVRMbyAIUMQxFExcsIF0HJQE9yR9taYqTIEGSlivIfQfYI6XxdhseXIi9dz/jbGoEzWgrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oBlUIjX8; arc=none smtp.client-ip=74.125.227.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=kAXyviS4AyJxHk0+NWezD8h9v7BZV00ZFP9rFiLi/kIT6DpvM4uiX5crOACIJhzpIn941jaAfy0p/1lF8Z/obAyrdeCFPU2SN+Ix0gDYT+D5yhhVeg9ymS+cXvVWo9fUGad2SiPC3u9A6GGteIlK9AWZzaQLARf99qZSXPDCiIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QkP48mJa; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oBlUIjX8"
-Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-3a0aa5e2b20so1627907a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 14:45:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QkP48mJa"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so3183081a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 14:53:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792100712; x=1792705512; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1792101213; x=1792706013; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=9Utj4RJBz9ZzU3Tg03m75VH5qFdGTJER42ZgUXj5+s8=;
-        b=oBlUIjX8H3L398YNTVFnWmj6VlVLiUIO2KPqjEG+Hk+0hL5At01p59XcFXwn2UrRS6
-         R2km8R5+QiphW4mpagyNunPEzS+jCMVjutxs6LL0c8d1fEvKSL2wVPueeBejArZHzjxM
-         eNjekzxVSW377t4jJhFU0tancVP7abd6IrBVjOe8CM5wTEp6s1WOX5t2xyh1nbeUwW3f
-         +iI80VEwLE2jbjI9NHITmArOqsZAmbA+JorYD9sPmp/vO9OjrsEUAPUyDLbLGyjbkFQp
-         KCX8N0URjeYkAZrG7ZVBvPEMH6ddB0zzLebV6AQuRxdke2l6/HnP7yfmaHCGePSNDkIy
-         snSw==
+        bh=mI5j2QSx7YHmNnf5OMmNmLr/+3VlhYuDRCjBR0r1XZM=;
+        b=QkP48mJalop8w16T6xlM3Dva0ZiyLbNVoGEjSWRODeKAkxr2gKPbt62+ky7LX5uYW6
+         DuLuvEWoFRFLoll2n0UemYoF//plZe9wAoprm1h5hrSY2iOTVBf872PJN5vW6/oJ5m6f
+         LeXQ5y+qz6V5B1QEXYyUyUq9WBBgm8VfmII/R71OW4YXsLb9v34Yt5o9bnp5o5QFIBOc
+         Bkuy10Mht0tzLKVw7Y7hf6Zol+S6yg2HNQSyoZ++J82HsiNBfs4SwhMgHZn5YWb8lxZ1
+         pCpuJuJlbqsbJSK8JJce7UJknMIE2GzT93m+wjw6pgVAX4ZlAJKOhjG/Kgxb5QXCTvoV
+         mkJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792100712; x=1792705512;
+        d=1e100.net; s=20260707; t=1792101213; x=1792706013;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9Utj4RJBz9ZzU3Tg03m75VH5qFdGTJER42ZgUXj5+s8=;
-        b=HLoTu0VTBtS6DTo57k9mUXTq6hsvdDnaWECZrOWmRlzDOX6e/1618LNBrPe1izvWpg
-         XJp0uj0PXA9jmDK9zJcc1WkuS5BTaxMEisBvFQ6+4xJfoxOi1eHbBuf1IBqYI7DBtP01
-         HDrFLX5RZG2LPi0fAI0kRA+PPBjELnk7u3QzgxNeIQyLDQj8iqB4iLNoFu8csRL8XsB+
-         Jv+DzrtY+D2uSX1J6LcjlAQR0/yhMA5SvC/hNqHgk0Dr6C6Gn7dD55J8pBDVSZqt2EnV
-         KMIrIGNgy1ly69JITnx5OnYt+7x0VZ8k9mRbRXC/mYLL18OjE2B7FObCmp6k2BwQ9v6l
-         bQBw==
-X-Forwarded-Encrypted: i=1; AKwUvByX5x/f0wvRRLL0q8H7OWvJhMWbwKQ7zvngD1C65h4nTDMmzYc8tIzjfISLwVquHWJyO+FDjyu8JiSW/1Q+qcM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKR8Vq3rbfclSyNLqQTgkuc8qx8Tw9AqA1omcEKUk/cUMWHkQOx
-	y0wQkT+qsPF5/bhq8yDglGPuvHEj4BhlCaFDiuHLJJNoAkOffx3Yplqb
-X-Gm-Gg: AYBFou3ca259WULfKDy4qcDuTGT1XpZYX7x2SxkZT8x5JylaAa5tWuNlBUlnkBlMKMd
-	bv4HC3PP18BCEWbBICiKCad63EJkZniuQeGcqDHZwHWscMJe6v7ACkjHu4WTGjikGDBN/Rho7fC
-	CeEeT9TaZQdPQvj1qL91j5TCgyzjVBDwqmUttWVL+FpFIA72GG+likyNykqv/iydJ0nDqpLSajV
-	u7xb/pb1YBdn51LHydfFQWsbvPipneVqzVKk3l19kY3JaGTPYWU+IRWLPPnncUdAWnDoDvwd41l
-	5c43FG4I8Zuee/0v+u+pttpAJ+CBfG7JzhrfEfhchZ9Isg2P4kUHFs0fl2/cOluIfHBhlq+ZQ7w
-	agJREWLsoIjPdtDXlAcqb0muPXFZ2Fi6vS+i6gWtF9cdjkCDhaf/SsKGg8B3cWTRLj3/tlV8Zex
-	3eRQNwM9lC1yDkJU7LPuOUU8Se7gFS8gdMvavCBVtxMVLnQuMc5T77S0xhg8zhnBa8
-X-Received: by 2002:a17:90b:4b09:b0:3a2:b16d:928b with SMTP id 98e67ed59e1d1-3ab3a79dd3emr16515826a91.46.1792100711675;
-        Thu, 15 Oct 2026 14:45:11 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:52::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc963f36asm239567a91.0.2026.10.15.14.45.11
+        bh=mI5j2QSx7YHmNnf5OMmNmLr/+3VlhYuDRCjBR0r1XZM=;
+        b=tITEY24bopP5pwiONyESNpVU//2cKkKkPGybzvZsdOPn3DXy84FTFbwXj9oXCn6hvh
+         k+BiX/51lR6Gl1w2oXrlDn83HKtXVV4bjkJ7dVvbT+4VIjCnRkl+IAGyHPo0Gp3HhDBB
+         47U++tjwCnK1v/Y5xycp7asWDzpoyFowFOtFDG5VvFWKrKPX+2lmv8Wtb2C40eZrOKKU
+         O6QeE/api7xxbecrUWgu1qjycQytAntcUZJGeFTmPnaRbuVY+C0S1lcznKF2rx1tRxm4
+         ALkfdXV57GnPo2l3QQQ3bmENeNJOK5sQQjQINfskkZDInOjCAv7FiA989fdSTuHqpe3x
+         cfaw==
+X-Gm-Message-State: AFq9FYJ7rFUio0Gl6r6klTuKbHXQBAK1leJ9d+TVe6IH78tR15q9KKaR
+	306hm1tk4aRclzEkMRg4lRBojd8B/2FB1sLYgLlQrvN6yCm59SAzsu8TQ38XuYLsdQ==
+X-Gm-Gg: AYBFou3zc2SwnZ0pa13+K1ctjHq9fReM25tsN1j3FXSFJz8zI5gNY7JN7Ahx7GSFOtV
+	CpxauWxgHhgpXIobtAFmwnGj1rVeGEBhyBKxsJBE2AoO5vpQa8ViBA/tHnLV9jnKp1gAXvbjtO2
+	ZtUw/O850vM9NIAGWDHWz+mePkoZdygObXEb0DB5dgQt0kLkpZfHMu3XxfXl508eZeaMpRT/VN5
+	GX6fdmzOTiYEMaz4L8Jqm26mPgrYlK/JzW86DN1+KoonSqjoFw3L8IexIyvqpY+skRjOsQOSdtL
+	AJpbXMIpZoJbIeur+jRh2hgY4GlbXG8u9K7+Hcx2MjIk3lY9Hlef1zjCV2xCsD8nWGX68tHyaT7
+	r7RyMeobyT0Hm0efpJc5XU+n6opId8TAS7SElp1oEDfcsiiIMJw1/+NGINv+7xZhepXlEUSeMbD
+	/xSDNr6VLnsspozXD7LmHipdEk8z36m/Lu37Bi3zmed3zQNnibM7KlRRGBHIaNb395CftkmOqBj
+	JxJKCjGdIIecM7lcfdyaehCin2yjycRsDxY171ahpq3PQ==
+X-Received: by 2002:a17:90b:5343:b0:3ab:188b:c5bc with SMTP id 98e67ed59e1d1-3ab3a94f0dcmr16931016a91.14.1792101212423;
+        Thu, 15 Oct 2026 14:53:32 -0700 (PDT)
+Received: from google.com (64.75.127.34.bc.googleusercontent.com. [34.127.75.64])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc48e8646sm865063a91.10.2026.10.15.14.53.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 14:45:11 -0700 (PDT)
-Date: Thu, 15 Oct 2026 14:45:02 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Willem Ferguson <wferguson@cloudflare.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org, 
-	kuba@kernel.org, pabeni@redhat.com, ncardwell@google.com, bpf@vger.kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, linux-doc@vger.kernel.org, corbet@lwn.net, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@cloudflare.com
-Subject: Re: [RFC PATCH net-next 0/4] tcp: carry a BPF-chosen identifier in
- TSval low bits
-Message-ID: <atFI9vl5hy09Dc0t@devvm7509.cco0.facebook.com>
-References: <20261013103906.2660384-1-wferguson@cloudflare.com>
+        Thu, 15 Oct 2026 14:53:31 -0700 (PDT)
+Date: Thu, 15 Oct 2026 21:53:27 +0000
+From: David Matlack <dmatlack@google.com>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org,
+	akpm@linux-foundation.org, linux-mm@kvack.org, vipinsh@google.com,
+	linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+	pratyush@kernel.org, graf@amazon.com
+Subject: Re: [PATCH v1 0/7] liveupdate: tmpfs preservation and early freeze
+Message-ID: <atFLV3tT0s3y6zMp@google.com>
+References: <20261015093816.2438942-1-pasha.tatashin@soleen.com>
+ <atESAwf17pJ11S9U@google.com>
+ <atEaPuWNOm5VLc7A@google.com>
+ <atEhc20Zawj4D62x@google.com>
+ <atE53vmlDeA4cWD2@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261013103906.2660384-1-wferguson@cloudflare.com>
+In-Reply-To: <atE53vmlDeA4cWD2@google.com>
 
-On 10/13, Willem Ferguson wrote:
-> This series lets a listener encode a small per-connection identifier in
-> the low bits of the TCP timestamp values it sends. The peer echoes TSval
-> back in TSecr, so every segment the peer sends after the handshake
-> carries the identifier in its TSecr.
-> 
-> In Anycast networks, mid-stream path changes caused by BGP route flapping
-> or ECMP shifts frequently deliver active TCP packets to an ingress Point
-> of Presence (PoP) that lacks the flow's socket state, resulting in abrupt
-> connection resets (RST). While protocols like QUIC avoid this using explicit
-> Connection IDs, TCP lacks an in-band routing token to help ingress
-> nodes identify where a flow actually lives. To address this problem,
-> we propose embedding an N-bit data center ID into the lower-order bits
-> of the TCP Timestamp option (TSval, RFC 7323), allowing edge load balancers
-> to recognize misdirected packets and steer them to the correct origin data
-> center holding the active session.
-> 
-> How it works:
-> 
->  - tcp_ts_id_bits (per netns, 0..8, default 0) sets how many low TSval
->    bits are reserved. The millisecond clock is shifted up by that many
->    bits.
->  - A sock_ops program opts a listener in with
->    BPF_SOCK_OPS_TCP_TS_ID_CB_FLAG and is called with
->    BPF_SOCK_OPS_TCP_TS_ID_CB for each SYN, before the SYN-ACK is sent.
->    It sees the SYN and optionally returns the identifier
->  - The identifier and width are stored in the request socket, then in
->    the full and timewait sockets. Incoming TSecr values are decoded
->    before RTT estimation and PAWS use them.
->  - TCP_TS_ID reads back the identifier, and /proc/net/netstat gains
->    TCPTSIdAssigned, TCPTSIdDeclined, TCPTSIdSkipped and
->    TCPTSIdEchoMismatch.
-> 
-> RTT estimation on the encoding host sees the same decoded timestamps
-> as before, so they are unchanged. On the peer, PAWS keeps working too;
-> the only effects are a shorter idle limit and a narrower tolerance for
-> reordered segments, both described below.
-> 
-> Scope and limitations:
-> 
->  - Passive opens only. SYN cookies, microsecond timestamps and peers
->    without timestamps are left unencoded.
->  - The peer sees a clock running 2^bits times faster. That narrows the
->    real-time span of its PAWS window, so the width should be no larger
->    than the identifiers need.
->  - Peers that keep ts_recent for the RFC 7323 24 days (e.g. FreeBSD,
->    macOS) stall connections that stay idle longer than 24.8/2^bits days
->    (about 37 hours at 4 bits). Linux peers stop enforcing PAWS after
->    TCP_PAWS_WRAP and are unaffected.
->  - TCP_REPAIR cannot restore the identifier, so hosts that migrate
->    established connections should leave the feature off.
-> 
-> All of this is documented under tcp_ts_id_bits in ip-sysctl.rst. With
-> the sysctl at 0 (the default) the only new cost on the established fast
-> path is one likely() branch when parsing TSecr.
-> 
-> Questions for reviewers:
-> 
->  1. Is encoding an identifier in the low bits of TSval acceptable in
->     principle, given the trade-offs above?
->  2. If so, what feedback do you have on the implementation?
+On 2026-10-15 04:38 PM, Pasha Tatashin wrote:
 
-Don't see any feedback yet, so from the top of my head: looks like you
-control two sides of the communication, so why not a custom (bpf) tcp option?
-Would you need that on every packet and it makes it expensive?
+> What if instead of retrieve-into an existing file FD, userspace passes
+> a dir_fd on the target tmpfs mount where the file should be restored?
 
-Or any other field you can abuse maybe? IPv6 Flow label?
+This is good. This eliminates the pinning race and also eliminates the
+checks v1 had to do on the userspace-provided file.
 
-Implementation-wise, the sock_ops is going away in favor of bpf_tcp_ops,
-so BPF_SOCK_OPS_TCP_TS_ID_CB_FLAG is a no go.
+> During preserve we can record the file's basename if the file was linked
+> (or mark that it was unlinked). On retrieve, creates a brand-new file in
+> dir_fd (e.g. starts as an unlinked O_TMPFILE on that tmpfs superblock),
+> populates all the folios and metadata while the file is still unreachable
+> by anyone else, links it into dir_fd under the preserved name at the end
+> (or leaves it unlinked if the original file was unlinked), and returns
+> the FD of the new file to userspace.
+
+I don't think the name should be in the ABI though:
+
+ - Userspace already has to know what each token is, so it knows the
+   name. And a basename isn't enough anyway, since userspace still has
+   to supply the directory.
+
+ - "The name" isn't well defined. A file can have several hard links,
+   and it can be renamed or unlinked between preserve and freeze.
+
+ - Linking in the kernel needs a policy for collisions, and linking at
+   finish() can fail (or find the name taken) at a point where there's
+   no good way to report it.
+
+ - The name isn't the only thing needed to create the file properly.
+   There's also the mode, the owner (fsuid/fsgid, setgid directories,
+   idmapped mounts), default ACLs and LSM labels, the access mode of the
+   fd, and whether the file may be linked at all. If we record those in
+   the ABI it grows a lot.
+
+What if we model the retrieve args on open() directly? RETRIEVE_FD
+behaves like openat(dirfd, ".", O_TMPFILE | flags, mode), then fills the
+file, then returns the fd:
+
+  struct liveupdate_memfd_retrieve_arg {
+  	__u32		size;
+  	__s32		dirfd;
+  	__aligned_u64	flags;	/* subset of O_*, ORed with O_TMPFILE */
+  	__aligned_u64	mode;
+  };
+
+In the kernel this is file_open_root(&dir_path, ".", O_TMPFILE | flags,
+mode), which goes through the same path as open().
+
+Userspace links the file into place with linkat() whenever it wants, the
+usual O_TMPFILE way, or passes O_EXCL to make it unlinkable. Then
+there's no name in the ABI or the uAPI, no linking in the kernel,
+unlinked files are just files userspace never links, and "don't link it
+until it's fully populated" comes for free.
+
+One quirk: open() rejects O_TMPFILE without write access.  With LUO
+holding the file until finish, that brings back the -ETXTBSY problem for
+restored binaries. vfs_tmpfile() itself doesn't need write access, and
+neither does filling the file, so I think we can allow an O_RDONLY |
+O_TMPFILE here.
+
+> I would like file type to stay exactly the same, I really don't want to 
+> play the game where LUO can magically change file from one type to 
+> another even if from Linux internal implementation they share a lot of 
+> code, they are still a different file types from the user perspective.
+
+Ok, I don't feel that strongly. We should just do it based on the
+superblock rather than i_nlink, so that O_TMPFILE and unlinked tmpfs
+files stay on a user mount.
