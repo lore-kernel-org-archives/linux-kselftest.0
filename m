@@ -1,64 +1,73 @@
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF343B8921;
-	Thu, 15 Oct 2026 02:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F143D8132
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 02:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792030401; cv=none; b=GC+764moTTWjShGuLM5tcbmIj1Y43iHb8z5qlcRjv2+6J75g/V3D7sIJ02RNMQC9+VfcBhJW8ypD6V1LUmsmc7gsekoppKoG6xEI4xUi6aNL6jcWTsi0OPAYmA3n4pTAjTg6KLWWBDdcRORzgP1o2eOPpNorwOq10KmT1fd+lUg=
+	t=1792031067; cv=none; b=mczqw0AcMpc7kSewPMXcXQhAXRm0gAjsrJt3GShDlNbF8eLhYJS3rW4+beknEGN6Hnuojx9GN2pPl/LFWvzIroFL8bsx2m4mtKPsNYfUpx2Q6g+I3LTDCboRlMpcwf976uStFhoGAiTw/qgSGmhb27NsX3VrgID/btaV0nh4lAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792030401; c=relaxed/simple;
-	bh=3NfrV1dTdOChrKOILxj8xxkkULtt0LTy9uqU4OOysgM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=geV5Iij1bG5I7uHnjpKAoezG/jsMqEzpogUbz/i+7E7371XLurgR8aXZf+hQOCCnkQriS7I8QXsusY+BWzFQU8Qb94vYCKFzdSEY0SlIzlCAXiCnLCiVisACvpl0K9YYDXlHInnvbGgeqyT7cTndivf6m2me2g+1Hemx5Rg5lwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ydiAgMzg; arc=none smtp.client-ip=115.124.30.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1792031067; c=relaxed/simple;
+	bh=KFkTlUboSzZbF/mPRaunuRcT5moLJ30RQFGCjhzRoJg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j6KLsN96veNEKi2eL8dkNGiitvh5qbWVm59vjKiat6sZ3qR27AykakisPYoEuxaCAy42AxufVqBEPvwe8elNQLd54gQirJVlHwbMPqhyxniSoUVYTnz8sbjDnZUVPZxOfAHQ/FrUSGb/2TwSRaRs9/13k73locLTf/gnnur2/P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cTY+Tn0I; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ydiAgMzg"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1792030386; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=AP8mOT2Tvjd0ULmisNLPOzWyXU+zviS2NkU89PTeN3c=;
-	b=ydiAgMzguzG35xnEiPb2dSDk6pHIMhcP23ITERen3Tu0pd3iuYtpBx+8nmMw+K3Qfb3A9bweFPsCrHykV/0fB4VilSl/bfC8srs01LgHJHwTgWmaglQ/eMNJncQhG5C1hTny7ML7cOcFoKo8OpZhJvVEzHXYN4LTB0yiTQ0CrTU=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0XCqJ07Y_1792030383;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XCqJ07Y_1792030383 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Oct 2026 10:13:04 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	puranjay@kernel.org
-Cc: eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	pulehui@huawei.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	luke.r.nels@gmail.com,
-	xi.wang@gmail.com,
-	shuah@kernel.org,
-	rgbi3307@gmail.com,
-	guoren@kernel.org,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 1/3] riscv: bpf: Add BPF private stack support
-Date: Thu, 15 Oct 2026 10:12:36 +0800
-Message-ID: <20261015021238.5657-2-cp0613@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cTY+Tn0I"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3a4cdc9025bso2621756a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 19:24:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792031065; x=1792635865; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RiRTtTPlWRafdFL0/1n5rOtzrGPreou1ymHMTLM9OmY=;
+        b=cTY+Tn0Iz8z7D1fixzWeQW1MCKI3cAHOXvrvzFiKiIEmEj2GDpED2qeOHVkMe68Cp7
+         6qoG+g3DHpqiWcg6y9j2Jp5bChz5bmdo3NALvTqvCfUanDaHVhlv3Gk1RKNZ7lB+uJxj
+         qaIanFC43DGuhqvuz9ilFm7VucZd/DS3L1cHAmzXWsr+vVouulVfYRvmZ5MUbnx34WYK
+         pHa9kLm+kF6OBd0/w8JDJNumez9F8R4k7eZjJZM+xjl42pgeui7HKJGJMcY27KvLH+cM
+         FZLEqPY1InI+w3gw/jFWcX0Fka5qGHt7BqnICCZXKQEC5MW6teQerBgqEWPSMMhIAikf
+         zPvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792031065; x=1792635865;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RiRTtTPlWRafdFL0/1n5rOtzrGPreou1ymHMTLM9OmY=;
+        b=sAnHyxnCzTdOMDEXYiOFnNMhVxvSw7NKCC5QyZbD6uxBtlo9wFRgVutN/zfHt4Mn0t
+         A9RxG/ltBCnIwYrlgTawB/QOfBKPU3pVO+0MmORchRu7djxZD0CzjtkKRa3yOmnXjxVv
+         tW2MhHDYVyR+2gatOCV73UeWZOQcVhG0tjWJX91ttJzSkrVwxoEmilLSuQekxiGWiInh
+         aG3QS2OqyPNch7UlTVOBY40c5JHfTg2Rqfsm/Y/ZBwQubDwD9b1bJ+eV+zAbJrVGiLlA
+         VEi/UxJdHzoMkqqvdVyEhpLyO0EaE/XTogny7oHGypMl/K25Rv4Sp9Yu4FtnzotqDBpX
+         5JWg==
+X-Forwarded-Encrypted: i=1; AKwUvByk3mi1qUD9XYuJG8eT00rYtVCvTUXjBWpUACp6QUqdBo+HjAOkfmz2pOL3w0L5t1RbDy5kHMt5gK0IUBt2USE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJahQKPEJ3VVqdhStV+iRNXO69bERqRtyxUJOHu4SCQsy0lRFsc
+	oRYjAUy53xDQu2CfzYr7ReDRl8dHssJ6ScgDAAt6zNO/v9exyHbMOf1I
+X-Gm-Gg: AYBFou28GtSJ6jgY+YmRlIgft7LVMVARa0gpNVoreKaQanm9LKxJz1hLqE31Jtjpruy
+	8EFPJuEyPRaOjI8tHjakxaSuQNaLPdSNJIx+gaNTt4RWZH1C5njvmwK4rF787V5w8TPNYMOxA7X
+	MQg949nKPrNtjXkk4IH0k7lndY6+8iKVT3WBA/etYXfDJPjMnj/Hsdt2L08tf8hM7w0Ss7wSsNp
+	/EdVFCvow0lErNTx/UZf0tfi70lL7ldWarx4kWq1dhc6GlAbEGaZ9PGIY2o5SrkVLCQzEi/W2FM
+	9FSE4vu4UldFDCIosRY+AxMF/tgs0NfCyX76+QH84UBJz0xV9jrCePuPwzYbm6I6GGg/BsBbuPr
+	VvSqSOFKgaHMCn0GVDKMZuL2rtkZyOcynBQbjChOusSVVma0PPCygP1P3/RxXnL+cDgMQw1EFYV
+	YBZ4GhCykOBD5kx5C6kpQwOsMIS5kPIkm28G7r0SQg8OBdIAlWckTuS5YVwTgmf7AAkmUN
+X-Received: by 2002:a17:90a:4ca2:b0:3ab:7031:d962 with SMTP id 98e67ed59e1d1-3ab70412990mr9429218a91.41.1792031065580;
+        Wed, 14 Oct 2026 19:24:25 -0700 (PDT)
+Received: from localhost ([211.249.71.105])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac945e7311sm1944388a91.4.2026.10.14.19.24.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 19:24:25 -0700 (PDT)
+From: Jaewon Jung <jaewon8868@gmail.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: Add nice dependency
+Date: Thu, 15 Oct 2026 11:23:39 +0900
+Message-ID: <20261015022416.43534-1-jaewon8868@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261015021238.5657-1-cp0613@linux.alibaba.com>
-References: <20261015021238.5657-1-cp0613@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,280 +76,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A program on a private stack keeps its BPF frames in a per-CPU area of
-its own rather than on the kernel stack of whichever context entered it.
-bpf_enable_priv_stack() grants that mode only once the JIT reports
-bpf_jit_supports_private_stack(), which riscv64 did not: programs there
-always ran on the kernel stack, and a struct_ops program that requires
-one was rejected with -EACCES.
+The tests use nice but do not list it as a requirement.
+Add nice to the requirements so the tests are unresolved, not failed,
+when it is not available.
 
-Allocate a per-CPU area of the verifier calculated depth plus a 16 byte
-guard region at each end, and point BPF_REG_FP (S5) at the top of it
-while leaving SP on the kernel stack. Every BPF stack access already
-goes through S5, and S5 is callee-saved with each subprog deriving its
-own, so nothing else in the JIT has to know about the private stack.
-
-The outgoing stack argument area stays in the kernel frame: callers
-write it relative to SP, callees relative to RV_REG_FP, which the
-prologue sets to the caller's SP.
-
-The per-CPU lookup is emitted after the tail call entry point: a program
-using a private stack can still be entered as a tail call target, and
-RV_TAILCALL_OFFSET is a constant added to the target's bpf_func, so what
-is in front of it must be the same size in every program.
-
-The base is materialized with absolute moves, as on arm64, x86-64 and
-powerpc64: the dynamic per-CPU area is vmalloc'd, beyond a PC-relative
-auipc pair from the JIT region, and riscv64 has no segment or register
-holding the per-CPU offset, so __per_cpu_offset needs materializing the
-same way. Both constants are fixed before the offset convergence loop,
-so the prologue length is stable across passes.
-
-The guard layout and value follow arm64, x86-64 and powerpc64: a 16
-byte region at each end holding two copies of the pattern. A jited
-program has them checked when it is freed, reporting the first
-corrupted CPU only; failure paths release the area unchecked since the
-image never ran, which also clears priv_stack_ptr for the later
-bpf_jit_free().
-
-RV32 does not declare support and keeps the existing kernel stack
-behaviour.
-
-Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+Signed-off-by: Jaewon Jung <jaewon8868@gmail.com>
 ---
- arch/riscv/net/bpf_jit.h        |  1 +
- arch/riscv/net/bpf_jit_comp64.c | 42 +++++++++++++++--
- arch/riscv/net/bpf_jit_core.c   | 84 +++++++++++++++++++++++++++++----
- 3 files changed, 115 insertions(+), 12 deletions(-)
+ .../test.d/trigger/inter-event/trigger-onchange-action-hist.tc  | 2 +-
+ .../test.d/trigger/inter-event/trigger-snapshot-action-hist.tc  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index 5c4f53060c91..6d42083829f7 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -14,6 +14,7 @@
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
+index 55ab0270e5f7..04e6db2a734d 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ # description: event trigger - test inter-event histogram trigger onchange action
+-# requires: set_event "onchange(var)":README ping:program
++# requires: set_event "onchange(var)":README ping:program nice:program
+ # flags: instance
  
- #define RV_MAX_REG_ARGS		8
- #define RV_EXTRA_STK_ARGS	(RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS)
-+#define PRIV_STACK_GUARD_SZ	16
+ fail() { #msg
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
+index 9eb37c2fa417..64bb0dca7e3b 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ # description: event trigger - test inter-event histogram trigger snapshot action
+-# requires: set_event snapshot events/sched/sched_process_fork/hist "onchange(var)":README "snapshot()":README ping:program
++# requires: set_event snapshot events/sched/sched_process_fork/hist "onchange(var)":README "snapshot()":README ping:program nice:program
+ # flags: instance
  
- /* verify runtime detection extension status */
- #define rv_ext_enabled(ext) \
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 788fcc21fd5b..9a83770f0460 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -2122,12 +2122,34 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	return 0;
- }
- 
-+static void emit_priv_stack_frame(struct rv_jit_context *ctx)
-+{
-+	u64 fp = (__force u64)ctx->prog->aux->priv_stack_ptr + PRIV_STACK_GUARD_SZ;
-+
-+	fp += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
-+	emit_imm(RV_REG_S5, fp, ctx);
-+#ifdef CONFIG_SMP
-+	emit_lw(RV_REG_T1, offsetof(struct thread_info, cpu), RV_REG_TP, ctx);
-+	emit_imm(RV_REG_T2, (u64)__per_cpu_offset, ctx);
-+	emit_sh3add(RV_REG_T1, RV_REG_T1, RV_REG_T2, ctx);
-+	emit_ld(RV_REG_T1, 0, RV_REG_T1, ctx);
-+	emit_add(RV_REG_S5, RV_REG_S5, RV_REG_T1, ctx);
-+#endif
-+}
-+
- void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- {
-+	bool priv_stack = ctx->prog->aux->priv_stack_ptr;
- 	int i, stack_adjust = 0, store_offset, bpf_stack_adjust = ctx->stack_arg_sz;
- 
--	bpf_stack_adjust += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
--	if (bpf_stack_adjust)
-+	/*
-+	 * With a private stack only the outgoing stack argument area is left in
-+	 * this frame. It has to stay: the caller writes it relative to SP while
-+	 * the callee reads it relative to RV_REG_FP, the caller's SP set below.
-+	 */
-+	if (!priv_stack)
-+		bpf_stack_adjust += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
-+	if (bpf_stack_adjust || priv_stack)
- 		mark_fp(ctx);
- 
- 	if (seen_reg(RV_REG_RA, ctx))
-@@ -2205,7 +2227,16 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 
- 	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
- 
--	if (bpf_stack_adjust)
-+	/*
-+	 * Point BPF_REG_FP at the top of this CPU's private stack. A program
-+	 * with one can still be entered as a tail call target, at
-+	 * RV_TAILCALL_OFFSET, so this has to come after that entry point; the
-+	 * offset is a constant added to the target's bpf_func, so everything in
-+	 * front of it must also be the same size in every program.
-+	 */
-+	if (priv_stack)
-+		emit_priv_stack_frame(ctx);
-+	else if (bpf_stack_adjust)
- 		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
- 
- 	ctx->stack_size = stack_adjust;
-@@ -2303,3 +2334,8 @@ bool bpf_jit_supports_callx(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_private_stack(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-index 5265dd5bd39e..06f74d6943a9 100644
---- a/arch/riscv/net/bpf_jit_core.c
-+++ b/arch/riscv/net/bpf_jit_core.c
-@@ -9,6 +9,7 @@
- #include <linux/bpf.h>
- #include <linux/filter.h>
- #include <linux/memory.h>
-+#include <linux/percpu.h>
- #include <asm/text-patching.h>
- #include <asm/cfi.h>
- #include "bpf_jit.h"
-@@ -44,6 +45,62 @@ bool bpf_jit_needs_zext(void)
- 	return true;
- }
- 
-+#define PRIV_STACK_GUARD_VAL	0xEB9F12345678eb9fULL
-+
-+static u32 priv_stack_size(struct bpf_prog *prog)
-+{
-+	return round_up(prog->aux->stack_depth, STACK_ALIGN) +
-+	       2 * PRIV_STACK_GUARD_SZ;
-+}
-+
-+static int alloc_priv_stack(struct bpf_prog *prog)
-+{
-+	u32 size = priv_stack_size(prog);
-+	u32 end = (size - PRIV_STACK_GUARD_SZ) / sizeof(u64);
-+	void __percpu *ptr;
-+	int cpu, i;
-+
-+	ptr = __alloc_percpu_gfp(size, STACK_ALIGN, GFP_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+
-+	for_each_possible_cpu(cpu) {
-+		u64 *stack = per_cpu_ptr(ptr, cpu);
-+
-+		for (i = 0; i < PRIV_STACK_GUARD_SZ / sizeof(u64); i++) {
-+			stack[i] = PRIV_STACK_GUARD_VAL;
-+			stack[end + i] = PRIV_STACK_GUARD_VAL;
-+		}
-+	}
-+	prog->aux->priv_stack_ptr = ptr;
-+	return 0;
-+}
-+
-+static void priv_stack_check_guard(struct bpf_prog *prog)
-+{
-+	u32 end = (priv_stack_size(prog) - PRIV_STACK_GUARD_SZ) / sizeof(u64);
-+	int cpu;
-+
-+	for_each_possible_cpu(cpu) {
-+		u64 *stack = per_cpu_ptr(prog->aux->priv_stack_ptr, cpu);
-+
-+		if (stack[0] != PRIV_STACK_GUARD_VAL ||
-+		    stack[1] != PRIV_STACK_GUARD_VAL ||
-+		    stack[end] != PRIV_STACK_GUARD_VAL ||
-+		    stack[end + 1] != PRIV_STACK_GUARD_VAL) {
-+			pr_err("bpf-jit: private stack overflow/underflow guard of prog %s corrupted on CPU %d\n",
-+			       bpf_jit_get_prog_name(prog), cpu);
-+			return;
-+		}
-+	}
-+}
-+
-+static void free_priv_stack(struct bpf_prog *prog)
-+{
-+	free_percpu(prog->aux->priv_stack_ptr);
-+	prog->aux->priv_stack_ptr = NULL;
-+}
-+
- struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog)
- {
- 	unsigned int prog_size = 0, extable_size = 0;
-@@ -82,12 +139,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 			    round_up((stack_arg_cnt - RV_EXTRA_STK_ARGS) * 8, STACK_ALIGN) : 0;
- 
- 	ctx->prog = prog;
-+	if (prog->aux->jits_use_priv_stack && alloc_priv_stack(prog))
-+		goto out_free_hdr;
-+
- 	ctx->offset = kvzalloc_objs(int, prog->len);
- 	if (!ctx->offset)
--		goto out_offset;
-+		goto out_free_hdr;
- 
- 	if (build_body(ctx, extra_pass, NULL))
--		goto out_offset;
-+		goto out_free_hdr;
- 
- 	for (i = 0; i < prog->len; i++) {
- 		prev_ninsns += 32;
-@@ -102,7 +162,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 		ctx->prologue_len = ctx->ninsns;
- 
- 		if (build_body(ctx, extra_pass, ctx->offset))
--			goto out_offset;
-+			goto out_free_hdr;
- 
- 		ctx->epilogue_offset = ctx->ninsns;
- 		bpf_jit_build_epilogue(ctx);
-@@ -122,7 +182,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 							  bpf_fill_ill_insns,
- 							  bpf_prog_was_classic(prog));
- 			if (!jit_data->ro_header)
--				goto out_offset;
-+				goto out_free_hdr;
- 
- 			/*
- 			 * Use the image(RW) for writing the JITed instructions. But also save
-@@ -188,10 +248,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 			ctx->offset[i] = ctx->offset[i - 1];
- 		ctx->offset[0] = ninsns_rvoff(ctx->prologue_len);
- 		bpf_prog_update_insn_ptrs(prog, ctx->offset, jit_data->ro_image);
--out_offset:
--		kvfree(ctx->offset);
--		kfree(jit_data);
--		prog->aux->jit_data = NULL;
-+		goto out_free_ctx;
- 	}
- 
- 	return prog;
-@@ -207,7 +264,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 				   sizeof(jit_data->header->size));
- 		bpf_jit_binary_pack_free(jit_data->ro_header, jit_data->header);
- 	}
--	goto out_offset;
-+	free_priv_stack(prog);
-+out_free_ctx:
-+	kvfree(ctx->offset);
-+	kfree(jit_data);
-+	prog->aux->jit_data = NULL;
-+	return prog;
- }
- 
- u64 bpf_jit_alloc_exec_limit(void)
-@@ -259,6 +321,10 @@ void bpf_jit_free(struct bpf_prog *prog)
- 		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
- 		hdr = bpf_jit_binary_pack_hdr(prog);
- 		bpf_jit_binary_pack_free(hdr, NULL);
-+		if (prog->aux->priv_stack_ptr) {
-+			priv_stack_check_guard(prog);
-+			free_priv_stack(prog);
-+		}
- 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
- 	}
- 
+ fail() { #msg
 -- 
-2.50.1
+2.43.0
 
