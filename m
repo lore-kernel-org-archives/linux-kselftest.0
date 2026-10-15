@@ -1,290 +1,158 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296584F4733
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 18:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0BFF54A7D0
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 19:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792090494; cv=none; b=RGhZtsJqtkw2Iyj7iGy3k0yljhayyRRnFC6QujuQuX7o7dUEE74YC3SMJPedfD1Ibx92rxaBe7QeIcstjTGdnyG6PGQHby/DSwQi2GV+v3alIOHrsfMDiOyUeu+VsqOsmwqCMwgMr58IWe0M7HUp0NKbSOSvQoxAeHHrfHDJUKk=
+	t=1792091013; cv=none; b=kKXCjYHzcRP0CM1/0R9WqktyDXkqWh6bKQajMJtQoEEZcY9W0Ztu6DCkLjI8mynFXBNjOKEwV2+sdDQkP2+WpiO3Ew8UDj8yOgEHW3XjarB22kxW6aeBISIjTSs/jSq5+7kp+Llsa120vEJWBm8kS/cXvl8jT1LZvcsKJZUJL5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792090494; c=relaxed/simple;
-	bh=V+5DobUGwWgbn/wQY1pIDzWIHCihSxw4xDJxND8YeZU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LJHMKo8XmxCm0UdaJ0D2Un2xPWP/8aZnF/nPyxHkg2Irr+a55aq7Zqt73PSBamSaueR3DxvaSl8Qh8UtTrjZHBMmEht0qbQS+Szz0VbBDHVPIjZcM5+vZXCbSwIVYlMTlvke3dejqCzT5PhXmLwnOtypObFiPXyMDGjTAvUTSwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lSC/+Mic; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1792091013; c=relaxed/simple;
+	bh=7b1Nk/ZJMD8drhAUN0wfc2gumfVbFyem4H6YFgUVL0I=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=Gu7OjppUxTSciX9EyPkKmrqz9fAS5RZwe80vWVzBOeKzNq2Zabsb7C/lfDVKuf0/b9QTXZ9igidcfcqgA698VgcU0Q71IBO8SmiXaCssgp7/Mlc6TrxDFR/I8i1F+yXaHPBsJmnRecWag1XxK2Lq3j2+3PMVZgQvvKPICv+auLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cabQjDQA; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lSC/+Mic"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3a4cdc9025bso3176927a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 11:54:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cabQjDQA"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e7e742a2c7so2830385ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 12:03:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792090489; x=1792695289; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IltlA15ffn2teEWgoeALmwOWBDbtdgaPXsnTGsD5rwo=;
-        b=lSC/+MicDWmDczibKQWLZPWUWT5H2X44ERqtu9QO/Y7ZdZ8f7ETJJkJGEFC3vpeZ4G
-         5jHK2or2b0YV5ZPBMaL/hxIqcRX55wxNaNWP7KHcqUPF7/A/JOv93c2L4yzwtopk4se7
-         ub9p0lSbmXDFwIp9Y4JFBQbIKBxJomgq4TRLzf35IYP9F8iZS8yNCkXs9dvfACdFpPc3
-         3v/Z+6HNwSDDPS7VAR0XUxScf5xwN9gtokw/5X/K/9xj/CpaSX6YXxLQDnNWs0+H++EU
-         1z8Z+UcJFErTsdp6bquy83PrR/t4NNeRb6Bk9AZsSL914AlRYgI0BmyORn1q3dWhDmtU
-         Dflw==
+        d=gmail.com; s=20251104; t=1792091011; x=1792695811; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=7b1Nk/ZJMD8drhAUN0wfc2gumfVbFyem4H6YFgUVL0I=;
+        b=cabQjDQA/k9ATVD4gnaKh4L7m2sori+UVd3ZH8wkFq9YfJR07+qoCNn8PbsY9jFXjD
+         opQb5ZbNd7L/PdeaBc1knI0NK2tG5sRWAxs1++tNNLZ/CdDHfEMnP5RyublAYLkz2IDM
+         bhqRcVtHNQEbSDghMBZJH+j0/jWlO6l0FUxF0hOMWaPSuGJ2lByZ4zWrBI+L6+Tckzi9
+         tEFYrK3kDLUptKZ7snEhsyjpN7I29XjuQJqEySWe1cthQwJ3/mZ/RzeG/3Q55yWn+2bH
+         Q2qA3mNKPEDvIv42hLV6cz09T5EN1AAEriNlOZXYe5RT3dmogzTNUryiQKDxL55QlniU
+         ZkQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792090489; x=1792695289;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1792091011; x=1792695811;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IltlA15ffn2teEWgoeALmwOWBDbtdgaPXsnTGsD5rwo=;
-        b=CHmKlRZPlAztfFbAIhzL8zD724/6dCqUm7ERuMLjBmjB15UN3XDEa4cklB9NhT8Rpt
-         HbjL5y52n1B6qVtazqytDhIjHkUVXUMH2nzD6n2+Sk9dUxhHYNHPJytzYPyLKYq0FAFY
-         NkLwII2vfdCmGXtPMgFvcTBDUYxjKj/deVdm5pHKP9gFEKE0rlahJJCEddYMaL1+Ly3r
-         jBlbrx7alXYevxyAoLSl7g+tzw4WEM8qN/9Hlenbh734xGEm6nQCV5CECxNEJsj5GWo2
-         2+RJFDfmjM4U9gxG+8xvm/YzAT2KGvH/xWiOu/L3a/g/g/HAHVx2yJ/qM+L3G0uYmG+3
-         mtaQ==
-X-Gm-Message-State: AFq9FYIejTY9YUcWja4s5NpQV2M6t02tcPrOmzMb19IJbPscTvPtqbDf
-	PWFRbjuDEU1Jg7RC1ZHNVZ/n1Ou8kJcTYqyGn6eo7ZfKGm5FITpQZ0CgeJBsMDLYyA==
-X-Gm-Gg: AYBFou2dylyY8n0LlsZQgjgMXSzwZbESm8fPTmjPli6NW+uFZ9fr1jkurJ8XGJq1p62
-	7LpGx/lQBEvb/v9cfDrcxRtQsf9O1sBHrXeQRltDZ0o2BpK6TywdQc8p/G+uGG8F57X7s2wX3eU
-	GbsF2ZsntP8lAd7hCLKRiXVBPpppc1UN7w7uMxQmR1HnswDsm+3L4WNdNGnHUAfcyjqQU/VzeWL
-	aDn8v/M6+ShpIQEe9s98yhVakeKptti0LlPPV+7hEVFSrr5SZxYeyV7ki8dd5nvTB/lrowVZZKB
-	s8MosNzc5HXX18p7poMM0WjTbThPXUQVZfKu8mLWRX5dCphc/bfRuY11xWUwUG4Uz2ETUUeN0vW
-	8fqRxnoYpTxBsNltAY8bh51CzyIIayT2fStwC3u8bnWER0xghHiSFnfwms8lURWcRDmRZUAebcV
-	V3QFt539+NKrakeFqEK/XX8oxnIejOOzOFfTIwHy6l5HyMqgcJDyKIrG8dGruc6mL6LnBXPSdv5
-	ZZ42jnW7crvhVzKMOXgu/uBurhttD2lWfQ=
-X-Received: by 2002:a17:90b:390d:b0:3ac:b6eb:e0d4 with SMTP id 98e67ed59e1d1-3acb6ebe1c9mr959297a91.63.1792090488544;
-        Thu, 15 Oct 2026 11:54:48 -0700 (PDT)
-Received: from google.com (64.75.127.34.bc.googleusercontent.com. [34.127.75.64])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc46ecd32sm452704a91.3.2026.10.15.11.54.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 11:54:47 -0700 (PDT)
-Date: Thu, 15 Oct 2026 18:54:43 +0000
-From: David Matlack <dmatlack@google.com>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org,
-	akpm@linux-foundation.org, linux-mm@kvack.org, vipinsh@google.com,
-	linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-	pratyush@kernel.org, graf@amazon.com
-Subject: Re: [PATCH v1 0/7] liveupdate: tmpfs preservation and early freeze
-Message-ID: <atEhc20Zawj4D62x@google.com>
-References: <20261015093816.2438942-1-pasha.tatashin@soleen.com>
- <atESAwf17pJ11S9U@google.com>
- <atEaPuWNOm5VLc7A@google.com>
+        bh=7b1Nk/ZJMD8drhAUN0wfc2gumfVbFyem4H6YFgUVL0I=;
+        b=UTmVNqyix/ExKaiiffeDNgGGwnref8c4bVdqsunnEdSToZGozE+Z3QmMbfjvIXf9XI
+         rl7SPx7dJGODpFbRLgn2//Ph0u6sXhQT3wemZd/BR009Gu8KlKjrLVwx3hYJJFaUy1Up
+         1iPWfdNRUvqgwOGDKEc3eB6AIFIdyMuF1rNHA6yO1Q0lzZ2OmVqzOAmPQRjJMAxKcDVh
+         RuRGhKGTIv2CFRNEnLIxq9CxvAublm3+F8dSSIb9HD53Oi7wfwTslAhzt52nOmiUM1h3
+         Cfkxlb61xShI8iMMM6AFHCYxXExOMP66lhIgD9oY0rCScaAywLTVqAWZDj4YsBqZyddN
+         GTKQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzAaSgKKJytH/JlxOtTdKilcyB4DqF8wTmsf7UFF2LL9Uc3vgGKpXSEF3LN+9aOPFLyDkpD0nRi6FlvyrDe63M=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLQ3Otwstgwb5QdMdykfH3U2rGxKKcCW3vP2Sg6CgBDK89Xg3w0
+	0OvgZFBW3ilLuWoraH0zDyeMolSfKOhJoXDB9sGTui5qcRBxqQjZjBp/
+X-Gm-Gg: AYBFou3MPp2iRp4NKZrlp+CRVPAnLi6TCLUSYoNOKR3B+xXFAXCoP4p3yw0Bq4souLm
+	XCPMZLNEu8A2ltZnp98A6BjLLPvfpsKKWeERp0OewE0BPKXcmJ5MHQLzhCK7ZPkJo2zms+hxMu+
+	8fwPiMWbJDHBljk2UqWdTKP0bKNBwSNODXtj/a+UfQbeFTk54Oo7ug/l+Bb7rsVXKISpP4smo97
+	Bt2sguOqfyCtu0dNf4ka7p+Edb7gqeZ5YWbIpkPZQP5tODaEPULxyONBVAP7fty0f8Iqh564Xxi
+	u6cuTvt+aKkTMgV6ffRHxdGvwr5RPdPzyOUs4eIvLv10qS2jBeI+vdUwVTs6gdrOonGLdy7QNU8
+	aF477jL+dPkVDEEQduUMwPluJuC41Dkk7IuJveUTiLI+aWz6fVCYdPgyRhzqpHiWotnX0lEn5I6
+	lxUrn2w78i/p+Vq2bloaGY4mpz6R3FkQc+bVYHaL1+Ivffd6ETZW3DstM24R3nBHy+XrBzZkyyG
+	JaCEsIUPVLr5dhWKiG01MDqqN23JSuTOafb+3NxXMt+5sCvA/lh1nbsrPSVSitru5M3XbotHZc7
+	oT4=
+X-Received: by 2002:a17:903:144b:b0:2e9:64b9:a338 with SMTP id d9443c01a7336-2e977140eccmr6102915ad.7.1792091010968;
+        Thu, 15 Oct 2026 12:03:30 -0700 (PDT)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8aad3dsm464765ad.64.2026.10.15.12.03.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2026 12:03:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <atEaPuWNOm5VLc7A@google.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 15 Oct 2026 19:03:29 +0000
+Message-Id: <DM5N8SCBZDQE.2SC93YN5ILEYG@gmail.com>
+Subject: Re: [PATCH bpf-next v2 00/21] bpf: Add tracing_multi link support
+ for bpf progs
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, "Jiri Olsa" <olsajiri@gmail.com>
+Cc: <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Quentin Monnet" <qmo@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Mykyta Yatsenko" <yatsenko@meta.com>, "Avinash
+ Duduskar" <avinash.duduskar@gmail.com>, "Anton Protopopov"
+ <a.s.protopopov@gmail.com>, "Amery Hung" <ameryhung@gmail.com>, "Jordan
+ Rife" <jordan@jrife.io>, "Rong Tao" <rongtao@cestc.cn>, "Eyal Birger"
+ <eyal.birger@gmail.com>, "Pu Lehui" <pulehui@huawei.com>, "Jingguo Tan"
+ <tanjingguo@huawei.com>, "Lin Ma" <malin89@huawei.com>,
+ <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
+References: <20261012154024.29423-1-leon.hwang@linux.dev>
+ <as_7Jgy_sdTE9M5O@krava> <09db7d70-b7d4-4cf5-9447-6d16bac10794@linux.dev>
+In-Reply-To: <09db7d70-b7d4-4cf5-9447-6d16bac10794@linux.dev>
 
-On 2026-10-15 02:23 PM, Pasha Tatashin wrote:
-> On 10-15 17:48, David Matlack wrote:
-> > On 2026-10-15 05:38 AM, Pasha Tatashin wrote:
-> > > This series allows preserving files in tmpfs via LUO to survive across a
-> > > live update, and allows userspace to decide when to freeze a session
-> > > instead of delaying until auto-freeze at kexec time. Once userspace is
-> > > done with a session, it can freeze the session immediately (and across
-> > > multiple sessions in parallel), reducing blackout time by not postponing
-> > > this operation to kexec shutdown where all sessions are frozen serially:
-> > > 
-> > > 1. Early session freeze (LIVEUPDATE_SESSION_FREEZE):
-> > >    Currently, LUO sessions are frozen automatically only inside the
-> > >    reboot(LINUX_REBOOT_CMD_KEXEC) path, where luo_session_serialize()
-> > >    iterates through all outgoing sessions under global write locks and
-> > >    freezes them serially during shutdown.
-> > > 
-> > >    Add the LIVEUPDATE_SESSION_FREEZE ioctl on session file descriptors so
-> > >    userspace can freeze a session as soon as it is done with it (and freeze
-> > >    multiple sessions concurrently, since luo_session_freeze() only acquires
-> > >    the per-session mutex). During kexec, already-frozen sessions skip the
-> > >    late auto-freeze step; if an early-frozen session is closed before
-> > >    kexec, its files are rolled back via .unfreeze() before being
-> > >    unpreserved.
-> > 
-> > Thanks for putting this together. I'm on board with driving
-> > retrieve-into through a per-handler argument instead of a LUO-level
-> > flag. It's what Pratyush suggested on the RFC too (sorry Pratyush, I
-> > never replied to that). I still need to review the actual patch but
-> > I think the idea is fine.
-> 
-> Yeah, Pratyush and I discussed this at LPC. I've been using this extra
-> argument in my cpu_preserve series to launch jobs at a given entry
-> address on a preserved CPU, and figured it would be a useful, generic
-> interface for others as well. So I decided to send this series now to
-> reduce the extra infrastructure I carry in my cpu_preserve series, and
-> your tmpfs work was a good reason to land it now :-)
-> 
-> > However, nothing ties the arg struct to a handler, it's interpreted by
-> > whichever handler owns the token. At LPC we discussed letting userspace
-> > pick the handler in PRESERVE_FD/RETRIEVE_FD, so that it controls which
-> > one is used when more than one can take a file. If we do that, the
-> > handler name would also be the natural key for which arg struct is
-> > expected.
-> > 
-> > > 3. Tmpfs file preservation and retrieval:
-> > >    Using the file handler retrieve argument, extend mm/memfd_luo to allow
-> > >    preserving generic shmem-backed tmpfs files (not just unlinked memfd
-> > >    pseudofiles), recording MEMFD_LUO_FLAG_TMPFS in
-> > >    struct memfd_luo_ser.flags so that preserved tmpfs files must be
-> > >    retrieved as tmpfs files and preserved memfd files must be retrieved as
-> > >    memfd files.
-> > 
-> > I've been working on a v1 of the tmpfs preservation since LPC. v1 fixes
-> > a number of problems in the RFC that I think this series still has
-> > (sorry for the wall of text, it is LLM-generated):
-> > 
-> >  - Failures that userspace can fix lose the file. The folios are
-> >    restored, charged and added one at a time, so if the target's mount
-> >    is too small (ENOSPC/quota) or the caller hits its memcg limit
-> >    partway through, the target is truncated, the folios are freed, and
-> >    the failure is permanent. Only bad-argument errors are retryable.
-> >    v1 restores all the folios first, charges all the blocks and memcg
-> >    up front, and adds all the folios to the page cache or none of them.
-> >    It keeps the restored folios in private_data between attempts (LUO
-> >    needs to pass private_data to .retrieve() and keep it on failure),
-> >    so the only permanent failure left is losing the KHO state itself.
-> 
-> I think the current behavior is fine: if the file doesn't fit when
-> restoring, I think it is okay to lose the file permanently. We shouldn't
-> keep preserved data around in private_data once we have started
-> retrieving folios.
+On Thu Oct 15, 2026 at 1:48 AM UTC, Leon Hwang wrote:
+> On 15/10/26 05:59, Jiri Olsa wrote:
+>> On Mon, Oct 12, 2026 at 11:40:02PM +0800, Leon Hwang wrote:
+>>> Similar to the tracing_multi link support for kernel functions [1], add
+>>> support for bpf progs.
+>>>
+>>> With this support, I'll be able to enhance the function-graph feature o=
+f
+>>> bpfsnoop [2]. It will trace all bpf progs, including their subprogs, to
+>>> draw a full function call graph including bpf prog call sites.
+>>>
+>>> The attachment could speed-up when there are hundreds of targets. For
+>>> example, on high CPU core count servers, it probably runs 200 tc-bpf
+>>> progs as Kubernetes CNI, and each tc-bpf prog might have 4 subprogs.
+>>> Hence, there will be 1000 targets to trace for bpfsnoop's function-grap=
+h
+>>> feature.
+>>>
+>>> With tracing_multi link support for bpf progs, bpfsnoop will be able to
+>>> attach to all targets quickly.
+>>>
+>>> When attaching to 1000 targets, fentry.multi is much faster than fentry
+>>> on a 16c16g QEMU VM on an AMD EPYC 9745 server.
+>>>
+>>> ./bench tracing-multi-attach-progs
+>>> Setting up benchmark 'tracing-multi-attach-progs'...
+>>> tracing-multi-attach-progs: prepared 1000 identical BPF program targets
+>>> tracing-multi-attach-progs: fentry created and attached 1000 programs/l=
+inks in 338.171ms
+>>> tracing-multi-attach-progs: fentry.multi created one program and attach=
+ed one 1000-target link in 47.345ms
+>>> tracing-multi-attach-progs: fentry.multi creation/attachment speedup is=
+ 7.14x
+>>=20
+>> it's faster, but the original attachment is under 1s,
+>> so not really a problem imo
+>>=20
+>> I guess the api is better for your use case, like having
+>> less file descriptors open ?
+>
+> Correct.
+>
+> The original attachment is fast enough. So there is no need to improve
+> attachment performance with a large patch series.
+>
+> Even though the series brings two benefits:
+>
+> * One bpf link for multiple bpf prog targets.
+> * Support for all archs that have trampoline support.
+>
+> But, I also doubt the value of this series.
 
-Ok I think we can omit keeping restore folios in private_data across
-retry attempts. It is a bit subtle.
+I'm not sure about the value as well.
+You also need to benchmark detach time.
+Overall the perf improvement is too minor vs added complexity,
+but the first couple patches in the set look like a nice cleanup.
+Pls resend them.
 
-> >  - memfd_pin_folios() doesn't require the inode lock, so iommufd can
-> >    pin folios of the target while they're being added or truncated
-> >    away. v1 starts with two patches that make iommufd take the lock
-> >    and make memfd_pin_folios() assert it.
-> 
-> Hm, isn't this mostly orthogonal to the change we're making here?
+pw-bot: cr
 
-Kind of. Today .retrieve() fills a brand-new memfd that nobody else can
-reach until the ioctl returns. Retrieve-into fills a file that other
-processes can already open by path and pass to iommufd, so pinning can
-now race with the folios being added, or truncated away on failure.
-
-In the failure case a folio can stay pinned (and mapped for DMA) after
-it's been removed from the file. Retrieve-into introduces the race, and
-the fix is two small prep patches.
-
-> >  - The target has to be opened for writing (FMODE_WRITE). Since LUO
-> >    holds a reference to it until finish, that means a restored binary
-> >    can't be executed until the session is finished (-ETXTBSY). v1
-> >    instead requires mnt_want_write_file() and file_permission(MAY_WRITE)
-> >    under the inode lock, like FS_IOC_ENABLE_VERITY. That also rejects
-> >    immutable files, which a fd opened for writing before chattr +i
-> >    doesn't.
-> 
-> Ah, good point.
-> 
-> >  - There's no file_modified() or fsnotify_modify(), so setuid/setgid
-> >    bits aren't cleared and timestamps aren't updated. The normal write
-> >    path does both.
-> 
-> That is true, though I'm not sure fsnotify_modify() is really needed
-> since the whole file is restored at once and I doubt anyone is watching
-> for modifications during restore (clearing setuid/setgid via
-> file_modified() makes sense, though).
-> 
-> >  - f_pos is set through fget() + vfs_setpos() without f_pos_lock, which
-> >    races with read()/lseek() on the same open file. v1 uses
-> >    fdget_pos(). (Sashiko called this an ABBA deadlock. I don't think it
-> >    is one, since vfs_setpos() doesn't take the lock, but the race is
-> >    real.)
-> 
-> Right, this was reported by Sashiko; I haven't looked into it yet.
-> 
-> > 
-> >  - Early failures leak the preserved folios. The seals/flags check
-> >    frees ser and records a permanent error, so .finish() skips the file
-> >    and the folios are never freed. Sashiko flagged this as well. The
-> >    new MEMFD_LUO_ALL_FLAGS check adds another way to get there. In v1,
-> >    early failures don't consume anything and aren't permanent, so
-> >    .finish() cleans up.
-> 
-> We originally agreed that if retrieve() fails, we fail permanently and
-> leak resources until reboot to avoid memory corruption from ongoing DMA
-> activity. However, now that we have the retryable option, we can start
-> relaxing what is considered a permanent failure vs. a recoverable/early
-> failure that .finish() can clean up.
-
-Ok I think we are ligned that we need to keep the preserved folios
-around until finish(). I think this point was saying there are bugs in
-the existing memfd_luo code and in this series that leak the folios even
-after finish(). Either way I'll fix them up.
-
-> 
-> >  - If a token was already retrieved, luo_retrieve_file() returns the
-> >    existing file and ignores arg. Userspace that asks to retrieve into
-> >    X gets success and an fd for a different file. I think LUO should
-> >    fail with -EBUSY if an arg is passed for a token that was already
-> >    retrieved.
-> 
-> Agreed, if an arg is passed for a token that was already retrieved,
-> failing with -EBUSY (or -EINVAL if the target file doesn't match the
-> originally retrieved struct file) makes sense.
-> 
-> 
-> >  - Sashiko's WARN_ON(liveupdate_claim_file()) report on 3/7 is valid:
-> >    xa_insert() can fail with -ENOMEM there, and userspace can trigger
-> >    that.
-> 
-> Yeah, we can address that.
-> 
-> > One place our series are not aligned is MEMFD_LUO_FLAG_TMPFS. My
-> > thinking has been that RETRIEVE_FD should support retrieving into any
-> > shmem file (including linked files, memfds, and O_TMPFILE). It is
-> > userspace's choice at retrieve time. The only thing the kernel enforces
-> > are the fundamental requirements such as exceeding the file's mount's
-> > limit.  When I think about it that way there is nothing special about
-> > retrieving into a memfd and MEMFD_LUO_FLAG_TMPFS is just artificially
-> > limiting how a shmem file can be retrieved. WDYT?
-> 
-> I do not want LUO to change the type of a preserved file across live
-> update. Take seals, for example: a memfd can be sealed with the
-> guarantee that it will never be modified, whereas a regular tmpfs file
-> does not support sealing. Allowing a preserved memfd to be retrieved
-> into a tmpfs file would create a loophole to strip seals (or bypass
-> mount/superblock boundaries). I strongly prefer keeping the file type
-> strictly the same across preserve and retrieve.
-
-I agree that seals must not be strippable. I am not proposing to allow
-that. Regular tmpfs files are created with F_SEAL_SEAL, and v1 refuses
-to retrieve into a target that has F_SEAL_SEAL if the preserved file has
-any seals the target doesn't have. So a sealed memfd can only be
-retrieved into a memfd that allows sealing, and gets its seals back
-there the same way F_ADD_SEALS would add them. Only unsealed memfds can
-be retrieved into regular tmpfs files.
-
-On mount boundaries, retrieving into a tmpfs file charges the blocks
-to that mount, so its size limit and quota apply. That's stricter than
-the unlimited internal shm mount that memfds live on, not looser.
-
-This is what I mean about enforcing the fundamental requirements, rather
-than enforcing something artifical like MEMFD_LUO_FLAG_TMPFS.
-
-BTW, MEMFD_LUO_FLAG_TMPFS is set based on i_nlink, so it doesn't really
-track the file type. An O_TMPFILE or unlinked tmpfs file gets preserved
-without the flag and comes back as an anonymous memfd on the internal
-shm mount. That changes its type and drops its mount's size limit and
-quota, which is the boundary crossing you're worried about.
-
-If you still want the type to stay the same, we can define it by
-superblock instead of i_nlink:
-
- - memfds (on the internal shm mount): plain retrieve only, as today.
- - files on a tmpfs mount, linked or not: retrieve-into only, into any
-   empty tmpfs file, including O_TMPFILE files.
-
-That keeps your guarantee, fixes the O_TMPFILE case above, and still
-lets userspace restore into an O_TMPFILE file and linkat() it into
-place once it's verified.
-
-But my preference is still to enforce the fundamental requirements,
-since we have to enforce them either way and MEMFD_LUO_FLAG_TMPFS adds
-ABI.
