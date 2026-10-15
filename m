@@ -1,137 +1,198 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F1B3C1D6E
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 15:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39FCA53CA85;
+	Thu, 15 Oct 2026 16:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792079554; cv=none; b=kEU0HVFGT18YjGsnX9h/ZKAVRJYYBD/WqsMEPfd4bEbm6ka+UTzaMQ5kVgLyQZ38Lw0EFBxWFCnO5lVNWigCx1gY3+E1pxLh4YZb/7dZMFtV5gkqPXiDru98gqhUG7X2EcPrFkdTt3bE+kESybffUwf7HIMKye0DidSCj3qJSrI=
+	t=1792080850; cv=none; b=UNz542ScDnel7tbtr0Dt2VX4479Iv9+Ije3f/OLy6JKMl7SQnmhgeRcRBQs+BCxm3CjMkvNIl/B/Lme/qLz39gphqXdf5d1MQv+4olG/JcOgYLvEJdZxo/AOJuKA2x3kyvHGnC/s66+LT4AB4t78DaNYWhPQLylHebFk6AUk2a4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792079554; c=relaxed/simple;
-	bh=8+TCZ/zrpvva3iiL9OUxATXfSB4Da998tMTbnuEx5QY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jMzYapAc3zmLKWuppzHITVbdDrV25OEeuzCCwJP9RGZYeNYWPO+kSc+s8aaEQ6REsTZQU6WjDA+K5vcACmH8T2vAmtFq5oK/COU+Xj6IXAoqyh60IiXAEU+B19+LaiAxMZpoi5lNnSgMr1JpU10Wv3KXsU4rE0BegitRKHdVGig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SmtnTtFm; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792080850; c=relaxed/simple;
+	bh=8bwprqGxRBHun1/JgD/FObTrwdc9bx0DjpMwwt2vpFo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mcKHOENI7PDwOy4QUovOYqAtfI0e8Qm2YTL1lnInJo6iHy2OVSazDMuWPYaU9ufQtrts+h/cxjX//mt8DOEpUrsiaknEO6VipD0wFW7WXQpYAEQYXiFjdKytTgh7tsXrQbtRnzwvovZlETv/RaoFkcnc7zifH7jq6YaS4OpF+fM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UsjYY5n9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SmtnTtFm"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso22259445e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 08:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792079541; x=1792684341; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=AHZqp2tUL+jR2ac8WD4oADqX9Z4sM0KD+dcaF1HV3NU=;
-        b=SmtnTtFm8vO9k+tlGe/PFyR4FCyq5uyshYnCTbSN/ImvLGEHZtL4P/o9Xvomrd8AG1
-         5gv1495Eqv23P1iwbFaACmegZztRjo/9RxFA7Z1xfkSWQ3NZV5kUTGFOaCkwsuXcBvvt
-         FghwSjz4Vj8ohvWqFIUYy/NACCxx0P4ymZktYH9hRQE8UYig05Zzuw7gsrHCBL9t0ep5
-         zfOKB7zNuFHLAs/Zx3/EVInZN/THVGma+1YBU9aHEYolT5BQsT/cP4ZfDqs0xirKbYHH
-         pEe4coy9EFZJHT7PwCtUTzv7Jg/t7w3iwZZTwTMBaomIPwkeV68vww/sAT7G52Ufy+42
-         iOeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792079541; x=1792684341;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=AHZqp2tUL+jR2ac8WD4oADqX9Z4sM0KD+dcaF1HV3NU=;
-        b=dO4FN2lTTNZGfwpKpbSynII0xCP4yaXuynmPNV+bYZr+xCQTlClubd9dt6ShBFcsoc
-         cumWQVR9qzdWQ4mHYJffxXuPD5AITVd/WlwmeHnG91hQhH5KQuAOHxxT/K23SkrBmVQX
-         DLRjw3cUy+PYnUDKf04Ulsk3muGtu6tRCIHkWS7J4Sa2/ikftNF3tNN+UUM1Wh/bl8Tl
-         7wyXS2CtMh1mKA96DlldGndenwls1G2Ekc5aIHw2KPprihvF4FycxDtcpyYMYPZVNrrW
-         hgl0KsMXY9PkXtKKgEy1jB875R0ss1uEn8JRRKNJ0usw01PmbOEbVA3O7Oe3Hd7jyPR6
-         I4IQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw3z28dACGmYHR3w4bX+x1BXXeo9PYg2JWb1u3PRFI7l/N2kRpDvhmoMU3YEOvJ9UbyixUp6f3RyoXpfEBFnIU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLJ9qDyD8XmRpREKdNTv0v1/x0IoGJiCpXUEwXJEXzM+eyLo1kB
-	xvQibLzsf8E6u7M5K0V/itKw6TZiLCclXtFxotxnmgb9VTa6Wk49vZUN
-X-Gm-Gg: AYBFou3M45uItn1JToyGPC+NnjFQRSPjoz3maBS/JD823OWO1k7tYiAImAcKVo8w5jb
-	n+3tItxH1leXRZYFMhu5cSnvKmnSEsz4dKMFAsvo+bjQwL+KZzyzLIUO0R59t0qI3peAb4WIK+L
-	RJ6k0rQgV4l9lBKvS8RaWtWxgwqCAAjgdVf7++bT615pYr0zf/WLBCPsUkAK+9H7Qez9IA9A0j3
-	1GKCaFJ7NPlrNQKhJO7EOXgUuZVcTXwKPDUP89QOs7AeAtvxt3MpJA3XGG8FgTvnZpp7UiI7GmA
-	jny60mClG3M0dfJ3/DvmvmcTIKiYpXXgxYJj1BX5zqSJNMynnIEUCrn/Spxo0FfVVBPGV7R9rZX
-	9fzdcfgiwOtQOW4UAL3xznfI8i+f6oH65xH4IFYy/SWTYDTqHfcNQlRp1PQUnZSWbAXjmmFNFPg
-	GuFgkQ1PtUwSXszV/DfAzWrLlPDd3nHxOIe6k6KNlm2ZF79PTLVTjeU2Wtt+Qh5+QDhG+Zbg/0h
-	K+MmAiwmfhqKjrmhkiqHHSyyAHnoPZ86jAq0Fg7WrVp+A==
-X-Received: by 2002:a05:600c:620b:b0:49c:fc6c:be19 with SMTP id 5b1f17b1804b1-4a18e4d12e7mr366480965e9.31.1792079540501;
-        Thu, 15 Oct 2026 08:52:20 -0700 (PDT)
-Received: from andreayoga.wind3.hub ([31.189.109.133])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1bd993caesm157053315e9.12.2026.10.15.08.52.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 08:52:20 -0700 (PDT)
-From: Andrea Parri <parri.andrea@gmail.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Samarth Narang <samarth.colleges@gmail.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UsjYY5n9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B9FB1F000C4;
+	Thu, 15 Oct 2026 16:13:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792080835;
+	bh=30bhUUWIqaWkvxc6HWDx5iOUXFGfR1hON5BVhCv9Fb0=;
+	h=From:To:Cc:Subject:Date;
+	b=UsjYY5n9mJXBX9OS96InGmyeV3KyCpfgjbeMWYr6T76RGfpdTLrt1sy3vOeXrqJXf
+	 WPDxRComZy0EAviqfYuMS8srQoEQdAzsm3FAAE78Q8vPr+8i2Pn6PIP1zLyFkpMQ63
+	 kfk0gvNTzXe6W8wwFU6BA29TRknvA/77c5HUfXND1wKm4O1t+7M7Ma5MvyUDwbszUV
+	 /BsWH3EaiZxCK8SgBVq+9yNy/Gf2qXiTDyWS2t7F4v76WvDWE6qLYMSUL684JZJ4Pv
+	 vlLC+PK2Io+JOn2yqn/MSxB7ZyFUMkqsqMjfvJt+INJmMDcd6RNN6E8oD++NTD227f
+	 oTLc42SZCGvEg==
+From: Kees Cook <kees@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Kees Cook <kees@kernel.org>,
+	Jinjie Ruan <ruanjinjie@huawei.com>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	Alex Williamson <alex@shazbot.org>,
-	Yishai Hadas <yishaih@nvidia.com>,
-	iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/4] iommufd/iova_bitmap: Clip recorded ranges to the bitmap
-Date: Thu, 15 Oct 2026 17:52:13 +0200
-Message-ID: <20261015155214.472218-1-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261015002647.GA3575173@nvidia.com>
-References: <20260925161142.189813-1-parri.andrea@gmail.com> <20260925161142.189813-2-parri.andrea@gmail.com> <20261015002647.GA3575173@nvidia.com>
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] selftests/seccomp: Test a TSYNC filter arriving during a ptrace stop
+Date: Thu, 15 Oct 2026 09:13:53 -0700
+Message-ID: <20261015161348.i.779-kees@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4801; i=kees@kernel.org; h=from:subject:message-id; bh=8bwprqGxRBHun1/JgD/FObTrwdc9bx0DjpMwwt2vpFo=; b=owGbwMvMwCVmps19z/KJym7G02pJDFkXfh+wa5A2cGmq0rrgLHVN00u2ybhMLGJpS+aHSX+X2 bUb/rDrKGVhEONikBVTZAmyc49z8XjbHu4+VxFmDisTyBAGLk4BmEiINyPD7J69mrOvB7D+sLif N+upqUq4VPhsoZZZ/9bWPZy1cZPgbEaG2yKLT4vHM89+/nR+0C2zq2xZfcprJnWszddhVFbKM0r nBAA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 14, 2026 at 09:26:47PM -0300, Jason Gunthorpe wrote:
-> If we silently truncate that to the range of the bitmap, like this
-> does, then we also are silently lossing dirty marks. The userspace
-> will call again with an iova range stepped ahead and instead of seeing
-> the early blocks being dirty they will be marked as clean.
+Seccomp runs after ptrace at syscall entry so that it checks what the
+tracer left. A thread can get its first filter by TSYNC from a sibling
+while it is stopped at a syscall entry; the generic entry code used the
+syscall work flags read before the stop, missed SYSCALL_WORK_SECCOMP,
+and ran that syscall unfiltered until commit 4a3591287fb7f ("entry: Fix
+seccomp bypass after ptrace with TSYNC").
 
-Right, the clip turns an overrun into silent dirty loss; failing the
-call is better.
+Add a test based on the reproducer from that patch's thread, using pipes
+instead of a sleep so the filter is known to be installed before the
+tracer resumes the syscall.
 
-I also saw your reply to Samarth's record_dirty() patch [1]: with both
-changes, a dirty entry that is not wholly inside the bitmap fails the
-call.  Samarth offered to send a v2 of both patches; I'm happy to leave
-1/4 to whichever of you prefers and rebase my tests on top.
+Tests run under qemu on ARCH=x86_64 defconfig plus the seccomp selftest
+config, with GCC 16.2.0: running the test 20 times all 20 runs pass at
+v7.3-rc2 and fails in all 20 with the fix reverted.
 
-A few things I'd like to check before I rework the rest:
+Link: https://lore.kernel.org/all/157aa098-a263-4f4f-b0fc-108701480303@huawei.com/
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 112 ++++++++++++++++++
+ 1 file changed, 112 insertions(+)
 
-1) The dirty bit is still cleared when the record fails.  In the
-   record_dirty() you proposed, as in visit_dirty() in io-pgtable-arm,
-   the entry is made clean unless IOMMU_DIRTY_NO_CLEAR, whatever
-   iova_bitmap_set() did.  With start_va rounded down to the entry, a
-   query that starts or ends inside a dirty huge IOPTE now fails this
-   way too, and a retry with an aligned range sees the entry clean.  Is
-   -EPROTO meant to be fatal for userspace (e.g. abort the migration),
-   or should the clear be skipped once bitmap->err is set?
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 0622bc2acad4..4da5ad1d7ab3 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -5041,6 +5041,118 @@ TEST(tsync_vs_dead_thread_leader)
+ 	EXPECT_EQ(0, status);
+ }
+ 
++struct tsync_vs_ptrace_args {
++	int go[2];
++	int done[2];
++};
++
++static void *tsync_vs_ptrace_syscall_stop_sibling(void *_args)
++{
++	struct sock_filter filter[] = {
++		BPF_STMT(BPF_LD|BPF_W|BPF_ABS,
++			offsetof(struct seccomp_data, nr)),
++		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_getppid, 0, 1),
++		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ERRNO | ESRCH),
++		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
++	};
++	struct sock_fprog prog = {
++		.len = (unsigned short)ARRAY_SIZE(filter),
++		.filter = filter,
++	};
++	struct tsync_vs_ptrace_args *args = _args;
++	char result = 'N';
++	char go;
++
++	/* Wait for the leader to stop at the entry of getppid(). */
++	if (read(args->go[0], &go, 1) == 1 &&
++	    seccomp(SECCOMP_SET_MODE_FILTER, SECCOMP_FILTER_FLAG_TSYNC,
++		    &prog) == 0)
++		result = 'Y';
++	if (write(args->done[1], &result, 1) != 1)
++		exit(3);
++
++	return NULL;
++}
++
++/*
++ * Seccomp runs after ptrace at syscall entry, so that it sees what the
++ * tracer left. A thread's first filter can arrive by TSYNC from a sibling
++ * while the thread is stopped at a syscall entry, and it must still apply
++ * to that syscall once the tracer resumes it.
++ */
++TEST(tsync_vs_ptrace_syscall_stop)
++{
++	struct tsync_vs_ptrace_args args;
++	unsigned long msg;
++	char result;
++	int status;
++	pid_t pid;
++	long ret;
++
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
++	ASSERT_EQ(0, pipe(args.go));
++	ASSERT_EQ(0, pipe(args.done));
++
++	pid = fork();
++	ASSERT_GE(pid, 0);
++
++	if (pid == 0) {
++		pthread_t sibling;
++
++		if (pthread_create(&sibling, NULL,
++				   tsync_vs_ptrace_syscall_stop_sibling, &args))
++			exit(1);
++		/* Only this thread is traced; the sibling runs freely. */
++		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
++			exit(2);
++		raise(SIGSTOP);
++
++		ret = syscall(__NR_getppid);
++		/* The filter installed during the entry stop must apply. */
++		if (ret != -1 || errno != ESRCH)
++			exit(4);
++		exit(0);
++	}
++
++	ASSERT_EQ(pid, waitpid(pid, &status, 0));
++	ASSERT_TRUE(WIFSTOPPED(status));
++	ASSERT_EQ(SIGSTOP, WSTOPSIG(status));
++	ASSERT_EQ(0, ptrace(PTRACE_SETOPTIONS, pid, NULL,
++			    PTRACE_O_TRACESYSGOOD | PTRACE_O_EXITKILL));
++
++	/* Run the child to its syscall entry stop for getppid(). */
++	do {
++		ASSERT_EQ(0, ptrace(PTRACE_SYSCALL, pid, NULL, 0));
++		ASSERT_EQ(pid, waitpid(pid, &status, 0));
++		ASSERT_TRUE(WIFSTOPPED(status)) {
++			TH_LOG("Child did not stop: status 0x%x", status);
++		}
++		ASSERT_EQ(SIGTRAP | 0x80, WSTOPSIG(status));
++		ASSERT_EQ(0, ptrace(PTRACE_GETEVENTMSG, pid, NULL, &msg));
++	} while (msg != PTRACE_EVENTMSG_SYSCALL_ENTRY ||
++		 get_syscall(_metadata, pid) != __NR_getppid);
++
++	/* Have the sibling install the first filter with TSYNC, and wait. */
++	ASSERT_EQ(1, write(args.go[1], "G", 1));
++	ASSERT_EQ(1, read(args.done[0], &result, 1));
++	ASSERT_EQ('Y', result) {
++		TH_LOG("Sibling could not install the filter with TSYNC");
++	}
++
++	ASSERT_EQ(0, ptrace(PTRACE_CONT, pid, NULL, 0));
++	ASSERT_EQ(pid, waitpid(pid, &status, 0));
++	ASSERT_TRUE(WIFEXITED(status)) {
++		TH_LOG("Child did not exit: status 0x%x", status);
++	}
++	EXPECT_EQ(0, WEXITSTATUS(status)) {
++		if (WEXITSTATUS(status) == 4)
++			TH_LOG("getppid() ran without the TSYNC filter");
++	}
++}
++
+ #ifdef __x86_64__
+ 
+ /*
+-- 
+2.55.0
 
-2) Could you point me at the patch that adds bitmap->err?  On mainline
-   iommu_read_and_clear_dirty() ignores the return of
-   iova_bitmap_for_each() and returns 0, so I assume that patch also
-   changes this.  Does it cover the VFIO DMA logging path as well
-   (vfio_device_log_read_and_clear(), with mlx5 and pds calling
-   iova_bitmap_set())?
-
-3) Patch 2 tests the clip, so with your change it fails: the 1M IOPTE
-   at MOCK_APERTURE_START is rejected whole against the 128K query, and
-   bitmap[0] stays clear.  I can respin it to expect EPROTO, keep the
-   guard check past the bitmap, and add a query that starts inside the
-   IOPTE, on top of the bitmap->err patch.
-
-Patches 3 and 4 still apply, I think: iova = 0 with length = 0 passes
-iommufd_check_iova_range(), and __iommu_read_and_clear_dirty() then
-walks [0, ULONG_MAX].  With your check nothing gets recorded, but the
-dirty bits it walks over are still cleared.
-
-[1] https://lore.kernel.org/all/20261015003412.GA13920@nvidia.com/
-
-Thanks,
-  Andrea
