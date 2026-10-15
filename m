@@ -1,80 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A673DF002;
-	Thu, 15 Oct 2026 18:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DAFC33F8D4;
+	Thu, 15 Oct 2026 18:12:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792087250; cv=none; b=YHrfkdA2EPDUEKhTbEpKq/VLwcqpRClawp1v4fJHMn/AtXmOe0CTnviELGDLV2CsW2t3obxszbQln1gzfyiCq4k0gxqfQRD8/0XG2mPLKmZiFG9H+7MdwQ0Y2KRyud0XQVMf02NYLyQ2ba0mZWo250LZv1/VEzlQ8VPK8l2YmHU=
+	t=1792087927; cv=none; b=pOwMxP+YV2vYQPOlPYRcEogH3OcfXDM0DEXHPb2abOjcbJtwq0IJCVcPVoI8ZIbWiuNI0vnAgNclEIuk18JXOohB08qfh9CL3wAHC4AuzblXO5VLzoI/r7tqvoRu+n+/nuZHqf3UOsQYS5L0uzuzZaWyg9CWh4h7OewxesFsiJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792087250; c=relaxed/simple;
-	bh=HGRhgs0YTRt2Egqbh5D7928fazb2gNLd1N7x8T6paVY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BdCdnHKMtbhYo3T+LNADM3MeCsQPCOcNTdMsKyRoAM1STyZm5XadE17eOvghpdt3IS16hsACL26WGUnGkmW8ONkjSljQ7dlojV8HiZ8etu59M4Ac4ydBtJrOyGZPcaVoTgheAgeTK4PUR5k90reSA9aChOK9oGIbAgmU8BJaa0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUd/YYIx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792087927; c=relaxed/simple;
+	bh=lb4Rl1o5/3HkWX592DeNjfwpCj6DGSbq0M9PUyV8CwU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ezfxZj/SYQBCPo00oU6h8NXFP79MLCxvPiTuuml3pXCMXxXuQEsk2pK6cJwf5CTx4wfrNv5iLU3PFqNc0VuPOBS+8UC1RTgV8F1SZCnO26nzuTy9BYexerJmpNG2MradbY8JVZnuauOVwDMMPFvrnK7TsnIWOvckBlJKDqx7rrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=tRAQC+9J; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUd/YYIx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697DC1F000C8;
-	Thu, 15 Oct 2026 18:00:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792087239;
-	bh=HGRhgs0YTRt2Egqbh5D7928fazb2gNLd1N7x8T6paVY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gUd/YYIxeYk7OF2DxSicuxLDZGuS8V0VOPR6C5ZP/0Qyza86uy7DWiISMClLxUe+D
-	 LTqPptJoNGkCBmWTGip/q6CDgzyLHL6frWY0h2YpIXUpDl1jeis82USIEjTnWG9+aq
-	 uY6GSJ396GXNnUiy09HBjSKCF7X+ciUHQ5Kt+YjSrniBJivb0iZ49HVEQfh+v8U7AY
-	 hRb2k7fEmsoy6TXZl3dcFxmY0Av4WE4t1tiZsw974UxmqFHEq0DpWVORFuRl2zjKns
-	 zpFUgZfWFRmPuOJF16RtrySdLXRcZCyBvuWiAnR5OiI/JTW820y6WU6MunICvpEdHG
-	 H/V1s3xUazZpw==
-Date: Thu, 15 Oct 2026 19:00:35 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] selftests: keep the build status from wrapping to
- success
-Message-ID: <f64e8221-cedb-4b4e-aed4-a87ac23c26cf@sirena.org.uk>
-References: <20261014200115.1363363-1-sashal@kernel.org>
- <20261014200115.1363363-2-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="tRAQC+9J"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE7BB14BF;
+	Thu, 15 Oct 2026 11:11:56 -0700 (PDT)
+Received: from gaia.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B5C613F871;
+	Thu, 15 Oct 2026 11:11:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1792087920; bh=lb4Rl1o5/3HkWX592DeNjfwpCj6DGSbq0M9PUyV8CwU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=tRAQC+9JYeNu1Lo5qLLgcEKcdHvjm4GTZ5y2DaAWJGu/woDL7kSTd6k9SNg2aYzn6
+	 CfnYTCtnmvj3aZU49EJJvQzYIUU/eArK3Qoi6EJvSt88b6lSbFLg+RYVzzN3g815fX
+	 GOp8Q3Zle06+ptc+0P2G1j1C69YoXxCoNA6Tx8ZM=
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Bill Roberts <bill.roberts@foss.arm.com>
+Subject: Re: [PATCH 0/2] arm64: gcs: Return -EPERM when changes are prevented by locking
+Date: Thu, 15 Oct 2026 19:10:36 +0100
+Message-ID: <179208783673.159915.17856867908691720090.b4-ty@b4>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260910-arm64-gcs-lock-eperm-v1-0-d88e51855c9f@kernel.org>
+References: <20260910-arm64-gcs-lock-eperm-v1-0-d88e51855c9f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="1ZgetmzRbUVnSdeg"
-Content-Disposition: inline
-In-Reply-To: <20261014200115.1363363-2-sashal@kernel.org>
-X-Cookie: Tax and title extra.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
+On Thu, 10 Sep 2026 20:00:39 +0100, Mark Brown wrote:
+> When we refuse to change the GCS configuraiton due to locking we
+> currently return -EBUSY which is an odd choice.  The only userspace I
+> found that relies on this value at present is the kselftest and other
+> architectures are using the more obvious -EPERM here let's switch.
 
---1ZgetmzRbUVnSdeg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to arm64 (for-next/gcs), thanks!
 
-On Wed, Oct 14, 2026 at 04:01:09PM -0400, Sasha Levin wrote:
+While a minor ABI change, it's pretty harmless. The benfit is eventual
+(hopefully) common handling with x86 and risc-v. I did wonder whether to
+cc stable but we can always send it separately.
 
-> Record a successful target instead of multiplying statuses. The rules
-> still fail only when no target succeeds, and FORCE_TARGETS still stops
-> at the first failure.
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---1ZgetmzRbUVnSdeg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmrRFMMACgkQJNaLcl1U
-h9BQdQf+OliQ0dUqua4MpWOPO5fKMFhEJCXpeQdceH0WCwGi4jQwqxXCkBlt2Vk3
-7f/QOuJkOROv9paHpIz3I0HpkYQmT4w3F5ch5svvfena89MJLb8xA+AI/81P1f7S
-1SFazw/y8PiQwjJi2nd/F/EHXubZYi7JAclG9mT20CH+h4wkBNbdhCPt46Xil5r5
-r6gaTWpanUrcuyT5nRbnomb1j96ns+cwO8xjPg2XaMquFLOT7F9JFpUgmxMytQAu
-6LnMPn6eO9QFKHbO0eoP3d2UTO6lhpg59+Lh0PTJwTViiQRzfbxYFy8qjFlhkUMj
-r38c3LLRmCQ9mxUZMUSOcIft5L0Wgg==
-=OKGF
------END PGP SIGNATURE-----
-
---1ZgetmzRbUVnSdeg--
+[1/2] arm64: gcs: Return -EPERM not -EBUSY for prctl() locking failures
+      https://git.kernel.org/arm64/c/988be99717ae
+[2/2] kselftest/arm64: Check for -EPERM not -EBUSY in the locking test
+      https://git.kernel.org/arm64/c/8c831e5cd3ad
