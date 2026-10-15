@@ -1,65 +1,65 @@
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE13E503BD1
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 09:38:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB605038EB
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 09:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792057111; cv=none; b=aebJYh/Rou0p4uaQT/xvzyarw2hu/CjnaOr2u5D1F79xo6wE4rHQPa+zCBBmkWwPWkPfYTY4i0ay8urfOOrHtE8C07ro/OljlCVPxMRxuRJ/Pge5SPZQoF9lgTS2u/3nxHcU3ZXVjJ8OyxEwVO9BMOO2rVRYTHkPwhObz7dj3TA=
+	t=1792057111; cv=none; b=EF4walxRGpz4XlI0tTOQtxrsFEjv99jLaKyaJewLeXJdjauDPlP/zaPgKmRdWIzyf7fR/I9HgzYaS89e1zt1rmUahVeUUnERwVdjb3D7Ji48S++5TEJiyck8jG9cs/GBk/ppNYUk+cYjJDR+NZz3sRhqJK+BLocjcu1Zl0+ZHzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1792057111; c=relaxed/simple;
-	bh=xGSW1HB9xuLPOxOviM6j5dkn3NfHltnvNZ07I548HfY=;
+	bh=9a0G36GEo4C4CDZFVWUS0XV7PQMYMmwFYWyoF0gL7Qc=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LZ7juTAnMnURawGxcaABUoTPFqlSsTNhwbArjJEnHTlbGb24VCWRTXiEktFvj0jB4kYdSH7Lgp9yK7pfVKGrKdt8akzHJsJqJ8IUykJ3M5Z4+2D8qG8lGyvWvYtPnCrIFvGOn2HRnJu55c2rlUUtw9MfFOJasSgFZjwHdrW4L8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Gj40T3WJ; arc=none smtp.client-ip=209.85.222.42
+	 MIME-Version; b=k9tE2nkHpCYQJRfX84es5ii7imyPKUosniC6Q6J5ixLG4VtmAU5SthQd0XOZWCFzpbj+aoYZ7ElHFnUz60Ru8iyORKZoFy7AuMNoY5OEs1AoSc4Cgv7Okfq0VfNXDEfC4RJBzOXOf4aEbk3+alwY7IK5oE2isqBNcJF5R4Cgqtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=ZuJ6k7/0; arc=none smtp.client-ip=209.85.221.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Gj40T3WJ"
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-9906034086cso539932241.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 02:38:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="ZuJ6k7/0"
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-5e4d95e3e55so474184e0c.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 02:38:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1792057105; x=1792661905; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1792057104; x=1792661904; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=QvPtbhrFSm5FoNNWvwj4y3Q4nd03scqDRxnUx7itX/Q=;
-        b=Gj40T3WJrU4PlZ0H6cGKc5KPdahOaeRHUgFJjxqL6gPGDKHpXBUAUxN+lOaCkuGIPF
-         EcpAjnOpeqE8K9q7B4AeQ2eSThX9+grNnSlvq+abqk2e64aSmtHhE+Z57sucXn68K99Z
-         vwYApeooPhk9TyeVXKEIzYiR41+2iZq6qs4irRzddLGssr4U0PYnDipLN0PFqYY75CQU
-         kGRKLB30xfbnm8IZaJFP6ky9zS7DaLWl4zKTnOlYaV4/pqujA1fLBFAWlwY+DoNwZgm7
-         PIDc+xwV9gOAG47506FO/zqJG1UhpvE94+E/iwpb8y5vRKZSeluxzsMY2BKr97iOwgQq
-         XG+g==
+        bh=pY48lcCbUxxQDObex6aFAnsnCQJNXYhublaxAxnxY3c=;
+        b=ZuJ6k7/0bkcyVfU1v/QxOevirENPqeK3PzJY0aRQ8pZfgB9T3NyUXAariB0gyNbHKA
+         7H9RYwdzaGWbIPYtPAbyrjjFkUa11hVhe0cyx0cBU/JKeQQaJu6FENp9EwIAy4WkNtfj
+         OOEJy5zGPWPWE1NBlwSULxWBlElBOCjsBAcK1boNuD46TQRZIuUIY52TKLoW6FHwEpQc
+         82bw+IwPbhWyh93LnZWBcAm590sSafu/ok0rPC0WAEdUdHVNZoUFHPX2IS3drFAf6/ol
+         9eDl3U0czTJUsGE8zz2Jg3tw/5CBVCZsKILRdC4GPoLI4Sg8wMr6p/D9/NmL8BxqR4J4
+         spKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792057105; x=1792661905;
+        d=1e100.net; s=20260707; t=1792057104; x=1792661904;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=QvPtbhrFSm5FoNNWvwj4y3Q4nd03scqDRxnUx7itX/Q=;
-        b=OxyWDssVRoqr5WEJ+0TxELjR47iZMFf2fVrd0vACa2MfAuae3PC5tqw4eSo0GfQ5Y8
-         0S12mAL/0fnlVedr7SeQ0hIGSCXWjXQRjIcKeha5wIE4iR1O3KmvvJfl/QND186WUKqT
-         6iG2dq3jP5ib5C1jBVsDBJtRj/XuU19jpCP5bxPXipnxJGQ9GKF4PsQ8+f1MYxJLTx+B
-         nrMRKVyODVQWgc3sRIrdxuKHsRszwmBnjzW+BLuMK5dAyD74Lss4JXuXkctEn7sMbPAK
-         sqEAZXSmMsb4nsvvLL4ko+2LWZmFEGYykCy09FaivhlGoMS7VwU+QwYb9VcoBXUfJmbk
-         XPsQ==
-X-Gm-Message-State: AFq9FYK3CgkmwA2SrGxkfSMZGdeQ8pzqXGQaRKkWA1XiMVCoJ2fIOmJM
-	wo5iH6AlzQhu6499k1sLUAD6FOAf0j6sivNSqAD6vCNNGFIK30BS5pehYQ0JuNSlNSIdUu7ox3a
-	ugJLM
-X-Gm-Gg: AYBFou0llM2WhqsrzOH4tO/Iol8wBi8cZgDMJL2R8zpFiOLmVA74qkFvzD9Aj/mKPHc
-	Kd45CFlvIr9p5RIKRyYwv7gp1l3u0TnfOwooygq/zTpVNdNPi9e59btk2xZ99QRMwItXX6yG0T6
-	YhwTnzQKTnA0r/yWm9RfWUvbmQqCIRNnxcBMVwo8RmxaDf7hUDiR7mzQvy+5qbnr3RBJtjZlACP
-	mcSrqGzurEHVBaFdMVg8q4Q3i7MK0keBEVrvqJJjZ/g2i1KoMed0w9VlHfR5B1QLlzoEbMKgHPt
-	+VgPoUfiG+oj6SdJYY/19rgPOOjw/MHsAmbZT7Iqmn5ZO4ALfxHpZ8RFuHnzuNmuNy5Hz+b7qn2
-	VCHYSsx1hsjbtZF87hWs7I2xp69uPlA1hVN8oyE6MoBUMJAOPcleJ4luauGil5Njvcip8wqe2ab
-	S/LR6841zzh9GuP40Ac26lOg6j6/iI/0rVkn2aCZO07P8RN0taFTDx5iDoFn/K3xdfaHyZvLE5r
-	I9KsQnDOYNr40F+U/PEHNmONLIM5F7Y1NxYUqDri1Dp3ku0BFiRwCEr3gWPpEWpIhVfj1cbCQbb
-	TMzV+3q77b3VdOi/QTnCX8x+aIOoi0E=
-X-Received: by 2002:a05:6102:c07:b0:7c3:873c:b3fa with SMTP id ada2fe7eead31-7cb36885ff2mr3914174137.4.1792057105254;
-        Thu, 15 Oct 2026 02:38:25 -0700 (PDT)
-Received: from soleen.c.googlers.com.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-99003d37009sm12275672241.2.2026.10.15.02.38.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=pY48lcCbUxxQDObex6aFAnsnCQJNXYhublaxAxnxY3c=;
+        b=lj6Gg6hUOKV155fbZnSaJWaMkKB+cO7tJ0k7eruDOsbX+Y16nNmMQvrm6Mz9SmeOG5
+         ZSD702dMLNNabPYTQVIpnqcPj3jC5AUUTnvBCcK+mrMmz2AnxaZBfdvaNLa/rwAes7qZ
+         hSVlpjhbBsIn5QsIMHo0p4GtPj3LzPBh4wHbflkwZvtNQZND0W74Rp/5rWNrpORv7Z5s
+         7s1IVNaiE5FPFuzKfmwynlBpVPf+Q5VMuNVRDzEDoFqcxZ1AtvBv+uQU4yWwfzo243MF
+         gfJ6moaO68KMaqPX9DEPD9v9blgSC338/fODlmOVvWG7t5Fw9cb3LAAuu4XOyxjn3hzo
+         zM3g==
+X-Gm-Message-State: AFq9FYLkflebnIldag3/EApKEvdnJv2yXgtgV1HHRmRaFmSxdAeeP5UF
+	mx3w9LEFmRHlqqvRX4I+LXf6yAfsl0T/pVDQhvQs1q/x7Vb+ZVoFditFOUmOg5SbrUnLi0T3+5p
+	cvoAe
+X-Gm-Gg: AYBFou2jxlOaKbkWEiGyc7IZvMWU4v+Y73j7Ta/E9m6NKvHLBiZXhUM0wn3E6OnwiIt
+	Q4id+z514PpcYUp/eV0dHVDNui7FQjTkCKVU70/wl6n9MgV9sP/bWC2eYvGqv2bKJIhm9i49xbT
+	qrU4IgLDpXMSoK8VYyRttAinsj5uJ/yMAAmwxFlW7nnEnSFlsry/bncqFrWd6Nu40+NiehaC2sR
+	SFeC2Vb9TmzbYMj6MALEpWpcsAtPQq+HAR8j8ekjbDmqPuOjiSZFjZdAkWViSrRolppaiZPkzzu
+	NYWuemnKkY7BD//twuZbT50Oc+slJsyrCnDi090aKj04dHBZTAvRqg3lywoH/sqMM1PpSKuFPVD
+	u2E4J3BS1cYpp1eXG1DtNIhclQcLTPlUaq+r5u9kRt8tgjPrcAoucoLoXe7kySTfjltcb+Gder0
+	woMj91j+T5dyodZRJEcOIdi2Oo3hKu7FNpTv252FDfq6/ikycgmau3s29THDA6rgU423ZXdwL73
+	lELKfrjsFMrm+P/NgkbHnrk3RoIp3NN40UTs8O3kKATMy1Lb0IuWOEgNBwQS2pnw9cDHmWT8sdu
+	e3dmKAf0n/Ber0g54e8=
+X-Received: by 2002:a05:6102:292a:b0:7b3:7653:5487 with SMTP id ada2fe7eead31-7cb377f7d31mr4406638137.32.1792057104242;
         Thu, 15 Oct 2026 02:38:24 -0700 (PDT)
+Received: from soleen.c.googlers.com.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-99003d37009sm12275672241.2.2026.10.15.02.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2026 02:38:23 -0700 (PDT)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: linux-kselftest@vger.kernel.org,
 	rppt@kernel.org,
@@ -73,9 +73,9 @@ To: linux-kselftest@vger.kernel.org,
 	kexec@lists.infradead.org,
 	pratyush@kernel.org,
 	graf@amazon.com
-Subject: [PATCH v1 2/7] selftests: liveupdate: Add tests for LIVEUPDATE_SESSION_FREEZE
-Date: Thu, 15 Oct 2026 05:38:11 -0400
-Message-ID: <20261015093816.2438942-3-pasha.tatashin@soleen.com>
+Subject: [PATCH v1 1/7] liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl to freeze sessions early
+Date: Thu, 15 Oct 2026 05:38:10 -0400
+Message-ID: <20261015093816.2438942-2-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.56.0.385.gd3acb90ef8-goog
 In-Reply-To: <20261015093816.2438942-1-pasha.tatashin@soleen.com>
 References: <20261015093816.2438942-1-pasha.tatashin@soleen.com>
@@ -87,122 +87,333 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Provide luo_session_freeze() in the liveupdate test library and add unit
-tests in liveupdate.c covering the LIVEUPDATE_SESSION_FREEZE ioctl. The
-tests verify that an outgoing session with preserved files can be frozen
-early, that freezing an already frozen session returns -EBUSY, and that
-attempting to preserve an additional file descriptor into a frozen session
-fails with -EBUSY.
+Currently, LUO sessions are frozen automatically only inside the
+reboot(LINUX_REBOOT_CMD_KEXEC) pathway, where luo_session_serialize()
+iterates through all outgoing sessions under global write locks and
+freezes them serially during shutdown. Allowing userspace to decide when
+to freeze a session once it is done with it (and to freeze multiple
+sessions in parallel, since luo_session_freeze() only acquires the
+per-session mutex) avoids postponing this work to kexec shutdown and
+reduces blackout time.
 
-Also freeze the test session early in luo_kexec_simple.c to exercise
-LIVEUPDATE_SESSION_FREEZE across a kexec reboot.
+Introduce LIVEUPDATE_SESSION_FREEZE on session file descriptors to freeze
+a session early. The ioctl runs .freeze() across all preserved files in the
+session and serializes their metadata. Once frozen, no additional files can
+be added to the session, and subsequent freeze calls return -EBUSY. Freeze
+is only valid on outgoing sessions and returns -EINVAL on incoming ones.
+
+During kexec, sessions that were already frozen early are skipped, while
+sessions that did not invoke this ioctl auto-freeze as before. If an
+early-frozen session is released before kexec, its files are rolled back
+via .unfreeze() before being unpreserved.
 
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- .../liveupdate/lib/include/libliveupdate.h    |  1 +
- .../selftests/liveupdate/lib/lu_utils.c       | 10 +++++
- .../testing/selftests/liveupdate/liveupdate.c | 40 +++++++++++++++++++
- .../selftests/liveupdate/luo_kexec_simple.c   |  5 +++
- 4 files changed, 56 insertions(+)
+ include/linux/liveupdate.h       |  3 +-
+ include/uapi/linux/liveupdate.h  | 25 +++++++++++++++
+ kernel/liveupdate/luo_file.c     | 33 +++++++++++---------
+ kernel/liveupdate/luo_internal.h |  3 ++
+ kernel/liveupdate/luo_session.c  | 52 +++++++++++++++++++++++++++++---
+ mm/memfd_luo.c                   |  5 +--
+ 6 files changed, 99 insertions(+), 22 deletions(-)
 
-diff --git a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-index fa07fed083646..15a7db3a6b3e8 100644
---- a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-+++ b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-@@ -26,6 +26,7 @@ int luo_create_session(int luo_fd, const char *name);
- int luo_retrieve_session(int luo_fd, const char *name);
- int luo_session_finish(int session_fd);
- int luo_get_session_name(int session_fd, char *name, size_t name_len);
-+int luo_session_freeze(int session_fd);
+diff --git a/include/linux/liveupdate.h b/include/linux/liveupdate.h
+index 63ea5417de849..885ec0bbc4b8c 100644
+--- a/include/linux/liveupdate.h
++++ b/include/linux/liveupdate.h
+@@ -57,7 +57,8 @@ struct liveupdate_file_op_args {
+  *                compatible with the given file.
+  * @preserve:     Required. Performs state-saving for the file.
+  * @unpreserve:   Required. Cleans up any resources allocated by @preserve.
+- * @freeze:       Optional. Final actions just before kernel transition.
++ * @freeze:       Optional. Prepares final state before kexec (via
++ *                LIVEUPDATE_SESSION_FREEZE or during reboot).
+  * @unfreeze:     Optional. Undo freeze operations.
+  * @retrieve:     Required. Restores the file in the new kernel.
+  * @can_finish:   Optional. Check if this FD can finish, i.e. all restoration
+diff --git a/include/uapi/linux/liveupdate.h b/include/uapi/linux/liveupdate.h
+index 4043d40387125..1644c502521e0 100644
+--- a/include/uapi/linux/liveupdate.h
++++ b/include/uapi/linux/liveupdate.h
+@@ -60,6 +60,7 @@ enum {
+ 	LIVEUPDATE_CMD_SESSION_RETRIEVE_FD = 0x41,
+ 	LIVEUPDATE_CMD_SESSION_FINISH = 0x42,
+ 	LIVEUPDATE_CMD_SESSION_GET_NAME = 0x43,
++	LIVEUPDATE_CMD_SESSION_FREEZE = 0x44,
+ };
  
- int luo_ensure_nofile_limit(long min_limit);
- int luo_session_preserve_fd(int session_fd, int fd, __u64 token);
-diff --git a/tools/testing/selftests/liveupdate/lib/lu_utils.c b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-index 74d41115c2815..6315746ff08f8 100644
---- a/tools/testing/selftests/liveupdate/lib/lu_utils.c
-+++ b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-@@ -198,6 +198,16 @@ int luo_session_finish(int session_fd)
- 	return 0;
- }
+ /**
+@@ -236,4 +237,28 @@ struct liveupdate_session_get_name {
+ #define LIVEUPDATE_SESSION_GET_NAME					\
+ 	_IO(LIVEUPDATE_IOCTL_TYPE, LIVEUPDATE_CMD_SESSION_GET_NAME)
  
-+int luo_session_freeze(int session_fd)
-+{
-+	struct liveupdate_session_freeze arg = { .size = sizeof(arg) };
-+
-+	if (ioctl(session_fd, LIVEUPDATE_SESSION_FREEZE, &arg) < 0)
-+		return -errno;
-+
-+	return 0;
-+}
-+
- void create_state_file(int luo_fd, const char *session_name, int token,
- 		       int next_stage)
- {
-diff --git a/tools/testing/selftests/liveupdate/liveupdate.c b/tools/testing/selftests/liveupdate/liveupdate.c
-index 2dedd5fc2534f..9de068f31c3ec 100644
---- a/tools/testing/selftests/liveupdate/liveupdate.c
-+++ b/tools/testing/selftests/liveupdate/liveupdate.c
-@@ -530,4 +530,44 @@ TEST_F(liveupdate_device, preserve_many_files)
- 	ASSERT_EQ(close(session_fd), 0);
- }
- 
-+/*
-+ * Test Case: Session Freeze
++/**
++ * struct liveupdate_session_freeze - ioctl(LIVEUPDATE_SESSION_FREEZE)
++ * @size:     Input; sizeof(struct liveupdate_session_freeze)
++ * @reserved: Input; Must be zero. Reserved for future use.
 + *
-+ * Verifies that an outgoing session can be frozen early via
-+ * LIVEUPDATE_SESSION_FREEZE, that subsequent freeze attempts return -EBUSY,
-+ * and that attempting to preserve an additional file descriptor into a frozen
-+ * session fails with -EBUSY.
++ * Freezes the session early from userspace before the reboot kexec phase.
++ *
++ * When this ioctl is called, the kernel executes the .freeze() callback on all
++ * preserved files in the session and serializes their metadata. Once frozen,
++ * no further files can be preserved in the session.
++ *
++ * During the subsequent reboot kexec, this session is recognized as already
++ * frozen and is skipped from the late auto freeze.
++ *
++ * Return: 0 on success, negative error code on failure.
 + */
-+TEST_F(liveupdate_device, session_freeze)
-+{
-+	int session_fd, mem_fd1, mem_fd2;
++struct liveupdate_session_freeze {
++	__u32		size;
++	__u32		reserved;
++};
 +
-+	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
-+	if (self->fd1 < 0 && errno == ENOENT)
-+		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
-+	ASSERT_GE(self->fd1, 0);
++#define LIVEUPDATE_SESSION_FREEZE					\
++	_IO(LIVEUPDATE_IOCTL_TYPE, LIVEUPDATE_CMD_SESSION_FREEZE)
 +
-+	session_fd = luo_create_session(self->fd1, "session-freeze-test");
-+	ASSERT_GE(session_fd, 0);
-+
-+	mem_fd1 = memfd_create("freeze-memfd-1", 0);
-+	ASSERT_GE(mem_fd1, 0);
-+	ASSERT_EQ(luo_session_preserve_fd(session_fd, mem_fd1, 0x1111), 0);
-+
-+	/* Freeze the session early */
-+	ASSERT_EQ(luo_session_freeze(session_fd), 0);
-+
-+	/* Subsequent freeze attempt on an already frozen session must fail with -EBUSY */
-+	EXPECT_EQ(luo_session_freeze(session_fd), -EBUSY);
-+
-+	/* Preserving a file after freeze must fail with -EBUSY */
-+	mem_fd2 = memfd_create("freeze-memfd-2", 0);
-+	ASSERT_GE(mem_fd2, 0);
-+	EXPECT_EQ(luo_session_preserve_fd(session_fd, mem_fd2, 0x2222), -EBUSY);
-+
-+	ASSERT_EQ(close(session_fd), 0);
-+	ASSERT_EQ(close(mem_fd1), 0);
-+	ASSERT_EQ(close(mem_fd2), 0);
-+}
-+
- TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/liveupdate/luo_kexec_simple.c b/tools/testing/selftests/liveupdate/luo_kexec_simple.c
-index 786ac93b9ae38..ab108c7f1d855 100644
---- a/tools/testing/selftests/liveupdate/luo_kexec_simple.c
-+++ b/tools/testing/selftests/liveupdate/luo_kexec_simple.c
-@@ -40,6 +40,11 @@ static void run_stage_1(int luo_fd)
- 			  TEST_MEMFD_TOKEN);
+ #endif /* _UAPI_LIVEUPDATE_H */
+diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+index c39f96961a85b..3c1c86ff14d69 100644
+--- a/kernel/liveupdate/luo_file.c
++++ b/kernel/liveupdate/luo_file.c
+@@ -31,9 +31,9 @@
+  *   - unpreserve(): Cleans up any resources allocated by .preserve(), called
+  *     if the preservation process is aborted before the reboot (i.e. session is
+  *     closed).
+- *   - freeze(): A final pre-reboot opportunity to prepare the state for kexec.
+- *     We are already in reboot syscall, and therefore userspace cannot mutate
+- *     the file anymore.
++ *   - freeze(): Prepares the final state for kexec. Invoked either early via
++ *     the LIVEUPDATE_SESSION_FREEZE ioctl once userspace is done modifying
++ *     the session's files, or during the reboot() syscall.
+  *   - unfreeze(): Undoes the actions of .freeze(), called if the live update
+  *     is aborted after the freeze phase.
+  *   - retrieve(): Reconstructs the file in the new kernel from the preserved
+@@ -48,7 +48,8 @@
+  *    handler, calls its .preserve() operation, and creates an internal &struct
+  *    luo_file to track the live state.
+  *
+- * 2. Freeze (Pre-Reboot): Just before the kexec, luo_file_freeze() is called.
++ * 2. Freeze (Pre-Reboot): Either explicitly via LIVEUPDATE_SESSION_FREEZE or
++ *    just before the kexec during reboot(), luo_file_freeze() is called.
+  *    It iterates through all preserved files, calls their respective .freeze()
+  *    operation, and serializes their final metadata (compatible string, token,
+  *    and data handle) into a contiguous memory block for KHO.
+@@ -422,11 +423,11 @@ static void __luo_file_unfreeze(struct luo_file_set *file_set,
+ /**
+  * luo_file_freeze - Freezes all preserved files and serializes their metadata.
+  * @file_set:     The file_set whose files are to be frozen.
+- * @file_set_ser: Where to put the serialized file_set.
++ * @file_set_ser: Where to put the serialized file_set, or %NULL if freezing early.
+  *
+- * This function is called from the reboot() syscall path, just before the
+- * kernel transitions to the new image via kexec. Its purpose is to perform the
+- * final preparation and serialization of all preserved files in the file_set.
++ * This function is called from the reboot() syscall path or from
++ * LIVEUPDATE_SESSION_FREEZE. Its purpose is to perform the preparation and
++ * serialization of all preserved files in the file_set.
+  *
+  * It iterates through each preserved file in FIFO order (the order of
+  * preservation) and performs two main actions:
+@@ -449,7 +450,7 @@ static void __luo_file_unfreeze(struct luo_file_set *file_set,
+  * running state. The function then returns an error, causing the reboot()
+  * syscall to fail.
+  *
+- * Context: Called only from the liveupdate_reboot() path.
++ * Context: Called from the liveupdate_reboot() path or LIVEUPDATE_SESSION_FREEZE.
+  * Return: 0 on success, or a negative errno on failure.
+  */
+ int luo_file_freeze(struct luo_file_set *file_set,
+@@ -487,8 +488,10 @@ int luo_file_freeze(struct luo_file_set *file_set,
+ 		file_ser->token = luo_file->token;
  	}
  
-+	ksft_print_msg("[STAGE 1] Freezing session '%s' early...\n",
-+		       TEST_SESSION_NAME);
-+	if (luo_session_freeze(session_fd) < 0)
-+		fail_exit("luo_session_freeze for '%s'", TEST_SESSION_NAME);
-+
- 	close(luo_fd);
- 	daemonize_and_wait();
+-	file_set_ser->count = file_set->count;
+-	file_set_ser->files = kho_block_set_head_pa(&file_set->block_set);
++	if (file_set_ser) {
++		file_set_ser->count = file_set->count;
++		file_set_ser->files = kho_block_set_head_pa(&file_set->block_set);
++	}
+ 
+ 	return 0;
+ 
+@@ -501,7 +504,7 @@ int luo_file_freeze(struct luo_file_set *file_set,
+ /**
+  * luo_file_unfreeze - Unfreezes all files in a file_set and clear serialization
+  * @file_set:     The file_set whose files are to be unfrozen.
+- * @file_set_ser: Serialized file_set.
++ * @file_set_ser: Serialized file_set, or %NULL if not serialized yet.
+  *
+  * This function rolls back the state of all files in a file_set after the
+  * freeze phase has begun but must be aborted. It is the counterpart to
+@@ -512,7 +515,8 @@ int luo_file_freeze(struct luo_file_set *file_set,
+  * their respective .unfreeze() handler callbacks.
+  *
+  * Context: This is called when the live update is aborted during
+- *          the reboot() syscall, after luo_file_freeze() has been called.
++ *          the reboot() syscall, after luo_file_freeze() has been called,
++ *          or when an early-frozen session is released before kexec.
+  */
+ void luo_file_unfreeze(struct luo_file_set *file_set,
+ 		       struct luo_file_set_ser *file_set_ser)
+@@ -521,7 +525,8 @@ void luo_file_unfreeze(struct luo_file_set *file_set,
+ 		return;
+ 
+ 	__luo_file_unfreeze(file_set, NULL);
+-	memset(file_set_ser, 0, sizeof(*file_set_ser));
++	if (file_set_ser)
++		memset(file_set_ser, 0, sizeof(*file_set_ser));
  }
+ 
+ /**
+diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+index 64879ffe73781..b42369c3b1f30 100644
+--- a/kernel/liveupdate/luo_internal.h
++++ b/kernel/liveupdate/luo_internal.h
+@@ -64,6 +64,8 @@ struct luo_file_set {
+  *              previous kernel) sessions.
+  * @retrieved:  A boolean flag indicating whether this session has been
+  *              retrieved by a consumer in the new kernel.
++ * @frozen:     A boolean flag indicating whether this session has been
++ *              frozen early from userspace.
+  * @file_set:   A set of files that belong to this session.
+  * @mutex:      protects fields in the luo_session.
+  */
+@@ -71,6 +73,7 @@ struct luo_session {
+ 	char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+ 	struct list_head list;
+ 	bool retrieved;
++	bool frozen;
+ 	struct luo_file_set file_set;
+ 	struct mutex mutex;
+ };
+diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+index f48e9a4185f97..403906937bc0f 100644
+--- a/kernel/liveupdate/luo_session.c
++++ b/kernel/liveupdate/luo_session.c
+@@ -34,10 +34,11 @@
+  * 1.  Creation: A userspace agent calls `luo_session_create()` to create a
+  *     new, empty session and receives a file descriptor for it.
+  *
+- * 2.  Serialization: When the `reboot(LINUX_REBOOT_CMD_KEXEC)` syscall is
+- *     made, `luo_session_serialize()` is called. It iterates through all
+- *     active sessions and writes their metadata into a memory area preserved
+- *     by KHO.
++ * 2.  Freeze / Serialization: Sessions may be frozen early from userspace
++ *     via `LIVEUPDATE_SESSION_FREEZE`. When the `reboot(LINUX_REBOOT_CMD_KEXEC)`
++ *     syscall is made, `luo_session_serialize()` is called to freeze any
++ *     remaining active sessions and write all session metadata into a memory
++ *     area preserved by KHO.
+  *
+  * 3.  Deserialization (in new kernel): After kexec, `luo_session_deserialize()`
+  *     runs, reading the serialized data and creating a list of `struct
+@@ -222,6 +223,10 @@ static void luo_session_unfreeze_one(struct luo_session *session,
+ 				     struct luo_session_ser *ser)
+ {
+ 	guard(mutex)(&session->mutex);
++	if (session->frozen) {
++		memset(&ser->file_set_ser, 0, sizeof(ser->file_set_ser));
++		return;
++	}
+ 	luo_file_unfreeze(&session->file_set, &ser->file_set_ser);
+ }
+ 
+@@ -229,6 +234,12 @@ static int luo_session_freeze_one(struct luo_session *session,
+ 				  struct luo_session_ser *ser)
+ {
+ 	guard(mutex)(&session->mutex);
++	if (session->frozen) {
++		ser->file_set_ser.count = session->file_set.count;
++		ser->file_set_ser.files =
++			kho_block_set_head_pa(&session->file_set.block_set);
++		return 0;
++	}
+ 	return luo_file_freeze(&session->file_set, &ser->file_set_ser);
+ }
+ 
+@@ -249,8 +260,11 @@ static int luo_session_release(struct inode *inodep, struct file *filep)
+ 		}
+ 		sh = &luo_session_global.incoming;
+ 	} else {
+-		scoped_guard(mutex, &session->mutex)
++		scoped_guard(mutex, &session->mutex) {
++			if (session->frozen)
++				luo_file_unfreeze(&session->file_set, NULL);
+ 			luo_file_unpreserve_files(&session->file_set);
++		}
+ 		sh = &luo_session_global.outgoing;
+ 	}
+ 
+@@ -267,6 +281,9 @@ static int luo_session_preserve_fd(struct luo_session *session,
+ 	int err;
+ 
+ 	guard(mutex)(&session->mutex);
++	if (session->frozen)
++		return -EBUSY;
++
+ 	err = luo_preserve_file(&session->file_set, argp->token, argp->fd);
+ 	if (err)
+ 		return err;
+@@ -340,11 +357,34 @@ static int luo_session_get_name(struct luo_session *session,
+ 	return luo_ucmd_respond(ucmd, sizeof(*argp));
+ }
+ 
++static int luo_session_freeze(struct luo_session *session,
++			      struct luo_ucmd *ucmd)
++{
++	struct liveupdate_session_freeze *argp = ucmd->cmd;
++	int err;
++
++	if (argp->reserved)
++		return -EINVAL;
++
++	guard(mutex)(&session->mutex);
++	if (session->frozen)
++		return -EBUSY;
++
++	err = luo_file_freeze(&session->file_set, NULL);
++	if (err)
++		return err;
++
++	session->frozen = true;
++
++	return luo_ucmd_respond(ucmd, sizeof(*argp));
++}
++
+ union ucmd_buffer {
+ 	struct liveupdate_session_finish finish;
+ 	struct liveupdate_session_preserve_fd preserve;
+ 	struct liveupdate_session_retrieve_fd retrieve;
+ 	struct liveupdate_session_get_name get_name;
++	struct liveupdate_session_freeze freeze;
+ };
+ 
+ /* Type of sessions the ioctl applies to. */
+@@ -382,6 +422,8 @@ static const struct luo_ioctl_op luo_session_ioctl_ops[] = {
+ 		 struct liveupdate_session_retrieve_fd, token, LUO_IOCTL_INCOMING),
+ 	IOCTL_OP(LIVEUPDATE_SESSION_GET_NAME, luo_session_get_name,
+ 		 struct liveupdate_session_get_name, name, LUO_IOCTL_ALL),
++	IOCTL_OP(LIVEUPDATE_SESSION_FREEZE, luo_session_freeze,
++		 struct liveupdate_session_freeze, reserved, LUO_IOCTL_OUTGOING),
+ };
+ 
+ static bool luo_ioctl_type_valid(struct luo_session *session,
+diff --git a/mm/memfd_luo.c b/mm/memfd_luo.c
+index 59de210bee5f9..26929495786e0 100644
+--- a/mm/memfd_luo.c
++++ b/mm/memfd_luo.c
+@@ -43,8 +43,9 @@
+  *   allocating pages for them during preservation.
+  *
+  * File Position
+- *   The current file position is preserved, allowing applications to continue
+- *   reading/writing from their last position.
++ *   The file position at the time the session is frozen is preserved,
++ *   allowing applications to continue reading/writing from their last
++ *   position.
+  *
+  * File Status Flags
+  *   memfds are always opened with ``O_RDWR`` and ``O_LARGEFILE``. This property
 -- 
 2.56.0.385.gd3acb90ef8-goog
 
