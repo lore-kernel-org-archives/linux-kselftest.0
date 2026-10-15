@@ -1,104 +1,137 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18A02D0614
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 15:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F1B3C1D6E
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 15:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792077141; cv=none; b=rye8xWpOe0rGy+tYE46tV4tVx4Omjxl6b3Wh8i1lBuscTIGM/LXUNfievZpt0Bsb8EbJtnD1dTuKbMRbYevZt+EjLkcGUC0p3pgfqdq3vq5vw4qlA7ePkcyznrzqNzT9iJFAMMuu9xynHANgdDjkkceyf09U2e9ZnKBviOyyfvc=
+	t=1792079554; cv=none; b=kEU0HVFGT18YjGsnX9h/ZKAVRJYYBD/WqsMEPfd4bEbm6ka+UTzaMQ5kVgLyQZ38Lw0EFBxWFCnO5lVNWigCx1gY3+E1pxLh4YZb/7dZMFtV5gkqPXiDru98gqhUG7X2EcPrFkdTt3bE+kESybffUwf7HIMKye0DidSCj3qJSrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792077141; c=relaxed/simple;
-	bh=rQ5DoMf8ZnQyBuNcuUdT0zQ4ECEYfTAmcSFNHkaDc7o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vf8iX+BDXNG3JN2ePU7LRw8zRkz8eyOuR+QLzg6t8MoC+umBCUZ1+N3GhWtw1ndAaqcmdz6Ac9qOp91i01jCmzTKR6m5AHdYjJasH1D5jVo3BrPUIiow6Ioz8oCjvXcQ0rsPB6P1fZ18RW20WxVfC7pBqKNHsN533CGQAmwe378=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QhgCQAsT; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1792079554; c=relaxed/simple;
+	bh=8+TCZ/zrpvva3iiL9OUxATXfSB4Da998tMTbnuEx5QY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jMzYapAc3zmLKWuppzHITVbdDrV25OEeuzCCwJP9RGZYeNYWPO+kSc+s8aaEQ6REsTZQU6WjDA+K5vcACmH8T2vAmtFq5oK/COU+Xj6IXAoqyh60IiXAEU+B19+LaiAxMZpoi5lNnSgMr1JpU10Wv3KXsU4rE0BegitRKHdVGig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SmtnTtFm; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QhgCQAsT"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-8b0d126f631so13941487b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 08:12:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SmtnTtFm"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso22259445e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 08:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1792077137; x=1792681937; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4f47ccrTPzkKKb0Ghz6v3dOkmhYk8321RuCtsSygqc0=;
-        b=QhgCQAsT7RVOz38TRpDbWHfkOSjHKnpNOby4P7lc2JBYH8LYDEEZdf0+V2/6cYqaY7
-         iYMhppPh1Ydru7IqzpbkuJ6sI1uXCN6kIJuECJTiULLgQxQfZSzNzHY37oBt6umdvmbe
-         dKohXThSEVKZ3D7Gca/2x4pj7hwDnXgN0yc4M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792077137; x=1792681937;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1792079541; x=1792684341; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4f47ccrTPzkKKb0Ghz6v3dOkmhYk8321RuCtsSygqc0=;
-        b=fJPZp8UgIHpfSISY4Ag1HL8N5qYP4NUs6tro9XW3DMaMmCP59WGt5qJSYya3lyCviQ
-         ItKVP7sUc2u3OPgyG0ZE+xJh/O4AHyP3ai6kZ/YX1Ow0ABZMJaZcinnu3XWWPUtxN2Fg
-         hWiHnx2fuYBM1JNYfnvPE7+hB55YWr7vzl4bjZMCmjfojHDuxyLaalHcMoub3dWe5DkO
-         HE5FQPZuUFPyW+5dUjcnF9Se32FroitYjL8tqS66zTgF3Wyq9LPFl5c/Sh2IMiIeliji
-         Rf79gqJBlO8/vesbOgjtpu5a5kiFSfkJBbYJNyW0ykNhk0agqz4/LzjYSAbP9H9rWt11
-         rasQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxKhiS0imHn+0bV4U3ZbTKkWQIaUsz7esOM5Z2H01AybqzGtz6ykhae+t83KhAHl2GlZJ6BjwUkOg+JJVcfV3M=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJDemBhR1ScrTaJ0uhEObR0sFKQJVOQ5s2GSH5RRGXIqzbpC9fH
-	wjN2GIzOFPuIlvUI0rgte6UQ6CkkUE8D2eLowB/lHecznOxit2L5xnTh1g1w82GsaoQ=
-X-Gm-Gg: AYBFou3mR4tLyosqvx7rRFMQHUXUDccVwipWhgFDeAKWqb0AVZ6gEk+o3hyerpWqWEC
-	5BIGxqtp/b3kIQmMzfkY+i/yQjWsWKWVs49qRIiLHguEnI00ilgUN/9VStCU6NOoqm611/+dTWb
-	KZqCsukUU2FoeWePMeWNd8b7rGv6LpF8UY85quHxEURYGk7Vklb+a4M+BxeHMUQUOPBOf++xlbX
-	iEhc44JJ3FhF1Ux5CB+FMMx4PBIcpb/+gpTBSG5Ko3IZCXDonTA0cGkRu4cq4SmZ1kNlVnnI/S0
-	s0mTRttwncj3ZSWW6AysvtSm1K6YneqUDjuan0xmlNLqlnWyHdJqwFdLguwt6NfzgBH9I8UtjpG
-	OapsnZ4joMXNlfp/hK/oeV8eq6f+dA0gONIN2tzDe/6JcVUfQqiOmYo02Y9ChvailI49gg6Z0gP
-	2sN5Jd8UE/XbIPX/eLb4rrWoblflyX62+5jjr92NI0ZufudWRro7cgUgeuuq+TgHUl9WbhSbl+b
-	8JPgC7Erw==
-X-Received: by 2002:a05:690c:e3ca:b0:8b0:a3a8:5f9c with SMTP id 00721157ae682-8b0a3a87f2dmr46357577b3.40.1792077136707;
-        Thu, 15 Oct 2026 08:12:16 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b07f263bc8sm66643697b3.45.2026.10.15.08.12.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 08:12:14 -0700 (PDT)
-Message-ID: <97e9479a-d64e-4905-b6f3-7f8831bf7f22@linuxfoundation.org>
-Date: Thu, 15 Oct 2026 09:12:12 -0600
+        bh=AHZqp2tUL+jR2ac8WD4oADqX9Z4sM0KD+dcaF1HV3NU=;
+        b=SmtnTtFm8vO9k+tlGe/PFyR4FCyq5uyshYnCTbSN/ImvLGEHZtL4P/o9Xvomrd8AG1
+         5gv1495Eqv23P1iwbFaACmegZztRjo/9RxFA7Z1xfkSWQ3NZV5kUTGFOaCkwsuXcBvvt
+         FghwSjz4Vj8ohvWqFIUYy/NACCxx0P4ymZktYH9hRQE8UYig05Zzuw7gsrHCBL9t0ep5
+         zfOKB7zNuFHLAs/Zx3/EVInZN/THVGma+1YBU9aHEYolT5BQsT/cP4ZfDqs0xirKbYHH
+         pEe4coy9EFZJHT7PwCtUTzv7Jg/t7w3iwZZTwTMBaomIPwkeV68vww/sAT7G52Ufy+42
+         iOeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792079541; x=1792684341;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=AHZqp2tUL+jR2ac8WD4oADqX9Z4sM0KD+dcaF1HV3NU=;
+        b=dO4FN2lTTNZGfwpKpbSynII0xCP4yaXuynmPNV+bYZr+xCQTlClubd9dt6ShBFcsoc
+         cumWQVR9qzdWQ4mHYJffxXuPD5AITVd/WlwmeHnG91hQhH5KQuAOHxxT/K23SkrBmVQX
+         DLRjw3cUy+PYnUDKf04Ulsk3muGtu6tRCIHkWS7J4Sa2/ikftNF3tNN+UUM1Wh/bl8Tl
+         7wyXS2CtMh1mKA96DlldGndenwls1G2Ekc5aIHw2KPprihvF4FycxDtcpyYMYPZVNrrW
+         hgl0KsMXY9PkXtKKgEy1jB875R0ss1uEn8JRRKNJ0usw01PmbOEbVA3O7Oe3Hd7jyPR6
+         I4IQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw3z28dACGmYHR3w4bX+x1BXXeo9PYg2JWb1u3PRFI7l/N2kRpDvhmoMU3YEOvJ9UbyixUp6f3RyoXpfEBFnIU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLJ9qDyD8XmRpREKdNTv0v1/x0IoGJiCpXUEwXJEXzM+eyLo1kB
+	xvQibLzsf8E6u7M5K0V/itKw6TZiLCclXtFxotxnmgb9VTa6Wk49vZUN
+X-Gm-Gg: AYBFou3M45uItn1JToyGPC+NnjFQRSPjoz3maBS/JD823OWO1k7tYiAImAcKVo8w5jb
+	n+3tItxH1leXRZYFMhu5cSnvKmnSEsz4dKMFAsvo+bjQwL+KZzyzLIUO0R59t0qI3peAb4WIK+L
+	RJ6k0rQgV4l9lBKvS8RaWtWxgwqCAAjgdVf7++bT615pYr0zf/WLBCPsUkAK+9H7Qez9IA9A0j3
+	1GKCaFJ7NPlrNQKhJO7EOXgUuZVcTXwKPDUP89QOs7AeAtvxt3MpJA3XGG8FgTvnZpp7UiI7GmA
+	jny60mClG3M0dfJ3/DvmvmcTIKiYpXXgxYJj1BX5zqSJNMynnIEUCrn/Spxo0FfVVBPGV7R9rZX
+	9fzdcfgiwOtQOW4UAL3xznfI8i+f6oH65xH4IFYy/SWTYDTqHfcNQlRp1PQUnZSWbAXjmmFNFPg
+	GuFgkQ1PtUwSXszV/DfAzWrLlPDd3nHxOIe6k6KNlm2ZF79PTLVTjeU2Wtt+Qh5+QDhG+Zbg/0h
+	K+MmAiwmfhqKjrmhkiqHHSyyAHnoPZ86jAq0Fg7WrVp+A==
+X-Received: by 2002:a05:600c:620b:b0:49c:fc6c:be19 with SMTP id 5b1f17b1804b1-4a18e4d12e7mr366480965e9.31.1792079540501;
+        Thu, 15 Oct 2026 08:52:20 -0700 (PDT)
+Received: from andreayoga.wind3.hub ([31.189.109.133])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1bd993caesm157053315e9.12.2026.10.15.08.52.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2026 08:52:20 -0700 (PDT)
+From: Andrea Parri <parri.andrea@gmail.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Samarth Narang <samarth.colleges@gmail.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Alex Williamson <alex@shazbot.org>,
+	Yishai Hadas <yishaih@nvidia.com>,
+	iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] iommufd/iova_bitmap: Clip recorded ranges to the bitmap
+Date: Thu, 15 Oct 2026 17:52:13 +0200
+Message-ID: <20261015155214.472218-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261015002647.GA3575173@nvidia.com>
+References: <20260925161142.189813-1-parri.andrea@gmail.com> <20260925161142.189813-2-parri.andrea@gmail.com> <20261015002647.GA3575173@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/ftrace: Add nice dependency
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- Jaewon Jung <jaewon8868@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20261015022416.43534-1-jaewon8868@gmail.com>
- <20261015145557.7AFB41F000C4@smtp.kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20261015145557.7AFB41F000C4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/15/26 08:55, Masami Hiramatsu (Google) wrote:
-> On Thu, 15 Oct 2026 11:23:39 +0900, Jaewon Jung <jaewon8868@gmail.com> wrote:
->> The tests use nice but do not list it as a requirement.
->> Add nice to the requirements so the tests are unresolved, not failed,
->> when it is not available.
->>
->> Signed-off-by: Jaewon Jung <jaewon8868@gmail.com>
-> 
-> Looks good to me.
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Shuah, will you pick this via your selftest branch?
-> 
+On Wed, Oct 14, 2026 at 09:26:47PM -0300, Jason Gunthorpe wrote:
+> If we silently truncate that to the range of the bitmap, like this
+> does, then we also are silently lossing dirty marks. The userspace
+> will call again with an iova range stepped ahead and instead of seeing
+> the early blocks being dirty they will be marked as clean.
 
-Applied to kselftest next for Linux 7.4-rc1
+Right, the clip turns an overrun into silent dirty loss; failing the
+call is better.
 
-thanks,
--- Shuah
+I also saw your reply to Samarth's record_dirty() patch [1]: with both
+changes, a dirty entry that is not wholly inside the bitmap fails the
+call.  Samarth offered to send a v2 of both patches; I'm happy to leave
+1/4 to whichever of you prefers and rebase my tests on top.
+
+A few things I'd like to check before I rework the rest:
+
+1) The dirty bit is still cleared when the record fails.  In the
+   record_dirty() you proposed, as in visit_dirty() in io-pgtable-arm,
+   the entry is made clean unless IOMMU_DIRTY_NO_CLEAR, whatever
+   iova_bitmap_set() did.  With start_va rounded down to the entry, a
+   query that starts or ends inside a dirty huge IOPTE now fails this
+   way too, and a retry with an aligned range sees the entry clean.  Is
+   -EPROTO meant to be fatal for userspace (e.g. abort the migration),
+   or should the clear be skipped once bitmap->err is set?
+
+2) Could you point me at the patch that adds bitmap->err?  On mainline
+   iommu_read_and_clear_dirty() ignores the return of
+   iova_bitmap_for_each() and returns 0, so I assume that patch also
+   changes this.  Does it cover the VFIO DMA logging path as well
+   (vfio_device_log_read_and_clear(), with mlx5 and pds calling
+   iova_bitmap_set())?
+
+3) Patch 2 tests the clip, so with your change it fails: the 1M IOPTE
+   at MOCK_APERTURE_START is rejected whole against the 128K query, and
+   bitmap[0] stays clear.  I can respin it to expect EPROTO, keep the
+   guard check past the bitmap, and add a query that starts inside the
+   IOPTE, on top of the bitmap->err patch.
+
+Patches 3 and 4 still apply, I think: iova = 0 with length = 0 passes
+iommufd_check_iova_range(), and __iommu_read_and_clear_dirty() then
+walks [0, ULONG_MAX].  With your check nothing gets recorded, but the
+dirty bits it walks over are still cleared.
+
+[1] https://lore.kernel.org/all/20261015003412.GA13920@nvidia.com/
+
+Thanks,
+  Andrea
