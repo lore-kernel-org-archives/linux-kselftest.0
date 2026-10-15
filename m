@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FAC42E8DC;
-	Thu, 15 Oct 2026 10:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8B750B426;
+	Thu, 15 Oct 2026 10:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792058758; cv=none; b=EWcn9WAtGgd0/zcnlLy42WtMEqQHYeY6QzjiTnzJQgxrIMyvD6zEl79hevKJGpdJ1u0Uzxn337jTWn6idZs4IW+jbO594n5YYQ7XVJrlWBSOdpUgLJLEWlr28+n+i1SWWdtReChVLar5xbM1p3tdF2Sc+rot+NhzCAJ9jwb+aoM=
+	t=1792058764; cv=none; b=QUi2TKsxtJJ8sZW8V9rmq/B0ftXnUKWmNT9kyYVzO7Ef7LxOBlHRIXzqcxgHSlmsbWnoHBrhDz5kKWd5espgVIZ3s3D9KHDLBDOyF/cpILnB2s+6TMFI0F36zc/4DPLKesU78Iy/8tV5Cf2hbpgKLA1+KYHouieFw+hO1wUtj3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792058758; c=relaxed/simple;
-	bh=Ab/tK1Z4TLk/dIwm7xnf+BsJbup/XQpBqmam9wbS4AE=;
+	s=arc-20240116; t=1792058764; c=relaxed/simple;
+	bh=BKKGC8j7kmj3qQsDkOgKmlZngZ3IPq2oRZrf/VyOiUY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RVPuCtCTftHUBH4EyAJo5fqukhPDDyc6JsgzGxufVDFZapaliAc9TD18oQFFwvikc0zWRqUTMCcLIFXLho6blfVyShIzB5QjE+1DUJ3JD5x5EdEaCz3RY3fL3WORn9IbozKzjEkoS6a4rtutqITNpgGCZ6c4G8sIZP0FOzTGERM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Y+z00THC; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=KWwntzfI8rCxktIj7avE7unagwp2PJb1w54r4JWaw2LRWQbhBESDAv0G4yajVE3UZjaQgcFF/tOuBZxtZ7klHZG0dFfzjJRcKpzva76uj7plK8+u0y6/y3E/+8opl7y0v6pohqRFAzrIh6HJfdkSIGra4xZyGiAArQUsTxRWd9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=cDp25/NW; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Y+z00THC"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="cDp25/NW"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=Q79JpLj96QE6hpuovBO29fD/uYFny8JBrGRCxNuE+hE=; b=Y+z00THCQybJW6l2eGw7c+bhBr
-	YVR6V3yj0y9arbjlxlaGSR1sC6iUgjzfpZFITlKJ2Emy3c9n7eUq2zTS+JYe15WysVomOPb9d2BH6
-	ABs7xyDFQ+SzYNwGZUOHHVnqerN3G0Q81VIHDnkXXHNCZjP6gW0WQPlyrFjYl39vnhDxLBgVzPWXa
-	PxqpnjNo1WyhAKe91S+OvEnWV7lRyAnpeCTm4bPMMaAzsw+5zB0BMxwBv3Red/MnkvBUO5/fLbrVG
-	utKPAS/1I+A7aL1Pt7MJSOmqtuSPDsG0S5Bmsbl/P+q3GXtR24Zw3oR2iEUi19SGRJ3W6o/mrq4qE
-	yP9cbPVg==;
+	bh=89lnP5mpdJjWe4eGgzelQkBONXW9fkepGuDbuiUIPzA=; b=cDp25/NWvDoHAUWmE+3evU671B
+	aLOmw4Xk1G6dxA6SHNotxEinXcJpzlT7pOtBYtROzaz23Qg6YkurJ98gvji3Y1wFh5tBPNErncJ39
+	Ivu4Vc003a8GlrFHBGXsc9upnQiz+2EnBLBaMSjXmlZC990NAL8+Wkp71lzmHb7KTRivOnmSIQgka
+	M+K2wCew2V55NlGb3oBsTyMbD6bax9TDNcHZbAU7djic0xpH8pWzBWhAO56Jqz3v7DUTmUpIqHblY
+	3nB8hcD7Ku2I+IqhcAwmW/Cj0xM52Njop+B0BIHSQExwe8YfoVKloLX5MsdD2B6yunqflMd6imEug
+	QVNcWZyg==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1xHILS-0057B5-1e;
-	Thu, 15 Oct 2026 10:05:54 +0000
+	id 1xHILY-0057BH-13;
+	Thu, 15 Oct 2026 10:06:00 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Thu, 15 Oct 2026 03:05:30 -0700
-Subject: [PATCH net-next v3 1/7] ipv6: treat a negative optlen as 4 in
- do_ipv6_getsockopt()
+Date: Thu, 15 Oct 2026 03:05:31 -0700
+Subject: [PATCH net-next v3 2/7] net: cap sockopt_expand_out() at
+ MAX_RW_COUNT
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-sockopt_expand_out_v2-v3-1-7d05ef2df448@debian.org>
+Message-Id: <20261015-sockopt_expand_out_v2-v3-2-7d05ef2df448@debian.org>
 References: <20261015-sockopt_expand_out_v2-v3-0-7d05ef2df448@debian.org>
 In-Reply-To: <20261015-sockopt_expand_out_v2-v3-0-7d05ef2df448@debian.org>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
@@ -65,83 +65,78 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  david.laight.linux@gmail.com, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2399; i=leitao@debian.org;
- h=from:subject:message-id; bh=Ab/tK1Z4TLk/dIwm7xnf+BsJbup/XQpBqmam9wbS4AE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBq0KV0CaPKCXgInCQ5BDR++tML+tOHvVcOm8LR+
- 373q9/JFAqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCatCldAAKCRA1o5Of/Hh3
- bagnD/4okayDqFRgTAVXdkU8f3wEee1bfYikRYjAV/mKUYozZ8wyBo/5yFZCzDeM20achARDPoG
- AlqbVBfqHQe67N9ekwZRqMsCZlndOMA2YbXhrPf156NE0SCX8UqX71bycO3wDZbFv5Sj15OMV7g
- XKpbFRnjwBj84TLSFzS7OXOzMXsLBtTCsIPWNP3A9W5S/2BeV19GO46kj4pfv83+gkBWICLvEAP
- RxF9h95H6QikZQFZg5USY161bBNoVjBgd4uuPLDYfR/fl+MpI9nGZYAWFoLEBTZFf+wY5Djzl1R
- UPtyJI1lPTOvt1U8A83p7km8OQvfTqLBxZS1Ztrsx3rOuSGt8ILrX6XsCV16mD8EayTMQuLyN2i
- pRh5Dl5q3d+WbN4MO0qmbY6+GdDWVOZpcP8dRjQjrUIUu8nQgqDrNnXk3CfnZ8lwLkjZOFTUk5i
- gknu+u10bgprGzFaZXasEUEkWRvXtQzwNuxxWPyZTjNMUjHIr9rEJAnJamj1hhg8/Gpdu51itvj
- 6OVi/Xe3IRjoWKjFRPddKpDmnKc4xLc69PRQCYXEKLkCSMOBWNdgzfnv/8sSqEpCudVt5fimVH6
- U3DC2VlhDb6KmsexdERMq7nb3WVBZeF/gsyueJMGitul1StIAaL68pI+9l/WFy61pXwYj0UfPnH
- zGdtG7OeeUalsSw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2172; i=leitao@debian.org;
+ h=from:subject:message-id; bh=BKKGC8j7kmj3qQsDkOgKmlZngZ3IPq2oRZrf/VyOiUY=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBq0KV06q4Xw/ePYUg0gExh0OqsuxACZkG1YA6YX
+ RErVMsn5wWJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCatCldAAKCRA1o5Of/Hh3
+ bRTsD/4j8TVSpN+pqqO3WhBxfOx0F/6nzueKHBabSKntvVTaV32VljaJdKnUwJLoLf7zcufSJxg
+ BLP7tbN6mWcWyzEpVXQl7dq0IrrHZX4g2cmOokB9LGn3HbY1s9AXHpLGDZKF2FC1ab2xXY4GnKw
+ DIafqBrZGl7EOSyuFQ0MA2noIkzsZzHJNT4u9Ffyx8m2na7UPiEkd57ioZP/7F1SYTlN+RG02Mn
+ es+GvYztrbLX0jq7LUueRErcqc3L2pcGbkvPaJHqcjgP30TFXcx4tTqltqvNZzI7gFQfYUZTVxq
+ z9ktdBVOyjzr5Cug0Usws92M9X8oTbttQ9Uc2xC0iRVmitXd2EXaaQeaESdcwHQ9u4t9cztex9t
+ NMcp/3P4ThpeKMrQWXhNAxdgPLhMzCSUtFJzaF0+7gF+0sshkCQd0APsm1Vv6P8TggEb2+/BlIX
+ U6a6PxRi6HYZFpnP8b7lvhh+Ns3B8OBypwE4IKJ5pJZ4YSzvaUHg9bWlJB3C6P1Vep+KOKBCNKU
+ umQJXbmF4Ned4y+UNp6TBi+bHlBaVEUCWha8BD0S9uRVrmfO8b40fyJpHxTZcdXB/oto6iP8Gt4
+ 6WuqUWcJj8lmbGHen6FuEHwuKStGohpcqCqOWAtLPImszF9SOCauF+IQuQPTxyfM6tq8PJfKVmi
+ DPprLl7l1NV0Dng==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-do_ipv6_getsockopt() reads optlen into an int and never checks its
-sign. Most of what consumes len compares it as unsigned, so a negative
-optlen reads as a huge buffer, and the reply depends on the option.
+sockopt_expand_out() grows the output iterator up to INT_MAX, but the
+MCAST_MSFILTER getters converted by the next two patches rewind it with
+iov_iter_revert() once they know the real reply size. iov_iter_revert()
+refuses to unroll past MAX_RW_COUNT:
 
-The int options clamp it to their own size:
+	if (WARN_ON(unroll > MAX_RW_COUNT))
+		return;
 
-	len = min_t(unsigned int, sizeof(int), len);
+MAX_RW_COUNT is INT_MAX rounded down to a page boundary, so a caller
+that expands into the (MAX_RW_COUNT, INT_MAX] range and then reverts
+hits that WARN_ON, and the iterator is left where it was instead of
+rewound. So does a caller whose optlen already covers such a size.
 
-so getsockopt(fd, SOL_IPV6, IPV6_TCLASS, buf, &len) with len set to -1
-answers 4 bytes and reports 4, rather than failing.
+Cap the size at MAX_RW_COUNT instead, before the early return for an
+optlen that already covers it, so a size that could never be reverted
+later is rejected up front.
 
-The other options see a huge buffer. The sticky options reply with
-their whole header, IPV6_2292PKTOPTIONS writes every pending control
-message without a limit, and IPV6_PATHMTU and IPV6_FLOWLABEL_MGR pass
-their length check.
+Sashiko found this while reviewing the conversions.
 
-do_ip_getsockopt() rejects a negative optlen, but doing that here would
-turn a call that works today into an error for a caller that passes an
-uninitialized length. Answer it as 4, as the int options do, for every
-option this function handles itself.
-
-That leaves the int options as they are. The sticky headers are cut to
-4 bytes, IPV6_2292PKTOPTIONS gets a 4 byte control buffer, and
-IPV6_PATHMTU and IPV6_FLOWLABEL_MGR fail with -EINVAL, as they do for
-any other undersized buffer.
-
-MRT6_* is dispatched earlier and keeps rejecting a negative optlen, and
-the netfilter fallback still sees the caller's value.
-
-This changes what callers that pass a negative length see. It is a
-behaviour change, not a fix, so there is no Fixes: tag.
-
-The conversion of this function to sockopt_t builds its buffers from
-optlen, which the standard helpers reject when negative, so the answer
-has to be settled before that.
-
-Suggested-by: David Laight <david.laight.linux@gmail.com>
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- net/ipv6/ipv6_sockglue.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/linux/net.h | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index 4b3536571c9804..700133e2fd11c2 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -1002,6 +1002,11 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
- 
- 	if (copy_from_sockptr(&len, optlen, sizeof(int)))
- 		return -EFAULT;
-+	/* Historic bug compatibility: take a negative optlen as 4, as the
-+	 * int options always did.
+diff --git a/include/linux/net.h b/include/linux/net.h
+index e2a866fbcfa5ea..de56f89d475ee2 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -80,16 +80,21 @@ static inline int sockopt_init_user(sockopt_t *opt, char __user *optval,
+  *
+  * Call it before writing through opt->iter_out: it re-anchors the iterator at
+  * the head of optval. Only a user buffer can be longer than the optlen the
+- * caller declared, so a kernel-backed optval is refused with -EINVAL.
++ * caller declared, so a kernel-backed optval is refused with -EINVAL. So is a
++ * @size above MAX_RW_COUNT, which iov_iter_revert() could not unroll.
+  */
+ static inline int sockopt_expand_out(sockopt_t *opt, size_t size)
+ {
++	/* iov_iter_revert() refuses to unroll past MAX_RW_COUNT, so a size
++	 * beyond that could never be reverted back to the fixed part later,
++	 * even when optlen already covers it.
 +	 */
-+	if (len < 0)
-+		len = 4;
- 	switch (optname) {
- 	case MCAST_MSFILTER:
- 		if (in_compat_syscall())
++	if (size > MAX_RW_COUNT)
++		return -EINVAL;
++
+ 	if (size <= (size_t)opt->optlen)
+ 		return 0;
+ 
+-	if (size > INT_MAX)
+-		return -EINVAL;
+-
+ 	/* Re-anchoring reads iter_out.ubuf, so the iterator has to be a user
+ 	 * buffer that nothing has written through yet.
+ 	 */
 
 -- 
 2.53.0-Meta
