@@ -1,135 +1,186 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7862436493F
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 01:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.37])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F6235E950;
+	Thu, 15 Oct 2026 01:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792028173; cv=none; b=NIG791B9iRz5V3LW/dv4IB3ggE2NQKzSrJoNBHIwra/eaLbe5/kNeIhHMsPXhO/25Tp2VsrsxrHWo9/n0BnZTnDlgfWMEjZgLDudvjnX5HD3sSSvg3ais/HljaxtqOQlhwbHxHZLHy7nUQGPr/K6DqUkWrpvNKhCeIdouM0sxSU=
+	t=1792028796; cv=none; b=QDIqxgMWqb+vcMNDpHOCUuQs2NFzN5bewYxAwBipT76YBJVz/aPq6k9JBfU9DLnaxrjlvc25nANjWNhVyS2pXlHXNEB3qFs7TJGFw7TIxHJrxoeWy00CUaLis/T9Gdy00WQouFx0Z5St03uS9QvNUj3c5et2Rw76mUof8RjgRSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792028173; c=relaxed/simple;
-	bh=1NL/Nz0Jize5Wp+cr1ElqPZeQvkJvvX8dyGuc9/PMII=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jnL+OdTVmOa+b5rBEd+g2p7npaIMbV0+aREg1/GxEVg9x/xVsEC2L2ZzIuZqNUjdlfRlXsUk2YJ596rS6myTDTeHyHZ3T5GYp8JVTDjn/W3kByE/qNyF/waBMdbXb+ZZRuyMK7/c+jIzhs6bxAjOSTUrLjwdBYCoUwBGfXh3QWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fd3Qh7hh; arc=none smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792028796; c=relaxed/simple;
+	bh=JS1UHXPvvp09gY0rzjuh5BWZwvh7T+K/RQvpRF/NL2Q=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=EaSpVI5grgKJHeq2xzv+Gk4beLIK3VRVYIkUrlRs+osFS6BiLPn0qmsomUou82aD++Xjs76ykgJjItBcwk2QeYsQpTl2HpnBdf4z67LSH+HuBDz7vIyLeoz69f0aeKld1sVG/0EY1NqmodwOkFvF/t/jckaJQ46TxKm1MItGcs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=/tGq1udY; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=UcJeR3s/; arc=none smtp.client-ip=160.80.4.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fd3Qh7hh"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-35b2c599f43so6432028eec.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2026 18:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792028170; x=1792632970; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=kg3c5RYSHRIiTzyj1QAovvIQRHBFLytxM/uGv+1fIrI=;
-        b=Fd3Qh7hh/dSuThaTt2n28zTkHeeJEe/NREiAMvjh+vd3ipnZn3l4O62fEQ2SnBdUrz
-         GUu+Y/I2lXSSo+7YiIlNkSu9fUU09w1bmXK16sLDbwyADnMska392iHCPoocjQKTMA9o
-         DgcH62iZXzO0Zv0LkFslgBTbEwgRdged76ISW3UDTX9J1cijjFsx82VWCNaTiKSsLF7Y
-         GtpiAVO7eWgP5+E1H/b7+/+uarhcdDV6WyQ9eZRIYFa7V010V1369MhJVYHWisAySVmD
-         FJ8L9ylIX4lASucY65ntTQUaoX4GNvf+IzP+CKaizpl1baXah3as6Ca6QoXpB6Pw9e6U
-         iWpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792028170; x=1792632970;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kg3c5RYSHRIiTzyj1QAovvIQRHBFLytxM/uGv+1fIrI=;
-        b=v1Jh6I8A/0//YRE3ws+z5bMU3zDGbRcpmHx4DksTvorE2U2/sZ55gw/+JDr1CoFM7s
-         PpQ1B4ve1ZGFgcnGxrNwwjNWdazPPwJ4FElIjS9RcroFNvQk+q4ivupuKGISUg0EGfOI
-         g1RntS4a1Vu/ftivzlrlvsVf+cZunUvldBmsjAsspTgcqgT2gW0yrgZClzT2234lcvOg
-         zKDKnL2IsY46UAEtsoeyCLPFZ+F0yqk2xw0rv6+jj5iWWIMKYXc7eHj6tetJOClIDnbk
-         XxnL5OEo5Fjf/MUpV06y9iCONGfWlul79xwOGt3GN8aFB2ne6Rp9zM1Bv3Vj44YVz9t1
-         A59g==
-X-Forwarded-Encrypted: i=1; AKwUvByNbTSrP/FZfJdr9XVQz/2qQLNEyhPdMhuqO0qCyJmaHmM1hjHzxjUa6D4QVmcIN5HiyMUdFAdYpsWGFcIsdg4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIsnM4D++ricV8mmer7VztK+TGdOQ30UQIwylc5PpG9/EBkmHdo
-	qKMlCFRyjeq32BiO+8WXJOdukvtqXboMj4ghOgRvlp2DuRZKtZxNiWlr
-X-Gm-Gg: AYBFou2O9U2ZxcCiH3bf2lobiZ0D7tzMk2pGa2gHOw0bPQ7wO4Q9kCMdnKbM/FOmcL6
-	RdFYJLwGnGCsiTQup7fq7BvBcSfeWYZOiaCd8XHMR8WgOyDG3yp1ZVEJ/NNubPEPF44B84bc2Wj
-	QzFN3ici0k4L3hihQ+oRbvQdMaTSIBi46KbPlhHLGo5kOdJMJx0cNMCYA70ucKDuzzERYT1VPCs
-	h01uQV0uYkSJfux1cnlYZ8AjzsJc2yPXqtIG0u4kwTfPIArUJ9iJWQHbSFserpaHLeKfTn46o3l
-	E1XKS0GRKlWz5PMdbadBgkPT743cNRG+7bb1mqw8GfJooaVGAI8kUC05+8/b3mLV50j9/xN5W4B
-	EY9+qpssYnvYqHIbRv/UolU1SKWrd7La6BkrYBK2wG0nHO/jLEicvddCLmbgMXUOb4S+kB3rrUI
-	YzGR1lJu5If9B0jwh57I4H8BSpxqt2m5faORFtZVVPPzuHZsr5lQPbbgqu5+3IKLFBeVicCEL/b
-	+J1
-X-Received: by 2002:a05:7300:2216:b0:351:28d9:4908 with SMTP id 5a478bee46e88-3537db99e8amr32571607eec.0.1792028170228;
-        Wed, 14 Oct 2026 18:36:10 -0700 (PDT)
-Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-358ee8a3387sm47863101eec.15.2026.10.14.18.36.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 18:36:09 -0700 (PDT)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Thu, 15 Oct 2026 09:35:52 +0800
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Wait for the struct_ops map
- to be freed in assoc_in_timer
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="/tGq1udY";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="UcJeR3s/"
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 69F1jleX026015;
+	Thu, 15 Oct 2026 03:45:52 +0200
+Received: from lubuntu-18.04 (host-79-32-222-240.retail.telecomitalia.it [79.32.222.240])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id EAC6E1212CA;
+	Thu, 15 Oct 2026 03:45:41 +0200 (CEST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1792028742; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E3jLV7xkKyPXyvZnAkQlyv/K5QoOzL9c26mU54ZKf5Y=;
+	b=/tGq1udYD2iG5msheWccAyxKu5AteoXND1qfVa5kvVZ0uc+nkImaiU+uaKTa0tgYU+vZN0
+	zfPYGlf0IQWuyhDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1792028742; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E3jLV7xkKyPXyvZnAkQlyv/K5QoOzL9c26mU54ZKf5Y=;
+	b=UcJeR3s/d4sIHHpBG9NAmJ6Z5YKwR7ZMZWIT7qSdAG+IvVoBsIoF5ZEC/hArvQbXx41wTL
+	0SXQM+G26W02XwZfAgrnJmUknVedK1x5YtIuPPBtRUEJY/yTd9lyH36b5EzbgFD9Q1mdSD
+	7LQsU+ISNxoN72/JOGsMn5A51J/vsWV6xIq3dYIYvNpVyNNQtkbnPo4bV/wDUAb0ZVvFKf
+	zevjOwGpxHpr7bai4OD/AtELaUEAOHSv6HDaDNnYlXHDC1w6/sIftLOcFlgArE6nva6fCz
+	feCUYFFxFuNMT7QxUir/FBBbRhp3lSRFk59obLd4PaIf2yLDhtyQRUkGtC9djA==
+Date: Thu, 15 Oct 2026 03:45:41 +0200
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: netdev-bot+sashiko@kernel.org
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+        pabeni@redhat.com, dsahern@kernel.org, horms@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        hangbin.liu@linux.dev, justin.iurman@gmail.com,
+        nicolas.dichtel@6wind.com, ahabdels@cisco.com,
+        stefano.salsano@uniroma2.it, andrea@common-net.org,
+        Andrea Mayer
+ <andrea.mayer@uniroma2.it>
+Subject: Re: [PATCH net-next 5/5] selftests: seg6: add tests for PSP with a
+ consumed SRH
+Message-Id: <20261015034541.cc16ac6eb2dfdb2f9273a021@uniroma2.it>
+In-Reply-To: <179183319121.434549.16235006579764445540@kernel.org>
+References: <20261011192310.55-6-andrea.mayer@uniroma2.it>
+	<179183319121.434549.16235006579764445540@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-selftests-bpf-struct-ops-assoc-timer-v3-3-efe643d4b2a3@gmail.com>
-References: <20261015-selftests-bpf-struct-ops-assoc-timer-v3-0-efe643d4b2a3@gmail.com>
-In-Reply-To: <20261015-selftests-bpf-struct-ops-assoc-timer-v3-0-efe643d4b2a3@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
-X-Mailer: b4 0.13.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-st_ops_assoc_in_timer_no_uref runs .test_1, which starts a timer to
-call it again 500ms later, drops every reference to the struct_ops map,
-and expects the timer callback to find no struct_ops associated with
-its program anymore.
+On Mon, 12 Oct 2026 19:26:31 +0000
+netdev-bot+sashiko@kernel.org wrote:
 
-The association goes away only when the map is freed, which happens in
-a work item after an RCU grace period. With other tests running in
-parallel, that can take longer than 500ms, and the callback still
-reaches the struct_ops and gets MAP_MAGIC instead of -1.
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issue(s) to consider.
+>
+> Critical: 0 · High: 0 · Medium: 1 · Low: 1
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+>
+> - [Medium] The consumed-SRH tests in
+>   host_srv6_end_flv_consumed_srh_tests()…
+> - [Low] setup_rt_consumed_srh() runs `ip -netns ... -6 route add "${sid}"
+>   table 90 encap seg6 mode inline segs ... dev dum0` and does not check…
+>
+> --
+>
+> [snip]
+>
+> [Severity: Medium]
+> If rt-2 removes the wrong SRH, or no SRH at all, would these tests notice?
+>
+> [snip]
+>
+> So two possible kernel regressions on the multi-SRH path would still pass:
+>
+>   - end_flv8986_core() takes srhoff from the first routing header instead of
+>     the one found with IP6_FH_F_SKIP_RH. seg6_pop_srh() then removes the
+>     consumed SRH at offset 40 and leaves
+>     "IPv6 | Policy's SRH, SL=0 | ICMPv6".
+>
+>   - PSP falls back to plain End without calling seg6_pop_srh(), which leaves
+>     "IPv6 | extra SRH, SL=0 | Policy's SRH, SL=0 | ICMPv6".
+>
+> In both cases ipv6_srh_rcv() skips each SL=0 SRH, the echo request is
+> delivered, and the ping succeeds.
+>
+> The comment and the commit message say "PSP itself is checked by the PSP
+> flavor and NEXT-C-SID,PSP tests". Those tests only carry a single SRH, so
+> srhoff is always sizeof(struct ipv6hdr). They never pick an SRH at
+> srhoff > 40, and they never run the positional nexthdr fix-up in the else
+> branch of seg6_pop_srh():
+>
+> 	if (srhoff == sizeof(*iph)) {
+> 		iph->nexthdr = srh_nexthdr;
+> 	} else {
+> 		...
+>
+> Could a host-side check of what is left in the packet close this gap? One
+> option is an ip6tables "-m srh" match on the host's veth0. It would accept
+> only a first SRH with --srh-last-entry-eq 1 and --srh-next-hdr 58.
+>
+> [snip]
 
-Have the timer callback restart the timer until the map is gone, as it
-does for st_ops_assoc_in_timer_free. Calling the struct_ops through the
-association until then is safe, as the map is freed only after a grace
-period that follows clearing the association.
+The consumed-SRH tests in this patch would not notice these cases.
 
-st_ops_assoc_in_timer_no_uref run 100 times with test_progs -j32 running
-in the background, on a KASAN kernel with the fix, x86_64 VM with 32
-vCPUs, before and after this patch:
+However, the suggested match is not enough for the first case. In (i.b)
+and (i.d), the Policy's SRH also has Last Entry 1 and is followed by
+ICMPv6, and the packet is still accepted. I checked this on a kernel
+where I added this regression on purpose.
 
-              before                       after
-  outcome     1 of 100 failed (MAP_MAGIC)  100 of 100 passed
+A check on Segment List[0] of the first SRH would detect this case. In
+the extra SRH it is the SID that triggered the insertion, while in the
+Policy's SRH it is an address of the host.
 
-Fixes: 5db69b0fbdc8 ("bpf: Make struct_ops tasks_rcu grace period optional")
-Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I will address this finding in v2.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-index 987117091c676..10fd294a0af3c 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-@@ -184,7 +184,7 @@ static void run_st_ops_assoc_in_timer_no_uref(int timer_ns, int wait_map_free,
- 
- static void test_st_ops_assoc_in_timer_no_uref(void)
- {
--	run_st_ops_assoc_in_timer_no_uref(500000000, 0, 0);
-+	run_st_ops_assoc_in_timer_no_uref(500000000, 1, 0);
- }
- 
- /*
+> [snip]
+>
+> > +setup_rt_consumed_srh()
+> > +{
+> > +	local rt="$1"
+> > +	local sid="$2"
+> > +	local end_rt="$3"
+> > +	local nsname
+> > +
+> > +	nsname="$(get_rtname "${rt}")"
+> > +
+> > +	ip -netns "${nsname}" -6 route \
+> > +		add "${sid}" table "${LOCALSID_TABLE_ID}" \
+> > +		encap seg6 mode inline \
+> > +		segs "${LOCATOR_SERVICE}:${end_rt}::${END_FUNC}" \
+> > +		dev "${DUMMY_DEVNAME}"
+> > +}
+>
+> [Severity: Low]
+> Should setup_rt_consumed_srh() check the exit status of this ip route add?
+>
+> The test body runs with set +e, so a failure here is ignored. Without the
+> route, the extra SRH is never inserted.
+>
+> The packet would then follow the plain Policy path that the earlier PSP and
+> NEXT-C-SID tests already cover. The ping would succeed, since the hosts have
+> seg6_enabled=1. log_test would then record a pass for the consumed SRH case
+> without running that path.
+>
+> I could not find a way for this route add to fail in the current topology.
+> setup() already uses the same features under set -e, so this is a
+> robustness question more than a confirmed failure.
+>
+> [snip]
 
--- 
-2.43.0
+I will also have a look at this for v2.
 
+Ciao,
+Andrea
+
+pw-bot: cr
