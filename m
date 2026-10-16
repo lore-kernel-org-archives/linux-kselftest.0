@@ -1,274 +1,165 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3725539CCE1
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 03:10:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792120231; cv=pass; b=XGKySdJnr6rXkrLGuq7DMzNiD0Ea1KaEu2jUCqZ2oA2dPZ2HNQ7GYm5acbIQ44L9szC14/QPktEcDdcCI0K9f+6L2t7ea955k9uOdpc/QFiSLtK0TGiWLSnMzrqQSilYB/oETM+aXqI6l1n9dzLFCm90c2RYkFTpYcRDUznS5Jg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792120231; c=relaxed/simple;
-	bh=WVQ/j1d2JaRchY/iDZaPslSfywaOQoJpll8D3v4G/LQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L87obhKVbim910V0lpsXUwxaovqJgZqn8nszhNSPxYgFj8Z3bhOScU2CdQyYXAAq45k4ZmsxZXzjC45O1pcfGBDoB1Zdjd/lFQFWJNzRlIfEs78hDQXfAvEfd6694M5ww1i/axByXjTqpGqmbuLVivR6Ye2P36KZuWEMnSKi9RE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HDQUGevn; arc=pass smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E88B377ABC
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 03:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792121142; cv=none; b=pFiPntJ65gsDBKJbf6fIId29z7V92MiQ5KB4gPkRpaho1015Vp5JSA4O6R6bQafHvvFsSBUXRJo7/5/71K0Vwgp61dMlkODxhIYxc3ppEP+e4aRG5U+uvWfO+AmKOmv0/8nwHBgxZ5hLbXMIEtPOnuERuO0bv5Zkhd0Er7dkd48=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792121142; c=relaxed/simple;
+	bh=abwtmiwURinT06F8vjjjeI7AmYc7EHl/p3zOxCDzMLY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XOcOpdEgkSsT7gNnW09wDvhGDtBBWJvx66dnxXNiNQ+VZWvlMPr2IFInxHooe/5P6ESpcmD55eMgBEex5BLo1thHIvqv8kwINSIIUXmNfkanFxit9nWYT6zuMlV+9dPSFSPSHXe3xnuIcPTFrSNxHITRdW9mkrXCBdQIwUOUkP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QaiNgrD7; arc=none smtp.client-ip=74.125.82.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HDQUGevn"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a1af482519so3962515e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 20:10:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792120227; cv=none;
-        d=google.com; s=arc-20260327;
-        b=skOZy0iF4c17QuBb+7srS0JwdruVackw3N8XSsbk0KgsXsRfJFtS/y9QucRg9py4Hu
-         X379ay+n+TeB0BSH4Ba9SefTd7QR+wGD+K2qCnCpFDJBCHB6wwYOrzHEU9y2HIn/IN6S
-         extatc3sgCNVDChYf2JZKQs9R87cSyoIKFvB2f62qiefxeX96JDaTJY33pzMbg4sVNyZ
-         jg9EqCXezbseL4OxnxfVdBP+atgTWSIp8xjtAXK/KaO3SFtXIjTttNnWiYYMpib8yxNe
-         +nYXbtOIyAiGvgWmQPESR95jhM6+MVow+FfYs4gGHv/dY5hnSY9GpInirmjuMwqWdYT6
-         qb9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xlTg1ZA1llUS+f5Z9F7BKuAG/CC4v+1NC0B32dFPZWI=;
-        fh=sk4Ep/LR+NhhE80LR97fuCGmU/v+ohJfGV81UmF4jvQ=;
-        b=RerJr0QfLCr/5eUMpFV2uhnZ4/3J4Qv1DzoirIrYBwiW6XEP2ivGHd5O1msIgcaI7b
-         2xLx6y2siKUis7BrFWR1x5j1tc8RsskqAIfF/CbrnTQhgbkeINUOhNDzph+QqS+psZje
-         seD04ZIGB3rfwJE4rAkYM3qdQHxAwA2TDrZ5W4wyDYpgspovzCrQmqkPfXCCgUgaZPY+
-         K2nlJHdREK4+/gsxXimFfdw8Q+mrkZXILEOO2nYn4SnT8rfCmmcG5dFCVs2GfVX0uxlR
-         oDF9sHjhORSQZoTMVLMAGwBlOnPxEV5NU++mUixKzA34QEv5U9VoivRfjbyoKC9PJ+9u
-         LTDQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QaiNgrD7"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1517bda04a0so4332602c88.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 20:25:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792120227; x=1792725027; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xlTg1ZA1llUS+f5Z9F7BKuAG/CC4v+1NC0B32dFPZWI=;
-        b=HDQUGevnZicrjXUQrDR0JNaZLlrGx1TGZvw2y7u6iZekbSseMFxveLn8swWGq1zjpN
-         Js73iJYQq9ZzzQGA7t6FwrpLoiTljo1i7FMyylM9qou4b2YHQY3+A+DbS277bj+id060
-         gv9udJfWoYoqykpiW101e2yQGd7YHD/ZRoitndm/YTiTTn5seJ4m1AL+WcpqF34o91eD
-         JRkDs7XB5apZEcKSpZam0EbpxK5fYBDAwdFB3tYwQEwmJjuvWVyZjEmS+pBrWoY6asai
-         kgp5AXsLMkPNgkc+eZa/tph9BCWt3keKTyZFOFEmQYdxIKD6TF3u0ptyDx/5GAltlH3g
-         FQIA==
+        d=gmail.com; s=20251104; t=1792121141; x=1792725941; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=SxVPECSRUSDaMuR9TFbDdAvOjcSyDgcao7qv4wsHXtI=;
+        b=QaiNgrD7dv99piQ/CSSGSUFxvc7GrRNfy9pV04lnIOc4T5d+XMz/K65bD6qvOVaRZw
+         v90RvsapfRL5ahBxXKPvURD//Obq4ybwJdjbADN8QKfrDonHmcmnvr4yia8W6JvQUnH0
+         Znls3M+SmaignWug8+nc+YF9HX9oTIPjzqxTQNPNPYnQoMSWSgkQUlWKNDE8uKvr0frP
+         xCuTQbx7XdB4gW6X0pmJqHxdVm0uNwNASVzjPUwnn+TnB0n3vbU/00dj7NvU5/6Mf5Zf
+         wqk3wUPCgqN7CDyoWHemdbZ1CcmO9zsrmrpPfyuUlFhTcFbo4BCwpAy84eGomnEg25ip
+         2fyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792120227; x=1792725027;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xlTg1ZA1llUS+f5Z9F7BKuAG/CC4v+1NC0B32dFPZWI=;
-        b=fHKKHZuZfbhs4UBdejN6QZRwLmyvrbKHU4txiybYLm4gpNMgRhGFN+ekYcNxwBxRnO
-         1RnRFDqaPr8/nHeQGEZZJhnr/o5+hcmSxhoL1EctiY2oEXBibO5sT7tX5BLM5Yk4oY17
-         vyPjWW1fVHEf12pcsq0s5sWya6whyw1NTyaqNgq2vIuEW0xTcTVx76diia5+V9p+aWLh
-         8IWcqhMzpdLQQj/4hii2SRdx33JIiZqNjm7Sl45MaWxc725reCmZoTQ8jYMNkoS2zrbR
-         GL31qDBJD8FNtSt6/0nQerjPcclbfM4WMnImuLlPyCY94PKWNUc31uZ/4G+sRBiI3sUp
-         qTsg==
-X-Forwarded-Encrypted: i=1; AKwUvBwjJD9hVBl/4DQKPVKg+HrBwryrwL1MKsB10jr0ee62fChz+cXpO9FnRnRxLp48TUso9QdyMbLbQzaMuIzbcG4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLhrnLkTIVlC5GGYD2LXyY6LLY7sTOnrC7+tGIqFOfOyGCyWerp
-	XhIccJ1Zgnv3n76sPztNUE8Jj2yNgt/NB949FpvYPzqc7zqp4bigT8BcJ0nx4EMePheCf8vLWW2
-	ANVloMm5CLGZYQyUOPT51r/FkiOm9j6Y=
-X-Gm-Gg: AYBFou13gIFUf9pH94goL7sG8becN711pLxlCLELvoSDXtuoFx/sAAfG9T7ENRvsLwn
-	wuRCO63SFRDpQAuUD6nCOKX19RKlaOn3W3HkDk3qkM8uOZdDl+3FPDvVaTdgaqrxakl705WZWVR
-	nQxnVRBO5hvZitN2Idf/jbohyAgfnLd/CVmY1WMcxJiwIUwTRFTbHRkHUUzRlh/e7mlsmNHRO10
-	gBulVZqZmX3VsT0jBZtIT2NQHiPXY5RUq4eZ6a+rcSj/FnRkUZwJnsJqP9jHd9t92l58+wk8t31
-	TevbHbO6GDHcpeVJOmwukZxD2zjsZOJB3FouTjf9+leGRogyFqvuEmwARWZWvwZWETk=
-X-Received: by 2002:a05:600d:82f3:b0:4a0:ec5:46d9 with SMTP id
- 5b1f17b1804b1-4a1c65b9d1cmr49895815e9.0.1792120227297; Thu, 15 Oct 2026
- 20:10:27 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792121141; x=1792725941;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=SxVPECSRUSDaMuR9TFbDdAvOjcSyDgcao7qv4wsHXtI=;
+        b=DHdBu8q7hOue6WGPfHXSbZ+JUDirvbxnCtMjVGVlg1tLvMfTcynoMyAurPwKgIM8xs
+         kczXnTD98QNRA7cXydiMi/5wMPHBhnlrZBWpAy1CIsQQn1yMYh+ezxL9Bihi3xVSKWCT
+         EqNsFh9wBfy2i2UoSkLG0QGXDupPF4cr/ihvO4LyFBHz6L8yZ1zN6g2bA8BRgCS+aa9J
+         pO/3lM1ki1cLVLkQ1jpzlM64dp0+VbMjcAHu9eWdqcKlIOmoJRm833yWfijvUCSUuUyr
+         4ZOUhclY4x76cjPMOkYTsgjDFtVR7lZ/xwchKu1F31h8WQrtC+vL9YrsPDs4SZlUGJvd
+         ZSYA==
+X-Forwarded-Encrypted: i=1; AKwUvByZ1eRPzy72Bo6vCGHu4nI4lHooOaZd+kRrjdCQ9WFHuQqyDupWzkSMxLbzh+fQzWw9YGP74/Z5NK7o4UIOj8s=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKr8Z+BVt1m+QQG8FTIz+gPkCopiLkJsxVCW3hBBBc9r4KK6QA6
+	qAZOSzZn1qIc2EJvpFPZVYHo3wQABUmItF/LGwMSkPn7K2Rpo9qJNrgh
+X-Gm-Gg: AYBFou063aqieb+yH+1rZNHphdcGShJzkgh8MTK0FrFnoZQkYm283/tARXmD0oY90xA
+	li7KQq1Ck9RejmpkMcRbrGBFkiMuhzTjovvabbAQ8cd0mMMO/38/fz+3ayHDAzmhlN8Gsr6fIEl
+	s8nKJBdUwsPxjAgEFrOOxNu4UBEF8ahzTOl7aZJ5Iz3apvnf2aVlgefOckJbiZPxCkMNnhwD1ub
+	oKtyvciOJWRP29oBuuh7p84TjRnovFP//0EhwcXuC63C4y1cgAqwYCGDK+hpdRqpuaBTrP6J8M2
+	soK6ujoxlUfyaRnK1OCxF1O1GlgnuRrh5riKHL5DSokW2FqrdddHEhZEVeIqNGdoqez7n7dt8ko
+	BkAtYuKj7R1FnQsioqo/x3OnFzZMlJI3sNurk2jAQ+svzVFZ39PMy5ChL7w6XM1wqWXZV9qj+7H
+	3gav2FnlBm73mVP3RXzNTQrUlnTEr1AHFVSaFr9jYZEdu9npYYGHmBV9E6glJW8jOvLw==
+X-Received: by 2002:a05:701b:420a:10b0:14d:3c0c:79e8 with SMTP id a92af1059eb24-16a5afe5490mr27285427c88.10.1792121140488;
+        Thu, 15 Oct 2026 20:25:40 -0700 (PDT)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831b75ac0fsm1758486c88.15.2026.10.15.20.25.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2026 20:25:39 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Date: Fri, 16 Oct 2026 11:25:34 +0800
+Subject: [PATCH bpf-next v2] selftests/bpf: Record only the test ICMP echo
+ in tc8 of tc_netkit_scrub
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261005171529.1378809-1-kunwu.chan@gmail.com>
- <20261005171529.1378809-9-kunwu.chan@gmail.com> <as3aMmPdCHCXW6Ci@U-YXDQC754-96.local>
-In-Reply-To: <as3aMmPdCHCXW6Ci@U-YXDQC754-96.local>
-From: KunWu Chan <kunwu.chan@gmail.com>
-Date: Fri, 16 Oct 2026 11:10:14 +0800
-X-Gm-Features: AclHuK-luj00YvB6W0gzUZaHST8ZYYHX_eNK_3NZlyZFFvQwwdxXevqOtbkN0mU
-Message-ID: <CAN_Opa9V-nXQ8-PyntDGaQDw4jQs0Z99J07pdApH3+EoTHyTcQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 08/15] locking/lockdep: use hazptr to wait for
- dynamic key lookups
-To: Lai Jiangshan <jiangshanlai@gmail.com>
-Cc: paulmck@kernel.org, corbet@lwn.net, mingo@redhat.com, frederic@kernel.org, 
-	neeraj.upadhyay@kernel.org, josh@joshtriplett.org, urezki@gmail.com, 
-	dave@stgolabs.net, lianux.mm@gmail.com, stern@rowland.harvard.edu, 
-	parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org, 
-	boqun@kernel.org, npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk, 
-	luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com, 
-	joelagnelf@nvidia.com, skhan@linuxfoundation.org, rdunlap@infradead.org, 
-	longman@redhat.com, rostedt@goodmis.org, mathieu.desnoyers@efficios.com, 
-	qiang.zhang@linux.dev, brads@mainlining.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, lkmm@lists.linux.dev, linux-doc@vger.kernel.org, 
-	rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261016-selftests-bpf-tc-netkit-scrub-v2-1-b484a7ce2a63@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAC2Z0WoC/42NQQqDMBBFryKz7pSJiGJXvUdxoXGiQzWWTCoW8
+ e5NPUGXj8d/fwflIKxwy3YIvIrK4hPklwzs2PqBUfrEkFNeGqIalScXWaNi93IYLXqOT4moNrw
+ 7dMRdXVPRk60gNV6BnWxn/wG/gectQpPMKBqX8DmPV3P6Pz9WgwZdUVqq2oK4svdhbmW62mWG5
+ jiOL9iH30rUAAAA
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ Nikolay Aleksandrov <razor@blackwall.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
+X-Mailer: b4 0.13.0
 
-On Tue, Oct 13, 2026 at 3:40=E2=80=AFPM Lai Jiangshan <jiangshanlai@gmail.c=
-om> wrote:
->
-> On Tue, Oct 06, 2026 at 01:15:22AM +0800, Kunwu Chan wrote:
-> > lockdep_unregister_key() waits for is_dynamic_key() callers with
-> > synchronize_rcu_expedited(), which requires system-wide coordination.
-> > Make is_dynamic_key() protect the hash bucket with a hazard pointer
-> > and use hazptr_synchronize() to wait for traversals of that bucket.
-> >
-> > The hash bucket returned by keyhashentry() has a stable address, so
-> > it can be used as the hazptr synchronization target.  Keep the key
-> > hashlist lifetime RCU-based with hlist_del_rcu() and call_rcu().
-> >
-> > Protect the traversal with the hazptr scoped_guard() added earlier
-> > in this series.
-> >
-> > This adapts the lockdep use case from Boqun Feng's shazptr series
-> > to the current hazptr API.
-> >
-> > Link: https://lore.kernel.org/lkml/20250625031101.12555-1-boqun.feng@gm=
-ail.com/
->
-> Hello,
->
-> I think this is a misuse of hazard pointers.
->
-> The bucket has a permanent, static address; its lifetime does not
-> need hazard-pointer protection. Instead, this patch combines a
-> hazard pointer with that address to construct a read-side/synchronize
-> mechanism in the same category as RCU. However, this construction
-> lacks the generation distinction needed to separate pre-existing
-> readers from subsequent readers.
->
-> The object being removed is the key, but the synchronization target
-> is the bucket. Unlinking the key does not prevent new lookups from
-> acquiring the same bucket address, including lookups for unrelated
-> keys that hash to that bucket.
->
-> This breaks the forward-progress argument used by the underlying
-> hazptr implementation: after removing an object from publication,
-> there should not be a continuing stream of new readers acquiring
-> that same object. Here, the bucket is never unpublished.
->
-> For example, let B be the bucket containing key K:
->
->   Updater                    Reader                 Scan kthread
->   -------                    ------                 ------------
->   Unlink K from B
->   hazptr_synchronize(B)
->                              Acquire B
->                                                     Observe B;
->                                                     retain waiter
->                              Release B
->                              Acquire B again
->                                                     Observe B;
->                                                     retain waiter
->                              Release B
->                              ...                    ...
->
-> Every reader critical section can finish, and the scan kthread
-> can keep running, while the updater waits indefinitely. Readers
-> that could have observed K may already have completed; later
-> lookups alone can keep the waiter pending.
->
-> RCU does not need the reader population to become empty. Its
-> generation (grace-period) machinery allows pre-existing readers to
-> drain without letting a continuous stream of subsequent readers
-> indefinitely extend that wait. This address-based construction has
-> no equivalent distinction.
->
-> So this is not merely protecting a different object with hazptr:
-> it is using hazptr as a different synchronization primitive without
-> providing the corresponding progress guarantee.
->
-> I think we should retain the RCU wait here. If the intention is to
-> implement bucket-scoped read-side synchronization, that needs an
-> explicit protocol to distinguish the readers being drained from
-> new arrivals; a permanent bucket address is not sufficient.
->
-> Sorry for the lengthy reply, which was written with the help of an AI
-> agent. I noticed this issue when this use case was first proposed, but
-> I struggled to articulate my concerns clearly back then. Well, now we
-> have AI. :)
->
+tc_netkit_scrub attaches tc8 to the primary netkit device, sends an ICMP
+echo with a mark and a priority through it, and checks the mark and the
+priority that tc8 saw against what the scrub mode lets through.
 
-Hi Lai, thanks for pointing this out.
-And thanks Boqun, Mathieu, and Paul for the helpful replies.
+tc8 records the mark and priority of every packet it sees, and the
+device also carries what the system sends on its own once the device
+is up, like IPv6 neighbor discovery or the mDNS of avahi-daemon. When
+such a packet goes out after the echo, it overwrites what tc8 recorded,
+and the test finds a mark and a priority of 0.
 
-I'll look into adding an RCU-stall-like mechanism to detect
-long-lived pointer waiters, and work with Boqun and Mathieu
-to find a more suitable scenario to exercise this case.
+Record only IPv4 ICMP packets in tc8.
 
-Thanks,
-Kunwu
+tc_netkit_scrub run 100 times on a bpf-next kernel with KASAN enabled,
+x86_64 VM with 32 vCPUs and avahi-daemon running, before and after this
+patch:
 
-> Thanks
-> Lai
->
-> > Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
-> > ---
-> >  kernel/locking/lockdep.c | 25 +++++++++++++++----------
-> >  1 file changed, 15 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-> > index c56a7f91d72e..d1ce5ace7fbf 100644
-> > --- a/kernel/locking/lockdep.c
-> > +++ b/kernel/locking/lockdep.c
-> > @@ -58,6 +58,7 @@
-> >  #include <linux/context_tracking.h>
-> >  #include <linux/console.h>
-> >  #include <linux/kasan.h>
-> > +#include <linux/hazptr.h>
-> >
-> >  #include <asm/sections.h>
-> >
-> > @@ -1280,14 +1281,19 @@ static bool is_dynamic_key(const struct lock_cl=
-ass_key *key)
-> >
-> >       hash_head =3D keyhashentry(key);
-> >
-> > -     rcu_read_lock();
-> > -     hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
-> > -             if (k =3D=3D key) {
-> > -                     found =3D true;
-> > -                     break;
-> > +     {
-> > +             struct hazptr_ctx ctx;
-> > +             void *bucket =3D hash_head;
-> > +
-> > +             scoped_guard(hazptr, &ctx, &bucket) {
-> > +                     hlist_for_each_entry_rcu(k, hash_head, hash_entry=
-, 1) {
-> > +                             if (k =3D=3D key) {
-> > +                                     found =3D true;
-> > +                                     break;
-> > +                             }
-> > +                     }
-> >               }
-> >       }
-> > -     rcu_read_unlock();
-> >
-> >       return found;
-> >  }
-> > @@ -6683,11 +6689,10 @@ void lockdep_unregister_key(struct lock_class_k=
-ey *key)
-> >        *
-> >        * Some operations like __qdisc_destroy() will call this in a deb=
-ug
-> >        * kernel, and the network traffic is disabled while waiting, hen=
-ce
-> > -      * the delay of the wait matters in debugging cases. Currently us=
-e a
-> > -      * synchronize_rcu_expedited() to speed up the wait at the cost o=
-f
-> > -      * system IPIs. TODO: Replace RCU with hazptr for this.
-> > +      * the delay of the wait matters in debugging cases. Replace the
-> > +      * expedited RCU wait with hazptr_synchronize().
-> >        */
-> > -     synchronize_rcu_expedited();
-> > +     hazptr_synchronize(keyhashentry(key));
-> >  }
-> >  EXPORT_SYMBOL_GPL(lockdep_unregister_key);
-> >
-> > --
-> > 2.43.0
-> >
+            before                                after
+  outcome   2 of 100 failed (mark and priority 0)   0 of 100 failed
+
+Fixes: 716fa7dadf11 ("selftests/bpf: Extend netkit tests to validate skb meta data")
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+---
+V1 -> V2:
+- Check the packet in tc8 the way tc1 and tc7 do, with
+  __bpf_constant_htons() and a goto out for each check (Daniel)
+- Add before/after data
+
+v1: https://lore.kernel.org/r/20261009-selftests-bpf-tc-netkit-scrub-v1-1-f46c07a40e7c@gmail.com
+---
+ tools/testing/selftests/bpf/progs/test_tc_link.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_link.c b/tools/testing/selftests/bpf/progs/test_tc_link.c
+index 630f12e51b075..917d5e6c84c6f 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_link.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_link.c
+@@ -4,6 +4,8 @@
+ 
+ #include <linux/bpf.h>
+ #include <linux/if_ether.h>
++#include <linux/in.h>
++#include <linux/ip.h>
+ #include <linux/stddef.h>
+ #include <linux/if_packet.h>
+ #include <bpf/bpf_endian.h>
+@@ -119,11 +121,21 @@ SEC("tc/egress")
+ int tc8(struct __sk_buff *skb)
+ {
+ 	struct net_device *dev = BPF_CORE_READ((struct sk_buff *)skb, dev);
++	struct iphdr iph = {};
++
++	/* Look only at the ICMP echo of the test, not at IPv6 ND or mDNS */
++	if (skb->protocol != __bpf_constant_htons(ETH_P_IP))
++		goto out;
++	if (bpf_skb_load_bytes(skb, sizeof(struct ethhdr), &iph, sizeof(iph)))
++		goto out;
++	if (iph.protocol != IPPROTO_ICMP)
++		goto out;
+ 
+ 	seen_tc8 = true;
+ 	mark = skb->mark;
+ 	prio = skb->priority;
+ 	headroom = BPF_CORE_READ(dev, needed_headroom);
+ 	tailroom = BPF_CORE_READ(dev, needed_tailroom);
++out:
+ 	return TCX_PASS;
+ }
+
+---
+base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+change-id: 20261009-selftests-bpf-tc-netkit-scrub-f0eb9904d0c7
+
+Best regards,
+-- 
+Qiliang Yuan <odys.yuan@gmail.com>
+
