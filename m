@@ -1,92 +1,111 @@
-Received: from mta0.migadu.com (out-119.mta0.migadu.com [91.218.175.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6123C39CCF8
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1AB24DCF9;
+	Fri, 16 Oct 2026 02:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792118630; cv=none; b=IXY6YK2DXgZZuTEnknkFoxsVWJvw+1LGh7Cyck6KLAgPb5m+rItzMzvKkRo2vGSzpkhlXjNJXgKqJg2jPavPs/yDSmTQamy/F0zfqHidldqJEa4gBu/IoXGztIXY4XLGumNzHPGB8A4KSBcyVoxGsmB66xFJPv65/K+npAFUxvg=
+	t=1792118719; cv=none; b=p7SqTFKRTUpREuRRaXWgtWoqZnJUAMHuFWV4TTKW4RYRWH9xKqo+IB4sdvN9vgX6MzLLb9ECJBEIKxkUyX4BYi264i4oXEyuPxLDUEx+IRVYO1KOABc7QCGbk+DWqvqOFURSCiShPOVcAPtS8I1v8hOP6zQsT6or9nJsFv41e9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792118630; c=relaxed/simple;
-	bh=vWZ/hae/0kIcNybhhEkkPXgWxtSubbVnInKF9+ZL+lk=;
+	s=arc-20240116; t=1792118719; c=relaxed/simple;
+	bh=I7+ilmraSUzrcNxZh6aozdurxXD2/t/E4qtyy+eo2ZA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dw5eROGPCfkoUmDKZ68ajATAK2JQbHHW3duJr+8jEoUyUEvbZGNKSYU4VvjrFOcCmdkOTaMsQd8/ke1Y/pdeRiMEs3DSUNOzJYrGmaph8veMBFWfy8TwfXHqjdR70aVyJyrxdnGjbB6/qbf8rcPEEFiqMOEHjyM+EKACkm2hWKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ENgyG2EC; arc=none smtp.client-ip=91.218.175.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=MSpJAeSnPuCysP2YipVMpDnO76UDmnNeWT+YskLH1xgxqVXTdH3dGtikFHCu+U9ZC3imWllrKrVp/3IsMWRsC8EsQj6tmRcn9CkmU3Q+CHOvI0D47SItpJCrMrZzujSYtzP/cXaPi/twcAJcTNRc6Nc3pMJWnNFTFHkGuTY38Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tl89BIlt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ENgyG2EC"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=vWZ/hae/0kIcNybhhEkkPXgWxtSubbVnInKF9+ZL+lk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792118626; v=1; x=1792723426;
- b=ENgyG2EC1a3j0WBHbH4zOt5Q6MIo0Dg7FWnmDWqQboELQ4r65PzjSsxr+P+L7SkuL5NZeWaj
- tUc66jtkx+R2WPlCWW3wil6rR0eNSL9lAA+NjOWpRQPngguzvJCZ6YHFZNADqdHMaFvNshz7s/X
- Vu/6ng2+O5VNFUQDHPkefVRY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id fa0e80597ab449b7;
-	Fri, 16 Oct 2026 02:43:46 +0000
-X-Mizu-Trace-ID: fa0e80597ab449b7
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 16 Oct 2026 10:43:35 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Ivan Vecera <ivecera@redhat.com>
-Cc: netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>, Shuah Khan <shuah@kernel.org>,
-	Victor Nogueira <victor@mojatatu.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] selftests: tc-testing: use $IP in hfsc test 8c39
- setup
-Message-ID: <atGPVzNYUlKY0ekD@fedora>
-References: <20261014121414.2373985-1-ivecera@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tl89BIlt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1575B1F000C4;
+	Fri, 16 Oct 2026 02:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792118718;
+	bh=BlIAy6HWo/kXDgbJZFG7yiw+GQkZq+GDaDT/QL7WkBc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Tl89BIltyTTokDGzdufyAZ6ob3g3JEU0o48X8/1H668RQXcWWw7OyRyyFBGX9KKmP
+	 CB0g0F7rY0BdBYqGSSVNQ0edFTZVri+fs5HG5A29Q+MGETD88WePbAp43yNZ1YYtrm
+	 xFwBOW+dErAYs7zf89loNyvCHLzTsqky9GyIrhHtRG874k9RbroVxl/uzoOZj2Cp2U
+	 /rHTmN0fZiq/y8+Rvq/fuPNdqpHRy2KWcE2ISDosSi2wZx9a7CvXQy92Jxrz4y1Yl7
+	 4Ekl6DvhUxkCNbgOWwQ2jkBa0DhXhOR1I2gh4qczpQ9lk0Kla0a3dVmrGT2DTDEEjY
+	 Y4gnHIBvLxR1g==
+Date: Thu, 15 Oct 2026 22:45:16 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+	linux-kbuild@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 4/6] tools: build kernel selftests in tools_build
+Message-ID: <atGPvKj_8pq2VPzh@laps>
+References: <20261011233647.2454648-1-sashal@kernel.org>
+ <20261011233647.2454648-5-sashal@kernel.org>
+ <8ee33f00-bd8f-4cf2-90c4-2961f443af60@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20261014121414.2373985-1-ivecera@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8ee33f00-bd8f-4cf2-90c4-2961f443af60@t-8ch.de>
 
-On Wed, Oct 14, 2026 at 02:14:12PM +0200, Ivan Vecera wrote:
-> Test 8c39 brings up lo with a bare "ip" command. nsPlugin runs it as
-> "$IP netns exec <ns> ip ...", and as tdc runs commands with an empty
-> environment, "ip netns exec" searches only the default execvp() path
-> (/bin:/usr/bin). On systems that install ip only in /sbin, like Fedora,
-> the setup fails:
-> 
->   # ./tdc.py -e 8c39
->   Test 8c39: HFSC classify walk still reaches leaf after lateral drift
->   -----> prepare stage *** Could not execute: "ip link set lo up"
->   -----> prepare stage *** Error message: "exec of "ip" failed: No such file or directory
-> 
-> Use $IP like all other tdc tests do.
-> 
-> Fixes: 1e24c4f2ee44 ("selftests: tc-testing: add a lateral-drift hfsc classify-walk test")
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> ---
->  tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
-> index 4f6bbb8b57f9..557730eef055 100644
-> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
-> @@ -181,7 +181,7 @@
->              "requires": "nsPlugin"
->          },
->          "setup": [
-> -            "ip link set lo up",
-> +            "$IP link set lo up",
->              "$TC qdisc add dev lo handle 1: root hfsc default 30",
->              "$TC class add dev lo parent 1: classid 1:1 hfsc rt m2 100kbit",
->              "$TC class add dev lo parent 1:1 classid 1:10 hfsc rt m2 50kbit",
-> -- 
-> 2.56.0
-> 
+On Tue, Oct 13, 2026 at 10:41:00PM +0200, Thomas Weißschuh wrote:
+>On 2026-10-11 19:36:43-0400, Sasha Levin wrote:
+>> Add a "Kernel selftests" sub-menu with one entry per selftests directory
+>> that builds with only a C library and does not write into the source
+>> tree. Each is built as "make kselftest-all" builds it, with KHDR_INCLUDES
+>> pointing at the UAPI headers installed in the object tree, but by its own
+>> make, so the selected ones build in parallel. Selftests whose Makefile
+>> does not use KHDR_INCLUDES still build against the C library's copy of
+>> the UAPI headers.
+>>
+>> The selftests do not track header dependencies, so a selftest is built
+>> again from scratch when its own directory, a header or makefile any
+>> selftest may share, or a kernel source it includes directly (the vDSO
+>> test includes the architecture's vDSO code) is newer than its last
+>> build.
+>>
+>> Selftests that need libraries beyond the C library, a vmlinux with BTF,
+>> or a sanitizer runtime are left out for now.
+>>
+>> Assisted-by: LLM
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> ---
+>>  tools/Kconfig         | 239 ++++++++++++++++++++++++++++++++++++++++++
+>>  tools/Makefile.kbuild | 100 ++++++++++++++++++
+>>  2 files changed, 339 insertions(+)
+>
+>(...)
+>
+>> diff --git a/tools/Makefile.kbuild b/tools/Makefile.kbuild
+>> index 62fd494253eca..c31347258d0a9 100644
+>> --- a/tools/Makefile.kbuild
+>> +++ b/tools/Makefile.kbuild
+>> @@ -92,6 +92,106 @@ PHONY += perf
+>>  perf: FORCE
+>>  	$(call build,$(outdir)/perf,-C $(toolsdir)/perf -f Makefile.perf O=$(outdir)/perf $(perf-flags) $(perf-flags-y),,TOOLS_BUILD_PERF)
+>
+>(...)
+>
+>> +# Unlike tools/build, the selftests do not track header dependencies. A
+>> +# selftest is built again from scratch when its own directory, a header or
+>> +# makefile any selftest may share, or a kernel source it includes directly
+>> +# is newer than its last build.
+>> +selftest-shared := $(outdir)/selftests/.shared
+>> +selftest-extra-vDSO := $(abs_srctree)/arch/$(SRCARCH)
+>
+>Can we not fix the selftests to properly track header dependencies?
+>That has been an annoyance of mine for quite some time.
+>It would also get rid of a whole bunch of hackery here.
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Ugh... I suppose? The current check is also incomplete: it misses headers
+outside the paths it watches, such as include/linux/annotate.h, which the vDSO
+test pulls in, or tools/arch/x86/include/uapi, used by ir and proc.
+
+I'll see if I can fix it up... 
+
+-- 
+Thanks,
+Sasha
