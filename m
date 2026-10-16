@@ -1,179 +1,93 @@
-Received: from mta1.migadu.com (out-30.mta1.migadu.com [95.215.58.30])
+Received: from mta1.migadu.com (out-122.mta1.migadu.com [95.215.58.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4185E284880
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D48E34750F
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792117366; cv=none; b=gMpRUy16l2NcOk32o2kw4EZNkIT4S0vqOhPpy5aV+evsRJn0+sojaYF9zLB2zvs5tuo2rKnVZrUHp46Qc4rbPTudA+4mAQlMVoYCkSPEat3hKztr5+4c6zm5vGxwhBoT5pPXZAXgK5rIkF5An1yFMLIPDcXeo3cvei4TKMCYeR0=
+	t=1792118535; cv=none; b=spT7ygKw+WaSZeT68UM3o3Ae7myDrsyi2jCsetJvt6TB0QhOKX8LDkXUdMw1ZKOR+eFJJBbA2CP94HwAc0LRQAyPbeIZvKAeIMsg+C1u1D5P20Ma6QXBeGIdOkRvINbJ2gBsZN5pRbO2zLJ9+4BJXvKpCfgs4H++jk2qo5YjLvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792117366; c=relaxed/simple;
-	bh=SdQ6kJyMEO0gh3BM/SI7J243J1sPEJVlOZXKOSbqdoc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g59eIElct1Ft2HXMxJF5zuSFwg1fLR1Iy38i2zXxlVpPaGX+RzF1isAb2VlsDibooKl9z5aYBy5FiOXJe/GKsyKzVV99IGoh5DxgnBJVirHkil7IMQUv/TqW85Wz//3KmuCAl53NOrzXRhRk/JrYFyda8IhvGpBD4mQL01OyoFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rR1TDjrw; arc=none smtp.client-ip=95.215.58.30
+	s=arc-20240116; t=1792118535; c=relaxed/simple;
+	bh=JiozdCoEa+i8cnI7fmP2rtddLWizrFN6D4IuJeVEtY0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HVW4paowSqpJyKBo4rcFJS0NbBfFW7/66isgufa2x0JoMXcbe9LvZr7kReX5aYV2gSPncWersmXKEk8qT2ZtAEMa4aRnLe6B5RnYYjlXVftu043kRU4na6Qzg0jt2DxJGVM2YPbSdB7MNsCghdzL8ndaQNvStc3W/kKqg3VoX4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aACR5q0P; arc=none smtp.client-ip=95.215.58.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rR1TDjrw"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aACR5q0P"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SdQ6kJyMEO0gh3BM/SI7J243J1sPEJVlOZXKOSbqdoc=;
+DKIM-Signature: a=rsa-sha256; bh=JiozdCoEa+i8cnI7fmP2rtddLWizrFN6D4IuJeVEtY0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792117363; v=1; x=1792722163;
- b=rR1TDjrwnddUvXDR11Hgz8Bd2EYcDHa3XdBAbu5YFCjNxBJqqCxorGQ3vhWlawUUz1CznhEa
- FSfjqgIyqXUapI55di3C5VwbNnqBpGSiqW3azeepgnBIzDq6dFvRsvBCZ6UTVUNu/YNFVxkyvhL
- q6oMmr0xlP2o9QCFVpSdo8bk=
+ t=1792118531; v=1; x=1792723331;
+ b=aACR5q0P6b7Nprm8T89n+YFuPkOPeMamjr53GO0MjKX3czR+OUsjIpB+amduBTOPgsgvnYET
+ M96Eku+n6ZfMQHLfvhUq+fRyKjsyl4pJVxawCOA+uRCz43jQ3vSm85uXgwQJ43EbO7Jia2ClbXd
+ uLMvWWXfIo40+ypOHvtmW068=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 42672e19db55343e;
-	Fri, 16 Oct 2026 02:22:43 +0000
-X-Mizu-Trace-ID: 42672e19db55343e
+Received: by mta12.migadu.com with ESMTPS id aaefb83f638cd73e;
+	Fri, 16 Oct 2026 02:42:11 +0000
+X-Mizu-Trace-ID: aaefb83f638cd73e
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <5c776fbf-4785-4b10-a7c4-65b54712ec94@linux.dev>
-Date: Fri, 16 Oct 2026 10:22:39 +0800
+Date: Fri, 16 Oct 2026 10:42:01 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Ivan Vecera <ivecera@redhat.com>
+Cc: netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
+	Jiri Pirko <jiri@resnulli.us>, Shuah Khan <shuah@kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] selftests: tc-testing: preload all qdisc
+ modules enabled in config
+Message-ID: <atGO-QnYwzjcyBr0@fedora>
+References: <20261014122045.2375722-1-ivecera@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v3 5/9] cgroup/cpuset: Properly disabling partition
- when partition state switching fails
-To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Randy Dunlap <rdunlap@infradead.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hui Peng <benquike@gmail.com>
-References: <20261014140548.575122-1-longman@redhat.com>
- <20261014140548.575122-6-longman@redhat.com>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <20261014140548.575122-6-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261014122045.2375722-1-ivecera@redhat.com>
 
-
-
-在 2026/10/14 22:05, Waiman Long 写道:
-> Before commit 103b08709e8a ("cgroup/cpuset: Fail if isolated and nohz_full
-> don't leave any housekeeping"), the partition state can be freely switched
-> from "root" to "isolated" and vice versa. After that commit, the switch
-> from "root" to "isolated" can fail if it exhausts all the housekeeping
-> CPUs. Later on, the switch from "isolated" to "root" can also fail if
-> some of the partition CPUs are boot-time isolated by "isolcpus".
+Hi Ivan,
+On Wed, Oct 14, 2026 at 02:20:45PM +0200, Ivan Vecera wrote:
+> tdc.sh preloads only some of the qdisc modules that the tc-testing
+> config enables. Add the missing ones: ingress, mqprio, multiq, netem,
+> pie, plug, prio, qfq, red, sfb, sfq, skbprio, taprio and tbf.
 > 
-> A local or remote partition is made invalid when the switch fails.
-> However there are 2 problems with the existing invalidation code.
-> 
->  1) Both the subpartitions_cpus and isolated_cpus are not properly
->     updated.
->  2) In the case of remote partition with remote_partition flag set, it
->     is not cleared.
-> 
-> Fix this by calling the proper partition disabling function in this case.
-> 
-> On an x86 test system with boot option "isolcpus=10 cgroup_debug" set
-> and more than 16 cores, the following commands were executed after boot.
-> 
->   # cd /sys/fs/cgroup
->   # echo +cpuset > cgroup.subtree_control
->   # cat cpuset.cpus.isolated
->   10
->   # mkdir A
->   # echo 10-12 > A/cpuset.cpus
->   # echo isolated > A/cpuset.cpus.partition
->   # cat A/cpuset.cpus.partition
->   isolated
-> 
-> Before the patch:
-> 
->   # echo root > A/cpuset.cpus.partition
->   # cat A/cpuset.cpus.partition
->   root invalid (partition config conflicts with housekeeping setup)
->   # cat cpuset.cpus.isolated .__DEBUG__.cpuset.cpus.subpartitions
->   10-12
->   10-12
-> 
-> After the patch:
-> 
->   # echo root > A/cpuset.cpus.partition
->   # cat A/cpuset.cpus.partition
->   root invalid (partition config conflicts with housekeeping setup)
->   # cat cpuset.cpus.isolated .__DEBUG__.cpuset.cpus.subpartitions
->   10
-> 
-> Reported-by: Tejun Heo <tj@kernel.org>
-> Link: https://lore.kernel.org/lkml/7f4c57b26ad120ab30adf35653f1dd94@kernel.org/
-> Fixes: 4a74e418881f ("cgroup/cpuset: Check partition conflict with housekeeping setup")
-> Fixes: 103b08709e8a ("cgroup/cpuset: Fail if isolated and nohz_full don't leave any housekeeping")
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
 > ---
->  kernel/cgroup/cpuset.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  tools/testing/selftests/tc-testing/tdc.sh | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 51723c299ca5..40c004386af0 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -2866,6 +2866,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->  	struct cpuset *parent = parent_cs(cs);
->  	struct tmpmasks tmpmask;
->  	bool isolcpus_updated = false;
-> +	bool disable_partition = false;
->  
->  	if (old_prs == new_prs)
->  		return 0;
-> @@ -2918,15 +2919,21 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->  		 * A change in load balance state only, no change in cpumasks.
->  		 * Need to update isolated_cpus.
->  		 */
-> -		if (prstate_housekeeping_conflict(new_prs, cs->effective_xcpus))
-> +		if (prstate_housekeeping_conflict(new_prs, cs->effective_xcpus)) {
-> +			disable_partition = true;
->  			err = PERR_HKEEPING;
-> -		else
-> +		} else {
->  			isolcpus_updated = true;
-> +		}
->  	} else {
->  		/*
->  		 * Switching back to member is always allowed even if it
->  		 * disables child partitions.
->  		 */
-> +		disable_partition = true;
-> +	}
-> +
-> +	if (disable_partition) {
->  		if (is_remote_partition(cs))
->  			remote_partition_disable(cs, &tmpmask);
->  		else
-> @@ -2935,7 +2942,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->  
->  		/*
->  		 * Invalidation of child partitions will be done in
-> -		 * update_cpumasks_hier().
-> +		 * update_cpumasks_hier() below.
->  		 */
->  	}
->  out:
-> @@ -2954,8 +2961,8 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->  		isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
->  	spin_unlock_irq(&callback_lock);
->  
-> -	/* Force update if switching back to member & update effective_xcpus */
-> -	update_cpumasks_hier(cs, &tmpmask, !new_prs);
-> +	/* Force update if partition is disabled & update effective_xcpus */
-> +	update_cpumasks_hier(cs, &tmpmask, disable_partition);
->  
->  	/* A newly created partition must have effective_xcpus set */
->  	WARN_ON_ONCE(!old_prs && (new_prs > 0)
+> diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
+> index dae19687912d..25cdc256287d 100755
+> --- a/tools/testing/selftests/tc-testing/tdc.sh
+> +++ b/tools/testing/selftests/tc-testing/tdc.sh
+> @@ -65,6 +65,20 @@ try_modprobe sch_gred
+>  try_modprobe sch_hfsc
+>  try_modprobe sch_hhf
+>  try_modprobe sch_htb
+> +try_modprobe sch_ingress
+> +try_modprobe sch_mqprio
+> +try_modprobe sch_multiq
+> +try_modprobe sch_netem
+> +try_modprobe sch_pie
+> +try_modprobe sch_plug
+> +try_modprobe sch_prio
+> +try_modprobe sch_qfq
+> +try_modprobe sch_red
+> +try_modprobe sch_sfb
+> +try_modprobe sch_sfq
+> +try_modprobe sch_skbprio
+> +try_modprobe sch_taprio
+> +try_modprobe sch_tbf
+>  try_modprobe sch_teql
+>  try_modprobe sch_dualpi2
+>  ./tdc.py -J"$(nproc)"
+> -- 
+> 2.56.0
+> 
 
-Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-
-Thanks,
-Guopeng
-
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
