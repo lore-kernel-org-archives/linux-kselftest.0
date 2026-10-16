@@ -1,45 +1,47 @@
-Received: from mta1.migadu.com (out-122.mta1.migadu.com [95.215.58.122])
+Received: from mta0.migadu.com (out-119.mta0.migadu.com [91.218.175.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D48E34750F
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6123C39CCF8
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792118535; cv=none; b=spT7ygKw+WaSZeT68UM3o3Ae7myDrsyi2jCsetJvt6TB0QhOKX8LDkXUdMw1ZKOR+eFJJBbA2CP94HwAc0LRQAyPbeIZvKAeIMsg+C1u1D5P20Ma6QXBeGIdOkRvINbJ2gBsZN5pRbO2zLJ9+4BJXvKpCfgs4H++jk2qo5YjLvY=
+	t=1792118630; cv=none; b=IXY6YK2DXgZZuTEnknkFoxsVWJvw+1LGh7Cyck6KLAgPb5m+rItzMzvKkRo2vGSzpkhlXjNJXgKqJg2jPavPs/yDSmTQamy/F0zfqHidldqJEa4gBu/IoXGztIXY4XLGumNzHPGB8A4KSBcyVoxGsmB66xFJPv65/K+npAFUxvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792118535; c=relaxed/simple;
-	bh=JiozdCoEa+i8cnI7fmP2rtddLWizrFN6D4IuJeVEtY0=;
+	s=arc-20240116; t=1792118630; c=relaxed/simple;
+	bh=vWZ/hae/0kIcNybhhEkkPXgWxtSubbVnInKF9+ZL+lk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HVW4paowSqpJyKBo4rcFJS0NbBfFW7/66isgufa2x0JoMXcbe9LvZr7kReX5aYV2gSPncWersmXKEk8qT2ZtAEMa4aRnLe6B5RnYYjlXVftu043kRU4na6Qzg0jt2DxJGVM2YPbSdB7MNsCghdzL8ndaQNvStc3W/kKqg3VoX4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aACR5q0P; arc=none smtp.client-ip=95.215.58.122
+	 Content-Type:Content-Disposition:In-Reply-To; b=dw5eROGPCfkoUmDKZ68ajATAK2JQbHHW3duJr+8jEoUyUEvbZGNKSYU4VvjrFOcCmdkOTaMsQd8/ke1Y/pdeRiMEs3DSUNOzJYrGmaph8veMBFWfy8TwfXHqjdR70aVyJyrxdnGjbB6/qbf8rcPEEFiqMOEHjyM+EKACkm2hWKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ENgyG2EC; arc=none smtp.client-ip=91.218.175.119
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aACR5q0P"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ENgyG2EC"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JiozdCoEa+i8cnI7fmP2rtddLWizrFN6D4IuJeVEtY0=;
+DKIM-Signature: a=rsa-sha256; bh=vWZ/hae/0kIcNybhhEkkPXgWxtSubbVnInKF9+ZL+lk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792118531; v=1; x=1792723331;
- b=aACR5q0P6b7Nprm8T89n+YFuPkOPeMamjr53GO0MjKX3czR+OUsjIpB+amduBTOPgsgvnYET
- M96Eku+n6ZfMQHLfvhUq+fRyKjsyl4pJVxawCOA+uRCz43jQ3vSm85uXgwQJ43EbO7Jia2ClbXd
- uLMvWWXfIo40+ypOHvtmW068=
+ t=1792118626; v=1; x=1792723426;
+ b=ENgyG2EC1a3j0WBHbH4zOt5Q6MIo0Dg7FWnmDWqQboELQ4r65PzjSsxr+P+L7SkuL5NZeWaj
+ tUc66jtkx+R2WPlCWW3wil6rR0eNSL9lAA+NjOWpRQPngguzvJCZ6YHFZNADqdHMaFvNshz7s/X
+ Vu/6ng2+O5VNFUQDHPkefVRY=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id aaefb83f638cd73e;
-	Fri, 16 Oct 2026 02:42:11 +0000
-X-Mizu-Trace-ID: aaefb83f638cd73e
+Received: by mta12.migadu.com with ESMTPS id fa0e80597ab449b7;
+	Fri, 16 Oct 2026 02:43:46 +0000
+X-Mizu-Trace-ID: fa0e80597ab449b7
 X-Migadu-Flow: FLOW_OUT
-Date: Fri, 16 Oct 2026 10:42:01 +0800
+Date: Fri, 16 Oct 2026 10:43:35 +0800
 From: Hangbin Liu <hangbin.liu@linux.dev>
 To: Ivan Vecera <ivecera@redhat.com>
 Cc: netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
 	Jiri Pirko <jiri@resnulli.us>, Shuah Khan <shuah@kernel.org>,
+	Victor Nogueira <victor@mojatatu.com>,
+	Jakub Kicinski <kuba@kernel.org>,
 	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
 	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] selftests: tc-testing: preload all qdisc
- modules enabled in config
-Message-ID: <atGO-QnYwzjcyBr0@fedora>
-References: <20261014122045.2375722-1-ivecera@redhat.com>
+Subject: Re: [PATCH net] selftests: tc-testing: use $IP in hfsc test 8c39
+ setup
+Message-ID: <atGPVzNYUlKY0ekD@fedora>
+References: <20261014121414.2373985-1-ivecera@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,44 +50,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261014122045.2375722-1-ivecera@redhat.com>
+In-Reply-To: <20261014121414.2373985-1-ivecera@redhat.com>
 
-Hi Ivan,
-On Wed, Oct 14, 2026 at 02:20:45PM +0200, Ivan Vecera wrote:
-> tdc.sh preloads only some of the qdisc modules that the tc-testing
-> config enables. Add the missing ones: ingress, mqprio, multiq, netem,
-> pie, plug, prio, qfq, red, sfb, sfq, skbprio, taprio and tbf.
+On Wed, Oct 14, 2026 at 02:14:12PM +0200, Ivan Vecera wrote:
+> Test 8c39 brings up lo with a bare "ip" command. nsPlugin runs it as
+> "$IP netns exec <ns> ip ...", and as tdc runs commands with an empty
+> environment, "ip netns exec" searches only the default execvp() path
+> (/bin:/usr/bin). On systems that install ip only in /sbin, like Fedora,
+> the setup fails:
 > 
+>   # ./tdc.py -e 8c39
+>   Test 8c39: HFSC classify walk still reaches leaf after lateral drift
+>   -----> prepare stage *** Could not execute: "ip link set lo up"
+>   -----> prepare stage *** Error message: "exec of "ip" failed: No such file or directory
+> 
+> Use $IP like all other tdc tests do.
+> 
+> Fixes: 1e24c4f2ee44 ("selftests: tc-testing: add a lateral-drift hfsc classify-walk test")
 > Signed-off-by: Ivan Vecera <ivecera@redhat.com>
 > ---
->  tools/testing/selftests/tc-testing/tdc.sh | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+>  tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
-> index dae19687912d..25cdc256287d 100755
-> --- a/tools/testing/selftests/tc-testing/tdc.sh
-> +++ b/tools/testing/selftests/tc-testing/tdc.sh
-> @@ -65,6 +65,20 @@ try_modprobe sch_gred
->  try_modprobe sch_hfsc
->  try_modprobe sch_hhf
->  try_modprobe sch_htb
-> +try_modprobe sch_ingress
-> +try_modprobe sch_mqprio
-> +try_modprobe sch_multiq
-> +try_modprobe sch_netem
-> +try_modprobe sch_pie
-> +try_modprobe sch_plug
-> +try_modprobe sch_prio
-> +try_modprobe sch_qfq
-> +try_modprobe sch_red
-> +try_modprobe sch_sfb
-> +try_modprobe sch_sfq
-> +try_modprobe sch_skbprio
-> +try_modprobe sch_taprio
-> +try_modprobe sch_tbf
->  try_modprobe sch_teql
->  try_modprobe sch_dualpi2
->  ./tdc.py -J"$(nproc)"
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
+> index 4f6bbb8b57f9..557730eef055 100644
+> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
+> @@ -181,7 +181,7 @@
+>              "requires": "nsPlugin"
+>          },
+>          "setup": [
+> -            "ip link set lo up",
+> +            "$IP link set lo up",
+>              "$TC qdisc add dev lo handle 1: root hfsc default 30",
+>              "$TC class add dev lo parent 1: classid 1:1 hfsc rt m2 100kbit",
+>              "$TC class add dev lo parent 1:1 classid 1:10 hfsc rt m2 50kbit",
 > -- 
 > 2.56.0
 > 
