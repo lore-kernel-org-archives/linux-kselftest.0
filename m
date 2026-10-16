@@ -1,68 +1,69 @@
 Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6D73191D6
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826013A9619
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:59:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792119557; cv=none; b=FXE1MRb5Z6xE6JTBr0+Jfk8WvRxKUlARaS4ZK3lww+qORpajrRuBNW7eROrU9yytiMGy4QK8E0Wh+fzZVQUky9NWQoKVfRjnINizKmcT1GASMv256IwJmGIScI/N8t6WNnRE0BiM/T5akwmJ3xmRHbbWmcceEC6USh77zBC911o=
+	t=1792119562; cv=none; b=UqRoUI6u0/foaWJx7hTKTKxdSYyNwsumPTx2QUT+BzZ57vZiISv75Rpn+7z6pwaBPvTUVJhNVVUbQxblC44kJWumgTN+vLZuI0MW2a2IFUR5O2Ej4+GMNy3NrAbwglvNgIrIJXmQ2+fkYkkTJdEytqgU1sqHrgR8m6CWRWWcFuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792119557; c=relaxed/simple;
-	bh=0imXMVLvOwwix9YUdq6XqYgfrrARm+8HJOJ2LHyQZMA=;
+	s=arc-20240116; t=1792119562; c=relaxed/simple;
+	bh=RYNq5BB5qmCL5WHlAW+hqwgCZugQVCL/BrXHrxUGlNo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=C4UZNJbS1povBUCUy8R4tKlc0Fbq8aqDLZujfnfOWYRf/mpUPWD2oCYXpqhIrAweckfAZZoR2ML/p+w+b9yHCM+enVMZC0OfTP2VceDddQfS1lD/FzBJQpRF6qXHwiW9Y6vmjHcPcI+75WsfERwSuABnVCeE14coxXeXgBTG3DY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gEd6Pkjh; arc=none smtp.client-ip=74.125.82.181
+	 In-Reply-To:To:Cc; b=lwY6DA+Au+kxrFVRvz21GH9Dje9FaktyAnufEqQFfPAZ9ixPlAnHvTxhApjKnHjm3xHfoHl2KTFj/3DVEbEapH9s25nuT5+8X19ctnCYu4bEhJDERLUPWj+0MF6KLnWfuzum2p02T2jxdXWuPPVBpkfLJem09MjrRzd8udtVL1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IWUE0BuQ; arc=none smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gEd6Pkjh"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-35f1f76ea84so2803985eec.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 19:59:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IWUE0BuQ"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-30b6dad2382so14258470eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 19:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792119555; x=1792724355; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792119560; x=1792724360; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=0pPuCC48Hy2fsKRIjoJrlINKPfQUMeKQHIeAV5LoC0E=;
-        b=gEd6PkjhMnC/WPLNK5nQ0uc/tgCYiGM4r9wGZX8ZJL/p4KUiKdMfU86Whv8kxF8Pxi
-         4CL2LFAaCcrW67O8jcSPeO55aOJaDYnDKfiPu45G9e2TMlicKOAM8OO8a3r/6VFHCPuo
-         OP2CX3Sb6fM0N6d0HuTBm1fFhL5fGs/MEboW060L9YQuRbyX0fLu3NcGsOGmYA/T4HT0
-         SguOypVoVq4ZioXj2Wcpm8hZXIeTTCfLmxQwqv9F0UVV/ikh7m2WOboO2eYY264oh9wv
-         72N4qhUOLXSPY8aekRmeszgxfKMCnMtMr8y/KVhTOQn9UE9bNaegGWUp3PqRa4Qu+geH
-         fhkg==
+        bh=2hIEJnGwSzaqA/hOBpSXRqZvtTI7vS1Ntv+NizT+m2U=;
+        b=IWUE0BuQyMrN+B4Thu4FUrpN8SJNlQA0YG5A+Fi3Bny7E6kf2d2btjfVGiKScM4zqS
+         r8aHrVrracIduUbtAkfc0Wz2+jZ0iDqU6VevMeEKTw7h3IFcGQuB54rJSo17E5suU4Ex
+         L3KKSKAxr4IEhuc4QsgrU5V3IgpZl/maGu1zwX2AL0B8Z5/YOuQop16A1bPqxyDSB1Tg
+         nJ5VqCc35U1ZbbYnlEXlKYsz9wN0cWQgYeVt6emOWT38BuDWxSEawfoIr1KccHpwF0sE
+         y5rn8LB3XA83+EREushWKE3KyXJO3Ko9xS6yb8m39xJdNBjkbHfIJkIzKEAtCjmfvXwI
+         omAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792119555; x=1792724355;
+        d=1e100.net; s=20260707; t=1792119560; x=1792724360;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0pPuCC48Hy2fsKRIjoJrlINKPfQUMeKQHIeAV5LoC0E=;
-        b=qu+VSTyB2tZtXep4Gbl/BobedhxKZ3RorE8l8duWMu3uXZnP2F1c0yM70ledIliB+3
-         qtOLr6ZjS9NMG0CDjnNdCqkrjolo9fdApXXojPbb5taTmYLIqbYPvhWa1We6V5H6asLc
-         hm08NaHAK5MmRAXLsBgE8od0nfS5ylE8VKEkJuOi8N3lhv3F4mTwI0gsIT7yb1N6i/af
-         xs0RVOv6tTxQ1BFvxI5Z8t6BRlzw0UXR4ZmlREiGKx7ESBgQaByFCvVYcEx4byW5hZTm
-         pruGJIZCtMYGhWoO73z7EFvfrr1tGn0ENIGjg1+VI8VDJ7g+roub2ZqW8LKXb74FIUND
-         ZN7Q==
-X-Forwarded-Encrypted: i=1; AKwUvByHoA5hbgINmTsw3AR4g1RBLotEHdUq888hbIREqk26NQC+4xby+ILbmbVzKE71ZSODGm0zogiwQAuPmJG6HO8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI6hkOB8KY6X/4eFXSNBTmDEE8+aOsriWbUzuNIid8QJvYr85Il
-	Pedl+f9+amCruKODhPf+W+CMwcEihQ1wziabZjeLGgLPnRFWLH9P7902
-X-Gm-Gg: AYBFou0IHQ+zG5qEbflUEBMHOcnJxHWSQg5aGEC8sShBrOEmuw49WeIrFrVlgU8P/zl
-	1wILpW0+uML9cYpggTH/LUjgi+4Z9Kny5jlmns1ErGRrwzNQU17jUlGN+WEQjSvelSW5k2kby5p
-	v21T3OPCzCKs5ZYjVGAXFN8iUvFRK4axLR1lJeza+hQqdcVLtkWrwMzA0JlrJvGOEWgiIk+FsKI
-	2mPokW/pTrQszhkY5W1IWbspj9mQOpjsVvSAxyreBfus89p+kHEphdR65W2R/opbxc2GQOCcv6l
-	kzObmqfstJxEqpMPZ7gNpb49LOaWpxtkmwHcJHXq0Ixusdp1T8w7MH6R3k/iBmRA57Vu3M8qFpX
-	f9pQbJyTCnllbmjZ6sLh7st/flwImdFORqylloQNuXhDSdudA5Ip0B45VYyvSgH1/x65BXIdA03
-	ZkMi7Wr7jfLaMGgesgPNMf7xmEfRFSOAAa7H19eKOh7PHZM8xG0eCWXJpYk8X3VO36gg==
-X-Received: by 2002:a05:7301:78cb:b0:351:515b:4e85 with SMTP id 5a478bee46e88-3537e088bd7mr28316839eec.16.1792119555483;
-        Thu, 15 Oct 2026 19:59:15 -0700 (PDT)
+        bh=2hIEJnGwSzaqA/hOBpSXRqZvtTI7vS1Ntv+NizT+m2U=;
+        b=CFj/SgYZwCOLwU1Bf4qufOlZqDo1RuakAGhp/XgJNUarCJxTgJl0oQ+tOTce32R3nr
+         jC7esjQSPFXT7ltz9Uz73O/D4UQ6J8GL0Zr9FsJruUhdte/5BMab+ocTsGXuNvNXUqYp
+         jMdOlBRkpvWUbA//13PdwnvrOXeS/6fpNKBO6N9wWECVYmr8Lbaw18i/tfWZM+L2vktX
+         5MUWFqZo3XfbRSfriMurOysxapuD6/w2rkcp0gQXD5BBpBoBszgB/IQ9a3BnfLy/1k2a
+         m3ix5Ce4GMm3kEW7i4zMK/2uQ0/Wxao9m1DSUiRtXVoN2slRFbdscRBfrZwK4wBc8jJ6
+         vQ0Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxQvd5/z8V7VFUG1WWSgSBPjSV3OHQjzQZj9P3uh+bfk36xo5P6pvlYMJH7EVq63+TBwIvacxU8mcbwZkfQYBY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL0OsPJ6qTw34VnnmifNiiEDUYlVe5QowliaDcSrrLdSlfRWoQ8
+	tPOuE3ruRtG/zARrpVhVPtlYsiHiGFIFIhOOTQ5Bahd04xqqbnFaw7Oh
+X-Gm-Gg: AYBFou3xnAfKeYQ9aEjJ6KFRFq0J0V3rUHK0XDIGa8QmJfJloxAV988gFTZNU4WW6HS
+	YS+SNd4DsqWaOJSmYV1ht6BesrVkKM5f+SsCVgZP+1pWXIrURzBamUASCz/B4hkqipwxmHD0KZX
+	qNjYP1MHX2Xaoz8noQQGziVJuNfx+gEDOEPkqb1+mKvECVSzxFZqN87Nx0FnHAGEf7Qu2Y98igt
+	KC2r1SUjv+whZxX0YCFivqrL4305KPf9iOUJ5yEpCZVlFMHmgHOXjrQnwbyC9b1OkXWRaLhn7Qz
+	oQ+UG6C5h6dd83zcIkZidelo62Z4Gwry6sgybVRW+1eTcuLRVtGqrWpUDYVySehgPiQH5Jzxmu9
+	68zQqw3YS6qFJ4w6XnhDXM+YlgAiAKvobvuIc6M2zfIR4RlO5R9gUsKMxgylUvN7kNs0ReVQ9Qk
+	5ITwqvv0zBv732kxPOq0+q/gcJmEqGR83aRk69qlhDwoSPCQOgsWNT3LzW9lDQhYs9cr7V0lDYc
+	sAX0A==
+X-Received: by 2002:a05:7300:e510:b0:35d:e9b1:1c6f with SMTP id 5a478bee46e88-35de9b11d74mr8864152eec.0.1792119560531;
+        Thu, 15 Oct 2026 19:59:20 -0700 (PDT)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3607ee0cab0sm2481261eec.3.2026.10.15.19.59.11
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3607ee0cab0sm2481261eec.3.2026.10.15.19.59.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 19:59:15 -0700 (PDT)
+        Thu, 15 Oct 2026 19:59:20 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 16 Oct 2026 10:59:05 +0800
-Subject: [PATCH bpf-next v4 1/4] bpf: Protect the struct_ops association
- with a spinlock
+Date: Fri, 16 Oct 2026 10:59:06 +0800
+Subject: [PATCH bpf-next v4 2/4] bpf: Dissociate struct_ops progs before
+ the grace period of the map
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +72,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261016-selftests-bpf-struct-ops-assoc-timer-v4-1-9ad31c21220c@gmail.com>
+Message-Id: <20261016-selftests-bpf-struct-ops-assoc-timer-v4-2-9ad31c21220c@gmail.com>
 References: <20261016-selftests-bpf-struct-ops-assoc-timer-v4-0-9ad31c21220c@gmail.com>
 In-Reply-To: <20261016-selftests-bpf-struct-ops-assoc-timer-v4-0-9ad31c21220c@gmail.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -87,106 +88,91 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-bpf_prog_assoc_struct_ops() and bpf_prog_disassoc_struct_ops() update
-prog->aux->st_ops_assoc under st_ops_assoc_mutex, and the latter puts
-the map of a non-struct_ops prog while holding it.
+A struct_ops prog is associated with its map without a reference on the
+map, and finds the struct_ops through bpf_prog_get_assoc_struct_ops()
+under RCU. For a struct_ops map, bpf_map_put() waits for an RCU grace
+period before it calls bpf_struct_ops_map_free(), which clears the
+association and then frees the trampoline and the kdata right away.
 
-A struct_ops map is about to dissociate its progs from
-map_free_pre_rcu(), which bpf_map_put() calls in whatever context drops
-the last reference, including softirq, e.g. bpf_struct_ops_put() from
-tcp_cleanup_congestion_control(). A mutex can't be taken there, and the
-put of the last reference under the lock of one prog would take the
-lock of other progs.
+Nothing waits for a prog that reads the association after that grace
+period started and before the association is cleared. A timer callback
+of a struct_ops prog that calls test_1 of bpf_testmod's multi_st_ops
+through the association while the map is freed returns into the freed
+trampoline, whose image is filled with int3. RAX holds MAP_MAGIC (1234),
+which test_1 has just returned:
 
-Replace the mutex with a spinlock taken with interrupts disabled, and
-put the map after dropping it.
+  Oops: int3: 0000 [#1] SMP KASAN NOPTI
+  CPU: 2 UID: 0 PID: 31 Comm: ksoftirqd/2 ...
+  RIP: 0010:0xffffffffc043114d
+  Code: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc <cc> cc cc cc
+  RAX: 00000000000004d2 ...
+  Call Trace:
+   bpf_prog_ec591f4f9d13f364_timer_cb+0x96/0x1e2
+   bpf_timer_cb+0x15d/0x240
+   __hrtimer_run_queues+0x264/0x5a0
+   hrtimer_run_softirq+0x1a7/0x3b0
+   handle_softirqs+0x18c/0x5b0
 
+Dissociate the progs in map_free_pre_rcu(), so that the grace period of
+bpf_map_put() follows it, and make that an RCU tasks trace grace period
+for every struct_ops map. It then also waits for the progs that read
+the association under RCU tasks trace, e.g. from a bpf_wq callback or a
+sleepable prog, as a tasks trace grace period implies an RCU one.
+
+The st_ops_assoc_in_timer_free subtest of test_progs reproduces it. Its
+timer callback keeps calling test_1 through the association while the
+map is freed, and test_1 spins in bpf_loop() when called from there:
+
+  $ cd tools/testing/selftests/bpf
+  $ make test_progs
+  $ ./test_progs -t struct_ops_assoc/st_ops_assoc_in_timer_free
+
+On kernels of the same bpf-next commit with KASAN enabled, x86_64 VM
+with 32 vCPUs, before and after this patch:
+
+            before                     after
+  outcome   Oops (int3) on run 1       100 of 100 runs passed, no Oops
+
+Fixes: 5db69b0fbdc8 ("bpf: Make struct_ops tasks_rcu grace period optional")
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- include/linux/bpf.h         |  2 +-
- kernel/bpf/bpf_struct_ops.c | 19 ++++++++++---------
- kernel/bpf/core.c           |  3 +--
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ kernel/bpf/bpf_struct_ops.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 54144372281cb..2a51acd34f9a9 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1960,7 +1960,7 @@ struct bpf_prog_aux {
- 		struct rcu_head	rcu;
- 	};
- 	struct bpf_stream *stream[2];
--	struct mutex st_ops_assoc_mutex;
-+	spinlock_t st_ops_assoc_lock; /* protects st_ops_assoc */
- 	struct bpf_map __rcu *st_ops_assoc;
- };
- 
 diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 1178acd72296e..a1ae30b145a03 100644
+index a1ae30b145a03..7d1a8514ba341 100644
 --- a/kernel/bpf/bpf_struct_ops.c
 +++ b/kernel/bpf/bpf_struct_ops.c
-@@ -1541,10 +1541,10 @@ int bpf_prog_assoc_struct_ops(struct bpf_prog *prog, struct bpf_map *map)
- {
- 	struct bpf_map *st_ops_assoc;
+@@ -1030,6 +1030,7 @@ static void bpf_struct_ops_map_free_pre_rcu(struct bpf_map *map)
+ 	struct bpf_struct_ops_map *st_map = (struct bpf_struct_ops_map *)map;
  
--	guard(mutex)(&prog->aux->st_ops_assoc_mutex);
-+	guard(spinlock_irqsave)(&prog->aux->st_ops_assoc_lock);
+ 	bpf_struct_ops_map_del_ksyms(st_map);
++	bpf_struct_ops_map_dissoc_progs(st_map);
+ }
  
- 	st_ops_assoc = rcu_dereference_protected(prog->aux->st_ops_assoc,
--						 lockdep_is_held(&prog->aux->st_ops_assoc_mutex));
-+						 lockdep_is_held(&prog->aux->st_ops_assoc_lock));
- 	if (st_ops_assoc && st_ops_assoc == map)
- 		return 0;
+ static void bpf_struct_ops_map_free(struct bpf_map *map)
+@@ -1045,8 +1046,6 @@ static void bpf_struct_ops_map_free(struct bpf_map *map)
+ 	if (btf_is_module(st_map->btf))
+ 		module_put(st_map->st_ops_desc->st_ops->owner);
  
-@@ -1569,19 +1569,20 @@ int bpf_prog_assoc_struct_ops(struct bpf_prog *prog, struct bpf_map *map)
- 
- void bpf_prog_disassoc_struct_ops(struct bpf_prog *prog)
- {
-+	struct bpf_prog_aux *aux = prog->aux;
- 	struct bpf_map *st_ops_assoc;
- 
--	guard(mutex)(&prog->aux->st_ops_assoc_mutex);
-+	scoped_guard(spinlock_irqsave, &aux->st_ops_assoc_lock) {
-+		st_ops_assoc = rcu_dereference_protected(aux->st_ops_assoc,
-+							 lockdep_is_held(&aux->st_ops_assoc_lock));
-+		if (!st_ops_assoc || st_ops_assoc == BPF_PTR_POISON)
-+			return;
- 
--	st_ops_assoc = rcu_dereference_protected(prog->aux->st_ops_assoc,
--						 lockdep_is_held(&prog->aux->st_ops_assoc_mutex));
--	if (!st_ops_assoc || st_ops_assoc == BPF_PTR_POISON)
--		return;
-+		RCU_INIT_POINTER(aux->st_ops_assoc, NULL);
-+	}
- 
- 	if (prog->type != BPF_PROG_TYPE_STRUCT_OPS)
- 		bpf_map_put(st_ops_assoc);
+-	bpf_struct_ops_map_dissoc_progs(st_map);
 -
--	RCU_INIT_POINTER(prog->aux->st_ops_assoc, NULL);
- }
+ 	if (tasks_rcu && IS_ENABLED(CONFIG_TASKS_RCU))
+ 		synchronize_rcu_tasks();
  
- /*
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 05c89396119ad..fd4e4dc4acc8c 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -141,7 +141,7 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flag
- 	mutex_init(&fp->aux->used_maps_mutex);
- 	mutex_init(&fp->aux->ext_mutex);
- 	mutex_init(&fp->aux->dst_mutex);
--	mutex_init(&fp->aux->st_ops_assoc_mutex);
-+	spin_lock_init(&fp->aux->st_ops_assoc_lock);
+@@ -1162,7 +1161,11 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
  
- 	return fp;
- }
-@@ -291,7 +291,6 @@ void __bpf_prog_free(struct bpf_prog *fp)
- #endif
- 		mutex_destroy(&fp->aux->used_maps_mutex);
- 		mutex_destroy(&fp->aux->dst_mutex);
--		mutex_destroy(&fp->aux->st_ops_assoc_mutex);
- 		kfree(fp->aux->poke_tab);
- 		kfree(fp->aux);
- 	}
+ 	mutex_init(&st_map->lock);
+ 	bpf_map_init_from_attr(map, attr);
+-	map->free_after_mult_rcu_gp = st_ops_desc->st_ops->free_after_mult_rcu_gp;
++	/*
++	 * A prog dissociated in map_free_pre_rcu() may still run the struct_ops
++	 * from a bpf_wq callback or a sleepable prog, under RCU tasks trace.
++	 */
++	map->free_after_mult_rcu_gp = true;
+ 	map->free_after_rcu_gp = true;
+ 
+ 	return map;
 
 -- 
 2.43.0
