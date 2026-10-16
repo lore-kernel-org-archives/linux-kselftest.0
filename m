@@ -1,180 +1,93 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CBE4611E5
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 08:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792141184; cv=pass; b=pvf4gk6OsfypvLHApZ3ka1+K7T2p+7onWQ74+rwxWDbJIcJXuuG+j80w1/O9/UiPG3RynM6TVoDth6ABgMexnzqHyIGhmSDLB4T2oI+hKa/T58yy5P1YT0ygLVFnV89X6IErfafoNeRFygnWHgSIz2ONiTyWB7CjqvLcWbJkQVs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792141184; c=relaxed/simple;
-	bh=tX8oW19EzNSpx55rVPyv0ZfQzctQtnlywYu1+2gW2R8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nN7n5rBqP1p46eYt5QaPopHMClt2V2WDJlz5aQm7a+adAUoYo96hvbXjT3UE3VN4wo5I66O0z6RwL2PTe+CDyAjT8EJOV0rPuoN8SaaQZpTyUYuuaGVaT0iYcHII1yQLowF8BDneS9W+d8ro0YyKNcf7VLahkQ5d/9SMAJFLD64=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AqD6hVh5; arc=pass smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9B9443ABA
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 09:02:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792141355; cv=none; b=omjp4QKcmKfnCduLwMxcthLIczZ14E/xgxp2k6KaltOnxgRpZKPlc5YPSK6fyy9mTl7Qb08lFd5EEDLCRc0gPpWlvZcCMl2utQMh0uIJ/vTwe/TA4XNSnuL1cU3+DI+y6L+PbYz7VoShn5sEFjNsrqhZWG1KhZRnjh7mSNDpxS4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792141355; c=relaxed/simple;
+	bh=EAL0w1drlk9iRFR44y1KTfcczLiGqgrQS+sQXndKFGk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=q6WNC0+UemWFbxD6DO1Kgb4GWQ9ZW5xYZRrdCVzn4XzWnQzE908mqCgXQbKR9aqSuf0uAKsrsQkW66p8uoU6SRajFoVXO1D2+c1UQ9ncUX3kiKHTmC7jr/BX6hZ9b4Fq3t7uiwFCEJsSuux1AZUIdDB5Q1BRh6nfxhE1HX7lTp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E/xS1Har; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AqD6hVh5"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6b1aa36fc0eso8568a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 01:59:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792141181; cv=none;
-        d=google.com; s=arc-20260327;
-        b=opp0ugKbzFTR51xLBZ3YXljCYs5qWM7xfiI/AhVxk/hHWwIl2Ur6bW6mV7w7DdTvQz
-         JRtnybcC811TPo7bqc3LYPP/fGRocI0vkHthpCI6QbwZ5mitANmCBHrALWB0xzQ2If/2
-         11adB032m/MIDNPdj510coicQ3wD9UnRvYk+xq4NJUL/Wmiws2EEr1NmkhQ/sHh4Je+C
-         Lpn1zRkWzESB172zktT3OxUvHU7pveQdS7/PAZi9DvXTKZK/xPuxNPkU77+sOWBAlTyc
-         NowZ0n+5spQcMgwjPpZLh6FMx44yC1ccODZTRtwvPZ986O+49WrnQMbjdINNNTgHBzi5
-         4RcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EZlGH4yy9O7O0nf1ZYvJL4ZoQnTfHAsB9O8BKxrx/Xs=;
-        fh=4trZVbiSH9IEW26LiIW8ABmqf1fu5s4hKKRkNlRmo4E=;
-        b=XWhWQ4tx19UHWzHfEdhr0QL/YIkaL6afwWsDB1lAIFoKCVbPAEaW6Bsk6bvmYCPpo2
-         vUwBvxvxaT7KQSxw3jbIAOAn3wyjEJAYB0AUgVkxacafeXto1Bce6f6oS7M+kgUgqeIB
-         LOHKArr1DubT6UDCcYSnwln1KRuTBUwvQdCoVpaWNDpiU/tzaetTRhQhZ0/WrBGV6NdX
-         INdfT9BPFrI9tYjLs3rl+pgIq9j38wrISDOHgK/BRcYFO33vX+/8Pf2SyVSzo690NJ7C
-         zf2lHXpeuAv44Bmz714083uA78B5PTA251+GvcuXnbGlFwdRoSXe51rAZn0rWEjdfyNJ
-         9bMw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/xS1Har"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a0286c981dso27837335e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:02:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792141181; x=1792745981; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EZlGH4yy9O7O0nf1ZYvJL4ZoQnTfHAsB9O8BKxrx/Xs=;
-        b=AqD6hVh5Z8fsmeU9NWVsCuw0LvJ4423W89OeuInlBsI6XDsT6K//yzPoLT5m8HbJfh
-         offi0z3iCY9M7g/YE/QZ9uSCmbzN/yB+j6kHHYXPfPp+gJEco49tuFOYQRD4fdtKnpia
-         OJ29jEM9LUnCBAIFRwV7Qo61yGxZ2XbCNVCXvePMbQJ7OokiX56LnTyj8TfZodb9e+6J
-         2yNoBfR8ijIVY3SfKdln8IF4BCMScMOLgLasTQA/ZEXk5YH0Whv2WLcn8YNZmtAyfn9Y
-         9l4vI4wlmM7f4Mn+lyI8VxxB6fqJfSro1+mLMppkUBm1AXdtxhZk3QCRy0luHD36UGzj
-         h3NQ==
+        d=gmail.com; s=20251104; t=1792141352; x=1792746152; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=j0+d5JuI7cYWqs6zSvGD292VqwhHrlteYqsYUHwcriY=;
+        b=E/xS1HarJM/1VjZk6VVExV4VjrIjxI7zxPYbwTlA166+kCdMwWdyE+RYgG5UALv/xg
+         MYNmnlQdBFTEVsJxooSR21XC6p1YlIFXLWXM3403qSeLtsYazUG/be6Oy5UPqWBPTruJ
+         IgNL/6l7+IQRbnB3iRvIWLWirXgHl169CY36SbGwF4i5A+qZozIg04xePRX+t0K28LGO
+         zz0wTHPNTNGgbT40shis3KLbPOhT9vOoDv0T7fae9J4d44m40JzuPGttSmLrAsMca2E6
+         Z4ZatE8038/DQIamSWd8N4XmbQ5t/0+ooiKg7VZjLjSO74JYmeh3qXl2YDea2pzbWZ+F
+         +P2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792141181; x=1792745981;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EZlGH4yy9O7O0nf1ZYvJL4ZoQnTfHAsB9O8BKxrx/Xs=;
-        b=RIYdOGlOp0RHQxnJDHesyFvNgQ2xHgcNSZlTpFH/WmpJCSGShGF/yETB7EvLf8jqmM
-         kZRO4+Z3PAI2ezAA7UD5LUjOCP6wVZZuYYrbXmcRiGb8RwNIUiqYW+vfJ/cl6iWr99HE
-         soGkTjahponSA5lo7OTth7S3m8NQOlWVtgI/vMUHw+iiqZniaqIWWUy7ofc+0DIQcduc
-         ScbSikAY8r0vIA5yYDJFjFpcxaOtlt2L4xoXWPMebkCTCMfQWcyZNI3R7bG72Rct7Fi/
-         FqRwBf6mCyGWWdc5ADpOTuwRMUN7Q+hKlkOCYOJxRjQ2VAY2CsOPasswoGho6UWYVdPI
-         dHsQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzQ8pV1G3SiYubgGo2h9AzSmyBH9WN8NiOFSN1DeONeo3hgXq7zMQ82bhuX5WHoGmphsKitBJdwi578lq7RMQA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKoqoKxAw55MHoOHCTVw66Xw34TyV2UVTGs5gJyg+aMfYPun7qR
-	/btlTaSFhqQ5FwSTbuxPILwL4STyD4bomq4fMNeilqJ2DjH8o0phQD/6KZuR0IV5olpAWvE5gWa
-	Y/qR7OvRcnoqK85I5IXxkiXCjva5EGKp9kdml7sOc
-X-Gm-Gg: AYBFou2EStngDo0S2xnXooJYrbBiOmoWyT9mHzA4bWge6ZOLe0cMvRUueLPwz7mh46N
-	ukcgxVdtUM+MPXJ3ZM0HDCE0IvVX7WPvihDIlV12ubx8/kI+WIe0fQkH6fG5p4TzUbolFLOwLHf
-	a2eUkmITZQyGs29GM2ubdRi5uWXff6pcXcDStvT95CgfFKeyT54xc0kj6GcobHEQh142OhmtkVQ
-	sKWBQuoKj3yNdR0DDOPDqxyu1wWo+RSSRbU+YTbmCkoNASRU196aZ6O6o7miiCwpA0vr+kqFD1T
-	vRL7SxEp5TcDL0FlM2Yt/sUBO1HcFOrGN++HguKETK9AKoRT+5fR2tK4EFX4NCi2h9wTa8WtKX4
-	0XKiJe2aydlUSB1vXvEQuCgSn
-X-Received: by 2002:aa7:d7c8:0:b0:6a9:d188:2374 with SMTP id
- 4fb4d7f45d1cf-6b38c3c7baamr30067a12.1.1792141180097; Fri, 16 Oct 2026
- 01:59:40 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792141352; x=1792746152;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=j0+d5JuI7cYWqs6zSvGD292VqwhHrlteYqsYUHwcriY=;
+        b=oVum8+2z3jmJcwn4M5g1us3gZosRoy8lv/bsDxVvGFwj48zzG5/y5YYttHsU1CC3Fe
+         Z9WrdUMK9LsvLy3nqtr1uDfpC6eo1nMHQLD26QHTsWdMzDYRaQnzgb47GV2c8NwT+epg
+         CdM7sDYabzzipic7h0UoQcZktFo7gUFHOQO695eHWPliJ+3dl3Cd3oVgXPclXzs8GPM/
+         Cnz4wlr3m/XLoQAtb5x6LSfrijjYNme2Miq9w6ollEpxDhRj+6kin/VHMfAnNmRZTGKY
+         r0hvJNptYE3zBpUt1bBTKAfkjiAw9AVk58xkxCGGKJJUnSFWOO/VLvTkq+EvzfMtaG2a
+         uZkw==
+X-Forwarded-Encrypted: i=1; AKwUvBw5cqUxDlJwtMGfcjoZJyetuVe0+bwTopq/ghwk7fxOJH1cFSadHaqCB/L+/O/z/lmLaBv1o58GmKGzinrTqBA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJzB+DeSja7g1qdTQ9FGXXeKGtrRRDHtFH2pzTWbSdb6PazVWli
+	f1kmdWZlWqs/zLDTxtfJbCQPKcAppWLSuTDiT57IX6LPDqv6J2uLgdGm
+X-Gm-Gg: AYBFou0MatjyLwXnzLK9F02aF6n2f3IHnij/0RsuTk+/DjCz9/BygQKxpRdOTO0XyFE
+	ee20eZYJayQu6MXGc3KXbCSs71DCs5tuX71EUK59hpaLse/VaYZ1JYW5CybC1ZbnPi4lBo6C2kj
+	V1VJ8I6MGOIdoUg+pibGTgcHFxYdtVuz96ENJujSELlSu0F6DFLrQ93STEgSW1z2x7SxPbnASEn
+	7cLNZo9JV6dI0wI45jivaqwE839duPEeB7NRaAt5EzNCe011rQEGrWZYXevNhfIxkc4x2dFaCuE
+	KGZAa89MhQcSDs7t0Hmpbj8TRhd+O7EANsPFRlGiwiI5qFYY2/x6g6GTKiqfIgfLVQxo18+AmiU
+	tiRriWXSxjstjFtNfbeKPnpdrLm78mgF+ka2FPQ5PhNZs5HGQUBL4GtxhY7Kwc1m6S0sDiS/9JP
+	SzBu5E0KJX0KbYc/mRFbxO0gZJz/KH4SM0XH6Tja/VtlEC+2K3P03KV+6SCe7tDl0emdn56uU8u
+	D1FZiPm3J793WjckhomtXMhbKZzY0FlG5FeRmUqfrl2Bg==
+X-Received: by 2002:a05:600c:46cc:b0:4a1:688d:a41c with SMTP id 5b1f17b1804b1-4a18e4c06a8mr416698625e9.25.1792141352107;
+        Fri, 16 Oct 2026 02:02:32 -0700 (PDT)
+Received: from andreayoga.wind3.hub ([31.189.109.133])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1cca30aa4sm16138995e9.2.2026.10.16.02.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2026 02:02:31 -0700 (PDT)
+From: Andrea Parri <parri.andrea@gmail.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Kevin Tian <kevin.tian@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	iommu@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] iommufd/selftest: Check dmabuf MMIO mappings filled from another domain
+Date: Fri, 16 Oct 2026 11:02:24 +0200
+Message-ID: <20261016090225.3824-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261015172243.GE13920@nvidia.com>
+References: <20261008125206.11990-1-parri.andrea@gmail.com> <20261008125206.11990-3-parri.andrea@gmail.com> <179200036595.15213.9864724554843977359.b4-review@b4> <20261014211608.291608-1-parri.andrea@gmail.com> <20261015172243.GE13920@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261015073736.2944215-1-tavip@google.com> <20261015073736.2944215-3-tavip@google.com>
- <CAAVpQUCpFC-7J=uEgBfh37hFb5BCJvhJQZx7_YKEDCtvbGrGWw@mail.gmail.com>
- <CAL4WiiozXgApewA6WWQA--YxaweezQASpiOiiLz7=ijrqbkqgQ@mail.gmail.com> <CAL4WiioJjvno8r7YeLCTf00q9L5w+OOGLbGz-t330R=NZ8ATkQ@mail.gmail.com>
-In-Reply-To: <CAL4WiioJjvno8r7YeLCTf00q9L5w+OOGLbGz-t330R=NZ8ATkQ@mail.gmail.com>
-From: Octavian Purdila <tavip@google.com>
-Date: Fri, 16 Oct 2026 01:59:27 -0700
-X-Gm-Features: AclHuK8hZWfSCQBFUZf2062w8cM86knegB4R5UxwwsJOxtJtgSEQ4r1q2T_WaWU
-Message-ID: <CAGWr4cTPTqYvfKg_e7kTgg_ioav+v2AWTre5aQqzkm7tvfS1sA@mail.gmail.com>
-Subject: Re: [PATCH net 2/2] selftests: net: packetdrill: add test for
- negative sk_forward_alloc in tcp_wmem_schedule()
-To: Eric Dumazet <edumazet@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>, Neal Cardwell <ncardwell@google.com>, 
-	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Willem de Bruijn <willemb@google.com>, Wei Wang <weiwan@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 16, 2026 at 1:23=E2=80=AFAM Eric Dumazet <edumazet@kernel.org> =
-wrote:
->
-> Le ven. 16 oct. 2026 =C3=A0 10:22, Eric Dumazet <edumazet@kernel.org> a =
-=C3=A9crit :
-> >
-> > Le ven. 16 oct. 2026 =C3=A0 09:54, Kuniyuki Iwashima <kuniyu@google.com=
-> a =C3=A9crit :
-> > >
-> > > On Thu, Oct 15, 2026 at 12:37=E2=80=AFAM Octavian Purdila <tavip@goog=
-le.com> wrote:
-> > > >
-> > > > Add a packetdrill test that drives sk->sk_forward_alloc negative vi=
-a
-> > > > tcp_collapse() on the receive queue while sk->sk_wmem_queued exceed=
-s
-> > > > sysctl_tcp_wmem[0], and verifies that a subsequent non-blocking wri=
-te()
-> > > > under TCP memory pressure fails with EAGAIN rather than returning a
-> > > > negative copy length from tcp_wmem_schedule() and failing with EFAU=
-LT.
-> > > >
-> > > > Assisted-by: LLM
-> > > > Signed-off-by: Octavian Purdila <tavip@google.com>
-> > >
-> > > Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > >
-> > > Thanks !
-> >
-> > Are you sure this test is passing on arches with 6K pages (as some
-> > arm64 and ppc64 platforms) ?
->
-> This was meant to read : 64K pages.
->
-> > We might need to add a check to only run it on 4K platforms.
+On Thu, Oct 15, 2026 at 02:22:43PM -0300, Jason Gunthorpe wrote:
+> This sounds better, but I don't know if we need all this code just for
+> a selftest.
 
-Ah, yes it would not pass. Thanks! I plan to add a check like the one
-below in v2:
+Fair enough, I'll drop the selftest.  Thanks for picking up patch 1.
 
-diff --git a/tools/testing/selftests/net/packetdrill/ksft_runner.sh
-b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
-index 0a97d5ae34699..e2a418357bf1c 100755
---- a/tools/testing/selftests/net/packetdrill/ksft_runner.sh
-+++ b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
-@@ -52,6 +52,12 @@ if [[ -n "${KSFT_MACHINE_SLOW}" ]]; then
-  failfunc=3Dktap_test_xfail
- fi
-
-+pagesize=3D$(grep -E '^--define=3DREQUIRES_PAGESIZE=3D' $script | cut -d
-'=3D' -f 3 | tr -d '"')
-+if [[ -n "$pagesize" && "$(getconf PAGESIZE)" !=3D "$pagesize" ]]; then
-+ ktap_skip_all "requires ${pagesize}B PAGE_SIZE"
-+ exit "$KSFT_SKIP"
-+fi
-+
- ip_versions=3D$(grep -E '^--ip_version=3D' $script | cut -d '=3D' -f 2)
- if [[ -z $ip_versions ]]; then
-  ip_versions=3D"ipv4 ipv6 ipv4-mapped-ipv6"
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_nega=
-tive_fwd_alloc.pkt
-b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_al=
-loc.pkt
-index 8e31db546f432..5e6a40e740b42 100644
---- a/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fw=
-d_alloc.pkt
-+++ b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fw=
-d_alloc.pkt
-@@ -3,6 +3,7 @@
- // when sk_wmem_schedule() fails under memory pressure and
- // sk->sk_wmem_queued >=3D sysctl_tcp_wmem[0], returning EAGAIN rather
-than EFAULT.
-
-+--define=3DREQUIRES_PAGESIZE=3D"4096"
- --mtu=3D65535
- --tolerance_usecs=3D100000
+Andrea
