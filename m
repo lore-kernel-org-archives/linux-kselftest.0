@@ -1,254 +1,50 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEF5212564
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 19:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48DE53CF68F;
+	Fri, 16 Oct 2026 20:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792180138; cv=none; b=j5BiH/LPd+iWJANw+vhPIEVwDs7dURc5OqT01oE/1Hlhm0FZSBaqn27+9t2eNcznisTtRDdyyJ9wbf3PKG5hDqUUbEcb9g/5lS/0QQ/A4TrKjBhhhSv/dBZLo+d4RY/K7ligLSaumRHcVHjYk4BEfOvFM2QxefxhAubSQD6DMyo=
+	t=1792181246; cv=none; b=UYCouov9Ky43saELUTadZmiRWYMzw4f4fZC+oQQDxRFVdnz6I/d/SNaq/bi9LQAjY+BO0VVzfOeNBUE8R5DBCIdm/PpYRtTfNnc4kkkhGHxr1ZqR2jMSLNZs6lTpgxta8ZBoecs6jnZqOtFPQ2JjHVa4hxCXtLU64LOiDrkmplc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792180138; c=relaxed/simple;
-	bh=oXXyib5NnNxqviHwEBhtytIp1Gadgc3QopfLYoZUZFw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GrhmJLuMS9UsoE+cL9NqCOFOAGqEDh6lGOHLg05KCBZGlKEhXF7VWeYqcE7i6hLYAmqhfy2Tn/b13FEFZhjh3pS2NCOR/3NexhJGyCMXaAzM0F4vgchtuqCVBk9Drgh8WhRHLiHsiDxLc0XcZBb4j5G4U5KtBSYFlk+pcrsQxaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EKqghDEr; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792181246; c=relaxed/simple;
+	bh=aFl0kUaeDRjAJuZUn2oQtj4Hu1baSzf/RZWziwL/ISI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=d2n9iAph6Q0FaDhI90WeLUfuAm4cIzqwckKl9dS4tvZyx/qE0TuHMEymI/2MgYmPBMN9+FF11JfHsG+LvkuqcUMZpUi3tjwecyiWUpcDCXhZqlM68iud3d2eoG/ZbQmhUzAqdXW8SOF9tE8Yepe1FlwoZELl0W35pU+zPgeDEaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lx8fDKaZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EKqghDEr"
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-3ab06692d33so1125581fa.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 12:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792180132; x=1792784932; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pD1QX2E0kEsZPc5QQVNEY3ZUzg/K1NBBqppLffbGTq4=;
-        b=EKqghDErcPhFKw7A+N+tjklez3tG20WgMnc8tKiumAzur/Pp0G5orWdsiDEUkIim8l
-         V8HsCpOlN3ET5HPasM1EvoGNPzqIHruVEufcTRdbFQaAbqVWcoNT5AoZjwfCbA+9D0Gu
-         iy+GjSNdDN1T+Yp5DlvEXUd1OA2PCnspe2ngWqSOJ1bhqOCUjOhvobZrV5vZ/kM+HgDk
-         cBZj4qBQ/xegZl3uNxSIHnp2myF/wVgtjpCeg3c0puuc/5wNgQ50UpDMKUJu48pHNE/2
-         hXKb0TE67wLlTYQcaMmom2/4HG1gb1LQwrXE9/PUAOwzmBjKisn+z/KDk5aAt0J6da7U
-         H5Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792180132; x=1792784932;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pD1QX2E0kEsZPc5QQVNEY3ZUzg/K1NBBqppLffbGTq4=;
-        b=jv0UaIn6etgx58eQ7MKNc3xD/P84U5vyzVaG2bvDWJ6SniYHYqcXRef09cvvbKQlJE
-         q/SivQqj16NdElafxR93Vp+aG1HzVvPJroS7+P4KFHU5agLu6AXgj8ASnDyaywYWI2eK
-         +xs8zLgPW/U5qrKUHnoBhgaByAkDqHq6ziIMTaw1069FhKjsSH6S1YL1KDKqYaPEIuYY
-         CAw6JReE+1T8vjowQnEOiro0JiBf2kiu0pgPuJGmg93mr2t/LcSDdGH4fUhqYWijW4q2
-         9bdo5ya1Ea35h2cXbaJVW7ulBJ4VmWtBxX22PSCWFT4/8q1Js3TjbnzL+Eq5yb+U0bV+
-         VqRA==
-X-Forwarded-Encrypted: i=1; AKwUvBwgyM42d4irdhBCxL7VTtVZCKWoVoC8rCjSJDM2DgJZrd8dq9zyuEepCUyf92TJ97vqBLottll0vjUL1ajQ5M8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJfEDgmd4T3HzmpReO6b9ibXMRgIiNej7y0kMBhnkn5HNppoyYp
-	LqMDbrTtwTz3Ogaoq/5DX9kUUGIFmGqHIBTcqckPVXJwpDbdKQu0nRKX
-X-Gm-Gg: AYBFou0mxsNo/OWgI/PkPir7X1bbNS+Wrq6CGi5inBUGqOp5DYuCERReOTcwtXm7mOM
-	/p4fzFU61+hlPXD1/JNPhz2f4foofx5bPhPrkmuqEr+BUHEDA86RS+91L2JEiXyE/mmiPoqBio7
-	TGS2SVJVKROM36bMhRPiR5yqlk6EJHJGsiPNlzMUhrNWnlnjxkWQkeC+N2eUn0rDomqEiqdKvY9
-	jRZKE8cixv2OB7lsAJ/BHrf9e3JZp9qMoGWIdp7JnW+RKX405/JNquvuEuFYqnp6EokoLuyzqAS
-	K5sKnA2TdeyZjHZmJ8SmJ1KcOUlDRtBLKQoaZMOJeIyxn9xoWHB7xZ+5HZPjT3mcGjrWxt5N2Ob
-	3oTH6d/3JWgp/z5+URGHBPWpE2L+3fRRb/b+kkV58uisc72uxNLFwjnNXt/MC4vE0330BzvKLVp
-	sy6EcEr54NOORLX4u7LFq937+r2y6uwH+saxCrmrm6UM2YOo3z/daliLKQ+oeHloC2f9nMTi/hD
-	MYYfj8Cx7h5sWTiMGasAMtpP86TW1BVXo6NlHxuIci9/y1DdbnGaad+NVEuQ4o=
-X-Received: by 2002:a05:651c:b11:b0:3a9:a1ed:634a with SMTP id 38308e7fff4ca-3ab292f05b5mr1702941fa.21.1792180132336;
-        Fri, 16 Oct 2026 12:48:52 -0700 (PDT)
-Received: from localhost.localdomain (95-24-167-79.broadband.corbina.ru. [95.24.167.79])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3ab2a4691f2sm1179411fa.19.2026.10.16.12.48.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 12:48:52 -0700 (PDT)
-From: Maxim Skokov <skokovmaksimevg@gmail.com>
-To: bpf@vger.kernel.org
-Cc: qmo@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	kuba@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	hi@tychen.cc
-Subject: [PATCH bpf-next v5 3/3] selftests/bpf: Test bpftool map dump on maps that can't be iterated
-Date: Fri, 16 Oct 2026 22:47:58 +0300
-Message-ID: <20261016194825.230433-4-skokovmaksimevg@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261016194825.230433-1-skokovmaksimevg@gmail.com>
-References: <20261016194825.230433-1-skokovmaksimevg@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lx8fDKaZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8100E1F000C4;
+	Fri, 16 Oct 2026 20:07:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792181243;
+	bh=xXIUexn4Je0YcK/ni6N9UfltQIEQV02i+femQibTGu0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=lx8fDKaZkMmUMrKqukxYlAaXz2Cw5Rtk0N7H36bRf04QqUlCYpSew/LPyNHMAT0Za
+	 LEFDMU9TUGxWJBMJpwbVmBhoRgxth2t7BU7TQqouCPn7gZf7Q4R1j5JMUipK2j75Sq
+	 c2c2t/Y7d6PIrQe+231TZpIJOoaRY62fLnEPhYy29e9yI7rDxGkt8+YB5yl0ktpidj
+	 uCd2nYdWaqTm+a5ewCcqc0nKs465c+9LgMISYcFUAwop8QoPi0MWMcRcso3+6m34vp
+	 A42zXbsm2q72aXcPLdBQc2iYoyVHwp/jVcucnW+ARLA1hBOQNJFwyVzbsN/VnyZ38T
+	 15yHjhZo0HnTw==
+Date: Fri, 16 Oct 2026 10:07:22 -1000
+Message-ID: <fec9516c8cf8a0366ecd535a967b66b0@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] selftests/cgroup: test pids.events notification
+In-Reply-To: <20261015111243.1551387-1-sahaj123.sc@gmail.com>
+References: <20261015111243.1551387-1-sahaj123.sc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Socket storage can't be iterated from user space. Create a
-BPF_MAP_TYPE_SK_STORAGE map, attach storage to a socket, pin it, and
-check that "bpftool map dump" fails with nothing but an error: a JSON
-error object with -j, no elements on stdout in plain mode, and the
-reason on stderr.
+Applied to cgroup/for-7.4.
 
-Socket storage always has BTF, so its plain dump goes through the BTF
-writer and never prints an element count. Check that path with a queue
-map created without BTF that holds one element: its plain dump must
-fail without a "Found" line, which bpftool printed as "Found 0
-elements" before, and give the reason on stderr.
+Thanks.
 
-Assisted-by: LLM
-Signed-off-by: Maxim Skokov <skokovmaksimevg@gmail.com>
----
- .../bpf/prog_tests/bpftool_map_dump.c         | 133 ++++++++++++++++++
- 1 file changed, 133 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-new file mode 100644
-index 0000000000000..187b3f7843079
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-@@ -0,0 +1,133 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <sys/socket.h>
-+#include <unistd.h>
-+#include <bpf/btf.h>
-+#include <test_progs.h>
-+#include "bpftool_helpers.h"
-+
-+#define PIN_PATH	"/sys/fs/bpf/test_bpftool_map_dump_sk_storage"
-+#define QUEUE_PIN_PATH	"/sys/fs/bpf/test_bpftool_map_dump_queue"
-+#define JSON_ERROR	"{\"error\":\"can't dump sk_storage map"
-+
-+/* An empty socket storage map with an int value. */
-+static int create_sk_storage_map(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_NO_PREALLOC);
-+	struct btf *btf;
-+	int int_id, fd = -1;
-+
-+	btf = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf, "btf__new_empty"))
-+		return -1;
-+
-+	int_id = btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
-+	if (!ASSERT_GT(int_id, 0, "btf__add_int"))
-+		goto out;
-+	if (!ASSERT_OK(btf__load_into_kernel(btf), "btf__load_into_kernel"))
-+		goto out;
-+
-+	opts.btf_fd = btf__fd(btf);
-+	opts.btf_key_type_id = int_id;
-+	opts.btf_value_type_id = int_id;
-+	fd = bpf_map_create(BPF_MAP_TYPE_SK_STORAGE, "sk_storage", sizeof(int),
-+			    sizeof(int), 0, &opts);
-+	ASSERT_OK_FD(fd, "bpf_map_create");
-+out:
-+	btf__free(btf);
-+	return fd;
-+}
-+
-+static void test_sk_storage(void)
-+{
-+	int map_fd, sk_fd = -1, value = 42, ret;
-+	char output[1024] = {};
-+
-+	map_fd = create_sk_storage_map();
-+	if (map_fd < 0)
-+		return;
-+
-+	sk_fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (!ASSERT_OK_FD(sk_fd, "socket"))
-+		goto out;
-+	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &sk_fd, &value, BPF_NOEXIST),
-+		       "add socket storage"))
-+		goto out;
-+	if (!ASSERT_OK(bpf_obj_pin(map_fd, PIN_PATH), "pin map"))
-+		goto out;
-+
-+	/*
-+	 * Socket storage can't be iterated, so the dump must fail with an
-+	 * error and nothing else, rather than print an empty map that holds
-+	 * an element. The buffer is cleared before each run so that a run
-+	 * that fails to start can't match stale or uninitialised output.
-+	 */
-+	ret = get_bpftool_command_output("-j map dump pinned " PIN_PATH,
-+					 output, sizeof(output));
-+	ASSERT_NEQ(ret, 0, "json dump fails");
-+	ASSERT_STRNEQ(output, JSON_ERROR, strlen(JSON_ERROR),
-+		      "json dump is only the error");
-+
-+	memset(output, 0, sizeof(output));
-+	ret = get_bpftool_command_output("map dump pinned " PIN_PATH,
-+					 output, sizeof(output));
-+	ASSERT_NEQ(ret, 0, "plain dump fails");
-+	ASSERT_NULL(strchr(output, '['), "plain dump prints no elements");
-+
-+	memset(output, 0, sizeof(output));
-+	get_bpftool_command_output("map dump pinned " PIN_PATH " 2>&1 >/dev/null",
-+				   output, sizeof(output));
-+	ASSERT_HAS_SUBSTR(output,
-+			  "can't dump sk_storage map: Operation not supported",
-+			  "plain dump explains why on stderr");
-+
-+out:
-+	unlink(PIN_PATH);
-+	if (sk_fd >= 0)
-+		close(sk_fd);
-+	close(map_fd);
-+}
-+
-+/*
-+ * A queue map has no BTF, so its plain dump prints an element count
-+ * rather than JSON. A dump that ignored the error would print "Found 0
-+ * elements" for a queue that holds one.
-+ */
-+static void test_queue(void)
-+{
-+	char output[1024] = {};
-+	int map_fd, value = 42, ret;
-+
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, "queue", 0, sizeof(int), 1,
-+				NULL);
-+	if (!ASSERT_OK_FD(map_fd, "bpf_map_create"))
-+		return;
-+	if (!ASSERT_OK(bpf_map_update_elem(map_fd, NULL, &value, BPF_ANY),
-+		       "push to queue"))
-+		goto out;
-+	if (!ASSERT_OK(bpf_obj_pin(map_fd, QUEUE_PIN_PATH), "pin map"))
-+		goto out;
-+
-+	ret = get_bpftool_command_output("map dump pinned " QUEUE_PIN_PATH,
-+					 output, sizeof(output));
-+	ASSERT_NEQ(ret, 0, "plain dump fails");
-+	ASSERT_NULL(strstr(output, "Found"), "plain dump prints no count");
-+
-+	memset(output, 0, sizeof(output));
-+	get_bpftool_command_output("map dump pinned " QUEUE_PIN_PATH " 2>&1 >/dev/null",
-+				   output, sizeof(output));
-+	ASSERT_HAS_SUBSTR(output, "can't dump queue map",
-+			  "plain dump explains why on stderr");
-+
-+out:
-+	unlink(QUEUE_PIN_PATH);
-+	close(map_fd);
-+}
-+
-+void test_bpftool_map_dump(void)
-+{
-+	if (test__start_subtest("sk_storage"))
-+		test_sk_storage();
-+	if (test__start_subtest("queue"))
-+		test_queue();
-+}
 -- 
-2.47.3
-
+tejun
