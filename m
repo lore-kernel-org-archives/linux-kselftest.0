@@ -1,164 +1,120 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788524A482F
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 12:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8121C4756DF;
+	Fri, 16 Oct 2026 13:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792155302; cv=none; b=kHcDKFh1PLNfSsywLrgR37BtdbKuC8kMjnEYRyb2oF8nUxcTr0+Ygh7PG1GQf5yBZB8M4EMV2IM+A2y72AIr8wsYlKAWnMtmO/Gu76deqZSWAp2B57b3wZnoNcgfw8GH/9pEnDDEBv9IQwF4O2JyB1+xP0gRigBxwOfF6cOJ1eA=
+	t=1792156928; cv=none; b=ZAabxF4emaGpkG4xMcvdyIVxYVsRDLtsRuc8DDG9wcQL59DuJDDwp+qKjlMG2GaULWWiTYNsHw/mWVjNChOWjqBIafdJKcgtxGh5T7MRntE4KB993f9HsVsTJ0MMmeTeTuTQImWRoSCa42PgjXOXj06WHuLPLdoKwGT6Ty6G+qI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792155302; c=relaxed/simple;
-	bh=LX8hK0qolg/iOl1j+KdSYrMDtNDyex1iT3NZil1UQBs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=fvB4S+2701hut1wWxfkbx4X5231FEp45MItZtXaRQOnmCV3tfjjsZpaeXlWCu83hWBvdg6ZCSmTxheFyp9Dn+qDuUX/+PzZMrjKkaNJjQNc7n61s2qUCoYB6mxN9WFw1gASz7ccX3NFY2RufV/zBuiGmAPHZ/Fu+8+XvWIHbAwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Feltn+1x; arc=none smtp.client-ip=74.125.82.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792156928; c=relaxed/simple;
+	bh=A7txyVYnucQ+mXIF45spbjwttKKlMtGxt+1t/z8ssrA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FSlaK0QzTbYsEspOSws11kpQ+5yZzDM+VwyeLtq/A9+ir9KOSV9IO9Ld00Zw9Dkj6wgkn0c03UYXxcZ+hxa3iVwaKvagCu/8ewvTdNplEBeEBGiyVWl2hGp1ccPZ24Ht8WnFiRWQ1apuRUFLV2H4F9ZaI6KsreeBoWFQWJ1ikRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YDu/F3sz; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Feltn+1x"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-35c76e9614aso4863034eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 05:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792155299; x=1792760099; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=E95YYQwjstxiJyP2LILlZnMWy7pjKVcdUHQn5hEnhWY=;
-        b=Feltn+1xjtEkmFDjxG+o6kSufSk6HEs6nZqU7YCY2FmuOUmKl7GVtult1UoQh8ridz
-         /8LGvhhP5eetPUCd3BOeyfh9Q9xgr8fu9cnUHWJo8+FT+ISNh671W2KlhOFWXodEJnDL
-         hfi74GHgawQpqc8Tkyz1/BfOzLxAnB8J6OOHfYoYayCEw0uBwOzdiUsU88Vp32b1zj68
-         1HFSmFycYhtcRThTupJxzMCw0H4j9BFbK5Z09XOiMH87GRLRdZi3GB2xAJpbyg977gvW
-         +AnOBKIgLcQ+bJDyQxNlcqsiv2zm5+vkbY1s+gR0LRciN/5SybYc0Fnvt5qXkcOoYk+k
-         V7ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792155299; x=1792760099;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=E95YYQwjstxiJyP2LILlZnMWy7pjKVcdUHQn5hEnhWY=;
-        b=KexvL5iJ4s6fYXTzeUUtGWmdDoJtYn1KO/n+XjXsOllclCTiAPPwf6twPjgtarcRA9
-         VfmZFjOQC0YmPQf9fpegX+8wAlRHxZlNjxAgad/4nKH4DNsQOEDvbQCpI0SOZ439/t3s
-         +vMOWNfY7eVZVBAv6H7IwlUtSWaEPJCbeKnjZpxWv8ZfAW5wP3yZBdZHVaxk/vCL9BOb
-         wRqkBA1PmxQETGA7t0kvMvwitdSmeie8dtGb17zfvVmM55rk/leOn5Sq/ZuUkU1UMjNf
-         /vRJp6ZrN0ogEdgURbOpx1Ry4jXLwTlXEpuZoeFKwqdCnQh6OY26aA54XaZ8qOTT27SY
-         wxXg==
-X-Forwarded-Encrypted: i=1; AKwUvBzvKERxNaDTicwS/Twm8wzmiZpyJhoCdpwqwkMFRueG58TVY2U50vaPmm3dUSUVEa/dcMfYgv1Mr0BKaKYftTE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIYjlnIgLmtx5mYIjdCDm+h/nQKN+yDZLJ612jM9ZlW33tHRHHO
-	qQaiBCddDQsgktHbDrtpAonIvkWPjRJkt8S7sd+uJuSQcxdMWwRqskLD
-X-Gm-Gg: AYBFou2o+NEaiCyd7MHyeyxORoLrkR7fuRP8KONY1Ek5afvkweC5JEIeN8YNWy4YbRi
-	ixIgoUAAnrynwrfn285gTc4P9z7TL8xna2KJO7sQynpyidB47gJk3VIH7hI4SaqTG6vcflNPHhh
-	BGpLeYiK0M8LvmNAQ/H1RavMfEQrozrbC76aPlLCRMUdkiAI9xAVUuQNoGQAX3BQ8fyO86oVsiu
-	sa+OOGmuPuMsh7TFDe3ldAd942wWnxoT0MGB1Lzg467gJz2gDKZSrZPqWIHgAd8wjUU4hngRmk/
-	OKED9U34zaj7cHq4D5vp/2oOj1f/JKf0LoMglozsLMuoCehEKItUA8hU4iICDmUxb36vrMhdWzX
-	ZVBIyq5NF0c1qvzpiBgaXiYZLa0O40iV3FO/HHlO4gk9+XQ/ZJt/sVIza5+7cLLwmGVzC0A5N4S
-	JCspvf0iY/klH0l43KceHXQVQLM7CzYI5LKiwOatJl9VPt20NnlQ7U45hKuGULERlJMzIf4icQA
-	hPh
-X-Received: by 2002:a05:7300:d58d:b0:360:73dc:1e13 with SMTP id 5a478bee46e88-36073dc22cdmr3045198eec.17.1792155299332;
-        Fri, 16 Oct 2026 05:54:59 -0700 (PDT)
-Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36081fa5a6esm6974508eec.16.2026.10.16.05.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 05:54:58 -0700 (PDT)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 16 Oct 2026 20:54:48 +0800
-Subject: [PATCH] selftests/mm: skip hugetlb cgroup v2 tests without the
- needed controllers
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YDu/F3sz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792156927; x=1823692927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A7txyVYnucQ+mXIF45spbjwttKKlMtGxt+1t/z8ssrA=;
+  b=YDu/F3szXkxDMNkM4rpmV4HNY7tjTr7HzUD+TnwOLWlZyx/re1Bct/F5
+   6BPNRMsKk75r+4HGFNcsoktxRcC2CHCP27nIvcX3vLHSRacTkUWLuHJ90
+   Srg9BpMx8o6b2yjfWMcQ0KO0jRRjOdNOtY/RFj/n7prY4pNFuGp62g5lu
+   OXLnnSWwhWYPEgXRhBr99P144qttT0k3taPtsM0xLI9nYTiQMfD5J/OzF
+   Wc9ynpXheniTitIbLSruq1Nn38cT0YROcnPF6GjFIiK68HSGuAKt2qFCj
+   J1aqG2f4y8SCpBd5ejblMMR3kZLdYQej4y705fc3frmbWjBXIgdvtcckW
+   w==;
+X-CSE-ConnectionGUID: vnQftWnqTwuMs2qKpwxuNQ==
+X-CSE-MsgGUID: 7mFImgLaQIeRb8jdz3Xazg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11936"; a="820266"
+X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
+   d="scan'208";a="820266"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2026 06:22:06 -0700
+X-CSE-ConnectionGUID: NG1UJPDCSDKpNOKt4UMv+A==
+X-CSE-MsgGUID: 7F3DT3sORvSDv1o3mBLYiA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
+   d="scan'208";a="1831994"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 16 Oct 2026 06:22:03 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xHhsl-00000000IAU-1WH4;
+	Fri, 16 Oct 2026 13:21:59 +0000
+Date: Fri, 16 Oct 2026 21:21:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Rae Moar <raemoar63@gmail.com>,
+	Ryota Sakamoto <sakamo.ryota@gmail.com>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Kir Chou <note351@hotmail.com>, Petr Mladek <pmladek@suse.com>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	Guan-Chun Wu <409411716@gms.tku.edu.tw>,
+	linux-kernel@vger.kernel.org,
+	"(open list:KERNEL UNIT TESTING FRAMEWORK \\(KUnit\\))" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] lib/tests: kunit for associative array
+Message-ID: <202610162123.hSusVMnq-lkp@intel.com>
+References: <20261014160144.1835860-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261016-bug-selftests-mm-hugetlb-cgroup2-skip-v1-1-7c78883a67b4@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAJce0moC/x3NTQrDIBBA4auEWXdATbGhVyldJHY0Q/7E0RAIu
- Xuky2/z3glCiUng3ZyQaGfhba3Qjwbc2K+BkH/VYJSxWmmLQwkoNPtMkgWXBccSKM8DupC2Eg3
- KxBFf3qlW22dnvYHaiok8H//P53tdN27F2oZ3AAAA
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
- Mina Almasry <almasrymina@google.com>, Muchun Song <muchun.song@linux.dev>, 
- Oscar Salvador <osalvador@suse.de>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261014160144.1835860-1-jarkko@kernel.org>
 
-With -cgroup-v2, charge_reserved_hugetlb.sh and
-hugetlb_reparenting_test.sh mount a cgroup2 hierarchy on a temporary
-directory when none is mounted and enable the hugetlb controller
-(hugetlb_reparenting_test.sh also enables memory) in its
-cgroup.subtree_control.
+Hi Jarkko,
 
-On a system that still binds these controllers to cgroup v1, they are
-not available in the new hierarchy. Writing to cgroup.subtree_control
-fails with ENOENT, "set -e" aborts the script, the test is reported as
-failed, and the temporary cgroup2 mount is left behind.
+kernel test robot noticed the following build errors:
 
-Check cgroup.controllers first, and skip the test when a controller is
-missing, after unmounting the hierarchy and removing the directory the
-script created.
+[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
+[also build test ERROR on linus/master v7.3-rc7]
+[cannot apply to next-20261012]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-With hugetlb and memory bound to cgroup v1, per script:
+url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sakkinen/lib-tests-kunit-for-associative-array/20261014-190138
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/20261014160144.1835860-1-jarkko%40kernel.org
+patch subject: [PATCH] lib/tests: kunit for associative array
+config: i386-randconfig-1010-20261016 (https://download.01.org/0day-ci/archive/20261016/202610162123.hSusVMnq-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261016/202610162123.hSusVMnq-lkp@intel.com/reproduce)
 
-                                before      after
-  result                        fail        skip
-  cgroup2 mounts left behind       1           0
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610162123.hSusVMnq-lkp@intel.com/
 
-Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
-Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
----
- tools/testing/selftests/mm/charge_reserved_hugetlb.sh  |  8 ++++++++
- tools/testing/selftests/mm/hugetlb_reparenting_test.sh | 10 ++++++++++
- 2 files changed, 18 insertions(+)
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-diff --git a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-index a1cfd3a349db6..65065b1377b24 100755
---- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-+++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-@@ -39,6 +39,14 @@ if [[ $cgroup2 ]]; then
-     mount -t cgroup2 none $cgroup_path
-     do_umount=1
-   fi
-+  if ! grep -qw hugetlb $cgroup_path/cgroup.controllers; then
-+    echo "hugetlb controller not available in cgroup v2. Skipping..."
-+    if [[ $do_umount ]]; then
-+      umount $cgroup_path
-+      rmdir $cgroup_path
-+    fi
-+    exit $ksft_skip
-+  fi
-   echo "+hugetlb" >$cgroup_path/cgroup.subtree_control
- else
-   cgroup_path=$(mount -t cgroup | grep ",hugetlb" | awk '{print $3}')
-diff --git a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-index 95f517c3bd167..811912ae7d975 100755
---- a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-+++ b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-@@ -29,6 +29,16 @@ if [[ $cgroup2 ]]; then
-     mount -t cgroup2 none $CGROUP_ROOT
-     do_umount=1
-   fi
-+  for ctrl in hugetlb memory; do
-+    if ! grep -qw $ctrl $CGROUP_ROOT/cgroup.controllers; then
-+      echo "$ctrl controller not available in cgroup v2. Skipping..."
-+      if [[ $do_umount ]]; then
-+        umount $CGROUP_ROOT
-+        rmdir $CGROUP_ROOT
-+      fi
-+      exit $ksft_skip
-+    fi
-+  done
-   echo "+hugetlb +memory" >$CGROUP_ROOT/cgroup.subtree_control
- else
-   CGROUP_ROOT=$(mount -t cgroup | grep ",hugetlb" | awk '{print $3}')
+>> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_iterate' undefined!
+>> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_gc' undefined!
+>> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_insert' undefined!
+>> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_cancel_edit' undefined!
+>> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_delete' undefined!
+>> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_clear' undefined!
+>> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_apply_edit' undefined!
+>> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_destroy' undefined!
+>> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_find' undefined!
 
----
-base-commit: 437a7e839def0f505277022622fc59a8b071d6cf
-change-id: 20261016-bug-selftests-mm-hugetlb-cgroup2-skip-7fc0316486f2
-
-Best regards,
--- 
-Qiliang Yuan <odys.yuan@gmail.com>
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
