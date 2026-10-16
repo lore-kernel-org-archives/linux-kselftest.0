@@ -1,104 +1,227 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mta0.migadu.com (out-28.mta0.migadu.com [91.218.175.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A653A2F7EE1
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 03:27:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CA21448E0
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 03:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792121229; cv=none; b=lHhvaZIDtEBYWjqYwWaRaHFD2lcODkC5tVN4yX9NJVI9nMa1874hLLOWp5J4RMhjr/UTYQMk6XGUMcBresSUC+sHu5bJWm90wEdrSSIcEdQih1fI6W3G2ipP7NZGtoOjLeLBnqeKkHh1AFuAEIt82E1+0fIxBzuuMt2DpHD2o3E=
+	t=1792121461; cv=none; b=pHmtRLrKzf3m7vj1XDcSqPhNXdd2d82HrWZjWckuuM8ydANAvtHTmIq9TUI44nsG2LORZmas7mz7P5tvPGFgUgiW5Xdlr5Y2k6v3UiP1Yo95diDNx3U/YVI4Z22SwIsbZEGzVaAaG9xs/u4bRNZAckZ9TO2zocdhOKMpBulg1WU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792121229; c=relaxed/simple;
-	bh=/VlbzGT1I3JhT4kb0vmmrNMzk6JfXiX50KYaXup3DEE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=piBKkEawqT/dAWDmRvT6TWehJyH88GGwHX4ULPo4LVNRl64AGXoP8Gtl/OEzCfAuPkzLFuNpDLpXVOUPucHR8aUh8z6bBdMz1UBZQY2ZB3M8MYxIKKfrrRc/BG/IgOl4MFKmWw2OX29zPPrZGZsSWTCnces2UJvIjsv7jG7Wdsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aOEZI/6u; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792121461; c=relaxed/simple;
+	bh=UuPBc3LRsWbAd4egcVpTfpxrv4fiEWFXnS5VgV5rga8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NobTbxJuuZHeELypcintefaCFSbSZ6ROBTTH5uieFb9TL3Usz/Qgk9AIQpG8Y2+utv7X5HgNGC2oii+Q13I4Ps0dWgaJCsHqZHOl/pMRWI1sK1gW7mC/hpZtdWm383Vuzv+IAIWrgk+cO3JFK9Ix3GIR8QTcWYI84suYvKHmjSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tUsYPxz1; arc=none smtp.client-ip=91.218.175.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aOEZI/6u"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8875d220446so3184240b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 20:27:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792121228; x=1792726028; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Y837x6zsLDY7Lr6OWbl3JVY9ardcrHQBqEd20U8eVmY=;
-        b=aOEZI/6uYuEBzCmL/qo3vZLbAd2DvnZRQ6K1uPz77J4R6gxeHkqNC45Z2nhAamMAul
-         CTKwc0IdckT4floa+zCesYjin2tKEFeiQZIIkyMuRGCCY/pZQYfhMyUxKBGRU2jal3/K
-         A1V1S6NjwHP/kfkADahCdnzCYdnQHyB39frqhbLeE7j0exzONjoy/wiyiA+jf1Y8fJvo
-         0f4eSbEttlV3wzTjYNrfhZTM58nzFmFIm9Q5KIHpxyTtKn8uQkCh7VBuaZ3jeIreTGWI
-         rNc9T8IpOZAX8Uj84qRr0TEuDmEdY8dqAuhOPsFOkHNAZZYOFFL5BaiH2mV4JLqBh+Up
-         mXEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792121228; x=1792726028;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Y837x6zsLDY7Lr6OWbl3JVY9ardcrHQBqEd20U8eVmY=;
-        b=yYqSua6z9zRJQjV+DFQecVH2foqZzzYKDQPSPTm+ZsLNMLGOeFONUkz1bzWPI2wFiT
-         MzGqVqQJmHApq2NY0WnRCgAAXXMbs+0r9xwzE2m3HgOgKMwau2aXasnC5+X+F8N1QjfG
-         +MwkUWJ26iebuUEx1rIPQ4XJXnRfQkuArenE6s6MG+UES63ts2+Ek+TIFam0TIGd6hEw
-         EPNVUUmixLjp2gfXhjPIlfSngECmqjh4Lo0hl+nPhfXSckyKnso+8CxeHFYE+HcCl8Ez
-         5RAo4iIFYbvwVfisUqTDbZWduy0jkoPDBBGIKz2kwhhD9gcOwIpJz0DScJO+EW/a0UBo
-         qIqg==
-X-Forwarded-Encrypted: i=1; AKwUvBwOHxOSu9WIH6/bjXC8VYIZWirmme1mr/3zJvMBHYHYoppWe6qJjJV0CgBbJpI6RKzjt1mtBGeXZkjec99j9+o=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJTbAjnB9qwFYhBSmrsc51rA5rCoWAKZOzsCRq6k0NkxkVYaSTA
-	gN6LXmheU08Yd2tv844Zf9vMdAoiB35Ofs7ATBJBdaJx4/jGu7aBswClcV2J4CRpgIA=
-X-Gm-Gg: AYBFou2YLXlbkVQtD046IP8+ZWd5MBIS8rFbk50q+8fbPbtb7LYfRd+lBzNUto9O67+
-	Fxtndt461vo3YglGNIn/HqfEufLZCUiy6hmiYIXOqfsKvaWiWJ5mKZPrGPC9EnSqcZnebxqj5Q3
-	2VgK1n1pEv6dWEHKduHuLCjgaZFDh5XyCfCDAW4OHw4GnERydRoGz9MPLWTBk9Q+/jJA1XDzQTf
-	8gx4UtmdLPCExsx08v5szldPanmkiLdqx36QDz73mFPCr+AUz5mCqN2jEJLJLk1wsxFQIwqbLd5
-	sJ10hdKj5fDvAEaoNZTcZNOm6Hff38l15Xap29ElzPMl4rJatMbU1uz5iiu72e0J2X8V9Ef9Ot5
-	3Dd9wWFoMTFjGcNL1xdFJjcY/bYUFpY8Bjqlc0Mq+ABy7Jw0Hj/UOmQgCkyO1MlLxNnHKT9wDph
-	lYoilBxfdc13X1JKQiK9xlzDo+aoYOCPvse9167c7pG6EiPRgCLQJrey3ld9rlFyga4SEy6q8Jb
-	VNWzVeX
-X-Received: by 2002:a17:90a:d2ce:b0:3ac:9925:72ae with SMTP id 98e67ed59e1d1-3ac99259edbmr4024010a91.31.1792121227907;
-        Thu, 15 Oct 2026 20:27:07 -0700 (PDT)
-Received: from localhost ([182.216.53.174])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acd3f3ce5asm305110a91.3.2026.10.15.20.27.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 20:27:07 -0700 (PDT)
-From: Jaewon Jung <jaewon8868@gmail.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/ftrace: Check for dynamic_events before clearing
-Date: Fri, 16 Oct 2026 12:26:32 +0900
-Message-ID: <20261016032655.82009-1-jaewon8868@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tUsYPxz1"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=UuPBc3LRsWbAd4egcVpTfpxrv4fiEWFXnS5VgV5rga8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792121457; v=1; x=1792726257;
+ b=tUsYPxz1taAWGICGaHkh76UH6SsAIJC+Jbb/cGOr0LfnC7pQ62P2k48Ngu5N+Ueq4hgxmWFT
+ bTzi2E+/23dOy/wTI7yx4IhJPv5fuRGduU+2iiP4lEtvq4E/RZjjvzkra+G8ZqdbQKGvKGf6iNF
+ b5ipZ8iturK3zdJe9GrXOIns=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 665f0c2d48d1a662;
+	Fri, 16 Oct 2026 03:30:57 +0000
+X-Mizu-Trace-ID: 665f0c2d48d1a662
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <497db854-17ba-47ae-a9e0-8f1dacb0b205@linux.dev>
+Date: Fri, 16 Oct 2026 11:30:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v3 6/9] cgroup/cpuset: Don't allow a child root
+ partition under an isolated parent
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Randy Dunlap <rdunlap@infradead.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Hui Peng <benquike@gmail.com>
+References: <20261014140548.575122-1-longman@redhat.com>
+ <20261014140548.575122-7-longman@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261014140548.575122-7-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Trace instances do not have a dynamic_events file, but
-clear_dynamic_events() is called during initialization. Check for the
-file to avoid a "No such file or directory" error.
 
-Signed-off-by: Jaewon Jung <jaewon8868@gmail.com>
----
- tools/testing/selftests/ftrace/test.d/functions | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-index 826141e299e5..4f2abb05e365 100644
---- a/tools/testing/selftests/ftrace/test.d/functions
-+++ b/tools/testing/selftests/ftrace/test.d/functions
-@@ -84,6 +84,8 @@ clear_synthetic_events() { # reset all current synthetic events
- }
- 
- clear_dynamic_events() { # reset all current dynamic events
-+    [ -f dynamic_events ] || return 0
-+
-     again=1
-     stop=1
-     # loop mulitple times as some events require other to be removed first
--- 
-2.43.0
+在 2026/10/14 22:05, Waiman Long 写道:
+> Although it is not typical for real users to create a complicated nested
+> partition hierarchy, it is currently allowed to create nested root and
+> isolated partitions. In addition, disabling or invalidating a partition
+> should always be allowed especially when the cpuset is being deleted.
+> 
+> With a nested root and isolated partition hierarchy, it is possible
+> that all active housekeeping CPUs can be exhausted when disabling or
+> invalidating a root partition and returning its CPUs to the isolated
+> parent.
+> 
+> One way to avoid this problem is to disallow the creation of a root
+> partition under an isolated parent. It is indeed a new limitation imposed
+> on the existing cpuset partition functionality. However an isolated
+> partition is usually a left node where scheduling and some other kernel
+> noises are disabled. It doesn't make much sense to create a child root
+> partition under an isolated parent and remove some CPUs from the set
+> of isolated CPUs again. Creation of a child isolated partition under a
+> root or isolated parent is still allowed.
+> 
+> The cgroup-v2 documentation is also updated to reflect this new
+> limitation. New test cases are added to test_cpuset_prs.sh to verify
+> this new behavior. Some existing test cases are also updated accordingly.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  Documentation/admin-guide/cgroup-v2.rst           |  4 +++-
+>  kernel/cgroup/cpuset-internal.h                   |  1 +
+>  kernel/cgroup/cpuset.c                            | 13 +++++++++++++
+>  tools/testing/selftests/cgroup/test_cpuset_prs.sh | 14 ++++++++------
+>  4 files changed, 25 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index bd8c80f3bbc9..2c445829e24d 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -2767,7 +2767,9 @@ Cpuset Interface Files
+>  	be retained, but behaves more like a "member".
+>  
+>  	All possible state transitions among "member", "root" and
+> -	"isolated" are allowed.
+> +	"isolated" are allowed with the exception that a local child
+> +	"root" partition is not allowed to be created under an "isolated"
+> +	parent partition.
+>  
+>  	On read, the "cpuset.cpus.partition" file can show the following
+>  	values.
+> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+> index 5da9c91295b0..2e44dc8634dc 100644
+> --- a/kernel/cgroup/cpuset-internal.h
+> +++ b/kernel/cgroup/cpuset-internal.h
+> @@ -35,6 +35,7 @@ enum prs_errcode {
+>  	PERR_HKEEPING,
+>  	PERR_ACCESS,
+>  	PERR_REMOTE,
+> +	PERR_ISOPARENT,
+>  };
+>  
+>  /* bits in struct cpuset flags field */
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 40c004386af0..681701ba46e1 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -60,6 +60,7 @@ static const char * const perr_strings[] = {
+>  	[PERR_HKEEPING]  = "partition config conflicts with housekeeping setup",
+>  	[PERR_ACCESS]    = "Enable partition not permitted",
+>  	[PERR_REMOTE]    = "Have remote partition underneath",
+> +	[PERR_ISOPARENT] = "Root partition is not allowed with isolated parent",
+>  };
+>  
+>  /*
+> @@ -2865,6 +2866,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>  	int err = PERR_NONE, old_prs = cs->partition_root_state;
+>  	struct cpuset *parent = parent_cs(cs);
+>  	struct tmpmasks tmpmask;
+> +	int parent_prs = parent->partition_root_state;
+>  	bool isolcpus_updated = false;
+>  	bool disable_partition = false;
+>  
+> @@ -2910,6 +2912,14 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>  			enum partition_cmd cmd = (new_prs == PRS_ROOT)
+>  					       ? partcmd_enable : partcmd_enablei;
+>  
+> +			/*
+> +			 * It is not allowed to create a root partition under
+> +			 * an isolated parent partition.
+> +			 */
+> +			if ((new_prs == PRS_ROOT) && (parent_prs == PRS_ISOLATED)) {
+> +				err = PERR_ISOPARENT;
+> +				goto out;
+> +			}
+
+I tested the following case. Writing root initially leaves C invalid, but
+updating its cpuset.cpus makes it valid again.
+
+CPUs 0-15 are online, with nohz_full=2-15 and no isolcpus:
+
+    # cd /sys/fs/cgroup
+    # echo +cpuset > cgroup.subtree_control
+    # mkdir A
+    # echo 1-2 > A/cpuset.cpus
+    # echo isolated > A/cpuset.cpus.partition
+    # echo +cpuset > A/cgroup.subtree_control
+    # mkdir A/C
+    # echo 1 > A/C/cpuset.cpus
+    # echo root > A/C/cpuset.cpus.partition
+    # cat A/C/cpuset.cpus.partition
+    root invalid (Root partition is not allowed with isolated parent)
+    # echo 1-2 > A/C/cpuset.cpus
+    # cat A/C/cpuset.cpus.partition
+    root
+
+C becomes a valid root partition.
+
+Thanks,
+Guopeng
+
+>  			err = update_parent_effective_cpumask(cs, cmd, NULL, &tmpmask);
+>  		} else {
+>  			err = remote_partition_enable(cs, new_prs, &tmpmask);
+> @@ -2922,6 +2932,9 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>  		if (prstate_housekeeping_conflict(new_prs, cs->effective_xcpus)) {
+>  			disable_partition = true;
+>  			err = PERR_HKEEPING;
+> +		} else if (parent_prs == PRS_ISOLATED) {
+> +			disable_partition = true;
+> +			err = PERR_ISOPARENT;
+>  		} else {
+>  			isolcpus_updated = true;
+>  		}
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 874a8a161236..85a4f87840b4 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -288,16 +288,12 @@ TEST_MATRIX=(
+>  								       A1:P0|A2:P1|A3:P0|B1:P1"
+>  	"   C0-3    C1-3   C3     C4    X2-3  X2-3:P1   P2     P1    0 A1:0-1|A2:2|A3:3|B1:4 \
+>  								       A1:P0|A2:P1|A3:P2|B1:P1 2-4|3"
+> -	"   C0-4    C1-4  C2-4     .    X2-4  X2-4:P2  X4:P1    .    0 A1:0-1|A2:2-3|A3:4 \
+> -								       A1:P0|A2:P2|A3:P1 2-4|2-3"
+> -	"   C0-4    C1-4  C2-4     .    X2-4  X2-4:P2 X3-4:P1   .    0 A1:0-1|A2:2|A3:3-4 \
+> -								       A1:P0|A2:P2|A3:P1 2"
+>  	" C0-4:X2-4 C1-4:X2-4:P1 C2-4:X4:P2 \
+>  				   .      .      X5      .      .    0 A1:0-4|A2:1-4|A3:2-4 \
+>  								       A1:P0|A2:P-1|A3:P-2 ."
+> -	" C0-4:X2-4 C1-4:X2-4:P2 C2-4:X4:P1 \
+> +	" C0-4:X2-4 C1-4:X2-4:P1 C2-4:X4:P2 \
+>  				   .      .      .      X1      .    0 A1:0-1|A2:2-4|A3:2-4 \
+> -								       A1:P0|A2:P2|A3:P-1 2-4"
+> +								       A1:P0|A2:P1|A3:P-2 ."
+>  	" CX1-3:P1 CX1-3  CX1-3    .      .      .      P1      .    0 A1:1-3|A2:1-3|A3:1-3 \
+>  								       A1:P1|A2:P0|A3:P-1"
+>  
+> @@ -430,6 +426,12 @@ TEST_MATRIX=(
+>  	# cpuset.cpus can become empty with task in it as it inherits parent's effective CPUs
+>  	"   C1-3    C2      .      .       .    T:C     .      .     0 A1:1-3|A2:1-3"
+>  
+> +	# Creation of root partition under an isolated partition is not allowed
+> +	"  C1-3:P2  C2      .      .       .     P1     .      .     0 A1:1-3|A2:2 A1:P2|A2:P-1 1-3"
+> +	"  C1-3:P2  C2      .      .       .     P2     .      .     0 A1:1,3|A2:2 A1:P2|A2:P2  1-3"
+> +	"  C1-3:P2 C2:P2    .      .       .     P1     .      .     0 A1:1-3|A2:2 A1:P2|A2:P-1 1-3"
+> +
+> +	#
+>  	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+>  	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+>  	# Failure cases:
 
