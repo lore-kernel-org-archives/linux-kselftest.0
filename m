@@ -1,149 +1,102 @@
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3D71ACEDE
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 00:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0DB25A2A2
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 00:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792109693; cv=none; b=IAGESzARGCbO+ObOVDsDVwzcH+aOpgJmYZtIJZrv5M4ZK7Sx5Y02pqS3B4xUYLaEtmyVPH327lkSXVi2CYHU35p4aBFPfKgS+RsvsJRkbOfD6f6UlvFOhSTJUw9yAm3aj56VN4MqLBvkaYuqnMHE0UvKl5AToG2dCHLO2FnNKtM=
+	t=1792110681; cv=none; b=cJtIxzVwr9y5PJSBmrZ33uQGR7KgtRzahJCWxdwHOxCgGn0zrx9L11OnQmSvLotHJ2wmDEpbbRSNBGynT02y7eQkRJhI2OI+VwAZcqEpVGOqnV9cl45qk9GLQu4O8DEjgv/Dea4Xy6WIiljyDyCV0r6d0irpWmPz0IctBG3lmv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792109693; c=relaxed/simple;
-	bh=N3hAyy7nTu0uD6uxxEosrsvSAc05WwQLSTSIID6INNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oQL4ihDAGmXWvS783iA18OArqFb6kN/OAbu65qwzlQJiTYgUVpb7l8ls0Il5N197RVMZ7Xuhr2xKyfHqH6bIqwbBfSiQyvNjfGkSVS6A4CcTgBsHE7Pj9YFR+XPoym8V80TD3jOjo6N/9xQ0hrZIBGS8zCpo/fz75ioJjAa/AAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=T/StiSJg; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1792110681; c=relaxed/simple;
+	bh=pPpVYZE37MEdXM4A+LvUAcPCWE74zNQfH8gS2u8rINM=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=bpEEYbLQguPXHnFKr6NhUFROqFmZPUEndXYYDoy6O7fRKlAveyW21l2pO5xXekQVuFnu6p6IsO2iEyZvL2JB9eQ1a6mTLY/kjDb1iuG6Pu8W5bLVK9WWJ6QwmpnehA6PV0rx06ROYhOscdaaUDvBkPK9gGdLgrnsRzrpaig8Ybo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dA54Ps/7; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="T/StiSJg"
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-5351d76e1baso5829961cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 17:14:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dA54Ps/7"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-89d6bd67045so314029b3a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 17:31:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1792109691; x=1792714491; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1792110680; x=1792715480; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=V2saNd2pf5xXpmgizEGMG+P83blHZRupazL/vtIJhv4=;
-        b=T/StiSJg9NKkj9ibcSWBMEe5hjKjl5QSwtnEiP3tJzvpn/R0nSFhQSE2BteEpHDzDF
-         4uRGBFJHEJaC8NsxylpA+ABes7IxI2+87ROJ6dQn0dhETh3oLKejUQcI3XVrCeooZ0jN
-         LBuzzRkKgdH7XqHEVZM1mVh+4VYM5srvaGbH7cRqoiS+NpWHcQ3PPJ8hSNCRl3zf0jSx
-         OC8glC/BwOAeoVt/aqPc6qBd/KOujSyKOKYhxMVH9idVTMQYEAS0+Dk3trwFqSQzgoDP
-         Ukq63JkewdwSwFPWIY5gvBVoi5Iy7viGPaetFhiagl3amNV78U7Bh5Yi+uua5qHdSPpB
-         aUIw==
+        bh=pPpVYZE37MEdXM4A+LvUAcPCWE74zNQfH8gS2u8rINM=;
+        b=dA54Ps/7pR0FU9wNDr9tY3+FpNTxC29Ck0g7Lx9551UcjbWRuergvCfYwqHsLcci0k
+         psV0muIX38K/9zdQFoVCKZE1QuBHSNFSNJcHGrfhYSkHKdbgpAR/k+6dEMK4jXpl6CeR
+         dfOsI3iMB0v9G3k+hGqStjHifMQklrv5V3tG7rT6Pbl9WQl5Nd747zoKFCwZvskD8vcx
+         By3uujNiVzEnkZnMcewEvCnuM9nwy5SvP8+Z2Yr+/OE+OmmWeJ89NDzyy7U4r8Y25AKT
+         3UJ8/pWZLrLw6U69XeNrydWYhGkvQHY9JPqNx6eNd5x+xdTMs/o2QPCc8f1Z/n9d8dHN
+         PmNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792109691; x=1792714491;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1792110680; x=1792715480;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=V2saNd2pf5xXpmgizEGMG+P83blHZRupazL/vtIJhv4=;
-        b=Bt4coLe94v0rZz6yAI+ilxZLIDQcoxFlg3h5P7CnLwGHF7GSxpRWap2K7vRSr6kxkp
-         HY8ue7fzAm2K92gCk/2y1I3uSLENbaqJzwlFPkvVLOpOsNdG7V0ettRo8hiJ1z77rPSB
-         8W3guBep3nPq1wdzl/HXOrO5hiZFVAQhJxlRfQDKt+RZyRvK1KWEWGcw27Lzj8rn7ehv
-         yO2hoyvHDTg/hidUJNe7gegu0EfhgC5mC5eOfakRNMYm4vBXTufUImzyIC/IHufCSvVc
-         2rjerhqTrP7pZTaE+++/8hUuaXZeKsepguPl5wb1HM/TAwAAg91UB9rsUhteHtYFKKTD
-         qRZA==
-X-Forwarded-Encrypted: i=1; AKwUvBxUB7oLNkeXe3HtpRyt9CC19EFND+NCZfuf/N3s63hIoL6RnEUi5ekkV/TVs3PzTCPGU+87pkDsiKAbI0SBtOE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJSOs5Gg0/NNjtBl/PqKiXKPQFEhTVlU7JgLF60PfImcEdUXQr2
-	GUs/0v7EPuhwFkG1QiaXw7XuqMj1dJ3Q3PBi1gGnqzkrDCTRGw3wnNUsyyQmOsr5PS4=
-X-Gm-Gg: AYBFou10snARpm9++1ZXfP7CuTFX9wSow0E6a1HxY+N93NZq5BdWEq0gcD+/hHd+yJZ
-	C/O71TnXJrAvoq/YJISOzyqoSdbvWuwbg1qCc/GpUfZ7pjxZgFQXDQahvBZz2lb/90y+GKyUgAx
-	Hcb1LVDFIeYo7ttOKhe0VStdhuukW2h2ruZY8a7Z5o2ESoKea2/KtkGJ0AuwW0g0rxUqsRRh1fB
-	2Aqnk7ICeEvvMNEDdTeYV+Q+bbp5itH38mQOCejo9CneRxpPZ9ouMl6p/gdFbwwdqdr8P72cjix
-	MdBWZxNCrxCtKXjF9acI3vgap8usvZAyHRWXwEGGLYZ/Mk3pEZyEM+fp95DH4FTmdlWeB3yzGH9
-	G1NTDTQMNEMjmxLTpj7YUM/uZKx0UlEtCYAcsUQND5viqTK1ljhWvs4hi3cy/s7KvLeOceW+4/2
-	pDIYT5ALj/BObdRFJN1PCFa11A4I2CJEDFnto8MiHlRApw4bgsfe+r8JEu1JnSeZBcCg8uVT9qn
-	N9MhQj4k+/ji+5M8UU6hjyioxo8Q1cz3xy/xsy9QwmEmSvF4JLTkw5c
-X-Received: by 2002:a05:622a:990:b0:535:ba01:d95 with SMTP id d75a77b69052e-536272c2d55mr30900421cf.19.1792109690637;
-        Thu, 15 Oct 2026 17:14:50 -0700 (PDT)
-Received: from ziepe.ca (hlfxns010zw-159-2-239-150.pppoe-dynamic.high-speed.ns.bellaliant.net. [159.2.239.150])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5362aa57106sm7257071cf.28.2026.10.15.17.14.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 17:14:49 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1xHVay-00000000IxD-2c33;
-	Thu, 15 Oct 2026 21:14:48 -0300
-Date: Thu, 15 Oct 2026 21:14:48 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Fred Griffoul <griffoul@gmail.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Ackerley Tng <ackerleytng@google.com>,
-	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Steffen Eiden <seiden@linux.ibm.com>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [RFC PATCH v2 07/11] iommufd: Use large IOMMU pages for provider
- mappings
-Message-ID: <20261016001448.GC14213@ziepe.ca>
-References: <20261014093733.90312-1-griffoul@gmail.com>
- <20261014093733.90312-8-griffoul@gmail.com>
+        bh=pPpVYZE37MEdXM4A+LvUAcPCWE74zNQfH8gS2u8rINM=;
+        b=FtdtBtuf/izefXAAr6TZHY9dYGChL3S///pCgCxSW6bBUubZhaf5kf+XKJEfFTQ/zo
+         7IHHei2jQtpIp+FQ5zvgmTfr1ZpV21gOtJst6+8uAevqxeC9XhX56rcWzC95QFETvBe0
+         AZtb2Rlkk6+kZD/a3eGL41sklbRDzUoRLbwWticN8Sy6HvgFSg4yCQrqB5mwEE704Rdq
+         aCFvXEC40Dzb4WKnhWRjP3cu3sAy7Lg8KrYdgbSc/XccIhozQG5aWiqpaSqLOwIXCPz0
+         q21ZuiLimOvEXF9YpdRPTt5jpkLkPS6olCD4hs+SnyOswwRKwVJye+SKjj8vzCAbLxpN
+         qjyg==
+X-Forwarded-Encrypted: i=1; AKwUvBzs1uCLDBlE6wPMMO8VYpg1QuFN+/O+4QaXll4Uv6GlkuP+fkGwyilNquw7VnMdueZ5OLoLsNz+D2rmt2K/pl4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKdxu46LDuseYlglKJXE44cgHkDv2jNpn9Xf+6NjC8Ys2/dYwPe
+	+tx8R0f1utsZSnfF3AxCh4McETbY36y7MaoRIEEFiIp9RWfDcutcl6Nl
+X-Gm-Gg: AYBFou3RzEZtuusE1ldI+v8uYWW8d24Xu7SBPe697V64G235Z4SqsaEueUd3NI6czNN
+	JuuDgHyNU41DLRSeKqCH8zd6WG9VwcrINyGkH//9W7pJ31Ygsxn3G8rNJuBMzB/Wph/J5bWqssZ
+	4gJ4add9J67h9vJkOcKJ/W6FFLH0Dxr+TGvMbOvqkyO9IUIUCw/VEPzKhnmcrVXQp1zi2mTj/j+
+	BCK2hZ8ldv3mYO8VgrU9GKIzyR0bSDt97nuMaGPKwtpqU86KTMumuM1jBgy+MoVGozwLx+BW0Gj
+	bFO3KqAbAfK0xauRWjpo80Gh8ORwLAsgy1dTsqXTOI72VKx92SEZvJBaNaMaktNElHB14T9+dT4
+	2FJJ5ZY2elELokdgWdKBlh4kUfo3txi29sAoUtwBQw5fJhyM4JmvZtuOikDDbVlNjaXEgAbRrWH
+	UDroZE7oXMq/ViF2/JYxbdf2MqxkVtaUGJWadM2FVfsu/OaHqBBiWZrkJrKlQvx5/R5YI6F32yj
+	EQarP92gj0sc75BmM6lbAOPVOL1LKW6Ft4w6kJPqYkT0+tpsk1323S4qH2UEMlexH/sTatR+Vhp
+	JJ8=
+X-Received: by 2002:a05:6a00:230c:b0:877:ce59:bd6 with SMTP id d2e1a72fcca58-89f1e9a1c35mr1115329b3a.1.1792110679891;
+        Thu, 15 Oct 2026 17:31:19 -0700 (PDT)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89f57947a64sm275547b3a.41.2026.10.15.17.31.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2026 17:31:19 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 16 Oct 2026 00:31:18 +0000
+Message-Id: <DM5U7S0WO4CB.72E73EAOUSGZ@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <ihor.solodrai@linux.dev>, <john.fastabend@gmail.com>,
+ <davem@davemloft.net>, <edumazet@kernel.org>, <kuba@kernel.org>,
+ <pabeni@redhat.com>, <horms@kernel.org>, <jakub@cloudflare.com>,
+ <jiayuan.chen@linux.dev>, <kuniyu@google.com>, <willemb@google.com>,
+ <shuah@kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf 0/2] bpf: Fix iterator link update target validation
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jan-Gerd Tenberge" <janten@gmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <20261008161309.8179-1-janten@gmail.com>
+References: <20261008161309.8179-1-janten@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261014093733.90312-8-griffoul@gmail.com>
 
-On Wed, Oct 14, 2026 at 09:37:29AM +0000, Fred Griffoul wrote:
-> From: Fred Griffoul <fgriffo@amazon.co.uk>
-> 
-> Provider pages are mapped with one PAGE_SIZE entry each. A device that
-> uses a large provider block then misses in the IOTLB on every page, and
-> the IOMMU needs more page table memory than the block requires. A
-> revoke also flushes the IOTLB once per run of pages it unmaps.
-> 
-> Map each block that the provider reports with large IOMMU pages where
-> the IOVA and the frames are aligned alike, and with smaller ones where
-> they are not. Only the pages of the block are mapped, as before.
-> 
-> A large IOMMU page can only be unmapped whole, so a revoke that cuts
-> one widens its range to the whole page. It maps back what the provider
-> backs now, and a device may also fault on the rest of that page while
-> it is remapped. The widening finds the page with iova_to_phys():
-> pages that only look like one large page make the revoke remap more
-> than it must, which is harmless.
+On Thu, Oct 08, 2026 at 06:13 PM Jan-Gerd Tenberge <janten@gmail.com> wrote:
+> Runtime testing in disposable QEMU guests confirmed that the resulting
+> out-of-bounds access can reach kernel-owned metadata of a separately
+> allocated live map and cause a deterministic kernel panic. Corrupting a
 
-You are going to need to go into generic_pt and implement cut and a
-more suitable unmap to make this stuff work properly. We can't over
-unmap on conversions.
+Way too long.
+The prog needs CAP_BPF and CAP_PERFMON and it writes past the end
+of the map value. That's all that needs to be said.
+See "Length" and "Impact Evaluation" in
+Documentation/process/security-bugs.rst.
+Trim the commit log of patch 1 as well.
 
-> iommu_unmap() may not split the range of one map call either, and
-> virtio-iommu refuses to. Map each IOMMU page with its own call: the
-> widened range ends on IOMMU page boundaries, so it also ends on map
-> call boundaries.
-
-Also please don't write commit messages with AI. WTF is this even
-trying to say? The subject is "use large pages" and this text says
-"map each page with its own call"
-
-Jason
+pw-bot: cr
