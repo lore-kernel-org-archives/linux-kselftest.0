@@ -1,146 +1,149 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B864DA9B1
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 22:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3D71ACEDE
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 00:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792103760; cv=none; b=l2AQ0k58/dsq5G+/Zd15AuXFpHHRx5RCXi8BT7XDKl+wicXt/kmZVJXxGixo/UN7p3kM/G4vjIyHpiEnKme6WWEkOkn57JFrso+wfRb58Zag0AIl8aDoDzgCQZ+YHVsqGqKz0YjYMVlL/PHGK6vJ4Ok05Lhy4s4H+vf7Uy5iJzw=
+	t=1792109693; cv=none; b=IAGESzARGCbO+ObOVDsDVwzcH+aOpgJmYZtIJZrv5M4ZK7Sx5Y02pqS3B4xUYLaEtmyVPH327lkSXVi2CYHU35p4aBFPfKgS+RsvsJRkbOfD6f6UlvFOhSTJUw9yAm3aj56VN4MqLBvkaYuqnMHE0UvKl5AToG2dCHLO2FnNKtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792103760; c=relaxed/simple;
-	bh=cNb2599aisLf9N4nv6csEEr4VxPSgmqchakmgV0DaH8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=bwq7FX7XE7ii4N56bk20aPgenPws9f1xigdvmno8fs7M1XK9dGDiTNIKwg2k7arrRWaE8rmeGH3dNuaV+4ciJ2HQR+D2F+23OqfGuEEHOYvEA2pJMaFmvvo2SU+eJFXEJwWMvj2FBLBHNNAEmCJL8SCRT8o9lQXu/fZ2IYaCcC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EjIqj7pC; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792109693; c=relaxed/simple;
+	bh=N3hAyy7nTu0uD6uxxEosrsvSAc05WwQLSTSIID6INNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oQL4ihDAGmXWvS783iA18OArqFb6kN/OAbu65qwzlQJiTYgUVpb7l8ls0Il5N197RVMZ7Xuhr2xKyfHqH6bIqwbBfSiQyvNjfGkSVS6A4CcTgBsHE7Pj9YFR+XPoym8V80TD3jOjo6N/9xQ0hrZIBGS8zCpo/fz75ioJjAa/AAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=T/StiSJg; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EjIqj7pC"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-35943f55c06so564350eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 15:35:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="T/StiSJg"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-5351d76e1baso5829961cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2026 17:14:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792103758; x=1792708558; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id
-         :references:in-reply-to:user-agent:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=xXSyEv36jnn0UrqVwNj52XhE8B6xeFQj285n9/QUz+4=;
-        b=EjIqj7pCoK4+nk0gU9MX14g+breJOxcXlm0yFKr5EaiA8aq7vDFzKWKqk+IoaAcvMV
-         mSk4mZuF73BmDubLI/kgjeBIyCTSOxz0+xTMAhHUnQy+xx/mhI9FpSqXCtR1GsB/HQ/K
-         BfGvBbOB5qbbVG/vRaSijI7V088bcrEaSPx+mfU4LsS5YTmPXTAFdGc30M8xHlIR56zG
-         Es7oHusr7nahKY3iRvXOTKZYXuBp/VBr++bBzCfjFl929eJRLbEmlP/94yn/pOgGzBkS
-         h5EXmNuXi41gSBA+oH/q0PCluQzF70hc4fFgENnEBxbpR86TLZRDtN80ggq4m5Ay3lsG
-         OqMw==
+        d=ziepe.ca; s=google; t=1792109691; x=1792714491; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=V2saNd2pf5xXpmgizEGMG+P83blHZRupazL/vtIJhv4=;
+        b=T/StiSJg9NKkj9ibcSWBMEe5hjKjl5QSwtnEiP3tJzvpn/R0nSFhQSE2BteEpHDzDF
+         4uRGBFJHEJaC8NsxylpA+ABes7IxI2+87ROJ6dQn0dhETh3oLKejUQcI3XVrCeooZ0jN
+         LBuzzRkKgdH7XqHEVZM1mVh+4VYM5srvaGbH7cRqoiS+NpWHcQ3PPJ8hSNCRl3zf0jSx
+         OC8glC/BwOAeoVt/aqPc6qBd/KOujSyKOKYhxMVH9idVTMQYEAS0+Dk3trwFqSQzgoDP
+         Ukq63JkewdwSwFPWIY5gvBVoi5Iy7viGPaetFhiagl3amNV78U7Bh5Yi+uua5qHdSPpB
+         aUIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792103758; x=1792708558;
-        h=content-transfer-encoding:content-type:mime-version:message-id
-         :references:in-reply-to:user-agent:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1792109691; x=1792714491;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xXSyEv36jnn0UrqVwNj52XhE8B6xeFQj285n9/QUz+4=;
-        b=J07x668qKfk9SPSl2Tn8fJUqDmAB5U4DyDAsKfkECCSLbvtHPAjQbJLtXgFZAavyoJ
-         B77dEV6RNDQaTsptrj3exGFOcLCcWyt1jA74/s6JwzKDQvSDZfxvTa+s8uAxEZJcRj77
-         gRnDbpmh6RIL8ZPfOOKielonurzWwamNVDDcwN3Ascp/6N7eA9en3HGCzC5Aq3zksUaR
-         CeasfULRTCUZgIZC4C5tXcRXqMLNrRgWX/nB7qB0qk2c8CYUHikBg3DPWmk/xJ8zK/Vi
-         fJj52tOyJIgCklhOTN2HFRjrRcxFe3HpPUE/Lj8c9zb3q1mZm8ds5RhaRIKyxfUljky3
-         Tklw==
-X-Forwarded-Encrypted: i=1; AKwUvBxL/GQgQ1kC+Ax7p7+I6ycEuhbFdC8q0462K+1yJYzZk1ODTFrXrDMltVIgQE8GHG2dsJgYeRcWMtcL1a8nzkY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIkmES90mTy4QTXU9btZ2KUTPysX0jRswULHxgle6mfCF1vLzaI
-	anz42rKvhLYZlo7qvM+YmsxU9xPWzCLkx6PWKk/sBwWLZ1fcw/h8iP/3ldnLVj/a
-X-Gm-Gg: AYBFou0ILrlwvYj3NJ799yH7PyaLMhLVKQjF83tmzPhrfD/JebfS+mrZw04ZZXgRJNM
-	zQU77wQA0GHihjw0HAoWq1RPY3QP2f+q8qE/meYzhS/jNln9CSzxdCsAqhi+0NFlPh4PUd06F0m
-	o6NoiG4B7lAO+B0Wj4mOJk5X0nJxA9OieLBBt/ICzdlj1628bVTPGxfD21HIIBu4hpc6bNDNYXo
-	cUQua7N2KXIb23xRLFJnYgTPpPC5ybXP1ybkT9bBdCciegjNBXpK0x2rq/KJJPta0Zwqo4vh5LS
-	TnlF2mPRb8uoNqL2BKxf86s9aPleUPlatTUjcb61O83A3xX9ODJn03ZuASfPP8C4+mQ3/nwOu/M
-	PdVvKsD1qTlXnieNXLyF5dtLwwzbMTCJzao733bdVa0gKHiCg7Ti+dXukTHz1D4QSwUZIcmxNMZ
-	Ze86pSWtcqL1Tvxk2IHnqAFWE2h6HF0G8HNnSdQA/NaBeSpu3W1I9OqI1A0JefqXn4JuR6OfGmv
-	5vwj3zhxiFhggs=
-X-Received: by 2002:a05:7300:50f0:b0:35c:eb2a:8c2a with SMTP id 5a478bee46e88-3602ae5f83emr1712774eec.8.1792103757626;
-        Thu, 15 Oct 2026 15:35:57 -0700 (PDT)
-Received: from ehlo.thunderbird.net ([2804:2bf0:60e7:ae00:5bc5:e41d:2ee5:2023])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3607ee0cab0sm1155305eec.3.2026.10.15.15.35.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 15:35:56 -0700 (PDT)
-Date: Thu, 15 Oct 2026 19:35:50 -0300
-From: Arnaldo Melo <arnaldo.melo@gmail.com>
-To: Sasha Levin <sashal@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>
-CC: Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
- Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 3/6] tools: build perf in tools_build
-User-Agent: Thunderbird for Android
-In-Reply-To: <atEo6aIQbgww4G0y@laps>
-References: <20261011233647.2454648-1-sashal@kernel.org> <20261011233647.2454648-4-sashal@kernel.org> <CAP-5=fWFY-tpJz2vcBZvurwdZY5gwd8cuTemE9q1rtZ0Vi0dng@mail.gmail.com> <20261013170854.647305-1-sashal@kernel.org> <as6SxXELnoIJenIX@x2> <atEo6aIQbgww4G0y@laps>
-Message-ID: <C62E88C6-52AF-4F68-95FC-310A84DDF8FC@gmail.com>
+        bh=V2saNd2pf5xXpmgizEGMG+P83blHZRupazL/vtIJhv4=;
+        b=Bt4coLe94v0rZz6yAI+ilxZLIDQcoxFlg3h5P7CnLwGHF7GSxpRWap2K7vRSr6kxkp
+         HY8ue7fzAm2K92gCk/2y1I3uSLENbaqJzwlFPkvVLOpOsNdG7V0ettRo8hiJ1z77rPSB
+         8W3guBep3nPq1wdzl/HXOrO5hiZFVAQhJxlRfQDKt+RZyRvK1KWEWGcw27Lzj8rn7ehv
+         yO2hoyvHDTg/hidUJNe7gegu0EfhgC5mC5eOfakRNMYm4vBXTufUImzyIC/IHufCSvVc
+         2rjerhqTrP7pZTaE+++/8hUuaXZeKsepguPl5wb1HM/TAwAAg91UB9rsUhteHtYFKKTD
+         qRZA==
+X-Forwarded-Encrypted: i=1; AKwUvBxUB7oLNkeXe3HtpRyt9CC19EFND+NCZfuf/N3s63hIoL6RnEUi5ekkV/TVs3PzTCPGU+87pkDsiKAbI0SBtOE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJSOs5Gg0/NNjtBl/PqKiXKPQFEhTVlU7JgLF60PfImcEdUXQr2
+	GUs/0v7EPuhwFkG1QiaXw7XuqMj1dJ3Q3PBi1gGnqzkrDCTRGw3wnNUsyyQmOsr5PS4=
+X-Gm-Gg: AYBFou10snARpm9++1ZXfP7CuTFX9wSow0E6a1HxY+N93NZq5BdWEq0gcD+/hHd+yJZ
+	C/O71TnXJrAvoq/YJISOzyqoSdbvWuwbg1qCc/GpUfZ7pjxZgFQXDQahvBZz2lb/90y+GKyUgAx
+	Hcb1LVDFIeYo7ttOKhe0VStdhuukW2h2ruZY8a7Z5o2ESoKea2/KtkGJ0AuwW0g0rxUqsRRh1fB
+	2Aqnk7ICeEvvMNEDdTeYV+Q+bbp5itH38mQOCejo9CneRxpPZ9ouMl6p/gdFbwwdqdr8P72cjix
+	MdBWZxNCrxCtKXjF9acI3vgap8usvZAyHRWXwEGGLYZ/Mk3pEZyEM+fp95DH4FTmdlWeB3yzGH9
+	G1NTDTQMNEMjmxLTpj7YUM/uZKx0UlEtCYAcsUQND5viqTK1ljhWvs4hi3cy/s7KvLeOceW+4/2
+	pDIYT5ALj/BObdRFJN1PCFa11A4I2CJEDFnto8MiHlRApw4bgsfe+r8JEu1JnSeZBcCg8uVT9qn
+	N9MhQj4k+/ji+5M8UU6hjyioxo8Q1cz3xy/xsy9QwmEmSvF4JLTkw5c
+X-Received: by 2002:a05:622a:990:b0:535:ba01:d95 with SMTP id d75a77b69052e-536272c2d55mr30900421cf.19.1792109690637;
+        Thu, 15 Oct 2026 17:14:50 -0700 (PDT)
+Received: from ziepe.ca (hlfxns010zw-159-2-239-150.pppoe-dynamic.high-speed.ns.bellaliant.net. [159.2.239.150])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5362aa57106sm7257071cf.28.2026.10.15.17.14.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2026 17:14:49 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1xHVay-00000000IxD-2c33;
+	Thu, 15 Oct 2026 21:14:48 -0300
+Date: Thu, 15 Oct 2026 21:14:48 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Fred Griffoul <griffoul@gmail.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Ackerley Tng <ackerleytng@google.com>,
+	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Steffen Eiden <seiden@linux.ibm.com>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [RFC PATCH v2 07/11] iommufd: Use large IOMMU pages for provider
+ mappings
+Message-ID: <20261016001448.GC14213@ziepe.ca>
+References: <20261014093733.90312-1-griffoul@gmail.com>
+ <20261014093733.90312-8-griffoul@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261014093733.90312-8-griffoul@gmail.com>
 
+On Wed, Oct 14, 2026 at 09:37:29AM +0000, Fred Griffoul wrote:
+> From: Fred Griffoul <fgriffo@amazon.co.uk>
+> 
+> Provider pages are mapped with one PAGE_SIZE entry each. A device that
+> uses a large provider block then misses in the IOTLB on every page, and
+> the IOMMU needs more page table memory than the block requires. A
+> revoke also flushes the IOTLB once per run of pages it unmaps.
+> 
+> Map each block that the provider reports with large IOMMU pages where
+> the IOVA and the frames are aligned alike, and with smaller ones where
+> they are not. Only the pages of the block are mapped, as before.
+> 
+> A large IOMMU page can only be unmapped whole, so a revoke that cuts
+> one widens its range to the whole page. It maps back what the provider
+> backs now, and a device may also fault on the rest of that page while
+> it is remapped. The widening finds the page with iova_to_phys():
+> pages that only look like one large page make the revoke remap more
+> than it must, which is harmless.
 
+You are going to need to go into generic_pt and implement cut and a
+more suitable unmap to make this stuff work properly. We can't over
+unmap on conversions.
 
-On October 15, 2026 4:26:33 PM GMT-03:00, Sasha Levin <sashal@kernel=2Eorg=
-> wrote:
->On Tue, Oct 13, 2026 at 05:21:25PM -0300, Arnaldo Carvalho de Melo wrote:
->> Why is that difficult to run:
->>=20
->> make -C tools/perf install-build-deps
->>=20
->> To do a recommended perf build deps install?
->>=20
->> That would be useful as it is what we expect users to do=2E
->
->That's what users do, but it wants to install packages=2E
->
->We need a path for unprivileged builds on bots and CI machines that can't
->install packages, and many of those builds are cross builds, where perf n=
-eeds
->the target's libelf and libtraceevent rather than the host's=2E
+> iommu_unmap() may not split the range of one map call either, and
+> virtio-iommu refuses to. Map each IOMMU page with its own call: the
+> widened range ends on IOMMU page boundaries, so it also ends on map
+> call boundaries.
 
-I see=2E It's unfortunate as the end result will not be that useful, as it=
- will not be testing what people use=2E
+Also please don't write commit messages with AI. WTF is this even
+trying to say? The subject is "use large pages" and this text says
+"map each page with its own call"
 
-Maybe use make MINIMAL=3D1 when doing cross builds?=20
-
-I think we can make this easier for you somehow, like disabling libtraceev=
-ent when not available instead of asking for it to be explicitly  opted out=
-?
-
->> If that is too difficult, for some reason, there is a minimal build in
->> tools/perf/tests/make, that is tested since forever:
->>=20
->> # all the NO_* variable combined
->> make_minimal        :=3D NO_PYTHON_MODULE=3D1
->> make_minimal        +=3D NO_DEMANGLE=3D1 NO_LIBELF=3D1 NO_BACKTRACE=3D1
->> make_minimal        +=3D NO_LIBNUMA=3D1 NO_LIBBIONIC=3D1 NO_LIBDW=3D1
->> make_minimal        +=3D NO_LIBBPF=3D1
->> make_minimal        +=3D NO_SDT=3D1 NO_JVMTI=3D1 NO_LIBZSTD=3D1
->> make_minimal        +=3D NO_CAPSTONE=3D1
-
->I tried make_minimal on perf-tools-next=2E It still requires libtraceeven=
-t, so an
->arm64 cross build without the arm64 libtraceevent installed stops at that
->check=2E With NO_LIBTRACEEVENT=3D1 added, it then fails building the Rust=
- test
->workload=2E
-
-I'll fix that, make_minimal wasn't updated when libtraceevent was made opt=
-imal, IIRC when it was removed from the kernel sources=20
-
-> Natively it still enables aio, libLLVM, libslang, libtraceevent,
->lzma, zlib and Rust when they are installed, so the result depends on the
->machine=2E
-> I'd like to go with Ian's suggestion then: a MINIMAL=3D1 knob in perf th=
-at turns
->off every optional feature, which tests/make can use for make_minimal as =
-well=2E
-
-Sure, for your use case it makes sense=2E
-
-- Arnaldo 
+Jason
