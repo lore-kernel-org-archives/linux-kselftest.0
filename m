@@ -1,95 +1,96 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B30364052
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 07:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B193E5A2F
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 07:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792136557; cv=pass; b=Jm91d0TOw0Nmw750QZvSI7SJCRhm3IM+nv63E4EDrghCehd+I9Ff2mVC3tR4FSh35+abVzmR9Zzh8SmY/2S+nbrfjIulqZnn0PFN7sB0Dy/gBwTIktfrvW1n2j+24szPWoMAMjFreX94ljVTt3KBCpDzaGV1GlfIYaFDTCy/4jU=
+	t=1792137256; cv=pass; b=qt2jTOcfbO7+nBJc1ARbAOamXS7fKORi+nVAfRobofMQHzi06eYs5YKOhL15YzLvRyACI2fHjQxidPgsdvaHsco3Qy91cYWS6OLKIdToF6SUdUdy7LD8Wm+LQmnylsfyIb5AtjgAb3H5nDrLtahCtmtfFqi/zULvufJEVE0lWdk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792136557; c=relaxed/simple;
-	bh=VX0h5Bm2UY47Tt2z8myprdx9WcuYmLn5gM77krDjH6A=;
+	s=arc-20240116; t=1792137256; c=relaxed/simple;
+	bh=KLwhpQm2UjBGZ/IU6JuN7xThtHaXDHsHEC+uZW/NhEQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TWf7rNWXHjfs1/EJ1kUgDAe3BqiznOdzmQEZU42tyCJhh9e+FmTKArJaP3Q9mmPuL+ZEeiV58PFmxNQ+lbzw19v+fkICQAk1OKprAT1BO4Fno5YReX8+nH2m82jAH8MjKogK1y8bHrCQDEwc43t6sIe/e49IyTZkHg+02CDkXEA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QBzDCDG3; arc=pass smtp.client-ip=74.125.82.47
+	 To:Cc:Content-Type; b=tj40rJUiDMWe9tmi9erhbzQ7b7DLmnd2O3l1V9d63XsAonbas/9GgFOI3VBt5+jPMSPeQ3VbrYUQwbzkWYMvhIFz3rhhOkfuibDUcbX2LFwDB/E9wEU8VMJq5JMNy3qber5Ux/BhtkqGa6wbcGbHT4NzKeucBBLdRMeOFISBaM0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=weOufLrx; arc=pass smtp.client-ip=74.125.82.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QBzDCDG3"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-15354aa70e8so2271241c88.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 00:42:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792136555; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="weOufLrx"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-170135e43c7so3557926c88.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 00:54:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792137254; cv=none;
         d=google.com; s=arc-20260327;
-        b=hpkkdplqwu5GOiJTJYutioNki1Y+Is8JmOEYqEvd6hUlnLUfSz0LMB52iz9qqTFXB2
-         uG4RwRPzZ3VcdTHFtO+4UUhXWNlQNcbI5hXRChWzkLk277XEGOyS+3DCTGgZgoatZmV7
-         SP5m6y2GtMu9rpf3YlUDJajnLdGcmY8JKGOS4nH6qm8wBACwtXTVow9h6h9tf8beYkYh
-         6G4u4e9jYC/eNyZw8DhrtxBsgrBVuyLh1/S1UNGLeDVwBHQq6xGZv71uVBMVILCTSh52
-         iCwXB/G89qPyqgWyfywUs0AtdTn9fWqVXJUGEYqQD8KR8kyMo7998LBgUUeiAmgUzyh+
-         9y2A==
+        b=HvoTW4yAiH8OSg5A3KrHdkbtq8vH+4L7PjMjA4/B4pdyOkpKKTG+GJ+NwX/a3BgBoM
+         0yqOJGSchOaaTNL+1d9e91h2OHbXxyYmjPtGetlHxB/wHn1vL2zzpZZ+oqJLkZd93Fmi
+         YUDWFvO/IipnhVGduhIm+ho8yxb8LWmAAKTuYAlt0h+bTusXDnPTlidMilPNleOW6Mok
+         A6idG5HW+YrFRKPv/2TMDyiu+ahpXCpEAM8rHXBEz9K45D3KAI4tD+qJYtU0xeyHTVtS
+         dvRvMOlnVIeNDpzz69QQ3OEJAP80YmfdMEyq2+eKemjRsXWp2UvAc2qy0xrRKrd4VhGW
+         2xsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=VX0h5Bm2UY47Tt2z8myprdx9WcuYmLn5gM77krDjH6A=;
-        fh=Jq5lX5CuHSPG5SYKQn9/31UF0WvBhho0alacJI+9o1Q=;
-        b=pTbuVPIbbxGSbRxyio0KjkG7rhLstoAWh2/KjY2sHPuCT3YHk8kN3e5qLMv+z626Is
-         b87BLosH4ncSbUncLLyWr07utW5GUoSxkJN8f3IHgO55fyDW3gchS81bhbw9jdONYLI4
-         CgP+75IylT95+iKaIQgdIPt8UPVAS4Tq4TURwm8CSqxjLLrBYZFOKzy2ps16Cu5YakNu
-         XN7y5MacRpQCVuRqTpugbKhUnLtq4fbh8j8HjC69DpPpjC2qK1DqErlHZe5OraGwcGmA
-         rUHNa1Aq5xUP/O1r/et0/nQiKvAkpkRiol7+8BenIV1PPnIzkNCDhznJtamP1mz9pAU8
-         WLgw==;
+        bh=KLwhpQm2UjBGZ/IU6JuN7xThtHaXDHsHEC+uZW/NhEQ=;
+        fh=NLd0JCN3i+/PL3ZDtErj8lk6y2MEJiUlMMvY32Qnx6k=;
+        b=EN/F4TMrhzhSD6DHLDK7KwS7OBx2t/tqJBzpBPxryRo7Mb73MfAEWVdEFO4qYzfGmH
+         vFeoFHCkJGfYe2tWQ+CNCNuzlgkZy8jrCoGiL9o3dfEzUORNzEKLTLBHUrMX3+ZvZ9Nt
+         YhbN35Jc2O741GHx+rbtVDWboflGr4egetBI78/cStkEFLinjEGPIGdCXj3xUKpezL4P
+         so5WC6Z7CXCRNIQTg5uHSSxTUmkug/puZnqsNWiN4I7ydNXOXfKLUxmYm6MYMAiGvpIx
+         GMn6aTAWLsUf6wap6oNMVtyha5QkBfM2krbl3Kc2X8eCnHfrQpQLVoCOwPOEdHPGuaqt
+         +bOA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792136555; x=1792741355; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1792137254; x=1792742054; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=VX0h5Bm2UY47Tt2z8myprdx9WcuYmLn5gM77krDjH6A=;
-        b=QBzDCDG3El9nnvMxpifvH7SBsJiKvYtDrWLShE+su9ih/U+GvGYJ+S6yM+rptayoy9
-         C6VzxcQWUCXQldIxfKhu8Xz557igSOD0OJ2A1ZI5yC7/EM1Q2QqeArj+lPCxPER25QOd
-         Ux7gvSCopIgoY5BGcUZnFu0KOcOtY+rbSbiJ+SSnq6Vqk5yDY48zrTlExQOkczy+MHze
-         IL8VKzhG1nC0UcakoQdsX9PqXVQk+NnNiQ0wrggR3dYTh1RVnt/5mGW+GuO7saQOloED
-         /56lrDh+jz78wWtH29orfm3Kziwd7axNYuD8hGZtUk05nrrArxzTTYEcwyyZ8DAmWVW9
-         PDhw==
+        bh=KLwhpQm2UjBGZ/IU6JuN7xThtHaXDHsHEC+uZW/NhEQ=;
+        b=weOufLrxmXvntHLb6aF9ExyGYiZIKUoo/wDEnuwclKkgTxCAGctFjtSmJnXOS72Ofc
+         qZqnR3IbGTjlvL1FnptfQqgOTN973+u6UXJ9zdgnALbBjg+uqkQchzrbOV1dhocS0hyw
+         uiDYJcSljRap9nMVOV5hEPLDefUO5KIt3eR9xoSTS4xCWPojXifLN/F9ofzDC2QVyN7z
+         b4i3UOnks6IZa2Y6GpdDRL2zfzDgNh/Pv5KxZtkIg/UtnekGCrc7bAyUUzXwD35Vy/6H
+         oQ9cWw9bFOC23EeU/454+2xR2JmYSlRXkTiZnln9xaq5kMlVMLIHdzcfhxxcE886xcE9
+         P+CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792136555; x=1792741355;
+        d=1e100.net; s=20260707; t=1792137254; x=1792742054;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VX0h5Bm2UY47Tt2z8myprdx9WcuYmLn5gM77krDjH6A=;
-        b=EAvLnFWpg9HH2CZiNn9yYLy8tjLD7wds6cv+BvMcPkYU2Ydms2AuCoMtXse6HStzCR
-         vI5pPc3m9BWwwyBIDG3EmUBYZwKgu/bfdjlmdYHAIngFWeNfL2mfnF3J+ag6gRoxXbtV
-         nBBNMP/Nnh1jEmMdtqC0m9lT/KZ4i5kB3Vs/TwKQzd8P7+OIJzB9gf/fae/wIGusEvz5
-         2Xoh77UpbUB2PP0vifBrBeAad0ZUXQT2PF+GCAKbod0yQyzmw1JaVzhBV6dQGGjKmw5t
-         dQrle/tlpfPSFvjsLntXkScQKoml3ZKtfsTnDtI2+1nUFTmVmE5WXLFQC4m9seL0CfRP
-         Cqwg==
-X-Forwarded-Encrypted: i=1; AKwUvBwWR0Neq8Lutn62ASr+diDffuBZe8PuD47u5h00xqixSU7sfxC3tlhGt9FbVeHyqvXbJI/dpDoF9jlLnqodWbg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ1AVKIGzcwaIc4qY3vvKvuRvzZGFWgyqAU+YJBgayt3hgJFzAD
-	wbCN1W2A2PAu+8+2sb4femmvuSCRfbmNU5DnH4rknVx9vXi28qQ5RB/NebOZacDuAz5KpaQo+4X
-	VKbyIK0mchmjn3gT0kzovcG65MjcPpuGvWfwo6lsw
-X-Gm-Gg: AYBFou1/XzNHwc7nw450D8+TXinn6ddvJ0kxH5HrRshUnu+P2mzhgMyAXDY7XQfM2Qq
-	UNYhScvZs1NNKtoSftkLe8hG60M6Mq5uNSH1+2X5Z910jh6gExY+8sN/CXNf37briSdiSEpC5cH
-	3bUMZ37Qqhf2TJXb4DP0G8ZrLXYHwN8Jb5BkNqhKAqmI8jNEuLlfvgE/B2Zqwo7EttjzgIcI2aC
-	yTwravSlcme8dJRX5UGQfwCm4MPFIP4TRk6/MbnEGsk09aNY0QBuXWHgMsY+NyeJMuGATKmsLYo
-	179wOXw3lm6PR9byFs/aR3M8Q0wFGJ90fu777r/f3kHyelOZAAQqwVDAuNHdEckc8xWaGuA27/p
-	bBxgCAJ8uaa8oRqMQoXP8CRSv969Z73PAgRLDRGenRygpMEhO3/pPqHvYfIi/Y6pN/z8=
-X-Received: by 2002:a05:7022:3f0c:b0:151:2e62:fe8d with SMTP id
- a92af1059eb24-16a5dcf817bmr31361642c88.9.1792136554133; Fri, 16 Oct 2026
- 00:42:34 -0700 (PDT)
+        bh=KLwhpQm2UjBGZ/IU6JuN7xThtHaXDHsHEC+uZW/NhEQ=;
+        b=B9yWePaCysC6Ppf0asWTeQLWhCx07qT7hMI3Xr2glfNF+MbdS+cE8/LPXV1Sq95V7+
+         9SzNiyxuQLyB1+02FW33YnhwB/OXhAc+Iwr2ya73bQdIiYYY89SF0G8hw8nWO3NBLAkn
+         Io1ZuXoRu11VoMXPAYfwL3yBJbe0R829H8fE/Grp/x6V1RQ9S+Og5n3XQKTY1S4y7cPt
+         4851AQFF/gxy00g8pSDIJXzx2hiUY58BPCH7u1aTyVteeNSJy+plBl02o7dJj4xl6e5z
+         mLievV/POK4Q6h63PZumPwRnOGjaORsslp1dEjZlaLkxSDH+s46vAtqv7Mwi4/MNOPiS
+         nJEg==
+X-Forwarded-Encrypted: i=1; AKwUvBxJTBubyYdl1DbKSTeAPj5IYD/DpihB/03fmPtcmNuRX5vEB+PVgAbLFi9wpVe2dlKNLkIFWmQv+/cJ1rsSJfI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIrnr3/JAThaHGoAewNyTIcrAgvrNg3hyMq+zXtAF3PZTMlWraL
+	OiuCUmewW7V7hOOcIHrDFz1vjg7IqCIaA//0SrAiczpYPRik5BElHlxaJK9VY9ohU9S5W6QUMjK
+	3rimFXLe+I/Ot3UWeUt0paEh5gT9VDBjMRCl2lN54
+X-Gm-Gg: AYBFou2RfTAN9Ha7YR8AnmKirQxl7dHIiK96FmIx/IN0UwVmjgU+PMn1XwO0Scst249
+	yyG/z2GaWEIIwLYiHCQCFRHYSvuv7ppSBvx3Q110hfxltf+PB+BHYBCAGMmtmQZlDY6/a9Hb9NM
+	YSVXxZc6cj4zWypalJ97FyGyHbc8U5+WUW2hG0LL6IR77ZFuQLc6NtfX1k6FNqA4sgm1fyysMLG
+	z2NTrcAnIBFZWqIlSVwJ0rI4aBlvBkBPqtcgXDIYjUEbBbUt0RKYJGQfUtKfv8ed6dTTyS6PSzW
+	R15C2vHjoGTXaCSo0hIg/CqKHgzEZU3/XYdTAKVifxgn7H0KV7bMqbLbS5fJMyDf0Vd3Vdp6vn7
+	hI3hQZsrrMLs3pBiul2MBayZ7Lxbr5JS1f3wGzpHZ+M/R4gNrPvdMZ73wXYbjlZw3pDo=
+X-Received: by 2002:a05:7022:ea86:b0:153:7a27:b7d with SMTP id
+ a92af1059eb24-16a626f6e93mr26850863c88.20.1792137253208; Fri, 16 Oct 2026
+ 00:54:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261015073736.2944215-1-tavip@google.com> <20261015073736.2944215-2-tavip@google.com>
-In-Reply-To: <20261015073736.2944215-2-tavip@google.com>
+References: <20261015073736.2944215-1-tavip@google.com> <20261015073736.2944215-3-tavip@google.com>
+In-Reply-To: <20261015073736.2944215-3-tavip@google.com>
 From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Fri, 16 Oct 2026 00:42:22 -0700
-X-Gm-Features: AclHuK_wCNAhqJf4c__nZlElCjEEiY8MOOLk1kNiLFXSjiYnruSv8DQvpSl-nBM
-Message-ID: <CAAVpQUAnURtwVgKmRYXTZBjEyb58mxXkeJoMkh7Mc6+ESb1Sfg@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] tcp: clamp return value of tcp_wmem_schedule() to non-negative
+Date: Fri, 16 Oct 2026 00:54:01 -0700
+X-Gm-Features: AclHuK-X0MEqM-qiZR_C1C8OlSnnVfLtG_uH9dpCSScAmzQL4uL378qfzqDiPp8
+Message-ID: <CAAVpQUCpFC-7J=uEgBfh37hFb5BCJvhJQZx7_YKEDCtvbGrGWw@mail.gmail.com>
+Subject: Re: [PATCH net 2/2] selftests: net: packetdrill: add test for
+ negative sk_forward_alloc in tcp_wmem_schedule()
 To: Octavian Purdila <tavip@google.com>
 Cc: Eric Dumazet <edumazet@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
 	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -103,37 +104,15 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Oct 15, 2026 at 12:37=E2=80=AFAM Octavian Purdila <tavip@google.com=
 > wrote:
 >
-> When sk_wmem_schedule(sk, copy) fails under TCP memory pressure and
-> sk->sk_wmem_queued already reaches or exceeds sysctl_tcp_wmem[0],
-> tcp_wmem_schedule() returns min(copy, sk->sk_forward_alloc).
+> Add a packetdrill test that drives sk->sk_forward_alloc negative via
+> tcp_collapse() on the receive queue while sk->sk_wmem_queued exceeds
+> sysctl_tcp_wmem[0], and verifies that a subsequent non-blocking write()
+> under TCP memory pressure fails with EAGAIN rather than returning a
+> negative copy length from tcp_wmem_schedule() and failing with EFAULT.
 >
-> However, sk->sk_forward_alloc is a signed int that can transiently
-> become negative when tcp_collapse() re-packs partially read or high
-> payload-to-truesize SKBs in the receive queue and charges newly
-> allocated SKBs via sk_mem_charge() before freeing the original SKB.
->
-> If tcp_wmem_schedule() returns a negative value, tcp_sendmsg_locked()
-> passes that negative copy length to skb_copy_to_page_nocache() ->
-> copy_from_iter_full() -> check_copy_size(), where it is converted to an
-> unsigned size_t > INT_MAX, triggering a WARN_ON_ONCE(bytes > INT_MAX)
-> and returning -EFAULT instead of waiting for memory or returning
-> -EAGAIN.
->
-> Clamp the return value of tcp_wmem_schedule() to [0, copy] so callers
-> treat negative sk_forward_alloc as 0 available bytes.
->
-> Fixes: 849b425cd091 ("tcp: fix possible freeze in tx path under memory pr=
-essure")
 > Assisted-by: LLM
 > Signed-off-by: Octavian Purdila <tavip@google.com>
 
 Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
 
-Basically sk->sk_forward_alloc should not be negative, and
-I was able to avoid that by refactoring tcp_collapse(), but it was
-a bit invasive for stable and late in rc8, so I'll post it in the next cycl=
-e.
-
-$ git diff --stat HEAD~4
- net/ipv4/tcp_input.c | 158 ...
- 1 file changed, 109 insertions(+), 49 deletions(-)
+Thanks !
