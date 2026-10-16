@@ -1,428 +1,340 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797CC4EB876;
-	Fri, 16 Oct 2026 14:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792162621; cv=none; b=gLHObYg9WJzb7bpsfeKvhDRlh1CSXjd1ieZR6XtK291FcIvCXxYAq9oftBZ8mhWfqazrvXBQ1rJkFPyWpzNZysOvPc0L0OY6ON1TxNW2HRo1RUT5BZLihFHguGJimJ9VjUfzXr66g0ycTje5i1dmPuJKOajT+S9NKexKg5ZpC/c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792162621; c=relaxed/simple;
-	bh=VPuD+iznaHPFgb0T5ME/jEwcfMyYal3GaoaMzqNGQAs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dCOcqVndDQFm3MURDu9Qs6fe1/o1kZB2p5MMalGgSk+L8PnErUO4xsfZ7eEwHq1HsJf+s1n440ERdlNscb+sjZtFw0516kLKhEY4A84Bed7N0JM4+a4VBXmxNwUAvRw4qmdFvCpLcTfXC/5p4InlagS6gwx2BeKcZMIiz7S5iWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=S6ryZJRj; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8DB14F85D4
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 15:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792164595; cv=pass; b=Qs9gvIu0QvM1WIhWdqWRXENJMh91xt6uipOiw+wy8fOw+6N0ia49MMZ3uI9cfV+Y3GXA1PENoRL+bWoQyU6DsyfD7WlnYpOQAF1siwL95R5AbA9A/5S+LVxgBpUrM0FSSohUCherG0KfuvLm8mjouNguJM9tRggc6DMtMtkLpFs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792164595; c=relaxed/simple;
+	bh=JKYwIAWuEO4Fdpw/MxbYoMyckJMChKRc7N9CbueXOIc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zda/jwaeuT6p1im9NOSt6nK2xo00nJKtuF5ag4atcBtTRb3MRa6svtLImjqaYycyN6C+ZiIcAgCW98II7ZanyLpaqavEYihSh9X8To9v0rU+z9rzb0gDA/3S/InAf/yMTNwTReqgX5gYWFdAdttEoJggzIx9WRKnJIFVoMwNXuk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OFiqM93Z; arc=pass smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="S6ryZJRj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
-	To:From:Reply-To:Content-ID:Content-Description;
-	bh=EPJAdsPZxOFKgj9EDg8h628y+uz0cGQWZ8gyqAeH6xk=; b=S6ryZJRjgDSSpj5OX2+b8sjyAH
-	8mC0CzRvD9zRhOnKDR4tN9XgQ/ifJteK/EMc09jPalBaDovu3lbRTrCIHujYnZ3XGqSwVO/5WF0fc
-	/WzjinQQWrnt4pciPa12g/8+Qa1MF92s26k2Ods7t1pfV7ORCtYYh7hESBPTIzmFUH/iLLMuAXIiy
-	duk+v2TcK7htEqICq7W+EdrSc5Q2SSNCkS3FoGlr/x6jglunas0QdlR/ylgcagKQDbmHqFtTDekaA
-	m3+1y0CC/qhu0zuMbOt0F+aiKxRcBPNd2hS7h/Aii9vecN/thnUdYPYGiNOQ9Y39dg4Hm60O3bTLo
-	7B/37b0Q==;
-Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xHjMX-00000001dOZ-1wnR;
-	Fri, 16 Oct 2026 14:56:49 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xHjMU-00000002Qiy-2pyU;
-	Fri, 16 Oct 2026 15:56:46 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paul Durrant <paul@xen.org>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Fred Griffoul <fgriffo@amazon.co.uk>,
-	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v3 03/11] KVM: x86/xen: Wait out memslot updates in the Xen attribute ioctls
-Date: Fri, 16 Oct 2026 15:56:37 +0100
-Message-ID: <20261016145646.579369-4-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261016145646.579369-1-dwmw2@infradead.org>
-References: <20261016145646.579369-1-dwmw2@infradead.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OFiqM93Z"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6ae27f06c2fso6456812a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 08:29:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792164590; cv=none;
+        d=google.com; s=arc-20260327;
+        b=eEfIzwHOKuXF5VtHmEAyD1aXgteXTBxnRLX1JRVDqGCzURVqIh5oBbdlmAo/fMMI6J
+         LWWBcwC81IO4nzbOe4h9wVhEzUbxEcX0OWoh8IqkqKQW66JZKeOWLxv5RmgrfxTZWMhM
+         L9u1l2PjzrvX6Gamx4/aU4ZPEg9v7H9iOtvAUrQw8M9qL9BPFqJrWp3Lna2yszEXOJn0
+         uguvpTle0sSOwVoYXcUlkKMpO1QRw1Jgbd8X43Z2jz1rdme1VvsC1f8KjV6rBwmNpD/I
+         cfVDABsgYsxUtzUbxN8/wviJGZjleCPvZ3lYGEVgJ81pJnLILfROBBjpVSzdwvrf9VfP
+         5Kow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GzxCTLXZVWb1sztadDq28zCG+50J58vjQyR4GrqxYug=;
+        fh=UjxKVW67c7mHUxHzHwVla0bhom9PPOqlR0HrsNMyiv4=;
+        b=XH7+dT8tMlo++snisryVEKhJy49NqISI0dkOgOkCZ538jh1VkRODYrjTIjQMBjXivh
+         w0ygtgfUZUketz/XhEX4NycxJaNYHTjfCPq1SU1wjIGDC2jZLL6KJTqQ+ZV7jOFZnxH4
+         uTo1NtEn5Vx8HT+tO8VUU+0hcnPYnT27/8N0+ioTV4pKbRKyQGyZ1zXtuxbCI46nXhWf
+         j8pAZfvcZxmqWP4UDxiI+qObOgJjldfoECLoGEfXGgoc9vcB/h1XK61OuxjSRjBzZ0er
+         DsI7az726vPTTuDGG42l7iWhzIxtGkax5EkiwCmXcnwnWPX6IOkZyBKmFisa4XGRPspd
+         +xHQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792164590; x=1792769390; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GzxCTLXZVWb1sztadDq28zCG+50J58vjQyR4GrqxYug=;
+        b=OFiqM93ZCLlXRKY44x9U7OTh3RRe0V6EResUzopNGgheVu98sJJnlUfU1F/psk8phD
+         3t3obRICfkxuJLESf23c64jKNyDycpgomiBJ9leu9XUnYbbtNsPOjwagA2qzyJlxsHSt
+         wMN25rrNAftvtP/uaWMXn0HmmZS2udyLp5q+iOMNpCcNvsDEGPVS1jgq34N2H8EW4u6L
+         Zdm9qqZPj4ctkOI/xuY3WGHRNjPEMljH1NSYn8N3GGbrgiGyqH583geNiIW1EBc/teRf
+         nsPeP08JGqKpK9Ggma5Pcg58zT7gSbx6ActpHtgwhvKCPnNmb5hIqgM/DYlLxvP8Ye0A
+         6S1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792164590; x=1792769390;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GzxCTLXZVWb1sztadDq28zCG+50J58vjQyR4GrqxYug=;
+        b=xdzNIWMwwZ4h38bXBglsU+1YksczHbvZfQx3I0OwARZuB1QgCboIBjNy+X2qWNUt6y
+         6Dmu9E37fajQggGfoI54kf/5wwbqqX1qdD74a0Jh1c6UT47yxuqt3yV+dU+K+fhIoyGa
+         HSjwwNFQLqty/bdriXu3JUWm1H5Lmr8fWb6w3ybV3+MPopcwxwt/oPuA8/F8pP/X9kgf
+         k7WOEZG+O+neeMY9MBz0n3aGtPriXdlI2PWHjd7Nb6xMCHWjoyKIpbsMt7/CItnCsxb3
+         NnyNsr3A0fch7KUuV3aZtdlp6eIdfbqVp44DhtvKKhRTnK7gks38yk3Smw6/1V7guap+
+         VHFA==
+X-Forwarded-Encrypted: i=1; AKwUvBzs41FsbDQs3EV19umBy0XC0gwaarErVgzGdz/1N3F6Qv9Mwzgbe0hTZRHC03Z3lz3Q76bT/uLrwviPYB7KH6k=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJVWFoF0EGm9hy9LGQyWr8Hmqyn95wSL35tz5urxadtgZxSpqu9
+	wez3trXJrOXzIOiTg4lb1e84cNw6vBruC0GoOd6VgfjQeJPresJtnA7WoU5qWFFm2jcmaGLLHe4
+	nITmoHsAMdo32HSFDTT3Krw5OUJOOFjPJDK6+JnA=
+X-Gm-Gg: AYBFou3ZMYoE4CAprjckAXCEJRzVU5Y0ZWp9Ao7DdpShj/UfHQNbhF58qIWvFEiBybu
+	x31AgO+9J70zsyJeZclWmvuDXZaHjqNnbIQrVmFOfstUbT9CYcI44TXuamwDuX90+jk/k4yDf+a
+	eJ4R6NNYCNwdtNRbwDulopOBQJ58NKPEWVr7AtMgAiAx/VfKmnOICFE1UolG7GHo2MQcbZoqRb4
+	ZrHymAejqx8yDqEdJNsdyQNFH9qOI4XUJkpissaLRvfZVq0NPLtccUtrOosV1DEFT8xzR9U9EPJ
+	QByx0k/CHRKSkiKdHZaYLG1lG4p9ReXwOKBLhvGmRLDnT2iYTk/jvjNx
+X-Received: by 2002:a05:6402:2115:b0:6a9:f88d:c092 with SMTP id
+ 4fb4d7f45d1cf-6b17c164de5mr18251328a12.0.1792164589590; Fri, 16 Oct 2026
+ 08:29:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+References: <20260924112858.51392-1-disgoel@linux.ibm.com> <20260924112858.51392-2-disgoel@linux.ibm.com>
+ <CAOQ4uxgj3RL2roivmha9yeWToR-s9kaBm8WUK1vJ_q7pWOjxOQ@mail.gmail.com> <95790639-84d0-4cc2-92a8-c97c920b2d22@linux.ibm.com>
+In-Reply-To: <95790639-84d0-4cc2-92a8-c97c920b2d22@linux.ibm.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Fri, 16 Oct 2026 17:29:38 +0200
+X-Gm-Features: AclHuK9GCD3mbn9wIGFBZNK990RRcALNugyHWGuR9k1nQAaxajqzHCCrTNtnk_A
+Message-ID: <CAOQ4uxh2yMYuzjJbmnw3eq-0b-nmmb4J=6zhJcVuHaNHUN3YBA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ovl: fix wrong layer paths in mountinfo for detached
+ mount FDs
+To: Disha Goel <disgoel@linux.ibm.com>, brauner@kernel.org
+Cc: miklos@szeredi.hu, viro@zeniv.linux.org.uk, jack@suse.cz, shuah@kernel.org, 
+	linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Mon, Sep 28, 2026 at 9:22=E2=80=AFAM Disha Goel <disgoel@linux.ibm.com> =
+wrote:
+>
+> On 25/09/26 9:27 pm, Amir Goldstein wrote:
+> > On Thu, Sep 24, 2026 at 1:29=E2=80=AFPM Disha Goel <disgoel@linux.ibm.c=
+om> wrote:
+> >>
+> >> When overlayfs layers are passed as detached mount file descriptors
+> >> (opened with open_tree(OPEN_TREE_CLONE)), ovl_parse_layer() uses d_pat=
+h()
+> >> to record the layer's path for display in mountinfo.
+> >>
+> >> d_path() walks up the mount tree to the process's filesystem root.  Fo=
+r
+> >> detached mounts this walk stops at the anonymous namespace root instea=
+d
+> >> of the real system root, producing a short incorrect path like "/l1"
+> >> instead of the full absolute path.
+> >>
+> >> Export mnt_is_anon() from fs/namespace.c to detect detached mounts.  I=
+n
+> >> ovl_parse_layer(), use dentry_path_raw() for detached mounts instead o=
+f
+> >> d_path().  dentry_path_raw() walks the dentry chain independent of mou=
+nt
+> >> namespace and returns the correct fs-relative path.  The path is
+> >> display-only; the actual layer_path used for mounting is always correc=
+t.
+> >>
+> >> Also fix the set_layers_via_detached_mount_fds selftest: the mountinfo
+> >> check strings were copy-pasted from the regular (non-detached) test an=
+d
+> >> expected absolute /tmp/ paths, causing the test to always fail.
+> >>
+> >> Fixes: a08557d19ef4 ("ovl: specify layers via file descriptors")
+> >> Cc: stable@vger.kernel.org
+> >> Signed-off-by: Disha Goel <disgoel@linux.ibm.com>
+> >
+> > Disha,
+> >
+> > Thanks for the report!
+> >
+> >> ---
+> >>   fs/namespace.c                                |  9 ++++++++
+> >>   fs/overlayfs/params.c                         | 14 ++++++++++-
+> >>   include/linux/mount.h                         |  1 +
+> >>   .../overlayfs/set_layers_via_fds.c            | 23 +++++++++++------=
+--
+> >>   4 files changed, 37 insertions(+), 10 deletions(-)
+> >>
+> >> diff --git a/fs/namespace.c b/fs/namespace.c
+> >> index ae5dc64f8b45..9feefa0a517d 100644
+> >> --- a/fs/namespace.c
+> >> +++ b/fs/namespace.c
+> >> @@ -363,6 +363,15 @@ bool __mnt_is_readonly(const struct vfsmount *mnt=
+)
+> >>   }
+> >>   EXPORT_SYMBOL_GPL(__mnt_is_readonly);
+> >>
+> >> +bool mnt_is_anon(struct vfsmount *mnt)
+> >> +{
+> >> +       struct mount *m =3D real_mount(mnt);
+> >> +       struct mnt_namespace *ns =3D READ_ONCE(m->mnt_ns);
+> >> +
+> >> +       return !IS_ERR_OR_NULL(ns) && is_anon_ns(ns);
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(mnt_is_anon);
+> >> +
+> >>   static inline void mnt_inc_writers(struct mount *mnt)
+> >>   {
+> >>   #ifdef CONFIG_SMP
+> >> diff --git a/fs/overlayfs/params.c b/fs/overlayfs/params.c
+> >> index c93fcaa45d4a..2758ff8426b7 100644
+> >> --- a/fs/overlayfs/params.c
+> >> +++ b/fs/overlayfs/params.c
+> >> @@ -477,7 +477,19 @@ static int ovl_parse_layer(struct fs_context *fc,=
+ struct fs_parameter *param,
+> >>                  layer_path =3D param->file->f_path;
+> >>                  path_get(&layer_path);
+> >>
+> >> -               layer_name =3D d_path(&layer_path, buf, PATH_MAX);
+> >> +               /*
+> >> +                * For detached mounts (open_tree(OPEN_TREE_CLONE)), d=
+_path()
+> >> +                * resolves against the anonymous namespace root and r=
+eturns a
+> >> +                * short fs-relative path rather than a full system pa=
+th.  Use
+> >> +                * dentry_path_raw() instead, which gives the path rel=
+ative to
+> >> +                * the filesystem root regardless of mount namespace. =
+ The name
+> >> +                * is display-only; layer_path itself is always correc=
+t.
+> >> +                */
+> >> +               if (mnt_is_anon(layer_path.mnt))
+> >> +                       layer_name =3D dentry_path_raw(layer_path.dent=
+ry,
+> >> +                                                    buf, PATH_MAX);
+> >> +               else
+> >> +                       layer_name =3D d_path(&layer_path, buf, PATH_M=
+AX);
+> >>                  if (IS_ERR(layer_name))
+> >>                          return PTR_ERR(layer_name);
+> >>
+> >> diff --git a/include/linux/mount.h b/include/linux/mount.h
+> >> index acfe7ef86a1b..51e9f228c9d1 100644
+> >> --- a/include/linux/mount.h
+> >> +++ b/include/linux/mount.h
+> >> @@ -78,6 +78,7 @@ extern void mnt_make_shortterm(struct vfsmount *mnt)=
+;
+> >>   extern struct vfsmount *mnt_clone_internal(const struct path *path);
+> >>   extern bool __mnt_is_readonly(const struct vfsmount *mnt);
+> >>   extern bool mnt_may_suid(struct vfsmount *mnt);
+> >> +extern bool mnt_is_anon(struct vfsmount *mnt);
+> >>
+> >>   extern struct vfsmount *clone_private_mount(const struct path *path)=
+;
+> >>   int mnt_get_write_access(struct vfsmount *mnt);
+> >> diff --git a/tools/testing/selftests/filesystems/overlayfs/set_layers_=
+via_fds.c b/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fd=
+s.c
+> >> index 7a293544233d..12d930fe46be 100644
+> >> --- a/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds=
+.c
+> >> +++ b/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds=
+.c
+> >> @@ -686,23 +686,28 @@ TEST_F(set_layers_via_fds, set_layers_via_detach=
+ed_mount_fds)
+> >>          while (getline(&line, &len, f_mountinfo) !=3D -1) {
+> >>                  char *haystack =3D line;
+> >>
+> >> -               if (strstr(haystack, "workdir=3D/tmp/w"))
+> >> +               /*
+> >> +                * Detached mount FDs are resolved via dentry_path_raw=
+(),
+> >> +                * which gives a path relative to the underlying fs ro=
+ot
+> >> +                * (e.g. "/u/upper", "/l1") rather than a full system =
+path.
+> >> +                */
+> >> +               if (strstr(haystack, "upperdir=3D/u/upper"))
+> >>                          layers_found[0] =3D true;
+> >> -               if (strstr(haystack, "upperdir=3D/tmp/u"))
+> >> +               if (strstr(haystack, "workdir=3D/u/work"))
+> >>                          layers_found[1] =3D true;
+> >> -               if (strstr(haystack, "lowerdir+=3D/tmp/l1"))
+> >> +               if (strstr(haystack, "lowerdir+=3D/l1"))
+> >>                          layers_found[2] =3D true;
+> >> -               if (strstr(haystack, "lowerdir+=3D/tmp/l2"))
+> >> +               if (strstr(haystack, "lowerdir+=3D/l2"))
+> >>                          layers_found[3] =3D true;
+> >> -               if (strstr(haystack, "lowerdir+=3D/tmp/l3"))
+> >> +               if (strstr(haystack, "lowerdir+=3D/l3"))
+> >>                          layers_found[4] =3D true;
+> >> -               if (strstr(haystack, "lowerdir+=3D/tmp/l4"))
+> >> +               if (strstr(haystack, "lowerdir+=3D/l4"))
+> >>                          layers_found[5] =3D true;
+> >> -               if (strstr(haystack, "datadir+=3D/tmp/d1"))
+> >> +               if (strstr(haystack, "datadir+=3D/d1"))
+> >>                          layers_found[6] =3D true;
+> >> -               if (strstr(haystack, "datadir+=3D/tmp/d2"))
+> >> +               if (strstr(haystack, "datadir+=3D/d2"))
+> >>                          layers_found[7] =3D true;
+> >> -               if (strstr(haystack, "datadir+=3D/tmp/d3"))
+> >> +               if (strstr(haystack, "datadir+=3D/d3"))
+> >>                          layers_found[8] =3D true;
+> >>          }
+> >>          free(line);
+> >> --
+> >> 2.45.1
+> >>
+> >
+> > Christian,
+> >
+> > I confirm that the test is failing on upstream:
+> >
+> > # Starting 1 tests from 1 test cases.
+> > #  RUN           set_layers_via_fds.set_layers_via_detached_mount_fds .=
+..
+> > # set_layers_via_fds.c:717:set_layers_via_detached_mount_fds:Expected
+> > layers_found[i] (0) =3D=3D true (1)
+> > # set_layers_via_fds.c:39:set_layers_via_detached_mount_fds:Expected
+> > rmdir("/set_layers_via_fds") (-1) =3D=3D 0 (0)
+> > # set_layers_via_detached_mount_fds: Test terminated by assertion
+> > #          FAIL  set_layers_via_fds.set_layers_via_detached_mount_fds
+> > not ok 1 set_layers_via_fds.set_layers_via_detached_mount_fds
+> > # FAILED: 0 / 1 tests passed.
+> >
+> > I could not find a point of regression.
+> > Could it be that the test was merged failing?
+> > That would be strange.
+> >
+> > This is how mountinfo of detached layers look like on upstream:
+> > / /set_layers_via_fds rw,relatime - overlay none
+> > rw,lowerdir+=3D/,lowerdir+=3D/,lowerdir+=3D/,lowerdir+=3D/,datadir+=3D/=
+,datadir+=3D/,datadir+=3D/,upperdir=3D/upper,workdir=3D/work,uuid=3Don,meta=
+copy=3Don
+> >
+>
+> Hi Amir,
+>
+> Thanks for looking into this!
+>
+> On my ppc64le system (7.3.0-rc4) I saw dentry_path_raw() giving per-
+> directory names like lowerdir+=3D/l1, upperdir=3D/u/upper etc., which is =
+why
+> I went with the kernel fix. But your observation of lowerdir+=3D/ for all
+> layers is a valid outcome too depending on how d_path() terminates.
+>
+> You are right that the test strings (/tmp/l1 etc.) never matched
+> detached mount output.
+>
+> > Whether the suggested solution is what we want for it, I am not sure.
+> > I also don't recall if we discussed this at the time and whether
+> > there were any decisions about how to present this mountinfo.
+> >
+> > Maybe this mountinfo is fine and then we only need to fix the test.
+>
+> Happy to send a v2 with just the selftest fix if that is the preferred
+> direction.
+>
 
-Activating a shared_info, vcpu_info, pvclock or runstate cache can
-fail if it races a memslot update: previously with -EFAULT, now with
--EAGAIN. These ioctls may sleep, so pass wait and let the activation
-ride the update out; userspace never sees the transient state.
+Hi Disha,
 
-The waiting is done without xen_lock held. A vCPU writing the
-hypercall page MSR blocks on xen_lock from within its kvm->srcu read
-section, and the memslot update cannot complete until that section
-quiesces, so an ioctl waiting while holding the lock would deadlock
-all three. Deactivations and the attribute field updates themselves
-stay under the lock; concurrent SET_ATTR calls racing through an
-activation window are userspace's own race, serialized by the cache's
-refresh_lock, and the last one wins. Document the rule at the lock's
-definition.
+Sorry for the delay, you caught us just before traveling to Plumbers.
+I have applied a patch to my tree to fix just the test paths expectation.
 
-This also means two kvm_xen_shared_info_init() calls can publish the
-wallclock concurrently, no longer excluded by xen_lock. That is
-harmless: concurrent writers compute the same epoch, modulo
-nanoseconds of jitter, and each re-reads long_mode to pick the
-destination, so the location for the final mode is always freshly
-written. Interleaving two observably different snapshots would
-require userspace to race its own clock update against its own
-attribute calls, and even full serialization would give it one or
-the other arbitrarily.
+w.r.t the regression of the override_cred feature and test case
+set_override_creds_nomknod due to commit
+c28f922c9dcee ("clone_private_mnt(): make sure that caller has
+CAP_SYS_ADMIN in the right userns")
 
-The hypercall page MSR write cannot wait at all — it would be waiting
-out its own srcu read section — so its shared_info re-init passes
-wait=false and ignores -EAGAIN, proceeding with the stale wallclock
-snapshot. The wallclock is written only here and in the attribute
-paths, so nothing retries it, but hitting that window requires the
-guest to change its own bitness while userspace is simultaneously
-rearranging memslots. A real failure (-EFAULT) still fails the WRMSR
-as it always did.
+I am still not sure what's the best way to handle this yet.
+Will wait for Christian to chime in, but I don't expect that to happen
+during the upcoming merge window.
 
-kvm_xen_shared_info_init() gains the wait flag for its refresh.
-It and xen_get_guest_pvclock() keep a kvm->srcu read section around
-each kvm_gpc_check() and the access through the mapping — the check
-consults the memslots — but drop it across the refresh.
-
-The kvm->srcu read sections around the activation calls go away;
-they existed to satisfy the old refresh contract, and holding one
-across a waiting activation would deadlock against the memslot
-update. The runstate updates in kvm_xen_vcpu_set_attr() still read
-guest state through the caches, so they keep narrow read sections
-of their own.
-
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Assisted-by: LLM
----
- arch/x86/include/asm/kvm_host.h |   6 ++
- arch/x86/kvm/xen.c              | 125 +++++++++++++++++++++++---------
- 2 files changed, 95 insertions(+), 36 deletions(-)
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 3af7395c2430..ed633a39a97a 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1108,6 +1108,12 @@ struct kvm_hv {
- #ifdef CONFIG_KVM_XEN
- /* Xen emulation context */
- struct kvm_xen {
-+	/*
-+	 * Taken from within kvm->srcu read sections (e.g. by a vCPU
-+	 * writing the hypercall page MSR), so never held while waiting
-+	 * out a memslot update: the update waits for those read
-+	 * sections to quiesce.
-+	 */
- 	struct mutex xen_lock;
- 	u32 xen_version;
- 	bool long_mode;
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index d64630a417a7..5901b5711c3a 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -36,7 +36,7 @@ static bool kvm_xen_hcall_evtchn_send(struct kvm_vcpu *vcpu, u64 param, u64 *r);
- 
- DEFINE_STATIC_KEY_DEFERRED_FALSE(kvm_xen_enabled, HZ);
- 
--static int kvm_xen_shared_info_init(struct kvm *kvm)
-+static int kvm_xen_shared_info_init(struct kvm *kvm, bool wait)
- {
- 	struct gfn_to_pfn_cache *gpc = &kvm->arch.xen.shinfo_cache;
- 	struct pvclock_wall_clock *wc;
-@@ -44,17 +44,24 @@ static int kvm_xen_shared_info_init(struct kvm *kvm)
- 	u32 wc_version;
- 	u64 wall_nsec;
- 	int ret = 0;
--	int idx = srcu_read_lock(&kvm->srcu);
-+	int idx;
- 
--	read_lock_irq(&gpc->lock);
--	while (!kvm_gpc_check(gpc, PAGE_SIZE)) {
-+	/*
-+	 * kvm_gpc_check() consults the memslots, so take kvm->srcu around
-+	 * each check and the write through the mapping — but not across
-+	 * the refresh, which may wait for a memslot update to complete.
-+	 */
-+	for (;;) {
-+		idx = srcu_read_lock(&kvm->srcu);
-+		read_lock_irq(&gpc->lock);
-+		if (kvm_gpc_check(gpc, PAGE_SIZE))
-+			break;
- 		read_unlock_irq(&gpc->lock);
-+		srcu_read_unlock(&kvm->srcu, idx);
- 
--		ret = kvm_gpc_refresh(gpc, PAGE_SIZE, false);
-+		ret = kvm_gpc_refresh(gpc, PAGE_SIZE, wait);
- 		if (ret)
- 			goto out;
--
--		read_lock_irq(&gpc->lock);
- 	}
- 
- 	/*
-@@ -98,9 +105,9 @@ static int kvm_xen_shared_info_init(struct kvm *kvm)
- 
- 	wc->version = wc_version + 1;
- 	read_unlock_irq(&gpc->lock);
-+	srcu_read_unlock(&kvm->srcu, idx);
- 
- out:
--	srcu_read_unlock(&kvm->srcu, idx);
- 	return ret;
- }
- 
-@@ -155,21 +162,29 @@ static int xen_get_guest_pvclock(struct kvm_vcpu *vcpu,
- 				 unsigned int offset)
- {
- 	unsigned long flags;
--	int r;
-+	int idx, r;
- 
--	read_lock_irqsave(&gpc->lock, flags);
--	while (!kvm_gpc_check(gpc, offset + sizeof(*hv_clock))) {
-+	/*
-+	 * As in kvm_xen_shared_info_init(): kvm_gpc_check() consults the
-+	 * memslots, so take kvm->srcu around each check and the copy, but
-+	 * not across the refresh.
-+	 */
-+	for (;;) {
-+		idx = srcu_read_lock(&vcpu->kvm->srcu);
-+		read_lock_irqsave(&gpc->lock, flags);
-+		if (kvm_gpc_check(gpc, offset + sizeof(*hv_clock)))
-+			break;
- 		read_unlock_irqrestore(&gpc->lock, flags);
-+		srcu_read_unlock(&vcpu->kvm->srcu, idx);
- 
- 		r = kvm_gpc_refresh(gpc, offset + sizeof(*hv_clock), false);
- 		if (r)
- 			return r;
--
--		read_lock_irqsave(&gpc->lock, flags);
- 	}
- 
- 	memcpy(hv_clock, gpc->khva + offset, sizeof(*hv_clock));
- 	read_unlock_irqrestore(&gpc->lock, flags);
-+	srcu_read_unlock(&vcpu->kvm->srcu, idx);
- 
- 	/*
- 	 * Sanity check TSC shift+multiplier to verify the guest's view of time
-@@ -784,27 +799,34 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 		} else {
- 			mutex_lock(&kvm->arch.xen.xen_lock);
- 			kvm->arch.xen.long_mode = !!data->u.long_mode;
-+			mutex_unlock(&kvm->arch.xen.xen_lock);
- 
- 			/*
- 			 * Re-initialize shared_info to put the wallclock in the
- 			 * correct place. Whilst it's not necessary to do this
- 			 * unless the mode is actually changed, it does no harm
--			 * to make the call anyway.
-+			 * to make the call anyway. Done without xen_lock held:
-+			 * the init may wait out a memslot update, and a vCPU
-+			 * may block on xen_lock from within the kvm->srcu read
-+			 * section which that update must wait out.
- 			 */
- 			r = kvm->arch.xen.shinfo_cache.active ?
--				kvm_xen_shared_info_init(kvm) : 0;
--			mutex_unlock(&kvm->arch.xen.xen_lock);
-+				kvm_xen_shared_info_init(kvm, true) : 0;
- 		}
- 		break;
- 
- 	case KVM_XEN_ATTR_TYPE_SHARED_INFO:
- 	case KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA: {
--		int idx;
--
-+		/*
-+		 * Deactivation stays under xen_lock, but an activation may
-+		 * wait out a memslot update and so must not hold it: a vCPU
-+		 * may block on xen_lock from within the kvm->srcu read
-+		 * section which that update must wait out. Concurrent
-+		 * SET_ATTR calls racing in the window are userspace's own
-+		 * race; the cache layer serializes them, last one wins.
-+		 */
- 		mutex_lock(&kvm->arch.xen.xen_lock);
- 
--		idx = srcu_read_lock(&kvm->srcu);
--
- 		if (data->type == KVM_XEN_ATTR_TYPE_SHARED_INFO) {
- 			gfn_t gfn = data->u.shared_info.gfn;
- 
-@@ -812,8 +834,10 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 				kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
- 				r = 0;
- 			} else {
-+				mutex_unlock(&kvm->arch.xen.xen_lock);
- 				r = kvm_gpc_activate(&kvm->arch.xen.shinfo_cache,
--						     gfn_to_gpa(gfn), PAGE_SIZE, false);
-+						     gfn_to_gpa(gfn), PAGE_SIZE, true);
-+				mutex_lock(&kvm->arch.xen.xen_lock);
- 			}
- 		} else {
- 			void __user * hva = u64_to_user_ptr(data->u.shared_info.hva);
-@@ -829,12 +853,11 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 			}
- 		}
- 
--		srcu_read_unlock(&kvm->srcu, idx);
-+		mutex_unlock(&kvm->arch.xen.xen_lock);
- 
- 		if (!r && kvm->arch.xen.shinfo_cache.active)
--			r = kvm_xen_shared_info_init(kvm);
-+			r = kvm_xen_shared_info_init(kvm, true);
- 
--		mutex_unlock(&kvm->arch.xen.xen_lock);
- 		break;
- 	}
- 	case KVM_XEN_ATTR_TYPE_UPCALL_VECTOR:
-@@ -937,7 +960,6 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 	int idx, r = -ENOENT;
- 
- 	mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
--	idx = srcu_read_lock(&vcpu->kvm->srcu);
- 
- 	switch (data->type) {
- 	case KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO:
-@@ -959,8 +981,16 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 			if (!IS_ALIGNED(data->u.gpa, sizeof(u32)))
- 				break;
- 
-+			/*
-+			 * As with the shared_info attributes: a waiting
-+			 * activation must not hold xen_lock, on which a
-+			 * vCPU may block from within the kvm->srcu read
-+			 * section the memslot update has to wait out.
-+			 */
-+			mutex_unlock(&vcpu->kvm->arch.xen.xen_lock);
- 			r = kvm_gpc_activate(&vcpu->arch.xen.vcpu_info_cache,
--					     data->u.gpa, sizeof(struct vcpu_info), false);
-+					     data->u.gpa, sizeof(struct vcpu_info), true);
-+			mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
- 		} else {
- 			if (data->u.hva == 0) {
- 				kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
-@@ -988,9 +1018,11 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 			break;
- 		}
- 
-+		mutex_unlock(&vcpu->kvm->arch.xen.xen_lock);
- 		r = kvm_gpc_activate(&vcpu->arch.xen.vcpu_time_info_cache,
- 				     data->u.gpa,
--				     sizeof(struct pvclock_vcpu_time_info), false);
-+				     sizeof(struct pvclock_vcpu_time_info), true);
-+		mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
- 		if (!r)
- 			kvm_make_request(KVM_REQ_CLOCK_UPDATE, vcpu);
- 		break;
-@@ -1022,10 +1054,14 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 
- 		/* How much fits in the (first) page? */
- 		sz1 = PAGE_SIZE - (data->u.gpa & ~PAGE_MASK);
-+
-+		mutex_unlock(&vcpu->kvm->arch.xen.xen_lock);
- 		r = kvm_gpc_activate(&vcpu->arch.xen.runstate_cache,
--				     data->u.gpa, sz1, false);
--		if (r)
-+				     data->u.gpa, sz1, true);
-+		if (r) {
-+			mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
- 			goto deactivate_out;
-+		}
- 
- 		/* Either map the second page, or deactivate the second GPC */
- 		if (sz1 >= sz) {
-@@ -1034,12 +1070,17 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 			sz2 = sz - sz1;
- 			BUG_ON((data->u.gpa + sz1) & ~PAGE_MASK);
- 			r = kvm_gpc_activate(&vcpu->arch.xen.runstate2_cache,
--					     data->u.gpa + sz1, sz2, false);
--			if (r)
-+					     data->u.gpa + sz1, sz2, true);
-+			if (r) {
-+				mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
- 				goto deactivate_out;
-+			}
- 		}
-+		mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
- 
-+		idx = srcu_read_lock(&vcpu->kvm->srcu);
- 		kvm_xen_update_runstate_guest(vcpu, false);
-+		srcu_read_unlock(&vcpu->kvm->srcu, idx);
- 		break;
- 	}
- 	case KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_CURRENT:
-@@ -1052,7 +1093,9 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 			break;
- 		}
- 
-+		idx = srcu_read_lock(&vcpu->kvm->srcu);
- 		kvm_xen_update_runstate(vcpu, data->u.runstate.state);
-+		srcu_read_unlock(&vcpu->kvm->srcu, idx);
- 		r = 0;
- 		break;
- 
-@@ -1132,10 +1175,12 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 		vcpu->arch.xen.runstate_times[RUNSTATE_offline] +=
- 			data->u.runstate.time_offline;
- 
-+		idx = srcu_read_lock(&vcpu->kvm->srcu);
- 		if (data->u.runstate.state <= RUNSTATE_offline)
- 			kvm_xen_update_runstate(vcpu, data->u.runstate.state);
- 		else if (vcpu->arch.xen.runstate_cache.active)
- 			kvm_xen_update_runstate_guest(vcpu, false);
-+		srcu_read_unlock(&vcpu->kvm->srcu, idx);
- 		r = 0;
- 		break;
- 
-@@ -1181,7 +1226,6 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 		break;
- 	}
- 
--	srcu_read_unlock(&vcpu->kvm->srcu, idx);
- 	mutex_unlock(&vcpu->kvm->arch.xen.xen_lock);
- 	return r;
- }
-@@ -1326,11 +1370,20 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
- 
- 		/*
- 		 * Re-initialize shared_info to put the wallclock in the
--		 * correct place.
-+		 * correct place. The wallclock is a snapshot, written only
-+		 * here, and this cannot wait out a memslot update from
-+		 * within the vCPU's kvm->srcu read section. If it races
-+		 * one (-EAGAIN), just proceed with the stale snapshot; a
-+		 * guest changing its own bitness while userspace is
-+		 * rearranging memslots has only itself to blame. A real
-+		 * failure still fails the WRMSR as it always did.
- 		 */
--		if (kvm->arch.xen.shinfo_cache.active &&
--		    kvm_xen_shared_info_init(kvm))
--			r = 1;
-+		if (kvm->arch.xen.shinfo_cache.active) {
-+			int ret = kvm_xen_shared_info_init(kvm, false);
-+
-+			if (ret && ret != -EAGAIN)
-+				r = 1;
-+		}
- 	}
- 	mutex_unlock(&kvm->arch.xen.xen_lock);
- 
--- 
-2.43.0
-
+Thanks,
+Amir.
