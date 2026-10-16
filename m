@@ -1,259 +1,264 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A3A348C7D;
-	Fri, 16 Oct 2026 05:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFE826C385;
+	Fri, 16 Oct 2026 07:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792129019; cv=none; b=E3y/CF9b5ci8pASJEmby+DvigS6pUA5N5zQI0T8c93/uXZVomswj1xO5R6e1oWvtS52cBx2oQ6jVKz9tOM44K8U5EkEJaoeKkYRdmowovB9sNw7T8zpI4CcasziH/igN63gnsCxH/IZlW0DEQ2K+6aECuq9lsAe6DyB+MBDg2PA=
+	t=1792134002; cv=none; b=Pj1zuDjS/xY1Hkp8xKTzeuz8roz6MHMM4IFQm02NNxesMfQVFgFf/AMzTQLj3yMelwJ6ZLoRc/k1QjKTkyGKbVuEW97opDS6gBUL9knzP1YUAeNLi9e/vHOU0RCk6mUQgUshmjyaxuFKAKHZcpo/pCjA/BxjQSa7xFjNqKPfmmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792129019; c=relaxed/simple;
-	bh=OxsimB+IRUojLvT+hziSkxVdTCzcdvyp81HuqPLZG/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aP+s23pj0YxJTegXfeFM1ZEnDQ+R8BWt+3hMfemCUAWFQUC6+Y8jX/ha+mJiu1pQo0IWnJMAhePv1xaIxoScDUH44tgAmZfvTa6kzIKvfO6VljhhgLxHwRV6eSOKOEXB4jrAUHS4nj7ZTTN0o0Cef/4R0vGplx3Bgg0h3mcVZKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IFvy02k4; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1792134002; c=relaxed/simple;
+	bh=8oaxSKh+8WoofAvlfK9hGF4WVXWUAEOOOuzvpWeEkWQ=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HSTLFV0FtskCDv3Dp5DM0m1RMIVR0lwOZZTbAEuj1sIgaD2F7ksDmT5Jk5HaIhvwU5urjVvtc7OgsHrXKqVPqEOPl++E6QgMj2ZXXELMYJxcSzWTfjXhIUzK1VcamVmM+3u4qLoa3vIXicd1dCSJF2jS1Xe4e7i5cplPm85DWhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gSxGSKth; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IFvy02k4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792129017; x=1823665017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OxsimB+IRUojLvT+hziSkxVdTCzcdvyp81HuqPLZG/s=;
-  b=IFvy02k40L6WlN0E6Q9Ei3c7kfpQppWK1wrQf3yIck7ebJPhNf2lp6Zn
-   puFGZszpoeRSzSBfzhgilgED09XCaGxQNozKbPHsipg1wRjL8bhYt/9OS
-   kPO8T5gTowL9qxsNw/5OsI4YfQgvk+PZd6ZKJ0BD54s+fZL70gWeS5fgM
-   zRUUtES/g/R2SCqwG4oM1KJE5rF4Px7G9a+wsE2cJoYVtvxsUBtE5kUrL
-   SzQQf75mFcfbAR9xf+nS+lYp/g6mIhHujql3eURcZuy3RjUGlNlGoLAF/
-   Y0lZqgq0WWRxMFKn0h9/7Psu/7xl1tzrzjVAKx5A3fBIRXN1qF7M756Q5
-   w==;
-X-CSE-ConnectionGUID: c7Vg7lllTnCJ05eeJ5FPCg==
-X-CSE-MsgGUID: BcupQumpRBubh7rLvp4JBw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11936"; a="915287"
-X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
-   d="scan'208";a="915287"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 22:36:56 -0700
-X-CSE-ConnectionGUID: cV+8eTvqSQ2EgdgT1mW2lg==
-X-CSE-MsgGUID: jlVQO0VBQtCYTbTBdJ3bkg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
-   d="scan'208";a="2236954"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 15 Oct 2026 22:36:51 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xHacZ-00000000Hfu-0y6G;
-	Fri, 16 Oct 2026 05:36:47 +0000
-Date: Fri, 16 Oct 2026 13:36:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>
-Cc: oe-kbuild-all@lists.linux.dev, Jarkko Sakkinen <jarkko@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Rae Moar <raemoar63@gmail.com>,
-	Ryota Sakamoto <sakamo.ryota@gmail.com>,
-	Kuan-Wei Chiu <visitorckw@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Kir Chou <note351@hotmail.com>, Petr Mladek <pmladek@suse.com>,
-	Dmitry Antipov <dmantipov@yandex.ru>,
-	Guan-Chun Wu <409411716@gms.tku.edu.tw>,
-	linux-kernel@vger.kernel.org,
-	"(open list:KERNEL UNIT TESTING FRAMEWORK \\(KUnit\\))" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] lib/tests: kunit for associative array
-Message-ID: <202610161338.iIHVeJyP-lkp@intel.com>
-References: <20261014160144.1835860-1-jarkko@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gSxGSKth"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A481F000C4;
+	Fri, 16 Oct 2026 06:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792134000;
+	bh=7DT2BsSllpTY9IaBZSpPqD3pqh0UvkhF2kAGCAJLOjw=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=gSxGSKthwwBd/911ZGcnAgEXd9FfEp5x2HLkrgTIPv0gTAsKrDdJC4u9Nl1GI9ioA
+	 3vyB4kIokymQISckcDdhWg/3uJzhVd/+PnVrLx+RvOWK0+0z7ScdBAqIN4dYG1/hyL
+	 lm0X5jC3FpsEFRdEn5qNaTPhDtThD4w2E9Xs1sp9xV+QXJO3TgC0C0oBNPuaQr6VcM
+	 eoTn3QV8RKpTuizPiKz57J40boZ+uN+oZ03slWjV8fBabPFrCCYwINIP4jYKAymZLv
+	 Wao+Y8cBZ5XuGBqMo0OHVTyZh2BF3Ze9GH2E8IqBHuyPYflZ4PblUnZcoZlnoWVcP8
+	 wo0xsyx0cFDYQ==
+Subject: Re: [PATCH can-next v1 1/8] selftests: can: add J1939 test helper
+ header and library
+From: netdev-bot+sashiko@kernel.org
+To: o.rempel@pengutronix.de
+Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
+ shuah@kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ alexander.hoelzl@gmx.net, quchaosheng000406@163.com,
+ penguin-kernel@I-love.SAKURA.ne.jp, kuba@kernel.org
+Date: Fri, 16 Oct 2026 06:59:59 +0000
+Message-ID: <179213399918.1406898.1255916338662682889@kernel.org>
+In-Reply-To: <20261014154435.3577983-2-o.rempel@pengutronix.de>
+References: <20261014154435.3577983-2-o.rempel@pengutronix.de>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261014160144.1835860-1-jarkko@kernel.org>
 
-Hi Jarkko,
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
-kernel test robot noticed the following build warnings:
+Critical: 0 · High: 0 · Medium: 2 · Low: 2
 
-[auto build test WARNING on akpm-mm/mm-nonmm-unstable]
-[also build test WARNING on linus/master v7.3-rc7]
-[cannot apply to next-20261012]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sakkinen/lib-tests-kunit-for-associative-array/20261014-190138
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-patch link:    https://lore.kernel.org/r/20261014160144.1835860-1-jarkko%40kernel.org
-patch subject: [PATCH] lib/tests: kunit for associative array
-config: arm-randconfig-1001-20261016 (https://download.01.org/0day-ci/archive/20261016/202610161338.iIHVeJyP-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 8.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261016/202610161338.iIHVeJyP-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610161338.iIHVeJyP-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> lib/tests/assoc_array_kunit.c:62:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000010UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:63:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000020UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:64:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000030UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:65:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000040UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:66:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000050UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:67:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000060UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:68:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000070UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:69:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000080UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:70:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000090UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:71:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x00000000000000a0UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:72:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x00000000000000b0UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:73:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x00000000000000c0UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:74:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x00000000000000d0UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:75:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x00000000000000e0UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:76:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x00000000000000f0UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:77:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000100UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:78:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000110UL,
-     ^~~~~~~~~~~~~~~~~~~~
-   lib/tests/assoc_array_kunit.c:79:2: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '16045690984503098046' to '3405691582' [-Woverflow]
-     0xdeadbeefcafebabeUL, 0x0000000000000001UL,
-     ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +62 lib/tests/assoc_array_kunit.c
-
-    19	
-    20	/*
-    21	 * As a quick remainder, these are the basic building blocks of an associative
-    22	 * array:
-    23	 *
-    24	 * - struct assoc_array_node: a tree node representing a nibble of the search
-    25	 *   key.
-    26	 * - struct assoc_array_shortcut: a tree node representing a sequence of nibbles
-    27	 *   shared by multiple search keys with no divergence among them.
-    28	 *
-    29	 * The keys in array will be created in order in tests, and is a constructed in
-    30	 * a way that splits reach the level 8:
-    31	 *
-    32	 * - 0..16:  Share prefix 0x21 at levels 0 and 4.
-    33	 * - 17:     Splits root shortcut at level 4.
-    34	 * - 18..34: Share chunk 0.
-    35	 * - 35:     Splits shortcut at chunk boundary.
-    36	 * - 36..46: Share prefix 0xbeef at levels 0..12.
-    37	 * - 47:     Splits shortcut at level 8.
-    38	 * - 48..63: Distinct leaves at level 0.
-    39	 *
-    40	 * The numbers were picked partly based on trial and error, and partly trying to
-    41	 * find smallest possible numbers reaching the level 8.
-    42	 */
-    43	static const unsigned long assoc_array_test_keys[ASSOC_ARRAY_TEST_NR_KEYS * 2] = {
-    44		0x0000000000000121UL, 0x0000000000000000UL,
-    45		0x0000000000000221UL, 0x0000000000000000UL,
-    46		0x0000000000000321UL, 0x0000000000000000UL,
-    47		0x0000000000000421UL, 0x0000000000000000UL,
-    48		0x0000000000000521UL, 0x0000000000000000UL,
-    49		0x0000000000000621UL, 0x0000000000000000UL,
-    50		0x0000000000000721UL, 0x0000000000000000UL,
-    51		0x0000000000000821UL, 0x0000000000000000UL,
-    52		0x0000000000000921UL, 0x0000000000000000UL,
-    53		0x0000000000000a21UL, 0x0000000000000000UL,
-    54		0x0000000000000b21UL, 0x0000000000000000UL,
-    55		0x0000000000000c21UL, 0x0000000000000000UL,
-    56		0x0000000000000d21UL, 0x0000000000000000UL,
-    57		0x0000000000000e21UL, 0x0000000000000000UL,
-    58		0x0000000000000f21UL, 0x0000000000000000UL,
-    59		0x0000000000001021UL, 0x0000000000000000UL,
-    60		0x0000000000001121UL, 0x0000000000000000UL,
-    61		0x0000000000000001UL, 0x0000000000000000UL,
-  > 62		0xdeadbeefcafebabeUL, 0x0000000000000010UL,
-    63		0xdeadbeefcafebabeUL, 0x0000000000000020UL,
-    64		0xdeadbeefcafebabeUL, 0x0000000000000030UL,
-    65		0xdeadbeefcafebabeUL, 0x0000000000000040UL,
-    66		0xdeadbeefcafebabeUL, 0x0000000000000050UL,
-    67		0xdeadbeefcafebabeUL, 0x0000000000000060UL,
-    68		0xdeadbeefcafebabeUL, 0x0000000000000070UL,
-    69		0xdeadbeefcafebabeUL, 0x0000000000000080UL,
-    70		0xdeadbeefcafebabeUL, 0x0000000000000090UL,
-    71		0xdeadbeefcafebabeUL, 0x00000000000000a0UL,
-    72		0xdeadbeefcafebabeUL, 0x00000000000000b0UL,
-    73		0xdeadbeefcafebabeUL, 0x00000000000000c0UL,
-    74		0xdeadbeefcafebabeUL, 0x00000000000000d0UL,
-    75		0xdeadbeefcafebabeUL, 0x00000000000000e0UL,
-    76		0xdeadbeefcafebabeUL, 0x00000000000000f0UL,
-    77		0xdeadbeefcafebabeUL, 0x0000000000000100UL,
-    78		0xdeadbeefcafebabeUL, 0x0000000000000110UL,
-    79		0xdeadbeefcafebabeUL, 0x0000000000000001UL,
-    80		0x000000000001beefUL, 0x0000000000000000UL,
-    81		0x000000000002beefUL, 0x0000000000000000UL,
-    82		0x000000000003beefUL, 0x0000000000000000UL,
-    83		0x000000000004beefUL, 0x0000000000000000UL,
-    84		0x000000000005beefUL, 0x0000000000000000UL,
-    85		0x000000000006beefUL, 0x0000000000000000UL,
-    86		0x000000000007beefUL, 0x0000000000000000UL,
-    87		0x000000000008beefUL, 0x0000000000000000UL,
-    88		0x000000000009beefUL, 0x0000000000000000UL,
-    89		0x00000000000abeefUL, 0x0000000000000000UL,
-    90		0x00000000000bbeefUL, 0x0000000000000000UL,
-    91		0x00000000000000efUL, 0x0000000000000000UL,
-    92		0x0000000000001000UL, 0x0000000000000000UL,
-    93		0x0000000000001001UL, 0x0000000000000000UL,
-    94		0x0000000000001002UL, 0x0000000000000000UL,
-    95		0x0000000000001003UL, 0x0000000000000000UL,
-    96		0x0000000000001004UL, 0x0000000000000000UL,
-    97		0x0000000000001005UL, 0x0000000000000000UL,
-    98		0x0000000000001006UL, 0x0000000000000000UL,
-    99		0x0000000000001007UL, 0x0000000000000000UL,
-   100		0x0000000000001008UL, 0x0000000000000000UL,
-   101		0x0000000000001009UL, 0x0000000000000000UL,
-   102		0x000000000000100aUL, 0x0000000000000000UL,
-   103		0x000000000000100bUL, 0x0000000000000000UL,
-   104		0x000000000000100cUL, 0x0000000000000000UL,
-   105		0x000000000000100dUL, 0x0000000000000000UL,
-   106		0x000000000000100eUL, 0x0000000000000000UL,
-   107		0x000000000000100fUL, 0x0000000000000000UL,
-   108	};
-   109	
+- [Medium] j1939_lib.sh is new and is installed through TEST_FILES in
+  tools/testing/selftests/net/can/Makefile.
+- [Medium] send_recv_verify() in j1939_tests.h says it verifies that len
+  bytes 'arrive byte-for-byte on rx', but it cannot catch a delivery…
+- [Low] j1939_lib.sh installs `trap cleanup EXIT INT TERM`, but cleanup()
+  never calls exit.
+- [Low] On the real-CAN path (CANIF not vcan*), setup() reprograms the
+  interface with `ip link set dev "$CANIF" type can bitrate "$BITRATE"`…
 
 --
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+selftests: can: add J1939 test helper header and library
+
+This adds j1939_tests.h, which holds the shared C helpers for the J1939
+selftests, and j1939_lib.sh, which holds the shared vcan setup, teardown
+and test runner. No tests use them yet; the following patches in the
+series add the tests.
+
+> diff --git a/tools/testing/selftests/net/can/Makefile b/tools/testing/selftests/net/can/Makefile
+> index 5b82e60a03e7..e2092c289109 100644
+> --- a/tools/testing/selftests/net/can/Makefile
+> +++ b/tools/testing/selftests/net/can/Makefile
+> @@ -6,6 +6,8 @@ CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INC
+>  
+>  TEST_PROGS := test_raw_filter.sh
+>  
+> +TEST_FILES := j1939_lib.sh
+> +
+
+[Severity: Medium]
+Does net/can also need a TEST_INCLUDES line here?
+
+j1939_lib.sh sources ../lib.sh, and net/lib.sh in turn sources
+lib/sh/defer.sh. net/can/Makefile does not declare either file for
+installation.
+
+net/lib.sh is only installed through TEST_FILES in net/Makefile. The top
+level selftests Makefile only pulls in the net lib dependency when TARGETS
+contains net, drivers/net or drivers/net/hw:
+
+tools/testing/selftests/Makefile:
+    ifneq ($(filter net drivers/net drivers/net/hw,$(TARGETS)),)
+
+With make TARGETS=net/can install, or when net/can is packaged on its own,
+would every J1939 wrapper added later in the series (test_j1939_base.sh,
+_opts, _addr, _wire, _multi) fail at the source line? They would then run
+with ksft_skip, check_err, log_test, tests_run and EXIT_STATUS undefined.
+
+net/mptcp/Makefile handles the same dependency with:
+
+    TEST_INCLUDES := ../lib.sh $(wildcard ../lib/sh/*.sh)
+
+test_raw_filter.sh already has a similar gap. This patch, though, adds a
+new shared library that the following tests depend on, and the gap is
+still there at the end of the series.
+
+>  TEST_GEN_FILES := test_raw_filter
+>  
+>  include ../../lib.mk
+> diff --git a/tools/testing/selftests/net/can/j1939_lib.sh b/tools/testing/selftests/net/can/j1939_lib.sh
+> new file mode 100644
+> index 000000000000..7b7fff228b16
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/can/j1939_lib.sh
+
+[ ... ]
+
+> +# Only undo what this script actually did: delete a vcan we created, and bring
+> +# down an interface only if we brought it up. A failed setup() (e.g. CANIF
+> +# already exists) must not disturb a pre-existing interface.
+> +created=0
+> +brought_up=0
+> +
+> +setup()
+> +{
+> +	if [[ $CANIF == vcan* ]]; then
+> +		ip link add name "$CANIF" type vcan || exit $ksft_skip
+> +		created=1
+> +	else
+> +		ip link set dev "$CANIF" type can bitrate "$BITRATE" || exit $ksft_skip
+> +	fi
+> +	ip link set dev "$CANIF" up || exit $ksft_skip
+> +	brought_up=1
+> +}
+> +
+> +cleanup()
+> +{
+> +	if [ "$brought_up" = 1 ]; then
+> +		ip link set dev "$CANIF" down 2>/dev/null
+> +	fi
+> +	if [ "$created" = 1 ]; then
+> +		ip link delete "$CANIF" 2>/dev/null
+> +	fi
+> +}
+
+[Severity: Low]
+On the real CAN path (CANIF not vcan*), setup() reprograms an existing
+interface to $BITRATE. It does not save the previous bittiming. cleanup()
+only undoes brought_up and created.
+
+Does this leave the interface at 250 kbit/s after the test? The same
+question applies when the following ip link set ... up fails and setup()
+exits with brought_up=0.
+
+Bittiming survives down/up, so the next user of the interface would bring
+it up at the new rate. That seems to contradict the comment above about
+not disturbing a pre-existing interface. test_raw_filter.sh behaves the
+same way.
+
+[ ... ]
+
+> +trap cleanup EXIT INT TERM
+> +setup
+> +
+> +tests_run
+> +
+> +exit $EXIT_STATUS
+
+[Severity: Low]
+cleanup() never calls exit. In bash, when the INT or TERM trap returns,
+the script carries on with the next command.
+
+If the signal arrives between setup and tests_run, could the test binary
+still run against the vcan that cleanup() just deleted? J1939_SETUP_IFINDEX
+would fail and log_test would report a FAIL.
+
+If the signal arrives while the binary is running, log_test and
+exit $EXIT_STATUS still run after the trap returns, and the EXIT trap then
+calls cleanup() a second time.
+
+bash also runs the EXIT trap on these signals. Would trap cleanup EXIT be
+enough on its own, as in test_raw_filter.sh?
+
+> diff --git a/tools/testing/selftests/net/can/j1939_tests.h b/tools/testing/selftests/net/can/j1939_tests.h
+> new file mode 100644
+> index 000000000000..dd70a7d60ec7
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/can/j1939_tests.h
+
+[ ... ]
+
+> +/* poll() + recv(): returns the recv() result, or -1 on timeout/error. */
+> +static inline int recv_timeout(int s, void *buf, size_t len, int timeout_ms)
+> +{
+> +	struct pollfd pfd = { .fd = s, .events = POLLIN };
+> +
+> +	if (poll(&pfd, 1, timeout_ms) <= 0)
+> +		return -1;
+> +	return recv(s, buf, len, 0);
+> +}
+> +
+> +/* Send len bytes on tx and verify they arrive byte-for-byte on rx. 0 / -1. */
+> +static inline int send_recv_verify(int tx, int rx, const void *buf, size_t len,
+> +				   int timeout_ms)
+> +{
+> +	uint8_t *rx_buf = malloc(len);
+> +	int rc = -1;
+> +
+> +	if (!rx_buf)
+> +		return -1;
+> +	if (send(tx, buf, len, 0) == (ssize_t)len &&
+> +	    recv_timeout(rx, rx_buf, len, timeout_ms) == (int)len &&
+> +	    memcmp(buf, rx_buf, len) == 0)
+
+[Severity: Medium]
+Can send_recv_verify() catch a delivery that is longer than len?
+
+rx_buf is exactly len bytes, and recv_timeout() calls recv(s, buf, len, 0).
+For an oversized datagram, j1939_sk_recvmsg() does:
+
+net/can/j1939/socket.c:j1939_sk_recvmsg() {
+    ...
+	if (size < skb->len)
+		msg->msg_flags |= MSG_TRUNC;
+	else
+		size = skb->len;
+    ...
+	return size;
+}
+
+So recv() returns len and the MSG_TRUNC indication is lost. An over-long
+delivery, for example from a TP/ETP reassembly regression that adds
+padding bytes, would pass both the == (int)len check and the memcmp() over
+the prefix.
+
+Later in the series, test_j1939_base.c and test_j1939_addr.c use this
+helper to check payload integrity at the transport size boundaries.
+
+Passing MSG_TRUNC as an input flag won't work, because j1939_sk_recvmsg()
+returns -EINVAL for any flag other than MSG_DONTWAIT, MSG_ERRQUEUE and
+MSG_CMSG_COMPAT. Would a len + 1 receive buffer, or recvmsg() with a check
+of msg_flags, work instead?
+
+> +		rc = 0;
+> +	free(rx_buf);
+> +	return rc;
+> +}
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014154435.3577983-1-o.rempel%40pengutronix.de
