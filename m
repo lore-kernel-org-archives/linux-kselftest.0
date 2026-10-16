@@ -1,65 +1,65 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F4B45FFDC
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 09:32:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946EB437846
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 09:32:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792143161; cv=none; b=ax7h/bAK25E08TOYoBuYutyMBL5rJqbeGiWKh8pT0CqodoKEv63YSr4dNH9jxmTppgRIhxHgJxg6qg+ieWQJ1KqP953/HlYOEWw8Hfd7U+J1f/bVoP8WXBPcLVvvILdiBK8oLLhpR0CahMdj4Kf1sSCAuEURX/6ARl3CB2UEKDM=
+	t=1792143166; cv=none; b=hwqKYXEWuq5zEgi8+3tOD6nL+JGucnow6vSXsg0deCiqTcCWXN1y2kl++AjXuIQJ2wsS2UqJwbVEZIOiUZqmK0IfNs6cOFBoff47BYWwZinDq//BG1nwblriJrafpo+Dug/gvGgOHDLAQJEdVHN40bfGZd+Q85D5iygdZvck3QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792143161; c=relaxed/simple;
-	bh=3OTy30U9zaA/EoJrB2LEVikw7T9erylLWW9kg7srSqA=;
+	s=arc-20240116; t=1792143166; c=relaxed/simple;
+	bh=Z9Mwbxdb/e66pqI6wraTgavodNtN8iMAFiUVb6k+BFQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=aIS55n9MSnfaspi+J9F99NbDfvL+gTgGPrOtCAKaCiwnE4UYi3c471Gm9PzvBVJXuqM9MiwIUM+7arEHgdqKmb3EnB1epo0UHiWUhlD0lORkyCrRfWT9e8VHBnA7aGK37f9NeDuyCZc/0+39rP99Hijfhw/W8m0eMLlse6qBWKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lG9eWanX; arc=none smtp.client-ip=74.125.82.175
+	 MIME-Version; b=BNQ+WcRmmUIKxQe/3cELpdk2rJNXqRroo8QpWYSFHJYtpj1jX4GmUppeiucDEGmkcUg9036LdtgtOp/JCA1LAckz0bZrrNQ479GL54p0mu/RRoB0vnPAdrikdLiTJSGJ0hcemr/G3heK31wFaozc5ONpQo6S++v3rLEes2hm49E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bHERSdA9; arc=none smtp.client-ip=74.125.82.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lG9eWanX"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-35f1f76ea84so3251640eec.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:32:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHERSdA9"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso2288508eec.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:32:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792143159; x=1792747959; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792143165; x=1792747965; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=uV/uHpIyvSDg1rMqWOrJjW5nbbNl8aiS8yrcLtotir0=;
-        b=lG9eWanXp6F34VL+5KABtmaUD/FqjI/9F1aRT5KoeQsWikE7x4YtnSIg5F2/ZPg8Dq
-         PePTpdsCVU4ZWXqstpXLsySY4u9tBu1lrbUykdf9yk2JO2fxO17cX5IdogM+kq2ndZS1
-         BPQOv9MrXmSaMx+HIg/c5JAGEO3bBQakipVu8VcRIxEFe+4dWirEnWCvlp8hdOkOaDhT
-         CI0ThqY8xcgrcQmTG+scdgYqjTixt3eJGCbZRX2h3CThnRuwmRjoSC/6mu0nHH23ElF6
-         azoxe8JwGb031mFgckOWiSzV3psUNE8eWaLFLrqN8yseVA5GtEJoTOd1I5UAMYBKGtFL
-         +gIw==
+        bh=XHmkv6BikJoFrn087jxAAKsWlqagsvtugyCffrxtj2U=;
+        b=bHERSdA9g4cxrnlEyUlZpv50EfUtdP2CgtywULH7Y86PJg1PkvgbAYKt/r5Akzd5tF
+         xJ0u0rCEoKruYyh4Gjg84HFbYdmPD8VJ02AMCONA/B3DLbI3NrhXC5A2Bx/EKvVEi/ZC
+         v08zwYv1oGveh7VXBAsSl7fBQroVMwetkP1LCx9RfI/r9AMxC0/g7qpIbKp2tSFLeghq
+         tnLm0YTh+06dsOt+Nuru3F22cxusAGVZUqVV5xxX68n5CGpTnKpCIA173KoDijwo4SWr
+         k/A8wq8PGZFlKwLzifwbCWX2FmyWDeKUwsCQNvd5MOaVuXFOGm7ufaJEUettfoYRGz4D
+         watw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792143159; x=1792747959;
+        d=1e100.net; s=20260707; t=1792143165; x=1792747965;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uV/uHpIyvSDg1rMqWOrJjW5nbbNl8aiS8yrcLtotir0=;
-        b=RS9RukvYq/R1yqohQDCO4666kv8bBzzYyAAQnwIVsWAmdTqdDei4TIqwRRRz/FcTx9
-         eChEMYHOjZACMXVlD20sWLKzLXrtzyA8xshVMijZjHrB3K3/BUN2E/kH7VZ7y3HFko63
-         CtaDKcKPZ/h5AicqqjO9u9zW/oQlmtoXIqLjHk6cEQruVLEIDnoQG3PQyUT2YwCKfFjR
-         nXsY4aAzaJOkzcmB9kmFjKBy6sMYA4bFio0HCmQRGLoY9+QbV9njNST9eScb6FRXaLbi
-         IA3CAsluJQnNTUpR6U9fRv6rpNTB7IOi51Xj60fja7Lc3g8Mi2mQ/n4XFNHS2+gTR59W
-         CHmQ==
-X-Forwarded-Encrypted: i=1; AKwUvByK0wb3gMRzwqJA+cS76/2rB5FkWm/Hdp3LMHCA7Bnzh/eISKaqXvW/j5pUAII+gxXQdExIyyK0/Hzd6wKtsiw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIXRPx4YS6w9NMm55u/PDuwWNScKnZdE28IZrg6/U+MrvD0G8Oz
-	HpGKmeJRr4HPG7ytVeS05Ns5fmyZ1mStQ4Ay7NQFHgA2joPVGGSEaDXw
-X-Gm-Gg: AYBFou3xt9qR/dCnNlGr/wpEktTpRyxBvguJ7tp7qc5NOk9ElxM/cAK1Wc97dwxB4Jd
-	HC5xfwiAXZ6kp/NAV954k6RDYssPecVC4ZDZFG2es7tEAkulb1ABGBvEBtzvb6CRzVCZoSpMjC0
-	WYgKTNfeV7VNcoEeInKofay80Wjr8sEWjHATBHPsLxlcx+NMotqgBQ5HUBf9F6h70aPQqcEMd6R
-	xFNDESuaYM7suqxhK8h46fVpdw63DAuHXE2g/7icOk6YrHmXf3Unt9wP0jpVkWgER5KsuDbTnVu
-	7l5gNkkygI2GvhLAUW1sjUwdSYBjN1hEkECHbnF85flW0Ce1ay4q0qC6KYNVk3fV/+ye36pgIAI
-	PvYJ0i9HKgGnWOvcQanfLrX49rJGW7bzo2o3QT+L6Cpaqcs7qWfdq6Fw+UKsmUbRgm8rYz3XPc6
-	Kg1A7rihM0fvYteR7yh6fuQLJbV34TCWHqtDQHkNQF9Jxrpt3m5YX+8vHUFVbTbS7RtajJWD8Mn
-	DI1nTE7HCoUOSdeY9ak5mcjTnVN61QIconnVUf+w20SsUrglhCM19L0ANrGNALcp8fyjIlge9tl
-	MXso+KhwIluCRkQ92z6L+7d29Fh9/iYxd5xeeboIkvY=
-X-Received: by 2002:a05:7300:87:b0:360:c266:cddf with SMTP id 5a478bee46e88-360c266d46amr1747387eec.5.1792143158891;
-        Fri, 16 Oct 2026 02:32:38 -0700 (PDT)
+        bh=XHmkv6BikJoFrn087jxAAKsWlqagsvtugyCffrxtj2U=;
+        b=ZXmTEiqAST5Z1bVHsbBAxQxhwLL4I05ChkR+NpT/IqrVtGpW540vuUbGgV2nz4LJu+
+         k9rpjEf7YbGyxp4pwugeAFFcHn0mm5ogeX8FHkFVtYF6XEhyHQZXLeU/bjY+W0LSMK1l
+         MbyFSYDAdMSDLHjpOYObZQp9ONgJ1LdjjEkLeAq6fxS4gUFJ4YgWqyKNKjgb/s35h0hH
+         PlB4a+WPpwXK8qABAs/Ck7/CF3hHeSPsZ+YnODB+Up33mDGayUX5wglLCgdqyM58QJ7B
+         d5bIYuPiMKO0roSw/epiG3Tp4Ang/ECRgW0isuyryfna1g86zkkP5MFtYYZKxm6B3C+4
+         atlw==
+X-Forwarded-Encrypted: i=1; AKwUvBx0VOComW80ps2der/rvRycg+zgDjMC1IB6fH6ZnxbDbOVEfvH3YFy/n82jAchRjz3RTGoIqt6zp2KbXbn4g4U=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIS7pvQbdgnSP6PWi14ze82/KhLuT0Gej6/FlSBPFh5O+ygaDhB
+	RyUoZqfn7DRDu3z8KKmy9Hr7VmvcKQz9ymDNMYG4l/2DMZruwSZcSLzs
+X-Gm-Gg: AYBFou3HV06U/EVDwsvynUkuNGJm9zNiIKnKx5JnjunySdvariZkBs0XQFSJqPuJrby
+	ZdIZnN7N3k0gvjvqUj1T6F962rnvG2IqEzu7zJ1I5h3PKwS8dy9P+lDym+u3yRMsE60UJQPon6F
+	8UagJ1Tcerc9pVPcP0z2yuQVUmcThNuobYzvn4IBIgGn1C1QesNma1/h1jKVDq9pkKjC/uG20Vg
+	6hVrarLv0qqJJRj42azu7YPWlJKeJl4HtyUPgctG0cnSIMI8CdbjeVDZqwAQfc5sv7VcwbV0Km+
+	CjMz9VkSOsSvrD7GaiRN8nVUYZgzmgiO4+sEQDIJqUqEiyfHctIUi8cYzFtx4m/9dOaQvso3qd8
+	i3iJ5MKO7eqXrmqmu5WbgLnnoplwWQSbHwKpzqmgC2ez15DGE4tFexvKclVc+Ua+eInI4fIhlmT
+	5siNo5aHfdjpPzzQQ+Nrsi9KaCoxJLQhayzkh50pKbh8BEyp+jygEarWvIDQO5JI+WK5AbOEC3Q
+	Bg6FzhTWx3Wg+7MXu5DJywN+DXdpoWDPGo82eYLCASwnSr2cFcWKqxqoWKVDooAf1BlHoA9EVS4
+	oEzcdcDxChk/lWTkzm+5yE+Wx45TbJDhlV6vU7zZ6j0=
+X-Received: by 2002:a05:693c:401c:b0:35f:2349:a574 with SMTP id 5a478bee46e88-35f2349e961mr6538038eec.40.1792143164540;
+        Fri, 16 Oct 2026 02:32:44 -0700 (PDT)
 Received: from ramen-dev-security-2.asia-south1-c.c.ramen-dev-345017.internal (90.156.200.35.bc.googleusercontent.com. [35.200.156.90])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-360820a79c7sm5157172eec.18.2026.10.16.02.32.33
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-360820a79c7sm5157172eec.18.2026.10.16.02.32.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 02:32:38 -0700 (PDT)
+        Fri, 16 Oct 2026 02:32:44 -0700 (PDT)
 From: Anil Kaushik <anilkaushikwireless@gmail.com>
 To: Pablo Neira Ayuso <pablo@netfilter.org>,
 	Harald Welte <laforge@gnumonks.org>,
@@ -78,9 +78,9 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Anil Kaushik <anilkaushikwireless@gmail.com>
-Subject: [PATCH net-next v7 1/4] gtp: set a valid genl command in PDP context get and dump replies
-Date: Fri, 16 Oct 2026 09:32:22 +0000
-Message-Id: <20261016093225.1036375-2-anilkaushikwireless@gmail.com>
+Subject: [PATCH net-next v7 2/4] gtp: hold RCU for the device lookup when adding a PDP context
+Date: Fri, 16 Oct 2026 09:32:23 +0000
+Message-Id: <20261016093225.1036375-3-anilkaushikwireless@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20261016093225.1036375-1-anilkaushikwireless@gmail.com>
 References: <20261016093225.1036375-1-anilkaushikwireless@gmail.com>
@@ -92,45 +92,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-gtp_genl_fill_info() stamps the reply with the command its callers pass
-in. gtp_genl_get_pdp() and gtp_genl_dump_pdp() pass nlmsg_type, which in
-a genl message is the dynamically assigned family id rather than a
-GTP_CMD_* value, so replies to a PDP context get or dump carry a
-meaningless command number.
+gtp_genl_new_pdp() calls gtp_find_dev(), which looks the device up with
+dev_get_by_index_rcu(). Since commit e2d1baca2b33 ("gtp: remove useless
+rcu_read_lock()"), this only runs under the rtnl lock, and kernels with
+CONFIG_PROVE_RCU_LIST warn:
 
-libgtpnl ignores the command and is unaffected, but parsers that check
-it (for example the ynl tooling) treat the reply as an unknown command
-and discard it. Pass GTP_CMD_GETPDP, as gtp_tunnel_notify() already
-passes a real command on the notification path. No uapi change.
+  WARNING: suspicious RCU usage
+  net/core/dev.c:1047 RCU-list traversed in non-reader section!!
+  ...
+   dev_get_by_index_rcu
+   gtp_find_dev
+   gtp_genl_new_pdp
 
-Fixes: 459aa660eb1d ("gtp: add initial driver for datapath of GPRS Tunneling Protocol (GTP-U)")
+Hold the RCU read lock around the lookup only: gtp_pdp_add() allocates
+with GFP_KERNEL, and the rtnl lock keeps the device alive afterwards.
+
+Found with the gtp selftest on a debug kernel.
+
+Fixes: e2d1baca2b33 ("gtp: remove useless rcu_read_lock()")
 Signed-off-by: Anil Kaushik <anilkaushikwireless@gmail.com>
 ---
- drivers/net/gtp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/gtp.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/net/gtp.c b/drivers/net/gtp.c
-index 4aff23bcfdd1..99836b773e5c 100644
+index 99836b773e5c..15b5d845fc3b 100644
 --- a/drivers/net/gtp.c
 +++ b/drivers/net/gtp.c
-@@ -2279,7 +2279,7 @@ static int gtp_genl_get_pdp(struct sk_buff *skb, struct genl_info *info)
- 	}
+@@ -2050,7 +2050,10 @@ static int gtp_genl_new_pdp(struct sk_buff *skb, struct genl_info *info)
  
- 	err = gtp_genl_fill_info(skb2, NETLINK_CB(skb).portid, info->snd_seq,
--				 0, info->nlhdr->nlmsg_type, pctx);
-+				 0, GTP_CMD_GETPDP, pctx);
- 	if (err < 0)
- 		goto err_unlock_free;
+ 	rtnl_lock();
  
-@@ -2326,7 +2326,7 @@ static int gtp_genl_dump_pdp(struct sk_buff *skb,
- 					    NETLINK_CB(cb->skb).portid,
- 					    cb->nlh->nlmsg_seq,
- 					    NLM_F_MULTI,
--					    cb->nlh->nlmsg_type, pctx)) {
-+					    GTP_CMD_GETPDP, pctx)) {
- 					cb->args[0] = i;
- 					cb->args[1] = j;
- 					cb->args[2] = (unsigned long)gtp;
++	/* the rtnl lock keeps the device alive once found */
++	rcu_read_lock();
+ 	gtp = gtp_find_dev(sock_net(skb->sk), info->attrs);
++	rcu_read_unlock();
+ 	if (!gtp) {
+ 		err = -ENODEV;
+ 		goto out_unlock;
 -- 
 2.25.1
 
