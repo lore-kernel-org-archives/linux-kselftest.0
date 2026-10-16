@@ -1,246 +1,449 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4AB4D9F82
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 14:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C754D7942
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 14:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792161323; cv=none; b=IB2kyM2f0PWM+xwe21T9V3B4ZSB02/H0WL+lzg6PUcu5QOiiyeESCGRsF6Up+msmZqJK/nyyNdpu7FqcjcyYAF/XdQVt5QwiB8PYmcXtlIGsnTBYXDpmT6iBm20nEL/nKWAUxPMY7/8ILeIz7FRNdaHFG7jKu6BmkSwnTfTIG8M=
+	t=1792161865; cv=none; b=JmFbd5X2p/71m28Pz7B8zlJgD5ytWnxWA9EZShNcR90yVaQDMBXs2QulupgERS/5ESceECdgg0Tkq1UnBresEmnBE1egxHfoulQEujQtZxNgBTIcNgIUPvXpnfe3l4Dftvqg6XqAzbd40+T4tT49hMqHCN/XEKlLrmXAARvGx1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792161323; c=relaxed/simple;
-	bh=jfH/5nDXFBBYY1yRei31P++B9MGbaA0B0jygAz20OZ8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GvM3h/4JpvOYPtW8LAN0cwkUrP9/y5N0OEGQEj7yQnBf62mY5R8MdG36dtp5ESCLJyTv/kdBn7VQKHVDAS7uo9MoX5P5D4fHjLUWsw1zg4haSvOOjVrUsqeoCkrKj6sNfQb0tst8xTNfpAKbeeJudvdagp1W1i0Bn3iNRB7WSvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K9r5OmDl; arc=none smtp.client-ip=74.125.82.172
+	s=arc-20240116; t=1792161865; c=relaxed/simple;
+	bh=TOIiJPI34vCinEaBrduHlT9a71FAHO435ctrN82VAoE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XJtGmLYvAdBWj+Ntp6+hMcBq993b48ZioNhk8cuwkCHegd/9Tp+Yui7rduaf9zBQQdqrwLF+559Foos7SnHw1ntQ7ZRsH6dgLEVDcU+5o8kJWJwH4HGwliHyv3VPl2sjpfhjjq7y21fH3RhuXt/fe5WCDnhzVYaE57vyOoLYSRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gTKfLCJY; arc=none smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K9r5OmDl"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-35c76e9614aso4997859eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 07:35:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gTKfLCJY"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-8b0a28a720aso49099927b3.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 07:44:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792161322; x=1792766122; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=G6Q8gG4c/qnKlMaH5pfvOOdUUEduyYXPZR3420tP37o=;
-        b=K9r5OmDlKe8FvjPj6F4S67o9Uq41Z+LSiq7ddqIAkUbR9LRiN1QRgHWKsChvAHM2yZ
-         6w35N8J6zFmnZ91HxFhK9RNNhTA/hsK4U4vZCknNP7vCQNg1DEtGyinTuc7u6rrCB6yv
-         YzWqrDy3UO0SzvA7sy2HDvAtG4c9xHDOeHBQOzG2qpyfaZU8boAUpAc7NwUGf/BS727U
-         KwlPUxuBntNtDMA9UfnyT91YO7du9IxNOqLtQiu+qk8YJBYzr0z27OW44QvGjTT+vQpX
-         U/3YVU33iUYs8qmHw4vlvC5KkCdQHRAFOjNFn9cz7ymfdBiLYbH9r/AzgvpbuFMpGYzh
-         /8yA==
+        d=gmail.com; s=20251104; t=1792161860; x=1792766660; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=b5mPysmOg/X2gxFC8sSeZVp+7zx/SSikTAHOJ0n/l4g=;
+        b=gTKfLCJYZqf9Va4X2gK4hWvh8JGoXo5O8GFEPbdK5EGPNk1+nMF69RBEbV56m7VuOa
+         u1/uUe52eoiqI9sJYiLcG8LRb7athiBY4YQdiuquYPDED6zea7ip1ow8YfUiVI5ALhmQ
+         L+EQJFBIjJ6HUsDnxw+ITN5Q1ujd38a6+1giBhswT7LZd0r5VyP94zQOvnzn4r3xOOHD
+         g+hmZ1QF9i+dNNoRfoqKzDPfpDjJ/fdl/Ygmq//k/M8kIvU278oZpbQ8rILnv2tqpwXL
+         3A2dYomZAyKqfrfk8w7PFMNPIFePM/8IocWMtWX19I88Ccq3Nfrz7GCPL0+eCWDnKAFR
+         Xiiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792161322; x=1792766122;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1792161860; x=1792766660;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=G6Q8gG4c/qnKlMaH5pfvOOdUUEduyYXPZR3420tP37o=;
-        b=um5KbiFRKg9wW1wxTZEbtiHJB9xThSm7v8xA3stRt1pZyNjHhUmyhGfz3dVTGjV7bQ
-         PBn00ke3CnMJrCbi/bI/1yyH6ayqu7HnGeviOJJfm07wrxgNsxYGYMESZS0V7hHthWBd
-         bhddrIYwYcvU83pQmhsV0ok0nWe/YbrAbbOkHmVC4MrxXPyVidysiHJPA178qNy+TIyS
-         KnC/KlwggqysRw4IZoua7UyInCxcjVCrDL+UxqKoJqpREf5vlOgwFHEcc8XtjRUfXYer
-         e5l38/NqGAZAYKkjMiZAkojNsdyDqmst6ZGurb7REl1RLmA+weq8JMhoU7nJ/ftcCCPi
-         WnHQ==
-X-Forwarded-Encrypted: i=1; AKwUvByHNPwvjqgjR+aAbceysVrWC2bkaCWtTbRxXC2rbrIS1J/Ck360LLzEUZDIVZdwBTD3kjlOuNM3LlDB4vJjrvI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL4RIUDaelENzOkz7vgxRDXdaKM6aPecnEnQraih5g24e0tXW8G
-	GAb/c9USa+0JAUlMMTqDkFObOuAoyJqi14yUWtVop/3us49yapVQE5VH
-X-Gm-Gg: AYBFou2KFmW2bxnO+dx4wK2xtUmQIJFBXPYWubzxss+54IV7RCNgOWhZPsAXwfKQJbm
-	swgNImcXEnEwGvF1tMoFSO92Vu8rL1HW5VQF/xwN8/ki7ACI+rrlUWjzF2hAygji1x8lKZHLHD0
-	UevGTrh+VruFhop076DTTcpccvwWnZxNGF2vcvcTD2d/Msg4b6FeMH8K7FsQvwmUsEc3uTXX8Qa
-	4QhPDrSE7CigGe4SBxNY+TKN2tYY+eSM3lsAgAWNykGlwEwhmJu4D/HVYY2nXZ8IrZL/ULGDdrB
-	9u6KvzAbx84Awe7kbSLxaPhK1yqO8YfWkKNmSHnJlmtcQfHi59n1UvyQJyZCkobisL094Q5zMQ/
-	6R7q3qljxNcXvhUhsmHMfDNX982yzeQVWCySagDhYq+kFyrN7wV05cBWZNMDXiIoXWKSwY125oR
-	TMS5U73D27zYdldUJvh/lbjUZYqkRcj7liyeorrQ4NOs4IhQzHt8c21uuSJX/4ZllORQ==
-X-Received: by 2002:a05:7301:da84:b0:35d:3370:d8e7 with SMTP id 5a478bee46e88-3619ed12158mr57587eec.2.1792161318630;
-        Fri, 16 Oct 2026 07:35:18 -0700 (PDT)
-Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3608297f4f7sm7611812eec.23.2026.10.16.07.35.13
+        bh=b5mPysmOg/X2gxFC8sSeZVp+7zx/SSikTAHOJ0n/l4g=;
+        b=Wbx0Rs6WC3qxcDOZYomwvRJTCWWyS3RrrpOwATuGXYfZrM8uoUxy1/CrgE2ZVdttZE
+         YZLxXAOtBi1ZMTenoWQUo3YwD6ZX+F5/6y8WA+rG7nrdj2sHBgNqDH0Qkm+DLpUpM24g
+         OEXVJfA0cXnwprK/bUVkWh5IMmwT/EICySWS243/HTBqKiWSIV/ixww3WqznOMLxMWFO
+         I0EljNxQjxIoCy+Mq+YaxBBPW24mRsKwvjWJ2oAuuvnhEZf85Yp+ubD03ytaOKDuS864
+         E3gZk44EqxNujabNx7MypodxjjkEGctgQFXkLxmCZG2LRbvM5Ht1PNz1itT5KNGHFKuM
+         6nxw==
+X-Forwarded-Encrypted: i=1; AKwUvBxFX21JuuxrImGJ5TaGzQ96ySxCx/llQ1MNAvv3UZg53TZOJcQSJgtOxUbTXwPUNxkPgr6V7lJ2yxstAwjIqMs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJrXETvDz/HgOWjrSfM67I4WTz0zfTIVFL/AVqCi0M6senjzXPC
+	DtBtpAbv2Nu+u4TJhgEdioxmOdLXOtnMeLZOzbJeer6x2/pDteIX4hdN
+X-Gm-Gg: AYBFou3l1DoIyXfPcqST/lluEph3eNLlaTa4Y0pVf6gL47dnCuDz7nK+mtM80u3ZQZK
+	NrpUfksDajo860Scd2MzDyXTEhJ4LsDiYWJDTQD8vSkTh8Wo/XqmT6wEBrBnV0wlHHHaGSGiMeR
+	uI9naMBjfe/q2BQd1BcNbiBt0tmXN3xp1b0+vR+7gZTFYhkiR4m+1AY5VQnwKd0ETBgJLws3oQj
+	91/M+Umiu0Qh5dc1+ZI9ebDC8lFhjGf6UGyqGPqlA1V97uuZvtWPYuF5mJk4tVuazZq2bPh/wbI
+	sSwyr7JKN2kTT/t31oJTllmpuIZRB52brO6xPdnA3ILcdnksdIVLAaeJliIM8tBUmiJCxRK3sZG
+	i2qsYGTdvSgL/IY+XoxOsnce/DNJqu70CoIwc1Sbh73pvu0y5Is8b6XikmYIZB9YPgumJSvYS+7
+	wMXSQgPxeBKz9VZUUzqa4YNZtlo7aHMnMpQYmXEpQUWB0YPb1J/j9Ws+hoAlpRoLWETcBwmdre
+X-Received: by 2002:a05:690c:a4d4:b0:8ae:8d28:77be with SMTP id 00721157ae682-8b0f205d6dfmr777507b3.1.1792161858531;
+        Fri, 16 Oct 2026 07:44:18 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:1002:ecef:6e38:613d])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b0e5888166sm9663717b3.14.2026.10.16.07.44.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 07:35:18 -0700 (PDT)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 16 Oct 2026 22:34:57 +0800
-Subject: [PATCH 2/2] selftests/mm: cover merging KSM pages aged by smart
- scan
+        Fri, 16 Oct 2026 07:44:17 -0700 (PDT)
+Date: Fri, 16 Oct 2026 10:44:16 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Cai Xinchen <caixinchen1@huawei.com>
+Cc: mic@digikod.net, gnoack@google.com, paul@paul-moore.com, 
+	jmorris@namei.org, serge@hallyn.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	rdunlap@infradead.org, gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, 
+	johan@kernel.org, dlemoal@kernel.org, hch@lst.de, axboe@kernel.dk, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, dhowells@redhat.com, 
+	code@tyhicks.com, linkinjeon@kernel.org, sj1557.seo@samsung.com, 
+	yuezhang.mo@sony.com, hirofumi@mail.parknet.co.jp, cel@kernel.org, jlayton@kernel.org, 
+	neil@brown.name, okorniev@redhat.com, Dai.Ngo@oracle.com, tom@talpey.com, 
+	hyc.lee@gmail.com, miklos@szeredi.hu, amir73il@gmail.com, senozhatsky@chromium.org, 
+	chenxiaosong@chenxiaosong.com, kpsingh@kernel.org, matt@bobrowski.net, rostedt@goodmis.org, 
+	mhiramat@kernel.org, mathieu.desnoyers@efficios.com, john.johansen@canonical.com, 
+	georgia.garcia@canonical.com, zohar@linux.ibm.com, roberto.sassu@huawei.com, 
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, stephen.smalley.work@gmail.com, 
+	omosnacek@gmail.com, casey@schaufler-ca.com, takedakn@nttdata.co.jp, 
+	penguin-kernel@i-love.sakura.ne.jp, xiujianfeng@huawei.com, nanx95726@gmail.com, djwong@kernel.org, 
+	lujialin4@huawei.com, bpf@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	netfs@lists.linux.dev, ecryptfs@vger.kernel.org, exfat@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, ntfs@lists.linux.dev, linux-unionfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, linux-trace-kernel@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 -next 09/18] landlock: Add READ_METADATA and
+ WRITE_METADATA access rights
+Message-ID: <atI20Vs7Du9-g1Hz@zenbox>
+References: <20261015125425.3246251-1-caixinchen1@huawei.com>
+ <20261015125425.3246251-10-caixinchen1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261016-bug-mm-ksm-smart-scan-align-skips-v1-2-2f91d76416be@gmail.com>
-References: <20261016-bug-mm-ksm-smart-scan-align-skips-v1-0-2f91d76416be@gmail.com>
-In-Reply-To: <20261016-bug-mm-ksm-smart-scan-align-skips-v1-0-2f91d76416be@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Xu Xin <xu.xin@linux.dev>, 
- Chengming Zhou <chengming.zhou@linux.dev>, Stefan Roesch <shr@devkernel.io>, 
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261015125425.3246251-10-caixinchen1@huawei.com>
 
-ksm_functional_tests checks merging and unmerging with ksmd's default
-settings, but nothing there exercises smart scan, which skips pages KSM
-has failed to merge for a while.
+On Thu, Oct 15, 2026 at 08:54:15PM +0800, Cai Xinchen wrote:
+> Add two new filesystem access rights to control file metadata access:
+> 
+> - LANDLOCK_ACCESS_FS_READ_METADATA: Read file or directory metadata
+>   (e.g. inode attributes, extended attributes and POSIX ACLs) through
+>   stat(2), fstat(2), lstat(2), newfstatat(2), getxattr(2) and
+>   friends, listxattr(2) and friends, and the POSIX ACL read
+>   operations.
+> - LANDLOCK_ACCESS_FS_WRITE_METADATA: Change file or directory
+>   metadata through chmod(2) and friends, chown(2) and friends,
+>   utimensat(2) and friends, setxattr(2) and friends, removexattr(2)
+>   and friends, and the POSIX ACL set and remove operations.
+> 
+> This follows the coarse-grained grouping approach discussed in the
+> mailing list [1], where file metadata operations are grouped by
+> security relevance rather than by individual syscall.
+> 
+> Implement the two rights by hooking the inode_getattr,
+> inode_file_getattr, inode_setattr, inode_file_setattr,
+> inode_setxattr, inode_getxattr, inode_listxattr, inode_removexattr,
+> inode_set_acl, inode_get_acl and inode_remove_acl LSM hooks, which
+> now receive a struct path thanks to the preceding VFS and LSM
+> refactoring.  The following system calls are now controlled:
+> 
+> - stat(2), fstat(2), lstat(2), newfstatat(2), getxattr(2) and
+>   friends, listxattr(2) and friends, POSIX ACL reads, and the
+>   chattr(1)/xfs_io style reads: ioctl(FS_IOC_GETFLAGS),
+>   ioctl(FS_IOC_FSGETXATTR) and file_getattr(2) via inode_getattr,
+>   inode_getxattr, inode_listxattr, inode_get_acl and
+>   inode_file_getattr (READ_METADATA)
+> - chmod(2), fchmod(2), fchmodat(2), fchmodat2(2), chown(2), fchown(2),
+>   lchown(2), fchownat(2), chgrp(2), utimensat(2), futimens(2),
+>   utime(2), setxattr(2) and friends, removexattr(2) and friends,
+>   POSIX ACL set and remove, and the chattr(1)/xfs_io style writes:
+>   ioctl(FS_IOC_SETFLAGS), ioctl(FS_IOC_FSSETXATTR) and
+>   file_setattr(2) via inode_setattr, inode_file_setattr,
+>   inode_setxattr, inode_removexattr, inode_set_acl and
+>   inode_remove_acl (WRITE_METADATA)
+> 
+> Both new rights are added to ACCESS_FILE as they apply to both files
+> and directories.
+> 
+> hook_inode_setattr only restricts explicit metadata changes, i.e. it
+> checks WRITE_METADATA only when the ia_valid mask contains
+> ATTR_MODE, ATTR_UID, ATTR_GID, ATTR_TIMES_SET or ATTR_TOUCH.
+> Metadata changes that the kernel performs implicitly, such as
+> timestamp updates on write(2) or size changes on truncate(2), are
+> therefore not restricted, and neither are chmod(2)/chown(2) calls
+> that do not change any attribute (e.g. chown(2) with -1/-1, which is
+> a no-op that never reaches the hook), matching the behavior of the
+> SELinux inode_setattr hook.
+> 
+> Stacking filesystems forward fileattr operations to underlying inodes
+> without calling the LSM hooks again (see the preceding patch), so a
+> fileattr operation on an overlayfs file is checked once on the
+> user-facing merged path and is not spuriously denied because of the
+> kernel-side creator credentials used for the forward.
+> 
+> Kernel-internal accesses performed with override_creds() (e.g.
+> overlayfs and cachefiles) are not affected because Landlock domains
+> are attached to credentials, and kernel threads without a Landlock
+> domain (e.g. nfsd and ksmbd) are not restricted either.
+> 
+> Remove stat(2), chmod(2), chown(2), setxattr(2) and utime(2) from the
+> list of file-related actions that cannot be restricted yet, and add
+> the names of the new rights to _LANDLOCK_ACCESS_FS_NAMES in
+> include/linux/landlock.h, which is shared by audit records and trace
+> events, so that denied accesses can be reported with a human-readable
+> name and the static assertion on fs_access_strings in
+> security/landlock/audit.c stays valid.
+> 
+> Increment the Landlock ABI version from 12 to 13, and update the ABI
+> version check in tools/testing/selftests/landlock/base_test.c
+> accordingly.
+>
+LANDLOCK_ACCESS_FS_*_METADATA should be checked at open time and follow
+the mechanic for the truncate right. Otherwise the access for already
+opened file descriptors would be changed. See hook_file_open in
+security/landlock/fs.c and this discussion here [1]
 
-Smart scan used to time those skips per page, so two identical pages
-that became mergeable some scans apart could end up never being looked
-at in the same scan, and were never merged. "mm/ksm: align smart scan
-skips with the scan number" fixed that.
+It should have clear documentation for this as well.
 
-Add a case that lets sixteen unique pages age for a dozen scans, then
-makes a duplicate of each mergeable one scan apart, and expects every
-pair to be merged 32 scans later:
+Justin
+[1] https://lore.kernel.org/all/20260929.Ahgoo4yeetai@digikod.net/
 
-  kernel               failures
-  before the fix       20/20
-  with the fix          0/20
 
-Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
----
- tools/testing/selftests/mm/ksm_functional_tests.c | 108 +++++++++++++++++++++-
- 1 file changed, 107 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index 31c06c72203fd..71d9b3cbdb8c1 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -695,6 +695,111 @@ static void test_fork_ksm_merging_page_count(void)
- 	munmap(map, size);
- }
- 
-+static int ksm_wait_full_scans(long nr)
-+{
-+	long start, cur;
-+
-+	start = ksm_get_full_scans();
-+	if (start < 0)
-+		return start;
-+	do {
-+		cur = ksm_get_full_scans();
-+		if (cur < 0)
-+			return cur;
-+	} while (cur < start + nr);
-+
-+	return 0;
-+}
-+
-+static void test_merge_aged_pairs(void)
-+{
-+	const unsigned int pairs = 16;
-+	const unsigned long size = 2 * pairs * pagesize;
-+	char *map, old_smart_scan = '1';
-+	int smart_scan_fd;
-+	unsigned int i;
-+
-+	ksft_print_msg("[RUN] %s\n", __func__);
-+
-+	smart_scan_fd = open("/sys/kernel/mm/ksm/smart_scan", O_RDWR);
-+	if (smart_scan_fd < 0) {
-+		ksft_test_result_skip("smart_scan not supported\n");
-+		return;
-+	}
-+	if (pread(smart_scan_fd, &old_smart_scan, 1, 0) != 1 ||
-+	    pwrite(smart_scan_fd, "1", 1, 0) != 1) {
-+		ksft_test_result_fail("Enabling smart_scan failed\n");
-+		goto close_fd;
-+	}
-+
-+	if (ksm_stop() < 0) {
-+		ksft_test_result_fail("Disabling (unmerging) KSM failed\n");
-+		goto restore;
-+	}
-+
-+	map = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (map == MAP_FAILED) {
-+		ksft_test_result_fail("mmap() failed\n");
-+		goto restore;
-+	}
-+	if (madvise(map, size, MADV_NOHUGEPAGE) && errno != EINVAL) {
-+		ksft_test_result_fail("MADV_NOHUGEPAGE failed\n");
-+		goto unmap;
-+	}
-+
-+	/*
-+	 * Page i of the first half and page i of the second half form a
-+	 * pair with content no other page shares.
-+	 */
-+	for (i = 0; i < pairs; i++) {
-+		memset(map + i * pagesize, i + 1, pagesize);
-+		memset(map + (pairs + i) * pagesize, i + 1, pagesize);
-+	}
-+
-+	/* Let the first page of each pair age without a duplicate. */
-+	if (madvise(map, size / 2, MADV_MERGEABLE)) {
-+		ksft_test_result_fail("MADV_MERGEABLE failed\n");
-+		goto unmap;
-+	}
-+	if (ksm_start() < 0 || ksm_wait_full_scans(12) < 0) {
-+		ksft_test_result_fail("Running KSM failed\n");
-+		goto unmap;
-+	}
-+
-+	/*
-+	 * Make the duplicates mergeable one scan apart so that each pair
-+	 * starts out with a different distance in scans.
-+	 */
-+	for (i = 0; i < pairs; i++) {
-+		if (madvise(map + (pairs + i) * pagesize, pagesize,
-+			    MADV_MERGEABLE)) {
-+			ksft_test_result_fail("MADV_MERGEABLE failed\n");
-+			goto unmap;
-+		}
-+		if (ksm_wait_full_scans(1) < 0) {
-+			ksft_test_result_fail("Running KSM failed\n");
-+			goto unmap;
-+		}
-+	}
-+
-+	if (ksm_wait_full_scans(32) < 0) {
-+		ksft_test_result_fail("Running KSM failed\n");
-+		goto unmap;
-+	}
-+
-+	ksft_test_result(ksm_get_self_merging_pages() == 2 * pairs,
-+			 "Pages aged by smart scan got merged\n");
-+unmap:
-+	ksm_stop();
-+	munmap(map, size);
-+restore:
-+	if (pwrite(smart_scan_fd, &old_smart_scan, 1, 0) != 1)
-+		ksft_print_msg("Restoring smart_scan failed\n");
-+close_fd:
-+	close(smart_scan_fd);
-+}
-+
- static void init_global_file_handles(void)
- {
- 	mem_fd = open("/proc/self/mem", O_RDWR);
-@@ -720,7 +825,7 @@ static void init_global_file_handles(void)
- 
- int main(int argc, char **argv)
- {
--	unsigned int tests = 9;
-+	unsigned int tests = 10;
- 	int err;
- 
- 	if (argc > 1 && !strcmp(argv[1], FORK_EXEC_CHILD_PRG_NAME)) {
-@@ -753,6 +858,7 @@ int main(int argc, char **argv)
- 	test_prctl_fork_exec();
- 	test_prctl_unmerge();
- 	test_fork_ksm_merging_page_count();
-+	test_merge_aged_pairs();
- 
- 	err = ksft_get_fail_cnt();
- 	if (err)
-
--- 
-2.43.0
-
+> [1]
+> https://lore.kernel.org/all/abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net/
+> 
+> Assisted-by: opencode: glm-5.3
+> Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
+> ---
+>  include/linux/landlock.h      |   4 +-
+>  include/uapi/linux/landlock.h |  25 ++++++-
+>  security/landlock/fs.c        | 126 ++++++++++++++++++++++++++++++++++
+>  security/landlock/limits.h    |   2 +-
+>  security/landlock/syscalls.c  |   2 +-
+>  5 files changed, 153 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/landlock.h b/include/linux/landlock.h
+> index 0ee4880988ba..ee1234fbc9f0 100644
+> --- a/include/linux/landlock.h
+> +++ b/include/linux/landlock.h
+> @@ -41,7 +41,9 @@
+>  	_LANDLOCK_NAME_ENTRY(LANDLOCK_ACCESS_FS_REFER, "refer"), \
+>  	_LANDLOCK_NAME_ENTRY(LANDLOCK_ACCESS_FS_TRUNCATE, "truncate"), \
+>  	_LANDLOCK_NAME_ENTRY(LANDLOCK_ACCESS_FS_IOCTL_DEV, "ioctl_dev"), \
+> -	_LANDLOCK_NAME_ENTRY(LANDLOCK_ACCESS_FS_RESOLVE_UNIX, "resolve_unix")
+> +	_LANDLOCK_NAME_ENTRY(LANDLOCK_ACCESS_FS_RESOLVE_UNIX, "resolve_unix"), \
+> +	_LANDLOCK_NAME_ENTRY(LANDLOCK_ACCESS_FS_READ_METADATA, "read_metadata"), \
+> +	_LANDLOCK_NAME_ENTRY(LANDLOCK_ACCESS_FS_WRITE_METADATA, "write_metadata")
+>  
+>  #define _LANDLOCK_ACCESS_NET_NAMES \
+>  	_LANDLOCK_NAME_ENTRY(LANDLOCK_ACCESS_NET_BIND_TCP, "bind_tcp"), \
+> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
+> index 24510e5d8479..36dfb499e48e 100644
+> --- a/include/uapi/linux/landlock.h
+> +++ b/include/uapi/linux/landlock.h
+> @@ -429,6 +429,25 @@ struct landlock_capability_attr {
+>   *
+>   *   The rationale for this design is described in
+>   *   :ref:`Documentation/security/landlock.rst <scoped-flags-interaction>`.
+> + * - %LANDLOCK_ACCESS_FS_READ_METADATA: Read file or directory metadata (e.g.
+> + *   inode attributes, extended attributes, and POSIX ACLs) through
+> + *   :manpage:`stat(2)`, :manpage:`fstat(2)`, :manpage:`lstat(2)`,
+> + *   :manpage:`newfstatat(2)`, :manpage:`getxattr(2)`, and
+> + *   :manpage:`listxattr(2)`.
+> + *
+> + *   This access right is available since the thirteenth version of the
+> + *   Landlock ABI.
+> + * - %LANDLOCK_ACCESS_FS_WRITE_METADATA: Change file or directory metadata
+> + *   (e.g. inode attributes, extended attributes, and POSIX ACLs) through
+> + *   :manpage:`chmod(2)`, :manpage:`chown(2)`, :manpage:`utimensat(2)`,
+> + *   :manpage:`setxattr(2)`, and :manpage:`removexattr(2)`, as well as related
+> + *   system calls.  Implicit metadata changes performed by the kernel (e.g.
+> + *   timestamp updates with :manpage:`write(2)`, or set-user-ID and
+> + *   set-group-ID bit clearing with :manpage:`write(2)` or
+> + *   :manpage:`truncate(2)`) are not restricted by this access right.
+> + *
+> + *   This access right is available since the thirteenth version of the
+> + *   Landlock ABI.
+>   *
+>   * Whether an opened file can be truncated with :manpage:`ftruncate(2)` or used
+>   * with `ioctl(2)` is determined during :manpage:`open(2)`, in the same way as
+> @@ -493,9 +512,7 @@ struct landlock_capability_attr {
+>   *
+>   *   It is currently not possible to restrict some file-related actions
+>   *   accessible through these syscall families: :manpage:`chdir(2)`,
+> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
+> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+> - *   :manpage:`fcntl(2)`, :manpage:`access(2)`.
+> + *   :manpage:`flock(2)`, :manpage:`fcntl(2)`, :manpage:`access(2)`.
+>   *   Future Landlock evolutions will enable to restrict them.
+>   */
+>  /* clang-format off */
+> @@ -516,6 +533,8 @@ struct landlock_capability_attr {
+>  #define LANDLOCK_ACCESS_FS_TRUNCATE			(1ULL << 14)
+>  #define LANDLOCK_ACCESS_FS_IOCTL_DEV			(1ULL << 15)
+>  #define LANDLOCK_ACCESS_FS_RESOLVE_UNIX			(1ULL << 16)
+> +#define LANDLOCK_ACCESS_FS_READ_METADATA		(1ULL << 17)
+> +#define LANDLOCK_ACCESS_FS_WRITE_METADATA		(1ULL << 18)
+>  /* clang-format on */
+>  
+>  /**
+> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+> index a8fa8f77e775..f56277c67a24 100644
+> --- a/security/landlock/fs.c
+> +++ b/security/landlock/fs.c
+> @@ -318,6 +318,8 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
+>  	LANDLOCK_ACCESS_FS_EXECUTE | \
+>  	LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>  	LANDLOCK_ACCESS_FS_READ_FILE | \
+> +	LANDLOCK_ACCESS_FS_READ_METADATA | \
+> +	LANDLOCK_ACCESS_FS_WRITE_METADATA | \
+>  	LANDLOCK_ACCESS_FS_TRUNCATE | \
+>  	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
+>  	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
+> @@ -1676,6 +1678,119 @@ static int hook_path_truncate(const struct path *const path)
+>  	return current_check_access_path(path, LANDLOCK_ACCESS_FS_TRUNCATE);
+>  }
+>  
+> +static int hook_inode_getattr(const struct path *const path)
+> +{
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_READ_METADATA);
+> +}
+> +
+> +static int hook_inode_file_getattr(const struct path *const path,
+> +				   struct file_kattr *const fa)
+> +{
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_READ_METADATA);
+> +}
+> +
+> +static int hook_inode_setattr(const struct path *const path,
+> +			      struct iattr *const attr)
+> +{
+> +	unsigned int ia_valid = attr->ia_valid;
+> +
+> +	/*
+> +	 * Only explicit metadata changes are checked: implicit
+> +	 * timestamp updates never go through notify_change(), and size
+> +	 * changes (ATTR_SIZE) are governed by the truncate hooks
+> +	 * instead.  See the "File metadata" section in the user space
+> +	 * documentation for the full semantics.
+> +	 *
+> +	 * Clearing the setuid and setgid bits on write(2) or
+> +	 * truncate(2) is also an implicit change: callers request it
+> +	 * with ATTR_KILL_S[UG]ID, and do_notify_change() then adds a
+> +	 * synthesized ATTR_MODE (with these bits removed) before
+> +	 * calling this hook.  As do_notify_change() makes it a bug for
+> +	 * callers to pass ATTR_MODE together with a kill flag, an
+> +	 * ATTR_MODE seen along with ATTR_KILL_S[UG]ID is always
+> +	 * kernel-synthesized and must not be checked.  An explicit
+> +	 * chmod(2) never sets a kill flag, and an explicit chown(2) on
+> +	 * a privileged file is still checked thanks to ATTR_UID and
+> +	 * ATTR_GID.
+> +	 */
+> +	if (ia_valid & (ATTR_KILL_SUID | ATTR_KILL_SGID))
+> +		ia_valid &= ~ATTR_MODE;
+> +
+> +	if (!(ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID |
+> +			  ATTR_TIMES_SET | ATTR_TOUCH)))
+> +		return 0;
+> +
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
+> +}
+> +
+> +static int hook_inode_file_setattr(const struct path *const path,
+> +				   struct file_kattr *const fa)
+> +{
+> +	/*
+> +	 * The chattr(2) style flags (e.g. FS_IMMUTABLE_FL) and fsxattr
+> +	 * fields are metadata: writing them requires WRITE_METADATA.  The
+> +	 * user-facing path is checked here; stacking filesystems skip this
+> +	 * hook on their internal forwards because they were already
+> +	 * checked on the user-facing path.
+> +	 */
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
+> +}
+> +
+> +static int hook_inode_setxattr(const struct path *const path,
+> +			       const char *const name,
+> +			       const void *const value, const size_t size,
+> +			       const int flags)
+> +{
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
+> +}
+> +
+> +static int hook_inode_getxattr(const struct path *const path,
+> +			       const char *const name)
+> +{
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_READ_METADATA);
+> +}
+> +
+> +static int hook_inode_listxattr(const struct path *const path)
+> +{
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_READ_METADATA);
+> +}
+> +
+> +static int hook_inode_removexattr(const struct path *const path,
+> +				  const char *const name)
+> +{
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
+> +}
+> +
+> +static int hook_inode_set_acl(const struct path *const path,
+> +			      const char *const acl_name,
+> +			      struct posix_acl *const kacl)
+> +{
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
+> +}
+> +
+> +static int hook_inode_get_acl(const struct path *const path,
+> +			      const char *const acl_name)
+> +{
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_READ_METADATA);
+> +}
+> +
+> +static int hook_inode_remove_acl(const struct path *const path,
+> +				 const char *const acl_name)
+> +{
+> +	return current_check_access_path(path,
+> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
+> +}
+> +
+>  /**
+>   * unmask_scoped_access - Remove access right bits in @masks in all layers
+>   *                        where @client and @server have the same domain
+> @@ -2100,6 +2215,17 @@ static struct security_hook_list landlock_hooks[] __ro_after_init = {
+>  	LSM_HOOK_INIT(path_unlink, hook_path_unlink),
+>  	LSM_HOOK_INIT(path_rmdir, hook_path_rmdir),
+>  	LSM_HOOK_INIT(path_truncate, hook_path_truncate),
+> +	LSM_HOOK_INIT(inode_getattr, hook_inode_getattr),
+> +	LSM_HOOK_INIT(inode_file_getattr, hook_inode_file_getattr),
+> +	LSM_HOOK_INIT(inode_setattr, hook_inode_setattr),
+> +	LSM_HOOK_INIT(inode_file_setattr, hook_inode_file_setattr),
+> +	LSM_HOOK_INIT(inode_setxattr, hook_inode_setxattr),
+> +	LSM_HOOK_INIT(inode_getxattr, hook_inode_getxattr),
+> +	LSM_HOOK_INIT(inode_listxattr, hook_inode_listxattr),
+> +	LSM_HOOK_INIT(inode_removexattr, hook_inode_removexattr),
+> +	LSM_HOOK_INIT(inode_set_acl, hook_inode_set_acl),
+> +	LSM_HOOK_INIT(inode_get_acl, hook_inode_get_acl),
+> +	LSM_HOOK_INIT(inode_remove_acl, hook_inode_remove_acl),
+>  	LSM_HOOK_INIT(unix_find, hook_unix_find),
+>  
+>  	LSM_HOOK_INIT(file_alloc_security, hook_file_alloc_security),
+> diff --git a/security/landlock/limits.h b/security/landlock/limits.h
+> index ddd300e10689..ed606ee3102f 100644
+> --- a/security/landlock/limits.h
+> +++ b/security/landlock/limits.h
+> @@ -21,7 +21,7 @@
+>  #define LANDLOCK_MAX_NUM_LAYERS		16
+>  #define LANDLOCK_MAX_NUM_RULES		U32_MAX
+>  
+> -#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_RESOLVE_UNIX
+> +#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_WRITE_METADATA
+>  #define LANDLOCK_MASK_ACCESS_FS		((LANDLOCK_LAST_ACCESS_FS << 1) - 1)
+>  #define LANDLOCK_NUM_ACCESS_FS		__const_hweight64(LANDLOCK_MASK_ACCESS_FS)
+>  
+> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+> index fb5af318b69b..11d3a2abcec1 100644
+> --- a/security/landlock/syscalls.c
+> +++ b/security/landlock/syscalls.c
+> @@ -191,7 +191,7 @@ static const struct file_operations ruleset_fops = {
+>   * If the change involves a fix that requires userspace awareness, also update
+>   * the errata documentation in Documentation/userspace-api/landlock.rst .
+>   */
+> -const int landlock_abi_version = 12;
+> +const int landlock_abi_version = 13;
+>  
+>  /**
+>   * sys_landlock_create_ruleset - Create a new ruleset
+> -- 
+> 2.18.0.huawei.25
+> 
+> 
