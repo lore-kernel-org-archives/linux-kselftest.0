@@ -1,92 +1,58 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7032B40EB91
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 21:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2221369997;
+	Fri, 16 Oct 2026 21:54:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792186953; cv=none; b=oOnZco0e/p/cGN9lPYnut4ul1/IF20f2C63HJG6/ggCiQX7Eq8orSxNgUH9a3k1hPZhGXcIHirichC2hHxyDwR4qOsChhQjOylx4DTvBMHUwiafaqf7r7Mz9SvjTuSJvxh7+TtFFXEz2HTVv77KgqxwAScHxFJp8irxB7wLvOdk=
+	t=1792187649; cv=none; b=SJMLE4BQjyw2sVSlgy6OkmFssrBS5CC4JUoWNtBSDpTbM4DGcGCfCPX++T6V1MurCKoO+x5yhIJ0d666mzb2B/nvJbLJZBSxS+1ou2wNi1ZVZvKuMShteM6/ADeU91Om6cLW69YdcIOaK6+CVP5+AzwIkB5Kuy4YJweLzF6roLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792186953; c=relaxed/simple;
-	bh=dii8AXBOk3+Az7UsFHXFPwZ3TOzk3cjgGLtibgvjexE=;
+	s=arc-20240116; t=1792187649; c=relaxed/simple;
+	bh=ZWM0sMHH8wKCZK3iuYqtS4+tjmbExVll3Zlm0HAqbFc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FssLqcrHfvyjZeyt+cEahSl1jAxzxu90YkV2le/uImxHmC8kba6nSmbu9qfB/23Dces2P76VchrlAhOF7Cygvds6aAF9NYqTainBU6xM7z/02831Ne19dQLy1gJ24t2fZTaXmpKL1dGFTCRra4fVEkAoOlZYLSmC8qvg+RenBxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=UVKKBRgV; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	 MIME-Version; b=CoY+thC9PH15mHSP1ckMLknJZHj4/jigXBDL3/qpk3etc5tmiTDaAnbvD9LtTyOrAc7WN+kLtso1A4IT9T/OrrFhodUn6o82hGLrXXOOSvPASSHKJCTuzWdWGnLC+TRwsY5oBnUVBHe68wFaQkEDATgIGqnVhhv95L8guap7O9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q7x35s3S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UVKKBRgV"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a16aaf2067so4935225e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 14:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1792186950; x=1792791750; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=nkSrmZ/rIJfb7LmuhXOuls+EtRmQ4jlpcUCCFqAgFDk=;
-        b=UVKKBRgVfcn3Gy27jj8bvS0Ot4oUCctL8Z14vhYod5b0d0ZTdC8df1dhdJV5BMlTHP
-         /hJC1udtx0mhN7Wwqoep+mgRmo1yrwDxrUjn8bHczRbrcGH1wdFbD7WGazLTNOPJdjIm
-         8plkOh38iLcmuYC9ATgV2zbPG8iE5BKofWLOmOhAwe9+t1az8e09mEt1m3ZP26TEQJfi
-         rcbsIlwplMr9VoE1WfmSMVVRWzW5pGFgBiLbm8jlkekiKg4mnMq+ACGNzb/msS2LC5vh
-         4eboH3e/j+xlHwQEq0cL4ZNKLgbHD14IBwyt2qij5YuHwaHxh4TtiqAT9u4+FrqXbQlh
-         EHCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792186950; x=1792791750;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nkSrmZ/rIJfb7LmuhXOuls+EtRmQ4jlpcUCCFqAgFDk=;
-        b=UyOUPwkm06kCObfSIbpQ132iBrMj2irXZNt6e9iDzycGOuT+xWlG8XfmuiYZc1fEjf
-         66br70RnJdx/8C4IAk92/RC80+i255pdaBiDc4TE/ufgXryPqgtqqXlAnUiPMV8envnk
-         +M4LdbRfuXR1d/0Z3JOgzxH1b0uTB1v2gLVE/ygCYdzcAZJCmCvIuFYQr2xOPTIOClxE
-         9LIbwUOt2kMzi0cVm0FiKBs9mqGD/AN0qmcNBwubXRSwEF8S08rNwFeZs221eW5XWvhw
-         2fdO5y3frJjMO0RS1+Q4XV7t0xvUYFvVnq3js1zujwRuNRtqt/6kFnvqtMFdTiACrNL0
-         yU5w==
-X-Forwarded-Encrypted: i=1; AKwUvBwbDv9WVkddumqsPczULlpHg+UmLdKiRGuP286HH2fPsYFtH8kgAKjtjjHljd0gewdli8utwvpkvy+355QlpIc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIkpnMsS4XjkiThLA2D56LQTF6J7KXxbKaVZmPdwEBhW5Sdse9Y
-	C7NK02/ckFxGB4y4KK7VRkSTY4uIRe28lvJ4nBkTNp3g9JzFXfPtk75DHquWgzUPc8A=
-X-Gm-Gg: AYBFou2wp+zVhjFWOOiyy9AugkZwG4QsFCVnC78esAbYVXMhCVM3v3FT2jlD3lkyAop
-	uVcbJBvTqCSRJKBDR5bFlOhenMjbWRUI9gv9UftZ6kZhtIZc+5jKQ61VDxz5uf0lI5Kww1IJH7i
-	Z/oeorocR9nt/tG5xEnrR3N7zpOAIZJmalUuriKsMNKqyHc0zIkw2xcLgslxc2ZVnDk8rjUDdJG
-	K2ds80d/6BI+vUPtJZH6wmydvzrwlmbSeZMLLpcH5AB/twQQEDP4BmnUiG7wdT3YXIoPKtIgjAI
-	9ud7rxsiAUJf1WHxnzF1BMar//Waac51Pq0fHSo+9foSkTjHDslnvLNtzm6j7RllWDTcsj6SCi8
-	STgE27Esy9geG+qpbJgwmrTx413smrDNp+vRZ3BTkk5NTZOUzBKMbv5RnN7h8Zces0/Vmy/3sdG
-	wcmnU7f9xtEv4sFId0pJ6xij2lIP9DYaCzqVnaKbnCsYTWmK4UCiAVm3urOPHIpiuTI8QwOuXKV
-	0Q7+2tmLKvs61oO2qxrasRucMNg
-X-Received: by 2002:a05:600c:1c09:b0:49c:fc6e:8caf with SMTP id 5b1f17b1804b1-4a1d7614ff4mr24321255e9.19.1792186949688;
-        Fri, 16 Oct 2026 14:42:29 -0700 (PDT)
-Received: from D90XRJJJNQ ([2a09:bac6:37af:ec8::179:190])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48dfd4f8bb6sm7975417f8f.34.2026.10.16.14.42.26
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 16 Oct 2026 14:42:28 -0700 (PDT)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	toke@redhat.com,
-	horms@kernel.org,
-	bpf@vger.kernel.org,
-	shuah@kernel.org,
-	hawk@kernel.org,
-	kernel-team@cloudflare.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org,
-	bochaolucky@gmail.com,
-	toshiaki.makita1@gmail.com,
-	lorenzo@kernel.org,
-	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net 2/2] selftests: net: veth: test XDP_TX to a peer with GRO enabled
-Date: Fri, 16 Oct 2026 22:42:17 +0100
-Message-ID: <20261016214217.16942-3-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261016214217.16942-1-tianyi@cloudflare.com>
-References: <20261016214217.16942-1-tianyi@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q7x35s3S"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id DFA4F1F000C5;
+	Fri, 16 Oct 2026 21:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792187648;
+	bh=YrzgZm1IM3e48u8hZMm1oRsSxJM6fwWMAcAQ5sfnEQA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Q7x35s3S8/J0gSwHp+bXSXmf5l0QYXJnj4e5Q7hwDj2GQzVSnjGSYK+69w9r+SsEl
+	 M7IMqCv3vLB9dfVEqIrWWAVxgBGrLZHP0FgA/xlost8UYny+SQlobRKx/6EW4CZHL7
+	 XjEP+i//gjC7gTZe6F8Xd5noK6QhpQnddTYPCD3Fqp8TPaseJ//DCV/1kIEuWHSe8J
+	 fTgyw6oEm0P4Avy1box+vAoravVaIpUJRFmtXa7radifnDKT1pfmv93+SZwfh9bE/2
+	 xu2wjctkK3hIyHhEYbxTETOgtiowK1JnHgtQyDuc9/rj2+OK4Y3dbGLqMWEX54kXhQ
+	 /fztsYip/TK3w==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: keyrings@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	dm-devel@lists.linux.dev (open list:DEVICE-MAPPER  (LVM)),
+	linux-kernel@vger.kernel.org (open list),
+	fsverity@lists.linux.dev (open list:FSVERITY: READ-ONLY FILE-BASED AUTHENTICITY PRO...),
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [RFC PATCH 4/6] keys: Add keyring_is_empty() for {fs,dm}-verity
+Date: Sat, 17 Oct 2026 00:53:02 +0300
+Message-ID: <20261016215326.4110064-5-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261016215326.4110064-1-jarkko@kernel.org>
+References: <20261016215326.4110064-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,81 +61,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Test that XDP_TX frames reach a peer that has GRO enabled and no XDP
-program. GRO enables NAPI on the peer, so the frames are queued on the
-peer's ring, and the peer's NAPI must be scheduled to process them.
+fs-verity and dm-verity read assoc_array's nr_leaves_on_tree directly to
+check whether a keyring is empty.
 
-Attach a program that returns XDP_TX for every frame, send 5 echo
-requests and check that all of them were sent back and that the peer's
-NAPI received them, as counted in its xdp_packets statistic. IPv6 is
-disabled on both devices, so that only the echo requests are counted.
+Add keyring_is_empty() and use it in the both callers.
 
-Add the program to xdp_dummy.bpf.c in a section of its own, so that the
-tests that load "section xdp" still get XDP_PASS.
-
-Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
-The XDP_TX program goes into xdp_dummy.bpf.c as a new section instead of
-a new file, since it is a single line; 75cc19c8ff89 ("selftests:
-drv-net: add xdp cases for ping.py") added the xdp.frags variant there
-the same way. libbpf does not know the section name "xdp_tx", but
-iproute2 loads it, as tc loads the custom sections in nat6to4.bpf.c.
+ drivers/md/dm-verity-verify-sig.c                      |  2 +-
+ fs/verity/signature.c                                  |  2 +-
+ include/linux/key.h                                    |  1 +
+ security/keys/keyring.c                                | 10 ++++++++++
+ .../selftests/dm-verity/test-dm-verity-keyring.sh      |  2 +-
+ 5 files changed, 14 insertions(+), 3 deletions(-)
 
- .../testing/selftests/net/lib/xdp_dummy.bpf.c |  6 +++++
- tools/testing/selftests/net/veth.sh           | 25 +++++++++++++++++++
- 2 files changed, 31 insertions(+)
-
-diff --git a/tools/testing/selftests/net/lib/xdp_dummy.bpf.c b/tools/testing/selftests/net/lib/xdp_dummy.bpf.c
-index e73fab3edd9f..95abd67cc184 100644
---- a/tools/testing/selftests/net/lib/xdp_dummy.bpf.c
-+++ b/tools/testing/selftests/net/lib/xdp_dummy.bpf.c
-@@ -16,4 +16,10 @@ int xdp_dummy_prog_frags(struct xdp_md *ctx)
- 	return XDP_PASS;
+diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+index b2b55c41e2cb..2ccb71bfb3ca 100644
+--- a/drivers/md/dm-verity-verify-sig.c
++++ b/drivers/md/dm-verity-verify-sig.c
+@@ -153,7 +153,7 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+ 	if (ret != -ENOKEY && ret != -EKEYREJECTED)
+ 		return ret;
+ 
+-	if (dm_verity_keyring->keys.nr_leaves_on_tree &&
++	if (!keyring_is_empty(dm_verity_keyring) &&
+ 	    dm_verity_keyring->restrict_link)
+ 		ret = verify_pkcs7_signature(root_hash, root_hash_len,
+ 					     sig_data, sig_len,
+diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+index 0302a4e506ec..890d33b9d812 100644
+--- a/fs/verity/signature.c
++++ b/fs/verity/signature.c
+@@ -67,7 +67,7 @@ int fsverity_verify_signature(const struct fsverity_info *vi,
+ 		return 0;
+ 	}
+ 
+-	if (fsverity_keyring->keys.nr_leaves_on_tree == 0) {
++	if (keyring_is_empty(fsverity_keyring)) {
+ 		/*
+ 		 * The ".fs-verity" keyring is empty, due to builtin signatures
+ 		 * being supported by the kernel but not actually being used.
+diff --git a/include/linux/key.h b/include/linux/key.h
+index 26139c3adf62..d82253b06c54 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -436,6 +436,7 @@ extern int restrict_link_reject(struct key *keyring,
+ 				struct key *restriction_key);
+ 
+ extern int keyring_clear(struct key *keyring);
++bool keyring_is_empty(const struct key *keyring);
+ 
+ extern key_ref_t keyring_search(key_ref_t keyring,
+ 				struct key_type *type,
+diff --git a/security/keys/keyring.c b/security/keys/keyring.c
+index 9ccce0db0665..613d1db41611 100644
+--- a/security/keys/keyring.c
++++ b/security/keys/keyring.c
+@@ -443,6 +443,16 @@ static void keyring_destroy(struct key *keyring)
+ 	assoc_array_destroy(&keyring->keys, &keyring_assoc_array_ops);
  }
  
-+SEC("xdp_tx")
-+int xdp_dummy_tx(struct xdp_md *ctx)
++/**
++ * keyring_is_empty - Check whether a keyring contains any links
++ * @keyring: The keyring to check.
++ */
++bool keyring_is_empty(const struct key *keyring)
 +{
-+	return XDP_TX;
++	return READ_ONCE(keyring->keys.nr_leaves_on_tree) == 0;
 +}
++EXPORT_SYMBOL(keyring_is_empty);
 +
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-index 8b867e0675a7..0167f78604ef 100755
---- a/tools/testing/selftests/net/veth.sh
-+++ b/tools/testing/selftests/net/veth.sh
-@@ -334,6 +334,31 @@ ip netns exec $NS_DST ethtool -K veth$DST rx-udp-gro-forwarding on
- chk_gro "        - aggregation with TSO off" 1
- cleanup
+ /*
+  * Describe a keyring for /proc.
+  */
+diff --git a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+index 1f9601ef22f8..792449d356cf 100755
+--- a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
++++ b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+@@ -746,7 +746,7 @@ test_keyring_inactive_when_empty() {
+     log_info "TEST: Verify dm-verity keyring is inactive when sealed empty"
  
-+create_ns
-+ip netns exec $NS_SRC sysctl -qw net.ipv6.conf.veth$SRC.disable_ipv6=1
-+ip netns exec $NS_DST sysctl -qw net.ipv6.conf.veth$DST.disable_ipv6=1
-+ip netns exec $NS_SRC ethtool -K veth$SRC gro on
-+ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp_tx
-+# veth$DST sends every frame back, so neither ARP nor ping gets an answer
-+mac=`ip netns exec $NS_DST cat /sys/class/net/veth$DST/address`
-+ip -n $NS_SRC neigh replace $BM_NET_V4$DST lladdr $mac dev veth$SRC
-+ip netns exec $NS_SRC ping -qc 5 -i 0.01 -W 1 $BM_NET_V4$DST >/dev/null
-+tx=`ip netns exec $NS_DST ethtool -S veth$DST | \
-+    awk '/rx_queue_[0-9]+_xdp_tx:/ {s += $2} END {print s + 0}'`
-+rx=`ip netns exec $NS_SRC ethtool -S veth$SRC | \
-+    awk '/rx_queue_[0-9]+_xdp_packets:/ {s += $2} END {print s + 0}'`
-+printf "%-60s" "xdp_tx to peer with gro on"
-+if [ $tx -ne 5 ]; then
-+	echo " fail - $tx frames sent back, expected 5"
-+	ret=1
-+elif [ $rx -ne 5 ]; then
-+	echo " fail - $rx frames received by the peer NAPI, expected 5"
-+	ret=1
-+else
-+	echo " ok "
-+fi
-+cleanup
-+
- create_ns
+     # When keyring_unsealed=0, the keyring is sealed immediately while empty
+-    # This means it should NOT be used for verification (nr_leaves_on_tree=0)
++    # An empty keyring should NOT be used for verification.
  
- CUR_TX=1
+     log_info "Keyring state (should be empty and sealed):"
+     list_keyring_keys
 -- 
-2.55.0
+2.47.3
 
