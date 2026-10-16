@@ -1,172 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D57466B75;
-	Fri, 16 Oct 2026 09:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89431463B8F
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 09:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792141980; cv=none; b=GII0as2LoigkeiFIYS8wvVNyoWXiucGWMlOO4YFQnqNE1X9S5p/qDVEEGD68qx4fn1OOw1OBx876MAnjPiqLqqw/lqv36NII3ngAccO8I9R6GgUreivn9O964KhKJrJR4N/pW/CuqxjNvm27WuapxcLBMl+OzeDiPHKGLzDed2g=
+	t=1792143157; cv=none; b=YkF9pMO3l042lItxbGDCNtv+gkdxJouNDwYBAHsl+5Jt5fx/fY40Qh+VY/+3NqqhrDsOfFIFMRKPuwHlGkk1lTk3+LZxI7ipTO32ib+BMsiIRzm0a3MSwtgpKPYPWuJF8YxYZChyvINmTeIQMG2YE4UErHVO0al2LoBxBBOJzJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792141980; c=relaxed/simple;
-	bh=tIkUz86ONiXurGzEfoccU/KpLb0S8j0MPoniAWV3O6g=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=GnVkQeEEB/p/+LvubBv9QBasF5gmHpD6H4ahByto5LJV85+G+Irj+LIyeij3Rct5dyB6CUKQhezQf+oNloLPO/wHY/nSiwQlFHEK/msudYr0iCU8aJPY+xttO4Ri4qzO+R68O/C0fpAUbZiwYWtwh23dEwduv+MaRuIOY4yJK6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LYZgl/L4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792143157; c=relaxed/simple;
+	bh=sWkP4JPpzh1PrUWgTn0gKtwQ2WpS/1O8YY32jiHfj9E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FoSvrBwAIc7q4S7TfLTsnR+La23pc5UtlBZwoxpGcaxilTAt1KQ1X+M7dSIM5gIjfzcSyOT+XRMB44Y7rlAPr1Ndv9yRW8lqLBuhMKj8MiOLGNQF6Pt4OqWPXLhdefBJFh88nJG/JZtjbzrc+rREtwUEibohEDg92jE4naQ9cTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dskCgRcn; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LYZgl/L4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 521BE1F000C4;
-	Fri, 16 Oct 2026 09:12:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792141979;
-	bh=mQH+kXpKSTymGia/uumXbgT78aV2agpPTvM0izIRqhE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=LYZgl/L47fPO8Aq+OVvp5UAIfE6hgsH5zIh9oJrQPyGOyzlbTMZ+sEC6Ba2iivygG
-	 TkPuULqc5Ixpat8F42Z/hB853dD7BfPLHituatCT9QtBtX37bYoB2UITBUScGPZJTv
-	 /usSd5kkvMwdNHq8GlE8NVjVR68AUrk8rBGTbLTczFneKEc+Vlra2BuBzIxoldvSJD
-	 5k/PrxNtsyWoMGyB7jwmq/3ALOfJ2jyscwflYFHeck2tVFD/wKAmWKx5Sd0GuFkzRm
-	 5Nais/Vmmp4nMWPIYN3Q5NTbSyK91tqJb4EB8JS7BrO04489Jub9pYLLW9dhx6IUPi
-	 ELIJk5iqbinsA==
-X-Mailer: emacs 31.1 (via feedmail 11-beta-1 I)
-From: Aneesh Kumar K.V <aneesh.kumar@kernel.org>
-To: Fred Griffoul <griffoul@gmail.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Jonathan Corbet <corbet@lwn.net>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dskCgRcn"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-3535a54bed9so4486866eec.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 02:32:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792143153; x=1792747953; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=M4EHfv55CyvmCv6DKOzDwfo547V/LhUX2GtLqYL05K0=;
+        b=dskCgRcnPjt5HwMZBceVdt217XXbp6cpjEQ9oIIR26EZ2Dr8PnyUvZrlmq5MGzRImz
+         4EfN9W/L2QY2mPrHG2prMNPOFd261a/lmzNWJW8moxDze7nALpBS/yy4u8Xx5Fa7T3Vj
+         tonW+K4zH/EBoI26PQCNpmB74YNXLWeZJR/cGxAQ7fifFpz+98EkUxoLe5PQbIQwHSS1
+         OW68wO04D5iMyiABS9+p/lqrGyZ/kDMO4a27ki9pIEomcv6MH5LRZVAaEwb8ud1xip6K
+         QV7HRCvArG7ivvKBX8WVYNF3OHws93CGfRQ9+WTNk2F9hvm+/s6tQ6WCmOdAZhn91AMG
+         6fzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792143153; x=1792747953;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=M4EHfv55CyvmCv6DKOzDwfo547V/LhUX2GtLqYL05K0=;
+        b=cNZru+Xjb4I2LZh0EbuNK1rTz8oywOnNLWybTv7+ob5pcn1uRm5nwFsPfMLfS68fg0
+         t1O31utiYX6m3Da/hmGsYLs+csxCWWVcaArLyK9T3YaKhYm18rhZqmtLT+ZNXgzyUCuw
+         /qE652yjAYN4DE8xZ+b55X7cJhT2akI7Py+ysDC/uwaNYKCVkTKIcW9RIsPSBbGWKbCF
+         IqBvrzFXX1B09X6b35Vqpbg6ylFr91hkpbmxZKe4vPLf52d6jQuN/3b93jMOkKy4o8cD
+         Fndl8BocFA8igoBUP0FaNdMDEIMMyqsmbn9vaHCc0EmhJ/KyseVUawclnSueWSSyAnIx
+         yN2Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxHvLKq3ggwkOQldtVJOAOoa7ylCrGT9WJ5AyWFbNE6HzttfDnxa4gqTpzbOEpGeT0Gz9h0dQG51MoJWN0UwMY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLZR0llEycE3rL7oCdxwGzdU9UGJl/jkcyirLdZ2/bcZc3JReF8
+	067HCD6zrGattB+TFphPO/tDNu7xPTL5Y3KTO5ypntYoHoj4Y4Uz5LiH
+X-Gm-Gg: AYBFou0RgZFpFwlN3lfZo0RnhRyiSsGG8sDBS4OVhqn7hPJFZYtQiyQ2FBbfSw5SBvU
+	7jddd7ElnAAcJkPLVmcWFGlP8iJXnZzc4DWB6Sebg7w0p84bgN4sdPjmfp8j03lnyF53OIGw93C
+	0rGeq/jSJ4x1+Hmh8JxC5+MosPnE6n4SvmEe4Z1go50Hzh6iQoiQirAslj/4NsE/d6wkLZpzjuJ
+	S6yF8SNy3W+be7jKtdVZw929yOhQnVOOdqnDgpPRzdZdextDuzBJdXpXOrZTUspb6hGVLbtwDKA
+	S7UILO2m/ThNzPLEDO1V8q2QHmgvBdkcuEEpEy78Xnv/zD81CnzvLQqAdh8TVNTyb2RXWsLeLFl
+	SpjwveiKukn83L/53sxY4XnazDgn7YvWZXTHR3zX/N958H2wjSqqcqrklossx0/rZ0UgWCb8JXv
+	VhRa1yciyPFM5jK/gRFkFXJuLh1rrnLdU7gmqKD8WyNtr/lbNVhrqF62ba0zC2EWas/OyaIXdNo
+	rWBnnh1KAhsFfJ1J4cacRU6m9b7lmJXPWPGJYKUDFSUOrh61odJqvkNOuqLwytAYC1iLX521WbP
+	STZT6meDy/StQ9NftucGvE+y2a1LZ+cZGz4s9D22RPqU
+X-Received: by 2002:a05:7300:e9d6:10b0:359:bdc8:c9d5 with SMTP id 5a478bee46e88-359bdd83104mr25799822eec.21.1792143153301;
+        Fri, 16 Oct 2026 02:32:33 -0700 (PDT)
+Received: from ramen-dev-security-2.asia-south1-c.c.ramen-dev-345017.internal (90.156.200.35.bc.googleusercontent.com. [35.200.156.90])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-360820a79c7sm5157172eec.18.2026.10.16.02.32.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2026 02:32:32 -0700 (PDT)
+From: Anil Kaushik <anilkaushikwireless@gmail.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Harald Welte <laforge@gnumonks.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
 	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: David Woodhouse <dwmw2@infradead.org>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	iommu@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [RFC PATCH v2 00/11] mm: Memory providers for guest_memfd and
- iommufd
-In-Reply-To: <20261014093733.90312-1-griffoul@gmail.com>
-References: <20261014093733.90312-1-griffoul@gmail.com>
-Date: Fri, 16 Oct 2026 14:42:40 +0530
-Message-ID: <yq5a4iem57qv.fsf@kernel.org>
+	Stanislav Fomichev <sdf.kernel@gmail.com>,
+	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+	osmocom-net-gprs@lists.osmocom.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Anil Kaushik <anilkaushikwireless@gmail.com>
+Subject: [PATCH net-next v7 0/4] gtp: ynl spec for the GTP netlink family, two fixes, and a selftest
+Date: Fri, 16 Oct 2026 09:32:21 +0000
+Message-Id: <20261016093225.1036375-1-anilkaushikwireless@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Fred Griffoul <griffoul@gmail.com> writes:
+This adds a ynl spec for the gtp genetlink family, two small driver
+fixes, and a selftest.
 
-> From: Fred Griffoul <fgriffo@amazon.co.uk>
->
+Patch 1: the GET and dump replies carried the family id in the command
+field, so ynl dropped them. Use GTP_CMD_GETPDP instead.
+Patch 2: new in v7. On the netdev CI debug kernel, the selftest hit an
+RCU warning: adding a PDP context looks up the device without the RCU
+read lock. Hold it around the lookup.
+Patch 3: the spec (NEWPDP/DELPDP/GETPDP/ECHOREQ), no uapi change.
+Patch 4: a selftest that adds, dumps and deletes PDP contexts.
 
- [ ... 24 lines skipped ... ] 
+The multicast notifications are not in the spec: they reuse the request
+command values, which the ynl C generator can't express with the
+current uapi header.
 
->
-> Why a new interface
-> ===================
->
-> kvm_gmem_ops gives KVM a way in. For devices, the only option today is
-> a dma-buf plus a private call that iommufd looks up with symbol_get(),
-> which is how vfio-pci works. Each new owner would need another such
-> lookup, and iommufd would end up knowing each owner by name. With a
-> common interface, a provider module only calls into mm, and nothing
-> needs symbol_get().
->
-> It also means the provider revokes a range once. The VMM hands the
-> same file to KVM and to iommufd; on a revoke the core forwards it to
-> every consumer, so KVM clears the range from stage-2, iommufd from the
-> IOMMU page tables, and guest_memfd from the VMM's own mapping, all
-> before the revoke returns.
->
+v7:
+ - new patch 2: fix the RCU warning the selftest found on debug kernels
+ - selftest: add a docstring to GtpFamily (pylint)
+ - Cc Stanislav for lib/py
+v6:
+ - spec: use the gtp_version uapi enum for the version attribute
+ - spec: family only applies to the MS address, fix its doc
+ - selftest: also skip on "Unknown device type", printed by iproute2
+   with extack support when the kernel has no gtp
+v5:
+ - ynl: add CFLAGS_gtp so the generated code builds with older headers
+ - spec: doc fixes, min-len for the IPv6 attributes
+ - selftest: only skip when GTP is unavailable, close the ynl handle
+v4:
+ - spec: request/reply attributes now match the handlers
+ - selftest: fix the gtp.ko autoload crash, check ENOENT, delete by
+   TEI and by MS address
 
-What confused me was the introduction of memory providers as a subsystem
-in their own. What we really need is the ability to map PFNs from
-other subsystems into KVM stage-2 and into subsystems such as iommufd?.
+v6: https://lore.kernel.org/netdev/20261013031000.528393-1-anilkaushikwireless@gmail.com/
+v5: https://lore.kernel.org/netdev/20261012024800.400616-1-anilkaushikwireless@gmail.com/
+v4: https://lore.kernel.org/netdev/20261010105740.223992-1-anilkaushikwireless@gmail.com/
+v3: https://lore.kernel.org/netdev/20261009060615.4177402-1-anilkaushikwireless@gmail.com/
+v2: https://lore.kernel.org/netdev/20261008181031.4129029-1-anilkaushikwireless@gmail.com/
 
-Restricting the scope to the above, at least initially, would make this
-much easier to reason about.
+Anil Kaushik (4):
+  gtp: set a valid genl command in PDP context get and dump replies
+  gtp: hold RCU for the device lookup when adding a PDP context
+  netlink: specs: add genetlink-legacy spec for GTP
+  selftests: net: add a test for the gtp netlink family
 
-For my use case, the VFIO fd becomes the backing provider (referred to
-as backend below). We can create a guest_memfd using that
-resource_fd, allowing MMIO BAR ranges to be mapped into KVM stage-2.
+ Documentation/netlink/specs/gtp.yaml          | 196 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +
+ drivers/net/gtp.c                             |   7 +-
+ tools/net/ynl/Makefile.deps                   |   1 +
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/config            |   1 +
+ tools/testing/selftests/net/gtp.py            | 123 +++++++++++
+ .../testing/selftests/net/lib/py/__init__.py  |   5 +-
+ tools/testing/selftests/net/lib/py/ynl.py     |   9 +-
+ 9 files changed, 340 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/netlink/specs/gtp.yaml
+ create mode 100755 tools/testing/selftests/net/gtp.py
 
-Another feature provided by this series is the ability to map the same
-range into iommufd. We probably want to restrict this to shared ranges.
-It may be simpler for guest_memfd to drive this. The resulting
-relationship would be:
+-- 
+2.25.1
 
-+-----------------------+
-| VFIO PCI BAR backing  |
-+-----------------------+
-            |
-            | guest_memfd_backing_ops
-            | Supplies BAR PFNs
-            v
-+------------------------------------------+
-| guest_memfd                              |
-|                                          |
-| Controls shared/private state            |
-| Exports shared, accessible PFNs          |
-| Revokes consumer mappings when needed    |
-+------------------------------------------+
-            |
-            | mem_provider_ops
-            | IOAS_MAP_FILE(fd = guest_memfd)
-            v
-+-----------------------+
-| IOMMUFD               |
-|                       |
-| Creates and refreshes |
-| IOMMU DMA mappings    |
-+-----------------------+
-            |
-            v
-      Device DMA access
-
-
-Another capability the memory-provider interface could provide is
-kernel-initiated IOAS mapping, for example by allowing a guest_memfd fd
-to be used with IOAS_MAP_FILE.
-
-Currently, a private-to-shared conversion causes a VM exit, followed by
-an IOAS_MAP for the newly shared range. Could using guest_memfd with
-IOAS_MAP_FILE avoid this?
-
-Perhaps the series could be rearranged as follows:
-
-- Allow a guest_memfd fd to be used with IOAS_MAP_FILE.
-- Add a VFIO or other backend for guest_memfd, without calling it a provider.
-- Add support for guest_memfd to provide guest PFNs to other subsystems
-  through its file descriptor.
-
-Would this work?
-
--aneesh
