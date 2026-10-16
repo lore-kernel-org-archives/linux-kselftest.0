@@ -1,199 +1,492 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57ED63E5A09;
-	Fri, 16 Oct 2026 07:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C4239A04C
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 07:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792134023; cv=none; b=kAeK1PWWZQRo84vj9CDYl+TzQZN7eSEdPDWp0jRn69fooTYWO19Buzdw7IUrdvJRgL3HCtACgd6ElhDp46gTYzeDjqZULfL6uwmNdgYzYGpP0gKXR72/G8F+EMvaMSbWsM7aArbOXTpwt2XVZGpDnLc/fS6hUhl8QAasDiXZkUI=
+	t=1792135984; cv=none; b=FGbtR4ebpB9DdoriLCLNGMWNRWAvcz69dE1/1L/mPthgokrjL3TVve9G3b5T/cqYwVEL1Xa6/TT4g6KxGE5C9XgmSQb7WSg3f4GtxoEVikd6CxdsI6/3R35ZJvR4o9ISjZIzrW7TUryf+TiyhqVXQ0A7ggYHumMjOZrBIUbsA2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792134023; c=relaxed/simple;
-	bh=Do6YjhU3I7HXW18+BJvR37KsjZCA905dHYlvgy77e7s=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MhSDXXJsQQlR1ijQb5em6kkUJCWTbJGNi3EOh6+yirBRMII3/ceMpJqiVjCGhH4knQMLWKmjXP83IGgnOM2O3JLBOLGU1CtVC0hk4kW4NLmFHF1JV975w5crCgiuNRTMMUmDFUjUNfJEVkCc0xO/O+vvPLpighbeJLYlN6cl05M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ryz3Gyfj; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792135984; c=relaxed/simple;
+	bh=1UFzf7BnjxuTJMMsRGNzEo600moxklhxLQ+/r4XOoOQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iveqtJEnkEH1OJFB4MGC6BKvQxQuclIpsGuttYabdFeXF9md+v4qtJwL7HBJRpLgRBdbrBj/b+R6/xd+p7WF9hER2arNCXowX4AzbnEvA9sB5QvEoKNJiPdUX9t30n4Un5ZQTrxZxgFKpjkVtkoKJsphTCA+tIzYEFdLN+vvkgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hg8evDs5; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ryz3Gyfj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C591F000C9;
-	Fri, 16 Oct 2026 07:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792134010;
-	bh=OF5ULa6IJWX3C2R4SV7E2KBsDCBTRDWyiPVgL8acyIw=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Ryz3GyfjT/USJjFGQt3HzXxT8soHFKPIs3f88FkJFaU98fhLCYND3mIxqYh3jsHm2
-	 036uMI4ZhygyUMLTILtDfpkJtsRtdtLJK8p8FuidubHLjIh73ywWEeqR0k7e/TgcH5
-	 Jckj4boqVYwv5cjZ3288oHyCrPjei1sVdVivdhfjKj1mWRkg2s3I1cxIKZErRCgTI0
-	 uzdVXgPPMVFplwPuDN9yCWPgee0irjUswcFATWetCDT3TenRy/DfLuRAdHhyiQ8r2e
-	 UQd5jq1HzBA6xy501V4a2PLOMCCvxga1i15VhrApiTS7K6cW/9velzoFGZCjnnk8+F
-	 V7t9h0M+8ImAw==
-Subject: Re: [PATCH can-next v1 7/8] selftests: can: cover J1939 transport
- abort and timeout paths
-From: netdev-bot+sashiko@kernel.org
-To: o.rempel@pengutronix.de
-Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
- shuah@kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- alexander.hoelzl@gmx.net, quchaosheng000406@163.com,
- penguin-kernel@I-love.SAKURA.ne.jp, kuba@kernel.org
-Date: Fri, 16 Oct 2026 07:00:09 +0000
-Message-ID: <179213400907.1406898.1428765402732531339@kernel.org>
-In-Reply-To: <20261014154435.3577983-8-o.rempel@pengutronix.de>
-References: <20261014154435.3577983-8-o.rempel@pengutronix.de>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hg8evDs5"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-88b7d853b11so1257182b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 00:33:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792135982; x=1792740782; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9lzObHIWSDCCNYCjA2Ll3fvLIHrxT5aolRRJzJ0JUnI=;
+        b=hg8evDs5f6g547/xgNERLEfhxp7+fQ9+3t5AJZ/+RRLDuGwMAOBP/2kwaagfLicWgm
+         EyPechQUjxQXZeG5W6Gi4iynlBITevVdd+T8jifEMrKERGJtvfvjhAX2m8rkn2SDo2B5
+         rpheeE7FK+xECqGtNhhvnwHzZY3qq7LqRVx6VVqV8B2LdBxE3ocImBexLUn4oTaiXQ8Y
+         PPaDE7Q1AUoPjg5gEMJZe3xr/VUkupr0HhMlvx4IhHAXiTrdGxumjQ9GLgfYlTA8MpfD
+         7ff34PEttz8rZjlfFTHmZXgjevlYS/sppgTyhMNBHAU8BoTfY9TYBeFk5Jnn9X5jEERC
+         CKlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792135982; x=1792740782;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9lzObHIWSDCCNYCjA2Ll3fvLIHrxT5aolRRJzJ0JUnI=;
+        b=c1yZLr9FuqBBZYfPcAo9UC4KoJYSq0Fse+vCmMx5mw/BkSmw8G32fMNu+RZ4qlcJEI
+         DtRIyQge4Ff83iD6z4o2wMlTxA9hYONsK9tWqn8d0dcYgBT4yJ98zraeIPuda15DVXLU
+         adWK5XDLd3P+ApMg9uephruFm69DV0sqXtgCclwo7nFbME4Hmo8wvZLElzunT2qY/F6Q
+         ti6cDAYTzanYsziUxGwy7vrdlaJal7MhtBvv1eMb1vfSrzfQdnDXVMuKyXnvFB+R2mCa
+         b6OXBLrgR65Rv3dH8TH0tUqncTbhPZww8Uz5yD1AppxoVXrZps8oUTC+qUCIA7VuGXx+
+         tcEg==
+X-Forwarded-Encrypted: i=1; AKwUvBzWmahBnx/lmXzbu/jHB1con/CnXRQqCvYirlkmBo+CijiUT3zedSsCOB57OHEEjjxi3HJqZUstA0Wt6QuZkI0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL7zMYYmS4xg8HEd4UvzGckanWzmYmFUesf5+hHYQAsqpdrGimx
+	IHUEDBDfdO4tuR4TY3CKaB/ILdOPIqYdtPWLbDHVxH5OR4xsZLyZhFY=
+X-Gm-Gg: AYBFou1qLszO5H2d52J1ChQpeMaQMMMahsOyJf9Qq7z98ielT+YJkCvkTXsr3wupOmg
+	eieoKDUlgoza57roMl15Ax021Cp0m0mmO8eNW+qe7dI8RP5mftILAqXJO3BORt/ZvLT4jTPyYWT
+	DYQo34EEZyr1vtfVL9Hbr3WpEeZmkoMk4lJqY/042EJLuYkeicMzobTerxWWT2k5jhgrO6n3gDX
+	qnBheMLLRp4CqoirUFnlGACubvXtQ33D4Fiv/8f7zqhi5YJy1HKmtl4AWyQ5cE6ry0U3CpMUcde
+	/biBS1QYYrQq1A9w233q7W02ZH4l8q/6ZjiCaK/0qM1wAu734xFNRZSrB5z/R5bVuJvVVEu+mZk
+	qH6i5Lp/47itATlongdwJU3OwtnfmcdlbBrQfhhXg2N7uBtfMLSsQcvPfwYSNel78WzTpVKehHk
+	M7UCOaXNi+I8eft4isKVe+Uk8Y3g8fUNeftHbl2pCFTrcCC7yPB1W5OPPTHwT6usm7UdLVo6tlr
+	NoWDI/v
+X-Received: by 2002:a05:6a00:3cca:b0:874:708d:b631 with SMTP id d2e1a72fcca58-897c79dd8c6mr18756274b3a.29.1792135980952;
+        Fri, 16 Oct 2026 00:33:00 -0700 (PDT)
+Received: from localhost.localdomain ([185.220.238.36])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89f54b30ec4sm674788b3a.4.2026.10.16.00.32.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2026 00:32:59 -0700 (PDT)
+From: Wang Yibo <szwyb123@gmail.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	David Gow <david@davidgow.net>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Subject: [PATCH v2] lib/sbitmap: add KUnit test suite
+Date: Fri, 16 Oct 2026 15:32:53 +0800
+Message-Id: <20261016073253.520971-1-szwyb123@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <d6ea208a-0b53-4da8-998f-817a0e0b7c61@davidgow.net>
+References: <d6ea208a-0b53-4da8-998f-817a0e0b7c61@davidgow.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+sbitmap is the tag allocator used by blk-mq and the I/O schedulers
+built on top of it, but the plain, synchronous part of its API has no
+test coverage at all.
 
-Low priority / nit picks for your consideration:
+Add a KUnit suite covering initialisation, allocation and exhaustion,
+deferred clears, round-robin ordering, resize, the bitmap helpers and
+sbitmap_for_each_set(), so that the behaviour is checked on every boot.
 
-- [Low] The file header comment in
-  tools/testing/selftests/net/can/test_j1939_multi.c (line 14) says the…
-- [Low] tp_tx_rts_cts_timeout and tp_rx_timeout in
-  tools/testing/selftests/net/can/test_j1939_multi.c time the kernel's…
+The new file is added to the BLOCK LAYER entry in MAINTAINERS, next to
+lib/sbitmap.c, so that it does not end up without a maintainer.
 
---
+Signed-off-by: Wang Yibo <szwyb123@gmail.com>
+---
+v2:
+ - Test sb.alloc_hint as a plain boolean: KUNIT_EXPECT_NOT_NULL() passes
+   its argument through a const void *, which a __percpu pointer cannot do
+   on architectures that keep percpu data in a separate address space, so
+   the test did not build on x86 (David Gow).
+ - Use a BITS_PER_LONG-relative bit number in sbitmap_test_iterate_set().
+   The hardcoded 130 lies past the end of the test bitmap when
+   BITS_PER_LONG is 32, so that bit was never visited and the test failed;
+   assert the precondition while at it (David Gow).
 
-selftests: can: cover J1939 transport abort and timeout paths
+Both issues were reproduced and the fixes verified:
+  - x86_64 (gcc 15.2, CONFIG_USE_X86_SEG_SUPPORT=y): v1 fails to build
+    with "comparison of pointers to disjoint address spaces" at the
+    KUNIT_EXPECT_NOT_NULL(sb.alloc_hint); v2 builds clean.
+  - i386, i.e. 32-bit (gcc): v1 fails sbitmap_test_iterate_set with
+    nr_visited == 5, as the out-of-range bit 130 is never visited;
+    v2 passes.
+  - v2 runs the whole suite green (8/8) under KUnit/QEMU on arm64,
+    i386 and x86_64.
 
-This commit adds TP-only edge-case tests to the J1939 multi-frame
-selftests. One test covers a per-CTS block limit, two cover the RTS/CTS
-and rx timeouts that should end a stalled session with a Connection
-Abort, and one covers a received Connection Abort cancelling an incoming
-session.
+Link: https://lore.kernel.org/r/20261014082704.33667-1-szwyb123@gmail.com
+Link: https://lore.kernel.org/r/d6ea208a-0b53-4da8-998f-817a0e0b7c61@davidgow.net
+ MAINTAINERS               |   1 +
+ lib/Kconfig.debug         |  13 ++
+ lib/tests/Makefile        |   1 +
+ lib/tests/sbitmap_kunit.c | 308 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 323 insertions(+)
+ create mode 100644 lib/tests/sbitmap_kunit.c
 
-> diff --git a/tools/testing/selftests/net/can/test_j1939_multi.c b/tools/testing/selftests/net/can/test_j1939_multi.c
-> index 1f27ee58f48c..069a9c8690b5 100644
-> --- a/tools/testing/selftests/net/can/test_j1939_multi.c
-> +++ b/tools/testing/selftests/net/can/test_j1939_multi.c
-> @@ -5,7 +5,18 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f53047aa8d3c..c8510e6f1817 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4726,6 +4726,7 @@ F:	include/uapi/linux/blk*
+ F:	include/uapi/linux/ioprio.h
+ F:	kernel/trace/blktrace.c
+ F:	lib/sbitmap.c
++F:	lib/tests/sbitmap_kunit.c
+ 
+ BLOCK LAYER DEVICE DRIVER API [RUST]
+ M:	Andreas Hindborg <a.hindborg@kernel.org>
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 6b24a2c89b84..f5fe7f5a0a4d 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2456,6 +2456,19 @@ config PRINTF_KUNIT_TEST
+ 
+ 	  If unsure, say N.
+ 
++config SBITMAP_KUNIT_TEST
++	tristate "KUnit test for sbitmap" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	depends on SBITMAP
++	default KUNIT_ALL_TESTS
++	help
++	  Enable to turn on sbitmap tests, running at boot or module load time.
++
++	  For more information on KUnit and unit tests in general, please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config SCANF_KUNIT_TEST
+ 	tristate "KUnit test scanf() family of functions at runtime" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+index 3cac3b63a752..1f49555f94c3 100644
+--- a/lib/tests/Makefile
++++ b/lib/tests/Makefile
+@@ -44,6 +44,7 @@ obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+ obj-$(CONFIG_PRANDOM_KUNIT_TEST) += random32_kunit.o
+ obj-$(CONFIG_PRINTF_KUNIT_TEST) += printf_kunit.o
+ obj-$(CONFIG_RANDSTRUCT_KUNIT_TEST) += randstruct_kunit.o
++obj-$(CONFIG_SBITMAP_KUNIT_TEST) += sbitmap_kunit.o
+ obj-$(CONFIG_SCANF_KUNIT_TEST) += scanf_kunit.o
+ obj-$(CONFIG_SEQ_BUF_KUNIT_TEST) += seq_buf_kunit.o
+ obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
+diff --git a/lib/tests/sbitmap_kunit.c b/lib/tests/sbitmap_kunit.c
+new file mode 100644
+index 000000000000..284dcb5d7188
+--- /dev/null
++++ b/lib/tests/sbitmap_kunit.c
+@@ -0,0 +1,308 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * KUnit tests for the scalable bitmap (sbitmap) implementation.
++ *
++ * sbitmap is the tag allocator used by blk-mq and the I/O schedulers built on
++ * top of it, but it has no tests.  These tests pin down the observable
++ * behaviour of the plain, synchronous parts of the API.
++ *
++ * Copyright (C) 2026 Wang Yibo <szwyb123@gmail.com>
++ */
++
++#include <linux/bitmap.h>
++#include <linux/gfp.h>
++#include <linux/sbitmap.h>
++
++#include <kunit/test.h>
++
++/*
++ * Big enough to span several words for any plausible BITS_PER_LONG, and not a
++ * power of two so that the last word is partially used.
++ */
++#define SBITMAP_TEST_DEPTH	(3 * BITS_PER_LONG + 5)
++
++static void sbitmap_test_init(struct kunit *test)
++{
++	const unsigned int depth = 97;
++	struct sbitmap sb;
++	int ret;
++
++	ret = sbitmap_init_node(&sb, depth, -1, GFP_KERNEL, NUMA_NO_NODE,
++				false, true);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++	KUNIT_EXPECT_EQ(test, sb.depth, depth);
++	KUNIT_EXPECT_EQ(test, sb.shift,
++			(unsigned int)sbitmap_calculate_shift(depth));
++	KUNIT_EXPECT_EQ(test, sb.map_nr, DIV_ROUND_UP(depth, 1U << sb.shift));
++	KUNIT_EXPECT_FALSE(test, sb.round_robin);
++	/*
++	 * alloc_hint is a __percpu pointer, which the generic pointer
++	 * assertions cannot take: on x86, where percpu data lives in
++	 * __seg_gs, passing it through a const void * does not compile.
++	 * Test it as a plain boolean instead.
++	 */
++	KUNIT_EXPECT_TRUE(test, sb.alloc_hint);
++	KUNIT_EXPECT_FALSE(test, sbitmap_any_bit_set(&sb));
++	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), 0U);
++	sbitmap_free(&sb);
++
++	/* An explicitly requested shift is honoured. */
++	ret = sbitmap_init_node(&sb, depth, 3, GFP_KERNEL, NUMA_NO_NODE,
++				false, true);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++	KUNIT_EXPECT_EQ(test, sb.shift, 3U);
++	KUNIT_EXPECT_EQ(test, sb.map_nr, DIV_ROUND_UP(depth, 1U << 3));
++	sbitmap_free(&sb);
++
++	/* BITS_PER_LONG bits per word is the largest representable granularity. */
++	ret = sbitmap_init_node(&sb, depth, ilog2(BITS_PER_LONG), GFP_KERNEL,
++				NUMA_NO_NODE, false, true);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++	KUNIT_EXPECT_EQ(test, sb.shift, (unsigned int)ilog2(BITS_PER_LONG));
++	KUNIT_EXPECT_EQ(test, sb.map_nr, DIV_ROUND_UP(depth, BITS_PER_LONG));
++	sbitmap_free(&sb);
++
++	/* Anything above that cannot be represented and must be rejected. */
++	ret = sbitmap_init_node(&sb, depth, ilog2(BITS_PER_LONG) + 1,
++				GFP_KERNEL, NUMA_NO_NODE, false, true);
++	KUNIT_EXPECT_EQ(test, ret, -EINVAL);
++}
++
++static void sbitmap_test_calculate_shift(struct kunit *test)
++{
++	/* Maps too small to spread over several words keep the default. */
++	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(0), ilog2(BITS_PER_LONG));
++	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(1), ilog2(BITS_PER_LONG));
++	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(3), ilog2(BITS_PER_LONG));
++
++	/* Four bits map to one bit per word. */
++	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(4), 0);
++
++	/* The shift grows back as the depth increases. */
++	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(4 * BITS_PER_LONG - 1),
++			ilog2(BITS_PER_LONG) - 1);
++	KUNIT_EXPECT_EQ(test, sbitmap_calculate_shift(4 * BITS_PER_LONG),
++			ilog2(BITS_PER_LONG));
++}
++
++static void sbitmap_test_get_exhaust(struct kunit *test)
++{
++	DECLARE_BITMAP(seen, SBITMAP_TEST_DEPTH) = { 0 };
++	struct sbitmap sb;
++	unsigned int i;
++	int bit;
++
++	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, SBITMAP_TEST_DEPTH, -1,
++						GFP_KERNEL, NUMA_NO_NODE,
++						false, true), 0);
++
++	/* Every bit is handed out exactly once, then the map is empty. */
++	for (i = 0; i < SBITMAP_TEST_DEPTH; i++) {
++		bit = sbitmap_get(&sb);
++		KUNIT_ASSERT_GE(test, bit, 0);
++		KUNIT_ASSERT_LT(test, bit, (int)SBITMAP_TEST_DEPTH);
++		KUNIT_ASSERT_FALSE(test, test_bit(bit, seen));
++		__set_bit(bit, seen);
++	}
++
++	KUNIT_EXPECT_TRUE(test, sbitmap_any_bit_set(&sb));
++	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb),
++			(unsigned int)SBITMAP_TEST_DEPTH);
++	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
++
++	sbitmap_free(&sb);
++}
++
++static void sbitmap_test_put_reuse(struct kunit *test)
++{
++	struct sbitmap sb;
++	unsigned int i;
++	int bit;
++
++	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, BITS_PER_LONG, -1,
++						GFP_KERNEL, NUMA_NO_NODE,
++						true, true), 0);
++
++	for (i = 0; i < BITS_PER_LONG; i++)
++		KUNIT_ASSERT_GE(test, sbitmap_get(&sb), 0);
++
++	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), (unsigned int)BITS_PER_LONG);
++	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
++
++	/*
++	 * Freeing a single bit must make exactly that bit available again, no
++	 * matter which bit it was.
++	 */
++	for (i = 0; i < BITS_PER_LONG; i++) {
++		sbitmap_put(&sb, i);
++		KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb),
++				(unsigned int)BITS_PER_LONG - 1);
++		bit = sbitmap_get(&sb);
++		KUNIT_EXPECT_EQ(test, bit, (int)i);
++		KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb),
++				(unsigned int)BITS_PER_LONG);
++		KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
++	}
++
++	sbitmap_free(&sb);
++}
++
++static void sbitmap_test_round_robin(struct kunit *test)
++{
++	struct sbitmap sb;
++	unsigned int i;
++	int bit, prev = -1;
++
++	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, SBITMAP_TEST_DEPTH, -1,
++						GFP_KERNEL, NUMA_NO_NODE,
++						true, true), 0);
++
++	/*
++	 * round_robin must hand out strictly increasing bit numbers while the
++	 * map fills up from empty.
++	 */
++	for (i = 0; i < SBITMAP_TEST_DEPTH; i++) {
++		bit = sbitmap_get(&sb);
++		KUNIT_ASSERT_GE(test, bit, 0);
++		KUNIT_ASSERT_LT(test, bit, (int)SBITMAP_TEST_DEPTH);
++		if (prev != -1)
++			KUNIT_ASSERT_GT(test, bit, prev);
++		prev = bit;
++	}
++
++	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb),
++			(unsigned int)SBITMAP_TEST_DEPTH);
++	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
++
++	sbitmap_free(&sb);
++}
++
++static void sbitmap_test_resize(struct kunit *test)
++{
++	const unsigned int depth = 4 * BITS_PER_LONG;
++	struct sbitmap sb;
++	unsigned int i;
++
++	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, depth, -1, GFP_KERNEL,
++						NUMA_NO_NODE, true, true), 0);
++
++	for (i = 0; i < depth; i++)
++		KUNIT_ASSERT_GE(test, sbitmap_get(&sb), 0);
++	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), depth);
++
++	/* Shrinking hides the bits past the new depth. */
++	sbitmap_resize(&sb, depth / 2);
++	KUNIT_EXPECT_EQ(test, sb.depth, depth / 2);
++	KUNIT_EXPECT_EQ(test, sb.map_nr,
++			DIV_ROUND_UP(depth / 2, 1U << sb.shift));
++	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), depth / 2);
++	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
++
++	/* Growing makes them visible again; they are still allocated. */
++	sbitmap_resize(&sb, depth);
++	KUNIT_EXPECT_EQ(test, sb.depth, depth);
++	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), depth);
++	KUNIT_EXPECT_EQ(test, sbitmap_get(&sb), -1);
++
++	sbitmap_free(&sb);
++}
++
++static void sbitmap_test_set_clear_bit(struct kunit *test)
++{
++	static const unsigned int bits[] = {
++		0, 1, BITS_PER_LONG - 1, BITS_PER_LONG,
++		2 * BITS_PER_LONG + 3, SBITMAP_TEST_DEPTH - 1
++	};
++	struct sbitmap sb;
++	unsigned int i;
++
++	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, SBITMAP_TEST_DEPTH, -1,
++						GFP_KERNEL, NUMA_NO_NODE,
++						false, true), 0);
++
++	KUNIT_EXPECT_FALSE(test, sbitmap_any_bit_set(&sb));
++
++	for (i = 0; i < ARRAY_SIZE(bits); i++) {
++		sbitmap_set_bit(&sb, bits[i]);
++		KUNIT_EXPECT_TRUE(test, sbitmap_test_bit(&sb, bits[i]));
++	}
++	KUNIT_EXPECT_TRUE(test, sbitmap_any_bit_set(&sb));
++	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), (unsigned int)ARRAY_SIZE(bits));
++
++	for (i = 0; i < ARRAY_SIZE(bits); i++) {
++		sbitmap_clear_bit(&sb, bits[i]);
++		KUNIT_EXPECT_FALSE(test, sbitmap_test_bit(&sb, bits[i]));
++	}
++	KUNIT_EXPECT_FALSE(test, sbitmap_any_bit_set(&sb));
++	KUNIT_EXPECT_EQ(test, sbitmap_weight(&sb), 0U);
++
++	sbitmap_free(&sb);
++}
++
++struct sbitmap_iter_ctx {
++	struct kunit *test;
++	DECLARE_BITMAP(visited, SBITMAP_TEST_DEPTH);
++	unsigned int nr_visited;
++};
++
++static bool sbitmap_iter_collect(struct sbitmap *sb, unsigned int bitnr,
++				 void *data)
++{
++	struct sbitmap_iter_ctx *ctx = data;
++
++	KUNIT_ASSERT_LT(ctx->test, bitnr, SBITMAP_TEST_DEPTH);
++	__set_bit(bitnr, ctx->visited);
++	ctx->nr_visited++;
++
++	return true;
++}
++
++static void sbitmap_test_iterate_set(struct kunit *test)
++{
++	static const unsigned int bits[] = {
++		0, 5, BITS_PER_LONG - 1, BITS_PER_LONG, 2 * BITS_PER_LONG + 3,
++		SBITMAP_TEST_DEPTH - 1
++	};
++	struct sbitmap_iter_ctx ctx = { .test = test };
++	struct sbitmap sb;
++	unsigned int i;
++
++	KUNIT_ASSERT_EQ(test, sbitmap_init_node(&sb, SBITMAP_TEST_DEPTH, -1,
++						GFP_KERNEL, NUMA_NO_NODE,
++						false, true), 0);
++
++	for (i = 0; i < ARRAY_SIZE(bits); i++) {
++		KUNIT_ASSERT_LT(test, bits[i], SBITMAP_TEST_DEPTH);
++		sbitmap_set_bit(&sb, bits[i]);
++	}
++
++	sbitmap_for_each_set(&sb, sbitmap_iter_collect, &ctx);
++
++	KUNIT_EXPECT_EQ(test, ctx.nr_visited, (unsigned int)ARRAY_SIZE(bits));
++	for (i = 0; i < ARRAY_SIZE(bits); i++)
++		KUNIT_EXPECT_TRUE(test, test_bit(bits[i], ctx.visited));
++
++	sbitmap_free(&sb);
++}
++
++static struct kunit_case sbitmap_test_cases[] = {
++	KUNIT_CASE(sbitmap_test_init),
++	KUNIT_CASE(sbitmap_test_calculate_shift),
++	KUNIT_CASE(sbitmap_test_get_exhaust),
++	KUNIT_CASE(sbitmap_test_put_reuse),
++	KUNIT_CASE(sbitmap_test_round_robin),
++	KUNIT_CASE(sbitmap_test_resize),
++	KUNIT_CASE(sbitmap_test_set_clear_bit),
++	KUNIT_CASE(sbitmap_test_iterate_set),
++	{}
++};
++
++static struct kunit_suite sbitmap_test_suite = {
++	.name = "sbitmap",
++	.test_cases = sbitmap_test_cases,
++};
++
++kunit_test_suite(sbitmap_test_suite);
++
++MODULE_DESCRIPTION("KUnit test for sbitmap");
++MODULE_LICENSE("GPL");
 
-[ ... ]
-
-> + * Timing limitation: the abort/timeout tests wait with wide receive windows
-> + * rather than tight bounds, because timing over vcan under QEMU is not tightly
-> + * bounded. They catch a gross timer regression (e.g. a doubled timeout) but not
-> + * a subtle shift; see the per-test comments.
-
-[Severity: Low]
-Does tp_rx_timeout() really catch a doubled timeout, as this comment
-says? Its receive window is:
-
-#define TP_RX_ABORT_WAIT_MS	(TP_T2_MS * 2)	/* generous; floor check is the real test */
-
-That is 2500 ms, which is exactly a doubled T2.
-
-The window also starts late. tp_rx_timeout() takes t0 only after
-tp_rx_start_session() has dequeued the CTS. The kernel arms the rx timer
-earlier, when it sends the CTS:
-
-net/can/j1939/transport.c:j1939_session_tx_cts() {
-    ...
-	ret = j1939_tp_tx_ctl(session, true, dat);
-	if (ret < 0)
-		return ret;
-    ...
-	j1939_tp_set_rxtimeout(session, 1250);
-    ...
-}
-
-Suppose T2 regressed from 1250 to 2500 ms. The abort would go out at
-about T_cts + 2500 ms. The recv_ctl_cmd() deadline is t0 + 2500 ms, and
-t0 is later than T_cts. So the abort would arrive inside the window or
-right at its edge, and the test would usually pass. Any regression below
-2x (for example 1250 -> 2400 ms) would always pass.
-
-The comment on tp_rx_timeout() itself ("the upper bound is a generous T2
-multiple, so timer shifts within it escape") also contradicts the header.
-Only tp_tx_rts_cts_timeout(), with its 2000 ms window, matches the
-header's claim. The last patch in this series doesn't change this file.
-
-Could the header claim be limited to the TX test? Alternatively, the RX
-window could be set below 2 * T2, for example 2000 ms as in the TX test.
-
-> + *
-> + * Coverage limitation: a received Connection Abort is exercised RX-side only;
-
-[ ... ]
-
-> @@ -313,6 +332,69 @@ TEST_F(j1939_multi, tp_tx_to_raw)
-
-[ ... ]
-
-> +TEST_F(j1939_multi, tp_tx_rts_cts_timeout)
-> +{
-> +	uint8_t payload[TP_SIZE];
-> +	struct timespec t0, t1;
-> +	struct can_frame frame;
-> +	long elapsed_ms;
-> +
-> +	fill_pattern(payload, sizeof(payload));
-> +
-> +	ASSERT_EQ(tx_start_session(&self->j1939, self->ifindex, payload,
-> +				   sizeof(payload), self->raw, J1939_PF(TP_CTL),
-> +				   TP_CMD_RTS, &frame), 0);
-> +
-> +	/* Deliberately send no CTS; expect the kernel to abort within 2000 ms. */
-> +	clock_gettime(CLOCK_MONOTONIC, &t0);
-> +	ASSERT_EQ(recv_ctl_cmd(self->raw, J1939_PF(TP_CTL), SA_PEER, &frame,
-> +			       2000, TP_CMD_ABORT), 0)
-> +		TH_LOG("kernel did not send a Connection Abort within 2000 ms");
-> +	clock_gettime(CLOCK_MONOTONIC, &t1);
-> +	elapsed_ms = timespec_diff_ms(&t0, &t1);
-> +	/* must not fire instantly: the T3 timer has to run before the abort */
-> +	ASSERT_GE(elapsed_ms, 800)
-> +		TH_LOG("abort fired after only %ld ms, timer did not run", elapsed_ms);
-
-[Severity: Low]
-Is t0 measured from the right reference point here? The kernel arms T3
-when it transmits the RTS, not when userspace reads it:
-
-net/can/j1939/transport.c:j1939_session_tx_rts() {
-    ...
-	ret = j1939_tp_tx_ctl(session, false, dat);
-	if (ret < 0)
-		return ret;
-    ...
-	} else {
-		j1939_tp_set_rxtimeout(session, 1250);
-	}
-    ...
-}
-
-tx_start_session() has already dequeued the RTS before
-clock_gettime(&t0) runs. So elapsed_ms is 1250 ms minus the delay
-between the kernel transmit and t0.
-
-If the test task stalls for about 450 ms or more before t0, the abort
-from a correct kernel arrives in under 800 ms. ASSERT_GE(elapsed_ms, 800)
-then fails even though the kernel is fine. If the stall is over 500 ms, a
-doubled T3 (2500 ms) would also fit inside the 2000 ms window. The
-comment above this test says that case should be caught.
-
-tp_rx_timeout() has the same pattern. j1939_session_tx_cts() arms the
-1250 ms rx timer right after it transmits the CTS. t0 is taken only after
-tp_rx_start_session() has consumed that CTS, and the same 800 ms floor
-applies.
-
-The header comment says vcan timing under QEMU is not tightly bounded,
-and that is where stalls like this are most likely. Would kernel socket
-timestamps on the RTS/CTS frame and on the abort give a more reliable
-measure of the timer interval? The last patch in the series doesn't
-change this.
-
-> +	/* the T3 expiry must be reported as a timeout abort */
-> +	EXPECT_EQ(frame.data[1], ABORT_REASON_TIMEOUT);
-> +}
-
-[ ... ]
-
+base-commit: 4056b3c9d3c92ea45955641dbafeb9b960e146ef
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014154435.3577983-1-o.rempel%40pengutronix.de
+2.25.1
+
