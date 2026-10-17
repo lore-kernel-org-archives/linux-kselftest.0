@@ -1,51 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-155.mta0.migadu.com [91.218.175.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3815490BE9;
-	Sat, 17 Oct 2026 14:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE362487CCB
+	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 14:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792247870; cv=none; b=qdsMgyj6GYKsoSC3utNnDUj/9HFynefMaJQAaJNuRVKA9DLtIVChb4xehi397SWXIpfAC/Z4p4Z8914gDBotgmZqsz4saheDRQ7PzKGEDgeBipZga6fdGJQRnNYJOkUnMrlJhKUHFgHOTTcTnDuAHLDZVhefEFNbVojZtD8WTiI=
+	t=1792247922; cv=none; b=jiWzLOhYO1Z2L3wutBYFMhYEsHY+tu/Uunr1AjXHcKPI2DZuHnMSXpHIuSyCYWOnMwsYD0fM88o9kM56WAseUc9xjrUZLw988s/z0vQ6U4BK9HfiqoGhtlIbRCEQoZ9+5f+DT55zLryaNa0dfTdaozhddBbvNh0ey+7tu+v1m/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792247870; c=relaxed/simple;
-	bh=ZrYHPIZCYyGGSWwkvGjKuL3ZPw06s8Yq5vHdPV3Iews=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TNHxZRDCm2Zi/pEIWN/APpySdeOVVamOITV44Puf0EgERjVXfqY/HeH1M0hT7iCCXhtFGzUcE7VHdEaqkCcpRURhAzuyuvWg3aNe++sapilKE7LTXbNa1A3ieYYb8TB1GU0gAxIoQPcDF5r+8u6ZsDxfK4gnXQOPaOlH4zpXX0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DUucexSa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792247922; c=relaxed/simple;
+	bh=EpvuBxKqKA4laIc2RRTTydYfpNhHi/D1qOfWR0z9OUo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dYVGIp9wTvdV/wjmqlD9uA/iMLQTElU49Plw/I9tBFs07ZsQcYLU4nNQi34Rsx6d3fgHaGl1jqCwkM6RClr3LQCKXbcp/txD3oMO1+UM016tcO2F4MBehF5gmWZXIc0Fv4Hfxyj1m4oEQc5DPbgnr7SoMgW9IkvYN6HxuIa3Bds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r2PVeqrA; arc=none smtp.client-ip=91.218.175.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DUucexSa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23EDA1F000C4;
-	Sat, 17 Oct 2026 14:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792247869;
-	bh=MQ8J4x1kAPgaO0Zvom1oyzDZ4z6A8asV7Zm9GAhDF8A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=DUucexSaqXmp+GIlTk+8oGOzkl1dAl5G/NKObWYRaKzC8rYbbBJIJppnbar+TaMF1
-	 nnLbJBay13gR/7/toVupI5WP5r3+tJb6HUmQyhENQRqQ9AVmf7D8SzAgk4oeHchvS9
-	 6yGNiyTdvlz2Qi2G+EDdkCbKb0TMgk9GXG+flhgx7gHB81rg8kLn3BcGVf+r+OpsM3
-	 IU7MEK/HfAxxze8qJ6hnC/sLi9cG+xTlOWqtfQ30i1iSBji5yYeq0nVvnRYNIXwqc1
-	 Z/QZHQGzlhcV+JOgnbNhASA1JYcJOlp16eDNoSBi0NOzKI8cGzLwl4OUUovKEY0VFF
-	 z8Xz6EPz2luBw==
-From: Sasha Levin <sashal@kernel.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r2PVeqrA"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=EpvuBxKqKA4laIc2RRTTydYfpNhHi/D1qOfWR0z9OUo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792247917; v=1; x=1792852717;
+ b=r2PVeqrAiC5wbllLK5NICeltOPFNm5MiLAbadfwdbAPomRLlMlkvthAcfOBxZYbtN35eeovR
+ J1ejVWAPclZvudLgvJMpcRMkkZBqYqS192s6ucHdWXfYa4fTFKaMy3RIekHpPvKiEeZnLBbxEuW
+ 29aVYBFdmOicLpUSo/e5/6Dk=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 826e6dd93e69ed21;
+	Sat, 17 Oct 2026 14:38:37 +0000
+X-Mizu-Trace-ID: 826e6dd93e69ed21
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Kaiyan Mei <M202472210@hust.edu.cn>,
+	Yinhao Hu <dddddd@hust.edu.cn>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Song Liu <song@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/livepatch: build test modules against the selected kernel
-Date: Sat, 17 Oct 2026 10:37:45 -0400
-Message-ID: <20261017143745.2601801-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <sashiko-outbox-171842@kernel.org>
-References: <20261014200154.1365200-1-sashal@kernel.org> <sashiko-outbox-171842@kernel.org>
+	Amery Hung <ameryhung@gmail.com>,
+	Martin Teichmann <martin.teichmann@xfel.eu>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v2 1/2] bpf: Fix verifier WARN on narrow read of bpf_tcp_sock u64 fields
+Date: Sat, 17 Oct 2026 22:38:12 +0800
+Message-ID: <20261017143819.209510-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,36 +70,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 14, 2026 at 08:12:26PM +0000, sashiko-bot@kernel.org wrote:
->> +modules clean: MAKEOVERRIDES := $(filter-out O=% KBUILD_OUTPUT=%,$(MAKEOVERRIDES))
->
->[Severity: Medium]
->Will this target-specific assignment of MAKEOVERRIDES be ignored by GNU Make?
->
->GNU Make does not support target-specific assignments for special variables
->like MAKEOVERRIDES and MAKEFLAGS. As a result, the global O= and
->KBUILD_OUTPUT= overrides will still be passed to the sub-make via MAKEFLAGS.
+A BPF program can read the middle of a u64 field in struct bpf_tcp_sock:
 
-It is not ignored. MAKEFLAGS holds a reference to $(MAKEOVERRIDES), so
-the sub-make started from these recipes gets the filtered value.
+	tp = bpf_tcp_sock(listener);
+	/* +0x54 is in the middle of the u64 bytes_received */
+	unsigned hi = *(unsigned *)((char *)tp + 0x54);
 
-I checked with make 4.4.1, running the livepatch Makefile with O= and
-KBUILD_OUTPUT= on the command line and a KDIR whose Makefile prints what
-it receives. Without this patch both arrive as command line variables.
-With it, neither is in MAKEFLAGS, KBUILD_OUTPUT is unset, and O is only
-in the environment, which the kernel Makefile ignores since it uses O
-only when its origin is "command line".
+bpf_tcp_sock_is_valid_access() allows this 4-byte read (the default case
+only checks size == 4), but bpf_tcp_sock_convert_ctx_access() only knows
+the field starts and has no idea how to handle such an offset. It emits
+no instruction, cnt stays 0 and the fixup pass trips verifier_bug():
 
->Is the call to has_kdir inside setup_config still appropriate here?
->
->When running tests via the kselftest_install workflow on a target system
->without a kernel build tree, has_kdir fails and unconditionally skips the
->tests.
+	verifier bug: error during ctx access conversion (0)
 
-This patch does not change that. setup_config has called has_kdir since
-54ee3526796f ("selftests: livepatch: Avoid running the tests if kernel-devel is missing"),
-and this patch only adds the livepatch availability check in front of it.
+Just disallow the narrower access by matching the whole u64 range of the
+two fields, so it is turned down at check time:
 
+	invalid tcp_sock access off=84 size=4
+
+Fixes: 655a51e536c0 ("bpf: Add struct bpf_tcp_sock and BPF_FUNC_tcp_sock")
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
+Closes: https://lore.kernel.org/bpf/7a8ff335.1024c.1a14395f3e5.Coremail.kaiyanm@hust.edu.cn/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+v1 -> v2: Add a selftest (Alexei).
+v1: https://lore.kernel.org/bpf/DM6CTQQV55G1.1AU1HIBPQYW8J@gmail.com/T/#t
+---
+ net/core/filter.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index ba536be2915f..f0eae1c14b2f 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7600,8 +7600,8 @@ bool bpf_tcp_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 		return false;
+ 
+ 	switch (off) {
+-	case offsetof(struct bpf_tcp_sock, bytes_received):
+-	case offsetof(struct bpf_tcp_sock, bytes_acked):
++	case bpf_ctx_range(struct bpf_tcp_sock, bytes_received):
++	case bpf_ctx_range(struct bpf_tcp_sock, bytes_acked):
+ 		return size == sizeof(__u64);
+ 	default:
+ 		return size == sizeof(__u32);
 -- 
-Thanks,
-Sasha
+2.43.0
+
