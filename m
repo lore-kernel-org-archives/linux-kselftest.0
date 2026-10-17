@@ -1,38 +1,38 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A54447FB13;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A394429803;
 	Sat, 17 Oct 2026 12:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792239907; cv=none; b=DJbVS/ABcQVNUi4ij1AibwaNeDk5M8Vk6PQ1/BIX908a4hFT9TJz60gIc0P+n35UdwmAnbQovhOM7vgv24m8zTYbixUoniqihmziWzXGT+Xp2441k6tc/iNDtS0LzgwWgTL1sQJ6oVIo7lAZBp9i4F+RkwGb5bMD7XIJpk1TY3s=
+	t=1792239908; cv=none; b=qWn+6FOEsoyvoi2jH0xqVQ44CUfzEOvThwDnPKUiVTWntL6s3GP2N4C4RBq0qLik2CADqQ7dlvJyTrouvzlVSgtBsU0+g6h8n5rTcTwTyYDUL3StX8EO4trWiNPt3ZacZmVHDliP1c0UAJ5VSmsbh1l1ryi37fsVgIUbW4c/ZIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792239907; c=relaxed/simple;
-	bh=DiMB85kWHBJwzj9kWTX/8hsMthIPOvIwZwLwo/Jp3K8=;
+	s=arc-20240116; t=1792239908; c=relaxed/simple;
+	bh=EdNJE8nsrv2gQ1P+023l3H/rmBoAKuuBjr/pt/ysCe0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L6Vtok6EEOpMJtUtcSMvuynBOq8TdawTu+G/a6VMYte2GgLn0Nj60MG41lcBdjeuuqtFBqhfHNyn3TvoXEXaR16c4Ghv7XxeCvoyqszQti69H3Xz6jU0y176PsTd3BjR0OUA/U38rhflYTvo8/6euW9rItpCfrvnNfxs0ilXoGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Am0MamZR; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=d75s7oSRDjofjWWTsCabemBAYd9nCyQX60WDpJmdMALiKeV98x6YC5Z25WL+J0ABgEKZIliuNoMYzZdn7Ft2bndVbE2XXrJyQe6lCrKqS7Zd6q7bhY1RAvyODrgkFSYpYZFXrgucwUK2OTO0XHJWOuFXTAk5sClBUUjhGiIMsA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=C3+TRrsZ; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Am0MamZR"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="C3+TRrsZ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
-	To:From:Reply-To:Content-ID:Content-Description;
-	bh=vRfXLwxb6xxx/uxqzwOZVie4vg6Lne5slKcWLAFH2DE=; b=Am0MamZRJZ+Y6mHcFrMOhWCv68
-	2TzBPfS8pUo7tUkQWp+dYNE5XWfg4KoKoMl+cG77qbRsgRkt6d7ZEnSzvTJeKqBQfD00JwfaYk269
-	OkBr7z3t/frdsTHwR1F+eKTyqp/EQ2Bhs+ZyrstZGbWWbgceLl8aQNN6Dch8YyOne/a7WrRu/4LUU
-	tEf+dLuSebifa4eC9YojbmeIyUEZRfzgLnVEHNeRT3Ybrysden6utkGaqU7rChk1wI4yTOnO58ANL
-	of7Hyk6CLDEtYe9YUcNVBNNBjF+KcrbMiz8ZPFFL574liQw9DLyMzGSildW+zn/a9/hqRVqXC6XX/
-	cUnNpLjg==;
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=DxaL2iW2qw0lcd/aZ0U76T4CgYFPlUAXsADikihu4L4=; b=C3+TRrsZJKP0qlDF4u2c9Gc95d
+	9nEcuw2LFUjSgNKwU4zlc2enZc9F8zgLkMVNlqncof3seCIlzIr1UTcL0ypj5PbmwC/yD6/ILDj2L
+	tn6bSKypAhOySiZ+KNigT+NRVTvlPX1uMepR8XDma42v6VyztcVpTyhgBFHAD8rtBrcEGmbKkKSYR
+	qMQZcjZICPsH6Cvnbgdj77KcHEneQv4Ul3SDsBYx1atxFFVzc4/Vxgi2Xo2IZsVHrvTWNh4sXmOK8
+	zPj/T+AcednIXtn+x44FuJZiL5qItitkUm19J6D2FzVwximZrXPUzpt0uIGWqzjyYs3p7l0Ea5QNI
+	ry5GNIfQ==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1xI3TC-0000000CVCA-0V7e;
-	Sat, 17 Oct 2026 12:25:02 +0000
+	id 1xI3TC-0000000CVCS-3xDs;
+	Sat, 17 Oct 2026 12:25:03 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xI3TB-00000002Yku-3iWu;
-	Sat, 17 Oct 2026 13:25:01 +0100
+	id 1xI3TC-00000002Ym7-2xZi;
+	Sat, 17 Oct 2026 13:25:02 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mushahid Hussain <hmushi@amazon.co.uk>,
 	David Woodhouse <dwmw@amazon.co.uk>,
 	nh-open-source@amazon.com
-Subject: [RFC PATCH 02/55] KVM: x86: Let userspace opt in to multiple planes with KVM_CAP_PLANES
-Date: Sat, 17 Oct 2026 13:24:08 +0100
-Message-ID: <20261017122501.610248-3-dwmw2@infradead.org>
+Subject: [RFC PATCH 19/55] KVM: x86: hyperv: don't arm PV EOI for a higher plane's VP assist page
+Date: Sat, 17 Oct 2026 13:24:25 +0100
+Message-ID: <20261017122501.610248-20-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017122501.610248-1-dwmw2@infradead.org>
 References: <20261017122501.610248-1-dwmw2@infradead.org>
@@ -65,155 +65,71 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-A VMM implementing a software privilege model such as Hyper-V VSM
-needs more than one plane, but kvm_arch_max_planes() returns the
-vendor ceiling — 1 everywhere except SEV-SNP, where VMPLs are
-guest-architectural — so KVM_CREATE_PLANE rejects every id above zero.
+Registering the VP assist page arms the PV EOI / APIC assist
+optimisation through a gfn_to_hva cache, and that cache refuses ranges
+carrying RW memory protections in plane 0's view. The Windows secure
+kernel places its VTL1 assist page in memory it has protected against
+VTL0, so the MSR write failed and VTL1 had no assist page at all: no
+VTL entry reasons, no VTL-return register control, no boot.
 
-Make KVM_CAP_PLANES a VM enable capability taking the number of planes
-userspace is going to manage, up to KVM_MAX_PLANES. It must be set
-before any vCPU or extra plane exists, so nothing is sized against the
-old limit, and cannot be changed once set. Non-default VM types are
-rejected: SEV-SNP keeps deriving its count from the supported VMPLs,
-and protected-state VM types need their own audit first. A VM that
-does not enable the capability keeps reporting a single plane.
+Register the page without arming PV EOI when the vCPU is in a plane
+above 0. KVM then never sets the no-EOI-required bit for that plane,
+so the guest always performs a real EOI; only the fast path is lost.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Assisted-by: LLM
 ---
- Documentation/virt/kvm/api.rst  | 27 +++++++++++++++++++++
- arch/x86/include/asm/kvm_host.h |  1 +
- arch/x86/kvm/x86.c              | 42 ++++++++++++++++++++++++++++++++-
- 3 files changed, 69 insertions(+), 1 deletion(-)
+ arch/x86/kvm/hyperv.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index b5f0136bb555..bc63054ce7bd 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6598,6 +6598,12 @@ KVM_S390_KEYOP_SSKE
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 797c5cbfbbaf..ea80536caa48 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1609,7 +1609,8 @@ static int kvm_hv_set_msr(struct kvm_vcpu *vcpu, u32 msr, u64 data, bool host)
  
- Creates a new *plane*, i.e. a separate privilege level for the virtual machine.
- 
-+The range of valid plane ids is [0, N) where N is the value returned by
-+KVM_CHECK_EXTENSION(KVM_CAP_PLANES) on the VM file descriptor.  Plane 0 is
-+the VM itself; for VM types where the plane count is not guest-architectural,
-+ids above 0 only become valid after userspace enables KVM_CAP_PLANES with
-+the number of planes it is going to manage (see section 7.47).
+ 		if (!(data & HV_X64_MSR_VP_ASSIST_PAGE_ENABLE)) {
+ 			hv_vcpu->hv_vapic = data;
+-			if (kvm_lapic_set_pv_eoi(vcpu, 0, 0))
++			if (!vcpu->plane_level &&
++			    kvm_lapic_set_pv_eoi(vcpu, 0, 0))
+ 				return 1;
+ 			break;
+ 		}
+@@ -1627,9 +1628,24 @@ static int kvm_hv_set_msr(struct kvm_vcpu *vcpu, u32 msr, u64 data, bool host)
+ 			return 1;
+ 		hv_vcpu->hv_vapic = data;
+ 		kvm_vcpu_mark_page_dirty(vcpu, gfn);
+-		if (kvm_lapic_set_pv_eoi(vcpu,
+-					    gfn_to_gpa(gfn) | KVM_MSR_ENABLED,
+-					    sizeof(struct hv_vp_assist_page)))
 +
- Each plane has a numeric id that is used when communicating with KVM.  While
- KVM is currently agnostic to whether low ids are more or less privileged, it is
- expected that this will not always be the case in the future.  For example KVM
-@@ -8959,6 +8965,27 @@ helpful if user space wants to emulate instructions which are not
- This capability can be enabled dynamically even if VCPUs were already
- created and are running.
- 
-+7.47 KVM_CAP_PLANES
-+-------------------
-+
-+:Architectures: x86
-+:Target: VM
-+:Parameters: args[0] contains the number of planes to make available
-+
-+Opts the VM in to using multiple planes, raising the limit on plane ids
-+that KVM_CREATE_PLANE accepts to args[0] (between 1 and the KVM_MAX_PLANES
-+value implied by KVM_CHECK_EXTENSION(KVM_CAP_PLANES) on the system fd).
-+
-+Planes other than plane 0 only exist when userspace manages them, so by
-+default a VM reports and accepts a single plane.  VM types whose plane
-+count is guest-architectural (such as SEV-SNP, where it reflects the
-+supported VMPLs) report that count without this capability, and enabling
-+it on them fails with -EINVAL.
-+
-+This capability must be enabled before any vCPU or extra plane has been
-+created, and the chosen count cannot be changed afterwards; otherwise
-+-EEXIST is returned.
-+
- 7.49 KVM_CAP_HCALL_FAULT_EXIT
- ------------------------------------
- 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 0ce814bbf1ea..e4c8691dc1e1 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1442,6 +1442,7 @@ struct kvm_arch {
- 	unsigned int indirect_shadow_pages;
- 	u8 mmu_valid_gen;
- 	u8 vm_type;
-+	unsigned int user_max_planes;
- 	bool has_private_mem;
- 	bool has_protected_state;
- 	bool has_protected_eoi;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 9a15e06fc91e..a9073436c734 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -490,11 +490,29 @@ EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_x86_default_max_planes);
- 
- unsigned kvm_arch_max_planes(struct kvm *kvm)
- {
-+	unsigned int vendor_planes;
-+
- 	/* For now, planes are only supported with irqchip=split */
- 	if (!irqchip_split(kvm))
- 		return 1;
- 
--	return kvm_x86_call(max_planes)(kvm);
-+	vendor_planes = kvm_x86_call(max_planes)(kvm);
-+
-+	/*
-+	 * When the plane count is guest-architectural (SEV-SNP VMPLs),
-+	 * the vendor module owns it.  Otherwise planes are a software
-+	 * construct and only exist when userspace has opted in to the
-+	 * number of planes it is going to manage, via KVM_CAP_PLANES.
-+	 */
-+	if (vendor_planes > 1)
-+		return vendor_planes;
-+
-+	/*
-+	 * Lockless readers (KVM_CHECK_EXTENSION) race the KVM_ENABLE_CAP
-+	 * store; the value is set once, so a torn-free read is all that
-+	 * is needed.
-+	 */
-+	return READ_ONCE(kvm->arch.user_max_planes) ? : 1;
- }
- 
- struct kvm_plane *x86_alloc_plane(void)
-@@ -6846,6 +6864,28 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
- 		mutex_unlock(&kvm->lock);
++		/*
++		 * The gfn_to_hva cache behind the PV EOI / APIC assist
++		 * optimization validates against plane 0's memory
++		 * attributes, and a higher plane's VP assist page may
++		 * live on a page the plane protected against plane 0
++		 * (the Windows secure kernel's does). Don't arm PV EOI
++		 * there: pv_eoi.msr_val stays clear, which keeps
++		 * kvm_hv_assist_page_enabled() false for the plane, so
++		 * every assist-page consumer behind it (PV EOI, nested
++		 * enlightened VMCS, the SVM VP-assist read) is disabled
++		 * and KVM never touches the page's contents.  The guest
++		 * always performs a real EOI.
++		 */
++		if (!vcpu->plane_level &&
++		    kvm_lapic_set_pv_eoi(vcpu,
++					 gfn_to_gpa(gfn) | KVM_MSR_ENABLED,
++					 sizeof(struct hv_vp_assist_page)))
+ 			return 1;
  		break;
  	}
-+	case KVM_CAP_PLANES: {
-+		mutex_lock(&kvm->lock);
-+		r = -EINVAL;
-+		if (cap->args[0] < 1 || cap->args[0] > KVM_MAX_PLANES)
-+			goto planes_unlock;
-+		/*
-+		 * Only ordinary VMs for now.  SEV-SNP VMs get their plane
-+		 * count from the architectural VMPL support, and VM types
-+		 * with protected state need per-plane audits first.
-+		 */
-+		if (kvm->arch.vm_type != KVM_X86_DEFAULT_VM)
-+			goto planes_unlock;
-+		r = -EEXIST;
-+		if (kvm->created_vcpus || kvm->has_planes ||
-+		    kvm->arch.user_max_planes)
-+			goto planes_unlock;
-+		WRITE_ONCE(kvm->arch.user_max_planes, cap->args[0]);
-+		r = 0;
-+planes_unlock:
-+		mutex_unlock(&kvm->lock);
-+		break;
-+	}
- 	case KVM_CAP_X2APIC_API:
- 		r = -EINVAL;
- 		if (cap->args[0] & ~KVM_X2APIC_API_VALID_FLAGS)
 -- 
 2.50.1
 
