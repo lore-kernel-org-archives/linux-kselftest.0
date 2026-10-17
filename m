@@ -1,63 +1,65 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617C63C1D78
-	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 18:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2C53AAF69
+	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 18:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792261518; cv=none; b=aRPjos1AoMV1EiON6UQcLpv88cvdO2m5xlXErkVaeNtrYcUXygsGV6HK6w/FmBeJ8xdrr9E8F68BcZkLlPVezHXaGzIiL92Dng5/1KA5Px6zNlkwi9LFNDXeKLqSvqcp9sbwEKb2xIxQUFXgd0c4uiDuCC9gE6d87+VC3F4rRsk=
+	t=1792261546; cv=none; b=eRtYkKOm2/+gC8Pmfd/KBFKXdlBmMzj1nblPgKzy4g//wBXOe4mHlsDcPbzXaVSqcA9ne0YSYdaqbbnyKTCRfWrOGqyFEFIYXizuoqOIuZiZmmB9yJfFFuz+ZoHUIwoJADYNRClk4VxUFzbkZ84yFpZ3WUX6jBDpKHbV3HAfOh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792261518; c=relaxed/simple;
-	bh=BRWVIj0+QDTuMYi7F6ltxI3tp8k6MD7qa2pkLuMBaWQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aDkoe78AY7RElaiAc/9Bufm6j9deox0yIGkg0a6BZat5MhVoZuEntzlb2zh2C3UWHJrTQ4h4dwxLADddmJz9n8fKnT85tBrllKkkQ/Daef56K3oD1W5QOtL2Qi1Zv7S8EQDUpCku0+6KTBeLTle4YEQlVGnfLxBX1+sZt86u/Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ILLOFWEa; arc=none smtp.client-ip=209.85.216.44
+	s=arc-20240116; t=1792261546; c=relaxed/simple;
+	bh=t94hsbrtkFucbaGDylnmE2KXa81VKRPfOEo7S50teV4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TKdiTcDdMxiAqYfi3yM4uEOplF6OWxcu2EIGifXUeeyR2DSITQLdpnD+gDP7O8F8HUaDOkTF9GNhxQ6glvN1fl8klI75wcWRjHxiy7Q/7PfTjBAv2NiJoFsN0ScwmR/c0OyGhkNaxpd4u3YARYKew6gH6f9HCYa3cv5GhxUl0pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A2W/TEFa; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ILLOFWEa"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ac677668a9so726214a91.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 11:25:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A2W/TEFa"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cc4be0e5351so333823a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 11:25:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792261517; x=1792866317; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=luYltKYLm6yYl2bIMxE28aT7V3Jm1uOyqRT/NXcaIW8=;
-        b=ILLOFWEalzVrj8yA0Em/8NS4cW4lV/XJhCeGEuPLrdwS/gyy78RcUnnMztUvzgcmc7
-         SC0PiSO0AeEt0Vub1isPfXOsdasudQWYFfD2ncJIM3VJSCZsvl81jfUEgX/sVx8x7TYA
-         4QVyFK/QUSN+xjeQask7SNGC3iNlLpelcv7elehDLmZTzTZicIadVUzqmuo+z6OM1dea
-         nOeSP4qtxNXXpIYaPeT8nzWS6BBcXTyNfNx55qDnqQc59UKiaZbK1DW4sGaXepbRmvSq
-         k/ChkTDc2cHzDOY80A8lwDhoh+NxFPS7paSWIde5xzdPl68VZWi3MOFv12FfdSUAH3C5
-         jsFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792261517; x=1792866317;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1792261544; x=1792866344; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=luYltKYLm6yYl2bIMxE28aT7V3Jm1uOyqRT/NXcaIW8=;
-        b=tya1tDhKeN4YAjKGoZQomNDrxQOHy1ULeFOw8Oc5ypP4/scWh5amle7fwK2EC6EdV3
-         CCi5CXrwDp68eq1E6eJABiJMlthBAiwRuY/7efblC0wTO1n5Q8lDFSd/IlDU2rjK/EX3
-         jmxeAvqj52eS8zlbp6Fo2wj2Ige2WB6Uc1TXSUlLMty5evmoIMS46qjUoQk+iz/OSH6v
-         3izf77R5YY1ZDtz6tVANKqi4XRK0J+ZYfa0kr3fNgIuJJr9avjBWem9LQOD7iNRtXLGO
-         GkZKdYqnDECNpVNv/M8ekSF19tUYxm1WsXzsexC2xKqahvLivv83tD7QlwNsJp1xE/Oi
-         S5VA==
-X-Forwarded-Encrypted: i=1; AKwUvBzIFfJ+v1dSkJ7Y3i62cS70RNAWwU52SqBaGvL4fgN4YVTJtTti+NmK8t7CdzaNizIaOD9w13YtPtn7YwAYnKE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL1kf8uY5dvqvnaqag78v15P8uXoGih1nPeXlTgCQa7sUsocjua
-	q0qkahatz6hCNrPOAceOihhqQf29d20j2A8NNH26Cn0BHbVaw4bfPECo
-X-Gm-Gg: AYBFou2sriKid0GkeVCI/AdimMNK3gqxxun/8w7OQ787ZvNFH1IPrx+R5btuFjfRypQ
-	U0J0K4bglBF9rdqe+It67+4AGuRsdZGTQUSg7Zv3JVuJvro9bIFMjLiUdru2+91DIUkp1kl+KMc
-	0OOeoelmGcCweE9vrmXoAya1ZvZZV46h7O5yowyJrLPDY890KIqPN6DzCOLKvp224xWwfh0OGJN
-	x+kX1Kow5nxB+m6bBlNy+r2BPI8QLH9haqdaF9Xip1CBRDNkjYZzTmR7ox1cs9/5zxAvgA8Tf8Q
-	af90uNcw1tgrqdUK+dJKvEjj7NMQXM5RLycaM1iNmQqqnzDcU6WmfNkRrS2b2dxsRqjrzou1qDk
-	nVxI5l6cYRNa7J48/ojfiPiLQiEcBxECfUveZkOlZs0xDff0CHVYBrRjGMdNtDCRnLpdUYUpvpz
-	Pm283TMoLM5Cnd8/USyBivTpV5/2QYW2gXraLj56K3gtIFJ+KUhJJ9DxwYj6SzZ1cHHTLX6wM45
-	mQmP9TBhkqs3N4qQEfQ897T8V3v/hQ0pdVlkKAp+/NZBlk6dSYWZR5TtgS8kx8GOCWnnPdLqcRQ
-	bw==
-X-Received: by 2002:a17:90b:3b91:b0:3ac:bfa7:b079 with SMTP id 98e67ed59e1d1-3acee97ab0amr2910170a91.7.1792261516634;
-        Sat, 17 Oct 2026 11:25:16 -0700 (PDT)
+        bh=2e9nJ9wUb+VNUHZnaOg0k/Urr8dN7s/5sJvd32soOTw=;
+        b=A2W/TEFaDcNkNh6Agn+ggZ7P6GW/BOrVBsy1zxMpzoo+feDiFgk9TjBtVTATUfRcv3
+         R449u5723gkIKazJU7JsAiKoVeCQdROWimUy2RUWwj78n+cnbSnN4re8EhBPEca16sGp
+         o6IE1WgmOqFxMAIMc0p8R1sA8UUPA0KXEeqdu8mgu5o8JtPxo/5yDBp0ICaBQ80RZpOy
+         m2rKz0ur1NpZ+0/KKQ6cfqWalaExY6q4AGFifgHKlYB2JFJ+Ei1X44HNjQ1dV+UTlSoc
+         OCJmRx9FkZFJwzvXjLVK9VTHBnIRPgdbO5Gyxcho25SAv1CFw3JdQp79AgyOVHGOMa+P
+         Vy0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792261544; x=1792866344;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2e9nJ9wUb+VNUHZnaOg0k/Urr8dN7s/5sJvd32soOTw=;
+        b=YpyyBVjGI+udhdAEQjdDwlLNTKuyeE6G+1eZVCGl9yAj4zEVg+kLZwh6lq5ar+YBmD
+         9RA+EpB40YZbUi7Uwmd1K+3n4RP8/jDeQj4TeCsp+66hkjAT5n6kqXaNMcD2w0aQmXxo
+         Ht6IJvR2E9JfyqUJoGxVxVqpcmasoPy2LQQuXopYh+FIXnb7AGzIRfQOAu41EX6jAi+p
+         y9QoVilbh1uXNK5uhBGJ32nXvEGGmYAv6k93SMONEchBrVntEr4FQG1f5yDygW8m15Jp
+         jGWsJy0TUgvPBk4Q7VWZ9byu0YsLgiSc4UsYQETE08zbIdyEJv3kSt85JE+KUvYRSWfa
+         2z6Q==
+X-Forwarded-Encrypted: i=1; AKwUvBy7eUlFPAqkI8DS5RVaFV0QLAvRu59Eq22NVrwCF1MGBYWwSbJEJe2npZHDNPPCx1LkGObn1eQUCsumD4h7Cx8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIdhoJNDMVjaaqijb8BuMMYyhELGKwQEPtHuCE8r0KILYN0ntqy
+	w/nfx/BZD9/qnjLOHnFFP8UMHxwHak1D8x6CfBFNUCUBOdN6DZv9trsl
+X-Gm-Gg: AYBFou17gTp2lpjEasRnaQycCN6zpy6IsGd9KJAwtdAEgGCD8BvdXWWd0Q40McP//Xj
+	8fOZiKrcO24aTV/BfpIcyiIrbDzhUv8CwAgNjbKyuK0pkGB405JK+SyWtVMrSU4UCu0UpTeB+am
+	LF0vf6sEnwQ/A+Uiz/ekrBiqQ1iry2v/f8JhjiNuq5MZN0HUB8Oly+FcbpJPftBvFY/ARpBpgh4
+	nEX2sS5TRKTmpdAlMjn1u8a0x1pK6bPSQrlXo8oJriWCYWn6vvbLzMGws72wQ5kvg2rLo8QY89R
+	0eH1SP/ifYlyfevs1ZnnmqaEgqSBHtGy3i4oe+M1xfnGqzw9Mp7XsIKhtBHsGLT56UJlZWnCyOw
+	Jo0xF10M4B1rxWDeR7rGbgWL/HolOc4WSnTaxsvvSXTkgnzLj49//M7ZpVmiktxBCe9wx9lqRKv
+	/qvKkWgz/5gNWygBF6UI1x9JpQvQ0UnJJX4rYeVSn8HyN5NBnGD1OiyfQ+8LyjwndfGFZ3KFPNA
+	joH1M/RCucR9MzyQltSw7UpaM9q76ec9QH8HGIkGvNuwBwK4BUs0qe8CgIcf+yawGTYwt44JXl9
+	6g==
+X-Received: by 2002:a17:90b:17d1:b0:3ac:a7ee:6772 with SMTP id 98e67ed59e1d1-3acef5ea843mr3055404a91.63.1792261543994;
+        Sat, 17 Oct 2026 11:25:43 -0700 (PDT)
 Received: from localhost.localdomain ([2001:56a:78dc:9300:8846:761:63e4:6d67])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc46ecd32sm9241586a91.3.2026.10.17.11.25.15
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc46ecd32sm9241586a91.3.2026.10.17.11.25.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 11:25:16 -0700 (PDT)
+        Sat, 17 Oct 2026 11:25:43 -0700 (PDT)
 From: Abdalla Eldoumani <aamsdoumani@gmail.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -68,10 +70,12 @@ Cc: Mark Brown <broonie@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Abdalla Eldoumani <abdalla.eldoumani@ucalgary.ca>
-Subject: [PATCH 0/2] kselftest/arm64: vec-syscfg exit status and VL inheritance coverage
-Date: Sat, 17 Oct 2026 12:24:52 -0600
-Message-ID: <20261017182455.1884-1-aamsdoumani@gmail.com>
+Subject: [PATCH 1/2] kselftest/arm64: Report test failures in vec-syscfg's exit status
+Date: Sat, 17 Oct 2026 12:24:53 -0600
+Message-ID: <20261017182455.1884-2-aamsdoumani@gmail.com>
 X-Mailer: git-send-email 2.49.0.windows.1
+In-Reply-To: <20261017182455.1884-1-aamsdoumani@gmail.com>
+References: <20261017182455.1884-1-aamsdoumani@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,34 +86,33 @@ Content-Transfer-Encoding: 8bit
 
 From: Abdalla Eldoumani <abdalla.eldoumani@ucalgary.ca>
 
-Two small changes to the vector length configuration test.
+vec-syscfg ends with ksft_exit_pass() whatever its tests reported, so it
+exits 0 even when tests fail. The kselftest runner decides whether a
+program passed from its exit status, so failures in vec-syscfg are only
+visible in its TAP output and the run as a whole is reported as passing.
 
-The first makes vec-syscfg report failures through its exit status. It
-currently always exits 0, so a kernel that fails its checks still shows
-as passing in the kselftest runner.
+Use ksft_finished() so the exit status reflects the results. Unsupported
+vector types are reported as skips, which ksft_finished() treats as
+passing, so systems without SVE or SME are unaffected.
 
-The second implements the "Test PR_SVE_VL_INHERIT after a double fork"
-item from the fp TODO list by also checking the VL in a grandchild, two
-fork() and exec() generations down.
-
-Tested under QEMU (-cpu max, -cpu max,sme=off and -cpu cortex-a57) on
-mainline (58161ead2, after v7.3-rc7). To check that the new test can
-fail, it was also run on a kernel modified to clear the inherit flag on
-exec(): the existing check passed, the new check failed for SVE and SME,
-and vec-syscfg exited 1.
-
+Fixes: 95cf3f23877b ("kselftest/arm64: Add tests for SVE vector configuration")
 Assisted-by: LLM
+Signed-off-by: Abdalla Eldoumani <abdalla.eldoumani@ucalgary.ca>
+---
+ tools/testing/selftests/arm64/fp/vec-syscfg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Abdalla Eldoumani (2):
-  kselftest/arm64: Report test failures in vec-syscfg's exit status
-  kselftest/arm64: Check that PR_SVE_VL_INHERIT survives a second exec
-
- tools/testing/selftests/arm64/fp/TODO         |  1 -
- tools/testing/selftests/arm64/fp/vec-syscfg.c | 64 +++++++++++++++++--
- 2 files changed, 60 insertions(+), 5 deletions(-)
-
-
-base-commit: 58161ead29e50d70a317ea26b472e0c7508e69da
+diff --git a/tools/testing/selftests/arm64/fp/vec-syscfg.c b/tools/testing/selftests/arm64/fp/vec-syscfg.c
+index 8dd932f..2c8ccbe 100644
+--- a/tools/testing/selftests/arm64/fp/vec-syscfg.c
++++ b/tools/testing/selftests/arm64/fp/vec-syscfg.c
+@@ -792,5 +792,5 @@ int main(void)
+ 			ksft_test_result_skip("%s\n", all_types_tests[i].name);
+ 	}
+ 
+-	ksft_exit_pass();
++	ksft_finished();
+ }
 -- 
 2.49.0.windows.1
 
