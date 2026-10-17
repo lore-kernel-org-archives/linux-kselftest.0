@@ -1,38 +1,38 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA96549BB5F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA67D49BB5E;
 	Sat, 17 Oct 2026 12:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792239917; cv=none; b=nRhrbUVhxla6Aszp2I6/CHjJ7vkEGgIEXm7SaA7whcVkG/tTI8Cv8WS0JquyS8Xd/2w0lJChLNg5QHQzpwsWudW/4QxWJOWar38pPkbEsRYagxUI4ODYnG339gn3R/lST9pYCd4VS2BuOHeXx/k4Zo5sGjj2+kPtF9Ct0rjuSy4=
+	t=1792239917; cv=none; b=eZhyZC4I62MMSZHOZU2mz3Y2A3B0WnIqG1MpbdiKGRHuPqivMDPY2sCpI9m7S8itAkp5I0fpxsQuOtkv75/iQJk4YNjhiZ0DPKNPtiv87aCqJcLl+wQ0ICIypYcnbFHbFuYfQ1rzgP/3OnUj2b+Szxegk13DE1SnU9CneAJWY8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1792239917; c=relaxed/simple;
-	bh=dOj6wP+V+GWw8xiz/KtJQz7qAUKGxy+PXofBbrnRQd8=;
+	bh=8dHDkYl4pvzcEHqywdJwvq3wSDzm1EVyT7972O+DpEs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FKADoUnZ61job6GhoYpsIDzgOsE96O9XJ/rkoiLE1cISNRouuR8MSFvNkHbi/bYGcqTgD5lSsnR0ONoVuAHh9mGCXlPIl/HvxX72Pr57d0AiIb4nJunIipm00lOpcfoSRV7vFl/DoxUR1sxC6rmGsSVJ+9cUD12h+nJ5kj6RUMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=GzvwMrgp; arc=none smtp.client-ip=90.155.92.199
+	 MIME-Version; b=J42UaguoZ1US4E0b/o0jH13xZ/qRnxtzqX/C8ASXSqzEWRu0Vm/Semjy/V60aiIH0G+PjvOniksg5dPP77arOyrlUcMnsNSDkqXB0ekRtEEbtpsbo9zbYdPHuPKfTTzoCKWz7+9NxyfwTkyTDittpmR/frL/jhSELeET8h50AYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=X07MoKV9; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GzvwMrgp"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="X07MoKV9"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=OMybf8GIoxb5hT8RLH9h9O0SFavkcz0FBTGpp9jkGAw=; b=GzvwMrgptj8Obf5LvV8VqIjL0N
-	lRbHmZY7z1Q73o30CZYmMIglIUMQOgW1+pNvRjaOvC65sRINnj1ZadSkGYvdJn/dvG6bDESwq80T4
-	Iryp+PyJQLD44Czs8rErH91Xu7blGw7/SJGnbqF5dtJa7CNsRPpazD3DbipmQ7WpGeI0H7RR+VrY3
-	9O9yZFoqIjpwgM79kdu8ajBBGZ5Y9F6E9NV9UsXDOMqC8oBlT6+s1k0JwSsJWXm2e15Mv+Mj0dlMG
-	eCiowyvZFiiRleS8QlOmKyfppR0vTvNp0hpb1Tzir5ZStMrL5QkDR9/qNmiIVc/T29sr/cruFDjOJ
-	8FIJIXNg==;
+	bh=vTY+MmDWBfuu+ZZ765xgJwxV4ddQ/XQCQUMyD6Z95L0=; b=X07MoKV9IunB+zQC/nq32vx8iC
+	2/R4EyXRIenptqGgDxilTf7pFIfrLyxgs28A0iDg/BKi4SgXX8zNFSw1YnI1YHtOtPz4e4qOd6k89
+	pl3A/dBt3bLQjtesItWIlZzgwJDP99nGq0W2/aio9zp9AjMLEWlgaev2P0FC6SW9UzbwOA76Xbn+g
+	EsAQCXnuSeQtBMuV9rvDgmQK//ldipKGeVmBTBhGr3uMLwgYcoB++kK2NR6oDGUGrLA12YjwuPMHk
+	HwV6SFRWP4tFrTMb/UmmCX+9P+FUFYHWY9pG15hcX7r4zmDalYIYdIoNXMi9FYQZ8/zzPS35kCTmn
+	ExA4zAvQ==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by desiato.infradead.org with esmtpsa (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xI3TG-00000002Lff-3Fts;
-	Sat, 17 Oct 2026 12:25:07 +0000
+	id 1xI3TF-00000002LfR-1xxz;
+	Sat, 17 Oct 2026 12:25:06 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xI3TE-00000002Yoj-1q1c;
-	Sat, 17 Oct 2026 13:25:04 +0100
+	id 1xI3TD-00000002Yn2-1PIG;
+	Sat, 17 Oct 2026 13:25:03 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mushahid Hussain <hmushi@amazon.co.uk>,
 	David Woodhouse <dwmw@amazon.co.uk>,
 	nh-open-source@amazon.com
-Subject: [RFC PATCH 55/55] KVM: planes: Annotate the lockless twin-publication protocol
-Date: Sat, 17 Oct 2026 13:25:01 +0100
-Message-ID: <20261017122501.610248-56-dwmw2@infradead.org>
+Subject: [RFC PATCH 32/55] KVM: planes: Keep current_vcpu in sync in vcpu_load()
+Date: Sat, 17 Oct 2026 13:24:38 +0100
+Message-ID: <20261017122501.610248-33-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017122501.610248-1-dwmw2@infradead.org>
 References: <20261017122501.610248-1-dwmw2@infradead.org>
@@ -71,117 +71,90 @@ X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-Plane twins are published with a plain store to common->vcpus[] plus an
-smp_wmb() that pairs with online_vcpus, not with twin initialisation,
-while the lockless readers grown across the series (the twin-kick
-paths, the Hyper-V TLB-flush and stimer twin lookups, the SEND_IPI
-target lookup, vcpu_for_each_plane) read the slots with a mixture of
-READ_ONCE and bare loads.  x86-TSO hides the lot, but the protocol is
-unannotated generic code: KCSAN reports it, and nothing stops a
-reordered publication from exposing a half-initialised twin to a kick.
+The preempt notifiers save and restore common->current_vcpu
+(kvm_sched_out()/kvm_sched_in()), but vcpu_load() does not update it.
+kvm_vcpu_ioctl_set_cpuid() swaps the loaded vCPU to each twin around
+kvm_vcpu_after_set_cpuid(), a window that is preemptible and sleeps
+(kvm_pmu_refresh, mmu_lock): a reschedule there arch-put the
+already-put caller a second time, never saved the twin, and reloaded
+the caller's VMCS, so the vendor callback wrote the twin's controls
+into the caller's VMCS and the trailing vcpu_put() unloaded a
+non-resident vCPU, corrupting the per-pCPU loaded_vmcs tracking. Any
+KVM_SET_CPUID2 on a multi-plane VM reaches this; ioctls taken on a
+plane-N fd while current_vcpu pointed at another plane had the same
+exposure, as do the kick paths that now read current_vcpu->cpu.
 
-Publish the slot with smp_store_release(), make every lockless reader
-use READ_ONCE (vcpu_for_each_plane included), and document the pairing
-at the iterator.  Mutex-serialised lookups (the in-kernel VTL switch
-runs under the shared vCPU mutex that twin creation also takes) stay
-plain.  Also document KVM_REQUEST_PER_PLANE's two scopes at its
-definition: the fan-out to twins happens in kvm_make_vcpu_request(),
-while a direct kvm_make_request() marks only the twin it was given - a
-distinction a future direct-raise caller would otherwise trip over.
+Set common->current_vcpu in vcpu_load(), making every load path (run
+loop, vcpu ioctls, the cpuid twin swap) agree with what the preempt
+notifiers will operate on. kvm_vcpu_select_plane() keeps its own
+assignment; both stores use WRITE_ONCE to pair with the lock-free
+readers in the kick paths.
 
-No functional change on x86.
+Found by Sashiko review.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Assisted-by: LLM
 ---
- arch/x86/kvm/hyperv.c    |  6 +++---
- include/linux/kvm_host.h | 13 ++++++++++++-
- virt/kvm/kvm_main.c      |  8 +++++++-
- 3 files changed, 22 insertions(+), 5 deletions(-)
+ virt/kvm/kvm_main.c | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index dbe1b83c1f28..8abc61f46608 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -612,7 +612,7 @@ static void stimer_mark_pending(struct kvm_vcpu_hv_stimer *stimer,
- 		int p;
- 
- 		for (p = 0; p < vcpu->plane_level; p++) {
--			twin = vcpu->common->vcpus[p];
-+			twin = READ_ONCE(vcpu->common->vcpus[p]);
- 			if (twin) {
- 				kvm_make_request(KVM_REQ_UNBLOCK, twin);
- 				kvm_vcpu_kick(twin);
-@@ -2370,7 +2370,7 @@ static void hv_tlb_flush_enqueue_all_planes(struct kvm_vcpu *v,
- 	int p;
- 
- 	for (p = 0; p < KVM_MAX_PLANES; p++) {
--		twin = v->common->vcpus[p];
-+		twin = READ_ONCE(v->common->vcpus[p]);
- 		if (!twin || !to_hv_vcpu(twin))
- 			continue;
- 		fifo = kvm_hv_get_tlb_flush_fifo(twin, false);
-@@ -2601,7 +2601,7 @@ static void kvm_hv_send_ipi_to_many(struct kvm *kvm, u32 vector,
- 		 * VTL): deliver into that plane's APIC.
- 		 */
- 		if (target_plane) {
--			target = vcpu->common->vcpus[target_plane];
-+			target = READ_ONCE(vcpu->common->vcpus[target_plane]);
- 			if (!target)
- 				continue;
- 		}
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 6a1ac96d64ba..4d98de4c7523 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -159,6 +159,12 @@ static inline bool kvm_is_error_gpa(gpa_t gpa)
- #define KVM_REQUEST_NO_WAKEUP      BIT(8)
- #define KVM_REQUEST_WAIT           BIT(9)
- #define KVM_REQUEST_NO_ACTION      BIT(10)
-+/*
-+ * A KVM_REQUEST_PER_PLANE request has two scopes: raised through
-+ * kvm_make_vcpu_request() (kicks, mass requests) it fans out to every
-+ * plane twin of the vCPU, while a direct kvm_make_request() marks only
-+ * the twin it was given.  A direct caller must pick the twin it means.
-+ */
- #define KVM_REQUEST_PER_PLANE      BIT(11)
- /*
-  * Architecture-independent vcpu->requests bit members
-@@ -400,9 +406,14 @@ struct kvm_vcpu_common {
- 	struct kvm_vcpu_arch_common arch;
- };
- 
-+/*
-+ * The slot read pairs with the smp_store_release() publication in
-+ * kvm_vcpu_finish_common() for iterators running outside the locks that
-+ * serialise twin creation.
-+ */
- #define vcpu_for_each_plane(common, i, v)			\
- 	for ((i) = 0; (i) < KVM_MAX_PLANES; ++(i))		\
--		if (((v) = common->vcpus[(i)]) != NULL)
-+		if (((v) = READ_ONCE(common->vcpus[(i)])) != NULL)
- 
- /* Tracked per plane-VCPU - used for deciding which plane-vcpu to run */
- enum kvm_vcpu_state {
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index f0b474b0547d..6031ba9a6667 100644
+index fa639a659138..d37961cc5235 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -563,7 +563,13 @@ static int kvm_vcpu_init_common(struct kvm_vcpu *vcpu, struct kvm *kvm, unsigned
- static void kvm_vcpu_finish_common(struct kvm_vcpu *vcpu)
+@@ -165,6 +165,16 @@ void vcpu_load(struct kvm_vcpu *vcpu)
  {
- 	WARN_ON(vcpu->common->vcpus[vcpu->plane_level] != NULL);
--	vcpu->common->vcpus[vcpu->plane_level] = vcpu;
+ 	int cpu = get_cpu();
+ 
 +	/*
-+	 * Publish with release semantics so the lockless twin readers
-+	 * (the kick paths, vcpu_for_each_plane, the hyperv twin lookups)
-+	 * observe a fully initialised vCPU through their READ_ONCE of the
-+	 * slot; the plain store relied on x86-TSO.
++	 * The preempt notifiers operate on common->current_vcpu, so it
++	 * must name the plane vCPU being loaded here: an ioctl taken on
++	 * another plane's fd than the one that ran last would otherwise
++	 * have a preemption arch-put the stale twin (whose state is not
++	 * resident) and arch-load it back over the state this load makes
++	 * resident.  The kick paths also read it to find the running
++	 * twin's pCPU.
 +	 */
-+	smp_store_release(&vcpu->common->vcpus[vcpu->plane_level], vcpu);
- 	smp_wmb();
- 	if (vcpu->plane_level == 0) {
- 		/*
++	WRITE_ONCE(vcpu->common->current_vcpu, vcpu);
+ 	__this_cpu_write(kvm_running_vcpu, vcpu->common);
+ 	preempt_notifier_register(&vcpu->common->preempt_notifier);
+ 	kvm_arch_vcpu_load(vcpu, cpu);
+@@ -4719,7 +4729,26 @@ static int kvm_plane_ioctl_create_vcpu(struct kvm_plane *plane, unsigned long id
+ 
+ 	kvm_vcpu_init(vcpu, kvm, id);
+ 
++	/*
++	 * A non-zero plane shares 'common' with a plane-0 twin which may
++	 * already be running.  kvm_arch_vcpu_create() calls vcpu_load(),
++	 * which publishes the half-created vCPU through
++	 * common->current_vcpu and registers the shared preempt notifier,
++	 * so it must not run concurrently with a twin's KVM_RUN: hold the
++	 * shared vCPU mutex across it.  Drop it before kvm->lock is taken
++	 * below, to respect the kvm->lock -> vcpu mutex ordering.
++	 */
++	if (plane->level > 0) {
++		r = mutex_lock_killable(kvm_vcpu_mutex(vcpu));
++		if (r)
++			goto vcpu_free_common;
++	}
++
+ 	r = kvm_arch_vcpu_create(vcpu);
++
++	if (plane->level > 0)
++		kvm_vcpu_unlock(vcpu);
++
+ 	if (r)
+ 		goto vcpu_free_common;
+ 
+@@ -5427,7 +5456,7 @@ struct kvm_vcpu *kvm_vcpu_select_plane(struct kvm_vcpu *vcpu)
+ 		ret->plane_state = RUNNABLE;
+ 	}
+ 
+-	common->current_vcpu = ret;
++	WRITE_ONCE(common->current_vcpu, ret);
+ 
+ 	common->plane_switch = false;
+ 
 -- 
 2.50.1
 
