@@ -1,31 +1,31 @@
-Received: from outbound.qs.icloud.com (qs-2001g-snip4-6.eps.apple.com [57.103.87.69])
+Received: from outbound.qs.icloud.com (qs-2001a-snip4-7.eps.apple.com [57.103.87.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBD93D25AF
-	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 21:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.87.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D3A41DDF1
+	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 21:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.87.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792271154; cv=none; b=SjPmjwAaR3PyuRtNaCn3CKL6bbGFvWNIvDnXoqkV0n78HQezI0uvGPpyi7Cc1Q5eWa7qgCoWbXSeMrzl5QzVkOdQOAcxH2+k/8X/6fmpAlWqK6l6tV3GLtg6I5gaW3DIGX+Ui10D6BF+cXyBSTID1lE8UfeqLRbA+lhGwUlVNtQ=
+	t=1792271157; cv=none; b=kYZPjhuw/nSTkNwA+R6GTjqdLOZkXKwkQsSaQAg32IdYt7KFfe2shjWEL5J5BTU/8XSuQiXm0ZDuEiPuT8LpK+OLtSKdd8REWdKByTJJ2HRCCqd3NC9uphjpjx1xNZq70fG2z9Oyz9ixrCzowkkVSriCNVWs+ANplZUFuCNw5CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792271154; c=relaxed/simple;
-	bh=UDPQCQ/tm1Mq5nfd3BVB2V9j9uUnqCPSinOniZhjzas=;
+	s=arc-20240116; t=1792271157; c=relaxed/simple;
+	bh=U73rza4Tey8bZdHSwdeA6BbhZAaWw0MwZBQiiZPetvU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IO8LLO5M/WCwg0mCcxPhpJ4U8mnoIKN4Av5i4MARazRG0rqnFqKZVwm7qIt9O4w6BM2jk6eOBeFpctlM4JOfx5PCWv40eu/OE76uoXN03m/Nx+XfdOs9nA9jhHUyQDkJjHNBkcDEWn6rrXB4Jj7Os2vmxvX8lrTl3iLbzE4u3io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=Ecmk43QR; arc=none smtp.client-ip=57.103.87.69
+	 MIME-Version; b=l/HnAu9+nAeRw9yp3PSuZuJcHtuPpwi9UxNV9r4+NUA0hJHZM8/o6gHyN6MmlBvBPc5/T+bApfxmgSX0it+zyT/HEeecWbmouS5bo5DxGkPrvolsYIuXXnPYPtf1Y3keNpaq176sL9b8vZz41SB/ov/wRtOb0DMiTD2O9ajWRoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=fYh/XPdL; arc=none smtp.client-ip=57.103.87.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="Ecmk43QR"
+	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="fYh/XPdL"
 Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-2d-100-percent-3 (Postfix) with ESMTPS id 434B91817E88;
-	Sat, 17 Oct 2026 21:05:49 +0000 (UTC)
-X-ICL-RepId: 01a14baf-6896-742e-b7d1-30132f0788d3
-X-ICL-Out-Info: HUtFAUMEWwJACUgATUQeDx5WFlZNRAJCTQ1OHVwORQFEF0oBTVIPDxRcFFofVgVyBlwKVwRUHxwXXlhVCQodVwJdEVAZGQxVUEsbDlwFS1oVVRcOAkIfUB9MFldDRhgcGVoUXBhTRVEfVFhDGUVWaUELTx1dGVscQmRYVwkKHVcCXRFQGRkMVVBUEVdQC1kCQg9JA1wAWQNADEgLQwBaCkQAVQFAUw5eGUsZXS1BDkAUUBtHQ1AMDFBNAUMICghHA00XXjJTBF8RUBY=
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1792271150; x=1823807150; bh=OXkywacKsBlJITstSqBw0C20L132JfqRvaQ3LiKzmn8=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=Ecmk43QR+1oxTDucfPeDAfbHPRUCuc4oqbrhvocTTyNuypc3P2X2+w2xQlvUhLHV92rhxK7f6iEdtZHNqVWxJ1H2Bn+35uuQr6lTCOrXmdIej3NXY7FTiemOkd+tM1i0XTzV5Z8DvtbcaFPxJMATEJyXx+G+B41nGaMJCH5vIH9roAqo/UAznS+ObU1hG/cxDxE3BDHkNDTBWSJvFLyK+cV9LQwBzOFAFZrXwR0/eeHk7huc/9DESe3dEbAPJ+uNAMDMgp7BmobIfhSWGhhvQd6y9NLJyTYONX5AiBYSPWF6fSHzx7fiTXeYHV049GjQPu/MIU07hBkFiTS1Yzkh9A==
+	by p00-icloudmta-asmtp-us-east-2d-100-percent-3 (Postfix) with ESMTPS id 70CAD18001D9;
+	Sat, 17 Oct 2026 21:05:52 +0000 (UTC)
+X-ICL-RepId: 01a14baf-74f6-7096-9275-ed6726ba399f
+X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQ1OHVwORQFEF0oBTVIPDxRcFFofVgVyBlwKVwRUHxwXXlhVCQodVwJdEVAZGQxVUEsbDlwFS1oVVRcOAkIfUB9MFldDRhgcGVoUXBhTRVEfVFhDGUVWaUELTx1dGVscQmRYVwkKHVcCXRFQGRkMVVBUEVdQC1kCQg9JA1wAWQNADEgLQwBaCkQAVQBAUw5eGUsZXS1BDkAUUBtHQ1AMDFBNAUMICghHA00XXjJTBF8RUBY=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1792271153; x=1823807153; bh=04Wvdso6J4G6jdyBCnDIpEQVxCfOfUQD28WYC3zRj6o=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=fYh/XPdL5wIJPBr6dKnQGo2BMLerX4H7gQLLi4O1lkqDzAYfqqkZaQkJTzJ47aM+5j4da72pa5UbjflE8aOVA8WMxe0pUPWJvonSF15RAx/goQmafUPapQ4A2dHsSUfNAEKTRbpz4GeoRRloJeAeElJVioLJBnJiFVKhyFmiw3SBxablQeck6yMOOMIo9PtfJl43UC36aGhJqO6HE8+GcTM9Okm0dcmaEIkI61Lr/TtZpr8oobnZ1GX7iCoLW+88/JWoWmBHXqrIeeCF/ZSY8qDgDsE1iq931gjOcpRaJALhtB6aCsKBbkXgDwY6QXTXY9GJPF7SX89y0jRbrcjVNg==
 mail-alias-created-date: 1621344842221
 Received: from DelNac.mail.msk (unknown [17.57.155.37])
-	by p00-icloudmta-asmtp-us-east-2d-100-percent-3 (Postfix) with ESMTPSA id CB351180020D;
-	Sat, 17 Oct 2026 21:05:46 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-east-2d-100-percent-3 (Postfix) with ESMTPSA id EFC10180023D;
+	Sat, 17 Oct 2026 21:05:49 +0000 (UTC)
 From: Vladimir Vdovin <deliran@verdict.gg>
 To: netdev@vger.kernel.org
 Cc: dsahern@kernel.org,
@@ -39,9 +39,9 @@ Cc: dsahern@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Vladimir Vdovin <deliran@verdict.gg>
-Subject: [PATCH net-next 1/2] ipv6: Cache pmtu for all paths of a multipath route
-Date: Sun, 18 Oct 2026 00:05:07 +0300
-Message-ID: <20261017210508.71849-2-deliran@verdict.gg>
+Subject: [PATCH net-next 2/2] selftests: net: pmtu: Add IPv6 multipath exceptions test
+Date: Sun, 18 Oct 2026 00:05:08 +0300
+Message-ID: <20261017210508.71849-3-deliran@verdict.gg>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261017210508.71849-1-deliran@verdict.gg>
 References: <20261017210508.71849-1-deliran@verdict.gg>
@@ -52,152 +52,262 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: ZBh63JwAdTfUHE2y72bFZCtNmGZ64hZm
-X-Proofpoint-ORIG-GUID: ZBh63JwAdTfUHE2y72bFZCtNmGZ64hZm
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE3MDA4NCBTYWx0ZWRfX+jyQ+X9z/0nA
- qcwA98dUh68kmQ4TQ6p8U+AnlVKrhKCW2yyv4ch9S4hQv60LO+tajrlsmMJVDRqOX4lr2xm2RgF
- ENLkEj/yO+EfLYPWHTEgBCLHd+AWryFwF2ZKw3A2sLg2k1ahfSnlCOnnkWnqHpVKcpseBPPKcIa
- RVvH/R1LmTYpf2e0nLnf4UmFtOkLN3AR8Gtc+HMnuaDB/1s4u3GhDX3mXghq/cfwn2zqL6AwJDw
- nLm4ENOmUfqMkJaJeoBvtm8Tf7YzeM2Wdg5WWX09d2dWp/m3Ko7l7A1xF5Y7UDbzcjN0C2uTGUP
- jCwUyJFo/aq00mAIh8MdQIdSqN9dg/+mk3Lt448+LGBlmWWyi3OKp/qUJ+EuRs=
-X-Authority-Info-Out: v=2.4 cv=NtzcssdJ c=1 sm=1 tr=0 ts=6ad3e32e
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE3MDA4NCBTYWx0ZWRfX3Cn1cEnuDDIY
+ iBnc2DiF2NcT5fAYCHQ5bsMFm72mGmgdM37I0RZ5yqIPl/TjTOB9q3Sf6Ea/kJrjU01DWIzqN/f
+ KYxwwITtPcpZ6/WRISJemnZ5a60QFs2E52cfUV3yjVc1iJ/rxOOuxlCFfdPFnipXiiMVx0atKHi
+ UBkmd6w7f6jIsm4xhIHqcZyCWUiW4gomVz4CssMxwPGpwQy8iOACLgt4mSVTdDVO8XlbksGQ5VV
+ 4H1LhF2222HCP/YL1kXr2EmcDC8lyMdagMPm0cDSubluF6K+tmwtcsv5TzlydwtRfyY2xMktJ7n
+ 58VA500fJ0/mItG+ON21AgjRaHtf3UdJOKc63/AoNrGhWNCJwBumcaDUcAOz3o=
+X-Proofpoint-GUID: yJFYwdMa7BfxjUcKZQzuLBvzLyJEC7YS
+X-Proofpoint-ORIG-GUID: yJFYwdMa7BfxjUcKZQzuLBvzLyJEC7YS
+X-Authority-Info-Out: v=2.4 cv=NqjcssdJ c=1 sm=1 tr=0 ts=6ad3e331
  cx=c_apl:c_pps:t_out a=bsP7O+dXZ5uKcj+dsLqiMw==:117
  a=bsP7O+dXZ5uKcj+dsLqiMw==:17 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=RL2efRYtI3CUIBQEIwUA:9
-X-JNJ: AAAAAAABS9CXybIC93M1eVs4t0pKC5jil0bYl8Eb7X/m0I0fcetHJ8Kduw24+crS1+83fPMOOc0nazQvpTbOeIvKxCcXIYHDKSRW1GkSoOCcCTaBJoKOd4v0+u271B0F0SqS1eg/WE6uigBt0NSJVLIi2gMzcdgaKlE4/Yd8/9cbG/M4NjbQ6efWO6D9nrY3suoLPjqeA3MOwOOeA+PSP4M3AA+hnRz6nJrDXGLlsS00b1CbEmt+LRePBjFutK9y7nNhKuPX9XKGXhXWR4aCH2NASw6CFX8JbwBm27fp5FfvhFrIeQRvAQ8lq2jtEL//cO2iM08BmNrxhaBIJhyHXnNPZE2BJI56auganhrxZxDbb71mSAF2n1313Wbu7geUUc9x8yH9zGIexi8rY0tu5tzbcZiuyturvEKw0j+sYcfb2jXggEkiDh+bYHhADcSAwFZKPYSG0QVaCRb8PFXwREE5Ki4rGOmFVr3Hjydh8kiK+4AFxIO+g04YaLF/IuuI9JFNJmKgssvz9ZGuwo2Ocywi3ds5N+eEPmUy4M09o2izznCgyoBw0l3siC5ine8wrsVFyJ9ac2TBJ9ONZgQORehhBjapQIYyRm0B6/zDMLy8JSYx8/3CGj1u+9RwFjIOsUGyRPJoOvcqPZPZLRW7Rf5CUvU3u97Karex0jCkRjDfMkqfxGtlhUhb1KJhSVtoflBNVEfwStLeQhX3jBiE3wXT1GJqQmriQKr+++FGuBuAKxvLGrZA3q2CVJp+aCQ+RqnfI99Lz7FAXXfblyWW8ObqshIUl4PJ3dMAvfbyiia/MMDzjXn7BloilU800wW/4YPVPJk1lR6r13ZrxWgJlnIdbEM80sBOtn0H5v4JS0o/VvXPhJA=
+ a=c9wAbVb4WFjQg88ejdAA:9
+X-JNJ: AAAAAAABfdnfbYvpMqP6uj/YOi2rfYgrJLiIwtEEKXTvjOQGBO5cKU46IJusAg8/ebL34fW8kfqNJb3wKn9wv+uiRj3YpC1R47evkE0l62tKeWL2hA1ypu11cc0lw/BLev7nmhHnZ66Qx3sUCBrPMeeejGk+Kfod0ZGFz9WRWjE6+XEq7QOTeYo4KbTzBRhDeVTZNCt4Qel5ZNSwdvqxfel/p3L3dyIwtVa3JG/oHnFCR8Cc/N/ASqMCAeQh4WZyXLMUyLLOko/PNjaIG26QRGvfoJoNGEEAaWN7z9XNsDxzYGpSO0HV4TVibf+ILzJXvek58NeoK1xAuSnA/PmUhXFkTHd7hr6fvtbT0kU8pRofcsPLA56+0ctRsh/3GNRbnRNNvUgakFLUycOl5fbaXdGHgE5tLSB+gpLjW2XCuG1dC1IRDtP2BHddrqV6268lTACh6sEUOIAJUNjEELnUQIVCx3s7W+wICX/9txL/a6F4pu3PWHAIWiWSAVcvl3br7s1ZIJ9LSPy8WWLCCrTWH8XsMqvAEdA6g5dJKKO4KlmxDVsxbEYV4yW0JfNWQBoJJz9Mc670tSjMO3tIvZkCxDq/xbgmDMX3DVKzWMJKx2OIr0Y+jxHhDlmGDHKWr3+uUqpgynlk3+SE59zGDQ+SPhJHLaXWqzUOD61i8mgBgMVaTLW0pjLxIqsSJJJbrxFMtXB0D0rK6kvn5pvt77A+nHpWGyPzeBJtkF8DZiWyRjlRZ9O6SAmJ4oJvcGk3gt8fa4rIMpReSgu9D0e13lC6ohFxCbmpsE0CHm+rRhsLLKvgETk5LtgjsWcB+06Q
 
-__ip6_rt_update_pmtu() creates the exception route only on the nexthop
-the Packet Too Big came in through. With a multipath route the other
-paths never see that ICMP error and keep sending with the link MTU, so
-flows hashed to them blackhole.
+Make pmtu_ipv4_mp_exceptions family agnostic and add
+pmtu_ipv6_mp_exceptions: one oversized ping over a multipath route
+must leave PMTU exceptions on both paths.
 
-Same problem and same fix as for IPv4 in commit 7d3f3b4367f3 ("net:
-ipv4: Cache pmtu for all packet paths if multipath enabled"): create
-the exception on every path. For a nexthop object walk all of its
-fib6_nh, for a legacy multipath route walk the siblings of the selected
-fib6_info.
+Without the preceding fix the IPv6 test fails with both legacy
+nexthops and nexthop objects:
 
-Link: https://lore.kernel.org/netdev/ad29493c-9e48-4a94-b327-e47af3a9d137@kernel.org/
+  PMTU exception wasn't created after exceeding MTU (veth_A-R2)
+
 Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
 ---
- net/ipv6/route.c | 88 +++++++++++++++++++++++++++++++++---------------
- 1 file changed, 61 insertions(+), 27 deletions(-)
+ tools/testing/selftests/net/pmtu.sh | 162 +++++++++++++++++++++-------
+ 1 file changed, 124 insertions(+), 38 deletions(-)
 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 34ab7f330540..d870c20f2728 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -2888,6 +2888,30 @@ static bool rt6_cache_allowed_for_pmtu(const struct rt6_info *rt)
- 		(rt->rt6i_flags & RTF_PCPU || rcu_access_pointer(rt->from));
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index c7cd271714ef..9ff46708fa03 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -203,6 +203,9 @@
+ #	on host A and B on lo reachable via both routers. Host A and B
+ #	addresses have multipath routes to each other, b_r1 mtu = 1500.
+ #	Check that PMTU exceptions are created for both paths.
++#
++# - pmtu_ipv6_mp_exceptions
++#	Same as above but with IPv6
+ 
+ source lib.sh
+ 
+@@ -272,7 +275,8 @@ tests="
+ 	list_flush_ipv6_exception	ipv6: list and flush cached exceptions	1
+ 	pmtu_ipv4_route_change		ipv4: PMTU exception w/route replace	1
+ 	pmtu_ipv6_route_change		ipv6: PMTU exception w/route replace	1
+-	pmtu_ipv4_mp_exceptions		ipv4: PMTU multipath nh exceptions	1"
++	pmtu_ipv4_mp_exceptions		ipv4: PMTU multipath nh exceptions	1
++	pmtu_ipv6_mp_exceptions		ipv6: PMTU multipath nh exceptions	1"
+ 
+ # Addressing and routing for tests with routers: four network segments, with
+ # index SEGMENT between 1 and 4, a common prefix (PREFIX4 or PREFIX6) and an
+@@ -352,6 +356,9 @@ tunnel6_mask="64"
+ host4_a_addr="192.168.99.99"
+ host4_b_addr="192.168.88.88"
+ 
++host6_a_addr="fc00:1000::a"
++host6_b_addr="fc00:1001::b"
++
+ dummy6_0_prefix="fc00:1000::"
+ dummy6_1_prefix="fc00:1001::"
+ dummy6_mask="64"
+@@ -994,49 +1001,112 @@ setup_ovs_bridge() {
  }
  
-+struct rt6_pmtu_exception_arg {
-+	struct fib6_result	*res;
-+	const struct in6_addr	*daddr;
-+	const struct in6_addr	*saddr;
-+	u32			mtu;
-+};
+ setup_multipath_new() {
+-	# Set up host A with multipath routes to host B host4_b_addr
+-	run_cmd ${ns_a} ip addr add ${host4_a_addr} dev lo
+-	run_cmd ${ns_a} ip nexthop add id 401 via ${prefix4}.${a_r1}.2 dev veth_A-R1
+-	run_cmd ${ns_a} ip nexthop add id 402 via ${prefix4}.${a_r2}.2 dev veth_A-R2
+-	run_cmd ${ns_a} ip nexthop add id 403 group 401/402
+-	run_cmd ${ns_a} ip route add ${host4_b_addr} src ${host4_a_addr} nhid 403
++	family=${1}
+ 
+-	# Set up host B with multipath routes to host A host4_a_addr
+-	run_cmd ${ns_b} ip addr add ${host4_b_addr} dev lo
+-	run_cmd ${ns_b} ip nexthop add id 401 via ${prefix4}.${b_r1}.2 dev veth_B-R1
+-	run_cmd ${ns_b} ip nexthop add id 402 via ${prefix4}.${b_r2}.2 dev veth_B-R2
+-	run_cmd ${ns_b} ip nexthop add id 403 group 401/402
+-	run_cmd ${ns_b} ip route add ${host4_a_addr} src ${host4_b_addr} nhid 403
++	if [ ${family} -eq 4 ]; then
++		host_a_addr=${host4_a_addr}
++		host_b_addr=${host4_b_addr}
++		nh_a_r1=${prefix4}.${a_r1}.2
++		nh_a_r2=${prefix4}.${a_r2}.2
++		nh_b_r1=${prefix4}.${b_r1}.2
++		nh_b_r2=${prefix4}.${b_r2}.2
++	else
++		host_a_addr=${host6_a_addr}
++		host_b_addr=${host6_b_addr}
++		nh_a_r1=${prefix6}:${a_r1}::2
++		nh_a_r2=${prefix6}:${a_r2}::2
++		nh_b_r1=${prefix6}:${b_r1}::2
++		nh_b_r2=${prefix6}:${b_r2}::2
++	fi
 +
-+static int rt6_nh_insert_pmtu_exception(struct fib6_nh *nh, void *_arg)
-+{
-+	struct rt6_pmtu_exception_arg *arg = _arg;
-+	struct fib6_result *res = arg->res;
-+	struct rt6_info *nrt6;
++	# Set up host A with multipath routes to host B host_b_addr
++	run_cmd ${ns_a} ip addr add ${host_a_addr} dev lo
++	run_cmd ${ns_a} ip nexthop add id ${family}01 via ${nh_a_r1} dev veth_A-R1
++	run_cmd ${ns_a} ip nexthop add id ${family}02 via ${nh_a_r2} dev veth_A-R2
++	run_cmd ${ns_a} ip nexthop add id ${family}03 group ${family}01/${family}02
++	run_cmd ${ns_a} ip route add ${host_b_addr} src ${host_a_addr} nhid ${family}03
 +
-+	res->nh = nh;
-+	nrt6 = ip6_rt_cache_alloc(res, arg->daddr, arg->saddr);
-+	if (nrt6) {
-+		rt6_do_update_pmtu(nrt6, arg->mtu);
-+		if (rt6_insert_exception(nrt6, res))
-+			dst_release_immediate(&nrt6->dst);
-+	}
++	# Set up host B with multipath routes to host A host_a_addr
++	run_cmd ${ns_b} ip addr add ${host_b_addr} dev lo
++	run_cmd ${ns_b} ip nexthop add id ${family}01 via ${nh_b_r1} dev veth_B-R1
++	run_cmd ${ns_b} ip nexthop add id ${family}02 via ${nh_b_r2} dev veth_B-R2
++	run_cmd ${ns_b} ip nexthop add id ${family}03 group ${family}01/${family}02
++	run_cmd ${ns_b} ip route add ${host_a_addr} src ${host_b_addr} nhid ${family}03
+ }
+ 
+ setup_multipath_old() {
+-	# Set up host A with multipath routes to host B host4_b_addr
+-	run_cmd ${ns_a} ip addr add ${host4_a_addr} dev lo
+-	run_cmd ${ns_a} ip route add ${host4_b_addr} \
+-			src ${host4_a_addr} \
+-			nexthop via ${prefix4}.${a_r1}.2 weight 1 \
+-			nexthop via ${prefix4}.${a_r2}.2 weight 1
++	family=${1}
+ 
+-	# Set up host B with multipath routes to host A host4_a_addr
+-	run_cmd ${ns_b} ip addr add ${host4_b_addr} dev lo
+-	run_cmd ${ns_b} ip route add ${host4_a_addr} \
+-			src ${host4_b_addr} \
+-			nexthop via ${prefix4}.${b_r1}.2 weight 1 \
+-			nexthop via ${prefix4}.${b_r2}.2 weight 1
++	if [ ${family} -eq 4 ]; then
++		host_a_addr=${host4_a_addr}
++		host_b_addr=${host4_b_addr}
++		nh_a_r1=${prefix4}.${a_r1}.2
++		nh_a_r2=${prefix4}.${a_r2}.2
++		nh_b_r1=${prefix4}.${b_r1}.2
++		nh_b_r2=${prefix4}.${b_r2}.2
++	else
++		host_a_addr=${host6_a_addr}
++		host_b_addr=${host6_b_addr}
++		nh_a_r1=${prefix6}:${a_r1}::2
++		nh_a_r2=${prefix6}:${a_r2}::2
++		nh_b_r1=${prefix6}:${b_r1}::2
++		nh_b_r2=${prefix6}:${b_r2}::2
++	fi
 +
-+	return 0;
++	# Set up host A with multipath routes to host B host_b_addr
++	run_cmd ${ns_a} ip addr add ${host_a_addr} dev lo
++	run_cmd ${ns_a} ip route add ${host_b_addr} \
++			src ${host_a_addr} \
++			nexthop via ${nh_a_r1} weight 1 \
++			nexthop via ${nh_a_r2} weight 1
++
++	# Set up host B with multipath routes to host A host_a_addr
++	run_cmd ${ns_b} ip addr add ${host_b_addr} dev lo
++	run_cmd ${ns_b} ip route add ${host_a_addr} \
++			src ${host_b_addr} \
++			nexthop via ${nh_b_r1} weight 1 \
++			nexthop via ${nh_b_r2} weight 1
+ }
+ 
++
+ setup_multipath() {
++	family="$1"
++
++	if [ ${family} -eq 4 ]; then
++		host_a_addr=${host4_a_addr}
++		host_b_addr=${host4_b_addr}
++		nh_r1_a=${prefix4}.${a_r1}.1
++		nh_r1_b=${prefix4}.${b_r1}.1
++		nh_r2_a=${prefix4}.${a_r2}.1
++		nh_r2_b=${prefix4}.${b_r2}.1
++	else
++		host_a_addr=${host6_a_addr}
++		host_b_addr=${host6_b_addr}
++		nh_r1_a=${prefix6}:${a_r1}::1
++		nh_r1_b=${prefix6}:${b_r1}::1
++		nh_r2_a=${prefix6}:${a_r2}::1
++		nh_r2_b=${prefix6}:${b_r2}::1
++	fi
++
+ 	if [ "$USE_NH" = "yes" ]; then
+-		setup_multipath_new
++		setup_multipath_new ${family}
+ 	else
+-		setup_multipath_old
++		setup_multipath_old ${family}
+ 	fi
+ 
+ 	# Set up routers with routes to dummies
+-	run_cmd ${ns_r1} ip route add ${host4_a_addr} via ${prefix4}.${a_r1}.1
+-	run_cmd ${ns_r2} ip route add ${host4_a_addr} via ${prefix4}.${a_r2}.1
+-	run_cmd ${ns_r1} ip route add ${host4_b_addr} via ${prefix4}.${b_r1}.1
+-	run_cmd ${ns_r2} ip route add ${host4_b_addr} via ${prefix4}.${b_r2}.1
++	run_cmd ${ns_r1} ip route add ${host_a_addr} via ${nh_r1_a}
++	run_cmd ${ns_r2} ip route add ${host_a_addr} via ${nh_r2_a}
++	run_cmd ${ns_r1} ip route add ${host_b_addr} via ${nh_r1_b}
++	run_cmd ${ns_r2} ip route add ${host_b_addr} via ${nh_r2_b}
 +}
 +
- static void __ip6_rt_update_pmtu(struct dst_entry *dst, const struct sock *sk,
- 				 const struct ipv6hdr *iph, u32 mtu,
- 				 bool confirm_neigh)
-@@ -2925,42 +2949,52 @@ static void __ip6_rt_update_pmtu(struct dst_entry *dst, const struct sock *sk,
- 		if (rt6->rt6i_flags & RTF_CACHE)
- 			rt6_update_exception_stamp_rt(rt6);
- 	} else if (daddr) {
-+		struct fib6_info *f6i, *sibling;
- 		struct fib6_result res = {};
--		struct rt6_info *nrt6;
-+		struct rt6_pmtu_exception_arg arg = {
-+			.res = &res,
-+			.daddr = daddr,
-+			.saddr = saddr,
-+			.mtu = mtu,
-+		};
++setup_multipath4() {
++	setup_multipath 4
++}
++
++setup_multipath6() {
++	setup_multipath 6
+ }
  
- 		rcu_read_lock();
--		res.f6i = rcu_dereference(rt6->from);
--		if (!res.f6i)
-+		f6i = rcu_dereference(rt6->from);
-+		if (!f6i)
- 			goto out_unlock;
+ setup() {
+@@ -2377,8 +2447,18 @@ test_pmtu_ipv6_route_change() {
+ 	test_pmtu_ipvX_route_change 6
+ }
  
--		res.fib6_flags = res.f6i->fib6_flags;
--		res.fib6_type = res.f6i->fib6_type;
-+		res.f6i = f6i;
-+		res.fib6_flags = f6i->fib6_flags;
-+		res.fib6_type = f6i->fib6_type;
+-test_pmtu_ipv4_mp_exceptions() {
+-	setup namespaces routing multipath || return $ksft_skip
++test_pmtu_ipvX_mp_exceptions() {
++	family=${1}
++
++	if [ ${family} -eq 4 ]; then
++		ping=ping
++		dst="${host4_b_addr}"
++	else
++		ping=${ping6}
++		dst="${host6_b_addr}"
++	fi
++
++	setup namespaces routing multipath${family} || return $ksft_skip
  
--		if (res.f6i->nh) {
--			struct fib6_nh_match_arg arg = {
--				.dev = dst_dev_rcu(dst),
--				.gw = &rt6->rt6i_gateway,
--			};
+ 	trace "${ns_a}"  veth_A-R1    "${ns_r1}" veth_R1-A \
+ 	      "${ns_r1}" veth_R1-B    "${ns_b}"  veth_B-R1 \
+@@ -2395,18 +2475,24 @@ test_pmtu_ipv4_mp_exceptions() {
+ 	mtu "${ns_r2}" veth_R2-A 2000
+ 	mtu "${ns_r2}" veth_R2-B 1500
+ 	mtu "${ns_b}"  veth_B-R2 1500
 -
--			nexthop_for_each_fib6_nh(res.f6i->nh,
--						 fib6_nh_find_match, &arg);
-+		/* A Packet Too Big only ever arrives through the path the
-+		 * offending packet took, so cache the pmtu on every path of a
-+		 * multipath route: the other paths will not get their own
-+		 * ICMP error and would keep sending with the link MTU.
-+		 */
-+		if (f6i->nh) {
-+			nexthop_for_each_fib6_nh(f6i->nh,
-+						 rt6_nh_insert_pmtu_exception,
-+						 &arg);
-+			goto out_unlock;
-+		}
+ 	# Ping and expect two nexthop exceptions for two routes
+-	run_cmd ${ns_a} ping -q -M want -i 0.1 -c 1 -s 1800 "${host4_b_addr}"
++	run_cmd ${ns_a} ${ping} -q -M want -i 0.1 -c 1 -s 1800 "${dst}"
  
--			/* fib6_info uses a nexthop that does not have fib6_nh
--			 * using the dst->dev + gw. Should be impossible.
--			 */
--			if (!arg.match)
--				goto out_unlock;
-+		rt6_nh_insert_pmtu_exception(f6i->fib6_nh, &arg);
+ 	# Check that exceptions have been created with the correct PMTU
+-	pmtu_a_R1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R1)"
+-	pmtu_a_R2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R2)"
+-
++	pmtu_a_R1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst}" oif veth_A-R1)"
++	pmtu_a_R2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst}" oif veth_A-R2)"
+ 	check_pmtu_value "1500" "${pmtu_a_R1}" "exceeding MTU (veth_A-R1)" || return 1
+ 	check_pmtu_value "1500" "${pmtu_a_R2}" "exceeding MTU (veth_A-R2)" || return 1
+ }
  
--			res.nh = arg.match;
--		} else {
--			res.nh = res.f6i->fib6_nh;
--		}
-+		if (!READ_ONCE(f6i->fib6_nsiblings))
-+			goto out_unlock;
- 
--		nrt6 = ip6_rt_cache_alloc(&res, daddr, saddr);
--		if (nrt6) {
--			rt6_do_update_pmtu(nrt6, mtu);
--			if (rt6_insert_exception(nrt6, &res))
--				dst_release_immediate(&nrt6->dst);
-+		/* fib6_del_route() zeroes fib6_nsiblings before unlinking
-+		 * f6i, stop then as its list_head may no longer be reached.
-+		 */
-+		list_for_each_entry_rcu(sibling, &f6i->fib6_siblings,
-+					fib6_siblings) {
-+			res.f6i = sibling;
-+			res.fib6_flags = sibling->fib6_flags;
-+			res.fib6_type = sibling->fib6_type;
-+			rt6_nh_insert_pmtu_exception(sibling->fib6_nh, &arg);
-+			if (!READ_ONCE(f6i->fib6_nsiblings))
-+				break;
- 		}
- out_unlock:
- 		rcu_read_unlock();
++test_pmtu_ipv4_mp_exceptions() {
++	test_pmtu_ipvX_mp_exceptions 4
++}
++
++test_pmtu_ipv6_mp_exceptions() {
++	test_pmtu_ipvX_mp_exceptions 6
++}
++
+ usage() {
+ 	echo
+ 	echo "$0 [OPTIONS] [TEST]..."
 -- 
 2.56.0
 
