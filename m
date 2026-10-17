@@ -1,38 +1,38 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A48047AF6D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E87848F001;
 	Sat, 17 Oct 2026 12:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792239909; cv=none; b=MBXDunNa8rkxZshId0AkhfF/DSyka0xlxBl6dYTlSP0+0CILg6Gxc2Uu3Xup/p1j1HL4RoUZLysEXJKpKc0SbsmXRKdtpAsmdXZvqihfdaMQJo9/g6azjcMJhngzip4caYNm/HpDnoq/qCoiOBWeouwLKfHYyGTSvo4/p2nPhFE=
+	t=1792239910; cv=none; b=OWVOiOypLClD3eAUaxaxiWYNXf9KFziHNpXUMFhrKtGpLLdHcO2H+WZEa9RhFFyM4sRvCh1VkcGTQhykf6P9J8pwZoA5GZ4VauGJ6mYg4MXaqdqdtS/Wb84paFUw2qtmV9lYhWwJl9Xioh6kPMkQ7vcj5GE8fpIngBiZ61ZDPzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792239909; c=relaxed/simple;
-	bh=Sah8TA7WMOyREYW/vCnq+PIvacRJITZiej9EDRShADg=;
+	s=arc-20240116; t=1792239910; c=relaxed/simple;
+	bh=1J3qC5Oq7Srd0keW0OO2QWLWcl2+mCDDb0bY9RxZj6E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sJwjc5ML4WI3DZpymLNg+saZEwZNR0Ix+WT2rhrqBZQTNiybCCmZ2eReP10O99hvennFartBcoszAXn6lM6eVN2ySYUwltvyE0gpr83uCCijsv6iMPL7dDMdIVA7jYUlR0xUh7gRZROQuQdoXfX5KizjCEjJ052Pq1gtvLIGLAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DgHE98A6; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=m7Or6OjF0dBrILppMnuja6d5slxIzC3utV665PQ9kgYgwVR3BHWgNg+9b9BdUfWABG4h1DfJMB/dqehvtE7S8QBz0qHMZuctLR2LUfV8Ed0NJARpygnyFI+LimF/qo5ZEnQ6Qrtaz1U8pxyPFW+chXtE9dSNGxxxes5NoVgbWzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jK0niyEC; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DgHE98A6"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jK0niyEC"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=8EdaPKkA0pFZ3HCqdo/wr6WZmT+wZqXu3qoDrjH1eAg=; b=DgHE98A6qpP1JO08v+UzwdacPP
-	fUX3ARep3gwYrDXdEZSXj307ndHA3pJXgHmcqMxvLJJoQ9V16YZXY9LZdkc0LlxsSU+QMCp2xK6wo
-	vC3HrUmqp9iWoSli8tDIijKMIjhoebmMVACbupna+THSHorzTCJDBkuhnI49RbLAMwTGIG90I+1sd
-	x0dRb2CNtBa6+10SwB8aZhhZ6wVRwT/MHVRtYSASr9HCmDG1pwB+sVBOJ9YUteKaKrUE9+S5vU6BN
-	4UKCiYNJv3JfMu2cR4DkrlsPc7c2n0Y02Mof7sUx3p18gMMTTW/z4wF//KuWrTo5wmhdlE9iypbGh
-	plnWI74Q==;
+	bh=wLsGF6uGFGLAH+kB1tI7Qt6oZ6M1uGzRVnG4O8inLuI=; b=jK0niyECKcTg7/ahYrKEWrKzrV
+	BKcXesX9cP5VdixbEBIw1qN3qQI69Y+geUaGhAozc8zhehlar+JiFQ210WEx7P3hI7FEnoRmXITFH
+	kkyMHuTKJOpnEX5QziaEzdLijVRcIcZAPJZi0mxul2dFrG6MLtu29lNu7lwlSfAtHXxMxQnCAI/u5
+	hrsztXBIkoqgyHBirIH7gX32GGsRQbWDaG1CmZTbjEjJPA1edCYw9ZsNCtFAM1GgCVjrrVw7k3f14
+	IJMJPc/rmaFXbRAwIlFy20GTHP9hsAeAxdHgS6ahih6xkP5+M6cobYjRDL8eKJZdCQjzatjhOc2iN
+	7Dm3Udmg==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1xI3TD-0000000CVCT-0euI;
+	id 1xI3TD-0000000CVD2-3XXB;
 	Sat, 17 Oct 2026 12:25:03 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xI3TC-00000002YmK-3h7X;
-	Sat, 17 Oct 2026 13:25:02 +0100
+	id 1xI3TD-00000002YnB-1tvM;
+	Sat, 17 Oct 2026 13:25:03 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mushahid Hussain <hmushi@amazon.co.uk>,
 	David Woodhouse <dwmw@amazon.co.uk>,
 	nh-open-source@amazon.com
-Subject: [RFC PATCH 22/55] KVM: x86: load each plane twin while updating it after KVM_SET_CPUID
-Date: Sat, 17 Oct 2026 13:24:28 +0100
-Message-ID: <20261017122501.610248-23-dwmw2@infradead.org>
+Subject: [RFC PATCH 34/55] KVM: planes: Share XCR0 across plane twins
+Date: Sat, 17 Oct 2026 13:24:40 +0100
+Message-ID: <20261017122501.610248-35-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017122501.610248-1-dwmw2@infradead.org>
 References: <20261017122501.610248-1-dwmw2@infradead.org>
@@ -71,51 +71,73 @@ X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-kvm_vcpu_ioctl_set_cpuid() runs kvm_vcpu_after_set_cpuid() on every
-plane twin, but only the calling vCPU is loaded. The vendor callback
-writes VMCS/VMCB controls, and on VMX those writes go to whatever VMCS
-is loaded on the current pCPU: the caller's, not the twin's. The
-twin's controls shadow is updated anyway, so the stale values in its
-real VMCS can never be corrected later; a twin created before
-KVM_SET_CPUID2 keeps its empty-CPUID controls (RDSEED/RDRAND exiting
-among them), and the guest's higher VTL takes a spurious #UD on its
-first RDSEED.
+XCR0/XFEM is shared between VTLs: the TLFS banks no vector state and
+the reference host keeps a single XCR0 (its store_vtl/load_vtl carry
+no XSAVE state). The planes series shares the FPU payload between
+twins but keeps arch.xcr0 per-vCPU, so an XSETBV in one VTL was
+invisible in the other: VTL1 read a stale XFEM, and state enabled by
+VTL0 (AVX, for the Windows secure kernel) silently vanished across a
+VTL switch.
 
-Swap the twin in as the loaded vCPU around its update. Plane ioctls
-all share the common vCPU mutex, so the twin cannot be loaded
-elsewhere concurrently.
+Propagate the validated value to every plane twin in __kvm_set_xcr(),
+covering both guest XSETBV and the KVM_SET_XCRS ioctl path. The CPUID
+dynamic-bits dirty marker lives in the shared common state, so the
+existing single set covers the twins.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Assisted-by: LLM
 ---
- arch/x86/kvm/cpuid.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/x86/kvm/x86.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index fe8a793b1643..f744e7845843 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -592,7 +592,20 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
- #ifdef CONFIG_KVM_XEN
- 		v->arch.xen.cpuid = kvm_get_hypervisor_cpuid(vcpu, XEN_SIGNATURE);
- #endif
-+		/*
-+		 * The ioctl loaded the calling vCPU; updating a twin's
-+		 * VMCS/VMCB controls requires that twin to be the loaded
-+		 * one, so swap it in around the update.
-+		 */
-+		if (v != vcpu) {
-+			vcpu_put(vcpu);
-+			vcpu_load(v);
-+		}
- 		kvm_vcpu_after_set_cpuid(v);
-+		if (v != vcpu) {
-+			vcpu_put(v);
-+			vcpu_load(vcpu);
-+		}
- 	}
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 491a0360c403..0f8a149ba0eb 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1361,6 +1361,28 @@ int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr)
  
- success:
+ 	vcpu->arch.xcr0 = xcr0;
+ 
++	/*
++	 * XCR0/XFEM is shared across VTLs (TLFS 15.4; the reference host
++	 * banks no vector state): propagate the new value to every plane
++	 * twin so the other VTLs observe it.  This covers both guest
++	 * XSETBV and the KVM_SET_XCRS ioctl path.  The CPUID dirty marker
++	 * below lives in the shared common state, so one set covers the
++	 * twins too.
++	 *
++	 * Skip the fan-out until this vCPU is published in
++	 * common->vcpus[]: the architectural reset of a twin still being
++	 * created must not clobber a live sibling's XCR0 (the new twin
++	 * inherits the shared value instead, in kvm_arch_vcpu_create()).
++	 */
++	if (vcpu->common &&
++	    vcpu->common->vcpus[vcpu->plane_level] == vcpu) {
++		struct kvm_vcpu *twin;
++		int i;
++
++		vcpu_for_each_plane(vcpu->common, i, twin)
++			twin->arch.xcr0 = xcr0;
++	}
++
+ 	if ((xcr0 ^ old_xcr0) & XFEATURE_MASK_EXTEND)
+ 		cpuid_set_dirty(vcpu);
+ 	return 0;
+@@ -13549,6 +13571,14 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+ 	kvm_vcpu_after_set_cpuid(vcpu);
+ 	kvm_set_tsc_khz(vcpu, vcpu->kvm->arch.default_tsc_khz);
+ 	kvm_vcpu_reset(vcpu, false);
++	/*
++	 * XCR0 is shared across planes.  A twin created after its plane-0
++	 * sibling has run (Hyper-V VSM enables VTL1 at runtime) inherits
++	 * the current shared value; the architectural reset value only
++	 * stands when no sibling exists yet.
++	 */
++	if (vcpu->plane_level && vcpu->common->vcpus[0])
++		vcpu->arch.xcr0 = vcpu->common->vcpus[0]->arch.xcr0;
+ 	kvm_init_mmu(vcpu);
+ 	vcpu_put(vcpu);
+ 	return 0;
 -- 
 2.50.1
 
