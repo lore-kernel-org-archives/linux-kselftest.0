@@ -1,64 +1,64 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3944394797
-	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 11:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A346046F484
+	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 11:03:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792235000; cv=none; b=VoLqR35r0xFVs84ek7GA3EpHLHHWXjLSF2FXv2XRMc0b1TC+wSo0x+aKP+l2KayvhF+UX50g2M55OdgCG6NI3SV2mRGB+kYzby3KpZiW/gZOgzk2CP+rkhWZXamJ29H6KRWVYCEGfryFUSFNxXraJMB0oVsO2Up73BZHTcyGxxw=
+	t=1792235014; cv=none; b=qnNtEf0xGsSA6lBFtGXkYGElVHKGZ0Q1jVTvTtoToHcfZMaw6Oeejq6pmxOWZ/keyYYkXKtfzC/JyHQE1uXj2FUDt3XP2CC3BmV7cfIwPTMEiVJ/PvTkWbbn5rEuzVCiArHdhCxRtVpVGelQTxObvoutewWFGJ12LZW3Zb9iiRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792235000; c=relaxed/simple;
-	bh=luspfJ1xZI4NzBO23wK7yIzNkEv+cTp75VYBXkmFvWU=;
+	s=arc-20240116; t=1792235014; c=relaxed/simple;
+	bh=7GJpk+Zm7RfMxIWiA/UAYftsuVNurXh/QNUDx1LsL7I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Oob7noasCwabaJWZMP5MAwh+qX1YW3qPWCf/bYlF2Z0IVq+j+d8LF4gD8VhrJVam6VLiBiHYdaLQRiiCuZBQAhITqOATHZOvPmT/fi0CaaNPpJWqNKtarKnc0WpqC7cr9VR8Sxlou06jY74jDOd3m5VuQkVFp3Gz059EOg4CSuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HFGRgl8x; arc=none smtp.client-ip=209.85.214.178
+	 MIME-Version; b=P7geg1tnSwUci/lA/7MPDByo8s049DFPUPx1j14GXBql+q8lE8RcrS8I50Gec6g6UnnwV585/Kt55QCvNqQXybwUV5xgcoJVl5LiXq7macaUVFdeoUr3XzDH96Uv3EqDl9ZVyDJIiDhnfMbUyxh+tWG2Jru6W6WFLEfqaVwIDyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=USj/93rV; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HFGRgl8x"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e60f9af6e6so4545515ad.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 04:03:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="USj/93rV"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e5378b281aso2896935ad.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 04:03:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792234999; x=1792839799; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792235012; x=1792839812; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Ny7KTMx+qld96qza0vCY0Dx/Bp+/LmW5iI7Izuhy18k=;
-        b=HFGRgl8x2pvUeS+IOBQT6G87n9ULbCa/xyH7KUFuDGhfLgAYYUgighZzDY+sPrdEgk
-         0/YHQWnuBexsNgLfQpgdAy2bXHYxJsZUzrHtI60HGefIGx2383Bq0LGjHit+ZwiC7uK2
-         +IJbdFWyeFgP555ht1n5Ms9Bg6598Bmm6IMcST8xE367OU9zxmT/ySS/U4Bc4Kz+Hl2e
-         KKoeSV/WpO61zXBQhYHrf+2xsQJzo6LbwUIiIBHL1/zPaasiMU4iZnIdpZ/IXSBWCZNE
-         nf3Os+FbQSfcNfsE5T9prXGJq0D01/6o3ZNCkB+21BPhxYiagaenZBfAwA51cYpbmax7
-         C31A==
+        bh=Tf4fy3DAykjNBLlmTR7a2o12P+Rb24NlY7yvH7wOMkE=;
+        b=USj/93rVMZ7kMj/UgK8nl+8jzPWsmEaGOUYt0f2cZoNZ1EM2s0ybq5ydIlaZfOhRCK
+         VecqvOHi7U0mAJ7m3LTuMngG4Lm/Q3H79Ubkf5SulOLs/tM54dWwHOjVOMZ9DtuBaJ2I
+         WyThx+84LCg/d2c2hL8iS1XSw3c71q0TwYtE425zxQjlvNuK33YXqWFPyeCFdfBC0FXu
+         MKP4NLnL90laYp7AbosLBtDuSdsRyJeRI1PtJOs3nVqKbUHhIlwAgVtvZR5qnf76w3b8
+         sgQjwqrQdQ5elToLA7JJGLz1bwopr5gQNZ7QOaDGZLy4GAyERzrA2J75n1RRUnUizID6
+         wC2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792234999; x=1792839799;
+        d=1e100.net; s=20260707; t=1792235012; x=1792839812;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Ny7KTMx+qld96qza0vCY0Dx/Bp+/LmW5iI7Izuhy18k=;
-        b=oluVwCyOLt17yzzIs5TzgBCZQ0pRLpwB8KJpOJTDhdKae5zTO4isaKGMk2nkLatmCV
-         lAaETWpc3RUFO0yTonOWz9CTPQJqRoTMo0mOOjfq3jkqppz1UCg5bJnW3FGeEtZ7Wbuz
-         rNnDsZMgXVoJB+n+lWJFZ/bjZY9bsyWMytl3MQtdSayQ2wHD5sNmczJzqYoCv5pds49I
-         VQz3sKpc9tRXitms9JLBo/JxOg1/KXKv+Sv6DnezZXhBfiuwNsny9WCEHHbK014fjphD
-         a8ASRyb1PqM6BgKTFqbKYvvUARglRbzCtMKR9NVnFT3fns9IL+pYnE1tcTrkgvG3xZZY
-         zENQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxoX6x3mBTWNX9Bvvuz1hXEGthX22zxQjqtHN05fkvMWcsM4veUDfE033JM9Y5h70XmiqB74wihCP1ZMsB2g50=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKTwTURk9DIJEiuDgucV+P78QNjktTNWNe1jDdjlYoBbjzoPKHn
-	FniwnAeCUazp6pk0IeNGAw92fqhnhaoerXLVBeXd/YbpJNtdrKDvK9tp
-X-Gm-Gg: AYBFou0qI0wolg28z//7PCH5SKbJQgX3p+Uw+NeYITVlLm/BoC9KlRWGnzHqBuv0cGn
-	k7pORbyGWkJv3XrQgWCh5AnBdCKC7e+XVjx+DpIatK8FUeSsTJ+DzJaIhB/qWdV4SpHEgrHL2ze
-	MZdoUgeH0z796+FRFiXQMO+IvQBv0gEjP9HtOvkUoYMmUU1+HSu91tL9fvfaTe6fReD7oec3CYP
-	jkJoyKj6DTB3CxgJM/+7Ij95r03dATuO4Bv3+4/Eg5L9QzOlTJTu8HxmtuU+kDYgacG/oRKrpNn
-	DeVdvPq68h6ZbVQbS0XS7b45Cjq5G5OoVjQCB6uwnQrqRI2hnioE78oOkzRKVdDW9oKlHXhdF4f
-	n92n9gT1HTcRl+8hSNfpJiE+NlEEMSTE03xw/mOejT0t39d2mMfyko8NEtIsIJlMVCDLzYdv7X5
-	CaaQ7NviiwbzCSUXfhlaUxBLNADAq1mtk0ick2fBdeNyiMOgGaFwgLTQZ6DA6zgMQzbdBNl59i/
-	XnorD0SLM0brCaihLKXPw==
-X-Received: by 2002:a17:902:d512:b0:2e9:3c24:999 with SMTP id d9443c01a7336-2e9a6c0de51mr23081545ad.40.1792234999087;
-        Sat, 17 Oct 2026 04:03:19 -0700 (PDT)
+        bh=Tf4fy3DAykjNBLlmTR7a2o12P+Rb24NlY7yvH7wOMkE=;
+        b=yRiNgaIpQ3ps+05re3WeRhKXJCWnGiOEYdEnMBlEulVeY0EdSWJB4IHG1M696Jvo3g
+         eEUDDA/WdTQCYS7TFKze0yaYx+w6j3QANnRgDNsBgoh6BoicU947WHOFqb66y6qXUFWc
+         k1yvKg7owK6vy1o+MenDcNIPxwu072KWXHoWz2rmKFKtIGnHWA3VDgqQI6fwQCIktp+M
+         UsJy92eWGQJbV1bAyaX8xF3p/Exd5Iiwoi0rGGa/aviltLztq1Exn6beFUBySZ1iTC4q
+         l7RyTtD6NnGR2+z3tdZ4TqVCrRYVdcRuAut+Jb3Ndb0xfL85lPvALo0A7OlDz5PTTPX8
+         azqA==
+X-Forwarded-Encrypted: i=1; AKwUvBw23nHPZuZ2ldfBXl4bdA88Xea347oQJiEs2WBfCM7IlriF0lTbH8fdSkeLml8G1n9na5Wvd0o4LMLZ5eRm5SA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK6T1JNZxSeE4rYF5t2eNNhzpyxky/H1/4NE2xtMzJVrTAfkOE2
+	xiHkUXL81x4xX/MmhjD/nL4di1mWBjTf5KjXqq267P2frNEvm+uILxMb
+X-Gm-Gg: AYBFou23FDyg+nqVeuXa/c5UWxnyXWxjZT0+UWB9hq/df9iJGutDdH4OO3xXPBVP7kE
+	FguLKMrIjEFFhQwtgolDZ2F49tbrqjLRA6cVqw5Ikl6DCzHQ7u+CS7I8kD1MqwEYWDnWb6jjRRU
+	b1yzvTi3t3VwQd0+Poex48tB2n5sguVTCqbz8M/QPhdQKN8RTAz3C1AOR9IcGtdzR2uYXVZBp0T
+	Kls3/7rhXT7PPVCabWddV4rF//CenkKzq7Hfa/XiJtWn7XeqXDuGTADvMqk8huA2pFWgHggfKwf
+	QABw3xk/AeWFQz8yQ6Q1cz9tZ9v9bZlf0sYPi/yNF7tgHZ1T9DISdF24hKS3NfNwlQN5vBSl0kL
+	/I0vsFQI7i98Boo5dh7GXcfcrL7rtCvwH4ACoNdXTxp9dhyOzJi6GeAUWzg4qR4VIUiz2FjTT07
+	wXdDj7UT2jEFlR2GcYyJrmsKFDYHsQk1490WjkIsWVNVDlTohxyOCQg3hzk+ORdUFm/8h1Rlsjy
+	kY390pyxsJOxkLZhRMK+Q==
+X-Received: by 2002:a17:902:e84c:b0:2e9:6b5b:3db6 with SMTP id d9443c01a7336-2e9a69e93d4mr22504755ad.30.1792235011936;
+        Sat, 17 Oct 2026 04:03:31 -0700 (PDT)
 Received: from x1c ([2405:9800:b670:b64b:7c65:ff3e:80ba:b06])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e804dd9sm20559955ad.16.2026.10.17.04.03.09
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e804dd9sm20559955ad.16.2026.10.17.04.03.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 04:03:18 -0700 (PDT)
+        Sat, 17 Oct 2026 04:03:31 -0700 (PDT)
 From: Tharit Tangkijwanichakul <tharitt97@gmail.com>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Sean Christopherson <seanjc@google.com>
@@ -88,9 +88,9 @@ Cc: Shuah Khan <shuah@kernel.org>,
 	me@brighamcampbell.com,
 	jkoolstra@xs4all.nl,
 	Tharit Tangkijwanichakul <tharitt97@gmail.com>
-Subject: [PATCH 4/5] KVM: selftests: Reserve memslot 1 for the ucall MMIO address
-Date: Sat, 17 Oct 2026 18:02:12 +0700
-Message-ID: <20261017110213.46199-5-tharitt97@gmail.com>
+Subject: [PATCH 5/5] KVM: selftests: Test protection of the ucall MMIO region
+Date: Sat, 17 Oct 2026 18:02:13 +0700
+Message-ID: <20261017110213.46199-6-tharitt97@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261017110213.46199-1-tharitt97@gmail.com>
 References: <20261017110213.46199-1-tharitt97@gmail.com>
@@ -102,78 +102,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Back the ucall MMIO address with a read-only region in slot 1
-when KVM_CAP_READONLY_MEM is available. Writes still exit as
-MMIO, while overlapping memslot creation is rejected.
-
-Start test memslots at slot 2, leaving slot 1 reserved by
-convention even when read-only memory is unsupported.
+Verify that creating a memslot overlapping the ucall MMIO region
+fails with EEXIST and that ucalls work before and after the
+attempt. Skip when MMIO ucalls or read-only memory are unsupported.
 
 Signed-off-by: Tharit Tangkijwanichakul <tharitt97@gmail.com>
 ---
- .../testing/selftests/kvm/include/kvm_util.h  |  2 +-
- tools/testing/selftests/kvm/lib/kvm_util.c    | 19 +++++++++++++------
- 2 files changed, 14 insertions(+), 7 deletions(-)
+ tools/testing/selftests/kvm/Makefile.kvm      |  1 +
+ .../selftests/kvm/reserved_slot_test.c        | 61 +++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/reserved_slot_test.c
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 759d604d44ce..4dbb2ef332fc 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -30,7 +30,7 @@
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 1f4bc2a1322d..ff4a5e9733e9 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -68,6 +68,7 @@ TEST_GEN_PROGS_COMMON += set_memory_region_test
+ TEST_GEN_PROGS_COMMON += memslot_modification_stress_test
+ TEST_GEN_PROGS_COMMON += memslot_perf_test
+ TEST_GEN_PROGS_COMMON += vm_types_test
++TEST_GEN_PROGS_COMMON += reserved_slot_test
  
- #define KVM_DEV_PATH "/dev/kvm"
- #define KVM_MAX_VCPUS 512
--#define TEST_MEM_SLOT_BASE 1
-+#define TEST_MEM_SLOT_BASE 2
- 
- #define NSEC_PER_SEC 1000000000L
- 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 9ddc047d5c27..73e28814a226 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -20,6 +20,7 @@
- #include <linux/kernel.h>
- 
- #define KVM_UTIL_MIN_PFN	2
-+#define KVM_UCALL_MEMSLOT	1
- 
- u32 kvm_random_seed;
- struct kvm_random_state kvm_rng;
-@@ -492,6 +493,7 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
- 	struct userspace_mem_region *slot0;
- 	struct kvm_vm *vm;
- 	int i, flags;
-+	gpa_t mmio_gpa;
- 
- 	kvm_set_files_rlimit(nr_runnable_vcpus);
- 
-@@ -514,14 +516,19 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
- 
- 	kvm_vm_elf_load(vm, program_invocation_name);
- 
--	/*
--	 * TODO: Add proper defines to protect the library's memslots, and then
--	 * carve out memslot1 for the ucall MMIO address.  KVM treats writes to
--	 * read-only memslots as MMIO, and creating a read-only memslot for the
--	 * MMIO region would prevent silently clobbering the MMIO region.
-+	/* KVM treats writes to read-only memslots as MMIO, and creating
-+	 * a read-only memslot for the MMIO region would prevent silently
-+	 * clobbering the MMIO region.
- 	 */
- 	slot0 = memslot2region(vm, 0);
--	ucall_init(vm, slot0->region.guest_phys_addr + slot0->region.memory_size);
-+	mmio_gpa = slot0->region.guest_phys_addr + slot0->region.memory_size;
-+	ucall_init(vm, mmio_gpa);
+ # Compiled test targets
+ TEST_GEN_PROGS_x86 = $(TEST_GEN_PROGS_COMMON)
+diff --git a/tools/testing/selftests/kvm/reserved_slot_test.c b/tools/testing/selftests/kvm/reserved_slot_test.c
+new file mode 100644
+index 000000000000..4a908017ca73
+--- /dev/null
++++ b/tools/testing/selftests/kvm/reserved_slot_test.c
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "kvm_util.h"
++#include "processor.h"
++#include "test_util.h"
 +
-+	if (vm_check_cap(vm, KVM_CAP_READONLY_MEM))
-+		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+					    mmio_gpa, KVM_UCALL_MEMSLOT,
-+					    vm_adjust_num_guest_pages(vm->mode, 1),
-+					    KVM_MEM_READONLY);
- 
- 	if (kvm_random_seed != last_kvm_seed)
- 		kvm_seed_rng(kvm_random_seed);
++#define CLOBBERED_SLOT		TEST_MEM_SLOT_BASE
++
++static void guest_code(void)
++{
++	GUEST_SYNC(1);
++	GUEST_SYNC(2);
++}
++
++static void test_slot1_protected(void)
++{
++	struct kvm_vcpu *vcpu;
++	struct kvm_run *run;
++	struct kvm_vm *vm;
++	struct ucall uc;
++	u32 nr_pages;
++	size_t slot_size;
++	void *slot_mem;
++	int ret;
++
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	nr_pages = vm_adjust_num_guest_pages(vm->mode, 1);
++	slot_size = (size_t)nr_pages * vm->page_size;
++
++	run = vcpu->run;
++	vcpu_run(vcpu);
++	TEST_ASSERT(run->exit_reason == KVM_EXIT_MMIO,
++		    "Unexpected exit reason = %u", run->exit_reason);
++	TEST_ASSERT(get_ucall(vcpu, &uc) == UCALL_SYNC && uc.args[1] == 1,
++		    "Expected the first sync before clobbering the ucall GPA");
++
++	slot_mem = kvm_mmap(slot_size, PROT_READ | PROT_WRITE,
++			    MAP_PRIVATE | MAP_ANONYMOUS, -1);
++	ret = __vm_set_user_memory_region2(vm, CLOBBERED_SLOT, 0,
++					   vm->ucall_mmio_addr, slot_size, slot_mem, 0, 0);
++	TEST_ASSERT(ret == -1 && errno == EEXIST,
++		    "Expected the ucall GPA overlap to be rejected: ret=%d errno=%d",
++		    ret, errno);
++
++	vcpu_run(vcpu);
++	TEST_ASSERT(run->exit_reason == KVM_EXIT_MMIO,
++		    "Unexpected exit reason = %u", run->exit_reason);
++	TEST_ASSERT(get_ucall(vcpu, &uc) == UCALL_SYNC && uc.args[1] == 2,
++		    "Expected the second sync after attempting to clobber the ucall GPA");
++
++	kvm_vm_free(vm);
++	TEST_ASSERT(!munmap(slot_mem, slot_size), "munmap() failed, errno=%d", errno);
++}
++
++int main(void)
++{
++	TEST_REQUIRE(UCALL_EXIT_REASON == KVM_EXIT_MMIO);
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_READONLY_MEM));
++
++	test_slot1_protected();
++	return 0;
++}
 -- 
 2.53.0
 
