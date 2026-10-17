@@ -1,37 +1,38 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC7049158D;
-	Sat, 17 Oct 2026 12:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB72B49BB68;
+	Sat, 17 Oct 2026 12:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792239920; cv=none; b=fdbQADDeMlKoFoG01VlwgZTUhnFeA8h79IilcSctxZrq8yI8b/k73RPvN77wq1bdVEzqvAFfn7gwTpOBVdOCRVphm1b8t1ZyZsa2ikSMBbSJNLlxnVu4HGpswnlYPvHJfUvALOB48RbIB8ZpcaZudfkMIYk2Cxgs8mhFBzAFaGI=
+	t=1792239921; cv=none; b=XsXZVO+Vx3gXVGlNPM+NsrW8H9GOOsxAN/0hZg50zVWOv/TAAhHQAEU/7Uw9j+P0kcgtmKLFr/piN4X6ZhnrCfWYZ1ALHgRJOhEOTAoLUpJ4truKtCb9aloeCXuB6hTFTdMN+yDoZdUg3D2xYYqYBMvRayh4CLaLX7G4WbOgD9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792239920; c=relaxed/simple;
-	bh=VmonMQNQEvT+KIRX0/Xw55/yWpG4wzyoRpO6of1g4IU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AKjKMpWj1XBo7ChshLd7M4MCeFRcGksRTJ3u9DkgpPrbxB0xoISlwy3IXvD8Ld3MvgZ736fkDLfIvKLLQsV4xqSyCtMVwZYGR/KA4LvdZXMabVzLqvOwVHKS0F69uRiOuFLXJ1cv1iEhjNdwoF1VIj8ZsE+YztbPsfDkNIrN9+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WCgXz196; arc=none smtp.client-ip=90.155.92.199
+	s=arc-20240116; t=1792239921; c=relaxed/simple;
+	bh=yvLoWk+JCdSpssyWz2vZZpG37/b5JCXoWs5ZKCrYDW0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BMVJmyPH2PG4tZVnhQb5YBSQXIhwOtl4xU8MeKeJxb8Le0cxZffIPScpJBPKjaNRtK27Cf1GOumRHHikT0I3Rl6wWwFdJ86wmsL83o2Sp9QarQ+GU99SaFN7e03DW/eI6zoeR9y8d/iIFgfuo3W7K9nO+933Ou7OIsUSOF5+4qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZUpX/ICx; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WCgXz196"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZUpX/ICx"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=4/j4hLYo4ZKdASbTs1SD/1QRFdf80rHDt9FHcVo24Jo=; b=WCgXz196SH7LweylMCamKShkHV
-	areI3OOvaTLnwOX4nWtJX6zKuCzex6JGzdrvuJ/zZsJIL+UZuO6x0mjflEu1UCUPVhGm+lvbvuNFM
-	410CmL2rXYJ7hn8ioKn06tIavnBdxOv8w9EsLlqXiDpdkP6ieWWPHqRV7XBaxUNdAqhHrbXDyk7jH
-	WIBvV5i11xKA2diUt7qpp3tnVIW9iJdTYqI1obq6kZWSkTl+z0u0iunQKq+H2TTm8iEOU3ePjvzJ9
-	JLTcpfSytV/8ygaGNfxcltTPFQTRs3g0LKxIDgyrhB1Qp0RrIKYhRzyvaDuQQhVDvmCdZXmVpDMkm
-	bTVe7zQA==;
+	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
+	To:From:Reply-To:Content-ID:Content-Description;
+	bh=85xhLKU/vn8G2sySUZ9gvUaw1K46WSLN0RTc8IO28iA=; b=ZUpX/ICxW5BLOUYpJ4WCT/KvNM
+	Htz8zQ23C1J6ZowV47CW/iB/oM4lkY6AgZ3IRXvgrYOowUBtu7jx40z+GlcTilsq8yeKr1FIRw2v7
+	clgTtdsRd/g9mpOJ4nmf6VZwFUSI8oETfJETvXqHgp6kb8DFcFwESe/+896gGyaUbfYIpImLFlSVg
+	e/j6e0nCxbL/uwGJYgOzRpxsv0oAZSYdSNX+ltqoOarAVucnC0e1q+rytquVk+LPgR2R6aFoFOQ9e
+	KkMsT8T1raNUTd+AesPdNfUuxrAWpFKERNy8xsBeLGGGaYoE1Os+ysBhODeHwk4N4sJJCej7UhBDu
+	G1WO8okw==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by desiato.infradead.org with esmtpsa (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xI3TE-00000002LfB-1abf;
-	Sat, 17 Oct 2026 12:25:14 +0000
+	id 1xI3TF-00000002LfW-1xoE;
+	Sat, 17 Oct 2026 12:25:06 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xI3TB-00000002Yko-3Hf6;
-	Sat, 17 Oct 2026 13:25:01 +0100
+	id 1xI3TD-00000002YnV-32hp;
+	Sat, 17 Oct 2026 13:25:03 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -52,10 +53,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Mushahid Hussain <hmushi@amazon.co.uk>,
 	David Woodhouse <dwmw@amazon.co.uk>,
 	nh-open-source@amazon.com
-Subject: [RFC PATCH 00/55] KVM: x86: Hyper-V VSM (Virtual Trust Levels) on VM planes
-Date: Sat, 17 Oct 2026 13:24:06 +0100
-Message-ID: <20261017122501.610248-1-dwmw2@infradead.org>
+Subject: [RFC PATCH 39/55] KVM: x86: hyperv: Harden the per-plane reference TSC page updates
+Date: Sat, 17 Oct 2026 13:24:45 +0100
+Message-ID: <20261017122501.610248-40-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261017122501.610248-1-dwmw2@infradead.org>
+References: <20261017122501.610248-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,234 +70,511 @@ Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+From: Mushahid Hussain <hmushi@amazon.co.uk>
 
-Windows uses Virtualization Based Security for Credential Guard and
-friends, and enables it by default in current releases. A guest with
-VBS enabled runs its secure kernel in VTL1, a higher privilege level
-which the hypervisor has to keep isolated from the normal kernel in
-VTL0. KVM has no concept of that today, so Windows guests either lose
-VBS or emulate it with nested virtualization, which is slower and
-loses features.
+The per-plane reference TSC pages were updated through
+kvm_write_guest_unprotected(), which bypasses the memory attribute
+checks entirely: a plane writing HV_X64_MSR_REFERENCE_TSC had KVM
+write the first 24 bytes of an arbitrary gfn of its choosing even
+where that plane's own attributes forbid it, which is precisely the
+protection a higher VTL counts on.  The sequence stream was also
+seeded from the lowest enabled plane's page — guest-writable memory,
+normally VTL0's — so VTL0 could stage S-1 on its own page (S being the
+sequence live on VTL1's page), force a rewrite with an MSR write and
+have a VTL1 reader which sampled S accept a torn body: guest-steered
+time in a higher trust level.  And a failed update marked the whole
+partition HV_TSC_PAGE_BROKEN, leaving every page at sequence zero for
+the rest of the guest's life although the previous parameters still
+described a valid clock.
 
-There have been completely in-kernel implementations of VBS, which
-did unnatural things all within a single kvm_vcpu (four APICs, etc.)
+Access each plane's page as the plane that owns it, with
+kvm_plane_write_guest() and kvm_plane_read_guest() checking the given
+plane's attributes (not exported to vendor modules: their only
+callers live in kvm.ko, and the helpers bypass the usual "as the
+vCPU's own plane" accessors).  Author the sequence host-side
+(hv_tsc_sequence: monotonic, never read back from a page), invalidate
+a page with a discrete zero-sequence write before touching its body,
+invalidate synchronously on guest enables, make a guest MSR write
+under TSC emulation take the recompute path, and invalidate any
+enabled page whose content does not match the adopted parameters.
 
-This is an attempt to build it more cleanly, more in userspace, based
-on KVM planes (https://lwn.net/Articles/1087590/).
+A refused access or a failed parameter computation now degrades only
+the affected plane: its page is tracked in a per-plane
+hv_tsc_page_broken bitmap and skipped until the plane writes its MSR
+again or the next clock update retries, while the other planes' pages
+are still maintained.  The pages are left invalid rather than
+republishing the previous parameters: that fallback (TIME_REF_COUNT
+answering from kvmclock) is always correct, and the previous
+scale/offset would advertise a clock that had just stopped being
+TSC-based.  Nothing marks the partition broken any more.
 
-The behavioural reference was the in-kernel VSM implementation in the
-Nitro Hypervisor, complete with its latest compatibility fixes since
-it was last posted — largely turned into a bunch of kvm unit
-tests. The result boots Windows Server 2016 through 2025 with
-Credential Guard active, on both Intel and AMD hosts, with VTL1
-protecting its memory from VTL0. With hibernate/resume tested, since
-that part has always been extra fun.
+Assisted-by: LLM
+[dwmw2: folded in the plane-aware accessor conversion, the host-side
+ sequence authorship and invalidation protocol, the per-plane broken
+ tracking replacing the partition-wide HV_TSC_PAGE_BROKEN restore
+ logic, and the removal of the helper exports; the original keep-the-
+ previous-values restore was dropped because parameters read back from
+ the plane-0 page (tsc_ref_from_guest) written to a higher plane's
+ page with hypervisor authority would let VTL0 forge its clock.]
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+ arch/x86/include/asm/kvm_host.h |  14 ++-
+ arch/x86/kvm/hyperv.c           | 216 ++++++++++++++++++++++++--------
+ include/linux/kvm_host.h        |   6 +-
+ virt/kvm/kvm_main.c             |  48 +++++--
+ 4 files changed, 218 insertions(+), 66 deletions(-)
 
-For now I've structured the userspace part as a separable library
-which can be pulled into QEMU or other VMMs. Partly because QEMU
-doesn't want it when AI did the typing (but *might* tolerate it as an
-external library), and partly because I think it might make sense to
-have a more permissively licensed standard implementation for how
-KVM-based VMMs implement VSM, and have some input from the Microsoft
-side and some improved expectation that it'll *keep* working with
-Windows and not keep breaking for every new release. But that's a
-future conversation. For now I'm just preempting the question, "why
-does it look like that?".
-
- • https://git.infradead.org/?p=users/dwmw2/linux.git;a=shortlog;h=refs/heads/vsm
- • https://git.infradead.org/?p=users/dwmw2/qemu.git;a=shortlog;h=refs/heads/vsm
- • https://git.infradead.org/?p=users/dwmw2/kvm-unit-tests.git;a=shortlog;h=refs/heads/vsm
-
-Pulled into my base tree on v7.1-rc7 (not reposted here):
-
- • KVM planes itself (Jörg's latest from June)
-   https://lore.kernel.org/kvm/20260608144252.351443-1-joro@8bytes.org/
-   https://github.com/joergroedel/linux/tree/kvm-planes-v7.1
- • Paolo's memory protection attributes v3
-   https://lore.kernel.org/kvm/20260918135030.171564-1-pbonzini@redhat.com/
- • Melody Wang's SEV-SNP #HV doorbell / Restricted Injection series
-   https://lore.kernel.org/all/cover.1777048608.git.huibo.wang@amd.com/
- • A few fixes to the above ride just above them in the git tree,
-   each citing the report it addresses; not part of this posting
-
-Generic fixes and features in KVM before we get to VSM itself:
-
- • Userspace opt-in (KVM_CAP_PLANES) and plane run-state ioctls;
-   MP state, guest-debug, KVM_TRANSLATE, SETUP_MCE and a filtered
-   KVM_ENABLE_CAP on plane vCPU fds; unwind of a failed
-   KVM_CREATE_PLANE
- • Plane mechanics: per-plane request fan-out, kicking the twin
-   that is actually running, XCR0 and TSC matching shared across
-   twins, runtime CPUID per plane, APICv inhibited while planes
-   are enabled (for now).
- • Per-plane memory attributes and overlays, and instruction state
-   on the memory-fault exit, for the VMM to build intercept
-   messages from
- • Fixes found along the way: KVM_TRANSLATE reporting a real
-   write-access walk, SVM keeping TPR[3:0] across exits without a
-   guest CR8 write
-
-Finally we get to the actual Hyper-V VSM bits:
-
- • Hypercall forwarding to userspace (KVM_CAP_HYPERV_FORWARD_HCALL),
-   with completion or injected #UD, for the VSM hypercalls KVM
-   doesn't handle itself
- • HvCallVtlCall/HvCallVtlReturn switching between planes in the
-   kernel; forced VTL entry gated on interrupt deliverability and
-   re-armed when a plane suspends with IRR set
- • Per-plane Hyper-V state: GUEST_OS_ID/HYPERCALL MSRs, the
-   reference TSC page, SynIC and event routing, TLB flushes
- • VTL register intercepts, including the descriptor-table load
-   traps Credential Guard requires
- • The suspended-VP state (from Nikolas Wipper's series), refusal of
-   SendIpi to a higher VTL, XMM fast hypercall output
- • Selftests for both halves; a hyperv_vsm suite for kvm-unit-tests
-   covering VTL call/return, protections, intercepts and eventing
-   follows separately
-
-The four WIP-marked patches need finishing and splitting; they are
-included because the series does not function without them. This is
-very much an RFC.
-
-Held back in the git tree for a follow-up posting:
-
- • KVM_TRANSLATE2 and the page-walker flags/status work (also
-   Nikolas's), and the HvCallTranslateVirtualAddress handling built
-   on it
- • TLB flush inhibit (TlbLocked)
-
-Not done at all yet: VINA, and migration of mid-VTL-switch state
-(the forced-entry and captured-register state has no GET/SET
-exposure). The interaction with SEV-SNP VMPLs, the other consumer of
-planes, is untested from this side.
-
-Mushahid also has a version which boots Windows 11 on arm64, which
-we'll reconcile when some of the dust settles.
-
-I think this will take a while to reconcile and merge, even after
-the base dependencies (planes, memattrs, etc.) are in. I'd like to
-start settling the basic functionality so we can start preparing
-to merge it in little pieces, if we can reach a general consensus.
-
-
-David Woodhouse (44):
-  KVM: x86/mmu: Move ACC_* masks from spte.h to mmu.h
-  KVM: x86: Let userspace opt in to multiple planes with KVM_CAP_PLANES
-  KVM: selftests: Add x86 planes lifecycle test
-  KVM: x86: hyper-v: Add KVM_CAP_HYPERV_FORWARD_HCALL
-  KVM: selftests: Add Hyper-V hypercall forwarding test
-  KVM: Add KVM_GET/SET_PLANE_RUN_STATE vCPU ioctls
-  KVM: selftests: Cover plane run-state ioctls in planes_test
-  KVM: x86: hyper-v: Let userspace fault a forwarded hypercall
-  KVM: x86: Allow MP state ioctls on plane vCPU fds
-  KVM: x86: Filter KVM_ENABLE_CAP on plane vCPU fds
-  KVM: x86: initialise Hyper-V state on every plane vCPU
-  KVM: implement per-plane memory attributes
-  KVM: x86: hyper-v: bank GUEST_OS_ID and HYPERCALL MSRs per plane
-  KVM: x86: hyper-v: bank the reference TSC page per plane
-  KVM: x86: allow KVM_SET_GUEST_DEBUG on plane vCPU fds
-  KVM: x86: hyper-v: flush the calling plane's TLB on flush hypercalls
-  KVM: x86/mmu: free obsolete roots of all planes
-  KVM: x86: hyperv: don't arm PV EOI for a higher plane's VP assist page
-  KVM: x86: allow KVM_TRANSLATE on plane vCPU fds
-  KVM: x86: hyper-v: handle VTL call/return in the kernel
-  KVM: x86: load each plane twin while updating it after KVM_SET_CPUID
-  WIP: userspace VTL interrupt entry and register intercepts
-  WIP: KVM: x86: deliver events to suspended higher planes
-  WIP: KVM: per-plane memory overlays, richer protection-fault exits
-  WIP: KVM: x86: VSM event-delivery parity fixes from Windows boot
-    triage
-  KVM: planes: fan out per-plane requests to twin vCPUs
-  KVM: x86: inhibit APICv when VM planes are enabled
-  KVM: x86: hyperv: divert LLDT and LTR into register intercepts
-  KVM: planes: Unwind published state on KVM_CREATE_PLANE failure
-  KVM: planes: Kick the running twin's pCPU, not the request target's
-  KVM: planes: Keep current_vcpu in sync in vcpu_load()
-  KVM: x86: Report a real write-access walk from KVM_TRANSLATE
-  KVM: planes: Share XCR0 across plane twins
-  KVM: x86: hyperv: Refuse a synthetic IPI to a higher VTL
-  KVM: x86: Gate forced VTL entry on interrupt deliverability
-  KVM: selftests: Test a plane suspending with an undelivered interrupt
-  KVM: x86: hyperv: Advertise XMM fast hypercall output
-  KVM: SVM: Carry instruction state on reflected plane-protection faults
-  KVM: SVM: Trap descriptor-table loads for VTL register intercepts
-  KVM: SVM: Keep TPR[3:0] across exits without a guest CR8 write
-  KVM: selftests: Add Hyper-V reference TSC page memory attribute test
-  KVM: SVM: Hedge the v_tpr_entry comment
-  KVM: Check every plane's protections before caching a gfn->hva
-  KVM: planes: Annotate the lockless twin-publication protocol
-
-Mushahid Hussain (9):
-  KVM: x86: Leave TSC matching to the plane 0 vCPUs
-  KVM: x86: hyperv: Track the reference TSC page per plane
-  KVM: x86: hyperv: Update the reference TSC page past protections
-  KVM: x86: hyperv: Publish an added reference TSC page at once
-  KVM: x86: hyperv: Harden the per-plane reference TSC page updates
-  KVM: x86: Derive runtime CPUID bits from the executing plane
-  KVM: selftests: Test hugepage sizing over mixed protection attributes
-  KVM: x86: hyperv: Do not skip a moved vCPU when completing a hypercall
-  KVM: x86: Allow KVM_X86_SETUP_MCE on plane vCPUs
-
-Nikolas Wipper (1):
-  KVM: x86: Implement Hyper-V's vCPU suspended state
-
-Paolo Bonzini (1):
-  KVM: selftests: Add VM plane infrastructure and tests
-
- Documentation/virt/kvm/api.rst                | 241 ++++-
- arch/x86/hyperv/hv_apic.c                     |   3 +-
- arch/x86/include/asm/kvm-x86-ops.h            |   1 +
- arch/x86/include/asm/kvm_host.h               | 140 ++-
- arch/x86/kvm/cpuid.c                          | 139 ++-
- arch/x86/kvm/cpuid.h                          |   6 +-
- arch/x86/kvm/emulate.c                        |  21 +
- arch/x86/kvm/hyperv.c                         | 995 ++++++++++++++++--
- arch/x86/kvm/hyperv.h                         |  37 +-
- arch/x86/kvm/kvm_emulate.h                    |  10 +
- arch/x86/kvm/lapic.c                          |  85 +-
- arch/x86/kvm/mmu.h                            |  14 +
- arch/x86/kvm/mmu/mmu.c                        | 131 ++-
- arch/x86/kvm/mmu/paging_tmpl.h                |   7 +-
- arch/x86/kvm/mmu/spte.h                       |  14 -
- arch/x86/kvm/mmu/tdp_mmu.c                    |  23 +-
- arch/x86/kvm/svm/nested.c                     |  16 +
- arch/x86/kvm/svm/svm.c                        | 143 ++-
- arch/x86/kvm/svm/svm.h                        |  16 +-
- arch/x86/kvm/vmx/main.c                       |  13 +-
- arch/x86/kvm/vmx/nested.c                     |   1 +
- arch/x86/kvm/vmx/vmx.c                        | 118 ++-
- arch/x86/kvm/vmx/x86_ops.h                    |   1 +
- arch/x86/kvm/x86.c                            | 668 +++++++++++-
- include/hyperv/hvgdk_mini.h                   |   5 +-
- include/hyperv/hvhdk_mini.h                   |   3 +-
- include/linux/kvm_host.h                      | 149 ++-
- include/uapi/linux/kvm.h                      |  63 +-
- tools/include/uapi/linux/kvm.h                |  54 +-
- tools/testing/selftests/kvm/Makefile.kvm      |   7 +
- .../testing/selftests/kvm/include/kvm_util.h  |  74 ++
- .../selftests/kvm/include/x86/processor.h     |   1 +
- tools/testing/selftests/kvm/lib/kvm_util.c    |  85 +-
- .../testing/selftests/kvm/lib/x86/processor.c |  15 +
- .../testing/selftests/kvm/memory_attributes.c |   6 +-
- tools/testing/selftests/kvm/plane_test.c      | 137 +++
- .../selftests/kvm/x86/hyperv_forward_hcall.c  | 144 +++
- .../selftests/kvm/x86/hyperv_tsc_page_attrs.c | 129 +++
- .../selftests/kvm/x86/memattr_hugepage_test.c | 132 +++
- .../selftests/kvm/x86/plane_x86_test.c        | 325 ++++++
- tools/testing/selftests/kvm/x86/planes_test.c | 142 +++
- .../selftests/kvm/x86/planes_vtl_entry_test.c | 188 ++++
- virt/kvm/kvm_main.c                           | 699 +++++++++++-
- virt/kvm/pfncache.c                           |   3 +-
- 44 files changed, 4956 insertions(+), 248 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/plane_test.c
- create mode 100644 tools/testing/selftests/kvm/x86/hyperv_forward_hcall.c
- create mode 100644 tools/testing/selftests/kvm/x86/hyperv_tsc_page_attrs.c
- create mode 100644 tools/testing/selftests/kvm/x86/memattr_hugepage_test.c
- create mode 100644 tools/testing/selftests/kvm/x86/plane_x86_test.c
- create mode 100644 tools/testing/selftests/kvm/x86/planes_test.c
- create mode 100644 tools/testing/selftests/kvm/x86/planes_vtl_entry_test.c
-
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index d913c68b18a7..153c076e91bc 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1233,8 +1233,6 @@ enum hv_tsc_page_status {
+ 	HV_TSC_PAGE_HOST_CHANGED,
+ 	/* TSC page was properly set up and is currently active  */
+ 	HV_TSC_PAGE_SET,
+-	/* TSC page was set up with an inaccessible GPA */
+-	HV_TSC_PAGE_BROKEN,
+ };
+ 
+ #ifdef CONFIG_KVM_HYPERV
+@@ -1260,6 +1258,18 @@ struct kvm_hv {
+ 	 * it exposes is not: every enabled page gets the same contents.
+ 	 */
+ 	u64 hv_tsc_page_plane[KVM_MAX_PLANES];
++	/*
++	 * Planes whose reference TSC page could not be written, typically
++	 * because the plane's own memory attributes forbid the write.  Such
++	 * a page is left alone until the plane writes its MSR again.
++	 */
++	DECLARE_BITMAP(hv_tsc_page_broken, KVM_MAX_PLANES);
++	/*
++	 * The last sequence number published to the planes' pages.  Host-
++	 * authored and monotonic; never seeded from the (guest-writable)
++	 * pages themselves.
++	 */
++	u32 hv_tsc_sequence;
+ 	enum hv_tsc_page_status hv_tsc_page_status;
+ 
+ 	/* Hyper-v based guest crash (NT kernel bugcheck) parameters */
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 2cf73f72836c..e6ef0f93096e 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1231,12 +1231,20 @@ static bool hv_tsc_page_gfn(struct kvm_hv *hv, int plane, u64 *gfn)
+ 	if (!(msr & HV_X64_MSR_TSC_REFERENCE_ENABLE))
+ 		return false;
+ 
++	if (test_bit(plane, hv->hv_tsc_page_broken))
++		return false;
++
+ 	*gfn = msr >> HV_X64_MSR_TSC_REFERENCE_ADDRESS_SHIFT;
+ 	return true;
+ }
+ 
+-/* Publish the current parameters to one plane's page: struct first, then sequence. */
+-static int hv_publish_tsc_page(struct kvm *kvm, unsigned int plane, u64 gfn)
++/*
++ * Publish the current parameters to one plane's page: struct first, then
++ * sequence.  The write is subject to the owning plane's own memory
++ * attributes; a plane whose page cannot be written loses only that page,
++ * and keeps whatever the page last held, until it writes its MSR again.
++ */
++static void hv_publish_tsc_page(struct kvm *kvm, unsigned int plane, u64 gfn)
+ {
+ 	struct kvm_hv *hv = to_kvm_hv(kvm);
+ 	struct ms_hyperv_tsc_page page = hv->tsc_ref;
+@@ -1252,38 +1260,55 @@ static int hv_publish_tsc_page(struct kvm *kvm, unsigned int plane, u64 gfn)
+ 	if (plane && hv->tsc_ref_from_guest)
+ 		tsc_seq = 0;
+ 
++	/*
++	 * The page may hold a live sequence from an earlier enable, over
++	 * parameters that have since changed.  Invalidate it with a discrete
++	 * write first: the stores of one long copy are not ordered as seen
++	 * by another vCPU, so folding the zero sequence into the body write
++	 * would let a reader pair the old sequence with a half-written body.
++	 */
+ 	page.tsc_sequence = 0;
+-	if (kvm_write_guest_unprotected(kvm, gfn_to_gpa(gfn), &page, sizeof(page)))
+-		return -EFAULT;
++	if (kvm_plane_write_guest(kvm->planes[plane], gfn_to_gpa(gfn), &page,
++				  sizeof(page.tsc_sequence)))
++		goto broken;
++
++	/* Ensure the sequence is zero before the body changes. */
++	smp_wmb();
++	if (kvm_plane_write_guest(kvm->planes[plane], gfn_to_gpa(gfn), &page,
++				  sizeof(page)))
++		goto broken;
+ 
+ 	if (!tsc_seq)
+-		return 0;
++		return;
+ 
+ 	/* The struct is complete before the sequence makes it valid. */
+ 	smp_wmb();
+ 	page.tsc_sequence = tsc_seq;
+-	if (kvm_write_guest_unprotected(kvm, gfn_to_gpa(gfn), &page,
+-					sizeof(page.tsc_sequence)))
+-		return -EFAULT;
+-	return 0;
++	if (kvm_plane_write_guest(kvm->planes[plane], gfn_to_gpa(gfn), &page,
++				  sizeof(page.tsc_sequence)))
++		goto broken;
++	return;
++
++broken:
++	set_bit(plane, hv->hv_tsc_page_broken);
+ }
+ 
+ /* The lowest plane with an enabled page; it owns the sequence number. */
+-static bool hv_first_tsc_page_gfn(struct kvm *kvm, u64 *gfn)
++static int hv_first_tsc_page(struct kvm *kvm, u64 *gfn)
+ {
+ 	struct kvm_hv *hv = to_kvm_hv(kvm);
+ 	int i;
+ 
+ 	for (i = 0; i < KVM_MAX_PLANES; i++) {
+ 		if (hv_tsc_page_gfn(hv, i, gfn))
+-			return true;
++			return i;
+ 	}
+ 
+-	return false;
++	return -1;
+ }
+ 
+ /* Write the first @len bytes of the reference page to every enabled plane. */
+-static int hv_write_tsc_pages(struct kvm *kvm, size_t len)
++static void hv_write_tsc_pages(struct kvm *kvm, size_t len)
+ {
+ 	struct kvm_hv *hv = to_kvm_hv(kvm);
+ 	u64 gfn;
+@@ -1293,11 +1318,54 @@ static int hv_write_tsc_pages(struct kvm *kvm, size_t len)
+ 		if (!hv_tsc_page_gfn(hv, i, &gfn))
+ 			continue;
+ 
+-		if (kvm_write_guest_unprotected(kvm, gfn_to_gpa(gfn), &hv->tsc_ref, len))
+-			return -EFAULT;
++		/*
++		 * A plane whose own attributes refuse the write loses only
++		 * its page; the other planes' pages stay maintained.
++		 */
++		if (kvm_plane_write_guest(kvm->planes[i], gfn_to_gpa(gfn),
++					  &hv->tsc_ref, len))
++			set_bit(i, hv->hv_tsc_page_broken);
+ 	}
++}
+ 
+-	return 0;
++/* Invalidate one plane's page: its readers fall back to TIME_REF_COUNT. */
++static void hv_invalidate_tsc_page(struct kvm *kvm, unsigned int plane, u64 gfn)
++{
++	struct kvm_hv *hv = to_kvm_hv(kvm);
++	u32 tsc_seq = 0;
++
++	if (kvm_plane_write_guest(kvm->planes[plane], gfn_to_gpa(gfn),
++				  &tsc_seq, sizeof(tsc_seq)))
++		set_bit(plane, hv->hv_tsc_page_broken);
++}
++
++/*
++ * Under guest TSC emulation the parameters come from plane @src_plane's
++ * page, which is guest-writable: they must not reach a higher plane's page
++ * with hypervisor authority.  A higher plane's page either already holds
++ * the same contents (every page gets the same stream, so a page carried
++ * across migration matches) or was never published — enabled from the host
++ * side while the update was pending — and would serve whatever its memory
++ * last held.  Invalidate the pages that do not match.
++ */
++static void hv_invalidate_mismatched_tsc_pages(struct kvm *kvm, int src_plane)
++{
++	struct kvm_hv *hv = to_kvm_hv(kvm);
++	struct ms_hyperv_tsc_page page;
++	u64 gfn;
++	int i;
++
++	for (i = src_plane + 1; i < KVM_MAX_PLANES; i++) {
++		if (!hv_tsc_page_gfn(hv, i, &gfn))
++			continue;
++
++		if (!kvm_plane_read_guest(kvm->planes[i], gfn_to_gpa(gfn),
++					  &page, sizeof(page)) &&
++		    !memcmp(&page, &hv->tsc_ref, sizeof(page)))
++			continue;
++
++		hv_invalidate_tsc_page(kvm, i, gfn);
++	}
+ }
+ 
+ void kvm_hv_setup_tsc_page(struct kvm *kvm,
+@@ -1305,6 +1373,7 @@ void kvm_hv_setup_tsc_page(struct kvm *kvm,
+ {
+ 	struct kvm_hv *hv = to_kvm_hv(kvm);
+ 	u32 tsc_seq;
++	int plane;
+ 	u64 gfn;
+ 
+ 	BUILD_BUG_ON(sizeof(tsc_seq) != sizeof(hv->tsc_ref.tsc_sequence));
+@@ -1312,28 +1381,46 @@ void kvm_hv_setup_tsc_page(struct kvm *kvm,
+ 
+ 	guard(mutex)(&hv->hv_lock);
+ 
+-	if (hv->hv_tsc_page_status == HV_TSC_PAGE_BROKEN ||
+-	    hv->hv_tsc_page_status == HV_TSC_PAGE_SET ||
++	if (hv->hv_tsc_page_status == HV_TSC_PAGE_SET ||
+ 	    hv->hv_tsc_page_status == HV_TSC_PAGE_UNSET)
+ 		return;
+ 
+-	if (!hv_first_tsc_page_gfn(kvm, &gfn))
+-		return;
++	if (tsc_page_update_unsafe(hv)) {
++		/*
++		 * The guest has opted for TSC emulation after migration: the
++		 * lowest enabled plane's page carries the parameters to keep.
++		 * The reads are subject to the owning plane's read attribute;
++		 * a plane whose page cannot be read loses that page and the
++		 * next enabled plane takes over.
++		 */
++		for (;;) {
++			plane = hv_first_tsc_page(kvm, &gfn);
++			if (plane < 0)
++				return;
++
++			if (likely(!kvm_plane_read_guest(kvm->planes[plane],
++							 gfn_to_gpa(gfn), &tsc_seq,
++							 sizeof(tsc_seq))))
++				break;
+ 
+-	/*
+-	 * Because the TSC parameters only vary when there is a
+-	 * change in the master clock, do not bother with caching.
+-	 */
+-	if (unlikely(kvm_read_guest(kvm, gfn_to_gpa(gfn),
+-				    &tsc_seq, sizeof(tsc_seq))))
+-		goto out_err;
++			set_bit(plane, hv->hv_tsc_page_broken);
++		}
+ 
+-	if (tsc_seq && tsc_page_update_unsafe(hv)) {
+-		if (kvm_read_guest(kvm, gfn_to_gpa(gfn), &hv->tsc_ref, sizeof(hv->tsc_ref)))
+-			goto out_err;
++		if (tsc_seq) {
++			if (kvm_plane_read_guest(kvm->planes[plane],
++						 gfn_to_gpa(gfn), &hv->tsc_ref,
++						 sizeof(hv->tsc_ref))) {
++				/* Status is unchanged: the next update retries. */
++				set_bit(plane, hv->hv_tsc_page_broken);
++				return;
++			}
+ 
+-		hv->tsc_ref_from_guest = true;
+-		hv->hv_tsc_page_status = HV_TSC_PAGE_SET;
++			hv->tsc_ref_from_guest = true;
++			hv->hv_tsc_page_status = HV_TSC_PAGE_SET;
++			hv_invalidate_mismatched_tsc_pages(kvm, plane);
++			return;
++		}
++	} else if (hv_first_tsc_page(kvm, &gfn) < 0) {
+ 		return;
+ 	}
+ 
+@@ -1342,37 +1429,43 @@ void kvm_hv_setup_tsc_page(struct kvm *kvm,
+ 	 * guest to use the time reference count MSR.
+ 	 */
+ 	hv->tsc_ref.tsc_sequence = 0;
+-	if (hv_write_tsc_pages(kvm, sizeof(hv->tsc_ref.tsc_sequence)))
+-		goto out_err;
++	hv_write_tsc_pages(kvm, sizeof(hv->tsc_ref.tsc_sequence));
+ 
++	/*
++	 * If the master clock is not currently TSC-based, the pages cannot
++	 * describe it: leave them invalid, with their readers on the
++	 * TIME_REF_COUNT fallback, and retry on the next clock update.
++	 * Republishing the previous parameters would advertise a clock that
++	 * no longer matches the one TIME_REF_COUNT answers from.
++	 */
+ 	if (!compute_tsc_page_parameters(hv_clock, &hv->tsc_ref))
+-		goto out_err;
++		return;
+ 
+ 	/* Ensure sequence is zero before writing the rest of the struct.  */
+ 	smp_wmb();
+-	if (hv_write_tsc_pages(kvm, sizeof(hv->tsc_ref)))
+-		goto out_err;
++	hv_write_tsc_pages(kvm, sizeof(hv->tsc_ref));
+ 
+ 	/*
+ 	 * Now switch to the TSC page mechanism by writing the sequence.
++	 * The sequence is host-authored and monotonic, never read back from
++	 * the pages themselves: they are guest-writable, and a lower plane
++	 * which could steer the next value could stage it on a higher
++	 * plane's page in advance, and have that plane's seqlock accept a
++	 * torn read across this rewrite.
+ 	 */
+-	tsc_seq++;
++	tsc_seq = hv->hv_tsc_sequence + 1;
+ 	if (tsc_seq == 0xFFFFFFFF || tsc_seq == 0)
+ 		tsc_seq = 1;
++	hv->hv_tsc_sequence = tsc_seq;
+ 
+ 	/* Write the struct entirely before the non-zero sequence.  */
+ 	smp_wmb();
+ 
+ 	hv->tsc_ref.tsc_sequence = tsc_seq;
+-	if (hv_write_tsc_pages(kvm, sizeof(hv->tsc_ref.tsc_sequence)))
+-		goto out_err;
++	hv_write_tsc_pages(kvm, sizeof(hv->tsc_ref.tsc_sequence));
+ 
+ 	hv->tsc_ref_from_guest = false;
+ 	hv->hv_tsc_page_status = HV_TSC_PAGE_SET;
+-	return;
+-
+-out_err:
+-	hv->hv_tsc_page_status = HV_TSC_PAGE_BROKEN;
+ }
+ 
+ void kvm_hv_request_tsc_page_update(struct kvm *kvm)
+@@ -1575,20 +1668,43 @@ static int kvm_hv_set_msr_pw(struct kvm_vcpu *vcpu, u32 msr, u64 data,
+ 	case HV_X64_MSR_REFERENCE_TSC: {
+ 		u64 gfn;
+ 
+-		/* The parameters are valid already: publish them to this page only. */
++		/* A newly written MSR is a fresh attempt at the page. */
++		clear_bit(vcpu->plane_level, hv->hv_tsc_page_broken);
++
++		hv->hv_tsc_page_plane[vcpu->plane_level] = data;
++
++		/*
++		 * The parameters are valid already: publish them to this page
++		 * only.  Not under guest TSC emulation: those parameters are
++		 * the frozen migration-time snapshot, and a guest MSR write
++		 * is the trigger for computing fresh ones (GUEST_CHANGED
++		 * below), as it was before the pages were tracked per plane.
++		 */
+ 		if (!host && hv->hv_tsc_page_status == HV_TSC_PAGE_SET &&
++		    !hv->tsc_ref_from_guest &&
+ 		    (data & HV_X64_MSR_TSC_REFERENCE_ENABLE)) {
+ 			/* The caller holds hv_lock. */
+-			hv->hv_tsc_page_plane[vcpu->plane_level] = data;
+ 			gfn = data >> HV_X64_MSR_TSC_REFERENCE_ADDRESS_SHIFT;
+-			if (hv_publish_tsc_page(kvm, vcpu->plane_level, gfn))
+-				hv->hv_tsc_page_status = HV_TSC_PAGE_BROKEN;
++			hv_publish_tsc_page(kvm, vcpu->plane_level, gfn);
+ 			break;
+ 		}
+ 
+-		hv->hv_tsc_page_plane[vcpu->plane_level] = data;
++		/*
++		 * The publish below is deferred to a plane-0 vCPU processing
++		 * the masterclock update; until then the page holds whatever
++		 * its memory last held — possibly a forged clock a lower
++		 * plane staged there.  Invalidate it now, so this plane reads
++		 * TIME_REF_COUNT until the real parameters arrive.  Not for
++		 * host writes: a page restored across migration keeps its
++		 * contents for the TSC-emulation readback.
++		 */
++		if (!host && (data & HV_X64_MSR_TSC_REFERENCE_ENABLE)) {
++			gfn = data >> HV_X64_MSR_TSC_REFERENCE_ADDRESS_SHIFT;
++			hv_invalidate_tsc_page(kvm, vcpu->plane_level, gfn);
++		}
++
+ 		/* Another plane's page may still be enabled: keep it updated. */
+-		if (hv_first_tsc_page_gfn(kvm, &gfn)) {
++		if (hv_first_tsc_page(kvm, &gfn) >= 0) {
+ 			if (!host)
+ 				hv->hv_tsc_page_status = HV_TSC_PAGE_GUEST_CHANGED;
+ 			else
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index beae4f2a982a..bc576889c6f0 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1551,8 +1551,10 @@ int kvm_write_guest_page(struct kvm *kvm, gfn_t gfn, const void *data,
+ 			 int offset, int len);
+ int kvm_write_guest(struct kvm *kvm, gpa_t gpa, const void *data,
+ 		    unsigned long len);
+-int kvm_write_guest_unprotected(struct kvm *kvm, gpa_t gpa, const void *data,
+-				unsigned long len);
++int kvm_plane_write_guest(struct kvm_plane *plane, gpa_t gpa, const void *data,
++			  unsigned long len);
++int kvm_plane_read_guest(struct kvm_plane *plane, gpa_t gpa, void *data,
++			 unsigned long len);
+ int kvm_write_guest_cached(struct kvm *kvm, struct gfn_to_hva_cache *ghc,
+ 			   void *data, unsigned long len);
+ int kvm_write_guest_offset_cached(struct kvm *kvm, struct gfn_to_hva_cache *ghc,
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 72fe64e5d4a1..1c70bb70500c 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -3832,24 +3832,49 @@ int kvm_write_guest(struct kvm *kvm, gpa_t gpa, const void *data,
+ }
+ EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_write_guest);
+ 
+-/* Write a page KVM maintains for the guest; plane protections do not apply. */
+-int kvm_write_guest_unprotected(struct kvm *kvm, gpa_t gpa, const void *data,
+-				unsigned long len)
++/*
++ * Write a page KVM maintains for the guest on behalf of plane @plane,
++ * honouring that plane's memory attributes rather than plane 0's.
++ */
++int kvm_plane_write_guest(struct kvm_plane *plane, gpa_t gpa, const void *data,
++			  unsigned long len)
+ {
++	struct kvm *kvm = plane->kvm;
+ 	gfn_t gfn = gpa >> PAGE_SHIFT;
+ 	int seg;
+ 	int offset = offset_in_page(gpa);
++	int ret;
+ 
+ 	while ((seg = next_segment(len, offset)) != 0) {
+-		struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
+-		unsigned long addr;
++		ret = __kvm_write_guest_page(plane, kvm,
++					     gfn_to_memslot(kvm, gfn), gfn,
++					     data, offset, seg);
++		if (ret < 0)
++			return ret;
++		offset = 0;
++		len -= seg;
++		data += seg;
++		++gfn;
++	}
++	return 0;
++}
+ 
+-		addr = gfn_to_hva_many(slot, gfn, NULL);
+-		if (kvm_is_error_hva(addr))
+-			return -EFAULT;
+-		if (__copy_to_user((void __user *)addr + offset, data, seg))
+-			return -EFAULT;
+-		mark_page_dirty_in_slot(kvm, slot, gfn);
++/* Read counterpart of kvm_plane_write_guest(). */
++int kvm_plane_read_guest(struct kvm_plane *plane, gpa_t gpa, void *data,
++			 unsigned long len)
++{
++	struct kvm *kvm = plane->kvm;
++	gfn_t gfn = gpa >> PAGE_SHIFT;
++	int seg;
++	int offset = offset_in_page(gpa);
++	int ret;
++
++	while ((seg = next_segment(len, offset)) != 0) {
++		ret = __kvm_read_guest_page(plane, gfn_to_memslot(kvm, gfn),
++					    gfn, data, offset, seg,
++					    KVM_MEMORY_ATTRIBUTE_NR);
++		if (ret < 0)
++			return ret;
+ 		offset = 0;
+ 		len -= seg;
+ 		data += seg;
+@@ -3857,7 +3882,6 @@ int kvm_write_guest_unprotected(struct kvm *kvm, gpa_t gpa, const void *data,
+ 	}
+ 	return 0;
+ }
+-EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_write_guest_unprotected);
+ 
+ int kvm_vcpu_write_guest(struct kvm_vcpu *vcpu, gpa_t gpa, const void *data,
+ 		         unsigned long len)
 -- 
 2.50.1
 
