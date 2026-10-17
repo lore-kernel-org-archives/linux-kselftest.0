@@ -1,123 +1,115 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863D6231A23
-	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 15:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792250718; cv=pass; b=awzGw9NlkHqDL5oLjxAGc4HNBKSqu+tfQ9bCOYel4nANh5ZeIyg4eoNkkTVR3Fnzq1/JjVCWZyx8u2H6GO77BVA0W8zGXoJrOkT6wv+/vxV1RKc74L2UElk8WMI2TH8YTAky3SXeZfgb+iQaM+cmQCiFx+OhfiMW2fgSRwkOsbo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792250718; c=relaxed/simple;
-	bh=Jm8AzdPrPR6BhXQyJz2nZ42hfc8fkKPUPVq/AoDXHaw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b4rGHywkStUcv5v/gAGDSjjzAU8DtvOZQc5bCdMJ9FNCqX85zo5dJZYhi9CXa0ZioeDPeW34BEmouSrHyDNhHbQBVIRlL67k02KQc0+Zte9sTly5VGy3K3tlAA+UG1SsOXG7vSAVJlGAKez7HATjvtkw5APnLznX/Qo9vRgOjjk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S5YGnyIS; arc=pass smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B40E3A8FEA
+	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 15:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792252532; cv=none; b=ubEXTKLp5u7ltPbjQysTzAo6YSA6jqGmlnNUnsFf8sn2HXXPnw/1djPkoeKd8FtaSDE0BWNoGF4GePrGKX0U549NJa0iaNzQBo3K44d9PPM6u2PydSYtTC34ABQNNxokx2GMTt9dEmYHeB3QABpFuaKImuPY23ZjvEpvfHiDc+Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792252532; c=relaxed/simple;
+	bh=3pyT+YdpjS2XysUjWOV9STmcUoBSIxn/+89jRe06jnk=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=EiF517dYQMdMF5aB/sAYKbw12/g2BNusjXGvF8Xfyjxl5KeQiyDZgSVDR84c5K3UriRXYDrIqEXrRk4GSt0JZeFOxYPHCuUeX9hmMwJVodk+aQqI2Z2G/GHCYVRtahGNgWuHu2HKivhXxK9pEf18hm5If/osa/lBQO1ho0TNvQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G7ToiXn0; arc=none smtp.client-ip=209.85.221.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S5YGnyIS"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-535179e995bso9902641cf.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 08:25:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792250716; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NGAJQ3v6RAXVNdCKkQd/QmoW0lWH9E4nFVe30V/W2WaQ5uQEHFS7UjHcshVYNTN7bo
-         x2pHs3QaaCyhCfk9Y9DccNDteDsuX3aJKhuVi2DvHZm6gH6OoN5F3If98icYDzfSu3Jj
-         aDk6wKxkV1lG5wW4wWnqO9GJVIJyuI+avwGLIYavk0E00pKWWG+/g8sLsPqhY/FAL+7j
-         qpBE7asNti5GxC+tc3d6h8p+GiCMphEug0V55A6QH0pjTJgCOnyEYEjxoqtiAFV7EIW4
-         1XQ1tna+Kv6ey6MALLIJU35zkr3P7GFgrAEHNkRVKj2rQr7SsuBivuFC/9wTWAje4KH6
-         SY8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=cBiNZFwCvoEsAVFQ+85lVVDF8nZW55yFDyjuRN5OJEE=;
-        fh=d6/YLY/XqItFBaH8SAxfK/Tw6Jvj2gBms4vuyCUfET4=;
-        b=KFoVrXswxaD15sazSGuWqimHP4bvA0WZZiNDSiiTLNNmGbid+j8y0BTn/Av50jnT4s
-         Y7awtpnXlqylx7nXYB5rKxy/bRsEwgieUBXd8eXq6exeahGVQrwCvSV3AUEfl7T5DPoa
-         MURYwxdZ10QzcnXQNyaXMDMglDv+gIJit704KghqfpBi9u5P5uJ5WrvyHobskB9/EzMI
-         Y8vRWDNEC7yPQlug+f6yckiz6bxUTWVb8ckzwlDLsxANvpMqVG7UzzcRd2+P9+0bDxvJ
-         +iSUZpjwGoP/sp+0Gx0f4rbRCuKbOoDgpnGCnihTpAQmK9/o79U9utU2e0wfzJ8N+WPD
-         x2xQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G7ToiXn0"
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-5e9a1f1681dso689236e0c.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 08:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792250716; x=1792855516; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cBiNZFwCvoEsAVFQ+85lVVDF8nZW55yFDyjuRN5OJEE=;
-        b=S5YGnyISdiqMD500TqKu/2332EmWoUTKP87+MUGOG6QPTvSlWnUVne+RBQtXXf8uii
-         pTMUtqFbFW3D+D6pM3k/cJkdQMEtMgwgDqSN+adWgX9u6IC9p1vl+8FJdIt5KhAs8bCN
-         x8ZARz/HAcGgUbbL9M7rj+p976MuH5PXUFwTaRTVghbH5D2z5Hy2P/HWdLK++bkPyG3t
-         nVmM9udXfE1pQM6YnsP4g7iXiKQDpWjZUdkJxzeO7yLTl6+Ewn57TdAVcWGRQ4RDUMSl
-         1/Htohgd2qUaGYR+t00PfMkRUHG9ctUkayYT3SzEZoX1ovEHlx4vFj7OddqUvPpy5OjL
-         9WaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792250716; x=1792855516;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20251104; t=1792252528; x=1792857328; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=cBiNZFwCvoEsAVFQ+85lVVDF8nZW55yFDyjuRN5OJEE=;
-        b=W1zNW2yP9rK06W8Nyt+AHmcqi/YOgi5q/gI1BrBQa5SNPWpExhzcy0UbI3AdhrOhxl
-         mMcS1YXo0NRA1++FlZRMjHtt3d7YzuTFRp941PqUhTLLD+RBMvj/SpbubW6RMkCsqLQ7
-         ij5y/O0nsogNS2R24hkaPJ+JqYOxhXdFBtloRmcq7fHmYvLacPukXmXikYRul9qvIqkJ
-         oEKHnwsru1lBsiorlq7fQ1bP6T3fxXq+qvwxyNpR8eBp1athbMO9owN9pwiVHrxsZIHY
-         0QkYf8/lRPm/BNsN3UI/QfB0Wf/5Ud87yJftpT48twGTxBsMnaA6dJ9hvS8rdpFyphI8
-         Jl2A==
-X-Forwarded-Encrypted: i=1; AKwUvBxoberPdIz+UlRD9RdqXKqfQP9T8R83z881/qAfpVzRpuZL/Nr0c4j9wL5B8X+jOXFdyd3Q1+2HXKJoaBHWvJQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ3NE3uahAN0H+zak3HRu3IQcusRSRLPZX5NiSSzww5BkopoHKu
-	vOVegoVpkG1quWKVd+WQAvXI6wdCMQ/Tjl9F0b1bAoMzKXFYBMUGm7fUTr1oei44JefVAA8Vq6Z
-	eMuhAstcby00Kz4cx9A1jy/BXfa3MLxA=
-X-Gm-Gg: AYBFou2r+gz8gWtnKZUmGSDLnbmKleJfPHWMbu+7UmM9QVvFld6WU5gPBstlLze919M
-	56JCpOhJVnzAWLHptef3pgqY8yzl5CPCb5lNbziFfoIQOj9tnHUbsVKO/4w4jCBUgKkAmX0dIR8
-	tiezF7iX/iOtCkW2IsZIjUqcGfa1wsfffmFkE6kTY08DayyHOdZ2IGZPbC8MRmeNZJvUBh/zvZw
-	nNu5oh1JrwP7tdtX9WsjvQdrX+WOScTbrRmV6zE+LpxIK3NRTHVe//P7OJt/WoK+GLutr6nEhPm
-	SzIeaRAChdJwddCV3e5LmuKlLZkPamNatZLoXkkFF1NDgtjsDQSsXIXfFa7E+H8EmlTTgC2wHSR
-	Pz9Qtmg+9jNiKxqC/1w2cuEVnKJxIBaZALnhm2G55cyP+ig==
-X-Received: by 2002:a05:620a:2783:b0:93e:d051:8f19 with SMTP id
- af79cd13be357-93f29ced575mr485953085a.40.1792250716444; Sat, 17 Oct 2026
- 08:25:16 -0700 (PDT)
+        bh=7HIUZNWScATpZDK2J5WpO4C7vVI8kel4WHjrh6jwWL8=;
+        b=G7ToiXn0i/t6APSVy+8u2t+72tFpMJksLnbvqKyMSTlk3qVvKIHFSGw2uPZUOkPm4I
+         Hm+ts9U4iFu5QQ/XBuyn/MczBVUTZixb5ehTpN8qGaObjxnf0Bk4s0dgEMFG86WwEaYo
+         Yst2qWY4tYyg89Qmwuzq27+q28Lt7E7svaQcj4bIfvnfxL3+XlUFG9m75/ZkhmzYXb9O
+         uzADpV6wyKfZdJB2NwF7r5D54+b7E7JXBNTN+hylAKh2r06V57YWPgoGAXaW2Um0oLsj
+         xI+lR1N9387AbNFAzef1Mj2aDpcT21XgdIlIKdCB8vdAYHnAe/0NsbvQxnW/OZi8Ozwg
+         2Weg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792252528; x=1792857328;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7HIUZNWScATpZDK2J5WpO4C7vVI8kel4WHjrh6jwWL8=;
+        b=elTNIB8t35QlugYmDZTARnnU6bq4Ng8OJ8QWtGOqkKXNmS50S0bdySkL5E7vklIrpK
+         dKtd36KXJxic6d7Ag8fTRyYeukqOvZ1sxpJu8thgcoXjiykRUTuC2rZ7c+uSCcERn0Oe
+         AXnhVzazOuUGsmzEfNkwON+r9EXVExNJNYjSIJTxtnMTHGt19BACusFRIF4aJyMmUhMU
+         Ls8oog0UAymti7KXMHd3nVRQpATpBixkuUI7Z6Gm2f+iBrGr/lAYaCbyUVMPLR+yhZ1c
+         aQW5IBOpCpB50Pm6an4SR1dJn/WZfWBHrzntMIb7fZ+cEeIHuLvKN0FWEDQ6JiHGJ8sq
+         ZZ1g==
+X-Gm-Message-State: AFq9FYL2wg8SIfjQHfQkcpwl7jQlJXYocgTNUW2dj6cZ+M2cmpHVaB1Q
+	3lr3sxccZK0qYk5vGHPDwOlTR207YK74c1b22daxsHAEhuIyZDga7poa
+X-Gm-Gg: AYBFou0qzS9ridMIhQSgFm1NJZZJHopxjyJtW1pmVJld/7k7USvfRupRgZ86HQqt5DM
+	gKybNfeZsYjQFD4RfYVHWMf/Rn6WXRXruG7WNqlTNFC5BUfi2xn1gF6HLcbJC3VvwkbWvBASSzb
+	DAFAY13tFRjKHlOlfG3Me6Q1zx6+LiRGxZLHL5WvDwg5vW9/ohLH/ahvo3OsHRNuLgEAZDF2wCZ
+	VXtk7gUKXvLqo4MbPzP6xnEpoIZOk956eQj9c0lB1YFO4IkVRYIUiUN4JhlvCPBrBlRhL1l4lO6
+	0+AC7X1p+ddBFKeujkPSMyWqirxAp8KlBfUvExJu08Tf//dy9/LzF2+97kQiiN3QLwAn7b69283
+	TFYeNgzOThVdXMx4gD9fh9xkPGsUB9g440yhq5R+dhC1DXdw15MiJd0BJNudxstbDIncw/pWuDL
+	OM7ksTXlv91UnIKXXsvhlw+ZqKadkG1W15R15wtDY+Ept9LLIYkmhhcJ7M64Eo7W6UHvgi4CCor
+	1cy/Zt5PBkNlosh8eqQoJaMGayM6jb44DktThLBwIkS9vWKUtotfr0jz7jjJNsDpDFJxJDkFS4j
+	YL5r7KNUlORffrqd0+nIt3zkuDBodLvTOwE5qA==
+X-Received: by 2002:a05:6102:441b:b0:7c3:90db:ed50 with SMTP id ada2fe7eead31-7cc369c0e9bmr910776137.17.1792252527694;
+        Sat, 17 Oct 2026 08:55:27 -0700 (PDT)
+Received: from gmail.com (111.46.245.35.bc.googleusercontent.com. [35.245.46.111])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eabbd9ea2bsm492984e0c.2.2026.10.17.08.55.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Oct 2026 08:55:26 -0700 (PDT)
+Date: Sat, 17 Oct 2026 11:55:26 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Megane Hebo <hebomegane@gmail.com>, 
+ netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, 
+ davem@davemloft.net, 
+ edumazet@kernel.org, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ horms@kernel.org, 
+ shuah@kernel.org, 
+ mst@redhat.com, 
+ virtualization@lists.linux.dev, 
+ willemdebruijn.kernel@gmail.com, 
+ habte.yibelo@gmail.com, 
+ jasowangio@gmail.com, 
+ eperezma@redhat.com, 
+ xuanzhuo@linux.alibaba.com
+Message-ID: <willemdebruijn.kernel.eb0f6ff37e8f@gmail.com>
+In-Reply-To: <CAJPVW+nstfbagm9GxQ=i-5J6Xi_aZ52-YiQZeYrzmPD3OmDNiw@mail.gmail.com>
+References: <CAJPVW+=XcHDV4aoXt5oAHYh49kX7m5wUxf7TucrcBy+q6MdXFA@mail.gmail.com>
+ <CAJPVW+nstfbagm9GxQ=i-5J6Xi_aZ52-YiQZeYrzmPD3OmDNiw@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next] selftests: net: exercise virtio checksum
+ ingress outcomes
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261017110213.46199-1-tharitt97@gmail.com> <20261017110213.46199-6-tharitt97@gmail.com>
-In-Reply-To: <20261017110213.46199-6-tharitt97@gmail.com>
-From: Tharit Tangkijwanichakul <tharitt97@gmail.com>
-Date: Sat, 17 Oct 2026 22:25:04 +0700
-X-Gm-Features: AclHuK8Bu8EDo40zZmiyUcWdeJAzBkx4-shpMZtTbASYDmEugT246DxrXg3J2Ik
-Message-ID: <CACak8wNa-dbNMGO=4U=JpTqSYWdk9MC+DWZS3WxRwuRRvC1T7g@mail.gmail.com>
-Subject: Re: [PATCH 5/5] KVM: selftests: Test protection of the ucall MMIO region
-To: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>
-Cc: Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>, 
-	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atish.patra@linux.dev>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel-mentees@lists.linux.dev, 
-	skhan@linuxfoundation.org, me@brighamcampbell.com, jkoolstra@xs4all.nl
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-> +#define CLOBBERED_SLOT         TEST_MEM_SLOT_BASE
-Upon self-review, this should have been hardcoded to 1 (to clobber the
-reserved ucal mmio).
+Megane Hebo wrote:
+> Correction: Gmail Web rewrote tabs and wrapped some long lines in the
+> inline diff I just sent, so that copy is not suitable for applying.
+> 
+> The attached format-patch file is the authoritative byte-exact patch.
+> Sorry for the transport noise.
+> 
+> SHA256: cd11c3970f0a23ac039cdfcdc6338c20c79dbff3db8fdc93ea53b4b8996437b8
 
-> +       ret = __vm_set_user_memory_region2(vm, CLOBBERED_SLOT, 0,
-> +                                          vm->ucall_mmio_addr, slot_size, slot_mem, 0, 0);
-> +       TEST_ASSERT(ret == -1 && errno == EEXIST,
-> +                   "Expected the ucall GPA overlap to be rejected: ret=%d errno=%d",
-> +                   ret, errno);
-This should have been errno == EINVAL check to catch writing to the
-exiting read-only slot.
+This is not the way to send patches
 
-The earlier test accidentally passed because it used a different slot
-ID (=2, not reserved) and received EEXIST for overlapping the reserved
-ucall GPA. It therefore tested GPA overlap rejection, not the intended
-rejection of overwriting slot 1.
+https://docs.kernel.org/process/submitting-patches.html
 
-I will fix it in v2
+More in-depth: with AI it is easy to generate testcases. We now have
+to consider which ones are important enough to submit. I think we all
+have reproducers for these specific fixes offline. If we had thought
+it worthwhile they would have been included in the feature series
+itself.
+
