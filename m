@@ -1,119 +1,105 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-pj2-f8.google.com (mail-pj2-f8.google.com [74.125.227.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C360339478B
-	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 02:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792202842; cv=pass; b=Pwflza2lLW46oaFS2to8s5M5y7gpfUmF7HfD/NTJbEKh4x8JpzsXJEEhR4cmZuLmUl0HnAhtWnJIrJgQHlr+0Hmb+WrTq/3AnlGLJh+39oNDS3Sl+DOUhukwGgdOaOD3kUQbEdUK7lHxVCXnBTOzGGt9jTi99wqW2TYgdK1bL/w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792202842; c=relaxed/simple;
-	bh=ucLhLRqL2N8ilt+Zi5fdpr9rjtxklnK4PIUsffaVrRQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=guWQqHNifkT4L6GJTTclQgI4IpbxLXuqlPgH4by1lL+Ag6hLqehOBb3E8kMPqV0YnNk/G598rc/5o4u9RTDEJvD+X2zqM2+uUe34gDhhJ66OcT/SN4lgF3zaJUaDKyUHlgZ0StCUkXM9IG/ZJMnUxJPuaGmwWccHsOrxMtHS/04=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=H1pRoMlz; arc=pass smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.tenstorrent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5433B357D19
+	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 05:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.136
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792216734; cv=none; b=sF0bHvLHG8wJyL7M9bQEtdqqGqbXBuVC7XRr2vxFmS5Xprse5cVeR88qPK0y6NeQivJ9qcJ1sD41yFVFugoGy2SHdl5LY6QaIIesFRXi0DOrs/94Hn1wX3J1fcSBzKg5GF+jaz61H3vCZvCWZPRK+Kmhs31iaqf8qDz0HN3IORU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792216734; c=relaxed/simple;
+	bh=TS80zdwgZtIntN9BXJLlbabXB0MPOJk7F5xXN+y4vg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NZfj4GuUWGUjxUzreDdA4WcjYZWSvCMRbW1vYvnWgCh7myD9QUG9+kxHebwT1E72fr68j7is5g4CbyvchyaHNyI1SwLdsHnHDCDBFC0OOTKvTEb/RP2evbKgf16UoaurHrgkDV3XNwnes5PtYxn897a2vhBtKdtjyXqvSKTicfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GxR3JUO9; arc=none smtp.client-ip=74.125.227.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="H1pRoMlz"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-8aea7b7ca0cso4058717b3.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 19:07:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792202837; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KDXO/Zj6DdVmkFgrySsMkHhc2HDo038lciuyEc9xuPuNe5rRvAVuL0k7PnmKBnFFsD
-         lNThjyTbF2rBnt/Mx5b9gEd7nHqrMZRMmgXtS6Ca4ldso/mVxp0a8xDTJMlVk3R+uXTq
-         GBOp0g5FU1lTf5L9EP/Ataq2tAGAgugvYEkJt4AqTcwxlwY4dCVg/hhQXoMKmP+pNmsz
-         gorddiSPbSoiynF3NAnT9P5KvSrtkVnmBzNGXaQg3a7mkIqCKVpL1B5oz0OcsFzZtHJy
-         SXYDAnN8/vtWY2QulCW/lZNkGYwNpydBH4nu9p63RHt/Qj8GlA8Q/O4DWfl94kIy2Z+/
-         u4rA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Rt4iW6eCLigRGcM8uSRJchyBda6OwJVbeGjzxJgrzQQ=;
-        fh=SIXm10U0XCrZgQxBorSi+HTORsMpdRZz93hpRAbY3/U=;
-        b=riKXG2j9/dvAIq3TshHGEMbFtdtEwo9xZnjyaqPpnoMl8YNIToPpzZOlMLx6vRe7RC
-         1yMJBoftGUbPqcNPAj/SGYQOFRn1hrrIZ66GCw9AsZnsGAU9+BnndECtQW8wu/hJcrTt
-         qTXUjA1d5jA3W6URTvKZiQ3uFcNWYYYlKlWatyUlbVWR8r+twxvIbr52pcQqHDLpeC4d
-         Lzd8G8ISRvErUgCDAj2iXUVRP2Fn9ICfjfwzOnE82lphf2Kr3nDAtUwwBLUHsumS71hJ
-         jfIa9st/Ww4c7McfyQhAVkDklmx3gtbcMebLSg9XL9mvZ98bpfGOC4GXVSrXEkiuGmjh
-         KaFg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GxR3JUO9"
+Received: by mail-pj2-f8.google.com with SMTP id 98e67ed59e1d1-3ac749e0719so143993a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 22:58:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tenstorrent.com; s=google; t=1792202837; x=1792807637; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1792216733; x=1792821533; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:content-type:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Rt4iW6eCLigRGcM8uSRJchyBda6OwJVbeGjzxJgrzQQ=;
-        b=H1pRoMlzueVrol4qx0l+oT9cmGk68zNnu32dDTC8JnWWYjEoRwOrO3KdC/IXEToUSI
-         bdy/U/OxQW9VR7l1mWrHLbrb4hwENywuM8XJp3iqGJsuoyZzjNH4e4qvHyDCn0GxseHI
-         h5OKeRDakAaK4ix7JOJP/j2VKyu2W0R92X8oRH+oDqnjJpLiQbSXS2CCWrwiQ1+5WEUZ
-         YJeCxzRX6E+i6c9MPfaVJd46qSCEI9eNfTmZZYntPSwitmGRPmnNRHKbOwieJcjFqyVl
-         wM4FVz1XRTWz5HoDlpxUp4jglu2QVZUwPV9oDzyePr0brpH/pt2QGtpaTXrwwAziOm7o
-         OBCA==
+        bh=1u1Xhol/J/CmwQIkyrdfZ4whYsR6x+45itfNA0thv6A=;
+        b=GxR3JUO9aa0UMFtfc5R4GUjCE+WDh6JHH7CnNke/oeEI3bhnfI1qSUfSv+hqp5IWih
+         ecw50Iz7DZV17CGu1jHhVb8WPxjtXZG4bpXMhChjD/4vLUM9R8PBfseo4P0l5P/CyEEj
+         0cVWEx0vAEcboWP8yVLa/hR+eYAWHoChJdW9hEeY8zJQwfZOIyCq8ebikeWP57Ma3bSe
+         6cf80Z10Jv5XevrznC44sHjHssfOtCENNiQpCoh4+BFOqnG1dFgea9MsEyOwcylAC+lS
+         l1bVr4tXWvSp/KX0m5cPbD7ADl2o42fQ7GbA3DKJL21GLS1E+TbU2T4/3FZ/Hr8B9ogU
+         p9Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792202837; x=1792807637;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792216733; x=1792821533;
+        h=content-transfer-encoding:mime-version:content-type:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Rt4iW6eCLigRGcM8uSRJchyBda6OwJVbeGjzxJgrzQQ=;
-        b=H4yEdyWKtUG4T8vRM0EMyVS3m4i2PGyzfosOWQT+GRxXOzrb7CNOo/o+xKAaDjXqkY
-         3c3d0M88YRMaNukjQCOe/07RAm/vnt3E8YXo1hHTQCwpVAW/G9YZhftDotIFdq0f4TUP
-         eiS+VKN0EJvbygJPBHyNO5huF34DfXaARz4OtvaUwAMay7cM27Hk7iS3X8vsd5oSqTRj
-         kmJdLIDztUhPupu7Xh1DrKNzT55ntQ8iBPp6lySf43HK3UCaSbTQ4bn55S4Y19x3MXMc
-         U39Ap193VIOkas88kv/kUx3R0sQ8njW/mcHm7A1co/f7jX/L2IwZuoI1/NaDa792Syed
-         sXyA==
-X-Gm-Message-State: AFq9FYIhTd6pOBCKayXnZTrjmoA44aM6qQxxeAEEIbAkseM4JB3T/HaN
-	dYGaZvNCeQ92QP+t7XgbJLrsBAHbfSd0pxSYSaEEtGQkbTvc3ZDlVQUoDoqpI39uBEUjXNo3XM/
-	gAzd6NjbfQ4W06RXFjDzcLldAWEkcdoxzr6HZZwq5nOS9pd/UWd2ueMM=
-X-Gm-Gg: AYBFou34SI2Pn75cCYbxARxH7OLnNdynnn7Ye406hJdK3A5f/Pj+FDyY0/tQKeVca8W
-	LWu/IHM5m9Na7FQa/z5keixHCTF/XMgY/NFPk96M7NyVq2DCTFSxGYD1vObeS7X0SE7a1JjK+M+
-	7izQhPCqxsgLmFFN/FtrJ/3LLS6myHQIHy0PVokYM57RcnB26jcQ9qtjn17FyRew1ttgz4AGkUV
-	GwB2rsEINEBftRexUrkDP2Lve0bQhaCKMY8LQaxBCF/aAIW2WXrVmjTULREQZ2DraEqN52oCY6c
-	Z5fxsl5jWGAo2PD+HneqT8DBA2yVe/ji8KUJ1w1oEBhWhl+qdAgBnOpeIUe8+1N2Cg+aT27kxaj
-	bsffBP447JgoEU0jmXpW/8cYcxjRWiv0kBK1SYkHoZQQ=
-X-Received: by 2002:a05:690c:a4d4:b0:8b0:a7d5:8592 with SMTP id
- 00721157ae682-8b0f2056466mr5190937b3.7.1792202836817; Fri, 16 Oct 2026
- 19:07:16 -0700 (PDT)
+        bh=1u1Xhol/J/CmwQIkyrdfZ4whYsR6x+45itfNA0thv6A=;
+        b=cY+bamtq7f6b/whe8Uvk0RxwxmuRzZNj/USR9t8d85mOgRx9ocQrJgkHzR/jW3JDuk
+         Tw8fqXuL/m6G1xSLPLPDkYbYYjFJvsXFsmgK7hyqOC68PADE6bZLzrEeF4jKwhrI5ctc
+         NYCGV5zuALpGCsVp1s9Zzxy7HNgL9taW/2ZoY7z5M2t7lVv+5iSSaLfVO41O2a+gAqvd
+         3mKZ4eAJh+4fCucfTcXBgZEP5rVFVZJwYHWxpd8c5pgdwpV/zuiOlHzb8grHJjwkNAqg
+         zYChXJAoAP0dqbN1kcM+wTkOyCWPZvG3oDx1Ree3gepdaxWEwuRqGyKVZCIgY+7sy+mH
+         Yilg==
+X-Forwarded-Encrypted: i=1; AKwUvByqYDl4R3V/9W8y0P/209wTNydZ3Vx/Ln8U631PuKZQql8NcVzz7bAL7WMZyxBwmVSNOp5gWlTkQ9l9GdO/tko=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJLBuXdmkWDbLagUz28wDsYc27vTGNu3qsTCdTSSIpFuRztfK6x
+	Qc/ksSk18hFWGkIlMi2z1cjfa1BbosQIv6Gx9K77AtejXlT7CBeN+TsE
+X-Gm-Gg: AYBFou37DQj7T1Lfis5toFSNTwH4CbUHFON6VysckEPZKgsGwkNTlSI7NQK7AM0x8Ce
+	y+fmP+n0lpdU6+qJzY6sFs10P3GKR58oBeCyCbKNCKhajCIM26ETDhPd95RS+/hXOtx4eDgG8AB
+	BC5SRnl+ECh1rgt4rBD+G0ryoVAKlBoU1tq8qtozmeuxXzS+OoKrne3zM5aHMGh+KkreeFzn1Nd
+	XwU2yWU4eTAJ7hJNzQBR8nljjpujLHnvB5tPUYGUceKTjG9aNVonWhWYgG+U/3czvIskeow9F3/
+	qm3Q43qpULPrtNWHRjZp8rk6yfYcMLnlvOjqaQ+o2PK611l5SUeGeYx2DxlFuEI7TyMJ3GnAget
+	IYlBd2B0pXO4PTkMQqrnOih8KND1aoUTcXx8kJN7J/bcbs5rvik0v1e3RZXCN/yb2OCF9+Y9OqF
+	eHB+EhSAVsdTk77Ajh9WtYLufwBUSZgeKfNuiG3YyIkjYhBloyow9X12hxrhaguDDX/DzFwI0uq
+	jFviZ3BZngGzw==
+X-Received: by 2002:a17:90b:4b90:b0:3a7:9045:fe29 with SMTP id 98e67ed59e1d1-3acee2796e7mr1677864a91.4.1792216732662;
+        Fri, 16 Oct 2026 22:58:52 -0700 (PDT)
+Received: from localhost.localdomain ([123.109.188.177])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac945e72c6sm11901830a91.5.2026.10.16.22.58.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2026 22:58:52 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Woojin Ji <random6.xyz@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf] bpf: Zero-extend the index in inlined bpf_get_func_arg()
+Date: Sat, 17 Oct 2026 14:58:45 +0900
+Message-ID: <179221660441.1929028.16387900667319276841.get-func-arg-cc@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <179221432098.1890560.17043109037413683447.get-func-arg-index@gmail.com>
+References: <179221432098.1890560.17043109037413683447.get-func-arg-index@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261002-breakpoints_rtc-v1-1-a3b6542a0fdf@oss.tenstorrent.com>
-In-Reply-To: <20261002-breakpoints_rtc-v1-1-a3b6542a0fdf@oss.tenstorrent.com>
-From: Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>
-Date: Fri, 16 Oct 2026 21:07:05 -0500
-X-Gm-Features: AclHuK8RuFJnIf3a20iamJ5FM0dBZXzdMrAy_kqn8gXFOTDJuXIEynXWTKXUKbM
-Message-ID: <CAEev2e_aPeO_MF4k2ScHB5OmyOsMQe7-uz1cxD7vOAO8ntoXmQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: breakpoints: Skip step_after_suspend_test on
- systems without a wakeup capable RTC
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+The initial posting of this patch went out without a Cc list; adding it
+here. Nothing in the patch or in its commit message changed since that
+posting, so there is nothing to re-review:
 
-On Fri, Oct 2, 2026 at 4:55=E2=80=AFPM Anirudh Srinivasan
-<asrinivasan@oss.tenstorrent.com> wrote:
->
-> This test puts a system into suspend state and uses CLOCK_BOOTTIME_ALARM
-> to wake the system up. This alarm can only wake up systems that have a
-> wakeup capable RTC source. On systems without such an RTC (for example,
-> most RISC-V boards), this test puts the system into suspend and just
-> hangs, requiring power cycling.
->
-> clock_getres(CLOCK_BOOTTIME_ALARM) fails with EINVAL on such systems,
-> so add a check based on that to skip this test on systems without a
-> wakeup capable RTC source.
->
-> Signed-off-by: Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>
-> ---
->  tools/testing/selftests/breakpoints/step_after_suspend_test.c | 11 +++++=
-++++++
->  1 file changed, 11 insertions(+)
+  https://lore.kernel.org/bpf/179221432098.1890560.17043109037413683447.get-func-arg-index@gmail.com/
 
-Gentle ping on this.
+For reference, the change under review is:
+
+ kernel/bpf/fixups.c                                |  5 +++
+ .../selftests/bpf/progs/get_func_args_test.c       | 36 ++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
