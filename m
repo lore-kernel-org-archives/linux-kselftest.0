@@ -1,117 +1,113 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E4930EF8F
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 23:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E4825771;
+	Sat, 17 Oct 2026 00:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792194724; cv=none; b=oQD/W3VMeQYuEGlGsMRPpSsHkVpJFOAlbwD+sWKao6UDQVs4u4rWkTn9sav6PaFSyukJY/Vp30uenQNJNjQ3x+P2uFl+tgiiYlTFHU0GuuyMJEQAwEWq1SGqoD4BqXgNFLJDZjAksHT/NMDYsSMpvoIajoA2yvB1D2UES7sz6UA=
+	t=1792196689; cv=none; b=plZ902DA7IPmNObRAPsnzKjs+ZedJupEan3nej+ok18xYkuhUCj5DrLbRYI0gUVhRW0c7FSrjopzKMzg5EntYHYCpTCHwhD0VTNDLZMJjC+QqAM2kLJ5ZjceVrgjbkoI7A7ygFEG2HQTZKcW8rBL1lRHD5AJscUsof7MCZ17Nco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792194724; c=relaxed/simple;
-	bh=encltDdbwP86iA3t/RWo0uh5+73YF5lHb4R7QxtVGSc=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=MKDxOfMRLQK5vGE3/oTeNFyIb0vTIdMl9UJ4lKOSDzllZmwZ9oD/rd9MElcgzKjZy6kHtwHOHit6Ptobgv7Q4FuVgNlPjUYy2fZQaziD8bk9oSdwwr1+OPvph16uXAGLlJVkeYKOKrFb78OGLt4ZTctzcXbH0HgjI81jf6dTQ5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i5/ESChz; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792196689; c=relaxed/simple;
+	bh=6G5n0FDPTPjR9sBseTwJxbMei11euc6KKl3QHSgP3Ag=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fUlGOOeErrlKvwlWrmz9zIbKTI7gimLYi2nEb8DGgHkwI+x5xoNUbw0x28ZXbL6eb7fh21J59kvaNZkAc/ic3x7+RIaQ9agDXNMesw0hhjI06o5p/mV/hoIalh+ZBKWdXr4Wmfn4aoAE/C6hPlrot1JwWNm3otKRC5xwxl7eKaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TlvWTnsa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i5/ESChz"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2e60f9af6e6so2453075ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Oct 2026 16:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792194723; x=1792799523; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LEuEMUsoi9gqHznlDv6aFR0STWW3QPHsNbZxVfkH0AU=;
-        b=i5/ESChzehoZqOnDmo5QAe0grXmsnQAgamVuu3FZMvSX7rkfz233i3eXVjUafU0CUg
-         5R2J5BXI3uZVWVhZjAyiK/Y47KmBv86SieFhGQROGXAP1/PZRPkBQ0hRYmZiR3DAVgdH
-         SX5yslwd4sIN4Teo+rON6BhgNnGWVDTfMEAP8z5a4OC769lzWBFaEj4iu+DwUwmzouWf
-         N5Cn+AdjCYlNdjltdOzblD1LBONRTNvbrJ4e+bBplr7haKc8YJsCVPS6Y6VE8qvZ47Ss
-         ifHHFHhFZXuWxfieLzAMV6u8PdlqiR1PcuWM77jX4TJyUBY1glqZJA6RWU+TUsJMYclZ
-         73Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792194723; x=1792799523;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LEuEMUsoi9gqHznlDv6aFR0STWW3QPHsNbZxVfkH0AU=;
-        b=vDT1MVCcHVtgaKL/4amM7DVKSqc02k/9oJRMBhHAqTERPqiPTWekdyTxs+V5Y3E9Ie
-         kOsFl45j/+kWPd9VrIsmu/xFhGM5Soz1uLv+L1qIiEb68olnPrXdU319lBBgFqHlpBrH
-         qtuqqlU/cKHrsdDlJoG3YmxHxAq8XFUy9vNkXVEpYLCmof5uefDiiAzjQblerp8ZYzVW
-         xy+g83YBD6u5hPYkphaCrfoajQ21cjHG4NGSQ/OrjTTktAsn0E+FU57dWry7lrPVlIof
-         T4ezRtItjPVEUyoq7nABghXl9ixw83LacrUAtavWQu+KrBx7JkT107qwdpMPTNsiuL9Q
-         iUiA==
-X-Forwarded-Encrypted: i=1; AKwUvByFdUlN2+i4Y3aIPTSTqdE9BtQfYqQfEbFl7OBaKvgcoletcS2diznbjw1a/QIDuzw0YgNpm+d2kzeVqJDJcxE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ51a8/3+ABBXm0wohNkYr1EZX79Kd8Yd/j91BqefKcFSYA1ra9
-	zM557E9fhljfgcoiCaMQ1wnKsdB9iRx3muAyfoJyihWUM7tBU8a4fgeM
-X-Gm-Gg: AYBFou3mZo6wxAwXm129PEF673KeiM2sZFY6kuVeS/LHWh9W3YY2Dxxkle0EBAav07y
-	mCBn9AVQDsln1QUU64GsdRfpmm1iIBljFsDKANFczw+YZXT+z40YF+PEQF9efKDKFkhjYT+sf4s
-	3IbHtX1E46t/mRX0dSGW3Bv3z5OW+c2CPElFELZ3YlPGRZKWeada8yWrF220Ee07OjjL5ATP9wr
-	G4L3W9rC2ntv+3ZdfKwglxQhRZ5wVbPLFxNdMYA1r1RnBlaKysxa+YlLARX39wdEcFkAk3jFG1A
-	MjoJMMU3+9mXqTcAgofkx4xegFExjk2GnFH4nq8QICRE9hFC4wMpGuEszz1y0OeRtQMClCmXLuL
-	p11uRQtnIPeq+lbgYj3Be14NCWrH9Ix7QKZNtaewp67mDBT9nQizV8GhTqsC0GhEK/lvAnqdNGs
-	EgkbJ5DBNhCyUWDDSD1rWWb2rL/VI67q+Bg6acMDnS765lZWLIGNKWAzfxlIalLotqZDN1RCBge
-	P3r5s+O+9K4EEbaf0sCswCNtn0x38fRnVHdQvooxttU0Mf7F7zZNQjHRcypTQKXygn5phtkNwjM
-	5LNuOeesubOdlw==
-X-Received: by 2002:a17:903:370b:b0:2e9:55fc:ded2 with SMTP id d9443c01a7336-2e9a6d1f605mr14152635ad.52.1792194722571;
-        Fri, 16 Oct 2026 16:52:02 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e833ffdsm16714415ad.32.2026.10.16.16.52.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Oct 2026 16:52:02 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 23:52:01 +0000
-Message-Id: <DM6O08VBRY20.1PFUYACCZ38JL@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Sashiko" <sashiko-bot@kernel.org>, "Jakub
- Sitnicki" <jakub@cloudflare.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf, sockmap: Restrict iter-context
- sockmap updates to iter/sockmap
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Michal Luczaj" <mhal@rbox.co>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>, "Lorenz Bauer" <lmb@cloudflare.com>
-In-Reply-To: <20261016-sockmap-update-limit-iter-v1-2-23fa946db59e@rbox.co>
-References: <20261016-sockmap-update-limit-iter-v1-0-23fa946db59e@rbox.co> <20261016-sockmap-update-limit-iter-v1-2-23fa946db59e@rbox.co>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TlvWTnsa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 695031F000C4;
+	Sat, 17 Oct 2026 00:24:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792196687;
+	bh=9fzL5hMra9kEevlYPK33fLecenioscGbo/vl/rIlX04=;
+	h=From:To:Cc:Subject:Date;
+	b=TlvWTnsazbjZzkZlDuUYuCiLFDbW3wL3EJkR7IMhxSM1oweaOourvg1jDuySXqafF
+	 GH93mqKfeS3AQbjthAjIOnFOTT2Qh8P3Wg7YRqsF/I7vB8a5embQU6UNHC+/2LDjtP
+	 NkhjcfXnZX9x4zYFV+4rB3wBGl29260EbiqiZUw9VFm+XRsXtWGeUi3EC+OOgw36LJ
+	 iYW0oXRCgj6c7meOPLdY3e8D5SEFsDrPYZrPxNX3ZvQlAj+60T5IEX/M2JhChLLNCh
+	 uMgUyQYAbOfVL1ptmK95Ln/LZiszDbma6lZZwttxdGCkCU2rb8R4B8W9ZNQ6Tdo3XX
+	 5gH/VdyF+4QGQ==
+From: Song Liu <song@kernel.org>
+To: live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Song Liu <song@kernel.org>
+Subject: [PATCH 00/11] klp-build: Fix dependent patches, add selftests
+Date: Fri, 16 Oct 2026 17:24:30 -0700
+Message-ID: <20261017002441.716615-1-song@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 16, 2026 at 11:09 PM Michal Luczaj <mhal@rbox.co> wrote:
-> [2]: commit 64c2f93fc325 ("bpf, sockmap: Take state lock for af_unix iter")
+klp-build fails when a later patch in the series depends on an earlier
+one, because it fixes each patch against the original source on its
+own.  Patch 1 fixes this by combining the patches into a single patch
+before adding the #line directives.
 
-unix_state_lock() in bpf_iter_unix_seq_show() was added only for
-unix_stream_bpf_update_proto() called from the iter prog.
-iter/unix cannot get there anymore.
-can we drop it ? can be a follow up...
+So far, testing this step has needed a full kernel build.  Patch 2 adds
+a --patch-only option, which validates and fixes the patches, prints
+the result, and exits without building.
 
-> +		if (eatype == BPF_TRACE_ITER &&
-> +		    env->prog->type == BPF_PROG_TYPE_TRACING &&
-> +		    !strcmp(afname + strlen(BPF_ITER_FUNC_PREFIX), "sockmap"))
->  			return true;
+Patches 3-11 use it to add a kselftest target, livepatch/test_klp_build.
+Each test builds a small source tree, runs "klp-build --patch-only" on
+some patches, and checks the patch it prints.  The tests compile
+nothing, need no root, and take about a second.  To run them:
 
-iter/sockmap prog is not limited to ctx->sk it seems.
-bpf_skc_to_unix_sock(ctx->sk)->peer is a plain PTR_TO_BTF_ID and
-the value arg of bpf_map_update_elem() accepts it.
-The peer doesn't have to be in any map, so it has no psock,
-and sock_map_seq_show() holds nothing but rcu.
-sock_map_update_elem() takes bh_lock_sock(), then sock_map_link() does
-sk_psock_init() and unix_stream_bpf_update_proto() on a socket
-that unix_release_sock() can be tearing down.
-That's the same unlocked socket as in iter/task_file.
+  make -C tools/testing/selftests/livepatch/test_klp_build tests
 
-Should we restrict it to ctx->sk somehow?
+Song Liu (11):
+  klp-build: Fix dependent patches in a series
+  klp-build: Add --patch-only option
+  selftests/livepatch: Add tests for klp-build's patch handling
+  selftests/livepatch: Test klp-build with dependent patches
+  selftests/livepatch: Test klp-build with patches to different
+    functions
+  selftests/livepatch: Test klp-build with patches which cancel out
+  selftests/livepatch: Test klp-build with created and deleted files
+  selftests/livepatch: Test where klp-build adds #line directives
+  selftests/livepatch: Test klp-build's rejection of unsupported files
+  selftests/livepatch: Test klp-build with patches which don't apply
+  selftests/livepatch: Test klp-build with patches which need offset or
+    fuzz
 
-pw-bot: cr
+ scripts/livepatch/klp-build                   | 121 ++++++++----
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/livepatch/README      |  16 ++
+ .../livepatch/test_klp_build/Makefile         |  27 +++
+ .../livepatch/test_klp_build/functions.sh     | 150 +++++++++++++++
+ .../livepatch/test_klp_build/run-tests.sh     |  68 +++++++
+ .../livepatch/test_klp_build/test-basic.sh    |  57 ++++++
+ .../test_klp_build/test-cancelling-patches.sh | 102 ++++++++++
+ .../test_klp_build/test-dependent-patches.sh  |  72 +++++++
+ .../test-independent-patches.sh               | 124 +++++++++++++
+ .../test_klp_build/test-line-directives.sh    | 175 ++++++++++++++++++
+ .../test-new-and-deleted-files.sh             |  94 ++++++++++
+ .../test_klp_build/test-offset-and-fuzz.sh    | 120 ++++++++++++
+ .../test_klp_build/test-patch-not-applying.sh |  73 ++++++++
+ .../test_klp_build/test-unsupported-files.sh  |  30 +++
+ 15 files changed, 1189 insertions(+), 41 deletions(-)
+ create mode 100644 tools/testing/selftests/livepatch/test_klp_build/Makefile
+ create mode 100644 tools/testing/selftests/livepatch/test_klp_build/functions.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/run-tests.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-basic.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-cancelling-patches.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-dependent-patches.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-independent-patches.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-line-directives.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-new-and-deleted-files.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-patch-not-applying.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-unsupported-files.sh
+
+-- 
+2.53.0-Meta
+
