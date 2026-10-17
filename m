@@ -1,91 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06EC3451DA;
-	Sat, 17 Oct 2026 14:50:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866F22E266C;
+	Sat, 17 Oct 2026 14:53:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792248607; cv=none; b=nCs7OlgLYIg2LlaKUrklrbyeOTy5fwU60LnXwFlR3JkbNhUzBs8sSOWNK4REeIfG5qQiMlCtE97bGTLKTJ9ZY2TjWtgoWf0eYOJnwnExXeTFI52mzF7E6L0rOOG18vzND9Va6dN2COVmWSTvQ9eQS+u/thSU/WLIBp4Hpj3a7yY=
+	t=1792248804; cv=none; b=l2vMYIvcLRqhl7lOw4dCy0IlV9J7Ne3/c8R+PYF3qC/1XCjcsDjnYSpBzOqDN3UXnR1m8hlx5YX0at7bF3s5zqdpfaZnedwjSIf259AEPwTbg7ETVMBniM0Qi8DMUsNti2QwNHBCZ4Pnwm1GScIKu3rThBibH6j38IE47rWjWw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792248607; c=relaxed/simple;
-	bh=aOw8WTvIUT04mkmectCcHghGlY0fcuUihqp7YFre96M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=iXvNTqs1TC3i2G2uV4RZffjSmGAFR2aDOkxU2eKoKzOCq+zBOsDPmZ3bmdQ6Zy25X0+5OsQa20Yt5i4FdiGZGKUCIuT/6Sr9Vu8WhxbVYRKiyZiavCNtndYIZlEDu7I8M7L8Hx+XnnrqkVloqCqFcqRsSWHN4vD2Yxx5X5sZV9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gbgxpblW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792248804; c=relaxed/simple;
+	bh=fryIqE7Rw8splORyfR0h2iOyhHC2h719ALE5w8lFEVs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=MKGv+/WMDY4SuVgMrIsTwdcHFM466xaA08UOXK1kmb4E0ReVXpyDcQ7dJCEWkvzlgDq0vIciwiXCwTMYcnf12bI14G2elZ25PJ3mb2/UfpTp3Yh8HrOCUDd1zfcuH8XRw3bqih03XjLuDsQ/dnC24He9aiwkLUS0RmXOAvpXiT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FGWhLXlu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gbgxpblW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2871F000C4;
-	Sat, 17 Oct 2026 14:50:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FGWhLXlu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0FB91F000C4;
+	Sat, 17 Oct 2026 14:53:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792248606;
-	bh=wG7qiAl+Rvy8noPtXI5iAzwiIXldCE75cshh7ohCKgU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=gbgxpblWv7UNtDqrYHfXUA9Bv3ALgqF7O7kYec+eXyR0aX+zb5ec6/syO0WqOB7ww
-	 6mPfvZDZD6wYuBQ2HMprAw/TbzBN2uZLWXKL8pW0bAUJ/5A48vGu6qMY5pDIrx7o3q
-	 bYtginJuk39pALDQ+fnQNzYx38ppbD/g4xK00JBQKtCG7IsAj1HOalwCu3JMy3ACZu
-	 QW4qjBg2KW005eWqorsu7+ANyBgoaUy/gjGgvL9FO09NPaBmbl5wXtEvbG1Ii6IgiP
-	 NG7B9mS1fLJuCK2S94r6w3MBECyUV6KvW9pxOH5NqlxyWcLKANPy4S9I4VQfzP7Yzb
-	 Y+Sk8PZYttERw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 774ED380CFD6;
-	Sat, 17 Oct 2026 14:50:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1792248803;
+	bh=nFEIPKzxh/STgeEaGPl4FKDwpruwwaBT7h5f2UfiKHA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=FGWhLXluvJBDD1ZAIbTOsaHO/abUyld2KdAC3vUsipfeT+edjqEVGyYyNzPbpdk1E
+	 lH7NG2tODMOiYAZvoyjF2YnTGhvWI6CpiWNvCluq21BwUYz+tLGqoMAGxBeCvkHw0y
+	 rl1+F1kbD5Lp4ieAcRpgNf0WkbG85HrZ5zxezMkFHsikPyasx52CXeGtP6Z3+z8bTR
+	 8Z9HRBPZM26BOu7jVq4Ie7tZY5bAfDWjbtyfGNPbzQqdhHl4EpPg3KUSV0qHiMmdOO
+	 ZpOaq/n17Ftwx4DS/uI0+HiU0l3g/zcIsKmy9yZH3fo9TGQXZQlMOvk9h4GQghDxf5
+	 B77KDpJ8jLpbw==
+Content-Type: multipart/mixed; boundary="===============9111035185755451495=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v5 0/3] bpftool: Fail map dump for maps that
- can't be
- iterated
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179224860527.1268583.11977700163601405121.git-patchwork-notify@kernel.org>
-Date: Sat, 17 Oct 2026 14:50:05 +0000
-References: <20261016194825.230433-1-skokovmaksimevg@gmail.com>
-In-Reply-To: <20261016194825.230433-1-skokovmaksimevg@gmail.com>
-To: Maxim Skokov <skokovmaksimevg@gmail.com>
-Cc: bpf@vger.kernel.org, qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, kuba@kernel.org,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, hi@tychen.cc
+Message-Id: <eb32cc32c29af7d8ad5a342bbd9a0da19c8b53d31a71754b98953a5be62638f0@mail.kernel.org>
+In-Reply-To: <20261017142649.51047-5-leon.hwang@linux.dev>
+References: <20261017142649.51047-5-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 4/6] libbpf: Factor out __bpf_sys_fd helper
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,davem@davemloft.net,edumazet@kernel.org,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,shuah@kernel.org,kuniyu@google.com,liuhangbin@gmail.com,mkarsten@uwaterloo.ca,masashi.honma@gmail.com,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,leon.hwang@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 17 Oct 2026 14:53:19 +0000 (UTC)
 
-Hello:
+--===============9111035185755451495==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> libbpf: Factor out __bpf_sys_fd helper
 
-On Fri, 16 Oct 2026 22:47:55 +0300 you wrote:
-> "bpftool map dump" treats only ENOENT from bpf_map_get_next_key() as the
-> end of the map. Map types that can't be iterated (local storage, ringbuf,
-> bloom filter, arena, queue, stack) fail on the first key, and bpftool
-> prints an empty dump, "[]" or "Found 0 elements", with only a non-zero
-> exit status.
-> 
-> Patch 1 adds a helper that prints ENOTSUPP (524), which the kernel
-> returns from some BPF commands, as "Operation not supported" instead of
-> "Unknown error 524", and uses it for map create, map element
-> operations, map freeze and prog run. Patch 2 asks for the first key
-> before printing anything and fails with the map type and the error.
-> Patch 3 adds a test_progs case on a socket storage map, and on a queue
-> map without BTF for the plain output path.
-> 
-> [...]
+TL;DR: Commit message nit only: subject and body call the new helper
+__bpf_sys_fd, but the code names it __sys_bpf_fd. Should the message match?
 
-Here is the summary with links:
-  - [bpf-next,v5,1/3] bpftool: Print ENOTSUPP as "Operation not supported"
-    https://git.kernel.org/bpf/bpf-next/c/b32b4956d451
-  - [bpf-next,v5,2/3] bpftool: Fail map dump for maps that can't be iterated
-    https://git.kernel.org/bpf/bpf-next/c/70ac4de43ad1
-  - [bpf-next,v5,3/3] selftests/bpf: Test bpftool map dump on maps that can't be iterated
-    https://git.kernel.org/bpf/bpf-next/c/631fee3f5a18
+> libbpf: Factor out __bpf_sys_fd helper
+>
+> In the next patch, it also needs to use the extended BPF syscall to
+> receive the reported log.
+>
+> So, factor out __bpf_sys_fd helper.
+>
+> No functional changes intended.
+>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+This isn't a bug, but the subject and body name the helper __bpf_sys_fd,
+while the function the patch adds is:
+
++static int __sys_bpf_fd(union bpf_attr *attr, const size_t attr_sz, enum bpf_cmd cmd,
++			struct bpf_log_opts *log_opts)
+
+which follows the existing sys_bpf(), sys_bpf_fd() and sys_bpf_ext_fd()
+naming.
+
+Should the subject and body say __sys_bpf_fd instead, so that searching the
+log for the real function name finds this commit?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39042048581
+--===============9111035185755451495==--
