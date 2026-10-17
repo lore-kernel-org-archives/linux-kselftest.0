@@ -1,166 +1,156 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77CAC3C4163
-	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 10:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792233481; cv=pass; b=KmB6JW5rJXu8qbV27LsrOh0Q0UUL4ivsn3AE+PO3HcMeCJdK5W6igc8YPBM+dolHoZ/6lZ0AL5v7BJKTjLxan1E9KaCH3USiF6g+i4RNHxGjaGmgj0/jP9ApGiGZkC/J0WSMvowi4LU+Gz5vMjZuM8TQwgPcfDk+FQYaipN0o8c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792233481; c=relaxed/simple;
-	bh=lpQm89oJ+ypIsAu728Xi2E+HeQLkTJDqgEphRq69EuQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ogwElfp6OTJzzTBzZmVS7+aiPWKijja3OQsqjV7zD9oG9Mk4k1B9WJ6ujVU/rC6c/MPWWyz0K4Z5bjmgRGSTv44ndssvvYwA2lVQIMJeKt4IBP4frA1IxbPHIKWN/whr2nTM3Xig10E9B0s6WAJUw1EBXeo+mOVYtGINTjaS1LQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=uSrfBAHd; arc=pass smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B1D3B14A4
+	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 11:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792234951; cv=none; b=YTq88M5NPB6oYMHI4/GemfecrMs1vpAN2LBX9QHbLa5XUTz56C2MqCGh/NsWBtsFAsob8t8R9kTHoGsmvPIX+y5glFTyl2Hh/5BQJUNuwrycYkpXUI/jVhzC79E1iQ5YeBNDS6PW3VcPYrBO2Q1tPtTc33IaSO+LUzKeOsHnjDY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792234951; c=relaxed/simple;
+	bh=FjGEp2k4FfSPM+tdsngqSEiml++4V5/mJNGAoCdd2oA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OqgEZb67hy1BI1K1g/Wnob8f59vPS6kX4TkgRahScwxEm5mNEUDJoOZE+L9+TUy1ZKBup4fnpr55V6futx4gr+e/dhEXPJXS4atfZpDNzDvjCPCpZtQHqQDkgrzjHvA7LBp1N0mfcpXKIs1UUDSqHjoytr7akY5xrTVlKXbD0Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cHuZQpun; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="uSrfBAHd"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-67990a45e02so629780d50.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 03:37:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792233478; cv=none;
-        d=google.com; s=arc-20260327;
-        b=iT9ZqFjs88aNTOZfnKActT9MFZk9Hnt1UoFPAiNsGG6xJgg+20nHtwAMfuk4ZgRnYX
-         ahXBHU+Fv/+/jR4Kzi05rqg0S8cycmhk+bQDOvAeYPAaOQoOZgt5BwU4ZTSZlwgYHll0
-         4cG2p7xGooohuwcY5X7vPMEsa6y3jYgT3Ij8Z2tZ0AcBA7oKSkIKIK2m1waUdOuKA6sA
-         RS4QHqmzWJVGo5KywRkFmHVd+OpOC0J1PXyInOIlI6nWrAsuht3LFWPNdU1NGuBQiOpR
-         8Q+H1jMRhAmS5KCNJdLxOyZOsWF6J/fvlL3voC2EMYaPIMDhPmQY7MFNHOifZPqAYyYV
-         xZiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=MRmDjnl0l5zRiljfJEoqVKQPlK3YrtzEIxHy6EIjrqI=;
-        fh=XQInNJyZv7jxONc3J8o55Oq1H9CQVdCt4aFav/78Gy8=;
-        b=OUNYXyUzWGSaJUinQoAVLjgU9HpOPbE9NQIsCrocOMTlES+IQfkFEHRJC6cB4rbXoK
-         PKEGGAwuE/Xk/jRUkFJub1WyNzBtWFjpMVek7U3v07x5ebspLquEXylYaKatiy3PSVZT
-         OaAbdQGS2wTM+md5zeMLAyz3w86jJ7uOy3zi7vK25KaZoN2xZDW/MjHgtdZpirSiR+nj
-         cVbxuF9RqVRutx+AuJGDqJNjTtVNaLeoF5O/f+/3fFIX9aKVIH+v5yRPajUqccRw93ug
-         tD8Dn9jMK+64BO5Ad7PMpCFOsWgmzeq3ELjrzOm2zn5SmOUmCEIQ6K5tSpZBXdswtH3K
-         GznQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cHuZQpun"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e9ae391a05so3781885ad.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 04:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1792233478; x=1792838278; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MRmDjnl0l5zRiljfJEoqVKQPlK3YrtzEIxHy6EIjrqI=;
-        b=uSrfBAHdi1kw9pdt1rRTCQCehVBqjUEphMkLAn0rsLnrx+5ggEOimnaLY1KxVWaqt7
-         MFA9g3PukgfK3de9suYNHp+wRQhMIdnXuVX8piqOwIdbYoqI2aqQis6r2p672DZUm2gs
-         3XwloHvq4YrTg3wNq36EM1Ac+3ovf92RV0JIPE+C+vAtZdA5Q7Xe8XUdEhLA5Q5N1QfF
-         shmTiDwC8XYNrOrNQi/qLkSkYM0BcY8Fciu14sFA2gEaD8tz18+6oM3O9/eBUwfYd0Gf
-         6B30H42afOEQhvlU/HpurAov8omsrFT8lMItKRtDOtI48x/FfVgxst8Y5MwIW4GG26eG
-         jUuA==
+        d=gmail.com; s=20251104; t=1792234949; x=1792839749; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=EooerGosbt9uNoLNk2R3r8CmWtmPXhr2JTyWgkAeP44=;
+        b=cHuZQpunqcDKgEEWM+GEZRfBnCIGjPlwrCxJQX5QcKOO/pp1ON9UIdIoaZVF9EGWLQ
+         ydpO4Rp1bQ3Vm9ykUu/sq8VzstLrvMLiMa6fhg/qMh+yTHdtJQ02lhzid4jPb4//r+Ok
+         QKRItRLq0gQRej8lQ/8a142R1MEcWEara+aqpwP51OrDWPDoRanzVL2tk7MNOwQjrRNQ
+         aaLHhUxO5BbkWLAOaynqv2gR8u0LXZPnuvue4tv90X0PgcsGpXxh9hj6VzL6Nmq8px9E
+         KEDsc8JmSmFcGaFtIP+jUy3z+E4CKqWDgSHt86Hi7cffVxSMWfU0saVPvdKy9TU0s+A3
+         eUlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792233478; x=1792838278;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=MRmDjnl0l5zRiljfJEoqVKQPlK3YrtzEIxHy6EIjrqI=;
-        b=OyY5SruKE9LxTnMLZoXusnGwaM569EP2X1DBUVOwTiAay8oTj58hxS5feS6PeVNURW
-         szc9wLRe8Kldtakq4jp1RyxToeU4gE3YMVaC801XlTq9B/k5cGGXJNib2NPVddoai9dS
-         zCmlLDaymyxKGidIOJcpG9DwBa4fVsqRqrVSIr+bTRNCHSmGNQw7VWg8Td/TrQfMoeZY
-         ZDG2RNe/U6hWlHYXS+movBmHOT0yDxq6e9HapzgXpu1ilPdy8aFrutCtJ6MX2cEeIG64
-         NUMGezBez5zsPzstFhd0DwOoNOG/Wl5W86h61CxlWljT28HGpn+JJBLp04EiKV4MyTzt
-         Kt9g==
-X-Forwarded-Encrypted: i=1; AKwUvBwk43JZyWDUyK6ZCOcOGq3f8OpbYbrircm3laqdomeV/XdAxmiB5XEsDecLq6J1ppiP3JiopkzUVhqdmgaIJoM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYITwC5Yo6Ze8lAYSBxOZjq05SWVn3tZgqjBkPFesF8LjULNYLQZ
-	iF2pkDUcq2hPosHr8ortXgPEHOw23xdh0guzidDd6NQORbxV3OGw169SJ0Oag/kg8+OoTRHFtEi
-	qrBRu+4Vic6+xx23BGTOl7hGwtsuHmXyY/tFjtG/4
-X-Gm-Gg: AYBFou0rlirUaMa91DMYnmb25g1HXYiPHkQ6qT/0lQn1JfIwI9B1XQ6G87zr1/zrjD8
-	Pc0gjBYVuejvJBsQwL6jyKnHDzLh0fOTJQvSFnq7ST19dYVjno3M+N/idPv/CrivE+vRyUHzbcK
-	KleffzOaYyTdZ65qpmuZzIscADbSCcG047FqMJLWpKxQmsCVREtNe3EzRVhTbb58odAxNcuO9ET
-	dO7SdqWJfi3KGReR89em9UOxf6U+hcSA83w/lrddmVFMC5XWWIWUAcoGBYOOrkmga//j0ZE+sgS
-	9An4ip7aCrSnMJv6BSqeP1i+nfLQDMusjUtWktojCKplB+EnhYx2AzJIcAOaEoGFDB3lFyGf7UJ
-	D7wg4DWkRAk54hND4sjAq8yf4xciaWy6uh+eYe8U3l90HQshDs7pE/cfPWuP51nI6wZ4FCWXrfQ
-	qV+iTJBTsgXU19FXw8KHZbj+RtDjejfWOQixC6VFdNPX1p8tyduOBuLh4x3+ipZW41g5f6g+eX9
-	jwWSk7aQrRZBI/JsbTAXEeXQGtUbpeVMWCUi9d/b+1shR04M6PZ/jgEo/o5JGqDVAgC6r+/Ic9b
-	DTlGBXLmkZEL5w==
-X-Received: by 2002:a05:690e:4812:b0:677:ac49:ebc4 with SMTP id
- 956f58d0204a3-679ca883777mr533948d50.67.1792233478237; Sat, 17 Oct 2026
- 03:37:58 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792234949; x=1792839749;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=EooerGosbt9uNoLNk2R3r8CmWtmPXhr2JTyWgkAeP44=;
+        b=I8VCqBGzXZ1pJMzHR6WlRuQWsrcI41CaQGI3pzwMh0Y4gwr8t7IBVpuiC6k2Qk1Qx/
+         RYPEfQuC/GVJx8pTqDUSv4wFJ/mQ74C7FVDJufCYTBDrKOIfv/VNQdPbJRPzrtzgi7jF
+         12f0eCuktDKc42RDImuv+OxxaiDd6DMBJaoOYIRHlbbJFxQrt28pxFtwxsii3Q+zV7GT
+         yNLdtCVitucAojG6g+A9/OaLJ3E9RTG+21VxC8LRiR5jqmHdM6U85aidSIgfcrcCqgN2
+         vkG67E2sLrVxxXflmMImef+sXUD+q+fa7WbkycDr40+xcERqGvAih+BBAVhYXm84ZIJP
+         pPSA==
+X-Forwarded-Encrypted: i=1; AKwUvBztC8mQVI5GBsx5EFaMVZ9dybUnn5w3GQstXwA5VRYRzmc2ONW/7uOThreooSxrtBeQZJ4liaSNuUN0rcC/BGc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJrHAyghxYzf5uhkclgCuNwzChlt/k8jV4KjXlbX0o/tWGA8wBY
+	yNr1YPw+V1+gSbwTVwRQNET76LEMoLAygIQkIgoLAdopWKrU3BvXLt2T
+X-Gm-Gg: AYBFou2Xx4Hm+nkggZy0JIU+Ij0iZUx6FWc6RB/8olON5glfw0UpaPjPLsD9PpleKKF
+	lzRwN3sDtQtyLMc0Iwf94fqnUz6jIxgqI6LpNlXCpNhM6tRKC6lhT0hrKlvjNXWDaQ43y3Ih5Gk
+	BVXyb1XPYTgqMT0wD5OgVeOGcQCh+GBKaeQ3JrhV7NAUBJdAdC7VoqH6aL2Of83WYgVhF1iVwzp
+	uSzVFgUQ6Sqw3L5X8LtaDRX2xGd5jbFyBgb1DUcEkq2BMEnOybA5ZKB4zzKzLeI5eX+6/EYyje3
+	/J84AtbO5U0WhJXMRd44E/eMtqzA1cg5u0BJQx1wf9likkWS+glGmiHtFSfbwYVMRqNmwJDICAU
+	lEmfK2kQEvuv5MW0XL5xZA3TX8X5sEzzuMXCd3cnZ04b0h7PeXOBb/fKQU/hdEjZI8pF2E+WFOH
+	4LGLXM2gXUXGr4iwzndsPQXfaLlyNpvXZiSKKBZ+rQBnt2R/N4hwiRyis1RhojmIRvtVtRijkdW
+	YM35xRXb/1FDgMlecxMgQ==
+X-Received: by 2002:a17:903:1a10:b0:2df:a0d4:71de with SMTP id d9443c01a7336-2e9a66ebc71mr15900275ad.0.1792234948529;
+        Sat, 17 Oct 2026 04:02:28 -0700 (PDT)
+Received: from x1c ([2405:9800:b670:b64b:7c65:ff3e:80ba:b06])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e804dd9sm20559955ad.16.2026.10.17.04.02.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Oct 2026 04:02:28 -0700 (PDT)
+From: Tharit Tangkijwanichakul <tharitt97@gmail.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel-mentees@lists.linux.dev,
+	skhan@linuxfoundation.org,
+	me@brighamcampbell.com,
+	jkoolstra@xs4all.nl,
+	Tharit Tangkijwanichakul <tharitt97@gmail.com>
+Subject: [PATCH 0/5] KVM: selftests: Reserve memslot 1 for ucall MMIO
+Date: Sat, 17 Oct 2026 18:02:08 +0700
+Message-ID: <20261017110213.46199-1-tharitt97@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261004171628.3544978-1-julius@bairaktaris.de>
-In-Reply-To: <20261004171628.3544978-1-julius@bairaktaris.de>
-From: Julius Bairaktaris <julius@bairaktaris.de>
-Date: Sat, 17 Oct 2026 10:37:21 +0000
-X-Gm-Features: AclHuK82J-XBozK4zoTEoCCy3jbA2RmbzrDB-Adm8RVieBFQXiCNHqYkufTba4U
-Message-ID: <CAC1t37JvSaXzbp_spXteQojKL6EvRLLUrwvwSO5e9pcJ4cpaPQ@mail.gmail.com>
-Subject: Re: [PATCH nf-next v2 0/4] netfilter: offload a TCP flow whose reply
- is never seen
-To: pablo@netfilter.org, netfilter-devel@vger.kernel.org
-Cc: kadlec@netfilter.org, fw@strlen.de, coreteam@netfilter.org, 
-	netdev@vger.kernel.org, geldot@protonmail.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Pablo,
+This series addresses the TODO in __vm_create() to reserve memslot 1
+for the ucall MMIO region. It introduces a shared base for test
+memslots, migrates existing test users, and adds a read-only region to
+prevent overlapping allocations.
 
-gentle ping on v2. Let me know if you'd like anything changed.
+A regression test verifies overlap rejection and continued ucall
+operation.
 
-Thanks,
-Julius
+Testing:
+- Intel Core i5-10210U and Rockchip RK3588 (arm64).
 
+These tests are changed but not tested: 
+- arm64/sea_to_user.c: not enough memory allocation.
+- x86/nested_vmsave_vmload_test.c: requires X86_FEATURE_SVM.
+- riscv/sbi_pmu_test.c: riscv hardware unavailability.
 
-Am So., 4. Okt. 2026 um 17:16 Uhr schrieb Julius Bairaktaris
-<julius@bairaktaris.de>:
->
-> A router that sees only one direction of a TCP connection, because the
-> reply takes another path, cannot offload it: conntrack marks the
-> client's ACK after the SYN invalid, and the flowtable only takes assured
-> TCP connections. The setup this comes from is two subnets on one L2
-> segment, with the server answering over the shared segment.
->
-> The series adds no TCP state:
-> - patch 1 hands that ACK to the existing loose pickup in tcp_new(),
->   gated by nf_conntrack_tcp_loose, as if the SYN had not been seen
-> - patch 2 keeps the reply direction of such a flow on the classic path
->   until the connection is assured, as act_ct does for UDP
-> - patch 3 offloads the connection in the original direction and caps
->   the timeout handed back to conntrack at UNACK, as
->   nf_conntrack_tcp_packet() does
-> - patch 4 adds a selftest, which fails without patches 1 to 3
->
-> Pablo, on v1 you asked how TCP tracking copes without the reply
-> direction, and guessed right that the goal is flowtable offload. The
-> connection is tracked like a loose mid-stream pickup today: window
-> checks are off in both directions, and a FIN or RST still takes the
-> flow off the flowtable.
->
-> This series was written with the help of an AI coding assistant. I have
-> reviewed and tested it.
->
-> Changes in v2:
-> - patch 2: the XDP flowtable lookup does not return the held reply tuple
-> - patch 3: cap the conntrack timeout at UNACK while no reply was seen
-> - rebased onto nf-next
->
-> v1: https://lore.kernel.org/netfilter-devel/20260910090052.2034970-1-julius@bairaktaris.de/
->
-> Gary Dotzler (2):
->   netfilter: conntrack: pick up a TCP flow whose SYN was never answered
->   netfilter: nft_flow_offload: offload a TCP flow that has no reply
->
-> Julius Bairaktaris (2):
->   netfilter: flowtable: promote a flow offloaded in one direction only
->   selftests: netfilter: cover a TCP flow whose reply is never seen
->
->  include/net/netfilter/nf_conntrack_l4proto.h  |  9 +++
->  net/netfilter/nf_conntrack_proto_tcp.c        | 16 ++++
->  net/netfilter/nf_flow_table_bpf.c             |  4 +
->  net/netfilter/nf_flow_table_core.c            |  5 ++
->  net/netfilter/nf_flow_table_ip.c              | 26 +++++++
->  net/netfilter/nft_flow_offload.c              |  6 +-
->  .../selftests/net/netfilter/nft_flowtable.sh  | 75 +++++++++++++++++++
->  7 files changed, 139 insertions(+), 2 deletions(-)
->
->
-> base-commit: 87b80c2f6b05cad9f0ff9136709c62a0f59923e3
-> --
-> 2.53.0
->
+The following test failures reproduce on both the unmodified base
+<8edffbc1f6272db167037e1a8c49b99e9cd04803> with host kernel 
+7.3.0-rc1-gd4b7fb647204 on RK3588 and with this series applied:
+- arm64/vgic_its_save.c
+- arm64/hypercalls.c
+
+These failures are unchanged by this series.
+
+Tharit Tangkijwanichakul (5):
+  KVM: selftests: Introduce a shared base for test memslots
+  KVM: selftests: Use the shared memslot base in memslot_perf_test
+  KVM: selftests: Use the shared memslot base in memstress
+  KVM: selftests: Reserve memslot 1 for the ucall MMIO address
+  KVM: selftests: Test protection of the ucall MMIO region
+
+ tools/testing/selftests/kvm/Makefile.kvm      |  1 +
+ .../testing/selftests/kvm/arm64/hypercalls.c  |  3 +-
+ .../testing/selftests/kvm/arm64/sea_to_user.c |  2 +-
+ .../kvm/arm64/stage2_block_transitions.c      |  2 +-
+ .../selftests/kvm/arm64/vgic_its_save.c       |  2 +-
+ .../selftests/kvm/arm64/vgic_lpi_stress.c     |  2 +-
+ tools/testing/selftests/kvm/dirty_log_test.c  |  2 +-
+ .../testing/selftests/kvm/guest_memfd_test.c  |  2 +-
+ .../testing/selftests/kvm/include/kvm_util.h  |  1 +
+ .../testing/selftests/kvm/include/memstress.h |  2 +-
+ .../selftests/kvm/kvm_page_table_test.c       |  2 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 19 ++++--
+ .../testing/selftests/kvm/memslot_perf_test.c | 62 +++++++++++--------
+ tools/testing/selftests/kvm/mmu_stress_test.c |  2 +-
+ .../selftests/kvm/reserved_slot_test.c        | 61 ++++++++++++++++++
+ .../selftests/kvm/riscv/sbi_pmu_test.c        |  3 +-
+ tools/testing/selftests/kvm/steal_time.c      |  3 +-
+ .../selftests/kvm/x86/nested_dirty_log_test.c |  2 +-
+ .../kvm/x86/nested_vmsave_vmload_test.c       |  2 +-
+ 19 files changed, 128 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/reserved_slot_test.c
+
+-- 
+2.53.0
+
