@@ -1,38 +1,38 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1D948F828;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1723E3141;
 	Sat, 17 Oct 2026 12:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792239911; cv=none; b=K6kXBb4HpY/uVaRS2T+KIg8vLSR3Kn3n7Sdl4YGmlzrRziY1qjbtQmZiDIWcs2oCFpUpy+5T2z3/gjF7LBx0UiX6tqYCwWe6S2HYPGgrypyskcnML13dztS5kVIMJS6MsSE6/Fpxya1TDuwROc1l7v5EP4L62nIiAsoiuUhOUJg=
+	t=1792239911; cv=none; b=XAibYGgE3oCjr4wFojA0q/ceNJFK0+On4GCpgIB8Gwh+TROH28GrIsNSr6J6jf/H5XZHLL+53CevHriWgKWreOCeBwGU2kcHItsNT21acUdZ1iUGm4sBeL+/F0HRTVJwjuB7yCC5sBU1EbIF/WJ5vB/A2XNdsHVviO6wv71kiK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1792239911; c=relaxed/simple;
-	bh=UlnAh4X/W1iV8phD2/NlYNYiqbhE+WtRQiUM6BtDIl0=;
+	bh=ApWJTmQLM5kBRmH9Z005pGADOjN7eGdNjg3kodctWb0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OOKf+dkakCy8dfrHmwYmncZoWO7UEjWvL/2yy6op84aD8On8+KmLL1jagwDGU0oZhMkSlUhDM9TUEmeUzcZrb5lEFcaKYg3GZ+Z43DqN65z0x7wyGWzxVV0KXdx1qU6SHxM0jlE5aLkDWsIGYYNdGvz0FiS1fRaa5uEhHSGXrYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nQfu6qVs; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version:Content-Type; b=FZxPDS3VevO4j0ULcN1fxsUZioYrH52ok3yggvCwCz1i0Q6zbxM9PXoufV0uzBSDRG8NQi7m1OJITs7/WkkEy93fkAz+Vr+Sx2lj5d8QqoPOprSN3kdSf2meAW9YsbKeYv0puIN/tcFCTMOViKSFw5703y5a4uv1CjGNIIHv4YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Ju6q0N0u; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nQfu6qVs"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Ju6q0N0u"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=p4JOl5VU+3U9bTyz+MT4JEVbN8bplcD1G1bGlp0DP8w=; b=nQfu6qVsnXqRYRbrqt71J/NMYE
-	o84fIn4RP05eF36cBYWE0XdY4vtIlOv5W0Rxp4IU8QBbNfXP9GvgtR3YbbzJto78Qz6DnJRRjND3C
-	wnLQK0XFlrewjPzJu/rPCEscBYm61iN2ssDjO/52afQnsy9YPnCZIz8mV3k7hAOeYwI1wNa1slKoG
-	b1zSCyAlevFPDelBTyNTQYfoYqY5aBT1sbC7FxL6ZoF+arlO1ETy2zgM2lcRSSPN1kFUFu0pOW8PT
-	w8xGirv34qgZfhdYMi+et6IivbKcnc3VTaw7mHD/Te+e8tlX+LWo/pvaUnv+s8IiPsr04dwFVbEjX
-	9/JiuZEg==;
+	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
+	To:From:Reply-To:Content-ID:Content-Description;
+	bh=7ARJOUQcl+1ibhuvMgnL7DEPIiHAQh/yHpzYeA1wcrY=; b=Ju6q0N0uXu0f5TShQr04+DS98C
+	wBfPF0RC9vS7oxomnKBAxyQrIwRLPGT2JPF9V2zfRxrJLwEHoEeaslRSKynhS5zNPryajKuM8yCMq
+	B0c/Iybil40TSBVaH3Hw+eDEt3NHiDyjdG86sS1mFTHR7ywoTYIwO+UVpvQmr2X5h0h/0HmAa0htk
+	Pr/TnjG+OZeRN4ZsKRl8Ki2/TtMyx+IX0XuzEky6Kjtu8HTMKSmJ0zOPpjG/7TBQ9Pp+w0jDoiVXC
+	pKDgo/Ihnc5i+NEZU+Bigrd5efBbkjcMM81mrCjUN/0o94A69FncxJGCdYVC3AD5Jc3X0GqNosGuY
+	3SczitXw==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1xI3TD-0000000CVDU-47l3;
-	Sat, 17 Oct 2026 12:25:04 +0000
+	id 1xI3TC-0000000CVCH-21oT;
+	Sat, 17 Oct 2026 12:25:02 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xI3TD-00000002YnZ-3CyQ;
-	Sat, 17 Oct 2026 13:25:03 +0100
+	id 1xI3TC-00000002YlO-13MM;
+	Sat, 17 Oct 2026 13:25:02 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mushahid Hussain <hmushi@amazon.co.uk>,
 	David Woodhouse <dwmw@amazon.co.uk>,
 	nh-open-source@amazon.com
-Subject: [RFC PATCH 40/55] KVM: x86: Implement Hyper-V's vCPU suspended state
-Date: Sat, 17 Oct 2026 13:24:46 +0100
-Message-ID: <20261017122501.610248-41-dwmw2@infradead.org>
+Subject: [RFC PATCH 09/55] KVM: x86: hyper-v: Let userspace fault a forwarded hypercall
+Date: Sat, 17 Oct 2026 13:24:15 +0100
+Message-ID: <20261017122501.610248-10-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017122501.610248-1-dwmw2@infradead.org>
 References: <20261017122501.610248-1-dwmw2@infradead.org>
@@ -65,167 +65,91 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-From: Nikolas Wipper <nikwip@amazon.de>
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Introduce a suspension state for Hyper-V enlightened vCPUs. Microsoft's
-"Hypervisor Top Level Functional Specification" (TLFS) introduces this
-state as a "vCPU that is stopped on a instruction guest boundary, either
-explicitly or implicitly due to an intercept". The only documented
-explicit suspension is caused in response to a TLB Flush hypercall, which
-will use the state switching API in subsequent patches.
+The architectural failure mode for an invalid VTL transition is #UD at
+the VMCALL, not a hypercall status — a status would advance RIP and
+complete the call. Define a result flag for the forwarded-hypercall
+completion which queues #UD at the unadvanced RIP and ignores the rest
+of the result.
 
-Each Hyper-V vCPU now has a 'suspended' boolean field, which is checked
-before entering the guest. When set, it forces the vCPU to block. Once in
-that state, the vCPU ignores any events. The vCPU is unsuspended by
-clearing 'suspend' and issuing a request to force the vCPU out of sleep.
-
-Suspensions are issued as a mechanism to halt execution until state change
-is observed on a remote vCPU. Hyper-V vCPUs track this with 'waiting_on',
-which holds the 'vcpu_id' of the remote vCPU that forced the vCPU to enter
-the suspended state. It's the remote vCPU's responsibility to wake up the
-suspended vCPUs when ready. 'waiting_on' ensures the remote vCPU can
-selectively unsuspend vCPUs that blocked on its behalf while leaving other
-suspended vCPUs undisturbed. One vCPU can only be suspended due to a
-single remote vCPU, but different vCPUs can be suspended on behalf of
-different or the same remote vCPU(s). The guest is responsible for
-avoiding circular dependencies between suspended vCPUs.
-
-Callers of the suspend API are responsible for ensuring that suspend and
-unsuspend aren't called in parallel while targeting the same pair of
-vCPUs. Otherwise kvm_hv_vcpu_{un}suspend_tlb_flush() ensure 'waiting_on'
-and 'suspended' are updated and accessed in the correct order. This, for
-example, avoids races where the unsuspended vCPU re-suspends before
-kvm_hv_vcpu_unsuspend_tlb_flush() is done updating 'waiting_on'.
-
-Signed-off-by: Nikolas Wipper <nikwip@amazon.de>
-
-(cherry picked from the posted series, re-done by hand)
-[hmushi: struct kvm_vcpu_hv now lives in arch/x86/kvm/hyperv.h;
- bitmap_zero(vcpu_mask) added (the original used an uninitialised stack
- bitmap)]
-Signed-off-by: Mushahid Hussain <hmushi@amazon.co.uk>
-(re-done by hand from the reference VSM implementation)
-[dwmw2: struct kvm_vcpu_hv is in arch/x86/include/asm/kvm_host.h on
- this branch.  Unsuspend walks the suspended waiters' own plane and
- kicks each one directly: kvm_make_vcpus_request_mask() resolves
- indices against plane 0, which is the wrong twin for a waiter in a
- higher plane.]
-Assisted-by: LLM
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Assisted-by: LLM
 ---
- arch/x86/include/asm/kvm_host.h |  3 +++
- arch/x86/kvm/hyperv.c           | 28 ++++++++++++++++++++++++++++
- arch/x86/kvm/hyperv.h           | 15 +++++++++++++++
- arch/x86/kvm/x86.c              |  2 +-
- 4 files changed, 47 insertions(+), 1 deletion(-)
+ arch/x86/kvm/hyperv.c          | 14 +++++++++++++-
+ include/uapi/linux/kvm.h       |  8 ++++++++
+ tools/include/uapi/linux/kvm.h |  9 +++++++++
+ 3 files changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 153c076e91bc..6d864aa71b5b 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -761,6 +761,9 @@ struct kvm_vcpu_hv {
- 	u64 vtl_entry_rax;
- 	u64 vtl_entry_rcx;
- 	bool vtl_entry_regs_valid;
-+
-+	bool suspended;
-+	int waiting_on;
- };
- 
- struct kvm_hypervisor_cpuid {
 diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index e6ef0f93096e..0bc9435ea3b9 100644
+index ec669dafda6e..e41d101e327a 100644
 --- a/arch/x86/kvm/hyperv.c
 +++ b/arch/x86/kvm/hyperv.c
-@@ -1040,6 +1040,7 @@ int kvm_hv_vcpu_init(struct kvm_vcpu *vcpu)
+@@ -2473,7 +2473,19 @@ static int kvm_hv_hypercall_complete(struct kvm_vcpu *vcpu, u64 result)
  
- 	vcpu->arch.hyperv = hv_vcpu;
- 	hv_vcpu->vcpu = vcpu;
-+	hv_vcpu->waiting_on = -1;
- 
- 	synic_init(&hv_vcpu->synic);
- 
-@@ -3764,3 +3765,30 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
- 
- 	return 0;
- }
+ static int kvm_hv_hypercall_complete_userspace(struct kvm_vcpu *vcpu)
+ {
+-	return kvm_hv_hypercall_complete(vcpu, vcpu->run->hyperv.u.hcall.result);
++	u64 result = vcpu->run->hyperv.u.hcall.result;
 +
-+void kvm_hv_vcpu_suspend_tlb_flush(struct kvm_vcpu *vcpu, int vcpu_id)
-+{
-+	/* waiting_on's store should happen before suspended's */
-+	WRITE_ONCE(vcpu->arch.hyperv->waiting_on, vcpu_id);
-+	WRITE_ONCE(vcpu->arch.hyperv->suspended, true);
-+}
-+
-+void kvm_hv_vcpu_unsuspend_tlb_flush(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_vcpu_hv *vcpu_hv;
-+	struct kvm_vcpu *v;
-+	unsigned long i;
-+
-+	plane_for_each_vcpu(i, v, vcpu->plane) {
-+		vcpu_hv = to_hv_vcpu(v);
-+
-+		if (vcpu_hv && kvm_hv_vcpu_suspended(v) &&
-+		    READ_ONCE(vcpu_hv->waiting_on) == vcpu->vcpu_id) {
-+			/* waiting_on's store should happen before suspended's */
-+			WRITE_ONCE(vcpu_hv->waiting_on, -1);
-+			WRITE_ONCE(vcpu_hv->suspended, false);
-+			kvm_make_request(KVM_REQ_EVENT, v);
-+			kvm_vcpu_kick(v);
-+		}
++	/*
++	 * A hypercall the VMM judged malformed beyond returning a status
++	 * (such as a VTL call that is invalid in the current state) faults
++	 * at the instruction instead of completing.
++	 */
++	if (result & KVM_HV_HCALL_RESULT_RAISE_UD) {
++		kvm_queue_exception(vcpu, UD_VECTOR);
++		return 1;
 +	}
-+}
-diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-index 0b81ba482201..5ba2bb2e649b 100644
---- a/arch/x86/kvm/hyperv.h
-+++ b/arch/x86/kvm/hyperv.h
-@@ -228,6 +228,15 @@ static inline bool guest_hv_cpuid_has_l2_tlb_flush(struct kvm_vcpu *vcpu)
- 		(hv_vcpu->cpuid_cache.nested_eax & HV_X64_NESTED_DIRECT_FLUSH);
++
++	return kvm_hv_hypercall_complete(vcpu, result);
  }
  
-+void kvm_hv_vcpu_suspend_tlb_flush(struct kvm_vcpu *vcpu, int vcpu_id);
-+void kvm_hv_vcpu_unsuspend_tlb_flush(struct kvm_vcpu *vcpu);
+ static int kvm_hvcall_signal_event(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 2aeb8c5172cb..b55e28be5181 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -1016,6 +1016,14 @@ struct kvm_enable_cap {
+ #define KVM_CAP_S390_VSIE_ESAMODE 248
+ #define KVM_CAP_PLANES 249
+ #define KVM_CAP_HYPERV_FORWARD_HCALL 250
 +
-+static inline bool kvm_hv_vcpu_suspended(struct kvm_vcpu *vcpu)
-+{
-+	return vcpu->arch.hyperv_enabled &&
-+	       READ_ONCE(vcpu->arch.hyperv->suspended);
-+}
-+
- static inline bool kvm_hv_is_tlb_flush_hcall(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-@@ -309,6 +318,12 @@ static inline bool kvm_hv_has_stimer_pending(struct kvm_vcpu *vcpu)
- {
- 	return false;
- }
-+static inline void kvm_hv_vcpu_suspend_tlb_flush(struct kvm_vcpu *vcpu, int vcpu_id) {}
-+static inline void kvm_hv_vcpu_unsuspend_tlb_flush(struct kvm_vcpu *vcpu) {}
-+static inline bool kvm_hv_vcpu_suspended(struct kvm_vcpu *vcpu)
-+{
-+	return false;
-+}
- static inline int kvm_hv_verify_vp_assist(struct kvm_vcpu *vcpu)
- {
- 	return 0;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index ba468f7c4d4a..d82b457e6714 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12182,7 +12182,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- static bool kvm_vcpu_running(struct kvm_vcpu *vcpu)
- {
- 	return (vcpu->arch.mp_state == KVM_MP_STATE_RUNNABLE &&
--		!vcpu->arch.apf.halted);
-+		!vcpu->arch.apf.halted && !kvm_hv_vcpu_suspended(vcpu));
- }
++/*
++ * Userspace completion of a forwarded Hyper-V hypercall (KVM_EXIT_HYPERV_HCALL
++ * under KVM_CAP_HYPERV_FORWARD_HCALL): setting this bit in the result makes
++ * KVM raise #UD at the faulting instruction instead of completing the
++ * hypercall; all other result bits are then ignored.
++ */
++#define KVM_HV_HCALL_RESULT_RAISE_UD	(1ULL << 63)
+ #define KVM_CAP_HCALL_FAULT_EXIT 252
  
- bool kvm_vcpu_has_events(struct kvm_vcpu *vcpu)
+ struct kvm_irq_routing_irqchip {
+diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
+index 8d9f7e6bba19..b55e28be5181 100644
+--- a/tools/include/uapi/linux/kvm.h
++++ b/tools/include/uapi/linux/kvm.h
+@@ -1017,6 +1017,15 @@ struct kvm_enable_cap {
+ #define KVM_CAP_PLANES 249
+ #define KVM_CAP_HYPERV_FORWARD_HCALL 250
+ 
++/*
++ * Userspace completion of a forwarded Hyper-V hypercall (KVM_EXIT_HYPERV_HCALL
++ * under KVM_CAP_HYPERV_FORWARD_HCALL): setting this bit in the result makes
++ * KVM raise #UD at the faulting instruction instead of completing the
++ * hypercall; all other result bits are then ignored.
++ */
++#define KVM_HV_HCALL_RESULT_RAISE_UD	(1ULL << 63)
++#define KVM_CAP_HCALL_FAULT_EXIT 252
++
+ struct kvm_irq_routing_irqchip {
+ 	__u32 irqchip;
+ 	__u32 pin;
 -- 
 2.50.1
 
