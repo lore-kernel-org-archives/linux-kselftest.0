@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7ACC46EF98;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A3D3D6487;
 	Sun, 18 Oct 2026 14:06:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792332374; cv=none; b=mHgemvLDYm6buXPp+rkN/FeJd7NtoXLjXfAHyW9+39sCFBn4EYiurxkpuRerxxsw+JBUjJfqFGSWHF8pQ1VKsxtaWFvIdeM2e/LzEMfoIG+xd6Qbaz16l+nGlklE/Rf2pYRmP/vwYikmIvWhAqqcLctnVlOR3vzBgYUBBqiLOKc=
+	t=1792332374; cv=none; b=lKb6RT3y1/ALDGJX7jaQ9CeGc+WWaORjv9t9VwCg+iXNXCN6dHKIasRmWjK23r9pDEB2TvNlZOaz1ECcUzvfa0J5zEUSc/Xe7Ml6F/5biAZ8lw/VrJLC0h+kryDBxvmFFnAo+KDhh4jK2ij2kWIL/tuuobvaZmKb6kf6x6th9t0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1792332374; c=relaxed/simple;
-	bh=ft+7IImlFfYl9bqUkdvuh1ZXUGk4HnmHbdLJZl3BBK4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=b+/VwVsfdELX2JTgEVbIfDatzoWTgG/ii8jQ4ZRQvGRAEhcWgo8HICJ07BlkN+hbICBAhbsvWyWhJxR2Ar7AkGZdWEql+vGqTmWtMps1DdK9aoXYJC5ocLxeBM9z8bopdy6MrCo9/y1Ml8cNS1M9c5W3vOUtIMQ/CjCTtFiYFVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RXG3dvpN; arc=none smtp.client-ip=10.30.226.201
+	bh=6zfVRO0wUkIX0trYTHFUHGIOQjYjRYp9mcAVET69qKc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fxf7mIjgFmJCKHzdDPHCDnPqAVIb1zeXumkkMncjmUzGFO7teWe2+xyKpbtnMugqKVa3Led9gev5QqYqVnwsAOX9H/m1s1GXTJp7leMvuMtBrim1VbNU7UMeZdWCbpr1TDxPvpx2KB69FE62GKcNfC8TQCSiPgeVZM7VP86xiSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=usZl9r2s; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RXG3dvpN"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79950C2BCFC;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="usZl9r2s"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 66132C2BCC7;
 	Sun, 18 Oct 2026 14:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1792332374;
-	bh=ft+7IImlFfYl9bqUkdvuh1ZXUGk4HnmHbdLJZl3BBK4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=RXG3dvpNq/X7ZPPyzMQmmnZQeRm2uyF3kqxtkpWK8pt5Wz0m99KIES65G2PQrfzPF
-	 Zn/erKeWSxQ/wyL9GL4GQGcylaqLQZtGLirTOxvS8i31+qUAUOeOFuXrNdBxJ3h3EO
-	 qO8dQKYPlWjjom3xQOQlbBpzf7/vGq1kB/W045h6wXSN3zI3Z4rRNTOIrl3KL3zcyy
-	 m/LrBJTwPDtL4Mt5d/SblKQXxiOO5L5q4g4MJ0BRlL316XDotSA7Lq2kldGkISRTtd
-	 1zsWUokP9CdeW7SKpY42ejjnWdTCcFLnz/Qjz0yB7ll6uLvkdP6dSTO4kA9EECmZLU
-	 ZqaXbyow5QbeQ==
+	bh=6zfVRO0wUkIX0trYTHFUHGIOQjYjRYp9mcAVET69qKc=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=usZl9r2sx7zxafYTaJ+GsiOeWirU+LywZL7cdtE1pCPcHZVe0zha7MqgEkB/SOFWb
+	 oB5udI+H0DMUyslePTtSFHvojjaeY47mLcR1hlPJUIERj7jVawsANnDPDcsnZ3BlCz
+	 hOYVe2q1dY3T+iYkkFCraki4EDbkHJNmQ8Cm3d72Rc1whKplgxxXKWINokoOH2N5av
+	 2o4zSC9O9m3VKft9+ESnPcPwjXBPr7zDKIMGiYSy1riuzWPcSlgrTTDYJpFXwNGZPB
+	 8EflRdiIxMXfxffaXqDao7eWXIy6+5WLbTRFj6KN4gYdxNKvPUsEHwXj8mnmsgHjvF
+	 crFSBHYEX12nA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A371CCA490;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 414A2CCF2C9;
 	Sun, 18 Oct 2026 14:06:14 +0000 (UTC)
 From: Bochao Cao via B4 Relay <devnull+bochaolucky.gmail.com@kernel.org>
-Date: Sun, 18 Oct 2026 22:05:50 +0800
-Subject: [PATCH net-next v6 1/5] selftests/bpf: Fix XDP feature test setup
- and teardown
+Subject: [PATCH net-next v6 0/5] selftests: Fix and migrate the XDP feature
+ test
+Date: Sun, 18 Oct 2026 22:05:49 +0800
+Message-Id: <20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,9 +41,11 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261018-xdp-v5-send-20261008-v6-1-7336e1282ca3@gmail.com>
-References: <20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3@gmail.com>
-In-Reply-To: <20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22OQQ6CMBBFr0JmbU0LUogr72FY0HaEGimkrQRDu
+ LttUVcu//t/XmYFh1ajg3O2gsVZOz2aEPghA9m3pkOiVciQ05wzSmuyqInMJXFoFPnBgjJFkam
+ C8RLC6WTxppekvYJBTwwuHpq9cU9xR+mjNW5F65AI2xrZR/TxJ/r1x1mvnR/tKz06l0m814z+/
+ ykAShTyupKCV/JEL93Q6sdRjgM027a9AaS+voX7AAAA
+X-Change-ID: 20261008-xdp-v5-send-20261008-301d0e1d3165
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -66,11 +68,11 @@ Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
  Petr Machata <petrm@nvidia.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792332371; l=7300;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792332371; l=3816;
  i=bochaolucky@gmail.com; s=default; h=from:subject:message-id;
- bh=tAY5Dk94/tGfujPcJ1sdQ5gyMHxW5FgaNjIP1qFRz34=;
- b=V1wKNH5PA2VZ75IKLMWS5UQ8OaKm3/p3JACfPW5BzaYvp2FOmGGu6T1AWSOaUviCuVvB1rlXk
- JH1VQOELfvSC9Q+gO2uPqD24bvXz3n/l+Ixtexx56gaQFN4rqfKFLbu
+ bh=6zfVRO0wUkIX0trYTHFUHGIOQjYjRYp9mcAVET69qKc=;
+ b=VEZVqT1rfhQPPNsBAbSVqpiKSeZrkvkyD1+KxVRRNWTFS1XQO0FbQcuRXdSv9d9pCTjp42CIt
+ PI7f8E3W/obD9ZLY5jEh0U5lkf8I0n4JEtsgRglpEvVNSyz1Vu9x2fU
 X-Developer-Key: i=bochaolucky@gmail.com; a=ed25519;
  pk=ZYp7O2eXSIrJ9YmKrl0iHDoulPYSG+1lzICsicAvld0=
 X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/default with
@@ -78,254 +80,79 @@ X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/default with
 X-Original-From: Bochao Cao <bochaolucky@gmail.com>
 Reply-To: bochaolucky@gmail.com
 
-From: Bochao Cao <bochaolucky@gmail.com>
+This series fixes the XDP feature test and moves it to drivers/net/hw.
+The tester uses AF_PACKET, so the remote host does not need native XDP.
+Existing remote XDP programs and offload settings are left unchanged.
 
-Initialize the DUT state and socket address lengths. Return the echo
-socket to the caller and join the worker only after it starts. Stop the
-worker on control EOF and other errors.
+Changes since v5:
+- Fix control EOF handling and preserve existing XDP programs on attach
+  failure in the initial cleanup patch.
+- Bound shell readiness, fix signal cleanup and namespace ownership,
+  isolate tracepoint counters, and fail on capability mismatches.
+- Support a separate control network, use an atomic signal flag, return
+  failure on interruption, and query capabilities after attachment.
+- Fix inherited source paths, host-tool selection and installed-header
+  priority in the shared BPF build rules.
+- Use argv lists for local commands and SSH deployment. Remove the old
+  ignore entry and fix the README heading.
+- Run veth XDP_TX when peer GRO is enabled without native XDP. Skip only
+  when the peer has neither. This covers the case addressed by [1].
 
-Read tester counters before teardown, which can produce extra echo
-traffic. Detach only after a successful attach so a failed test
-preserves an existing XDP program.
+Tested on x86_64 Ubuntu with Linux 6.8.0-124-generic:
+- Normal and separate-output builds, relative inherited srctree, host
+  bootstrap with target CC/LD disabled, and conflicting source headers.
+- Earlier baseline across three veth configurations: 17 PASS and
+  1 expected XDP_TX SKIP.
+- All six features with separate IPv4 and IPv6 control networks: 12 PASS.
+- Nine error/cleanup checks, six protocol/isolation checks, and DUT/tester
+  attach-failure preservation checks passed.
+- Patch 2: two concurrent six-case runs and three repeated-TERM runs
+  left no helper processes or namespaces.
+- SSH deployment and execution from a path containing spaces and a quote.
+- GRO-only XDP_TX: isolated veth modules with and without the one-line
+  fix reproduce failure and success for both IPv4 and IPv6. The runner
+  also passes the expected skip/failure/success checks with ethtool 5.16.
+- GCC -fanalyzer reported no diagnostics. Clang diagnostics were checked;
+  the unused assignment was removed and model false positives documented.
 
-Tested on Ubuntu 6.8 with gcc. DUT and tester attach failures both
-preserve the existing program ID.
+Tests used veth devices; physical-NIC testing remains unverified.
 
-Fixes: 4dba3e7852b7 ("selftests/bpf: introduce XDP compliance test tool")
+[1] https://lists.openwall.net/netdev/2026/10/16/565
+
+Previous version:
+https://lore.kernel.org/all/20261010-xdp-v5-send-20261008-v5-0-de687cb67c40@gmail.com/
+
 Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
+
 ---
- tools/testing/selftests/bpf/xdp_features.c | 63 ++++++++++++++++++++----------
- 1 file changed, 42 insertions(+), 21 deletions(-)
+Bochao Cao (5):
+      selftests/bpf: Fix XDP feature test setup and teardown
+      selftests/bpf: Track XDP test processes and isolate namespaces
+      selftests/bpf: Send XDP feature probes with AF_PACKET
+      selftests/net: Add a shared BPF skeleton rule
+      selftests/net: Move the XDP feature test to drivers/net/hw
 
-diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/bpf/xdp_features.c
-index a27ed663967c4..3076fdda61fa4 100644
---- a/tools/testing/selftests/bpf/xdp_features.c
-+++ b/tools/testing/selftests/bpf/xdp_features.c
-@@ -227,51 +227,53 @@ static void *dut_echo_thread(void *arg)
- 	int sockfd = *(int *)arg;
- 
- 	while (!exiting) {
- 		struct tlv_hdr *tlv = (struct tlv_hdr *)buf;
- 		struct sockaddr_storage addr;
--		socklen_t addrlen;
--		size_t n;
-+		socklen_t addrlen = sizeof(addr);
-+		ssize_t n;
- 
- 		n = recvfrom(sockfd, buf, sizeof(buf), MSG_WAITALL,
- 			     (struct sockaddr *)&addr, &addrlen);
--		if (n != ntohs(tlv->len))
-+		if (n != sizeof(*tlv) || n != ntohs(tlv->len))
- 			continue;
- 
- 		if (ntohs(tlv->type) != CMD_ECHO)
- 			continue;
- 
- 		sendto(sockfd, buf, sizeof(buf), MSG_NOSIGNAL | MSG_CONFIRM,
- 		       (struct sockaddr *)&addr, addrlen);
- 	}
- 
--	pthread_exit((void *)0);
- 	close(sockfd);
- 
- 	return NULL;
- }
- 
- static int dut_run_echo_thread(pthread_t *t, int *sockfd)
- {
--	int err;
-+	int *fds, err;
- 
--	sockfd = start_reuseport_server(AF_INET6, SOCK_DGRAM, NULL,
-+	fds = start_reuseport_server(AF_INET6, SOCK_DGRAM, NULL,
- 					DUT_ECHO_PORT, 0, 1);
--	if (!sockfd) {
-+	if (!fds) {
- 		fprintf(stderr,
- 			"Failed creating data UDP socket on device %s\n",
- 			env.ifname);
- 		return -errno;
- 	}
- 
-+	*sockfd = *fds;
-+	free(fds);
-+
- 	/* start echo channel */
- 	err = pthread_create(t, NULL, dut_echo_thread, sockfd);
- 	if (err) {
- 		fprintf(stderr,
- 			"Failed creating data UDP thread on device %s: %s\n",
--			env.ifname, strerror(-err));
--		free_fds(sockfd, 1);
-+			env.ifname, strerror(err));
-+		close(*sockfd);
- 		return -EINVAL;
- 	}
- 
- 	return 0;
- }
-@@ -339,14 +341,18 @@ static int dut_attach_xdp_prog(struct xdp_features *skel, int flags)
- 
- static int recv_msg(int sockfd, void *buf, size_t bufsize, void *val,
- 		    size_t val_size)
- {
- 	struct tlv_hdr *tlv = (struct tlv_hdr *)buf;
--	size_t len;
-+	ssize_t len;
- 
- 	len = recv(sockfd, buf, bufsize, 0);
--	if (len != ntohs(tlv->len) || len < sizeof(*tlv))
-+	if (len < 0)
-+		return -errno;
-+	if (!len)
-+		return -ECONNRESET;
-+	if (len < sizeof(*tlv) || len != ntohs(tlv->len))
- 		return -EINVAL;
- 
- 	if (val) {
- 		len -= sizeof(*tlv);
- 		if (len > val_size)
-@@ -359,14 +365,15 @@ static int recv_msg(int sockfd, void *buf, size_t bufsize, void *val,
- }
- 
- static int dut_run(struct xdp_features *skel)
- {
- 	int flags = XDP_FLAGS_UPDATE_IF_NOEXIST | XDP_FLAGS_DRV_MODE;
--	int state, err = 0, *sockfd, ctrl_sockfd, echo_sockfd;
-+	int state = CMD_STOP, err = 0, *sockfd, ctrl_sockfd, echo_sockfd;
- 	struct sockaddr_storage ctrl_addr;
--	pthread_t dut_thread = 0;
--	socklen_t addrlen;
-+	pthread_t dut_thread;
-+	bool thread_started = false, xdp_attached = false;
-+	socklen_t addrlen = sizeof(ctrl_addr);
- 
- 	sockfd = start_reuseport_server(AF_INET6, SOCK_STREAM, NULL,
- 					DUT_CTRL_PORT, 0, 1);
- 	if (!sockfd) {
- 		fprintf(stderr,
-@@ -387,12 +394,14 @@ static int dut_run(struct xdp_features *skel)
- 	while (!exiting) {
- 		unsigned char buf[BUFSIZE] = {};
- 		struct tlv_hdr *tlv = (struct tlv_hdr *)buf;
- 
- 		err = recv_msg(ctrl_sockfd, buf, BUFSIZE, NULL, 0);
--		if (err)
-+		if (err == -EAGAIN || err == -EINTR)
- 			continue;
-+		if (err)
-+			goto end_thread;
- 
- 		switch (ntohs(tlv->type)) {
- 		case CMD_START: {
- 			if (state == CMD_START)
- 				continue;
-@@ -401,13 +410,16 @@ static int dut_run(struct xdp_features *skel)
- 			/* Load the XDP program on the DUT */
- 			err = dut_attach_xdp_prog(skel, flags);
- 			if (err)
- 				goto out;
- 
-+			xdp_attached = true;
-+
- 			err = dut_run_echo_thread(&dut_thread, &echo_sockfd);
- 			if (err < 0)
- 				goto out;
-+			thread_started = true;
- 
- 			tlv->type = htons(CMD_ACK);
- 			tlv->len = htons(sizeof(*tlv));
- 			err = send(ctrl_sockfd, buf, sizeof(*tlv), 0);
- 			if (err < 0)
-@@ -420,10 +432,11 @@ static int dut_run(struct xdp_features *skel)
- 
- 			state = CMD_STOP;
- 
- 			exiting = true;
- 			bpf_xdp_detach(env.ifindex, flags, NULL);
-+			xdp_attached = false;
- 
- 			tlv->type = htons(CMD_ACK);
- 			tlv->len = htons(sizeof(*tlv));
- 			err = send(ctrl_sockfd, buf, sizeof(*tlv), 0);
- 			goto end_thread;
-@@ -482,13 +495,18 @@ static int dut_run(struct xdp_features *skel)
- 			break;
- 		}
- 	}
- 
- end_thread:
--	pthread_join(dut_thread, NULL);
-+	exiting = true;
-+	if (thread_started) {
-+		shutdown(echo_sockfd, SHUT_RDWR);
-+		pthread_join(dut_thread, NULL);
-+	}
- out:
--	bpf_xdp_detach(env.ifindex, flags, NULL);
-+	if (xdp_attached)
-+		bpf_xdp_detach(env.ifindex, flags, NULL);
- 	close(ctrl_sockfd);
- 	free_fds(sockfd, 1);
- 
- 	return err;
- }
-@@ -576,11 +594,11 @@ static int tester_run(struct xdp_features *skel)
- 	int flags = XDP_FLAGS_UPDATE_IF_NOEXIST | XDP_FLAGS_DRV_MODE;
- 	unsigned long long advertised_feature;
- 	struct bpf_program *prog;
- 	unsigned int stats;
- 	int i, err, sockfd;
--	bool detected_cap;
-+	bool detected_cap, xdp_attached = false;
- 
- 	sockfd = socket(AF_INET6, SOCK_STREAM, 0);
- 	if (sockfd < 0) {
- 		fprintf(stderr,
- 			"Failed creating tester service control socket\n");
-@@ -618,10 +636,11 @@ static int tester_run(struct xdp_features *skel)
- 		fprintf(stderr, "Failed attaching XDP program to device %s\n",
- 			env.ifname);
- 		goto out;
- 	}
- 
-+	xdp_attached = true;
- 	err = send_and_recv_msg(sockfd, CMD_START, NULL, 0);
- 	if (err)
- 		goto out;
- 
- 	for (i = 0; i < 10 && !exiting; i++) {
-@@ -634,23 +653,25 @@ static int tester_run(struct xdp_features *skel)
- 
- 	err = send_and_recv_msg(sockfd, CMD_GET_STATS, &stats, sizeof(stats));
- 	if (err)
- 		goto out;
- 
-+	/* Sample before teardown, which can produce additional echo traffic. */
-+	detected_cap = tester_collect_detected_cap(skel, ntohl(stats));
-+
- 	/* stop the test */
- 	err = send_and_recv_msg(sockfd, CMD_STOP, NULL, 0);
- 	/* send a new echo message to wake echo thread of the dut */
- 	send_echo_msg();
- 
--	detected_cap = tester_collect_detected_cap(skel, ntohl(stats));
--
- 	fprintf(stdout, "Feature %s: [%s][%s]\n", get_xdp_feature_str(),
- 		detected_cap ? GREEN("DETECTED") : RED("NOT DETECTED"),
- 		env.feature.drv_feature & advertised_feature ? GREEN("ADVERTISED")
- 							     : RED("NOT ADVERTISED"));
- out:
--	bpf_xdp_detach(env.ifindex, flags, NULL);
-+	if (xdp_attached)
-+		bpf_xdp_detach(env.ifindex, flags, NULL);
- 	close(sockfd);
- 	return err < 0 ? err : 0;
- }
- 
- int main(int argc, char **argv)
+ tools/testing/selftests/bpf/.gitignore             |    1 -
+ tools/testing/selftests/bpf/Makefile               |   11 +-
+ tools/testing/selftests/bpf/test_xdp_features.sh   |  107 --
+ tools/testing/selftests/bpf/xdp_features.c         |  719 --------------
+ tools/testing/selftests/drivers/net/README.rst     |   19 +
+ tools/testing/selftests/drivers/net/hw/.gitignore  |    3 +
+ tools/testing/selftests/drivers/net/hw/Makefile    |   15 +-
+ tools/testing/selftests/drivers/net/hw/config      |    3 +
+ .../net/hw/xdp_features.bpf.c}                     |   60 +-
+ .../selftests/drivers/net/hw/xdp_features.c        | 1023 ++++++++++++++++++++
+ .../{bpf => drivers/net/hw}/xdp_features.h         |    1 +
+ .../selftests/drivers/net/hw/xdp_features.py       |  146 +++
+ .../selftests/drivers/net/lib/py/remote_ssh.py     |    2 +-
+ tools/testing/selftests/net/bpf.mk                 |   33 +-
+ 14 files changed, 1266 insertions(+), 877 deletions(-)
+---
+base-commit: 8df0638138d3e0344fd1fb36cf2d1ca1cf5028f0
+change-id: 20261008-xdp-v5-send-20261008-301d0e1d3165
 
--- 
-Git-155)
+Best regards,
+--  
+Bochao Cao <bochaolucky@gmail.com>
 
 
