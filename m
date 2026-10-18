@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6295B3D7D6C;
-	Sun, 18 Oct 2026 13:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15B84B9230;
+	Sun, 18 Oct 2026 13:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792329393; cv=none; b=HT4dNn54BLF1Gg4yiRveIZJrlIaD42EXuUfJcRUQtkZvRA4237JIPCS4kmXCZq4j8hlADRqn+HEaZCEM2JH9zCVirPoQD9+SG95K33VP6/ylVfg1mGaDkPBUvF+j29HbfBoDmAqHbqnBdTC4n/ZOKhYwJ8+34NEFDxg4gSkM7cg=
+	t=1792329395; cv=none; b=i1Njglj6miy4ogTRLibyvt8vnU/34FgyQ0An1nyLzUYbUbBbqK7BUOgIYftzCRz08hE0bEbyvEsYBwybIM99cIvmpB4lo8dnkBLFF/Gc+AWxVY7+Jk2/aV9uP7LnYkSwH+oCvsQjfQyWBOFqXP24zYQMKB7Hx41x/dsL6LNdQOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792329393; c=relaxed/simple;
-	bh=lMpA+iuGf19MfP9l4fBkY32mAMfRHidLrvoEVP0o8E4=;
+	s=arc-20240116; t=1792329395; c=relaxed/simple;
+	bh=/9IUGDoGf/huyyJZYIO40N8NVdb65OVMZ2kjEX5fijw=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SDoJh86cMKzaYXDQzuLCAn/hinIOS9Yh/h+VyJO5yGtzbivdZhdsU4OUSeHP3eBvMU3LJZTjDZIluw+USmGcHDx3QFdZDMSbmLhnRI0NwYJYIbFCCKIbHLHlxrFtwYRrjVS7zXL8mHzSkuNLvO6Dsen+lwRGIEzHU9LaTRiWX8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmpqaUlI; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=f69R6dMx03zyC5wjLah1NWIHbC54YNC8zR3cX9PAnqu29R3Kc39sMFrRIIGT23ZsJefgJEbaM+x/LtYBXmnyVHVBj4nQqFzMrece0/3qo8Ye4bioUwZfjL9e7RbVaX84/xxDuKTMkshkJopGnBOGq95YICIwtnWRzWHnjC3lcYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ong0em6R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmpqaUlI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 837B91F000C5;
-	Sun, 18 Oct 2026 13:16:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ong0em6R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34161F000C6;
+	Sun, 18 Oct 2026 13:16:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792329392;
-	bh=ZVT/DgFM7AnSStXFdi7HK5nCvEMnh6FUs6WZ7gtrADc=;
+	s=k20260515; t=1792329393;
+	bh=sKltOVZ9nuP11H9dLZqZO4Bv1mo4TEV5/hw5LOnNVSI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=jmpqaUlIvgHwIljaM13zWigNQ43AfkkBOgYU9fq/RtuXUtn0llxalkwdz4OeAsWF7
-	 +SZKMdQ4W88yikvb4AIqLDj+vsTqsOLfQNprlLq1FE+9C9xOJkmgmriVDt1hXhXA9K
-	 HZ4YU6CK/XY3nyjD9BSKE6f/ioz2YpleYeOCkdUa0IEri4OKNR1je4yeOOZlnUhWp6
-	 hcg1jpSUKJH+U6FfrfRB3Naq3kZGjSp78ML12XqAfbizff5+LPK69fV6xeJg5Rr6YZ
-	 apH5JZP2WFDiIAx68ylYE/m4FoEn7fbLItPhqZlquv4I+PTG7lsyz4fxrCKrvyyC5c
-	 Pi8nGpYHa+WaA==
-Subject: Re: [PATCH net-next v4 3/7] vxlan: vnifilter: clamp the dumped VNI
- range to the request limit
+	b=Ong0em6RMLVKhKrlKnrBWDc/7gxamWKH9/x/e3YhLsLkW60nDdGLy344GSOrU9Ydg
+	 KyJcVHlmcvG1Y2XuhTE38flJULAjBizVctki2CQZyNHuFOYQ9/StFqLT1Ct1GDRwlQ
+	 NadazxGzhooS0+UtsrTT3I93jSahPzqvZG9EKL+jKjBuppr+988czXXhW7y+vLQbBy
+	 buet74wHc+AE5uHD+B+PNxa+5yE0wGH3Gh3Pg7X8rnEgE4/G8XAWO/fhloxz/keB/A
+	 w9lzmQjst8R/2AJ7Ztp/5/oDzK7fISnHL5V56GpMmWS887HchB/e1ZzVnv2oxieUkw
+	 m/3g6UIRKpQAw==
+Subject: Re: [PATCH net-next v4 4/7] vxlan: vnifilter: bound the number of
+ VNIs one request may touch
 From: netdev-bot+sashiko@kernel.org
 To: alishmery18@gmail.com
 Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
@@ -35,10 +35,10 @@ Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
  andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
  roopa@nvidia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Sun, 18 Oct 2026 13:16:31 +0000
-Message-ID: <179232939107.3135.8359039730969717990@kernel.org>
-In-Reply-To: <20261014123814.388557-4-alishmery18@gmail.com>
-References: <20261014123814.388557-4-alishmery18@gmail.com>
+Date: Sun, 18 Oct 2026 13:16:32 +0000
+Message-ID: <179232939246.3135.13085822140784693158@kernel.org>
+In-Reply-To: <20261014123814.388557-5-alishmery18@gmail.com>
+References: <20261014123814.388557-5-alishmery18@gmail.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,55 +56,54 @@ you want to address the nit picks below when you respin.
 Low priority / nit picks for your consideration:
 
 - [Low] The comment above VXLAN_VNI_FILTER_MSG_MAX in
-  drivers/net/vxlan/vxlan_vnifilter.c (lines 20-24) describes the order…
+  drivers/net/vxlan/vxlan_vnifilter.c says: "A later patch bounds a…
 
 --
 
-vxlan: vnifilter: clamp the dumped VNI range to the request limit
+vxlan: vnifilter: bound the number of VNIs one request may touch
 
-This commit adds VXLAN_VNI_FILTER_MSG_MAX and limits
-vxlan_vnifilter_dump_dev() in two ways. A coalesced run of VNIs ends once
-it reaches the limit, and each netlink message has a VNI budget. As a
-result, no dumped message holds more VNIs than the input path accepts in
-one request after a later patch in the series.
+This commit adds vxlan_vnifilter_check_msg(). It adds up the VNI spans of
+every VXLAN_VNIFILTER_ENTRY in an RTM_NEWTUNNEL or RTM_DELTUNNEL request.
+If the total is more than VXLAN_VNI_FILTER_MSG_MAX, the whole message is
+rejected before any entry is applied. The range extraction is moved into
+vxlan_vni_filter_entry_range() so the check and the dispatch path use the
+same logic.
 
 > diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
-> index 9e15f4de75c99..5beec29eb84a8 100644
+> index 5beec29eb84a8..2999dd536625e 100644
 > --- a/drivers/net/vxlan/vxlan_vnifilter.c
 > +++ b/drivers/net/vxlan/vxlan_vnifilter.c
-> @@ -17,6 +17,13 @@
->  
->  #include "vxlan_private.h"
->  
-> +/* The dump coalesces a contiguous run of VNIs into entries, and packs entries
-> + * into netlink messages, of at most this many VNIs each, so every message the
-> + * dump emits stays within what the input path will accept on replay. A later
-> + * patch bounds a single RTM_NEWTUNNEL/RTM_DELTUNNEL request to the same number.
+
+[ ... ]
+
+> +/* Reject a request touching more than VXLAN_VNI_FILTER_MSG_MAX VNIs before any
+> + * of its entries is acted on. Both add and delete walk the span one VNI at a
+> + * time under rtnl_lock, so both are bounded. Entries are applied one at a time
+> + * and each one notifies as it goes, so a limit checked inside the dispatch loop
+> + * would leave the entries ahead of the offending one already applied.
 > + */
-> +#define VXLAN_VNI_FILTER_MSG_MAX	4096
+> +static int vxlan_vnifilter_check_msg(const struct nlmsghdr *nlh,
+> +				     struct netlink_ext_ack *extack)
 
 [Severity: Low]
-This isn't a bug, but will the "A later patch bounds a single
-RTM_NEWTUNNEL/RTM_DELTUNNEL request to the same number" sentence go stale
-once the series is merged?
+This isn't a bug, but should the comment above VXLAN_VNI_FILTER_MSG_MAX
+be updated now that this function exists?
 
-At the end of the series this comment is unchanged. By then, the commit
-"vxlan: vnifilter: bound the number of VNIs one request may touch" has
-added the request cap. vxlan_vnifilter_process() calls
-vxlan_vnifilter_check_msg(), which does this:
+The preceding patch added this to the top of vxlan_vnifilter.c:
 
-    if (vnis > VXLAN_VNI_FILTER_MSG_MAX) {
+/* The dump coalesces a contiguous run of VNIs into entries, and packs entries
+ * into netlink messages, of at most this many VNIs each, so every message the
+ * dump emits stays within what the input path will accept on replay. A later
+ * patch bounds a single RTM_NEWTUNNEL/RTM_DELTUNNEL request to the same number.
+ */
+#define VXLAN_VNI_FILTER_MSG_MAX	4096
 
-Once merged, "a later patch" no longer points to anything. The comment
-also doesn't say where the input-side limit is enforced.
+This commit is the later patch that sentence refers to. Once it is
+applied, the comment still describes the per-request limit as future work.
+The text is also the same at the end of the series.
 
-Could the comment describe the invariant instead? For example, "must
-match the per-request limit enforced by vxlan_vnifilter_check_msg()".
-Another option is to move that sentence into the patch that adds the
-cap.
-
-The dump and input paths agree in the final tree, so this is only about
-the comment text.
+Could the last sentence say that vxlan_vnifilter_check_msg() applies the
+same bound to a single request?
 
 [ ... ]
 
