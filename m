@@ -1,108 +1,126 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-wr2-f7.google.com (mail-wr2-f7.google.com [74.125.225.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AA52D8DA8
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 02:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792289009; cv=pass; b=V20Ryo371ugSD4ZtK3M2OvLGtXBdgNEUnMWlVPupLitK9S85RA+fuCfpf7N4XBO43aYpXtnbSF/NbeybAGywLmreyypJ5H7XC5zQbQag03SfpM0ToqPaOzIcaMJuwaRIPezh7EWm3rbNcXvAt6Ajfn4mroqstkCfNJlu7nEeHLI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792289009; c=relaxed/simple;
-	bh=OFvFUXE9xCFsK6/kBrpheywoSYe93LHItZLxp7xrWHk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aysHINSqO2AKjDULQOKgEn3HI3NcJx40wgSRIP2iodl/vxQo12uSs1hwUv/rzeJ//oU87ltuSTCiHLsz4ZeyoMA51HUsZtP3Y+UGDqCecd0GoNNxRYC+9fqucW7KRlVDnlr4HUZekR1W7yJFG4VXT49PrEHAi1GPVhe4uaVY0oU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=Nr0pP7vV; arc=pass smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB75347C6
+	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 02:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.71
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792289070; cv=none; b=qyg8NjwnjAe3Rppv/oQSXIDN6kJURxC3SiT1Hl8w2QCF3NjilZ3hUiWQJQlHZJgYraJ8DZSs9k2DzQQvMlVdk+kjg3CAMHmVMTYRqlvW1Q3wd0Bnva9cJ80rHW3oqbdjNpVRXzDg4nZxduoUIFjgGFSE5oRyMLETEjqfA+rsoIM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792289070; c=relaxed/simple;
+	bh=caZTDHt6UILp09QROvQ0YGeBMVOn9q8m9mcI8/xIScg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CCie4OBUVhdVXZRHorkf8MHruqmd9SiYoV9we4OVMBWXG7hUZKe2ULsQiaJnFds+520+zBTt0/VA6O7bzAc45SwkRDM7fI60/wGQXKpb9q5+qJ8bVTYaR/lXhl4BAmSDxC/hRJSV7vVCHxy2b4s1DGOsYFhrE6P8VOyKrwuCgYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YCcunluZ; arc=none smtp.client-ip=74.125.225.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="Nr0pP7vV"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-8b056d58f2aso7839197b3.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 19:03:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792289007; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Lywb/Y2urW00hhUcXeIQ/5PDC03h4MGTin5sGrqHEWNaZgeF3jZOn0+MnbxBR++xMj
-         Eeg35gb2YGatH2k2XHF6otE6QP24zgV+7CH/4GYIS0MrgoYc81KEnuzZ3i1UUwQRfjuW
-         +SQUquy10CsSoivL+rmYCqje2vUwPBc5p3xL/FGXpF+nVKMlcoJZe+zKW7p79fVtYnZt
-         LVymsARiYUaniw7fo+iy0HAlIC0ntv22f4KocKLqSb4J45Lo/IFph/3Xa6LSJ7f2vwB5
-         7bCcr2QZ3WJVIyiAiWEPJIMqICR++K51SoyphlQxVqvkVMiNzvpI7hNEyLB6UOm+M+8w
-         66Zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=OFvFUXE9xCFsK6/kBrpheywoSYe93LHItZLxp7xrWHk=;
-        fh=aiAGw5DQkmIe2EYhcO8Qr4T+ju4WEk14CxwqCitpJMU=;
-        b=Umo7h7S6JGk5UkzJSaBhn4+CXDt17eGRwNRIM5RXzXgkNCYVNZuUlmgQPtvVf5/VRV
-         XFKYEgiCMxF0jv4cu1v+ZOEJ2C4mxUOZmT8AfN9PrC7vRhGj4yZHTbDCSif0FAfRQwYG
-         huh3urfzGWuF8zS+nrJxWT+M/pKQkDwt4VsX0Ma5EnTYbXR0Tk7IC6JcGvqzvg70bS2k
-         ch7Cvk31ac1zUZiSOYpPjh6L/PAjRmawPP5jlsAGQsnkBANMkXcknCQKbMxIjLnI0Qpc
-         6dyf4xrpRoSyuzHkqRgb1CsAgMzP6tS7vhCx/5bwvgMqG0p+laOIRJgThDaS/+HjOKiy
-         CKrw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YCcunluZ"
+Received: by mail-wr2-f7.google.com with SMTP id ffacd0b85a97d-48df951fd31so522441f8f.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 19:04:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1792289007; x=1792893807; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OFvFUXE9xCFsK6/kBrpheywoSYe93LHItZLxp7xrWHk=;
-        b=Nr0pP7vVL4KeAR6PNJUeqzMXTnHsB97OF6gWi7jtNwt0qBvNOE0UvtQk1UniP2sCJg
-         5M/VJIGIjHq+HPOlyRCYGgFq4+hcpvO/Gh7ouWmtqrJ8cOL5UppFYGMlGuMVnyz1Snlw
-         JBLVKi3sWjDJ5dn9+KjaPSyVf1n8233GRJLMELG8kbFMKdotnD+w9Bt+04wTuA+d4t8A
-         NRkR4oB9cTTtFiV1C3NDR9W40SApTrVU9m6y/4wWZMiNOOTTd3y+aJ/lOH4Z6k2+WrMr
-         NsNwbLmjdsJ+PBiQl+QLvuUd2q63FglcqUflYsp2CgrbeXe5k3TQDgUUSxzMjniDk+xl
-         XfRg==
+        d=gmail.com; s=20251104; t=1792289068; x=1792893868; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xcLGhS41qDyrPASVGx39Zak2pOFp3aGzMbLkGewPdag=;
+        b=YCcunluZXmQmIH7LYN2FluxxcbbuP1wT5IE43wlgbMAjAnH2pA3CJO8fhfdhSxolIl
+         UPTDHRkP7XXg7jwBV1h/6iJanroaXFzr6//Yv7e28AD2mP+e5LyansN92+of54BYl/rC
+         SDkNVxTy5UJi/hbhAMGwxKjXhW77TdcAFkLsTn2X5Xsw3Sjf0Dh4/ZZcOkp69s60TGD0
+         eJVluDeIO5451KCNPLRB37ATWpl10heu57Vixa/bOaUVCkmout0XYUade6EHI9sLj6V+
+         tj270ACZKj7BJq2KVFRyt2QC7fC68LBeXmgNOwQ4Ky7jbCtc5u4R7HSRlLw5njLwMQqJ
+         9j0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792289007; x=1792893807;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=OFvFUXE9xCFsK6/kBrpheywoSYe93LHItZLxp7xrWHk=;
-        b=HtJVVjjDXZ+3kqHFwTt+83GZo8uOu4+PQeDaanCQ/E+FkhA2aWv9i9WNqHlqQ7mNMf
-         x92s6BTKD0Wu25567RtAHxcGB8gUcIntwEqpq3Fh5Mk9VWwr8T6TqxxZIFxCF/3nG8/9
-         X0Votm6snI3MqTwS4d7rFjrdG+oWZnyTIfA0dQ6uc+qxsDQI/iiOSqzdSxWDd2AfkOmi
-         SHhpB0OHa4Z5v8iQRb9U5tYdP9rdS6ICaQyZT1ZEr4Ncd3ZR8HL9CsBqdZ4wNvBJwWNT
-         VrblnETWVgdFB0DsX6RWIR5Mpcyj46wxiC5HWJdCESNqVvqhzcDMnFw/EjAYDVr+fzCx
-         Vfwg==
-X-Forwarded-Encrypted: i=1; AKwUvBwLQ28myzxoUGR0AiaWFyHR72erYJQbB5/W7p69Dt2hPJAI0SNSgPz1Xhnp+R01rMgixY0NtvALUlwyicbuoDQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLvJoFI38jRecNqQCVRwz62hUhZog2nB719wPxK2uZmNxzsJKsr
-	5Oe2FsaUden+lX2fDvT2LijO9UUeXXOfmfOV0OvC5CtOwH0gLpmBAM6v1w0bC5zf9yRtYgFxzfK
-	eS65u2fkqOlxpMGoyA/fas74fTCNC77/yPAsTP/A3
-X-Gm-Gg: AYBFou0f+X9wUcUXuzCEVIeVNdPeDwRyXhHzmdxPYq5jp6ofYAVnrQcVJBt27Q02b2M
-	V3ulcvMvFhQgb0gFwarQMw9CMxk1WAvMXWzi7h4wzEydCiv6MlfJTIEK4+Q4+ULPC2qP+976AnW
-	TB3fhKA3uzT0G9scbGjx8bzIvPnYeBV6GCjyoVCb/q261VCuNPq4PRCofMWA7NO5ja+lPSa5J/s
-	vMUrGU+XMQisZL2pPNqVCYKcGPGQ9nwRtuovjwTG8PC8rKZBrt1zSHL/n2S8Sbg6vpvJOR3ESVz
-	qIJ9JCIAGkpQNlx82n9Imdey53hu9iSBTe6in6rdQXr1Rkt+yH8GPLsCjGGxsYf5H0anyZSh2du
-	Sjjmok10VnpoY+xjwvcab7g8pf31UxFh4O9nUHwHoFrpJ8Xkfl7OGg9z4GB7GN0AfqOX+J3afss
-	J3BFR1lik8gGI1qa2vKahQuBg5D6V142OHF6PtTuBBMDqK0WamR/t81nbVLy7gsSxTYg2ARFb1a
-	VFfJpFbLbGh4oCNwYgiiI7+MQG+VzmoFaNkb5L22E1wBVhjpwpA6k/m3V89MX7d5szuiToo6JZk
-	MGLW4SEBxfr7Fg==
-X-Received: by 2002:a05:690c:c4e9:b0:8b0:f04a:3132 with SMTP id
- 00721157ae682-8b0f2163601mr11361017b3.27.1792289007350; Sat, 17 Oct 2026
- 19:03:27 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792289068; x=1792893868;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xcLGhS41qDyrPASVGx39Zak2pOFp3aGzMbLkGewPdag=;
+        b=WZ4+Fmsl1sxPqfx/RDgCy2V+nV/fDoa3cgp0B+eXPurnwbcAnoxiodvhaF/OBiFXQ8
+         UEKuHbtJnLtPeXm6POPnwX1cfFs9S50aF3ORSkToUh9Z6xNwufOVQxP890RmN0FTz6lr
+         fVEsW+CMkigfdybM/pFglXnjX1eMBvV7mVxrFfS9zYIxjS0LU6d+UzKssrdi6CDc3+3Z
+         WqGmsPL5XuMVrJJsnQSK5sQY/c/OOG6tPA1b/JtCr7T7lZ01kMfD83gTRG7lt+LHFB7O
+         FtzHOJshf4mdUM3laNgzntgvzbhoNc4Zg5XhWcnCbgsWS7y3d652dTAfU9C920fPHKEI
+         pMQQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzYPfvBKp+9y5vOjbd5x7mlRfpqphj2OJRwPD0j+P36q2f85cOdAcOsnnP0YkoIdQoMjGS5p3n+MgEY9SNXmq8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI8cv3jZNkBCujv7XmGLyNtqEZI3Bc3l+CynNxNWPgz/JsRZmSU
+	c6JBsCs7Ddc56xrfxZF3TybyGn3zeccz6xtmtMLhA7CghuOZ/NBPCF1C
+X-Gm-Gg: AYBFou0owkW9Ymley9gC6JMLpqVI7ommkGm5Gqn9q6rK15OOIiIBrfu9gR8taMc/cMn
+	bsDUncHg5MgDwXgYkxxtHwzqBTYv4+V9ENNchhDM1ynKiJPKDYSZNSwE8Sa5itpyLNhU8SfIQIy
+	324J6XpuDgTrPGaFOCoFMIgSFrK7Adr+DlsTxxLUfQLw8BZy/vDK5ypJn+jBWoWXYccUMI9iDz7
+	lVU3k3Cry5Q8vetxC624u2YiQ0C8BdXcPw1Rz5waD/IE5cHgPtY1zbsjHwIjoBSHZIXwlEoPu6Q
+	N1Hb69ZyJxNX4TyQp2UtYNKEJKI8YqCAOx9dkYd8VRJM5JRT034/KtS+RKz6ZIX9J1E1ZH1JRQf
+	4DxraHXi4u1j1pZLo+CzPBEz0+rGRw+A9KLg+dQi4UdP9XTNX5RMsGUCk25vgr11Sqij2+Hch4O
+	jph7UDAJLJFrHfBBm6R3o8PIllJEXEc96Pz5HSCiReSAbnyM6vyktnncSc1QUXyYlmFN6T+tzJm
+	TXC7LLjcvX2uGtlZgSyrYlWf+sKzHJtcUDvkXGdlOQp7Bm5HdA7Qw2dV7MGxCS3zkuuyW48Fp4V
+	ao7ilk9/8Z1nIuHy1/nd4ShEX9f9GKnH0A==
+X-Received: by 2002:a05:6000:4381:b0:48c:6955:a603 with SMTP id ffacd0b85a97d-48e07bb5a24mr8947014f8f.13.1792289067693;
+        Sat, 17 Oct 2026 19:04:27 -0700 (PDT)
+Received: from lima-kernel.telekom.ip (84-115-220-212.cable.dynamic.surfer.at. [84.115.220.212])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48dfd4e7ff1sm15001449f8f.25.2026.10.17.19.04.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Oct 2026 19:04:26 -0700 (PDT)
+From: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+To: SJ Park <sj@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/damon/sysfs.py: stop obsolete_target shells hanging the test
+Date: Sun, 18 Oct 2026 04:04:15 +0200
+Message-ID: <20261018020415.35567-1-jaeyeon.lee.dev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261004171628.3544978-1-julius@bairaktaris.de>
- <20261018015434.3326758-1-julius@bairaktaris.de> <atQoL7WUM3BvDwbI@chamomile>
-In-Reply-To: <atQoL7WUM3BvDwbI@chamomile>
-From: Julius Bairaktaris <julius@bairaktaris.de>
-Date: Sun, 18 Oct 2026 02:02:49 +0000
-X-Gm-Features: AclHuK8LcA_x4fXjqJQJo4qGB6xwiKVubMehR2hBrYfUz8uLAdhaaMXVC05SGRY
-Message-ID: <CAC1t37JX5HnbU4gPxAE-PkNz=6e_pr2p6ujgEB-3gRi0HjXybg@mail.gmail.com>
-Subject: Re: [PATCH nf-next v2 0/4] netfilter: offload a TCP flow whose reply
- is never seen
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: netfilter-devel@vger.kernel.org, kadlec@netfilter.org, fw@strlen.de, 
-	coreteam@netfilter.org, netdev@vger.kernel.org, geldot@protonmail.com, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-That would be awesome.
+The obsolete_target test spawns three 'sh' processes as monitoring
+targets.  The processes inherit stdin from the test.  When the test is
+run via 'make run_tests' from an interactive terminal, the kselftest
+runner executes it under 'timeout', which puts it in a background
+process group.  The 'sh' processes then try to read the terminal, so
+the kernel sends SIGTTIN to the whole process group.  This stops the
+'sh' processes, and also the child the test has just forked to spawn
+the next 'sh', before it can run 'sh'.  The test then waits on that
+child forever, until the kselftest runner kills it after 45 seconds.
+The test passes when run directly.
 
-I will continue the development downstream and send the items upstream
-after a merge one by one.
+Fix this by passing stdin=subprocess.PIPE when spawning the processes.
+The processes then read from a pipe that never receives input, so they
+stay alive and idle as the test expects.
 
-Thanks for your time!
+Assisted-by: LLM
+Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+---
+ tools/testing/selftests/damon/sysfs.py | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
+index 66c826189320..ce54fa21c09f 100755
+--- a/tools/testing/selftests/damon/sysfs.py
++++ b/tools/testing/selftests/damon/sysfs.py
+@@ -390,12 +390,12 @@ def main():
+     kdamonds.stop()
+ 
+     # test obsolete_target.
+-    proc1 = subprocess.Popen(['sh'], stdout=subprocess.PIPE,
+-                             stderr=subprocess.PIPE)
+-    proc2 = subprocess.Popen(['sh'], stdout=subprocess.PIPE,
+-                             stderr=subprocess.PIPE)
+-    proc3 = subprocess.Popen(['sh'], stdout=subprocess.PIPE,
+-                             stderr=subprocess.PIPE)
++    proc1 = subprocess.Popen(['sh'], stdin=subprocess.PIPE,
++                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++    proc2 = subprocess.Popen(['sh'], stdin=subprocess.PIPE,
++                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++    proc3 = subprocess.Popen(['sh'], stdin=subprocess.PIPE,
++                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+     kdamonds = _damon_sysfs.Kdamonds(
+             [_damon_sysfs.Kdamond(
+                 contexts=[_damon_sysfs.DamonCtx(
+-- 
+2.43.0
+
