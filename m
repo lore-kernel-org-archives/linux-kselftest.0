@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-46.mta0.migadu.com [91.218.175.46])
+Received: from mta0.migadu.com (out-66.mta0.migadu.com [91.218.175.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3833DDDCC
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 16:33:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480DE3E1D17
+	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 16:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792341198; cv=none; b=oR4WBaD7oxpswt400AHTR7A63k1zEuKvxdUICXq041XqHLtdoOzWl2vMG+5nyavdjuCC8WIontsYT8rF3NGbMatROqkcEb6PwWaLZyrzxjDTf8s7CuiByvvu6nk462SVUZYZzQ1xvIPHhqkNwvcouCvvlqLTj1+u/dWfYLv1IhU=
+	t=1792341243; cv=none; b=Qf3eP06ZNW/hzLrL9F/c3n3wYytw9Knk86zjewnivNDGZyYQQG2O0STNsjaIH2tGbmEsr/Iw03tXAOVz8L1YYnRwSYaGbS9seHPlNdX4Dj971MKPNzqEFeyXfAO3slxGH1s7cuocp8+O8iGv/Knl0sfcFE+qKg6RIOc/JpNLSvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792341198; c=relaxed/simple;
-	bh=ojksHLeipKPRkqBzkwdonsEV9b1jH0qB2Zw+8QFvt2w=;
+	s=arc-20240116; t=1792341243; c=relaxed/simple;
+	bh=m7n7YIoURJCxjqzRmIhNGAzD2y+XE5DbMarExGyeOOU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hv9rup2mA9jk5YACbzXrRzhRWxC/QOMXpIbm6P7KP6ugqeRAU71XZKIwv9y13cKAEcyeHPaj2t1iV7xInCVqkaH17o5Im77xnxTAcO4q5Gdir5Fpl+NBkwtwPW9Vi/XHRtYQB8m2tzmVvKEUj39ihj5GuY2dTJvpChXea14FPAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MU6Tq3F2; arc=none smtp.client-ip=91.218.175.46
+	 In-Reply-To:Content-Type; b=GFkezFiefnEHxPTRj0Q6pxhvKL1yRz0KFbGPFMF2SXDQEDWdHhPvKvdaWu+lZVCnY2q4CPBJq+8GXS0+fxBPdfq+ILrWBgNiL458HBaWXWHN1OjTldCDqvFTsqrgEK4aDixpgoeKC8lNGTEF0PsjvoNnNaoCyCtecGq7CJSwkFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pCEFc+sL; arc=none smtp.client-ip=91.218.175.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MU6Tq3F2"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pCEFc+sL"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ojksHLeipKPRkqBzkwdonsEV9b1jH0qB2Zw+8QFvt2w=;
+DKIM-Signature: a=rsa-sha256; bh=m7n7YIoURJCxjqzRmIhNGAzD2y+XE5DbMarExGyeOOU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792341192; v=1; x=1792945992;
- b=MU6Tq3F2JtlJvHtQqgd3/5uLKQSfx1QSgtMX5c8jzBCoWO9VmO9IyIdHwmYF5ekZqJbDiK9N
- ViKhXvxC9x/wi3ko2ehWvlg/SdnvRcuKZkyFg+wM/eLgLDTSV8WAKEFY1f44Abo+XyFHCAbK/qS
- wpIGlmxD+XySAK7mFLfZQQ2M=
+ t=1792341234; v=1; x=1792946034;
+ b=pCEFc+sLbBGdU6kH3TV5/lQBsNQFjEri08L5wncs61Flwclrvtmv8WzkWVxYw6SuHLdMTHBC
+ WAfnJgm0yFQPHsbh1QPPv2IVXJ0Vj1G1iMACukuDizMswW/QW8NugYVMr9ccqiAEqcTWieH+DP6
+ y4jmjfe5NNobM/Q/XqtunYgw=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4a67c33501ed153d;
-	Sun, 18 Oct 2026 16:33:11 +0000
-X-Mizu-Trace-ID: 4a67c33501ed153d
+Received: by smtp.migadu.com with ESMTPS id 5af85ac1fdd41fb6;
+	Sun, 18 Oct 2026 16:33:53 +0000
+X-Mizu-Trace-ID: 5af85ac1fdd41fb6
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <4600eb22-3075-454b-8d6f-d8e01f092e5e@linux.dev>
-Date: Mon, 19 Oct 2026 00:33:00 +0800
+Message-ID: <b97fa998-b77d-4600-8453-9bb16200409e@linux.dev>
+Date: Mon, 19 Oct 2026 00:33:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,7 +38,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 5/6] libbpf: Add bpf_link_create_log API
+Subject: Re: [PATCH bpf-next 6/6] selftests/bpf: Add tests to verify
+ link_create logs
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
  kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
@@ -52,52 +53,94 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
  linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  martin.lau@kernel.org, mason@kernel.org
-References: <20261017142649.51047-6-leon.hwang@linux.dev>
- <d8f51a15d54c296421230d26a3c7b1bb535c9bd98e15eb52dd36344c3690c053@mail.kernel.org>
+References: <20261017142649.51047-7-leon.hwang@linux.dev>
+ <343fe8b9f06af37dde193869b694dbf908b0a0f6592a1e4cc5f5a0ac295b1b88@mail.kernel.org>
 Content-Language: en-US
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <d8f51a15d54c296421230d26a3c7b1bb535c9bd98e15eb52dd36344c3690c053@mail.kernel.org>
+In-Reply-To: <343fe8b9f06af37dde193869b694dbf908b0a0f6592a1e4cc5f5a0ac295b1b88@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2026/10/17 23:03, bot+bpf-ci@kernel.org wrote:
->> libbpf: Add bpf_link_create_log API
+On 2026/10/17 23:02, bot+bpf-ci@kernel.org wrote:
+>> selftests/bpf: Add tests to verify link_create logs
 > 
-> TL;DR: Commit message only: the rationale for adding bpf_link_create_log()
-> instead of extending bpf_link_create_opts is vague ("it seems not proper") and
-> one sentence is self-contradictory; no code issues raised.
+> TL;DR: Nits only, in the new link_create log selftests in xdp_link.c: the four
+> subtests repeat the same setup and assertions and could share a helper, and
+> one has a redundant true_size = 0.
 > 
->> libbpf: Add bpf_link_create_log API
->>
->> Add a new API to accept the log opts, instead of extending the existing
->> struct bpf_link_create_opts.
->>
->> In the struct bpf_link_create_opts, it seems not proper to append a
->> tailing common log field prior to those variant length fields.
->>
->> Add a new API to avoid breaking the struct bpf_link_create_opts.
->>
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
+>> --- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
 > 
-> This isn't a bug, but could the changelog say more concretely why a log
-> field cannot be added to struct bpf_link_create_opts (for example, the
-> trailing union growing for future link types), rather than "it seems not
-> proper"?
+> [ ... ]
 > 
-> The sentence "append a tailing common log field prior to those variant
-> length fields" also reads as self-contradictory, since "append" and "prior
-> to" point in opposite directions.
+>> @@ -150,3 +150,135 @@ void serial_test_xdp_link(void)
+>>  	test_xdp_link__destroy(skel1);
+>>  	test_xdp_link__destroy(skel2);
+>>  }
+>> +
+>> +static void test_link_create_invalid_prog_fd(void)
+>> +{
+>> +	const char *msg = "Invalid prog_fd.\n";
+>> +	char log_buf[128] = {};
+>> +	int fd;
+>> +	LIBBPF_OPTS(bpf_log_opts, log_opts,
+>> +		    .buf = log_buf,
+>> +		    .size = sizeof(log_buf),
+>> +		    .level = 1,
+>> +	);
+>> +
+>> +	fd = bpf_link_create_log(-1, IFINDEX_LO, BPF_XDP, NULL, &log_opts);
+>> +	if (!ASSERT_LT(fd, 0, "bpf_link_create_log")) {
+>> +		close(fd);
+>> +		return;
+>> +	}
+>> +
+>> +	ASSERT_EQ(fd, -EBADF, "fd");
+>> +	ASSERT_STREQ(log_buf, msg, "log_buf");
+>> +	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
+>> +}
+> 
+> This isn't a bug, but the four new test_link_create_*() functions repeat the
+> same log_buf and LIBBPF_OPTS(bpf_log_opts, ...) setup, and the same trailing
+> ASSERT_EQ(fd, ...) / ASSERT_STREQ(log_buf, msg) /
+> ASSERT_EQ(log_opts.true_size, strlen(msg) + 1) sequence.  They differ only in
+> prog fd, target, attach type, expected errno and message.
 
-Will describe my justification with a concrete case in the next revision.
+Will factor out helpers to simplify the tests code.
+
+> 
+> This looks close to test_map_create() in map_init.c.  Could the four
+> link_create log tests share a small helper that takes the prog fd, target,
+> attach type, opts, expected errno and message?
+> 
+>> +
+>> +static void test_link_create_invalid_attach_type(void)
+>> +{
+>> +	const char *msg = "Invalid attach_type.\n";
+>> +	struct test_xdp_link *skel;
+>> +	char log_buf[128] = {};
+>> +	int fd;
+>> +	LIBBPF_OPTS(bpf_log_opts, log_opts,
+>> +		    .buf = log_buf,
+>> +		    .size = sizeof(log_buf),
+>> +		    .level = 1,
+>> +	);
+>> +
+>> +	skel = test_xdp_link__open_and_load();
+>> +	if (!ASSERT_OK_PTR(skel, "test_xdp_link__open_and_load"))
+>> +		return;
+>> +
+>> +	log_opts.true_size = 0;
+> 
+> This isn't a bug, but is the log_opts.true_size = 0; line needed here?
+> LIBBPF_OPTS() already zero-initializes log_opts, true_size is only written by
+> libbpf after the syscall, and the other three tests omit this line.
+
+Good catch.
+
+This line is unnecessary. Will drop it in the next revision.
 
 Thanks,
 Leon
-
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39042048581
 
