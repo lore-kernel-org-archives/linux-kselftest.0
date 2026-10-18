@@ -1,64 +1,65 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286D34A2064
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 12:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478E54A2619
+	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 12:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792328217; cv=none; b=hHVRvfXUW87JmnLZfr+dcsHoCbPOcFEPqHAcwIZlthoX9izi77taIQl2A4h+1LP8ae3RdHbtxS1rR456Uy76o0wkoN1OEbj+ADT8ZziHEWET5IczQ/IIK/YHb0YqqQ2s0/5Ww5lIKS/wGpzg9DX6hgssqBMCHv3EXTkpYNGts1M=
+	t=1792328220; cv=none; b=dcP4AUDLQlVPoEfOpuCh3kIkpy9n3B82XqTM3SbFau+4ud4Lpt5c19dweBmFxCnVgUwWzDEdsfgBoWgYttP16PgyfYT7r6wYy2e6xLQwaH4xRBARTGovPVE5eZ4GbVMkie0bsXqBn1EqvbQnxrbPh4Gke9L6MeOJH891kDQ4lwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792328217; c=relaxed/simple;
-	bh=OsrzL6ScmdUef1w4yo+N45vyWLhq1/I/YSTqZdchIEw=;
+	s=arc-20240116; t=1792328220; c=relaxed/simple;
+	bh=fGeuiXoT6xfJG+i1Q7CVs1QkQR99sQEgvsl5cYIXtGA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O1cce7pkpir2W/eA7QXNYF9q9DD9tsT1f0ZQaTD6QrJj/7B38nsG75NEQrSflamJ2YjjHjnavZrh4X2Ow+Ivo2ORYeNQLGo+T/OIqLmcaBlzZ6a1O8IfuvWy5KAEuO86OfN1eNV9zQL9H6TMpJb9APa86kkNa51SGysbGXDU5sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mr+UTrgR; arc=none smtp.client-ip=74.125.82.179
+	 MIME-Version; b=PtleJVQSDUgbrCecZMoYG33PzX+QSvR6IzvEvTrClyc1JCh0qxAIzOCyKcPOPtflABZ0Wz5wQrfHxu5pqZPtP0nYbFSNAON3MqiMoGdVua78/f79OCLna3cvOQr2Ywbl/WBy8kA0DBysnw0QYBGvk+txJrhLl4BkuiM9yCyObfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZwTxB8Ib; arc=none smtp.client-ip=74.125.82.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mr+UTrgR"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-35829219da8so2610403eec.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 05:56:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZwTxB8Ib"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-3282db206d3so1426377eec.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 05:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792328215; x=1792933015; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792328218; x=1792933018; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1hR3kISfYtP85z8lc58s0LO5cffGmvqjBO0ESNwiecU=;
-        b=mr+UTrgRT4Oy2tt0dGiu99EYX99SHkAt2dTkvoVHToNEBbmDHJVnw1r2/J7mJBUcAz
-         GFjNr+4wpI6x65vuZoP220NMbe99o9mKNo3WqiRzw7oQIs/7+qOTL9Mr91E9KDH/9QYO
-         UZde4VtT99TbXY8GIWlcRlBb7EjXGz8vtJzwSN6HvRBrBuI2u8n2ObszA75xYALXDRny
-         zpU2mikCphRvJiaj2hiPxYFoFpiMAp3o0hHw1LxKws8MivVCgAXR8lsHL7RLrO40Uumf
-         Ygw3Tzee2MpSLbbbrBMUeWXMSr0Cn+4xLNJc8yx+1ifVC49CSi/xl2W+vrqi6xJD2mx+
-         IZIA==
+        bh=35zLSPgPljkvq7HeoKghafYVUm5JrdIxwci7K3QcKT8=;
+        b=ZwTxB8IbH1a7pRx0svBvrSByCoJLD/UioBRo7HqbSF0/LkXuHhL+gCbBcwnJyDmGbN
+         UWXbwB+WEXKr5La+nrh/fKBeO9e/iT3ZRIojcEXEfRNtKqlLr+O7AbApqzLxGDKRwm91
+         8QYwhSYU93sZ5tYUPvbf4HL4Wssf7dCIFfUKWcuuDPk4wHc9aIQEZ7IvW0E8z5kUD7zj
+         waaeu30/PW34nO8RxpYsmYJMp40Z65AmeyscylJGNp7Uo7N6w2EbO7Mw9snmaZNYmpdf
+         Eec3dZnm5LaKd1uyTqgyGbBpri3mIgJqnxJRAzDwjAp+7TbRihAKco5koUSQ/VN8u8wW
+         4SQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792328215; x=1792933015;
+        d=1e100.net; s=20260707; t=1792328218; x=1792933018;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1hR3kISfYtP85z8lc58s0LO5cffGmvqjBO0ESNwiecU=;
-        b=kiRI/G9DDPeMlhXYq8PMozsxgADY1m8a6ZDZAgmt96H7LbHeqIXp4JWwLmxdGW5xpa
-         jpHZ3SG/APy7Ts42b2CMOBvNygYXrfgoUgMXr4XumZlcljSCjdSNTN6qGjqRa2aZj1KB
-         Qd4VBpK4vIZ76NOlHBw1xL/9crz60L1QUQJh0fZLinDFH7rENXhWv0rbLEIIbX7EfMap
-         xps/Hw/jCtCnNKPPcGyKh7o7muFNtiogcLnqnjzbmeHq2u0HpFS01pn6TeMIG5aJ0sqr
-         8muhLNsoKXpusj/Wg0B5u/0Y7Du7jvnn8lUWnhyM58XwvbmKvalTTmTHOZ37ngi7OWl4
-         Xomw==
-X-Forwarded-Encrypted: i=1; AKwUvBxO5dh/NqdoNVoU5VvJ8ofXPEnsxObDOdIdpzpCP3jflBc0aYE8U2af5uYFLNCgIlZhumsEX70QlvU02BoTKvY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJbHiEbO+PI3MRmd4KBKwbRN8j6k49W3qz9dpB7vtgorlmFnpmc
-	9nAamdK8GCcMCcH9UOxNbqwGDgo3ep+DxaAUGGEhmZhbaDjFfp7coZh0
-X-Gm-Gg: AYBFou2IKpNGAzXRZCQ0Ioo9bY1IUfv94OQRL73UU53yNXt7NQwppyJZkxcT/FXMGPw
-	5wNmuf3jKYRoHYzcMPQzLRQAqHJIadUk9rcWGTNJ7IqNbt8dBtcePzjersw9rJYEGHJVsijlZQF
-	NMeQCuA9EbAEFTaMeJn+XlBxK1Irz55nMUiNj9nKNlQeiRBO/4jjtnPrjWOH8lSgAMCsES4c2G2
-	lmzjtQ/AIM0sNWj3mluPjPt9T6ZHxT3JIDo+GmLbaNYCAGYKnKZ9C8AKt0XSHGDyIu39cfPUKUA
-	fuCeNNNL5dtt22VrYDPiWRdRVwapKTz9jpApTUlphOQeXyu5axv3pmynofOWLkL7E3SexD2pXCF
-	tZzV7SqQqANl1qwHGZexfUXkkW7axJ6oTwc3QAPU3VB0zuylxfSdvt/CwUlZNyJ12/ZNJlGoW0+
-	1nFnUOftBEVU4nwtpB1upvysxhWymOcc+rGSejBucjhfpVpx25Le6hdre8bfjX7UkC/hPhJD/10
-	4B5lR1+g18Mt3xT2bWQF4giSfFUeHirEAR6SvHk9w==
-X-Received: by 2002:a05:7022:43a5:b0:152:dd1b:4fa7 with SMTP id a92af1059eb24-18511eb69acmr9823189c88.19.1792328215121;
-        Sun, 18 Oct 2026 05:56:55 -0700 (PDT)
+        bh=35zLSPgPljkvq7HeoKghafYVUm5JrdIxwci7K3QcKT8=;
+        b=VwQMIRcFJue1xVrnbl5y/yNQDXmL1l+lr2cvKbiuNdyTG696pNPjN3oVFPYdq5+n0Q
+         MCkXuef8pzLVRiOUqTCPQHFIOpAg54S67uSK5SBt+uUKaYdBOiN6bLo9Wl4/+yKWmEPO
+         9WLbkbVQAnjDO2Cp45RNF0AM23IZ8rR1Q1UIE/Zc/tn/i3DZUBsHbyMq5CR3PpJ1LimM
+         wEozUZ3BxpzVGHCtuWBY52AsFzK0652xkLC9Z76BaCG73aKwgefgID/sBAC7KWpkL/xO
+         1Tfj1Qn86F1ZiIiwImP5+Mm5Ibt5Ztb9wEWxQs1KPw8jdq0SdkcY1T5j3ezMUzg+5gH0
+         Xgyg==
+X-Forwarded-Encrypted: i=1; AKwUvByilFlAm2wDsMvhbuaXp/VqnytfFghWyhALEbmtlHlujpI+lqT1n5XZhpcOcFV9Hyn66zKjeUoVJ0SAU5lBqu8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ8o3yEayCT9QyrRbJoGStQLbu1RwGftN0lBu60QCl1eOkyinaG
+	XrQa35efYGnXjQyTRWQMGCXKczO290d7L5jTY78+kCAXV9QGXjOAI2tn
+X-Gm-Gg: AYBFou3cPb+up97ztc42VdNt40BmhFFUi8x3LY7FVEteY16CszsHXeyxhfBUSReRW8h
+	MH9LgnterL8crPWvT/p4sKBpPBuTOUy9timwNJ3vpiV89f5cwjQAPpfDFJ9ROVRkzV2K+07cuq0
+	Fjuh54YMQE2ftAQWsaCiKhkmoHeGUpW7EnIhMHJH6NxmUee15ph/FpsqQG00ah2wtA60Pg+9LrW
+	JPLx0P++0OBMXXoqTLG6swAGYL1uQ/uzapxzUsZBEO9p6hzypS5hiJro2wa2zdgT7oyhy1NXqnd
+	kXtyCk6qNhF1jhfuBnyQAznQULAr49L5Mg2v2rCtJu53NiRKvoGK9onuTNE/FNhMVe1oscVIgvp
+	9vRJhz9rSGGneAj1/5TjVPp4f5hg7UtDGZq8k4sybf+TS6l9jg3WbgjBbrwf0B6W1XqadNTgct9
+	tvih/sbVhkouuPqd7VkENUdHmjKjyuVrUYTmuno2dze+pHK4NWvplgIM5xbc/T/6RmaGqmfdavz
+	5Nn+HLrIsN7azVvNJLT4fvGRNOF8dHRKBnRENwTaYjfwKGmlYxTBHdsCoT1u6wVjGuxK3/ZnVuB
+	VTYCqn4Tffa0dHzM++ZedkE=
+X-Received: by 2002:a05:701b:424d:10b0:13b:4ab5:41d7 with SMTP id a92af1059eb24-1850c9cf427mr8398805c88.3.1792328218029;
+        Sun, 18 Oct 2026 05:56:58 -0700 (PDT)
 Received: from Biostar-A520MT.. ([187.94.15.112])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831c4d4675sm20404082c88.21.2026.10.18.05.56.52
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831c4d4675sm20404082c88.21.2026.10.18.05.56.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 05:56:54 -0700 (PDT)
+        Sun, 18 Oct 2026 05:56:57 -0700 (PDT)
 From: Breno Rodrigues Alves <breno3011alves@gmail.com>
 To: linux-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org,
@@ -68,9 +69,9 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
 	Ian Rogers <irogers@google.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Breno Rodrigues Alves <breno3011alves@gmail.com>
-Subject: [RFC PATCH 2/5] perf/tests: convert check_all_patterns_found.pl to Python
-Date: Sun, 18 Oct 2026 09:56:38 -0300
-Message-ID: <20261018125641.23064-3-breno3011alves@gmail.com>
+Subject: [RFC PATCH 3/5] perf/tests: convert check_no_patterns_found.pl to Python
+Date: Sun, 18 Oct 2026 09:56:39 -0300
+Message-ID: <20261018125641.23064-4-breno3011alves@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261018125641.23064-1-breno3011alves@gmail.com>
 References: <20261018125641.23064-1-breno3011alves@gmail.com>
@@ -83,23 +84,22 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Faithful re-implementation of tools/perf/tests/shell/common/
-check_all_patterns_found.pl in Python 3 (stdlib only). Same
-regex matching, same TESTLOG_VERBOSITY/TESTLOG_ERR_MSG_MAX_LINES
-environment handling, same exit codes.
+check_no_patterns_found.pl in Python 3 (stdlib only). Same
+regex matching, same environment handling, same exit codes.
 
 Verified byte-for-byte identical to the Perl version.
 
 Signed-off-by: Breno Rodrigues Alves <breno3011alves@gmail.com>
 ---
- .../shell/common/check_all_patterns_found.py  | 35 +++++++++++++++++++
+ .../shell/common/check_no_patterns_found.py   | 35 +++++++++++++++++++
  1 file changed, 35 insertions(+)
- create mode 100755 tools/perf/tests/shell/common/check_all_patterns_found.py
+ create mode 100755 tools/perf/tests/shell/common/check_no_patterns_found.py
 
-diff --git a/tools/perf/tests/shell/common/check_all_patterns_found.py b/tools/perf/tests/shell/common/check_all_patterns_found.py
+diff --git a/tools/perf/tests/shell/common/check_no_patterns_found.py b/tools/perf/tests/shell/common/check_no_patterns_found.py
 new file mode 100755
-index 000000000..3eb907af3
+index 000000000..0e5d931b9
 --- /dev/null
-+++ b/tools/perf/tests/shell/common/check_all_patterns_found.py
++++ b/tools/perf/tests/shell/common/check_no_patterns_found.py
 @@ -0,0 +1,35 @@
 +#!/usr/bin/env python3
 +# SPDX-License-Identifier: GPL-2.0
@@ -126,9 +126,9 @@ index 000000000..3eb907af3
 +
 +    passed = True
 +    for r in argv:
-+        if r not in found:
++        if r in found:
 +            if not quiet:
-+                print(f'Regexp not found: "{r}"')
++                print(f'Regexp found: "{r}"')
 +            passed = False
 +
 +    return 0 if passed else 1
