@@ -1,62 +1,64 @@
 Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4994A0EF7
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 12:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EAB4A1E03
+	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 12:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792328211; cv=none; b=h/lRnkJvEZAT68+GbRa+hq+n4jzr4NTmX8dfp1GDrKWiTJCFn4mt88yRC5L3KOwhioavtwUXpTilgD1OdATnDASGRsuIpSaAmkBJVAs4ADVtxxEWEeZTyW77xmkPI5PLonE0cUGfg7HQX5SfNjQkDV4Ql3tX+YuWH0plpc3gnfo=
+	t=1792328214; cv=none; b=aSM8qvRJ8oLVNQUQZWsej9+Yl+hQ2862lOvvZ9sYnulGCPFOvSw+CFxU/HMDMorwXz+yqdNBXCHJYgcF8ilryf3A53luUrD2z0gQ8hsqOz5SiOHWRIws44AMmtz8U7W5uShehb4kN5uuMco4smTR1Q11ltW2sFOYCxFo1H8XlfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792328211; c=relaxed/simple;
-	bh=2WJTSDjAEakWpXPC/NVEOZ+BPuvaLCgPchT0JxuXVV4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UuEylJvp88cVExO6J6waeKHMwcCnO3fQi8mt21OWkxJExmYcyNHvtq02/51/+xug5KSD6Yv7aQm/h8DaIWkp5oiupTkWyIuFTjvgsXquH38C+l2gYL6gQZPIM/w9Zf5fo8Rp180u5AYBdSASiKW9wnG4XkulJU2qJbkvymCf26o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sthafnpB; arc=none smtp.client-ip=74.125.82.51
+	s=arc-20240116; t=1792328214; c=relaxed/simple;
+	bh=PksKvJSYmolkgiySGOXytWOGhgc2e/1kXd1gcpQcOvk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LlWsLU0k4oLv+GkFmxjQjaxAjc+ixylkEsVsuPWGrX3piue0R/C+ofImxM9ZQKlIGf7rr3z78dU3MMVOgGeQOkKi3cn/Ky/9BBzj/ga5HQ1PIlbhUp/T18oNDA8xdWQV+bXkA1vrDGZw8tXeOOzCQyPXMc8ZJ2L4OZaCjFCRSp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H57z7bI3; arc=none smtp.client-ip=74.125.82.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sthafnpB"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-16079d54c17so3158895c88.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 05:56:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H57z7bI3"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1438d9363fbso144575c88.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 05:56:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792328209; x=1792933009; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JERkWB0TDE76PWFJHk1bArxy1QoTkEsYgt43aA6L+iw=;
-        b=sthafnpB/g8QaQsUMmsJww5liZNrt3yXIg6uCJg+Ufq7UZQmYmmKIdKhp2UYatLF24
-         jwoootDi2Vj2WoFVKATyJTe/5TN6QVtyiGkew5UgWZzXdxw9sJFMNcNyi0ykZsoVYTG9
-         RgsNaP+s8bnCTrwHJ7JmVjyjL5B/DeYPgCm57VWL5SBH15zjitjWAIAcpFA9mHipVmhU
-         vlyvf9NyfnSbLY4pN4xfToTQFtYWu6DD4v5/eYgk6tAqDkibXrcf8CJ4I7h1aCY/9xfF
-         VbOvVEl0KieN2THUIVQzWmvCQfuZEaQa/6aQBhDLhulzIbXooyL5azaQRAntEjN7wSdY
-         MbJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792328209; x=1792933009;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1792328212; x=1792933012; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=JERkWB0TDE76PWFJHk1bArxy1QoTkEsYgt43aA6L+iw=;
-        b=J9JdliL5YqGoqfvCZkL4qvOVTBAzWA7rbbZ3geK0MitZGRK/oBtWFQ8KnHLvBBbU+y
-         7th+AZIIozJ793HlNVaIoMOwUggxXjERpmmqQPBP2M7MVBUjT3ZtkpmKHLbVYsKOBkIk
-         76kX7O8gWCZpeplvfdmmU0hwpQBkjf7U8lznmP2Ddzm6pF7ga8Or2Koln1bS54YXRvPg
-         8Ajxs35wXwC+mdjrQYITj0U+R+iNI37qSFCNPJ27dZSpuMAhh2DSzvqfKaB9Yq8oGM32
-         Lcete7GSg0AZAyC7RU/kA6C/QQvzol4F1wfqxUxFjLxn1xeKzcGzkM3IqZhzkAj1FLwD
-         Vf/g==
-X-Forwarded-Encrypted: i=1; AKwUvBybW4Mo86Xq0797PjXIaxVfS/pj8+hXuJbD3Q5vgg0+YuomvqntSh5VUnD9RBFCNsGayCFHxV8wOGyTucT5R6E=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKPybStoUIpu1iKF21DuVMo1vmxPws/9uW5juHfC8gN/fVcZnzx
-	bAMZ4/n8uwRCznL7elOIGYPYfC1+vVKZRHdCZQnxD72/cuskew/wzsjb
-X-Gm-Gg: AYBFou1E5yME3lbgEHVXjFjMTChaxbggqQoa32/WSSLhI/vcmrFZbca3Gh6LgXDdLaH
-	Eagp6te/BGnwJoOnwU/02USbbF4ERHkKMqeIZwSSTwMbjtoWpadShskqtnH0Ai8uK2qvnX43udX
-	uh+gL7U7dL41SkEtWMrK7gEZunu4WkZE7kT+5Fa2pi6cpmbY+34Xv53L8ywggkB0tDyOXyFW0p4
-	iQ6AfNSFhW2YhPHt+fEOMuYfrDZZTUFHQM1fD7x0mfU2jzPr+t1eWLvVBH0ByHCMhwBJfnQKZQn
-	MU1+z2qgOehh5tqwqViJjfxj7d3DRiMrjYpdfEbyam479QGNrzmhovoV5uzyG8nR1JxrfgSAwPw
-	C+597kaY2sH0tZqJWA/Ej9YRi7rRiv1Z9X9e/ytIUdd4Zxk0I4HZOMd591l76dm2ksDCerJvxGd
-	3WNVto53FVJgsVqnNqOz1qZ1ILGxF47rLd0qjSGRhDuu7fKX28rTdFDhgT/mUMPGlwGVZxDdko2
-	zGk9BbnuEOkaXrV/EklC1zsAj4cqPcoXVYhnAGd6w==
-X-Received: by 2002:a05:701b:2816:b0:151:d6e5:596b with SMTP id a92af1059eb24-18511ad88c3mr6664435c88.9.1792328208664;
-        Sun, 18 Oct 2026 05:56:48 -0700 (PDT)
+        bh=B/T5q56CR4R9vbTCEnqV1OrpsFX4ExiSjkWfLjOv1KM=;
+        b=H57z7bI3rqLOD7Q+RAwrDxoIYjURL/DrGIuSAwQEks5jQ+0N1RTCnpq9SekJ8pdWLT
+         u+OVD2XgLwC4RL1D4mCgldrADW9tP3qufK62xph4DlLNic9PgAwgnQrSECg1h5h+tSai
+         f4USRafC5ElF+uUoCL34I2HiD+kjeHbgMz0A+xtSt1QWr0ywdw35cySNZVOMHgWhGzIU
+         7DndNKRH68QjTtGMrMdmL1awp9SlALDWYhasVgRvqvmYi8Khtdl4GdeqXoPuphwRrKJW
+         uYDvhkk+fffFrbeRdfV4xdrtPZ4k8dWktRsitrmBw3Yqpc2vJM9c1OlvflN5hobI/qBl
+         at+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792328212; x=1792933012;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=B/T5q56CR4R9vbTCEnqV1OrpsFX4ExiSjkWfLjOv1KM=;
+        b=HDDQjtz559icnDIpaEwde37mgCZdPCN4BXM8/GTTup0nta51kkSO1CVz8W/SyQjsm8
+         eSlG3irVNW87WyPw+6RgCzzZ1XhX4TQ4Y96DAywzTEDoNlIUNDyqI38XscuFsUfRsGfU
+         lRZflhb0xQxb3r/WubF7zkR26Jv7W9Hx6XisTGDRHZmnzZ15QcfCCvZgptQg83EapNi8
+         HL21UtUvFMpaXxqPojtqGd2pyGwjH3t8gdZo1NheTSRpskE6OetyjX+gRnQfh13Uaqcp
+         HCMW14mhRmvd0/knSnerOx9npNRCbUVNdrOkY1PK28qjA+K5dyvFhPPvrJfUb+UvAZte
+         IXdw==
+X-Forwarded-Encrypted: i=1; AKwUvBwAfnJT2kUKCUaqeXqZXNHfBgakh9ABflhPlK1wOIw8jW9MVn3+pE2KDwydKySSOMU5hsyt2b0/L+TB/tKwV9Y=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJlrCTp4VUmQtwApq3T+AZVxvggKMJib066VuLDPXhem+FlUqbI
+	+QWGYeH25Ho+jatqqFu6x6v88pxOJCOpqZOICeeECsxYL0FKuebtZt6g
+X-Gm-Gg: AYBFou2US+USNpoy3ReyDBYMw5uF7dPIDF/kuVuBm656adDTKqUgUhI2cHtSPgM6lnQ
+	tFwDvkwx2ZXGp7++nb+Xh9tH1pINU/2OQYAVumB8hwaRTEDQzJiSMb6IgLfc/5PPdQrOzgdaWT5
+	/HTqxMzOxBHbCzj/kkN9CibAZRHQDISMkfkrrd0PeaNYkmbf/glYfFwlCTE2GDRYeu4QfkSa2dz
+	YQXEay5D0MbSN0Bu48o+3ZBZckhmF1IoPqQYgwqrIvicosZIfNmWpoV4nertdGHEisVx+E8cGxT
+	iHv8mBQLjGbrRX3apZRb/Sawsa7rNmAhWra4G5lUGNinuGX4lUOoUFfBlXd8U1zEwKo1Wiq6nbk
+	Qj6+zxh4Ees0HIc3cbEv/cvVzR5J2buMyxL5iQeT/J3H2F9kopeq5s4YkqamcVFFwlO8ixfjwFt
+	C9BC1arAQGy0ZHIZFbUWy/blfIJ2BtjPg3gQLqaSe43TzZJZyTURBCpn+k5D12t/gkBk2DuvAkm
+	vQklJOnq+vAyd9zo6yEBLvVEDAJTygFXJafM3/p4g==
+X-Received: by 2002:a05:7022:913:b0:14e:61bb:ec3d with SMTP id a92af1059eb24-18511232282mr13479073c88.16.1792328212122;
+        Sun, 18 Oct 2026 05:56:52 -0700 (PDT)
 Received: from Biostar-A520MT.. ([187.94.15.112])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831c4d4675sm20404082c88.21.2026.10.18.05.56.44
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831c4d4675sm20404082c88.21.2026.10.18.05.56.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 05:56:46 -0700 (PDT)
+        Sun, 18 Oct 2026 05:56:51 -0700 (PDT)
 From: Breno Rodrigues Alves <breno3011alves@gmail.com>
 To: linux-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org,
@@ -66,10 +68,12 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
 	Ian Rogers <irogers@google.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Breno Rodrigues Alves <breno3011alves@gmail.com>
-Subject: [RFC PATCH 0/5] perf/tests: convert Perl test helpers to Python
-Date: Sun, 18 Oct 2026 09:56:36 -0300
-Message-ID: <20261018125641.23064-1-breno3011alves@gmail.com>
+Subject: [RFC PATCH 1/5] perf/kselftest: convert prefix.pl to Python
+Date: Sun, 18 Oct 2026 09:56:37 -0300
+Message-ID: <20261018125641.23064-2-breno3011alves@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261018125641.23064-1-breno3011alves@gmail.com>
+References: <20261018125641.23064-1-breno3011alves@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,53 +82,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series converts five Perl test helpers in tools/ to Python 3,
-continuing the Perl-to-Python conversion effort for the kernel's
-auxiliary scripts.
+Faithful re-implementation of tools/testing/selftests/kselftest/
+prefix.pl in Python 3 (stdlib only). Same unbuffered stdin-to-stdout
+processing, same "# " prefix behavior.
 
-Each conversion is a faithful 1:1 port: same CLI, same output,
-same exit codes. All use only the Python standard library.
+Verified byte-for-byte identical to the Perl version.
 
-The five scripts are:
-  - prefix.pl                      -> prefix.py
-  - check_all_patterns_found.pl    -> check_all_patterns_found.py
-  - check_no_patterns_found.pl     -> check_no_patterns_found.py
-  - check_all_lines_matched.pl     -> check_all_lines_matched.py
-  - check_errors_whitelisted.pl    -> check_errors_whitelisted.py
-
-All five were verified byte-for-byte identical to their Perl
-counterparts on synthetic inputs.
-
-These files are used by perf test shell scripts to validate
-test output; they have no dependency on the perf binary or its
-Python bindings, so they can be converted independently.
-
-Breno Rodrigues Alves (5):
-  perf/kselftest: convert prefix.pl to Python
-  perf/tests: convert check_all_patterns_found.pl to Python
-  perf/tests: convert check_no_patterns_found.pl to Python
-  perf/tests: convert check_all_lines_matched.pl to Python
-  perf/tests: convert check_errors_whitelisted.pl to Python
-
-Breno Rodrigues Alves (5):
-  perf/kselftest: convert prefix.pl to Python
-  perf/tests: convert check_all_patterns_found.pl to Python
-  perf/tests: convert check_no_patterns_found.pl to Python
-  perf/tests: convert check_all_lines_matched.pl to Python
-  perf/tests: convert check_errors_whitelisted.pl to Python
-
- .../shell/common/check_all_lines_matched.py   | 45 +++++++++++++++
- .../shell/common/check_all_patterns_found.py  | 35 ++++++++++++
- .../shell/common/check_errors_whitelisted.py  | 55 +++++++++++++++++++
- .../shell/common/check_no_patterns_found.py   | 35 ++++++++++++
- tools/testing/selftests/kselftest/prefix.py   | 24 ++++++++
- 5 files changed, 194 insertions(+)
- create mode 100755 tools/perf/tests/shell/common/check_all_lines_matched.py
- create mode 100755 tools/perf/tests/shell/common/check_all_patterns_found.py
- create mode 100755 tools/perf/tests/shell/common/check_errors_whitelisted.py
- create mode 100755 tools/perf/tests/shell/common/check_no_patterns_found.py
+Signed-off-by: Breno Rodrigues Alves <breno3011alves@gmail.com>
+---
+ tools/testing/selftests/kselftest/prefix.py | 24 +++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
  create mode 100755 tools/testing/selftests/kselftest/prefix.py
 
+diff --git a/tools/testing/selftests/kselftest/prefix.py b/tools/testing/selftests/kselftest/prefix.py
+new file mode 100755
+index 000000000..2bf16b37d
+--- /dev/null
++++ b/tools/testing/selftests/kselftest/prefix.py
+@@ -0,0 +1,24 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++# Prefix all lines with "# ", unbuffered.
++
++import sys
++
++
++def main():
++    needed = True
++    while True:
++        char = sys.stdin.buffer.read(1)
++        if not char:
++            return 0
++        if needed:
++            sys.stdout.buffer.write(b"# ")
++            needed = False
++        sys.stdout.buffer.write(char)
++        sys.stdout.buffer.flush()
++        if char == b"\n":
++            needed = True
++
++
++if __name__ == "__main__":
++    sys.exit(main())
+\ No newline at end of file
 -- 
 2.43.0
 
