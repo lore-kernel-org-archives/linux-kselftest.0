@@ -1,129 +1,193 @@
-Received: from mta0.migadu.com (out-221.mta0.migadu.com [91.218.175.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0553E282F13
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 00:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8FE2D8DC4
+	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 01:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792284957; cv=none; b=ez/r8QXtr2QektqazXPVccsbhEKmiIDrEDHe3JlHdLD9Ak5E/ZUOt0UbQVDca8yGXOrvkGLK+9JNvNpSKQPKtFMzQ4NtB9bhLPWsWk8onMDsTrzBDfsOdp6vDICAabk5I0R2k8jyGMlWr+maJgPG4RN1Jpff0w/cMZNSd7yt/tI=
+	t=1792285871; cv=none; b=FIc4nxUEpiap8AqaNrDaoMraAeEA415xJa3ec84Qme8IOzZUzIUjQO7YrMturPM8oywDZYz+Aufv3LyNVQoaPNMrjSycyA7kpe3gF0s4+kaABDETww5J+FS4Wgr6WrCG5X0/AKQeoaKKORPQxUZS1619nERvbZKTnJAWzW5awPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792284957; c=relaxed/simple;
-	bh=APFwl/HiItu/QCD6VtNINOJAd0UoIdFGyY4WR9sMH7o=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l7YtYWs3FsznL+wqJEhMZZ5twc/drzFwv5/MZqANy0KhYKv7rT44Fg6rzkixxeyCrceKM6hnoT/ZUqNSWrcFWwACcbFw+Fw+JyNsQFYSwCYyylY4v43T83ZAoxAAFtxIsVzElR4XnBjP9CFZAuh0zKdsDKWH1WSL+xkNNlj6ZXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mM83M+Bt; arc=none smtp.client-ip=91.218.175.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792285871; c=relaxed/simple;
+	bh=iClRPXEe5mR6eqpKMdMBt4IQqiTf2uKaNcox0pzAZ7s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DnEm8EbzqsIq5xUnTVX7yHlHH8VlOfRQdCycHVHhwd5msjH9ktJaxKZEozvqyqdoEpsCWP4UTFn22Ca9wQ4bPIkG9CzBhjPBI5qcOYkNE7KjZ91797ZY40vmM8HGgfY+e5mUYfVtoXmWz8Gk/+c3ox8mrCVv38bThgxCzgaIshE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benboeckel.net; spf=pass smtp.mailfrom=benboeckel.net; dkim=pass (2048-bit key) header.d=benboeckel.net header.i=@benboeckel.net header.b=lvLKv3jN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tQTzcmLt; arc=none smtp.client-ip=202.12.124.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benboeckel.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=benboeckel.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mM83M+Bt"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=APFwl/HiItu/QCD6VtNINOJAd0UoIdFGyY4WR9sMH7o=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792284954; v=1; x=1792889754;
- b=mM83M+Bt3J7eYmTcQR3Z7zI2VSiN9CGp/GvZCNm1g2LjkyUQGXvQYd+QoGYEEMzpkHqC1667
- Iot8HUEvEMn+kp20aMxZ+AIU/JAnlpUmisXd37cYnwU+kQAZpfugegrB/4QUEQW3nGlKyDif1Ug
- wWopGTSKLNx9jjJA538a9ZDM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id e9275ec6c32b6a9a;
-	Sun, 18 Oct 2026 00:55:53 +0000
-X-Mizu-Trace-ID: e9275ec6c32b6a9a
-X-Migadu-Flow: FLOW_OUT
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	KaFai Wan <kafai.wan@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Feng Jiang <jiangfeng@kylinos.cn>,
-	Vineet Gupta <vineet.gupta@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v3 4/4] selftests/bpf: Use _exit() in uprobe_multi_test clone-ed child
-Date: Sun, 18 Oct 2026 08:53:48 +0800
-Message-ID: <20261018005348.2195130-5-kafai.wan@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261018005348.2195130-1-kafai.wan@linux.dev>
-References: <20261018005348.2195130-1-kafai.wan@linux.dev>
+	dkim=pass (2048-bit key) header.d=benboeckel.net header.i=@benboeckel.net header.b="lvLKv3jN";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tQTzcmLt"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.stl.internal (Postfix) with ESMTP id 43E5A1D00081
+	for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 21:11:09 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Sat, 17 Oct 2026 21:11:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:reply-to:subject:subject:to:to; s=fm1; t=1792285866;
+	 x=1792372266; bh=IQsgVY0IWPoHORuYJpzS4mkNp1CJYmEIgbOfStHyy7Y=; b=
+	lvLKv3jNBogmMUqjchVm4Nl3Rby3771Nrf2pmqLEmJM6+deNX//3dondo17gC/m5
+	whyaiAZqUXZxtAJt8cSmJY8Qi3htrwdVnF2BCyjCA/UEKLCkOJ2HZ5f1m8670owi
+	sD2GqEO6+WqWqDC84Y3htQISEdEUf1Aed1SKCRTAy3OStefX8tQfNIsnUjvjlc0S
+	944IQcjP2LK7uk+FKS4haRxcis9RUzN45LzQPVpJKRTELzcGuRgR15aP9ID58bpt
+	BUCHxg276iT3Z+6u2lfs+u+kgSO4OzeXGdwl+QcrsGr9obdSebFIIayu1ojkSbC9
+	Y7S/saPjZm+YGl8mh/7U5g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1792285866; x=1792372266; bh=IQsgVY0IWPoHORuYJpzS4mkNp1CJ
+	YmEIgbOfStHyy7Y=; b=tQTzcmLtpuziSWN/KwVQLT9e4ctmKj9C/Lobtei15FdS
+	dlIEcfzEYpvoNNME8PiY9KEtOUSCKo77FG8E8dgvQHEnTFNUP2BD5DuKZi87/QgL
+	onLwe/DcVNVuPDCkgp53EmcuwKOZtRqeOCFH6coS8IZKS0SUBq47D4cklRKA+zpQ
+	c3SzMSopSjru7VnfDLXvwjbr9TKJRDvJnj//bVCKCU3xAnLo4R6EbvMUoZj9BDRu
+	QWzwE7uQXbVU6tq2Vi3QBHrp2mAOVLvuqB8Tuunl9TR5luyhYpNiNJJ+e0UoWMud
+	hVhqBtjVO8xDVjMULDhxjfSuNDMXd8HDh2UOPnb0+g==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
+	action=sign d=benboeckel.net a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1792285866; d=benboeckel.net;
+	mf=PG1lQGJlbmJvZWNrZWwubmV0Pg==;
+	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm1:rsa-sha256:XZsoIaAazNOJWL36RxYtvUHw+q2nZmgJfOBXS/kb7mTMN0r
+	eqzyd50abO8t4faZnlxxXh0HM1ICorcju+zTAxlfDMM8Q9vy09ploCT2FaaPUK7Y
+	mnPdxGzZg4NE97+ZKiEcdtKRoKUfvuSb8deLcvnP0oYlbmsX97EUGpulBkvQkO2M
+	Aev+VarKzN6+CfYpmur6hk60NAiEQM4AM+/Rb9J7BmJF1TmAF/gnmufM21x7SVz3
+	pMzQIR5RXs4rfhjFvdXgA8GCvgqMFeB5deqGFn7kPhDrnuoXFJTvooRueTXafLdg
+	6R+vJiJCPB2vpOkyXYGuJBsediF8/K4zzS03lgQ==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
+	action=mi-m=1; hc=14;
+	hn=cc,content-disposition,content-type,date,feedback-id,from,
+	in-reply-to,message-id,mime-version,references,reply-to,subject,
+	to,user-agent;
+Message-Instance: m=1; h=sha256:Vi3N86SJGk1w63md9NbJDlcOb0nEbeK8aupUZx13Qcw=:iClRPXEe5mR6eqpKMdMBt4IQqiTf2uKaNcox0pzAZ7s=;
+X-ME-Sender: <xms:qRzUanjO0lq1_iCh05wWS2AszCPGvjzDid8C-T3UbQZZ9DXNWIrg3A>
+    <xme:qRzUauuRh5pR02mB4Cfrd0JYA2WlTrXDp70WD79zGlUuFlQOuCUG04xiSnDZ1c_19
+    mQAG7LUGACcRTIlNRDCRvJQdewbvnDYKPVJlZHcJvAQkmlsqliLaELF>
+X-ME-Received: <xmr:qRzUatv1NfTgCZll3K0hCPY4u9872BlYnyv4URO7lYAnlhpz7JVZ2Yw3HQ>
+X-ME-Proxy-Cause: dmFkZTEvnTXb7wlPNdbPCo79KPjALe1WyOomyRWhprFt/vGO9Ai679h2SHP/kqZH93QGjI
+    +ozfqZTdZKg7h8D7XL5tDXORgip7Vh/Iw1HAwfLVrotIcUbd7YOIXOUoOee/rBp3M0Vjrg
+    +dCHbCyJpUvgDwj1Sq6UvkNmqYLWR8LGlOPh9uV2QqNtST1P/mE8LA6cwr9Va8hyC94yqA
+    qqkwb0dmWcp6pYePryL50SA2PuYbwEc/oVV6UaV7j3KaFhmXYKYR0BJI2+N0Gws0eA+Nvv
+    w8QrVGxrfUZtk6pI7rj1J/u/MY/qe89NuVYCSQ08nvYnSuJ6oNm4hXM0wwwaygLSlzP9Z2
+    i6YYlf3qZsHFPOoLLyit+n5ap1/Qs4Ie0j6ixsRKNtQlFdAaPTCgdofAa7FPkcFzs6jXLR
+    ho2J8Xr4vG8Y8bqauGwrVN8gMu3StR+YaEd8vQtihFl/gfx0kksVPcbMPbklHSxjzz1TF/
+    j0IVX0HUIWvE29G/xH4eqM/MJ3gn3EuO6IhK5MZSwyr/8xesImV8m7p0dVi3mr6SYr2TKD
+    ZoxnebomkTJciLsrdw9VyavNzukigajK+MJR0voUUXE0mjZWSAwumFi6czU4JSxFZyVE9J
+    L1TMYaATsDxvf3HfUk3zg09csqiR7mNC987cOX1OQ4+AQ0pTmI31L7zzWAvw
+X-ME-Proxy: <xmx:qRzUavML6aKT6Hb0mb0yqO4TlzLkEGfSwRyNvmDZWKkJYnD4W6NQqw>
+    <xmx:qRzUaveHmcbn-gT7gI0J_a5vsZ1ukzaBryWKzcQUtzRAxPODWES-JA>
+    <xmx:qRzUamllVWv-rKXbsIQ3xUZqjMW4HNQUlzybCcm8wxqYr07_9l1wOw>
+    <xmx:qRzUahxD-5JRBjWdwEg6TCNU04-zDCfbBiQX6PWr1JIbzKv5_sGRgw>
+    <xmx:qhzUamTrVIHs9pioam_XAHDlj_qDvXSWKUjHS_1tMb6KEZkl1Q6a07rk>
+Feedback-ID: iffc1478b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 17 Oct 2026 21:11:04 -0400 (EDT)
+Date: Sat, 17 Oct 2026 21:11:01 -0400
+From: Ben Boeckel <me@benboeckel.net>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: keyrings@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Rae Moar <raemoar63@gmail.com>,
+	Ryota Sakamoto <sakamo.ryota@gmail.com>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Kir Chou <note351@hotmail.com>, Petr Mladek <pmladek@suse.com>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	Guan-Chun Wu <409411716@gms.tku.edu.tw>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <linux-kselftest@vger.kernel.org>,
+	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <kunit-dev@googlegroups.com>
+Subject: Re: [PATCH] lib/tests: kunit for associative array
+Message-ID: <atQcpQ-1J28uJyT9@rotor.dev.benboeckel.internal>
+Reply-To: list.lkml.keyrings@me.benboeckel.net
+References: <20261014160144.1835860-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261014160144.1835860-1-jarkko@kernel.org>
+User-Agent: Mutt/2.4.2 (2026-08-30)
 
-child_func() terminates with exit(), but spawn_child_flag() also starts
-it via clone(CLONE_VM), which shares the parent's address space. That
-exit() then runs atexit handlers and static destructors against globals
-the parent is still using.
+On Wed, Oct 14, 2026 at 19:01:38 +0300, Jarkko Sakkinen wrote:
+> This is a kunit test for lib/assoc_array.c, which maintains a shadow model
+> across assoc_array operations, and checks its integrity after every
+> operation.
+> 
+> I wrote a draft version so that I could properly test 'assoc-array-fixes'
+> tag at Linus' tree, and spent today rewriting a new more polished version
+> with as good description as I could possibly could on how the seeded test
+> keys were cherry-picked. Along the way I also tweaked the numbers to be
+> a bit less messier set than in my original version.
+> 
+> The transcripts that follow were executed with this command-line:
+> 
+>     ./tools/testing/kunit/kunit.py run --raw_output assoc_array
+> 
+> With 'assoc-array-fixes' commits and its subsequent tag iterations all
+> eight tests pass, and without them all of them fail.
+> 
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+>  lib/Kconfig.debug             |  15 +
+>  lib/tests/Makefile            |   1 +
+>  lib/tests/assoc_array_kunit.c | 570 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 586 insertions(+)
+>  create mode 100644 lib/tests/assoc_array_kunit.c
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 6b24a2c89b84..3e8d3852f53c 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2857,6 +2857,21 @@ config HASHTABLE_KUNIT_TEST
+> 
+>  	  If unsure, say N.
+> 
+> +config ASSOC_ARRAY_KUNIT_TEST
+> +	tristate "KUnit test for assoc_array" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	select ASSOCIATIVE_ARRAY
+> +	help
+> +	  This builds the assoc_array KUnit test suite.
+> +	  It tests the basic functionality of the API defined in
+> +	  include/linux/assoc_array.h.
+> +
+> +	  For more information on KUnit and unit tests in general please refer
+> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +	  If unsure, say N.
+> +
+>  config LINEAR_RANGES_TEST
+>  	tristate "KUnit test for linear_ranges"
+>  	depends on KUNIT
+> diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+> index 3cac3b63a752..107e16b4ebc1 100644
+> --- a/lib/tests/Makefile
+> +++ b/lib/tests/Makefile
+> @@ -4,6 +4,7 @@
+> 
+>  # KUnit tests
+>  CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
+> +obj-$(CONFIG_ASSOC_ARRAY_KUNIT_TEST) += assoc_array_kunit.o
+>  obj-$(CONFIG_BASE64_KUNIT) += base64_kunit.o
+>  obj-$(CONFIG_BITOPS_KUNIT) += bitops_kunit.o
+>  obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
 
-LLVM commit `3c3ed59c6a2a ("[llvm] Add format check for
-MCSubtargetFeatures")` [1], included in the LLVM 23.1 releases, added
-Target::isValidFeatureListFormat() with a function-local static holding
-the compiled regex:
+Why does this one end with `_TEST` and the others do not? I see
+`LINEAR_RANGES_TEST` in the context above, but it also lacks `_KUINT`.
+There is `HASHTABLE_KUNIT_TEST` nearby too, so perhaps consistency has
+just never been popular around these parts.
 
-	static const llvm::Regex pattern("^([+-][^,]+)(,[+-][^,]+)*,?$");
-	return pattern.match(Features);
+Thanks,
 
-The child exit destroys that static while its guard variable still marks
-it as initialized, so the regex is never rebuilt in the parent. From that
-point on, get_jited_program_text() gets NULL from
-LLVMCreateDisasmCPUFeatures(), so every jited program text check in the
-tests running after filter_clone_vm fails, e.g. "verifier_jit_convergence",
-"verifier_private_stack", "verifier_tailcall_jit" and "verifier_jit_inline".
-
-Use _exit(), which runs neither atexit handlers nor static destructors, as
-uprobe_syscall.c already does for its own CLONE_VM child.
-
-[1] https://github.com/llvm/llvm-project/pull/180943
-Fixes: d2520bdb1932f ("selftests/bpf: Add uprobe multi pid filter test for clone-ed processes")
-Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
----
- tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-index f0baf5738b751..7fbcfddc3cc36 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-@@ -94,14 +94,14 @@ static int child_func(void *arg)
- 	/* wait for parent's kick */
- 	err = read(child->go[0], &c, 1);
- 	if (err != 1)
--		exit(err);
-+		_exit(err);
- 
- 	uprobe_multi_func_1();
- 	uprobe_multi_func_2();
- 	uprobe_multi_func_3();
- 	usdt_trigger();
- 
--	exit(errno);
-+	_exit(errno);
- }
- 
- static int spawn_child_flag(struct child *child, bool clone_vm)
--- 
-2.43.0
-
+--Ben
