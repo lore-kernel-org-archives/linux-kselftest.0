@@ -1,90 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3B73A6F09;
-	Sun, 18 Oct 2026 16:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFB04CF47D
+	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 16:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792340618; cv=none; b=H8k3bXCA3nF/QdB0yxdlgT7YmF+8cYszGHIlS9KR78v2ihlVKweNADKMaE/5VpycOeY1kmPi2uaz6fM7j6rXfLTQedsQY1j9jdrxFB6h3eV81uucfy5fyq2IR5IgyB7Pel/ycrN0I0IUZkA7uqP+SvanFf0UHcqaXHQws246Mg0=
+	t=1792341048; cv=none; b=hMnFA9y0kt3ClI8oENFRSWueNDVcd/38HGcXf/xgh+rRa7rBkSc4LR/UI8SaXPVlBJW42zSKWH9sOdw/IMS2fSxdS3bvEcHmcl3lOUo9JHfzI1iCqbo1pMrSeWY4E1sZ8jQFBIFM9clAqzX2uu8hlw5zgSeW8m1icxoP0658jEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792340618; c=relaxed/simple;
-	bh=HwNXUeNKdwzjy+YPEJg5pGa3SbGf1bmlntlDyn92vb0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pl4flpw0LK/FntQbRk29nHSd2gdrNlm3sFNUiQZyL3u4hIQOrkmfdg7dgpwCAzMXUJyl+h55O63Mg6LAhAEbAmTfUhLU54Ce78vVxDxQm0MCkKrHQkZikZ5NVVTKbl0s6UkphFn5Tk2ECUHnmTzfsKEHycNrQdzkMLR/DVPGty8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P6pSUoE0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792341048; c=relaxed/simple;
+	bh=wVl7PEAQy4n1gX78hW+uwNN+//utyJr1zIHPEuth3iM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oP+bKUsGb/uQ8GuIGtEch1O/c+0hGoBHzK+C4t11bA03C3DG6OdAE29iHyyAuw3jhG+5nFDSZfzKMBqg8y/y29L1PizdrOfbfapb+jgn9NvzFjTKwQDNriBCnUdBOSwUZ6Sw/hVz3T2PgZcXCpuJ8+LfwybhrLCMwkFMYHL6xSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KnLUAAl9; arc=none smtp.client-ip=95.215.58.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P6pSUoE0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40A31F000C4;
-	Sun, 18 Oct 2026 16:23:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792340617;
-	bh=PkvCnZp3GqJK4bIvD1zVQOPN0TOHqm9DCWSAjzxS07o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=P6pSUoE0uF9R61EmmdJ/FHRrRUP+N3n8/JOStw3k3xMxktDAZ9yjDt6raMWvnFs5r
-	 uTBxSI4ODXNjzZWV+iMaAY5Eo8+aNEsYoWI9w4fR2/Mx742HJQvD88czJXIG0UJtsh
-	 E4N8qevijiTh2YnwIrS1lvZ8QSi6b+vRnZ4QDROCVGvM61VF+F9VPLf/CzITV4Tf71
-	 YMYMWbfXe7eYuGr/tZ7sJJHWKWr4My4sbUy0KPpN89fyQTXNuaOfwYCjuEsQtHIqYm
-	 vvEI3gAzUDGrzJ1FDtwWyABA2tdZQz2OtJZcNmI8+E8YWx3n9joQ4Y206uVsHG1INU
-	 Ifk14sum/ay8g==
-From: SJ Park <sj@kernel.org>
-To: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
-Cc: SJ Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/damon/sysfs.py: stop obsolete_target shells hanging the test
-Date: Sun, 18 Oct 2026 09:23:29 -0700
-Message-ID: <20261018162330.107844-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261018020415.35567-1-jaeyeon.lee.dev@gmail.com>
-References: 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KnLUAAl9"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=wVl7PEAQy4n1gX78hW+uwNN+//utyJr1zIHPEuth3iM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792341045; v=1; x=1792945845;
+ b=KnLUAAl9Se0bKYxf0/eyNDbaOQYG/uSgWNgwHDkPm8lRhwsTMXngARjnsxh6QJATTknqYttT
+ 8PEVx6Wpe4PNprCmk9Qrzp8uYuVa5TWwjMCv7O/IHTsVYue/MMsZvcdGDK3dLpsfGKXLWzHHK3r
+ Uvc/jvuEY4QK9TDrJcharwjA=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b268277504964426;
+	Sun, 18 Oct 2026 16:30:44 +0000
+X-Mizu-Trace-ID: b268277504964426
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <96dd8e4e-2783-4616-8c68-9d89151a0cad@linux.dev>
+Date: Mon, 19 Oct 2026 00:30:33 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/6] bpf: Add syscall common attrs support for
+ xdp link_create
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, rostedt@goodmis.org, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, shuah@kernel.org, kuniyu@google.com,
+ liuhangbin@gmail.com, mkarsten@uwaterloo.ca, masashi.honma@gmail.com,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20261017142649.51047-3-leon.hwang@linux.dev>
+ <41c7d03fa06bd4e9439560fac5b3cf4d170b96b5c23946da8a3449e05c482b38@mail.kernel.org>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <41c7d03fa06bd4e9439560fac5b3cf4d170b96b5c23946da8a3449e05c482b38@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, 18 Oct 2026 04:04:15 +0200 Jaeyeon Lee <jaeyeon.lee.dev@gmail.com> wrote:
-
-> The obsolete_target test spawns three 'sh' processes as monitoring
-> targets.  The processes inherit stdin from the test.  When the test is
-> run via 'make run_tests' from an interactive terminal, the kselftest
-> runner executes it under 'timeout', which puts it in a background
-> process group.  The 'sh' processes then try to read the terminal, so
-> the kernel sends SIGTTIN to the whole process group.  This stops the
-> 'sh' processes, and also the child the test has just forked to spawn
-> the next 'sh', before it can run 'sh'.  The test then waits on that
-> child forever, until the kselftest runner kills it after 45 seconds.
-> The test passes when run directly.
+On 2026/10/17 23:03, bot+bpf-ci@kernel.org wrote:
+>> bpf: Add syscall common attrs support for xdp link_create
 > 
-> Fix this by passing stdin=subprocess.PIPE when spawning the processes.
-> The processes then read from a pipe that never receives input, so they
-> stay alive and idle as the test expects.
-
-Thank you for finding and fixing the bug!
-
+> TL;DR:
+> - bpf_log(log, extack._msg) in bpf_xdp_link_attach() may dereference NULL when
+>   no extack message is set
+> - bpf_log() may be an undefined reference when CONFIG_BPF_SYSCALL=n
 > 
-> Assisted-by: LLM
-> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+>> diff --git a/net/core/dev.c b/net/core/dev.c
+>> index 18dc88990510..fdc1de21f358 100644
+>> --- a/net/core/dev.c
+>> +++ b/net/core/dev.c
+> 
+> [ ... ]
+> 
+>> @@ -10784,6 +10786,7 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+>>  	dev = dev_get_by_index(net, attr->link_create.target_ifindex);
+>>  	if (!dev) {
+>>  		rtnl_unlock();
+>> +		bpf_log(log, "Invalid target_ifindex.\n");
+>>  		return -EINVAL;
+>>  	}
+>>
+> 
+> Can this fail to link when CONFIG_BPF_SYSCALL is not set?
+> 
+> bpf_xdp_link_attach() is built whenever CONFIG_NET=y, but bpf_log() lives in
+> kernel/bpf/log.c, which kernel/bpf/Makefile only builds under
+> CONFIG_BPF_SYSCALL:
+> 
+>   obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o ... log.o ...
+> 
+> include/linux/bpf_verifier.h declares bpf_log() with no stub for the
+> !CONFIG_BPF_SYSCALL case, and CONFIG_NET only does "select BPF".  A config
+> with CONFIG_NET=y and CONFIG_BPF_SYSCALL=n looks like it would end with an
+> undefined reference to bpf_log from both of the new calls in this function.
+> 
+> include/linux/bpf.h provides static inline stubs for bpf_link_init(),
+> bpf_link_prime(), bpf_link_settle() and bpf_link_cleanup() so that this
+> function builds without the bpf() syscall.
+> 
+> Should bpf_log() get a similar stub, or should the calls be guarded with
+> IS_ENABLED(CONFIG_BPF_SYSCALL)?  None of the later patches in the series add
+> a stub or change the Makefile.
 
-Reviewed-by: SJ Park <sj@kernel.org>
+Will add a stub bpf_log() when CONFIG_BPF_SYSCALL is not set.>
+> [ ... ]
+> 
+>> @@ -10812,6 +10815,7 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+>>  	if (err) {
+>>  		link->dev = NULL;
+>>  		bpf_link_cleanup(&link_primer);
+>> +		bpf_log(log, extack._msg);
+>>  		trace_bpf_xdp_link_attach_failed(extack._msg);
+>>  		goto out_put_dev;
+>>  	}
+> 
+> Can extack._msg be NULL here?
+> 
+> extack is zero-initialised (struct netlink_ext_ack extack = {};), and _msg
+> stays NULL whenever dev_xdp_attach_link() fails without anyone calling
+> NL_SET_ERR_MSG().  Many ndo_bpf implementations do exactly that.  For
+> example, ixgbe_xdp() -> ixgbe_xdp_setup() has several -EINVAL and -ENOMEM
+> returns that don't set an extack message, and mlx5e_xdp_set() ->
+> mlx5e_xdp_allowed() returns -EINVAL with only a netdev_warn().
+> 
+> If the caller passed BPF_COMMON_ATTRS with log_level != 0
+> (bpf_verifier_log_attr_valid() accepts log_level=1 even with a NULL log_buf
+> and a log_size of 0), bpf_verifier_log_needed() is true and the call chain
+> becomes:
+> 
+>   bpf_log(log, NULL)
+>     -> bpf_verifier_vlog(log, NULL, args)
+>       -> vscnprintf(log->kbuf, BPF_VERIFIER_TMP_LOG_SIZE, NULL, args)
+>         -> vsnprintf()    /* while (*fmt.str) with fmt.str == NULL */
+> 
+> which dereferences NULL.  The tracepoint on the next line copes with NULL
+> because __assign_str() substitutes a placeholder string, and the netlink ack
+> path also checks extack->_msg, so this new bpf_log() call looks like the only
+> consumer without a NULL check.
+> 
+> Passing the message as the format string also means a '%' in an extack
+> message would be interpreted as a conversion, and unlike the other bpf_log()
+> messages in link_create(), this one has no trailing newline.  Would
+> something like this be better?
+> 
+>   if (extack._msg)
+>           bpf_log(log, "%s\n", extack._msg);
 
-I applied  this patch to damon/next [1] tree.  We are now quite close to next
-merge window.  It may better to focus on making mm.git more stabilized and
-therefore ready for the next merge window, rather than adding more changes that
-are not really urgent.  I understand this series is not really urgent.  Hence,
-Andrew might not add this patch until next -rc1 release.  In the case, I will
-request adding this to mm.git after next -rc1 release.  So, no action from your
-side is needed for now.  Let me know if you think this is really  urgent.
-
-[1] https://origin.kernel.org/doc/html/latest/mm/damon/maintainer-profile.html#scm-trees
-
+Will change to this.
 
 Thanks,
-SJ
+Leon
 
-[...]
+> [...]
