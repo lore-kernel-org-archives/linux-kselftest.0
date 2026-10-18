@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB2D4AB1A5;
-	Sun, 18 Oct 2026 13:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654C44B9221;
+	Sun, 18 Oct 2026 13:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792329396; cv=none; b=NLJsm5XL5+9+uihZ++1bqrC3DGl5Hx5gPmfWLGI9j3LNRWKVnFmBWXKNOFAJDP5hw2wYHq9g1xTOK4bkCiYBixUVelBV5hisFLCA9DZ2v9SBcIjs1Ngq03jlNrUxFuFH4uYFidwSgQ3CSr85p/18kDRIxgwPpNGb6XSryVDuzpo=
+	t=1792329397; cv=none; b=ifxpRr3m9k6ira1aj11v5IZ0fyqltVRe76TeoS61ka8YvbFa6ekK528fHyU4MurMUv0fdQtPoLZ15sxBFghe0y7pTW5xEz7gmYBACk1wIqctG3zLY64vRCoALj+EysSOny5WY4+h0hGuNN/5KtiNNTFc/2OpiWDuXejHblxK1Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792329396; c=relaxed/simple;
-	bh=1+HWnnDgEOwEowv1a4wBOBszBOt4XiehRFUqDLSbF4Q=;
+	s=arc-20240116; t=1792329397; c=relaxed/simple;
+	bh=7SONenFz0VX6VfgFhhgS6ItUrvfAMVhNTv7y80LrKbE=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GTIl+38FUC+30pQD1PbQZZgHCwZ7CEfuNNhGOzHU9DeT+SghRNvK9BJ+gQId+fbPytAa1NpTD3mJ7bxIFxdme+y58F7gSV8BprGqNNsJVj3QX6glk7OcZa3I+W2IFCofwRHVNDV0xKkXZcvC0FDDdwTyFvHLabtCGQOOyAPkJao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IEe63DEl; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=C9vv6WcSJZ0UyTNRP/pZ/9qXxy2X4G/AihGvEaBIeyRBBuQDuJiuBbJuGiuSUOOSlyxH6uZ1sGO9lcp65xXaFCQpeZYkTl0jiLXCrgalA4Ntkt78kEcHzttVKretbafdmIeOzosMjuNNG1j2iIKkh2t6FwOyGEkpQ0L5hfWchtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=evTqrPOu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IEe63DEl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428BC1F000C4;
-	Sun, 18 Oct 2026 13:16:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="evTqrPOu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8935A1F000C5;
+	Sun, 18 Oct 2026 13:16:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792329394;
-	bh=VII/o3W3dI01GUse5I8KzJFkp5bYKlieMuVE2DmeSc8=;
+	s=k20260515; t=1792329396;
+	bh=yPfxwYavMEPqVnPZXTuepLeeedqkC9HKHNpd77Ks81Y=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=IEe63DElslU3kQFBPJNKMJfd8/GIrOxqw4gmy4U+Cz1Yioeeo7TD5YPdmM8G9kAOM
-	 Jz4HjkbQlcFbkClZWAK8lu4op9Q+69G7CxO0jAzQWClYnByqq0c2MF9yZa/Qi+3muF
-	 h2vc9H3aGiDeD5w/qUY+uy/YahrFniR1/JM8yaFeUzr4eIc1kP1Y/oHTcQFzmkThGw
-	 hsk5+Tx4+1vwVxymM9sw4nl483MisO3oPs8TyKoRo1EGZZswUDyt8ZT1K1ZCXdpGoJ
-	 WC3WMX2vXt33AAi/ahpiIt8gP81EYQW8J9TkTQIk4aHCHxfKObPqZvlr6M49oNcRPV
-	 lNpbjlcUZQPSQ==
-Subject: Re: [PATCH net-next v4 6/7] vxlan: vnifilter: account the default FDB
- entry to memcg
+	b=evTqrPOujd5dB94DzqLRaoi0n5Yb3Ia9tOY9B+b8Qj1KCDXWfDuJ/niJQIpHk0Mbk
+	 YQ6xiBwXfe26gM8URgvQx9VGk4rZPZesd42rJLHMBbs/Zfpi+Am1+XtCclrWUmlq06
+	 QM+cCH1lA0Gw9CG+zkrWPdKCkIu5grZ+1aS5A1o6+eUwKkANy9RElDBmG4FFZ6trv+
+	 gQxsLwd8C86j9tuH7wxZKn2sEzUXMKd1J948tA/ZtEJsYrXV6Tg+XiVYLuW5Y+mVn9
+	 KQdgbrthtNfOjNvCHCOGMdN4En5Yv6o5cm0YDfU2Slt5CYLC14NsuGEU+2SBLt1C2g
+	 M/OPiLJrSRdig==
+Subject: Re: [PATCH net-next v4 7/7] selftests: net: test the vxlan vnifilter
+ request limit and dump replay
 From: netdev-bot+sashiko@kernel.org
 To: alishmery18@gmail.com
 Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
@@ -35,11 +35,11 @@ Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
  andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
  roopa@nvidia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Sun, 18 Oct 2026 13:16:33 +0000
-Message-ID: <179232939385.3135.13264598705207281518@kernel.org>
-In-Reply-To: <20261014123814.388557-7-alishmery18@gmail.com>
-References: <20261014123814.388557-7-alishmery18@gmail.com>
-X-sashiko-severity: High
+Date: Sun, 18 Oct 2026 13:16:35 +0000
+Message-ID: <179232939511.3135.8638231822029471558@kernel.org>
+In-Reply-To: <20261014123814.388557-8-alishmery18@gmail.com>
+References: <20261014123814.388557-8-alishmery18@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -49,10 +49,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 5 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 0 (1) · Low: 2
+Critical: 0 · High: 0 · Medium: 1 · Low: 4 (1)
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -60,217 +60,257 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] This patch adds a deliberate, deterministic -ENOMEM to the VNI
-  create path: vxlan_vni_update_group() calls…
-- [Low] Commit message inaccuracy.
-- [Low] In vxlan_fdb_update_existing() (drivers/net/vxlan/vxlan_core.c),
-  f->state and f->flags are overwritten before vxlan_fdb_append(), which…
+- [Medium] In vxlan_vnifilter_dump_replay()
+  (tools/testing/selftests/net/test_vxlan_vnifiltering.sh), the exit…
+- [Low] Each new 'absent before' / 'installed nothing' probe in
+  vxlan_vnifilter_api() runs `bridge -netns $testns vni show dev vxlan-…
+- [Low] vxlan_vnifilter_dump_replay() replays the dump one range at a
+  time, each in its own `bridge vni add` (lines 457-460), using ranges…
+- [Low] The 24-bit bound cases in vxlan_vnifilter_api() do not isolate
+  the START half of vni_filter_entry_policy, and one case cannot tell…
+- [Low] In vxlan_vnifilter_dump_replay(), the replay result variable `rc`
+  is overwritten by run_cmd() before the replay loop.
 
 Pre-existing issues:
-- [Medium] This problem wasn't introduced by this patch, but the
-  RTM_NEWNEIGH path vxlan_fdb_add() still allocates the same objects…
+- [Low] The comment on VXLAN_VNI_FILTER_MSG_MAX in
+  drivers/net/vxlan/vxlan_vnifilter.c (lines 20-24) still says 'A later…
 
 --
 
-vxlan: vnifilter: account the default FDB entry to memcg
+selftests: net: test the vxlan vnifilter request limit and dump replay
 
-This patch adds a gfp_t argument to vxlan_fdb_update() and
-vxlan_update_default_fdb_entry(). The argument is passed down to the
-struct vxlan_fdb, struct vxlan_rdst and dst_cache allocations. The
-per-VNI RTM_NEWTUNNEL path uses GFP_NOWAIT | __GFP_ACCOUNT, the
-device-wide RTM_NEWLINK walk uses GFP_ATOMIC | __GFP_ACCOUNT, and all
-other callers keep GFP_ATOMIC.
+This extends test_vxlan_vnifiltering.sh to cover the per-request VNI cap
+on add and delete and the 24-bit VNI bound. It also adds a dump/replay
+test that builds a contiguous run twice the limit and replays the dumped
+ranges into a second device. The cleanup() handler now also removes
+veth-host and the test netns.
 
-> diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-> index 278d41f58d895..7991b544af5a4 100644
-> --- a/drivers/net/vxlan/vxlan_core.c
-> +++ b/drivers/net/vxlan/vxlan_core.c
+> diff --git a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
+> index 6fb5af013dacf..bb35e89d2d036 100755
+> --- a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
+> +++ b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
 
 [ ... ]
 
-> @@ -1047,7 +1047,8 @@ static int vxlan_fdb_update_existing(struct vxlan_dev *vxlan,
->  	if ((flags & NLM_F_APPEND) &&
->  	    (is_multicast_ether_addr(f->key.eth_addr) ||
->  	     is_zero_ether_addr(f->key.eth_addr))) {
-> -		rc = vxlan_fdb_append(f, ip, port, vni, ifindex, &rd);
-> +		rc = vxlan_fdb_append(f, ip, port, vni, ifindex, &rd,
-> +				      gfp);
->  
->  		if (rc < 0)
->  			return rc;
+> @@ -347,6 +349,121 @@ vxlan_vnifilter_api()
+>  	# change vxlan vnifilter flag
+>  	run_cmd "ip -netns $testns link set dev vxlan-ext1 type vxlan external novnifilter"
+>  	log_test $? 2 "Cannot unset vnifilter flag on a device"
+> +
+> +	# A single request may add at most 4096 VNIs. bridge(8) puts one
+> +	# VXLAN_VNIFILTER_ENTRY per comma-separated item into a single message,
+> +	# so both the single-entry and the multi-entry paths are reachable here.
 
 [Severity: Low]
-The vnifilter change path now passes GFP_NOWAIT | __GFP_ACCOUNT, so this
-append can fail once the memcg is at its limit. By that point,
-vxlan_fdb_update_existing() has already overwritten f->state and f->flags:
+This problem was not introduced by this patch, but the comment on
+VXLAN_VNI_FILTER_MSG_MAX in drivers/net/vxlan/vxlan_vnifilter.c still
+describes the request cap as future work:
 
-	if (!(fdb_flags & NTF_EXT_LEARNED) ||
-	    !(f->flags & NTF_VXLAN_ADDED_BY_USER)) {
-		if (f->state != state) {
-			f->state = state;
-			notify = 1;
-		}
-		if (f->flags != fdb_flags) {
-			f->flags = fdb_flags;
-			notify = 1;
-		}
-	}
+drivers/net/vxlan/vxlan_vnifilter.c:
+ * dump emits stays within what the input path will accept on replay. A later
+ * patch bounds a single RTM_NEWTUNNEL/RTM_DELTUNNEL request to the same number.
+ */
+#define VXLAN_VNI_FILTER_MSG_MAX	4096
 
-On the vxlan_vni_update_group(create=false) ->
-vxlan_update_default_fdb_entry() path, fdb_flags is NTF_SELF without
-NTF_EXT_LEARNED. So the existing all-zeros entry always has its state and
-flags reset. For example, a user-set NTF_VXLAN_ADDED_BY_USER is dropped.
+That cap is already in the tree. vxlan_vnifilter_process() calls
+vxlan_vnifilter_check_msg() before it applies any entry:
 
-If vxlan_fdb_append() then returns -ENOMEM, the return rc path does not
-restore these fields, and no RTM_NEWNEIGH is sent.
+	err = vxlan_vnifilter_check_msg(nlh, extack);
+	if (err)
+		return err;
 
-Could the state/flags update move to after a successful append, or be
-rolled back here? This ordering is older than this patch, but the failure
-is now deterministic. The commit message also says "no established FDB
-state is destroyed", which doesn't quite hold for these fields.
+Could the "A later patch" sentence be updated, since this selftest is
+exercising that cap?
+
+> +
+> +	# The largest accepted add, and one VNI more rejected.
+> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 10000-14095"
+> +	log_test $? 0 "Add a request of the maximum VNI count"
+> +
+> +	# The rejected oversized add must install nothing. Assert the range is
+> +	# absent first: vxlan_vni_add() folds an already-present VNI into the
+> +	# update path and returns 0, so a later probe cannot tell "installed
+> +	# nothing" from "installed part" unless it started absent.
+> +	run_cmd "bridge -netns $testns vni show dev vxlan-ext1 | grep -qw 20000"
+> +	log_test $? 1 "VNI 20000 absent before the oversized add"
+
+[Severity: Low]
+Can this probe pass when bridge vni show itself fails?
+
+run_cmd() evaluates the whole pipeline and returns its status:
+
+	out=$(eval $cmd $stderr)
+	rc=$?
+
+That status comes from grep. Neither this script nor lib.sh sets
+pipefail. If bridge vni show fails, grep reads no input and exits 1, which
+is the value log_test expects.
+
+The same pattern is used for each of the "absent before" and "installed
+nothing" probes for 20000, 30000 and 55000. That means these probes cannot
+tell a VNI that is absent from a show that failed.
+
+The src_ranges and dst_ranges captures in vxlan_vnifilter_dump_replay() also
+drop the exit status of bridge.
+
+Would it make sense to check the exit status of bridge vni show on its own,
+or to set pipefail for these probes?
+
+> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 20000-24096"
+> +	log_test $? 255 "Cannot add a request over the maximum VNI count"
 
 [ ... ]
 
-> @@ -1287,7 +1289,7 @@ static int vxlan_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
->  	err = vxlan_fdb_update(vxlan, addr, &ip, ndm->ndm_state, flags,
->  			       port, src_vni, vni, ifindex,
->  			       ndm->ndm_flags | NTF_VXLAN_ADDED_BY_USER,
-> -			       nhid, true, extack);
-> +			       nhid, true, extack, GFP_ATOMIC);
->  	spin_unlock_bh(&vxlan->hash_lock);
+> +	# The VXLAN header carries 24 bits. The bound is on both endpoints, so a
+> +	# range whose END alone leaves the space is rejected too.
+> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 16777215"
+> +	log_test $? 0 "Add the highest VNI the header can carry"
+> +	run_cmd "bridge -netns $testns vni del dev vxlan-ext1 vni 16777215"
+> +	log_test $? 0 "Delete the highest VNI the header can carry"
+> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 16777215-16777216"
+> +	log_test $? 255 "Cannot add a range whose END leaves the 24-bit space"
+> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 100-4294967295"
+> +	log_test $? 255 "Cannot add a range whose END wraps past the 24-bit space"
+
+[Severity: Low]
+Does the 100-4294967295 case depend on the END range policy? Its span is
+4294967196 VNIs, so vxlan_vnifilter_check_msg() would reject it with
+-EINVAL even if the END bound in vni_filter_entry_policy were removed:
+
+	vnis += vni_end - vni_start + 1;
+	if (vnis > VXLAN_VNI_FILTER_MSG_MAX) {
+
+The test comment ("The bound is on both endpoints") and the commit message
+("exercised through END, not only START") suggest that an out-of-range
+START is tested. No such case exists here or elsewhere under
+tools/testing/selftests.
+
+A single VNI such as 16777216 has no END attribute. That gives a span of
+one, so check_msg accepts it, and only the START policy keeps it out of
+vxlan_vni_add_del():
+
+	[VXLAN_VNIFILTER_ENTRY_START] = NLA_POLICY_FULL_RANGE(NLA_U32,
+							      &vni_filter_vni_range),
+
+If START=END=0xffffffff ever got past that policy, this loop would wrap
+under rtnl_lock:
+
+	for (v = start_vni; v <= end_vni; v++) {
+
+Could a case like "vni add ... vni 16777216" be added so a regression in
+the START bound is caught?
+
+> +}
+> +
+> +# A device may hold a contiguous run longer than one request's limit, built
+> +# from several requests. The dump coalesces it, so the dump must break the run
+> +# into entries each no larger than the limit, or the configuration it reports
+> +# cannot be replayed. Install such a run, then feed every range the dump
+> +# reports back into a second device and require all to be accepted.
+> +vxlan_vnifilter_dump_replay()
+> +{
+> +	local opts="external vnifilter local 172.16.0.1 dev veth-testns"
+> +	local range rc=0 src_ranges dst_ranges
+
+[ ... ]
+
+> +	# 8192 contiguous VNIs sharing the default remote: one run, twice the
+> +	# limit, installed in two accepted requests.
+> +	run_cmd "bridge -netns $testns vni add dev vxlan-src vni 10000-14095"
+> +	run_cmd "bridge -netns $testns vni add dev vxlan-src vni 14096-18191"
+> +	log_test $? 0 "dump/replay: populate a run larger than the limit"
 
 [Severity: Medium]
-This isn't a bug introduced by this patch, but this RTM_NEWNEIGH path
-still allocates the same struct vxlan_fdb, struct vxlan_rdst and per-CPU
-dst_cache without charging them to a memcg.
+Is the status of the first populate command lost here? The $? passed to
+log_test is only the status of the 14096-18191 add.
 
-With NLM_F_APPEND on the all-zeros MAC or a multicast MAC, each distinct
-(ip, port, vni, ifindex) adds a new rdst plus dst_cache:
+If the 10000-14095 add fails, vxlan-src holds exactly 4096 VNIs. In that
+case vxlan_vnifilter_dump_dev() never reaches the clamp:
 
-vxlan_fdb_add()
-  vxlan_fdb_update(..., GFP_ATOMIC)
-    vxlan_fdb_update_existing()
-      vxlan_fdb_append()
+	if (!dump_stats && vnirange(vend, v) == 1 &&
+	    vnirange(vbegin, v) < VXLAN_VNI_FILTER_MSG_MAX &&
 
-This path never reaches the cfg->addrmax check in vxlan_fdb_create(). A
-task with CAP_NET_ADMIN in the netns can keep growing this memory
-uncharged, including by appending to the vnifilter default entries that
-this patch now charges.
+The dump is then a single limit-sized entry. The non-empty check, the
+replay loop and the src/dst comparison all pass, whether or not the dump
+clamp exists.
 
-The commit message limits the scope to vnifilter, so this may be planned
-as a follow-up. Would it make sense to account this path as well?
+The v4 note says the non-empty check was added so the replay case cannot
+pass vacuously, but this path still does.
 
-[ ... ]
+There is a related gap. src_ranges is never compared against the expected
+split (10000-14095 and 14096-18191). Both the replay input and the expected
+result come from the same source dump.
 
-> @@ -4652,7 +4656,8 @@ static int vxlan_changelink(struct net_device *dev, struct nlattr *tb[],
->  							       &cfg->remote_ip,
->  							       conf.remote_ifindex,
->  							       cfg->remote_ifindex,
-> -							       NULL);
-> +							       NULL,
-> +							       GFP_ATOMIC | __GFP_ACCOUNT);
->  				if (lowerdev_changed)
->  					netdev_adjacent_change_abort(vxlan->lowerdev,
->  								     lowerdev, dev);
+A resume regression in vxlan_vnifilter_dump_dev() could drop or repeat VNIs
+at the 4096 boundary, or lose the second message:
+
+	if (!err && vbegin) {
+		if (vnis + vnirange(vbegin, vend) + 1 > VXLAN_VNI_FILTER_MSG_MAX)
+			err = -EMSGSIZE;
+
+Wouldn't that produce the same wrong ranges on both devices and still
+pass?
+
+Could each populate command get its own log_test, and could src_ranges be
+checked against the literal expected ranges?
+
+> +
+> +	# Assert the dump is non-empty before replaying it, so an empty or
+> +	# failed dump cannot let the replay check below pass without testing
+> +	# anything.
+> +	src_ranges=$(bridge -netns $testns vni show dev vxlan-src | \
+> +		     grep -oE '[0-9]+-[0-9]+|[0-9]{2,}' | sort)
+> +	test -n "$src_ranges"
+> +	log_test $? 0 "dump/replay: source dump is non-empty"
+> +
+> +	for range in $src_ranges; do
+> +		bridge -netns $testns vni add dev vxlan-dst vni "$range" \
+> +			2>/dev/null || rc=$?
+> +	done
 
 [Severity: Low]
-The commit message says:
+This loop replays one range per bridge vni add, using ranges parsed from
+the text output of bridge vni show. That output loses netlink message
+boundaries, so the per-message VNI budget in vxlan_vnifilter_dump_dev() is
+never tested:
 
-  The device-wide default-remote change (RTM_NEWLINK, via
-  vxlan_vnilist_update_group()) keeps GFP_ATOMIC | __GFP_ACCOUNT.
-  ...
-  here it stays force-charged, as before this series, and is charged to
-  the task issuing the RTM_NEWLINK.
+	if (vnis + sz > VXLAN_VNI_FILTER_MSG_MAX) {
+		err = -EMSGSIZE;
+		break;
+	}
 
-Before this patch, vxlan_fdb_alloc() and vxlan_fdb_append() hard-coded
-GFP_ATOMIC without __GFP_ACCOUNT, so nothing on the
-vxlan_vnilist_update_group() walk was charged. Isn't the accounting, and
-the force-charging, new behaviour added by this patch rather than kept?
+vxlan_vnifilter_check_msg() caps the sum across all entries in a request.
+Suppose that budget were removed and the merge clamp kept. The 8192-VNI
+run would be dumped as 10000-14095 and 14096-18191 in one message, and that
+message would be rejected if replayed as a single request.
 
-The message also doesn't mention this vxlan_changelink() rollback call,
-which now gets GFP_ATOMIC | __GFP_ACCOUNT. The rollback re-creates the
-conf.vni default entry as accounted. vxlan_dev_create() and the forward
-vxlan_fdb_update() call in vxlan_changelink() create the same kind of
-entry unaccounted. Is that inconsistency intended?
+Each range would still replay on its own here, the dumps would match, and
+the test would pass. Is the per-message half of the dump guarantee meant
+to be covered by this test?
 
-[ ... ]
+> +	log_test $rc 0 "dump/replay: every dumped entry is accepted on replay"
 
-> diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
-> index 4a631fcdf23ab..4b43674cceff0 100644
-> --- a/drivers/net/vxlan/vxlan_vnifilter.c
-> +++ b/drivers/net/vxlan/vxlan_vnifilter.c
+[Severity: Low]
+Can rc be non-zero here even when every replay add succeeded?
 
-[ ... ]
+run_cmd() assigns rc=$? without declaring it local. Because bash scoping is
+dynamic, that assignment writes to the local rc in
+vxlan_vnifilter_dump_replay(). After the 14096-18191 populate run_cmd, rc
+holds that command's exit status.
 
-> @@ -636,7 +637,8 @@ static int vxlan_vni_update_group(struct vxlan_dev *vxlan,
->  					     oldrip, newrip,
->  					     cfg->remote_ifindex,
->  					     cfg->remote_ifindex,
-> -					     extack);
-> +					     extack,
-> +					     GFP_NOWAIT | __GFP_ACCOUNT);
->  	if (ret)
->  		goto out;
+The replay loop only assigns rc when an add fails. So if the populate
+failed, this line also reports FAIL even when all replays succeeded, and
+the rc=0 initializer has no effect.
 
-[Severity: High]
-With GFP_NOWAIT | __GFP_ACCOUNT, try_charge_memcg() fails without reclaim
-once the memcg is at its limit. That means this call can now routinely
-return -ENOMEM on the create path. Does vxlan_vni_add() handle that
-failure?
+Would resetting rc=0 just before the loop, or using a separate variable,
+avoid this?
 
-By the time vxlan_vni_update_group() runs, the node is already published:
-
-drivers/net/vxlan/vxlan_vnifilter.c:vxlan_vni_add() {
-    ...
-	err = rhashtable_lookup_insert_fast(&vg->vni_hash,
-					    &vninode->vnode,
-					    vxlan_vni_rht_params);
-    ...
-	__vxlan_vni_add_list(vxlan, vg, vninode);
-
-	if (vxlan->dev->flags & IFF_UP)
-		vxlan_vs_add_del_vninode(vxlan, vninode, false);
-
-	err = vxlan_vni_update_group(vxlan, vninode, group, true, &changed,
-				     extack);
-
-	vxlan_vnifilter_notify(vxlan, vninode, RTM_NEWTUNNEL);
-
-	return err;
-}
-
-On failure, goto out skips recording vninode->remote_ip and skips the
-IGMP join. The node still stays in vni_hash, vni_list and the socket VNI
-hash. RTM_NEWTUNNEL is sent anyway, while the requester gets -ENOMEM. The
-VNI then receives traffic but has no default all-zeros FDB entry.
-
-Suppose the request is retried without a group while cfg->remote_ip is
-set. vxlan_vni_add() finds the node and calls vxlan_vni_update() ->
-vxlan_vni_update_group(create=false). old_remote_ip is still any, so
-oldrip and newrip both point at &cfg->remote_ip, and this check returns 0:
-
-	if (!create && oldrip && newrip && vxlan_addr_equal(oldrip, newrip))
-		return 0;
-
-Wouldn't the retry report success without ever installing the default FDB
-entry? Deleting and re-adding the VNI seems to be the only way to recover.
-
-For a range add, vxlan_vni_add_del() also stops at the first error. The
-failing VNI and all VNIs added before it stay installed.
-
-The missing unwind in vxlan_vni_add() predates this patch. It was hard to
-hit while GFP_ATOMIC forced the charge through. The commit message says:
-
-  The failure
-  is clean -- the new entry is allocated before the old is freed, so an
-  add that fails leaves the existing entry intact and returns the error;
-  no established FDB state is destroyed and no false success is returned.
-  Creating a VNI is gated the same way by the previous patch's node and
-  stats (GFP_KERNEL_ACCOUNT, hard-bounded).
-
-Should vxlan_vni_add() unlink and free the node, and skip the
-notification, when vxlan_vni_update_group() fails, before this path
-switches to GFP_NOWAIT?
+> +
+> +	dst_ranges=$(bridge -netns $testns vni show dev vxlan-dst | \
+> +		     grep -oE '[0-9]+-[0-9]+|[0-9]{2,}' | sort)
+> +	[ "$src_ranges" = "$dst_ranges" ]
+> +	log_test $? 0 "dump/replay: source and destination dump the same ranges"
+>  }
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014123814.388557-1-alishmery18%40gmail.com
