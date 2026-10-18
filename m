@@ -1,172 +1,293 @@
-Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103F31B4F0A
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 04:22:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53025357CED;
+	Sun, 18 Oct 2026 04:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792297328; cv=none; b=HOk/ksV+FnR9BKqGd/otdptU1nuHS6kQFQOt0J294EGcFGVLyj4kt7/7Kn5Hgimji/0K9cpaWLHjVZvI4nex8w/PD8NccViBHSVb2RQ1LO7nWSfsYv3LdgZA4l5LYA3DdEzv4X2FvJjcL6kdDALs+qLDlwAXOj+NTeGnCSnVgs0=
+	t=1792298127; cv=none; b=QIVUyHFALMi1YoltJqr9wBWD67BMGGGmI0IgZ7W1AoOxWqe2Y1fegEDRjqvE1GqxGVfOGcLDnBRmyMH7mPYen3C/lO9mzZa1M0z5UOcWDiSRBZXKN1ZQKGPp9lD3aRIIkQP4WuWisvhNZGYRCR31VtfMLK8Bydp6eQHi+/pEBFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792297328; c=relaxed/simple;
-	bh=1WTEq8XDn5lZJt8MvaFJTmJDSDYONR3DmalFi1vhOFo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OoJIl5/GEDn8NNhWFzfD3t2dPq3r3leW2zXcTIw6UQIr5WzfE9Pv6EkxFkUdg8UGV7xSg9M8WcXbNLKJE0iuaR3Bo1i/WkQRD8uhfHhOxEjWZEgbDiLseuzaQrAN1PveZnOM+KND7oakhNz7vR0edaJZTOXFmh9OHV9bwyyEpMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SuKihxCf; arc=none smtp.client-ip=74.125.227.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792298127; c=relaxed/simple;
+	bh=fIIzO3YeQ89hHkR10kQq/oT7VhSRWJgqIhFbWPKhPV4=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AVhW05Rc6KcLKTcNnlXCagQNbgo+d0dbnVpQES/NpKGl6A04t3rDid7SWRF6UtFXFe0+NV39gKZvQlp5hvBTBsEx9a4QRaNk0KY5EKgGe9nJiAotqHp1O4xCLk47T4mbyOym2749jV4OzjeQ0rxSqRHVFotdIB6ykKnIsAlLQb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZXtI6rEf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SuKihxCf"
-Received: by mail-pj2-f4.google.com with SMTP id 98e67ed59e1d1-3ac845e7231so307049a91.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 21:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792297326; x=1792902126; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/LDrqDBR4YF4jx3Glhm4GDi471ougI+ZECXiqokwPJY=;
-        b=SuKihxCfIQywq/PsnV6gU89D3HYuor5UMMAtaA+jInzLuzx6/ybmlt/dMhVYJRN51i
-         kzbDmFFEbepi9+eNRZrOdXoPeA3djbWgVGJPwtTHE5k9jgPNLKOtfcqFIGiSVwg1SFFq
-         EKzSn/ZO4J9oAtHugTd2yJFt2FT7dznZSb9DoPOEsh8UsWOEbdQcldSv1o2ZR31Oo/em
-         jIMoO8s8RCEIOEayCEnFYqNpIxSGWMrGtQqLlx+Y1d57VFX8oGBHvbxGPuDeIwe/iEaf
-         0P3E6ieLIFHQq8PKAQR1Bjj0KEnFSTLBnqapyCcK25DYrcigvTi3OwMZypXaO+h6NfXc
-         FMDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792297326; x=1792902126;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/LDrqDBR4YF4jx3Glhm4GDi471ougI+ZECXiqokwPJY=;
-        b=IFAkYhxW9cdkbOr5kcpB5/qOVBWWo1SF8SLplnlD86S/N4P0wiHszUw34J7RHlRD5i
-         OTSr1gaUPVSLJkE2ZNX4/F9mwVx7Dnr8O4OXLiefAvg73IVluBx55i6GVi07hkijemKf
-         81EnhmrrWYrlfLFBtPTlSL+bS5HiecMNb3ersq0WTr4xxuP+bgkFIT2Aq0BdQ1y5rtyB
-         W5uuv54agenlS5vSSnVGzV/FkiB18s1DZgxIsY+lNiiT+L1E0M34ghZZmVRWSbh+CuRf
-         YxKerW/nEmNo7Nslg9tw11eGs6vPMphKa5q+l7xkQb1WHjYuyZVunvSZ2OKg9rdBmv6N
-         41hw==
-X-Forwarded-Encrypted: i=1; AKwUvBzHMnJtidIMMyk6BJDo07Jbbb5hCXQI113aMlIKMG26hal0NlWQixlLh6BxEqhp8Lj0f+JF33ebVLO27Vi+nWY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJVrJ/mpAEuW5+cd8llLonJlwOEOBzOlo2HbyxTWUYWil2fdEpO
-	a2NrKA/bAzuv1IX3VExQbdykOdP2D6FTBYGzRpGE7d2hCPS7YBf0NouD
-X-Gm-Gg: AYBFou1QSlQv07PNV4i0LUvrJmkfv38drD/6G+2JA1+LvC7TrOGZSELWhPsDbFwndab
-	t9rOuBNy+hwsqXai4W7Ct/rw9qeoRuMK3PYyxf0CVJKfh2znsgNkAfUdcZV1KaLYSF4VPQlfbxl
-	pKyr56rLouxtEjrMIj4tOHBUMXWPEncoUzQgD9M95O1GgDULZnT3fxOR5KHk7gIknSx6vRIi8F7
-	VAc1OUxRLmRO+gvyhAkjuAs5NrvXsvOD3smisUegzFi4DFRPdIslhdGSdjNzrdxGUAnJts0gO5r
-	34bPRKzZHJqD7fDOou4Suzz06A98A89iNiPQ7FlKqcEeHdRKPoMD97r9vUOjhU9znYVdiKNmZOt
-	PsIrtZxuyoyd4PSKFzO2T3uOCwfox+7iJusqXA22fs0AVYGkQVI5DDRZWskfYM5vuuFupYFaDM6
-	NcXlwszZbUk4kk6VhiZFkRRTVaRmo9ZAkIa2ds44KGvvfa7J5xgjqAQW0bhAp4m6Wh2wAw8Wj/
-X-Received: by 2002:a17:90b:2d86:b0:3ab:33b6:2c27 with SMTP id 98e67ed59e1d1-3aceefbf369mr3429642a91.23.1792297326333;
-        Sat, 17 Oct 2026 21:22:06 -0700 (PDT)
-Received: from [127.0.1.1] ([123.109.188.177])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8758efsm24799195ad.55.2026.10.17.21.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 21:22:05 -0700 (PDT)
-From: Woojin Ji <random6.xyz@gmail.com>
-Date: Sun, 18 Oct 2026 13:21:42 +0900
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Test out-of-range index bits in
- bpf_get_func_arg()
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZXtI6rEf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5678F1F000C4;
+	Sun, 18 Oct 2026 04:35:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792298125;
+	bh=PRpTZJSpbXXgxWwOLofA5Y6mVk1ATVD63mzOc94TFVM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=ZXtI6rEfp1QOABC3VVWMBFS+Pg0XYpu2vUbXchMn+UZlgj3JuZaaXefIcbtrqnF1B
+	 WPU7ghCLPECMB9AkykZZQa6k5BdDi93ZjwR0+Rz5nUqFhrY0EFfNbuE5BV5LZih9T3
+	 x9e0tcBgYUjyfF7aSY6wLYocQjuGnUPJeft+1inG8IPM5T1uf1pAzdT0waOooSZPNQ
+	 X+Zd3+LzAXT6JVLDfpY86ttM6ZwtW03R5gATQ4vkCCzyJAQ6BGjxooPj/AwPFmJ2ke
+	 ltI54e53Se8cb0ARS25wAbQ6qx8kfcFCAvDAkO+wWiqvHMtRhddYoEOoUvC0TtuHSh
+	 L2YTVRvLXMxww==
+Subject: Re: [PATCH net v2] selftests/net: test network sysctl extremes
+From: netdev-bot+sashiko@kernel.org
+To: sahaj123.sc@gmail.com
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Sun, 18 Oct 2026 04:35:24 +0000
+Message-ID: <179229812489.3135.14817248906900099268@kernel.org>
+In-Reply-To: <20261014041446.2821085-1-sahaj123.sc@gmail.com>
+References: <20261014041446.2821085-1-sahaj123.sc@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261018-get-func-arg-v2-2-048848b3eddf@gmail.com>
-References: <20261018-get-func-arg-v2-0-048848b3eddf@gmail.com>
-In-Reply-To: <20261018-get-func-arg-v2-0-048848b3eddf@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Woojin Ji <random6.xyz@gmail.com>
-X-Mailer: b4 0.14.2
 
-The inlined expansion of bpf_get_func_arg() bounds-checks only the low 32
-bits of the index, so a helper prototype that keeps the upper bits of the
-index is needed to reach it.
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
-Add check_wide_index() and call it from the fexit and tp_btf tests. It
-drives the helper with indices that have upper bits set and with indices
-whose low 32 bits are out of range, and it checks that the destination is
-left untouched when the helper reports -EINVAL. Without the previous patch
-the wide index is shifted as 64-bit and the load uses an address far
-outside the context.
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Assisted-by: LLM
-Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
----
- .../selftests/bpf/progs/get_func_args_test.c       | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-diff --git a/tools/testing/selftests/bpf/progs/get_func_args_test.c b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-index 1bf47f64d0967a3543739841201b58b14b4036a7..9b0beb58d88d5bcf1a36a0598695fd02a2cebbcf 100644
---- a/tools/testing/selftests/bpf/progs/get_func_args_test.c
-+++ b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-@@ -6,6 +6,40 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+/* Keep the upper index bits: the inlined expansion must truncate them. */
-+static long (*bpf_get_func_arg_wide)(void *ctx, __u64 n, __u64 *value) =
-+	(void *)BPF_FUNC_get_func_arg;
-+
-+/* Both traced functions are called with arguments 2 and 3. */
-+static __always_inline int check_wide_index(void *ctx)
-+{
-+	__u64 a = 0, z = 0xdeadbeefdeadbeefULL;
-+	__s64 err;
-+	int ok = 1;
-+
-+	/* The index is truncated to u32, so these select arguments 0 and 1. */
-+	err = bpf_get_func_arg_wide(ctx, 1ULL << 32, &a);
-+	ok &= err == 0 && ((int)a == 2);
-+	err = bpf_get_func_arg_wide(ctx, (1ULL << 32) | 1, &a);
-+	ok &= err == 0 && a == 3;
-+	err = bpf_get_func_arg_wide(ctx, 1ULL << 59, &a);
-+	ok &= err == 0 && ((int)a == 2);
-+	err = bpf_get_func_arg_wide(ctx, (1ULL << 59) | 1, &a);
-+	ok &= err == 0 && a == 3;
-+
-+	/* Out of range: -EINVAL and no store into the destination. */
-+	err = bpf_get_func_arg_wide(ctx, (1ULL << 32) | 2, &z);
-+	ok &= err == -EINVAL && z == 0xdeadbeefdeadbeefULL;
-+	err = bpf_get_func_arg_wide(ctx, (1ULL << 32) | 0xffffffffULL, &z);
-+	ok &= err == -EINVAL && z == 0xdeadbeefdeadbeefULL;
-+	err = bpf_get_func_arg_wide(ctx, (1ULL << 59) | 2, &z);
-+	ok &= err == -EINVAL && z == 0xdeadbeefdeadbeefULL;
-+	err = bpf_get_func_arg_wide(ctx, (1ULL << 59) | 0xffffffffULL, &z);
-+	ok &= err == -EINVAL && z == 0xdeadbeefdeadbeefULL;
-+
-+	return ok;
-+}
-+
- __u64 test1_result = 0;
- SEC("fentry/bpf_fentry_test1")
- int BPF_PROG(test1)
-@@ -63,6 +97,7 @@ int BPF_PROG(test2)
- 	/* return value */
- 	err = bpf_get_func_ret(ctx, &ret);
- 	test2_result &= err == 0 && ret == 5;
-+	test2_result &= check_wide_index(ctx);
- 	return 0;
- }
- 
-@@ -162,6 +197,7 @@ int BPF_PROG(tp_test2)
- 	/* not valid argument */
- 	err = bpf_get_func_arg(ctx, 2, &z);
- 	test6_result &= err == -EINVAL;
-+	test6_result &= check_wide_index(ctx);
- 
- 	return 0;
- }
+- [Medium] selftests/net: unhandled EPIPE when reading /dev/kmsg causes
+  spurious test failures
+- [Low] main() in tools/testing/selftests/net/sysctl_net_test.c uses the
+  kselftest.h API against its documented contract.
+- [Low] The UDP part of the test cannot exercise the documented effect of
+  the UDP sysctls it selects, so its 'UDP 16/16' result says nothing…
+- [Low] v2 adds a facility filter to check_kernel_log() (`prefix =
+  strtoul(record, NULL, 10); if (prefix >> 3 != 0) continue;`, lines…
+
+--
+
+selftests/net: test network sysctl extremes
+
+This adds a new net selftest, sysctl_net_test. It finds the accepted lower
+and upper bounds of four per-netns sysctls (tcp_rmem, tcp_wmem,
+udp_rmem_min, udp_wmem_min) and runs TCP and UDP loopback traffic at each
+bound. While it runs, it watches /dev/kmsg for kernel splats, and it
+restores the original values after each probe.
+
+Link: https://lore.kernel.org/r/20261007054508.1059927-1-sahaj123.sc@gmail.com
+
+> diff --git a/tools/testing/selftests/net/sysctl_net_test.c b/tools/testing/selftests/net/sysctl_net_test.c
+> new file mode 100644
+> index 0000000000000..6360616132c41
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/sysctl_net_test.c
+> @@ -0,0 +1,925 @@
+
+[ ... ]
+
+> +static bool check_kernel_log(void)
+> +{
+
+[ ... ]
+
+> +		record[n] = '\0';
+> +		message = strchr(record, ';');
+> +		if (!message)
+> +			continue;
+> +		/* Ignore messages that userspace wrote to /dev/kmsg. */
+> +		prefix = strtoul(record, NULL, 10);
+> +		if (prefix >> 3 != 0)
+> +			continue;
+> +		message++;
+> +		for (i = 0; i < ARRAY_SIZE(splats); i++) {
+> +			if (!strstr(message, splats[i]))
+> +				continue;
+> +			set_failure("kernel splat detected: %.180s", message);
+> +			return false;
+> +		}
+> +	}
+> +}
+
+[Severity: Medium]
+What happens in check_kernel_log() when the printk ring buffer wraps
+past this reader between two calls?
+
+devkmsg_read() reports that case once as -EPIPE. It then moves the
+reader forward to the oldest record that is still available:
+
+kernel/printk/printk.c:devkmsg_read() {
+    ...
+	if (pmsg.dropped) {
+		/* our last seen message is gone, return error and reset */
+		atomic64_set(&user->seq, pmsg.seq);
+		ret = -EPIPE;
+		goto out;
+	}
+    ...
+}
+
+The loop here handles EINTR and EAGAIN/EWOULDBLOCK. Any other errno
+goes to set_failure() and returns false.
+
+So on a busy machine where something else logs heavily during the run,
+the test fails with "cannot read /dev/kmsg: Broken pipe". Nothing in
+the network stack went wrong in that case. probe_value(),
+prepare_sysctl() and exercise_value() all turn this into a failure.
+main() then stops testing the remaining sysctls. That makes the test
+flaky on noisy CI hosts.
+
+The next read() after -EPIPE succeeds, so could this case simply
+continue the loop? If you want the output to show that records were
+missed, and a splat could therefore have been lost, a "# " diagnostic
+line might be enough. Or do you prefer to treat lost records as a
+failure?
+
+[Severity: Low]
+The commit message says the test passed "also while userspace wrote
+WARNING:/BUG: lines to /dev/kmsg". This facility check covers that case,
+because devkmsg_write() forces LOG_USER on those records.
+
+Does it keep all user-controlled text out of the match, though? Records
+that the kernel itself generates still carry facility 0 even when they
+embed user strings. Also, strstr() matches anywhere in the message body.
+For example, on x86 show_signal_msg() puts the task comm at the start of
+the line:
+
+arch/x86/mm/fault.c:show_signal_msg() {
+    ...
+	printk("%s%s[%d]: segfault at %lx ip %px sp %px error %lx",
+		loglvl, tsk->comm, task_pid_nr(tsk), address,
+    ...
+}
+
+Suppose an unprivileged process calls prctl(PR_SET_NAME, "BUG:") and then
+segfaults while this test runs. The record "BUG:[1234]: segfault at ..."
+passes the prefix >> 3 check and matches "BUG:". The test then reports a
+kernel splat and fails.
+
+Would it help to match the markers only at the start of the message
+(for example "WARNING: CPU:", "------------[ cut here ]", or "BUG: " at
+offset 0)?
+
+[ ... ]
+
+> +static int udp_loopback(void)
+> +{
+
+[ ... ]
+
+> +	addr.sin_port = htons(server_port);
+> +	n = sendto(client, &data, sizeof(data), 0, (struct sockaddr *)&addr,
+> +		   sizeof(addr));
+
+[Severity: Low]
+How much does the "UDP 16/16" result say about udp_rmem_min and
+udp_wmem_min?
+
+udp_loopback() sends and receives a single byte, which normally stays
+below the protocol memory limit. In that case __sk_mem_raise_allocated()
+returns before it reads udp_rmem_min:
+
+net/core/sock.c:__sk_mem_raise_allocated() {
+    ...
+	/* Under limit. */
+	if (allocated <= sk_prot_mem_limits(sk, 0)) {
+		sk_leave_memory_pressure(sk);
+		return 1;
+	}
+    ...
+	if (kind == SK_MEM_RECV) {
+		if (atomic_read(&sk->sk_rmem_alloc) < sk_get_rmem0(sk, prot))
+			return 1;
+    ...
+}
+
+Documentation/networking/ip-sysctl.rst also says udp_rmem_min applies
+"even if total pages of UDP sockets exceed udp_mem pressure". For
+udp_wmem_min it says "this tunable has no effect".
+
+The test never creates UDP memory pressure. Unless the system is already
+under pressure, wouldn't both bounds of both UDP sysctls pass whether or
+not the minimum buffer handling works?
+
+> +	if (n != sizeof(data)) {
+> +		if (n >= 0)
+> +			errno = EIO;
+> +		goto out;
+> +	}
+
+[ ... ]
+
+> +int main(int argc, char **argv)
+> +{
+
+[ ... ]
+
+> +	ksft_print_header();
+> +	ksft_set_plan(1);
+> +
+> +	if (unshare(CLONE_NEWNET))
+> +		ksft_exit_skip("cannot create network namespace: %s\n",
+> +			       strerror(errno));
+> +
+> +	kmsg_fd = open("/dev/kmsg", O_RDONLY | O_NONBLOCK | O_CLOEXEC);
+> +	if (kmsg_fd < 0)
+> +		ksft_exit_skip("cannot read /dev/kmsg: %s\n", strerror(errno));
+> +	if (lseek(kmsg_fd, 0, SEEK_END) < 0)
+> +		ksft_exit_skip("cannot seek /dev/kmsg: %s\n", strerror(errno));
+> +	if (set_loopback_up())
+> +		ksft_exit_skip("cannot bring loopback up: %s\n", strerror(errno));
+
+[ ... ]
+
+> +	if (!failure[0] && !tested_files)
+> +		ksft_exit_skip("no selected writable numeric network sysctls found\n");
+
+[ ... ]
+
+> +	ksft_test_result_pass("TCP %zu/%zu, UDP %zu/%zu deliveries succeeded\n",
+> +			      tcp_successes, tcp_attempts,
+> +			      udp_successes, udp_attempts);
+> +	ksft_finished();
+> +	close(kmsg_fd);
+> +	return KSFT_PASS;
+> +
+> +fail:
+> +	ksft_test_result_fail("%s\n", failure);
+> +	ksft_finished();
+> +	close(kmsg_fd);
+> +	return KSFT_FAIL;
+> +}
+
+[Severity: Low]
+Can the close(kmsg_fd) and return statements after ksft_finished() ever
+run? ksft_finished() expands to ksft_exit(), and that always calls either
+ksft_exit_pass() or ksft_exit_fail(). Both are __noreturn.
+
+So the exit status comes from the kselftest counters, not from the
+KSFT_PASS or KSFT_FAIL returned here. The same applies to the fail: path.
+
+Separately, ksft_exit_skip() is called after ksft_set_plan(1). This
+happens on the unshare(), /dev/kmsg open and seek, loopback, and "no
+selected writable numeric network sysctls" paths. kselftest.h calls this
+pattern a misuse:
+
+tools/testing/selftests/kselftest.h:ksft_exit_skip() {
+    ...
+	/*
+	 * FIXME: several tests misuse ksft_exit_skip so produce
+	 * something sensible if some tests have already been run
+	 * or a plan has been printed.  Those tests should use
+	 * ksft_test_result_skip or ksft_exit_fail_msg instead.
+	 */
+    ...
+}
+
+The header works around this today and prints "ok 1 # SKIP", so the TAP
+output is still valid. Would ksft_test_result_skip() followed by
+ksft_finished() be a better fit on these paths?
 
 -- 
-2.47.3
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014041446.2821085-1-sahaj123.sc%40gmail.com
