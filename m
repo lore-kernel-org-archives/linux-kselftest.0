@@ -1,93 +1,218 @@
-Received: from mail-pj2-f6.google.com (mail-pj2-f6.google.com [74.125.227.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059DB406804
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 17:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF5D3932DC;
+	Sun, 18 Oct 2026 19:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792343401; cv=none; b=SGsbVeX5YpfsXA0WUVnOStntlaqoZ/nQkJZareokOl0SG7Mhb/Q3E3Um6tHLk3zdH8aPF0hhkUaRQv//ul6wtXC0kHQk2uP2HFD3wrbdQVfDXIWGa69DSv3PWC9eUUmUqHV9LWacAaPJ2lJs3up44tULLKxjfCBMc/uLjmlC4uc=
+	t=1792351376; cv=none; b=iu7MoFupf2J1yXCWPADwHZcBz7LhZCfcCzGcWlNwhTXToTJ7cl1tYe08uv1fuN5AzvuQYbEeW4fln/bIxsprqh4GSw7UOLCYleQhjtHRDNhTidA71Dgr+YNBrb+Ligv6kuyBAoI9/U/H1pvVwSITA6LRL/sDUb53/DYEPjEChgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792343401; c=relaxed/simple;
-	bh=+WJ/hu/3Wga52spo7IQdSXB7WSieQhEpzGVW/oaXQhc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=HGttIJeZhHsYCAJNm72fGpUqIhsfEQVGT1s4YWQ3rkjydr42SSs9B67UrFEALPrw/WUEsi+AD9pkp9OecuEFkyTrxIQWUTBcvRjoWgExSRAOIojBSzef80gFi2vGoxDccx5KdDlk4HWuAOr2I4Hyni8nhlsX97aZhIAK9oM0Zt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LHsk/YMk; arc=none smtp.client-ip=74.125.227.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792351376; c=relaxed/simple;
+	bh=wTAtlfNyc/+8+hBnAHdv9hylqiUClzmQnp5hdItR1K0=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=U5e2Gz8RTxymNmAVmso/f3BpmDv3ZzVuTomDe8/Pe9e19VBdJuEjm06I+BXg9ucmszC9QTwz6bEOsrWgTY5HnNJOmFLpGkJ6feC7A63XTKzuMm4XIXC+HIEC80ptrVDBnFvr97xrxg6uAf2Ai3tlb7O2VSukT29EocEklVtCOjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=arolshh9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LHsk/YMk"
-Received: by mail-pj2-f6.google.com with SMTP id 98e67ed59e1d1-3ad211ad92bso233112a91.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 10:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792343399; x=1792948199; darn=vger.kernel.org;
-        h=message-id:date:content-transfer-encoding:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+WJ/hu/3Wga52spo7IQdSXB7WSieQhEpzGVW/oaXQhc=;
-        b=LHsk/YMkVAj/JDH0R9Cn2AaeSDuZT+CToHn+gDN5M+G0sg8uKEdpiaAGoV3JaYlaFN
-         N+N9UTu/M1cL2Nor+whWrkcvv/4pOPJj6pkxgbpC/zIQ6IArcbcBkGM9sKdloaCfBvcz
-         lQk6ci1aatKa6+vrdtMR1WMz1d2dFK7wK9/EsinGGDfMNLdVAqj+RaKDFJvw8nt03+/1
-         8NEtxsNVHPgKODVIl2XJ1oRQoWbDaSdfADM+Yp9KWInDAR7l0pwcbDVVnZuCPp3ajVRO
-         KezsJnW4GJd4bKF//TyfFSoFILOdqhqQ0fjnZTEjGtfwjurWkCvYA5CjU+VEBjdunlVB
-         xuhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792343399; x=1792948199;
-        h=message-id:date:content-transfer-encoding:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+WJ/hu/3Wga52spo7IQdSXB7WSieQhEpzGVW/oaXQhc=;
-        b=jxQpF1S7WMF0j08WqwmNsbeOflf2aYm02IR4HJMADULib+ab7QyNAjuhCoRuWfUo2Q
-         678gb7+NH9ecYydDrc8u/+UGBBE8baWOsM4v3L9bh67yy2uzdH9f1iextKAJA/Mza1Dn
-         wm2RAwewkcvbAQ5EhVSjcla3oJYV9gIUcyWuzHcVrs4BGpxsm0XOXF2i05XZPYUtFMDm
-         zluDJZ/OCYq4XDzo+1FxqrtZoEMEtTFfcOrXRJB/JvWLsfbPRxTamVw4c12cO6K6s73G
-         U5rZk6DNPhS+BS67HklK2F0IF4zcMMLgfObSE70scz4A4d7LgQa/NbiZmnvyLOkNqxF/
-         abrw==
-X-Forwarded-Encrypted: i=1; AKwUvBwrwmz4tRDK8Ws/9aGiejAJUSgQ9tq+2DQDKS/97J7d6H5hCCQu1qICumdu+t0EoGj+f8zcYd/OTBCXM1E7ITA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJXcSVIAmYMEuxV8airPh22/ZYCVMfTbFkHApI6vhN/t8ekCNzw
-	z3UNHT8DKcHo8ehficqOoucJ3CBM9HC7gsyxJaypbjf7D5NB/wdU2qxU
-X-Gm-Gg: AYBFou2Hyt7Z8lxfA94u044/n5kIpFX90MrCnBKP7jhLmdXyWQsDCtIDf8mpsAn4eUj
-	FpVONuXmP37wmsWz0jZoVEIwjPsNyaO7L1PF4xyS7U1ZgqfJPWIgWjjNn6lQPRdPsNfyKNHaUJh
-	eUfeLZp470WS1hi5g44ifz6r1UHHj86ukMIGUZzTpWZonZzcBO/hoG4fmMFuFuKrlIP1RVKpSCW
-	qC/9xQ4B6CZURWBdKK044bPu3cvgraJQpWmRAlVW6ra7xCB616gCBvX4j9tPhIDYAKLtGLiyGR4
-	nFRLbR6AY3qQulOfMm/88pxQr4F/HJUpKa6UbvyUPVCNFjDGtRFmOcB5x0WiP4XDvcT3+q1gLm0
-	DhpsogVwuTvdXQO30DTUA3UA06OQqMQLdGq8LmMP37FcAi/KtjEC9/mU/+bsX1HAqB41PXEfVw4
-	lnX2vQdaMxhurKuEqZrVZJdSu0UtP+nfgXFm7S1WtakRqOWmXjWWtlzq5J8Un5Pcv4zL/+ccULb
-	nWsmZmbEpyZG/+IRrhdyCFdxLWQ22DgEHlQVYGhsSaO1Sjlw7nAFE/lExF+OytzrmQ6vYCPTgg6
-	6dI=
-X-Received: by 2002:a17:90b:57c3:b0:3ac:8ee5:e007 with SMTP id 98e67ed59e1d1-3aceec24801mr4102774a91.20.1792343399360;
-        Sun, 18 Oct 2026 10:09:59 -0700 (PDT)
-Received: from [10.20.15.86] (n106-71-19-159.sun21.vic.optusnet.com.au. [106.71.19.159])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac94798212sm17396301a91.14.2026.10.18.10.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 10:09:59 -0700 (PDT)
-From: Aveline Noir <jm5905938@gmail.com>
-To: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
-Cc: SJ Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
- damon@lists.linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/damon/sysfs.py: stop obsolete_target shells
- hanging the test
-In-Reply-To: <20261018020415.35567-1-jaeyeon.lee.dev@gmail.com>
-References: <20261018020415.35567-1-jaeyeon.lee.dev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="arolshh9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6441C1F000C4;
+	Sun, 18 Oct 2026 19:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792351375;
+	bh=9SMjdtbh2rN4mcpNJo9gUpkv4BKrvaatwTj8eYOs5ic=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=arolshh9c6vEhrXXTJYOctrfxFuF6DYNaXW9J9du8yxrXaQSb+RutVJ7EMsiZvIg4
+	 WL0pwqu2vE5xeFAuiVWYndv/8cX+13dhRVxYFTwW1xI75iDR+Kh3QRsZiOh59SOZeo
+	 I6K+NoIJWLtFlQ/3CAY4JY10y9CCoi9bgXKeT1oqTi+F9Obz62ezG/neIrnCy4uzGy
+	 pNrnGzVf6mSKwZAKMeXRRGuSgbuMkJBGT+RgnNkyq5abBzc71RTl5Z5vITHgjdJlGV
+	 nLvbyRBfNoruRlR+kjysz72sRjJ1jWacR55oJ6XByEFOPLF0dg5UNB3yT1kyiqiaWn
+	 38vnsywDbz3Rw==
+Subject: Re: [PATCH net-next v5 01/10] tls: Bound consecutive no-data records
+ in tls_sw_read_sock()
+From: netdev-bot+sashiko@kernel.org
+To: cel@kernel.org
+Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
+ davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
+ shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Sun, 18 Oct 2026 19:22:53 +0000
+Message-ID: <179235137390.3135.8037803967508250404@kernel.org>
+In-Reply-To: <20261014-tls-follow-on-v5-1-e76c301d4f05@kernel.org>
+References: <20261014-tls-follow-on-v5-1-e76c301d4f05@kernel.org>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Date: Mon, 19 Oct 2026 01:09:02 +0800
-Message-ID: <179234334286.2.7819752603607417566.damon-sysfs-tested@gmail.com>
 
-Hi Jaeyeon,
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-> Fix this by passing stdin=subprocess.PIPE when spawning the processes.
+Critical: 0 · High: 1 · Medium: 1 · Low: 1
 
-Tested on x86-64 KVM, works fine.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Tested-by: Aveline Noir <jm5905938@gmail.com>
+- [High] The new limit only counts consecutive empty records, so a peer
+  can get around it by mixing in small records.
+- [Medium] When tls_sw_read_sock() stops at TLS_RX_NODATA_LIMIT, it
+  queues data_ready_work only if tls_strp_msg_ready(ctx) is true…
+- [Low] (Baseline: not confirmed after checking the end of the series.)
+  At this commit, the wake condition at the new TLS_RX_NODATA_LIMIT exit…
 
-Thanks,
-Aveline Noir
+--
+
+tls: Bound consecutive no-data records in tls_sw_read_sock()
+
+This patch makes tls_sw_read_sock() stop after TLS_RX_NODATA_LIMIT (16)
+consecutive zero-length application_data records. Any record that delivers
+bytes resets the count. When the loop stops and a parsed record is still
+pending, a work item on tls_strp_wq calls the socket's current
+sk_data_ready(), so consumers such as nvme-tcp get woken again.
+
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 312e51270f293..37fcca95c0467 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+
+[ ... ]
+
+> @@ -2136,14 +2153,23 @@ int tls_sw_read_sock(struct sock *sk, read_descriptor_t *desc,
+>  			goto read_sock_requeue;
+>  		}
+>  
+
+[ ... ]
+
+>  		if (rxm->full_len == 0) {
+>  			consume_skb(skb);
+> +			if (++nodata >= TLS_RX_NODATA_LIMIT) {
+> +				/* tls_rx_reader_release() wakes only the
+> +				 * callback saved when TLS_RX was set up;
+> +				 * nvme-tcp installs its own afterward.
+> +				 */
+> +				if (tls_strp_msg_ready(ctx))
+> +					queue_work(tls_strp_wq,
+> +						   &ctx->data_ready_work);
+
+[Severity: Medium]
+What happens when this limit is hit after the parse of the next record
+was deferred to strp->work?
+
+After the 16th empty record, tls_rx_rec_done()->tls_strp_check_rcv() can
+reach tls_strp_read_copy() if the receive queue layout forces copy mode.
+That path calls alloc_page(strp->sk->sk_allocation), and
+nvme_tcp_alloc_queue() sets sk_allocation to GFP_ATOMIC. If the
+allocation fails:
+
+net/tls/tls_strp.c:tls_strp_check_rcv() {
+    ...
+	if (tls_strp_read_sock(strp) == -ENOMEM)
+		queue_work(tls_strp_wq, &strp->work);
+    ...
+}
+
+then msg_ready stays false. The new break skips data_ready_work and
+returns 0, so nvme_tcp_io_work() sees no progress and exits.
+
+When strp->work parses the record later, tls_rx_msg_maybe_announce()
+sends the announcement here:
+
+	ctx->saved_data_ready(strp->sk);
+
+That is the pre-TLS callback, not nvme_tcp_data_ready(), which does not
+chain to it. Only nvme_tcp_data_ready() schedules io_work.
+
+Could the received record then sit unread until unrelated traffic or an
+I/O timeout runs io_work again?
+
+Before this patch, the loop went back into tls_rx_rec_wait(), which
+retries tls_strp_check_rcv() right away. Hitting this stall needed two
+allocation failures in a row.
+
+[Severity: Low]
+Should this wake condition also look at ctx->rx_list?
+tls_sw_sock_is_readable() treats either of these as readable:
+
+	return tls_strp_msg_ready(ctx) ||
+		!skb_queue_empty(&ctx->rx_list);
+
+At this commit, tls_sw_recvmsg() with MSG_PEEK can use put_on_rx_list to
+leave 16 or more empty data records, followed by a non-empty record, on
+rx_list while msg_ready is false. kcm_attach() only checks the family and
+protocol, so a read_sock consumer can then be attached to that kTLS
+socket.
+
+In that case tls_sw_read_sock() would consume the 16 empty records from
+rx_list, break without queueing data_ready_work, and return 0. The
+decrypted payload would stay on rx_list.
+
+The later patch in this series, "tls: Consume empty data records in
+tls_sw_recvmsg()", appears to keep empty data records off rx_list. With
+it, rx_list would be empty whenever this limit fires, so the issue goes
+away at the end of the series. It still seems reachable with this commit
+alone.
+
+> +				break;
+> +			}
+>  			continue;
+>  		}
+>  
+> @@ -2154,6 +2180,7 @@ int tls_sw_read_sock(struct sock *sk, read_descriptor_t *desc,
+>  			goto read_sock_requeue;
+>  		}
+>  		copied += used;
+> +		nodata = 0;
+
+[Severity: High]
+Can a peer get around the bound by resetting nodata here?
+
+The commit message says:
+
+    A zero-length application_data record does not deliver a payload, so
+    tls_sw_read_sock() never runs the read_actor for one and nothing
+    decrements desc->count.
+
+That implies desc->count bounds the loop for non-empty records. For
+nvme-tcp it doesn't seem to:
+
+drivers/nvme/host/tcp.c:nvme_tcp_try_recv() {
+    ...
+	rd_desc.count = 1;
+	lock_sock(sk);
+	queue->nr_cqe = 0;
+	consumed = sock->ops->read_sock(sk, &rd_desc, nvme_tcp_recv_skb);
+    ...
+}
+
+nvme_tcp_recv_skb() never decrements desc->count.
+
+The loop's input is also not fixed when it starts. tls_rx_rec_wait()
+calls sk_flush_backlog() when no record is ready, and
+tls_read_flush_backlog() flushes the backlog periodically inside the
+loop.
+
+Suppose the peer keeps repeating "15 empty records, then one 1-byte data
+record the consumer accepts". Each delivered byte sets nodata back to 0,
+so the ++nodata >= TLS_RX_NODATA_LIMIT check never fires.
+
+Wouldn't tls_sw_read_sock() then keep running with the socket lock held
+for as long as the peer keeps sending? That is the case the commit
+message says this patch closes.
+
+Would this need a cap on the total number of records per call, or no
+backlog flushing inside read_sock, rather than a count of consecutive
+empty records?
+
+>  		if (used < rxm->full_len) {
+>  			rxm->offset += used;
+>  			rxm->full_len -= used;
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014-tls-follow-on-v5-0-e76c301d4f05%40kernel.org
