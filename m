@@ -1,113 +1,146 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-pj2-f9.google.com (mail-pj2-f9.google.com [74.125.227.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2D0321F5E
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 02:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F441B4F0A
+	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 04:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792292023; cv=none; b=NEN2Y7x2NNr3vkLlENU7nxJjgTo/PCcz0KJQOxw51AJ6qJYEQVSGdMewmxeCG3qu+kIt5lLILs03neiyBADcFOAXjZxIaaVtoAaLjILspr/j0I9us+yPwOz8J8xT8Jl7onWLTzNDj67NdeQYfX7uLQoElaRgyar7gaBNtyo509A=
+	t=1792297323; cv=none; b=BXCxY5yXYazDyv3/60H+FyZevcEvmkaTyadKEBbcAa5vqSO4qDktIbomPAVr+Mk56czzX+t+vpIJiklQpSDHuf0uXHqJzP1zH9BPfRkpX2CaBGqdrOYDTontLL0nTN+lUzhNuMn9YMyiCps8KIJm4+zaLIIQi0bSp5fJOd9wqWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792292023; c=relaxed/simple;
-	bh=bBj6psTg0atPzJHuE/vK78ETes9bC48NNTa8QuWS9mE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=in7DS/aHMLux4CVfKkIscVgKeK0sPqFq8S6sgXwU7WCboHHuzZQx4cYM5V/Do4XDnUOrVBWaMCry8A/Taf2E6XMNuBIKZ4JHwT9KaHARPIburiXvl9BXc1mrm+JgpmNFeHaPOXZJlmpNN/IeubuIuuY5sWSpLY5teQsH14qvfIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=vtjpyZaM; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
+	s=arc-20240116; t=1792297323; c=relaxed/simple;
+	bh=hAo0vwGVQ7+kpr8T3cgGCZDlFVZJeV9ymqFaz8SiIQM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LItGBiLbe8DGDOT0oB47EMIBHiXecSBQyw3cq8DK8E6gGyDNNiZuUR9gFf1jxemO4pxJS4V2g15Y6kbd8yoKUtmC1zDiH4Hiof/4o7PE7N6ZQyrLAd1YoUqM2fEqufdxRSG4N4HyqZXrnIj4SLUywUnXBV/NBdxD8vMG/mKGssY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RxMQMRVX; arc=none smtp.client-ip=74.125.227.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="vtjpyZaM"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c2055573c8cso122708066b.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 19:53:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RxMQMRVX"
+Received: by mail-pj2-f9.google.com with SMTP id d9443c01a7336-2e97ddaf3c4so3609965ad.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Oct 2026 21:22:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1792292020; x=1792896820; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bBj6psTg0atPzJHuE/vK78ETes9bC48NNTa8QuWS9mE=;
-        b=vtjpyZaMej8Yz9x2R5/U/H0oFkmd3hnmdPU+tCMBIl1+WCZSgQsF7LWmQmtryy6LoV
-         EFNF4qRpkjX7Nm31+nqoeWOUhatLe8DTxdggm968U7I6G+/LGWEW0h5eR4YRIKkfIpMG
-         G00ug6QsitHLKRXrLYYdm9LE+jD8wFyep0WYencNQFTY0teAeCZ+dA5CcsDTOvItiVMy
-         EfNVYQfz3z6APzJkg5rqkDHz+c7LAfQkHOL7TmFPhg1sdGswogyqUg+GCszNaTsIBCRM
-         KQVRmTjrZPKRIngHGnG1hwkcfx8hRCsHlbIv1ShIqbwn6WN3uvlP2ZOj6mAZw8TtdSSy
-         RUag==
+        d=gmail.com; s=20251104; t=1792297320; x=1792902120; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=u+mb+Ws97QevRJvwejrow/iLEBPi/r7J2JBQR0nE39Y=;
+        b=RxMQMRVXouUBwDlPhl0WeoQQvYKzkQ492oDvKW3TDDgTwfO0edFj+VQgfBK8TbmF4G
+         1P52Vmi4Z/xGE7tmFnKoW1hTLxZ1atKeRhYraaZoXOnwygunTAoBe2yQgDLWTt7H6wO0
+         qRHwxTxMDWYeut2W12/r2CXT87YegzOgOwRpDmu7kUwGV0Fi+KVk4qLft+20C51kUrLL
+         Qle4WjTgJ4WyekA8GZ6Ke/2olZmpN2mdrkDwTz8qdOw/swskB8+hnjX62O8ooroJYVqr
+         Ea/1uTFBKfpq2Jg8oaMgiyRXAqaX0g/EctXsHnavIYEpNdbmGN7UDN4WonQoSolQZIfd
+         9jUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792292020; x=1792896820;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bBj6psTg0atPzJHuE/vK78ETes9bC48NNTa8QuWS9mE=;
-        b=b2u6sNhlA5KmI/vt63UH5OLGM2JLE/PNcu+qiyYUs35Do1VMxDnMd0IgVwzq+rxHWr
-         NzGRD5mZGLCLka8HVN4NushwOAIER0z/RN3vH4ZA4acri3Y9cgur0JyMebYf0oR5MiWy
-         HMg4NYHG9Vgghs7GwDfHKime97msR+7x1I4WgPfWcamsJZxT6XVkqt7Bro6ewvLtZJi8
-         b+OqFTZhN9xsArNX1GvaOYZBWMH59acY1uYUCWia09bTQkszbjNB5m2qE6ab9bT6LnC7
-         gILy5NLSMkaKd/T6P118UlblIlh6MI9YvJvBQnIqeIDXXaEoMXPbfSXzi8JPgbX0ThAT
-         sqDQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxgT53fsDaIEu4qIYyQOYhocO/AkoczqnctOexM0Akt3v4bsMGtaieY6QLu8j88TjdB/H1dFuLKPRm6LoxgowU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKo4UZTJ5+7XRdTC6Ly6RQfTPv3f6IgZK5yp4AB3I5vBzr73LZz
-	vsrc1nFeMcf6S7frqj5rESxCaRseuf6CIJztVQD8TX4wZNfZ4y1X1zcMWlFY56o3+Q==
-X-Gm-Gg: AYBFou3rb+zvCXfWlVChiKMGxW9yqivAwSArsvsB30ZmJO+VZp/TKwSadN47BM2AfqF
-	0ORaxD/hvoLhmxYbeXQ3xxyGEu34iTNxMIyDb+9g8X5k0rnsae0erWxBkIyyY5cmdsjBwuD9Fhb
-	yExnW6u6zJ7xo58ri/e3O4A9WWuIiDEtD2PfFG01Z4MH+1DokaxUbI5sgoumeefCw9ATVHk+ubm
-	alnq/EuWQGMT9OZLi7++olaPUtVe4RPdHu437TGt2EaKEzNo6HTNZ6MDVppNTDeTp59mA3/v0i+
-	xt/5sYC7cLKrHfa2qItRIcWtfUnwSk1+YH7+VwYyurU0l955i1FKJNEJXXVtQ4bx54kPatnjJUw
-	YJPvcqxkVkvH8wlDpg5ypVZ1kffJIYDOC+hcshqDnZ7UEvc5C7XoGlN/38768X7XHVBnOra5BbS
-	b7Uq3BKH6WoMvP49UVa7eJGclCwvfulReSx0dE7daHXoSiz4Djkbq7vhCMIS728bfynA1eyYJAE
-	2NBwkI9OoaNe2a+aFLRLC/fZDvKzDJoGm2Vj557EXRPcL5mmfJDyQKQGoMFbnYluYJB5FUy3Gxi
-	BFhJ/41bzu9xqnM2ZuajVo6/2D3Nbc3SbK0k9BpJ73LX7krm0xPDM5rAyTsrt7o/q0kNfk8ynG5
-	edE89Jz+2Ec1/TRjxK3G7UaSMZqJ9gkZWIFefhLPSsJUlyBiIB+NuGLo3/9Pv2kizchrYpOHXbe
-	PwyPDa+G3O1QSbrTnT1ebrvZOsFNXNIt9CAwvJuE2Hk2oC9Wzc7ROoVwWEbZAI3QkH65Wv
-X-Received: by 2002:a17:907:94d0:b0:c41:285a:46a9 with SMTP id a640c23a62f3a-c41a08d9fc4mr265085666b.46.1792292004094;
-        Sat, 17 Oct 2026 19:53:24 -0700 (PDT)
-Received: from Desktop.fritz.box (p200300f24740ac10545cfe8be1a407c1.dip0.t-ipconnect.de. [2003:f2:4740:ac10:545c:fe8b:e1a4:7c1])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4090dd1130sm227219666b.25.2026.10.17.19.53.21
+        d=1e100.net; s=20260707; t=1792297320; x=1792902120;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=u+mb+Ws97QevRJvwejrow/iLEBPi/r7J2JBQR0nE39Y=;
+        b=s+hsTmU8ZeRL/MIR0HgBM8z8RXz7KG2ICnKDvvWl/656YUIpnZ2WIipAkHPSTI5m34
+         N29LoOZq3zmIebf1fSzIyALp+DXMiwrYTUieBxmz5QqEgSsYFG7qoSZGpjpOBRSyZvbl
+         O81pEGoJlg7yukc5y1+c97fM/tYZLEt0se9FIzV3D1CWBdwcRfB7yN/+ySdLAEq6q5HA
+         6V54udjrvLc/SUovHrLZLZUVDn66jgXrwTvyZ7R6wIHT15cNoLELxOL7Er8BghAN7xnq
+         bCWrkgzDsuvsJE+QkPDHaZTYu0fgMXXx/Qy8hN8cIVKjRvBiuZD07cxV/sPKxDxZzCmX
+         YXgg==
+X-Forwarded-Encrypted: i=1; AKwUvBzoeGejag1XIvkjEaHZiQfSZfGuW53NcDpvoIxAzj4wX6tzzrk8JK0CwhdTEsaiaMkzvCbNhbZQ4/+9MUpnzYc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKddcJSjS88ZW2lr5bNvGmishYyjkTNJYSI4z5Lcn6Q8nr8pNmr
+	BzVLqu3/ugWP3STy93XonNel+66pkqL+iKRh6FJM74B8XxRqQ+MhHAJP
+X-Gm-Gg: AYBFou377pdHIsE+2tLwsmomikAtUrvLyPVcKMpgx+itKeIXRUAzdPDiK2xLjFDRej/
+	FRavsrc7z5Nw+dz6lpQi5DQIxWVyOMbzELyPWMd4Z+IWqeWTXRO5dP+bfO785SH8+oqEzAuXbBY
+	P0i9PesBZD2B8ggIaAHmCRhRDt/g/a0yW9zglduF3pbuqXc80YshMyP7HBIYUmewpnhEkzReuyp
+	GMWGpW9KPwuWFk4d2/Mkqa6vjIkwOE6zedICOIgMwNdyYRZUcGvcjloxeSujDfLdBE7O+Jp9ckA
+	4TXPdLa20t9vVfm141KG+TUl1uS9cdWuQhY6XDQQyQbE2dsiE9qZcR/Z7O64esSwyT/c764YPG2
+	GrPjjg1i6cgaawDmby9wOHV5+pEVTfgd7O0b8CHkUtYyrkUN8ATrP3+8R3mZXEtm+IQm7AbDY+3
+	I4g7a0RiX9v3vFDKrJUh9u0v/OwKI4Fpj6HGX2A38rkhSXlixUC4eCTPI2LKJMQk3agyjaWQWDY
+	TdSLlzG/9E=
+X-Received: by 2002:a17:902:f68e:b0:2e9:7190:32e1 with SMTP id d9443c01a7336-2e9a69f7864mr32203925ad.17.1792297319948;
+        Sat, 17 Oct 2026 21:21:59 -0700 (PDT)
+Received: from [127.0.1.1] ([123.109.188.177])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8758efsm24799195ad.55.2026.10.17.21.21.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 19:53:22 -0700 (PDT)
-From: Julius Bairaktaris <julius@bairaktaris.de>
-To: pablo@netfilter.org
-Cc: netfilter-devel@vger.kernel.org,
-	fw@strlen.de,
-	phil@nwl.cc,
-	coreteam@netfilter.org,
-	netdev@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	andrew+netdev@lunn.ch,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	nbd@nbd.name
-Subject: Re: [PATCH nf-next 2/3] netfilter: flowtable: update upper device stats in the fast path
-Date: Sun, 18 Oct 2026 04:53:19 +0200
-Message-ID: <20261018025319.1445197-1-julius@bairaktaris.de>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <atQmpPlfT_DSd9dq@chamomile>
-References: <atQmpPlfT_DSd9dq@chamomile>
+        Sat, 17 Oct 2026 21:21:59 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+Subject: [PATCH bpf v2 0/2] bpf: Zero-extend the index in inlined
+ bpf_get_func_arg()
+Date: Sun, 18 Oct 2026 13:21:40 +0900
+Message-Id: <20261018-get-func-arg-v2-0-048848b3eddf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFRJ1GoC/x3MQQ5AMBBA0avIrE1SLYKriEXVTM2mpEUk4u4ay
+ 7f4/4FEUSjBUDwQ6ZIkW8jQZQFutcETypINWum2UlWHng7kMzi00WNvXKeW1hDXDeRkj8Ry/7s
+ R5p1het8PUP6Ht2MAAAA=
+X-Change-ID: 20261018-get-func-arg-93c80d63ef45
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Woojin Ji <random6.xyz@gmail.com>
+X-Mailer: b4 0.14.2
 
-On Sun, Oct 18, 2026 at 03:53:40AM +0200, Pablo Neira Ayuso wrote:
-> I mentioned it is a feature that these counters are not bumped,
-> because packets are not passing through this devices in the bypass.
->
-> This allows users to see what packets follow classic path?
+v2, from the review of v1:
 
-OpenWrt users report it as a bug. On my router a 268 MB download moved
-0.15 MB on br-lan, while the port below it counted all of it.
-conntrack already shows which flows are offloaded.
+ - Shift the index as a 32-bit value instead of inserting an explicit
+   zero-extension (Alexei). The inlined sequence is one instruction shorter
+   and the bounds check is untouched, so no program is accepted or rejected
+   differently.
 
-> But if you insist, then explore a way to synchronize these counters
-> offline (ie. not from packet path) to see how it looks like.
+ - The selftest is now a separate patch (Jiri). Patch 2 keeps Jiri's
+   Acked-by from v1; patch 1 does not, because the kernel patch changed.
 
-OK. The gc could add the conntrack counter delta to the upper devices,
-which would also cover hardware offloaded flows. I will try it
-downstream and post it after the fdb series.
+v1, the problem: bpf_get_func_arg() takes a u32 index, but the inlined
+expansion compared only the low 32 bits of R2 with the argument count and
+then shifted the full 64-bit register to compute the context address. R2 is
+ARG_ANYTHING, so an index of 1ULL << 32 passed the bounds check as index
+zero while the load was performed at ctx + (1ULL << 35).
 
-Julius
+Patch 2 depends on patch 1: without it the wide index faults in the inlined
+sequence and the guest panics.
+
+Validation, re-run with this revision (the 32-bit shift kernel):
+
+ - Disposable x86_64 QEMU guest running a BTF-enabled kernel built with
+   clang 22, with tracing and bpf_testmod. test_progs output, verbatim:
+
+     #150     get_func_args_fsession_test:OK
+     #151     get_func_args_test:OK
+     Summary: 2/0 PASSED, 0 SKIPPED, 0/0 FAILED
+
+   The pairs in that line are top-level tests/subtests, so both tests pass
+   with nothing skipped or failed; TEST_PROGS_EXIT=0 and the guest dmesg is
+   clean.
+ - The same two tests on unpatched ff47652a4b66 fault in the inlined
+   sequence: a page fault in bpf_prog_..._test2, with the load performed at
+   ctx + (1ULL << 35), which panics the guest.
+ - bpftool xlated dumps of both test programs show the index shifted as a
+   32-bit value (w2 <<= 3) at all 32 inlined helper sites on this kernel,
+   and the 64-bit shift (r2 <<= 3) at all 32 on unpatched ff47652a4b66.
+
+v1: https://lore.kernel.org/bpf/179221432098.1890560.17043109037413683447.get-func-arg-index@gmail.com/
+
+---
+Woojin Ji (2):
+      bpf: Zero-extend the index in inlined bpf_get_func_arg()
+      selftests/bpf: Test out-of-range index bits in bpf_get_func_arg()
+
+ kernel/bpf/fixups.c                                |  2 +-
+ .../selftests/bpf/progs/get_func_args_test.c       | 36 ++++++++++++++++++++++
+ 2 files changed, 37 insertions(+), 1 deletion(-)
+---
+base-commit: ff47652a4b66c067c765a7ad464d930b5a9367cc
+change-id: 20261018-get-func-arg-93c80d63ef45
+
+Best regards,
+-- 
+Woojin Ji <random6.xyz@gmail.com>
+
