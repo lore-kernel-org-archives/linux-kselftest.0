@@ -1,215 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3558A46D0AC;
-	Sun, 18 Oct 2026 16:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3B73A6F09;
+	Sun, 18 Oct 2026 16:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792339274; cv=none; b=RCowuGlduaMFYaS8QFwzPZUMdZYfVP2nEn25aHCvN7JtVJENeR+RacOKIgN/R/QrcRwiumfvVCPCtZW/KyLVBNhJI/N43qIBAO11ALqKEKcuTCsRn+iJEPLCh4y/rIr4VinXKWcCUHzMZMlUYFuX/1HUf+l3ZllgUPhD4DP7AdQ=
+	t=1792340618; cv=none; b=H8k3bXCA3nF/QdB0yxdlgT7YmF+8cYszGHIlS9KR78v2ihlVKweNADKMaE/5VpycOeY1kmPi2uaz6fM7j6rXfLTQedsQY1j9jdrxFB6h3eV81uucfy5fyq2IR5IgyB7Pel/ycrN0I0IUZkA7uqP+SvanFf0UHcqaXHQws246Mg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792339274; c=relaxed/simple;
-	bh=//X/wiwmt+Im6yHVEXxiJnHvXhCwAM0skc53aOjteRE=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m4O7+8lW2f6hjK8W7L3WR04zYlw6MRMCFYWhwNRZcVpGVyjMb3QxgGKiHEJxK6S+xkrym127WeVZH6Uj9Pc6r07Bq3gsk4V3nM6ESuKHR28s+2D6Zf++2rs3xwgqVIgln9rkpSRzkQoltr4cevDA9vtwTQWeWsNBtZeJG+2N964=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MyocOagE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792340618; c=relaxed/simple;
+	bh=HwNXUeNKdwzjy+YPEJg5pGa3SbGf1bmlntlDyn92vb0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pl4flpw0LK/FntQbRk29nHSd2gdrNlm3sFNUiQZyL3u4hIQOrkmfdg7dgpwCAzMXUJyl+h55O63Mg6LAhAEbAmTfUhLU54Ce78vVxDxQm0MCkKrHQkZikZ5NVVTKbl0s6UkphFn5Tk2ECUHnmTzfsKEHycNrQdzkMLR/DVPGty8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P6pSUoE0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MyocOagE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571411F000C4;
-	Sun, 18 Oct 2026 16:01:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P6pSUoE0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40A31F000C4;
+	Sun, 18 Oct 2026 16:23:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792339273;
-	bh=AvBfaI1A7Wm4thY0Q9puG6a7Zmf5trkowv5N01h1M4o=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=MyocOagElc7aW/wWF57cMnrelxPqQcdbFQtdiB3TlvHxKRBRxbf9qY1uyzyQT5tN8
-	 bCna15wB76ZAFF0ZO6iDqUE87oU1TU1QTZF6Jm579ZZDjMrI5RlQVe70c7ctkwsbvr
-	 yzJfPPYkefq8t+Tkcg0HdCTO7XQecPAJ6YkRMzcBCv/kZjGpueSSmYB/Tkc5f5bWSL
-	 /yGl2PIV9pXlkFwFdUv+AMs5LPAOxUhPA5r46OLBpxqNnJr/qlIjqBu3bigwDgHG0j
-	 pqSJ6aZoerBfq6sReYBLZe+Bys8yWS0zltFctTqeDduH0/1je/oOKmuSSeS7aPb+YH
-	 gudtNovyqlx/w==
-Subject: Re: [PATCH net v4 3/4] netdevsim: support devmem RX and TX bindings
-From: netdev-bot+sashiko@kernel.org
-To: almasrymina@google.com
-Cc: kuba@kernel.org, asml.silence@gmail.com, dw@davidwei.uk, sdf@fomichev.me,
- ap420073@gmail.com, pabeni@redhat.com, kaiyuanz@google.com,
- bobbyeshleman@meta.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, hawk@kernel.org, ilias.apalodimas@linaro.org,
- horms@kernel.org, shuah@kernel.org, sumit.semwal@linaro.org,
- christian.koenig@amd.com, dtatulea@nvidia.com, razor@blackwall.org,
- daniel@iogearbox.net, tariqt@nvidia.com, kaifengw@google.com
-Date: Sun, 18 Oct 2026 16:01:10 +0000
-Message-ID: <179233927086.3135.6123492094489915156@kernel.org>
-In-Reply-To: <20261015163915.1166043-4-almasrymina@google.com>
-References: <20261015163915.1166043-4-almasrymina@google.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1792340617;
+	bh=PkvCnZp3GqJK4bIvD1zVQOPN0TOHqm9DCWSAjzxS07o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=P6pSUoE0uF9R61EmmdJ/FHRrRUP+N3n8/JOStw3k3xMxktDAZ9yjDt6raMWvnFs5r
+	 uTBxSI4ODXNjzZWV+iMaAY5Eo8+aNEsYoWI9w4fR2/Mx742HJQvD88czJXIG0UJtsh
+	 E4N8qevijiTh2YnwIrS1lvZ8QSi6b+vRnZ4QDROCVGvM61VF+F9VPLf/CzITV4Tf71
+	 YMYMWbfXe7eYuGr/tZ7sJJHWKWr4My4sbUy0KPpN89fyQTXNuaOfwYCjuEsQtHIqYm
+	 vvEI3gAzUDGrzJ1FDtwWyABA2tdZQz2OtJZcNmI8+E8YWx3n9joQ4Y206uVsHG1INU
+	 Ifk14sum/ay8g==
+From: SJ Park <sj@kernel.org>
+To: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+Cc: SJ Park <sj@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/damon/sysfs.py: stop obsolete_target shells hanging the test
+Date: Sun, 18 Oct 2026 09:23:29 -0700
+Message-ID: <20261018162330.107844-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261018020415.35567-1-jaeyeon.lee.dev@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On Sun, 18 Oct 2026 04:04:15 +0200 Jaeyeon Lee <jaeyeon.lee.dev@gmail.com> wrote:
 
-Critical: 0 · High: 1 · Medium: 0 (1) · Low: 0
+> The obsolete_target test spawns three 'sh' processes as monitoring
+> targets.  The processes inherit stdin from the test.  When the test is
+> run via 'make run_tests' from an interactive terminal, the kselftest
+> runner executes it under 'timeout', which puts it in a background
+> process group.  The 'sh' processes then try to read the terminal, so
+> the kernel sends SIGTTIN to the whole process group.  This stops the
+> 'sh' processes, and also the child the test has just forked to spawn
+> the next 'sh', before it can run 'sh'.  The test then waits on that
+> child forever, until the kselftest runner kills it after 45 seconds.
+> The test passes when run directly.
+> 
+> Fix this by passing stdin=subprocess.PIPE when spawning the processes.
+> The processes then read from a pipe that never receives input, so they
+> stay alive and idle as the test expects.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Thank you for finding and fixing the bug!
 
-- [High] On builds where PP_DMA_INDEX_BITS is 0, this patch leads to a
-  use-after-free of the netdevsim bus device.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
 
-Pre-existing issues:
-- [Medium] This problem wasn't introduced by this patch, but writing true
-  to the pp_hold debugfs file of a running netdevsim VF port…
+Reviewed-by: SJ Park <sj@kernel.org>
 
---
+I applied  this patch to damon/next [1] tree.  We are now quite close to next
+merge window.  It may better to focus on making mm.git more stabilized and
+therefore ready for the next merge window, rather than adding more changes that
+are not really urgent.  I understand this series is not really urgent.  Hence,
+Andrew might not add this patch until next -rc1 release.  In the case, I will
+request adding this to mm.git after next -rc1 release.  So, no action from your
+side is needed for now.  Let me know if you think this is really  urgent.
 
-netdevsim: support devmem RX and TX bindings
+[1] https://origin.kernel.org/doc/html/latest/mm/damon/maintainer-profile.html#scm-trees
 
-This commit sets a 64-bit DMA mask on the netdevsim bus device, enables
-NETMEM_TX_DMA, and creates netdevsim page pools with
-PP_FLAG_ALLOW_UNREADABLE_NETMEM and queue_idx, plus DMA mapping when
-CONFIG_HAS_DMA is set, so devmem bind-rx and bind-tx can be tested. It
-also refuses pp_hold on memory-provider-backed pools under the netdev
-instance lock, and drops unreadable skbs in the software PSP checksum
-path.
 
-> diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-> index b4a99f3ceac60..357ea9e5623b3 100644
-> --- a/drivers/net/netdevsim/netdev.c
-> +++ b/drivers/net/netdevsim/netdev.c
-> @@ -414,19 +414,27 @@ static int nsim_poll(struct napi_struct *napi, int budget)
->  	return done;
->  }
->  
-> -static int nsim_create_page_pool(struct page_pool **p, struct napi_struct *napi)
-> +static int nsim_create_page_pool(struct net_device *dev, struct page_pool **p,
-> +				 struct napi_struct *napi, int idx)
->  {
-> +	struct netdevsim *ns = netdev_priv(dev);
->  	struct page_pool_params params = {
->  		.order = 0,
->  		.pool_size = NSIM_RING_SIZE,
-> +		.flags = PP_FLAG_ALLOW_UNREADABLE_NETMEM,
-> +		.max_len = PAGE_SIZE,
->  		.nid = NUMA_NO_NODE,
-> -		.dev = &napi->dev->dev,
-> +		.dev = &ns->nsim_bus_dev->dev,
->  		.napi = napi,
->  		.dma_dir = DMA_BIDIRECTIONAL,
-> -		.netdev = napi->dev,
-> +		.netdev = dev,
-> +		.queue_idx = idx,
->  	};
->  	struct page_pool *pool;
->  
-> +	if (IS_ENABLED(CONFIG_HAS_DMA))
-> +		params.flags |= PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV;
-> +
+Thanks,
+SJ
 
-[Severity: High]
-
-Can this cause a use-after-free of the nsim_bus_dev struct device on
-builds where PP_DMA_INDEX_BITS is 0?
-
-The page pool doesn't take a reference on pool->p.dev. With
-PP_FLAG_DMA_MAP now set, pages from these pools carry a DMA mapping
-against &ns->nsim_bus_dev->dev.
-
-PP_DMA_INDEX_BITS is 0 when POISON_POINTER_DELTA is 0 and PAGE_OFFSET is
-not a suitably aligned compile-time constant. Some 32-bit and nommu
-builds hit this, riscv nommu for example, where PAGE_OFFSET is
-phys_ram_base. In that case the mapping is never recorded:
-
-net/core/page_pool.c:page_pool_register_dma_index() {
-    ...
-	if (unlikely(!PP_DMA_INDEX_BITS))
-		goto out;
-    ...
-}
-
-so page_pool_scrub() can't unmap outstanding pages while the device is
-still alive.
-
-Suppose a page is held via pp_hold and the device is then deleted.
-nsim_destroy() returns ns->page late on purpose ("Put this intentionally
-late to exercise the orphaning path"), and the sequence looks like this:
-
-nsim_destroy()
-  nsim_queue_uninit()
-    page_pool_destroy()
-      page_pool_release()
-        page_pool_scrub()     <- held page not tracked, stays mapped
-      inflight == 1, release_dw scheduled
-  page_pool_put_full_page(pp, ns->page, false)  <- page lands in pool->ring
-nsim_bus_dev_del()
-  device_unregister()
-    nsim_bus_dev_release()    <- struct device freed
-
-page_pool_release_retry()
-  page_pool_release()
-    ...
-      page_pool_empty_ring()
-        page_pool_return_netmem()
-          __page_pool_release_netmem_dma()
-            __page_pool_unmap_netmem_dma()
-              dma_unmap_page_attrs(pool->p.dev, ...)  <- freed device
-
-The existing nl_netdev.py page_pool test, which holds a page and then
-removes the device, follows this sequence. Before this patch the pools
-did no DMA mapping, so the late put never touched the device.
-
->  	pool = page_pool_create(&params);
->  	if (IS_ERR(pool))
->  		return PTR_ERR(pool);
-
-[ ... ]
-
-> @@ -929,12 +939,15 @@ nsim_pp_hold_write(struct file *file, const char __user *data,
->  		return ret;
->  
->  	rtnl_lock();
-> +	netdev_lock(ns->netdev);
->  	ret = count;
->  	if (val == !!ns->page)
->  		goto exit;
->  
->  	if (!netif_running(ns->netdev) && val) {
->  		ret = -ENETDOWN;
-> +	} else if (val && page_pool_is_unreadable(ns->rq[0]->page_pool)) {
-
-[Severity: Medium]
-
-This isn't a bug introduced by this patch, but can this dereference a
-NULL ns->rq on VF ports?
-
-nsim_create() creates the pp_hold file for both PF and VF ports. However,
-nsim_init_netdevsim_vf() only sets nsim_vf_netdev_ops and registers the
-netdev, so ns->rq stays NULL.
-
-nsim_vf_netdev_ops has no ndo_open. __dev_open() still sets
-__LINK_STATE_START, so after "ip link set up" on the VF the
-netif_running() check above passes.
-
-Writing 1 to pp_hold on a running VF port with no page held would then
-evaluate ns->rq[0] with ns->rq == NULL. The previous
-page_pool_dev_alloc_pages(ns->rq[0]->page_pool) call had the same
-dereference.
-
-> +		ret = -EOPNOTSUPP;
->  	} else if (val) {
->  		ns->page = page_pool_dev_alloc_pages(ns->rq[0]->page_pool);
->  		if (!ns->page)
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261015163915.1166043-1-almasrymina%40google.com
+[...]
