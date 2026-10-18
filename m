@@ -1,316 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654C44B9221;
-	Sun, 18 Oct 2026 13:16:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2B14B66F8
+	for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 13:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792329397; cv=none; b=ifxpRr3m9k6ira1aj11v5IZ0fyqltVRe76TeoS61ka8YvbFa6ekK528fHyU4MurMUv0fdQtPoLZ15sxBFghe0y7pTW5xEz7gmYBACk1wIqctG3zLY64vRCoALj+EysSOny5WY4+h0hGuNN/5KtiNNTFc/2OpiWDuXejHblxK1Ig=
+	t=1792330240; cv=none; b=qCd7ceSbp7LvZ+Zrv7KjlsRD9+uHqJwi04WnHqiuvYgCxCEASI9pqbslDn/F1uF0DfJyCt0IEWfLzJvO2VtoQTjzzQFwaRh/gxWdmPiWyZdPeBzTEP28VY8XTSYZTXkOOebfCXldhKKLHnzlOeWWkiEianjuMc3/OKHRpC1g+QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792329397; c=relaxed/simple;
-	bh=7SONenFz0VX6VfgFhhgS6ItUrvfAMVhNTv7y80LrKbE=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=C9vv6WcSJZ0UyTNRP/pZ/9qXxy2X4G/AihGvEaBIeyRBBuQDuJiuBbJuGiuSUOOSlyxH6uZ1sGO9lcp65xXaFCQpeZYkTl0jiLXCrgalA4Ntkt78kEcHzttVKretbafdmIeOzosMjuNNG1j2iIKkh2t6FwOyGEkpQ0L5hfWchtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=evTqrPOu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792330240; c=relaxed/simple;
+	bh=NNkfZMaHqUINHPy4yAyt09M/t54snH42tS/afOsUZmQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cOrWnfnCqXD2O6JzEtfreJYoPDDnkRWOv58I3V2ZZX61TR5tXOAz12tYkXrWyEGZft13e1MWiiUS+oX9n6/Ldj4DzhK3upiGnJyM8etupX/BDS3EATGfTDMEowjzrl7IUbHauu7fOqMEA9LJjMCFbqWHpge3I9NnfaGaLdmHUQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9SIDYkA; arc=none smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="evTqrPOu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8935A1F000C5;
-	Sun, 18 Oct 2026 13:16:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792329396;
-	bh=yPfxwYavMEPqVnPZXTuepLeeedqkC9HKHNpd77Ks81Y=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=evTqrPOujd5dB94DzqLRaoi0n5Yb3Ia9tOY9B+b8Qj1KCDXWfDuJ/niJQIpHk0Mbk
-	 YQ6xiBwXfe26gM8URgvQx9VGk4rZPZesd42rJLHMBbs/Zfpi+Am1+XtCclrWUmlq06
-	 QM+cCH1lA0Gw9CG+zkrWPdKCkIu5grZ+1aS5A1o6+eUwKkANy9RElDBmG4FFZ6trv+
-	 gQxsLwd8C86j9tuH7wxZKn2sEzUXMKd1J948tA/ZtEJsYrXV6Tg+XiVYLuW5Y+mVn9
-	 KQdgbrthtNfOjNvCHCOGMdN4En5Yv6o5cm0YDfU2Slt5CYLC14NsuGEU+2SBLt1C2g
-	 M/OPiLJrSRdig==
-Subject: Re: [PATCH net-next v4 7/7] selftests: net: test the vxlan vnifilter
- request limit and dump replay
-From: netdev-bot+sashiko@kernel.org
-To: alishmery18@gmail.com
-Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
- pabeni@redhat.com, davem@davemloft.net, edumazet@google.com,
- andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
- roopa@nvidia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Sun, 18 Oct 2026 13:16:35 +0000
-Message-ID: <179232939511.3135.8638231822029471558@kernel.org>
-In-Reply-To: <20261014123814.388557-8-alishmery18@gmail.com>
-References: <20261014123814.388557-8-alishmery18@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9SIDYkA"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-15354aa70e8so903679c88.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 06:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792330238; x=1792935038; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=UxNMEUEtD9CHubkx0OvUL7KBqR4421WFDcx17ucFJkk=;
+        b=W9SIDYkA5VPWXXIEPz1n0iEPmdtZUE3+KzJoyymXQfS1cDJYHjH5gH6EuiClk2xrdo
+         wj6HUhTT7cpB5TtzjPRZm/stqDSG/ZwvTRUasklr6dsS5O5W4WjzVXx/EJCEWE3OKuG8
+         FZGK7QmPc+KGg1I0bVniAMnIgLZ+dhHakKOJAdpcFdlp+sY+0PjSeaEA459GySXj/zzn
+         qdSBSDBnOPunR70yNezaT6Hm6KWnb3ZLrjSFEQLfk68OJFjJ7iUPK1vP/WW7A5MIKscV
+         aSWIGh4r6U2cwuNHPSDKrfeCB1avghcn5WNSE4ul8GOVAJJ8HM12i80rrAseT4yEiPqZ
+         VNRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792330238; x=1792935038;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=UxNMEUEtD9CHubkx0OvUL7KBqR4421WFDcx17ucFJkk=;
+        b=sXBjhZ63QsiGLEzCXgtXRRkRkXrLmbGi7h9u1Nm5DpHMzsx/wqv9DGhUTroHB+0wF0
+         VdGe2WddDaIS1E3wtii6qlCuSrb3XID+d7lQE0Iof6dpGgScjSLBRQY+jbIGsGSXtIB/
+         N5ikxs412zYnVU8PR0dGDNdVrd6rmU4F4XMe6SE59qfOIipnzhfrHeJpNrj79EN8Y7ZV
+         t7/rdIiARAPncil6ZHs2R6+YH7M/MGg21E7X7E7OhxwgZyPID1BcTmBes7Dq/3GK+wiM
+         1dTzVjzaKCvBkawxuRerlg1zy6FJ6ImGyfV6zWtF5xVgjL03paEwp4/i2ieM0isgk5qA
+         Hfpg==
+X-Forwarded-Encrypted: i=1; AKwUvBwzprHlo+C+nxReHx2m1mMJu8JJMhf8Xz65uCoyG0oU/rPfIK09dle6DCyobBpSSAENAk5xwX7K5Gjdf4mIxcQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJOsruu1/gYF544jb+f7b7flp0ZZgZRjTZ+eraK1+BxaREHto3x
+	ON+WBM7mirI8Fe7ki24DTGeBBrTTBZg7GYFAkJbqOuYYveyrIH+LRO/9
+X-Gm-Gg: AYBFou3lMhZfD6QTg7ke0q/ysL6RpfFJLMMQlzp7KyQ4FUUTy5QnyOye240FZ9BrdUl
+	J/TvHIQ4qBVR2QDrnKDIRLyysbJ1XA/LzdXvNFx1was7sBe0K5gKYKKlYm7EX7X9L6oFW2KNIx+
+	BlxuCLDW7yE5Ae0BmY2b0IdA2Jbav80uAgKSyYzXwddednhGptR8bJANclYbKgAqZWOudh91J6T
+	DHj3MqfJR7kdoAxh3KaTL+4LMMexvDweBsV2UyY8+p0cgnIaKyDSHqJZwIphrdGmjhL/LjF2ad6
+	LdEgQ0l3gQT5upOmpF4gSR3UwHNzlb0aPpi2ZcqM6dihzJ2GNWsbnSOzG/KPT2PlQs+psvC8KnA
+	3N+T0V1A103KNr8/G6s3Nk8I3HyrCe7wuRzoBpUOk4K0XGLXhu4cCmHCjA35OxTgqd4HeeBz9Dn
+	baTX4HV8gmcTJlwpgG4KyRagfv4koRF249mZPRWTkjXPKSBS8JzS1ZndZl7Q5ClUTyop3f/JKrD
+	7V3madDVIg4WWoV3q6zd9O1UkvZ1w586QoIM+zNww==
+X-Received: by 2002:a05:701b:2608:b0:185:9384:31b5 with SMTP id a92af1059eb24-18593843236mr6207679c88.45.1792330237788;
+        Sun, 18 Oct 2026 06:30:37 -0700 (PDT)
+Received: from Biostar-A520MT.. ([187.94.15.112])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-18314ef8ed8sm19879934c88.3.2026.10.18.06.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Oct 2026 06:30:37 -0700 (PDT)
+From: Breno Rodrigues Alves <breno3011alves@gmail.com>
+To: linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Breno Rodrigues Alves <breno3011alves@gmail.com>
+Subject: [RFC PATCH v2 0/2] perf: convert Perl test helpers to Python
+Date: Sun, 18 Oct 2026 10:30:30 -0300
+Message-ID: <20261018133032.24467-1-breno3011alves@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261018125641.23064-1-breno3011alves@gmail.com>
+References: <20261018125641.23064-1-breno3011alves@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 5 potential
-issue(s) to consider.
+v2 changes since v1:
+  - Restructure as 2 commits (prefix.py alone; the 4 check_*.py together,
+    since their callers are heavily intermingled)
+  - Update runner.sh and kselftest/Makefile to invoke/install prefix.py
+  - Update Makefile.perf to install *.py (not just *.sh/*.pl)
+  - Update all call sites in base_probe/ and base_report/
+  - Remove the 5 original .pl files
+  - Add trailing newlines to all 5 files (pylint C0304)
+  - Fix the check_all_patterns_found commit message:
+    TESTLOG_ERR_MSG_MAX_LINES is only handled by check_all_lines_matched
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 4 (1)
+This series converts five Perl test helpers in tools/ to Python 3,
+continuing the Perl-to-Python conversion effort for the kernel's
+auxiliary scripts.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Each conversion is a faithful 1:1 port: same CLI, same output,
+same exit codes. All use only the Python standard library.
 
-- [Medium] In vxlan_vnifilter_dump_replay()
-  (tools/testing/selftests/net/test_vxlan_vnifiltering.sh), the exit…
-- [Low] Each new 'absent before' / 'installed nothing' probe in
-  vxlan_vnifilter_api() runs `bridge -netns $testns vni show dev vxlan-…
-- [Low] vxlan_vnifilter_dump_replay() replays the dump one range at a
-  time, each in its own `bridge vni add` (lines 457-460), using ranges…
-- [Low] The 24-bit bound cases in vxlan_vnifilter_api() do not isolate
-  the START half of vni_filter_entry_policy, and one case cannot tell…
-- [Low] In vxlan_vnifilter_dump_replay(), the replay result variable `rc`
-  is overwritten by run_cmd() before the replay loop.
+The five scripts are:
+  - prefix.pl                      -> prefix.py
+  - check_all_patterns_found.pl    -> check_all_patterns_found.py
+  - check_no_patterns_found.pl     -> check_no_patterns_found.py
+  - check_all_lines_matched.pl     -> check_all_lines_matched.py
+  - check_errors_whitelisted.pl    -> check_errors_whitelisted.py
 
-Pre-existing issues:
-- [Low] The comment on VXLAN_VNI_FILTER_MSG_MAX in
-  drivers/net/vxlan/vxlan_vnifilter.c (lines 20-24) still says 'A later…
+All five were verified byte-for-byte identical to their Perl
+counterparts on synthetic inputs.
 
---
+Breno Rodrigues Alves (2):
+  perf/kselftest: convert prefix.pl to Python
+  perf/tests: convert check_*.pl helpers to Python
 
-selftests: net: test the vxlan vnifilter request limit and dump replay
+Breno Rodrigues Alves (2):
+  perf/kselftest: convert prefix.pl to Python
+  perf/tests: convert check_*.pl helpers to Python
 
-This extends test_vxlan_vnifiltering.sh to cover the per-request VNI cap
-on add and delete and the 24-bit VNI bound. It also adds a dump/replay
-test that builds a contiguous run twice the limit and replays the dumped
-ranges into a second device. The cleanup() handler now also removes
-veth-host and the test netns.
-
-> diff --git a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-> index 6fb5af013dacf..bb35e89d2d036 100755
-> --- a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-> +++ b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-
-[ ... ]
-
-> @@ -347,6 +349,121 @@ vxlan_vnifilter_api()
->  	# change vxlan vnifilter flag
->  	run_cmd "ip -netns $testns link set dev vxlan-ext1 type vxlan external novnifilter"
->  	log_test $? 2 "Cannot unset vnifilter flag on a device"
-> +
-> +	# A single request may add at most 4096 VNIs. bridge(8) puts one
-> +	# VXLAN_VNIFILTER_ENTRY per comma-separated item into a single message,
-> +	# so both the single-entry and the multi-entry paths are reachable here.
-
-[Severity: Low]
-This problem was not introduced by this patch, but the comment on
-VXLAN_VNI_FILTER_MSG_MAX in drivers/net/vxlan/vxlan_vnifilter.c still
-describes the request cap as future work:
-
-drivers/net/vxlan/vxlan_vnifilter.c:
- * dump emits stays within what the input path will accept on replay. A later
- * patch bounds a single RTM_NEWTUNNEL/RTM_DELTUNNEL request to the same number.
- */
-#define VXLAN_VNI_FILTER_MSG_MAX	4096
-
-That cap is already in the tree. vxlan_vnifilter_process() calls
-vxlan_vnifilter_check_msg() before it applies any entry:
-
-	err = vxlan_vnifilter_check_msg(nlh, extack);
-	if (err)
-		return err;
-
-Could the "A later patch" sentence be updated, since this selftest is
-exercising that cap?
-
-> +
-> +	# The largest accepted add, and one VNI more rejected.
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 10000-14095"
-> +	log_test $? 0 "Add a request of the maximum VNI count"
-> +
-> +	# The rejected oversized add must install nothing. Assert the range is
-> +	# absent first: vxlan_vni_add() folds an already-present VNI into the
-> +	# update path and returns 0, so a later probe cannot tell "installed
-> +	# nothing" from "installed part" unless it started absent.
-> +	run_cmd "bridge -netns $testns vni show dev vxlan-ext1 | grep -qw 20000"
-> +	log_test $? 1 "VNI 20000 absent before the oversized add"
-
-[Severity: Low]
-Can this probe pass when bridge vni show itself fails?
-
-run_cmd() evaluates the whole pipeline and returns its status:
-
-	out=$(eval $cmd $stderr)
-	rc=$?
-
-That status comes from grep. Neither this script nor lib.sh sets
-pipefail. If bridge vni show fails, grep reads no input and exits 1, which
-is the value log_test expects.
-
-The same pattern is used for each of the "absent before" and "installed
-nothing" probes for 20000, 30000 and 55000. That means these probes cannot
-tell a VNI that is absent from a show that failed.
-
-The src_ranges and dst_ranges captures in vxlan_vnifilter_dump_replay() also
-drop the exit status of bridge.
-
-Would it make sense to check the exit status of bridge vni show on its own,
-or to set pipefail for these probes?
-
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 20000-24096"
-> +	log_test $? 255 "Cannot add a request over the maximum VNI count"
-
-[ ... ]
-
-> +	# The VXLAN header carries 24 bits. The bound is on both endpoints, so a
-> +	# range whose END alone leaves the space is rejected too.
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 16777215"
-> +	log_test $? 0 "Add the highest VNI the header can carry"
-> +	run_cmd "bridge -netns $testns vni del dev vxlan-ext1 vni 16777215"
-> +	log_test $? 0 "Delete the highest VNI the header can carry"
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 16777215-16777216"
-> +	log_test $? 255 "Cannot add a range whose END leaves the 24-bit space"
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 100-4294967295"
-> +	log_test $? 255 "Cannot add a range whose END wraps past the 24-bit space"
-
-[Severity: Low]
-Does the 100-4294967295 case depend on the END range policy? Its span is
-4294967196 VNIs, so vxlan_vnifilter_check_msg() would reject it with
--EINVAL even if the END bound in vni_filter_entry_policy were removed:
-
-	vnis += vni_end - vni_start + 1;
-	if (vnis > VXLAN_VNI_FILTER_MSG_MAX) {
-
-The test comment ("The bound is on both endpoints") and the commit message
-("exercised through END, not only START") suggest that an out-of-range
-START is tested. No such case exists here or elsewhere under
-tools/testing/selftests.
-
-A single VNI such as 16777216 has no END attribute. That gives a span of
-one, so check_msg accepts it, and only the START policy keeps it out of
-vxlan_vni_add_del():
-
-	[VXLAN_VNIFILTER_ENTRY_START] = NLA_POLICY_FULL_RANGE(NLA_U32,
-							      &vni_filter_vni_range),
-
-If START=END=0xffffffff ever got past that policy, this loop would wrap
-under rtnl_lock:
-
-	for (v = start_vni; v <= end_vni; v++) {
-
-Could a case like "vni add ... vni 16777216" be added so a regression in
-the START bound is caught?
-
-> +}
-> +
-> +# A device may hold a contiguous run longer than one request's limit, built
-> +# from several requests. The dump coalesces it, so the dump must break the run
-> +# into entries each no larger than the limit, or the configuration it reports
-> +# cannot be replayed. Install such a run, then feed every range the dump
-> +# reports back into a second device and require all to be accepted.
-> +vxlan_vnifilter_dump_replay()
-> +{
-> +	local opts="external vnifilter local 172.16.0.1 dev veth-testns"
-> +	local range rc=0 src_ranges dst_ranges
-
-[ ... ]
-
-> +	# 8192 contiguous VNIs sharing the default remote: one run, twice the
-> +	# limit, installed in two accepted requests.
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-src vni 10000-14095"
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-src vni 14096-18191"
-> +	log_test $? 0 "dump/replay: populate a run larger than the limit"
-
-[Severity: Medium]
-Is the status of the first populate command lost here? The $? passed to
-log_test is only the status of the 14096-18191 add.
-
-If the 10000-14095 add fails, vxlan-src holds exactly 4096 VNIs. In that
-case vxlan_vnifilter_dump_dev() never reaches the clamp:
-
-	if (!dump_stats && vnirange(vend, v) == 1 &&
-	    vnirange(vbegin, v) < VXLAN_VNI_FILTER_MSG_MAX &&
-
-The dump is then a single limit-sized entry. The non-empty check, the
-replay loop and the src/dst comparison all pass, whether or not the dump
-clamp exists.
-
-The v4 note says the non-empty check was added so the replay case cannot
-pass vacuously, but this path still does.
-
-There is a related gap. src_ranges is never compared against the expected
-split (10000-14095 and 14096-18191). Both the replay input and the expected
-result come from the same source dump.
-
-A resume regression in vxlan_vnifilter_dump_dev() could drop or repeat VNIs
-at the 4096 boundary, or lose the second message:
-
-	if (!err && vbegin) {
-		if (vnis + vnirange(vbegin, vend) + 1 > VXLAN_VNI_FILTER_MSG_MAX)
-			err = -EMSGSIZE;
-
-Wouldn't that produce the same wrong ranges on both devices and still
-pass?
-
-Could each populate command get its own log_test, and could src_ranges be
-checked against the literal expected ranges?
-
-> +
-> +	# Assert the dump is non-empty before replaying it, so an empty or
-> +	# failed dump cannot let the replay check below pass without testing
-> +	# anything.
-> +	src_ranges=$(bridge -netns $testns vni show dev vxlan-src | \
-> +		     grep -oE '[0-9]+-[0-9]+|[0-9]{2,}' | sort)
-> +	test -n "$src_ranges"
-> +	log_test $? 0 "dump/replay: source dump is non-empty"
-> +
-> +	for range in $src_ranges; do
-> +		bridge -netns $testns vni add dev vxlan-dst vni "$range" \
-> +			2>/dev/null || rc=$?
-> +	done
-
-[Severity: Low]
-This loop replays one range per bridge vni add, using ranges parsed from
-the text output of bridge vni show. That output loses netlink message
-boundaries, so the per-message VNI budget in vxlan_vnifilter_dump_dev() is
-never tested:
-
-	if (vnis + sz > VXLAN_VNI_FILTER_MSG_MAX) {
-		err = -EMSGSIZE;
-		break;
-	}
-
-vxlan_vnifilter_check_msg() caps the sum across all entries in a request.
-Suppose that budget were removed and the merge clamp kept. The 8192-VNI
-run would be dumped as 10000-14095 and 14096-18191 in one message, and that
-message would be rejected if replayed as a single request.
-
-Each range would still replay on its own here, the dumps would match, and
-the test would pass. Is the per-message half of the dump guarantee meant
-to be covered by this test?
-
-> +	log_test $rc 0 "dump/replay: every dumped entry is accepted on replay"
-
-[Severity: Low]
-Can rc be non-zero here even when every replay add succeeded?
-
-run_cmd() assigns rc=$? without declaring it local. Because bash scoping is
-dynamic, that assignment writes to the local rc in
-vxlan_vnifilter_dump_replay(). After the 14096-18191 populate run_cmd, rc
-holds that command's exit status.
-
-The replay loop only assigns rc when an add fails. So if the populate
-failed, this line also reports FAIL even when all replays succeeded, and
-the rc=0 initializer has no effect.
-
-Would resetting rc=0 just before the loop, or using a separate variable,
-avoid this?
-
-> +
-> +	dst_ranges=$(bridge -netns $testns vni show dev vxlan-dst | \
-> +		     grep -oE '[0-9]+-[0-9]+|[0-9]{2,}' | sort)
-> +	[ "$src_ranges" = "$dst_ranges" ]
-> +	log_test $? 0 "dump/replay: source and destination dump the same ranges"
->  }
+ tools/perf/Makefile.perf                      |  2 +-
+ .../base_probe/test_adding_blacklisted.sh     |  6 +-
+ .../shell/base_probe/test_adding_kernel.sh    | 44 +++++++--------
+ .../perf/tests/shell/base_probe/test_basic.sh | 12 ++--
+ .../shell/base_probe/test_invalid_options.sh  |  4 +-
+ tools/perf/tests/shell/base_report/setup.sh   |  4 +-
+ .../tests/shell/base_report/test_basic.sh     | 54 +++++++++---------
+ .../shell/common/check_all_lines_matched.pl   | 39 -------------
+ .../shell/common/check_all_lines_matched.py   | 45 +++++++++++++++
+ .../shell/common/check_all_patterns_found.pl  | 34 ------------
+ .../shell/common/check_all_patterns_found.py  | 35 ++++++++++++
+ .../shell/common/check_errors_whitelisted.pl  | 51 -----------------
+ .../shell/common/check_errors_whitelisted.py  | 55 +++++++++++++++++++
+ .../shell/common/check_no_patterns_found.pl   | 34 ------------
+ .../shell/common/check_no_patterns_found.py   | 35 ++++++++++++
+ tools/testing/selftests/Makefile              |  2 +-
+ tools/testing/selftests/kselftest/prefix.pl   | 24 --------
+ tools/testing/selftests/kselftest/prefix.py   | 24 ++++++++
+ tools/testing/selftests/kselftest/runner.sh   |  7 +--
+ 19 files changed, 260 insertions(+), 251 deletions(-)
+ delete mode 100755 tools/perf/tests/shell/common/check_all_lines_matched.pl
+ create mode 100755 tools/perf/tests/shell/common/check_all_lines_matched.py
+ delete mode 100755 tools/perf/tests/shell/common/check_all_patterns_found.pl
+ create mode 100755 tools/perf/tests/shell/common/check_all_patterns_found.py
+ delete mode 100755 tools/perf/tests/shell/common/check_errors_whitelisted.pl
+ create mode 100755 tools/perf/tests/shell/common/check_errors_whitelisted.py
+ delete mode 100755 tools/perf/tests/shell/common/check_no_patterns_found.pl
+ create mode 100755 tools/perf/tests/shell/common/check_no_patterns_found.py
+ delete mode 100755 tools/testing/selftests/kselftest/prefix.pl
+ create mode 100755 tools/testing/selftests/kselftest/prefix.py
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014123814.388557-1-alishmery18%40gmail.com
+2.43.0
+
