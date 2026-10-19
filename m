@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792445978;
-	b=uZMnn4JiH8DrOQKv9Q2eVGYHSBBJfKzNluxPF1+av88cgHYhvhJcF62GB7ATQIbuC7P/
-	 s2q0LLzqNYzkFXk6q1LIRP9hfZ0bNzewctrGPqCpUUIWMSez0tkoPFnM0G9zsFtrkiBAF
-	 EF5QIVmWSK7iMu2Z0RIawOjN2CW58Qea+GmRsdGvDRI5TisSJJrwuQEvdGmQhddxrCkH7
-	 enqc2qo42LS98wgUhqr0nSjRj5PdoaMvBhFDzpJVDyr/43V0WaY0b8qnqSpQCZQmldJDE
-	 3tBRhkZxi2rTK9eHgswYlZJuC653FV0F7BZaPj1soP+wFVapJsrdGtI8ZngD0J9naEg==
+	t=1792445979;
+	b=i0LQB4VGYyi0IcQBfXSK00xdE3BaBf5/W2LubwvtIQbc1JzS5mJlY2x7DDDgwh2lWuM2
+	 c1jpvzeOZ86tJcBBbM4a/316OZI8qdHN8N+5Er7ulwOx9g2m2MfNyMocCT3ld0AeaGRFM
+	 vwnw70mWL3YtwSx2rSt1qX3xEmc+4ZGxzwz4iPHS/1NUIQBKVfBhG0YvhjQd7uQ1YB2aJ
+	 VyiwYhk9JS6GgZ2A1lcIhjfsmve5qsdCzoNBnvpTv2ZZAG69khvasgPKvjUWfQBeS8SGr
+	 yo+2RfFykXaGm354EsutMmVO7Yu+sWLPOFsTyT9iAYPfguoCicT6Rr+L1/OJHfW3+2w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792445978;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792445979;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=UPFqQstS2ZI9d/LmUXF4gupNyOv5vMnDf08wB9sGsfU=;
-	b=XT+lmm38+NwhHhqVKR7C74wdDqF7hTCTMpA2tC4Ogada5YvOvBZUUEOlWHTUu0EdmCjr
-	 LWqSpN3tA1AZkGN8qPhPyhf+lQhNEXv80L2sAlz2Td8OZjaRbkv+hIKK4Q8iF2GVEFOWC
-	 pHfHRTTFTQxdTcMHnGT7Ogz92wfVQQ/lExZODIig2bq6wP23pwHQ75lXv6PD4isG+5xoT
-	 4pq1oqz4xzhHkZl3DZ2qoNEEzfRIUPsS5+NiD8A9zhP1XvPeTJBK6kEUXUwUPIHga9qZT
-	 An71T2lOEhM8A0E8iZZFFX4KmUOmIEvBcX4CJ/uJHh/WKzIw+U3sEc8OrmjzvFFmy3g==
+	bh=lUOLr3+IgRNwYlYuXupDD20VzjhzLRu2KMPBlhhL/0Y=;
+	b=bDNPGM53oLn0umOdg34tAfEAq7bO53NOb2jDMhK73CRq/FGrDZTjpRbG33738yyf1PNr
+	 Gn47plXfIrX8y/EvLtSRNeJVANP2Y9Y+xcRf/A1jcKWYZbNlzshxwet7VveMR42brUsaO
+	 2edHCddXImpH+7mWqVuBfegMyCDOPxG/sdX/Syk3KH6prjFPeYRG4oYJcSU12e3XZh33n
+	 sRD5CIc1jumsAGgV2OWbquDrkitibjcEUfDxgMNQ8rkEbvpg5m9V5EZIZeL0EBpDvtkd6
+	 gYCrFJsKrvxfglKWkZwqlHKjW2bV+1anl1jKmd2fkAUZNR1m+iY/1vvqgH9WJ9Pl6YA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TcVWhDaD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Cjey8ZvT;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D66606A31B;
-	Mon, 19 Oct 2026 21:39:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF51606A322;
+	Mon, 19 Oct 2026 21:39:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TcVWhDaD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BCD71F000C4;
-	Mon, 19 Oct 2026 21:39:36 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Cjey8ZvT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04DDB1F000C5;
+	Mon, 19 Oct 2026 21:39:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792445977;
-	bh=UPFqQstS2ZI9d/LmUXF4gupNyOv5vMnDf08wB9sGsfU=;
+	s=k20260515; t=1792445978;
+	bh=lUOLr3+IgRNwYlYuXupDD20VzjhzLRu2KMPBlhhL/0Y=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=TcVWhDaD3NrwY1P9KNGAIaRWOWeX4Rcdo8u0+Z/rL1zMv88ym24PjgZtnQePxx6Eu
-	 WpEn/4DGjQr+KcH/eziB6N8ggHvNSOyoZf7jnj3+UvmU/MCXgX4Az5WeuEcqRZqezv
-	 mfvOydcn4Sv8xuwcXdlrvFzYkjNXh71ambSt9kzWgZAri9v18DGNj02/XHtkl8RGSA
-	 yw5gRpHkQVx7YO+J8BI5bYiGMrnxqPrcDupIV2nhoMHS2d+iIfpJdIjgwTy1Q+8CkI
-	 PzNQIRvN0m7z8tz7vTI5hzWSvbB5PKtrSh1bFkFYbf+WCodSh7tM61RfYMGOrx18Ff
-	 R5Ror8bemtS0Q==
-Subject: Re: [PATCH net-next v2 1/3] net/sched: drr, ets, sfq: skip empty
- rounds in the deficit-refill dequeue loop
+	b=Cjey8ZvT1hmBHCe2wXyiib8n3V7MCuXYgVC8Dgkk+SfLIj4jJkFSawJ458Gvc+QIa
+	 +Lvu1HQVI/6uKPSKs7tZfdO/K0lnIC+A2XNTRUTIPXUcNwN8DCxoa4SS18DOdmuXB4
+	 YV4848iQdT/Om+Io0ZPTEzNm7QRO/S51v5WRMrKSHyNVI1JfT/DKAIVJXB9m4n5vnG
+	 o9pIrKatVStmWvZmVz4F7yrXHUSwrK4pfuysVO31uT7JXEt4LpNHDMp0ai5QxBvaeq
+	 Bk9OVjFn6xe6cqL/LfW7NejoQO+y2bSQQEy5WtV4QpM50lFND/o9AhaCORalsRrOsF
+	 c2AgCBQNWCNJQ==
+Subject: Re: [PATCH net-next v2 2/3] net/sched: fq, fq_codel, fq_pie: skip
+ empty rounds in the deficit-refill dequeue loop
 From: netdev-bot+sashiko@kernel.org
 To: victor@mojatatu.com
 Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  pabeni@redhat.com, jhs@mojatatu.com, jiri@resnulli.us, netdev@vger.kernel.org,
  horms@kernel.org, sashiko-bot@kernel.org, shuah@kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Mon, 19 Oct 2026 21:39:36 +0000
-Message-ID: <179244597608.3135.14866688728455017187@kernel.org>
-In-Reply-To: <QDISC-TIAE.v2.r0.20261015163454-1@mojatatu.com>
-References: <QDISC-TIAE.v2.r0.20261015163454-1@mojatatu.com>
+Date: Mon, 19 Oct 2026 21:39:37 +0000
+Message-ID: <179244597754.3135.16063712933346709195@kernel.org>
+In-Reply-To: <QDISC-TIAE.v2.r0.20261015163454-2@mojatatu.com>
+References: <QDISC-TIAE.v2.r0.20261015163454-2@mojatatu.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -76,43 +76,223 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] drr_dequeue() and ets_qdisc_dequeue() allow only one bulk
-  refill per dequeue: `scanned = true` is set at sch_drr.c:414 /…
-- [Medium] The new two-pass bulk refill in drr_dequeue() and
-  ets_qdisc_dequeue() reads each class's quantum separately in the scan…
-- [Low] The commit fixes a user-triggerable long busy loop under the
-  qdisc lock with BH disabled (the commit itself says ~1 s per drain,…
+- [Medium] In __fq_codel_dequeue() (net/sched/sch_fq_codel.c), the new
+  skip pass unlinks empty flows with k < rounds by calling…
+- [Medium] The skip-ahead can run only once per dequeue call, and one
+  trap flow per dequeue is enough to undo it.
+- [Low] The commit message is missing the tags a bug fix needs.
 
 Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the sibling-
-  site audit in this series is incomplete.
+- [High] This problem wasn't introduced by this patch, but the series
+  leaves the same bug class open in sch_cake.
 
 --
 
-net/sched: drr, ets, sfq: skip empty rounds in the deficit-refill dequeue loop
+net/sched: fq, fq_codel, fq_pie: skip empty rounds in the deficit-refill dequeue loop
 
-This patch changes the DRR, ETS and SFQ dequeue loops. After a full round
-in which no class could dequeue, they now compute how many more rounds are
-needed and add that many quanta to every class in one pass, instead of
-refilling one quantum per iteration. It follows commit 8f735d64382d to bound
-the dequeue cost when a size table inflates packet lengths to 1 MiB.
+This patch adds a skip-ahead to the deficit-refill dequeue loops of fq,
+fq_codel and fq_pie. After a full round in which no flow could dequeue, it
+gives every flow the quanta for the remaining rounds in one pass. In the
+same pass it removes the empty flows the old one-quantum loop would have
+removed.
 
-Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260819143213.57401-1-jhs@mojatatu.com
+Link: https://lore.kernel.org/netdev/179182028153.434549.4854377793269282267@kernel.org/
 
-> sfq has the same loop and is fixed the same way. ETS has at most 16
-> bands, so it was never that slow; it is changed to match DRR.
+> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
+> Link: https://lore.kernel.org/netdev/179182028153.434549.4854377793269282267@kernel.org/
+> Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+> Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+
+[Severity: Low]
+This isn't a bug in the code, but should this have a Fixes: tag and a
+Cc: stable? The dequeue spin has been in fq, fq_codel and fq_pie since they
+were merged. Without those tags, stable maintainers have nothing to act on.
+
+The companion commit "net/sched: drr, ets, sfq: skip empty rounds in the
+deficit-refill dequeue loop" says the trigger only needs CAP_NET_ADMIN
+("unshare -Urn is enough"). Could this commit message say the same?
+
+Using Link: rather than Closes: after Reported-by: is fine as it is, since
+checkpatch accepts either.
+
+> diff --git a/net/sched/sch_fq.c b/net/sched/sch_fq.c
+> index a282812c192ee..5c724ec04d903 100644
+> --- a/net/sched/sch_fq.c
+> +++ b/net/sched/sch_fq.c
+
+[ ... ]
+
+> @@ -782,9 +788,76 @@ static struct sk_buff *fq_dequeue(struct Qdisc *sch)
+>  	f = head->first;
+>  	retry = 0;
+>  	if (f->credit <= 0) {
+> +		/* No flow could dequeue in the last full round. Add the
+> +		 * quanta for the rounds still needed in one pass.
+> +		 */
+> +		if (!scanned && f == first) {
+> +			unsigned int rounds = UINT_MAX;
+> +			struct fq_flow *iter, *prev;
+> +			bool skip = true;
+> +
+> +			scanned = true;
+> +			/* new_flows is empty after a full round. */
+> +			for (iter = pband->old_flows.first; iter;
+> +			     iter = iter->next) {
+> +				/* Empty flows don't limit the rounds. */
+> +				if (!fq_peek(iter))
+> +					continue;
+> +				if (iter->credit > 0) {
+> +					skip = false;
+> +					break;
+> +				}
+
+[ ... ]
+
+> @@ -796,6 +869,9 @@ static struct sk_buff *fq_dequeue(struct Qdisc *sch)
+>  		if (now + offload_horizon < time_next_packet) {
+>  			head->first = f->next;
+>  			f->time_next_packet = time_next_packet;
+> +			/* The round's first flow left; the next one takes over. */
+> +			if (f == first)
+> +				first = scanned ? NULL : head->first;
+>  			fq_flow_set_throttled(q, f);
+>  			goto begin;
+>  		}
+
+[Severity: Medium]
+Can one trap flow per dequeue bring back the full cost here?
+
+In fq_dequeue(), scanned is set to true as soon as the scan starts. That
+includes the case where the scan stops early because a non-empty flow
+already has credit > 0 (skip = false; break;). After that, the
+!scanned && f == first check cannot pass again in this call. fq clears
+scanned only when the band changes.
+
+If the flow that became eligible is then throttled, the code above sets
+first to NULL. The remaining flows then go back to one quantum per
+iteration. With the 1 MiB stab inflation and quantum 256, that is about
+N * 4096 iterations again.
+
+__fq_codel_dequeue() has the same latch and never clears scanned. There the
+trap is an eligible flow whose packets codel_dequeue() all drops, which hits
+the !skb path:
+
+	list_del_init(&flow->flowchain);
+	if (flow == first)
+		first = scanned ? NULL : ...;
+
+The commit message mentions this ("A setup built to make that happen every
+time is as slow as before"). In fq, though, one paced or EDT flow with a
+small deficit (SO_TXTIME, SO_MAX_PACING_RATE, maxrate or
+low_rate_threshold) per dequeue looks like enough. The message also doesn't
+cover the early-stop case.
+
+Would it make sense to allow the scan to run again after the round's first
+flow leaves, instead of once per dequeue?
+
+Also, fq_pie_qdisc_dequeue() never drops at dequeue, so an eligible
+non-empty flow always dequeues. Is the "all its packets are dropped by the
+AQM (fq_codel, fq_pie)" wording accurate for fq_pie?
+
+> diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
+> index e6c87a32950f9..bc74690e23236 100644
+> --- a/net/sched/sch_fq_codel.c
+> +++ b/net/sched/sch_fq_codel.c
+
+[ ... ]
+
+> @@ -298,6 +300,67 @@ static struct sk_buff *__fq_codel_dequeue(struct Qdisc *sch)
+>  	flow = list_first_entry(head, struct fq_codel_flow, flowchain);
+>  
+>  	if (flow->deficit <= 0) {
+
+[ ... ]
+
+> +			if (skip) {
+> +				struct fq_codel_flow *tmp;
+> +
+> +				list_for_each_entry_safe(iter, tmp, &q->old_flows,
+> +							 flowchain) {
+> +					unsigned int k = 0;
+> +
+> +					/* An empty flow leaves the list after
+> +					 * k more refills. If that falls within
+> +					 * the skipped rounds, remove it now.
+> +					 */
+> +					if (iter->head) {
+> +						WRITE_ONCE(iter->deficit,
+> +							   iter->deficit +
+> +							   rounds * q->quantum);
+> +						continue;
+> +					}
+> +					if (iter->deficit <= 0)
+> +						k = DIV_ROUND_UP(1 - iter->deficit,
+> +								 q->quantum);
+> +					if (k < rounds) {
+> +						WRITE_ONCE(iter->deficit,
+> +							   iter->deficit +
+> +							   k * q->quantum);
+> +						list_del_init(&iter->flowchain);
+> +						continue;
+> +					}
+
+[Severity: Medium]
+Do flows removed here keep stale CoDel state?
+
+The old one-quantum loop always reached such an empty flow with
+deficit > 0 before any non-empty flow became eligible (k < rounds). It then
+called codel_dequeue() on it. With no skb, that resets the CoDel vars
+before the !skb path calls list_del_init():
+
+include/net/codel_impl.h:codel_dequeue() {
+	...
+	if (!skb) {
+		vars->first_above_time = 0;
+		WRITE_ONCE(vars->dropping, false);
+		return skb;
+	}
+	...
+}
+
+The skip pass unlinks the flow without that reset. When the flow comes
+back, fq_codel_enqueue() only restores list membership and deficit:
+
+	if (list_empty(&flow->flowchain)) {
+		list_add_tail(&flow->flowchain, &q->new_flows);
+		q->new_flow_count++;
+		WRITE_ONCE(flow->deficit, q->quantum);
+	}
+
+Suppose the flow's last packet had sojourn >= target while the backlog was
+above mtu. Then first_above_time stays non-zero and in the past. On the
+first packet after the flow comes back, codel_should_drop() takes the
+codel_time_after(now, vars->first_above_time) branch and returns
+ok_to_drop.
+
+If dropping is still true and drop_next has passed, codel_dequeue() goes
+straight into its drop loop with the old count and rec_inv_sqrt. The old
+code would have set first_above_time = now + interval and not dropped.
+
+The commit message says the new pass matches the old loop, but the CoDel
+state differs here. fq and fq_pie don't have this side effect when they
+remove a flow, so only fq_codel seems to be affected.
+
+[ ... ]
+
+> +		/* Remember which flow started this round. */
+> +		if (!first)
+> +			first = flow;
+>  		WRITE_ONCE(flow->deficit, flow->deficit + q->quantum);
+>  		list_move_tail(&flow->flowchain, &q->old_flows);
+>  		goto begin;
 
 [Severity: High]
-This is a pre-existing issue and was not introduced by this patch.
-cake_dequeue() in net/sched/sch_cake.c seems to have the same
-one-quantum-per-visit refill, and no patch in the series changes it.
-
-The later patch "net/sched: fq, fq_codel, fq_pie: skip empty rounds in the
-deficit-refill dequeue loop" covers fq, fq_codel and fq_pie. That leaves
-cake:
+This is a pre-existing issue, not one introduced by this patch, but should
+sch_cake get the same treatment? cake_dequeue() still has the DRR++ refill
+loop this series replaces in fq_codel:
 
 net/sched/sch_cake.c:cake_dequeue() {
-    ...
+	...
 	if (flow->deficit <= 0) {
 		...
 		WRITE_ONCE(flow->deficit,
@@ -121,179 +301,23 @@ net/sched/sch_cake.c:cake_dequeue() {
 
 		goto retry;
 	}
-    ...
+	...
 }
 
-cake_overhead() starts from qdisc_pkt_len(skb). With a root stab of
-overhead 1048576, each flow can therefore be left about 1 MiB in deficit
-after a single dequeue.
+cake_overhead() starts from qdisc_pkt_len(), so the same 1 MiB stab
+overhead applies to cake.
 
-The per-visit quantum is also much smaller than DRR's minimum of 256:
+cake_set_rate() clamps b->flow_quantum to 300..1514. cake_get_flow_quantum()
+then scales it by quantum_div[host_load], and host_load can reach
+CAKE_QUEUES (1024). So the average refill can drop below one byte.
 
-net/sched/sch_cake.c:cake_get_flow_quantum() {
-    ...
-	return (q->flow_quantum * quantum_div[host_load] +
-		get_random_u16()) >> 16;
-}
+With up to 1024 bulk flows in a tin, that is roughly 1024 * (2^20 / 300),
+about 3.6M iterations per dequeue without host scaling, and far more with
+it. All of this runs under the root qdisc lock with BH disabled.
 
-Take the default triple-isolate mode with 1024 bulk flows from one host.
-That averages about 1.46 bytes per visit, or about 0.29 bytes with
-flow_quantum 300.
-
-Could one cake_dequeue() over 1024 flows at -1 MiB then need roughly 7e8
-to 3.7e9 iterations under the root lock with BH disabled? That is well
-past the 16384-class DRR case that the commit message describes as a ~1s
-stall.
-
-> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-> Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260819143213.57401-1-jhs@mojatatu.com
-> Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> Signed-off-by: Victor Nogueira <victor@mojatatu.com>
-
-[Severity: Low]
-Should this have a Fixes: tag? The commit message says this follows
-commit 8f735d64382d ("net/sched: bound qdisc_pkt_len to prevent qdisc
-soft lockup"), and that commit carries:
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
-Without a matching tag, stable may take 8f735d64382d without this patch.
-8f735d64382d on its own still allows N * 4096 iterations per dequeue.
-
-> diff --git a/net/sched/sch_drr.c b/net/sched/sch_drr.c
-> index 8621d057edd9f..d6cb389a55f03 100644
-> --- a/net/sched/sch_drr.c
-> +++ b/net/sched/sch_drr.c
-
-[ ... ]
-
-> @@ -402,6 +403,45 @@ static struct sk_buff *drr_dequeue(struct Qdisc *sch)
->  			return skb;
->  		}
->  
-> +		/* No class could dequeue in the last full round. Add the
-> +		 * quanta for the rounds still needed in one pass.
-> +		 */
-> +		if (!scanned && cl == first) {
-> +			unsigned int rounds = UINT_MAX;
-> +			struct drr_class *iter;
-> +			bool skip = true;
-> +
-> +			scanned = true;
-
-[Severity: Medium]
-scanned is never cleared, so each dequeue gets at most one bulk refill.
-Can a child's peeked head change between this scan and the loop's next
-visit to that class?
-
-prio_peek() polls every band again on each call:
-
-net/sched/sch_prio.c:prio_peek() {
-    ...
-	for (prio = 0; prio < q->bands; prio++) {
-		struct Qdisc *qdisc = q->queues[prio];
-		struct sk_buff *skb = qdisc->ops->peek(qdisc);
-		if (skb)
-			return skb;
-	}
-    ...
-}
-
-A netem band also decides readiness from a fresh ktime_get_ns() in
-netem_dequeue().
-
-Here is an example setup. One DRR class has a PRIO child with a delayed
-netem band 0 and a pfifo band 1 that holds a small packet. Every other
-class has a 1 MiB head and quantum 256. The scan sees the small packet,
-picks rounds=2 and raises every deficit to 1024.
-
-Suppose the netem deadline passes before the loop gets back to the PRIO
-class. prio_peek() then returns the 1 MiB netem packet and no class is
-eligible. Because scanned is already true, the loop falls back to the
-one-quantum path:
-
-		WRITE_ONCE(cl->deficit, cl->deficit + READ_ONCE(cl->quantum));
-		list_move_tail(&cl->alist, &q->active);
-
-That costs roughly N * 4091 more iterations.
-
-The commit message says "a dequeue costs O(N)" for DRR/ETS without a
-caveat. The follow-up fq patch documents a similar limitation, but this
-one does not.
-
-Would clearing scanned and first after a bulk pass avoid this?
-ets_qdisc_dequeue() has the same one-shot guard, although there it is
-bounded by 16 bands.
-
-> +			list_for_each_entry(iter, &q->active, alist) {
-> +				unsigned int pkt_len;
-> +				struct sk_buff *peek;
-> +
-> +				/* An empty child unlinks iter; stop here. */
-> +				peek = iter->qdisc->ops->peek(iter->qdisc);
-> +				if (!peek) {
-> +					skip = false;
-> +					break;
-> +				}
-> +				pkt_len = qdisc_pkt_len(peek);
-> +				if (pkt_len <= iter->deficit) {
-> +					skip = false;
-> +					break;
-> +				}
-> +				rounds = min(rounds,
-> +					     DIV_ROUND_UP(pkt_len - iter->deficit,
-> +							  READ_ONCE(iter->quantum)));
-> +			}
-> +			if (skip && rounds != UINT_MAX) {
-> +				list_for_each_entry(iter, &q->active, alist)
-> +					WRITE_ONCE(iter->deficit,
-> +						   iter->deficit + rounds *
-> +						   READ_ONCE(iter->quantum));
-
-[Severity: Medium]
-quantum is read once in the scan to compute rounds, then read again here
-when the refill is applied. Can it change between the two reads?
-
-drr_change_class() updates an existing class without sch_tree_lock():
-
-net/sched/sch_drr.c:drr_change_class() {
-    ...
-	if (cl != NULL) {
-		...
-		if (tb[TCA_DRR_QUANTUM])
-			WRITE_ONCE(cl->quantum, quantum);
-
-		return 0;
-	}
-    ...
-}
-
-tc_ctl_tclass() calls cops->change() under RTNL only. It does not take
-the qdisc root lock that dequeue holds.
-
-As an example, say the scan computes rounds=1 from a class with quantum
-524288, deficit 524288 and a 1 MiB head. A concurrent change then sets
-that quantum to 256 before this pass, so the refill adds only 256 and no
-class becomes eligible.
-
-Since scanned is already true, would the loop then fall back to about
-2047 one-quantum rounds over all N classes?
-
-ets_qdisc_dequeue() and ets_class_change() have the same pattern.
-Snapshotting each class's quantum, or taking sch_tree_lock() around the
-quantum update, would close this.
-
-> +				continue;
-> +			}
-> +		}
-> +
-> +		if (!first)
-> +			first = cl;
->  		WRITE_ONCE(cl->deficit, cl->deficit + READ_ONCE(cl->quantum));
->  		list_move_tail(&cl->alist, &q->active);
->  	}
-
-[ ... ]
+hhf_dequeue() in sch_hhf.c has the same loop. It only has two WDRR buckets
+and quantum >= 256, though, so its cost doesn't grow with the number of
+flows.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-TIAE.v2.r0.20261015163454%40mojatatu.com
