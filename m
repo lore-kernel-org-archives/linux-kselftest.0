@@ -1,293 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010023.outbound.protection.outlook.com [40.93.198.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E993B49502D;
-	Mon, 19 Oct 2026 08:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792397620; cv=none; b=Q52caBBvuMFSjwG1ZLcKkIEEZrpXb0ek6V4SGK3gts4QFeNzGl5pfSUagF1/Ds3yvKPpw3o6U1mg1QbqBAxINxmH0bt6pngXrBJCyvZbqIB8Ciu8g3xuitnixwAhxDqr8d8xlCPIE01EKSAtB4xZYJGw0Amt2B8XviVoeUADjxM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792397620; c=relaxed/simple;
-	bh=971PbG8MZVADyvBX7JdS6zdx5hQ7TWByVHrGqhguIII=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=vCDG3uotUZu3i+eun2fQxy/tq5G39VYKEEGJXWss7zx20DZwSVyhBJL1WdIwNyIVS4iDOQoVaeoAphBX9snIyUWlH3IbaP1O/mBwrGhP/N0S6kZ4Cg27woCPVegKWcX1DKbJI77aCGN7hSi+7e0taga3jkgx6DQK8nbMwLimaEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P61RH9xR; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8504908C9;
+	Mon, 19 Oct 2026 08:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.23
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792398432; cv=fail; b=A4eO+PgZZfIwXIFrjtryQsAXD3ydaBoRUPKZxrVfHj9jorAEraFklWWYUVNbUsqh4Nm6XVTT9Bv0zQxEiylOZyH9FGzNRWrK7M+v95yI35aMTV2/Bu8fLopYQJJVD3LmngPO/TGmKNNu3rSujF1mtLiAirsyQq+wBKb+/Md/0kY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792398432; c=relaxed/simple;
+	bh=pIgph5Mb4jECy/bY54mDFW8xT6I0d4lXY9oCC+G9uSg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Vk6BASaNdsiUdsp75juEazRQXMva1qvghYltZtgf9CCMnAbmsTj+cm2vmEZy/mowc07ZdQCxbWi1pgXJGSkyuflt+tCuwxixU0wDonX9Ln9evTb7SzXzL40OcyrjwpbeoIGaEqh+llruazSCf/oJkyY4wnNXNmfeN0s8XiOgG44=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=f8creEqT; arc=fail smtp.client-ip=40.93.198.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P61RH9xR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA471F000C7;
-	Mon, 19 Oct 2026 08:13:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792397618;
-	bh=9A3BtJaASQr/mF5gQgnbWtiVz/25gWSAbamYzmllBMU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=P61RH9xRTdsaUIOH90aE+w2LdVG6bSYNQmVf1Ty/yMVfghKJzJe/APS9qJSmS+MpE
-	 Zfr/Ud3zk6jPGT1WLhG+a+do8ZB2ub8QP3BgL7oXHW4FS8zUGNEUIXqUGIy/GFqs9x
-	 oivpg48CmxbcN0YqEVtA6RsW/8v/kOxYXS6D3Pth7+xV+Ih7/c6PJAjRg0m59axxxC
-	 IEZTgKC7XPM8HjurrjLCuT0c/EMCBEGU3GpEiR3k0DZN8MHsZ9kJhA4WaTGiuT2/Jx
-	 /c/f/LSMaRoHyDSTj5OWMVMsIW4uTVmqufJguvZAi1gyDmpIwhEiO970jRTD4Q6A2a
-	 DjMLs/ZPfnuTg==
-Subject: Re: [PATCH net 2/2] selftests: net: packetdrill: add test for
- negative sk_forward_alloc in tcp_wmem_schedule()
-From: netdev-bot+sashiko@kernel.org
-To: tavip@google.com
-Cc: edumazet@kernel.org, ncardwell@google.com, kuniyu@google.com,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, willemb@google.com, soheil@google.com, weiwan@google.com,
- shakeel.butt@linux.dev, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Mon, 19 Oct 2026 08:13:37 +0000
-Message-ID: <179239761721.3135.11128694654168419892@kernel.org>
-In-Reply-To: <20261015073736.2944215-3-tavip@google.com>
-References: <20261015073736.2944215-3-tavip@google.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="f8creEqT"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yf1h8zyjxcwFVUO40U9ypO+YC4K98AROZJ99LaF1dqa3AlmDw0+duJaRvzIMiMgueJYGK+Z+8fpMdjZW/VCW03P8Xjh/L/ETV7/fHy29LhASMH/ozG6Vp1JTbqnzX4g2MvFTjJe1M/xpm5z5ahXCQhM56qgwRp6lkQFcO5VtVe++crkwKo3+0/LcHEkrMsTD54DWRw1/rjA0zmnVrSPs/eACd2H31DHkSCOGqLiDD84zODEwoCC3HhwCn/GoxV+ZTBbgXZUauOuAk3exV9P1FBA9FglLup5WR8DkefU6JIHwDwNL1rkG3mUcbWNXmxGjgrMBKT5JCFzFjlywc80+XQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pIgph5Mb4jECy/bY54mDFW8xT6I0d4lXY9oCC+G9uSg=;
+ b=L4uodLcgWaVOZ1cJdCe6Js8FZFVWfUB8AFxhyNYEiKQvB4phHdtIGJFnVmGeTcI5rf9Zhlt7FGswAnJH453iY0afr1PBmNYWofkpd6IkqVCUyAdn7OjQpnyln482PxrmYEQs3tLyqo2toqVA8Lf7yTw0QtdirnwujrAwK5IXfKY4g93ucXC0N8YezxLfdE4LAUHQDw0f2ZFfedvUGD0qNxsMuEeas+sAz69o6TKoUGZdw4G81JSpMUSsSu24KLPcS1UoXybVUaNcYmYePm5Mufdic9QPNb/W6N5Db7mgpWoPY+CXyFIE9071tdfz5Muve79i8vXey16Q6OFlLqetHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pIgph5Mb4jECy/bY54mDFW8xT6I0d4lXY9oCC+G9uSg=;
+ b=f8creEqTNhaWDP0Muo7omH9pLkfD6g67eMDSY6yFvrygyO8Hl3rvGo4aG3CO/7cmgrFBJNIa3i4sCEbXfyw0wkQD72ibwccLjagY1v1A69nr4m6IJwcAJDU4N3+q2ZYpX5zVhORAXuuPBHl9XKfOGvpqfDvWU8OdOOY6H3zg3ZL1iuP12pXwbOl7Zw2lRIesorOtMpGcmzZw4JnwgSLY3iQjBf6BKHoXWAiS+ivWjvHqD1lQRBDxzLxxn7pDxtNAgSaoj5u61LxPaRdK3ec3caZNr1T6/Xv4ChRNR2PKESmCw0p5ejyZagUbtDD70QZWiY3UT3n6DGmgbRyVgKBy2A==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH0PR12MB7957.namprd12.prod.outlook.com (2603:10b6:510:281::22)
+ by IA1PR12MB7566.namprd12.prod.outlook.com (2603:10b6:208:42e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Mon, 19 Oct
+ 2026 08:27:06 +0000
+Received: from PH0PR12MB7957.namprd12.prod.outlook.com
+ ([fe80::9251:acc2:cc63:3499]) by PH0PR12MB7957.namprd12.prod.outlook.com
+ ([fe80::9251:acc2:cc63:3499%3]) with mapi id 15.21.0522.017; Mon, 19 Oct 2026
+ 08:26:58 +0000
+Date: Mon, 19 Oct 2026 11:19:07 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: David Ahern <dsahern@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+	Eric Dumazet <edumazet@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, david.laight.linux@gmail.com,
+	kernel-team@meta.com
+Subject: Re: [PATCH net-next v3 0/7] ipv4,ipv6: convert the getsockopt
+ switches to sockopt_t
+Message-ID: <20261019081907.GA2725184@shredder>
+References: <20261015-sockopt_expand_out_v2-v3-0-7d05ef2df448@debian.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261015-sockopt_expand_out_v2-v3-0-7d05ef2df448@debian.org>
+X-ClientProxiedBy: TL2P290CA0026.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:3::13) To PH0PR12MB7957.namprd12.prod.outlook.com
+ (2603:10b6:510:281::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR12MB7957:EE_|IA1PR12MB7566:EE_
+X-MS-Office365-Filtering-Correlation-Id: a7c2f494-8b0b-437a-e29a-08df2dbabe1e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|56012099006|11063799006|10067099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	SLUtyGINJKdtS5agy65u6mQsIRt7ycL27dmGe1c522VtofE2c7M3HnuFo12duPTU/rjyn+RWuf18B164lZhwI3nONw+E4rjqnxpR5dNWI6939SNVvjSU3jQQur6gVLVxlp5hquGzLH/MbuJNB2rnMzFrTLt4zvCEESCdzceZiFNX2epAzfCPSs+l2seMBtImMkYwP+LWKTFQkEOfmTVS067zopcht+6ZY4lIAm0/eCv61np5r/Kigo+y4jLTxDAMSEW9aZXC+7tJB0icbJ21+Z90zGucBawoZZiqDYaan7jbyTndiT1/b7PQtWMkTsPP9mwZ69Sb74myeKul3flKkCAw/6h1JfKINNd8M/tbO7wVn9aY9iAB4md+douyDePuemZQ/Qcfxng1s6B3O+Rm+UmP9RU1eEDO526VhlvgmTaHg/DYb6hIoH3jKlOb9lFhHlKSO3M/GY/uw0Le0eL2scmCpTVxtwyPsdo+i1B9Bnvd5ISP47J6+VhozYHwuuWIZMgqQt3tcW9aBRZesSDB8u1KbfZAgedsaVTu4oTMPgBjWSbZihhvx47/DuAPj35GFW+Qfl3oJ/EGx9WLqE4K1hnBbOuYXyUnlLOZ3TWOsqT/BWSjA9vZeAs2O2wxAsK9JobIhzpoKCOZhHVFxlEbxJrUbDsZSvmwJMkEGPfyIxA=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB7957.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(56012099006)(11063799006)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ov4FDyl6PacIaQXjN9jCoA4snNbNhVzmkss9aqU0uxh6VtUujnm8jV789OK3?=
+ =?us-ascii?Q?xN2jtXpAcKvNcL1RhyfbSD9V1ygytoXwmGRiPXSvqB4UwBbbokXMRCxKBmts?=
+ =?us-ascii?Q?eQEcvSNNtweB60UE0GGP0CnS0xZoMTiKto+/O/6mN0eGgsRISueumTSY+fgd?=
+ =?us-ascii?Q?l19URc/m8AVgyHkVLAUWH4QiL/PP5PpXGABa0mLbuajXyAe4416PWUc9/16G?=
+ =?us-ascii?Q?pe5/+sQie2VfGP+/3ibDGK8l+Em/tsdDLRfokQHF6HMQsedOSKC7W80Np0cf?=
+ =?us-ascii?Q?QNuX6oidD/KBE72usERPnN02nGvJQMcOIHxWxU3bffdF8XmvyOUOtKfvO5oQ?=
+ =?us-ascii?Q?5NfnWq4q7BsSnhQoLHguQzEgDb98x0Buc2vF8TtAy/UbjYkDLA7U7zFi5ObF?=
+ =?us-ascii?Q?P84xESyiO5DHGqicLPJQf/Stt4tbvi9pr/fNvHDirbhIi3P7LiHsn/U+LCr7?=
+ =?us-ascii?Q?Bj27PhMv9oQVhPKWxYnS9wpTNrmlNqIpXLy5ENfFtZPWG5kKvPn30pSOmp0c?=
+ =?us-ascii?Q?MEoTCwI116LDkwc/i7255tk9sOzVGiVMymfRyecYMBYlbxoeUEkJeLcwlDod?=
+ =?us-ascii?Q?rIalYX6wh9vC9vEf6NA8PvrEi42GNMgs14rY3m6P/HO99geEBRpiCXxn79BJ?=
+ =?us-ascii?Q?GfVqL1Gq4RmpPQqKXu73GlOT/6IIcEHkvjYCs34bv+p9kdJWhFWuAsZocumy?=
+ =?us-ascii?Q?L96uvTAnayfnrFeLEtrKXnjnnVPo2TKTqfCrgs7N+VGpJPhvHhSB+knSNWTw?=
+ =?us-ascii?Q?UhsMdjDS1rP9JaS72rRNVMsKohQJCz+ugdvlFwFouA5EC7aZSlwqA6kvKSXb?=
+ =?us-ascii?Q?8bjHlbU/ikFgq/1i56uq167qz+jQWwdOGxpWO3OHq3Uk7494BimRaAwZVUUA?=
+ =?us-ascii?Q?dh2vXb+EyL5LqDrnvnmj/xn9lEtNCR5h8aWy6U9EhNGCXHAeyUX+qTT49FvM?=
+ =?us-ascii?Q?qRkx7nHAK2POSdlxG2CsAN+pwfwGYlj1KE2zR0ewi+D8nAz+pvXeq90qEtaQ?=
+ =?us-ascii?Q?BFtS6Iyauec3clse2kuEdoYf7Ws09U5OP/b/JzttR108WCETj8zo81wwALh6?=
+ =?us-ascii?Q?WG8k0HN3ajsLURG7PTk3b+AlOSN4woKC3a7HV98G/DZaE0oEyyjPuXk+ujfz?=
+ =?us-ascii?Q?A2KUUKzdWpUF4EBDMkjcHMVxrnq0CPtiu3w0sQk0VnXkqMIb+Y2uDBAAlOtd?=
+ =?us-ascii?Q?0F9V5WscKIOFW78Z5slGSBrDLJKju0ZgzcvMS0ZXv48WNSZvuqHqmAJ058Ey?=
+ =?us-ascii?Q?7ljaQrwwVvdj48Yt9o0pFOMzNjyA88pB4HIqBeybPK5mxTtShXsbUsXyZbqN?=
+ =?us-ascii?Q?p8ASpox4JYjwToRieN25nggEZ38IOJOr1YZ71K5gltjeCpXKg+mdFDTlQlRY?=
+ =?us-ascii?Q?7J89Ue9EOBibwh+nhdx10l2p6+vw123ZlZstSmnBHc6mxzFLb4Q3D7OYZc/v?=
+ =?us-ascii?Q?4KhUR35dhl4uyC0mpXYFolAHmOp51cmv/hH3FoZoWEzAiZ0R7OjmPRbBL7t5?=
+ =?us-ascii?Q?ET8UyWBlzbEn50rEAOpdlaexOr+TJ1e64da34w1Vlpk88wtX5upyDuxR7QNP?=
+ =?us-ascii?Q?tS5HVuNuFDJUpxVISgytkpkUl83QDShCZWWJZ1BSuapEGPwzO/VjFmolKy3a?=
+ =?us-ascii?Q?+Ky72+8ThvPPl+h7rDMJKp30HRsmguqiD/o4lIjujXLRYrM/vhH67PMyn+3E?=
+ =?us-ascii?Q?Y70LwLIFaeX7kLrsJORVRUbOWnJXJ40HVX26PZC7fdrGQ1LR?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7c2f494-8b0b-437a-e29a-08df2dbabe1e
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB7957.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 08:26:58.7584
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ujEv1GFbpGI9cZYGE2hrpZGLHZaKuSaMeu4x+WNaklglUUiTwqFQoyhbpMrtqG/7HuAun73mFwdXNtkTzwRWyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7566
 
-Thank you for your contribution! Sashiko AI review found 6 potential
-issue(s) to consider.
+On Thu, Oct 15, 2026 at 03:05:29AM -0700, Breno Leitao wrote:
+> This series continues the migration to sockopt_t, as described in [1].
+> do_ip_getsockopt() and do_ipv6_getsockopt() still take a sockptr_t pair,
+> and everything they forward to now takes a sockopt_t, so convert them
+> both.
 
-Critical: 0 · High: 0 · Medium: 3 · Low: 3
+Acked-by: Ido Schimmel <idosch@nvidia.com>
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] When cgroup2 or memcg is missing, the new test reports FAIL
-  instead of SKIP.
-- [Medium] The test relies on SO_SNDBUF=2097152 (line 38) and
-  SO_RCVBUF=145536 (line 39) taking effect exactly.
-- [Medium] The memcg cap at step 4 is racy, and the comment at line 32
-  ('so only the sockets remain charged to pkt_${PPID}') is wrong.
-- [Low] tools/testing/selftests/net/packetdrill/config adds
-  `CONFIG_MEMCG=y` but not `CONFIG_CGROUPS=y`.
-- [Low] The init command enables the memory controller for all children
-  of the cgroup2 root (`echo +memory >…
-- [Low] Teardown depends on packetdrill exiting normally.
-
---
-
-selftests: net: packetdrill: add test for negative sk_forward_alloc in tcp_wmem_schedule()
-
-This adds a packetdrill test that drives sk_forward_alloc negative via
-tcp_collapse() while sk_wmem_queued exceeds tcp_wmem[0]. It then caps the
-socket's memcg and checks that a non-blocking write() fails with EAGAIN
-rather than EFAULT. CONFIG_MEMCG=y is also added to the packetdrill config
-fragment.
-
-> diff --git a/tools/testing/selftests/net/packetdrill/config b/tools/testing/selftests/net/packetdrill/config
-> index b7df8bf30920..dc3cd72a8da8 100644
-> --- a/tools/testing/selftests/net/packetdrill/config
-> +++ b/tools/testing/selftests/net/packetdrill/config
-> @@ -1,6 +1,7 @@
->  CONFIG_HZ=1000
->  CONFIG_HZ_1000=y
->  CONFIG_IPV6=y
-> +CONFIG_MEMCG=y
-
-[Severity: Low]
-Should this fragment also add CONFIG_CGROUPS=y?
-
-In init/Kconfig, MEMCG sits inside the CGROUPS block:
-
-menuconfig CGROUPS
-...
-if CGROUPS
-...
-config MEMCG
-	bool "Memory controller"
-
-If this fragment is merged onto a base config with CGROUPS=n,
-merge_config only prints a warning and MEMCG is dropped. The new test
-then has no memory controller to use.
-
-Other fragments that need memcg, such as
-tools/testing/selftests/cgroup/config, list both CONFIG_CGROUPS=y and
-CONFIG_MEMCG=y.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
-> new file mode 100644
-> index 000000000000..db232b54c554
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
-> @@ -0,0 +1,116 @@
-
-[ ... ]
-
-> +`set -e
-> +./defaults.sh
-> +ip link set dev tun0 mtu 65535
-> +sysctl -q net.ipv4.tcp_rmem="4096 131072 6291456"
-> +sysctl -q net.ipv4.tcp_wmem="4096 16384 4194304"
-> +cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-> +[ -n "$cgroot" ]
-
-[Severity: Medium]
-What happens on systems where this check or the cgroup writes below
-fail?
-
-The init command runs under set -e. Any of these makes it exit non-zero
-and abort packetdrill:
-
-- no cgroup2 mount (hybrid v1 setups, minimal VMs), so the
-  [ -n "$cgroot" ] check fails
-- the memory controller is bound to cgroup v1, so the +memory write
-  gets ENOENT
-- the test runs in a container whose cgroup namespace root holds
-  processes, so the +memory write gets EBUSY
-- cgroupfs is read-only, so the writes and the mkdir fail
-
-ksft_runner.sh treats any non-zero packetdrill exit as a failure:
-
-	&& ktap_test_pass $ip_version || $failfunc $ip_version
-
-Here failfunc=ktap_test_fail. A missing optional feature is therefore
-reported as three failures (ipv4, ipv6, ipv4-mapped-ipv6) instead of a
-skip. No other packetdrill test depends on cgroups.
-
-Could these prerequisites be detected and reported as a skip?
-
-> +echo +memory > "${cgroot}/cgroup.subtree_control"
-
-[Severity: Low]
-Does anything turn the memory controller off at the root again?
-
-The cleanup command at the end of the script moves tasks back and runs
-rmdir "${cgroot}/pkt_${PPID}". It never writes -memory. On hosts where
-memory was not already enabled in the root cgroup.subtree_control, memcg
-accounting stays on for every existing and future top-level cgroup after
-the test finishes.
-
-Everything else the test changes is either per-netns or removed
-explicitly. This looks like the only setup step with no matching
-teardown.
-
-Could the previous state be saved here and restored in cleanup?
-
-> +mkdir -p "${cgroot}/pkt_${PPID}"
-> +echo $PPID > "${cgroot}/pkt_${PPID}/cgroup.procs"
-> +`
-
-[Severity: Low]
-Can a cgroup left over from an earlier run get reused here?
-
-Packetdrill runs the cleanup command itself. If packetdrill is killed by
-a signal (a kselftest timeout or SIGKILL), pkt_<pid> stays behind with
-the limits set in step 4:
-
-	echo 0 > "${cgroot}/pkt_${PPID}/memory.high"
-	cat "${cgroot}/pkt_${PPID}/memory.current" > "${cgroot}/pkt_${PPID}/memory.max"
-
-mkdir -p succeeds on an existing directory, and nothing resets
-memory.high or memory.max before packetdrill is moved in. unshare -n
-does not create a PID namespace. A later run that gets the same PID
-would then do its socket setup and page faults under a near-zero cap.
-
-Would a plain mkdir avoid this? Resetting memory.high and memory.max to
-max after creating the directory would also work.
-
-[ ... ]
-
-> ++0.000 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [2097152], 4) = 0
-> ++0.000 setsockopt(4, SOL_SOCKET, SO_RCVBUF, [145536], 4) = 0
-
-[Severity: Medium]
-Does the test rely on these sizes being granted exactly?
-
-sk_setsockopt() in net/core/sock.c clamps both values without reporting
-it, and still returns 0:
-
-		val = min_t(u32, val, READ_ONCE(sysctl_wmem_max));
-	...
-		__sock_set_rcvbuf(sk, min_t(u32, val, READ_ONCE(sysctl_rmem_max)));
-
-net.core.wmem_max and net.core.rmem_max are global and read-only inside
-a child netns. The test cannot raise them from its unshare -n
-environment.
-
-Suppose the host has lowered net.core.wmem_max, for example to 212992,
-which gives an sk_sndbuf of 425984. The blocking
-write(4, ..., 500000) in step 2 would then sit in
-sk_stream_wait_memory(). Every injected segment carries ack 1, so no
-send space is ever freed, and the script never reaches step 4.
-
-Even if it did reach step 4, __sk_mem_raise_allocated() force charges
-in this case:
-
-		if (sk->sk_wmem_queued + size >= sk->sk_sndbuf) {
-			/* Force charge with __GFP_NOFAIL */
-
-The final write would then succeed instead of returning EAGAIN. A
-lowered rmem_max would likewise change the 291072 byte sk_rcvbuf that
-the collapse step depends on.
-
-Packetdrill runs privileged. Would SO_SNDBUFFORCE and SO_RCVBUFFORCE, or
-a getsockopt() check, make this deterministic?
-
-[ ... ]
-
-> +// 4. Cap the socket memcg at its current usage and expect -EAGAIN on non-blocking write.
-> ++0.010 `cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-> +echo 0 > "${cgroot}/pkt_${PPID}/memory.high"
-> +cat "${cgroot}/pkt_${PPID}/memory.current" > "${cgroot}/pkt_${PPID}/memory.max"`
-> ++0.000 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-> ++0.000 write(4, ..., 16384) = -1 EAGAIN (Resource temporarily unavailable)
-
-[Severity: Medium]
-Is this cap reliable enough for the EAGAIN check?
-
-An earlier comment in the script says:
-
-  // Move packetdrill back to its original cgroup so only the sockets remain charged to pkt_${PPID}
-
-Cgroup v2 does not move existing charges when a task migrates. Whatever
-packetdrill allocated while in pkt_${PPID} stays charged there. The same
-goes for the sh, awk and sed helpers it forked. Any of those charges can
-be released at a later point.
-
-In mm/memcontrol.c, memory_high_write() calls drain_all_stock() once.
-drain_all_stock() can skip the drain entirely, and for remote CPUs it
-only queues work:
-
-	if (!mutex_trylock(&percpu_charge_mutex))
-		return;
-	...
-			else
-				schedule_drain_work(cpu, &memcg_st->work);
-
-memory_max_write() returns straight away, because max equals the
-current usage:
-
-		if (nr_pages <= max)
-			break;
-
-try_charge_memcg() uses the per-CPU stock before checking any limit:
-
-	if (consume_stock(memcg, nr_pages))
-		return 0;
-
-Stock left for pkt_${PPID} on packetdrill's CPU could satisfy the
-16384 byte charge. So could a remote drain or an uncharge that completes
-after memory.current is read. Either way the charge in
-tcp_wmem_schedule()->sk_wmem_schedule()->__sk_mem_raise_allocated()
-would succeed and write() would return data. The test would then fail
-intermittently with no kernel bug involved.
-
-On systems with swap, can memory.high=0 also swap out packetdrill's own
-anon pages that are charged to pkt_${PPID}? Swapping them back in would
-charge the capped memcg, which has no task that can be killed.
-Packetdrill could then stall in repeated page fault OOM retries.
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261015073736.2944215-1-tavip%40google.com
+Given the user visible changes, the fact that the merge window is now
+open and that this isn't the last part of the conversion, my preference
+would be for this to be re-posted after the merge window.
