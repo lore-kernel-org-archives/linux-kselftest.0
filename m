@@ -1,59 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792451773;
-	b=h0/ZZebyWaIXydFRkRU0nhLKuK4loGq5Ew4gMUCS9KIGhs6A678UgOQAfK1crEaP/4uo
-	 IMwYqz2u/zN6F9L090Rlb0EMdlS/bQiTwl1mlgg/kdD/+7eTeODshjKO3GghFfpbVkfGg
-	 7d0t8SKMou//gFqpNQttEoVkQoFzixJghm7c+ETQ4UCzmSNsNf5P+kMSnwFml85xH3JDv
-	 dVCHcaf4M5SPAfgcu057KpC4KiVlpYmEzrXQsWXj/qgV53W6G6x78UZWGp0TVZc79tNwV
-	 8nE1EDQJS/ttUaLt0JPT3sF1gyMzlDQeQ0vIUPcGick8zpsgha4TloI7KJjvzJwWbZw==
+	t=1792452271;
+	b=ASNWvggvpSe/ngp8VSBvUbnMjjB5oFlomsmoQFw8TSlIFQgAyCHfvr/2l96C2EE75i9i
+	 W/Hdi/w1kDe5cqtyG8XNQ8N01p902Baij1rFOhOl/k4N/9XGX39bEbCNz7qmCW69vuSw7
+	 v+zdNjH7yOBWkMkjl3tVXukfZYQnYd1dbTjIsABGYiTptE3sH38xNM2tqnpEyeeaBTIWa
+	 5ZxRBnYxBwjN9qEtPE11gcZj80dRhOb0X7V00VnBYPcipwq6pMiJagJ21ckF5NSxQScXT
+	 8hFHfB+EkrhXZBsDLJjFdyoX5hokFnc+u4M2yB00So0k83990W49OsuqKLojyoA9t3Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792451773;
-	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References;
-	bh=sb5/RITy1eFGsr3qG/Edmwuyn6lOyRFKHbFGJssFJTc=;
-	b=EscFs9bRPFJnqwzp4f8WLGSjKLXr/bzsXQPDqhgGWANhGY5prQq9ZDbQyjSMVcj15M8/
-	 2HIFMtglvV8l50gINy1HQq5f3gMYbZSInAMYBZohUeXNIX5zDiciXwOz+jKHO06ONmUTg
-	 POTFd7oB9hzlN8jlvvX6eTD4ofgnJiGUd5UrnGlw70Lyj5/o3Nk15mbUSAgvzTYOrrjcF
-	 AzwLV+WJh9tOfHrvw0khoPlauaX2drNPEzJ7NEJgKbXzR3mUgCk8GH6WR0oy4ayQBsgpI
-	 Sm15Wq/cc809EaPd09fCMcXb5hueuTTo0VKeFEmJjxCFrpI38qKJQdbHN/NcTi9N50A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792452271;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=10eCjaMoOwpoINyqTdOdhi6Mz8qOVskSc0NuNTtMy2U=;
+	b=XIGNycMAc4bR/29tkt8xvlEzHFTvOCQFOz4CbKUOMGpXiJYRhaph97wi2afGrCBzU8vc
+	 ddZukydqkutw2a1YnKfuCp49tAmAJZ1j3vFrEl2TXRJjk078exu8kNRmTi0P/8l+KnMQ/
+	 qMW0GQokUHQqXyJnoUAS3y1U1ac4e7oa1/m692Cl0geecvUR9OUA2SYQyXdmm3d65OOlQ
+	 DlYP6jMnZIfQdycEfR3DkwIjx3GO5wBYma8055ipde4fd9la77YNK2qXlkocicjqd+PTj
+	 jlNHicnwCv3x1n2i5lBpAx9mw21QNPHfp3hX3uYWKGCSiYeADeKFm4/qrwFOnQg+neg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OPcQG4ai;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bakaace3;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28185606A31D;
-	Mon, 19 Oct 2026 23:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD294606A32E;
+	Mon, 19 Oct 2026 23:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OPcQG4ai
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2F01F000CA;
-	Mon, 19 Oct 2026 23:16:12 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bakaace3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 149A71F000C5;
+	Mon, 19 Oct 2026 23:24:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792451772;
-	bh=sb5/RITy1eFGsr3qG/Edmwuyn6lOyRFKHbFGJssFJTc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=OPcQG4aiQe/HP4yIZioj8N7r6ZbGA10GQ4GlKy2l0Zime9ouyffpoaiQ+48mzKGHX
-	 UVGwFlFZwAO7Hr9IAk+MsiXqXJ5Y4APIZjGQE1OJkRgh+a5ztRvnpZjKYREu61KnuC
-	 ev+tQHxB1SVb0zB+bAKhrR1XiMVykfViIDrr2ybrBp6FmkVolQR76nrQ+qNKd/R7Yf
-	 JJ6i/d1vp3Swci0vb3UrOd8IaNqdD3tTNSKhcbCYfl6rXHdjqTEDc9oOWZ2vU57M2I
-	 wPXcD/Mjf/E1NQjW0o2ILeALOYTUsuZvNLaPDvNwHTOBSJhGPkaW41NtOpIgEf5ePc
-	 adRQwVYhc/0/g==
-Date: Mon, 19 Oct 2026 13:16:11 -1000
-Message-ID: <abf437b321bfa2e1c84f2d4bed0b9b58@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Waiman Long <longman@redhat.com>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>, cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Hui Peng <benquike@gmail.com>,
-	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>, sashiko-bot@kernel.org
-Subject: Re: [PATCH-next v4 0/9] cgroup/cpuset: Fix various housekeeping check problems
-In-Reply-To: <20261019181020.1069325-1-longman@redhat.com>
-References: <20261019181020.1069325-1-longman@redhat.com>
+	s=k20260515; t=1792452270;
+	bh=10eCjaMoOwpoINyqTdOdhi6Mz8qOVskSc0NuNTtMy2U=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Bakaace39seCT2ZID1tB3Fq7vSyjpWFjZ1HVCSBHouhQEaiXt6DwJFPi2wMv8GDTo
+	 RJhsWg2MonTPnBzT5VpIm1D1DY6h86io/Q2ohXeeRbA4iYGEoiFMUB7JOxG2mGI4PM
+	 VK0C2HVXc/NoTGwVSAimo3rdUtPHLpjMBBO8u163fD5NHQkCWnfTNmX2gOQ5DKPhPT
+	 /Tf6QO6POJMlCkzBuzAx78L5Eit3ceA7GCvXvz7Nr6BO7u/N4eKjI1IfcQ2jFUUJQV
+	 PtueLnFbS0KFOToipm/sPrjw7kK0/95zodzT0B4a7InueoiFNVuI6sdpXFXShQ3vC0
+	 idLxjf8bz0UlQ==
+Message-ID: <f35b0ff4-6479-4670-9883-77b3f918de20@kernel.org>
+Date: Mon, 19 Oct 2026 16:24:29 -0700
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,28 +50,41 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/4] keys: add KEY_SPEC_IPE_KEYRING
+To: manuelh@nvidia.com, David Howells <dhowells@redhat.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+ Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+ <20261019-b4-ipe-keyring-rfc-v1-2-156f0b93e843@nvidia.com>
+Content-Language: en-US
+From: Fan Wu <wufan@kernel.org>
+In-Reply-To: <20261019-b4-ipe-keyring-rfc-v1-2-156f0b93e843@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
->   cgroup/cpuset: Fix a missing isolated_cpus update in
->     update_cpumasks_hier()
->   cgroup/cpuset: Consolidate isolated_cpus_can_update() into
->     prstate_housekeeping_conflict()
->   cgroup/cpuset: Consider all the exclusive CPUs when doing housekeeping
->     check
->   cgroup/cpuset: Do housekeeping check before converting invalid
->     partition to valid
->   cgroup/cpuset: Properly disabling partition when partition state
->     switching fails
->   cgroup/cpuset: Don't allow a child root partition under an isolated
->     parent
->   selftests/cgroup: Add tests for isolcpus housekeeping check
->   selftests/cgroup: Add tests for nohz_full housekeeping check
->   selftests/cgroup: Skip test_cpuset_prs.sh test if some required CPUs
->     are offline
 
-Applied 1-9 to cgroup/for-7.4-fixes. Never mind the post-rc1 ping. I just
-opened the fixes branch on top of for-7.4.
 
-Thanks.
+On 10/19/2026 2:40 PM, Manuel Huber via B4 Relay wrote:
+> From: Manuel Huber <manuelh@nvidia.com>
+> 
+> The IPE policy keyring is allocated unlinked, so userspace would
+> otherwise have to scrape /proc/keys to name it.
+> 
+> Signed-off-by: Manuel Huber <manuelh@nvidia.com>
+> ---
 
---
-tejun
+I'm ok with this id addition, but why can't Kata use keyctl to find the keyring by name? e.g. keyctl padd asymmetric "" %:.ipe < cert.der.
+
+If the concern is that /proc/keys can be spoofed, that would mean other processes are already running while the keyring is still unsealed, which seems even less appropriate.
+
+Fan
