@@ -1,1058 +1,293 @@
-Received: from mta1.migadu.com (out-135.mta1.migadu.com [95.215.58.135])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D39248F84F
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 07:39:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E993B49502D;
+	Mon, 19 Oct 2026 08:13:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792395581; cv=none; b=Gi7634JAZ32hP9+uiCm9NdasGL7sm+PjKIWp51HS3FYeRJrP/VuZOf0aGja9rt/7iYeR4dXhs/1RrkWIKp+wFziQMJJyOAuFkXfbDSHYoSa5WCcrBb84XIBEqTwWJ+NzCirExf9NqXoH8sYmoAyYOAGoYfSRshoBw9BBhABlr8s=
+	t=1792397620; cv=none; b=Q52caBBvuMFSjwG1ZLcKkIEEZrpXb0ek6V4SGK3gts4QFeNzGl5pfSUagF1/Ds3yvKPpw3o6U1mg1QbqBAxINxmH0bt6pngXrBJCyvZbqIB8Ciu8g3xuitnixwAhxDqr8d8xlCPIE01EKSAtB4xZYJGw0Amt2B8XviVoeUADjxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792395581; c=relaxed/simple;
-	bh=d3cKeLYAmxAjHd4aRGd3GFKac+xN+xPQ/z9Y7icRQgg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GL6W9MYO4H7SJaj0dVbBcGTM60jlH/sXbQdyna5bh+iD7VUITUH+9yLOMvGzMRj7qT9OxY6L5M1Gq3HVP7uAITkQ8d2izgEFvQbiTJik+10WvE8+jXhTaOTzJQCK1g1Xw1+PkTYV9SJF3lHq7jsRIKx1GF/dpaknTnZiY/tLcc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DiloZCLI; arc=none smtp.client-ip=95.215.58.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792397620; c=relaxed/simple;
+	bh=971PbG8MZVADyvBX7JdS6zdx5hQ7TWByVHrGqhguIII=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=vCDG3uotUZu3i+eun2fQxy/tq5G39VYKEEGJXWss7zx20DZwSVyhBJL1WdIwNyIVS4iDOQoVaeoAphBX9snIyUWlH3IbaP1O/mBwrGhP/N0S6kZ4Cg27woCPVegKWcX1DKbJI77aCGN7hSi+7e0taga3jkgx6DQK8nbMwLimaEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P61RH9xR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DiloZCLI"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=d3cKeLYAmxAjHd4aRGd3GFKac+xN+xPQ/z9Y7icRQgg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792395574; v=1; x=1793000374;
- b=DiloZCLIk6eioNkHFN8+x0TbwhSfT/QL4BvPC5x1BpSjMiAczhHFPfAs/qnBOaIRem6kMMDP
- pE1hOqNdu/xlCpVgYR+k6qOIGU8OA9U77ia6X8+YTJAX2qr4ERj9IwwblXrjgAMU5q36ita5hNR
- fO6uijyeYh4BatMdgPC+bIWU=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id c45aa43e38a73bca;
-	Mon, 19 Oct 2026 07:39:33 +0000
-X-Mizu-Trace-ID: c45aa43e38a73bca
-X-Migadu-Flow: FLOW_OUT
-Date: Mon, 19 Oct 2026 15:39:27 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Sahaj Chaudhari <sahaj123.sc@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] selftests/net: test network sysctl extremes
-Message-ID: <atXJLy6iTh5vbe9D@fedora>
-References: <20261014041446.2821085-1-sahaj123.sc@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P61RH9xR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA471F000C7;
+	Mon, 19 Oct 2026 08:13:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792397618;
+	bh=9A3BtJaASQr/mF5gQgnbWtiVz/25gWSAbamYzmllBMU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=P61RH9xRTdsaUIOH90aE+w2LdVG6bSYNQmVf1Ty/yMVfghKJzJe/APS9qJSmS+MpE
+	 Zfr/Ud3zk6jPGT1WLhG+a+do8ZB2ub8QP3BgL7oXHW4FS8zUGNEUIXqUGIy/GFqs9x
+	 oivpg48CmxbcN0YqEVtA6RsW/8v/kOxYXS6D3Pth7+xV+Ih7/c6PJAjRg0m59axxxC
+	 IEZTgKC7XPM8HjurrjLCuT0c/EMCBEGU3GpEiR3k0DZN8MHsZ9kJhA4WaTGiuT2/Jx
+	 /c/f/LSMaRoHyDSTj5OWMVMsIW4uTVmqufJguvZAi1gyDmpIwhEiO970jRTD4Q6A2a
+	 DjMLs/ZPfnuTg==
+Subject: Re: [PATCH net 2/2] selftests: net: packetdrill: add test for
+ negative sk_forward_alloc in tcp_wmem_schedule()
+From: netdev-bot+sashiko@kernel.org
+To: tavip@google.com
+Cc: edumazet@kernel.org, ncardwell@google.com, kuniyu@google.com,
+ davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, willemb@google.com, soheil@google.com, weiwan@google.com,
+ shakeel.butt@linux.dev, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 19 Oct 2026 08:13:37 +0000
+Message-ID: <179239761721.3135.11128694654168419892@kernel.org>
+In-Reply-To: <20261015073736.2944215-3-tavip@google.com>
+References: <20261015073736.2944215-3-tavip@google.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261014041446.2821085-1-sahaj123.sc@gmail.com>
 
-Hi Sahaj,
+Thank you for your contribution! Sashiko AI review found 6 potential
+issue(s) to consider.
 
-On Wed, Oct 14, 2026 at 09:44:46AM +0530, Sahaj Chaudhari wrote:
-> Probe accepted bounds for writable network sysctls and exercise
-> TCP and UDP loopback traffic at each bound. Test representative
-> per-network-namespace TCP/UDP settings, with an option to select
-> from the set.
+Critical: 0 · High: 0 · Medium: 3 · Low: 3
 
-Is there any reason that you choose write this test with C? I feel
-a shell script should be more concise and clear.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Thanks
-Hangbin
+- [Medium] When cgroup2 or memcg is missing, the new test reports FAIL
+  instead of SKIP.
+- [Medium] The test relies on SO_SNDBUF=2097152 (line 38) and
+  SO_RCVBUF=145536 (line 39) taking effect exactly.
+- [Medium] The memcg cap at step 4 is racy, and the comment at line 32
+  ('so only the sockets remain charged to pkt_${PPID}') is wrong.
+- [Low] tools/testing/selftests/net/packetdrill/config adds
+  `CONFIG_MEMCG=y` but not `CONFIG_CGROUPS=y`.
+- [Low] The init command enables the memory controller for all children
+  of the cgroup2 root (`echo +memory >…
+- [Low] Teardown depends on packetdrill exiting normally.
 
-> 
-> Tested: Focused selftest build and CLI checks. QEMU on Linux
-> 7.3.0-rc7 passed (4 sysctls/8 values, TCP 16/16, UDP 16/16), also
-> while userspace wrote WARNING:/BUG: lines to /dev/kmsg. On an AArch64
-> Linux 6.12.57 board, 4 sysctls/8 values met aggregate criteria (TCP
-> 15/16, UDP 16/16), with one TCP timeout at tcp_rmem[1]=1. No kernel
-> splats were found.
-> 
-> Link: https://lore.kernel.org/r/20261007054508.1059927-1-sahaj123.sc@gmail.com
-> Signed-off-by: Sahaj Chaudhari <sahaj123.sc@gmail.com>
-> ---
-> Changes in v2:
-> - Remove --all and the full /proc/sys/net scan. It could enable
->   nf_hooks_lwtunnel, a global static key that cannot be disabled again,
->   so restoring the original value failed. The remaining sysctls are per
->   network namespace and restored by writing the original value back.
->   Document this constraint above the sysctl list. (Sashiko)
-> - The rounding issue in find_bound() applied to ms/jiffies sysctls that
->   only --all reached; the remaining four do not round. (Sashiko)
-> - Ignore /dev/kmsg records whose facility is not LOG_KERN. (Sashiko)
-> - Rebase on current master.
-> 
-> v1: https://lore.kernel.org/r/20261012155339.3799130-1-sahaj123.sc@gmail.com
-> 
-> Eric, v1 was narrower than the generic network-sysctl coverage you
-> suggested. Is this reduced scope acceptable, or should it be folded into
-> an existing selftest?
->  tools/testing/selftests/net/.gitignore        |   1 +
->  tools/testing/selftests/net/Makefile          |   1 +
->  tools/testing/selftests/net/sysctl_net_test.c | 925 ++++++++++++++++++
->  3 files changed, 927 insertions(+)
->  create mode 100644 tools/testing/selftests/net/sysctl_net_test.c
-> 
-> diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-> index dacd36ed8455..842cb359bbf6 100644
-> --- a/tools/testing/selftests/net/.gitignore
-> +++ b/tools/testing/selftests/net/.gitignore
-> @@ -43,6 +43,7 @@ so_incoming_cpu
->  so_netns_cookie
->  so_rcv_listener
->  stress_reuseport_listen
-> +sysctl_net_test
->  tap
->  tcp_fastopen_backup_key
->  tcp_inq
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index 590b33e16d9f..8926fcfef6e9 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -196,6 +196,7 @@ TEST_GEN_PROGS := \
->  	sk_connect_zero_addr \
->  	sk_so_peek_off \
->  	so_incoming_cpu \
-> +	sysctl_net_test \
->  	tap \
->  	tcp_port_share \
->  	tls \
-> diff --git a/tools/testing/selftests/net/sysctl_net_test.c b/tools/testing/selftests/net/sysctl_net_test.c
+--
+
+selftests: net: packetdrill: add test for negative sk_forward_alloc in tcp_wmem_schedule()
+
+This adds a packetdrill test that drives sk_forward_alloc negative via
+tcp_collapse() while sk_wmem_queued exceeds tcp_wmem[0]. It then caps the
+socket's memcg and checks that a non-blocking write() fails with EAGAIN
+rather than EFAULT. CONFIG_MEMCG=y is also added to the packetdrill config
+fragment.
+
+> diff --git a/tools/testing/selftests/net/packetdrill/config b/tools/testing/selftests/net/packetdrill/config
+> index b7df8bf30920..dc3cd72a8da8 100644
+> --- a/tools/testing/selftests/net/packetdrill/config
+> +++ b/tools/testing/selftests/net/packetdrill/config
+> @@ -1,6 +1,7 @@
+>  CONFIG_HZ=1000
+>  CONFIG_HZ_1000=y
+>  CONFIG_IPV6=y
+> +CONFIG_MEMCG=y
+
+[Severity: Low]
+Should this fragment also add CONFIG_CGROUPS=y?
+
+In init/Kconfig, MEMCG sits inside the CGROUPS block:
+
+menuconfig CGROUPS
+...
+if CGROUPS
+...
+config MEMCG
+	bool "Memory controller"
+
+If this fragment is merged onto a base config with CGROUPS=n,
+merge_config only prints a warning and MEMCG is dropped. The new test
+then has no memory controller to use.
+
+Other fragments that need memcg, such as
+tools/testing/selftests/cgroup/config, list both CONFIG_CGROUPS=y and
+CONFIG_MEMCG=y.
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
 > new file mode 100644
-> index 000000000000..6360616132c4
+> index 000000000000..db232b54c554
 > --- /dev/null
-> +++ b/tools/testing/selftests/net/sysctl_net_test.c
-> @@ -0,0 +1,925 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define _GNU_SOURCE
-> +#include <arpa/inet.h>
-> +#include <ctype.h>
-> +#include <errno.h>
-> +#include <fcntl.h>
-> +#include <getopt.h>
-> +#include <limits.h>
-> +#include <net/if.h>
-> +#include <netinet/in.h>
-> +#include <poll.h>
-> +#include <sched.h>
-> +#include <stdarg.h>
-> +#include <stdbool.h>
-> +#include <stdint.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <sys/ioctl.h>
-> +#include <sys/socket.h>
-> +#include <sys/stat.h>
-> +#include <sys/time.h>
-> +#include <unistd.h>
-> +
-> +#include "kselftest.h"
-> +
-> +#define SYSCTL_ROOT		"/proc/sys/net"
-> +#define SYSCTL_TEXT_SIZE	4096
-> +#define SYSCTL_MAX_VALUES	256
-> +#define KMSG_TEXT_SIZE		4096
-> +#define FIRST_TEST_PORT		20000
-> +#define LAST_TEST_PORT		59998
-> +
-> +struct sysctl_number {
-> +	uint64_t magnitude;
-> +	bool negative;
-> +};
-> +
-> +struct sysctl_values {
-> +	struct sysctl_number value[SYSCTL_MAX_VALUES];
-> +	size_t count;
-> +};
-> +
-> +static int kmsg_fd = -1;
-> +static unsigned int next_tcp_port = FIRST_TEST_PORT;
-> +static unsigned int next_udp_port = FIRST_TEST_PORT;
-> +static size_t tested_files;
-> +static size_t skipped_files;
-> +static size_t tested_values;
-> +static size_t tcp_attempts;
-> +static size_t tcp_successes;
-> +static size_t udp_attempts;
-> +static size_t udp_successes;
-> +static char failure[256];
-> +static char tcp_delivery_failure[256];
-> +static char udp_delivery_failure[256];
-> +
-> +/*
-> + * Only add sysctls that are per network namespace and are restored by
-> + * writing their original value back. Some sysctls change global state that
-> + * the private namespace does not isolate and that cannot be undone.
-> + */
-> +static const char * const representative_sysctls[] = {
-> +	"ipv4/tcp_rmem",
-> +	"ipv4/tcp_wmem",
-> +	"ipv4/udp_rmem_min",
-> +	"ipv4/udp_wmem_min",
-> +};
-> +
-> +static bool selected_sysctls[ARRAY_SIZE(representative_sysctls)];
-> +
-> +static void set_failure(const char *fmt, ...)
-> +{
-> +	va_list args;
-> +
-> +	if (failure[0])
-> +		return;
-> +
-> +	va_start(args, fmt);
-> +	vsnprintf(failure, sizeof(failure), fmt, args);
-> +	va_end(args);
-> +}
-> +
-> +static struct sysctl_number number_from_signed(int64_t value)
-> +{
-> +	struct sysctl_number number = {};
-> +
-> +	if (value < 0) {
-> +		number.negative = true;
-> +		number.magnitude = (uint64_t)(-(value + 1)) + 1;
-> +	} else {
-> +		number.magnitude = value;
-> +	}
-> +	return number;
-> +}
-> +
-> +static struct sysctl_number number_from_unsigned(uint64_t value)
-> +{
-> +	struct sysctl_number number = {
-> +		.magnitude = value,
-> +	};
-> +
-> +	return number;
-> +}
-> +
-> +static int64_t number_to_signed(struct sysctl_number number)
-> +{
-> +	if (!number.negative)
-> +		return (int64_t)number.magnitude;
-> +	if (number.magnitude == (UINT64_C(1) << 63))
-> +		return INT64_MIN;
-> +	return -(int64_t)number.magnitude;
-> +}
-> +
-> +static bool numbers_equal(struct sysctl_number a, struct sysctl_number b)
-> +{
-> +	return a.magnitude == b.magnitude &&
-> +	       (a.magnitude == 0 || a.negative == b.negative);
-> +}
-> +
-> +static bool format_number(struct sysctl_number number, char *text,
-> +			  size_t text_size)
-> +{
-> +	int n = snprintf(text, text_size, number.negative ? "-%llu" : "%llu",
-> +			 (unsigned long long)number.magnitude);
-> +
-> +	return n >= 0 && (size_t)n < text_size;
-> +}
-> +
-> +static bool parse_values(char *text, struct sysctl_values *values)
-> +{
-> +	char *pos = text;
-> +
-> +	values->count = 0;
-> +	while (*pos) {
-> +		char *end;
-> +		struct sysctl_number value;
-> +
-> +		while (isspace((unsigned char)*pos))
-> +			pos++;
-> +		if (!*pos)
-> +			break;
-> +		if (values->count == SYSCTL_MAX_VALUES)
-> +			return false;
-> +
-> +		errno = 0;
-> +		if (*pos == '-') {
-> +			long long signed_value = strtoll(pos, &end, 10);
-> +
-> +			if (end == pos || errno == ERANGE)
-> +				return false;
-> +			value = number_from_signed(signed_value);
-> +		} else {
-> +			unsigned long long unsigned_value = strtoull(pos, &end, 10);
-> +
-> +			if (end == pos || errno == ERANGE)
-> +				return false;
-> +			value = number_from_unsigned(unsigned_value);
-> +		}
-> +		if (*end && !isspace((unsigned char)*end))
-> +			return false;
-> +
-> +		values->value[values->count++] = value;
-> +		pos = end;
-> +	}
-> +
-> +	return values->count > 0;
-> +}
-> +
-> +static bool read_values(const char *path, struct sysctl_values *values)
-> +{
-> +	char text[SYSCTL_TEXT_SIZE];
-> +	size_t len = 0;
-> +	int fd;
-> +	bool ok = false;
-> +
-> +	fd = open(path, O_RDONLY | O_CLOEXEC);
-> +	if (fd < 0)
-> +		return false;
-> +
-> +	while (len < sizeof(text) - 1) {
-> +		ssize_t n = read(fd, text + len, sizeof(text) - 1 - len);
-> +
-> +		if (n < 0 && errno == EINTR)
-> +			continue;
-> +		if (n < 0)
-> +			goto out;
-> +		if (!n)
-> +			break;
-> +		len += n;
-> +	}
-> +	if (len == sizeof(text) - 1)
-> +		goto out;
-> +
-> +	text[len] = '\0';
-> +	ok = parse_values(text, values);
-> +out:
-> +	close(fd);
-> +	return ok;
-> +}
-> +
-> +static bool values_equal(const struct sysctl_values *a,
-> +			 const struct sysctl_values *b)
-> +{
-> +	size_t i;
-> +
-> +	if (a->count != b->count)
-> +		return false;
-> +	for (i = 0; i < a->count; i++) {
-> +		if (!numbers_equal(a->value[i], b->value[i]))
-> +			return false;
-> +	}
-> +	return true;
-> +}
-> +
-> +static bool format_values(const struct sysctl_values *values, char *text,
-> +			  size_t text_size)
-> +{
-> +	size_t i, len = 0;
-> +
-> +	for (i = 0; i < values->count; i++) {
-> +		char number[32];
-> +		int n;
-> +
-> +		if (!format_number(values->value[i], number, sizeof(number)))
-> +			return false;
-> +		n = snprintf(text + len, text_size - len, "%s%c", number,
-> +			     i + 1 == values->count ? '\n' : ' ');
-> +		if (n < 0 || (size_t)n >= text_size - len)
-> +			return false;
-> +		len += n;
-> +	}
-> +	return len > 0;
-> +}
-> +
-> +static bool write_values(const char *path,
-> +			 const struct sysctl_values *values)
-> +{
-> +	char text[SYSCTL_TEXT_SIZE];
-> +	size_t len;
-> +	ssize_t n;
-> +	int fd;
-> +	bool ok;
-> +
-> +	if (!format_values(values, text, sizeof(text)))
-> +		return false;
-> +	len = strlen(text);
-> +
-> +	fd = open(path, O_WRONLY | O_CLOEXEC);
-> +	if (fd < 0)
-> +		return false;
-> +	do {
-> +		n = write(fd, text, len);
-> +	} while (n < 0 && errno == EINTR);
-> +	ok = n == (ssize_t)len;
-> +	if (close(fd) < 0)
-> +		ok = false;
-> +	return ok;
-> +}
-> +
-> +static bool restore_values(const char *path,
-> +			   const struct sysctl_values *original)
-> +{
-> +	struct sysctl_values current;
-> +
-> +	if (read_values(path, &current) && values_equal(original, &current))
-> +		return true;
-> +	return write_values(path, original) &&
-> +	       read_values(path, &current) &&
-> +	       values_equal(original, &current);
-> +}
-> +
-> +static bool check_kernel_log(void)
-> +{
-> +	static const char * const splats[] = {
-> +		"WARNING:",
-> +		"BUG:",
-> +		"Oops:",
-> +		"divide error",
-> +		"general protection fault",
-> +		"invalid opcode",
-> +		"kernel BUG at",
-> +		"Kernel panic",
-> +		"KASAN:",
-> +		"UBSAN:",
-> +		"soft lockup",
-> +		"hard LOCKUP",
-> +		"blocked for more than",
-> +		"possible circular locking dependency",
-> +	};
-> +	char record[KMSG_TEXT_SIZE + 1];
-> +
-> +	for (;;) {
-> +		ssize_t n = read(kmsg_fd, record, sizeof(record) - 1);
-> +		unsigned long prefix;
-> +		char *message;
-> +		size_t i;
-> +
-> +		if (n < 0 && errno == EINTR)
-> +			continue;
-> +		if (n < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
-> +			return true;
-> +		if (n < 0) {
-> +			set_failure("cannot read /dev/kmsg: %s", strerror(errno));
-> +			return false;
-> +		}
-> +		if (!n)
-> +			return true;
-> +
-> +		record[n] = '\0';
-> +		message = strchr(record, ';');
-> +		if (!message)
-> +			continue;
-> +		/* Ignore messages that userspace wrote to /dev/kmsg. */
-> +		prefix = strtoul(record, NULL, 10);
-> +		if (prefix >> 3 != 0)
-> +			continue;
-> +		message++;
-> +		for (i = 0; i < ARRAY_SIZE(splats); i++) {
-> +			if (!strstr(message, splats[i]))
-> +				continue;
-> +			set_failure("kernel splat detected: %.180s", message);
-> +			return false;
-> +		}
-> +	}
-> +}
-> +
-> +static uint64_t ordered_value(int64_t value)
-> +{
-> +	/* Map signed integers to unsigned keys in numeric order. */
-> +	return (uint64_t)value ^ (UINT64_C(1) << 63);
-> +}
-> +
-> +static int64_t unordered_value(uint64_t key)
-> +{
-> +	uint64_t raw = key ^ (UINT64_C(1) << 63);
-> +
-> +	if (raw <= INT64_MAX)
-> +		return (int64_t)raw;
-> +	return -1 - (int64_t)(UINT64_MAX - raw);
-> +}
-> +
-> +static int probe_value(const char *path, const struct sysctl_values *original,
-> +		       size_t index, struct sysctl_number candidate,
-> +		       bool *accepted)
-> +{
-> +	struct sysctl_values expected = *original;
-> +	struct sysctl_values current;
-> +	char text[32];
-> +
-> +	expected.value[index] = candidate;
-> +	*accepted = false;
-> +
-> +	if (write_values(path, &expected) &&
-> +	    read_values(path, &current) &&
-> +	    values_equal(&expected, &current))
-> +		*accepted = true;
-> +
-> +	if (!restore_values(path, original)) {
-> +		format_number(candidate, text, sizeof(text));
-> +		set_failure("failed to restore %s after probing %s", path, text);
-> +		return -1;
-> +	}
-> +	if (!check_kernel_log())
-> +		return -1;
-> +	return 0;
-> +}
-> +
-> +static uint64_t next_step(uint64_t step)
-> +{
-> +	if (step > UINT64_MAX / 2)
-> +		return UINT64_MAX;
-> +	return step * 2;
-> +}
-> +
-> +static int find_bound(const char *path,
-> +		      const struct sysctl_values *original, size_t index,
-> +		      bool lower, bool unsigned_domain,
-> +		      struct sysctl_number *bound)
-> +{
-> +	struct sysctl_number start = original->value[index];
-> +	uint64_t valid = unsigned_domain ? start.magnitude :
-> +			 ordered_value(number_to_signed(start));
-> +	uint64_t step = 1;
-> +
-> +	for (;;) {
-> +		uint64_t candidate, invalid;
-> +		bool accepted;
-> +
-> +		if (lower) {
-> +			if (!valid)
-> +				break;
-> +			candidate = valid > step ? valid - step : 0;
-> +		} else {
-> +			if (valid == UINT64_MAX)
-> +				break;
-> +			candidate = UINT64_MAX - valid < step ?
-> +				    UINT64_MAX : valid + step;
-> +		}
-> +		if (candidate == valid)
-> +			break;
-> +
-> +		if (probe_value(path, original, index,
-> +				unsigned_domain ? number_from_unsigned(candidate) :
-> +				number_from_signed(unordered_value(candidate)),
-> +				&accepted))
-> +			return -1;
-> +		if (accepted) {
-> +			valid = candidate;
-> +			step = next_step(step);
-> +			continue;
-> +		}
-> +
-> +		invalid = candidate;
-> +		while (lower ? valid - invalid > 1 : invalid - valid > 1) {
-> +			uint64_t middle = lower ?
-> +					  invalid + (valid - invalid) / 2 :
-> +					  valid + (invalid - valid) / 2;
-> +
-> +			if (probe_value(path, original, index,
-> +					unsigned_domain ?
-> +					number_from_unsigned(middle) :
-> +					number_from_signed(unordered_value(middle)),
-> +					&accepted))
-> +				return -1;
-> +			if (accepted)
-> +				valid = middle;
-> +			else
-> +				invalid = middle;
-> +		}
-> +		break;
-> +	}
-> +
-> +	*bound = unsigned_domain ? number_from_unsigned(valid) :
-> +		 number_from_signed(unordered_value(valid));
-> +	return 0;
-> +}
-> +
-> +static int find_lower_bound(const char *path,
-> +			    const struct sysctl_values *original,
-> +			    size_t index, struct sysctl_number *bound)
-> +{
-> +	struct sysctl_number start = original->value[index];
-> +	bool unsigned_domain = !start.negative && start.magnitude > INT64_MAX;
-> +
-> +	return find_bound(path, original, index, true, unsigned_domain, bound);
-> +}
-> +
-> +static int find_upper_bound(const char *path,
-> +			    const struct sysctl_values *original,
-> +			    size_t index, struct sysctl_number *bound)
-> +{
-> +	bool unsigned_domain = !original->value[index].negative;
-> +
-> +	return find_bound(path, original, index, false, unsigned_domain, bound);
-> +}
-> +
-> +static int get_port_pair(bool tcp, uint16_t *server, uint16_t *client)
-> +{
-> +	unsigned int *next = tcp ? &next_tcp_port : &next_udp_port;
-> +
-> +	if (*next > LAST_TEST_PORT) {
-> +		errno = EADDRNOTAVAIL;
-> +		return -1;
-> +	}
-> +	*server = *next;
-> +	*client = *next + 1;
-> +	*next += 2;
-> +	return 0;
-> +}
-> +
-> +static int bind_loopback(int fd, uint16_t port)
-> +{
-> +	struct sockaddr_in addr = {
-> +		.sin_family = AF_INET,
-> +		.sin_port = htons(port),
-> +		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-> +	};
-> +
-> +	return bind(fd, (struct sockaddr *)&addr, sizeof(addr));
-> +}
-> +
-> +static int wait_readable(int fd)
-> +{
-> +	struct pollfd pfd = {
-> +		.fd = fd,
-> +		.events = POLLIN,
-> +	};
-> +	int ret;
-> +
-> +	ret = poll(&pfd, 1, 1000);
-> +	if (ret < 0)
-> +		return -1;
-> +	if (!ret) {
-> +		errno = ETIMEDOUT;
-> +		return -1;
-> +	}
-> +	if (!(pfd.revents & POLLIN)) {
-> +		errno = EIO;
-> +		return -1;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int tcp_loopback(void)
-> +{
-> +	struct timeval timeout = { .tv_sec = 1 };
-> +	uint16_t server_port, client_port;
-> +	char data[64] = { 1 };
-> +	char received[sizeof(data)];
-> +	int listener = -1, client = -1, server = -1;
-> +	int ret = -1;
-> +	ssize_t n;
-> +
-> +	if (get_port_pair(true, &server_port, &client_port))
-> +		return -1;
-> +	listener = socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
-> +	client = socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
-> +	if (listener < 0 || client < 0 ||
-> +	    setsockopt(client, SOL_SOCKET, SO_SNDTIMEO, &timeout,
-> +		       sizeof(timeout)) ||
-> +	    bind_loopback(listener, server_port) ||
-> +	    listen(listener, 1) || bind_loopback(client, client_port))
-> +		goto out;
-> +
-> +	{
-> +		struct sockaddr_in addr = {
-> +			.sin_family = AF_INET,
-> +			.sin_port = htons(server_port),
-> +			.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-> +		};
-> +
-> +		if (connect(client, (struct sockaddr *)&addr, sizeof(addr)))
-> +			goto out;
-> +	}
-> +
-> +	if (wait_readable(listener))
-> +		goto out;
-> +	server = accept4(listener, NULL, NULL, SOCK_CLOEXEC);
-> +	if (server < 0)
-> +		goto out;
-> +	n = send(client, data, sizeof(data), MSG_NOSIGNAL);
-> +	if (n <= 0) {
-> +		if (!n)
-> +			errno = EPIPE;
-> +		goto out;
-> +	}
-> +	if (wait_readable(server))
-> +		goto out;
-> +
-> +	n = recv(server, received, sizeof(received), 0);
-> +	if (n <= 0) {
-> +		if (!n)
-> +			errno = ECONNRESET;
-> +		goto out;
-> +	}
-> +	ret = 0;
-> +out:
-> +	if (server >= 0)
-> +		close(server);
-> +	if (client >= 0)
-> +		close(client);
-> +	if (listener >= 0)
-> +		close(listener);
-> +	return ret;
-> +}
-> +
-> +static int udp_loopback(void)
-> +{
-> +	uint16_t server_port, client_port;
-> +	struct sockaddr_in addr = {
-> +		.sin_family = AF_INET,
-> +		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-> +	};
-> +	char data = 1, received;
-> +	int server = -1, client = -1;
-> +	int ret = -1;
-> +	ssize_t n;
-> +
-> +	if (get_port_pair(false, &server_port, &client_port))
-> +		return -1;
-> +	server = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
-> +	client = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
-> +	if (server < 0 || client < 0 || bind_loopback(server, server_port) ||
-> +	    bind_loopback(client, client_port))
-> +		goto out;
-> +
-> +	addr.sin_port = htons(server_port);
-> +	n = sendto(client, &data, sizeof(data), 0, (struct sockaddr *)&addr,
-> +		   sizeof(addr));
-> +	if (n != sizeof(data)) {
-> +		if (n >= 0)
-> +			errno = EIO;
-> +		goto out;
-> +	}
-> +	if (wait_readable(server))
-> +		goto out;
-> +
-> +	n = recv(server, &received, sizeof(received), 0);
-> +	if (n != sizeof(received)) {
-> +		if (n >= 0)
-> +			errno = EIO;
-> +		goto out;
-> +	}
-> +	ret = 0;
-> +out:
-> +	if (client >= 0)
-> +		close(client);
-> +	if (server >= 0)
-> +		close(server);
-> +	return ret;
-> +}
-> +
-> +static void run_loopback_traffic(const char *path, size_t index,
-> +				 const char *value)
-> +{
-> +	int err;
-> +
-> +	tcp_attempts++;
-> +	if (!tcp_loopback()) {
-> +		tcp_successes++;
-> +	} else {
-> +		err = errno;
-> +		if (!tcp_delivery_failure[0])
-> +			snprintf(tcp_delivery_failure,
-> +				 sizeof(tcp_delivery_failure),
-> +				 "%s[%zu]=%s: %s", path, index, value,
-> +				 strerror(err));
-> +	}
-> +
-> +	udp_attempts++;
-> +	if (!udp_loopback()) {
-> +		udp_successes++;
-> +	} else {
-> +		err = errno;
-> +		if (!udp_delivery_failure[0])
-> +			snprintf(udp_delivery_failure,
-> +				 sizeof(udp_delivery_failure),
-> +				 "%s[%zu]=%s: %s", path, index, value,
-> +				 strerror(err));
-> +	}
-> +}
-> +
-> +static int exercise_value(const char *path,
-> +			  const struct sysctl_values *original,
-> +			  size_t index, struct sysctl_number value)
-> +{
-> +	struct sysctl_values expected = *original;
-> +	char text[32];
-> +	bool restore = !numbers_equal(value, original->value[index]);
-> +	bool applied = false;
-> +
-> +	if (!format_number(value, text, sizeof(text))) {
-> +		set_failure("cannot format boundary for %s", path);
-> +		return -1;
-> +	}
-> +	if (restore) {
-> +		struct sysctl_values current;
-> +
-> +		expected.value[index] = value;
-> +		applied = write_values(path, &expected) &&
-> +			  read_values(path, &current) &&
-> +			  values_equal(&expected, &current);
-> +		if (!applied) {
-> +			if (!restore_values(path, original)) {
-> +				set_failure("failed to restore %s after setting %s",
-> +					    path, text);
-> +				return -1;
-> +			}
-> +			set_failure("%s no longer accepts boundary %s", path, text);
-> +			return -1;
-> +		}
-> +	}
-> +
-> +	check_kernel_log();
-> +	if (!failure[0])
-> +		run_loopback_traffic(path, index, text);
-> +
-> +	if (restore && !restore_values(path, original)) {
-> +		format_number(value, text, sizeof(text));
-> +		set_failure("failed to restore %s after traffic at %s", path,
-> +			    text);
-> +	}
-> +	check_kernel_log();
-> +	return failure[0] ? -1 : 0;
-> +}
-> +
-> +static bool prepare_sysctl(const char *path,
-> +			   const struct sysctl_values *original)
-> +{
-> +	struct sysctl_values current;
-> +	bool writable;
-> +
-> +	writable = write_values(path, original) &&
-> +		   read_values(path, &current) &&
-> +		   values_equal(original, &current);
-> +	if (!writable && !restore_values(path, original)) {
-> +		set_failure("failed to restore %s after initial write", path);
-> +		return false;
-> +	}
-> +	if (!check_kernel_log())
-> +		return false;
-> +	return writable;
-> +}
-> +
-> +static int test_sysctl(const char *path, const struct sysctl_values *original)
-> +{
-> +	size_t i;
-> +
-> +	if (!prepare_sysctl(path, original)) {
-> +		if (!failure[0]) {
-> +			skipped_files++;
-> +			printf("# SKIP %s: sysctl is not writable\n", path);
-> +		}
-> +		return failure[0] ? -1 : 0;
-> +	}
-> +
-> +	tested_files++;
-> +	for (i = 0; i < original->count; i++) {
-> +		struct sysctl_number lower, upper;
-> +
-> +		if (find_lower_bound(path, original, i, &lower) ||
-> +		    find_upper_bound(path, original, i, &upper))
-> +			return -1;
-> +		if (exercise_value(path, original, i, lower) ||
-> +		    (!numbers_equal(upper, lower) &&
-> +		     exercise_value(path, original, i, upper)))
-> +			return -1;
-> +		tested_values++;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static void print_usage(FILE *stream, const char *program)
-> +{
-> +	size_t i;
-> +
-> +	fprintf(stream, "Usage: %s [-s SYSCTL ...]\n", program);
-> +	fprintf(stream, "  -s, --sysctl SYSCTL  Test a representative sysctl (repeatable)\n");
-> +	fprintf(stream, "  -h, --help           Show this help\n");
-> +	fprintf(stream, "Default sysctls:\n");
-> +	for (i = 0; i < ARRAY_SIZE(representative_sysctls); i++)
-> +		fprintf(stream, "  %s\n", representative_sysctls[i]);
-> +}
-> +
-> +static int parse_options(int argc, char **argv)
-> +{
-> +	static const struct option options[] = {
-> +		{ "help", no_argument, NULL, 'h' },
-> +		{ "sysctl", required_argument, NULL, 's' },
-> +		{}
-> +	};
-> +	bool selection_given = false;
-> +	int option;
-> +
-> +	while ((option = getopt_long(argc, argv, "hs:", options, NULL)) != -1) {
-> +		switch (option) {
-> +		case 's': {
-> +			size_t i;
-> +
-> +			selection_given = true;
-> +			for (i = 0; i < ARRAY_SIZE(representative_sysctls); i++) {
-> +				if (strcmp(optarg, representative_sysctls[i]))
-> +					continue;
-> +				selected_sysctls[i] = true;
-> +				break;
-> +			}
-> +			if (i == ARRAY_SIZE(representative_sysctls)) {
-> +				fprintf(stderr, "Unknown sysctl: %s\n", optarg);
-> +				goto invalid_options;
-> +			}
-> +			break;
-> +		}
-> +		case 'h':
-> +			print_usage(stdout, argv[0]);
-> +			return 1;
-> +		default:
-> +			goto invalid_options;
-> +		}
-> +	}
-> +	if (optind != argc)
-> +		goto invalid_options;
-> +
-> +	if (!selection_given) {
-> +		size_t i;
-> +
-> +		for (i = 0; i < ARRAY_SIZE(representative_sysctls); i++)
-> +			selected_sysctls[i] = true;
-> +	}
-> +	return 0;
-> +
-> +invalid_options:
-> +	print_usage(stderr, argv[0]);
-> +	return -1;
-> +}
-> +
-> +static int test_selected_sysctl(const char *name)
-> +{
-> +	char path[PATH_MAX];
-> +	struct sysctl_values values;
-> +	int n;
-> +
-> +	n = snprintf(path, sizeof(path), "%s/%s", SYSCTL_ROOT, name);
-> +	if (n < 0 || (size_t)n >= sizeof(path)) {
-> +		set_failure("sysctl path is too long: %s", name);
-> +		return -1;
-> +	}
-> +
-> +	if (access(path, F_OK)) {
-> +		if (errno == ENOENT || errno == ENOTDIR) {
-> +			skipped_files++;
-> +			printf("# SKIP %s: not available\n", name);
-> +			return 0;
-> +		}
-> +		set_failure("cannot inspect %s: %s", path, strerror(errno));
-> +		return -1;
-> +	}
-> +	if (access(path, R_OK)) {
-> +		int err = errno;
-> +
-> +		skipped_files++;
-> +		printf("# SKIP %s: not readable (%s)\n", name, strerror(err));
-> +		return 0;
-> +	}
-> +	if (!read_values(path, &values)) {
-> +		set_failure("%s is not a readable numeric sysctl", path);
-> +		return -1;
-> +	}
-> +	if (access(path, W_OK)) {
-> +		int err = errno;
-> +
-> +		skipped_files++;
-> +		printf("# SKIP %s: not writable (%s)\n", name, strerror(err));
-> +		return 0;
-> +	}
-> +
-> +	printf("# Testing %s\n", name);
-> +	return test_sysctl(path, &values);
-> +}
-> +
-> +static int set_loopback_up(void)
-> +{
-> +	struct ifreq ifr = {};
-> +	int fd, ret = -1;
-> +
-> +	fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
-> +	if (fd < 0)
-> +		return -1;
-> +	strncpy(ifr.ifr_name, "lo", IFNAMSIZ - 1);
-> +	if (ioctl(fd, SIOCGIFFLAGS, &ifr))
-> +		goto out;
-> +	ifr.ifr_flags |= IFF_UP;
-> +	ret = ioctl(fd, SIOCSIFFLAGS, &ifr);
-> +out:
-> +	close(fd);
-> +	return ret;
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	int option_status;
-> +	size_t i;
-> +
-> +	option_status = parse_options(argc, argv);
-> +	if (option_status > 0)
-> +		return KSFT_PASS;
-> +	if (option_status < 0)
-> +		return KSFT_FAIL;
-> +
-> +	ksft_print_header();
-> +	ksft_set_plan(1);
-> +
-> +	if (unshare(CLONE_NEWNET))
-> +		ksft_exit_skip("cannot create network namespace: %s\n",
-> +			       strerror(errno));
-> +
-> +	kmsg_fd = open("/dev/kmsg", O_RDONLY | O_NONBLOCK | O_CLOEXEC);
-> +	if (kmsg_fd < 0)
-> +		ksft_exit_skip("cannot read /dev/kmsg: %s\n", strerror(errno));
-> +	if (lseek(kmsg_fd, 0, SEEK_END) < 0)
-> +		ksft_exit_skip("cannot seek /dev/kmsg: %s\n", strerror(errno));
-> +	if (set_loopback_up())
-> +		ksft_exit_skip("cannot bring loopback up: %s\n", strerror(errno));
-> +	if (!check_kernel_log())
-> +		goto fail;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(representative_sysctls); i++) {
-> +		if (!selected_sysctls[i])
-> +			continue;
-> +		if (test_selected_sysctl(representative_sysctls[i]))
-> +			break;
-> +	}
-> +	if (!failure[0] && !tested_files)
-> +		ksft_exit_skip("no selected writable numeric network sysctls found\n");
-> +	if (!failure[0] && (!tcp_successes || !udp_successes))
-> +		set_failure("loopback delivery incomplete: TCP %zu/%zu, UDP %zu/%zu",
-> +			    tcp_successes, tcp_attempts,
-> +			    udp_successes, udp_attempts);
-> +	if (!failure[0] && !check_kernel_log())
-> +		goto fail;
-> +	if (tcp_delivery_failure[0])
-> +		printf("# first TCP delivery failure: %s\n",
-> +		       tcp_delivery_failure);
-> +	if (udp_delivery_failure[0])
-> +		printf("# first UDP delivery failure: %s\n",
-> +		       udp_delivery_failure);
-> +	if (failure[0])
-> +		goto fail;
-> +
-> +	printf("# tested %zu sysctls, %zu values; skipped %zu\n",
-> +	       tested_files, tested_values, skipped_files);
-> +	ksft_test_result_pass("TCP %zu/%zu, UDP %zu/%zu deliveries succeeded\n",
-> +			      tcp_successes, tcp_attempts,
-> +			      udp_successes, udp_attempts);
-> +	ksft_finished();
-> +	close(kmsg_fd);
-> +	return KSFT_PASS;
-> +
-> +fail:
-> +	ksft_test_result_fail("%s\n", failure);
-> +	ksft_finished();
-> +	close(kmsg_fd);
-> +	return KSFT_FAIL;
-> +}
-> -- 
-> 2.43.0
-> 
+> +++ b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
+> @@ -0,0 +1,116 @@
+
+[ ... ]
+
+> +`set -e
+> +./defaults.sh
+> +ip link set dev tun0 mtu 65535
+> +sysctl -q net.ipv4.tcp_rmem="4096 131072 6291456"
+> +sysctl -q net.ipv4.tcp_wmem="4096 16384 4194304"
+> +cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
+> +[ -n "$cgroot" ]
+
+[Severity: Medium]
+What happens on systems where this check or the cgroup writes below
+fail?
+
+The init command runs under set -e. Any of these makes it exit non-zero
+and abort packetdrill:
+
+- no cgroup2 mount (hybrid v1 setups, minimal VMs), so the
+  [ -n "$cgroot" ] check fails
+- the memory controller is bound to cgroup v1, so the +memory write
+  gets ENOENT
+- the test runs in a container whose cgroup namespace root holds
+  processes, so the +memory write gets EBUSY
+- cgroupfs is read-only, so the writes and the mkdir fail
+
+ksft_runner.sh treats any non-zero packetdrill exit as a failure:
+
+	&& ktap_test_pass $ip_version || $failfunc $ip_version
+
+Here failfunc=ktap_test_fail. A missing optional feature is therefore
+reported as three failures (ipv4, ipv6, ipv4-mapped-ipv6) instead of a
+skip. No other packetdrill test depends on cgroups.
+
+Could these prerequisites be detected and reported as a skip?
+
+> +echo +memory > "${cgroot}/cgroup.subtree_control"
+
+[Severity: Low]
+Does anything turn the memory controller off at the root again?
+
+The cleanup command at the end of the script moves tasks back and runs
+rmdir "${cgroot}/pkt_${PPID}". It never writes -memory. On hosts where
+memory was not already enabled in the root cgroup.subtree_control, memcg
+accounting stays on for every existing and future top-level cgroup after
+the test finishes.
+
+Everything else the test changes is either per-netns or removed
+explicitly. This looks like the only setup step with no matching
+teardown.
+
+Could the previous state be saved here and restored in cleanup?
+
+> +mkdir -p "${cgroot}/pkt_${PPID}"
+> +echo $PPID > "${cgroot}/pkt_${PPID}/cgroup.procs"
+> +`
+
+[Severity: Low]
+Can a cgroup left over from an earlier run get reused here?
+
+Packetdrill runs the cleanup command itself. If packetdrill is killed by
+a signal (a kselftest timeout or SIGKILL), pkt_<pid> stays behind with
+the limits set in step 4:
+
+	echo 0 > "${cgroot}/pkt_${PPID}/memory.high"
+	cat "${cgroot}/pkt_${PPID}/memory.current" > "${cgroot}/pkt_${PPID}/memory.max"
+
+mkdir -p succeeds on an existing directory, and nothing resets
+memory.high or memory.max before packetdrill is moved in. unshare -n
+does not create a PID namespace. A later run that gets the same PID
+would then do its socket setup and page faults under a near-zero cap.
+
+Would a plain mkdir avoid this? Resetting memory.high and memory.max to
+max after creating the directory would also work.
+
+[ ... ]
+
+> ++0.000 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [2097152], 4) = 0
+> ++0.000 setsockopt(4, SOL_SOCKET, SO_RCVBUF, [145536], 4) = 0
+
+[Severity: Medium]
+Does the test rely on these sizes being granted exactly?
+
+sk_setsockopt() in net/core/sock.c clamps both values without reporting
+it, and still returns 0:
+
+		val = min_t(u32, val, READ_ONCE(sysctl_wmem_max));
+	...
+		__sock_set_rcvbuf(sk, min_t(u32, val, READ_ONCE(sysctl_rmem_max)));
+
+net.core.wmem_max and net.core.rmem_max are global and read-only inside
+a child netns. The test cannot raise them from its unshare -n
+environment.
+
+Suppose the host has lowered net.core.wmem_max, for example to 212992,
+which gives an sk_sndbuf of 425984. The blocking
+write(4, ..., 500000) in step 2 would then sit in
+sk_stream_wait_memory(). Every injected segment carries ack 1, so no
+send space is ever freed, and the script never reaches step 4.
+
+Even if it did reach step 4, __sk_mem_raise_allocated() force charges
+in this case:
+
+		if (sk->sk_wmem_queued + size >= sk->sk_sndbuf) {
+			/* Force charge with __GFP_NOFAIL */
+
+The final write would then succeed instead of returning EAGAIN. A
+lowered rmem_max would likewise change the 291072 byte sk_rcvbuf that
+the collapse step depends on.
+
+Packetdrill runs privileged. Would SO_SNDBUFFORCE and SO_RCVBUFFORCE, or
+a getsockopt() check, make this deterministic?
+
+[ ... ]
+
+> +// 4. Cap the socket memcg at its current usage and expect -EAGAIN on non-blocking write.
+> ++0.010 `cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
+> +echo 0 > "${cgroot}/pkt_${PPID}/memory.high"
+> +cat "${cgroot}/pkt_${PPID}/memory.current" > "${cgroot}/pkt_${PPID}/memory.max"`
+> ++0.000 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
+> ++0.000 write(4, ..., 16384) = -1 EAGAIN (Resource temporarily unavailable)
+
+[Severity: Medium]
+Is this cap reliable enough for the EAGAIN check?
+
+An earlier comment in the script says:
+
+  // Move packetdrill back to its original cgroup so only the sockets remain charged to pkt_${PPID}
+
+Cgroup v2 does not move existing charges when a task migrates. Whatever
+packetdrill allocated while in pkt_${PPID} stays charged there. The same
+goes for the sh, awk and sed helpers it forked. Any of those charges can
+be released at a later point.
+
+In mm/memcontrol.c, memory_high_write() calls drain_all_stock() once.
+drain_all_stock() can skip the drain entirely, and for remote CPUs it
+only queues work:
+
+	if (!mutex_trylock(&percpu_charge_mutex))
+		return;
+	...
+			else
+				schedule_drain_work(cpu, &memcg_st->work);
+
+memory_max_write() returns straight away, because max equals the
+current usage:
+
+		if (nr_pages <= max)
+			break;
+
+try_charge_memcg() uses the per-CPU stock before checking any limit:
+
+	if (consume_stock(memcg, nr_pages))
+		return 0;
+
+Stock left for pkt_${PPID} on packetdrill's CPU could satisfy the
+16384 byte charge. So could a remote drain or an uncharge that completes
+after memory.current is read. Either way the charge in
+tcp_wmem_schedule()->sk_wmem_schedule()->__sk_mem_raise_allocated()
+would succeed and write() would return data. The test would then fail
+intermittently with no kernel bug involved.
+
+On systems with swap, can memory.high=0 also swap out packetdrill's own
+anon pages that are charged to pkt_${PPID}? Swapping them back in would
+charge the capped memcg, which has no task that can be killed.
+Packetdrill could then stall in repeated page fault OOM retries.
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261015073736.2944215-1-tavip%40google.com
