@@ -1,100 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792426272;
-	b=YO5q6NMwE22UsqChhO7II8BfHLxpz8TP+mmRNPYM13sdT88NPNavjRT1MjQQ/9e5nImG
-	 IcLu1lCu9N+AU7RxnNx1fE+OfJHpXJaAPamhKksrMbGp081MFTqieJCQTj6oAleLou86u
-	 YgxOXSyOjOa9ANUlucHAr0nPoUVEfikVvno9xipjYYthDlkM16dEVYWiLRYbiugUGXPwV
-	 AgswFJX7pI7oJlXRFN7ti4raS5qG1X4VyuxFnEqiQhj5hqQn0N6DlOCLB+WS1mSanmLU4
-	 kWV8nM7bd8CBVyfil7DndRtfkru1MlGV/aNW7wquEBctkzSYrXmVSmOZKu63sUbBTSQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792426272;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Pr7BJMuifE78YwYx6pJZlEAPKb8dBOcE7CtzncpVA88=;
-	b=dW2lS3XLn/dyboAt5RNUWlTNX159bv5POeFxPiM54hP2T/lF8/dIZIMQCWyOmq78zQDe
-	 mZfQVgyZBlzPsR9DSvknR6p1dqk7wYGiGHLmJM1wJPLahw5l0x/l6Thw0GF53sHLE8Prh
-	 JOn2WZPMtlXoAoguuOoQ4EL7p7bNTiyviwS8CmwaJS1AkRm21//6wEdEjejA5f/im9hIc
-	 iPgy0v/P/DsFLU0PstEUa8ewC+TYDNoUYX0qTQFj1jP0NzRrehne6lL9sU8SaKFCOlcQx
-	 uxMR+jioerzHzj9bQrtjc8z9QXyGP90ySXqcmqN89mJ6NSjnUe/gGZbr66dhNIRfRHQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=tRx3K5jm;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792427097;
+	b=pfbcJXE5F6p7YfOpv6jvXfac9WqBuUYUuY9CigJgIVAcuNaJnDS52NvMy1H0pqDl6IK2
+	 P2kyLOFjhZXyLADEVGrMX8D+SF8Cxw5y9HVOxyZxJaxSBrs9ho/DGlZEaOthzCGRFcmE6
+	 5srySuAaz9FUOTiqYdRgWzS1pq4wZo9FYcDYbmTlAhGUzL/9Fq0T1sF1BwX+8fc9xrtO6
+	 cFpyMX44fQPTo9+tAfe28toYshFAdjqEmcOc1YtEpLTH0RSs9YbxzH5kPy3GeOI9xEDGu
+	 PnoVm7zjV+vjLz0WbsBgpSk2htzI1b4h2nXv6fTwH/1hjrht6KK441Mbhef8yZNy9uw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792427097;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
+	bh=/VD9EG2KiE5OItNAh1xRhZZwJ3NvkM7B3uEI0rjcQOU=;
+	b=juRX4iqGIG0v4vAvEFZiQu6mopm/wD07xfz2g9l6JZWsehlNlg6BpfTCi3NJaj9tP511
+	 XVwD4WruwVmenrxsjjrbqZ/igf+0PYYZBIAcLjaPT/mSqPacwkIqiYmQx5DV6sMM9AMj6
+	 x0b8q4hcTUIyXdc35+QS48dbVux1hS3cpWbpJ0sLj5kX1/WPL7n1XPbQDXsBkFFDeSLwX
+	 YsA1fUf4EEB+Vshu9oqXwIKIoL4G4FB+XDPcTPQg7lR6mRPTOSDaqkJWsy7fOUUZUcZN5
+	 lglj2XCw5+nTlwv1xA4lTuU408kDr6CR/dkqTqfiPLIvrRECKyF8Lo9FXuVKQo2RCMQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=infradead.org;
+	spf=none smtp.mailfrom=casper.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=WVOW95rb;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC34606DA7B
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 16:11:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EAC34606DA7B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED24606A31F;
+	Mon, 19 Oct 2026 16:24:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9ED24606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=tRx3K5jm
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6ae14cdc63aso16988a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 09:11:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792426270; cv=none;
-        d=google.com; s=arc-20260327;
-        b=g/rewAAnICpzLgcMOfEPW5uVoZMVOTmp8tOqa89cKVUeYdFMZUSbnIiytYgY1f0hfa
-         n7I02zOqLZFd9LuJ/DCEU2sDneGtwVS9ORrsZXAxsklDDDrOEehlL38wIZIkBVCRbKly
-         NgqCTj6ZifTNJcrDiR/pDiyU07NhjoSf75DMaTbWRjswKGTs+kXdN+KMtoCqEkGJygit
-         cWx3KkBX8YMvV/M6iyAo5xLjmr+vSa5M5apsEBqARoAni85XTEE5jpYdIFkbnEmEeBrb
-         kpXqHfP3Gyjh6ZJAj4+ZL9C2bS96KwALqArYnnq6PR25XkEqcx/a4hmBm7HsiHvj6EBz
-         Qmiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Pr7BJMuifE78YwYx6pJZlEAPKb8dBOcE7CtzncpVA88=;
-        fh=WEKRQNUqDn93W1sf17I6/4jhSC4PEglwnR9ZM6eS0d8=;
-        b=JE3YTQ3n83Aj2BuxCOVOTA5hm0Rfysmhbhgla0t+MmnfTb1pfDJ9sJTgfrldypc1sU
-         REp+6zLaKOCJ0qnOTULSWiRyzDmOJoWqOylpKp3PLKQcT6j4MOrACigQz7eI1cXgZGGK
-         OY8q4UsIaS2fbwT2GIAlosVVsHcVz41ZpAu9UoLEo1uFV2HEE4rrhFvCCTyFzP5iQlaF
-         Mde3l6jSt6a+nnBH6ZM3cX4Com8l7PtUncIIkXBfNOpibYRKzRlckc50RcCuBrUhPMQH
-         Hk1qOCFOgIKJBy4S3H4706QD1XCV7DGVGcWgXLSKN+RcD75ZDK6/OwS9R+KbjxAdQjuQ
-         dqQA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792426270; x=1793031070; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Pr7BJMuifE78YwYx6pJZlEAPKb8dBOcE7CtzncpVA88=;
-        b=tRx3K5jmcY33uFjjLhBl+j7aQChswPzQ8jc6vt21o8gL5HebhBkZhq0m4V5VQXj8Os
-         Vxy55uyFlopl85UWtcuhSyXPeS8T5aUmHQFtnKEsZz7CPNXCpLO6jJgwUUnFOIl2yUFB
-         91ziLFkt7j059F2wIJiIWCft3lgYJiZpl7D3tjbGSsU8jErVrD+G6+TLwtfY72Fl1BRp
-         +udUczkN4A9EVjpSES388lV7wjosc45EmCjnJY0x3QPYLgzoDNHjM4jwwdIDS0kg07RL
-         YnqkBmDIKaVV6xViHZm/RbvKeMlM1D1RnEkQXEC8kGdWmFWv98zxVzqcc+Q+Y0hzQQtm
-         mbkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792426270; x=1793031070;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Pr7BJMuifE78YwYx6pJZlEAPKb8dBOcE7CtzncpVA88=;
-        b=M2s8yBNjNBJu7txHi81ol4XzJ51M52zeV+D/HiiRQ5/IfulQHFfHwEeIGk6TB8/4/g
-         qM+9z7qSpQlodNH7Ch+2hcgOPbigrfxWg+queGNRH+1ETKmpFnLOInjHhwl8dNMIAAtC
-         wFGZrDk300vfL8XXz5wjkx+MJ/L//GDlzw/sKij48lONeMmckTCnA47TVMcsRHYPoA1b
-         0+oOFbN782AIo1aA6jTkEhHsDhlGEx/WOtC33cU7W817cTI2ysUXVxPjj82OUZ1tEJGp
-         Twa9f5Y5qbsY4C0c+8N/J5ZlCg0/wsX4YLhZARWreAd+gw36hKEa2IurtaaPvxBMbCri
-         AgOw==
-X-Forwarded-Encrypted: i=1; AKwUvByA09uphN6THDJ7SlA6OASxoEJZKeA0qGx66H9nEbo0BKhs87EAVKwueXe1L4WYe/lnkc2aU+VTLl4tiy4j3lY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIEO7Vg2cdLWI0OiXEZ4ud0y5Fu2KId6NFVmbjejEy9oJrvft/o
-	c00bysabmUuC625DAWUwYTvaOSVCXvSONj/sI9AiJJXYtIANXi1ICScDgI52m/t0G/Dudw1633w
-	qCRpzl6VsT4wcUsOc696alJxV0zBQeOKgtL/ySLr2
-X-Gm-Gg: AYBFou2iUWGNCbbGl74/uedDe8grL/e8QufpME6cZbuIPjTdrv6EJuVLTFqnvf3zHdC
-	AmMQbdTEfKVbrC9SSQUtq1Oww4S3k1FjAGegSh2dRF1CagXCB9lZyLLFjVKNNUgj4sU69LG5Qdq
-	/UP9HdqqqDhPGNg1FRJLFE8+7rO+yn3zLmEgYyrffSQAvWl4B0ThhCN4wUUDtBpOuWjQA6wIWw1
-	g/+hs5j3qCsw698OpmYZun3KYW3s7kZSZdz6dEtuu3w5k/EsMA3onV5SgwVEOEj55Y1fnvDrLah
-	MELexH7bqu1827G7CCPlueFd9yg2k1rSF710A42KSz4uJKn+XtDIa/rzjIlXF8rBpbSXpasrqYc
-	m7WOIfBGV6A==
-X-Received: by 2002:aa7:d3c1:0:b0:6ae:188e:e119 with SMTP id
- 4fb4d7f45d1cf-6b3ad90b655mr92225a12.9.1792426269498; Mon, 19 Oct 2026
- 09:11:09 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=WVOW95rb
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
+	To:From:Reply-To:Content-ID:Content-Description;
+	bh=/VD9EG2KiE5OItNAh1xRhZZwJ3NvkM7B3uEI0rjcQOU=; b=WVOW95rbqjl78HyTifdRtCP1aH
+	NG8MvbDO9XfMXxeGYNRyZSvZUr69XApWv07FW4z+5paWkIqQcu3kY0RwWCYQj3Jojivt5W9Be9p48
+	Am15D75sC7sdDq1lHo9jFAqN2WLOghZpYzJpsMh/id1rv1Ia2VMGkzJW4CthQBSNsRjio3r92w38/
+	uU8+DDp2RRgWBbs3No2MhhFQF8ytYpkaDXuO0zL+5SFcxGAW6SDXe4DhcwHB5vfTkjjM7SED3N7gE
+	OypVyFaZL2gAUg+pDIcD5+mk11+h2POhOe015qsDJiHq08HbM4mA1xiUzjLQHUE6VpkSuhYKPyz4b
+	VHS+mhZg==;
+Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1xIqAH-00000009VGL-3PBP;
+	Mon, 19 Oct 2026 16:24:45 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
+	id 1xIqAH-000000009ga-0tUO;
+	Mon, 19 Oct 2026 17:24:45 +0100
+From: David Woodhouse <dwmw2@infradead.org>
+To: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paul Durrant <paul@xen.org>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Fred Griffoul <fgriffo@amazon.co.uk>,
+	David Woodhouse <dwmw@amazon.co.uk>
+Subject: [PATCH v4 02/12] KVM: pfncache: Return -EAGAIN for a lookup which hits an invalid memslot
+Date: Mon, 19 Oct 2026 17:24:33 +0100
+Message-ID: <20261019162445.37219-3-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261019162445.37219-1-dwmw2@infradead.org>
+References: <20261019162445.37219-1-dwmw2@infradead.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,51 +75,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261015163915.1166043-4-almasrymina@google.com> <179233927086.3135.6123492094489915156@kernel.org>
-In-Reply-To: <179233927086.3135.6123492094489915156@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 19 Oct 2026 09:10:57 -0700
-X-Gm-Features: AclHuK8eiPagoVp9rRWfufPEyCEaXmjBdb7vS7t1VxUSJn80p85wHIDPJ3eEP2Y
-Message-ID: <CAHS8izPobFzob0pF2cLqL+nqtJVL-TC50QuDHOem9_cwJoGSxA@mail.gmail.com>
-Subject: Re: [PATCH net v4 3/4] netdevsim: support devmem RX and TX bindings
-To: netdev-bot+sashiko@kernel.org
-Cc: kuba@kernel.org, asml.silence@gmail.com, dw@davidwei.uk, sdf@fomichev.me, 
-	ap420073@gmail.com, pabeni@redhat.com, kaiyuanz@google.com, 
-	bobbyeshleman@meta.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@kernel.org, hawk@kernel.org, ilias.apalodimas@linaro.org, 
-	horms@kernel.org, shuah@kernel.org, sumit.semwal@linaro.org, 
-	christian.koenig@amd.com, dtatulea@nvidia.com, razor@blackwall.org, 
-	daniel@iogearbox.net, tariqt@nvidia.com, kaifengw@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-On Sun, Oct 18, 2026 at 9:01=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wro=
-te:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider.
->
-> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 0 (1) =C2=B7 Low: 0
->
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwor=
-k
-> know by including "pw-bot: cr" as a separate line at the end of your repl=
-y
-> (one such reply per series is enough).
->
-> - [High] On builds where PP_DMA_INDEX_BITS is 0, this patch leads to a
->   use-after-free of the netdevsim bus device.
->
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Bro this is a pre-existing issue I think. My local sashiko also caught
-this but it has to do with us not doing a get_dev or something when
-PP_DMA_INDEX_BITS is 0. That's a very rare condition and unrelated to
-this patch series I think.
+A memslot being deleted or moved is present in the active array but
+flagged KVM_MEMSLOT_INVALID — a transient state which exists only
+within a single KVM_SET_USER_MEMORY_REGION call and is announced by
+a further generation bump when it resolves. gfn_to_hva_memslot()
+collapses that case and a genuinely unbacked gfn into one error, and
+the pfncache refresh reported both as -EFAULT.
 
---=20
-Thanks,
-Mina
+Distinguish them: return -EAGAIN when the slot exists but is
+invalid, mirroring what RET_PF_RETRY does for ordinary guest faults
+on an invalid slot. Existing users don't *need* to change; most
+will simply resolve again at the next refresh. But the distinct
+error code *allows* a caller to retry.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Assisted-by: LLM
+---
+ virt/kvm/pfncache.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
+index 3659686b97c2..17aaebd76db8 100644
+--- a/virt/kvm/pfncache.c
++++ b/virt/kvm/pfncache.c
+@@ -304,7 +304,22 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned l
+ 			gpc->uhva = gfn_to_hva_memslot(gpc->memslot, gfn);
+ 
+ 			if (kvm_is_error_hva(gpc->uhva)) {
+-				ret = -EFAULT;
++				/*
++				 * A slot being deleted or moved is present
++				 * but flagged invalid; the lookup failure is
++				 * transient, resolved when the update
++				 * completes (or reverts) and announced by a
++				 * new memslot generation. Distinguish that
++				 * from a genuinely unbacked gfn so that the
++				 * caller may retry rather than report an
++				 * error, as RET_PF_RETRY does for ordinary
++				 * guest faults.
++				 */
++				if (gpc->memslot &&
++				    (gpc->memslot->flags & KVM_MEMSLOT_INVALID))
++					ret = -EAGAIN;
++				else
++					ret = -EFAULT;
+ 				goto out;
+ 			}
+ 
+-- 
+2.43.0
+
