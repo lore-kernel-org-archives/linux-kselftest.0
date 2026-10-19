@@ -1,279 +1,196 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012043.outbound.protection.outlook.com [52.101.43.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C97044C64B
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 13:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1434FC34F;
+	Mon, 19 Oct 2026 13:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792418077; cv=pass; b=ct7TfVQJvGHuWjeykgPeJ0mXYBxiN30+lREEQ8Js3RLXyw2wCjdGrmfwGdGlEY9M1sZfEXQ3JpXZRj1Zf8uJol1/MfuNa/uygE31EJiVbduc93MxuaXf02fFEFjAMgfEwIEqC91lgAGttEgiQRgN67yghV2Mkkv5aARvuOBKMw8=
+	t=1792418089; cv=fail; b=HGV6RgzrkTgfohiwXZaPGWCNnBg2HHWPjtaOz6cPWVoYDqVcAvGDvdGxpeseIzbPCeZdDhy70/4qEok5s8UQ0hZLqkcOEDo7MU74n7LsF4OoS9U1TVAUYGVowyYmBQU9D3TMtGqSqbCx3kmdp2tEPvfCipumfH1LAlWg9nQ/8oo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792418077; c=relaxed/simple;
-	bh=gvwoY48v8HtjEGBanR0EVPc+UxSyK5a07IZl2skoMZ4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gmDaN37lp+pQejdaLFui/EWDjwiqfx8QnkZpfjlyhRTAudqXdEzacMqGKX6pZcBEU72kDNgG6lquWZQ59arsSHcD9vgAOnkSB4zrtpNR7AdMSzKPc3XUCJlPV+K0ytY7NuZy/kmEJT4ib8mzjvwcD2hSiY2Z1Yg7TqtC1gAdSaE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uNpXCGQP; arc=pass smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1792418089; c=relaxed/simple;
+	bh=JM0YjG8nvVw9pjYzBghFmu0oK+bi83RM+sJvVxEtPz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Uk9IpyC2CW1nSVvXESPDh11QPi41N0cE+0EGuHcdzst6yu1uD9XJf0AR/HYH6J0Dt5Hr8V08N98vWC1G6QAsWQrkHoo93poylI6+1CrpEBVy95Yj/GjCkLorqV9dmJc4BMpXuWFQI9EZvPpgYeeC+cfuiv55Rut/WgGSe4TEpqQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IKnlaSY2; arc=fail smtp.client-ip=52.101.43.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uNpXCGQP"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5337fa12431so402721cf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 06:54:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792418074; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Wsnxv096EUDtksLqa/vsMe1WSYs0PLb80gqjDpW11ap9dp9GByXzgLmcVz6AUmwHSb
-         vBG4xD0cBdFe0/YKPlyaJXhCq2uUpL2DPDBh+FFmXNMZop0CHsqB7T7hHBaN+4hHXtQR
-         mh8aosY3uq4m2jzcbWAqR2dp0MblZHyD8V/HSPPnuC2CvIwZvb64yfE5KA0Tjj3KoM7k
-         nqoobXXZ6kXQ3mBRTZyy6li0dwlDd04dHrBHnw1VwitdJL/l5/T1Q9cmha0lyQbwX+i9
-         uGL5EbrgIOwtoQPdsbGCTvP0DVb2BP8bQZK4mZmKQn3CMiIgRQM0Lg9GeiPbO88SY+Pm
-         rVng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0kEytU5LeiM3vhSLHRfNg06oRQOFH8XdzJ+MdOl7cWw=;
-        fh=ZyC0fUIwRk3SA28ZJCrW98M1znpQy+rlq6oTMAVRaXk=;
-        b=RF62uSOOVLW3ZePw4n3mFmcr8JfSWO3DK6z2EXZOjykc7riSVcHhZMblDYyPLFmpur
-         SyRDi0tjLMTnWcYWv2MNvl0azNkssIkM0wbEmFssianF5+9YTs3uA5e9CtphozYbQjmD
-         00vb+ww0a4Bp75/HYc5vWHV+rYf0An2xqoPTQbuhMXYpMWErNYVGx/WY6PDHDjdkw7a/
-         WiTuzgiLINvBvENxR766VHZ2Sx4fl5Zal/G3EIeAj4yelWPRoMaG0GEvI5W/WMP2wrxJ
-         l8p2wP4Z1jeRzGLZapXN5qjRXwbY2iv35xY7W+gxMSWSa8HpifvZ9yQAAi6lxUVMN2uZ
-         L42Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792418074; x=1793022874; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=0kEytU5LeiM3vhSLHRfNg06oRQOFH8XdzJ+MdOl7cWw=;
-        b=uNpXCGQPcR1FBHrB7LaE+WHjBB52uC8BjnVVPYEmtek8ERcmSeijJ9LBLLm3BTxAqr
-         aPAH3DCoH57rKYO2v9WsiafoGqkCwWxfh85xiwk/SzfB5nR7V9ZNVdQRB9d08PwdyJYz
-         YeqQhUu/UVlD/Cbdavi/XdKRN+hGNO91HLRAihExCMqkd9RhcWL29TXISP/KuI83Z7YE
-         k0U66OxR055W3AkvkRdfYmr1meUrsTDI1N1wTb7gd5MfJzteXs6T3i4yaL8DNRyOsMZm
-         SMY5kub6Zj+WrgsJ203Oafz3t4jeM+JWEF5bWZIAFcuOQktMCKCM2eJUR9tBEjSR1Pym
-         /aKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792418074; x=1793022874;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0kEytU5LeiM3vhSLHRfNg06oRQOFH8XdzJ+MdOl7cWw=;
-        b=JqZUXHOIaSSiDqH5U+OI0dOAIEKd3LyiMZDRs7lEPgKQ2BzfQ3zekN2u2SBvK+KCdu
-         f3Qo73N0vY5Kxxo6sgt3BzuyyapRXk4SAUBaLLd2vkNgHRcfZUEe4NT+rlK0t9bg9f+x
-         IKB7dw+7zuFdSTAkMvfqKuLsSmrAqx2YKGr5/OQrrLLxk+7NgcgYNiV3JUwXPld3Qjoo
-         teN9ccPb3gJZoBK6LdMMO5QBp3fqbUEbZBt+ZuR3EmvOaB2bqs1Jb9V8LXu9qGXq43ks
-         PwDII2cQUR+RMCnB0PTUh3Et9L1AdivOkOOJ0lxD0n6Zx+uDKA11xYbPAkfv45YooqQH
-         afpg==
-X-Forwarded-Encrypted: i=1; AKwUvBxnTjPA3k388kpfSzHI5ShZbvrsrl1niqXyXT4xHonvxJ4/9syk1ybUUzE6QJQ19nT3fUgDsGItCCbxfK+Npi8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIrL6MorRHM96RTKOO+MFpMmB4dg6Y4SIWLmOVAIlYF+aLw8bZT
-	kketggWKoB5BWGNZjS+sGwzvkl0NUQpz2W3HjFIWEHEfg9PhL6TVSx4wtGbcNlYpj+1rWJ9ABGw
-	pzl3+VeDAdEXUPSsqJIcvH6z62nQA3EMP4EA39dRX
-X-Gm-Gg: AYBFou2IYNagVvQTIPhJyA3lR7M/vfKRgOK7lxkAFi4FqFpZDjGSV0pZBcTgK1wjJja
-	aRBZX9gxR3BqpJT/WrkA0Ntzyufx7SYvSYlTEee+qLiLL2Bexf8nO9TnC9l2MpRk76wZuQt9wIm
-	M2q3iGe1qfADMdgeLPDER0Z14Jvz7Ic7ec/Dk9JNFG/2J1/cJZQ9vg3ofPGavH03e8gqHWHi9Xv
-	WYcIkiM3kQOqbNRbTYhJTJu353sGNgWOAHVFb0Xbl/MQpyBIgNxdp1HZ4ydjTBTob9fe+epzeut
-	bS/JDF9qkoNKqF1x7nrLj3O0EtkvQlNyRQ8atNXti7tSjQv/dOLPR2Cje6dwivnsBmonjYFe42m
-	nFws+UaySRysJDFpjpR7vH0mva90PzhQbu1rh+QZhch1isfA9JJffxAo=
-X-Received: by 2002:a05:622a:228b:b0:532:eff9:ca08 with SMTP id
- d75a77b69052e-536465dfce9mr41062201cf.12.1792418073474; Mon, 19 Oct 2026
- 06:54:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IKnlaSY2"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fIAceooJjo0FD9VK27TSCCb4GtTOtqtjaKiNFAG/BbxGi2BK05MBj8sWUG5TcsV+HPE9T5117OZ2TwoY6cMymN776AtHmKEd2Slsj6TAtmgM2iY7W+foQ+mbuUlsZlSX5ZQS4+yYlr1mhM4gT62udOyzb/xl9ouDHdAdejfWVj+IZAW6HRRMkCV7AgqtYyscXr8F8O0lGAQfRdxHdowIbJQr9uPdGtjqdUz4stReI2hKZMSEKrYWxXpwXb8swICAq3reJUuQBOC09BlsV252SfQmAre6pZautSR0GBrYv4joXu0gyS7H7kjpe1RaNPrH8n0ll0Cg0YCe2rO8uKh1DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+dD9/hvy8CjdpytNmMTQelv0WDFvgfCSAODHd8XjH8g=;
+ b=aSJYNk/V89xWXyUQawe2DTjIKUY7bVI0xChXWHrAFDvytoNpj4rTBat+MPbY7hMvxuA8ImudXQar2ULiDo1oaNYztT5w1yU3GJpaQpnVIPMBN7pjw5Lo2uSYwMTYEAmsipPeDqNLa/TuF+T5uf1YuxKAinFPuwOm1rpLET0EA6X0uFqCsLgt1OQwaUherLNYIcPkAZL2yv7w73VYIlPYSvoyKzIFodqimeHZHY+DCL7gBBGDdi6SbbzvaPykc7rZSrSIadf1RXmhqsyXvnaaRPks9A80iCjJ69podBpE56PnCMwHL5lymAzemSS8/cMttxaAT3HuHYMQ4Ufr2i1bTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+dD9/hvy8CjdpytNmMTQelv0WDFvgfCSAODHd8XjH8g=;
+ b=IKnlaSY2ZMNZQnnRFGJGnBqF2+zjvpv/7OLYdyIm9ZDWlFlekSSP4FZ7wi0xHWj00R4JpszZEN8wSLjMViYutwF+vsNCPjOiKcsrWLpNtY80ddnC0rTLLUCl5ZPgbrwIr2Kir/enTORRFyHQ79Uq0ASn8u0J/4Ti7G4JfSSa2J0x/GRaWklkGiW+w8u0wwhmJFq56ZsaVA7L5Ku3+qeWg+wjkePqbloqIZJYPIufe5qBgjHwDFvR0McgegKfADY8ERYL47wmZY6QEiPrZNTS7oP/uiKVrysqhWARzYQQnjl7babSp3Ugx5jxHMiTq9v+AJvQ3tVtVWIGgTBUZwgqWQ==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19)
+ by MW3PR12MB4491.namprd12.prod.outlook.com (2603:10b6:303:5c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Mon, 19 Oct
+ 2026 13:54:45 +0000
+Received: from BL1PR12MB5174.namprd12.prod.outlook.com
+ ([fe80::58de:822b:868:96e9]) by BL1PR12MB5174.namprd12.prod.outlook.com
+ ([fe80::58de:822b:868:96e9%6]) with mapi id 15.21.0522.017; Mon, 19 Oct 2026
+ 13:54:45 +0000
+Date: Mon, 19 Oct 2026 15:54:38 +0200
+From: Andrea Righi <arighi@nvidia.com>
+To: Michal Blaszczyk <michalblk@google.com>
+Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Kuba Piecuch <jpiecuch@google.com>
+Subject: Re: [PATCH 2/2] selftests/sched_ext: Add class_switch_stall test
+Message-ID: <atYhHvJAxLp01QbT@gpd4>
+References: <20261019124146.3582127-1-michalblk@google.com>
+ <20261019124146.3582127-3-michalblk@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261019124146.3582127-3-michalblk@google.com>
+X-ClientProxiedBy: ZR0P278CA0014.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:16::24) To BL1PR12MB5174.namprd12.prod.outlook.com
+ (2603:10b6:208:31c::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261018211514.2817293-1-chia-yu.chang@nokia-bell-labs.com> <20261018211514.2817293-2-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20261018211514.2817293-2-chia-yu.chang@nokia-bell-labs.com>
-From: Neal Cardwell <ncardwell@google.com>
-Date: Mon, 19 Oct 2026 09:54:16 -0400
-X-Gm-Features: AclHuK-yKHKszrAvQ0DWznhcRsJCvVm21RfRVRcavHBDlb8PKd3FVpjc1os6wtY
-Message-ID: <CADVnQy=jqk0vZUsG6JKv44cBbnR5pG5+7Tvacohuz3tzFpF6pQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 1/3] tcp: accecn: Add ece_delta to rate_sample
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: ihor.solodrai@linux.dev, john.fastabend@gmail.com, jakub@cloudflare.com, 
-	jiayuan.chen@linux.dev, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, linux-kselftest@vger.kernel.org, 
-	shuah@kernel.org, horms@kernel.org, dsahern@kernel.org, pabeni@redhat.com, 
-	jhs@mojatatu.com, stephen@networkplumber.org, davem@davemloft.net, 
-	edumazet@google.com, andrew+netdev@lunn.ch, donald.hunter@gmail.com, 
-	kuniyu@google.com, ij@kernel.org, koen.de_schepper@nokia-bell-labs.com, 
-	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
-	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
-	Jason_Livingood@comcast.com, vidhi_goel@apple.com, Mike_Rudolph@comcast.com, 
-	Jeff_Howe@comcast.com, srichard@netapp.com, 
-	Olivier Tilmans <olivier.tilmans@nokia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5174:EE_|MW3PR12MB4491:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5de77641-1864-41b4-1226-08df2de8882b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|6133799003|18002099003|22082099003|11063799006|4143699003|10067099003|261009223027099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	+6ajNGDDpyztVfWwoQ7QCMk/4Er442QzhH8bq64r/L7BHaG8UnM+6AaEy4BY/yF4OpTPwB1o/PtTxJ3RsdponlkmukAGpMEftXpxHjGusVhrF/z9aQJPB4SduCjOakpg9wXpikKHNSUFfnhwC1lNvC2q/7rEoXH5LGREYtg4vx25he/cswsEyYZvq2y6ZE474R1/SIWw10soyo2zxYLqqQQbXuBB6oJvtCpNpFIUURmj/inNp1PtFOK/2AVVqF/5Wb2UVbktKaxgl4Ka/GhmHd88bgdMsghMxsNp8fh0r/PN5lpAuoWpViFRq2/6B6e6i6ODIesDXACrNfPOZLL5UJy6BZacNp8eXUrzsv3BH7rwE1jUGV/fDAnO/dzrOAh1pDFhgGlhNMLny6xJn+iQm3qsHtz6a0/VTC6rCjuG7CiVxjEsc0Cz67G4YewuDN8nATGNYFZoxcG1yr9ymAuPPGRXKedhwI1KXpE5bvS5WMvfvzA8Fv6mzUPQO2jIafbdvnx/UmgsVpwkhcKgAQlCHI6zPFa/X0Zj98LmGAOHOELbyOCBX+ZtXTvXixZOU4foRhVOJMcgiYxCSxWrdbWuDNuY5vZ1b4myctJVn2bOoKF1mL2WhMdKeahAZoLG8JDHXAgmtIHH8eLKOiZcehJ3HvaM+Bj25l+Ypj7csGVLf58=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(6133799003)(18002099003)(22082099003)(11063799006)(4143699003)(10067099003)(261009223027099003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?rYXPqEIEybstq6ZvLv+Aoe9m4IYi6wYLvbRZdwUHJOqWI+OUUUpgG4B2XIly?=
+ =?us-ascii?Q?0AHFMvf8FDFqfK2E/OpJo2hH9Z2crUPfOT8yC5tlafOmN9YXn02IJtpsaLGf?=
+ =?us-ascii?Q?qfXw1/21+1iITafrgGgmReVurzK4EeS3jVNfipUjdRMcx9jvEB/jlF9Xs3UI?=
+ =?us-ascii?Q?VyamxCud//616J1JCpVZ+qPrAVaVP8P1oby+08oA1TJBSgpqQAiGEocBcIhv?=
+ =?us-ascii?Q?4y2d45b+Q6boDx6VQIPyvx/VFHJ/8Ntdd4oymF8RCZkwQXDtu5m2mwPIenSP?=
+ =?us-ascii?Q?8hwEKrj/38Khs7na7K0ry5lq4kzmeYtfYqka3kegrMkqUdEVKN86fvPBFWQt?=
+ =?us-ascii?Q?kTvrb4lHOH8f+VFkJCebf2hZ/YsL1I64tG5Uf1MmWUY/9Xg9RvFOUyhE9S9Q?=
+ =?us-ascii?Q?4KvwSZGIPK/Rvipd0agX6OERPoLomyQDGheICO2CxWQ/Fi9zbNXgAbi1Mujz?=
+ =?us-ascii?Q?X96LqAEh6+MuGazgbKiTf05I3gBK3CEha07fX8pfRdCmycCL5kHOXcRdmvGq?=
+ =?us-ascii?Q?0RIlQXCTmbh0LB3oOiXLVigYIc3LPTwP15OAITmYeFVM2HWW16UR+e9oOx8r?=
+ =?us-ascii?Q?bAfTiisjs64tIhQZ7fUOUoBsRRAozIzVsj8E6iAkI9uTQYi9m/AA6cne2Nmr?=
+ =?us-ascii?Q?aQ0/YW1mMeU4V2agudTJTVyB7m4KPlFeCn9p1AWoGCfOIyo1R49uffUQRnS+?=
+ =?us-ascii?Q?wVtW31F1dUYHtYJ0cMN293HEgZ4NUjkjjBkK0QaSJ7aPmLyWF2MddfESLMne?=
+ =?us-ascii?Q?zXiUHvjwdiqWzq3/oU/p7VMwSSAWZPu5p85pRRm6ubIqprTA8LEUwR4ZKwmt?=
+ =?us-ascii?Q?Rtjo/l1RUjV6CG0cL1j72uc4kPi8n9GhdW0xx+FS7oLk8CcrBRcbVDKt0xGJ?=
+ =?us-ascii?Q?/SYnozPMIVuT2Jvu8J2nAEW62a2aUAn0ZQjatxBvimC+8L92zRYFZ0xdrG5m?=
+ =?us-ascii?Q?/tw5nFqz9jY6M1r0bOiqHe8VBHpQkxPMv7cT6pyRuSWk4w+i2o4U6arvwLXN?=
+ =?us-ascii?Q?N5pz2Ida/34TWy8ALu7KfKY/tb4Ra2Y4m8OGJ9C3sRdWPbEHeXkiXg0X2JRH?=
+ =?us-ascii?Q?qcrQCa5VTkdveYSz5s/iQO69UGmWi3dh4a9St/bVQM8wy/cGYosFA6ZjV2Tk?=
+ =?us-ascii?Q?KJprWZi1dMjKE6Q+DTvndLpDJ6SCwModcZ7qSQE270DUVET++LC7sN+eQi37?=
+ =?us-ascii?Q?C1BxyX8rVyLlBnrnqc/7C+CTouOWArD8QxTs5WRCsW6vSNqP4xItWYhFYQg1?=
+ =?us-ascii?Q?Bc+Xka3zQnuDmqBdZoHQdUt0GfkcT96SmCDVgPD6/hPaCmcOxmSfcZXp+uFD?=
+ =?us-ascii?Q?r0R4AqZ8rdqyqYP3m20m4cLQzyXLJlycKrCms+KbXnBM2kzXonfKj7RE/fw8?=
+ =?us-ascii?Q?H1R14XN8Cfk8YSEdkM0N0Y0ucvaRDMb3uoEfjEE9km5uiZA9Gmwfe/T+IxJI?=
+ =?us-ascii?Q?SmfpkkWJntZBzfu8HwlFfmVYbPVooPmvRrh4iURMTrbJKN0soyef7YklypX+?=
+ =?us-ascii?Q?EAMRZ5M7L7AamABAqMgvowVzZ2zt1o9r5O3ZHPS1I13hoSCmMR9SitALYnz6?=
+ =?us-ascii?Q?lU01uQjuo77Lggy+TxmKEzW5uqyBdlL/ynYEEExYqGGxoB8Ny47voTxxX/OC?=
+ =?us-ascii?Q?uaOpj2TxcxNqfSjuSk/0MsjbACWmrf12iIh2WzZxc7gt5i+nlXDTYllrsGCm?=
+ =?us-ascii?Q?jQVVE3XxbmMy1q7J+cxeHxTERMqniUvF+oyeq+CFxOYGoGJHdAIsEtpbH5R1?=
+ =?us-ascii?Q?WzUemmsDlA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5de77641-1864-41b4-1226-08df2de8882b
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5174.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 13:54:45.0766
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9t3U78GOSvXcV9s+SKz/e2RUPZHe6sYPcyAVV02vSoVYsk8MpCJ/tU9FqGbxPWZAfeLoq/aVlxR7JlUZ6PqFCA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4491
 
-On Sun, Oct 18, 2026 at 5:15=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com>=
- wrote:
->
-> From: Ilpo J=C3=A4rvinen <ij@kernel.org>
+Hi Michal,
 
-Thanks for the patch. I agree this will be useful for congestion
-control modules using L4S ECN. For example, I see this field is used
-by Prague in https://github.com/L4STeam/linux/blob/testing/net/ipv4/tcp_pra=
-gue.c
-.... is that the current URL for the code?
+On Mon, Oct 19, 2026 at 12:41:46PM +0000, Michal Blaszczyk wrote:
+> Add a test for a task which leaves SCHED_EXT while it's waiting. Its
+> scheduler keeps the task waiting on a DSQ after it wakes up. The test
+> switches the task to SCHED_OTHER while it's waiting, lets it sleep outside
+> of SCHED_EXT for three times the watchdog timeout, then switches it back
+> and wakes it up. The scheduler keeps it waiting again, for longer than the
+> watchdog interval but shorter than the timeout, which the watchdog must not
+> report as a stall.
+> 
+> Without the previous patch, the watchdog charges the task for the time it
+> spent outside of SCHED_EXT and aborts the scheduler.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Michal Blaszczyk <michalblk@google.com>
 
-> Include echoed CE count into rate_sample. Replace local ecn_count
-> variable with it.
+...
 
-I'd suggest a clearer commit message, like:
+> diff --git a/tools/testing/selftests/sched_ext/class_switch_stall.c b/tools/testing/selftests/sched_ext/class_switch_stall.c
+> new file mode 100644
+> index 0000000000000..489d23c777f05
+> --- /dev/null
+> +++ b/tools/testing/selftests/sched_ext/class_switch_stall.c
+> @@ -0,0 +1,240 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Check that a task which leaves SCHED_EXT while it's waiting doesn't carry
+> + * that wait over to its next stay on SCHED_EXT. If it did, the watchdog would
+> + * count the time the task spent outside SCHED_EXT as waiting and abort the
+> + * scheduler.
+> + *
+> + * Copyright (c) 2026 Google LLC.
+> + */
+> +#define _GNU_SOURCE
+> +
+> +#include <bpf/bpf.h>
+> +#include <poll.h>
+> +#include <sched.h>
+> +#include <scx/common.h>
+> +#include <signal.h>
+> +#include <stdio.h>
+> +#include <string.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +#include "class_switch_stall.bpf.skel.h"
+> +#include "scx_test.h"
+> +
+> +#ifndef SCHED_EXT
+> +#define SCHED_EXT 7
+> +#endif
+> +
+> +/* class_switch_stall_ops.timeout_ms, the watchdog checks every half of it */
+> +#define TIMEOUT_MS 1000
+> +/* longer than the watchdog interval, but shorter than the timeout */
+> +#define PARK_MS 750
+> +/* time spent outside of SCHED_EXT, a stale wait would exceed the timeout */
+> +#define OUTSIDE_MS (3 * TIMEOUT_MS)
 
-Include in rate_sample a count of the number of segments that were
-newly marked, on this ACK, as having been CE (congestion experienced).
-Replace local ecn_count variable with it. This signal will be useful,
-in upcoming patches, for congestion control modules, like Prague,
-which want to process AccECN-style ECN signals.
+Could we increase the watchdog timeout to 3s and the park duration to
+2s, updating timeout_ms accordingly?
 
->
-> Co-developed-by: Olivier Tilmans <olivier.tilmans@nokia.com>
-> Signed-off-by: Olivier Tilmans <olivier.tilmans@nokia.com>
-> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> ---
->  include/net/tcp.h    |  1 +
->  net/ipv4/tcp_input.c | 41 +++++++++++++++++++----------------------
->  2 files changed, 20 insertions(+), 22 deletions(-)
->
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 0265c27a5fd7..1838389a9d8a 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -1346,6 +1346,7 @@ struct rate_sample {
->         int  losses;            /* number of packets marked lost upon ACK=
- */
->         u32  acked_sacked;      /* number of packets newly (S)ACKed upon =
-ACK */
->         u32  prior_in_flight;   /* in flight before this ACK */
-> +       u32  ece_delta;         /* is this ACK echoing some received CE? =
-*/
+With the current values, there is only about 250ms of headroom for timer
+delivery, dispatch, and the child actually getting CPU time before it
+becomes eligible for a watchdog stall The first phase also depends on
+userspace switching the parked child out within 1s.
 
+I haven't observed a false failure, so this is a robustness suggestion
+(I'm thinking at loaded CI VMs) rather than an observed problem. A 2s
+park would still span the nominal 1.5s watchdog interval while leaving
+more headroom.
 
-This comment seems incorrect. It implies the value is a boolean, but
-it's a count.
-
-I'd suggest renaming the field for clarity, to something like
-acked_sacked_ece, since AFAIK it is the subset of the packets in
-acked_sacked that were marked as CE.
-
-So, for clarity/readability, I'd suggest renaming it, and placing the
-field immediately below acked_sacked, and reworking the comment to be
-like:
-
-        u32  acked_sacked;      /* number of packets newly (S)ACKed upon AC=
-K */
-        u32  acked_sacked_ece;  /* number of packets ECE-marked upon ACK */
-
->         u32  last_end_seq;      /* end_seq of most recently ACKed packet =
-*/
->         bool is_app_limited;    /* is sample from packet with bubble in p=
-ipe? */
->         bool is_retrans;        /* is sample from retransmission? */
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index 02ec0b0116d1..a5a7302050c4 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -588,9 +588,10 @@ static u32 __tcp_accecn_process(struct sock *sk, con=
-st struct sk_buff *skb,
->         return safe_delta;
->  }
->
-> -static u32 tcp_accecn_process(struct sock *sk, const struct sk_buff *skb=
-,
-> -                             u32 delivered_pkts, u32 delivered_bytes,
-> -                             u64 prior_bytes_acked, int *flag)
-> +static void tcp_accecn_process(struct sock *sk, struct rate_sample *rs,
-> +                              const struct sk_buff *skb, u32 delivered_p=
-kts,
-> +                              u32 delivered_bytes, u64 prior_bytes_acked=
-,
-> +                              int *flag)
->  {
->         struct tcp_sock *tp =3D tcp_sk(sk);
->         u32 delta;
-> @@ -600,11 +601,11 @@ static u32 tcp_accecn_process(struct sock *sk, cons=
-t struct sk_buff *skb,
->         if (delta > 0) {
->                 tcp_count_delivered_ce(tp, delta);
->                 *flag |=3D FLAG_ECE;
-> +               rs->ece_delta =3D delta;
->                 /* Recalculate header predictor */
->                 if (tp->pred_flags)
->                         tcp_fast_path_on(tp);
->         }
-> -       return delta;
->  }
-
-
-Does this compile? Did you try to compile this patch? This removes the
-only "return" statement from a function that returns a value. Looks
-like invalid C to me. :-)
-
->
->  /* Buffer size and advertised window tuning.
-> @@ -4220,8 +4221,8 @@ static void tcp_xmit_recovery(struct sock *sk, int =
-rexmit)
->  }
->
->  /* Returns the number of packets newly acked or sacked by the current AC=
-K */
-> -static u32 tcp_newly_delivered(struct sock *sk, u32 prior_delivered,
-> -                              u32 ecn_count, int flag)
-> +static u32 tcp_newly_delivered(struct sock *sk, struct rate_sample *rs,
-> +                              u32 prior_delivered, int flag)
->  {
->         const struct net *net =3D sock_net(sk);
->         struct tcp_sock *tp =3D tcp_sk(sk);
-> @@ -4232,8 +4233,8 @@ static u32 tcp_newly_delivered(struct sock *sk, u32=
- prior_delivered,
->
->         if (flag & FLAG_ECE) {
->                 if (tcp_ecn_mode_rfc3168(tp))
-
-
-This (tcp_ecn_mode_rfc3168(tp)) expression seems to suggest that the
-value will not be available for AccECN connections. How will Prague
-use this rs->ece_delta field if it's only available for rfc3168 ECN?
-
-I suggest addressing this so that the rs->ece_delta is updated if
-tcp_ecn_mode_any(), and putting that change in a new commit, placed
-before this commit in this patch series.
-
->
-> -                       ecn_count =3D delivered;
-> -               NET_ADD_STATS(net, LINUX_MIB_TCPDELIVEREDCE, ecn_count);
-> +                       rs->ece_delta =3D delivered;
-> +               NET_ADD_STATS(net, LINUX_MIB_TCPDELIVEREDCE, rs->ece_delt=
-a);
->         }
->
->         return delivered;
-> @@ -4288,7 +4289,7 @@ static int tcp_ack(struct sock *sk, const struct sk=
-_buff *skb, int flag)
->         struct inet_connection_sock *icsk =3D inet_csk(sk);
->         struct tcp_sock *tp =3D tcp_sk(sk);
->         struct tcp_sacktag_state sack_state;
-> -       struct rate_sample rs =3D { .prior_delivered =3D 0 };
-> +       struct rate_sample rs =3D { .prior_delivered =3D 0, .ece_delta =
-=3D 0 };
-
-Adding the ece_delta field here in the initializer is redundant.
-
-According to the C99 standard (ISO/IEC 9899:1999, Section 6.7.9,
-paragraph 21), if an aggregate or union contains fewer initializers
-than there are members, the remaining fields are implicitly
-initialized the same as objects that have static storage duration.
-When you explicitly initialize even a single scalar field (whether to
-zero or any other value) using a designated initializer, you trigger
-the C language rule for partial initialization. Arithmetic/Scalar
-types (integers, floats) are initialized to 0.
-
-Thanks again for the patch.
-
-Best,
-neal
+Thanks,
+-Andrea
