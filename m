@@ -1,144 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=192.198.163.10
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1792448386;
-	b=ZDCm0UcBABuw6k1V9O8mIalvHSYgnoHRY1E7RfTf5OuoCC/DKVKDI5edWyj2mcNrVZuP
-	 NlVd8FhY2M1ZJ/u3vicRGcXJF6XopZiUXmwu5NA91qGAegrNKs/KkHxqaYyyYQbLzhbnX
-	 GmpXZ0F5Om2Ag1VzEO1WSdaEiLlj9IpfOKKSons4iiGf121f4Vj3Knyh7B6OSdI3Cg4ds
-	 7kbhvVS09tsMEiPTUSZH+SYjD3f+9ZM+ItcEFNiMBdbKYVX1c8liV0AWdIAMQkTRFPQkp
-	 hf2sbUtuTAjT6TzEHXWoiO47WyBW3FqRs+0ztvwPX6ciTZu9PmHD7eICfrjBsAofJjQ==
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.181
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792449076;
+	b=D2wewZdDj7HYkRd6+Iw8ugIn7sajR2jjt90VGTfmm9dDWjN54L+2ZWU2obioDpULLySE
+	 J2Jzvjx+H/iL8khpZKrB31rgQ5qhb+lrXJzctcB+HvQJTuba6M/1s7K35qS0Jzmt6so7p
+	 n8QjleUncKrdRxPUdNu80N9lG24XaM9fVcNs65lc2iWzRABVdJkNDWmuwSIHf8WmzS3N9
+	 rm6kh6YWcKlGXKEt1+i9y7zrwXObh+A/CJTZB+V4k6UZMuyClISe0gmoVboRoa0pIC6ga
+	 RtQXj5/CXDEeAmxhD2AQsO23eJ1CVCtVjAXSIH4iQwaD728+4r/K9DWivebtteA9EHQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792448386;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
-	 Received:Received:Received:Message-ID:Date:User-Agent:Subject:
-	 Content-Language:To:CC:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-LD-Processed:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
-	bh=siNMGnpp6fWEyBYNCemuCMtZx9uDKXBkGAQiGwYtDW8=;
-	b=35mhlJEK+pHJ7ZZO61NHykkR8vyIS6hYZrMJiOhjvCTFw+AFlQE2wHVdlqua+FkeSK3v
-	 /3q99GpYfuNm6gcCBsPl3i/BMDNUn7FevXqcMXaNZVCOx02hPFbN8ZAXLDPgccBKZlGCW
-	 wcqKpTTWJzbDTgnkJIZKOxpEfubm/bEqRtXTY1Vn546R6Eh8FVZ6QaTrGjp6oT+CE3qS1
-	 ZnomvfIsz3OebI9m76Y9wrRvuaMgwrHZSKL2Ug+KRw88pU1+phQ7ZUd002dqzDFMejAGm
-	 fpNnI1Tl7Qx9kJ6EDzwrU8NSma0WBIAfY7DFUoqpYPRoXJ1JaRUlNSmElJ8KauDIzpg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792449076;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=7Y7YiwpHnHRTlx4OY6pg4GKzGSuy4/quEwIOKfF9VTA=;
+	b=dnhIm528m8nW9dGTGLwgVjfwDPagpjqVqczaIrMxr76PeZaGLYBBQBFymdlV82fgabYC
+	 fcCHtFw6sGsgd72PbfmCbcz7tiJzoys6bGPBvezkWsBstnlqti1JmYtp7trV1h9oZQIbx
+	 nlN2Qvh57uJaRfqgQW/aKjrJXgxaLKOOJ97gTCkGXhM3+ApFCbrQgv2sQ2qM9/4R3NJKr
+	 CMDPSSmA2uc3w01WT8O4zi3P0SBA7gsEIbfKhngLF8HeKqw9uCUumeE1jMLSdLbgCZAjh
+	 gVRogdgZqeN508DV4JiL2aUCYhTSaiSJ8wB68wD3CBsvjpjS+qvXssGqx9H2wYDsiMA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=MSZprOLB;
-	arc=fail smtp.remote-ip=192.198.163.10
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=X3mjpDas;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.181
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8D6606A319;
-	Mon, 19 Oct 2026 22:19:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A8D6606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F23B606A319
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 22:31:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F23B606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=MSZprOLB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792448386; x=1823984386;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=mAkbqKgR7Gq5/a/icrnBIhbxXqQgnVtrvuYQ6nJsNus=;
-  b=MSZprOLBOKCx9kt3/U/4K6CuccwGC9P4Er9fIGbRC/sROy2jLH8wTctj
-   7YCmGGBYK2SjlSFd+C0q+YhSsobJn5jy4nNHXiTmadI/+SS8Fy3jQG+8c
-   EezV5+uHVbOR3abBOiGDNu2FT5uRpVajwhO5jPGABuX6uS/Cht5LK+OTd
-   coG79iYcfvY99uc4z3ipAVy9rH9ENS4wfwSBPbDZEfLVCKqF3TD2K0vn7
-   quojRv2VFB0/hPI93hpJKtOhRDyLm3JIMbq5je5B3jOMacFNx4frfBOs6
-   r68WXN2hHFl+8FKc85OsiITmxOXky4b1s+P5tO+EwpZeFP+unZqazLUDX
-   w==;
-X-CSE-ConnectionGUID: jHP0ZgKOTwidiqnj3ivwtQ==
-X-CSE-MsgGUID: xzM7KO6gQG2NMNuGD4KuJw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11940"; a="1042566"
-X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="1042566"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 15:19:42 -0700
-X-CSE-ConnectionGUID: ECVggeiGRUWL1oSOByMrxA==
-X-CSE-MsgGUID: oNnloBfzQWu/a9a6goIfNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="3024387"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 15:19:41 -0700
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49; Mon, 19 Oct 2026 15:19:41 -0700
-Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49 via Frontend Transport; Mon, 19 Oct 2026 15:19:41 -0700
-Received: from SA9PR02CU001.outbound.protection.outlook.com (40.93.196.49) by
- edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49; Mon, 19 Oct 2026 15:19:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dZiz9WtdvF7RqBgkyduMgiWycgLqPXweaSnkmfCMuaN7s/LyWmY5NCNTaWYlmB4TeXroeeQrqMd3PkZWCzlT/b19onD9CnxUBNGqHhlnVE/qq6S+71sGhfn9d6qO271nlIod9eiJ+N+7jVK4iLZMqVS1fcwezPhh6vAfTxYEat/9wcpkhuRAftUXUuf7oeaFLnVCvN27oa8EerLU0RzjLwp9fK5Ky+4+gUO6lyR4WBE5D+zoy6SGQ88HnMlEDtLWSfp6oRYo9Hh4zFhcYw/Biwkz6pgK0busgNQK70tADbXFPhJ296bNkTRtwpKFdi7+fGqJFFiX8nD8DyCaI8MfgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=siNMGnpp6fWEyBYNCemuCMtZx9uDKXBkGAQiGwYtDW8=;
- b=ajfggcQI2QJPd89sAsaaA1Y9tInrhdBVOmAVuWldT/qTZm90YdcjvYGQ3o52D+tU63u/GFL3poFM5tWK7WfQ9QtZvDD4dhL1155/TVyY3MyJYWKNFbGa3OvfdrfIJsmbiuv0XvTpgi7qveYJKYMFCTk09sPc1tSKOWKEBq8aRj0p5e4HKismj+OL9Acncpw5axzcWzThFRM4Osadur+GnYt52Q4xNkNTPlNp1v2xz1xkb4sk0IEI7qjGZAHqBmOBdbe9GI6WmVb9wLAR81U6FiCzEarIfGtHQFfEc6qOTK6kSAtjxtyBHzFqAQZt/HiZLEAsisaUDgWbVyljttMxtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY8PR11MB7846.namprd11.prod.outlook.com (2603:10b6:930:79::14)
- by PH7PR11MB5863.namprd11.prod.outlook.com (2603:10b6:510:135::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Mon, 19 Oct
- 2026 22:19:35 +0000
-Received: from CY8PR11MB7846.namprd11.prod.outlook.com
- ([fe80::cae0:d05c:b2fc:c395]) by CY8PR11MB7846.namprd11.prod.outlook.com
- ([fe80::cae0:d05c:b2fc:c395%5]) with mapi id 15.21.0522.017; Mon, 19 Oct 2026
- 22:19:29 +0000
-Message-ID: <99404dbc-49b4-4c91-8d80-6526109cc301@intel.com>
-Date: Mon, 19 Oct 2026 15:19:26 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 00/28] KVM: Enable FRED support with KVM VMX
-Content-Language: en-US
-To: Dave Hansen <dave.hansen@intel.com>, <kvm@vger.kernel.org>,
-	<x86@kernel.org>
-CC: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
-	<seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
-	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, Xin Li
-	<xin@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, Andrew Cooper <andrew.cooper3@citrix.com>, "Tom
- Lendacky" <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
-	Shivansh Dhiman <shivansh.dhiman@amd.com>, David Woodhouse
-	<dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>, Binbin Wu
-	<binbin.wu@linux.intel.com>, Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed
-	<yosry@kernel.org>, David Matlack <dmatlack@google.com>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20260911213659.2025974-1-sohil.mehta@intel.com>
- <542f22f2-9140-4bf3-bf37-e79a4b99d3ce@intel.com>
-From: Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <542f22f2-9140-4bf3-bf37-e79a4b99d3ce@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0048.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::23) To CY8PR11MB7846.namprd11.prod.outlook.com
- (2603:10b6:930:79::14)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=X3mjpDas
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-353804b591eso4986732eec.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 15:31:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792449075; cv=none;
+        d=google.com; s=arc-20260327;
+        b=pYKt90kt5SnE7nVHniKlnnz3Nb1Pzu7ikBDExVVGYY5847ayCUXiTPxEAMUx+1ew3I
+         f2rwdGhKBnlbv3khqscjC60ySA4kefZ8BU1FVExxmLDAaFSH05g03TQUIbcpu7hqWW9v
+         rh+/gr8hKKMt5n6wItrXn148tThpuS6umDJ+SeGKWtzwOto1S+JfU/N+DmlfAVFh1QVO
+         RJAbuvyhlLUVdk5eKgBN8pjUBlmVerx9JSycXdDUWBxVVUMTJWftrRoVsw8SsdLZBOBS
+         p0ze8jyfnCUePcG53IxZYR0n2Se6lmoqJ1StNzsIqJ+Wqyfs0MNAYwfWubuiWOoU8G+J
+         MM9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=7Y7YiwpHnHRTlx4OY6pg4GKzGSuy4/quEwIOKfF9VTA=;
+        fh=ckvum+dd69w83qyyyXoiWaciK1Qchk6N4fBdX14Nr+o=;
+        b=H4E499QSOCWF71t4qe92b5/eZmI1hrOca5mVPn670CLu1o1K876pP0MOL6TIIFG2s0
+         pDN8v9fJKmW/qOwifzPzsdxgGQU63rLAtx/cToqMcJpZfWQw3Kw+dCDOERyqKCn7BJbv
+         bVRw0HqRxbnSdEH9tr8Nh/8KdD/WRCasY2d6dCvsYYSiRzY45VhPHCdoUFvfuOyVpiBy
+         TkjoXqXl7QQIzpM/LQzHCCIbuUHiV3I23MJfrRnaXVXsP3dnlBzGrs85xspAGPOxPxHY
+         KkCGvZu+U54EBh6Prbawaw1w7dawlSvgHH7i9bPb8vpcbtT82ZIDeVv6nUwonlxn6O6b
+         /rMA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792449075; x=1793053875; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7Y7YiwpHnHRTlx4OY6pg4GKzGSuy4/quEwIOKfF9VTA=;
+        b=X3mjpDasQAnbvTscP8iKS25txgnb2JYwM0tGQojP4D39YTn/DPY8MK20qFyemelnNb
+         lFuHp1Am8dyutcx58RNt+EXDeDSSpsTgJbtrKsA3XgovVedhi1zt1221nzSRDbK6sqLP
+         fh/B9c5iPMlx6tMjPItPnomzF9sW7AwpgHF3mZPx4I8/y6mWSJS90Ghn4QBOnjtLhsWI
+         617HhZz8dnnvaoN1nP80ipvL8HlM7SgiY+2uLc57UWrBE0pw0qGz92/OhWgPuze+/hMF
+         YV3f3x8OqkW2thWDRYm02VSAZogwiREQqo1aNo2PhDkiLhjsRsL6YQLf+G65FVS929cN
+         pErA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792449075; x=1793053875;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=7Y7YiwpHnHRTlx4OY6pg4GKzGSuy4/quEwIOKfF9VTA=;
+        b=LGcbGVDhTB21OjlNFi87xX85CvwYCV+SFnb9P1L6QkCY/yXXmq8RRReGbSaATU9cWy
+         kIewVBDAqNax6i83qupwyf4SH1MpwDK156MdPvjmINxO7QyvJCkDMjiXZO5AJGTaJXA4
+         sBZIceievkAKxLRcDXc7dZjB52CmSOvtCjNpqbT8DIzTpre97D8xiOukYJcbfV740CEp
+         O0d/azmjqJY+BL5Js48grrRt80eoYDXDmFS2WazvYTJmZDOPSosh3HgGrdH2w+Jxfvej
+         e/m5tAssocg8kEQn3zPyVRYr9QwpZ8XrMPInducGbUksK7FIgfuEmTv2g+KhNeza4A3m
+         JmEQ==
+X-Forwarded-Encrypted: i=1; AKwUvByyGKCnAX8lfS5pI+IONj1HB0bNucpA6gL7hmBmKIs6GWrw1XmiU1wZ3ro8MCgEzYNuX0mlqyOAI0sCWKOKSms=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLNY2WTEL6KiWxGv834Jv1cqcXqQ5VSyW6TFmmYj17c5Ukgdr+X
+	pqUyQgreaMOQ7lkIrL4VZzBysBnuc+TqcwWCzdoRgsWxsIk+kvpmFaS9tZ/0Y+3y755jSTtlcXF
+	N/Ii3HIR1PxTD3DSbd+JKBooWod2W493sDZ7O2RiV
+X-Gm-Gg: AYBFou0RM6tg2aCNBp1pyc21NASpnZHcIb2KwcDdXHm8MexyO40et/oaayng7+hklZa
+	LVLN7VivxAa/BanIs7x0cJ5alQokSu15/QSZw0Md8YEeMPk9b30FD5rDtmbUC9A61PcEivzU+ax
+	J/Y+uEemDdrKykIFGhioq975u3d8rvEmIj1gldg8vR2i5Z0bCbiKP64CgYu6zFWl5UCKC43QSA+
+	cB7YksrqOvAKzj8gkF8yFUxFr+/SOb4r6l1H87zo9Y+CQcFq9MUQFkFYPs5d7B8Xj1RDgk+6/P8
+	cnD6b1uy2S21HeMAraLYtWKiHt/6tZvGd1Qy53Ao6bhITXq06Zgu/GaROH5cWarDKTupJeD1Ef3
+	O9RaT1xxtTSrKncE/oo/pzuyIcBrVpisSJhXcpFqW2ejtf2ASoXK0tVSxxSCYYiGEhD8j
+X-Received: by 2002:a05:701b:42cb:10b0:169:b1b1:1445 with SMTP id
+ a92af1059eb24-18512e2515fmr12984330c88.31.1792449074316; Mon, 19 Oct 2026
+ 15:31:14 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -148,109 +103,250 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY8PR11MB7846:EE_|PH7PR11MB5863:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0778733f-be78-4bf4-d176-08df2e2f0b2a
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|23010399003|1800799024|10067099003|56012099006|22082099003|18002099003|5023799004|4143699003|11063799006;
-X-Microsoft-Antispam-Message-Info: TGD1FL0TL+/jv/bELL0WbEq/OLSVnWewHYMUQg+lYu4Zvyy24BYxJf6tjNK7UzyJoM6+i7DvLB6jEvZC0s4rdeX7llxn77OgPO6Gutct+XLHAx5QlxQM188Le5BlVf0rl7I+lxcxxKM51us5+2Gnc83fa+NCk61I2BKux1kVIbPB28JzTmRb5YJWeZp8CDZ2yf5CzImK3iM3j+oRagnDO6GyItTI25XZqNZSgC4zdWc2Ykg/3XYAL1z2hjitoFckKdj2fJMDz6z/+0XztOYSEdtJWPSTiMlJriJ48KVh88BRHLEgA1Y03BsbRv1Oik5p+uhuw5Yc7btJExid7CMsNpApvD0ps6cRuPGlOjkeN/VJQRiKygEEv07fP1h61+3rQz2eqcgiGChCdhaLwpGOVqFmkteCEmZWbvuqiLyTt4eO8wqr99SGL2aNSSnzQQ2uYLEgQlIhS8lAWCUx70YjTFU3bIktfLaRCkarQ9lu255mZfk40Y/w6M2CN4rsKFW/cdmcXs7c8WAyYET270k/GXPfThvT/8Wt/btBJFFDuCiTqT5WeBvGaj8ePr0V0B3ig6zQjjExiM2y+dMAt/gNxcWmaWZsU725hbhu/oOGlUsyMV8WLqeicNsuiwf+QWMZwQ3IP9Nl4KmnMZTC3WjUwqjQgr1aJs+PwMbWwG4CH9M=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7846.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(23010399003)(1800799024)(10067099003)(56012099006)(22082099003)(18002099003)(5023799004)(4143699003)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TVBSdWRaVG16djhKbWVqRDVrMHMvNTE5c3lPa0tSYkYrcUNoblh0b2Q5VDZz?=
- =?utf-8?B?dkpEc3d1R21WUUw2MFMyVEJkTXk1Y2VtTko1VFdyOEdRMVdxZnpzSUhMZ3pU?=
- =?utf-8?B?di9udXhDZ0NpV3dtZFJEWDZmcnpYdnRJRyt3aU1LNVdSY05vb2JuQWk1OVND?=
- =?utf-8?B?bHE5WEtwbTFvYVVqNjBCR0h3TU9zMUN6bjAxWWZENFZqbVl3clZOTWc0Slkz?=
- =?utf-8?B?akpoZ09CU0VMaE8vcGl4eGRxM0lnL00wVDU5VDhEUFFqTGdQcTV6LytTdm90?=
- =?utf-8?B?azFTajVGQ0xPbDhtT0czUGFjYVBlL0VXV0VFenBzWFR3NE9iTHZFQmZCQVR4?=
- =?utf-8?B?dFRPSHZMS2dDZUQyUGFTUzBkMEVHSjBwV0h6d21MRnRtbTZkcURQREl2T2Vq?=
- =?utf-8?B?VkgzVW5QbmFGNDBoeFV5bmEzekVsQ0ZpT0J3Vm5XMFB1Z3Vac2NXbUwvdkNZ?=
- =?utf-8?B?Yk9sN25iU0s2SDkveDFaT2hLVEhjakM1UXplOUJXVTBPTkVZa05TeXkzSG9o?=
- =?utf-8?B?bk9pem5xVXpFa3lEWEduNEJaVE55MDBHZ0NSUFNyOHJzY3F3VEdMb0JudGZV?=
- =?utf-8?B?L0k3djRjcDV4bEs3MEtxZEg0eUdTWFFBZUxFRzNXTVBDM2h1WG1ueGN3cUxN?=
- =?utf-8?B?SjEwTzMvbjRsNTFoa0txZ3ZLN1dYSlhqanQ5ZDVEc3NvQThYQ2NONVQ2U3Zm?=
- =?utf-8?B?TFM3N05EQnRyV2lEQURVNDc5T1cva09kdGlma2dwYmdXUW5pejJkZ1RIdTJO?=
- =?utf-8?B?RXM5Q3lxWjVsMnlLcjFYMVBFNWJCd05odGE3dFI3YlphUE9CVzJKTnl5SXMv?=
- =?utf-8?B?MFN5S0Vsa0VHZWVLMDYzY3NidjdOMEJLb2RYMkoxMXdBeWVBaFFaUG1kNTVw?=
- =?utf-8?B?WGdFU2RBTGVCcXQvbkN4MFVjOEIwYzJxMjJuR0ZwQ0E1SkpXZkptNDdpZXov?=
- =?utf-8?B?cXhBSHo2S2xYbkRqVnlLejBsbVFXQk9zVnVLMkxQSVpKVEdCdnk5dnIwUDQr?=
- =?utf-8?B?d0JSN01PampqbDRncGtKWDFHMXprU0l3Y2w1RHZhV3FLOXV3RE1kdVdGWExP?=
- =?utf-8?B?dkNyWGJ1bXcraE5BS250ckMwdVR5NnBxdlV3U3dISkxLTnQ1a09xdS9rZ08w?=
- =?utf-8?B?S2JLS0draGROK2hTUXVpTzdZTzZLMStObVZwVkNnWTJuUHlSM0hCbnl4dUZt?=
- =?utf-8?B?Sm1jQjc2S0FBQ0YraUs2d01odVRyUHY0dmRyeUdWRjZydTQvUFkydEhIZzhq?=
- =?utf-8?B?VlhBYlMvdHZramU3bFphZlhXZENCSjZlRFJtWHdsaVZuaEtFVEptY3Nsb1lT?=
- =?utf-8?B?dno3NDZSNy9TeE1XdGlmWnV2TUNXWFJuV3RtN2N0VjBJaDJQSDl2dlRML3li?=
- =?utf-8?B?MkZmQnBWV2pOeFRaNVd0bktiS3VYN3dnUkM4RFFjL1RKNUk2ODdJcmJMK2Vn?=
- =?utf-8?B?K1VWejlNYTJJZ2RtNkFEdGltN1hWSkoxTWRQSk1CSnFoY01DZ1FIQmZ3V1Zq?=
- =?utf-8?B?a0oxaFl6c0RKc0V3T2gvUHFZTGV2Y1kvYXZyY3NsM3hWNUxId3k5V2pJby9o?=
- =?utf-8?B?OEtKWllLUWRyOWdFZWJkd2t5SjRnTEI3enNqeDJnVTJhYm41RlV3czQ0SWRD?=
- =?utf-8?B?YWFueG5heU1ucHQxcTNyd2JjMXladFZqT1puZkRoUUgyNE9HeDhjazVCSzBs?=
- =?utf-8?B?eU83ZElCUXN2MWp2V29mSVFhUFBXUGxmU0JBbnEveXVyUFFyTnNXZmxFdVh5?=
- =?utf-8?B?dk9hazdacjk2dExocjRZVnd2V0pYdkxnRTl5TjQwQ1NmY2d4N1VjVllaMDBF?=
- =?utf-8?B?alE3QzZHQ0ZRaGhQVzhpU0syVHY1Y3A0WFFaN1JYa0tMak9xMWRlU2g2N0da?=
- =?utf-8?B?WmVYRjE3Y29SYXFVbGdvV1FEbU1tQXdoVW0xRXNGc3VLdXpFM0NjSzg4Vnpu?=
- =?utf-8?B?UnowNXd5RDJsT2cyeWxGOGNZbFFRcTRwU01XQW1RalV6b1A1VXU0MDJ5NW9q?=
- =?utf-8?B?a09LRGdSRUxNSHFvdC84cVhUbFo2NXcvS0tmZXRFdDI5Ylp0ZWZMMjczeUJC?=
- =?utf-8?B?RWw5UlY1N05sN290WUdxZnpTWnRHOHBXRTVyRHJReXd1VzN6RHZTb3JBSkYv?=
- =?utf-8?B?TUlEbTF2RnlUVlMyWGdvYWVGM0t4YjMrMUhUREtvaWlZV0JpQnRkSVZmZStz?=
- =?utf-8?B?V2ZwblEvblZKYWYwUnVxNVJDZlQ5OWxqZ3RuU1ZJNGVIb2xFN2xWWjg2YVhL?=
- =?utf-8?B?OVlsTXFKcXpyMUQ2eHBmNXladHhsalo3RnlPZXdRVVBqNk1ETEZ5MysxUld6?=
- =?utf-8?B?QlVjMTF1MDVMdUU5YVhsUVV5ZE5oTmVzTnVwTXBtWitkZTF5K3pTZz09?=
-X-Exchange-RoutingPolicyChecked: GFPLOD505cMUchDZp56TaSQBZn0q0/2FOvYVe1mASVgdzwfeW8AoApj/kN7YzKv+b+gJliwXeIHi2JwtXhD5+JDY3KsE3gV0VAuk3S2ktSJw490BO7X9d9QR3hf0D64B3sxZ3BcOmmrq1XzyELceBX686h3r1h57CSw5u0vA1h5cxUE9L2kECMZ5EVj2EbgT0409UTYpeFf99rKGLyUxIfxNIuQXSCjeb2oRi/663ovNQSiSyjy/nwr8SWBlm81zHH1JoFM4CFy1z3hB8cowUFr7IS6HQiB349m0wHmgmbbEX533YWbZFn9ILLxD3xkNk+t0wvzlN6ElVQUvHOgg1A==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0778733f-be78-4bf4-d176-08df2e2f0b2a
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7846.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 22:19:29.6661
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lqkfoInJnBw3iNjM5T27HmTEJTGUD+ylhk4hrSMfawZXDNEQDRPgTiOUEspRk1qtpVwLZHVg4mHommfGcL6YXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5863
-X-OriginatorOrg: intel.com
+References: <20261019-bug-word-at-a-time-zeropad-kasan-v1-0-f21a3ed6a477@gmail.com>
+ <20261019-bug-word-at-a-time-zeropad-kasan-v1-1-f21a3ed6a477@gmail.com>
+In-Reply-To: <20261019-bug-word-at-a-time-zeropad-kasan-v1-1-f21a3ed6a477@gmail.com>
+From: Marco Elver <elver@google.com>
+Date: Tue, 20 Oct 2026 00:30:37 +0200
+X-Gm-Features: AclHuK-9KfyXQ0m8f9CHsU2jTa1lgiXB2sNpwhyCmDMarQWZL2s0qBm4al6Ih6c
+Message-ID: <CANpmjNPPncfo41Hu=TKB8cd1aFm0Lm-9+AT6pXVsYyUgFVx8TQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] word-at-a-time: check the first byte in load_unaligned_zeropad()
+To: Qiliang Yuan <odys.yuan@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, Shrikanth Hegde <sshegde@linux.ibm.com>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-arm-kernel@lists.infradead.org, Kees Cook <kees@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-mm@kvack.org, 
+	Peter Collingbourne <peter@pcc.me.uk>
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/19/2026 1:46 PM, Dave Hansen wrote:
-> On 9/11/26 14:36, Sohil Mehta wrote:
->> This series enables Intel flexible return and event delivery (FRED) with
->> KVM VMX to allow guests to utilize FRED.
-> 
-> Hey Sohil,
-> 
-> So, one data point: I've been using these for the past few days on a
-> piece of FRED-capable hardware to do kernel shadow stack development. At
-> least for my purposes, they're working great.
-> 
+On Mon, 19 Oct 2026 at 03:58, Qiliang Yuan <odys.yuan@gmail.com> wrote:
+>
+> load_unaligned_zeropad() reads a word that may run into an unmapped
+> page and recovers through an exception fixup. It does the word loads of
+> sized_strscpy() and of the name compare in dentry_string_cmp(), path
+> components in hash_name() and hashlen_string(), and the trailing bytes
+> in x86's csum_partial().
+>
+> It is inline assembly on every architecture that implements it, so
+> KASAN and KCSAN never see these loads, while read_word_at_a_time() at
+> least checks the first byte of each word. A use-after-free or
+> out-of-bounds read of a name handed to path lookup goes unreported, and
+> so does strscpy() reading from a bad source, which the kasan_strings
+> KUnit case expects to be reported. On x86_64 with generic KASAN:
+>
+>   KASAN and string KUnit suites      failures
+>                                   before    after
+>   CONFIG_FORTIFY_SOURCE=n              1        0
+>   CONFIG_FORTIFY_SOURCE=y              1        0
+>
+> Check the first byte at the start of load_unaligned_zeropad() on every
+> architecture, as read_word_at_a_time() does. All callers only load a
+> word whose first byte belongs to the string or buffer they read, so
+> the check does not flag their intended reads past the end. Add no-op
+> stubs for the powerpc selftest that builds the header in user space.
+>
+> Suggested-by: Peter Collingbourne <peter@pcc.me.uk>
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 
-Glad to hear that :)
+Reviewed-by: Marco Elver <elver@google.com>
 
-> Other than sashiko, it looks like there hasn't been much activity on
-> v10. What are your plans for this? 
+Thanks!
 
-I have been focussed on getting the LASS KVM series ready for merge.
-That is ready for Sean to look at.
-
-Now, I am planning to focus on FRED KVM for the next few weeks. I'll go
-through the Sashiko comments this week and respond to them.
-
-
-> Are you going to rebase and repost after the merge window closes?
-> 
-
-Yes, assuming that the Sashiko issues are minor, I'm hoping to time it
-with the KVM next branch around the -rc2 timeframe.
-
-
-> Is there anything else you know of holding this up?
-
-I've listed a few opens in the cover letter but most of them are not
-gating. There is *a* solution included for each open (except for the
-INT1 event type issue reported by David). However, depending on the KVM
-preference the code might need to be tweaked.
-
-Overall, I think the patches need some human reviews. They have been
-cache cold for a while, so I thought reviewers might need some time to
-refresh.
-
-With Plumbers done and folks in PRC back from holidays, hopefully we can
-build some momentum and get this series merge ready :)
+> ---
+>  arch/arm/include/asm/word-at-a-time.h                           | 7 +++++++
+>  arch/arm64/include/asm/word-at-a-time.h                         | 7 +++++++
+>  arch/powerpc/include/asm/word-at-a-time.h                       | 6 ++++++
+>  arch/riscv/include/asm/word-at-a-time.h                         | 6 ++++++
+>  arch/s390/include/asm/word-at-a-time.h                          | 6 ++++++
+>  arch/x86/include/asm/word-at-a-time.h                           | 6 ++++++
+>  tools/testing/selftests/powerpc/primitives/linux/kasan-checks.h | 3 +++
+>  tools/testing/selftests/powerpc/primitives/linux/kcsan-checks.h | 3 +++
+>  8 files changed, 44 insertions(+)
+>
+> diff --git a/arch/arm/include/asm/word-at-a-time.h b/arch/arm/include/asm/word-at-a-time.h
+> index 5023f98d8293d..f672aad2e30e6 100644
+> --- a/arch/arm/include/asm/word-at-a-time.h
+> +++ b/arch/arm/include/asm/word-at-a-time.h
+> @@ -56,6 +56,9 @@ static inline unsigned long find_zero(unsigned long mask)
+>  #include <asm-generic/word-at-a-time.h>
+>  #endif
+>
+> +#include <linux/kasan-checks.h>
+> +#include <linux/kcsan-checks.h>
+> +
+>  #ifdef CONFIG_DCACHE_WORD_ACCESS
+>
+>  /*
+> @@ -69,6 +72,10 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
+>  {
+>         unsigned long ret, tmp;
+>
+> +       /* open-coded instrument_read(addr, 1), as in read_word_at_a_time() */
+> +       kasan_check_read(addr, 1);
+> +       kcsan_check_read(addr, 1);
+> +
+>         /* Load word from unaligned pointer addr */
+>         asm(
+>         "1:     ldr     %0, [%2]\n"
+> diff --git a/arch/arm64/include/asm/word-at-a-time.h b/arch/arm64/include/asm/word-at-a-time.h
+> index 824ca6987a516..11ecca99057aa 100644
+> --- a/arch/arm64/include/asm/word-at-a-time.h
+> +++ b/arch/arm64/include/asm/word-at-a-time.h
+> @@ -40,6 +40,9 @@ static inline unsigned long zero_bytemask(unsigned long bits)
+>  #include <asm-generic/word-at-a-time.h>
+>  #endif
+>
+> +#include <linux/kasan-checks.h>
+> +#include <linux/kcsan-checks.h>
+> +
+>  /*
+>   * Load an unaligned word from kernel space.
+>   *
+> @@ -51,6 +54,10 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
+>  {
+>         unsigned long ret;
+>
+> +       /* open-coded instrument_read(addr, 1), as in read_word_at_a_time() */
+> +       kasan_check_read(addr, 1);
+> +       kcsan_check_read(addr, 1);
+> +
+>         __mte_enable_tco_async();
+>
+>         /* Load word from unaligned pointer addr */
+> diff --git a/arch/powerpc/include/asm/word-at-a-time.h b/arch/powerpc/include/asm/word-at-a-time.h
+> index 54653a8634149..49c6a1f65c493 100644
+> --- a/arch/powerpc/include/asm/word-at-a-time.h
+> +++ b/arch/powerpc/include/asm/word-at-a-time.h
+> @@ -5,6 +5,8 @@
+>   * Word-at-a-time interfaces for PowerPC.
+>   */
+>  #include <linux/bitops.h>
+> +#include <linux/kasan-checks.h>
+> +#include <linux/kcsan-checks.h>
+>  #include <linux/wordpart.h>
+>  #include <asm/asm-compat.h>
+>  #include <asm/extable.h>
+> @@ -168,6 +170,10 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
+>  {
+>         unsigned long ret, offset, tmp;
+>
+> +       /* open-coded instrument_read(addr, 1), as in read_word_at_a_time() */
+> +       kasan_check_read(addr, 1);
+> +       kcsan_check_read(addr, 1);
+> +
+>         asm(
+>         "1:     " PPC_LL "%[ret], 0(%[addr])\n"
+>         "2:\n"
+> diff --git a/arch/riscv/include/asm/word-at-a-time.h b/arch/riscv/include/asm/word-at-a-time.h
+> index 3802cda71ab7e..fb7e2904dd7fd 100644
+> --- a/arch/riscv/include/asm/word-at-a-time.h
+> +++ b/arch/riscv/include/asm/word-at-a-time.h
+> @@ -11,6 +11,8 @@
+>
+>  #include <asm/asm-extable.h>
+>  #include <linux/bitops.h>
+> +#include <linux/kasan-checks.h>
+> +#include <linux/kcsan-checks.h>
+>  #include <linux/wordpart.h>
+>
+>  struct word_at_a_time {
+> @@ -60,6 +62,10 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
+>  {
+>         unsigned long ret;
+>
+> +       /* open-coded instrument_read(addr, 1), as in read_word_at_a_time() */
+> +       kasan_check_read(addr, 1);
+> +       kcsan_check_read(addr, 1);
+> +
+>         /* Load word from unaligned pointer addr */
+>         asm(
+>         "1:     " REG_L " %0, %2\n"
+> diff --git a/arch/s390/include/asm/word-at-a-time.h b/arch/s390/include/asm/word-at-a-time.h
+> index eaa19dee76994..59393cf065964 100644
+> --- a/arch/s390/include/asm/word-at-a-time.h
+> +++ b/arch/s390/include/asm/word-at-a-time.h
+> @@ -3,6 +3,8 @@
+>  #define _ASM_WORD_AT_A_TIME_H
+>
+>  #include <linux/bitops.h>
+> +#include <linux/kasan-checks.h>
+> +#include <linux/kcsan-checks.h>
+>  #include <linux/wordpart.h>
+>  #include <asm/asm-extable.h>
+>  #include <asm/bitsperlong.h>
+> @@ -52,6 +54,10 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
+>  {
+>         unsigned long data;
+>
+> +       /* open-coded instrument_read(addr, 1), as in read_word_at_a_time() */
+> +       kasan_check_read(addr, 1);
+> +       kcsan_check_read(addr, 1);
+> +
+>         asm_inline volatile(
+>                 "0:     lg      %[data],0(%[addr])\n"
+>                 "1:     nopr    %%r7\n"
+> diff --git a/arch/x86/include/asm/word-at-a-time.h b/arch/x86/include/asm/word-at-a-time.h
+> index 422a47746657a..1319e1d87a9c4 100644
+> --- a/arch/x86/include/asm/word-at-a-time.h
+> +++ b/arch/x86/include/asm/word-at-a-time.h
+> @@ -3,6 +3,8 @@
+>  #define _ASM_WORD_AT_A_TIME_H
+>
+>  #include <linux/bitops.h>
+> +#include <linux/kasan-checks.h>
+> +#include <linux/kcsan-checks.h>
+>  #include <linux/wordpart.h>
+>
+>  struct word_at_a_time {
+> @@ -71,6 +73,10 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
+>  {
+>         unsigned long ret;
+>
+> +       /* open-coded instrument_read(addr, 1), as in read_word_at_a_time() */
+> +       kasan_check_read(addr, 1);
+> +       kcsan_check_read(addr, 1);
+> +
+>         asm volatile(
+>                 "1:     mov %[mem], %[ret]\n"
+>                 "2:\n"
+> diff --git a/tools/testing/selftests/powerpc/primitives/linux/kasan-checks.h b/tools/testing/selftests/powerpc/primitives/linux/kasan-checks.h
+> new file mode 100644
+> index 0000000000000..000c92de6baf2
+> --- /dev/null
+> +++ b/tools/testing/selftests/powerpc/primitives/linux/kasan-checks.h
+> @@ -0,0 +1,3 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* There is nothing for KASAN to check in user space. */
+> +#define kasan_check_read(p, size)      ((void)(p), (void)(size))
+> diff --git a/tools/testing/selftests/powerpc/primitives/linux/kcsan-checks.h b/tools/testing/selftests/powerpc/primitives/linux/kcsan-checks.h
+> new file mode 100644
+> index 0000000000000..39c97bc15531e
+> --- /dev/null
+> +++ b/tools/testing/selftests/powerpc/primitives/linux/kcsan-checks.h
+> @@ -0,0 +1,3 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* There is nothing for KCSAN to check in user space. */
+> +#define kcsan_check_read(p, size)      ((void)(p), (void)(size))
+>
+> --
+> 2.43.0
+>
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion visit https://groups.google.com/d/msgid/kasan-dev/20261019-bug-word-at-a-time-zeropad-kasan-v1-1-f21a3ed6a477%40gmail.com.
