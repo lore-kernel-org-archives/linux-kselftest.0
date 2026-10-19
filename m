@@ -1,119 +1,1058 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mta1.migadu.com (out-135.mta1.migadu.com [95.215.58.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82BF3F1ABE
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 06:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D39248F84F
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 07:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792391835; cv=none; b=ibJ61GnQmP3qeiy/HXFfcvYPi9LLRX0FM/2JQDE2bGVLYlK6QqCtZLe2iVD47TMANcsOIsFp/SlaZxhx0aqR3fWRL+5oh0uPTqzGX1Pz+NzQCmKYMdfMpv3exT5nGuD83lg0N2QJcrvZ82ZbZQFbHpq9sMb7zHn+R9RWCN/aZNQ=
+	t=1792395581; cv=none; b=Gi7634JAZ32hP9+uiCm9NdasGL7sm+PjKIWp51HS3FYeRJrP/VuZOf0aGja9rt/7iYeR4dXhs/1RrkWIKp+wFziQMJJyOAuFkXfbDSHYoSa5WCcrBb84XIBEqTwWJ+NzCirExf9NqXoH8sYmoAyYOAGoYfSRshoBw9BBhABlr8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792391835; c=relaxed/simple;
-	bh=1vEKNs1Lv8s9RlC0dYldCjP9Clmvu1wr0qp2xUuHHc0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u8ZJzsv+8YxD518Ksv9ESH1ZJSr4vlFaCIE6BAc6SnZ6uZX9yWkSabNpQekHr3qa4DfuNMMmdptk6dbYCBbd6/G8ovjfV/uUUGWa1VDNfSpB26svKlOx9uk18wgPH6GfPBZNxJCIkgLyyIgY8m3+e8QvEWvdoPIps0L2uTiFx0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EltVEAue; arc=none smtp.client-ip=74.125.82.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792395581; c=relaxed/simple;
+	bh=d3cKeLYAmxAjHd4aRGd3GFKac+xN+xPQ/z9Y7icRQgg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GL6W9MYO4H7SJaj0dVbBcGTM60jlH/sXbQdyna5bh+iD7VUITUH+9yLOMvGzMRj7qT9OxY6L5M1Gq3HVP7uAITkQ8d2izgEFvQbiTJik+10WvE8+jXhTaOTzJQCK1g1Xw1+PkTYV9SJF3lHq7jsRIKx1GF/dpaknTnZiY/tLcc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DiloZCLI; arc=none smtp.client-ip=95.215.58.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EltVEAue"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-35c76e9614aso3393731eec.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 23:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792391832; x=1792996632; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mKqh3a+klgRP2nrDDzvAYEDMhzyw7ysI9kOxZXjrT/4=;
-        b=EltVEAue9+qEdZCyEXhFXWuM+w5R9aaFVdIOHoJnqbVHyCmt5nJDmj0cLPD4d0nru3
-         XAE3Q79HfNOjKwJ5LiJVRLARO/nwaNMkmL6HxDL3G/5RSHpA6BVSpU2/Tzm+X86GH+Ri
-         +fCbuUh2CUkHFf9V2ZMK41zTA3LWDPiZH/msDrN3WTyaLA5vK9ZK5aa+6b6enlNxMQ+f
-         dwP3OPOqJnFWoEFHfJihzJvjHPntzkiC39iPARN3mCmeouB+GggaoV3UWnIvPdy/E45o
-         q+ATdj36oQdbGXy6Bg1iGeGxY7y8oTUajP3+jYJhpu+RmtZptZyLkfTYAsbpYumA8KfE
-         RgHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792391832; x=1792996632;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mKqh3a+klgRP2nrDDzvAYEDMhzyw7ysI9kOxZXjrT/4=;
-        b=ApqHjgHH4DT+2hFBbKCAPOBZjXUoFbRyoremVV4L7lia3KDrh7aEf5TRSBimOU3nyS
-         Tx80BZrqPtve1hNBU29qh0RfsmRyd71zrSGLQsbLLwkRiY8GlfaRr6SS/cCmgpiLp29p
-         X0/fuu/xPne6wtMq2DdrN29M1EsSILVe2csmsFurgBUebj3F74InnesfHCzZBtbZ/wHZ
-         bTZRCunIXg4GCaaG4tOtDePP4kO418jVPL4FvyB6i9+o9d479p8DcQCLBlZ8zIwYehzP
-         luRhm0TPfNuW5Bc8X+QMaMk8a0sC6/WRv4QGLk2CIrYR8Z9qYdNnxQ3DibvthRDWrK4H
-         ddqQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzMt3CQwI+ep65sEjNoqg+e/qhC9sSo2tEpi+Z0j1VDaZ+L+stvXFEaJL3gpuURWckL8uBlrwuFWMDVAb/UgPo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLmcs9qkFxxnYOcbxTHd3wa/NMlOvlgz1UO+V0/WLaDbR4A4w1z
-	9lemjxoRu+SVDbYMPKtCdWuWoSQBgDpKz5ImwEW3UEhFUYNVWcrjpy+1
-X-Gm-Gg: AYBFou2J7aNpgJpV8cMHeBPExXOUBOi5Gzqf7pInU0UuBa8uT0DGra9ebKy/Of+FAts
-	UwDgEUiKfDaYdFMlHhVPsthx/q+QLSsJ40Sp+OJ1zmFilADXjsUqR/YL0HKt2Vm090osKFv0L37
-	NnATd7EPJr6rdywBOY10gx1mmqM87PEqP+N9W3mmkQaTKqba13TiJe1hh9I9kWABzmCyB02ZzNg
-	VWxFBy2YKYGYpu2HMPZ5tsTJyehjLyvkIMQkNWneATkPYSKal9fr7aw49jkLi4XZ70Qfa/SekqU
-	QF6GjAQAeGW+oAel97FLy9oMGlTkFJS4cGcl/7UcTxzzzLe6ZJw6pXFgf7zuimze9WZHkwfqOLb
-	gmUtm2wNXHbqjpTweciShEFxDy+XkDCdCFk4uMGb0efalsKjYOfl8hFZ2VDlzwvK7t9Bmpv/JjI
-	JxnKR5Vc3MXxroOseoRcawBob/T0Tqyf8EYjTdRzZvbQ73H0k1nKEC9s+c0zV+cXo=
-X-Received: by 2002:a05:7301:470e:b0:358:8bd2:fda1 with SMTP id 5a478bee46e88-361a2649752mr9635115eec.30.1792391831387;
-        Sun, 18 Oct 2026 23:37:11 -0700 (PDT)
-Received: from ubuntu.. ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36082a7b33bsm53697748eec.24.2026.10.18.23.37.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 23:37:10 -0700 (PDT)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DiloZCLI"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=d3cKeLYAmxAjHd4aRGd3GFKac+xN+xPQ/z9Y7icRQgg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792395574; v=1; x=1793000374;
+ b=DiloZCLIk6eioNkHFN8+x0TbwhSfT/QL4BvPC5x1BpSjMiAczhHFPfAs/qnBOaIRem6kMMDP
+ pE1hOqNdu/xlCpVgYR+k6qOIGU8OA9U77ia6X8+YTJAX2qr4ERj9IwwblXrjgAMU5q36ita5hNR
+ fO6uijyeYh4BatMdgPC+bIWU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id c45aa43e38a73bca;
+	Mon, 19 Oct 2026 07:39:33 +0000
+X-Mizu-Trace-ID: c45aa43e38a73bca
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 19 Oct 2026 15:39:27 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Run tc_edt serially
-Date: Mon, 19 Oct 2026 14:37:03 +0800
-Message-ID: <20261019063703.2144943-1-odys.yuan@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <DM6E35SUH95A.2B7HJ5XOTFJHS@gmail.com>
-References: <20261009-selftests-bpf-tc-edt-serial-v1-1-f72e045f2465@gmail.com> <DM4FOVA9PW2E.1WIY5HRJWA1QP@bootlin.com> <DM6E35SUH95A.2B7HJ5XOTFJHS@gmail.com>
+Subject: Re: [PATCH net v2] selftests/net: test network sysctl extremes
+Message-ID: <atXJLy6iTh5vbe9D@fedora>
+References: <20261014041446.2821085-1-sahaj123.sc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261014041446.2821085-1-sahaj123.sc@gmail.com>
 
-On Fri, Oct 16, 2026 at 4:05 PM UTC, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> The test is flaky without -j too.
-> It's in DENYLIST.s390x in CI since Dec 2025:
-> https://github.com/kernel-patches/vmtest/pull/418
-> and it fails on x86 with ASAN:
-> https://github.com/kernel-patches/vmtest/issues/503
-> Both jobs run test_progs without -j. serial_ won't help there.
+Hi Sahaj,
 
-Right. I timed the parts of the measurement on a KASAN kernel, x86_64
-VM with 32 vCPUs, 30 runs each, median (max):
+On Wed, Oct 14, 2026 at 09:44:46AM +0530, Sahaj Chaudhari wrote:
+> Probe accepted bounds for writable network sysctls and exercise
+> TCP and UDP loopback traffic at each bound. Test representative
+> per-network-namespace TCP/UDP settings, with an option to select
+> from the set.
 
-                 before 1st data   shaped data        after last data
-  idle           0.7ms (0.9ms)     200.08ms (201.9)   0.4ms (0.7ms)
-  32 busy loops  1.0ms (4.7ms)     200.08ms (200.4)   0.2ms (0.8ms)
+Is there any reason that you choose write this test with C? I feel
+a shell script should be more concise and clear.
 
-The shaping itself is accurate. What eats the 2% margin, which is 4ms
-of the 200ms transfer, is what send_recv_data() does before the first
-byte goes out: creating the sender thread and accepting the connection.
-That grows with how busy or slow the machine is.
+Thanks
+Hangbin
 
-To Alexis' questions: the misses are small, the test reports
-"actual 2 > expected 2" and -2.4% was the worst here, and they do come
-from CPU load. Widening the margin would only move the line, though, so
-v2 [1] starts the measurement at the first packet with data instead,
-which the BPF program notes. With 32 busy loops, 100 runs fail 3 times
-before and none after.
-
-[1] https://lore.kernel.org/r/20261019-selftests-bpf-tc-edt-serial-v2-1-41c3813e7916@gmail.com
+> 
+> Tested: Focused selftest build and CLI checks. QEMU on Linux
+> 7.3.0-rc7 passed (4 sysctls/8 values, TCP 16/16, UDP 16/16), also
+> while userspace wrote WARNING:/BUG: lines to /dev/kmsg. On an AArch64
+> Linux 6.12.57 board, 4 sysctls/8 values met aggregate criteria (TCP
+> 15/16, UDP 16/16), with one TCP timeout at tcp_rmem[1]=1. No kernel
+> splats were found.
+> 
+> Link: https://lore.kernel.org/r/20261007054508.1059927-1-sahaj123.sc@gmail.com
+> Signed-off-by: Sahaj Chaudhari <sahaj123.sc@gmail.com>
+> ---
+> Changes in v2:
+> - Remove --all and the full /proc/sys/net scan. It could enable
+>   nf_hooks_lwtunnel, a global static key that cannot be disabled again,
+>   so restoring the original value failed. The remaining sysctls are per
+>   network namespace and restored by writing the original value back.
+>   Document this constraint above the sysctl list. (Sashiko)
+> - The rounding issue in find_bound() applied to ms/jiffies sysctls that
+>   only --all reached; the remaining four do not round. (Sashiko)
+> - Ignore /dev/kmsg records whose facility is not LOG_KERN. (Sashiko)
+> - Rebase on current master.
+> 
+> v1: https://lore.kernel.org/r/20261012155339.3799130-1-sahaj123.sc@gmail.com
+> 
+> Eric, v1 was narrower than the generic network-sysctl coverage you
+> suggested. Is this reduced scope acceptable, or should it be folded into
+> an existing selftest?
+>  tools/testing/selftests/net/.gitignore        |   1 +
+>  tools/testing/selftests/net/Makefile          |   1 +
+>  tools/testing/selftests/net/sysctl_net_test.c | 925 ++++++++++++++++++
+>  3 files changed, 927 insertions(+)
+>  create mode 100644 tools/testing/selftests/net/sysctl_net_test.c
+> 
+> diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+> index dacd36ed8455..842cb359bbf6 100644
+> --- a/tools/testing/selftests/net/.gitignore
+> +++ b/tools/testing/selftests/net/.gitignore
+> @@ -43,6 +43,7 @@ so_incoming_cpu
+>  so_netns_cookie
+>  so_rcv_listener
+>  stress_reuseport_listen
+> +sysctl_net_test
+>  tap
+>  tcp_fastopen_backup_key
+>  tcp_inq
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index 590b33e16d9f..8926fcfef6e9 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -196,6 +196,7 @@ TEST_GEN_PROGS := \
+>  	sk_connect_zero_addr \
+>  	sk_so_peek_off \
+>  	so_incoming_cpu \
+> +	sysctl_net_test \
+>  	tap \
+>  	tcp_port_share \
+>  	tls \
+> diff --git a/tools/testing/selftests/net/sysctl_net_test.c b/tools/testing/selftests/net/sysctl_net_test.c
+> new file mode 100644
+> index 000000000000..6360616132c4
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/sysctl_net_test.c
+> @@ -0,0 +1,925 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#define _GNU_SOURCE
+> +#include <arpa/inet.h>
+> +#include <ctype.h>
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <getopt.h>
+> +#include <limits.h>
+> +#include <net/if.h>
+> +#include <netinet/in.h>
+> +#include <poll.h>
+> +#include <sched.h>
+> +#include <stdarg.h>
+> +#include <stdbool.h>
+> +#include <stdint.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/ioctl.h>
+> +#include <sys/socket.h>
+> +#include <sys/stat.h>
+> +#include <sys/time.h>
+> +#include <unistd.h>
+> +
+> +#include "kselftest.h"
+> +
+> +#define SYSCTL_ROOT		"/proc/sys/net"
+> +#define SYSCTL_TEXT_SIZE	4096
+> +#define SYSCTL_MAX_VALUES	256
+> +#define KMSG_TEXT_SIZE		4096
+> +#define FIRST_TEST_PORT		20000
+> +#define LAST_TEST_PORT		59998
+> +
+> +struct sysctl_number {
+> +	uint64_t magnitude;
+> +	bool negative;
+> +};
+> +
+> +struct sysctl_values {
+> +	struct sysctl_number value[SYSCTL_MAX_VALUES];
+> +	size_t count;
+> +};
+> +
+> +static int kmsg_fd = -1;
+> +static unsigned int next_tcp_port = FIRST_TEST_PORT;
+> +static unsigned int next_udp_port = FIRST_TEST_PORT;
+> +static size_t tested_files;
+> +static size_t skipped_files;
+> +static size_t tested_values;
+> +static size_t tcp_attempts;
+> +static size_t tcp_successes;
+> +static size_t udp_attempts;
+> +static size_t udp_successes;
+> +static char failure[256];
+> +static char tcp_delivery_failure[256];
+> +static char udp_delivery_failure[256];
+> +
+> +/*
+> + * Only add sysctls that are per network namespace and are restored by
+> + * writing their original value back. Some sysctls change global state that
+> + * the private namespace does not isolate and that cannot be undone.
+> + */
+> +static const char * const representative_sysctls[] = {
+> +	"ipv4/tcp_rmem",
+> +	"ipv4/tcp_wmem",
+> +	"ipv4/udp_rmem_min",
+> +	"ipv4/udp_wmem_min",
+> +};
+> +
+> +static bool selected_sysctls[ARRAY_SIZE(representative_sysctls)];
+> +
+> +static void set_failure(const char *fmt, ...)
+> +{
+> +	va_list args;
+> +
+> +	if (failure[0])
+> +		return;
+> +
+> +	va_start(args, fmt);
+> +	vsnprintf(failure, sizeof(failure), fmt, args);
+> +	va_end(args);
+> +}
+> +
+> +static struct sysctl_number number_from_signed(int64_t value)
+> +{
+> +	struct sysctl_number number = {};
+> +
+> +	if (value < 0) {
+> +		number.negative = true;
+> +		number.magnitude = (uint64_t)(-(value + 1)) + 1;
+> +	} else {
+> +		number.magnitude = value;
+> +	}
+> +	return number;
+> +}
+> +
+> +static struct sysctl_number number_from_unsigned(uint64_t value)
+> +{
+> +	struct sysctl_number number = {
+> +		.magnitude = value,
+> +	};
+> +
+> +	return number;
+> +}
+> +
+> +static int64_t number_to_signed(struct sysctl_number number)
+> +{
+> +	if (!number.negative)
+> +		return (int64_t)number.magnitude;
+> +	if (number.magnitude == (UINT64_C(1) << 63))
+> +		return INT64_MIN;
+> +	return -(int64_t)number.magnitude;
+> +}
+> +
+> +static bool numbers_equal(struct sysctl_number a, struct sysctl_number b)
+> +{
+> +	return a.magnitude == b.magnitude &&
+> +	       (a.magnitude == 0 || a.negative == b.negative);
+> +}
+> +
+> +static bool format_number(struct sysctl_number number, char *text,
+> +			  size_t text_size)
+> +{
+> +	int n = snprintf(text, text_size, number.negative ? "-%llu" : "%llu",
+> +			 (unsigned long long)number.magnitude);
+> +
+> +	return n >= 0 && (size_t)n < text_size;
+> +}
+> +
+> +static bool parse_values(char *text, struct sysctl_values *values)
+> +{
+> +	char *pos = text;
+> +
+> +	values->count = 0;
+> +	while (*pos) {
+> +		char *end;
+> +		struct sysctl_number value;
+> +
+> +		while (isspace((unsigned char)*pos))
+> +			pos++;
+> +		if (!*pos)
+> +			break;
+> +		if (values->count == SYSCTL_MAX_VALUES)
+> +			return false;
+> +
+> +		errno = 0;
+> +		if (*pos == '-') {
+> +			long long signed_value = strtoll(pos, &end, 10);
+> +
+> +			if (end == pos || errno == ERANGE)
+> +				return false;
+> +			value = number_from_signed(signed_value);
+> +		} else {
+> +			unsigned long long unsigned_value = strtoull(pos, &end, 10);
+> +
+> +			if (end == pos || errno == ERANGE)
+> +				return false;
+> +			value = number_from_unsigned(unsigned_value);
+> +		}
+> +		if (*end && !isspace((unsigned char)*end))
+> +			return false;
+> +
+> +		values->value[values->count++] = value;
+> +		pos = end;
+> +	}
+> +
+> +	return values->count > 0;
+> +}
+> +
+> +static bool read_values(const char *path, struct sysctl_values *values)
+> +{
+> +	char text[SYSCTL_TEXT_SIZE];
+> +	size_t len = 0;
+> +	int fd;
+> +	bool ok = false;
+> +
+> +	fd = open(path, O_RDONLY | O_CLOEXEC);
+> +	if (fd < 0)
+> +		return false;
+> +
+> +	while (len < sizeof(text) - 1) {
+> +		ssize_t n = read(fd, text + len, sizeof(text) - 1 - len);
+> +
+> +		if (n < 0 && errno == EINTR)
+> +			continue;
+> +		if (n < 0)
+> +			goto out;
+> +		if (!n)
+> +			break;
+> +		len += n;
+> +	}
+> +	if (len == sizeof(text) - 1)
+> +		goto out;
+> +
+> +	text[len] = '\0';
+> +	ok = parse_values(text, values);
+> +out:
+> +	close(fd);
+> +	return ok;
+> +}
+> +
+> +static bool values_equal(const struct sysctl_values *a,
+> +			 const struct sysctl_values *b)
+> +{
+> +	size_t i;
+> +
+> +	if (a->count != b->count)
+> +		return false;
+> +	for (i = 0; i < a->count; i++) {
+> +		if (!numbers_equal(a->value[i], b->value[i]))
+> +			return false;
+> +	}
+> +	return true;
+> +}
+> +
+> +static bool format_values(const struct sysctl_values *values, char *text,
+> +			  size_t text_size)
+> +{
+> +	size_t i, len = 0;
+> +
+> +	for (i = 0; i < values->count; i++) {
+> +		char number[32];
+> +		int n;
+> +
+> +		if (!format_number(values->value[i], number, sizeof(number)))
+> +			return false;
+> +		n = snprintf(text + len, text_size - len, "%s%c", number,
+> +			     i + 1 == values->count ? '\n' : ' ');
+> +		if (n < 0 || (size_t)n >= text_size - len)
+> +			return false;
+> +		len += n;
+> +	}
+> +	return len > 0;
+> +}
+> +
+> +static bool write_values(const char *path,
+> +			 const struct sysctl_values *values)
+> +{
+> +	char text[SYSCTL_TEXT_SIZE];
+> +	size_t len;
+> +	ssize_t n;
+> +	int fd;
+> +	bool ok;
+> +
+> +	if (!format_values(values, text, sizeof(text)))
+> +		return false;
+> +	len = strlen(text);
+> +
+> +	fd = open(path, O_WRONLY | O_CLOEXEC);
+> +	if (fd < 0)
+> +		return false;
+> +	do {
+> +		n = write(fd, text, len);
+> +	} while (n < 0 && errno == EINTR);
+> +	ok = n == (ssize_t)len;
+> +	if (close(fd) < 0)
+> +		ok = false;
+> +	return ok;
+> +}
+> +
+> +static bool restore_values(const char *path,
+> +			   const struct sysctl_values *original)
+> +{
+> +	struct sysctl_values current;
+> +
+> +	if (read_values(path, &current) && values_equal(original, &current))
+> +		return true;
+> +	return write_values(path, original) &&
+> +	       read_values(path, &current) &&
+> +	       values_equal(original, &current);
+> +}
+> +
+> +static bool check_kernel_log(void)
+> +{
+> +	static const char * const splats[] = {
+> +		"WARNING:",
+> +		"BUG:",
+> +		"Oops:",
+> +		"divide error",
+> +		"general protection fault",
+> +		"invalid opcode",
+> +		"kernel BUG at",
+> +		"Kernel panic",
+> +		"KASAN:",
+> +		"UBSAN:",
+> +		"soft lockup",
+> +		"hard LOCKUP",
+> +		"blocked for more than",
+> +		"possible circular locking dependency",
+> +	};
+> +	char record[KMSG_TEXT_SIZE + 1];
+> +
+> +	for (;;) {
+> +		ssize_t n = read(kmsg_fd, record, sizeof(record) - 1);
+> +		unsigned long prefix;
+> +		char *message;
+> +		size_t i;
+> +
+> +		if (n < 0 && errno == EINTR)
+> +			continue;
+> +		if (n < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
+> +			return true;
+> +		if (n < 0) {
+> +			set_failure("cannot read /dev/kmsg: %s", strerror(errno));
+> +			return false;
+> +		}
+> +		if (!n)
+> +			return true;
+> +
+> +		record[n] = '\0';
+> +		message = strchr(record, ';');
+> +		if (!message)
+> +			continue;
+> +		/* Ignore messages that userspace wrote to /dev/kmsg. */
+> +		prefix = strtoul(record, NULL, 10);
+> +		if (prefix >> 3 != 0)
+> +			continue;
+> +		message++;
+> +		for (i = 0; i < ARRAY_SIZE(splats); i++) {
+> +			if (!strstr(message, splats[i]))
+> +				continue;
+> +			set_failure("kernel splat detected: %.180s", message);
+> +			return false;
+> +		}
+> +	}
+> +}
+> +
+> +static uint64_t ordered_value(int64_t value)
+> +{
+> +	/* Map signed integers to unsigned keys in numeric order. */
+> +	return (uint64_t)value ^ (UINT64_C(1) << 63);
+> +}
+> +
+> +static int64_t unordered_value(uint64_t key)
+> +{
+> +	uint64_t raw = key ^ (UINT64_C(1) << 63);
+> +
+> +	if (raw <= INT64_MAX)
+> +		return (int64_t)raw;
+> +	return -1 - (int64_t)(UINT64_MAX - raw);
+> +}
+> +
+> +static int probe_value(const char *path, const struct sysctl_values *original,
+> +		       size_t index, struct sysctl_number candidate,
+> +		       bool *accepted)
+> +{
+> +	struct sysctl_values expected = *original;
+> +	struct sysctl_values current;
+> +	char text[32];
+> +
+> +	expected.value[index] = candidate;
+> +	*accepted = false;
+> +
+> +	if (write_values(path, &expected) &&
+> +	    read_values(path, &current) &&
+> +	    values_equal(&expected, &current))
+> +		*accepted = true;
+> +
+> +	if (!restore_values(path, original)) {
+> +		format_number(candidate, text, sizeof(text));
+> +		set_failure("failed to restore %s after probing %s", path, text);
+> +		return -1;
+> +	}
+> +	if (!check_kernel_log())
+> +		return -1;
+> +	return 0;
+> +}
+> +
+> +static uint64_t next_step(uint64_t step)
+> +{
+> +	if (step > UINT64_MAX / 2)
+> +		return UINT64_MAX;
+> +	return step * 2;
+> +}
+> +
+> +static int find_bound(const char *path,
+> +		      const struct sysctl_values *original, size_t index,
+> +		      bool lower, bool unsigned_domain,
+> +		      struct sysctl_number *bound)
+> +{
+> +	struct sysctl_number start = original->value[index];
+> +	uint64_t valid = unsigned_domain ? start.magnitude :
+> +			 ordered_value(number_to_signed(start));
+> +	uint64_t step = 1;
+> +
+> +	for (;;) {
+> +		uint64_t candidate, invalid;
+> +		bool accepted;
+> +
+> +		if (lower) {
+> +			if (!valid)
+> +				break;
+> +			candidate = valid > step ? valid - step : 0;
+> +		} else {
+> +			if (valid == UINT64_MAX)
+> +				break;
+> +			candidate = UINT64_MAX - valid < step ?
+> +				    UINT64_MAX : valid + step;
+> +		}
+> +		if (candidate == valid)
+> +			break;
+> +
+> +		if (probe_value(path, original, index,
+> +				unsigned_domain ? number_from_unsigned(candidate) :
+> +				number_from_signed(unordered_value(candidate)),
+> +				&accepted))
+> +			return -1;
+> +		if (accepted) {
+> +			valid = candidate;
+> +			step = next_step(step);
+> +			continue;
+> +		}
+> +
+> +		invalid = candidate;
+> +		while (lower ? valid - invalid > 1 : invalid - valid > 1) {
+> +			uint64_t middle = lower ?
+> +					  invalid + (valid - invalid) / 2 :
+> +					  valid + (invalid - valid) / 2;
+> +
+> +			if (probe_value(path, original, index,
+> +					unsigned_domain ?
+> +					number_from_unsigned(middle) :
+> +					number_from_signed(unordered_value(middle)),
+> +					&accepted))
+> +				return -1;
+> +			if (accepted)
+> +				valid = middle;
+> +			else
+> +				invalid = middle;
+> +		}
+> +		break;
+> +	}
+> +
+> +	*bound = unsigned_domain ? number_from_unsigned(valid) :
+> +		 number_from_signed(unordered_value(valid));
+> +	return 0;
+> +}
+> +
+> +static int find_lower_bound(const char *path,
+> +			    const struct sysctl_values *original,
+> +			    size_t index, struct sysctl_number *bound)
+> +{
+> +	struct sysctl_number start = original->value[index];
+> +	bool unsigned_domain = !start.negative && start.magnitude > INT64_MAX;
+> +
+> +	return find_bound(path, original, index, true, unsigned_domain, bound);
+> +}
+> +
+> +static int find_upper_bound(const char *path,
+> +			    const struct sysctl_values *original,
+> +			    size_t index, struct sysctl_number *bound)
+> +{
+> +	bool unsigned_domain = !original->value[index].negative;
+> +
+> +	return find_bound(path, original, index, false, unsigned_domain, bound);
+> +}
+> +
+> +static int get_port_pair(bool tcp, uint16_t *server, uint16_t *client)
+> +{
+> +	unsigned int *next = tcp ? &next_tcp_port : &next_udp_port;
+> +
+> +	if (*next > LAST_TEST_PORT) {
+> +		errno = EADDRNOTAVAIL;
+> +		return -1;
+> +	}
+> +	*server = *next;
+> +	*client = *next + 1;
+> +	*next += 2;
+> +	return 0;
+> +}
+> +
+> +static int bind_loopback(int fd, uint16_t port)
+> +{
+> +	struct sockaddr_in addr = {
+> +		.sin_family = AF_INET,
+> +		.sin_port = htons(port),
+> +		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
+> +	};
+> +
+> +	return bind(fd, (struct sockaddr *)&addr, sizeof(addr));
+> +}
+> +
+> +static int wait_readable(int fd)
+> +{
+> +	struct pollfd pfd = {
+> +		.fd = fd,
+> +		.events = POLLIN,
+> +	};
+> +	int ret;
+> +
+> +	ret = poll(&pfd, 1, 1000);
+> +	if (ret < 0)
+> +		return -1;
+> +	if (!ret) {
+> +		errno = ETIMEDOUT;
+> +		return -1;
+> +	}
+> +	if (!(pfd.revents & POLLIN)) {
+> +		errno = EIO;
+> +		return -1;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int tcp_loopback(void)
+> +{
+> +	struct timeval timeout = { .tv_sec = 1 };
+> +	uint16_t server_port, client_port;
+> +	char data[64] = { 1 };
+> +	char received[sizeof(data)];
+> +	int listener = -1, client = -1, server = -1;
+> +	int ret = -1;
+> +	ssize_t n;
+> +
+> +	if (get_port_pair(true, &server_port, &client_port))
+> +		return -1;
+> +	listener = socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
+> +	client = socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
+> +	if (listener < 0 || client < 0 ||
+> +	    setsockopt(client, SOL_SOCKET, SO_SNDTIMEO, &timeout,
+> +		       sizeof(timeout)) ||
+> +	    bind_loopback(listener, server_port) ||
+> +	    listen(listener, 1) || bind_loopback(client, client_port))
+> +		goto out;
+> +
+> +	{
+> +		struct sockaddr_in addr = {
+> +			.sin_family = AF_INET,
+> +			.sin_port = htons(server_port),
+> +			.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
+> +		};
+> +
+> +		if (connect(client, (struct sockaddr *)&addr, sizeof(addr)))
+> +			goto out;
+> +	}
+> +
+> +	if (wait_readable(listener))
+> +		goto out;
+> +	server = accept4(listener, NULL, NULL, SOCK_CLOEXEC);
+> +	if (server < 0)
+> +		goto out;
+> +	n = send(client, data, sizeof(data), MSG_NOSIGNAL);
+> +	if (n <= 0) {
+> +		if (!n)
+> +			errno = EPIPE;
+> +		goto out;
+> +	}
+> +	if (wait_readable(server))
+> +		goto out;
+> +
+> +	n = recv(server, received, sizeof(received), 0);
+> +	if (n <= 0) {
+> +		if (!n)
+> +			errno = ECONNRESET;
+> +		goto out;
+> +	}
+> +	ret = 0;
+> +out:
+> +	if (server >= 0)
+> +		close(server);
+> +	if (client >= 0)
+> +		close(client);
+> +	if (listener >= 0)
+> +		close(listener);
+> +	return ret;
+> +}
+> +
+> +static int udp_loopback(void)
+> +{
+> +	uint16_t server_port, client_port;
+> +	struct sockaddr_in addr = {
+> +		.sin_family = AF_INET,
+> +		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
+> +	};
+> +	char data = 1, received;
+> +	int server = -1, client = -1;
+> +	int ret = -1;
+> +	ssize_t n;
+> +
+> +	if (get_port_pair(false, &server_port, &client_port))
+> +		return -1;
+> +	server = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
+> +	client = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
+> +	if (server < 0 || client < 0 || bind_loopback(server, server_port) ||
+> +	    bind_loopback(client, client_port))
+> +		goto out;
+> +
+> +	addr.sin_port = htons(server_port);
+> +	n = sendto(client, &data, sizeof(data), 0, (struct sockaddr *)&addr,
+> +		   sizeof(addr));
+> +	if (n != sizeof(data)) {
+> +		if (n >= 0)
+> +			errno = EIO;
+> +		goto out;
+> +	}
+> +	if (wait_readable(server))
+> +		goto out;
+> +
+> +	n = recv(server, &received, sizeof(received), 0);
+> +	if (n != sizeof(received)) {
+> +		if (n >= 0)
+> +			errno = EIO;
+> +		goto out;
+> +	}
+> +	ret = 0;
+> +out:
+> +	if (client >= 0)
+> +		close(client);
+> +	if (server >= 0)
+> +		close(server);
+> +	return ret;
+> +}
+> +
+> +static void run_loopback_traffic(const char *path, size_t index,
+> +				 const char *value)
+> +{
+> +	int err;
+> +
+> +	tcp_attempts++;
+> +	if (!tcp_loopback()) {
+> +		tcp_successes++;
+> +	} else {
+> +		err = errno;
+> +		if (!tcp_delivery_failure[0])
+> +			snprintf(tcp_delivery_failure,
+> +				 sizeof(tcp_delivery_failure),
+> +				 "%s[%zu]=%s: %s", path, index, value,
+> +				 strerror(err));
+> +	}
+> +
+> +	udp_attempts++;
+> +	if (!udp_loopback()) {
+> +		udp_successes++;
+> +	} else {
+> +		err = errno;
+> +		if (!udp_delivery_failure[0])
+> +			snprintf(udp_delivery_failure,
+> +				 sizeof(udp_delivery_failure),
+> +				 "%s[%zu]=%s: %s", path, index, value,
+> +				 strerror(err));
+> +	}
+> +}
+> +
+> +static int exercise_value(const char *path,
+> +			  const struct sysctl_values *original,
+> +			  size_t index, struct sysctl_number value)
+> +{
+> +	struct sysctl_values expected = *original;
+> +	char text[32];
+> +	bool restore = !numbers_equal(value, original->value[index]);
+> +	bool applied = false;
+> +
+> +	if (!format_number(value, text, sizeof(text))) {
+> +		set_failure("cannot format boundary for %s", path);
+> +		return -1;
+> +	}
+> +	if (restore) {
+> +		struct sysctl_values current;
+> +
+> +		expected.value[index] = value;
+> +		applied = write_values(path, &expected) &&
+> +			  read_values(path, &current) &&
+> +			  values_equal(&expected, &current);
+> +		if (!applied) {
+> +			if (!restore_values(path, original)) {
+> +				set_failure("failed to restore %s after setting %s",
+> +					    path, text);
+> +				return -1;
+> +			}
+> +			set_failure("%s no longer accepts boundary %s", path, text);
+> +			return -1;
+> +		}
+> +	}
+> +
+> +	check_kernel_log();
+> +	if (!failure[0])
+> +		run_loopback_traffic(path, index, text);
+> +
+> +	if (restore && !restore_values(path, original)) {
+> +		format_number(value, text, sizeof(text));
+> +		set_failure("failed to restore %s after traffic at %s", path,
+> +			    text);
+> +	}
+> +	check_kernel_log();
+> +	return failure[0] ? -1 : 0;
+> +}
+> +
+> +static bool prepare_sysctl(const char *path,
+> +			   const struct sysctl_values *original)
+> +{
+> +	struct sysctl_values current;
+> +	bool writable;
+> +
+> +	writable = write_values(path, original) &&
+> +		   read_values(path, &current) &&
+> +		   values_equal(original, &current);
+> +	if (!writable && !restore_values(path, original)) {
+> +		set_failure("failed to restore %s after initial write", path);
+> +		return false;
+> +	}
+> +	if (!check_kernel_log())
+> +		return false;
+> +	return writable;
+> +}
+> +
+> +static int test_sysctl(const char *path, const struct sysctl_values *original)
+> +{
+> +	size_t i;
+> +
+> +	if (!prepare_sysctl(path, original)) {
+> +		if (!failure[0]) {
+> +			skipped_files++;
+> +			printf("# SKIP %s: sysctl is not writable\n", path);
+> +		}
+> +		return failure[0] ? -1 : 0;
+> +	}
+> +
+> +	tested_files++;
+> +	for (i = 0; i < original->count; i++) {
+> +		struct sysctl_number lower, upper;
+> +
+> +		if (find_lower_bound(path, original, i, &lower) ||
+> +		    find_upper_bound(path, original, i, &upper))
+> +			return -1;
+> +		if (exercise_value(path, original, i, lower) ||
+> +		    (!numbers_equal(upper, lower) &&
+> +		     exercise_value(path, original, i, upper)))
+> +			return -1;
+> +		tested_values++;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static void print_usage(FILE *stream, const char *program)
+> +{
+> +	size_t i;
+> +
+> +	fprintf(stream, "Usage: %s [-s SYSCTL ...]\n", program);
+> +	fprintf(stream, "  -s, --sysctl SYSCTL  Test a representative sysctl (repeatable)\n");
+> +	fprintf(stream, "  -h, --help           Show this help\n");
+> +	fprintf(stream, "Default sysctls:\n");
+> +	for (i = 0; i < ARRAY_SIZE(representative_sysctls); i++)
+> +		fprintf(stream, "  %s\n", representative_sysctls[i]);
+> +}
+> +
+> +static int parse_options(int argc, char **argv)
+> +{
+> +	static const struct option options[] = {
+> +		{ "help", no_argument, NULL, 'h' },
+> +		{ "sysctl", required_argument, NULL, 's' },
+> +		{}
+> +	};
+> +	bool selection_given = false;
+> +	int option;
+> +
+> +	while ((option = getopt_long(argc, argv, "hs:", options, NULL)) != -1) {
+> +		switch (option) {
+> +		case 's': {
+> +			size_t i;
+> +
+> +			selection_given = true;
+> +			for (i = 0; i < ARRAY_SIZE(representative_sysctls); i++) {
+> +				if (strcmp(optarg, representative_sysctls[i]))
+> +					continue;
+> +				selected_sysctls[i] = true;
+> +				break;
+> +			}
+> +			if (i == ARRAY_SIZE(representative_sysctls)) {
+> +				fprintf(stderr, "Unknown sysctl: %s\n", optarg);
+> +				goto invalid_options;
+> +			}
+> +			break;
+> +		}
+> +		case 'h':
+> +			print_usage(stdout, argv[0]);
+> +			return 1;
+> +		default:
+> +			goto invalid_options;
+> +		}
+> +	}
+> +	if (optind != argc)
+> +		goto invalid_options;
+> +
+> +	if (!selection_given) {
+> +		size_t i;
+> +
+> +		for (i = 0; i < ARRAY_SIZE(representative_sysctls); i++)
+> +			selected_sysctls[i] = true;
+> +	}
+> +	return 0;
+> +
+> +invalid_options:
+> +	print_usage(stderr, argv[0]);
+> +	return -1;
+> +}
+> +
+> +static int test_selected_sysctl(const char *name)
+> +{
+> +	char path[PATH_MAX];
+> +	struct sysctl_values values;
+> +	int n;
+> +
+> +	n = snprintf(path, sizeof(path), "%s/%s", SYSCTL_ROOT, name);
+> +	if (n < 0 || (size_t)n >= sizeof(path)) {
+> +		set_failure("sysctl path is too long: %s", name);
+> +		return -1;
+> +	}
+> +
+> +	if (access(path, F_OK)) {
+> +		if (errno == ENOENT || errno == ENOTDIR) {
+> +			skipped_files++;
+> +			printf("# SKIP %s: not available\n", name);
+> +			return 0;
+> +		}
+> +		set_failure("cannot inspect %s: %s", path, strerror(errno));
+> +		return -1;
+> +	}
+> +	if (access(path, R_OK)) {
+> +		int err = errno;
+> +
+> +		skipped_files++;
+> +		printf("# SKIP %s: not readable (%s)\n", name, strerror(err));
+> +		return 0;
+> +	}
+> +	if (!read_values(path, &values)) {
+> +		set_failure("%s is not a readable numeric sysctl", path);
+> +		return -1;
+> +	}
+> +	if (access(path, W_OK)) {
+> +		int err = errno;
+> +
+> +		skipped_files++;
+> +		printf("# SKIP %s: not writable (%s)\n", name, strerror(err));
+> +		return 0;
+> +	}
+> +
+> +	printf("# Testing %s\n", name);
+> +	return test_sysctl(path, &values);
+> +}
+> +
+> +static int set_loopback_up(void)
+> +{
+> +	struct ifreq ifr = {};
+> +	int fd, ret = -1;
+> +
+> +	fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
+> +	if (fd < 0)
+> +		return -1;
+> +	strncpy(ifr.ifr_name, "lo", IFNAMSIZ - 1);
+> +	if (ioctl(fd, SIOCGIFFLAGS, &ifr))
+> +		goto out;
+> +	ifr.ifr_flags |= IFF_UP;
+> +	ret = ioctl(fd, SIOCSIFFLAGS, &ifr);
+> +out:
+> +	close(fd);
+> +	return ret;
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	int option_status;
+> +	size_t i;
+> +
+> +	option_status = parse_options(argc, argv);
+> +	if (option_status > 0)
+> +		return KSFT_PASS;
+> +	if (option_status < 0)
+> +		return KSFT_FAIL;
+> +
+> +	ksft_print_header();
+> +	ksft_set_plan(1);
+> +
+> +	if (unshare(CLONE_NEWNET))
+> +		ksft_exit_skip("cannot create network namespace: %s\n",
+> +			       strerror(errno));
+> +
+> +	kmsg_fd = open("/dev/kmsg", O_RDONLY | O_NONBLOCK | O_CLOEXEC);
+> +	if (kmsg_fd < 0)
+> +		ksft_exit_skip("cannot read /dev/kmsg: %s\n", strerror(errno));
+> +	if (lseek(kmsg_fd, 0, SEEK_END) < 0)
+> +		ksft_exit_skip("cannot seek /dev/kmsg: %s\n", strerror(errno));
+> +	if (set_loopback_up())
+> +		ksft_exit_skip("cannot bring loopback up: %s\n", strerror(errno));
+> +	if (!check_kernel_log())
+> +		goto fail;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(representative_sysctls); i++) {
+> +		if (!selected_sysctls[i])
+> +			continue;
+> +		if (test_selected_sysctl(representative_sysctls[i]))
+> +			break;
+> +	}
+> +	if (!failure[0] && !tested_files)
+> +		ksft_exit_skip("no selected writable numeric network sysctls found\n");
+> +	if (!failure[0] && (!tcp_successes || !udp_successes))
+> +		set_failure("loopback delivery incomplete: TCP %zu/%zu, UDP %zu/%zu",
+> +			    tcp_successes, tcp_attempts,
+> +			    udp_successes, udp_attempts);
+> +	if (!failure[0] && !check_kernel_log())
+> +		goto fail;
+> +	if (tcp_delivery_failure[0])
+> +		printf("# first TCP delivery failure: %s\n",
+> +		       tcp_delivery_failure);
+> +	if (udp_delivery_failure[0])
+> +		printf("# first UDP delivery failure: %s\n",
+> +		       udp_delivery_failure);
+> +	if (failure[0])
+> +		goto fail;
+> +
+> +	printf("# tested %zu sysctls, %zu values; skipped %zu\n",
+> +	       tested_files, tested_values, skipped_files);
+> +	ksft_test_result_pass("TCP %zu/%zu, UDP %zu/%zu deliveries succeeded\n",
+> +			      tcp_successes, tcp_attempts,
+> +			      udp_successes, udp_attempts);
+> +	ksft_finished();
+> +	close(kmsg_fd);
+> +	return KSFT_PASS;
+> +
+> +fail:
+> +	ksft_test_result_fail("%s\n", failure);
+> +	ksft_finished();
+> +	close(kmsg_fd);
+> +	return KSFT_FAIL;
+> +}
+> -- 
+> 2.43.0
+> 
