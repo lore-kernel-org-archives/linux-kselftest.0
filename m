@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.80
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792424229;
-	b=dmT/usAfAKrIgg2wKUsyg7olF6Uxw2A+lDzQu9BlMLBIbsl0j46MzhFPefSbmrvd8lGZ
-	 pmvlXvrofK9FPlLOThRrqpP7/GzLCMLk5SFBwKCCGa+yqydZCwVn8K7ZZtj8fVpI4Si2t
-	 L61TE95OR5wiWX2U+2PGGRj5YSgc9LNuhLGIkRhzXOuOSNDge0KQT5L6IaJhoV7P3+P/p
-	 HTkYDRRSdLqOwl8THDcO7jM6XGgtQWgO3evbymyuZZu45gnsEHLb3vwRvHFNUdeBuhjfR
-	 ftRWcCgRUSNHS6I+ARuZvSL3wwmu+e8VZES7r+IUyxqJDXXz0YXFAVr2Z74WSCUTVfg==
+	t=1792424238;
+	b=zpwBjf8NEXOrOcm/2ZVB2vcHijZD44/GormXSj5J5i7s364oqEX3S5Ybh5vWIk+vfI3R
+	 TO/Vru85u6rzA1f53i9yy2J1SPkEgAtG/Whd2U2l4xJ/SL7IajEtoiSdGWyxYiw223h9I
+	 CJb4klM3nx8lNKWS+dPXggvVQCbSEsWk18g+hFsTmfL1uS0Kr6g8pyZTNrBgB9EFjSgss
+	 vIQCl8E5zmqWOofpXP5uBTPTH0efQov5Q52ML2AUUNj8iCRQQA8T/KVPcTEobbUL1QVER
+	 T89vDkjMZq0xPstJdLIj5omfeCVU19kq1auDGqN9Svnr+hRdvWtjwnYKPu+F3mPw60Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792424229;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792424238;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=TNedbBYOy/266NwdenfQLWbJ1e1qFOtNO3TwhovjQfA=;
-	b=go4tyJcWRnqzx3JeezZS7Uy9HqM8hGKrj+jkpw7SjXPEICcoNoc98GU6+qXXnA3u8Zv5
-	 lwvhEQcemgesMDCc1aV+ldbGy+3oPAqgbOuJVggfNJf+7m73fQBy5vpeMn3eIkE2wMtNq
-	 BhHljNKhvyuY9oGqrdojtl/oq2d0JBwDTJctUUfl+oM4Psd3C/UmRETgOcB4SVe2BBKlx
-	 gKpmiYDlL9urJPJSjZu++s3p73tddzaDK3qOsDk/LNmK9fxQ5OSPI6pgp0IGhdbFeGkUt
-	 2JZ0hlEjyjSzv+ixwJJSrl+VLRR6xJIgwlvFzdGQPZ9cPAFH1j6FMVUTJXyi1Vdg91g==
+	bh=KVTYbR14YYgS4yah5hFkztdQ5rEEHZC+1mz3Q0u1oEs=;
+	b=NKckgfjbtL2n2W1VG2uz/sQp7kDuZGm7IOtlkJzg2j9NToHRXDAthj/zvFeQ0tPPMD1e
+	 UFUBFbasPBzD3sCbifVMshxEpQRvEUPyn4WapeeKt1Mo/op5WDnfuo2Pc5w9ZJfyw5cMj
+	 uVr7ChTYL/xHjig/VyJKDhrNcvu9h6gP4fWpECqOzbtNpdl3khUg5LTDQTdkGC2+zKmsG
+	 P1tjOrT+7z5je98+a5rXwb0yv5+1faNTnllfBlVVYCzS+M58atbRJdjI3BnIXv2Etw1Yd
+	 ffP7yLBH0L5bztsUia7SQt3hcsZpbx1ge99FTfPqCneQNi0n4l2UhckE3rfSBl91yUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=u05FXs97;
-	arc=none smtp.remote-ip=95.215.58.80
-Received: from mta1.migadu.com (out-80.mta1.migadu.com [95.215.58.80])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xgnlGb9h;
+	arc=none smtp.remote-ip=91.218.175.12
+Received: from mta0.migadu.com (out-12.mta0.migadu.com [91.218.175.12])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B59607F483
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 15:37:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25B59607F483
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0417860820D2
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 15:37:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0417860820D2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=u05FXs97
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xgnlGb9h
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=orhaXplratJcNb2My1mCuYwPc/ihniONCQm4s/dSjPA=;
+DKIM-Signature: a=rsa-sha256; bh=CfPc369hGVqKqwx/bCg1l8qsUmx6TMYTOAmZtXg4gRU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792424227; v=1; x=1793029027;
- b=u05FXs97mqMESr1VV/A95FKRIjYu1PwfKPpsBoCJf7UCetT0HTeJKvefMHQwlJaiOveYf2ZU
- PDavddVDM1uP66duPvl7a/l9hiIZNKHNcmwsMydGebd/odBhUDsoNOVvrVubk2s/K3nbuAJW+So
- D2gitv+BGnwHcOeVgsdS5sUo=
+ t=1792424235; v=1; x=1793029035;
+ b=xgnlGb9hJPT8QYc0K+88k6baT14ewfOh2WiCckL4vv+YZq7PPJhiwXCgW/CSgh0RMIn4WpwP
+ FeCz8mnx7gmNrxudcjobb9PxKUeZ3OQ8CJQPQfxGlGWIBLOUNRaaJpM7cbZ1i1eATJedoJAexnO
+ 8ZFP1GSY3O/l4GAbSzSkYtK8=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9046bafc7c8451ba;
-	Mon, 19 Oct 2026 15:37:06 +0000
-X-Mizu-Trace-ID: 9046bafc7c8451ba
+Received: by smtp.migadu.com with ESMTPS id 431842a5e60b459b;
+	Mon, 19 Oct 2026 15:37:14 +0000
+X-Mizu-Trace-ID: 431842a5e60b459b
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -82,9 +82,9 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next v2 3/6] bpf: Retire tracepoint bpf_xdp_link_attach_failed
-Date: Mon, 19 Oct 2026 23:36:25 +0800
-Message-ID: <20261019153628.15912-4-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 4/6] libbpf: Factor out __sys_bpf_fd helper
+Date: Mon, 19 Oct 2026 23:36:26 +0800
+Message-ID: <20261019153628.15912-5-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261019153628.15912-1-leon.hwang@linux.dev>
 References: <20261019153628.15912-1-leon.hwang@linux.dev>
@@ -99,219 +99,84 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In the previous patch, it has a proper way to back-propagate the
-underlying driver error message to user space via the BPF syscall common
-attributes.
+In the next patch, it also needs to use the extended BPF syscall to
+receive the reported log.
 
-The tracepoint bpf_xdp_link_attach_failed seems redundant to report the
-error message. And, the tracepoint doesn't report the ifindex alongside
-the error message [1].
+So, factor out __sys_bpf_fd helper.
 
-So, retire the tracepoint bpf_xdp_link_attach_failed and its selftest.
-
-According to the tracepoint change discussion [2], please revert this
-patch if users complain about the disappeared tracepoint
-bpf_xdp_link_attach_failed in the future.
-
-Links:
-[1] https://lore.kernel.org/bpf/CAFk-A4mE9Jweo2hfX7y_85xbPyt0FqpMT1EvqX1OcYZ=LTLgRA@mail.gmail.com/
-[2] https://lore.kernel.org/linux-mm/CY8PR11MB7134346A3E4BB28ECA28D6E989132@CY8PR11MB7134.namprd11.prod.outlook.com/
+No functional changes intended.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- include/trace/events/xdp.h                    | 17 -----
- net/core/dev.c                                |  1 -
- .../selftests/bpf/prog_tests/xdp_attach.c     | 65 -------------------
- .../bpf/progs/test_xdp_attach_fail.c          | 54 ---------------
- 4 files changed, 137 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/progs/test_xdp_attach_fail.c
+ tools/lib/bpf/bpf.c | 41 +++++++++++++++++++++++++----------------
+ 1 file changed, 25 insertions(+), 16 deletions(-)
 
-diff --git a/include/trace/events/xdp.h b/include/trace/events/xdp.h
-index 18c0ac514fcb..f1d4d0702884 100644
---- a/include/trace/events/xdp.h
-+++ b/include/trace/events/xdp.h
-@@ -362,23 +362,6 @@ TRACE_EVENT(mem_connect,
- 	)
- );
- 
--TRACE_EVENT(bpf_xdp_link_attach_failed,
--
--	TP_PROTO(const char *msg),
--
--	TP_ARGS(msg),
--
--	TP_STRUCT__entry(
--		__string(msg, msg)
--	),
--
--	TP_fast_assign(
--		__assign_str(msg);
--	),
--
--	TP_printk("errmsg=%s", __get_str(msg))
--);
--
- #endif /* _TRACE_XDP_H */
- 
- #include <trace/define_trace.h>
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 96be63b9331e..a142613536b0 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10817,7 +10817,6 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog,
- 		bpf_link_cleanup(&link_primer);
- 		if (extack._msg)
- 			bpf_log(log, "%s\n", extack._msg);
--		trace_bpf_xdp_link_attach_failed(extack._msg);
- 		goto out_put_dev;
- 	}
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-index e6bcb6051402..fa3cac5488f5 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-@@ -1,6 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
--#include "test_xdp_attach_fail.skel.h"
- 
- #define IFINDEX_LO 1
- #define XDP_FLAGS_REPLACE		(1U << 4)
-@@ -86,74 +85,10 @@ static void test_xdp_attach(const char *file)
- 	bpf_object__close(obj1);
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index b49822d212ae..9a2107d4f6d8 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -203,6 +203,30 @@ int bump_rlimit_memlock(void)
+ 	return 0;
  }
  
--#define ERRMSG_LEN 64
--
--struct xdp_errmsg {
--	char msg[ERRMSG_LEN];
--};
--
--static void on_xdp_errmsg(void *ctx, int cpu, void *data, __u32 size)
--{
--	struct xdp_errmsg *ctx_errmg = ctx, *tp_errmsg = data;
--
--	memcpy(&ctx_errmg->msg, &tp_errmsg->msg, ERRMSG_LEN);
--}
--
--static const char tgt_errmsg[] = "Invalid XDP flags for BPF link attachment";
--
--static void test_xdp_attach_fail(const char *file)
--{
--	struct test_xdp_attach_fail *skel = NULL;
--	struct xdp_errmsg errmsg = {};
--	struct perf_buffer *pb = NULL;
--	struct bpf_object *obj = NULL;
--	int err, fd_xdp;
--
--	LIBBPF_OPTS(bpf_link_create_opts, opts);
--
--	skel = test_xdp_attach_fail__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "test_xdp_attach_fail__open_and_load"))
--		goto out_close;
--
--	err = test_xdp_attach_fail__attach(skel);
--	if (!ASSERT_EQ(err, 0, "test_xdp_attach_fail__attach"))
--		goto out_close;
--
--	/* set up perf buffer */
--	pb = perf_buffer__new(bpf_map__fd(skel->maps.xdp_errmsg_pb), 1,
--			      on_xdp_errmsg, NULL, &errmsg, NULL);
--	if (!ASSERT_OK_PTR(pb, "perf_buffer__new"))
--		goto out_close;
--
--	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &fd_xdp);
--	if (!ASSERT_EQ(err, 0, "bpf_prog_test_load"))
--		goto out_close;
--
--	opts.flags = 0xFF; // invalid flags to fail to attach XDP prog
--	err = bpf_link_create(fd_xdp, IFINDEX_LO, BPF_XDP, &opts);
--	if (!ASSERT_EQ(err, -EINVAL, "bpf_link_create"))
--		goto out_close;
--
--	/* read perf buffer */
--	err = perf_buffer__poll(pb, 100);
--	if (!ASSERT_GT(err, -1, "perf_buffer__poll"))
--		goto out_close;
--
--	ASSERT_STRNEQ((const char *) errmsg.msg, tgt_errmsg,
--		      42 /* strlen(tgt_errmsg) */, "check error message");
--
--out_close:
--	perf_buffer__free(pb);
--	bpf_object__close(obj);
--	test_xdp_attach_fail__destroy(skel);
--}
--
- void serial_test_xdp_attach(void)
++static int __sys_bpf_fd(union bpf_attr *attr, const size_t attr_sz, enum bpf_cmd cmd,
++			struct bpf_log_opts *log_opts)
++{
++	const size_t attr_common_sz = sizeof(struct bpf_common_attr);
++	struct bpf_common_attr attr_common;
++	int fd;
++
++	if (!OPTS_VALID(log_opts, bpf_log_opts))
++		return libbpf_err(-EINVAL);
++
++	if (log_opts && feat_supported(NULL, FEAT_BPF_SYSCALL_COMMON_ATTRS)) {
++		memset(&attr_common, 0, attr_common_sz);
++		attr_common.log_buf = ptr_to_u64(OPTS_GET(log_opts, buf, NULL));
++		attr_common.log_size = OPTS_GET(log_opts, size, 0);
++		attr_common.log_level = OPTS_GET(log_opts, level, 0);
++		fd = sys_bpf_ext_fd(cmd, attr, attr_sz, &attr_common, attr_common_sz);
++		OPTS_SET(log_opts, true_size, attr_common.log_true_size);
++	} else {
++		fd = sys_bpf_fd(cmd, attr, attr_sz);
++		OPTS_SET(log_opts, true_size, 0);
++	}
++	return fd;
++}
++
+ int bpf_map_create(enum bpf_map_type map_type,
+ 		   const char *map_name,
+ 		   __u32 key_size,
+@@ -211,8 +235,6 @@ int bpf_map_create(enum bpf_map_type map_type,
+ 		   const struct bpf_map_create_opts *opts)
  {
- 	if (test__start_subtest("xdp_attach"))
- 		test_xdp_attach("./test_xdp.bpf.o");
- 	if (test__start_subtest("xdp_attach_dynptr"))
- 		test_xdp_attach("./test_xdp_dynptr.bpf.o");
--	if (test__start_subtest("xdp_attach_failed"))
--		test_xdp_attach_fail("./xdp_dummy.bpf.o");
+ 	const size_t attr_sz = offsetofend(union bpf_attr, excl_prog_hash_size);
+-	const size_t attr_common_sz = sizeof(struct bpf_common_attr);
+-	struct bpf_common_attr attr_common;
+ 	struct bpf_log_opts *log_opts;
+ 	union bpf_attr attr;
+ 	int fd;
+@@ -248,20 +270,7 @@ int bpf_map_create(enum bpf_map_type map_type,
+ 	attr.excl_prog_hash_size = OPTS_GET(opts, excl_prog_hash_size, 0);
+ 
+ 	log_opts = OPTS_GET(opts, log_opts, NULL);
+-	if (!OPTS_VALID(log_opts, bpf_log_opts))
+-		return libbpf_err(-EINVAL);
+-
+-	if (log_opts && feat_supported(NULL, FEAT_BPF_SYSCALL_COMMON_ATTRS)) {
+-		memset(&attr_common, 0, attr_common_sz);
+-		attr_common.log_buf = ptr_to_u64(OPTS_GET(log_opts, buf, NULL));
+-		attr_common.log_size = OPTS_GET(log_opts, size, 0);
+-		attr_common.log_level = OPTS_GET(log_opts, level, 0);
+-		fd = sys_bpf_ext_fd(BPF_MAP_CREATE, &attr, attr_sz, &attr_common, attr_common_sz);
+-		OPTS_SET(log_opts, true_size, attr_common.log_true_size);
+-	} else {
+-		fd = sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
+-		OPTS_SET(log_opts, true_size, 0);
+-	}
++	fd = __sys_bpf_fd(&attr, attr_sz, BPF_MAP_CREATE, log_opts);
+ 	return libbpf_err_errno(fd);
  }
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_attach_fail.c b/tools/testing/selftests/bpf/progs/test_xdp_attach_fail.c
-deleted file mode 100644
-index 2ff1b596e87e..000000000000
---- a/tools/testing/selftests/bpf/progs/test_xdp_attach_fail.c
-+++ /dev/null
-@@ -1,54 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright Leon Hwang */
--
--#include <linux/bpf.h>
--#include <bpf/bpf_helpers.h>
--
--#define ERRMSG_LEN 64
--
--struct xdp_errmsg {
--	char msg[ERRMSG_LEN];
--};
--
--struct {
--	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
--	__type(key, int);
--	__type(value, int);
--} xdp_errmsg_pb SEC(".maps");
--
--struct xdp_attach_error_ctx {
--	unsigned long unused;
--
--	/*
--	 * bpf does not support tracepoint __data_loc directly.
--	 *
--	 * Actually, this field is a 32 bit integer whose value encodes
--	 * information on where to find the actual data. The first 2 bytes is
--	 * the size of the data. The last 2 bytes is the offset from the start
--	 * of the tracepoint struct where the data begins.
--	 * -- https://github.com/iovisor/bpftrace/pull/1542
--	 */
--	__u32 msg; // __data_loc char[] msg;
--};
--
--/*
-- * Catch the error message at the tracepoint.
-- */
--
--SEC("tp/xdp/bpf_xdp_link_attach_failed")
--int tp__xdp__bpf_xdp_link_attach_failed(struct xdp_attach_error_ctx *ctx)
--{
--	char *msg = (void *)(__u64) ((void *) ctx + (__u16) ctx->msg);
--	struct xdp_errmsg errmsg = {};
--
--	bpf_probe_read_kernel_str(&errmsg.msg, ERRMSG_LEN, msg);
--	bpf_perf_event_output(ctx, &xdp_errmsg_pb, BPF_F_CURRENT_CPU, &errmsg,
--			      ERRMSG_LEN);
--	return 0;
--}
--
--/*
-- * Reuse the XDP program in xdp_dummy.c.
-- */
--
--char LICENSE[] SEC("license") = "GPL";
+ 
 -- 
 2.55.0
 
