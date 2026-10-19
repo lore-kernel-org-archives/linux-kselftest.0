@@ -1,43 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6973A4FD782;
-	Mon, 19 Oct 2026 13:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE4E4F85A4;
+	Mon, 19 Oct 2026 13:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792417904; cv=none; b=l0rZfD3OguXdLg6uWKZfcMIU9bokEf00RAGfCA2m7M5kVFxCUk86EswdC4mhatB07pUoiIM4V653DhlXFSYEXEci5xasaGmer39mxQS9k6J6YNxxL4oj5YbmZltVFVWixgPC8e5IL/+vYWQ71oJTZP0iXHw2ykJlYtJT+bNkiYQ=
+	t=1792417941; cv=none; b=ZOBeALdycUd4dmQi9rhioTWlCz4DKz56aV8ymTl6CIuGOnG6eym3BNO5YTMtsYisLgXUYHLc67CZrjpyfOgYfItD3VhnxAlgp/sUBQKpAtL2hLQPQhxg/G20qSJt3aKd+WA6ysPqQYi/hXoe3oBXM3aaQppmJzSi81ho4/FFNEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792417904; c=relaxed/simple;
-	bh=UlPi+srIHsEjnI53QFJwruy7+OhmobPVTGcz3MLsiTI=;
+	s=arc-20240116; t=1792417941; c=relaxed/simple;
+	bh=RcpiFFUabE2AtqJIr4ID2KCUBRdEtDxV6zfbZoEBIfQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hw0mU+RYOgYN/JamEM7Ptro5yiG3/ETumBmPjUkzlHjd+A6ECzRwlubBrX7ZyQ1ijZZMRTPwzkc8tjdoCqjgWl7kwYfDCmJVOx+CgVgXAcWcyJOZ3UoQPSY0DCu5O2AnP1uG9HgsW1kLL49irkurURJ2D7fdpvp58s7FpTkctyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kedHgPQ5; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=pK7p9IKrNTpocK6DybTAZq5NjbGP5LhOPZi3rumojzRxmJh2v842T0RQKrAPn341Y56VHVW1KvkdK/2a3XNWjktxSS084ktb8J6ZuFH5Lc3p/VaTZ35FI4leO4dUMeiQTdNcT2P0Ls3cWRMsHk+z8ySuC3LaADx9Wxn7JBY9hco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aht1qCxj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kedHgPQ5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD041F000C4;
-	Mon, 19 Oct 2026 13:51:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aht1qCxj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2A51F000C4;
+	Mon, 19 Oct 2026 13:52:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792417903;
-	bh=8DoshP9R1xMB2Brh7195PJTWyn0JrbcznglLz6Oe4+g=;
+	s=k20260515; t=1792417940;
+	bh=aR9exyQpvmBZy20HnaYird0KAPjLnyk7prA8CImTHYU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=kedHgPQ5/MjBobdknoNxY3rNJAzcZKbN+qUia8TMgugleJgbhHs+Dbuphixq5anO/
-	 +QRf0JOMZWQd/mbSmUkqNIaQmNd5YXHMAEwZmK2qPW8g0vwFU5u9wlIqE3HGT1IRWa
-	 MGNoyOF7/wiH2ocLaJIQuaSKDQ/UEny+B3o2Vn0TeARKFIIT6VTwdHL6gq5EKL2xBr
-	 Vuc1dfGCoUT5et2QgVbY+30Q0rzdO+yjDKl6jtHTxqQjOAD+qmKo1pPKGvWcM+pVF0
-	 qRrmSdP0H7dtmDTbKCrgz1vDRN0WxB+o1uM65KpnwemIG+JCjw8pgWUNdbIUHTx5gy
-	 N9oK9JDc5SQOg==
-Date: Mon, 19 Oct 2026 14:51:37 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/mm: check MREMAP_DONTUNMAP mlock accounting
-Message-ID: <atYgQ-K4oIxvCSUU@gremlin>
-References: <20261006064120.6796-1-azpijr@gmail.com>
+	b=Aht1qCxjkle638FqbshuAgXXDI11Qy5YFKJDKbLH5axSWp9dT7J29By1d2PdihWtr
+	 POgd7I9wEwF3p51X2IBdS3ngK6BZiKnyfNoh2MY5YDfeMIb7L7zwtihl5dpc30BMFv
+	 rudnSLuQy9P6k7PzbMgI6yoW2rk9onNVDuON2kFCjel6TMtvVjfYQjvrXYVWvEM/G2
+	 lNltGwqlVdXjXNIuv3kjOziupJ7Ujo1w9kJxYfstdwXwZKSmxgOuCJHOyKIqcCa85m
+	 7N/SHKgwQuiThp5eo9rvtgyq4GBk9P7ylxN4QkL9A11UtShRlDeefL+T6pv8KG8TW7
+	 uYPV+4ojRttfw==
+Date: Mon, 19 Oct 2026 16:52:10 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: "Ning, Hongyu" <hongyu.ning@linux.intel.com>, x86@kernel.org,
+	shuah@kernel.org, rick.p.edgecombe@intel.com, tglx@kernel.org,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	hpa@zytor.com, ljs@kernel.org, akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	hongyu.ning@intel.com, jolsa@kernel.org, dwindsor@gmail.com
+Subject: Re: [PATCH] selftests/x86: Fix userfaultfd test for shadow stack
+ rejection
+Message-ID: <atYginh9CIXA0baV@kernel.org>
+References: <3b3e0a35-e664-40ab-84ad-afa3e31e3aea@linux.intel.com>
+ <493158de-7b76-45ca-9d71-ad8981242c12@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,153 +48,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261006064120.6796-1-azpijr@gmail.com>
+In-Reply-To: <493158de-7b76-45ca-9d71-ad8981242c12@kernel.org>
 
-On Tue, Oct 06, 2026 at 08:39:01AM +0200, Jose A. Perez de Azpillaga wrote:
-> MREMAP_DONTUNMAP keeps the source VMA in place, but clears its mlock flags
-> while setting them on the destination VMA.  The "mm/mremap: fix two issues
-> with MREMAP_DONTUNMAP" series fixed two cases where this leaked
-> mm->locked_vm:
->
->  - an unfaulted mlock-on-fault VMA moved behind itself self-merges, so the
->    single resulting VMA loses the flags without the accounting being
->    dropped;
->
->  - a partial mremap() moves only part of the range, leaving the pages which
->    are not moved accounted as locked in a VMA whose flags were cleared.
->
-> Add a test which mlock2()s a source mapping, moves all or part of it with
-> MREMAP_DONTUNMAP, unmaps everything and checks that VmLck is back to its
-> value from before, and run it for the self-merge case and for a partial
-> move with and without MLOCK_ONFAULT.
->
-> Verified on x86_64: the three cases fail on mm-unstable with the two fixes
-> reverted and pass with them applied.
->
-> Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
+On Mon, Oct 19, 2026 at 03:03:43PM +0200, David Hildenbrand (Arm) wrote:
+> On 10/19/26 03:03, Ning, Hongyu wrote:
+> > Commit 3c58f641e813 ("userfaultfd: prevent registration of special
+> > VMAs") prevents userfaultfd registration on shadow stack VMAs to avoid
+> > bypassing shadow stack protections through UFFDIO_COPY.
+> > 
+> > The existing shadow stack selftest still expects UFFDIO_REGISTER to
+> > succeed and uses UFFDIO_COPY to populate the shadow stack. This causes
+> > the selftest to fail on Kernels containing this security fix.
+> > 
+> > Update the selftest to verify that UFFDIO_REGISTER rejects shadow stack
+> > VMAs with EINVAL. Remove the obsolete userfaultfd fault handling thread
+> > and UFFDIO_COPY test path.
+> > 
+> > Tested on: Intel shadow stack capable x86_64 platform
+> > 
+> > Before fix:
+> > 	[FAIL]  Userfaultfd test with return code 1
+> > 
+> > After fix:
+> > 	[OK]    Userfaultfd rejects shadow stack registration (EINVAL)
+> 
+> 
+> Interesting, so we wouldn't be able to snapshot+restore an app that uses shadow
+> stacks.
+> 
+> @Mike: I assume that's not a concern for CRIU etc, right?
 
-Thanks for writing tests for this. Looks generally OK to me, so:
+CRIU can do snapshots without uffd and it can do shadow stacks in its own
+inventive way :)
+ 
+> > 
+> > Fixes: 3c58f641e813 ("userfaultfd: prevent registration of special VMAs")
+> > 
+> > Signed-off-by: Hongyu Ning <hongyu.ning@linux.intel.com>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> 
+> -- 
+> Cheers,
+> 
+> David
 
-Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-
-> ---
-> v2:
->  - Reduce the churn (David): fold the three cases into one parameterised
->    test and drop the child process per case, comparing VmLck against its
->    value before each case instead.
->  - Use the file's BUG_ON() for setup failures and vm_util's
->    check_for_pattern() to read VmLck, call mlock2() directly.
->  - Verify against mm-unstable with the two fixes reverted rather than an
->    older -rc, now that the series is applied.
->
->  tools/testing/selftests/mm/mremap_dontunmap.c | 63 ++++++++++++++++++-
->  1 file changed, 62 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/mm/mremap_dontunmap.c b/tools/testing/selftests/mm/mremap_dontunmap.c
-> index 96ba537facf7..5ca33d9d42af 100644
-> --- a/tools/testing/selftests/mm/mremap_dontunmap.c
-> +++ b/tools/testing/selftests/mm/mremap_dontunmap.c
-> @@ -7,6 +7,7 @@
->   */
->  #define _GNU_SOURCE
->  #include <sys/mman.h>
-> +#include <sys/syscall.h>
->  #include <linux/mman.h>
->  #include <errno.h>
->  #include <stdio.h>
-> @@ -15,6 +16,7 @@
->  #include <unistd.h>
->
->  #include "kselftest.h"
-> +#include "vm_util.h"
->
->  unsigned long page_size;
->  char *page_buffer;
-> @@ -335,6 +337,62 @@ static void mremap_dontunmap_partial_mapping_overwrite(void)
->  	ksft_test_result_pass("%s\n", __func__);
->  }
->
-> +/* VmLck from /proc/self/status, which is mm->locked_vm in kB. */
-> +static unsigned long locked_vm_kb(void)
-> +{
-> +	unsigned long kb;
-> +	char buf[256];
-> +	FILE *fp;
-> +
-> +	fp = fopen("/proc/self/status", "r");
-> +	BUG_ON(!fp, "unable to open /proc/self/status");
-> +	BUG_ON(!check_for_pattern(fp, "VmLck:", buf, sizeof(buf)) ||
-> +	       sscanf(buf, "VmLck: %lu kB", &kb) != 1, "unable to read VmLck");
-> +	fclose(fp);
-> +
-> +	return kb;
-> +}
-> +
-> +/*
-> + * MREMAP_DONTUNMAP clears the mlock flags of the source VMA and sets them on
-> + * the destination, and mm->locked_vm has to follow.  mlock2() a source of
-> + * num_pages and move its first move_pages to gap pages past its end:
-> + *
-> + *  |------ source ------|... gap ...|-- dest --|
-> + *
-> + * then unmap everything and check that VmLck is back where it started.  With
-> + * no gap the destination is adjacent to the source and could merge with it,
-> + * otherwise the gap is left PROT_NONE so that it cannot.
-> + */
-> +static void mremap_dontunmap_mlock(const char *desc, unsigned long num_pages,
-> +				   unsigned long move_pages, unsigned long gap,
-> +				   int mlock_flags)
-> +{
-> +	unsigned long size = (num_pages + gap + move_pages) * page_size;
-> +	unsigned long locked = locked_vm_kb();
-> +	void *source, *dest;
-> +
-> +	source = mmap(NULL, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +	BUG_ON(source == MAP_FAILED, "mmap");
-> +	BUG_ON(mprotect(source, num_pages * page_size,
-> +			PROT_READ | PROT_WRITE) == -1, "mprotect");
-> +	dest = source + (num_pages + gap) * page_size;
-> +
-> +	if (syscall(__NR_mlock2, source, num_pages * page_size, mlock_flags)) {
-> +		ksft_test_result_skip("%s: %s: mlock2: %s\n", __func__, desc,
-> +				      strerror(errno));
-> +		BUG_ON(munmap(source, size) == -1, "unable to unmap mappings");
-> +		return;
-> +	}
-> +
-> +	BUG_ON(mremap(source, move_pages * page_size, move_pages * page_size,
-> +		      MREMAP_DONTUNMAP | MREMAP_MAYMOVE | MREMAP_FIXED,
-> +		      dest) != dest, "mremap");
-> +
-> +	BUG_ON(munmap(source, size) == -1, "unable to unmap mappings");
-> +	ksft_test_result(locked_vm_kb() == locked, "%s: %s\n", __func__, desc);
-> +}
-> +
->  int main(void)
->  {
->  	ksft_print_header();
-> @@ -348,7 +406,7 @@ int main(void)
->  		ksft_finished();
->  	}
->
-> -	ksft_set_plan(5);
-> +	ksft_set_plan(8);
->
->  	// Keep a page sized buffer around for when we need it.
->  	page_buffer =
-> @@ -361,6 +419,9 @@ int main(void)
->  	mremap_dontunmap_simple_fixed();
->  	mremap_dontunmap_partial_mapping();
->  	mremap_dontunmap_partial_mapping_overwrite();
-> +	mremap_dontunmap_mlock("onfault self-merge", 1, 1, 0, MLOCK_ONFAULT);
-> +	mremap_dontunmap_mlock("partial", 3, 2, 1, 0);
-> +	mremap_dontunmap_mlock("onfault partial", 3, 2, 1, MLOCK_ONFAULT);
->
->  	BUG_ON(munmap(page_buffer, page_size) == -1,
->  	       "unable to unmap page buffer");
-> --
-> 2.55.0
->
-
---
-Cheers, Lorenzo
+-- 
+Sincerely yours,
+Mike.
