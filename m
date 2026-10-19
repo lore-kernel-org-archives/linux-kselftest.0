@@ -1,79 +1,109 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792422764;
+	b=BPNntBaDc/6CqlgPwRVFG2pi4kyeWNy4FKFeriMnDz4c+R3SRDfrlbdvn7CNFh1b+sxL
+	 AJ4jc7ylKbXqygbtLXK5Xouq58Kob0smdy+ebdMkVGmUt1yqPTi37HjjG995cL0CtebR4
+	 yUhWjD6vXj77X61q3vOumg+N1+mh61zZ0VOsVmctLfjLn6lsK0bAcK9pWfvJpZnFJEAVV
+	 bVgDD9wNnflE+bXsDu2Wuj7tQZw8SKbqHjhe6WQGfL3XwWAXuJ4NDm6SKoH7vJHdK8+df
+	 7RJkSJ/QTieFpOsVc361U1zln8jpa33HqoIx9SlzA+kos8RzVgk+E4QRfmq3qi/u1NQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792422764;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=6PQ7rJFQ1MjXdxCdNwWjzLkv9kPmh/e2gKaO15xc1ZE=;
+	b=v6HdAPeC8SOjODWCEF0JA6XXYYwOBQC1WA3Vh4PFKK0NTxGGMGEYxodqXydeBZojriAJ
+	 wr/qHI1alIeK+ZM6jr5jd3gmkRIx2EeHbg7vZvu3AWd+LaVXl3VOvIVgU93bTbNLAPmj7
+	 OZVKgImda9JCB/rIobPu/aJeYeMIzJRg9AON4oQ6gLeuvDeYRSXnyn4rvAbIvb82xpmxz
+	 odKFL8Be6p7zMHMj47gAQTdD+fUvuBBo7E9ZlhX4LXCnqaIE7YUrU8/8s7O5b5buZ7lH7
+	 hkQqa06Q6eV3JtMjExQ0uZSErQdL6Op0WD7ytX8bE/6Tg54F6P5s3JG2CxLW6QkSbGA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JEWhMUW8;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C33597F5D;
-	Mon, 19 Oct 2026 14:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792420808; cv=none; b=PmKYNkyybf4BgunQYWUbUTrdOxSD762yGT+DrcUPvsRbWVwqND8A3Z0/2ZdDKJ3vxOxWBmKUnSNckMmMK5OISXfUBMH8ZwM7dMy2bWtZcYpr8xhaw/NR0sI7xBzcz7z+P1m2YrY8hMW1YavqHULixQ07pnwfijPVxy+Xj4bAt7o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792420808; c=relaxed/simple;
-	bh=nIb72tWQZM/gVIvuxEnHHOxnOfLXr/hkpBhRlLRlsqY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iuiW2FgSm/fBKavaE6UwjFDz4NHrwDH3BGk3FiGPYKw1JC8o81btabrriAQbezPMZDoa+x77n9hi+mXaTWm94UgkS2XQjIdJu4XKrPudhk/98mThI+Atow7MPXzvSu7T6ulYQamUunBzTSEIwl6iaxF9rngUva6uL6auHiKv34g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=yKS71ieX; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEADB6098A29
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 15:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="yKS71ieX"
-Received: from omf05.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 06E88A071B;
-	Mon, 19 Oct 2026 14:40:03 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id E89D92000E;
-	Mon, 19 Oct 2026 14:40:01 +0000 (UTC)
-Date: Mon, 19 Oct 2026 10:39:57 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Jeff Barnes <jeffbarnes@linux.microsoft.com>
-Cc: mhiramat@kernel.org, shuah@kernel.org, beaub@linux.microsoft.com,
- mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] tracing/user_events: Share state with existing
- threads
-Message-ID: <20261019103957.69759ee3@gandalf.local.home>
-In-Reply-To: <20261019142301.2084882-1-jeffbarnes@linux.microsoft.com>
-References: <20261006164720.3940272-1-jeffbarnes@linux.microsoft.com>
- <20261019142301.2084882-1-jeffbarnes@linux.microsoft.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Precedence: bulk
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JEWhMUW8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C6941F000C5;
+	Mon, 19 Oct 2026 15:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792422763;
+	bh=6PQ7rJFQ1MjXdxCdNwWjzLkv9kPmh/e2gKaO15xc1ZE=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=JEWhMUW8oI+9/GwWFrIGfwVWH6rWcYGRdsOFtMZ/YdkwEZZ/vc5v9tl5Qc9DCGcRB
+	 gw2vKip7n19rc7WgINdlIL0Sb6XnhigjlPYFhfXByLcgK0xgG8+adFbk89OzfIjKci
+	 qv0As2BoEEfdGSh6yKlMmMfT7R7I+59gv7NuQWdXVFzpCExNod1rv/ZDtNLVdy7eFG
+	 6xQAsu1yuCLSFe8jSh+vmLX5iNExLCW6SXLfDNa42T+gv9EyhHFEEBb8Nw9XKBTCuh
+	 wlyFe0TeqGVc/i0dliRW7N1ZOILc2wxAGV/CuHoQQ0imCQtNqUsDKldLmSPHdZWEk3
+	 f4vjXmpsRU53A==
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id A510BF40068;
+	Mon, 19 Oct 2026 11:12:42 -0400 (EDT)
+Received: from phl-imap-15 ([10.202.2.104])
+  by phl-compute-10.internal (MEProxy); Mon, 19 Oct 2026 11:12:42 -0400
+X-ME-Sender: <xms:ajPWah7lJlVBNX4JpysFXHksOTTaKF6xNsORa997_9RMuSfIasKeoA>
+    <xme:ajPWaptVn0rz6GstUpqbiqUjmrBdW0P4kVSosYfjfCyg6kjFbuTPHTlImXHyjSJuq
+    vg1XC1UHZI6Box35Rnl9YGHobOBrCyQ8zO3HnxzahmmRCAfKUGcq0GE>
+X-ME-Proxy-Cause: dmFkZTGqjfOSmA3Aau4J8Ozzk8oOartWuKRv+z7G5P9pRafGgeYlsmM8zHgSUOTvWrHV+J
+    XLlA4sbRRk+um29mck8d5VO3yoAthdviqjyiHvDUo9ZvOMzjNmkmUdndpUFF9rcSwYbeST
+    ZZSJWnEuMDa00CvtSxY5MKc5kQSLl5FhDiqzG24oThSuF7g3V0fhKn17P5mQgcWQuxNWZO
+    2Nh92hlCXu4njSKlocubaYPOPMSqEGJcWBarekOLgFiAFsDyn7JnDPVuCVkpW/SRPDxrlP
+    j3u6+R1dgh3qO/9RZGA27RSR4Agep0cG7DBWgi6kE16F/GL5mGz5GNQVBGL/WxsMZsCONo
+    rcByMia5bBc3WDYcl2ZLxjh1pH/v5qp+5IN9d9Ri+vsOC8TU6tyhPqi/w+LQFKeJHTmPvy
+    7toXEw2jG5QT1wpvNMWGBaS+HHEp7TndCrw7WIit8yFEXH1rUYh6iy8SprYBHp3DCdNiNE
+    wAQM6kE1b1wDk8bOT1oktle7cDYUie/FMqyRoFxqycwF59FvbgPxjvKHkAR5q2YqFS6LGm
+    t9TVX8mo8XEFACgdqOsVzdqO84tHidkSNoFZYyvlfsmkSTW1nllIWhI9jk367sozpFL9KD
+    CXM3/nJ91LqFPROQI4utSRbP66M05n/+2RcotnhvtlytdXFWEA4hzR5rgmvw
+X-ME-Proxy: <xmx:ajPWaos8_IcneFswrilFzhh4Eh5gXQkcNE8Zwjn25ohnyc73rVtY3Q>
+    <xmx:ajPWaiL1mOx_XgYj3N1q5Slu-x6ZaklhAcSpJcWZks13iAMRhFRgmg>
+    <xmx:ajPWanrOohoXKPdb8zZ-hc9bU_wryruLH3_XcuYu2niEw8Z3iH_3mg>
+    <xmx:ajPWalV5EV-q0Ae0aws0mhW_SR-kjbmeYHbAqSYnkEx3u9ACxgKMYA>
+    <xmx:ajPWas1URoVwWf7tl3CXE232jZAZnXQJAahUVpMGMSPDF2j0gs6UFoYv>
+Feedback-ID: ifa6e4810:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 862E7782738; Mon, 19 Oct 2026 11:12:42 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
+List-Post: <mailto:linux-kselftest@vger.kernel.org>
+List-Help: <mailto:linux-kselftest+help@vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
+Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: E89D92000E
-X-Stat-Signature: 8tjo8czkkxtce98zqpygfg65hak6hnha
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18l97dNhDQNr/m/gbgR4Aa1qmemmMHzTcs=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=TgvEG1bdMe8lKkcr4Dz3rJBRTT/4j1TEWGKmyyDzNQU=; b=yKS71ieXeJYDjSUUSyVRtUr6bZTnRYt5oirI94eZCb9PaR4EQXpRum9Nj00UPZYDXkLvvp4oL8/nCXDtaY9WWBTz1W1y3jS4io7hXw6cANo1bhev6Ec5W7KNibHWuWbiJCmBhXxdntfuUZoAfPd5eVIemk3OMNmcxSYVegklPT8=
-X-HE-Tag: 1792420801-279918
-X-HE-Meta: U2FsdGVkX1+Zl43l3YKIvN4ejUDl4dQDf8EA41H1S605DoC5Oa3QVXOnRhq6kuAxSO23FdWbkFpPVLkfsXQzRTIZ/Z7nOISU20NRLquuczR8Dg4HvP8vm9YW2y4CFIcSsYnAEUvaf0IACRsOh4n1azXsMGoOHmfcHLzkcXe7v8OlZAVfnow4zlcXuyAjqBUHMgltp2As6e//CsZRkt2kwolItLB+5Dsshccd77UwOUpT56gbfg1wOU9H71ezrfHlwUu/h9dzsPr5E31Gp1ZETJxN7aXNsU4CQSCYseku9/gaAzBPuxfw7YU72gzg+j8TQJMnfhL2qYLtLN2S9FSWEjI/7J96EaIm
+X-ThreadId: AOepKXJOuym3
+Date: Mon, 19 Oct 2026 11:12:22 -0400
+From: "Chuck Lever" <cel@kernel.org>
+To: netdev-bot+sashiko@kernel.org
+Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
+ davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
+ shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Message-Id: <d5f50a80-6c90-4266-bd31-c9ab5ad6f5a5@slotpi15m67>
+In-Reply-To: <179235138070.3135.12865177018877469954@kernel.org>
+References: <20261014-tls-follow-on-v5-6-e76c301d4f05@kernel.org>
+ <179235138070.3135.12865177018877469954@kernel.org>
+Subject: Re: [PATCH net-next v5 06/10] tls: Return copied data ahead of a run of empty
+ records
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 19 Oct 2026 10:23:01 -0400
-Jeff Barnes <jeffbarnes@linux.microsoft.com> wrote:
+On Sun, Oct 18, 2026, at 3:23 PM, netdev-bot+sashiko@kernel.org wrote:
+> - [High] The new early exit in tls_sw_recvmsg() (net/tls/tls_sw.c:1946,
+>   `if (decrypted + copied >=3D target) break;`) only fires once the lo=
+w-=E2=80=A6
 
-> Gentle ping on this series.
-> 
-> Please let me know if there are any further comments or changes you'd like me to make.
+See my reply on patch 2. This patch returns data already copied. A
+reader below target, or one that has copied nothing, keeps reading
+until a signal is pending, as the description says. v6 will keep
+that behavior.
 
-Hi Jeff,
 
-FYI, always start a new thread when sending out a new series. Don't make it
-a reply to an old one. That makes it confusing to know which series to look
-at.
-
-Also, I've was traveling between September 14th and October 10th and my
-backlog built up quite a bit.
-
-If Beau can review this series, that would be great. I'm currently putting
-together several branches for the merge window. Unfortunately, due to my
-backlog, there's patches that have been sent this month that will need to
-be postponed to the next window.
-
-As user_events are agnostic to other changes, there's still a chance your
-changes can get added this window.
-
--- Steve
-
+--=20
+Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
