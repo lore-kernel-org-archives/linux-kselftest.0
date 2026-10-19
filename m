@@ -1,202 +1,198 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012014.outbound.protection.outlook.com [52.101.53.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213B74FC8E5;
-	Mon, 19 Oct 2026 13:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792417900; cv=fail; b=tivP/SZOlqgJKxboORP9pUoUXTuOD8XWzixJohUHhfJiRb7P1jz1b1Rqme2Jr0LBvx11GeNY6NyD1EAGcI7QRKVkShqNYme+l/iVwR61neswQq+tmu5BTD0IhMSseo51ljU9vmFGz0R1Iv10cV120+2L2rW5YyPNZntuNMxdV38=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792417900; c=relaxed/simple;
-	bh=iB8pUP/APs1+XjOPnHq/fdd9F8zoXmwOQe5GedyATXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=u1u8yFJbaq0WItUok+CkYxV5Cwn5PqsQ/ZbZR5D/tY0ThTxqz0yYHdLvUO85Ij/sDfdV7NJv+Z2i0j+xoNfXuEHBnxY2JCz8GNPZmn2Zg/J63y7tSqeltPlFuKuXWzJ0vl9seoTDGs88710ctIS/vPl+Mn53yTJrlinNCadRFOE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=m4kVCcLU; arc=fail smtp.client-ip=52.101.53.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6973A4FD782;
+	Mon, 19 Oct 2026 13:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792417904; cv=none; b=l0rZfD3OguXdLg6uWKZfcMIU9bokEf00RAGfCA2m7M5kVFxCUk86EswdC4mhatB07pUoiIM4V653DhlXFSYEXEci5xasaGmer39mxQS9k6J6YNxxL4oj5YbmZltVFVWixgPC8e5IL/+vYWQ71oJTZP0iXHw2ykJlYtJT+bNkiYQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792417904; c=relaxed/simple;
+	bh=UlPi+srIHsEjnI53QFJwruy7+OhmobPVTGcz3MLsiTI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hw0mU+RYOgYN/JamEM7Ptro5yiG3/ETumBmPjUkzlHjd+A6ECzRwlubBrX7ZyQ1ijZZMRTPwzkc8tjdoCqjgWl7kwYfDCmJVOx+CgVgXAcWcyJOZ3UoQPSY0DCu5O2AnP1uG9HgsW1kLL49irkurURJ2D7fdpvp58s7FpTkctyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kedHgPQ5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="m4kVCcLU"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hVBoi9vN/WztKspO6U2PfStsVVYMDl/A2VqJQDRRHF7FLpTelyirvbizu/LkbzAM0INwvAM4cy3ktvAoIw9b0yEq1sz8yund5T7VsGigO4KBPls8KSstHVIs+MJHCbpgw3MSNCweUs+0kFTvutSwP/TxWW9CS+568onReKaCRQX/dAmaUsIFjgZ7NNzuwW1DEUVhJRVv1TblkNnXaY7ZnFH0kIJcXNnK+3St6deeJc8+yw5WCI/6m/8oPGCTrL4NP906Ggis+xSx8vwRWc/jjPxUg7J8S/8W8oJetOBFTum3m9rn5JKH8SbiVPYxXkWXmgCORZRcbQ/ge5WzB8Eapw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=40hS8oqXDBECKU4SlPBCMNb+mirUXz7NS4TqOnhiIO8=;
- b=raeqc/VeAwmBcqjROE0JW2nNgnF8fMl3TQr7f1lFD+dD7nlJ4H1aov0kMBkpafCLCLkcRez9Jfz5CeqXVIc9NUrJT499oRZ8ujPBkua3XhVnO02y+4QsBP+9SE0B+dVXa9lyxh8pV0Z5gYTjVUgpAZi6bqcVesYweL1ZopaG08OzpadIaiGO77RjngnHBGjhWjoqsIJXtZPwm4ux1Fht3+m463/momA4pi7LYEtsfNepWfhXYSoRRDKgnY1nUgSvQefP+RGrjHGqlD4dkusT/IMUPCAKQpTSWtSFAFAqH0XPjm8/KV614qDQZcs7Sx6s7VyX/WWi3buz7oRprWO9rA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=40hS8oqXDBECKU4SlPBCMNb+mirUXz7NS4TqOnhiIO8=;
- b=m4kVCcLU0/6/i2yfSkMGX2S+sdeCZx52mBbN0Lmg40OgsGHnFLQqU9mRzEUGonKiGDUQ2Hf/040KKFxTXrPvcJCnbrFdy1g7F9vFD82h+Th7IKThiq8ruV30K7hJEDs9gp0j2JZmgw/dJt1MG2TMbIl8xxyxkcGgq3w8DtgYqAsMBnPOalNB5FJ4UV1SAlr7BC2fsFFs5o/zrzcAlekxhkOENegrzhXXFewmv64QwYn697821SWZ6JT3D69UOkQGPU2HQfr4nOU3FwLVb134phtMCEGBiYtgPANsDnnKb3BdkxfrXI4PChkvg2BeiCCc4MXvLDtuMkIj0cyi+BtUtg==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19)
- by DS5PR12MB015052.namprd12.prod.outlook.com (2603:10b6:8:47d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Mon, 19 Oct
- 2026 13:51:35 +0000
-Received: from BL1PR12MB5174.namprd12.prod.outlook.com
- ([fe80::58de:822b:868:96e9]) by BL1PR12MB5174.namprd12.prod.outlook.com
- ([fe80::58de:822b:868:96e9%6]) with mapi id 15.21.0522.017; Mon, 19 Oct 2026
- 13:51:35 +0000
-Date: Mon, 19 Oct 2026 15:51:26 +0200
-From: Andrea Righi <arighi@nvidia.com>
-To: Michal Blaszczyk <michalblk@google.com>
-Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Kuba Piecuch <jpiecuch@google.com>
-Subject: Re: [PATCH 1/2] sched_ext: Reset runnable_at when a task leaves its
- scheduler
-Message-ID: <atYgXtpPSGsoWmZE@gpd4>
-References: <20261019124146.3582127-1-michalblk@google.com>
- <20261019124146.3582127-2-michalblk@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261019124146.3582127-2-michalblk@google.com>
-X-ClientProxiedBy: ZR2P278CA0087.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:65::12) To BL1PR12MB5174.namprd12.prod.outlook.com
- (2603:10b6:208:31c::19)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kedHgPQ5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD041F000C4;
+	Mon, 19 Oct 2026 13:51:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792417903;
+	bh=8DoshP9R1xMB2Brh7195PJTWyn0JrbcznglLz6Oe4+g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=kedHgPQ5/MjBobdknoNxY3rNJAzcZKbN+qUia8TMgugleJgbhHs+Dbuphixq5anO/
+	 +QRf0JOMZWQd/mbSmUkqNIaQmNd5YXHMAEwZmK2qPW8g0vwFU5u9wlIqE3HGT1IRWa
+	 MGNoyOF7/wiH2ocLaJIQuaSKDQ/UEny+B3o2Vn0TeARKFIIT6VTwdHL6gq5EKL2xBr
+	 Vuc1dfGCoUT5et2QgVbY+30Q0rzdO+yjDKl6jtHTxqQjOAD+qmKo1pPKGvWcM+pVF0
+	 qRrmSdP0H7dtmDTbKCrgz1vDRN0WxB+o1uM65KpnwemIG+JCjw8pgWUNdbIUHTx5gy
+	 N9oK9JDc5SQOg==
+Date: Mon, 19 Oct 2026 14:51:37 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/mm: check MREMAP_DONTUNMAP mlock accounting
+Message-ID: <atYgQ-K4oIxvCSUU@gremlin>
+References: <20261006064120.6796-1-azpijr@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5174:EE_|DS5PR12MB015052:EE_
-X-MS-Office365-Filtering-Correlation-Id: 833b0dff-a375-4431-ed63-08df2de81705
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|23010399003|1800799024|261009223027099003|10067099003|56012099006|22082099003|18002099003|4143699003|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	UOqPAOSy0ZlIG6IRALsNgXOoXISQB1KJ+L6R6Y71cdCCeY6zE+OOoefB+mb2ByFv4a3/bcm2pT0HOT2QFdQ+KqRJpDAwFb7VHRVXjrxSKpApGsI8+CfJO15eiAPhQxiHOQY/cdOB/g2dS80AUyA3+084sPwEOjwOSj1oEq/u9hge8jL65rIks0KhCFw1y9oDsPGz9hZYqDb9ih5V7SNeDT2HfGCdrZWWGXlZxDYzDcDvTHeI25eVn/oTgDKCJ1JoLXMxSDHeX0cEdPJfyymSmIJeyTSdEOV8di/1Fg84S/uPIzf9TPfej1hfAmgwFTTO9vQi45DhGjq01GWY61/B+/v7hdlRb8dLwFIBMKT8XxIJDbje4sDFXECT78kihb7kK/+7HQQJLvTnKTQhBtoMIMq35v4kEESz9u3iqjR0ja647AzZKm+aFeN5d9NlapV4BxDyevKJ2xmqluw5duQHgPzWQwzxCOD/bjNKjQsFQKMlaKTw8gUqvDrYEItIU1zAVwnorUtzfGXLkkN8AwUFpCGfepDsL6XmOoS2HnZlPGtAMGh4kPIXBM0t/VTVZxyCgH8vMa+ystsn3K9+qE3x/SEkcRzOXBcix2+4iAGliWSWritzHZPGMpU6oo85Oui6YgBH+lDnLRtKRrCv7dFuEe3yoskgd9TMlLpUJEWp9bM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(23010399003)(1800799024)(261009223027099003)(10067099003)(56012099006)(22082099003)(18002099003)(4143699003)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?yZdOG6Jvdq8mg5z3kwBmTbetFCqgtuh15zBPJvAxHKZtWWlqzIvWzuUeKwwF?=
- =?us-ascii?Q?a0aq9ht3a9Vi6dBQyjZh7nwAbqt0K+0iF+E6Z8/P95FT6bWh+A83z2sIQwrl?=
- =?us-ascii?Q?w1YO3lHX7YSQBNmZXEBuGEnqFTVGXMjuB8i9uxOnqY6bqMhN+wmwJ6WU8ObQ?=
- =?us-ascii?Q?330CeO52SCjR60VJ8SeBa+Xf6+SudpHAFkXJrgUiL76bo5AX+K6MjYiChhji?=
- =?us-ascii?Q?8kY6CHT/4oMGomk/jzLYRa1BiY3bae1jIB5cQbH9CotB78nmm9CmLxaVoiGv?=
- =?us-ascii?Q?LO+MaXViik0pmq9mYGUy5fwgG3vkvaFgmq1f+BeS1xfjIoTFIwqkp4A/MjtV?=
- =?us-ascii?Q?reueiFjRwkcLB/2Y2zc0n6e5/xzicQ0k8TSh8M3at/+g/Q01FR4DsoUsz4G3?=
- =?us-ascii?Q?g3pjUoC7FMJRWlzdPtf6k6hoH7D6aPIXtJEbSkbQYW9s6LSJcXYmF9Owzq2O?=
- =?us-ascii?Q?/WtcZS0/35l7oQKuU0+sQg7jIK0ZIsA7OJdvrHbkmppCMilfVvOAc0bXOMv0?=
- =?us-ascii?Q?Arjwj3klyhA4H+qHUWGjZjL2AbcOWwJ3E3GDZew8ylrdX2ZRKm1hmiuqfa+v?=
- =?us-ascii?Q?5yGRulPE1XN7t504HM5CtqL51RLPoL/6xEajqb3W6jEUV2fl1WX55L/wLJ1p?=
- =?us-ascii?Q?rbTAwUGDfS1x/kzMc7EKHgboesnVzkl7XIKnMiRM+C2yJMa9k64DYZC2EnBW?=
- =?us-ascii?Q?XBfxJBQ5i9f5m4odV5cVaX3JT26sF4jO25FJ8dkRPBjnePVOiJdIufCMLPL2?=
- =?us-ascii?Q?OnW0IQdOnT2QitlahdvO4qdFPQv35hXxpTcbiE1kvykQpOX+XlKuAnuZMtty?=
- =?us-ascii?Q?z8MkS5eK5WAYlzBH/frc/4BZokIDacNg+VBqwB2g0+ze1NFm6MDeI3h7vejR?=
- =?us-ascii?Q?vNKv16NSdZ6Y0jMCtLC3U/VISK9VnBddwcRvfooaT+VC/4D071oSaKYEQZvk?=
- =?us-ascii?Q?5QVudt023+peXoYEhS5ygHRgpVdZBfvOb3YEGGY98hPOEV6Nq4wWlh06wcxg?=
- =?us-ascii?Q?iTNFPGiwOMUA4/Zw0cW9CoRzH82kwTNjrKgUSF545N76tZIzb1vmWA0P/eKz?=
- =?us-ascii?Q?MCLNUsZeFEp8fg9fPwOyxW7njF8/jMpZByyrM1qjNYq5E4v/kBMXFdtCp6nO?=
- =?us-ascii?Q?0t3pjI+AsS1Nq8J5iqbNOOOMUDwhwFARPWm5sNemD5SDkjukHhk6Jws2V3zL?=
- =?us-ascii?Q?LAzg/sjmO6q5MoOydwsRq1Ag4YAiFfJq3ZK1cwETc+rgQFvlwliJyyhonYyI?=
- =?us-ascii?Q?ekcEmC3A6ZLpjl+kuKRXKQAFqZh7IXFzBa3azS+U/80I0yJkJGstXDu/E6iW?=
- =?us-ascii?Q?KW934Xikbg7FNGvJzsgok7ckRrOmVI1Sjc6pmXEXWfA8aDBq5CBABlzLumIG?=
- =?us-ascii?Q?sWUcJNJ6UJJYYwl/wc4XnJint7iTrYRPCzwDdW55vDqgoBDCI7V53yILLuGe?=
- =?us-ascii?Q?gSM6a+sPTNWJpLIt6hTviCF1PWMQxcduA/U1+2l7376jEPo7FUIpNsW2gNCV?=
- =?us-ascii?Q?uU7Q01pxyt6MAGSHRmIIEOQJJhPSY29eaupDToRmIa41Y/VIUCgP9io7leUl?=
- =?us-ascii?Q?8BMS4jX+0yMKEf2v+rbzEZUR2+7dt7FWqrskPK7zY2ZvkUMrwUXovt/4LHXV?=
- =?us-ascii?Q?6fzofld00mqie73Pb62AB+T71MhSu3ru4kbvP4nHIaeAX2hqFztzVwug2Nsr?=
- =?us-ascii?Q?J4yN9YcHX5lQq6zq6C21TaZRgSGzZM2xMA+zn8uIw2aux0ud?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 833b0dff-a375-4431-ed63-08df2de81705
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5174.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 13:51:35.2812
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xG4T0L3a8eHe/VlAoB+s94wyOcOk/lpnmSdkEtYI+/v4eCaLFrS8K/nvtYN4zLfbAt1ymQhWGLw5QK6sXUuJiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PR12MB015052
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261006064120.6796-1-azpijr@gmail.com>
 
-Hi Michal,
+On Tue, Oct 06, 2026 at 08:39:01AM +0200, Jose A. Perez de Azpillaga wrote:
+> MREMAP_DONTUNMAP keeps the source VMA in place, but clears its mlock flags
+> while setting them on the destination VMA.  The "mm/mremap: fix two issues
+> with MREMAP_DONTUNMAP" series fixed two cases where this leaked
+> mm->locked_vm:
+>
+>  - an unfaulted mlock-on-fault VMA moved behind itself self-merges, so the
+>    single resulting VMA loses the flags without the accounting being
+>    dropped;
+>
+>  - a partial mremap() moves only part of the range, leaving the pages which
+>    are not moved accounted as locked in a VMA whose flags were cleared.
+>
+> Add a test which mlock2()s a source mapping, moves all or part of it with
+> MREMAP_DONTUNMAP, unmaps everything and checks that VmLck is back to its
+> value from before, and run it for the self-merge case and for a partial
+> move with and without MLOCK_ONFAULT.
+>
+> Verified on x86_64: the three cases fail on mm-unstable with the two fixes
+> reverted and pass with them applied.
+>
+> Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
 
-On Mon, Oct 19, 2026 at 12:41:45PM +0000, Michal Blaszczyk wrote:
-> The watchdog measures how long a task has been waiting from
-> p->scx.runnable_at, which set_task_runnable() resets when the task becomes
-> runnable after it last ran. ops_dequeue() never asks for a reset, as the
-> dequeue of a waiting task is temporary, e.g. for a migration or an
-> attribute change.
-> 
-> Leaving the scheduler isn't temporary. A task which is switched out of
-> SCHED_EXT while it's waiting keeps its runnable_at. When it's switched back
-> and becomes runnable, its wait appears to have started before it left, and
-> the time it spent in another class counts towards the timeout. If the
-> watchdog checks before the task runs, it aborts the scheduler:
-> 
->   sched_ext: class_switch_stall: runner[418] failed to run for 3.010s
-> 
-> Here, the task waited for a few milliseconds before it was switched to
-> SCHED_OTHER, slept outside of SCHED_EXT for three seconds, and was charged
-> for all of it as soon as it woke up on SCHED_EXT again.
-> 
-> The same happens when scx_sub_enable_workfn() hands a waiting task over to
-> a new sub-scheduler, which can then be blamed for time the task waited
-> under the parent. scx_rehome_task() isn't affected, as it moves the task
-> through SCX_TASK_INIT, which resets runnable_at. The stale runnable_at also
-> skews the default core-sched ordering in scx_prio_less().
-> 
-> Reset runnable_at in scx_disable_task(), when the task leaves the control
-> of its scheduler.
-> 
-> Fixes: 8a010b81b3a5 ("sched_ext: Implement runnable task stall watchdog")
-> Assisted-by: LLM
-> Signed-off-by: Michal Blaszczyk <michalblk@google.com>
+Thanks for writing tests for this. Looks generally OK to me, so:
 
-This makes sense to me and I reproduced the issue (thanks for providing
-a selftest).
-
-Reviewed-by: Andrea Righi <arighi@nvidia.com>
-
--Andrea
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
 > ---
->  kernel/sched/ext/ext.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-> index 07857039aee69..120df09b9e0af 100644
-> --- a/kernel/sched/ext/ext.c
-> +++ b/kernel/sched/ext/ext.c
-> @@ -2424,7 +2424,11 @@ static void ops_dequeue(struct rq *rq, struct task_struct *p, u64 deq_flags)
->  	struct scx_sched *sch = scx_task_sched(p);
->  	unsigned long opss;
->  
-> -	/* dequeue is always temporary, don't reset runnable_at */
-> +	/*
-> +	 * Don't reset runnable_at. If @p is waiting, the wait continues across
-> +	 * temporary dequeues, e.g. for a migration or an attribute change.
-> +	 * scx_disable_task() ends it if @p leaves its scheduler.
-> +	 */
->  	clr_task_runnable(p, false);
->  
->  retry:
-> @@ -4517,6 +4521,14 @@ static void scx_disable_task(struct scx_sched *sch, struct task_struct *p)
->  	scx_set_task_slice(p, 0);
->  	p->scx.reenq_cnt = 0;
->  
-> +	/*
-> +	 * If @p is runnable but not running, its wait started at runnable_at,
-> +	 * which ops_dequeue() didn't reset. Leaving @sch ends the wait. Reset
-> +	 * runnable_at the next time @p is enqueued on SCX, so that the watchdog
-> +	 * doesn't count the time @p spends elsewhere.
-> +	 */
-> +	p->scx.flags |= SCX_TASK_RESET_RUNNABLE_AT;
+> v2:
+>  - Reduce the churn (David): fold the three cases into one parameterised
+>    test and drop the child process per case, comparing VmLck against its
+>    value before each case instead.
+>  - Use the file's BUG_ON() for setup failures and vm_util's
+>    check_for_pattern() to read VmLck, call mlock2() directly.
+>  - Verify against mm-unstable with the two fixes reverted rather than an
+>    older -rc, now that the series is applied.
+>
+>  tools/testing/selftests/mm/mremap_dontunmap.c | 63 ++++++++++++++++++-
+>  1 file changed, 62 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/mm/mremap_dontunmap.c b/tools/testing/selftests/mm/mremap_dontunmap.c
+> index 96ba537facf7..5ca33d9d42af 100644
+> --- a/tools/testing/selftests/mm/mremap_dontunmap.c
+> +++ b/tools/testing/selftests/mm/mremap_dontunmap.c
+> @@ -7,6 +7,7 @@
+>   */
+>  #define _GNU_SOURCE
+>  #include <sys/mman.h>
+> +#include <sys/syscall.h>
+>  #include <linux/mman.h>
+>  #include <errno.h>
+>  #include <stdio.h>
+> @@ -15,6 +16,7 @@
+>  #include <unistd.h>
+>
+>  #include "kselftest.h"
+> +#include "vm_util.h"
+>
+>  unsigned long page_size;
+>  char *page_buffer;
+> @@ -335,6 +337,62 @@ static void mremap_dontunmap_partial_mapping_overwrite(void)
+>  	ksft_test_result_pass("%s\n", __func__);
+>  }
+>
+> +/* VmLck from /proc/self/status, which is mm->locked_vm in kB. */
+> +static unsigned long locked_vm_kb(void)
+> +{
+> +	unsigned long kb;
+> +	char buf[256];
+> +	FILE *fp;
 > +
->  	/*
->  	 * Verify the task is not in BPF scheduler's custody. If flag
->  	 * transitions are consistent, the flag should always be clear
-> -- 
-> 2.56.0.176.g3575e65682-goog
-> 
+> +	fp = fopen("/proc/self/status", "r");
+> +	BUG_ON(!fp, "unable to open /proc/self/status");
+> +	BUG_ON(!check_for_pattern(fp, "VmLck:", buf, sizeof(buf)) ||
+> +	       sscanf(buf, "VmLck: %lu kB", &kb) != 1, "unable to read VmLck");
+> +	fclose(fp);
+> +
+> +	return kb;
+> +}
+> +
+> +/*
+> + * MREMAP_DONTUNMAP clears the mlock flags of the source VMA and sets them on
+> + * the destination, and mm->locked_vm has to follow.  mlock2() a source of
+> + * num_pages and move its first move_pages to gap pages past its end:
+> + *
+> + *  |------ source ------|... gap ...|-- dest --|
+> + *
+> + * then unmap everything and check that VmLck is back where it started.  With
+> + * no gap the destination is adjacent to the source and could merge with it,
+> + * otherwise the gap is left PROT_NONE so that it cannot.
+> + */
+> +static void mremap_dontunmap_mlock(const char *desc, unsigned long num_pages,
+> +				   unsigned long move_pages, unsigned long gap,
+> +				   int mlock_flags)
+> +{
+> +	unsigned long size = (num_pages + gap + move_pages) * page_size;
+> +	unsigned long locked = locked_vm_kb();
+> +	void *source, *dest;
+> +
+> +	source = mmap(NULL, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	BUG_ON(source == MAP_FAILED, "mmap");
+> +	BUG_ON(mprotect(source, num_pages * page_size,
+> +			PROT_READ | PROT_WRITE) == -1, "mprotect");
+> +	dest = source + (num_pages + gap) * page_size;
+> +
+> +	if (syscall(__NR_mlock2, source, num_pages * page_size, mlock_flags)) {
+> +		ksft_test_result_skip("%s: %s: mlock2: %s\n", __func__, desc,
+> +				      strerror(errno));
+> +		BUG_ON(munmap(source, size) == -1, "unable to unmap mappings");
+> +		return;
+> +	}
+> +
+> +	BUG_ON(mremap(source, move_pages * page_size, move_pages * page_size,
+> +		      MREMAP_DONTUNMAP | MREMAP_MAYMOVE | MREMAP_FIXED,
+> +		      dest) != dest, "mremap");
+> +
+> +	BUG_ON(munmap(source, size) == -1, "unable to unmap mappings");
+> +	ksft_test_result(locked_vm_kb() == locked, "%s: %s\n", __func__, desc);
+> +}
+> +
+>  int main(void)
+>  {
+>  	ksft_print_header();
+> @@ -348,7 +406,7 @@ int main(void)
+>  		ksft_finished();
+>  	}
+>
+> -	ksft_set_plan(5);
+> +	ksft_set_plan(8);
+>
+>  	// Keep a page sized buffer around for when we need it.
+>  	page_buffer =
+> @@ -361,6 +419,9 @@ int main(void)
+>  	mremap_dontunmap_simple_fixed();
+>  	mremap_dontunmap_partial_mapping();
+>  	mremap_dontunmap_partial_mapping_overwrite();
+> +	mremap_dontunmap_mlock("onfault self-merge", 1, 1, 0, MLOCK_ONFAULT);
+> +	mremap_dontunmap_mlock("partial", 3, 2, 1, 0);
+> +	mremap_dontunmap_mlock("onfault partial", 3, 2, 1, MLOCK_ONFAULT);
+>
+>  	BUG_ON(munmap(page_buffer, page_size) == -1,
+>  	       "unable to unmap page buffer");
+> --
+> 2.55.0
+>
+
+--
+Cheers, Lorenzo
