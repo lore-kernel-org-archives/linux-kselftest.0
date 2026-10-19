@@ -1,251 +1,156 @@
-Received: from mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D91A495020
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 08:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC92499F31;
+	Mon, 19 Oct 2026 08:43:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792399391; cv=none; b=knCe+yYObDoetN5QXOSuehZXkopTzf392iXJXMAVJOUGcBew0HyFrQflI0dXut+2Vauy7kXe6kI/VpNI5hPEV8/8Rk6TUSF34DopJz03SSzxHnphvn28D1Rxk6OKd8P6paN6EdOa2HTCuCWih6CXOCMrmaoQUjYhLHtXzsPfxBA=
+	t=1792399422; cv=none; b=GovAG6Bm2b8EQqcTEqRJsAAajghUTTIapOWbZf9sUprRI3d0F2jxr4ekHa1zLLkqIAyQx30nIKoQIXWwQAWEDOz7dJuUjym3oGyK+b5PYceugdGHe1x/68wmqyFIoFyHFTUFw3O4E+x0UjSRFDvDHVdav5WxmIPXxt4ohxfLneM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792399391; c=relaxed/simple;
-	bh=SkseMn7fPuRum4KiC10PAEDJWAlNIXhfvD1jIKxAIkQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Po0Q3Z9oSmvi49vk8MXDGZ8ycw6FH3O094p+2MrbyTx6uqxBb95VOTAkKKWdkxuRjKlajHpvFSZCaRfOnPjE0IBciAx3do7h7e9Wqr7ylEVQ4saYJz8GKICAyktWRNMz+MBJl7US+GgnMPhc3/MilP2IDGXetJXB5HeoICeQGuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hwcCABqA; arc=none smtp.client-ip=91.218.175.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792399422; c=relaxed/simple;
+	bh=MhBi0tOU15TuSVtmzTAWS1mGzQCHjqPVTw8i0JLakIw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dvg5/YSx/+O8t7KkOMjLdBtcjNoci+XwUWQRE/QR533c+sDoD2VI7B5yQie4XxekyiwFmVgyf+tPBqr/fzVFWU+OLWGhSrd1s/eTKJ0Rw2LSJybWs8YXGgXCJLY2lATMZyvpNOY4RqoNx3kQsaYbkQyHnCtMExf2sy/jDazPpbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PSqmWsFb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hwcCABqA"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SkseMn7fPuRum4KiC10PAEDJWAlNIXhfvD1jIKxAIkQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792399386; v=1; x=1793004186;
- b=hwcCABqAgltYQmaTSbczVNLVDTH5gpdSXcW6zD/q8hCJkow7DrzJxMAebc9Z0BDnbGEVDsn5
- XhzVuOkIlrByE9q0nTatoARYcr+BXjNiLa32nPfRpyDkQoAAWq22dexN66XRawAV2Rk7Lgj+zZG
- Jj3MljRgdTxIZrRNBYN1xxQA=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 65f89b9575891237;
-	Mon, 19 Oct 2026 08:43:06 +0000
-X-Mizu-Trace-ID: 65f89b9575891237
-X-Migadu-Flow: FLOW_OUT
-From: Jackie Liu <liu.yun@linux.dev>
-To: josef@toxicpanda.com
-Cc: axboe@kernel.dk,
-	shuah@kernel.org,
-	tom.leiming@gmail.com,
-	yukuai@fygo.io,
-	linux-block@vger.kernel.org,
-	nbd@other.debian.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 4/4] selftests: nbd: test multi-connection startup races
-Date: Mon, 19 Oct 2026 16:42:27 +0800
-Message-ID: <1e23512b7d6701f53fdec82e08ee480cd9b27712.1792399226.git.liuyun01@kylinos.cn>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <cover.1792399225.git.liuyun01@kylinos.cn>
-References: <cover.1792399225.git.liuyun01@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSqmWsFb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B2F1F000C4;
+	Mon, 19 Oct 2026 08:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792399420;
+	bh=fy26aZDFXGwTKUczlKhKEkeMGJBaoVyPi8d9QO/iEBg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=PSqmWsFbqFiDSBjC/53uW07HkSAkEyNdAnioC4t11fPnuQQjqwXCsz5QZxWNzvtKu
+	 s4NT+DDvVz7C79CnHxcyBjU0f4l1lKcg5JTEH0QsCEE+8STWWee65KsizEA7dyjTZ8
+	 rkrYYVcPNOk4KIz5Z/pwmWfNg68KxagnnLostsYKXPvc2hAccesbB0SaU8mDWIty5O
+	 I9JdWqLvfLfMIr1zOwfQVK1YEFlz4FRAdFPltQBGqL4TTTSOZTSQWBe8UD0uxFlE/K
+	 QqHRKz9awTFYvfx42xk5lPAuTxtswSLDF0anNn02GSjw67Aj0OcQsuvULQ0XP4ToYp
+	 XHWqil432b9Uw==
+Date: Mon, 19 Oct 2026 11:43:28 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org, kuba@kernel.org,
+	enelsonmoore@gmail.com, bp@alien8.de, shuah@kernel.org,
+	david@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+	ljs@kernel.org, mhocko@suse.com, skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org, vbabka@kernel.org,
+	dapeng1.mi@linux.intel.com, linux-kernel@vger.kernel.org,
+	corbet@lwn.net, surenb@google.com, kexec@lists.infradead.org,
+	pratyush@kernel.org, rdunlap@infradead.org, elver@google.com,
+	graf@amazon.com, lirongqing@baidu.com, liam@infradead.org,
+	jlayton@kernel.org
+Subject: Re: [PATCH v1 0/8] kho: add read-only Kexec Handover mode
+Message-ID: <atXYMK5tmW8f23gs@kernel.org>
+References: <20261019021111.990394-1-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261019021111.990394-1-pasha.tatashin@soleen.com>
 
-From: Jackie Liu <liuyun01@kylinos.cn>
+Hi Pasha,
 
-Extend the NBD startup selftests to race NBD_DO_IT against adding a
-second socket without NBD_FLAG_CAN_MULTI_CONN, and against clearing the
-flag on a device that already has two sockets. Prime the queue count
-before each attempt to exercise the unlocked hardware queue update.
+Some brief comments before digging in.
 
-Check for EINVAL or a valid single-connection start. Detect an invalid
-multi-connection start by checking whether a receive worker consumes a
-byte from the second socket. Keep the reply incomplete so that the check
-does not inject a malformed reply into request completion.
+On Sun, Oct 18, 2026 at 10:11:03PM -0400, Pasha Tatashin wrote:
+> This series introduces a read-only Kexec Handover mode, enabled at boot
+> via 'kho_ro=<pa>' pointing to the physical address of the KHO FDT.
+> 
+> In standard KHO, the target kernel takes ownership of preserved memory
+> during early boot, initializes struct pages for preserved folios, and
+> reclaims KHO metadata and preserved pages back into the page allocator
+> as they are restored.
+> 
+> In some scenarios (such as a caretaker, inspection kernel, firmware), a
+> kernel needs to inspect and consume preserved KHO subtrees, radix trees,
+> and serialized metadata without taking ownership of or modifying the KHO
+> state, leaving the preserved KHO tree intact for a subsequent kernel.
+> In this mode, the KHO physical memory lies outside the kernel's direct
+> map.
+> 
+> To support this cleanly without duplicating KHO traversal logic:
+> - Patch 1 exposes the physical address of the outgoing KHO FDT via
+>   /sys/kernel/debug/kho/out/fdt_phys so userspace tooling can pass it
+>   to a 'kho_ro=<pa>' kernel.
 
-Exclude flag changes observed after PID publication, since changing
-flags on an already running device is outside the startup race being
-tested. As with the concurrent-start test, this is scheduling stress and
-a passing run does not prove that every race window was exercised.
+We already pass the physical address, why adding a boolean kho_ro is not
+enough?
 
-Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
----
- tools/testing/selftests/nbd/.gitignore       |   1 +
- tools/testing/selftests/nbd/Makefile         |   2 +-
- tools/testing/selftests/nbd/nbd_multi_conn.c | 147 +++++++++++++++++++
- 3 files changed, 149 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/nbd/nbd_multi_conn.c
+> - Patch 2 moves the shared radix-tree key encoding and indexing,
+>   vmalloc flag conversion, and FDT validation and subtree lookup helpers
+>   to kernel/liveupdate/kexec_handover_internal.h so they can be shared
+>   between standard and read-only KHO.
+> - Patch 3 hardens kho_restore_vmalloc() by introducing
+>   kho_vmalloc_validate() in kernel/liveupdate/kexec_handover_internal.h
+>   to validate the preservation metadata header and flags before
+>   restoring the vmalloc area.
 
-diff --git a/tools/testing/selftests/nbd/.gitignore b/tools/testing/selftests/nbd/.gitignore
-index 5516e34b30f2..5920071f30ee 100644
---- a/tools/testing/selftests/nbd/.gitignore
-+++ b/tools/testing/selftests/nbd/.gitignore
-@@ -1 +1,2 @@
- /nbd_pid_race
-+/nbd_multi_conn
-diff --git a/tools/testing/selftests/nbd/Makefile b/tools/testing/selftests/nbd/Makefile
-index e49ee6cfc82e..7c3e5e6ea1b0 100644
---- a/tools/testing/selftests/nbd/Makefile
-+++ b/tools/testing/selftests/nbd/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- CFLAGS += -O2 -Wall -Wextra $(KHDR_INCLUDES)
--TEST_GEN_PROGS := nbd_pid_race
-+TEST_GEN_PROGS := nbd_pid_race nbd_multi_conn
- LOCAL_HDRS += nbd_common.h
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/nbd/nbd_multi_conn.c b/tools/testing/selftests/nbd/nbd_multi_conn.c
-new file mode 100644
-index 000000000000..a032b36bb89d
---- /dev/null
-+++ b/tools/testing/selftests/nbd/nbd_multi_conn.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2026 KylinSoft Co., Ltd. All rights reserved.
-+ *
-+ * Startup must revalidate CAN_MULTI_CONN after an unlocked queue update.
-+ */
-+#include <errno.h>
-+#include <linux/nbd.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/socket.h>
-+#include <unistd.h>
-+
-+#include "../kselftest.h"
-+#include "nbd_common.h"
-+
-+struct stats {
-+	int rounds;
-+	int rejected;
-+	int missed;
-+	int hits;
-+	int errors;
-+};
-+
-+/*
-+ * A byte cannot disappear from this UNIX socket unless a receiver reads it.
-+ * Only recv_work() reads the client endpoint. Keep the reply incomplete so
-+ * observing a second receiver does not depend on hardware queue counts or
-+ * inject a malformed NBD reply into request completion.
-+ */
-+static int second_receiver(struct session *s)
-+{
-+	long long end = nbd_now_ms() + 50;
-+
-+	if (send(s->sockets[1][1], "x", 1, MSG_NOSIGNAL) != 1)
-+		return -errno;
-+	for (;;) {
-+		int pending;
-+
-+		if (ioctl(s->sockets[1][0], FIONREAD, &pending))
-+			return -errno;
-+		if (!pending)
-+			return 1;
-+		if (pending != 1)
-+			return -EIO;
-+		if (nbd_now_ms() >= end)
-+			return 0;
-+		usleep(1000);
-+	}
-+}
-+
-+static int multi_connection(int index, struct options *o, struct stats *st,
-+			    bool flags_only)
-+{
-+	struct session s;
-+	int ret, state = -1, cleanup;
-+	bool eligible = true;
-+
-+	ret = nbd_prime(index, flags_only ? 1 : 2, o);
-+	if (ret)
-+		return ret;
-+	ret = nbd_session_open(&s, index, flags_only ? 2 : 1,
-+			       flags_only ? NBD_FLAG_CAN_MULTI_CONN : 0);
-+	if (!ret)
-+		ret = nbd_launch(&s, 1, o);
-+	if (!ret) {
-+		if (o->spread_b)
-+			usleep(rand_r(&o->seed) % o->spread_b);
-+		if (flags_only) {
-+			if (ioctl(s.fd, NBD_SET_FLAGS, 0))
-+				ret = -errno;
-+			/* A flags change after startup is a separate, older behavior. */
-+			state = nbd_device_pid(index);
-+			if (state < 0)
-+				ret = state;
-+			eligible = state == 0;
-+		} else if (ioctl(s.fd, NBD_SET_SOCK, s.sockets[1][0])) {
-+			if (errno == EBUSY)
-+				eligible = false;
-+			else
-+				ret = -errno;
-+		}
-+	}
-+	if (!ret) {
-+		state = nbd_wait_state(&s);
-+		st->rounds++;
-+		if (!state && s.results[0].error == EINVAL) {
-+			st->rejected++;
-+		} else if (state == 1) {
-+			int receiving = eligible ? second_receiver(&s) : 0;
-+
-+			if (receiving < 0) {
-+				ret = receiving;
-+			} else if (receiving) {
-+				st->hits++;
-+				ksft_print_msg("nbd%d: invalid second receiver (%s)\n",
-+					       index,
-+					       flags_only ? "flags changed" : "socket added");
-+			} else {
-+				st->missed++;
-+			}
-+		} else {
-+			ret = state < 0 ? state : -EIO;
-+		}
-+	}
-+	cleanup = nbd_session_close(&s);
-+	if (!ret)
-+		ret = cleanup;
-+	if (!ret && state == 1 && (s.nr_results != 1 || s.results[0].error))
-+		ret = -EIO;
-+	return ret;
-+}
-+
-+static void run_test(struct options *o, bool flags_only, const char *name)
-+{
-+	struct stats st = { 0 };
-+	int i;
-+
-+	for (i = 0; i < o->rounds; i++) {
-+		int ret = multi_connection(nbd_pick_device(i), o, &st, flags_only);
-+
-+		if (ret) {
-+			ksft_print_msg("%s round %d: %s (%d)\n", name, i + 1,
-+				       strerror(-ret), ret);
-+			st.errors++;
-+		}
-+		if (st.errors || st.hits)
-+			break;
-+	}
-+	ksft_test_result(!st.errors && !st.hits && st.rounds == o->rounds,
-+			 "%s: rounds=%d rejected=%d missed=%d regressions=%d errors=%d\n",
-+			 name, st.rounds, st.rejected, st.missed, st.hits, st.errors);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct options o;
-+
-+	nbd_parse_options(argc, argv, &o);
-+	ksft_print_header();
-+	nbd_init_test(&o);
-+	ksft_set_plan(2);
-+	run_test(&o, false, "socket-count retry rechecks CAN_MULTI_CONN");
-+	run_test(&o, true, "flags-only change rechecks CAN_MULTI_CONN");
-+	ksft_finished();
-+}
+The diff for kexec_handover_internal.h 
+
+>  kernel/liveupdate/kexec_handover_internal.h   | 171 +++++++-
+
+seems a wee too large. Maybe some of this should move to a .c file?
+
+> - Patch 4 avoids modifying ser->next and bs->head_pa in kho_block_add()
+>   and kho_block_set_shrink_one() when operating on an incoming block
+>   set, as the chain is already linked and incoming blocks must not be
+>   modified in KHO read-only mode.
+> - Patch 5 adds CONFIG_KEXEC_HANDOVER_READONLY and
+>   kernel/liveupdate/kexec_handover_ro.c. When booted with
+>   'kho_ro=<pa>', preserved KHO metadata is mapped read-only
+>   (PAGE_KERNEL_RO), with the FDT and radix-tree nodes mapped lazily on
+>   first visit and kept cached, providing read-only implementations of
+>   kho_retrieve_subtree(), kho_restore_vmalloc(),
+>   kho_ro_lookup_folio_order(), kho_ro_map_folio(), and kho_ro_unmap().
+
+What are the expected users of these APIs?
+
+> - Patch 6 updates kho_block to map incoming serialized blocks read-only
+>   via kho_ro_map_folio() and unmap them via kho_ro_unmap() in read-only
+>   KHO mode.
+> - Patches 7 and 8 extend test_kho and tools/testing/selftests/kho/vmtest.sh
+>   to test read-only KHO handover when preserved memory lies outside
+>   the boot kernel's initial memory range on both x86_64 and arm64.
+> 
+> Pasha Tatashin (8):
+>   kho: expose physical address of outgoing FDT
+>   kho: move radix tree, vmalloc, and FDT helpers to internal header
+>   kho: validate preservation metadata in kho_restore_vmalloc()
+>   kho: do not modify incoming serialized blocks
+>   kho: add read-only Kexec Handover mode
+>   kho: support read-only KHO mode in kho_block
+>   kho: test: support read-only KHO mode in test_kho
+>   selftests: kho: add read-only KHO test to vmtest.sh
+> 
+>  .../admin-guide/kernel-parameters.txt         |   6 +
+>  Documentation/admin-guide/mm/kho.rst          |   3 +
+>  include/linux/kexec_handover.h                |  53 ++-
+>  kernel/liveupdate/Kconfig                     |  16 +
+>  kernel/liveupdate/Makefile                    |   4 +-
+>  kernel/liveupdate/kexec_handover.c            | 142 +------
+>  kernel/liveupdate/kexec_handover_debugfs.c    |  22 +-
+>  kernel/liveupdate/kexec_handover_internal.h   | 171 +++++++-
+>  kernel/liveupdate/kexec_handover_ro.c         | 378 ++++++++++++++++++
+>  kernel/liveupdate/kho_block.c                 |  92 +++--
+>  lib/Kconfig.debug                             |   2 +-
+>  lib/test_kho.c                                |  68 +++-
+>  tools/testing/selftests/kho/arm64.conf        |   3 +
+>  tools/testing/selftests/kho/init.c            |  38 +-
+>  tools/testing/selftests/kho/vmtest.sh         | 103 +++--
+>  tools/testing/selftests/kho/x86.conf          |   1 +
+>  16 files changed, 881 insertions(+), 221 deletions(-)
+>  create mode 100644 kernel/liveupdate/kexec_handover_ro.c
+> 
+> 
+> base-commit: 27be83a12b246b6b3783e7d3ac5c378ff7520f25
+> -- 
+> 2.56.0.176.g3575e65682-goog
+> 
+
+-- 
+Sincerely yours,
+Mike.
