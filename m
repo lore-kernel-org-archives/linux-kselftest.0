@@ -1,67 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792423256;
-	b=QglBsJ9bs08sJK1u9cHar6qzTYid0l59zQUjI0kjwvjLZKozfzfqHTRTC4k8hapj4rcB
-	 8xXGoom0oMo7Veo/x8eYiRHafrgkqwF608+YhQH01qVORSRul8mCmFP2NyG6cpEPXyEiw
-	 a3noHXUfSJ8F8b9iq7FImJzeWgLdOXaRugMxH8vY8wgdJ34d08CsDrnAhU3QCKKoYI5vU
-	 qW2wY70AZbvpPrG5dxi/e0sk7qVLB10jqj6Tydcz3ZSrxjRiPTGhgBMbZ5Q72vaZXb57K
-	 5mt1wcpPwOQjiPwadc1q6cuDh25uKYdrf9Nj7zczwW3sr+eolbvKINm0TjVM0TbRQzA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792423256;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=NDxpkGNoz7BmnUqvvkIeuzCaJB7Pz7RiPfeGG6dFS7k=;
-	b=SRNtMrOc9gg2S774toH3T/fYMennWF9UtAeYMBaGgzl7vsef6kg95vGN2iwplcfcQUpN
-	 NzD7/6ltDJZEIKzV1Ln2H2IMZvwpg2JwhX9AKvYFgHmUIBtr726qlm4F72rfHk4Y9KR6r
-	 DEmLAky+vEVQYT8QJmS4oR8xIlTpEQmkJ5w1Qb62zzwFPxv4UicixdPbn78IV+x4Q8q1r
-	 P/LTC+8cX6TqXg6wfOqIPAqycLyCKC4fuInMEj35srNhp8Cy/wmvUOc12O7YeAi/ysyYg
-	 y0Yzb+jdpHT4JGMOpzrfvnz0gSpeCj0d8zxkeLc+cPQ0JZ+EzNcZzZD30McDxJi7Hhw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=LcT1ciLO;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D1960A7E62
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 15:20:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6D1960A7E62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792421709;
+	b=b4LkGYVvSsvx+SfANkO0I7+L9oa/sxz5EmKbhQu+Do1wBTDWBxC6XodULFGHrs8KOe04
+	 RlrEOGxp+EJVDb/YRrRC6trcKMVM7i8vhM3zSghRwjoirEGBtE9I98FrqyJoS66ymPf47
+	 BZEDGvuwrYcbvyDpo5EQItAG/XIhx4OuIJ9zASTMCqHVwP0LM9B3P0ouMdKcCVbvtM2vD
+	 WSn6L2F5YvfnlaxssDT/KxS7m9qICUmVz9m5CuxTAaFDvPFctS58cODOdfnRi8iNlOHS/
+	 zhMoMEDYYBsijSBDXiQ+BO4iUncxheazra7wI+qp8hPU+vngaJNOZ0xqthRh68/iScA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792421709;
+	h=Received:Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=+JUxYD7hsy9+873bVBb64U1eteVVDuAvUhFWgvJelD4=;
+	b=FrAWDstoOvfmlccm1mGNB/6jzN2JKvgtNANldHNtFYsrpMWwZ9SSwo7mujIMtb73vR3d
+	 Cdhy0fs3pGE9K/ucT3lf1W8isKEUeMWjQjRqIzaGa0nhapfnhtbeqI7g3xVc8VGXh/Hop
+	 0sVaaex3RbQgiiw0ns3AFYo4JYXX3e/opm6Jo1OrVyFtuZmcUTWQp7if3zjWsDqo5WbJc
+	 LYHl2zlKtw5WbbBO8Unwl9OlUqcl7NuXGKZ/OkZrNlU+BjdJitzo6RXsZukyBtMhXhmc4
+	 TXoLs564xQc81pfvVwQHst6WoQUpe1WpWUcxLOoK7y3Skrc3rRk78tgn5Z29mDhrPOg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TpoWiUhv;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+Received: from aws-us-west-2-korg-listserv-1.web.codeaurora.org (ip-10-30-226-211.us-west-2.compute.internal [10.30.226.211])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 177E5606EFE9;
+	Mon, 19 Oct 2026 14:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=LcT1ciLO
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792423254;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NDxpkGNoz7BmnUqvvkIeuzCaJB7Pz7RiPfeGG6dFS7k=;
-	b=LcT1ciLOFYBUZlBePquh/Dbim88EgKEB6EXLA87nHcE2k1vR0EUc2t4HVkagFS5LJgvX8a
-	OB0+ID7G8kCJanW6xnYxsU/5DB3+QKmDI/u3HhbYGDE86Jx3GT5+zwJsKXnrHZVGROa6gs
-	WgrVeQ4DxDuKXqHSvY0A7QIA/YKPQaA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-355-wbqslNhsODGZaDT2JDQoaw-1; Mon,
- 19 Oct 2026 15:20:45 +0000
-X-MC-Unique: wbqslNhsODGZaDT2JDQoaw-1
-X-Mimecast-MFC-AGG-ID: wbqslNhsODGZaDT2JDQoaw_1792423243
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TpoWiUhv
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D943F180061F;
-	Mon, 19 Oct 2026 15:20:42 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6854B180057F;
-	Mon, 19 Oct 2026 15:20:40 +0000 (UTC)
-Message-ID: <c27e9477-656e-4fd5-bf6d-a59b426d70eb@redhat.com>
-Date: Mon, 19 Oct 2026 11:20:39 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CC36513FF;
+	Mon, 19 Oct 2026 14:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792421709; cv=none; b=Kx5/sJm6PI9j5E86xXnZIrs+5rYpV6nQbp7hVgKoXvjcn2yieSY6aJx6d82tlKrAfQQmBhe+Jv7MlRpQeIhZiel27RQASaX/2rDovckt5uHP+WQCZyAPZPKHwR+A7an8ZpUyannl5/k0US1/eYymqjRMeGLuBKuc0+T1td1s13M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792421709; c=relaxed/simple;
+	bh=rypUYqt1WxoN40+ku5yahBFpXbOcWjQofkx/7yag5k8=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RDhSZ+olmgcyrHGvJ2BbJTtY8eU9BKdNjs+RPfq2ptHG0sDuBY+FVCeuj23dlD4SmGq4fYxNuOhoxgK4nV/xAWDrx39XL/guT3SW4twlmBaFcqSDcv1vA/y0xINjP289ut/KCzhPnzm1bc1feM22uZAqsJpTVYcABKMoAH0GWoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TpoWiUhv; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AA241F000C5;
+	Mon, 19 Oct 2026 14:55:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792421707;
+	bh=+JUxYD7hsy9+873bVBb64U1eteVVDuAvUhFWgvJelD4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=TpoWiUhvlPWuiOAzwQ0+QYp1daD5dXruX/kR2AJHRWNdqmgRTyUwwWwa+sRV+2IrL
+	 qdMOqQJf/VKImZ2CmKFbRDxbSpf1mueNlPbW0S0A4JWDzEuu6gIvPdPBwXxAiMJvcS
+	 kiA6C8l9qYU76zsFXaLHbH28Rj+nDJXA4kqFjor8LjGmFwpPZBE27OTiVgGPbAOI5p
+	 XOmxC3hdmTfeaEkvfoOrttUR+AGgMExhSly0PcfHcVjOQtnPIWNfn9fJzru23dsa9V
+	 yqYN4frfKF+YRddnsrOMbfO9x9lyfBw/xJeRQu/KIbKmkHA+4G6Jdjl82mfELlJCgx
+	 smIVXBHc809cw==
+Subject: Re: [PATCH net-next v6 2/5] selftests/bpf: Track XDP test processes
+ and isolate namespaces
+From: netdev-bot+sashiko@kernel.org
+To: bochaolucky@gmail.com
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ andrew+netdev@lunn.ch, edumazet@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ alexis.lothore@bootlin.com, lorenzo@kernel.org, tiozhang@didiglobal.com,
+ willemdebruijn.kernel@gmail.com, petrm@nvidia.com
+Date: Mon, 19 Oct 2026 14:55:05 +0000
+Message-ID: <179242170518.3135.2037803545467217348@kernel.org>
+In-Reply-To: <20261018-xdp-v5-send-20261008-v6-2-7336e1282ca3@gmail.com>
+References: <20261018-xdp-v5-send-20261008-v6-2-7336e1282ca3@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,131 +81,123 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v3 1/9] cgroup/cpuset: Fix a missing isolated_cpus
- update in update_cpumasks_hier()
-To: Guopeng Zhang <guopeng.zhang@linux.dev>,
- Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hui Peng <benquike@gmail.com>
-References: <20261014140548.575122-1-longman@redhat.com>
- <20261014140548.575122-2-longman@redhat.com>
- <0bd7f6ff-3675-4447-a62a-a2047241e3e6@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <0bd7f6ff-3675-4447-a62a-a2047241e3e6@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 10/15/26 9:02 AM, Guopeng Zhang wrote:
->
-> 在 2026/10/14 22:05, Waiman Long 写道:
->> It is found that when a local isolated partition is being invalidated
->> because its root partition parent is no longer valid, the isolated_cpus
->> cpumask may not be properly updated. If the parent was previously
->> an isolated partition, its invalidation should have properly updated
->> isolated_cpus before and no action will be needed.
->>
->> Fix that by calling isolated_cpus_update() in this invalidation case
->> to update isolated_cpus. A test case in test_cpuset_prs.sh is modified
->> to test that.
->>
->> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/cgroup/cpuset.c                        | 19 ++++++++++++++-----
->>   .../selftests/cgroup/test_cpuset_prs.sh       |  4 ++--
->>   2 files changed, 16 insertions(+), 7 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 0ebba2d646c3..6b5c870e5607 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -2229,7 +2229,9 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->>   		 * cpuset if the parent's effective_cpus changes.
->>   		 */
->>   		if ((cp != cs) && old_prs) {
->> -			switch (parent->partition_root_state) {
->> +			int parent_prs = parent->partition_root_state;
->> +
->> +			switch (parent_prs) {
->>   			case PRS_ROOT:
->>   			case PRS_ISOLATED:
->>   				update_parent = true;
->> @@ -2238,11 +2240,18 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->>   			default:
->>   				/*
->>   				 * When parent is not a partition root or is
->> -				 * invalid, child partition roots become
->> -				 * invalid too.
->> +				 * invalid, child partition roots become invalid
->> +				 * too. For an isolated partition with root
->> +				 * partition parent, isolated_cpus_updated()
->> +				 * is called to update isolated_cpus.
->>   				 */
->> -				if (is_partition_valid(cp))
->> -					new_prs = -cp->partition_root_state;
->> +				if (is_partition_valid(cp)) {
->> +					new_prs = -old_prs;
->> +					if ((old_prs == PRS_ISOLATED) &&
->> +					    (parent_prs == -PRS_ROOT))
->> +						isolated_cpus_update(old_prs, new_prs,
->> +								     cp->effective_xcpus);
->> +				}
-> I tested switching a parent partition from root to member and found that
-> CPUs can remain listed in cpuset.cpus.isolated. CPUs 0-15 are online, with
-> nohz_full=2-15 and no isolcpus:
->
->      # cd /sys/fs/cgroup
->      # echo +cpuset > cgroup.subtree_control
->      # mkdir A
->      # echo 1-2 > A/cpuset.cpus
->      # echo root > A/cpuset.cpus.partition
->      # echo +cpuset > A/cgroup.subtree_control
->      # mkdir A/C
->      # echo 2 > A/C/cpuset.cpus
->      # echo isolated > A/C/cpuset.cpus.partition
->      # cat cpuset.cpus.isolated
->      2
->      # echo member > A/cpuset.cpus.partition
->      # cat A/C/cpuset.cpus.partition
->      isolated invalid (Parent is not a partition root)
->      # cat cpuset.cpus.isolated
->      2
->
-> A is now a member and C is invalid, so cpuset.cpus.isolated should be
-> empty here, but CPU 2 remains.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Yes, this patch isn't quite correct and can't catch some corner cases. I 
-have a new version that should work much better and I can't reproduce 
-your test case with the new patch. I will send out a v4 soon.
+Low priority / nit picks for your consideration:
 
-Cheers,
-Longman
+- [Low] Concern about a signal race in cleanup() and handle_signal() in
+  tools/testing/selftests/bpf/test_xdp_features.sh.
+- [Low] Concern about a check-then-create race (TOCTOU) on namespace
+  ownership in setup() of…
 
-> Thanks,
-> Guopeng>  				WRITE_ONCE(cp->prs_err,
->>   					   is_partition_invalid(parent)
->>   					   ? PERR_INVPARENT : PERR_NOTPART);
->> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> index 7efd5e645767..874a8a161236 100755
->> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> @@ -292,9 +292,9 @@ TEST_MATRIX=(
->>   								       A1:P0|A2:P2|A3:P1 2-4|2-3"
->>   	"   C0-4    C1-4  C2-4     .    X2-4  X2-4:P2 X3-4:P1   .    0 A1:0-1|A2:2|A3:3-4 \
->>   								       A1:P0|A2:P2|A3:P1 2"
->> -	" C0-4:X2-4 C1-4:X2-4:P2 C2-4:X4:P1 \
->> +	" C0-4:X2-4 C1-4:X2-4:P1 C2-4:X4:P2 \
->>   				   .      .      X5      .      .    0 A1:0-4|A2:1-4|A3:2-4 \
->> -								       A1:P0|A2:P-2|A3:P-1 ."
->> +								       A1:P0|A2:P-1|A3:P-2 ."
->>   	" C0-4:X2-4 C1-4:X2-4:P2 C2-4:X4:P1 \
->>   				   .      .      .      X1      .    0 A1:0-1|A2:2-4|A3:2-4 \
->>   								       A1:P0|A2:P2|A3:P-1 2-4"
+--
 
+selftests/bpf: Track XDP test processes and isolate namespaces
+
+This commit reworks test_xdp_features.sh so each run gets its own DUT and
+tester namespaces. The DUT server is tracked as a shell job with a bounded
+readiness wait, and signals are handled during setup and cleanup. It also
+filters the tracepoint counters by this run's program and CPU map IDs, and
+makes the tester fail when detected and advertised features differ.
+
+> diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
+> index 0aa71c4455c05..5b68b20d94ac9 100755
+> --- a/tools/testing/selftests/bpf/test_xdp_features.sh
+> +++ b/tools/testing/selftests/bpf/test_xdp_features.sh
+> @@ -2,105 +2,179 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+>  readonly NS="ns1-$(mktemp -u XXXXXX)"
+> +readonly DUT_NS="dut-${NS}"
+
+[ ... ]
+
+>  setup() {
+>  	{
+> -		ip netns add ${NS}
+> -
+> -		ip link add v1 type veth peer name v0 netns ${NS}
+> -
+> -		ip link set v1 up
+> -		ip addr add $V1_IP4/24 dev v1
+> -		ip addr add $V1_IP6/64 nodad dev v1
+> +		[ ! -e "/run/netns/${NS}" ]
+> +		peer_created=true
+> +		ip netns add "${NS}"
+> +		[ ! -e "/run/netns/${DUT_NS}" ]
+> +		dut_created=true
+> +		ip netns add "${DUT_NS}"
+
+[Severity: Low]
+Can cleanup() end up deleting a namespace that belongs to a different run?
+
+The existence check and the ip netns add are not atomic. The ownership
+flag is also set before the create succeeds.
+
+Suppose a concurrent run creates the same name after the [ ! -e ... ]
+check but before ip netns add. The add fails and set -e exits. cleanup()
+then sees peer_created=true (or dut_created=true):
+
+cleanup() {
+    ...
+	if "$peer_created"; then
+		ip netns del "$NS" 2> /dev/null || true
+	fi
+}
+
+and deletes the other run's namespace.
+
+This needs two runs to get the same suffix from mktemp -u XXXXXX and then
+hit the window, so it is unlikely. Would setting peer_created and
+dut_created only after each ip netns add succeeds close it?
+
+The later patch in this series, "selftests/net: Move the XDP feature test
+to drivers/net/hw", deletes test_xdp_features.sh entirely. So this only
+affects the intermediate state of the series.
+
+[ ... ]
+
+>  cleanup() {
+> -	ip link del v1 2> /dev/null
+> -	ip netns del ${NS} 2> /dev/null
+> -	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
+> +	trap '' HUP INT QUIT ABRT TERM
+> +	trap - EXIT
+> +	terminate_dut_server
+> +	if "$dut_created"; then
+> +		ip netns del "$DUT_NS" 2> /dev/null || true
+> +	fi
+> +	if "$peer_created"; then
+> +		ip netns del "$NS" 2> /dev/null || true
+> +	fi
+>  }
+
+[Severity: Low]
+Is there a window where a second signal can cut cleanup() short?
+
+After the first HUP/INT/QUIT/ABRT/TERM, handle_signal() calls exit and
+cleanup() starts as the EXIT trap. If a second signal arrives before the
+trap '' HUP INT QUIT ABRT TERM line takes effect, handle_signal() still
+runs:
+
+handle_signal() {
+	if "$setup_in_progress"; then
+		pending_signal=$1
+	else
+		exit "$1"
+	fi
+}
+
+That exit would then run from inside the EXIT trap. In that case,
+terminate_dut_server() and both ip netns del calls would be skipped,
+leaving the DUT xdp_features process and both namespaces behind.
+
+The old script had no TERM or EXIT trap, so this is not worse than
+before. The later patch "selftests/net: Move the XDP feature test to
+drivers/net/hw" also removes this script.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3%40gmail.com
