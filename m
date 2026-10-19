@@ -1,86 +1,35 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA0B37A829
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 02:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B9E447811;
+	Mon, 19 Oct 2026 03:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792378501; cv=none; b=A6kKJZBCezamk2Vy9QGb0vk90x3dwfLSKNC0UmAzIM9hHgEhGNwp2hRLU/O8Y6zuVegkPqu5biCmfD00roIXomyzavv7lFdzDS11DosATSFV5rF7Z8w+QTLT0wpoIwiNS4Bl40JoOKBZSJYTiaiSH04ph0XWEZglWCblFiMZPho=
+	t=1792380009; cv=none; b=cyUHyAj24u0atLJ3MebJYgx5KDDeNz015AVfCd9rg0+htAfUSHa5sZopzKrSbyf2rIx+QJ9PhIjLN627PZtcQC/J2RlzbeKEkUSWzWyaLPUvfozQsj2knWCqRvv9CXwfOyzybOf1IUUEEg7aRa8E0dyoLZewVLpAo6nppJHc67Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792378501; c=relaxed/simple;
-	bh=XGREyND8rEv52sMD8zmNsmIDPDCH9HddupZaIP9wsLA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ljn0d6TycfsHQY38GyLmI9ehqoyboTPXiTjwzCeAP+ub9zEPgKcXfTuSvGXirPsCVw5ZOj8RHkEEPEuncbTaFpooYB3FHO8VyuUYFYCLeOy5Ha/Of3Ll1APs1oz8vdcVF5w1K4nZF0GEDElK1MSMq+LWUg3fINe8WFt17VlpqFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fyJ9saRi; arc=none smtp.client-ip=74.125.82.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792380009; c=relaxed/simple;
+	bh=9D/tTq4orHUatReRSC0s/yYSLUXAjs0NGHI8nfR6iU0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hPN4MSXc3vf0BZc9Gg+OiUDBeCBK4p3bYmH/bXAsUEoRYFWgMgLfRt4g7XQ8r92h3NImGDwyetxXBXY/H9fUkj304tJsl/TQ+P3ym16SJsBGpRvn+rZR/2mV9Nh5CYZkKMp4s9bkyYhUwCYoH5Qqtb1Grk324d+/GqFNarz83BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MXsJ9G4R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fyJ9saRi"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-14394530ec6so438533c88.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 19:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792378499; x=1792983299; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XGREyND8rEv52sMD8zmNsmIDPDCH9HddupZaIP9wsLA=;
-        b=fyJ9saRizt//RF3/0HkOaCcodnCYYeYYMp5bBj64t1q3VeUAg0Wxkv0f8nLqQmUVcZ
-         PMKSYVD2iI17oCK3tOTtDlZ78rjxzFqKXVEfCZvj5cXenELlpmGB+ir0Oz9r0vSkE5CS
-         Qgl6EDZjRxvD5m9ep/pF01h0NdyLZZG3nC90HFqXdYX9OOevgXGQMBw+iyCzg+/f6x7g
-         iWEANmZZHlqv3Bu3g52ut2pnsX8m5hn/4Gh4mJgb3aMEpCgAhfiZ3j4xeGhEH9Xwkg3w
-         3cJHUvWqoFyYekBo6CJ0/EJqJb3ZBPPscc09Wdc5MlSUOZnKXcTu5OL9hviQq0sZyoQc
-         UELw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792378499; x=1792983299;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XGREyND8rEv52sMD8zmNsmIDPDCH9HddupZaIP9wsLA=;
-        b=fvL5CTNdu/vLTENXCFmC11vyI+e4bZp7E1C2tY0iXF/yYQ9mT94GpdjKj4pu9tdAZP
-         pm90UvGM4wGNJVKy0tdc40beX9GGcwYvRsZELtNKDHB3nwU0hSJvi5Vuqj8NA3aNz+aG
-         tMt12A1hEAxX2pFpXPudmMbPPk+583YmcrjeLwEcstDUHbFR0GLTnXrs+z85DHEln8ld
-         kFLqQDe1PYL7FVcqEaoSFLppqV/KbX8ezH5WS5au803noKWscykmrmqDTOHxaXqLxYSX
-         AlbwkVbYarmW6ZKbpwK8SGUc6joDuRRXVhpeFctqhuUSC8GFF6/+J7WP0McFGt5RKzB0
-         3gIw==
-X-Forwarded-Encrypted: i=1; AKwUvBy1aKkMglf1KnA1cCyh5aWNtQoqc5h9EHH+9BNl0Vve5uOJyPpgHjWR+rnA3OVmlgGl8kfVvAK7p7d4hWizYX0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK6bTB0OAZOwd+rjoryFzfchZ0gz/UCcmKJmITJQmkRwerH8GDT
-	10aN806mjpwath16c/1jfNasEDPtnv0r3n2PVgnePuqI5InQ/OCb8Wor
-X-Gm-Gg: AYBFou3GqDcTtILSsijup7wx4upPslQacwDTH8fgqD6t8hIBThruXUcWrsmI1TfZ3kC
-	wVvGnFgUswXemubd4pL5OPJ6jD7o6I20vSxzL4mvoA4P80flzPYDNAxJA2YRRNKWfOYEE6XF4rR
-	VidDXls0sIeRSYERVxsCdsJaXSED0VnYGxbKkVchPNfigSBlcFAW2xhGZy+e9TqlRdALpwurDeM
-	sNeVxhMw1K+DBYKR0bjC2mRf/aWgzf82ZtrwyrW0uOK3kKlF/lwNmTf6+EaJstUqhJEhPUAsTG3
-	n99WHv9pEaLRoE9xJ7RvYIPQymbpcdkr1psGO1oY9hZP8gBAZP5Hvi8NMwGX1ek5pPsPTjp8Cul
-	avtBMfv9IpoB4d/T/VpbcTIHdTMiat94NpkI3Xr/hZ7ReknEC0cLXX1CSFLj+lLDdTIFIO5iBPR
-	aTGmY5n3OoMpxnWyv0UajGiihaPsnPmMWbuDIwe8Y0QVmkeGbL0iEQ8T2rcsCdc4FTdopWH2EWw
-	g==
-X-Received: by 2002:a05:701b:4586:10b0:18a:6c40:1a35 with SMTP id a92af1059eb24-18a6c401a5dmr2085059c88.20.1792378499080;
-        Sun, 18 Oct 2026 19:54:59 -0700 (PDT)
-Received: from ubuntu.. ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1830f213ba7sm28459793c88.0.2026.10.18.19.54.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 19:54:58 -0700 (PDT)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Run the enable_stats program with BPF_PROG_TEST_RUN
-Date: Mon, 19 Oct 2026 10:54:52 +0800
-Message-ID: <20261019025452.1470555-1-odys.yuan@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <DM6HAA1FCDCO.1V38UFFVZNV16@gmail.com>
-References: <20261009-selftests-bpf-enable-stats-inflight-v2-1-691ee379e511@gmail.com> <DM6HAA1FCDCO.1V38UFFVZNV16@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MXsJ9G4R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073791F000C4;
+	Mon, 19 Oct 2026 03:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792380008;
+	bh=CNKDQtmKSS3+n5QZzQjFbPVGBPOyM0GNuPUPPITwubQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=MXsJ9G4R+GN9olJb4nktvleN20dsr+1EWMDqzwK0NfiCiIyFVEEjjYnf2KPb9UIGb
+	 V9r491TixLohKL7eZ5bfw0zYzfY65/rqp4M3X7JcKbPkbw0XnGe6zdLatOGEwZCvuF
+	 yQc8XBJuSIRI8IobnRf2ygljDKMeZxAzWJbJyGWz7G/BJK/IePn+pPDRkJAB0oFr+w
+	 4AOoA9R18qfrSg4wMpmYihylGSn/eAaSjt6W76ELzpmcVpkeZSKpfFj2YTXYq3Kr95
+	 4DRvAr4idxrstYec55LysTNHAZ6B6v+dctC44I/HPkK3L9wUcS9L2sIro8u5KxHGmV
+	 l23cUB0sxBueQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F143938119C5;
+	Mon, 19 Oct 2026 03:20:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,22 +37,50 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Run the cpumask map insert tests
+ only for the test task
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179238000660.2381645.14989315546275364536.git-patchwork-notify@kernel.org>
+Date: Mon, 19 Oct 2026 03:20:06 +0000
+References: 
+ <20261009-selftests-bpf-cpumask-insert-filter-v1-1-3249218594d7@gmail.com>
+In-Reply-To: 
+ <20261009-selftests-bpf-cpumask-insert-filter-v1-1-3249218594d7@gmail.com>
+To: Qiliang Yuan <odys.yuan@gmail.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+ ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, shuah@kernel.org, void@manifault.com,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Fri, Oct 16, 2026 at 6:35 PM UTC, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> Did v1 fail anywhere?
-> It passed BPF CI on x86, arm64 and s390.
+Hello:
 
-No, I haven't seen v1 fail. v2 only addressed a concern from Sashiko
-about the resolution of the clock.
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
-> Run the prog 1000 times in a for loop and keep get_info as it was in v1.
-> Then no need for the comment, and check_run_cnt_valid compares
-> 1000 with 1000 instead of 1 with 1.
+On Fri, 09 Oct 2026 09:49:32 +0800 you wrote:
+> verify_success() attaches each cpumask test program to task_newtask,
+> forks a single child, and expects err to be 0 afterwards. Most programs
+> return right away for other tasks than the test one.
+> 
+> test_insert_leave and test_insert_remove_release don't, and insert a
+> cpumask into the single entry of __cpumask_map for every task created
+> in the system while they are attached. test_insert_leave leaves its
+> cpumask in the map, so a second task created, for instance by a test
+> running in parallel, fails to insert one and sets err to 3. Two tasks
+> created at the same time can do the same to test_insert_remove_release.
+> 
+> [...]
 
-Done in v3 [1].
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Run the cpumask map insert tests only for the test task
+    https://git.kernel.org/bpf/bpf-next/c/e2c978ad415c
 
-> Also pls don't respin in 12 hours only because a bot said something. Wait for people to reply.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Understood, sorry for the noise.
 
-[1] https://lore.kernel.org/r/20261019-selftests-bpf-enable-stats-inflight-v3-1-e7728f5b061a@gmail.com
