@@ -1,85 +1,114 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792433464;
-	b=0tubw5L4f2JWMYImtPCSKZ0tW07T0TcL4WyPAkFncV/PRT04eBJev4gE9xaohV0zOTgj
-	 LR84UfMEc/e3OGEwMhBe3bGMkp9xVEyq4RPu41ENm8M4g8lV+n3S2KPIWlV1/dc0Z+9Pj
-	 jZn0C7dNf29BF6Sf7d8E2yIPRu+V7KMFtfww6oMu+OJiUuO0D7k2iWi0fpRU1MfMw8Z+G
-	 +HmUhhEjdvbs4muWIItzodkDX9z77W9cSqVIDD8I9ofAbu1B3LjMAAGdF3fTkE29hypbX
-	 dyq/Z2ZPFu0B2z7wLQab5N/lXVpC9mIq7+E+lqAqNDqi6aw/ZN3id2hueaBCC20u4gQ==
+	t=1792437954;
+	b=ihJ2Ek3uqyqhnZTbCahkC/3kIwKGoxbIIxV4APCdgF4GqDxvyPV2zBHoOna4k42zOLVt
+	 1+2MLhTq4EHQcgiO+KQ41g/ujNI6ltNdi5TiJBSNJa/AKeC8IQ1Xfrj8xjBrtATYChLsI
+	 9t/QZPONA/1iJ7pf09Z+f0QvYnDhq8J5zSscLTbFBruSHSYr8mo55OCX21GCDLHAYKObF
+	 CyAGX4BothciIVO0Rt33Yn2GiW3oEQLrZOXbZ2CsKrC1B/4/uFR8N7lCwoSdeocxSDx5N
+	 CI5g/AtlnXn4PWhtQ9JPdmtGJSS4zGEo44p9MwXUYXOnYyOdTgYAFwZLzt+HGXIyBtA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792433464;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=oGAwyQN0n84ky1lWzEw+Vsol6hjFQW4kazC/RDKa14E=;
-	b=tIjvY8kY47/1a+Mk7IUFWYOKoYtx/Xv+iEDNmM/eS8mRIW1z+7jFv/y0F640td/4e4of
-	 slPyrIdWF//xpHBcnJjf3rzgV455OW7A+v9oN6UWBxcNPlnFcQEoP0i7NenQmvU+jnRqw
-	 IgBpA17Rf/SwEIIjQ0BIiIBCNTlt6nSMGzeSWnES61sIl9kbVoAfkwkam1Mw7O3JCSL7B
-	 i8uCKvWFEVwNViHwPy9Pk6ub02KBvT5tPX8Iv2R6j8FxPtvymhTdlT8He+0ruF9+JIXw9
-	 Y8XSujgC47QlMY7OL3KJzMAeYU8a5OioTrXYM6eWsYrv9FVEn5PVh8NBPY4FCzt2S2g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792437954;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=Gl+QuejblNFV3uEkIxOgOsS4jX0GlJs/ROUNx5zrPn4=;
+	b=ttZowOcelF717Wx3hs/CZ0AROv22Hmo2Bx3IQQi1FxN+M+hx2QWuT9W33gbmcR088ob/
+	 VwnltSMIk8+VOOtEYfezTOSmu6ti/6zcLadeg0zzKTvUdhKN1GbyuCPq1krQ/JFn37bVN
+	 buAUBgeL5+96aAsAj0LGMdDNH3VajC25xCmQiDyOQm6x3D0M+5ZhCz9AXqokKLUY4mR5w
+	 J84YvlNagEJ3oGF+DpTHukXPxZ/7+/qb7bjOQTZ7IeOYE8Fs95LFU/YRn1JOIcSJeEyEn
+	 Q8o2iTxJZkod16NDTn8DSVnpmXAyfSrmsDJyDhzAjSWASO3In6gPZAtJqMT2XNra47w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Rlvg8bcp;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gYnQr9al;
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB592606A319
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 18:11:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB592606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F1C606A327
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 19:25:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 63F1C606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Rlvg8bcp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792433463;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oGAwyQN0n84ky1lWzEw+Vsol6hjFQW4kazC/RDKa14E=;
-	b=Rlvg8bcpi8ckwQpxM8++EronQt2G5ocXgM0/6pzngmi6kwCra+Sgl03+JOIgDe+upyn2Fz
-	zMr58CqvRLVtf1reBNvmQNyRbpj+vT3Nml3SgM9owW2Fq2OUNF3sNyfKHm9bmm5aXRXewJ
-	kiW+LxW9P7M5yf6fDlakIR8Mkzwoj4c=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-592-PCCM2deGNaav_nKsyT2vLA-1; Mon,
- 19 Oct 2026 18:10:55 +0000
-X-MC-Unique: PCCM2deGNaav_nKsyT2vLA-1
-X-Mimecast-MFC-AGG-ID: PCCM2deGNaav_nKsyT2vLA_1792433453
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7E5D51955F40;
-	Mon, 19 Oct 2026 18:10:53 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.rmtusnh.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 85DE3418;
-	Mon, 19 Oct 2026 18:10:51 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>
-Cc: cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hui Peng <benquike@gmail.com>,
-	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v4 8/9] selftests/cgroup: Add tests for nohz_full housekeeping check
-Date: Mon, 19 Oct 2026 14:10:19 -0400
-Message-ID: <20261019181020.1069325-9-longman@redhat.com>
-In-Reply-To: <20261019181020.1069325-1-longman@redhat.com>
-References: <20261019181020.1069325-1-longman@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gYnQr9al
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ab4178ee33so1893836a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 12:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792437954; x=1793042754; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Gl+QuejblNFV3uEkIxOgOsS4jX0GlJs/ROUNx5zrPn4=;
+        b=gYnQr9alcw+J9ojP/SdeDo47GsqS10jIYNdvilfzW9uVyvOFI724RKT1A9EsWtQ3bQ
+         OgXWmiBiwDCiu/gWReT46D/Rk9VHkHgUrKHIxf0YStCBAljm0BIHRVvWPUYzKX908eUt
+         iCuSA6FUQ3dcvqmycwRt4gjLfOklT6OAGxuKl5xqbY72BqpfGdxLXGUQIuf+OJ5g7fu5
+         g/W82eNWWUviKy78jCy3BJRjKeND6NWnWoTU9lAqh7g7bOgPK8d9buk+6bjXfb3EBJwv
+         ck0cedd6WPJoOke0xDGXsTBf/906L8PkyCNeMlUttfM6CF3DCo/JPd8cengfq/sPfTmR
+         TcnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792437954; x=1793042754;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Gl+QuejblNFV3uEkIxOgOsS4jX0GlJs/ROUNx5zrPn4=;
+        b=pF1MbNfiYMjPZkZiT5Ozx8dwDWzr/B2cqg4RkOeB/R2whbBI2FLD7x/paPcwaQ6SYO
+         bAxjpF1ENofebKMZJ08jccs1oUlefWQrFKkUr97G7AdmMDYqHABWuYp1RqxrvNLKTJlO
+         T917Wn0yxz0M5/j2yyDc7jWOG9fVEjdzF7UDoU0I/+fqHcU0xQiV0XyRrc3PifnbmGjR
+         SZydtGYJTCIyWmYdq+AZIKdlxI+tpzLLiPfbmK4xaYRLYZ5mIcjGrbw+UzpaOKCh+nNK
+         lOWHd9GkdKzMmeovWe8y308Tql4+OWq54iKCqh5mz7KYi1aslYydbNUQZSVaDh6CGo6r
+         INxg==
+X-Forwarded-Encrypted: i=1; AKwUvByNP9leQEHqXKQvWwhn6UPAj+nA7UcLLTCBR6L4qlj/0uZLMDWaUZ7HQwr6Q5Kkl8gWEtxUSpyj29CIYn7QU0Q=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKcxLD4kJn+YpuvpqvOOG8FmPRuIqVN4HG8Lqsro3mznt1Jk2Oq
+	Z7jko1AG2bQNnsdOuaJ4svo+wRqEAOWNbVdUzI/pSoR8oxMr7upZf+eQ
+X-Gm-Gg: AYBFou3UQkXGUWz1sCoDgANvuaAI8uCr9iDw5OYra6pHPoLaca52UARRMiHfIBaD3N9
+	LSSqVRh/lrPzbc33RZLZ++nt1aE7avOD1mUnRoMJnq/t2we3HMJmjlVBqESDD9A72xaVx1m9MYV
+	6oLSEwTS+AekxaRqQDq7Pe8Ng5oD9Kmdq7bJ4DyygnBDjwbVHIJkwRwqbQyyT8FyZjIbKVFfp34
+	jFaT+ytMBRnO0M5YlH41A0oB5XOp3O+ydH9fNd0CBkMCDLq+Fo97MCXOCt+K7RFVo37NoDMfW11
+	WR5Td8KQuPlko0jlRZVdgLHmEpGULHy/Jf/09i3ptnn2RrgzABW4wcgvHHvtY/iIhaPQwgq1Thr
+	5S4Q0x0Q7HGcPd2anAnOLDp7kBcSCAzXOGM3jKJrWxLk0asQMYlG/76qPrkTpvM2gjRKgws0j+C
+	w+agREQ8QSaw1Gltjt/dMI8pCvD6Q4d+a/NBdpMWy0WZiid5tn+2M3KSKSGMaRMGUOUCkJXlOfY
+	Tpm+RBxkND4E48dIr9sch8ryN4KZ556RhgwZqXFVYN4YtfIDPkmAy6B9MUodJfa97qdP3NwKwRa
+	VeI=
+X-Received: by 2002:a17:90b:280e:b0:3ab:be66:ddbf with SMTP id 98e67ed59e1d1-3acef58d853mr6802869a91.54.1792437953584;
+        Mon, 19 Oct 2026 12:25:53 -0700 (PDT)
+Received: from localhost ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acd05c9255sm8977238a91.2.2026.10.19.12.25.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Oct 2026 12:25:52 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 19 Oct 2026 19:25:50 +0000
+Message-Id: <DM9282PWYQD9.21LDVIJ8824AL@gmail.com>
+Cc: "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S . Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
+ <sdf@fomichev.me>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
+ Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Kuniyuki Iwashima" <kuniyu@google.com>, "Hangbin Liu"
+ <liuhangbin@gmail.com>, "Martin Karsten" <mkarsten@uwaterloo.ca>, "Masashi
+ Honma" <masashi.honma@gmail.com>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add syscall common attrs support
+ for link_create
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20261019153628.15912-2-leon.hwang@linux.dev>
+References: <20261019153628.15912-1-leon.hwang@linux.dev> <20261019153628.15912-2-leon.hwang@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,84 +118,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-When a boot time nohz_full CPUs are present and they cover CPUs 0-7,
-some of the test cases may fail.  So the test run will be skipped with
-a warning message in this case. On the other hand, if the boot time
-nohz_full CPUs cover all the CPUs except 0-7, a special set of nohz_full
-specific housekeeping check related tests could be run to make sure the
-housekeeping check are behaving properly. The test_cpuset_prs.sh test
-script is now updated to do exactly that.
+On Mon, Oct 19, 2026 at 08:36 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+> +	ret = bpf_log_attr_report_size(&attr_log, 0);
+> +	if (ret)
+> +		goto put_prog;
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- .../selftests/cgroup/test_cpuset_prs.sh       | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
+can we drop bpf_log_attr_report_size() ?
+Nothing is logged when the attach succeeds, so there is no size to
+report, and libbpf zeroes attr_common, so log_true_size reads 0 anyway.
+Finalizing only when ret < 0 already keeps -EFAULT away from a live link.
+Then no need for the 2nd write, the log.c refactoring and the put_prog
+label.
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index cd179854ecd5..7639e9f11cf9 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -84,6 +84,31 @@ echo member > test/cpuset.cpus.partition
- echo "" > test/cpuset.cpus
- [[ $RESULT -eq 0 ]] && skip_test "Child cgroups are using cpuset!"
- 
-+#
-+# If nohz_full CPUs have been reserved at boot time, they should not include
-+# CPUs 0-7 as that may fail some of the test cases. On the other hand if the
-+# set of nohz_full CPUs includes all the CPUs except 0-7, we can run a special
-+# set of housekeeping CPUs exhaustion tests to see if the cpuset code will
-+# reject them.
-+#
-+FIRST_NOHZ_FULL_CPU=
-+LAST_NOHZ_FULL_CPU=
-+RUN_NOHZ_FULL_TESTS=
-+NOHZ_FULL_CPUS=
-+[[ -f /sys/devices/system/cpu/nohz_full ]] &&
-+	NOHZ_FULL_CPUS=$(cat /sys/devices/system/cpu/nohz_full)
-+LAST_PRESENT_CPU=$(cat /sys/devices/system/cpu/present | sed -e "s/.*[,-]//")
-+[[ -n "$NOHZ_FULL_CPUS" ]] && {
-+	FIRST_NOHZ_FULL_CPU=$(echo $NOHZ_FULL_CPUS | sed -e "s/[,-].*//")
-+	LAST_NOHZ_FULL_CPU=$(echo $NOHZ_FULL_CPUS | sed -e "s/.*[,-]//")
-+	echo "Boot nohz_full CPUs: $NOHZ_FULL_CPUS"
-+}
-+[[ -n "$FIRST_NOHZ_FULL_CPU" && "$FIRST_NOHZ_FULL_CPU" -le 7 ]] &&
-+	skip_test "Boot NOHZ_FULL CPUs overlap CPUs to be tested!"
+Something like this (compile tested only):
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 849bc91..61d100e 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5856,8 +5856,11 @@ err_put:
+ }
+
+ #define BPF_LINK_CREATE_LAST_FIELD link_create.uprobe_multi.path_fd
+-static int link_create(union bpf_attr *attr, bpfptr_t uattr)
++static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
++		       bpfptr_t uattr_common, u32 size_common)
+ {
++	struct bpf_verifier_log *log;
++	struct bpf_log_attr attr_log;
+ 	struct bpf_prog *prog;
+ 	int ret;
+
+@@ -5867,14 +5870,24 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+ 	if (attr->link_create.attach_type == BPF_STRUCT_OPS)
+ 		return bpf_struct_ops_link_create(attr);
+
++	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, size_common);
++	if (IS_ERR(log))
++		return PTR_ERR(log);
 +
-+[[ -n "$FIRST_NOHZ_FULL_CPU" && "$FIRST_NOHZ_FULL_CPU" = 8 &&
-+   "$LAST_NOHZ_FULL_CPU" = $LAST_PRESENT_CPU ]] && RUN_NOHZ_FULL_TESTS=1
-+
- #
- # If isolated CPUs have been reserved at boot time (as shown in
- # /sys/devices/system/cpu/isolated), these isolated CPUs should be outside of
-@@ -500,6 +525,17 @@ ISOLCPUS_TEST_MATRIX=(
- 	" CX1-2,I:X1,I:P1 . .      .     X1,2,I  .      .      .     0 A1:1-2,I|XA1:1-2,I A1:P-1 ."
- )
- 
-+# Test matrix to be run when boot time nohz_full CPUs cover all CPUs except CPUs 0-7
-+NOHZ_FULL_TEST_MATRIX=(
-+	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
-+	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
-+	# Using all the nohz_full HK CPUs 0-7 in isolated partition is not allowed
-+	" C0-7       .      .      .      P2     .      .      .     0 A1:0-7 A1:P-2 ."
-+	" C2-7:P2    .      .      .     C0-4    .      .      .     0 A1:0-4 A1:P2 0-4"
-+	" C1-7:P2 C5-7:P2   .      .       .     .      .    C0:P2   0 A1:1-4|A2:5-7|B1:0
-+								       A1:P2|A2:P2|B1:P-2 1-7"
-+)
-+
- #
- # Cpuset controller remote partition test matrix.
- #
-@@ -1365,6 +1401,7 @@ trap cleanup 0 2 3 6
- run_state_test TEST_MATRIX
- run_remote_state_test REMOTE_TEST_MATRIX
- TEST_ISOLCPUS=1 run_state_test ISOLCPUS_TEST_MATRIX
-+[[ -n "$RUN_NOHZ_FULL_TESTS" ]] && run_state_test NOHZ_FULL_TEST_MATRIX
- test_isolated
- test_boot_isolated
- test_inotify
--- 
-2.55.0
+ 	prog = bpf_prog_get(attr->link_create.prog_fd);
+-	if (IS_ERR(prog))
+-		return PTR_ERR(prog);
++	if (IS_ERR(prog)) {
++		bpf_log(log, "Invalid prog_fd.\n");
++		ret = PTR_ERR(prog);
++		prog = NULL;
++		goto out;
++	}
 
+ 	ret = bpf_prog_attach_check_attach_type(prog,
+ 						attr->link_create.attach_type);
+-	if (ret)
++	if (ret) {
++		bpf_log(log, "Invalid attach_type.\n");
+ 		goto out;
++	}
+
+ 	switch (prog->type) {
+ 	case BPF_PROG_TYPE_CGROUP_SKB:
+@@ -5953,12 +5966,19 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+ 			ret = bpf_uprobe_multi_link_attach(attr, prog);
+ 		break;
+ 	default:
++		bpf_log(log, "Invalid prog type.\n");
+ 		ret = -EINVAL;
+ 	}
+
+ out:
+-	if (ret < 0)
+-		bpf_prog_put(prog);
++	if (ret < 0) {
++		int err = bpf_log_attr_finalize(&attr_log, log);
++
++		ret = err ? err : ret;
++		if (prog)
++			bpf_prog_put(prog);
++	}
++	kfree(log);
+ 	return ret;
+ }
+
+@@ -6530,7 +6550,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
+ 		err = bpf_map_do_batch(&attr, uattr.user, BPF_MAP_DELETE_BATCH);
+ 		break;
+ 	case BPF_LINK_CREATE:
+-		err = link_create(&attr, uattr);
++		err = link_create(&attr, uattr, &attr_common, uattr_common, size_common);
+ 		break;
+ 	case BPF_LINK_UPDATE:
+ 		err = link_update(&attr);
+
+pw-bot: cr
