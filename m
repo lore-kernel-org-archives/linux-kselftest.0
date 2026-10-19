@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792421714;
-	b=QwGDAnqzVS7DDPn9nMZRiy4BkJZZj0cwb/xA5PKsnLBE9/G5vJ/1z0tvLUmchzO6/CqC
-	 YHpAUl9ma54OnAGwucx7xZSFjPQEc4ys0lFvf2Ho5v3RIM6sUDpruIYgXvA/h2z9dQ5v7
-	 8lpK4ILnkeFxb3uIDcv5V/nkT6VAtRgY2xlDMvkrhpyaQn62M1Yau/wBrxle4An0mXUu2
-	 pfxjfJIBP1ePQvoS8Dtd3Zj/WUMQuaf+AoQkfGXodHKbjUybfsI4BgybI1itg7xHztyHk
-	 fbClv+cTOwsTEMrAiThAiyUoT3hRWEvwQmS2nxrm0loaXyt9Q/+GoSI6FgR841d7ZJQ==
+	t=1792421706;
+	b=ei+L/tE3NSbTTcq1fTGCitQOJVuEHL/6P5sBV7nZdlIUV7HxrSFQqTCvM0Fl1aZbtP61
+	 kNAD8u4HF9xJO+3J3UHhb1/Vnu7E30ZyrWVZW9Gg0P3VA89kwSuDanZMxAIFhoQLIc4rM
+	 9NpV6WmV/6Vz9oAMo7AES3piS4HJR/SRjemckjJhHFO8DJPmeXlbvE7DgNFgY09QE3oau
+	 3OjBGOxqDKQtOxcyWRc1EI6pQr19XFpSXNv6ykygS7dVV1aUurabFZasVNfm2w2wVzVt+
+	 TeoMHDNsYYpo/w0fL8fVuZKz588IOCwhuBuHUyUEEVlHpGvIBJCm8d8HHEQJ45ad2wQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792421714;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792421706;
 	h=Received:Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=sHbDMT8ENqvz9QG0gvkdlOdXMu+42GPiSj0ilWUBxPM=;
-	b=NpTQrVH2H6Spl/EwVTbS2H642PP4IAq0OWPoYbEnMizE27TWI2Q5ZxKkEDzAY4bMZF7/
-	 pFbFKujeU6PaFRRLFc0F0/e4/QOLLclWHISqb2VVTNDxS8ROHk70MkAFqZ7K5DTt5pI9y
-	 C+P1443gCPkNNK45gdbny/aKCPHOlXW2Ycsl4yKKl8z5IQcIpj0quEjxRYeE06f+6GRV4
-	 ak61279uh94Yl5IzZgBNznB7c9EM9tNAhG3DyrcoxSnWUG6Z3/Kt+SuEvyw/Q/JwrhBQ8
-	 U8pNbGsc9xyu2W5dM2mL3HuHskqSTkhQMzOXhBPf6vbrlugI4VhUXp5q+5Ht1+18qHA==
+	bh=mZLzRwRYboY/RmAU+vEf+KfhFzbpntUfPL9/1QMLPg4=;
+	b=GCgR7D6d9SfRaYV226T9vC8CNfHsflX5NSht0VUFHsOhrhQ+SkEXvDKrqRrgP6gqky2K
+	 xZ5VXgVjp7GljaUJ5lMPtReA6bjTwpCgHc1UOEOaIswy+DaBV+yHAl9MqirNZa26zTs4u
+	 PUV5cOauu4ELT9nT9xpMFdbYQbD86qou91BUoZKVU8uudgQJbx5BMUt062AzwENQhU9Er
+	 SZk12hg4aUKF5DQUwuLW62Dzvo3j7mcjwQscScTRCLh8A/63RaCl1WcBgKD0RK4uNN8qz
+	 2mF9QfBDlQd9HACVpostfQBImSKzBG1yoC9qWls7XYA/L1j40nWbe0dyg+tTPepun2w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VxWpwoA3;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kHHofU0r;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
 Received: from aws-us-west-2-korg-listserv-1.web.codeaurora.org (ip-10-30-226-211.us-west-2.compute.internal [10.30.226.211])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293F8606EFF3;
-	Mon, 19 Oct 2026 14:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B007B606EFE6;
+	Mon, 19 Oct 2026 14:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VxWpwoA3
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kHHofU0r
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A4E6513F3;
-	Mon, 19 Oct 2026 14:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABBE234964;
+	Mon, 19 Oct 2026 14:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792421714; cv=none; b=hmttmFiDlnJ+dbtNegyYoTJlWQeX4e8PWfjb3xikXu0s1eT44fK53GPU6ZlP35n9WIVDPqlEfUdsGtp6nnTVZgO2TPfXKyBMBuunuVbn5f4YJWCpAXKtXr347amxjaDxNca5CaEv9vT03tBfSoveGZkRc0UVDGbem6FrN7MjIso=
+	t=1792421706; cv=none; b=TCnLJuB3FaGM41lcTEq2aWDzCDHTl8TD8XX++TZc52MwHT7PhCag2sSFh7cx5nxv3yDN1QVDBLoX1jCiik56UfdtLt9awUXTXFPF1hkdVLFxV35fLn8kPAwnWLZk4v9/aNJOunDo6D7ilxchKBGqduKvrHdPd8ut3HOUNtnA5RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792421714; c=relaxed/simple;
-	bh=nIlMfvMaBe0ZMQwkcMYX6GTwHnQbjtaTSb4Mg+QQCFM=;
+	s=arc-20240116; t=1792421706; c=relaxed/simple;
+	bh=rzZ8aVYHTbvvvHXdIbMH7BBTWk45dgc5mYEFN5NQOlM=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Jcikb1Hzx/9f99IX7wRq116S/isIbQfL1qo7iEtF5VgtblxJ48+FHC/BuZCNzeKejqvmW3CanbXcb0ik1P38Y1TKZYIRpqs22KO3DzXQsSdTGPibLe6LbSpCIV3L0ZOyIwqAmJUk0HoY8+sNzZiBDcVzUNzzl4rfnCU1BqJC2XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VxWpwoA3; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE2A91F000C6;
-	Mon, 19 Oct 2026 14:55:10 +0000 (UTC)
+	 Content-Type:MIME-Version; b=m1fZLah0vPULlyLzU9lUVjC99sltZZjXQKpqaUIsfXtjFeC6ku308uJGdFLlGcLRvPmKjeVI0fcNdl0uzS6XYVvAxAMFSozDnQlPmTtfSgU6dD9Jnpethn14G5delDQT1Y45vYkgFtS1I4y5AXEJFsqe8X9wWrEIcL3dS3zGVu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kHHofU0r; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 526C01F000C4;
+	Mon, 19 Oct 2026 14:55:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792421712;
-	bh=sHbDMT8ENqvz9QG0gvkdlOdXMu+42GPiSj0ilWUBxPM=;
+	s=k20260515; t=1792421705;
+	bh=mZLzRwRYboY/RmAU+vEf+KfhFzbpntUfPL9/1QMLPg4=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VxWpwoA3SbJ4icQi+dVMsoA6vtJc3SyHGAxdIrWHixM+jK0AqTICTayUAQBiM5YK+
-	 iPW3i93adtXrPlu5BIJ15z3YYcfwE3DXXSSk3tEjNEZ7JMOQHTsBvMO7CKP9/Xcgt/
-	 6py5EGRUjgEt+8BTrMBt3/ppOalh0o86KiPCpbyCZTXB03Pbic5fdMXGVi5b9KN7GS
-	 rygA9v55/F4Kv5G6jj4ZRXqS1OwcMkdGt0Z+xQdrN1eeRlgAQC6KHyv12d1EhIqLb1
-	 XjAg3wkkPFgOjrgSWK2Rz2YwoSMuJi9IOmRIZkZN7ZxSpSuM1mc1U+dEP+96gWAdGv
-	 F290DQui7g2ow==
-Subject:
- Re: [PATCH net-next v6 4/5] selftests/net: Add a shared BPF skeleton rule
+	b=kHHofU0rYuCnhF24LmEHw4SnsG9PEmLBo2DwGVUs58j86P/0FdZ6XWeHDZVLvTErD
+	 x+nBzd9woAXRC3l15OeMB2SlHqkfUknr7620h8Qw4aOs5iK5MiNwO3y4ZITB91sqbf
+	 KFSL4LR8q+FXg/ttYU8yCEw4UF3zy4j1ho4b//W/OrxVJzexrr/Gl14YZI46TTMFYX
+	 5F/oYIRGQcdconbxeDYTqbmyc9ZBEUKlERt8NvM5jRfpq83cMG1JeKy6YVKoLKVbGm
+	 YD3+tckFU23CE+YxRzCrFnAFxDC8FNpacA+kHqx1WGrt7z22o7RoX6nmDYc1b6v3ip
+	 VFfur1KqMae5w==
+Subject: Re: [PATCH net-next v6 1/5] selftests/bpf: Fix XDP feature test setup
+ and teardown
 From: netdev-bot+sashiko@kernel.org
 To: bochaolucky@gmail.com
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
@@ -65,11 +65,11 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
  linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
  alexis.lothore@bootlin.com, lorenzo@kernel.org, tiozhang@didiglobal.com,
  willemdebruijn.kernel@gmail.com, petrm@nvidia.com
-Date: Mon, 19 Oct 2026 14:55:10 +0000
-Message-ID: <179242171055.3135.2655547147698612346@kernel.org>
-In-Reply-To: <20261018-xdp-v5-send-20261008-v6-4-7336e1282ca3@gmail.com>
-References: <20261018-xdp-v5-send-20261008-v6-4-7336e1282ca3@gmail.com>
-X-sashiko-severity: Medium
+Date: Mon, 19 Oct 2026 14:55:02 +0000
+Message-ID: <179242170282.3135.3655485232785325877@kernel.org>
+In-Reply-To: <20261018-xdp-v5-send-20261008-v6-1-7336e1282ca3@gmail.com>
+References: <20261018-xdp-v5-send-20261008-v6-1-7336e1282ca3@gmail.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -82,141 +82,200 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+- [Low] The `xdp_attached` guard only records that an attach succeeded at
+  some point.
 
-- [Medium] Under LLVM=1, the host bpftool bootstrap rule in
-  tools/testing/selftests/net/bpf.mk probes one compiler and builds with…
-- [Low] The patch makes two changes outside its subject.
+Pre-existing issues:
+- [Medium] test_xdp_features.sh uses only the tester's exit status, and
+  tester_run() returns 0 whether or not the capability is DETECTED or…
+- [Low] In tester_run(), the settimeo() and connect() failure paths
+  return directly without close(sockfd), which leaks the control socket.
+- [Low] recv_msg() accepts payloads shorter than val_size and copies only
+  the bytes it received.
 
 --
 
-selftests/net: Add a shared BPF skeleton rule
+selftests/bpf: Fix XDP feature test setup and teardown
 
-This commit adds a shared %.skel.h rule to selftests/net/bpf.mk. When
-BPFTOOL is not supplied, it also builds a host bootstrap bpftool. The
-BPF compiler now takes KHDR_INCLUDES instead of the source-tree
-usr/include, and the libbpf sub-make gets an absolute srctree.
+This commit fixes several setup and teardown problems in the xdp_features
+selftest tool. It initializes the DUT state and socket address lengths,
+hands the echo socket back to the caller, and stops and joins the echo
+thread only if it was started. It also samples the tester counters before
+teardown, and it detaches XDP programs only after a successful attach.
 
-> diff --git a/tools/testing/selftests/net/bpf.mk b/tools/testing/selftests/net/bpf.mk
-> index a4f6755dd8941..016e32960280a 100644
-> --- a/tools/testing/selftests/net/bpf.mk
-> +++ b/tools/testing/selftests/net/bpf.mk
-> @@ -6,8 +6,8 @@ BUILD_DIR := $(SCRATCH_DIR)/build
->  BPFDIR := $(top_srcdir)/tools/lib/bpf
->  APIDIR := $(top_srcdir)/tools/include/uapi
+> diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/bpf/xdp_features.c
+> index a27ed663967c4..3076fdda61fa4 100644
+> --- a/tools/testing/selftests/bpf/xdp_features.c
+> +++ b/tools/testing/selftests/bpf/xdp_features.c
+
+[ ... ]
+
+> @@ -341,10 +343,14 @@ static int recv_msg(int sockfd, void *buf, size_t bufsize, void *val,
+>  		    size_t val_size)
+>  {
+>  	struct tlv_hdr *tlv = (struct tlv_hdr *)buf;
+> -	size_t len;
+> +	ssize_t len;
 >  
-> +CCINCLUDE += $(KHDR_INCLUDES)
->  CCINCLUDE += -I$(selfdir)/bpf
-> -CCINCLUDE += -I$(top_srcdir)/usr/include/
->  CCINCLUDE += -I$(SCRATCH_DIR)/include
+>  	len = recv(sockfd, buf, bufsize, 0);
+> -	if (len != ntohs(tlv->len) || len < sizeof(*tlv))
+> +	if (len < 0)
+> +		return -errno;
+> +	if (!len)
+> +		return -ECONNRESET;
+> +	if (len < sizeof(*tlv) || len != ntohs(tlv->len))
+>  		return -EINVAL;
 >  
->  BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
-> @@ -46,8 +46,37 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
->  	   $(APIDIR)/linux/bpf.h					       \
->  	   | $(BUILD_DIR)/libbpf
->  	$(call msg,MAKE,,$@)
-> -	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
-> +	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) srctree=$(abspath $(top_srcdir)) \
-> +		    OUTPUT=$(BUILD_DIR)/libbpf/ \
->  		    EXTRA_CFLAGS='-g -O0'				       \
->  		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
+>  	if (val) {
 
 [Severity: Low]
-This isn't a bug, but the patch also changes two existing parts of
-bpf.mk. CCINCLUDE now uses $(KHDR_INCLUDES) in place of
--I$(top_srcdir)/usr/include/, and the libbpf sub-make now gets an
-absolute srctree.
+This isn't a bug introduced by this patch, but recv_msg() only rejects
+payloads that are larger than val_size:
 
-Both changes fix behaviour that dates back to commit 3f584c211d8c
-("selftests: net: extract BPF building logic from the Makefile").
+	if (val) {
+		len -= sizeof(*tlv);
+		if (len > val_size)
+			return -ENOMEM;
 
-The commit message does describe both changes. Would it be worth moving
-them into their own patch, or adding a Fixes: tag, so they can be picked
-up separately from the new skeleton rule?
+		memcpy(val, tlv->data, len);
+	}
+
+Can a short payload leave part of the destination unwritten?
+
+In tester_run(), stats and advertised_feature are both declared without
+an initial value. Leftover stack bytes could then affect the feature
+result that gets printed.
+
+A later patch in this series changes the check to:
+
+	if (len != val_size)
+		return -ENOMEM;
+
+That rejects short payloads before the memcpy().
+
+[ ... ]
+
+> @@ -403,9 +412,12 @@ static int dut_run(struct xdp_features *skel)
+>  			if (err)
+>  				goto out;
+>  
+> +			xdp_attached = true;
+> +
+>  			err = dut_run_echo_thread(&dut_thread, &echo_sockfd);
+
+[ ... ]
+
+> @@ -422,6 +434,7 @@ static int dut_run(struct xdp_features *skel)
+>  
+>  			exiting = true;
+>  			bpf_xdp_detach(env.ifindex, flags, NULL);
+> +			xdp_attached = false;
+
+[Severity: Low]
+The xdp_attached flag records that bpf_xdp_attach() succeeded at some
+point. However, bpf_xdp_detach(env.ifindex, flags, NULL) removes
+whatever program is attached to the device at the time it runs.
+
+If another privileged user replaces the program between the attach and
+the detach, would this still remove that other program?
+
+The out: label in tester_run() uses the same pattern:
+
+	if (xdp_attached)
+		bpf_xdp_detach(env.ifindex, flags, NULL);
+
+A later patch in this series appears to fix this. The DUT attaches with
+bpf_link_create() and cleans up with close(link_fd). The tester no
+longer attaches an XDP program at all, because it uses AF_PACKET.
 
 >  
->  EXTRA_CLEAN += $(SCRATCH_DIR)
-> +
-> +# Build a host bpftool only when a test needs a generated skeleton.
-> +HOSTCC ?= gcc
-> +HOSTLD ?= ld
-> +BPFTOOL_BUILD := $(BUILD_DIR)/bpftool
+>  			tlv->type = htons(CMD_ACK);
+>  			tlv->len = htons(sizeof(*tlv));
 
 [ ... ]
 
-> +$(BPFTOOL_BUILD)/bootstrap/bpftool: \
-> +	$(wildcard $(top_srcdir)/tools/bpf/bpftool/*.[ch]) \
-> +	$(top_srcdir)/tools/bpf/bpftool/Makefile \
-> +	$(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)
-> +	$(call msg,MAKE,,$@)
-> +	$(Q)mkdir -p $(BPFTOOL_BUILD)
-> +	$(Q)$(MAKE) $(submake_extras) -C $(top_srcdir)/tools/bpf/bpftool \
-> +		OUTPUT=$(BPFTOOL_BUILD)/ srctree=$(abspath $(top_srcdir)) \
-> +		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" bootstrap
+> @@ -578,7 +596,7 @@ static int tester_run(struct xdp_features *skel)
+>  	struct bpf_program *prog;
+>  	unsigned int stats;
+>  	int i, err, sockfd;
+> -	bool detected_cap;
+> +	bool detected_cap, xdp_attached = false;
+>  
+>  	sockfd = socket(AF_INET6, SOCK_STREAM, 0);
+>  	if (sockfd < 0) {
+
+[Severity: Low]
+This is a pre-existing issue, but the settimeo() and connect() failure
+paths just below this return without closing sockfd:
+
+	if (settimeo(sockfd, 1000) < 0)
+		return -EINVAL;
+
+	err = connect(sockfd, (struct sockaddr *)&env.dut_ctrl_addr,
+		      sizeof(env.dut_ctrl_addr));
+	if (err) {
+		...
+		return -errno;
+	}
+
+Does this leak the control socket? Now that xdp_attached starts out
+false, could these paths go to the out: label instead?
+
+A later patch in this series changes them to "err = -errno; goto out;".
+
+[ ... ]
+
+> @@ -636,19 +655,21 @@ static int tester_run(struct xdp_features *skel)
+>  	if (err)
+>  		goto out;
+>  
+> +	/* Sample before teardown, which can produce additional echo traffic. */
+> +	detected_cap = tester_collect_detected_cap(skel, ntohl(stats));
+> +
+>  	/* stop the test */
+
+[ ... ]
+
+>  	fprintf(stdout, "Feature %s: [%s][%s]\n", get_xdp_feature_str(),
+>  		detected_cap ? GREEN("DETECTED") : RED("NOT DETECTED"),
+>  		env.feature.drv_feature & advertised_feature ? GREEN("ADVERTISED")
+>  							     : RED("NOT ADVERTISED"));
+>  out:
+> -	bpf_xdp_detach(env.ifindex, flags, NULL);
+> +	if (xdp_attached)
+> +		bpf_xdp_detach(env.ifindex, flags, NULL);
+>  	close(sockfd);
+>  	return err < 0 ? err : 0;
+>  }
 
 [Severity: Medium]
-Can this bootstrap build fail with LLVM=1?
+This isn't a bug introduced by this patch, but detected_cap and
+advertised_feature are only printed here. tester_run() returns 0
+whatever their values are.
 
-bpf.mk sets HOSTCC to gcc and HOSTLD to ld whatever LLVM=, LLVM_PREFIX
-and LLVM_SUFFIX are, and it only hands them to the bpftool sub-make as
-CC and LD. HOSTCC itself is never passed or exported, so inside the
-sub-make tools/scripts/Makefile.include sets it from LLVM:
+test_xdp_features.sh checks only the exit status of the tester:
 
-  $(call allow-override,HOSTCC,$(LLVM_PREFIX)clang$(LLVM_SUFFIX))
-  $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
-  $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
+	ip netns exec ${NS} ./xdp_features -t -f XDP_PASS \
+					   -D $V1_IP6 -C $V1_IP6 \
+					   -T $V0_IP6 v0
+	[ $? -ne 0 ] && exit
 
-bpftool then compiles the bootstrap objects and the bootstrap libbpf with
-that HOSTCC, which is clang:
+Could a broken or unadvertised XDP action still pass the selftest?
 
-tools/bpf/bpftool/Makefile:
-	$(QUIET_CC)$(HOSTCC) $(HOST_CFLAGS) -c -MMD $< -o $@
-	...
-		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
-		CFLAGS="$(LIBBPF_BOOTSTRAP_CFLAGS)" EXTRA_CFLAGS= $@ install_headers
+A later patch in this series ("selftests/bpf: Track XDP test processes
+and isolate namespaces") adds:
 
-The CC_NO_CLANG probe in Makefile.include, however, runs against $(CC).
-That is the gcc forced on the command line, so the probe adds the
-GCC-only warning:
+	if (!err && detected_cap != !!(env.feature.drv_feature & advertised_feature))
+		err = -EINVAL;
 
-  ifeq ($(CC_NO_CLANG), 1)
-  EXTRA_WARNINGS += -Wstrict-aliasing=3
-
-bpftool copies EXTRA_WARNINGS into CFLAGS, HOST_CFLAGS and
-LIBBPF_BOOTSTRAP_CFLAGS, and tools/lib/bpf/Makefile adds -Werror. Clang
-would then stop with:
-
-  error: unknown warning option '-Wstrict-aliasing=3' [-Werror,-Wunknown-warning-option]
-
-Commit 093b75ef5995 ("tools: Suppress request for warning options not
-existent in clang") added the CC_NO_CLANG guard to avoid exactly this
-error.
-
-On a clang-only host the result is the same, because a missing gcc
-leaves CC_NO_CLANG at 1. The libelf-zstd feature probe would also run
-with gcc, not with the clang that does the linking.
-
-The following command should hit this once "selftests/net: Move the XDP
-feature test to drivers/net/hw" makes xdp_features depend on
-xdp_features.skel.h:
-
-  make LLVM=1 -C tools/testing/selftests TARGETS=drivers/net/hw
-
-selftests/bpf and selftests/hid include tools/scripts/Makefile.include,
-so their HOSTCC follows LLVM=. Could bpf.mk set its HOSTCC/HOSTLD
-defaults the same way, or pass HOSTCC, HOSTLD and HOSTAR to the bpftool
-sub-make as well as CC and LD?
-
-[ ... ]
+The same series also replaces the shell script with
+drivers/net/hw/xdp_features.py.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3%40gmail.com
