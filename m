@@ -1,36 +1,60 @@
-Received: from mta0.migadu.com (out-4.mta0.migadu.com [91.218.175.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B077B49BB58
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 08:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A755031BCAE;
+	Mon, 19 Oct 2026 08:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792399657; cv=none; b=oDEldqAcRfgOdQF9Rfdwb0Y/WRqJIVcctXcV61omH2AmPNUHeAucchI444ahYkmJqpMvTwU28x4XMVwFuW/fcyKoYGkZIF6eupkh88sCdNisXx6PEbWFQA0EbZs4HRdLoCRN9kv+j0R5d/VMakPcIDe+B9arxzYuZ4dbXb9q1cM=
+	t=1792400049; cv=none; b=QOUUJhxHNmwuzJedOUa2F7jCEDNO0f45ELgbeacbE19WJAjqoeH/eYMPnNqgL4VtMJphhlD2z2/q8AtFJDdNyX+GUQgOVCIkpkauHQ2wdq0piOVdILuKUPLKUEf/nkw3hc1dC1kBZLvJnU6+dy/EhlCox5S+EyBi0WrKI4tRmCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792399657; c=relaxed/simple;
-	bh=jFAkyj5yoPWtYLC+zOW72R2wyKdGUE2qk/tecO0yjmA=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=p87TCJqMvNhYAGi/nFxaBQv95nqoLbjIMXPIATNi4DJgNGt9cgI0DwSZ3PvdQa72A/RM+fYhFL+9EKb/R+tAj1vlwfGoOLMUl3KvjvKl24J1wwQ7nwVBlIN3/sIYWEMDNR4pdaJ9OlL15ff3flMiz3QUxFqPON3RZsDo3vQ3aUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JZ1ZcpQ6; arc=none smtp.client-ip=91.218.175.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792400049; c=relaxed/simple;
+	bh=EyaMsR5iFwGWvG9qQ3I0c8/2vWJxmxXrEFqr0VPGaW4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uVYep/5P3DNOieTIud6ytEkOwe4DAkCRSZp1b6M28I/GBOhENZADa+f30W+NTPiqZ51DgEnN/yakLiMSs6LMFdzycoCM1dlyHDCz+nT9ny12yO/mKax5aYLeUjyG+3xgLsQt/m4aI5ACVeX/qU+0f4u/RCXcdeBLHDl9+pcvR1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pqyuCBbo; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JZ1ZcpQ6"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=jFAkyj5yoPWtYLC+zOW72R2wyKdGUE2qk/tecO0yjmA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792399653; v=1; x=1793004453;
- b=JZ1ZcpQ6rs/nEXE0tIhJ2SEUgsoq0dF8fHk1c2XZC/ntxtHo0YRtOJW3N9MnO5OHSt69/45h
- cFJMesqOXbslNCCjA7t3qGuv7hGFkdkt++X/8EHLPGzVWC05S1O2uL/N48ZTniAem+GJ/Kw3DVX
- UvENTPelfBKUpx6sW5sqAEW8=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d39df06ac6c62a0f;
-	Mon, 19 Oct 2026 08:47:33 +0000
-X-Mizu-Trace-ID: d39df06ac6c62a0f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <6f2cb853-5eb5-4f3b-9021-ab24735a61c3@linux.dev>
-Date: Mon, 19 Oct 2026 16:47:26 +0800
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pqyuCBbo"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69J8i5vU1636640;
+	Mon, 19 Oct 2026 08:54:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=OxWYpG
+	YGadiI9V8mHVtnuZO1pcajp+u0zbDutU4rXHI=; b=pqyuCBboU4EDht1tq5y4ta
+	/JstzltpTRATNRPNoKzqfr6iF1ySlA6WL6vLvk9r0BGo3+VubJs/SGPy3VPqKglY
+	DlU0MhBEYG3vHqnBBewIX53rwq59ma2WgupFPJ9Dn/lga/o/O6C6xFA5nLpXONaD
+	E9gKbgNEsMKyUcXDh41yR5RSwBhNaqEJ9H3D2RnAbA7zCEc8FheIZPIcJ+TmcWJf
+	BZkfWa26r9tHNhJcK92IX6xuG11IcyJrKlwNBtEi5X/bIUgjrlCAmqxWaJT6DeSc
+	iYXnPB9CWhjPA0B7/ScjQbuoJP756oBK5l4hHxXmQKVPsNyCb7JCGRhGW8VrGG+Q
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4hc0ptj4qj-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 19 Oct 2026 08:54:02 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 69J8ZH4g3842415;
+	Mon, 19 Oct 2026 08:54:01 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4hckbq521c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 Oct 2026 08:54:01 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 69J8rvxd47251754
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Oct 2026 08:53:57 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BEFEB2004B;
+	Mon, 19 Oct 2026 08:53:57 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 76D0D20040;
+	Mon, 19 Oct 2026 08:53:57 +0000 (GMT)
+Received: from [9.224.77.173] (unknown [9.224.77.173])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 19 Oct 2026 08:53:57 +0000 (GMT)
+Message-ID: <ec1cdde1-3201-4f6e-845c-c8f2ca0bb76a@linux.ibm.com>
+Date: Mon, 19 Oct 2026 10:53:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,69 +62,89 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
- cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- linux-kselftest@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>,
- ameryhung@gmail.com, alexei.starovoitov@gmail.com
-Subject: Re: [RFC PATCH v10 0/4] blk-iocost: add BPF struct_ops cost model
- support
-To: Tejun Heo <tj@kernel.org>
-References: <20261003124045.1289305-1-cui.tao@linux.dev>
- <a3dfbc2d-8580-478c-8189-3794d49aee11@linux.dev>
- <20e2b2a51fd97292add8d8e527b14a45@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20e2b2a51fd97292add8d8e527b14a45@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/2] KVM: s390: fix ESSA addressing exception injection
+ in migration mode
+To: Gautam Gala <ggala@linux.ibm.com>, imbrenda@linux.ibm.com,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: frankja@linux.ibm.com, david@kernel.org, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com, svens@linux.ibm.com,
+        pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org
+References: <20261015104822.77062-1-ggala@linux.ibm.com>
+Content-Language: en-US
+From: Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20261015104822.77062-1-ggala@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE5MDAzNCBTYWx0ZWRfX/8FL6NjUpEGo
+ V3w5Ln1Z7LCJv/1YhjON2fTqMrcGkPIf0Pg8SUFxks+PB4uEVjbyruWQu3tvh4/EYvOI+P8djYM
+ 0WsSI7YvVYL8rHUxb9itrS5SejaeTGroD2GZ4Nu8fcr2eak4fCftaxa3sbwCEziGV6kA7IZCjeR
+ 1rt3gKNsLh8sPoxDGpHwbnFi8DKvs/SKy6cOhqTEkFfSCRkcj26YhUR0cltrrQQkQknIf6ipmG4
+ FNzPYP3wAmuYaTbepm19EZx8/bU7rnyTM4+n+78uS1h9waTUkKVQ2HulxbpIl4KiqS+L+ScZXeE
+ IGvct5DlJkvrHsSzi61JjHTU/qR2WFIOQVoXxJcEIZNFJWbRQokYPdXdDwf6NWfNTDNYXBlXFMN
+ vSd9vFExLfpvgaklEdHeiw58jeDS0KWq8od+7HyBbq/pt/5LMOfZPuZGBmyuvVfBRnCk5gJnPTo
+ j5/LD910e8GeecnNCDw==
+X-Authority-Analysis: v=2.4 cv=WNvqzXsR c=1 sm=1 tr=0 ts=6ad5daaa cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=BdKKiVBxiTNh0JwODn8A:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE5MDAzNCBTYWx0ZWRfX8hcLAkJbjeNC
+ rv7XZUKzSz67kHteS6tLcRN9PdUCCmYOmgdv2UlFZmpamLpZ3UH9SnJDNAO+K5Xd93rmaisrVpX
+ WppPh+/oQ8Un5jJQ10me5FE2WHAwZTI=
+X-Proofpoint-GUID: T1G9eOk7o-EigrjfgA9crZAav1XT9UUO
+X-Proofpoint-ORIG-GUID: kXCNzz0_rstK71_YtHoaIcEQfFdKsrNZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-19_03,2026-10-14_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 malwarescore=0 spamscore=0 impostorscore=0 phishscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610190034
 
-Hello Tejun,
 
-在 2026/10/17 01:49, Tejun Heo 写道:
-> Hello, Tao.
+
+Am 15.10.26 um 12:48 schrieb Gautam Gala:
+> ESSA emulation in migration mode silently dropped addressing exceptions
+> when the guest page-table walk failed, so the guest never received the
+> expected PGM_ADDRESSING interrupt during live migration.
 > 
-> On Thu, 15 Oct 2026 20:00:20 +0800, Tao Cui wrote:
->> When you have a chance, could you take a look at this series? I'd
->> appreciate your thoughts on whether the implementation still matches
->> what we discussed, or whether it has drifted somewhere along the way.
+> Patch 1 fixes dat_perform_essa() to return PGM_ADDRESSING on a walk
+> failure, and __do_essa() to inject the program interrupt when it sees
+> that return value.
 > 
-> The behavior matches what was discussed, but the implementation needs a
-> lot of cleanup, and there are bugs in the detach path and the
-> iocg_init()/iocg_free() pairing. Details are in the replies to the
-> patches.
+> Patch 2 adds a regression test integrated into the existing cmma_test
+> selftest.
 > 
-
-Thank you for the careful review, and especially for confirming that
-the behavior is where we wanted it.
-
-The two bugs are mine to fix, and v11 reworks both. The detach path
-follows your map-reference suggestion, and the iocg_init()/iocg_free()
-pairing moves to ioc_pd_online() as you described, with iocg_free()
-keeping the delivered flag per your catch about bios still holding the
-blkg across offline. 
-
->> Sashiko flagged a possible ABBA between the BPF paths and
->> ioc_cost_model_write(): attach/detach take the queue freeze before
->> q->rq_qos_mutex, while the cost-model write holds rq_qos_mutex across
->> its freeze. That is indeed the current ordering, but I don't think this
->> can deadlock because the queue freeze is a depth counter
+> Changes since v1:
+>   - dat_perform_essa() now returns +PGM_ADDRESSING instead of
+>     -PGM_ADDRESSING; kvm_s390_inject_program_int() takes an unsigned u16
+>     so passing -5 would have wrapped to 0xFFFB and injected a bogus PIC.
+>     __do_essa() comparison and inject call updated accordingly. The
+>     kernel-doc return-value entry is corrected to %PGM_ADDRESSING.
+>   - Selftest: pgm_handler_c() now reads the actual PIC from lowcore
+>     (__LC_PGM_INT_CODE) instead of hard-coding PGM_ADDRESSING, so the
+>     test would have caught the sign error above had it been in v1.
+>   - Selftest: virt_map(vm, 0, 0, 1) added so the DAT-on guest can
+>     access the lowcore to read the PIC.
+>   - Selftest: PGM_ADDRESSING, __LC_PGM_INT_CODE and __LC_PGM_NEW_PSW
+>     constants moved to the shared s390/processor.h header.
+>   - Selftest: SIGALRM/alarm() timeout wrapper removed.
 > 
-> The attach and detach order matches ioc_qos_write(). The reverse order in
-> ioc_cost_model_write() predates this series and is better fixed
-> separately. An earlier attempt to convert it ran into blk_iocost_init()'s
-> percpu allocation under the freeze:
+> Gautam Gala (2):
+>    KVM: s390: fix ESSA addressing exception injection in migration mode
+>    KVM: s390: selftests: add ESSA migration mode PGM_ADDRESSING
+>      regression test
 > 
->   https://lore.kernel.org/all/aV5OwAvw1sRF1IW1@fedora/
-> 
-Agreed. The write path ordering predates the series and
-I've left it alone there.
-
-The implementation cleanup from the patch replies is in v11 as well.
-
-Thanks,
-Tao
-
-> Thanks.
+>   arch/s390/kvm/gmap/dat.c                      |  5 +-
+>   arch/s390/kvm/s390/priv.c                     |  2 +
+>   .../selftests/kvm/include/s390/processor.h    |  7 ++
+>   tools/testing/selftests/kvm/s390/cmma_test.c  | 69 +++++++++++++++++++
+>   4 files changed, 82 insertions(+), 1 deletion(-)
 > 
 
+
+Thanks, applied.
