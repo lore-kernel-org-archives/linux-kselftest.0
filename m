@@ -1,105 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792438836;
-	b=QYU3xQO8gJc6t5/5VfWS6xTy3gI4qmKLzn/2EWE7mJH3O7uQCfCX/HxFYXxYaoA2VYu3
-	 Nx50P3dsDWg0N6bvGLL28PIvv8z7wWzjjowQqnLB/n/xc+syaWfIRbr/9n2dFV4HdY2P7
-	 4KFQo8TzGj/CfVtTKI1Mg9CNLXV0FZrRyfy+PQqyq81pVyCjdzjCyyq4HxnyJ9xzZKlzn
-	 R71cpqsbVLhIPeBZM6mrhkak68RCuNQF6rhlvr/IlguOGyX0unYlWLff+GOK26czeV1Dp
-	 126KQBuhpHv+2LFZRh0VBx3U8C31DHA92aE3ol7Heg0cP+yHOnZYAR2C7LiY8BtxMtw==
+	t=1792440817;
+	b=WbQ2UlnHXIHcWc2M4U+cJlobAQva5jW64JG6+DYIeaq0c9dAguUrFCxzdzR6i3k9emwB
+	 Rh60xiGKYU/PzGDKjCVT4ILaBbbJotHSEv1y9UZg40KEAtsvGqfa9wV31w9nvvpqyGVFF
+	 4D4S1A3CDnOEVxwukhj9Vi7vZbGcOezabj3sb+MSlqgT3V2X6QMr3cn8O+f/BagYQLVsw
+	 /R/JGgDDdc7baUxDL7a6/LMLNi9VW2FyYx8RCRl52k17ZdghfzidmAgkRxzGWjwVfzX0G
+	 CJDku1PatEazcuF+YKcUAGUeh+7UPtN91cqMu1avu09txajfrzj7w2B0Er2GP9yPNyg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792438836;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=jCMFezbT/OjEFJBH7XUEU5R0jVHmGVvv13z7WJO3X3E=;
-	b=B9+UTTl3rMH38nZBQ3e9JE23GovfaJJtjGq+Oa+bYh/KgP8kV5BsZLaHGtMJWOwIM3JL
-	 VPXVheEsbazgneovQgnYZ/Slk6mw90j106zNhbskwPtihMUr2HYX8xmbwTCRH7v4clTrn
-	 wH/wSN1FbqIeQKTMGgSxADEJ39hS/a0+NtO9gNhobquzlUeBIFoZSLRVByRGiGPfF6QpB
-	 17IauCCrBV+rWd5+2puuqZQj1J9A8cb588XztxyzjtlLKJA1xAfNEml9Z7QqvKkDU0e9Y
-	 B3c8PokJZXrDC7ObOQp1xL6xarbSrwNLZIkMCHqwHITT1hvOPm1PpVpqrcqvf8mx/Nw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792440817;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+	bh=UmLvI9mU/knn1IKKzwxAJ1414ElMF+G8scSYn1obsAE=;
+	b=TRmCP3PKzxyHp4Ong01yZ1eDFM/B0Dk49I8WiSLU1ZCCTTdOJwi4s8hfzNoxuX9UQ3Ie
+	 RSZAFEK/s3OghPefHfg/SoRGrm/fCiJ0pltjUwyky8HOLWaI3nBOWtU7UIy4wbvo7KzAE
+	 xmpB7gyg1RC7q/eIeyoqhbcbL7gGnkXjXt+sFTTCjdR0wjezQORugsXCm/Zam+mb+eLOD
+	 X4zg9SkbkfJtnvq4k9PPFyVWFOk1Sgnv2c/8daR7//Ppl9haZ4zXFrpkV3hx9FeEjePY/
+	 DsJOZYaw4RZZKTtZQm/KPkvYqXjUpM2z6qYmiFQLe/IMrfRku4yyxXAcbL96tp+ATig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AwKLsCH0;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b="nw/z/tSx";
+	arc=none smtp.remote-ip=185.246.85.4
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27705606A32D
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 19:40:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27705606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE03606A32E;
+	Mon, 19 Oct 2026 20:13:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EAE03606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AwKLsCH0
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ac7c7b3a90so1174296a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 12:40:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792438835; x=1793043635; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jCMFezbT/OjEFJBH7XUEU5R0jVHmGVvv13z7WJO3X3E=;
-        b=AwKLsCH0eCBDjV+uPmQSwL4hPhllyt3bz/fVOAvm5/kXUvXjTfvH5ZqqwpMjcpWh7X
-         JNTxMbWNTnOOwfXbMPriw8L2OXABTAKygX/SZvHJZ1HUu28hcBLfI3idDkgcBZthXgRY
-         0eR+LXFb7SEPUh1Yf59T1npD6SMgsMin2amGbSD84ao89WhG+Ue/0EqTaQfQaqACnz/+
-         W8o82Ko0xYys8Vw7SK4rYh768XCtXLQJMz6T5e+Ji3fgRQjW6XAAltPMFl7/V0vapMPw
-         M/XEL58w+kM5QEI3wTtJJHMYu1JG/ZgGFaiHo2zb1UPw3+bQKTRzCt16qNpTGAPufCbR
-         OLpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792438835; x=1793043635;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jCMFezbT/OjEFJBH7XUEU5R0jVHmGVvv13z7WJO3X3E=;
-        b=Shx2HnJFlo2VmsR88HCMwu6JsHgaGrOpf26rmBn1AaBinUNfFX1QTm57zNAkSfqODi
-         shSQ++kLptu2tWDCODI3+Ogd0OxNFg/C8/XFMRr6/fWlHxfKFodM5mIQdDZhnsiIGou7
-         olblQ6ag4telKdSIO3wGiCpP0ymQ15gzARTvPJYntnN0wMl3c9N2i52v8Ba1t9Y1wX12
-         2bLOAb9q6RfM5tocG3NW5gbsKqkXqOYDpKqw/r37xMHUJzZn6R4fFuIfKOdRH9nqsHz2
-         NRyokzAKflDGpCRkKDcDdRzkZZsfcV3VPN5HxmDhBJ7wZ1YKh5CP0KYUhC+XEaP6lq0i
-         Gc6Q==
-X-Forwarded-Encrypted: i=1; AKwUvByKNZI3Cq9Ecr6lRgKScOqyL+mCWqak9GsXkPbO4RM33RczgQigJlXBtgh7HH1aUP+KXWamU2BXyJypwzt1lP8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLwITTZwjkqj1KM3fmaHsA7Af/Zw8K797GztF3XxVxRyd/y3bTi
-	HKrXDhfdXa+lN/gElCxqAKlY4hBgdOZ+s/cOyTiXolUuMG9xU03ie9G1ApyOMw==
-X-Gm-Gg: AYBFou2EeU0uH+4L/8+t/HZzt4zHaZqINo6LO1A7leznYPxh3mDmiQqwBp7ISedujTF
-	PxXtsn2lzdVDYRGUD9V2rivH3rpuWLfX2kEbhz+mj7IFZiyOLoPb5d1dG4eRRlarR5lHnyV2qJT
-	oWZcL4jpRqgP6XGUZZtJBt04BD7VBx6I7UleZwlo5Qp8IggVWpbLqlsZlyxwTIzVhNLMIhNVJ1B
-	y2QIDRdOK7vXME4n2lBI80I0uaeSjg0du2pY3od2nAQV0Ay/+802FpwkiUHTnYKimq6W/ysDOdD
-	AQ/lm7DAjqzv4VLOza3hByyL7ykAMcG6HkxSRS6NpJDKnqzK9gUk8Dy1sv2UgIRRetbFz9Mns/1
-	FhNVfmVGP5CyAwi7tI217cgsVqplQ8jBrlcpk90K0z5TeyPkQEGYd1b1eLdu8KAS/2sLfGq2gKu
-	qXCnp+wYftsBdujV8aGsIF3m+yn5/PGb/P6xVlGFjZAouTwaTu5itUVvVPt4kMSF1/dKPe/L/hQ
-	cVTaPJdr3z3XYiAB9qXa+u3+ramV7o1t/LXUGoeEfNTSuKdu51h9aiNmPIhMeIHfnE9VUPFTsom
-	o5iGYVrT+AFhlA==
-X-Received: by 2002:a17:90b:4a03:b0:3ac:6e91:3f14 with SMTP id 98e67ed59e1d1-3acef134d44mr8271080a91.22.1792438835344;
-        Mon, 19 Oct 2026 12:40:35 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc9942956sm7478188a91.1.2026.10.19.12.40.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Oct 2026 12:40:34 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Oct 2026 19:40:33 +0000
-Message-Id: <DM92JCFA4X4U.30MTDH0KCPTJ@gmail.com>
-To: "Michal Luczaj" <mhal@rbox.co>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>, "Lorenz Bauer" <lmb@cloudflare.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Sashiko" <sashiko-bot@kernel.org>, "Jakub
- Sitnicki" <jakub@cloudflare.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf, sockmap: Restrict iter-context
- sockmap updates to iter/sockmap
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <a9ba4549-4bae-4516-85ef-ee38f13551cd@rbox.co>
-References: <20261016-sockmap-update-limit-iter-v1-0-23fa946db59e@rbox.co> <20261016-sockmap-update-limit-iter-v1-2-23fa946db59e@rbox.co> <DM6O08VBRY20.1PFUYACCZ38JL@gmail.com> <a9ba4549-4bae-4516-85ef-ee38f13551cd@rbox.co>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=nw/z/tSx
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 541C74E4127B;
+	Mon, 19 Oct 2026 20:13:35 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 276F460582;
+	Mon, 19 Oct 2026 20:13:35 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9188210328C22;
+	Mon, 19 Oct 2026 22:13:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1792440814; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=UmLvI9mU/knn1IKKzwxAJ1414ElMF+G8scSYn1obsAE=;
+	b=nw/z/tSxxz/ymrUXlw7ytwYdCJH6TxBGodUA8LfL1kQejlDk8IrrF/eXWHoNH/61uNDqup
+	na6DZ2B5oMOCMLXsvCzP67IXfSSw45uELKkl4RownbnL1l5xbPXkHvVnhEICsVrSx+TZ18
+	PziLAFYKVOhsjps3645NMz/U/MGAhCf5QpevmSQvTCuHRELZ3vHRr987PMG8wnqBO+hjQB
+	DABliIfp39v01RmsnffsGrBCBYkjx4zv1v2+Q66+sZ1iINqgHlnV8N68byRUGe7CyINW/+
+	k79I2WHOyloC5pqOJKXJVZBlgmjyzbvyJWePgE9D8e7K0YH60pm0aH49u1ouTA==
+Date: Mon, 19 Oct 2026 22:13:33 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Shuah Khan <shuah@kernel.org>, Wake Liu <wakel@google.com>
+Cc: linux-kselftest@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] selftests: rtc: fix flaky date_read_loop test
+Message-ID: <179244056634.104236.8068913442860813306.b4-ty@b4>
+References: <20260929152212.2092062-1-wakel@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,37 +66,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260929152212.2092062-1-wakel@google.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, Oct 19, 2026 at 08:20 AM Michal Luczaj <mhal@rbox.co> wrote:
-> On 10/17/26 01:52, Alexei Starovoitov wrote:
->> unix_state_lock() in bpf_iter_unix_seq_show() was added only for
->> unix_stream_bpf_update_proto() called from the iter prog.
->> iter/unix cannot get there anymore.
->> can we drop it ? can be a follow up...
->
-> So we don't care about having a stable socket state while iterating? Which
-> is the case for iter/sockmap, but is unlike iter/{tcp,udp}.
+On Tue, 29 Sep 2026 15:22:12 +0000, Wake Liu wrote:
+> The test case rtc.date_read_loop in rtctest.c fails intermittently because
+> it checks that the RTC time does not advance by more than 1 second per loop
+> iteration. However, the loop sleeps for 11ms via nanosleep(), and if the
+> test thread is descheduled by the OS scheduler (e.g., under heavy system
+> load in a VM), more than 1 second can elapse between consecutive RTC reads.
+> This causes the next RTC time read to be 2 or more seconds ahead of the
+> previous read, triggering a test assertion failure.
+> 
+> [...]
 
-Not sure. Is there a value?
+Applied, thanks!
 
-> I'm not sure I see the (stream sock) issue above. psock->sk_pair holds the
-> peer, so peer pointer remains valid during proto update. iter/sockmap is
-> safe, because sk is held by RCU. And for iter/unix we currently take
-> unix_state_lock().
+[1/1] selftests: rtc: fix flaky date_read_loop test
+      https://git.kernel.org/abelloni/c/82e7babfb39f
 
-got it. you're right.
+Best regards,
 
->> Should we restrict it to ctx->sk somehow?
->
-> I recall a discussion about having BPF helpers accept only trusted
-> pointers:
-> https://lore.kernel.org/bpf/CAADnVQK_93g_KkNFYXSr8ZvA1fYh4hoFRJCJFPS-zs4ox0HhAA@mail.gmail.com/
-> Restricting only iter/unix seems better?
-
-we just discussed at bpf sync meeting that it's time to
-finally remove plain PTR_TO_BTF_ID.
-Otherwise we keep hitting this bug everywhere.
-
-in the meantime can we do it for this one arg ?
-Mark ctx->sk as PTR_TRUSTED in sock_map_iter_reg
-like iter/tcp and iter/udp do ?
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
