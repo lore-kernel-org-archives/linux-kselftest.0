@@ -1,67 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.211
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792443442;
-	b=cO+IkA3Wi3zMyug5LeDbBga8Gs8RM1HWinS4EObLZKi8j1AWIcRrxE+XSjDK6bKafWDM
-	 FyBtbYK64Ai2SQsksbbPon5xlI34PwsnvH4NQfzOJGkPhiJnZWk4V28dMgB1yvHyUH/kH
-	 jwxkm6CPbAokghZ8UP10dw1whf5nLsXoPBLIbZXo796wWgRU0U6fGezXdEXJqgskMQ5M+
-	 kiGyb9naSvScp+uAVAnTiz1z0AgjHRXqatVqCQm62kudCydcgJRPXdgAhjyQFwixHOvxV
-	 Y4L4rus20e82IsyNLpWyrskynM6EwAfrVqRna+Zs8ZEmyAI1HaRkXo5eT9v7h3vCkYQ==
+	t=1792445929;
+	b=YIYIP9YO+9m0XwpN7JWFNlJA+J8kBfjlZnoxIW824NWZ+Wsd6mxPZdqWztpO2jqaAUE8
+	 ZInPPP/CtdDyXrxk37MrGSGPghWP6MYQOb2N9UcpJUTmM1ZVFNgZQ6S/doB400zcVQIa8
+	 7gSoFS9pmMOyQ05pEeVpTCL6+8G50Yu1iAlrKGIUl7bLHdVm4xZIfgfi5YNBlNvQpEiiU
+	 AmobjFvLuHXJ9Qr0pKOawcaIgZVldZgOFbGjOjHgB3d1v2K+4HL4fgrqP64E+1a9ft3Jl
+	 GMiW2yXmazqQYg/8LBfuQBLRKFuKl6qdAm8jacCs7fRrrvcWgwMvWSCpmVGp4mFzENg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792443442;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=iUxDgCC6thNE6bahIcLevwQy6B6nWx+XvwiMIDf3yFM=;
-	b=vPA1t7/kMEY2GIG4dgg/nHeiADGhBP2JwGDSdelv4eei7HLty+V29hTZ3wThzdd2eL/r
-	 TA+4812C3Lab0LrUiFmTVtfq41kkSX9pjAWIm6SME/eXknjLP0O97uMbdqQMwlwtTx2N/
-	 O/S6r+wqgFqiNpDW3N6CTfruMp3W1KrLn8KJ7B4Vahc9czuOZvCL5pCgNVyEqV63nuU28
-	 IpgB4Jk3RnhO4v37yFvvgFPdl4OWPxA8S7WnY6uYWiiHv34LLyIcAn26FwNv354Ahh2qG
-	 QJ9VyrRbM56lAMuOVYjm9shYhfhsqgK+AH5JoIYSWgofCi2oPgWBibfIJhBGQUiMy3w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792445929;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=LfWSuYKCth8K/6tVVIdahT1UVozh1NXcJ2UWGJ4bf7Q=;
+	b=vZD7oNoIAOm1PgDRUSvwBlEI1cmRPsmQm7B/T0g7QE/ANf84JQQiVWFR54S37F5cfQkN
+	 4uARHNgjLqR6BZcNBaENJ38tPcqGkRjJdwKdNuCvMb99xMAMUJyDyZC/idacK7+BXYFev
+	 GAv57HRjiZSHo8EQ2cwRKeipSJQ1J/P8i+f9bAtnCSp0F9tuC0F/A0ynce27+mB44f4eg
+	 RLwJy45KTLpXCPZFFNrBlb3/w/zwsIrNhYf3t0fPGkEzYioLwIhET8ZrdicrkEaEXBXiL
+	 2r+OSJe9MNnoILKQxPGa/BYB93znpLlxRrEi6eaHbZwB8vqSDT6kPgXnnvMa2lvWfEw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=IY4Fa06a;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=95.215.58.211
+Received: from mta1.migadu.com (out-211.mta1.migadu.com [95.215.58.211])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AA9606A31B
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 20:57:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78AA9606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=IY4Fa06a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792443440;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iUxDgCC6thNE6bahIcLevwQy6B6nWx+XvwiMIDf3yFM=;
-	b=IY4Fa06aWXgkXGzHm0MZpBV/s90qUQVCqEidnEnZnmh2zdCZDbixMAmTqpvbVjr9WEkcGT
-	L5Eh0BcBeKyIIXubk1qJI/yBxmuJVx//BGkPcbKPKzgNyWJhUeZ8+SVIC0YfEQJiZ3taP8
-	iCkOoJ8D3Teow95TAev31kgzKzF44vA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-180-VXEkOMxNPdyM2fxjJV-9zg-1; Mon,
- 19 Oct 2026 20:57:14 +0000
-X-MC-Unique: VXEkOMxNPdyM2fxjJV-9zg-1
-X-Mimecast-MFC-AGG-ID: VXEkOMxNPdyM2fxjJV-9zg_1792443432
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B67881800654;
-	Mon, 19 Oct 2026 20:57:11 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 43CBE410;
-	Mon, 19 Oct 2026 20:57:08 +0000 (UTC)
-Message-ID: <3531bfe0-d5a3-4a38-af5b-68ce5406c591@redhat.com>
-Date: Mon, 19 Oct 2026 16:57:07 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDD8606A321
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 21:38:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BDD8606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pdm4vPb67Yst7tFmF7qxL6HpuVTm0tl2rIhOUO0+ORI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792445916; v=1; x=1793050716;
+ b=aEMI6tHZdJRSaYOn45foOGwsc8iNulKBAa264AKAlkoSYyqnchAOjel0xDTwVTm8Tq88lDux
+ doBuh/7amkX+LYo+D5P0wuOsILTnqs/xJEjCaF/vdZh5y6g2/BmkDdQ1m9+ko7v2fm3Zbkriroe
+ n62UG3qZHwf+bvXq6EZRboLc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5dcd77049f212692;
+	Mon, 19 Oct 2026 21:38:36 +0000
+X-Mizu-Trace-ID: 5dcd77049f212692
+X-Migadu-Flow: FLOW_OUT
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+To: jgg@ziepe.ca,
+	leon@kernel.org,
+	shuah@kernel.org,
+	zyjzyj2000@gmail.com,
+	linux-rdma@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	yanjun.zhu@linux.dev
+Subject: [PATCH v2 0/2] selftests/rdma: Add an eBPF-based testcase using netkit for RXE
+Date: Mon, 19 Oct 2026 14:38:19 -0700
+Message-ID: <20261019213821.44842-1-yanjun.zhu@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,54 +64,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v4 0/9] cgroup/cpuset: Fix various housekeeping check
- problems
-To: Tejun Heo <tj@kernel.org>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Johannes Weiner
- <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Randy Dunlap <rdunlap@infradead.org>, cgroups@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Hui Peng <benquike@gmail.com>,
- Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20261019181020.1069325-1-longman@redhat.com>
- <ataCxJxYwg_uhS-j@slm.duckdns.org>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <ataCxJxYwg_uhS-j@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Content-Transfer-Encoding: 8bit
 
+Add a new self-test case to verify RXE (Soft-RoCE) traffic using
+netkit virtual interfaces and an eBPF tcx ingress program to dump
+and parse RDMA transport headers (BTH, etc.).
 
-On 10/19/26 4:51 PM, Tejun Heo wrote:
-> On Mon, Oct 19, 2026 at 02:10:11PM -0400, Waiman Long wrote:
->>   v4:
->>    - Adjust a number of patches to fix issues reported by Sashiko and
->>      Guopeng Zhang.
->>    - Add more test cases to test_cpuset_prs.sh to improve test coverage.
->>
->>   v3:
->>    - https://lore.kernel.org/lkml/20261014140548.575122-1-longman@redhat.com
->>    - Further revise the code based on feedback from sashiko and
->>      reviewers.
->>    - Add a new fix patch which fixes a bug found during the testing process.
->>    - Add a patch to impose a new restriction that creating a child root
->>      partition under an isolated parent partition is not allowed.
->>
->>   v2:
->>    - Update patches 2 and 3 to address bugs reported by sashiko.
->>    - Add a new test_cpuset_prs.sh patch to skip the test if some of the
->>      required CPUs are offline.
-> Can you ping me after -rc1 drops?
+The test results:
 
-Yes, I will.
+# make -C tools/testing/selftests/ TARGETS=rdma run_tests
+make: Entering directory '/root/linux/tools/testing/selftests'
+clang -g -O2 -target bpf -D__TARGET_ARCH_x86 -I../../../../usr/include -I../../../../include/uapi -I../bpf -I/root/linux/tools/testing/selftests/rdma -c rxe_pkg_kernel_dump.c -o /root/linux/tools/testing/selftests/rdma/rxe_pkg_kernel_dump.o
+bpftool gen skeleton /root/linux/tools/testing/selftests/rdma/rxe_pkg_kernel_dump.o > /root/linux/tools/testing/selftests/rdma/rxe_pkg_kernel.skel.h
+gcc -D_GNU_SOURCE= -I/root/linux/tools/testing/selftests/../../../tools/testing/selftests  -g -Wall -I../../../../usr/include -I../../../../include/uapi -I../bpf -I/root/linux/tools/testing/selftests/rdma rxe_pkg_user_dump.c  -lbpf -lelf -lz -o /root/linux/tools/testing/selftests/rdma/rxe_netkit_dump
+# timeout set to 45
+# selftests: rdma: rxe_rping_between_netns.sh
+# client DISCONNECT EVENT...
+ok 1 selftests: rdma: rxe_rping_between_netns.sh
+# timeout set to 45
+# selftests: rdma: rxe_ipv6.sh
+ok 2 selftests: rdma: rxe_ipv6.sh
+# timeout set to 45
+# selftests: rdma: rxe_socket_with_netns.sh
+ok 3 selftests: rdma: rxe_socket_with_netns.sh
+# timeout set to 45
+# selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
+ok 4 selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
+# timeout set to 45
+# selftests: rdma: rxe_sent_rcvd_bytes.sh
+# server DISCONNECT EVENT...
+# wait for RDMA_READ_ADV state 10
+# client DISCONNECT EVENT...
+ok 5 selftests: rdma: rxe_sent_rcvd_bytes.sh
+# timeout set to 45
+# selftests: rdma: rxe_netns_names.sh
+# 1..0 # SKIP rdma netns exclusive mode is not supported
+ok 6 selftests: rdma: rxe_netns_names.sh # SKIP
+# timeout set to 45
+# selftests: rdma: rxe_pkg_netkit.sh
+# server DISCONNECT EVENT...
+# wait for RDMA_READ_ADV state 10
+# ./rxe_pkg_netkit.sh: line 28:  9866 Killed                  "$CUR_WD/rxe_netkit_dump"
+ok 7 selftests: rdma: rxe_pkg_netkit.sh
+make: Leaving directory '/root/linux/tools/testing/selftests'
 
-Cheers,
-Longman
+---
+V1 - > V2: Fix problems from sashiko
+---
 
->
-> Thanks.
->
+Zhu Yanjun (2):
+  selftests/rdma: Introduce eBPF kernel and user dump utilities for RXE
+  selftests/rdma: Add netkit-based automated test script for RXE
+
+ tools/testing/selftests/rdma/Makefile         |   23 +-
+ tools/testing/selftests/rdma/config           |    3 +
+ .../selftests/rdma/rxe_pkg_kernel_dump.c      |   62 +
+ .../testing/selftests/rdma/rxe_pkg_netkit.sh  |   63 +
+ .../selftests/rdma/rxe_pkg_user_dump.c        | 1275 +++++++++++++++++
+ 5 files changed, 1425 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/rdma/rxe_pkg_kernel_dump.c
+ create mode 100755 tools/testing/selftests/rdma/rxe_pkg_netkit.sh
+ create mode 100644 tools/testing/selftests/rdma/rxe_pkg_user_dump.c
+
+-- 
+2.54.0
 
