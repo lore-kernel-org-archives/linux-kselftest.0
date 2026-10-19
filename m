@@ -1,47 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792452509;
-	b=QBGsQJjE8qYJVMoqi+sWOI2W5CueVvxmph3TRYPkveeDAESZBOTvcD8uYUyKW6VAEkbi
-	 7HhX7qQV55cYrp6HEZXxxJTs1S1iRplPCY2HvD/VuJwOh+atUY0Hrx5Z1YAtUIfq7ETYd
-	 uDjM3lSw/aUqJmuGc/5pDCepspBES2H5w3FxumIWdvZfuaOr1Vw9YBK7GQWBQbdIDeyqq
-	 zcIg8V+0SVf/xPFfg1lb5rX7sYp+pGx0U9MKJZKLY8zGbDnlXzAbN0qPfSRuhgNAQnaHr
-	 wyTpPt4C46sN1DpYorC7TGFsq3n0N8c21ffnS8kFmzBL1YoWDliN/KadwM3Bq+mfTTQ==
+	t=1792452498;
+	b=ypcDA2SkGJfh+p5Z+AZCDvNu/p+OrUhDLGAudoKMM2FvzglKTjsOr6ahclpmpJR6ufcI
+	 3gClvMQi3Wsl/R/s4j3tig8r3J/kGiJWkkyoWLEFqpKwFln1m4ngOkeEi1NZ7ZlaEetoe
+	 mbP4G0H6SuLntT7Tans/hftjWdT2T54FlqFUOGKWrxQfgTYXQXcbVsmS/nAP3gQsSVpUL
+	 qmyRs+/4uqcNzpIdEbrhCI4A/wY2zJJNATH0NvGgoiBSHehRN7x5Gl9vAGT5RqCCcnHAL
+	 cZHIFQgwfGGVw2v5oPDo5pdW7Pog1Fd0grIFA1UGUiLWunqYUaWrO7NmMC4x/yEAYGA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792452509;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=ML8QuNr/SitRoSc3ITEYHmuyYUgVewzWtNVAZkiyDrE=;
-	b=QO85JXRPoKytZ8BS2rAdcDs1znthD6o9aP+sgVSp1JHbUtcIhTV2CFdIHxVXL9xXSjnj
-	 hRB2ftEhKs4cyehBc6pk4mPfnI36uAML+5VyTR15W7/o0glvYaGVUc6SdA/d47pLMbyc9
-	 J03FbYjl+vcUL2pPPcyba2MGjCmaSAE0fK/kjPz0OL6VcCN3QrAAKCO/HVYenRHi37fYH
-	 +DLejaMr9f25Dn3/Cd3OVDKVikU3O3u/s/sS2/YvQO6PRA7HtlhMg5PggfBtM6SqXAtOK
-	 dv9pXTk3IWgfJqQNqfCt0UdG13u2mTr1Zi4UibFnGHOiB/eL3GXzQtw6IS2bL6aEQeA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792452498;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=doDQWejrullsVYFGySwnbyd1nx0Kc8hjk3Zuvv2FYpw=;
+	b=qOkiE1pZKvFlfsuD0uI4TklOcpoa7IfB2udz2LDLwvlVgewaLXPQvQv0Jb6kXomUROfW
+	 yHVMcCtMDqCeENgHBgGtLq6rHXnogmi3oarh8+BYlxcS20MGEh2/0NxbcBWICffWogVPI
+	 72DrCD2qFJXB+iwN2ZieQfPa15dUYoG3Jj/Vy9uIwtT4++4aPHjEys1wGd7MwOCDaZc7L
+	 meWpEZ68qorkLxSFQXXXSyphU2fNL5OU069KQoiTIY2mD0YQCQBFNKJ2d7fYrq2j4hz61
+	 9xf+t54BfFWuHKOoI/uaC8EIiM/+B+P0LjqYlm4akPpDykuJTIoTiL7prOleSCMPPlg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tqn4kl1P;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dAPaJ5PO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB50606A31E;
-	Mon, 19 Oct 2026 23:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C99C606A31A;
+	Mon, 19 Oct 2026 23:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tqn4kl1P
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3F71F000C5;
-	Mon, 19 Oct 2026 23:28:28 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dAPaJ5PO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C193B1F000C4;
+	Mon, 19 Oct 2026 23:28:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792452508;
-	bh=ML8QuNr/SitRoSc3ITEYHmuyYUgVewzWtNVAZkiyDrE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Tqn4kl1PBPlF2kJixJd/7mcxxNuVLf+rAAEUu4w/kptLkmEe42mooG5/d2QlJiedF
-	 AraewhApdjMu8UNc+h2EcoVwZrBaPMASILorZSqAGTMMzlvw/JxFkwF98K8ICs36A6
-	 HD+/6JXVP6rp3sPLcTU+hTTg+0dIFjf0czrL097yKqHljEnxEErWHRyEImtiz/s1a2
-	 M71ODIREV7LtTdztLHznrO0xvkVBPxz5u0fAX/7kqRUUf0zUvsu43y8w6vz57gQN4f
-	 jKT+jrq9unme/Y815KwMAgGcVGx4br4fDV3TnOpDTGpI+npQAoqybcpfUmH9SvMUFO
-	 6T+1Z2ybUEa1w==
-Message-ID: <1c39ea06-4b5c-49c0-a508-06955c549556@kernel.org>
-Date: Mon, 19 Oct 2026 16:28:28 -0700
+	s=k20260515; t=1792452498;
+	bh=doDQWejrullsVYFGySwnbyd1nx0Kc8hjk3Zuvv2FYpw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=dAPaJ5POG1VgZU8faTBA7Ni69Z/b8FSlKSb+HDaEXIND4cC5HaSc4hKk6LKG4d2mm
+	 3kNp5amrhQ9TAKBQBMPn0k730XzprLWDdCUCPsqRn9CBcQr6Le+JHciD9TWBtTOqG0
+	 hJQSz3QKKfz4Ykhq00WqP6uj9sji0fvhzPJJeoYVagVvgqlI8RjcKKfwftE/wWsOfM
+	 lHlHqRRXjwk30R2JM7gaYEA+Es9+ApMJatJ8T9CdneMgTGsEuDEWE9AlwjVlHYloxn
+	 9MWlQHTPj94694HkG4ON+/Dk3Uvlp3hfDQJPhVmE2ObHYxxqp966b6vzE0J2rMV4TX
+	 hiv2ij/oGZq8A==
+Date: Mon, 19 Oct 2026 16:28:17 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Omar Ramadan <omar@blockcast.net>
+Cc: Taehee Yoo <ap420073@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 00/13] amt: add an IPv6 outer transport
+Message-ID: <20261019162817.0855e1bb@kernel.org>
+In-Reply-To: <20261009122426.551178-1-omar@blockcast.net>
+References: <20261009122426.551178-1-omar@blockcast.net>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -51,55 +62,20 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 4/4] selftests/ipe: test the IPE policy keyring
-To: manuelh@nvidia.com, David Howells <dhowells@redhat.com>,
- Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
- Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
- <20261019-b4-ipe-keyring-rfc-v1-4-156f0b93e843@nvidia.com>
-Content-Language: en-US
-From: Fan Wu <wufan@kernel.org>
-In-Reply-To: <20261019-b4-ipe-keyring-rfc-v1-4-156f0b93e843@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+On Fri,  9 Oct 2026 12:24:13 +0000 Omar Ramadan wrote:
+> The amt driver runs AMT (RFC 7450) only over IPv4. The relay and the
+> gateway bind one AF_INET UDP socket, and every message is routed and
+> sent with the IPv4 helpers. RFC 7450 defines the protocol over both IP
+> versions, with an IPv6 form of the Relay Advertisement. A gateway on an
+> IPv6-only access network cannot reach an amt relay today.
 
+Plenty of AI feedback here.
 
-On 10/19/2026 2:40 PM, Manuel Huber via B4 Relay wrote:
-> From: Manuel Huber <manuelh@nvidia.com>
-> 
-> Add an IPE kselftest that validates policy keyring operations for
-> both ipe.keyring_unsealed values 0 and 1.
-> 
-> For the default ipe.keyring_unsealed=0, verify that a) the special key
-> ID resolves, b) certificate enrollment is rejected, and c) the keyring
-> is not used for policy verification.
-> For ipe.keyring_unsealed=1, verify that we can a) provision multiple
-> certificates, b) restrict the keyring, then reject unenrolled and
-> corrupted signatures, c) authenticate policy loads and updates with
-> different enrolled certificates.
-> 
-> Since IPE is built in, keyring restriction is irreversible, which is
-> why we can only exercise the initially sealed and unsealed scenarios
-> via separate boots. To get full coverage, CI thus needs to spin up
-> separate environments with respective parameter values.
-> 
-> Signed-off-by: Manuel Huber <manuelh@nvidia.com>
-> ---
-
-IPE doesn't use kselftest. Our tests live in the IPE CI [1], which already has keyring tests for policy signatures [2] and an initrd unit that provisions and seals the .fs-verity keyring [3]. Please add the .ipe cases there instead.
-[1] https://github.com/Integrity-Policy-Enforcement/ci
-[2] https://github.com/Integrity-Policy-Enforcement/ci/blob/main/suite/cases/policy_signature.py
-[3] https://github.com/Integrity-Policy-Enforcement/ci/blob/main/image/initrd/anchor-fsverity.service
-
-Fan
-
+When you repost the v2 (and not that net-next is closed, so you should
+wait with that: https://netdev.bots.linux.dev/net-next.html )
+Could you explain if you are currently using AMT and what is your use
+case? I'm curious if you have experience using the existing AMT code
+because from the patch stream alone it seems a bit buggy.
