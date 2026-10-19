@@ -1,51 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792427099;
-	b=5UpF0BGS8VAhA/eXKTLjPvemcqbJVcGh0AGDPsMzyQ9AHDSKOUDrlpbTJQKDPK775oyp
-	 c/sj1YqWl8gfs2PA/bCYGde6iaWl9jX8wR2DLOwohvA+OlxBj+XsOaropO7wAdqBulSQ4
-	 EAJmgTVDnGgfETRqeYJljxmS2waedW2nHORFSMR5FzY8nw5KCKRnoDjbkpH+6fwEzZIDg
-	 ipzatCaMJiH8ESJlG5QsWjIpuC+6uvXE2XaZLQZsXxt7UIl/+IUS+sjUk0CkDdLlH+TiK
-	 GHXqc/qQMeMt1UTcvs1ymUgOAkjclkww1zmnZLYVE8XaG2i8zpzlbVqhQJDvyowbWrQ==
+	t=1792427100;
+	b=mNkq3VwW730pJBjXK7Qfia5NK1YjhKM1G0rfDNOcmoI7RxYl8GsgVXJ19A6f029EuVCD
+	 BuyFjgvkq1Pj8DgkhzRxSgbIbNid2gch0mjVHWgWfVIahz45dPvsl8tKAzW2wkiucoxNP
+	 v6m9LE34qm1mUHxd24uScUBTDw4/waJYuYsEl2TlAWlbsVol86KtET8fsed6fwv4Gf5Tg
+	 +fBnq9lSEF7EWsMGQNhnQmC/Z9HVDC8jilo3uwpyQOqqZ6yfAyKX6HW+zxbkwNF+gdEDI
+	 yVdEjT/bIgwjPOQwdLRaNPY0wSdyQqenwjzT7ADi9TamtmJF27LaSEuyMRPItwYo6/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792427099;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792427100;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=rT1IuNRvUK1tXKDVBXwQfqdnLoMYvUGVQjyTkyvkKyo=;
-	b=v4SK+59Iksmy1ozo3ZDpNbu0qit9pNkAv0P7xOx3JRajlRH4Q01E9xxOY6pGk8GHUtnn
-	 EoJ9qs5GJmVua7RunChJv0lXm5Z9vLjGh8t2G846NBHmLNptM6sq9z0JnmEMFNXxbB+2R
-	 1w7acHPFTU45I/+R3K8D3ZWxOQWZme2jiaEPZoP39FLkH9OMTHDBdAmksiFZiejgKhhoe
-	 xjkXgxP/hoxMJe/q6wtg5bgFwuCPdufIdlXCcT9NSkkOdbwL/sau8t32bdmC9F1zLrR7s
-	 lb8trQttYK7AJ5XmX8bczWjTq50q9jE3O3Oja1otRBb4xHxJF65qHzZcKo/07c+fTyw==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
+	bh=6MKBy2LzwKc5tYKfWDsUXaCqB+jnQ5/Uc3KirDlScOU=;
+	b=DSW0Q1aFJE7r9w+WJmsZtyXS16eYv2ohN1+KfNA6+Ww/m4XiWfY4q0UB6+404OwbtK/f
+	 PcwORGsaGlF8gT0yAXoCDz1y81uyW/TZpAxelQgGjEhbLbJiocFrytkiKPqclw1Vnn7wV
+	 xe3+hB5/ocqoxzX3i9LirinnnzR3j1VCOeX6k6a8HRHG/Rqb58B4CogVyVNyqioB5vazH
+	 gdlkooKb/kBGW4yYlgKMBpQ88kiASmWwpYD7IpNXVOoS/RqPyZp9RLDmYAHDxsMTE8M5r
+	 d2dmNvaXE8Zjhdg9Bg+yd2CC8IsvcFbDwyHtnxOR5kHKWcQNdW9Bfzhv083YgswyqFA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=infradead.org;
+	dmarc=pass header.from=infradead.org;
 	spf=none smtp.mailfrom=desiato.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=AoTupm1w;
 	arc=none smtp.remote-ip=90.155.92.199
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B90606A327;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748F0606A320;
 	Mon, 19 Oct 2026 16:24:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75B90606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=infradead.org
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 748F0606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=AoTupm1w
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=rT1IuNRvUK1tXKDVBXwQfqdnLoMYvUGVQjyTkyvkKyo=; b=ODlqUsEQyhpuJmPZM1jpNaPBGh
-	L1dx2db25YShoo3WT/W1cyXMBtVFSRBH6fTfs7yis2HJmklli8dU0J6QNuOrUn2SQb/aSFOKNWIBs
-	Q/z2Xbg6v2BCSMHiPsbeM8efeJSXdHdi3+ijJ1bG4e7gkDMcF35OAJpkWdgag4h63V1WCTuj07rDj
-	CNuzwhn3f1w/DFFCx/ilIdAeEq6N6DHmPejSoAJ9TLgnc2FbnnNHI0d2Bktwtfm/LE4GUDxbUeb0R
-	5z3/a0rDlOiJI3i4seMTGcfr1h2uz56uuo2T6fsDyxBbAD6e13hnbWPhLBBQ5IkK+yJBrDcHgkD35
-	ZY2AA2sA==;
+	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
+	To:From:Reply-To:Content-ID:Content-Description;
+	bh=6MKBy2LzwKc5tYKfWDsUXaCqB+jnQ5/Uc3KirDlScOU=; b=AoTupm1wxEFh+2JaCBgpbgU0ic
+	TbRK8WtR/+MVOxAXWCBs6eAdFLyGjEZMLk68spb4zp/ATSfNr2UAfLg172l1k2zNIiCMNph3n93xt
+	sj+rq4ZcGI5xncBejrD+OyK6FthZS3l6Nn54vphoI1SSY4PEiruR5q8+zfMTiPOD7BdW6nMvtY/ZN
+	fYPlGyDYaDsKpiWkZoXumqPcaQDw/ZcK2LecvUwyg8JTnAk+CqD3updqkGuzlesSQWzHqIHuRD/kx
+	zqOYd45MoM9L1sa2BgRRLdUg/++9zS+MYTHUkEvmBeArUpPNdPByNAuEzfUCvxf2XU08p5FIFcuN4
+	aL+rKMLg==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by desiato.infradead.org with esmtpsa (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xIqAK-00000003qsi-1H1z;
+	id 1xIqAK-00000003qsj-1Gta;
 	Mon, 19 Oct 2026 16:24:48 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xIqAH-000000009gU-0HmP;
+	id 1xIqAH-000000009gj-1aDd;
 	Mon, 19 Oct 2026 17:24:45 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
@@ -57,10 +60,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Vitaly Kuznetsov <vkuznets@redhat.com>,
 	Fred Griffoul <fgriffo@amazon.co.uk>,
 	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v4 00/12] KVM: x86/xen: Don't drop event deliveries which race memslot updates
-Date: Mon, 19 Oct 2026 17:24:31 +0100
-Message-ID: <20261019162445.37219-1-dwmw2@infradead.org>
+Subject: [PATCH v4 05/12] KVM: x86/xen: Don't lose the timer event when delivery fails transiently
+Date: Mon, 19 Oct 2026 17:24:36 +0100
+Message-ID: <20261019162445.37219-6-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261019162445.37219-1-dwmw2@infradead.org>
+References: <20261019162445.37219-1-dwmw2@infradead.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,198 +82,239 @@ X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-Sashiko analysis and torture testing of the upcoming conversion of the
-gfn_to_pfn_cache from rwlock to atomic SRCU¹ highlighted a pre-existing
-problem: refreshing a cache can fail while a memslot is briefly marked
-KVM_MEMSLOT_INVALID during a memslot update, causing kvm_gpc_refresh() to
-return -EFAULT. The Xen event channel and timer delivery paths silently
-dropped events when this happened.
+kvm_xen_inject_timer_irqs() can drop events if kvm_xen_set_evtchn()
+fails transiently, as it can when a memslot is in the process of
+being updated. Defer the delivery in that case by leaving
+->arch.xen.timer_pending set, so that it gets retried.
 
-The first patch is a standalone fix which the same testing found: a guest
-parked in SCHEDOP_poll with a zero timeout halts holding vcpu_run's
-kvm->srcu read section — unlike every other halt, which drops it — so the
-VMM's next memslot update hangs, unkillably, in synchronize_srcu() until the
-guest deigns to be woken. A memslot add which normally completes in
-microseconds blocks forever.
+Raise KVM_REQ_UNBLOCK for the retry, as the timer callback does when
+it defers: without it, nothing aborts the guest entry, and a vCPU
+which takes no further exits would hold the owed event indefinitely.
+The request survives to kvm_vcpu_exit_request(), bouncing the vCPU
+back through vcpu_run()'s injection pass until the memslot update
+completes.
 
-For the KVM_MEMSLOT_INVALID case, in some cases we don't really care very
-much: the VMM should really be using the KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA
-mode which doesn't depend on memslots at all, and more faithfully represents
-the Xen semantics where the shared info page exists whether it's mapped into
-the guest at any given moment or not. But we can be more consistent, and
-more intentional about it. So...
+If the shared_info cache has been deactivated (-EINVAL), clear
+timer_pending — a halted vCPU would otherwise spin forever, as
+kvm_cpu_has_pending_timer() aborts every block while nothing can
+deliver the event — but keep timer_expires, so the GET_ATTR/SET_ATTR
+migration flow still carries the event and re-fires it on re-arm.
+If delivery fails with -EFAULT, the shared_info gfn is genuinely
+unbacked and can never succeed: drop the event and complete the
+timer rather than spin on it.
 
-Return -EAGAIN from __kvm_gpc_refresh() to distinguish the transient case
-from a genuinely unbacked GFN, and add a retry loop for the common case
-callers which can just wait for the memslot update to complete, as well as
-dealing with the corner cases which can't:
+True Xen does not have this problem: the shared_info page is owned
+by Xen and always exists, even when not mapped into the guest. The
+equivalent for a KVM/Xen VMM is KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA,
+which has no memslot dependency and is the recommended mode; this
+fixes the legacy GFN mode, which xen_shinfo_test exercises.
 
- - The Xen attribute ioctls wait, so userspace never sees the transient
-   state.
+Don't re-arm the hrtimer in the KVM_XEN_VCPU_GET_ATTR(TIMER) flush
+while a delivery is still pending; a re-fired callback racing the
+retry would deliver twice. Re-arm through kvm_xen_start_timer(),
+which recomputes the expiry from timer_expires: the hrtimer's own
+expiry field is stale when the timer last fired through the direct
+callback path, which doesn't program the hrtimer. A timer still
+armed across the flush is always restored; one which already fired is
+not re-fired if its port is out of range, where the immediate -EINVAL
+would destroy the owed timer_expires state just reported to
+userspace.
 
- - Timer delivery leaves ->arch.xen.timer_pending set and retries from
-   kvm_xen_inject_timer_irqs() on the next vCPU entry.
+The drop is vanishingly rare upstream, but hangs roughly half of all
+xen_shinfo_test runs once a subsequent atomic SRCU conversion of the
+pfncache widens the window; hence fixing it first.
 
- - The guest's own EVTCHNOP_send hypercall runs under vcpu_run's kvm->srcu
-   read section — the very reader the memslot update is waiting for — so it
-   cannot wait. Leave the hypercall uncompleted without advancing RIP, so
-   the guest re-executes it. This is how Xen itself restarts preempted
-   hypercalls.
+Fixes: 536395260582 ("KVM: x86/xen: handle PV timers oneshot mode")
+Assisted-by: LLM
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+ arch/x86/kvm/xen.c                            | 108 ++++++++++++++----
+ .../selftests/kvm/x86/xen_shinfo_test.c       |  11 +-
+ 2 files changed, 89 insertions(+), 30 deletions(-)
 
- - Events which cannot be delivered because userspace deactivated the
-   GFN-mode shared_info are deliberately dropped. Treat the shinfo
-   like APIC state when serializing a guest — one of the *last* things
-   to go — and better still, use the HVA mode and never have it absent
-   at all.
-
- - The hypercall page MSR may want to update the shared info page if
-   latching a change of long_mode. Plumbing a retry like the one added for
-   EVTCHNOP_send would be complex overkill, so on -EAGAIN just allow the
-   wallclock change to fail (as opposed to #GP as it did before without
-   even filling the hypercall page). A guest sets the hypercall page
-   *early* in boot, and nothing should be manipulating memslots then
-   anyway.
-
-The waiting is done without holding xen_lock, on which a vCPU writing
-the hypercall page MSR may block from within its kvm->srcu read
-section — the very reader the memslot update has to wait out.
-
-Patches 7-10 are pulled forward from the SRCU series because they stand
-alone:
-
- - Three from Sean², extracting vcpu_info delivery into a separate
-   helper and taking the shared_info and vcpu_info pages out of dirty
-   tracking. Rebased: his series had first converted the GPC locks to
-   read_trylock(), which this one doesn't carry as the rwlocks are all
-   going away soon anyway.
-
- - Requesting the guest TLB flush from record_steal_time() itself, as
-   a standalone cleanup in preparation for converting that to GPC.
-
-The last two patches are selftests: a new test racing a guest
-EVTCHNOP_send loop against a tight memslot delete/recreate loop, and a
-fix to xen_shinfo_test's timer recovery protocol. Tested with both and
-the rest of the KVM selftests; an instrumented run showed 10 of the
-race test's 4000 sends hitting the update window and re-executing.
-
-Based on kvm/next (d4b7fb647204).
-
-v4: https://git.infradead.org/?p=users/dwmw2/linux.git;a=shortlog;h=refs/heads/gpc-eagain-v4
- - New patch 1: don't hold the vCPU's kvm->srcu read section across
-   the SCHEDOP_poll halt. Guest-triggerable unkillable hang of the
-   VMM's memslot ioctls; reproduced with a dedicated test, fixed as
-   vcpu_block() already does for every other halt.
- - Call kvm_xen_shared_info_init() with xen_lock held again, dropping
-   it internally only across the refresh. The wallclock publish is
-   single-writer once more, which answers the torn-seqcount question
-   on v3 3/11 with code rather than argument.
- - Raise KVM_REQ_UNBLOCK when timer delivery defers on -EAGAIN, so a
-   vCPU which takes no further exits cannot sit on the owed event
-   (v3 5/11).
- - In the KVM_XEN_VCPU_GET_ATTR timer flush, always restore a timer
-   which was still armed; only a fired timer with an out-of-range
-   port is not re-fired.
- - Race selftest: assert at least one delivery succeeded, add a
-   whole-run watchdog and a delivered-count diagnostic.
- - Comment, commit message and kernel-doc fixes; Fixes tags.
-
-v3: https://git.infradead.org/?p=users/dwmw2/linux.git;a=shortlog;h=refs/heads/gpc-eagain-v3
-    https://lore.kernel.org/kvm/20261016145646.579369-1-dwmw2@infradead.org/
- - Take kvm->srcu around each kvm_gpc_check() and the copy through the
-   mapping in xen_get_guest_pvclock(), which had none (also found by
-   the syzbot CI on v2).
- - Drop v2's patch 3 and move the waiting out from under xen_lock
-   instead. The srcu unlock/relock it added to the hypercall page MSR
-   write was reachable from nested VM-exit MSR-load lists in contexts
-   (KVM_SET_NESTED_STATE and friends) which hold kvm->srcu by a local
-   index, corrupting the SRCU counts. With no ioctl ever waiting
-   while holding xen_lock, taking it from within a kvm->srcu read
-   section is safe again and no srcu games are needed. Activations
-   racing a concurrent SET_ATTR in the window are userspace's own
-   race; last one wins.
- - The hypercall page MSR write keeps wait=false for its shared_info
-   re-init and no longer fails the WRMSR on the transient race (see
-   above).
- - Re-arm through kvm_xen_start_timer() in the KVM_XEN_VCPU_GET_ATTR
-   timer flush, recomputing the expiry from timer_expires. The
-   hrtimer's own expiry field is stale when the timer last fired
-   through the direct callback path, which doesn't program it. Don't
-   re-arm an undeliverable (out of range) port, where the immediate
-   -EINVAL would destroy the timer_expires state just reported.
- - New final patch: give the timer recovery poll in xen_shinfo_test a
-   timeout. If the timer event is dropped while the guest is already
-   blocked in SCHEDOP_poll, nothing else ever wakes it, so the test's
-   documented VMM re-arm protocol could never actually run.
- - Commit message and kernel-doc fixes.
-
-Thanks again to the Sashiko review bot for its findings on v3, both
-addressed above. My own local incarnation, once updated from its
-three-week-old build, went on to find the SCHEDOP_poll hang and the
-armed-timer regression. I take back most of what I said about it.
-
-v2: https://git.infradead.org/?p=users/dwmw2/linux.git;a=shortlog;h=refs/heads/gpc-eagain-v2
-    https://lore.kernel.org/kvm/20261014220508.518772-1-dwmw2@infradead.org/
- - Take kvm->srcu around the kvm_gpc_check() loop and the wallclock
-   write in kvm_xen_shared_info_init(), which had lost it.
- - New patch 3: don't block on xen_lock within the vCPU's kvm->srcu
-   read section (three-way deadlock against a waiting ioctl and a
-   memslot update). Document the rule at the lock's definition.
- - On -EINVAL (deactivated shared_info, or an invalid port), clear
-   timer_pending but keep timer_expires: a halted vCPU would
-   otherwise spin aborting its own block, and the event is still
-   reported as pending through KVM_XEN_VCPU_GET_ATTR.
- - Drop the wait argument from kvm_xen_inject_timer_irqs(); neither
-   caller may wait.
- - Extend the KVM_GET_DIRTY_LOG note in api.rst to the vcpu_info area.
- - Teach lockdep that the wait functions as a synchronize_srcu(), so
-   it reports any lock held across it which a kvm->srcu read section
-   can take.
- - Comment fixes; drop a leftover cosmetic hunk.
-
-v1: https://git.infradead.org/?p=users/dwmw2/linux.git;a=shortlog;h=refs/heads/gpc-eagain
-    https://lore.kernel.org/kvm/20261013204824.454208-1-dwmw2@infradead.org/
-
-¹ https://git.infradead.org/?p=users/dwmw2/linux.git;a=shortlog;h=refs/heads/gpc-srcu-v2
-² https://lore.kernel.org/kvm/20260529165114.748639-1-seanjc@google.com/
-
-
-David Woodhouse (9):
-  KVM: x86/xen: Don't block memslot updates while halted in SCHEDOP_poll
-  KVM: pfncache: Return -EAGAIN for a lookup which hits an invalid
-    memslot
-  KVM: pfncache: Add a 'wait' argument to the refresh and activate
-    functions
-  KVM: x86/xen: Wait out memslot updates in the Xen attribute ioctls
-  KVM: x86/xen: Don't lose the timer event when delivery fails
-    transiently
-  KVM: x86/xen: Retry event channel delivery which races a memslot
-    update
-  KVM: x86: Request the guest TLB flush from record_steal_time()
-  KVM: selftests: Add Xen evtchn vs memslot-update race test
-  KVM: selftests: Fix unreachable timer recovery in xen_shinfo_test
-
-Sean Christopherson (3):
-  KVM: x86/xen: Extract delivery of event to vCPU into a separate helper
-  KVM: x86/xen: Explicitly tag "shared info" page as never being dirty
-    tracked
-  KVM: x86/xen: Don't dirty track "vCPU info" page
-
- Documentation/virt/kvm/api.rst                |   5 +-
- arch/x86/include/asm/kvm_host.h               |   6 +
- arch/x86/kvm/msrs.c                           |   2 +-
- arch/x86/kvm/x86.c                            |  28 +-
- arch/x86/kvm/xen.c                            | 474 ++++++++++++------
- include/linux/kvm_host.h                      |  39 +-
- include/linux/kvm_types.h                     |   1 +
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../kvm/x86/xen_evtchn_memslot_race_test.c    | 208 ++++++++
- .../selftests/kvm/x86/xen_shinfo_test.c       |  20 +-
- virt/kvm/pfncache.c                           | 142 ++++--
- 11 files changed, 723 insertions(+), 203 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86/xen_evtchn_memslot_race_test.c
-
-
-base-commit: d4b7fb647204f0c81dfeae2d1a708e4d858e0c94
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 8c49ec8aa4d9..8a9d6963fc05 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -36,6 +36,19 @@ static bool kvm_xen_hcall_evtchn_send(struct kvm_vcpu *vcpu, u64 param, u64 *r);
+ 
+ DEFINE_STATIC_KEY_DEFERRED_FALSE(kvm_xen_enabled, HZ);
+ 
++static inline int max_evtchn_port(bool has_64bit_shinfo)
++{
++	if (has_64bit_shinfo)
++		return EVTCHN_2L_NR_CHANNELS;
++	else
++		return COMPAT_EVTCHN_2L_NR_CHANNELS;
++}
++
++static inline int kvm_max_evtchn_port(struct kvm *kvm)
++{
++	return max_evtchn_port(kvm_xen_has_64bit_shinfo(kvm));
++}
++
+ static int kvm_xen_shared_info_init(struct kvm *kvm, bool wait)
+ {
+ 	struct gfn_to_pfn_cache *gpc = &kvm->arch.xen.shinfo_cache;
+@@ -126,14 +139,47 @@ void kvm_xen_inject_timer_irqs(struct kvm_vcpu *vcpu)
+ {
+ 	if (atomic_read(&vcpu->arch.xen.timer_pending) > 0) {
+ 		struct kvm_xen_evtchn e;
++		int rc;
+ 
+ 		e.vcpu_id = vcpu->vcpu_id;
+ 		e.vcpu_idx = vcpu->vcpu_idx;
+ 		e.port = vcpu->arch.xen.timer_virq;
+ 		e.priority = KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL;
+ 
+-		kvm_xen_set_evtchn(&e, vcpu->kvm);
++		rc = kvm_xen_set_evtchn(&e, vcpu->kvm);
++
++		/*
++		 * Leave timer_pending set if the memslot is being updated
++		 * (-EAGAIN), and raise KVM_REQ_UNBLOCK — as the timer
++		 * callback does when it defers — so that the entry is
++		 * aborted and this retried from vcpu_run(), rather than
++		 * the guest running with the owed event undelivered until
++		 * some unrelated VM exit.
++		 */
++		if (rc == -EAGAIN) {
++			kvm_make_request(KVM_REQ_UNBLOCK, vcpu);
++			return;
++		}
++
++		/*
++		 * If the event cannot currently be delivered (-EINVAL:
++		 * deactivated shared_info, or an out-of-range port), clear
++		 * timer_pending — a halted vCPU would otherwise spin on
++		 * kvm_cpu_has_pending_timer() — but keep timer_expires,
++		 * which still reports the event as owed through
++		 * KVM_XEN_VCPU_GET_ATTR; re-arming the timer with an expiry
++		 * in the past fires it again.
++		 */
++		if (rc == -EINVAL) {
++			atomic_set(&vcpu->arch.xen.timer_pending, 0);
++			return;
++		}
+ 
++		/*
++		 * Delivered - or failed in a way which can never succeed
++		 * (-EFAULT: a genuinely unbacked shared_info gfn). Either
++		 * way the event is complete: drop it rather than spin.
++		 */
+ 		vcpu->arch.xen.timer_expires = 0;
+ 		atomic_set(&vcpu->arch.xen.timer_pending, 0);
+ 	}
+@@ -1315,17 +1361,21 @@ int kvm_xen_vcpu_get_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+ 		r = 0;
+ 		break;
+ 
+-	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
++	case KVM_XEN_VCPU_ATTR_TYPE_TIMER: {
++		bool timer_armed = false;
++
+ 		/*
+-		 * Ensure a consistent snapshot of state is captured, with a
+-		 * timer either being pending, or the event channel delivered
+-		 * to the corresponding bit in the shared_info. Not still
+-		 * lurking in the timer_pending flag for deferred delivery.
+-		 * Purely as an optimisation, if the timer_expires field is
+-		 * zero, that means the timer isn't active (or even in the
+-		 * timer_pending flag) and there is no need to cancel it.
++		 * Ensure a consistent snapshot of state is captured: a timer
++		 * which already fired has either been delivered to the
++		 * corresponding bit in the shared_info, or is reported as
++		 * still owed (expires_ns != 0, if the shared_info page was
++		 * unavailable). Purely as an optimisation, if the
++		 * timer_expires field is zero, that means the timer isn't
++		 * active (or even in the timer_pending flag) and there is
++		 * no need to cancel it.
+ 		 */
+ 		if (vcpu->arch.xen.timer_expires) {
++			timer_armed = hrtimer_active(&vcpu->arch.xen.timer);
+ 			hrtimer_cancel(&vcpu->arch.xen.timer);
+ 			kvm_xen_inject_timer_irqs(vcpu);
+ 		}
+@@ -1341,13 +1391,34 @@ int kvm_xen_vcpu_get_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+ 		 * That's fine, as the guest won't even have had a chance
+ 		 * to run and handle the interrupt. Asserting an already
+ 		 * pending event channel is idempotent.
++		 *
++		 * Don't re-arm if the flush above failed transiently and
++		 * left the timer pending: delivery is owned by the retry
++		 * on the guest entry path, and an immediate hrtimer fire
++		 * would race it — the callback's timer_pending suppression
++		 * check is not serialized against the entry path, so a
++		 * late callback could re-assert a port the entry path had
++		 * already delivered and the guest already consumed.
++		 *
++		 * An expiry already in the past fires immediately: the
++		 * event is still owed.
++		 *
++		 * A timer still armed (not yet fired) across the flush is
++		 * always restored, whatever its port. One which already
++		 * fired is not re-fired if its port is out of range, where
++		 * the immediate -EINVAL from the delivery path would destroy
++		 * the timer_expires state just reported to userspace.
+ 		 */
+-		if (vcpu->arch.xen.timer_expires)
+-			hrtimer_start_expires(&vcpu->arch.xen.timer,
+-					      HRTIMER_MODE_ABS_HARD);
++		if (vcpu->arch.xen.timer_expires &&
++		    !atomic_read(&vcpu->arch.xen.timer_pending) &&
++		    (timer_armed ||
++		     vcpu->arch.xen.timer_virq < kvm_max_evtchn_port(vcpu->kvm)))
++			kvm_xen_start_timer(vcpu, vcpu->arch.xen.timer_expires,
++					    false);
+ 
+ 		r = 0;
+ 		break;
++	}
+ 
+ 	case KVM_XEN_VCPU_ATTR_TYPE_UPCALL_VECTOR:
+ 		data->u.vector = vcpu->arch.xen.upcall_vector;
+@@ -1520,19 +1591,6 @@ static int kvm_xen_hypercall_complete_userspace(struct kvm_vcpu *vcpu)
+ 	return kvm_xen_hypercall_set_result(vcpu, run->xen.u.hcall.result);
+ }
+ 
+-static inline int max_evtchn_port(bool has_64bit_shinfo)
+-{
+-	if (has_64bit_shinfo)
+-		return EVTCHN_2L_NR_CHANNELS;
+-	else
+-		return COMPAT_EVTCHN_2L_NR_CHANNELS;
+-}
+-
+-static inline int kvm_max_evtchn_port(struct kvm *kvm)
+-{
+-	return max_evtchn_port(kvm_xen_has_64bit_shinfo(kvm));
+-}
+-
+ static bool wait_pending_event(struct kvm_vcpu *vcpu, bool has_64bit_shinfo,
+ 			       int nr_ports, evtchn_port_t *ports)
+ {
+diff --git a/tools/testing/selftests/kvm/x86/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86/xen_shinfo_test.c
+index aaa414c677ad..3b11d0ee253f 100644
+--- a/tools/testing/selftests/kvm/x86/xen_shinfo_test.c
++++ b/tools/testing/selftests/kvm/x86/xen_shinfo_test.c
+@@ -356,11 +356,12 @@ static void guest_code(void)
+ wait_for_timer:
+ 	/*
+ 	 * Poll for a timer wake event while the worker thread is mucking with
+-	 * the shared info.  KVM XEN drops timer IRQs if the shared info is
+-	 * invalid when the timer expires.  Arbitrarily poll 100 times before
+-	 * giving up and asking the VMM to re-arm the timer.  100 polls should
+-	 * consume enough time to beat on KVM without taking too long if the
+-	 * timer IRQ is dropped due to an invalid event channel.
++	 * the shared info.  KVM is now supposed to retry a timer IRQ whose
++	 * delivery hit an invalid shared info rather than drop it, but older
++	 * kernels drop it on the floor.  Arbitrarily poll 100 times before
++	 * giving up and asking the VMM to re-arm the timer, so the test still
++	 * completes (and documents the VMM-side recovery protocol) on
++	 * unfixed kernels.
+ 	 */
+ 	for (i = 0; i < 100 && !guest_saw_irq; i++)
+ 		__xen_hypercall(__HYPERVISOR_sched_op, SCHEDOP_poll, &p);
 -- 
 2.43.0
 
