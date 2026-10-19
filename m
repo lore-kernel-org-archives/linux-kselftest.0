@@ -1,196 +1,416 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012043.outbound.protection.outlook.com [52.101.43.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1434FC34F;
-	Mon, 19 Oct 2026 13:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792418089; cv=fail; b=HGV6RgzrkTgfohiwXZaPGWCNnBg2HHWPjtaOz6cPWVoYDqVcAvGDvdGxpeseIzbPCeZdDhy70/4qEok5s8UQ0hZLqkcOEDo7MU74n7LsF4OoS9U1TVAUYGVowyYmBQU9D3TMtGqSqbCx3kmdp2tEPvfCipumfH1LAlWg9nQ/8oo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792418089; c=relaxed/simple;
-	bh=JM0YjG8nvVw9pjYzBghFmu0oK+bi83RM+sJvVxEtPz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Uk9IpyC2CW1nSVvXESPDh11QPi41N0cE+0EGuHcdzst6yu1uD9XJf0AR/HYH6J0Dt5Hr8V08N98vWC1G6QAsWQrkHoo93poylI6+1CrpEBVy95Yj/GjCkLorqV9dmJc4BMpXuWFQI9EZvPpgYeeC+cfuiv55Rut/WgGSe4TEpqQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IKnlaSY2; arc=fail smtp.client-ip=52.101.43.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A323514753;
+	Mon, 19 Oct 2026 13:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792418107; cv=none; b=VlkHXPiTfjXRUQ+fJowRWL6kCpCE9p161z+rBir31pvSVfJRqJlNouDlPPHfBQZitCOCCtFpZLoZuTFY/GO5pZI7TPdSQMvdJPWxV9wYBPMx9b7jmZ2LJZK4RWmegKjE2ZGbd6VU60O1asLkSQxeVgM4HxutTtXlx2Q0aUPbk1c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792418107; c=relaxed/simple;
+	bh=jXlyxxQFxfUqX6pnvaWYF38tE6OgTm28TgmzDMre1GE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kc7mLGGevxOaEQFg8NmCm6uhg2WHwO1+HZL3PQAmhLMmfU1Kpd0RDVxpRaAREsXKGRbd9TxmCbojihWPQyxdzyEPDGNCGbxPg4B+9tIPndnejS/K7PP9rFezC1FBxzeVX02a2ExLqwwe/OqjcHMMsgLlO+OKiD6S/4ZFZpfUAjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DGFRHV8d; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IKnlaSY2"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fIAceooJjo0FD9VK27TSCCb4GtTOtqtjaKiNFAG/BbxGi2BK05MBj8sWUG5TcsV+HPE9T5117OZ2TwoY6cMymN776AtHmKEd2Slsj6TAtmgM2iY7W+foQ+mbuUlsZlSX5ZQS4+yYlr1mhM4gT62udOyzb/xl9ouDHdAdejfWVj+IZAW6HRRMkCV7AgqtYyscXr8F8O0lGAQfRdxHdowIbJQr9uPdGtjqdUz4stReI2hKZMSEKrYWxXpwXb8swICAq3reJUuQBOC09BlsV252SfQmAre6pZautSR0GBrYv4joXu0gyS7H7kjpe1RaNPrH8n0ll0Cg0YCe2rO8uKh1DA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+dD9/hvy8CjdpytNmMTQelv0WDFvgfCSAODHd8XjH8g=;
- b=aSJYNk/V89xWXyUQawe2DTjIKUY7bVI0xChXWHrAFDvytoNpj4rTBat+MPbY7hMvxuA8ImudXQar2ULiDo1oaNYztT5w1yU3GJpaQpnVIPMBN7pjw5Lo2uSYwMTYEAmsipPeDqNLa/TuF+T5uf1YuxKAinFPuwOm1rpLET0EA6X0uFqCsLgt1OQwaUherLNYIcPkAZL2yv7w73VYIlPYSvoyKzIFodqimeHZHY+DCL7gBBGDdi6SbbzvaPykc7rZSrSIadf1RXmhqsyXvnaaRPks9A80iCjJ69podBpE56PnCMwHL5lymAzemSS8/cMttxaAT3HuHYMQ4Ufr2i1bTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+dD9/hvy8CjdpytNmMTQelv0WDFvgfCSAODHd8XjH8g=;
- b=IKnlaSY2ZMNZQnnRFGJGnBqF2+zjvpv/7OLYdyIm9ZDWlFlekSSP4FZ7wi0xHWj00R4JpszZEN8wSLjMViYutwF+vsNCPjOiKcsrWLpNtY80ddnC0rTLLUCl5ZPgbrwIr2Kir/enTORRFyHQ79Uq0ASn8u0J/4Ti7G4JfSSa2J0x/GRaWklkGiW+w8u0wwhmJFq56ZsaVA7L5Ku3+qeWg+wjkePqbloqIZJYPIufe5qBgjHwDFvR0McgegKfADY8ERYL47wmZY6QEiPrZNTS7oP/uiKVrysqhWARzYQQnjl7babSp3Ugx5jxHMiTq9v+AJvQ3tVtVWIGgTBUZwgqWQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19)
- by MW3PR12MB4491.namprd12.prod.outlook.com (2603:10b6:303:5c::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Mon, 19 Oct
- 2026 13:54:45 +0000
-Received: from BL1PR12MB5174.namprd12.prod.outlook.com
- ([fe80::58de:822b:868:96e9]) by BL1PR12MB5174.namprd12.prod.outlook.com
- ([fe80::58de:822b:868:96e9%6]) with mapi id 15.21.0522.017; Mon, 19 Oct 2026
- 13:54:45 +0000
-Date: Mon, 19 Oct 2026 15:54:38 +0200
-From: Andrea Righi <arighi@nvidia.com>
-To: Michal Blaszczyk <michalblk@google.com>
-Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Kuba Piecuch <jpiecuch@google.com>
-Subject: Re: [PATCH 2/2] selftests/sched_ext: Add class_switch_stall test
-Message-ID: <atYhHvJAxLp01QbT@gpd4>
-References: <20261019124146.3582127-1-michalblk@google.com>
- <20261019124146.3582127-3-michalblk@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261019124146.3582127-3-michalblk@google.com>
-X-ClientProxiedBy: ZR0P278CA0014.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:16::24) To BL1PR12MB5174.namprd12.prod.outlook.com
- (2603:10b6:208:31c::19)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DGFRHV8d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25251F000CA;
+	Mon, 19 Oct 2026 13:55:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792418105;
+	bh=JqlXyvFuSdHOxo0/HGsAnTDVAoVmT6DZMuonjjOohJo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=DGFRHV8dNIxkoJ9H/PyGPhaAEiO6sW0aKH+iVRcfYGCOPUkIXbr9haONkuLTfY4jb
+	 QHFBIn1yZx94Ik25qhtmFg2wX6VdRhKvGrDa8ENVn34VFgLeBMnU/dUA3XGV+yYcd/
+	 ZpNCOnBLCLvf2sMNxV2pT+XSEDLea6NqKmd0cJV1uBUqGqX8xWCkm+1TTG3p8rM5YI
+	 rynt9Pet5wfWu8XDNo6zh2s+imKmRWJOgrWCOQD3Yc6OHLNMQGYZYnU7gko35oHRFG
+	 3zBi9C+/rUmzSG44X1MtLPyp0w6gaDxIinxxYfsgO8t2wbpM2qotzbgI2YO0evzY4X
+	 vJDz66DkNkCmg==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Feng Tang <feng.tang@linux.alibaba.com>,
+	Simon Horman <horms@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Sasha Levin <sashal@kernel.org>,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.18-6.1] selftests: net: reuseport_bpf_numa: consider cpuless numa node
+Date: Mon, 19 Oct 2026 09:45:06 -0400
+Message-ID: <20261019135441.1420968-15-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261019135441.1420968-1-sashal@kernel.org>
+References: <20261019135441.1420968-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5174:EE_|MW3PR12MB4491:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5de77641-1864-41b4-1226-08df2de8882b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|6133799003|18002099003|22082099003|11063799006|4143699003|10067099003|261009223027099003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	+6ajNGDDpyztVfWwoQ7QCMk/4Er442QzhH8bq64r/L7BHaG8UnM+6AaEy4BY/yF4OpTPwB1o/PtTxJ3RsdponlkmukAGpMEftXpxHjGusVhrF/z9aQJPB4SduCjOakpg9wXpikKHNSUFfnhwC1lNvC2q/7rEoXH5LGREYtg4vx25he/cswsEyYZvq2y6ZE474R1/SIWw10soyo2zxYLqqQQbXuBB6oJvtCpNpFIUURmj/inNp1PtFOK/2AVVqF/5Wb2UVbktKaxgl4Ka/GhmHd88bgdMsghMxsNp8fh0r/PN5lpAuoWpViFRq2/6B6e6i6ODIesDXACrNfPOZLL5UJy6BZacNp8eXUrzsv3BH7rwE1jUGV/fDAnO/dzrOAh1pDFhgGlhNMLny6xJn+iQm3qsHtz6a0/VTC6rCjuG7CiVxjEsc0Cz67G4YewuDN8nATGNYFZoxcG1yr9ymAuPPGRXKedhwI1KXpE5bvS5WMvfvzA8Fv6mzUPQO2jIafbdvnx/UmgsVpwkhcKgAQlCHI6zPFa/X0Zj98LmGAOHOELbyOCBX+ZtXTvXixZOU4foRhVOJMcgiYxCSxWrdbWuDNuY5vZ1b4myctJVn2bOoKF1mL2WhMdKeahAZoLG8JDHXAgmtIHH8eLKOiZcehJ3HvaM+Bj25l+Ypj7csGVLf58=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(6133799003)(18002099003)(22082099003)(11063799006)(4143699003)(10067099003)(261009223027099003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?rYXPqEIEybstq6ZvLv+Aoe9m4IYi6wYLvbRZdwUHJOqWI+OUUUpgG4B2XIly?=
- =?us-ascii?Q?0AHFMvf8FDFqfK2E/OpJo2hH9Z2crUPfOT8yC5tlafOmN9YXn02IJtpsaLGf?=
- =?us-ascii?Q?qfXw1/21+1iITafrgGgmReVurzK4EeS3jVNfipUjdRMcx9jvEB/jlF9Xs3UI?=
- =?us-ascii?Q?VyamxCud//616J1JCpVZ+qPrAVaVP8P1oby+08oA1TJBSgpqQAiGEocBcIhv?=
- =?us-ascii?Q?4y2d45b+Q6boDx6VQIPyvx/VFHJ/8Ntdd4oymF8RCZkwQXDtu5m2mwPIenSP?=
- =?us-ascii?Q?8hwEKrj/38Khs7na7K0ry5lq4kzmeYtfYqka3kegrMkqUdEVKN86fvPBFWQt?=
- =?us-ascii?Q?kTvrb4lHOH8f+VFkJCebf2hZ/YsL1I64tG5Uf1MmWUY/9Xg9RvFOUyhE9S9Q?=
- =?us-ascii?Q?4KvwSZGIPK/Rvipd0agX6OERPoLomyQDGheICO2CxWQ/Fi9zbNXgAbi1Mujz?=
- =?us-ascii?Q?X96LqAEh6+MuGazgbKiTf05I3gBK3CEha07fX8pfRdCmycCL5kHOXcRdmvGq?=
- =?us-ascii?Q?0RIlQXCTmbh0LB3oOiXLVigYIc3LPTwP15OAITmYeFVM2HWW16UR+e9oOx8r?=
- =?us-ascii?Q?bAfTiisjs64tIhQZ7fUOUoBsRRAozIzVsj8E6iAkI9uTQYi9m/AA6cne2Nmr?=
- =?us-ascii?Q?aQ0/YW1mMeU4V2agudTJTVyB7m4KPlFeCn9p1AWoGCfOIyo1R49uffUQRnS+?=
- =?us-ascii?Q?wVtW31F1dUYHtYJ0cMN293HEgZ4NUjkjjBkK0QaSJ7aPmLyWF2MddfESLMne?=
- =?us-ascii?Q?zXiUHvjwdiqWzq3/oU/p7VMwSSAWZPu5p85pRRm6ubIqprTA8LEUwR4ZKwmt?=
- =?us-ascii?Q?Rtjo/l1RUjV6CG0cL1j72uc4kPi8n9GhdW0xx+FS7oLk8CcrBRcbVDKt0xGJ?=
- =?us-ascii?Q?/SYnozPMIVuT2Jvu8J2nAEW62a2aUAn0ZQjatxBvimC+8L92zRYFZ0xdrG5m?=
- =?us-ascii?Q?/tw5nFqz9jY6M1r0bOiqHe8VBHpQkxPMv7cT6pyRuSWk4w+i2o4U6arvwLXN?=
- =?us-ascii?Q?N5pz2Ida/34TWy8ALu7KfKY/tb4Ra2Y4m8OGJ9C3sRdWPbEHeXkiXg0X2JRH?=
- =?us-ascii?Q?qcrQCa5VTkdveYSz5s/iQO69UGmWi3dh4a9St/bVQM8wy/cGYosFA6ZjV2Tk?=
- =?us-ascii?Q?KJprWZi1dMjKE6Q+DTvndLpDJ6SCwModcZ7qSQE270DUVET++LC7sN+eQi37?=
- =?us-ascii?Q?C1BxyX8rVyLlBnrnqc/7C+CTouOWArD8QxTs5WRCsW6vSNqP4xItWYhFYQg1?=
- =?us-ascii?Q?Bc+Xka3zQnuDmqBdZoHQdUt0GfkcT96SmCDVgPD6/hPaCmcOxmSfcZXp+uFD?=
- =?us-ascii?Q?r0R4AqZ8rdqyqYP3m20m4cLQzyXLJlycKrCms+KbXnBM2kzXonfKj7RE/fw8?=
- =?us-ascii?Q?H1R14XN8Cfk8YSEdkM0N0Y0ucvaRDMb3uoEfjEE9km5uiZA9Gmwfe/T+IxJI?=
- =?us-ascii?Q?SmfpkkWJntZBzfu8HwlFfmVYbPVooPmvRrh4iURMTrbJKN0soyef7YklypX+?=
- =?us-ascii?Q?EAMRZ5M7L7AamABAqMgvowVzZ2zt1o9r5O3ZHPS1I13hoSCmMR9SitALYnz6?=
- =?us-ascii?Q?lU01uQjuo77Lggy+TxmKEzW5uqyBdlL/ynYEEExYqGGxoB8Ny47voTxxX/OC?=
- =?us-ascii?Q?uaOpj2TxcxNqfSjuSk/0MsjbACWmrf12iIh2WzZxc7gt5i+nlXDTYllrsGCm?=
- =?us-ascii?Q?jQVVE3XxbmMy1q7J+cxeHxTERMqniUvF+oyeq+CFxOYGoGJHdAIsEtpbH5R1?=
- =?us-ascii?Q?WzUemmsDlA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5de77641-1864-41b4-1226-08df2de8882b
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5174.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 13:54:45.0766
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9t3U78GOSvXcV9s+SKz/e2RUPZHe6sYPcyAVV02vSoVYsk8MpCJ/tU9FqGbxPWZAfeLoq/aVlxR7JlUZ6PqFCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4491
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.57
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Michal,
+From: Feng Tang <feng.tang@linux.alibaba.com>
 
-On Mon, Oct 19, 2026 at 12:41:46PM +0000, Michal Blaszczyk wrote:
-> Add a test for a task which leaves SCHED_EXT while it's waiting. Its
-> scheduler keeps the task waiting on a DSQ after it wakes up. The test
-> switches the task to SCHED_OTHER while it's waiting, lets it sleep outside
-> of SCHED_EXT for three times the watchdog timeout, then switches it back
-> and wakes it up. The scheduler keeps it waiting again, for longer than the
-> watchdog interval but shorter than the timeout, which the watchdog must not
-> report as a stall.
-> 
-> Without the previous patch, the watchdog charges the task for the time it
-> spent outside of SCHED_EXT and aborts the scheduler.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Michal Blaszczyk <michalblk@google.com>
+[ Upstream commit 88b8d85e889e2fe1cce3e66e50c3029dda94842a ]
 
-...
+reuseport_bpf_numa case failed when testing on a platform with CXL
+memory:
 
-> diff --git a/tools/testing/selftests/sched_ext/class_switch_stall.c b/tools/testing/selftests/sched_ext/class_switch_stall.c
-> new file mode 100644
-> index 0000000000000..489d23c777f05
-> --- /dev/null
-> +++ b/tools/testing/selftests/sched_ext/class_switch_stall.c
-> @@ -0,0 +1,240 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Check that a task which leaves SCHED_EXT while it's waiting doesn't carry
-> + * that wait over to its next stay on SCHED_EXT. If it did, the watchdog would
-> + * count the time the task spent outside SCHED_EXT as waiting and abort the
-> + * scheduler.
-> + *
-> + * Copyright (c) 2026 Google LLC.
-> + */
-> +#define _GNU_SOURCE
-> +
-> +#include <bpf/bpf.h>
-> +#include <poll.h>
-> +#include <sched.h>
-> +#include <scx/common.h>
-> +#include <signal.h>
-> +#include <stdio.h>
-> +#include <string.h>
-> +#include <sys/wait.h>
-> +#include <unistd.h>
-> +#include "class_switch_stall.bpf.skel.h"
-> +#include "scx_test.h"
-> +
-> +#ifndef SCHED_EXT
-> +#define SCHED_EXT 7
-> +#endif
-> +
-> +/* class_switch_stall_ops.timeout_ms, the watchdog checks every half of it */
-> +#define TIMEOUT_MS 1000
-> +/* longer than the watchdog interval, but shorter than the timeout */
-> +#define PARK_MS 750
-> +/* time spent outside of SCHED_EXT, a stale wait would exceed the timeout */
-> +#define OUTSIDE_MS (3 * TIMEOUT_MS)
+    #./reuseport_bpf_numa
+    ---- IPv4 UDP ----
+    send node 0, receive socket 0
+    ./reuseport_bpf_numa: failed to pin to node: Invalid argument
 
-Could we increase the watchdog timeout to 3s and the park duration to
-2s, updating timeout_ms accordingly?
+The root cause is that the platform has 2 numa nodes: node 0 has
+both cpu and memory, while node 1 is a CXL node which only has
+memory, and caused numa_run_on_node() to fail.
 
-With the current values, there is only about 250ms of headroom for timer
-delivery, dispatch, and the child actually getting CPU time before it
-becomes eligible for a watchdog stall The first phase also depends on
-userspace switching the parked child out within 1s.
+Add sanity check to skip cpuless numa node for the numa binding test.
 
-I haven't observed a false failure, so this is a robustness suggestion
-(I'm thinking at loaded CI VMs) rather than an observed problem. A 2s
-park would still span the nominal 1.5s watchdog interval while leaving
-more headroom.
+Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
+Link: https://patch.msgid.link/20260807002436.43991-1-feng.tang@linux.alibaba.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-Thanks,
--Andrea
+LLM Generated explanations, may be completely bogus:
+
+## Phase 1: Commit message forensics
+
+**Step 1.1: Subject line**
+- Record: `[selftests: net]` `[consider]` skip CPU-less NUMA nodes in
+  `reuseport_bpf_numa` so the test does not abort when
+  `numa_run_on_node()` cannot pin to a memory-only node.
+
+**Step 1.2: Tags**
+- Record: `Reviewed-by: Simon Horman <horms@kernel.org>`; `Link: https:/
+  /patch.msgid.link/20260807002436.43991-1-feng.tang@linux.alibaba.com`;
+  `Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>`; `Signed-off-
+  by: Paolo Abeni <pabeni@redhat.com>`.
+- No `Fixes:`, no `Reported-by:`, no `Tested-by:`, no `Cc: stable`
+  (absence is expected). Ignore any pipeline `Signed-off-by: Sasha
+  Levin` / `[Upstream commit ...]` markers.
+
+**Step 1.3: Body**
+- Record: On a 2-node CXL box, node 0 has CPU+memory and node 1 is
+  memory-only. The test prints `send node 0, receive socket 0` then dies
+  with `failed to pin to node: Invalid argument` from
+  `numa_run_on_node()`. Root cause is treating every bit in
+  `numa_nodes_ptr` as a pin-able CPU node. Fix: skip CPU-less nodes.
+
+**Step 1.4: Hidden bug fix?**
+- Record: Yes. “Consider” is test-robustness language, but the program
+  currently `error(1, ...)` and fails. This is a real false failure, not
+  style cleanup.
+
+## Phase 2: Diff analysis
+
+**Step 2.1: Inventory**
+- Record: One file, `tools/testing/selftests/net/reuseport_bpf_numa.c`.
+  About +24 lines. New helper `is_cpuless_node()`; `test()` gains two
+  `continue`s. Surgical, single-file, userspace selftest only.
+
+**Step 2.2: Flow**
+- Record: Before: both forward and reverse loops skip only nodes unset
+  in `numa_nodes_ptr`, then call `send_from_node()` which does
+  `numa_run_on_node()` and aborts on failure. After: also skip nodes
+  whose libnuma CPU mask has weight 0. Normal send/receive path for CPU-
+  bearing nodes is unchanged.
+
+**Step 2.3: Bug mechanism**
+- Record: Logic/correctness in a selftest. Memory-only NUMA nodes are
+  present in `numa_nodes_ptr` (the 2021 skip does not drop them) but
+  have an empty CPU mask, so pinning returns EINVAL. `is_cpuless_node()`
+  uses `numa_allocate_cpumask()` / `numa_node_to_cpus()` /
+  `numa_bitmask_weight()`; on helper error it returns false (do not
+  skip), which is conservative.
+
+**Step 2.4: Fix quality**
+- Record: Obviously correct and minimal. Skipping a CPU-less node is
+  right: `bpf_get_numa_node_id()` is the current CPU’s node, so a
+  memory-only node can never be the sender. Regression risk is very low
+  (userspace test only). Helper allocation failure still hits the old
+  abort path.
+
+## Phase 3: Git history
+
+**Step 3.1: Blame**
+- Record: Loops come from `3c2c3c16aaf6a` (Daniel Borkmann, 2016-10-21,
+  “reuseport, bpf: add test case for bpf_get_numa_node_id”), first
+  contained in v4.10-rc1. The existing skip is `a38bc45a08e97` (Kleber
+  Sacilotto de Souza, 2021-11-01), contained in v5.16-rc1: skip nodes
+  not in `numa_nodes_ptr` (non-consecutive IDs). That does not cover
+  CPU-less memory nodes.
+
+**Step 3.2: Fixes: tag**
+- Record: None. Buggy assumption is in the original 2016 test, still
+  present here.
+
+**Step 3.3: File history**
+- Record: This tree only has later `0273d10182ec4` (ARRAY_SIZE warning),
+  then the 2021 skip, 2018 numa-skip-if-unavailable, SPDX, and the
+  original test. No `setup_netns()` in this file (0 matches).
+  Standalone; not patch X/Y.
+
+**Step 3.4: Author**
+- Record: Feng Tang has other tools/selftests work in this history (e.g.
+  mm `compaction_test`) but no other net `reuseport_bpf_numa` commits.
+  Not the net maintainer. Applied by Paolo Abeni after Simon Horman’s
+  review.
+
+**Step 3.5: Prerequisites**
+- Record: Needs existing libnuma usage (`numa_nodes_ptr`,
+  `numa_run_on_node`, `-lnuma`). All present. Makefile already has
+  `$(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma`. No missing kernel
+  APIs. Can apply standalone.
+
+## Phase 4: Mailing list / external
+
+**Step 4.1: Original discussion**
+- Record: `b4 mbox` for msgid
+  `20260807002436.43991-1-feng.tang@linux.alibaba.com` returned 404;
+  lore.kernel.org fetches returned 403. Recovered from
+  Openwall/LKML/Patchew.
+- v1 (`20260730113040.75718-1-...`): check inside `send_from_node()`,
+  return -1, no NULL check on `numa_allocate_cpumask()`.
+- v2 (`[PATCH net v2]`): lift check into `test()`, add alloc-failure
+  handling; typo “unlikeyly”; unnecessary `inline`.
+- v3 (`[PATCH net-next v3]`): spelling + drop `inline` (Jakub, Sashiko).
+  Committed version matches v3.
+- No NAKs. No reviewer `Cc: stable` found.
+
+**Step 4.2: Reviewers**
+- Record: To/Cc included Jakub Kicinski, David Miller, Eric Dumazet,
+  Paolo Abeni, Simon Horman, Shuah Khan, Andi Kleen, netdev, linux-
+  kselftest, bpf. Jakub reviewed v2 (inline). Simon Horman `Reviewed-by`
+  on v3. Paolo applied.
+
+**Step 4.3: Bug report**
+- Record: Author reproduced on CXL hardware; commit body has the exact
+  abort. No syzbot/bugzilla. Severity for testers: hard FAIL after the
+  first successful node-0 send.
+
+**Step 4.4: Series**
+- Record: Single patch, three revisions. No sibling patches required.
+
+**Step 4.5: Stable list**
+- Record: No stable-list hit found. UNVERIFIED that nobody asked for it
+  on stable@ (lore 403).
+
+## Phase 5: Semantic analysis
+
+**Step 5.1: Functions**
+- Record: Adds `is_cpuless_node()`. Touches `test()`. `send_from_node()`
+  unchanged.
+
+**Step 5.2: Callers**
+- Record: `is_cpuless_node` only from `test()`. `test()` only from
+  `main()` (IPv4/IPv6 × UDP/TCP). Userspace kselftest, not kernel.
+
+**Step 5.3: Callees**
+- Record: libnuma `numa_allocate_cpumask`, `numa_node_to_cpus`,
+  `numa_bitmask_weight`, `numa_bitmask_free`. Already linked with
+  `-lnuma`.
+
+**Step 5.4: Reachability**
+- Record: Triggered by running `./reuseport_bpf_numa` on NUMA
+  (`CONFIG_NUMA=y` in `tools/testing/selftests/net/config`) with at
+  least one CPU-less node. Not a syscall/kernel path.
+
+**Step 5.5: Similar patterns**
+- Record: Same file already skips unavailable nodes (`a38bc45a08e97`).
+  This is the CPU-less counterpart. No other `numa_run_on_node`
+  selftests in this tree.
+
+## Phase 6: This tree (6.12.111)
+
+**Step 6.1: Buggy code present?**
+- Record: Yes. Local tree is `pending-6.12` / `p-6.12-3-gc504cf0baa3d8`,
+  `make kernelversion` = **6.12.111**. File has the 2016 loops and the
+  2021 `numa_nodes_ptr` skip, and still calls `send_from_node()` without
+  a CPU-less check (`git merge-base --is-ancestor` for both historical
+  commits succeeded). `git log --grep="consider cpuless"` on this file
+  is empty. CXL is in this tree (`drivers/cxl/`).
+
+**Step 6.2: Backport difficulty**
+- Record: Clean apply. The three functional contexts exist verbatim
+  (helper insertion after `attach_bpf()`, two loop sites). Mainline
+  trailing `setup_netns()` context is **not** in 6.12 and is not part of
+  the v3 hunks. `bool` is already used in other net selftests here
+  without extra headers.
+
+**Step 6.3: Related fixes already here?**
+- Record: Only the 2021 unavailable-node skip. It does not fix CXL
+  memory-only nodes. No equivalent `is_cpuless_node` fix.
+
+## Phase 7: Subsystem context
+
+**Step 7.1:** Record: `tools/testing/selftests/net` — kselftest for
+SO_REUSEPORT + `bpf_get_numa_node_id`. Criticality: PERIPHERAL for
+production runtime; IMPORTANT for people who run net kselftests (this
+6.12.y tree already took ~100 `tools/testing/selftests/net` commits
+since `v6.12`).
+
+**Step 7.2:** Record: Net selftests are actively backported here (UAF in
+tests, br_netfilter false failures, HZ=100 skips, portable timeouts,
+etc.).
+
+## Phase 8: Impact and risk
+
+**Step 8.1:** Record: Testers running this binary on NUMA machines with
+CPU-less nodes (CXL memory, similar memory-only nodes). Not a production
+kernel path.
+
+**Step 8.2:** Record: Trigger is running the selftest on that topology.
+First CPU node can succeed; the next CPU-less node aborts. Unprivileged
+if the test is run that way; not a kernel exploit path.
+
+**Step 8.3:** Record: Failure mode = kselftest abort (`error(1, errno,
+"failed to pin to node")`). Severity LOW–MEDIUM for the kernel (no
+oops/corruption), HIGH for CI on those machines (hard fail).
+
+**Step 8.4:** Record: Benefit medium for CXL/NUMA testers of 6.12.y;
+risk very low (userspace, +24 lines, no kernel change). Ratio favors
+backport on this tree, which already takes kselftest false-fail fixes.
+
+## Phase 9: Synthesis
+
+**For**
+- Real, reproduced FAIL on CXL memory-only NUMA; 6.12 has both the test
+  and CXL.
+- Completes the 2021 skip: `numa_nodes_ptr` still includes CPU-less
+  nodes.
+- Small, reviewed, v3 is the applied form; no series deps.
+- Applies cleanly here; zero kernel runtime risk.
+- This tree regularly backports the same class (e.g. `selftests:
+  netfilter: packetdrill: avoid failure on HZ=100 kernel`,
+  vxlan/br_netfilter false-fail fixes).
+- v2 was sent to `net` as a bugfix.
+
+**Against**
+- Not a kernel crash, security hole, or data-corruption fix.
+- Affects one selftest on a subset of NUMA topologies.
+- Final submission was `net-next`; no `Cc: stable` in the thread I could
+  read.
+
+**Unresolved**
+- Exact mainline SHA (not on this branch).
+- lore.kernel.org / `b4` thread dump (403/404).
+- Whether stable@ ever discussed it.
+
+**Stable rules checklist**
+1. Obviously correct and tested? **PASS** (libnuma weight 0; Reviewed-by
+   Horman; author reproduced).
+2. Real bug that bothers people? **PASS** (hard selftest FAIL on real
+   CXL hardware).
+3. Important (crash/security/corruption/deadlock)? **PASS** under this
+   tree’s documented “oh, that’s not good” / kselftest-false-fail
+   practice; not a production oops.
+4. Small and contained? **PASS** (~24 lines, one file).
+5. No new features/APIs? **PASS**.
+6. Can apply to this tree? **PASS** (contexts verified).
+
+**Exception category:** none of ID/quirk/DT/build/docs; it is a
+kselftest correctness/robustness fix, which this 6.12.y tree already
+accepts.
+
+The test in 6.12.111 still assumes every exposed NUMA node has CPUs.
+That is false on CXL memory-only nodes, so `reuseport_bpf_numa` aborts.
+The patch only skips those nodes and does not change kernel behavior.
+That is a contained, low-risk fix worth taking on this tree.
+
+### Verification
+- [Phase 1] Parsed tags: Reviewed-by Simon Horman; Link msgid; SOBs Feng
+  Tang / Paolo Abeni; no Fixes/Reported-by/Cc:stable.
+- [Phase 2] Diff: +24 lines, `is_cpuless_node()` + two `continue`s in
+  `test()`; `send_from_node()` still `error(1)` on pin failure.
+- [Phase 3] `git blame` loops: `3c2c3c16aaf6a` (2016) and
+  `a38bc45a08e97` (2021 skip). Both are ancestors of HEAD.
+- [Phase 3] `git describe --contains`: original test v4.10-rc1; 2021
+  skip v5.16-rc1.
+- [Phase 3] `git log --grep="consider cpuless"` on this file: empty (fix
+  not in tree).
+- [Phase 4] `b4 mbox` msgid: 404; lore WebFetch: 403; used
+  Openwall/LKML/Patchew for v1–v3.
+- [Phase 4] v1→v3: Sashiko NULL-check; lift skip out of
+  `send_from_node`; Jakub spelling/`inline`; Horman Reviewed-by; no NAK.
+- [Phase 5] Callers: `main` → `test` → `send_from_node`; userspace only.
+  `grep numa_run_on_node` only this file under selftests.
+- [Phase 6] `git describe HEAD` / `make kernelversion`: pending-6.12,
+  6.12.111. File matches patch contexts (`hunk1 present`, two loop
+  sites). No `setup_netns`. `drivers/cxl/` present. `CONFIG_NUMA=y` in
+  net selftest config. `-lnuma` already in Makefile.
+- [Phase 6] `v6.12..HEAD -- tools/testing/selftests/net/`: 100 commits,
+  including false-fail/skip fixes.
+- [Phase 8] Failure: selftest abort `failed to pin to node: Invalid
+  argument`; not a kernel oops.
+- UNVERIFIED: lore.kernel.org full thread; stable@ discussion; mainline
+  SHA.
+
+**YES**
+
+ .../selftests/net/reuseport_bpf_numa.c        | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/testing/selftests/net/reuseport_bpf_numa.c
+index c9ba36aa688e2..b04b511809ad2 100644
+--- a/tools/testing/selftests/net/reuseport_bpf_numa.c
++++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
+@@ -104,6 +104,26 @@ static void attach_bpf(int fd)
+ 	close(bpf_fd);
+ }
+ 
++/*
++ * Return true if it is a cpuless node. Return false if it isn't or any
++ * error (very unlikely) happens during the libnuma calls.
++ */
++static bool is_cpuless_node(int node_id)
++{
++	struct bitmask *cpumask;
++	bool ret = false;
++
++	cpumask = numa_allocate_cpumask();
++	if (!cpumask)
++		return ret;
++
++	if (!numa_node_to_cpus(node_id, cpumask) && !numa_bitmask_weight(cpumask))
++		ret = true;
++
++	numa_bitmask_free(cpumask);
++	return ret;
++}
++
+ static void send_from_node(int node_id, int family, int proto)
+ {
+ 	struct sockaddr_storage saddr, daddr;
+@@ -213,6 +233,8 @@ static void test(int *rcv_fd, int len, int family, int proto)
+ 	for (node = 0; node < len; ++node) {
+ 		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
+ 			continue;
++		if (is_cpuless_node(node))
++			continue;
+ 		send_from_node(node, family, proto);
+ 		receive_on_node(rcv_fd, len, epfd, node, proto);
+ 	}
+@@ -221,6 +243,8 @@ static void test(int *rcv_fd, int len, int family, int proto)
+ 	for (node = len - 1; node >= 0; --node) {
+ 		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
+ 			continue;
++		if (is_cpuless_node(node))
++			continue;
+ 		send_from_node(node, family, proto);
+ 		receive_on_node(rcv_fd, len, epfd, node, proto);
+ 	}
+-- 
+2.53.0
+
