@@ -1,43 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2745D3C37;
-	Mon, 19 Oct 2026 14:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1EF5D6C8C;
+	Mon, 19 Oct 2026 14:01:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792418500; cv=none; b=YUL3RSHVqz3ou03jXPw4HN41J8ndrszK5ZtY69Z1Aggpll2P7fDMr2Fbba5zMQyILQ/0ah8oPo4OalQu+27T+69e8qZpRU8bquV8D7ZPwDsX3M48c9Ij+dbpAhRzVP+uZ4uBvJ1vhUgIXU3VaVsVNRnABRP/YCW+wlh79/QauNY=
+	t=1792418512; cv=none; b=AU+vEqCOUPuCXG9lu/LJGK7u84Y2suceJ/uPQfcJL0wNESYpILNrNP0Qt99cwDnyWUGrVKP+jL368MklPrUA0fxvDDHT5w8WKJ/Iaf8mTsrMw1XVRb/eDM9BPbrs85+wwG6vMCB0Lqm3fbX+f8a6XhDYqjsK95OQr4MVvvbVYJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792418500; c=relaxed/simple;
-	bh=22uhUZ/DLHs0CZkgnFH/MBSGlU2p1a3f72O9EochvAg=;
+	s=arc-20240116; t=1792418512; c=relaxed/simple;
+	bh=Ldn3g9pm8KgpRUyYul0Z2x5+VApmaplofuvShAA5s7U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N+9vwn0LWcPMYcEO0Mr+IA0eYhYpC7K1iBHBPkaOWL0lM+TOlKDndT7oaKJSNx3MUOTkj/9R6iv5MtEb/qcA1cGqoa6h2/1LkQqLbZvNUALD52kyQduNBO8/wFib4ZgFWwXUI4Rlnm7ikW9XhxwQmYmBdVwq6vJ4D+mtwtQGato=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MqhWI+bs; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=YXvdhkx1mt4BgsrpzEH7dnty8fc115XdyvqeB8zgjJvE/y9DkcXVF20eEZ530dczgN2iEZ5CvOEUF9pZpsWbS9zSaG8ymHGkT/kgc8/htjz1wOs6l5tSDc9uHrirWgK6yjVULAfNtblBqtIgXu4pqBqq4IgYxcuhVVQ4DGnhydU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C/qidoLD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MqhWI+bs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4917B1F000C7;
-	Mon, 19 Oct 2026 14:01:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C/qidoLD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 974231F000C7;
+	Mon, 19 Oct 2026 14:01:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792418497;
-	bh=ZlO61TrZDclDEP/J41cpKLqQXMCyv97Pd4adStebopw=;
+	s=k20260515; t=1792418509;
+	bh=5fYDhfE3WWxP0b5e/isSFx+04+F0Wkjxq4I0dZ4CyrE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=MqhWI+bsOdXCVk36eb4IVA8l8mNum44X8u3KKrudIoXWb5/TuSa7wsHAmWT/hteni
-	 mPJPBquBXPxaDYCoskfsSO0H1nd7o0p7jJA3WanEWryr4XykHrs+RXnUec8DTNDPRe
-	 232e5qRNLC5pE+6Jny1QNilEd3qx3R0ZLzjCl+13M7wzxLjKxjHEEB1kCw97Fodwry
-	 0HSophNji2G2BlVQiILytmCviFI4HyZwnB5ghKSghCDj1y2YnAZ5Ucsx0TGsxR4A6A
-	 R7pX85r1yINJpDmMSenzn3DF3Ik+F6nMl0UCuR9EWjibr0sQH1N4YTFN58wLR5l38e
-	 5vThEZU7VqW6g==
+	b=C/qidoLD7U2R8Bw9XoHqsOqhMxMFvrLWslkUMA5SdqkEF076/mspzlsKCZtQ3CnBk
+	 f3nEtaj+H8nAe2pSOjJuWLausL5kqgTU91uOH0Qn0mqJiLhVUnSgCvEH7uAjGnT3CO
+	 aCzhLgn191iaY12GhUwLRrjksD3ohLrv90xMLKrwjlNoLvDYG5LQOiZcgHjSfbb1c0
+	 nx+5H1f9XBmqN9K3LyF8HKTh8LvzXMtPed4BfYmaVKN8MZDM66Z58cob0HuYdGVg0i
+	 c8Hxv2rlkMbzDwUaHlH1eo/4v+JoTCsLyvuGSNoDg2q6fszv3GhmE8xBCsL1PiWg7X
+	 epSZPOlf+EF5A==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Christian Brauner <brauner@kernel.org>,
-	Amir Goldstein <amir73il@gmail.com>,
+Cc: Joe Simmons-Talbott <joest@redhat.com>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Tejun Heo <tj@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
+	hannes@cmpxchg.org,
 	shuah@kernel.org,
+	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18] selftests/filesystems/overlayfs: fix set_layers_via_fds link error
-Date: Mon, 19 Oct 2026 09:49:41 -0400
-Message-ID: <20261019135441.1420968-290-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.18] selftests/cgroup: Adjust cpu test duration based on HZ
+Date: Mon, 19 Oct 2026 09:49:50 -0400
+Message-ID: <20261019135441.1420968-299-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261019135441.1420968-1-sashal@kernel.org>
 References: <20261019135441.1420968-1-sashal@kernel.org>
@@ -47,421 +50,520 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.18.57
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Christian Brauner <brauner@kernel.org>
+From: Joe Simmons-Talbott <joest@redhat.com>
 
-[ Upstream commit e5804b1024193c91ff2648403beda882cb4f8b6c ]
+[ Upstream commit a2703c2980c0776e9be7d8f9e144afd054dddb12 ]
 
-set_layers_via_fds.c calls open_tree() directly, but that wrapper is
-not provided by all C libraries, so the test fails to link with
-"undefined reference to open_tree" on toolchains without it.
+For lower HZ values a quota of 1000us is much lower than the amount
+of microseconds per tick which makes the tests test_cpucg_max and
+test_cpugc_max_nested fail. Increase the test duration to accommodate
+for lower HZ values.
 
-Use sys_open_tree() from ../wrappers.h, the syscall wrapper already
-used for move_mount(), fsmount() and friends here.  This is also a
-prerequisite for building the new idmapped_mounts test added to this
-directory.
-
-Link: https://patch.msgid.link/20260615-work-idmapped-overlayfs-v1-8-7381632aa402@kernel.org
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+Link: https://lore.kernel.org/lkml/20260625203307.1114538-1-joest@redhat.com/
+Signed-off-by: Joe Simmons-Talbott <joest@redhat.com>
+Acked-by: Michal Koutný <mkoutny@suse.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-I have enough to decide: this is a selftest link fix for code that
-already exists on 6.18.y, with a clean apply and no kernel runtime
-change.
-
 ## PHASE 1: COMMIT MESSAGE FORENSICS
 
 **Step 1.1: PARSE THE SUBJECT LINE**
-- Record: `[selftests/filesystems/overlayfs] [fix] [replace libc
-  open_tree() with sys_open_tree() so the test links]`
+- Subsystem: `selftests/cgroup`
+- Action verb: **Adjust** (makes tests pass on low-HZ kernels)
+- Claimed intent: scale `test_cpucg_max` / `test_cpucg_max_nested`
+  duration from `CONFIG_HZ` so a 1000µs quota is not smaller than one
+  tick.
+
+Record: `[selftests/cgroup] [Adjust] [scale cpu.max test duration by HZ
+so tests do not fail on low-HZ kernels]`
 
 **Step 1.2: PARSE ALL COMMIT MESSAGE TAGS**
-- `Link: https://patch.msgid.link/20260615-work-idmapped-
-  overlayfs-v1-8-7381632aa402@kernel.org` — lore/msgid for patch 8/10 of
-  the idmapped overlayfs series
-- `Reviewed-by: Amir Goldstein <amir73il@gmail.com>` — overlayfs
-  maintainer
-- `Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>` —
-  VFS maintainer / author
-- Pipeline-only (ignored for selection): `[Upstream commit
-  e5804b1024193c91ff2648403beda882cb4f8b6c]`, `Signed-off-by: Sasha
-  Levin`
-- Absent (expected): `Fixes:`, `Cc: stable@vger.kernel.org`, `Reported-
-  by:`, `Tested-by:`, syzbot
+- `Link: https://lore.kernel.org/lkml/20260625203307.1114538-1-
+  joest@redhat.com/`
+- `Signed-off-by: Joe Simmons-Talbott <joest@redhat.com>` (author)
+- `Acked-by: Michal Koutný <mkoutny@suse.com>` (cgroup reviewer)
+- `Signed-off-by: Tejun Heo <tj@kernel.org>` (cgroup maintainer)
+- No `Fixes:`, `Reported-by:`, `Tested-by:`, `Reviewed-by:`, `Cc:
+  stable` (absence expected)
+- Ignoring pipeline `Signed-off-by: Sasha Levin` and `[Upstream commit
+  ...]`
+
+Record: Author Red Hat; Ack from Michal Koutný; applied by Tejun Heo;
+lore link present; no syzbot/CVE.
 
 **Step 1.3: ANALYZE THE COMMIT BODY TEXT**
-- Record: `[Bug] set_layers_via_fds.c calls libc open_tree(), which some
-  C libraries do not provide. [Symptom] link failure: "undefined
-  reference to open_tree". [Version info] none. [Root cause] the test
-  already uses sys_fsopen/sys_fsmount/sys_move_mount from wrappers.h,
-  but this one test used the libc name instead of sys_open_tree(). The
-  message also says the change is a prerequisite for a new
-  idmapped_mounts test.`
+The body is two sentences: a 1000µs `cpu.max` quota is much smaller than
+microseconds-per-tick at low HZ, so `test_cpucg_max` and
+`test_cpugc_max_nested` (typo for `test_cpucg_max_nested`) fail. The fix
+is a longer run so averaging can absorb tick quantization.
+
+Record:
+- Bug: kselftest false FAIL on low `CONFIG_HZ`
+- Symptom: `test_cpu` cpu.max cases fail
+- Root cause: 1000µs quota vs tick (HZ=100 → 10ms/tick)
+- No kernel oops/corruption described; kernel bandwidth behavior is
+  expected
 
 **Step 1.4: DETECT HIDDEN BUG FIXES**
-- Record: `[Not a hidden fix] The subject and body state a link error.
-  That is a real userspace build failure of an existing kselftest, not a
-  disguised kernel runtime bug. The "prerequisite for idmapped_mounts"
-  line is extra context for a later new test, not the bug being fixed
-  here.`
+Not disguised cleanup. It is an explicit test-robustness fix. Not a
+kernel bug.
+
+Record: `[Not a hidden kernel bug; it is a selftest false-failure fix]`
+
+---
 
 ## PHASE 2: DIFF ANALYSIS
 
 **Step 2.1: INVENTORY THE CHANGES**
-- Record: `[Files]
-  tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c
-  (+8/-8). [Function] TEST_F(set_layers_via_fds,
-  set_layers_via_detached_mount_fds) only. [Scope] single-file surgical
-  rename, 8 call sites.]`
+- `tools/testing/selftests/cgroup/lib/include/cgroup_util.h`: +1
+  (`NSEC_PER_USEC`)
+- `tools/testing/selftests/cgroup/test_cpu.c`: +38 / −6
+- Functions: new `get_config_hz()`; modified `test_cpucg_max()`,
+  `test_cpucg_max_nested()`
+
+Record: `[2 files, +38/−6] [get_config_hz, test_cpucg_max,
+test_cpucg_max_nested] [single-subsystem surgical selftest fix]`
 
 **Step 2.2: UNDERSTAND THE CODE FLOW CHANGE**
-- Record: `[Before] eight open_tree(dfd, path,
-  OPEN_TREE_CLONE|OPEN_TREE_CLOEXEC) calls (libc symbol). [After] the
-  same arguments via sys_open_tree(), the local syscall wrapper. [Path]
-  userspace selftest setup for detached overlay layer mounts. No kernel
-  path, no error-path logic change, no flag change.]`
+Before: hog runs 1.0s wall time; expected usage = 10 periods × 1000µs =
+10ms; pass if within 10% via `values_close_report`.
+After: `duration_usec = 1s * 1000 / hz` (HZ=1000 → 1s; HZ=250 → 4s;
+HZ=100 → 10s). Hog timespec and expected-usage math both use the scaled
+duration.
+
+Record: `[normal test path only: 1s hog → HZ-scaled hog; expected usage
+scales with duration]`
 
 **Step 2.3: IDENTIFY THE BUG MECHANISM**
-- Record: `[Category] build / link error (portability). [Mechanism]
-  unresolved libc symbol on C libraries without open_tree();
-  sys_open_tree() already exists in wrappers.h and issues
-  syscall(__NR_open_tree, ...).]`
+Category: **logic / test correctness** (tick quantization vs tight 10%
+check).
+
+Michal Koutný’s v2 review: tasks overrun quota on a long tick; CFS
+compensates over several periods; 1s is too short for that average to
+land inside 10%. Longer duration was chosen over changing the quota (so
+the same 1000µs quantity is still what is tested). Joe confirmed both
+approaches passed 10 iterations; they took the simpler duration
+approach.
+
+Record: `[test robustness] [quota < tick ⇒ usage noise; longer run
+shrinks relative error]`
 
 **Step 2.4: ASSESS THE FIX QUALITY**
-- Record: `[Quality] obviously correct: same arguments, wrapper already
-  used for the other new-mount syscalls in this file, OPEN_TREE_*
-  already defined in wrappers.h. [Regression risk] very low. syscall()
-  and libc open_tree() both return fd or -1/errno; the test already uses
-  ASSERT_GE(fd, 0). No kernel ABI, locking, or API change.]`
+- Small, reviewed, v1→v5, Acked, applied to `cgroup/for-7.3`.
+- `duration_usec % USEC_PER_SEC * NSEC_PER_USEC` is left-to-right and
+  correct.
+- `1 * USEC_PER_SEC * 1000` fits in 32-bit `long`.
+- Residual issues: `get_config_hz()` only reads `/proc/config.gz`;
+  fallback HZ=1000 leaves duration at 1s, so kernels without
+  `CONFIG_IKCONFIG_PROC` still fail (Tao Cui raised this on v2 for the
+  old quota fallback; v5 still defaults to 1000). `popen`+`grep` is
+  best-effort. Reviewer noted SMP noise may still need later work. No
+  follow-up changed `get_config_hz()` on `origin/master`.
+
+Record: `[obviously correct for the stated goal; residual fallback
+limitation; userspace-only so kernel regression risk is none]`
+
+---
 
 ## PHASE 3: GIT HISTORY INVESTIGATION
 
 **Step 3.1: BLAME THE CHANGED LINES**
-- Record: `[Introduced by] ccc829b15d48a ("selftests: add tests for
-  using detached mount with overlayfs", 2025-02-12). [Present in this
-  tree] yes (ancestor of v6.18.53). The test file itself dates to
-  af9199145b197 (2024-10-14).]`
+`test_cpucg_max` added in `889ab8113ef13` (David Vernet, 2022-04).
+Duration/quota/10% check came from `954bacce36d97` (“selftests/cgroup:
+fix cpu.max tests”, 2025-07, in v6.18). That commit replaced a broken
+inverted 95% check with a real 10% comparison, which is what makes low-
+HZ mismatch actually fail.
+
+Record: `[buggy tightness: 954bacce36d97, in v6.18; tests themselves:
+889ab8113ef13 / a79906570f964, v5.19 era]`
 
 **Step 3.2: FOLLOW THE FIXES: TAG**
-- Record: `[N/A] No Fixes: tag. The intro commit is ccc829b15d48a,
-  confirmed via blame on v6.18.53.]`
+No `Fixes:` tag. N/A.
 
-**Step 3.3: CHECK FILE HISTORY FOR RELATED CHANGES**
-- Record: `[Related] 0bd92b9fe538b moved wrappers.h to
-  tools/testing/selftests/filesystems/wrappers.h (already in v6.18.53).
-  Next commit 226c30d522a3b adds idmapped_mounts.c (new test, not in
-  v6.18.53). [Standalone] this rename does not need the new test.]`
+**Step 3.3: CHECK FILE HISTORY**
+Recent related: `954bacce36d97` (cpu.max expected-usage math),
+`4cdde87d723a0` (`values_close_report`). Standalone; not patch X/Y.
+
+Record: `[standalone follow-on to the 2025 cpu.max test correction
+already in this tree]`
 
 **Step 3.4: CHECK THE AUTHOR'S OTHER COMMITS**
-- Record: `[Author] Christian Brauner, VFS maintainer, overlayfs
-  contributor. [Related] authored the original detached-mount test and
-  the later idmapped overlayfs series. Not a drive-by change.]`
+Joe Simmons-Talbott: this is the only cgroup selftest commit in this
+history. Michal Koutný Ack; Tejun Heo applied.
 
-**Step 3.5: CHECK FOR DEPENDENT/PREREQUISITE COMMITS**
-- Record: `[Dependencies] sys_open_tree() and #include "../wrappers.h"
-  already exist at v6.18.53. Parent file vs v6.18.53 file: 0-line diff.
-  [Standalone] yes for this tree. The new idmapped_mounts test is not
-  required.]`
+Record: `[distro engineer + subsystem maintainer path]`
+
+**Step 3.5: DEPENDENT/PREREQUISITE COMMITS**
+Needs `values_close_report` and the 2025 expected-usage math — both in
+v6.18.53. `NSEC_PER_USEC` is added here. `BUF_SIZE` vs `PAGE_SIZE`
+header rename (`6e9f5c2eecd10`) is **not** in v6.18.53 and is **not**
+required.
+
+Record: `[no missing prerequisites in this tree; can apply standalone]`
+
+---
 
 ## PHASE 4: MAILING LIST AND EXTERNAL RESEARCH
 
 **Step 4.1: FIND THE ORIGINAL PATCH DISCUSSION**
-- Record: `[Lore] https://patch.msgid.link/20260615-work-idmapped-
-  overlayfs-v1-8-7381632aa402@kernel.org . [Series] v1 only (10 patches,
-  "ovl: support idmapped overlay mounts"). This is 08/10. [Review] no
-  NAK on this patch. Amir Goldstein Reviewed-by on the whole series
-  ("the entire series looks good to me"). His risk comments were about
-  FS_ALLOW_IDMAP on overlayfs itself, not this selftest rename. [Stable
-  nomination] none in the thread.]`
+`b4 dig -c a2703c2980c0776e9be7d8f9e144afd054dddb12` matched:
+- v3: https://patch.msgid.link/20260624160358.430354-1-joest@redhat.com
+- v4 RESEND:
+  https://patch.msgid.link/20260625203307.1114538-1-joest@redhat.com
+- v5 (applied):
+  https://patch.msgid.link/20260626202925.1527524-1-joest@redhat.com
 
-**Step 4.2: CHECK WHO REVIEWED THE PATCH**
-- Record: `[Recipients] Miklos Szeredi, Amir Goldstein, linux-unionfs,
-  linux-fsdevel. [Reviewer] Amir Goldstein (overlayfs maintainer) gave
-  series-wide Reviewed-by.]`
+v1/v2 changed **quota** to one tick. Michal asked not to change the
+tested value; Joe tried unaligned-expectation math and longer duration;
+both passed 10 runs; v3+ uses duration. v4 naming nits; v5 inlines
+timespec math. No NAKs. No `Cc: stable` in review.
+
+Record: `[v5 applied; no NAK; no stable nomination in thread]`
+
+**Step 4.2: CHECK WHO REVIEWED**
+`b4 dig -w`: Tejun Heo, Johannes Weiner, Michal Koutný, Shuah Khan,
+cgroups@, linux-kselftest@. Michal Acked v5; Tejun: “Applied to
+cgroup/for-7.3.”
+
+Record: `[right lists; maintainer applied]`
 
 **Step 4.3: SEARCH FOR THE BUG REPORT**
-- Record: `[No Reported-by / bugzilla / syzbot] The failure is described
-  by the author as a link error. No independent user report found.]`
+No bugzilla/syzbot. Author hit it in testing. Tao Cui confirmed the low-
+HZ failure mode in review.
 
-**Step 4.4: CHECK FOR RELATED PATCHES AND SERIES**
-- Record: `[Series] 01–07/10 and 10/10 are overlayfs idmapped-mount
-  kernel/docs features. 09/10 is the new idmapped_mounts selftest. Those
-  are new functionality and are not in v6.18.53 (no FS_ALLOW_IDMAP on
-  overlay in this tree; no idmapped_mounts.c). This 08/10 patch is
-  independently a fix to an existing test.]`
+Record: `[reproduced by author; 10 clean iterations after the duration
+change]`
+
+**Step 4.4: RELATED PATCHES AND SERIES**
+Standalone. Later `origin/master` commits on the same file
+(`77bc7e952f660`, `0c893d170ff8e`) are unrelated.
+
+Record: `[standalone]`
 
 **Step 4.5: CHECK STABLE MAILING LIST HISTORY**
-- Record: `[UNVERIFIED for lore.kernel.org/stable] WebFetch returned
-  403. b4 dig of the original thread found no stable@ discussion.]`
+lore.kernel.org returned 403; `lei q` hung and was killed.
+
+Record: `[UNVERIFIED: no stable@ thread retrieved; none in the cgroup
+thread]`
+
+---
 
 ## PHASE 5: CODE SEMANTIC ANALYSIS
 
-**Step 5.1: IDENTIFY KEY FUNCTIONS**
-- Record: `[Modified] TEST_F(set_layers_via_fds,
-  set_layers_via_detached_mount_fds) in userspace kselftest. [Added]
-  none. semcode MCP not available; identified from @@ hunks.]`
+**Step 5.1: KEY FUNCTIONS**
+`get_config_hz`, `test_cpucg_max`, `test_cpucg_max_nested`.
 
 **Step 5.2: TRACE CALLERS**
-- Record: `[Callers] kselftest harness TEST_HARNESS_MAIN / fixture
-  runner when executing the set_layers_via_fds binary. Not in-kernel.
-  Not interrupt or syscall-kernel context.]`
+Both tests are registered with `T(test_cpucg_max)` /
+`T(test_cpucg_max_nested)` in `test_cpu.c` (v6.18.53 lines 791–792).
+Invoked only when running that kselftest as root. Not kernel, IRQ, or
+syscall.
 
 **Step 5.3: TRACE CALLEES**
-- Record: `[sys_open_tree] syscall(__NR_open_tree, dfd, filename, flags)
-  in wrappers.h. Same as other sys_* helpers already used in this file
-  (sys_fsopen, sys_fsmount, sys_move_mount, sys_fsconfig).]`
+`cg_create` / `cg_write("cpu.max")` / `cg_run(..., hog_cpus_timed)` /
+`cg_read_key_long("cpu.stat")` / `values_close_report`. `hog_cpus_timed`
+burns CPU for the given timespec on `CLOCK_MONOTONIC`.
 
-**Step 5.4: FOLLOW THE CALL CHAIN**
-- Record: `[Reachability] only when a developer/CI builds and runs
-  overlayfs kselftests (typically root, CONFIG_OVERLAY_FS). Not a
-  production kernel path. The link failure happens at test build time,
-  before the test runs.]`
+**Step 5.4: CALL CHAIN / REACHABILITY**
+Userspace kselftest only. Trigger: run `test_cpu` on a low-HZ kernel
+with cgroup cpu controller. Unprivileged users do not hit this.
 
-**Step 5.5: SEARCH FOR SIMILAR PATTERNS**
-- Record: `[This tree at v6.18.53] the only remaining libc open_tree()
-  uses in tools/testing/selftests besides this file are
-  landlock/fs_test.c, which defines its own local open_tree() wrapper.
-  Overlayfs tests were already supposed to use sys_open_tree(). Earlier
-  overlayfs selftest build fixes already in this tree: e8b8c5264d4eb
-  (ppc64 format), 0f05ee447949c (mount.h / sys_mount).]`
+**Step 5.5: SIMILAR PATTERNS**
+No other `get_config_hz` in this cgroup selftest dir. Michal noted BPF
+selftests have similar HZ helpers. No sibling drivers with the same bug.
+
+---
 
 ## PHASE 6: CROSS-REFERENCING AGAINST THE LOCAL TREE
 
 **Step 6.1: DOES THE BUGGY CODE EXIST IN THIS TREE?**
-- Record: `[Tree] Makefile VERSION=6 PATCHLEVEL=18 SUBLEVEL=53; git
-  describe HEAD = v6.18.53-5049-g0f0bdc2b0dffb; branch autosel.
-  [v6.18.53] set_layers_via_fds.c exists and has all 8 open_tree()
-  calls. wrappers.h already has sys_open_tree() and
-  OPEN_TREE_CLONE/CLOEXEC. Include of ../wrappers.h is already present.
-  [Bug introduced] ccc829b15d48a, in this series.]`
+Local tree: **v6.18.53** (`VERSION=6`, `PATCHLEVEL=18`, `SUBLEVEL=53`;
+`git describe HEAD` starts at `v6.18.53`).
+v6.18.53 `test_cpu.c` still uses `duration_seconds = 1` and `quota_usec
+= 1000` in both tests. Upstream
+`a2703c2980c0776e9be7d8f9e144afd054dddb12` is **not** an ancestor of
+v6.18.53.
 
-**Step 6.2: CHECK FOR BACKPORT COMPLICATIONS**
-- Record: `[Difficulty] clean apply. `git diff v6.18.53 088318c9d7a6e^
-  -- set_layers_via_fds.c` is empty. Applying the commit patch onto a
-  copy of the v6.18.53 file: APPLY_CLEAN.]`
+Record: `[yes, buggy 1s/1000µs tests are in v6.18.53]`
 
-**Step 6.3: CHECK IF RELATED FIXES ARE ALREADY HERE**
-- Record: `[No equivalent fix in v6.18.53] still uses open_tree().
-  Candidate 088318c9d7a6e is on autosel only, not in v6.18.53 (`git
-  merge-base --is-ancestor 088318c9d7a6e v6.18.53` → not an ancestor).]`
+**Step 6.2: BACKPORT COMPLICATIONS**
+`git show a2703c… | patch -p1 --dry-run` on a v6.18.53 archive of
+`tools/testing/selftests/cgroup` succeeded on both files.
+
+Record: `[clean apply]`
+
+**Step 6.3: RELATED FIXES ALREADY HERE**
+`954bacce36d97` (correct expected-usage + 10% check) is in v6.18. No
+later HZ-duration fix. No equivalent workaround.
+
+Record: `[no substitute already present]`
+
+---
 
 ## PHASE 7: SUBSYSTEM AND MAINTAINER CONTEXT
 
-**Step 7.1: IDENTIFY THE SUBSYSTEM AND ITS CRITICALITY**
-- Record: `[Subsystem] kselftests for overlayfs
-  (tools/testing/selftests/filesystems/overlayfs/). [Criticality]
-  PERIPHERAL for production runtime; IMPORTANT for overlayfs regression
-  testing of this LTS tree. Overlayfs itself is a widely used fs
-  (containers), but this commit does not touch fs/overlayfs/.]`
+**Step 7.1: SUBSYSTEM AND CRITICALITY**
+`tools/testing/selftests/cgroup` — kselftests, not `kernel/` or `mm/`.
 
-**Step 7.2: ASSESS SUBSYSTEM ACTIVITY**
-- Record: `[Activity] overlayfs selftests were added/extended through
-  6.15 (fd mounts, detached mounts, override_creds). Relatively new
-  tests, still the ones this 6.18.y tree ships. Kernel overlayfs is
-  mature.]`
+Record: `[kselftests / cgroup cpu controller] [PERIPHERAL for production
+runtime; IMPORTANT for distro/CI validation of this tree]`
+
+**Step 7.2: SUBSYSTEM ACTIVITY**
+v6.18..v6.18.53 has **236** commits under `tools/testing/selftests/`,
+including cgroup ones (`13cf95d19e84b`, `0ef3f5629051f`). This series
+already takes kselftest correctness/flake fixes.
+
+Record: `[this 6.18.y tree regularly backports selftest fixes]`
+
+---
 
 ## PHASE 8: IMPACT AND RISK ASSESSMENT
 
-**Step 8.1: DETERMINE WHO IS AFFECTED**
-- Record: `[Affected] people/CI building overlayfs kselftests on a C
-  library without libc open_tree() (author: "not provided by all C
-  libraries"). Not universal kernel users. UNVERIFIED which specific
-  libc versions still lack it in 2026; glibc added open_tree in 2.36, so
-  musl/older glibc are the plausible cases.]`
+**Step 8.1: WHO IS AFFECTED**
+People running `selftests/cgroup/test_cpu` on `CONFIG_HZ` 100/250/300.
+Production cgroup cpu.max behavior is unchanged.
 
-**Step 8.2: DETERMINE THE TRIGGER CONDITIONS**
-- Record: `[Trigger] building TEST_GEN_PROGS set_layers_via_fds
-  (Makefile already lists it). Common for anyone running these
-  selftests. Unprivileged users are not a security concern; this is a
-  link failure, not a runtime exploit.]`
+Record: `[config-specific kselftest users / distro CI]`
 
-**Step 8.3: DETERMINE THE FAILURE MODE SEVERITY**
-- Record: `[Failure] userspace link error; the kernel still builds and
-  boots. Test binary is not produced, so that overlayfs selftest cannot
-  be run. [Severity] LOW for production runtime, MEDIUM for stable-
-  kernel testability. Matches the documented "build error" class, not
-  oops/corruption/deadlock.]`
+**Step 8.2: TRIGGER CONDITIONS**
+Run the cpu.max tests on low HZ. Common on Debian-style HZ=250 and some
+servers at HZ=100. Not unprivileged. Not a race; quantization + short
+window.
 
-**Step 8.4: CALCULATE RISK-BENEFIT RATIO**
-- Record: `[Benefit] medium for testers of this tree (existing test
-  becomes buildable everywhere the rest of this directory already
-  builds). [Risk] very low: 8 identifier substitutions, no kernel
-  change, wrapper already in tree. [Ratio] favorable if build fixes for
-  existing selftests are in scope; this one is.]`
+**Step 8.3: FAILURE MODE SEVERITY**
+False kselftest FAIL. Kernel stays up. No corruption/UAF.
+
+Record: `[false test failure] [LOW for runtime; MEDIUM for CI that gates
+6.18.y]`
+
+**Step 8.4: RISK-BENEFIT**
+- Benefit: stops known false FAILs on configs this tree still ships;
+  matches other selftest backports already in 6.18.53.
+- Risk: userspace-only; no kernel locking/alloc/API change. Worst case:
+  tests stay FAIL without `/proc/config.gz`, same as today; or tests run
+  up to ~10s on HZ=100.
+
+Record: `[moderate CI benefit / very low risk]`
+
+---
 
 ## PHASE 9: FINAL SYNTHESIS
 
-**Step 9.1: COMPILE THE EVIDENCE**
+**Step 9.1: EVIDENCE**
 
-FOR backporting:
-- Real link failure of an existing test in this 6.18.y tree
-- Documentation/process/stable-kernel-rules.rst explicitly lists build
-  errors as acceptable
-- 8-line surgical change, obviously correct
-- sys_open_tree() and wrappers.h already present; applies cleanly
-- Overlayfs maintainer Reviewed-by
-- Same class of fix as e8b8c5264d4eb / 0f05ee447949c already in this
-  lineage
-- No kernel runtime regression surface
+FOR:
+- Real, reproduced failure of tests that exist in v6.18.53
+- Small (+38/−6), clean apply, no kernel code
+- v5 reviewed; Acked-by Michal Koutný; applied by Tejun Heo
+- This 6.18.y tree already backports kselftest flake/correctness fixes
+- Zero production regression surface
 
 AGAINST:
-- Not a kernel crash, security hole, or data-corruption fix
-- Lives in a 10-patch new-feature series; 09/10 and the kernel idmap
-  work must not be pulled with it
-- No independent user/syzbot report
-- Only testers building kselftests benefit
+- Not a kernel crash/security/corruption/deadlock
+- Best-effort HZ probe; fallback HZ=1000 does not help without
+  `config.gz`
+- Reviewer expected possible later SMP tuning
+- No `Cc: stable` in the thread (not used as a negative per
+  instructions)
 
 UNRESOLVED:
-- Exact C libraries that still lack open_tree() in 2026 (author claim,
-  not independently enumerated)
-- No stable@ thread found (lore stable search 403)
+- Stable@ archive search (lore 403, lei hung)
 
-**Step 9.2: APPLY THE STABLE RULES CHECKLIST**
-1. Obviously correct and tested? **PASS** — rename to an existing
-   wrapper; reviewed by Amir Goldstein
-2. Fixes a real bug that affects users? **PASS** — existing kselftest
-   fails to link on some toolchains
-3. Important issue (crash, security, corruption, deadlock)? **PASS**
-   under the documented build-error clause, not under crash/security
-4. Small and contained? **PASS** — 8 lines, one file, one test
-5. No new features or APIs? **PASS** — no new test, no kernel API; the
-   later idmapped_mounts test is a different commit
-6. Can apply to the local tree? **PASS** — v6.18.53 file matches the
-   parent; apply check clean
+**Step 9.2: STABLE RULES CHECKLIST**
+1. Obviously correct and tested? **PASS** — v5 after review; author ran
+   10 iterations; maintainer applied.
+2. Fixes a real bug that affects users? **PASS** — false FAILs of in-
+   tree tests on valid HZ; Red Hat author hit it.
+3. Important issue? **PASS** under this tree’s practice (“oh, that’s not
+   good” kselftest failures), not under oops/CVE. Analogous to flake
+   fixes already in 6.18.y.
+4. Small and contained? **PASS** — two selftest files, &lt;50 lines.
+5. No new features or APIs? **PASS** — duration scaling only.
+6. Can apply to the local tree? **PASS** — dry-run clean on v6.18.53;
+   prerequisites present.
 
-**Step 9.3: CHECK FOR EXCEPTION CATEGORIES**
-- Record: `[Exception] BUILD FIX for an existing in-tree selftest. Not a
-  device ID, quirk, DT, or docs-only change.]`
+**Step 9.3: EXCEPTION CATEGORIES**
+Not a device ID/quirk/DT/build/doc fix. Closest: isolated userspace test
+fix with the same risk profile as a build/doc fix.
 
-**Step 9.4: MAKE YOUR DECISION**
+**Step 9.4: DECISION**
+The tests and the tight 10% check are in this 6.18.53 tree; the kernel
+bug is not, because there is no kernel bug. The patch only stops those
+tests from failing on low HZ, applies cleanly, and cannot regress kernel
+runtime. For this tree, that is enough.
 
-This should be backported to this 6.18.y tree. The bug is in the tree,
-the wrapper is in the tree, and the patch only makes an existing
-overlayfs selftest match the sys_* calling convention the rest of the
-file already uses. The idmapped-overlay feature series around it is
-irrelevant here: that feature and its new test are not in v6.18.53 and
-are not part of this diff.
+What it solves for stable users: distro/CI `test_cpu` cpu.max cases on
+HZ&lt;1000. It meets the written rules as a small, tested, in-tree test
+fix. Risk is negligible versus the CI benefit.
 
-### What the commit solves and why it matters here
-`set_layers_via_fds` is already built on 6.18.y (`TEST_GEN_PROGS +=
-set_layers_via_fds`). One fixture still calls libc `open_tree()`, so the
-binary fails to link where that symbol is missing. Switching to
-`sys_open_tree()` fixes that with no kernel change.
+---
 
-### Stable rules
-It is small, obviously correct, and a build error. It does not add
-features or APIs.
+## Verification
 
-### Risk vs benefit
-Risk is negligible (userspace identifier change). Benefit is that
-overlayfs kselftests for this LTS tree can actually be built on the same
-toolchains the wrappers were written for.
+- [Phase 1] Parsed tags: Link to lore; SOB Joe Simmons-Talbott; Ack
+  Michal Koutný; SOB Tejun Heo; no Fixes/Reported-by/Cc:stable
+- [Phase 1] Body: low HZ + 1000µs quota ⇒ `test_cpucg_max` / nested fail
+- [Phase 2] Diff: +`NSEC_PER_USEC`; +`get_config_hz()` via `zcat
+  /proc/config.gz`; duration `* 1000 / hz` in both tests
+- [Phase 2] Operator precedence of `%`/`*` verified; 1e9 fits in 32-bit
+  long
+- [Phase 3] `git describe HEAD` / Makefile: **6.18.53**
+- [Phase 3] `git merge-base --is-ancestor
+  a2703c2980c0776e9be7d8f9e144afd054dddb12 v6.18.53` → not present
+- [Phase 3] blame: tests 889ab8113ef13 / a79906570f964 (2022); 10% check
+  954bacce36d97 (in v6.18)
+- [Phase 3] `values_close_report` present at v6.18.53 test_cpu.c:694,765
+- [Phase 4] `b4 dig -c a2703c…`: v3/v4/v5 msgid links; `b4 dig -a/-w/-m`
+  used
+- [Phase 4] v2 thread: Michal proposed duration formula; Joe: both
+  approaches passed 10 runs
+- [Phase 4] v5: Michal Ack; Tejun applied to cgroup/for-7.3; no NAK; no
+  stable Cc
+- [Phase 4] lore.kernel.org WebFetch 403; lei stable search killed after
+  30s → UNVERIFIED stable@
+- [Phase 5] Tests only in `T(...)` table; `hog_cpus_timed` is wall-clock
+  hog
+- [Phase 6] v6.18.53 still has `duration_seconds = 1` / `quota_usec =
+  1000`
+- [Phase 6] `patch --dry-run` of a2703c on v6.18.53 cgroup selftests:
+  clean
+- [Phase 6] `6e9f5c2eecd10` BUF_SIZE rename not in v6.18.53; not
+  required
+- [Phase 6] no later `get_config_hz` change on origin/master
+- [Phase 7] `git log v6.18..v6.18.53 -- tools/testing/selftests/` → 236
+  commits
+- [Phase 8] Failure = kselftest FAIL only; kernel path untouched
+- UNVERIFIED: whether `/proc/config.gz` is typical on 6.18.y distro test
+  images (fallback limitation stands either way)
 
-### Concerns
-Do not pull 09/10 (`idmapped_mounts.c`) or the overlay FS_ALLOW_IDMAP
-kernel patches with this; they implement a new feature this tree does
-not have. This commit does not require them.
-
-Verification:
-- [Phase 1] Parsed tags: Link to patch 8/10, Reviewed-by Amir Goldstein,
-  SOB Christian Brauner; no Fixes/Cc:stable/Reported-by
-- [Phase 1] Body: link error "undefined reference to open_tree"; also
-  mentions idmapped_mounts prerequisite
-- [Phase 2] Diff: 8 open_tree → sys_open_tree in
-  set_layers_via_detached_mount_fds; +8/-8 one file
-- [Phase 2] wrappers.h: sys_open_tree() = syscall(__NR_open_tree, ...);
-  OPEN_TREE_CLONE/CLOEXEC defined
-- [Phase 3] git describe HEAD: v6.18.53-5049-g0f0bdc2b0dffb; make
-  kernelversion 6.18.53
-- [Phase 3] git merge-base --is-ancestor 088318c9d7a6e v6.18.53: NOT in
-  v6.18.53
-- [Phase 3] git blame v6.18.53: open_tree() lines from ccc829b15d48a
-  (2025-02-12), present in this tree
-- [Phase 3] git diff v6.18.53 vs commit parent for this file: 0 lines
-  (identical)
-- [Phase 3] idmapped_mounts.c: not in v6.18.53; FS_ALLOW_IDMAP not set
-  on overlay in this tree
-- [Phase 4] b4 dig -c e5804b1024193c91ff2648403beda882cb4f8b6c: matched
-  08/10 of ovl idmapped series
-- [Phase 4] b4 dig -a: v1 only
-- [Phase 4] b4 dig -w: Miklos Szeredi, Amir Goldstein, linux-unionfs,
-  linux-fsdevel
-- [Phase 4] b4 dig -m: Amir series-wide Reviewed-by; risk comments were
-  about kernel FS_ALLOW_IDMAP, not this patch; no NAK on 08/10
-- [Phase 4] lore WebFetch 403; stable list search 403 — UNVERIFIED
-  beyond the saved mbox
-- [Phase 5] semcode unavailable; callers are kselftest harness only
-- [Phase 5] git grep v6.18.53: only this file plus landlock (local
-  wrapper) use open_tree() in selftests
-- [Phase 6] v6.18.53 has the 8 open_tree() calls and ../wrappers.h
-  include; patch apply onto that file: APPLY_CLEAN
-- [Phase 7] tools/testing/selftests/filesystems/overlayfs; not
-  fs/overlayfs
-- [Phase 8] Failure mode: userspace link error; severity LOW runtime /
-  build-error class
-- UNVERIFIED: exact C libraries lacking open_tree() in 2026; no stable@
-  thread (403)
+The tests this commit repairs are in this 6.18.53 tree, the patch
+applies cleanly, and it does not touch kernel runtime.
 
 **YES**
 
- .../filesystems/overlayfs/set_layers_via_fds.c   | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ .../cgroup/lib/include/cgroup_util.h          |  1 +
+ tools/testing/selftests/cgroup/test_cpu.c     | 43 ++++++++++++++++---
+ 2 files changed, 38 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c b/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c
-index dc0449fa628f8..d4a645ec88636 100644
---- a/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c
-+++ b/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c
-@@ -624,7 +624,7 @@ TEST_F(set_layers_via_fds, set_layers_via_detached_mount_fds)
+diff --git a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
+index 7ab2824ed7b54..b9cd00e0e8349 100644
+--- a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
+@@ -8,6 +8,7 @@
  
- 	ASSERT_EQ(sys_move_mount(fd_tmpfs, "", -EBADF, "/set_layers_via_fds_tmpfs", MOVE_MOUNT_F_EMPTY_PATH), 0);
+ #define MB(x) (x << 20)
  
--	fd_tmp = open_tree(fd_tmpfs, "u", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
-+	fd_tmp = sys_open_tree(fd_tmpfs, "u", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
- 	ASSERT_GE(fd_tmp, 0);
++#define NSEC_PER_USEC	1000L
+ #define USEC_PER_SEC	1000000L
+ #define NSEC_PER_SEC	1000000000L
  
- 	layer_fds[0] = openat(fd_tmp, "upper", O_CLOEXEC | O_DIRECTORY | O_PATH);
-@@ -633,25 +633,25 @@ TEST_F(set_layers_via_fds, set_layers_via_detached_mount_fds)
- 	layer_fds[1] = openat(fd_tmp, "work", O_CLOEXEC | O_DIRECTORY | O_PATH);
- 	ASSERT_GE(layer_fds[1], 0);
+diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+index d54e2317efff2..de60967279668 100644
+--- a/tools/testing/selftests/cgroup/test_cpu.c
++++ b/tools/testing/selftests/cgroup/test_cpu.c
+@@ -639,6 +639,31 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
+ 	return run_cpucg_nested_weight_test(root, false);
+ }
  
--	layer_fds[2] = open_tree(fd_tmpfs, "l1", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
-+	layer_fds[2] = sys_open_tree(fd_tmpfs, "l1", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
- 	ASSERT_GE(layer_fds[2], 0);
++/*
++ * Best effort attempt to get the kernel's HZ value from the config.
++ * Return the HZ value if found otherwise return 1000 (the default) to
++ * indicate failure.
++ */
++static long
++get_config_hz(void)
++{
++	long hz = 1000;
++	FILE *f;
++	char cmd[256] = "zcat /proc/config.gz 2>/dev/null | grep '^CONFIG_HZ='";
++
++	f = popen(cmd, "r");
++
++	if (!f)
++		return hz;
++
++	if (fscanf(f, "CONFIG_HZ=%ld", &hz) == EOF)
++		goto out;
++
++out:
++	pclose(f);
++	return hz;
++}
++
+ /*
+  * This test creates a cgroup with some maximum value within a period, and
+  * verifies that a process in the cgroup is not overscheduled.
+@@ -646,15 +671,18 @@ test_cpucg_nested_weight_underprovisioned(const char *root)
+ static int test_cpucg_max(const char *root)
+ {
+ 	int ret = KSFT_FAIL;
++	long hz = get_config_hz();
+ 	long quota_usec = 1000;
+ 	long default_period_usec = 100000; /* cpu.max's default period */
+ 	long duration_seconds = 1;
  
--	layer_fds[3] = open_tree(fd_tmpfs, "l2", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
-+	layer_fds[3] = sys_open_tree(fd_tmpfs, "l2", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
- 	ASSERT_GE(layer_fds[3], 0);
+-	long duration_usec = duration_seconds * USEC_PER_SEC;
++	long duration_usec;
+ 	long usage_usec, n_periods, remainder_usec, expected_usage_usec;
+ 	char *cpucg;
+ 	char quota_buf[32];
  
--	layer_fds[4] = open_tree(fd_tmpfs, "l3", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
-+	layer_fds[4] = sys_open_tree(fd_tmpfs, "l3", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
- 	ASSERT_GE(layer_fds[4], 0);
++	duration_usec = duration_seconds * USEC_PER_SEC * 1000 / hz;
++
+ 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
  
--	layer_fds[5] = open_tree(fd_tmpfs, "l4", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
-+	layer_fds[5] = sys_open_tree(fd_tmpfs, "l4", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
- 	ASSERT_GE(layer_fds[5], 0);
+ 	cpucg = cg_name(root, "cpucg_test");
+@@ -670,8 +698,8 @@ static int test_cpucg_max(const char *root)
+ 	struct cpu_hog_func_param param = {
+ 		.nprocs = 1,
+ 		.ts = {
+-			.tv_sec = duration_seconds,
+-			.tv_nsec = 0,
++			.tv_sec = duration_usec / USEC_PER_SEC,
++			.tv_nsec = duration_usec % USEC_PER_SEC * NSEC_PER_USEC,
+ 		},
+ 		.clock_type = CPU_HOG_CLOCK_WALL,
+ 	};
+@@ -710,15 +738,18 @@ static int test_cpucg_max(const char *root)
+ static int test_cpucg_max_nested(const char *root)
+ {
+ 	int ret = KSFT_FAIL;
++	long hz = get_config_hz();
+ 	long quota_usec = 1000;
+ 	long default_period_usec = 100000; /* cpu.max's default period */
+ 	long duration_seconds = 1;
  
--	layer_fds[6] = open_tree(fd_tmpfs, "d1", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
-+	layer_fds[6] = sys_open_tree(fd_tmpfs, "d1", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
- 	ASSERT_GE(layer_fds[6], 0);
+-	long duration_usec = duration_seconds * USEC_PER_SEC;
++	long duration_usec;
+ 	long usage_usec, n_periods, remainder_usec, expected_usage_usec;
+ 	char *parent, *child;
+ 	char quota_buf[32];
  
--	layer_fds[7] = open_tree(fd_tmpfs, "d2", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
-+	layer_fds[7] = sys_open_tree(fd_tmpfs, "d2", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
- 	ASSERT_GE(layer_fds[7], 0);
++	duration_usec = duration_seconds * USEC_PER_SEC * 1000 / hz;
++
+ 	snprintf(quota_buf, sizeof(quota_buf), "%ld", quota_usec);
  
--	layer_fds[8] = open_tree(fd_tmpfs, "d3", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
-+	layer_fds[8] = sys_open_tree(fd_tmpfs, "d3", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
- 	ASSERT_GE(layer_fds[8], 0);
- 
- 	ASSERT_EQ(close(fd_tmpfs), 0);
+ 	parent = cg_name(root, "cpucg_parent");
+@@ -741,8 +772,8 @@ static int test_cpucg_max_nested(const char *root)
+ 	struct cpu_hog_func_param param = {
+ 		.nprocs = 1,
+ 		.ts = {
+-			.tv_sec = duration_seconds,
+-			.tv_nsec = 0,
++			.tv_sec = duration_usec / USEC_PER_SEC,
++			.tv_nsec = duration_usec % USEC_PER_SEC * NSEC_PER_USEC,
+ 		},
+ 		.clock_type = CPU_HOG_CLOCK_WALL,
+ 	};
 -- 
 2.53.0
 
