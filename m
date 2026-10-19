@@ -1,65 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792433460;
-	b=0QS+I/MFg+FAQpWmKgM2U3ZdIXijXa+vxggPolaxkJu6E1Q5JFk2d+i0u1UTRC50LBex
-	 wDGsoZ8YekGnyZX91Onll2Qb4GGx6W6CZC7j9zPn4ZlFTKDSgo2fvqfsXOhs/O7kXChT2
-	 cPSRS5/1b2WEsqlDraoRQ6rupRs4ITGoQ30Sr8Xc+ZxvIHJMfQPiI2InF4q+kMSfHt1RZ
-	 ZJyh633cedidogBMl0WhwFTpb7WC19ZHy9U4e+cZM/10fNH3g2bX1DivmAgO+Asy9qUXd
-	 ttOuM6ZnCEPBRk2YABKG+fIEAUa4kOf1DyGOziWeikNor+3ZVp68bA0widF19wErHzg==
+	t=1792433464;
+	b=cG71TRh3o2WwNKka5DNNOIpqmuqmS+Q2z8nWS0mAMzhEyDhIACnHdtQCkZmcsK8XMYI9
+	 hdWqEw/SSLe0ylC3l3Zl+AjDbl88V5fMlumC5IzQsBAsRkE3T2izSCSBdBcbuAhMPpnQh
+	 6xWLzrodPfVEJisz82c7mtttnQRUXEkVL30HhCmW3EBMZxcVHpBw4K79pD1ZIYFfbnaFo
+	 oI3MVkMlxLKCjUuMswcy7AukVzovWpXmBOfEaPZEs7XkPPO8J8ckq5CX7pCRFELVTq+Ab
+	 /Jtv2xG8ktMzHUVjyifA0kGGKpRHhjl1Y9v/luL4hGqz4ZG03aUNRnk0KmN1FnRgn4g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792433460;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792433464;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=7+IdROeZ0caW9OoPk+66hYKch0DJTHXyhwvQopipRRY=;
-	b=eOI+sUDmEsC5znK70Tj14udFM2rCl+bEbYl604P3QKMfnQnPdg/FQUt0luvmaUk9DScd
-	 8moRT7y1SFyb6mAkquKFuFtgQbOSjUstT08wxSgEOGPVoZheEcdC+vWOvFZ9pFf+SNyHp
-	 eAkq8iApgMKVaoyJ5ZjY5vm+TFWzwaR3MH/0nuaZ7r/KrvhMKKGk7JBMVBiMW4E65B9Dk
-	 Am6DxNaQPem4Y96wJyGlW0jIYsELJpp8I1BwIF1NI5QQFfS4j9Y2/ZfxCh0fmIO4HhOn3
-	 SoDkIl6R/itbi8lSlUOFp/iTcF8ePpTt9B0SOf6Lp+7dXkQ6uZZJQnJsAhP47fRdtUQ==
+	bh=fRpRjOsNXnarjnEQWZ+ErDczW+pYEljbQ5Lk8t6C4EY=;
+	b=EvxrrhN3zs0WiARiT0kkd3bg/3M9BmcLZsk+lIoKmu5AfjycQXTPm6/cPHRP50Ri+fMN
+	 z0+/IW6K49XRc+LhNhNWW/bvmXqjr0i0GR2wc8v5O19vaUHzfe7zEvzy+tOq30hhxMjcv
+	 9YHZkA+zLDDeGqBGsEgItwEoOg2aoJ8K2xGSMyBQ7orMs+vTVYfRAN94l11z1G1f2SRmD
+	 V3oM/KbB6+06xL3aIWjcFNZMHWukM69w9j0So8Jjwe58bstKDVKPz7atCTD+/+1xO5H0H
+	 AkWjQvn8/+HgDh82k3Ry5sdlvs2mbSDfO22ywwgkGulwZKVdA7z4uEPRjBmtVGy667g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=fHjWFTID;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=hWiGEn4w;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5DB60A381F
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 18:10:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F5DB60A381F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1EB60A3839
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 18:11:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF1EB60A3839
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=fHjWFTID
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=hWiGEn4w
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792433458;
+	s=mimecast20190719; t=1792433462;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=7+IdROeZ0caW9OoPk+66hYKch0DJTHXyhwvQopipRRY=;
-	b=fHjWFTID+/84tydOLja6vzdyYOX2D7Yob/7Sj0zMssKh9OethIlCnl5sgxhLmszMfs2yFg
-	OPXpcR0WjwyYAhZ3M2t1LXIwo893HOdk6f6ppZ+Vfsaxz7Cf6Y/xFxNF3/hyLqAxim3FWv
-	zAs5Yrjt08iEtdXb8PKNJlsFpu02ic0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=fRpRjOsNXnarjnEQWZ+ErDczW+pYEljbQ5Lk8t6C4EY=;
+	b=hWiGEn4wR/4QHbiDu+FJ2kAeKo40eO5ACbQJV0SrN4TFhkxvvNw81NCj3C8wEndalyk3+R
+	2yoRJV908jmWbrc4eDVYIk6raGByzunkbw1ANelb/8GTFL0+l3w2JA/ufiHJbiZLezM5jf
+	pQnJkCJkVgIpJ+VkKO8J/3ijQcaXlZE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-320-zr34aLTtNIuNz_r4UWAwMw-1; Mon,
- 19 Oct 2026 18:10:51 +0000
-X-MC-Unique: zr34aLTtNIuNz_r4UWAwMw-1
-X-Mimecast-MFC-AGG-ID: zr34aLTtNIuNz_r4UWAwMw_1792433449
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-497-109DXJwlOFq_-0n6tQukrA-1; Mon,
+ 19 Oct 2026 18:10:57 +0000
+X-MC-Unique: 109DXJwlOFq_-0n6tQukrA-1
+X-Mimecast-MFC-AGG-ID: 109DXJwlOFq_-0n6tQukrA_1792433455
 Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A2B8718021DB;
-	Mon, 19 Oct 2026 18:10:48 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ABF18195609F;
+	Mon, 19 Oct 2026 18:10:55 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.rmtusnh.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8C32641B;
-	Mon, 19 Oct 2026 18:10:46 +0000 (UTC)
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B4469418;
+	Mon, 19 Oct 2026 18:10:53 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Ridong Chen <ridong.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
@@ -75,9 +75,9 @@ Cc: cgroups@vger.kernel.org,
 	Hui Peng <benquike@gmail.com>,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v4 6/9] cgroup/cpuset: Don't allow a child root partition under an isolated parent
-Date: Mon, 19 Oct 2026 14:10:17 -0400
-Message-ID: <20261019181020.1069325-7-longman@redhat.com>
+Subject: [PATCH-next v4 9/9] selftests/cgroup: Skip test_cpuset_prs.sh test if some required CPUs are offline
+Date: Mon, 19 Oct 2026 14:10:20 -0400
+Message-ID: <20261019181020.1069325-10-longman@redhat.com>
 In-Reply-To: <20261019181020.1069325-1-longman@redhat.com>
 References: <20261019181020.1069325-1-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -92,198 +92,116 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-Although it is not typical for real users to create a complicated nested
-partition hierarchy, it is currently allowed to create nested root and
-isolated partitions. In addition, disabling or invalidating a partition
-should always be allowed especially when the cpuset is being deleted.
+The test_cpuset_prs.sh test assumes that all the relevant CPUs being
+tested are online. If some of them are offline, some of the test cases
+may fail. So skip the test if the required CPUs are either offline or
+not present.
 
-With a nested root and isolated partition hierarchy, it is possible
-that all active housekeeping CPUs can be exhausted when disabling or
-invalidating a root partition and returning its CPUs to the isolated
-parent.
-
-One way to avoid this problem is to disallow the creation of a root
-partition under an isolated parent. It is indeed a new limitation imposed
-on the existing cpuset partition functionality. However an isolated
-partition is usually a left node where scheduling and some other kernel
-noises are disabled. It doesn't make much sense to create a child root
-partition under an isolated parent and remove some CPUs from the set
-of isolated CPUs again. Creation of a child isolated partition under a
-root or isolated parent is still allowed.
-
-If a partition with child root partitions is converted to isolated,
-the child root partitions will be invalidated.
-
-The cgroup-v2 documentation is also updated to reflect this new
-limitation. New test cases are added to test_cpuset_prs.sh to verify
-this new behavior. Some existing test cases are also updated accordingly.
+While at it, the cleanup() and online_cpus() functions as well as the
+trap statement to run cleanup() on exit are moved earlier to make sure
+the cleanup function will be run if the test is somehow aborted early.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- Documentation/admin-guide/cgroup-v2.rst       |  4 ++-
- kernel/cgroup/cpuset-internal.h               |  1 +
- kernel/cgroup/cpuset.c                        | 32 ++++++++++++++++---
- .../selftests/cgroup/test_cpuset_prs.sh       | 23 +++++++------
- 4 files changed, 46 insertions(+), 14 deletions(-)
+ .../selftests/cgroup/test_cpuset_prs.sh       | 64 +++++++++++++------
+ 1 file changed, 43 insertions(+), 21 deletions(-)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index bd8c80f3bbc9..2c445829e24d 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2767,7 +2767,9 @@ Cpuset Interface Files
- 	be retained, but behaves more like a "member".
- 
- 	All possible state transitions among "member", "root" and
--	"isolated" are allowed.
-+	"isolated" are allowed with the exception that a local child
-+	"root" partition is not allowed to be created under an "isolated"
-+	parent partition.
- 
- 	On read, the "cpuset.cpus.partition" file can show the following
- 	values.
-diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
-index 5da9c91295b0..2e44dc8634dc 100644
---- a/kernel/cgroup/cpuset-internal.h
-+++ b/kernel/cgroup/cpuset-internal.h
-@@ -35,6 +35,7 @@ enum prs_errcode {
- 	PERR_HKEEPING,
- 	PERR_ACCESS,
- 	PERR_REMOTE,
-+	PERR_ISOPARENT,
- };
- 
- /* bits in struct cpuset flags field */
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 5a0a4269e7c0..0f047d6bbd9a 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -60,6 +60,7 @@ static const char * const perr_strings[] = {
- 	[PERR_HKEEPING]  = "partition config conflicts with housekeeping setup",
- 	[PERR_ACCESS]    = "Enable partition not permitted",
- 	[PERR_REMOTE]    = "Have remote partition underneath",
-+	[PERR_ISOPARENT] = "Root partition is not allowed with isolated parent",
- };
- 
- /*
-@@ -1899,6 +1900,10 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 			part_error = PERR_CPUSEMPTY;
- 			goto write_error;
- 		}
-+		if ((parent_prs == PRS_ISOLATED) && (old_prs == -PRS_ROOT)) {
-+			part_error = PERR_ISOPARENT;
-+			goto write_error;
-+		}
- 
- 		/* Check newmask again, whether cpus are available for parent/cs */
- 		nocpu |= tasks_nocpu_error(parent, cs, newmask);
-@@ -1974,6 +1979,13 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 				adding = cpumask_and(tmp->addmask,
- 						     cs->effective_xcpus,
- 						     parent->effective_xcpus);
-+		} else if ((parent_prs == PRS_ISOLATED) &&
-+			   ((old_prs == PRS_ROOT) || (old_prs == -PRS_ROOT))) {
-+			part_error = PERR_ISOPARENT;
-+			if (old_prs == PRS_ROOT) {
-+				cpumask_copy(tmp->addmask, cs->effective_xcpus);
-+				adding = true;
-+			}
- 		} else if (is_partition_invalid(cs) && !cpumask_empty(xcpus) &&
- 			   cpumask_subset(xcpus, parent->effective_xcpus)) {
- 			struct cgroup_subsys_state *css;
-@@ -2927,6 +2939,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 	int err = PERR_NONE, old_prs = cs->partition_root_state;
- 	struct cpuset *parent = parent_cs(cs);
- 	struct tmpmasks tmpmask;
-+	int parent_prs = parent->partition_root_state;
- 	bool isolcpus_updated = false;
- 	bool disable_partition = false;
- 
-@@ -2972,6 +2985,14 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 			enum partition_cmd cmd = (new_prs == PRS_ROOT)
- 					       ? partcmd_enable : partcmd_enablei;
- 
-+			/*
-+			 * It is not allowed to create a root partition under
-+			 * an isolated parent partition.
-+			 */
-+			if ((new_prs == PRS_ROOT) && (parent_prs == PRS_ISOLATED)) {
-+				err = PERR_ISOPARENT;
-+				goto out;
-+			}
- 			err = update_parent_effective_cpumask(cs, cmd, NULL, &tmpmask);
- 		} else {
- 			err = remote_partition_enable(cs, new_prs, &tmpmask);
-@@ -2985,12 +3006,15 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 		 * Need to update isolated_cpus.
- 		 */
- 		if (prstate_housekeeping_conflict(new_prs, parent_prs,
--						  cs->effective_xcpus, NULL)) {
--			disable_partition = true;
-+						  cs->effective_xcpus, NULL))
- 			err = PERR_HKEEPING;
--		} else {
-+		else if (parent_prs == PRS_ISOLATED)
-+			err = PERR_ISOPARENT;
-+
-+		if (!err)
- 			isolcpus_updated = true;
--		}
-+		else
-+			disable_partition = true;
- 	} else {
- 		/*
- 		 * Switching back to member is always allowed even if it
 diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index f1dda27b1394..872a9988e4c4 100755
+index 7639e9f11cf9..d04aad697b96 100755
 --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
 +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -288,16 +288,14 @@ TEST_MATRIX=(
- 								       A1:P0|A2:P1|A3:P0|B1:P1"
- 	"   C0-3    C1-3   C3     C4    X2-3  X2-3:P1   P2     P1    0 A1:0-1|A2:2|A3:3|B1:4 \
- 								       A1:P0|A2:P1|A3:P2|B1:P1 2-4|3"
--	"   C0-4    C1-4  C2-4     .    X2-4  X2-4:P2  X4:P1    .    0 A1:0-1|A2:2-3|A3:4 \
--								       A1:P0|A2:P2|A3:P1 2-4|2-3"
--	"   C0-4    C1-4  C2-4     .    X2-4  X2-4:P2 X3-4:P1   .    0 A1:0-1|A2:2|A3:3-4 \
--								       A1:P0|A2:P2|A3:P1 2"
-+	"  C1-6:P1 C3-6:P1 C5-6:P1 .      .      P2      .      .    0 A1:1-2|A2:3-6|A3:5-6 \
-+								       A1:P1|A2:P2|A3:P-1 3-6"
- 	" C1-4:X2-4 C2-4:X3-4:P1 C3-4:X4:P2 \
- 				   .      .      X5      .      .    0 A1:1-4|A2:2-4|A3:3-4 \
- 								       A1:P0|A2:P-1|A3:P-2 ."
--	" C0-4:X2-4 C1-4:X2-4:P2 C2-4:X4:P1 \
--				   .      .      .      X1      .    0 A1:0-1|A2:2-4|A3:2-4 \
--								       A1:P0|A2:P2|A3:P-1 2-4"
-+	" C1-4:X2-4 C1-4:X3-4:P1 C3-4:X4:P2 \
-+				   .      .      .      X1      .    0 A1:1-2|A2:3-4|A3:3-4 \
-+								       A1:P0|A2:P1|A3:P-2 ."
- 	" CX1-3:P1 CX1-3  CX1-3    .      .      .      P1      .    0 A1:1-3|A2:1-3|A3:1-3 \
- 								       A1:P1|A2:P0|A3:P-1"
+@@ -67,6 +67,30 @@ then
+ 	echo Y > /sys/kernel/debug/sched/verbose
+ fi
  
-@@ -331,8 +329,8 @@ TEST_MATRIX=(
- 	" C0-3:X1-3:P2 C1-3:X2-3:P2 C2-3:X3:P2 \
- 				   .      .    C4:X     .      .     0 A1:1-3|A2:1-3|A3:2-3|XA2:|XA3: A1:P2|A2:P-2|A3:P-2 1-3"
- 	# Local partition CPU change tests
--	" C0-5:P2  C4-5:P1  .      .      .    C3-5     .      .     0 A1:0-2|A2:3-5 A1:P2|A2:P1 0-2"
--	" C0-5:P2  C4-5:P1  .      .    C1-5     .      .      .     0 A1:1-3|A2:4-5 A1:P2|A2:P1 1-3"
-+	" C0-5:P1  C4-5:P2  .      .      .    C3-5     .      .     0 A1:0-2|A2:3-5 A1:P1|A2:P2 3-5"
-+	" C0-5:P1  C4-5:P2  .      .    C1-5     .      .      .     0 A1:1-3|A2:4-5 A1:P1|A2:P2 4-5"
- 
- 	# cpus_allowed/exclusive_cpus update tests
- 	" C0-3:X2-3 C1-3:X2-3 C2-3:X2-3 \
-@@ -430,6 +428,13 @@ TEST_MATRIX=(
- 	# cpuset.cpus can become empty with task in it as it inherits parent's effective CPUs
- 	"   C1-3    C2      .      .       .    T:C     .      .     0 A1:1-3|A2:1-3"
- 
-+	# Creation of root partition under an isolated partition is not allowed
-+	"  C1-3:P2  C2      .      .       .     P1     .      .     0 A1:1-3|A2:2 A1:P2|A2:P-1 1-3"
-+	"  C1-3:P2  C2      .      .       .     P2     .      .     0 A1:1,3|A2:2 A1:P2|A2:P2  1-3"
-+	"  C1-3:P2 C2:P2    .      .       .     P1     .      .     0 A1:1-3|A2:2 A1:P2|A2:P-1 1-3"
-+	"  C1-3:P2 C2:P1    .      .       .    C2-3    .      .     0 A1:1-3|A2:2-3 A1:P2|A2:P-1 1-3"
++cleanup()
++{
++	online_cpus
++	cd $CGROUP2
++	rmdir A1/A2/A3 A1/A2 A1 B1 test/A1 test/B1 test > /dev/null 2>&1
++	rmdir rtest/p1/c11 rtest/p1/c12 rtest/p2/c21 \
++	      rtest/p2/c22 rtest/p1 rtest/p2 rtest > /dev/null 2>&1
++	[[ -n "$SCHED_DEBUG" ]] &&
++		echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
++}
 +
-+	#
- 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
- 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
- 	# Failure cases:
++online_cpus()
++{
++	[[ -n "$OFFLINE_CPUS" ]] && {
++		for C in $OFFLINE_CPUS
++		do
++			write_cpu_online ${C}=1
++		done
++	}
++}
++
++# Clean up the cgroupfs directory if the test is aborted.
++trap cleanup 0 2 3 6
++
+ cd $CGROUP2
+ echo +cpuset > cgroup.subtree_control
+ 
+@@ -143,16 +167,25 @@ TEST_ISOLCPUS=
+ 		skip_test "Current isolated CPUs ($CURRENT_ISOLCPUS) don't match boot isolated CPUs!"
+ }
+ 
+-cleanup()
+-{
+-	online_cpus
+-	cd $CGROUP2
+-	rmdir A1/A2/A3 A1/A2 A1 B1 test/A1 test/B1 test > /dev/null 2>&1
+-	rmdir rtest/p1/c11 rtest/p1/c12 rtest/p2/c21 \
+-	      rtest/p2/c22 rtest/p1 rtest/p2 rtest > /dev/null 2>&1
+-	[[ -n "$SCHED_DEBUG" ]] &&
+-		echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
+-}
++#
++# This test assumes that all the relevant CPUs being tested are online.
++# If some of them are offline, some of the tests may fail. So we are going to
++# skip running this test script if some of the required CPUs may be offline.
++# The required CPUs include CPUs 0-7 and the first boot time isolated CPU if
++# present. However the check below is not exhaustive and can be a false
++# positive, but users should not run this test if some CPUs are offline.
++#
++ONLINE_CPUS=$(cat /sys/devices/system/cpu/online | sed -e "s/,.*//")
++ONLINE_FIRST=$(echo $ONLINE_CPUS | sed -e "s/-.*//")
++ONLINE_LAST=$(echo $ONLINE_CPUS | sed -e "s/.*-//")
++if [[ -n "$FIRST_ISOLCPUS" ]]
++then
++	LAST_REQUIRED_CPU=$FIRST_ISOLCPUS
++else
++	LAST_REQUIRED_CPU=7
++fi
++[[ $ONLINE_FIRST != 0 || $ONLINE_LAST -lt $LAST_REQUIRED_CPU ]] &&
++	skip_test "Some of the required CPUs are offline or not present!"
+ 
+ # Pause in ms
+ pause()
+@@ -754,16 +787,6 @@ set_ctrl_state_noerr()
+ 	}
+ }
+ 
+-online_cpus()
+-{
+-	[[ -n "$OFFLINE_CPUS" ]] && {
+-		for C in $OFFLINE_CPUS
+-		do
+-			write_cpu_online ${C}=1
+-		done
+-	}
+-}
+-
+ #
+ # Remove all the test cgroup directories
+ #
+@@ -1397,7 +1420,6 @@ test_inotify()
+ 	echo "" > cpuset.cpus
+ }
+ 
+-trap cleanup 0 2 3 6
+ run_state_test TEST_MATRIX
+ run_remote_state_test REMOTE_TEST_MATRIX
+ TEST_ISOLCPUS=1 run_state_test ISOLCPUS_TEST_MATRIX
 -- 
 2.55.0
 
