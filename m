@@ -1,67 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792425534;
-	b=BD0+fNYOimUwMM7z/zZrcwzvUsVFZsQ9QhMqkbj+h4RhdkikXK4mVv/8gtamcSktrCQB
-	 AgCu3Xa0jBCItTgf3iQwRKyVVPrGAqrJjcAx8VoWnegw41gKFYpo1ghSLsx+QaI3a7oo6
-	 B6RjoO6PYjeEuWmfwHREj47czBBVXie1v0sKrGvcgE8WKMBMk5C2ZqW2JfFd95/W/KqCT
-	 FoJqDBA4kGZDOgZrfmEklXv2vULtiviS9ZGVafLp1/3bsN5Wt7fHDwxmJXFXspeZyTOcq
-	 bOYLeyew03eJ8Dw3VbGC4fTtEOuxWnjMBlLSEtEviVXnSUJc/SZJtv/7VafS+qShPMg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792425534;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=xiJEIKtkd3LoHb9/mGUKK1tAHph0ZPZhpBeMubfOR5Y=;
-	b=YbYORviM+H9MMKPff5ztyZeyDorYzo1BADQY6CdlVHRNBKT1pBjnfMKqUAo0njzUQ3yg
-	 6NRiUERfmPehDc0T5qj6f8szt8QvdF9/gA4sSer5nz/vBjGrIYqoF348cgcfy0nSQ5MO9
-	 P2Jy0AToEBEkJMwhaGceMX9KeWlxOhACzKNMTaugHyn6jrhS4kEqSGm2XLSgxS9uqcaJB
-	 l05NulqvtEIcRbwzxh4RXOMEGVhxKmgoPMcVzJ6sZiuQaSK7zTMLXICZH7pl9/SeiFR8E
-	 HFU9CUlZhs8ReNbH4k8LhvPiDEj4BfqxEAXqalxF1X3FGX8pOjBDxqJiPxfqgIFjj0w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=MvOFnCAt;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792426272;
+	b=YO5q6NMwE22UsqChhO7II8BfHLxpz8TP+mmRNPYM13sdT88NPNavjRT1MjQQ/9e5nImG
+	 IcLu1lCu9N+AU7RxnNx1fE+OfJHpXJaAPamhKksrMbGp081MFTqieJCQTj6oAleLou86u
+	 YgxOXSyOjOa9ANUlucHAr0nPoUVEfikVvno9xipjYYthDlkM16dEVYWiLRYbiugUGXPwV
+	 AgswFJX7pI7oJlXRFN7ti4raS5qG1X4VyuxFnEqiQhj5hqQn0N6DlOCLB+WS1mSanmLU4
+	 kWV8nM7bd8CBVyfil7DndRtfkru1MlGV/aNW7wquEBctkzSYrXmVSmOZKu63sUbBTSQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792426272;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=Pr7BJMuifE78YwYx6pJZlEAPKb8dBOcE7CtzncpVA88=;
+	b=dW2lS3XLn/dyboAt5RNUWlTNX159bv5POeFxPiM54hP2T/lF8/dIZIMQCWyOmq78zQDe
+	 mZfQVgyZBlzPsR9DSvknR6p1dqk7wYGiGHLmJM1wJPLahw5l0x/l6Thw0GF53sHLE8Prh
+	 JOn2WZPMtlXoAoguuOoQ4EL7p7bNTiyviwS8CmwaJS1AkRm21//6wEdEjejA5f/im9hIc
+	 iPgy0v/P/DsFLU0PstEUa8ewC+TYDNoUYX0qTQFj1jP0NzRrehne6lL9sU8SaKFCOlcQx
+	 uxMR+jioerzHzj9bQrtjc8z9QXyGP90ySXqcmqN89mJ6NSjnUe/gGZbr66dhNIRfRHQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=tRx3K5jm;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813CD606A31F
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 15:58:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 813CD606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC34606DA7B
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 16:11:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EAC34606DA7B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=MvOFnCAt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792425531;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xiJEIKtkd3LoHb9/mGUKK1tAHph0ZPZhpBeMubfOR5Y=;
-	b=MvOFnCAtNqD4u9FKDDUzaiNyfh+FuBdh8u8HXZzmRoVHYLjMkghauaNjLDI5ANeucV0ET2
-	tM8W31Qd0czgUd2HFj/OeM0RrNLCoQsDfWzF8PITdp8uMSs66VjG/MfJo+Rm+KDLZIELoL
-	gqJXIFAzGRfvlSaTgCQ2ljqSDM+kdEY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-607-1evXegoyMFasyfG_YYbubw-1; Mon,
- 19 Oct 2026 15:58:50 +0000
-X-MC-Unique: 1evXegoyMFasyfG_YYbubw-1
-X-Mimecast-MFC-AGG-ID: 1evXegoyMFasyfG_YYbubw_1792425528
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 382111955F11;
-	Mon, 19 Oct 2026 15:58:47 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 07C4A195608B;
-	Mon, 19 Oct 2026 15:58:44 +0000 (UTC)
-Message-ID: <32462fc4-8a28-47f2-a32a-aaaaa9a501d7@redhat.com>
-Date: Mon, 19 Oct 2026 11:58:44 -0400
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=tRx3K5jm
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6ae14cdc63aso16988a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 09:11:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792426270; cv=none;
+        d=google.com; s=arc-20260327;
+        b=g/rewAAnICpzLgcMOfEPW5uVoZMVOTmp8tOqa89cKVUeYdFMZUSbnIiytYgY1f0hfa
+         n7I02zOqLZFd9LuJ/DCEU2sDneGtwVS9ORrsZXAxsklDDDrOEehlL38wIZIkBVCRbKly
+         NgqCTj6ZifTNJcrDiR/pDiyU07NhjoSf75DMaTbWRjswKGTs+kXdN+KMtoCqEkGJygit
+         cWx3KkBX8YMvV/M6iyAo5xLjmr+vSa5M5apsEBqARoAni85XTEE5jpYdIFkbnEmEeBrb
+         kpXqHfP3Gyjh6ZJAj4+ZL9C2bS96KwALqArYnnq6PR25XkEqcx/a4hmBm7HsiHvj6EBz
+         Qmiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Pr7BJMuifE78YwYx6pJZlEAPKb8dBOcE7CtzncpVA88=;
+        fh=WEKRQNUqDn93W1sf17I6/4jhSC4PEglwnR9ZM6eS0d8=;
+        b=JE3YTQ3n83Aj2BuxCOVOTA5hm0Rfysmhbhgla0t+MmnfTb1pfDJ9sJTgfrldypc1sU
+         REp+6zLaKOCJ0qnOTULSWiRyzDmOJoWqOylpKp3PLKQcT6j4MOrACigQz7eI1cXgZGGK
+         OY8q4UsIaS2fbwT2GIAlosVVsHcVz41ZpAu9UoLEo1uFV2HEE4rrhFvCCTyFzP5iQlaF
+         Mde3l6jSt6a+nnBH6ZM3cX4Com8l7PtUncIIkXBfNOpibYRKzRlckc50RcCuBrUhPMQH
+         Hk1qOCFOgIKJBy4S3H4706QD1XCV7DGVGcWgXLSKN+RcD75ZDK6/OwS9R+KbjxAdQjuQ
+         dqQA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792426270; x=1793031070; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Pr7BJMuifE78YwYx6pJZlEAPKb8dBOcE7CtzncpVA88=;
+        b=tRx3K5jmcY33uFjjLhBl+j7aQChswPzQ8jc6vt21o8gL5HebhBkZhq0m4V5VQXj8Os
+         Vxy55uyFlopl85UWtcuhSyXPeS8T5aUmHQFtnKEsZz7CPNXCpLO6jJgwUUnFOIl2yUFB
+         91ziLFkt7j059F2wIJiIWCft3lgYJiZpl7D3tjbGSsU8jErVrD+G6+TLwtfY72Fl1BRp
+         +udUczkN4A9EVjpSES388lV7wjosc45EmCjnJY0x3QPYLgzoDNHjM4jwwdIDS0kg07RL
+         YnqkBmDIKaVV6xViHZm/RbvKeMlM1D1RnEkQXEC8kGdWmFWv98zxVzqcc+Q+Y0hzQQtm
+         mbkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792426270; x=1793031070;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Pr7BJMuifE78YwYx6pJZlEAPKb8dBOcE7CtzncpVA88=;
+        b=M2s8yBNjNBJu7txHi81ol4XzJ51M52zeV+D/HiiRQ5/IfulQHFfHwEeIGk6TB8/4/g
+         qM+9z7qSpQlodNH7Ch+2hcgOPbigrfxWg+queGNRH+1ETKmpFnLOInjHhwl8dNMIAAtC
+         wFGZrDk300vfL8XXz5wjkx+MJ/L//GDlzw/sKij48lONeMmckTCnA47TVMcsRHYPoA1b
+         0+oOFbN782AIo1aA6jTkEhHsDhlGEx/WOtC33cU7W817cTI2ysUXVxPjj82OUZ1tEJGp
+         Twa9f5Y5qbsY4C0c+8N/J5ZlCg0/wsX4YLhZARWreAd+gw36hKEa2IurtaaPvxBMbCri
+         AgOw==
+X-Forwarded-Encrypted: i=1; AKwUvByA09uphN6THDJ7SlA6OASxoEJZKeA0qGx66H9nEbo0BKhs87EAVKwueXe1L4WYe/lnkc2aU+VTLl4tiy4j3lY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIEO7Vg2cdLWI0OiXEZ4ud0y5Fu2KId6NFVmbjejEy9oJrvft/o
+	c00bysabmUuC625DAWUwYTvaOSVCXvSONj/sI9AiJJXYtIANXi1ICScDgI52m/t0G/Dudw1633w
+	qCRpzl6VsT4wcUsOc696alJxV0zBQeOKgtL/ySLr2
+X-Gm-Gg: AYBFou2iUWGNCbbGl74/uedDe8grL/e8QufpME6cZbuIPjTdrv6EJuVLTFqnvf3zHdC
+	AmMQbdTEfKVbrC9SSQUtq1Oww4S3k1FjAGegSh2dRF1CagXCB9lZyLLFjVKNNUgj4sU69LG5Qdq
+	/UP9HdqqqDhPGNg1FRJLFE8+7rO+yn3zLmEgYyrffSQAvWl4B0ThhCN4wUUDtBpOuWjQA6wIWw1
+	g/+hs5j3qCsw698OpmYZun3KYW3s7kZSZdz6dEtuu3w5k/EsMA3onV5SgwVEOEj55Y1fnvDrLah
+	MELexH7bqu1827G7CCPlueFd9yg2k1rSF710A42KSz4uJKn+XtDIa/rzjIlXF8rBpbSXpasrqYc
+	m7WOIfBGV6A==
+X-Received: by 2002:aa7:d3c1:0:b0:6ae:188e:e119 with SMTP id
+ 4fb4d7f45d1cf-6b3ad90b655mr92225a12.9.1792426269498; Mon, 19 Oct 2026
+ 09:11:09 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,145 +104,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v3 6/9] cgroup/cpuset: Don't allow a child root
- partition under an isolated parent
-To: Guopeng Zhang <guopeng.zhang@linux.dev>,
- Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hui Peng <benquike@gmail.com>
-References: <20261014140548.575122-1-longman@redhat.com>
- <20261014140548.575122-7-longman@redhat.com>
- <497db854-17ba-47ae-a9e0-8f1dacb0b205@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <497db854-17ba-47ae-a9e0-8f1dacb0b205@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+References: <20261015163915.1166043-4-almasrymina@google.com> <179233927086.3135.6123492094489915156@kernel.org>
+In-Reply-To: <179233927086.3135.6123492094489915156@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 19 Oct 2026 09:10:57 -0700
+X-Gm-Features: AclHuK8eiPagoVp9rRWfufPEyCEaXmjBdb7vS7t1VxUSJn80p85wHIDPJ3eEP2Y
+Message-ID: <CAHS8izPobFzob0pF2cLqL+nqtJVL-TC50QuDHOem9_cwJoGSxA@mail.gmail.com>
+Subject: Re: [PATCH net v4 3/4] netdevsim: support devmem RX and TX bindings
+To: netdev-bot+sashiko@kernel.org
+Cc: kuba@kernel.org, asml.silence@gmail.com, dw@davidwei.uk, sdf@fomichev.me, 
+	ap420073@gmail.com, pabeni@redhat.com, kaiyuanz@google.com, 
+	bobbyeshleman@meta.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	edumazet@kernel.org, hawk@kernel.org, ilias.apalodimas@linaro.org, 
+	horms@kernel.org, shuah@kernel.org, sumit.semwal@linaro.org, 
+	christian.koenig@amd.com, dtatulea@nvidia.com, razor@blackwall.org, 
+	daniel@iogearbox.net, tariqt@nvidia.com, kaifengw@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/15/26 11:30 PM, Guopeng Zhang wrote:
+On Sun, Oct 18, 2026 at 9:01=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wro=
+te:
 >
-> 在 2026/10/14 22:05, Waiman Long 写道:
->> Although it is not typical for real users to create a complicated nested
->> partition hierarchy, it is currently allowed to create nested root and
->> isolated partitions. In addition, disabling or invalidating a partition
->> should always be allowed especially when the cpuset is being deleted.
->>
->> With a nested root and isolated partition hierarchy, it is possible
->> that all active housekeeping CPUs can be exhausted when disabling or
->> invalidating a root partition and returning its CPUs to the isolated
->> parent.
->>
->> One way to avoid this problem is to disallow the creation of a root
->> partition under an isolated parent. It is indeed a new limitation imposed
->> on the existing cpuset partition functionality. However an isolated
->> partition is usually a left node where scheduling and some other kernel
->> noises are disabled. It doesn't make much sense to create a child root
->> partition under an isolated parent and remove some CPUs from the set
->> of isolated CPUs again. Creation of a child isolated partition under a
->> root or isolated parent is still allowed.
->>
->> The cgroup-v2 documentation is also updated to reflect this new
->> limitation. New test cases are added to test_cpuset_prs.sh to verify
->> this new behavior. Some existing test cases are also updated accordingly.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   Documentation/admin-guide/cgroup-v2.rst           |  4 +++-
->>   kernel/cgroup/cpuset-internal.h                   |  1 +
->>   kernel/cgroup/cpuset.c                            | 13 +++++++++++++
->>   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 14 ++++++++------
->>   4 files changed, 25 insertions(+), 7 deletions(-)
->>
->> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
->> index bd8c80f3bbc9..2c445829e24d 100644
->> --- a/Documentation/admin-guide/cgroup-v2.rst
->> +++ b/Documentation/admin-guide/cgroup-v2.rst
->> @@ -2767,7 +2767,9 @@ Cpuset Interface Files
->>   	be retained, but behaves more like a "member".
->>   
->>   	All possible state transitions among "member", "root" and
->> -	"isolated" are allowed.
->> +	"isolated" are allowed with the exception that a local child
->> +	"root" partition is not allowed to be created under an "isolated"
->> +	parent partition.
->>   
->>   	On read, the "cpuset.cpus.partition" file can show the following
->>   	values.
->> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
->> index 5da9c91295b0..2e44dc8634dc 100644
->> --- a/kernel/cgroup/cpuset-internal.h
->> +++ b/kernel/cgroup/cpuset-internal.h
->> @@ -35,6 +35,7 @@ enum prs_errcode {
->>   	PERR_HKEEPING,
->>   	PERR_ACCESS,
->>   	PERR_REMOTE,
->> +	PERR_ISOPARENT,
->>   };
->>   
->>   /* bits in struct cpuset flags field */
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 40c004386af0..681701ba46e1 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -60,6 +60,7 @@ static const char * const perr_strings[] = {
->>   	[PERR_HKEEPING]  = "partition config conflicts with housekeeping setup",
->>   	[PERR_ACCESS]    = "Enable partition not permitted",
->>   	[PERR_REMOTE]    = "Have remote partition underneath",
->> +	[PERR_ISOPARENT] = "Root partition is not allowed with isolated parent",
->>   };
->>   
->>   /*
->> @@ -2865,6 +2866,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->>   	int err = PERR_NONE, old_prs = cs->partition_root_state;
->>   	struct cpuset *parent = parent_cs(cs);
->>   	struct tmpmasks tmpmask;
->> +	int parent_prs = parent->partition_root_state;
->>   	bool isolcpus_updated = false;
->>   	bool disable_partition = false;
->>   
->> @@ -2910,6 +2912,14 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->>   			enum partition_cmd cmd = (new_prs == PRS_ROOT)
->>   					       ? partcmd_enable : partcmd_enablei;
->>   
->> +			/*
->> +			 * It is not allowed to create a root partition under
->> +			 * an isolated parent partition.
->> +			 */
->> +			if ((new_prs == PRS_ROOT) && (parent_prs == PRS_ISOLATED)) {
->> +				err = PERR_ISOPARENT;
->> +				goto out;
->> +			}
-> I tested the following case. Writing root initially leaves C invalid, but
-> updating its cpuset.cpus makes it valid again.
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
 >
-> CPUs 0-15 are online, with nohz_full=2-15 and no isolcpus:
+> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 0 (1) =C2=B7 Low: 0
 >
->      # cd /sys/fs/cgroup
->      # echo +cpuset > cgroup.subtree_control
->      # mkdir A
->      # echo 1-2 > A/cpuset.cpus
->      # echo isolated > A/cpuset.cpus.partition
->      # echo +cpuset > A/cgroup.subtree_control
->      # mkdir A/C
->      # echo 1 > A/C/cpuset.cpus
->      # echo root > A/C/cpuset.cpus.partition
->      # cat A/C/cpuset.cpus.partition
->      root invalid (Root partition is not allowed with isolated parent)
->      # echo 1-2 > A/C/cpuset.cpus
->      # cat A/C/cpuset.cpus.partition
->      root
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwor=
+k
+> know by including "pw-bot: cr" as a separate line at the end of your repl=
+y
+> (one such reply per series is enough).
 >
-> C becomes a valid root partition.
+> - [High] On builds where PP_DMA_INDEX_BITS is 0, this patch leads to a
+>   use-after-free of the netdevsim bus device.
+>
 
-Thank for finding this bug. Yes, the patch is missing check in some 
-places. Will fix in the next version.
+Bro this is a pre-existing issue I think. My local sashiko also caught
+this but it has to do with us not doing a get_dev or something when
+PP_DMA_INDEX_BITS is 0. That's a very rare condition and unrelated to
+this patch series I think.
 
-Cheers,
-Longman
-
+--=20
+Thanks,
+Mina
