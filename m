@@ -1,73 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792422718;
-	b=05ub5uRIuOOezla7U1aGCu7oT83sCK23V/fYMfB0yMH/iHAfUZjnWrDiWGmw4Gz3oY5J
-	 lx5IbBnyUdxvKKa2RSy7SI0/d6wGl+1kgl8Ofm2eVESG2RHlvvYbt4W7ar3TyfcWY+02u
-	 uoeGgPwt7nL8dbXzRUlVw2JUDITV8bFansKUkVGFNi6Q6QRRhyDYFi3ZlTDynm/DA5X/v
-	 I8KrSi4aZEoK8hGa4Hrlrfy0KY+EgxH3YIhrYHcsRirR66MC0Mlue2T+85gnrpLjpSQqs
-	 F05CG+kZ45BLLRSEqpyHyeGQ21jR61LqwqtsYDlVGlkU+TcGgfE1GQPjQjluZNqSFCg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792422718;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=IOr8tP9WaxFdfAOo39mHK4RggF7GLTDIwC8oUe4sANI=;
-	b=3kLu227NagnSV+1lFMKatmqekx1outgB8aYEP6/0seHHuf/X7z1CK7UgZILN65yQ0Rut
-	 ybQqCvGPMH6m4k22ihp9SQq6inRYUzu/lMdvMlQ3Wn2SVq55b33qj3njmZVGMnNO0pYMn
-	 K88nspY7mW8M9LunzV/TK3NYlwTKxmo5b91f5wnjczS7PcuvrlJNP+0skqeGW42L+MZk4
-	 4fNDTOP24hEPuOLbDD9pRq5qKotmiR6ofU4qyiMF4+Bb8TTIVTfMBKz0+HYWCgHjJrrro
-	 WjzTcsEEPZC8ebtxE9cP14uPo7MIRv6uaOojTgtBtxSd/l3PTbBIDcBsrP8+ByyBc8Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aBrdbamH;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3B0607D353;
-	Mon, 19 Oct 2026 15:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792421712;
+	b=iv5lj8JrmXhIkwciFKjdJKa3yyISttTqnQnRCfgiSZRouPiL+8gTwJZca9czLRyIi0+l
+	 JeM/aEV8UxuLxJ/uytbbW8rVFq2pKAB+QNmmmqHc3Ub3dLbNKvq6/+3o9hi2U9shrqwWy
+	 V/cCMSr46XjeHKknMdTI4v3IlFWboC2r5VR6TjdglpJn1on+R+FJEUhTTuYpncXT6f9u4
+	 vz6Ph1vgddNEKRPPYrwCYvPqzgfz7dHjlv7rWMBgqItmq3wyX2LgF+GiuG09mJ0JWfn++
+	 WScyRWsPj3GwpIw6ue29SCzeUI7ADybGOCCDg4QytlV60nlzckfvoWaGmbFxPZsEMAA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792421712;
+	h=Received:Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=WQrKvC0O7qmerhfnG9M3z27SqPcXxJWgtPiJ3mb6oJE=;
+	b=Pr11EhuxDk6k7p+5tCMX6PpfQg7XFHF5BgPMIuxcH8czsYGVg4nBY75VUvfosqFnEwLX
+	 jSK/bkXqZ43ywgfzqJOmDlwfibtTNqLxCxj3zoiarIo2az2mkOHVEWUG/6bDv9ChiBJHJ
+	 D+lTtpZ1JDTnwwNhCIhTavtXxeS/cdd3FyytW7xuownstiiuCpUKDVVAUJyPdoYsr2lYO
+	 0q79aGxQ7Qz5WehmF+s9asqL8DKrsRVk0/s+kxyP1jW2PSq/gk90urr1x/OsguF2W79iU
+	 SQMTOK18xrMB0z6osBa/1UkoHwR6Arywg1QLHbAxurmVD/MQXCobkRuu24z9uaGXfPg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J0PvmOnD;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+Received: from aws-us-west-2-korg-listserv-1.web.codeaurora.org (ip-10-30-226-211.us-west-2.compute.internal [10.30.226.211])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E799606EFEE;
+	Mon, 19 Oct 2026 14:55:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aBrdbamH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D10F1F000C5;
-	Mon, 19 Oct 2026 15:11:58 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J0PvmOnD
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F6F533D6;
+	Mon, 19 Oct 2026 14:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792421712; cv=none; b=m//qWIo4iGvRgXdICscJopzosP8/UCnjM/bAn7klrTVpQNnofTfULB5Ccfs5TE3YNEeu6JKTBiyPhOoIRfbmiD6APs36DY1LTVq6GT/Fj5/mDdbsh5n36wU7DE1OyGF2p1Bhs7pdhc2MjFkWADRGm4Yv3CpQcrQ2tEd2UDK3H70=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792421712; c=relaxed/simple;
+	bh=VivAJRvivSKrkuPz0VaDEUS9jDA46EwfrqY6W31PGFQ=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=DF9uDU2T/drNSV4d2VGwMnZhgzlj+80J5PkQkaRuSi0XIdcPcL846B016bWirzUTD7UX81EMySPp5/jrqV5kDT1yZLR8GVIBRNCMcTUEA/5LTiDQYZbEBYZtsTWvSr7DjRUAIrFx/4fL7G7BCFMTBsgrVHYoXDizrHVlydKO+0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J0PvmOnD; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3CF81F000C4;
+	Mon, 19 Oct 2026 14:55:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792422718;
-	bh=IOr8tP9WaxFdfAOo39mHK4RggF7GLTDIwC8oUe4sANI=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=aBrdbamHwaFtp/In5WXudMm4Vq5z8FHialV2pOinYC3AYuPTgDGJzKbzIFkt1UqPq
-	 tF9bZxY6F7F9Onc+riLsDK2mHJWJ+nkqTCSJWXyzYOUImS4PBziAuBEqEeM8GpqZA2
-	 GOHDzay0H1dn3qWAAQjmEmlak11sy930d65MoXEnmS3qucNmfwezrM+CY9T9GhcRnz
-	 FcAueTLGw4RGHkoGMPgke1SdcPnMAxGsCOE83seRdtxzY8Mwx4B1lDXueHaafu30s8
-	 azAq9XkFMg8E8XMeraZTUHP4P6NuD7Svj4slMHiIWdfCi3VZ33YZBHV58TtNsYMFzG
-	 UOw1a6UD5gx4Q==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 83CA7F40066;
-	Mon, 19 Oct 2026 11:11:57 -0400 (EDT)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Mon, 19 Oct 2026 11:11:57 -0400
-X-ME-Sender: <xms:PTPWapeOmsBnwwUL7qrLpFI7arNc1Cu1ST-sGo-e49qsi5jCmMB3CA>
-    <xme:PTPWaiA0rR4vwhUaqsSV2ZIVzINIAygntESl9KCWa2uspnme5a26Hk8zFaN1vhiTu
-    gPJmrxdUuUzBPMHqeNH3TQBEE5u_jNwHLPV95U8V_shv0w3aKCbETC5>
-X-ME-Proxy-Cause: dmFkZTEiFjWiUgOfIOMQ4EUMDdZLzvVgNNGnEgNHif7VXc9gPvezXknPkPZlst3zI6EuIC
-    hH61iiN8zp+X8xZLntXKBl5Ogl6RusltAHWU8VS4CbCGRthZP+zkKJCp8xynNLqCxDN+Qm
-    Olwbz5OEsbkmEMCHf619qD7bCR+iXTbyErrvuh0x9j6RLNPZt1OZP3XTEGVP6OVuF3Z4z3
-    5ciLOE8V3HgCwYvSXYUsYVWzl645p94HOqjV9xubvaK7NaLcBTcNSq9CokFuBjF4mIe8Ly
-    wloCm8bCCtk7CSNQvC8frMSC9tigY8VJkF/90vWYzIHi5xcDKUu82zQQ3CseLVIcmqEjWi
-    97gvaNg3IjnS+nbnAv4o4vCfRrX+LDa+C7xRGhp9RcHX8Zkgv4MP0AGQPREJJRSNW5vFj6
-    UjcWBzu+3FkL9d61iWTIoaDg5qDzpBqkgz4iStQ5lYnZeaveN3qVZyDWyydxaBNREO8rDQ
-    ZZhem6/95wwdNmsPv1mPXF/GhIzg7mCNzZXRSfErGMChor9pDxHs7IEDjHe0wfd1ihVVz/
-    5/LyiZeehxIXmr9/p47opxSTMZ/5i5AY+5DYHPot7tKd/UNv1w3XabvLAtBBv/tkVbyn1z
-    FojnVkwUn5ZbkionCj6JJV/Qp035oaOQP58CVFISXcPlrkhtZ/Ii4f59VDQg
-X-ME-Proxy: <xmx:PTPWatRp8Kp7eR8_IX2J7Ir9hAbvk1l3fx6DHuUfFRxmvoj-Tl9uyQ>
-    <xmx:PTPWajfTizz2ijEevews1SwqfS33IXbneEdQY8gEvwemJoDNBbjRnQ>
-    <xmx:PTPWams77km-I79pqW3zVj_iN49hfb_zeod_se1AvYCZwbbfnh3w3w>
-    <xmx:PTPWavJhO7JwRkR5S_KU-FXVkr1MQCW6Rt7Ezou1BcktDytPQfx7rg>
-    <xmx:PTPWaqZt1ysR_yHElxkgrhyFLGhlBzyvJTLvRdnkEjgEQoFb_qS1h8TX>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 638F5782738; Mon, 19 Oct 2026 11:11:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=k20260515; t=1792421710;
+	bh=WQrKvC0O7qmerhfnG9M3z27SqPcXxJWgtPiJ3mb6oJE=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=J0PvmOnDAo5flEbgEBdcb40YpvrJbbRjjWvSW/Pinv/I+iHZuPGuRiwmC2Lw/xj/j
+	 qGq0EQmOtuZUsIGSiQdUa3U8IPXD0bLzwwsdYTp1ljbnObhJZKIygsj7kBIKWhF0KD
+	 btzWRp3sWKK5eo+opls6Doclu3K1dLYx7LlmMBk37bPCK6oaD2trZI7Rk0JJw6EDqA
+	 6QPCvzWQXG9WK1mGCyzxUUaG1qeJbkUJM/c/1dmGOnRc7Qiu3ivb29GfR1biiAvNjV
+	 e5OcVCUuzUCfU4nUigBexE3DxiqHJJuQjcg2bytAUiwEUR7EZ+nCPoQ/KR7ksBH6K4
+	 rxe7RhusGxVGw==
+Subject: Re: [PATCH net-next v6 3/5] selftests/bpf: Send XDP feature probes
+ with AF_PACKET
+From: netdev-bot+sashiko@kernel.org
+To: bochaolucky@gmail.com
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ andrew+netdev@lunn.ch, edumazet@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ alexis.lothore@bootlin.com, lorenzo@kernel.org, tiozhang@didiglobal.com,
+ willemdebruijn.kernel@gmail.com, petrm@nvidia.com
+Date: Mon, 19 Oct 2026 14:55:07 +0000
+Message-ID: <179242170743.3135.13335465558311529562@kernel.org>
+In-Reply-To: <20261018-xdp-v5-send-20261008-v6-3-7336e1282ca3@gmail.com>
+References: <20261018-xdp-v5-send-20261008-v6-3-7336e1282ca3@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,49 +81,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AX_0bg9EglMV
-Date: Mon, 19 Oct 2026 11:11:37 -0400
-From: "Chuck Lever" <cel@kernel.org>
-To: netdev-bot+sashiko@kernel.org
-Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
- davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
- shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <55df0a71-5ceb-49d8-9b7d-d9e584aec6a6@slotpi15m67>
-In-Reply-To: <179235137916.3135.16553916944020990232@kernel.org>
-References: <20261014-tls-follow-on-v5-5-e76c301d4f05@kernel.org>
- <179235137916.3135.16553916944020990232@kernel.org>
-Subject: Re: [PATCH net-next v5 05/10] tls: Consume empty data records in
- tls_sw_recvmsg()
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 18, 2026, at 3:23 PM, netdev-bot+sashiko@kernel.org wrote:
-> - [Low] The commit message gives a reason for the new MSG_EOR: "The new
->   branch sets MSG_EOR itself, because the record no longer reaches the=
-=E2=80=A6
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-v6 will note that a MSG_PEEK receive now reports MSG_EOR at an
-empty record where it did not before.
+Low priority / nit picks for your consideration:
 
+- [Low] The hand-written usage line in argp_program_doc still reads
+  `USAGE: ./xdp-features [-vt] [-f <xdp-feature>] ...` and does not…
 
-> - [High] This problem wasn't introduced by this patch, but
->   tls_sw_recvmsg() still has no limit on how many consecutive empty=E2=
-=80=A6
+--
 
-See my reply on patch 2. v6 keeps recvmsg() unbounded, and the
-description says so.
+selftests/bpf: Send XDP feature probes with AF_PACKET
 
+The tester now uses AF_PACKET to send echo probes and count the replies,
+so it no longer needs XDP support. The DUT now attaches through an XDP
+link, and the patch adds a -q option that queries native XDP support.
+The network_helpers dependency is dropped and veth XDP_TX is skipped.
 
-> - [Medium] This problem wasn't introduced by this patch, but
->   tls_sw_recvmsg() still returns 0 (read as EOF) when empty data recor=
-ds=E2=80=A6
+> diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/bpf/xdp_features.c
+> index 97c0e871c5b65..be4acb768e0a2 100644
+> --- a/tools/testing/selftests/bpf/xdp_features.c
+> +++ b/tools/testing/selftests/bpf/xdp_features.c
 
-AFAICT, pre-existing. tls_record_content_type() latches the record
-type before the empty record is consumed, and the existing
-0data_0data_ctrl variant encodes the zero return. Changing that is
-out-of-scope for this series.
+[ ... ]
 
+> @@ -78,6 +156,7 @@ const char argp_program_doc[] =
+>  static const struct argp_option opts[] = {
+>  	{ "verbose", 'v', NULL, 0, "Verbose debug output" },
+>  	{ "tester", 't', NULL, 0, "Tester mode" },
+> +	{ "query", 'q', NULL, 0, "Check native XDP support without attaching" },
 
---=20
-Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
+[Severity: Low]
+This isn't a bug, but should the usage line in argp_program_doc also
+list the new option? It still reads:
+
+"USAGE: ./xdp-features [-vt] [-f <xdp-feature>] [-D <dut-data-ip>] [-T <tester-data-ip>] [-C <dut-ctrl-ip>] <iface-name>\n"
+
+The -q, --query entry shows up in the argp-generated option list, but
+the hand-written usage summary leaves it out. The usage line is still
+unchanged at the end of the series.
+
+>  	{ "feature", 'f', "XDP-FEATURE", 0, "XDP feature to test" },
+>  	{ "dut_data_ip", 'D', "DUT-DATA-IP", 0, "DUT IP data channel" },
+>  	{ "dut_ctrl_ip", 'C', "DUT-CTRL-IP", 0, "DUT IP control channel" },
+
+[ ... ]
+
+> @@ -719,6 +969,20 @@ int main(int argc, char **argv)
+>  		return -ENODEV;
+>  	}
+>  
+> +	if (env.query_only) {
+> +		LIBBPF_OPTS(bpf_xdp_query_opts, opts);
+> +
+> +		err = bpf_xdp_query(env.ifindex, XDP_FLAGS_DRV_MODE, &opts);
+> +		if (err)
+> +			return 1;
+> +		return opts.feature_flags & NETDEV_XDP_ACT_BASIC ? 0 : 4;
+> +	}
+
+[Severity: Low]
+Could the exit codes for query mode be documented somewhere, such as in
+argp_program_doc or the -q help text?
+
+Here 0 means NETDEV_XDP_ACT_BASIC is advertised, 4 means it is not, and
+1 means bpf_xdp_query() failed. None of this is described in the tool.
+
+Later in the series, run_feature() in drivers/net/hw/xdp_features.py
+treats probe.ret == 4 as a skip, so the contract is already in use.
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3%40gmail.com
