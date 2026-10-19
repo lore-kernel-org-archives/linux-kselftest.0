@@ -1,48 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A323514753;
-	Mon, 19 Oct 2026 13:55:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5309491B3D;
+	Mon, 19 Oct 2026 13:55:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792418107; cv=none; b=VlkHXPiTfjXRUQ+fJowRWL6kCpCE9p161z+rBir31pvSVfJRqJlNouDlPPHfBQZitCOCCtFpZLoZuTFY/GO5pZI7TPdSQMvdJPWxV9wYBPMx9b7jmZ2LJZK4RWmegKjE2ZGbd6VU60O1asLkSQxeVgM4HxutTtXlx2Q0aUPbk1c=
+	t=1792418142; cv=none; b=IdjpfCQQPwYS7yokQQg/23N6205ehsLAEWXQy9uGl7JIIgYBRz6bLdAuPNOH1qyljULphWR4pnScDXVaowKuX6bMg70X0TBE1QDdVmqrynv6oyMPVWMbC9ShDIymOUcs14OSCbv6/jibvuJb7ouIHhGB63QdYRKbyeLeKKa/VX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792418107; c=relaxed/simple;
-	bh=jXlyxxQFxfUqX6pnvaWYF38tE6OgTm28TgmzDMre1GE=;
+	s=arc-20240116; t=1792418142; c=relaxed/simple;
+	bh=ySlhVHs5EIvaSq+cdETOQHdQwsOEDbFvT/Gg499Rl0s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kc7mLGGevxOaEQFg8NmCm6uhg2WHwO1+HZL3PQAmhLMmfU1Kpd0RDVxpRaAREsXKGRbd9TxmCbojihWPQyxdzyEPDGNCGbxPg4B+9tIPndnejS/K7PP9rFezC1FBxzeVX02a2ExLqwwe/OqjcHMMsgLlO+OKiD6S/4ZFZpfUAjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DGFRHV8d; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=tEv8HMfy7hCIJQhSi5I7BbNAsc74MLZZLipTpaq5tgPyR/b/3pSclHunlDTRsxGGUcY4REFonVmfdHXggb6fq1UMyqcdLvm9Br3q2VmY8ZfMzXCNJuBYIwEl7fUUMJK02eLbdCOsCRLzx1GF3ZF3uOicm4SENi/MsAf55NwxcF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V9IonbLK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DGFRHV8d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25251F000CA;
-	Mon, 19 Oct 2026 13:55:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V9IonbLK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA811F000C6;
+	Mon, 19 Oct 2026 13:55:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792418105;
-	bh=JqlXyvFuSdHOxo0/HGsAnTDVAoVmT6DZMuonjjOohJo=;
+	s=k20260515; t=1792418139;
+	bh=q6Y5kyHWSxLwi9giqi72Tq/HTjncMBIStO0G17YuWw0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=DGFRHV8dNIxkoJ9H/PyGPhaAEiO6sW0aKH+iVRcfYGCOPUkIXbr9haONkuLTfY4jb
-	 QHFBIn1yZx94Ik25qhtmFg2wX6VdRhKvGrDa8ENVn34VFgLeBMnU/dUA3XGV+yYcd/
-	 ZpNCOnBLCLvf2sMNxV2pT+XSEDLea6NqKmd0cJV1uBUqGqX8xWCkm+1TTG3p8rM5YI
-	 rynt9Pet5wfWu8XDNo6zh2s+imKmRWJOgrWCOQD3Yc6OHLNMQGYZYnU7gko35oHRFG
-	 3zBi9C+/rUmzSG44X1MtLPyp0w6gaDxIinxxYfsgO8t2wbpM2qotzbgI2YO0evzY4X
-	 vJDz66DkNkCmg==
+	b=V9IonbLKKfFHjhquDMRFtdehQRLkhutM5ewown8MizBDZCyRTCruaERbQaDD5wJvV
+	 8RNl9wmoTAHrwmawuJ+0uZSKiV/qR8ioUcmtB6zyD24dvSqyjm4W5eTYLr9DCK06Qz
+	 AQ3RnwnvydK6p1aHbCtFEknkF5+uEuT1GNCEsL7BXyvIy2jffdNwO7pGvmJJb1mq8t
+	 Pbbs9/7F/pozVdyAKbt/DrHLyv/nUgMIn1zVETivEAd8mb9tX8q+XMs1+tTKoj2O6s
+	 e4vzbZnz7PNBroeQYj7M7CYyT4GFipg9q33SxqnA1kN5epTMx8sq03xBDHVV5gKaSE
+	 dV/I5jitxnUWA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Feng Tang <feng.tang@linux.alibaba.com>,
-	Simon Horman <horms@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
+Cc: Rui Qi <qirui.001@bytedance.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
+	rostedt@goodmis.org,
 	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-6.1] selftests: net: reuseport_bpf_numa: consider cpuless numa node
-Date: Mon, 19 Oct 2026 09:45:06 -0400
-Message-ID: <20261019135441.1420968-15-sashal@kernel.org>
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.18-5.10] selftests/ftrace: Force C locale in ftracetest
+Date: Mon, 19 Oct 2026 09:45:31 -0400
+Message-ID: <20261019135441.1420968-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261019135441.1420968-1-sashal@kernel.org>
 References: <20261019135441.1420968-1-sashal@kernel.org>
@@ -58,359 +55,362 @@ X-stable-base: Linux 6.18.57
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Feng Tang <feng.tang@linux.alibaba.com>
+From: Rui Qi <qirui.001@bytedance.com>
 
-[ Upstream commit 88b8d85e889e2fe1cce3e66e50c3029dda94842a ]
+[ Upstream commit c13fcd3951dcc19524ce0b3e852844b16cd32b22 ]
 
-reuseport_bpf_numa case failed when testing on a platform with CXL
-memory:
+Some ftracetest test cases parse command output by matching English
+field names. Tools such as readelf may localize their output via
+gettext, while ftracetest currently inherits the user locale from
+the environment.
 
-    #./reuseport_bpf_numa
-    ---- IPv4 UDP ----
-    send node 0, receive socket 0
-    ./reuseport_bpf_numa: failed to pin to node: Invalid argument
+If a translated field name is printed, parsing can fail even though
+the tested kernel behavior is unchanged. For example, add_remove_uprobe
+can fail to find the ELF entry point and then write a uprobe event with
+a missing offset.
 
-The root cause is that the platform has 2 numa nodes: node 0 has
-both cpu and memory, while node 1 is a CXL node which only has
-memory, and caused numa_run_on_node() to fail.
+Export LC_ALL=C in the top-level ftracetest runner so every test case
+gets stable command output by default.
 
-Add sanity check to skip cpuless numa node for the numa binding test.
+Link: https://lore.kernel.org/all/20260807081512.2974757-2-qirui.001@bytedance.com/
 
-Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>
-Reviewed-by: Simon Horman <horms@kernel.org>
-Link: https://patch.msgid.link/20260807002436.43991-1-feng.tang@linux.alibaba.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Rui Qi <qirui.001@bytedance.com>
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
+I have enough to decide: this is a three-line selftest locale fix, the
+companion uprobe offset patch is already in this 6.18 tree, and the
+runner still inherits the user locale.
+
 ## Phase 1: Commit message forensics
 
 **Step 1.1: Subject line**
-- Record: `[selftests: net]` `[consider]` skip CPU-less NUMA nodes in
-  `reuseport_bpf_numa` so the test does not abort when
-  `numa_run_on_node()` cannot pin to a memory-only node.
+- Record: `[selftests/ftrace] [Force] Force C locale in ftracetest so
+  test parsing is locale-stable`
 
 **Step 1.2: Tags**
-- Record: `Reviewed-by: Simon Horman <horms@kernel.org>`; `Link: https:/
-  /patch.msgid.link/20260807002436.43991-1-feng.tang@linux.alibaba.com`;
-  `Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>`; `Signed-off-
-  by: Paolo Abeni <pabeni@redhat.com>`.
-- No `Fixes:`, no `Reported-by:`, no `Tested-by:`, no `Cc: stable`
-  (absence is expected). Ignore any pipeline `Signed-off-by: Sasha
-  Levin` / `[Upstream commit ...]` markers.
+- Record:
+  - `Link: https://lore.kernel.org/all/20260807081512.2974757-2-
+    qirui.001@bytedance.com/`
+  - `Signed-off-by: Rui Qi <qirui.001@bytedance.com>` (author)
+  - `Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>`
+    (ftrace/probes maintainer)
+  - No `Fixes:`, `Reported-by:`, `Tested-by:`, `Reviewed-by:`, `Acked-
+    by:`, or `Cc: stable` (absence is expected for this review)
+  - Upstream SHA: `c13fcd3951dcc19524ce0b3e852844b16cd32b22`
 
 **Step 1.3: Body**
-- Record: On a 2-node CXL box, node 0 has CPU+memory and node 1 is
-  memory-only. The test prints `send node 0, receive socket 0` then dies
-  with `failed to pin to node: Invalid argument` from
-  `numa_run_on_node()`. Root cause is treating every bit in
-  `numa_nodes_ptr` as a pin-able CPU node. Fix: skip CPU-less nodes.
+- Record: `[Bug] ftracetest inherits the user locale; tools such as
+  readelf can print translated field names. Tests that grep English
+  strings then fail even though kernel behavior is unchanged.`
+  `[Symptom] add_remove_uprobe fails to parse the ELF entry point and
+  writes a uprobe event with a missing offset.` `[Versions] none
+  stated.` `[Root cause] command-output parsing depends on English
+  gettext strings while LC_ALL is not forced.`
 
 **Step 1.4: Hidden bug fix?**
-- Record: Yes. “Consider” is test-robustness language, but the program
-  currently `error(1, ...)` and fails. This is a real false failure, not
-  style cleanup.
+- Record: `[Not disguised.] This is an explicit robustness fix for
+  locale-dependent test parsing, not a style cleanup.`
 
 ## Phase 2: Diff analysis
 
 **Step 2.1: Inventory**
-- Record: One file, `tools/testing/selftests/net/reuseport_bpf_numa.c`.
-  About +24 lines. New helper `is_cpuless_node()`; `test()` gains two
-  `continue`s. Surgical, single-file, userspace selftest only.
+- Record: `[Files] tools/testing/selftests/ftrace/ftracetest +3 / -0`
+  `[Functions] none; top-level shell runner` `[Scope] single-file,
+  surgical]`
 
-**Step 2.2: Flow**
-- Record: Before: both forward and reverse loops skip only nodes unset
-  in `numa_nodes_ptr`, then call `send_from_node()` which does
-  `numa_run_on_node()` and aborts on failure. After: also skip nodes
-  whose libnuma CPU mask has weight 0. Normal send/receive path for CPU-
-  bearing nodes is unchanged.
+**Step 2.2: Code flow**
+- Record: `[Before] ftracetest and every sourced `.tc` inherit LANG/LC_*
+  from the environment.` `[After] `export LC_ALL=C` at runner start,
+  inherited by all test cases including `readelf` in add_remove_uprobe.`
+  `[Path] initialization of the test harness, not kernel runtime.`
 
 **Step 2.3: Bug mechanism**
-- Record: Logic/correctness in a selftest. Memory-only NUMA nodes are
-  present in `numa_nodes_ptr` (the 2021 skip does not drop them) but
-  have an empty CPU mask, so pinning returns EINVAL. `is_cpuless_node()`
-  uses `numa_allocate_cpumask()` / `numa_node_to_cpus()` /
-  `numa_bitmask_weight()`; on helper error it returns false (do not
-  skip), which is conservative.
+- Record: `[Category] logic/correctness in the test harness (locale-
+  dependent parsing).` `[Mechanism] `add_remove_uprobe.tc` does `grep
+  "Entry point"` and `grep LOAD` on `readelf` output. If those strings
+  are translated, `ENTRY` is empty, `OFFSET` is empty, and the script
+  writes `p:myevent ${REALBIN}:` with no offset.`
 
 **Step 2.4: Fix quality**
-- Record: Obviously correct and minimal. Skipping a CPU-less node is
-  right: `bpf_get_numa_node_id()` is the current CPU’s node, so a
-  memory-only node can never be the sender. Regression risk is very low
-  (userspace test only). Helper allocation failure still hits the old
-  abort path.
+- Record: `[Quality] obviously correct; `LC_ALL=C` is the standard way
+  to freeze tool output. Three comment+export lines, no API change.`
+  `[Regression risk] very low. C locale can change collation/number
+  formatting, but ftrace tests parse English tracefs and ELF field
+  names. Maintainer asked for runner-wide export rather than
+  per-`readelf` wrappers.`
 
 ## Phase 3: Git history
 
 **Step 3.1: Blame**
-- Record: Loops come from `3c2c3c16aaf6a` (Daniel Borkmann, 2016-10-21,
-  “reuseport, bpf: add test case for bpf_get_numa_node_id”), first
-  contained in v4.10-rc1. The existing skip is `a38bc45a08e97` (Kleber
-  Sacilotto de Souza, 2021-11-01), contained in v5.16-rc1: skip nodes
-  not in `numa_nodes_ptr` (non-consecutive IDs). That does not cover
-  CPU-less memory nodes.
+- Record: `[Introduced] ftracetest header is from `6e68e6c5e4b67`
+  (2014). The locale-sensitive parsing was added by `dc4b165855f23`
+  ("Use readelf to find entry point in uprobe test", 2025-02-26) and
+  tightened by `bd4e5a97edf8c` (already in this tree), which greps
+  `"Entry point"` with no `LC_ALL=C`.` `[Age] parsing bug present since
+  v6.15-era code; still present here.`
 
 **Step 3.2: Fixes: tag**
-- Record: None. Buggy assumption is in the original 2016 test, still
-  present here.
+- Record: `[N/A] no Fixes: tag. Companion series patch 2/2
+  (`bd4e5a97edf8c` / upstream `24aa630f6259`) fixes `dc4b165855f23` and
+  is already an ancestor of HEAD.`
 
 **Step 3.3: File history**
-- Record: This tree only has later `0273d10182ec4` (ARRAY_SIZE warning),
-  then the 2021 skip, 2018 numa-skip-if-unavailable, SPDX, and the
-  original test. No `setup_netns()` in this file (0 matches).
-  Standalone; not patch X/Y.
+- Record: `[Related] `bd4e5a97edf8c` already backported here with `Cc:
+  stable`. That is v2 2/2 of the same series. In v2, per-command
+  `LC_ALL=C` was removed from the uprobe test because patch 1/2 was
+  supposed to set it in the runner. This tree has 2/2 without 1/2.`
+  `[Standalone?] yes as a diff; semantically it completes that series.`
 
 **Step 3.4: Author**
-- Record: Feng Tang has other tools/selftests work in this history (e.g.
-  mm `compaction_test`) but no other net `reuseport_bpf_numa` commits.
-  Not the net maintainer. Applied by Paolo Abeni after Simon Horman’s
-  review.
+- Record: `[Author] Rui Qi (ByteDance); not the subsystem maintainer.
+  Only other ftrace selftest commit in this tree is the companion offset
+  conversion. Maintainer Masami Hiramatsu applied both.`
 
 **Step 3.5: Prerequisites**
-- Record: Needs existing libnuma usage (`numa_nodes_ptr`,
-  `numa_run_on_node`, `-lnuma`). All present. Makefile already has
-  `$(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma`. No missing kernel
-  APIs. Can apply standalone.
+- Record: `[Dependencies] none for apply. Insertion is after the
+  copyright block, which matches this tree. Local `ftracetest` lacks
+  mainline `--rv`; that is later context only and is not required.`
+  `[Standalone apply] yes.`
 
-## Phase 4: Mailing list / external
+## Phase 4: Mailing list
 
 **Step 4.1: Original discussion**
-- Record: `b4 mbox` for msgid
-  `20260807002436.43991-1-feng.tang@linux.alibaba.com` returned 404;
-  lore.kernel.org fetches returned 403. Recovered from
-  Openwall/LKML/Patchew.
-- v1 (`20260730113040.75718-1-...`): check inside `send_from_node()`,
-  return -1, no NULL check on `numa_allocate_cpumask()`.
-- v2 (`[PATCH net v2]`): lift check into `test()`, add alloc-failure
-  handling; typo “unlikeyly”; unnecessary `inline`.
-- v3 (`[PATCH net-next v3]`): spelling + drop `inline` (Jakub, Sashiko).
-  Committed version matches v3.
-- No NAKs. No reviewer `Cc: stable` found.
+- Record: `[Lore] https://patch.msgid.link/20260807081512.2974757-2-
+  qirui.001@bytedance.com` (WebFetch on lore.kernel.org returned 403;
+  thread recovered via `b4 dig -m`).`
+- `[Revisions] v1 (2026-08-06): `LC_ALL=C` only on one `readelf` in
+  add_remove_uprobe. v2 (2026-08-07): moved to top-level `ftracetest`
+  per Masami. Applied version is v2, latest.`
+- `[Feedback] Masami on v1: force C locale in the top-level runner, not
+  per test. Author agreed and sent v2. Masami applied v2 2/2 with "Good
+  catch! OK, let me take it." No NAKs. No reviewer `Cc: stable` on this
+  patch (2/2 had `Fixes:` and later got `Cc: stable` in the backport).`
 
-**Step 4.2: Reviewers**
-- Record: To/Cc included Jakub Kicinski, David Miller, Eric Dumazet,
-  Paolo Abeni, Simon Horman, Shuah Khan, Andi Kleen, netdev, linux-
-  kselftest, bpf. Jakub reviewed v2 (inline). Simon Horman `Reviewed-by`
-  on v3. Paolo applied.
+**Step 4.2: Recipients**
+- Record: `[To/Cc] Steven Rostedt, Masami Hiramatsu, Mathieu Desnoyers,
+  Shuah Khan, Heiko Carstens, linux-trace-kernel, linux-kselftest,
+  linux-kernel.`
 
 **Step 4.3: Bug report**
-- Record: Author reproduced on CXL hardware; commit body has the exact
-  abort. No syzbot/bugzilla. Severity for testers: hard FAIL after the
-  first successful node-0 send.
+- Record: `[No syzbot/bugzilla.] Cover letter: series fixes two ways
+  add_remove_uprobe can build an invalid uprobe offset. v1 body: if
+  readelf is translated, ENTRYPOINT is empty and the `uprobe_events`
+  write is rejected because the offset after `PATH:` is missing. Author
+  is a real user of a non-C locale (ByteDance).`
 
 **Step 4.4: Series**
-- Record: Single patch, three revisions. No sibling patches required.
+- Record: `[v2 0/2] "Fix add_remove_uprobe robustness". Patch 1 = this
+  commit. Patch 2 = ELF VA→file offset (`bd4e5a97edf8c`), already in
+  this tree. v2 2/2 dropped inline `LC_ALL=C` and relies on the runner.`
 
 **Step 4.5: Stable list**
-- Record: No stable-list hit found. UNVERIFIED that nobody asked for it
-  on stable@ (lore 403).
+- Record: `[No stable-list discussion found] for this subject. Companion
+  2/2 was taken into this tree with `Cc: stable@vger.kernel.org`.`
 
-## Phase 5: Semantic analysis
+## Phase 5: Code semantics
 
 **Step 5.1: Functions**
-- Record: Adds `is_cpuless_node()`. Touches `test()`. `send_from_node()`
-  unchanged.
+- Record: `[No C functions.] Change is `export LC_ALL=C` in
+  `ftracetest`. Affected consumer: `add_remove_uprobe.tc` `readelf`
+  parsing.`
 
 **Step 5.2: Callers**
-- Record: `is_cpuless_node` only from `test()`. `test()` only from
-  `main()` (IPv4/IPv6 × UDP/TCP). Userspace kselftest, not kernel.
+- Record: `[ftracetest-ktap] runs `./ftracetest -K -v`. kselftest
+  Makefile lists `ftracetest` / `ftracetest-ktap`. `__run_test` sources
+  each `.tc` in a subshell, so `LC_ALL=C` is inherited. Reachable
+  whenever someone runs ftrace selftests.`
 
 **Step 5.3: Callees**
-- Record: libnuma `numa_allocate_cpumask`, `numa_node_to_cpus`,
-  `numa_bitmask_weight`, `numa_bitmask_free`. Already linked with
-  `-lnuma`.
+- Record: `[readelf -hW / -lW, grep, awk, writes to uprobe_events.]
+  Kernel ABI involved is `uprobe_events`, already exercised by the
+  test.`
 
-**Step 5.4: Reachability**
-- Record: Triggered by running `./reuseport_bpf_numa` on NUMA
-  (`CONFIG_NUMA=y` in `tools/testing/selftests/net/config`) with at
-  least one CPU-less node. Not a syscall/kernel path.
+**Step 5.4: Call chain**
+- Record: `[kselftest runner → ftracetest-ktap → ftracetest →
+  add_remove_uprobe.tc → readelf → uprobe_events.] Userspace-only. Not a
+  syscall bug; it does cause a false test failure and a malformed probe
+  write.`
 
 **Step 5.5: Similar patterns**
-- Record: Same file already skips unavailable nodes (`a38bc45a08e97`).
-  This is the CPU-less counterpart. No other `numa_run_on_node`
-  selftests in this tree.
+- Record: `[Only this ftrace test greps readelf "Entry point".] Other
+  selftests (e.g. mptcp) already pin `LC_ALL=C` on individual commands.
+  No `export LC_ALL=C` in this tree's ftrace runner yet.`
 
-## Phase 6: This tree (6.12.111)
+## Phase 6: This tree (pending-6.18 / 6.18.53)
 
 **Step 6.1: Buggy code present?**
-- Record: Yes. Local tree is `pending-6.12` / `p-6.12-3-gc504cf0baa3d8`,
-  `make kernelversion` = **6.12.111**. File has the 2016 loops and the
-  2021 `numa_nodes_ptr` skip, and still calls `send_from_node()` without
-  a CPU-less check (`git merge-base --is-ancestor` for both historical
-  commits succeeded). `git log --grep="consider cpuless"` on this file
-  is empty. CXL is in this tree (`drivers/cxl/`).
+- Record: `[Yes.] `tools/testing/selftests/ftrace/ftracetest` has no
+  `LC_ALL=C`. `add_remove_uprobe.tc` lines 17 and 37 grep English
+  `readelf` strings. `git describe HEAD` = `p-6.18-1-g03b85e06ca9bf`;
+  `make kernelversion` = `6.18.53`. Introduced by `dc4b165855f23`
+  (ancestor of HEAD).`
 
 **Step 6.2: Backport difficulty**
-- Record: Clean apply. The three functional contexts exist verbatim
-  (helper insertion after `attach_bpf()`, two loop sites). Mainline
-  trailing `setup_netns()` context is **not** in 6.12 and is not part of
-  the v3 hunks. `bool` is already used in other net selftests here
-  without extra headers.
+- Record: `[Clean apply.] Copyright-block context matches. `--rv` in the
+  candidate hunk is later mainline noise, not needed here.`
 
 **Step 6.3: Related fixes already here?**
-- Record: Only the 2021 unavailable-node skip. It does not fix CXL
-  memory-only nodes. No equivalent `is_cpuless_node` fix.
+- Record: `[Partial.] Offset conversion `bd4e5a97edf8c` is here; locale
+  export is not. No earlier equivalent `LC_ALL=C` in this file.`
 
 ## Phase 7: Subsystem context
 
-**Step 7.1:** Record: `tools/testing/selftests/net` — kselftest for
-SO_REUSEPORT + `bpf_get_numa_node_id`. Criticality: PERIPHERAL for
-production runtime; IMPORTANT for people who run net kselftests (this
-6.12.y tree already took ~100 `tools/testing/selftests/net` commits
-since `v6.12`).
+**Step 7.1**
+- Record: `[Subsystem] tools/testing/selftests/ftrace` `[Criticality]
+  PERIPHERAL for production kernel runtime; IMPORTANT for anyone running
+  ftrace kselftests on this stable tree (distro CI, KernelCI, vendor
+  QA).`
 
-**Step 7.2:** Record: Net selftests are actively backported here (UAF in
-tests, br_netfilter false failures, HZ=100 skips, portable timeouts,
-etc.).
+**Step 7.2**
+- Record: `[Activity] active; recent ftrace selftest fixes already
+  landed in this 6.18.y tree, including the companion uprobe test fix.`
 
 ## Phase 8: Impact and risk
 
-**Step 8.1:** Record: Testers running this binary on NUMA machines with
-CPU-less nodes (CXL memory, similar memory-only nodes). Not a production
-kernel path.
+**Step 8.1: Who is affected**
+- Record: `[config/test-specific] users/CI running ftracetest with a
+  non-C locale (zh_CN, de_DE, ja_JP, etc.). No effect on kernel boot or
+  production tracing if tests are not run.`
 
-**Step 8.2:** Record: Trigger is running the selftest on that topology.
-First CPU node can succeed; the next CPU-less node aborts. Unprivileged
-if the test is run that way; not a kernel exploit path.
+**Step 8.2: Trigger**
+- Record: `[Trigger] run ftracetest (or kselftest ftrace) with
+  translated binutils/gettext. Common on non-English developer and QA
+  machines. Unprivileged users can run the tests if they have tracefs
+  access; this is not a privilege-escalation bug.`
 
-**Step 8.3:** Record: Failure mode = kselftest abort (`error(1, errno,
-"failed to pin to node")`). Severity LOW–MEDIUM for the kernel (no
-oops/corruption), HIGH for CI on those machines (hard fail).
+**Step 8.3: Failure mode**
+- Record: `[Failure] false-negative kselftest; possible write of
+  `p:myevent <path>:` with empty offset, which the kernel rejects. Not a
+  panic, UAF, or data corruption.` `[Severity] MEDIUM for QA/CI
+  correctness; LOW for production kernel runtime.`
 
-**Step 8.4:** Record: Benefit medium for CXL/NUMA testers of 6.12.y;
-risk very low (userspace, +24 lines, no kernel change). Ratio favors
-backport on this tree, which already takes kselftest false-fail fixes.
+**Step 8.4: Risk-benefit**
+- Record: `[Benefit] medium for this tree: completes a 2-patch series
+  whose second half is already here, so add_remove_uprobe stays locale-
+  broken without it.` `[Risk] very low (3 lines, userspace test runner
+  only).` `[Ratio] favorable.`
 
 ## Phase 9: Synthesis
 
-**For**
-- Real, reproduced FAIL on CXL memory-only NUMA; 6.12 has both the test
-  and CXL.
-- Completes the 2021 skip: `numa_nodes_ptr` still includes CPU-less
-  nodes.
-- Small, reviewed, v3 is the applied form; no series deps.
-- Applies cleanly here; zero kernel runtime risk.
-- This tree regularly backports the same class (e.g. `selftests:
-  netfilter: packetdrill: avoid failure on HZ=100 kernel`,
-  vxlan/br_netfilter false-fail fixes).
-- v2 was sent to `net` as a bugfix.
+**Step 9.1: Evidence**
 
-**Against**
-- Not a kernel crash, security hole, or data-corruption fix.
-- Affects one selftest on a subset of NUMA topologies.
-- Final submission was `net-next`; no `Cc: stable` in the thread I could
-  read.
+For:
+- Real, reproducible test failure when `readelf` is localized.
+- Companion v2 2/2 is already in this 6.18 tree and depends on runner
+  `LC_ALL=C` (inline `LC_ALL=C` was removed in v2).
+- Tiny, obviously correct, maintainer-directed.
+- Applies cleanly; no kernel ABI/feature change.
+- kselftest false failures on stable are used by distros and CI.
 
-**Unresolved**
-- Exact mainline SHA (not on this branch).
-- lore.kernel.org / `b4` thread dump (403/404).
-- Whether stable@ ever discussed it.
+Against:
+- Not a kernel crash, security hole, deadlock, or data corruption.
+- Only hits people who run ftrace selftests under a non-C locale.
+- This patch itself was not `Cc: stable` (not used as a NO vote per the
+  review rules).
 
-**Stable rules checklist**
-1. Obviously correct and tested? **PASS** (libnuma weight 0; Reviewed-by
-   Horman; author reproduced).
-2. Real bug that bothers people? **PASS** (hard selftest FAIL on real
-   CXL hardware).
-3. Important (crash/security/corruption/deadlock)? **PASS** under this
-   tree’s documented “oh, that’s not good” / kselftest-false-fail
-   practice; not a production oops.
-4. Small and contained? **PASS** (~24 lines, one file).
+Unresolved:
+- Could not fetch lore.kernel.org over HTTP (403); discussion was
+  recovered from `b4 dig` mbox. No stable-list thread found.
+
+**Step 9.2: Stable rules**
+1. Obviously correct and tested? **PASS** — 3-line export; maintainer
+   requested and applied; author ran `checkpatch` and `sh -n`.
+2. Real bug affecting users? **PASS** — false ftracetest failure and
+   malformed uprobe write on localized systems.
+3. Important issue? **PASS** — not a kernel oops, but it is a real
+   kselftest break, and this tree already took the paired functional
+   fix. Leaving this out keeps that test locale-fragile.
+4. Small and contained? **PASS** — +3 lines, one file.
 5. No new features/APIs? **PASS**.
-6. Can apply to this tree? **PASS** (contexts verified).
+6. Can apply to this tree? **PASS**.
 
-**Exception category:** none of ID/quirk/DT/build/docs; it is a
-kselftest correctness/robustness fix, which this 6.12.y tree already
-accepts.
+**Step 9.3: Exception category**
+- Record: `[Not a device-ID/quirk/DT/build/docs exception.] Closest
+  analogue is a kselftest robustness/false-failure fix, which stable
+  trees routinely take when the test exists in-tree.`
 
-The test in 6.12.111 still assumes every exposed NUMA node has CPUs.
-That is false on CXL memory-only nodes, so `reuseport_bpf_numa` aborts.
-The patch only skips those nodes and does not change kernel behavior.
-That is a contained, low-risk fix worth taking on this tree.
+**Step 9.4: Decision**
+This should be backported to **this** 6.18.y tree. The bug exists here,
+the patch is surgical, and it finishes a series that is already half-
+applied.
 
-### Verification
-- [Phase 1] Parsed tags: Reviewed-by Simon Horman; Link msgid; SOBs Feng
-  Tang / Paolo Abeni; no Fixes/Reported-by/Cc:stable.
-- [Phase 2] Diff: +24 lines, `is_cpuless_node()` + two `continue`s in
-  `test()`; `send_from_node()` still `error(1)` on pin failure.
-- [Phase 3] `git blame` loops: `3c2c3c16aaf6a` (2016) and
-  `a38bc45a08e97` (2021 skip). Both are ancestors of HEAD.
-- [Phase 3] `git describe --contains`: original test v4.10-rc1; 2021
-  skip v5.16-rc1.
-- [Phase 3] `git log --grep="consider cpuless"` on this file: empty (fix
-  not in tree).
-- [Phase 4] `b4 mbox` msgid: 404; lore WebFetch: 403; used
-  Openwall/LKML/Patchew for v1–v3.
-- [Phase 4] v1→v3: Sashiko NULL-check; lift skip out of
-  `send_from_node`; Jakub spelling/`inline`; Horman Reviewed-by; no NAK.
-- [Phase 5] Callers: `main` → `test` → `send_from_node`; userspace only.
-  `grep numa_run_on_node` only this file under selftests.
-- [Phase 6] `git describe HEAD` / `make kernelversion`: pending-6.12,
-  6.12.111. File matches patch contexts (`hunk1 present`, two loop
-  sites). No `setup_netns`. `drivers/cxl/` present. `CONFIG_NUMA=y` in
-  net selftest config. `-lnuma` already in Makefile.
-- [Phase 6] `v6.12..HEAD -- tools/testing/selftests/net/`: 100 commits,
-  including false-fail/skip fixes.
-- [Phase 8] Failure: selftest abort `failed to pin to node: Invalid
-  argument`; not a kernel oops.
-- UNVERIFIED: lore.kernel.org full thread; stable@ discussion; mainline
-  SHA.
+### What the commit solves for stable users
+On a non-C locale, `readelf` can translate `"Entry point"`, so
+`add_remove_uprobe` computes an empty offset and fails even though
+uprobes work. Distros and CI that run ftrace kselftests against 6.18.y
+get a false failure. The offset-conversion fix already in this tree
+still greps English `readelf` text and assumed this runner change.
+
+### Risk vs benefit
+Benefit is restoring a test that this tree already ships. Risk is
+negligible: `LC_ALL=C` only affects the ftracetest process tree.
+
+### Concerns
+None material. `--rv` in the original hunk context is not in this tree
+and is not required. No further commits are needed for the export to
+work.
+
+## Verification
+- [Phase 1] Parsed tags: Link to lore msgid `20260807081512.2974757-2`;
+  SOBs Rui Qi and Masami Hiramatsu; no Fixes/Reported-by/Cc: stable.
+- [Phase 2] Diff: +3 lines in `ftracetest` (`export LC_ALL=C`);
+  confirmed local file lacks it.
+- [Phase 3] `git describe HEAD` → `p-6.18-1-g03b85e06ca9bf`; `make
+  kernelversion` → `6.18.53`.
+- [Phase 3] `git merge-base --is-ancestor c13fcd3951dcc1 HEAD` → not an
+  ancestor (fix not in tree).
+- [Phase 3] `git merge-base --is-ancestor bd4e5a97edf8c HEAD` → yes
+  (companion 2/2 is in tree).
+- [Phase 3] `git merge-base --is-ancestor dc4b165855f23 HEAD` → yes
+  (readelf parsing introduced here).
+- [Phase 3] `git blame` on ftracetest header: `6e68e6c5e4b67` (2014); no
+  LC_ALL.
+- [Phase 3] Read `add_remove_uprobe.tc`: greps `"Entry point"` and
+  `LOAD` with no LC_ALL.
+- [Phase 4] `b4 dig -c c13fcd3951dcc1` → v2 1/2 msgid link above.
+- [Phase 4] `b4 dig -a` → v1 per-readelf LC_ALL, v2 runner-wide
+  (applied).
+- [Phase 4] `b4 dig -w` → Rostedt, Masami, Desnoyers, Shuah, kselftest
+  and trace lists.
+- [Phase 4] mbox: Masami asked to set LC_ALL in the runner; no NAKs;
+  cover letter describes two invalid-offset paths.
+- [Phase 4] lore WebFetch 403; stable-list search found no discussion of
+  this subject.
+- [Phase 5] `ftracetest-ktap` invokes `./ftracetest -K -v`; `__run_test`
+  sources `.tc` files so export is inherited.
+- [Phase 6] Insertion context after copyright block is present; `export
+  LC_ALL=C` is not.
+- [Phase 8] Failure mode verified from v1 message and current test
+  script: empty ENTRY → `p:myevent path:` write → test fail, not kernel
+  oops.
+- UNVERIFIED: live `readelf` translation under a specific locale was not
+  executed on this machine; the gettext localization claim is from the
+  author and is consistent with binutils behavior, but was not
+  reproduced here.
 
 **YES**
 
- .../selftests/net/reuseport_bpf_numa.c        | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ tools/testing/selftests/ftrace/ftracetest | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/testing/selftests/net/reuseport_bpf_numa.c
-index c9ba36aa688e2..b04b511809ad2 100644
---- a/tools/testing/selftests/net/reuseport_bpf_numa.c
-+++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
-@@ -104,6 +104,26 @@ static void attach_bpf(int fd)
- 	close(bpf_fd);
- }
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index cce72f8b03dce..ee3b950e872f6 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -7,6 +7,9 @@
+ #  Written by Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
+ #
  
-+/*
-+ * Return true if it is a cpuless node. Return false if it isn't or any
-+ * error (very unlikely) happens during the libnuma calls.
-+ */
-+static bool is_cpuless_node(int node_id)
-+{
-+	struct bitmask *cpumask;
-+	bool ret = false;
++# Keep command output parsing stable regardless of the user's locale.
++export LC_ALL=C
 +
-+	cpumask = numa_allocate_cpumask();
-+	if (!cpumask)
-+		return ret;
-+
-+	if (!numa_node_to_cpus(node_id, cpumask) && !numa_bitmask_weight(cpumask))
-+		ret = true;
-+
-+	numa_bitmask_free(cpumask);
-+	return ret;
-+}
-+
- static void send_from_node(int node_id, int family, int proto)
- {
- 	struct sockaddr_storage saddr, daddr;
-@@ -213,6 +233,8 @@ static void test(int *rcv_fd, int len, int family, int proto)
- 	for (node = 0; node < len; ++node) {
- 		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
- 			continue;
-+		if (is_cpuless_node(node))
-+			continue;
- 		send_from_node(node, family, proto);
- 		receive_on_node(rcv_fd, len, epfd, node, proto);
- 	}
-@@ -221,6 +243,8 @@ static void test(int *rcv_fd, int len, int family, int proto)
- 	for (node = len - 1; node >= 0; --node) {
- 		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
- 			continue;
-+		if (is_cpuless_node(node))
-+			continue;
- 		send_from_node(node, family, proto);
- 		receive_on_node(rcv_fd, len, epfd, node, proto);
- 	}
+ usage() { # errno [message]
+ [ ! -z "$2" ] && echo $2
+ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
 -- 
 2.53.0
 
