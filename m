@@ -1,79 +1,78 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1792446045;
-	b=Mq0yBs5YII/RtjPhnPmTdKRo11oc5NvurJcSEUpxMobmFVA1TAc/So8MbE5xog7uRW99
-	 PqOyH5z7TvaQJN1NWXGi8kKDnwmkfxHHXUgttWOy1txUe/BDqG8qAXRgqak7hm4ouYU8v
-	 hG6usVvrMdpxK1N/66+XHl4BsfkO3fd9iW/bRRAVA/23cT3J9kErRY+mAm6wKVGRMEd2E
-	 9q4F5MGU4QH5lis00ck5O/WlLU0fC3+gCmrWCxW6VrpLqi00NGWQqOPGbKBpJq8bUZHOj
-	 jUFCHc8GuL9Z5gTpIWk+8FhQcifvzKrePBkV7KmKGz/B6CecyaPwyIFMpuBNUL7Z4DA==
+	b=RV5/JqdNT3x2XguNhUP5+L9l1dVJR8M6rp4FNUrgRhmL6HfMsdFUm77vmKAeKzNKGh0Z
+	 jSFU7BeR8qSONCryLfiMw7No3g+IPUynrRGPICS53/2PdkEhKqZyZ244g/WfGElHq7g/7
+	 HRfj8YuU3vm1yDNA6dfQ3Thal+cjD8IFqwm09MQb9FDeyCapkFpjtEmWikSCkcILyszlG
+	 pejGenXXWZcH6qqZUbyS7DfON993CYP8yDaC3W1CpnntvtQMpMDs5KH5ZlcoU2IBqR8sj
+	 eJRbxPJ5RKbqTwvJrCYGZ28J4SaZDTnUoaZumEZo8lxqnQH1JTviV9/cfC5C61vOodw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792446045;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=6GJN1th4CMtwapjnje2N+N42yjiIBXhALvroNWjHZT0=;
-	b=Uw+NcVwyrP2Lv4ld7tEqSxbyOhRwEPxGNOIsSuWCIH1CfdKOWMpvnJjWg2XJzrr6l7zp
-	 5SoW8emYd0KbMSCyR6SttaO5FXt9RiqgCGxfXhMS4d6yykb7K0XPu2CjlLKtI3+5hTlEL
-	 vb+yqAq29Kv7h4U1bz0q4sSwYHdp1XlBm4VQl9TqjU8jRI+NUCWslupKL/Xqv63Znl6d4
-	 J7PwDmJSD8o/D7jDdHOPChR1M8raGbOZlIKvv3vQiHYz0eDWSxbQI1n8akrky4JsKeRKx
-	 NPg2bNxMQPd7OcXVOuZerHJhsEdFcysEr6e0ZKJECjerzS7nMJCRfwH1LVNK4U15m7w==
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=jurHIDrhl6KPL+vb3cebyYVtlyxHhq6VSQQuboTgOOs=;
+	b=izbkxZGcxmdCkkvLfVnlJ0pQa23lh4r7+O0KJFkCEzwZxmfCMYBavLba6u8mLmzeRzY1
+	 IB+nkkoVGfVt0y/2r74UEWiw/QGrpurtN2OkH0yQxFxAWhK3mfEiHpxxqgCh0lqTsqeae
+	 obGFQRvi8Gsdp3wcbD1Xme/+39TXSZB48ceBMt9sWMu431/7wd+sx/8+yDRHPxpUShXm+
+	 iuPmR/BPU9iqDcfQJpYvGVHJniiuoOROiqVvOJe2bG+2n6IhnVro4GVNZ6XkAQPkMqPNq
+	 58tDfBCDiU0fs15lc7MCo/BB2RWjN7aaMiTN0xiDLmnBfOKY2XhjFGwNVKCayrXHQhQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="CkG/Jsyc";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kX3FU4EX;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5B7606A31F;
-	Mon, 19 Oct 2026 21:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B2D606A325;
+	Mon, 19 Oct 2026 21:40:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CkG/Jsyc
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kX3FU4EX
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792446044;
-	b=AqvwL991H/sezuVC2WR18ixI4JiaTS9+swE1nc+zEyIGdcEnG2u+inh6nPFYD5utf7dm
-	 3U/NGTD/0+iavVbkSrqG3H6tzJWxlj2DSH0DiG+95wiiGRSb72djiKp8+cNMAWSTuLRoJ
-	 XupJMhR5uz+UOJjTbdokVT44hQEZiglKGllcw2+lK9wV5xce3uk8PPh8P/944szbzWCLs
-	 P/ZrvANWiIobHyhwFk4KTn7qga2qwfHcW89QCjmUD3eW3ao1ouSCetI731M0oemkMoiPE
-	 8U1EuTAKLHsRPkL1XAD2s7eWi599DdFX8maGXUja3pygGRJZ35PTGU1p6mTIGxr+tcw==
+	t=1792446045;
+	b=qBQ5pdMi2udIK7P/5VKB+8k2QHAtPRL1EdC0OuNSsBJe11t6FQ/M7jGMRFfoKfS9i/JH
+	 Mx1AMt7W4i7fd9itAwxqLLCUL3+c693bcDOpfbEjVuyRI+oXg6d3tIKup9dawPlQdQ9hx
+	 GfqBM4dmd/4WCcifGvPyUWZwhx+KpPw1YjHxnL7mwH5vepQyu+Oatvh2LWQ8eEKE7IFtN
+	 hPP5I3hOPjzfJmf+vLhPTqR0gHGwv48fno4y7tHgAAv9fgnpHeEqdnaRP7vBX1UOdLmYw
+	 nz4oIroUuUpX//MjNyblJOrjkSlWwI+D5T3kRKRPPkTokJXkWnbxN6NsjKaFwoV/f3A==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792446044;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=6GJN1th4CMtwapjnje2N+N42yjiIBXhALvroNWjHZT0=;
-	b=zXLn8/9EgjCF9gUK+JryvFf8gwe+qsHwP7Ou5c3oPncifzmkOz1P7ULhWCNcntBTqz1S
-	 FSns/qBr+iDA/vBzvjhHGznNLVbxySeM9MRkESI/LOjfitS3Z/Z6Km7KU+f6QgpD+LE4X
-	 qZ5LWbEikJVZ8sOvJMErfR4ORps+l4PlmkNJxZaJjV5sM0LWQF74+/SA6VlF2KNxoHiLT
-	 Mzhn07+TMOCOL4qfK6EgayRP70VWVZ3pyLg5DUguYEqNZmBJsuF8EzvBMUuF7pDrEAtbZ
-	 3zTFRVbYowf4g0UdzaXX7N8eocbBomVJmZGqO+WGTmxZnJxup5qJRaXxqfOYNDQjoVg==
+	c=relaxed/relaxed; t=1792446045;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=jurHIDrhl6KPL+vb3cebyYVtlyxHhq6VSQQuboTgOOs=;
+	b=pZVA8OuhuHl0LgX154R69ASxV+IdWcxdl5FsugfjCaerDAQ1bcgEc0rn5MdmhdkD8GVe
+	 fpS9UDdojY740w37eVlYmTN/FtzHNeerFYIwj2cecsh02uhGQf3TRY3CpuBxGBaTjKLCB
+	 geueYSczGcggsXnP6SrM51kadeKyBhoKmoeJSMWc431xro2bds+IARGS/jaoBHQKsO3BV
+	 qTTWwxnCVTFO8SV+3p6/L/ceuXHhfk4CTUknuAZLSsreIdQxQtgenNJYYNSWKh5Y/rGSd
+	 j/Ec+12aADh4aUxhKTBOZrQwtx5SM8fKyWAPK//TP2aWw70X5X4BvsDL1i8yY0RpTwQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B2C9E1F000C7;
+	by smtp.kernel.org (Postfix) with ESMTPS id B2D061F000C8;
 	Mon, 19 Oct 2026 21:40:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792446044;
-	bh=6GJN1th4CMtwapjnje2N+N42yjiIBXhALvroNWjHZT0=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=CkG/Jsycf5k3To5VbUAfB/ZCX+5KQwW2iLCjb3t9lDdDx44vdIg8FBqSMEntBh6aF
-	 PrjXGMn090QQSB921317efnSPu6leetmSyqToobF1cEp/m3+QLnF/DqlFS1ZntPMyn
-	 zoNavV+rL65EhPOp+EqifVTzdGLwDm6550yvDhUf3XW3V+MZ5tPFWBTz61KIeiC0oL
-	 T4shbIbIAMRte/afoIGQE4jrqJ2Kh1VYi0MihSlpyk/O0lbmkfGIuCFmL80oBNEFE0
-	 GqMhzW1/N+ftUyEyne8Rf/J6lm40lu6Ez8LszFQZf1vTeLk8ZydIsApGIwvlo6OpmS
-	 Bd3TNoX+NXlAw==
+	s=k20260515; t=1792446045;
+	bh=jurHIDrhl6KPL+vb3cebyYVtlyxHhq6VSQQuboTgOOs=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=kX3FU4EXdpRTv3843JHwzPjntQQHEOhC0Eq9Gn3p9xV6gG11QsLp18uqjbUMSzOak
+	 ipGDQx3eFFZovxXzTzPQW648zEffuKJWBxYL0s9Ueict2qBiQvL/CMI4dR+thG4bjR
+	 TyjJKsjtSvV/ZtCJPOaAN5qxIzOzStNzveMWN0ob6uAVQpoly9mdwpRj/OSjB5zau4
+	 g9FP1ocPRAzsuKemGrxQRdf6O+e4vexpc/HgJckaxbWwaj45sphAQfAeQEIay292QM
+	 pKVT7NFu4UaSi35KCxDZgzCDhWI6ixLuHl0WLhe2whzlcGAzz+XvdPTd9BQ0iKyjzr
+	 mZc8MdyMb/piA==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id F30CE40633;
-	Mon, 19 Oct 2026 21:40:42 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 155154063D;
+	Mon, 19 Oct 2026 21:40:43 +0000 (UTC)
 From: Manuel Huber via B4 Relay <devnull+manuelh.nvidia.com@kernel.org>
-Subject: [PATCH RFC 0/4] IPE: add a dedicated policy keyring
-Date: Mon, 19 Oct 2026 21:40:24 +0000
-Message-Id: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+Date: Mon, 19 Oct 2026 21:40:27 +0000
+Subject: [PATCH RFC 3/4] Documentation: ipe: document the IPE keyring
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,11 +83,9 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MMQqAMAxA0atIZgO2ilBXwQO4ikOrUYNQJQVRp
- He3OL7h/xcCCVOAJntB6OLAh09QeQbTZv1KyHMy6ELXqlAGXYV8Eu70CPsVZZnQmdIZS0obqyG
- Fp9DC9z8doO9aGGP8AH+7iDNpAAAA
-X-Change-ID: 20261019-b4-ipe-keyring-rfc-b93b9ae129a2
+Message-Id: <20261019-b4-ipe-keyring-rfc-v1-3-156f0b93e843@nvidia.com>
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+In-Reply-To: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
 To: Fan Wu <wufan@kernel.org>, David Howells <dhowells@redhat.com>, 
  Jarkko Sakkinen <jarkko@kernel.org>
 Cc: Christian Brauner <brauner@kernel.org>, 
@@ -102,75 +99,118 @@ Cc: Christian Brauner <brauner@kernel.org>,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Manuel Huber <manuelh@nvidia.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792446042; l=2751;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792446042; l=4917;
  i=manuelh@nvidia.com; s=20261019; h=from:subject:message-id;
- bh=6WPcEAqFx8dpbBNrw8M+IL0uMQ7Yp3AICptgIgyBFtA=;
- b=gkxyREkuboghZ5svc2zXzJmD9W9S2bUyNSjdWo563ECwGLU3xuBDMg9oYuexLJePZ5edkrcMn
- iUDB19Lgr1ICwRUnqLsI5JMzrO0MYWKnXfSeG9B8v1dUd48rmk8lKcC
+ bh=bQSlVKSLE/vFXclrnH0WGlD57ySt0pDqaCI7PqKjvz8=;
+ b=LeRG8q2weFYyCzPHBXqZC5UUlqvkvzwvk8VeM4N7+kedJjkHqVy+hnuVIQ+xrFVEi0iR32rAm
+ 7fUQYrHrKA3DBUiCrfmMsjOPbsMLoFlwYPYdpBypAVhMf9xZU2Fw6SJ
 X-Developer-Key: i=manuelh@nvidia.com; a=ed25519;
  pk=uKggxpZ/mM0qtFnudxvh5Dfz8I6VoehwoM3eYCe3tyU=
 X-Endpoint-Received: by B4 Relay for manuelh@nvidia.com/20261019 with
  auth_id=1244
 X-Original-From: Manuel Huber <manuelh@nvidia.com>
 Reply-To: manuelh@nvidia.com
+Content-Transfer-Encoding: 7bit
 
-Add a dedicated ".ipe" keyring for IPE policy-signature verification,
-modeled after the dm-verity keyring, allowing userspace to provision
-IPE-specific policy-signing certificates. Systems that do not provision
-the keyring retain their existing behavior.
+From: Manuel Huber <manuelh@nvidia.com>
 
-This RFC is based on commit 48f936e302a9 ("ipe: update the project and
-test suite links") from ipe/next so review can begin before the
-prerequisite keyring work reaches that branch. The series will be rebased
-onto a refreshed ipe/next once that work is available there [1].
-
-The keyring readiness check currently follows the dm-verity and BPF
-implementations. A parallel keys RFC introduces keyring_is_empty() for
-this purpose [2]. A later revision will use the helper if it is available
-in the submission base.
-
-Testing:
-- Built an x86_64 kernel with GCC 15.2.0 and Clang/LLD 21.1.8.
-- Passed all 33 IPE parser KUnit assertions.
-- Passed all 4 sealed-default keyring selftests under QEMU TCG.
-- Passed all 16 provisioning-mode keyring selftests under QEMU TCG with
-  ipe.keyring_unsealed=1.
-
-[1] https://lore.kernel.org/r/20261008-ajhalaney-dmverity-key-identifier-v2-0-008456d189cb@amutable.com
-[2] https://lore.kernel.org/r/20261016215326.4110064-5-jarkko@kernel.org
+Document the .ipe policy-verification keyring and its additive use
+after the existing trust sources.
 
 Signed-off-by: Manuel Huber <manuelh@nvidia.com>
 ---
-Manuel Huber (4):
-      ipe: add the .ipe policy keyring
-      keys: add KEY_SPEC_IPE_KEYRING
-      Documentation: ipe: document the IPE keyring
-      selftests/ipe: test the IPE policy keyring
+ Documentation/admin-guide/LSM/ipe.rst | 41 ++++++++++++++++++++++++++++++++++-
+ Documentation/security/ipe.rst        | 16 +++++++++-----
+ 2 files changed, 51 insertions(+), 6 deletions(-)
 
- Documentation/admin-guide/LSM/ipe.rst           |  41 ++-
- Documentation/admin-guide/kernel-parameters.txt |   9 +
- Documentation/security/ipe.rst                  |  16 +-
- Documentation/security/keys/core.rst            |   9 +
- MAINTAINERS                                     |   1 +
- include/linux/key.h                             |   2 +
- include/uapi/linux/keyctl.h                     |   1 +
- security/ipe/Makefile                           |   1 +
- security/ipe/ipe.c                              |   2 +
- security/ipe/keyring.c                          |  80 ++++++
- security/ipe/keyring.h                          |  16 ++
- security/ipe/policy.c                           |  10 +
- security/keys/process_keys.c                    |  23 ++
- tools/testing/selftests/Makefile                |   1 +
- tools/testing/selftests/ipe/Makefile            |   5 +
- tools/testing/selftests/ipe/config              |   7 +
- tools/testing/selftests/ipe/test-ipe-keyring.sh | 357 ++++++++++++++++++++++++
- 17 files changed, 575 insertions(+), 6 deletions(-)
----
-base-commit: 48f936e302a9c48cfc032eb5944c3a6246bc9043
-change-id: 20261019-b4-ipe-keyring-rfc-b93b9ae129a2
+diff --git a/Documentation/admin-guide/LSM/ipe.rst b/Documentation/admin-guide/LSM/ipe.rst
+index 9e82a2082b94..48ccad203301 100644
+--- a/Documentation/admin-guide/LSM/ipe.rst
++++ b/Documentation/admin-guide/LSM/ipe.rst
+@@ -238,7 +238,11 @@ unconstrained root, and deploying an "allow all" policy). These
+ policies must be signed by a certificate that chains to the
+ ``SYSTEM_TRUSTED_KEYRING``, or to the secondary and/or platform keyrings if
+ ``CONFIG_IPE_POLICY_SIG_SECONDARY_KEYRING`` and/or
+-``CONFIG_IPE_POLICY_SIG_PLATFORM_KEYRING`` are enabled, respectively.
++``CONFIG_IPE_POLICY_SIG_PLATFORM_KEYRING`` are enabled, respectively. IPE also
++provides a dedicated ``.ipe`` keyring for policy-signing certificates that are
++provisioned by userspace, as described below. The ``.ipe`` keyring is an
++additive final fallback and does not replace the configured system trust
++sources.
+ With openssl, the policy can be signed by::
+ 
+    openssl smime -sign \
+@@ -251,6 +255,41 @@ With openssl, the policy can be signed by::
+       -outform der \
+       -out "$MY_POLICY.p7b"
+ 
++Provisioning the IPE policy keyring
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The ``.ipe`` keyring allows a system to provision an IPE-specific policy
++signing certificate without embedding it in the kernel or firmware trust
++stores. It is not linked into any process keyring. Userspace addresses it
++directly with the ``KEY_SPEC_IPE_KEYRING`` special key ID (``-12``), which does
++not grant possession of the keyring.
++
++The keyring is restricted while empty by default and cannot then be
++provisioned. To provision it, boot with ``ipe.keyring_unsealed=1``. Userspace
++can add a DER-encoded X.509 certificate and then apply a reject-all
++restriction::
++
++   keyctl padd asymmetric "" -12 < policy-signing-key.der
++   keyctl restrict_keyring -12
++
++Both steps are required. IPE ignores the keyring until it is nonempty and
++restricted, so a partially provisioned, mutable keyring is not a trust source.
++The restriction cannot be removed. More than one certificate can be enrolled
++by repeating the ``keyctl padd`` command before restricting the keyring.
++
++Restriction prevents adding keys, but it does not prevent userspace from
++removing keys or otherwise disabling the keyring. To lock it against further
++userspace modification, drop its write and setattr permissions::
++
++   keyctl setperm -12 0x08030000
++
++This retains the permissions needed for verification and inspection.
++Provisioning, restriction, and permission hardening must be completed before
++relying on ``.ipe`` as a trust source.
++
++Once nonempty and restricted, ``.ipe`` is searched after the configured system
++trust sources. An absent, empty, or unrestricted ``.ipe`` keyring is ignored.
++
+ Deploying the policies is done through securityfs, through the
+ ``new_policy`` node. To deploy a policy, simply cat the file into the
+ securityfs node::
+diff --git a/Documentation/security/ipe.rst b/Documentation/security/ipe.rst
+index 4490aed5918a..80f9893dddb5 100644
+--- a/Documentation/security/ipe.rst
++++ b/Documentation/security/ipe.rst
+@@ -248,11 +248,17 @@ policy updates have to be done rebootlessly.
+ 
+ To allow an update from an external source, it could be potentially malicious,
+ so this policy needs to have a way to be identified as trusted. This is
+-done via a signature chained to a trust source in the kernel. Arbitrarily,
+-this is  the ``SYSTEM_TRUSTED_KEYRING``, a keyring that is initially
+-populated at kernel compile-time, as this matches the expectation that the
+-author of the compiled-in policy described above is the same entity that can
+-deploy policy updates.
++done via a signature chained to a trust source in the kernel. IPE can use the
++builtin trusted keyring and, when configured, the secondary and platform
++keyrings. This matches systems where the entity that establishes the kernel or
++firmware trust store is also authorized to deploy policy updates.
++
++IPE also has a dedicated ``.ipe`` keyring for deployments that establish an
++IPE-specific trust anchor from userspace. The keyring can be provisioned and
++irreversibly restricted. IPE uses it only when it is nonempty and restricted,
++and only as a fallback after the configured system keyrings. This keeps the
++existing trust model intact while allowing a policy-signing key to be rotated
++across boots without changing the kernel image or a broader system trust store.
+ 
+ Anti-Rollback / Anti-Replay
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Best regards,
 -- 
-Manuel Huber <manuelh@nvidia.com>
+2.53.0
 
 
