@@ -1,40 +1,33 @@
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A61305E1F;
-	Mon, 19 Oct 2026 13:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68684F68AF;
+	Mon, 19 Oct 2026 13:37:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792415913; cv=none; b=XKpGr6cTWSlm9myuwrL+gKYJ8rJ0rkt4YaPISt1QFbmLH9IkJqocFAjflYXjHB+wt/r/MNrI7xlYbixEiPQFNgnFQMlbqdnzcyIPkvex+Xj1o4qLojCx2D8cBZKyjpAQyatyeORvDFxEgl418FZR7BAbkbhnyijFfemdZIf+ITE=
+	t=1792417078; cv=none; b=p7gploZtE7GGk5MW0CqWhw5cZgSK8DcRos+xZxHIs26FKAZhuzCjW0r9kOdPusv5tBzjinWX8XCxZVG5HEdgE3veClZUF+f94N42O/Fzss4axZTenoj3o+DQm3runPYv1KJjwWc2fBaOFJyCtio7vG+gra6wuTHvzkhytNFB4RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792415913; c=relaxed/simple;
-	bh=tw/NIA6n/WlEM9gbRkoL6G9qlG0bYIFMcFGFohHaOpg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SZL35z+CpLiuo6vCm6aly2QyiPs4uF4CT4zRUSarulMebxS9/EzQOL9u8UYaOyNWunhpfWIUelZ0Z0FgErUEZCtkcwyigPlh3fnpEAOl9Yw3Z/+NRjV/Pf2Nj50eiWQ9wqphUdXNPyviNUVaMr7gyuObr1PuSxuaFnPOxCECuLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=4TBSCuQs; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1792417078; c=relaxed/simple;
+	bh=DkWNBP86p1Ny3thKYlcwU4OKR3uPHpisYlc604VomoQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uO/j6HVGVOHQ/yL/0f8xm1mvsEfBVITRpoReb2xHe+BZeBMK8Oe3+hRtJfrb5OypQknmgmTt5oJ/iZoFbVrFjDBGdutzuV5rZ8MtBQdDd8C0dvjqPfNhrHzFMj+wNrVv2JjdEuifBo7U7ncFVEBVQaJiJu/nLd4acHjncR+nPRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XMX4/U2U; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="4TBSCuQs"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=nsTgvIZAvLZ3AkHd7te1YwAT5vQcze+ZS3sOvyFtcIg=;
-	b=4TBSCuQs0ZdnPFMgTM9bX9OvAvFEfbIZ0LIjSwYBzm0TCIeE0rVraJFOIej4k1X7EItvC1NmR
-	DX3BwVJS/9MaAexRTXkUg/68Kdod6DsiNW4k5ZZ6iNTl5sWy1P0de+g7jr1skB7fCwujvSD5mIa
-	tukVtvADo4Ri0z5qNKiN+rE=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4j7bhR2MFBz1K96D;
-	Mon, 19 Oct 2026 21:18:15 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id 23C6D4057A;
-	Mon, 19 Oct 2026 21:18:18 +0800 (CST)
-Received: from [10.67.110.140] (10.67.110.140) by
- whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Mon, 19 Oct 2026 21:18:11 +0800
-Message-ID: <bfc74a80-92e9-4dcf-926e-0a2e2c33e4d5@huawei.com>
-Date: Mon, 19 Oct 2026 21:18:10 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMX4/U2U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF8D91F000C6;
+	Mon, 19 Oct 2026 13:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792417077;
+	bh=KltLcIUAb/n+sPGDmQ9VfrMwiJ4IpafpRw0FqjJaXS8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=XMX4/U2UBmjjuzUmFjYnVEtJKs/hgbhAQ3E4P2BJ9BSyFgm13GtxuXVyu+m1r+TZ8
+	 kGDtePXENyVjG0DzuYjtAdPMXyvyce9UzWDWLXQqBn9nft8MpG7MUp/tKXIBnTdnUS
+	 cMqa3M1ZLYKcuTvBUco/4YfHGnnKaNq+CqNdxW40wV2rOxugl/4hRXSls6z5OJPqmh
+	 PCTvDYMZ4bHICyb9KOezlMa4HXrUfkmb9FP646d+fRTC91gVFbWMYpL5+jNpB+US2U
+	 6Y9/a4Y7vzJ5Wg3q96HIEzGfDSNbUhEPgaekVNS5wPE2cpiQ6yhTbwkjl11EUrhgE3
+	 fyIKk8KOFSHXg==
+Message-ID: <4a6ddf56-af89-482a-b173-18e181bfc3ae@kernel.org>
+Date: Mon, 19 Oct 2026 15:37:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,199 +35,129 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 -next 09/18] landlock: Add READ_METADATA and
- WRITE_METADATA access rights
-To: =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, Justin Suess
-	<utilityemal77@gmail.com>
-CC: <mic@digikod.net>, <paul@paul-moore.com>, <jmorris@namei.org>,
-	<serge@hallyn.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<eddyz87@gmail.com>, <memxor@gmail.com>, <martin.lau@linux.dev>,
-	<song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
-	<emil@etsalapatis.com>, <ihor.solodrai@linux.dev>, <rdunlap@infradead.org>,
-	<gregkh@linuxfoundation.org>, <rafael@kernel.org>, <dakr@kernel.org>,
-	<johan@kernel.org>, <dlemoal@kernel.org>, <hch@lst.de>, <axboe@kernel.dk>,
-	<viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <jack@suse.cz>,
-	<dhowells@redhat.com>, <code@tyhicks.com>, <linkinjeon@kernel.org>,
-	<sj1557.seo@samsung.com>, <yuezhang.mo@sony.com>,
-	<hirofumi@mail.parknet.co.jp>, <cel@kernel.org>, <jlayton@kernel.org>,
-	<neil@brown.name>, <okorniev@redhat.com>, <Dai.Ngo@oracle.com>,
-	<tom@talpey.com>, <hyc.lee@gmail.com>, <miklos@szeredi.hu>,
-	<amir73il@gmail.com>, <senozhatsky@chromium.org>,
-	<chenxiaosong@chenxiaosong.com>, <kpsingh@kernel.org>, <matt@bobrowski.net>,
-	<rostedt@goodmis.org>, <mhiramat@kernel.org>,
-	<mathieu.desnoyers@efficios.com>, <john.johansen@canonical.com>,
-	<georgia.garcia@canonical.com>, <zohar@linux.ibm.com>,
-	<roberto.sassu@huawei.com>, <dmitry.kasatkin@gmail.com>,
-	<eric.snowberg@oracle.com>, <stephen.smalley.work@gmail.com>,
-	<omosnacek@gmail.com>, <casey@schaufler-ca.com>, <takedakn@nttdata.co.jp>,
-	<penguin-kernel@i-love.sakura.ne.jp>, <xiujianfeng@huawei.com>,
-	<nanx95726@gmail.com>, <djwong@kernel.org>, <lujialin4@huawei.com>,
-	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<driver-core@lists.linux.dev>, <linux-block@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <netfs@lists.linux.dev>,
-	<ecryptfs@vger.kernel.org>, <exfat@lists.linux.dev>,
-	<linux-nfs@vger.kernel.org>, <ntfs@lists.linux.dev>,
-	<linux-unionfs@vger.kernel.org>, <linux-cifs@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <apparmor@lists.ubuntu.com>,
-	<linux-integrity@vger.kernel.org>, <selinux@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20261015125425.3246251-1-caixinchen1@huawei.com>
- <20261015125425.3246251-10-caixinchen1@huawei.com> <atI20Vs7Du9-g1Hz@zenbox>
- <atYBVCIYE1zDb7do@google.com>
+Subject: Re: [PATCH] selftests/mm: keep ksm_tests on small pages
+To: Qiliang Yuan <odys.yuan@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Usama Arif <usamaarif642@gmail.com>, Yu Zhao <yuzhao@google.com>,
+ Xu Xin <xu.xin@linux.dev>, Chengming Zhou <chengming.zhou@linux.dev>,
+ Nico Pache <npache@redhat.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261018-bug-selftests-mm-ksm-tests-nohugepage-v1-1-55ed54bdad35@gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <atYBVCIYE1zDb7do@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemk100010.china.huawei.com (7.152.184.41)
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20261018-bug-selftests-mm-ksm-tests-nohugepage-v1-1-55ed54bdad35@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello Günther,
+On 10/18/26 06:53, Qiliang Yuan wrote:
+> ksm_tests fills regions with identical data and checks KSM's counters
+> after merging them. allocate_memory() maps these regions without any
+> THP hint.
+> 
+> With mTHP enabled the regions can be backed by large folios, which KSM
+> splits before merging. Splitting an anonymous folio maps its
+> zero-filled pages to the shared zeropage, so with use_zero_pages=0
+> those pages never become KSM pages and "KSM zero page merging" fails
+> its count. "ksm_tests -Z -p 10 -z 0", 20 runs:
+> 
+>   THP setup                     before    after
+>   default                         0/20     0/20
+>   every mTHP size "always"       20/20     0/20
+> 
+> Map the regions with MADV_NOHUGEPAGE, as ksm_functional_tests does.
+> ksm_merge_hugepages_time() maps its own THP-backed region and is not
+> affected.
 
-Yes, this seems reasonable to me, and I agree it should be a conscious
-decision: the next revision will make the *_METADATA rights follow the
-same "file descriptor as capability" semantic as *_TRUNCATE and
-*_IOCTL_DEV.
 
-Concretely:
+That's actually something Nico intends to fix:
 
-- hook_file_open() will record READ_METADATA and WRITE_METADATA
-   availability at open() time, together with TRUNCATE and IOCTL_DEV;
-   both rights will join the _LANDLOCK_ACCESS_FS_OPTIONAL set, which
-   also keeps the deny-mask and quiet-audit logic consistent.
-- Metadata operations that go through a file descriptor (fstat() and
-   statx() on a descriptor, fchmod(), fchown(), futimensat() with
-   AT_EMPTY_PATH, fgetxattr(), fsetxattr(), flistxattr(),
-   fremovexattr(), POSIX ACLs set through a descriptor, the FS_IOC_*
-   flag ioctls, and file_getattr() / file_setattr() with AT_EMPTY_PATH)
-   will be authorized with the rights recorded at open() time,
-   regardless of the domain of the calling thread -- like ftruncate()
-   today.
-- Operations on paths keep being checked against the current domain.
-- The "Rights associated with file descriptors" documentation section
-   will be updated accordingly, together with a note that
-   READ_METADATA should usually be requested in lockstep with
-   READ_FILE and READ_DIR, as for WRITE_FILE and TRUNCATE.
+https://lore.kernel.org/all/20260609114619.144416-1-npache@redhat.com/
 
-On 10/19/2026 7:43 PM, Günther Noack wrote:
-> Hello!
->
-> On Fri, Oct 16, 2026 at 10:44:16AM -0400, Justin Suess wrote:
->> On Thu, Oct 15, 2026 at 08:54:15PM +0800, Cai Xinchen wrote:
->>> Add two new filesystem access rights to control file metadata access:
->>>
->>> - LANDLOCK_ACCESS_FS_READ_METADATA: Read file or directory metadata
->>>    (e.g. inode attributes, extended attributes and POSIX ACLs) through
->>>    stat(2), fstat(2), lstat(2), newfstatat(2), getxattr(2) and
->>>    friends, listxattr(2) and friends, and the POSIX ACL read
->>>    operations.
->>> - LANDLOCK_ACCESS_FS_WRITE_METADATA: Change file or directory
->>>    metadata through chmod(2) and friends, chown(2) and friends,
->>>    utimensat(2) and friends, setxattr(2) and friends, removexattr(2)
->>>    and friends, and the POSIX ACL set and remove operations.
->>>
->>> This follows the coarse-grained grouping approach discussed in the
->>> mailing list [1], where file metadata operations are grouped by
->>> security relevance rather than by individual syscall.
->>>
->>> Implement the two rights by hooking the inode_getattr,
->>> inode_file_getattr, inode_setattr, inode_file_setattr,
->>> inode_setxattr, inode_getxattr, inode_listxattr, inode_removexattr,
->>> inode_set_acl, inode_get_acl and inode_remove_acl LSM hooks, which
->>> now receive a struct path thanks to the preceding VFS and LSM
->>> refactoring.  The following system calls are now controlled:
->>>
->>> - stat(2), fstat(2), lstat(2), newfstatat(2), getxattr(2) and
->>>    friends, listxattr(2) and friends, POSIX ACL reads, and the
->>>    chattr(1)/xfs_io style reads: ioctl(FS_IOC_GETFLAGS),
->>>    ioctl(FS_IOC_FSGETXATTR) and file_getattr(2) via inode_getattr,
->>>    inode_getxattr, inode_listxattr, inode_get_acl and
->>>    inode_file_getattr (READ_METADATA)
->>> - chmod(2), fchmod(2), fchmodat(2), fchmodat2(2), chown(2), fchown(2),
->>>    lchown(2), fchownat(2), chgrp(2), utimensat(2), futimens(2),
->>>    utime(2), setxattr(2) and friends, removexattr(2) and friends,
->>>    POSIX ACL set and remove, and the chattr(1)/xfs_io style writes:
->>>    ioctl(FS_IOC_SETFLAGS), ioctl(FS_IOC_FSSETXATTR) and
->>>    file_setattr(2) via inode_setattr, inode_file_setattr,
->>>    inode_setxattr, inode_removexattr, inode_set_acl and
->>>    inode_remove_acl (WRITE_METADATA)
->>>
->>> Both new rights are added to ACCESS_FILE as they apply to both files
->>> and directories.
->>>
->>> hook_inode_setattr only restricts explicit metadata changes, i.e. it
->>> checks WRITE_METADATA only when the ia_valid mask contains
->>> ATTR_MODE, ATTR_UID, ATTR_GID, ATTR_TIMES_SET or ATTR_TOUCH.
->>> Metadata changes that the kernel performs implicitly, such as
->>> timestamp updates on write(2) or size changes on truncate(2), are
->>> therefore not restricted, and neither are chmod(2)/chown(2) calls
->>> that do not change any attribute (e.g. chown(2) with -1/-1, which is
->>> a no-op that never reaches the hook), matching the behavior of the
->>> SELinux inode_setattr hook.
->>>
->>> Stacking filesystems forward fileattr operations to underlying inodes
->>> without calling the LSM hooks again (see the preceding patch), so a
->>> fileattr operation on an overlayfs file is checked once on the
->>> user-facing merged path and is not spuriously denied because of the
->>> kernel-side creator credentials used for the forward.
->>>
->>> Kernel-internal accesses performed with override_creds() (e.g.
->>> overlayfs and cachefiles) are not affected because Landlock domains
->>> are attached to credentials, and kernel threads without a Landlock
->>> domain (e.g. nfsd and ksmbd) are not restricted either.
->>>
->>> Remove stat(2), chmod(2), chown(2), setxattr(2) and utime(2) from the
->>> list of file-related actions that cannot be restricted yet, and add
->>> the names of the new rights to _LANDLOCK_ACCESS_FS_NAMES in
->>> include/linux/landlock.h, which is shared by audit records and trace
->>> events, so that denied accesses can be reported with a human-readable
->>> name and the static assertion on fs_access_strings in
->>> security/landlock/audit.c stays valid.
->>>
->>> Increment the Landlock ABI version from 12 to 13, and update the ABI
->>> version check in tools/testing/selftests/landlock/base_test.c
->>> accordingly.
->>>
->> LANDLOCK_ACCESS_FS_*_METADATA should be checked at open time and follow
->> the mechanic for the truncate right. Otherwise the access for already
->> opened file descriptors would be changed. See hook_file_open in
->> security/landlock/fs.c and this discussion here [1]
->>
->> It should have clear documentation for this as well.
->>
->> Justin
->> [1] https://lore.kernel.org/all/20260929.Ahgoo4yeetai@digikod.net/
->
-> I agree with Justin here.
->
-> Apart from what I said in [1], Justin and Mickaël pointed out this
-> other aspect in which it is similar to *_TRUNCATE, in [2] and [3]:
-> System calls like fstat(2) operate on an already-opened file
-> descriptor, and the semantic that Landlock has so far been following
-> for these is that the effective access rights for that file descriptor
-> would be determined at the time of open(2) and stored in the opened
-> struct file, just as it has been done for the *_TRUNCATE and
-> *_IOCTL_DEV access rights in the hook_file_open() call which Justin
-> points to above.
->
-> That way, an already opened file acts as a handle for a "capability"
-> (in the more general sense of the word), and the things you can do
-> with that opened file don't change as the process enforces nested
-> Landlock domains.
->
-> Landlock's documentation describes this in
-> https://docs.kernel.org/userspace-api/landlock.html#rights-associated-with-file-descriptors
->
-> It feels that this would be in order for the *_METADATA rights as
-> well?  Does this seem reasonable to you?
->
-> (If you have arguments against that, I'm also more than happy to
-> discuss, but we should make a conscious decision. :-))
->
-> —Günther
->
-> [1] https://lore.kernel.org/all/arurOphe6QIx2Zr8@google.com/
-> [2] https://lore.kernel.org/all/arvjb0HJYh1KyEBB@suesslenovo/
-> [3] https://lore.kernel.org/all/20260929.Ahgoo4yeetai@digikod.net/
+> 
+> Fixes: b1f202060afe ("mm: remap unused subpages to shared zeropage when splitting isolated thp")
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+> ---
+>  tools/testing/selftests/mm/ksm_tests.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+> index 5fd7792a0d479..140ea833353b6 100644
+> --- a/tools/testing/selftests/mm/ksm_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_tests.c
+> @@ -178,6 +178,16 @@ static void  *allocate_memory(void *ptr, int prot, int mapping, char data, size_
+>  		ksft_perror("mmap");
+>  		return NULL;
+>  	}
+> +	/*
+> +	 * Splitting a large folio before merging maps its zero-filled pages
+> +	 * to the shared zeropage, so keep the pages small. Ignore EINVAL on
+> +	 * kernels without THP.
+> +	 */
+> +	if (madvise(map_ptr, map_size, MADV_NOHUGEPAGE) && errno != EINVAL) {
+> +		ksft_perror("madvise");
+> +		munmap(map_ptr, map_size);
+> +		return NULL;
+> +	}
+>  	memset(map_ptr, data, map_size);
+>  	if (mprotect(map_ptr, map_size, prot)) {
+>  		ksft_perror("mprotect");
+> 
+> ---
+> base-commit: 90201351a862182bdabfc1ad1c97b1e1b6ed5931
+> change-id: 20261016-bug-selftests-mm-ksm-tests-nohugepage-1414868db0ef
+> 
+> Best regards,
+
+
+-- 
+Cheers,
+
+David
