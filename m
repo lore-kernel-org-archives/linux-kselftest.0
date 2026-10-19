@@ -1,141 +1,137 @@
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C884331EB8
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 12:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983AF48EC8B
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 12:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792413725; cv=none; b=prclDad+dJoAICD+SG6eA7w7Jay7jWNMZgH8lC+gNQaDPPl9IeAXzYc6vWRaSmPuuCtCqkHY1uEf9mUpygyd1H8pat+rehwpoMiIdVHFzE/CgLKywQ+lpDeIdB2ZTlNoD6jAh/dNiMBGg1DwtfYp6rVJZhhlI3GXrWyscH8modU=
+	t=1792414669; cv=none; b=jwmnwZHDMc8IaM6n0Yy+fVajt5r0PbCegknCiQ17z/mJu5iPE4lLTR6bXcVsSp4DcfEm3M7Q03OzUDjNU+qmKo60zljXgiUsWwPdtdqXqaxS6/LziPcI3QvOtDMUrdwMfVCA6Qvaa+cvwkbPXJR+zeayXBQ+WDVv3VIKp8ExAbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792413725; c=relaxed/simple;
-	bh=FlBQwdip4g4HHV/g4pwDPD+JRcfp+uQYehDQvnDw7uY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=otqKdlyaM5NQczaiBSGjTQcihX5oc2X8OeSYHfng+foSF+94LBDTJH0Rv4q85/PGvz/EFUvaGnimJ6Gkhlh3xqp0WaMTnHNCRpTyvVEJegGaYW9JfwPes6uzTiAI7Zl3CDzLCVCOP+6WgC0uGVCqfb6x21lzPMbEv3goLWniZAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--michalblk.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OTgnloRi; arc=none smtp.client-ip=209.85.218.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--michalblk.bounces.google.com
+	s=arc-20240116; t=1792414669; c=relaxed/simple;
+	bh=w046RqlnctneZ8SARYX+vlfSsfJJViupwrW+GsN5Rgo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VeMAc+bLTcvFCdqfPDwkC1y4Dqdx+Q4R7qMsxBo0mBJXgHBojCg1ONdf0OecXiOsowrplgCV5bM7fLmwwHITCViX7I88ww/6JOidwV5O/HrFf6UxSPAykWS0wiS7Qjba8+x66eyL5McnIRJoTkjhTjS2SPh4JGSV38HQqgNwaPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VlrjQxgg; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OTgnloRi"
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c41b03cd1dcso173176866b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 05:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792413714; x=1793018514; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6LoRGSkasm8ghLjUGPktte7l/3lMtd3+HJlK+733NI4=;
-        b=OTgnloRinqYgv0F8i05sXj+7GJXN/UEUxXRg4L58ojRA6uXsoNWmEV4sLKLed3j4Po
-         ObFjw40/FbBRdPhDZR+zLraU6AGble/58uVs7V7TWr9kxwJAsr7uJ3fY4F2wsqSYHrOU
-         PkKTCwtT+Y9YpZJxH3pSIl4DbXOxNs8hOe0PGlDMGEWnUie8U6xw1L/9bZMFt4bKpGZb
-         kwitH9+W+MpazdoCW5I7o0GIbC0M4wm1oxC56C+jY3QQ3yf4ZPjEHGIr5RZfx54cq4cw
-         0a7gTnMSJXTpcq0eNJTy5DEcmqgL/LFlqQuRvRvmeZLfA1RcAQ8nRsuE78pUjH3tmXp7
-         HFnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792413714; x=1793018514;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6LoRGSkasm8ghLjUGPktte7l/3lMtd3+HJlK+733NI4=;
-        b=RthGXTM55rEMW/5t9El6euwPGfoxpDqItFfil9m9F9FT5TI7vLGFKZHChW8hTjNHOn
-         79vudejmHZBeEqoaM/ujebsCA83LKKLv2stLRtWQ08mXGvYBSM9WLg0M7Skg5tFa9hSb
-         /JT1rkcF4iB0TzTOLCh+00xi+u127alSRGR8SiXcse8lpNeGegYR0/0ogd241dK0XX2X
-         fGiKtq7/lehf9MXEawRkm3zAzORQoOWFIBLXiHq5V3ATdF+aan2BcM5e5T+C+KQNUERz
-         jDhEHxDpsTq4xt7/pLgTLzYbKeC3ZpQLzFEX4tZ/b/9+qAEceu1saNMELf58RWeBeL6o
-         FUNQ==
-X-Forwarded-Encrypted: i=1; AKwUvBynoSYIDNCBPX39n/dUL9uwDO0zmCBl741FxwfjdbJNpgXPoqItYxbwZobS9cHGidJ1UcxU9WgEsJw7jEX1oEE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIxtmlk0yDyzB8kXnSMhkPe8qYX+hOvvt9MrQ9Wc1t7v1nqIn9t
-	Btqxc1J7ZqoXQrVzor+3SPCFJ0A5f5NTx3yeJfISwRpegqVSp4cPEqdQmTFVU9sSwpaYBQuofiA
-	De5bPMoEGG/kJuMb3RQ==
-X-Received: from ejgi17.prod.google.com ([2002:a17:906:3c51:b0:c3f:bf12:31eb])
- (user=michalblk job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:d08d:b0:c41:8736:8c38 with SMTP id a640c23a62f3a-c419f703a50mr462018766b.30.1792413713899;
- Mon, 19 Oct 2026 05:41:53 -0700 (PDT)
-Date: Mon, 19 Oct 2026 12:41:45 +0000
-In-Reply-To: <20261019124146.3582127-1-michalblk@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VlrjQxgg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792414667;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hRfvEtCLzTcglOUE0NGocUwOc/vYbOtviBwd3XYhKMk=;
+	b=VlrjQxggNA+tZYisFk/Nbls7zDVs2docuwmglJ5ekaPwy3x46Sd2FXDyillh22xLdshA+S
+	labDrS84stOXg/T2qdYmNCwyxH//4vG1XZ9jv2PMsQkc+MU9Bzhe5uGiNajQfrJLk8b3bh
+	AGT69LArTiCeBExTQJ6WHjWoqtEhgXo=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-310-efvPfy7BMFi2s6zVjB3iJQ-1; Mon,
+ 19 Oct 2026 12:57:38 +0000
+X-MC-Unique: efvPfy7BMFi2s6zVjB3iJQ-1
+X-Mimecast-MFC-AGG-ID: efvPfy7BMFi2s6zVjB3iJQ_1792414656
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B069E1954AC2;
+	Mon, 19 Oct 2026 12:57:35 +0000 (UTC)
+Received: from onestero-thinkpadp1gen7.tpbc.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id CDFA21955E76;
+	Mon, 19 Oct 2026 12:57:31 +0000 (UTC)
+Received: by onestero-thinkpadp1gen7.tpbc.csb (nbSMTP-1.00) for uid 13628
+	oleg@redhat.com; Mon, 19 Oct 2026 14:57:35 +0200 (CEST)
+Date: Mon, 19 Oct 2026 14:57:30 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Kir Kolyshkin <kolyshkin@gmail.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Serge Hallyn <serge@hallyn.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] cgroup: fix cgroup.kill for exited thread group
+ leader
+Message-ID: <atYTukAn0-7CAXmp@redhat.com>
+References: <20261018-cgroup-kill-exited-leader-v1-0-c71ad94c20cc@gmail.com>
+ <20261018-cgroup-kill-exited-leader-v1-1-c71ad94c20cc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20261019124146.3582127-1-michalblk@google.com>
-X-Mailer: git-send-email 2.56.0.176.g3575e65682-goog
-Message-ID: <20261019124146.3582127-2-michalblk@google.com>
-Subject: [PATCH 1/2] sched_ext: Reset runnable_at when a task leaves its scheduler
-From: Michal Blaszczyk <michalblk@google.com>
-To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>
-Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Kuba Piecuch <jpiecuch@google.com>, 
-	Michal Blaszczyk <michalblk@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261018-cgroup-kill-exited-leader-v1-1-c71ad94c20cc@gmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-The watchdog measures how long a task has been waiting from
-p->scx.runnable_at, which set_task_runnable() resets when the task becomes
-runnable after it last ran. ops_dequeue() never asks for a reset, as the
-dequeue of a waiting task is temporary, e.g. for a migration or an
-attribute change.
+On 10/18, Kir Kolyshkin wrote:
+>
+> cgroup.kill does not work in case a process' thread group leader is gone
+> but other threads are still running. This is because __cgroup_kill()
+> only walks the thread group leaders and sends SIGKILL to each of them
+> with send_sig(), which uses PIDTYPE_PID:
+>
+> 1. The exited leader is still listed by CSS_TASK_ITER_PROCS as long as
+>    the process has live threads, but a signal directed at a single
+>    exiting task never takes effect: complete_signal() does not look for
+>    another thread to deliver it to, and __send_signal_locked() now drops
+>    it altogether.  The process keeps running.
+>
+> 2. The live threads of such a process can be migrated to another cgroup
+>    by writing any of their IDs to cgroup.procs, while the exited leader
+>    stays behind.  The destination cgroup has no thread group leader to
+>    iterate, so writing to its cgroup.kill does nothing at all.
 
-Leaving the scheduler isn't temporary. A task which is switched out of
-SCHED_EXT while it's waiting keeps its runnable_at. When it's switched back
-and becomes runnable, its wait appears to have started before it left, and
-the time it spent in another class counts towards the timeout. If the
-watchdog checks before the task runs, it aborts the scheduler:
+...
 
-  sched_ext: class_switch_stall: runner[418] failed to run for 3.010s
+> Case 1 can be fixed by using do_send_sig_info(..., PIDTYPE_TGID) instead
+> of send_sig(), so that the signal is taken by a live thread even if the
+> task found by the iterator is exiting. Note it was pointed out by Eric
+> in [1] while reviewing v2 of cgroup.kill patchset, and v3 was meant to
+> switch to it, but the change was only made in cgroup_post_fork(),
+> leaving __cgroup_kill() with send_sig().
+>
+> Case 2 can only be fixed by iterating over all threads, so this is what
+> the fix also does. Once a thread group is being killed, its other
+> threads are skipped since they already have a fatal signal pending.
 
-Here, the task waited for a few milliseconds before it was switched to
-SCHED_OTHER, slept outside of SCHED_EXT for three seconds, and was charged
-for all of it as soon as it woke up on SCHED_EXT again.
+...
 
-The same happens when scx_sub_enable_workfn() hands a waiting task over to
-a new sub-scheduler, which can then be blamed for time the task waited
-under the parent. scx_rehome_task() isn't affected, as it moves the task
-through SCX_TASK_INIT, which resets runnable_at. The stale runnable_at also
-skews the default core-sched ordering in scx_prio_less().
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -4289,7 +4289,7 @@ static void __cgroup_kill(struct cgroup *cgrp)
+>  	cgrp->kill_seq++;
+>  	spin_unlock_irq(&css_set_lock);
+>
+> -	css_task_iter_start(&cgrp->self, CSS_TASK_ITER_PROCS | CSS_TASK_ITER_THREADED, &it);
+> +	css_task_iter_start(&cgrp->self, CSS_TASK_ITER_THREADED, &it);
 
-Reset runnable_at in scx_disable_task(), when the task leaves the control
-of its scheduler.
+I guess this change alone is enough to fix both problems?
 
-Fixes: 8a010b81b3a5 ("sched_ext: Implement runnable task stall watchdog")
-Assisted-by: LLM
-Signed-off-by: Michal Blaszczyk <michalblk@google.com>
----
- kernel/sched/ext/ext.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+But even if I am right,
 
-diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-index 07857039aee69..120df09b9e0af 100644
---- a/kernel/sched/ext/ext.c
-+++ b/kernel/sched/ext/ext.c
-@@ -2424,7 +2424,11 @@ static void ops_dequeue(struct rq *rq, struct task_struct *p, u64 deq_flags)
- 	struct scx_sched *sch = scx_task_sched(p);
- 	unsigned long opss;
- 
--	/* dequeue is always temporary, don't reset runnable_at */
-+	/*
-+	 * Don't reset runnable_at. If @p is waiting, the wait continues across
-+	 * temporary dequeues, e.g. for a migration or an attribute change.
-+	 * scx_disable_task() ends it if @p leaves its scheduler.
-+	 */
- 	clr_task_runnable(p, false);
- 
- retry:
-@@ -4517,6 +4521,14 @@ static void scx_disable_task(struct scx_sched *sch, struct task_struct *p)
- 	scx_set_task_slice(p, 0);
- 	p->scx.reenq_cnt = 0;
- 
-+	/*
-+	 * If @p is runnable but not running, its wait started at runnable_at,
-+	 * which ops_dequeue() didn't reset. Leaving @sch ends the wait. Reset
-+	 * runnable_at the next time @p is enqueued on SCX, so that the watchdog
-+	 * doesn't count the time @p spends elsewhere.
-+	 */
-+	p->scx.flags |= SCX_TASK_RESET_RUNNABLE_AT;
-+
- 	/*
- 	 * Verify the task is not in BPF scheduler's custody. If flag
- 	 * transitions are consistent, the flag should always be clear
--- 
-2.56.0.176.g3575e65682-goog
+> @@ -4299,7 +4299,7 @@ static void __cgroup_kill(struct cgroup *cgrp)
+>  		if (__fatal_signal_pending(task))
+>  			continue;
+>
+> -		send_sig(SIGKILL, task, 0);
+> +		do_send_sig_info(SIGKILL, SEND_SIG_NOINFO, task, PIDTYPE_TGID);
+
+I agree that do_send_sig_info(PIDTYPE_TGID) makes more sense.
+
+Acked-by: Oleg Nesterov <oleg@redhat.com>
+
+
+Either way, I am not sure about SEND_SIG_NOINFO. Perhaps __cgroup_kill()
+should use SEND_SIG_PRIV? I dunno.
+
+Oleg.
 
