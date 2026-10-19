@@ -1,83 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792429933;
-	b=UpLjyw5FFrYpAAuRU16kXv51SCp54TRDVuLmWADMextDuosiBX1/d5vLoOe8f8qROxHA
-	 oViQrAkgiVsQKrgZvFRwCtJi2v+Px3wXJwaDFhnPFISSC0T8rRkE8SVeZcQZ4BNXfyJJ1
-	 f9PWlmDS6INFMN61hFEaPEBltB0AFuF/cgsowLg4AQDOHX8MEe47m14rP8HyDzlUak3kd
-	 lqNwR2ez7wtV6OtF5hGr7dg5BqwrX0URO5r/lo/nuF0m0mVgNTVD1w84vrxeYR+lXLPOK
-	 ZvWm/K1pMZ2Y2v+W5WMf6jfejpveQ+n6/Rc4SJMPWjLXL9Gcy4GIY3LsD+DTeWggGHg==
+	t=1792429935;
+	b=hVoZn7tzeKkkMMkbfyMb/LD1SrO31D8zLRe0Zf01N/LpbYEyTvyGJC/bpup/+WgOKDaG
+	 t2yIp9sfQwQn+m+QTwxSwP+oh4RB+P+cicjXkcwK3LyIMoMWvvvlIFXhExWnSlJraCLhl
+	 vp+iW/F+qORc9hIfCrWREgxEMlaN+d8bY9pZcY4p5O08d9CGYwjWA2BtZeGWyUeBH+3II
+	 /rh22ayaTpFhS9k3R75JAVZntPnHRsGSI6mLW2zi9mI5SyOKs8l2M0oXmudFC3ie1CY5e
+	 r9HMdszLxmjNXm7/adjo8zW9JPfvPy1zXiSqJsAhp8Jdo8Hu8NSiMvDuj9wiA8oDjvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792429933;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792429935;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=NSkebjJriJxD8huVKtJ/dZPvDeRsYwUsy6nc9NLY9s4=;
-	b=WYtHHu8OCr4cDOFA/MGTGSXO02aa2ga3AvhtecwsE5xtyxx0pplVnkoyrd4wc33lPMkb
-	 xBY3brZ15h//6JWBb4cMS8fHxCU6mL5qy7C2cyPt0EaOe3MLyTd78WJh6slmcLZKfaIZs
-	 0w1ZCToYtmHBiMQ9+w0GH0PQQ1of8qC+01TFUld0/W7ckVrEZOGjliaE6+YxW0gshXoUh
-	 nujnF/uEk0axHaKUAc/5zzkPGzHOk+6afqRoAtBeFnrptY+z7Sylux+EwK5JLmbslgP8t
-	 WdWtatpToVj8ToVHfkUYrXH8wbWME8dZ6kvajvPA70w5YTE8NUlvUdujEtZlncIMD5Q==
+	bh=bz4HIGdHrbzH5B04ukJiXoFVbLAu333X7PHNoO6ecQs=;
+	b=zvfKI1QC91LHfN614wBlIlZoDbiEw1Jgb2wiKkfpNfAxBK8WF5VgUYYQuaqo1zU++z1J
+	 o1JfZ7YC822KKEYPTgiXs6x3tqzAMG2D2BggM0fEz/1cjKZOvOrIifPiJd17PvN91VtSc
+	 1ceAh/UVHFrULBZIIu7CR8zXxWcjM65i5kjDtNeCvtpIHaRQEn944To8ZoYpfH7kIbXPW
+	 iMDvwMAvXmGht55KflPhZgZDrtb8EIRv9WA+KqPSdaU8UY/oOs5j5REN4aT4/XM0sJcRs
+	 EMZTx62XbeGNeON48nN4IoaEjuSGeVEckPPS4Kr/SlOjYh/fdbo78ktnQRv7iBQ3CmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=gourry.net;
 	spf=pass smtp.mailfrom=gourry.net;
-	dkim=pass header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b=Rs+IINv8;
-	arc=none smtp.remote-ip=209.85.219.46
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	dkim=pass header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b=PyFTpwlo;
+	arc=none smtp.remote-ip=209.85.160.172
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40209606A331
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 17:12:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40209606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46F8606A339
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 17:12:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B46F8606A339
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b=Rs+IINv8
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-919abb3335fso20160606d6.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 10:12:12 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b=PyFTpwlo
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-5366ae57896so11834301cf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 10:12:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1792429932; x=1793034732; darn=vger.kernel.org;
+        d=gourry.net; s=google; t=1792429934; x=1793034734; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NSkebjJriJxD8huVKtJ/dZPvDeRsYwUsy6nc9NLY9s4=;
-        b=Rs+IINv8Uo+hZJT3YE39Kmz26IQAlH6dRyDbzyySNky+H3Ni9TN5xhTkyRn5QcuYhP
-         2vN7m9R/1Xt46k76AXo9EXqR++vmoi78dYd5cSFme9Y3nZDYVqITIWItHVyThfn1DB4b
-         awwOjsoO0Kqo1XMIaO9QoOkCmFJSMOl5tTicC4HGI24n3qy501m2sYzf6im3g+bRBYEG
-         hkbRlDCmn1fXcyKl9cRdQhcvupU45rHa5OUJRxpuk/J3rtvEb/0HOnO13Kg9fmTG3foG
-         SUnMh1fyQHg0NkLqgf9JPmwSSmEtuRAyFAiaQnwukYFKIPjfmqQxflkagNpS1JBz4w2y
-         ROlg==
+        bh=bz4HIGdHrbzH5B04ukJiXoFVbLAu333X7PHNoO6ecQs=;
+        b=PyFTpwloOkXK5za1FQptmH+fWmci+DXmyJN1c9qTpOg5cmKP1epyMvWht8hqDsonMd
+         sAzzWKSbt8N5/EHrlOhV0TOBeqbru2A5kbmqz2cXA2wqSBVFuJUw8i7//sgKmeA/7q4r
+         dGnqDUc8j2oufejwGw7t9b/83jTLykyR88SKrsVydYxZG4RFh15s+54wJs4amGeyKBW0
+         nJBu6D6FnW6yr0bigYj/mA+99ImJVuMWpMOYWWOElqQdfqJ5dVlhP4djdKnQHqtyqoTb
+         aPFfLmzTo37AP1KwpZ+YDamtmdWyXwkJ/+YrlRIwzdVMJbQm/nkHphncicbZsPtPiKTV
+         Fadg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792429932; x=1793034732;
+        d=1e100.net; s=20260707; t=1792429934; x=1793034734;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NSkebjJriJxD8huVKtJ/dZPvDeRsYwUsy6nc9NLY9s4=;
-        b=pILvwqrYNEKb++tFAkpvFW1qQUKaa82pK8h/OmT9LT3II3452MAYDjwntpqa+sqDtg
-         dey/jGOom7kNBKGexpGVSpAXLbRY9PSICt8f7M/NaxPAYL/fIKUxR7PSFGdiL0PgTBDl
-         h+7qVL3AuXoO2S2yuHWq3j9dCe7mVuOjxTRzkzGk+PbVgMzQzGhwAvs8o+3jTZjTyXZF
-         oHIRLwd0tCiLiDGomEN9DfLX72aVF7nPao8CyBjV6NVBpsxYiVhNyIuZeNnpOkmCmGGG
-         FOwneKL320JIGNaSlwYeaH6BIUf5yfylcY/NBo932GlD6JypM5FwvVE2j9n8avm0DsGU
-         84jw==
-X-Gm-Message-State: AFq9FYKwRGgYKd9aoifWW9V1BYNQxJgJP86hgTibGqsO9BgcFrdpoQ94
-	/nmWHZXhOi2JcfYbqgM8t8GQFzDrnt+AyCrl1+BxXNhCZYqUb9NNaJJBzhE0+l+D60/cNshEleG
-	ISUXFX1s=
-X-Gm-Gg: AYBFou0F1Px09KQYe0d18LXSwI3G0eII0g3bKTAvLMzmJcigyrS7+rUFWZcndrwREnj
-	g9oWCABdPUdnXHo1ZSnj151TccjSaNjwUJOhOz73NkP/zymkL8YZlJwed058tW+3O2flagpTGqV
-	WdrLy9gA5AnfGOVjKO2osoNO1D71qwaQgmykEOrbU0Jf5uy9vR07teC1hTi13JIKyGT4vtGSEgt
-	shGUCFBYwtZL5OeCt009EOv9J6FEEITcYtgQ7onEhtsTiKL99tDu3KC1jXgofaQ62hI6Wm6HNUa
-	lMnKnxH6QNj80JiHeikU2bFpkFnGAb/Xia1zpj1rnLEDrHj2xmhE/z1sDkOaNQjpcOHvvuiZoug
-	pU2jXOqNWEh4t1es90iWH4Wu3kEOyHtaJ9oKvRrnVF6rZVSQbpRzivrtTyPBDfNAm6RKE0n8e6W
-	HrrBK/uLR9/xKduTHrI/H15IRp+/y3H4ig4ZGsP9WkTe4itp5+TgVr6vRaiGG95lC8XVYXFJJQO
-	YmN3V1a/79fyCvMBNT1/hE8afYc1BnZJJRo0Wwq9RHlF7RDEsAseA/xf2XByvFkjItWMbvMDAOv
-	f8p1fq0H1v/yYtdA1hlPKaOEPZEe/Qc2huRIN23kKg==
-X-Received: by 2002:a05:6214:dcd:b0:91b:9061:b7f7 with SMTP id 6a1803df08f44-91bdf059500mr152667696d6.20.1792429932077;
-        Mon, 19 Oct 2026 10:12:12 -0700 (PDT)
+        bh=bz4HIGdHrbzH5B04ukJiXoFVbLAu333X7PHNoO6ecQs=;
+        b=hZsbIggEOPcZVklSl7S/tjouIW5eWVTryc5WUQdnzNop3xcul+C2bwtQlKoMKZ5gks
+         Up2j9mr//pVSXzFbMZimsfi44pgRlH+UsHOD0SeYa/gQmH/WB3AgSSnnpm0eOp9diqFr
+         s2eLY/Jnk1PRVv7BFWtrOig1RwryQyP+TPspiEnuryWV2ipucgXpClUDIFhCEtkCuk3K
+         lXVnk6W2u5mac4YWBVBFif3+pgeC4Nb+mD6a9mtYSRE8p3oG9LIrxeaBviJVffTbZ6A8
+         m3TBEC0o1BzPV/4eekd+tVwkgGbhCoBVlew15aX9C8W4NZZ8SKDqYDnSsEK/w5x8RHuL
+         krfw==
+X-Gm-Message-State: AFq9FYJYXjpbqL4Q3FJC2fR0/1vJ91zyv+h21QdivurjcxOmBNx7iv4i
+	fn0Dx0s5SLHYxgLRtUwolI9q4lZ5guqz7QoobKne8AXxzM3dTa6e1ZhtI2qbLXvFRBGNFMdoBcq
+	5HYFh3oQ=
+X-Gm-Gg: AYBFou2ThI4o83840HEN0mXAIzasZe+SM5Nj7ZNt/vD2108JWm03ajhk5MfJuWV/Y2n
+	+aoY3b1bcZP7yp9kq6QkTyASSBAGQ76Lwp6mHzTgdt5y8Sh01n9XZX3BHzshiFYfBDv6fMVPZEj
+	TCOF9l9bBCVRo99Tth6+w1Nxt/cnucLBO3e6vp3OFCYrXZ6KRYsUvyuddRAbYOVvGQxOP9bLdgF
+	8IL4suo2sEShxjRbKzCWKzqIo6cp+90uShwo4ff5OkHyPARAg1hPdOncNqlJCtadrtrHDwq938J
+	HZZquLJ9wRZQj5fVEiE8DEySv2oCGWOVOj0tetjQhQF/mUdK34mZ1bCRB+541rdhG2ENEcchMsU
+	RAmINBSfLlCRDEXwPSX2PyIq3PzCBQHOGNemFedX3Ufb6aj30OB6zvmJSHMQLjLhQ5y+r36Z3VZ
+	f5IGj8eRJcQIpBIUl+1qiKn3u4Mj+fMJ/fwsoixi+yxSqS/cHRPhBYmB0YJLp9VdVPta3uHSkDS
+	h2q+NhXIe/ySwGg09NMDHRo0xFnR6HagKmeu46E0hVrATSBN7KNt7hyKn0e
+X-Received: by 2002:a05:622a:229c:b0:51c:fc4:a144 with SMTP id d75a77b69052e-53645bf1ad1mr120809701cf.4.1792429933560;
+        Mon, 19 Oct 2026 10:12:13 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91c040d4cedsm723116d6.34.2026.10.19.10.12.11
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91c040d4cedsm723116d6.34.2026.10.19.10.12.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 10:12:11 -0700 (PDT)
+        Mon, 19 Oct 2026 10:12:13 -0700 (PDT)
 From: "Gregory Price (Meta)" <gourry@gourry.net>
 To: linux-kselftest@vger.kernel.org
 Cc: linux-mm@kvack.org,
@@ -91,10 +90,11 @@ Cc: linux-mm@kvack.org,
 	rppt@kernel.org,
 	surenb@google.com,
 	mhocko@suse.com,
-	shuah@kernel.org
-Subject: [PATCH v3 2/7] selftests/mm: check MADV_COLD and MADV_PAGEOUT range handling
-Date: Mon, 19 Oct 2026 13:12:01 -0400
-Message-ID: <20261019171206.3331374-3-gourry@gourry.net>
+	shuah@kernel.org,
+	Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: [PATCH v3 3/7] selftests/mm: check that MADV_COLD and MADV_PAGEOUT reject hugetlb
+Date: Mon, 19 Oct 2026 13:12:02 -0400
+Message-ID: <20261019171206.3331374-4-gourry@gourry.net>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261019171206.3331374-1-gourry@gourry.net>
 References: <20261019171206.3331374-1-gourry@gourry.net>
@@ -109,111 +109,68 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-madvise(2) accepts a zero-length range, rejects an unaligned start, and
-reports an unmapped gap in the range with ENOMEM while still applying the
-advice to the mapped pages on either side.
+Neither hint may be applied to hugetlb memory, so madvise(2) must fail
+with EINVAL for a hugetlb VMA. Locked VMAs are already checked here and
+PFNMAP VMAs by the pfnmap test.
 
-Check each of these for both hints. Around the gap, only MADV_PAGEOUT has
-an effect the test can observe, so only MADV_PAGEOUT is checked for
-paging out both neighbors, and only if MADV_PAGEOUT can swap at all.
-Both hints' ENOMEM is checked first, so it is covered without swap.
+Check the hugetlb case for both hints. run_vmtests.sh does not reserve
+hugetlb pages, so when run as root main() reserves the one page the test
+needs, and restores the pool on exit. Otherwise the test skips if no
+page is free.
 
 Signed-off-by: Gregory Price (Meta) <gourry@gourry.net>
+Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
 ---
- .../testing/selftests/mm/madv_cold_pageout.c  | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
+v3: Kept Sarthak's Reviewed-by, but only a couple minor changes,
+    e.g. the hugetlb reservations / skips.
+---
+ .../testing/selftests/mm/madv_cold_pageout.c  | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/tools/testing/selftests/mm/madv_cold_pageout.c b/tools/testing/selftests/mm/madv_cold_pageout.c
-index 5d451d409937..8cbbfd4c24c4 100644
+index 8cbbfd4c24c4..0874726ec141 100644
 --- a/tools/testing/selftests/mm/madv_cold_pageout.c
 +++ b/tools/testing/selftests/mm/madv_cold_pageout.c
-@@ -141,6 +141,86 @@ TEST_F(madv_cold_pageout, locked_vma_is_rejected)
+@@ -141,6 +141,29 @@ TEST_F(madv_cold_pageout, locked_vma_is_rejected)
  	ASSERT_EQ(munmap(mapping, page_size), 0);
  }
  
-+/* A zero-length range is accepted. */
-+TEST_F(madv_cold_pageout, zero_length_is_accepted)
++/* Neither hint may be applied to hugetlb memory. */
++TEST_F(madv_cold_pageout, hugetlb_vma_is_rejected)
 +{
++	size_t size = default_huge_page_size();
 +	char *mapping;
 +
-+	mapping = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(mapping, MAP_FAILED);
-+
-+	ASSERT_EQ(madvise(mapping, 0, MADV_COLD), 0);
-+	ASSERT_EQ(madvise(mapping, 0, MADV_PAGEOUT), 0);
-+
-+	ASSERT_EQ(munmap(mapping, page_size), 0);
-+}
-+
-+/* The start of the range must be page-aligned. */
-+TEST_F(madv_cold_pageout, unaligned_start_is_rejected)
-+{
-+	char *mapping;
-+
-+	mapping = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(mapping, MAP_FAILED);
++	if (!size)
++		SKIP(return, "hugetlb is not supported");
++	mapping = mmap(NULL, size, PROT_READ | PROT_WRITE,
++		       MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
++	if (mapping == MAP_FAILED)
++		SKIP(return, "no hugetlb pages are available");
 +	mapping[0] = 1;
 +
-+	ASSERT_EQ(madvise(mapping + 1, page_size, MADV_COLD), -1);
++	ASSERT_EQ(madvise(mapping, size, MADV_COLD), -1);
 +	ASSERT_EQ(errno, EINVAL);
-+	ASSERT_EQ(madvise(mapping + 1, page_size, MADV_PAGEOUT), -1);
++	ASSERT_EQ(madvise(mapping, size, MADV_PAGEOUT), -1);
 +	ASSERT_EQ(errno, EINVAL);
 +	ASSERT_EQ(mapping[0], 1);
 +
-+	ASSERT_EQ(munmap(mapping, 2 * page_size), 0);
++	ASSERT_EQ(munmap(mapping, size), 0);
 +}
 +
-+/*
-+ * An unmapped gap in the range makes either hint fail with ENOMEM, after
-+ * advising the mapped pages on both sides of the gap. Only MADV_PAGEOUT has
-+ * an effect on those pages that the test can observe.
-+ */
-+TEST_F(madv_cold_pageout, unmapped_gap_fails_after_advising)
-+{
-+	bool swapped = false;
-+	char *mapping;
-+	int retry;
-+
-+	mapping = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
-+		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(mapping, MAP_FAILED);
-+	mapping[0] = 1;
-+	mapping[2 * page_size] = 1;
-+	ASSERT_EQ(munmap(mapping + page_size, page_size), 0);
-+
-+	ASSERT_EQ(madvise(mapping, 3 * page_size, MADV_COLD), -1);
-+	ASSERT_EQ(errno, ENOMEM);
-+	ASSERT_EQ(madvise(mapping, 3 * page_size, MADV_PAGEOUT), -1);
-+	ASSERT_EQ(errno, ENOMEM);
-+	ASSERT_EQ(mapping[0], 1);
-+	ASSERT_EQ(mapping[2 * page_size], 1);
-+
-+	if (!can_swap)
-+		SKIP(return, "MADV_PAGEOUT cannot swap");
-+
-+	for (retry = 0; retry < PAGEOUT_RETRIES && !swapped; retry++) {
-+		ASSERT_EQ(madvise(mapping, 3 * page_size, MADV_PAGEOUT), -1);
-+		ASSERT_EQ(errno, ENOMEM);
-+		swapped = pagemap_is_swapped(self->pagemap_fd, mapping) &&
-+			  pagemap_is_swapped(self->pagemap_fd,
-+					     mapping + 2 * page_size);
-+		if (!swapped)
-+			usleep(10000);
-+	}
-+	ASSERT_TRUE(swapped)
-+		TH_LOG("MADV_PAGEOUT did not page out both sides of the gap");
-+	ASSERT_EQ(mapping[0], 1);
-+	ASSERT_EQ(mapping[2 * page_size], 1);
-+
-+	ASSERT_EQ(munmap(mapping, page_size), 0);
-+	ASSERT_EQ(munmap(mapping + 2 * page_size, page_size), 0);
-+}
-+
- /* Neither hint may fault a swapped page back in. */
- static void check_skips_swapped_pte(struct __test_metadata *_metadata,
- 				    int pagemap_fd, int advice)
+ /* A zero-length range is accepted. */
+ TEST_F(madv_cold_pageout, zero_length_is_accepted)
+ {
+@@ -276,6 +299,9 @@ int main(int argc, char **argv)
+ 	page_size = getpagesize();
+ 	/* The harness forks each test, which inherits this. */
+ 	pin_to_current_cpu();
++	/* Only root can reserve the page that hugetlb_vma_is_rejected maps. */
++	if (!geteuid())
++		hugetlb_setup_default(1);
+ 
+ 	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+ 	if (pagemap_fd < 0)
 -- 
 2.56.0
 
