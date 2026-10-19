@@ -1,48 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D6E5BE69A;
-	Mon, 19 Oct 2026 14:01:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2745D3C37;
+	Mon, 19 Oct 2026 14:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792418469; cv=none; b=g7Yo4G1CoeawGCx7dX9OJlINl0fC9Uz0cCaifq2MHzJwnYHl7hZXgDfdKphYHI06KT4ziSVPQJjk6I9JcvOFPX7MlkkV+ROtCeBN28FZceQ9wg9T/gjoVwKfnHXCIcXL6Yl6RcT/aEniQFRZk8tacPi8+Y3sOqU4mypjMTHCrQw=
+	t=1792418500; cv=none; b=YUL3RSHVqz3ou03jXPw4HN41J8ndrszK5ZtY69Z1Aggpll2P7fDMr2Fbba5zMQyILQ/0ah8oPo4OalQu+27T+69e8qZpRU8bquV8D7ZPwDsX3M48c9Ij+dbpAhRzVP+uZ4uBvJ1vhUgIXU3VaVsVNRnABRP/YCW+wlh79/QauNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792418469; c=relaxed/simple;
-	bh=pWdHP9LHEKz+sABbungOTDUeh0Z4zqzoeeY4zbHYH+g=;
+	s=arc-20240116; t=1792418500; c=relaxed/simple;
+	bh=22uhUZ/DLHs0CZkgnFH/MBSGlU2p1a3f72O9EochvAg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DS4YwJP8qfGRGpOQmXI4218IZfTPEk5DE5A96tvZNPYa6k/HAIm5Tr2PbXuVRJQvfKctOT/odpgZMih8UAtVP92eEWDgchJ/wxJOpTd23hlDqfrMm/Xl4C2WCZqFFrVoLe2w6hhDmT5GciR6Jb8hJ1VnA0a+9VSOdNHcn+QOloY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iZb2M6IK; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=N+9vwn0LWcPMYcEO0Mr+IA0eYhYpC7K1iBHBPkaOWL0lM+TOlKDndT7oaKJSNx3MUOTkj/9R6iv5MtEb/qcA1cGqoa6h2/1LkQqLbZvNUALD52kyQduNBO8/wFib4ZgFWwXUI4Rlnm7ikW9XhxwQmYmBdVwq6vJ4D+mtwtQGato=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MqhWI+bs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iZb2M6IK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F95A1F000CA;
-	Mon, 19 Oct 2026 14:01:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MqhWI+bs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4917B1F000C7;
+	Mon, 19 Oct 2026 14:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792418467;
-	bh=lJlw6GhXp1L1rVQ4RJd14E3+3JJvpD0/PFLiCS+TtDM=;
+	s=k20260515; t=1792418497;
+	bh=ZlO61TrZDclDEP/J41cpKLqQXMCyv97Pd4adStebopw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=iZb2M6IKha4110qa8pjwQOWKVKtq4azzbl/EltGrYAFX6d/rjwfb4L9d71RGIno6k
-	 eqwTHI2+IkPL7eWwLRrGUiLOTqtmqK68l9rd47jHpSMP31nYAuOo3LCAIAs3pBep9m
-	 aBFGw9NnOAe2qdFF3RoHiw1JtMbJSCdyvAuR+u/YKkrm5uw35FKG9GLCW1oQS8giEQ
-	 OlzoTozmmd9S0ue7MuS4DC5PhPh0IytA6XdS29m8nXiP4UaL+y/jrWjj7oDH4/O9Kv
-	 ioxmUmH+NMSU5BiMRmkg3jI7Sk793HQCZoovdyAjj7KA8EbH42pZF8G+xXA35EG5P9
-	 dr9nVMCB+IVdw==
+	b=MqhWI+bsOdXCVk36eb4IVA8l8mNum44X8u3KKrudIoXWb5/TuSa7wsHAmWT/hteni
+	 mPJPBquBXPxaDYCoskfsSO0H1nd7o0p7jJA3WanEWryr4XykHrs+RXnUec8DTNDPRe
+	 232e5qRNLC5pE+6Jny1QNilEd3qx3R0ZLzjCl+13M7wzxLjKxjHEEB1kCw97Fodwry
+	 0HSophNji2G2BlVQiILytmCviFI4HyZwnB5ghKSghCDj1y2YnAZ5Ucsx0TGsxR4A6A
+	 R7pX85r1yINJpDmMSenzn3DF3Ik+F6nMl0UCuR9EWjibr0sQH1N4YTFN58wLR5l38e
+	 5vThEZU7VqW6g==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Brian Grech <bgrech@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
+Cc: Christian Brauner <brauner@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>,
 	Sasha Levin <sashal@kernel.org>,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	pabeni@redhat.com,
 	shuah@kernel.org,
-	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-5.10] selftests/net: fin_ack_lat: fix latency threshold typo
-Date: Mon, 19 Oct 2026 09:49:20 -0400
-Message-ID: <20261019135441.1420968-269-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.18] selftests/filesystems/overlayfs: fix set_layers_via_fds link error
+Date: Mon, 19 Oct 2026 09:49:41 -0400
+Message-ID: <20261019135441.1420968-290-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261019135441.1420968-1-sashal@kernel.org>
 References: <20261019135441.1420968-1-sashal@kernel.org>
@@ -58,381 +53,415 @@ X-stable-base: Linux 6.18.57
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Brian Grech <bgrech@redhat.com>
+From: Christian Brauner <brauner@kernel.org>
 
-[ Upstream commit 2373107782a98ba15931a37bbd9dd46d7213e5aa ]
+[ Upstream commit e5804b1024193c91ff2648403beda882cb4f8b6c ]
 
-The commit message for af8c8a450bf4 ("selftests: net: Add FIN_ACK
-processing order related latency spike test") states: "if the latency
-is larger than 1 second (spike), print a message". However the code
-uses a threshold of 100000 us (100 ms), not 1000000 us (1 s).
+set_layers_via_fds.c calls open_tree() directly, but that wrapper is
+not provided by all C libraries, so the test fails to link with
+"undefined reference to open_tree" on toolchains without it.
 
-The lower threshold causes false positives on slower hardware where
-normal connection latency occasionally exceeds 100 ms but never
-approaches the 1 s spike that indicates the actual FIN/ACK race bug.
+Use sys_open_tree() from ../wrappers.h, the syscall wrapper already
+used for move_mount(), fsmount() and friends here.  This is also a
+prerequisite for building the new idmapped_mounts test added to this
+directory.
 
-Fix the threshold to match the documented intent.
-
-Reviewed-by: Simon Horman <horms@kernel.org>
-Signed-off-by: Brian Grech <bgrech@redhat.com>
-Link: https://patch.msgid.link/20260806151645.4172900-1-bgrech@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://patch.msgid.link/20260615-work-idmapped-overlayfs-v1-8-7381632aa402@kernel.org
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-I have the local 6.12 tree, the one-line typo, mailing-list review, and
-a clean apply. Compiling the nine-phase analysis next.
-
----
+I have enough to decide: this is a selftest link fix for code that
+already exists on 6.18.y, with a clean apply and no kernel runtime
+change.
 
 ## PHASE 1: COMMIT MESSAGE FORENSICS
 
 **Step 1.1: PARSE THE SUBJECT LINE**
-- Record: `[selftests/net] [fix] latency threshold typo in fin_ack_lat`
+- Record: `[selftests/filesystems/overlayfs] [fix] [replace libc
+  open_tree() with sys_open_tree() so the test links]`
 
-**Step 1.2: PARSE ALL COMMIT MESSAGE TAGS** (from the presented message
-and from `git show 2373107782a9`)
-- `Reviewed-by: Simon Horman <horms@kernel.org>`
-- `Signed-off-by: Brian Grech <bgrech@redhat.com>` (author)
-- `Link:
-  https://patch.msgid.link/20260806151645.4172900-1-bgrech@redhat.com`
-- `Signed-off-by: Jakub Kicinski <kuba@kernel.org>` (netdev maintainer,
-  applied it)
-- No `Reported-by`, `Tested-by`, `Acked-by` in the committed message
-- Committed message has no `Fixes:` / `Cc: stable` (those tags were on
-  mailing-list v3; they are not treated as “already selected”)
-- Record: Reviewed by a netdev reviewer; applied by the net maintainer.
-  Author is Red Hat.
+**Step 1.2: PARSE ALL COMMIT MESSAGE TAGS**
+- `Link: https://patch.msgid.link/20260615-work-idmapped-
+  overlayfs-v1-8-7381632aa402@kernel.org` — lore/msgid for patch 8/10 of
+  the idmapped overlayfs series
+- `Reviewed-by: Amir Goldstein <amir73il@gmail.com>` — overlayfs
+  maintainer
+- `Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>` —
+  VFS maintainer / author
+- Pipeline-only (ignored for selection): `[Upstream commit
+  e5804b1024193c91ff2648403beda882cb4f8b6c]`, `Signed-off-by: Sasha
+  Levin`
+- Absent (expected): `Fixes:`, `Cc: stable@vger.kernel.org`, `Reported-
+  by:`, `Tested-by:`, syzbot
 
 **Step 1.3: ANALYZE THE COMMIT BODY TEXT**
-- Record: [Bug] `fin_ack_lat` treats latency ≥ 100000 µs (100 ms) as a
-  spike, while the original test commit says the spike is **1 second**.
-  [Symptom] false FAIL printouts on slower/loaded hardware when normal
-  localhost connect latency is 100 ms–1 s. [Version] original test is
-  `af8c8a450bf4` (2020). [Root cause] missing zero: 100000 vs 1000000.
+- Record: `[Bug] set_layers_via_fds.c calls libc open_tree(), which some
+  C libraries do not provide. [Symptom] link failure: "undefined
+  reference to open_tree". [Version info] none. [Root cause] the test
+  already uses sys_fsopen/sys_fsmount/sys_move_mount from wrappers.h,
+  but this one test used the libc name instead of sys_open_tree(). The
+  message also says the change is a prerequisite for a new
+  idmapped_mounts test.`
 
 **Step 1.4: DETECT HIDDEN BUG FIXES**
-- Record: Not hidden. Explicit typo/threshold bug in a kselftest. “fix”
-  is accurate.
-
----
+- Record: `[Not a hidden fix] The subject and body state a link error.
+  That is a real userspace build failure of an existing kselftest, not a
+  disguised kernel runtime bug. The "prerequisite for idmapped_mounts"
+  line is extra context for a later new test, not the bug being fixed
+  here.`
 
 ## PHASE 2: DIFF ANALYSIS
 
 **Step 2.1: INVENTORY THE CHANGES**
-- Record: `tools/testing/selftests/net/fin_ack_lat.c` — 1 line changed
-  (`100000` → `1000000`). Function: `client()`. Scope: single-file, one-
-  line surgical fix. `git show --stat`: `1 file changed, 1 insertion(+),
-  1 deletion(-)`.
+- Record: `[Files]
+  tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c
+  (+8/-8). [Function] TEST_F(set_layers_via_fds,
+  set_layers_via_detached_mount_fds) only. [Scope] single-file surgical
+  rename, 8 call sites.]`
 
 **Step 2.2: UNDERSTAND THE CODE FLOW CHANGE**
-- Record: After `connect`/`send`/`read`, `timediff()` returns
-  microseconds (`tv_sec * 1000000 + tv_usec`). If `lat < threshold`,
-  skip the printf and close. Before: print (and the wrapper script
-  counts a FAIL) at ≥ 100 ms. After: only at ≥ 1 s.
+- Record: `[Before] eight open_tree(dfd, path,
+  OPEN_TREE_CLONE|OPEN_TREE_CLOEXEC) calls (libc symbol). [After] the
+  same arguments via sys_open_tree(), the local syscall wrapper. [Path]
+  userspace selftest setup for detached overlay layer mounts. No kernel
+  path, no error-path logic change, no flag change.]`
 
 **Step 2.3: IDENTIFY THE BUG MECHANISM**
-- Record: [Category] logic/correctness (wrong constant). [Mechanism]
-  threshold was 10× too low vs documented 1 s spike that matches
-  `TCP_TIMEOUT_INIT` (1×HZ). Wrapper `fin_ack_lat.sh` fails if any spike
-  line is printed.
+- Record: `[Category] build / link error (portability). [Mechanism]
+  unresolved libc symbol on C libraries without open_tree();
+  sys_open_tree() already exists in wrappers.h and issues
+  syscall(__NR_open_tree, ...).]`
 
 **Step 2.4: ASSESS THE FIX QUALITY**
-- Record: Obviously correct vs the original commit text and vs
-  `timediff()` units. Minimal. Regression risk is that 100 ms–1 s events
-  would no longer FAIL; that is intended, because those are not the
-  FIN/ACK race (which waits a full initial RTO of 1 s). No
-  API/locking/kernel-runtime change.
-
----
+- Record: `[Quality] obviously correct: same arguments, wrapper already
+  used for the other new-mount syscalls in this file, OPEN_TREE_*
+  already defined in wrappers.h. [Regression risk] very low. syscall()
+  and libc open_tree() both return fd or -1/errno; the test already uses
+  ASSERT_GE(fd, 0). No kernel ABI, locking, or API change.]`
 
 ## PHASE 3: GIT HISTORY INVESTIGATION
 
 **Step 3.1: BLAME THE CHANGED LINES**
-- Record: Line 72 (`if (lat < 100000)`) blamed to `af8c8a450bf469`
-  (SeongJae Park, 2020-02-02). Introduced with the test; never changed
-  since.
+- Record: `[Introduced by] ccc829b15d48a ("selftests: add tests for
+  using detached mount with overlayfs", 2025-02-12). [Present in this
+  tree] yes (ancestor of v6.18.53). The test file itself dates to
+  af9199145b197 (2024-10-14).]`
 
 **Step 3.2: FOLLOW THE FIXES: TAG**
-- Committed message has no `Fixes:` tag. Mailing-list v3 cited `Fixes:
-  af8c8a450bf4`.
-- `git merge-base --is-ancestor af8c8a450bf4 HEAD` → yes (exit 0).
-- Original test message: “if the latency is larger than 1 second
-  (spike), print a message.”
-- Related kernel fix `9603d47bad464` (“tcp: Reduce SYN resend delay if a
-  suspicous ACK is received”) is also an ancestor; it describes the 1 s
-  `TIMEOUT_INIT` reconnection spike this test is for.
+- Record: `[N/A] No Fixes: tag. The intro commit is ccc829b15d48a,
+  confirmed via blame on v6.18.53.]`
 
-**Step 3.3: CHECK FILE HISTORY**
-- Record: Only one commit on this file in this tree: `af8c8a450bf46`. No
-  later refactor. Standalone, not patch X/Y.
+**Step 3.3: CHECK FILE HISTORY FOR RELATED CHANGES**
+- Record: `[Related] 0bd92b9fe538b moved wrappers.h to
+  tools/testing/selftests/filesystems/wrappers.h (already in v6.18.53).
+  Next commit 226c30d522a3b adds idmapped_mounts.c (new test, not in
+  v6.18.53). [Standalone] this rename does not need the new test.]`
 
 **Step 3.4: CHECK THE AUTHOR'S OTHER COMMITS**
-- Record: `git log --author="Brian Grech" --
-  tools/testing/selftests/net/` is empty in this tree (author is not a
-  6.12 net-selftest regular). Reviewer Horman and committer Kicinski are
-  netdev maintainers/reviewers.
+- Record: `[Author] Christian Brauner, VFS maintainer, overlayfs
+  contributor. [Related] authored the original detached-mount test and
+  the later idmapped overlayfs series. Not a drive-by change.]`
 
 **Step 3.5: CHECK FOR DEPENDENT/PREREQUISITE COMMITS**
-- Record: None. Only changes a numeric constant. `git apply --check` of
-  `2373107782a9` succeeds on this tree.
-
----
+- Record: `[Dependencies] sys_open_tree() and #include "../wrappers.h"
+  already exist at v6.18.53. Parent file vs v6.18.53 file: 0-line diff.
+  [Standalone] yes for this tree. The new idmapped_mounts test is not
+  required.]`
 
 ## PHASE 4: MAILING LIST AND EXTERNAL RESEARCH
 
 **Step 4.1: FIND THE ORIGINAL PATCH DISCUSSION**
-- Record: `b4 dig -c 2373107782a9` →
-  https://patch.msgid.link/20260806151645.4172900-1-bgrech@redhat.com
-- Revisions (`b4 dig -a`):
-  - v1: 2026-07-31,
-    https://patch.msgid.link/20260731145914.4014912-1-bgrech@redhat.com
-  - v2: 2026-08-04 (added maintainer CCs)
-  - v3: 2026-08-06 (applied)
-- Horman (2026-08-06): looks good; “might be nice” to explain why 1 s;
-  “if this is a fix to be backported (I am unsure)” then add `Fixes:`
-  and target `net`. **Reviewed-by** given; no NAK.
-- Author replied and sent v3 with original-commit wording, `Fixes:`, and
-  `Cc: stable`.
-- Applied to netdev/net-next by Jakub Kicinski (`2373107782a9`). No NAKs
-  in the saved thread.
+- Record: `[Lore] https://patch.msgid.link/20260615-work-idmapped-
+  overlayfs-v1-8-7381632aa402@kernel.org . [Series] v1 only (10 patches,
+  "ovl: support idmapped overlay mounts"). This is 08/10. [Review] no
+  NAK on this patch. Amir Goldstein Reviewed-by on the whole series
+  ("the entire series looks good to me"). His risk comments were about
+  FS_ALLOW_IDMAP on overlayfs itself, not this selftest rename. [Stable
+  nomination] none in the thread.]`
 
 **Step 4.2: CHECK WHO REVIEWED THE PATCH**
-- Record (`b4 dig -w`): netdev, linux-kselftest, Shuah Khan, Eric
-  Dumazet, Paolo Abeni, Simon Horman, Jakub Kicinski. Right lists and
-  maintainers.
+- Record: `[Recipients] Miklos Szeredi, Amir Goldstein, linux-unionfs,
+  linux-fsdevel. [Reviewer] Amir Goldstein (overlayfs maintainer) gave
+  series-wide Reviewed-by.]`
 
 **Step 4.3: SEARCH FOR THE BUG REPORT**
-- Record: No syzbot/bugzilla. Evidence is the commit text plus a Red Hat
-  author describing loaded/slower-hardware false positives. Severity:
-  incorrect kselftest FAIL, not a kernel oops.
+- Record: `[No Reported-by / bugzilla / syzbot] The failure is described
+  by the author as a link error. No independent user report found.]`
 
 **Step 4.4: CHECK FOR RELATED PATCHES AND SERIES**
-- Record: Standalone 1-patch series. No sibling patches required.
+- Record: `[Series] 01–07/10 and 10/10 are overlayfs idmapped-mount
+  kernel/docs features. 09/10 is the new idmapped_mounts selftest. Those
+  are new functionality and are not in v6.18.53 (no FS_ALLOW_IDMAP on
+  overlay in this tree; no idmapped_mounts.c). This 08/10 patch is
+  independently a fix to an existing test.]`
 
 **Step 4.5: CHECK STABLE MAILING LIST HISTORY**
-- Record: lore.kernel.org/stable search via WebFetch returned 403. Web
-  search did not find a stable-list rejection or discussion of this fix.
-  UNVERIFIED: no confirmed stable@ thread beyond v3 CCing stable.
-
----
+- Record: `[UNVERIFIED for lore.kernel.org/stable] WebFetch returned
+  403. b4 dig of the original thread found no stable@ discussion.]`
 
 ## PHASE 5: CODE SEMANTIC ANALYSIS
 
-**Step 5.1: KEY FUNCTIONS**
-- Record: `client()` only.
+**Step 5.1: IDENTIFY KEY FUNCTIONS**
+- Record: `[Modified] TEST_F(set_layers_via_fds,
+  set_layers_via_detached_mount_fds) in userspace kselftest. [Added]
+  none. semcode MCP not available; identified from @@ hunks.]`
 
 **Step 5.2: TRACE CALLERS**
-- Record: `main()` forks and the child calls `client(port)`. Userspace-
-  only. `fin_ack_lat.sh` runs `./fin_ack_lat` for 30s and FAILs if any
-  stdout spike line appears. Makefile: `TEST_PROGS += fin_ack_lat.sh`,
-  `TEST_GEN_FILES += fin_ack_lat` — part of default net selftests.
+- Record: `[Callers] kselftest harness TEST_HARNESS_MAIN / fixture
+  runner when executing the set_layers_via_fds binary. Not in-kernel.
+  Not interrupt or syscall-kernel context.]`
 
 **Step 5.3: TRACE CALLEES**
-- Record: socket/connect/send/read, `timediff()`, `printf` on spike. No
-  kernel helpers.
+- Record: `[sys_open_tree] syscall(__NR_open_tree, dfd, filename, flags)
+  in wrappers.h. Same as other sys_* helpers already used in this file
+  (sys_fsopen, sys_fsmount, sys_move_mount, sys_fsconfig).]`
 
 **Step 5.4: FOLLOW THE CALL CHAIN**
-- Record: Reachable by running the net kselftest (localhost TCP). Not a
-  syscall bug; it is the test harness for the 2020 FIN/ACK race.
+- Record: `[Reachability] only when a developer/CI builds and runs
+  overlayfs kselftests (typically root, CONFIG_OVERLAY_FS). Not a
+  production kernel path. The link failure happens at test build time,
+  before the test runs.]`
 
 **Step 5.5: SEARCH FOR SIMILAR PATTERNS**
-- Record: Only this one comparison. `timediff()` already uses `*
-  1000000` (µs), which confirms 1000000 = 1 s.
-
----
+- Record: `[This tree at v6.18.53] the only remaining libc open_tree()
+  uses in tools/testing/selftests besides this file are
+  landlock/fs_test.c, which defines its own local open_tree() wrapper.
+  Overlayfs tests were already supposed to use sys_open_tree(). Earlier
+  overlayfs selftest build fixes already in this tree: e8b8c5264d4eb
+  (ppc64 format), 0f05ee447949c (mount.h / sys_mount).]`
 
 ## PHASE 6: CROSS-REFERENCING AGAINST THE LOCAL TREE
 
 **Step 6.1: DOES THE BUGGY CODE EXIST IN THIS TREE?**
-- Record: Yes. This checkout is **6.12.111** (`pending-6.12`,
-  `p-6.12-3-gc504cf0baa3d8`). `fin_ack_lat.c:72` is still `if (lat <
-  100000)`. Introduced 2020-02 (`af8c8a450bf4`); present throughout
-  6.12. Candidate `2373107782a9` is **not** an ancestor of HEAD.
+- Record: `[Tree] Makefile VERSION=6 PATCHLEVEL=18 SUBLEVEL=53; git
+  describe HEAD = v6.18.53-5049-g0f0bdc2b0dffb; branch autosel.
+  [v6.18.53] set_layers_via_fds.c exists and has all 8 open_tree()
+  calls. wrappers.h already has sys_open_tree() and
+  OPEN_TREE_CLONE/CLOEXEC. Include of ../wrappers.h is already present.
+  [Bug introduced] ccc829b15d48a, in this series.]`
 
 **Step 6.2: CHECK FOR BACKPORT COMPLICATIONS**
-- Record: `git diff af8c8a450bf4 HEAD --
-  tools/testing/selftests/net/fin_ack_lat.c` is empty. `git apply
-  --check` of the candidate succeeds. Expected: **clean apply**.
+- Record: `[Difficulty] clean apply. `git diff v6.18.53 088318c9d7a6e^
+  -- set_layers_via_fds.c` is empty. Applying the commit patch onto a
+  copy of the v6.18.53 file: APPLY_CLEAN.]`
 
 **Step 6.3: CHECK IF RELATED FIXES ARE ALREADY HERE**
-- Record: `git log --grep="fin_ack_lat: fix latency"` and
-  `--grep="latency threshold typo"` on that path: empty. No alternate
-  fix.
-
----
+- Record: `[No equivalent fix in v6.18.53] still uses open_tree().
+  Candidate 088318c9d7a6e is on autosel only, not in v6.18.53 (`git
+  merge-base --is-ancestor 088318c9d7a6e v6.18.53` → not an ancestor).]`
 
 ## PHASE 7: SUBSYSTEM AND MAINTAINER CONTEXT
 
-**Step 7.1: SUBSYSTEM AND CRITICALITY**
-- Record: `tools/testing/selftests/net/` — kselftest, not kernel
-  runtime. Criticality: **PERIPHERAL** for production machines;
-  **IMPORTANT** for people who run net selftests on 6.12 (distro CI, LTS
-  validation).
+**Step 7.1: IDENTIFY THE SUBSYSTEM AND ITS CRITICALITY**
+- Record: `[Subsystem] kselftests for overlayfs
+  (tools/testing/selftests/filesystems/overlayfs/). [Criticality]
+  PERIPHERAL for production runtime; IMPORTANT for overlayfs regression
+  testing of this LTS tree. Overlayfs itself is a widely used fs
+  (containers), but this commit does not touch fs/overlayfs/.]`
 
-**Step 7.2: SUBSYSTEM ACTIVITY**
-- Record: Net selftests are active in 6.12; this **file** is untouched
-  since 2020 (mature, long-standing typo).
-
----
+**Step 7.2: ASSESS SUBSYSTEM ACTIVITY**
+- Record: `[Activity] overlayfs selftests were added/extended through
+  6.15 (fd mounts, detached mounts, override_creds). Relatively new
+  tests, still the ones this 6.18.y tree ships. Kernel overlayfs is
+  mature.]`
 
 ## PHASE 8: IMPACT AND RISK ASSESSMENT
 
-**Step 8.1: WHO IS AFFECTED**
-- Record: Anyone running `tools/testing/selftests/net`
-  (`fin_ack_lat.sh`). Not production TCP. Config: standard net
-  kselftests.
+**Step 8.1: DETERMINE WHO IS AFFECTED**
+- Record: `[Affected] people/CI building overlayfs kselftests on a C
+  library without libc open_tree() (author: "not provided by all C
+  libraries"). Not universal kernel users. UNVERIFIED which specific
+  libc versions still lack it in 2026; glibc added open_tree in 2.36, so
+  musl/older glibc are the plausible cases.]`
 
-**Step 8.2: TRIGGER CONDITIONS**
-- Record: 30 s of localhost connect/send/read. False FAIL when a loop
-  exceeds 100 ms (loaded CI, slow VM, embedded). Unprivileged users can
-  run the test; this is not a security trigger.
+**Step 8.2: DETERMINE THE TRIGGER CONDITIONS**
+- Record: `[Trigger] building TEST_GEN_PROGS set_layers_via_fds
+  (Makefile already lists it). Common for anyone running these
+  selftests. Unprivileged users are not a security concern; this is a
+  link failure, not a runtime exploit.]`
 
-**Step 8.3: FAILURE MODE SEVERITY**
-- Record: Incorrect kselftest FAIL (script: `FAIL: N spikes detected`).
-  No oops, hang, or corruption. Severity: **MEDIUM** for testers/CI,
-  **LOW** for production runtime. The kernel bug the test is meant to
-  catch is a ~1 s SYN retry (`TCP_TIMEOUT_INIT` = `1*HZ` in
-  `include/net/tcp.h`).
+**Step 8.3: DETERMINE THE FAILURE MODE SEVERITY**
+- Record: `[Failure] userspace link error; the kernel still builds and
+  boots. Test binary is not produced, so that overlayfs selftest cannot
+  be run. [Severity] LOW for production runtime, MEDIUM for stable-
+  kernel testability. Matches the documented "build error" class, not
+  oops/corruption/deadlock.]`
 
-**Step 8.4: RISK-BENEFIT RATIO**
-- Record: Benefit: stops false FAILs on 6.12 net selftests; restores the
-  1 s meaning the test was written for. Risk: one constant in userspace;
-  no kernel change. Ratio: **high benefit for testers / very low risk**.
-
----
+**Step 8.4: CALCULATE RISK-BENEFIT RATIO**
+- Record: `[Benefit] medium for testers of this tree (existing test
+  becomes buildable everywhere the rest of this directory already
+  builds). [Risk] very low: 8 identifier substitutions, no kernel
+  change, wrapper already in tree. [Ratio] favorable if build fixes for
+  existing selftests are in scope; this one is.]`
 
 ## PHASE 9: FINAL SYNTHESIS
 
-**Step 9.1: EVIDENCE**
+**Step 9.1: COMPILE THE EVIDENCE**
 
-FOR:
-- Real, documented mismatch: commit `af8c8a450bf4` says 1 s; code uses
-  100 ms.
-- `timediff()` is in microseconds; 1000000 µs is 1 s.
-- Kernel symptom being tested is a 1 s initial RTO (`TCP_TIMEOUT_INIT`),
-  not 100 ms.
-- Wrapper treats any printed spike as FAIL, so the typo causes false
-  failures.
-- File and bug exist in this 6.12 tree unchanged since 2020.
-- One-line, applies cleanly, userspace-only.
-- Reviewed-by Horman; applied by Kicinski.
-- Author (Red Hat) describes slower/loaded-system false positives — a
-  real “bothers people” case for LTS testing.
+FOR backporting:
+- Real link failure of an existing test in this 6.18.y tree
+- Documentation/process/stable-kernel-rules.rst explicitly lists build
+  errors as acceptable
+- 8-line surgical change, obviously correct
+- sys_open_tree() and wrappers.h already present; applies cleanly
+- Overlayfs maintainer Reviewed-by
+- Same class of fix as e8b8c5264d4eb / 0f05ee447949c already in this
+  lineage
+- No kernel runtime regression surface
 
 AGAINST:
-- Not a kernel crash, UAF, deadlock, or CVE.
-- Horman was unsure about backport before v3.
-- Applied via net-next; committed message dropped `Fixes:`/`Cc: stable`.
-- Only testers are affected.
+- Not a kernel crash, security hole, or data-corruption fix
+- Lives in a 10-patch new-feature series; 09/10 and the kernel idmap
+  work must not be pulled with it
+- No independent user/syzbot report
+- Only testers building kselftests benefit
 
 UNRESOLVED:
-- Could not read lore.kernel.org/stable (403). No evidence of a stable
-  rejection.
+- Exact C libraries that still lack open_tree() in 2026 (author claim,
+  not independently enumerated)
+- No stable@ thread found (lore stable search 403)
 
-**Step 9.2: STABLE RULES CHECKLIST**
-1. Obviously correct and tested? **PASS** — units, original docs, and
-   TCP_TIMEOUT_INIT all agree; reviewed.
-2. Fixes a real bug that affects users? **PASS** — false kselftest FAILs
-   on slower/loaded hardware; Red Hat author.
-3. Important issue? **PASS** (as “oh, that's not good” / broken default
-   net selftest), not as a production crash. Official `stable-kernel-
-   rules.rst` allows a real bug that bothers people, not only
-   oops/hang/CVE.
-4. Small and contained? **PASS** — 1 line, 1 file.
-5. No new features or APIs? **PASS**.
-6. Can apply to this tree? **PASS** — clean apply; buggy code present.
+**Step 9.2: APPLY THE STABLE RULES CHECKLIST**
+1. Obviously correct and tested? **PASS** — rename to an existing
+   wrapper; reviewed by Amir Goldstein
+2. Fixes a real bug that affects users? **PASS** — existing kselftest
+   fails to link on some toolchains
+3. Important issue (crash, security, corruption, deadlock)? **PASS**
+   under the documented build-error clause, not under crash/security
+4. Small and contained? **PASS** — 8 lines, one file, one test
+5. No new features or APIs? **PASS** — no new test, no kernel API; the
+   later idmapped_mounts test is a different commit
+6. Can apply to the local tree? **PASS** — v6.18.53 file matches the
+   parent; apply check clean
 
-**Step 9.3: EXCEPTION CATEGORIES**
-- Record: Not a device-ID/quirk/DT/build/docs exception. Closest
-  analogue: **test/tooling correctness** (same spirit as a build fix:
-  helps people who build and test this kernel).
+**Step 9.3: CHECK FOR EXCEPTION CATEGORIES**
+- Record: `[Exception] BUILD FIX for an existing in-tree selftest. Not a
+  device ID, quirk, DT, or docs-only change.]`
 
-**Step 9.4: DECISION**
+**Step 9.4: MAKE YOUR DECISION**
 
-This tree is **6.12.111**. The typo is in-tree, the 1 s threshold is
-what the test and the TCP bug both mean, and the patch is a one-line
-userspace correction with no kernel regression surface. That is
-appropriate for 6.12 stable: it stops false net-selftest failures
-without changing runtime behavior.
+This should be backported to this 6.18.y tree. The bug is in the tree,
+the wrapper is in the tree, and the patch only makes an existing
+overlayfs selftest match the sys_* calling convention the rest of the
+file already uses. The idmapped-overlay feature series around it is
+irrelevant here: that feature and its new test are not in v6.18.53 and
+are not part of this diff.
 
----
+### What the commit solves and why it matters here
+`set_layers_via_fds` is already built on 6.18.y (`TEST_GEN_PROGS +=
+set_layers_via_fds`). One fixture still calls libc `open_tree()`, so the
+binary fails to link where that symbol is missing. Switching to
+`sys_open_tree()` fixes that with no kernel change.
 
-## What the commit solves for stable users
+### Stable rules
+It is small, obviously correct, and a build error. It does not add
+features or APIs.
 
-On 6.12, `fin_ack_lat` is a default net selftest. It is supposed to flag
-the ~1 s reconnect spike from FIN/ACK processing order
-(`TCP_TIMEOUT_INIT`). A missing zero makes it flag ≥100 ms instead, so
-loaded or slow machines can FAIL without the actual TCP bug. Distros and
-anyone running kselftests on 6.12 get noisy, wrong results.
+### Risk vs benefit
+Risk is negligible (userspace identifier change). Benefit is that
+overlayfs kselftests for this LTS tree can actually be built on the same
+toolchains the wrappers were written for.
 
-## Stable rules / risk vs benefit
+### Concerns
+Do not pull 09/10 (`idmapped_mounts.c`) or the overlay FS_ALLOW_IDMAP
+kernel patches with this; they implement a new feature this tree does
+not have. This commit does not require them.
 
-It is obviously correct, tiny, already reviewed, and applies cleanly.
-Benefit is reliable tests; risk is negligible. It does not fix a
-production crash, but it does fix a real, user-visible test bug in this
-tree.
-
-## Concerns
-
-None that block a backport: no missing prerequisites, no file drift, no
-kernel ABI change. Raising the threshold will ignore 100 ms–1 s events;
-that matches the original design.
-
----
-
-## Verification
-- [Phase 1] Parsed committed tags on `2373107782a9`; Horman Reviewed-by;
-  Kicinski SOB; no Fixes in committed text
-- [Phase 1] Original test commit `af8c8a450bf4` text: “larger than 1
-  second (spike)”
-- [Phase 2] Diff: one comparison in `client()`, 100000 → 1000000
-- [Phase 2] `timediff()` uses `tv_sec * 1000000` (microseconds) —
-  verified in `fin_ack_lat.c`
-- [Phase 2] `fin_ack_lat.sh` FAILs if any spike line is printed —
-  verified
-- [Phase 3] `git blame` line 72 → `af8c8a450bf469` (2020-02-02)
-- [Phase 3] `git merge-base --is-ancestor af8c8a450bf4 HEAD` → yes;
-  `2373107782a9` → no
-- [Phase 3] `9603d47bad464` (TCP SYN resend / 1 s spike) is an ancestor
-- [Phase 3] File unmodified after introduction (`git diff af8c8a450bf4
-  HEAD -- fin_ack_lat.c` empty)
-- [Phase 3] `git apply --check` of candidate → success
-- [Phase 4] `b4 dig -c 2373107782a9` → lore msgid
-  `20260806151645.4172900-1-bgrech@redhat.com`
-- [Phase 4] `b4 dig -a`: v1 (2026-07-31), v3 (2026-08-06, applied)
-- [Phase 4] `b4 dig -m`: Horman Reviewed-by; unsure about backport; no
-  NAK; v3 added Fixes + Cc: stable on the list
-- [Phase 4] Patchwork: applied to net-next as `2373107782a9`
-- [Phase 4] UNVERIFIED: stable@ archive (lore 403)
-- [Phase 5] `client()` called only from forked `main()`; Makefile lists
-  the test in `TEST_PROGS`
-- [Phase 5] `TCP_TIMEOUT_INIT` is `1*HZ` in `include/net/tcp.h`
-- [Phase 6] `git describe HEAD` → `p-6.12-3-gc504cf0baa3d8`; `make
-  kernelversion` → 6.12.111; line 72 still `100000`
-- [Phase 8] Failure mode: kselftest false FAIL, not kernel oops;
-  severity MEDIUM for testers
+Verification:
+- [Phase 1] Parsed tags: Link to patch 8/10, Reviewed-by Amir Goldstein,
+  SOB Christian Brauner; no Fixes/Cc:stable/Reported-by
+- [Phase 1] Body: link error "undefined reference to open_tree"; also
+  mentions idmapped_mounts prerequisite
+- [Phase 2] Diff: 8 open_tree → sys_open_tree in
+  set_layers_via_detached_mount_fds; +8/-8 one file
+- [Phase 2] wrappers.h: sys_open_tree() = syscall(__NR_open_tree, ...);
+  OPEN_TREE_CLONE/CLOEXEC defined
+- [Phase 3] git describe HEAD: v6.18.53-5049-g0f0bdc2b0dffb; make
+  kernelversion 6.18.53
+- [Phase 3] git merge-base --is-ancestor 088318c9d7a6e v6.18.53: NOT in
+  v6.18.53
+- [Phase 3] git blame v6.18.53: open_tree() lines from ccc829b15d48a
+  (2025-02-12), present in this tree
+- [Phase 3] git diff v6.18.53 vs commit parent for this file: 0 lines
+  (identical)
+- [Phase 3] idmapped_mounts.c: not in v6.18.53; FS_ALLOW_IDMAP not set
+  on overlay in this tree
+- [Phase 4] b4 dig -c e5804b1024193c91ff2648403beda882cb4f8b6c: matched
+  08/10 of ovl idmapped series
+- [Phase 4] b4 dig -a: v1 only
+- [Phase 4] b4 dig -w: Miklos Szeredi, Amir Goldstein, linux-unionfs,
+  linux-fsdevel
+- [Phase 4] b4 dig -m: Amir series-wide Reviewed-by; risk comments were
+  about kernel FS_ALLOW_IDMAP, not this patch; no NAK on 08/10
+- [Phase 4] lore WebFetch 403; stable list search 403 — UNVERIFIED
+  beyond the saved mbox
+- [Phase 5] semcode unavailable; callers are kselftest harness only
+- [Phase 5] git grep v6.18.53: only this file plus landlock (local
+  wrapper) use open_tree() in selftests
+- [Phase 6] v6.18.53 has the 8 open_tree() calls and ../wrappers.h
+  include; patch apply onto that file: APPLY_CLEAN
+- [Phase 7] tools/testing/selftests/filesystems/overlayfs; not
+  fs/overlayfs
+- [Phase 8] Failure mode: userspace link error; severity LOW runtime /
+  build-error class
+- UNVERIFIED: exact C libraries lacking open_tree() in 2026; no stable@
+  thread (403)
 
 **YES**
 
- tools/testing/selftests/net/fin_ack_lat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../filesystems/overlayfs/set_layers_via_fds.c   | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/net/fin_ack_lat.c b/tools/testing/selftests/net/fin_ack_lat.c
-index 70187494b57af..4117332eb1a9c 100644
---- a/tools/testing/selftests/net/fin_ack_lat.c
-+++ b/tools/testing/selftests/net/fin_ack_lat.c
-@@ -69,7 +69,7 @@ static void client(int port)
- 		lat = timediff(start, end);
- 		sum_lat += lat;
- 		nr_lat++;
--		if (lat < 100000)
-+		if (lat < 1000000)
- 			goto close;
+diff --git a/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c b/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c
+index dc0449fa628f8..d4a645ec88636 100644
+--- a/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c
++++ b/tools/testing/selftests/filesystems/overlayfs/set_layers_via_fds.c
+@@ -624,7 +624,7 @@ TEST_F(set_layers_via_fds, set_layers_via_detached_mount_fds)
  
- 		if (getsockname(sock, (struct sockaddr *)&laddr, &len) == -1)
+ 	ASSERT_EQ(sys_move_mount(fd_tmpfs, "", -EBADF, "/set_layers_via_fds_tmpfs", MOVE_MOUNT_F_EMPTY_PATH), 0);
+ 
+-	fd_tmp = open_tree(fd_tmpfs, "u", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
++	fd_tmp = sys_open_tree(fd_tmpfs, "u", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
+ 	ASSERT_GE(fd_tmp, 0);
+ 
+ 	layer_fds[0] = openat(fd_tmp, "upper", O_CLOEXEC | O_DIRECTORY | O_PATH);
+@@ -633,25 +633,25 @@ TEST_F(set_layers_via_fds, set_layers_via_detached_mount_fds)
+ 	layer_fds[1] = openat(fd_tmp, "work", O_CLOEXEC | O_DIRECTORY | O_PATH);
+ 	ASSERT_GE(layer_fds[1], 0);
+ 
+-	layer_fds[2] = open_tree(fd_tmpfs, "l1", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
++	layer_fds[2] = sys_open_tree(fd_tmpfs, "l1", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
+ 	ASSERT_GE(layer_fds[2], 0);
+ 
+-	layer_fds[3] = open_tree(fd_tmpfs, "l2", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
++	layer_fds[3] = sys_open_tree(fd_tmpfs, "l2", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
+ 	ASSERT_GE(layer_fds[3], 0);
+ 
+-	layer_fds[4] = open_tree(fd_tmpfs, "l3", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
++	layer_fds[4] = sys_open_tree(fd_tmpfs, "l3", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
+ 	ASSERT_GE(layer_fds[4], 0);
+ 
+-	layer_fds[5] = open_tree(fd_tmpfs, "l4", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
++	layer_fds[5] = sys_open_tree(fd_tmpfs, "l4", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
+ 	ASSERT_GE(layer_fds[5], 0);
+ 
+-	layer_fds[6] = open_tree(fd_tmpfs, "d1", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
++	layer_fds[6] = sys_open_tree(fd_tmpfs, "d1", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
+ 	ASSERT_GE(layer_fds[6], 0);
+ 
+-	layer_fds[7] = open_tree(fd_tmpfs, "d2", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
++	layer_fds[7] = sys_open_tree(fd_tmpfs, "d2", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
+ 	ASSERT_GE(layer_fds[7], 0);
+ 
+-	layer_fds[8] = open_tree(fd_tmpfs, "d3", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
++	layer_fds[8] = sys_open_tree(fd_tmpfs, "d3", OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC);
+ 	ASSERT_GE(layer_fds[8], 0);
+ 
+ 	ASSERT_EQ(close(fd_tmpfs), 0);
 -- 
 2.53.0
 
