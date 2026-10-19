@@ -1,83 +1,222 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D34DD3BC696;
-	Mon, 19 Oct 2026 06:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8228727FB37
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 06:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792391124; cv=none; b=bv+Px4/Z2QGJ3JgM7gj++YJ9s8T9ch70R5fX2jYbj+xHwP69QpfGOTucmH6J3XBB+6lByBwIZUfErwGzyLPY3HXCBqPi4qcKivWZnjhEN+MVz93Tf3/VrkdHugnSaTfMMrGY6MoUXknteeegC5qADiNtNhRtU2gf+FWkA528T80=
+	t=1792391764; cv=none; b=MtRNFDNvyjInvBdZGIvLwwhlRMSipJu8CBrwDT/0VxM4XSoUwbDhHmWdi8SiXjUnGQAdaXfqL459PTssIZupKFYmDAWzg5LbzffNMdFea55c2mQwJJXTE2S6t2xluZ7AFtPdvVLGR3P//6wtMU/B0z78FgWMQqxB53W/vQUElOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792391124; c=relaxed/simple;
-	bh=55RfTNFBQ9bYI0TDGXnU655P/5to3Zf/3l6pm2G36ns=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WE9xri4Pj+r26c3fhF3NkSyVD/YZXx722cmRV4FYJjc12rdJTEkIFLgeri35h4r15vEQ24ytrRfVgPJuEz+v77wz23JAKPsABCHQpSyxbvovnGqHC0q+lPJthvKXU/13wE5HhMtSm3ec41/c3PmXKYBbc37Erb2Fij6c/842mWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=PAjLuW7o; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1792391764; c=relaxed/simple;
+	bh=PX9zZj4iTg9WzoWwoCz6MvS21cdwDV4voOBVLw9O6pg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QsK6X3QF4LrIoJExIbuf3+esL9wine505NQXiyEa8poPa/VyMO/9s4hkidEZYVL5W6o26EJBwK6X64sShMmX740cHG0G/yK5kjMRf2jocaRtl6cCW9EhDcS5SULwFceIb881MzS1RidoJiUdvGnAEY/eZki30VD4JE2i3uCBaJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cYVYgvkf; arc=none smtp.client-ip=74.125.82.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="PAjLuW7o"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E13A1477;
-	Sun, 18 Oct 2026 23:25:17 -0700 (PDT)
-Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A8423F673;
-	Sun, 18 Oct 2026 23:25:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1792391120; bh=55RfTNFBQ9bYI0TDGXnU655P/5to3Zf/3l6pm2G36ns=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PAjLuW7oV1dFsO9RUkEDuhzNJVk/QIY1FdzjBlsdfuae1ojCAEHeWbysLZQS33AuL
-	 91afN7as3b2wVL8PgRS7QalzNL3VJmXu5G34VBJSycUtx5kDnNHbQGuFmbHivrXfdR
-	 PWNX8NdAERb2KexXuzG3pP1o8xO/AUzTHsFH5Gv0=
-Message-ID: <d7b1711a-44aa-4169-a250-227a172f4125@arm.com>
-Date: Mon, 19 Oct 2026 11:55:12 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cYVYgvkf"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-3550c917fd3so2033711eec.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2026 23:36:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792391762; x=1792996562; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=yFQatoeAsD0uy3HEOPLZwlpYB4M5Dzpm+OdX5z+s5s4=;
+        b=cYVYgvkfPdscFvhdjQ+ja9tAa2jhRirfYFvFiVJeT83Kc6Z6KMDe8MBRAL6p8YZiBU
+         RcX0qxIGWCiGtDnGcOJnH54rSUe579OI3mcCq6EN+5EXujv7kOLpW6PPmiJDZN0ISqo5
+         Bgms6d68dCbj9TacB8ALnDQCzlVXcGdjBSJSKzkW2q7aK+MRNc+l+A/DNoJljKvsyKsm
+         9NlKnJwLsJr500KvPCuyRjxP0jo5hixWn3pLt80t2U8FBpvTDOtxfgrnJMjQGkwQpxDo
+         /zW0Mu09+NcFayZVb16OLZtXLOYoMJXOJ2K/4VBIgp58Lhkr4BDgUgo6OmPSTXtXrBih
+         SL2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792391762; x=1792996562;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=yFQatoeAsD0uy3HEOPLZwlpYB4M5Dzpm+OdX5z+s5s4=;
+        b=KmcAZ2Ha7ECxr3N2HJFAhDWHr09FbyJ6WsQfZrwU5G5nyfb+ZG/asX0/cATc0reIiD
+         xwIOnMgjOr+bEAhM5cFYWoqds4zbjxIFAInK6L99oOqp8gOm9NXUR+X32q/KvFoXAB2/
+         sXHd5IvGySzYrmU21Mmpqxw0kB9BL4cv3Rb+wRC/6YKvc1dexcZ1edTQqIsY77hWdRUu
+         brmLDM37vbWyJx4bBulcXMWjTCeWIH25LOwnca6aFDhMtmbDtbYDiM/bCU/O4sONNuIp
+         U5sxaDhmvLXwWHact+dWI/bzIXQAVhwJv3yZOzBCCLm3e7oOy2uAT/cP916DnFXDlpMa
+         mfvA==
+X-Forwarded-Encrypted: i=1; AKwUvByshzhHLC8jPgvwiTwx5BhkOLMyX+zdlqj+H4VpFdbfnA5NWFS+vYyLJeZgu6zddFcmcKeYowt5H/qyk0eX2dc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJHli66YZybmVSKuKPPzm9z6dn6MFBZT4W+XIuhv50n4RVEq9zu
+	DXX0tvOOgIFQ0PrIkhSNNtcn6P65cYnZ1Hf2Fn6/rAwi0u+cWnDL6V3f
+X-Gm-Gg: AYBFou2C2hqmeEZDUbcJo3NbXBc9CS18E/QMKo9ODMSG8rMa4AZSov/iSY1e2krcn+e
+	dC1MmodkUhTAFtFAipueanivnJtFQ9Oi0TuErdFqnWjSp9mHTfgAeYWmOv86BdL1ws9KyLLcDnm
+	A218h9eDWaA/VeSRrz+btxTSjtLGMgJiYfqhUSSYaiwcrx+sT3GeT5toK7Z2jjJ4Ll5tlluD7CM
+	hnQv4rvgauR0UDjQtblazTruLi1T8csMmbUxbP26Lh7QSvtKwWssq557JXVC4mYS09x/inTIGdB
+	YJWm9ORZSmvBhldqIFKSneLs0/LJ5ditVCzzJkqJ/PceAIN6cnvZf3YWBuA+21bKtmcTMEYO3cA
+	5dUO72+sTQCQA4VJTGqTaU+yrgpOOO/Jix3Ivq7tX7yIqZABlwyM5jKoq5ktQ6md/WTGBIU7DUs
+	fXLrzMaQ/gK0WqMonS2dtigeJwgqL5hyBH3ZIlHYn+N18UMFl8Lz+/FbJ2ddIZm5eczQ==
+X-Received: by 2002:a05:701b:458e:10b0:15d:d124:b7c7 with SMTP id a92af1059eb24-185120a8bbfmr9772701c88.10.1792391762455;
+        Sun, 18 Oct 2026 23:36:02 -0700 (PDT)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831a6f5a13sm30785476c88.12.2026.10.18.23.35.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Oct 2026 23:36:01 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Date: Mon, 19 Oct 2026 14:35:55 +0800
+Subject: [PATCH bpf-next v2] selftests/bpf: Time tc_edt from its first
+ packet with data
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: keep ksm_tests on small pages
-To: Qiliang Yuan <odys.yuan@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Usama Arif <usamaarif642@gmail.com>, Yu Zhao <yuzhao@google.com>,
- Xu Xin <xu.xin@linux.dev>, Chengming Zhou <chengming.zhou@linux.dev>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261018-bug-selftests-mm-ksm-tests-nohugepage-v1-1-55ed54bdad35@gmail.com>
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-Content-Language: en-US
-In-Reply-To: <20261018-bug-selftests-mm-ksm-tests-nohugepage-v1-1-55ed54bdad35@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20261019-selftests-bpf-tc-edt-serial-v2-1-41c3813e7916@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAEq61WoC/42NTQqDMBBGryKz7pQkGK1d9R7FRRonGvCPTAgW8
+ e6NnqDLx/t43w5MwRPDs9ghUPLslzmDuhVgBzP3hL7LDEqoSgrRINPoInFk/KwOo0XqIp4RM2J
+ jK21cLd2j1JALayDnt6v+hnM+0xahzWbwHJfwvW6TvPxfD0miRFcrEqV2qqz0q5+MH+92maA9j
+ uMHtgQgdNAAAAA=
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
+X-Mailer: b4 0.13.0
 
+tc_edt sends 1MB over a TCP connection that a BPF program shapes with
+EDT, and checks that the rate it measures is within 2% of the target
+rate. The transfer takes about 200ms, so the margin is about 4ms.
 
+The measurement starts before send_recv_data(), which first creates the
+sender thread and accepts the connection. On a KASAN kernel, x86_64 VM
+with 32 vCPUs, that takes 0.7ms when idle and up to 4.7ms with all
+CPUs busy, while the BPF program spreads the data over 200.08ms in the
+median. The test also fails without test_progs -j where everything runs
+slower, e.g. on s390x and with ASAN in BPF CI.
 
-On 10/18/26 10:23 AM, Qiliang Yuan wrote:
-> ksm_tests fills regions with identical data and checks KSM's counters
-> after merging them. allocate_memory() maps these regions without any
-> THP hint.
-> 
-> With mTHP enabled the regions can be backed by large folios, which KSM
-> splits before merging. Splitting an anonymous folio maps its
-> zero-filled pages to the shared zeropage, so with use_zero_pages=0
-> those pages never become KSM pages and "KSM zero page merging" fails
-> its count. "ksm_tests -Z -p 10 -z 0", 20 runs:
-> 
->   THP setup                     before    after
->   default                         0/20     0/20
->   every mTHP size "always"       20/20     0/20
-> 
-> Map the regions with MADV_NOHUGEPAGE, as ksm_functional_tests does.
-> ksm_merge_hugepages_time() maps its own THP-backed region and is not
-> affected.
-> 
-> Fixes: b1f202060afe ("mm: remap unused subpages to shared zeropage when splitting isolated thp")
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-> ---
-Tested the patch by enabling all mTHP sizes as mentioned. Before the
-patch, the test failed and applying the patch fixed it. So:
+Have the BPF program note when the first packet with data goes out, and
+start the measurement there.
 
-Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+tc_edt run 100 times on the same VM, idle and with 32 busy loops in the
+background, before and after this patch:
+
+                 before                after
+  idle           0 of 100 failed       0 of 100 failed
+  busy loops     3 of 100 failed       0 of 100 failed
+
+Fixes: b0f82e7ab6fb ("selftests/bpf: integrate test_tc_edt into test_progs")
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+---
+V1 -> V2:
+- Start the measurement at the first packet with data instead of running
+  tc_edt serially, as it also fails without -j (Alexei)
+- Add before/after data
+
+v1: https://lore.kernel.org/r/20261009-selftests-bpf-tc-edt-serial-v1-1-f72e045f2465@gmail.com
+---
+ tools/testing/selftests/bpf/prog_tests/test_tc_edt.c | 13 ++++++++++---
+ tools/testing/selftests/bpf/progs/test_tc_edt.c      | 13 ++++++++++---
+ 2 files changed, 20 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c b/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
+index 462512fb191f1..1391978a3e309 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
+@@ -90,7 +90,7 @@ static void cleanup(void)
+ 	remove_netns(SERVER_NS);
+ }
+ 
+-static void run_test(void)
++static void run_test(struct test_tc_edt *skel)
+ {
+ 	int server_fd, client_fd, err;
+ 	double rate_mbps, rate_error;
+@@ -113,12 +113,19 @@ static void run_test(void)
+ 	if (!ASSERT_OK_FD(client_fd, "connect client"))
+ 		return;
+ 
+-	ts_start = get_time_ns();
+ 	err = send_recv_data(server_fd, client_fd, TX_BYTES_COUNT);
+ 	ts_end = get_time_ns();
+ 	close_netns(nstoken);
+ 	ASSERT_OK(err, "send_recv_data");
+ 
++	/*
++	 * Start from the first packet with data rather than before
++	 * send_recv_data(), which also sets up the sender.
++	 */
++	ts_start = skel->bss->tx_start_ns;
++	if (!ASSERT_GT(ts_start, 0, "tx_start_ns"))
++		return;
++
+ 	rate_mbps = TX_BYTES_COUNT / ((ts_end - ts_start) / 1000.0);
+ 	rate_error =
+ 		fabs((rate_mbps - TARGET_RATE_MBPS) * 100.0 / TARGET_RATE_MBPS);
+@@ -138,7 +145,7 @@ void test_tc_edt(void)
+ 	if (!ASSERT_OK(setup(skel), "global setup"))
+ 		return;
+ 
+-	run_test();
++	run_test(skel);
+ 
+ 	cleanup();
+ 	test_tc_edt__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_edt.c b/tools/testing/selftests/bpf/progs/test_tc_edt.c
+index 4f6f03122d61d..69f4b16acbef6 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_edt.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_edt.c
+@@ -24,6 +24,7 @@ struct {
+ } flow_map SEC(".maps");
+ 
+ __uint64_t target_rate;
++__uint64_t tx_start_ns;
+ 
+ static inline int throttle_flow(struct __sk_buff *skb)
+ {
+@@ -62,7 +63,8 @@ static inline int throttle_flow(struct __sk_buff *skb)
+ 	return TC_ACT_OK;
+ }
+ 
+-static inline int handle_tcp(struct __sk_buff *skb, struct tcphdr *tcp)
++static inline int handle_tcp(struct __sk_buff *skb, struct tcphdr *tcp,
++			     uint32_t hdr_len)
+ {
+ 	void *data_end = (void *)(long)skb->data_end;
+ 
+@@ -70,8 +72,12 @@ static inline int handle_tcp(struct __sk_buff *skb, struct tcphdr *tcp)
+ 	if ((void *)(tcp + 1) > data_end)
+ 		return TC_ACT_SHOT;
+ 
+-	if (tcp->source == bpf_htons(9000))
++	if (tcp->source == bpf_htons(9000)) {
++		/* Note when the first packet with data goes out */
++		if (!tx_start_ns && skb->len > hdr_len + tcp->doff * 4)
++			tx_start_ns = bpf_ktime_get_ns();
+ 		return throttle_flow(skb);
++	}
+ 
+ 	return TC_ACT_OK;
+ }
+@@ -94,7 +100,8 @@ static inline int handle_ipv4(struct __sk_buff *skb)
+ 		return TC_ACT_SHOT;
+ 
+ 	if (iph->protocol == IPPROTO_TCP)
+-		return handle_tcp(skb, (struct tcphdr *)(((void *)iph) + ihl));
++		return handle_tcp(skb, (struct tcphdr *)(((void *)iph) + ihl),
++				  sizeof(struct ethhdr) + ihl);
+ 
+ 	return TC_ACT_OK;
+ }
+
+---
+base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+change-id: 20261009-selftests-bpf-tc-edt-serial-9c65af71f845
+
+Best regards,
+-- 
+Qiliang Yuan <odys.yuan@gmail.com>
+
