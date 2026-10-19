@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792445979;
-	b=i0LQB4VGYyi0IcQBfXSK00xdE3BaBf5/W2LubwvtIQbc1JzS5mJlY2x7DDDgwh2lWuM2
-	 c1jpvzeOZ86tJcBBbM4a/316OZI8qdHN8N+5Er7ulwOx9g2m2MfNyMocCT3ld0AeaGRFM
-	 vwnw70mWL3YtwSx2rSt1qX3xEmc+4ZGxzwz4iPHS/1NUIQBKVfBhG0YvhjQd7uQ1YB2aJ
-	 VyiwYhk9JS6GgZ2A1lcIhjfsmve5qsdCzoNBnvpTv2ZZAG69khvasgPKvjUWfQBeS8SGr
-	 yo+2RfFykXaGm354EsutMmVO7Yu+sWLPOFsTyT9iAYPfguoCicT6Rr+L1/OJHfW3+2w==
+	t=1792445981;
+	b=KAxsouSWLTG8pH8cu9K7Orjx7VWPJv7pheUDTn+7EYNmL3rNVvGw2PeYEML/R/5t2cDU
+	 hwgN02ws0FGwTxD6W/p3rPd/LHjt9rP9L/WooBqwbYSIJR7WrvSg1eq6Wm/M6lMknzfLK
+	 eWMOVvcbNt+FPEXi5nyJAEWHtgg4NuSBMskFFd3ZDIaeDiIFCdaLuqJxp3KTC4XkBLYm+
+	 KeAh6/bIYGifaLRyri6u/ssjDmVLN1DKccBVIMfAdhZzf2EdE3Y1XhcNCctrCzLJPaxPW
+	 mkt0ZHKsvNrdSry04efvp7AyqHgp/jGzUJX37VY0EAcYZTiF6PmMudOYiVKb51x9i1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792445979;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792445981;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=lUOLr3+IgRNwYlYuXupDD20VzjhzLRu2KMPBlhhL/0Y=;
-	b=bDNPGM53oLn0umOdg34tAfEAq7bO53NOb2jDMhK73CRq/FGrDZTjpRbG33738yyf1PNr
-	 Gn47plXfIrX8y/EvLtSRNeJVANP2Y9Y+xcRf/A1jcKWYZbNlzshxwet7VveMR42brUsaO
-	 2edHCddXImpH+7mWqVuBfegMyCDOPxG/sdX/Syk3KH6prjFPeYRG4oYJcSU12e3XZh33n
-	 sRD5CIc1jumsAGgV2OWbquDrkitibjcEUfDxgMNQ8rkEbvpg5m9V5EZIZeL0EBpDvtkd6
-	 gYCrFJsKrvxfglKWkZwqlHKjW2bV+1anl1jKmd2fkAUZNR1m+iY/1vvqgH9WJ9Pl6YA==
+	bh=Ayfk9D707IuSir5watYa+UkolTblVMoJkmhTWHZ/yKw=;
+	b=UlsCfkZVNhge5pIbRdtizTxtrZnVOR53tU6IunJ5M6rpyulimNHBXQJs2+8EP8dZ54+w
+	 1ybN/0VVIpmsSHTIVSHuYfTdemAbFOZbaIgBg1vp77PFI0t+gP0yLYYVMckJJ4bJrknkM
+	 soy+K6l9Ba4YF+utU/GWOcgz+2I7SglIc9Wi2+EzrntpwBT4DjWyNqxX+6EWBjI64T9WM
+	 rKu7uroq0KhoHDnEsFKtv+ekqqOsy3DRzH1cpZZKSLsIx2IoC9vPnK9WjA65OT2pX+TtR
+	 WvvR9HXnMGd/2qoNuYXed4PId2/SAOL3dHyxRFckTvUw0pB5nFvOEbeufKi/h7IZTrg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Cjey8ZvT;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QcBG3MOp;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF51606A322;
-	Mon, 19 Oct 2026 21:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B48D606A32A;
+	Mon, 19 Oct 2026 21:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Cjey8ZvT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04DDB1F000C5;
-	Mon, 19 Oct 2026 21:39:37 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QcBG3MOp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF5B1F000C4;
+	Mon, 19 Oct 2026 21:39:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792445978;
-	bh=lUOLr3+IgRNwYlYuXupDD20VzjhzLRu2KMPBlhhL/0Y=;
+	s=k20260515; t=1792445980;
+	bh=Ayfk9D707IuSir5watYa+UkolTblVMoJkmhTWHZ/yKw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Cjey8ZvT1hmBHCe2wXyiib8n3V7MCuXYgVC8Dgkk+SfLIj4jJkFSawJ458Gvc+QIa
-	 +Lvu1HQVI/6uKPSKs7tZfdO/K0lnIC+A2XNTRUTIPXUcNwN8DCxoa4SS18DOdmuXB4
-	 YV4848iQdT/Om+Io0ZPTEzNm7QRO/S51v5WRMrKSHyNVI1JfT/DKAIVJXB9m4n5vnG
-	 o9pIrKatVStmWvZmVz4F7yrXHUSwrK4pfuysVO31uT7JXEt4LpNHDMp0ai5QxBvaeq
-	 Bk9OVjFn6xe6cqL/LfW7NejoQO+y2bSQQEy5WtV4QpM50lFND/o9AhaCORalsRrOsF
-	 c2AgCBQNWCNJQ==
-Subject: Re: [PATCH net-next v2 2/3] net/sched: fq, fq_codel, fq_pie: skip
- empty rounds in the deficit-refill dequeue loop
+	b=QcBG3MOpaF9GV6/c8ZTcp8ERRbLoEnROTvqZkUNu4g37COjlGtpQofbpwjEI2FmBo
+	 arPgTe3+1kVTM1vMOvlBn/wtzsTZscKo/XwX2sXSWcis9hnV7zzlNxPjZA9+tW2C07
+	 ajx3qCTgS7ARLmP4EEyQHqy+y7ahWXQcmRyZ0+q5/cIVYqtSXlJ2Lvkc4XSQGZy5Xc
+	 G1KjfGG4Tak/3pV2mw6k5CiO7VYfXuono+vrNIQCE8TB11Pgyx6gbTHHD8I7VKnDn6
+	 MpSWoMSFdAyf4vUHavH7IStCfqj/4I4CBm6cF6SCq3+ER4d4Mck8SbdYesP3plijiI
+	 no6S1VCyAzM/Q==
+Subject: Re: [PATCH net-next v2 3/3] selftests: tc-testing: pin DRR and ETS
+ deficit refill semantics
 From: netdev-bot+sashiko@kernel.org
 To: victor@mojatatu.com
 Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  pabeni@redhat.com, jhs@mojatatu.com, jiri@resnulli.us, netdev@vger.kernel.org,
  horms@kernel.org, sashiko-bot@kernel.org, shuah@kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Mon, 19 Oct 2026 21:39:37 +0000
-Message-ID: <179244597754.3135.16063712933346709195@kernel.org>
-In-Reply-To: <QDISC-TIAE.v2.r0.20261015163454-2@mojatatu.com>
-References: <QDISC-TIAE.v2.r0.20261015163454-2@mojatatu.com>
+Date: Mon, 19 Oct 2026 21:39:38 +0000
+Message-ID: <179244597889.3135.16923738862014270514@kernel.org>
+In-Reply-To: <QDISC-TIAE.v2.r0.20261015163454-3@mojatatu.com>
+References: <QDISC-TIAE.v2.r0.20261015163454-3@mojatatu.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,10 +65,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 (1) · Medium: 2 · Low: 1
+Critical: 0 · High: 0 · Medium: 2 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -76,248 +76,191 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] In __fq_codel_dequeue() (net/sched/sch_fq_codel.c), the new
-  skip pass unlinks empty flows with k < rounds by calling…
-- [Medium] The skip-ahead can run only once per dequeue call, and one
-  trap flow per dequeue is enough to undo it.
-- [Low] The commit message is missing the tags a bug fix needs.
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the series
-  leaves the same bug class open in sch_cake.
+- [Medium] The three new tests (3f3e, 57a1, 2177) coordinate with their
+  background traffic only through wall-clock sleeps measured against…
+- [Medium] selftests: tc: mathematically contradictory expected stats in
+  ETS test 2177
 
 --
 
-net/sched: fq, fq_codel, fq_pie: skip empty rounds in the deficit-refill dequeue loop
+selftests: tc-testing: pin DRR and ETS deficit refill semantics
 
-This patch adds a skip-ahead to the deficit-refill dequeue loops of fq,
-fq_codel and fq_pie. After a full round in which no flow could dequeue, it
-gives every flow the quanta for the remaining rounds in one pass. In the
-same pass it removes the empty flows the old one-quantum loop would have
-removed.
+This adds three tdc tests (3f3e, 57a1 and 2177) that check DRR and ETS
+deficit refill. Each test puts netem delay qdiscs under DRR or ETS. It
+starts background traffic in setup and checks the class stats after a
+fixed sleep.
 
-Link: https://lore.kernel.org/netdev/179182028153.434549.4854377793269282267@kernel.org/
-
-> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-> Link: https://lore.kernel.org/netdev/179182028153.434549.4854377793269282267@kernel.org/
-> Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> Signed-off-by: Victor Nogueira <victor@mojatatu.com>
-
-[Severity: Low]
-This isn't a bug in the code, but should this have a Fixes: tag and a
-Cc: stable? The dequeue spin has been in fq, fq_codel and fq_pie since they
-were merged. Without those tags, stable maintainers have nothing to act on.
-
-The companion commit "net/sched: drr, ets, sfq: skip empty rounds in the
-deficit-refill dequeue loop" says the trigger only needs CAP_NET_ADMIN
-("unshare -Urn is enough"). Could this commit message say the same?
-
-Using Link: rather than Closes: after Reported-by: is fine as it is, since
-checkpatch accepts either.
-
-> diff --git a/net/sched/sch_fq.c b/net/sched/sch_fq.c
-> index a282812c192ee..5c724ec04d903 100644
-> --- a/net/sched/sch_fq.c
-> +++ b/net/sched/sch_fq.c
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
+> index 2b61d8d79bde8..d7ac32294738e 100644
+> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
+> @@ -86,5 +86,87 @@
 
 [ ... ]
 
-> @@ -782,9 +788,76 @@ static struct sk_buff *fq_dequeue(struct Qdisc *sch)
->  	f = head->first;
->  	retry = 0;
->  	if (f->credit <= 0) {
-> +		/* No flow could dequeue in the last full round. Add the
-> +		 * quanta for the rounds still needed in one pass.
-> +		 */
-> +		if (!scanned && f == first) {
-> +			unsigned int rounds = UINT_MAX;
-> +			struct fq_flow *iter, *prev;
-> +			bool skip = true;
-> +
-> +			scanned = true;
-> +			/* new_flows is empty after a full round. */
-> +			for (iter = pband->old_flows.first; iter;
-> +			     iter = iter->next) {
-> +				/* Empty flows don't limit the rounds. */
-> +				if (!fq_peek(iter))
-> +					continue;
-> +				if (iter->credit > 0) {
-> +					skip = false;
-> +					break;
-> +				}
-
-[ ... ]
-
-> @@ -796,6 +869,9 @@ static struct sk_buff *fq_dequeue(struct Qdisc *sch)
->  		if (now + offload_horizon < time_next_packet) {
->  			head->first = f->next;
->  			f->time_next_packet = time_next_packet;
-> +			/* The round's first flow left; the next one takes over. */
-> +			if (f == first)
-> +				first = scanned ? NULL : head->first;
->  			fq_flow_set_throttled(q, f);
->  			goto begin;
->  		}
+> +        "setup": [
+> +            "$IP addr add 10.10.11.10/24 dev $DUMMY",
+> +            "$TC qdisc add dev $DUMMY root handle 1: drr",
+> +            "$TC class add dev $DUMMY parent 1: classid 1:1 drr quantum 256",
+> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 10: netem delay 2s limit 10",
+> +            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match u32 0 0 flowid 1:1",
+> +            "ping -c 2 -s 1472 -i 1 10.10.11.11 -I $DUMMY -W 0.01 >/dev/null 2>&1 &"
+> +        ],
+> +        "cmdUnderTest": "sleep 2.5",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC -s class show dev $DUMMY",
+> +        "matchPattern": "deficit 22b",
 
 [Severity: Medium]
-Can one trap flow per dequeue bring back the full cost here?
+Can this test fail now and then on a loaded or debug kernel? The verify
+step is tied to the background ping only by wall-clock sleeps measured
+against the netem delay. That leaves about 0.5s of slack either way.
 
-In fq_dequeue(), scanned is set to true as soon as the scan starts. That
-includes the case where the scan stops early because a non-empty flow
-already has credit > 0 (skip = false; break;). After that, the
-!scanned && f == first check cannot pass again in this call. fq clears
-scanned only when the band changes.
+exec_cmd() in tdc.py waits only for the shell to exit:
 
-If the flow that became eligible is then throttled, the code above sets
-first to NULL. The remaining flows then go back to one quantum per
-iteration. With the 1 MiB stab inflation and quantum 256, that is about
-N * 4096 iterations again.
+    proc = subprocess.Popen(command,
+        shell=True,
+        ...
+    (rawout, serr) = proc.communicate(timeout=NAMES['TIMEOUT'])
 
-__fq_codel_dequeue() has the same latch and never clears scanned. There the
-trap is an eligible flow whose packets codel_dequeue() all drops, which hits
-the !skb path:
+The ping runs in the background with its output sent to /dev/null. Setup
+can therefore move on before ping has started or queued anything.
+nsPlugin also wraps every command in ip netns exec, which adds more
+startup latency.
 
-	list_del_init(&flow->flowchain);
-	if (flow == first)
-		first = scanned ? NULL : ...;
+Say ping sends at T and T+1. Netem then releases the packets at T+2 and
+T+3, and the verify command runs at about T+2.5 plus overheads.
 
-The commit message mentions this ("A setup built to make that happen every
-time is as slow as before"). In fq, though, one paced or EDT flow with a
-small deficit (SO_TXTIME, SO_MAX_PACING_RATE, maxrate or
-low_rate_threshold) per dequeue looks like enough. The message also doesn't
-cover the early-stop case.
+If verify runs before the first release, the deficit is still 256. If it
+runs after the second release, qlen is 0 and drr_dump_class_stats()
+reports 0:
 
-Would it make sense to allow the scan to run again after the round's first
-flow leaves, instead of once per dequeue?
+net/sched/sch_drr.c:drr_dump_class_stats() {
+    ...
+	memset(&xstats, 0, sizeof(xstats));
+	if (qlen)
+		xstats.deficit = READ_ONCE(cl->deficit);
+    ...
+}
 
-Also, fq_pie_qdisc_dequeue() never drops at dequeue, so an eligible
-non-empty flow always dequeues. Is the "all its packets are dropped by the
-AQM (fq_codel, fq_pie)" wording accurate for fq_pie?
+In both cases "deficit 22b" won't match.
 
-> diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
-> index e6c87a32950f9..bc74690e23236 100644
-> --- a/net/sched/sch_fq_codel.c
-> +++ b/net/sched/sch_fq_codel.c
+Test 57a1 in drr.json and test 2177 in ets.json have the same timing
+dependency. Netem must release the first python3 pair (send time + 3s)
+before verify runs at about 3.5s. It must still hold the second pair,
+which is sent after "sleep 1" plus python3 startup.
+
+Both conditions hold only if python3 startup, ip netns exec and the
+sleep overheads vary by less than about 0.5s.
+
+These are nsPlugin tests, so mp_bins() puts them in the parallel bins.
+tdc.sh runs ./tdc.py -J"$(nproc)", which is capped at 4 workers. That
+means they run alongside other namespace-heavy tests, and startup latency
+gets longer and less predictable on KASAN or lockdep kernels.
+
+Could the tests sync with the traffic instead? One option is to have
+setup wait for the expected qlen or backlog before the sleep. Another is
+a much longer netem delay, so the window doesn't depend on process
+startup time.
 
 [ ... ]
 
-> @@ -298,6 +300,67 @@ static struct sk_buff *__fq_codel_dequeue(struct Qdisc *sch)
->  	flow = list_first_entry(head, struct fq_codel_flow, flowchain);
->  
->  	if (flow->deficit <= 0) {
-
-[ ... ]
-
-> +			if (skip) {
-> +				struct fq_codel_flow *tmp;
-> +
-> +				list_for_each_entry_safe(iter, tmp, &q->old_flows,
-> +							 flowchain) {
-> +					unsigned int k = 0;
-> +
-> +					/* An empty flow leaves the list after
-> +					 * k more refills. If that falls within
-> +					 * the skipped rounds, remove it now.
-> +					 */
-> +					if (iter->head) {
-> +						WRITE_ONCE(iter->deficit,
-> +							   iter->deficit +
-> +							   rounds * q->quantum);
-> +						continue;
-> +					}
-> +					if (iter->deficit <= 0)
-> +						k = DIV_ROUND_UP(1 - iter->deficit,
-> +								 q->quantum);
-> +					if (k < rounds) {
-> +						WRITE_ONCE(iter->deficit,
-> +							   iter->deficit +
-> +							   k * q->quantum);
-> +						list_del_init(&iter->flowchain);
-> +						continue;
-> +					}
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
+> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
+> @@ -1007,5 +1007,59 @@
+>          "teardown": [
+>              "echo \"1\" > /sys/bus/netdevsim/del_device"
+>          ]
+> +    },
+> +    {
+> +        "id": "2177",
+> +        "name": "ETS serves the band that fits its deficit first",
+> +        "category": [
+> +            "qdisc",
+> +            "ets"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP addr add 10.10.11.10/24 dev $DUMMY",
+> +            "sh -c 'echo 1 > /proc/sys/net/ipv6/conf/$DUMMY/disable_ipv6' || true",
+> +            "$TC qdisc add dev $DUMMY root handle 1: ets bands 2 quanta 256 256",
+> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 10: netem delay 3s limit 10",
+> +            "$TC qdisc add dev $DUMMY parent 1:2 handle 20: netem delay 3s limit 10",
+> +            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match ip dport 1111 0xffff flowid 1:1",
+> +            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match ip dport 2222 0xffff flowid 1:2",
+> +            "python3 -c \"import socket; a=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); b=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); a.sendto(b'A'*1472,('10.10.11.11',1111)); b.sendto(b'B'*472,('10.10.11.11',2222))\" >/dev/null 2>&1 &",
+> +            "sleep 1",
+> +            "python3 -c \"import socket; a=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); b=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); a.sendto(b'A'*1472,('10.10.11.11',1111)); b.sendto(b'B'*472,('10.10.11.11',2222))\" >/dev/null 2>&1 &"
+> +        ],
+> +        "cmdUnderTest": "sleep 2.5",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC -j -s class show dev $DUMMY",
+> +        "matchJSON": [
+> +            {
+> +                "class": "ets",
+> +                "handle": "1:1",
+> +                "root": true,
+> +                "stats": {
+> +                    "bytes": 1514,
+> +                    "packets": 1,
+> +                    "backlog": 3028,
+> +                    "qlen": 2
+> +                }
+> +            },
+> +            {
+> +                "class": "ets",
+> +                "handle": "1:2",
+> +                "root": true,
+> +                "stats": {
+> +                    "bytes": 514,
+> +                    "packets": 1,
+> +                    "backlog": 514,
+> +                    "qlen": 1
+> +                }
+> +            }
+> +        ],
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY root"
+> +        ]
+>      }
+>  ]
 
 [Severity: Medium]
-Do flows removed here keep stale CoDel state?
+Does the expectation for band 1:1 match the traffic the setup
+generates? Only two packets ever reach 1:1: the 1514-byte datagrams
+from the two python3 runs. The expected stats say one of them was
+sent (bytes 1514, packets 1), yet both are still queued (backlog 3028,
+qlen 2). Read literally, that needs three packets in the band.
 
-The old one-quantum loop always reached such an empty flow with
-deficit > 0 before any non-empty flow became eligible (k < rounds). It then
-called codel_dequeue() on it. With no skb, that resets the CoDel vars
-before the !skb path calls list_del_init():
+It also differs from 57a1. The commit message calls 2177 the same
+case under ETS, but 57a1 expects bytes 0 and packets 0 for 1:1.
 
-include/net/codel_impl.h:codel_dequeue() {
-	...
-	if (!skb) {
-		vars->first_above_time = 0;
-		WRITE_ONCE(vars->dropping, false);
-		return skb;
-	}
-	...
-}
+If the test really passes, as the commit message says, I suspect the
+reason is how ETS reports band stats. ets_class_dump_stats() returns
+the child qdisc's counters (cl->qdisc->bstats and its qstats), not
+per-band ETS counters.
 
-The skip pass unlinks the flow without that reset. When the flow comes
-back, fq_codel_enqueue() only restores list membership and deficit:
+ets_qdisc_dequeue() looks at the head of the band through
+cl->qdisc->ops->peek(), which for netem is qdisc_peek_dequeued(). That
+calls netem_dequeue(), which bumps netem's bstats. It then parks the
+skb in gso_skb and adds it back to qlen and backlog. So "bytes": 1514
+would be the packet ETS peeked at and couldn't afford, not one it
+sent.
 
-	if (list_empty(&flow->flowchain)) {
-		list_add_tail(&flow->flowchain, &q->new_flows);
-		q->new_flow_count++;
-		WRITE_ONCE(flow->deficit, q->quantum);
-	}
+If that is what happens, this assertion pins netem's peek accounting
+rather than the ETS deficit refill. A change to how ETS peeks, or to
+how the child's counters are kept, would break the test without any
+change in scheduling order. If it isn't what happens, the test fails
+every time.
 
-Suppose the flow's last packet had sojourn >= target while the backlog was
-above mtu. Then first_above_time stays non-zero and in the past. On the
-first packet after the flow comes back, codel_should_drop() takes the
-codel_time_after(now, vars->first_above_time) branch and returns
-ok_to_drop.
-
-If dropping is still true and drop_next has passed, codel_dequeue() goes
-straight into its drop loop with the old count and rec_inv_sqrt. The old
-code would have set first_above_time = now + interval and not dropped.
-
-The commit message says the new pass matches the old loop, but the CoDel
-state differs here. fq and fq_pie don't have this side effect when they
-remove a flow, so only fq_codel seems to be affected.
-
-[ ... ]
-
-> +		/* Remember which flow started this round. */
-> +		if (!first)
-> +			first = flow;
->  		WRITE_ONCE(flow->deficit, flow->deficit + q->quantum);
->  		list_move_tail(&flow->flowchain, &q->old_flows);
->  		goto begin;
-
-[Severity: High]
-This is a pre-existing issue, not one introduced by this patch, but should
-sch_cake get the same treatment? cake_dequeue() still has the DRR++ refill
-loop this series replaces in fq_codel:
-
-net/sched/sch_cake.c:cake_dequeue() {
-	...
-	if (flow->deficit <= 0) {
-		...
-		WRITE_ONCE(flow->deficit,
-			   flow->deficit + cake_get_flow_quantum(b, flow, q->config->flow_mode));
-		list_move_tail(&flow->flowchain, &b->old_flows);
-
-		goto retry;
-	}
-	...
-}
-
-cake_overhead() starts from qdisc_pkt_len(), so the same 1 MiB stab
-overhead applies to cake.
-
-cake_set_rate() clamps b->flow_quantum to 300..1514. cake_get_flow_quantum()
-then scales it by quantum_div[host_load], and host_load can reach
-CAKE_QUEUES (1024). So the average refill can drop below one byte.
-
-With up to 1024 bulk flows in a tin, that is roughly 1024 * (2^20 / 300),
-about 3.6M iterations per dequeue without host scaling, and far more with
-it. All of this runs under the root qdisc lock with BH disabled.
-
-hhf_dequeue() in sch_hhf.c has the same loop. It only has two WDRR buckets
-and quantum >= 256, though, so its cost doesn't grow with the number of
-flows.
+Could you confirm which it is? If it's the peek artifact, would it be
+better to assert only on band 1:2, or on something that reflects ETS's
+own dequeue decision? Either way, please note in the test why 1:1 is
+expected to differ from 57a1.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-TIAE.v2.r0.20261015163454%40mojatatu.com
