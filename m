@@ -1,156 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-4.mta0.migadu.com [91.218.175.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC92499F31;
-	Mon, 19 Oct 2026 08:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B077B49BB58
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 08:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792399422; cv=none; b=GovAG6Bm2b8EQqcTEqRJsAAajghUTTIapOWbZf9sUprRI3d0F2jxr4ekHa1zLLkqIAyQx30nIKoQIXWwQAWEDOz7dJuUjym3oGyK+b5PYceugdGHe1x/68wmqyFIoFyHFTUFw3O4E+x0UjSRFDvDHVdav5WxmIPXxt4ohxfLneM=
+	t=1792399657; cv=none; b=oDEldqAcRfgOdQF9Rfdwb0Y/WRqJIVcctXcV61omH2AmPNUHeAucchI444ahYkmJqpMvTwU28x4XMVwFuW/fcyKoYGkZIF6eupkh88sCdNisXx6PEbWFQA0EbZs4HRdLoCRN9kv+j0R5d/VMakPcIDe+B9arxzYuZ4dbXb9q1cM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792399422; c=relaxed/simple;
-	bh=MhBi0tOU15TuSVtmzTAWS1mGzQCHjqPVTw8i0JLakIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dvg5/YSx/+O8t7KkOMjLdBtcjNoci+XwUWQRE/QR533c+sDoD2VI7B5yQie4XxekyiwFmVgyf+tPBqr/fzVFWU+OLWGhSrd1s/eTKJ0Rw2LSJybWs8YXGgXCJLY2lATMZyvpNOY4RqoNx3kQsaYbkQyHnCtMExf2sy/jDazPpbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PSqmWsFb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792399657; c=relaxed/simple;
+	bh=jFAkyj5yoPWtYLC+zOW72R2wyKdGUE2qk/tecO0yjmA=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=p87TCJqMvNhYAGi/nFxaBQv95nqoLbjIMXPIATNi4DJgNGt9cgI0DwSZ3PvdQa72A/RM+fYhFL+9EKb/R+tAj1vlwfGoOLMUl3KvjvKl24J1wwQ7nwVBlIN3/sIYWEMDNR4pdaJ9OlL15ff3flMiz3QUxFqPON3RZsDo3vQ3aUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JZ1ZcpQ6; arc=none smtp.client-ip=91.218.175.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSqmWsFb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B2F1F000C4;
-	Mon, 19 Oct 2026 08:43:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792399420;
-	bh=fy26aZDFXGwTKUczlKhKEkeMGJBaoVyPi8d9QO/iEBg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PSqmWsFbqFiDSBjC/53uW07HkSAkEyNdAnioC4t11fPnuQQjqwXCsz5QZxWNzvtKu
-	 s4NT+DDvVz7C79CnHxcyBjU0f4l1lKcg5JTEH0QsCEE+8STWWee65KsizEA7dyjTZ8
-	 rkrYYVcPNOk4KIz5Z/pwmWfNg68KxagnnLostsYKXPvc2hAccesbB0SaU8mDWIty5O
-	 I9JdWqLvfLfMIr1zOwfQVK1YEFlz4FRAdFPltQBGqL4TTTSOZTSQWBe8UD0uxFlE/K
-	 QqHRKz9awTFYvfx42xk5lPAuTxtswSLDF0anNn02GSjw67Aj0OcQsuvULQ0XP4ToYp
-	 XHWqil432b9Uw==
-Date: Mon, 19 Oct 2026 11:43:28 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org, kuba@kernel.org,
-	enelsonmoore@gmail.com, bp@alien8.de, shuah@kernel.org,
-	david@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-	ljs@kernel.org, mhocko@suse.com, skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org, vbabka@kernel.org,
-	dapeng1.mi@linux.intel.com, linux-kernel@vger.kernel.org,
-	corbet@lwn.net, surenb@google.com, kexec@lists.infradead.org,
-	pratyush@kernel.org, rdunlap@infradead.org, elver@google.com,
-	graf@amazon.com, lirongqing@baidu.com, liam@infradead.org,
-	jlayton@kernel.org
-Subject: Re: [PATCH v1 0/8] kho: add read-only Kexec Handover mode
-Message-ID: <atXYMK5tmW8f23gs@kernel.org>
-References: <20261019021111.990394-1-pasha.tatashin@soleen.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JZ1ZcpQ6"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=jFAkyj5yoPWtYLC+zOW72R2wyKdGUE2qk/tecO0yjmA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792399653; v=1; x=1793004453;
+ b=JZ1ZcpQ6rs/nEXE0tIhJ2SEUgsoq0dF8fHk1c2XZC/ntxtHo0YRtOJW3N9MnO5OHSt69/45h
+ cFJMesqOXbslNCCjA7t3qGuv7hGFkdkt++X/8EHLPGzVWC05S1O2uL/N48ZTniAem+GJ/Kw3DVX
+ UvENTPelfBKUpx6sW5sqAEW8=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id d39df06ac6c62a0f;
+	Mon, 19 Oct 2026 08:47:33 +0000
+X-Mizu-Trace-ID: d39df06ac6c62a0f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <6f2cb853-5eb5-4f3b-9021-ab24735a61c3@linux.dev>
+Date: Mon, 19 Oct 2026 16:47:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261019021111.990394-1-pasha.tatashin@soleen.com>
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>,
+ ameryhung@gmail.com, alexei.starovoitov@gmail.com
+Subject: Re: [RFC PATCH v10 0/4] blk-iocost: add BPF struct_ops cost model
+ support
+To: Tejun Heo <tj@kernel.org>
+References: <20261003124045.1289305-1-cui.tao@linux.dev>
+ <a3dfbc2d-8580-478c-8189-3794d49aee11@linux.dev>
+ <20e2b2a51fd97292add8d8e527b14a45@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <20e2b2a51fd97292add8d8e527b14a45@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Pasha,
+Hello Tejun,
 
-Some brief comments before digging in.
-
-On Sun, Oct 18, 2026 at 10:11:03PM -0400, Pasha Tatashin wrote:
-> This series introduces a read-only Kexec Handover mode, enabled at boot
-> via 'kho_ro=<pa>' pointing to the physical address of the KHO FDT.
+在 2026/10/17 01:49, Tejun Heo 写道:
+> Hello, Tao.
 > 
-> In standard KHO, the target kernel takes ownership of preserved memory
-> during early boot, initializes struct pages for preserved folios, and
-> reclaims KHO metadata and preserved pages back into the page allocator
-> as they are restored.
+> On Thu, 15 Oct 2026 20:00:20 +0800, Tao Cui wrote:
+>> When you have a chance, could you take a look at this series? I'd
+>> appreciate your thoughts on whether the implementation still matches
+>> what we discussed, or whether it has drifted somewhere along the way.
 > 
-> In some scenarios (such as a caretaker, inspection kernel, firmware), a
-> kernel needs to inspect and consume preserved KHO subtrees, radix trees,
-> and serialized metadata without taking ownership of or modifying the KHO
-> state, leaving the preserved KHO tree intact for a subsequent kernel.
-> In this mode, the KHO physical memory lies outside the kernel's direct
-> map.
-> 
-> To support this cleanly without duplicating KHO traversal logic:
-> - Patch 1 exposes the physical address of the outgoing KHO FDT via
->   /sys/kernel/debug/kho/out/fdt_phys so userspace tooling can pass it
->   to a 'kho_ro=<pa>' kernel.
-
-We already pass the physical address, why adding a boolean kho_ro is not
-enough?
-
-> - Patch 2 moves the shared radix-tree key encoding and indexing,
->   vmalloc flag conversion, and FDT validation and subtree lookup helpers
->   to kernel/liveupdate/kexec_handover_internal.h so they can be shared
->   between standard and read-only KHO.
-> - Patch 3 hardens kho_restore_vmalloc() by introducing
->   kho_vmalloc_validate() in kernel/liveupdate/kexec_handover_internal.h
->   to validate the preservation metadata header and flags before
->   restoring the vmalloc area.
-
-The diff for kexec_handover_internal.h 
-
->  kernel/liveupdate/kexec_handover_internal.h   | 171 +++++++-
-
-seems a wee too large. Maybe some of this should move to a .c file?
-
-> - Patch 4 avoids modifying ser->next and bs->head_pa in kho_block_add()
->   and kho_block_set_shrink_one() when operating on an incoming block
->   set, as the chain is already linked and incoming blocks must not be
->   modified in KHO read-only mode.
-> - Patch 5 adds CONFIG_KEXEC_HANDOVER_READONLY and
->   kernel/liveupdate/kexec_handover_ro.c. When booted with
->   'kho_ro=<pa>', preserved KHO metadata is mapped read-only
->   (PAGE_KERNEL_RO), with the FDT and radix-tree nodes mapped lazily on
->   first visit and kept cached, providing read-only implementations of
->   kho_retrieve_subtree(), kho_restore_vmalloc(),
->   kho_ro_lookup_folio_order(), kho_ro_map_folio(), and kho_ro_unmap().
-
-What are the expected users of these APIs?
-
-> - Patch 6 updates kho_block to map incoming serialized blocks read-only
->   via kho_ro_map_folio() and unmap them via kho_ro_unmap() in read-only
->   KHO mode.
-> - Patches 7 and 8 extend test_kho and tools/testing/selftests/kho/vmtest.sh
->   to test read-only KHO handover when preserved memory lies outside
->   the boot kernel's initial memory range on both x86_64 and arm64.
-> 
-> Pasha Tatashin (8):
->   kho: expose physical address of outgoing FDT
->   kho: move radix tree, vmalloc, and FDT helpers to internal header
->   kho: validate preservation metadata in kho_restore_vmalloc()
->   kho: do not modify incoming serialized blocks
->   kho: add read-only Kexec Handover mode
->   kho: support read-only KHO mode in kho_block
->   kho: test: support read-only KHO mode in test_kho
->   selftests: kho: add read-only KHO test to vmtest.sh
-> 
->  .../admin-guide/kernel-parameters.txt         |   6 +
->  Documentation/admin-guide/mm/kho.rst          |   3 +
->  include/linux/kexec_handover.h                |  53 ++-
->  kernel/liveupdate/Kconfig                     |  16 +
->  kernel/liveupdate/Makefile                    |   4 +-
->  kernel/liveupdate/kexec_handover.c            | 142 +------
->  kernel/liveupdate/kexec_handover_debugfs.c    |  22 +-
->  kernel/liveupdate/kexec_handover_internal.h   | 171 +++++++-
->  kernel/liveupdate/kexec_handover_ro.c         | 378 ++++++++++++++++++
->  kernel/liveupdate/kho_block.c                 |  92 +++--
->  lib/Kconfig.debug                             |   2 +-
->  lib/test_kho.c                                |  68 +++-
->  tools/testing/selftests/kho/arm64.conf        |   3 +
->  tools/testing/selftests/kho/init.c            |  38 +-
->  tools/testing/selftests/kho/vmtest.sh         | 103 +++--
->  tools/testing/selftests/kho/x86.conf          |   1 +
->  16 files changed, 881 insertions(+), 221 deletions(-)
->  create mode 100644 kernel/liveupdate/kexec_handover_ro.c
-> 
-> 
-> base-commit: 27be83a12b246b6b3783e7d3ac5c378ff7520f25
-> -- 
-> 2.56.0.176.g3575e65682-goog
+> The behavior matches what was discussed, but the implementation needs a
+> lot of cleanup, and there are bugs in the detach path and the
+> iocg_init()/iocg_free() pairing. Details are in the replies to the
+> patches.
 > 
 
--- 
-Sincerely yours,
-Mike.
+Thank you for the careful review, and especially for confirming that
+the behavior is where we wanted it.
+
+The two bugs are mine to fix, and v11 reworks both. The detach path
+follows your map-reference suggestion, and the iocg_init()/iocg_free()
+pairing moves to ioc_pd_online() as you described, with iocg_free()
+keeping the delivered flag per your catch about bios still holding the
+blkg across offline. 
+
+>> Sashiko flagged a possible ABBA between the BPF paths and
+>> ioc_cost_model_write(): attach/detach take the queue freeze before
+>> q->rq_qos_mutex, while the cost-model write holds rq_qos_mutex across
+>> its freeze. That is indeed the current ordering, but I don't think this
+>> can deadlock because the queue freeze is a depth counter
+> 
+> The attach and detach order matches ioc_qos_write(). The reverse order in
+> ioc_cost_model_write() predates this series and is better fixed
+> separately. An earlier attempt to convert it ran into blk_iocost_init()'s
+> percpu allocation under the freeze:
+> 
+>   https://lore.kernel.org/all/aV5OwAvw1sRF1IW1@fedora/
+> 
+Agreed. The write path ordering predates the series and
+I've left it alone there.
+
+The implementation cleanup from the patch replies is in v11 as well.
+
+Thanks,
+Tao
+
+> Thanks.
+> 
+
