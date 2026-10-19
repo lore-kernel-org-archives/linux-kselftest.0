@@ -1,60 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792445981;
-	b=KAxsouSWLTG8pH8cu9K7Orjx7VWPJv7pheUDTn+7EYNmL3rNVvGw2PeYEML/R/5t2cDU
-	 hwgN02ws0FGwTxD6W/p3rPd/LHjt9rP9L/WooBqwbYSIJR7WrvSg1eq6Wm/M6lMknzfLK
-	 eWMOVvcbNt+FPEXi5nyJAEWHtgg4NuSBMskFFd3ZDIaeDiIFCdaLuqJxp3KTC4XkBLYm+
-	 KeAh6/bIYGifaLRyri6u/ssjDmVLN1DKccBVIMfAdhZzf2EdE3Y1XhcNCctrCzLJPaxPW
-	 mkt0ZHKsvNrdSry04efvp7AyqHgp/jGzUJX37VY0EAcYZTiF6PmMudOYiVKb51x9i1Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792445981;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=Ayfk9D707IuSir5watYa+UkolTblVMoJkmhTWHZ/yKw=;
-	b=UlsCfkZVNhge5pIbRdtizTxtrZnVOR53tU6IunJ5M6rpyulimNHBXQJs2+8EP8dZ54+w
-	 1ybN/0VVIpmsSHTIVSHuYfTdemAbFOZbaIgBg1vp77PFI0t+gP0yLYYVMckJJ4bJrknkM
-	 soy+K6l9Ba4YF+utU/GWOcgz+2I7SglIc9Wi2+EzrntpwBT4DjWyNqxX+6EWBjI64T9WM
-	 rKu7uroq0KhoHDnEsFKtv+ekqqOsy3DRzH1cpZZKSLsIx2IoC9vPnK9WjA65OT2pX+TtR
-	 WvvR9HXnMGd/2qoNuYXed4PId2/SAOL3dHyxRFckTvUw0pB5nFvOEbeufKi/h7IZTrg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QcBG3MOp;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1792446046;
+	b=gngYgEkwwUS9o4+bG5O315oQm4DzkUt9uua+zES3TfSYTPzTwnNisdyyu5vaB4kCTPGU
+	 vu61MahpBz8Fx/bTCjahzNC8FI7XA+W7VC8ZDezKiY0AEBpgQUfSkG5uo/OOGYeSm3aBY
+	 b4kIoaILjfas7myuGEQ+udsbooCShXvxQw1PplUiCzjy80eEd+hAJDTWDOb5U6UWHPTeR
+	 ipJ0QYU8xLfO8wSvJhGsZFFHgbOlS3mU8mYOrCaXlFL8hNl/YtDg4DucHsWqKZM9bi+G6
+	 bHex0Z+rUCBUlb8XSKd2LnzF/k3ipES6d/1KxFBJNrGGtvCFVc8uTQnUPGGcbVG+LHA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792446046;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=r5lantx5T1q6bN4wiI36oD3VJ/9gICPU472zEAG06qk=;
+	b=IXF3EfqYCoKGXRzqmxrlAHlMn98/tRmWmNlkZ0kEIkW1riG5Gi9LqC8WEkdhn5U0Bh6c
+	 53VGExxXsPebV4OmgKW7vTREcfQHQIq8Q9jcEkxPvBZZYHn38+32gG3fohlr/uHA+15nM
+	 uM5rmoZo5ridAAxeSczeOp04TNwA7BuY59vN7Q7GUOS2CDyDJOsf8EYIm4jJAWPGtcwNu
+	 qMS1kXGRagaTlLvlFWtIVoNw3pn1oA7+RvrJ+jtT19oVCyh8Y4tr1GN1zgZW/QolBsUu/
+	 00/+84Dt6jfpdYfCsPQicvK1pOEAHAH5BJ6QatztFz57LMw6ibmHKvd6f/w0zZBulFQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=grmjwNzc;
+	arc=fail smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B48D606A32A;
-	Mon, 19 Oct 2026 21:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C02606A339;
+	Mon, 19 Oct 2026 21:40:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QcBG3MOp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF5B1F000C4;
-	Mon, 19 Oct 2026 21:39:39 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=grmjwNzc
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1792446045;
+	b=eGGeAbMjuvThgHW4jO3ThLv+PfV6w1sBZ3U4aB3htHMORPaodIZTaUZgg/5hjtTN8GHS
+	 wXd9SPAPorqnG0LeT3EOIe7M6aXENHaiw9abEU9VYPwYZo2ONhG2ni8wXstxezd0WL1mh
+	 THEoZFfbb1hdS6ePPBOeO/XaHkAiaA9PtHSTyy/DOO33tuN+Jh0PcZOmgKkRcvN5ooxLj
+	 w5oRt0lGp55k05ElyL9tGJG7ChomQrW9rAT7fhy8HAMiTtT4x8QMguWwBNcGza35yTVYT
+	 mToDIMevzEPPqnonLcjbGmUoA9bhHuRszLd5w2Dnh+4C9ojMZUXz2KqEykIwojZxiAg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792446045;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=r5lantx5T1q6bN4wiI36oD3VJ/9gICPU472zEAG06qk=;
+	b=EsDZU8mrXSUVLhqAORAoKy+pJtedIWE2PxCUdDz3zJ5ikpHeYwKosz8ZDY+anzrv1CxV
+	 qAW7s6WOUQd4NTjIdgHskdtYiVd0co8YOpKoBUBtIFQ7Kp3oMyKHhZLHaA8gjiu7rGkfl
+	 Rvf4kpt6TG+2kTnk2awHmZxzz0uFXOIiWD4NQwGwuKhLB3Xz0W5FxeySqt8jZm/GQGneT
+	 5Sul/WAM23gisfZV3y/q/FvYOAEnlaQIPJX8HieHFlxQgg6cqgc1r0y3FJ4SjGLYN5z+3
+	 fxMb7mbgNu0CB403P0nsnjZmA9rTrtsuQJ7N18V6z8L1IxMHVmRBAX67BNbTsE2PuGw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B2AAE1F000C6;
+	Mon, 19 Oct 2026 21:40:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792445980;
-	bh=Ayfk9D707IuSir5watYa+UkolTblVMoJkmhTWHZ/yKw=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=QcBG3MOpaF9GV6/c8ZTcp8ERRbLoEnROTvqZkUNu4g37COjlGtpQofbpwjEI2FmBo
-	 arPgTe3+1kVTM1vMOvlBn/wtzsTZscKo/XwX2sXSWcis9hnV7zzlNxPjZA9+tW2C07
-	 ajx3qCTgS7ARLmP4EEyQHqy+y7ahWXQcmRyZ0+q5/cIVYqtSXlJ2Lvkc4XSQGZy5Xc
-	 G1KjfGG4Tak/3pV2mw6k5CiO7VYfXuono+vrNIQCE8TB11Pgyx6gbTHHD8I7VKnDn6
-	 MpSWoMSFdAyf4vUHavH7IStCfqj/4I4CBm6cF6SCq3+ER4d4Mck8SbdYesP3plijiI
-	 no6S1VCyAzM/Q==
-Subject: Re: [PATCH net-next v2 3/3] selftests: tc-testing: pin DRR and ETS
- deficit refill semantics
-From: netdev-bot+sashiko@kernel.org
-To: victor@mojatatu.com
-Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, jhs@mojatatu.com, jiri@resnulli.us, netdev@vger.kernel.org,
- horms@kernel.org, sashiko-bot@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-Date: Mon, 19 Oct 2026 21:39:38 +0000
-Message-ID: <179244597889.3135.16923738862014270514@kernel.org>
-In-Reply-To: <QDISC-TIAE.v2.r0.20261015163454-3@mojatatu.com>
-References: <QDISC-TIAE.v2.r0.20261015163454-3@mojatatu.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1792446045;
+	bh=r5lantx5T1q6bN4wiI36oD3VJ/9gICPU472zEAG06qk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=grmjwNzcQ5BRj//giAsTZ3a4i41shrVcHWCOgpfCOKxwgZlcrFqvRKJ+SpVpCLoNv
+	 8iwrqOm//IZwaKdYjCjoeqHQdB7ns8+cxthdUQLXV/62WT4B/kYvsVwu0Z/HQxJJ52
+	 F/q84fuRZz7nVR+WbwLXBlHjfTZ+C2n1D16daEsnDo7NlezMO66SqR4TDi8FwZg38H
+	 4LjJoUhZ6G9clTljLjgZ9TdG5bx71+e05deo9xqqPJvSgYuB30Y4KTt8KI+GM4yK4e
+	 RUPZiWHdPCZhyUqyZ7VB5gbxesh0b3jSvePi6Ncrao9CbAsYGL5cXpT9/nP4+aasWz
+	 gCgbD7IeP+GRQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 083D140631;
+	Mon, 19 Oct 2026 21:40:43 +0000 (UTC)
+From: Manuel Huber via B4 Relay <devnull+manuelh.nvidia.com@kernel.org>
+Date: Mon, 19 Oct 2026 21:40:25 +0000
+Subject: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,203 +82,269 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+In-Reply-To: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+To: Fan Wu <wufan@kernel.org>, David Howells <dhowells@redhat.com>, 
+ Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, 
+ Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ linux-security-module@vger.kernel.org, keyrings@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Manuel Huber <manuelh@nvidia.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792446042; l=7425;
+ i=manuelh@nvidia.com; s=20261019; h=from:subject:message-id;
+ bh=pzmdNrjH0K9jBZOsygXh8Yb7f2fOt7gvUDgHY5ObJnM=;
+ b=224d2yttNRkgR9OFGtyo3Av3E6VfoYQzjQs75w2w9gzlveaL4NqBDAD/bPpkGmLk8nKssW5tw
+ bnMFsrT4dQqDt7AuC0tNnj5u5wi9HMLbltX0uZGNIerHOwUPuFqmWxJ
+X-Developer-Key: i=manuelh@nvidia.com; a=ed25519;
+ pk=uKggxpZ/mM0qtFnudxvh5Dfz8I6VoehwoM3eYCe3tyU=
+X-Endpoint-Received: by B4 Relay for manuelh@nvidia.com/20261019 with
+ auth_id=1244
+X-Original-From: Manuel Huber <manuelh@nvidia.com>
+Reply-To: manuelh@nvidia.com
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+From: Manuel Huber <manuelh@nvidia.com>
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 0
+Add a dedicated .ipe keyring for IPE policy signature verification,
+modeled after the .dm-verity and .bpf keyring implementations.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+With this, userspace can provision its own keys into the keyring,
+then restrict it and activate it for IPE policy signature verification.
 
-- [Medium] The three new tests (3f3e, 57a1, 2177) coordinate with their
-  background traffic only through wall-clock sleeps measured against…
-- [Medium] selftests: tc: mathematically contradictory expected stats in
-  ETS test 2177
+This enables scenarios in which a trusted userspace component generates
+an IPE policy, and creates an ephemeral policy-signing key pair,
+provisions its public certificate, and restricts the IPE keyring during
+the early lifetime of a system. The trusted component can then sign the
+IPE policy, destroy the private key, and load and activate the policy.
+During that phase, the system is considered in a trusted state whereas
+the system transitions into a possibly untrusted state afterwards,
+running arbitrary user-provided applications. In such a scenario, the
+trusted userspace component could reside on a dm-verity protected
+rootfs disk, and applications would reside on additional dm-verity
+protected disks. The latter disks would be dynamically attached and
+their dm-verity root hashes and/or signatures not known a priori to
+launching the system.
 
---
+A concrete usage scenario could be Kata Containers, which enables
+running Kubernetes pods in ephemeral, headless utility VMs, possibly
+without systemd. The rootfs disk is static and known beforehand, but
+containerd's image layers might be acquired and transported into the
+VM using the erofs snapshotter and dynamic block device attachment
+using dm-verity.
 
-selftests: tc-testing: pin DRR and ETS deficit refill semantics
+Signed-off-by: Manuel Huber <manuelh@nvidia.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt |  9 +++
+ security/ipe/Makefile                           |  1 +
+ security/ipe/ipe.c                              |  2 +
+ security/ipe/keyring.c                          | 79 +++++++++++++++++++++++++
+ security/ipe/keyring.h                          | 16 +++++
+ security/ipe/policy.c                           | 10 ++++
+ 6 files changed, 117 insertions(+)
 
-This adds three tdc tests (3f3e, 57a1 and 2177) that check DRR and ETS
-deficit refill. Each test puts netem delay qdiscs under DRR or ETS. It
-starts background traffic in setup and checks the class stats after a
-fixed sleep.
-
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
-> index 2b61d8d79bde8..d7ac32294738e 100644
-> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
-> @@ -86,5 +86,87 @@
-
-[ ... ]
-
-> +        "setup": [
-> +            "$IP addr add 10.10.11.10/24 dev $DUMMY",
-> +            "$TC qdisc add dev $DUMMY root handle 1: drr",
-> +            "$TC class add dev $DUMMY parent 1: classid 1:1 drr quantum 256",
-> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 10: netem delay 2s limit 10",
-> +            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match u32 0 0 flowid 1:1",
-> +            "ping -c 2 -s 1472 -i 1 10.10.11.11 -I $DUMMY -W 0.01 >/dev/null 2>&1 &"
-> +        ],
-> +        "cmdUnderTest": "sleep 2.5",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC -s class show dev $DUMMY",
-> +        "matchPattern": "deficit 22b",
-
-[Severity: Medium]
-Can this test fail now and then on a loaded or debug kernel? The verify
-step is tied to the background ping only by wall-clock sleeps measured
-against the netem delay. That leaves about 0.5s of slack either way.
-
-exec_cmd() in tdc.py waits only for the shell to exit:
-
-    proc = subprocess.Popen(command,
-        shell=True,
-        ...
-    (rawout, serr) = proc.communicate(timeout=NAMES['TIMEOUT'])
-
-The ping runs in the background with its output sent to /dev/null. Setup
-can therefore move on before ping has started or queued anything.
-nsPlugin also wraps every command in ip netns exec, which adds more
-startup latency.
-
-Say ping sends at T and T+1. Netem then releases the packets at T+2 and
-T+3, and the verify command runs at about T+2.5 plus overheads.
-
-If verify runs before the first release, the deficit is still 256. If it
-runs after the second release, qlen is 0 and drr_dump_class_stats()
-reports 0:
-
-net/sched/sch_drr.c:drr_dump_class_stats() {
-    ...
-	memset(&xstats, 0, sizeof(xstats));
-	if (qlen)
-		xstats.deficit = READ_ONCE(cl->deficit);
-    ...
-}
-
-In both cases "deficit 22b" won't match.
-
-Test 57a1 in drr.json and test 2177 in ets.json have the same timing
-dependency. Netem must release the first python3 pair (send time + 3s)
-before verify runs at about 3.5s. It must still hold the second pair,
-which is sent after "sleep 1" plus python3 startup.
-
-Both conditions hold only if python3 startup, ip netns exec and the
-sleep overheads vary by less than about 0.5s.
-
-These are nsPlugin tests, so mp_bins() puts them in the parallel bins.
-tdc.sh runs ./tdc.py -J"$(nproc)", which is capped at 4 workers. That
-means they run alongside other namespace-heavy tests, and startup latency
-gets longer and less predictable on KASAN or lockdep kernels.
-
-Could the tests sync with the traffic instead? One option is to have
-setup wait for the expected qlen or backlog before the sleep. Another is
-a much longer netem delay, so the window doesn't depend on process
-startup time.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-> @@ -1007,5 +1007,59 @@
->          "teardown": [
->              "echo \"1\" > /sys/bus/netdevsim/del_device"
->          ]
-> +    },
-> +    {
-> +        "id": "2177",
-> +        "name": "ETS serves the band that fits its deficit first",
-> +        "category": [
-> +            "qdisc",
-> +            "ets"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP addr add 10.10.11.10/24 dev $DUMMY",
-> +            "sh -c 'echo 1 > /proc/sys/net/ipv6/conf/$DUMMY/disable_ipv6' || true",
-> +            "$TC qdisc add dev $DUMMY root handle 1: ets bands 2 quanta 256 256",
-> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 10: netem delay 3s limit 10",
-> +            "$TC qdisc add dev $DUMMY parent 1:2 handle 20: netem delay 3s limit 10",
-> +            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match ip dport 1111 0xffff flowid 1:1",
-> +            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match ip dport 2222 0xffff flowid 1:2",
-> +            "python3 -c \"import socket; a=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); b=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); a.sendto(b'A'*1472,('10.10.11.11',1111)); b.sendto(b'B'*472,('10.10.11.11',2222))\" >/dev/null 2>&1 &",
-> +            "sleep 1",
-> +            "python3 -c \"import socket; a=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); b=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); a.sendto(b'A'*1472,('10.10.11.11',1111)); b.sendto(b'B'*472,('10.10.11.11',2222))\" >/dev/null 2>&1 &"
-> +        ],
-> +        "cmdUnderTest": "sleep 2.5",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC -j -s class show dev $DUMMY",
-> +        "matchJSON": [
-> +            {
-> +                "class": "ets",
-> +                "handle": "1:1",
-> +                "root": true,
-> +                "stats": {
-> +                    "bytes": 1514,
-> +                    "packets": 1,
-> +                    "backlog": 3028,
-> +                    "qlen": 2
-> +                }
-> +            },
-> +            {
-> +                "class": "ets",
-> +                "handle": "1:2",
-> +                "root": true,
-> +                "stats": {
-> +                    "bytes": 514,
-> +                    "packets": 1,
-> +                    "backlog": 514,
-> +                    "qlen": 1
-> +                }
-> +            }
-> +        ],
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY root"
-> +        ]
->      }
->  ]
-
-[Severity: Medium]
-Does the expectation for band 1:1 match the traffic the setup
-generates? Only two packets ever reach 1:1: the 1514-byte datagrams
-from the two python3 runs. The expected stats say one of them was
-sent (bytes 1514, packets 1), yet both are still queued (backlog 3028,
-qlen 2). Read literally, that needs three packets in the band.
-
-It also differs from 57a1. The commit message calls 2177 the same
-case under ETS, but 57a1 expects bytes 0 and packets 0 for 1:1.
-
-If the test really passes, as the commit message says, I suspect the
-reason is how ETS reports band stats. ets_class_dump_stats() returns
-the child qdisc's counters (cl->qdisc->bstats and its qstats), not
-per-band ETS counters.
-
-ets_qdisc_dequeue() looks at the head of the band through
-cl->qdisc->ops->peek(), which for netem is qdisc_peek_dequeued(). That
-calls netem_dequeue(), which bumps netem's bstats. It then parks the
-skb in gso_skb and adds it back to qlen and backlog. So "bytes": 1514
-would be the packet ETS peeked at and couldn't afford, not one it
-sent.
-
-If that is what happens, this assertion pins netem's peek accounting
-rather than the ETS deficit refill. A change to how ETS peeks, or to
-how the child's counters are kept, would break the test without any
-change in scheduling order. If it isn't what happens, the test fails
-every time.
-
-Could you confirm which it is? If it's the peek artifact, would it be
-better to assert only on band 1:2, or on something that reflects ETS's
-own dequeue decision? Either way, please note in the test why 1:1 is
-expected to differ from 57a1.
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index e75344f4e0cd..fd508dd779ed 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -2733,6 +2733,15 @@ Kernel parameters
+ 			Determine whether IPE starts in permissive (0) or
+ 			enforce (1) mode. The default is enforce.
+ 
++	ipe.keyring_unsealed=
++			[IPE]
++			Format: <bool>
++			When set to 1, leave the IPE policy keyring
++			unsealed after initialization so userspace can provision
++			keys. Once the keyring is nonempty and restricted, it is
++			searched during policy-signature verification. The default
++			is 0, which creates the keyring restricted and empty.
++
+ 	ipe.success_audit=
+ 			[IPE]
+ 			Format: <bool>
+diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+index 2ffabfa63fe9..109e736696a5 100644
+--- a/security/ipe/Makefile
++++ b/security/ipe/Makefile
+@@ -20,6 +20,7 @@ obj-$(CONFIG_SECURITY_IPE) += \
+ 	hooks.o \
+ 	fs.o \
+ 	ipe.o \
++	keyring.o \
+ 	policy.o \
+ 	policy_fs.o \
+ 	policy_parser.o \
+diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+index 495bb765de1b..f5232f850dc2 100644
+--- a/security/ipe/ipe.c
++++ b/security/ipe/ipe.c
+@@ -7,6 +7,7 @@
+ #include "ipe.h"
+ #include "eval.h"
+ #include "hooks.h"
++#include "keyring.h"
+ 
+ extern const char *const ipe_boot_policy;
+ bool ipe_enabled;
+@@ -97,4 +98,5 @@ DEFINE_LSM(ipe) = {
+ 	.init = ipe_init,
+ 	.blobs = &ipe_blobs,
+ 	.initcall_fs = ipe_init_securityfs,
++	.initcall_late = ipe_keyring_init,
+ };
+diff --git a/security/ipe/keyring.c b/security/ipe/keyring.c
+new file mode 100644
+index 000000000000..ea8d164b62a6
+--- /dev/null
++++ b/security/ipe/keyring.c
+@@ -0,0 +1,79 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++ */
++
++#include <linux/cred.h>
++#include <linux/err.h>
++#include <linux/key.h>
++#include <linux/moduleparam.h>
++
++#include "ipe.h"
++#include "keyring.h"
++
++static struct key *ipe_keyring __ro_after_init;
++
++static bool ipe_keyring_unsealed __ro_after_init;
++
++/* Set the right module name for built-in parameters. */
++#ifdef KBUILD_MODNAME
++#undef KBUILD_MODNAME
++#define KBUILD_MODNAME "ipe"
++#endif
++
++module_param_named(keyring_unsealed, ipe_keyring_unsealed, bool, 0444);
++MODULE_PARM_DESC(keyring_unsealed, "Leave the IPE keyring unsealed");
++
++/**
++ * ipe_keyring_lookup() - Get the IPE keyring if it is ready for use.
++ *
++ * Return: A borrowed pointer to the IPE keyring if it is nonempty and
++ * restricted, or %NULL otherwise. The keyring has system lifetime.
++ */
++struct key *ipe_keyring_lookup(void)
++{
++	if (!ipe_keyring)
++		return NULL;
++
++	if (!READ_ONCE(ipe_keyring->keys.nr_leaves_on_tree) ||
++	    !READ_ONCE(ipe_keyring->restrict_link))
++		return NULL;
++
++	return ipe_keyring;
++}
++
++/**
++ * ipe_keyring_init() - Allocate and configure the IPE keyring.
++ *
++ * Return: Always %0. A failure leaves IPE without its dedicated keyring.
++ */
++int __init ipe_keyring_init(void)
++{
++	struct key *keyring;
++	int rc;
++
++	keyring = keyring_alloc(".ipe", GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
++				current_cred(),
++				KEY_POS_SEARCH |
++				KEY_USR_VIEW | KEY_USR_READ | KEY_USR_WRITE |
++				KEY_USR_SEARCH | KEY_USR_SETATTR,
++				KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
++	if (IS_ERR(keyring)) {
++		pr_err("failed to allocate keyring: %ld\n", PTR_ERR(keyring));
++		return 0;
++	}
++
++	if (!ipe_keyring_unsealed) {
++		rc = keyring_restrict(make_key_ref(keyring, true), NULL, NULL);
++		if (rc) {
++			pr_err("failed to restrict keyring: %d\n", rc);
++			key_revoke(keyring);
++			key_put(keyring);
++			return 0;
++		}
++	}
++
++	ipe_keyring = keyring;
++
++	return 0;
++}
+diff --git a/security/ipe/keyring.h b/security/ipe/keyring.h
+new file mode 100644
+index 000000000000..3d450a465511
+--- /dev/null
++++ b/security/ipe/keyring.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++ */
++
++#ifndef _IPE_KEYRING_H
++#define _IPE_KEYRING_H
++
++#include <linux/init.h>
++
++struct key;
++
++int __init ipe_keyring_init(void);
++struct key *ipe_keyring_lookup(void);
++
++#endif /* _IPE_KEYRING_H */
+diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+index e542329726bc..abc1ff9ac230 100644
+--- a/security/ipe/policy.c
++++ b/security/ipe/policy.c
+@@ -9,6 +9,7 @@
+ #include "ipe.h"
+ #include "eval.h"
+ #include "fs.h"
++#include "keyring.h"
+ #include "policy.h"
+ #include "policy_parser.h"
+ #include "audit.h"
+@@ -160,6 +161,7 @@ struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
+ 				  const char *pkcs7, size_t pkcs7len)
+ {
+ 	struct ipe_policy *new = NULL;
++	struct key *keyring;
+ 	int rc = 0;
+ 
+ 	new = kzalloc_obj(*new);
+@@ -189,6 +191,14 @@ struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
+ 						    VERIFYING_UNSPECIFIED_SIGNATURE,
+ 						    set_pkcs7_data, new);
+ #endif
++		if (rc == -ENOKEY || rc == -EKEYREJECTED) {
++			keyring = ipe_keyring_lookup();
++			if (keyring)
++				rc = verify_pkcs7_signature(NULL, 0, new->pkcs7,
++							    pkcs7len, keyring,
++							    VERIFYING_UNSPECIFIED_SIGNATURE,
++							    set_pkcs7_data, new);
++		}
+ 		if (rc)
+ 			goto err;
+ 	} else {
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-TIAE.v2.r0.20261015163454%40mojatatu.com
+2.53.0
+
+
