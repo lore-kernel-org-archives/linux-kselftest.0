@@ -1,58 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792452498;
-	b=ypcDA2SkGJfh+p5Z+AZCDvNu/p+OrUhDLGAudoKMM2FvzglKTjsOr6ahclpmpJR6ufcI
-	 3gClvMQi3Wsl/R/s4j3tig8r3J/kGiJWkkyoWLEFqpKwFln1m4ngOkeEi1NZ7ZlaEetoe
-	 mbP4G0H6SuLntT7Tans/hftjWdT2T54FlqFUOGKWrxQfgTYXQXcbVsmS/nAP3gQsSVpUL
-	 qmyRs+/4uqcNzpIdEbrhCI4A/wY2zJJNATH0NvGgoiBSHehRN7x5Gl9vAGT5RqCCcnHAL
-	 cZHIFQgwfGGVw2v5oPDo5pdW7Pog1Fd0grIFA1UGUiLWunqYUaWrO7NmMC4x/yEAYGA==
+	t=1792457408;
+	b=t18QNDQ3TiDbkflA35ISVXwEBqMGSTQTE//5AxHC8ItOybptFB9pro6INuut70xnasrH
+	 vlD2yHkIBU/UpP0dnW9OyKqp4QViR5GXlYXlsZOMOLCmvuym77AJK/kSdSL8BwV/dPrR4
+	 RiDuGZfcJkUKpHAJSkQDnnxvgTC781NVGYXK64Ul7Kxx9nEYq0c7m3z95cPADt4U0th1y
+	 3D0s15xp/EQbh7JWQln+T9ObP1pZvkMeI67ljuwDCl085uX7sNhQpfmiyNjkbNkB00Ug4
+	 E1PJ+kuGpBObkVmLUg/JgLGwgqfflffHL0pqHwhR6AcVUZ0WbtEy/YyAIEcEFebkZag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792452498;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=doDQWejrullsVYFGySwnbyd1nx0Kc8hjk3Zuvv2FYpw=;
-	b=qOkiE1pZKvFlfsuD0uI4TklOcpoa7IfB2udz2LDLwvlVgewaLXPQvQv0Jb6kXomUROfW
-	 yHVMcCtMDqCeENgHBgGtLq6rHXnogmi3oarh8+BYlxcS20MGEh2/0NxbcBWICffWogVPI
-	 72DrCD2qFJXB+iwN2ZieQfPa15dUYoG3Jj/Vy9uIwtT4++4aPHjEys1wGd7MwOCDaZc7L
-	 meWpEZ68qorkLxSFQXXXSyphU2fNL5OU069KQoiTIY2mD0YQCQBFNKJ2d7fYrq2j4hz61
-	 9xf+t54BfFWuHKOoI/uaC8EIiM/+B+P0LjqYlm4akPpDykuJTIoTiL7prOleSCMPPlg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792457408;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=el9hJYBAjlZoS6JyxYpDl9voCiCbLdNbk8o8t7V70ZE=;
+	b=JYel754mX/UYujX1n5f55MRGdQapHQYPBiKaqRCW8JEFUzXEBIZcFq1nUm87x71rrTA0
+	 Fkau0r/Eu1E5pwB5Gx1RFtuKMC4D39MMiiyCU1C24nzgbagXvzs5rZ8q2dMx3/QTOxAxd
+	 F8SaCbASAUjziUB33OrmOdJtwXBpqHnWL9fYrtv3RRtlmtv1Eg4iT8SxYsyypAvI1GdiZ
+	 Z9aQl8IY3+VBvI3Ccw3LpOU77zUVcRbOvgY7lzf8lNAnOkNraVwmQdynIqXXeRcX/J9f5
+	 yVmZDxNcwcPBrQqbEY2xxPm+fPWc2JjnfcFT2XqXmgRmV8mLC31Z9ho8GeEWpIiBzQA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dAPaJ5PO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JeKPmpIb;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C99C606A31A;
-	Mon, 19 Oct 2026 23:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799D0606A31A;
+	Tue, 20 Oct 2026 00:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dAPaJ5PO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C193B1F000C4;
-	Mon, 19 Oct 2026 23:28:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JeKPmpIb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073BE1F000C4;
+	Tue, 20 Oct 2026 00:50:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792452498;
-	bh=doDQWejrullsVYFGySwnbyd1nx0Kc8hjk3Zuvv2FYpw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=dAPaJ5POG1VgZU8faTBA7Ni69Z/b8FSlKSb+HDaEXIND4cC5HaSc4hKk6LKG4d2mm
-	 3kNp5amrhQ9TAKBQBMPn0k730XzprLWDdCUCPsqRn9CBcQr6Le+JHciD9TWBtTOqG0
-	 hJQSz3QKKfz4Ykhq00WqP6uj9sji0fvhzPJJeoYVagVvgqlI8RjcKKfwftE/wWsOfM
-	 lHlHqRRXjwk30R2JM7gaYEA+Es9+ApMJatJ8T9CdneMgTGsEuDEWE9AlwjVlHYloxn
-	 9MWlQHTPj94694HkG4ON+/Dk3Uvlp3hfDQJPhVmE2ObHYxxqp966b6vzE0J2rMV4TX
-	 hiv2ij/oGZq8A==
-Date: Mon, 19 Oct 2026 16:28:17 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Omar Ramadan <omar@blockcast.net>
-Cc: Taehee Yoo <ap420073@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 00/13] amt: add an IPv6 outer transport
-Message-ID: <20261019162817.0855e1bb@kernel.org>
-In-Reply-To: <20261009122426.551178-1-omar@blockcast.net>
-References: <20261009122426.551178-1-omar@blockcast.net>
+	s=k20260515; t=1792457408;
+	bh=el9hJYBAjlZoS6JyxYpDl9voCiCbLdNbk8o8t7V70ZE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=JeKPmpIb7rioVU8KSVMTaPEL4qrczdF7iOjohijyh7IRKnr4hC+HhAvNd+L4TyUAa
+	 mYj9nK3+AkWuDVICQSrEX5wouJKb65VHUpLGfm+YZZ+sfusp09sW4bOs2vMKzhNM9u
+	 hEvNxg72gLhb9akdTTjPUJfPE1nFmTB2IahrvBS5o7NxoAx8E/FDPBe1rfMWItzFYU
+	 fNsOauJr/M6S1oaqjmGfr1oI+VBPhyF16WmUmFH8SomJ7gA+o0Vu/b0RuDCE/AboDg
+	 cIbCxT+oeHh9w5yzBhj0HjFMTRVU4mfnR0Ket1ybdB9fADVYqSDc/eBYPeS2J3xeIG
+	 bZYeJ8/Nr/sug==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F15633924A6F;
+	Tue, 20 Oct 2026 00:50:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,20 +53,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 0/3] net/sched: cls_bpf: accept dev-bound programs
+ on
+ shared blocks
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179245740678.3407717.8152429753344693059.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Oct 2026 00:50:06 +0000
+References: <QDISC-PYC7.v2.20261010165947@mojatatu.com>
+In-Reply-To: <QDISC-PYC7.v2.20261010165947@mojatatu.com>
+To: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, john.fastabend@gmail.com,
+ sdf@fomichev.me, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, jiri@resnulli.us, bpf@vger.kernel.org,
+ stable@vger.kernel.org, sashiko-bot@kernel.org, victor@mojatatu.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch
 
-On Fri,  9 Oct 2026 12:24:13 +0000 Omar Ramadan wrote:
-> The amt driver runs AMT (RFC 7450) only over IPv4. The relay and the
-> gateway bind one AF_INET UDP socket, and every message is routed and
-> sent with the IPv4 helpers. RFC 7450 defines the protocol over both IP
-> versions, with an IPv6 form of the Relay Advertisement. A gateway on an
-> IPv6-only access network cannot reach an amt relay today.
+Hello:
 
-Plenty of AI feedback here.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-When you repost the v2 (and not that net-next is closed, so you should
-wait with that: https://netdev.bots.linux.dev/net-next.html )
-Could you explain if you are currently using AMT and what is your use
-case? I'm curious if you have experience using the existing AMT code
-because from the patch stream alone it seems a bit buggy.
+On Sat, 10 Oct 2026 17:02:47 -0400 you wrote:
+> This series fixes the regression where a device-bound SCHED_CLS program
+> attached through a shared block is rejected even when it is bound to a
+> netdev that owns the block, and closes the bind/reoffload replay hole a
+> later-joining device would otherwise exploit.
+> 
+> Patch 1 gives netdevsim's cls_bpf TC block callback the device-match
+> check nfp already has; the callback is the authoritative per-device
+> acceptance boundary and the defect there predates the cls_bpf core
+> change.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2,1/3] netdevsim: reject cls_bpf programs bound to another device
+    https://git.kernel.org/netdev/net/c/5820ca58b409
+  - [net,v2,2/3] net/sched: cls_bpf: accept dev-bound programs on shared blocks
+    https://git.kernel.org/netdev/net/c/d305547d1632
+  - [net,v2,3/3] selftests: net: exercise dev-bound cls_bpf on shared blocks
+    https://git.kernel.org/netdev/net/c/866363c3cc40
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
