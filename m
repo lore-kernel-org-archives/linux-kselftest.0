@@ -1,66 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792503390;
-	b=B3tV/as9HeICivBDhMogDkJs7Rb35DVUx1mJ/04vU167Mjn+IEGDGriE3YzTS6h7H7ti
-	 O4HsLAq9ZjgxB3SjN47/sFr3lXr1Drvj5VJX/yX4zp1RNA/wSXWBF3k16lu0IPyvtaiqM
-	 elKC5CAWfPPkD5oPs8cG/SgbN3nZSG7W2fuG9y6lFhSZShHAV8579Ncurc4swziYw7oGg
-	 KSaC5oR07oTGzUR4K60173F7Dr2j5wdG0jyC618V17pSPQGG5NT2HoOB/L8bJivQuXQ5R
-	 IDPTC4OBHLk2Vv/YktaQeReKq0SBEKL8uJUYFLhe9j4amgNDtkc7s8ntHlzWg5koXUA==
+	t=1792504600;
+	b=sEVbWXs5WmzwpDuEOhy0Lj+cfBT1oqeFe+tjrUS0KpACmsmbEOhNvvnq2GfW/tE0VaKP
+	 rVTP9epmEIZHsc4x+ThirMZr1OVUJ9qEXSa7gTL0CFHeYaR+wlEL3ggnKjzU6PDdnp6mU
+	 ipuUABOJ9QULNtV3zV4zHJyoeZITkQcvesZ1tgurH03QLboadT093X/LgG79tps5Hw4iC
+	 oGZJRov+eOCINcsTJu8sY/B+FIMdP79ejj4j0Ky53zOqoS2vqfBTdBsDHliAHm+Y1qbiJ
+	 Rq+IFAYmKXRG8u0TgayvY/a5H5FW1fsBxnFxRqwx8lOf1ljdSTIp9+cRykXNO/Irxhw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792503390;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=mf8k7XTI/zTxzeprUjIQpoEOfwu4NGyWtykxH2O6lr0=;
-	b=34G2I46XWw4HU8q1g30VeI1PGdlWsDhSCIQ4qJNLIUC48lMy8fOkqUmcLuu2wxEf3iUk
-	 EoO0zZdSNxnmExv0teS47/rp1JCZkKLbX0h1f/Nd62w4LojjSfP4V9BNwYWF/yj6jYOA7
-	 CYFrKi5Wnqf/gbjSCFgbXZj/FaTUJF+6yd4HZkg+qnagNe/GUem3tC10+k38oFZyit3qH
-	 uq+Csr253efttgkYR/X7Cg2lHhI7YUTbOyAcMr5sqb4NKG6gXYRFxB1ZKUMuP/zht4JGp
-	 GUbi2XMx2lIChnGtPdrXkwNjC14N0PcbOXeJpeFqjn46z8jVH7WSJmBKCVKF86AwLwg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792504600;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=l8TpnDSr4xMVn+kzn3EMXGvx3pJwLmxiXIETZ9Ka+Pw=;
+	b=t8ojVmoSg++VVULjcwS5Ngyc5S0OdJLGTEAOkcMIRZufr9iPRROKXKCTBUoiLvsWHT/g
+	 kU4rX/pZ+DsrxJ3qIlvlYqXXfyHYd3wAX5Jy8HBdxcB5gz5hLCyqVhuRGH6BowEyeGJ7t
+	 D5vAnDSqM8OMCibsOPCVgImhXo8gbjvpyHbFDz5HOWl+DMZ7dJUU5gme7hQlEmIJGXOGF
+	 gk9pDtbT347aWqzw56jKeM/ZtBbV6Eq4mSJaPq+WaPpSdh+0YTLG0mSDZQiheXpHX/8oO
+	 E1Ww2u0tC498R8VVwtknfWZqzbs2bshFgULfItO0KrCQJcUmQBZb4QBxdkICVOJqogQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=smbu0gWk;
-	arc=none smtp.remote-ip=91.218.175.151
-Received: from mta0.migadu.com (out-151.mta0.migadu.com [91.218.175.151])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=Xbn3xy8E;
+	arc=none smtp.remote-ip=117.135.210.5
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7F060A2625
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 13:36:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D7F060A2625
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC3C606A31A;
+	Tue, 20 Oct 2026 13:56:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DEC3C606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=smbu0gWk
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=mqlNuzWiK+UMeR8XNNFBfexTXPgP+qQFSEcNjwZbRo8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792503387; v=1; x=1793108186;
- b=smbu0gWkp3PPRx9wUWACH/JxGuNCXdJ421b0VaqdKf3InUBO9oyz/TQ59rGDVv/tcxmG/yEy
- IP6+Cs8O2Edaqu8DFRjagygrfyHmeeNSYI5t3SSWqEtFb/sa27CWMlSIYJwag1JpBCbOzKiNQLO
- 7gEfp7kmFeyYduSsX8iaKa/s=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3c43797985b64205;
-	Tue, 20 Oct 2026 13:36:26 +0000
-X-Mizu-Trace-ID: 3c43797985b64205
-X-Migadu-Flow: FLOW_OUT
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-To: longman@redhat.com,
-	tj@kernel.org
-Cc: ridong.chen@linux.dev,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	cgroups@vger.kernel.org,
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=Xbn3xy8E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=l8
+	TpnDSr4xMVn+kzn3EMXGvx3pJwLmxiXIETZ9Ka+Pw=; b=Xbn3xy8EZpfuq97yov
+	qknSOML+iIpfh0Q4t1XjFQbK7MHdWvwpO5ogWN7aXRlAKoEyANtrzzAVB3ybBo8f
+	sVefRMzZ1vKFi6XCKG5/Y0cCeF/oVeehlDupT6pbXwe/S2ZJaWrd48vtmri3IYiq
+	74bhyW95YsnaJAxCBKSpXLlws=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgD3YQntctdquSfMAw--.51436S3;
+	Tue, 20 Oct 2026 21:55:58 +0800 (CST)
+From: Xia Yan <yana06070@163.com>
+To: netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	horms@kernel.org,
+	kuba@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH] cgroup/cpuset: Fix task checking when enabling a partition
-Date: Tue, 20 Oct 2026 21:36:15 +0800
-Message-ID: <20261020133615.124373-1-guopeng.zhang@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	yana06070@163.com
+Subject: [PATCH net v2 2/2] selftests: net: check veth carrier after changing channel counts
+Date: Tue, 20 Oct 2026 21:55:44 +0800
+Message-Id: <20261020135544.24441-2-yana06070@163.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20261020135544.24441-1-yana06070@163.com>
+References: <20261020135544.24441-1-yana06070@163.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,83 +70,170 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:PSgvCgD3YQntctdquSfMAw--.51436S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKF4fJr18tF17Gr1kZFWDJwb_yoW7Gw1fpF
+	s3Cwn8Gr1IqF1aqw4xKw1xZFyUW3Wqqw4UX34fK34xZ3W7Kr9aqr13K34Ut3W2krs0va13
+	ZF9a9Fn2g3WDCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zifbb_UUUUU=
+X-CM-SenderInfo: p1dqtiawqxiqqrwthudrp/xtbC-A9o7mrXcu9LwgAA3c
 
-From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Add a regression test for veth_set_channels() incorrectly reporting
+LOWER_UP on a running interface whose peer is administratively down.
 
-Creating a child partition can fail when tasks are present in its
-descendants, even though the parent has no tasks of its own.
+Test the up/up and both mixed up/down combinations with GRO enabled and
+disabled. Resize the RX and TX channel counts in both directions on
+each end and check LOWER_UP on each running interface. Also verify that
+rejecting an out-of-range channel count leaves that state unchanged.
 
-On a cgroup v2 system with CPUs 0-7 online:
+IFF_LOWER_UP is masked on administratively down interfaces, so do not
+use it to assert their raw carrier state. Omit the down/down combination,
+where neither endpoint can report LOWER_UP.
 
-    cd /sys/fs/cgroup
-    echo +cpuset > cgroup.subtree_control
-    mkdir A
-    echo 1-2 > A/cpuset.cpus
-    echo root > A/cpuset.cpus.partition
-    echo +cpuset > A/cgroup.subtree_control
-    mkdir A/B
-    echo 1-2 > A/B/cpuset.cpus
-    echo +cpuset > A/B/cgroup.subtree_control
-    mkdir A/B/C
-    echo 1-2 > A/B/C/cpuset.cpus
-    echo $$ > A/B/C/cgroup.procs
-    echo root > A/B/cpuset.cpus.partition
-    cat A/B/cpuset.cpus.partition
-    root invalid (Parent unable to distribute cpu downstream)
-    cat A/cpuset.cpus.effective
-    1-2
+On an unpatched UML kernel the four mixed up/down cases fail. All six
+cases pass with the carrier restoration fix.
 
-B should be a valid root, leaving A with an empty effective CPU list.
-The task in C belongs to B's partition and does not need CPUs in A.
-
-partition_is_populated() is called with B as excluded_child, but
-continue only skips B in the pre-order walk. The walk still visits C
-and finds the task there, so A is considered populated.
-
-Fix this by skipping the whole excluded subtree with
-css_rightmost_descendant(), as is already done for valid child
-partitions. Also add a test case to test_cpuset_prs.sh with a task in
-a grandchild cpuset.
-
-Fixes: b1bcaed1e39a ("cpuset: Treat cpusets in attaching as populated")
-Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Assisted-by: LLM
+Signed-off-by: Xia Yan <yana06070@163.com>
 ---
- kernel/cgroup/cpuset.c                            | 4 ++--
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 585a982249ad..71644482faa7 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -478,10 +478,10 @@ static inline bool partition_is_populated(struct cpuset *cs,
- 
- 	rcu_read_lock();
- 	cpuset_for_each_descendant_pre(cp, pos_css, cs) {
--		if (cp == cs || cp == excluded_child)
-+		if (cp == cs)
- 			continue;
- 
--		if (is_partition_valid(cp)) {
-+		if (cp == excluded_child || is_partition_valid(cp)) {
- 			pos_css = css_rightmost_descendant(pos_css);
- 			continue;
- 		}
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index d04aad697b96..9978c560b398 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -452,6 +452,9 @@ TEST_MATRIX=(
- 	# Enabling partition with child cpusets is allowed
- 	"   C0-1    C1      .    C2-3    P1      .      .      .     0 A1:0-1|A2:1 A1:P1"
- 
-+	# Tasks below a new partition belong to it, not to its parent.
-+	" C1-2:P1 C1-2 C1-2:T    .      .      P1     .      .     0 A1:|A2:1-2|A3:1-2 A1:P1|A2:P1"
+Notes:
+    Changes in v2:
+    - Limit carrier assertions to running endpoints and omit down/down, since
+      IFF_LOWER_UP does not expose a down endpoint's raw carrier state.
+    - Use log_test_skip() on veth creation failure to avoid a stale retmsg.
+    - Include the discovery and reproduction details in the driver commit.
+    - Driver code is unchanged.
+    
+    v1: https://lore.kernel.org/netdev/20261015085821.12725-1-yana06070@163.com/
+    Review: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/8081
+    
+    Validation for the revised selftest on the original net baseline:
+    - bash -n passed.
+    - Unpatched UML kernel: 2 pass, 4 fail (the mixed up/down cases).
+    - Patched UML kernel: 6 pass.
+    - Injected veth creation failure after an earlier failed case: SKIP no
+      longer repeats the earlier error; the aggregate failure is preserved.
+    
+    Reused the existing UML kernels; no kernel rebuild was performed for
+    this revision. Prior build results and their limits remain archived.
+
+ tools/testing/selftests/net/Makefile          |  1 +
+ .../selftests/net/veth_channels_carrier.sh    | 93 +++++++++++++++++++
+ 2 files changed, 94 insertions(+)
+ create mode 100755 tools/testing/selftests/net/veth_channels_carrier.sh
+
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 590b33e..4004014 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -128,6 +128,7 @@ TEST_PROGS := \
+ 	udpgso_bench.sh \
+ 	unicast_extensions.sh \
+ 	veth.sh \
++	veth_channels_carrier.sh \
+ 	vlan_bridge_binding.sh \
+ 	vlan_hw_filter.sh \
+ 	vrf-xfrm-tests.sh \
+diff --git a/tools/testing/selftests/net/veth_channels_carrier.sh b/tools/testing/selftests/net/veth_channels_carrier.sh
+new file mode 100755
+index 0000000..03c2995
+--- /dev/null
++++ b/tools/testing/selftests/net/veth_channels_carrier.sh
+@@ -0,0 +1,93 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +
- 	# A partition root with non-partition root parent is invalid| but it
- 	# can be made valid if its parent becomes a partition root too.
- 	"   C0-1    C1      .    C2-3     .      P2     .      .     0 A1:0-1|A2:1 A1:P0|A2:P-2"
++source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
++
++require_command ip
++require_command ethtool
++
++if [ "$EUID" -ne 0 ]; then
++	echo "SKIP: root privileges are required"
++	exit "$ksft_skip"
++fi
++
++trap cleanup_all_ns EXIT
++setup_ns ns || exit $?
++
++check_carrier()
++{
++	local dev=$1
++	local state=$2
++	local expected=$3
++	local carrier=0
++	local link
++
++	# IFF_LOWER_UP is reported only for running interfaces.
++	[ "$state" = up ] || return 0
++
++	link=$(ip -n "$ns" -o link show dev "$dev")
++	check_err $? "Failed to read $dev link state"
++	[[ $link == *LOWER_UP* ]] && carrier=1
++	[ "$carrier" -eq "$expected" ]
++	check_err $? "$dev carrier is $carrier, expected $expected"
++}
++
++check_state()
++{
++	local left=$1
++	local right=$2
++	local gro=$3
++	local expected=0
++	local count dev
++
++	RET=0
++	if ! ip -n "$ns" link add vca numtxqueues 2 numrxqueues 2 \
++		type veth peer name vcb numtxqueues 2 numrxqueues 2; then
++		log_test_skip "veth carrier: $left/$right, GRO $gro"
++		return
++	fi
++
++	ip -n "$ns" link set vca "$left"
++	check_err $? "Failed to configure vca"
++	ip -n "$ns" link set vcb "$right"
++	check_err $? "Failed to configure vcb"
++	ip netns exec "$ns" ethtool -K vca gro "$gro" >/dev/null
++	check_err $? "Failed to configure GRO"
++	ip netns exec "$ns" ethtool -K vcb gro "$gro" >/dev/null
++	check_err $? "Failed to configure peer GRO"
++
++	[ "$left" = up ] && [ "$right" = up ] && expected=1
++	check_carrier vca "$left" "$expected"
++	check_carrier vcb "$right" "$expected"
++
++	for dev in vca vcb; do
++		for count in 1 2; do
++			ip netns exec "$ns" ethtool -L "$dev" \
++				rx "$count" tx "$count"
++			check_err $? "Failed to resize $dev channels"
++			check_carrier vca "$left" "$expected"
++			check_carrier vcb "$right" "$expected"
++		done
++
++		ip netns exec "$ns" ethtool -L "$dev" rx 3 tx 3 \
++			>/dev/null 2>&1
++		check_fail $? "Out-of-range channel counts were accepted"
++		check_carrier vca "$left" "$expected"
++		check_carrier vcb "$right" "$expected"
++	done
++
++	ip -n "$ns" link del vca
++	check_err $? "Failed to delete the veth pair"
++	log_test "veth carrier: $left/$right, GRO $gro"
++}
++
++for gro in off on; do
++	for left in down up; do
++		for right in down up; do
++			[ "$left" = down ] && [ "$right" = down ] && continue
++			check_state "$left" "$right" "$gro"
++		done
++	done
++done
++
++exit "$EXIT_STATUS"
 -- 
 2.43.0
 
