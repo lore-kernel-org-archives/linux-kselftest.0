@@ -1,59 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=159.69.126.157
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792531425;
-	b=R8DIY74mUtxUGCUSAA6y90URiUiEX5l0eVPVOWjfFjbuJUyg+G2WJxc6i7nzkgmUoLAc
-	 5qsT8Yvcjvx9HnuhAeLPoaWsbIqzkeWAy6Hgm/DYSbvPRNU4uniGDQrZBuX9OQBP5P4Rb
-	 cubJlj5JPFYO75tl9Tl3xfDbGZq8W1zr3Q+OMEQmwmN8B8yjcwNFq1rTmU1sMCHLPHHpH
-	 fyY90P7uYdeC+IeZDk+3Xx6qXG8CJmh+aFby9b38xYTdmBRzwxFbYMm+eMXocRQFEtvdF
-	 Psc9MdWRNYjAPMLZMrtGVASBKsQx0kIicSnErdYrOrFsX3w0B7hawbXDq2Qq6tiCroQ==
+	t=1792532220;
+	b=gZnDJqhUt16jvIyBgUrG9+8dtod+IFlmBmkYLXwyF+p/EiScZW3HVhZTl51wOZ/+0j2Z
+	 BQnQLFfS1mTnS4gAuOaa/Ce/sVX8SLidCmoOl277pyjwbMRqIIhVJlLTdWgDChLgtvqEw
+	 q4WSVP2O+4q10PyKlVatyCmmWYB4i/xA7Sz0fePv3SDjqGafmSSkjRcnR95QJlZymZHBd
+	 GAh9lVJTLmFT7+YB4NEEDcW/fORfdBEOsTML4Y4Dwpoz3bsPf8Yk/5snbMHKrr+ThnOvl
+	 pj5lAb8jjnqUmHvmwyy2ynBKsvDRVWMEkijiO4Ibu2CHW4A3/N79UocF4hWyZDWlzRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792531425;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=Roe4BMBeedZNSI4l8eJ0dPrl1wLnKmzYGDF5Bf3TQRM=;
-	b=ALfmRXZujSwOyvPah6Us/Ym9ZguvqshRmBV/DNQsAyqGvc0x7tyW8p70ybPBAI+dkJIC
-	 VKG3ld3KXAGSXXe+9DiLl+WIGHoqlue23PxDDVvu6xJJCt0B2jJFPJ8SRNt2yd418IWbH
-	 61qoVmtEtlKJ3RrzILNS2GkNbOQFBb57Jh7TpEeGL1iULH41frd6EiezhPrylaXt1pgtV
-	 8YgHbYHsMak6R9FFx0L5F4G8wbuWdYeKs1Xaohte+Wgw7qTIWMcMa6TcsDdfZftsnOcVV
-	 wdKrNZez7g2+szNFW0vHlz6SjLsOV/tN1xH6SoD1oB5gdIsx7OVhP455jp/59kjBIfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792532220;
+	h=DMARC-Filter:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=DniO7GTUvw7bqTyFUYAZgt74jqpmOaAIKPkBtG5q2Gk=;
+	b=KXuVmH7vf6SeonReslLLvNHG7t1ACs5bbzkWZAiR9WUr2t4RXME3TpZo3KFzYmt3dieN
+	 HN+tTULB81qp3EIU7WVBy5rMbvRvkLzQWB71eddazBsX+IC6bBfrK3k7oZ5LNUGmDmb9M
+	 FXA2axKDZukYb5iCUmZs1I9AAUhgrt15DYiBSImQLsCV71ZU3pfCheeNFdMwrvxwjjyQW
+	 r/7FGQGX5YKLzJlEaoS3hrD1n6oIOFACAx5KgNTidBrJeHVQwbjbBFMOJBFdxuQd5T6Kj
+	 7g+koEybe4snDvS866KMJTQMBp1CW0hwTTGZiUNpkniRHRLTeDcvLi5s3IjqSyBlpag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="V/BzBwap";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=weissschuh.net;
+	spf=pass smtp.mailfrom=weissschuh.net;
+	dkim=pass header.d=weissschuh.net header.i=@weissschuh.net header.a=rsa-sha256 header.s=mail header.b=IKuIkBXf;
+	arc=none smtp.remote-ip=159.69.126.157
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1234C606A326;
-	Tue, 20 Oct 2026 21:23:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F295606A31A;
+	Tue, 20 Oct 2026 21:36:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F295606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V/BzBwap
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0394F1F000CA;
-	Tue, 20 Oct 2026 21:23:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792531424;
-	bh=Roe4BMBeedZNSI4l8eJ0dPrl1wLnKmzYGDF5Bf3TQRM=;
-	h=From:To:Cc:Subject:Date;
-	b=V/BzBwapxKGVKBCAdo6Qkjv+RI8S7suahbqbpA5pzIq8ewxw+V3hlt1JvZ0i0tc2G
-	 aRhRAkkMAjV+szWZleiO8rBlE/gio6kJ5aOwjhTYjeG67FdFXbXfpKaClytxqQWCUy
-	 NzVLKD748Oj3hDe/OFXjFnQd3K2IlPtD1LNtq1G8LTWpBnGrZqRS/XU7xrizAWrS5n
-	 h4aTvq8bPHHJfXtT/zBRR4txEhSyyJfCS3R4wwX2bpddgvlpo9wk1bqjbDDaCjRBae
-	 G9ln47XMqW43huss8YBLD1BQubEhF+Q0qpHDWC6X6JsnRntQJKrYxz7d04SrUxmHg7
-	 eBhtslznEndHA==
-From: Song Liu <song@kernel.org>
-To: live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Song Liu <song@kernel.org>
-Subject: [PATCH] klp-build: Reuse the target kernel randstruct seed
-Date: Tue, 20 Oct 2026 14:23:41 -0700
-Message-ID: <20261020212341.706367-1-song@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key, unprotected) header.d=weissschuh.net header.i=@weissschuh.net header.a=rsa-sha256 header.s=mail header.b=IKuIkBXf
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1792532217;
+	bh=PyZDwwkl589eMcugJzYk5y9RrjeAtVDA2rA8OJ4cCWM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IKuIkBXfYbTxMiG93vM1wcRM3MaxqlK22grQXBNdYTbTlJMjoj9HuH2Gw4EIilORU
+	 BAPCqnsTj5dJg3ozea2Z0O5yuIgrdkkj4f4clQDyhDUJKTxEeiI5K8ELoOGorn+l8k
+	 WTwxjqyekY0t4jB0Jyl2rLTb3az1y84bQlgmcyuY=
+Date: Tue, 20 Oct 2026 23:36:56 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Zhi Wang <zhiw@nvidia.com>
+Cc: Alexandre Courbot <acourbot@nvidia.com>, 
+	Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Lyude Paul <lyude@redhat.com>, Yury Norov <yury.norov@gmail.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, driver-core@lists.linux.dev
+Subject: Re: [PATCH RFC 00/11] rust: add support for dynamic debug
+Message-ID: <ffe50a28-72d7-4b88-b7db-b7a590aacbc4@t-8ch.de>
+References: <20261011-rust-dyndbg-v1-0-832e4039b71f@weissschuh.net>
+ <DM9OY2QIU84D.2T3QX6SJJI6VH@nvidia.com>
+ <310ae622-20e8-42ac-b501-4315c4cd4d14@t-8ch.de>
+ <20261020212542.2e3331c4@inno-dell>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,170 +75,127 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261020212542.2e3331c4@inno-dell>
 
-CONFIG_RANDSTRUCT randomizes struct layouts based on a seed which kbuild
-generates from /dev/urandom.  A livepatch has to observe the same layouts
-as the kernel it is loaded into, but klp-build runs 'make clean', after
-which kbuild generates a new seed, and the resulting module can't be
-loaded:
+On 2026-10-20 21:25:42+0300, Zhi Wang wrote:
+> On Tue, 20 Oct 2026 19:30:33 +0200
+> Thomas Weißschuh <linux@weissschuh.net> wrote:
+> 
+> > +To: Zhi Wang
+> > 
+> 
+> Thanks Alex for bridge the threads together!
+> 
+> Hey Thomas,
+> 
+> Thanks for the comparison! As a user of this feature, I'm happy to
+> combine the two series and see this making progress.
+> 
+> The Bounded types, bitfield tests, and module_path!() fallback look
+> like useful additions. One clarification: with CONFIG_JUMP_LABEL, our
+> disabled path already has no FFI call. static_branch_unlikely!() is
+> sufficient for our initially disabled callsites, including enabling
+> them at runtime.
 
-  module livepatch_foo: .gnu.linkonce.this_module
-  section size must match the kernel's built struct module size at run time
+Ack. Although adding jump label support as a later step would make the
+patches smaller and easier to review.
 
-struct module had grown 64 bytes of padding relative to the running
-kernel (0x540 vs 0x500).  Every other randomized struct the patch touches
-would be read at the wrong offsets too, so this is not just a loader nit.
+> For the combined series, I'd like to retain these behaviors:
+> 
+> - Debug logging is independent of debug_assertions, starts disabled,
+>   and is controlled through dynamic debug. IMHO, fewer distro kernels
+>   are compiled with CONFIG_RUST_DEBUG_ASSERTIONS=y nowadays. (At least,
+>   Arch and Fedora are compiled with N)
 
-Reuse the seed of the kernel being patched, taken from --randstruct-seed
-or from scripts/basic/randstruct.seed in the tree, and refuse to build
-when CONFIG_RANDSTRUCT is on and no valid seed is available.  A wrong
-module is worse than no module.
+Ack. It would still be useful to also support default-enabled callsites,
+like the C version does. What about '--cfg DEBUG'?
 
-Pin scripts/gen-randstruct-seed.sh rather than the generated seed file:
-clean_kernel() removes scripts/basic/.randstruct.seed.cmd, so kbuild's
-if_changed finds no saved command and regenerates the seed no matter what
-the file already holds.  The generator is stashed, so it is restored on
-exit like scripts/setlocalversion.
+> - Disabled pr_debug!()/dev_dbg!() calls do not evaluate their
+>   arguments. IMHO, it seems the current dev_dbg!() in your patch
+>   evaluates the params before checking the switch on/off. (pr_debug()!
+>   looks fine though)
 
-Read the seed before set_kernelversion(), but pin the generator after it.
-set_kernelversion() runs 'make listnewconfig' and 'make syncconfig', which
-build scripts/basic as well, so after a 'make clean' they would replace
-the seed before the default seed file is read.  But if the generator is
-already modified when 'make kernelrelease' runs, setlocalversion appends
-"-dirty" to the kernel release and the module's vermagic no longer
-matches the target kernel.
+As far as I understand, fmt!() itself does not yet evaluate the
+expressions passed as arguments. It only typechecks and
+creates the precompiled Arguments<'_> structure. The parameters' Display
+traits are only executed when the Arguments<'_> is written somewhere.
+IMO the typechecking should be done even if the code is going to be
+compiled out. Similar to no_printk() on the C side.
 
-The Clang and GCC plugin implementations both derive their layouts only
-from scripts/basic/randstruct.seed, so pinning the seed covers
-CONFIG_GCC_PLUGIN_RANDSTRUCT too.  Drop the check that rejected it.  The
-plugin requires a 64 character seed, which is what gen-randstruct-seed.sh
-writes, so validate exactly that format.
+> - The dynamic-debug prefix flags remain supported. (I use the C version
+>   of dynamic debug to support e.g. +m, +l and _t)
 
-An explicit option is needed rather than deriving the path from
-uname -r, because the build host is usually not running the kernel being
-patched.
+Absolutely, this is a bug in my v1. It is fixed in v2.
 
-Signed-off-by: Song Liu <song@kernel.org>
----
- scripts/livepatch/klp-build | 61 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 56 insertions(+), 5 deletions(-)
+> Could you share your pending encapsulation/Opaque and static-branch
+> wip patches? We can then work out how they fit together, incorporate
+> Alice's review feedback, and preserve attribution for Andrew's work.
 
-diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index b52a8489d9f6..fd336f685a84 100755
---- a/scripts/livepatch/klp-build
-+++ b/scripts/livepatch/klp-build
-@@ -19,7 +19,7 @@ set -o nounset
- # This helps keep execution in pipes so pipefail+ERR trap can catch errors.
- shopt -s lastpipe
- 
--unset DEBUG_CLONE DIFF_CHECKSUM SKIP_CLEANUP VERBOSE XTRACE
-+unset DEBUG_CLONE DIFF_CHECKSUM RANDSTRUCT_SEED RANDSTRUCT_SEED_FILE SKIP_CLEANUP VERBOSE XTRACE
- 
- REPLACE=1
- SHORT_CIRCUIT=0
-@@ -133,6 +133,8 @@ Options:
-    -j, --jobs=<jobs>		Build jobs to run simultaneously [default: $JOBS]
-    -o, --output=<file.ko>	Output file [default: livepatch-<patch-name>.ko]
-        --no-replace		Disable livepatch atomic replace
-+       --randstruct-seed=<file>	Randstruct seed of the target kernel
-+                                [default: scripts/basic/randstruct.seed]
-    -v, --verbose		Pass V=1 to kernel/module builds
- 
- Advanced Options:
-@@ -160,7 +162,7 @@ process_args() {
- 	local patch
- 
- 	short="hfj:o:vdS:T"
--	long="help,show-first-changed,jobs:,output:,no-replace,verbose,debug,short-circuit:,keep-tmp"
-+	long="help,show-first-changed,jobs:,output:,no-replace,randstruct-seed:,verbose,debug,short-circuit:,keep-tmp"
- 
- 	args=$(getopt --options "$short" --longoptions "$long" -- "$@") || {
- 		echo; usage; exit
-@@ -193,6 +195,11 @@ process_args() {
- 				REPLACE=0
- 				shift
- 				;;
-+			--randstruct-seed)
-+				[[ -r "$2" ]] || die "can't read randstruct seed file '$2'"
-+				RANDSTRUCT_SEED_FILE="$2"
-+				shift 2
-+				;;
- 			-v | --verbose)
- 				VERBOSE=1
- 				shift
-@@ -268,9 +275,6 @@ validate_config() {
- 	[[ -v CONFIG_GCC_PLUGIN_LATENT_ENTROPY ]] &&	\
- 		die "kernel option 'CONFIG_GCC_PLUGIN_LATENT_ENTROPY' not supported"
- 
--	[[ -v CONFIG_GCC_PLUGIN_RANDSTRUCT ]] &&	\
--		die "kernel option 'CONFIG_GCC_PLUGIN_RANDSTRUCT' not supported"
--
- 	[[ -v CONFIG_LD_DEAD_CODE_DATA_ELIMINATION ]] &&		\
- 		die "kernel option 'CONFIG_LD_DEAD_CODE_DATA_ELIMINATION' not supported"
- 
-@@ -328,6 +332,51 @@ set_kernelversion() {
- 	sed -i "2i echo $kernelrelease; exit 0" scripts/setlocalversion
- }
- 
-+# CONFIG_RANDSTRUCT randomizes struct layouts based on a seed which kbuild
-+# generates from /dev/urandom.  A livepatch has to observe the same layouts as
-+# the kernel it gets loaded into, so reuse that kernel's seed.  Otherwise the
-+# module loader rejects the module ("...this_module section size must match
-+# the kernel's built struct module size at run time"), and any randomized
-+# struct the patch touches would be accessed at the wrong offsets.
-+#
-+# This must run before set_kernelversion(), whose 'make syncconfig' also
-+# builds scripts/basic.  After a 'make clean' that would replace the seed
-+# before the default seed file gets read.
-+read_randstruct_seed() {
-+	local seed_file
-+
-+	[[ -v CONFIG_RANDSTRUCT ]] || return 0
-+
-+	if [[ -v RANDSTRUCT_SEED_FILE ]]; then
-+		seed_file="$RANDSTRUCT_SEED_FILE"
-+	else
-+		seed_file="$PWD/scripts/basic/randstruct.seed"
-+		[[ -r "$seed_file" ]] ||				\
-+			die "CONFIG_RANDSTRUCT is enabled but there's no $seed_file; pass --randstruct-seed with the seed used to build the kernel"
-+	fi
-+
-+	RANDSTRUCT_SEED="$(< "$seed_file")"
-+	[[ "$RANDSTRUCT_SEED" =~ ^[0-9a-f]{64}$ ]] ||			\
-+		die "malformed randstruct seed in $seed_file"
-+}
-+
-+# Pin the generator rather than the seed file: clean_kernel() removes
-+# scripts/basic/.randstruct.seed.cmd, so if_changed sees no saved command and
-+# regenerates the seed no matter what the file already holds.
-+#
-+# This must run after set_kernelversion(), otherwise setlocalversion sees the
-+# modified generator and appends "-dirty" to the kernel release.
-+set_randstruct_seed() {
-+	local gen="$PWD/scripts/gen-randstruct-seed.sh"
-+
-+	[[ -v RANDSTRUCT_SEED ]] || return 0
-+
-+	stash_file "$gen"
-+	sed -i "s|^SEED=.*|SEED=$RANDSTRUCT_SEED|" "$gen"
-+	command grep -q "^SEED=$RANDSTRUCT_SEED$" "$gen" ||		\
-+		die "failed to pin randstruct seed"
-+}
-+
- get_patch_input_files() {
- 	local patch="$1"
- 
-@@ -464,7 +513,9 @@ do_init() {
- 
- 	validate_config
- 	set_module_name
-+	read_randstruct_seed
- 	set_kernelversion
-+	set_randstruct_seed
- }
- 
- # Refresh the patch hunk headers, specifically the line numbers and counts.
--- 
-2.53.0-Meta
+Here:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git/log/?h=b4/rust-dyndbg
+
+> Thanks,
+> Zhi.
+> 
+> > Hi Alexandre,
+> > 
+> > On 2026-10-20 22:14:12+0900, Alexandre Courbot wrote:
+> > > On Sun Oct 11, 2026 at 9:52 PM JST, Thomas Weißschuh wrote:  
+> > > > Add the Rust infrastructure to integrate with the dynamic debug
+> > > > infrastructure.
+> > > >
+> > > > Static keys are not used for now, as the full bindings are missing
+> > > > for those. A follow-up series will add that.
+> > > > Also custom classes are not supported yet, but could be added on
+> > > > top.
+> > > >
+> > > > Patches 1-4: Generic Rust preparation patches.
+> > > > Patches 5-7: C dynamic debug preparation patches.
+> > > > Patches 8: Rust Dynamic debug infrastructure.
+> > > > Patches 9-11: Rust Dynamic debug enablement.  
+> > > 
+> > > Were you aware of this series [1]?  
+> > 
+> > I was was told about the original work from Andrew back at Kangrejos.
+> > However I was unable to find it on LKML and it was not clear how far
+> > along that series has come along. The posting of Zhi's v3 only
+> > happened after I started on my variant, and I did not see it until
+> > you mentioned it. So my development is completely independent from
+> > Andrew's and Zhi's.
+> > 
+> > > There seems to be quite a bit of overlap.  
+> > 
+> > Indeed. I see pros for both serieses:
+> > 
+> > Mine:
+> > * No FFI in the fastpath.
+> > * No need for RUST_MODNAME.
+> > * Use of Bounded.
+> > * Tests for the flag encoding.
+> > * modname!() as function name.
+> >   (As discussed with Benno and Gary and LPC)
+> > * Better encapsulation of 'struct Descriptor' (partially not yet
+> > posted)
+> > * Use of Opaque<> to wrap bindings::_ddebug (not yet posted).
+> > * Use of !cv() (not yet posted).
+> > 
+> > Andrew/Zhi:
+> > * Better docs.
+> > * Static branch support.
+> >   * static_branch_likely!() support is missing however.
+> >   * I also have follow-up patches to enable static_branch_likely!().
+> > * host doctest support.
+> > 
+> > I am perfectly fine with merging both serieses.
+> > 
+> > 
+> > Thomas
+> > 
+> > > [1]
+> > > https://lore.kernel.org/all/20261001145940.1077801-1-zhiw@nvidia.com/
+> > >  
+> 
