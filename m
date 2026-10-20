@@ -1,75 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=188.68.63.162
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792497161;
-	b=3wb4+3Do7fetBLJoIDQlH7Xk1sNywGZelKnOIlsf04MpUMDPQq5YLYrllMqfVBACeLOz
-	 nshlFBBSAgQeboeLXzi57OXmX3/oLbVzu7PUz/A9v9sl0MHIvoFsIJ0UGiqONMKWsjWDS
-	 jG4f+bqpnrSyUp7bxBUZKetw3nub6rATNwKk2AslgTz6rpKV/rDJAWER1Sd695HvT8qfd
-	 4FFdPJku3knKsfx0CUPvM5HXfIE0xbUB+JpGL911/P0qAh16sgEmlPDiS7zy4LFZR6mBI
-	 VDb40KbmuXcv9PjFbuln3gIVJpN2xZtpLxTmzbIaB9PNiP7fidH/S0P6Rcx8clndQGQ==
+	t=1792497916;
+	b=sr9Cu/ubKSGYZLm+sYFr1/5/D8n6wZQOy0enyEYEAWlecCwML1+OVOindTihcGegylCg
+	 lsCRzT1oNIAzAzrHW0VSVK+gK/I8xS3q/0e3R5RkVO7n/MLaYWMd3Bkz4utXSUmPHmTse
+	 Bi472LSEMn70PXPRJQzxbAEQBDKtnq4Ll/iS67H3FVxs8JS3dfxqCZkRD2TSWwk+SoRwK
+	 vzzrxmSNhj8Uk7kiLf9491ZWmE3tTJwHiefgmmqhJ5Tmfegr/QXocaa501B8kOo7cx5lz
+	 kB78V1UsBowRfHFDXR5FaXvqd8Yze+wkH7A2yN1xUZVeHThikVT0gY7b968bF/uJNyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792497161;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:X-Virus-Scanned:
-	 X-Spam-Flag:X-Spam-Score:X-Spam-Level:X-Spam-Status:Received:Received:
-	 Received-SPF:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:From:Content-Language:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-PPP-Message-ID:X-Rspamd-Server:
-	 X-Rspamd-Queue-Id:X-NC-CID;
-	bh=8EKzET6Q3Oe29eiOPPQyolrirMTcuWuf5kk0hSpRXPM=;
-	b=rOaWbPKwoMHk5sGRk0Vq6d3dQd8y6XvQzyubb9E9jPi9bd931nMh2eKY2Kl1w4R4ZSCG
-	 68LHIsyRdc28OJhYq671QwCrURNFXY3S0DYJdDEMr09mhBlcGrGKeRq3a+NKYgDlO4uR5
-	 y3xiN4OracguG4B74Op+zUXwKRedMktGsKrriZtO3ULbknbpxiE87qX7cc0HtuYqzuHSo
-	 o8mokBgO8NjFAgm+4EE0FPRNX1RYMrcClXWDPgJB506ul03PUoqcqju1yZ+OdtiFEnewf
-	 AbmLQ2vfiwT7etCRu/2gYWm4ymTbg28aYzCB1SYkbiqtBB6Ku6Itf0IP4U5MSu0r56A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792497916;
+	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 X-Cookie;
+	bh=3rUGvuaVTTy+ZOb7QiqULfTKmRQxwC5KzfroeU94W3c=;
+	b=LoeG6ME/ZWm5z6FJB3bI8c8lXiJtR5VI5HRIX+IAm70qlO9JtRk/FdgV0eSVbxLuY+DD
+	 ARdRfGfitv+5OubVXq4yfekYxENyaMj0MdjiFD0QY4Jk7C37FDeMCizC9PX5B74RayAoh
+	 lPZFE0j4yhHjSa/EwwVv2OXXbmAHFZ5ELZfoN8JFU7Tsg0qZmTijYnPbiOGP73EYfOeNx
+	 6CUEr2HkW1PPxn14cl3Lbwd7PzBWieCjQoXBglUuG+V9eKahufxfVFbZklnclcMvXuOIn
+	 Q3Pb8ZMfdCyIVhmzv1yhG+JScVR10OQQjwGGwkOsdL6Aw732CkxwBRUgkJWNA5mb/vg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=leemhuis.info;
-	spf=pass smtp.mailfrom=leemhuis.info;
-	dkim=pass header.d=leemhuis.info header.i=@leemhuis.info header.a=rsa-sha256 header.s=key2 header.b=JvsHrtOP;
-	arc=none smtp.remote-ip=188.68.63.162
-Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.63.162])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iSv62ugK;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39E4606A31A;
-	Tue, 20 Oct 2026 11:52:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E39E4606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC905606A31A;
+	Tue, 20 Oct 2026 12:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=leemhuis.info header.i=@leemhuis.info header.a=rsa-sha256 header.s=key2 header.b=JvsHrtOP
-Received: from mors-relay-8201.netcup.net (localhost [127.0.0.1])
-	by mors-relay-8201.netcup.net (Postfix) with ESMTPS id 4j89l40BsQz4CZg;
-	Tue, 20 Oct 2026 13:52:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leemhuis.info;
-	s=key2; t=1792497152;
-	bh=xsjk8+sY6X4RagsU4w8nwKGuri0Fu5KJJpjSpUNyFig=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JvsHrtOPdJcKIdcu8nxF4U5eJslrRs4hPf7rtU1e6r/BtG61VflE6n5TQEFH6HtSz
-	 DhpM3UDVQ3EY0oveEOwH4ncYf3qfYCStObbuakq6pqGmgh98wfgZUfoYvFItsXGQXE
-	 n7efx55hnerqtN5u/UrqlDD2JgiqxUKSkp/mDlZVCxaZv4AQUWHVKs+bemJo65stoD
-	 WSv4tdaIEzF5eTJIy4x2VEPJbeBSzaUrevHwOh8M1+oV2FfU8stEDVVr1qdL1xOUrp
-	 ypN4U1PYPYiogiirKkNuvL7PreJL2Dz+Fn+IV37VKmpPVWq+M97bfjNpVgRyFZQ75A
-	 TnthOCOhTFYPw==
-Received: from policy01-mors.netcup.net (unknown [46.38.225.35])
-	by mors-relay-8201.netcup.net (Postfix) with ESMTPS id 4j89l36Yr3z4BcX;
-	Tue, 20 Oct 2026 13:52:31 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at policy01-mors.netcup.net
-X-Spam-Flag: NO
-X-Spam-Score: -2.901
-X-Spam-Level: 
-Received: from mxe9fb.netcup.net (unknown [10.243.12.53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by policy01-mors.netcup.net (Postfix) with ESMTPS id 4j89l027n0z8v56;
-	Tue, 20 Oct 2026 13:52:28 +0200 (CEST)
-Received: from [IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f] (unknown [IPv6:2a02:8108:8984:1d00:a0cf:1912:4be:477f])
-	by mxe9fb.netcup.net (Postfix) with ESMTPSA id 4C4745FB49;
-	Tue, 20 Oct 2026 13:52:18 +0200 (CEST)
-Authentication-Results: mxe9fb;
-        spf=pass (sender IP is 2a02:8108:8984:1d00:a0cf:1912:4be:477f) smtp.mailfrom=linux@leemhuis.info smtp.helo=[IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f]
-Received-SPF: pass (mxe9fb: connection is authenticated)
-Message-ID: <e77d6e7e-bc46-4363-8bea-d95ed521b5ab@leemhuis.info>
-Date: Tue, 20 Oct 2026 13:52:17 +0200
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iSv62ugK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271851F000C6;
+	Tue, 20 Oct 2026 12:05:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792497915;
+	bh=3rUGvuaVTTy+ZOb7QiqULfTKmRQxwC5KzfroeU94W3c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=iSv62ugK666I+rMSJ2KdftrD5ohEdfUYkw/dR1CzFfDtijTXtsc9QJFpCRxA91Lv4
+	 hoFWMtlvJNQ3zi5AVQNs54HxJ9YkYvyHk8djA48iX9NDcoAZIz6NemKAWy70JX9Sf8
+	 aRGYsVzkYM0Te2EJ8x/Go9bVL8XtdBgm5/PprTgHZ21Yg4L+Rvi9QX3CPhXs/TlVlw
+	 oe8MnlVfCNLNTnp5AuLplj18Yfs9e7Wh0pWHeSfb8buxkescVy9gVlXTcKdQOu+Cr7
+	 aGL9BVfraXpP6KipeYu6UYAjYHCZ7RxaOhh9gKMAiVu6c1FHhGGeco5Mo2LO9PhtoZ
+	 UVnOXvy8uTy6Q==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id C324D1AC57D0; Tue, 20 Oct 2026 13:05:11 +0100 (BST)
+Date: Tue, 20 Oct 2026 13:05:11 +0100
+From: Mark Brown <broonie@kernel.org>
+To: =?iso-8859-1?Q?Iv=E1n?= Ezequiel Rodriguez <ivanrwcm25@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Deepak Gupta <debug@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
+	Albert Ou <aou@eecs.berkeley.edu>, Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Zong Li <zong.li@sifive.com>,
+	Charlie Jenkins <thecharlesjenkins@gmail.com>,
+	Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+	Zishun Yi <vulab@iscas.ac.cn>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] arm64/gcs: release GCS on failed fork
+Message-ID: <atdY90gcVwbHu2sc@sirena.co.uk>
+References: <cover.1792179433.git.ivanrwcm25@gmail.com>
+ <2539f61f79a6053e2a33a1d1ae9df09013c04bd8.1792179433.git.ivanrwcm25@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,109 +78,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 0/7] kbuild: build the userspace tools in tools/
- with the kernel
-To: Sasha Levin <sashal@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, linux-perf-users@vger.kernel.org,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org
-References: <20261016143143.3613501-1-sashal@kernel.org>
-From: Thorsten Leemhuis <linux@leemhuis.info>
-Content-Language: de-DE, en-US
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 MEK4
-In-Reply-To: <20261016143143.3613501-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-PPP-Message-ID: 
- <179249713907.3888684.11477973284338372774@mxe9fb.netcup.net>
-X-Rspamd-Server: rspamd-worker-8404
-X-Rspamd-Queue-Id: 4C4745FB49
-X-NC-CID: CIkwp68IG2Wfb3bYsIfn3/l5pRPoEpB1Lme1XzJOHBhMXaPDI7Q=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gxc4xle/qhZ2446+"
+Content-Disposition: inline
+In-Reply-To: <2539f61f79a6053e2a33a1d1ae9df09013c04bd8.1792179433.git.ivanrwcm25@gmail.com>
+X-Cookie: You buttered your bread, now lie in it.
 
-On 10/16/26 16:31, Sasha Levin wrote:
-> The userspace programs under tools/ are disconnected from the rest of the
-> kernel's build system. Each has its own makefiles and build framework, and
-> "make" never builds them: apart from the few host tools the build itself needs,
-> such as objtool and resolve_btfids, nothing under tools/ is compiled as part of
-> a kernel build.
-> 
-> That makes them easy to break. Most people, and most of the build bots, check a
-> change with "make allmodconfig && make", which doesn't cover tools/ at all. A
-> change that breaks a tool passes every build check and is only noticed when
-> someone happens to build that tool by hand, often much later.
-> 
-> We keep seeing this in tools/testing/: selftests that stop building after a
-> change elsewhere in the tree, or after a backport to a stable tree, and stay
-> broken until someone tries to build them. Others brought up the same concern at
-> LPC. [...]
 
-I noticed that "keeps what is built the same on every machine" in 3/6.
-But is it explained anywhere why this is the done?
+--gxc4xle/qhZ2446+
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I wonder, as the overall goal of this patch set is to increase build
-coverage. So why disable optional features that could be built on
-machines that have the required userland libs installed?
+On Fri, Oct 16, 2026 at 04:46:00PM -0300, Iv=E1n Ezequiel Rodriguez wrote:
 
-Isn't that in a very limited scope what we do for the kernel itself
-already, as some small aspects of the build environment (like the
-versions of gcc or rust installed or the availability of things like
-gcc-plugins) already influence somewhat what is built when you run "make
-allmodconfig all"? Or do I misremember this bit?
+> Select HAVE_EXIT_THREAD and free the child's GCS from
+> exit_thread(). gcs_free() already ignores a cleared base and a
+> different mm, so the usual exit path (deactivate_mm() then this) is
+> a no-op the second time. copy_thread_gcs() zeros the inherited
+> tracking before a user-thread allocation, so an allocation error
+> still skips exit_thread() with nothing to unmap.
 
-Anyway: many thx for this, as I occasionally run into issues with my
-builds of linux-next and stable-rc rpms when while building perf or
-selftests -- and thx to these patches, submitters with a bit of luck in
-the future will notice more of those problems themselves. :-D
+This makes sense and mirrors the handling on x86 which had an existing
+exit_thread().  There was a lot of pain finding the right places to hook
+in here, there's far too many routes through this code :/ .
 
-Ciao, Thorsten
+> A kthread copies the caller's GCS fields via arch_dup_task_struct().
+> kernel_thread() uses CLONE_VM, so during a failed copy_process()
+> the child still shares the caller's mm and gcs_free()'s mm check
+> does not save us. Clear the inherited tracking as part of kthread
+> setup.
+
+I'm not spotting an equivalent path on x86, it's entirely possible I'm
+missing something here but if I'm not then I expect they need the same
+fix?  They use a similar memcpy() for the arch data and I'm not seeing a
+reset anywhere.
+
+> @@ -503,6 +513,17 @@ int copy_thread(struct task_struct *p, const struct =
+kernel_clone_args *args)
+> =20
+>  		p->thread.cpu_context.x19 =3D (unsigned long)args->fn;
+>  		p->thread.cpu_context.x20 =3D (unsigned long)args->fn_arg;
+> +#ifdef CONFIG_ARM64_GCS
+> +		/*
+> +		 * kernel_thread() uses CLONE_VM, so a failed
+> +		 * copy_process() still shares the caller's mm.
+> +		 * Inherited GCS tracking would then look like a
+> +		 * child mapping to gcs_free().
+> +		 */
+> +		p->thread.gcs_base =3D 0;
+> +		p->thread.gcs_size =3D 0;
+> +		p->thread.gcspr_el0 =3D 0;
+> +#endif
+
+I think it'd be a bit more idiomatic to have a function to reset the GCS
+state that gets an empty stub with !CONFIG_GCS=20
+
+--gxc4xle/qhZ2446+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQReagvpf3TrrA7BoYYv73Ows9A4iQUCatdY9AAKCRAv73Ows9A4
+iWTwAQC7iQAwJ8AvSpT4za/gdMW9NJKIrjii+W62TxSlegpBlwEA0ZL335q7PnHL
+KBKZVvTQfALmAMz+nHizc7SQa5fSOwg=
+=NmUr
+-----END PGP SIGNATURE-----
+
+--gxc4xle/qhZ2446+--
