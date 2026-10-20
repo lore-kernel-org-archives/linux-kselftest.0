@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.190
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.211
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792513200;
-	b=JnaYp+4eLCA+RWQObnN4GZQVH1f8zMcmD3NDzOc8X0mDUATZzG24Kp8fTf2svNhl4J76
-	 Sxm8M1DCdkjnpt31Rniti/Mxj4gkTqJI93ViqJBZUgVrYGuYnfQ/sMI8wVLSJ5zxfE0iX
-	 qAJFO/8UrKQqw9hBvlAxdnQskkwt4Lg3XDhED23actMSN5tovhMhFJD3ltHFoBBQAA6CS
-	 h6LP32acxkFIUYR5zaGviOk+Y86rpLRd1FJ8iqyYzGVsZv4ttp4aX+cRy1NFF4LGczZlG
-	 2E17dKhQJziQOdXxSHbXvMqnjbbReND8ofDhJPWzGxWNt8HScgmx0+n9SwvdpNzQu3w==
+	t=1792513215;
+	b=0VifIWqQvz1Jj/KTZN5UG4/gvRvnh2hYpNyFNTfdl2qIZ+M3N85tw1nrcTfEEliSiO3D
+	 8oHY8DPS4yPUg2XhUvLJKObW9AlYsdL3wrIw/Q3Yi8Hi+W1wuuplcWmTKIKCOvgb9iwTV
+	 spGDbwKQg4HmjhIuqGBSYhYcus4cEHppdTJBSOE7uC7cokYbI+K1cZBZXtktPIepL5Yza
+	 UJnPo2h1S7RHg5AGcY9cDv5kIxUNqYX6VrLLawcVovsSqIwOSZW8fXvIyG3IzEBXyNaeO
+	 6Z3nmmE2lDThH2X18+0qXMszZ0PunJUjvo2WQHuaOpQpUcqQyVlv/xtXLvLRFIvpfEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792513200;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792513215;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Ua7Lf9K5WBIncm71YXHcWygPR1Kpcb2CloeMCzqxAaA=;
-	b=KxSJ/5+Y0MldYAwOqLeMuyoqFGp19ttpWstmmQw6x5Nlb6gqjiCLobqCYrA8uTJ6XRed
-	 U3Jru30jDt6fcLyo70T6/RXXXtvqSmS6R2rsfJnlgqWai//dhjcUfp0WlMrua4IBa8p5d
-	 6FLx5JlUBsGUo3wvxJOx/Rp+JKkPFe4Q5z9TYjvhA+4X0CFG7+C6Y5jRxEBwuHB4yXsJs
-	 anU1/MFfckgPHpFdbooKF84dI5Qzz7zMn3lpLiTeyMF49Wuq9B07snhAUl+xmPF4VSOHY
-	 tFeG0su9u+qKumcCG4Y68S7kbUceIGEoro+KhENUNC3ds2ZWSlGeZiPkvdaL3Z+o29g==
+	bh=aeEuyyYM2ltDcE4hsGe5Ex7fp6PFqJnBAdk1jg3yBeo=;
+	b=LR8hbipryzO0t3W1VQRa2vAL5WY0yxcqbzmM7RqSypZy1on2swhGBCYuRelyEW6oB9RG
+	 kZ8AK0OSWy3wC/dop9TbBcgk07llQ1D8apUsFr1iOMtuOfZZMdaEOVCmZMjzakwqFpPd4
+	 XB6KCHC65+g1t2Y5W1YRXUW+h7k6KtVNhgl3W5nrP5Iv9R53OyEuUhoVoQtX3atLb64z1
+	 NyiVmDjd4EL3Y36PQtDVtwlHCYgfuLjW5OjRngmdsROZdQc5+FXu98h1IkR9nNQD09ihx
+	 9mgwqHGtNAUVrc4fPkW8uSIv5Xd06RL5LjkP+v/G8BMXjrwfTV4ps52YwjFFz8US4kw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Kn3ZrhCC;
-	arc=none smtp.remote-ip=91.218.175.190
-Received: from mta0.migadu.com (out-190.mta0.migadu.com [91.218.175.190])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EFBhtOgb;
+	arc=none smtp.remote-ip=95.215.58.211
+Received: from mta1.migadu.com (out-211.mta1.migadu.com [95.215.58.211])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D394E60A3802
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 16:19:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D394E60A3802
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C895260A2601
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 16:20:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C895260A2601
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Kn3ZrhCC
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EFBhtOgb
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=OcaKo8vBMcPK2i5mcytKpINtfxKb6f8YEnRBF3ZzBtQ=;
+DKIM-Signature: a=rsa-sha256; bh=ndzYTlgaOkL0YsMx3oV9bHvAAD9cb4ogcKZ+R7dB0Mo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792513198; v=1; x=1793117998;
- b=Kn3ZrhCC+gB/QqCHwBOmSvKUC8g/qWcvMvx9ILqJWWuAOvgAPw+Pww+LlrYe8+EixcT7Ui8J
- mkFbWWhdKGVutDR48lcNSNubhWeCDVS9D1WRKhPdPI77Sj62meNc6vpzeb0sFb4UNFLVQxqg7Lh
- EUA0vOFdj8XRbIdQsBRXVrt0=
+ t=1792513212; v=1; x=1793118012;
+ b=EFBhtOgbZyBCmvmi0O1Apam7zvD/Wx25cain0jb2B9KEiEH46CXjNQwWmd6P1Zk/7oUSR89y
+ LDURE9u0gkPCIXu3ylsKetZ0dEq1W9kdyxUPHL1dF6CpAFQhKKNf8U2BtaKw2GAPAoJvtzlTKAH
+ oQhGhJvclh2mKejGqjjUQLvU=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d45fc1b81ec5bdfa;
-	Tue, 20 Oct 2026 16:19:57 +0000
-X-Mizu-Trace-ID: d45fc1b81ec5bdfa
+Received: by smtp.migadu.com with ESMTPS id bdd1f2ff77ffbded;
+	Tue, 20 Oct 2026 16:20:09 +0000
+X-Mizu-Trace-ID: bdd1f2ff77ffbded
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: ast@kernel.org,
@@ -65,9 +65,9 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v3 06/12] bpf: Track low-32 scalar equality across sign-extending movs
-Date: Tue, 20 Oct 2026 09:19:01 -0700
-Message-ID: <20261020161907.2115379-7-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v3 08/12] bpf: Recover the low 32 bits on the reverse link direction
+Date: Tue, 20 Oct 2026 09:19:03 -0700
+Message-ID: <20261020161907.2115379-9-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261020161907.2115379-1-vineet.gupta@linux.dev>
 References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
@@ -82,304 +82,246 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A 32-bit sign extension shares the source's low 32 bits too, filling the
-high half from bit 31:
+A low-32 link over a wide base drives sync_linked_regs() forwards only.
+Narrowing the base reaches the members, but narrowing a member tells the
+base nothing:
 
-  r6 = ...              /* full 64-bit unknown */
-  r7 = (s32)r6          /* 32-bit sign-extending mov */
-  if w6 == -1 goto ...  /* taken: r6's low 32 bits are all ones */
-  ...                   /* r7 is -1, not deduced today */
+	r6 = ...		/* full 64-bit unknown */
+	w7 = w6;
+	w7 += 5;
+	if w7 != 15 goto ...	/* so (u32)r6 == 10 */
+	if w6 == 10 goto ...	/* not deduced */
 
-No constant k makes dst == (u32)(src + k) a sign extension, so this
-needs a third kind, BPF_REG_LINK_SEXT, driven by sext_32_to_64() where
-the zero-extending arm uses zext_32_to_64(). The enum already had room,
-so bpf_reg_state stays 80 bytes.
+That refusal is broader than it needs to be, in two ways.
 
-Both work from the base's 32-bit range, which is what a 32-bit compare
-narrows; coerce_reg_to_size_sx() cannot serve, as it reads smin/smax,
-which straddle after such a compare. tnum_sext() is the counterpart to
-tnum_cast(), keeping the known low bits where a tnum_range() over the new
-bounds would not.
+It only applies to a *wide* base in the first place -- the guard is
+scoped on get_reg_width(reg) > 32. A base that fits 32 bits is equal to
+the member's low half, so a compare on the member pins it exactly, and
+such a pair already falls through to the differencing arm. What the two
+mov patches had to get right there is which extension rebuilds it, since
+choosing wrong is unsound rather than merely imprecise.
 
-sext_32_to_64() resets the register's base/step line; the comment there
-gives the arithmetic. Note it resets unconditionally, where
-coerce_reg_to_size_sx() and coerce_subreg_to_size_sx() return early when
-the extension is a provable no-op and keep the line. That costs a little
-precision in the same case here, which is not worth an extra branch on a
-path that has just rebuilt the value from the base.
+And for a wide base it is only the *high* half that is unrecoverable.
+Writing the two registers against the same abstract X, the member is
+ext(X + d_member) and the base is X + d_base, so their low 32 bits are
+(X + d) mod 2^32 and differ by the known constant d_member - d_base. The
+member therefore pins the base's low half exactly; what it says nothing
+about is everything above bit 31.
 
-Unlike the zero-extending arm, the source's delta comes along. Both
-base + d and (u32)(base + d) have low half (base + d), so dst is
-(s32)(base + d) whichever the source was:
+Eduard put it as a direction rather than a kind, on v2 03/13:
 
-	w7 = w6;	/* BPF_REG_LINK_ZEXT, delta 0 */
-	w7 += 5;	/* BPF_REG_LINK_ZEXT, delta 5 */
-	r8 = (s32)r7;	/* BPF_REG_LINK_SEXT, delta 5 */
+> - if known_reg is sext/zext -> sync to 'full' register recovers only
+>   lower 32-bits and keeps upper untouched (counting on cross-domain
+>   bounds sync logic).
 
-keeps r8 tied to r6. sext_mov_inherits_delta pins it; without the
-inheritance the program is rejected. A self-mov can form a link here too,
-which is how a sign-extended int return lands.
+So instead of skipping, add the delta difference to the member's 32-bit
+range and intersect it into the base's r32 and tnum_subreg, leaving r64
+and the upper tnum to reg_bounds_sync(). Never writing the high half
+directly is what keeps this sound. Dropping the guard outright instead
+makes scalars_alu32_basic and zext_narrow_dst_keeps_base verify, and both
+must not; they still fail here.
 
-sync_linked_regs() needs no separate sext path: the differencing arm
-already copies the base and adds the delta difference, and which extension
-follows is just the member's kind. Where the base does fit 32 bits the
-reverse direction runs for both narrow kinds with the *zero* extension --
-the base is then below 2^32 and equal to the member's low half, whichever
-way the member filled its own high half.
+It buys nothing today, and is proposed anyway. No verdict changes on any
+of the three corpora, and on its own it costs nothing anywhere. The zero
+is a result rather than a non-event: instrumenting the new arm to emit a
+token, it fires 78 times under bpf-gcc and 40 under clang, so programs do
+reach it and come out identical. zext_reverse_pins_low_half is a
+__failure without the patch.
 
-One guard gains a new meaning. BPF_REG_LINK_ZEXT against
-BPF_REG_LINK_SEXT is a sound deduction that is now declined on purpose:
-bpf-gcc compiles "i += 1" for an int loop counter into exactly that
-pair, and deducing the sign-extended half makes the counter a fresh
-constant every iteration, so iters.c:iter_obfuscate_counter runs to the
-1M instruction limit. sext_no_sync_from_zext_sibling pins it.
+It does interact with the narrowing-fill patch that follows -- together
+they cost big_alloc2 2956 -> 3095 insns where neither does alone -- which
+that patch spells out, since a bisect lands the cost there.
 
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
-v3: was v2 7/13.
- - SUBREG_SEXT becomes BPF_REG_LINK_SEXT, a value of the same two-bit
-   field, so the sign-extending link costs no space of its own, and v2's
-   separate reconstruction in sync_linked_regs() is gone.
- - new capability: a sign-extending mov inherits the source's delta.
-   Nothing in the corpus builds the shape, so sext_mov_inherits_delta
-   covers it directly.
- - assign_scalar_id_before_mov() now keeps a BPF_REG_LINK_SEXT source's
-   id. Without it bpf_iter_tasks/dump_task_sleepable hits the 8192-jump
-   limit under bpf-gcc.
- - the mixed-kind guard also covers BPF_REG_LINK_ZEXT against
-   BPF_REG_LINK_SEXT. That deduction is sound and declined on purpose:
-   making it turns an int loop counter into a fresh constant each
-   iteration and iter_obfuscate_counter stops converging.
+v3: new in v3.
+ - answers Eduard's point on v2 03/13: the reverse direction recovers
+   the low half even though it cannot recover the high one. A base
+   that fits 32 bits was never refused -- the guard is scoped on
+   get_reg_width(reg) > 32 -- so this is the remaining case, a base
+   wider than 32 bits.
+ - proposed for merge, not tagged, and it buys nothing today -- no
+   verdict changes on any of the three corpora.
+ - costs nothing on its own. With the narrowing-fill patch that follows
+   it costs big_alloc2 2956 -> 3095 insns; neither produces that alone,
+   and a bisect lands it on the fill patch, which says so.
+ - the arm is instrumented to confirm it is reached rather than merely
+   silent: 78 firings under bpf-gcc, 40 under clang.
 
- include/linux/bpf_verifier.h |  3 +-
- include/linux/tnum.h         |  7 +++
- kernel/bpf/log.c             |  2 +
- kernel/bpf/tnum.c            | 15 ++++++
- kernel/bpf/verifier.c        | 89 +++++++++++++++++++++++++++++++-----
- 5 files changed, 103 insertions(+), 13 deletions(-)
+ kernel/bpf/verifier.c                         | 58 ++++++++++++++-----
+ .../bpf/progs/verifier_linked_scalars.c       | 47 ++++++++++++---
+ 2 files changed, 80 insertions(+), 25 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 081facac7b86..16e3d5a951b5 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -57,13 +57,14 @@ enum bpf_iter_state {
-  *
-  *   BPF_REG_LINK_FULL:  reg == base + delta
-  *   BPF_REG_LINK_ZEXT:  reg == (u32)(base + delta), for ANY base width
-- *   BPF_REG_LINK_SEXT:  reg == (s32)(base + delta)
-+ *   BPF_REG_LINK_SEXT:  reg == (s32)(base + delta), for ANY base width
-  *
-  *   r1 = r2;       r1 and r3 are linked to r2: id == N
-  *   r3 = r2;
-  *   r1 += 10;      r1 gets BPF_REG_LINK_FULL, delta 10
-  *   w3 += 10;      w3 gets BPF_REG_LINK_ZEXT, delta 10
-  *   w7 = w6;       r7 gets BPF_REG_LINK_ZEXT, delta 0  (r6 may be wide)
-+ *   r8 = (s32)r7;  r8 gets BPF_REG_LINK_SEXT, delta 0
-  */
- enum bpf_reg_link_kind {
- 	BPF_REG_LINK_NONE = 0,
-diff --git a/include/linux/tnum.h b/include/linux/tnum.h
-index 16682248f963..0ad7ea0d4898 100644
---- a/include/linux/tnum.h
-+++ b/include/linux/tnum.h
-@@ -63,6 +63,13 @@ struct tnum tnum_union(struct tnum t1, struct tnum t2);
- /* Return @a with all but the lowest @size bytes cleared */
- struct tnum tnum_cast(struct tnum a, u8 size);
- 
-+/*
-+ * Return the lowest @size bytes of @a sign-extended to 64 bits. @size must
-+ * be 1, 2 or 4: tnum_cast() above cannot express a 64-bit field, and the
-+ * shift here would be by 64 for @size 0.
-+ */
-+struct tnum tnum_sext(struct tnum a, u8 size);
-+
- /* Swap the bytes of a tnum */
- struct tnum tnum_bswap16(struct tnum a);
- struct tnum tnum_bswap32(struct tnum a);
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index a6f205653a9e..2286576ccfe6 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -654,6 +654,8 @@ static void print_reg_state(struct bpf_verifier_env *env,
- 		verbose_a("id=%d", reg->id);
- 	if (reg->link_kind)
- 		verbose(env, "%+d", reg->delta);
-+	if (reg->link_kind == BPF_REG_LINK_SEXT)
-+		verbose(env, ".sx");
- 	if (reg->parent_id)
- 		verbose_a("parent_id=%d", reg->parent_id);
- 	if (type_is_non_owning_ref(reg->type))
-diff --git a/kernel/bpf/tnum.c b/kernel/bpf/tnum.c
-index 1f620facd1b7..55d10d362eed 100644
---- a/kernel/bpf/tnum.c
-+++ b/kernel/bpf/tnum.c
-@@ -200,6 +200,21 @@ struct tnum tnum_cast(struct tnum a, u8 size)
- 	return a;
- }
- 
-+struct tnum tnum_sext(struct tnum a, u8 size)
-+{
-+	u8 shift = 64 - size * 8;
-+
-+	/*
-+	 * Shifting the field up to the top and back down arithmetically
-+	 * replicates its sign bit through the high half. Applying that to the
-+	 * mask as well carries over whether the sign was known: an unknown
-+	 * sign bit leaves every high bit unknown.
-+	 */
-+	a = tnum_cast(a, size);
-+	return TNUM((s64)(a.value << shift) >> shift,
-+		    (s64)(a.mask << shift) >> shift);
-+}
-+
- bool tnum_is_aligned(struct tnum a, u64 size)
- {
- 	if (!size)
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ce7016446936..dffcaa2e1392 100644
+index dffcaa2e1392..6b26487d4549 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -3763,7 +3763,7 @@ static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
- 	 * rY->id has special linked register already.
- 	 * Cleared it, since multiple rX += const are not supported.
- 	 */
--	if (src_reg->link_kind)
-+	if (src_reg->link_kind && src_reg->link_kind != BPF_REG_LINK_SEXT)
- 		bpf_clear_scalar_id(src_reg);
- 	/*
- 	 * Ensure that src_reg has a valid ID that will be copied to
-@@ -6057,6 +6057,25 @@ static void zext_32_to_64(struct bpf_reg_state *reg)
- 	reg_set_urange64(reg, reg_u32_min(reg), reg_u32_max(reg));
- }
- 
-+/*
-+ * The sign-extending counterpart. Signed bounds carry over directly because
-+ * sign extension is monotonic over the signed 32-bit range.
-+ */
-+static void sext_32_to_64(struct bpf_reg_state *reg)
-+{
-+	/*
-+	 * See comment at reg_step_check_unsigned(). Sign extension subtracts
-+	 * 2^32 from every value with bit 31 set, which preserves a residue
-+	 * mod step only when step divides 2^32, so the line cannot be kept.
-+	 * The zero-extending twin calls reg_step_check_unsigned(reg, 32) for
-+	 * the same reason; the unsigned form does not apply here because the
-+	 * result is not the low 32 bits but the low 32 bits moved.
-+	 */
-+	reg_step_reset(reg);
-+	reg->var_off = tnum_sext(reg->var_off, 4);
-+	reg_set_srange64(reg, reg_s32_min(reg), reg_s32_max(reg));
-+}
-+
- /* truncate register to smaller size (in bytes)
-  * must be called with size < BPF_REG_SIZE
-  */
-@@ -17544,12 +17563,29 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 						return -EACCES;
- 					} else if (src_reg->type == SCALAR_VALUE) {
- 						bool no_sext;
-+						/*
-+						 * A 32-bit sign extension keeps the low 32
-+						 * bits, so dst shares them with whatever src
-+						 * shares them with. Both base + d and
-+						 * (u32)(base + d) have low half (base + d), so
-+						 * dst is (s32)(base + d) either way: inherit
-+						 * src's id and delta and record
-+						 * BPF_REG_LINK_SEXT.
-+						 */
-+						bool subreg_link =
-+							(insn->off >> 3) == 4 &&
-+							(src_reg != dst_reg || src_reg->id);
- 
- 						no_sext = reg_umax(src_reg) < (1ULL << (insn->off - 1));
- 						if (no_sext)
- 							assign_scalar_id_before_mov(env, src_reg);
-+						else if (subreg_link && !src_reg->id &&
-+							 !tnum_is_const(src_reg->var_off))
-+							src_reg->id = ++env->id_gen;
- 						*dst_reg = *src_reg;
--						if (!no_sext)
-+						if (!no_sext && subreg_link && src_reg->id)
-+							dst_reg->link_kind = BPF_REG_LINK_SEXT;
-+						else if (!no_sext)
- 							bpf_clear_scalar_id(dst_reg);
- 						coerce_reg_to_size_sx(dst_reg, insn->off >> 3);
- 					} else {
-@@ -18485,17 +18521,29 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+@@ -18521,29 +18521,54 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
  		if (reg->id != known_reg->id)
  			continue;
  		/*
--		 * A zero-extending link, spelled BPF_REG_LINK_ZEXT: the
--		 * relation reg == (u32)(base + delta) does not invert once the
--		 * base is wider than 32 bits, so the reverse direction is
--		 * skipped.
-+		 * The reverse direction does not work for a narrow known_reg:
-+		 * it knows only its low 32 bits, which say nothing about a
-+		 * wider reg's high half. Neither (u32)(base + delta) nor
-+		 * (s32)(base + delta) inverts once the base is wider than 32
-+		 * bits.
+-		 * The reverse direction does not work for a narrow known_reg:
+-		 * it knows only its low 32 bits, which say nothing about a
+-		 * wider reg's high half. Neither (u32)(base + delta) nor
+-		 * (s32)(base + delta) inverts once the base is wider than 32
+-		 * bits.
++		 * The reverse direction, from a narrow known_reg to a wider
++		 * reg, does not invert: neither (u32)(base + delta) nor
++		 * (s32)(base + delta) says anything about the base's high
++		 * half. It does still pin the low half, though -- both sides
++		 * are (base + delta) mod 2^32, differing only by their deltas
++		 * -- so recover that much and leave the high half alone.
  		 */
--		if (known_reg->link_kind == BPF_REG_LINK_ZEXT &&
-+		if ((known_reg->link_kind == BPF_REG_LINK_ZEXT ||
-+		     known_reg->link_kind == BPF_REG_LINK_SEXT) &&
-+		    reg->link_kind != BPF_REG_LINK_ZEXT &&
-+		    reg->link_kind != BPF_REG_LINK_SEXT &&
- 		    get_reg_width(reg) > 32)
- 			continue;
+ 		if ((known_reg->link_kind == BPF_REG_LINK_ZEXT ||
+ 		     known_reg->link_kind == BPF_REG_LINK_SEXT) &&
+ 		    reg->link_kind != BPF_REG_LINK_ZEXT &&
+ 		    reg->link_kind != BPF_REG_LINK_SEXT &&
+-		    get_reg_width(reg) > 32)
+-			continue;
++		    get_reg_width(reg) > 32) {
++			/*
++			 * Only @low's 32-bit half is meaningful: its var_off
++			 * is advanced over all 64 bits while r64 and the
++			 * base/step line are not, and nothing below reads
++			 * either. It is a scratch value, not a register state.
++			 */
++			struct bpf_reg_state low = *known_reg;
++			struct tnum low32;
++
++			fake_reg.type = SCALAR_VALUE;
++			__mark_reg_known(&fake_reg,
++					 (s64)reg->delta - (s64)known_reg->delta);
++			scalar32_min_max_add(&low, &fake_reg);
++			low.var_off = tnum_add(low.var_off, fake_reg.var_off);
++
++			cnum32_intersect_with(&reg->r32, low.r32);
++			low32 = tnum_intersect(tnum_subreg(reg->var_off),
++					       tnum_subreg(low.var_off));
++			reg->var_off = tnum_with_subreg(reg->var_off, low32);
++			reg_bounds_sync(reg);
++			goto scratched;
++		}
  		/*
--		 * Skip mixed 32/64-bit links: the delta relationship doesn't
--		 * hold across different ALU widths.
-+		 * Skip a pair of differing kinds. Where BPF_REG_LINK_FULL meets
-+		 * a 32-bit kind the delta relationship genuinely does not hold:
-+		 * the deltas were added at different ALU widths.
-+		 * BPF_REG_LINK_ZEXT against BPF_REG_LINK_SEXT is not that case
-+		 * -- both are base + delta in the low 32 bits, so narrowing one
-+		 * really does narrow the other -- but that deduction is
-+		 * declined on purpose. It makes an int loop counter a fresh
-+		 * constant on every iteration, so no two iterations prune
-+		 * against each other and the program runs to the instruction
-+		 * limit. See sext_no_sync_from_zext_sibling.
+ 		 * Skip a pair of differing kinds. Where BPF_REG_LINK_FULL meets
+-		 * a 32-bit kind the delta relationship genuinely does not hold:
+-		 * the deltas were added at different ALU widths.
+-		 * BPF_REG_LINK_ZEXT against BPF_REG_LINK_SEXT is not that case
+-		 * -- both are base + delta in the low 32 bits, so narrowing one
+-		 * really does narrow the other -- but that deduction is
+-		 * declined on purpose. It makes an int loop counter a fresh
+-		 * constant on every iteration, so no two iterations prune
+-		 * against each other and the program runs to the instruction
+-		 * limit. See sext_no_sync_from_zext_sibling.
++		 * a 32-bit kind the delta relationship does not hold over all
++		 * 64 bits: the deltas were added at different ALU widths. For a
++		 * wide member the low half still relates and the arm above has
++		 * already recovered it; a member that fits 32 bits does not
++		 * reach that arm and is skipped outright. BPF_REG_LINK_ZEXT
++		 * against BPF_REG_LINK_SEXT is not that case -- both are base +
++		 * delta in the low 32 bits, so narrowing one really does narrow
++		 * the other -- but that deduction is declined on purpose. It
++		 * makes an int loop counter a fresh constant on every
++		 * iteration, so no two iterations prune against each other and
++		 * the program runs to the instruction limit. See
++		 * sext_no_sync_from_zext_sibling.
  		 */
  		if (reg->link_kind && known_reg->link_kind &&
  		    reg->link_kind != known_reg->link_kind)
-@@ -18504,7 +18552,7 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
- 		 * Only an unlinked pair is a plain copy. Anything carrying a
- 		 * kind goes through the differencing arm below, which adds the
- 		 * delta difference (zero when the deltas match) and then
--		 * applies the BPF_REG_LINK_ZEXT zero-extension.
-+		 * re-applies whichever extension the kinds call for.
- 		 */
- 		if (!reg->link_kind && !known_reg->link_kind) {
- 			*reg = *known_reg;
-@@ -18531,9 +18579,26 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
- 			scalar32_min_max_add(reg, &fake_reg);
- 			scalar_min_max_add(reg, &fake_reg);
- 			reg->var_off = tnum_add(reg->var_off, fake_reg.var_off);
--			if (reg->link_kind == BPF_REG_LINK_ZEXT ||
--			    known_reg->link_kind == BPF_REG_LINK_ZEXT)
-+			if (reg->link_kind == BPF_REG_LINK_SEXT) {
-+				sext_32_to_64(reg);
-+			} else if (reg->link_kind == BPF_REG_LINK_ZEXT ||
-+				   known_reg->link_kind == BPF_REG_LINK_ZEXT ||
-+				   known_reg->link_kind == BPF_REG_LINK_SEXT) {
-+				/*
-+				 * Either @reg is itself the zero extension, or
-+				 * @reg has no 32-bit kind and @known_reg does
-+				 * -- the reverse direction, where the guard
-+				 * above has already proved @reg fits 32 bits.
-+				 * Then @reg is @known_reg's low half with
-+				 * nothing above it, whichever way @known_reg
-+				 * filled its own high half, so the zero
-+				 * extension is the reconstruction for both
-+				 * kinds. BPF_REG_LINK_FULL is not here on
-+				 * purpose: it relates all 64 bits and must not
-+				 * be truncated.
-+				 */
- 				zext_32_to_64(reg);
-+			}
- 			/*
- 			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
- 			 * link over a wide base does not propagate back, so the
+@@ -18622,6 +18647,7 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 				*reg = prev;
+ 			reg_bounds_sync(reg);
+ 		}
++scratched:
+ 		if (e->is_reg)
+ 			mark_reg_scratched(env, e->regno);
+ 		else
+diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+index 9a33cc60e8cb..69efe1381eca 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
++++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+@@ -247,6 +247,30 @@ l0_%=:								\
+ }
+ #endif /* CAN_USE_MOVSX */
+ 
++SEC("socket")
++__success
++__retval(0)
++__naked void zext_reverse_pins_low_half(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	r6 <<= 32;						\
++	call %[bpf_get_prandom_u32];				\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	w7 = w6;						\
++	w7 += 5;		/* r7 = (u32)(r6 + 5) */	\
++	if w7 != 15 goto l0_%=;	/* so (u32)r6 == 10 */		\
++	if w6 == 10 goto l0_%=;					\
++	r0 /= 0;						\
++l0_%=:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ /*
+  * Test that sync_linked_regs() correctly handles large offset differences.
+  * r1.off = S32_MIN, r2.off = 1, delta = S32_MIN - 1 requires 64-bit math.
+@@ -414,9 +438,11 @@ l0_%=:								\
+ }
+ 
+ /*
+- * Test that sync_linked_regs() skips propagation when one register used
+- * alu32 (BPF_REG_LINK_ZEXT) and the other used alu64 (BPF_REG_LINK_FULL).
+- * The delta relationship doesn't hold across different ALU widths.
++ * Test that sync_linked_regs() does not carry the delta relationship across
++ * registers that used different ALU widths: r7 used alu32 (BPF_REG_LINK_ZEXT) and r8
++ * alu64 (BPF_REG_LINK_FULL), so the relationship does not hold over all 64 bits. The
++ * low half is recovered -- r8 comes out exactly 0x100000000 -- which is why
++ * the div is still reachable and this is a __failure.
+  */
+ SEC("socket")
+ __failure __msg("div by zero")
+@@ -434,7 +460,7 @@ __naked void scalars_alu32_alu64_cross_type(void)
+ 	/* r7 = 0xFFFFFFFF */					\
+ 	/* sync: known_reg=r7 (BPF_REG_LINK_ZEXT), reg=r8 (BPF_REG_LINK_FULL) */ \
+ 	/* Without fix: r8 = zext(0xFFFFFFFF + 1) = 0 */	\
+-	/* With fix: r8 stays [2, 0x100000001] (r8 >= 2) */	\
++	/* With fix: r8 == 0x100000000, so still > 0 */		\
+ 	if r8 > 0 goto l1_%=;					\
+ 	goto l0_%=;						\
+ l1_%=:								\
+@@ -950,8 +976,10 @@ __naked void zext_no_sync_between_mixed_kinds(void)
+ }
+ 
+ /*
+- * ... and here the low-32 link is the branch register, so the register
+- * carrying the delta must not be narrowed either.
++ * ... and here the low-32 link is the branch register. Its low half does
++ * reach the register carrying the delta, but the high half must not: r8's
++ * low 32 bits become 3 while the rest stays unknown, so r8 == 3 is still
++ * not provable and the div stays reachable.
+  */
+ SEC("socket")
+ __failure __msg("div by zero")
+@@ -1276,9 +1304,10 @@ __naked void sext_no_sync_when_base_has_delta(void)
+ 
+ /*
+  * ... and with the link as the branch register the propagation must not run
+- * backwards: a BPF_REG_LINK_SEXT register knows nothing about the base's high half, so
+- * narrowing it must leave the rest of the set alone. Were the guard missing,
+- * r8 would be rebuilt as r7 + 3 == 2, treating r7 as if it were the base.
++ * backwards over the high half: a BPF_REG_LINK_SEXT register knows nothing about the
++ * base's high bits. The low half is recovered, so r8's low 32 bits do become
++ * 2, but treating that as the whole value -- r8 == 2, as if r7 were the base
++ * -- must not happen.
+  */
+ SEC("socket")
+ __failure __msg("div by zero")
 -- 
 2.53.0-Meta
 
