@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792478308;
-	b=pJd2KJ/4x2auJjpM4jm26h+s136ETCeSMzjHdAzAJtKMfmzH05MpYsq8YkjyysSpkFIp
-	 laND74wZSjov2bbCwVdlSpplG7wSR1t81A9XPS0QbInDReUNfZw9sccf5r6jmb4z0hPwn
-	 N95wM8pvQePFod85xXSg7L643aE78nk0QTOOTOAoOMW+ycEP6nmTZPT8+pHE2NRB2PCgR
-	 INdAM/hioYA3akbd0AYPHOyWUKQG3CDeDP06mLQWlSpnga28pOJzcn7HL4MignQKEbi4e
-	 KSv/2Ye3CsQXVuEn+Rniaz1ibemI5oSx5q+rO42lSYKkK+S2ugLsUPFAQmF45qZSPvw==
+	t=1792478311;
+	b=vlwg9iJrh7zJOXWroiSg4N50/f4ZayHdtoyDWCWv3HFicXVOHOepi9eueDYZBRJjftLv
+	 46tRXWBn64ko6dWptXYRBQz3oQ6jOTbFDjECm6oEIW0/S15trE7wAuRXIy0NiZF2B4OUt
+	 eGvj1s4z1slzVA33JrZPVXM3DNPubAswy57YOCzaqe67bUGF2ndY9UjmSPzTdtGf9rh/F
+	 S7/QZFhPsr7dDFZvrgcRoGspZEZZQI7cZqawSPwWiE+CB1YtxpBZ3KILKVUsLYmUCXfHd
+	 Q7hk22pl7nCFD/tb55M0BXEe4KP0EPU18KRlevpsqja5pe7Koc/IJXzt8z9zbiEtX1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792478308;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792478311;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=54nP+hVnBR38qJFAJ37FPqemtxXLBnXTchrtQmC7INs=;
-	b=jsiut3GGw793QG1kMYg5435pl/8hjMYrb4vnnc4Qz/lYwr0t6MrnpE4vZGqabUH2y/mr
-	 ATFp42dhqLefE71zKIM+So7RcyO+ecO/eUpVCXpUntTyLuprHTbImaS1p1UUyE727z9lp
-	 VQV09loyy7pc74DHwtpSuECOMq0/5HhsmOTSQyAB2GkvztzZP7ubLw9uzVZlMqC50c6Wb
-	 LW85txRPYyfcguHGZRN0rsmGgFVISFh9QPjCiglZl50TvVTc58pbCv7cJdwVOYiKsQxuO
-	 EMrnWqnKxpOqOwtLVAl94tKOXuH3b7fxKB0mayhTpHJQ/hUXSimTDq7wTudUqksgVEQ==
+	bh=u9+toBtEEPVpz6hTN7Pcfhr9T4/drBZovt9bfqsgE5Q=;
+	b=OOBBHH4gnywMWN0Ta+LtzfZBKY2G3iSvc8ZxAp7RJ24E1J144bASqxVzujI8DUDjM0O3
+	 ya1QRbUavYN5HIaLc+1JoCkKiwlsS4Bk+QHAUFIvLUi3tbf6pTQmLgzgbMhLZ2+t2wzp/
+	 HHpKBHF5shYAbWuWIkiNCCMYZyhwYPcT7u4o/awxbXunnjHslNOP5hkXydjAC6yIsZ92i
+	 yG1blbRDhK7EBlg4po6UDLXrrMy3H1Y8LwKKgbwmpYkS2otXIwc6xqWKAaesXQRgPzI0n
+	 0BoaiDXrx9HkZAcMXfybfHqmFylX6P4xVrYjKQCbOQgcLoe/cAs5kmuLriEqlAqBpNA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Aln6DWWQ;
-	arc=none smtp.remote-ip=209.85.221.54
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JT4YDfD0;
+	arc=none smtp.remote-ip=209.85.221.41
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08E4606A31F
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:38:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A08E4606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FCA260A2616
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:38:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7FCA260A2616
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Aln6DWWQ
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48b042c0759so1808475f8f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:38:27 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JT4YDfD0
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-48e0d885929so2135471f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:38:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792478306; x=1793083106; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792478309; x=1793083109; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=54nP+hVnBR38qJFAJ37FPqemtxXLBnXTchrtQmC7INs=;
-        b=Aln6DWWQ66nyAA9XH0EuCU+6CESveBtk2wAH+eysfQwQxncBnpy32ta5rQJP2FuDG9
-         foMXr68z1yIVgvIA0V6vbJV0ZGqtgO/wNwSP+mOmHw2/CgFj2Qx9eiowrJRrhT/ttb+U
-         uzN9WFHl2ux1CLe7GuIunPeHCivhj+M5O2rNz53CCeloPsLYiPERQNOrsDOAdc6qtpRP
-         ywiMxJL65clx/1iZeHhJFYHAD62irJ/hVko+GSsPoQaMGQPximjG8fLKLYoh/L7LuGj9
-         6WwnEo4A9NPLZ/qrE3RiteOxhMTxWtmYNG+nmjTA+c6zk60/7qSAvHHbKL4ZewVqPcCU
-         3BrQ==
+        bh=u9+toBtEEPVpz6hTN7Pcfhr9T4/drBZovt9bfqsgE5Q=;
+        b=JT4YDfD0Aw5+5dvdOGL1aJEX9vUX55vIr0W7wrSg0hkHHU+y7g+VR1R5WGzVJVmerg
+         84Os19N7kJt4mYuIyB1OsurnEfrJwgh0cRpXti8bgCAfWE6CRrQRTSTwd63oTfx56HYf
+         kIue6b47gLPi4YGFC2XTmQKoP2YG7eiDJUf11dPqm6XtEuyC51+Xg4Wz9FNZs1ceil5g
+         t3aXkRTU8hWZQ0A0pWwEmD8pbM+JgNbIFJkQBdPCzW+Ni3yZ6b9/IwVIKBnmSaX0nptD
+         v4/wqpQvM6kskNnN/qS/Xz23Nv89QoBOXfR74JxF9LKxgIC+xo4chsPOm2Xab+kt6ftA
+         5y/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792478306; x=1793083106;
+        d=1e100.net; s=20260707; t=1792478309; x=1793083109;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=54nP+hVnBR38qJFAJ37FPqemtxXLBnXTchrtQmC7INs=;
-        b=wQjC1WDwFkO1ef0FYWcOF26d4jwBEIP5wOZ1WHol8fLt3ANuoQ/CeDeYvAuPDzUG7v
-         XRsgl+U6MWmimzYIZbrOTwpmLok14a8X+nOA/APQu+Y/V77vl6tkvn6aWpkHF0NvW64a
-         +NYapoq8gXhw14tWgkd+i+LZqebH5sk7dHUCFRGAXKg0+D4AU4fB1tGTYKyDlZ122gjB
-         5PyvBnKXvEQXoBEsQyhiUzHZhDNZxwbO2sfjXo9ofOw7bEzalArqVt3NNS8i5n3KxAn0
-         wQ5vBys8bies/I5hti65VuS3gLXDJVP8/k521jrvYlWe8u0nmcYOjZuArlmjGP6b88s8
-         Xhjw==
-X-Forwarded-Encrypted: i=1; AKwUvByB8yXm+iYp0Jcw+mxbZ0bVmt5xFOpDL3Hx4DJl0ECvGJG0IqumMzR/IkPazdrD9jLwZXHGFsZQw/O0ngJrl44=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLz86q5q/qiFkNK165YoQlo53D5c9Tt9QM8z4P0x+lToeG48oGE
-	NZttU7uhqQgDKjqSmwZxYt7GBcLzuEv73dt87gjPSXMXt3hcwZDHR//f
-X-Gm-Gg: AYBFou2Qku54LSPen6JMrqt7mYtZkgk17PIQcaYo8Nbr4BCpLSpdcGBKr1NU5suN2J1
-	QjvK58Zy8XmWiY8ZpA6ynNhDuFnpNNtDX4FEv7PpaXzGETRDNrn8doVwXR5tqhHpwXAxYJeUWlQ
-	U7aDuATiSAXtGFBQjXfeZVjNSOHQG9AVuQ4uuU7xEDG2UwoOd6tQI23QAQyRjH2JRujIHERRU+E
-	yuc+QsTd6yLK0etiSZeoSEdGbPIR+2eWB3P5daZzCQjpe247Cjc2GPiILWoDYBA8KvsYpX7w5vH
-	Qj+JMyamPObb+RI5j4JBtcMSFvIOFa7nsz9psA0pVVSm3k44hWegJHBoCJNIe7KDbMo265D3KZ5
-	YvBzVLa34jgJIx01ZroCbE2TNYF24j+lchMXdF930/hL4Z9dwA8DIfjcLhFapqa74ZCUvPFL8cf
-	v8CH8F5Kw3gH2vGjW+zPLeZaPsbpuHw3RjI0IwgEYnfwAdAuvhdNgi51v/t9aNhr/+AUp5D7cDO
-	KmAAYHbRVSOW1iHQibZxe5N1G+v7eEJ7w4ltoXN2BZk/dlXUhQ2m/VRAtsIPXSfEDayX/kWZLUi
-	bqetWShffEMt61QmNK9FAfcBGc0q7GGpy2XQhuLRc0PULhLj4RXYwEvp1kpmKdPRQLzR5qzIWw5
-	tCSxxUj6txec4
-X-Received: by 2002:a05:6000:1e4f:b0:48e:412:3829 with SMTP id ffacd0b85a97d-48e07fb2b18mr14486670f8f.15.1792478305848;
-        Mon, 19 Oct 2026 23:38:25 -0700 (PDT)
+        bh=u9+toBtEEPVpz6hTN7Pcfhr9T4/drBZovt9bfqsgE5Q=;
+        b=Rm8MVQM1dVyPIl6zqb1mZeIVXmelhbJrS+wBVxnfY9lswZmV0Sap56tc0yStmWPxES
+         QC21/wxGLjnw3JHXeekzGScURhxZqKV1x+K4KTS0zNk24tTfMm2Nk93pMN+M5yM5CosS
+         WdXVaB7N6v/QSrpEj7+leT2n7aB16ta7EiVCoatnXBpXkol2GxmpKFnbuiuPx3MHrGMA
+         iYTIOVR6L91urLSYosBxpIgjalFiuhWwntcdzmfxQ30CJAEKsL+ATs5LaJgk9nyH006b
+         bIsbjJkJVZa0BANySLpppB+KbH7gxTioJSt0sZ0avr32lF/B7MQGdjfRo/RHnh5AdDMG
+         Z7Nw==
+X-Forwarded-Encrypted: i=1; AKwUvBxarvVE349WmeV7Mj/J6RtmIcRB+8DFolLRBGKzn4+UAfk36KufE5ppHwb9XYV+XXwxj59IDmN3Nj7yWc8CuxI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIAlKQthrlSrxp6QLYXUOHfWQA3qQOxeCCfUPdQwks1poCrC0bt
+	Tffqgo3xWOpdjmYW+Ag35LSz6HBKMh4aCdZ4zPMtpGGmvpd55I/7sdio
+X-Gm-Gg: AYBFou3CgRdh+uE+k9sEMD6xQPZvra3/8Kxd2HskYGFuGklHtPjYps9H/+DpnojceMI
+	xPrLHZ8GU+lJszrbxEcxKwrSGqamaK6V4wYcp6t5e3By5xw+YetPlaL8NeSoh5HoHuzmrj/5Vui
+	9FfOZQQsWXK8bpQvIfGs7YvgyQRTj1vg4LTc06cV2nMLNSdj9OJcpvHJzyVWOdfTAmUtKRv1qmm
+	BklIPgbMri7sbT3AQWkNZ/aC2F2EuPqULnbdM0kXgozWBeihxU0PJY8srdl5Q3WTYK9IVg0Smwi
+	0si4q563O7ATIDwq0cwoOcQHRplTYB1hyOz3tPbIYcJAb6/i2BYKPr7v4BvE/JZD1rkod8Mv8m4
+	FOdAx6M8W4aXUgRZW3KnDQd9J9E6VqkCv3MVFztXUxhWGKXZOp5Uum07ssjsqZeacIppdGflqH1
+	V0SZq3EpIp1N5gKkO2f1oYeovaEMKVve6LP5Kv9zwRGm32MYHsoOtumcUy0qcB5Gixcsc4N95w2
+	PxFUu/s/oLac/b4jLz/8UZg8Ynau68oKhraPtRmgikjf02aQPJMb5lFd5r9mYjXI7goQhMP+ykB
+	va2Sv6rlCysnZzyhSQMWwUWyRguyMiHoHvqJ2Wh7xAz+NYeK/Dx7/Qhex1FIPf337MxVoHNKFyJ
+	tOw==
+X-Received: by 2002:a05:6000:400f:b0:48e:d88:55e5 with SMTP id ffacd0b85a97d-48e0d885ae8mr18682745f8f.6.1792478308630;
+        Mon, 19 Oct 2026 23:38:28 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-9c92-6501-2169-eb9c-7ad3-f5db.310.pool.telefonica.de. [2a02:3100:9c92:6501:2169:eb9c:7ad3:f5db])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d820714sm3916393f8f.35.2026.10.19.23.38.23
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d820714sm3916393f8f.35.2026.10.19.23.38.27
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 19 Oct 2026 23:38:25 -0700 (PDT)
+        Mon, 19 Oct 2026 23:38:28 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Jason Gunthorpe <jgg@nvidia.com>,
 	Alistair Popple <apopple@nvidia.com>
@@ -98,9 +98,9 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	linaro-mm-sig@lists.linaro.org
-Subject: [RFC PATCH 2/6] iommufd: Publish successful PAL mappings under resv
-Date: Tue, 20 Oct 2026 08:37:41 +0200
-Message-Id: <10fbbfdbf3a19fff48e504bcf5ec3a74f11bfd7c.1792477872.git.kmehltretter@gmail.com>
+Subject: [RFC PATCH 3/6] iommufd: Clear the PAL list before dropping resv
+Date: Tue, 20 Oct 2026 08:37:42 +0200
+Message-Id: <65a7be483aa5e374e0afd4d72cbafab0fd07a4a3.1792477872.git.kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <cover.1792477872.git.kmehltretter@gmail.com>
 References: <cover.1792477872.git.kmehltretter@gmail.com>
@@ -115,56 +115,37 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-iopt_map_dmabuf() stores the PAL map result in exp_phys before checking
-for errors and publishes the attachment after dropping resv. The
-attachment is already linked to the DMA-buf. An invalidation after the
-unlock can therefore pass a NULL attachment to dma_buf_pal_unmap_phys().
-On map failure, the non-NULL error pointer also looks like a live mapping
-to iopt_dmabuf_revoked().
+iopt_release_pages() frees the PAL physical list while holding resv but
+leaves exp_phys pointing to it. Between the reservation unlock and
+dma_buf_detach(), an invalidation can see that pointer and unmap the same
+list again.
 
-Keep the map result local until it succeeds. Publish the attachment and
-physical list together before dropping resv, leaving exp_phys NULL on
-failure.
+Clear exp_phys before dropping resv so a later invalidation sees that
+there is no live PAL mapping.
 
+Link: https://lore.kernel.org/r/20261016194022.62065-1-kmehltretter@gmail.com/
 Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- drivers/iommu/iommufd/pages.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/iommu/iommufd/pages.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
-index 0b32c65af..9e9bc6a1c 100644
+index 9e9bc6a1c..76d8803d6 100644
 --- a/drivers/iommu/iommufd/pages.c
 +++ b/drivers/iommu/iommufd/pages.c
-@@ -1491,6 +1491,7 @@ static int iopt_map_dmabuf(struct iommufd_ctx *ictx, struct iopt_pages *pages,
- {
- 	struct dma_buf_mapping_match pal_match[] = { DMA_BUF_IMAPPING_PAL() };
- 	struct dma_buf_attachment *attach;
-+	struct dma_buf_phys_list *phys;
- 	int rc;
+@@ -1674,9 +1674,11 @@ void iopt_release_pages(struct kref *kref)
+ 		struct dma_buf *dmabuf = pages->dmabuf.attach->dmabuf;
  
- 	attach = dma_buf_mapping_attach(dmabuf, pal_match,
-@@ -1513,16 +1514,16 @@ static int iopt_map_dmabuf(struct iommufd_ctx *ictx, struct iopt_pages *pages,
- 	if (rc)
- 		goto err_detach;
+ 		dma_resv_lock(dmabuf->resv, NULL);
+-		if (pages->dmabuf.exp_phys)
++		if (pages->dmabuf.exp_phys) {
+ 			dma_buf_pal_unmap_phys(pages->dmabuf.attach,
+ 					       pages->dmabuf.exp_phys);
++			pages->dmabuf.exp_phys = NULL;
++		}
+ 		dma_resv_unlock(dmabuf->resv);
  
--	pages->dmabuf.exp_phys = dma_buf_pal_map_phys(attach);
--	if (IS_ERR(pages->dmabuf.exp_phys)) {
--		rc = PTR_ERR(pages->dmabuf.exp_phys);
-+	phys = dma_buf_pal_map_phys(attach);
-+	if (IS_ERR(phys)) {
-+		rc = PTR_ERR(phys);
- 		goto err_unpin;
- 	}
- 
--	dma_resv_unlock(dmabuf->resv);
--
- 	/* On success iopt_release_pages() will detach and put the dmabuf. */
- 	pages->dmabuf.attach = attach;
-+	pages->dmabuf.exp_phys = phys;
-+	dma_resv_unlock(dmabuf->resv);
- 	return 0;
- 
- err_unpin:
+ 		dma_buf_unpin(pages->dmabuf.attach);
 -- 
 2.39.5 (Apple Git-154)
 
