@@ -1,93 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792506468;
-	b=mqlQxK4gdvUI4HO9bcU2Kg8TMkX94Hg0dit97ZesrJX/KY+iAYQ8A0FLDLceR0r4IGMr
-	 RcFlB28GxwIZAySIOkFtc0MB33/UtxsIBKyzVBe1xlKy4cf5jSZ/qYChm3tIh4F2Gz/cw
-	 mZccsAkBz+AyV0Yq12GENS+seRE9Qu24/T1+PesDuIE+oGaSN+ZvQHLT3dtjY5yRFQ+Qz
-	 AMTjQg9M8N7sikiKy6j8UXTkL9ZHz9MtvgBA/BzA2PKSbZ3j4fCaYi8YzHnZJbDS7K0QO
-	 8Htii4gwxMENVM+6rKGxc5Z0rTBk0OaiClXD75YCtHnyEGq4zxlR0d9HQ+pLEj0TKSA==
+	t=1792506611;
+	b=S2QOH5qMCfUn0pcgNgOEX6bwropmnJCq03+SkqOVqmqgh11qh75Dw7/BkVMG+2N2uFum
+	 wRXnoevG91sF4BJhm7jBwovhYDKjF7NaNJknmaR6YplwS5Q/PMbu49aexkwwiK8ViGkeK
+	 eiSJdqa2fja3RBBM1z1MjX+HsK9fR55EhyRbevhYNGx3qFzsFpueJZHMtjPgLv7rM7rjp
+	 CWYsTFVyGJqU6pVgXJvAeu8bF4Q49bEzb+pHsMJA2qrRAfMZcfPnKTBj8rBrGbFNJoDoD
+	 fuNBcydnmZNPyq9N1PD4ZDXKuGzCnzpoS/2csjELDINb+s0hnk/f5R36J3t0/hrcZUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792506468;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792506611;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:To:Cc:Message-ID:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=YYdUJX6CxNd1qo/rBqP+LkzXmW73u3T67hGKBmDRpeQ=;
-	b=PynZ6SQytt9Rw6jUnICZYTJTUNaJ5Zx8lrY/YtKXpjMGgb6OhD7ES3WtzUddABcwndhd
-	 B5rQyHY3Az2k2VNx2qlZ5epHsvXs2QylTq1vJkH9njgwOA2vUcHmYAZrMJxWhKH+YMsJs
-	 nX1AN9hrj4Kb6d7vQ3Q3Lyw9TA47RdtOuXujFzjxR/rBTxhhrzMOeQVnkODkcTyqGAo74
-	 TJB0vhP2mF3jMPNNGsMqc/okRg5IE2HTYbeIqPrBHatQ5Jn4C7whpT5cuHP493EJcgNPb
-	 zXcgDOSvtZ0KTd4JdRdtzTGv+C9rIzQysLc7luZz6n8bDCNgbfFb7m8BKCTd+usleMQ==
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=Xf7TkZF3OBqfOdq3p0Xj300grOV6/XXUYozCmNJzyro=;
+	b=gkmQhW4oXbqShmwAYNsMmp0Ml0dzOVIL4c479jxMtxuiijDhiLMVDMh7SggWy1aIwX3L
+	 HeLySF68ZLop3Kj6RMbEeJ2CdhOzeAunOvwPeMAAgQCuSlbWq3XuV2oaDZdtG8wKd0Ab0
+	 ikEShmRM0LnD2CsF2tB1HQ7WMIlFD8rWk5n8l5EpJLj/6jYpEOLQCxuj/eMORCc52dIrc
+	 eEpe2hD89fUoTQFu4oabmynuZlC3lSHuZFUfarkME/vDKQEC7bxPoPyqx0WMj/wPKKm4c
+	 hDvRmSMHhEHBbbnyInb7w+h3QD/juHlwIFY15pErcgYARC9nd3ePl08b2SzYr8Oxa4g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=X9eOmd0M;
-	arc=none smtp.remote-ip=209.85.219.42
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=Y4PdXNc2;
+	arc=none smtp.remote-ip=209.85.221.179
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56061606A32D
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 14:27:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56061606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E8A606A31D
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 14:30:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65E8A606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=X9eOmd0M
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-917a64f28d0so9543896d6.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 07:27:48 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=Y4PdXNc2
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5eac48af23fso888939e0c.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 07:30:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792506467; x=1793111267; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:message-id:cc:to:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YYdUJX6CxNd1qo/rBqP+LkzXmW73u3T67hGKBmDRpeQ=;
-        b=X9eOmd0MHVJiLpZa4cT4z4LcM6QV6Zh8LasqDEKQJryNFrsyTpXe8C2GA5JHRHRHUh
-         f+ZY8STqPP2xvorDdgtZk0o66VY/FBMgPeWW7xqkvAdiUkMAoKSsb0pRX7tvB9CHyP13
-         wnAdpSHEfxZywh9nfSmm5LX4HxOBN20HZHqqPGQlhRoWAymUi2qAXTag5wzaxZRG550I
-         JrIgYHtIemPegeV/UT7fEuu5TwjnCcBKeLrx1XFirvxvM294rXTV3zP7Z3dteRiDJLzr
-         GUj0jcgmXRd7LGzhej/7j4h9DLv64Gh0YdJp+yb4Sh8mS/43UoCNqxaFNqCTEXJ9u8xa
-         Dcyg==
+        d=soleen.com; s=google; t=1792506610; x=1793111410; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Xf7TkZF3OBqfOdq3p0Xj300grOV6/XXUYozCmNJzyro=;
+        b=Y4PdXNc2cM9BskKGMFzBwlWrJdLAc8rIQmdISWOj3T5xevM8MiipH3Iwjq22o13IPH
+         PDwdieZAEMH3I6FVZwIE40UH2GOvmPTiTbJ4PDl5a4NL2jrm7J8hTLex47no6oIsx7x7
+         ZyNzyKNdiMSU8+/xnfM2e3Zh91lfYDkZdOzWZGs16WgHn9qlIEhBG593eA8qgdZ7y1qG
+         nq5I0zF3zDIQNKZN1FpdXsWRYuucF9oi5gFULyuZoIBTeirAd3PvWG9ONEVBZcjp+I0X
+         t4OU5+Uod+QqBRUmAuaOYO+QvEDtaEcS80NVIrydSWjRSlnUciBpnKqxTM9WGDkq2YUM
+         Qy1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792506467; x=1793111267;
-        h=content-transfer-encoding:content-type:message-id:cc:to:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YYdUJX6CxNd1qo/rBqP+LkzXmW73u3T67hGKBmDRpeQ=;
-        b=hFJMVaAkGBufHqHR4McEAsRrBcC2dwga+QvTk3cljFu1cdcxZpfA6oar4E0FPEXwAh
-         KrWshvs2GX+HjDTrh1pCKjV1YnV3PG5DW2uiYLLic1snOQ12NVzoVOA756XI1Fy5ngm2
-         Sotlzu7avob+2/IFsM5BMQlX6x3OOvmzEHvPvSMNM4qa1je8/8ZWzsjkAwBqBECyIvKi
-         3GTQAHvVizRjjlGueFmrUuudx6mAe6L/gqXMfdsu/5rbusT/mutYgfPeU20+/eKeT7ta
-         ersfM5jidfuc/Rlhrim1iHvqn1pO4BRVZA/OK2B8PUF7dIIlzsn4T62n4LtbkJ7J7V/R
-         j5lw==
-X-Forwarded-Encrypted: i=1; AKwUvBxhdJwdO+jcUYt8UyQwz8c6+05uzV34P8KX/tnMkvHQXu0sVwFfUbXKaSiJqm+JHWFp5LguTgMDD4PbiZ6jpCc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI5cvKVc+tIlbiLsmKoD9MGxRTUtJ0nHTLR9rIOTxxe9jSoowkt
-	1x7lZrSCWlvbOtKer4+2P3ocZ8mZtuCFiXIK0MBgxyYAnp5xXcknzqk=
-X-Gm-Gg: AYBFou3CZiRMcJJDtzwrgv4nyWCrfH5e30oxrCc1ZdCTdIGNNg6WwT798hdW/irHx3+
-	yszksLd3XCX7ojZHSF1dhjC9Qc6KuJTIFnH57fVbchqLtpmZ9HAZhHQ1miGorgBDgjpyBrTvcLN
-	To4tR7Blamiltgg9coDjwarJwViRO5PR9deuAXEsXpXRIdWgsxHoeQjpRJBij/4vr903daQxcX8
-	1dPUoetMVGipd1rBaTS0xPXzN2CsoTfJeCPNO1wH5lLFEncnbIOCgNVdBK9ogjel8cuc8SzbcfQ
-	Huv5utZZKGX8sXPAJFanuCuoto88gNT4lx86iASK242nyT2MM9d2t3M7Xj+CV6xsjb7mhJamE8v
-	BEDAaZEEYD2s/FzA3/yYy0OU4Ek3kDVGLz8OC+/LDYGymG5Btbzxp2Jyp+YzvBzRHqP0ixAjL1c
-	Gzh4VQ/iiJTlsao4rlkgrEJpvWzS8EZePNicLe7vIE37kWYnccY45mKancB6qZ/qqwWrrGm9CfO
-	eojV9CWN4nBtl1AExI8qY4IeLY5PPwPwOGP6Hlyb6xbgZsyq6IalQVIL41gTYn/4556TFaFfT3Z
-	x+hlCg7CKcNQIKPqnJB3F5s1yAZtMoRqSFG9q4E=
-X-Received: by 2002:a05:620a:1a19:b0:93e:7156:f814 with SMTP id af79cd13be357-93f4c1c5518mr352969385a.11.1792506467179;
-        Tue, 20 Oct 2026 07:27:47 -0700 (PDT)
-Received: from [127.0.1.1] (207-237-119-98.s2383.c3-0.nyr-cbr1.nyr.ny.cable.rcncustomer.com. [207.237.119.98])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f4b0d7c74sm234996985a.35.2026.10.20.07.27.45
+        d=1e100.net; s=20260707; t=1792506610; x=1793111410;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Xf7TkZF3OBqfOdq3p0Xj300grOV6/XXUYozCmNJzyro=;
+        b=YbjAhEm2Fi68ynQc2U/0Dp9cL5Fs8BTk169TcNtJVU4wn4spJjodJNvXDUJg9G76Ve
+         mhlrcm/m7aiBXCDKx9nKW9oRkK95bd6QEUEb/+D1EBzoaIC7BYjP4+yRCSdiOJKazn2n
+         W77METRYSX0yi1Q5fw/X09EvQ1fxcm5sKOnv+94YJEEMTGAvmRyPgQ47BVjLklLo6HzY
+         uT+AKU+4hLEqXUcDTGUMUKKVJiZ2e5cKUk+A5aVOgiDTqAjevZfBBiXpEusDNwwrArNS
+         9z+t51aivX0GEXsF7Qs7hYWDpUzk4pNJFgp+sUOT05IJradsO5dtR9KLj5sVu2TmUpA0
+         Yq6w==
+X-Forwarded-Encrypted: i=1; AKwUvBz6VMcUpCVj+IbNguZc89wRO5/mjfHsNg7TP/PJ0NZZ56OZ2S//RDJkL0v95gRtxA6njooNtHip0M1UVZJIruY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ1manDYsEwzMVrOkN4FD52RH9KIgKgDWtL0syI4IuhoHtMo6DE
+	7DGdYvjNMV1MMBlJ2vWKlqZdfzTLMJk+U9eJCY8XVGaErf7JKq2zi6V/xi9x92yd1N8=
+X-Gm-Gg: AYBFou2VgHGtTAUUEUCcBJiwsHH36F2JCv2wIbWdGt+PMbpEK2VmsI34bff2FAe4Zdd
+	epdCnbOiGsbwVSlg6dtbygTZZx6so67X7+Kfz3ewnqe/8jktSr4scV/ChEcQoSL9DB4oUnIPZhm
+	80Lj18WAHR96z1CuuacLKX1kR/KvDXQdvbADgp4qTY5UFK3JIgdaEP3wjx9qtY03u1NkpiyqgA1
+	6IICxR6eQvGX7uGuiiXO6Xc/6D6u5Y1V0bAJWxHuZejy4kh5+NBsWcbbE7H07F6GWM3iowqX9ej
+	fscabty2e91JAyKMSAkbH4TW7zN0wdGCQtPmkcV/92TYZpK1XvljNkoXbYJia9UfiVYWlFcSUos
+	P8An+YM1XYNAnEP8cFaiwwkHbToJfSsnH0rYFalK+OSR3XcawG2KnxJ1A76fW11+Lj+u1qEH1bR
+	5MgzEleNIodQunfJ8t47lAkD9OTVgAViKyxsVz/G4S1R17Uahrph7hPYEF6x4xAID7ToC48c5bh
+	6wOfEcCKa1Df01fGXG1KqTu5y1mJaTzWuxwoRbdB/8NQXyD01haELzNwy2B8lE00m5W1bUT6dk=
+X-Received: by 2002:a05:6122:20a4:b0:5ea:cc3c:9449 with SMTP id 71dfb90a1353d-5eacc3c9891mr1844327e0c.19.1792506610182;
+        Tue, 20 Oct 2026 07:30:10 -0700 (PDT)
+Received: from google.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eaca7cc59asm5934172e0c.5.2026.10.20.07.30.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 07:27:46 -0700 (PDT)
-From: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
-Date: Tue, 20 Oct 2026 12:10:33 +0000
-Subject: [PATCH] Documentation: kunit: document --summary and --failed options
-To: brendan.higgins@linux.dev, david@davidgow.net, corbet@lwn.net
-Cc: raemoar63@gmail.com, skhan@linuxfoundation.org, rdunlap@infradead.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- workflows@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-ID: <179250646543.2190262.8632957027583518623@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+        Tue, 20 Oct 2026 07:30:09 -0700 (PDT)
+Date: Tue, 20 Oct 2026 10:30:08 -0400
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
+	linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org,
+	akpm@linux-foundation.org, linux-mm@kvack.org, vipinsh@google.com,
+	linux-kernel@vger.kernel.org, dmatlack@google.com,
+	kexec@lists.infradead.org, graf@amazon.com
+Subject: Re: [PATCH v1 1/7] liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl
+ to freeze sessions early
+Message-ID: <atd68E5_LA9bsfeV@google.com>
+References: <20261015093816.2438942-1-pasha.tatashin@soleen.com>
+ <20261015093816.2438942-2-pasha.tatashin@soleen.com>
+ <2vxz8q3shboh.fsf@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -96,43 +100,217 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2vxz8q3shboh.fsf@kernel.org>
 
-Commit 062a9dd9bad7 ("kunit: tool: Only print the summary") and commit
-3c67a2c09b3c ("kunit: tool: print failed tests only") added the --summary
-and --failed options to kunit.py, but the matching entries in the
-run_wrapper documentation were never added.
+On 10-20 13:08, Pratyush Yadav wrote:
+> Hi,
+> 
+> On Thu, Oct 15 2026, Pasha Tatashin wrote:
+> 
+> > Currently, LUO sessions are frozen automatically only inside the
+> > reboot(LINUX_REBOOT_CMD_KEXEC) pathway, where luo_session_serialize()
+> > iterates through all outgoing sessions under global write locks and
+> > freezes them serially during shutdown. Allowing userspace to decide when
+> > to freeze a session once it is done with it (and to freeze multiple
+> > sessions in parallel, since luo_session_freeze() only acquires the
+> > per-session mutex) avoids postponing this work to kexec shutdown and
+> > reduces blackout time.
+> >
+> > Introduce LIVEUPDATE_SESSION_FREEZE on session file descriptors to freeze
+> > a session early. The ioctl runs .freeze() across all preserved files in the
+> > session and serializes their metadata. Once frozen, no additional files can
+> > be added to the session, and subsequent freeze calls return -EBUSY. Freeze
+> > is only valid on outgoing sessions and returns -EINVAL on incoming ones.
+> >
+> > During kexec, sessions that were already frozen early are skipped, while
+> > sessions that did not invoke this ioctl auto-freeze as before. If an
+> > early-frozen session is released before kexec, its files are rolled back
+> > via .unfreeze() before being unpreserved.
+> >
+> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> [...]
+> > @@ -487,8 +488,10 @@ int luo_file_freeze(struct luo_file_set *file_set,
+> >  		file_ser->token = luo_file->token;
+> >  	}
+> >  
+> > -	file_set_ser->count = file_set->count;
+> > -	file_set_ser->files = kho_block_set_head_pa(&file_set->block_set);
+> > +	if (file_set_ser) {
+> > +		file_set_ser->count = file_set->count;
+> > +		file_set_ser->files = kho_block_set_head_pa(&file_set->block_set);
+> > +	}
+> >  
+> >  	return 0;
+> >  
+> > @@ -501,7 +504,7 @@ int luo_file_freeze(struct luo_file_set *file_set,
+> >  /**
+> >   * luo_file_unfreeze - Unfreezes all files in a file_set and clear serialization
+> >   * @file_set:     The file_set whose files are to be unfrozen.
+> > - * @file_set_ser: Serialized file_set.
+> > + * @file_set_ser: Serialized file_set, or %NULL if not serialized yet.
+> >   *
+> >   * This function rolls back the state of all files in a file_set after the
+> >   * freeze phase has begun but must be aborted. It is the counterpart to
+> > @@ -512,7 +515,8 @@ int luo_file_freeze(struct luo_file_set *file_set,
+> >   * their respective .unfreeze() handler callbacks.
+> >   *
+> >   * Context: This is called when the live update is aborted during
+> > - *          the reboot() syscall, after luo_file_freeze() has been called.
+> > + *          the reboot() syscall, after luo_file_freeze() has been called,
+> > + *          or when an early-frozen session is released before kexec.
+> >   */
+> >  void luo_file_unfreeze(struct luo_file_set *file_set,
+> >  		       struct luo_file_set_ser *file_set_ser)
+> > @@ -521,7 +525,8 @@ void luo_file_unfreeze(struct luo_file_set *file_set,
+> >  		return;
+> >  
+> >  	__luo_file_unfreeze(file_set, NULL);
+> > -	memset(file_set_ser, 0, sizeof(*file_set_ser));
+> > +	if (file_set_ser)
+> > +		memset(file_set_ser, 0, sizeof(*file_set_ser));
+> >  }
+> >  
+> >  /**
+> > diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+> > index 64879ffe73781..b42369c3b1f30 100644
+> > --- a/kernel/liveupdate/luo_internal.h
+> > +++ b/kernel/liveupdate/luo_internal.h
+> > @@ -64,6 +64,8 @@ struct luo_file_set {
+> >   *              previous kernel) sessions.
+> >   * @retrieved:  A boolean flag indicating whether this session has been
+> >   *              retrieved by a consumer in the new kernel.
+> > + * @frozen:     A boolean flag indicating whether this session has been
+> > + *              frozen early from userspace.
+> >   * @file_set:   A set of files that belong to this session.
+> >   * @mutex:      protects fields in the luo_session.
+> >   */
+> > @@ -71,6 +73,7 @@ struct luo_session {
+> >  	char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+> >  	struct list_head list;
+> >  	bool retrieved;
+> > +	bool frozen;
+> >  	struct luo_file_set file_set;
+> >  	struct mutex mutex;
+> >  };
+> > diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+> > index f48e9a4185f97..403906937bc0f 100644
+> > --- a/kernel/liveupdate/luo_session.c
+> > +++ b/kernel/liveupdate/luo_session.c
+> > @@ -34,10 +34,11 @@
+> >   * 1.  Creation: A userspace agent calls `luo_session_create()` to create a
+> >   *     new, empty session and receives a file descriptor for it.
+> >   *
+> > - * 2.  Serialization: When the `reboot(LINUX_REBOOT_CMD_KEXEC)` syscall is
+> > - *     made, `luo_session_serialize()` is called. It iterates through all
+> > - *     active sessions and writes their metadata into a memory area preserved
+> > - *     by KHO.
+> > + * 2.  Freeze / Serialization: Sessions may be frozen early from userspace
+> > + *     via `LIVEUPDATE_SESSION_FREEZE`. When the `reboot(LINUX_REBOOT_CMD_KEXEC)`
+> > + *     syscall is made, `luo_session_serialize()` is called to freeze any
+> > + *     remaining active sessions and write all session metadata into a memory
+> > + *     area preserved by KHO.
+> >   *
+> >   * 3.  Deserialization (in new kernel): After kexec, `luo_session_deserialize()`
+> >   *     runs, reading the serialized data and creating a list of `struct
+> > @@ -222,6 +223,10 @@ static void luo_session_unfreeze_one(struct luo_session *session,
+> >  				     struct luo_session_ser *ser)
+> >  {
+> >  	guard(mutex)(&session->mutex);
+> > +	if (session->frozen) {
+> > +		memset(&ser->file_set_ser, 0, sizeof(ser->file_set_ser));
+> > +		return;
+> > +	}
+> >  	luo_file_unfreeze(&session->file_set, &ser->file_set_ser);
+> >  }
+> >  
+> > @@ -229,6 +234,12 @@ static int luo_session_freeze_one(struct luo_session *session,
+> >  				  struct luo_session_ser *ser)
+> >  {
+> >  	guard(mutex)(&session->mutex);
+> > +	if (session->frozen) {
+> > +		ser->file_set_ser.count = session->file_set.count;
+> > +		ser->file_set_ser.files =
+> > +			kho_block_set_head_pa(&session->file_set.block_set);
+> > +		return 0;
+> > +	}
+> 
+> This is getting messy. If early freeze, then you set the file_set_ser
+> here, if late freeze, you set it in luo_file_freeze().
+> 
+> I think it is better to just set it here, and drop the code from
+> luo_file_freeze() entirely.
+> 
+> Same for unfreeze.
+> 
+> Maybe also rename the function to make it clear it only runs for
+> serialization? The core of serialization is done by luo_file_freeze().
 
-Add descriptions for both options next to the other output options, so
-the documentation lists the arguments the tool actually accepts.
+Agreed, that is cleaner. In v2 I dropped struct luo_file_set_ser * from 
+luo_file_freeze() and luo_file_unfreeze() completely, and renamed the 
+session helpers to luo_session_serialize_one() / 
+luo_session_unserialize_one() so all of struct luo_session_ser is 
+populated and cleared there.
 
-Assisted-by: LLM
-Signed-off-by: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
----
- Documentation/dev-tools/kunit/run_wrapper.rst | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Pasha
 
-diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-index cecc110a..641ab50a 100644
---- a/Documentation/dev-tools/kunit/run_wrapper.rst
-+++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-@@ -327,6 +327,14 @@ command line arguments:
- - ``--junit``: If set, stores the test results in JUnit XML format and prints to `stdout` or
-   saves to a file if a filename is specified.
- 
-+- ``--summary``: If set, prints only the summary line for parsed test
-+  results, rather than the result of every individual test. Does nothing
-+  if ``--raw_output`` is set.
-+
-+- ``--failed``: If set, prints only the tests that failed or crashed, along
-+  with the summary line, once all tests have run. Does nothing if
-+  ``--raw_output`` is set.
-+
- - ``--filter``: Specifies filters on test attributes, for example, ``speed!=slow``.
-   Multiple filters can be used by wrapping input in quotes and separating filters
-   by commas. Example: ``--filter "speed>slow, module=example"``.
-
-base-commit: c03c1a14507dfaf8b856c2608f9ac216021fc222
--- 
-2.34.1
-
-
+> 
+> >  	return luo_file_freeze(&session->file_set, &ser->file_set_ser);
+> >  }
+> >  
+> > @@ -249,8 +260,11 @@ static int luo_session_release(struct inode *inodep, struct file *filep)
+> >  		}
+> >  		sh = &luo_session_global.incoming;
+> >  	} else {
+> > -		scoped_guard(mutex, &session->mutex)
+> > +		scoped_guard(mutex, &session->mutex) {
+> > +			if (session->frozen)
+> > +				luo_file_unfreeze(&session->file_set, NULL);
+> >  			luo_file_unpreserve_files(&session->file_set);
+> > +		}
+> >  		sh = &luo_session_global.outgoing;
+> >  	}
+> >  
+> > @@ -267,6 +281,9 @@ static int luo_session_preserve_fd(struct luo_session *session,
+> >  	int err;
+> >  
+> >  	guard(mutex)(&session->mutex);
+> > +	if (session->frozen)
+> > +		return -EBUSY;
+> > +
+> >  	err = luo_preserve_file(&session->file_set, argp->token, argp->fd);
+> >  	if (err)
+> >  		return err;
+> > @@ -340,11 +357,34 @@ static int luo_session_get_name(struct luo_session *session,
+> >  	return luo_ucmd_respond(ucmd, sizeof(*argp));
+> >  }
+> >  
+> > +static int luo_session_freeze(struct luo_session *session,
+> > +			      struct luo_ucmd *ucmd)
+> > +{
+> > +	struct liveupdate_session_freeze *argp = ucmd->cmd;
+> > +	int err;
+> > +
+> > +	if (argp->reserved)
+> > +		return -EINVAL;
+> > +
+> > +	guard(mutex)(&session->mutex);
+> > +	if (session->frozen)
+> > +		return -EBUSY;
+> > +
+> > +	err = luo_file_freeze(&session->file_set, NULL);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	session->frozen = true;
+> > +
+> > +	return luo_ucmd_respond(ucmd, sizeof(*argp));
+> > +}
+> > +
+> [...]
+> 
+> -- 
+> Regards,
+> Pratyush Yadav
