@@ -1,108 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792480317;
-	b=N8s2JRj52W94+ycNRFKmHBUCnQ6++GRDdZCygza99AJBB7k/Im8l3wp/cRLs2YdJgYbH
-	 h6s7B2cT9GMmoIH2W3ojhRqC+4ZnOP8n4/RBGRUBoY7qwHMO8FSujG0Wf3S7rqm9rnZuj
-	 7fPE5tQL6xR5UAHqK8voAteyclOlIM0Q1kqPuSDY094W9i65n6JlNHUS0SAhfD+F5MQ3L
-	 lUrwYeiIgzKq7abSk121xx6BP7e5QVWTWJ4VQxcX0bQTUENIQBUq10T4cDigTjSbg2stz
-	 Z4ZNedzBG8I3HEzqbbbjE3ZC9pnEpRNUVYF1bvXgAoE0IrzxLFg043A6+3q+4KbfiOg==
+	t=1792482633;
+	b=BIz+BQK9pS3fEg40mmA1ASrQSbG+fxxHssw38bAkyg9Ihi2uB+1r05JUUDruEPvzJ2fU
+	 cWIUW+9AhqUpfhBSl8Kfz1gR46TpuDAxsy/IPqGSqnk7sOgxuvJY3EvqJExHz+05E/mpf
+	 7x7dWVEB1lDSNxJ/TsAQKXbe7KX4ywm1s+kWmHNQafgDCVW15eiBhgpWk8ZleK83AL80D
+	 tNmCkYkafjdzGXrBEEEeUuqH8TFOLZzhPHdEBIgJ2x0lK4pSynA9Mma/4guvcjl+xaAR5
+	 QXzBKbSoyY1reY2FXvlOh4yx8p/FeHlIhnJNJU0DL1VI28K0ROj4Y0I8kclVNZUhLjQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792480317;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=M2ZWtK3jwBgT6W5EC/9V6YJ1MiOaCmKaMmxzxQcJy6w=;
-	b=hQdwe8FGwOd5kbq1NHLRFaCDgxu2p8G6ReyIvsolehXJy296zGICzE/QNeULuQ+FMXYm
-	 kIzz8WTgJci39pk8slJZk0XfkcOt0chvF90ztPf2qc7U3t7nK2o9oN13Eo+nIXvgTpsXS
-	 8bhJIVplWbaUskIkBIOB/QH7XlSTuz38Vs16pIZBcTVNG+nBUPRu8Gsv6il03m/A66TzC
-	 JZAkOlssNEhl/KcckM3Q40EpktsxKJA2c6uQLCdwImOQCVpyHaux2r0NVQoOXV5k5j6H7
-	 hLqo2rhcSJBvwZAMqgNoBgSadQ1ksNE8+sqhV4fif+NmbA2Q89+qJetX0xvjKTOAoVQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792482633;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=Pu3C9gNSSW1SZOaOvtYdw2Ykdk6v6QqTygLjRHUJrNw=;
+	b=biqgXXkq0k3FFemOENEBAcxsTw2saU0HPWwks0lbtOuREnj5wcq4qowJviR5AlXf0Kg2
+	 kw3rmSrVG3h60lwsbQCPDZbAyV8As0B1R5HG/3nkZM4Ug7xEvbH/cEZamH4AjBgC/EOo7
+	 RvF2H3vPFbm3A7WlPXtfI3Ey9SVmuwlwV2091IQ9tad1Bwt7b27IBS1gFXnxROi4Znj8H
+	 S+UJyTz3c0C1/o5Ur9ZCYZt6KYlHvh2Pi/QlvhuV5yIjjMbhE3C9CcXG1rD5TTcJ9Z+yx
+	 iS3/aiNxPUi0CFLADU8630G9YHM71UKAzHqhCf5FRVpMy4a5xeYdBz/ME7pN2V/hk/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=KgBXG6iw;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=rVBKfbQY;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--michalblk.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=KNEzWwh8;
+	arc=none smtp.remote-ip=209.85.208.70
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCF3606A321
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 07:11:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FCF3606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B391606A325
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 07:50:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B391606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--michalblk.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=KgBXG6iw;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=rVBKfbQY
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792480316;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M2ZWtK3jwBgT6W5EC/9V6YJ1MiOaCmKaMmxzxQcJy6w=;
-	b=KgBXG6iw6YMaV6P+oSBrgP5JUW/vKzUjBrEgLS9knnuegNnO3yp0k+y7/wTtPPm5kixrf9
-	kTaOOLv0xCxY+WujwIAvGPHeixwmtoS1ixv8gbZuuGvWPCu40unnqNK/qRDL/9zVfPFCOh
-	7WSfHi5p0e62bizRwYkYELRSrwB98Rw=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-8-cc7ccJH_MzCf8xa53Cd7-w-1; Tue, 20 Oct 2026 03:11:49 -0400
-X-MC-Unique: cc7ccJH_MzCf8xa53Cd7-w-1
-X-Mimecast-MFC-AGG-ID: cc7ccJH_MzCf8xa53Cd7-w_1792480308
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4a1721559b4so29728785e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 00:11:49 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=KNEzWwh8
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-6b1e00100eeso4308735a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 00:50:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1792480308; x=1793085108; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=M2ZWtK3jwBgT6W5EC/9V6YJ1MiOaCmKaMmxzxQcJy6w=;
-        b=rVBKfbQYqDfcxMDVajSJ0//djDSLUEq072XS+G5TL1DWTT0+GB4v8hqSlkBH/fHiYT
-         Me4ww78z3ubKuKElpTYoIogjUXyPMkuqowXO93J3x+nDZkR21E0A0kO8qfzpKIoC8OpR
-         vePp6xjRYxl9Zt+ym9JLChvG0fbMHq0XOMTJcaDLcsSm04nGo7scVy9fydRuuzA7r+Lg
-         LrI06nWVKT0x2/xYp35Wkl/uSpPwo6pgwDxc3yI6/QNkjKT1YLn3TQmtRTa6G4FNio3K
-         KmNM5uYcp/W9UmNDDK5w7mep/tycZo+DZ9cSAFgyeCdZBuqYgJO1oBCKqmC5UvvjEKWX
-         EDbg==
+        d=google.com; s=20251104; t=1792482631; x=1793087431; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Pu3C9gNSSW1SZOaOvtYdw2Ykdk6v6QqTygLjRHUJrNw=;
+        b=KNEzWwh8XaWIpU1DTRtWXgQKqhe0s83oy6YjwNaGQEzs7MIrrIYC7I5AhhM+hZuOIP
+         bKYAI36EwB9xiCxKChnf5+RMli5Vy0vRwXshKchgJeMBJ/dT6yOwoMrdg8hFc+IgGcTF
+         vXTsB3kyja51khbbMx7DfUjAw3NCRKk20C39u+HbhqLPHQXbqJfZsSuzF6Itc7nD7jK+
+         vS6Xih/X/5kwh+/1yXSNGOwB7aakTqsQWUPbcfgdXvRAfgSaq1u7Ouj4L7uVzOmeUuh8
+         lzT+C+UnuIbUglPep3SPQZ3FsWz9xf8XVfMVZJc6rfNOt7mvRFrJXDBn4m7I2GQPCEHZ
+         9HCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792480308; x=1793085108;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=M2ZWtK3jwBgT6W5EC/9V6YJ1MiOaCmKaMmxzxQcJy6w=;
-        b=IUL7E+LCWdQIhCukTTxesXw3gBS8sBsNI9f6kzxEC76I4o0CJLHnRF4NUdZowp8vVq
-         6zqlwVT8WCGN6tVWe6ySEAMKr/XZIH2E3Ff4M/vaqK/9GeBoCM7/5J9x/bSxYBCAX19n
-         /9EntR3OmP/0ClQ1V6D5/hVTGb2VL2sqgKCbnVgV15/xbuuK/Mw3+ihZHli2tXraMWB4
-         SyrsDspZ1u0pG9IvqrRyq/mTcs7UxR2saiYsss/xztKSV1di+A1XBjhcjbWH/VNInDKt
-         PwhWJvVM7vFccTg9dUlHAvly9d+5sJjidQxrn5x7m3t5I4GUMNaObxNwB5jt3FQoP5lC
-         zHQQ==
-X-Forwarded-Encrypted: i=1; AKwUvByEE92mGUzDpZIIK/qddbEimstmNFGp2Rw703x6OlUKJHtw0QJsHL2XD5FGRRlzpB2PesT26R7+9oeQEG5WTDI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKtfOnXR8pjOw07g3zVbJUHHBchNjTRqxKJA2fe06AoMko+YrVQ
-	ryD+8u0FCKGrKrnRdIyAmB+DUtlULineTzW7753oyF0Jk6bPEAN967mtstg6u/rlL8sPlDygbR9
-	LwF4H7PK7RGHkAz3xt9u6oBEbQCC1FNF7vflrRc1UdC08seLZyN9N8rqva0GYdDwGTI566g==
-X-Gm-Gg: AYBFou1X0vESAcT8eBLh/MvZFsw3pMV1xTtwhWTk6OJ88olcirrIhz6ciw17qhnRVa9
-	IBysg/njE0E7uzfraDIlgvNX/sP4vIWyhrxTlvR8+klRQ7VIXbvGyrgzRNcdVg/fLD7fsYGgdcd
-	++ncq+KWqnJbyt1UnqRkuPO93a/fCMrby4gThDqiAO98mXRmGgeiJ78+UQG5XQPhGpJlqdxcNP/
-	rihGLaUpSgnzzu6OIf2PvF2ftkK5jfi130JWPkY7Dyiw73Gkbdm8L28S+9TKcyZiT0hb5lBrhmF
-	EilsOInbmG0/WLCRs6dC2B/SdkFH3sEtLP8yxlat3QAzJXIks4zQNom6XEJesSAKbzRx/p0fpMF
-	UMj3/IyClniDCvMMAatRQB3BkgP9kp1dghPGwYRAwHh7a1+GVoAGhc+LRAprieE+g2vUZwTvKSw
-	==
-X-Received: by 2002:a05:600c:3e05:b0:4a1:71ab:63ba with SMTP id 5b1f17b1804b1-4a1d763625emr205330605e9.29.1792480307727;
-        Tue, 20 Oct 2026 00:11:47 -0700 (PDT)
-X-Received: by 2002:a05:600c:3e05:b0:4a1:71ab:63ba with SMTP id 5b1f17b1804b1-4a1d763625emr205329845e9.29.1792480307327;
-        Tue, 20 Oct 2026 00:11:47 -0700 (PDT)
-Received: from [192.168.188.234] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1dc952d63sm331515125e9.2.2026.10.20.00.11.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2026 00:11:46 -0700 (PDT)
-Message-ID: <976d815d-a9ec-4fa0-9b16-8e55695706c2@redhat.com>
-Date: Tue, 20 Oct 2026 09:11:45 +0200
+        d=1e100.net; s=20260707; t=1792482631; x=1793087431;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Pu3C9gNSSW1SZOaOvtYdw2Ykdk6v6QqTygLjRHUJrNw=;
+        b=gzNe5C4HhulBBEPTcH32eEeyCcvuXd0sziux2HZ2lmNEsR0nTtsL+FVzctMEIihYt1
+         Chp3yNphdOhIE18c1fsMYpePB85YGDY3yx4Jilb9gVsoWKC9EJ7FHZ5vnGafVbbvkTjS
+         TYNvY3wdMDLrLWoLW7FEAu8sBcIDQSZGAhF9tHm84IA+oDHO1tIM4cuK6jl0Zz4b0SHR
+         /LR8iVUa2gHr6s3Njas/yc6lqkt19sZURDuFKcSq/CWOjnJohKunePbuuVdMLe/nfN/U
+         7EmjXZWeI1dC0FIjt8gOlH5yO36E/V1CqLMOhhs5EaSyJFrUYCcD5DUPBGZi0oobe5HG
+         J3Og==
+X-Forwarded-Encrypted: i=1; AKwUvBzyUscMKwMRyGYQM1rceeu6ZrhUSkbvee9rHv5iXGRmh1d86OGRBnjGu8c/YgXqVEmuVYVHMoE0fVtOO6RdKmU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ/pa18O95nG4Y/DVh8lDTW9sB88SefT42VMxiQs5sM1ucdTpxh
+	Ok/mUdSQcLz+3Q4fD+6qqfA1J2B+GGxTUnGTwgF2qBSVe/a/uYCcmKsCdm2RRVrx8mDtj6JCuTz
+	2CTiiuyI5ICWRxGxLKQ==
+X-Received: from edr4.prod.google.com ([2002:a05:6402:44c4:b0:6ac:b90c:5524])
+ (user=michalblk job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:44da:b0:6b1:b849:c7d8 with SMTP id 4fb4d7f45d1cf-6b3a81ac904mr4648985a12.38.1792482631297;
+ Tue, 20 Oct 2026 00:50:31 -0700 (PDT)
+Date: Tue, 20 Oct 2026 07:50:29 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,65 +75,441 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 3/6] net: add a generation counter for
- dev->mc changes
-To: Yuyang Huang <sigefriedhyy@gmail.com>
-Cc: netdev-bot+sashiko@kernel.org, ajay.kathat@microchip.com,
- aleksandr.loktionov@intel.com, andrew+netdev@lunn.ch,
- claudiu.beznea@tuxon.dev, davem@davemloft.net, dsahern@kernel.org,
- donald.hunter@gmail.com, edumazet@google.com, idosch@nvidia.com,
- jacob.e.keller@intel.com, kuba@kernel.org, johannes@sipsolutions.net,
- kees@kernel.org, kory.maincent@bootlin.com, kuniyu@google.com,
- nicolas.dichtel@6wind.com, nickgarlis@gmail.com, sd@queasysnail.net,
- shuah@kernel.org, horms@kernel.org, sdf.kernel@gmail.com,
- vadim.fedorenko@linux.dev, willemb@google.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org,
- netdev@vger.kernel.org
-References: <20261012011707.3378-4-sigefriedhyy@gmail.com>
- <179185709988.434549.15422498299449004512@kernel.org>
- <CA+7S2v+LHUWXQMD-cYPEzT5-f3Qhw_vz+LEssQH_A_oqDKtnnA@mail.gmail.com>
- <8dcd9564-e9a3-4b00-93b8-3cb023d68047@redhat.com>
- <CA+7S2v+rWYvz9xKPEeM6=3HPz3o7TbX2uRfRKk95f9Y60HnEiA@mail.gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <CA+7S2v+rWYvz9xKPEeM6=3HPz3o7TbX2uRfRKk95f9Y60HnEiA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.212.g129ede20d9-goog
+Message-ID: <20261020075029.330343-1-michalblk@google.com>
+Subject: [PATCH v2] selftests/sched_ext: Add class_switch_stall test
+From: Michal Blaszczyk <michalblk@google.com>
+To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>
+Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Kuba Piecuch <jpiecuch@google.com>, 
+	Michal Blaszczyk <michalblk@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/19/26 13:35, Yuyang Huang wrote:
-> On Mon, Oct 19, 2026 at 8:19 PM Paolo Abeni <pabeni@redhat.com> wrote:
->>
->> I agree this is not a blocker, but I think it would be nice if you could
->> follow-up on this one.
->>
->> The solution proposed by the LLM LGTM.
->>
->> Same here.
->>
->> Also, still speaking of possible follow-up,  I think it would be nice if
->> you could change the addr list lifecycle to RCU (no idea of how much
->> complex would be that).
->>
-> 
-> Thanks for the review. Since we're already at v12 I'd rather not respin
-> just for these, but I agree both are worth fixing, so I'll handle them as
-> follow ups.
-> 
-> The first one is a simple fix, so if v13 ends up being needed
-> for other reasons I'll fold it in there, otherwise I'll send it as a
-> separate patch.
-> 
-> The RCU conversion needs more thought and will probably
-> cause quite a bit of churn, so I'll try it if there's a v13, and if it
-> gets too messy. I'll post it separately later.
-To clarify: every I mentioned in my previous email was about possible
-follow-ups - not to be included here.
+Add a test for a task which leaves SCHED_EXT while it's waiting. Its
+scheduler keeps the task waiting on a DSQ after it wakes up. The test
+switches the task to SCHED_OTHER while it's waiting, lets it sleep outside
+of SCHED_EXT for longer than the watchdog timeout, then switches it back
+and wakes it up. The scheduler keeps it waiting again, for longer than the
+watchdog interval but shorter than the timeout, which the watchdog must not
+report as a stall.
 
-My understanding is that there is sort of a pending/implicit question
-from Jakub on v9: why are you doing this? is does it solve some
-specific scaling problem or is 'nl is nicer" thing?
+Without commit 993e8fbfecbb ("sched_ext: Reset runnable_at when a task
+leaves its scheduler"), the watchdog charges the task for the time it
+spent outside of SCHED_EXT and aborts the scheduler.
 
-/P
+Assisted-by: LLM
+Signed-off-by: Michal Blaszczyk <michalblk@google.com>
+---
+
+Notes:
+    v2: Raise the watchdog timeout to 3s and the park time to 2s, set
+    timeout_ms from userspace, shorten the time outside of SCHED_EXT to
+    TIMEOUT_MS + 1s, and derive the second read timeout from TIMEOUT_MS
+    (Andrea). Rebase on sched_ext/for-7.4-fixes, which has the fix this
+    tests, and refer to the fix by its commit ID.
+    
+    v1: https://lore.kernel.org/r/20261019124146.3582127-3-michalblk@google.com
+
+ tools/testing/selftests/sched_ext/Makefile    |   1 +
+ .../sched_ext/class_switch_stall.bpf.c        | 120 +++++++++
+ .../selftests/sched_ext/class_switch_stall.c  | 245 ++++++++++++++++++
+ 3 files changed, 366 insertions(+)
+ create mode 100644 tools/testing/selftests/sched_ext/class_switch_stall.bpf.c
+ create mode 100644 tools/testing/selftests/sched_ext/class_switch_stall.c
+
+diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
+index c5d3a2eaea7da..44083f1c65969 100644
+--- a/tools/testing/selftests/sched_ext/Makefile
++++ b/tools/testing/selftests/sched_ext/Makefile
+@@ -165,6 +165,7 @@ all_test_bpfprogs := $(foreach prog,$(wildcard *.bpf.c),$(INCLUDE_DIR)/$(patsubs
+ 
+ auto-test-targets :=			\
+ 	cgroup_nr_cpus			\
++	class_switch_stall		\
+ 	create_dsq			\
+ 	dequeue				\
+ 	dequeue_iter			\
+diff --git a/tools/testing/selftests/sched_ext/class_switch_stall.bpf.c b/tools/testing/selftests/sched_ext/class_switch_stall.bpf.c
+new file mode 100644
+index 0000000000000..8268dcb45a0cc
+--- /dev/null
++++ b/tools/testing/selftests/sched_ext/class_switch_stall.bpf.c
+@@ -0,0 +1,120 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * A scheduler that keeps the target task waiting on a DSQ when it wakes up,
++ * until it's switched out of SCHED_EXT or, if @park_ns is set, for @park_ns.
++ * This lets userspace switch the target out while it's waiting.
++ *
++ * Copyright (c) 2026 Google LLC.
++ */
++
++#include <scx/common.bpf.h>
++
++char _license[] SEC("license") = "GPL";
++
++#define PARK_DSQ 0
++
++UEI_DEFINE(uei);
++
++s32 target_pid;		/* set by userspace */
++bool park;		/* set by userspace, cleared when parking */
++u64 park_ns;		/* set by userspace, how long to park, 0 for no limit */
++u64 nr_parked;		/* how many times the target has been parked */
++u64 nr_released;	/* how many times the target has been released */
++
++static bool released;	/* set by the timer, cleared when parking */
++static s32 target_cpu;	/* CPU to kick when the timer fires */
++
++struct release_timer {
++	struct bpf_timer timer;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, u32);
++	__type(value, struct release_timer);
++} release_timer SEC(".maps");
++
++static int release_timerfn(void *map, int *key, struct bpf_timer *timer)
++{
++	released = true;
++	scx_bpf_kick_cpu(target_cpu, 0);
++	return 0;
++}
++
++s32 BPF_STRUCT_OPS(class_switch_stall_select_cpu, struct task_struct *p,
++		   s32 prev_cpu, u64 wake_flags)
++{
++	/* Don't dispatch directly so that wakeups go to ops.enqueue(). */
++	return prev_cpu;
++}
++
++void BPF_STRUCT_OPS(class_switch_stall_enqueue, struct task_struct *p,
++		    u64 enq_flags)
++{
++	struct release_timer *rt;
++	u32 key = 0;
++
++	if (p->pid != target_pid || !park || !(enq_flags & SCX_ENQ_WAKEUP)) {
++		scx_bpf_dsq_insert(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
++		return;
++	}
++
++	park = false;
++	released = false;
++	target_cpu = scx_bpf_task_cpu(p);
++	scx_bpf_dsq_insert(p, PARK_DSQ, SCX_SLICE_DFL, enq_flags);
++	__sync_fetch_and_add(&nr_parked, 1);
++
++	if (!park_ns)
++		return;
++
++	rt = bpf_map_lookup_elem(&release_timer, &key);
++	if (!rt) {
++		scx_bpf_error("failed to look up the release timer");
++		return;
++	}
++	bpf_timer_start(&rt->timer, park_ns, 0);
++}
++
++void BPF_STRUCT_OPS(class_switch_stall_dispatch, s32 cpu,
++		    struct task_struct *prev)
++{
++	if (released && scx_bpf_dsq_move_to_local(PARK_DSQ, 0))
++		__sync_fetch_and_add(&nr_released, 1);
++}
++
++s32 BPF_STRUCT_OPS_SLEEPABLE(class_switch_stall_init)
++{
++	struct release_timer *rt;
++	u32 key = 0;
++	s32 ret;
++
++	ret = scx_bpf_create_dsq(PARK_DSQ, -1);
++	if (ret)
++		return ret;
++
++	rt = bpf_map_lookup_elem(&release_timer, &key);
++	if (!rt)
++		return -ESRCH;
++
++	bpf_timer_init(&rt->timer, &release_timer, CLOCK_MONOTONIC);
++	bpf_timer_set_callback(&rt->timer, release_timerfn);
++	return 0;
++}
++
++void BPF_STRUCT_OPS(class_switch_stall_exit, struct scx_exit_info *ei)
++{
++	UEI_RECORD(uei, ei);
++}
++
++SEC(".struct_ops.link")
++struct sched_ext_ops class_switch_stall_ops = {
++	.select_cpu		= (void *)class_switch_stall_select_cpu,
++	.enqueue		= (void *)class_switch_stall_enqueue,
++	.dispatch		= (void *)class_switch_stall_dispatch,
++	.init			= (void *)class_switch_stall_init,
++	.exit			= (void *)class_switch_stall_exit,
++	.flags			= SCX_OPS_SWITCH_PARTIAL,
++	.name			= "class_switch_stall",
++};
+diff --git a/tools/testing/selftests/sched_ext/class_switch_stall.c b/tools/testing/selftests/sched_ext/class_switch_stall.c
+new file mode 100644
+index 0000000000000..2d0ca85caabb7
+--- /dev/null
++++ b/tools/testing/selftests/sched_ext/class_switch_stall.c
+@@ -0,0 +1,245 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Check that a task which leaves SCHED_EXT while it's waiting doesn't carry
++ * that wait over to its next stay on SCHED_EXT. If it did, the watchdog would
++ * count the time the task spent outside SCHED_EXT as waiting and abort the
++ * scheduler.
++ *
++ * Copyright (c) 2026 Google LLC.
++ */
++#define _GNU_SOURCE
++
++#include <bpf/bpf.h>
++#include <poll.h>
++#include <sched.h>
++#include <scx/common.h>
++#include <signal.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/wait.h>
++#include <unistd.h>
++#include "class_switch_stall.bpf.skel.h"
++#include "scx_test.h"
++
++#ifndef SCHED_EXT
++#define SCHED_EXT 7
++#endif
++
++/* watchdog timeout, the watchdog checks every half of it */
++#define TIMEOUT_MS 3000
++/* longer than the watchdog interval, but shorter than the timeout */
++#define PARK_MS 2000
++/* time spent outside of SCHED_EXT, a stale wait would exceed the timeout */
++#define OUTSIDE_MS (TIMEOUT_MS + 1000)
++
++static enum scx_test_status setup(void **ctx)
++{
++	struct class_switch_stall *skel;
++
++	skel = class_switch_stall__open();
++	SCX_FAIL_IF(!skel, "Failed to open");
++	SCX_ENUM_INIT(skel);
++	skel->struct_ops.class_switch_stall_ops->timeout_ms = TIMEOUT_MS;
++	SCX_FAIL_IF(class_switch_stall__load(skel), "Failed to load skel");
++
++	*ctx = skel;
++
++	return SCX_TEST_PASS;
++}
++
++/* Echoes back each byte from @in_fd. */
++static void child_main(int in_fd, int out_fd)
++{
++	char c;
++
++	while (read(in_fd, &c, 1) == 1) {
++		if (write(out_fd, &c, 1) != 1)
++			_exit(1);
++	}
++	_exit(0);
++}
++
++static bool read_byte(int fd, int timeout_ms)
++{
++	struct pollfd pfd = { .fd = fd, .events = POLLIN };
++	char c;
++
++	return poll(&pfd, 1, timeout_ms) == 1 && read(fd, &c, 1) == 1;
++}
++
++/* Waits for up to 1s for @pid to be in interruptible sleep. */
++static bool wait_for_sleeping(pid_t pid)
++{
++	char path[64], buf[512], *state;
++	bool sleeping;
++	FILE *f;
++	int i;
++
++	snprintf(path, sizeof(path), "/proc/%d/stat", pid);
++
++	for (i = 0; i < 1000; i++) {
++		f = fopen(path, "r");
++		if (!f)
++			return false;
++		/* The state follows "(comm)", and comm may contain ')'. */
++		state = fgets(buf, sizeof(buf), f) ? strrchr(buf, ')') : NULL;
++		sleeping = state && !strncmp(state, ") S", 3);
++		fclose(f);
++		if (sleeping)
++			return true;
++		usleep(1000);
++	}
++	return false;
++}
++
++/* Waits for up to 1s for the target to have been parked @cnt times in total. */
++static bool wait_for_parked(struct class_switch_stall *skel, u64 cnt)
++{
++	int i;
++
++	for (i = 0; i < 1000; i++) {
++		if (skel->bss->nr_parked >= cnt)
++			return true;
++		usleep(1000);
++	}
++	return false;
++}
++
++static bool set_policy(pid_t pid, int policy)
++{
++	struct sched_param param = {};
++
++	return !sched_setscheduler(pid, policy, &param);
++}
++
++static enum scx_test_status run(void *ctx)
++{
++	struct class_switch_stall *skel = ctx;
++	enum scx_test_status status = SCX_TEST_FAIL;
++	int to_child[2] = { -1, -1 }, from_child[2] = { -1, -1 };
++	struct bpf_link *link = NULL;
++	pid_t pid = -1;
++	int i;
++
++	if (pipe(to_child) || pipe(from_child)) {
++		SCX_ERR("Failed to create pipes");
++		goto out;
++	}
++
++	link = bpf_map__attach_struct_ops(skel->maps.class_switch_stall_ops);
++	if (!link) {
++		SCX_ERR("Failed to attach scheduler");
++		goto out;
++	}
++
++	pid = fork();
++	if (pid == 0)
++		child_main(to_child[0], from_child[1]);
++	if (pid < 0) {
++		SCX_ERR("Failed to fork");
++		goto out;
++	}
++	skel->bss->target_pid = pid;
++
++	if (!wait_for_sleeping(pid) || !set_policy(pid, SCHED_EXT)) {
++		SCX_ERR("Failed to switch the child to SCHED_EXT");
++		goto out;
++	}
++
++	/*
++	 * Keep the child waiting on the DSQ after it wakes up, and switch it to
++	 * SCHED_OTHER while it's still waiting.
++	 */
++	skel->bss->park_ns = 0;
++	skel->bss->park = true;
++	if (write(to_child[1], "a", 1) != 1 || !wait_for_parked(skel, 1)) {
++		SCX_ERR("The child wasn't parked");
++		goto out;
++	}
++	if (!set_policy(pid, SCHED_OTHER) || !read_byte(from_child[0], 1000)) {
++		SCX_ERR("The child didn't run after leaving SCHED_EXT");
++		goto out;
++	}
++
++	/* Let time pass while the child sleeps outside of SCHED_EXT. */
++	if (!wait_for_sleeping(pid)) {
++		SCX_ERR("The child didn't block in read()");
++		goto out;
++	}
++	usleep(OUTSIDE_MS * 1000);
++
++	/*
++	 * Bring the child back and keep it waiting for longer than the watchdog
++	 * interval, but shorter than the timeout. Its wait must start now, not
++	 * when it started waiting before it left SCHED_EXT.
++	 */
++	if (!set_policy(pid, SCHED_EXT)) {
++		SCX_ERR("Failed to switch the child back to SCHED_EXT");
++		goto out;
++	}
++	skel->bss->park_ns = PARK_MS * 1000000ULL;
++	skel->bss->park = true;
++	if (write(to_child[1], "b", 1) != 1 || !wait_for_parked(skel, 2)) {
++		SCX_ERR("The child wasn't parked again");
++		goto out;
++	}
++	/*
++	 * A stall is detected up to a watchdog interval after the timeout. Wait
++	 * long enough for it to be reported by the exit info below.
++	 */
++	if (!read_byte(from_child[0], 2 * TIMEOUT_MS)) {
++		SCX_ERR("The child didn't run after the second wait");
++		goto out;
++	}
++
++	/*
++	 * Only the watchdog aborting the scheduler lets the child run before
++	 * it's released. The exit info is recorded asynchronously, wait for it.
++	 */
++	if (skel->bss->nr_released != 1)
++		SCX_TIMED_WAIT_UEI(skel, uei, 1000);
++
++	if (UEI_EXITED(skel, uei)) {
++		SCX_ERR("Scheduler exited (kind=%llu): %s",
++			(unsigned long long)skel->data->uei.kind,
++			skel->data->uei.msg);
++		goto out;
++	}
++	if (skel->bss->nr_released != 1) {
++		SCX_ERR("The child was released %llu times, expected 1",
++			(unsigned long long)skel->bss->nr_released);
++		goto out;
++	}
++
++	status = SCX_TEST_PASS;
++out:
++	if (pid > 0) {
++		kill(pid, SIGKILL);
++		waitpid(pid, NULL, 0);
++	}
++	if (link)
++		bpf_link__destroy(link);
++	for (i = 0; i < 2; i++) {
++		if (to_child[i] >= 0)
++			close(to_child[i]);
++		if (from_child[i] >= 0)
++			close(from_child[i]);
++	}
++	return status;
++}
++
++static void cleanup(void *ctx)
++{
++	struct class_switch_stall *skel = ctx;
++
++	class_switch_stall__destroy(skel);
++}
++
++struct scx_test class_switch_stall = {
++	.name = "class_switch_stall",
++	.description = "Verify that leaving SCHED_EXT ends a task's wait",
++	.setup = setup,
++	.run = run,
++	.cleanup = cleanup,
++};
++REGISTER_SCX_TEST(&class_switch_stall)
+
+base-commit: e2859566ffbc3a9f33308255114ccf167124e048
+-- 
+2.56.0.212.g129ede20d9-goog
 
