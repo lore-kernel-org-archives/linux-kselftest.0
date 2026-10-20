@@ -1,114 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792520401;
-	b=nz+D/tBKZIftesX6d0TLViF0BMHplML0pCfuSCLYa0ST9ilbfWgBj9lH3BZ0fV2MmaZg
-	 1yJoRdUCQu7TLIX8F3x9Yd5bygUZI53U+GXSaHxxTv+Imgpf41hD/ds3aehlNY+SMl9ao
-	 1u86mCU8+2ahDUTRVjKIdKodeSoy2twJ+Vv8HQQtQ/TCFB7ysCgEMRH2A70QTdsafXUA3
-	 pQ7uQu7uITFWpHVtJ7DR44d5RhGpQTA0Aib8cGymBmyYXgDRtTVptQTzRtSQt3JIQngz5
-	 lJB3pxwMJ32D/MZ4G5aZ9M9Kd+LZZLOLQKbTFek9/wUp/UVhvGqJGh5xnn7b6Gzt/Ug==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792520401;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=AD4FupzOkNV/tXGDExVuku+h5mwG6UM+nTlzYdmocg8=;
-	b=rwCKaA23+785gPMr/LGhp2D6vWupqqHIc/G59n29/DKCHaf260IcvVHDJD+Ht/huPP3X
-	 Zo5W315oqWy1wrLmEZDrQahUlbtwpeMcxzo/sSf34WVLVguqZJBnTIfd2feyP+GwrbVGp
-	 kCyCE6LXA3vadhsYI5Hpdq/gtQpbzujSeZ1EJLnm7HhaSyJJUnKtA3BDkY0YNKV/E0ZdT
-	 LaX6s19tM3ehr9djiMs1zhRbX98RQKRowGplVHG7A2oR8lSQD/mRgq06qj89ADv7vYux5
-	 vy9TMQuQRDyf+x/miyaNOo/ttGHqZFl2c49Elh/u2VHBE/yYNBNIXUVVwp40Yw8oEGQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=YmxDgDCY;
-	arc=none smtp.remote-ip=74.125.82.177
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.53.1
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792520434;
+	b=x5yo2tsnxdHxvQFIMtrvT4M8YYrlcXbfZyh7GTd41k2K4h6WDqGbxrD7lgSpfiN9aw/s
+	 FJXXkjgqXXI5qn63WGhUZzRvbyrsV0rzSu9hwPUFpcQv5hk5tLcsMyJdE4xlgzyj57FOU
+	 6rj+YvfSa1R2+9SwolZJPJm7eC/9qlxa8Vy54yvuMih1dGAQ/XuaUfgIKwB1y4l4iDo6L
+	 AsB+NYCscqJ87xf9vwVZpNLakGmXg3Zpsxd8psVtJFbg8X0qX0aZ7DhFPOcBylX7Siszv
+	 5FsTnhqEvWGZ0pgYlWNZRXzx/qSNcvDB/C4B+9urAxrdsYvSthHSb8HCzZ9ULSVmhcA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792520434;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:Content-Type:Content-Disposition:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=iL7QWmo3ZUgPZJpZm6BtqmZyeRnpALI62uWLTk+NGjQ=;
+	b=niOpCn0GaOMNVN8IesyPWRhN5le4pQiC5gDJRAeIsFXb+PKkv4UthDyygZo4ZHctaJEs
+	 nyUjRhqIZqaCm2hRj/VJATAyl8ovZGfJog3FyXqRxHNBFxpLk2JimvNtLkDpjn/vIcMQe
+	 tE26yCHJRL1xTmnSDAGiF/9vDsBXeoCCVvhjTSTwqdUfNpXbNKBzf56KLHLn0w0PMCp8K
+	 Q7y/WhbHLtUtTsyyh3KcEbVf5IEulSCIxcejw1R9NFRxt36LAlxkaaNU2J3NdtasWwjaH
+	 7yyw6nhJ8McUjbZnPD/n+niqyhtg2RaZ96blC8VGQnNSMcbEphoX6+pcByc7/LmB5+A==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=Nw5TEhyN;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.53.1
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012001.outbound.protection.outlook.com [52.101.53.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E7D606A323
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 18:20:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56E7D606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288B960A3815;
+	Tue, 20 Oct 2026 18:20:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 288B960A3815
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=YmxDgDCY
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-3514b90bb89so9727777eec.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 11:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792520400; x=1793125200; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=AD4FupzOkNV/tXGDExVuku+h5mwG6UM+nTlzYdmocg8=;
-        b=YmxDgDCYwXPLjojoj00LgfK+nMoCRDKWWeILGeajTcfRbuJP/mKX0qAM/tetMB9+sP
-         JGBwy2BNDFEAkxnJGecRKgaXlIRajfitIHBhOjG/ZsJl+uflIjSaIaDy3TqkCmYxvxGb
-         fi1xyEO0U+BOHn5+UMGGy2cF4jyDAnzcJ0cLQhQTO5OVs2ZGxTw4bUTTnM3Eg0CupABI
-         B47zgQsiXBAXnBskNXIEZDRRh+Pxoti6p7kZ6lixWsSv2TG/t+ISucQWiwzROGqPPWdl
-         XBHip1/OpV5PwTmydNJCu/LZ5an3N7SLOxIslaRVsJeveuM3D1vCh9L2fIkRl2ihzkaN
-         s1iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792520400; x=1793125200;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=AD4FupzOkNV/tXGDExVuku+h5mwG6UM+nTlzYdmocg8=;
-        b=VpG4H94aF76u0AoRHIA4bqgSPBqM+M1IHAnloq7hpCY4Y0B9+71hHKs7XYrpavREMc
-         7naHkAsgnNJ3m7jp4df31l3yxiticVhgXLGsH8KYFWZ+OE9alQy28oY+l1RcdsAs2gIi
-         kW1QQTtODbD5COW5rBzwK8bxWiyPncS2XnOor4f+kqcsnughd7gSimjEtZyRj/n2VXz7
-         u9TkYSBWaq2OxKc6D7wBa9Cn5HmuT7d12b6rullipJ4gv71sM1fePHT+avPScyJ2mcm7
-         AU8duAHFHV+puKW4UIuPr7QTz8sZ8n5CMWki30HLc6eLxdHHPusPv4AoRPaNc0ml/MfT
-         NN+Q==
-X-Forwarded-Encrypted: i=1; AKwUvBybUZT9k17re3Qhee5byQ/5IzGbhgubOB8ktxPG1sTHicwEzOy+Hewn4WEo7Xk6lxqM0rCPR4wricsLB0GvDoM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIVtwGVuIyzPZwUwoA7AEw+LDAqBvMFnPCT54tAPKtQyloFi9cM
-	xf0WM+nyn8fbadSTG2UsGMV4heeIlhmS9HwLBodAXeGUbLfb6g8YE2jW
-X-Gm-Gg: AYBFou3W19Pw4dSAuDf5LrdfQW47f0TWEL8bh9Q6NrF2RWuq/AMCPdeijsJLxdlw+EB
-	2g/scHjtyrMLDX6IeE0vGnKH3aXvBwS0JRUg/z8ylod7utBFOF6xS4e2HTXtKFU+iuMRo3xSFGy
-	x8OK6XYIBHzRAVPvwnoLVLqkR+WJDskRMkwoQFE+kClgCJxGgdLtbnWWdEEeaBwAx7c74LmGZ+q
-	XB6suOi5yKpnwBPpIfnvNj2/pUjP1oIKYiMYfJCgqp1jOORZq/G7vbJk8nR0yvrfL4SARHA7N+v
-	gIwE+KRI1ZRhllTDe3tVE5diUxCoa334K25+vSK3KjjpxPLSbXXSA8EGX3yw65OBvZJ2osOAdTc
-	ju/u0YnEZ754dXLs70uH77Dix0/weGhUh9rSgd/AqoiJCWw9g1rEGx26luCWrrOuZkB4uQhDr0Z
-	y7NgdhnQ+tMGomGH+NjrQp1caRBihl95KS6gl1ZebAw4/XeOIqNHXt4VF4itg1Td4hHQ0gVWOq/
-	q0=
-X-Received: by 2002:a05:693c:65cc:b0:367:23b6:94e1 with SMTP id 5a478bee46e88-3674e25bf5cmr60596eec.41.1792520400378;
-        Tue, 20 Oct 2026 11:20:00 -0700 (PDT)
-Received: from unix.. ([181.229.23.179])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3673e15353csm523728eec.2.2026.10.20.11.19.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 11:20:00 -0700 (PDT)
-From: =?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mark Brown <broonie@kernel.org>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Albert Ou <aou@eecs.berkeley.edu>,
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=Nw5TEhyN
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kcmyuCiPX4Jk9SWZP7Z3GkzeEFVTYBNKkg1nwwMZCIbJaAc/7OKqPLQnkmIOYN9/KblNxSwrqBE3urDkydSb7h+M5inFt/Yf7tH3H4T6bhjFWV+TgNSr8c1KVRSlrQQkfJAIjdHqAYG28uIwk0+D7DNtsz69z3KSVoSDQrtuz1sqwGHYSGhE+dsLJIH912TgIEuvngfYAh2Jjauafv9xtk8eIOAbjUcfgoePQNvocjUTvoEQvOqiypDqJw+B7P50Xe+shtDdvV9Baubm3u0TkCoQFBMpAuXU1XgtdKu4CVr6dRFJy+3nIMdGXWWX7MksBhNmFYSLfvpVATNc+e6Diw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iL7QWmo3ZUgPZJpZm6BtqmZyeRnpALI62uWLTk+NGjQ=;
+ b=RLhw0O4wchbWNGDx+plJaG2aIS8sgGYiKr/mh9qPxGSWmq8NCD2tjBpL3gL4orTDYjpd/RMmtyqJbmbkjrI0CkqC6LmdyDavXT4/+GvMbePR35tHJLA8Z56E5txGcLhC42JHc3jid1fI3ZNXVSpqQq1oTuZ9jj+z1/lPu+mr4uq7xhs78ln+849HJ1Pcc0dim8m/Z/yHJZruv3JEW7BQJ048BdzgQJzhmiCtanzTM2LU/qOgLRrIbJdQsjxvakzdgm6lMCehwVjjbX/RkxQrOkCBVZeuTd1Riqs7EXsgKAQODV9+Y/KEouezW34O5ZG4s6Ze3KPaS89HCVGk1vaYRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iL7QWmo3ZUgPZJpZm6BtqmZyeRnpALI62uWLTk+NGjQ=;
+ b=Nw5TEhyN6WOQ1HyQUc453WhsQY+FANAyD9Z9QdIzgR0mNTQK2kIunTNdOfAz65P+35h7K7H5aj38vdjUPVzxSpSAnuhT11BCs1V+SAe/1VJXQzjxby4bRFFs852GAkyWGYmgvhHMJcgO3K4exNBwb4GffVrCwB3lQbaVQI25WA6bShAElE5rvDzGtSlw2ZznvuuNE1CEI8dWupckiqAWBH9zCeSxfRfY+9Mx2nDJ9Tclc3mgVJh3jxRgys6seLWq/+aKd0MIuMyss+UhTP5pWUd6YwEF//VGdwvr4VjSR1mo/xN+4yTK21MkY6oz9aMxsmy5vLC7NUcvzq6beAI90g==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CHBPR12MB731189.namprd12.prod.outlook.com
+ (2603:10b6:610:33d::12) by IA0PR12MB8253.namprd12.prod.outlook.com
+ (2603:10b6:208:402::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Tue, 20 Oct
+ 2026 18:20:30 +0000
+Received: from CHBPR12MB731189.namprd12.prod.outlook.com
+ ([fe80::b0e5:123d:fe06:e10d]) by CHBPR12MB731189.namprd12.prod.outlook.com
+ ([fe80::b0e5:123d:fe06:e10d%6]) with mapi id 15.21.0546.012; Tue, 20 Oct 2026
+ 18:20:30 +0000
+Date: Tue, 20 Oct 2026 15:20:29 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alistair Popple <apopple@nvidia.com>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Zong Li <zong.li@sifive.com>,
-	Charlie Jenkins <thecharlesjenkins@gmail.com>,
-	Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-	Zishun Yi <vulab@iscas.ac.cn>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH v2 4/4] selftests/riscv: shadow stack must not leak on a failed clone3
-Date: Tue, 20 Oct 2026 15:19:33 -0300
-Message-ID: <2c48cc867d005e2e54ca7d6c28c7f87b32a7a70b.1792519121.git.ivanrwcm25@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1792519121.git.ivanrwcm25@gmail.com>
-References: <cover.1792519121.git.ivanrwcm25@gmail.com>
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	dri-devel@lists.freedesktop.org, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [RFC PATCH 0/6] iommufd: harden DMA-BUF PAL setup and release
+Message-ID: <20261020182029.GH3008132@nvidia.com>
+References: <cover.1792477872.git.kmehltretter@gmail.com>
+ <atdKZpEJVZY0enR2@nvdebian.thelocal>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <atdKZpEJVZY0enR2@nvdebian.thelocal>
+X-ClientProxiedBy: MW4PR03CA0241.namprd03.prod.outlook.com
+ (2603:10b6:303:b4::6) To CHBPR12MB731189.namprd12.prod.outlook.com
+ (2603:10b6:610:33d::12)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -118,230 +105,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CHBPR12MB731189:EE_|IA0PR12MB8253:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2bf72785-7a1e-4985-0ea7-08df2ed6d2e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|366016|1800799024|7416014|376014|11063799006|4143699003|56012099006|10067099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	WaJJz491q/5sdPK8zoBlavkTOIVPYcVm/fHXZpxG3Qum0eTyqNH1AQrPRcie5uhTNkM5nDFcG0xW/8JibIW1jWZ9z5+3LchtEKANlEopOC2N9/yJmM3/lzgMnSnTe/Ea6RWelYj6ETD/J/+IEm11ISJcfPSS8Fh91Sw4srt57HwKCPuoT4/IhoEfF9gZiXV1R2OtLA2PlZ82KBfJws1+zRVIm4v/Jb7As7/bj+i5yBHnKgy5RO1BiMSFQBzVKJKGfHTIPD/LHDq2yru7GS5zzNb3k26q9xnehZCbFp+Sfy87QEF+07n9AFcyY7mAKVX1jcOlRXG3PmXpqjZ+IizJ17mVN06LwboRXgp4gfooqcUSAzszq4Ab9ew1pshF5XGsLsCssFtrjF3MVyiic5o27T0iH8uB27p9YJnuRFpCJdr7dX91C2C4Zx2IFDeRsAvxbvu6+CJQR9NCJTrJw1F5PTtOf0eIOZo9WqR/m3p7BHVNFpGH/1OHNL1LFc98jh8ZNVmkAEGUSABVqeBndcEVXJdgHMgzQfmTPJeM8IQV9TXL5OshFiomyb4JaODEilXSv7FRX3P9uY/O5Uv4NE/2JMKps6BFcVSBDPaY9MNPFy7PtP9k0pDtRdf4WcCjTtJmq8zcbSa3G8E+x1e3QQccxt6ys5Y3P7uHiLE0NqekuQQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHBPR12MB731189.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(7416014)(376014)(11063799006)(4143699003)(56012099006)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?bDc60YnkifBMVKmH8OqFdyP0ZtZD9luMDHPLgi0aXkhg3XVwwNb+XrbXGZj1?=
+ =?us-ascii?Q?Mi3jW8nrNPy/wjBxORswONgSwJsvHNrF+weL0XQXp694VTtolnW4anWIeAX2?=
+ =?us-ascii?Q?kg/XBH1NEkw4VUdMfRiffidccS8QBUlJrcXVaLI+ROHDxAnQ6/u/Sm6ta1VK?=
+ =?us-ascii?Q?04hH5Nd6z+OTxyG37J3yukmKLy24bnzJFs7pu2mvYEv/H/LQ+qXYOhF0xbaI?=
+ =?us-ascii?Q?h46ooQM9bGEUXA7v2HKavOwwgIHqCxim0gfIQsEPqjNW8OFHiQOGT6SAg/yi?=
+ =?us-ascii?Q?e4H0EP8oojjZV1w9LP5dTn0YLwFasnGQNjsg3aTV08uzPP51rgKZZIgqbi+w?=
+ =?us-ascii?Q?+6m+34xpxoEF1Dk69qU63PwuRWlVQYlWu5H7kVPXNbtZcsA0K2tez8Sb6xpp?=
+ =?us-ascii?Q?eHjs6Kb9glkIg09kpRwqfue0IzAXZNb1YT2I70OdRa+sA6MjWyrSXyUGUHLK?=
+ =?us-ascii?Q?wZ4EVxcmk/JrhP3XM4JU+8vw6WbLUr4YoQUObEjyw5KEuqUCMdu5UXYueIex?=
+ =?us-ascii?Q?MNcV7vypE122UQArzgBlwPYAEhrkVG3uf0CgRC2tXKbKH861MnLxfANOE4VP?=
+ =?us-ascii?Q?0MW11dkszFDOx+LKGcSQgaJnyXqdG458YKkDihl++wYBaMwNr+Rp4CVSHlFq?=
+ =?us-ascii?Q?npUMetWb/+gwTUd5HOsoiIsNUTP9P52slTv5wojDMaawUIsSxNfDTGmw8ni0?=
+ =?us-ascii?Q?DhOV3M3NwzVO4rz+84Cjgvi6kBm9T+zlCmdydwPCZIKm2KxQBS2U0wkBayy7?=
+ =?us-ascii?Q?HDm/3CEldAPAAQYCqrkrwDEr0fLF1GR38FHezov3gVFxF+PQo+bipXeZ98xj?=
+ =?us-ascii?Q?BNN911eyzTlZplUaCOAPKzJCayuW9omPk+EQv7iRquU9SnifjFYyn3imap2a?=
+ =?us-ascii?Q?XNIsZF7RMrOAts7spvfJf5wZFy4H4/HS0+CTElzmOZWd7m0myM1jDDLHmV6z?=
+ =?us-ascii?Q?eXsBxqmXoQKx5K12WPia4IuHX71bp+z7Th4czh4ChuX6B9LIcqAYBG1tzpE2?=
+ =?us-ascii?Q?SEar1zHAK+tf+d525ayiWM3vVASVmooSqegigU8f1Jim9T53xpe68XwwJbYL?=
+ =?us-ascii?Q?wAJeIPpVpV54l7pnhBb+WQv5ahWS3FoCGkQ2gv139nq+WdJom0v2s9hXABeX?=
+ =?us-ascii?Q?Cyai3SZAqo531tUwxJq+nsPhKNebpHiP6kyOlt47ovTC360f7wJUJ6Ybav1o?=
+ =?us-ascii?Q?ta3/tqAXMu6x7kldQXb2OBCHXiFOtrlrAHwf/Cnc8gLMTAE6xkPX9yZNBJn2?=
+ =?us-ascii?Q?iRMm1tOjev5KSqxXzvzxm6M34l3e7SrlzcFQkzNM5Rls8iZZWzVU5yptMs8x?=
+ =?us-ascii?Q?m0Jo6GWTuCEScXLt0No3ydFApc8sex+X4eqzMam1Cd/p0opLLYI1hhCz23R5?=
+ =?us-ascii?Q?IgO/KyIqVGOKxQKDuVNcGNXjuyKwGH9lqAfQ43fWDRTmllVwcafHxfGTNiaZ?=
+ =?us-ascii?Q?9uvDgeby2LLbPRCApLQWOHBG7nuTZnpNYPRFUYl4osUgWyTOkUuWuLxNbVSr?=
+ =?us-ascii?Q?BI3DlPDctRQgFLV+VzSPkgmLAMdxE/AzsXCAKe8yv0OAAlvQ2aERgul7nuPV?=
+ =?us-ascii?Q?9irONHaNP1QEuDwiXI1dLXt3H5pl5GT4ItqjsUd/lNTl39maagB+osdYgfeR?=
+ =?us-ascii?Q?hCIJJy8WlP5eJZjMHMht8nyZ+RzTZSODXKhk1hzV5bjm4k5F72RTaw5gwX6c?=
+ =?us-ascii?Q?M8SIuBw+zSPkFkl6zI+YvEqKxZkoBzu561JnHimCVbkSob0c?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bf72785-7a1e-4985-0ea7-08df2ed6d2e7
+X-MS-Exchange-CrossTenant-AuthSource: CHBPR12MB731189.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2026 18:20:30.7126
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yvlkmYvOtLtDxlsiIDDCvZVxTj8I0kd3Vf3EtCblVepyOp4FnXDjZBOMz2/iE4RP
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8253
 
-clone3(CLONE_VM|CLONE_PIDFD) with an unwritable pidfd pointer fails
-in put_user() after copy_thread() has mapped a shadow stack.
-copy_process() then calls exit_thread(). Without HAVE_EXIT_THREAD
-that free is a no-op and the VMA stays in the parent's mm.
+On Tue, Oct 20, 2026 at 10:16:26PM +1100, Alistair Popple wrote:
 
-Use kselftest.h / KTAP. Skip paths that cannot run the regression
-run before ksft_set_plan(). Then confirm a valid clone3 writes a
-pidfd, reject 16 bad-pidfd clones with -EFAULT, and require the
-shadow-stack VMA count (VmFlags " ss") to stay unchanged.
+> I haven't had a chance to look at these patches yet, but if some of them are
+> fixing bugs in Jason's series it might be best for us to fold them into that
+> series, with correct attribution of course. Anyway I will take a closer look in
+> the morning.
 
-ENOSYS, EINVAL, and EPERM from the valid clone skip. The rejected
-child exits with a raw ecall. The test expects /proc already
-mounted. The Makefile skips this binary when the compiler cannot
-target zicfiss/zicfilp.
+Are any fixing bugs in tree right now? I think one of them is already
+applied from someone else..
 
-Assisted-by: LLM
-Signed-off-by: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
----
- tools/testing/selftests/riscv/cfi/Makefile    |   5 +-
- .../selftests/riscv/cfi/shstk-clone-pidfd.c   | 173 ++++++++++++++++++
- 2 files changed, 177 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/riscv/cfi/shstk-clone-pidfd.c
-
-diff --git a/tools/testing/selftests/riscv/cfi/Makefile b/tools/testing/selftests/riscv/cfi/Makefile
-index 418b4b5325a5..dbecb1fd3b82 100644
---- a/tools/testing/selftests/riscv/cfi/Makefile
-+++ b/tools/testing/selftests/riscv/cfi/Makefile
-@@ -13,10 +13,13 @@ endif
- 
- 
- ifeq ($(shell $(CC) $(CFLAGS) -nostdlib -xc /dev/null -o /dev/null > /dev/null 2>&1; echo $$?),0)
--TEST_GEN_PROGS := cfitests
-+TEST_GEN_PROGS := cfitests shstk-clone-pidfd
- 
- $(OUTPUT)/cfitests: cfitests.c shadowstack.c
- 	$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $^
-+
-+$(OUTPUT)/shstk-clone-pidfd: shstk-clone-pidfd.c
-+	$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $^
- else
- 
- $(shell echo "Toolchain doesn't support CFI, skipping CFI kselftest." >&2)
-diff --git a/tools/testing/selftests/riscv/cfi/shstk-clone-pidfd.c b/tools/testing/selftests/riscv/cfi/shstk-clone-pidfd.c
-new file mode 100644
-index 000000000000..1f16d9c513e6
---- /dev/null
-+++ b/tools/testing/selftests/riscv/cfi/shstk-clone-pidfd.c
-@@ -0,0 +1,173 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * clone3(CLONE_VM|CLONE_PIDFD) with an unwritable pidfd pointer must
-+ * not leak a shadow-stack VMA. copy_thread() maps one, then put_user()
-+ * fails and copy_process() calls exit_thread(). Without HAVE_EXIT_THREAD
-+ * that free is a no-op and the VMA stays in the parent's mm.
-+ *
-+ * After enabling the shadow stack, do not return from main(): libc
-+ * frames above that point have no shadow-stack entries.
-+ */
-+#define _GNU_SOURCE
-+
-+#include <errno.h>
-+#include <linux/prctl.h>
-+#include <linux/sched.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include "../../kselftest.h"
-+#include "cfi_rv_test.h"
-+
-+#ifndef __NR_clone3
-+#define __NR_clone3 435
-+#endif
-+
-+#ifndef PR_GET_SHADOW_STACK_STATUS
-+#define PR_GET_SHADOW_STACK_STATUS	74
-+#endif
-+#ifndef PR_SET_SHADOW_STACK_STATUS
-+#define PR_SET_SHADOW_STACK_STATUS	75
-+#endif
-+#ifndef PR_SHADOW_STACK_ENABLE
-+#define PR_SHADOW_STACK_ENABLE		(1UL << 0)
-+#endif
-+
-+#define NCLONE			16
-+#define STACK_SIZE		(64 * 1024)
-+
-+static int count_ss_vmas(void)
-+{
-+	FILE *f;
-+	char line[256];
-+	int vmas = 0;
-+
-+	f = fopen("/proc/self/smaps", "r");
-+	if (!f)
-+		ksft_exit_fail_msg("fopen /proc/self/smaps: %s\n",
-+				   strerror(errno));
-+
-+	while (fgets(line, sizeof(line), f)) {
-+		if (!strncmp(line, "VmFlags:", 8) && strstr(line, " ss"))
-+			vmas++;
-+	}
-+	fclose(f);
-+	return vmas;
-+}
-+
-+/*
-+ * Raw ecall: the child resumes on an empty shadow stack, so a libc
-+ * return after clone3 would fault.
-+ */
-+static long clone_pidfd(void *stack, size_t stack_size, int *pidfd_ptr)
-+{
-+	struct clone_args args = {
-+		.flags = CLONE_VM | CLONE_PIDFD,
-+		.pidfd = (uint64_t)(uintptr_t)pidfd_ptr,
-+		.exit_signal = SIGCHLD,
-+		.stack = (uint64_t)(uintptr_t)stack,
-+		.stack_size = stack_size,
-+	};
-+	register long num __asm__("a7") = __NR_clone3;
-+	register long ret __asm__("a0") = (long)&args;
-+	register long sz __asm__("a1") = sizeof(args);
-+	int st;
-+
-+	asm volatile("ecall"
-+		     : "+r"(ret)
-+		     : "r"(num), "r"(sz)
-+		     : "memory", "cc");
-+	if (ret == 0) {
-+		register long n __asm__("a7") = __NR_exit;
-+		register long e __asm__("a0") = 0;
-+
-+		asm volatile("ecall" : : "r"(n), "r"(e) : "memory");
-+		__builtin_unreachable();
-+	}
-+	if (ret < 0)
-+		return ret;
-+	if (waitpid((pid_t)ret, &st, 0) < 0)
-+		return -errno;
-+	if (!WIFEXITED(st) || WEXITSTATUS(st) != 0)
-+		return 1;
-+	return 0;
-+}
-+
-+int main(void)
-+{
-+	void *stack;
-+	void *bad_pidfd;
-+	unsigned long ss_mode = 0;
-+	long rc;
-+	int pidfd = -1;
-+	int vmas0, vmas1;
-+	int i, n_efault = 0;
-+
-+	ksft_print_header();
-+
-+	stack = mmap(NULL, STACK_SIZE, PROT_READ | PROT_WRITE,
-+		     MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
-+	if (stack == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap stack: %s\n", strerror(errno));
-+
-+	bad_pidfd = mmap(NULL, 4096, PROT_NONE,
-+			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (bad_pidfd == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap pidfd page: %s\n", strerror(errno));
-+
-+	rc = my_syscall5(__NR_prctl, PR_GET_SHADOW_STACK_STATUS, &ss_mode,
-+			 0, 0, 0);
-+	if (rc == -ENOSYS || rc == -EINVAL || rc == -EOPNOTSUPP)
-+		ksft_exit_skip("shadow stack not available: %ld\n", rc);
-+	if (rc)
-+		ksft_exit_fail_msg("PR_GET_SHADOW_STACK_STATUS: %ld\n", rc);
-+
-+	if (!(ss_mode & PR_SHADOW_STACK_ENABLE)) {
-+		rc = my_syscall5(__NR_prctl, PR_SET_SHADOW_STACK_STATUS,
-+				 PR_SHADOW_STACK_ENABLE, 0, 0, 0);
-+		if (rc == -EOPNOTSUPP || rc == -EINVAL || rc == -EBUSY)
-+			ksft_exit_skip("cannot enable shadow stack: %ld\n",
-+				       rc);
-+		if (rc)
-+			ksft_exit_fail_msg("PR_SET_SHADOW_STACK_STATUS: %ld\n",
-+					   rc);
-+	}
-+
-+	rc = clone_pidfd(stack, STACK_SIZE, &pidfd);
-+	if (rc == -ENOSYS || rc == -EINVAL || rc == -EPERM)
-+		ksft_exit_skip("clone3 valid pidfd unavailable: %s\n",
-+			       strerror(-rc));
-+
-+	ksft_set_plan(3);
-+
-+	ksft_test_result(rc == 0 && pidfd >= 0,
-+			 "clone3 valid pidfd (rc=%ld pidfd=%d)\n",
-+			 rc, pidfd);
-+	if (pidfd >= 0)
-+		close(pidfd);
-+
-+	vmas0 = count_ss_vmas();
-+
-+	for (i = 0; i < NCLONE; i++) {
-+		rc = clone_pidfd(stack, STACK_SIZE, bad_pidfd);
-+		if (rc == -EFAULT)
-+			n_efault++;
-+	}
-+	ksft_test_result(n_efault == NCLONE,
-+			 "clone3 bad pidfd returns -EFAULT x%d\n", NCLONE);
-+
-+	vmas1 = count_ss_vmas();
-+	ksft_test_result(vmas1 == vmas0,
-+			 "no shadow-stack VMA leak (%d -> %d)\n",
-+			 vmas0, vmas1);
-+
-+	ksft_finished();
-+}
--- 
-2.43.0
-
+Jason
