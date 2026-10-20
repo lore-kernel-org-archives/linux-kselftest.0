@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792478311;
-	b=vlwg9iJrh7zJOXWroiSg4N50/f4ZayHdtoyDWCWv3HFicXVOHOepi9eueDYZBRJjftLv
-	 46tRXWBn64ko6dWptXYRBQz3oQ6jOTbFDjECm6oEIW0/S15trE7wAuRXIy0NiZF2B4OUt
-	 eGvj1s4z1slzVA33JrZPVXM3DNPubAswy57YOCzaqe67bUGF2ndY9UjmSPzTdtGf9rh/F
-	 S7/QZFhPsr7dDFZvrgcRoGspZEZZQI7cZqawSPwWiE+CB1YtxpBZ3KILKVUsLYmUCXfHd
-	 Q7hk22pl7nCFD/tb55M0BXEe4KP0EPU18KRlevpsqja5pe7Koc/IJXzt8z9zbiEtX1g==
+	t=1792478313;
+	b=WtTXm6Cem1S0wgXAwPTsYFSPWJFF6Pcykd/5+E+zHIjqYMNr5GmCIE7+OhszpuZQUcx0
+	 by/RzIqYfLoiIx/u0fNKXU0CWFDBNAKduaP1N0SJivIrXKj8omn5utA4ZFGxnyEpnbly+
+	 ZvLRegrQPEaURnKOjHF8OKqX6ps9Fb4oVCibv5EcVFBROvJJ2oy4cXTIWLhqkBV8TrYkV
+	 owQB9Aq7CJnsXq7pc81YMbwB/jMM4XrAKOHZp6KM0V6WRSjCeHtWVM1L8dKVdVS5VtIdu
+	 kN/H3H9tdgJgnEJlp0mf8Nd2jyi0rx2vI0LBzo1pbANtYE7i5henrGQ4SOcjAhz+EPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792478311;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792478313;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=u9+toBtEEPVpz6hTN7Pcfhr9T4/drBZovt9bfqsgE5Q=;
-	b=OOBBHH4gnywMWN0Ta+LtzfZBKY2G3iSvc8ZxAp7RJ24E1J144bASqxVzujI8DUDjM0O3
-	 ya1QRbUavYN5HIaLc+1JoCkKiwlsS4Bk+QHAUFIvLUi3tbf6pTQmLgzgbMhLZ2+t2wzp/
-	 HHpKBHF5shYAbWuWIkiNCCMYZyhwYPcT7u4o/awxbXunnjHslNOP5hkXydjAC6yIsZ92i
-	 yG1blbRDhK7EBlg4po6UDLXrrMy3H1Y8LwKKgbwmpYkS2otXIwc6xqWKAaesXQRgPzI0n
-	 0BoaiDXrx9HkZAcMXfybfHqmFylX6P4xVrYjKQCbOQgcLoe/cAs5kmuLriEqlAqBpNA==
+	bh=ZfCKuhuFLFgY7+lDwr5/B266OUdv6BfsTvR8mFssGTA=;
+	b=kfmdJg25aY4CBZt0hwYdZix8nYahO35+s4UgqyI6hF88Py0XRDxVu/ldJHBiiSrFWZ/F
+	 cKuT3lHGRASuXC4ytRcvtFyxwvIwcxOzvPcOFxx7mql68pxIDOKc19aP/OURXJr1/EUMv
+	 n2r9FPHgbUenjMJC71cQYfTzKNPyg7F0sWMoeihaL3aIlSeZZNGEFrXgPv27m9GgfFSah
+	 HkRnW+wN00cdjHd9uUBHKQKmi5xEJUW5VAwdpKV6nrGk/xOkeke6rYNPfTvKX0hDAUd14
+	 3+/0M951BlEVvZ90E0IebkrdpCNwxTUBV3K16NPpOgCebbG5Wy9gTYJLsBjZe1dFE5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JT4YDfD0;
-	arc=none smtp.remote-ip=209.85.221.41
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jyCX5E17;
+	arc=none smtp.remote-ip=209.85.221.49
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FCA260A2616
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:38:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7FCA260A2616
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8142660A262E
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:38:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8142660A262E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JT4YDfD0
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-48e0d885929so2135471f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:38:30 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jyCX5E17
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-48b001cd92bso1518750f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:38:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792478309; x=1793083109; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792478312; x=1793083112; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=u9+toBtEEPVpz6hTN7Pcfhr9T4/drBZovt9bfqsgE5Q=;
-        b=JT4YDfD0Aw5+5dvdOGL1aJEX9vUX55vIr0W7wrSg0hkHHU+y7g+VR1R5WGzVJVmerg
-         84Os19N7kJt4mYuIyB1OsurnEfrJwgh0cRpXti8bgCAfWE6CRrQRTSTwd63oTfx56HYf
-         kIue6b47gLPi4YGFC2XTmQKoP2YG7eiDJUf11dPqm6XtEuyC51+Xg4Wz9FNZs1ceil5g
-         t3aXkRTU8hWZQ0A0pWwEmD8pbM+JgNbIFJkQBdPCzW+Ni3yZ6b9/IwVIKBnmSaX0nptD
-         v4/wqpQvM6kskNnN/qS/Xz23Nv89QoBOXfR74JxF9LKxgIC+xo4chsPOm2Xab+kt6ftA
-         5y/w==
+        bh=ZfCKuhuFLFgY7+lDwr5/B266OUdv6BfsTvR8mFssGTA=;
+        b=jyCX5E17hnjLXAhAwoXKBMXQVYu+tPW2CI+HH0G2ER6wB9MTmmSiAZpi/as4fOdclo
+         kAXxM9PkY4H5JHdjsZ+4Bzx5HpHo2OnrZ1HwgLbj+bPwLnnqf70yEaupd4CLVASzf05+
+         OWSWlR51HT6pmhY9gIzfGoDxulMeZ7F5ku19C7h7HDX7X1ERjFj6F5Vm0iNa7uXV1PFt
+         NYQOfJoQQiaI/ISd6sVZIM0JKsBtHgJSriQUYmbyhsYlwRYCxSYdk4j45W35mPoYQWKe
+         eoBwtsyp9MCCF4vac8+i04nXoIXyxJkMqmbtyDTak7n0J5c3tabeCTmLOTojUJhKN4tk
+         yyXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792478309; x=1793083109;
+        d=1e100.net; s=20260707; t=1792478312; x=1793083112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=u9+toBtEEPVpz6hTN7Pcfhr9T4/drBZovt9bfqsgE5Q=;
-        b=Rm8MVQM1dVyPIl6zqb1mZeIVXmelhbJrS+wBVxnfY9lswZmV0Sap56tc0yStmWPxES
-         QC21/wxGLjnw3JHXeekzGScURhxZqKV1x+K4KTS0zNk24tTfMm2Nk93pMN+M5yM5CosS
-         WdXVaB7N6v/QSrpEj7+leT2n7aB16ta7EiVCoatnXBpXkol2GxmpKFnbuiuPx3MHrGMA
-         iYTIOVR6L91urLSYosBxpIgjalFiuhWwntcdzmfxQ30CJAEKsL+ATs5LaJgk9nyH006b
-         bIsbjJkJVZa0BANySLpppB+KbH7gxTioJSt0sZ0avr32lF/B7MQGdjfRo/RHnh5AdDMG
-         Z7Nw==
-X-Forwarded-Encrypted: i=1; AKwUvBxarvVE349WmeV7Mj/J6RtmIcRB+8DFolLRBGKzn4+UAfk36KufE5ppHwb9XYV+XXwxj59IDmN3Nj7yWc8CuxI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIAlKQthrlSrxp6QLYXUOHfWQA3qQOxeCCfUPdQwks1poCrC0bt
-	Tffqgo3xWOpdjmYW+Ag35LSz6HBKMh4aCdZ4zPMtpGGmvpd55I/7sdio
-X-Gm-Gg: AYBFou3CgRdh+uE+k9sEMD6xQPZvra3/8Kxd2HskYGFuGklHtPjYps9H/+DpnojceMI
-	xPrLHZ8GU+lJszrbxEcxKwrSGqamaK6V4wYcp6t5e3By5xw+YetPlaL8NeSoh5HoHuzmrj/5Vui
-	9FfOZQQsWXK8bpQvIfGs7YvgyQRTj1vg4LTc06cV2nMLNSdj9OJcpvHJzyVWOdfTAmUtKRv1qmm
-	BklIPgbMri7sbT3AQWkNZ/aC2F2EuPqULnbdM0kXgozWBeihxU0PJY8srdl5Q3WTYK9IVg0Smwi
-	0si4q563O7ATIDwq0cwoOcQHRplTYB1hyOz3tPbIYcJAb6/i2BYKPr7v4BvE/JZD1rkod8Mv8m4
-	FOdAx6M8W4aXUgRZW3KnDQd9J9E6VqkCv3MVFztXUxhWGKXZOp5Uum07ssjsqZeacIppdGflqH1
-	V0SZq3EpIp1N5gKkO2f1oYeovaEMKVve6LP5Kv9zwRGm32MYHsoOtumcUy0qcB5Gixcsc4N95w2
-	PxFUu/s/oLac/b4jLz/8UZg8Ynau68oKhraPtRmgikjf02aQPJMb5lFd5r9mYjXI7goQhMP+ykB
-	va2Sv6rlCysnZzyhSQMWwUWyRguyMiHoHvqJ2Wh7xAz+NYeK/Dx7/Qhex1FIPf337MxVoHNKFyJ
-	tOw==
-X-Received: by 2002:a05:6000:400f:b0:48e:d88:55e5 with SMTP id ffacd0b85a97d-48e0d885ae8mr18682745f8f.6.1792478308630;
-        Mon, 19 Oct 2026 23:38:28 -0700 (PDT)
+        bh=ZfCKuhuFLFgY7+lDwr5/B266OUdv6BfsTvR8mFssGTA=;
+        b=XKDNwIVeF/Ir5A1UnoLjORDPiOOD/ZvC/0pwCN3aoNZcphBLZK0bWVs4QlXg1ZnLMH
+         MlVKeVN9hd75TCKo07NKJvyyCXxmxmF7yza+s+RqeCarPD4NSKr67mYREbX+cV5CIIJM
+         nykX/Oro/X+PYHuoRUlc8yuPhrm9Ssxr9UVeAus6EfAydVRPyZOq9CZ8uPC+B5KSK3mG
+         fohrliQ4e7tC2ws9EUsz0/0jnoJrOIkcIECXccAX74aaY3grPlUcNrECk/H5WijNURp7
+         2R1Zxn0EV8p8SXz96jxrqV1gbJhLZ21vr7m/G/6nUeVgMwYQq3xAOdTie1onSJsapnLH
+         7EBw==
+X-Forwarded-Encrypted: i=1; AKwUvBwTzbUTQzhd+obP/DwV+IwCy2uRI3kzQeYbmYwJcYMn0B4OXN6tHzGCQa/zavVYTZCki9ZX3VAdRbuPOOCcYwI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLG5AIV7rjRfkHUy4WQjvbq2OM+HGA/VpAaxMSdSkojKddwZP+W
+	jul5FLdh5Oe8imfbUWDD8VXLypOIwS6jOmPT+IhYTRPSZUA7RFBHcOt8
+X-Gm-Gg: AYBFou2RXF+HIH7BaQ5eW5Lw99HON0DpZl20vSe4DSoaHRcqSzU3Oswz/FCMxBhKDe4
+	/0dFI9oOdUxTG2uFlURutcHZDXCfYB3tMgwkxRBbCgq6jKaSP+jQTtn9rEfy8KU18zZB3l8NEO4
+	9bjKIHIRhcexPn8dwqEN5+aAhZnVC9zB/EmMdTXUr/J0cam8kMOJ5ZSIqDu1YQMVUhW8Ln89fbr
+	9d88D9QyNEYyovSK7N0f/EOuxwPlxKzSBKw/hNumzqvkwwvrwIJM6eG//YWq+tEleKm6uIR6075
+	AdT4Bjy2Nug0vjsBIGImOFDGVj6hfMcFBsaUHRpaB6+x+wTojg9Z4OHUeppRd9uhMstEOhDqAhq
+	S4Sa5b+g8xGTyAZ1tBSJjR9YwK+WFsumG1CRZ6x08PAoE3T68tLJP0vhidexf124wmoOU/VQCwi
+	Wy4Jd/I3pTkDKVSd9g8wQOwuIMForg6KZXkNvPXdp9ElwZNf/BfqIKRrhcRjiJ5CJDS/g0MA8C/
+	m1i6hj1shGpyglRYQrSqPXwNG/+mg3cJgI3MMdjMWj8ML6CSCfyefozdxE3q/VVIr6aeOQNA1Kn
+	OztMUmzAwyCq4RUHeBaexMTBtlRai0n7d17eEiZtcFKHRgbl3qb+IY8bTwXhcZe5HWMPJ9vlN0V
+	d6A==
+X-Received: by 2002:a05:6000:490f:b0:48d:f99d:a0d2 with SMTP id ffacd0b85a97d-48e07bbe6a1mr21638509f8f.15.1792478311632;
+        Mon, 19 Oct 2026 23:38:31 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-9c92-6501-2169-eb9c-7ad3-f5db.310.pool.telefonica.de. [2a02:3100:9c92:6501:2169:eb9c:7ad3:f5db])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d820714sm3916393f8f.35.2026.10.19.23.38.27
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d820714sm3916393f8f.35.2026.10.19.23.38.29
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 19 Oct 2026 23:38:28 -0700 (PDT)
+        Mon, 19 Oct 2026 23:38:30 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Jason Gunthorpe <jgg@nvidia.com>,
 	Alistair Popple <apopple@nvidia.com>
@@ -98,9 +98,9 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	linaro-mm-sig@lists.linaro.org
-Subject: [RFC PATCH 3/6] iommufd: Clear the PAL list before dropping resv
-Date: Tue, 20 Oct 2026 08:37:42 +0200
-Message-Id: <65a7be483aa5e374e0afd4d72cbafab0fd07a4a3.1792477872.git.kmehltretter@gmail.com>
+Subject: [RFC PATCH 4/6] iommufd: Keep the pages mutex alive until DMA-buf detach
+Date: Tue, 20 Oct 2026 08:37:43 +0200
+Message-Id: <fdb5d9715d7f278ac24f05246f09703edb283525.1792477872.git.kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <cover.1792477872.git.kmehltretter@gmail.com>
 References: <cover.1792477872.git.kmehltretter@gmail.com>
@@ -115,37 +115,39 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-iopt_release_pages() frees the PAL physical list while holding resv but
-leaves exp_phys pointing to it. Between the reservation unlock and
-dma_buf_detach(), an invalidation can see that pointer and unmap the same
-list again.
+iopt_release_pages() destroys pages->mutex before removing the DMA-buf
+attachment. The linked attachment still exposes pages through
+importer_priv. An invalidation can enter iopt_revoke_notify() and lock
+the destroyed mutex, including when exp_phys is already NULL.
 
-Clear exp_phys before dropping resv so a later invalidation sees that
-there is no live PAL mapping.
+Destroy pages->mutex after dma_buf_detach() has removed the attachment
+and excluded further invalidation callbacks.
 
-Link: https://lore.kernel.org/r/20261016194022.62065-1-kmehltretter@gmail.com/
 Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- drivers/iommu/iommufd/pages.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/iommu/iommufd/pages.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
-index 9e9bc6a1c..76d8803d6 100644
+index 76d8803d6..59ee68a1a 100644
 --- a/drivers/iommu/iommufd/pages.c
 +++ b/drivers/iommu/iommufd/pages.c
-@@ -1674,9 +1674,11 @@ void iopt_release_pages(struct kref *kref)
- 		struct dma_buf *dmabuf = pages->dmabuf.attach->dmabuf;
+@@ -1667,7 +1667,6 @@ void iopt_release_pages(struct kref *kref)
+ 	WARN_ON(pages->npinned);
+ 	WARN_ON(!xa_empty(&pages->pinned_pfns));
+ 	mmdrop(pages->source_mm);
+-	mutex_destroy(&pages->mutex);
+ 	put_task_struct(pages->source_task);
+ 	free_uid(pages->source_user);
+ 	if (iopt_is_dmabuf(pages) && pages->dmabuf.attach) {
+@@ -1689,6 +1688,7 @@ void iopt_release_pages(struct kref *kref)
+ 	} else if (pages->type == IOPT_ADDRESS_FILE) {
+ 		fput(pages->file);
+ 	}
++	mutex_destroy(&pages->mutex);
+ 	kfree(pages);
+ }
  
- 		dma_resv_lock(dmabuf->resv, NULL);
--		if (pages->dmabuf.exp_phys)
-+		if (pages->dmabuf.exp_phys) {
- 			dma_buf_pal_unmap_phys(pages->dmabuf.attach,
- 					       pages->dmabuf.exp_phys);
-+			pages->dmabuf.exp_phys = NULL;
-+		}
- 		dma_resv_unlock(dmabuf->resv);
- 
- 		dma_buf_unpin(pages->dmabuf.attach);
 -- 
 2.39.5 (Apple Git-154)
 
