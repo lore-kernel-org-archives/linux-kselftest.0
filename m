@@ -1,46 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792523767;
-	b=chVTsK5iezZIHYrVHwSIJ8SnwN4f1ngTXzFQhxMb+WV5xogomwnUdCu6wJH+t2J+MkCs
-	 Q8H6Dbm4WhfOqMymS+9px2uZLxylVkGVITlFpMrFLYwN7WHo/KPVaw/j2zBshASmMr6pY
-	 O+PP+yA9PKcLJpzFaju9F2wIAK6GjXhsRb55wUq1PzozXSNJDE83IxemmVTRtsx7kqt9Q
-	 86noWYKaMqk1EDIZkGgKxgmA23/v5drY8GtHVdSIC7/pk+xiSrvbVDq2NXnUHtOsYGDco
-	 qJRWhxJWhQpw02WjZpl/4zUrrm+4Hg8mXuUMcZpr6XFnNLhp2BXfFaSlY1MYOS4kf0w==
+	t=1792523941;
+	b=bdZsJipmn7HuuQaqPofFrpBeM4c9gYymmQ26TD+SpztUN63+gG0MVpWvA7qJPhZ4yiLr
+	 udbL4A52G0aUPvY6g1gOfQvUyNq5IxtAl7XcSbCwIgWleKnolHIKRR+rJs+dwoRur8vik
+	 LNA7jJUxxHjpAWf+88frlTOAN5hb1z2tIRGQT9s52sBXvgbMiVVYiKWKJZj8YtcYvyI07
+	 SnMU/6NlQbfihuaROPSmORcl96EBbl9NjHP9JNRvgSlpkAunFAk/6H9VQtMoaEnplPNih
+	 a1RMzq9j6KFK6aeQ01BvTz/Hq61Zs8R3tRGIigbTq++ded5KQyc2+0/b+Wf47BdWrUg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792523767;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792523941;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=UjcRWvdL2BC3TrFlxjVScdtXMjuSFx/nZAKVfJjRpTY=;
-	b=DkBerqvaJue0aDl+hZs2SosHXX0xNOLbIG+pRClyt1Auwa1ko/qGIOfDJ/m4lDVsWstD
-	 +QjzK6nThEiujJM1Tx93Cn13ODcjJmkUN9pAYr73/+3e2drzIJY+nHtr4pIYsA8H9IgPr
-	 +nMfGpkq4msHXCZ6dnYQfhujEad+bTwJYP7qTaRNZ8I5LXl3uQ74Osi9EjYxFDWEn7sCh
-	 MSnddmnqRYnQIXFPaY4V4fVRv6n4UtT8MtQQSACGKvLhlG9f5zyn3ZuTtx/LWnfETc7eu
-	 P4H03iMUHBbl0EBNbw6xXaZWBF1j9pWlG9cZEaJGFV5zq5wGrJreZHtRkWlsgYML3ng==
+	bh=o+qYngWD3VtHRYJROR8r2QEagYzTVh9jUdoxhwafRww=;
+	b=gdoHODeoncCBU+8sItiS/rXB3QTdA/8BwDlyLDXF1ZPBdhhS8CFsMBnOU+TPrr2FiidK
+	 eCIK/rSyl/0jEjop2RsAIyX0tYFJ0D2nPsigSxWOO3U7dE/ZKveGR3BjNbKOA3UWJb74Q
+	 vu/6iHnvzpJyUEKu7c5Zav/oeNQATS4Jz75W/fAL862XUanLRj3+PYI5dHtGsNX/IyLJY
+	 C2MICUA03EnFVAN2Yq4kfGJAnLkcZMeHgZIGQNpqNvvBNXg8zT+B2S8RZiH4OurGz9oKp
+	 /njZaLAtnbcN4QO4PeoMh5wxIbWg9AQrHjg9z+bXYDeEeJytPgxdORv9ooeSU07BPDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="gQa6/Cle";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A7w0gEdO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3261606A320;
-	Tue, 20 Oct 2026 19:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE96606A319;
+	Tue, 20 Oct 2026 19:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gQa6/Cle
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671BA1F000C9;
-	Tue, 20 Oct 2026 19:16:06 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A7w0gEdO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921281F000C9;
+	Tue, 20 Oct 2026 19:18:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792523767;
-	bh=UjcRWvdL2BC3TrFlxjVScdtXMjuSFx/nZAKVfJjRpTY=;
+	s=k20260515; t=1792523940;
+	bh=o+qYngWD3VtHRYJROR8r2QEagYzTVh9jUdoxhwafRww=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=gQa6/CleNS3xUJ8mhSgRJbW9WzgAGva4e2f9agAcAvBfEFQE2JEz6PDfO89WvSqVh
-	 fAAVaYQWrFHxzd1XRWwoZIGtusEmqs1DNrP3Npu8l3bL0vYrAzCNX7vUQkhC3xSTYd
-	 GOFG50rIu7R+tAOdysAuiFYu5k7fPUNKF6QX8SdbLDoNRHa1p4xwSeQpJTqgiy5Qos
-	 9TlOdWlF9sCuhLDcfbvlMhR8HAa23s8gZEGcbUFhqxP/QqESUeNUqlFkOnkOWCj2rT
-	 B1rTqwHLpLgd2HhfBrOQA6oLAR14kzmq/hC8/91NDgd870bVzab5XrK4b3/PrXlwvI
-	 LOgnGEnsnkZnA==
-Date: Tue, 20 Oct 2026 12:16:05 -0700
+	b=A7w0gEdOvYzmk0vkW1JwU8bkYmH1HgaxOPga0sFNm0yLcYM4qvuuthmiN2t9Vfdoz
+	 Cvd4nrhYU5g2767tUif4Olx3uzuA/n46c9VtZTpU9WVxwL3YptLYYmWfvH3KroQ5Dv
+	 lWcBo5Qsj0pQHd7fBmqd0z0hPK+h7fEvL4kUx4Cf4987ztpjXd5CyKl5iAy+0FURRY
+	 9bvyzOZvLD2ZovXoR9m02gJzdFd6jpTAWE45BDZ1zpEeJsVqIGwY2blTooVEy7m6e5
+	 MEg/4Um77dGmgbveH57cGzYzZiXaO9DwLdLyfo9Y4AkHpPdJWnWc5E/IUoMft3kNva
+	 1dzazHcVxQ7kg==
+Date: Tue, 20 Oct 2026 12:18:58 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
@@ -57,11 +57,11 @@ Cc: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
  <christian.koenig@amd.com>, Dragos Tatulea <dtatulea@nvidia.com>, Nikolay
  Aleksandrov <razor@blackwall.org>, Daniel Borkmann <daniel@iogearbox.net>,
  Tariq Toukan <tariqt@nvidia.com>, Kaifeng Wang <kaifengw@google.com>
-Subject: Re: [PATCH net v4 0/4] net: devmem: fix RX and TX binding teardown
- on device unregistration
-Message-ID: <20261020121605.2e0004cd@kernel.org>
-In-Reply-To: <20261015163915.1166043-1-almasrymina@google.com>
+Subject: Re: [PATCH net v4 3/4] netdevsim: support devmem RX and TX bindings
+Message-ID: <20261020121858.3b9107c5@kernel.org>
+In-Reply-To: <20261015163915.1166043-4-almasrymina@google.com>
 References: <20261015163915.1166043-1-almasrymina@google.com>
+	<20261015163915.1166043-4-almasrymina@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,15 +74,13 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 15 Oct 2026 16:39:11 +0000 Mina Almasry wrote:
-> Fix two device-unregistration lifecycle bugs in devmem TCP bindings and
-> add netdevsim support plus selftests covering both RX and TX device
-> unregistration:
+On Thu, 15 Oct 2026 16:39:14 +0000 Mina Almasry wrote:
+> Set a 64-bit DMA mask on nsim_bus_dev, enable NETMEM_TX_DMA on the
+> netdevsim net_device, and configure page_pool instances with
+> PP_FLAG_ALLOW_UNREADABLE_NETMEM and queue_idx, plus PP_FLAG_DMA_MAP |
+> PP_FLAG_DMA_SYNC_DEV when CONFIG_HAS_DMA is set, so devmem bind-rx and
+> bind-tx netlink operations can be tested against netdevsim in software
+> selftests.
 
-This seems to conflict with something in net-next.
-Please wait for net-next -> net merge during this merge window,
-rebase and repost. I'm assuming this is based on an LLM report
-and not something you're hitting in real life? (cover letter
-should state how you discovered the issue)
--- 
-pw-bot: cr
+Slightly worried this will bring a bunch of maintenance burden and
+"bugs" in netdevsim. IOW that this will be more pain than gain.
