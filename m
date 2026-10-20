@@ -1,49 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792488009;
-	b=0Q8zQ08dWDsjl2B4Q2kHeNv3px4zLW1PAaHmm9IzFbh5HWSw479RNCDhFn1p5y8Pv/2A
-	 Z1MRPee1dPkzQnZRgn+/zeIvf10nza3vbAJ3F6QhE2LHECmCCug/kyUsfrrlv20f9nQf3
-	 owZd8Q16iqOjm8r45TUbdPKI62s0o9s4Tz+5dtfDeIrAlsc13tXJh1f7nXrbDQVzul3j2
-	 vvlfg1+vse8q2wS1HGPk+9TU8sRyNTOaUBXsbGn7bnBIaob9MZvNLg/4CoxIyJn0fyR2+
-	 n1tx3ex6YR6KPJkJi4Iy/NTnlBOFN1W9NPisa4XL0fGt6Pns9VzUuigKzgrrKv3wEHA==
+	t=1792488095;
+	b=JJ3aPV/U9g8OWB7DlGeSRD/fVVWLKhBNK2K38mW1AIDkVCKLoGQdKPwIHEabPRo4Ox+j
+	 Qxb0Rmdcc3u8oKJj3H+HKsYeB5mK87MfXsEEOWnQaYZletJGGDcrJl4H5CADKOoQQptRV
+	 HuZLkiDCCojTG/8E+SrPYmtImDtNbFxbj7dfwxFRrSDz9dAV6vSgSPNTUnUoUNQ/F34Xr
+	 AispeZw52PpFD9YrFI0/QU6aBCgcKRLExajIpjLwkPsyuZYChMNd8Rl6KhGXC0/wI77SR
+	 +Qmr+iC4NZwkoDuiHFS1NMY4KdfH8mC7Gzzsv8kEi68nvEsHjaa0HEgaPldrkHqjeSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792488009;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=5y63LO8K1OCznULxQHwWfMhQvv8jfPHcfHJ8c5j0ul0=;
-	b=oHJdixpE6avJ1eggUZzQ+FbYNtrYcIeWz4zygdNcH9WBcR+FLSzKjbmHHjhVccuk1Dpa
-	 vS6sht598LP0X7J6S27lmYgxIqPgD7/3HFueq8knlEV+M0mZ5+Tafw7nlieq7emzEPx6q
-	 oVhoZqo5OykG9OVonE1W68lLyO0LXJArquUYG3rjsHAzEJQVykXG8IhNtaWgEOF2cJYA6
-	 D4mPE7fe0fH0KJfSw2h+AiIbH3EARsfPJlK/cRpeBdDeu+VEBQaC/oDl5CIdsUgb5M1fO
-	 8yN7Dk950+Hh4Yr+uNvbT4cteT3tm5WpFBBeJXEHS+cAxzxVXWbBX0M8JgMZA5Y5oMw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792488095;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=5e+oqors5ngXUuG02qSoQoio2oIJEIQO9xg33zEm4II=;
+	b=DLCI8hr1OIacee9kQTdizEtWmglHQdol5JGwqeOIRHgbFWvHEAuKe1UR+uXGtX897kS/
+	 jbMwyZSOgR0HMh7laqNN7yU/N2C79MVS22KVYZl44ta1V8JIRLZRGDfcvG8iIvshWYUW7
+	 VOw9sw2FvPORNxDQGGE0+5DEU7hiZXpBNaK610XVJvCD2wn0KfK8jd2gRyVFXeUloRl+W
+	 P3Ltvgh2dEa+m9H2DauN+dy+03vZqR/m+bDUAxVGtT5GR8lIttpFrE/PRH3gnnuXfUnPv
+	 4/dwK518cyNW3j8tNiGcaOanjC0dQ/XIM9STTdN3fp0POR/SA+0G3td0xR16cUbPR8Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kEY+wVHT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C76606A331;
-	Tue, 20 Oct 2026 09:20:08 +0000 (UTC)
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=rbclCkjH;
+	arc=none smtp.remote-ip=111.22.67.139
+Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CBF1606A331;
+	Tue, 20 Oct 2026 09:21:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1CBF1606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kEY+wVHT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CA4B1F000C4;
-	Tue, 20 Oct 2026 09:20:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792488008;
-	bh=5y63LO8K1OCznULxQHwWfMhQvv8jfPHcfHJ8c5j0ul0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=kEY+wVHTeudtPuBhkmpr/azpG6rDUEWGsD/0LxSH9PhEN9Vr92DvgG3YWU5Wb8kMp
-	 GmmR/tzccolphTyi4/tQKiXmRg4PZa7hyFaSopkMa/XQCiARR5HXrRd41RbjalBh2p
-	 t8Q7lWuj6XrvdZjscB5m6HDjOdA6xAdMNXgBsy/OgWHPiOMDQ+Nl/p87D+27szz9IK
-	 yGTzxbKklk3X7NWbH5GU7vdhp6PuFfzRnIluWs3kPu/DNvAto+Qmp7d5EZuRQ3gT4C
-	 Up/tsVpvfywBVnrBDxcKsOrSTu0y6ykmLB2suKptbmWonndqDc9qlnuOgKS/sQaE+o
-	 BRB22XmMWvSpw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 774E43808209;
-	Tue, 20 Oct 2026 09:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=rbclCkjH
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=rbclCkjH+HCO6sAi7dtdiLTD6JORM7W7xg5FTdEuflHkpSm/cWeleXuNAwp/bauAxJ5hcHpUUaMjQ
+	 kiILRk5ZAQiVJfHLMOtka/m6QN3a4da8MMvI96DMRa+98D10kb6VcRQZ5p1t2ZY3QsnVLcei7KEv+w
+	 AfpR23Xz49AALz/Q=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee16ad7329b0ac-f75f0;
+	Tue, 20 Oct 2026 17:21:31 +0800 (CST)
+X-RM-TRANSID:2ee16ad7329b0ac-f75f0
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.99])
+	by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee96ad73299558-c826e;
+	Tue, 20 Oct 2026 17:21:31 +0800 (CST)
+X-RM-TRANSID:2ee96ad73299558-c826e
+From: yanxia <yanxia@cmss.chinamobile.com>
+To: bot+bpf-ci@kernel.org,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org
+Cc: yana06070@163.com,
+	ast@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	rdunlap@infradead.org,
+	richardcochran@gmail.com,
+	netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	martin.lau@kernel.org,
+	mason@kernel.org
+Subject: Re: [PATCH bpf-next v2] tools/bpf: Remove legacy BPF tools
+Date: Tue, 20 Oct 2026 17:21:19 +0800
+Message-ID: <20261020092119.918464-1-yanxia@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <a02301c0ff8593349602f81cdf0c21f1b38db0b60118f8eed3199a6a38330234@mail.kernel.org>
+References: <20261020083713.905006-1-yanxia@cmss.chinamobile.com> <a02301c0ff8593349602f81cdf0c21f1b38db0b60118f8eed3199a6a38330234@mail.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,44 +95,17 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] selftests: tc-testing: use $IP in hfsc test 8c39
- setup
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179248800729.3606430.14897745214644926489.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Oct 2026 09:20:07 +0000
-References: <20261014121414.2373985-1-ivecera@redhat.com>
-In-Reply-To: <20261014121414.2373985-1-ivecera@redhat.com>
-To: Ivan Vecera <ivecera@redhat.com>
-Cc: netdev@vger.kernel.org, jhs@mojatatu.com, jiri@resnulli.us,
- shuah@kernel.org, victor@mojatatu.com, kuba@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Hello:
+Thanks for the review. Agreed: the table lists mnemonics, addressing
+modes and descriptions. I'll fix the wording in the next revision:
 
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+  The instruction set consists of load, store, branch, alu, miscellaneous
+  and return instructions. This table lists the assembly notation and what
+  the corresponding opcodes defined in linux/filter.h do:
 
-On Wed, 14 Oct 2026 14:14:12 +0200 you wrote:
-> Test 8c39 brings up lo with a bare "ip" command. nsPlugin runs it as
-> "$IP netns exec <ns> ip ...", and as tdc runs commands with an empty
-> environment, "ip netns exec" searches only the default execvp() path
-> (/bin:/usr/bin). On systems that install ip only in /sbin, like Fedora,
-> the setup fails:
-> 
->   # ./tdc.py -e 8c39
->   Test 8c39: HFSC classify walk still reaches leaf after lateral drift
-> 
-> [...]
-
-Here is the summary with links:
-  - [net] selftests: tc-testing: use $IP in hfsc test 8c39 setup
-    https://git.kernel.org/netdev/net/c/b6ef0d965fe8
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Best regards,
+yanxia
 
 
