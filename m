@@ -1,64 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792504600;
-	b=EEopc2Al8jNIcyxUKEhyLHX304GAKKgluxDXpOZffrMyutxF2cnz9j6RpPvGUPVdBINV
-	 nm7hoqUtnr/IXFC9yem5nod8v/8/+AHnOf5bvbXgFcQLl4cnDj4i827DoXTYBdydaMGtJ
-	 YWcp+xGAgGEXlnFcKFXGH/aFXx+IhzFIeim0cn5WhLWMgT/utS2ESRKHRVa4Uh8704lf3
-	 bMHMoU33vtx4n/S/PptoH27Rkdf6apkKT/8I+lMixomp/78sw3A1oGZHSgC1smekJw+UY
-	 aOpgc9oSNJhDOEP56qoKcHy7dFHL/F4OPxEbVyKCBjoqAcveSuPiL+iKOZE1cVI5BrQ==
+	t=1792504802;
+	b=s4h8r0+tjBYf9IIq+5g80zVvrSN8kWvxVMJ2KbPvIrsF/u1O/iCmBiZPAsD8zuMS4O1i
+	 WllW+2J2cdo+YsQ6q6M84x/lefTbkjhj0CoBu3Q32oyv5lQb50UAOXGk0Z2AJd2AUuJUe
+	 qXhmz/TgxkC790E8za7c+K46z6P9AJyIwtJTHZ5vZhpi7csi90HkEtB+omd5ZzJ20i/Ex
+	 0aoS8M25EII3JvLngUd1WsA2ZXG2uoziOKr1jXUEYWMkQ8Q+A7T4wUdQkqU7GxOfHieIf
+	 I7bhVS5g7KkiJ8JmqM4lFY5ZX6DQIvBY5L4CIsJQ+RNmPaOXCutjMGuQe4b+QX594yA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792504600;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=HYCpdEa0CjagDkIoEI9c3ElxA1vOooGlVLR/xOXvad8=;
-	b=ccqvsXnh1YjkjlSbsbi6FLzNl7+yY1/IYbDUeY2z3bziPgenFgZWgJZ8mSg/EWaP2nfb
-	 3MgtAAfdvS30ReJc6ocTtOWPlBkfcNcj+wTFcPJBwg2/mtXHgXxHJawc42lvxMQL6aq4Q
-	 FV+4ZhZTRk+FminzNaVZZnA3TtBaaIMIEfjE2S2Iwrt4TT4fUduC+uSXZA2i8X13mmBzL
-	 4uul2AJy9/a76EB8fpNTtXI9iyEzsguHJc5AywxxoRoKzPKLKnirx8gqK/uHUFwBkzpki
-	 cm2NHnV0qmHJBgRZE/62j0xCoumAIJBEwXGt3nkCM+E4SRDbijb9bh0p3+jWiEuM9Qw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792504802;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+	b=as/DI+LiGDAZz8e7/IagtCbbpoOdn3AVKlVzYg5fanqg+TMLDmIW4iIMrMdNfO80jLZx
+	 llttp0xJB3FDOj0O15cZGlMur2mC2z/lvr9hFCoNUsx0IFOhT7wrLhyyGlz4zmLwv3zkT
+	 mb18HgNX8oUYoITQY8dGPlP/ALyT763S1qOXKvjERJmGJoproNTsEsvDUNBinednQKREO
+	 iZ9HNC3CJ8V+KJ9wue1wft47gxVIUrcB6mkPWobqKBp6TwUUl9DvNfMSkldTCShdJ+Wk/
+	 8jYHz687+EdUSOk2uSa5/Xf8vQzp1GCxOZlb016nC6aaR3z3LQGIn+aOaf9n2Aqs7PA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=hdu87VDv;
-	arc=none smtp.remote-ip=117.135.210.2
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=d9vYlLx1;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=mR8JAM6D;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA8C606A319;
-	Tue, 20 Oct 2026 13:56:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1BA8C606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF393606A338
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 14:00:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF393606A338
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=hdu87VDv
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=HY
-	CpdEa0CjagDkIoEI9c3ElxA1vOooGlVLR/xOXvad8=; b=hdu87VDvYUaeZ5u34U
-	VT1VuHXx33f34jw4PdosOs3vNYS2jLDIYUV5WCWHN7QUILrZn9s7EkrYSrhr0yGP
-	yH6qfTcza8A0+bSBThz7nUMql/1LnTs9bh5sr04S3Nj4FS9IBRntv0Vp0UqhGU2a
-	8/FObYLUdmavPUbrL+9IGH/uU=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgD3YQntctdquSfMAw--.51436S2;
-	Tue, 20 Oct 2026 21:55:58 +0800 (CST)
-From: Xia Yan <yana06070@163.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	horms@kernel.org,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	yana06070@163.com,
-	stable@vger.kernel.org
-Subject: [PATCH net v2 1/2] veth: keep carrier off when resizing channels with a down peer
-Date: Tue, 20 Oct 2026 21:55:43 +0800
-Message-Id: <20261020135544.24441-1-yana06070@163.com>
-X-Mailer: git-send-email 2.33.0
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=d9vYlLx1;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=mR8JAM6D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792504800;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+	b=d9vYlLx1uJfQpOLx3cae9BhEjSKAJrEJ9RcFJlRlYz7g8vr790qjfZnywlZeZQ2dMEad8P
+	tt7XZUJ2cdZejWWgQLSlU1l+t9Vd11OUucNjVU82OllWk3l46WmpafYZ//6bdbMCmJabSS
+	cSrvGpCL/r4LWoX5pb2aFyWO4uuKAPk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-682-u6DSsIp0P1mWRjNkMcNmyw-1; Tue, 20 Oct 2026 13:59:59 +0000
+X-MC-Unique: u6DSsIp0P1mWRjNkMcNmyw-1
+X-Mimecast-MFC-AGG-ID: u6DSsIp0P1mWRjNkMcNmyw_1792504798
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4a1de9dac94so21903585e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1792504798; x=1793109598; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+        b=mR8JAM6Dx+SPWbfkeZnOuGFetgjlmDjbH+LFq7jAyJiAKciZVgzTSeI6Ngc+/YyH0P
+         mCirkApaIVqwGqDQdP2i06rvMK5Lzpo/0kN8K5u1fw/RGJHTSQa9GjEofK8nUNDMiR+8
+         R2Gb3eriJjl0yEV0gN6e3mnMU+2KU+03pZhqTDSW0iKY45Tof4QGCbXBCBmRfrOJGxN3
+         SDa1e9D2dcwGvBSzSTbmKB6Y7A/s8AxccXVSNLU6bh6lQ/ZgeRH3t3pU4xR5+F4KqSna
+         74f949/TZbz4xCOso7OpWx31lR91CKkQO8Scbt1MpT8t8+oiHGy/upa3vJ7adtQbFopZ
+         7D9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792504798; x=1793109598;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+        b=htnlUjO98j0GvA9jtrNJqk2F1YGqTgy/waA6MxBTv183G9aNv+1guRwMlGnwM4G/yr
+         AM45VaqmvF+pqgzEZWXhFxAa5UvZLCw2bnVgyh6204GgaR3nOEn6uCQa2Hhg/BsEPUHk
+         IV/KdYHg4Szi0D+sIpSzqiQDNgJjDdfsaZyq6NoF+cc205JHBozyWb+7RnHe63dZMwCN
+         NQBdIwt3dwrNvWBvdvtcMr2nKHEAq3a3I4CkW/vpa5b/hYBHV0qc/uT+wt65ToQl1Eux
+         aVkKUhdii/+Mu1cj22Z8mRDknVPMuaRHPBekYNdTlNef/kYCmg4BKDFpDnJQxQlmY8KM
+         FzSg==
+X-Forwarded-Encrypted: i=1; AKwUvBwBwHUZT7Cs5f1mewxUgWBImLMNOCpC7Yg/91xr3QeJiG1KM/H9uxYsFTaluHIlQ0sWqcMEX3bAvnJHmTWdAd0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKtjY6j3EltaT862a20ouS/Rd7Q3IZWxLA45yT6IgXIwYILwp7f
+	I7ie5Fdp3CzdEYxaghTQWhxLmSqBtCFsQpFxjrqr2ymHbz37kYxpCMldJbft561MGPM6cCKHlok
+	7xIMKvvILo2eL+Yq54aVbEs1akR58kXPgtWlEDjhAdDUSWihdwUN+SXU3f9F5qNIG1BcV+g==
+X-Gm-Gg: AYBFou2lac9MhjF14jHitN0Oj3OkS5ymTLWDZNErOjB3mtS/5KaFJu8jcdB1XmCnVo2
+	VPFlMffYbCp/r/GK8f8aIPr2xl4ISMcJXE6zKwjiISphhlyCu4t52Ic+jVfmmeKu/Mss8ZKF/Ca
+	zPjBYUe+fgv8pV6wtgqcKWN5v64FnSgTBOtxaNfzcrUFoxa/2hG5leeMW+X02HnFz6JttHXNgDm
+	QlKUcjh94Fwh4l65iZ4tZS2Q8x0n8GkWo4shQ8s76yQv5svAdZhyAcI9oTObAiRoplqygwzwPdi
+	lVWfFxxO1lq7paL3TCxMo2C7CGLkU2vdspBliXJkIIvuDHkoGoimgGSsTzz/RP+5Hutaqm0fo6t
+	GCMeNNpDX6l1sOJ0RISbx5S6Iec2F2WxC4JPFvRtWakeJn9SOw0HEbccj3zxFisZWnHmCmROvqg
+	==
+X-Received: by 2002:a05:600c:4e14:b0:4a1:d307:b526 with SMTP id 5b1f17b1804b1-4a1d7464034mr234316735e9.0.1792504798220;
+        Tue, 20 Oct 2026 06:59:58 -0700 (PDT)
+X-Received: by 2002:a05:600c:4e14:b0:4a1:d307:b526 with SMTP id 5b1f17b1804b1-4a1d7464034mr234316075e9.0.1792504797756;
+        Tue, 20 Oct 2026 06:59:57 -0700 (PDT)
+Received: from [192.168.188.234] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f2d85a9bsm82778815e9.15.2026.10.20.06.59.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 06:59:57 -0700 (PDT)
+Message-ID: <106b3ab1-77e2-4656-a124-7f78ad890ee7@redhat.com>
+Date: Tue, 20 Oct 2026 15:59:55 +0200
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,62 +112,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 0/7] ipv4,ipv6: convert the getsockopt
+ switches to sockopt_t
+To: Ido Schimmel <idosch@nvidia.com>, Breno Leitao <leitao@debian.org>
+Cc: David Ahern <dsahern@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+ Eric Dumazet <edumazet@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, david.laight.linux@gmail.com,
+ kernel-team@meta.com
+References: <20261015-sockopt_expand_out_v2-v3-0-7d05ef2df448@debian.org>
+ <20261019081907.GA2725184@shredder>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20261019081907.GA2725184@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:PSgvCgD3YQntctdquSfMAw--.51436S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uF4rZF1rAFWxJr47WFy3urg_yoW8Ar4kpF
-	4ftFW5Cry0qF47ta1vqayUZFyrJa1xX34agF9Yk3yruw1UtF95Xr4Fy34j9F1UKFZYqF42
-	vrW09r1Dua4DZF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piPCztUUUUU=
-X-CM-SenderInfo: p1dqtiawqxiqqrwthudrp/xtbC3w5o7mrXcu7V-gAA3d
 
-veth_set_channels() temporarily turns carrier off while reconfiguring a
-running interface. It then turns carrier on for both ends without
-checking whether the peer is administratively up. If only one end is up,
-changing its channel counts therefore reports LOWER_UP even though the
-peer remains down.
+On 10/19/26 10:19, Ido Schimmel wrote:
+> On Thu, Oct 15, 2026 at 03:05:29AM -0700, Breno Leitao wrote:
+>> This series continues the migration to sockopt_t, as described in [1].
+>> do_ip_getsockopt() and do_ipv6_getsockopt() still take a sockptr_t pair,
+>> and everything they forward to now takes a sockopt_t, so convert them
+>> both.
+> 
+> Acked-by: Ido Schimmel <idosch@nvidia.com>
+> 
+> Given the user visible changes, the fact that the merge window is now
+> open and that this isn't the last part of the conversion, my preference
+> would be for this to be re-posted after the merge window.
 
-For example, after creating a pair with two RX and TX queues per end:
+I agree on the above, also clashiko noted that patch 7 lacks an additional
 
-  ip link set vca up
-  ethtool -L vca rx 1 tx 1
+CONFIG_IP_MULTICAST=y
 
-vca incorrectly reports LOWER_UP while vcb is still down.
-
-Only restore carrier when the peer has IFF_UP, matching veth_open().
-The local interface is already known to be running at this point.
-
-Found during LLM-assisted source review and reproduced with a veth pair
-in a network namespace. Built and booted UML kernels before and after
-the fix; the accompanying test fails in the four mixed up/down cases
-before the fix and passes all six cases after it.
-
-Fixes: 4752eeb3d891 ("veth: implement support for set_channel ethtool op")
-Cc: stable@vger.kernel.org
-Assisted-by: LLM
-Signed-off-by: Xia Yan <yana06070@163.com>
----
- drivers/net/veth.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 643b97d..4e75830 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1372,9 +1372,10 @@ static int veth_set_channels(struct net_device *dev,
- 		 * to identify the range we have to disable
- 		 */
- 		veth_disable_range_safe(dev, new_rx_count, old_rx_count);
--		netif_carrier_on(dev);
--		if (peer)
-+		if (peer && (peer->flags & IFF_UP)) {
-+			netif_carrier_on(dev);
- 			netif_carrier_on(peer);
-+		}
- 	}
- 
- 	/* update XDP supported features */
-
-base-commit: 513444cc62e231a11c9b15ea88de0890da9b2b4f
--- 
-2.43.0
+/P
 
