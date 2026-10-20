@@ -1,107 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.0.225.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792462481;
-	b=rFadhYyLUw7uEd/m1xKQnYge93LXCfViYrl7VPZQmBZH91ZDNZGFSauboCw/CpqYeNih
-	 ZFh/fY+hbzI0Fj6NpfaHE84aEjVSCK5loGXz6y5ieH+hqAd/DSYGftOq5w2HnDC1kdujX
-	 9CqUDoz8Q0Pgby87LRrX4+nDtk0jORbItCyJUTyAY0xJJdGqH27Q7Fo6M/frw/vxXuRpy
-	 Pse9bmaHBeo8e58DX/rqOrSHXpga++n3BkX814WONDaKpH96/+RA7LOon/1c0GbmoI0nS
-	 U8SPKp4qmywkfUgw+s8p8hS08iiuNPIb/Ox3kekdPtEnU3OdIgO1X9JZFyMtE1aCWkg==
+	t=1792464802;
+	b=QST6HU6GQa97kbIu09EGYMpBydIRVo0KY5T540yrxQi1IMnxighzxRZcFVswrFYufXXM
+	 +zxlSOfa7TzuEdIc+Pi9UFeitg9Wgl2segNJfNLSNwjUN/EA4IopgxdjFbfzQ9pLKi4c0
+	 rtC9IzFuBZEuLPggUb8IGQk1UdkuuQK0S9wRTXrFOZH3f70iwrPNn7yB3Q8HgwygpAm3b
+	 nt2ywHvMGesslg7aACI5YvvMx80BRJjJearjZUB6irjihh2ctbwmR3O7c7ilrhepsBlwm
+	 ZEimO3B2Bc/J/mP0JdQRyiigFwgVs5zepY7AYkZJ7guj+Uk1HzeV2ZK7jY+XNFUEaAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792462481;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=5Iwx53FddK31aCeF3yTsYcRGG3DAdKI2xVbjXFtQkwA=;
-	b=rCcjOQpGA1cEUGURROGC6r36gDikFv7lhY7blpqjRMZSI7WgvRxOpzIb/1EreERKJRwK
-	 dyUcVNXp1OwNlI4uJ2RqWeJVuFUru6fEv21ANsW2nk4vZGwYsxr7tjSqWEyYqQINUNZdA
-	 FmTOa50sy1Vk9BkQeq7ji/HrHRSqbr4SuTWsnG6Gk2z71ND6y7dsmfAegLYk3I1hEB6k/
-	 WdJuRN8nuc6tmdR5vE+XKOZ0fhJr2OG/YqE4CdGqlElNEQfXpyqgCvevWleVhiEonl2YO
-	 7K5NHS3T3VvnalgWMPgfpw5kIX27eeR7HA2AS7zN5dGX0ndS0DtE27VInlV/d0Vc7QQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792464802;
+	h=DMARC-Filter:Received:Received:Received:X-Eyou-Smtpauth:
+	 X-Eyou-EnvelopeSender:X-Eyou-From:From:Date:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 X-Eyou-Sender;
+	bh=Isam2qzXFBltZx89pCZ1QeUN4o0j6H71EtrOD9wZiSk=;
+	b=yLPZ6AYdhhExr/fE8DClDOQakXRnXc6HPfzUOvXks9LG4QcIpO5M98sJexTxVmbxgsKk
+	 to+/dnCYcjGDut8o+k/B0Vlse0iKeYgYT+amJETzbL5K42fM9Q4SqUCmFUBZMiKT14R41
+	 /QGdLt7KkmNUOUOLAPIYPjdjPCKJqYxQtT70vs9RcOopcpEUCLOq6UpHKoYIqlXv64Q5X
+	 tK9s0iFxLDLyYUwTUemhQvIzzIQVXnEek3Cp1ZDo3vIv3EyIbk5xwDypms89u9dnHVPHL
+	 rE8uMkYt0TiLY1lShWo4e2lfU73h/m+BfOw0/0H1IgKQm0mmv9sYXJHNW1ZU4tBY5TA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=oBihJ65C;
-	arc=none smtp.remote-ip=209.85.221.54
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C9B606A319
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 02:14:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3C9B606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=oBihJ65C
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48441a2ba1bso1668620f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 19:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792462479; x=1793067279; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5Iwx53FddK31aCeF3yTsYcRGG3DAdKI2xVbjXFtQkwA=;
-        b=oBihJ65CMLYBqYHD9hPzlwUnnU21Djjlk+0ywA8lRRGdNyRHqBkmkB2lVi7j7VuJ1l
-         MPwAaFfom20siTmykpM4ACL2ty3lpQ6vyWJJmpPI8ZNX5UWUMWNCT76IcffFNMOUGFTk
-         ORdK+O3A4W904mNRG0BhTfAQ3NjS8YqXkkKvnV12Bxd9kRss/cY1Tv6b9jyxrJCeHjml
-         1UVPVfEtj0r/j8yx2gjVcG3pxob+11ZYhiUZjgUj33HkXufAXfebmxat2Oeiaf2Mav0z
-         Vvwv6t7UGKyBpY9zHG+AYKsyBiV69wdVVX/+3Y2olVz6L5eDY0ngAgoqozcmxhtarnNO
-         JaXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792462479; x=1793067279;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5Iwx53FddK31aCeF3yTsYcRGG3DAdKI2xVbjXFtQkwA=;
-        b=iuQkDCYqH/iuUg1AXiM1t0vK296pzrz8ztktEPVTZEdTl2YTnHGHIAf1u3b+TJe/73
-         Mb33H7WOlBUbSyNbk1RocCzuvsEY/YC2fNTGPeKp9r50HJhfyWsONyuUpdVoj0FY6V5i
-         jp+MP+Jb1+mf/Nry7kXIcyKPpsOK9i0TXWSY65m5O7RG1aNfcVhh+sYzu7ZoOIh4CFwr
-         8uDEfOqe2qIt2SbzklSCHy6TeysNo4oF3TUQv61IRRBjdUT5bjimnhZaleu+351ngNOp
-         8guvm1CckCmtmQ/M0VJryqiylaXXomvi6KofdBQXA5ps7+F08n+Y5JI4kA0lV6SU6xtZ
-         /egw==
-X-Forwarded-Encrypted: i=1; AKwUvByN6x1vjhrtsREB84sJ4ZFDWk6F3KELg/R3n7XY4LrawiiW1Ljp5qhoffk8IN0hgyDkcH+tBEk2kZ1nOsCn3D0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ4rm9DQfD0/bFyLmCMI6pT/p9yhy3yNBZUDsucria0V8oOYwU+
-	yHtUm7tmbyrnhppfE85p+TuPCBbHbD/iNrQQeajX/u1IFGmzM2+Hr3GN
-X-Gm-Gg: AYBFou0Pvnq4jE7iI+I6RpRvpHgFPaNVO/U5yThppjUwj6VkFboKMrwiZWYv9jYQ6SV
-	xWbA8HE6DvM0s72k3hgluzhY/fwEQS7NjRYSLU9O502QUBOQlaUfp2WsmtTrRDMxtDlf7vnSdX7
-	ZmpWRYewG69GkpLKxG8LlS5GUpzLuDrXeR/1jcBijj7O13iGS0asHKxJeLJRfZVXXnNc8Vz+4u1
-	I3gAVRtE4xTXPBUg9Y88GWRxTX01xd0TniBpVbgRWYRMjEsoWZ7y3y/bMWUXrv85/NjXtGAC3qv
-	/GHP+6JMOFP43QxorUjioWOZhx0xoc7OgKua9b8OMWRNktSGTrNPmU+CyH9HSKUKRwcnAZNOiGh
-	M3EIH0YSJlNhkCiSvHFKq8Fy9kWUlfzJw7RHn8LS7rae2ZH+yKe3Is3sf8Hi9VR9is9ZmymioHO
-	pLs+ODyU1++XGklFYdHIDCttBtR/mu/uRzwN1aUKW/dVopx6TWMZFVtLkGkz9LdAiSrC0Lnwt0+
-	ENjF2Lapd41O8Eo3yBpf1yBALgIJnwpwWaLtqfnBDAbrhtnZLVpbVH3gVNFh9fxMdoKMXYuGx/o
-	eUs40THy0S+ESwf8vxwq0ocyiz4tHJakfZZ/NVBNxzJq4ZJqiSGXL2s/39MgXyWex2CIhmiqVKp
-	CVGJM3tcTzA==
-X-Received: by 2002:a05:6000:491d:b0:488:5852:6ee3 with SMTP id ffacd0b85a97d-48e07bc2f43mr19882172f8f.34.1792462478968;
-        Mon, 19 Oct 2026 19:14:38 -0700 (PDT)
-Received: from unknown748F3CBA5068 (dynamic-2a02-3100-9c92-6501-cda9-90cd-4e49-75d9.310.pool.telefonica.de. [2a02:3100:9c92:6501:cda9:90cd:4e49:75d9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d8208b1sm2879816f8f.33.2026.10.19.19.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 19:14:38 -0700 (PDT)
-Date: Tue, 20 Oct 2026 04:14:36 +0200
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Harry Yoo <harry@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	David Stevens <stevensd@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
-	Swaraj Gaikwad <swarajgaikwad1925@gmail.com>, Clark Williams <clrkwllms@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-mm@kvack.org, linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/3] locking, mm: Add atomic allocator trylocks on
- RT
-Message-ID: <atbOS2rs94fB2red@gmail.com>
-References: <20261005070625.8871-1-kmehltretter@gmail.com>
- <asZ8jmWNoGk5tYce@thinkpad>
+	dmarc=none header.from=zhaoxin.com;
+	spf=pass smtp.mailfrom=zhaoxin.com;
+	arc=none smtp.remote-ip=210.0.225.12
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5370606A31A;
+	Tue, 20 Oct 2026 02:53:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5370606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+Received: from zhaoxin.com (unknown [127.0.0.1])
+	by mx1.zhaoxin.com (MTA) with ESMTP id 4j7xmm022Bzb0pbc;
+	Tue, 20 Oct 2026 10:53:12 +0800 (CST)
+Received: from zhaoxin.com (unknown [10.28.140.201])
+	by mx1.zhaoxin.com (MTA) with ESMTP id 4j7xml4GH3zb0pbc;
+	Tue, 20 Oct 2026 10:53:11 +0800 (CST)
+Received: from ewan-server (ewan-server [10.28.24.7])
+	by zhaoxin.com (8.30) with ESMTP62f8ff40056a60f56e6be29f9128510a
+	Tue, 20 Oct 2026 10:53:10 +0800
+X-Eyou-Smtpauth: ewanhai-oc@zhaoxin.com
+X-Eyou-EnvelopeSender: ewanhai-oc@zhaoxin.com
+X-Eyou-From: Ewan Hai <ewanhai-oc@zhaoxin.com>
+From: "=?UTF-8?B?RXdhbiBIYWktb2M=?=" <ewanhai-oc@zhaoxin.com>
+Date: Tue, 20 Oct 2026 10:53:29 +0800
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Frank Zhu <frankzhu@zhaoxin.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, ewanhai@zhaoxin.com, cobechen@zhaoxin.com
+Subject: Re: [PATCH v2 6/9] KVM: selftests: Skip PERF_CAPABILITIES vCPU
+ checks without PDCM
+Message-ID: <atbVQZsuClHwaLGo@ewan-server>
+References: <20260910115414.3015260-1-ewanhai-oc@zhaoxin.com>
+ <20260910115414.3015260-7-ewanhai-oc@zhaoxin.com>
+ <aqQqJysVQxS76YIE@google.com>
+ <arHesdC4MieHtZUr@ewan-server>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,32 +64,84 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <asZ8jmWNoGk5tYce@thinkpad>
+In-Reply-To: <arHesdC4MieHtZUr@ewan-server>
+X-Eyou-Sender: <ewanhai-oc@zhaoxin.com>
 
-On Wed, Oct 07, 2026 at 07:15:29PM +0100, Harry Yoo wrote:
-> On Mon, Oct 05, 2026 at 09:06:22AM +0200, Karl Mehltretter wrote:
-> > On PREEMPT_RT, a BPF task-storage program attached to sched_waking
-> > can deadlock when kmalloc_nolock() obtains an rtmutex-backed allocator
-> > spinlock while try_to_wake_up() holds p->pi_lock. Releasing the allocator
-> > lock can enter priority-inheritance or wakeup code and re-enter scheduler
-> > locking.
+On Tue, Sep 22, 2026 at 09:54:51AM +0800, Ewan Hai-oc wrote:
+> On Fri, Sep 11, 2026 at 09:19:51AM -0700, Sean Christopherson wrote:
+> > On Thu, Sep 10, 2026, Ewan Hai-oc wrote:
+> > > From: Frank Zhu <frankzhu@zhaoxin.com>
+> > > 
+> > > KVM allows userspace to query MSR_IA32_PERF_CAPABILITIES through
+> > > KVM_GET_MSRS even when PDCM is not exposed in KVM_GET_SUPPORTED_CPUID.
+> > > However, vCPU accesses to the MSR fail without PDCM.
 > > 
-> > The first RFC [1] rejected every non-preemptible caller. That prevents the
-> > deadlock, but it also rejects BPF arena allocation and faults under the
-> > arena's ordinary raw lock.
+> > Hrm, no, KVM is supposed to allow reads and drop writes of '0' for MSRs that are
+> > advertised to userspace, but ultimately unsupported.  I'm pretty sure this is a
+> > KVM bug.  I think MSR_IA32_ARCH_CAPABILITIES is also affected.
 > > 
-> > This RFC instead adds an atomic owner state for bounded PREEMPT_RT spinlock
-> > trylocks. Atomic acquisition succeeds only from the completely free state.
+> > Completely untested, but I think this?
+> > 
+> > diff --git a/arch/x86/kvm/msrs.c b/arch/x86/kvm/msrs.c
+> > index dd3bb04878ca..fa77cfdbda7e 100644
+> > --- a/arch/x86/kvm/msrs.c
+> > +++ b/arch/x86/kvm/msrs.c
+> > @@ -512,9 +512,15 @@ static int kvm_get_feature_msr(struct kvm_vcpu *vcpu, u32 index, u64 *data,
+> >  
+> >  	switch (index) {
+> >  	case MSR_IA32_ARCH_CAPABILITIES:
+> > +		if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_CAPABILITIES))
+> > +			return KVM_MSR_RET_UNSUPPORTED;
+> > +
+> >  		*data = kvm_get_arch_capabilities();
+> >  		break;
+> >  	case MSR_IA32_PERF_CAPABILITIES:
+> > +		if (!kvm_cpu_cap_has(X86_FEATURE_PDCM))
+> > +			return KVM_MSR_RET_UNSUPPORTED;
+> > +
+> >  		*data = kvm_caps.supported_perf_cap;
+> >  		break;
+> >  	case MSR_PLATFORM_INFO:
+> >
 > 
-> Please don't skip discussion stage and jump into submitting a very
-> intrusive change across locking and mm, assisted by LLM? :/
+> I saw that you applied eight patches from the series to the kvm-x86
+> selftests branch and skipped patch 6 as a KVM bug.
 > 
-> I don't think attempts to tackle this problem will make progress without
-> discussing and getting buy-in from (PREEMPT_RT) locking folks.
+> We are testing the change you suggested on Zhaoxin systems with and
+> without PDCM support. We expect to report the results within the next
+> few weeks.
 > 
 
-Sebastian, Peter, Thomas, did you have a chance to look at the locking
-direction here?
+Hi Sean,
+
+Frank tested your suggested change on Zhaoxin systems **without** PDCM,
+using kvm_intel. The results support the fix.
+
+MSR_IA32_PERF_CAPABILITIES is no longer listed in
+KVM_GET_MSR_FEATURE_INDEX_LIST. A direct KVM_GET_MSRS query on the
+/dev/kvm fd still succeeds, with the MSR data changing from 0x2000
+to 0 through the existing unsupported-MSR handling. The MSR remains
+in KVM_GET_MSR_INDEX_LIST, and the existing vCPU userspace behavior
+of allowing reads of zero and writes of zero is unchanged.
+
+We also checked the QEMU behavior. With the MSR absent from the feature
+list, QEMU's supported-feature query returns zero for PERF_CAPABILITIES.
+The PDCM bit in KVM_GET_SUPPORTED_CPUID is unchanged and was already
+clear on these systems. QEMU filters PDCM out of CPU models that request
+it, so this resolves our concern about the effect on CPU model selection.
+
+feature_msrs_test passes with the change. vmx_pmu_caps_test is skipped
+on these systems, and the other KVM selftests we ran showed no regressions.
+Our hardware testing covered systems without PDCM; we have not validated
+the change on PDCM-capable hardware.
+
+One observation about the ARCH_CAPABILITIES check: in the code we
+checked, EMULATED_F(ARCH_CAPABILITIES) already enables the capability
+unconditionally, so the new check does not change its behavior.
 
 Thanks,
-Karl
+Ewan
+
+> Thanks for applying the patches and for looking into the patch 6 issue.
+> 
+
