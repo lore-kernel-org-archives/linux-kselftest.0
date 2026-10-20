@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792520387;
-	b=5nIpzJ1F1tIG5BLN3RuAPjAABB9YjGRZtwXxdT9ivHCY8rAZTMib1eFK2ongQaTfQvy9
-	 LyCMYBYL5/uKbSTjjzWYoa/kBmDkQN94PDI29ZwGDslFxOAF9RPBC4xQ/aK8NqQTRteIF
-	 mmE/eV0aHAmbAJH1+njf7MXcIiIgSbPVQ51AAMqf6WG1AYgtHO/1J5wi9UwWjCs+21VZz
-	 BmJE01HtvmKkNgINiYJe5W4QJ9sCAoJXLRz1t2mA+J8quQ6agiPetFPUQCy6f0QfoGvt6
-	 v6T3PEf892P8ItT+gXrl4kjOB0oW1MdhcASdZTFi0iaVaulp5D7gIQul5QCJ8sLOJLw==
+	t=1792520397;
+	b=UZoHaGQLIxOUW6drJn9OrOirV5UQyxeuj4dN+mGY5s3tzSRMiQwwwmGBWNmtO8BvyUaN
+	 tTXeutBwYfCq0Bd2Rp+C+Bp70K7/OI9lc0VWj89NrAY7qWDmrzYctIsvDE9SPw1w5UICs
+	 8nEzBIMuIGxNdTnXbe8Pp3DAhcai/MunoxslEJxy2AyekfvzrNpBXMVx1F3r3DnxR2NF7
+	 RXv9JLYE4nKvER+L3/mX287NmGmsfgG8Tyt7SqtZK6nFDNr8hXcYMsuJUG4pHgPXlWzHK
+	 0t405ZE0vxpyNUmC72PRX2HxxKiT5sSox/9MrCZDgXCD3VsATsNOOIJ/s44QNQeT8pg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792520387;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792520397;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=xOHuMA/WM9xuTdSj+ZDzOAw3l3xrB59FAR7IgfJil6U=;
-	b=Am43SLKaQ39PPec3qjAIZvbHDZb44LidiJaH6aC3JJ8aChVWkun3d7h4BMm6ryvSi5DF
-	 U7PbSEiTyPQP+1y6xvxHZdd4WwJHjvlLINjd/I0TORvJuQ2scuaePM3U4PCZon2pbMsH6
-	 7u/AIct+3LqFYeYNe2tmWFNC1xjuEceIkAc+kAT5QJXU/W6KfyK2rtdSP2596Fmf1pzhd
-	 yYX1LrMCA7g7frXyrEUGgxYLxk0qLENyp9QoVmwJL4/smuBWprEngOYs0CG+0E1auoBVL
-	 Zmj8PTk4EwyokvtX4KHaNyP5D1PKGesxMrqYRSPKYEEzwM7N+yJT2IBYLKHqgoCIjoA==
+	bh=ODwfS8M8SXuoEAx3U0UwYdL7MiECVNqk0msYC5n17UI=;
+	b=CWpC8YkIITNNMrycgSU43LlQmDw+/twKvXHVcpeZZV876wzUMMaACVTE1AE7CviVzyTh
+	 Wf491BfkeiCynJgMJXvvjKmeVnGk8I4t7+HIrjDGMU7SgKAFazs5CP4kEwFmEu0jatIll
+	 vIEAo+sIucZ47CDrkyAfO3//6CXLH1kI7EDLWE5OZYxzF3yDfTQCvzcYWFQUBKNb8R3Cz
+	 sTyFZHk96x75HPA7ow1raIRZyOLMH6YgwubqkrOsw1REvmopoGVYyz9N1kv8GqBYplNjA
+	 8b1bqxY6LaZLFh2sjhMozS/ladiKgzxz1jaVBFlrmxPIYucfw20UYUrn6u6FBhEyaxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hErdiEsh;
-	arc=none smtp.remote-ip=74.125.82.172
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=WCJAuynP;
+	arc=none smtp.remote-ip=74.125.82.182
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D265960A5BDE
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 18:19:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D265960A5BDE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7628606A31C
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 18:19:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7628606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hErdiEsh
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-354ba08cfd1so6404884eec.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 11:19:46 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=WCJAuynP
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso1845067eec.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 11:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792520386; x=1793125186; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792520396; x=1793125196; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=xOHuMA/WM9xuTdSj+ZDzOAw3l3xrB59FAR7IgfJil6U=;
-        b=hErdiEshqyyBX6eVApdQ4fgl8tgxFrBg2fPzMCcUXEqup6Sb4E12WO7BQ/6LGW0Edc
-         eHy7b+xfCUMM32M6Nrb4GgoX7RLF2cIgR51c55M1wjPudfozchhazJ2grV4umIAOqzas
-         YgJdoiOTwSTPo23AzTYk520o6YssvURQ3zvZ+uFaQFIfotJQCBhfDmPhQ4Cv4IQnsYai
-         dI9Z+dxxsYjZfkjvEjSwSurXTtOekkhfMkAFd1AHIrihHTQhwAGyxSraE1+ekBOaknCP
-         O56DsJTsisobk9t82Zp+LYjpGyBGbEy5JuLJVxW16x0j+sTGOXXeyR62jwb6hYpuxOly
-         IM4Q==
+        bh=ODwfS8M8SXuoEAx3U0UwYdL7MiECVNqk0msYC5n17UI=;
+        b=WCJAuynPIXaXCLZSScUBe6YnW12OLKwxvrMAAnG4DWxFBQbx8F1PJWmAtEJm2mrYWM
+         r4+W/sgdSot2n2L3N7sqPDFdz+Vg8bfShwWXDU9wXcK0uEht3ty52dPFGlKSLgXT9AxX
+         iT0yPe+YUvihtfFmDoJBXrlg99DnjrhaZ/vVnwKsH72DZggDaqsU2WTrIJ5Brq28JNSV
+         MSdq0zDDkCbMA9ilMtsJvjSYxr7nb7MNK1FE7DQpPay+QczbTOnCtX05J1tqgG5ms7Av
+         e9TSisNyWBLohavrKCXTDmMRbLB2knpZa2xyD1gSA1t2SnQoswNb9i07PA15UQfKv2MX
+         W11w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792520386; x=1793125186;
+        d=1e100.net; s=20260707; t=1792520396; x=1793125196;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xOHuMA/WM9xuTdSj+ZDzOAw3l3xrB59FAR7IgfJil6U=;
-        b=WuOIrzEo7StxZSGUOEU/oxbF/RyQ34LmzbkbGhbQLCBxpTMurRumDauWl9zimxn4EA
-         2DTf90iXtO/9hLW0/1n8eQWjGYSiktq6RApLRn1VEds1sGcHIy76bkYniv7oqhfAx8KU
-         3tazbHldQ4G69COUwJw/rbYn/H8gEMHLvAQbGCcZBpCb2gHyJuVV1s4lPqa4whdNbcL8
-         9vdpzf91avEA9wYvEGsm9ATKKEOR4vziFBaWSDULeNFI9KCskggDcn+NrJl0b7pgXDz4
-         OQubvfOeH4oonOK1rTn3UV41qsY4h3LTFPzCXSvJgTlYQNZrcFgcpeeky+dmCsGkN6KU
-         aTCQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzQEEH4hXS815v8SfDqqkXK5dIrCECb1GCqVsOOuUS9FnSwBpu+bmvIGOhFcCcqeIDWTDxUaZGA+2vrNEU9Fw0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKrO1V+Lewtv08VwgeMDue/RjEvAxF7x3jmbWqCUsWaJyxHV3VX
-	fmKARH5+EQapxcTyhKBCpkTFXxgjBCkvPmq0Ef9NmdlpPIieMhzDGwX5
-X-Gm-Gg: AYBFou3oIRxmJRJyTeEjRgyq47M4BfiJZGPBBEVGvBc/NBNbne2WBfIT3xZkVe3lU+M
-	6yZxGdNCl088hWQMuYPqjyf2hyRzjlWL7iW6a2nUfF/E5BTLR7uj/izJT9ZjwLsFG5tOEdtoiZg
-	nfK6EQ9YbjbYpd0lNxHLk8R4+SP3nPxajlHt5faBdd1B4LJLOcELsI+6NhKn+v8BvEPwOMsnIsV
-	Whc1yfpvbx918ASmeNgJ6bDT4hSIhNOSnc9p2qKZPNkRI9krLQLbt2jBTOEv4OngUXpv1dtu1Ct
-	PJaDUD7jZgnr5wHUdiVud9o8TbmzPZyMrAuWo60v3RdiD/wBdChXUIob9U/FiB/wMG/UvfUWq22
-	bK2VOdWbbIa12Br2pvO9I2Kxf1N+3XChgoAGWSCCYOnlWieifDIhVr4L5ta0PY6+KnL9HL8SPmv
-	+IhmHxYARiRqt675x0PPvTA1gU7f+h/lAbBJk8Spuck+W6nVtGC6UyBinII96K8Ttc
-X-Received: by 2002:a05:693c:65cc:b0:35c:99e1:c755 with SMTP id 5a478bee46e88-3674e355183mr55514eec.38.1792520385832;
-        Tue, 20 Oct 2026 11:19:45 -0700 (PDT)
+        bh=ODwfS8M8SXuoEAx3U0UwYdL7MiECVNqk0msYC5n17UI=;
+        b=gPKjEnaHMTAp8t6n5Y8xW0xigF6yBVzQs1BHXot/hkZy2dJzoib3/y5asxW6/tCvYM
+         +0U4DxQiFiw/rPKa57PpLfkppbBgZwHwDGOEyzZA6IuXDKwHFaT/OEBcH33lmWmE7nTf
+         bHSxZBVqCDF2gixnLrdYeHri1yYd/bTZpRqIAjBD/REiRQhGO84qL7tboKvrI63uexC+
+         R1s+HksqmGTurGWjYrjMrJpi/KZvEdIxUkFtwulVd0NQSL6kI8ZBa3WSCssUSHAkRTY6
+         d2cVvOPf2/jZMfeRAGxr9gVnzbcTV/COMC+wqIkcLBjCWjMm3gM++532BgbYoI1ZpRql
+         5RyQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzcwLVBHkGkpkMLj8gm60rE16AXDMB6BRhx0rLUAbBdgnqC5fc883JukN2eoQ4UJ9MX7xfOjRFWlpHH/TjCgiE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJBnyRwV7EczMP2v3N36gCtWvdJl+A8roqXwvxuFebkNKcx6e8I
+	ESnFB88jGR98J51PY2S8hI+lRNjNx3gzhK0A7AiH8QX9eqVbhdD+85P7
+X-Gm-Gg: AYBFou1iACkrL2Xe8mlGMRMj2nRkna+CRW6ajalkxLQ3jxKluyo1REKFh2uNwaa72bo
+	iPOpSCqu6wVr+2j7gUbEMsxN5taD5m1ZCJQM02VqGykgEHjVU7ePuCxPieapeL8zuGwnCFHF6zm
+	kc1fdQIYuN95Y3TZbiP7QhppwgTL3VS2yObA+0MQ2TC5guATN2w8T24aZvy2JcU4MxGH0cnAmuY
+	7pXlNxlCsGdLFWTtGQ+WtRRXjU6EjuZltm/oith0JXEz78utkz0kaBCrMkxoXrYbJWXzbSy1mwz
+	uhuFjqVtYjgpqrpjIO11sEa2yk49Amd6NR08mmreDXu26YF8I/4LWYffp+qtAP+fYxsiHGVM8Ek
+	op2GD2ARwjR7f774AUjMrl+y+vYpzAI9N/LD4VEsamNGnf+eYG8bN5KeZg9SJit1Tzgdimzzul4
+	/BHTCmlCOb+fEQUmXY+CSXiWx9Q+Rl5NAZzFnAkHHH4DWWJgpz+PgRc++R62ReLa5Rd6RTgztjm
+	0s=
+X-Received: by 2002:a05:7300:8812:b0:35b:da8b:f88c with SMTP id 5a478bee46e88-367508eb4dbmr34905eec.41.1792520395576;
+        Tue, 20 Oct 2026 11:19:55 -0700 (PDT)
 Received: from unix.. ([181.229.23.179])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3673e15353csm523728eec.2.2026.10.20.11.19.41
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3673e15353csm523728eec.2.2026.10.20.11.19.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 11:19:45 -0700 (PDT)
+        Tue, 20 Oct 2026 11:19:55 -0700 (PDT)
 From: =?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -101,11 +102,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Charlie Jenkins <thecharlesjenkins@gmail.com>,
 	Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
 	Zishun Yi <vulab@iscas.ac.cn>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	stable@vger.kernel.org
-Subject: [PATCH v2 1/4] arm64/gcs: release GCS on failed fork
-Date: Tue, 20 Oct 2026 15:19:30 -0300
-Message-ID: <8522b8d3d3ecda7474d0af8b8517c1f5d708ecc2.1792519121.git.ivanrwcm25@gmail.com>
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH v2 3/4] selftests/arm64: GCS must not leak on a failed clone3
+Date: Tue, 20 Oct 2026 15:19:32 -0300
+Message-ID: <420e012252ed09cdb83d18512488fd2535ffc7fa.1792519121.git.ivanrwcm25@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1792519121.git.ivanrwcm25@gmail.com>
 References: <cover.1792519121.git.ivanrwcm25@gmail.com>
@@ -121,126 +121,319 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-copy_thread() maps a GCS for a CLONE_VM child and can still return
-0. A later copy_process() failure then goes through
-bad_fork_cleanup_thread, which calls exit_thread(). The hole this
-series hits is clone3(CLONE_VM|CLONE_PIDFD) when put_user() of the
-pidfd fails after that mapping. arm64 did not implement
-exit_thread(). deactivate_mm() is what normally calls gcs_free(),
-and it does not run on this path. Each rejected clone leaves one
-GCS VMA in the parent's mm until the mm dies.
+clone3(CLONE_VM|CLONE_PIDFD) with an unwritable pidfd pointer fails
+in put_user() after copy_thread() has mapped a GCS. copy_process()
+then calls exit_thread(). Without HAVE_EXIT_THREAD that free is a
+no-op and the VMA stays in the parent's mm.
 
-Select HAVE_EXIT_THREAD and free the child's GCS from
-exit_thread(). gcs_free() already ignores a cleared base and a
-different mm, so the usual exit path (deactivate_mm() then this) is
-a no-op the second time. copy_thread_gcs() zeros the inherited
-tracking before a user-thread allocation, so an allocation error
-still skips exit_thread() with nothing to unmap.
+Use kselftest.h / KTAP. Skip paths that cannot run the regression
+run before ksft_set_plan(). Then confirm a valid clone3 writes a
+pidfd, reject 16 bad-pidfd clones with -EFAULT, and require the
+shadow-stack VMA count (VmFlags " ss") to stay unchanged.
 
-Tasks created through the args->fn path (kernel_thread(),
-create_io_thread(), and similar) do not allocate a user GCS in
-copy_thread(). They still inherit GCS tracking via
-arch_dup_task_struct(), and with CLONE_VM a later failed
-copy_process() still shares the caller's mm, so gcs_free()'s mm
-check does not save us. Clear that tracking with
-gcs_reset_thread(), an empty stub when !CONFIG_ARM64_GCS.
+ENOSYS, EINVAL, and EPERM from the valid clone skip; any other
+error, or a success that leaves pidfd unset, fails. The rejected
+child exits with a raw svc. The test expects /proc already mounted.
 
-x86 does not need the same args->fn clear: copy_thread() runs
-shstk_alloc_thread_stack() before both the PF_KTHREAD and later
-args->fn return paths, so CLONE_VM replaces the inherited tracking
-first.
+Move my_syscall2 into gcs-util.h and reuse it from gcs-locking.c and
+libc-gcs.c.
 
-Tested with CONFIG_ARM64_GCS on QEMU 11.1.2 -machine virt -cpu max.
-Sixteen clone3() calls with CLONE_VM|CLONE_PIDFD and an unwritable
-pidfd pointer leaked 16 GCS VMAs without the fix. With it, the VMA
-count was unchanged.
-
-Fixes: 506496bcbb42 ("arm64/gcs: Ensure that new threads have a GCS")
-Cc: stable@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>
 Assisted-by: LLM
 Signed-off-by: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
 ---
- arch/arm64/Kconfig           |  1 +
- arch/arm64/include/asm/gcs.h |  8 ++++++++
- arch/arm64/kernel/process.c  | 19 +++++++++++++++++++
- 3 files changed, 28 insertions(+)
+ tools/testing/selftests/arm64/gcs/Makefile    |   3 +-
+ .../selftests/arm64/gcs/gcs-clone-pidfd.c     | 168 ++++++++++++++++++
+ .../testing/selftests/arm64/gcs/gcs-locking.c |  20 ---
+ tools/testing/selftests/arm64/gcs/gcs-util.h  |  24 +++
+ tools/testing/selftests/arm64/gcs/libc-gcs.c  |  20 ---
+ 5 files changed, 194 insertions(+), 41 deletions(-)
+ create mode 100644 tools/testing/selftests/arm64/gcs/gcs-clone-pidfd.c
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index cab741a695f5..c7fc79409f98 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -177,6 +177,7 @@ config ARM64
- 	select HAVE_ARM_SMCCC
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_EBPF_JIT
-+	select HAVE_EXIT_THREAD
- 	select HAVE_C_RECORDMCOUNT
- 	select HAVE_CMPXCHG_DOUBLE
- 	select HAVE_CMPXCHG_LOCAL
-diff --git a/arch/arm64/include/asm/gcs.h b/arch/arm64/include/asm/gcs.h
-index 8fa0707069e8..f47aaad30d7d 100644
---- a/arch/arm64/include/asm/gcs.h
-+++ b/arch/arm64/include/asm/gcs.h
-@@ -67,6 +67,13 @@ void gcs_preserve_current_state(void);
- unsigned long gcs_alloc_thread_stack(struct task_struct *tsk,
- 				     const struct kernel_clone_args *args);
+diff --git a/tools/testing/selftests/arm64/gcs/Makefile b/tools/testing/selftests/arm64/gcs/Makefile
+index 1fbbf0ca1f02..f1365eea31c9 100644
+--- a/tools/testing/selftests/arm64/gcs/Makefile
++++ b/tools/testing/selftests/arm64/gcs/Makefile
+@@ -6,7 +6,8 @@
+ # nolibc.
+ #
  
-+static inline void gcs_reset_thread(struct task_struct *task)
+-TEST_GEN_PROGS := basic-gcs libc-gcs gcs-locking gcs-stress gcspushm gcsstr
++TEST_GEN_PROGS := basic-gcs libc-gcs gcs-locking gcs-stress gcspushm gcsstr \
++		  gcs-clone-pidfd
+ TEST_GEN_PROGS_EXTENDED := gcs-stress-thread
+ 
+ LDLIBS+=-lpthread
+diff --git a/tools/testing/selftests/arm64/gcs/gcs-clone-pidfd.c b/tools/testing/selftests/arm64/gcs/gcs-clone-pidfd.c
+new file mode 100644
+index 000000000000..96400ea376c0
+--- /dev/null
++++ b/tools/testing/selftests/arm64/gcs/gcs-clone-pidfd.c
+@@ -0,0 +1,168 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * clone3(CLONE_VM|CLONE_PIDFD) with an unwritable pidfd pointer must
++ * not leak a GCS VMA. copy_thread() maps one, then put_user() fails
++ * and copy_process() calls exit_thread(). Without HAVE_EXIT_THREAD
++ * that free is a no-op and the VMA stays in the parent's mm.
++ *
++ * After enabling GCS, do not return from main(): libc frames above
++ * that point have no GCS entries.
++ */
++#define _GNU_SOURCE
++
++#include <errno.h>
++#include <linux/sched.h>
++#include <sched.h>
++#include <signal.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/auxv.h>
++#include <sys/mman.h>
++#include <sys/syscall.h>
++#include <sys/wait.h>
++#include <unistd.h>
++
++#include <asm/hwcap.h>
++
++#include "kselftest.h"
++#include "gcs-util.h"
++
++#ifndef HWCAP_GCS
++#define HWCAP_GCS		(1UL << 32)
++#endif
++
++#ifndef __NR_clone3
++#define __NR_clone3 435
++#endif
++
++#define NCLONE			16
++#define STACK_SIZE		(64 * 1024)
++
++static int count_ss_vmas(void)
 +{
-+	task->thread.gcs_base = 0;
-+	task->thread.gcs_size = 0;
-+	task->thread.gcspr_el0 = 0;
++	FILE *f;
++	char line[256];
++	int vmas = 0;
++
++	f = fopen("/proc/self/smaps", "r");
++	if (!f)
++		ksft_exit_fail_msg("fopen /proc/self/smaps: %s\n",
++				   strerror(errno));
++
++	while (fgets(line, sizeof(line), f)) {
++		if (!strncmp(line, "VmFlags:", 8) && strstr(line, " ss"))
++			vmas++;
++	}
++	fclose(f);
++	return vmas;
 +}
 +
- static inline int gcs_check_locked(struct task_struct *task,
- 				   unsigned long new_val)
- {
-@@ -167,6 +174,7 @@ static inline bool task_gcs_el0_enabled(struct task_struct *task)
- static inline void gcs_set_el0_mode(struct task_struct *task) { }
- static inline void gcs_free(struct task_struct *task) { }
- static inline void gcs_preserve_current_state(void) { }
-+static inline void gcs_reset_thread(struct task_struct *task) { }
- static inline void put_user_gcs(unsigned long val, unsigned long __user *addr,
- 				int *err) { }
- static inline void push_user_gcs(unsigned long val, int *err) { }
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 581f80e9b9b7..83d5a07a238f 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -341,6 +341,16 @@ void flush_thread(void)
- 	flush_gcs();
- }
- 
-+void exit_thread(struct task_struct *tsk)
++/*
++ * CLONE_VM maps a new GCS. CLONE_PIDFD lets put_user() fail after that.
++ * Use a raw svc: the child resumes on an empty GCS, so a libc return
++ * after clone3 would fault; exit the same way.
++ */
++static long clone_pidfd(void *stack, size_t stack_size, int *pidfd_ptr)
 +{
-+	/*
-+	 * copy_process() calls this after copy_thread() returns 0.
-+	 * deactivate_mm() does not run on that failure path.
-+	 * gcs_free() is a no-op once gcs_base is cleared.
-+	 */
-+	gcs_free(tsk);
++	struct clone_args args = {
++		.flags = CLONE_VM | CLONE_PIDFD,
++		.pidfd = (uint64_t)(uintptr_t)pidfd_ptr,
++		.exit_signal = SIGCHLD,
++		.stack = (uint64_t)(uintptr_t)stack,
++		.stack_size = stack_size,
++	};
++	register long num __asm__("x8") = __NR_clone3;
++	register long ret __asm__("x0") = (long)&args;
++	register long sz __asm__("x1") = sizeof(args);
++	int st;
++
++	asm volatile("svc #0"
++		     : "+r"(ret)
++		     : "r"(num), "r"(sz)
++		     : "memory", "cc");
++	if (ret == 0) {
++		register long n __asm__("x8") = __NR_exit;
++		register long e __asm__("x0") = 0;
++
++		asm volatile("svc #0" : : "r"(n), "r"(e) : "memory");
++		__builtin_unreachable();
++	}
++	if (ret < 0)
++		return ret;
++	if (waitpid((pid_t)ret, &st, 0) < 0)
++		return -errno;
++	if (!WIFEXITED(st) || WEXITSTATUS(st) != 0)
++		return 1;
++	return 0;
 +}
 +
- void arch_release_task_struct(struct task_struct *tsk)
++int main(void)
++{
++	void *stack;
++	void *bad_pidfd;
++	unsigned long gcs_mode;
++	long rc;
++	int pidfd = -1;
++	int vmas0, vmas1;
++	int i, n_efault = 0;
++
++	ksft_print_header();
++
++	if (!(getauxval(AT_HWCAP) & HWCAP_GCS))
++		ksft_exit_skip("GCS not supported\n");
++
++	stack = mmap(NULL, STACK_SIZE, PROT_READ | PROT_WRITE,
++		     MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
++	if (stack == MAP_FAILED)
++		ksft_exit_fail_msg("mmap stack: %s\n", strerror(errno));
++
++	bad_pidfd = mmap(NULL, 4096, PROT_NONE,
++			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (bad_pidfd == MAP_FAILED)
++		ksft_exit_fail_msg("mmap pidfd page: %s\n", strerror(errno));
++
++	rc = my_syscall2(__NR_prctl, PR_GET_SHADOW_STACK_STATUS, &gcs_mode);
++	if (rc)
++		ksft_exit_fail_msg("PR_GET_SHADOW_STACK_STATUS: %ld\n", rc);
++
++	if (!(gcs_mode & PR_SHADOW_STACK_ENABLE)) {
++		rc = my_syscall2(__NR_prctl, PR_SET_SHADOW_STACK_STATUS,
++				 PR_SHADOW_STACK_ENABLE);
++		if (rc == -EOPNOTSUPP || rc == -EINVAL || rc == -EBUSY)
++			ksft_exit_skip("cannot enable GCS: %ld\n", rc);
++		if (rc)
++			ksft_exit_fail_msg("PR_SET_SHADOW_STACK_STATUS: %ld\n",
++					   rc);
++	}
++
++	rc = clone_pidfd(stack, STACK_SIZE, &pidfd);
++	if (rc == -ENOSYS || rc == -EINVAL || rc == -EPERM)
++		ksft_exit_skip("clone3 valid pidfd unavailable: %s\n",
++			       strerror(-rc));
++
++	ksft_set_plan(3);
++
++	ksft_test_result(rc == 0 && pidfd >= 0,
++			 "clone3 valid pidfd (rc=%ld pidfd=%d)\n",
++			 rc, pidfd);
++	if (pidfd >= 0)
++		close(pidfd);
++
++	vmas0 = count_ss_vmas();
++
++	for (i = 0; i < NCLONE; i++) {
++		rc = clone_pidfd(stack, STACK_SIZE, bad_pidfd);
++		if (rc == -EFAULT)
++			n_efault++;
++	}
++	ksft_test_result(n_efault == NCLONE,
++			 "clone3 bad pidfd returns -EFAULT x%d\n", NCLONE);
++
++	vmas1 = count_ss_vmas();
++	ksft_test_result(vmas1 == vmas0,
++			 "no GCS VMA leak (%d -> %d)\n", vmas0, vmas1);
++
++	ksft_finished();
++}
+diff --git a/tools/testing/selftests/arm64/gcs/gcs-locking.c b/tools/testing/selftests/arm64/gcs/gcs-locking.c
+index 1e6abb136ffd..61789bdd2744 100644
+--- a/tools/testing/selftests/arm64/gcs/gcs-locking.c
++++ b/tools/testing/selftests/arm64/gcs/gcs-locking.c
+@@ -18,26 +18,6 @@
+ 
+ #include "gcs-util.h"
+ 
+-#define my_syscall2(num, arg1, arg2)                                          \
+-({                                                                            \
+-	register long _num  __asm__ ("x8") = (num);                           \
+-	register long _arg1 __asm__ ("x0") = (long)(arg1);                    \
+-	register long _arg2 __asm__ ("x1") = (long)(arg2);                    \
+-	register long _arg3 __asm__ ("x2") = 0;                               \
+-	register long _arg4 __asm__ ("x3") = 0;                               \
+-	register long _arg5 __asm__ ("x4") = 0;                               \
+-	                                                                      \
+-	__asm__  volatile (                                                   \
+-		"svc #0\n"                                                    \
+-		: "=r"(_arg1)                                                 \
+-		: "r"(_arg1), "r"(_arg2),                                     \
+-		  "r"(_arg3), "r"(_arg4),                                     \
+-		  "r"(_arg5), "r"(_num)					      \
+-		: "memory", "cc"                                              \
+-	);                                                                    \
+-	_arg1;                                                                \
+-})
+-
+ /* No mode bits are rejected for locking */
+ TEST(lock_all_modes)
  {
- 	fpsimd_release_task(tsk);
-@@ -503,6 +513,15 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+diff --git a/tools/testing/selftests/arm64/gcs/gcs-util.h b/tools/testing/selftests/arm64/gcs/gcs-util.h
+index 7a81bb07ed4b..46f6ed9cf54d 100644
+--- a/tools/testing/selftests/arm64/gcs/gcs-util.h
++++ b/tools/testing/selftests/arm64/gcs/gcs-util.h
+@@ -43,6 +43,30 @@
+ #define GCS_CAP(x) (((unsigned long)(x) & GCS_CAP_ADDR_MASK) | \
+ 		    GCS_CAP_VALID_TOKEN)
  
- 		p->thread.cpu_context.x19 = (unsigned long)args->fn;
- 		p->thread.cpu_context.x20 = (unsigned long)args->fn_arg;
-+		/*
-+		 * Tasks created through the args->fn path do not
-+		 * allocate a user GCS here. Clear inherited allocation
-+		 * tracking so a later failed copy_process() cannot
-+		 * release the caller's GCS when the mm is still shared
-+		 * (CLONE_VM), as with kernel_thread() and
-+		 * create_io_thread().
-+		 */
-+		gcs_reset_thread(p);
++/*
++ * prctl(..., arg1, arg2) with unused registers forced to zero.  The
++ * kernel rejects non-zero unused args; libc may leave garbage there.
++ */
++#define my_syscall2(num, arg1, arg2)					\
++({									\
++	register long _num  __asm__ ("x8") = (num);			\
++	register long _arg1 __asm__ ("x0") = (long)(arg1);		\
++	register long _arg2 __asm__ ("x1") = (long)(arg2);		\
++	register long _arg3 __asm__ ("x2") = 0;				\
++	register long _arg4 __asm__ ("x3") = 0;				\
++	register long _arg5 __asm__ ("x4") = 0;				\
++									\
++	__asm__ volatile (						\
++		"svc #0\n"						\
++		: "=r"(_arg1)						\
++		: "r"(_arg1), "r"(_arg2),				\
++		  "r"(_arg3), "r"(_arg4),				\
++		  "r"(_arg5), "r"(_num)					\
++		: "memory", "cc"					\
++	);								\
++	_arg1;								\
++})
++
+ static inline unsigned long *get_gcspr(void)
+ {
+ 	unsigned long *gcspr;
+diff --git a/tools/testing/selftests/arm64/gcs/libc-gcs.c b/tools/testing/selftests/arm64/gcs/libc-gcs.c
+index ddb0b2b20155..4e9fa9b82f0f 100644
+--- a/tools/testing/selftests/arm64/gcs/libc-gcs.c
++++ b/tools/testing/selftests/arm64/gcs/libc-gcs.c
+@@ -24,26 +24,6 @@
  
- 		if (system_supports_poe())
- 			p->thread.por_el0 = POR_EL0_INIT;
+ #include "gcs-util.h"
+ 
+-#define my_syscall2(num, arg1, arg2)                                          \
+-({                                                                            \
+-	register long _num  __asm__ ("x8") = (num);                           \
+-	register long _arg1 __asm__ ("x0") = (long)(arg1);                    \
+-	register long _arg2 __asm__ ("x1") = (long)(arg2);                    \
+-	register long _arg3 __asm__ ("x2") = 0;                               \
+-	register long _arg4 __asm__ ("x3") = 0;                               \
+-	register long _arg5 __asm__ ("x4") = 0;                               \
+-	                                                                      \
+-	__asm__  volatile (                                                   \
+-		"svc #0\n"                                                    \
+-		: "=r"(_arg1)                                                 \
+-		: "r"(_arg1), "r"(_arg2),                                     \
+-		  "r"(_arg3), "r"(_arg4),                                     \
+-		  "r"(_arg5), "r"(_num)					      \
+-		: "memory", "cc"                                              \
+-	);                                                                    \
+-	_arg1;                                                                \
+-})
+-
+ static noinline void gcs_recurse(int depth)
+ {
+ 	if (depth)
 -- 
 2.43.0
 
