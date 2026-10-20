@@ -1,49 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.166
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792513114;
-	b=iN27q4x3V+7mszh09C5L8HQeWUHR+aNXwrWvJKd9ylUI/X+0RXzcmCBe+Z/G8N/BDWUm
-	 2FjEcLvgNaKlPsjMx0SZkeg8Y0Dr38LZgnajQFLDZJ64GPAlzDEJFu3Do9QFgz0Le43Oi
-	 ThfAY5fQYJAPeZCX+9hWB/Udsq2SKfAHFshOm2FyQgnZvBunw8UJoyqkFAgJXkD1GZPRG
-	 +2peQHnTYeTW2cpro5cqmN7Oq14u61s4XMl+NEncR77z3btU0r9cwUaOrlpyBKo+wBYHj
-	 RftbBGOzoKgVElxJiSIVbEI+cN+aGj/K6evib4ppsP9PjaGgpeJ7oT3dzdnt8ulg4xQ==
+	t=1792513165;
+	b=hwUWaLoQCLOO5hOAx5JiedklmujGsV/fyJaCMy4cbqrLXskuoqQTukGerdejjwd0+894
+	 KOr0pJQEMdy8nKiU3Bq4NNKrpBpRSF9lDkOnWEA5xem6ydvZbCRDHJA+sEVTYvY6zTKk9
+	 LvOnPP8vu8iLMaybN5+sCqcHDDP0KlNGR2RYYTygIR04KqYjz1CxqTNMC/xw82uRBIQ7O
+	 ngKnk03qLfL8laxsNdc0nXe7hg2FVJwg7C+LWUiGazKYFK2lQsaInGRwp2XeLuuNdiyXO
+	 R9bEfcmWqBVjxh/BeqolViPE92amjAmpaDiKFse9MgCgUVeZYuwDBuKSBvHgRlgN1jw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792513114;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=sRy8OMvelqpi1kx8GaG4oDAawes2m93eDuOUAuGI78I=;
-	b=vLB/NcBWzhm6U9KcGEjw3Gin7SF9B53ykF79LnHi2RD93wXqlo+nHWhikSgzbJqaYTaG
-	 mYqQbdKgMu/qDgK2kLgWRg8XZ+fWK1qMOGP7FptF2VoBKcmNpfzIm3ZUn+iv57tPn6+pS
-	 AzQh5wlsUYBb/a2BnFfkGyDKXBbhfW3boD6ZVlQimne4KBIrN6pYBEdL9U2srUKKirJQ5
-	 Zt/YJRawWchXw6d8yh62WObWDwlN3U6jnFz7tfT7AvvUlYHqbogR7giOqmlPX/LiY8Cqt
-	 Om0N6OyD75rj6VpnoHUCvNL3IhPfck34/BFszE0hKihYlTC9DS0JvwuDQyujG88Of7g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792513165;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=J8AQDqYa093bO5JROgq8wcTCDu2HbaJ3o/zBYJsra74=;
+	b=3VwNXzCkoXYxc0ZQyI7merrGBE7k0Raed1Vu/opdCcW7f/5vTQ5oxajpsdFpWjSWI3g+
+	 XJvVpYxCXiN9NGTPl7cXdfVkSU4zYfz8OjGRGseCdj02k2U0/AWUALW+T6xUPgI8Jp7jH
+	 HyE2Z+HSF465aZ1ue1dMkItCmfIRw9390ZEwi3Zlxxs7CZXjNFJj/3mwX+w5ydSRktsxh
+	 ij7Zf+vc05rytKytnBGSmpcE3GXxVvYth6NEeEvIVzwCG2jKTqd7zpHC5ITKYJGfGmbbV
+	 qGV3mONtFyt1LKDIouaWzRXvMOsQTj+pFDhv0qxqT6WtLFRhd1LI8nvVMsoyllwxhaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=P3UKYGoj;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7022A606A321;
-	Tue, 20 Oct 2026 16:18:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7022A606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nBsbaFgz;
+	arc=none smtp.remote-ip=95.215.58.166
+Received: from mta1.migadu.com (out-166.mta1.migadu.com [95.215.58.166])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529D6606A339
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 16:19:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 529D6606A339
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=P3UKYGoj
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87E562103;
-	Tue, 20 Oct 2026 09:18:29 -0700 (PDT)
-Received: from [10.2.212.8] (e134344.arm.com [10.2.212.8])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7DD503F7D8;
-	Tue, 20 Oct 2026 09:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1792513112; bh=C9GWUSzHu70C+auZV5q3SwYVi5/DqwHUbfj4SB1WjDs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=P3UKYGojoamu+TtRAydYO4m+GIMBnLjmIMSd9zG+Uxq3x97+c8iBdviiA2haADTrF
-	 fBI4p4GlhFIEjJTGK3WPJi4Mx4maLW0joHPmFDwiOd4wJihxWwqSs/l8w74WB50IMR
-	 B5bulrDunM0QRXWIaDJlPbuGGNaFPyn8ydM9iYt4=
-Message-ID: <415d1bf3-342d-45b5-b31e-ddc654510d85@arm.com>
-Date: Tue, 20 Oct 2026 17:18:28 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nBsbaFgz
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JwWe/dMpnTbNzKs9pgLm3Ba/MnLyPwYkBRb2X2J23ZA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792513162; v=1; x=1793117962;
+ b=nBsbaFgz9E1tzkJBxYCnGqv78waQvNTvn2G3sNR9M8bZhBBSbAYVyfXfO/pVYMobxw+OFFFQ
+ 8uNZVBTVBvrBPMYsQwoBgolkAXPztiawLwyiYlLYJX9+tOmQW5edE4+PLrpJlY+ZrVFDYJEEH8b
+ yLWJCCmenDCDyuPO5K0J0Ib8=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b965807214146e88;
+	Tue, 20 Oct 2026 16:19:22 +0000
+X-Mizu-Trace-ID: b965807214146e88
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	shuah@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v3 00/12] bpf: track scalar equality across the low 32 bits
+Date: Tue, 20 Oct 2026 09:18:55 -0700
+Message-ID: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,128 +77,317 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] selftests/resctrl: Recognise aarch64 as a vendor
- for L3_NONCONT_CAT
-To: Richard Cheng <icheng@nvidia.com>, tony.luck@intel.com,
- reinette.chatre@intel.com, x86@kernel.org, shuah@kernel.org,
- fenghuay@nvidia.com
-Cc: Dave.Martin@arm.com, james.morse@arm.com, babu.moger@amd.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kaihengf@nvidia.com, kobak@nvidia.com, newtonl@nvidia.com,
- kristinc@nvidia.com, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>
-References: <20261012074729.40042-1-icheng@nvidia.com>
- <20261012074729.40042-3-icheng@nvidia.com>
-Content-Language: en-US
-From: Ben Horgan <ben.horgan@arm.com>
-In-Reply-To: <20261012074729.40042-3-icheng@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Richard,
+This series was motivated by BPF_GCC tendency to generate sign-extensions
+which the verifier effectively doesn't handle at all for the scalar linked
+tracking.
 
-On 12/10/2026 08:47, Richard Cheng wrote:
-> aarch64 has no vendor_id in /proc/cpuinfo, so detect_vendor() returns 0
-> and arch_supports_noncont_cat() falls through to "return false".
-> L3_NONCONT_CAT therefore spuriously fails on every ARM MPAM platform.
-> 
-> Define ARCH_ARM, short-circuit detect_vendor() to it on aarch64, and
-> add it to the AMD/Hygon always-supports early-out in
-> arch_supports_noncont_cat().
-> 
-> aarch64 has many implementers (ARM 0x41, NVIDIA 0x43, etc.), but MPAM
-> mandates non-contiguous CPBM uniformly, so per-implementer handling is
-> not needed here.
-> 
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> Signed-off-by: Richard Cheng <icheng@nvidia.com>
-> ---
->  tools/testing/selftests/resctrl/cat_test.c    |  9 ++++++--
->  tools/testing/selftests/resctrl/resctrl.h     |  1 +
->  .../testing/selftests/resctrl/resctrl_tests.c | 21 +++++++++++++++++++
->  3 files changed, 29 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index 0a417267dd74..f4b02b3eedd7 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -271,8 +271,13 @@ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
->  {
->  	unsigned int vendor_id = get_vendor();
->  
-> -	/* AMD and Hygon always support non-contiguous CBM. */
-> -	if (vendor_id == ARCH_AMD || vendor_id == ARCH_HYGON)
-> +	/*
-> +	 * AMD and Hygon always support non-contiguous CBM. ARM/MPAM defines
-> +	 * MPAMCFG_CPBM as a bitmap with no contiguity constraint per ARM
-> +	 * DDI 0598.
-> +	 */
-> +	if (vendor_id == ARCH_AMD || vendor_id == ARCH_HYGON ||
-> +	    vendor_id == ARCH_ARM)
->  		return true;
+This can prevent correct programs from loading such as the test below,
 
-Would it be better not to just to use the information resctrl advertises?
-/sys/fs/resctrl/info/L3/sparse_masks
+   0: (61) r2 = *(u32 *)(r1 +24)
+   1: (bf) r0 = (s32)r2
+   2: (56) if w2 != 0x0 goto pc+10       ; R2=0
+  12: (95) exit
 
-Is there any reason this test doesn't use that other than being written before its introduction?
+leads to following load failure:
 
-Thanks,
+  At program exit the register R0 has smin=-2147483648 smax=2147483647
+  should have been in [0, 1]
 
-Ben
+The verifier currently tracks the full 64 bits or nothing (the alu32
+handling is also full 64-bits with upper bits known to be zeroes).
+The sign extension at insn 1 has no way to say "same low 32 bits, high half
+from bit 31", so it doesn't link r0 and r2, hence the insn 2 branch can't
+narrow r0.
 
->  
->  #if defined(__i386__) || defined(__x86_64__) /* arch */
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> index a7556cdae0de..03b4500c1f7f 100644
-> --- a/tools/testing/selftests/resctrl/resctrl.h
-> +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -41,6 +41,7 @@
->  #define ARCH_INTEL	BIT(0)
->  #define ARCH_AMD	BIT(1)
->  #define ARCH_HYGON	BIT(2)
-> +#define ARCH_ARM	BIT(3)
->  
->  #define END_OF_TESTS	1
->  
-> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-> index dbcd5eea9fbc..cfece594a8c6 100644
-> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
-> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> @@ -23,6 +23,15 @@ static struct resctrl_test *resctrl_tests[] = {
->  	&l2_noncont_cat_test,
->  };
->  
-> +static bool detect_aarch64(void)
-> +{
-> +#if defined(__aarch64__)
-> +	return true;
-> +#else
-> +	return false;
-> +#endif
-> +}
-> +
->  static unsigned int detect_vendor(void)
->  {
->  	static unsigned int vendor_id;
-> @@ -34,6 +43,18 @@ static unsigned int detect_vendor(void)
->  	if (initialized)
->  		return vendor_id;
->  
-> +	if (detect_aarch64()) {
-> +		/*
-> +		 * aarch64 has no userspace vendor_id in /proc/cpuinfo.
-> +		 * MPAM-capable ARM implementations follow ARM DDI 0598;
-> +		 * treat all aarch64 builds as a single vendor for the
-> +		 * purposes of resctrl selftests.
-> +		 */
-> +		vendor_id = ARCH_ARM;
-> +		initialized = true;
-> +		return vendor_id;
-> +	}
-> +
->  	inf = fopen("/proc/cpuinfo", "r");
->  	if (!inf) {
->  		vendor_id = 0;
+A slightly complex scenario involving sign extension is where the source
+is already linked (bpf_sockmap_map_iter_fd/copy):
+
+  31: (85) call bpf_map_delete_elem#3   ; R0=scalar()
+  32: (bf) r1 = r0                      ; R0=scalar(id=4) R1=scalar(id=4)
+  33: (bf) r0 = (s32)r0                 ; R0=scalar(smin=0xffffffff80000000,smax=0x7fffffff)
+  34: (16) if w1 == 0x0 goto pc+6       ; R0 unchanged
+  41: (95) exit
+
+And a zero extension has the same gap, but usually it only costs precision.
+This is captured in existing verifier_reg_equal.c:subreg_equality_2 (since
+2023):
+
+  call %[bpf_ktime_get_ns]
+  r2 = r0 		<-- unknown high bits
+  w3 = w2 		<-- only low half shared, not recorded
+  if w2 < 9 goto l0_%=  <-- narrows w2
+  exit 
+l0_%=:
+  if r3 < 9 goto l1_%=  <-- this doesn't deduce
+  r0 -= r1    		<-- illegal read reachable
+l1_%=:
+  exit 
+
+This series, among others, also removes this restriction, making the test
+pass now.
+
+  -__description("check w reg not equal if r reg upper32 bits not 0")
+  -__failure __msg("R1 !read_ok")
+  +__description("check w reg equal if r reg upper32 bits not 0")
+  +__success
+
+And finally this series also handles narrowing stack fills: a 4-byte read
+of a value spilled wider. Its mirror image, the narrowing stack spill,
+is implemented here too (patch 11-12) but is not proposed, see
+Testing: veristat sub-section below for reasoning.
+
+Improvements
+============
+
+This series completely eliminates two class of verifier failures in
+selftests built with BPF_GCC: 
+
+ - all 19 instances of "should have been in [0, 1]"
+ - all 6 instances of "The sequence of 8193 jumps is too complex"
+
+It unblocks existing subreg_equality_2.
+
+How it is modelled
+==================
+
+Upstream currently relates two scalars using ->id which additionally
+encodes add_const with a optional delta. Sign-extension requires a different
+relationship which is low32 same only. This series generalizes the
+existing mechanisms:
+
+For an abstract scalar X, a register can be:
+
+	X + delta        zext(X + delta)        sext(X + delta)
+
+The first is the existing add_const and other two are the new
+functionality and also support the optional delta. The relationship now
+looks like:
+
+	enum bpf_reg_link_kind {
+		BPF_REG_LINK_NONE = 0,
+		BPF_REG_LINK_FULL,	/* all 64 bits shared */
+		BPF_REG_LINK_ZEXT,	/* low 32 shared, high half zero */
+		BPF_REG_LINK_SEXT,	/* low 32 shared, high half = bit 31 */
+	};
+
+Four values fit the two bits add_const already had, so the encoding
+costs no space: bpf_reg_state stays 80 bytes and bpf_func_state stays in
+the 1K allocator bucket that commit a2052333e6f9 ("bpf: Bpf_func_state
+size optimization") put it in.
+
+Other details to be aware of
+============================
+
+ - Sext with delta is supported.
+
+ - Semantics of BPF_ADD_CONST32 change: It used to be:
+
+	reg == base + delta, base known to fit u32
+
+   Now it is modelled as:
+
+	BPF_REG_LINK_ZEXT:  reg == (u32)(base + delta), for ANY base width.
+
+ - Delta composing/stacking: is allowed now, albeit only once:
+
+	"w3 = w0; w3 -= 1" is now able to keep the regs linked
+
+   Composing further is deliberately not done, as it interferes with
+   state pruning in loops.  On arena_strsearch, allowing any second delta
+   costs 1176 -> 1751 insns and 102 -> 133 states; allowing it onto a zero
+   delta produced by an add rather than by the mov still costs 1176 -> 1196.
+
+ - Propagating a delta backwards: patches 4 and 6 already do that for
+   base that fits 32-bits, for wide base, patch 8 does that for
+   completeness. It does fix the directed test zext_reverse_pins_low_half,
+   and the instrumented arm fires 78 times under bpf-gcc, 40 times under
+   clang, but no visible improvements.
+
+Testing
+=======
+
+ - kernel off bpf-next baseline of 26/10/16, commit d2141481a764 "(bpf: Free
+   the subprog jump tables once the CFG passes are done)"
+ - bpf-gcc (20261010, ga02e2004cb70).
+
+Only patch 1-10 are used for testing as the last 2 are just for demonstration
+(as asked for in v2), but not really production.
+
+
+1. BPF_GCC built selftest changes:
+
+  before:        476 FAIL    6912 OK     749 SKIP
+  after:         450 FAIL    6985 OK     751 SKIP
+
+  bpf_ip_check_defrag                                              FAIL -> OK
+  bpf_ip_check_defrag/v4                                           FAIL -> OK
+  bpf_ip_check_defrag/v6                                           FAIL -> OK
+  bpf_iter                                                         FAIL -> OK
+  bpf_iter/bpf_sockmap_map_iter_fd                                 FAIL -> OK
+  bpf_iter/task_pid                                                FAIL -> OK
+  bpf_iter/task_pidfd                                              FAIL -> OK
+  bpf_iter/task_sleepable                                          FAIL -> OK
+  bpf_iter/task_tid                                                FAIL -> OK
+  bpf_sockmap_map_iter_fd                                          FAIL -> OK
+  setget_sockopt                                                   FAIL -> OK
+  sock_addr/connect_unix: attach prog with wrong attach type       FAIL -> OK
+  sock_addr/connect_unix: connect (stream)                         FAIL -> OK
+  sock_addr/connect_unix: connect deny (stream)                    FAIL -> OK
+  sock_addr/connect_unix: kernel_connect (dgram)                   FAIL -> OK
+  sock_addr/connect_unix: kernel_connect deny (dgram)              FAIL -> OK
+  sock_addr/sendmsg_unix: attach prog with wrong attach type       FAIL -> OK
+  sock_addr/sendmsg_unix: kernel_sendmsg deny (dgram)              FAIL -> OK
+  sock_addr/sendmsg_unix: sendmsg (dgram)                          FAIL -> OK
+  sock_addr/sendmsg_unix: sendmsg deny (dgram)                     FAIL -> OK
+  sock_addr/sendmsg_unix: sock_sendmsg (dgram)                     FAIL -> OK (runs twice)
+  sock_addr/sendmsg_unix: sock_sendmsg deny (dgram)                FAIL -> OK
+  sockmap_basic                                                    FAIL -> OK
+  sockmap_basic/sockhash copy                                      FAIL -> OK
+  sockmap_basic/sockmap copy                                       FAIL -> OK
+
+
+2. veristat on selftests built off bpf-gcc, clang and a corpora of prebuilt
+   bpf objects.
+
+bpf-gcc, 3314 programs verifying on both sides:
+
+  verdicts      12 pre-existing failure -> success
+  total_insns   4 changed, 2 worse, -16 overall: cond_break3 36 -> 48,
+                ksock_wq_start 207 -> 213, estab 2849 -> 2817, and the
+                series' own zext_contradiction_keeps_range_sane 11 -> 9
+  total_states  1 changed, 1 worse:  cond_break3 4 -> 6
+
+clang, 3520 programs verifying on both sides:
+
+  verdicts      1 pre-existing: subreg_equality_2
+  total_insns   3 changed, 1 worse, +126 overall: big_alloc2
+                2956 -> 3095, cond_break2 90 -> 79, and the series' own
+                zext_contradiction_keeps_range_sane 11 -> 9
+  total_states  2 changed, 1 worse:  big_alloc2 157 -> 165,
+                cond_break2 10 -> 9
+
+and an external corpus -- 441 objects from cilium, katran, fb and
+sched_ext, 1467 programs verifying on both sides (increase test coverage
+from selftest 5.4M insns and 15 progs above 50k insns to 25.2M insns and
+131 progs over 50k insns).
+
+  verdicts      no change
+  total_insns   12 changed, 10 worse, +7087 (+0.028%); two improve.
+                Worst is +1812 on test_file_open, 2470 -> 4282, in
+                bpfjailer .../lib-tests-bpf-open-open.bpf.o
+  total_states  9 changed, 7 worse, +242 (+0.026%); worst +155 on the
+                same program
+
+3. Applying 11-12 on top of 1-10:
+
+  bpf-gcc       nothing at all -- no program changes
+  clang         one program changes, and it improves
+  external      102 changed, 63 worse, +84450 insns (+0.335%) and
+                +6257 states (+0.661%). Not a broad slowdown: the three
+                below carry 97% of it. Of the remaining 60, two are
+                +26.6% and +7.7%; the other 58 are under 1% each.
+
+                  +89.7%  +19784   rusty_enqueue    22053 ->  41837
+                                     scx_rusty.bpf.o
+                  +57.2%  +59616   test_file_open  104160 -> 163776
+                                     bpfjailer .../match-tests-...-file.bpf.o
+                  +40.6%   +2688   layered_enqueue   6626 ->   9314
+                                     scx_layered 1.0.11.1
+
+Two notes for anyone re-running the above.
+
+Four programs in the external corpus are named test_file_open. The one
+at +57.2% here is in .../match-tests-...-file.bpf.o; the +1812 in
+section 2 is a different and much smaller program in
+.../lib-tests-...-open.bpf.o, which these two patches take the other
+way, 4282 -> 2476.
+
+And veristat's raw verdict-change counts are larger than the twelve in
+section 2 -- 28 on bpf-gcc, 17 on clang -- because the corpus is built
+from the series tree, so the series' own new tests read as
+failure -> success too. zext_mov_breaks_linked_src goes the other way,
+success -> failure: it is an intentional __failure test, and veristat
+records "failure" for a program that does not load.
+
+Patches
+=======
+
+  1-2   fix a sign extension that cannot change the range but widens it
+        anyway, which is unrelated to the rest and was asked to go first
+  3     move the linked-scalar flags out of bpf_reg_state->id
+  4-5   zero-extending movs
+  6-7   sign-extending movs, including the inherited delta
+  8     the reverse direction, for a base wider than 32 bits
+  9-10  narrowing stack fills
+  11-12 [do not merge] narrowing stack spills
+
+Patches 1-10 are what is proposed. 11-12 are posted because the relation
+is the one asked for and implementing it was the only way to find out
+what it costs; the answer is in 11's message and it is not worth it.
+
+Changes since v2
+================
+
+  - the kind moves out of bpf_reg_state->id into an enum of its own
+    (Eduard), replacing v2's add_const plus a separate subreg_sext
+    bool. bpf_reg_state stays 80 bytes. v2's 2/13 is squashed into the
+    patch that needs it (Alexei).
+  - the zero-extending link is ADD_CONST32 with a zero delta rather
+    than a kind of its own (Alexei), which drops the
+    dst_umax > U32_MAX guard -- the one pre-existing semantic this
+    series changes, described above.
+  - sign-extending movs carry a delta, which v2 did not support.
+  - 4/12 fixes a reachable WARNING found while preparing this revision:
+    the intersect step could leave an empty range behind. v2 never
+    showed it because its 8/13 happened to mask it.
+  - 9/12 reports its cost, which v2 did not: +6598 insns over six
+    external programs, with no verdict change.
+  - v2's 11/13 is dropped; the two spill patches are now [do not
+    merge], with the measurement behind that call in 11/12.
+
+The per-patch changelogs under each --- have the rest.
+
+v2:
+https://lore.kernel.org/bpf/20260910164635.459558-1-vineet.gupta@linux.dev/
+
+RFC:
+https://lore.kernel.org/bpf/20260814231945.3884596-1-vineet.gupta@linux.dev/
+
+Vineet Gupta (12):
+  bpf: Keep the 32-bit range across a sign extension that cannot change
+    it
+  selftests/bpf: Cover sign extensions that cannot change the range
+  bpf: Prepare linked scalars for relations narrower than 64 bits
+  bpf: Track low-32 scalar equality across zero-extending movs
+  selftests/bpf: Cover the low-32 link for zero-extending movs
+  bpf: Track low-32 scalar equality across sign-extending movs
+  selftests/bpf: Cover the low-32 link for sign-extending movs
+  bpf: Recover the low 32 bits on the reverse link direction
+  bpf: Track low-32 scalar equality across narrowing stack fills
+  selftests/bpf: Cover the low-32 link for narrowing stack fills
+  [do not merge] bpf: Track low-32 scalar equality across narrowing
+    stack spills
+  [do not merge] selftests/bpf: Cover the low-32 link for narrowing
+    stack spills
+
+ include/linux/bpf_verifier.h                  |   52 +-
+ include/linux/tnum.h                          |    7 +
+ kernel/bpf/log.c                              |    6 +-
+ kernel/bpf/scev.c                             |    2 +-
+ kernel/bpf/states.c                           |   38 +-
+ kernel/bpf/tnum.c                             |   15 +
+ kernel/bpf/verifier.c                         |  387 ++++-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   16 +
+ .../selftests/bpf/progs/verifier_bounds.c     |    2 +-
+ .../selftests/bpf/progs/verifier_ldsx.c       |    8 +-
+ .../bpf/progs/verifier_linked_scalars.c       | 1323 ++++++++++++++++-
+ .../selftests/bpf/progs/verifier_movsx.c      |   63 +-
+ .../selftests/bpf/progs/verifier_reg_equal.c  |   14 +-
+ .../selftests/bpf/progs/verifier_spill_fill.c |    6 +-
+ 14 files changed, 1787 insertions(+), 152 deletions(-)
+
+-- 
+2.53.0-Meta
 
