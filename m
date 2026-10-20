@@ -1,114 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.155
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792538647;
-	b=2KrO6lWd3uR1Du8yEs9xa3LKJ2bv3aX9B5hYwYo5XHKQeKkvX4CTDzyWfiIrgVgXk2Dz
-	 HVP1w+10DsGlTeZ7U8pQhK884h57ABR2cEAT8BBByKfkq9iA7RPLUVfVRUt+M+iIgD5sL
-	 5YyUTj6Yt9eRPp4+h1V8qqmqPUHBE3Iqr02FiHcsjn4U07S14gVGSTye6qGR/TmozGE3g
-	 Q71Q2h3tMNIeO/lvQZqvpOCF4KzFvaPFOgiclHk6sKhmmzaApHjgygIZ/SDEUBAqFimYw
-	 b+ib9m7QdQRi3vo6F4qQLenIsH+VPlQlzmjY0nvnpkBOI8kiMiIQp1QLYiTy5ytuP6Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792538647;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Content-Type:Content-Transfer-Encoding:MIME-Version:From:To:
-	 Cc:Subject:In-reply-to:References:Date:Message-id:Reply-To;
-	bh=m93/5adlurF89b+l4gDR1WEiHyoUAoJGQAA/6nptpHE=;
-	b=teOPP+yZC+16JKr8xn8JZIwOZzc/QLSTnPCqkaINhY17QrcIJenm7omHnZLEKejo/eXK
-	 LjWwmyeE4nh65wDBiDL3TAfVhbaPQV35mnbBRIX2Fm/UVZAMYKlAsc8/pPvHpLyQddNqO
-	 TIYMKptTzsy7Kg4Ek/TUtxlrhEF1hB2g4eRzXu2dPMDyMcm87qAkhIC1dCISoHraDBlxU
-	 d0KT2vBGX+SNb7E+gi4JP0XwFNoVIXTD8qvzFLHCzIlH9ua30kapEvzclvOupO/ZpDK61
-	 YyPdWWhiJOR31L5DJk+VSq3nGACXB7LhR8RLYOKgmKPhJiYW85uYuOuhGCkdXPdoAxg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=ownmail.net;
-	spf=pass smtp.mailfrom=ownmail.net;
-	dkim=pass header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=gT+pUwzi;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=R2YRmVhV;
-	arc=none smtp.remote-ip=202.12.124.155
-Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.170
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792538768;
+	b=f2E22q3Sq3l5sM6XReDebAN6MsGIxVPwViVe5mQeyPdX0LsjvOnCMPbHsdnEsvS7EQtE
+	 E/2V46sv6RLAl9XZJcSa1GvW3GRs7F3d0Z5mmMBNMS0sHJ7EOUdyi6zJ7u4E7BLyK0SbA
+	 7Tz8JeeMndf/zCjcKyH2u4I7IXZeGlNhf/cU3QA7Jhjt6xzbDtDlRTcFF6DdHhhPXjQz7
+	 dKoTY6I5fGD7VDd5xoC2roReSepXddnr9BRBBbZBNTuaD+CkfGm+Yl1qOrgkkuhJ0rYBd
+	 Dp+yZE4RPXBv3lKqoxkXz6b/hjRxXX8IhPqdSGWfg7uhL+zw5EJVBHLOkLz53sw5I2w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792538768;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=xyqDPzOKJl88+NvwNHrrm2JsEqX4pARN/C15jZakpa0=;
+	b=AlBuOLRYgLPXwgfUWhHS8oXb5C2BQKrp0t+iDaGDuqafnalN8lzBEVdAdcTGoJP4VAfP
+	 V2egq5kyx6oPmnwr4lewHuDiTY6tueywRHd/6wZx8lFSUZsgEa291cidAq+yCDwKwGUxs
+	 QfxY/zm4mpEIVCh9kAmsYFQ4oZS1zH+PG3oH9zDySaOHq76cb/ozD+CLKAeP9H1bNr3ax
+	 6xwVns7+FHms+v0obLioz2dxJz+wekVDXyo0dlU3msLuz1sjfCnTzuTcFVGd2t/S7KZ2R
+	 plLKX8yB9EILNyqRdAv+f4O0Qj0T2qa/vWel34pHVCPgdm3xUcnYVhS48T0aD59hpPA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qM0+ADNG;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.170
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8DF4606A319
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 23:24:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8DF4606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE43606A31D
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 23:26:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7FE43606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=gT+pUwzi;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=R2YRmVhV
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id E2F187A00DF
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 19:24:05 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Tue, 20 Oct 2026 19:24:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to; s=fm2; t=
-	1792538645; x=1792625045; bh=m93/5adlurF89b+l4gDR1WEiHyoUAoJGQAA
-	/6nptpHE=; b=gT+pUwziYC+eLeje432CS84gpOAqTaYjuQso9l5jp6Hk2iZUPRr
-	DO366tOv2Xlq26u/ncTZwUVL4Sczaww6FAO9DG1xtfm827Pql04+A94cytzG+zya
-	iu8InSU8TCsLvNWt9ZN3xGIyj8MjjF4THhfZd+jhUgP0FsSWTv6VeF7CRofErjbo
-	mXh+vw9ttadn0+XGspYGuWoSM61CiUKYtPJtseyQAEFBQOrePFZuB6sF2BLG/JkR
-	OVVzd90MDbAeqkTB45B8RPej9GIZXXS3SmtPQfkI2PL8Owdk/YFw8KeqFAXSVo7l
-	bx+jfylrl/Ogov+12L09Ah5agfTJad1etwQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1792538645; x=
-	1792625045; bh=m93/5adlurF89b+l4gDR1WEiHyoUAoJGQAA/6nptpHE=; b=R
-	2YRmVhVz23nongs9ED/DARc5FKanljttCrwaA5g2tWQR6VgwzVghBnVEV6Elm3f7
-	vPTNyq91w28m6p5jzMNAO4jmOnYiE4RCsySlcHriwQuJ0x6aA6I8n8ULebQOebFk
-	t7Ouu8EMFDe6a/oMH9MKUSrz5k1IHKWLDsq9heR3KOxNmWqoGiLYZoSfkCpW911l
-	ihZaMXZah+LSdeaAVJhXbr2z00c5bSFu1WFMwO3H/fN5fKfxB2Jv0DPDYkygCaYs
-	XC65jCOe1wezbV8M//J39dUT0xBPbGTnlRIF5FeTos7qhzVYPQ44IXC/Qpmas3Ir
-	IdGMyUYnWYIO5OgD+Wc1g==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
-	action=sign d=ownmail.net a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1792538645; d=ownmail.net;
-	mf=PG5laWxiQG93bm1haWwubmV0Pg==;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:J0RlBn9QbGIW/vhN3wf7Zz0Zxd2AnKPOxUmQW/dJTc7Z4Xe
-	hI3JgB/fzPUgrkqBGgArj7lGz+mNLM/v1idLtnaDrTt3pEGZLrks8OeiFEluuEMt
-	GMKNzyQ/MMdN10O27oSsRt2babjSkbdHKjLtOXjRMh84LK2knso76D+AMtHam+yK
-	mjMaBkYE7pwew74nCdpDq4yTrCJXT/gFER6QvSa2OmwSoXXuXpw8WO8z5qU1UagS
-	tfmq7hhJsNoeJ+38QI/YeKwC2dIsGu9GkS+3r+yJSQCTTARhU/yiW6uPzyb/i2W+
-	xCQbhQOhY8rG4eR3y7apki5cZ25G+EpVDxFooHQ==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
-	action=mi-m=1; hc=13;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,reply-to,
-	subject,to;
-Message-Instance: m=1; h=sha256:sstMLNDq47Y3m29ScfU0ktKsSSoFiSFQypqJt8SAcSg=:ToKF+1HByErDpcD2A2aZ3aMdKRTAAMPaVcaVCnH7mcM=;
-X-ME-Sender: <xms:FfjXagfz0VfAnNFkN0WMW8o7NGaxVpe-FAHqzZHSIqs0_K_LpZ0eNQ>
-    <xme:FfjXanJ5vS6z7bqaHQJkH085vitlRHjCxChytc8ZPOwP5eplb6F_AOIKa0S6qtGPu
-    RQfAtWVGPY2JE8SG1CZT9U-0a74G7MqpD73rm7oAqIjSFqL60I>
-X-ME-Received: <xmr:FfjXalxRYXQdVJ28dP_9xAKc50qRUUEx6yJoQi7HZ1-e-UUvxwujs48gYEOqRa3emw>
-X-ME-Proxy-Cause: dmFkZTF7MIhu5mIQ/LdGhlF/QC93i71dvIzwtqFtYkxwbL/q2JFjnK5vIHOy9ejhZXHJep
-    uvg5QyK2tihi3JQJ+H6sZ2qpN/Nb2W5TH2T6hmmZwgPAnW8ZPkbdFuL/07Vds+hxingz2U
-    SFSLLThsJJHcsjZm+fbRa9h6x3HDLgrlMlCrro8yNWCwc2n3A7XhOWWcBjK82xV/fGG2Q4
-    p3CO/DiImkc/IP86oUeNb8CajsjLh1zmTpQ8cxUOcpQhIyiYZ+/IOdQ3RMb/VQdNnRjHPr
-    XoGdwBV644kFv0qhh86zg7VWWvkMlx8OdLyj2ZFInO5qlzSidrAcYJUyDCaiDKlD99fuCD
-    htG+Dn8ePlWq2nuRUtBT9Csf035jC7OaZM2eumD427K/Z7F53wtWpAsZmQVjEcVUR9gi8g
-    keau0k55MAA8xrkBV91BRi4sJx/B6t/R7JrSpEs/NIDDVdbav9B/BgaBQzRuH03EF7j96C
-    xalLRp9I4gqzcT8Q9mNF/7vP7SgLrqskKVjs4joazciFzsL2OatB9KEZ920qsMwChi2UkD
-    oJI5FKAWKLtDNTtoyJIaZcaGFLLwSJCHlZnNJPqyQrT5ZIcXsYS+/HjJpYbj/8p4UhLbCT
-    GO/LNN6w7Bfti8kPQJspm7Ge5aoUd++Uc16rOqTOawycD0F4nEzWqts6ck7g
-X-ME-Proxy: <xmx:FfjXalsC-tbJevb7Ty7zGmbNkGTaxz4vO84zhuX-kCTOEXxqqGTGTQ>
-    <xmx:FfjXagC_ewX4VGdG4xVUd31QTh-Q12xMoPOgTLjapRiINWoUXRAqAg>
-    <xmx:FfjXavE5Fg8TOyUH8H5YZuAT8ukBhpd0op7rtmvFc1ZhUUZENnMMrw>
-    <xmx:FfjXaoBqV0C43Oo5fMaHeEo5i4lXO0bMzKLqHi7WNdRgyK7btsaNDg>
-    <xmx:FfjXany9jupRsfSsN7mTMdYIhJDrubVLLPicWEsU0Ki880MOdCm586O3>
-Feedback-ID: i9d664b8f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Oct 2026 19:24:01 -0400 (EDT)
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qM0+ADNG
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2e9f6a16aedso787965ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 16:26:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792538768; cv=none;
+        d=google.com; s=arc-20260327;
+        b=h8rb5Z+KhEI+TUX4fEuJ03rjL1kf0NgrRFj6kG484K7Ygb2AxywyrmMLDMh+eUjfOG
+         mTJIMM7TjTDqslFQjfeqaKIBE2YgfdFuX3wsO6Oa51l60DmIntgWt+Zsx/00KRAslBKb
+         0RV9v7OkqWH5kYrBRJ3SJ94cp05TSWsAEHprEQwwO7OxEKlhPKeCB0pWJ9N6687CoFRE
+         5XV86ea2hFaE/Icth/aj+jA8uJ+HBnN/QT5NqYC+9gbQSVGR5iKbLIqoFZadfbOJ0CCd
+         9hrBNk7Sh5VIX5LU0ahdttuzDLPvjxMWohgoioz7l4j9n3Rq0ejxuuEp93JCVennVeiu
+         4M+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xyqDPzOKJl88+NvwNHrrm2JsEqX4pARN/C15jZakpa0=;
+        fh=5rxbS35I/wxx/GYouJAfwMwlbM3cKGNUCan1byAIwYc=;
+        b=ml/uuzy7/Dzs1fREbXcq2RE7rBHRScK9NZYztTnkBAXCtfukqtXm1TowigHUikHBFK
+         QYgYsjY17dfN7EQbIiZcf2d55gCKL3fsdm7xLVvBVvvGDucrXYje2vZWoMuQAtRX/bSO
+         wIv8IhdPskzZxP2g22I0lq/5Mi5E8j45xYczJ+2171+oY5spt0evDQobLyvwznOo306u
+         7q0Pj/SxzxvbJPH4hwofHhSrTsoppbOvtVnTJr3tRlIWvSdJpPn0LdFwaqoWXMj67U1t
+         G0XQCj/0azmHrYI0kuPz4ej/Wle2ztMN6E0dUJDmykjCuPXV05ya6wqcH8xSaDZrsR2J
+         Ae/A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792538768; x=1793143568; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xyqDPzOKJl88+NvwNHrrm2JsEqX4pARN/C15jZakpa0=;
+        b=qM0+ADNGoG3hYbfcw9Hhfz1nkRSW5OE3gkA32HzVbHb6cTQfwInMWb6jgTvgikixYt
+         NR1Bm1uImSOUNIt0HdWC7wk6ceUdaCMvZUneapLTvY7j66PJX+f33N9mTpZg8D0kxbmO
+         JzloxsssVmu/gVxMuIGT8rTZBG+eTnSqyn3H7jwEC1ksSRizF6ANPGqEPDUFuGAiC8jV
+         DIocPjtvPOwB6tYWxJWF3RcLTWJk89LvUmOqL31KmcG31QCFKJPHFyRal/wW0smxUO71
+         u0Z0TRF3+xEvMZXbaW0dLZW5a9iHqrNeyLtveF8va4fa/DIvI31hhPCPbHKX9iqFZrU1
+         b7Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792538768; x=1793143568;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xyqDPzOKJl88+NvwNHrrm2JsEqX4pARN/C15jZakpa0=;
+        b=Skt+9ZNpp5xcFtk738E6cWyFiEEbd0kXLMoKTu4cRfgM0u5ePHrZ8/LzWgS76Fg8M8
+         frggq41cXhXPyAk9X4ae/fR+ogvbUizSkligKuym9/eAfaJ7cRuO9woi2MXcUWc03CvQ
+         4911oX1PZ1Uv+rUzT3BIOu6uvlVY6b9TRAXKI/kouUfRR4QBVGyV+O6ZjLYY2Q7h9vNT
+         OVGP5f1ppQfhiNzuZq90HCQ0vlr0/DcRojrGjdD8k/wGFEuNGxcbpirfrzbBKiter7dS
+         DL+qTLs9Ci24LyQA3JnfXO7B0ASqfLTDJx7Cc2gac4wayBOPBlBTnL5Ig7UXiSknEd04
+         +K5g==
+X-Forwarded-Encrypted: i=1; AKwUvBwd1XvW6D+hEebwF/3aFW5Y3vNcdMNL66EeyIf9cl/up0CBG2G2UmU0PxRskZgVOTVhlKh8nAkhiLect90DDw4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJnhC3jmVRp8eTwtsjnTzj11DX+Jzwel5FlmpA1uA3MRREf8mpm
+	5WrBJROoUrD1PJtct7z7K0UrNpj0Dpj1euZxjucX6h9GF8sgKLWlTVhcgw0AcZztqfGST6sFnQJ
+	SEH6CSquMkLgexjB/mMB++93r4peAFEM=
+X-Gm-Gg: AYBFou2epqYrMRlEQTcXTJ7zqn4lS3A5HcPukeDpfwYBWQUekbzQEqsOC3E7DT6MDNW
+	xNfHNRy5iCf52rXZSxl22yeSjHsQlhsNhcnhnkV8IRXvZ8BNwHLh3n6NJczJk4ng5q3lsz/Oi/9
+	4wVbaB4KCWRqwPi/8p+QhyhIAnF1GgDxSv37YtFLcYzC9397BlZQOe4kxxYOblNlQfx3Jr9JP8a
+	UsA/9KvtsOZi7Z2HYKzUWvdzG9rvU0Lvcq+M5AXpyw4YcYWIhUeiks6pNbUEdjwVcJYrtn9eN/N
+	j7k57cShByRPJQ890KY3goEtzFsnnF6ROfL6Yls4Z9tNKPKk9YjJQ5yntONi3+up4XCKJ4LRRMr
+	0f8pm1ejDILMeHE86OT3IWiuD1Nnii1wGwM2tyVawLRbsPusbb1R4
+X-Received: by 2002:a17:90b:17cb:b0:3ac:a521:95e with SMTP id
+ 98e67ed59e1d1-3ad86f028c8mr320588a91.47.1792538767665; Tue, 20 Oct 2026
+ 16:26:07 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -118,299 +104,218 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: NeilBrown <neilb@ownmail.net>
-To: "jamz" <jamz@amazon.com>
-Cc: "Miklos Szeredi" <miklos@szeredi.hu>, "Jimmy Zuber" <jamz@amazon.com>,
- fuse-devel@lists.linux.dev, linux-kselftest@vger.kernel.org,
- "Shuah Khan" <shuah@kernel.org>, "Bernd Schubert" <bernd@bsbernd.com>,
- "Jim Harris" <jiharris@nvidia.com>, "Horst Birthelmer" <horst@birthelmer.de>,
- "Luis Henriques" <luis@igalia.com>
-Subject: Re: [PATCH 1/3] fuse: add FUSE_OPEN_ATOMIC
-In-reply-to: <20261020141647.3271341-2-jamz@amazon.com>
-References: <20261020141647.3271341-1-jamz@amazon.com>
-  <20261020141647.3271341-2-jamz@amazon.com>
-Date: Wed, 21 Oct 2026 10:23:57 +1100
-Message-id: <179253863737.1724252.12836488084615923712@noble.neil.brown.name>
-Reply-To: NeilBrown <neil@brown.name>
+References: <20261019153628.15912-1-leon.hwang@linux.dev> <20261019153628.15912-6-leon.hwang@linux.dev>
+In-Reply-To: <20261019153628.15912-6-leon.hwang@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 20 Oct 2026 16:25:55 -0700
+X-Gm-Features: AclHuK9R-Pz11REH9KszPt0wQBWz-TsT_XQJqO1BNWiMHHq0gxNTu4ERDjHPk6w
+Message-ID: <CAEf4Bzbr46UkiE1sbb+Zwcs0S1ejpKmtTGjNCAkWD-J6FRcPGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/6] libbpf: Add bpf_link_create_log API
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>, 
+	Martin Karsten <mkarsten@uwaterloo.ca>, Masashi Honma <masashi.honma@gmail.com>, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 21 Oct 2026, jamz wrote:
-> From: Jimmy Zuber <jamz@amazon.com>
->=20
-> Add FUSE_OPEN_ATOMIC, allowing the kernel to skip LOOKUP to improve
-> performance. A server implementing FUSE_OPEN_ATOMIC will look up
-> the name, create it if O_CREAT is supplied, and open it in one request.
->=20
-> The server replies with the entry and the open file. If the file was
-> created, the server returns FOPEN_CREATED, or just the entry if it
-> was not created. If the name does not exist, the server returns a
-> zero nodeid, cacheable like a negative LOOKUP. An existing file
-> opened with O_TRUNC is returned unopened, so that truncation can be
-> performed after permissions are checked.
->=20
-> FMODE_CREATED is set only when the server reports that it created the
-> file. Therefore a file created by someone else between LOOKUP and
-> CREATE is no longer opened without a permission check.
->=20
-> A server without the request replies -ENOSYS, and the kernel falls back to
-> FUSE_LOOKUP, keeping backwards compatibility.
->=20
-> Assisted-by: Claude:claude-opus-5-5 [Claude-Code]
-> Signed-off-by: Jimmy Zuber <jamz@amazon.com>
+On Mon, Oct 19, 2026 at 8:37=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+> Add a new API to accept the log opts, instead of extending the existing
+> struct bpf_link_create_opts.
+>
+> Appending log_opts to struct bpf_link_create_opts would place them after
+> attach-type-specific fields of varying sizes, making it difficult to
+> extend the struct while preserving forward compatibility.
+>
+> For example, adding log_opts would prevent extending uprobe_multi
+> directly with a new build_id field. Instead, a separate union would
+> be needed:
+>
+> struct bpf_link_create_opts {
+>         /* ... */
+>         union {
+>                 /* ... */
+>                 struct {
+>                         /* ... */
+>                         __u32 path_fd;
+>                 } uprobe_multi;
+>         };
+>         struct bpf_log_opts *log_opts;
+>         union {
+>                 struct {
+>                         __u64 build_id;
+>                 } uprobe_multi_ext;
+>         };
+>         size_t :0;
+> };
+>
+> Without log_opts, build_id could be added directly to uprobe_multi:
+>
+> struct bpf_link_create_opts {
+>         /* ... */
+>         union {
+>                 /* ... */
+>                 struct {
+>                         /* ... */
+>                         __u32 path_fd;
+>                         __u64 build_id;
+>                 } uprobe_multi;
+>         };
+>         size_t :0;
+> };
+>
+> Introduce bpf_link_create_log() to accept struct bpf_log_opts separately,
+> preserving the forward compatibility of struct bpf_link_create_opts.
+>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  fs/fuse/dir.c             | 112 +++++++++++++++++++++++++++++++++++---
->  fs/fuse/fuse_i.h          |   3 +
->  include/uapi/linux/fuse.h |   8 ++-
->  3 files changed, 113 insertions(+), 10 deletions(-)
->=20
-> diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-> index f48fafccce4b..34d2271eb248 100644
-> --- a/fs/fuse/dir.c
-> +++ b/fs/fuse/dir.c
-> @@ -815,7 +815,47 @@ static void free_ext_value(struct fuse_args *args)
+>  tools/lib/bpf/bpf.c      | 28 ++++++++++++++++++++++++----
+>  tools/lib/bpf/bpf.h      |  5 +++++
+>  tools/lib/bpf/libbpf.map |  2 ++
+>  3 files changed, 31 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 9a2107d4f6d8..263a1d516a02 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -788,9 +788,10 @@ int bpf_prog_detach2(int prog_fd, int target_fd, enu=
+m bpf_attach_type type)
+>         return bpf_prog_detach_opts(prog_fd, target_fd, type, NULL);
 >  }
-> =20
->  /*
-> - * Atomic create+open operation
-> + * FUSE_OPEN_ATOMIC found an existing name and left the open to the VFS.  A
-> + * zero nodeid means the name does not exist.
-> + */
-> +static int fuse_open_atomic_found(struct inode *dir, struct dentry *entry,
-> +				  struct file *file,
-> +				  struct fuse_entry_out *outarg,
-> +				  struct fuse_forget_link *forget, int epoch,
-> +				  u64 attr_version, u64 evict_ctr)
+>
+> -int bpf_link_create(int prog_fd, int target_fd,
+> -                   enum bpf_attach_type attach_type,
+> -                   const struct bpf_link_create_opts *opts)
+> +static int __bpf_link_create(int prog_fd, int target_fd,
+> +                            enum bpf_attach_type attach_type,
+> +                            const struct bpf_link_create_opts *opts,
+> +                            struct bpf_log_opts *log_opts)
+>  {
+>         const size_t attr_sz =3D offsetofend(union bpf_attr, link_create)=
+;
+>         __u32 target_btf_id, iter_info_len, relative_id;
+> @@ -965,7 +966,7 @@ int bpf_link_create(int prog_fd, int target_fd,
+>                 break;
+>         }
+>  proceed:
+> -       fd =3D sys_bpf_fd(BPF_LINK_CREATE, &attr, attr_sz);
+> +       fd =3D __sys_bpf_fd(&attr, attr_sz, BPF_LINK_CREATE, log_opts);
+>         if (fd >=3D 0)
+>                 return fd;
+>         /* we'll get EINVAL if LINK_CREATE doesn't support attaching fent=
+ry
+> @@ -975,6 +976,10 @@ int bpf_link_create(int prog_fd, int target_fd,
+>         if (err !=3D -EINVAL)
+>                 return libbpf_err(err);
+>
+> +       /* bpf_raw_tracepoint_open() does not support log_opts */
+> +       if (log_opts)
+> +               return libbpf_err(err);
+> +
+>         /* if user used features not supported by
+>          * BPF_RAW_TRACEPOINT_OPEN command, then just give up immediately
+>          */
+> @@ -999,6 +1004,21 @@ int bpf_link_create(int prog_fd, int target_fd,
+>         }
+>  }
+>
+> +int bpf_link_create(int prog_fd, int target_fd,
+> +                   enum bpf_attach_type attach_type,
+> +                   const struct bpf_link_create_opts *opts)
 > +{
-> +	struct fuse_conn *fc =3D get_fuse_conn(dir);
-> +	struct inode *inode =3D NULL;
-> +	struct dentry *res;
-> +
-> +	if (outarg->nodeid) {
-> +		inode =3D fuse_iget(dir->i_sb, outarg->nodeid, outarg->generation,
-> +				  &outarg->attr, ATTR_TIMEOUT(outarg),
-> +				  attr_version, evict_ctr);
-> +		if (!inode) {
-> +			fuse_chan_queue_forget(fc->chan, forget,
-> +					       outarg->nodeid, 1);
-> +			return -ENOMEM;
-> +		}
-> +	}
-> +	kfree(forget);
-> +	if (inode && get_node_id(inode) =3D=3D FUSE_ROOT_ID) {
-> +		iput(inode);
-> +		return -EIO;
-> +	}
-> +
-> +	d_drop(entry);
-> +	res =3D d_splice_alias(inode, entry);
-
-As of f1ac607f786f d_splice_alias() handles hashed dentries
-and the d_drop() is not needed and not wanted.
-
-
-> +	if (!IS_ERR(res)) {
-> +		fuse_dentry_set_epoch(res ?: entry, epoch);
-> +		fuse_change_entry_timeout(res ?: entry, outarg);
-> +	}
-> +	return finish_no_open(file, res);
+> +       return __bpf_link_create(prog_fd, target_fd, attach_type, opts, N=
+ULL);
 > +}
 > +
-> +/*
-> + * Atomic create+open operation, or lookup with optional create and open f=
-or
-> + * FUSE_OPEN_ATOMIC
->   *
->   * If the filesystem doesn't support this, then fall back to separate
->   * 'mknod' + 'open' requests.
-> @@ -833,8 +873,12 @@ static int fuse_create_open(struct mnt_idmap *idmap, s=
-truct inode *dir,
->  	struct fuse_entry_out outentry;
->  	struct fuse_inode *fi;
->  	struct fuse_file *ff;
-> +	u64 attr_version, evict_ctr;
->  	int epoch, err;
->  	bool trunc =3D flags & O_TRUNC;
-> +	bool atomic =3D opcode =3D=3D FUSE_OPEN_ATOMIC;
-> +	bool create =3D !atomic || (flags & O_CREAT);
-> +	bool locked, created;
-> =20
->  	/* Userspace expects S_IFREG in create mode */
->  	BUG_ON((mode & S_IFMT) !=3D S_IFREG);
-> @@ -878,26 +922,62 @@ static int fuse_create_open(struct mnt_idmap *idmap, =
-struct inode *dir,
->  	outopenp =3D &ff->args->open_outarg;
->  	args.out_args[1].size =3D sizeof(*outopenp);
->  	args.out_args[1].value =3D outopenp;
-> +	/* FUSE_OPEN_ATOMIC leaves out fuse_open_out if it did not open */
-> +	args.out_argvar =3D atomic;
-> =20
-> -	err =3D get_create_ext(idmap, &args, dir, entry, mode);
-> -	if (err)
-> -		goto out_free_ff;
-> +	if (create) {
-> +		err =3D get_create_ext(idmap, &args, dir, entry, mode);
-> +		if (err)
-> +			goto out_free_ff;
-> +	} else {
-> +		idmap =3D &invalid_mnt_idmap;
-> +	}
-> =20
-> +	attr_version =3D fuse_get_attr_version(fm->fc);
-> +	evict_ctr =3D fuse_get_evict_ctr(fm->fc);
+> +int bpf_link_create_log(int prog_fd, int target_fd,
+> +                       enum bpf_attach_type attach_type,
+> +                       const struct bpf_link_create_opts *opts,
+> +                       struct bpf_log_opts *log_opts)
+> +{
+> +       return __bpf_link_create(prog_fd, target_fd, attach_type, opts, l=
+og_opts);
+> +}
 > +
-> +	/* Without O_CREAT the parent is locked shared, as for a lookup */
-> +	locked =3D !create && fuse_lock_inode(dir);
->  	err =3D fuse_simple_idmap_request(idmap, fm, &args);
-> +	fuse_unlock_inode(dir, locked);
->  	free_ext_value(&args);
-> -	if (err)
-> +	if (err < 0)
->  		goto out_free_ff;
-> =20
->  	err =3D -EIO;
-> +	if (atomic && !args.out_args[1].size) {
-> +		/* A zero nodeid: the name does not exist and was not created */
-> +		if (!outentry.nodeid && create)
-> +			goto out_free_ff;
-> +		if (outentry.nodeid && (invalid_nodeid(outentry.nodeid) ||
-> +					fuse_invalid_attr(&outentry.attr)))
-> +			goto out_free_ff;
-> +		fuse_file_free(ff);
-> +		return fuse_open_atomic_found(dir, entry, file, &outentry,
-> +					      forget, epoch, attr_version,
-> +					      evict_ctr);
-> +	}
-> +
->  	if (!S_ISREG(outentry.attr.mode) || invalid_nodeid(outentry.nodeid) ||
-> -	    fuse_invalid_attr(&outentry.attr))
-> +	    fuse_invalid_attr(&outentry.attr) ||
-> +	    args.out_args[1].size !=3D sizeof(*outopenp))
->  		goto out_free_ff;
-> =20
-> +	created =3D !atomic || (outopenp->open_flags & FOPEN_CREATED);
-> +	if (atomic) {
-> +		/* Only O_CREAT creates; O_TRUNC opens are left to the VFS */
-> +		if ((created && !create) || (!created && trunc))
-> +			goto out_free_ff;
-> +		if (created)
-> +			file->f_mode |=3D FMODE_CREATED;
-> +	}
-> +
->  	ff->fh =3D outopenp->fh;
->  	ff->nodeid =3D outentry.nodeid;
->  	ff->open_flags =3D outopenp->open_flags;
->  	inode =3D fuse_iget(dir->i_sb, outentry.nodeid, outentry.generation,
-> -			  &outentry.attr, ATTR_TIMEOUT(&outentry), 0, 0);
-> +			  &outentry.attr, ATTR_TIMEOUT(&outentry),
-> +			  created ? 0 : attr_version, created ? 0 : evict_ctr);
->  	if (!inode) {
->  		flags &=3D ~(O_CREAT | O_EXCL | O_TRUNC);
->  		fuse_sync_release(NULL, ff, flags);
-> @@ -906,10 +986,14 @@ static int fuse_create_open(struct mnt_idmap *idmap, =
-struct inode *dir,
->  		goto out_err;
->  	}
->  	kfree(forget);
-> -	d_instantiate(entry, inode);
-> +	if (d_in_lookup(entry))
-> +		d_splice_alias(inode, entry);
-> +	else
-> +		d_instantiate(entry, inode);
+>  int bpf_link_detach(int link_fd)
+>  {
+>         const size_t attr_sz =3D offsetofend(union bpf_attr, link_detach)=
+;
+> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> index 826d9cc9ab65..dedaf8086902 100644
+> --- a/tools/lib/bpf/bpf.h
+> +++ b/tools/lib/bpf/bpf.h
+> @@ -484,6 +484,11 @@ LIBBPF_API int bpf_link_create(int prog_fd, int targ=
+et_fd,
+>                                enum bpf_attach_type attach_type,
+>                                const struct bpf_link_create_opts *opts);
+>
+> +LIBBPF_API int bpf_link_create_log(int prog_fd, int target_fd,
+> +                                  enum bpf_attach_type attach_type,
+> +                                  const struct bpf_link_create_opts *opt=
+s,
+> +                                  struct bpf_log_opts *log_opts);
 
-Similar to above, d_splice_alias() is now sufficient for all cases.
+Leon,
 
-Thanks,
-NeilBrown
+how about instead of adding this new API, we try to repurpose
+bpf_link_create_opts' iter_info to be used as log opts? we have this
+right now:
 
->  	fuse_dentry_set_epoch(entry, epoch);
->  	fuse_change_entry_timeout(entry, &outentry);
-> -	fuse_dir_changed(dir);
-> +	if (created)
-> +		fuse_dir_changed(dir);
->  	err =3D generic_file_open(inode, file);
->  	if (!err) {
->  		file->private_data =3D ff;
-> @@ -947,6 +1031,16 @@ static int fuse_atomic_open(struct inode *dir, struct=
- dentry *entry,
->  	if (fuse_is_bad(dir))
->  		return -EIO;
-> =20
-> +	if (!fc->no_open_atomic && (d_in_lookup(entry) || (flags & O_CREAT))) {
-> +		err =3D fuse_create_open(idmap, dir, entry, file, flags,
-> +				       mode | S_IFREG, FUSE_OPEN_ATOMIC);
-> +		if (err =3D=3D -EEXIST)
-> +			fuse_invalidate_entry(entry);
-> +		if (err !=3D -ENOSYS)
-> +			return err;
-> +		fc->no_open_atomic =3D 1;
-> +	}
+union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
+struct bpf_link_create_opts {
+        size_t sz; /* size of this struct for forward/backward compatibilit=
+y */
+        __u32 flags;
+        union bpf_iter_link_info *iter_info;
+        __u32 iter_info_len;
+        __u32 target_btf_id;
+        union {
+
+
+that iter_info/iter_info_len is a bit of a legacy before we had
+per-attach type union, what if we add iter section into the union,
+wrap iter_info with union and put log_opts there, mark iter_info
+deprecated or something.
+
+I'm not sure anyone is actually using iter_info (I didn't find any
+uses in Meta code base, for instance), but we can detect its use by
+checking iter_info_len: if it's non-zero, then iter_info must be a
+real bpf_iter_link_info. so we should be able to detect this just
+fine, the only downside is that you can't use log_opts and iter_info
+simultaneously, but I think that's fine: you can update your code to
+use new iter.info fields instead, if you need log_opts + iter_info.
+
+WDYT?
+
+
 > +
->  	if (d_in_lookup(entry)) {
->  		struct dentry *res =3D fuse_lookup(dir, entry, 0);
->  		if (res || d_really_is_positive(entry))
-> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-> index 8546855386b5..ba6dc4c43a1f 100644
-> --- a/fs/fuse/fuse_i.h
-> +++ b/fs/fuse/fuse_i.h
-> @@ -589,6 +589,9 @@ struct fuse_conn {
->  	/** @no_create: Is create not implemented by fs? */
->  	unsigned no_create:1;
-> =20
-> +	/** @no_open_atomic: Is open atomic not implemented by fs? */
-> +	unsigned no_open_atomic:1;
-> +
->  	/** @no_bmap: Is bmap not implemented by fs? */
->  	unsigned no_bmap:1;
-> =20
-> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-> index 10a7f31c4bdf..745b686c468f 100644
-> --- a/include/uapi/linux/fuse.h
-> +++ b/include/uapi/linux/fuse.h
-> @@ -251,6 +251,9 @@
->   *
->   *  7.47
->   *  - add FUSE_HAS_SYNCFS opt-in flag for privileged userspace servers
-> + *
-> + *  7.48
-> + *  - add FUSE_OPEN_ATOMIC and FOPEN_CREATED
->   */
-> =20
->  #ifndef _LINUX_FUSE_H
-> @@ -286,7 +289,7 @@
->  #define FUSE_KERNEL_VERSION 7
-> =20
->  /** Minor version number of this interface */
-> -#define FUSE_KERNEL_MINOR_VERSION 47
-> +#define FUSE_KERNEL_MINOR_VERSION 48
-> =20
->  /** The node ID of the root inode */
->  #define FUSE_ROOT_ID 1
-> @@ -400,6 +403,7 @@ struct fuse_file_lock {
->   *                           (FUSE_URING_ZERO_COPY) and the request carrie=
-s page
->   *                           payload. Otherwise reads/writes fall back to
->   *                           copying.
-> + * FOPEN_CREATED: FUSE_OPEN_ATOMIC created the file
->   */
->  #define FOPEN_DIRECT_IO		(1 << 0)
->  #define FOPEN_KEEP_CACHE	(1 << 1)
-> @@ -410,6 +414,7 @@ struct fuse_file_lock {
->  #define FOPEN_PARALLEL_DIRECT_WRITES	(1 << 6)
->  #define FOPEN_PASSTHROUGH	(1 << 7)
->  #define FOPEN_IO_URING_ZERO_COPY (1 << 8)
-> +#define FOPEN_CREATED		(1 << 9)
-> =20
->  /**
->   * INIT request/reply flags
-> @@ -690,6 +695,7 @@ enum fuse_opcode {
->  	FUSE_TMPFILE		=3D 51,
->  	FUSE_STATX		=3D 52,
->  	FUSE_COPY_FILE_RANGE_64	=3D 53,
-> +	FUSE_OPEN_ATOMIC	=3D 54,
-> =20
->  	/* CUSE specific operations */
->  	CUSE_INIT		=3D 4096,
-> --=20
-> 2.50.1
->=20
->=20
-
+>  LIBBPF_API int bpf_link_detach(int link_fd);
+>
+>  struct bpf_link_update_opts {
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index eeba4072a5da..f6eb57151f7d 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -475,4 +475,6 @@ LIBBPF_1.8.0 {
+>  } LIBBPF_1.7.0;
+>
+>  LIBBPF_1.9.0 {
+> +       global:
+> +               bpf_link_create_log;
+>  } LIBBPF_1.8.0;
+> --
+> 2.55.0
+>
