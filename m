@@ -1,83 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792478289;
-	b=t5NscxH2eeAE2QybwnlYoFH1RR38NLluKg5G9D6uiMKfs35VuVB9f4A9bXNebz8duTuS
-	 ouJIqD/LV0krOi4QkL4qU7mla9kzsjQS3Cxi6YAVWHAfFxJiuSaBu6FxpBB1SyRouM89V
-	 xmjf4J1R3iXR67BdiTgsr83V34ZvNtWFI+JNaoujwiBaXyQrn5mwD/aDsZDjO5O7p17gu
-	 NxXNtiBPHA3qx1LrBYQikTtHXwlQ+sE4r0SaGwNZhXSvx3/PFZ6NLcu5m5mfC1TSxv97G
-	 JpNFCjg2oUo7mbhnk2WnyFysOWg0nbiU82SCurCLu/RjReBTuwFSkuWbGrT4l+zxTow==
+	t=1792478300;
+	b=Toiy/sswedyCd9rFZuWvLQGru1dnefuvXdbj0FLY1hdEzKzmYktP4Sx60o8Dgn2GVX6N
+	 G4levC1dewMcrKC+haZ1+kgkJ1oIJm9sMC/asGBWXZXthPV5veDFF8ZErKGR1tK+B1Ave
+	 +zDi6ATRHTwmvHaE/E2pB4Sxw+Iy2a2/52e2lkgzPAx5aZT+/7dvTwvnNxu0vfDAEU9p+
+	 t2iJKESP4FieV3kC1jNJeU2Mx8/KNNQjUAqgbycwkg2oQo+KB8m54GrtFrJDQq9EV/Ycw
+	 zrLe8quAECi5qywV9fSQzsv+RPG5+TeoG6mzpwiIMk7BqiMEfU0DFiboBjDlbijBtiQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792478289;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792478300;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=UzAZEenc0KxEq0x6RyPzYufxdEkxW9SFi1K+hoFFagM=;
-	b=ItiBbhUbYFXp+pEr/ydLw4iYcVh13DZ2qTRZy/tF6Nz2RQFEyafdwaAUAy8AgU8QOeXb
-	 /w3j65ClaZ8X0CLxoy8UcZWzAp5nxo+N1UBIAADk1m3Ob4iiAuG65kx0VtBGwzwYMHN52
-	 n+FcWxb1z231Yl+zjlYzU7ovSoc3HZjk/tN7BkfntiUrGcsra2wdpmpCNJ9Y9ChZFOYDa
-	 DBp/g9S0GGW7Ghg07k0YZNS6Yc/x0e1vJCtbfp84HzvGOf3c9AiSURfXHVBuP/KNUfZIl
-	 JLQo5Ln1lwqTzfBjtLmv+BQhTQeZ9F6Ux0MQuX4Hbllny6YjXTpyXd4ubys8Ldb7vEQ==
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=WaoGSBUw+3Jzr2stHEJVabNKgV1ycEWdou5OEyDZ/EU=;
+	b=Z25hXrE2IvhoOPFihiho26xt7Y1Rr6IoT8GNytqBYmYDFk+tYOkysbgW6y7j0JqWl0dH
+	 M8YcpjPWPQrP8U19iej8eQop35IKbvMNuvhsAboKTGb9m1kw3vZNyrJr10ScfO4Qou6b/
+	 YHuBmLv6x02hptoCUfsJn6rct2beetIhdBSmJY6YATU4h476YGBuGE/E9xR5BbekNTJY7
+	 kr2KBkl+hcoPXMwjj7IK3vTR6MJRrtirPkQ/UHottTEkIe9FWE1QnL5LdXnxO+7Hqm6Fg
+	 /HFQ5xlznNVqtyRXkCSv3Q8lcGDUy0bp/dIwej0nfQmOPyz0GypoQTA8vGnKyqwr4SA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="KdI/M7KN";
-	arc=none smtp.remote-ip=209.85.128.46
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QaGhlh+q;
+	arc=none smtp.remote-ip=209.85.221.52
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD88A606A320
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:38:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD88A606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564A4606A31C
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:38:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 564A4606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=KdI/M7KN
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a1ec92f655so3450095e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:38:08 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QaGhlh+q
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-48e011d370dso2313534f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:38:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792478287; x=1793083087; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UzAZEenc0KxEq0x6RyPzYufxdEkxW9SFi1K+hoFFagM=;
-        b=KdI/M7KNAmf+mbjijy9pL7ul3XOVYz1JSfuxwrGvg7QCBlvopedyQkPagbYjz51YCe
-         N15kUbT93hEG+kS/QHuwQeHHTOJ7E2HCCehDRXEfDqyIbV7UVklz4dhhcmwFcgBwM+Vh
-         KP6rfCjZG85ST4pwA1EhOL3soCxjpgg2GWhhk/5lDqW/zwGF6bSjUqblS0Lv0p0dRtAI
-         L7s4sdZfzrIWA9G4PNKwEsTPFm5xfEfkvKvGdfmAw9ctvrbMVsWzGpzikCxtBB0dCaFM
-         LzzLtgeCEtMv+3+dxohh/le6MTut5S4AVyrRy2JAVz69h7ewmKTm8GhLc5l2CAnjD93B
-         t55w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792478287; x=1793083087;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1792478299; x=1793083099; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=UzAZEenc0KxEq0x6RyPzYufxdEkxW9SFi1K+hoFFagM=;
-        b=VC6i6SWNVpjViMlDwzXz4ELv/suCGkK+Y7GMMKi7RYZASekiR5/xec9iOrt3J1Bp5x
-         cM/llkAEtzIJBc5BpKlBvL35cGbQsAIu4cdS4jmvVQhVHLSd8a3G1hJ2nO/JBzKDwoYi
-         NMAc9WXW3izJdsL8z07rCh8FC6KWDWh1IPODeYXKkw4DQUSxIS3wkjpw2bAYzrsLO79G
-         Hwv/uraFDXZWBpzbgEE3yUcP0PpjxTMK4TNnJx4cmrdqIlKci7LhyKcdQ408+i2asAyk
-         j6hiYlqDHJtw/5Msp3SjGdC1gerQCB2QTi3rudpjcbPvytAk9SaMPLg0d0kplSG0fW4q
-         Exhw==
-X-Forwarded-Encrypted: i=1; AKwUvBx0Z+2MKuBrwgnOXPMhwEFf/I01sz9JcDzODLOezgQSKxJYw1ciNQE0dCycP8hCRTPBsWRTgA7+izFAypffqYo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK7RQts8Ex+TEFInlY0IXkBR1ZtFPKKQ+CzadkshX+CUoOpFwp3
-	iEZQbiQ1Eda1nl1qB5DS08P1hd5TMAkR4tIQZaNd7ERBMN8Qejd0tCLJ
-X-Gm-Gg: AYBFou3RK2vZxBs3ACo6nduaqlWD4Z+KVw5HmAfqsLrNT16mTiluDFgSkhqyCImTWhX
-	wI716AHk+FBrYTYGYgBanSKhNhcaBpb1X5FZiM6bK7ZG969qbxHVQqN+k0ohjpeNxLuVuCgJgSi
-	8Bfu7uopo3UnSh3wyTjMdGJ4lrf8PkNAomI1sgzr6qPfzQiKz31QlTv0OXXSSEIOqOFJJqDT/dp
-	g27ETPk4o4i1qVgRVs3elKtIBuaH5GmsqPlo/dMBOSGfMc9uO3mEQ1XVEbqgbirGzH0vdERRlt3
-	yDArUgkGNFQrDzM+efVX2vnRg/gd+dFYZn1KPqneaHQMUeKOnGNeWKbPQASu2ZNTOr3UoG9rvYl
-	P7W4YpXE8E5iFn6FHD1rSu343EikL4AVS0WsL4qb/CtvMN6VW8ToXS1AdclXE0rNwDUuV/mYHh1
-	Qu3NC/90ZrWWzBcszyyAziDo++X3syl2zBYcthPLpsEf4R80Lzjv0G5DD3kWX3zKekR/t7+U5y9
-	MimJn6ecBLgotGy03fgmbFK/hv/+hdx9DQZ33+Yq6Iiq/xD/yf8Cd7eEDhN03fqUr2HLGEDbq2C
-	TxJMV6k1biFExFwgbdic19sykkSqwE9KU1oFhENjnAoz6MWXluA2s2w7jeoXLJBD1yTSD5wceNm
-	ljJLi1j/t91c/
-X-Received: by 2002:a05:600c:3114:b0:4a1:ac66:604b with SMTP id 5b1f17b1804b1-4a1f4c70117mr24583145e9.1.1792478286893;
-        Mon, 19 Oct 2026 23:38:06 -0700 (PDT)
+        bh=WaoGSBUw+3Jzr2stHEJVabNKgV1ycEWdou5OEyDZ/EU=;
+        b=QaGhlh+qQ+oivF5NfN36r2CTE+g/j1KuWE6VhvG8SpnMY7oKim0rNol7iJgN+tE4q+
+         MVlQpnipcyxlqpwmar/PD2chWtmknUqsiFTkO95BEUKl+W+bmK7z+5Ejvn3Knxol0zJW
+         +H7W8MM0hXObP7E+nRMiN/x3VU2/SMm9MnXUrpLB75C0uA/gHT7Gt/AUhm+yDZ7Ras+0
+         ZK9TXDLd2/cWIECm6xd0LZX4E6isxEz2x6c7pyJ8X+r11X822uKwIxtxpdTR7SkeL8X8
+         DEbKf83bpzYLaXDwQuA0Mo9CX1RlYqnWWXfj9IhXu3zsR3klycLE/+CSjcazcoPtDdFB
+         Z/ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792478299; x=1793083099;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=WaoGSBUw+3Jzr2stHEJVabNKgV1ycEWdou5OEyDZ/EU=;
+        b=NMr9PjBpSzVwsgtn2SFAapNlohbbT3Lj6eTENJXGF6LoxGnyYgKVE+/SW9Key7DN66
+         nHR6g9/ewsZUHjEQ5jAMtrZPu+2goOJZi5zz+I5Pxuy1IwOrWHsC868cjOyu0fabVGuQ
+         XCPe7MAjXPhLzkgCkUgjHDuX4mBOLm/DluQQJ/10UujNZs+Kmw7KcTKzrfhWjecKz659
+         HrCa7n3fNK85yndMir+YzfeQ29WZEoTrKHcEY/v0r/ZzoVa6sEMnOjtQV5UdAlescrkQ
+         Q/96qQC3N2veCyIwfZCZ65OY9WJM9SpYywasuI8Ycx6Q/QBz/KA7Nbs5uRbovJEk+fhx
+         qEkg==
+X-Forwarded-Encrypted: i=1; AKwUvBz6gk48ygXPJ0Lc5WyVp4obZn9wqPlfkc/opHvdAf57o+kS1V0tiozg5Ce6dHmQaNuLbdHGzxb6nEwWHDRzvCY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLbvX9fJGKLlpeWqwCtY5xm9XvA7/IKorfiTBrVVw6+qma7YQTb
+	fIQD7CpMtNl7/yrAtKd2pTmuw86QubJQfTnXdzVw4KM1cNgR0LUJ1Sox
+X-Gm-Gg: AYBFou3mhSsyp/tvq0Nl3Yz5KCK/112zWTNi37pgCwdOHS2ph7Xqw5fkqtsaYuyVgBq
+	c8X+MwbXt6iNUQRUiBxY3pY4DBUe9yMaAzbEJ5GMJBGjBkUKbEu5DbKxq1ihExlgfuRF/lHe7NG
+	FreNgat6ykkFA6LtKUrWrqHypKXALJQ4Mqa9dcDTggb+mFgm8DwR4oHpjPBhc8d2mn/wUcYGW5V
+	jBMPMak3qn+dvH5rg2tTc5uoUliz5n0xfvkvyEdKLCSxHSyw8WDS25n0/YvT7utCBkZ7FAcnW5z
+	UqffThsOKD7ISQqn2KppIG7dNBI9laST04jcYse+SPk7Gzf7MtzwNHWxM88Zw7ASVmtvh+1A99W
+	z2Iv5KdDloH7AIWdnRJ3S8W3Xr8XtiEfzwEWzxy+pvcQkHIm8d02S2L2uMw7cPJQJx3rOMMUf0+
+	l5YY1kPTfNPCD0BKc2bMarLD6DXS6fGInffVPGSHdZyYtZAQ8fMI/t6MqCxzThv2YRTQKoSLWyn
+	K+BO/KvWP6MO7DRFpzjLbRAjjYwG8rL2CTOXg+pPgFiOckP0ORetE4s/rY2tMsKE+GYdsRFa8wH
+	L3afLRw5ESsw4399nI5mR6rY356RNa6yHrp9lFu06v3fZ0DmxPGb9L24UFMfHZV+XAkkMkbmKOF
+	LGYtIilRNyzeq
+X-Received: by 2002:a05:6000:4694:b0:48e:3d2:44b1 with SMTP id ffacd0b85a97d-48e07fb6991mr13514200f8f.52.1792478298615;
+        Mon, 19 Oct 2026 23:38:18 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-9c92-6501-2169-eb9c-7ad3-f5db.310.pool.telefonica.de. [2a02:3100:9c92:6501:2169:eb9c:7ad3:f5db])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d820714sm3916393f8f.35.2026.10.19.23.38.05
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d820714sm3916393f8f.35.2026.10.19.23.38.15
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 19 Oct 2026 23:38:06 -0700 (PDT)
+        Mon, 19 Oct 2026 23:38:17 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Jason Gunthorpe <jgg@nvidia.com>,
 	Alistair Popple <apopple@nvidia.com>
@@ -97,10 +98,12 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	linaro-mm-sig@lists.linaro.org
-Subject: [RFC PATCH 0/6] iommufd: harden DMA-BUF PAL setup and release
-Date: Tue, 20 Oct 2026 08:37:39 +0200
-Message-Id: <cover.1792477872.git.kmehltretter@gmail.com>
+Subject: [RFC PATCH 1/6] iommufd: Preserve DMA-buf pin errors
+Date: Tue, 20 Oct 2026 08:37:40 +0200
+Message-Id: <9a3912ce01cfd1205daeb13b57de47aa8f27f076.1792477872.git.kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <cover.1792477872.git.kmehltretter@gmail.com>
+References: <cover.1792477872.git.kmehltretter@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -112,122 +115,34 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is a narrow companion to Jason's unmerged DMA-BUF mapping-type RFC. It
-fixes setup and release problems in the IOMMUFD PAL consumer and adds fault-
-injection selftests. It is not standalone and requires this exact base:
+If dma_buf_pin() fails, iopt_map_dmabuf() replaces its error with
+PTR_ERR(pages->dmabuf.exp_phys). The newly allocated pages object still
+has a NULL exp_phys, so the function detaches and returns zero. Its
+caller then accepts a DMA-buf pages object with no attachment.
 
-  c37cf2824740d ("cover-letter: Add DMA-buf mapping types and convert
-                  vfio/iommufd to use them")
+Keep the error returned by dma_buf_pin() when unwinding the attachment.
 
-I used LLM assistance while inspecting, testing and drafting this series.
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+---
+ drivers/iommu/iommufd/pages.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-I also tested DMA-BUF paths on a Raspberry Pi 400 and Pi 500+, using their
-stock Raspberry Pi kernels (6.18.39+rpt-rpi-v8 and 6.18.34+rpt-rpi-2712).
-Both passed offscreen CPU/V3D byte checks. The Pi 400 also passed five raw-MJPG
-payload-prefix comparisons through V3D; this was not direct or zero-copy camera
-DMA. Neither board ran this RFC or IOMMUFD PAL. The Pi 500+ connector state and
-mode remained unchanged; the tested buffers were not scanned out.
-
-RFC:
-https://lore.kernel.org/r/0-v1-b5cab63049c0+191af-dmabuf_map_type_jgg@nvidia.com/
-
-Jason's branch:
-https://github.com/jgunthorpe/linux/commits/dmabuf_map_type
-
-This series:
-https://github.com/kmehltretter82/linux/commits/dmabuf-pal-lifecycle-rfc-v1
-
-Diederik's RK3588 testing produced a useful trace through
-rockchip_gem_iommu_map() and iommu_map_sg():
-
-https://lore.kernel.org/r/DLYLA3WQNN3X.3FB9MO8ZWBQ5@cknow-tech.com/
-
-Jason noted that this showed the same private-IOMMU-domain mapping need as
-IOMMUFD:
-
-https://lore.kernel.org/r/20261009125338.GB13920@nvidia.com/
-
-That trace is motivation only. This series neither revives my warn-only
-mechanism nor converts Rockchip. Jason's feedback on that mechanism is here:
-
-https://lore.kernel.org/r/20261009124259.GA13920@nvidia.com/
-
-Compared with Jason's branch, this series:
-
-  - preserves dma_buf_pin() errors;
-  - publishes the attachment and successful PAL list together under resv;
-  - unmaps and clears the published PAL pointer under resv before unlocking;
-  - keeps callback state alive until dma_buf_detach() returns;
-  - calls dma_buf_unpin() while holding resv; and
-  - tests pin/map failures, cleanup counters and retry on the same DMA-BUF.
-
-Patch 3 follows an earlier forced-window arm64 QEMU/KASAN double-free report:
-
-https://lore.kernel.org/r/20261016194022.62065-1-kmehltretter@gmail.com/
-
-The proposed release order is:
-
-  resv lock -> unmap and clear PAL -> unpin -> unlock -> detach -> put ->
-  destroy the pages mutex
-
-Questions:
-
-1. Is that publication and lifetime rule correct?
-
-2. Is c37cf2824740d still the right base for this companion series? If not,
-   which tree should I use?
-
-3. Can these lifecycle fixes stand independently of moving final mapping
-   selection closer to map time?
-
-   https://lore.kernel.org/r/20261016202653.97339-1-kmehltretter@gmail.com/
-   https://lore.kernel.org/r/20261019184123.GR13920@nvidia.com/
-
-4. Is the per-buffer selftest control acceptable, or would deterministic
-   setup/release race hooks be more useful?
-
-Testing:
-
-  - arm64 QEMU virt: two boots, 24 selected cases per boot, zero skips;
-  - x86-64 KVM q35: two 24-case candidate boots plus one focused four-case
-    pin-failure boot;
-  - a one-defect x86 control failed all four pin-failure variants on the
-    expected erroneous successful ioctl return;
-  - x86-64 GCC 13.3 built the exact head, headers and IOMMUFD selftests; this
-    build was not booted; and
-  - KASAN and lockdep initialized with no diagnostics in candidate runs.
-
-The QEMU/KVM campaigns use mock IOMMU domains and the selftest exporter. They
-do not cover a non-selftest PAL exporter, physical DMA/IOMMU, forced
-invalidation races, or the complete IOMMUFD selftest suite. The x86 negative
-control validates patch 1 only; the earlier patch-3 report is separate.
-
-Testing with a non-selftest PAL exporter would be welcome, especially failure
-followed by retry, invalidation during setup/release, repeated revoke, and
-multi-range buffers. Please include the base, config, architecture,
-exporter/device and full dmesg. A full IOMMUFD selftest run on another
-configuration would also help.
-
-Thanks,
-Karl
-
-Karl Mehltretter (6):
-  iommufd: Preserve DMA-buf pin errors
-  iommufd: Publish successful PAL mappings under resv
-  iommufd: Clear the PAL list before dropping resv
-  iommufd: Keep the pages mutex alive until DMA-buf detach
-  iommufd: Unpin the DMA-buf while holding resv
-  iommufd/selftest: Check DMA-buf pin and map failure cleanup
-
- drivers/iommu/iommufd/iommufd_test.h          |  24 ++++
- drivers/iommu/iommufd/pages.c                 |  24 ++--
- drivers/iommu/iommufd/selftest.c              | 111 ++++++++++++++++
- tools/testing/selftests/iommu/iommufd.c       | 121 ++++++++++++++++++
- tools/testing/selftests/iommu/iommufd_utils.h |  30 +++++
- 5 files changed, 298 insertions(+), 12 deletions(-)
-
-
-base-commit: c37cf2824740d833b21eb816e21f94836100291f
+diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
+index 98c2a8027..0b32c65af 100644
+--- a/drivers/iommu/iommufd/pages.c
++++ b/drivers/iommu/iommufd/pages.c
+@@ -1510,10 +1510,8 @@ static int iopt_map_dmabuf(struct iommufd_ctx *ictx, struct iopt_pages *pages,
+ 	}
+ 
+ 	rc = dma_buf_pin(attach);
+-	if (rc) {
+-		rc = PTR_ERR(pages->dmabuf.exp_phys);
++	if (rc)
+ 		goto err_detach;
+-	}
+ 
+ 	pages->dmabuf.exp_phys = dma_buf_pal_map_phys(attach);
+ 	if (IS_ERR(pages->dmabuf.exp_phys)) {
 -- 
 2.39.5 (Apple Git-154)
 
