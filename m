@@ -1,69 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=188.68.61.107
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792502134;
-	b=pbqIg4lWL+etaozUdQAb5SeI7H0vHDnJj85f3ytP+mYSnc6TUn6VUw/B7id7F8DkCorr
-	 Kz8uFUtnJAB/57etfVcIDyYnjS7JtC+4w1MdH4b7pdjskO/m840n2YNYC1qK2fSJEGefO
-	 Ibm2aYyC8y3jH/I0gvS8wUcpdFGVpljTodHO+vPWg7OwXwEq2cI4rUwPMi0gs0GdyXeWe
-	 ct4f0uA37iEzhClwH1OlifOteYH+7jrW9n3taprIypo8s4fTFDxbRIKsrRrdxEnGDCg/X
-	 v76sdJpOp4gHZ/RJmxF3+z7E53rhuRRo+dZMI+a15fXQfijG/3C4dcEN+h9PbKkNqwA==
+	t=1792502218;
+	b=ATIRNPc7tjJ//MJzYMu3X3PO3HpICnHZUsimeNxBKCCdBtRpTFEHNNK5Oj3rOnc2bjZ9
+	 y8o0Gd26zpiaPkdsRmCH72obL9wLqGTmP0N0HM9zwAAkvNIowQ1F4UslqXYoUXn9vAj/a
+	 CkQwhSCnoi9xZxfjXIizU0EC9+b71QldvOVZhhvUCKTwfl4BhPfCg81FLySlmx36HEUsK
+	 u8eVRZEArrcBUm4JX9LZWM6DR+KqTIMw9Nt2g/ybwuagmuM98CptGUrFCvEJibDWghZPo
+	 ncXgErZdDw+hjfqwtIAuJGsc/PQn9D4BBX1LbW4lEPceljND/G4ECMq7Oq317a1H5GQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792502134;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received-SPF:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:From:Content-Language:Autocrypt:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-PPP-Message-ID:X-NC-CID;
-	bh=FkEqMH8rGF7FoEDXomBXOVP2VcjecZfCWJRIeXoQMa8=;
-	b=rosTQSXq3Ak241DNUfkjDj2GoJNJf+euE5l/Gpz1QGJuAZ926l7LC6SWu8gYsAbcU0c5
-	 M5K4xRqyANNhDVj6xuWyefkG1AAts0Rm4MFno60AZqAkmAzbpv4h32QlvvDJnzDIjKIaE
-	 A+3LckxfcTxS3at7qd6Q8mzvqfSAIIJcLm7VSG7DIkl3IFNsSZHdVLIwZZACUDOuLcEws
-	 m3RlQNd57uBNIhHM/9ytg36gyTW0Y6YWl7AgoJx6384s2f55DYt2rbSULwuBSAMIoIlda
-	 RGAD9X4bdYMSnt0IC6IYHWJcaE3fyqZpyCxAXTIn0rLKu6WutVs6IFKsAQSTBLVPGkg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792502218;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=Etd6ucBFRv+2kOi2yYshLpQy3u0L6/x6e/cAweVbOSw=;
+	b=na6kiicE6BP+1791Y985clzc3iJtvKPvXSPSr8FxTk/UHnZWEZ7rEMYPVDKN2L1Ahn3b
+	 qg0bvnpLk/KmXRSayyih/rmKpGwRf/b+83w7O/5P+tulDu74xS9dYrkthAb39fEHLVA1q
+	 ayKyR2rN1FPhOxd4ajEqcglv/eH0Fgca2DhSgMp3fS9zKgSt+ZpHtuGerU0hrRGwRReIO
+	 d7k/4ccGvhzrwOMc4uwIcR31XvBvQrwjZAHR/LKjANA4tvNGv7CsOWX1I0yt7bwn/LA6g
+	 h2hcfDdeBtv3ip1vxL9zmC1jqJ2CMjpuK46Pa2q4tLJ2/h/KkxsTWg92pqb5UY5futg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=leemhuis.info;
-	spf=pass smtp.mailfrom=leemhuis.info;
-	dkim=pass header.d=leemhuis.info header.i=@leemhuis.info header.a=rsa-sha256 header.s=key2 header.b=VMHrrMhy;
-	arc=none smtp.remote-ip=188.68.61.107
-Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.61.107])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="lSo3U/Dg";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C61C606A334;
-	Tue, 20 Oct 2026 13:15:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C61C606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F05606A325;
+	Tue, 20 Oct 2026 13:16:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=leemhuis.info header.i=@leemhuis.info header.a=rsa-sha256 header.s=key2 header.b=VMHrrMhy
-Received: from mors-relay-8405.netcup.net (localhost [127.0.0.1])
-	by mors-relay-8405.netcup.net (Postfix) with ESMTPS id 4j8CZF5R90z742d;
-	Tue, 20 Oct 2026 15:15:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leemhuis.info;
-	s=key2; t=1792502101;
-	bh=i0m0djEN9tpxFXwokRqAZtDQ78W568BjJ13hug5Kqcs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VMHrrMhyyhivuc+B2jqlpNV8LJeJVnWyLtgm1OaTR9cUJvsw+E2yoVOXscI/vnGQ7
-	 9r2GVvZstWVZuuy9Z57NvpoO0+gz9s5MfDvc5KxAA5h7O2+YMmb4w8Ik4xj5WoRENN
-	 CNbbzNuKEZZ7Gz4SqqJgU8vaqURhRwKi72SxguSRRWAM5BzDHS8yVUWxyb2j6i63A9
-	 JaNEYRp5vklOSZHyL/kWVz8KBPf3c9BkrZ+p7anIovJc3/nej2r3xiQlXa9ZfsN1EQ
-	 m8XlbjGiK1ya9ifY/XJWETh7JE/YRycaIeQ6+Lhs+TkEQebpPlzJs8jysmpF7C/Drj
-	 NaWQCt8VXfeEQ==
-Received: from policy02-mors.netcup.net (unknown [46.38.225.35])
-	by mors-relay-8405.netcup.net (Postfix) with ESMTPS id 4j8CZF4kP0z741c;
-	Tue, 20 Oct 2026 15:15:01 +0200 (CEST)
-Received: from mxe9fb.netcup.net (unknown [10.243.12.53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by policy02-mors.netcup.net (Postfix) with ESMTPS id 4j8CZC1HV0z8svZ;
-	Tue, 20 Oct 2026 15:14:59 +0200 (CEST)
-Received: from [IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f] (unknown [IPv6:2a02:8108:8984:1d00:a0cf:1912:4be:477f])
-	by mxe9fb.netcup.net (Postfix) with ESMTPSA id 3D3155F992;
-	Tue, 20 Oct 2026 15:14:41 +0200 (CEST)
-Authentication-Results: mxe9fb;
-        spf=pass (sender IP is 2a02:8108:8984:1d00:a0cf:1912:4be:477f) smtp.mailfrom=linux@leemhuis.info smtp.helo=[IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f]
-Received-SPF: pass (mxe9fb: connection is authenticated)
-Message-ID: <73460e00-f0fc-458e-8ea4-4b5ec4e04288@leemhuis.info>
-Date: Tue, 20 Oct 2026 15:14:39 +0200
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lSo3U/Dg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3471F000C9;
+	Tue, 20 Oct 2026 13:16:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792502218;
+	bh=Etd6ucBFRv+2kOi2yYshLpQy3u0L6/x6e/cAweVbOSw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=lSo3U/DgvqTSwlraWwSAgPECmRJEUs5KxGqJeCP0RLzL0OcBhj+6q3yvZlAwTeGN9
+	 yvt5l0NY62BVsjT7s9GPrNquu4sIswA3VglkICr9Q8tqs0aljuKTEXLj5Z2yK+cBZ/
+	 AB9jJv/nmcYJRcAf6fJqDvfozzWW9RGYPfrulUpiTfl8dsaDukSSgDh74pfswNUq6G
+	 //4tVbfNHuwgiDlB/JjqZ1oFsZd5mpISMAxB+rOW+mp71Yt+JpxoSappWPjbnm07Jf
+	 Xj67C29HMVAuW36W7S1PkCJyU+PECJO5Jpw8OR9idY9MnGNKDFOGpDqRrqCz2L89/R
+	 /AQUqDDP550Lg==
+Date: Tue, 20 Oct 2026 14:16:50 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Fuad Tabba <fuad.tabba@linux.dev>, Peter Maydell <peter.maydell@linaro.org>, 
+	Leonardo Bras <leo.bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, 
+	Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v21 02/15] KVM: arm64: Refuse to start a guest with S1PIE
+ or S1POE but not TCR2
+Message-ID: <atdebC62zPS1sQeR@gremlin>
+References: <20260930-arm64-gcs-v21-0-3556644cd927@kernel.org>
+ <20260930-arm64-gcs-v21-2-3556644cd927@kernel.org>
+ <86fqyn2che.wl-maz@kernel.org>
+ <as-f1JfUy38Xt9QA@gremlin>
+ <ae24e80c-1b34-4827-9c93-e80b987e9cd7@sirena.org.uk>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,91 +66,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 0/7] kbuild: build the userspace tools in tools/
- with the kernel
-To: Sasha Levin <sashal@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- linux-kbuild@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, linux-perf-users@vger.kernel.org,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org
-References: <20261016143143.3613501-1-sashal@kernel.org>
- <e77d6e7e-bc46-4363-8bea-d95ed521b5ab@leemhuis.info>
- <20261020124309.3022372-1-sashal@kernel.org>
-From: Thorsten Leemhuis <linux@leemhuis.info>
-Content-Language: de-DE, en-US
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 MEK4
-In-Reply-To: <20261020124309.3022372-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-PPP-Message-ID: <179250208210.540767.17395814278053043276@mxe9fb.netcup.net>
-X-NC-CID: ePy6a31AXuBk1UyrtA9FX3RTAP+OGclNKmwC22wt3LuEbVMcKVo=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae24e80c-1b34-4827-9c93-e80b987e9cd7@sirena.org.uk>
 
-On 10/20/26 14:43, Sasha Levin wrote:
-> On Tue, Oct 20, 2026 at 01:52:17PM +0200, Thorsten Leemhuis wrote:
+On Wed, Oct 14, 2026 at 06:48:37PM +0100, Mark Brown wrote:
+> On Wed, Oct 14, 2026 at 04:47:22PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > On Sat, Oct 03, 2026 at 01:30:05PM +0100, Marc Zyngier wrote:
 >
-> For allmodconfig the main reason is that perf's feature detection does not
-> always turn a feature off when its library is missing: [...]
-> 
-> You remember it right. The difference is that Kconfig probes for those, so a
-> missing tool turns the option off rather than failing the build, and the result
-> is recorded in .config.
-> 
-> That is how I'd like to add the selftests that need libraries: a Kconfig
-> probe per library, so allmodconfig builds them where the libraries are
-> installed and .config says which ones were built.
+> > > This *absolutely* needs to be data driven, and we're not going back to
+> > > over two years ago. We already have most of what is needed in
+> > > config.c, and it is only a matter of making sure that S1PxE is only
+> > > enabled for the guest if TCR2 and ATS1A are also present. If that
+> > > means additional sanitisation of the idregs when finalised, so be it.
+>
+> I do agree that's what we should have, I started down that route but as
+> I noted in the commit log it felt like I was pulling in disproportionate
+> refactoring given the existing gap.
+>
+> > > If userspace decides to expose crap in the ID registers, that's its
+> > > own problem, and we're not in the business of enforcing idiotic
+> > > configurations. The only thing that matters is that the state that KVM
+> > > deals with is consistent.
+>
+> > As I understand it: don't return an error for a configuration that doesn't
+> > make sense, enforce RES0 instead.
+>
+> I went with erroring out there to make sure that we didn't make any
+> mistakes with the ordering of our checks - I didn't want to accidentally
+> end up with a situation where we look at the dependencies for feature A,
+> decide that it's OK, then later check feature B which it depends on and
+> turn it off due to it missing it's own prerequisite.
+>
+> We can resolve that like you've done here by having the full dependency
+> stack in every check but I worried that this would be error prone due to
+> all the duplication, however looking at your code I think we can resolve
+> that anyway, see blow.
+>
+> Userspace really shouldn't be setting up guests where we need to make
+> adjustments in the first place, and setting up guests isn't that hot a
+> path so like Marc says so long as KVM protects itself we're fine.
+>
+> >  #define kvm_has_s1pie(k)				\
+> > -	(kvm_has_feat((k), ID_AA64MMFR3_EL1, S1PIE, IMP))
+> > +	(kvm_has_tcr2(k) &&				\
+> > +	 kvm_has_feat((k), ID_AA64ISAR2_EL1, ATS1A, IMP) &&	\
+> > +	 kvm_has_feat((k), ID_AA64MMFR3_EL1, S1PIE, IMP))
+>
+> This will mean that every time we check for an individual feature
+> throughout KVM we check for all the dependencies as well.  A lot of the
+> time that's not really going to matter but we have these checks in hot
+> paths like context switches.
+>
+> > +static bool feat_s1pie(struct kvm *kvm)
+> > +{
+> > +	return kvm_has_s1pie(kvm);
+> > +}
+>
+> We should put the dependencies in here where they're only checked during
+> initialisation instead, that way the hot paths only need to look at the
+> leaf features.  We could also deal with the duplication concern by
+> having the functions call each other rather than duplicating their
+> contents:
+>
+> 	static bool feat_gcs(struct kvm *kvm)
+> 	{
+> 		if (!feat_s1pie(kvm))
+> 			return false;
+>
+> 		return kvm_has_gcs(kvm);
+> 	}
+>
+> (or whatever stylistic variation of that.)
+>
+> This approach also needs the code for updating the ID registers since
+> config.c doesn't do that at the moment.  Some of the existing visibility
+> limiting stuff (like for 32 bit ID registers without AArch32 or
+> ID_AA64ZFR0_EL1 without SVE) could be moved over too.
 
-Okay, now this makes more sense to me, many thx for taking the time for
-a reply!
+Hopefully Fuad + Marc's efforts [0] make all of this fairly easy :) as we
+now have a specific dependency mechanism, and with GCS added on respin
+should enforce all this correctly.
 
-Ciao, Thorsten
+>
+> TBH when I said in the commit log I was thinking of something more data
+> driven I was thinking more of having the dependencies expressed as pure
+> data, more like the way the test in set_id_regs is written.  This also
+> seems fine to me, the checks are similar.  It's just much more invasive.
 
+Indeed. Perhaps the config.c approach will make it easier to convert JSON
+-> code also?
+
+--
+Cheers, Lorenzo
+
+[0]:https://lore.kernel.org/r/20261020064306.1542865-1-fuad.tabba@linux.dev
