@@ -1,106 +1,32 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.177
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792515960;
-	b=5oBnaEfDEQ4El04oqt8fo5uyE6vEmmpZAlGSjXq1WUAmVT6GZNpJlf+69vOnf1S4dTnA
-	 Pb/bSS2ojYO84aYhB2FrUvT/W90zdTtliWddOoflpWspifso9imZem1NipAeZS5eQoCxE
-	 n8mdS5G6NQtjge6J/nwy2ap0sueVItMpfGAR9/KcnUwmHI2ACF304VwG6YE6TopPBX2+K
-	 446YGm773lsChdrqeEjNFFkMgGvgpBYycZEOz/dehZb5YfVeBukzdwZR0re+jxLXgyiNn
-	 LEaE00orvplpqmoqmoI9GaC6FQp1d8HGEb8WxixhJQI8WQ+PiZvVv7fIympRCsHc0MA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792515960;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:From:In-Reply-To:References:MIME-Version:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=CawfSGUltcTxf3WieqiwxZVbLh4EPDpBCzdr6aE2BVo=;
-	b=Ew1HoPJ5LQj6r6Wq/waRNmgs3sO3vv+5dA5KQ3b5jXZqz8nnpjPEgBkV+15fsFlY2PaB
-	 FDPBexgV/smCcB7EQVnm5PPrSPT9H+bcjQOBqREj4wEtKCPgcoqOzutzYCGjWK4AtU7mn
-	 jONa0ldhUMBWsgrA8PQ9D5s7d4R9LBFQUNfnpUsrem8PQGZqRHV8XKW8kIuG06RPGs4E5
-	 YRMoy1vgcfxP9QWPhVXu2FiNbu6kEpVsgIQFpDTQh2t4OkBnRCpTccf3IaE7MPasqbC/L
-	 hGqBFvVyxqchqWkKrVRL0Sz/N3pkKC2wV4+bTXdHQIO9nIQ2dIdqj+9mZrb6ke4OeXg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="EjiCtsY/";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.177
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792516126;
+	b=O1uFM39f0vX7gTI1u2mcyxngGaneAQiaghswEyCHArUhoRmTRFd0Zul69tEHmaNP9B0f
+	 71tsSTxQCQlSOHuBERS30ZiSD0VKbEJ6eCaGPXNSbepgEIEtG2dBa/vnKlL8E35pFwiy7
+	 KtYd0h7635g/2nSdtWdmfSPmmqVmL9AMWUcM44S4QNvCBRfS8v3B/LT3CnlprywRx8Gvv
+	 XzB8TNtIfrGHRDrzsPfUufJls3OLwkci68t8ySZUCqSSNrstPDf8kbe9tZV02ZbvlyrH/
+	 ZWRmr4Dg3jVrZSibujyQ4xWRSVuNcg0RoNnpJdmn3ge8aDN+vmcMDvY+i1xljcYcxUw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792516126;
+	h=Received:Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date;
+	bh=WmttQryXnibWlRJiZPUojQhvGDcV+ijgulX9csVBoUI=;
+	b=PlKXfsQ8wzTB3riK9oIlZ8EcS7V89K/tQE8Eup8/NkPg26zRHvRyLzXKKEY+kZ+7rZkc
+	 XEIr8M7YSBX/8u6rcAwqRMQ2i6ITjyZyd4A+EsvVa2KtKS1axtyydwvIc+pwpVJb97+e/
+	 4tRpCJCQXknnydeuKOr4QNO/8Peow9SjoDQ1i3m/XFwmsWrRiDKyH9/4fkeA1ols4BdYN
+	 phZMJkLBcFw0DgJr/w+nGHjgqQKqTH6iV86EVnOlXWA1eJjEdRuCgWDdKf6Qlfbw16E1/
+	 CZOUpINss/GeASlUnBkfqss8DjVjPs46FD/3jK/uYAM+PJBxkLJasnfdJls1ci1PXQA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8133606A338
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 17:05:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E8133606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=EjiCtsY/
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-8b0f1dfef72so3723607b3.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 10:05:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792515959; cv=none;
-        d=google.com; s=arc-20260327;
-        b=TLVXvEvhnuByZdiNr1819A6WnKBBsP1VyzL+bP9UaT/b+HNBSH+3FA7k5R/IsnZf2r
-         Pf/LlnNpqMFbSbzUpo6ZWe5cAMUD9BNi+4ORFJfFJmi0hWDgTpDN1cTheluc0W6vONnK
-         RaEGnU0pg5vY3RavFMiFCPmc69eBWMoAbhsOmcTZE620pVxAt8c8JHgh/1j5JyeFmbnm
-         nklKvQCPmtP9bRSUSCQgHPSG8SZVIqGqoFqjuxPFmkwDm6/3bKFtMy8nuuWZs/tOPHMq
-         8NfNtG1JZNb/nRC8AzL8wsr+5Co8WdyaIJ7oA0YSguT8WFTZ8SYDkwx6ROe5+MKqvr4i
-         PjcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=CawfSGUltcTxf3WieqiwxZVbLh4EPDpBCzdr6aE2BVo=;
-        fh=Bf/r7SChxAO8yUVxHUy1nXvloAIvbLqVTtBILtlSUMc=;
-        b=pj2Bw0In4eDtPthzIM7+CUlc3g9I1ctqsT9UEoymo/S+wG70WHk7szaCPBJnZABlSb
-         kAdeWCqAbVZ9M1SoW6+gJbhh5BySCMhXooUpc5nNaHDmRXoX45s0eUYOCUEfKG748TmH
-         77pZsjMZspm2aCzpNLorRHJwEToPk/jj2JyN8Tw2ngY7LjBvL+AzAtvuyrCeSvUB9AAt
-         98+Oc5b36HmSl/DvzNvPCGcE4ANAwbriCJQ++55Au/pl3CtTeIUkAx1zRyutJmB8+DLp
-         IuWM7aMWBNt/nshYo1Yt4r3uRhJeDd/tsUW+zw7dAeBx7viN6TkYQB5kzKJVbPh6EVSs
-         QDhA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792515959; x=1793120759; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CawfSGUltcTxf3WieqiwxZVbLh4EPDpBCzdr6aE2BVo=;
-        b=EjiCtsY/ZOF90gjCs/BDy14TUFvLnpqFVe7zF4DpPHBfTP6HnmeZFgtdMcb9BvlJTp
-         4pxSbR5yKKYpyLVtBdpCBsvyBRD54nXnijUfOskpIyUAV1j2g35x18xFYvNJmyTIYgZt
-         0iuxf+Px6JyXIGwyCSNSM6+QMU9PoDZyA990d3LGTuvOicsVF4XRBN0VpNObEKNthGjJ
-         axPCwU/9cS7gMDkq+phYi5LAcbFA9Pi9h/h2LkktmB6IW4qqlRmTx/BLgILC5JIcw7dF
-         bhbJlMjF2Utkn9qL1MppP7RH2+AGU3g8+qlJjopyhCLl6gosrso1m+nEzVxM4AKoFKV1
-         xu9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792515959; x=1793120759;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=CawfSGUltcTxf3WieqiwxZVbLh4EPDpBCzdr6aE2BVo=;
-        b=LGgQC8xVj5psObCWWoQocvk/aRv+qMc5OJm+sWoTj4EKNxoE1hnNLwUvH3qdNHNfqH
-         hU/0SBPZ8SVOs7Ja7zgF8MimmBufx4BXX58aOCCnCsPtHmwYossbJe07362h8YdqWD7I
-         rK7TqHx4HGqVfECD2q9ddJQNVxaexNzHheccDU7hRY7MPsxbl+o1WFo2c3X8cvWKbn0C
-         CvXURAhp6B2wEBLpWHWF+18cm+GdUlRnubExrkwVbyBywKEl3fJZh6Jl6HstdjUb+O+H
-         wLwH5snSWyZUCbXQcfyju4FQsF5I4umnmA9zeorpN74FxKgxtavxQzrRCuRrLmj5hGPg
-         yslQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz3P2xyp0Lms4k5mn1Qz6xWUlRcMDL1hclr4j3iBm46n8PbpT1+vefu6cTV33BLTDeatuyyysQ9uygE3h5xfBU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK3Ukjk+CPqHcblrIxFszbNQqTBZZE58o4sAJfvw0tEu7HuVLNq
-	0EKIachofsv1wINfBSxLI90Ormkka7W6fC0xeW0WInvtQAp+YiUUq2Bb4VygstdoegSWKtYNB3W
-	EZ9hRW81QykS2utg6ne4JIHTwy+lAgOg=
-X-Gm-Gg: AYBFou0vwJBEgjahIfs/McAD+7vqJhHwgEGjzAJ/sivdVn5rlxLERMgiO4PYdqGHPRy
-	DTPV4veSu4QwkPyS4Yblt/KYrFleES5EJWCdpfeZwWrNn2eUqc1Tk4xm4jI6eRlByvFjPuX4HGy
-	l4263l6D5QoLFKs+cDiNyXsy8OAu24uFcUZhF8dSL40J/TEXYOogCqxi4kzOamUf/Uppl/hl+z6
-	NxxV/BUTpDqVazvhvOj/R0+NQlhgX/tYlv0e+8VwgbOr3TKKyh2t9blmM3QZNUmHNZ09TFs0GYE
-	y1cZcprboILNIAEo+kPpObCC8Ec9icP4hjPBVDTsICo4eSkc94XoBg==
-X-Received: by 2002:a05:690c:6087:b0:8b0:da84:d1c1 with SMTP id
- 00721157ae682-8b0f1f1a89fmr64960787b3.0.1792515958898; Tue, 20 Oct 2026
- 10:05:58 -0700 (PDT)
-Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 20 Oct 2026 13:05:58 -0400
-Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 20 Oct 2026 13:05:57 -0400
-From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-In-Reply-To: <20261019-bug-word-at-a-time-zeropad-kasan-v1-2-f21a3ed6a477@gmail.com>
-References: <20261019-bug-word-at-a-time-zeropad-kasan-v1-0-f21a3ed6a477@gmail.com>
- <20261019-bug-word-at-a-time-zeropad-kasan-v1-2-f21a3ed6a477@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE45606A31B;
+	Tue, 20 Oct 2026 17:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06841F000C9;
+	Tue, 20 Oct 2026 17:08:45 +0000 (UTC)
+Content-Type: multipart/mixed; boundary="===============2184321447331015808=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,50 +36,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Tue, 20 Oct 2026 13:05:57 -0400
-X-Gm-Features: AclHuK_DtrU2XCq8YwSMY07NqOt7wGt-hW6PGZPkgwrcRUr2dimhQIUPQ6PwL98
-Message-ID: <CAPAsAGz89aKUHzm6U9PQZfkGq-GnWsm8AYHeo5+4u34LHk4uZQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kasan/test: cover load_unaligned_zeropad()
-To: Qiliang Yuan <odys.yuan@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, 
-	Shrikanth Hegde <sshegde@linux.ibm.com>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Marco Elver <elver@google.com>, 
-	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-arm-kernel@lists.infradead.org, Kees Cook <kees@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <443e1351eed4f46cf6c202e5f1130b189e9c5eb09cfcffd24d752c6ec73d450c@mail.kernel.org>
+In-Reply-To: <20261020161907.2115379-4-vineet.gupta@linux.dev>
+References: <20261020161907.2115379-4-vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v3 03/12] bpf: Prepare linked scalars for relations narrower than 64 bits
+From: bot+bpf-ci@kernel.org
+To: vineet.gupta@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 20 Oct 2026 17:08:45 +0000 (UTC)
 
-Qiliang Yuan <odys.yuan@gmail.com> writes:
+--===============2184321447331015808==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On architectures with CONFIG_DCACHE_WORD_ACCESS, load_unaligned_zeropad()
-> does the word loads of the dcache name compare and of path name
-> hashing.
->
-> None of the KASAN test cases reads memory through it, so nothing
-> noticed that KASAN did not check these loads at all.
->
-> Add a case that reads a freed object through load_unaligned_zeropad()
-> and expects a report. Skip it with hardware tag-based KASAN, since
-> arm64 turns tag checking off for this load:
->
->   kasan_load_unaligned_zeropad, x86_64, generic KASAN
->   without "word-at-a-time: check the first byte in
->   load_unaligned_zeropad()"                                 FAILED
->   with it                                                   PASSED
->
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+> bpf: Prepare linked scalars for relations narrower than 64 bits
 
-Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+TL;DR: Commit message only: regs_exact() now also rejects states whose linked
+scalars share a base id in old but not in cur, a stricter infinite-loop check
+the changelog doesn't mention.
+
+> bpf: Prepare linked scalars for relations narrower than 64 bits
+>
+> Two scalars sharing an ->id are always related by full 64-bit equality
+> today: reg == base + delta over all 64 bits (this is true for
+> BPF_ADD_CONST32 as well, which implies upper bits to be all zero).
+> Sign-extension needs a genuinely low32 equal only relationship kind
+> with bit 31 supplying upper 32-bits.
+>
+> Today the following 2 relationships exist
+>
+>   #define BPF_ADD_CONST64 (1U << 31)
+>   #define BPF_ADD_CONST32 (1U << 30)
+>
+> Model them differently as
+>
+>   enum bpf_reg_link_kind { BPF_REG_LINK_NONE, BPF_REG_LINK_FULL,
+>                            BPF_REG_LINK_ZEXT, BPF_REG_LINK_SEXT };
+>
+> So BPF_ADD_CONST64 becomes BPF_REG_LINK_FULL and BPF_ADD_CONST32 becomes
+> BPF_REG_LINK_ZEXT with the exact same semantics as today. But this paves
+> the way for a future BPF_REG_LINK_SEXT in the same framework.
+>
+> The implementation needs to change as well. Today the above 2 bits are
+> shoe-horned into ->id, needing masking and OR'ing to get ->id and kind
+> bits: with more types and bits needed, move them out into an enum
+> bitfield of its own. To avoid growing the storage (and stay within the
+> 1K allocator bucket), borrow 2 bits out of ->map_uid, 31 -> 29, which is
+> still far more ids than a program can generate.
+>
+> ->id becomes a plain identifier, so check_scalar_ids() loses its "compare
+> the compound id, then the base id" dance in favour of one check_ids().
+>
+> With the kind out of ->id it also leaves the idmap key, so regs_exact()
+> and regsafe()'s explore_alu_limits arm have to compare it explicitly.
+>
+> One case changes behaviour -- old {r2.id=A+delta32} against
+> cur {r2.id=B+delta64} was accepted and is now rejected, correctly, since
+> alu32 and alu64 deltas diverge in sync_linked_regs().
+>
+> Clearing a link is no longer just ->id = 0: any stale ->link_kind needs
+> to be cleared out as well. And given this needs to be done in the newly
+> added kernel/bpf/scev.c, it is moved into bpf_verifier.h as
+> bpf_clear_scalar_id().
+>
+> The helper also zeroes ->delta, which the open-coded clear left behind.
+> Unlike ->id that field is inside the memcmp() prefix state comparison
+> uses, so a leftover value could keep two otherwise-identical states
+> apart; clearing it can only help pruning.
+>
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+
+The changelog lists only the delta32/delta64 mismatch as a case that changes
+behaviour.  Is that the only one?
+
+regs_exact() also changes.  It used to run check_ids() on the compound id,
+so old {r2.id=A, r3.id=A|BPF_ADD_CONST64} against cur {r2.id=B,
+r3.id=C|BPF_ADD_CONST64} built two independent idmap entries (A->B and
+A|flag->C|flag) and was accepted as exact.
+
+With the kind moved out of ->id, the same pair now maps A->B and then A->C,
+and check_ids() rejects it:
+
+    return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+           rold->link_kind == rcur->link_kind &&
+           check_ids(rold->id, rcur->id, idmap) && ...
+
+regs_exact() is reached through regsafe(..., EXACT) from the infinite loop
+check in bpf_is_state_visited():
+
+    states_equal(env, &sl->state, cur, EXACT)
+
+so this is a stricter comparison than before.
+
+Could the changelog also say that regs_exact() now enforces base-id
+consistency for linked scalars, which the old compound-id idmap key did not?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39458500836
+--===============2184321447331015808==--
