@@ -1,93 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.136.161.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792510169;
-	b=W/M5lfU06HFNn2HgKHfP5u887BiwpGzz1F5+0xFXcZnhA7UJldplJiBrCMCKtXCodZWZ
-	 AxktfbyS8VksHOAfyfwUnyqb6gqy5o51gNmpqmySi3+PeG/+aDQOnSQPpylqelS2yNNip
-	 7XgBsjMgjq3IVVmpF59YCtM0wNwrjBbvr+55vMI/WiJqzfpJDLRTdb+zcn6JHU4P0XEtK
-	 FqySa/T3rqwD47ELDxUFXdBS26IxCDMbrCtIwJvj9figRl6BFxJp8ISeNTbGv7c0+tn9b
-	 wNJsyS4avkYhJ8Y0+28AbMIayzWkrkquiSPIChQAN2RzHX6AXAD0l3y52jffc/ZAcsQ==
+	t=1792510200;
+	b=1SrcMtwY/PAPgPWpRjn30GFpdH+ny/NqHrNpipEwPiD9FX3PN15k6ofHe2MEbgXdj0wU
+	 nc7zN6E885pPMXRAi+YcSZZYz/EPhbuNlVRur308LpVuvNgYs53rGQDsmvIwMkYbHx0HX
+	 KBmDGt3JzoJDizsZl6UAGlvAn/BQn9FeSJTmSUSn/rTGtIuTfteatGqszfx55tdpn4wqz
+	 2ceO6E9J/v6qN3+NbGy7RieKp3jyOrVou3l4UZ633f2FUXaMw6vZAyMtcn7rJXkU213YP
+	 EfNCsy3YH3oXUyuEwlrqQcgWxmO5ZoUS7XwhES67kF9+mzCmAXiyBj2CflScMk1OPTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792510169;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1792510200;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=9GDFV35RrSVf5yP47jS+7rs1H7n+XBgiZq3zykV+XtQ=;
-	b=QlWA3FMX3Z8DJZObC7VITQYduzV2fGiHDJU6XXDB/8d5A/iPvEESmSPjliB+ZjLx0bus
-	 r82dshZtBFqHWbyqs8J+fu/r4u+AYjrxNCBFdt/7V8/Ra4lEu4rEJM/nAyG4cquPyEvO7
-	 YUKxcIzcQXmPzHvXqpF185/AjzzsGhqFVpT6Ga+yb/VVPpziZGh8uAfo95Q7DuA+MYL09
-	 ESmYQkSuX8gnF2YBhgGlKrxuJHLx4AqDq8hecehCT6mUUXqyJQp5YdrWdshZ1L9l6U390
-	 +Rrhk0JqFw0Q9oNjaInGqFFvDxYfU+T7ifCxNLO3zIH/MLUj+dBD76tOJdipIPf27oA==
+	bh=X7li7zppPfXAQDWIziNGfnEjMbFeJImmkhr9aLqumbs=;
+	b=tiIPG2g+J+kltBXSYp28cjeEsDLqw6ff9Q+Qe2M/csUBzoJMYNztLLIQGhnoLCKf9xyW
+	 hJyz5nQ3Znnq9TbouHtiXZVeCsKDcl9M+wKsZqLxRllnP5QEZ+HHxz57LKGuZS9jcWM3R
+	 5UzMP3+5aXOkTr4ct/nfI5vY/v76kokEeUMxLClF7H8RRmSSWfPTJKo803f8x2Dcxy1ni
+	 3JggCLIrg/SNV92wis+bB4i06Zb1fUO67J9You6qE4wJbUsAD57EQ5Pq3S4+3ssp+JGeW
+	 /u0LTJ2/WtTinuBKBP3Sh9nvSbexCT9UZolabCaypIwr1q7nejWDUEOAFJb37WE+nzg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="n/xDhLui";
-	arc=none smtp.remote-ip=95.215.58.173
-Received: from mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2090606A327
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 15:29:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2090606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	dmarc=pass header.from=cs.unibo.it;
+	spf=pass smtp.mailfrom=cs.unibo.it;
+	dkim=pass header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=veAqQRvm;
+	arc=none smtp.remote-ip=130.136.161.50
+Received: from mail.virtlab.unibo.it (mail.virtlab.unibo.it [130.136.161.50])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13B1F606A320;
+	Tue, 20 Oct 2026 15:29:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 13B1F606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cs.unibo.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unibo.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=n/xDhLui
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=qDoOdKi6oKQdzWjw9ttiqe9bR4kfbpGeSoHF507AHt0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792510167; v=1; x=1793114967;
- b=n/xDhLui/B6iYXMShd5zI/knbMIldewi4erzJF60TWChYVvJpknTaz4HGbgpGLkp0A/xRbx4
- EW5iAvpS96paL562RyUJM91bhiYUP5xc/YiqDDEfWfG+cxLjlCb0iu/dMRz7lSPbVTZGpOFa+Z4
- lnwyVE+7mQEWlzCco1UgoqWo=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4a298b9aecc1ef70;
-	Tue, 20 Oct 2026 15:29:26 +0000
-X-Mizu-Trace-ID: 4a298b9aecc1ef70
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	dkim=pass (1024-bit key, unprotected) header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=veAqQRvm
+Received: from eipi10.cs.unibo.it (unknown [94.32.99.206])
+	by mail.virtlab.unibo.it (Postfix) with ESMTPA id 9DA8B1C0251;
+	Tue, 20 Oct 2026 17:29:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=cs.unibo.it;
+	s=virtlab; t=1792510198;
+	bh=kecThFQauD5pORZjNAwNTrsBZzkWTRHw2R4hetODibc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=veAqQRvmf/f/cYUdyAWyB4Uey00XfxCpUsln+jiOijpHEIBrVJuv+RtjR0x4kDt6w
+	 A3lZBmvae+xZhBiEc09i4SGQKNhlX6qNQnKOvja3s485mwJHbIPTRUE2i6450E8YSO
+	 hZDqpGJbM0+fIPAbmM/JLGL8n89otuV1JnruMC+E=
+From: Renzo Davoli <renzo@cs.unibo.it>
+To: linux-kernel@vger.kernel.org
+Cc: Davide Berardi <berardi.dav@gmail.com>,
+	Oleg Nesterov <oleg@redhat.com>,
+	=?UTF-8?q?Michal=20Such=C3=A1nek?= <msuchanek@suse.de>,
+	Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Masashi Honma <masashi.honma@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
+	"Dmitry V . Levin" <ldv@strace.io>,
+	Alexey Gladkov <legion@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next v3 6/6] selftests/bpf: Add tests to verify link_create logs
-Date: Tue, 20 Oct 2026 23:28:04 +0800
-Message-ID: <20261020152804.39863-7-leon.hwang@linux.dev>
+	strace-devel@lists.strace.io,
+	Renzo Davoli <renzo@cs.unibo.it>
+Subject: [PATCH v9 1/3] seccomp: let the tracer skip a syscall independently of its number
+Date: Tue, 20 Oct 2026 17:29:41 +0200
+Message-ID: <20261020152945.575664-2-renzo@cs.unibo.it>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261020152804.39863-1-leon.hwang@linux.dev>
-References: <20261020152804.39863-1-leon.hwang@linux.dev>
+In-Reply-To: <20261020152945.575664-1-renzo@cs.unibo.it>
+References: <20261020152945.575664-1-renzo@cs.unibo.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -97,125 +78,149 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add tests to verify the new logs in link_create and xdp link_create,
-including a log reported via extack when fail to create an xdp link.
+From: Davide Berardi <berardi.dav@gmail.com>
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+At a PTRACE_EVENT_SECCOMP stop the tracer can only skip the system call
+by setting its number to -1, which seccomp reads back with
+syscall_get_nr().  This depends on how each architecture lays out the
+syscall number and the return value in the registers:
+
+ - on some architectures the syscall number shares a register with the
+   return value (e.g. v0 on MIPS), so setting the return value after the
+   number would overwrite the skip request, and each of them needs its
+   own way to keep it (MIPS keeps a copy of the number in thread_info);
+
+ - on s390 syscall_get_nr() returns the low 16 bits of int_code, so -1
+   is read back as 65535: seccomp does not skip the call but runs the
+   filters again on syscall 65535, which kills the task if the filter
+   denies unknown syscalls.
+
+Add a per-task flag which the tracer sets with
+seccomp_ptrace_skip_syscall() while the tracee is stopped at the
+PTRACE_EVENT_SECCOMP stop, after it has set the return value.  When the
+tracee resumes, seccomp skips the system call like for
+SECCOMP_RET_ERRNO, which every architecture already handles without
+touching the return value.
+
+The flag is cleared by the tracee before the stop and written by the
+tracer only while the tracee is stopped, so it needs no locking: the
+wake-up of the tracee orders it like the registers written by the
+tracer.
+
+The next patch uses this in PTRACE_SET_SYSCALL_INFO.
+
+Suggested-by: Michal Suchánek <msuchanek@suse.de>
+Assisted-by: claude-opus-5-5
+Signed-off-by: Renzo Davoli <renzo@cs.unibo.it>
 ---
- .../selftests/bpf/prog_tests/xdp_link.c       | 101 ++++++++++++++++++
- 1 file changed, 101 insertions(+)
+ include/linux/seccomp.h       | 33 +++++++++++++++++++++++++++++++++
+ include/linux/seccomp_types.h |  4 ++++
+ kernel/seccomp.c              | 11 ++++++++++-
+ 3 files changed, 47 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-index e7e9f3c22edf..18c1f1039d4e 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-@@ -150,3 +150,104 @@ void serial_test_xdp_link(void)
- 	test_xdp_link__destroy(skel1);
- 	test_xdp_link__destroy(skel2);
+diff --git a/include/linux/seccomp.h b/include/linux/seccomp.h
+index fcb3eb9825e5..ee31857f3ba6 100644
+--- a/include/linux/seccomp.h
++++ b/include/linux/seccomp.h
+@@ -75,6 +75,32 @@ static inline int seccomp_mode(struct seccomp *s)
+ #ifdef CONFIG_SECCOMP_FILTER
+ extern void seccomp_filter_release(struct task_struct *tsk);
+ extern void get_seccomp_filter(struct task_struct *tsk);
++
++/**
++ * seccomp_ptrace_skip_syscall - make a tracee skip the current system call
++ * @tsk: tracee stopped at a PTRACE_EVENT_SECCOMP stop
++ *
++ * Must only be called by the tracer of @tsk while @tsk is stopped at a
++ * PTRACE_EVENT_SECCOMP stop, after it has set the return value of the system
++ * call.  When the tracee resumes, the system call is skipped and the return
++ * value is left untouched, like with SECCOMP_RET_ERRNO.
++ */
++static inline void seccomp_ptrace_skip_syscall(struct task_struct *tsk)
++{
++	tsk->seccomp.ptrace_skip = true;
++}
++
++/**
++ * seccomp_ptrace_syscall_skipped - check for seccomp_ptrace_skip_syscall()
++ * @tsk: tracee stopped at a PTRACE_EVENT_SECCOMP stop
++ *
++ * Return: true if the tracer requested to skip the system call during the
++ * current PTRACE_EVENT_SECCOMP stop of @tsk.
++ */
++static inline bool seccomp_ptrace_syscall_skipped(struct task_struct *tsk)
++{
++	return tsk->seccomp.ptrace_skip;
++}
+ #else  /* CONFIG_SECCOMP_FILTER */
+ static inline void seccomp_filter_release(struct task_struct *tsk)
+ {
+@@ -84,6 +110,13 @@ static inline void get_seccomp_filter(struct task_struct *tsk)
+ {
+ 	return;
  }
-+
-+static void test_link_create(int prog_fd, int ifindex, enum bpf_attach_type attach_type,
-+			     struct bpf_link_create_opts *opts, int exp_err, const char *msg)
++static inline void seccomp_ptrace_skip_syscall(struct task_struct *tsk)
 +{
-+	char log_buf[128] = {};
-+	int fd;
-+	LIBBPF_OPTS(bpf_log_opts, log_opts,
-+		    .buf = log_buf,
-+		    .size = sizeof(log_buf),
-+		    .level = 1,
-+	);
-+
-+	fd = bpf_link_create_log(prog_fd, ifindex, attach_type, opts, &log_opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_link_create_log")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_EQ(fd, exp_err, "fd");
-+	ASSERT_STREQ(log_buf, msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
 +}
-+
-+static void test_link_create_invalid_prog_fd(void)
++static inline bool seccomp_ptrace_syscall_skipped(struct task_struct *tsk)
 +{
-+	const char *msg = "Invalid prog_fd.\n";
-+
-+	test_link_create(-1, IFINDEX_LO, BPF_XDP, NULL, -EBADF, msg);
++	return false;
 +}
-+
-+static void test_link_create_invalid_prog_type(void)
-+{
-+	const struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	const char *msg = "Invalid prog type.\n";
-+	int prog_fd;
-+
-+	prog_fd = bpf_prog_load(BPF_PROG_TYPE_LIRC_MODE2, NULL, "GPL", insns,
-+				ARRAY_SIZE(insns), NULL);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf_prog_load"))
-+		return;
-+
-+	test_link_create(prog_fd, 0, BPF_LIRC_MODE2, NULL, -EINVAL, msg);
-+
-+	close(prog_fd);
-+}
-+
-+static void test_link_create_attach(int ifindex, enum bpf_attach_type attach_type,
-+				    struct bpf_link_create_opts *opts, const char *msg)
-+{
-+	struct test_xdp_link *skel;
-+
-+	skel = test_xdp_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_xdp_link__open_and_load"))
-+		return;
-+
-+	test_link_create(bpf_program__fd(skel->progs.xdp_handler), ifindex, attach_type, opts,
-+			 -EINVAL, msg);
-+
-+	test_xdp_link__destroy(skel);
-+}
-+
-+static void test_link_create_invalid_attach_type(void)
-+{
-+	const char *msg = "Invalid attach_type.\n";
-+
-+	test_link_create_attach(IFINDEX_LO, BPF_CGROUP_INET_INGRESS, NULL, msg);
-+}
-+
-+static void test_link_create_xdp_invalid_target_ifindex(void)
-+{
-+	const char *msg = "Invalid target_ifindex.\n";
-+
-+	test_link_create_attach(0, BPF_XDP, NULL, msg);
-+}
-+
-+static void test_link_create_xdp_extack(void)
-+{
-+	const char *msg = "Invalid XDP flags for BPF link attachment\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = XDP_FLAGS_REPLACE,
-+	);
-+
-+	test_link_create_attach(IFINDEX_LO, BPF_XDP, &opts, msg);
-+}
-+
-+void test_link_create_log(void)
-+{
-+	if (test__start_subtest("invalid_prog_fd"))
-+		test_link_create_invalid_prog_fd();
-+	if (test__start_subtest("invalid_prog_type"))
-+		test_link_create_invalid_prog_type();
-+	if (test__start_subtest("invalid_attach_type"))
-+		test_link_create_invalid_attach_type();
-+	if (test__start_subtest("xdp/invalid_target_ifindex"))
-+		test_link_create_xdp_invalid_target_ifindex();
-+	if (test__start_subtest("xdp/extack"))
-+		test_link_create_xdp_extack();
-+}
+ #endif /* CONFIG_SECCOMP_FILTER */
+ 
+ #if defined(CONFIG_SECCOMP_FILTER) && defined(CONFIG_CHECKPOINT_RESTORE)
+diff --git a/include/linux/seccomp_types.h b/include/linux/seccomp_types.h
+index cf0a0355024f..4bdb8424055b 100644
+--- a/include/linux/seccomp_types.h
++++ b/include/linux/seccomp_types.h
+@@ -18,11 +18,15 @@ struct seccomp_filter;
+  *
+  *          @filter must only be accessed from the context of current as there
+  *          is no read locking.
++ * @ptrace_skip: set by the tracer while the task is stopped at a
++ *               PTRACE_EVENT_SECCOMP stop to request that the system call is
++ *               skipped, after it has set the return value.
+  */
+ struct seccomp {
+ 	int mode;
+ 	atomic_t filter_count;
+ 	struct seccomp_filter *filter;
++	bool ptrace_skip;
+ };
+ 
+ #else
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 86cf4460d69e..edeb21fa3e23 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -1306,6 +1306,7 @@ static bool __seccomp_filter(int this_syscall, const bool recheck_after_trace)
+ 		}
+ 
+ 		/* Allow the BPF to provide the event message */
++		current->seccomp.ptrace_skip = false;
+ 		ptrace_event(PTRACE_EVENT_SECCOMP, data);
+ 		/*
+ 		 * The delivery of a fatal signal during event
+@@ -1319,7 +1320,15 @@ static bool __seccomp_filter(int this_syscall, const bool recheck_after_trace)
+ 		 */
+ 		if (fatal_signal_pending(current))
+ 			goto skip;
+-		/* Check if the tracer forced the syscall to be skipped. */
++		/*
++		 * Check if the tracer forced the syscall to be skipped, either
++		 * with seccomp_ptrace_skip_syscall(), which does not depend on
++		 * how the architecture encodes the syscall number and the
++		 * return value in the registers, or by setting the syscall
++		 * number to -1.
++		 */
++		if (current->seccomp.ptrace_skip)
++			goto skip;
+ 		this_syscall = syscall_get_nr(current, current_pt_regs());
+ 		if (this_syscall < 0)
+ 			goto skip;
 -- 
 2.55.0
 
