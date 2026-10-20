@@ -1,74 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792497916;
-	b=sr9Cu/ubKSGYZLm+sYFr1/5/D8n6wZQOy0enyEYEAWlecCwML1+OVOindTihcGegylCg
-	 lsCRzT1oNIAzAzrHW0VSVK+gK/I8xS3q/0e3R5RkVO7n/MLaYWMd3Bkz4utXSUmPHmTse
-	 Bi472LSEMn70PXPRJQzxbAEQBDKtnq4Ll/iS67H3FVxs8JS3dfxqCZkRD2TSWwk+SoRwK
-	 vzzrxmSNhj8Uk7kiLf9491ZWmE3tTJwHiefgmmqhJ5Tmfegr/QXocaa501B8kOo7cx5lz
-	 kB78V1UsBowRfHFDXR5FaXvqd8Yze+wkH7A2yN1xUZVeHThikVT0gY7b968bF/uJNyQ==
+	t=1792498826;
+	b=guce62t6uvgZLL8B1L61exxU+zgZUG1WUNYZFZBBF7G9keHKRYDG57T955Zm04T0wGb2
+	 x/c3E2eD4+nu5xFdLaJKISS6kbGjKeiazvHBay6qwGr5SPasLyxCm8N0SodDIQfPLvC64
+	 ru0pE9caZfAwAoXYB4JnVVCuYn/Cj2yqNMJx1uIOJSxXUKTGwnrdz8GGH5Rgioa0eJuyK
+	 VpBAJUqrUxDbHNPZ5przTsCzQIFufyqPVPzECBrVi8+N4KXo3Mg1Ui2jKocHMR1u+uvVv
+	 C8PqGF7zmoKowCzVWn4VBAGhEGJrouSwFi+CoNR5GoQ34cHODvKMYKX89e6f2ccziDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792497916;
-	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 X-Cookie;
-	bh=3rUGvuaVTTy+ZOb7QiqULfTKmRQxwC5KzfroeU94W3c=;
-	b=LoeG6ME/ZWm5z6FJB3bI8c8lXiJtR5VI5HRIX+IAm70qlO9JtRk/FdgV0eSVbxLuY+DD
-	 ARdRfGfitv+5OubVXq4yfekYxENyaMj0MdjiFD0QY4Jk7C37FDeMCizC9PX5B74RayAoh
-	 lPZFE0j4yhHjSa/EwwVv2OXXbmAHFZ5ELZfoN8JFU7Tsg0qZmTijYnPbiOGP73EYfOeNx
-	 6CUEr2HkW1PPxn14cl3Lbwd7PzBWieCjQoXBglUuG+V9eKahufxfVFbZklnclcMvXuOIn
-	 Q3Pb8ZMfdCyIVhmzv1yhG+JScVR10OQQjwGGwkOsdL6Aw732CkxwBRUgkJWNA5mb/vg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792498826;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=NElDP+/LtIzOBKGOj7/b1eUU69rD1be4ecgd41kze+g=;
+	b=LU3rcPn3RiqVLWGczIue/K5Tggf1m/Z1U1+PZYTfcaN39Fz3w2/ofjbnSXNSTJvXDyc+
+	 p7IT1FwOTgAXg9eF+bsMYO1E1mfUwuMcuBSnx8dDuQqgRodOAQQn9T+miCtySMjXzqL+L
+	 gnCkj9J4EsKea0YYByZRBsLKAN8aV0i7noT3f0ZHhv5v3IvyXUgNQoLwraWvHhm2GoPJc
+	 b71LwyMkTtNLwT6CPlsJZjd1V1XTDav+vKinZj96pNmg4cF5gA8fsgQIQVOENB9+WExcz
+	 fqt8yCvYkRBVG2ujsZaRRtRkzlhUaj+HMerOl/hE7yLQZhRK7TvHMXA7tsZcCO5IqSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iSv62ugK;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=SQi16b+F;
+	arc=none smtp.remote-ip=220.197.31.4
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC905606A31A;
-	Tue, 20 Oct 2026 12:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC1560A2634;
+	Tue, 20 Oct 2026 12:20:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0DC1560A2634
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iSv62ugK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271851F000C6;
-	Tue, 20 Oct 2026 12:05:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792497915;
-	bh=3rUGvuaVTTy+ZOb7QiqULfTKmRQxwC5KzfroeU94W3c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iSv62ugK666I+rMSJ2KdftrD5ohEdfUYkw/dR1CzFfDtijTXtsc9QJFpCRxA91Lv4
-	 hoFWMtlvJNQ3zi5AVQNs54HxJ9YkYvyHk8djA48iX9NDcoAZIz6NemKAWy70JX9Sf8
-	 aRGYsVzkYM0Te2EJ8x/Go9bVL8XtdBgm5/PprTgHZ21Yg4L+Rvi9QX3CPhXs/TlVlw
-	 oe8MnlVfCNLNTnp5AuLplj18Yfs9e7Wh0pWHeSfb8buxkescVy9gVlXTcKdQOu+Cr7
-	 aGL9BVfraXpP6KipeYu6UYAjYHCZ7RxaOhh9gKMAiVu6c1FHhGGeco5Mo2LO9PhtoZ
-	 UVnOXvy8uTy6Q==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id C324D1AC57D0; Tue, 20 Oct 2026 13:05:11 +0100 (BST)
-Date: Tue, 20 Oct 2026 13:05:11 +0100
-From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?Iv=E1n?= Ezequiel Rodriguez <ivanrwcm25@gmail.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=SQi16b+F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
+	Content-Type; bh=NElDP+/LtIzOBKGOj7/b1eUU69rD1be4ecgd41kze+g=;
+	b=SQi16b+Fax/iMZudTGfodNc/h8gbLJ4vJfQruZKLucrxu4VxlBkc2ZbTM6K+tO
+	kfQIn3h22+HWfydYxcjnIRs3M/gZ50jI1azZ20prUpcEmcFcHcNpP3TYL9M3Mql+
+	ZbglxelrgFs3uD8Tw6M77hu1nXRWyfyBGvicU4OfGvCts=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgDn+n9oXNdqB4r+Aw--.58039S2;
+	Tue, 20 Oct 2026 20:19:53 +0800 (CST)
+From: Xia Yan <yana06070@163.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	horms@kernel.org,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Deepak Gupta <debug@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
-	Albert Ou <aou@eecs.berkeley.edu>, Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Zong Li <zong.li@sifive.com>,
-	Charlie Jenkins <thecharlesjenkins@gmail.com>,
-	Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-	Zishun Yi <vulab@iscas.ac.cn>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/4] arm64/gcs: release GCS on failed fork
-Message-ID: <atdY90gcVwbHu2sc@sirena.co.uk>
-References: <cover.1792179433.git.ivanrwcm25@gmail.com>
- <2539f61f79a6053e2a33a1d1ae9df09013c04bd8.1792179433.git.ivanrwcm25@gmail.com>
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	yana06070@163.com
+Subject: Re: [PATCH net 2/2] selftests: net: check veth carrier after
+ changing channel counts
+Date: Tue, 20 Oct 2026 20:19:39 +0800
+Message-Id: <179249872343.21684.7854076185953389263.carrier-selftest-review@163.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20261015085821.12725-2-yana06070@163.com>
+References: <20261015085821.12725-1-yana06070@163.com>
+ <20261015085821.12725-2-yana06070@163.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,71 +71,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gxc4xle/qhZ2446+"
-Content-Disposition: inline
-In-Reply-To: <2539f61f79a6053e2a33a1d1ae9df09013c04bd8.1792179433.git.ivanrwcm25@gmail.com>
-X-Cookie: You buttered your bread, now lie in it.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:PygvCgDn+n9oXNdqB4r+Aw--.58039S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Xw47WF1fCr4kAr4xJFyDGFg_yoWDtFX_ua
+	yDAry8Wa12vF1Dua18Gr47WrZFka1UCry0vr4kCr13u340qrWkWFyvqF1ag3WIg39ayF1D
+	A34Sv395Gr1S9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUjxnY5UUUUU==
+X-CM-SenderInfo: p1dqtiawqxiqqrwthudrp/xtbC3wvBSGrXXGtaYgAA3v
 
+Hi,
 
---gxc4xle/qhZ2446+
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I checked the two selftest findings on the Sashiko dashboard:
+https://netdev-ai.bots.linux.dev/sashiko/#/patchset/8081
 
-On Fri, Oct 16, 2026 at 04:46:00PM -0300, Iv=E1n Ezequiel Rodriguez wrote:
+The LOWER_UP coverage issue is valid. The test detects the original bug
+through the running endpoint in the mixed up/down cases, but cannot read
+the down endpoint's raw carrier state through IFF_LOWER_UP.
 
-> Select HAVE_EXIT_THREAD and free the child's GCS from
-> exit_thread(). gcs_free() already ignores a cleared base and a
-> different mm, so the usual exit path (deactivate_mm() then this) is
-> a no-op the second time. copy_thread_gcs() zeros the inherited
-> tracking before a user-thread allocation, so an allocation error
-> still skips exit_thread() with nothing to unmap.
+For v2, I have limited the assertions and commit description to LOWER_UP
+on running endpoints and dropped the down/down cases. The test targets
+the incorrect LOWER_UP reported by an up endpoint whose peer is down;
+it does not claim to verify the raw carrier bit on a down endpoint.
 
-This makes sense and mirrors the handling on x86 which had an existing
-exit_thread().  There was a lot of pain finding the right places to hook
-in here, there's far too many routes through this code :/ .
+I also changed the veth creation failure path to use log_test_skip().
+An injected creation failure after a failed case confirmed that the SKIP
+line no longer repeats the earlier error message and that the aggregate
+failure is preserved.
 
-> A kthread copies the caller's GCS fields via arch_dup_task_struct().
-> kernel_thread() uses CLONE_VM, so during a failed copy_process()
-> the child still shares the caller's mm and gcs_free()'s mm check
-> does not save us. Clear the inherited tracking as part of kthread
-> setup.
+I reran the revised test under the existing unpatched and patched UML
+kernels: the four mixed up/down cases fail before the fix, and all six
+cases pass after it. The driver diff is unchanged.
 
-I'm not spotting an equivalent path on x86, it's entirely possible I'm
-missing something here but if I'm not then I expect they need the same
-fix?  They use a similar memcpy() for the arch data and I'm not seeing a
-reset anywhere.
+Thanks,
+Xia Yan
 
-> @@ -503,6 +513,17 @@ int copy_thread(struct task_struct *p, const struct =
-kernel_clone_args *args)
-> =20
->  		p->thread.cpu_context.x19 =3D (unsigned long)args->fn;
->  		p->thread.cpu_context.x20 =3D (unsigned long)args->fn_arg;
-> +#ifdef CONFIG_ARM64_GCS
-> +		/*
-> +		 * kernel_thread() uses CLONE_VM, so a failed
-> +		 * copy_process() still shares the caller's mm.
-> +		 * Inherited GCS tracking would then look like a
-> +		 * child mapping to gcs_free().
-> +		 */
-> +		p->thread.gcs_base =3D 0;
-> +		p->thread.gcs_size =3D 0;
-> +		p->thread.gcspr_el0 =3D 0;
-> +#endif
-
-I think it'd be a bit more idiomatic to have a function to reset the GCS
-state that gets an empty stub with !CONFIG_GCS=20
-
---gxc4xle/qhZ2446+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQReagvpf3TrrA7BoYYv73Ows9A4iQUCatdY9AAKCRAv73Ows9A4
-iWTwAQC7iQAwJ8AvSpT4za/gdMW9NJKIrjii+W62TxSlegpBlwEA0ZL335q7PnHL
-KBKZVvTQfALmAMz+nHizc7SQa5fSOwg=
-=NmUr
------END PGP SIGNATURE-----
-
---gxc4xle/qhZ2446+--
