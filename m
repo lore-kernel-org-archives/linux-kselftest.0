@@ -1,58 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.0.225.12
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792464802;
-	b=QST6HU6GQa97kbIu09EGYMpBydIRVo0KY5T540yrxQi1IMnxighzxRZcFVswrFYufXXM
-	 +zxlSOfa7TzuEdIc+Pi9UFeitg9Wgl2segNJfNLSNwjUN/EA4IopgxdjFbfzQ9pLKi4c0
-	 rtC9IzFuBZEuLPggUb8IGQk1UdkuuQK0S9wRTXrFOZH3f70iwrPNn7yB3Q8HgwygpAm3b
-	 nt2ywHvMGesslg7aACI5YvvMx80BRJjJearjZUB6irjihh2ctbwmR3O7c7ilrhepsBlwm
-	 ZEimO3B2Bc/J/mP0JdQRyiigFwgVs5zepY7AYkZJ7guj+Uk1HzeV2ZK7jY+XNFUEaAg==
+	t=1792465207;
+	b=oR94LJaMRj7zDeQwF1byR5zPHqLRNXeFDHQuLbuIKaOg2huaPkhido6AF26le6DhJkDb
+	 I2F8t+r9nnM65maIkHWzfjGIaMfrX76mJL6O/Y79BGiLgoNUt/gvzRsSx82rgyT/7nWtB
+	 BTpKh+dQGj2LafrBsdtGQSWtmfGg1eSFX3yAfMyY5ZjURSi9xMP/SWRiNDAoDNyauFIB8
+	 d/FXLtxCbNjT3ln5zSigVI2HRHKd3ivy6WsExt3hO5885PJcrHDo22iwIcd62Hw1CHejB
+	 kKoeE+lDXM4IkJroMgotM91RAHG4LnuhgrjjdE14HZdrNVYMjSeUJdf7CRLaSs+aBeA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792464802;
-	h=DMARC-Filter:Received:Received:Received:X-Eyou-Smtpauth:
-	 X-Eyou-EnvelopeSender:X-Eyou-From:From:Date:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 X-Eyou-Sender;
-	bh=Isam2qzXFBltZx89pCZ1QeUN4o0j6H71EtrOD9wZiSk=;
-	b=yLPZ6AYdhhExr/fE8DClDOQakXRnXc6HPfzUOvXks9LG4QcIpO5M98sJexTxVmbxgsKk
-	 to+/dnCYcjGDut8o+k/B0Vlse0iKeYgYT+amJETzbL5K42fM9Q4SqUCmFUBZMiKT14R41
-	 /QGdLt7KkmNUOUOLAPIYPjdjPCKJqYxQtT70vs9RcOopcpEUCLOq6UpHKoYIqlXv64Q5X
-	 tK9s0iFxLDLyYUwTUemhQvIzzIQVXnEek3Cp1ZDo3vIv3EyIbk5xwDypms89u9dnHVPHL
-	 rE8uMkYt0TiLY1lShWo4e2lfU73h/m+BfOw0/0H1IgKQm0mmv9sYXJHNW1ZU4tBY5TA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792465207;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=LLU3IDAkcJ517K/+XbdTzGRryYF+KBNYwub94onqkuw=;
+	b=WHDFbJV5JghkZ6nzeF5/idV1vdEi4w0MGMfYcT8b7M1eQGMgtMP9DV9fabihsztIUJny
+	 BpXJR//BCxbGu9W65UT+mt2CXp0EnudmGSZtBuxUwAaSaZ/gv+obrH2ontRuC0YamP7Te
+	 F52Gv2SGyQk7IXbkiq7wlsUNUUOJsRgXiOtMRr+rBrLpdl+S4wNktbreZwNV5u99A/FfI
+	 uSz0ajHjv4BZoPFqT9i1OoAg8dEcITeFt8knriwHKbr1vlBG+39ZojhBcj5fJ+91QP/eQ
+	 jpRtDD1Bz8x7lfMBKrYAZfZew7MWp0uy0kCuYdmEyjCFiDPX2LOA4zpzlrEWz0eK5ZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=zhaoxin.com;
-	spf=pass smtp.mailfrom=zhaoxin.com;
-	arc=none smtp.remote-ip=210.0.225.12
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5370606A31A;
-	Tue, 20 Oct 2026 02:53:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5370606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-Received: from zhaoxin.com (unknown [127.0.0.1])
-	by mx1.zhaoxin.com (MTA) with ESMTP id 4j7xmm022Bzb0pbc;
-	Tue, 20 Oct 2026 10:53:12 +0800 (CST)
-Received: from zhaoxin.com (unknown [10.28.140.201])
-	by mx1.zhaoxin.com (MTA) with ESMTP id 4j7xml4GH3zb0pbc;
-	Tue, 20 Oct 2026 10:53:11 +0800 (CST)
-Received: from ewan-server (ewan-server [10.28.24.7])
-	by zhaoxin.com (8.30) with ESMTP62f8ff40056a60f56e6be29f9128510a
-	Tue, 20 Oct 2026 10:53:10 +0800
-X-Eyou-Smtpauth: ewanhai-oc@zhaoxin.com
-X-Eyou-EnvelopeSender: ewanhai-oc@zhaoxin.com
-X-Eyou-From: Ewan Hai <ewanhai-oc@zhaoxin.com>
-From: "=?UTF-8?B?RXdhbiBIYWktb2M=?=" <ewanhai-oc@zhaoxin.com>
-Date: Tue, 20 Oct 2026 10:53:29 +0800
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Frank Zhu <frankzhu@zhaoxin.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, ewanhai@zhaoxin.com, cobechen@zhaoxin.com
-Subject: Re: [PATCH v2 6/9] KVM: selftests: Skip PERF_CAPABILITIES vCPU
- checks without PDCM
-Message-ID: <atbVQZsuClHwaLGo@ewan-server>
-References: <20260910115414.3015260-1-ewanhai-oc@zhaoxin.com>
- <20260910115414.3015260-7-ewanhai-oc@zhaoxin.com>
- <aqQqJysVQxS76YIE@google.com>
- <arHesdC4MieHtZUr@ewan-server>
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Psfyw63l;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D84606A31B;
+	Tue, 20 Oct 2026 03:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Psfyw63l
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 830271F000C4;
+	Tue, 20 Oct 2026 03:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792465206;
+	bh=LLU3IDAkcJ517K/+XbdTzGRryYF+KBNYwub94onqkuw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Psfyw63ltsfp7qgwVwL28W0xzMoJqM7M5vyR0+zlxbu6pYpueAIZ0RaWIIx+tZvWw
+	 H8qFADS5ZJZkDfPbLKMA8BRLo4Z3AAZ3n38DXnCR/oXuw9ux5Tiv3AsRxP+oN2rGjL
+	 id8VNig8zev47ls0LfHgry+0IA3OPvUbeRMqUgtVr3uBYnQMnoGsKclS+w7BVE5jld
+	 sIIJrDN13WnjZN6MrYsIygxVk0QM2JOGhs506Rj4YYWMAR6bZ8DM7JIzIARyZHf8Qg
+	 7NYqlZcbYRqLmdXlV8AsrTABrRaBwD1WcXLTiLmuDnjncdvmsLwW6wRJxx9rg4ic02
+	 xzlOE2ieU8hoQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 773923924A70;
+	Tue, 20 Oct 2026 03:00:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,86 +53,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <arHesdC4MieHtZUr@ewan-server>
-X-Eyou-Sender: <ewanhai-oc@zhaoxin.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/2 repost3] net/sched: act_api: reject duplicate
+ actions
+ in a batch
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179246520503.3454580.1042472378869646593.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Oct 2026 03:00:05 +0000
+References: <QDISC-K1TH.v1.r3.20261012134653-1@mojatatu.com>
+In-Reply-To: <QDISC-K1TH.v1.r3.20261012134653-1@mojatatu.com>
+To: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: netdev@vger.kernel.org, stable@vger.kernel.org, victor@mojatatu.com,
+ jiri@resnulli.us, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, vladbu@mellanox.com,
+ marcelo.leitner@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ sashiko-bot@kernel.org
 
-On Tue, Sep 22, 2026 at 09:54:51AM +0800, Ewan Hai-oc wrote:
-> On Fri, Sep 11, 2026 at 09:19:51AM -0700, Sean Christopherson wrote:
-> > On Thu, Sep 10, 2026, Ewan Hai-oc wrote:
-> > > From: Frank Zhu <frankzhu@zhaoxin.com>
-> > > 
-> > > KVM allows userspace to query MSR_IA32_PERF_CAPABILITIES through
-> > > KVM_GET_MSRS even when PDCM is not exposed in KVM_GET_SUPPORTED_CPUID.
-> > > However, vCPU accesses to the MSR fail without PDCM.
-> > 
-> > Hrm, no, KVM is supposed to allow reads and drop writes of '0' for MSRs that are
-> > advertised to userspace, but ultimately unsupported.  I'm pretty sure this is a
-> > KVM bug.  I think MSR_IA32_ARCH_CAPABILITIES is also affected.
-> > 
-> > Completely untested, but I think this?
-> > 
-> > diff --git a/arch/x86/kvm/msrs.c b/arch/x86/kvm/msrs.c
-> > index dd3bb04878ca..fa77cfdbda7e 100644
-> > --- a/arch/x86/kvm/msrs.c
-> > +++ b/arch/x86/kvm/msrs.c
-> > @@ -512,9 +512,15 @@ static int kvm_get_feature_msr(struct kvm_vcpu *vcpu, u32 index, u64 *data,
-> >  
-> >  	switch (index) {
-> >  	case MSR_IA32_ARCH_CAPABILITIES:
-> > +		if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_CAPABILITIES))
-> > +			return KVM_MSR_RET_UNSUPPORTED;
-> > +
-> >  		*data = kvm_get_arch_capabilities();
-> >  		break;
-> >  	case MSR_IA32_PERF_CAPABILITIES:
-> > +		if (!kvm_cpu_cap_has(X86_FEATURE_PDCM))
-> > +			return KVM_MSR_RET_UNSUPPORTED;
-> > +
-> >  		*data = kvm_caps.supported_perf_cap;
-> >  		break;
-> >  	case MSR_PLATFORM_INFO:
-> >
+Hello:
+
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 12 Oct 2026 14:09:25 -0400 you wrote:
+> tca_action_gd() builds actions[] with one tcf_action_get_1() per nested
+> TCA_ACT_TAB entry.  Each successful lookup takes its own reference to the
+> resolved action, so repeated TCA_ACT_INDEX entries in one request yield
+> the same pointer in multiple slots.
 > 
-> I saw that you applied eight patches from the series to the kvm-x86
-> selftests branch and skipped patch 6 as a KVM bug.
+> For RTM_DELACTION, tcf_action_delete() then consumes two references per
+> slot: one in tcf_action_put() and one in tcf_idr_delete_index().  A
+> duplicate therefore drives the refcount to zero mid-walk -- the delete
+> frees the action and removes its IDR slot -- and the next slot calls
+> tcf_action_put() on the freed action:
 > 
-> We are testing the change you suggested on Zhaoxin systems with and
-> without PDCM support. We expect to report the results within the next
-> few weeks.
-> 
+> [...]
 
-Hi Sean,
+Here is the summary with links:
+  - [net,1/2,repost3] net/sched: act_api: reject duplicate actions in a batch
+    https://git.kernel.org/netdev/net/c/f67b3ed1308d
+  - [net,2/2,repost3] selftests: tc-testing: add duplicate action delete batch test
+    https://git.kernel.org/netdev/net/c/044ad3c90d9d
 
-Frank tested your suggested change on Zhaoxin systems **without** PDCM,
-using kvm_intel. The results support the fix.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-MSR_IA32_PERF_CAPABILITIES is no longer listed in
-KVM_GET_MSR_FEATURE_INDEX_LIST. A direct KVM_GET_MSRS query on the
-/dev/kvm fd still succeeds, with the MSR data changing from 0x2000
-to 0 through the existing unsupported-MSR handling. The MSR remains
-in KVM_GET_MSR_INDEX_LIST, and the existing vCPU userspace behavior
-of allowing reads of zero and writes of zero is unchanged.
-
-We also checked the QEMU behavior. With the MSR absent from the feature
-list, QEMU's supported-feature query returns zero for PERF_CAPABILITIES.
-The PDCM bit in KVM_GET_SUPPORTED_CPUID is unchanged and was already
-clear on these systems. QEMU filters PDCM out of CPU models that request
-it, so this resolves our concern about the effect on CPU model selection.
-
-feature_msrs_test passes with the change. vmx_pmu_caps_test is skipped
-on these systems, and the other KVM selftests we ran showed no regressions.
-Our hardware testing covered systems without PDCM; we have not validated
-the change on PDCM-capable hardware.
-
-One observation about the ARCH_CAPABILITIES check: in the code we
-checked, EMULATED_F(ARCH_CAPABILITIES) already enables the capability
-unconditionally, so the new check does not change its behavior.
-
-Thanks,
-Ewan
-
-> Thanks for applying the patches and for looking into the patch 6 issue.
-> 
 
