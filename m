@@ -1,73 +1,67 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792523395;
-	b=Hq3IHiBH/7B1wbGMtnaaNMSKQkoQQtD+0zW+oOc0+Nj1aljbOcAH2PMqtqaQ+E7WwNQX
-	 XBRgG9TfcMbUdV0w8PskkptCYiId8Ix5PKxzfqGwUkVqk9Jrj7Y7wEghYDrpKT3sJaUDa
-	 zbyUTkX04w+XDsfSyedxyKm98RKVuwYfZjdZoBKFiIL73OqS9azUAVHkwfB9qfMfF27MC
-	 1RUKPggYO1KsY/6lTNi1BHRgF3M7D36l0g2eKKLPjmEh30r04p5wO2uOT/Djx8erUH0Sj
-	 9Sx+59L4vZdHVsTZn1XqX2ZRaG0d92fM1DI8vSv3d1J47/u1La0tY3wHVAEY4pOtQnA==
+	t=1792523767;
+	b=chVTsK5iezZIHYrVHwSIJ8SnwN4f1ngTXzFQhxMb+WV5xogomwnUdCu6wJH+t2J+MkCs
+	 Q8H6Dbm4WhfOqMymS+9px2uZLxylVkGVITlFpMrFLYwN7WHo/KPVaw/j2zBshASmMr6pY
+	 O+PP+yA9PKcLJpzFaju9F2wIAK6GjXhsRb55wUq1PzozXSNJDE83IxemmVTRtsx7kqt9Q
+	 86noWYKaMqk1EDIZkGgKxgmA23/v5drY8GtHVdSIC7/pk+xiSrvbVDq2NXnUHtOsYGDco
+	 qJRWhxJWhQpw02WjZpl/4zUrrm+4Hg8mXuUMcZpr6XFnNLhp2BXfFaSlY1MYOS4kf0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792523395;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=ovQlggD95czzIsSuFFFOXTejTXPO0gwu2CoTMYAFg3I=;
-	b=YNAS2J0w6cA75OyjiTsRBKDQDXQnPq2IaoobInTO2DzU0XxrAo6EXOZiObUqu84Lmmxk
-	 S0GU056rOATBHeNbt8lzKZMA8p7nYp2nj2oI6Gk938WtLvCg99IW3OiCWa92SPvUMVc86
-	 ZQpBKYWbbWWO6YAPq3gkwu8M+nb+78Np2h4C8wdB3VsEZts2XZgOYCroKMpbxFdehMXWQ
-	 ljEp13pondw7cE8dbzUDfGohHMWRLa5mbCIyVJiXhMm5oc+izpRiuTUUN3XLsIpQldPZV
-	 w96/YvXldKTysohIackDs/Bbk3p7ZLl9CF+KbYxaTjGX7sOHl1J8yPXx9r4VhZaz+UA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792523767;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=UjcRWvdL2BC3TrFlxjVScdtXMjuSFx/nZAKVfJjRpTY=;
+	b=DkBerqvaJue0aDl+hZs2SosHXX0xNOLbIG+pRClyt1Auwa1ko/qGIOfDJ/m4lDVsWstD
+	 +QjzK6nThEiujJM1Tx93Cn13ODcjJmkUN9pAYr73/+3e2drzIJY+nHtr4pIYsA8H9IgPr
+	 +nMfGpkq4msHXCZ6dnYQfhujEad+bTwJYP7qTaRNZ8I5LXl3uQ74Osi9EjYxFDWEn7sCh
+	 MSnddmnqRYnQIXFPaY4V4fVRv6n4UtT8MtQQSACGKvLhlG9f5zyn3ZuTtx/LWnfETc7eu
+	 P4H03iMUHBbl0EBNbw6xXaZWBF1j9pWlG9cZEaJGFV5zq5wGrJreZHtRkWlsgYML3ng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kI2foLsg;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="gQa6/Cle";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E03606A31A;
-	Tue, 20 Oct 2026 19:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3261606A320;
+	Tue, 20 Oct 2026 19:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kI2foLsg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DC31F000CC;
-	Tue, 20 Oct 2026 19:09:54 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gQa6/Cle
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671BA1F000C9;
+	Tue, 20 Oct 2026 19:16:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792523394;
-	bh=ovQlggD95czzIsSuFFFOXTejTXPO0gwu2CoTMYAFg3I=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=kI2foLsgTSi2oRjIn+pQp2BXj5cltiuRUDb0t1B24devT1wip+qLzQ7PGNKkeXfOE
-	 1Z7yFYWk/cvjfzl8O5KI64zLictROqeheNNf6I0VjlekIJ/h43CXwSH//4dQwYcxGS
-	 JrPGh8o+n4858dEiC7MGOYl74wJIgH37C+ZB7+/KqcKifRa4NkK2ADqTNC2xg9xSDX
-	 QAUbm0c6XZd58Is0NAKyY/qIYS87B9ZUv0EpRSLL5L7Nin8wB3lJUFMT+2V8TFgCH5
-	 ioma9vkJhTbcVAPHPQMjBdlvnPm27hX8Gy9dL0/gtEs1Gd3jRIN2mXq+uOj5fuBq94
-	 h9+b0+w4bBYrQ==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 9A1B9F40066;
-	Tue, 20 Oct 2026 15:09:53 -0400 (EDT)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Tue, 20 Oct 2026 15:09:53 -0400
-X-ME-Sender: <xms:gbzXamUKYcrpjssOOc8DSkfGhDF3WP6CDCm42jwm6Ag_vgpr7Pwb1A>
-    <xme:gbzXatb-UmH5Tg9Z1FmjWRODpdsDsGXAocNTRlKA4Mgn2sExwCJ2W-faSAb3NnJk9
-    LtDrxQNe1rA0c2DaBEjXF8oaO74NqmpWahY8gLEZzj1waAPOl6aT9As>
-X-ME-Proxy-Cause: dmFkZTGKdi/GfMzdxPHGEfvPy1C1gOrwx57H13otpJGvmTnAe20XYgdujii0sMUac7KkMs
-    pAFmLHMLuJk8b63/774vYB8yUtnFZCNuxxhZMfMMJ/F0ezeVyJ/O3+82AQmPAUfko69eEy
-    hSzRfKmYXuJnYF69XIWfscf4lTCRCwct7WhCfqxjvDEqL4D8UO1lQ/Dd2SGfo2ZKHz4u0A
-    DBfl2RVHNlWZPyNmXmLwmLsBUV+b4TGVTMvdFNppJyxguAaigQlcEuxa+U8yymreP00FS3
-    L3icWQhoiwgy1iiYPRsIZqYVtSHmqkrKkzwUS06VNSRwLHAQc9LZRpDPYTao+7QlkIx4E7
-    IEPiYnAX8QNyXOQyGM5geHPDDdchiLIq88fSBYBCajn/waHMdZVxTNeayoJPEBrBmFvCGu
-    Xg3hzfDNvLYPuesntGklFkqXSxew64sW5ZfBU+MMZ4j90R0ZQAeLfvNcTXV/GEAqMu+qR3
-    ESp2vCFw5KLX4pYsYVFGyvR1SawUQgfRn02M6hbP36YG7JxEq2wXhu3QlCy6G9hoqpYR39
-    9ghgAi5538zAwW0BYtEbFFRM9wmEdAjnD56wgvCYQq5RC76FzqzE3mKs4KuUCauWQzZ0iJ
-    L1NCnu1BRYziuEgIZKI1VhyDVBsWV/KNki+DmlnN+O7SLbnwWx6Zd/GorhEQ
-X-ME-Proxy: <xmx:gbzXanJisgjiNJBilY8UeCrmHgG-hfDn4Nq1OeNb1iOVLGsUlOYwhw>
-    <xmx:gbzXasjtmPfPbqJPsHtRPhjJS2YlkEY2nE2QD3F82GWzx5okwHepRg>
-    <xmx:gbzXao-t1RGQPQo8YZTLJ6Xxhw6QP4R5ZiZ5Zf2b8bKp7VuT5xdWRg>
-    <xmx:gbzXaooWtJdUWYhyxuqrr07_x_JxRSYZd4DmAXEqqVz3HFpzhsirZA>
-    <xmx:gbzXalOey-wvnwk2iTj9kw-EY9uSORXHHrHkQqyv1QHyTcUhAW6Ostxd>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 6D45F782738; Tue, 20 Oct 2026 15:09:53 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=k20260515; t=1792523767;
+	bh=UjcRWvdL2BC3TrFlxjVScdtXMjuSFx/nZAKVfJjRpTY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=gQa6/CleNS3xUJ8mhSgRJbW9WzgAGva4e2f9agAcAvBfEFQE2JEz6PDfO89WvSqVh
+	 fAAVaYQWrFHxzd1XRWwoZIGtusEmqs1DNrP3Npu8l3bL0vYrAzCNX7vUQkhC3xSTYd
+	 GOFG50rIu7R+tAOdysAuiFYu5k7fPUNKF6QX8SdbLDoNRHa1p4xwSeQpJTqgiy5Qos
+	 9TlOdWlF9sCuhLDcfbvlMhR8HAa23s8gZEGcbUFhqxP/QqESUeNUqlFkOnkOWCj2rT
+	 B1rTqwHLpLgd2HhfBrOQA6oLAR14kzmq/hC8/91NDgd870bVzab5XrK4b3/PrXlwvI
+	 LOgnGEnsnkZnA==
+Date: Tue, 20 Oct 2026 12:16:05 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+ Stanislav Fomichev <sdf@fomichev.me>, Taehee Yoo <ap420073@gmail.com>,
+ Paolo Abeni <pabeni@redhat.com>, Kaiyuan Zhang <kaiyuanz@google.com>, Bobby
+ Eshleman <bobbyeshleman@meta.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Sumit Semwal
+ <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Dragos Tatulea <dtatulea@nvidia.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Tariq Toukan <tariqt@nvidia.com>, Kaifeng Wang <kaifengw@google.com>
+Subject: Re: [PATCH net v4 0/4] net: devmem: fix RX and TX binding teardown
+ on device unregistration
+Message-ID: <20261020121605.2e0004cd@kernel.org>
+In-Reply-To: <20261015163915.1166043-1-almasrymina@google.com>
+References: <20261015163915.1166043-1-almasrymina@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,46 +71,18 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AY0IOz-isJ-R
-Date: Tue, 20 Oct 2026 15:09:25 -0400
-From: "Chuck Lever" <cel@kernel.org>
-To: "Jeff Layton" <jlayton@kernel.org>
-Cc: "Donald Hunter" <donald.hunter@gmail.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, NeilBrown <neil@brown.name>,
- "Olga Kornievskaia" <okorniev@redhat.com>, "Dai Ngo" <Dai.Ngo@oracle.com>,
- "Tom Talpey" <tom@talpey.com>, "Trond Myklebust" <trondmy@kernel.org>,
- "Anna Schumaker" <anna@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <e776dd28-44c9-42fa-b2c1-fd1491e4c231@slotpi15m67>
-In-Reply-To: <20261020-nfsd-filehandle-get-v1-1-8c54f625800b@kernel.org>
-References: <20261020-nfsd-filehandle-get-v1-1-8c54f625800b@kernel.org>
-Subject: Re: [PATCH] nfsd: add NFSD_CMD_FILEHANDLE_GET for root filehandle lookup
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Hi Jeff, thanks for the patch. Review findings:
+On Thu, 15 Oct 2026 16:39:11 +0000 Mina Almasry wrote:
+> Fix two device-unregistration lifecycle bugs in devmem TCP bindings and
+> add netdevsim support plus selftests covering both RX and TX device
+> unregistration:
 
-1. The selftest's proc_filehandle() cannot parse the /proc reply.
-   write_filehandle() emits the handle via qword_addhex(), which
-   prefixes the hex digits with "\x" (net/sunrpc/cache.c), so the
-   first hexval() call fails and the function returns -EIO.
-
-2. The new binary is missing from tools/testing/selftests/nfsd/
-   .gitignore, unlike the four sibling programs listed there.
-
-3. The yaml doc for maxsize and the kernel-doc claim the handle is
-   capped at @maxsize, but the code silently clamps to NFS3_FHSIZE.
-   A caller passing 128 gets a 64-byte handle with no error.
-
-4. My sashiko instance here noted that fh_proc_mount() leaves
-   self->mnt behind when mount(2) fails after mkdir() succeeds, so
-   teardown's rmdir() of the tmpdir fails.
-
-Can you send a v2 that addresses these issues?
-
-
+This seems to conflict with something in net-next.
+Please wait for net-next -> net merge during this merge window,
+rebase and repost. I'm assuming this is based on an LLM report
+and not something you're hitting in real life? (cover letter
+should state how you discovered the issue)
 -- 
-Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
+pw-bot: cr
