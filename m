@@ -1,47 +1,46 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.2
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1792504600;
-	b=sEVbWXs5WmzwpDuEOhy0Lj+cfBT1oqeFe+tjrUS0KpACmsmbEOhNvvnq2GfW/tE0VaKP
-	 rVTP9epmEIZHsc4x+ThirMZr1OVUJ9qEXSa7gTL0CFHeYaR+wlEL3ggnKjzU6PDdnp6mU
-	 ipuUABOJ9QULNtV3zV4zHJyoeZITkQcvesZ1tgurH03QLboadT093X/LgG79tps5Hw4iC
-	 oGZJRov+eOCINcsTJu8sY/B+FIMdP79ejj4j0Ky53zOqoS2vqfBTdBsDHliAHm+Y1qbiJ
-	 Rq+IFAYmKXRG8u0TgayvY/a5H5FW1fsBxnFxRqwx8lOf1ljdSTIp9+cRykXNO/Irxhw==
+	b=EEopc2Al8jNIcyxUKEhyLHX304GAKKgluxDXpOZffrMyutxF2cnz9j6RpPvGUPVdBINV
+	 nm7hoqUtnr/IXFC9yem5nod8v/8/+AHnOf5bvbXgFcQLl4cnDj4i827DoXTYBdydaMGtJ
+	 YWcp+xGAgGEXlnFcKFXGH/aFXx+IhzFIeim0cn5WhLWMgT/utS2ESRKHRVa4Uh8704lf3
+	 bMHMoU33vtx4n/S/PptoH27Rkdf6apkKT/8I+lMixomp/78sw3A1oGZHSgC1smekJw+UY
+	 aOpgc9oSNJhDOEP56qoKcHy7dFHL/F4OPxEbVyKCBjoqAcveSuPiL+iKOZE1cVI5BrQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792504600;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=l8TpnDSr4xMVn+kzn3EMXGvx3pJwLmxiXIETZ9Ka+Pw=;
-	b=t8ojVmoSg++VVULjcwS5Ngyc5S0OdJLGTEAOkcMIRZufr9iPRROKXKCTBUoiLvsWHT/g
-	 kU4rX/pZ+DsrxJ3qIlvlYqXXfyHYd3wAX5Jy8HBdxcB5gz5hLCyqVhuRGH6BowEyeGJ7t
-	 D5vAnDSqM8OMCibsOPCVgImhXo8gbjvpyHbFDz5HOWl+DMZ7dJUU5gme7hQlEmIJGXOGF
-	 gk9pDtbT347aWqzw56jKeM/ZtBbV6Eq4mSJaPq+WaPpSdh+0YTLG0mSDZQiheXpHX/8oO
-	 E1Ww2u0tC498R8VVwtknfWZqzbs2bshFgULfItO0KrCQJcUmQBZb4QBxdkICVOJqogQ==
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=HYCpdEa0CjagDkIoEI9c3ElxA1vOooGlVLR/xOXvad8=;
+	b=ccqvsXnh1YjkjlSbsbi6FLzNl7+yY1/IYbDUeY2z3bziPgenFgZWgJZ8mSg/EWaP2nfb
+	 3MgtAAfdvS30ReJc6ocTtOWPlBkfcNcj+wTFcPJBwg2/mtXHgXxHJawc42lvxMQL6aq4Q
+	 FV+4ZhZTRk+FminzNaVZZnA3TtBaaIMIEfjE2S2Iwrt4TT4fUduC+uSXZA2i8X13mmBzL
+	 4uul2AJy9/a76EB8fpNTtXI9iyEzsguHJc5AywxxoRoKzPKLKnirx8gqK/uHUFwBkzpki
+	 cm2NHnV0qmHJBgRZE/62j0xCoumAIJBEwXGt3nkCM+E4SRDbijb9bh0p3+jWiEuM9Qw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=163.com;
 	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=Xbn3xy8E;
-	arc=none smtp.remote-ip=117.135.210.5
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=hdu87VDv;
+	arc=none smtp.remote-ip=117.135.210.2
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC3C606A31A;
-	Tue, 20 Oct 2026 13:56:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DEC3C606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA8C606A319;
+	Tue, 20 Oct 2026 13:56:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1BA8C606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=Xbn3xy8E
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=hdu87VDv
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=l8
-	TpnDSr4xMVn+kzn3EMXGvx3pJwLmxiXIETZ9Ka+Pw=; b=Xbn3xy8EZpfuq97yov
-	qknSOML+iIpfh0Q4t1XjFQbK7MHdWvwpO5ogWN7aXRlAKoEyANtrzzAVB3ybBo8f
-	sVefRMzZ1vKFi6XCKG5/Y0cCeF/oVeehlDupT6pbXwe/S2ZJaWrd48vtmri3IYiq
-	74bhyW95YsnaJAxCBKSpXLlws=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=HY
+	CpdEa0CjagDkIoEI9c3ElxA1vOooGlVLR/xOXvad8=; b=hdu87VDvYUaeZ5u34U
+	VT1VuHXx33f34jw4PdosOs3vNYS2jLDIYUV5WCWHN7QUILrZn9s7EkrYSrhr0yGP
+	yH6qfTcza8A0+bSBThz7nUMql/1LnTs9bh5sr04S3Nj4FS9IBRntv0Vp0UqhGU2a
+	8/FObYLUdmavPUbrL+9IGH/uU=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgD3YQntctdquSfMAw--.51436S3;
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgD3YQntctdquSfMAw--.51436S2;
 	Tue, 20 Oct 2026 21:55:58 +0800 (CST)
 From: Xia Yan <yana06070@163.com>
 To: netdev@vger.kernel.org
@@ -54,13 +53,12 @@ Cc: andrew+netdev@lunn.ch,
 	linux-kselftest@vger.kernel.org,
 	pabeni@redhat.com,
 	shuah@kernel.org,
-	yana06070@163.com
-Subject: [PATCH net v2 2/2] selftests: net: check veth carrier after changing channel counts
-Date: Tue, 20 Oct 2026 21:55:44 +0800
-Message-Id: <20261020135544.24441-2-yana06070@163.com>
+	yana06070@163.com,
+	stable@vger.kernel.org
+Subject: [PATCH net v2 1/2] veth: keep carrier off when resizing channels with a down peer
+Date: Tue, 20 Oct 2026 21:55:43 +0800
+Message-Id: <20261020135544.24441-1-yana06070@163.com>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20261020135544.24441-1-yana06070@163.com>
-References: <20261020135544.24441-1-yana06070@163.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,169 +69,61 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:PSgvCgD3YQntctdquSfMAw--.51436S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKF4fJr18tF17Gr1kZFWDJwb_yoW7Gw1fpF
-	s3Cwn8Gr1IqF1aqw4xKw1xZFyUW3Wqqw4UX34fK34xZ3W7Kr9aqr13K34Ut3W2krs0va13
-	ZF9a9Fn2g3WDCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zifbb_UUUUU=
-X-CM-SenderInfo: p1dqtiawqxiqqrwthudrp/xtbC-A9o7mrXcu9LwgAA3c
+X-CM-TRANSID:PSgvCgD3YQntctdquSfMAw--.51436S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF4rZF1rAFWxJr47WFy3urg_yoW8Ar4kpF
+	4ftFW5Cry0qF47ta1vqayUZFyrJa1xX34agF9Yk3yruw1UtF95Xr4Fy34j9F1UKFZYqF42
+	vrW09r1Dua4DZF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piPCztUUUUU=
+X-CM-SenderInfo: p1dqtiawqxiqqrwthudrp/xtbC3w5o7mrXcu7V-gAA3d
 
-Add a regression test for veth_set_channels() incorrectly reporting
-LOWER_UP on a running interface whose peer is administratively down.
+veth_set_channels() temporarily turns carrier off while reconfiguring a
+running interface. It then turns carrier on for both ends without
+checking whether the peer is administratively up. If only one end is up,
+changing its channel counts therefore reports LOWER_UP even though the
+peer remains down.
 
-Test the up/up and both mixed up/down combinations with GRO enabled and
-disabled. Resize the RX and TX channel counts in both directions on
-each end and check LOWER_UP on each running interface. Also verify that
-rejecting an out-of-range channel count leaves that state unchanged.
+For example, after creating a pair with two RX and TX queues per end:
 
-IFF_LOWER_UP is masked on administratively down interfaces, so do not
-use it to assert their raw carrier state. Omit the down/down combination,
-where neither endpoint can report LOWER_UP.
+  ip link set vca up
+  ethtool -L vca rx 1 tx 1
 
-On an unpatched UML kernel the four mixed up/down cases fail. All six
-cases pass with the carrier restoration fix.
+vca incorrectly reports LOWER_UP while vcb is still down.
 
+Only restore carrier when the peer has IFF_UP, matching veth_open().
+The local interface is already known to be running at this point.
+
+Found during LLM-assisted source review and reproduced with a veth pair
+in a network namespace. Built and booted UML kernels before and after
+the fix; the accompanying test fails in the four mixed up/down cases
+before the fix and passes all six cases after it.
+
+Fixes: 4752eeb3d891 ("veth: implement support for set_channel ethtool op")
+Cc: stable@vger.kernel.org
 Assisted-by: LLM
 Signed-off-by: Xia Yan <yana06070@163.com>
 ---
+ drivers/net/veth.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Notes:
-    Changes in v2:
-    - Limit carrier assertions to running endpoints and omit down/down, since
-      IFF_LOWER_UP does not expose a down endpoint's raw carrier state.
-    - Use log_test_skip() on veth creation failure to avoid a stale retmsg.
-    - Include the discovery and reproduction details in the driver commit.
-    - Driver code is unchanged.
-    
-    v1: https://lore.kernel.org/netdev/20261015085821.12725-1-yana06070@163.com/
-    Review: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/8081
-    
-    Validation for the revised selftest on the original net baseline:
-    - bash -n passed.
-    - Unpatched UML kernel: 2 pass, 4 fail (the mixed up/down cases).
-    - Patched UML kernel: 6 pass.
-    - Injected veth creation failure after an earlier failed case: SKIP no
-      longer repeats the earlier error; the aggregate failure is preserved.
-    
-    Reused the existing UML kernels; no kernel rebuild was performed for
-    this revision. Prior build results and their limits remain archived.
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 643b97d..4e75830 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1372,9 +1372,10 @@ static int veth_set_channels(struct net_device *dev,
+ 		 * to identify the range we have to disable
+ 		 */
+ 		veth_disable_range_safe(dev, new_rx_count, old_rx_count);
+-		netif_carrier_on(dev);
+-		if (peer)
++		if (peer && (peer->flags & IFF_UP)) {
++			netif_carrier_on(dev);
+ 			netif_carrier_on(peer);
++		}
+ 	}
+ 
+ 	/* update XDP supported features */
 
- tools/testing/selftests/net/Makefile          |  1 +
- .../selftests/net/veth_channels_carrier.sh    | 93 +++++++++++++++++++
- 2 files changed, 94 insertions(+)
- create mode 100755 tools/testing/selftests/net/veth_channels_carrier.sh
-
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 590b33e..4004014 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -128,6 +128,7 @@ TEST_PROGS := \
- 	udpgso_bench.sh \
- 	unicast_extensions.sh \
- 	veth.sh \
-+	veth_channels_carrier.sh \
- 	vlan_bridge_binding.sh \
- 	vlan_hw_filter.sh \
- 	vrf-xfrm-tests.sh \
-diff --git a/tools/testing/selftests/net/veth_channels_carrier.sh b/tools/testing/selftests/net/veth_channels_carrier.sh
-new file mode 100755
-index 0000000..03c2995
---- /dev/null
-+++ b/tools/testing/selftests/net/veth_channels_carrier.sh
-@@ -0,0 +1,93 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
-+
-+require_command ip
-+require_command ethtool
-+
-+if [ "$EUID" -ne 0 ]; then
-+	echo "SKIP: root privileges are required"
-+	exit "$ksft_skip"
-+fi
-+
-+trap cleanup_all_ns EXIT
-+setup_ns ns || exit $?
-+
-+check_carrier()
-+{
-+	local dev=$1
-+	local state=$2
-+	local expected=$3
-+	local carrier=0
-+	local link
-+
-+	# IFF_LOWER_UP is reported only for running interfaces.
-+	[ "$state" = up ] || return 0
-+
-+	link=$(ip -n "$ns" -o link show dev "$dev")
-+	check_err $? "Failed to read $dev link state"
-+	[[ $link == *LOWER_UP* ]] && carrier=1
-+	[ "$carrier" -eq "$expected" ]
-+	check_err $? "$dev carrier is $carrier, expected $expected"
-+}
-+
-+check_state()
-+{
-+	local left=$1
-+	local right=$2
-+	local gro=$3
-+	local expected=0
-+	local count dev
-+
-+	RET=0
-+	if ! ip -n "$ns" link add vca numtxqueues 2 numrxqueues 2 \
-+		type veth peer name vcb numtxqueues 2 numrxqueues 2; then
-+		log_test_skip "veth carrier: $left/$right, GRO $gro"
-+		return
-+	fi
-+
-+	ip -n "$ns" link set vca "$left"
-+	check_err $? "Failed to configure vca"
-+	ip -n "$ns" link set vcb "$right"
-+	check_err $? "Failed to configure vcb"
-+	ip netns exec "$ns" ethtool -K vca gro "$gro" >/dev/null
-+	check_err $? "Failed to configure GRO"
-+	ip netns exec "$ns" ethtool -K vcb gro "$gro" >/dev/null
-+	check_err $? "Failed to configure peer GRO"
-+
-+	[ "$left" = up ] && [ "$right" = up ] && expected=1
-+	check_carrier vca "$left" "$expected"
-+	check_carrier vcb "$right" "$expected"
-+
-+	for dev in vca vcb; do
-+		for count in 1 2; do
-+			ip netns exec "$ns" ethtool -L "$dev" \
-+				rx "$count" tx "$count"
-+			check_err $? "Failed to resize $dev channels"
-+			check_carrier vca "$left" "$expected"
-+			check_carrier vcb "$right" "$expected"
-+		done
-+
-+		ip netns exec "$ns" ethtool -L "$dev" rx 3 tx 3 \
-+			>/dev/null 2>&1
-+		check_fail $? "Out-of-range channel counts were accepted"
-+		check_carrier vca "$left" "$expected"
-+		check_carrier vcb "$right" "$expected"
-+	done
-+
-+	ip -n "$ns" link del vca
-+	check_err $? "Failed to delete the veth pair"
-+	log_test "veth carrier: $left/$right, GRO $gro"
-+}
-+
-+for gro in off on; do
-+	for left in down up; do
-+		for right in down up; do
-+			[ "$left" = down ] && [ "$right" = down ] && continue
-+			check_state "$left" "$right" "$gro"
-+		done
-+	done
-+done
-+
-+exit "$EXIT_STATUS"
+base-commit: 513444cc62e231a11c9b15ea88de0890da9b2b4f
 -- 
 2.43.0
 
