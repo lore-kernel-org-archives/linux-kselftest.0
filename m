@@ -1,99 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.170
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792477342;
-	b=zwiIn9GFzpPAyTtHK1hBNfpWCdg2GfJs2S67GhtT5pee6ztecmzK58ASaav6+1nH4gZh
-	 x8u/2lwbgR5KVFjgZTYYvizrB6JzUmdVntFZQBtw2aOnaQYAAp7IBYPax6lKJ6jWmBX7h
-	 jbdK1y9lKhONI6RVF1ITjugV9sDRsUfdnmxXNXwA2wTuJV/Xnm80wrQZI7ReMAmp4wLV7
-	 bIM5gLnyuxAfgSmVA/FC8Gby8naMFBNdF2buhe3t5ZStEiKtxk33Y6pbb0Impw9KtpePZ
-	 f+y6jO7DrtQA0BwNHKyf7qqNVsyF6acxSyI/rOdBZs2xtJzoQiPxKydlo97wwQIeGpA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792477342;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792478289;
+	b=t5NscxH2eeAE2QybwnlYoFH1RR38NLluKg5G9D6uiMKfs35VuVB9f4A9bXNebz8duTuS
+	 ouJIqD/LV0krOi4QkL4qU7mla9kzsjQS3Cxi6YAVWHAfFxJiuSaBu6FxpBB1SyRouM89V
+	 xmjf4J1R3iXR67BdiTgsr83V34ZvNtWFI+JNaoujwiBaXyQrn5mwD/aDsZDjO5O7p17gu
+	 NxXNtiBPHA3qx1LrBYQikTtHXwlQ+sE4r0SaGwNZhXSvx3/PFZ6NLcu5m5mfC1TSxv97G
+	 JpNFCjg2oUo7mbhnk2WnyFysOWg0nbiU82SCurCLu/RjReBTuwFSkuWbGrT4l+zxTow==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792478289;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=kf8/+k3Jjj7ru8eZKZwxf7K+ABa74mbZZPeMICUo+Y4=;
-	b=pAWl2TmIzNNhbSm51qLClVdRxUvQ12rr+AN2iMUtj5cjxkPldo80Dcsh6VTW6SRGqKa0
-	 eoTXR+dseEgblbMZh3yjWd3yrC8SIT+D4NrPMxijFfPtw7MzbHWTIIdWgxH1V9UR6BXcZ
-	 +S61bwIWSICnjDe1wn9ITe6qYaRb6WS4rq9gFZPsLavhaB/rKhRw28j6I7BgqZqRxqS14
-	 uZe+UK1jitkiKwHi+5G3+lpAs2dUR/q/o8uQHhUmrjaix/ZgrmCpNmbycsdCJoifybd+E
-	 r3DmmDZgNA4UYZTBkIQK0oowKK3MsCJXwS51dTQNJkeGxXVheBPapuytVl68TkUgOSQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=UzAZEenc0KxEq0x6RyPzYufxdEkxW9SFi1K+hoFFagM=;
+	b=ItiBbhUbYFXp+pEr/ydLw4iYcVh13DZ2qTRZy/tF6Nz2RQFEyafdwaAUAy8AgU8QOeXb
+	 /w3j65ClaZ8X0CLxoy8UcZWzAp5nxo+N1UBIAADk1m3Ob4iiAuG65kx0VtBGwzwYMHN52
+	 n+FcWxb1z231Yl+zjlYzU7ovSoc3HZjk/tN7BkfntiUrGcsra2wdpmpCNJ9Y9ChZFOYDa
+	 DBp/g9S0GGW7Ghg07k0YZNS6Yc/x0e1vJCtbfp84HzvGOf3c9AiSURfXHVBuP/KNUfZIl
+	 JLQo5Ln1lwqTzfBjtLmv+BQhTQeZ9F6Ux0MQuX4Hbllny6YjXTpyXd4ubys8Ldb7vEQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=lKX2o7+H;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.170
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="KdI/M7KN";
+	arc=none smtp.remote-ip=209.85.128.46
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7FD606A31F
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:22:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A7FD606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD88A606A320
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:38:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD88A606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=lKX2o7+H
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2e98798cbddso11185875ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:22:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792477341; cv=none;
-        d=google.com; s=arc-20260327;
-        b=nILsGZwefvakUddeZ2hwwpwv6vbLLp+8gl6YVTY3aAtGgfsT2eK6JDUIfPBLy5BQHm
-         aztnUnxVYo2n+cDLJqXHDHJYCB23Nvd8y+bLjR7MhI9kOZXfvgYLkMcgd58sVVm3YdOJ
-         DIVUgznsODOq5pVHV1mbuB4aBQQABtat0oZgMCBd7lghPNS6lOy4c6wr+mgYyd8YYuIE
-         lm0eo5QPJ7qaPdxLLp3HPvogARV71/6IQ6pC5E8jlMU03bCWjr+qUXZevd37fzLFgVgc
-         4tJQE9yfW3Oh/llrHco7/kn/oV1D/rOc6AlKB/j4xjMRTT0tz1Nzw+3iiEWtG9cX6Zzl
-         1atg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kf8/+k3Jjj7ru8eZKZwxf7K+ABa74mbZZPeMICUo+Y4=;
-        fh=OiBWbf01Gg/lJaXAaqPGSTEhm/2sy/xbXzhmv4vnD1M=;
-        b=adY5VNDPBdql4ITMPhwXeQRR1Z8coLg2nfLffW9QSO/0LjEDtaVy5P8/SI5A1fn01D
-         wx6+oC9BbzeLnOQFalUhI27NABrla3xpvBuagiZTX/Q7ST4fINQ7JE7n/8E3/dccErvF
-         hVNo5YQTVgwbJcs9RM7cP49L1taZg9YVzhip9Tu/83uHOXnhuN+qI0IVT76adxnutww8
-         4we3u1/Uqdms9bWfF9ZTg7xps32H93pGfnbCowFnfJUosPj+hzGI1zoYe+l8f16zk4FW
-         H+TgdUeqwUfGPt3zXQr/hNHg1IVPp5ZQUA4WPB+/RpS1V8Trlk/oMQWZ87xnV4UDd176
-         issA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=KdI/M7KN
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a1ec92f655so3450095e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:38:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792477341; x=1793082141; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=kf8/+k3Jjj7ru8eZKZwxf7K+ABa74mbZZPeMICUo+Y4=;
-        b=lKX2o7+HuD5fpQzZNTLEVq9KL1e8Mg8z16cabHaSJ/2C7LS6z3N6JJwzDTah6U7qBI
-         0Lj4Nw1Z6+fnib8fx9+Q7HnXTwIWwK9PuO4Ap4RAkWDiDNOrml42b3GiPpLZ7uqQbsYm
-         2CWHNx7TTHt2PQdvvmwyLu6JL14GB2SIAM3kcTBbj7gXgc9FNj5+tctXSfSLVQhuQ8Av
-         Wjt1JUWa7uWleeCanSskhVMMuuU0Gpu544YbSCxqAF1tJH5nTQd2lquAcOtWdgTEpbL3
-         rWxG3PRAJVitBBMaUDBkGgKW7mWpMCzCIfVJDBTZ/TtIQUwdIa9PTmGbyArlFuSM8Yai
-         Zzmw==
+        d=gmail.com; s=20251104; t=1792478287; x=1793083087; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=UzAZEenc0KxEq0x6RyPzYufxdEkxW9SFi1K+hoFFagM=;
+        b=KdI/M7KNAmf+mbjijy9pL7ul3XOVYz1JSfuxwrGvg7QCBlvopedyQkPagbYjz51YCe
+         N15kUbT93hEG+kS/QHuwQeHHTOJ7E2HCCehDRXEfDqyIbV7UVklz4dhhcmwFcgBwM+Vh
+         KP6rfCjZG85ST4pwA1EhOL3soCxjpgg2GWhhk/5lDqW/zwGF6bSjUqblS0Lv0p0dRtAI
+         L7s4sdZfzrIWA9G4PNKwEsTPFm5xfEfkvKvGdfmAw9ctvrbMVsWzGpzikCxtBB0dCaFM
+         LzzLtgeCEtMv+3+dxohh/le6MTut5S4AVyrRy2JAVz69h7ewmKTm8GhLc5l2CAnjD93B
+         t55w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792477341; x=1793082141;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kf8/+k3Jjj7ru8eZKZwxf7K+ABa74mbZZPeMICUo+Y4=;
-        b=uWsl7NARXupw56Hh4RxsRN1C9FMmplHXS0iPmbVrenhA3erHD3pQpGWb/nBGgAqI/a
-         cZPjpbgfD4ZZsViMo8M/7nthd6JypjcjVfLP7LXSBZDiqCGeNHb2e/NCp+2QY9GHJg6g
-         2qQuGrbVGFjlWPHXxm2NEJ0VxJMtwzKpGHUsyo6Wd/LflZMjpbV8f5hFy+L59BR3fFYR
-         zR+lPdW0ziBV1OoU82fZc07LdyHeOUSXIFxHt8J35DG0q0qOX9uuDKc2Lk04vZV9wZAE
-         c5qszNIKsIpYLhxaLcLDUJMLxiedXE/n9hWnDyzb30D51i3Ho40hKOMcThCDfIeAw1Ey
-         ornQ==
-X-Forwarded-Encrypted: i=1; AKwUvByPIwmnR+n1QBXDjrdq1r17N1nIFT5sV5wOJkbRSUEy2bY6xETC4vdCinHH5ILZ89O0K1s4AZFCm2x7LuUEPEk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK3rLh2LUbRhPH7B1SvwJUyMV4Qt7iy6np7THLcOIT1Q2FfZQd2
-	2k+9boufFmssBO7Zs0D2k5sowJSuP5XI7QxE7GYY6kimABK2QU3ZkjvGgELP3gMKPOY2ILO5wpZ
-	dYtET/Knfjlt2341JWkCqJJQYg2bMLO0=
-X-Gm-Gg: AYBFou0vTdLQsv+MzuVzJQY0uwWjxOwskaclH1aPLJPei8VffynLImxhv8p66utyP7l
-	RBy9rIoesD7lS2GLar9/CPrEGqGEmiCN4pwb1NuKauPO1/6OqBAk8dGeQn5pce3OVHNpdJXcNNu
-	yiZdmvbhtxJkTb0uqiHZisOWRKZhzpXQU30bt0NiiGJAbhIyQrWD++l3rZlr0CvRrQ7qCBW0AxK
-	AzASteP0Hhua1Sskd2aoU0B0lQ45MW13D1EKl24DeOPcSgPpm9jWmNg5tIiS69awettzM7hBpyb
-	kPN2GuEmHKhg0Rdoy0qMKv9nMI8PmWn0Po/Ev197AEoV1NDIGA1RAQU=
-X-Received: by 2002:a17:902:ce81:b0:2e5:334f:f47e with SMTP id
- d9443c01a7336-2e9a69ea07fmr86514295ad.21.1792477340861; Mon, 19 Oct 2026
- 23:22:20 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792478287; x=1793083087;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=UzAZEenc0KxEq0x6RyPzYufxdEkxW9SFi1K+hoFFagM=;
+        b=VC6i6SWNVpjViMlDwzXz4ELv/suCGkK+Y7GMMKi7RYZASekiR5/xec9iOrt3J1Bp5x
+         cM/llkAEtzIJBc5BpKlBvL35cGbQsAIu4cdS4jmvVQhVHLSd8a3G1hJ2nO/JBzKDwoYi
+         NMAc9WXW3izJdsL8z07rCh8FC6KWDWh1IPODeYXKkw4DQUSxIS3wkjpw2bAYzrsLO79G
+         Hwv/uraFDXZWBpzbgEE3yUcP0PpjxTMK4TNnJx4cmrdqIlKci7LhyKcdQ408+i2asAyk
+         j6hiYlqDHJtw/5Msp3SjGdC1gerQCB2QTi3rudpjcbPvytAk9SaMPLg0d0kplSG0fW4q
+         Exhw==
+X-Forwarded-Encrypted: i=1; AKwUvBx0Z+2MKuBrwgnOXPMhwEFf/I01sz9JcDzODLOezgQSKxJYw1ciNQE0dCycP8hCRTPBsWRTgA7+izFAypffqYo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK7RQts8Ex+TEFInlY0IXkBR1ZtFPKKQ+CzadkshX+CUoOpFwp3
+	iEZQbiQ1Eda1nl1qB5DS08P1hd5TMAkR4tIQZaNd7ERBMN8Qejd0tCLJ
+X-Gm-Gg: AYBFou3RK2vZxBs3ACo6nduaqlWD4Z+KVw5HmAfqsLrNT16mTiluDFgSkhqyCImTWhX
+	wI716AHk+FBrYTYGYgBanSKhNhcaBpb1X5FZiM6bK7ZG969qbxHVQqN+k0ohjpeNxLuVuCgJgSi
+	8Bfu7uopo3UnSh3wyTjMdGJ4lrf8PkNAomI1sgzr6qPfzQiKz31QlTv0OXXSSEIOqOFJJqDT/dp
+	g27ETPk4o4i1qVgRVs3elKtIBuaH5GmsqPlo/dMBOSGfMc9uO3mEQ1XVEbqgbirGzH0vdERRlt3
+	yDArUgkGNFQrDzM+efVX2vnRg/gd+dFYZn1KPqneaHQMUeKOnGNeWKbPQASu2ZNTOr3UoG9rvYl
+	P7W4YpXE8E5iFn6FHD1rSu343EikL4AVS0WsL4qb/CtvMN6VW8ToXS1AdclXE0rNwDUuV/mYHh1
+	Qu3NC/90ZrWWzBcszyyAziDo++X3syl2zBYcthPLpsEf4R80Lzjv0G5DD3kWX3zKekR/t7+U5y9
+	MimJn6ecBLgotGy03fgmbFK/hv/+hdx9DQZ33+Yq6Iiq/xD/yf8Cd7eEDhN03fqUr2HLGEDbq2C
+	TxJMV6k1biFExFwgbdic19sykkSqwE9KU1oFhENjnAoz6MWXluA2s2w7jeoXLJBD1yTSD5wceNm
+	ljJLi1j/t91c/
+X-Received: by 2002:a05:600c:3114:b0:4a1:ac66:604b with SMTP id 5b1f17b1804b1-4a1f4c70117mr24583145e9.1.1792478286893;
+        Mon, 19 Oct 2026 23:38:06 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-9c92-6501-2169-eb9c-7ad3-f5db.310.pool.telefonica.de. [2a02:3100:9c92:6501:2169:eb9c:7ad3:f5db])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d820714sm3916393f8f.35.2026.10.19.23.38.05
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 19 Oct 2026 23:38:06 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Jason Gunthorpe <jgg@nvidia.com>,
+	Alistair Popple <apopple@nvidia.com>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	dri-devel@lists.freedesktop.org,
+	iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: [RFC PATCH 0/6] iommufd: harden DMA-BUF PAL setup and release
+Date: Tue, 20 Oct 2026 08:37:39 +0200
+Message-Id: <cover.1792477872.git.kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,101 +110,124 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261018-cgroup-kill-exited-leader-v1-0-c71ad94c20cc@gmail.com>
- <20261018-cgroup-kill-exited-leader-v1-1-c71ad94c20cc@gmail.com> <atYTukAn0-7CAXmp@redhat.com>
-In-Reply-To: <atYTukAn0-7CAXmp@redhat.com>
-From: Kirill Kolyshkin <kolyshkin@gmail.com>
-Date: Mon, 19 Oct 2026 23:22:09 -0700
-X-Gm-Features: AclHuK9ygSdoDJEA1JRd9ZHGPjt0wCVb9_5HzGSf6_SYCV4LA_12hP3cAjxp2vw
-Message-ID: <CAGmPdrypQQnmE1iCTWS46c47P0puRsA0Z4jYnXFFnZ0Um7KJOQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cgroup: fix cgroup.kill for exited thread group leader
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Serge Hallyn <serge@hallyn.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Christian Brauner <brauner@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, "Eric W. Biederman" <ebiederm@xmission.com>, cgroups@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 19, 2026 at 5:57=E2=80=AFAM Oleg Nesterov <oleg@redhat.com> wro=
-te:
->
-> On 10/18, Kir Kolyshkin wrote:
-> >
-> > cgroup.kill does not work in case a process' thread group leader is gon=
-e
-> > but other threads are still running. This is because __cgroup_kill()
-> > only walks the thread group leaders and sends SIGKILL to each of them
-> > with send_sig(), which uses PIDTYPE_PID:
-> >
-> > 1. The exited leader is still listed by CSS_TASK_ITER_PROCS as long as
-> >    the process has live threads, but a signal directed at a single
-> >    exiting task never takes effect: complete_signal() does not look for
-> >    another thread to deliver it to, and __send_signal_locked() now drop=
-s
-> >    it altogether.  The process keeps running.
-> >
-> > 2. The live threads of such a process can be migrated to another cgroup
-> >    by writing any of their IDs to cgroup.procs, while the exited leader
-> >    stays behind.  The destination cgroup has no thread group leader to
-> >    iterate, so writing to its cgroup.kill does nothing at all.
->
-> ...
->
-> > Case 1 can be fixed by using do_send_sig_info(..., PIDTYPE_TGID) instea=
-d
-> > of send_sig(), so that the signal is taken by a live thread even if the
-> > task found by the iterator is exiting. Note it was pointed out by Eric
-> > in [1] while reviewing v2 of cgroup.kill patchset, and v3 was meant to
-> > switch to it, but the change was only made in cgroup_post_fork(),
-> > leaving __cgroup_kill() with send_sig().
-> >
-> > Case 2 can only be fixed by iterating over all threads, so this is what
-> > the fix also does. Once a thread group is being killed, its other
-> > threads are skipped since they already have a fatal signal pending.
->
-> ...
->
-> > --- a/kernel/cgroup/cgroup.c
-> > +++ b/kernel/cgroup/cgroup.c
-> > @@ -4289,7 +4289,7 @@ static void __cgroup_kill(struct cgroup *cgrp)
-> >       cgrp->kill_seq++;
-> >       spin_unlock_irq(&css_set_lock);
-> >
-> > -     css_task_iter_start(&cgrp->self, CSS_TASK_ITER_PROCS | CSS_TASK_I=
-TER_THREADED, &it);
-> > +     css_task_iter_start(&cgrp->self, CSS_TASK_ITER_THREADED, &it);
->
-> I guess this change alone is enough to fix both problems?
+This is a narrow companion to Jason's unmerged DMA-BUF mapping-type RFC. It
+fixes setup and release problems in the IOMMUFD PAL consumer and adds fault-
+injection selftests. It is not standalone and requires this exact base:
 
-Correct; my initial version only had this change, and it fixes
-both issues.
+  c37cf2824740d ("cover-letter: Add DMA-buf mapping types and convert
+                  vfio/iommufd to use them")
 
->
-> But even if I am right,
->
-> > @@ -4299,7 +4299,7 @@ static void __cgroup_kill(struct cgroup *cgrp)
-> >               if (__fatal_signal_pending(task))
-> >                       continue;
-> >
-> > -             send_sig(SIGKILL, task, 0);
-> > +             do_send_sig_info(SIGKILL, SEND_SIG_NOINFO, task, PIDTYPE_=
-TGID);
->
-> I agree that do_send_sig_info(PIDTYPE_TGID) makes more sense.
+I used LLM assistance while inspecting, testing and drafting this series.
 
-Indeed, I added it for "making sense" (rather than for fixing the
-issue) after reading through the initial cgroup.kill patchset reviews.
-Eric flagged both places in v2, but only one was fixed in v3.
+I also tested DMA-BUF paths on a Raspberry Pi 400 and Pi 500+, using their
+stock Raspberry Pi kernels (6.18.39+rpt-rpi-v8 and 6.18.34+rpt-rpi-2712).
+Both passed offscreen CPU/V3D byte checks. The Pi 400 also passed five raw-MJPG
+payload-prefix comparisons through V3D; this was not direct or zero-copy camera
+DMA. Neither board ran this RFC or IOMMUFD PAL. The Pi 500+ connector state and
+mode remained unchanged; the tested buffers were not scanned out.
 
->
-> Acked-by: Oleg Nesterov <oleg@redhat.com>
->
->
-> Either way, I am not sure about SEND_SIG_NOINFO. Perhaps __cgroup_kill()
-> should use SEND_SIG_PRIV? I dunno.
->
-> Oleg.
->
+RFC:
+https://lore.kernel.org/r/0-v1-b5cab63049c0+191af-dmabuf_map_type_jgg@nvidia.com/
+
+Jason's branch:
+https://github.com/jgunthorpe/linux/commits/dmabuf_map_type
+
+This series:
+https://github.com/kmehltretter82/linux/commits/dmabuf-pal-lifecycle-rfc-v1
+
+Diederik's RK3588 testing produced a useful trace through
+rockchip_gem_iommu_map() and iommu_map_sg():
+
+https://lore.kernel.org/r/DLYLA3WQNN3X.3FB9MO8ZWBQ5@cknow-tech.com/
+
+Jason noted that this showed the same private-IOMMU-domain mapping need as
+IOMMUFD:
+
+https://lore.kernel.org/r/20261009125338.GB13920@nvidia.com/
+
+That trace is motivation only. This series neither revives my warn-only
+mechanism nor converts Rockchip. Jason's feedback on that mechanism is here:
+
+https://lore.kernel.org/r/20261009124259.GA13920@nvidia.com/
+
+Compared with Jason's branch, this series:
+
+  - preserves dma_buf_pin() errors;
+  - publishes the attachment and successful PAL list together under resv;
+  - unmaps and clears the published PAL pointer under resv before unlocking;
+  - keeps callback state alive until dma_buf_detach() returns;
+  - calls dma_buf_unpin() while holding resv; and
+  - tests pin/map failures, cleanup counters and retry on the same DMA-BUF.
+
+Patch 3 follows an earlier forced-window arm64 QEMU/KASAN double-free report:
+
+https://lore.kernel.org/r/20261016194022.62065-1-kmehltretter@gmail.com/
+
+The proposed release order is:
+
+  resv lock -> unmap and clear PAL -> unpin -> unlock -> detach -> put ->
+  destroy the pages mutex
+
+Questions:
+
+1. Is that publication and lifetime rule correct?
+
+2. Is c37cf2824740d still the right base for this companion series? If not,
+   which tree should I use?
+
+3. Can these lifecycle fixes stand independently of moving final mapping
+   selection closer to map time?
+
+   https://lore.kernel.org/r/20261016202653.97339-1-kmehltretter@gmail.com/
+   https://lore.kernel.org/r/20261019184123.GR13920@nvidia.com/
+
+4. Is the per-buffer selftest control acceptable, or would deterministic
+   setup/release race hooks be more useful?
+
+Testing:
+
+  - arm64 QEMU virt: two boots, 24 selected cases per boot, zero skips;
+  - x86-64 KVM q35: two 24-case candidate boots plus one focused four-case
+    pin-failure boot;
+  - a one-defect x86 control failed all four pin-failure variants on the
+    expected erroneous successful ioctl return;
+  - x86-64 GCC 13.3 built the exact head, headers and IOMMUFD selftests; this
+    build was not booted; and
+  - KASAN and lockdep initialized with no diagnostics in candidate runs.
+
+The QEMU/KVM campaigns use mock IOMMU domains and the selftest exporter. They
+do not cover a non-selftest PAL exporter, physical DMA/IOMMU, forced
+invalidation races, or the complete IOMMUFD selftest suite. The x86 negative
+control validates patch 1 only; the earlier patch-3 report is separate.
+
+Testing with a non-selftest PAL exporter would be welcome, especially failure
+followed by retry, invalidation during setup/release, repeated revoke, and
+multi-range buffers. Please include the base, config, architecture,
+exporter/device and full dmesg. A full IOMMUFD selftest run on another
+configuration would also help.
+
+Thanks,
+Karl
+
+Karl Mehltretter (6):
+  iommufd: Preserve DMA-buf pin errors
+  iommufd: Publish successful PAL mappings under resv
+  iommufd: Clear the PAL list before dropping resv
+  iommufd: Keep the pages mutex alive until DMA-buf detach
+  iommufd: Unpin the DMA-buf while holding resv
+  iommufd/selftest: Check DMA-buf pin and map failure cleanup
+
+ drivers/iommu/iommufd/iommufd_test.h          |  24 ++++
+ drivers/iommu/iommufd/pages.c                 |  24 ++--
+ drivers/iommu/iommufd/selftest.c              | 111 ++++++++++++++++
+ tools/testing/selftests/iommu/iommufd.c       | 121 ++++++++++++++++++
+ tools/testing/selftests/iommu/iommufd_utils.h |  30 +++++
+ 5 files changed, 298 insertions(+), 12 deletions(-)
+
+
+base-commit: c37cf2824740d833b21eb816e21f94836100291f
+-- 
+2.39.5 (Apple Git-154)
+
