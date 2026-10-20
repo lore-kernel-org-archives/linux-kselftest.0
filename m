@@ -1,106 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.177
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792515536;
-	b=Tl+kg57T+CY9oFcOBngpN7/J8Rj6bxaTXnJyckeMZLciI6ZrdlZbKGw2NFGPbrFtidM6
-	 2qM0eCMY6XKIfhrmcE+PK0PHUmhC31znxEmrmzB+Y0+eNhX5KytighCCeqow+kFBwxB+W
-	 heF/GYbEMzdyGued/DwvQKYpj33lIYFruu+PXXqSoAjkLi1TPyL6B3bueEdLDrSfvJpWH
-	 IhPq2BZ0wYfYWZFv3pS10qKxVWfEq9JreiYRrd3jcaKk5tN1KNPzzu8aoMPt0ad/c2cbz
-	 uwK+S0h7yvyHejmzwst3T6qZvUEfelkjgH0FIeCItxI229cl00j82rNxe5s6k7YA8dQ==
+	t=1792515960;
+	b=5oBnaEfDEQ4El04oqt8fo5uyE6vEmmpZAlGSjXq1WUAmVT6GZNpJlf+69vOnf1S4dTnA
+	 Pb/bSS2ojYO84aYhB2FrUvT/W90zdTtliWddOoflpWspifso9imZem1NipAeZS5eQoCxE
+	 n8mdS5G6NQtjge6J/nwy2ap0sueVItMpfGAR9/KcnUwmHI2ACF304VwG6YE6TopPBX2+K
+	 446YGm773lsChdrqeEjNFFkMgGvgpBYycZEOz/dehZb5YfVeBukzdwZR0re+jxLXgyiNn
+	 LEaE00orvplpqmoqmoI9GaC6FQp1d8HGEb8WxixhJQI8WQ+PiZvVv7fIympRCsHc0MA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792515536;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792515960;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Received:From:In-Reply-To:References:MIME-Version:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=W3UZs72ItN8BjuPnBCdirt6JsCzxyYkOlT58mDePWJs=;
-	b=WNpBESPeVxgWyrc2MQoSFnphU+/YHTrf4vlIbCH4L5txhevetanKtDodLA5jruwxymMP
-	 82sTPVNIxlW59cyOLXOy4TZAAVVDYV4SKNFrmXJ1HcOXebFnXLFggJ5mlfz+c4+vOz53U
-	 63tK7SiS4v2eJgwDANbF3jGlkshfFMXos3wDSdCtP8q9XcwiFtuy0RFzdC6QuGT8AQwKr
-	 96RPIYUuAkBFZtFaDXY+iQgZj5sFFOTViWtbxYdfA872a/oG6KeS71fNoRZDBmYHJ9tjA
-	 OiAAAfwl1plWoUCwCfTQ5b0Wi3HSpp4QHiksle8+YtT11WVhTYZ+SMKhqiKAe4m2GUA==
+	bh=CawfSGUltcTxf3WieqiwxZVbLh4EPDpBCzdr6aE2BVo=;
+	b=Ew1HoPJ5LQj6r6Wq/waRNmgs3sO3vv+5dA5KQ3b5jXZqz8nnpjPEgBkV+15fsFlY2PaB
+	 FDPBexgV/smCcB7EQVnm5PPrSPT9H+bcjQOBqREj4wEtKCPgcoqOzutzYCGjWK4AtU7mn
+	 jONa0ldhUMBWsgrA8PQ9D5s7d4R9LBFQUNfnpUsrem8PQGZqRHV8XKW8kIuG06RPGs4E5
+	 YRMoy1vgcfxP9QWPhVXu2FiNbu6kEpVsgIQFpDTQh2t4OkBnRCpTccf3IaE7MPasqbC/L
+	 hGqBFvVyxqchqWkKrVRL0Sz/N3pkKC2wV4+bTXdHQIO9nIQ2dIdqj+9mZrb6ke4OeXg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CJA16jB7;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.48
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="EjiCtsY/";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.177
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13BF606A320
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 16:58:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F13BF606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8133606A338
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 17:05:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E8133606A338
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CJA16jB7
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-6795df33283so500125d50.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 09:58:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792515535; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=EjiCtsY/
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-8b0f1dfef72so3723607b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 10:05:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792515959; cv=none;
         d=google.com; s=arc-20260327;
-        b=lb4neH7UlNe3e+nes4JTSaQukpztltaSmk/c6ngDHqdaMkIzZ8LHOhi1li0w2sgOuG
-         5YjK2r3t48QDMKNg5OAzuczDz8LWsJFtzWts1Oy2giFcqW58hwW2eurkgiOqP8MEXrZr
-         4BRHMQdWx85TZgnybyqGYIZBcv/tM/SR9JGdglVMGUIJrvUFGCdFvb15xZxTZ08vFd+o
-         vFp+hNUsG7XrJ0uh8I2QwuzMZvfFOzLioX5YLGiBjaey5uRQlQM/6fjnXb1DMciaoCsy
-         fN8JwQ2SfoXLAg6ewO9+7t5sZUfI5vxRu5TWSU2q+Uh71nNSDuthc3If42T/GQtVe6En
-         ju3A==
+        b=TLVXvEvhnuByZdiNr1819A6WnKBBsP1VyzL+bP9UaT/b+HNBSH+3FA7k5R/IsnZf2r
+         Pf/LlnNpqMFbSbzUpo6ZWe5cAMUD9BNi+4ORFJfFJmi0hWDgTpDN1cTheluc0W6vONnK
+         RaEGnU0pg5vY3RavFMiFCPmc69eBWMoAbhsOmcTZE620pVxAt8c8JHgh/1j5JyeFmbnm
+         nklKvQCPmtP9bRSUSCQgHPSG8SZVIqGqoFqjuxPFmkwDm6/3bKFtMy8nuuWZs/tOPHMq
+         8NfNtG1JZNb/nRC8AzL8wsr+5Co8WdyaIJ7oA0YSguT8WFTZ8SYDkwx6ROe5+MKqvr4i
+         PjcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
          :from:dkim-signature;
-        bh=W3UZs72ItN8BjuPnBCdirt6JsCzxyYkOlT58mDePWJs=;
-        fh=jiBt0ak7K6xQmFRZXWxJuCbRfLDgKGi5sVo+bedzIAs=;
-        b=eAqz1yLjQbAUuu7ZMGenQGFe4DsPe3MyXJeGOyHhgDZSPAdVmxinlvyFNVGGdk/aaf
-         u02q6E/+0ru7f+Wh3e/qP/1nvBy3l4VgrOVi23ReAkN6QTLYWhTzHFqVboDxYMc7CD2+
-         SLGSNJwJH4a4Vq7+4HQz4YqpOJlSlnlEg4lEOSTEY4GexI8iJSnKrgFdYAn8E2xwBGph
-         0AtJUkB8sxn56URmpRUTj9Khfcx7cZVWMiHNwja/WJvY63PCxAeh/vbtleFIicu8utbT
-         TcD9VV9tl90/a/F8xWIxeCpp/FSZRYhPucBwbEyrUvUmdXfoUSQRYNBuFYJXHYL7urpS
-         9SpQ==;
+        bh=CawfSGUltcTxf3WieqiwxZVbLh4EPDpBCzdr6aE2BVo=;
+        fh=Bf/r7SChxAO8yUVxHUy1nXvloAIvbLqVTtBILtlSUMc=;
+        b=pj2Bw0In4eDtPthzIM7+CUlc3g9I1ctqsT9UEoymo/S+wG70WHk7szaCPBJnZABlSb
+         kAdeWCqAbVZ9M1SoW6+gJbhh5BySCMhXooUpc5nNaHDmRXoX45s0eUYOCUEfKG748TmH
+         77pZsjMZspm2aCzpNLorRHJwEToPk/jj2JyN8Tw2ngY7LjBvL+AzAtvuyrCeSvUB9AAt
+         98+Oc5b36HmSl/DvzNvPCGcE4ANAwbriCJQ++55Au/pl3CtTeIUkAx1zRyutJmB8+DLp
+         IuWM7aMWBNt/nshYo1Yt4r3uRhJeDd/tsUW+zw7dAeBx7viN6TkYQB5kzKJVbPh6EVSs
+         QDhA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792515535; x=1793120335; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792515959; x=1793120759; darn=vger.kernel.org;
         h=content-type:cc:to:subject:message-id:date:mime-version:references
          :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=W3UZs72ItN8BjuPnBCdirt6JsCzxyYkOlT58mDePWJs=;
-        b=CJA16jB7gWCpEr8AZzawOzxdJb4z/YFbC4DXOKSP80dkmRfx9QH9UfwmDDMEnx6xrY
-         ytWQXNUpYR16zu6JxHLJT920ExBMXHtB22zguBiRyWPN5R/seJsI2ALDFelxA3RynBnk
-         k6SaPDm2PQdU8eyNp2gGkRKCMQyWXvj5KMKc+T/kzKmDhI71TQ91IFPyIi48S1AlBFtP
-         pUjYL29NSRsLrDoc6mMsS3vPR0p537pzITgbBc7WHOZrxaeMGGfzpqx+5A0fwKsXo4l6
-         vGu4aZ/5UhxApp19j+gWVxlx/pBPcFlASON9y7t2DhHQt4/qBBperU87oPXQvmT53Rfr
-         nKjw==
+        bh=CawfSGUltcTxf3WieqiwxZVbLh4EPDpBCzdr6aE2BVo=;
+        b=EjiCtsY/ZOF90gjCs/BDy14TUFvLnpqFVe7zF4DpPHBfTP6HnmeZFgtdMcb9BvlJTp
+         4pxSbR5yKKYpyLVtBdpCBsvyBRD54nXnijUfOskpIyUAV1j2g35x18xFYvNJmyTIYgZt
+         0iuxf+Px6JyXIGwyCSNSM6+QMU9PoDZyA990d3LGTuvOicsVF4XRBN0VpNObEKNthGjJ
+         axPCwU/9cS7gMDkq+phYi5LAcbFA9Pi9h/h2LkktmB6IW4qqlRmTx/BLgILC5JIcw7dF
+         bhbJlMjF2Utkn9qL1MppP7RH2+AGU3g8+qlJjopyhCLl6gosrso1m+nEzVxM4AKoFKV1
+         xu9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792515535; x=1793120335;
+        d=1e100.net; s=20260707; t=1792515959; x=1793120759;
         h=content-type:cc:to:subject:message-id:date:mime-version:references
          :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=W3UZs72ItN8BjuPnBCdirt6JsCzxyYkOlT58mDePWJs=;
-        b=UkKZ/rpNKm2OT1dT57OXBSXXiYmzVTZsKWayLmmHzOPr5dA+zqcR2kiRxx3222949Y
-         79ktXojrQgklzZc3YWAcEcWrcG8A1/A1ES/ZoK3eTSdyUoQ90L1XJZCtPWoqZ6ZGHBzg
-         iz2QjMRhnUPCCLxQHoUdvP2a09g7lmyw3dwAwv1gAMoysoKQw94GbjQmyzJqg0jH2rYf
-         Msj1+pZVcqpa0wKxKQArbn4EMqjStEUIB1I8jCmWYfwBQynFINCh4KUQiQxby6xMK0cY
-         k5kXIN7DMqyFKU2U0pPerqE3msR+ISGW2jXqfHSt3jPhx6icyKkM4dFuSo/3CRyBaofs
-         Mtng==
-X-Forwarded-Encrypted: i=1; AKwUvByiePx5EAZRG1GaRrExOYs/U4UL2UDAFKXTiTMV+imZ9q/XoCDZz2FQs4DnOJSpIDZDV8ZfT+bq/4r4gdBCv4c=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJrByGfQbXbVMfedbfZYccmkFQtrXs8dojpuXq4drukGfmaXwTI
-	nZEKuQQB0BtFJm4w+wrROY6J2OzXaBWn2EIT2SgDdPYlCvzYohXZT/sIt8WKFTro+lEztZkCqW0
-	QrHfFPFLQbI9GtwtSBwEkeQZ/bb27KP0=
-X-Gm-Gg: AYBFou3/WBFFgX9OpfIIg93S5keFEs6IFrMeNqqNKL5LRdAGfyFw5/HzwXjWyiJ98RT
-	PdNS8HEo3HCsUpJoPtRZD745DUO9GX4BzDFwuR9OLsZO2xx8qiwACeV074Uk1MH+s4VdcyJAgoz
-	XRWZlkQ+2oSzDVx4y9+aWxFDuDTcWwIcXZj/PJ8QJgnYi/IpeFSrufg6Q/XIcfGdnuzMIoGRWUT
-	N5iF45qIkXlySHtJ+JaAxJntoPlQX54EBEgV36KG7GB0aR92nCy0gjSfL6mcu51HHQOAIeittHH
-	0/3EQkgn1+t4bSSrAibIHlWI1H84mrOPk5E1ixytn3pdc44QSM6LPQ==
-X-Received: by 2002:a05:690e:138a:b0:679:b8df:29c with SMTP id
- 956f58d0204a3-679ca54432bmr6769731d50.2.1792515534972; Tue, 20 Oct 2026
- 09:58:54 -0700 (PDT)
+        bh=CawfSGUltcTxf3WieqiwxZVbLh4EPDpBCzdr6aE2BVo=;
+        b=LGgQC8xVj5psObCWWoQocvk/aRv+qMc5OJm+sWoTj4EKNxoE1hnNLwUvH3qdNHNfqH
+         hU/0SBPZ8SVOs7Ja7zgF8MimmBufx4BXX58aOCCnCsPtHmwYossbJe07362h8YdqWD7I
+         rK7TqHx4HGqVfECD2q9ddJQNVxaexNzHheccDU7hRY7MPsxbl+o1WFo2c3X8cvWKbn0C
+         CvXURAhp6B2wEBLpWHWF+18cm+GdUlRnubExrkwVbyBywKEl3fJZh6Jl6HstdjUb+O+H
+         wLwH5snSWyZUCbXQcfyju4FQsF5I4umnmA9zeorpN74FxKgxtavxQzrRCuRrLmj5hGPg
+         yslQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz3P2xyp0Lms4k5mn1Qz6xWUlRcMDL1hclr4j3iBm46n8PbpT1+vefu6cTV33BLTDeatuyyysQ9uygE3h5xfBU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK3Ukjk+CPqHcblrIxFszbNQqTBZZE58o4sAJfvw0tEu7HuVLNq
+	0EKIachofsv1wINfBSxLI90Ormkka7W6fC0xeW0WInvtQAp+YiUUq2Bb4VygstdoegSWKtYNB3W
+	EZ9hRW81QykS2utg6ne4JIHTwy+lAgOg=
+X-Gm-Gg: AYBFou0vwJBEgjahIfs/McAD+7vqJhHwgEGjzAJ/sivdVn5rlxLERMgiO4PYdqGHPRy
+	DTPV4veSu4QwkPyS4Yblt/KYrFleES5EJWCdpfeZwWrNn2eUqc1Tk4xm4jI6eRlByvFjPuX4HGy
+	l4263l6D5QoLFKs+cDiNyXsy8OAu24uFcUZhF8dSL40J/TEXYOogCqxi4kzOamUf/Uppl/hl+z6
+	NxxV/BUTpDqVazvhvOj/R0+NQlhgX/tYlv0e+8VwgbOr3TKKyh2t9blmM3QZNUmHNZ09TFs0GYE
+	y1cZcprboILNIAEo+kPpObCC8Ec9icP4hjPBVDTsICo4eSkc94XoBg==
+X-Received: by 2002:a05:690c:6087:b0:8b0:da84:d1c1 with SMTP id
+ 00721157ae682-8b0f1f1a89fmr64960787b3.0.1792515958898; Tue, 20 Oct 2026
+ 10:05:58 -0700 (PDT)
 Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 20 Oct 2026 12:58:54 -0400
+ Tue, 20 Oct 2026 13:05:58 -0400
 Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 20 Oct 2026 12:58:54 -0400
+ Tue, 20 Oct 2026 13:05:57 -0400
 From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-In-Reply-To: <20261019-bug-word-at-a-time-zeropad-kasan-v1-1-f21a3ed6a477@gmail.com>
+In-Reply-To: <20261019-bug-word-at-a-time-zeropad-kasan-v1-2-f21a3ed6a477@gmail.com>
 References: <20261019-bug-word-at-a-time-zeropad-kasan-v1-0-f21a3ed6a477@gmail.com>
- <20261019-bug-word-at-a-time-zeropad-kasan-v1-1-f21a3ed6a477@gmail.com>
+ <20261019-bug-word-at-a-time-zeropad-kasan-v1-2-f21a3ed6a477@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,10 +110,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Tue, 20 Oct 2026 12:58:54 -0400
-X-Gm-Features: AclHuK_J27k-o8Ui6g8e3q8L_DReW_3vhUszXOZ3Ua6MjDZ1MkwzX1wkuw839aA
-Message-ID: <CAPAsAGyrH1quaLuyui6Qm5sokid8=yjNbAM3cOunynfPNQtfgg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] word-at-a-time: check the first byte in load_unaligned_zeropad()
+Date: Tue, 20 Oct 2026 13:05:57 -0400
+X-Gm-Features: AclHuK_DtrU2XCq8YwSMY07NqOt7wGt-hW6PGZPkgwrcRUr2dimhQIUPQ6PwL98
+Message-ID: <CAPAsAGz89aKUHzm6U9PQZfkGq-GnWsm8AYHeo5+4u34LHk4uZQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kasan/test: cover load_unaligned_zeropad()
 To: Qiliang Yuan <odys.yuan@gmail.com>, Russell King <linux@armlinux.org.uk>, 
 	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
 	Mark Rutland <mark.rutland@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
@@ -133,38 +133,27 @@ Cc: linux-arm-kernel@lists.infradead.org, Kees Cook <kees@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
 	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
 	linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-mm@kvack.org, 
-	Peter Collingbourne <peter@pcc.me.uk>
+	kasan-dev@googlegroups.com, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 
 Qiliang Yuan <odys.yuan@gmail.com> writes:
 
+> On architectures with CONFIG_DCACHE_WORD_ACCESS, load_unaligned_zeropad()
+> does the word loads of the dcache name compare and of path name
+> hashing.
 >
-> diff --git a/arch/arm/include/asm/word-at-a-time.h b/arch/arm/include/asm/word-at-a-time.h
-> index 5023f98d8293d..f672aad2e30e6 100644
-> --- a/arch/arm/include/asm/word-at-a-time.h
-> +++ b/arch/arm/include/asm/word-at-a-time.h
-> @@ -56,6 +56,9 @@ static inline unsigned long find_zero(unsigned long mask)
->  #include <asm-generic/word-at-a-time.h>
->  #endif
+> None of the KASAN test cases reads memory through it, so nothing
+> noticed that KASAN did not check these loads at all.
 >
-> +#include <linux/kasan-checks.h>
-> +#include <linux/kcsan-checks.h>
-> +
->  #ifdef CONFIG_DCACHE_WORD_ACCESS
+> Add a case that reads a freed object through load_unaligned_zeropad()
+> and expects a report. Skip it with hardware tag-based KASAN, since
+> arm64 turns tag checking off for this load:
 >
->  /*
-> @@ -69,6 +72,10 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
->  {
->  	unsigned long ret, tmp;
+>   kasan_load_unaligned_zeropad, x86_64, generic KASAN
+>   without "word-at-a-time: check the first byte in
+>   load_unaligned_zeropad()"                                 FAILED
+>   with it                                                   PASSED
 >
-> +	/* open-coded instrument_read(addr, 1), as in read_word_at_a_time() */
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 
-Why it's open-coded ?
-
-> +	kasan_check_read(addr, 1);
-> +	kcsan_check_read(addr, 1);
-> +
->  	/* Load word from unaligned pointer addr */
->  	asm(
->  	"1:	ldr	%0, [%2]\n"
+Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
