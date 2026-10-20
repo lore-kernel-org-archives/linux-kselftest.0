@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792478313;
-	b=WtTXm6Cem1S0wgXAwPTsYFSPWJFF6Pcykd/5+E+zHIjqYMNr5GmCIE7+OhszpuZQUcx0
-	 by/RzIqYfLoiIx/u0fNKXU0CWFDBNAKduaP1N0SJivIrXKj8omn5utA4ZFGxnyEpnbly+
-	 ZvLRegrQPEaURnKOjHF8OKqX6ps9Fb4oVCibv5EcVFBROvJJ2oy4cXTIWLhqkBV8TrYkV
-	 owQB9Aq7CJnsXq7pc81YMbwB/jMM4XrAKOHZp6KM0V6WRSjCeHtWVM1L8dKVdVS5VtIdu
-	 kN/H3H9tdgJgnEJlp0mf8Nd2jyi0rx2vI0LBzo1pbANtYE7i5henrGQ4SOcjAhz+EPA==
+	t=1792478319;
+	b=od4tJaPhvZOwCKixoyBRtYHkFQMYR06z4ke4+xUv22wqB5qqv7Ps/UwlJSxSl7f8cGy/
+	 tm2qIhI34xNFiJ9LVzAn3h4kSZpU+UIqW/OEHGpUnqtHqM7HHQnEen+/uAz1eLMf8yT25
+	 uUASSZsUeOy28AW+Ulwb58kqViBo6qmFxaZS8f9rrdlnl3HFXMZdxUN4q03b2fT/OIr3A
+	 c5w5f7xMGXw54TzY1HrFOoFGr4uF1gxzLk7kEqZYGjI7/pakfgPE+r726n7yNxt5e1uqA
+	 HAldf5y9nVBMBdnJxQ2v5UC42XtpzdoKH/rBHVb9ZiqDLnqI2oW5tHnxPjZI+8GL/MQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792478313;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792478319;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=ZfCKuhuFLFgY7+lDwr5/B266OUdv6BfsTvR8mFssGTA=;
-	b=kfmdJg25aY4CBZt0hwYdZix8nYahO35+s4UgqyI6hF88Py0XRDxVu/ldJHBiiSrFWZ/F
-	 cKuT3lHGRASuXC4ytRcvtFyxwvIwcxOzvPcOFxx7mql68pxIDOKc19aP/OURXJr1/EUMv
-	 n2r9FPHgbUenjMJC71cQYfTzKNPyg7F0sWMoeihaL3aIlSeZZNGEFrXgPv27m9GgfFSah
-	 HkRnW+wN00cdjHd9uUBHKQKmi5xEJUW5VAwdpKV6nrGk/xOkeke6rYNPfTvKX0hDAUd14
-	 3+/0M951BlEVvZ90E0IebkrdpCNwxTUBV3K16NPpOgCebbG5Wy9gTYJLsBjZe1dFE5Q==
+	bh=SzeDh/DG7K/TRHa14eJVZ0wsnX3im6yxpMJ76+c0/dY=;
+	b=QnBJkrHZTbd8HOfHNE0AewmQH5dYKLTJLTCPNN1RQZ+RePJnXMFtsF+SkSepajTZHuQh
+	 Bemv8KjjniQ2jEb51ub8XoNI0d+TuSt7+UNgtblt8kx3GAEhRT0XRdvin0je20KJfh0KU
+	 7Xtk/rPvqdgmPYNDP9O/50yWE1wjPOJFcVv1zZLz4VA6rAKTqmtSwlnMEiG6p1y8k+ItH
+	 9YQinRkp3tWt8tnJUKWGGg5/4oKNJdwouMU4YI8KUn+/XoFtY8WdC3A7Ungto4CAWwlri
+	 CltvHZAFk2lOgZv8Xf6MDSg9Jcy59VdNzdDq50VPR+baAA5Q57VsHzSXtKNqazz4eeQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jyCX5E17;
-	arc=none smtp.remote-ip=209.85.221.49
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pS8kdSPy;
+	arc=none smtp.remote-ip=209.85.221.47
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8142660A262E
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:38:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8142660A262E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E3E60A3802
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 06:38:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A9E3E60A3802
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jyCX5E17
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-48b001cd92bso1518750f8f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:38:33 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pS8kdSPy
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48dee593f18so2123117f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Oct 2026 23:38:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792478312; x=1793083112; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792478317; x=1793083117; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ZfCKuhuFLFgY7+lDwr5/B266OUdv6BfsTvR8mFssGTA=;
-        b=jyCX5E17hnjLXAhAwoXKBMXQVYu+tPW2CI+HH0G2ER6wB9MTmmSiAZpi/as4fOdclo
-         kAXxM9PkY4H5JHdjsZ+4Bzx5HpHo2OnrZ1HwgLbj+bPwLnnqf70yEaupd4CLVASzf05+
-         OWSWlR51HT6pmhY9gIzfGoDxulMeZ7F5ku19C7h7HDX7X1ERjFj6F5Vm0iNa7uXV1PFt
-         NYQOfJoQQiaI/ISd6sVZIM0JKsBtHgJSriQUYmbyhsYlwRYCxSYdk4j45W35mPoYQWKe
-         eoBwtsyp9MCCF4vac8+i04nXoIXyxJkMqmbtyDTak7n0J5c3tabeCTmLOTojUJhKN4tk
-         yyXQ==
+        bh=SzeDh/DG7K/TRHa14eJVZ0wsnX3im6yxpMJ76+c0/dY=;
+        b=pS8kdSPy43DQfSfmrUcM5VFUf9OlClZrNUXcN/e0h1+S0RUX2sJz9PZGM8U2PqYoxN
+         9QJz98WzW2TzxAZWvsrUMvE9tepekQQ7ZAxQ1+qc/cOBlAYOoY2ZQ+4CoMikujb4+HRD
+         eyaRErWZkTvXVCC4HPqasa2prlH18HUfnW+HkDsiOOsp27uSuvYXvNwseErMTWfctodc
+         9ylpmG+wzgYJkeJGgJ84SKnQTIddTyG37odV9XIG4ay3yatBFwB6T+OKjTbKYyeK4fkF
+         agtB6573z9ImSvuxQSEmwlalfrhwTVlSvgP6hd/4MEfj9aiKEkw1+DoHkyCph9ZQ37gb
+         Gvyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792478312; x=1793083112;
+        d=1e100.net; s=20260707; t=1792478317; x=1793083117;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZfCKuhuFLFgY7+lDwr5/B266OUdv6BfsTvR8mFssGTA=;
-        b=XKDNwIVeF/Ir5A1UnoLjORDPiOOD/ZvC/0pwCN3aoNZcphBLZK0bWVs4QlXg1ZnLMH
-         MlVKeVN9hd75TCKo07NKJvyyCXxmxmF7yza+s+RqeCarPD4NSKr67mYREbX+cV5CIIJM
-         nykX/Oro/X+PYHuoRUlc8yuPhrm9Ssxr9UVeAus6EfAydVRPyZOq9CZ8uPC+B5KSK3mG
-         fohrliQ4e7tC2ws9EUsz0/0jnoJrOIkcIECXccAX74aaY3grPlUcNrECk/H5WijNURp7
-         2R1Zxn0EV8p8SXz96jxrqV1gbJhLZ21vr7m/G/6nUeVgMwYQq3xAOdTie1onSJsapnLH
-         7EBw==
-X-Forwarded-Encrypted: i=1; AKwUvBwTzbUTQzhd+obP/DwV+IwCy2uRI3kzQeYbmYwJcYMn0B4OXN6tHzGCQa/zavVYTZCki9ZX3VAdRbuPOOCcYwI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLG5AIV7rjRfkHUy4WQjvbq2OM+HGA/VpAaxMSdSkojKddwZP+W
-	jul5FLdh5Oe8imfbUWDD8VXLypOIwS6jOmPT+IhYTRPSZUA7RFBHcOt8
-X-Gm-Gg: AYBFou2RXF+HIH7BaQ5eW5Lw99HON0DpZl20vSe4DSoaHRcqSzU3Oswz/FCMxBhKDe4
-	/0dFI9oOdUxTG2uFlURutcHZDXCfYB3tMgwkxRBbCgq6jKaSP+jQTtn9rEfy8KU18zZB3l8NEO4
-	9bjKIHIRhcexPn8dwqEN5+aAhZnVC9zB/EmMdTXUr/J0cam8kMOJ5ZSIqDu1YQMVUhW8Ln89fbr
-	9d88D9QyNEYyovSK7N0f/EOuxwPlxKzSBKw/hNumzqvkwwvrwIJM6eG//YWq+tEleKm6uIR6075
-	AdT4Bjy2Nug0vjsBIGImOFDGVj6hfMcFBsaUHRpaB6+x+wTojg9Z4OHUeppRd9uhMstEOhDqAhq
-	S4Sa5b+g8xGTyAZ1tBSJjR9YwK+WFsumG1CRZ6x08PAoE3T68tLJP0vhidexf124wmoOU/VQCwi
-	Wy4Jd/I3pTkDKVSd9g8wQOwuIMForg6KZXkNvPXdp9ElwZNf/BfqIKRrhcRjiJ5CJDS/g0MA8C/
-	m1i6hj1shGpyglRYQrSqPXwNG/+mg3cJgI3MMdjMWj8ML6CSCfyefozdxE3q/VVIr6aeOQNA1Kn
-	OztMUmzAwyCq4RUHeBaexMTBtlRai0n7d17eEiZtcFKHRgbl3qb+IY8bTwXhcZe5HWMPJ9vlN0V
-	d6A==
-X-Received: by 2002:a05:6000:490f:b0:48d:f99d:a0d2 with SMTP id ffacd0b85a97d-48e07bbe6a1mr21638509f8f.15.1792478311632;
-        Mon, 19 Oct 2026 23:38:31 -0700 (PDT)
+        bh=SzeDh/DG7K/TRHa14eJVZ0wsnX3im6yxpMJ76+c0/dY=;
+        b=wuAsPQTlLEmFKF7srA/EqfnFR8+2xzcgfN3/z7J2t06pC6HYKEf9zEJFH2vPE3g4W5
+         ircL40P5T0dgMk6Eu0k4BVdojY0FLbevJCrMyFVgLHsuhHzbL9szzOb3J7ScvvGCjt8R
+         ogB0hsmMNxse2WjZz5bucwukjZy+ELX8TKlXkVcQWGuyxF03Y5k0zmOjD3q56N6zhd+u
+         bfaJ9PJiQIQZRrzN1rUyf0rKlS+61RUrGBA/ffQHkqAOyySFOboiJ+Rxdt+12Px8rj7N
+         vClJQinDlu3kZTtpsljn+OeVqROI9USFFpVQqZhxXOOsUue61G6A25YP2dVrwN9Axkre
+         VnXw==
+X-Forwarded-Encrypted: i=1; AKwUvBz0W96njvXonSRolb9PCYf3Dx0xyt/3S05EOD8hVwPePx7CDad/YktRY1+4jS4WC4MGHyQxAN3MClJcEqTKPnE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIXpN3OGSdizXSeTU7oTsT/1oaMxfFg4Td/ThsysAHMYw0myCzh
+	iUvMf6npGmVnfOfYTQTyl3z5+CnN6D/X3J9xV2RjfuYF0PzyC9Y9qrKZ
+X-Gm-Gg: AYBFou2i0zRxsxfOkaAjPU2wj/VEXg/jLJWq/rZSn31l3aTC2B/b9SElSgm71jZfvsb
+	rCrpZ+2eCjAqrtbUxAXO91YWbw4rJhRF0mbEA0kDWA7eGwh6fnswFSbVGBJ70laWDE8oiTDKRtg
+	/ttDQBOCBHG7jjmc2HqCEY9NcPqPL7CkMKonAT2xeyghV/XhAXelEd1HvrioPUfO57VJI3PVyCm
+	JzzhLdSdu72xxAet9Sa3ud3zwzXnZPbWCnI3uhcsgeonJf3gSyz7ay5jM+g0hjEINdOkaYOh/MO
+	dUbueH6TpnRNUpflgSPBwFxN/XvqirWaeMrbTj6RExWiWXm/Tgo1zxi6VmonimZztfcY5rQNKDG
+	EemU9WNjJP6a+ckLNMfVWc6N5LI5jMLavvNHohDFC0eQZfB+ahf5KC/LfRrKWrr5IizhFSt8HcT
+	nse2i6EnN4xFvk0SUrPgKMSlJzTow7npPMGjQfOpyQibFPDIEwfrygdW97qu4aLc4XsHeCjro4u
+	axovouPJWsz/OlrZu0kHZpAs52xa7I36f/ZWnahggK/cgZTJ1uU3oGx8f5poNAa8WR+Fs/cxykU
+	pIlf3Ixqx18P7XSmobtBtf8iZMRvoUUu9KlG1bsDu8GfTDvLBHnN8QubXd2eZCYyf6GpHK4xFgM
+	6gg==
+X-Received: by 2002:a05:6000:2313:b0:48e:d27:bee4 with SMTP id ffacd0b85a97d-48e0d27c1f4mr17275309f8f.2.1792478316869;
+        Mon, 19 Oct 2026 23:38:36 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-9c92-6501-2169-eb9c-7ad3-f5db.310.pool.telefonica.de. [2a02:3100:9c92:6501:2169:eb9c:7ad3:f5db])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d820714sm3916393f8f.35.2026.10.19.23.38.29
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d820714sm3916393f8f.35.2026.10.19.23.38.35
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 19 Oct 2026 23:38:30 -0700 (PDT)
+        Mon, 19 Oct 2026 23:38:36 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Jason Gunthorpe <jgg@nvidia.com>,
 	Alistair Popple <apopple@nvidia.com>
@@ -98,9 +98,9 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	linaro-mm-sig@lists.linaro.org
-Subject: [RFC PATCH 4/6] iommufd: Keep the pages mutex alive until DMA-buf detach
-Date: Tue, 20 Oct 2026 08:37:43 +0200
-Message-Id: <fdb5d9715d7f278ac24f05246f09703edb283525.1792477872.git.kmehltretter@gmail.com>
+Subject: [RFC PATCH 5/6] iommufd: Unpin the DMA-buf while holding resv
+Date: Tue, 20 Oct 2026 08:37:44 +0200
+Message-Id: <3ca8c42d7a597658329e77a8af92aa294f0dc4e1.1792477872.git.kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <cover.1792477872.git.kmehltretter@gmail.com>
 References: <cover.1792477872.git.kmehltretter@gmail.com>
@@ -115,39 +115,33 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-iopt_release_pages() destroys pages->mutex before removing the DMA-buf
-attachment. The linked attachment still exposes pages through
-importer_priv. An invalidation can enter iopt_revoke_notify() and lock
-the destroyed mutex, including when exp_phys is already NULL.
+iopt_release_pages() calls dma_buf_unpin() after releasing the DMA-buf
+reservation lock. The unpin interface requires the reservation to be
+held while it invokes the exporter callback.
 
-Destroy pages->mutex after dma_buf_detach() has removed the attachment
-and excluded further invalidation callbacks.
+Move the unpin into the reservation critical section used to release
+the PAL physical list.
 
 Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- drivers/iommu/iommufd/pages.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iommu/iommufd/pages.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
-index 76d8803d6..59ee68a1a 100644
+index 59ee68a1a..85004a936 100644
 --- a/drivers/iommu/iommufd/pages.c
 +++ b/drivers/iommu/iommufd/pages.c
-@@ -1667,7 +1667,6 @@ void iopt_release_pages(struct kref *kref)
- 	WARN_ON(pages->npinned);
- 	WARN_ON(!xa_empty(&pages->pinned_pfns));
- 	mmdrop(pages->source_mm);
--	mutex_destroy(&pages->mutex);
- 	put_task_struct(pages->source_task);
- 	free_uid(pages->source_user);
- 	if (iopt_is_dmabuf(pages) && pages->dmabuf.attach) {
-@@ -1689,6 +1688,7 @@ void iopt_release_pages(struct kref *kref)
- 	} else if (pages->type == IOPT_ADDRESS_FILE) {
- 		fput(pages->file);
- 	}
-+	mutex_destroy(&pages->mutex);
- 	kfree(pages);
- }
+@@ -1678,9 +1678,8 @@ void iopt_release_pages(struct kref *kref)
+ 					       pages->dmabuf.exp_phys);
+ 			pages->dmabuf.exp_phys = NULL;
+ 		}
+-		dma_resv_unlock(dmabuf->resv);
+-
+ 		dma_buf_unpin(pages->dmabuf.attach);
++		dma_resv_unlock(dmabuf->resv);
  
+ 		dma_buf_detach(dmabuf, pages->dmabuf.attach);
+ 		dma_buf_put(dmabuf);
 -- 
 2.39.5 (Apple Git-154)
 
