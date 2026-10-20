@@ -1,72 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792491076;
-	b=KCemqIQLMcxRTwhbZ/taj5k3EVd0OcNppq12MCRj7f3IfTBvAacgdolrBWdqVy+NhfOl
-	 RDBJKX668ihMQCjesqdX00nzlwO0O0uYbvJiiWOx7V8zbAP14WZwuigeHrGplkFu8z/NP
-	 pI/gu7E//fJrn59ImFwWhtAFQuPeDh+T+7s3xv0cMuaCO6V820CxbDxmAcyb0GjwzhfK9
-	 riVDXFtQUh7ACAFt/0bToPqMWeFNJwWrHkrL6czRH9/5cCvy4TqzAisOApb/5hY3Hr/aN
-	 +gdVaz1uoGagTCcsQL+RF3R0TFsQu7xJXTSdPwWrHs3ozqd1CUGk1gV9OLWBS8xm2KQ==
+	t=1792491524;
+	b=GacCoXE+TqtU9zN9ElNXtWhRvjC/hDBTEOAre0oGoTDCFxjGD4viRUxKkzIuVu9sx6fx
+	 zMfV/BpcGfjBBrWrLv3Az21OerIXJC0UWENdZdmbugX0qATPphs7+F6DiGJVAEvK+ZNXU
+	 y0QoH/MqMdP03BkNF66wWNMcPPe5b27nIsnAK8SpWhax8SBF1dz0HY28koiXyCfWGCXKP
+	 tZ1F/zucu1o9IDz7/x8wIhfyWxoR84RwMf0wpZ6hSfwjS8ovtUVHXKclY5kncVaga26XG
+	 gnxZuh0KdBl39+HSRCtGucWAqQ8XGmJ0h7LU82mnt2rqZqpZ5xTftjFn1eEACafUcjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792491076;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:To:Cc:
-	 Subject:In-Reply-To:References:User-Agent:Date:Message-ID:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Last-TLS-Session-Version;
-	bh=AF3BwNTjc3cQhxo/zFwFMktZ+rpNg/N7alAMthomJEA=;
-	b=i3c359IeL0PjR65iamjhmqYqc3Z7FkzgqB7Lw4rIU5czQUlG4mpaq65YcUzkjFvIWMbm
-	 ZvaRno9SPjPopI3jMQY8cTsEZ9xWJbdq5ILVyl+sXfpiHGKcBoSeE4ZoUbxsqoHhECRdo
-	 u3xEloJDEYW75QcD68ajSxtqI/Ha2NA570l2EWzTW8dPfudOwCgVCSe4tFNgqmfT49VsU
-	 WKjC/Gm4UA361NpG8plX3usfe1eWk4VYkcfi62B5qggJWRDR/8GEcA9H9hFCV97estvud
-	 Hi+0Jk99mmOFSd3KvscwSotumHpwPOoBPAu/KykIHFOLpixYF2Om309ig/OT9idgvlQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792491524;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=UKKt7Twh+jS4oO61F237KY5RZI9g4b/zZpLEBznPE3s=;
+	b=JpWCrE4Gugx2Ku8LZScNPyKZU9VAoqThKeMxmenXmDDEuhC4UM6CCv5Rzbz+jDgTQ527
+	 3ehVG7pKdj/Rd6cO4bCrBVbn931uAZ4mCLaZGX9ysyER8P28vXBWJUypTZpV+dARjah3J
+	 /GfyJJWK9eyfI6QX2hNU5CcNqMPY6IbFM0IWQUKP+ao6+8lkW7YJln4JynmIupS5BGGVA
+	 z+wuCVd+CbK9jStNbtmyq5ag+FddAzC6Z30yEk3SAMlCMdaIkm2ifSaou0zi/0JNXHPQX
+	 l9QcG8bSVWpRHaAwE7OJy2OCpKEuvgOfefjmOglYLdz1gJSqP/ovt7X3THuUgJtYASA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=D158JEF3;
-	arc=none smtp.remote-ip=185.171.202.116
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FMS5SmBK;
+	arc=none smtp.remote-ip=209.85.215.179
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92D4606A320
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 10:11:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A92D4606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0437606A31D
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 10:18:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0437606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=D158JEF3
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 4AB6FC5CD5F;
-	Tue, 20 Oct 2026 10:12:10 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C382B60393;
-	Tue, 20 Oct 2026 10:11:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9713310328C52;
-	Tue, 20 Oct 2026 12:11:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1792491070; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=AF3BwNTjc3cQhxo/zFwFMktZ+rpNg/N7alAMthomJEA=;
-	b=D158JEF39wkwljUJNH2cpX5X77YTgOGtmWkKjwvYfADgBKly+UXMXn1LuaQMqaZTfnYFjs
-	+5Pp1yU1CGTsYKHkjbRNF8asnW9yW9A9Qh65tztizCy52H48hWzojAsuNRiemSMo64mq1N
-	U3lXjtqEefBKeGzjy36yoW2ndINtt0YsIMEYDTfMDcF8cCuhJGlBT1dLoa5dZjxV6J4ifQ
-	YPSWB+cXGYtICd3AvSxwQbPg4a8mZiJNhPxveLsJ0WwVyskhxEX9IbhG61/UV64fx470Lb
-	UZ5O4DCjqt8HG4Qp7B2RVn5RZ4KfEbwchAXBV1e7/7wBiiwx37GOpMm4nI5aZg==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Brian Masney <bmasney@redhat.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,  Stephen Boyd
- <sboyd@kernel.org>,  Maxime Ripard <mripard@kernel.org>,  Alberto Ruiz
- <aruiz@redhat.com>,  Brendan Higgins <brendan.higgins@linux.dev>,  David
- Gow <david@davidgow.net>,  Rae Moar <raemoar63@gmail.com>,
-  linux-clk@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  kunit-dev@googlegroups.com
-Subject: Re: [PATCH v8 0/8] clk: add support for v1 / v2 clock rate
- negotiation and kunit tests
-In-Reply-To: <20260327-clk-scaling-v8-0-86cd0aba3c5f@redhat.com> (Brian
-	Masney's message of "Fri, 27 Mar 2026 15:31:55 -0400")
-References: <20260327-clk-scaling-v8-0-86cd0aba3c5f@redhat.com>
-User-Agent: mu4e 1.12.12; emacs 30.2
-Date: Tue, 20 Oct 2026 12:11:06 +0200
-Message-ID: <87wlrcsmv9.fsf@bootlin.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FMS5SmBK
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-ca766c1c9ccso993183a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 03:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792491523; x=1793096323; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=UKKt7Twh+jS4oO61F237KY5RZI9g4b/zZpLEBznPE3s=;
+        b=FMS5SmBKqmR3FOeqRu9NPrVBF3sRL7+sasEaKIq+pZErHIsInCvmt7/abw7PBxiO0b
+         /kcXmODuJJky7WdFK3b7Yleqp5ab6o3+YBrBw9biK+8blt5RC4K1m6cHxISUY8SMOsBD
+         5OBWDi08NGprHsWOpf2kTZWHdna5ZnyFKqtT/qXO/Rrkz26GGfHzJpP+D1G8up5SgT5d
+         n1Xhy+6XJXVAx9pNZBTAs46c9QiLYEh8wde20OfDxsfqySCjqN3btgHlluDOt3Uw91go
+         O04Xy8U2pLdq/VKK4tEqGfyvR16zqHaUkZ1hQWNzImnIa/yn2DgFHT6j5siiYQeVhogK
+         Fb+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792491523; x=1793096323;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=UKKt7Twh+jS4oO61F237KY5RZI9g4b/zZpLEBznPE3s=;
+        b=ljPiswQff0NvN6Be4nY/h6HkY+diJ4DFU2PH+MrPnKSJUkfo4mEJMLCTtDoErz/jho
+         L92xJJtQvzIHntgfe/CYfWXmYt7Cranr2RRgbzx3swKzgWUouPfQcbR/1YdvAQHG3bOO
+         UGlCOTJRG2PU/abgO/MTev6SEzt65KDYWt6XZxLIrrjbvmk2R/LFK6ledRwMBgORKXZv
+         vBVptO0r8f2r3iHCXqP/d03ToPHk91LjN7/PInB1mA/igU43pFFr5fLFaSxc1Ec4l+js
+         n/7b0qjl7EBUuZ1fLFO7ZnNLumb6DpueIXh0YVsnotc4PWc1u+ITh65Bvdxaoe+vaxJA
+         GUyg==
+X-Forwarded-Encrypted: i=1; AKwUvBzdVscfvRXl5FMObi3hlAj+mihiacA5J9DSlM44TkyPJ/zbPrUTyKCqKgKow2x+/KM3+GixYUYPL7Oiwb9ty54=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIb55Xzgtr93foeRFFASqxn4s8EAES6/bKFaHYm78mcRDerS4LO
+	OS+mEjaOjd8ocLl64873sqZw7r4GPZD3cKIC06zP4w8S0LXGCdA3GNhw
+X-Gm-Gg: AYBFou1t5WA/aI8gwCrpZeaYWh83tdbU1YYy45caM7aDqQrHksPM7BHVXhrvkcTC0jQ
+	eN+T11spkpgOriXvWKdIcacrLRNj4laGZ6gakz2w5RxvqUUeTPmo7Szd23ualE3FllpwulHfzf7
+	CABFdQqDZb5bHY89gtzP8gozsLLT2C7Q0DmM90/bWGhhdUXOcIxxyAGXB1NxecQjS2B7T+cOeaM
+	L8Uh0rhzsTKiPRUFIqp+P7Lqs44wq7hP5wITsqqexUpH7qa65zkAmv+k1mCQU7HjWG4eUltPyx9
+	pEtHU8qMG3bUnf4A1NUk6XYMgorNJtE4Dzdsn/TKq8J8jUlv5hEtCc/mqqcG2ZEusA8Ua37wZvP
+	9fQ+GQIz4jFZgd28gOpqgey5/Dx4+K/ALAyejKIOmc39FJMOwgxD3bL/IPlJBLVb9hMnHokW4Jy
+	3quI16pEpJc9cXp3QSOxyOu6d10AjFOfUsESo8/T1E3EcsZLxBctX7xW4zoxY9PjMWJA6qH9FBy
+	PQTfgBvtduZXsd24zb4cSpjJofCIx5NaqZsRLUasGBlE16l3Z6FSqXMSKIupMRzGL8jaZLQPDSQ
+	X0J7x4hH5g==
+X-Received: by 2002:a17:90b:580c:b0:3ac:c03a:38ad with SMTP id 98e67ed59e1d1-3acee276f1fmr9591757a91.5.1792491523233;
+        Tue, 20 Oct 2026 03:18:43 -0700 (PDT)
+Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad6100ba34sm2873904a91.16.2026.10.20.03.18.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2026 03:18:42 -0700 (PDT)
+From: HyeongJun An <sammiee5311@gmail.com>
+To: Takashi Iwai <tiwai@suse.com>
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	HyeongJun An <sammiee5311@gmail.com>
+Subject: [PATCH 0/2] selftests: ALSA: pcmtest: Fix two test bugs
+Date: Tue, 20 Oct 2026 19:18:35 +0900
+Message-ID: <cover.1792390197.git.sammiee5311@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,99 +100,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
-On 27/03/2026 at 15:31:55 -04, Brian Masney <bmasney@redhat.com> wrote:
+Two fixes for the pcmtest selftest. The first makes the playback tests
+fail when a transfer fails. The second sizes the pattern buffer to the
+4096 bytes the driver allows.
 
-> The Common Clock Framework is expected to keep a clock=E2=80=99s rate sta=
-ble
-> after setting a new rate with:
->
->     clk_set_rate(clk, NEW_RATE);
->
-> Clock consumers do not know about the clock hierarchy, sibling clocks,
-> or the type of clocks involved. However, several longstanding issues
-> affect how rate changes propagate through the clock tree when
-> CLK_SET_RATE_PARENT is involved, and the parent's clock rate is changed:
->
-> - A clock in some cases can unknowingly change a sibling clock's rate.
->
-> - No negotiation is done with the sibling clocks, so an inappropriate
->   or less than ideal parent rate can be selected.
->
-> A selection of some real world examples of where this shows up is at
-> [1]. DRM needs to run at precise clock rates, and this issue shows up
-> there, however will also show up in other subsystems that require
-> precise clock rates, such as sound.
->
-> This series introduces kunit tests to illustrate the current behavior in
-> the clk core. As discussed at Linux Plumbers Conference 2025 in Tokyo
-> [2], it was suggested to move the negotiation logic into the clk
-> providers themselves so that only the clks with this issue can have
-> their rate preserved, and add some common helpers to the clk core.
+Tested on x86_64 with snd-pcmtest. All five tests pass as before. With
+inject_trigger_err=1 the playback and ni_playback tests passed before
+and now fail. With a 2000-byte pattern on channel 0 four tests failed
+before and now pass.
 
-I could succesfully test this series with minor adjustments:
+HyeongJun An (2):
+  selftests: ALSA: pcmtest: Check the frame count of each transfer
+  selftests: ALSA: pcmtest: Make room for the longest fill pattern
 
-* The LCM calculation must happen on core clocks instead of hw clocks
-  (see my other answer in this thread).
+ .../selftests/alsa/test-pcmtest-driver.c      | 25 +++++++++++--------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
-* The imx8mp LDB clock shall set the CLK_SET_RATE_PARENT flag, otherwise
-  it does not forward the rate change:
+-- 
+2.43.0
 
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -751,9 +751,9 @@ static int imx8mp_clocks_probe(struct platform_device *=
-pdev)
--       hws[IMX8MP_CLK_MEDIA_LDB] =3D imx8m_clk_hw_composite("media_ldb", i=
-mx8mp_media_ldb_sels, ccm_base + 0xbf00);
-+       hws[IMX8MP_CLK_MEDIA_LDB] =3D imx8m_clk_hw_composite_bus_flags("med=
-ia_ldb", imx8mp_media_ldb_sels, ccm_base + 0xbf00, CLK_SET_RATE_PARENT);
-
-* The imx8mp LDB and media_pix[1,2] clocks need to be flagged as
-  supporting the new v2 rate calculation introduced by Brian.
-
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -689,7 +689,7 @@ static int imx8mp_clocks_probe(struct platform_device *=
-pdev)
-
--       hws[IMX8MP_CLK_MEDIA_DISP2_PIX] =3D imx8m_clk_hw_composite_bus_flag=
-s("media_disp2_pix", imx8mp_media_disp_pix_sels, ccm_base + 0x9300, CLK_SET=
-_RATE_PARENT);
-+       hws[IMX8MP_CLK_MEDIA_DISP2_PIX] =3D imx8m_clk_hw_composite_bus_flag=
-s("media_disp2_pix", imx8mp_media_disp_pix_sels, ccm_base + 0x9300, CLK_SET=
-_RATE_PARENT | CLK_V2_RATE_NEGOTIATION);
-=20
--       hws[IMX8MP_CLK_MEDIA_DISP1_PIX] =3D imx8m_clk_hw_composite_bus_flag=
-s("media_disp1_pix", imx8mp_media_disp_pix_sels, ccm_base + 0xbe00, CLK_SET=
-_RATE_PARENT);
-+       hws[IMX8MP_CLK_MEDIA_DISP1_PIX] =3D imx8m_clk_hw_composite_bus_flag=
-s("media_disp1_pix", imx8mp_media_disp_pix_sels, ccm_base + 0xbe00, CLK_SET=
-_RATE_PARENT | CLK_V2_RATE_NEGOTIATION);
-
--       hws[IMX8MP_CLK_MEDIA_LDB] =3D imx8m_clk_hw_composite_bus_flags("med=
-ia_ldb", imx8mp_media_ldb_sels, ccm_base + 0xbf00, CLK_SET_RATE_PARENT);
-+       hws[IMX8MP_CLK_MEDIA_LDB] =3D imx8m_clk_hw_composite_bus_flags("med=
-ia_ldb", imx8mp_media_ldb_sels, ccm_base + 0xbf00, CLK_SET_RATE_PARENT | CL=
-K_V2_RATE_NEGOTIATION);
-
-To be fairly honest, the discussion at LPC about how to handle this case
-(and the transition) did not exist because time was flying but I do not
-generally like the approaches were we introduce "the good" alternative
-without enabling it by default. It just makes the transitions endless
-and more painful for people who already suffer from a problem. I am
-fine keeping the old behaviour available, but I would be in favour of
-making the legacy way available with an explicity flag, rather than the
-opposite. We may break users, yes, but otherwise we will have to support
-the two calculations forever and nobody will ever notice the new
-alternative.
-
-That being said, it works! So:
-
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Thanks,
-Miqu=C3=A8l
