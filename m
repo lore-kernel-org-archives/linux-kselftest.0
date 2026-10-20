@@ -1,100 +1,114 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.170
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792538768;
-	b=f2E22q3Sq3l5sM6XReDebAN6MsGIxVPwViVe5mQeyPdX0LsjvOnCMPbHsdnEsvS7EQtE
-	 E/2V46sv6RLAl9XZJcSa1GvW3GRs7F3d0Z5mmMBNMS0sHJ7EOUdyi6zJ7u4E7BLyK0SbA
-	 7Tz8JeeMndf/zCjcKyH2u4I7IXZeGlNhf/cU3QA7Jhjt6xzbDtDlRTcFF6DdHhhPXjQz7
-	 dKoTY6I5fGD7VDd5xoC2roReSepXddnr9BRBBbZBNTuaD+CkfGm+Yl1qOrgkkuhJ0rYBd
-	 Dp+yZE4RPXBv3lKqoxkXz6b/hjRxXX8IhPqdSGWfg7uhL+zw5EJVBHLOkLz53sw5I2w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792538768;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=xyqDPzOKJl88+NvwNHrrm2JsEqX4pARN/C15jZakpa0=;
-	b=AlBuOLRYgLPXwgfUWhHS8oXb5C2BQKrp0t+iDaGDuqafnalN8lzBEVdAdcTGoJP4VAfP
-	 V2egq5kyx6oPmnwr4lewHuDiTY6tueywRHd/6wZx8lFSUZsgEa291cidAq+yCDwKwGUxs
-	 QfxY/zm4mpEIVCh9kAmsYFQ4oZS1zH+PG3oH9zDySaOHq76cb/ozD+CLKAeP9H1bNr3ax
-	 6xwVns7+FHms+v0obLioz2dxJz+wekVDXyo0dlU3msLuz1sjfCnTzuTcFVGd2t/S7KZ2R
-	 plLKX8yB9EILNyqRdAv+f4O0Qj0T2qa/vWel34pHVCPgdm3xUcnYVhS48T0aD59hpPA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qM0+ADNG;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.170
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.146
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792539233;
+	b=v0VJZ1slFA4WEsnePYkiaD/iN/wd6Goz1gAjQTJuhxrXysjV/+fBjDQEH7c7tgRkq7zo
+	 4YYKckfeZb8v44Wc3jBkyn67iH98cIp8Fhs4HpNSc3MhCwNiujzMr3K3aRtBVtEkE3bD+
+	 SWPVZI4N3UwDjisyMH73T/8cUiUcY1dTdHDwytkTrHTNTQgS5LV+v/92Ik6Evsql9Xa5t
+	 X9IGAfEJw1n64HUZNpGtUoqMw2cIIPua9pfg2Nj/J01aI5iwZJCO6KysKAK2dEYJaF8qF
+	 huFCwOkGf3NRqMw/XZJrdDk09Pmt/c4kjM7pAgsqPpQvgTeq10UQgufyJbyDV6kRLoQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792539233;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
+	 Received:Content-Type:Content-Transfer-Encoding:MIME-Version:From:To:
+	 Cc:Subject:In-reply-to:References:Date:Message-id:Reply-To;
+	bh=rXuTf9MlNi3gCPS9slrsF274GgQjjMDR257jPNV3xKE=;
+	b=Zo4CTJNtWVeKGwZAE0qfyKWMABoLGhwXWmID94Nx5Azfg+CkIMi/HXyin5ZaXp+AtrIp
+	 gVckAl1x2e3PrtCR4TyMN0ncVYwKAX8rElZqBQMGHbzLXoyeUZkxrfqI18Fm+nQyTCnNe
+	 s9qvbUO2BETk2ZU4WZVS8HK+DlonzVtlZD2WkRt3XERMY9ts4fsRG3A6wc9WP+OFBD0PH
+	 vx84s+qdT+VNOcJcOkHTp0zrLSUSub4/xC07TYBz8ackxUBpQZETEjr73xc3/ukB6MJtc
+	 /mTtF+7rr6o66pjhgRbpkD1lfGoCsIRyuq9W8RqLIsrXjS41FurnwS5KofmCF1OYmsw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=ownmail.net;
+	spf=pass smtp.mailfrom=ownmail.net;
+	dkim=pass header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=jbFVrqp2;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=NmsGfiJE;
+	arc=none smtp.remote-ip=202.12.124.146
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE43606A31D
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 23:26:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7FE43606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E84C606A319
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 23:33:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E84C606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qM0+ADNG
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2e9f6a16aedso787965ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 16:26:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792538768; cv=none;
-        d=google.com; s=arc-20260327;
-        b=h8rb5Z+KhEI+TUX4fEuJ03rjL1kf0NgrRFj6kG484K7Ygb2AxywyrmMLDMh+eUjfOG
-         mTJIMM7TjTDqslFQjfeqaKIBE2YgfdFuX3wsO6Oa51l60DmIntgWt+Zsx/00KRAslBKb
-         0RV9v7OkqWH5kYrBRJ3SJ94cp05TSWsAEHprEQwwO7OxEKlhPKeCB0pWJ9N6687CoFRE
-         5XV86ea2hFaE/Icth/aj+jA8uJ+HBnN/QT5NqYC+9gbQSVGR5iKbLIqoFZadfbOJ0CCd
-         9hrBNk7Sh5VIX5LU0ahdttuzDLPvjxMWohgoioz7l4j9n3Rq0ejxuuEp93JCVennVeiu
-         4M+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xyqDPzOKJl88+NvwNHrrm2JsEqX4pARN/C15jZakpa0=;
-        fh=5rxbS35I/wxx/GYouJAfwMwlbM3cKGNUCan1byAIwYc=;
-        b=ml/uuzy7/Dzs1fREbXcq2RE7rBHRScK9NZYztTnkBAXCtfukqtXm1TowigHUikHBFK
-         QYgYsjY17dfN7EQbIiZcf2d55gCKL3fsdm7xLVvBVvvGDucrXYje2vZWoMuQAtRX/bSO
-         wIv8IhdPskzZxP2g22I0lq/5Mi5E8j45xYczJ+2171+oY5spt0evDQobLyvwznOo306u
-         7q0Pj/SxzxvbJPH4hwofHhSrTsoppbOvtVnTJr3tRlIWvSdJpPn0LdFwaqoWXMj67U1t
-         G0XQCj/0azmHrYI0kuPz4ej/Wle2ztMN6E0dUJDmykjCuPXV05ya6wqcH8xSaDZrsR2J
-         Ae/A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792538768; x=1793143568; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xyqDPzOKJl88+NvwNHrrm2JsEqX4pARN/C15jZakpa0=;
-        b=qM0+ADNGoG3hYbfcw9Hhfz1nkRSW5OE3gkA32HzVbHb6cTQfwInMWb6jgTvgikixYt
-         NR1Bm1uImSOUNIt0HdWC7wk6ceUdaCMvZUneapLTvY7j66PJX+f33N9mTpZg8D0kxbmO
-         JzloxsssVmu/gVxMuIGT8rTZBG+eTnSqyn3H7jwEC1ksSRizF6ANPGqEPDUFuGAiC8jV
-         DIocPjtvPOwB6tYWxJWF3RcLTWJk89LvUmOqL31KmcG31QCFKJPHFyRal/wW0smxUO71
-         u0Z0TRF3+xEvMZXbaW0dLZW5a9iHqrNeyLtveF8va4fa/DIvI31hhPCPbHKX9iqFZrU1
-         b7Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792538768; x=1793143568;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xyqDPzOKJl88+NvwNHrrm2JsEqX4pARN/C15jZakpa0=;
-        b=Skt+9ZNpp5xcFtk738E6cWyFiEEbd0kXLMoKTu4cRfgM0u5ePHrZ8/LzWgS76Fg8M8
-         frggq41cXhXPyAk9X4ae/fR+ogvbUizSkligKuym9/eAfaJ7cRuO9woi2MXcUWc03CvQ
-         4911oX1PZ1Uv+rUzT3BIOu6uvlVY6b9TRAXKI/kouUfRR4QBVGyV+O6ZjLYY2Q7h9vNT
-         OVGP5f1ppQfhiNzuZq90HCQ0vlr0/DcRojrGjdD8k/wGFEuNGxcbpirfrzbBKiter7dS
-         DL+qTLs9Ci24LyQA3JnfXO7B0ASqfLTDJx7Cc2gac4wayBOPBlBTnL5Ig7UXiSknEd04
-         +K5g==
-X-Forwarded-Encrypted: i=1; AKwUvBwd1XvW6D+hEebwF/3aFW5Y3vNcdMNL66EeyIf9cl/up0CBG2G2UmU0PxRskZgVOTVhlKh8nAkhiLect90DDw4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJnhC3jmVRp8eTwtsjnTzj11DX+Jzwel5FlmpA1uA3MRREf8mpm
-	5WrBJROoUrD1PJtct7z7K0UrNpj0Dpj1euZxjucX6h9GF8sgKLWlTVhcgw0AcZztqfGST6sFnQJ
-	SEH6CSquMkLgexjB/mMB++93r4peAFEM=
-X-Gm-Gg: AYBFou2epqYrMRlEQTcXTJ7zqn4lS3A5HcPukeDpfwYBWQUekbzQEqsOC3E7DT6MDNW
-	xNfHNRy5iCf52rXZSxl22yeSjHsQlhsNhcnhnkV8IRXvZ8BNwHLh3n6NJczJk4ng5q3lsz/Oi/9
-	4wVbaB4KCWRqwPi/8p+QhyhIAnF1GgDxSv37YtFLcYzC9397BlZQOe4kxxYOblNlQfx3Jr9JP8a
-	UsA/9KvtsOZi7Z2HYKzUWvdzG9rvU0Lvcq+M5AXpyw4YcYWIhUeiks6pNbUEdjwVcJYrtn9eN/N
-	j7k57cShByRPJQ890KY3goEtzFsnnF6ROfL6Yls4Z9tNKPKk9YjJQ5yntONi3+up4XCKJ4LRRMr
-	0f8pm1ejDILMeHE86OT3IWiuD1Nnii1wGwM2tyVawLRbsPusbb1R4
-X-Received: by 2002:a17:90b:17cb:b0:3ac:a521:95e with SMTP id
- 98e67ed59e1d1-3ad86f028c8mr320588a91.47.1792538767665; Tue, 20 Oct 2026
- 16:26:07 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=jbFVrqp2;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=NmsGfiJE
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 968721D00059
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 19:33:52 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Tue, 20 Oct 2026 19:33:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:reply-to:subject:subject:to:to; s=fm2; t=
+	1792539232; x=1792625632; bh=rXuTf9MlNi3gCPS9slrsF274GgQjjMDR257
+	jPNV3xKE=; b=jbFVrqp25QmshWSsLAdTlzXvUoy9NfrY5cVTYc7m8QAaKUrpl9y
+	QusNbOc5/1sV3KN1FqQ+DP+qYw0al+GDT0jPyfrgQ9ajcoPMub0Xd+eZgl93jYei
+	UneT4eRB8gPW2fzljYlz4IrDsrE4PVPRfLtkWAaDSNaObhDu24vmXm0bgamFZUGJ
+	K8VsZuIv0F950oQQeCrpd/ZOM26dKcGbUgOP10TOOuvl6iShaTJajAKHWTvJbuXV
+	mxa2KLBhf9AOjG+rq+jkudeRzEg/STaPWl8W8r/U0Vh4hPEI4ZWqWsi5Ie7fbTdF
+	alYwTCI6Wr0+M8cDKjmiLeGRiyJU1HAC5zQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1792539232; x=
+	1792625632; bh=rXuTf9MlNi3gCPS9slrsF274GgQjjMDR257jPNV3xKE=; b=N
+	msGfiJEA1jauM+EM0poq/ZB1SRhLq0HqRfAQR8O58GuTQT/2iijtp4NhqFubdiDC
+	+TLtuwfHsj4O6G9/HOxbxoO3veERndt8zHVhHYbbq3CMCprjKbB5xxVsot9ZXEe8
+	xJShUl2AB2vAEs0pJcNE+/CTgNN/Hssy/Lk/zZO2T/LaAzesQPUX5edc/kB+JE73
+	KhEsDngHjtjZIz4R52QpyhGVnXEoMG6kU3YhicvQ7WS7PTHN0+HDKBEjx73njgAp
+	cgMeOV6YQLz+Q9/Q6hxSiWIGj8KcX4ZZDYEM7apcZx9ST8HmVY80FBUkWcIqesVY
+	0taXcBTmXeVmIK6i0rHmQ==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
+	action=sign d=ownmail.net a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1792539232; d=ownmail.net;
+	mf=PG5laWxiQG93bm1haWwubmV0Pg==;
+	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:aeb9avtPYmigwdqzp1/D4qaKQxZn4kQU+oqNHavgdFhOriI
+	Atlz6iLGQb283e+mgddwFFfQqAa1oQMLINptI/obdpZIr8aXA4oRAyzzzuSuOtt8
+	+7BeHT0Q5MYEIxwEaL1pSnON18Gv0VTB7GzppYlqsL/823K+H+x5KF1s4pB2RXAG
+	rO/JD2x4QVlw6wFpUSItPHKDhfNEAqescVs7p7nzUs3xqnKskcw6Y5wqt82NNCGN
+	TN4ecc9pqkeu0Rrgw75gIxzNjh7gNEHepV0o7l/5zA177Woxh/EoBLgG4XM3ZyPr
+	2PG7+5GxTeish5cA3n8cmNFMSQxczUmU4NUdZWw==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
+	action=mi-m=1; hc=13;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,reply-to,
+	subject,to;
+Message-Instance: m=1; h=sha256:J/XJTn0s3QUHG8+qquqGGSJZEt19yvABeMqfC5v6w18=:kFba7Dsgg5LxWvj8orHnHGtvho6jdXYB12ViMVRveZs=;
+X-ME-Sender: <xms:YPrXaoBFFJ0Xy6yQTmPsqGX14QP_dGVFe36OTRwQrw-vEHT7UZvSaA>
+    <xme:YPrXavdMnzeKMvpZtjqBIwwqQuet0587bX2V5lOMjYTKfpz1AHWS1VyaIwijfAOJw
+    W7vXISyIkjVkianClkeVEgr0q-EBqp1kM43lJykAMqUolUcRPI>
+X-ME-Received: <xmr:YPrXav3eLXVQrL_dow6ysa5_a8-2nldHq8loLF_j4SN1LfoaL5HCUvijINGweMto6Lh2IKRgVQNyrmJTvT6eNCoTGr1LRLY>
+X-ME-Proxy-Cause: dmFkZTGWaOVZU0YAt7mxINLLGn1D9+oSwfzBCHxdbgm3M3WrsGh0Yz4KrBc/T7GZ/WgvCY
+    DXtXZ7zL/hLg16re4tAbVVBPnHXpfmmzVQNZDm9KvsSvUSwX5cAGu2ioYzQilwRlpM918L
+    eDCKmfZQp43Qo/+YFAlfi/SKHU57xPBQeoZq9lUecR7+12XvaB6kG34Nu+PEdKoyevyZza
+    Vod2FWkXII4RfqRoGr3K3z4fqg/fnX6l1pGobryjGfcC6amiRDDAsSM3iJ20ONc7sqE0IF
+    RgF8EAL3J1QuGQHWzar45OlKk+zyeXplf6AHqQn5KWkg/o6uzsgqLLfDeHiVrWsMzk3par
+    OOUEz/NktG4SWtO0hU+irl9txScKxpRjD5UlQLtrUxqMSJwxxAVI4GqDNOOdNATVja0F34
+    uYXHWxSYxBiI809IHZgM5ONfpg6j4QIGPqLMiSJKomwSa3nlK+yY1+PTrS8NOl2jZeG0mC
+    I4xWSYVvHooQrQZOPdAbf7RoK77CPNN/zaqJIKaddTiCQX2EzQLGJH7tXq4BAOQq60QPGu
+    RucImKWtQ08ebSE9yZGQdwhKiTvvURZs8kFgVlj+z08s8zDuyMMkwW54gUZzpznkMH+FSK
+    nCqRLUZgrjkc2HTWzXvG3ipcK9nVRjTe1iU5MaIQB7UWdBHTTM10kJkaR0xA
+X-ME-Proxy: <xmx:YPrXauj1vCMgHmLHshj8RYoN-72aQAGuL4zhdTXFOLNA7BsBP9eO0Q>
+    <xmx:YPrXagkgSqdZtVkl6rDEpyox8jTt6Yjb7FciuJRyx00FmkPbIuLDVA>
+    <xmx:YPrXasagb6F-dXAPIilO1-jjU1g_4IADkEbEd5eQUPYbFjh0hLmjGA>
+    <xmx:YPrXajGRJ2WCxrIIPxkm257JpX_ihvrJrPBQnkUrOqWj2fg3PLc23Q>
+    <xmx:YPrXaswZ6_OTEU0BPZ4PmvIvzx9M5rpGntKL9XO3pDl2IiU8m3xNSxBH>
+Feedback-ID: i9d664b8f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 20 Oct 2026 19:33:49 -0400 (EDT)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,218 +118,86 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261019153628.15912-1-leon.hwang@linux.dev> <20261019153628.15912-6-leon.hwang@linux.dev>
-In-Reply-To: <20261019153628.15912-6-leon.hwang@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 20 Oct 2026 16:25:55 -0700
-X-Gm-Features: AclHuK9R-Pz11REH9KszPt0wQBWz-TsT_XQJqO1BNWiMHHq0gxNTu4ERDjHPk6w
-Message-ID: <CAEf4Bzbr46UkiE1sbb+Zwcs0S1ejpKmtTGjNCAkWD-J6FRcPGQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 5/6] libbpf: Add bpf_link_create_log API
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>, 
-	Martin Karsten <mkarsten@uwaterloo.ca>, Masashi Honma <masashi.honma@gmail.com>, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: NeilBrown <neilb@ownmail.net>
+To: "jamz" <jamz@amazon.com>
+Cc: "Miklos Szeredi" <miklos@szeredi.hu>, "Jimmy Zuber" <jamz@amazon.com>,
+ fuse-devel@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ "Shuah Khan" <shuah@kernel.org>, "Bernd Schubert" <bernd@bsbernd.com>,
+ "Jim Harris" <jiharris@nvidia.com>, "Horst Birthelmer" <horst@birthelmer.de>,
+ "Luis Henriques" <luis@igalia.com>
+Subject: Re: [PATCH 0/3] fuse: atomic open
+In-reply-to: <20261020141647.3271341-1-jamz@amazon.com>
+References: <20261020141647.3271341-1-jamz@amazon.com>
+Date: Wed, 21 Oct 2026 10:33:46 +1100
+Message-id: <179253922666.1724252.16392934420146585044@noble.neil.brown.name>
+Reply-To: NeilBrown <neil@brown.name>
 
-On Mon, Oct 19, 2026 at 8:37=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> Add a new API to accept the log opts, instead of extending the existing
-> struct bpf_link_create_opts.
->
-> Appending log_opts to struct bpf_link_create_opts would place them after
-> attach-type-specific fields of varying sizes, making it difficult to
-> extend the struct while preserving forward compatibility.
->
-> For example, adding log_opts would prevent extending uprobe_multi
-> directly with a new build_id field. Instead, a separate union would
-> be needed:
->
-> struct bpf_link_create_opts {
->         /* ... */
->         union {
->                 /* ... */
->                 struct {
->                         /* ... */
->                         __u32 path_fd;
->                 } uprobe_multi;
->         };
->         struct bpf_log_opts *log_opts;
->         union {
->                 struct {
->                         __u64 build_id;
->                 } uprobe_multi_ext;
->         };
->         size_t :0;
-> };
->
-> Without log_opts, build_id could be added directly to uprobe_multi:
->
-> struct bpf_link_create_opts {
->         /* ... */
->         union {
->                 /* ... */
->                 struct {
->                         /* ... */
->                         __u32 path_fd;
->                         __u64 build_id;
->                 } uprobe_multi;
->         };
->         size_t :0;
-> };
->
-> Introduce bpf_link_create_log() to accept struct bpf_log_opts separately,
-> preserving the forward compatibility of struct bpf_link_create_opts.
->
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  tools/lib/bpf/bpf.c      | 28 ++++++++++++++++++++++++----
->  tools/lib/bpf/bpf.h      |  5 +++++
->  tools/lib/bpf/libbpf.map |  2 ++
->  3 files changed, 31 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 9a2107d4f6d8..263a1d516a02 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -788,9 +788,10 @@ int bpf_prog_detach2(int prog_fd, int target_fd, enu=
-m bpf_attach_type type)
->         return bpf_prog_detach_opts(prog_fd, target_fd, type, NULL);
->  }
->
-> -int bpf_link_create(int prog_fd, int target_fd,
-> -                   enum bpf_attach_type attach_type,
-> -                   const struct bpf_link_create_opts *opts)
-> +static int __bpf_link_create(int prog_fd, int target_fd,
-> +                            enum bpf_attach_type attach_type,
-> +                            const struct bpf_link_create_opts *opts,
-> +                            struct bpf_log_opts *log_opts)
->  {
->         const size_t attr_sz =3D offsetofend(union bpf_attr, link_create)=
-;
->         __u32 target_btf_id, iter_info_len, relative_id;
-> @@ -965,7 +966,7 @@ int bpf_link_create(int prog_fd, int target_fd,
->                 break;
->         }
->  proceed:
-> -       fd =3D sys_bpf_fd(BPF_LINK_CREATE, &attr, attr_sz);
-> +       fd =3D __sys_bpf_fd(&attr, attr_sz, BPF_LINK_CREATE, log_opts);
->         if (fd >=3D 0)
->                 return fd;
->         /* we'll get EINVAL if LINK_CREATE doesn't support attaching fent=
-ry
-> @@ -975,6 +976,10 @@ int bpf_link_create(int prog_fd, int target_fd,
->         if (err !=3D -EINVAL)
->                 return libbpf_err(err);
->
-> +       /* bpf_raw_tracepoint_open() does not support log_opts */
-> +       if (log_opts)
-> +               return libbpf_err(err);
-> +
->         /* if user used features not supported by
->          * BPF_RAW_TRACEPOINT_OPEN command, then just give up immediately
->          */
-> @@ -999,6 +1004,21 @@ int bpf_link_create(int prog_fd, int target_fd,
->         }
->  }
->
-> +int bpf_link_create(int prog_fd, int target_fd,
-> +                   enum bpf_attach_type attach_type,
-> +                   const struct bpf_link_create_opts *opts)
-> +{
-> +       return __bpf_link_create(prog_fd, target_fd, attach_type, opts, N=
-ULL);
-> +}
-> +
-> +int bpf_link_create_log(int prog_fd, int target_fd,
-> +                       enum bpf_attach_type attach_type,
-> +                       const struct bpf_link_create_opts *opts,
-> +                       struct bpf_log_opts *log_opts)
-> +{
-> +       return __bpf_link_create(prog_fd, target_fd, attach_type, opts, l=
-og_opts);
-> +}
-> +
->  int bpf_link_detach(int link_fd)
->  {
->         const size_t attr_sz =3D offsetofend(union bpf_attr, link_detach)=
-;
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 826d9cc9ab65..dedaf8086902 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -484,6 +484,11 @@ LIBBPF_API int bpf_link_create(int prog_fd, int targ=
-et_fd,
->                                enum bpf_attach_type attach_type,
->                                const struct bpf_link_create_opts *opts);
->
-> +LIBBPF_API int bpf_link_create_log(int prog_fd, int target_fd,
-> +                                  enum bpf_attach_type attach_type,
-> +                                  const struct bpf_link_create_opts *opt=
-s,
-> +                                  struct bpf_log_opts *log_opts);
+On Wed, 21 Oct 2026, jamz wrote:
+> From: Jimmy Zuber <jamz@amazon.com>
+>=20
+> Add FUSE_OPEN_ATOMIC, allowing the kernel to skip LOOKUP to improve
+> performance. A server implementing FUSE_OPEN_ATOMIC will look up
+> the name, create it if O_CREAT is supplied, and open it in one request.
+>=20
+> The reply says whether the file was created, as Miklos suggested in [1].
+> The overall pattern follows his sketch in [2]. For a cached
+> name, the kernel compares the returned nodeid with the cached one and
+> looks the name up again on a mismatch.
+>=20
+> A server without FUSE_OPEN_ATOMIC replies -ENOSYS and keeps today's
+> behaviour.
 
-Leon,
+This all looks like a reasonably sensible design. As permission checking
+happens in the client, not on the server, it is appropriate that
+FUSE_OPEN_ATOMIC only opens the file if it actually created it.
+So it doesn't make sense to implement O_TRUNC.
 
-how about instead of adding this new API, we try to repurpose
-bpf_link_create_opts' iter_info to be used as log opts? we have this
-right now:
+However the code seems to suggest that the server might open the file if
+it was found to already exist.  In that case, were does the permission
+check happen...
 
-union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
-struct bpf_link_create_opts {
-        size_t sz; /* size of this struct for forward/backward compatibilit=
-y */
-        __u32 flags;
-        union bpf_iter_link_info *iter_info;
-        __u32 iter_info_len;
-        __u32 target_btf_id;
-        union {
+Maybe I need a more explicit statement of what FUSE_OPEN_ATOMIC is meant
+to do in the various cases.  Or maybe I just don't know enough about
+fuse.
+
+There is work underway to support O_CREAT|O_DIRECTORY so that a
+directory can be created and opened in a single operation.  Would it
+make sense to include this in FUSE_OPEN_ATOMIC ??
+
+Thanks,
+NeilBrown
 
 
-that iter_info/iter_info_len is a bit of a legacy before we had
-per-attach type union, what if we add iter section into the union,
-wrap iter_info with union and put log_opts there, mark iter_info
-deprecated or something.
 
-I'm not sure anyone is actually using iter_info (I didn't find any
-uses in Meta code base, for instance), but we can detect its use by
-checking iter_info_len: if it's non-zero, then iter_info must be a
-real bpf_iter_link_info. so we should be able to detect this just
-fine, the only downside is that you can't use log_opts and iter_info
-simultaneously, but I think that's fine: you can update your code to
-use new iter.info fields instead, if you need log_opts + iter_info.
+>=20
+> Tested with a new selftest under UML and KVM.
+>=20
+> [1] https://lore.kernel.org/all/CAJfpeguEK4JsFo60=3DyHkpLL6XkDGS7cQ5GOhiFL3=
+79KsYk0TsQ@mail.gmail.com/
+> [2] https://lore.kernel.org/all/CAJfpegvXtXY=3DPbxv+dMGFR8mvWN0DUwhSo6NwaVe=
+xk6Y6sao+w@mail.gmail.com/
+>=20
+>=20
+> Jimmy Zuber (3):
+>   fuse: add FUSE_OPEN_ATOMIC
+>   fuse: open cached files with FUSE_OPEN_ATOMIC
+>   selftests/fuse: add test for FUSE_OPEN_ATOMIC
+>=20
+>  fs/fuse/dir.c                                 | 359 +++++++++++--
+>  fs/fuse/file.c                                |   4 +-
+>  fs/fuse/fuse_i.h                              |   4 +
+>  include/uapi/linux/fuse.h                     |   8 +-
+>  .../selftests/filesystems/fuse/.gitignore     |   1 +
+>  .../selftests/filesystems/fuse/Makefile       |   3 +-
+>  .../filesystems/fuse/atomic_open_test.c       | 473 ++++++++++++++++++
+>  7 files changed, 797 insertions(+), 55 deletions(-)
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/atomic_open_te=
+st.c
+>=20
+>=20
+> base-commit: b776cbe24cc1b79c7f5101762b0069b3f48b6a4b
+> --=20
+> 2.50.1
+>=20
+>=20
 
-WDYT?
-
-
-> +
->  LIBBPF_API int bpf_link_detach(int link_fd);
->
->  struct bpf_link_update_opts {
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index eeba4072a5da..f6eb57151f7d 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -475,4 +475,6 @@ LIBBPF_1.8.0 {
->  } LIBBPF_1.7.0;
->
->  LIBBPF_1.9.0 {
-> +       global:
-> +               bpf_link_create_log;
->  } LIBBPF_1.8.0;
-> --
-> 2.55.0
->
