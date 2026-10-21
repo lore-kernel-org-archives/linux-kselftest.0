@@ -1,45 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792615305;
-	b=e7SEGSmp1OGeOht5huWaH4JmXKWU85515MTIoMfduLuSwgY5I0gGOIXUsb/8uelGS1Qo
-	 xWzYMAnJ4RO4AOaw4JMJdUiSDXaUbvIhYxqUvwFgCOsaDA2DcN2vTYPC5bMheEyqePWZP
-	 HVQkTU56vHbcpjBspa5yENR1xI1m+X74Wt/8bZilgTKdrQq+zmpLkdaQf40LHsZlfhVIr
-	 UC0glM9eosv3kuaMXIdTmz6ukiyt/MLE+FTZiDPRWqEptD62l/CPOF2ypcoc2XG0HrPby
-	 kqQZq+wBrskys+sbMPSKWImLfViIQD6RrWDmQ8vC4jsHJ10daAXXSR/xuOkFsd+0LpA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792615305;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Bq3V9J9F4ZHKrQtjacM7Tw7YXz58yMhcGPTw8dbAFrA=;
-	b=aKmTQhCf5K+icSHoGTIxBDc8p8R8W/8wHgXzhjSyGS8IpycxoQ9mvWYOyUS6ZF/4/xxp
-	 hwsW7J07uXoW6vTCBIePhdKb8cBMc2Q5jJbF2JQ4BLCvzAO+UZucIsZ4/OTx4WA5em7rn
-	 YNkD5RG5t/BnV9xibfj6KUzVObCvcRbBgP0KLjfvay6AkcJ+RYbBwAEbgwGEOviU5W+GB
-	 jNd1FqTVVaTyRy7NymKN748cLArzc/mUCmeogW8V2bYCflc7WzJqs7FtQPS+MAM5MjaGB
-	 5RRWDa1QGddLy0EuLaXnmDm/NfgnTYtQvpKwGMhmcG4Q24AkKXJgXTd7nfwhaWMXB6Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OVPYEOJF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.52
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792615347;
+	b=AznPhT/3ssTZIZBQ2jqmmfRSM7msGdnZ/P4TRoP6sx9zpKn1Hjta7ILJQQQTFcWpxxt5
+	 79voILXLq5AI6aO5g+PqnJiazmIT/O2GlATmQrFy8bPWvgAlzv/vdI8lELOXjALUEMibj
+	 K6IkU/ZiiJQzripvpXCC4eT01GaUpEu/REMdiBU390vppId33/e5LHeYwEghIfPEbDw3f
+	 Nr8jKcMrRp5OptmTlzprsAm4QQHLDz2oEZidG2ZNuAyxa4DwqXvWMJZALzXQ84sxZ9JpN
+	 dJJrfn3AKDLmjm0VyfV/5pA+SMY7020eUfqKjayKdlcl+IJzdqpoBWTW/9ULxXsUCOw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792615347;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=8xOtYw2UQzjfVaNRpu7KDUVa/s7vr4AwHD7vVplnNCY=;
+	b=23OyqCvCZNhkiNuTlTXHcNZ1Nl7cfONjTnfm/4yPKA8jFbu3Jq+VfmKk0r5RPnHW4hGT
+	 r/iEPlJqYYBZlp2nGiGXix4UoHlJrfEh70ZA/GbcP6oB0u720YGdmMCjPcA24ICs3b7aD
+	 X3oac+VaRAwJiTUwVZmi9Gse7mVN7hvAS1ClFXqrG51StNB4X/vgWYGUapUSVAVy2yOtu
+	 F4d50ROgOTT+c2fQsLEVp5ZYJ673cIA1JRyefAa9IWxsLcC35IRon2ipfRaZQeYwzhaLw
+	 YZAx66ylRvQue75mpI2KBSgEbg/TXTRR9TvxwH34zM3MzizOBE1TOqeHpB2Q92U9Mqg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=mojatatu.com;
+	spf=none smtp.mailfrom=mojatatu.com;
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=VO3YUyFd;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.52
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D2D606A319;
-	Wed, 21 Oct 2026 20:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5C2606A31B
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 20:42:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E5C2606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OVPYEOJF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE1411F000C1;
-	Wed, 21 Oct 2026 20:41:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792615304;
-	bh=Bq3V9J9F4ZHKrQtjacM7Tw7YXz58yMhcGPTw8dbAFrA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OVPYEOJFHxyq2Jn+Mw16KBU0u4plWBYpqFAxZfQIetwIc4UlXVDL+weM0LK9cj2UC
-	 RC8KozZM3bGjca4q5PGzfvxdvRwJkWOWFr6SOq4BzyWUPITiKI+LTe8X4uRMjUNDux
-	 o0kFUr2WR0J0IuQvKhY7daAWRScMmQNEfuGX59yDrN/yz3Hl/bb5wylqgz1rXnJ+Ur
-	 /wF7jX7kB1baY0FPJKzEoyCnvxxQdcgleWPu3ZsAxN84jz62ON9Shl1lw5DnEbGgH1
-	 K1xe68vud9jyiFi7OU8IJFoVYDnBTVZsrdy2H4RReHnjjJZsPrfO+X/SdQsVJCsXVB
-	 B/Xex9h+p1tyg==
-Content-Type: multipart/mixed; boundary="===============3655339663897498520=="
+	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=VO3YUyFd
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-677d35fd1d2so1166835d50.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 13:42:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792615346; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JPFs/mfja7+D79z2hjbRg4F47DmGBNIab37VShBL4E5JNyyg0eyoldm/+aLVONLnKi
+         Fw+gYWcuuH+mdRSxOpkzlTaEz2TawRo+9+Cl2xr7/lA0YUD1Q8p0vrfYQe4bOXTsXel2
+         vvod3ps2HQ2f2ZRUFGB4t+TY1SkMmrPrt8LKh75ZWel2Udz/c/ts/7G7NeoS1rmiLdse
+         GwFR08wloPv6hQk3fPQVDnmm4pdjT5i5M2MP+F6lGX50tFYlxrUiN2nXNZ0aIXxapT7x
+         Pgrm8Csb/rdpcCxzRqmJ7sMOvg5PjHimchF3aQqSkqBxreayHEPHK857xQzPs8Sh6zB+
+         ljKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8xOtYw2UQzjfVaNRpu7KDUVa/s7vr4AwHD7vVplnNCY=;
+        fh=DDsYj78N3Gm/rUJwm6U/3n4+fVQ8RGughDoAo2vQAO8=;
+        b=YHW0pD8/gK9s16cFou0p3D843Hcr+nd0ZYgDuYt0I2c86wchUfBpymyRje9bMrnf/X
+         eA4Ttx/1zyvrye83Je2/pzOWjKFjhFUz3zBEnEJy735e8tqiRv1PyuA/tX61sARQCTJ4
+         Ww2Va7mh838CCPiLzdPdb4sY+zJQeSkNUHrGvoUWhQvdQa7u0bEiR001QIR0henMaRfd
+         wpQYbmjN/Xm3Cpi4U3BvAOlltBezJIultPFGCnEBYrqLrH1ArSB/DW5mrnq09DoSdPOA
+         tO3rf0M74Vy5IgyPlPLhu+J9TkAY9713w5TZV7d61CztuB/Um4QnAdKHVXXmlIv4Pcoy
+         iRVQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu.com; s=google; t=1792615346; x=1793220146; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=8xOtYw2UQzjfVaNRpu7KDUVa/s7vr4AwHD7vVplnNCY=;
+        b=VO3YUyFd3pmmCIftZq+xF2ZkQZoIHU9JIzi2JIJ+1ESR/1LcjJdDVnlViAkkfXi36z
+         KI+f3J0R4BZKChF+LZNb+KRrbY81eb4kL8JRiYuIdZ6QbY4V6+IWGHtIHClBHazi44OL
+         XyRuKI9pxH4Pp/IuDAbTbYY1MLG2AjDZpVcpU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792615346; x=1793220146;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8xOtYw2UQzjfVaNRpu7KDUVa/s7vr4AwHD7vVplnNCY=;
+        b=ihP7LT3oWi0s+4WPrYHVDisnPGVq41dCZZOZWldBCIBxLoAesUQ0xGBEKiPKFb88We
+         ZYCFu4OoRj+3qG6uHVRTYcxBQ/mNI3s4FhZhpEfT9gYadergPz6FzntBkHrQLgctqm6D
+         /4XmblxSz3SmeCV1HRmCwHkYQERDGhvGvpRWvExfj35MPJS4oWDbAT6eE6OBqxl852OD
+         9pYL8YmcU+eqKAHYFTJX8+V90grrqOnKKUNNabHV2pHaMEJSeSQsyPugkm+jCNtH0lwK
+         lIiBlrzfQwT7h1WvQlRc6m3UZT0mc4bRaL+ppwGX/+2xRuNUrcBgp/HGzrTBgR2pIRVD
+         JV1A==
+X-Forwarded-Encrypted: i=1; AKwUvByxOJHVCX9q8vduOM05U+s/Nzgb6r6PHo82OB+ZtDxIuqBHPnozRE8YT9Jq2bDfCltaIjPQzqR96CNaFuNyvx8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJX8y+Cl/hezQUKNXifwhE+juxm1snXghOItxUmnxwprObVV3L5
+	tktuB7vtG6pkSSKdtQTBaITYYHwrpBvJlayHc6pxKKv74vLFjWPeE5/6r4me/g3c++94oz50US7
+	j4q7qq0RmhcniDaMSsIL2XrmLW/ZmyBs4M6nuqvKerFlm/KO7a2g=
+X-Gm-Gg: AYBFou2U3jz4YBwJ0LvwnEJSaC2/ATugQ+vEEXjPE06usG+RIef4Lf0oJVmfiqbxWGD
+	BzZHT3hczpRxaKRA1xvvzvpMoC72T1qELmL+K6KPcKpYkWsfKhiLo0ruXXp0uXZAGXIbupXesGX
+	Pz9VYVap/p87dfoTpfz3Ysp0aJl+B+l6tdDA5KuO2LdrKAj9vL4JmaKIRo8s9FIrqTugq87h67d
+	EdI4a1824QnL+k3aAeEL7MQSSIxJ3c5EKIy1YxMJBp7lEzW8r17ZCJ95JhXYZPwzCv1T8u2jwdJ
+	ptNAaEyzizX8Hy/3E5vV4xm//3WiIWCSc1t/jURq7PnyJyDSMkt2e5qf5RkY4iMADVUVPu+zYt2
+	XU+bWdSiyx9lFkToGmZ1618mENaCos4OktrCHHH/WMDAC+wlxSTY=
+X-Received: by 2002:a05:690e:1512:b0:679:b810:6e02 with SMTP id
+ 956f58d0204a3-67a0e45c3f7mr1012582d50.26.1792615345995; Wed, 21 Oct 2026
+ 13:42:25 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,114 +101,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <ff53ef1657f7ecedb34c148ab05588f657dac0d092ffb55923d7bc6fd375bf84@mail.kernel.org>
-In-Reply-To: <20261021195759.119421-5-jolsa@kernel.org>
-References: <20261021195759.119421-5-jolsa@kernel.org>
-Subject: Re: [RFC bpf-next 4/9] bpf: Add kfuncs to allocate and seal user pages
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net
-Cc: bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,linux-mm@kvack.org,akpm@linux-foundation.org,liam@infradead.org,ljs@kernel.org,linux-kselftest@vger.kernel.org,shuah@kernel.org,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 21 Oct 2026 20:41:43 +0000 (UTC)
+References: <QDISC-TIAE.v2.r0.20261015163454-1@mojatatu.com>
+ <179244597608.3135.14866688728455017187@kernel.org> <3ab59725-e34c-4243-bc72-d93f837bcad1@redhat.com>
+In-Reply-To: <3ab59725-e34c-4243-bc72-d93f837bcad1@redhat.com>
+From: Victor Nogueira <victor@mojatatu.com>
+Date: Wed, 21 Oct 2026 17:42:13 -0300
+X-Gm-Features: AclHuK8LdBftHZw4Zb8WFN_X048TWKstFrjtX5FLtVeFmM9dmX8keSM3eYtswtE
+Message-ID: <CA+NMeC_kwd5yihR3SSqb+Z8wX+NuobntbvpKtAyOwjZ1Xa4mVg@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 1/3] net/sched: drr, ets, sfq: skip empty
+ rounds in the deficit-refill dequeue loop
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev-bot+sashiko@kernel.org, davem@davemloft.net, edumazet@kernel.org, 
+	kuba@kernel.org, jhs@mojatatu.com, jiri@resnulli.us, netdev@vger.kernel.org, 
+	horms@kernel.org, sashiko-bot@kernel.org, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============3655339663897498520==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Oct 21, 2026 at 11:22=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wr=
+ote:
+>
+> On 10/19/26 23:39, netdev-bot+sashiko@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 3 potential
+> > issue(s) to consider.
+> >
+> > Critical: 0 =C2=B7 High: 0 (1) =C2=B7 Medium: 2 =C2=B7 Low: 1
+> >
+> > If you believe none of the issues are legitimate, please reply to each
+> > issue of Medium severity or higher and explain why the AI is wrong.
+> > If any of them are legitimate and you plan to respin, please let patchw=
+ork
+> > know by including "pw-bot: cr" as a separate line at the end of your re=
+ply
+> > (one such reply per series is enough).
+> >
+> > - [Medium] drr_dequeue() and ets_qdisc_dequeue() allow only one bulk
+> >    refill per dequeue: `scanned =3D true` is set at sch_drr.c:414 /=E2=
+=80=A6
+>
+> This looks legit.
+>
+> Also is would be great if you could somehow deduplicate the code a bit,
+> (but I have no good idea on how to achieve that)
 
-> bpf: Add kfuncs to allocate and seal user pages
+Fair enough, I'll respin this set once net-next reopens.
 
-TL;DR: bpf_user_page_exec() may skip the icache flush on arm64/riscv, since
-flush_icache_user_page() runs before VM_EXEC is set, so with THP a task could
-execute stale instructions.
-
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 4d9e9423826a..246f4969a144 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-
-[ ... ]
-
-> @@ -3739,6 +3743,127 @@ __bpf_kfunc int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
-
-[ ... ]
-
-> +__bpf_kfunc int bpf_user_page_exec(unsigned long addr)
-> +{
-
-[ ... ]
-
-> +	err = get_user_pages(addr, 1, FOLL_WRITE, &page);
-
-[ ... ]
-
-> +	flush_icache_user_page(vma, page, addr, PAGE_SIZE);
-> +	err = do_mprotect_pkey_locked(addr, PAGE_SIZE, PROT_READ | PROT_EXEC, -1);
-
-Does flush_icache_user_page() do anything here on the architectures that
-need it?
-
-At this point the VMA is still the read/write mapping created by
-bpf_user_page_alloc(), so VM_EXEC is not set yet.  On riscv the macro is:
-
-    #define flush_icache_user_page(vma, pg, addr, len)  \
-    do {                                                \
-            if (vma->vm_flags & VM_EXEC)                \
-                    flush_icache_mm(vma->vm_mm, 0);     \
-    } while (0)
-
-so it is skipped, and VM_EXEC only gets set by the
-do_mprotect_pkey_locked() call on the next line.  arm64 does not define
-flush_icache_user_page(), so it falls back to the empty stub in
-include/asm-generic/cacheflush.h.
-
-That leaves only the set_ptes() hook that runs when change_pte_range()
-installs the read/execute PTE.  On arm64 it is
-__sync_cache_and_tags()->__sync_icache_dcache(), and on riscv it is
-__set_pte_at()->flush_icache_pte().  Both only do cache maintenance when
-PG_dcache_clean is clear on the folio, and then set it for the whole folio:
-
-    if (!test_bit(PG_dcache_clean, &folio->flags.f)) {
-            sync_icache_aliases(folio_address(folio),
-                                folio_address(folio) + folio_size(folio));
-            set_bit(PG_dcache_clean, &folio->flags.f);
-    }
-
-The BPF program writes the instructions through the user address with
-bpf_probe_write_user_faultable(), which uses copy_to_user() and never calls
-flush_dcache_folio(), so PG_dcache_clean is not cleared again after the
-first exec mapping of the folio.
-
-With THP enabled (arm64 or riscv, 4K pages), can this sequence happen?
-
-  bpf_user_page_alloc(512) returns a PMD-aligned address
-  the program writes page 0, and the fault maps a 2MB anonymous THP
-  bpf_user_page_exec(addr) splits the VMA and the PMD, the read/execute
-    set_ptes() for page 0 syncs the whole 2MB folio and sets PG_dcache_clean
-  the program writes code into page 1, which is still read/write
-  bpf_user_page_exec(addr + PAGE_SIZE) calls flush_icache_user_page() again
-    as a no-op, and the read/execute set_ptes() sees PG_dcache_clean set and
-    skips maintenance
-
-The task would then execute page 1 without a D-cache clean to the point of
-unification and I-cache invalidate (arm64 without CTR_EL0.IDC/DIC), or
-without fence.i (riscv), and could fetch stale instructions.  mTHP sizes
-give the same result for smaller allocations.
-
-The uprobe XOL code, which also writes instructions for user space, does
-explicit maintenance through the kernel alias: arm64 arch_uprobe_copy_ixol()
-calls sync_icache_aliases(), and riscv, loongarch and mips call
-flush_icache_range() on the kmap address.
-
-Should bpf_user_page_exec() do the same, for example with
-kmap_local_page(page) followed by flush_icache_range()?  Alternatively,
-would calling flush_dcache_page(page) before the mprotect, so the arch
-set_ptes() hook redoes the sync, be enough?  Either way the flush would no
-longer depend on VM_EXEC being set at the time of the call.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39668036298
---===============3655339663897498520==--
+cheers,
+Victor
