@@ -1,55 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792599133;
-	b=FnFXN3uv5x8k0kBvsgtnKpyKr2r8z3EKWQ6dN+uHot4abs9fFDFWH/gotNw325rlem9J
-	 jKYRFbU40gbQBHNMeVOfe1URt73aIqzCHuFiuleVvSGIoCr5m/uCdo7gxkuHC3/S+cESZ
-	 BsrrvSwctr2WokzJNPYJUNOJ0gRKYLew42GuE9eu/DSkM3tUxGNm+GYlgSABkbi7+XLD1
-	 KBTb6krqUxJOk+nQhLla1S227F2OAzgR26SezZq1dNTFfBN3pyl8oGIZLd8wZvz+khxL4
-	 QW54TwILu78nFM8agt54IiE7+bxAkgdSlcnKKViK82fbOwhQzsBqcdeDwuWgdt2kSIw==
+	t=1792600315;
+	b=RwmkTVYo0dD31T+DZ2Gv6yizsYQpAJoLjrMZI4EevcSLjjkiVe/UFtQSR8Z1VTSom7EZ
+	 jRJS0VX6m8GItGo0+NKGCZ01yrcKth87aM66uxOVcBbX6NOnL1qksc0at7bgorgWd3u5k
+	 46wdp6GNW64/preMrvBJlrLxFia4O46CamQKoRS/DOhBMxyCsBVr+EPkZoRGbrymB+VmX
+	 R89X0G0qWJrkPTmMsTYl4Tn1DaqwJuAHeKiUTzVxT0vkiAdi2aLu1Dy/tiTy9MHn0Imnx
+	 kl4sP9F0aEKr0xoJql+E4oX5yBH0HmXPZg/Mt6bhhPglMR03SVREjkzpPFfknHKlEUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792599133;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Nv4dga8Beqk0UYUE4xptK3XxJoHuljS/2JzvfnhjtMU=;
-	b=xFq8y2gaw8MCH+6CFh9wHziZ2HDQx4AedAk0+boJbJsJ9OOjtQ+V8pM3vfhRX/dGtbpS
-	 SaEHFC6dcDnDQpvFVwG6+HKN8d2qD1CbHZlO2hsyrfybxxHJTgSTqbZajlpbO46PXmjPU
-	 YMyur6Ww+z9T9RV8j7JRvWZ28dVmvxbjfNjc8fULvfJtaJD2PEXJG9wnnkz706U0SSM8P
-	 dRWJbu6KiLQquFE+voN6B/rJMlF5KOH7XlsDFOlf0prcyI0rVE4TRBROe+SQ7Wiks1oFm
-	 PpSHuyct609REDy3Uis5VJmvnpjDHdRYwQBCnxUMUHeBH5n4NDTG/RUQG9iI4LkD/2Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792600315;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=3Bc76Zyj7fjJAs6twP2BXgV+vjnIbg8KFD0gadMNdtU=;
+	b=adP2NXKEAVrB7CawwoOeZcRSysLB93lGaSze/GPoxE7+Y1fEg8noaA2SozJDvh7XJcl7
+	 XicJi/NL5Mti8rOSRj4jo3ZmqTEzMnASCRuCAsSaG7D6sI0yFkOj0EJMnO6cfTW9Uk/FZ
+	 rqRgH1e1492FOmkhFBpcI/QvsHq4c7sYhei2iXe5SxqRLsgnMtDEVMwwOrzRDyAqUJoz5
+	 nFruCe8t7c2F5UHaCY85igzBBKZZz4+/8v0TUaIrlKic9TqXoIr8hRKIzvVGCNutvqKIt
+	 y7SYY0j45DgzV67gJZTLlUMysRf9y9DUTfn8ue8pC5WqoU2YYbP/hQa9aPic4JotUgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Et7iQEWD;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C72606A31E
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 16:12:12 +0000 (UTC)
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=qaX1G4g6;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84E00606A31A;
+	Wed, 21 Oct 2026 16:31:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84E00606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Et7iQEWD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BF761F000C3
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 16:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792599132;
-	bh=Nv4dga8Beqk0UYUE4xptK3XxJoHuljS/2JzvfnhjtMU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Et7iQEWDGAKMCS2o9c+29zSscUpl4CwbBKX8IxuAImdtHVYke6AKTJ4Jmc8+DZd4r
-	 b5l8l7eJ44H4jVM9hI5Oz26AfSTFROnUPh2PIGm5CaxcPeFsUbExbJGdlkIq3lNO6N
-	 k9NpiDRyq0YoGA1nwoUk4u4rRqN9E3Sea5xaTrM4UnAUX+kMx8oBz939fEbwdUxNC2
-	 bM8vAN8Rz5rEIqWgmnAIXI20slEs56wv09DKHMVMrZx+4gRZltyOqFa1jo9cSyGc7A
-	 /WU7qrG+JtyIbSG94Q2A7voiuFDI579PpwXaxYF5/jiEvuzD7+xKvHNFP0XDflg8wk
-	 +b5MbKEcqgBkg==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-4877837890fso452729fac.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 09:12:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBwLx/IS25DV3BthSs3yp+BFG6j82xZ2fJR7RG6fGTvFOgOePxkJ6CmuqKkJbu90uguQGpn24wlpvXkYkTWFoSk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIJ9P9po7+6fUinxzSpcsVYYz3tvSHw8o5JO9eC7IFKewcfLCb+
-	Ru+hJr/fvYt4O+gO6M31MzV/uFOKkcasutxAw+i5pvhnZ1hcdTr6tZnWJiPs5Nn4KwVnk4CFcO7
-	eQPJGW/vkCqdCsyJn7FldO81H9f3MXmE=
-X-Received: by 2002:a05:6871:4e86:b0:49e:472c:6b12 with SMTP id
- 586e51a60fabf-4a7dc2bb889mr1367699fac.52.1792599131843; Wed, 21 Oct 2026
- 09:12:11 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=qaX1G4g6
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31A521595;
+	Wed, 21 Oct 2026 09:31:45 -0700 (PDT)
+Received: from [10.2.212.8] (e134344.arm.com [10.2.212.8])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8077D3F7D8;
+	Wed, 21 Oct 2026 09:31:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1792600308; bh=wjg8va0dwrFjEhHJbzt9fHvFZWhxWkaPeVPa02AKIW4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qaX1G4g6y/zAemw/PIi92bhfww5ZlXN1TDVUH9CcPgoBWZ7C/6l+X2AwwlacBeEfP
+	 32LenG75QQInJL0AvexSWb/aWT/1W96gwPKH8mPm0Nb688mEzj6BLmZT6C+S3n80ch
+	 JR9bqGALMM5PQvDpxI3VTbMoegyxtFdMMq1qr4Hk=
+Message-ID: <a718389c-5c0d-4e4a-988d-6d3a61e667f9@arm.com>
+Date: Wed, 21 Oct 2026 17:31:45 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,41 +53,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261021152658.2618709-1-gthelen@google.com>
-In-Reply-To: <20261021152658.2618709-1-gthelen@google.com>
-From: Eric Dumazet <edumazet@kernel.org>
-Date: Wed, 21 Oct 2026 18:12:00 +0200
-X-Gmail-Original-Message-ID: <CAL4Wiirq6kO+U+zMaKppTTx=4TBT0R4=TPT2qfFuN8U+N0Cz8A@mail.gmail.com>
-X-Gm-Features: AclHuK_w2i57ia4yV8d-q-ZdbSEDqvhVGU3hAiIbV2vwLx8691QNitdURm0Db6k
-Message-ID: <CAL4Wiirq6kO+U+zMaKppTTx=4TBT0R4=TPT2qfFuN8U+N0Cz8A@mail.gmail.com>
-Subject: Re: [PATCH net] selftests/net: tcp_mmap: remove unused -k option and keepflag
-To: Greg Thelen <gthelen@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Soheil Hassas Yeganeh <soheil@google.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/2] selftests/resctrl: Recognise aarch64 as a vendor
+ for L3_NONCONT_CAT
+To: Reinette Chatre <reinette.chatre@intel.com>,
+ Richard Cheng <icheng@nvidia.com>, tony.luck@intel.com, x86@kernel.org,
+ shuah@kernel.org, fenghuay@nvidia.com
+Cc: Dave.Martin@arm.com, james.morse@arm.com, babu.moger@amd.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kaihengf@nvidia.com, kobak@nvidia.com, newtonl@nvidia.com,
+ kristinc@nvidia.com, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>
+References: <20261012074729.40042-1-icheng@nvidia.com>
+ <20261012074729.40042-3-icheng@nvidia.com>
+ <415d1bf3-342d-45b5-b31e-ddc654510d85@arm.com>
+ <801eeed4-6c31-40e7-8cfa-279d0740aa98@intel.com>
+Content-Language: en-US
+From: Ben Horgan <ben.horgan@arm.com>
+In-Reply-To: <801eeed4-6c31-40e7-8cfa-279d0740aa98@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Le mer. 21 oct. 2026 =C3=A0 17:27, Greg Thelen <gthelen@google.com> a =C3=
-=A9crit :
->
-> Commit aacb0c2e524c ("selftests: net: tcp_mmap must use
-> TCP_ZEROCOPY_RECEIVE") removed the only read of keepflag in child_thread(=
-),
-> leaving the file-scope keepflag variable set by the -k option in main() b=
-ut
-> never read. This triggers a Clang 23 warning:
->
->   tcp_mmap.c:91:12: error: variable 'keepflag' set but not used
->   [-Werror,-Wunused-but-set-global]
->
-> Remove the unused keepflag variable and the dead -k getopt option.
->
-> Fixes: aacb0c2e524c ("selftests: net: tcp_mmap must use TCP_ZEROCOPY_RECE=
-IVE")
-> Signed-off-by: Greg Thelen <gthelen@google.com>
+Hi Reinette, Richard,
 
-Reviewed-by: Eric Dumazet <edumazet@kernel.org>
+On 21/10/2026 15:56, Reinette Chatre wrote:
+> Hi Ben,
+> 
+> On 10/20/26 9:18 AM, Ben Horgan wrote:
+>> On 12/10/2026 08:47, Richard Cheng wrote:
+> 
+>>> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+>>> index 0a417267dd74..f4b02b3eedd7 100644
+>>> --- a/tools/testing/selftests/resctrl/cat_test.c
+>>> +++ b/tools/testing/selftests/resctrl/cat_test.c
+>>> @@ -271,8 +271,13 @@ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
+>>>  {
+>>>  	unsigned int vendor_id = get_vendor();
+>>>  
+>>> -	/* AMD and Hygon always support non-contiguous CBM. */
+>>> -	if (vendor_id == ARCH_AMD || vendor_id == ARCH_HYGON)
+>>> +	/*
+>>> +	 * AMD and Hygon always support non-contiguous CBM. ARM/MPAM defines
+>>> +	 * MPAMCFG_CPBM as a bitmap with no contiguity constraint per ARM
+>>> +	 * DDI 0598.
 
-Thanks!
+Nit: DDI 0598 is retired. The new spec version is IHI0099.
+
+>>> +	 */
+>>> +	if (vendor_id == ARCH_AMD || vendor_id == ARCH_HYGON ||
+>>> +	    vendor_id == ARCH_ARM)
+>>>  		return true;
+>>
+>> Would it be better not to just to use the information resctrl advertises?
+>> /sys/fs/resctrl/info/L3/sparse_masks
+> 
+> The result of this architecture specific test is used to validate that 
+> /sys/fs/resctrl/info/L3/sparse_masks provides accurate information.
+> 
+> This test was originally developed on Intel where support for
+> sparse masks need to be discovered from the hardware. 
+
+Ah ok, thanks for putting me straight.  The defined(__aarch64__) check looks to be the common way of
+checking in the selftests. This looks fine to me.
+
+Reviewed-by: Ben Horgan <ben.horgan@arm.com>
+
+Thanks,
+
+Ben
+
+> 
+>>
+>> Is there any reason this test doesn't use that other than being written before its introduction?
+> Reinette
+
