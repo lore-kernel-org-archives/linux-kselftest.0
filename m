@@ -1,88 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792619452;
-	b=F4ksidtELSxzx4W8gqhSxTKzUmby4aw86Y/uB3y4/QC+k6WWTOonPxYCAQXpG4jwRttk
-	 CYgWXkUU6qnZbNLYVKU6cv0LYUKyjdpn0PAdnoKBQYCKLo5ztg+4TtY0ecOB72dtBi+Ul
-	 PxpImw7W0SWmt6vLluRFnRez8ouJA/ydW8keDEDaamPgQBBehjq7L0NNWmNtG0VPRBBkL
-	 nLx/iWdPUuyNb1tEQAW0TJiZMDKazZDbefYWDNAyWjxA2uWX/HICetABd8+3ssIoDcSYK
-	 dj6uGfgOUlU+fFrVQf/wwpl+FTF0644lIixpslHA7gWVfw9BIJwNDkEdPS/V5KJ8XCA==
+	t=1792619630;
+	b=qY2V0V7jX47/flMpgVDeVXpJnJqp77deGnE0YDu0s1XmPkGC+uQa4liL1aTM0HZutfwe
+	 O2hItCs3UP8pEe3mQ7wHC9z2rvntqp/6r+4kpmTr5mBNCXnLqk9TAm7PpNoczX5gC0ThG
+	 cISdE7gUFrrG2TEoZX+8oJElTdmZ1qWsnNvPVWPnVgLVaFMUhIXydxIL9UKkWR/BcYR+y
+	 MIf2h5wacjxunQuYoFozVx8k6wRssKz3vyokt8+YqWtoGKIEkNlpf5Xviu2r5yk5wX56D
+	 Dit4aIvqgEpMW+rOyw+pfSxOgNzEpPomqrFoJkSI/VL5Bgq7S27ZcD4uSZgaQ5FXGcw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792619452;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792619630;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=iNVbIqY0np3EFl5r02H57aH+C95nGImopBoQIdWCOEE=;
-	b=49e/VBbW7pScCXeuUaubYarYVMZ5FYF1QFf/aSWmLIKfCnI1ux6WYhcLRkVgU/G6W2t+
-	 ZRtBKkNtJb9IeDSvpxIS7VJ5Sa0S+ExjZCaXA403VOCtEizIWcEdPli6u5ei0G/Va9QeQ
-	 SxGTTPfgT5N0oSFOawE2Vq+M6rTOCyhmfU5DvF20geZ/PNOP03o990VXa/LMavTs7fGpD
-	 9lhYv3YlypKjJLJNXyBXUGu2a4Gw1d2WBYC2zxbdq0/5hJWzUwz3kW8PuRM/A25VwGyvs
-	 rqEdCiRxnVFU9dWAvN9iW9sM6Yrg/p9U0e+d47zsgYGOxAcS3ofSluU4VqPdrU8+L1A==
+	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=mtRYkql7bK2+Mk9/MALlnk6mIy+nScSi0K/oMYikPEc=;
+	b=2k26Fs21BeVZF6RYZ2g3VMe+1jbzN+bZnHFSjEdzLnCmnRw1pIgJbEufEoKO+OZwLlgt
+	 iiz63jWblT6CZM9CugIwhdLmyuE9T8nMwiRkkUaVv4q8F4xtEpM/rV0ugIhzs+Szf1ih4
+	 EF92TW3bJ5XrJWkoZ/+Sfz7U9dARVoAfziPraz1VT4AD7HkTj8U8nh/Mdg6d0jqGKGb8e
+	 yX6Bxs9GFJbb8/lOhmKq5c306/2RaiTGFMjoZDC/OPniU5+R8GgDx2yITAXK2MLbU0hGc
+	 lVzAvAUAtX2UVQf1ek2C3yuWbAF0NvMrFG9g/TMxJDeuUASHRVIg2VPkBzTZwj3amKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linuxfoundation.org;
-	spf=pass smtp.mailfrom=linuxfoundation.org;
-	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=P8sMRjQS;
-	arc=none smtp.remote-ip=209.85.161.48
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=cABGdqYX;
+	arc=none smtp.remote-ip=209.85.210.173
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25D6606A31A
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 21:50:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B25D6606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF99B606A31A
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 21:53:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF99B606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=P8sMRjQS
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-705cb6cedd5so195713eaf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 14:50:51 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=cABGdqYX
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8a06e79e152so531527b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 14:53:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1792619450; x=1793224250; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iNVbIqY0np3EFl5r02H57aH+C95nGImopBoQIdWCOEE=;
-        b=P8sMRjQSlKY+E/heqfjcKfCDVd1BrkkUZWZs/wnhB9Chrkz6f+EKDA18pe+oioL2wF
-         41dczgsQ9C/VtMYutUSdAyN+y0q5JLXhhescZfSA4DqyOgwYaaBxfsDhx6iaErMyFDma
-         pxyMG6SihyqW4bBOBx2i7mTE8zZTjz6BOcFdA=
+        d=gmail.com; s=20251104; t=1792619629; x=1793224429; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=mtRYkql7bK2+Mk9/MALlnk6mIy+nScSi0K/oMYikPEc=;
+        b=cABGdqYXLXx8C1dXRIFghvRXabpseERl/6fM5pwK9rlZJ0CDtP7XcqxjX5rhdjN9oG
+         PgSJ2CG+brNc0eJ3ZS88V+KI557oM6Vby9VxtU1iYqcDPxSb7rzHnI1jhNK3Vdc17g0o
+         chiHwnlFACfHEtI1kStEfTT+jOZhaGxcPKp/YyWBX521mz1cD4Mw6byR2kiQJPu9gy+T
+         ruBPg8JzZUxnxzxKh7smiRKRIHsPjn0sw2y3GuaC+KzIljAMx6hDP7FgQ5nWvioLxik1
+         +l8g5MbVCZ6kz81pfc7g8FDM0F7SFyXUxn33KS2h2sySEUtfk6Ja9Y49cg7V8415aq+3
+         gfBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792619450; x=1793224250;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=iNVbIqY0np3EFl5r02H57aH+C95nGImopBoQIdWCOEE=;
-        b=piMSsNXjKcQWfM5eLbikJm3lRYDp2WMYodo0OPktP+Hfq42z1/aYJTUEVB2DL0i4ss
-         Xk7fVlhEDOUYx/YbXVKLj5UNBAKSqPRmInCx/oE4VEW7QlKmD0P+h8SMvdjE1wRZvMyS
-         qQeuEFWRP/9+zbvrZ8AYSPINsii9cBEwXWAeB9YZK6yXBOeJgShQkP397xdFdtBsyquS
-         R9D1TJAH/fe14TSBJUnKiO3HfPFYdxr+kqRO+PZ+64v2zku52o0z6kdZknOX43QQZqrk
-         t/rC85+JObbn3UpE6rRG8AZy0GLl5k1W9uCZUB+numW3+tR2JnrUTDhfEfyHShvsIsMO
-         TaHQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx2F7iiSBPgBUx+yEkVhb6V9X4gQfiQUcPDdClGvdFFmTCUPDv6631K/b/5/s4ad78luTzMmIW5/HYTITcu5GI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJixi8Z+ehaTfjxRn44x6dgOVvq/HUJqsMVpSYCnevply4kwBRK
-	kqudMHZapLdUo2EYGOLNDDs6OWtQdI2nRGolqlQ697uS5nuWHxq1/GkyRc0/BM3tnDM=
-X-Gm-Gg: AYBFou0Gum0e04wIk/9BzG0qq5WgC+vNmPPnsnQW4oiUmp8xMBORGAmEiMzFK2HbeDM
-	Geeoctj6Y7dtmI6QOL2OsXAHYwdjSMeqVqpVbhNjEBpol/4FLzV0Tqdi04TnTqnhn42GBUlpP2D
-	N0tSe/vDrss54MrhRtNS7+uTI9ReN+wUuX3dtX50b409TSstKIWV1nY2gbJXJ7CSOJhbKq9ll1B
-	CBO9pjRh6LlVLCKMr3IJQAAroCBUaaHzdRRJKOWGOkuWwfv5OFpMv6W1cdbrLlbSoSTFyFTyFbT
-	pxLmBbbjYTMI72cwk7w0HgS5DaBGwfiM3SvvIAg2+scqnRKMSZ07gQM/VaZiUdmmBkv9JTDgVEn
-	oyJ7tzM3wgDUwyZzGMUyg4nUwgsZxwKpZZIs7InaeqK9gZM+G8MKykyFV+QXcWOeWsMPtgitPn2
-	Ekqu/p0tTHfw//SoXQRotLB3yKkiqmRpgM9/oqCub91SVX4o2Mhxa33/Q+E220fe/n2CC/6QmYB
-	Gq00rEfeK3QzNmiGmTwTsggYENjIoFb7f6jkjof38r9d1Z2NBi5B3jWqJj7pmtKb4/CSg==
-X-Received: by 2002:a05:6820:1f05:b0:6cd:3fdc:2664 with SMTP id 006d021491bc7-70a7f50452bmr388171eaf.37.1792619450586;
-        Wed, 21 Oct 2026 14:50:50 -0700 (PDT)
-Received: from shuah-tx13.internal ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-84cbd2d2d29sm3413637a34.15.2026.10.21.14.50.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 14:50:49 -0700 (PDT)
-From: Shuah Khan <skhan@linuxfoundation.org>
-To: hirofumi@mail.parknet.co.jp,
-	shuah@kernel.org
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/filesystems: Fix run_fat_tests hang
-Date: Wed, 21 Oct 2026 15:50:15 -0600
-Message-ID: <20261021215045.26522-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.47.3
+        d=1e100.net; s=20260707; t=1792619629; x=1793224429;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mtRYkql7bK2+Mk9/MALlnk6mIy+nScSi0K/oMYikPEc=;
+        b=Er21WLAcZCojt222C2XwJc08vAtEJGR2gqLxHOqPqrjKed/Jpj/5s+jLuyxbwWIruf
+         5AthvxJw1rXj4OCnNt/9wLxbWVRqhbraKYLkx8OpnVcoh08HxRGnb9yCCSvtrtGDHqHC
+         9JDIgTMPdkbYAd3XWoXj5Qd17hu2oY9VCgjyzMsCr1mVnT84vQ7N2sF7vaALLC+5gCjH
+         OyCIymf9+mx3iY/av50Y+qqkBwiHZVc1Nf3PNJnWiGn2VqBP+BaWERpxGoxMxHRfefK6
+         5QUnDtD74qIhrn7VGTfkoWANNy6Yrukbf8WeTL15uHgRBfDv6l80+EC8rvkjQ+eDyFIb
+         +P7A==
+X-Forwarded-Encrypted: i=1; AKwUvBw5FTpR8/5OjfEq8x/yQ2MWKspoXuD/OVjrmnf/6Cjek6WwEh6jC5DFQAh3o3Yz6mZRGbai7sfpNg0eicLxonY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLYt02kHqJO9wo/eoeKpt9Zv866XZrdsn6ljSWDbn2k2tcRkG4l
+	4aEOpX+uAw10ELvGb7SrHtMnVKCtSfPxouGzUuWM56Ji5shtCE4KsL6s
+X-Gm-Gg: AYBFou2qHg+NfTKSPuZ8Qw8lE0DNLpQ9Vk87rdFKqhgYAdGzw27ncP5JOKM5hATMk9w
+	PFf5a4mp0F+IKS38lS2Gb7X6fPzjkO3Y2Ifc69ShFec4bENWtsqQkYsu55VtSWf18QapxYrGcfQ
+	tXfcAydxZIJ7/kQT06AAZY6qgA3PejnBFVSUzEZQ+dYBhseRDc+5sZUuyAWMgXPjfCe1/PznJkI
+	onqPftQjOQ78Z/QWUNA3i5zvyVi/1h7rzmvr8aMXNh2Ti2AbOam98xaAnwgcTz88LFhmea9qw1B
+	v5CxIiLzcux0hqOlTed0FLBzBNs81Bxf8PI/Y5CJivgeHeDRAP92CgWeOysBfRv8wxxM7a8QRIE
+	mnrdwASmUPk55EB4VC6G7+y6sp6gX6pTxhDSODW3obhFg0GlOGatBC29OcEMS1v1ZsTZAIrisXe
+	X1Eq+6+KlqEpzEKcUgm1IabxfSaaU06ggCRcjpWnOqq9prTRb41Sd361sEzG1/idbKIqmM8rQId
+	ggvRWXf+KoSTcAiwLYMuoG6CXnEO3/7dEItHtFV20AFHChRR4K41TGg4HZBvSHSPdNBINVpqLY/
+	2aq+ifkwtO63eINU3Gx4BMj9Ghs1FMZzcsCVK2YmpaTFESp0cNsls5n9rOoZgw==
+X-Received: by 2002:a05:6a21:4ea3:b0:3e1:885f:b4ab with SMTP id adf61e73a8af0-3e287bca4bbmr2324254637.8.1792619629160;
+        Wed, 21 Oct 2026 14:53:49 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a0895f8ca3sm1297288b3a.46.2026.10.21.14.53.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Oct 2026 14:53:48 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 21 Oct 2026 21:53:47 +0000
+Message-Id: <DMAUMG9WL4X6.12UEJJMJSW54Z@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jiri Olsa" <jolsa@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, <linux-mm@kvack.org>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, <linux-kselftest@vger.kernel.org>,
+ "Shuah Khan" <shuah@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>
+Subject: Re: [RFC bpf-next 0/9] bpf: Add support to allocate user page
+In-Reply-To: <20261021195759.119421-1-jolsa@kernel.org>
+References: <20261021195759.119421-1-jolsa@kernel.org>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,57 +105,134 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-run_fat_tests script hangs waiting at sudo prompt preventing the
-kselftest default test to complete when a non-privileged user
-runs the test. This is incorrect test behavior. Fix it to test
-for root and skip the test.
+On Wed, Oct 21, 2026 at 12:57 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> hi,
+> we have few use cases where having the ability to allocate normal
+> or executable user space memory would help (like to replace function
+> in live process or change environment variables)
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- .../selftests/filesystems/fat/run_fat_tests.sh     | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+I think it's better to do what debuggers do:
+vm_mmap() with the final prot and
+access_process_vm(FOLL_FORCE | FOLL_WRITE), like PTRACE_POKETEXT,
+to fill it. It faults the pages in, writes into r-x private mapping
+and copy_to_user_page() takes care of icache.
+Then no need for bpf_user_page_exec(), do_mprotect_pkey_locked(),
+the marker, READ_IMPLIES_EXEC special case, get_user_pages(), etc.
+No mm changes.
 
-diff --git a/tools/testing/selftests/filesystems/fat/run_fat_tests.sh b/tools/testing/selftests/filesystems/fat/run_fat_tests.sh
-index d61264d4795d..0712c8d23fd7 100755
---- a/tools/testing/selftests/filesystems/fat/run_fat_tests.sh
-+++ b/tools/testing/selftests/filesystems/fat/run_fat_tests.sh
-@@ -15,6 +15,8 @@ BASE_DIR="$(dirname $0)"
- TMP_DIR="$(mktemp -d /tmp/fat_tests_tmp.XXXXXX)"
- IMG_PATH="${TMP_DIR}/fat.img"
- MNT_PATH="${TMP_DIR}/mnt"
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
- 
- cleanup()
- {
-@@ -23,6 +25,17 @@ cleanup()
+Like:
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 648abe1..ca1d88d 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -29,6 +29,7 @@
+ #include <linux/task_work.h>
+ #include <linux/irq_work.h>
+ #include <linux/buildid.h>
++#include <linux/mman.h>
+
+ #include "../../lib/kstrtox.h"
+
+@@ -3834,6 +3835,60 @@ __bpf_kfunc int bpf_copy_from_user_task_str(void *dst, u32 dst__sz,
+ 	return ret;
  }
- trap cleanup SIGINT SIGTERM EXIT
- 
-+check_prereqs()
+
++/**
++ * bpf_copy_to_user_task() - Copy data to a task's address space
++ * @unsafe_ptr__ign: Destination address in the task's address space
++ * @src:             Source address, in kernel space
++ * @src__sz:         Number of bytes to copy
++ * @tsk:             The task whose address space will be used
++ * @flags:           Reserved for future use; must be zero
++ *
++ * Faults in the destination and writes the way ptrace(PTRACE_POKETEXT) does:
++ * a private mapping doesn't have to be writable.
++ *
++ * Return: 0 on success, -EINVAL if @flags is non-zero, or -EFAULT if the copy
++ * fails or is partial.
++ */
++__bpf_kfunc int bpf_copy_to_user_task(void __user *unsafe_ptr__ign, const void *src,
++				      u32 src__sz, struct task_struct *tsk, u64 flags)
 +{
-+        local msg="skip all tests:"
-+        local uid=$(id -u)
++	int ret;
 +
-+        if [ $uid -ne 0 ]; then
-+                echo $msg must be run as root >&2
-+                exit $ksft_skip
-+        fi
++	if (unlikely(flags))
++		return -EINVAL;
++
++	if (unlikely(!src__sz))
++		return 0;
++
++	ret = access_process_vm(tsk, (unsigned long)unsafe_ptr__ign, (void *)src,
++				src__sz, FOLL_FORCE | FOLL_WRITE);
++	return ret == src__sz ? 0 : -EFAULT;
 +}
 +
- create_loopback()
- {
-     touch "${IMG_PATH}"
-@@ -73,6 +86,7 @@ unmount_image()
-     sudo umount "${MNT_PATH}" &> /dev/null
- }
- 
-+check_prereqs
- create_loopback
- mount_image
- rename_exchange_test
--- 
-2.48.1
++/**
++ * bpf_user_mmap() - Map private anonymous memory into the current process
++ * @len:  Length of the mapping
++ * @prot: PROT_* flags of mmap(2)
++ *
++ * Return: The address of the mapping on success, or a negative error code.
++ */
++__bpf_kfunc long bpf_user_mmap(unsigned long len, unsigned long prot)
++{
++	return vm_mmap(NULL, 0, len, prot, MAP_PRIVATE | MAP_ANONYMOUS, 0);
++}
++
++/**
++ * bpf_user_munmap() - Unmap a range of addresses of the current process
++ * @addr: Start of the range
++ * @len:  Length of the range
++ *
++ * Return: 0 on success, or a negative error code.
++ */
++__bpf_kfunc int bpf_user_munmap(unsigned long addr, unsigned long len)
++{
++	return vm_munmap(addr, len);
++}
++
+ /* Keep unsigned long in prototype so that kfunc is usable when emitted to
+  * vmlinux.h in BPF programs directly, but note that while in BPF prog, the
+  * unsigned long always points to 8-byte region on stack, the kernel may only
+@@ -5139,6 +5194,25 @@ static const struct btf_kfunc_id_set generic_kfunc_set = {
+ 	.set   = &generic_btf_ids,
+ };
 
++BTF_KFUNCS_START(user_mem_btf_ids)
++BTF_ID_FLAGS(func, bpf_copy_to_user_task, KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_user_mmap, KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_user_munmap, KF_SLEEPABLE | KF_PERFMON)
++BTF_KFUNCS_END(user_mem_btf_ids)
++
++static int user_mem_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
++{
++	if (!btf_id_set8_contains(&user_mem_btf_ids, kfunc_id))
++		return 0;
++	return security_locked_down(LOCKDOWN_BPF_WRITE_USER);
++}
++
++static const struct btf_kfunc_id_set user_mem_kfunc_set = {
++	.owner  = THIS_MODULE,
++	.set    = &user_mem_btf_ids,
++	.filter = user_mem_kfunc_filter,
++};
++
+ BTF_ID_LIST(generic_dtor_ids)
+ BTF_ID(struct, task_struct)
+ BTF_ID(func, bpf_task_release_dtor)
+@@ -5266,6 +5340,8 @@ static int __init kfunc_init(void)
+ 	};
+
+ 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
++	/* Sleepable kprobe prog can only be attached to uprobe */
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_KPROBE, &user_mem_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
+
+But I'm not at all sure that it's a good idea
+to inject code into a process.
+
+pw-bot: cr
