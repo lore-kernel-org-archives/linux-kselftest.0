@@ -1,66 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1792545341;
-	b=b9SqrzWyjjd7+IBOtkEAdf/LSZcDKtIPqCZAqJkn6BtXzQ7/K0UV1RvEErOBBYZPaNqe
-	 eznRCbwOkVIp0zLwyKgujCXDr60ve74+gs59ZbpfMs58HT/9LQ2nUDySCMliUymX6h+wO
-	 nfby9iFUhkAZersmq+35ifF132Qhq7E3I/9sR5eTd26SbXzc73ZrwMmvulWJqoGEgaTm6
-	 DnF90L39RQMzJYqfYx+OrMxQgbtqo+6k7ANc1jBebi8JPqOBK7B+D9NUICgHKA5qnRq7V
-	 +DQ5H0mGlfBxQB2MVJ+vaxzM5fp7Kctf2xuw9vW3pWqPHHWO/KifCmUwZBTWe3Y0gkA==
+	b=pD9tUohSG5L59rHjnN+0ZkU0LZzxyOQByO3q/+n+nrXGjaaJUUvWa3jnmt+ceZJdXpGv
+	 ax+DngsS3e8v0Qp/z+TUNaVUVi8cj0PqeGUKiiFK4UcllfpgsGWgz84j/w1XUU3yE5vQo
+	 vngBM7ygMITOX2M1brSImjrzG3ygxPEZ4KIZpG2iTKZK333JcLGyiT/jZOURkqcVh/aA0
+	 /i1uNBMyThTc09ElCTOY1n9xhqYGG6VR9BASD1QxViPZl7Roe99ksGU1imwq7E7DAyB0k
+	 WIKM9Nb3vJO61836PGNvKwuz9rUnem1hRNi5BSFk7em28aY5Z7NsCBVsudMnhnUX+8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792545341;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-ID:References:In-Reply-To:To:CC:X-Mailer:X-Originating-IP:
+	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:X-Proofpoint-Spam-Info:
 	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
 	 X-Proofpoint-Virus-Version;
-	bh=+Rd+3kEkCsDWN0DvinxQu6xg72gBQ+FigAcOTspXtfI=;
-	b=VeRBqkzB7StJfggFqj9ow8tDxasSo8eNSd9tj/MziVpQ8YcW9Vmu2F0BkWB5lVojmICm
-	 K8LtJsakQUcEw9oo33fbSvHanuN+uV5KRnKwTcrD6oB4X7Sz4/Eau6MndfNJRkq4mvCzv
-	 TU7Qu3nwJWWKp3ATzNw7v1X8fG6+4JotQ16NUHzKMFb2Bb/H/XU+3w/6LfJ+KqsxYR78m
-	 HdD6tEyk3MhNPMTXQt7LhLHU185bGDYjHGPH0yaauOWXmNWfM5yVSY9fxGCFxRqnelcr7
-	 uePR5pXvqCnj7MRaihP8ZQJiJxQiNWMA8Jx058BJQ5CMv6kCDFhgOOMbwonauT6jymA==
+	bh=w/sWIs8UfkKmHt3/JDcaudv9fV9VMQ092RWZIMJKb24=;
+	b=lsznZQd7WvwqC1b6aV9/tbY4uEoNgjo0xVTBO99CWQn8MSHuAS2nMZUictk8E96Qpdfu
+	 5ZClZIGac7AIhqNVhfo2Vcjc2d9ZrTxJCDPDagS48PWcA3fpWCWa4r5RrSo75q91gIGjn
+	 J9aeUGYOmHhYCQa3GYlGvHJfCMGKIkDAEK2CvRhiKQLi6Z+9+AAt0wN7RgXa/N6ivW1w1
+	 VYOsmucdalldFUR1rcaohXJiOGquWtK6HIdBM1cAvqxQlW/00Ig5+hx/VHig5w/VLs5ad
+	 tp8g2lGcQncx93rYfmqMkI+8nmHU3xkTaRrxORBtxkv3ru5LNRNnks9p7tbb5hOJy4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=meta.com;
 	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=YJ+jeKMS;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=ETT54AgX;
 	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3AC3606A322;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3981606A31C;
 	Wed, 21 Oct 2026 01:15:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3AC3606A322
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3981606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=YJ+jeKMS
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 69KNF4pr3405467;
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=ETT54AgX
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69KNF5we675525;
 	Tue, 20 Oct 2026 18:15:18 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=+Rd+3kEkCsDWN0DvinxQu6xg72gBQ+FigAcOT
-	spXtfI=; b=YJ+jeKMSD21K3MZJTczf5YmZWWC1p9vRLgTDIuEsyHHeCddJOCLXk
-	QJgo0+djv3jHSpNkN8Wy7c184fYTa/cwrBnlz6v+gU36LV1ELWaDPTci6NFHqSyw
-	4H7MaGzVaM493bk8N3ucdB2KW/bQ/SyxipQ7myXakOCdyi5eCVHPp1OY0hlxSc9K
-	kv2CLVjQOUcWUv0TsoDl/MjvCOjUOkB6xy8AlWZAVH4mNXNJzy04cHAiUdUu2HNs
-	b2y4phmlmUlKhb07awjPpI/4Tr0mJPMsU/diwgctyAJKEMRtSltKD4bmYntVZ8gS
-	1r92zc3LXKTXbgfUIYP1oh0St88pttXfA==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by m0089730.ppops.net (PPS) with ESMTPS id 4hdw56rsqq-2
+	pps82601-s2048-2026-q3; bh=w/sWIs8UfkKmHt3/JDcaudv9fV9VMQ092RWZI
+	MJKb24=; b=ETT54AgXEzEQJjmnb0nAmMaTldKWGzXYYa+VBpnzMVw0hbZw2+kuM
+	7euO1T6VVYEz4s0XxlVMj34e6djf0Uq3zj+Nq2noD24i91jVfGjJBG+qOntvohk+
+	msG+MCLxAIui02YNtysbwtFFI5xtpBaC1nhb36jP4YSJVI4U2NVj1AaTfaqNTC8B
+	I3ApAfolSq7aZjNJw0LXvFjqnFkhOgekaH3wAHv9tE7E+erpgeYJ+tnhvsKmNx1f
+	/Y9DaC6fNpW32HP1q1DSxF9UwIR1VF6y0NlYGjQ1Xm77aJ4BGOSvDHJX1ZufQgfD
+	D03LIJe0Jhphw7Cd7mGCvVkhtZDGC1uKw==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hdw50gqnx-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Tue, 20 Oct 2026 18:15:17 -0700 (PDT)
-Received: from localhost (2620:10d:c085:208::f) by mail.thefacebook.com
- (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Wed, 21 Oct
- 2026 01:15:16 +0000
+	Tue, 20 Oct 2026 18:15:18 -0700 (PDT)
+Received: from localhost (2620:10d:c0a8:1b::30) by mail.thefacebook.com
+ (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.49; Wed, 21 Oct
+ 2026 01:15:17 +0000
 From: Bobby Eshleman <bobbyeshleman@meta.com>
-Date: Tue, 20 Oct 2026 18:15:04 -0700
-Subject: [PATCH net-next v4 1/7] vsock: constify the transport in
- vsock_for_each_connected_socket()
+Date: Tue, 20 Oct 2026 18:15:05 -0700
+Subject: [PATCH net-next v4 2/7] vsock: rename the vsock pernet operations
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,7 +71,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20261020-vsock-guest-ns-v4-1-047527cfccfc@meta.com>
+Message-ID: <20261020-vsock-guest-ns-v4-2-047527cfccfc@meta.com>
 References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
 In-Reply-To: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
 To: Stefano Garzarella <sgarzare@redhat.com>,
@@ -105,68 +104,93 @@ CC: <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
         Bobby Eshleman
 	<bobbyeshleman@meta.com>
 X-Mailer: b4 0.14.3
-X-Proofpoint-GUID: 9fqTzDTEQh1sPHL2-ALqesEAwd0XA8GN
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIxMDAwNCBTYWx0ZWRfX9oxiZxNHmwl4
- SXW8jeOYVrzHlmk2RTOcwdNX4zfMP45XQsLPyRBvfNRETBbs8H1fbjoYvtuYggpuM1JpEVeMXAl
- EAJCQA/VAGf81A5wHlFSYZw2UqkXPiiRYPyup1L+C3MDGLAAfChhs5QgHVSk/WkWKuEw+2mUfH8
- /wkiFhozbQRbYrRQrZjISPRQ+XUvC3+V9SQUNKb0cXw5mCWsdg3uc/IkT5+4emuS7BmSXLU6jVd
- 2VnQ+85nAv7fk1X5SXeIdbsnMO7V9pXPytIh381xliClSrqEBr+pc/fnLy5T3rJtkDgF7KDvaXn
- fNze8GW6OOlBQwRhDiNfIKkPycSMgNkk9aYuaul/Gg1QDkb1W/c06AQSJaHHJysvUkrTzZqHEYI
- o0+C3ro5eNVGEwjDoK5xPF00nE0uto1WG4Q5LPheJMc22rgYKRA2d41AA4HdqdKgtmsbRkzZGx/
- j5U3rfcjQmcSfdwZgYA==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIxMDAwNCBTYWx0ZWRfX4lf85LZnjz89
- nh6EkLV9vG/yrOPAM/haveJALy8ikmy3eo3AwJ6JfjoKwSHkoBwAAsCPEUyNqQUjiopUVAwkIOW
- 0bgo4oaJ4hLi9/yPxJtCLtpnB4sRCGg=
-X-Authority-Analysis: v=2.4 cv=J+Q/fwnS c=1 sm=1 tr=0 ts=6ad81225 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+X-Proofpoint-ORIG-GUID: uAWGrrmTl2KtKN_H49_v8iwHl4hbkK4h
+X-Authority-Analysis: v=2.4 cv=GaCCDgXL c=1 sm=1 tr=0 ts=6ad81226 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
  a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=855S8uPTkML1Oy45N9_h:22 a=20KFwNOVAAAA:8
- a=VabnemYjAAAA:8 a=YkCHES2veT9o9JeyN-cA:9 a=QEXdDO2ut3YA:10
- a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: 9fqTzDTEQh1sPHL2-ALqesEAwd0XA8GN
+ a=7x6HtfJdh03M6CCDgxCd:22 a=xtH7KyWI9dI7BmFOsl-x:22 a=VabnemYjAAAA:8
+ a=-BBy4ptD6Xa2-Mryg3AA:9 a=QEXdDO2ut3YA:10 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIxMDAwNCBTYWx0ZWRfXwhmaw+rx2RYx
+ UGHI9uDfw7CD6TF038BwzKrMJ//hM2S+FYERkAj9VwUYbAMFJPwM9+gI41NJM1foVdoi1RzKr3o
+ HFIeD/wb3LvdJ6aFYMHcfbKKHGEXs8g=
+X-Proofpoint-GUID: uAWGrrmTl2KtKN_H49_v8iwHl4hbkK4h
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIxMDAwNCBTYWx0ZWRfX6NodKB2OOCh7
+ v/GMGLb965va5x1I6+Uvjy8m9Wbpcinfif4pxTLj254SAW/8P8uzm6y7fiustuA2r17oApS49z1
+ xKhOqWlEtwUbRqkIHoJftFFEhxePngj2pof1TwdCgCmXQvMZ8Soq6N5gEyaY9rxWykzGw8CfxG7
+ Z9F4Lber5sISsvN0zZmh2MSIMEr//XsuN9d7OrJMdyZx8+PySlHT4Cno/EfmvJ4ufs3PsCAmVxq
+ a7iY636NOIdHmi6xIt5tyKC1fFc7hR5H6s5m7V7+N19IkdAPhi2YsD6aKCg+ceor9iA3RZgB/wp
+ vd5WzdHXPHcIDwzNaENxYccnbIDAFz9rgd8Zcd1z0wnugX+vkUIwSrhaw5W6j5klYdeXhGqQ5Xz
+ 1mvib/DdiX1watL3rm2jeAo7DXlLN98l768Y8QYZ52UQLxSe+QM6lASLI5J0m+HicZ2R7EMjSUT
+ vrhCzlRX1wVT89E0q1w==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-10-20_04,2026-10-19_02,2025-10-01_01
 
-Allow const transports to be passed too. The function only compares the
-pointer against vsk->transport, which is itself const, and never writes
-through it.
+vsock_sysctl_ops and its two callbacks are named for the sysctl tables
+they register, but the init callback already does more than that: it
+also initialises the per-namespace vsock state through vsock_net_init().
+
+Rename them to vsock_pernet_ops, vsock_pernet_init and
+vsock_pernet_exit, so that later per-namespace work can be placed here
+too.
 
 No functional change.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- include/net/af_vsock.h   | 2 +-
- net/vmw_vsock/af_vsock.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ net/vmw_vsock/af_vsock.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
-index 5549298c1ec6..370fcd3ddabc 100644
---- a/include/net/af_vsock.h
-+++ b/include/net/af_vsock.h
-@@ -233,7 +233,7 @@ bool vsock_check_source(const struct vsock_sock *vsk,
- 			const struct vsock_transport *transport,
- 			const struct sockaddr_vm *src);
- void vsock_remove_sock(struct vsock_sock *vsk);
--void vsock_for_each_connected_socket(struct vsock_transport *transport,
-+void vsock_for_each_connected_socket(const struct vsock_transport *transport,
- 				     void (*fn)(struct sock *sk));
- int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk);
- bool vsock_find_cid(unsigned int cid);
 diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 483af15a5109..5a0ba068bfd1 100644
+index 5a0ba068bfd1..aa4732c3599f 100644
 --- a/net/vmw_vsock/af_vsock.c
 +++ b/net/vmw_vsock/af_vsock.c
-@@ -480,7 +480,7 @@ void vsock_remove_sock(struct vsock_sock *vsk)
+@@ -3037,7 +3037,7 @@ static void vsock_net_init(struct net *net)
+ 	net->vsock.g2h_fallback = 1;
  }
- EXPORT_SYMBOL_GPL(vsock_remove_sock);
  
--void vsock_for_each_connected_socket(struct vsock_transport *transport,
-+void vsock_for_each_connected_socket(const struct vsock_transport *transport,
- 				     void (*fn)(struct sock *sk))
+-static __net_init int vsock_sysctl_init_net(struct net *net)
++static __net_init int vsock_pernet_init(struct net *net)
  {
- 	int i;
+ 	vsock_net_init(net);
+ 
+@@ -3047,14 +3047,14 @@ static __net_init int vsock_sysctl_init_net(struct net *net)
+ 	return 0;
+ }
+ 
+-static __net_exit void vsock_sysctl_exit_net(struct net *net)
++static __net_exit void vsock_pernet_exit(struct net *net)
+ {
+ 	vsock_sysctl_unregister(net);
+ }
+ 
+-static struct pernet_operations vsock_sysctl_ops = {
+-	.init = vsock_sysctl_init_net,
+-	.exit = vsock_sysctl_exit_net,
++static struct pernet_operations vsock_pernet_ops = {
++	.init = vsock_pernet_init,
++	.exit = vsock_pernet_exit,
+ };
+ 
+ static int __init vsock_init(void)
+@@ -3084,7 +3084,7 @@ static int __init vsock_init(void)
+ 		goto err_unregister_proto;
+ 	}
+ 
+-	if (register_pernet_subsys(&vsock_sysctl_ops)) {
++	if (register_pernet_subsys(&vsock_pernet_ops)) {
+ 		err = -ENOMEM;
+ 		goto err_unregister_sock;
+ 	}
+@@ -3108,7 +3108,7 @@ static void __exit vsock_exit(void)
+ 	misc_deregister(&vsock_device);
+ 	sock_unregister(AF_VSOCK);
+ 	proto_unregister(&vsock_proto);
+-	unregister_pernet_subsys(&vsock_sysctl_ops);
++	unregister_pernet_subsys(&vsock_pernet_ops);
+ }
+ 
+ const struct vsock_transport *vsock_core_get_transport(struct vsock_sock *vsk)
 
 -- 
 2.53.0-Meta
