@@ -1,84 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792551281;
-	b=xrxCSyim3GnJrMUp1FT3FgRS10AXLMMJL8FoO5zPaN37dCPXk4WD7n8ublNhtFvhYJmg
-	 o2F6gDLd2WoP6uhytYXg4ih3RwuEOxREySmiGs0mtVXr8h45JejLBVcODs/58BkDHXefP
-	 o42Pzj6XAQK3KxIqAWySpK9Ja1BgBnSffdXGI/mKJFNRYz62kLH0aHm9PDEq7eSulba/5
-	 fk/6bA+eQTilk8s106fRgp+XdzG0PNMs4M0X5HpIfbs5BJ3wNsoke0IxxaYDZ71c9MWk/
-	 rIZNVbnQ6zbHTCBvYbURszGp4cZyqcEu/WXNZT2+/6Xl3lBAIOLuabQX7P3Ym/xuiuw==
+	t=1792551887;
+	b=MG/LEaYK6qEI5B8QaNw5CcKg6nMuXD5QW+dMlO66N8c5xIpeJ9QzIPLClGGnR0OLXuwM
+	 BlLpDqN5tk92954pheBnh2eCTSWPvGrBXK/nmfMXec++rQBmFDE3D7TPSUWrJKpvq+T3m
+	 qi8bqSDlMlzuNlQc/HR2wJWBDw+CIC/IJ+tUmOpDUNpmUgy8KR0tECKJpdy3mEU/Kk1Eb
+	 Cdi7KTFRZeU5H19hkA6lpYUV8yg6jzm4fgp/lR8Ev+pFV/D2fZP1D5Lbmkdnneq9uVmx3
+	 2hEZzLHW/gIGbOUHDT2Kdf9zMMMPPglC9olc7laPPfs4dUrx7TUoebJgnXymPpnjiHQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792551281;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792551887;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:From:To:
-	 Cc:In-Reply-To:References:Date:Message-Id:X-Mailer;
-	bh=dSA8sP/l7jXaX7+Oajvaq7NlGy6nqeA0l/fafopK+Hk=;
-	b=gDjBEznRttBe7CUniPvrFayx7TnHOmDWptWGJLu0kwbA1HFK5EDI7D8IJoWI3Vzev85R
-	 pOvZdZKKYJt3fUyMDJnDE8Y+MASk96NyBw8wAzQsVvDzGkH9spllIPuLvwR2fbsOj3eN4
-	 xuTBqCLyGhQb64AwFcTLVIRL83EtWy0xO6xonyZRlfI1Taj0EMMDKHEwWJnFwTAYnmgAm
-	 2oJbcXb1wcOnXiaIXLLt+DJKJ5DDh3/XUoBUPrPTd3IBiPXarZxftVBapGnpiw6tGjxAh
-	 Q8w1KGfBfW7HMXMtslFbZMNpfMx7xtv9KC1s5D3+YB50Ltn85wHGKxSLhm1BWmlEVwQ==
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
+	bh=rc5wrhUHr1AVoBfBDZ+r5qvZgVrRLeIPWk5f/ArMKLg=;
+	b=nn/mrJalGeGCWbzM5KIAMmc13zJLbqZDVdChIw4E5fA/TlUC/yo+vBpkPtTcpypNqkVH
+	 80082YYlFEe1SjDiRX6tHWhsbaQV+vG2+5a7/LO11lp36uHWkwIZFPLJ1OybBX0NVhAKF
+	 HatVt/dTYWxX0PpiI9B7wbRAW7KFZoa0V3IDSNZv6phYKlYxQwkRCxsHJRKtgDNRB/HdK
+	 z+4DcmTXz4wrD4GboVJH8yHMHDIpEDN/YrLvrysmMKYMz5e/CHbdU3Q9S4RfzEqRFbxi5
+	 gym4lcSUCKdXG92fvvaTXxeJF+xCj3AvTHMcbGakEmSwDpkj8AkDUOAwH9OghKZ1bBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=gourry.net;
-	spf=pass smtp.mailfrom=gourry.net;
-	dkim=pass header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b=TPB7P4wT;
-	arc=none smtp.remote-ip=209.85.160.173
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PuGDi+yC;
+	arc=none smtp.remote-ip=209.85.215.182
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74971606A31A
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 02:54:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74971606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1DA606A31A
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 03:04:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C1DA606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b=TPB7P4wT
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-5364648ae07so3165511cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 19:54:41 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PuGDi+yC
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd5d2dafeccso67690a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 20:04:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1792551280; x=1793156080; darn=vger.kernel.org;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:from:to:cc
+        d=gmail.com; s=20251104; t=1792551887; x=1793156687; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=dSA8sP/l7jXaX7+Oajvaq7NlGy6nqeA0l/fafopK+Hk=;
-        b=TPB7P4wT3ZpwzDc0H04y1xO6RW40hKiUdingtfVzBENRbJUby8lnyQDabNyMR9ryZb
-         L6ryR7ZIQsu9H+R3Vi5l0CGRbA4/5DA0YJ7uLGiig0guGyBmFgIFx/kc1bje644633/H
-         GioqQ5BmGmcy33d0lUUfqjyR5Opgnl7gQQRSOJaz3HA02O9hD8oLsE9zTtQAYgNnnfJg
-         UkrKGKeR/Nwh+Kvr7jeACX6I9OoprwZ88EDhKPF3VZxiPIadPxqRkzbuaZz2zb+GvEBE
-         RqCPDkjelW3nmag27k7NIfFh6E7B0+5WYqfNQknjejpqzqrBvmceLFo3n+8fvN1x4bLP
-         v20Q==
+        bh=rc5wrhUHr1AVoBfBDZ+r5qvZgVrRLeIPWk5f/ArMKLg=;
+        b=PuGDi+yC/qP1bGcg/TSJFrSAOJewAE8/w32VXn0pviJ9BU1AXHc+a3rPhPUuvSfVDm
+         JR7tpDlII85BMuy9n3vyR4guPVqaMo0FxWhPE9NcoUQbhXT+7mMAI4QRfLXUIcqo5/Xs
+         q6j4Gd+4w4vZcM5fGQi/8qw9VONKn+ZhsJ6qLm4IGL2EXDxGcJlYXGqZxwREBl5JaE7P
+         l6vYVejnVU+p2Lwy4bfhWLOkJSbW+EYU4kJGgtyAWl+a57JCZRRlZ6MXcsMGDQJtdKfX
+         UIsVQLX4CpWTz8Ys24LC4PJxBQF3aDGHBsiFJYu9VBoyLLX+g3l+ljvbGnceydfkRGMe
+         hbQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792551280; x=1793156080;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792551887; x=1793156687;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=dSA8sP/l7jXaX7+Oajvaq7NlGy6nqeA0l/fafopK+Hk=;
-        b=Wb0Fo0xZ8U0xsSoqIj79m/4TbGCwjogH3dg27l02ITf/QI5nNxt7e+SZZGZt3TwmL2
-         vUyyJ2t/EiaHtLOoIHD2iJ9RH0NZbttIhsLJbeWSD0Y94hW6QA/fmoVvAaPXq6uZyTA6
-         ykFkywdCx+d4Tror8uG8J3RquzBuDJC6MT5N518Tb0XhOD9JXfRp8WfovBF9D17lGyBo
-         8jptJVbeyrgJn3U/I7aZfIV3l7OW/8IR2SpjC1oJwRk8p9AhK6unoJB5eGhcc2wdyPcU
-         N97uyziEoYx4AFFG9e3PqJtyMhfrfM//UMjAjNtiTA433xfcaGj+0h2rk1HQvCHIdhZl
-         vWvg==
-X-Forwarded-Encrypted: i=1; AKwUvBzkZyZ+eWfyqkAzRmMUI7AMm0jd6OGu9UfjmHwZ5h/zpkhdCs2A65sAQ8lESEYVX+VU3ywjf2TPVrsqgPjRsPc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIoCoQKhGxtb58wyPrXGmFs7hHjwIflrpK+z6f22CsduTQ6an9u
-	eMDsguvhodeS3Tl6ctyjjutv87uOYOHf9zeSyKX4UIkszKm7FTlV+wEVQnA6yI2LaWI=
-X-Gm-Gg: AYBFou2LH6eLO95mxf80GjHshi+dqXQC6vW+drLxCY/9833sV5H4upD+aNrSG3CTP/E
-	e9NwSkU88cf9e4Zk8Uaa5KMm6IVPiCOElhyahcBpB+NvysR6fO1ouvdJ3q94518my86lj0tmrIj
-	WvCh0uxJ0LlD0c30Vo5FjuYz2IEv4+iZkH9GPvbYjaSkjM9P1XyU4/ehNbOEakWNgqSYbS11cpY
-	jxUwwEn4VGQuL/sLcIQJHlAKjpmKjdv3BDSK5blaixD8nzvIexBw7UaM2NGGnGbw++TyB4rV49A
-	omi+vkixQmTfVi03kzmRqJADlr6ljjGzUzxZmoGwArp4HmOzpM9SoD48jp4dSxZuVMfmn7YyPud
-	8PqOqfV95LB9Wff6ShuugLQ8aje7dEEGzthqfzjjynTJKGFm91QwxX4ksd0wNNt64x1H4xEsW4e
-	0bgFYsTYiyND2kH8qlzckAm8zmihImRGpy5Y30CX1GV6p6EcWzup8bkmtPbvEYNvlEiAidpvAL+
-	kCa9UXhf+Hv6Hy79594o9LZg2TOyx5i+Ttt2IXEp3YX03onm0EzK4W5QQnCYS1Hv8Y4wuANJOqR
-	DdV5TaOjHlb99mCHqy72m8dAKEI=
-X-Received: by 2002:a05:622a:a15:b0:535:a5fb:645b with SMTP id d75a77b69052e-5369b8fb767mr11805941cf.70.1792551280390;
-        Tue, 20 Oct 2026 19:54:40 -0700 (PDT)
-Received: from [192.168.86.58] (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-53698b290c4sm9952991cf.12.2026.10.20.19.54.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 19:54:40 -0700 (PDT)
+        bh=rc5wrhUHr1AVoBfBDZ+r5qvZgVrRLeIPWk5f/ArMKLg=;
+        b=BuUAtpPDFHvM+zMIEfSsUoteiEG/EIniCDd5bnWCZk/N0SCAXDecqXJfBNX5uLUJKp
+         iEDpme8mkwDezch9Aht+hOWFM3SgZA5o6IBk/2AlETe7A4pOX/OERq6JIV0SvwmFADRU
+         eUoEtdfoCZeDdAnSrI64XgYgeJrP4W6Ne/h0x1V9M6/Z/g/yM1kXznd7v6luV/qMhvXy
+         aRT6bH7MvNAKkGsVXBp9OHAae59TooZdmXhgheWxVEwmZ7/hz+5k/FwTpo03LQyLoPj8
+         vLZS5ObacNlKiFvQkm62O7zMSoU9fO+VrOsYj8/o05IkDpo8wZOKlY6mfX+GAT/elEpj
+         l40Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxNY6xtNE7KMfC4D3zwUxoxZd2oGnf5hhkXi9I3d+my5TTDtsWcZ1MysoVKQ7z1RCA54RfkN+88tQ4DGGw0Mvs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLW69/f/JYu8TtZMNyznExFbknJkHqXifM3txz57HnXIifLcE9J
+	5HvRE8Pt7c51OZ9Ek6hNPjxpEfG28qlcL7ogCgGgDmy1IW1bKzbNZ+zn
+X-Gm-Gg: AYBFou2PmA890K4YSIHFsxU2eYuC9XpdFVtru3cKOM2BsYA9ACyyDLdjuodmuqAfS6d
+	2+tF0igfYGSqWJuLwJQSvHnNBWbtgTmXnfbo+y917JaXk+cmB+vcUOIgb0rKjZh/070C+p4SstH
+	i3JMI5PtahzjaP7yK4eSqRRjkx1xkLdRHMZTi21QUW0/jSFz2DSCRby4JCgJWY8dWUH4rQ9VAr+
+	wsVr0IPGBGlczmELBkpjsP/T59Vm2LNrI/xwUZqzXJ/dLRXYsRdUUI5s+oYVTL3P+OeWeS1vOY3
+	gBS93pHCtEAFssBLzFnCA+F4Di7TpHsRwdHJ/gf1Yyy+QeyLrKEsusSV8rXDhwP/b7diEXqIA0t
+	vt3wx2WYGOafbKfy4R7vHbRHdw8JED7fYLJlzhGREU5PyNz43e7v2UwMXtcckzZO3tTlGEbmmNk
+	66uInepcw+Hh6DudlfvW7kk8OHXz3c/4wnMgDjSUUSWxjPP+06pSeF80Qr0ZzJRluxD6me5T89Z
+	KlMw3mdbbNYPt+3fRYFgcYbY805IQCE60HvidcDg3LWJLOBnUx1BEHjsv8YqlldA7ewC6sG8m9k
+	GowZYOcWwr58GanmyLlm7wV5RI98cy6PHtLG0NVIkev0XEPK8U1M+85daSjB0OxK8+MMY7zAkYK
+	qSUEruw==
+X-Received: by 2002:a17:90b:288e:b0:3ac:2788:cab1 with SMTP id 98e67ed59e1d1-3ad86ed22f9mr629222a91.30.1792551886548;
+        Tue, 20 Oct 2026 20:04:46 -0700 (PDT)
+Received: from localhost ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad8035883bsm1999788a91.15.2026.10.20.20.04.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 20:04:45 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,58 +88,90 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] selftests/mm: merge: reserve the far mremap() targets
-From: "Gregory Price (Meta)" <gourry@gourry.net>
-To: Danish Khateeb <danishkhateeb03@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, 
- Pedro Falcato <pfalcato@suse.de>, David Hildenbrand <david@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20261021011929.89150-1-danishkhateeb03@gmail.com>
-References: <20261021011929.89150-1-danishkhateeb03@gmail.com>
-Date: Tue, 20 Oct 2026 22:54:36 -0400
-Message-Id: <179255127693.1919196.16421147648649712106.b4-reply@b4>
-X-Mailer: b4 0.17-dev
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 21 Oct 2026 03:04:44 +0000
+Message-Id: <DMA6LZFMAQ3X.2YOXSMADL3LQ5@gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/6] bpf: Add syscall common attrs support
+ for xdp link_create
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jakub Kicinski" <kuba@kernel.org>, "Leon Hwang" <leon.hwang@linux.dev>
+Cc: <bpf@vger.kernel.org>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S .
+ Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
+ <sdf@fomichev.me>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
+ Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Kuniyuki Iwashima" <kuniyu@google.com>, "Hangbin Liu"
+ <liuhangbin@gmail.com>, "Martin Karsten" <mkarsten@uwaterloo.ca>, "Masashi
+ Honma" <masashi.honma@gmail.com>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
+References: <20261020152804.39863-1-leon.hwang@linux.dev>
+ <20261020152804.39863-3-leon.hwang@linux.dev>
+ <20261020182553.534c8d6e@kernel.org>
+In-Reply-To: <20261020182553.534c8d6e@kernel.org>
 
-On 2026-10-20 20:19 -0500, Danish Khateeb wrote:
-> The merge tests map their areas at fixed addresses within a 30-page
-> PROT_NONE carveout. Several mremap() tests move an area 1000 or 2000
-> pages away to separate it from the others, but those targets are outside
-> the carveout, and MREMAP_FIXED unmaps whatever is mapped there.
-> 
-> Under virtme-ng, the shared libraries are packed right above the
-> carveout and the dynamic linker starts about 4 MiB above it. The moves
-> then replace part of its text with an anonymous mapping, and the test
-> crashes in its next lazily bound call:
-> 
->   merge[6980]: segfault at 7f7ebb3c1e60 ip 00007f7ebb3c1e60 sp 00007ffd35fbaec8 error 14
-> 
-> Two to four of the mremap() tests then fail with "Test terminated
-> unexpectedly by signal 11", depending on the exact layout. On a host
-> where libc is mapped at a 2 MiB aligned address, the targets happen to
-> land above the dynamic linker and the tests pass.
-> 
-> Make the carveout large enough to contain the targets.
-> 
-> Fixes: 4e25f85b9f85 ("tools/testing/selftests: add mremap() unfaulted/faulted test cases")
-> Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+On Wed Oct 21, 2026 at 1:25 AM UTC, Jakub Kicinski wrote:
+> On Tue, 20 Oct 2026 23:28:00 +0800 Leon Hwang wrote:
+>> --- a/net/core/dev.c
+>> +++ b/net/core/dev.c
+>> @@ -97,6 +97,7 @@
+>>  #include <linux/kthread.h>
+>>  #include <linux/bpf.h>
+>>  #include <linux/bpf_trace.h>
+>> +#include <linux/bpf_verifier.h>
+>>  #include <net/net_namespace.h>
+>>  #include <net/sock.h>
+>>  #include <net/busy_poll.h>
+>> @@ -10771,7 +10772,8 @@ static const struct bpf_link_ops bpf_xdp_link_lo=
+ps =3D {
+>>  	.update_prog =3D bpf_xdp_link_update,
+>>  };
+>> =20
+>> -int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
+og)
+>> +int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
+og,
+>> +			struct bpf_verifier_log *log)
+>>  {
+>>  	struct net *net =3D current->nsproxy->net_ns;
+>>  	struct bpf_link_primer link_primer;
+>> @@ -10784,6 +10786,7 @@ int bpf_xdp_link_attach(const union bpf_attr *at=
+tr, struct bpf_prog *prog)
+>>  	dev =3D dev_get_by_index(net, attr->link_create.target_ifindex);
+>>  	if (!dev) {
+>>  		rtnl_unlock();
+>> +		bpf_log(log, "Invalid target_ifindex.\n");
+>>  		return -EINVAL;
+>>  	}
+>> =20
+>> @@ -10812,6 +10815,8 @@ int bpf_xdp_link_attach(const union bpf_attr *at=
+tr, struct bpf_prog *prog)
+>>  	if (err) {
+>>  		link->dev =3D NULL;
+>>  		bpf_link_cleanup(&link_primer);
+>> +		if (extack._msg)
+>> +			bpf_log(log, "%s\n", extack._msg);
+>>  		trace_bpf_xdp_link_attach_failed(extack._msg);
+>>  		goto out_put_dev;
+>>  	}
+>
+> No, this is silly. We shouldn't be spreading bpf_verifier.h includes
+> around, and making core networking code use bpf_log().
+>
+> Add an extack to this API and for the extack -> bpf_log() conversion
+> in the caller or some "boundary crossing" helper.
 
-A better improvement would be to tweak the tests so they don't use
-magic numbers like (page_size * 1000) and it matches more statically
-to what the mmap'd region size is.  Otherwise it'll get copy/pasted
-again later.
+Tnis will be a trivial refactor in the follow up.
 
-(e.g. please don't just update the mmap, please update the tests as
-well)
-
-~Gregory
-
--- 
-Gregory Price (Meta) <gourry@gourry.net>
