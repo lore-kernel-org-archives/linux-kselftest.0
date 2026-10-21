@@ -1,95 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792578866;
-	b=C/+iKIJOgWKDpamEkZ+QrMZd0iTPX61K+DPhdxvcZTRNtnaDpBs0d/xVyD5OK4MSzsdC
-	 aZYQes91PrYb4EailRXgjSqujC5nLUwYgmPMkpG+2QAY+XcfaWOpd99sFzoPM2Ofx9Jup
-	 Bgp2DbgLJkMqLrUKjg+59l88rNnur+KoKrfEAg6RNcLn7WIdZRodBRmzxL565o1pigBET
-	 qJN8ptLM1ajexNeBVC6Z7pbcNXf76+ZI4XbNGSQL9eRlrFKm5wKBUJGttJxR5tlvILerP
-	 KMQAK0tgVUxNK7tIxrrtlI67pVHjkuUIMge8MtbfNqYh1bSXcRmkwurS+Ar7TC4cirQ==
+	t=1792579378;
+	b=bkUXehA7T3b1+raezUT7+mFm0Bjy4mgaMyrKvEr/ohNZ3WACu64v+6TCjpFsGb2AxgYm
+	 LZFjZMUILYlWQpc+eZINRWDvPjlzcHc9/9aucetVsW8MLIAI5frVhgPYMg88PTcf2WJgZ
+	 XPY2m9JN1VNXuUHyGVQe1DGOgJXkuYJLB0Rl8mHuIXMjHi57qJFZ0VQexowkJkuNc+KxU
+	 46RurqafZ74vVhdpNMJ86jqlHmOj91pF/WDG/zZniDxBgphrpG8ENMX6hISn87FVDiemd
+	 37HFpHuNGe2/dfJAPFmFrPvXgcA539uDyF+00IfyiuY2Mj9sjLcZUnFOHbilIettH8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792578866;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=y2v57bUWAG26s2bm1BoDK2qEh8HhgMjugrP4Ic/x+w0=;
-	b=VYYxsg7/GOTxzFr/nE0IQPz2TFHRNN3KXDy2TPS1XVghmU8Uvh1wMA6JE3T3I0QQ8U5C
-	 nRbScbA6E73dpL3wJjWg31vVNshPY06YyU/RMUCgqYqnAmeE4b+2caB1Jkm436pYsMRNK
-	 wnxt9eIyuVGyT3+9KHa8akmAVKhdklD62oGYsUq9Ndx6BTeR7aegZcFyztHYUUMGq6ihS
-	 TDQ4KcFkPkeEEzNGbbjsisWxcBVNwr92UgMSvhRyqmLJVdEgnxFJo+4Ez/tCUMALgHfo4
-	 5fG9FD58czS0J89Q3lq/3YKcqdp5vb59gwqK/su+QrIa2lFOtpo3caPomtYXIyGTsyg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792579378;
+	h=Received:DKIM-Signature:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
+	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=t90tvZS6oZQr0j8LPs+bmUY4QvpEatggf68p5mbwtZ8=;
+	b=3GfDjo6kkFBDZjNECPkB+1JTpySEXdBajlccOPiVYji5NSXEIWMTy1mkoVx6x5BK1pNH
+	 WMb4/vVpBECgpwjuBnUSsG1Hgx7wK9x9uWVRRfX6Na8/Z2dfO+5hEho1QuTusYuyZKJrp
+	 Paf8cLrANQ7wwsmZQxMlJvaHkvky0JVKWlgDc4Zax3KUYZcA3l0cnNzmaFUtpvzIY9Qwb
+	 KzdPa3APxs1m3Uov+BA1LbAyHbj6Usq797emjqloHNEyYWDhyeCuW7PHDfIRnp0WaJv84
+	 vZoXnf8cEuh96vlre+g5QbPp82ucpQdIxGC+oMzadiGAPsDDJJZr4dzwuDu+eucf2dg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AkHKS07S;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dsB1qgjp;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36413606A31B;
-	Wed, 21 Oct 2026 10:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598D5606A322;
+	Wed, 21 Oct 2026 10:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AkHKS07S
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33BB21F000CB;
-	Wed, 21 Oct 2026 10:34:24 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dsB1qgjp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842F41F000C9;
+	Wed, 21 Oct 2026 10:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792578865;
-	bh=y2v57bUWAG26s2bm1BoDK2qEh8HhgMjugrP4Ic/x+w0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=AkHKS07SreEz44Ef4ECOlzOb5mnzP9iJk7YT0+qqP0xIFFHOlPZnphtCXRGztYfAq
-	 qvuTG5kksnxWd6wmtukEXn3W4Bi1Z/sh4PcmQPLBmEBCqaI29KXc2F8HoAJfhwjANl
-	 u9lO4OIKSlKv2Zb9hhS+4jUHOY/wMC8qsjnR1wfOGgLVrDs15QS+fUNc3RSGGwPk2E
-	 mq68vp3vBAHIROeSLvcSEtnc+4N1kNMYrnaM1lcBkxK9+0F8yeFMXbWkcmwAkXyfoU
-	 vh0PrK+yzlzEgHwlrQ9+RTsCdkQlgw5iW/i0abyKid8g8Wg/brLKmcQLcpenLi7OD4
-	 5TexAVkROVpLg==
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 91E29198003A;
-	Wed, 21 Oct 2026 06:34:18 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Wed, 21 Oct 2026 06:34:22 -0400
-X-ME-Sender: <xms:KZXYap-B1gdwwfApnDe96FzTIIISa4dxNma1SHwQYQt7uxZ-8Bm4zg>
-    <xme:KZXYasM08_wpU5LkFYXYcHzCfKFMAJ7WQjGe1RwK56Fxo4os8ZSMEYTD9u5Rg-G88
-    SUSAOl2YAaSd7hWMd7uA4AmvoElK-byuHUVADO6n7byjAqbdPAJMs_E>
-X-ME-Received: <xmr:KZXYah3QKPZaSBtpYFY5KUUNTd1z2Bw39JqeYr7iYE525tekLHR7lzTE4vw>
-X-ME-Proxy-Cause: dmFkZTFQXCLhgM1j6Uol95BZ6fYJcKahMN2vJQx7GcVvkHkXemtg13fKccd2t/ueNjJM1R
-    NZNDI4Gh+RldPGTb1bpmZejKabh2JDquyTm3SXJ/srOft1k+cpto6f5YKWNDAQFuIJ7ff+
-    qQWH455eQHrQF1lsqcQvBmZn4xyB4v+poc3u9QnXsJ6qRNPfCIDd8yV7fbhTXFgHvUzpsG
-    SKDwbvYu1qlrIXYGiSHoxu9xNNJCEKRtsPuXelRWYRCEtvWD3CgaRD2lyuw0MMIHgO5r9+
-    QhijrY6ZhmtL9PQUWhLSIkqUi6Czh066+c2VSkDAhDkzsmqHcpvQWWqmoVAuBOSEen2IEG
-    I8DRubFCdnteHWcaCg7+ep2GmCV6a1jAygX7y9kBDDwtZox33QjkNDf89pfnetl5BFphag
-    esd6Iv+6E+XFUU5a7adlxlJKyfbeOFFX8yHu6SdKamKUNU0hZgDKHalndbHtyq3+LEb62x
-    Y8+X5Z7xk48UcOEHntNXppBaLzSeoD1M5mm9z8M/gu8fpTer3OE62V2mnqdvYet/j4fOhA
-    VzOL8tdmklPthIG33/HCqULQeuHbqhaerqtfo4myPpP3qcxdkvVfKyzASxaTnikmGpx311
-    0eSuN4plxEUs3JjUKHKxQQBKybUwylz4/QGqFAXTXmK4Rg3qtoNFogtp1WfQ
-X-ME-Proxy: <xmx:KZXYajo2jWD3StK13oUCJD-bGc_sbcHvNfCY5u_rCvtEr6pN-GzdKA>
-    <xmx:KZXYaps7lW8jncdcwOVb7MM6OQebOJocgq2ri3h-HpT1YcojzLb_Ew>
-    <xmx:KZXYamJdmolfEHZ4N9B2f3rCJtpC50qh_FSaAdT57208BdoilWH_-Q>
-    <xmx:KZXYan3cSU_fMf1efCGtB0ld1kj8lPH2JDBXx9fkIFzQzBz41yU-gg>
-    <xmx:KZXYatoOQIPIzFknbNSPFv0KFOSG5WppE3zZ9dp0DwcE0SJbICUTLnjA>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 21 Oct 2026 06:34:16 -0400 (EDT)
-Date: Wed, 21 Oct 2026 11:34:15 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Zenghui Yu <zenghui.yu@linux.dev>
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, "David Hildenbrand (Arm)" <david@kernel.org>, 
-	"Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Usama Arif <usama.arif@linux.dev>, 
-	"Nico Pache (Red Hat)" <nico.pache@linux.dev>, Zi Yan <ziy@nvidia.com>, Barry Song <baohua@kernel.org>, 
-	Dev Jain <dev.jain@arm.com>, Hugh Dickins <hughd@google.com>, 
-	Lance Yang <lance.yang@linux.dev>, "Liam R. Howlett" <liam@infradead.org>, 
-	Michal Hocko <mhocko@suse.com>, Ryan Roberts <ryan.roberts@arm.com>, 
-	Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	"Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, kernel-team@meta.com
-Subject: Re: [PATCH v6 16/19] selftests/mm: add khugepaged race harness
-Message-ID: <atiU94VjdEsWzdBr@thinkstation>
-References: <20260919002451.496763-1-kirill@shutemov.name>
- <20260919002451.496763-17-kirill@shutemov.name>
- <85b3725a-6dde-4a57-b303-4ae2b53b60a5@linux.dev>
- <6e3c298f-9b93-43b2-840d-65c5ffa3bc36@arm.com>
- <248431ea-4bbf-4a48-a80e-72287ffbae22@linux.dev>
+	s=k20260515; t=1792579378;
+	bh=t90tvZS6oZQr0j8LPs+bmUY4QvpEatggf68p5mbwtZ8=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=dsB1qgjpAnBJ2mwnX25B8XCsTjcViWTFyHTFd7hup+WM3+qNNpPq1BwW+MfkW2NcY
+	 p/Hkc4u6LeNdbJudbAQczNqkA8JIqDCIqrWPm624L9Wk47A94nph6qSByL+DKfu4HI
+	 U7kehuOF0Mmdx7K3hCQFFWlvukGZIwXKZSL/IamhVOmqW4L1YR7/v2VebS296RWIUe
+	 83+MfF7pLtfVjL1nDdMKPwWlzzQ/l327Iz20SogXjgDAQth0twB7INmV+LRItF4N7G
+	 utHNp5FTlFWPQtuA2F86RuSzddMuHiAFNXG01gS2IdqMNR/cMQ8rMIfrw/PyTRK5Td
+	 HYJ2APtRDYzfg==
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -99,41 +49,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <248431ea-4bbf-4a48-a80e-72287ffbae22@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v1] pidfs: do not report fields that do not fit into
+ the caller's struct
+From: Christian Brauner <brauner@kernel.org>
+To: Nickolai Zeldovich <nickolai@csail.mit.edu>
+Cc: Christian Brauner <brauner@kernel.org>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
+ Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
+ Luca Boccassi <luca.boccassi@gmail.com>, linux-fsdevel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20261017020634.792390-1-nickolai@csail.mit.edu>
+References: <20261017020634.792390-1-nickolai@csail.mit.edu>
+Date: Wed, 21 Oct 2026 12:42:51 +0200
+Message-Id: <20261021-trauen-wirft-hegen-847ed3b60f61@brauner>
+X-Mailer: b4 0.17-dev-3d1b8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2907; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=pTFgFr7+/hXlFUZ+wq+itkgyJLMrzj6irJNX8yUZYyI=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTdmK6bNL12jeIUriqpeUujV05YuumCd77jzkkn799aO
+ VtJ7FSYWkcpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBE7iUwMjzx9boXu5Q39Q7H
+ u8z/mzc8WL5QkOVVx/37vl2HO6Q0PvYxMty5rbuxkkul9KoVd4Z9yozaCULrrlSd7vr1yt17V+b
+ Kdg4A
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Thu, Oct 08, 2026 at 10:23:22PM +0800, Zenghui Yu wrote:
-> On 10/8/26 4:18 PM, Muhammad Usama Anjum wrote:
+> The documentation of struct pidfd_info promises that "If the structure
+> size is too small to contain a field (requested or not), to avoid
+> confusion the mask will not contain a bit for that field", and asks
+> userspace to trust the returned mask when deciding which fields hold
+> valid data.
 > 
-> > On 08/10/2026 8:30 am, Zenghui Yu wrote:
-> > > On 9/19/26 8:24 AM, Kiryl Shutsemau wrote:
-> > >
-> > > > +		} else {	/* madvise */
-> > > > +			while (now_ms() < end_ms && !corrupted) {
-> > > > +				for (i = 0; i < nr_shared_areas; i++) {
-> > > > +					madvise(region + i * hpage_pmd_size,
-> > > > +						hpage_pmd_size, MADV_COLLAPSE);
-> > >
-> > > I got the following error when compiling it:
-> > >
-> > > khugepaged_race.c: In function ‘main’:
-> > > khugepaged_race.c:506:23: error: ‘MADV_COLLAPSE’ undeclared (first use in this function); did you mean ‘MADV_COLD’?
-> > >   506 |       hpage_pmd_size, MADV_COLLAPSE);
-> > >       |                       ^~~~~~~~~~~~~
-> > >       |                       MADV_COLD
-> > > khugepaged_race.c:506:23: note: each undeclared identifier is reported only once for each function it appears in
-> > > make: *** [../lib.mk:225: /data/code/mm/tools/testing/selftests/mm/khugepaged_race] Error 1
-> > 
-> > I've just tested with and without make headers on linux-next
-> > which has this patch and I've not received such error.
-> > 
-> > If your system headers are old, running make headers can help.
+> pidfd_info() does not keep that promise. It builds kinfo.mask without
+> looking at the size encoded in the ioctl command, and
+> copy_struct_to_user() then truncates the copy to that size. A caller
+> that passes a 64-byte struct (PIDFD_INFO_SIZE_VER0) and requests
+> PIDFD_INFO_COREDUMP or PIDFD_INFO_SUPPORTED_MASK gets a mask with
+> PIDFD_INFO_COREDUMP, PIDFD_INFO_COREDUMP_SIGNAL, PIDFD_INFO_COREDUMP_CODE
+> and PIDFD_INFO_SUPPORTED_MASK set, while the coredump_* and
+> supported_mask fields behind the 64 bytes were never written. Trusting
+> the mask as documented, userspace then reads whatever its own buffer
+> held at those offsets. The same happens for a 72- or 80-byte struct
+> and the fields added after it.
 > 
-> I forgot to mention that this can be fixed like fd5295afae91.
+> Clear the bits of the fields that lie beyond the caller's size before
+> the copy, in the one place that knows both the final mask and the size.
+> A request for a field that cannot be returned is thereby answered the
+> way the header describes: the field is simply absent from the mask.
+> 
+> The added selftest issues PIDFD_GET_INFO with the first published size
+> over a full-size, poisoned struct and checks that the mask names none
+> of the fields beyond that size and that the poison is intact. It fails
+> on an unpatched kernel and passes with this change.
+> 
+> Found by formal verification of fs/pidfs.c against the kernel binary.
+> 
+> Fixes: 1d8db6fd698d ("pidfs, coredump: add PIDFD_INFO_COREDUMP")
+> Signed-off-by: Nickolai Zeldovich <nickolai@csail.mit.edu>
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> ---
+> Notes:
+>     The three size thresholds follow the field layout: coredump_mask and
+>     coredump_signal end at PIDFD_INFO_SIZE_VER1 (72), coredump_code at
+>     PIDFD_INFO_SIZE_VER2 (80), supported_mask at PIDFD_INFO_SIZE_VER3 (88).
+>     Masking the request bits early instead (before the coredump and
+>     supported_mask blocks run) would save a little work for such callers
+>     but leaves the bits set in the task->mm fallback path; clearing the
+>     result once before copy_struct_to_user() covers every way a bit can be
+>     set. No stable tag: the only callers affected pass a struct size
+>     smaller than the fields they request, and the consequence is a wrong
+>     mask bit, not a crash or corruption.
+> 
+>  fs/pidfs.c                                    |  8 ++++
+>  tools/testing/selftests/pidfd/pidfd.h         | 16 +++++++
+>  .../testing/selftests/pidfd/pidfd_info_test.c | 48 +++++++++++++++++++
 
-Right. Would you like to send the fix?
+Semantic changes and selftest changes in separate patches, please.
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+
