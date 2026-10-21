@@ -1,45 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.32
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792614625;
-	b=fX/ozbkPNey7nWcgZWbt6FTUx0vCKcfhwZPO3qnqM1bR+cWYkeV9gT7Se2gykxZIjQeu
-	 OYtFC2HakwwSB/CAekRZsgbEHBjcL6QfzKsxvojpgFD+N+R7wqpPg7hc4M/2NqgYpo/KA
-	 VLKb0aY6/HkOPwnr5TFmXzY6jmrFFHSMkoKxF9xWaj1Eh7HTC0no6pF6yNmuejkBj2xgg
-	 LuiSPuEvf2zhmmEmK9jTa4Y+Svsfv84a9CLTvshbOoEBpgE+LaW0Z+lrHZA482JLYkaI1
-	 I65PHRYhdCEW4HcxEyVQipPdrtwxuKz5IBWXZd8Vnh51ET6lLOX/1weZfKuNrwGK8Xg==
+	t=1792614691;
+	b=fRWTSZlOkk3k4yX8jmqgsNQj/SrUhw8++llNC8uuGM5aZYcCY/Jo5d2r33OxnohLggs8
+	 HDyQYQAJ2zAwNE69tlHfNq77CP/zTPcgUUZi0iHEIIOQepzWfCwO9pyoLl7EJQGEldU9E
+	 0DGGgSrX4OnwFCE6Ik8qHG/oJ3WM4d8zFHGv/2I21Hze2RFZICuTK62Qd4kER2iQjPm4i
+	 BiYD2ajF6HhwVlWG6+2Jl5kohBBrkHCCUBf9I48lotG6tFYCPyWrrGGT6C9sad/rYbaZf
+	 doj0xXKWeHwSjzhYZ/gXeI19EKO4eC4kpgOq/ClZpgAP3110bSUNbp83NEZbook2qjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792614625;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=KBK4LZ76/LMHs38+RcqRgWOhkYyz4na1Z6dIKP/tOqk=;
-	b=p0J0KbLLiBegVLqhZICmOlHSQ63ghHuQqtE7FRl6i0CYOz1HeUzEc3bqooaKdEmkKRqm
-	 yrzsaOwno8ZiwdJ3TbEzt0ywo30NvKpNQoeXImf60NDTIjSaq9lJaacNTxiJH04e9iApA
-	 YifDCBbpjZDMDA/0Q8XGmAbdHk+74JZxKq+zsuKiwZKOK0IgdnYzPYFEyjiuPc3rXGJKa
-	 zT3haFovYHa2iu/xCfx4liWU8A8DQFKbp4Bl86l8QfW6VKTBBYnRP06KEZiA9hqB4m8VQ
-	 87bLBkjC1fLXVkTFemvtT6b6kfumxJrcfD7q4P+YMJ+6TgPSQJXtOb1RC+LakZa+pxw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792614691;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=KxwBrwp4beob4QtDN6Vgdq08lcQBA4NIn9MwR8QBPkU=;
+	b=kXA80AweJV7gaIeC1EQ+1phWZnSi1wF3NU/lyuXsHQH6Ma8PwzMgfyBO0vAPEASQCKVj
+	 wvFJt54fbaJARuG3gmEP3oOA2y1CjvOoWlUfi9gpKDkdmZQRrVItHyRgOEKYGNg6r6MmU
+	 vZWlKTP3lMx1dxZA/3Cooq9ubgaWp8uoBfUH5A5RClGXGZcDGvcjp5bnu8C6mxaOaO6y5
+	 AvuJAOnY6qyf0cL6C4Kbjd2x2bJcdY2H+kCAwHDKMk4ocqp4TxayOuDwW+lxIAPcPjT5V
+	 IMEmiF2x8USWZumUM3YVKCv9RMPIoLRHS8HzdMcE1EdkvjvyEU6L4uSqO0UGsn4TQrw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LGcJTwNS;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=q7dvXRnT;
+	arc=none smtp.remote-ip=95.215.58.32
+Received: from mta1.migadu.com (out-32.mta1.migadu.com [95.215.58.32])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9419606A31D;
-	Wed, 21 Oct 2026 20:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE461606A31B
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 20:31:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE461606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LGcJTwNS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BE01F000C2;
-	Wed, 21 Oct 2026 20:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792614624;
-	bh=KBK4LZ76/LMHs38+RcqRgWOhkYyz4na1Z6dIKP/tOqk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LGcJTwNS+wrlBBLVvQ9ovngE23Noc9VOmWvk2FRS75Y/m/cgQwVkUTonRoFDY/Frv
-	 WLGOMZ04f4qVLz7PtsOIxRPvCKIlgUMIi/7JVI9zP9SDlYdI2+ZlT5rje/up+3NVHe
-	 q+Q8DK4stx0Zuum4v4z2Jdf76/uRakBFa3nwABCIzPQoGRfndK1P1ObqSfPI26ryJt
-	 KXBcJe91FoGxwtKVgEN3R6jj7JkhTMa29qbJv/83ZBzdgKhDvYfpzUJFGBQan4wmES
-	 MAQpQVk/1Rd17mCrUwpUqfXmUgsYdU0nlaFIaXpIifjnPcAtJJf7s9OmsW2QsJPYrr
-	 SizUAhXRnvmiQ==
-Content-Type: multipart/mixed; boundary="===============0931245153222694076=="
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=q7dvXRnT
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=n8p1HmjNMWhlzUdbwb8q/SiUw9ZRnxHT690PoGANNvo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792614687; v=1; x=1793219487;
+ b=q7dvXRnTpcx35Pk/LLSxdbWhdDlN4uQokwO4JyHfS6AN6NnPVbhdXgGLvRNS/uR5u9+zW09t
+ 8XCXYGdSmoN0hlQeAVA+MOwVyJr4mXN8rHTofWpuEqi11LNLPm/5uCS2GOyM9AiDJ8eKC0qwTVK
+ yfxvbOsRSueXg6bvmaSIVUbk=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2cd00a1c9ad92a45;
+	Wed, 21 Oct 2026 20:31:27 +0000
+X-Mizu-Trace-ID: 2cd00a1c9ad92a45
+X-Migadu-Flow: FLOW_OUT
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+To: jgg@ziepe.ca,
+	leon@kernel.org,
+	shuah@kernel.org,
+	zyjzyj2000@gmail.com,
+	linux-rdma@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	yanjun.zhu@linux.dev
+Subject: [PATCH v3 0/2] selftests/rdma: Add an eBPF-based testcase using netkit for RXE
+Date: Wed, 21 Oct 2026 13:31:13 -0700
+Message-ID: <20261021203115.54560-1-yanjun.zhu@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,103 +67,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <409d58c6952c879c08413c5f5b00b325789263b4704147098dc43d9a4fd93b33@mail.kernel.org>
-In-Reply-To: <20261021195759.119421-3-jolsa@kernel.org>
-References: <20261021195759.119421-3-jolsa@kernel.org>
-Subject: Re: [RFC bpf-next 2/9] bpf: Add uprobe faultable user copy kfunc
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net
-Cc: bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,linux-mm@kvack.org,akpm@linux-foundation.org,liam@infradead.org,ljs@kernel.org,linux-kselftest@vger.kernel.org,shuah@kernel.org,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 21 Oct 2026 20:30:23 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============0931245153222694076==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Add a new self-test case to verify RXE (Soft-RoCE) traffic using
+netkit virtual interfaces and an eBPF tcx ingress program to dump
+and parse RDMA transport headers (BTH, etc.).
 
-> bpf: Add uprobe faultable user copy kfunc
+The test results:
 
-TL;DR:
-- New write-to-user kfunc may let CAP_BPF+CAP_PERFMON loaders write user
-  memory, bypassing the helper's CAP_SYS_ADMIN requirement
-- Unused enum (nit)
-
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-
-[ ... ]
-
-> @@ -5139,6 +5170,31 @@ static const struct btf_kfunc_id_set generic_kfunc_set = {
->  	.set   = &generic_btf_ids,
->  };
->
-> +BTF_KFUNCS_START(user_mem_btf_ids)
-> +BTF_ID_FLAGS(func, bpf_probe_write_user_faultable, KF_SLEEPABLE | KF_PERFMON)
-> +BTF_KFUNCS_END(user_mem_btf_ids)
-
-The new kfunc does the same job as bpf_probe_write_user(), but it is gated
-only by KF_PERFMON.  The verifier checks that flag as env->allow_ptr_leaks,
-which is bpf_token_capable(token, CAP_PERFMON), and loading a
-BPF_PROG_TYPE_KPROBE program already requires CAP_PERFMON (see
-is_perfmon_prog_type() in syscall.c).  For this program type KF_PERFMON
-doesn't seem to add any restriction.
-
-The existing helper is gated on CAP_SYS_ADMIN in bpf_tracing_func_proto():
-
-    if (!bpf_token_capable(prog->aux->token, CAP_SYS_ADMIN))
-        return NULL;
-    switch (func_id) {
-    case BPF_FUNC_probe_write_user:
-        return security_locked_down(LOCKDOWN_BPF_WRITE_USER) < 0 ?
-               NULL : &bpf_probe_write_user_proto;
-
-and include/uapi/linux/capability.h documents "CAP_SYS_ADMIN is required to
-use bpf_probe_write_user."
-
-With this patch, can a loader holding only CAP_BPF and CAP_PERFMON write to
-user memory through the kfunc even though the helper refuses it?
-
-The commit message carries over the LOCKDOWN_BPF_WRITE_USER restriction from
-the helper but says nothing about the capability requirement.  Should
-user_mem_kfunc_filter() also require
-bpf_token_capable(prog->aux->token, CAP_SYS_ADMIN) for this kfunc?  If
-CAP_PERFMON is meant to be enough, could the changelog and capability.h
-explain why?
-
-> +
-> +enum user_mem_kfunc_id {
-> +	KF_bpf_probe_write_user_faultable,
-> +};
-> +
-
-This isn't a bug, but enum user_mem_kfunc_id and its enumerator
-KF_bpf_probe_write_user_faultable don't seem to be referenced anywhere, in
-this commit or later in the series.  user_mem_kfunc_filter() compares against
-bpf_probe_write_user_faultable_btf_id[0] from the BTF_ID_LIST_SINGLE below
-instead.
-
-The similar pattern in verifier.c (enum special_kfunc_type) works because it
-indexes a BTF_ID_LIST, and there is no such list here.  Can the enum be
-dropped?
-
-> +BTF_ID_LIST_SINGLE(bpf_probe_write_user_faultable_btf_id, func,
-> +		   bpf_probe_write_user_faultable)
-> +
-> +static int user_mem_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
-> +{
-> +	if (kfunc_id == bpf_probe_write_user_faultable_btf_id[0])
-> +		return security_locked_down(LOCKDOWN_BPF_WRITE_USER);
-> +
-> +	return 0;
-> +}
-
-[ ... ]
-
+# make -C tools/testing/selftests/ TARGETS=rdma run_tests
+make: Entering directory '/root/linux/tools/testing/selftests'
+clang -g -O2 -target bpf -D__TARGET_ARCH_x86 -I../../../../usr/include -I../../../../include/uapi -I../bpf -I/root/linux/tools/testing/selftests/rdma -c rxe_pkg_kernel_dump.c -o /root/linux/tools/testing/selftests/rdma/rxe_pkg_kernel_dump.o
+bpftool gen skeleton /root/linux/tools/testing/selftests/rdma/rxe_pkg_kernel_dump.o > /root/linux/tools/testing/selftests/rdma/rxe_pkg_kernel.skel.h
+gcc -D_GNU_SOURCE= -I/root/linux/tools/testing/selftests/../../../tools/testing/selftests  -g -Wall -I../../../../usr/include -I../../../../include/uapi -I../bpf -I/root/linux/tools/testing/selftests/rdma rxe_pkg_user_dump.c  -lbpf -lelf -lz -o /root/linux/tools/testing/selftests/rdma/rxe_netkit_dump
+# timeout set to 45
+# selftests: rdma: rxe_rping_between_netns.sh
+# client DISCONNECT EVENT...
+ok 1 selftests: rdma: rxe_rping_between_netns.sh
+# timeout set to 45
+# selftests: rdma: rxe_ipv6.sh
+ok 2 selftests: rdma: rxe_ipv6.sh
+# timeout set to 45
+# selftests: rdma: rxe_socket_with_netns.sh
+ok 3 selftests: rdma: rxe_socket_with_netns.sh
+# timeout set to 45
+# selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
+ok 4 selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
+# timeout set to 45
+# selftests: rdma: rxe_sent_rcvd_bytes.sh
+# server DISCONNECT EVENT...
+# wait for RDMA_READ_ADV state 10
+# client DISCONNECT EVENT...
+ok 5 selftests: rdma: rxe_sent_rcvd_bytes.sh
+# timeout set to 45
+# selftests: rdma: rxe_netns_names.sh
+# 1..0 # SKIP rdma netns exclusive mode is not supported
+ok 6 selftests: rdma: rxe_netns_names.sh # SKIP
+# timeout set to 45
+# selftests: rdma: rxe_pkg_netkit.sh
+# server DISCONNECT EVENT...
+# wait for RDMA_READ_ADV state 10
+# ./rxe_pkg_netkit.sh: line 28:  9866 Killed                  "$CUR_WD/rxe_netkit_dump"
+ok 7 selftests: rdma: rxe_pkg_netkit.sh
+make: Leaving directory '/root/linux/tools/testing/selftests'
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+V2 - > V3: Fix errs in user space application
+V1 - > V2: Fix problems from sashiko
+---
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39668036298
---===============0931245153222694076==--
+Zhu Yanjun (2):
+  selftests/rdma: Introduce eBPF kernel and user dump utilities for RXE
+  selftests/rdma: Add netkit-based automated test script for RXE
+
+ tools/testing/selftests/rdma/Makefile         |   23 +-
+ tools/testing/selftests/rdma/config           |    3 +
+ .../selftests/rdma/rxe_pkg_kernel_dump.c      |   62 +
+ .../testing/selftests/rdma/rxe_pkg_netkit.sh  |   63 +
+ .../selftests/rdma/rxe_pkg_user_dump.c        | 1275 +++++++++++++++++
+ 5 files changed, 1425 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/rdma/rxe_pkg_kernel_dump.c
+ create mode 100755 tools/testing/selftests/rdma/rxe_pkg_netkit.sh
+ create mode 100644 tools/testing/selftests/rdma/rxe_pkg_user_dump.c
+
+-- 
+2.54.0
+
