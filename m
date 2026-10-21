@@ -1,59 +1,121 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792577649;
-	b=RWLWn5E0Nby+xQg1dfUvgOJ/IyndL3iyU3QnW1nJWmQU6vK35Ue9RJnkclGBk0ds1Tx3
-	 abBGSxhw1+49thhVCJ06roD54fg+Z8cEL2snMfWfXYSvak1ljSCFL5dznddfktpfOJiTP
-	 R/3jTagXyubGQ8/5OYS6VcTJRSXNSBFiTpL9PYa0nm7T9HVUiENv97+JgZzAPrTedu+81
-	 Cv5DL4531Ri8FCrw5vBzx5tV1ZbSlOmNeleeyx/Gv3SrXvuGQ6jiQV2Fv/97CMh+axdhF
-	 PApDfWhA5m2TNm4mq75z3MJpDgwbCLCuVgUd0V2ji3Fhs1+Smj77edOobxXx4RHCaMQ==
+	t=1792577685;
+	b=Rqs4Z1HYhljGZvHl1kSdEZ6hYEBF+sWkW69pzTxTbI97xoZmMowTNeiLBw4HosmsOLwG
+	 EDbKni3TFfIUAq6WugDq4oDMI5Q0hY8N0XMqxjnQGjSOdebdt/M00b2woN7mVu6ePSxMN
+	 mjvYDRbgSg9QBOH/6XropUyBvqXc8XbgsVLxiAAyC4X2nuRU4GvBeFx0Jk1tv/YC9xnRa
+	 x08+VOTHd3y5qsOZx/ypFi4PbWUN09bNwBkNBF8D1a5wyexp6+vVIR3mQrdJFOeIyiVEK
+	 HQ/KppJwWmR0+4cr1Q5qCFGdE43/31fBhngLKO/YVF/WwBYX0N19zEIDZAWvHjMIfRQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792577649;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=LZVDv/ifhL0pps23IxWAzGyzN5pLImGVnvohaaA3ul8=;
-	b=aUpJEXi4PY2sxCvRMgIPvr9cxwij4pRNoXMqynGjvoEi/fNZg5Ec1PGC41G3nqy9wOns
-	 yTWGuPa73mkgCNj1gEX/BEOqScVfoYLa2MffYyyzwkCPoYfA6Ws7Q+tBimGDURinsnVmy
-	 hy0YnFkFYzF+eif8SmXdeKi0Mj7kIOY0Q8rQT8ZcR+GSlN9I3WFYGZ2MqNOgR3y7mS1iR
-	 6yVpnMv0ZxmSNsgxImyII5eGNS5RwbIjGoANYc4g9HLTD1jJKkCd5dpIvhzDBkVZlCGAQ
-	 sKGlbvVjqAHo6wEHY5Pa2eptfULd3M18QN8QRUATTcqXruC40HKdk4FCfwNZ3kiCOKg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792577685;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=LaMrw0UGiuCnM59eNBEdevbmBZ2o/qyOQGg9zp+WMrM=;
+	b=S3IEKP1kb3T01yorRPjSizhMvgx2VS5Egk6OJtUWFqXMUaxU6/rgXME8bfrjU/kBwiu6
+	 p49+hSu6VrUrP+dr3gdsKAjEt2bBGMP6x2uSoFh371U3fSkhbwSDBb7Y3KoBa1tfbsCkn
+	 rRCnK+o1IqnOlcIs9y2OxC7N5gpy6On6MvK25ECZB/v7GmWvHcbG7tuYhiVrQzOxDyUWH
+	 nqvcjSPqUy/umNCUXtB3iteAbhBDfuXno2ekLCHhv8+6gXC8ykrxdth6cPTA+8VwaRdiT
+	 8Bleo/yKP0B/IrYgbKVFYE7UhIP+XLB6poXp+3xdT1ocwowdg7tD+8MbSdY/7sHzyqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Yuw/Sekv";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TpixcOcI;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ejAaswOC;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DA6606A31A;
-	Wed, 21 Oct 2026 10:14:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0AD606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 10:14:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F0AD606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Yuw/Sekv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066A21F000C9;
-	Wed, 21 Oct 2026 10:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792577649;
-	bh=LZVDv/ifhL0pps23IxWAzGyzN5pLImGVnvohaaA3ul8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=Yuw/SekvpA8wouPa4hXTPQKwya21oUto+gEM/H+kyCUI1ePM0O9xLhf64F1ydeCJG
-	 EbLxMGYgsMgA32wr5KFIuEmy+ANcyot2YtVFDubrJRR6/+9bBxaNDGonlxbu7a26Mj
-	 5wnShYj59Y0sQTUF8T25Dt4EMpvo2TK3nLPkOTcIH7YcOg8vSMMZrGz6PQTZxZ7L9H
-	 vt9LIC9NtJHUdD/Np28olfMhroxRhdWvSQeWSWK4cZmB0fT+hZiPMniZF5vsC3g+kr
-	 xHCUCftCuYkI58iO2N8teTFYWBHOFWOzLH6t03tpgXmZSKhoWe63wqTTe7Ejk4nZpj
-	 cGz9F3R0PsP4w==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org,  rppt@kernel.org,  shuah@kernel.org,
-  akpm@linux-foundation.org,  linux-mm@kvack.org,  vipinsh@google.com,
-  linux-kernel@vger.kernel.org,  dmatlack@google.com,
-  kexec@lists.infradead.org,  pratyush@kernel.org,  graf@amazon.com
-Subject: Re: [PATCH v2 1/2] liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl
- to freeze sessions early
-In-Reply-To: <20261020144710.4154339-2-pasha.tatashin@soleen.com> (Pasha
-	Tatashin's message of "Tue, 20 Oct 2026 10:47:03 -0400")
-References: <20261020144710.4154339-1-pasha.tatashin@soleen.com>
-	<20261020144710.4154339-2-pasha.tatashin@soleen.com>
-Date: Wed, 21 Oct 2026 12:14:05 +0200
-Message-ID: <2vxz4iefgy36.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TpixcOcI;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ejAaswOC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792577684;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LaMrw0UGiuCnM59eNBEdevbmBZ2o/qyOQGg9zp+WMrM=;
+	b=TpixcOcIc+qEmEDiQ0FLw+S+qtpggT3NqH0RIXuzC8XKV/f9YbgNr3ahFBE7fZ+GDb2aiM
+	MJ8Tu/HXmRNLwBcF7ACuwPEadiowaMAmgZJ/st10hS9I3uA3Zr1aRYCnlG+rN/XIpsvwi5
+	q+58VurQ3uB5vhiS4wynDKnC3HLs7QE=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-136-eKPGlRHpMOmITeB6HHsOvg-1; Wed, 21 Oct 2026 06:14:36 -0400
+X-MC-Unique: eKPGlRHpMOmITeB6HHsOvg-1
+X-Mimecast-MFC-AGG-ID: eKPGlRHpMOmITeB6HHsOvg_1792577676
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-48e1ad3cb66so282117f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 03:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1792577675; x=1793182475; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LaMrw0UGiuCnM59eNBEdevbmBZ2o/qyOQGg9zp+WMrM=;
+        b=ejAaswOCkEY3H7XHMvAZgqt+YFWmaA2GRwEj+PstMfsG6vKej3aW9Mc3rh9fAEWYEb
+         pg2JMCkAPE82ExN+TJKKaHRxxf+3uJRlOUFuBXopOsn1ymGHjdcQSgg7go7o2YFOI6B4
+         5Be9HrAfZ3MzPuPr3CKBSUBj4Qny302DJ5AAyOadKTYOToXS4tMVBUuwRD052omVT7J0
+         MD1H88CSDfGxOULqFgCsw8YcCa6ZqWGbgLZXdbr5TZ9li9gphxupZM28UZ3UNFe32CXU
+         Z6TO6k+AYwCq6yZ5V00AlM8z7dgnk6dWXWcf/KseDK8hkirdiHm+lEyFTAzhw2dNekkJ
+         r8Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792577675; x=1793182475;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LaMrw0UGiuCnM59eNBEdevbmBZ2o/qyOQGg9zp+WMrM=;
+        b=NJ8OMIz4e3Pe6fMru0C+vzx1J0huEE6o8nqJbAN2CZTDnJ2AZVFSJYxd62Xqa2gHEZ
+         Th+sqQHYBDOhFErI3A3+OT0hZqAwYJUzk5qMvXryd+rpdEZ8uKJvTELuKXimDD4FGuog
+         GvcYxYrR19vzkVu3xE6jWm7GXfb+nyIi1p93xXeJ9fiOND08lsueLKlcqLQYAYXh2HvQ
+         Xrv9C/yy667oUPIEJfUZQzu9BNbKd6VKgDh4SwrBuOLEg6byfm1UcGpP9zuvuojXucwC
+         tkULrWYY+DKoLFg3hdL3nuqe6dW30Pf/rTh6filAiS/O9d0ydiaQCn3vfHBsAthoYC/C
+         nYpw==
+X-Forwarded-Encrypted: i=1; AKwUvByi0Wc4CeIiyPrpSS1pBvr9g60cVMKe083RlAH+QVeMEVqSHsQYSe7patRbz+w0c0dz/prsxqZvuChEcWhIQmM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKFXYRGuUfOedKwvk2Bcm44VeqGE3JhxlrPorpY6pjPQS6U+ijx
+	OA6TDS+rj7W0ohsxU56cZfswyVpAJYzNMfphawBSoFxUqboZU/B7nXR9cP2OnRgEXqz3CJNdy61
+	D0/p59BNWukJfHpRzgXO6/83ELjPB7XImtoDQetnbhl5UkcT5vz2slEm3ugwlx3sezfiM7A==
+X-Gm-Gg: AYBFou0sCPno2VM4OmbcDn5yK939YWVOzZ99s4Z+AswD1NB/qCzV16nrCmHq/Ts+5EW
+	1NuWBjMecc3Z8vAv/GjTTgqWv8fS/n/hcR9403tz5BsrnQAY8kmohbOz1vzlBpzzSNbkPVy9DA7
+	jInIafO4VNo8YvWgfbCLFbtWYPvGvAFWApsUbUkqYI88YbhEwVoLJBAXchsBt+1rQwaGExdPsbS
+	uPIwWAZz0mqzGK76bjN7gJTivER6skF1BxH1PeYgL3lvsxyyri731QmxOd9wmyHhof2xVEJptCi
+	n3woOrsvOU5DKes+NxCaz6+8qCc06a/T/ztpoO/FGEuWRarKRYkwIrrgYJHX0OCzfIC5qWkalDL
+	s2BqSnA==
+X-Received: by 2002:a05:6000:4213:b0:488:8931:b1b2 with SMTP id ffacd0b85a97d-48e264bd584mr3754101f8f.28.1792577675510;
+        Wed, 21 Oct 2026 03:14:35 -0700 (PDT)
+X-Received: by 2002:a05:6000:4213:b0:488:8931:b1b2 with SMTP id ffacd0b85a97d-48e264bd584mr3754032f8f.28.1792577675060;
+        Wed, 21 Oct 2026 03:14:35 -0700 (PDT)
+Received: from sgarzare-redhat ([193.207.178.135])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e254f0bc2sm4512724f8f.1.2026.10.21.03.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2026 03:14:34 -0700 (PDT)
+Date: Wed, 21 Oct 2026 12:14:30 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobbyeshleman@meta.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Jason Wang <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eric Dumazet <edumazet@kernel.org>, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com, 
+	Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: Re: [PATCH net-next v4 3/7] vsock: pass the netns to
+ ->has_remote_cid()
+Message-ID: <atiQfOneKTIyhGHX@sgarzare-redhat>
+References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
+ <20261020-vsock-guest-ns-v4-3-047527cfccfc@meta.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,140 +125,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20261020-vsock-guest-ns-v4-3-047527cfccfc@meta.com>
 
-On Tue, Oct 20 2026, Pasha Tatashin wrote:
-
-> Currently, LUO sessions are frozen automatically only inside the
-> reboot(LINUX_REBOOT_CMD_KEXEC) pathway, where luo_session_serialize()
-> iterates through all outgoing sessions under global write locks and
-> freezes them serially during shutdown. Allowing userspace to decide when
-> to freeze a session once it is done with it (and to freeze multiple
-> sessions in parallel, since luo_session_freeze() only acquires the
-> per-session mutex) avoids postponing this work to kexec shutdown and
-> reduces blackout time.
+On Tue, Oct 20, 2026 at 06:15:06PM -0700, Bobby Eshleman wrote:
+>The transports only use the socket to find its network namespace. Pass
+>the namespace instead, so that a later patch can ask whether a CID is
+>taken in a namespace without necessarily having a socket on hand. This
+>will help with avoiding CID collisions when devices move between
+>namespaces.
 >
-> Introduce LIVEUPDATE_SESSION_FREEZE on session file descriptors to freeze
-> a session early. The ioctl runs .freeze() across all preserved files in the
-> session and serializes their metadata. Once frozen, no additional files can
-> be added to the session, and subsequent freeze calls return -EBUSY. Freeze
-> is only valid on outgoing sessions and returns -EINVAL on incoming ones.
+>No functional change.
 >
-> During kexec, sessions that were already frozen early are skipped, while
-> sessions that did not invoke this ioctl auto-freeze as before. If an
-> early-frozen session is released before kexec, its files are rolled back
-> via .unfreeze() before being unpreserved.
->
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-[...]
-> @@ -218,18 +219,33 @@ static int luo_session_finish_one(struct luo_session *session)
->  	return luo_file_finish(&session->file_set);
->  }
->  
-> -static void luo_session_unfreeze_one(struct luo_session *session,
-> -				     struct luo_session_ser *ser)
-> +static void luo_session_unserialize_one(struct luo_session *session,
-> +					struct luo_session_ser *ser)
->  {
->  	guard(mutex)(&session->mutex);
-> -	luo_file_unfreeze(&session->file_set, &ser->file_set_ser);
-> +	if (!session->frozen)
-> +		luo_file_unfreeze(&session->file_set);
+>Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+>---
+> drivers/vhost/vsock.c            | 4 +---
+> include/net/af_vsock.h           | 2 +-
+> net/vmw_vsock/af_vsock.c         | 6 ++++--
+> net/vmw_vsock/virtio_transport.c | 2 +-
+> 4 files changed, 7 insertions(+), 7 deletions(-)
 
-"Wait, this looks wrong. If session is not frozen then unfreeze it?
-Should be the other way round, right?"
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-This was my first reaction until I realized that you only unfreeze
-_automatically_ frozen sessions. User-frozen sessions stay frozen. Which
-makes sense, but is not obvious at all.
-
-Perhaps rename this to session->user_frozen and add a comment here?
-
-With that fixed, feel free to add
-
-Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
-
-> +	memset(ser, 0, sizeof(*ser));
->  }
->  
-> -static int luo_session_freeze_one(struct luo_session *session,
-> -				  struct luo_session_ser *ser)
-> +static int luo_session_serialize_one(struct luo_session *session,
-> +				     struct luo_session_ser *ser)
->  {
-> +	int err;
-> +
->  	guard(mutex)(&session->mutex);
-> -	return luo_file_freeze(&session->file_set, &ser->file_set_ser);
-> +	if (!session->frozen) {
-> +		err = luo_file_freeze(&session->file_set);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	strscpy(ser->name, session->name, sizeof(ser->name));
-> +	ser->file_set_ser.count = session->file_set.count;
-> +	ser->file_set_ser.files =
-> +		kho_block_set_head_pa(&session->file_set.block_set);
-> +
-> +	return 0;
->  }
->  
->  static int luo_session_release(struct inode *inodep, struct file *filep)
-[...]
-> @@ -267,6 +286,9 @@ static int luo_session_preserve_fd(struct luo_session *session,
->  	int err;
->  
->  	guard(mutex)(&session->mutex);
-> +	if (session->frozen)
-> +		return -EBUSY;
-> +
->  	err = luo_preserve_file(&session->file_set, argp->token, argp->fd);
->  	if (err)
->  		return err;
-> @@ -340,11 +362,40 @@ static int luo_session_get_name(struct luo_session *session,
->  	return luo_ucmd_respond(ucmd, sizeof(*argp));
->  }
->  
-> +static int luo_session_freeze(struct luo_session *session,
-> +			      struct luo_ucmd *ucmd)
-> +{
-> +	struct liveupdate_session_freeze *argp = ucmd->cmd;
-> +	int err;
-> +
-> +	if (argp->reserved)
-> +		return -EINVAL;
-> +
-> +	guard(mutex)(&session->mutex);
-> +	if (session->frozen)
-> +		return -EBUSY;
-> +
-> +	err = luo_file_freeze(&session->file_set);
-> +	if (err)
-> +		return err;
-> +
-> +	err = luo_ucmd_respond(ucmd, sizeof(*argp));
-> +	if (err) {
-> +		luo_file_unfreeze(&session->file_set);
-> +		return err;
-> +	}
-> +
-> +	session->frozen = true;
-> +
-> +	return 0;
-> +}
-> +
->  union ucmd_buffer {
->  	struct liveupdate_session_finish finish;
->  	struct liveupdate_session_preserve_fd preserve;
->  	struct liveupdate_session_retrieve_fd retrieve;
->  	struct liveupdate_session_get_name get_name;
-> +	struct liveupdate_session_freeze freeze;
->  };
->  
->  /* Type of sessions the ioctl applies to. */
-[...]
-
--- 
-Regards,
-Pratyush Yadav
