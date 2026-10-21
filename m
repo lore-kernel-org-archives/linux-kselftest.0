@@ -1,80 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792568808;
-	b=0B0IxN0IRaSSCSk9sDErnjCk2f98ZdvC2piGJ92qlHmBknhLf0uQKouYzKaoHHammZM3
-	 tif3ju36/8wF5SCitsa9dScVCZJc7AhoUMFHIVAYf5r6YuFXiATonQ506EWhCw4xXen9A
-	 h6/kQDmiIs0HbQmfMzdlByl5XqjvoKuO9YGCyC7J0xrrQtwSc0roWnW5ovypd1oTr/ins
-	 8n9xoPH5LnX8dvr0BvhopF/kOyYmR5n/k+JzNoURiS10F2KLuIWlHfLKTLNQH9A/Tzbmc
-	 eFzHYjvB4UchvkMYyPHo5JjCYfXHmIOBia5ooTvL4yb6LBJ2Th6XJJNjTykDk8QGIBQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792568808;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=uqNA6UdvlKNzowUzrT4uwPygJKlqawV2mVUNB/VmOGE=;
-	b=GN3gK2wKRPLiOmTIamra8+1s4kMWJTpbbNT3xbYNraiJep7vL/9x1p0050iP62NgZlZ0
-	 9WiBAEI325bgNRi+zUNsUxiY7Ow70qvP1lbBXMp+N622W+ypSwf+Ap8JknciX+k2UuifJ
-	 8grsidqcatqR2X9ZhruoM7GlSJsECT3q2HNmSEay97ONXQ5MDMRDyNP46WNzwjYdyGmLN
-	 mpEOhfZGKwYZMAKG1MYPNZshD5LNsM1Z13S8YFBhRhIMSXxxCoBw407BSo7x8uaiMZ2up
-	 AqR13oQL0/oT6XbDmQfOFTpx6Wm93xC31I2As/tpDvSq6i7Cqy41Nf7RgwONsmj9bEA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="N/gGO+Yg";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26497606A326;
-	Wed, 21 Oct 2026 07:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N/gGO+Yg
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792568807;
-	b=LXt/VPFkkFL8M37HzHZY+3B5xlMolDUORMA/5uRYFX+TSyodB4ej7WHlWubQuakuC2nl
-	 RKdeor7KTYUvOpRJLODkn3X04fMmvfatGnzAEkoTVVNy5xx4lP2oQpiap3j3csx11ViV3
-	 PqJ7aePlLWvwfE2c/yVrNGJ8KQf7l29vrYsQwf+ddi9qSsRkS0oUsuuCWB3aureILui9m
-	 SFtF/KXgOIbH9gNwmA2I12n4mh+CpMebFU+lQ2r4yD4aL9FpW15XQHpWTa04Sx8ms08hM
-	 4xuY5WLG7FeEgSVIetA1tk5vM9iZdrN0REXxEmLxgHjoad6QO4VIDEooDdC/Seq93mA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792568807;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=uqNA6UdvlKNzowUzrT4uwPygJKlqawV2mVUNB/VmOGE=;
-	b=FzCVlFw5GUAnKItxOwvJ3AsjDbZQnRV04N1vTjiyZuJ+qsnntkWKBjexwrH33F4L8czh
-	 DvGizOH11Tip7oPOWX13z80CCfVol3+NuFiGIC0g1VnspO+VaFmOQqwy+fEKxgROUUlqg
-	 AvRiNdnYIB+l0LDGG2xN8V/r7/vj9oU1KyoaXWLKsy3jRZqrVQnUP5FcIfAyTwSbuS4TA
-	 astAAH9plPiw9yNQsoszYfM9uSkFjzWNES6W9IM/IS13TZF7CdOvNpcqMpgax5AY9u1pz
-	 ha2NwlX+fElJl8CUVZhxpunsybI7+hUXCqjw1kffWYt/WXABROFxNnGAEQLIuYa3TLQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.182
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792569674;
+	b=vhYUS3eksRvOhbRG3nWBQVmUmT5Y7r5mfb5wDJcjvGTGHiJAhmT0WAv70wwRUdLFhVIH
+	 AGG6FR3O1nmzIfCcB3DlhtPLKc2sA9tePwX4MAZoj4k7xQRye1HkvJBE/jy+/Jz2VSMh3
+	 vjUdKSOdT2gMcAx8Rj1vU1CgPaqap2bSE5LhFUvWm1ZCczUlvg+Yti8o2C8PHJf2LMoHg
+	 v72L0wmb6pY+mrt+HVw6k6Xe8Qf5IHXvnhZoz4ZEHGFQvFr2LVVjFd5oxArR2FGOEvpko
+	 Lufw/6VZYqXEKyBPT7yuuBLVu1z7cDp/fN4gbJB9vZ2VSqwMS8g5VZxmU8u32daknJA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792569674;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=PiI4cMavYXtb8vt/MajCrhWPebqVcKLkNr8147+y6WU=;
+	b=Y7yMSknCyv9RQQgBx/UhqShNlIUiyskemi+MPapDxQ/mB6MNFHlhqWorAb2JuDmVO3IR
+	 0yqrW5G/auqDBT0FefVSmrGFn6ztczqTyPRgVlkxXlsgNV3/ObvSYzX3rOIwxbjdAcx28
+	 Cyp3E64L/Kck/F6Zvhe/gK8YfpkNm7gYEYD2o0N5e9UdThFnDXPZmKLvPuIIBqKta9GdY
+	 v/IqgDm69T9OgelNuHXM8XUyYaRv9xR59fG7OJzEdZmtrFZqvm7G8FC7O7fLkUIr+8Orw
+	 GBLYgGo2TO1iDLdnzA4K3c1QLNJMrrxAoVciD74pbFKrZUsS6XwMuQ73LHjskja5plw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=beu0BXXQ;
+	arc=none smtp.remote-ip=74.125.82.182
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EFEF61F000CA;
-	Wed, 21 Oct 2026 07:46:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792568807;
-	bh=uqNA6UdvlKNzowUzrT4uwPygJKlqawV2mVUNB/VmOGE=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=N/gGO+Yg1nTOSG5oY9uyAOWw7mthkptlW8AbF/BgTOqUEYNYQV3LMo4UoNCTSK17R
-	 yuj5vUmyDefjhweCu9qWM59gEJrdWR5Lw37YS1LxqqqbpqOvprhm9lJpZufFwuUYsR
-	 ozwBkf5aDdzMRzJEqLOC0j8Sok+EneIMZfEudQY747QrdIl4H/TvcLx2g6vb03cFJX
-	 Mxrse4x49tzO2Sr6sIXrsIUjVCqj/ho7bZlHXXnhN9UWgkog09yixGoAXQV+lvlSZu
-	 xVks4KbwED1GIjL0Cx7/McMs4M+2hy+rFmTW+an8OuNqn4LZwSExEgHuheFyNu8C8T
-	 zfz67upxZVePg==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 4B39143312;
-	Wed, 21 Oct 2026 07:46:45 +0000 (UTC)
-From: Henrik Enquist via B4 Relay <devnull+henrik.enquist.gmail.com@kernel.org>
-Subject: [PATCH 0/2] ALSA: aloop: Update the PCM Slave controls for a
- matching playback
-Date: Wed, 21 Oct 2026 09:46:44 +0200
-Message-Id: <20261021-aloop-slave-controls-v1-0-62297727177f@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202FA606A31B
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 08:01:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 202FA606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=beu0BXXQ
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso1359986eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 01:01:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792569673; x=1793174473; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=PiI4cMavYXtb8vt/MajCrhWPebqVcKLkNr8147+y6WU=;
+        b=beu0BXXQNA4InNFt82BaFOJL7zjfNzYGRue65Lszr5n1WGFG30rIq1M+HQKabuKkU7
+         WSGmDMMMCbDASNd576d4BDkYI/1wp6mgI/GmHyILQKHOSInIEZ1qkcYS0t9hULGA+kn4
+         jJoOCAhS6O9mMs8W39ak8jOyiwaM8xvuuz/XFO4h/fHkykK3R3oP0lnsMN7QbzJJ+7Nt
+         pZ1Ebg3bWHyPBJcfET7k48n8OnHw4wWjxUjiJKiA2d9nOVooBcUAkN6zawPdFd79CJYE
+         1LCplnCxiXImwEi+W866dU/4WYnve+jSyw5TAMWa3ZSZGLM1vXr6YUZm0Hcdr9dR9PpO
+         XT5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792569673; x=1793174473;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PiI4cMavYXtb8vt/MajCrhWPebqVcKLkNr8147+y6WU=;
+        b=pamasJcikqzgLXgWu/ilkGp+9bsmG595B7wDe5BefKnsLd1mPndH3MH3V6PnR7v/mu
+         cVqvoyw+xNWSjCbYptVIvIYS2gp8hiwMc127AlI4iXqBGAUcPhApcsstFSnEvnq2dIIr
+         O5LAzznJLQH9bQmYYwlerZauW0PX2YDfYSy83LyhtMMHk4k4wwtMf6U3DgRtBtVvQUuy
+         aUItIBN36QG6y0HxtWi1yLycnd6EMeAnbPpkWFekp8RDfO9djgJaaEvEUBGse87zkNUM
+         ZR9TwiTuJoQ0o/4vd0eP1V3cjdMA9ae8LNl6i7LEDIsWIgS7V3b44hLt3yprAEUa500R
+         sgjw==
+X-Forwarded-Encrypted: i=1; AKwUvBwjGciey8u6w+ci3iSyViVb2uksR2r+LNj6BCSmXpEOsBOxAm5xCIdMVab3ZzDwAYkauHM8G7i8+ihWKla5uzw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLTn3PijKQVBwuj9+Vbn4Gdvyhs1bb9pfdKEFs2Oce71UiHkBr4
+	w7hnTFDXSjx/B3eVKzOyOUe8EhZNDTEMXLiC8VH4ygVKnCJVOxpVn7jS
+X-Gm-Gg: AYBFou0nIimbu+Z538bGe2bXWtZpwmq1GyfcGMCEB4Rnv89GY+6snXyuLAINE0ithRP
+	Fwtf3UVlpL6j6kVUax8khHQ5v3bDbaLyt4yfiUjwcZ9gUWJjPd7sY5fk5lW7MwaSSfmkI7N9dcI
+	O0mpqR0U/Uf8RyOQiBxWLyS/uujrEQG+7Wq9Nkwtj31oCjb1/iD+SQUBdJnQHGXzw6MMOXqX5HN
+	wTTVPmAiSsXM0nmtx0b54mWFpI3an01XpLIHk4wzuf5M9t2pahYQqbLToqJzaVcx9c9jkLaG06u
+	pSSsT26D/IL/gWZQ0wH8zq186yscgrKIGcidCTWk8PyP2uCLYvacqGFYp7Tnc7lJGdfbebX6PJQ
+	S2WNrEqBvgvfmUIpE4zmls92cVyZZn+RhcOFph4YMKfvMQIMaf8WrQAAHFImzi9PquHgOAZ1GY5
+	gqQn1s7853whu9C+/XhBPQ4zlnNerY1xuEBIIPNl5EhnUwAtLbn0Wb934AYLXZGW6qbmaelvMWq
+	A+N8NmH8prRFs8zztEQV2Six4yzZIWldINCo0eK1Rog38QsnL5LwnppOvQiagqN6M9EuNr3PADa
+	rDdh/6mWVKUO9eDyZ69BCkRZ7jK5
+X-Received: by 2002:a05:7022:e1d:b0:141:4c37:a212 with SMTP id a92af1059eb24-190a051dd9amr2581121c88.2.1792569672784;
+        Wed, 21 Oct 2026 01:01:12 -0700 (PDT)
+Received: from Terra.tail0ac356.ts.net ([198.176.50.208])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367416a1fb9sm4470610eec.20.2026.10.21.01.01.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2026 01:01:11 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	co+eada64ce90ecebce@bugs.sh,
+	Xiang Mei <xmei5@asu.edu>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v2 1/2] bpf: Validate stack arg reads against caller state
+Date: Wed, 21 Oct 2026 01:00:59 -0700
+Message-ID: <20261021080100.2663618-1-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,85 +109,90 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMwQrCMAyA4VcZORtYehD1VcRDl2YaKc1o5hDG3
- n2dHr/D/6/gUlUcbt0KVRZ1tdJApw74FctTUFMzhD6cqQ+EMZtN6DkugmxlrpYdrwMz0SWlMUR
- o6VRl1O9ve3/87Z/hLTwfL9i2Hbo/dvJ4AAAA
-X-Change-ID: 20261021-aloop-slave-controls-9bcc118ddf2a
-To: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org, 
- Henrik Enquist <henrik.enquist@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792568804; l=2541;
- i=henrik.enquist@gmail.com; s=20261003; h=from:subject:message-id;
- bh=fYqwJhgziyigD6vhqDk4JUf6KAY1bq/UX5B5MmVYzUM=;
- b=1OFud9GDKIaNLquSWN+TQVtfX4rw1oiGbtrcC6NGzh+UNzu2hnMOAM+pHrZVDigf/OWBxxkGF
- uP1G65QXb8vCN2dQN+swkUhTq8jyrZ8QoBsq2uAE/FiomClRGHCpAXZ
-X-Developer-Key: i=henrik.enquist@gmail.com; a=ed25519;
- pk=ctrSXwtuuiWIZbc1qNzu+n+1PkhB/a+2nlRyXd5j2pg=
-X-Endpoint-Received: by B4 Relay for henrik.enquist@gmail.com/20261003 with
- auth_id=1105
-X-Original-From: Henrik Enquist <henrik.enquist@gmail.com>
-Reply-To: henrik.enquist@gmail.com
+Content-Transfer-Encoding: 8bit
 
-Hi,
+check_stack_arg_read() bounds a stack argument index with the callee's
+BTF-derived argument count, then uses the index in the caller's
+stack_arg_regs[] array. The array's actual logical length is recorded in
+caller->out_stack_arg_cnt, so the bound and indexed object can diverge.
 
-One more aloop fix, after the notify mode one (ded1060369 "ALSA:
-aloop: Don't constrain playback params in notify mode"). I ran into
-this while working on a new CamillaDSP feature that uses notify mode.
-The "PCM Slave" controls are meant to report the playback's
-parameters, but often they don't. loopback_check_format() returns
-early when a capture is open and the parameters match, before it
-updates the controls. They then keep the module defaults, or the
-values of an earlier stream.
+A crafted BPF_PROG_LOAD can use an argument mismatch to mark a static
+subprogram's BTF information unreliable. Later calls return from
+btf_check_subprog_call() before check_outgoing_stack_args(), while
+check_func_call() continues the static call on -EINVAL. The callee can
+then read a slot that the caller never allocated or initialized. The
+earlier commit 4286f5deee14 ("bpf: Validate outgoing stack args when
+btf_prepare_func_args fails") closed this hole for the first call, but
+not for later calls after the subprogram has been marked unreliable.
 
-This isn't specific to notify mode. Without notify, a playback that
-joins a running capture always has matching parameters, so the controls
-are never updated in that case. The early return has been there since
-the driver was added, hence the Fixes tag on the 2010 commit.
+Callbacks have a related problem. The verifier can make incoming stack
+arguments readable from outgoing slots at the helper call site. However,
+helpers and kfuncs invoke callbacks through an ABI that passes at most five
+arguments, so the runtime callback receives no stack arguments. Async
+callback verification can also reach check_stack_arg_read() without a
+caller frame.
 
-Patch 1 skips only the capture stop when the parameters match, and
-always updates the controls. A value event is still sent only for a
-control whose value changes, so nothing new shows up except where a
-stale value gets corrected.
+On x86-64, KASAN reports the direct-call out-of-bounds copy as:
 
-Patch 2 adds a test for it to the aloop selftest. It doesn't need to go
-to stable, so it can wait for the next merge window if that's easier.
+  BUG: KASAN: slab-out-of-bounds in check_load_mem+0xb51/0xc60
+  Read of size 80 at addr ffff8881009af550 by task poc/131
+  Call Trace:
+   check_stack_arg_read at kernel/bpf/verifier.c:4234
+   (inlined by) check_load_mem at kernel/bpf/verifier.c:6645
+   do_check_common at kernel/bpf/verifier.c:19568
+   bpf_check at kernel/bpf/verifier.c:21318
+   bpf_prog_load at kernel/bpf/syscall.c:3134
 
-Testing: for-linus at 443ed4edc2, arm64 VM, kernel with KASAN,
-lockdep, DEBUG_ATOMIC_SLEEP and DEBUG_LIST, comparing the patched
-driver with the unpatched one built from the same tree.
-- The selftest passes 5 of 5 patched. Unpatched, only the new test
-  fails: the controls keep the earlier stream's values (96000 Hz,
-  S32_LE, 4 channels, non-interleaved) and no value events arrive.
-- The reproducer in patch 1 reports 48000 unpatched and 44100 patched.
-- No KASAN, lockdep or other warnings in dmesg.
-Not tested: real hardware, other architectures.
+Reject callback subprograms with incoming stack arguments before their
+state is pushed. For direct calls, retrieve the slot with
+bpf_get_spilled_stack_arg(), which validates the index against the caller's
+out_stack_arg_cnt and rejects uninitialized slots before copying the
+register state.
 
-AI disclosure: as with the notify series, I used Claude Code (Claude
-Opus 5.5). It traced the bug through the driver and its history, wrote
-both patches and their changelogs, built the test kernels and ran the
-tests. I reviewed all of it.
-
-Henrik
-
+Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+Reported-by: <co+eada64ce90ecebce@bugs.sh>
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Assisted-by: LLM
+Signed-off-by: Weiming Shi <bestswngs@gmail.com>
 ---
-Henrik Enquist (2):
-      ALSA: aloop: Update the PCM Slave controls for a matching playback
-      selftests/alsa: Check the aloop PCM Slave controls for a matching playback
+Changes in v2:
+- Reject callback subprograms that declare stack arguments.
+- Drop the curframe-zero check because only async callbacks can reach that
+  state, and callbacks with stack arguments are now rejected earlier.
+- Explain that commit 4286f5deee14 closed the hole for the first call only.
 
- sound/drivers/aloop.c                     | 11 +++++----
- tools/testing/selftests/alsa/aloop-test.c | 40 +++++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+), 4 deletions(-)
----
-base-commit: 443ed4edc2678cc51c5a01e7dffc4c890be40051
-change-id: 20261021-aloop-slave-controls-9bcc118ddf2a
+ kernel/bpf/verifier.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Best regards,
---  
-Henrik Enquist <henrik.enquist@gmail.com>
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 72a3f5998dd27f..f461e9e5d19da5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4228,7 +4228,12 @@ static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf_func_st
+ 	}
+ 
+ 	caller = vstate->frame[vstate->curframe - 1];
+-	arg = &caller->stack_arg_regs[spi];
++	arg = bpf_get_spilled_stack_arg(spi, caller);
++	if (!arg) {
++		verbose(env, "invalid read from uninitialized stack arg off %d\n", off);
++		return -EACCES;
++	}
++
+ 	cur = vstate->frame[vstate->curframe];
+ 	bpf_diag_mod_begin(env, &cur->regs[dst_regno], arg, BPF_DIAG_MOD_WRITE);
+ 	cur->regs[dst_regno] = *arg;
+@@ -9839,6 +9844,10 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 	err = btf_check_subprog_call(env, subprog, caller->regs);
+ 	if (err == -EFAULT)
+ 		return err;
++	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog])) {
++		verbose(env, "callback subprog cannot have stack args\n");
++		return -EINVAL;
++	}
+ 
+ 	/* set_callee_state is used for direct subprog calls, but we are
+ 	 * interested in validating only BPF helpers that can call subprogs as
+-- 
+2.56.0
 
