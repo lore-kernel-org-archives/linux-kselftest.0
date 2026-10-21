@@ -1,55 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792614987;
-	b=wYbCZWHynL2u5PIIz6930dQyRz2n20h4qICtpN3xZSESK9S/vIpPPJ95/B3yIFjqJLgX
-	 aVAkV906Ir1qxJHhfthA2uOWkkMTp46y0b7FD7q9sV3ozh8e9FBm/oWygBwVdmvtShDHm
-	 4DskY/oYjvMI1bkiQv1Z0s7yJT0pTfFYUe7gIPqKJhDkTqHSLGjYM9lD8R/ISoQF2mr+y
-	 MWJrNncvduYAbXXQPAoToim/gNj5qpldayyYHgxUeymxBVTAsnxIROAnLRmLVxBNJs3H9
-	 duuZwMvtJCLNEO3nutNaraoxYyma72+1yrnb0TY2LCM2GnkWnv8r4pVSeNh12GBDe4Q==
+	t=1792615305;
+	b=e7SEGSmp1OGeOht5huWaH4JmXKWU85515MTIoMfduLuSwgY5I0gGOIXUsb/8uelGS1Qo
+	 xWzYMAnJ4RO4AOaw4JMJdUiSDXaUbvIhYxqUvwFgCOsaDA2DcN2vTYPC5bMheEyqePWZP
+	 HVQkTU56vHbcpjBspa5yENR1xI1m+X74Wt/8bZilgTKdrQq+zmpLkdaQf40LHsZlfhVIr
+	 UC0glM9eosv3kuaMXIdTmz6ukiyt/MLE+FTZiDPRWqEptD62l/CPOF2ypcoc2XG0HrPby
+	 kqQZq+wBrskys+sbMPSKWImLfViIQD6RrWDmQ8vC4jsHJ10daAXXSR/xuOkFsd+0LpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792614987;
-	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=xRYTM7fnAWcOHXN6sYtLFwsf0RsyMtzXmlCvmvLIHrg=;
-	b=MgxRh16ihJvPfGTgX7p1cmpt1VWK/5MUg8KSgJm4KFNm2OixDc15pEOWruVFuYZQ7IjR
-	 sbGJPOLK53P+N/ugnKky0HgDkE+BQHU/qfRIhdwvGnAAfdZX2DlQ0jIcXS0r3gmI7zZpa
-	 +/kAsvK3ouQQQdOafGO+e15hqhDczEeE0DHwec2M9HKNyU+NJWw5yy/w025+VGDRII1k9
-	 C4vw7//UTrpzeZrKhKpfXiaW29hGrLJp3GtfArF+IlF3UzxpZoeW4zgs03AcXNmp6w8gn
-	 w4UJbjpKr93Cw1gxOIcC04dynDwcTwevat5z5HwFxag6LIGOxv5QrlO4pwVMEX+ElcQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792615305;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=Bq3V9J9F4ZHKrQtjacM7Tw7YXz58yMhcGPTw8dbAFrA=;
+	b=aKmTQhCf5K+icSHoGTIxBDc8p8R8W/8wHgXzhjSyGS8IpycxoQ9mvWYOyUS6ZF/4/xxp
+	 hwsW7J07uXoW6vTCBIePhdKb8cBMc2Q5jJbF2JQ4BLCvzAO+UZucIsZ4/OTx4WA5em7rn
+	 YNkD5RG5t/BnV9xibfj6KUzVObCvcRbBgP0KLjfvay6AkcJ+RYbBwAEbgwGEOviU5W+GB
+	 jNd1FqTVVaTyRy7NymKN748cLArzc/mUCmeogW8V2bYCflc7WzJqs7FtQPS+MAM5MjaGB
+	 5RRWDa1QGddLy0EuLaXnmDm/NfgnTYtQvpKwGMhmcG4Q24AkKXJgXTd7nfwhaWMXB6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=virtuozzo.com;
-	spf=pass smtp.mailfrom=virtuozzo.com;
-	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=p1quoMtK;
-	arc=none smtp.remote-ip=130.117.225.111
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OVPYEOJF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C43E606A32C;
-	Wed, 21 Oct 2026 20:36:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C43E606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D2D606A319;
+	Wed, 21 Oct 2026 20:41:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=p1quoMtK
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=Message-Id:Content-Type:MIME-Version:Subject:Date
-	:From; bh=xRYTM7fnAWcOHXN6sYtLFwsf0RsyMtzXmlCvmvLIHrg=; b=p1quoMtKV/aLG7i8AqC
-	+uQWoPkWgpRohfDSu68uHYpqbvwecEc4rFnPgAmHzKor+I+lYSquFiKrOHalKmbcA9UnKrVXs/Yqb
-	DswZLGW8KkMxm0Ni3AjlYLQCJI0lrXmrWfnzD22iG8hBSdoo+AhawAXh98HAJohnPRplxNItaekci
-	z5rfXpbzxF1dSlPbwStc/Gaqsj9jYrBl7axb4mExcYEXS3Cu7xWJsMqJGbKF4X3too7lH9KBn1h8+
-	lqqgGP2+Oo22zvS2Ntxce1m/CGgcjsR4DGOJHaInE4FA/u3FDRwAH/mTmhCjJgPGMWGcv3DzDuxtv
-	kWa3dBE9l0o/dDg==;
-Received: from ch-demo-asa.virtuozzo.com ([130.117.225.8] helo=f0.sw.ru)
-	by relay.virtuozzo.com with esmtp (Exim 4.96)
-	(envelope-from <khorenko@virtuozzo.com>)
-	id 1xJcz6-00D9zC-1k;
-	Wed, 21 Oct 2026 22:36:11 +0200
-From: Konstantin Khorenko <khorenko@virtuozzo.com>
-Date: Wed, 21 Oct 2026 22:36:02 +0200
-Subject: [PATCH v4 3/4] mm/huge_memory: read a special PMD under the lock
- in copy_huge_pmd()
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OVPYEOJF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE1411F000C1;
+	Wed, 21 Oct 2026 20:41:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792615304;
+	bh=Bq3V9J9F4ZHKrQtjacM7Tw7YXz58yMhcGPTw8dbAFrA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=OVPYEOJFHxyq2Jn+Mw16KBU0u4plWBYpqFAxZfQIetwIc4UlXVDL+weM0LK9cj2UC
+	 RC8KozZM3bGjca4q5PGzfvxdvRwJkWOWFr6SOq4BzyWUPITiKI+LTe8X4uRMjUNDux
+	 o0kFUr2WR0J0IuQvKhY7daAWRScMmQNEfuGX59yDrN/yz3Hl/bb5wylqgz1rXnJ+Ur
+	 /wF7jX7kB1baY0FPJKzEoyCnvxxQdcgleWPu3ZsAxN84jz62ON9Shl1lw5DnEbGgH1
+	 K1xe68vud9jyiFi7OU8IJFoVYDnBTVZsrdy2H4RReHnjjJZsPrfO+X/SdQsVJCsXVB
+	 B/Xex9h+p1tyg==
+Content-Type: multipart/mixed; boundary="===============3655339663897498520=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,140 +49,114 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <ff53ef1657f7ecedb34c148ab05588f657dac0d092ffb55923d7bc6fd375bf84@mail.kernel.org>
+In-Reply-To: <20261021195759.119421-5-jolsa@kernel.org>
+References: <20261021195759.119421-5-jolsa@kernel.org>
+Subject: Re: [RFC bpf-next 4/9] bpf: Add kfuncs to allocate and seal user pages
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net
+Cc: bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,linux-mm@kvack.org,akpm@linux-foundation.org,liam@infradead.org,ljs@kernel.org,linux-kselftest@vger.kernel.org,shuah@kernel.org,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 21 Oct 2026 20:41:43 +0000 (UTC)
+
+--===============3655339663897498520==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-3-66f00b7a564c@virtuozzo.com>
-References: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-0-66f00b7a564c@virtuozzo.com>
-In-Reply-To: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-0-66f00b7a564c@virtuozzo.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- "David Hildenbrand (Arm)" <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
- Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
- Peter Xu <peterx@redhat.com>
-Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org, 
- =?utf-8?q?Lo=C3=AFc_Molinari?= <loic.molinari@collabora.com>, 
- Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, 
- linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, Konstantin Khorenko <khorenko@virtuozzo.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Sashiko <sashiko-bot@kernel.org>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3894;
- i=khorenko@virtuozzo.com; h=from:subject:message-id;
- bh=livbJIVllqi9tjof4xcSXNlwj+qMnVMZzyODwKG/KkA=;
- b=owEBbQKS/ZANAwAKAVGWCkf5YVwqAcsmYgBq2SI4OzYdMkv0y22/iMTVTPGRPBuq7eyDakOFD
- eYKcKYE9OGJAjMEAAEKAB0WIQRWD23IPcXT0GO9CCxRlgpH+WFcKgUCatkiOAAKCRBRlgpH+WFc
- Ki0OEACM5t9icGUbUfF7oM2+7vDjg6uiZ/QlwAXRXORLzo6PdOir8qcZhQ2Dxp4vS7e/BtF9xYE
- Am5NxUVCXW/owrlYnm1bLHQ+2ylTm6JlCLOCh7ooy4ILlAFDJyUvv5nfoLHhk6ydEhlQ/lO9OLY
- QqAUJWsK+CdOArLzZ+wB160FQiBufc4zHI50sZ0rA5fuGDuoiJdu3UJNc2q7+SJho2qlTdmIEPL
- +4z05HFrk80HSM7o8vibRwzGbfHUSpJyf4/fGolfMYm8X97VQ4fHl/Hc+f7XqshSZPrI0Hi82hI
- 2kRwr/rUw2QqTn2KyBtUSSMieLe+FTcHVOB2o1rKMBmy5kTvYCjrsbHJLHA2N71zGittHvdFQAV
- wc+CRV5a4yJ+i7wj9g8sBSXJYtl2oc+Nh3YoFgonmxrsr4gqVGHh0p19j4QU3uKT79elyogWliL
- igktAc782Hv4OTeQEw/mOWzRD9KPuEBmYe7RV+vez9WQ5phkrIUO7KMODcMGrQ7m56j2UQgODJC
- +jnUCGDIFF7udwOHWjbtMgOT7iBJj2rMVJaPPjPKHWG65w8dK0lkgKGgVE3c5iLC1VO4TO60kpt
- r73GPnlPIIN6sFFV/KhwFfnUD5kZMhrKgeZL7gLF+7azWsgH31FT8y1gkMNuThqR4EAn0bTzxKI
- mnF4/gQ14YUWGGQ==
-X-Developer-Key: i=khorenko@virtuozzo.com; a=openpgp;
- fpr=560F6DC83DC5D3D063BD082C51960A47F9615C2A
 
-copy_huge_pmd() reads a special PMD without the page table lock and
-copies that value to the child. The mmap write lock held by fork does
-not stop unmap_mapping_range(): it zaps under i_mmap_rwsem and the PMD
-lock.
+> bpf: Add kfuncs to allocate and seal user pages
 
-The zap visits the parent VMA before the child's, as dup_mmap() links
-the child right after the parent in i_mmap. If it clears the parent PMD
-after fork has read it, and passes the child before fork copies it, the
-child keeps a mapping the driver has revoked, for example:
+TL;DR: bpf_user_page_exec() may skip the icache flush on arm64/riscv, since
+flush_icache_user_page() runs before VM_EXEC is set, so with THP a task could
+execute stale instructions.
 
-- vfio-pci: the child reaches the BAR after the device memory was
-  disabled or the device was reset, instead of getting SIGBUS;
-- panthor: the child maps the pages of an evicted buffer object after
-  the driver has released them.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 4d9e9423826a..246f4969a144 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
-The same branch deposits no page table under the copy. ppc64 in hash
-mode keeps the hash slot array of every huge PMD in that table, so the
-child dereferences a NULL table on the first hash fault, in
-__hash_page_thp(), and on the zap, in hash__pmdp_huge_get_and_clear().
+[ ... ]
 
-Take the locks first and let vm_normal_page_pmd() tell a PFN mapping
-from a folio under them, as copy_present_ptes() does with
-vm_normal_page(). The zap clears the parent PMD under the same lock, so
-either fork finds it none and skips it, or the copy is in place before
-the zap reaches the child.
+> @@ -3739,6 +3743,127 @@ __bpf_kfunc int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
 
-The copy of a PFN mapping then goes through the same tail as a folio:
+[ ... ]
 
-- it gets a page table where the architecture needs one;
-- in a shared mapping it is marked clean in the child, as a PTE is;
-- in a CoW mapping, which only VM_MIXEDMAP allows, both sides are write
-  protected instead of a warning being printed.
+> +__bpf_kfunc int bpf_user_page_exec(unsigned long addr)
+> +{
 
-Fixes: bc02afbd4d73 ("mm/fork: accept huge pfnmap entries")
-Fixes: d1503aa9ab80 ("powerpc/64s: Add support for huge pfnmaps")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://sashiko.dev/#/patchset/20261014-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v1-1-d225c60bc316@virtuozzo.com?part=1
-Suggested-by: David Hildenbrand <david@kernel.org>
-Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
+[ ... ]
+
+> +	err = get_user_pages(addr, 1, FOLL_WRITE, &page);
+
+[ ... ]
+
+> +	flush_icache_user_page(vma, page, addr, PAGE_SIZE);
+> +	err = do_mprotect_pkey_locked(addr, PAGE_SIZE, PROT_READ | PROT_EXEC, -1);
+
+Does flush_icache_user_page() do anything here on the architectures that
+need it?
+
+At this point the VMA is still the read/write mapping created by
+bpf_user_page_alloc(), so VM_EXEC is not set yet.  On riscv the macro is:
+
+    #define flush_icache_user_page(vma, pg, addr, len)  \
+    do {                                                \
+            if (vma->vm_flags & VM_EXEC)                \
+                    flush_icache_mm(vma->vm_mm, 0);     \
+    } while (0)
+
+so it is skipped, and VM_EXEC only gets set by the
+do_mprotect_pkey_locked() call on the next line.  arm64 does not define
+flush_icache_user_page(), so it falls back to the empty stub in
+include/asm-generic/cacheflush.h.
+
+That leaves only the set_ptes() hook that runs when change_pte_range()
+installs the read/execute PTE.  On arm64 it is
+__sync_cache_and_tags()->__sync_icache_dcache(), and on riscv it is
+__set_pte_at()->flush_icache_pte().  Both only do cache maintenance when
+PG_dcache_clean is clear on the folio, and then set it for the whole folio:
+
+    if (!test_bit(PG_dcache_clean, &folio->flags.f)) {
+            sync_icache_aliases(folio_address(folio),
+                                folio_address(folio) + folio_size(folio));
+            set_bit(PG_dcache_clean, &folio->flags.f);
+    }
+
+The BPF program writes the instructions through the user address with
+bpf_probe_write_user_faultable(), which uses copy_to_user() and never calls
+flush_dcache_folio(), so PG_dcache_clean is not cleared again after the
+first exec mapping of the folio.
+
+With THP enabled (arm64 or riscv, 4K pages), can this sequence happen?
+
+  bpf_user_page_alloc(512) returns a PMD-aligned address
+  the program writes page 0, and the fault maps a 2MB anonymous THP
+  bpf_user_page_exec(addr) splits the VMA and the PMD, the read/execute
+    set_ptes() for page 0 syncs the whole 2MB folio and sets PG_dcache_clean
+  the program writes code into page 1, which is still read/write
+  bpf_user_page_exec(addr + PAGE_SIZE) calls flush_icache_user_page() again
+    as a no-op, and the read/execute set_ptes() sees PG_dcache_clean set and
+    skips maintenance
+
+The task would then execute page 1 without a D-cache clean to the point of
+unification and I-cache invalidate (arm64 without CTR_EL0.IDC/DIC), or
+without fence.i (riscv), and could fetch stale instructions.  mTHP sizes
+give the same result for smaller allocations.
+
+The uprobe XOL code, which also writes instructions for user space, does
+explicit maintenance through the kernel alias: arm64 arch_uprobe_copy_ixol()
+calls sync_icache_aliases(), and riscv, loongarch and mips call
+flush_icache_range() on the kmap address.
+
+Should bpf_user_page_exec() do the same, for example with
+kmap_local_page(page) followed by flush_icache_range()?  Alternatively,
+would calling flush_dcache_page(page) before the mprotect, so the arch
+set_ptes() hook redoes the sync, be enough?  Either way the flush would no
+longer depend on VM_EXEC being set at the time of the call.
+
+
 ---
- mm/huge_memory.c | 24 +++---------------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 13e3674fb6115..da5918a0ade87 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1961,25 +1961,6 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
- 	int ret = -ENOMEM;
- 	bool writable;
- 
--	pmd = pmdp_get_lockless(src_pmd);
--	if (unlikely(pmd_present(pmd) && pmd_special(pmd) &&
--		     !is_huge_zero_pmd(pmd))) {
--		dst_ptl = pmd_lock(dst_mm, dst_pmd);
--		src_ptl = pmd_lockptr(src_mm, src_pmd);
--		spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
--		/*
--		 * No need to recheck the pmd, it can't change with write
--		 * mmap lock held here.
--		 *
--		 * Meanwhile, making sure it's not a CoW VMA with writable
--		 * mapping, otherwise it means either the anon page wrongly
--		 * applied special bit, or we made the PRIVATE mapping be
--		 * able to wrongly write to the backend MMIO.
--		 */
--		VM_WARN_ON_ONCE(vma_is_cow_mapping(src_vma) && pmd_write(pmd));
--		goto set_pmd;
--	}
--
- 	if (vma_is_anonymous(dst_vma) || arch_needs_pgtable_deposit()) {
- 		pgtable = pte_alloc_one(dst_mm);
- 		if (unlikely(!pgtable))
-@@ -2021,7 +2002,9 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
- 		goto copy_pmd;
- 	}
- 
--	src_page = pmd_page(pmd);
-+	src_page = vm_normal_page_pmd(src_vma, addr, pmd);
-+	if (!src_page)
-+		goto copy_pmd;
- 	VM_BUG_ON_PAGE(!PageHead(src_page), src_page);
- 	src_folio = page_folio(src_page);
- 
-@@ -2061,7 +2044,6 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
- 	}
- 	if (src_vma->vm_flags & VM_SHARED)
- 		pmd = pmd_mkclean(pmd);
--set_pmd:
- 	pmd = pmd_mkold(pmd);
- 	set_pmd_at(dst_mm, addr, dst_pmd, pmd);
- 
-
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39668036298
+--===============3655339663897498520==--
