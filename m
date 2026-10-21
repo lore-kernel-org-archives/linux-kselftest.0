@@ -1,61 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792616548;
-	b=vZZUSs1kVyA6QtqpzpJBOxY7B12vmt0ytNCDLZs1VUgVXvGSGT/6tYE6yMRGOwtdeGTy
-	 dLY9FpkSBtnDoBWt7Qj8sF28LjMqwCYh703UzY723nWNa5ifTmWQeUd3ohyQl5cpa5c3d
-	 7rxHMGi3yh4zJdi6hp7bfINVEbOdVp7wvCDBsNW1fpElrKQXVseii4RcwZ+yhvR4DjSA7
-	 DItLncI6ehWk2orxV4jRN/xWKbKOv5sZq03IxIc+qM1PhcfpFfIPwsCCXl/2L71D+mQeo
-	 5MZpew3A6mL7toPkNdszwOvFp7TQ0rzRE7M0wR+V87xxbq69mB7o+Ma45eqptBISPRg==
+	t=1792616551;
+	b=WKx6YqbGHvCWN2y0G7jrKcT6niNHK5BTDjQ6yvJKQjS6bxbTijxwFbfj0fgtvzi4Er3x
+	 t8IbmGx2+E3HVSgql0HvDZgX+6NDiu/UCyU4jAv7n7kLynHOw+6AI8sn43rLML/3QNbba
+	 RDJavhMwUD73VLWzGSqM+eEWIy91qO79tjFgjRV4ZveC4ve785MjZrSjEblzp5xohXQ9u
+	 U2SfDsRsvQO6MyC3Hd63g3a9l1lZWcU6DmLnQJ+JogCSC8xNlVEieV2xvxyhBx/RTRUBp
+	 KGhBB9AQqZDHO5RLTnuUgoZFcHZTNwSNfFrumaRgO2DTR7+1uxCMiXHj/aRVnDvj9wA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792616548;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792616551;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
 	 X-Proofpoint-Virus-Version;
-	bh=6JbcNpjPHdgeoWVpdkfe+xRqxcB8Uct5BYXM7qbHkFM=;
-	b=5EzE6nUHgz7Jom9nNYhThL40VUWL6ite+rQkp81M1FSBGl/2PfDkB5PH/9Aa4rusxiKI
-	 NZYwNhx5eow4Mvp9RZ76AWWGyVQ+EYAKApA9NMuIMryrT70JGPbuGeqh4IHBlVmwVnLeF
-	 7EIQMYyT6nFUnXq1JXHPgquhnrBdJ6nOYsNrR3zqP/ddH66PLuSQ/DD25w7H35ZqPbgXA
-	 xCH9NYBasaCGX6UVAZ003z/g15rL06POaE5C2r+ei/LFp11Yk/Zs0JQWl4zJscggVYQ5u
-	 /gDWUJuw/Aseg3XWKd+bOb9L8k9wHawiRJHscc5cU7gTu8AerxASUW8EX7jOfSKNXXw==
+	bh=RPGR1ao2ryPXVERPslfkTvMcfX9uFT9ATTomLz1wY1s=;
+	b=r69R51ycuvvuRZ59YQym13fewGeL9a/yVAS+V76tc43PvopvyeoPkMssIu+uzkbyUwWr
+	 y9kT2uReUahA2Kf/jjOvb8TxNEuZaRArunaL5dQAhqHgn5l5ac1Ni2UGnLlhEiUg/Rg5k
+	 JE9jNxoPvldGqThIxOUSAObxNoj7ssHHF9+MfIFa1UeCwTNhSblGaQRIQ8Yo+AyefkVow
+	 rxy7jCmdt5qGhYI/QqgwW+GnwirXmfs4PoHRtQRPCaeqcXe7CrsdMmGjlSppcJ/3XoUcE
+	 1hK/q/o/VsFTUcuR5CVpl18qxeEhDkN0XXMoSmYd6tu874aHZtwcWoWUdNgadBOR5vA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=meta.com;
 	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=I8cOwnoX;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=NVeHM3zN;
 	arc=none smtp.remote-ip=67.231.145.42
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D411606A32D;
-	Wed, 21 Oct 2026 21:02:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4D411606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CCB606A325;
+	Wed, 21 Oct 2026 21:02:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18CCB606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=I8cOwnoX
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69LKdfYU3517987;
-	Wed, 21 Oct 2026 14:02:17 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=NVeHM3zN
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69LKdmZX1705486;
+	Wed, 21 Oct 2026 14:02:22 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pps82601-s2048-2026-q3; bh=6JbcNpjPH
-	dgeoWVpdkfe+xRqxcB8Uct5BYXM7qbHkFM=; b=I8cOwnoX9q9mIIUoTl0XNFbOd
-	WYWOo6dYA7TnZ+P60bqnOlGt4vuQpB8BEWpsnB4E0LzC3wAya6Py/irTRUevzAA6
-	JUVgX245v8KRz0mF4914weO7wVSCyNAnobhUHWPnlbg60PJAMT/Ay3tls9/XI7A3
-	OfvRXGOVXC0+2SAcHQ/2vvxd0KlH/6WDKNvvo+3h4mMPsa2O3SAfDuCSATvKS6vB
-	BKGdXmbkWsLkXf2z/uIPuTTmP3xNw//gvdVPXRW+AV8DW7764+wy3I3y9DmTPupo
-	wEj7Xizweo4WDQnYxUoM791/Z70kJeZxgeRb3KYQc+OcQCfsWVhbnM+JP247g==
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	pps82601-s2048-2026-q3; bh=RPGR1ao2ryPXVERPslfkTvMcfX9uFT9ATTomL
+	z1wY1s=; b=NVeHM3zNA4kcCyrL6wWbJ+EFtch8NFRfmcgbeSA2vdo19z6RixIGi
+	MoZ72qtiG3epNKzLzRy+7BzO62WDZxWXOGEf6jN60o4zqX+QnOtMaqGbRFnGKq1e
+	LOqeRxKhxFAyzqEa/6v8IVGNrKU6FZrlyOel8V5UuPcqurzsxGgWb1dTObAPVZkW
+	dAzF+4wCFQeObAYrKPgC75gmT+jmk3OdNNhyuYLhnOuV4Ta2hBYz2iYQV89TjsGY
+	XWTwkT0XQKdyg00x7Z0qB4fgGrkLh4gc2InJd7X8Oec9iaVHG83ALRYl/dU4nFRo
+	6+dALP9tyvdVejW65Gp6cGRR0vRs6Ik1A==
 Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hdw52xqsf-2
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hdw56esa0-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 21 Oct 2026 14:02:17 -0700 (PDT)
-Received: from localhost (2620:10d:c085:108::4) by mail.thefacebook.com
+	Wed, 21 Oct 2026 14:02:22 -0700 (PDT)
+Received: from localhost (2620:10d:c085:208::f) by mail.thefacebook.com
  (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Wed, 21 Oct
- 2026 21:02:16 +0000
+ 2026 21:02:21 +0000
 From: Todd Freed <toddfreed@meta.com>
 To: <netdev@vger.kernel.org>, <toddfreed@meta.com>
 CC: Daniel Zahka <daniel.zahka@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
@@ -72,10 +73,12 @@ CC: Daniel Zahka <daniel.zahka@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
         Raed Salem <raeds@nvidia.com>, Cosmin Ratiu
 	<cratiu@nvidia.com>,
         <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net 0/2] psp: drop packets with extension headers in transport mode
-Date: Wed, 21 Oct 2026 14:01:58 -0700
-Message-ID: <20261021210200.788191-1-toddfreed@meta.com>
+Subject: [PATCH net 1/2] psp: drop transport mode packets with extension headers
+Date: Wed, 21 Oct 2026 14:01:59 -0700
+Message-ID: <20261021210200.788191-2-toddfreed@meta.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261021210200.788191-1-toddfreed@meta.com>
+References: <20261021210200.788191-1-toddfreed@meta.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,47 +90,82 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIxMDA4MyBTYWx0ZWRfX88LzQTuR00eH
- dHlmsCKVXSgX95LkSNHHcIXplPrT5zkGuXAaA0+bTZt7LHWic0G5GbCzFKMwK/gCw42woRNY/Ba
- kRz08RCdkg2qzhXYyoGTvdRm6Gu9eDClK1rHbkgyyYzkBPNN3VfCVoZI+NOaEZGVO4w8XakX7cz
- 9V7k6ihYwEdZkzUlzibOQiNBxCsh4OaCu0Am5/6Pxdn5CnF+SS2EATtR17xgaHE8tvAWGzzRWWe
- UCvdJfneh7/TNQwkgt+JMa8ZD/XF4iOSZ3XN2TMLq1i3K5ipz0V3ykCMyN93ebP6tDLzqKvHme9
- JvDoy/qIADz4VJU2FLw1aGESH/wEObWUmoWyzqs88qm1SRZEy6NX4rXRqEQnIn3u+Ydze6/GSQR
- Inwg4nEWWR0yO9Xa3sqsU7pw0fjRk1LF38Ba1iZSwMmH50FO1Ji/5qU8YjdRQMsq0L43vcP1aRD
- trL1Y1X2E4SPg48ypOA==
-X-Proofpoint-ORIG-GUID: C5JAK9VtywW-dIZqimHX8qnCTfG2PiYw
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIxMDA4MyBTYWx0ZWRfX8wTw14iPHmpH
- BdtoTpRoWpD430PNIsaM2Y5JHb/H2Q1axklsRabil7BZBTJ2+A5A2Jg4M4sY4qHv1u517RWp3vH
- Q0muuFi1ew0qknEd5hW6CeMH1/m/Iq4=
-X-Proofpoint-GUID: C5JAK9VtywW-dIZqimHX8qnCTfG2PiYw
-X-Authority-Analysis: v=2.4 cv=BqEIUoX5 c=1 sm=1 tr=0 ts=6ad92859 cx=c_pps
+X-Proofpoint-ORIG-GUID: ldoFD-eCdSkfQR_martPK3DUh9ktVcN7
+X-Proofpoint-GUID: ldoFD-eCdSkfQR_martPK3DUh9ktVcN7
+X-Authority-Analysis: v=2.4 cv=OcwNnRTY c=1 sm=1 tr=0 ts=6ad9285e cx=c_pps
  a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
  a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=03ozwUkBphtHgyqjj1sw:22 a=vqkdi4PVka8owyC1bpEA:9
+ a=PAz_-FQ8hEVmOPYdF0yf:22 a=VabnemYjAAAA:8 a=UhlmTuaJ2cu9RCaPLkEA:9
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIxMDA4MyBTYWx0ZWRfXwwArw8eQ/vKZ
+ dS00/qVzphBTa9qpWlTFmd/F4NvXLY26WMxN5EFIGHZtOclJjfB3i8A30Ek6kUz+622GaFA2eqp
+ rACQeO9HuX+vqzAXTV+RjeDTzXriI0fEy8ogDPHEmtfT6HEqiczrVicTl3FbbMNtwWJe0NUUZh9
+ B1RCGcjWjU5j9CxCrcjeUhgsygamrZBidWeBt+LkDPH2BLvQQTMREneYC37LZjZdwaD13TD/vjQ
+ nPSoYSS1KRg4MDsau5c7qHnyQHuJ4UGibXNLtYLFwIvh1K9MtvXP5jwpvN366yVSVRKeNi54sXS
+ xGvsQaV3Qth6t5C1A/Vk3WLqXqpgmsQFfHKZ8G1Me0SDIiV4aAzw5nwXWjWmJjWmvLiw3tQsGDy
+ FDhS7ZffALDBbjVOoe9g5XHbAvdx3jM3ujIvIRRwMpl1HqwM8Mcm5f6whS/fqjLsneQSbzIuNgJ
+ vOxdtpnzq7jLyvra3lg==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIxMDA4MyBTYWx0ZWRfXzuXmfvaKoMeF
+ GgNmFvycwfHfjGtfYnQas9HFMRiPcyR/S0EcrangZHGQQxc2SoRCJoQOAiOR1XvQ6LjG78oltVN
+ 96qf4tC7p+QHJwama1/duneRhDkYagI=
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-10-21_06,2026-10-21_02,2025-10-01_01
 
-While working on adding support for socket-less psp associations, I
-noticed that this case was not being handled correctly. It will be more
-relevant with that series, because it adds udp support, for which the
-psp nexthdr will be taken from the inner packet.
+psp_dev_encapsulate() inserts the udp and psp headers and rewrites the
+l3 next header to udp.
 
-Since the tx association encodes intent to send encrypted packets, but
-because of other configuration (socket options, routes) the packets are
-sent unencrypted, sending this change as a fix.
+if the packet is an ipv6 packet with extension headers, the transport
+header comes after them, so rewriting the next header of the ipv6 fixed
+header is wrong.
 
-The first patch drops the packets, the second patch adds selftests for
-that case.
+a psp tcp socket emits such packets if certain socket options are set on
+it (e.g. IPV6_DSTOPTS). with mlx5, these packets also go out
+unencrypted.
 
-Todd Freed (2):
-  psp: drop transport mode packets with extension headers
-  selftests: drv-net: psp: test ipv6 tcp socket with extension headers
+drop such packets on egress rather than them send malformed.
 
- net/psp/psp_main.c                         |   7 +-
- tools/testing/selftests/drivers/net/config |   1 +
- tools/testing/selftests/drivers/net/psp.py | 120 ++++++++++++++++++++-
- 3 files changed, 125 insertions(+), 3 deletions(-)
+note that a tcp socket which has such options set stops making progress.
+its packets are dropped (SKB_DROP_REASON_PSP_OUTPUT) until the
+connection times out.
 
+refusing the combination on the control path, when the options or the tx
+association are set, would be helpful but is not implemented here.
+extension headers can also come from a route, so the datapath check is
+needed either way.
+
+Fixes: fc724515741a ("psp: provide encapsulation helper for drivers")
+
+Signed-off-by: Todd Freed <toddfreed@meta.com>
+---
+ net/psp/psp_main.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
+index c9c1a8826b7f..0d276e2aceff 100644
+--- a/net/psp/psp_main.c
++++ b/net/psp/psp_main.c
+@@ -243,7 +243,7 @@ static void psp_write_headers(struct net *net, struct sk_buff *skb, __be32 spi,
+ }
+ 
+ /* Encapsulate a TCP packet with PSP by adding the UDP+PSP headers and filling
+- * them in.
++ * them in. IPv6 packets with extension headers are rejected.
+  */
+ bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
+ 			 u8 ver, __be16 sport)
+@@ -256,6 +256,11 @@ bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
+ 	    skb->protocol != htons(ETH_P_IPV6))
+ 		return false;
+ 
++	/* extension headers not supported */
++	if (skb->protocol == htons(ETH_P_IPV6) &&
++	    network_len != sizeof(struct ipv6hdr))
++		return false;
++
+ 	if (skb_cow_head(skb, PSP_ENCAP_HLEN))
+ 		return false;
+ 
 -- 
 2.53.0-Meta
+
