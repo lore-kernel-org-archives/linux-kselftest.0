@@ -1,66 +1,128 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792625036;
-	b=VA0R2UsmOF4CQY7Uk8aIERL3k1hxOFs7BNPSADD35XRw/AvROMUYFPbphSIZBOD1U0Tr
-	 9qQqE4ha2aSH6aM8vzYO+AtHw1ldFkYrSGXUmODcLuh6tASxvG+XJvT/EjSGpbpMbLXpa
-	 4IIEJY9KL0VnTfUaKGoPGMSArLqFzUIhmgmiclUWp6KLVPiE39gbybXEwgF6bn7jyxqcB
-	 44nYVlC8s3fpd9IrDXbY9B/MkPCGTGLrSbt9MUMZ9LQEGvjYLSBG1yt2vTmcYCyHHJCIq
-	 7hZ7QLYezvGldRJmzEhd1xuoP0RB5gnD3O4LLk4bMsIuaXcofJ+WkaCPh0gZiDUmbWA==
+	t=1792626411;
+	b=WWF5ZQPBQnTJlvFON2HtMbK4cRPbTdE969ed2IBB1UiIjGOV3B4Vc1n4+MYM3ZU+belV
+	 zUTw9qmOaqXbm6L5nzXN9UXzr5xGlg0qH54ZEBDsX7ZM1bO9nNOS81s1HB6i+/bUl0B7z
+	 5tyIXSHH9Yk5bXM77dF+SFUakaFbSgn9SDWIoG23974gesAnNyI19LVUQXluJJITCIZgz
+	 490qqF4wJZk4xz5r/w8H9qTnr0aCx2Rh/TfqaIf4hs9YOFfBNd3EhOFlOgaq5wEXlqGKc
+	 ErxjbLrNKXZwYGCEZ5w31laMzPTNc0I6lYi2sO5qRNYf1PbgUuZRxjUL7yDjpifMvhQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792625036;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=qjj5hZjI8xw1hJvXTB1lpAtU8s+DbInFpqaIpOJfVII=;
-	b=SApf9DoDWUtuQdmLFyt1Aguw0AZhbKAiIaVhojp7JxzzvoK4DZTrVJzcnleTPsJHuCE2
-	 N2TOip+Spq6MFUjwohJvoxVGWLofcyzA6zjfzCDd/H6K/F9ewD/LRv2yJpnVbXfBtSYOl
-	 VsEeOQgBs2WfWT53xs5wzjPvQdwFGGd2Dp3d1oe47/MfnOyIho7cOG8dZmodJSzURBOOm
-	 QFlS9kZ7Tio0X6FyrBcVLuYpt/4dXxIN98P36+4lZDxcNoYlWdIBnzuxRblKQllt2bDeH
-	 iWm4rHaxI7GVJoBmsHMGA3HDGO/3Gsy7iAtewirG+iqhYOMSHBZcvk9Du5o4CXS2Ycw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792626411;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=n5hOymfjgaz7xpjT1ssIdHSQ+wD4cuNPKUAfRnejzdg=;
+	b=W4J8/NcuP6J/0Rd3dd5AJdsXNiQJSefMvhe5VgvHCi79ZcVxYTgzmDQd3bLrSXd+qn0/
+	 J3XJRBHttjl+mZkYpZ2/6B3pMw2E9KRmySup5KB5nUvxJbbGBTCl1EAslxsa0FcsBIHjV
+	 DmwtlH2Pc2urX7gzNmT94KsTsEbVay1BO74cKLw7HKY8wSCAjRayYZHgp0WMs4Z6+ten0
+	 Gnp4g8e4R12w6msCxQUi3m7R1AnAB0TG6dSlbcsHrVNm7DMwRl/ussSy6rzmrHnAwtDWl
+	 21a0ZZmnrt8ipYgrzWSxjWNhbC+fKgUM7axOSRabjO+wxTove78CUY51qaHB6VKNTwQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hZF0AvHr;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=ziepe.ca;
+	spf=pass smtp.mailfrom=ziepe.ca;
+	dkim=pass header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=RWEqARLN;
+	arc=none smtp.remote-ip=209.85.222.182
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1C7606A319;
-	Wed, 21 Oct 2026 23:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85706606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 23:46:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85706606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hZF0AvHr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D84C1F000C1;
-	Wed, 21 Oct 2026 23:23:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792625036;
-	bh=qjj5hZjI8xw1hJvXTB1lpAtU8s+DbInFpqaIpOJfVII=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hZF0AvHrtrBbOyeslQSvPK3nLyRD6q5W+1DcrndySbgKuAw179TvOSArbO0qOftOk
-	 xHNg4IjuxWO0239SLU/mBnNhtQo2d6ctQQznaBwwlkNVQ+XgRk9fj6jqbpZq1PquFa
-	 45um5GpbsOSY1FM6jPxqhle3dNBiY/ligqvxLaJkclnNZVS6/PiddIDktWU3AGmfQ8
-	 AUvHRPo6L8DkI493SpLgLTLTLdbBJhjZWYRUG4nE3RYWhbLbvuNItuOMF0fdAeJcC7
-	 qQ3uMri5zBImazHcxrTMp2WCepEDhkVqRmcmFtiAV5xYeAuKu/fS3Ls0hJVl/PkgvQ
-	 Q/EylziyUIRRA==
-Date: Wed, 21 Oct 2026 16:23:54 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	linux-kbuild@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	linux-perf-users@vger.kernel.org,
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	dkim=pass (2048-bit key, unprotected) header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=RWEqARLN
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-93e63ee7b4cso146021585a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 16:46:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1792626409; x=1793231209; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=n5hOymfjgaz7xpjT1ssIdHSQ+wD4cuNPKUAfRnejzdg=;
+        b=RWEqARLNhr7kM3UoylUxt0c18uD7BW+nnkV6qlrI9YT9zsHGYUDmS0p2u/OOJbEXRO
+         SgtdrfJPP8qwXew2mkzTL5kBpez8YAljokMt8HUv0ST5gnPGdO65tJGybD3uqk3DHnFQ
+         VEfyFNtRpndd2xu3NGiNoG2k4NxrYb1vsCefZIqb45l7I9z62Aci6eddaiDR77WnIZoy
+         eWMUHuI+2+oIZ9KbTn2PavphoEY3W05B528MicbkGhBUCoiwiAwUvz+JZs0AWZblHyFz
+         J4NMmzr4UzXCJ11N9e51QR5awZqclvbU5xHpjVK9003y/gTpC40ys8/YEtw5gSAxngqs
+         Ulog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792626409; x=1793231209;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=n5hOymfjgaz7xpjT1ssIdHSQ+wD4cuNPKUAfRnejzdg=;
+        b=GBfcGfkp8R2v4kFA1OjLrZLi+Gvwws8ja29vBMNVlp3vtpEvPFn4Ue0XraVGF5duTp
+         fNKLPAbPjRX6t1qL5Q+X5PmOYjoUj/eb3qI6BwkoetfAyoc1aSnh4a+jBWmjGx8gbkpF
+         t9lPduCi5B8YDleCVqjOvCO1RyCVUdTKLEkk+lCuS/eQQare94WD81wU9OHwtJqwwOf/
+         WCaAgHIuIAGapSGNTPE7kpms16upXoZeb3GefYMvEfsLDSTDawwswkVyqsD9HTQiu2XD
+         kTgO8FXVOIWprjPIDhQJeOkTlRRXGCdGN1JotcWssw5CXmN46KETRSsBnl7bm8IOcno2
+         7U9Q==
+X-Forwarded-Encrypted: i=1; AKwUvBx9kKwwU4JmRghP0bWAyNsCPJUZALVoJ7KI+V3CNRV9JU43b7OJt6dW9wlrhi7G3q72nDysSJHE8M/fdBjgfEA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL40EBveiSb19P4M+gAeIFLPd0dodRnTq5mLzowxD2hLwHpa5fJ
+	jL+q2W274ZUzkJeBxMxv8ep3juPX927AyspUFFO9RESOGD6SdxsVaWebf7F0dNXgFMs=
+X-Gm-Gg: AYBFou28ctN0pIQHBCSx2CxnHBmgPY6ZZAlDRC0n3CGtM2IQJgTDehavHbq+WJZOhcD
+	VgVJCqyeVqFYKC+mVYuPPE+fhhxJ9uN6jCHbTl5RnOIDPcmcYIDjEtdC4f3MCE6Ql6K8LihOrS1
+	RKAxi0bxpv4095kF+d7vmup5Jdh909tPJFl4E4XJHVmQ5ToklqxVcjsI5p5/qfwY+IekAZ+mo7g
+	WDWMs0eNqETAaN/8CO3pCeB1ecy4s8zRVK/BtX5U+K48Jim9GCw5uJkn4rH6pXOvkuLg4c+VrN7
+	7AwtTmunWz4NoogIBwJ0ArH+3o1hI+JyoHKTqPnfKy5KxRi/po2KKgtZeczQfQV4alTmqNi+BRj
+	kthwQKy6P2f0F16VhrxyIwk9nOKLnqKZQR6VempjiQJEyQxW4WuZzgRKd+uLO9M4EK+XeRpgss1
+	Jp/TGwHDqjoWZzSeYxntoRQ52jS6lqfZihACz7lyCcIGZtVfO8DbEHqjmqP0UtOReIu3VXCF02T
+	ci3koK5lGvw8za+Qcegkm8uVtzRj5x+Lsna6lKaIwWtPKhohEnO1QpxhOhyacnVIl0TzSJABbtf
+	pnKEkH1d0A9+DvFuIfPsL8DG3+K4HR7MBfWzWLrrZUMOZY6jW3h7PzPKwbw=
+X-Received: by 2002:a05:620a:17a1:b0:93f:22f1:97be with SMTP id af79cd13be357-93f5800e406mr694136885a.72.1792626409239;
+        Wed, 21 Oct 2026 16:46:49 -0700 (PDT)
+Received: from ziepe.ca (hlfxns010zw-159-2-239-150.pppoe-dynamic.high-speed.ns.bellaliant.net. [159.2.239.150])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f56e2bee2sm373858385a.42.2026.10.21.16.46.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2026 16:46:48 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1xJg19-0000000EWG8-3cjA;
+	Wed, 21 Oct 2026 20:46:47 -0300
+Date: Wed, 21 Oct 2026 20:46:47 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Samiullah Khawaja <skhawaja@google.com>
+Cc: Fred Griffoul <griffoul@gmail.com>, Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/7] tools: build perf in tools_build
-Message-ID: <atlJij2v6sbOYZot@google.com>
-References: <20261016143143.3613501-1-sashal@kernel.org>
- <20261016143143.3613501-5-sashal@kernel.org>
+	David Hildenbrand <david@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Ackerley Tng <ackerleytng@google.com>,
+	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Steffen Eiden <seiden@linux.ibm.com>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [RFC PATCH v2 06/11] iommufd: Map memory provider files
+Message-ID: <20261021234647.GA3381610@ziepe.ca>
+References: <20261014093733.90312-1-griffoul@gmail.com>
+ <20261014093733.90312-7-griffoul@gmail.com>
+ <atkO08eCJzLX6R58@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,81 +132,23 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261016143143.3613501-5-sashal@kernel.org>
+In-Reply-To: <atkO08eCJzLX6R58@google.com>
 
-On Fri, Oct 16, 2026 at 10:31:40AM -0400, Sasha Levin wrote:
-> Add CONFIG_TOOLS_BUILD_PERF. perf is built as it is built standalone,
-> with optional features enabled when their libraries are installed, and
-> with perf's WERROR setting following CONFIG_WERROR. The feature table is
-> left out of the kernel build log.
-> 
-> CONFIG_TOOLS_BUILD_PERF_MINIMAL builds it with MINIMAL=1 instead, which
-> turns every optional feature off, so the result does not depend on the
-> build machine. allmodconfig and allyesconfig turn it on.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Wed, Oct 21, 2026 at 08:17:05PM +0000, Samiullah Khawaja wrote:
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+> With this approach, silently skipping holes during IOAS_MAP_FILE means
+> iommufd has no tracking of which IOVA ranges in the area are actually
+> mapped, which complicates unmap and could also hide a bug if a hole in
+> the range was not expected?
 
-Thanks,
-Namhyung
+I think if we are going to do this it should only work with iommupt
+and iommupt should provide an unmap that is compatible with the holes.
 
-> ---
->  tools/Kconfig         | 16 ++++++++++++++++
->  tools/Makefile.kbuild | 10 ++++++++++
->  2 files changed, 26 insertions(+)
-> 
-> diff --git a/tools/Kconfig b/tools/Kconfig
-> index 2d05c8e593e21..4f13e3b104377 100644
-> --- a/tools/Kconfig
-> +++ b/tools/Kconfig
-> @@ -60,6 +60,22 @@ config TOOLS_BUILD_IIO
->  	help
->  	  Build tools/iio (lsiio, iio_event_monitor, iio_generic_buffer).
->  
-> +config TOOLS_BUILD_PERF
-> +	bool "perf"
-> +	help
-> +	  Build tools/perf. As in a standalone perf build, optional
-> +	  features are enabled when the libraries they need are installed.
-> +
-> +config TOOLS_BUILD_PERF_MINIMAL
-> +	bool "Build perf with all optional features disabled"
-> +	depends on TOOLS_BUILD_PERF
-> +	help
-> +	  Build perf with MINIMAL=1, which turns off every optional
-> +	  feature, so that the result does not depend on which libraries
-> +	  the build machine has installed. allmodconfig and allyesconfig
-> +	  turn this on, which keeps their builds the same on every
-> +	  machine.
-> +
->  config TOOLS_BUILD_SPI
->  	bool "SPI tools"
->  	help
-> diff --git a/tools/Makefile.kbuild b/tools/Makefile.kbuild
-> index 8cfa7f80039cd..4b3ea73bc8ab9 100644
-> --- a/tools/Makefile.kbuild
-> +++ b/tools/Makefile.kbuild
-> @@ -79,6 +79,16 @@ PHONY += $(tool-targets)
->  $(tool-targets): tool-%: FORCE
->  	$(call build,$(outdir)/$*,-C $(toolsdir)/$* O=$(outdir)/$* CC='$(call escsq,$(tools-cc))',,TOOLS_BUILD_$(shell echo $* | tr a-z A-Z))
->  
-> +# perf, without the feature table in the kernel build log
-> +perf-flags := CC='$(call escsq,$(tools-cc))' FEATURE_DISPLAY= WERROR=$(if $(CONFIG_WERROR),1,0)
-> +perf-flags-$(CONFIG_TOOLS_BUILD_PERF_MINIMAL) += MINIMAL=1
-> +
-> +__tools_build: $(if $(CONFIG_TOOLS_BUILD_PERF),perf)
-> +
-> +PHONY += perf
-> +perf: FORCE
-> +	$(call build,$(outdir)/perf,-C $(toolsdir)/perf -f Makefile.perf O=$(outdir)/perf $(perf-flags) $(perf-flags-y),,TOOLS_BUILD_PERF)
-> +
->  PHONY += FORCE
->  FORCE:
->  
-> -- 
-> 2.53.0
-> 
+There are other places that would like such an operation, IIRC.
+
+This will have to block an access reaching into a guest memfd mapping
+as well, so that should be OK.
+
+Jason
