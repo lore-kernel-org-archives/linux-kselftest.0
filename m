@@ -1,38 +1,38 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.79.60.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.129.254.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792581902;
-	b=wvvWAj649LEIokNazyn3xNz6W2orI21HKn5COvHlIdeinbQ473Sc0aT8qs3fyTv1BX5j
-	 DDkyKhTxvMFqRH2QsmORaoLKWbUew2YSFBJip8YzIElufY+4UK1/47G8PT26MpxA8Mrmt
-	 61QzhhLujaCoj7QzYVBmZVD43EXf//yUTT6YhR3SOrDTraoQyg+V6ul43D9wHxZ22E2Tk
-	 TVo4wjhNVpWg9IKTvxt8nec7z5OqODf2puWOXY6u+KVchx4cYA0hvcQbXgAQJmh9Pi5N8
-	 QIl/p7uIuAUVMb+vKf7vugAOs3298UPT18bO1v1D0MjufZ4I99cbTdPIHL+sVnglnAA==
+	t=1792581904;
+	b=V7eoQiWGz2pZpzmg/ZjLrWXtmNMlhUlThb6hzbtYgzEypp1N660A3HEZJ7yhlNJCSY5r
+	 pphiZzIPq9ybDDiqUggP4J9vRiHxUsFvNUESo2OczXOeNTRwcyKwHXcOmzylat32ORCPi
+	 izA3z0M5c2yFdAITyAXuQR0fJuA+4vaeWffu+cT4phuvKy0K+AgbPIUoVK0lcqz+OfExk
+	 QomhjRSijuOFlhrs7FvpIT+Nbk7mBg7JGiSFB/4BSX8QhvhmBNRi33l/Tjjo2TLeEo9kZ
+	 93T8EwD79AX7065IG5g010zqP5q5lii4y39wwjhdniQN5DdwDHO1L9jLnO5jPXcga7g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792581902;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792581904;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
 	 X-HM-Tid:X-HM-MType:X-HM-Spam-Status;
-	bh=XNod+BDD/BkSwCVYSyt2PbUacsNtMgi+MLEdpjX47ak=;
-	b=pUK/FV5fszLimbBWg1Q36lcxXAPrpVlBd6D4bEdTYz8lcZfG8Yw2XX+Pj03iw8EZ7Yqh
-	 nXlBJpTtXC51jN441CVhP33TQ/HC3Eu31PZ3Hgvqg/tq3/0zJbBxtmdlo6s8OQNP3t3/H
-	 kMzlOQKt/9YIV4+AiJo6a60O+fHpgBKN+1mbphyBP/U+7GbCf+cgXLMQ48FCkgPA+TnDW
-	 pZhRYgJP6/Oin4fKSkIBfLUxwZFlNQo/50gfblvZlpw6UImOIyEKJoDT50iKMHGjLZ/7j
-	 LjdBqgqZkifSz/hKAen/87q2lgSbjKhhJESVCvPH+d11kC1nDmMlIQ84EW4BXl4LLNg==
+	bh=EPDlZMTSTVQ5eCE68sbvYSTGTpxshvufAloZkiCKtC0=;
+	b=3ZNJTS7U++rMcG4aiS918xAqt3GUsuPGfaZVX7QVx2JwvFJc8I67ng9hkcX5cQPJvbpq
+	 wdZ435yj2d+Dy2NZYk/V7ZaLZjAcyTlA0IosE0k2mQ9L9euohp8S7cSXbVBmIZTtd+HHA
+	 0PtgWUsjqxpMMQUMXvoZI+mgfQOol25KnJXgWmLJ+R7AgLwuqZsH8DKICqA9R6S/qg+gj
+	 /psa2+s1xVqPwMAXsrMpHag8j98fWuKDmfmDxVLstNFCMAGZeVqhpzF1bUyfx3kUkQvYy
+	 PRqQUpQydgiTDqqRPYUUv4b8k14S4ZI1/Op+Hv9bOEhv+hkc0TDRU12A+h20ZswpNmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=easystack.cn;
 	spf=pass smtp.mailfrom=easystack.cn;
-	arc=none smtp.remote-ip=210.79.60.16
-Received: from mail-m6016.netease.com (mail-m6016.netease.com [210.79.60.16])
+	arc=none smtp.remote-ip=103.129.254.92
+Received: from mail-m25492.xmail.ntesmail.com (mail-m25492.xmail.ntesmail.com [103.129.254.92])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E920606A31B;
-	Wed, 21 Oct 2026 11:25:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E920606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5F8606A330;
+	Wed, 21 Oct 2026 11:25:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C5F8606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
 Received: from localhost.localdomain (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 204f151a7;
-	Wed, 21 Oct 2026 19:24:50 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 204f151ab;
+	Wed, 21 Oct 2026 19:24:53 +0800 (GMT+08:00)
 From: Zhen Ni <zhen.ni@easystack.cn>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -58,9 +58,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Zhen Ni <zhen.ni@easystack.cn>
-Subject: [PATCH v3 2/7] mm/page_owner: protect page access with mem-hotplug read lock
-Date: Wed, 21 Oct 2026 19:24:32 +0800
-Message-Id: <20261021112437.1799213-3-zhen.ni@easystack.cn>
+Subject: [PATCH v3 4/7] mm/page_owner: add open-coded page_owner iterator
+Date: Wed, 21 Oct 2026 19:24:34 +0800
+Message-Id: <20261021112437.1799213-5-zhen.ni@easystack.cn>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20261021112437.1799213-1-zhen.ni@easystack.cn>
 References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
@@ -74,121 +74,164 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa15e34f2a30229kunme08c1fd526acd7
+X-HM-Tid: 0aa15e34fe6f0229kunme08c1fd526ace2
 X-HM-MType: 1
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDSx5PVhoeSE1LGB5LTEpMH1YVFA
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCSkNMVk9KT0JPSk5NGB5CT1YVFA
 	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
 	lPT09IVUpLS1VKQktLWQY+
 
-The page_owner scan walks PFNs locklessly and dereferences the resolved
-struct page in the scan itself and in print_page_owner(). With
-CONFIG_MEMORY_HOTREMOVE, a concurrent remove_memory() can tear down the
-section's vmemmap, so a dereference after a stale validity check may
-fault.
+Add an open-coded bpf_iter over the pages eligible for page_owner
+output, reusing page_owner_next_eligible().
 
-Take a mem-hotplug read lock across each page's check-then-deref. In the
-scan, gate every PFN with pfn_to_online_page() under the reader and drop
-it before cond_resched(), so hotplug can still interleave between pages;
-in print_page_owner(), re-resolve the page under a reader covering just
-the print of one record.
+A sleepable BPF program drives it with
+bpf_iter_page_owner_new()/next()/destroy(); each next() returns the
+page_owner_scan. po_snap is copied inside the page_ext RCU window, so
+the program needs no RCU section when it reads it.
 
-The reader is cheap: get_online_mems()/put_online_mems() are just
-per-CPU counter increments/decrements when no hotplug is active, so
-they contend only with an actual add/remove. Taking the lock per-page
-bounds the writer's wait to a single page's check-and-deref, keeping
-hot-remove stalls brief while all accesses stay protected.
-
-This makes the traversal crash-free. A recycled-but-present page can
-still yield stale data -- the lockless scan is best-effort and
-unchanged by this patch.
+Also add bpf_page_owner_stack_snprint(), which renders the stack trace
+of the current page into a caller-provided buffer.
 
 Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
 ---
 Changes in v3:
-- New patch. Add the mem-hotplug protect.
----
- mm/page_owner.c | 35 ++++++++++++++++++++++++++++++-----
- 1 file changed, 30 insertions(+), 5 deletions(-)
+- Gate the kfuncs with KF_PERFMON.
+- Check the page_owner_inited static key in the iterator.
+- Without scan->page, start at min_low_pfn - 1 and let next() pre-increment.
+- bpf_page_owner_stack_snprint() rejects a NULL or zero-size buffer.
 
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 92a92cdf74ec..8e72a85c663c 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -762,13 +762,22 @@ static bool page_owner_next_eligible(struct page_owner_scan *scan)
- 			continue;
- 		}
+Changes in v2:
+- bpf_page_owner_stack_snprint() now takes the scan cursor.
+- Buffer args renamed to buf__uninit/buf__sz.
+
+v2: https://lore.kernel.org/linux-mm/20261013122125.843451-4-zhen.ni@easystack.cn/
+v1: https://lore.kernel.org/linux-mm/20261009112308.240769-4-zhen.ni@easystack.cn/
+---
+ kernel/bpf/helpers.c |  9 +++++++
+ mm/page_owner.h      |  3 +++
+ mm/page_owner_iter.c | 64 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 76 insertions(+)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 712dca5a2c5b..0ba836f77957 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4946,6 +4946,15 @@ BTF_ID_FLAGS(func, bpf_iter_dmabuf_new, KF_ITER_NEW | KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_iter_dmabuf_next, KF_ITER_NEXT | KF_RET_NULL | KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_iter_dmabuf_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
+ #endif
++#ifdef CONFIG_PAGE_OWNER
++BTF_ID_FLAGS(func, bpf_iter_page_owner_new,
++	     KF_ITER_NEW | KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_iter_page_owner_next,
++	     KF_ITER_NEXT | KF_RET_NULL | KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_iter_page_owner_destroy,
++	     KF_ITER_DESTROY | KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_page_owner_stack_snprint, KF_SLEEPABLE | KF_PERFMON)
++#endif
+ BTF_ID_FLAGS(func, __bpf_trap)
+ BTF_ID_FLAGS(func, bpf_strcmp, KF_PERFMON);
+ BTF_ID_FLAGS(func, bpf_strcasecmp, KF_PERFMON);
+diff --git a/mm/page_owner.h b/mm/page_owner.h
+index 0aa7695bec82..4ab513f17fc9 100644
+--- a/mm/page_owner.h
++++ b/mm/page_owner.h
+@@ -6,6 +6,7 @@
+ #ifndef __MM_PAGE_OWNER_H
+ #define __MM_PAGE_OWNER_H
  
--		page = pfn_to_page(pfn);
-+		/*
-+		 * Hold a mem-hotplug reader across the page derefs so the
-+		 * vmemmap isn't torn down mid-scan; released before
-+		 * cond_resched().
-+		 */
-+		get_online_mems();
-+		page = pfn_to_online_page(pfn);
-+		if (!page)
-+			goto put_online_continue;
++#include <linux/jump_label.h>
+ #include <linux/page_ext.h>
+ #include <linux/sched.h>
+ #include <linux/stackdepot.h>
+@@ -13,6 +14,8 @@
+ /*
+  * mm/page_owner.c
+  */
++DECLARE_STATIC_KEY_FALSE(page_owner_inited);
 +
- 		if (skip_buddy_pages(&pfn, page))
--			continue;
-+			goto put_online_continue;
+ struct page_owner {
+ 	unsigned short order;
+ 	short last_migrate_reason;
+diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
+index 529b2c4a589a..4b9741a2de53 100644
+--- a/mm/page_owner_iter.c
++++ b/mm/page_owner_iter.c
+@@ -4,6 +4,7 @@
+ #include <linux/memblock.h>
+ #include <linux/mm.h>
+ #include <linux/seq_file.h>
++#include <linux/stackdepot.h>
  
- 		page_ext = page_ext_get(page);
- 		if (unlikely(!page_ext))
--			continue;
-+			goto put_online_continue;
+ #include "page_owner.h"
  
- 		/*
- 		 * Some pages could be missed by concurrent allocation or free,
-@@ -805,10 +814,13 @@ static bool page_owner_next_eligible(struct page_owner_scan *scan)
- 			goto ext_put_continue;
+@@ -116,3 +117,66 @@ int page_owner_iter_register(void)
  
- 		page_ext_put(page_ext);
-+		put_online_mems();
- 		return true;
- 
- ext_put_continue:
- 		page_ext_put(page_ext);
-+put_online_continue:
-+		put_online_mems();
- 		cond_resched();
- 	}
- 
-@@ -831,7 +843,17 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 
- 	/* Find an allocated page */
- 	while (page_owner_next_eligible(&scan)) {
--		struct page *page = pfn_to_page(scan.pfn);
-+		struct page *page;
-+		ssize_t ret;
+ 	return bpf_iter_reg_target(&page_owner_iter_reg_info);
+ }
 +
-+		/*
-+		 * The scan is lockless. Re-resolve the page under a mem-hotplug
-+		 * read-side lock so that we never access a hot-removed section.
-+		 */
-+		get_online_mems();
-+		page = pfn_to_online_page(scan.pfn);
-+		if (!page)
-+			goto skip_continue;
- 
- 		if (state->nid_filter_enabled) {
- 			int nid;
-@@ -851,10 +873,13 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 		/* Record the next PFN to read in the file offset */
- 		*ppos = scan.pfn + 1;
- 
--		return print_page_owner(buf, count, scan.pfn, page,
-+		ret = print_page_owner(buf, count, scan.pfn, page,
- 				&scan.po_snap, scan.po_snap.handle, state);
-+		put_online_mems();
-+		return ret;
- 
- skip_continue:
-+		put_online_mems();
- 		scan.pfn++;
- 		cond_resched();
- 	}
++/* opaque to BPF programs */
++struct bpf_iter_page_owner {
++	__u64 __opaque[16];
++} __attribute__((aligned(8)));
++
++struct bpf_iter_page_owner_kern {
++	struct page_owner_scan scan;
++} __attribute__((aligned(8)));
++
++__bpf_kfunc_start_defs();
++
++__bpf_kfunc int bpf_iter_page_owner_new(struct bpf_iter_page_owner *it)
++{
++	struct bpf_iter_page_owner_kern *kit = (void *)it;
++
++	BUILD_BUG_ON(sizeof(*kit) > sizeof(*it));
++	BUILD_BUG_ON(__alignof__(*kit) != __alignof__(*it));
++
++	kit->scan.pfn = min_low_pfn - 1;
++	return 0;
++}
++
++__bpf_kfunc struct page_owner_scan *
++bpf_iter_page_owner_next(struct bpf_iter_page_owner *it)
++{
++	struct bpf_iter_page_owner_kern *kit = (void *)it;
++
++	if (!static_branch_unlikely(&page_owner_inited))
++		return NULL;
++
++	cond_resched();
++
++	kit->scan.pfn++;
++	if (!page_owner_next_eligible(&kit->scan))
++		return NULL;
++
++	return &kit->scan;
++}
++
++__bpf_kfunc void bpf_iter_page_owner_destroy(struct bpf_iter_page_owner *it)
++{
++}
++
++__bpf_kfunc int bpf_page_owner_stack_snprint(struct page_owner_scan *scan,
++					     char *buf__uninit, u32 buf__sz)
++{
++	int len = 0;
++
++	if (!buf__uninit || !buf__sz)
++		return 0;
++
++	if (static_branch_unlikely(&page_owner_inited))
++		len = stack_depot_snprint(scan->po_snap.handle, buf__uninit,
++					  buf__sz, 0);
++
++	if (!len)
++		buf__uninit[0] = '\0';
++
++	return len;
++}
++
++__bpf_kfunc_end_defs();
 -- 
 2.20.1
 
