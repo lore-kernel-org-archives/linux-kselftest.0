@@ -1,66 +1,66 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792546022;
-	b=gWzXGjVEWwuaOIiYAM2PjlHD4v6Tz1IvN82/AsnTJ6SN27NIBXCYn8rLswxEED0cjzps
-	 +2Dw7YWzu9UnkcqIoCoSFwvb08YrH1r9gR53uQeGH6cxOxrRt/tFmcV9nGyadqY4dDR6K
-	 uWC6HLsLxNejk+ukecBXTvH2oPdni0DlXaGRyWiBIQL1QZrYj9aFs9Eoz9kKCSrIRVXeN
-	 ++SaVUMmmK0iJHexLnDTVZp6jNATp5ih+U52m/unWI0yFwa5Ls/yDaEj7YuOkybafT4AR
-	 IIOxNH8j+Oj5QtELUbXHQUIQddDbEhW/w25zTG124p+9x9xEUeeJGARCGS1kKF2h3xA==
+	t=1792546503;
+	b=o9p4i9oj/DsJc7IFSRlW4gx0Dm9M/svvJUTONKs+LTxNiW/ZtRFLy/1PvM2P9uU2m3fr
+	 vh2ktC1k4SJsMlASIJZSbVi37pciLUORYb6+q7rzJ2xarMzlnIK5hSLbKVt2uRsap6Wfj
+	 E1aXf4ztxRkTXgdgG2wFqyA2pGFerAzKauR8n9p5qTTjItOf0aHkeASoC+J4h5/iZ72WG
+	 lsFhdonVqdY5kWIwPPQtc+8dWSx771iu25TruEtV6fVW97onpYRQLp4lXbKLZbu+Re9UU
+	 3Czx7Fsyb6l3q0zpoTdDxyI3qxxxZSODUETLq3GLkcabWJVcepQzS7K5d74Hu7Cb0kg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792546022;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792546503;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=Hn8gzc0bhv9nfAFVJ07Ihg2A3G1+jFD+Sf19dCfHSbY=;
-	b=i5DDx7CBt4uL+krngksTtwSQy7sXin8+xeTCtz6mrXvoMtScKJw1IiOn/tjUZp5k5Z5q
-	 EcDXx1vO+1Je3JpWVfn9g0lawCoDoHKgaePfNyVbf4ewaKD4XUqD/5hhLjcAw5EUSn3vP
-	 HrM8tsLQu8mJBxAuX/cH+cSyX0aJXblU10QzmAbOVn5UiAQ6UZOBGiyIhvtsfg66AcFw6
-	 1yIYsOEBn0BX8K2E6/Zdm5KKR2/T91pPMMG/Zmz2oS71Vu7yRVDCPBHgT7KG2oeMAQ0pg
-	 bhA8YSQAPFpmK+8Qx3Enk94a1B14aPpn1/HOqJGQShUE7RaOVVSgcnLGYgbawLISE0w==
+	bh=RrrCMgJ3wDXc/zCjSsVsylYamdUiiZGnBksOK3TkOQw=;
+	b=i1kVf8VFT1UdyTzoGTt9NcbtHvxHvQcO85Sz44gP5IUkkRXkW8KT1IVAbWCmomMRPWpN
+	 gC8CPxT5xhgoxSWaWG2lJMuCgfhRiisHOzV1MYE+O2wHFXdFK89fyGLKPiqbLbpjdMZtY
+	 4YV3yS+TYsJyKNtNESOujthvqOuAjRfPMLcom+KxpSi8ZR1AB5Plcm2sNn0RQH89ORHE2
+	 DWnOb1bPqCxyTY9+j8ppOS7NCy0H+F4HpmleJ3oVABXJf7o759HcfQsjUyICxmmM/tzPC
+	 kiVidrFfQrWiUeSNu4vYHDBIksGOjhhfCcsXaT97N973UA6zOLgBtJKxj22+hOPqx9w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KqAL0qUz;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PwgxXx23;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6718C606A319;
-	Wed, 21 Oct 2026 01:27:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A67A606A31A;
+	Wed, 21 Oct 2026 01:35:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KqAL0qUz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E71DA1F000C9;
-	Wed, 21 Oct 2026 01:27:00 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PwgxXx23
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1861F000CA;
+	Wed, 21 Oct 2026 01:35:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792546022;
-	bh=Hn8gzc0bhv9nfAFVJ07Ihg2A3G1+jFD+Sf19dCfHSbY=;
+	s=k20260515; t=1792546503;
+	bh=RrrCMgJ3wDXc/zCjSsVsylYamdUiiZGnBksOK3TkOQw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=KqAL0qUz4xPSyMQk//AkXpBg3r29MgB+IoltQDglGmB95pf5a4atsqZNzoqxf6fEA
-	 u7IJunerI0pRUQyRpQTQjap35SeyZzUcCKXYBWvPkC2HY9khoIfObY8mNXIKz954+b
-	 F9RDJ4jbYplSTQussplNWihVem2ijW3486QYs9NbN70LzzsFNNUIkAQ0qQ6zSzbo9l
-	 5atela3Ng2hDrREmNky8h3HvvFVnO0N/O98ejswphaxx0z81OwP76nb9rqDsmjlIm3
-	 1FoCB9c0qKYfByjmL4/fKzCIavyp9lHHLT0SGfYSZ8fvfyiLO11BNGdihaQaDhPO64
-	 OpkzuQmi/hrDw==
-Date: Tue, 20 Oct 2026 18:27:00 -0700
+	b=PwgxXx230dZhFycujY1r3ztRThXg4iwUxZDjYIVcBgrQUfJ1FGKjlkWTZriFTAND5
+	 /zeeA/coMcRyjwMezIZ4TbB8F3dMmDCtQYGKCTmQu64ZyMAYQLvzNWMv6Hf+UZDGzn
+	 7hjAtUHY2+aeQNkarZL3bKAt0tg5s1869fRe7/EurnAAvTs19T9rXzsBVeTSSpu3AV
+	 2q6iC5pTG4UYRJLCIOnG1/yoBO9l58FaawOAWiZoctzXnX4BtJNtAi8XfsZGpSEosc
+	 xwpi5RdHilx/IrkPV1kDYYJN8q+2ya45u8yIXPc7AOPWjyNV78MDtKMHg5ZUl3QhRw
+	 Tn1DC2CHPxJNQ==
+Date: Tue, 20 Oct 2026 18:35:01 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: ast@kernel.org
-Cc: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- pabeni@redhat.com, horms@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- shuah@kernel.org, kuniyu@google.com, liuhangbin@gmail.com,
- mkarsten@uwaterloo.ca, masashi.honma@gmail.com,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 0/6] bpf: Add syscall common attrs support
- for xdp link_create
-Message-ID: <20261020182700.655edf14@kernel.org>
-In-Reply-To: <179253001886.208021.6536312952037292688.git-patchwork-notify@kernel.org>
-References: <20261020152804.39863-1-leon.hwang@linux.dev>
-	<179253001886.208021.6536312952037292688.git-patchwork-notify@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@meta.com>
+Cc: Stefano Garzarella <sgarzare@redhat.com>, "David S. Miller"
+ <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Stefan Hajnoczi <stefanha@redhat.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowangio@gmail.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Eugenio =?UTF-8?B?UMOpcmV6?=
+ <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Donald Hunter <donald.hunter@gmail.com>, Eric
+ Dumazet <edumazet@kernel.org>, <virtualization@lists.linux.dev>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <sargun@sargun.me>, <jlinbox@meta.com>,
+ Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: Re: [PATCH net-next v4 0/7] vsock: assign the guest vsock device to
+ a network namespace
+Message-ID: <20261020183501.6c15777a@kernel.org>
+In-Reply-To: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
+References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,39 +73,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 20 Oct 2026 21:00:18 +0000 patchwork-bot+netdevbpf@kernel.org
-wrote:
-> Hello:
-> 
-> This series was applied to bpf/bpf-next.git (master)
-> by Alexei Starovoitov <ast@kernel.org>:
-> 
-> On Tue, 20 Oct 2026 23:27:58 +0800 you wrote:
-> > I'm planning to add syscall common attrs support for LINK_CREATE cmd.
-> > 
-> > This is the first series for the plan, that adds syscall common attrs
-> > support for xdp LINK_CREATE.
-> > 
-> > Thereafter, retire the tracepoint bpf_xdp_link_attach_failed, because
-> > the underlying driver's error can be back-propagated to user space via
-> > the syscall common attrs.
-> > 
-> > [...]  
-> 
-> Here is the summary with links:
->   - [bpf-next,v3,1/6] bpf: Add syscall common attrs support for link_create
->     https://git.kernel.org/bpf/bpf-next/c/c8e3a753a9ee
->   - [bpf-next,v3,2/6] bpf: Add syscall common attrs support for xdp link_create
->     https://git.kernel.org/bpf/bpf-next/c/d80d00835520
->   - [bpf-next,v3,3/6] bpf: Retire tracepoint bpf_xdp_link_attach_failed
->     https://git.kernel.org/bpf/bpf-next/c/278568acb588
->   - [bpf-next,v3,4/6] libbpf: Factor out __sys_bpf_fd helper
->     https://git.kernel.org/bpf/bpf-next/c/deb9732f53da
->   - [bpf-next,v3,5/6] libbpf: Add bpf_link_create_log API
->     https://git.kernel.org/bpf/bpf-next/c/1480f290d1f7
->   - [bpf-next,v3,6/6] selftests/bpf: Add tests to verify link_create logs
->     https://git.kernel.org/bpf/bpf-next/c/f23fa8f01ce3
+On Tue, 20 Oct 2026 18:15:03 -0700 Bobby Eshleman wrote:
+> vsock network namespaces let a host put each VM in a namespace of its
+> own. A guest has no equivalent yet. It has a single G2H device that
+> cannot be assigned to a network namespace.
 
-Please don't merge changes touching core networking without an ack from
-networking maintainers. I haven't even finished mopping up all the ways
-the XDP link bypasses normal XDP safety checks :/
+## Form letter - net-next-closed
+
+The merge window for Linux v7.4 has begun, and the net-next
+tree is now closed for new drivers, features, code refactoring
+and optimizations. We are currently accepting bug fixes only.
+
+Please repost when net-next reopens. There is some uncertainty
+about how long this merge window will last, so please check
+https://netdev.bots.linux.dev/net-next.html
+before reposting. net-next _may_ reopen on Nov 2nd.
+
+See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+-- 
+pw-bot: defer
+pv-bot: closed
