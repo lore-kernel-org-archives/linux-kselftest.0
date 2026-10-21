@@ -1,118 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792578756;
-	b=bHLLPjQpUwSIWUug6NJcrvrHbjvZjUyCQHnpk8nwb0smrlLCd3J7g7Ze11J0FBMEwN04
-	 BQuIBo44BDVTSkfmh2G8ZE+W6NbYGUUgVUU8hM7Db+rNr/S/eMoVCle+gv2u1LvNg0K9W
-	 eFGqa01nOQEFWdQpWfDikHFmQTdslhSa+i5XEqZNeOBKcChyb+ebuxvhvdSNCs9GpiT5U
-	 e2j2v7IkpBA5a65kpntIVku4X4QtF0G48r+0IVouIi80nr249ET/VELAsSPH9axFNP1QB
-	 fW5gSqvGcurvQhPB14muSlzJAcO33IH83aAXELa0kvHXmx4uuu9p/7yAXQai+fFV15g==
+	t=1792578866;
+	b=C/+iKIJOgWKDpamEkZ+QrMZd0iTPX61K+DPhdxvcZTRNtnaDpBs0d/xVyD5OK4MSzsdC
+	 aZYQes91PrYb4EailRXgjSqujC5nLUwYgmPMkpG+2QAY+XcfaWOpd99sFzoPM2Ofx9Jup
+	 Bgp2DbgLJkMqLrUKjg+59l88rNnur+KoKrfEAg6RNcLn7WIdZRodBRmzxL565o1pigBET
+	 qJN8ptLM1ajexNeBVC6Z7pbcNXf76+ZI4XbNGSQL9eRlrFKm5wKBUJGttJxR5tlvILerP
+	 KMQAK0tgVUxNK7tIxrrtlI67pVHjkuUIMge8MtbfNqYh1bSXcRmkwurS+Ar7TC4cirQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792578756;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=ao5wRKo7Aqr2EOL/H5SIhA5Ty28X4+tjsBNb2koDVLk=;
-	b=P7uzCdwc7AN3w8EN8+2Rrnys1pxuL3yIyUtrpQ89Y8qDWJxE5UDc84dUzBngXPotO7/w
-	 9X71ixcjfao3rVsNxhUdvqSnnQNDljZwLF+RTX0h3qo3Br42HPUVjjYAWTmgR0KhReYid
-	 ZnLfoJqVhLbasATObTrruwXUql/tyNB0f6AynqAR8m7c3UZhBocVFo7fD2iD8xohIIFxB
-	 K7zA5VXchkHSMpFWSi/u/ockPLWdnMRvpYrEBihgAZN8KC/yxXtvYkSxcQACd4G+tBU2Q
-	 nE+v9Z6w4Duer8CAOX1D+MwdGC5s/nC/crdLt+smHRjYD3Ray8zOFCQczBLcTNMe2Vg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792578866;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=y2v57bUWAG26s2bm1BoDK2qEh8HhgMjugrP4Ic/x+w0=;
+	b=VYYxsg7/GOTxzFr/nE0IQPz2TFHRNN3KXDy2TPS1XVghmU8Uvh1wMA6JE3T3I0QQ8U5C
+	 nRbScbA6E73dpL3wJjWg31vVNshPY06YyU/RMUCgqYqnAmeE4b+2caB1Jkm436pYsMRNK
+	 wnxt9eIyuVGyT3+9KHa8akmAVKhdklD62oGYsUq9Ndx6BTeR7aegZcFyztHYUUMGq6ihS
+	 TDQ4KcFkPkeEEzNGbbjsisWxcBVNwr92UgMSvhRyqmLJVdEgnxFJo+4Ez/tCUMALgHfo4
+	 5fG9FD58czS0J89Q3lq/3YKcqdp5vb59gwqK/su+QrIa2lFOtpo3caPomtYXIyGTsyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=shutemov.name;
-	spf=pass smtp.mailfrom=shutemov.name;
-	dkim=pass header.d=shutemov.name header.i=@shutemov.name header.a=rsa-sha256 header.s=fm3 header.b="gTQv/y+7";
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=MJgpk6uJ;
-	arc=none smtp.remote-ip=202.12.124.137
-Received: from flow-b2-smtp.messagingengine.com (flow-b2-smtp.messagingengine.com [202.12.124.137])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AkHKS07S;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705C8606A31E
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 10:32:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 705C8606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36413606A31B;
+	Wed, 21 Oct 2026 10:34:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=shutemov.name header.i=@shutemov.name header.a=rsa-sha256 header.s=fm3 header.b=gTQv/y+7;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=MJgpk6uJ
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id 7EC531300BC0
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 06:32:34 -0400 (EDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AkHKS07S
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33BB21F000CB;
+	Wed, 21 Oct 2026 10:34:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792578865;
+	bh=y2v57bUWAG26s2bm1BoDK2qEh8HhgMjugrP4Ic/x+w0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=AkHKS07SreEz44Ef4ECOlzOb5mnzP9iJk7YT0+qqP0xIFFHOlPZnphtCXRGztYfAq
+	 qvuTG5kksnxWd6wmtukEXn3W4Bi1Z/sh4PcmQPLBmEBCqaI29KXc2F8HoAJfhwjANl
+	 u9lO4OIKSlKv2Zb9hhS+4jUHOY/wMC8qsjnR1wfOGgLVrDs15QS+fUNc3RSGGwPk2E
+	 mq68vp3vBAHIROeSLvcSEtnc+4N1kNMYrnaM1lcBkxK9+0F8yeFMXbWkcmwAkXyfoU
+	 vh0PrK+yzlzEgHwlrQ9+RTsCdkQlgw5iW/i0abyKid8g8Wg/brLKmcQLcpenLi7OD4
+	 5TexAVkROVpLg==
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfauth.ams.internal (Postfix) with ESMTP id 91E29198003A;
+	Wed, 21 Oct 2026 06:34:18 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Wed, 21 Oct 2026 06:32:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1792578753; x=
-	1792585953; bh=ao5wRKo7Aqr2EOL/H5SIhA5Ty28X4+tjsBNb2koDVLk=; b=g
-	TQv/y+70dORm84A9UVOlvuGtZU5F5a6eVyc9ce1ghh5B3pn0Gs0GBHqcb88ZnWUE
-	10/z/DrERnxWRJgZmKtEZkKH+ZSur0OSpGN7nkq/RmazT6yep5OrLPFFw/e5CLUb
-	3m84BSkGkeq+iZfJKEdsxJZ8F/HDxq853WekJU9SJeMp0d4Wx9fkNwpjOFe8yjqc
-	avvI2hkIpMMHXVd1So+RJrjY8I/HFwO4OMiryEq2NlJIzbcdUTN1c0ngGOqR4Tsg
-	RL1ErZufY87JziKGMgSeqJtpzvMKznJksCJhuCbur35v09Z32ExWRilIx8TVAOOo
-	l/jacfUdJ4Delw0mbOIjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1792578753; x=1792585953; bh=ao5wRKo7Aqr2EOL/H5SIhA5Ty28X4+tjsBN
-	b2koDVLk=; b=MJgpk6uJafFLWK+gdZFyqyUsQlaTa0QnI5DJA10VyKNB22nHFra
-	FCVPB1W5dtzlKcYdCaqTT1mGosqtro480kUsJZ4fE2Cqrvb6aY+R4FqwUGyt/4YP
-	5zAId++Y9wjMTdoo9wvvEly+Q0rKCIlcvHLA2uOChmP+Q2oKwFzVjGOQWKDuh39K
-	l79BstO0BIbb1Ox39I/b3tAmSFrx0h13hUSLE+09IJXgzPX13mf736vQoUfvGGNy
-	GE5J5qVCClgh2KPifcJjL7R1zHuJ3KtqWuo8ht2OVeJIPshiE8VlVVGnpixbP7eG
-	8rxOd08G379YiLLAThVa+KLSI3KijqVc0kg==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=sign d=shutemov.name a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1792578753; d=shutemov.name;
-	mf=PGtpcmlsbEBzaHV0ZW1vdi5uYW1lPg==;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm3:rsa-sha256:r81yDuvY/vlwaHMg8pKp/UtTXAYPiKrgOCmfUkdWRvtXjtU
-	I9fH4clM3Fe2F7mpOjno3MKRRDKy9bsm1THnUCOC7BQ6gukoDZMnyGLp2wleoePK
-	3vRhGv6sosVjmmiaYxq3EBthw2pj7n01RG23B1u8PuL2g28/hbKYxispXxNSfeo0
-	Zv7G3LbYsmnB2JKg7cx6ieLnN/WcndG+KGejx5j/O0Fdtw8xfmStocO8RGNwmFej
-	jBpRMNBA34M+yGz1dvdsnl0bRsEuJIAc3IkQ0iN0xVPNb4yIPBDT8UZyBFSegtCZ
-	AH8oh2krqtdcFFE+VtLFnUds61XYs8k6yx0C7aA==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-disposition,content-type,date,feedback-id,from,
-	in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:0iGKCJbhYU0ofzk6Npyui0jqKKmOu7ZXpeh+imW0Z1s=:mab1Cv011TVDlRjbYop1LecBevJxhFR5JHPAi3J8Mhw=;
-X-ME-Sender: <xms:vpTYai6ULHsFAu42jW498bwd6049ted7JtILPFXi9lYmxuk0U19jfw>
-    <xme:vpTYaqaVGYsnsptwmD18SuFUP5TxvXfRTN1sbL5CArHrpNy4O5v802sS64-OZ1Tay
-    5ccGLinrpbuzWeUPKFRG-bCOfFtGlXyTXjSprJj_3cI7jKIyY62qpQ>
-X-ME-Received: <xmr:vpTYasQC0CIXhNEIntXyHcCwBuEQ77dfXpDNjz57lXnVj3m3qeOqzYJosBQ>
-X-ME-Proxy-Cause: dmFkZTGnhrpawq32AodX1hclL8yoAmMZid0tB7OC5CEHocuh1cymOwJ/kQUvMQgGQBVneN
-    fn8CQg4VkpXP52MPdVTziNPQNJDcNRcCzcA2XkYozz8Co44DHKT0iojkng6oG6FZQPyeVf
-    BuHkztAvyKVOK70eSgjlNcQ1X5qCyAOLTNgi6uIWn6ugxfP2yjp+nn9XkM2Ob0etdtfI3U
-    /4ZOai2ZCpmogZJNmjgkqW6zBtui9lcmEVCtmyVG7Yd8+BYH3ldpiGfPnNBWVht3EVBxTI
-    EKI7KJaz5TnGAEPE+KhN1SRn4FjeHqOcRrH3Q4kQjYUDRgF0j+C1/wppVqIurAQNRysQbo
-    lKkElDR2XjPF92/HwwcyPJZ/uI/Xk+ipBJbxpFveG9enESiTU6AmhcIhg/5iSX03xjrA5A
-    RoWHvF4GHpHXuGVZWO0l/UwDjFLYUExUnyRls5uJpu3ktDw/ly6xGie836xV0vmAOcqQGY
-    mm0w1xkMTvxiCoygk7Kml4uouDmn7PsmDgirrXZ/c0ClvHpK0aLmB/OEGUenwYQ4r3ATvb
-    AAhCvG44jf7L3OFZ8+/vBcKB9aA6MoZvBGnS3D34OPsU+YQxTSsYJHOgnSr9RzRaJjrKS5
-    kHN5SATJPs13eTr/9agmzcnG0slflFQFjvRlUlMDEEPW455Am3Cpy8evEslA
-X-ME-Proxy: <xmx:vpTYalXRMx9bq4HmCdqouGvgUZwGcn382lcgaR4ziZNzWin0NwO20w>
-    <xmx:vpTYahqIw7KlUNZuVtCzIk1pS660kj_MXpzeYUE-8UGfH6eF6MXz4Q>
-    <xmx:vpTYanUJH2RoHRR8kiduC9R8zG4MZfWSxarW7upO46YsDq9z5T_-Mw>
-    <xmx:vpTYapQy5KclNGY066cOMw7t9255muo-ve4Pyrqulm6Qsqvjmz3D7w>
-    <xmx:wZTYav7C_aV_drMgYUoF5iXAbmfYqY0GnH0Hxy8k-fmPodU3tviYko3->
-Feedback-ID: ie3994620:Fastmail
+  by phl-compute-02.internal (MEProxy); Wed, 21 Oct 2026 06:34:22 -0400
+X-ME-Sender: <xms:KZXYap-B1gdwwfApnDe96FzTIIISa4dxNma1SHwQYQt7uxZ-8Bm4zg>
+    <xme:KZXYasM08_wpU5LkFYXYcHzCfKFMAJ7WQjGe1RwK56Fxo4os8ZSMEYTD9u5Rg-G88
+    SUSAOl2YAaSd7hWMd7uA4AmvoElK-byuHUVADO6n7byjAqbdPAJMs_E>
+X-ME-Received: <xmr:KZXYah3QKPZaSBtpYFY5KUUNTd1z2Bw39JqeYr7iYE525tekLHR7lzTE4vw>
+X-ME-Proxy-Cause: dmFkZTFQXCLhgM1j6Uol95BZ6fYJcKahMN2vJQx7GcVvkHkXemtg13fKccd2t/ueNjJM1R
+    NZNDI4Gh+RldPGTb1bpmZejKabh2JDquyTm3SXJ/srOft1k+cpto6f5YKWNDAQFuIJ7ff+
+    qQWH455eQHrQF1lsqcQvBmZn4xyB4v+poc3u9QnXsJ6qRNPfCIDd8yV7fbhTXFgHvUzpsG
+    SKDwbvYu1qlrIXYGiSHoxu9xNNJCEKRtsPuXelRWYRCEtvWD3CgaRD2lyuw0MMIHgO5r9+
+    QhijrY6ZhmtL9PQUWhLSIkqUi6Czh066+c2VSkDAhDkzsmqHcpvQWWqmoVAuBOSEen2IEG
+    I8DRubFCdnteHWcaCg7+ep2GmCV6a1jAygX7y9kBDDwtZox33QjkNDf89pfnetl5BFphag
+    esd6Iv+6E+XFUU5a7adlxlJKyfbeOFFX8yHu6SdKamKUNU0hZgDKHalndbHtyq3+LEb62x
+    Y8+X5Z7xk48UcOEHntNXppBaLzSeoD1M5mm9z8M/gu8fpTer3OE62V2mnqdvYet/j4fOhA
+    VzOL8tdmklPthIG33/HCqULQeuHbqhaerqtfo4myPpP3qcxdkvVfKyzASxaTnikmGpx311
+    0eSuN4plxEUs3JjUKHKxQQBKybUwylz4/QGqFAXTXmK4Rg3qtoNFogtp1WfQ
+X-ME-Proxy: <xmx:KZXYajo2jWD3StK13oUCJD-bGc_sbcHvNfCY5u_rCvtEr6pN-GzdKA>
+    <xmx:KZXYaps7lW8jncdcwOVb7MM6OQebOJocgq2ri3h-HpT1YcojzLb_Ew>
+    <xmx:KZXYamJdmolfEHZ4N9B2f3rCJtpC50qh_FSaAdT57208BdoilWH_-Q>
+    <xmx:KZXYan3cSU_fMf1efCGtB0ld1kj8lPH2JDBXx9fkIFzQzBz41yU-gg>
+    <xmx:KZXYatoOQIPIzFknbNSPFv0KFOSG5WppE3zZ9dp0DwcE0SJbICUTLnjA>
+Feedback-ID: i10464835:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 21 Oct 2026 06:32:30 -0400 (EDT)
-Date: Wed, 21 Oct 2026 11:32:29 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
+ 21 Oct 2026 06:34:16 -0400 (EDT)
+Date: Wed, 21 Oct 2026 11:34:15 +0100
+From: Kiryl Shutsemau <kas@kernel.org>
 To: Zenghui Yu <zenghui.yu@linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"David Hildenbrand (Arm)" <david@kernel.org>, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Baolin Wang <baolin.wang@linux.alibaba.com>, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Muhammad Usama Anjum <usama.anjum@arm.com>, Usama Arif <usama.arif@linux.dev>, 
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, "David Hildenbrand (Arm)" <david@kernel.org>, 
+	"Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Usama Arif <usama.arif@linux.dev>, 
 	"Nico Pache (Red Hat)" <nico.pache@linux.dev>, Zi Yan <ziy@nvidia.com>, Barry Song <baohua@kernel.org>, 
 	Dev Jain <dev.jain@arm.com>, Hugh Dickins <hughd@google.com>, 
 	Lance Yang <lance.yang@linux.dev>, "Liam R. Howlett" <liam@infradead.org>, 
@@ -120,12 +83,13 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
 	"Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
 	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, kernel-team@meta.com
-Subject: Re: [PATCH v6 02/19] selftests/mm: skip collapse_compound_extreme()
- where the PMD is too large
-Message-ID: <atiQmWnz8zx2AKI7@thinkstation>
+Subject: Re: [PATCH v6 16/19] selftests/mm: add khugepaged race harness
+Message-ID: <atiU94VjdEsWzdBr@thinkstation>
 References: <20260919002451.496763-1-kirill@shutemov.name>
- <20260919002451.496763-3-kirill@shutemov.name>
- <5862cddb-a78f-419f-a5a1-15e16a422bf5@linux.dev>
+ <20260919002451.496763-17-kirill@shutemov.name>
+ <85b3725a-6dde-4a57-b303-4ae2b53b60a5@linux.dev>
+ <6e3c298f-9b93-43b2-840d-65c5ffa3bc36@arm.com>
+ <248431ea-4bbf-4a48-a80e-72287ffbae22@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -135,49 +99,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5862cddb-a78f-419f-a5a1-15e16a422bf5@linux.dev>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <248431ea-4bbf-4a48-a80e-72287ffbae22@linux.dev>
 
-On Thu, Oct 08, 2026 at 07:52:18PM +0800, Zenghui Yu wrote:
-> Hi Kiryl,
+On Thu, Oct 08, 2026 at 10:23:22PM +0800, Zenghui Yu wrote:
+> On 10/8/26 4:18 PM, Muhammad Usama Anjum wrote:
 > 
-> On 9/19/26 8:24 AM, Kiryl Shutsemau wrote:
-> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> > On 08/10/2026 8:30 am, Zenghui Yu wrote:
+> > > On 9/19/26 8:24 AM, Kiryl Shutsemau wrote:
+> > >
+> > > > +		} else {	/* madvise */
+> > > > +			while (now_ms() < end_ms && !corrupted) {
+> > > > +				for (i = 0; i < nr_shared_areas; i++) {
+> > > > +					madvise(region + i * hpage_pmd_size,
+> > > > +						hpage_pmd_size, MADV_COLLAPSE);
+> > >
+> > > I got the following error when compiling it:
+> > >
+> > > khugepaged_race.c: In function ‘main’:
+> > > khugepaged_race.c:506:23: error: ‘MADV_COLLAPSE’ undeclared (first use in this function); did you mean ‘MADV_COLD’?
+> > >   506 |       hpage_pmd_size, MADV_COLLAPSE);
+> > >       |                       ^~~~~~~~~~~~~
+> > >       |                       MADV_COLD
+> > > khugepaged_race.c:506:23: note: each undeclared identifier is reported only once for each function it appears in
+> > > make: *** [../lib.mk:225: /data/code/mm/tools/testing/selftests/mm/khugepaged_race] Error 1
 > > 
-> > collapse_compound_extreme() builds a PTE table full of distinct PTE-mapped
-> > compound pages by cycling hpage_pmd_nr fault-time THPs through mremap.  It
-> > therefore needs hpage_pmd_nr PMD-order allocations in a row.  That is fine
-> > at a 2M PMD (4K base pages) or a 32M one (16K).  A 512M PMD -- arm64 with
-> > 64K base pages -- makes each of those an order-13 allocation, which the
-> > allocator cannot reliably hand out even once, let alone 8192 times.
+> > I've just tested with and without make headers on linux-next
+> > which has this patch and I've not received such error.
 > > 
-> > The failure is not a quiet one: the case calls ksft_exit_fail_msg(), so the
-> > whole binary stops and every case after it is lost.
-> > 
-> > Skip the case where the PMD is larger than 32M.  The MADV_COLLAPSE cases
-> > still cover PMD-order collapse on those configurations, and 4K and 16K
-> > PMDs are unaffected.
+> > If your system headers are old, running make headers can help.
 > 
-> collapse_compound_extreme() failed on an arm64 virtual machines with 16k
-> pages.  The VM has 8GB of memory.  Not sure if this is the same issue that
-> this patch attempts to address.
+> I forgot to mention that this can be fixed like fd5295afae91.
 
-It is the same issue.
-
-Memory usage for the test case, assuming 64-bit page table entries:
-
-         4K pages:  512 x   2M =  1G
-        16K pages: 2048 x  32M = 64G
-        64K pages: 8192 x 512M =  4T
-
-64G is a lot, but I don't think we want to give up on this test case
-on 16k machines completely.
-
-Maybe we should treat a failure to allocate a huge page here as a skip,
-not a fail? And remove the PMD-size gating.
-
-Zenghui, do you want to experiment with this?
+Right. Would you like to send the fix?
 
 -- 
   Kiryl Shutsemau / Kirill A. Shutemov
