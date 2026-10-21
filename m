@@ -1,121 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792577685;
-	b=Rqs4Z1HYhljGZvHl1kSdEZ6hYEBF+sWkW69pzTxTbI97xoZmMowTNeiLBw4HosmsOLwG
-	 EDbKni3TFfIUAq6WugDq4oDMI5Q0hY8N0XMqxjnQGjSOdebdt/M00b2woN7mVu6ePSxMN
-	 mjvYDRbgSg9QBOH/6XropUyBvqXc8XbgsVLxiAAyC4X2nuRU4GvBeFx0Jk1tv/YC9xnRa
-	 x08+VOTHd3y5qsOZx/ypFi4PbWUN09bNwBkNBF8D1a5wyexp6+vVIR3mQrdJFOeIyiVEK
-	 HQ/KppJwWmR0+4cr1Q5qCFGdE43/31fBhngLKO/YVF/WwBYX0N19zEIDZAWvHjMIfRQ==
+	t=1792577840;
+	b=xKhRMBhfWm3poErQdAOjTF+5JfuSfVUVRpTZmrq1+JMrA5Wqu/7mrnISt4kka//BhbdH
+	 2ELdqkrTxoUWnFAZP5We+z7SKRLZc+vk500lVrGJTRqsSf0725mGUuL18TCRmJgbeiTxQ
+	 T8Y/6aKjaeSRU9ItZoMbdn6A+PYf7RrSjHdjQrDg79dg4h4CtcA9KSqRAPC2owiujgzTt
+	 p5M06bNUYfthROv3WF2DsfrwtMRlJn1+mVuGYyO5ZeYnVaFvjSk7nVPROvdEuBz+E9SD/
+	 subr09hlDW4W6/blGkIjWlRyt1inFlPKAk7KFdwOmf6JuVqfvd/ypGZWBwyBg7bQeIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792577685;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=LaMrw0UGiuCnM59eNBEdevbmBZ2o/qyOQGg9zp+WMrM=;
-	b=S3IEKP1kb3T01yorRPjSizhMvgx2VS5Egk6OJtUWFqXMUaxU6/rgXME8bfrjU/kBwiu6
-	 p49+hSu6VrUrP+dr3gdsKAjEt2bBGMP6x2uSoFh371U3fSkhbwSDBb7Y3KoBa1tfbsCkn
-	 rRCnK+o1IqnOlcIs9y2OxC7N5gpy6On6MvK25ECZB/v7GmWvHcbG7tuYhiVrQzOxDyUWH
-	 nqvcjSPqUy/umNCUXtB3iteAbhBDfuXno2ekLCHhv8+6gXC8ykrxdth6cPTA+8VwaRdiT
-	 8Bleo/yKP0B/IrYgbKVFYE7UhIP+XLB6poXp+3xdT1ocwowdg7tD+8MbSdY/7sHzyqg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792577840;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
+	bh=Kt6vo4l51awhjqq3I2zXUePIjWcvYUZXxZ9RPkgXQb4=;
+	b=uULjwi3jUUuDA7nU5ZJMuhRIVQBxwT7yu031IM6sxEG9XGTLAvTgpjy6UjFCR/oQ2JMH
+	 GxQfpwnUv9WdY52GDoxN/388ZEteX5bWeKuyO0zt49fJnTq2q0TwEV9ZteJm/iWTbV9xU
+	 OWNyz02p1N01dZ4eXNt6gR+mb8UV2BKbvPLNtb6chg28kVyCHtK3BAuBULzAiEXc5FD9r
+	 oTM+OgsK4W0OLxmpiliXnmbY/rAFg2pvUPqIVWtwuCeOAkro5Orf8XN/xFqroyvKriZfn
+	 kp01fjop4fHOObWeUCpf4zSq3ekS1w2DHG34eq7/m/0ksH8DNc+n2HLv3eIDQCsN91w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TpixcOcI;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ejAaswOC;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ua7oM8fD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0AD606A320
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 10:14:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F0AD606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964D3606A319;
+	Wed, 21 Oct 2026 10:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TpixcOcI;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ejAaswOC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792577684;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LaMrw0UGiuCnM59eNBEdevbmBZ2o/qyOQGg9zp+WMrM=;
-	b=TpixcOcIc+qEmEDiQ0FLw+S+qtpggT3NqH0RIXuzC8XKV/f9YbgNr3ahFBE7fZ+GDb2aiM
-	MJ8Tu/HXmRNLwBcF7ACuwPEadiowaMAmgZJ/st10hS9I3uA3Zr1aRYCnlG+rN/XIpsvwi5
-	q+58VurQ3uB5vhiS4wynDKnC3HLs7QE=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-136-eKPGlRHpMOmITeB6HHsOvg-1; Wed, 21 Oct 2026 06:14:36 -0400
-X-MC-Unique: eKPGlRHpMOmITeB6HHsOvg-1
-X-Mimecast-MFC-AGG-ID: eKPGlRHpMOmITeB6HHsOvg_1792577676
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-48e1ad3cb66so282117f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 03:14:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1792577675; x=1793182475; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LaMrw0UGiuCnM59eNBEdevbmBZ2o/qyOQGg9zp+WMrM=;
-        b=ejAaswOCkEY3H7XHMvAZgqt+YFWmaA2GRwEj+PstMfsG6vKej3aW9Mc3rh9fAEWYEb
-         pg2JMCkAPE82ExN+TJKKaHRxxf+3uJRlOUFuBXopOsn1ymGHjdcQSgg7go7o2YFOI6B4
-         5Be9HrAfZ3MzPuPr3CKBSUBj4Qny302DJ5AAyOadKTYOToXS4tMVBUuwRD052omVT7J0
-         MD1H88CSDfGxOULqFgCsw8YcCa6ZqWGbgLZXdbr5TZ9li9gphxupZM28UZ3UNFe32CXU
-         Z6TO6k+AYwCq6yZ5V00AlM8z7dgnk6dWXWcf/KseDK8hkirdiHm+lEyFTAzhw2dNekkJ
-         r8Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792577675; x=1793182475;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LaMrw0UGiuCnM59eNBEdevbmBZ2o/qyOQGg9zp+WMrM=;
-        b=NJ8OMIz4e3Pe6fMru0C+vzx1J0huEE6o8nqJbAN2CZTDnJ2AZVFSJYxd62Xqa2gHEZ
-         Th+sqQHYBDOhFErI3A3+OT0hZqAwYJUzk5qMvXryd+rpdEZ8uKJvTELuKXimDD4FGuog
-         GvcYxYrR19vzkVu3xE6jWm7GXfb+nyIi1p93xXeJ9fiOND08lsueLKlcqLQYAYXh2HvQ
-         Xrv9C/yy667oUPIEJfUZQzu9BNbKd6VKgDh4SwrBuOLEg6byfm1UcGpP9zuvuojXucwC
-         tkULrWYY+DKoLFg3hdL3nuqe6dW30Pf/rTh6filAiS/O9d0ydiaQCn3vfHBsAthoYC/C
-         nYpw==
-X-Forwarded-Encrypted: i=1; AKwUvByi0Wc4CeIiyPrpSS1pBvr9g60cVMKe083RlAH+QVeMEVqSHsQYSe7patRbz+w0c0dz/prsxqZvuChEcWhIQmM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKFXYRGuUfOedKwvk2Bcm44VeqGE3JhxlrPorpY6pjPQS6U+ijx
-	OA6TDS+rj7W0ohsxU56cZfswyVpAJYzNMfphawBSoFxUqboZU/B7nXR9cP2OnRgEXqz3CJNdy61
-	D0/p59BNWukJfHpRzgXO6/83ELjPB7XImtoDQetnbhl5UkcT5vz2slEm3ugwlx3sezfiM7A==
-X-Gm-Gg: AYBFou0sCPno2VM4OmbcDn5yK939YWVOzZ99s4Z+AswD1NB/qCzV16nrCmHq/Ts+5EW
-	1NuWBjMecc3Z8vAv/GjTTgqWv8fS/n/hcR9403tz5BsrnQAY8kmohbOz1vzlBpzzSNbkPVy9DA7
-	jInIafO4VNo8YvWgfbCLFbtWYPvGvAFWApsUbUkqYI88YbhEwVoLJBAXchsBt+1rQwaGExdPsbS
-	uPIwWAZz0mqzGK76bjN7gJTivER6skF1BxH1PeYgL3lvsxyyri731QmxOd9wmyHhof2xVEJptCi
-	n3woOrsvOU5DKes+NxCaz6+8qCc06a/T/ztpoO/FGEuWRarKRYkwIrrgYJHX0OCzfIC5qWkalDL
-	s2BqSnA==
-X-Received: by 2002:a05:6000:4213:b0:488:8931:b1b2 with SMTP id ffacd0b85a97d-48e264bd584mr3754101f8f.28.1792577675510;
-        Wed, 21 Oct 2026 03:14:35 -0700 (PDT)
-X-Received: by 2002:a05:6000:4213:b0:488:8931:b1b2 with SMTP id ffacd0b85a97d-48e264bd584mr3754032f8f.28.1792577675060;
-        Wed, 21 Oct 2026 03:14:35 -0700 (PDT)
-Received: from sgarzare-redhat ([193.207.178.135])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e254f0bc2sm4512724f8f.1.2026.10.21.03.14.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 03:14:34 -0700 (PDT)
-Date: Wed, 21 Oct 2026 12:14:30 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@meta.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eric Dumazet <edumazet@kernel.org>, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com, 
-	Bobby Eshleman <bobbyeshleman@gmail.com>
-Subject: Re: [PATCH net-next v4 3/7] vsock: pass the netns to
- ->has_remote_cid()
-Message-ID: <atiQfOneKTIyhGHX@sgarzare-redhat>
-References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
- <20261020-vsock-guest-ns-v4-3-047527cfccfc@meta.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ua7oM8fD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3D61F000C9;
+	Wed, 21 Oct 2026 10:17:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792577840;
+	bh=Kt6vo4l51awhjqq3I2zXUePIjWcvYUZXxZ9RPkgXQb4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=Ua7oM8fD2K3FMaghCaMTRd9ndhsONSrpG8JtFqKFRH7QkzZYnNXA15wEiVNRYcXDG
+	 /ZrdAvrUX1dtBFeRhboJ87hFl8Lzk2RKkMo+bHOPOlIZFAoDm3FUFDBYiwNrXbzbiD
+	 o5PqeyWU4ITidvmG4Pin2asL7HiPpAK5VRQp/lO2O9dQyJoeQua+dNbvzRJ8i0iXzw
+	 17K2T8spJdWwbNdFEGl73ma9zW0rwXlPoPHGDVLapHBQ+CXK8paHtxovCMXXD2WYB6
+	 AqVhpfGAghihIMoozPSch1/UiP0HFf8Obo5ajBAhbOVNVfIEePRmHOtVNCEyx3kiUa
+	 Jdp96m58i4GhA==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org,  rppt@kernel.org,  shuah@kernel.org,
+  akpm@linux-foundation.org,  linux-mm@kvack.org,  vipinsh@google.com,
+  linux-kernel@vger.kernel.org,  dmatlack@google.com,
+  kexec@lists.infradead.org,  pratyush@kernel.org,  graf@amazon.com
+Subject: Re: [PATCH v2 2/2] selftests: liveupdate: Add tests for
+ LIVEUPDATE_SESSION_FREEZE
+In-Reply-To: <20261020144710.4154339-3-pasha.tatashin@soleen.com> (Pasha
+	Tatashin's message of "Tue, 20 Oct 2026 10:47:04 -0400")
+References: <20261020144710.4154339-1-pasha.tatashin@soleen.com>
+	<20261020144710.4154339-3-pasha.tatashin@soleen.com>
+Date: Wed, 21 Oct 2026 12:17:16 +0200
+Message-ID: <2vxzzew7fjdf.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -125,26 +63,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20261020-vsock-guest-ns-v4-3-047527cfccfc@meta.com>
+Content-Type: text/plain
 
-On Tue, Oct 20, 2026 at 06:15:06PM -0700, Bobby Eshleman wrote:
->The transports only use the socket to find its network namespace. Pass
->the namespace instead, so that a later patch can ask whether a CID is
->taken in a namespace without necessarily having a socket on hand. This
->will help with avoiding CID collisions when devices move between
->namespaces.
+On Tue, Oct 20 2026, Pasha Tatashin wrote:
+
+> Provide luo_session_freeze() in the liveupdate test library and add unit
+> tests in liveupdate.c covering the LIVEUPDATE_SESSION_FREEZE ioctl. The
+> tests verify that non-zero reserved bits are rejected with -EINVAL, an
+> outgoing session with preserved files can be frozen early, freezing an
+> already frozen session returns -EBUSY, and attempting to preserve an
+> additional file descriptor into a frozen session fails with -EBUSY.
 >
->No functional change.
+> Also freeze the test session early in luo_kexec_simple.c to exercise
+> LIVEUPDATE_SESSION_FREEZE across a kexec reboot, and verify that
+> attempting to freeze a retrieved incoming session returns -EINVAL.
 >
->Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
->---
-> drivers/vhost/vsock.c            | 4 +---
-> include/net/af_vsock.h           | 2 +-
-> net/vmw_vsock/af_vsock.c         | 6 ++++--
-> net/vmw_vsock/virtio_transport.c | 2 +-
-> 4 files changed, 7 insertions(+), 7 deletions(-)
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
 
+[...]
+
+-- 
+Regards,
+Pratyush Yadav
