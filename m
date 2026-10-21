@@ -1,102 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.170
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792576336;
-	b=CzwENhG+GFLBS+4Qpi+U14n7AHVGWm5jM1zYOmG100L3woNIADW1BsYVUj4e8p73qt4V
-	 cdPxCGXeBCViQ+ogeHiPL7Y+JP9hxE/i+KYrRorD6n/m6AxvSnCJ1Q3c/S2mDvAcblhMJ
-	 EX5Y3u3G9/wYCrmfazspMzmO50ikrwNez0hj9JEeP0eemF3KrYU1GtsyLBOWjRN6QrVPM
-	 yjxFGS10BZ364jbpRWad7jjuVtVb6fmdWnq/8ZktqnocbwJhJIDSGPOa1Ield8GJ21K+s
-	 EYfWTPEnWhKN2DttY7P+AmKgLbGwg7XTpIRDVkNgkFXzbK9beUvLmr41hjh3MmqysVw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792576336;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=Jvum9vHoM5in6HyLcCxwho4XKzNHKiwHpUd+vconds8=;
-	b=bA1CDW5oGi12BJzCrDfY5xBRg8sOkMYxaFlPYT1dFE9CRMHr8B3YkuxDF2NyDAAlrIdb
-	 RXjR4o0VCU1vQEI8Na3Nsl6mYmp4BW+fNL9ccBvHT8wP4MePyUcZB6ioxDM5oMzJ2AFec
-	 SkTnMAEuzNvhX2tGMGTmbsObL5lQDoYe9c9wnzFgrPvT7hrQHBp/OvvXXRy7miqkDwS+V
-	 V/x6yuxEjKYTNZBsk5da5fR5VoDVlh+NAh4WpOk0WiuRoIo6y32huAODfM1mDn5X+9T9u
-	 GSKGgXY015Iu3kI6s9DGFuQc+4VXrwlPjz9VAv2KFIuyoGPJU9+ys7dfhPXfWnCRrRQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bairaktaris.de;
-	spf=pass smtp.mailfrom=bairaktaris.de;
-	dkim=pass header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=bFdHvy08;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.170
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773F9606A31E
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 09:52:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 773F9606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792576541;
+	b=vaQc/p5L/cNvN28q5CAKJkCxkyn7d5OYebjC9GZj2G6uvBQ7L72I7zbdzA5Ds8y9sTnr
+	 DP5YelTx9ceWYK3M15QIHT5uRC+9u6s21dq/Nw/adTBSIs26PLe4ZqL/5zIGwvVWbc0Yr
+	 pNq48pRbRAm3Enb5NECcxbqT1NEG8DDuWdzD/2WO3SBBGLy7NSEvLW4+8HxZuSTt2Ovkl
+	 NXp9lCb0Aa4peCooFed3ovk3I94kCK6mIEn4uYqC9cT6tdAATtxNZ5j9x0/LFyKj+ydTo
+	 0rUmy2WHkqPmPRPOGu2uAYQH0bYgdOWSTF8USi62qESRCW4UtoHSFWz9eQ6d7RKfomg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792576541;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:From:To:Cc:References:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=4Mli0UH0SB8rO3o4eqV3Cy0WqV8a6zJJQW200aYwx/8=;
+	b=Tdliid6791vlTb1AOsTBXXYbYTGz86X0VZdVDQlq74VhsSrNsG9bZ2HmTiJEPy0amT6a
+	 dY4llUPRhEyOrXZAHNLcVb7k1avWCX2TrZtxOS7gfTFI3+maPKxSPaFl39WSqgEMdpdBu
+	 UPAsF0JBWYsw5JBvyi8hrVDkuNvdTlqYQHRDUpvm5NaHuusKbO/0+4MdhEl/3tJNqXgQ0
+	 VWMNBdK06Vy63M/MdLyPe45V03Q/1P9TfBgPwQx7p1YQgVTkEdt1icjvx8VhcvKgPo2/w
+	 5OdQdWhjfe106tMOP1ptVgliKgQtobn62zsP06BfzkEY0wgmQTdkzMn4G8OC1RDmkQg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=blEYdzpN;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C2B606A320;
+	Wed, 21 Oct 2026 09:55:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95C2B606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=bFdHvy08
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-8b118bea471so3057667b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 02:52:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792576335; cv=none;
-        d=google.com; s=arc-20260327;
-        b=beMPLY54SJ5ZoERjL7SSaTWf1db6Ulo5ff8IAD7Z3II/llIq09qxyds/44VnBwJcfu
-         6DPvziXvpnHrSVpjVwpVn1H5G2Si/3tQ4gKmvuc6G87TjoDYzJ0uVjwLrhfdNP8SUsRJ
-         sYlM0X6QL7+TgVyJahe7L7nd9ADuV8tvEd06sKf8l6TMulb5doUMK+c0/bzOaNpGSQjP
-         1ErSj0AD//EEH+sUGvaCiNqW65ZuiFGGFkNa6nMAGcnAqGGiVTv2teauI1HHZVy9pKZn
-         50RzfiGQU2mQy4J7+VjkYPcGO2jttXCS14eSWeARklr69vXJrBvPwjf2fjviAFOWOFPM
-         aomA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=Jvum9vHoM5in6HyLcCxwho4XKzNHKiwHpUd+vconds8=;
-        fh=/KzDjv/1OlZJMsTZg83nfoyl5jScD90McBpf95V7zP0=;
-        b=FiNfvSW0N54gelUTWlzsgpon3l8SU8tdvEwfRWgGEYc3mhq3USXM/+IF8PRLabIm3P
-         BZ8MNmEl/wz15qoXlomQ5c910OmW2m2octKrU0tI6uA+aihUIIJmr46fiZbbBButfmkL
-         /ZkdgAr2qzJmmdkNIcJ/0nQ0mNyLVkiCGkso1NJhRuv6FCxZxGmBpbDUgiSg8ALewJ0W
-         5IxifmNTPzCbP5ewJ36rwThKDJNXIIORgE0TWC9kNB378/wHhUuq0cDB32FGoiEbJlQE
-         eqx75WNWLgiUGiV5znRcTZ/M9iHQTn57vz/4NmnIBZLCRhe9OMGxoBOez3iw1VW9vJYO
-         Zl8Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1792576335; x=1793181135; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Jvum9vHoM5in6HyLcCxwho4XKzNHKiwHpUd+vconds8=;
-        b=bFdHvy08P5qTB+4vC3oEIRt/xKMa3RZ5dVG7cKzf2O6NwQgBTnKsoJAKPu00bMNLqX
-         eDayHVV406lPN30nVfCqvhQsSPAMYRUsDDx/Yfu8By1+D71d6Xs2cYpYqDcNkhyuHWUr
-         QTWvxkxavzRGSjvR+pobQhyGFRotU54L/noqHEgJG1EYXju2pcCE8w8XGdtXZI2ELx9v
-         SVqkS0saCjWz8uxENbAQB1dqqIeVrCEl2mUE6lr9c9g0G/CctkGjy2YUYbz4fdva9jH/
-         pl//1WVpvsuc7nb8TCyOSdjeFtNpUQvQTmZDg0TltV5F/bFhVAWImJnglr0HUmpi+9PZ
-         a7Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792576335; x=1793181135;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Jvum9vHoM5in6HyLcCxwho4XKzNHKiwHpUd+vconds8=;
-        b=M3q1MA8Z/ujxdC9k0HzbPwjvrtJXKAAsZ5/Rc1gLeNLkxz4xwjfsx02mLT9JUn1W86
-         boDqMW0moDZF01myoReFW7ImE44LqJWfQWRtY6iLEqaJEbyuyu5gKQh4E1OLBWhC09hf
-         K82MdHJgVnRpVB95NsfncUpxo2jXmfBjI+8DwJmDe8PltnTFMsEQ3DA89wjFp9VndKUz
-         BsEOKXqIn9N0X6WT7XJxuc4625CYAtmJbw2xHIKazBcC7f7F6ZiHwkPTXDUCNF3hF1Tw
-         FUfCqGE9jahY75y5XpLrcSbaRkS0vEey2cct3nF36fd9u+6cCkXbjaDCWfgH4Z3yEcgY
-         nofQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw9MHkqzTBPNWu2eCjsoQpbzPxUR+vEN+vlQ3kJua5uL1je5gv9VpdTGlBcnZxXgfsTL5u50irXfGowzXO0oBw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLjKHc6RoU9cqNcxcOd/VoVvZFbWlEdIK6SxAtwNrTyRQi4S8Ua
-	qrKmHP3H9lPhaknu9cXBSqjH0hV17gkEnyyghFLYeNaBCawJWfLnftXZMNXHdb7kxEM5+/RCNpc
-	ZU9awoqXr8stzNyqgg28IgZzAbEY+ZD89rnKZf794
-X-Gm-Gg: AYBFou16DC3A+Ox5OtHDtjlC1sKbkoIcARniGY0hFKuZJ/SXLe4Z02MwRTtJoM2L8Ed
-	vRzd7VYJ2+iPOTsDL6F7XqPCLDrmo3P8R2UDnExNezxrZzA4ubgLsA7u0pmKzMgwME2dgssbgfZ
-	1s2UsFQgpihuSbjtbQrG1T2F8yfYHqJ727Toy0gSL0ywfmc9hgYfqPDYH/u1BMX/PoGU4E+2ICs
-	e/KXWNeAmNzYmQefpUinppyiD7zzFgVyGg3xGcJcq9gz/ymKPMtBLrptjEcXns93sEx6eCoDf0N
-	z5kzTIbPpa4Gh4uy87JpjQv7QQYLoxHn87EcCrYNMvo10krk9g37AVblkTNg2LmspCD6uKzwNch
-	DkAgWgJx8H89713BfWe5bOEVes4k/OLVGuRrr+dpVgkzjWH1jT8zg9MlquN68dSKc7MBChT+jKh
-	DxIKvH6jjQomHChR2NaSGbgjFB+BH5Aev4hvVcbxyjwG78SEQ+XVPQB3vQWbzd2WnGfuNlzaqsC
-	5v5zJ2fX9ySzStH2jviwKKD94DPAPOA++pjUX91GB8RNCFwsvIibSjXrRSmx6bFM/M+rjYHec0g
-	RJyEK8EidxrVW2junKtoOHUakBBEbZcG8mQlmHeu6pB+nLabbds79T4JJ+ZHBMQsHZPxRlQ=
-X-Received: by 2002:a05:690c:e653:b0:8a9:da0d:1d94 with SMTP id
- 00721157ae682-8b133fbd819mr5144797b3.68.1792576335378; Wed, 21 Oct 2026
- 02:52:15 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=blEYdzpN
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7726616F8;
+	Wed, 21 Oct 2026 02:55:35 -0700 (PDT)
+Received: from [10.2.212.8] (e134344.arm.com [10.2.212.8])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E2B633F7D8;
+	Wed, 21 Oct 2026 02:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1792576538; bh=wbnN4z5LNLrXS3cpKqUEOH8EhmtbipCX/3WFSWcg/eI=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=blEYdzpNY/DCLg+JmsLk7UU9P/IoJk8TwJBbGj8+hcBj8NHsZVPGLnZ3zumi2Yjfs
+	 ndja7HIRn9f/zywVGuKlvIKamJOZvU8XoO/+E2yld6CSkF3bQEy+JktND2Htq8qHIL
+	 iuwH3+zyCPWbTaeXRBKkvRKlzSfj28DSkiGQ3ZmY=
+Message-ID: <9cccea63-397c-4913-95bc-eed38f0ebd66@arm.com>
+Date: Wed, 21 Oct 2026 10:55:35 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,33 +53,110 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <atQmpPlfT_DSd9dq@chamomile> <20261018025319.1445197-1-julius@bairaktaris.de>
- <athy9HUHBPfCBKu6@strlen.de>
-In-Reply-To: <athy9HUHBPfCBKu6@strlen.de>
-From: Julius Bairaktaris <julius@bairaktaris.de>
-Date: Wed, 21 Oct 2026 09:51:40 +0000
-X-Gm-Features: AclHuK-pk6kFTufeu4wo_iVpKWwHjnmfy3Rd4sMx-D_9eg3gvY73gs9VtcFkc1Y
-Message-ID: <CAC1t37KrcwpXz5BDrPMpKBdpwJMon=WQWs8sbxDh-FrGFkAaMQ@mail.gmail.com>
-Subject: Re: [PATCH nf-next 2/3] netfilter: flowtable: update upper device
- stats in the fast path
-To: Florian Westphal <fw@strlen.de>
-Cc: pablo@netfilter.org, netfilter-devel@vger.kernel.org, phil@nwl.cc, 
-	coreteam@netfilter.org, netdev@vger.kernel.org, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	andrew+netdev@lunn.ch, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, nbd@nbd.name
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/2] selftests/resctrl: Implement cl_flush() and sb()
+ for aarch64
+From: Ben Horgan <ben.horgan@arm.com>
+To: Richard Cheng <icheng@nvidia.com>, tony.luck@intel.com,
+ reinette.chatre@intel.com, x86@kernel.org, shuah@kernel.org,
+ fenghuay@nvidia.com
+Cc: Dave.Martin@arm.com, james.morse@arm.com, babu.moger@amd.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kaihengf@nvidia.com, kobak@nvidia.com, newtonl@nvidia.com,
+ kristinc@nvidia.com
+References: <20261012074729.40042-1-icheng@nvidia.com>
+ <20261012074729.40042-2-icheng@nvidia.com>
+ <847af89d-7b79-44b4-8273-243dfb51ef5e@arm.com>
+Content-Language: en-US
+In-Reply-To: <847af89d-7b79-44b4-8273-243dfb51ef5e@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Am Mi., 21. Okt. 2026 um 08:08 Uhr schrieb Florian Westphal <fw@strlen.de>:
-> Conceptually, with flowtable, offloaded packets bypass that device entirely
-> and therefore should not touch stats of the virtual device.  At least
-> thats how I'd expect it to behave.
+Hi Richard,
 
-Fair point. Users could just as well report that as a bug.
+On 20/10/2026 17:30, Ben Horgan wrote:
+> Hi Richard,
+> 
+> Thanks for having a look at the arm64 side of the resctrl selftests. That hasn't had much love but
+> it would be good to have them working properly.
+> 
+> On 12/10/2026 08:47, Richard Cheng wrote:
+>> cl_flush() and sb() compile to empty functions on aarch64, making
+>> mem_flush() a silent no-op and leaving CMT/CAT tests operating on
+>> unflushed state.
+>>
+>> Add "dsb sy" for sb(), ARM requires a DSB whose access type covers both
+>> loads and stores.
+> 
+> I guess this is referring to the synchronization required for the cache maintenance instruction but
+> that's not what you are using in this patch.
+> 
+>>
+>> For cl_flush(), "dc civac" only reaches the Point of Coherency, on
+>> ARM MPAM systems the SLC lies past the PoC and may be a NOP on coherent
+>> platforms. Instead, dirty each cacheline with a store so that
+>> mem_flush's full-buffer sweep evicts lines from the SLC via LRU
+>> pressure.
+>>
+>> Signed-off-by: Richard Cheng <icheng@nvidia.com>
+>> ---
+>>  tools/testing/selftests/resctrl/fill_buf.c | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+>> index b9fa7968cd6e..eae0262fe265 100644
+>> --- a/tools/testing/selftests/resctrl/fill_buf.c
+>> +++ b/tools/testing/selftests/resctrl/fill_buf.c
+>> @@ -27,6 +27,9 @@ static void sb(void)
+>>  #if defined(__i386) || defined(__x86_64)
+>>  	asm volatile("sfence\n\t"
+>>  		     : : : "memory");
+>> +#elif defined(__aarch64__)
+>> +	asm volatile("dsb sy\n\t"
+>> +		     : : : "memory");
+>>  #endif
+>>  }
+>>  
+>> @@ -35,6 +38,14 @@ static void cl_flush(void *p)
+>>  #if defined(__i386) || defined(__x86_64)
+>>  	asm volatile("clflush (%0)\n\t"
+>>  		     : : "r"(p) : "memory");
+>> +#elif defined(__aarch64__)
+>> +	/*
+>> +	 * Dirty the cache line with a store. As mem_flush() sweeps
+>> +	 * the full test buffer (sized larger than the SLC), cache pressure
+>> +	 * evicts lines from the SLC via LRU replacement.
+>> +	 */
+>> +	asm volatile("strb wzr, [%0]\n\t"
+>> +		     : : "r"(p) : "memory");
+>>  #endif
 
-Pablo, I have a v2 ready if you still want it. Otherwise I'm fine with
-dropping the series until the expected behaviour is clear.
+One more thing that occurred to me is that if this is intended to evict all existing data in the
+cache then it would require that the cache portions bitmap for the control group (PARTID) in use is
+set to all 1s. E.g. 'L3:0=0xffff'. Otherwise, you may not affect the whole cache. This likely means
+that the cl_flush() function isn't the right abstraction for MPAM and the test needs a bit of
+restructuring to get this to fit in elegantly. Similarly, to the limbo handler in resctrl you could
+then check the llc_occupancy() to check it's under a "low enough" threshold.
 
-And thanks for giving your thoughts, Pablo and Florian!
+Thanks,
 
-Julius
+Ben
+
+> 
+> Isn't this cl_flush() used without changing the resctrl control and monitor group (PARTID/PMG)?
+> Hence, I expect you are ending up making the cache full of data associated with the identifiers that
+> the benchmark runs with. Is that the case?
+> 
+> I'm also unclear how this the cat_test will detect any performance differences on arm/MPAM as the
+> perf events would need to specific to the system level cache implementation.
+> 
+> Thanks,
+> 
+> Ben
+> 
+> 
+> 
+>>  }
+>>  
+> 
+
