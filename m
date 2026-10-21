@@ -1,121 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792602248;
-	b=YlAjk48p1ouUkuO6Qm1yKjTNkIk3/qtbBFpUD0ji9etwRpZDmvjBq4OqfrUWOKi3ehoU
-	 xdWi4TJm/F3ayYZO45gpwusdEwDc9trvpm+Orst+hh6N9kE2hgwfKumG+8UI9xZ9QlBLr
-	 GmEuLavY6x+Z/HAisqgdCRHybILj0raUFfyEkMX0yZrT0pikLjjpoqWB77CwfEfR8Cv4s
-	 4jN5qCENFCMjoOPtEa1InpM45o/hdHVBPmd42qhoGXYlBNqCfPD4HMZwE4k/3ye1BeAXl
-	 kW8x69kdDJPAjugtzLSAKn2phCz+fr+I8mTDPBsMaZgrFakU7sZY/OSBrU09KWQD52A==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792602248;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.174
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792604520;
+	b=rrYcamvRQkUpMsXSsYTEelLHMB76A+FHv5+nkg1BV3XgZC13G2shkkbhq0uVdg96cn14
+	 MyU3CiItdzNYquckMlEmyGD8Gn6qNu3FTlpK6e7FQKXhWDsfKubCzojsM4sJfbUuskqO+
+	 zV3ejoYVR+qd/oBtpwir+Psu0pGQeRFa9koDVBd1ifdrkruXPhB7RTbCQi715i22hYDiI
+	 R9oukBbeB5f7LSr5sPaMmeZwgvSRqxiRyN+fyk8uyB2tulvNyUPRpmXHEgp6lKQcJIl13
+	 1I8ZsDg6ZXBmkbS7L/COb8qZlmd3YHxpAoGKE9ajPYQAAxHN1sMqzVx2+mmnkPzgn3A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792604520;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Qofc/C3ulxNQPffK4mS2418qbHbzkMfHjhjhVdFF1AY=;
-	b=Q2ihtchdseNMZPOGb8cFGUYzjkFs9qQl3jibJUPz+p9sqPR9bX0hn1G4PVf6ZD22pEhp
-	 od/fbqIx3wFVpodS6/mxEy7U4XGJPKwqMcMvmZfOxO38USl3Vc2ps1CxezK8l8TEfxFiA
-	 585LU/SiHL09j7bMC8be32Znryc01iIxA/VtfDDaUc6pFUz1sXbjDX8AE4mHDb1QwA+Fe
-	 YRiea3e01aq/QaC4bA7VRBpmvHw3ZKqXO1inta3ZKsFsCkCF7MFIPNHgt9b6CNVRWVR4/
-	 BTqCWvFFETt6CpqnDEHkPKwu+9qsyucHdfPmrxE4u6bFf90pJB940E11s6oMQsaQ3CQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=IU2w1HmK;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Ev15ecuS;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=WbPfC3xf415pZLIbAAwGQiH8uDkz76+8nE49QrFCe/Q=;
+	b=HbSekZmJO4jYxTrgVsyD40LN04SmxykVPIR/6PPhg2VV9xE4tdKJDW98yCRx+HeZ5/fX
+	 On9rqfVxVcY29jgVPJehgjQjo1LL672BFLoP405Fv2SeKTrtnWmMOIy/ZEzUzy8SiVF1C
+	 ZTwNioK+O3Z/Lhg6hacSAOjISDNJ2coZffVAaBVR4p+gHMMg94qDWwKB27adKbWI1xZwh
+	 nLXjFh0eKBGzgo6UWbEdaDUFnlwuui/Ha7c1i6gMtqDOXYWIz56A7Di5yBrZdsdW7shac
+	 D7PEEv3gM/OisJqatQcglNFg4NsuAnpDTdn5I1lmZY9gkHumY8e5rGvaXVj1LbKUnvg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GvAbxW8U;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.174
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED3B606A320
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 17:04:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BED3B606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B50E606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 17:42:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B50E606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=IU2w1HmK;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Ev15ecuS
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792602246;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qofc/C3ulxNQPffK4mS2418qbHbzkMfHjhjhVdFF1AY=;
-	b=IU2w1HmK2HI5Po45pvt67nBdMmzEbGpuEe6WIYFT9XcWOlsRZv9XvEux6dS6jGgtBFaOXm
-	MQOP4JI/XnbRIACkli9joGAJiPc4vPAeyqFgtpTBwqo4NjZpFhJJ8cqC/Z7yCXeePeh4dX
-	JjA8A/TpeJuzCm6yOIR7yooylxx06NE=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-656-00B9rg5NNDCujvDY1K1cXA-1; Wed, 21 Oct 2026 17:04:05 +0000
-X-MC-Unique: 00B9rg5NNDCujvDY1K1cXA-1
-X-Mimecast-MFC-AGG-ID: 00B9rg5NNDCujvDY1K1cXA_1792602244
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-48dff112136so677637f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 10:04:05 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GvAbxW8U
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cc4b1f7e8f4so407693a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 10:42:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792604520; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QfgZM1kkmhNug2Ft4b0MzgeITRdUmPa5f50CvY7PYV13HyRcGjaOHhvGHYEXIHIX7b
+         ilmPihxiMa6IEcPaYURCYc+1wAXd48Bbr7sjFE2rNaCN+4yTEwQgKHXsruhqEv1X6WQ8
+         DAY4PIWiBbnnx7IAXRM6Lnnuxlrk9B9KyQJVU9g84ufVmb/BaaJfw+6kkEtAlb7/Dys7
+         gaS8vnIb48JOqGOMKuTiqgvsRGNsfKDKBQNSFoqsvrUVCRQeiJmX9tXCngC09Z6hbDFV
+         v3zdFQFD2c9fEiPdrU/gdm61RbH7AyHeAZyIGuVtBGxdQWT5KiZoo06H4YkSSjZHqCBd
+         RyRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WbPfC3xf415pZLIbAAwGQiH8uDkz76+8nE49QrFCe/Q=;
+        fh=t3Z6Fq/3KrizCo8Bfusnd9GKTChGzt5si7b2donNGXU=;
+        b=bbQ8B7/WA0lpGRvXbiy4jIPIFbYBs0FKUq/AjardJJ9k2LAASxKNC4tB6huw53StLJ
+         27hVHFh9TbCZrP+6IIB8VEc0okdOyZuB9aWaHpL2JO7NonnmhiZmImxRMKJovRuXARmC
+         hjy6k1/yEGnqK/hv9VJJq6vuFb4kuA3wyTjy9yHQo1bE++Mnk+M2pggAoKPh7+wFIgi9
+         M9RYhHdtTXmdXcsjr/579R3Z36Bp4tVDXrjlfPm8iIMzm2zDjL1dp5qLi3x/f+bXB5NG
+         sUSKkpvD0FkJELMmrGZuJDzLROWOUameMKogUJH1kXt2FnI+3wWFv1u20otKNA426cCA
+         FEKA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1792602244; x=1793207044; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1792604520; x=1793209320; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Qofc/C3ulxNQPffK4mS2418qbHbzkMfHjhjhVdFF1AY=;
-        b=Ev15ecuSDBQIpfU30tw3kVnKUZ8wKo2z/jxmtv40Shaw6vlWGs+ABOt5h4N+oafAiA
-         Rx82URgokALhp1LQFylA7CzLn+J1arpjVuKF2HPy4d0RQhNsuIO5SSfg1VpP8FrlJJrY
-         tFRHaVx2ZaKGnowmNQfcJm8VtPjTjdatvneJQXHkuq0+QlMQvh5XPmC/AHkG0+nXBulH
-         Yi5R0iqHnBNz6NV7MpJMnj1Dcf7vBs884YrC8ULNUImBDhcuMp7RfnPtpedCE3II3LZP
-         R2cdOFOWGTEJ0CCbOsr4d4C0LZZWXO45nv1L2J4RMjV8zRZHQiqGCgHs1t7myGzueOTf
-         +YZQ==
+        bh=WbPfC3xf415pZLIbAAwGQiH8uDkz76+8nE49QrFCe/Q=;
+        b=GvAbxW8UXtF+sRo9OMu4rbiOvh/ZUVz/YIvz0PscUkArcnkkSoHXjx90jpuxuMfVj+
+         gvaXcIpvK/50UG3alQJ1Dp+2g0gdqjTAy5dm37l86wOcXJrukh709bQOUA+kBnTyfJi8
+         qZtNnpMZsfDYyI6WIxZvhBlQZbClbbWY0qrp2jd4DE/n1oA/K0IeB0+YkDIMXH+Xuj5T
+         HPw+nY/bs4Z0G4Xi/rxh0plLMUug5NI98mr/u7qmV3y0SN6sva4+Duq9Bz9yHmm7Kk1d
+         jtodxu+rnwuW5xb6SJB7Sri91KGj7ab04wNmbK0F7wLB2SDE9nwKdnQabNsQv+yJvzy9
+         J5qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792602244; x=1793207044;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1792604520; x=1793209320;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Qofc/C3ulxNQPffK4mS2418qbHbzkMfHjhjhVdFF1AY=;
-        b=bQW2lyyI1a1G+Ve35p3PVI1h30XQsI3ALialDOVdLiBKg1aT7RlYfjGw1ETyMnxAyY
-         ucbKuVuTfdFjVmqyyse2hT+SH9ox+bswqffTK4gTKGh7h1rzKkl0ZxyjoU+zeu1Kv1PH
-         xTIv77S1Msy6+2FpLANNn/PKo04tFDzCZF+IrySJ2S0aw9h/MVxW0VmqyCczEQhzNX5+
-         wEiDFVroQVHmv+e465ZkvQLEMVKOnuA5Z2WWNiuiprQ9HF4tXr22HR+B2aBexbz25A4H
-         Hck+GXhNmEQgGPfCVWgrazMDQEAUGevG7YlDFhVIMddI3JJgORzW4+9aw6AhbdUlVjPq
-         JspQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxbhd/u5XZH6YS2Tqy+uqSf/24N4/Ig88DKeF26RwYQnIivw4rM8RJPxr1Ms90wGHUpL4CUbIOC5u9swaojsLs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLEktdA6AQeD0UzZ6dtr4xfpzJUVDaVWPAN197iQZDbjgeendEn
-	gWwgi7y5NWJ8kqEdbggvNs2/gzYXQ3Kh0OuS/6NQiUIajKn7X132RBh+2IcJWjUYnBeb9MQmwl5
-	7JA6XbkqPAs9EnYdNqTQWxx5gTQcw+bbu5MZk/bx2BgB95OUBnFP8qtkfZtwjd2MsQXjz2A==
-X-Gm-Gg: AYBFou2obMSZ9KPnd7yr1K9e9n+BFpPL5hrs18OrB6bOqEnFlds7ndmj9X/eH+7TM0B
-	nMbihpv0a4TrKne820mXH0NXyFst+NOgVboJrFLM9jB2LcXZKMgGZ7CnfEeOzMymdWmF+Df2rzI
-	YHWPqrCwz6sX+3Z9IVGg+hW0zjt2BWb5+HEoI1Pfh52y780G10s27ahuwbn1I6gm/m5la9l6Vp8
-	n489B3AcuLJXoE5C37I90YRQ8kU5qYQL23x1KTjGuFVVKHocbvVpZWkii3gbPc2KUO5pIC/oZHZ
-	9QxCyA/yDB2nIN7GIwb/igtsgoL1OEIZz9p3xjEBCUnVrshnE5TXXxQjAzTbS6XAyUWbGQjLO4W
-	iVBZpxQ==
-X-Received: by 2002:a05:600c:c16e:b0:49f:cbf3:551c with SMTP id 5b1f17b1804b1-4a1fdd2aa12mr60550795e9.12.1792602244020;
-        Wed, 21 Oct 2026 10:04:04 -0700 (PDT)
-X-Received: by 2002:a05:600c:c16e:b0:49f:cbf3:551c with SMTP id 5b1f17b1804b1-4a1fdd2aa12mr60550105e9.12.1792602243508;
-        Wed, 21 Oct 2026 10:04:03 -0700 (PDT)
-Received: from sgarzare-redhat ([193.207.143.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a203a350b0sm6349215e9.9.2026.10.21.10.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 10:04:02 -0700 (PDT)
-Date: Wed, 21 Oct 2026 19:03:42 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@meta.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eric Dumazet <edumazet@kernel.org>, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com, 
-	Bobby Eshleman <bobbyeshleman@gmail.com>
-Subject: Re: [PATCH net-next v4 5/7] vsock/virtio: support guest device
- network namespace
-Message-ID: <atjvzn-zPYJjLAhy@sgarzare-redhat>
-References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
- <20261020-vsock-guest-ns-v4-5-047527cfccfc@meta.com>
+        bh=WbPfC3xf415pZLIbAAwGQiH8uDkz76+8nE49QrFCe/Q=;
+        b=dgH1RnoG/zvkUWDBVqFtBmBq+iaz/sfQG25S+fvv/uWWT+RUD2vPCYtqdJ/HebRsgG
+         6mI4nxF7zLHIIn+RPizxG6ctEb34aOznGFsJJIEhNndmLPhQIdpnwQAmKXYbS6DOvWAX
+         iZOYsQBvQqXQ6RwJJRmlzpcuhFv8GhGs/ZAH5qPjqwrSf23xiJw/rkOQFMMGrQlWiMUG
+         61MX5RhYdIW85N4rFn+Vp0rUa5K/uIi3d0QDJjbIk7/Ddj/nUGhepEn8zWRhrJaIAisx
+         pjfZNzmJCfCUPAbJxCgqrBIoIhaCxEyYFtJbM5hmErWKM87kPQoYRoAW5ijhTRXrbskt
+         7Kww==
+X-Forwarded-Encrypted: i=1; AKwUvBwpZjrfJu6L3+fLM1Jf6/CAKDzthtvinkUnUhFUMNrZ3nWzv2z1Zpt5Np/5lZhNX6gx5y8nZ7BkWZcmPy+RK8Y=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKLaS6PjPidE0fA8eh/TUhHJNsJDgrJ2Zi0P1N03xndtcSePglL
+	b1mZxJpUb07/LbOhNYklwz+KfW0y/GN8YhKu1sGmldUBYLIV78XgDZhn5XUW3kYKw8CycZxZufz
+	ZQta5B3UNrOnVVRf6cSgoPPoGmITlLxU=
+X-Gm-Gg: AYBFou2ZO2Io3L8hlsXEAKBQ4kSmTEekiZRF9RFYGbQ8tUFb3PZbtJvhWnZsOFW4WME
+	AFaNpawRoMwJAok3qWJM9qKWx0kXcbIU7WdAed4jPF1/c0Ll3R6N0DF+VDYxxWdYBXkvq1JEXA4
+	U+jPgGBTXCR0Mcbv519XQxD1yFxwAR3j4FvhHu0OuAOLYDDBFvj0nxvZXsgUPUuIU9XDydbB85w
+	Xvdvg89JIwC0WJYRuvW5s5CpV6yKFD6jw8LNqsp/qBeseOBFnhqhRZ4zDNdLwjOQYcBI9Wxhg6D
+	YJ8/M6KraGVI10sf2qJmacRfK3XgyTSqp5VZJCqtXz5CUI0dI7xcK/ujmY6JhB5tvsYhYl5Sut5
+	rUHaWr60c2PKPbPepjorMQfA9RhfaZDK97eZT0m67WTth4VIRjSMQD6jpIaY39FMxGv4VQ17hir
+	uYtJmQxwwZSdACRvu8mQ==
+X-Received: by 2002:a17:90b:258c:b0:3ab:2ad1:f10a with SMTP id
+ 98e67ed59e1d1-3ad86ca45acmr2134722a91.0.1792604519654; Wed, 21 Oct 2026
+ 10:41:59 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -125,205 +105,124 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20261020-vsock-guest-ns-v4-5-047527cfccfc@meta.com>
+References: <20261019153628.15912-1-leon.hwang@linux.dev> <20261019153628.15912-6-leon.hwang@linux.dev>
+ <CAEf4Bzbr46UkiE1sbb+Zwcs0S1ejpKmtTGjNCAkWD-J6FRcPGQ@mail.gmail.com> <d4fc4fcd-3691-4122-8b3e-a75447956255@linux.dev>
+In-Reply-To: <d4fc4fcd-3691-4122-8b3e-a75447956255@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 21 Oct 2026 10:41:43 -0700
+X-Gm-Features: AclHuK8euPDDrPLcZ78w73yg4ZplR7FA7dJCpvboj2MZKSFYtjKIdYl4Mw0-_4w
+Message-ID: <CAEf4BzY13x1skc6XSnXGyoLwaFoOtENGokUX7XHiakEyw+eQEw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/6] libbpf: Add bpf_link_create_log API
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>, 
+	Martin Karsten <mkarsten@uwaterloo.ca>, Masashi Honma <masashi.honma@gmail.com>, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 20, 2026 at 06:15:08PM -0700, Bobby Eshleman wrote:
->virtio-vsock did not have namespace support (the device was always
->accessible to any global namespace).
+On Wed, Oct 21, 2026 at 8:27=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
->Make the virtio-vsock device assignable to a namespace and initialize it
->to init_net. Because virtio-vsock and init_net are both hardcoded to
->global mode, nothing changes until the assign command is issued.
+> On 2026/10/21 07:25, Andrii Nakryiko wrote:
+> > On Mon, Oct 19, 2026 at 8:37=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
 >
->An assign can land while virtio_transport_rx_work() is draining a
->batch, so the assigned namespace is re-read per packet rather than once
->per batch. Matching the rest of the batch against the namespace the
->device has left would reset connections that belong to the new one.
+> [...]
 >
->When a device is assigned to a namespace, every already established
->vsock socket that is no longer able to reach the device is forcibly
->closed. For that reason, adding new sockets to the connected table must
->be performed atomically with regards to namespace assignment. This
->ensures that when the socket is added to the connected table that it
->actually passes the new reachability conditions set by ns assignment. If
->it wins the race to the table and does NOT pass the reachability tests,
->then it will be reset. This is the purpose of the new helper
->'vsock_maybe_set_connected()'.
+> >> --- a/tools/lib/bpf/bpf.h
+> >> +++ b/tools/lib/bpf/bpf.h
+> >> @@ -484,6 +484,11 @@ LIBBPF_API int bpf_link_create(int prog_fd, int t=
+arget_fd,
+> >>                                enum bpf_attach_type attach_type,
+> >>                                const struct bpf_link_create_opts *opts=
+);
+> >>
+> >> +LIBBPF_API int bpf_link_create_log(int prog_fd, int target_fd,
+> >> +                                  enum bpf_attach_type attach_type,
+> >> +                                  const struct bpf_link_create_opts *=
+opts,
+> >> +                                  struct bpf_log_opts *log_opts);
+> >
+> > Leon,
+> >
+> > how about instead of adding this new API, we try to repurpose
+> > bpf_link_create_opts' iter_info to be used as log opts? we have this
+> > right now:
+> >
+> > union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
+> > struct bpf_link_create_opts {
+> >         size_t sz; /* size of this struct for forward/backward compatib=
+ility */
+> >         __u32 flags;
+> >         union bpf_iter_link_info *iter_info;
+> >         __u32 iter_info_len;
+> >         __u32 target_btf_id;
+> >         union {
+> >
+> >
+> > that iter_info/iter_info_len is a bit of a legacy before we had
+> > per-attach type union, what if we add iter section into the union,
+> > wrap iter_info with union and put log_opts there, mark iter_info
+> > deprecated or something.
+> >
+> > I'm not sure anyone is actually using iter_info (I didn't find any
+> > uses in Meta code base, for instance), but we can detect its use by
+> > checking iter_info_len: if it's non-zero, then iter_info must be a
+> > real bpf_iter_link_info. so we should be able to detect this just
+> > fine, the only downside is that you can't use log_opts and iter_info
+> > simultaneously, but I think that's fine: you can update your code to
+> > use new iter.info fields instead, if you need log_opts + iter_info.
+> >
+> > WDYT?
+> >
 >
->Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
->---
->Changes in v4:
->- Drop packets in virtio_transport_send_pkt() from a netns that cannot
->  reach the device, e.g. shutdown() or credit updates on a swept socket
->  (Sashiko)
+> IIUC, the struct bpf_link_create_opts will be changed to
 >
->Changes in v3:
->- Re-read the assigned netns per packet in virtio_transport_rx_work()
->  rather than once per batch, so a mid-batch assign cannot reset the new
->  namespace's connections (Sashiko)
->- Drop the NULL netns reset in virtio_transport_rx_work(), the assigned
->  netns is now pinned
->- Drop the .reset op and the virtio_transport_reset{,_no_sock}() exports,
->  the sweep no longer sends a RST (Sashiko)
+> struct bpf_link_create_opts {
+>         size_t sz; /* size of this struct for forward/backward compatibil=
+ity */
+>         __u32 flags;
+>         union {
+>                 union bpf_iter_link_info *iter_info;
+>                 struct bpf_log_opts *log_opts;
+>         };
+>         __u32 iter_info_len;
+>         __u32 target_btf_id;
+>         union {
+>                 /* ... */
+>                 struct {
+>                         union bpf_iter_link_info *info;
+>                         __u32 len;
+>                 } iter;
+>         };
+> };
 >
->Changes in v2:
->- Export virtio_transport_reset(), wire it to the new .reset op (Stefano)
->- netns_assign_allow is now a bool (Stefano)
->- Pass NULL, not &init_net, in virtio_transport_rx_work(), and
->  comment why (Stefano)
->- Drop the if (net) guard around put_net() (Stefano)
->- Drop the comments at the vsock_maybe_set_connected() call sites,
->  the commit msg seems sufficient
->---
-> net/vmw_vsock/virtio_transport.c        | 32 +++++++++++++++++++++++++++-----
-> net/vmw_vsock/virtio_transport_common.c | 18 +++++++++++++-----
-> 2 files changed, 40 insertions(+), 10 deletions(-)
+> Thereafter, iter.info is preferred against iter_info. And to keep
+> backward compatibility, iter_info is used only when iter_info_len is
+> set. But iter_info_len and iter.len are not allowed to be set at the
+> same time.
 >
->diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
->index eced6929405d..06df82b130cf 100644
->--- a/net/vmw_vsock/virtio_transport.c
->+++ b/net/vmw_vsock/virtio_transport.c
->@@ -256,6 +256,15 @@ virtio_transport_send_pkt(struct sk_buff *skb, struct net *net)
-> 		goto out_rcu;
-> 	}
+> With this change, the bpf_link_create_log API can be dropped.
 >
->+	/* A socket reset by an assign can still send credit updates from
->+	 * recvmsg() and setsockopt(SO_RCVLOWAT).
->+	 */
->+	if (!vsock_g2h_net_reachable(net)) {
->+		kfree_skb(skb);
->+		len = -ENETUNREACH;
->+		goto out_rcu;
->+	}
->+
-> 	/* If send_pkt_queue is empty, we can safely bypass this queue
-> 	 * because packet order is maintained and (try) to put the packet
-> 	 * on the virtqueue using virtio_transport_send_skb_fast_path.
->@@ -542,7 +551,7 @@ static bool virtio_transport_msgzerocopy_allow(void)
->
-> bool virtio_transport_stream_allow(struct vsock_sock *vsk, u32 cid, u32 port)
-> {
->-	return vsock_net_mode_global(vsk);
->+	return vsock_g2h_net_reachable(sock_net(sk_vsock(vsk)));
-> }
->
-> static bool virtio_transport_seqpacket_allow(struct vsock_sock *vsk,
->@@ -587,6 +596,7 @@ static struct virtio_transport virtio_transport = {
-> 		.seqpacket_has_data       = virtio_transport_seqpacket_has_data,
->
-> 		.msgzerocopy_allow        = virtio_transport_msgzerocopy_allow,
->+		.netns_assign_allow       = true,
->
-> 		.notify_poll_in           = virtio_transport_notify_poll_in,
-> 		.notify_poll_out          = virtio_transport_notify_poll_out,
->@@ -616,7 +626,7 @@ virtio_transport_seqpacket_allow(struct vsock_sock *vsk, u32 remote_cid)
-> 	struct virtio_vsock *vsock;
-> 	bool seqpacket_allow;
->
->-	if (!vsock_net_mode_global(vsk))
->+	if (!vsock_g2h_net_reachable(sock_net(sk_vsock(vsk))))
-> 		return false;
->
-> 	seqpacket_allow = false;
->@@ -633,7 +643,12 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> {
-> 	struct virtio_vsock *vsock =
-> 		container_of(work, struct virtio_vsock, rx_work);
->+	struct virtio_transport *t = &virtio_transport;
->+	netns_tracker ns_tracker;
-> 	struct virtqueue *vq;
->+	struct net *net;
->+
->+	net = vsock_g2h_net_get(&ns_tracker);
->
-> 	mutex_lock(&vsock->rx_lock);
->
->@@ -682,10 +697,15 @@ static void virtio_transport_rx_work(struct work_struct *work)
->
-> 			virtio_transport_deliver_tap_pkt(skb);
->
->-			/* Force virtio-transport into global mode since it
->-			 * does not yet support local-mode namespacing.
->+			/* Only grab a reference if the net changes underneath
->+			 * us.
-> 			 */
->-			virtio_transport_recv_pkt(&virtio_transport, skb, NULL);
->+			if (unlikely(!vsock_g2h_net_eq(net))) {
->+				put_net_track(net, &ns_tracker);
->+				net = vsock_g2h_net_get(&ns_tracker);
->+			}
->+
->+			virtio_transport_recv_pkt(t, skb, net);
-> 		}
-> 	} while (!virtqueue_enable_cb(vq));
->
->@@ -694,6 +714,8 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> 		virtio_vsock_rx_fill(vsock);
-> out_nofill:
-> 	mutex_unlock(&vsock->rx_lock);
->+
->+	put_net_track(net, &ns_tracker);
-> }
->
-> static int virtio_vsock_vqs_init(struct virtio_vsock *vsock)
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index 1e762a480df4..0c864db2bc65 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -1478,9 +1478,13 @@ virtio_transport_recv_connecting(struct sock *sk,
->
-> 	switch (le16_to_cpu(hdr->op)) {
-> 	case VIRTIO_VSOCK_OP_RESPONSE:
->-		sk->sk_state = TCP_ESTABLISHED;
->+		if (!vsock_maybe_set_connected(vsk)) {
->+			skerr = ECONNRESET;
->+			err = -ENETUNREACH;
->+			goto destroy;
->+		}
->+
-> 		sk->sk_socket->state = SS_CONNECTED;
->-		vsock_insert_connected(vsk);
-> 		sk->sk_state_change(sk);
-> 		break;
-> 	case VIRTIO_VSOCK_OP_INVALID:
->@@ -1736,8 +1740,6 @@ virtio_transport_recv_listen(struct sock *sk, struct sk_buff *skb,
->
-> 	lock_sock_nested(child, SINGLE_DEPTH_NESTING);
->
->-	child->sk_state = TCP_ESTABLISHED;
->-
-> 	vchild = vsock_sk(child);
-> 	vsock_addr_init(&vchild->local_addr, le64_to_cpu(hdr->dst_cid),
-> 			le32_to_cpu(hdr->dst_port));
->@@ -1758,7 +1760,13 @@ virtio_transport_recv_listen(struct sock *sk, struct sk_buff *skb,
-> 	if (virtio_transport_space_update(child, skb))
-> 		child->sk_write_space(child);
->
->-	vsock_insert_connected(vchild);
->+	if (!vsock_maybe_set_connected(vchild)) {
->+		release_sock(child);
->+		virtio_transport_reset_no_sock(t, skb, sock_net(sk));
+> I'd like to drop the bpf_link_create_log API first, then add iter.info
+> in the series of log support for iter link_create in the future.
 
-We might be facing the same issue here that we were discussing a few 
-days ago in another patch.
+up to you, but I don't see the problem of dropping bpf_link_create_log
+API and moving iter.info in the same series
 
-I mean, is it correct to send the reset to `sock_net(sk)`?
-Or should we use the one of the sender?
-
-Thanks,
-Stefano
-
->+		sock_put(child);
->+		return -ENETUNREACH;
->+	}
->+
-> 	vsock_enqueue_accept(sk, child);
-> 	virtio_transport_send_response(vchild, skb);
 >
+> Thanks,
+> Leon
 >
->-- 
->2.53.0-Meta
->
-
