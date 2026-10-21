@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792568807;
-	b=rRD9Rk6+MvJP4qywnbQwwmm6CieGQ/3N7Ja0VI5UQi0F8VB+68gEEwZBAeEaJpdGGa9l
-	 doPQtdS9E+m0ZKKWzUT9zp6ti2Oq4ZG+GJq0KhQZPnuzWJWUTno0Z0iiTufy95yUtqYPv
-	 0pgq8hjB8Se2GvyLZUYjwlCZ51bGezp0iYmFAotRKM8BMeyXZlzBlhjbGIHcUul3wHcwD
-	 gCy+foXHn81ujMn96lEBWRWlNz2BoLNkGvX3w2KTywUWzo/7PS9PXyZZxUtX6mAQUNuBS
-	 m8HKz5g4RuJVBJZ8syfR8MuxxD39VLGBD8RfDeA8TOqOxInTMkxZDddfWlaqFjzoXDg==
+	t=1792568808;
+	b=X7cy+CGux0cRBfQBhMIEKpfdeKDcv0d8BnWrFsoWhwkI+MJbCUJCKBsv27zHyNeVTN5G
+	 jwv41ZKgSZP4c/hov8JEqSwv97PKBOgRcrerwBx+063otUgWADGJIy1CWx9CnZgGmdTSg
+	 9xLRCqSzjtukK0g7w2LqhI6GJyQQ8x3ohzfWgUbIn/iQoUrANPKJzAFgXf+cl41ND3C5s
+	 2NzgXTsS6cS+jsqgtgk75P7hd8dgp50em6v/APzm9tGC4QNmKQXhfx21wAkwgqD0hcsFj
+	 Nrj1EqYWiC90cNsXJUbxlrdmBa8NCGaf3km6qOeMc6zjdOA5rZtgYic/Li+t83faniA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792568807;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792568808;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=4wOKV3uTe7ngC/bk4GM0xP88MMKFpUGtrZfXCCbot38=;
-	b=TllsyXRLTvT4eTiZWDxuZSSiU9txyn98pAF0/JjAdkbhfFQY1g0qCe7OvYfSTHa3aGNt
-	 1OCbNlGIMZmWyIv3UdK0g3Abn5++F5I5nysKBv0t2pEdZVs9OYWxp5/V8Ka3P9uHx0txf
-	 9okwujer/vYCLZxBGPBqFZcW0sm9fmOgjgDHL7LtQajG0UKkFwkFuMRvrpzigX7Eg3E/Y
-	 zxrrxrz0aBWrB39cfZ6ucFbvV8fmcNdRn1cFHFBdjAQT0unlMGhEg5ZL/6r+vVHbM+BBq
-	 G/WmTeMX3Wx4zI7O3ufzaDXEE1xStMdUnoYAmu+UtrhjOWimsA0KZV/bQeEj/CnByGg==
+	bh=L2u42M2YsC+ehb89rqqgYHL67FTxygXb/r1It10ecj0=;
+	b=T91+Fu1rNsv+5uf2fd+Fl8YGl7UZruEuo0fWRXszsTCkUqGXXqV09Ie/g7d7h++viHqa
+	 sMgRCT310AEKmT2XZA3nU5RQf2Lh3MeBIa5G/tCtrLmk5p5Jw0TUExTF9p4IkN4gSeDr+
+	 3Ic5AO8rQT8uaVdW35d4TC7mqFHKWuAuDa349GsyIcxPZTuo6oXllpdPi8TgR5cQDVNa2
+	 BG/056aZK7GTFWNfY4LDnB6a7pwVZ2NzfXhxF7/QhtpwXCGJkyoejYRrUSmrOXUfLgSNI
+	 UaoLPGYcInCr9UhVNLXMj5vwJOaqNOZ1DCFkJ6f5Sa14xImoRjxnkLxqxTh+MvXpfgQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oCLpk7rW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ze8Y3R+a;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACACC606A319;
-	Wed, 21 Oct 2026 07:46:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88D2606A31D;
+	Wed, 21 Oct 2026 07:46:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oCLpk7rW
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ze8Y3R+a
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792568806;
-	b=wr21dBf0da0tubCLnWdhV+HPXBDu0i7NNMlbjHzabi92gnBwQSLcemzAPGGKELodFW8H
-	 JC2Mhj4BYEu904pWA5ceNvfYbhvMj9rBbgDXH+Nk41RWeMi7Jl4iYiN94w3V9BjDEL3/h
-	 07d4NPdelc4ajYIluXQIna9IjULqq2tS8gdyILsm3lKK4ACQUZFd82FY/53qiyXhH2tD0
-	 B/0z/18j+ZjvTmW2dSbz3amPWPiq279yIgAiEO+N2tLt0JhTCrm3SFJAMqTZbDDMUQ7s0
-	 1reURfSdQ8bvaJZB03Rxo8g1iNwjvu8yy0iKfH6QET5QAX12IrQ7/QSYdYoAJn63lDA==
+	t=1792568807;
+	b=GpVjM3Isj6FrDqmsP0/3bvPdVrji3B1sFuujXIz/4TdEs4HVSmVFPk2L3LrV8OEJh12r
+	 8YpgFXeXf21vbhhag1NPefHIHgLFaxW5CDoRgPPfP2VpE5Ens//jAxpkZuwyKHQSk2kds
+	 7gaM8AQBqobeCUGaIRF0IusWaLvChZz6B/bS8Pc5LZuyrUViiJtcqElSM/cSiMfC9pGeX
+	 jit6cOO67lfXYsmnIJG3aANwSQWJMZZqPhd/J8TZ+7cPKK+MM02YT4pe8UYdp8QQxWTXn
+	 LfGnndqexvGJsiF+Z/H3owU37D8Yp1gRtftpembBhbm+grgM2lRCxcEwXUHsICEE8jw==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792568806;
+	c=relaxed/relaxed; t=1792568807;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=4wOKV3uTe7ngC/bk4GM0xP88MMKFpUGtrZfXCCbot38=;
-	b=U3l3jsExu43NRME0Q6MxyacCwUNB7S58AT16930B9Pm1HiUIxYx40fLzEzw9ta01c9ag
-	 uF5aKhIWtdZO0CTBN/xlBiNoDmVqUUSs+i2hnlVH6rnJIms33uUrcnTcStqa7D9N8oFYf
-	 bb/kpGMkXMMXdSY3QagB1AHgHaKIQy6uXkC+5ILdE81SlgaY8VZDXyWgMaB9rpl9KNyvP
-	 8TGO3ySgqykd/Sxr9PHTz9igd2/YKpezLkpmA9XEPDOOfuQ0oCLKpcsrvKHT7EWzX2TRx
-	 qdIX69cCUrtGIfcybw6s/S8+eMYmeg2oaEPDaKU9bC5k0tJVVb7iOc1BX2ACEbGhnQA==
+	bh=L2u42M2YsC+ehb89rqqgYHL67FTxygXb/r1It10ecj0=;
+	b=COJaxL7RlC+TbetvR2Dq98RVzXu+9NfQl6bLQ3xBhB2PXU+n+yiK8s9q/PUXSIpsKREM
+	 ldbbSRLg1hM/j+2ZlXQYYWZMmmb2l8zBDu5ZiB8FTo2hhpFsoFaR3z/Alv10TCzDW8e1x
+	 khFICi43eM2jvnLdiJH3byw0NQElRlPx84xwPFpbkZZJyT0sN/f9wjUACBjElPlYkzCzG
+	 c5XOH0F5J4RjEEFGFFKBTHKIJ4PNzRTrVOZpIKAWsE/G8xeM6qP6fNE2PtFeBOoW5gmO0
+	 4M9X5b+qOrjNlnFBXcfDO6C52+LCZOyV8dMDfG6NmqzDQT3b8pmEUPEQmX82E/RetJw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E78B61F000C9;
-	Wed, 21 Oct 2026 07:46:45 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id EFF241F000CB;
+	Wed, 21 Oct 2026 07:46:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792568806;
-	bh=4wOKV3uTe7ngC/bk4GM0xP88MMKFpUGtrZfXCCbot38=;
+	s=k20260515; t=1792568807;
+	bh=L2u42M2YsC+ehb89rqqgYHL67FTxygXb/r1It10ecj0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=oCLpk7rWW7TpHQevsjxLQtVY8CxEPj+EerbTMKdbgkykM6IvxH6wVtBt7XNuZtuAc
-	 ri7ET6t3Nss5rnkiyE2S2h+oNfN8qJ5Ml6WqQ28Gx7FxG86SzcVbBQALY+OKbjfTZa
-	 uz8ur0/jXc8MTXChMuIqknYvleTuaYiBnGtE9N9B2N040tgPbzJ6Owgy9QJuL/3RT8
-	 oRMjh9Foji0H2PhwL5IMla22o77qBbwU/f0LJYKPMv304ToNU77KWQyuEgBN2GrJeJ
-	 g1DOFo4lP+Os8ZwflJ/gdgPGDRG7c1jtJr0QaCzcVlC4K8pF5WX1bfQypzjb/akK4j
-	 8FRroVlq419Bw==
+	b=Ze8Y3R+aT+XNrWV6TiO2T0bYE3s6TM89rAMxTKHjKwTsDmHN7VsYw2pxbLMm1zW2U
+	 N5Ga+Isbrv5TprsbF89N25njwDadLK9LmF4UTbjPrZLXnktIDgHLUu6CB8s/xQR7WD
+	 V0BoltBky0oZfxThtgwCLVQ8lRUMjhmefDuykIC2DsqUn9iJ4qDjNLecsqGppA+Nzj
+	 PvzKWFEBNH9xvaBG0ehmxKTjKOnOZCBV00nu74BKWS8CQKcPRCtmSwLbPJhai5DNTj
+	 5cxqf/mc74GlR/Gy8XJJcKQ25CZYlihObZwyRJXLnQyvZbdsMX52LxmE3WxdZTMCW5
+	 6WVdTfD9s5i9g==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 5BBE043316;
+	by lkml.kernel.org (Postfix) with ESMTP id 532A64330A;
 	Wed, 21 Oct 2026 07:46:45 +0000 (UTC)
 From: Henrik Enquist via B4 Relay <devnull+henrik.enquist.gmail.com@kernel.org>
-Date: Wed, 21 Oct 2026 09:46:46 +0200
-Subject: [PATCH 2/2] selftests/alsa: Check the aloop PCM Slave controls for
- a matching playback
+Date: Wed, 21 Oct 2026 09:46:45 +0200
+Subject: [PATCH 1/2] ALSA: aloop: Update the PCM Slave controls for a
+ matching playback
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,19 +84,20 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261021-aloop-slave-controls-v1-2-62297727177f@gmail.com>
+Message-Id: <20261021-aloop-slave-controls-v1-1-62297727177f@gmail.com>
 References: <20261021-aloop-slave-controls-v1-0-62297727177f@gmail.com>
 In-Reply-To: <20261021-aloop-slave-controls-v1-0-62297727177f@gmail.com>
 To: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
  Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc: linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Henrik Enquist <henrik.enquist@gmail.com>
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org, 
+ Henrik Enquist <henrik.enquist@gmail.com>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792568804; l=2678;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792568804; l=2444;
  i=henrik.enquist@gmail.com; s=20261003; h=from:subject:message-id;
- bh=VSTLeRkvDN+ZF+CMMCj3hMx1dw85nE2aZG16Hn9p9sY=;
- b=4K+sccxtaLcCx3g/oIrpq0WvrzVqWT2n9N/fZgRhtxxFFt3xzzSD4MXm05dmLtnzT3DmtJpJQ
- y1idqp+KfGtBDCvZNBWaTTPywRrxhYCq5wW+kUXwFGpI/PEv4qMbf2M
+ bh=JSJJdwA1ZDYJEuhfeBvekFeO/E6auhSV39A86bwL5zo=;
+ b=rwbDWv14VwAVd3bg7bGo+K04O3M1ra3Pg33dXO0xnzytFdHQK76IXF7N/JYkVRVUXMTPK4iSm
+ /Ah/2wI0OgbCPGu33eqrATVSaoRWVswGtmLhwBMaVUIkowCovnZK1Tc
 X-Developer-Key: i=henrik.enquist@gmail.com; a=ed25519;
  pk=ctrSXwtuuiWIZbc1qNzu+n+1PkhB/a+2nlRyXd5j2pg=
 X-Endpoint-Received: by B4 Relay for henrik.enquist@gmail.com/20261003 with
@@ -107,68 +108,60 @@ Content-Transfer-Encoding: 7bit
 
 From: Henrik Enquist <henrik.enquist@gmail.com>
 
-Add a test that starts a playback with the same parameters as a running
-capture, and checks that the capture keeps running and that the
-"PCM Slave" controls report the playback's parameters, with a value
-event for each control that changed. Before the previous patch, the
-controls keep the parameters of the earlier stream and the test fails.
+The "PCM Slave" format, rate, channels and access controls report the
+parameters of the playback side of a cable. loopback_check_format()
+updates them when a playback starts, but returns early when a capture
+is open and its parameters match. The controls then keep the module
+defaults, or the parameters of an earlier stream.
 
+A playback that joins an open capture with the same parameters is the
+normal case without notify, where it is constrained to the capture's
+parameters, and also with notify whenever the player happens to use
+them. An application that reads the controls to find the playback's
+parameters, for example to reopen the capture side at the right rate
+after a restart, then gets the wrong values.
+
+Only skip the capture stop when the parameters match, and update the
+controls in every case. A value event is still sent only for a control
+whose value changes.
+
+Reproducer:
+  arecord -D hw:Loopback,1,0 -r 44100 -f S16_LE -c 2 /dev/null &
+  aplay -D hw:Loopback,0,0 -t raw -r 44100 -f S16_LE -c 2 /dev/zero &
+  amixer -c Loopback cget "iface=PCM,name='PCM Slave Rate',device=1"
+Before: the control reports 48000, the module default.
+After: it reports 44100.
+
+Fixes: 597603d615d2 ("ALSA: introduce the snd-aloop module for the PCM loopback")
+Cc: stable@vger.kernel.org
 Signed-off-by: Henrik Enquist <henrik.enquist@gmail.com>
 ---
- tools/testing/selftests/alsa/aloop-test.c | 40 +++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ sound/drivers/aloop.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/alsa/aloop-test.c b/tools/testing/selftests/alsa/aloop-test.c
-index a58b9fdbdc..74d6ccc127 100644
---- a/tools/testing/selftests/alsa/aloop-test.c
-+++ b/tools/testing/selftests/alsa/aloop-test.c
-@@ -323,6 +323,46 @@ TEST_F(aloop, params_change_stops_capture_with_notify) {
- 	snd_pcm_close(capt);
- }
- 
-+/*
-+ * A playback that joins a running capture with the same parameters doesn't
-+ * stop it, and the "PCM Slave" controls still report the playback's
-+ * parameters rather than those of an earlier stream.
-+ */
-+TEST_F(aloop, matching_playback_updates_controls) {
-+	snd_pcm_t *capt, *play;
-+	unsigned int events;
-+
-+	/* Leave the controls at other parameters than the ones used below. */
-+	ASSERT_EQ(open_pcm(&play, self->play_name, SND_PCM_STREAM_PLAYBACK, &playback_params), 0);
-+	ASSERT_EQ(start_playback(play, &playback_params), 0);
-+	snd_pcm_close(play);
-+
-+	ASSERT_EQ(set_notify(self->ctl, false), 0);
-+	ASSERT_EQ(open_pcm(&capt, self->capt_name, SND_PCM_STREAM_CAPTURE, &capture_params), 0);
-+	ASSERT_EQ(snd_pcm_start(capt), 0);
-+	read_events(self->ctl);
-+
-+	ASSERT_EQ(open_pcm(&play, self->play_name, SND_PCM_STREAM_PLAYBACK, &capture_params), 0);
-+	ASSERT_EQ(start_playback(play, &capture_params), 0);
-+
-+	EXPECT_EQ(snd_pcm_state(capt), SND_PCM_STATE_RUNNING);
-+
-+	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Active"), 1);
-+	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Format"), capture_params.format);
-+	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Rate"), capture_params.rate);
-+	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Channels"), capture_params.channels);
-+	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Access Mode"), 0);
-+
-+	events = read_events(self->ctl);
-+	EXPECT_TRUE(events & EV_FORMAT);
-+	EXPECT_TRUE(events & EV_RATE);
-+	EXPECT_TRUE(events & EV_CHANNELS);
-+	EXPECT_TRUE(events & EV_ACCESS);
-+
-+	snd_pcm_close(play);
-+	snd_pcm_close(capt);
-+}
-+
- /* With notify, a capture opened second is still pinned to the playback's parameters. */
- TEST_F(aloop, capture_constrained_with_notify) {
- 	struct probe_result res;
+diff --git a/sound/drivers/aloop.c b/sound/drivers/aloop.c
+index d6a059ab37..824d320b66 100644
+--- a/sound/drivers/aloop.c
++++ b/sound/drivers/aloop.c
+@@ -412,11 +412,14 @@ static int loopback_check_format(struct loopback_cable *cable, int stream)
+ 			runtime->channels != cruntime->channels ||
+ 			is_access_interleaved(runtime->access) !=
+ 			is_access_interleaved(cruntime->access);
+-			if (!check)
+-				return 0;
+-			if (stream == SNDRV_PCM_STREAM_CAPTURE)
++			/*
++			 * Matching params also go on to the update below, so that
++			 * the setup controls follow a playback that joins an open
++			 * capture.
++			 */
++			if (check && stream == SNDRV_PCM_STREAM_CAPTURE)
+ 				return -EIO;
+-			else if (cruntime->state == SNDRV_PCM_STATE_RUNNING) {
++			else if (check && cruntime->state == SNDRV_PCM_STATE_RUNNING) {
+ 				/* close must not free the peer runtime below */
+ 				snd_refcount_get(&cable->stop_count);
+ 				stop_capture = true;
 
 -- 
 2.53.0
