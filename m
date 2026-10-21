@@ -1,55 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792606274;
-	b=yaDsaLHm46G54+3HIiRcofd3NymY5KS1/gaRikZabVhJoxseYBTaFC+4Xsp5dBw0Nbqj
-	 SZg7A5gMw566WqJ5WCETHIt2+Z5o52lalprMLYebiSrCpS+QLkPhEPHgPN/XzORF2vxO3
-	 8zTkn4oUpNamFQILv9gyx0VloFyNv+84l9NVbl+dfgZ8CDSOkUjELbSn0JXnR1txn5u9K
-	 b8AMp45T8SV5uI0M8pWvbH4/oTGgpQB+jWhJ4zXET6Wkfv9ldWQv++N4mRf/2nvas1Au4
-	 IcERPsaCKtYJLYuOwx8QBsfwb6G20DpF93FhtIbLVFFbquoL+xD74v5Ys5fzwGnH5Rw==
+	t=1792607514;
+	b=1SPHlgVRp7sP4GaCF0loauqX3FNG56yoPaql7Gs8ZMnY8wzC55mk4jwQ6/YKCrPA475J
+	 QN0ib6PY7n0mPENIqumXDi1tIlEHMMSc/YgXdv7kKfPkyysv0RQD3oPxCF9JKDMOWc3Cl
+	 Pi3wAJzBgDU6k6iSTLU6BkE/glOUqa8hYocN3JZxlQRpoDkD084HkBWLv+ib3529aV/sJ
+	 b7dXyJmsaWaMhA2UXkIeTS0ZGrmytDJkCO9wQsU3bs6f59FrYOrKl8+BU4U87eDcE0wbZ
+	 0pVz9Ki1KZ2XZZX9A+c/hJrUvvDzqlLpOChZAV6IjhouvyJYRZ9vxyCqZUnnBtr8Tyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792606274;
-	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=M1dTXl83utElj4WNg2krvHUULoFFNoYTsd5aEDSTt+o=;
-	b=NWL1Trrixo1DaJd0IFTxyws83TBXUpkVzOV6xIKoPhoLuAA4cJ4jVXyeHbQ8gT8VNUeT
-	 d/vCepML3bUz7KUtjpzkyaA3gJqnk2IqWLj/D9ILY/oFfjZ6nR6o3VREnvL7yM61vomEZ
-	 voHl9/y2BeAY9mQ3uzUl6aTe2vBJg6PR32gyc+SQN8WfTOY/XlmwS3JRYjotPVwpCEHg/
-	 oJS1dNB4G61iOB6GMPxl8n6lkRxkkLJggE3iYkwHPYbxQqK3dsyPy+tjlfdwbcIoEUQ8z
-	 9GBsP0XMO2FQRAwVGuyfU384fn4JOYp336yOrIf9t/DQxoqW/9Jq/BePHDZiW+9CxWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792607514;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=H/C92bFGslXNt0AknMrgNcyMQFOZNr/Li4FPW9jxEpg=;
+	b=tfE6CQOWLEpTe3ywanDa7uzMqhIoefEep3d54/JzpXgCLiqVeUwg2pplKm3NtQvjqiiw
+	 zRJWb5B9RlKOslt+RTWz1jodJxEQMm9CezAOoOL317A3oY3uGeG+p5Xa47j9m4Z1b6zns
+	 Hnc7MkmNZSLBnIlQV46JKWfZ5xG9dXrKUSP5NTWa9FlPkOKiwEQvxkyCw/sKcqSKWvzgg
+	 BqN3A7ZnFVwvn43xMugcxlJGICfa03WAq2Vn3vdu/GRIYczJlHSKAmE1eLIMcG2iJYFlb
+	 B8R704DCNRt/r/2yOIVF5NJyXfK6Oyky1at4QNCyrVKRrujpkui4Hf5u+FeApYPdZaw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=virtuozzo.com;
-	spf=pass smtp.mailfrom=virtuozzo.com;
-	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=czntJg33;
-	arc=none smtp.remote-ip=130.117.225.111
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linuxfoundation.org;
+	spf=pass smtp.mailfrom=linuxfoundation.org;
+	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b="c5ODpY/W";
+	arc=none smtp.remote-ip=209.85.161.49
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63614606A31A;
-	Wed, 21 Oct 2026 18:11:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 63614606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA60606A319
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 18:31:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EA60606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=czntJg33
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=Message-Id:Content-Type:MIME-Version:Subject:Date
-	:From; bh=M1dTXl83utElj4WNg2krvHUULoFFNoYTsd5aEDSTt+o=; b=czntJg33/EH3MMahMSC
-	1zvgpqrY+bEcrs6XioefvtHFzDegujHA6tzNNsD0HbCXPAnNe/+NXy+O4EOj+Z8J8i9qBWYYo+Hm3
-	dHja8IcQ9WD1pC1CIYc4YHGZ61dnlw9hjmlQDnS8VlrUGSPRlfJt3KuPpaygqcWsyxe6EUV/3EDo/
-	Mfe8LuQSmd3H5b4Qmi07j33h71BkbvKJe5d1awB5Qs87J2M72l0eJ4d2qu6+jWlKsbGny2ahZ1vES
-	LZdLx4WpW8zCBJkZHWzVCs0cRbyOnmws2fIV0vIMGZugW6Wdnfw+uLrjscLzM/FJ6ZTXQ3DtqI8PM
-	J18dTxWC65XAV9A==;
-Received: from ch-demo-asa.virtuozzo.com ([130.117.225.8] helo=f0.sw.ru)
-	by relay.virtuozzo.com with esmtp (Exim 4.96)
-	(envelope-from <khorenko@virtuozzo.com>)
-	id 1xJaif-00ANvl-23;
-	Wed, 21 Oct 2026 20:11:04 +0200
-From: Konstantin Khorenko <khorenko@virtuozzo.com>
-Date: Wed, 21 Oct 2026 20:10:53 +0200
-Subject: [PATCH 1/2] mm/huge_memory: take a reference on a folio PUD copied
- by fork
+	dkim=pass (1024-bit key, unprotected) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=c5ODpY/W
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-6b1afdf5196so424991eaf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 11:31:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1792607512; x=1793212312; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=H/C92bFGslXNt0AknMrgNcyMQFOZNr/Li4FPW9jxEpg=;
+        b=c5ODpY/W9uYSYWXI70jnDoAGs8eBtqNpE9xks9pXRR35vGNK+JHifcBRjAqEOXS10g
+         iUTXz1EI/BMbkpZp02fd9CbJkCBD7ujzE47viANOF90uKW8LhCrRej+EqY+LlZheqril
+         LSRlWKkK3RzaXhrzP+FQk8Ms9BuLw+Ysr4Ofg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792607512; x=1793212312;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=H/C92bFGslXNt0AknMrgNcyMQFOZNr/Li4FPW9jxEpg=;
+        b=cwg4b4KOxh5Ggtm2RvInidkKDXy5spweaMY56yAdh++zv5/Fv+66UFFytnB8t8GBjW
+         wqSj9cPaKNTSKzVLpWyfsrLHWhcKIFcaTHHCv6MSEzvJMicEEhtXRbjOVAUAV3+ZsAEv
+         BiGF+FhZSwt/sm04us7FuDWoCZrUxHbx9dYUqD6wqZopOZZSFyzkhSRbGHAmSzWGkxRZ
+         ntaGQJ/IE7uI10X2vZoUaDXOrQW9UwQprLl2auTfVCgtpS0WAu8B7t8rB44xYi8h3grC
+         tEX/HqbAdyVEEakCeGH3Fhmo22azIreW1rTsKXJU4HX2OQrgaJcYZEsn2f5lRuvebVkY
+         KiBw==
+X-Forwarded-Encrypted: i=1; AKwUvBx+0euhuWJLODIFlJoo4CFBKlmUtCgZb8MU1LZYOEW2t0LYPD4zgGK9JY/iKqWRUB4dvDfcOyAL/0TH17IqCdw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ/Z2Ev+biD9T3nqZbault/Mfyarccyw1nbm1Pjv1/FD23TfTrE
+	uJD1+mvCF/833pl1k2sIpvo/cz8j1QHiHKMz4loA9Bz/SlnAdo2//W8Ca0oC7sqYXlA=
+X-Gm-Gg: AYBFou0RbJpK+1LrzIZkj/APW4dqoSFvClF/V0cPOK5bhAlkTHl7xjvFdRmzy+zo+Vo
+	p9sou0dHsxnPXQFCEUuBGx9nLvbZodrAjt6Rx5fQOfFnL+zZ3BpTG1tS81QQczthnAahKxxpEy2
+	WXogrytem7622LLgcv3dfH/4TrlyhWe644dh12cpiIl8jvCorkGEm0ei/UbWZ+SlMlbaRfYszJN
+	ZqDq3pBYGAijgiHmmLQ/b91GkgNAyiKUMmzML9bDjhUoL6i1pB/QNaWqINZAZyK0QFQmlaFdtp4
+	ByqQRQf3U8uRcIfV2FtJilzKGqPITJlHbcEW/UQSrvaBa3PHahBGblMFdmVrCUWRIscaYe4KMFr
+	k9PPam+1czBLmh4qOv07sRTjjxuzIQCIHWrUcyXYCIxUU6ddxQNpoqyJCJy+UPy7GS6MIG3AgWb
+	rFvaaD0WXi8qJ2mP0ucM34UOhQyEqivBVJJUWHWuJOiDZnYBhZDabfUh97kP+RhBa9cvYNAi1TM
+	ABqkl/it69W2U4j7H07Wy2k+QAbdbBpM9/hSDWVg9yV493aVocQ5N9qaQ9wGznvU6mk8pe7J2RN
+	wZj8XPtLbHc=
+X-Received: by 2002:a05:6820:2088:b0:6be:139:c032 with SMTP id 006d021491bc7-7093fcba6c4mr1493986eaf.18.1792607511905;
+        Wed, 21 Oct 2026 11:31:51 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-70a543c313fsm448703eaf.12.2026.10.21.11.31.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Oct 2026 11:31:51 -0700 (PDT)
+Message-ID: <96d29c1f-d797-4f83-a65a-d1763f0cf760@linuxfoundation.org>
+Date: Wed, 21 Oct 2026 12:31:46 -0600
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,164 +89,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 0/2] Start removing X86_X32_ABI
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Jonathan Corbet <corbet@lwn.net>, Justin Stitt <justinstitt@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Richard Purdie <richard.purdie@linuxfoundation.org>,
+ Sam James <sam@gentoo.org>, Shuah Khan <shuah@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, Tomas Glozar <tglozar@kernel.org>,
+ Willy Tarreau <w@1wt.eu>, x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20261015-x32_removal-v5-0-2bfef9151fad@linutronix.de>
+ <2fcf2983-0972-427b-ad05-b403e325ce40@linuxfoundation.org>
+ <20261019103532.E7ra8pya@linutronix.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20261019103532.E7ra8pya@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261021-vstor-150143-copy_huge_pud-folio-refcount-v1-1-8bd88551f9be@virtuozzo.com>
-References: <20261021-vstor-150143-copy_huge_pud-folio-refcount-v1-0-8bd88551f9be@virtuozzo.com>
-In-Reply-To: <20261021-vstor-150143-copy_huge_pud-folio-refcount-v1-0-8bd88551f9be@virtuozzo.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- Alistair Popple <apopple@nvidia.com>, Dan Williams <djbw@kernel.org>
-Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Konstantin Khorenko <khorenko@virtuozzo.com>, stable@vger.kernel.org
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5104;
- i=khorenko@virtuozzo.com; h=from:subject:message-id;
- bh=8M/OBpw5Os7GQ5/io4vjGbxC7NEnaAM1Ho77x2Uuv5k=;
- b=owEBbQKS/ZANAwAKAVGWCkf5YVwqAcsmYgBq2QA4FTU+mgpWgG2VBPoT3uxOpKYeA855gQISj
- xeMgsIspaiJAjMEAAEKAB0WIQRWD23IPcXT0GO9CCxRlgpH+WFcKgUCatkAOAAKCRBRlgpH+WFc
- KsgVEACL10FRNeije/yqAfWx2B8jti5tdDDN2wsI0M0g179SDXeDTbLAeu2gHI8pnzThXf40fIs
- VUuSj6BKWmGXdBNyIYC5xVTHgz56FIGFwfTJPlDfqK6JSnwd9PcRdxiaPFkjXBhS45Il028W8TZ
- u+uQEZJfGOD/P9Ip8RKNaK77929JrfrxAPTscCoii/p+axeaTtHXDsuklsRh+7Nh41QZJVeK0CT
- ULwvKwXAZzmLCJY8r2fLHcBCOg0RODrThi7JRKyrHw1om6j3jwHkjH4j0QxfUskRWRWeTC5G8k4
- F22rl0GSDzlnYxl5809cy/qM73ab9NOka42WUbvlc+L1wnAtk1nSHec8qi/rLclP07bHUrXPZCG
- s0NYBcTjHOe52RoPa0n522Oos6+ORwk+D4hFJEo1PTlQKkq143nIpWgSOnyHD31Ss+XRxqszmZJ
- +x1EsjSsYkyW12xcRj4JMKB2e6wQTaihik2IxgH8KquDiYH/dw/UFNUwxMWXSvk5EnCOQznMKAr
- T5Yw+09lK0b+YycYvaswvEkOQTBu5mVY2v1o52T4hHc2do1fCR37HaFUHGr0KTZh1sQ7kwGR+3j
- MH4/Ks+qnauXMCODsdgvEvV797fk1aW612Uql1754xviqlKhmIZhJls9TKrQWyqM+qrLPts4fDC
- q92bVHoAslG6NXA==
-X-Developer-Key: i=khorenko@virtuozzo.com; a=openpgp;
- fpr=560F6DC83DC5D3D063BD082C51960A47F9615C2A
 
-Device DAX maps its memory with vmf_insert_folio_pud(), which takes a
-folio reference, adds a PUD rmap and accounts the pages to the mm.
-zap_huge_pud() drops all three, but copy_huge_pud() copies the PUD into
-the child without taking any of them. Each child's unmap then drops
-what the parent took:
+On 10/19/26 04:35, Sebastian Andrzej Siewior wrote:
+> On 2026-10-15 13:47:37 [-0600], Shuah Khan wrote:
+>> For selftests:
+>>
+>> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> Thank you.
+> 
+>> Do you plan to cleanup x32 checks from selftests/x86 Makefiles?
+> 
+> Could you please give me an example? I've been looking through
+> 	tools/testing/selftests/x86
+> 
+> and didn't find anything Makefile + x32 related. Just
+> syscall_numbering.c which has x32 bits.
+> 
 
-- the folio is a reference short, so with two children its refcount
-  drops to zero and free_zone_device_folio() runs while the parent
-  still maps it;
-- the child's file counter goes negative, "Bad rss-counter state" when
-  its mm is freed;
-- the parent's unmap drives the entire mapcount below zero.
+Take a look at x86 selftest directory. You will find sigreturn.c
+and syscall_numbering.c that have references to x32 syscalls.
 
-fork copies the page tables of a device DAX mapping that has a guard
-region: commit f807123d578d ("mm: allow guard regions in file-backed and
-read-only mappings") allowed MADV_GUARD_INSTALL there, and it makes fork
-copy the VMA.
+Makefile has handling for TARGETS_C_32BIT_ONLY.
 
-Take the reference, the rmap and the counter for a PUD that
-vm_normal_page_pud() resolves to a page, as copy_huge_pmd() does for a
-PMD, with a new folio_dup_file_rmap_pud() helper.
-
-Fixes: aed877c2b425 ("device/dax: properly refcount device dax pages when mapping")
-Cc: stable@vger.kernel.org
-Assisted-by: LLM
-Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
----
- include/linux/huge_mm.h |  2 +-
- include/linux/rmap.h    | 22 ++++++++++++++++++++++
- mm/huge_memory.c        | 13 +++++++++++--
- mm/memory.c             |  4 ++--
- 4 files changed, 36 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index c745f7ad22987..c5094f9d95ba9 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -14,7 +14,7 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
- bool huge_pmd_set_accessed(struct vm_fault *vmf);
- int copy_huge_pud(struct mm_struct *dst_mm, struct mm_struct *src_mm,
- 		  pud_t *dst_pud, pud_t *src_pud, unsigned long addr,
--		  struct vm_area_struct *vma);
-+		  struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma);
- 
- #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
- void huge_pud_set_accessed(struct vm_fault *vmf, pud_t orig_pud);
-diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-index 0b332770abeed..3c9ed8e27f0e4 100644
---- a/include/linux/rmap.h
-+++ b/include/linux/rmap.h
-@@ -564,6 +564,28 @@ static inline void folio_dup_file_rmap_pmd(struct folio *folio,
- #endif
- }
- 
-+/**
-+ * folio_dup_file_rmap_pud - duplicate a PUD mapping of a page range of a folio
-+ * @folio:	The folio to duplicate the mapping of
-+ * @page:	The first page to duplicate the mapping of
-+ * @dst_vma:	The destination vm area
-+ *
-+ * The page range of the folio is defined by [page, page + HPAGE_PUD_NR)
-+ *
-+ * The caller needs to hold the page table lock.
-+ */
-+static inline void folio_dup_file_rmap_pud(struct folio *folio,
-+		struct page *page, struct vm_area_struct *dst_vma)
-+{
-+#if defined(CONFIG_TRANSPARENT_HUGEPAGE) && \
-+	defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD)
-+	__folio_dup_file_rmap(folio, page, HPAGE_PUD_NR, dst_vma,
-+			      PGTABLE_LEVEL_PUD);
-+#else
-+	WARN_ON_ONCE(true);
-+#endif
-+}
-+
- static __always_inline int __folio_try_dup_anon_rmap(struct folio *folio,
- 		struct page *page, int nr_pages, struct vm_area_struct *dst_vma,
- 		struct vm_area_struct *src_vma, enum pgtable_level level)
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 1e5d68acf62a5..7e8b41f293a49 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2075,9 +2075,10 @@ void touch_pud(struct vm_area_struct *vma, unsigned long addr,
- 
- int copy_huge_pud(struct mm_struct *dst_mm, struct mm_struct *src_mm,
- 		  pud_t *dst_pud, pud_t *src_pud, unsigned long addr,
--		  struct vm_area_struct *vma)
-+		  struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
- {
- 	spinlock_t *dst_ptl, *src_ptl;
-+	struct page *page;
- 	pud_t pud;
- 	int ret;
- 
-@@ -2094,7 +2095,15 @@ int copy_huge_pud(struct mm_struct *dst_mm, struct mm_struct *src_mm,
- 	 * TODO: once we support anonymous pages, use
- 	 * folio_try_dup_anon_rmap_*() and split if duplicating fails.
- 	 */
--	if (vma_is_cow_mapping(vma) && pud_write(pud)) {
-+	page = vm_normal_page_pud(src_vma, addr, pud);
-+	if (page) {
-+		struct folio *folio = page_folio(page);
-+
-+		folio_get(folio);
-+		folio_dup_file_rmap_pud(folio, page, dst_vma);
-+		add_mm_counter(dst_mm, mm_counter_file(folio), HPAGE_PUD_NR);
-+	}
-+	if (vma_is_cow_mapping(src_vma) && pud_write(pud)) {
- 		pudp_set_wrprotect(src_mm, addr, src_pud);
- 		pud = pud_wrprotect(pud);
- 	}
-diff --git a/mm/memory.c b/mm/memory.c
-index 8b0c2c735d3de..8acd4d5bb2310 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1514,8 +1514,8 @@ copy_pud_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
- 			int err;
- 
- 			VM_BUG_ON_VMA(next-addr != HPAGE_PUD_SIZE, src_vma);
--			err = copy_huge_pud(dst_mm, src_mm,
--					    dst_pud, src_pud, addr, src_vma);
-+			err = copy_huge_pud(dst_mm, src_mm, dst_pud, src_pud,
-+					    addr, dst_vma, src_vma);
- 			if (err == -ENOMEM)
- 				return -ENOMEM;
- 			if (!err)
-
--- 
-2.43.0
-
+thanks,
+-- Shuah
