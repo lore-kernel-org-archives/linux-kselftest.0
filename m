@@ -1,114 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792539233;
-	b=v0VJZ1slFA4WEsnePYkiaD/iN/wd6Goz1gAjQTJuhxrXysjV/+fBjDQEH7c7tgRkq7zo
-	 4YYKckfeZb8v44Wc3jBkyn67iH98cIp8Fhs4HpNSc3MhCwNiujzMr3K3aRtBVtEkE3bD+
-	 SWPVZI4N3UwDjisyMH73T/8cUiUcY1dTdHDwytkTrHTNTQgS5LV+v/92Ik6Evsql9Xa5t
-	 X9IGAfEJw1n64HUZNpGtUoqMw2cIIPua9pfg2Nj/J01aI5iwZJCO6KysKAK2dEYJaF8qF
-	 huFCwOkGf3NRqMw/XZJrdDk09Pmt/c4kjM7pAgsqPpQvgTeq10UQgufyJbyDV6kRLoQ==
+	t=1792540873;
+	b=ft+lUctpT6e+lvYU7pjhAHg9efGJFag9gya0LlhtGEewJcVjSm1dfUN/1tgSo/DCUh/M
+	 G0OIb+a3KzFUOB2QdTJX6Pc9FRRxGAfoYOCj1Ymzr3/Vyk9phbz42r6hXHDVxKbU30P1J
+	 +qL/xf4dDC0Lk1Yd/UfTMNlo90WDqamRz4LBBg+DgT4rCVjTBEhQv0USf/Sr15t3D7SbY
+	 xlqYEh4oUXnO+i7V1hlMj/yEQ8YHIpQEtuhF+t+NmZIxlBQaU8kxNNrao+qf97SxwQFw8
+	 A3tLBHU+Om+eljkOLYsd5r/Rb8XofbVNAxjkN2Njf4bN1MBnwRV7M5y3CCDmvmVPuPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792539233;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Content-Type:Content-Transfer-Encoding:MIME-Version:From:To:
-	 Cc:Subject:In-reply-to:References:Date:Message-id:Reply-To;
-	bh=rXuTf9MlNi3gCPS9slrsF274GgQjjMDR257jPNV3xKE=;
-	b=Zo4CTJNtWVeKGwZAE0qfyKWMABoLGhwXWmID94Nx5Azfg+CkIMi/HXyin5ZaXp+AtrIp
-	 gVckAl1x2e3PrtCR4TyMN0ncVYwKAX8rElZqBQMGHbzLXoyeUZkxrfqI18Fm+nQyTCnNe
-	 s9qvbUO2BETk2ZU4WZVS8HK+DlonzVtlZD2WkRt3XERMY9ts4fsRG3A6wc9WP+OFBD0PH
-	 vx84s+qdT+VNOcJcOkHTp0zrLSUSub4/xC07TYBz8ackxUBpQZETEjr73xc3/ukB6MJtc
-	 /mTtF+7rr6o66pjhgRbpkD1lfGoCsIRyuq9W8RqLIsrXjS41FurnwS5KofmCF1OYmsw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792540873;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=AEeiPsA/EawKKYb8+qMzkwfuJK4nmSs/11TC2lwYs/8=;
+	b=mpcKJkiImGIGjCn1gRmP93YHXv11qaWDVkrP8OrqHRr27AgCOBFAPWbsnQFmYLC6qtQ7
+	 KqPHIR8msvGinMa8XASLj7eM3cspHkFDPnev4C3z6R0is9kBhwq6J0gR/PiyCZsvCDCo1
+	 SB+CnBZXZYovuCBllIYxMM5OrdyjcxV9r5/bM05ikQd72hgJE1o1QEzkwR034vlPOL+PY
+	 /qbPaLN8Eaw43h04G56Ex6147CPpULvvtlbwlSLBiN+N07k1Bn+9IEPmiEr9dF27IiaQI
+	 IPsF7C2qyQTkA0o5s6jcTqhKU8ILPYwEXZBL1ENPzam1VpMX6QQU+8Utd0IEN3XPnBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=ownmail.net;
-	spf=pass smtp.mailfrom=ownmail.net;
-	dkim=pass header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=jbFVrqp2;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=NmsGfiJE;
-	arc=none smtp.remote-ip=202.12.124.146
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=X4qmef56;
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E84C606A319
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 23:33:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E84C606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91640606A31A
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 00:01:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91640606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=jbFVrqp2;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=NmsGfiJE
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 968721D00059
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 19:33:52 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Tue, 20 Oct 2026 19:33:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to; s=fm2; t=
-	1792539232; x=1792625632; bh=rXuTf9MlNi3gCPS9slrsF274GgQjjMDR257
-	jPNV3xKE=; b=jbFVrqp25QmshWSsLAdTlzXvUoy9NfrY5cVTYc7m8QAaKUrpl9y
-	QusNbOc5/1sV3KN1FqQ+DP+qYw0al+GDT0jPyfrgQ9ajcoPMub0Xd+eZgl93jYei
-	UneT4eRB8gPW2fzljYlz4IrDsrE4PVPRfLtkWAaDSNaObhDu24vmXm0bgamFZUGJ
-	K8VsZuIv0F950oQQeCrpd/ZOM26dKcGbUgOP10TOOuvl6iShaTJajAKHWTvJbuXV
-	mxa2KLBhf9AOjG+rq+jkudeRzEg/STaPWl8W8r/U0Vh4hPEI4ZWqWsi5Ie7fbTdF
-	alYwTCI6Wr0+M8cDKjmiLeGRiyJU1HAC5zQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1792539232; x=
-	1792625632; bh=rXuTf9MlNi3gCPS9slrsF274GgQjjMDR257jPNV3xKE=; b=N
-	msGfiJEA1jauM+EM0poq/ZB1SRhLq0HqRfAQR8O58GuTQT/2iijtp4NhqFubdiDC
-	+TLtuwfHsj4O6G9/HOxbxoO3veERndt8zHVhHYbbq3CMCprjKbB5xxVsot9ZXEe8
-	xJShUl2AB2vAEs0pJcNE+/CTgNN/Hssy/Lk/zZO2T/LaAzesQPUX5edc/kB+JE73
-	KhEsDngHjtjZIz4R52QpyhGVnXEoMG6kU3YhicvQ7WS7PTHN0+HDKBEjx73njgAp
-	cgMeOV6YQLz+Q9/Q6hxSiWIGj8KcX4ZZDYEM7apcZx9ST8HmVY80FBUkWcIqesVY
-	0taXcBTmXeVmIK6i0rHmQ==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
-	action=sign d=ownmail.net a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1792539232; d=ownmail.net;
-	mf=PG5laWxiQG93bm1haWwubmV0Pg==;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:aeb9avtPYmigwdqzp1/D4qaKQxZn4kQU+oqNHavgdFhOriI
-	Atlz6iLGQb283e+mgddwFFfQqAa1oQMLINptI/obdpZIr8aXA4oRAyzzzuSuOtt8
-	+7BeHT0Q5MYEIxwEaL1pSnON18Gv0VTB7GzppYlqsL/823K+H+x5KF1s4pB2RXAG
-	rO/JD2x4QVlw6wFpUSItPHKDhfNEAqescVs7p7nzUs3xqnKskcw6Y5wqt82NNCGN
-	TN4ecc9pqkeu0Rrgw75gIxzNjh7gNEHepV0o7l/5zA177Woxh/EoBLgG4XM3ZyPr
-	2PG7+5GxTeish5cA3n8cmNFMSQxczUmU4NUdZWw==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
-	action=mi-m=1; hc=13;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,reply-to,
-	subject,to;
-Message-Instance: m=1; h=sha256:J/XJTn0s3QUHG8+qquqGGSJZEt19yvABeMqfC5v6w18=:kFba7Dsgg5LxWvj8orHnHGtvho6jdXYB12ViMVRveZs=;
-X-ME-Sender: <xms:YPrXaoBFFJ0Xy6yQTmPsqGX14QP_dGVFe36OTRwQrw-vEHT7UZvSaA>
-    <xme:YPrXavdMnzeKMvpZtjqBIwwqQuet0587bX2V5lOMjYTKfpz1AHWS1VyaIwijfAOJw
-    W7vXISyIkjVkianClkeVEgr0q-EBqp1kM43lJykAMqUolUcRPI>
-X-ME-Received: <xmr:YPrXav3eLXVQrL_dow6ysa5_a8-2nldHq8loLF_j4SN1LfoaL5HCUvijINGweMto6Lh2IKRgVQNyrmJTvT6eNCoTGr1LRLY>
-X-ME-Proxy-Cause: dmFkZTGWaOVZU0YAt7mxINLLGn1D9+oSwfzBCHxdbgm3M3WrsGh0Yz4KrBc/T7GZ/WgvCY
-    DXtXZ7zL/hLg16re4tAbVVBPnHXpfmmzVQNZDm9KvsSvUSwX5cAGu2ioYzQilwRlpM918L
-    eDCKmfZQp43Qo/+YFAlfi/SKHU57xPBQeoZq9lUecR7+12XvaB6kG34Nu+PEdKoyevyZza
-    Vod2FWkXII4RfqRoGr3K3z4fqg/fnX6l1pGobryjGfcC6amiRDDAsSM3iJ20ONc7sqE0IF
-    RgF8EAL3J1QuGQHWzar45OlKk+zyeXplf6AHqQn5KWkg/o6uzsgqLLfDeHiVrWsMzk3par
-    OOUEz/NktG4SWtO0hU+irl9txScKxpRjD5UlQLtrUxqMSJwxxAVI4GqDNOOdNATVja0F34
-    uYXHWxSYxBiI809IHZgM5ONfpg6j4QIGPqLMiSJKomwSa3nlK+yY1+PTrS8NOl2jZeG0mC
-    I4xWSYVvHooQrQZOPdAbf7RoK77CPNN/zaqJIKaddTiCQX2EzQLGJH7tXq4BAOQq60QPGu
-    RucImKWtQ08ebSE9yZGQdwhKiTvvURZs8kFgVlj+z08s8zDuyMMkwW54gUZzpznkMH+FSK
-    nCqRLUZgrjkc2HTWzXvG3ipcK9nVRjTe1iU5MaIQB7UWdBHTTM10kJkaR0xA
-X-ME-Proxy: <xmx:YPrXauj1vCMgHmLHshj8RYoN-72aQAGuL4zhdTXFOLNA7BsBP9eO0Q>
-    <xmx:YPrXagkgSqdZtVkl6rDEpyox8jTt6Yjb7FciuJRyx00FmkPbIuLDVA>
-    <xmx:YPrXasagb6F-dXAPIilO1-jjU1g_4IADkEbEd5eQUPYbFjh0hLmjGA>
-    <xmx:YPrXajGRJ2WCxrIIPxkm257JpX_ihvrJrPBQnkUrOqWj2fg3PLc23Q>
-    <xmx:YPrXaswZ6_OTEU0BPZ4PmvIvzx9M5rpGntKL9XO3pDl2IiU8m3xNSxBH>
-Feedback-ID: i9d664b8f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Oct 2026 19:33:49 -0400 (EDT)
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=X4qmef56
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3a4b3ac8fb7so101734a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 17:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792540873; x=1793145673; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=AEeiPsA/EawKKYb8+qMzkwfuJK4nmSs/11TC2lwYs/8=;
+        b=X4qmef56mV1cGDB+s8rxjvMjWgK79wD0teCYvWaCvGWcBsW9tn7OKw/eFYtriNtvdR
+         HKc0+D0iRvbEum79CeELLv2i66rh4M1mHINIpveCbd4D6xZVVoeMFr+EI3CqjQi20KYe
+         +Vwll+GwtZL5zEuusqxNLqLR5a8ZbFreBlwDmo25kL8DotyYDjR0nye+wTHO9oyR96lR
+         +SLVbCk8XUPB4wTaWgjsVBkhk1kBtyQzhwBCJWi2oB6XDlYJGOHH3S3PtgdcWYgcWq2k
+         v3NOx76kt1gqlC6ElSLHjsAn2tK5fx72EjQ1DMUtwCDbHZ5t3Qzjvnn2UQ1MtT6NOj53
+         LdAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792540873; x=1793145673;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AEeiPsA/EawKKYb8+qMzkwfuJK4nmSs/11TC2lwYs/8=;
+        b=jT8YrGt4Z4c1iXzqHXQ1+xVOznciMPXzJ2IHhaGsursU/fPd6eYHAyN1SFYbJYHPzf
+         64L14fz9pRKwYhV4ZlHc6NjDBPftH9y/D2/n154GVtp2MPxb7cNw1r6IFhDELWWGQPWa
+         PC5N2OQ8hn7QibVPExx0dpjb757TdEihbJVjt5agTbobeUIELdM5wce4C2bw8wEtUI6W
+         tDOMTDajDPBDK9i4ZVtJ8SqFPQm/lLKrv5EtqRJ1xe0V2r3+mQjQrI9dchFiI/o2oIuM
+         gDWHFP3cYUF5wtcyEFHsdW2aPlFjHjUsISHr04M1d++5bbwxWIpkE2fjcB/rNV3uc16Q
+         Se4Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwQjmp/Y8iZYgupQC2Ig7KwoBNTG8Q1VDWTi4bLQ+dfajb2x5+vkw+KJXH5jjuFlmbT6UI2Y1x5nQ/YSuPLPRM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKkumeZaOplUojWlOFteM0AttbkE/YkOjJfzNS3jsfpe3eqSAsr
+	5M0EfpDC/d+GOu/bHPkcZXgF0QJz0GKyUfQ8TS4nI4ir7CpxxeUsGyQi
+X-Gm-Gg: AYBFou2IWLCDvN7T6USHaCDRCtgzSfRTFgUV3+mjy8lXhurnM4MbgsiRzu8ZaHohwwg
+	QqNRbqLBPIm72ylZDwwsnX2bcYAc7NczHC62lYKa/h9CrMjNmi+DIM+MCdHvrGhQCkBSNurx5cR
+	8ZC6xUqRj6AAostSboXRXGAdvNSC6tBqolg/+lxb3C4EXCtP5HUL5l+FLgNp9Czv7OnblrQOtMO
+	40mh//TmIgC4317hE+i5widhxehc8lWv2qKxZ8pXIhTPfjixAobSwF9SR+GwJSikdF8xwZETtma
+	GTg18f4EvhTS1RsEkvwm/msTbaCUO+7WOGd4PpHdwtTQ1/jzrp67F3A1qU6cZ2NYbw3VClsLmNO
+	TJyyNsG1qyScGKnGxdYgSw8igGyy4HW/XcjiQSArL9CBByZ70/0V3mbRTCUhfFzAS8VtXBrSbzF
+	7BFte+A+Z0n9oTv8k1HvuIeOxGYhjD3JjLO+qJ/uFcHeV+As1AnOpviO6U9TvO7VbN8l6uhwy3C
+	yC9DpjlzJPFLqnk+ux32XFbsRUC7Hdk+5e6ZXJ+K29JWUqSwWvBQoaUXQhPQWTCFnF3kEQ9Z2Rp
+	lZRCyMhUsuOoxg==
+X-Received: by 2002:a17:90b:5310:b0:3a0:c3d4:f3b2 with SMTP id 98e67ed59e1d1-3ad86cc126cmr434607a91.56.1792540872776;
+        Tue, 20 Oct 2026 17:01:12 -0700 (PDT)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad802957d3sm1536060a91.8.2026.10.20.17.01.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 17:01:08 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 21 Oct 2026 00:01:07 +0000
+Message-Id: <DMA2PE5NZ5HP.3DYHQ3DIKG0OG@gmail.com>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v5 0/4] bpf: Fix a struct_ops use-after-free
+ behind a flaky assoc_in_timer test
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Qiliang Yuan" <odys.yuan@gmail.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Amery Hung" <ameryhung@gmail.com>
+In-Reply-To: <20261019-selftests-bpf-struct-ops-assoc-timer-v5-0-77b2e181e5cc@gmail.com>
+References: <20261019-selftests-bpf-struct-ops-assoc-timer-v5-0-77b2e181e5cc@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -118,86 +108,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: NeilBrown <neilb@ownmail.net>
-To: "jamz" <jamz@amazon.com>
-Cc: "Miklos Szeredi" <miklos@szeredi.hu>, "Jimmy Zuber" <jamz@amazon.com>,
- fuse-devel@lists.linux.dev, linux-kselftest@vger.kernel.org,
- "Shuah Khan" <shuah@kernel.org>, "Bernd Schubert" <bernd@bsbernd.com>,
- "Jim Harris" <jiharris@nvidia.com>, "Horst Birthelmer" <horst@birthelmer.de>,
- "Luis Henriques" <luis@igalia.com>
-Subject: Re: [PATCH 0/3] fuse: atomic open
-In-reply-to: <20261020141647.3271341-1-jamz@amazon.com>
-References: <20261020141647.3271341-1-jamz@amazon.com>
-Date: Wed, 21 Oct 2026 10:33:46 +1100
-Message-id: <179253922666.1724252.16392934420146585044@noble.neil.brown.name>
-Reply-To: NeilBrown <neil@brown.name>
 
-On Wed, 21 Oct 2026, jamz wrote:
-> From: Jimmy Zuber <jamz@amazon.com>
->=20
-> Add FUSE_OPEN_ATOMIC, allowing the kernel to skip LOOKUP to improve
-> performance. A server implementing FUSE_OPEN_ATOMIC will look up
-> the name, create it if O_CREAT is supplied, and open it in one request.
->=20
-> The reply says whether the file was created, as Miklos suggested in [1].
-> The overall pattern follows his sketch in [2]. For a cached
-> name, the kernel compares the returned nodeid with the cached one and
-> looks the name up again on a mismatch.
->=20
-> A server without FUSE_OPEN_ATOMIC replies -ENOSYS and keeps today's
-> behaviour.
+On Sun, Oct 18, 2026 at 07:27 PM Qiliang Yuan <odys.yuan@gmail.com> wrote:
 
-This all looks like a reasonably sensible design. As permission checking
-happens in the client, not on the server, it is appropriate that
-FUSE_OPEN_ATOMIC only opens the file if it actually created it.
-So it doesn't make sense to implement O_TRUNC.
-
-However the code seems to suggest that the server might open the file if
-it was found to already exist.  In that case, were does the permission
-check happen...
-
-Maybe I need a more explicit statement of what FUSE_OPEN_ATOMIC is meant
-to do in the various cases.  Or maybe I just don't know enough about
-fuse.
-
-There is work underway to support O_CREAT|O_DIRECTORY so that a
-directory can be created and opened in a single operation.  Would it
-make sense to include this in FUSE_OPEN_ATOMIC ??
-
-Thanks,
-NeilBrown
-
-
-
->=20
-> Tested with a new selftest under UML and KVM.
->=20
-> [1] https://lore.kernel.org/all/CAJfpeguEK4JsFo60=3DyHkpLL6XkDGS7cQ5GOhiFL3=
-79KsYk0TsQ@mail.gmail.com/
-> [2] https://lore.kernel.org/all/CAJfpegvXtXY=3DPbxv+dMGFR8mvWN0DUwhSo6NwaVe=
-xk6Y6sao+w@mail.gmail.com/
->=20
->=20
-> Jimmy Zuber (3):
->   fuse: add FUSE_OPEN_ATOMIC
->   fuse: open cached files with FUSE_OPEN_ATOMIC
->   selftests/fuse: add test for FUSE_OPEN_ATOMIC
->=20
->  fs/fuse/dir.c                                 | 359 +++++++++++--
->  fs/fuse/file.c                                |   4 +-
->  fs/fuse/fuse_i.h                              |   4 +
->  include/uapi/linux/fuse.h                     |   8 +-
->  .../selftests/filesystems/fuse/.gitignore     |   1 +
->  .../selftests/filesystems/fuse/Makefile       |   3 +-
->  .../filesystems/fuse/atomic_open_test.c       | 473 ++++++++++++++++++
->  7 files changed, 797 insertions(+), 55 deletions(-)
->  create mode 100644 tools/testing/selftests/filesystems/fuse/atomic_open_te=
-st.c
->=20
->=20
-> base-commit: b776cbe24cc1b79c7f5101762b0069b3f48b6a4b
-> --=20
-> 2.50.1
->=20
->=20
-
+doesn't apply anymore
