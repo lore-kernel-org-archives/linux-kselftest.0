@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792569674;
-	b=vhYUS3eksRvOhbRG3nWBQVmUmT5Y7r5mfb5wDJcjvGTGHiJAhmT0WAv70wwRUdLFhVIH
-	 AGG6FR3O1nmzIfCcB3DlhtPLKc2sA9tePwX4MAZoj4k7xQRye1HkvJBE/jy+/Jz2VSMh3
-	 vjUdKSOdT2gMcAx8Rj1vU1CgPaqap2bSE5LhFUvWm1ZCczUlvg+Yti8o2C8PHJf2LMoHg
-	 v72L0wmb6pY+mrt+HVw6k6Xe8Qf5IHXvnhZoz4ZEHGFQvFr2LVVjFd5oxArR2FGOEvpko
-	 Lufw/6VZYqXEKyBPT7yuuBLVu1z7cDp/fN4gbJB9vZ2VSqwMS8g5VZxmU8u32daknJA==
+	t=1792569682;
+	b=MXkK6TBWur+jtCVG1VB6EBusmtB1VWYbpxIkyTeAcek49RTqs7LQ3Hb77WymVjmVxKxj
+	 oPRvD4RTkC2IbRlqVJeWJO2zTwvlbtcE6qv0rjN875WNZfNRX8pJUkIBA8oZjCVYsSEO1
+	 bRTa+VZwGxZGB5H+yyRC/A2FAgxQWzZ9Mm1URd7jlzenMrVK2GmfAIb6RsZSKIKO698ET
+	 Cuw9ZcDkwnPqrilq42jSy5DTUPu/d/HwY8FIvPkfuu1RkGa+zRjbxG61xC75YVJvA1/dB
+	 a1w/UrN1DBxJpcMbagcKWbHmcHD82hdrDgVJYi0ENctqUw7GklF2jO6gv/E310D4x+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792569674;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792569682;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=PiI4cMavYXtb8vt/MajCrhWPebqVcKLkNr8147+y6WU=;
-	b=Y7yMSknCyv9RQQgBx/UhqShNlIUiyskemi+MPapDxQ/mB6MNFHlhqWorAb2JuDmVO3IR
-	 0yqrW5G/auqDBT0FefVSmrGFn6ztczqTyPRgVlkxXlsgNV3/ObvSYzX3rOIwxbjdAcx28
-	 Cyp3E64L/Kck/F6Zvhe/gK8YfpkNm7gYEYD2o0N5e9UdThFnDXPZmKLvPuIIBqKta9GdY
-	 v/IqgDm69T9OgelNuHXM8XUyYaRv9xR59fG7OJzEdZmtrFZqvm7G8FC7O7fLkUIr+8Orw
-	 GBLYgGo2TO1iDLdnzA4K3c1QLNJMrrxAoVciD74pbFKrZUsS6XwMuQ73LHjskja5plw==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=7MIS0cUZkMo0tueSJ40/6CJPQJ/uhX77qO1/G5pJdKc=;
+	b=ZFLOaIQIunykzlo7TMdAA2a6hBivLOxYzdeJf47YFUFKW3+U/kQPGQS0aW0EN4tTk7tG
+	 lhoXlKLoDpVUgRX1MawTSDT4AYzlkWBUFzQZRgOPma+Jplm1euRHYyt6eiSbYtzYoQgAj
+	 TKYvgJQJwshQkYhf8EOWtiKgCczb8LDdpMtbJNSE6ewmKJiQ+D7A8/lQM9nnUAt7xE4TB
+	 vb8EHUcrjnttcZnqTGuNzM6qOGuNXvKj/1m8BE/m/2qiJLB1PhFBfQXGQCfPmupe42lAc
+	 nwxfXcDx++tqUG/SBBjuiI1s5wAMjj/eEJhxsDWoOl/JdQ2baFY+TQAkqpM/vqC1QpQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=beu0BXXQ;
-	arc=none smtp.remote-ip=74.125.82.182
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pPtw1iXh;
+	arc=none smtp.remote-ip=74.125.82.177
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202FA606A31B
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 08:01:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 202FA606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25058606A325
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 08:01:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25058606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=beu0BXXQ
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso1359986eec.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 01:01:14 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pPtw1iXh
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-33fb4680717so1137890eec.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 01:01:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792569673; x=1793174473; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PiI4cMavYXtb8vt/MajCrhWPebqVcKLkNr8147+y6WU=;
-        b=beu0BXXQNA4InNFt82BaFOJL7zjfNzYGRue65Lszr5n1WGFG30rIq1M+HQKabuKkU7
-         WSGmDMMMCbDASNd576d4BDkYI/1wp6mgI/GmHyILQKHOSInIEZ1qkcYS0t9hULGA+kn4
-         jJoOCAhS6O9mMs8W39ak8jOyiwaM8xvuuz/XFO4h/fHkykK3R3oP0lnsMN7QbzJJ+7Nt
-         pZ1Ebg3bWHyPBJcfET7k48n8OnHw4wWjxUjiJKiA2d9nOVooBcUAkN6zawPdFd79CJYE
-         1LCplnCxiXImwEi+W866dU/4WYnve+jSyw5TAMWa3ZSZGLM1vXr6YUZm0Hcdr9dR9PpO
-         XT5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792569673; x=1793174473;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1792569681; x=1793174481; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=PiI4cMavYXtb8vt/MajCrhWPebqVcKLkNr8147+y6WU=;
-        b=pamasJcikqzgLXgWu/ilkGp+9bsmG595B7wDe5BefKnsLd1mPndH3MH3V6PnR7v/mu
-         cVqvoyw+xNWSjCbYptVIvIYS2gp8hiwMc127AlI4iXqBGAUcPhApcsstFSnEvnq2dIIr
-         O5LAzznJLQH9bQmYYwlerZauW0PX2YDfYSy83LyhtMMHk4k4wwtMf6U3DgRtBtVvQUuy
-         aUItIBN36QG6y0HxtWi1yLycnd6EMeAnbPpkWFekp8RDfO9djgJaaEvEUBGse87zkNUM
-         ZR9TwiTuJoQ0o/4vd0eP1V3cjdMA9ae8LNl6i7LEDIsWIgS7V3b44hLt3yprAEUa500R
-         sgjw==
-X-Forwarded-Encrypted: i=1; AKwUvBwjGciey8u6w+ci3iSyViVb2uksR2r+LNj6BCSmXpEOsBOxAm5xCIdMVab3ZzDwAYkauHM8G7i8+ihWKla5uzw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLTn3PijKQVBwuj9+Vbn4Gdvyhs1bb9pfdKEFs2Oce71UiHkBr4
-	w7hnTFDXSjx/B3eVKzOyOUe8EhZNDTEMXLiC8VH4ygVKnCJVOxpVn7jS
-X-Gm-Gg: AYBFou0nIimbu+Z538bGe2bXWtZpwmq1GyfcGMCEB4Rnv89GY+6snXyuLAINE0ithRP
-	Fwtf3UVlpL6j6kVUax8khHQ5v3bDbaLyt4yfiUjwcZ9gUWJjPd7sY5fk5lW7MwaSSfmkI7N9dcI
-	O0mpqR0U/Uf8RyOQiBxWLyS/uujrEQG+7Wq9Nkwtj31oCjb1/iD+SQUBdJnQHGXzw6MMOXqX5HN
-	wTTVPmAiSsXM0nmtx0b54mWFpI3an01XpLIHk4wzuf5M9t2pahYQqbLToqJzaVcx9c9jkLaG06u
-	pSSsT26D/IL/gWZQ0wH8zq186yscgrKIGcidCTWk8PyP2uCLYvacqGFYp7Tnc7lJGdfbebX6PJQ
-	S2WNrEqBvgvfmUIpE4zmls92cVyZZn+RhcOFph4YMKfvMQIMaf8WrQAAHFImzi9PquHgOAZ1GY5
-	gqQn1s7853whu9C+/XhBPQ4zlnNerY1xuEBIIPNl5EhnUwAtLbn0Wb934AYLXZGW6qbmaelvMWq
-	A+N8NmH8prRFs8zztEQV2Six4yzZIWldINCo0eK1Rog38QsnL5LwnppOvQiagqN6M9EuNr3PADa
-	rDdh/6mWVKUO9eDyZ69BCkRZ7jK5
-X-Received: by 2002:a05:7022:e1d:b0:141:4c37:a212 with SMTP id a92af1059eb24-190a051dd9amr2581121c88.2.1792569672784;
-        Wed, 21 Oct 2026 01:01:12 -0700 (PDT)
+        bh=7MIS0cUZkMo0tueSJ40/6CJPQJ/uhX77qO1/G5pJdKc=;
+        b=pPtw1iXh0q5WfAtHEuxSAz1WelWzqMsZOhK/i4Ybpbmiv7DXt3F88tHkJHSE+TzG2w
+         +hemZUvb1PDJvayoYm4YK2aWbSKUo/DQz6k084eKCjcpqEmTR74laCR8zDMSIdGgcZXB
+         7OkpXuRW357xyvQR9gq+3FQt9ZAeF0XBVNe5dnHRauMZl9qszsCcQw2JqRc7Y9UA3Km0
+         LSKVKPQQNg5dOybyy6qfmKkV3W65Cw/EuuPeEtXk9+Ug1KcDPwbJsS6tRIaZrI0yFLVu
+         Lq8tcwrgi4L/6mVLzPsV1Itrm2yaKsIp2JIdlYOoaQFLg0d4vys698bHs/hKVc3i9m4o
+         pJMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792569681; x=1793174481;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=7MIS0cUZkMo0tueSJ40/6CJPQJ/uhX77qO1/G5pJdKc=;
+        b=lX8toK00De9Eky8uJHts0lEku+ARcU1dyP/vPZmIL/3CJUwpvRy43wNhvqy3QTLNAj
+         FmVHjfxFT1Fue8J8Olyi3Zik9YpHtvriS+2lQEq/GO8cWL4k9ryRfchLIx5EO29rfrmo
+         69lkEZK6MNtQiSqgpUvwf77oQqB6J0tspZ6S56VGW4jNbhLKET+itNNcTJC7apO1M7Qj
+         rzRq0hyPrbk7IdZqA488LXITM8CwnjRl+iHgGkuM50KtQaR2p0hSCGaQuhr5IkMDrrE9
+         ETC0ZqPb1TPjroe0vaR4WePmejNhlTF0P0hr6yFDOuBEnmNLUhrtH+5jg4UkaulpBSnY
+         z+og==
+X-Forwarded-Encrypted: i=1; AKwUvBwURaTKnaoH310bwWL6wyMS8i3zD/jgiK9yJE97dlTXjrz+Iviim9f/aEQ/ZEsnIXm7LSLTN0aWT5SZsNMI7wc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIiTfbmoDHqCTGIB23E/WHtytaAsLAHsqwBYGUtY02iYbqGNlSl
+	ZwmqKXol+hhzj7hfA+s9TjZ4y6i/Gp03l5bNdiV5oeB3651qtYxV4GZWTYoC5Ge3nhc=
+X-Gm-Gg: AYBFou0gOxg577EK5JKDoSp+Cey5BgH9xJQ37hQL3B3YkXFSfQdZsyyigQfPK2oiYzP
+	OcOOcu6tYKuPgM29e1o7OF+IGrRu9t2TRyUE3xzGg5K7pmvUPIGoFrkjT1Q58IM0uPaYA2wiriZ
+	21xH05sP5PpqPax6caIHbwcqSOhaUAKJSwhHLJ8RVYfUaghS5L2K0wHef2Dw6hK96LBoQvtoXrj
+	55yrmJNN8UybPPtP452MAiDB2gIhNS33P6B6j18HP7cT3RCSpVmWte5pg8QBRqDofzklF6Es2xR
+	CuOPM31BKYrzGqzPKGaAnKCSdbfdJyFRdUWtMEXcSXuEKhOU7Eq1RjTUOtuqU+GSC/dPCUZYC6t
+	ArDPwkeq3AIUOBraxVTZcsiqHw1eGEaQIBT8OEB8lbnIBIgTQpx8x1B+1LHRtI9LQ88o23eCWLr
+	f5/94a/2iqCt6jKDiy4nfdmhsfXiT5Hay4puJwthiNT+WzUQODm0m7qNK99tf92QqMPJp063Ymd
+	/WNY0BZDLPdEdbSVnVrtMZK1Ys+UEwD5JG4Hrj/uUOa11vsRWtXxDf4MB1m1TSpO7m58+MK8GFY
+	c0hu/CKHjDqFXg7Bia71u49OG5Zc
+X-Received: by 2002:a05:7301:dd88:b0:35d:8c39:b2fd with SMTP id 5a478bee46e88-3674a40df97mr2426025eec.1.1792569680787;
+        Wed, 21 Oct 2026 01:01:20 -0700 (PDT)
 Received: from Terra.tail0ac356.ts.net ([198.176.50.208])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367416a1fb9sm4470610eec.20.2026.10.21.01.01.05
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367416a1fb9sm4470610eec.20.2026.10.21.01.01.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 01:01:11 -0700 (PDT)
+        Wed, 21 Oct 2026 01:01:19 -0700 (PDT)
 From: Weiming Shi <bestswngs@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -96,10 +97,12 @@ Cc: bpf@vger.kernel.org,
 	Xiang Mei <xmei5@asu.edu>,
 	Weiming Shi <bestswngs@gmail.com>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH bpf v2 1/2] bpf: Validate stack arg reads against caller state
-Date: Wed, 21 Oct 2026 01:00:59 -0700
-Message-ID: <20261021080100.2663618-1-bestswngs@gmail.com>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Test missing and callback stack arguments
+Date: Wed, 21 Oct 2026 01:01:00 -0700
+Message-ID: <20261021080100.2663618-2-bestswngs@gmail.com>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261021080100.2663618-1-bestswngs@gmail.com>
+References: <20261021080100.2663618-1-bestswngs@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,88 +114,216 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_stack_arg_read() bounds a stack argument index with the callee's
-BTF-derived argument count, then uses the index in the caller's
-stack_arg_regs[] array. The array's actual logical length is recorded in
-caller->out_stack_arg_cnt, so the bound and indexed object can diverge.
+Exercise the path where a static seven-argument subprogram has unreliable
+BTF and is called through a bridge with only one initialized outgoing stack
+argument. The callee expects two stack arguments, but the unreliable-BTF
+path skips check_outgoing_stack_args(). Expect the verifier to reject the
+second r11 load at offset 16.
 
-A crafted BPF_PROG_LOAD can use an argument mismatch to mark a static
-subprogram's BTF information unreliable. Later calls return from
-btf_check_subprog_call() before check_outgoing_stack_args(), while
-check_func_call() continues the static call on -EINVAL. The callee can
-then read a slot that the caller never allocated or initialized. The
-earlier commit 4286f5deee14 ("bpf: Validate outgoing stack args when
-btf_prepare_func_args fails") closed this hole for the first call, but
-not for later calls after the subprogram has been marked unreliable.
+Also exercise synchronous and asynchronous callbacks whose BTF prototypes
+declare a sixth argument. Initialize the outgoing slot at each helper call
+site so the programs reach the callback-specific rejection. Keep a valid
+six-argument direct call in each program so bpf_fixup_call_args() records
+the stack-argument requirement and cannot become an unrelated rejection
+fallback.
 
-Callbacks have a related problem. The verifier can make incoming stack
-arguments readable from outgoing slots at the helper call site. However,
-helpers and kfuncs invoke callbacks through an ABI that passes at most five
-arguments, so the runtime callback receives no stack arguments. Async
-callback verification can also reach check_stack_arg_read() without a
-caller frame.
+The fix also rejects the existing uninitialized-stack-argument test before
+the later unreadable-register check. Update that test's expected diagnostic
+accordingly.
 
-On x86-64, KASAN reports the direct-call out-of-bounds copy as:
-
-  BUG: KASAN: slab-out-of-bounds in check_load_mem+0xb51/0xc60
-  Read of size 80 at addr ffff8881009af550 by task poc/131
-  Call Trace:
-   check_stack_arg_read at kernel/bpf/verifier.c:4234
-   (inlined by) check_load_mem at kernel/bpf/verifier.c:6645
-   do_check_common at kernel/bpf/verifier.c:19568
-   bpf_check at kernel/bpf/verifier.c:21318
-   bpf_prog_load at kernel/bpf/syscall.c:3134
-
-Reject callback subprograms with incoming stack arguments before their
-state is pushed. For direct calls, retrieve the slot with
-bpf_get_spilled_stack_arg(), which validates the index against the caller's
-out_stack_arg_cnt and rejects uninitialized slots before copying the
-register state.
-
-Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
-Reported-by: <co+eada64ce90ecebce@bugs.sh>
 Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Assisted-by: LLM
 Signed-off-by: Weiming Shi <bestswngs@gmail.com>
 ---
 Changes in v2:
-- Reject callback subprograms that declare stack arguments.
-- Drop the curframe-zero check because only async callbacks can reach that
-  state, and callbacks with stack arguments are now rejected earlier.
-- Explain that commit 4286f5deee14 closed the hole for the first call only.
+- Add synchronous bpf_loop callback coverage.
+- Add asynchronous bpf_timer callback coverage.
+- Add the six-argument callback BTF prototype and initialize the outgoing
+  stack slot so both tests reach the callback-specific rejection.
 
- kernel/bpf/verifier.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ .../bpf/progs/btf__verifier_stack_arg_order.c |  10 ++
+ .../bpf/progs/verifier_stack_arg_order.c      | 121 +++++++++++++++++-
+ 2 files changed, 130 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 72a3f5998dd27f..f461e9e5d19da5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4228,7 +4228,12 @@ static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf_func_st
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
+index 99bc115f8380a7..cd0ab034b788ce 100644
+--- a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
++++ b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
+@@ -25,6 +25,11 @@ void subprog_bad_ptr_7args(long *a, int b, int c, int d, int e, int f, int g)
+ {
+ }
  
- 	caller = vstate->frame[vstate->curframe - 1];
--	arg = &caller->stack_arg_regs[spi];
-+	arg = bpf_get_spilled_stack_arg(spi, caller);
-+	if (!arg) {
-+		verbose(env, "invalid read from uninitialized stack arg off %d\n", off);
-+		return -EACCES;
-+	}
++int callback_6args(long a, long b, long c, long d, long e, long f)
++{
++	return a + b + c + d + e + f;
++}
 +
- 	cur = vstate->frame[vstate->curframe];
- 	bpf_diag_mod_begin(env, &cur->regs[dst_regno], arg, BPF_DIAG_MOD_WRITE);
- 	cur->regs[dst_regno] = *arg;
-@@ -9839,6 +9844,10 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	err = btf_check_subprog_call(env, subprog, caller->regs);
- 	if (err == -EFAULT)
- 		return err;
-+	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog])) {
-+		verbose(env, "callback subprog cannot have stack args\n");
-+		return -EINVAL;
-+	}
+ #else
  
- 	/* set_callee_state is used for direct subprog calls, but we are
- 	 * interested in validating only BPF helpers that can call subprogs as
+ int subprog_bad_order_6args(void)
+@@ -46,4 +51,9 @@ void subprog_bad_ptr_7args(void)
+ {
+ }
+ 
++int callback_6args(void)
++{
++	return 0;
++}
++
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
+index c9fe4857da3f55..610c96e8113760 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
+@@ -5,6 +5,17 @@
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
+ 
++struct timer_value {
++	struct bpf_timer timer;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct timer_value);
++} timer_map SEC(".maps");
++
+ #if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
+ 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ 
+@@ -129,6 +140,25 @@ static void subprog_bad_ptr_7args(long *a, int b, int c, int d, int e, int f, in
+ 	);
+ }
+ 
++__noinline __used __naked
++static int callback_6args(long a, long b, long c, long d, long e, long f)
++{
++	asm volatile ("r0 = *(u64 *)(r11 + 8);"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__noinline __used __naked
++static void subprog_call_bad_ptr_7args(void)
++{
++	asm volatile ("*(u64 *)(r11 - 8) = 0;"
++		"call subprog_bad_ptr_7args;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
+ SEC("tc")
+ __description("stack_arg: read without caller write")
+ __failure
+@@ -151,7 +181,7 @@ __naked void stack_arg_read_without_write_1(void)
+ SEC("tc")
+ __description("stack_arg: read with not-initialized caller write")
+ __failure
+-__msg("R0 !read_ok")
++__msg("invalid read from uninitialized stack arg off 8")
+ __btf_func_path("btf__verifier_stack_arg_order.bpf.o")
+ __naked void stack_arg_read_without_write_2(void)
+ {
+@@ -170,6 +200,95 @@ __naked void stack_arg_read_without_write_2(void)
+ 	);
+ }
+ 
++SEC("tc")
++__description("stack_arg: unreliable callee with too few stack args")
++__failure
++__msg("invalid read from uninitialized stack arg off 16")
++__btf_func_path("btf__verifier_stack_arg_order.bpf.o")
++__naked void stack_arg_read_with_short_bridge_write(void)
++{
++	asm volatile ("r1 = 0;"
++		"r2 = 0;"
++		"r3 = 0;"
++		"r4 = 0;"
++		"r5 = 0;"
++		"*(u64 *)(r11 - 8) = 0;"
++		"*(u64 *)(r11 - 16) = 0;"
++		"call subprog_bad_ptr_7args;"
++		"call subprog_call_bad_ptr_7args;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++SEC("tc")
++__description("stack_arg: synchronous callback with stack args")
++__failure
++__msg("callback subprog cannot have stack args")
++__btf_func_path("btf__verifier_stack_arg_order.bpf.o")
++__naked void stack_arg_sync_callback(void)
++{
++	asm volatile ("r6 = 0;"
++		"*(u64 *)(r11 - 8) = r6;"
++		"r1 = 1;"
++		"r2 = %[callback_6args];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		"r1 = 1;"
++		"r2 = 2;"
++		"r3 = 3;"
++		"r4 = 4;"
++		"r5 = 5;"
++		"*(u64 *)(r11 - 8) = 6;"
++		"call callback_6args;"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_ptr(callback_6args),
++		  __imm(bpf_loop)
++		: __clobber_common, "r6"
++	);
++}
++
++SEC("tc")
++__description("stack_arg: asynchronous callback with stack args")
++__failure
++__msg("callback subprog cannot have stack args")
++__btf_func_path("btf__verifier_stack_arg_order.bpf.o")
++__naked void stack_arg_async_callback(void)
++{
++	asm volatile ("r1 = 0;"
++		"*(u32 *)(r10 - 4) = r1;"
++		"r1 = %[timer_map] ll;"
++		"r2 = r10;"
++		"r2 += -4;"
++		"call %[bpf_map_lookup_elem];"
++		"if r0 == 0 goto l0_%=;"
++		"r6 = r0;"
++		"r7 = 0;"
++		"*(u64 *)(r11 - 8) = r7;"
++		"r1 = r6;"
++		"r2 = %[callback_6args];"
++		"call %[bpf_timer_set_callback];"
++		"r1 = 1;"
++		"r2 = 2;"
++		"r3 = 3;"
++		"r4 = 4;"
++		"r5 = 5;"
++		"*(u64 *)(r11 - 8) = 6;"
++		"call callback_6args;"
++	"l0_%=: r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(timer_map),
++		  __imm_ptr(callback_6args),
++		  __imm(bpf_map_lookup_elem),
++		  __imm(bpf_timer_set_callback)
++		: __clobber_common, "r6", "r7"
++	);
++}
++
+ #else
+ 
+ SEC("socket")
 -- 
 2.56.0
 
