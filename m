@@ -1,104 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.76
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792553596;
-	b=FNfxc41JmUdXW7xk8TYj2d9pHmf9jmUs22M3TUMbqnWiIqdo2NE2YPYouzK57c/m51E+
-	 hbuIy+7A0LwdHJ7ah79SiLJ2goFB+0UaI6W6mqbjfPHqZO6OBg8WdfJtUfwSBCNxj1/Ez
-	 dDjLDSL+Dr2Q12lxQu1TW98NHmY+0vYhHFqt8hrhKghwazkqqchFDM3qr0HB7K08PKnyA
-	 Ld889Q5W7nAlteN7dJ8CIsqxlc2DeiBiiojIlKlDG8z0QJVxbRWSpua+Qif5IzRG2CJ/z
-	 wV73GqZn2mYyaKHlG+CzUkUMXMlRAIVHRep2Qm9DS1dnKnb2cl4KAc4hp04xQjXSD5w==
+	t=1792553633;
+	b=sebgHD0DQC2lyhNW2/GYv3ofSCA79GARAEqUP7mHZDq+eUQN0uZBX3jcL98C6GOsXecn
+	 VA6uvtkg+wJiLj5iM/ToQsuGiL8iDsvyYgPIVA7781/NPxDOM+/pqGzw/AbtXgeXdTrOC
+	 iBJkBwPKUcrYRA2MB6u760PyKTtOODaSDpi4zDwJLJNYzsjW+HlEJ64TMDnVvRLlpoWy8
+	 mlg3/6RAGlzHqPq+sZT9JVWuziprECdOXzd3mJHF5BODbFAhR059EOzysTMZjzDAP9egd
+	 ueUD5DiSohafOYdLaPE4jX9YxzvtvyA2dg8T7xkc4uN77OAT06cNxGFg7ewwGSrEtvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792553596;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=jrdPTTT8LeuGKw/UCJIAORDOHiF4eOET7WBKgWyq0CA=;
-	b=0w2Q1GY4NMtUgEb5OsS09ORRQfch7wJtFHq9PsXwzGtahEsHO2dCW0X81BOYFHpGoBOm
-	 B/YuCgYDJ217Sep5pCzRtPH5JYXncaRjLzHaXYaYbGMHM7PGOFrZVtyakd+tAiz4u0qfT
-	 e3rwtxSsImcIsYnHSD0k+4oduB+50Z+PJV+1/llAq1cBZPkzplspTZ1nVD4N5AeKeWr+y
-	 TfJDJ905fsbj0C+5dsDlLHM2eVoEEyHu2Sc4+RyaaafR7/YZgFvijtaK1awMxG5liSf9a
-	 NiFjenBVwXEkc53uYDqsoE9O4CCC1xmY/CH2sm/yeg1NRH0dXbZ3WFI0OBk2MI8IIAQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792553633;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=RbLlIDBzxSpd5cJfPOd2N3zvhSlGP9L2jcWxKocz/10=;
+	b=r5agOVPSFAy1eVfSve5ey/VjQCzwmKwJKj/T3MsL9B1L83fHCnX2EVyjhytUbHJ0QiBT
+	 6TLx8F54N+q/HslGujNQ8qDR8lFNzPajqzmp1HyBacD6vFsxEoQtIGxNXs4h+PkJ40uNC
+	 ZavNTcYI8f8pAxt0Hybg/YJiphpVWaYmY7l/wqeBRCdTQgbiPIHQJWRcthfd80T7olw2v
+	 kh8PXfUdORI6LVZL02Q63nL9pPQ3zoIJLFRTEMr7YgPFB/WpwyRXtqNJoKZbWt4fcwMPx
+	 Nw0lcbyoTUbKWLIc3zhir5jBiAY4AEgJNCMCDb7M2Tx5tPyUHQegl70+Q7g5m10yIqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=openai.com;
-	spf=pass smtp.mailfrom=openai.com;
-	dkim=pass header.d=openai.com header.i=@openai.com header.a=rsa-sha256 header.s=google header.b=X5XibFYs;
-	arc=none smtp.remote-ip=209.85.161.49
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HuUipxgR;
+	arc=none smtp.remote-ip=91.218.175.76
+Received: from mta0.migadu.com (out-76.mta0.migadu.com [91.218.175.76])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5AD606A31C
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 03:33:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D5AD606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50991606A331
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 03:33:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 50991606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=openai.com header.i=@openai.com header.a=rsa-sha256 header.s=google header.b=X5XibFYs
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-6fe4372c5f3so125552eaf.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 20:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openai.com; s=google; t=1792553595; x=1793158395; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jrdPTTT8LeuGKw/UCJIAORDOHiF4eOET7WBKgWyq0CA=;
-        b=X5XibFYsv5I92LrAxuIAIELYc8JWFexebLAbJJ7l0SbZdhwQyds90r9XxKbIeJT38y
-         lUtjXHEJpFtgxndozNIty+KNblvj2GWDRpr/pyW3WmPZNz3mLXHMc4OTIuxjngA7D8Ne
-         xNgeawx0Ro0KhLEL5tI7Wn5vSucJbfY/gR1Dw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792553595; x=1793158395;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jrdPTTT8LeuGKw/UCJIAORDOHiF4eOET7WBKgWyq0CA=;
-        b=2QRLcSsyhOgAJPi2tpogxrHCFlYNbRHgunugdu4OWRILpgfX8pU+Qqri4Kctgkd96c
-         /hxUtPkVYES9nqHHaDoczgWV4gSFE7GyDCHea6nkat0yvSzJTOFhXTQR9h68xOjxy50Y
-         qGln5cvC0rJueGr95fS2XaheDHe6N3syKW1QMkK71dDoxd2UVjxDKTkWtlf64ONXiDkD
-         fEQKjcqFEoHmFJaf+SFMlhFt/b+VRrY3wndyyY21c28lkLnmskWLPDXlzFRV3FBxodBM
-         be0reXFFvdPdhhLPLgY6y4DnhdRxs4pevXDrwuR5/yn+Qy7+NJFGjmY7JE1zJA2BxDXg
-         FXYg==
-X-Forwarded-Encrypted: i=1; AKwUvBxhR0xKuXugVFTOp231Y6ElbyiQDIzs4FR+6yHGojoeFLsnW3Eet/wpmVvrHfuWcAPaifcp6UVbAsuK2fHcgms=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJHDOeaEPKDwBjHXJlvD5MCDAhTzCccrl/6BgBKmiN2mwWR2Uyp
-	l3azuxXeChE5dKUkjreoFZDp/gseVWp+VVlFIlSBaaSI5MMiqX0ubBm0eQocbM7M2Dc=
-X-Gm-Gg: AYBFou0GKCFJZmjC/lH5dWpAbpZ6HCylf85jmMowJh0qLFz5lpJzodSb3HYpLgj01tm
-	IfipTWShPQHfcnaOoRWoMsKYtpvyASsg5OeYy2zTexH+wxqP1TK1hsL4ngIwLggUhAe8EnOIV5V
-	b7Nd6nrMW88p0+KGp41mY6Mh1V+UnhZYv5C7xyfsJC+FsVMv3nOTJdAKI/v4CxQa/H2CkJFyL8k
-	smLXUvubSzoKfKijHmUKfDkes4xHXIf9khrQZ0B5dGixvuJwCAs+JE12dT8jQo6xDBWqRgImTZh
-	WP/BAbgmtQdBJ11yIpYOZ1hy6JXN+T4jzUyIlw3w70uXVnCZqMbPpngF/2cNBi9NTcpKmkT0FuE
-	4oqSaa0dfkUi/2Z4DkyxeVbejCQmuinrv5/DGRrudMfabMmVs4J7gq7ND4oZQcoYCRHrdwqv9+K
-	FTmiMVpdFXisIuhIFzq6zlJYpU18z2uhNKWzb7RxyBIOx1havfbKr/xpS2XpGgtyBGunnUdznTt
-	fKHt+Whc5XYRuntG5PAYiurhKpXuo7qS7jyyZtO8feYqRe4EWUFafd/puXZlEsqO8bOGZmipCVp
-	+8Vu31Gh3I22WKn5MeIg7KH2/AQ6iFGzZI2amQjbb3Uj4H87chpFQLqb4qTovwqt6+raUW2SLqF
-	e9L+xKw==
-X-Received: by 2002:a05:6820:1f07:b0:6e0:edfa:9b48 with SMTP id 006d021491bc7-70941830650mr500639eaf.77.1792553595173;
-        Tue, 20 Oct 2026 20:33:15 -0700 (PDT)
-Received: from com-68297.corp.openai.org ([199.47.143.7])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-84cbd2d2a76sm1333653a34.18.2026.10.20.20.33.13
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 20 Oct 2026 20:33:14 -0700 (PDT)
-From: nramaswamy@openai.com
-To: Eric Dumazet <edumazet@kernel.org>,
-	Neal Cardwell <ncardwell.sw@gmail.com>
-Cc: Neil Ramaswamy <nramaswamy@openai.com>,
-	davem@davemloft.net,
-	horms@kernel.org,
-	jiayuan.chen@linux.dev,
-	kuba@kernel.org,
-	kuniyu@google.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ncardwell@google.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HuUipxgR
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=y927hDeFwTRi1uuF8AFccBXiuWM2sJNn4YnO+caicLI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792553630; v=1; x=1793158430;
+ b=HuUipxgRWS3e7sDvPB7ilyEUPgRtTmYZ+Pmv+0G7aSfoBB64N9Ezdvggr7cyCJYhNYRoNABQ
+ 1NIALLv0lL+pT7s1Ta2HlXtIcSDzHQRv1LjU8Bz41eNK1xug9eM3nBz5/ICuWBm7aW60JdMJAdN
+ h6MPK5xaXrRLUQqt3HGTojB0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 071bc8b21379f3c8;
+	Wed, 21 Oct 2026 03:33:50 +0000
+X-Mizu-Trace-ID: 071bc8b21379f3c8
+X-Migadu-Flow: FLOW_OUT
+From: George Guo <dongtai.guo@linux.dev>
+To: pratyush@kernel.org
+Cc: rppt@kernel.org,
+	pasha.tatashin@soleen.com,
+	chenhuacai@kernel.org,
+	ardb@kernel.org,
 	shuah@kernel.org,
-	ycheng@google.com
-Subject: Re: [PATCH net v3 3/3] selftests: net: packetdrill: test RTO fallback after partial undo
-Date: Tue, 20 Oct 2026 20:32:19 -0700
-Message-ID: <20261021033310.46029-2-nramaswamy@openai.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261012012601.27658-1-nramaswamy@openai.com>
-References: <CAL4Wiip9RyA-2=p0SVwBcn-oe0864FqqF3QMTCX_7=+ErcJp6Q@mail.gmail.com> <20261009171447.291802-1-ncardwell.sw@gmail.com> <20261012012601.27658-1-nramaswamy@openai.com>
+	ilias.apalodimas@linaro.org,
+	akpm@linux-foundation.org,
+	baoquan.he@linux.dev,
+	ruirui.yang@linux.dev,
+	guodongtai@kylinos.cn,
+	kernel@xen0n.name,
+	graf@amazon.com,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kexec@lists.infradead.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-efi@vger.kernel.org
+Subject: Re: [PATCH v5 1/5] efi: add a KHO configuration table channel
+Date: Wed, 21 Oct 2026 11:33:42 +0800
+Message-ID: <20261021033342.3110-1-dongtai.guo@linux.dev>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <2vxza4p95v6e.fsf@kernel.org>
+References: <2vxza4p95v6e.fsf@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,19 +82,125 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Neil Ramaswamy <nramaswamy@openai.com>
+Hi Pratyush,
 
-Hi Eric and Neal,
+Thanks for the detailed review. I've rewriten the comments and commit messages
+myself for v6. Replies inline.
 
-What would be the best next steps here? Happy to give you more time to
-review if needed, but I can also 1) send another patch with Neal's
-approach or 2) send a patch with my proposal to move lost segments that
-meet RACK's criteria to the lost list to make the merge simpler.
+On Tue, Sep 22 2026, Pratyush Yadav wrote:
+> > +config EFI_KHO
+> > +	bool
+> > +	depends on EFI_STUB && EFI_GENERIC_STUB && KEXEC_HANDOVER
+> > +	help
+[...]
+> I don't like adding a config for this sort of thing. Do we really need
+> this? Why not just have the code always compiled and only used by
+> loongarch? I don't really see we need a user decision for this sort of
+> thing.
 
-I'm still unsure how best to handle the -ENOBUFS case I mentioned. If you
-have a preferred approach, I can implement and test it.
+Agreed, v6 drops it.
 
-Thanks.
+> > +		/*
+> > +		 * Reserve the stub-allocated table so it is neither handed
+> > +		 * out by the buddy allocator nor placed on by kexec
+> > +		 * segments, mirroring the memreserve handling above.  This
+> > +		 * runs on every boot, so it also protects the table in the
+> > +		 * next kernel until it reads it.
+> > +		 */
+>
+> Nit: this comment is too wordy. Can you please make it more concise and
+> to the point?
+
+v6:
+
+	/* Keep the buddy allocator and kexec segments off the table. */
+
+> > +			if (kho->fdt_addr)
+>
+> When can kho->fdt_addr be NULL? Also, perhaps print a warning if
+> early_memremap() fails?
+
+It is 0 when there is nothing to restore:
+
+  - on a cold boot, because the stub installs the table zeroed;
+  - after a kexec into an image without KHO state, such as a crash
+    kernel, because the table is zeroed just before that kexec.
+
+v6 says this in the struct documentation, and adds a pr_warn() when
+early_memremap() fails.
+
+> > +	/*
+> > +	 * Keep a persistent mapping of the table, the same way
+> > +	 * efi_memreserve_root_init() keeps the memreserve root mapped:
+> > +	 * efi_kho_update() is also called on the crash kexec path, where
+> > +	 * memremap() is no longer an option.
+> > +	 */
+>
+> No need to mention memreserve. Just explain the reason here. And keep it
+> as short and to the point as possible.
+
+v6:
+
+	/* Map it now: the table is also written at panic time. */
+
+> This is unreadable. Please add a human touch to this.
+>
+> And once again, the fact that it mirrors efi_mem_reserve_persistent()
+> isn't important.
+
+v6:
+
+	/*
+	 * Write the KHO addresses the next kernel should use, or zeroes
+	 * if it should boot without KHO.
+	 */
+
+> Why ENODEV? Wouldn't ENOENT be a tiny bit better?
+
+Neither, in v6. No table is the normal case outside LoongArch, so
+efi_kho_update() now returns 0. The only error left is a table that
+could not be mapped at boot, which returns -ENOMEM.
+
+> This has too much information. You need to make it more to the point.
+> For example, "without a device tree" already implies there is no /chosen
+> property in the first place. No need to mention the function either.
+>
+> The lifetime of the table is certainly useful information but again,
+> should be much more clear and to the point.
+>
+> Also, you should document what each of the members of the struct mean.
+
+Agreed. v6:
+
+	/**
+	 * struct linux_efi_kho_data - KHO state passed to the next kernel
+	 * @fdt_addr: physical address of the KHO FDT, 0 if there is none
+	 * @fdt_size: size of the KHO FDT
+	 * @bootmem_addr: physical address of the bootmem area list
+	 * @bootmem_size: size of the bootmem area list
+	 *
+	 * Pointed to by the LINUX_EFI_KEXEC_HANDOVER_GUID configuration table.
+	 *
+	 * The EFI stub installs this table zeroed on a cold boot. It stays
+	 * in place across kexec; the running kernel rewrites it just before
+	 * each kexec, and the next kernel reads it during early boot.
+	 *
+	 * The layout is fixed. Changing it requires a new GUID.
+	 */
+
+> Note: I recently sent a series that renames scratch to bootmem [0]. It
+> looks close to landing. So you likely need to rename this to
+> bootmem_{addr,size}.
+
+Thanks for the heads-up. It is in liveupdate/next now, so v6 is based
+on it and uses bootmem_{addr,size}.
+
+> Why __packed?
+
+No good reason. All four members are u64, so there is no padding
+and __packed changes nothing. Dropped.
+
+Thanks,
+George
