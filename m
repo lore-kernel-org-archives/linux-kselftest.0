@@ -1,99 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792616135;
-	b=17ntCJE8B6WHSBMnlzeO9QEmtLadoIj6FIJnRYqtUTR6hD7JL6tl5YnSlB3vRowISTEc
-	 tjynq76mtZ/d5ggTGdMSjWts11rBK6UTiqjf6Odv2Cw1x7kOi1IM4wYUAqZBsZwoIxrpH
-	 3jBYN7b9o8E9Ig/FKgzYhNpI9bgpHFcpOsxipsjg/U/jIA9dqA4MKPblewN4YmNbIhoCN
-	 dzQpC+pvbyA/EQiNr2r1rYOtG5uZqE7ucUsKVYwoY5X3iSmZYJ8l3T7Cd1j8JqxmnlVMX
-	 LPCjJFRAF6/tNCnDwkSdC+jwwe1YhqHSqtDmy05eJ4k0cYOPIR/eplcP21m/1czrpIg==
+	t=1792616548;
+	b=vZZUSs1kVyA6QtqpzpJBOxY7B12vmt0ytNCDLZs1VUgVXvGSGT/6tYE6yMRGOwtdeGTy
+	 dLY9FpkSBtnDoBWt7Qj8sF28LjMqwCYh703UzY723nWNa5ifTmWQeUd3ohyQl5cpa5c3d
+	 7rxHMGi3yh4zJdi6hp7bfINVEbOdVp7wvCDBsNW1fpElrKQXVseii4RcwZ+yhvR4DjSA7
+	 DItLncI6ehWk2orxV4jRN/xWKbKOv5sZq03IxIc+qM1PhcfpFfIPwsCCXl/2L71D+mQeo
+	 5MZpew3A6mL7toPkNdszwOvFp7TQ0rzRE7M0wR+V87xxbq69mB7o+Ma45eqptBISPRg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792616135;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=bduUcpXtkOmTxyFRZdyAPVl9VAhrZ6DhzOg/BEf13tE=;
-	b=sEGZDhQFBzumrYcQyVctPpAfchAGKOJSRRrI/5hpQo1OxkdkCV0LJkQH63kWvndWqAaF
-	 1bJe+fvS6b14CMtwxCE6c0KHGSTfqwNYLBQr+paWAAO+jVte/oVl/nENxHOtOxPi3VbKM
-	 iPLYuLJty2TxsZcHlvA/SX3hstpj7GN14fkf58vpjy9YPwk1iX5lp7NY+t6RNUwaW5+vB
-	 v6mkercJMPSqqPjbBX6545OxU5nGNel+d4EtuwecB4HLf0A4X8CznyWX/1RqpzX8zXTK8
-	 nSF6TL3Zb0OS903SpEqHcn1I5YZHt7BvGXKIYc+f1Wg/Co6S9sB8wLCASGa1slYMI8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792616548;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Virus-Version;
+	bh=6JbcNpjPHdgeoWVpdkfe+xRqxcB8Uct5BYXM7qbHkFM=;
+	b=5EzE6nUHgz7Jom9nNYhThL40VUWL6ite+rQkp81M1FSBGl/2PfDkB5PH/9Aa4rusxiKI
+	 NZYwNhx5eow4Mvp9RZ76AWWGyVQ+EYAKApA9NMuIMryrT70JGPbuGeqh4IHBlVmwVnLeF
+	 7EIQMYyT6nFUnXq1JXHPgquhnrBdJ6nOYsNrR3zqP/ddH66PLuSQ/DD25w7H35ZqPbgXA
+	 xCH9NYBasaCGX6UVAZ003z/g15rL06POaE5C2r+ei/LFp11Yk/Zs0JQWl4zJscggVYQ5u
+	 /gDWUJuw/Aseg3XWKd+bOb9L8k9wHawiRJHscc5cU7gTu8AerxASUW8EX7jOfSKNXXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=F1T9KowB;
-	arc=none smtp.remote-ip=209.85.221.181
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=I8cOwnoX;
+	arc=none smtp.remote-ip=67.231.145.42
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5093606A319
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 20:55:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5093606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D411606A32D;
+	Wed, 21 Oct 2026 21:02:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4D411606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=F1T9KowB
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-5eafa528803so67158e0c.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 13:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792616134; x=1793220934; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bduUcpXtkOmTxyFRZdyAPVl9VAhrZ6DhzOg/BEf13tE=;
-        b=F1T9KowBBnAIpilNjTW11zXtvGWc+wkCskzq8zI1quuT3rfLVRT2jTpShd9YvjJ2p4
-         hxZ0zPUpAKsliN3lZ5WNsxbSR4/eaSQFRWMKhUIcn+dgxM9RN7d5dAVXG1Ec06EhVJ9m
-         /rCmElThGj9KX2PztlO8N88s8lKWw6SjidaTZkPjmB44VkFOAp792KoGsJSJUQAzbf2Q
-         HdOOsY41DDgeXPK2kI2B1dKjj6Yt6hpp4zIPY1wqCWF5B9/xtabUqlhnFFnpn/qYM2/s
-         mdxkuqIRtBsBDf3v35Qck+msXAjTNWJM/afcTYfP9kJPgcBQ0VDOgT1Su8HzU37ESMbG
-         3XLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792616134; x=1793220934;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bduUcpXtkOmTxyFRZdyAPVl9VAhrZ6DhzOg/BEf13tE=;
-        b=QuQHm57i8sGVhbYOiPPUrt5p7rz3XZyt69ceskZq53mN6/jE+/5iyQ83d+r18Q+Xl6
-         ATh2EUNcszpoVe4LmStMbXYd6sbezCeryU178/MzmtpApKaJrM66HITixAKCPJj3P0fJ
-         e5288ZqJB1x1waTqQ3fSDOKHWDFa22WfTHEP1oEzONigXqNPOS3r1TXzYe6Z47QwRShk
-         q0UQSi1WBwQcp9HZAUGNlLs1U9jO7gtsb4G2nWuznPsJzHAM0lot1yGg25dSNRgMjARa
-         ba0HvSV1MYJRYsfzvCVwBd396qCKgCBTnnQ1b4CzhqvUkQXv+UCJX79VBN3xVNabG9/+
-         P08g==
-X-Forwarded-Encrypted: i=1; AKwUvBxPN4TVmcbaVjZYztFN74Fad6QC6Y+n7I4WWyxbk9zPSuW3JSPG/syllvuDObErE3azfHEXp6Uq53gAQAYWz0k=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJKo3N+iVHxmHjiR/9oS9/LJtekkjM23YOLFRQjifuyEhCZmqM9
-	0quPlZLdO3O/6TBZ6OwvokbdH0E4U47c5oHb/7ZxKbU87qGIxG6PSip7
-X-Gm-Gg: AYBFou0V598sMiRyuM/rhY9TTlvWONbG1a946Ju2EuOCHtkBMCO9nyWxJ/cyHDD2eeE
-	Qfd3G1yfUyK8KkoIH0WZisffcTDGDzno903ZHYp7PIXQ+Ub5sVC2tOTboHCENorzizuRMYIKyjo
-	OcCnjdBV+ty8KQwjOD5SJ7t0Xhz8mfQNzfofCGYDoP4Ht4Gjubbd5uyOSrvg9zBgARlRjyGETbm
-	bOIuTQYtg8pha8pV2i2FXd+FyY5v87hxQUWfj3seN3+j/95qH083lsuwTMXxqUdKN4g6MyKhS+4
-	qzim/k1JsdXleocF8NIoIqKA6yJecwoIV0ubuOlmydFWE54sWXfiPgSS2KLlU57SJ0aedp6cFwK
-	VjXJXGeSrfpfO/XFCJvJo915uLnaediUGOwxl8UkWcS1BvclLEsbdzs+Lztlo+YzNkjHy8w/c8+
-	zDm7aaW1MKKVi+R07EOvaHuNBxKe8nOlPXWfzHDHgdYuEY9L57kMDsUGsV/H3s605qHnf+b7prt
-	1B5Z/jlvgbBYO9lRk+4/OWSfq5kiw8c1W5VKsm8HTfLNJacIRSgFk/oVY/0wDARz5sHkzH5Cesc
-	gdxVpE0ata6gKvCdha6EeCrFC0WtsFv3l2D8BX6jlg==
-X-Received: by 2002:a67:e702:0:b0:7b5:7cd5:2a1b with SMTP id ada2fe7eead31-7cc92650811mr1194197137.10.1792616133325;
-        Wed, 21 Oct 2026 13:55:33 -0700 (PDT)
-Received: from Biostar-A520MT ([187.94.15.233])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eae980f64esm4553359e0c.13.2026.10.21.13.55.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 13:55:32 -0700 (PDT)
-From: Breno Rodrigues Alves <breno3011alves@gmail.com>
-To: irogers@google.com
-Cc: acme@kernel.org,
-	namhyung@kernel.org,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Breno Rodrigues Alves <breno3011alves@gmail.com>
-Subject: [RFC PATCH v4 2/2] perf/tests: convert check_*.pl helpers to Python
-Date: Wed, 21 Oct 2026 17:55:06 -0300
-Message-ID: <20261021205506.26736-3-breno3011alves@gmail.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261021205506.26736-1-breno3011alves@gmail.com>
-References: <20261018134322.26445-1-breno3011alves@gmail.com>
- <20261021205506.26736-1-breno3011alves@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=I8cOwnoX
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69LKdfYU3517987;
+	Wed, 21 Oct 2026 14:02:17 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps82601-s2048-2026-q3; bh=6JbcNpjPH
+	dgeoWVpdkfe+xRqxcB8Uct5BYXM7qbHkFM=; b=I8cOwnoX9q9mIIUoTl0XNFbOd
+	WYWOo6dYA7TnZ+P60bqnOlGt4vuQpB8BEWpsnB4E0LzC3wAya6Py/irTRUevzAA6
+	JUVgX245v8KRz0mF4914weO7wVSCyNAnobhUHWPnlbg60PJAMT/Ay3tls9/XI7A3
+	OfvRXGOVXC0+2SAcHQ/2vvxd0KlH/6WDKNvvo+3h4mMPsa2O3SAfDuCSATvKS6vB
+	BKGdXmbkWsLkXf2z/uIPuTTmP3xNw//gvdVPXRW+AV8DW7764+wy3I3y9DmTPupo
+	wEj7Xizweo4WDQnYxUoM791/Z70kJeZxgeRb3KYQc+OcQCfsWVhbnM+JP247g==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hdw52xqsf-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 21 Oct 2026 14:02:17 -0700 (PDT)
+Received: from localhost (2620:10d:c085:108::4) by mail.thefacebook.com
+ (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Wed, 21 Oct
+ 2026 21:02:16 +0000
+From: Todd Freed <toddfreed@meta.com>
+To: <netdev@vger.kernel.org>, <toddfreed@meta.com>
+CC: Daniel Zahka <daniel.zahka@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "David S. Miller"
+	<davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>,
+        Simon Horman <horms@kernel.org>, Andrew Lunn
+	<andrew+netdev@lunn.ch>,
+        Shuah Khan <shuah@kernel.org>,
+        Rahul Rameshbabu
+	<rrameshbabu@nvidia.com>,
+        Raed Salem <raeds@nvidia.com>, Cosmin Ratiu
+	<cratiu@nvidia.com>,
+        <linux-kselftest@vger.kernel.org>
+Subject: [PATCH net 0/2] psp: drop packets with extension headers in transport mode
+Date: Wed, 21 Oct 2026 14:01:58 -0700
+Message-ID: <20261021210200.788191-1-toddfreed@meta.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,935 +86,48 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIxMDA4MyBTYWx0ZWRfX88LzQTuR00eH
+ dHlmsCKVXSgX95LkSNHHcIXplPrT5zkGuXAaA0+bTZt7LHWic0G5GbCzFKMwK/gCw42woRNY/Ba
+ kRz08RCdkg2qzhXYyoGTvdRm6Gu9eDClK1rHbkgyyYzkBPNN3VfCVoZI+NOaEZGVO4w8XakX7cz
+ 9V7k6ihYwEdZkzUlzibOQiNBxCsh4OaCu0Am5/6Pxdn5CnF+SS2EATtR17xgaHE8tvAWGzzRWWe
+ UCvdJfneh7/TNQwkgt+JMa8ZD/XF4iOSZ3XN2TMLq1i3K5ipz0V3ykCMyN93ebP6tDLzqKvHme9
+ JvDoy/qIADz4VJU2FLw1aGESH/wEObWUmoWyzqs88qm1SRZEy6NX4rXRqEQnIn3u+Ydze6/GSQR
+ Inwg4nEWWR0yO9Xa3sqsU7pw0fjRk1LF38Ba1iZSwMmH50FO1Ji/5qU8YjdRQMsq0L43vcP1aRD
+ trL1Y1X2E4SPg48ypOA==
+X-Proofpoint-ORIG-GUID: C5JAK9VtywW-dIZqimHX8qnCTfG2PiYw
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIxMDA4MyBTYWx0ZWRfX8wTw14iPHmpH
+ BdtoTpRoWpD430PNIsaM2Y5JHb/H2Q1axklsRabil7BZBTJ2+A5A2Jg4M4sY4qHv1u517RWp3vH
+ Q0muuFi1ew0qknEd5hW6CeMH1/m/Iq4=
+X-Proofpoint-GUID: C5JAK9VtywW-dIZqimHX8qnCTfG2PiYw
+X-Authority-Analysis: v=2.4 cv=BqEIUoX5 c=1 sm=1 tr=0 ts=6ad92859 cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
+ a=03ozwUkBphtHgyqjj1sw:22 a=vqkdi4PVka8owyC1bpEA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-10-21_06,2026-10-21_02,2025-10-01_01
 
-Faithful re-implementations of the four Perl test helpers in
-tools/perf/tests/shell/common/:
-  - check_all_patterns_found.pl
-  - check_no_patterns_found.pl
-  - check_all_lines_matched.pl
-  - check_errors_whitelisted.pl
+While working on adding support for socket-less psp associations, I
+noticed that this case was not being handled correctly. It will be more
+relevant with that series, because it adds udp support, for which the
+psp nexthdr will be taken from the inner packet.
 
-Same CLI, same output, same exit codes. All use only the Python
-standard library. TESTLOG_VERBOSITY and TESTLOG_ERR_MSG_MAX_LINES
-environment handling is preserved.
+Since the tx association encodes intent to send encrypted packets, but
+because of other configuration (socket options, routes) the packets are
+sent unencrypted, sending this change as a fix.
 
-Update all 37 call sites across base_probe/ and base_report/ to
-invoke the .py versions. Update Makefile.perf's install-tests
-target to install *.py files (in addition to *.sh) from
-tests/shell/common/. Remove the four old .pl files.
+The first patch drops the packets, the second patch adds selftests for
+that case.
 
-All four were verified byte-for-byte identical to their Perl
-counterparts on synthetic inputs.
+Todd Freed (2):
+  psp: drop transport mode packets with extension headers
+  selftests: drv-net: psp: test ipv6 tcp socket with extension headers
 
-Signed-off-by: Breno Rodrigues Alves <breno3011alves@gmail.com>
----
- tools/perf/Makefile.perf                      |  2 +-
- .../base_probe/test_adding_blacklisted.sh     |  6 +-
- .../shell/base_probe/test_adding_kernel.sh    | 44 +++++++-------
- .../perf/tests/shell/base_probe/test_basic.sh | 12 ++--
- .../shell/base_probe/test_invalid_options.sh  |  4 +-
- tools/perf/tests/shell/base_report/setup.sh   |  4 +-
- .../tests/shell/base_report/test_basic.sh     | 54 ++++++++---------
- .../shell/common/check_all_lines_matched.pl   | 39 -------------
- .../shell/common/check_all_lines_matched.py   | 47 +++++++++++++++
- .../shell/common/check_all_patterns_found.pl  | 34 -----------
- .../shell/common/check_all_patterns_found.py  | 37 ++++++++++++
- .../shell/common/check_errors_whitelisted.pl  | 51 ----------------
- .../shell/common/check_errors_whitelisted.py  | 58 +++++++++++++++++++
- .../shell/common/check_no_patterns_found.pl   | 34 -----------
- .../shell/common/check_no_patterns_found.py   | 37 ++++++++++++
- 15 files changed, 242 insertions(+), 221 deletions(-)
- delete mode 100755 tools/perf/tests/shell/common/check_all_lines_matched.pl
- create mode 100755 tools/perf/tests/shell/common/check_all_lines_matched.py
- delete mode 100755 tools/perf/tests/shell/common/check_all_patterns_found.pl
- create mode 100755 tools/perf/tests/shell/common/check_all_patterns_found.py
- delete mode 100755 tools/perf/tests/shell/common/check_errors_whitelisted.pl
- create mode 100755 tools/perf/tests/shell/common/check_errors_whitelisted.py
- delete mode 100755 tools/perf/tests/shell/common/check_no_patterns_found.pl
- create mode 100755 tools/perf/tests/shell/common/check_no_patterns_found.py
+ net/psp/psp_main.c                         |   7 +-
+ tools/testing/selftests/drivers/net/config |   1 +
+ tools/testing/selftests/drivers/net/psp.py | 120 ++++++++++++++++++++-
+ 3 files changed, 125 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 2d9379fea267..494a38871560 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -982,7 +982,7 @@ install-tests: all install-gtk
- 		$(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
- 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/common'; \
- 		$(INSTALL) tests/shell/common/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/common'; \
--		$(INSTALL) tests/shell/common/*.pl '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/common'; \
-+		$(INSTALL) tests/shell/common/*.py '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/common'; \
- 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/base_probe'; \
- 		$(INSTALL) tests/shell/base_probe/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/base_probe'; \
- 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/base_report'; \
-diff --git a/tools/perf/tests/shell/base_probe/test_adding_blacklisted.sh b/tools/perf/tests/shell/base_probe/test_adding_blacklisted.sh
-index f74aab5c5d7f..867545a62908 100755
---- a/tools/perf/tests/shell/base_probe/test_adding_blacklisted.sh
-+++ b/tools/perf/tests/shell/base_probe/test_adding_blacklisted.sh
-@@ -54,7 +54,7 @@ for BLACKFUNC in $BLACKFUNC_LIST; do
- 	PERF_EXIT_CODE=$?
- 
- 	# check for bad DWARF polluting the result
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"$REGEX_MISSING_DECL_LINE" >/dev/null < $LOGS_DIR/adding_blacklisted.err
- 
- 	if [ $? -eq 0 ]; then
-@@ -75,7 +75,7 @@ for BLACKFUNC in $BLACKFUNC_LIST; do
- 			fi
- 		fi
- 	else
--		"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+		"$DIR_PATH/../common/check_all_lines_matched.py" \
- 			"$REGEX_SKIP_MESSAGE" "$REGEX_NOT_FOUND_MESSAGE" \
- 			"$REGEX_ERROR_MESSAGE" "$REGEX_SCOPE_FAIL" \
- 			"$REGEX_INVALID_ARGUMENT" "$REGEX_SYMBOL_FAIL" \
-@@ -100,7 +100,7 @@ fi
- $CMD_PERF list probe:\* > $LOGS_DIR/adding_blacklisted_list.log
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"$RE_LINE_EMPTY" "List of pre-defined events" "Metric Groups:" \
- 	< $LOGS_DIR/adding_blacklisted_list.log
- CHECK_EXIT_CODE=$?
-diff --git a/tools/perf/tests/shell/base_probe/test_adding_kernel.sh b/tools/perf/tests/shell/base_probe/test_adding_kernel.sh
-index eadac837f108..5058700f566c 100755
---- a/tools/perf/tests/shell/base_probe/test_adding_kernel.sh
-+++ b/tools/perf/tests/shell/base_probe/test_adding_kernel.sh
-@@ -44,7 +44,7 @@ for opt in "" "-a" "--add"; do
- 	$CMD_PERF probe $opt $TEST_PROBE 2> $LOGS_DIR/adding_kernel_add$opt.err
- 	PERF_EXIT_CODE=$?
- 
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"Added new events?:" "probe:$TEST_PROBE" "on $TEST_PROBE" \
- 		< $LOGS_DIR/adding_kernel_add$opt.err
- 	CHECK_EXIT_CODE=$?
-@@ -60,7 +60,7 @@ done
- $CMD_PERF list probe:\* > $LOGS_DIR/adding_kernel_list.log
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"$RE_LINE_EMPTY" "List of pre-defined events" \
- 	"probe:${TEST_PROBE}(?:_\d+)?\s+\[Tracepoint event\]" \
- 	"Metric Groups:" < $LOGS_DIR/adding_kernel_list.log
-@@ -76,7 +76,7 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "listing added probe :: perf list
- $CMD_PERF probe -l > $LOGS_DIR/adding_kernel_list-l.log
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"\s*probe:${TEST_PROBE}(?:_\d+)?\s+\(on ${TEST_PROBE}(?:[:\+]$RE_NUMBER_HEX)?@.+\)" \
- 	< $LOGS_DIR/adding_kernel_list-l.log
- CHECK_EXIT_CODE=$?
-@@ -100,11 +100,11 @@ REGEX_STAT_VALUES="\s*\d+\s+probe:$TEST_PROBE"
- # the value should be greater than 1
- REGEX_STAT_VALUE_NONZERO="\s*[1-9][0-9]*\s+probe:$TEST_PROBE"
- REGEX_STAT_TIME="\s*$RE_NUMBER\s+seconds (?:time elapsed|user|sys)"
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"$REGEX_STAT_HEADER" "$REGEX_STAT_VALUES" "$REGEX_STAT_TIME" \
- 	"$RE_LINE_COMMENT" "$RE_LINE_EMPTY" < $LOGS_DIR/adding_kernel_using_probe.log
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"$REGEX_STAT_HEADER" "$REGEX_STAT_VALUE_NONZERO" "$REGEX_STAT_TIME" \
- 	< $LOGS_DIR/adding_kernel_using_probe.log
- (( CHECK_EXIT_CODE += $? ))
-@@ -119,7 +119,7 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "using added probe"
- $CMD_PERF probe -d $TEST_PROBE\* 2> $LOGS_DIR/adding_kernel_removing.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"Removed event: probe:$TEST_PROBE" < $LOGS_DIR/adding_kernel_removing.err
- CHECK_EXIT_CODE=$?
- 
-@@ -133,7 +133,7 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "deleting added probe"
- $CMD_PERF list probe:\* > $LOGS_DIR/adding_kernel_list_removed.log
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"$RE_LINE_EMPTY" "List of pre-defined events" "Metric Groups:" \
- 	< $LOGS_DIR/adding_kernel_list_removed.log
- CHECK_EXIT_CODE=$?
-@@ -149,7 +149,7 @@ $CMD_PERF probe -n --add $TEST_PROBE 2> $LOGS_DIR/adding_kernel_dryrun.err
- PERF_EXIT_CODE=$?
- 
- # check for the output (should be the same as usual)
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"Added new events?:" "probe:$TEST_PROBE" "on $TEST_PROBE" \
- 	< $LOGS_DIR/adding_kernel_dryrun.err
- CHECK_EXIT_CODE=$?
-@@ -168,7 +168,7 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "dry run :: adding probe"
- $CMD_PERF probe --add $TEST_PROBE 2> $LOGS_DIR/adding_kernel_forceadd_01.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"Added new events?:" "probe:$TEST_PROBE" "on $TEST_PROBE" \
- 	< $LOGS_DIR/adding_kernel_forceadd_01.err
- CHECK_EXIT_CODE=$?
-@@ -180,7 +180,7 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "force-adding probes :: first pro
- ! $CMD_PERF probe --add $TEST_PROBE 2> $LOGS_DIR/adding_kernel_forceadd_02.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"Error: event \"$TEST_PROBE\" already exists." \
- 	"Error: Failed to add events." < $LOGS_DIR/adding_kernel_forceadd_02.err
- CHECK_EXIT_CODE=$?
-@@ -193,7 +193,7 @@ NO_OF_PROBES=`$CMD_PERF probe -l $TEST_PROBE| wc -l`
- $CMD_PERF probe --force --add $TEST_PROBE 2> $LOGS_DIR/adding_kernel_forceadd_03.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"Added new events?:" "probe:${TEST_PROBE}_${NO_OF_PROBES}" \
- 	"on $TEST_PROBE" < $LOGS_DIR/adding_kernel_forceadd_03.err
- CHECK_EXIT_CODE=$?
-@@ -209,7 +209,7 @@ $CMD_PERF stat -e probe:$TEST_PROBE -e probe:${TEST_PROBE}_${NO_OF_PROBES} -x';'
- PERF_EXIT_CODE=$?
- 
- REGEX_LINE="$RE_NUMBER;+probe:${TEST_PROBE}_?(?:$NO_OF_PROBES)?;$RE_NUMBER;$RE_NUMBER"
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"$REGEX_LINE" "$RE_LINE_EMPTY" "$RE_LINE_COMMENT" \
- 	< $LOGS_DIR/adding_kernel_using_two.log
- CHECK_EXIT_CODE=$?
-@@ -229,7 +229,7 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "using doubled probe"
- $CMD_PERF probe --del \* 2> $LOGS_DIR/adding_kernel_removing_wildcard.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"Removed event: probe:$TEST_PROBE" \
- 	"Removed event: probe:${TEST_PROBE}_1" < $LOGS_DIR/adding_kernel_removing_wildcard.err
- CHECK_EXIT_CODE=$?
-@@ -243,7 +243,7 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "removing multiple probes"
- $CMD_PERF probe -nf --max-probes=512 -a 'vfs_* $params' 2> $LOGS_DIR/adding_kernel_adding_wildcard.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"probe:vfs_mknod" "probe:vfs_create" "probe:vfs_rmdir" \
- 	"probe:vfs_link" "probe:vfs_write" < $LOGS_DIR/adding_kernel_adding_wildcard.err
- CHECK_EXIT_CODE=$?
-@@ -268,21 +268,21 @@ test $PERF_EXIT_CODE -ne 139 -a $PERF_EXIT_CODE -ne 0
- PERF_EXIT_CODE=$?
- 
- # check that the error message is reasonable
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"Failed to find" \
- 	"somenonexistingrandomstuffwhichisalsoprettylongorevenlongertoexceed64" \
- 	< $LOGS_DIR/adding_kernel_nonexisting.err
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"in this function|at this address" "Error" "Failed to add events" \
- 	< $LOGS_DIR/adding_kernel_nonexisting.err
- (( CHECK_EXIT_CODE += $? ))
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"Failed to find" "Error" "Probe point .+ not found" "optimized out" \
- 	"Use.+\-\-range option to show.+location range" \
- 	< $LOGS_DIR/adding_kernel_nonexisting.err
- (( CHECK_EXIT_CODE += $? ))
--"$DIR_PATH/../common/check_no_patterns_found.pl" \
-+"$DIR_PATH/../common/check_no_patterns_found.py" \
- 	"$RE_SEGFAULT" < $LOGS_DIR/adding_kernel_nonexisting.err
- (( CHECK_EXIT_CODE += $? ))
- 
-@@ -301,7 +301,7 @@ fi
- $CMD_PERF probe --add "$TEST_PROBE%return \$retval" 2> $LOGS_DIR/adding_kernel_func_retval_add.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"Added new events?:" "probe:$TEST_PROBE" \
- 	"on $TEST_PROBE%return with \\\$retval" \
- 	< $LOGS_DIR/adding_kernel_func_retval_add.err
-@@ -314,7 +314,7 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "function with retval :: add"
- $CMD_PERF record -e probe:$TEST_PROBE\* -o $CURRENT_TEST_DIR/perf.data -- cat /proc/cpuinfo > /dev/null 2> $LOGS_DIR/adding_kernel_func_retval_record.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"$RE_LINE_RECORD1" "$RE_LINE_RECORD2" \
- 	< $LOGS_DIR/adding_kernel_func_retval_record.err
- CHECK_EXIT_CODE=$?
-@@ -327,10 +327,10 @@ $CMD_PERF script -i $CURRENT_TEST_DIR/perf.data > $LOGS_DIR/adding_kernel_func_r
- PERF_EXIT_CODE=$?
- 
- REGEX_SCRIPT_LINE="\s*cat\s+$RE_NUMBER\s+\[$RE_NUMBER\]\s+$RE_NUMBER:\s+probe:$TEST_PROBE\w*:\s+\($RE_NUMBER_HEX\s+<\-\s+$RE_NUMBER_HEX\)\s+arg1=$RE_NUMBER_HEX"
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"$REGEX_SCRIPT_LINE" < $LOGS_DIR/adding_kernel_func_retval_script.log
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"$REGEX_SCRIPT_LINE" < $LOGS_DIR/adding_kernel_func_retval_script.log
- (( CHECK_EXIT_CODE += $? ))
- 
-diff --git a/tools/perf/tests/shell/base_probe/test_basic.sh b/tools/perf/tests/shell/base_probe/test_basic.sh
-index 162838ddc974..a702be7340c0 100755
---- a/tools/perf/tests/shell/base_probe/test_basic.sh
-+++ b/tools/perf/tests/shell/base_probe/test_basic.sh
-@@ -31,24 +31,24 @@ if [ "$PARAM_GENERAL_HELP_TEXT_CHECK" = "y" ]; then
- 	$CMD_PERF probe --help > $LOGS_DIR/basic_helpmsg.log 2> $LOGS_DIR/basic_helpmsg.err
- 	PERF_EXIT_CODE=$?
- 
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"PERF-PROBE" "NAME" "SYNOPSIS" "DESCRIPTION" "OPTIONS" \
- 		"PROBE\s+SYNTAX" "PROBE\s+ARGUMENT" "LINE\s+SYNTAX" \
- 		< $LOGS_DIR/basic_helpmsg.log
- 	CHECK_EXIT_CODE=$?
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"LAZY\s+MATCHING" "FILTER\s+PATTERN" "EXAMPLES" "SEE\s+ALSO" \
- 		< $LOGS_DIR/basic_helpmsg.log
- 	(( CHECK_EXIT_CODE += $? ))
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"vmlinux" "module=" "source=" "verbose" "quiet" "add=" "del=" \
- 		"list.*EVENT" "line=" "vars=" "externs" < $LOGS_DIR/basic_helpmsg.log
- 	(( CHECK_EXIT_CODE += $? ))
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"no-inlines" "funcs.*FILTER" "filter=FILTER" "force" "dry-run" \
- 		"max-probes" "exec=" "demangle-kernel" < $LOGS_DIR/basic_helpmsg.log
- 	(( CHECK_EXIT_CODE += $? ))
--	"$DIR_PATH/../common/check_no_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_no_patterns_found.py" \
- 		"No manual entry for" < $LOGS_DIR/basic_helpmsg.err
- 	(( CHECK_EXIT_CODE += $? ))
- 
-@@ -64,7 +64,7 @@ fi
- # without any args perf-probe should print usage
- $CMD_PERF probe 2> $LOGS_DIR/basic_usage.log > /dev/null
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"[Uu]sage" "perf probe" "verbose" "quiet" "add" "del" "force" \
- 	"line" "vars" "externs" "range" < $LOGS_DIR/basic_usage.log
- CHECK_EXIT_CODE=$?
-diff --git a/tools/perf/tests/shell/base_probe/test_invalid_options.sh b/tools/perf/tests/shell/base_probe/test_invalid_options.sh
-index 44a3ae014bfa..d88bb7ec5da6 100755
---- a/tools/perf/tests/shell/base_probe/test_invalid_options.sh
-+++ b/tools/perf/tests/shell/base_probe/test_invalid_options.sh
-@@ -34,7 +34,7 @@ for opt in '-a' '-d' '-L' '-V'; do
- 	! $CMD_PERF probe $opt 2> $LOGS_DIR/invalid_options_missing_argument$opt.err
- 	PERF_EXIT_CODE=$?
- 
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"Error: switch .* requires a value" \
- 		< $LOGS_DIR/invalid_options_missing_argument$opt.err
- 	CHECK_EXIT_CODE=$?
-@@ -69,7 +69,7 @@ for opt in '-a xxx -d xxx' '-a xxx -L foo' '-a xxx -V foo' '-a xxx -l' '-a xxx -
- 	! $CMD_PERF probe $opt > /dev/null 2> $LOGS_DIR/aux.log
- 	PERF_EXIT_CODE=$?
- 
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"Error: switch .+ cannot be used with switch .+" < $LOGS_DIR/aux.log
- 	CHECK_EXIT_CODE=$?
- 
-diff --git a/tools/perf/tests/shell/base_report/setup.sh b/tools/perf/tests/shell/base_report/setup.sh
-index bb49b0fabb11..10fe4b553c4e 100755
---- a/tools/perf/tests/shell/base_report/setup.sh
-+++ b/tools/perf/tests/shell/base_report/setup.sh
-@@ -26,7 +26,7 @@ SW_EVENT="cpu-clock"
- $CMD_PERF record -asdg -e $SW_EVENT -o $CURRENT_TEST_DIR/perf.data -- $CMD_LONGER_SLEEP 2> $LOGS_DIR/setup.log
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"$RE_LINE_RECORD1" "$RE_LINE_RECORD2" < $LOGS_DIR/setup.log
- CHECK_EXIT_CODE=$?
- 
-@@ -41,7 +41,7 @@ echo ==================
- cat $LOGS_DIR/setup-latency.log
- echo ==================
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"$RE_LINE_RECORD1" "$RE_LINE_RECORD2" < $LOGS_DIR/setup-latency.log
- CHECK_EXIT_CODE=$?
- 
-diff --git a/tools/perf/tests/shell/base_report/test_basic.sh b/tools/perf/tests/shell/base_report/test_basic.sh
-index 0dfe7e5fd1ca..9bfec006879b 100755
---- a/tools/perf/tests/shell/base_report/test_basic.sh
-+++ b/tools/perf/tests/shell/base_report/test_basic.sh
-@@ -26,36 +26,36 @@ if [ "$PARAM_GENERAL_HELP_TEXT_CHECK" = "y" ]; then
- 	$CMD_PERF report --help > $LOGS_DIR/basic_helpmsg.log 2> $LOGS_DIR/basic_helpmsg.err
- 	PERF_EXIT_CODE=$?
- 
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"PERF-REPORT" "NAME" "SYNOPSIS" "DESCRIPTION" "OPTIONS" \
- 		"OVERHEAD\s+CALCULATION" "SEE ALSO" < $LOGS_DIR/basic_helpmsg.log
- 	CHECK_EXIT_CODE=$?
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"input" "verbose" "show-nr-samples" "show-cpu-utilization" \
- 		"threads" "comms" "pid" "tid" "dsos" "symbols" "symbol-filter" \
- 		< $LOGS_DIR/basic_helpmsg.log
- 	(( CHECK_EXIT_CODE += $? ))
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"hide-unresolved" "sort" "fields" "parent" "exclude-other" \
- 		"column-widths" "field-separator" "dump-raw-trace" "children" \
- 		< $LOGS_DIR/basic_helpmsg.log
- 	(( CHECK_EXIT_CODE += $? ))
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"call-graph" "max-stack" "inverted" "ignore-callees" "pretty" \
- 		"stdio" "tui" "gtk" "vmlinux" "kallsyms" "modules" \
- 		< $LOGS_DIR/basic_helpmsg.log
- 	(( CHECK_EXIT_CODE += $? ))
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"force" "symfs" "cpu" "disassembler-style" "source" "asm-raw" \
- 		"show-total-period" "show-info" "branch-stack" "group" \
- 		< $LOGS_DIR/basic_helpmsg.log
- 	(( CHECK_EXIT_CODE += $? ))
--	"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_all_patterns_found.py" \
- 		"branch-history" "objdump" "demangle" "percent-limit" "percentage" \
- 		"header" "itrace" "full-source-path" "show-ref-call-graph" \
- 		< $LOGS_DIR/basic_helpmsg.log
- 	(( CHECK_EXIT_CODE += $? ))
--	"$DIR_PATH/../common/check_no_patterns_found.pl" \
-+	"$DIR_PATH/../common/check_no_patterns_found.py" \
- 		"No manual entry for" < $LOGS_DIR/basic_helpmsg.err
- 	(( CHECK_EXIT_CODE += $? ))
- 
-@@ -76,11 +76,11 @@ REGEX_LOST_SAMPLES_INFO="#\s*Total Lost Samples:\s+$RE_NUMBER"
- REGEX_SAMPLES_INFO="#\s*Samples:\s+(?:$RE_NUMBER)\w?\s+of\s+event\s+'$RE_EVENT_ANY'"
- REGEX_LINES_HEADER="#\s*Children\s+Self\s+Command\s+Shared Object\s+Symbol"
- REGEX_LINES="\s*$RE_NUMBER%\s+$RE_NUMBER%\s+\S+\s+\[kernel\.(?:vmlinux)|(?:kallsyms)\]\s+\[[k\.]\]\s+\w+"
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"$REGEX_LOST_SAMPLES_INFO" "$REGEX_SAMPLES_INFO" \
- 	"$REGEX_LINES_HEADER" "$REGEX_LINES" < $LOGS_DIR/basic_basic.log
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_errors_whitelisted.pl" \
-+"$DIR_PATH/../common/check_errors_whitelisted.py" \
- 	"$DIR_PATH/stderr-whitelist.txt" < $LOGS_DIR/basic_basic.err
- (( CHECK_EXIT_CODE += $? ))
- 
-@@ -96,10 +96,10 @@ PERF_EXIT_CODE=$?
- 
- REGEX_LINES_HEADER="#\s*Children\s+Self\s+Samples\s+Command\s+Shared Object\s+Symbol"
- REGEX_LINES="\s*$RE_NUMBER%\s+$RE_NUMBER%\s+$RE_NUMBER\s+\S+\s+\[kernel\.(?:vmlinux)|(?:kallsyms)\]\s+\[[k\.]\]\s+\w+"
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"$REGEX_LINES_HEADER" "$REGEX_LINES" < $LOGS_DIR/basic_nrsamples.log
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_errors_whitelisted.pl" \
-+"$DIR_PATH/../common/check_errors_whitelisted.py" \
- 	"$DIR_PATH/stderr-whitelist.txt" < $LOGS_DIR/basic_nrsamples.err
- (( CHECK_EXIT_CODE += $? ))
- 
-@@ -122,7 +122,7 @@ REGEX_LINE_CPUS_ONLINE="#\s+nrcpus online\s*:\s*$MY_CPUS_ONLINE"
- REGEX_LINE_CPUS_AVAIL="#\s+nrcpus avail\s*:\s*$MY_CPUS_AVAILABLE"
- # disable precise check for "nrcpus avail" in BASIC runmode
- test $PERFTOOL_TESTSUITE_RUNMODE -lt $RUNMODE_STANDARD && REGEX_LINE_CPUS_AVAIL="#\s+nrcpus avail\s*:\s*$RE_NUMBER"
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"$REGEX_LINE_TIMESTAMP" "$REGEX_LINE_HOSTNAME" "$REGEX_LINE_KERNEL" \
- 	"$REGEX_LINE_PERF" "$REGEX_LINE_ARCH" "$REGEX_LINE_CPUS_ONLINE" \
- 	"$REGEX_LINE_CPUS_AVAIL" < $LOGS_DIR/basic_header.log
-@@ -156,10 +156,10 @@ PERF_EXIT_CODE=$?
- 
- REGEX_LINES_HEADER="#\s*Children\s+Self\s+sys\s+usr\s+Command\s+Shared Object\s+Symbol"
- REGEX_LINES="\s*$RE_NUMBER%\s+$RE_NUMBER%\s+$RE_NUMBER%\s+$RE_NUMBER%\s+\S+\s+\[kernel\.(?:vmlinux)|(?:kallsyms)\]\s+\[[k\.]\]\s+\w+"
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"$REGEX_LINES_HEADER" "$REGEX_LINES" < $LOGS_DIR/basic_cpuut.log
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_errors_whitelisted.pl" \
-+"$DIR_PATH/../common/check_errors_whitelisted.py" \
- 	"$DIR_PATH/stderr-whitelist.txt" < $LOGS_DIR/basic_cpuut.err
- (( CHECK_EXIT_CODE += $? ))
- 
-@@ -174,9 +174,9 @@ $CMD_PERF report --stdio -i $CURRENT_TEST_DIR/perf.data --pid=1 > $LOGS_DIR/basi
- PERF_EXIT_CODE=$?
- 
- grep -P -v '^#' $LOGS_DIR/basic_pid.log | grep -P '\s+[\d\.]+%' | \
--	"$DIR_PATH/../common/check_all_lines_matched.pl" "systemd|init"
-+	"$DIR_PATH/../common/check_all_lines_matched.py" "systemd|init"
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_errors_whitelisted.pl" \
-+"$DIR_PATH/../common/check_errors_whitelisted.py" \
- 	"$DIR_PATH/stderr-whitelist.txt" < $LOGS_DIR/basic_pid.err
- (( CHECK_EXIT_CODE += $? ))
- 
-@@ -190,10 +190,10 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "pid"
- $CMD_PERF report --stdio -i $CURRENT_TEST_DIR/perf.data --symbols=dummynonexistingsymbol > $LOGS_DIR/basic_symbols.log 2> $LOGS_DIR/basic_symbols.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_lines_matched.pl" \
-+"$DIR_PATH/../common/check_all_lines_matched.py" \
- 	"$RE_LINE_EMPTY" "$RE_LINE_COMMENT" < $LOGS_DIR/basic_symbols.log
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_errors_whitelisted.pl" \
-+"$DIR_PATH/../common/check_errors_whitelisted.py" \
- 	"$DIR_PATH/stderr-whitelist.txt" < $LOGS_DIR/basic_symbols.err
- (( CHECK_EXIT_CODE += $? ))
- 
-@@ -208,9 +208,9 @@ $CMD_PERF report --stdio -i $CURRENT_TEST_DIR/perf.data --symbol-filter=map > $L
- PERF_EXIT_CODE=$?
- 
- grep -P -v '^#' $LOGS_DIR/basic_symbolfilter.log | grep -P '\s+[\d\.]+%' | \
--	"$DIR_PATH/../common/check_all_lines_matched.pl" "\[[k\.]\]\s+.*map"
-+	"$DIR_PATH/../common/check_all_lines_matched.py" "\[[k\.]\]\s+.*map"
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_errors_whitelisted.pl" \
-+"$DIR_PATH/../common/check_errors_whitelisted.py" \
- 	"$DIR_PATH/stderr-whitelist.txt" < $LOGS_DIR/basic_symbolfilter.err
- (( CHECK_EXIT_CODE += $? ))
- 
-@@ -224,7 +224,7 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "symbol filter"
- $CMD_PERF report -i $CURRENT_TEST_DIR/perf.data.1 --stdio --header-only > $LOGS_DIR/latency_header.log
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	", context_switch = 1, " < $LOGS_DIR/latency_header.log
- CHECK_EXIT_CODE=$?
- 
-@@ -236,10 +236,10 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "latency header"
- $CMD_PERF report --stdio -i $CURRENT_TEST_DIR/perf.data.1 > $LOGS_DIR/latency_default.log 2> $LOGS_DIR/latency_default.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"# Overhead   Latency  Command" < $LOGS_DIR/latency_default.log
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_errors_whitelisted.pl" \
-+"$DIR_PATH/../common/check_errors_whitelisted.py" \
- 	"stderr-whitelist.txt" < $LOGS_DIR/latency_default.err
- (( CHECK_EXIT_CODE += $? ))
- 
-@@ -251,10 +251,10 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "default report for latency profi
- $CMD_PERF report --latency --stdio -i $CURRENT_TEST_DIR/perf.data.1 > $LOGS_DIR/latency_latency.log 2> $LOGS_DIR/latency_latency.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"#  Latency  Overhead  Command" < $LOGS_DIR/latency_latency.log
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_errors_whitelisted.pl" \
-+"$DIR_PATH/../common/check_errors_whitelisted.py" \
- 	"stderr-whitelist.txt" < $LOGS_DIR/latency_latency.err
- (( CHECK_EXIT_CODE += $? ))
- 
-@@ -266,11 +266,11 @@ print_results $PERF_EXIT_CODE $CHECK_EXIT_CODE "latency report for latency profi
- $CMD_PERF report --hierarchy --sort latency,parallelism,comm,symbol --parallelism=1,2 --stdio -i $CURRENT_TEST_DIR/perf.data.1 > $LOGS_DIR/parallelism_hierarchy.log 2> $LOGS_DIR/parallelism_hierarchy.err
- PERF_EXIT_CODE=$?
- 
--"$DIR_PATH/../common/check_all_patterns_found.pl" \
-+"$DIR_PATH/../common/check_all_patterns_found.py" \
- 	"#           Latency  Parallelism / Command / Symbol" \
- 	< $LOGS_DIR/parallelism_hierarchy.log
- CHECK_EXIT_CODE=$?
--"$DIR_PATH/../common/check_errors_whitelisted.pl" \
-+"$DIR_PATH/../common/check_errors_whitelisted.py" \
- 	"stderr-whitelist.txt" < $LOGS_DIR/parallelism_hierarchy.err
- (( CHECK_EXIT_CODE += $? ))
- 
-diff --git a/tools/perf/tests/shell/common/check_all_lines_matched.pl b/tools/perf/tests/shell/common/check_all_lines_matched.pl
-deleted file mode 100755
-index fded48959a3f..000000000000
---- a/tools/perf/tests/shell/common/check_all_lines_matched.pl
-+++ /dev/null
-@@ -1,39 +0,0 @@
--#!/usr/bin/perl
--# SPDX-License-Identifier: GPL-2.0
--
--@regexps = @ARGV;
--
--$max_printed_lines = 20;
--$max_printed_lines = $ENV{TESTLOG_ERR_MSG_MAX_LINES} if (defined $ENV{TESTLOG_ERR_MSG_MAX_LINES});
--
--$quiet = 1;
--$quiet = 0 if (defined $ENV{TESTLOG_VERBOSITY} && $ENV{TESTLOG_VERBOSITY} ge 2);
--
--$passed = 1;
--$lines_printed = 0;
--
--while (<STDIN>)
--{
--	s/\n//;
--
--	$line_matched = 0;
--	for $r (@regexps)
--	{
--		if (/$r/)
--		{
--			$line_matched = 1;
--			last;
--		}
--	}
--
--	unless ($line_matched)
--	{
--		if ($lines_printed++ < $max_printed_lines)
--		{
--			print "Line did not match any pattern: \"$_\"\n" unless $quiet;
--		}
--		$passed = 0;
--	}
--}
--
--exit ($passed == 0);
-diff --git a/tools/perf/tests/shell/common/check_all_lines_matched.py b/tools/perf/tests/shell/common/check_all_lines_matched.py
-new file mode 100755
-index 000000000000..732a48255fa8
---- /dev/null
-+++ b/tools/perf/tests/shell/common/check_all_lines_matched.py
-@@ -0,0 +1,47 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+import os
-+import re
-+import sys
-+
-+
-+def main(argv):
-+    sys.stdin.reconfigure(encoding="utf-8", errors="surrogateescape")
-+    sys.stdout.reconfigure(encoding="utf-8", errors="surrogateescape")
-+    max_printed = 20
-+    if "TESTLOG_ERR_MSG_MAX_LINES" in os.environ:
-+        try:
-+            max_printed = int(os.environ["TESTLOG_ERR_MSG_MAX_LINES"])
-+        except ValueError:
-+            pass
-+
-+    quiet = True
-+    try:
-+        if int(os.environ.get("TESTLOG_VERBOSITY", "0")) >= 2:
-+            quiet = False
-+    except ValueError:
-+        pass
-+
-+    passed = True
-+    lines_printed = 0
-+
-+    for line in sys.stdin:
-+        line = line.rstrip("\n")
-+        matched = False
-+        for r in argv:
-+            if re.search(r, line):
-+                matched = True
-+                break
-+        if not matched:
-+            show = lines_printed < max_printed
-+            lines_printed += 1
-+            if show and not quiet:
-+                print(f'Line did not match any pattern: "{line}"')
-+            passed = False
-+
-+    return 0 if passed else 1
-+
-+
-+if __name__ == "__main__":
-+    sys.exit(main(sys.argv[1:]))
-diff --git a/tools/perf/tests/shell/common/check_all_patterns_found.pl b/tools/perf/tests/shell/common/check_all_patterns_found.pl
-deleted file mode 100755
-index 11bdf1d3460a..000000000000
---- a/tools/perf/tests/shell/common/check_all_patterns_found.pl
-+++ /dev/null
-@@ -1,34 +0,0 @@
--#!/usr/bin/perl
--# SPDX-License-Identifier: GPL-2.0
--
--@regexps = @ARGV;
--
--$quiet = 1;
--$quiet = 0 if (defined $ENV{TESTLOG_VERBOSITY} && $ENV{TESTLOG_VERBOSITY} ge 2);
--
--%found = ();
--$passed = 1;
--
--while (<STDIN>)
--{
--	s/\n//;
--
--	for $r (@regexps)
--	{
--		if (/$r/)
--		{
--			$found{$r} = 1;	# FIXME: maybe add counters -- how many times was the regexp matched
--		}
--	}
--}
--
--for $r (@regexps)
--{
--	unless (exists $found{$r})
--	{
--		print "Regexp not found: \"$r\"\n" unless $quiet;
--		$passed = 0;
--	}
--}
--
--exit ($passed == 0);
-diff --git a/tools/perf/tests/shell/common/check_all_patterns_found.py b/tools/perf/tests/shell/common/check_all_patterns_found.py
-new file mode 100755
-index 000000000000..42cf4bc2c0d4
---- /dev/null
-+++ b/tools/perf/tests/shell/common/check_all_patterns_found.py
-@@ -0,0 +1,37 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+import os
-+import re
-+import sys
-+
-+
-+def main(argv):
-+    sys.stdin.reconfigure(encoding="utf-8", errors="surrogateescape")
-+    sys.stdout.reconfigure(encoding="utf-8", errors="surrogateescape")
-+    quiet = True
-+    try:
-+        if int(os.environ.get("TESTLOG_VERBOSITY", "0")) >= 2:
-+            quiet = False
-+    except ValueError:
-+        pass
-+
-+    found = set()
-+    for line in sys.stdin:
-+        line = line.rstrip("\n")
-+        for r in argv:
-+            if re.search(r, line):
-+                found.add(r)
-+
-+    passed = True
-+    for r in argv:
-+        if r not in found:
-+            if not quiet:
-+                print(f'Regexp not found: "{r}"')
-+            passed = False
-+
-+    return 0 if passed else 1
-+
-+
-+if __name__ == "__main__":
-+    sys.exit(main(sys.argv[1:]))
-diff --git a/tools/perf/tests/shell/common/check_errors_whitelisted.pl b/tools/perf/tests/shell/common/check_errors_whitelisted.pl
-deleted file mode 100755
-index c57d355dd76e..000000000000
---- a/tools/perf/tests/shell/common/check_errors_whitelisted.pl
-+++ /dev/null
-@@ -1,51 +0,0 @@
--#!/usr/bin/perl
--# SPDX-License-Identifier: GPL-2.0
--
--$whitelist_file = shift;
--
--if (defined $whitelist_file)
--{
--	open (INFILE, $whitelist_file) or die "Checker error: Unable to open the whitelist file: $whitelist_file\n";
--	@regexps = <INFILE>;
--	close INFILE or die "Checker error: Unable to close the whitelist file: $whitelist_file\n";
--}
--else
--{
--	@regexps = ();
--}
--
--$max_printed_lines = 20;
--$max_printed_lines = $ENV{TESTLOG_ERR_MSG_MAX_LINES} if (defined $ENV{TESTLOG_ERR_MSG_MAX_LINES});
--
--$quiet = 1;
--$quiet = 0 if (defined $ENV{TESTLOG_VERBOSITY} && $ENV{TESTLOG_VERBOSITY} ge 2);
--
--$passed = 1;
--$lines_printed = 0;
--
--while (<STDIN>)
--{
--	s/\n//;
--
--	$line_matched = 0;
--	for $r (@regexps)
--	{
--		chomp $r;
--		if (/$r/)
--		{
--			$line_matched = 1;
--			last;
--		}
--	}
--
--	unless ($line_matched)
--	{
--		if ($lines_printed++ < $max_printed_lines)
--		{
--			print "Line did not match any pattern: \"$_\"\n" unless $quiet;
--		}
--		$passed = 0;
--	}
--}
--
--exit ($passed == 0);
-diff --git a/tools/perf/tests/shell/common/check_errors_whitelisted.py b/tools/perf/tests/shell/common/check_errors_whitelisted.py
-new file mode 100755
-index 000000000000..72250d4cd8c5
---- /dev/null
-+++ b/tools/perf/tests/shell/common/check_errors_whitelisted.py
-@@ -0,0 +1,58 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+import os
-+import re
-+import sys
-+
-+
-+def main(argv):
-+    sys.stdin.reconfigure(encoding="utf-8", errors="surrogateescape")
-+    sys.stdout.reconfigure(encoding="utf-8", errors="surrogateescape")
-+    if argv:
-+        whitelist = argv[0]
-+        try:
-+            with open(whitelist, encoding="utf-8", errors="surrogateescape") as f:
-+                regexps = [ln.rstrip("\n") for ln in f]
-+        except OSError as e:
-+            print(f"Checker error: Unable to open the whitelist file: {whitelist}", file=sys.stderr)
-+            sys.exit(e.errno or 1)
-+    else:
-+        regexps = []
-+
-+    max_printed = 20
-+    if "TESTLOG_ERR_MSG_MAX_LINES" in os.environ:
-+        try:
-+            max_printed = int(os.environ["TESTLOG_ERR_MSG_MAX_LINES"])
-+        except ValueError:
-+            pass
-+
-+    quiet = True
-+    try:
-+        if int(os.environ.get("TESTLOG_VERBOSITY", "0")) >= 2:
-+            quiet = False
-+    except ValueError:
-+        pass
-+
-+    passed = True
-+    lines_printed = 0
-+
-+    for line in sys.stdin:
-+        line = line.rstrip("\n")
-+        matched = False
-+        for r in regexps:
-+            if re.search(r, line):
-+                matched = True
-+                break
-+        if not matched:
-+            show = lines_printed < max_printed
-+            lines_printed += 1
-+            if show and not quiet:
-+                print(f'Line did not match any pattern: "{line}"')
-+            passed = False
-+
-+    return 0 if passed else 1
-+
-+
-+if __name__ == "__main__":
-+    sys.exit(main(sys.argv[1:]))
-diff --git a/tools/perf/tests/shell/common/check_no_patterns_found.pl b/tools/perf/tests/shell/common/check_no_patterns_found.pl
-deleted file mode 100755
-index 770999e87a5f..000000000000
---- a/tools/perf/tests/shell/common/check_no_patterns_found.pl
-+++ /dev/null
-@@ -1,34 +0,0 @@
--#!/usr/bin/perl
--# SPDX-License-Identifier: GPL-2.0
--
--@regexps = @ARGV;
--
--$quiet = 1;
--$quiet = 0 if (defined $ENV{TESTLOG_VERBOSITY} && $ENV{TESTLOG_VERBOSITY} ge 2);
--
--%found = ();
--$passed = 1;
--
--while (<STDIN>)
--{
--	s/\n//;
--
--	for $r (@regexps)
--	{
--		if (/$r/)
--		{
--			$found{$r} = 1;
--		}
--	}
--}
--
--for $r (@regexps)
--{
--	if (exists $found{$r})
--	{
--		print "Regexp found: \"$r\"\n" unless $quiet;
--		$passed = 0;
--	}
--}
--
--exit ($passed == 0);
-diff --git a/tools/perf/tests/shell/common/check_no_patterns_found.py b/tools/perf/tests/shell/common/check_no_patterns_found.py
-new file mode 100755
-index 000000000000..92842ec0a1e1
---- /dev/null
-+++ b/tools/perf/tests/shell/common/check_no_patterns_found.py
-@@ -0,0 +1,37 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+import os
-+import re
-+import sys
-+
-+
-+def main(argv):
-+    sys.stdin.reconfigure(encoding="utf-8", errors="surrogateescape")
-+    sys.stdout.reconfigure(encoding="utf-8", errors="surrogateescape")
-+    quiet = True
-+    try:
-+        if int(os.environ.get("TESTLOG_VERBOSITY", "0")) >= 2:
-+            quiet = False
-+    except ValueError:
-+        pass
-+
-+    found = set()
-+    for line in sys.stdin:
-+        line = line.rstrip("\n")
-+        for r in argv:
-+            if re.search(r, line):
-+                found.add(r)
-+
-+    passed = True
-+    for r in argv:
-+        if r in found:
-+            if not quiet:
-+                print(f'Regexp found: "{r}"')
-+            passed = False
-+
-+    return 0 if passed else 1
-+
-+
-+if __name__ == "__main__":
-+    sys.exit(main(sys.argv[1:]))
 -- 
-2.56.0
-
+2.53.0-Meta
