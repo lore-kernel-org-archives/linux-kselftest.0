@@ -1,69 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792614187;
-	b=XTcSMrpMaa96WqBXlVx95x/+Qmvf6iMsEdIkClJTOFTIvV0JrG7RqS9X4j7QdOW0HaEm
-	 fvO2kBVoGFyH3gHSfZ5dkyBjhSW5WMm+4ISpCzGBhxTlMHw1twddi2gJ02SWiVc8VrHgh
-	 3qLQKOBcszjfmkAPCjfEVlnmTkbUj/zG6qjsU1M1MF1KXjyKGaxBff3vYGNnByLNMhHPF
-	 GbHz1qfQCph495Im1mvITQQN/ZNlGIrhNK+yOrTmV01DxRF8FrK4f6Ot/gemkyeUYeFPj
-	 Au9BCPw2iCGWw/P+D2C17RS7cwJYdwVJuUx5gc+8lCs8+sJzp8PP7Qb3WhVqHRQ47Tw==
+	t=1792614621;
+	b=vkbFitr7MUPVnnKPNB9y9EpOHMP3Ws7ttzUZZvKC7EoChlNK+/XcLprYORc95JH5ED9J
+	 PeQ2/WtbPCwJusVCdr8K54CQdMLGJiiQUrmkH4nPi21oAd0pl7chC+62HoKt/pqrKf8Dg
+	 FayTSZlkPq18+GxW69tRIJj76p5evQHAcFxKmXFJfub9/P2lBp/77lQQYDn3ErYVRCBzX
+	 nPurhDzETVdOOyxPm7j9DYER6ajNbo4L1Y4J9CCgbPD31r4EEWZtk1aGWU+jzf3rNQwpd
+	 FK4fx8dbIz8paU/y6pc4KgQlpnfCkOqQMTPqadyK25JOg8f3iKVQ58IkMc8IGV3WlSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792614187;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=svbLHawCS4fbgc8FgUAE9dACgxqB99TX/pf/aIWHxmw=;
-	b=PBJPg4b0JVgLwyKdh28vgga5MJOeA7Tc3tYumhhrH/iE+RFYyPnjn4vjdL1DnTX5JtKv
-	 MfGu1o0TzgMYVVADOGijIcusH/nxgJF8WhKxCKyCzX51alqpJsTbeKanSMnaCIpFOrbY4
-	 jPNk8DtA+xkuvrUZD2yjpzMmYVcGeMEUDtXCy8QwuOLoJ82Eczo+W8rFaZJZ383xWfbtI
-	 Y+/jXYs6S8MuRo1qWBSjHP0Ux29xmrCAbv66IRWPu32Hl+7K7As3toIEBDnr0iO52W9wa
-	 LwY82LqhIe6FNs40q3ruVp/qkPKquctBjVt2g9naj0LtyZesSXrAMHarL3j+WjoW4/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792614621;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=dC5pXc4nN0qf0upwnfjFKJD9G2HlA8g2yqaCeFHQhQQ=;
+	b=eCJyShcsFygz5Gp+uQ0kMwlmsFYctg2cM8Hz8dtE+QBz8+1oFFRV6oGej5CYPQ/3pkyn
+	 sJ70I6uKVQqnLWN/4wxwQYuJwlqOMMB3IJ2jXI86ZGQvTs47RPXlqPnpIwhiEjblmQFRW
+	 7i2jqe795Yng+valrNSMEem88PH+iIXYkO99EKtVV5iqLbseKZ7WRHcim/AGvGXfNjE3x
+	 Csv/ZJ35tSzFTAjrGgBJRJO1sSnqxf0xNaNcvgamBTJdtmsnJNN65qs1uMIE8MsgZkorV
+	 Uj6vct6IeTqoDRdo78vP1YpFC/7Rz9NjGHWL2KPI6+IVZtcC/6Z0XBymdm053Iz0DeQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Xt6/atqy";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="N/VdZDYY";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5BC606A31B;
-	Wed, 21 Oct 2026 20:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F72606A324;
+	Wed, 21 Oct 2026 20:30:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xt6/atqy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7038B1F000C1;
-	Wed, 21 Oct 2026 20:23:05 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N/VdZDYY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A47C1F000C2;
+	Wed, 21 Oct 2026 20:30:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792614186;
-	bh=svbLHawCS4fbgc8FgUAE9dACgxqB99TX/pf/aIWHxmw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Xt6/atqypGAD9faryuoH3pgi4bQyVVE+O07lp7aASyyT+FjnI8XTnoivNgxAwDhec
-	 Xfo3gi2XcyeLmjrLYvmosrThi+PoBZYzkwjHAo0eRu+Vlc9DI+00/VrcYgSCZrPdHb
-	 JOGx4pQdXWFUq8yH3QQEzSRu6hrI+GjfUedgt53bUyqFAQV7XQZTF0LwdsCb1sHWuM
-	 moz22KoG1vi7VY4g0aCEA7fdlfYla+rzgWwRFk5/9HUG5gPMTqGokYS6omzjbIT0O/
-	 ZNvHAn9mKMOD9soFx/Go9d98JombmkpZrOCi4rh36dgn9CTej7Xb6ItJQmx50xcWcQ
-	 suBfY00yvRSqA==
-Date: Wed, 21 Oct 2026 13:23:04 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
- Stanislav Fomichev <sdf@fomichev.me>, Taehee Yoo <ap420073@gmail.com>,
- Paolo Abeni <pabeni@redhat.com>, Kaiyuan Zhang <kaiyuanz@google.com>, Bobby
- Eshleman <bobbyeshleman@meta.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Sumit Semwal
- <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Dragos Tatulea <dtatulea@nvidia.com>, Nikolay
- Aleksandrov <razor@blackwall.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Tariq Toukan <tariqt@nvidia.com>, Kaifeng Wang <kaifengw@google.com>
-Subject: Re: [PATCH net v4 3/4] netdevsim: support devmem RX and TX bindings
-Message-ID: <20261021132304.23e0a4e7@kernel.org>
-In-Reply-To: <CAHS8izPwWT+vbgAe49m5vXsRxT3unbfjLTkVZBScgAPdQTo2dQ@mail.gmail.com>
-References: <20261015163915.1166043-1-almasrymina@google.com>
-	<20261015163915.1166043-4-almasrymina@google.com>
-	<20261020121858.3b9107c5@kernel.org>
-	<CAHS8izPwWT+vbgAe49m5vXsRxT3unbfjLTkVZBScgAPdQTo2dQ@mail.gmail.com>
+	s=k20260515; t=1792614620;
+	bh=dC5pXc4nN0qf0upwnfjFKJD9G2HlA8g2yqaCeFHQhQQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=N/VdZDYYRjr+K7gPY+DRPpbDh54v1Jugz91wj373VKafhu5CnBpph665lbj73ijd6
+	 0zG42WBW8RZ/GrXqQKCOM9BWFDLgs8gEccQO0oacheUteDflqkucODHDVauwr1AGiw
+	 3GvoQnX2+Ca4VmfoEui8dsXIbH8QgJNynaYYZFMFeF8Byd7nS+fOiGJTbfUNl2Mdnz
+	 mUO4oZ50SElfFKrEjVRbKKwdg5x/iYEScJGYHLVOSW9/iY9CMvtDdTMM0XOX9DaCTC
+	 XOLenf/H9eX+cZk+p29ipW++EAsQwQWESGMz842uceiR2R2AEf4UxNg9YyeYDAMJlw
+	 au/3qGehx3jcw==
+Content-Type: multipart/mixed; boundary="===============4819838643990905154=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,18 +49,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <038645137772f125ac45a4ea75ca052ffcd035160522f1bc4c2011fd372e88bf@mail.kernel.org>
+In-Reply-To: <20261021195759.119421-10-jolsa@kernel.org>
+References: <20261021195759.119421-10-jolsa@kernel.org>
+Subject: Re: [RFC bpf-next 9/9] selftests/bpf: Add user page failures test
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net
+Cc: bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,linux-mm@kvack.org,akpm@linux-foundation.org,liam@infradead.org,ljs@kernel.org,linux-kselftest@vger.kernel.org,shuah@kernel.org,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 21 Oct 2026 20:30:20 +0000 (UTC)
+
+--===============4819838643990905154==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Tue, 20 Oct 2026 23:17:34 -0700 Mina Almasry wrote:
-> But on the other hand the test coverage is nice, and maybe one day if
-> we add enough devmem support in netdevsim we'll be able to fuzz the
-> data path or something. Is there a way to get the best of both worlds?
-> Like put a comment on top of netdevsim that this is test simulator
-> device and any missing functionality and/or bugs in it should be
-> medium criticality max or something? Or is it too much trouble and I
-> should drop the netdevsim support and tests?
+> selftests/bpf: Add user page failures test
 
-I already strip Fixes tags and apply the patches to net-next.
-But it's still a burden. If you're signing up to fix the issues /
-review the slop we can try.
+TL;DR: Commit message claims the test covers replacing sealed mappings, but
+test_reject_replacement() replaces a still-writable page before any exec call;
+either reorder the test or reword the changelog.
+
+>     selftests/bpf: Add user page failures test
+>
+>     Cover expected failures for invalid allocation sizes, misaligned or
+>     unrelated exec requests, replacement of sealed mappings, repeated
+>     execution, bad writes and attempts to restore write permission.
+>
+>     Assisted-by: Codex:GPT-6
+>     Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+
+The commit message lists "replacement of sealed mappings" as a covered
+failure, but does test_reject_replacement() ever seal the mapping before
+replacing it?
+
+In this series "seal" refers to the bpf_user_page_exec() transition, which
+the kernel-doc describes as "The page cannot be made writable again after
+this call".  The test goes straight from alloc_user_pages() to the
+replacement:
+
+    if (!alloc_user_pages(skel, 1, &addr))
+        return;
+
+    ret = mmap((void *)addr, page_size, PROT_WRITE,
+               MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
+    if (!ASSERT_EQ(ret, (void *)addr, "replace_mmap"))
+        goto out;
+
+    skel->bss->exec_addr = addr;
+    skel->bss->action = USER_PAGE_EXEC_ONLY;
+    user_page_trigger();
+    ASSERT_EQ(skel->bss->exec_ret, -EINVAL, "replacement_not_bpf");
+
+At the time of the MAP_FIXED mmap() the page is still a plain writable VMA,
+and USER_PAGE_EXEC_ONLY is only triggered afterwards, on the replacement.
+The replacement itself is also not a failure, since the test asserts that
+it succeeds.  Only the later bpf_user_page_exec() on the new VMA is
+expected to fail with -EINVAL.
+
+So the scenario the changelog describes (replacing an already exec-only,
+non-writable page with a writable mapping and checking that exec refuses
+it) is never run.  A reader could also take the changelog and the test name
+to mean that the kernel refuses to replace sealed mappings, which it does
+not do.
+
+Should bpf_user_page_exec() be called before the MAP_FIXED mmap() so the
+test matches the description, or should the changelog be reworded (for
+example "exec of a replaced BPF-allocated mapping")?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39668036298
+--===============4819838643990905154==--
