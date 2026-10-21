@@ -1,49 +1,120 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792576810;
-	b=S4bTkzIQmW8ytcMQA8RTUnAnFj43F08s+Uon8kj+gL1SeulSHS6n8M86JrKo7GbjyWqz
-	 bW6ZsVk4dJFygYI5slO6XCXrc0KVsmQiLdlgsX1MHcr5GTn8RjxTGIEAc7hi26x/tH5Hy
-	 bOsVTFjAVogMMsltI/9vPJjJ5Vipjj4PYQDk64cnd77f1NzH4bPqr84H8vbNti4xMFFHv
-	 iSF+cgX9ioCunJ5QaZMztoJUa6+/27g/UyeMz0qKXgydF4wbcQmF3HDfWGMbiPSgcYUa1
-	 X1CpeeIRF4e9C9j+FDSaV3oM8SrlKe0E3s4VE8pQJY6Z2Qe5Gnidrbid+K6xZckiwZA==
+	t=1792577478;
+	b=sALNL5IZy2otGZY6YiPzVs9AGd+3R4yq3If/rzysOi/UZVpVcusTXYvwz29MndoMqtUQ
+	 orN7J4S/c/XrlU5XNQktmbmaVAGeJl5VaO4DvwQGPSr5eCaoyw8ivyO8qfk9EWnAAsn5M
+	 VM9OM/HJBTfjdEPzm3QI9amNO+POB0Ru4Zj1ygszNTUnPmboy9+yEHqO1cqUImigZoWp3
+	 Hd3U7ITKFNROf45QELD/5kuKcCVMcj5KuMlSnmB580giCToH3d/amJJCEfiIw/GGbt5RQ
+	 ZgpZn7YIBQzBsul6vMORIVpueT11raTYdqsCSk0JvNKlbePsEI8tIGbcYlP13PuC5aw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792576810;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=IXpdNahMxn9TR1HD+Mn7efw1bbwxmk2HtLEylRRzfSs=;
-	b=Ty0pAd5+YipwrPI1n8agbJF0NG0zoZh2fMINka/9+PwX9WOSAddAh79IeLfXldDdmu5S
-	 ZICxNg6oQETZPbDZXPC98i0bMyjAIob1Hc+dO2bi8Bjev3REkqGROYuqfJrmAZUdeSJ0J
-	 omvuSb+HzWnsjk3KEUmYAvuQhhtt1TYhGe7QLU3Y7f/3jtKxJQ2kviWc94Ai/o+5jykEC
-	 8VCZ1zt9BcgAxCkiIMlWf+wnMCP77L63Cw2jcEsYN8LAIvBz5DsQGs+sfo80Hudnq9Rmi
-	 mzm0GczjhzAqWOVkostAECGv/CnmCIIho1DRls2agmUN+Tfj9BCSKZ52iCd6tUVUfnA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792577478;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=vVLJOhfTidMKw4MIf43k3Z+xniDsBdpWe5ByNjjrE/o=;
+	b=VfSodVO6BjPdOvFRM74GkC3nFMeJwy6MRw9dDIxGAcLG+Xk3xG0J6sFmuH/9d0KwLEhr
+	 2pEvDyZVEAGFF3xRhOJUxTBWRmw/u71JtVB4M5/30IT/QpnRh176f4aom/gWt9+iaRfP/
+	 FGpkJZndOINyF4+3KwdS8jZHhSKHNRYxueTJme5+U+2V6eKcSvqXH0PLAiMH7UkVZgGVT
+	 AYX9nYVgplKnn3pK77oUFJcj18N9m6WyKKoEZbsX/YUTfSs4cV+/0m/V+8FELwZCOV60n
+	 YMnkLdZyF3jNjXWHQv8aeny1osnSsZeDWdQOlgg/yEKzcQHfzaWBMUW46QPaEgKlRPA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e2gl8tIT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=hszdT9a8;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=p2NMMm65;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC47B606A31A;
-	Wed, 21 Oct 2026 10:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C74606A325
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 10:11:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 09C74606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e2gl8tIT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 459C31F000C9;
-	Wed, 21 Oct 2026 10:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792576809;
-	bh=IXpdNahMxn9TR1HD+Mn7efw1bbwxmk2HtLEylRRzfSs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=e2gl8tITQBmN4QlHLt3yS/KRk0nSOvhJhrcf1sBKdJf3kSzPkSDm+JKU0KfIKcHMd
-	 bNbOnIQ3LcpAuPkmnMh5+6Bgj3VkAeWuRPVgeYRbrnEG+qMSfymwVGjBACgh9OjU/P
-	 jqaaxwnhglq1Uh7rg07YqUIqFGgBv75dEYDSYtR7ZQSqKDAlrAaf5+jNbaJaP5dOKd
-	 TIBkVM6WiksGIemHzJ1m7zT+PPSu5gHtwHjddrUbe/FKekT0MMt0jlBpdj6JWl8Bvh
-	 5p3dqtTgtsGB467SOtDdV3btFJ8ynJyoSkFOYLZZpeedTrbejfsrXbp6iceH6TIYxq
-	 SUJe76fecaLMw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A4593809A24;
-	Wed, 21 Oct 2026 10:00:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=hszdT9a8;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=p2NMMm65
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792577477;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vVLJOhfTidMKw4MIf43k3Z+xniDsBdpWe5ByNjjrE/o=;
+	b=hszdT9a8Gz7PZmDau+A5NQzk5enlaX1loOY9dz8VDTy1D/qIsLECmsg0TFFc+ezOTleatP
+	Uny5ao51m/VubELupZnkam7Aj6EprFOqZFcGGg03tJde+vIB7Vf5HEV2hTvXL3KL0/1yL4
+	XQwVB/izHWz6RfZihwAFjmQqvXCHPw8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-226-mLFnK-jnOXi-WfQp1J0xmA-1; Wed, 21 Oct 2026 06:11:12 -0400
+X-MC-Unique: mLFnK-jnOXi-WfQp1J0xmA-1
+X-Mimecast-MFC-AGG-ID: mLFnK-jnOXi-WfQp1J0xmA_1792577472
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-48e1ad3cb66so280096f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 03:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1792577471; x=1793182271; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vVLJOhfTidMKw4MIf43k3Z+xniDsBdpWe5ByNjjrE/o=;
+        b=p2NMMm65jqUj/I4P1B9BWGIMi03CnY7qLB07ZBtujZih+ki0UsAbslcVS2RDxNYh/Y
+         o2MMminxeoAs0V/jx+OZTBzf5RO5ereCCprRDR9pxx0wCTK/Zz7oPSzfiE2J0EIvRujU
+         EzSPPpgnyZVIGxuwDqaIzeo4/hfhsxkaAQlpY4dwJbyLi7J9KSLygKezm5TbHBggRyXN
+         3lJ6ksGEVRgwPNI0sQblkaXKLUSeJ6clUYyNgsMUz9s4A4u9MHlKa8AHjjU54WO+6yID
+         rxfnlBdy26X2A/hQnxRPrHn8oMD6vkQ0eJvUy+avYZqyFNoWTcqPhPN0k7R+bTNR/5ZG
+         NLbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792577471; x=1793182271;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vVLJOhfTidMKw4MIf43k3Z+xniDsBdpWe5ByNjjrE/o=;
+        b=2nQ5JN6WNXG/RFR2KQ/vQUS7a3SfRyd+paH3+3etP2ppn6pZgK3lUL/biJIJ6GfbwB
+         SOgeATUUzbKXOFGIlT6SX4PE4F55ghg+GiFIEFLbXzSdFTVkmdezCsVdm2nswebkNUS8
+         9N4mla1E6YtXEPRsaXRaavGjnfeODCaaMUei0NORTr/Qrj/+wGLRfl+uXoB1FLx7gUut
+         LL5nrpNYZxha5unvpEOnhdD804rpvcPUGo7IDBN09z4MEdtTwlfgdE0jA9QOYTFKxxpD
+         BU1EzSwlebTkPlyidljhw+HnvkB7wCGvcSnx8bknDTXXzJb3/mK/0JX0qDjhUrAvBcsp
+         yv/g==
+X-Forwarded-Encrypted: i=1; AKwUvBwDev5pDOspUk8QjEU+ckNWFRLZ2xm/I/SBwO0rJ3NJfxIi9WVg9kvjuSm0yDATLeLficWRcsZlYBlxmy9dfZQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL9XrvsMzBJp22Cwt/8JguCKhifoBMpWGKR5wnB9c44djhxmupy
+	Ck+xIfy/Z5sjZlYQyLVSUJ0bykPNpf2t5Jc1zOFQGZj8PhlBtWE4ksbC2aNRvZ4XutRogc1iPdX
+	yw7GjsaSPwynU3E4HamvWHAz2luM82DqLS+ZupSxrcm1B8NnC4UW0EoHorDtIcmGKZJc9Ig==
+X-Gm-Gg: AYBFou1awE8BSCPoiyUPs+0EAVYKqaLacGBKgsG3AVeBXwCDwlIiZuNFYy+U4cMfV8r
+	L5zVPcrYHFgh9Y/UzuL5Uvxngy7sTwaC1NTaqyH0w5swoeEL2kqPxGHoqhdloMHLoWPoYPd4dhi
+	Dj2VpgAVfbMycsj0C8GpAwFdzTxP2BLDe/xQvfshVYESiVlcTVjhscbG1mILp4BCun32QxQ1iSm
+	t4mcuERhhJc1YOmRMG7eQtRoPvPFvGgq1drA1AhwM9E256lM/B3A5EITUcEjDanGrwG0ffOaNBI
+	LVqIpnMXFSmx6qgCY7zUmbmikOIcVi+8SgJLMfIf/Ud+b+7pIquSlOs1a/n40BUj5UL00EhtOqj
+	YxKa55Q==
+X-Received: by 2002:a05:600c:34ce:b0:4a1:dbdf:17a8 with SMTP id 5b1f17b1804b1-4a1fd8a7d77mr31195245e9.2.1792577470784;
+        Wed, 21 Oct 2026 03:11:10 -0700 (PDT)
+X-Received: by 2002:a05:600c:34ce:b0:4a1:dbdf:17a8 with SMTP id 5b1f17b1804b1-4a1fd8a7d77mr31194065e9.2.1792577469551;
+        Wed, 21 Oct 2026 03:11:09 -0700 (PDT)
+Received: from sgarzare-redhat ([193.207.178.135])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f2d699dasm152330945e9.12.2026.10.21.03.11.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2026 03:11:08 -0700 (PDT)
+Date: Wed, 21 Oct 2026 12:11:00 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobbyeshleman@meta.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Jason Wang <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eric Dumazet <edumazet@kernel.org>, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com, 
+	Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: Re: [PATCH net-next v4 2/7] vsock: rename the vsock pernet operations
+Message-ID: <atiPgleCntfwV4-N@sgarzare-redhat>
+References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
+ <20261020-vsock-guest-ns-v4-2-047527cfccfc@meta.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,55 +124,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v7 0/4] gtp: ynl spec for the GTP netlink family,
- two fixes, and a selftest
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179257680778.526483.7395011719912367177.git-patchwork-notify@kernel.org>
-Date: Wed, 21 Oct 2026 10:00:07 +0000
-References: <20261016093225.1036375-1-anilkaushikwireless@gmail.com>
-In-Reply-To: <20261016093225.1036375-1-anilkaushikwireless@gmail.com>
-To: Anil Kaushik <anilkaushikwireless@gmail.com>
-Cc: pablo@netfilter.org, laforge@gnumonks.org, donald.hunter@gmail.com,
- kuba@kernel.org, davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com,
- horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
- sdf.kernel@gmail.com, nicolas.dichtel@6wind.com,
- osmocom-net-gprs@lists.osmocom.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20261020-vsock-guest-ns-v4-2-047527cfccfc@meta.com>
 
-Hello:
+On Tue, Oct 20, 2026 at 06:15:05PM -0700, Bobby Eshleman wrote:
+>vsock_sysctl_ops and its two callbacks are named for the sysctl tables
+>they register, but the init callback already does more than that: it
+>also initialises the per-namespace vsock state through vsock_net_init().
+>
+>Rename them to vsock_pernet_ops, vsock_pernet_init and
+>vsock_pernet_exit, so that later per-namespace work can be placed here
+>too.
+>
+>No functional change.
+>
+>Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+>---
+> net/vmw_vsock/af_vsock.c | 14 +++++++-------
+> 1 file changed, 7 insertions(+), 7 deletions(-)
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Fri, 16 Oct 2026 09:32:21 +0000 you wrote:
-> This adds a ynl spec for the gtp genetlink family, two small driver
-> fixes, and a selftest.
-> 
-> Patch 1: the GET and dump replies carried the family id in the command
-> field, so ynl dropped them. Use GTP_CMD_GETPDP instead.
-> Patch 2: new in v7. On the netdev CI debug kernel, the selftest hit an
-> RCU warning: adding a PDP context looks up the device without the RCU
-> read lock. Hold it around the lookup.
-> Patch 3: the spec (NEWPDP/DELPDP/GETPDP/ECHOREQ), no uapi change.
-> Patch 4: a selftest that adds, dumps and deletes PDP contexts.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v7,1/4] gtp: set a valid genl command in PDP context get and dump replies
-    https://git.kernel.org/netdev/net-next/c/758d8928d2c5
-  - [net-next,v7,2/4] gtp: hold RCU for the device lookup when adding a PDP context
-    https://git.kernel.org/netdev/net-next/c/fe3e1a42fb7e
-  - [net-next,v7,3/4] netlink: specs: add genetlink-legacy spec for GTP
-    https://git.kernel.org/netdev/net-next/c/8a2f9964fc28
-  - [net-next,v7,4/4] selftests: net: add a test for the gtp netlink family
-    https://git.kernel.org/netdev/net-next/c/ffb51f75013f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
