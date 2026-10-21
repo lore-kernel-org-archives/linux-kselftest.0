@@ -1,59 +1,76 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792577840;
-	b=xKhRMBhfWm3poErQdAOjTF+5JfuSfVUVRpTZmrq1+JMrA5Wqu/7mrnISt4kka//BhbdH
-	 2ELdqkrTxoUWnFAZP5We+z7SKRLZc+vk500lVrGJTRqsSf0725mGUuL18TCRmJgbeiTxQ
-	 T8Y/6aKjaeSRU9ItZoMbdn6A+PYf7RrSjHdjQrDg79dg4h4CtcA9KSqRAPC2owiujgzTt
-	 p5M06bNUYfthROv3WF2DsfrwtMRlJn1+mVuGYyO5ZeYnVaFvjSk7nVPROvdEuBz+E9SD/
-	 subr09hlDW4W6/blGkIjWlRyt1inFlPKAk7KFdwOmf6JuVqfvd/ypGZWBwyBg7bQeIg==
+	t=1792578116;
+	b=NL8ZpqZCWWwYYFAZoHYONQvHTrjJ09JyOIcJWYDNMqW4NcqVVRHJtR6mshvcfn6xXTW/
+	 5K7ttWzjWPAbK+2ufHIYXrJjzhaQpeU2tPcQGUjCNfbrwnUjwLO5X861cWLUvJm2f1Ie6
+	 cd0x7u0edN2SpdLWWefE0Mq6hC8uXaHNhpVd3nXSJg1+Xg8eTG0AEnwZBJGS2WDbqS5Qt
+	 KS45fbYnkOkbV5cfHNVjQm/lcg9BBpqSGyfcZUQtrBWqD/bvDpTil5Bhd17yFid/q5Nfl
+	 +fIK2p7KqPRYuNXwDPXKGxoYStzV4f5NAwcF8+e7oUjKE53YXyHuMxluFKkdx4qPODQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792577840;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=Kt6vo4l51awhjqq3I2zXUePIjWcvYUZXxZ9RPkgXQb4=;
-	b=uULjwi3jUUuDA7nU5ZJMuhRIVQBxwT7yu031IM6sxEG9XGTLAvTgpjy6UjFCR/oQ2JMH
-	 GxQfpwnUv9WdY52GDoxN/388ZEteX5bWeKuyO0zt49fJnTq2q0TwEV9ZteJm/iWTbV9xU
-	 OWNyz02p1N01dZ4eXNt6gR+mb8UV2BKbvPLNtb6chg28kVyCHtK3BAuBULzAiEXc5FD9r
-	 oTM+OgsK4W0OLxmpiliXnmbY/rAFg2pvUPqIVWtwuCeOAkro5Orf8XN/xFqroyvKriZfn
-	 kp01fjop4fHOObWeUCpf4zSq3ekS1w2DHG34eq7/m/0ksH8DNc+n2HLv3eIDQCsN91w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792578116;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=IzO1E6ikKD8tl2Wsl1moqCKEq1l/nX4FZiTYItV58uI=;
+	b=Na30fbzbmF9ffbf88MZXidvz/GwP0bvyyaD5DJk/Q175LC/IAkZyAsAw9tbrBeHJXGew
+	 Yj9KBnaxHHKLm4e+o3xU3WHlgccBbjGC/vR5XkxsaDOEw/KiR2OV8Rer6hQiN0T36I6VV
+	 b7GZ1oBOsEmadAlzHtTKZxFP071Vtj1g3VMS/Ez+QR3ez3BVmy4lcQ3G26HCEXxiB+hsw
+	 oQbDef1Xa03LNaoDIQdKyN64ZILCgsOYNCVtf99Zq+QowwesxjDx8vdwrSrSVUaOwlZGz
+	 nsFCXFOEpna5ytlOKlJOg89WjYA1ebqNAN1bCyNDjeyclaf8lFc8+D1q7N2uPX8DcOA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ua7oM8fD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mxIJkEAE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964D3606A319;
-	Wed, 21 Oct 2026 10:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812FE606A31A;
+	Wed, 21 Oct 2026 10:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ua7oM8fD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3D61F000C9;
-	Wed, 21 Oct 2026 10:17:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mxIJkEAE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A92D1F000C9;
+	Wed, 21 Oct 2026 10:21:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792577840;
-	bh=Kt6vo4l51awhjqq3I2zXUePIjWcvYUZXxZ9RPkgXQb4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=Ua7oM8fD2K3FMaghCaMTRd9ndhsONSrpG8JtFqKFRH7QkzZYnNXA15wEiVNRYcXDG
-	 /ZrdAvrUX1dtBFeRhboJ87hFl8Lzk2RKkMo+bHOPOlIZFAoDm3FUFDBYiwNrXbzbiD
-	 o5PqeyWU4ITidvmG4Pin2asL7HiPpAK5VRQp/lO2O9dQyJoeQua+dNbvzRJ8i0iXzw
-	 17K2T8spJdWwbNdFEGl73ma9zW0rwXlPoPHGDVLapHBQ+CXK8paHtxovCMXXD2WYB6
-	 AqVhpfGAghihIMoozPSch1/UiP0HFf8Obo5ajBAhbOVNVfIEePRmHOtVNCEyx3kiUa
-	 Jdp96m58i4GhA==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org,  rppt@kernel.org,  shuah@kernel.org,
-  akpm@linux-foundation.org,  linux-mm@kvack.org,  vipinsh@google.com,
-  linux-kernel@vger.kernel.org,  dmatlack@google.com,
-  kexec@lists.infradead.org,  pratyush@kernel.org,  graf@amazon.com
-Subject: Re: [PATCH v2 2/2] selftests: liveupdate: Add tests for
- LIVEUPDATE_SESSION_FREEZE
-In-Reply-To: <20261020144710.4154339-3-pasha.tatashin@soleen.com> (Pasha
-	Tatashin's message of "Tue, 20 Oct 2026 10:47:04 -0400")
-References: <20261020144710.4154339-1-pasha.tatashin@soleen.com>
-	<20261020144710.4154339-3-pasha.tatashin@soleen.com>
-Date: Wed, 21 Oct 2026 12:17:16 +0200
-Message-ID: <2vxzzew7fjdf.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=k20260515; t=1792578116;
+	bh=IzO1E6ikKD8tl2Wsl1moqCKEq1l/nX4FZiTYItV58uI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mxIJkEAEUemoHzqFpjGOGsISTWbamBRSUja5/+PShimgeDu5pEKvopKkpU417cjQS
+	 LUqwYcw1SBOPpayMExd/35Gnzu6vWNYtpIRwMBn1YzbAVoItArpZDVk3V/2yxpBUSt
+	 9fzVhM7CM1JzxX/30rMD4LM/SMeQgvPK71uLA9cJ6KKuCcL9byzvEuq3NKJpBNSfkI
+	 hOZZhVe1KN8bfJmLl2/aV98mPzJLBOsp6PiULbCuee+h9exCxuOQwZCmfAA20lj/Y5
+	 rZglUOVWEtzU9bw0QJBCz7xQiasZhWom0scGxlDmBqafUSH/ovyAfRSFdg3IQhiHli
+	 c6Wa6I1EvnH2g==
+Date: Wed, 21 Oct 2026 12:21:35 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Cai Xinchen <caixinchen1@huawei.com>
+Cc: mic@digikod.net, gnoack@google.com, paul@paul-moore.com, 
+	jmorris@namei.org, serge@hallyn.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	rdunlap@infradead.org, gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, 
+	johan@kernel.org, dlemoal@kernel.org, hch@lst.de, axboe@kernel.dk, 
+	viro@zeniv.linux.org.uk, jack@suse.cz, dhowells@redhat.com, code@tyhicks.com, 
+	linkinjeon@kernel.org, sj1557.seo@samsung.com, yuezhang.mo@sony.com, 
+	hirofumi@mail.parknet.co.jp, cel@kernel.org, jlayton@kernel.org, neil@brown.name, 
+	okorniev@redhat.com, Dai.Ngo@oracle.com, tom@talpey.com, hyc.lee@gmail.com, 
+	miklos@szeredi.hu, amir73il@gmail.com, senozhatsky@chromium.org, 
+	chenxiaosong@chenxiaosong.com, kpsingh@kernel.org, matt@bobrowski.net, rostedt@goodmis.org, 
+	mhiramat@kernel.org, mathieu.desnoyers@efficios.com, john.johansen@canonical.com, 
+	georgia.garcia@canonical.com, zohar@linux.ibm.com, roberto.sassu@huawei.com, 
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, stephen.smalley.work@gmail.com, 
+	omosnacek@gmail.com, casey@schaufler-ca.com, takedakn@nttdata.co.jp, 
+	penguin-kernel@i-love.sakura.ne.jp, xiujianfeng@huawei.com, nanx95726@gmail.com, djwong@kernel.org, 
+	lujialin4@huawei.com, bpf@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	netfs@lists.linux.dev, ecryptfs@vger.kernel.org, exfat@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, ntfs@lists.linux.dev, linux-unionfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, linux-trace-kernel@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 -next 01/18] fs: pass struct path to notify_change()
+Message-ID: <20261021-nanotechnologie-gebadet-gepaukt-52a950759f0a@brauner>
+References: <20261015125425.3246251-1-caixinchen1@huawei.com>
+ <20261015125425.3246251-2-caixinchen1@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,27 +80,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261015125425.3246251-2-caixinchen1@huawei.com>
 
-On Tue, Oct 20 2026, Pasha Tatashin wrote:
+On Thu, Oct 15, 2026 at 08:54:07PM +0800, Cai Xinchen wrote:
+> notify_change() takes a struct mnt_idmap and a struct dentry even
+> though all of its callers either already hold a struct path (or a
+> struct file) or have to pass &nop_mnt_idmap because no idmapped
+> mount is involved.  Switch the helper and its declaration to take a
+> struct path instead and derive the idmap and dentry from it.
 
-> Provide luo_session_freeze() in the liveupdate test library and add unit
-> tests in liveupdate.c covering the LIVEUPDATE_SESSION_FREEZE ioctl. The
-> tests verify that non-zero reserved bits are rejected with -EINVAL, an
-> outgoing session with preserved files can be frozen early, freezing an
-> already frozen session returns -EBUSY, and attempting to preserve an
-> additional file descriptor into a frozen session fails with -EBUSY.
->
-> Also freeze the test session early in luo_kexec_simple.c to exercise
-> LIVEUPDATE_SESSION_FREEZE across a kexec reboot, and verify that
-> attempting to freeze a retrieved incoming session returns -EINVAL.
->
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-
-Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
-
-[...]
-
--- 
-Regards,
-Pratyush Yadav
+No, the idmap needs to be passed separately. The whole point is that
+during path lookup mnt->mnt_idmap can change. So mnt->mnt_idmap is taken
+of the mount at the time it was checked and passed down to the
+filesystem so that the VFS and the filesystem are guaranteed to see the
+same idmap.
