@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792616127;
-	b=C/s9IHdHafis0Q7THa44X/JIy/Urox2XdVxA90Mn0X+eFttS8mTIEeCUNqaFYYZT1qo4
-	 vqfIeLZjBlkcTvc33vYSkKa2HLJA6eKav4HMbJB70bZdImPRadNYE3PJbZBBVlDBQ7IH3
-	 Mfgc7ZmyKBcBWa/x3SG33MK22xVgxrelwKWBBu4JDcU8MZzp+UOz4i1Uqb0DLcdQtlCci
-	 XkO8KeCXcpFqx/vGhKfrkV3dmKJ9k0rSZK/HLCOXKQwRJfvaFHxj0cbIcd023vxHzix5f
-	 frcYaZTnAEhrl4Mav7Txe9HhzvdTazHZC4e5d5bSKH56isX722DjNbg4cozVHwljFxw==
+	t=1792616132;
+	b=RPrVeyL8BosHW8Wm3i6G3QmRw1RywwhhbbdmrYwKa9FZqSKk95AbjX/Pc5uUp5AYQQYS
+	 ZudwFeOCHT2jSZ8I6Ac5AK9ugmjBvE3zKqfhhjO2PaunTKy48yrGqaLlnQdkDb+PFb3gZ
+	 /CO0whqblcCVwWM8cPC9lpwu3BWl++zu6eEPOsk4PJSvsNPTzkFr2MiEVah+RwKif0bXV
+	 lEj8tm4dAJjZ/Cia/1J/xBNIqNfNovHz+e+0F+Jlj/tYjymWmhkDz0zUx+XGCKFWGD5EY
+	 HINeabL/bxRTQedogq8L69CSb/ruD3N1p6nWkql9uiPiodEgKpFppvxw4xRGXn6okOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792616127;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792616132;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=BoG6FgQzAOsqSSw4b90ZKrbZ/8eF7MERpzSbbqg2z5o=;
-	b=2bryq0HROPezwt9DsIeYWjpzV9u2E8xbRrFJwQkK/7CVkoGrGi2M8cKY8CBi8E0ftPmH
-	 nKaBW5azDK+JqtLI44JjuIcNExCFXFGSlaLjxHD0vf8p8z89LxmOT2shZoLAjmoMXjvsP
-	 JrEsohote5Efx4ZEW7kEuc5ZZEmhL+hZU7hOz5PchvLM/M6mrKSp08lqeIRgrzQOCu9UW
-	 DR88TPHHq01UdXTTILGGatHFpNqizNYUaxkQo/UF5PbUOdMAe2iGBC28HoxuB6mjpvqPj
-	 m+0/WfEk3hSeqkSe3+icA8CBiyvlJz2RKU/7mf+RHwK49zNmCgPuaoxmklHht5N06BA==
+	bh=k2CVahfdtfCEt6Rhl5+UPBC8R4qgo2uKGjGxWZGnVNc=;
+	b=ZFEYiYQ3wOfgQLsSGOQIX6D8iYnBFtOJDJmgjAKqfR0ibPc4Z/WhCtjIzUcyuYjmp65v
+	 iFf+dezgsgUllmtes39WVvm2JpanTW3+fERaRzQM5N+OzHBadHtDVDDnV5w3d+w4PZqfi
+	 y7/I2425/6bfy5zHzELOo6U8TcsQIGmchv14ek46G4lv78YK37+KKEAK4YCE7aAitUDXi
+	 St14XP4Cz9K7eB9p5GhZOVHm96ia9BpdAbg8FoDEhPfSyM18rHpGsQmygZ9JSKyty3Nwr
+	 AY06n2cNIkHE8RyM7Y55t3QHArUgwjkodvfAJHG0+BLLvG+cUddXZbbfI61Iz6sDRgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rlsoi9gk;
-	arc=none smtp.remote-ip=209.85.221.170
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Pal82Sk1;
+	arc=none smtp.remote-ip=209.85.217.52
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754DF606A31B
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 20:55:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 754DF606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6721E606A31F
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 20:55:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6721E606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rlsoi9gk
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-5eabf7d5bbeso1274738e0c.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 13:55:27 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Pal82Sk1
+Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-7cc0892f92cso427809137.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 13:55:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792616126; x=1793220926; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792616130; x=1793220930; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BoG6FgQzAOsqSSw4b90ZKrbZ/8eF7MERpzSbbqg2z5o=;
-        b=rlsoi9gkS/LM3Pu3xYPtL7zf/U6dTptg6cRP/51gPEafMMPbJkkfk5F1Sgimdip3h9
-         PTtEPJw0y6xSa5uQsJAL0fNMDnIraWtFrsA678FnlLlc4rNRtsjgMQcACLSLWHbB+pJF
-         1cgJ1mJjEOFGAK0j2jsPClYtjcPl+346TKtQBE4XyiTTHLCAXB07T4wDkIPoYfRENcz0
-         H1aJVgf5J/WycWH9fkBBvZYWhSELd4BOB4VJCKkoC5l4x6NscEM2gkGqkpJ3tuHIKfUJ
-         UBdi9kJhU6N/x8P9PclLHtuHK/ZqtfQdLf9z3GOdC7H38pmSgiArGz1V9Hm+Dt2F64BD
-         4EfQ==
+        bh=k2CVahfdtfCEt6Rhl5+UPBC8R4qgo2uKGjGxWZGnVNc=;
+        b=Pal82Sk1MxtlriboG/NXM+O/pVnBqIOA9veaPFQvJAXMxlmo29mkKVQb2jYoy1+KsJ
+         PvjGx5DTLvqpv3AKnkr0VvRbkzq90T+S99IpYmwuEUDAc5qmEJgobeEcSb4m6oUXCeJa
+         Ls/v0Xz8yUaa3XSh3Sg6g6pG3vqPi1/ZOsOBv3qDPP83Fq0CZJHprD8sbadbovTIBoOg
+         0g3dyON3oil5G+pQRRD0Q5yPXokzxzaA4yoA7Zfm9C5qb8u/Gkrfpi/Dye8bMCljEaeD
+         tMYyh2G8HFye9526ybmnM0xRie+IpPlYKsmOAgc8yA16LXxWqr5evtoUg3INlbw2UYkU
+         XW+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792616126; x=1793220926;
+        d=1e100.net; s=20260707; t=1792616130; x=1793220930;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BoG6FgQzAOsqSSw4b90ZKrbZ/8eF7MERpzSbbqg2z5o=;
-        b=nB4SKN1mDLrMuN+5H/TVpsVYDO0UBgC7f1Uj7QWPt9giCiFgGMgIU/4YuzTAbBvboc
-         EGZ8ENVpJZWLfkRqC2sjl0P6eYe1SvoY1prN05TruAJTHnhdS0uP4a4isBnjTNu3gM0f
-         2n9RgbPfntf8S+74S8FH1RnqQQ9S17j1FTzsrcWlAdtx2sWiIWLQgImIBRfIT+rbPPiq
-         3WACamB30ellhlsWZPN7yF0ODr1YKz4iJ6sDQI0tXCDDYJy6w+AlcEsKHMe15WM9LrOc
-         vKwh/UsnU57e8PmpNzPAWjoRxjZJCQ3cQJDHmYY85Zhyg4XlCS4y0vDqI0EZVZT0uhMK
-         +ptA==
-X-Forwarded-Encrypted: i=1; AKwUvBwGT9nAt+j0OKRCVNzYZGm0x4mPIHa/J11SZUcqrUGh/WphrCMfxvQXBRT+QvCmydu0LmvpOa0Ie9r6mPjQHic=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLZOLX41X2sala3sTYhUKhbN/xPai1JhJTd7W4/9Q4TF4buBS8o
-	b6mXnK0YMsoVeGlBknDdzyvJhUq5YuWbXgMMq1S2TH3dbMH9bX+3mHwj
-X-Gm-Gg: AYBFou2dKVW37lTrQjJBlN3kYrc4F3XrG1ww9pc6qfWRWeGVAEKpfINrtR8cKdssGWU
-	KicR4MUDVbOClC1Hxf8iVbXnd6k+77x7Jwy7/ZQiGMI2PJiAorOR3CDQxfYNeB6iWcGRBldyduN
-	m4qT4pVLILk8wFQQY+pZdj6fsTwe8Zl95uScV8GfvrugiDnUj4CPIe79fqHupDanXNhsSQKV17I
-	2OmsyVng+Q0AwgO4IfNoFYXkCzXmQ2+JMk0MwkvjFQeP9GRDLZ+wl45NXYf+aL7X5zlkLTazqn+
-	fE+vX/vnopbwaGCCznWeQpUOZRz1shiNqWZU8Jt5tBaQT09vC6aLF131WCH5YOLM+H7wkseEk+G
-	JmoyVk5GkcBs9rsBbIgjesraMcd/YaoW1kMCvXfJ4/qhmDoQTxoLSXJQI9xTOyaN3GcYbxPl4OA
-	+xqLvEQWeK0xy7UIa8MKIEQFrTYcD8mx0dMnqYBsScGYu+OkSB7XiseajqjXduZSDDFs4UaTSz+
-	bwCzLWdHrWTiZH+jQZCSriVhpICjUHhOoi4t6p/BiHLI9gkRh72ROISnbLs9dDGtW283ZNpNVc6
-	l/oweZa0KW0+cIlW3zuO
-X-Received: by 2002:a05:6122:a50f:b0:5ca:856d:cf80 with SMTP id 71dfb90a1353d-5eaebde8b71mr1215288e0c.11.1792616126316;
-        Wed, 21 Oct 2026 13:55:26 -0700 (PDT)
+        bh=k2CVahfdtfCEt6Rhl5+UPBC8R4qgo2uKGjGxWZGnVNc=;
+        b=FwiM9/n7AOMQJuctgnHR1l9vSU3eS3bWZUcTQxYlJowIjczvBm+bhepyTrg4LYZvWm
+         tsz3OmakLaU9rUrGqtLN922qu7CQyG7U2SfMIRWEAw3KGbrVujUPA4VQUMrBVe8eZ084
+         mWDYd4DvG5u9E1ZtH2h0vYO3H+nOoFZVxLmpwuSJqSwb91Oh92JCn1sCDS8G5+87dgkN
+         wMpscLUolv9f0Pzfs/1YRphmDp+e7MTdwQG61Si1jriSsLkY9Ft/TIeQNYLAYfE3dheC
+         w3+8AFrjf3AS6NfnpQHcVxlwd4GseM1EBUaNaf1rCXAmqqKUOwmexowXvsMVxjGq9Igc
+         ynDQ==
+X-Forwarded-Encrypted: i=1; AKwUvBweezJolGLZ2JWNli8X88e711lCixw+BebaXD3snih+Gk4x6RxuSWgr9SsyTEimRHLpTWt5lp1h/CL+AThFtdQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKR5T9mAgICoFRTrhIgrEuQE8Sr1h8FTvP2fBOG9YDkBPXRHNCd
+	Q/NcvWgmki54usoEZs3RGq4jXHeHhXDdve4cj8P8zEAfEzl+6V1iDwrB
+X-Gm-Gg: AYBFou3wPkbhu54zpIVrEMai/5B/DjwsN0FFMIKgPjE2JONMZ2DNCU3OGAOc8nlY9yb
+	5wa7+b7yQp5KXkakvWmH8WOSgwh8Np//I/lMe9JTY/RitYkNXvVmHtJdXVry9au6aG8e8uR9uIY
+	YSw0gLftQBziS7qWDX+LJecnozSoAJ2x/UoLHvK4tsMXPFbWNntAcVssmIKqLqmwkRgUextQTc/
+	Zp7pXI1cUscVMxeKysF1AbXBjuprMdgDhLbzNTYEKDt15mVNfTvuhjzeVbNBH3KF7B9eDhpaJRg
+	DFYN0XjMkWD3f7nkl9dP7/r+Y9GQ1J4t42yrVi5aGv88BR+7fJRg0F6pkFkxpVKiiesBtnmmxlv
+	yO2utAhN8HVoW+IAeDH0togaAMuKF7pTp8MzTc8ItoiTeI0+HVtR2PuU9A61SQdsnwwpeivX3MB
+	RpWCyRsISCm3HA73KI24Cb69T8P2K4Drb3E9ODyktXzhlFJ7uPJIjRwLxkJjSk2QOf0Dsz0Vkls
+	3XPzhSZhGz2PQW260o6H0m4YkFRUNLeHWKH6Nt69jjUpR0aTf4dsNPw/+RaIjCqbKo3UEyfdnji
+	8WRfKr0HkGsOSgFVepB+uY1OGzHQoqpcBbLELaQmmQ==
+X-Received: by 2002:a05:6102:3709:b0:7c8:268:ecd7 with SMTP id ada2fe7eead31-7cc92739b17mr1017473137.23.1792616130118;
+        Wed, 21 Oct 2026 13:55:30 -0700 (PDT)
 Received: from Biostar-A520MT ([187.94.15.233])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eae980f64esm4553359e0c.13.2026.10.21.13.55.23
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eae980f64esm4553359e0c.13.2026.10.21.13.55.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 13:55:25 -0700 (PDT)
+        Wed, 21 Oct 2026 13:55:28 -0700 (PDT)
 From: Breno Rodrigues Alves <breno3011alves@gmail.com>
 To: irogers@google.com
 Cc: acme@kernel.org,
@@ -87,12 +87,13 @@ Cc: acme@kernel.org,
 	linux-perf-users@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Breno Rodrigues Alves <breno3011alves@gmail.com>
-Subject: [RFC PATCH v4 0/2] perf/kselftest: convert Perl test helpers to Python
-Date: Wed, 21 Oct 2026 17:55:04 -0300
-Message-ID: <20261021205506.26736-1-breno3011alves@gmail.com>
+Subject: [RFC PATCH v4 1/2] kselftest: convert prefix.pl to Python
+Date: Wed, 21 Oct 2026 17:55:05 -0300
+Message-ID: <20261021205506.26736-2-breno3011alves@gmail.com>
 X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261018134322.26445-1-breno3011alves@gmail.com>
+In-Reply-To: <20261021205506.26736-1-breno3011alves@gmail.com>
 References: <20261018134322.26445-1-breno3011alves@gmail.com>
+ <20261021205506.26736-1-breno3011alves@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,75 +105,116 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is v4 of the series converting the Perl test helpers to Python.
+Faithful re-implementation of tools/testing/selftests/kselftest/
+prefix.pl in Python 3 (stdlib only). Same unbuffered stdin-to-stdout
+processing, same "# " prefix behavior.
 
-Changes since v3:
- - Fixed pylint W1514 in check_errors_whitelisted.py by passing an
-   explicit encoding to open():
-     open(path, encoding="utf-8", errors="surrogateescape")
-   "surrogateescape" preserves the byte-for-byte behavior of the Perl
-   original, which reads raw bytes.
+Update runner.sh to invoke prefix.py instead of prefix.pl, update
+the install target to install prefix.py, and remove the old
+prefix.pl.
 
- - Also fixed two issues found while testing the series locally:
-   * open() failures on the whitelist now exit with the underlying
-     errno (matching Perl's die), e.g. ENOENT -> rc 2, instead of
-     always rc 1.
-   * stdin/stdout are reconfigured with surrogateescape so that
-     non-UTF-8 bytes in the log (e.g. oops/KASAN output) do not
-     raise UnicodeDecodeError/UnicodeEncodeError, preserving the
-     byte-for-byte behavior of the Perl originals.
-
- - The series is split by tree, addressing Ian's suggestion:
-   * Patch 1 (kselftest:) touches only tools/testing/selftests/ and can
-     go through the kselftest tree.
-   * Patch 2 (perf/tests:) touches only tools/perf/ and can go through
-     the perf tree.
-
- - Note on pylint-tests: it fails on tools/perf/tests/shell/lib/
-   perf_json_output_lint.py with:
-     W4904: Using deprecated class FileType of module argparse
-   This is pre-existing in perf-tools-next and reproduces on the base
-   commit without this series. The four files touched by this series
-   pass pylint 10/10 with the flags used by Makefile.perf.
+Verified byte-for-byte identical to the Perl version.
 
 Signed-off-by: Breno Rodrigues Alves <breno3011alves@gmail.com>
-
-
-Breno Rodrigues Alves (2):
-  kselftest: convert prefix.pl to Python
-  perf/tests: convert check_*.pl helpers to Python
-
- tools/perf/Makefile.perf                      |  2 +-
- .../base_probe/test_adding_blacklisted.sh     |  6 +-
- .../shell/base_probe/test_adding_kernel.sh    | 44 +++++++-------
- .../perf/tests/shell/base_probe/test_basic.sh | 12 ++--
- .../shell/base_probe/test_invalid_options.sh  |  4 +-
- tools/perf/tests/shell/base_report/setup.sh   |  4 +-
- .../tests/shell/base_report/test_basic.sh     | 54 ++++++++---------
- .../shell/common/check_all_lines_matched.pl   | 39 -------------
- .../shell/common/check_all_lines_matched.py   | 47 +++++++++++++++
- .../shell/common/check_all_patterns_found.pl  | 34 -----------
- .../shell/common/check_all_patterns_found.py  | 37 ++++++++++++
- .../shell/common/check_errors_whitelisted.pl  | 51 ----------------
- .../shell/common/check_errors_whitelisted.py  | 58 +++++++++++++++++++
- .../shell/common/check_no_patterns_found.pl   | 34 -----------
- .../shell/common/check_no_patterns_found.py   | 37 ++++++++++++
- tools/testing/selftests/Makefile              |  2 +-
- tools/testing/selftests/kselftest/prefix.pl   | 24 --------
- tools/testing/selftests/kselftest/prefix.py   | 24 ++++++++
- tools/testing/selftests/kselftest/runner.sh   |  4 +-
- 19 files changed, 269 insertions(+), 248 deletions(-)
- delete mode 100755 tools/perf/tests/shell/common/check_all_lines_matched.pl
- create mode 100755 tools/perf/tests/shell/common/check_all_lines_matched.py
- delete mode 100755 tools/perf/tests/shell/common/check_all_patterns_found.pl
- create mode 100755 tools/perf/tests/shell/common/check_all_patterns_found.py
- delete mode 100755 tools/perf/tests/shell/common/check_errors_whitelisted.pl
- create mode 100755 tools/perf/tests/shell/common/check_errors_whitelisted.py
- delete mode 100755 tools/perf/tests/shell/common/check_no_patterns_found.pl
- create mode 100755 tools/perf/tests/shell/common/check_no_patterns_found.py
+---
+ tools/testing/selftests/Makefile            |  2 +-
+ tools/testing/selftests/kselftest/prefix.pl | 24 ---------------------
+ tools/testing/selftests/kselftest/prefix.py | 24 +++++++++++++++++++++
+ tools/testing/selftests/kselftest/runner.sh |  4 ++--
+ 4 files changed, 27 insertions(+), 27 deletions(-)
  delete mode 100755 tools/testing/selftests/kselftest/prefix.pl
  create mode 100755 tools/testing/selftests/kselftest/prefix.py
 
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 2d960626750e..4bec301fe278 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -280,7 +280,7 @@ ifdef INSTALL_PATH
+ 	mkdir -p $(INSTALL_PATH)/kselftest
+ 	install -m 744 kselftest/module.sh $(INSTALL_PATH)/kselftest/
+ 	install -m 744 kselftest/runner.sh $(INSTALL_PATH)/kselftest/
+-	install -m 744 kselftest/prefix.pl $(INSTALL_PATH)/kselftest/
++	install -m 744 kselftest/prefix.py $(INSTALL_PATH)/kselftest/
+ 	install -m 744 kselftest/ktap_helpers.sh $(INSTALL_PATH)/kselftest/
+ 	install -m 744 kselftest/ksft.py $(INSTALL_PATH)/kselftest/
+ 	install -m 744 run_kselftest.sh $(INSTALL_PATH)/
+diff --git a/tools/testing/selftests/kselftest/prefix.pl b/tools/testing/selftests/kselftest/prefix.pl
+deleted file mode 100755
+index 12a7f4ca2684..000000000000
+--- a/tools/testing/selftests/kselftest/prefix.pl
++++ /dev/null
+@@ -1,24 +0,0 @@
+-#!/usr/bin/env perl
+-# SPDX-License-Identifier: GPL-2.0
+-# Prefix all lines with "# ", unbuffered. Command being piped in may need
+-# to have unbuffering forced with "stdbuf -i0 -o0 -e0 $cmd".
+-use strict;
+-use IO::Handle;
+-
+-binmode STDIN;
+-binmode STDOUT;
+-
+-STDOUT->autoflush(1);
+-
+-my $needed = 1;
+-while (1) {
+-	my $char;
+-	my $bytes = sysread(STDIN, $char, 1);
+-	exit 0 if ($bytes == 0);
+-	if ($needed) {
+-		print "# ";
+-		$needed = 0;
+-	}
+-	print $char;
+-	$needed = 1 if ($char eq "\n");
+-}
+diff --git a/tools/testing/selftests/kselftest/prefix.py b/tools/testing/selftests/kselftest/prefix.py
+new file mode 100755
+index 000000000000..67c4fd0b6089
+--- /dev/null
++++ b/tools/testing/selftests/kselftest/prefix.py
+@@ -0,0 +1,24 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++# Prefix all lines with "# ", unbuffered.
++
++import sys
++
++
++def main():
++    needed = True
++    while True:
++        char = sys.stdin.buffer.read(1)
++        if not char:
++            return 0
++        if needed:
++            sys.stdout.buffer.write(b"# ")
++            needed = False
++        sys.stdout.buffer.write(char)
++        sys.stdout.buffer.flush()
++        if char == b"\n":
++            needed = True
++
++
++if __name__ == "__main__":
++    sys.exit(main())
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 311811dc55a0..1944c74f1e31 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -29,10 +29,10 @@ TR_CMD=$(command -v tr)
+ # with sed instead of unbuffered output.
+ tap_prefix()
+ {
+-	if [ ! -x /usr/bin/perl ]; then
++	if [ ! -x /usr/bin/python3 ]; then
+ 		sed -e 's/^/# /'
+ 	else
+-		"$BASE_DIR"/kselftest/prefix.pl
++		"$BASE_DIR"/kselftest/prefix.py
+ 	fi
+ }
+ 
 -- 
 2.56.0
 
