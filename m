@@ -1,100 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792563469;
-	b=0JcibwEUYr4nq7d1Oo84ypVDiteFAP17efnRG6Yd60kDh+2tgNCbA5AMue2FS+SjFpeC
-	 eGIdEDhKhQfG55ZXWu2PhZI+k7WMWK3nlxrh6eCJ8MN3IAT/4FBomwMmkWJwYGvWVRboM
-	 dWaw4Pjs5lzKonNLQePFUita244HGoVd/Ugq3sb7+GONQ7xDlYNypFZIozEm57MU9dFbJ
-	 XR881cZf15nsrBftvg5ERiZY1/M8ri6+MB44PWClFEOPf7YWUqX2m67nqWRMm0YyBkoPF
-	 J+3Ks12bgRlHVAuL1TsJhppXUC467LfQgmAOo10Eq2ja5O6PJprl7ZYtABj4DvP+HWQ==
+	t=1792568807;
+	b=rRD9Rk6+MvJP4qywnbQwwmm6CieGQ/3N7Ja0VI5UQi0F8VB+68gEEwZBAeEaJpdGGa9l
+	 doPQtdS9E+m0ZKKWzUT9zp6ti2Oq4ZG+GJq0KhQZPnuzWJWUTno0Z0iiTufy95yUtqYPv
+	 0pgq8hjB8Se2GvyLZUYjwlCZ51bGezp0iYmFAotRKM8BMeyXZlzBlhjbGIHcUul3wHcwD
+	 gCy+foXHn81ujMn96lEBWRWlNz2BoLNkGvX3w2KTywUWzo/7PS9PXyZZxUtX6mAQUNuBS
+	 m8HKz5g4RuJVBJZ8syfR8MuxxD39VLGBD8RfDeA8TOqOxInTMkxZDddfWlaqFjzoXDg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792563469;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=OpMUSfXjYdpw9tHtxpMBZ2ptmbz/1TA55D+obf0dVY0=;
-	b=s2+dsweQq4tLQ0g6vw4DWq6wg7QDxp9tgEMLjXLR6eFADeyeq++KjE36NnoHHWlQJQ+K
-	 +hi+Z3ibM5KaHQIeyKnrJlROnWlI93rhEDTIHZY7vXZwltRmBZbjgNPj906bYkYJW5JGr
-	 7eRo5MYveWlK+ws30eWM+GTcTAnBrTDTuVj1gvtjLsiuGkoQM/dWwZq4p26ALiKKcKopu
-	 qXTGJlY/Lan49z2YkwFxnd4GYgfMAGyu335KVIRrxZsneTJnZS2d+bCeameAEwCwaJVqC
-	 8hTjpJvD9fhfQMPCcYjUr1BSypuH8W1AAqgk9XcZh/I6CAYte0NGIblQOB6MAEWlkUA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792568807;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=4wOKV3uTe7ngC/bk4GM0xP88MMKFpUGtrZfXCCbot38=;
+	b=TllsyXRLTvT4eTiZWDxuZSSiU9txyn98pAF0/JjAdkbhfFQY1g0qCe7OvYfSTHa3aGNt
+	 1OCbNlGIMZmWyIv3UdK0g3Abn5++F5I5nysKBv0t2pEdZVs9OYWxp5/V8Ka3P9uHx0txf
+	 9okwujer/vYCLZxBGPBqFZcW0sm9fmOgjgDHL7LtQajG0UKkFwkFuMRvrpzigX7Eg3E/Y
+	 zxrrxrz0aBWrB39cfZ6ucFbvV8fmcNdRn1cFHFBdjAQT0unlMGhEg5ZL/6r+vVHbM+BBq
+	 G/WmTeMX3Wx4zI7O3ufzaDXEE1xStMdUnoYAmu+UtrhjOWimsA0KZV/bQeEj/CnByGg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=pQIPJhuw;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oCLpk7rW;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACACC606A319;
+	Wed, 21 Oct 2026 07:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oCLpk7rW
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1792568806;
+	b=wr21dBf0da0tubCLnWdhV+HPXBDu0i7NNMlbjHzabi92gnBwQSLcemzAPGGKELodFW8H
+	 JC2Mhj4BYEu904pWA5ceNvfYbhvMj9rBbgDXH+Nk41RWeMi7Jl4iYiN94w3V9BjDEL3/h
+	 07d4NPdelc4ajYIluXQIna9IjULqq2tS8gdyILsm3lKK4ACQUZFd82FY/53qiyXhH2tD0
+	 B/0z/18j+ZjvTmW2dSbz3amPWPiq279yIgAiEO+N2tLt0JhTCrm3SFJAMqTZbDDMUQ7s0
+	 1reURfSdQ8bvaJZB03Rxo8g1iNwjvu8yy0iKfH6QET5QAX12IrQ7/QSYdYoAJn63lDA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792568806;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=4wOKV3uTe7ngC/bk4GM0xP88MMKFpUGtrZfXCCbot38=;
+	b=U3l3jsExu43NRME0Q6MxyacCwUNB7S58AT16930B9Pm1HiUIxYx40fLzEzw9ta01c9ag
+	 uF5aKhIWtdZO0CTBN/xlBiNoDmVqUUSs+i2hnlVH6rnJIms33uUrcnTcStqa7D9N8oFYf
+	 bb/kpGMkXMMXdSY3QagB1AHgHaKIQy6uXkC+5ILdE81SlgaY8VZDXyWgMaB9rpl9KNyvP
+	 8TGO3ySgqykd/Sxr9PHTz9igd2/YKpezLkpmA9XEPDOOfuQ0oCLKpcsrvKHT7EWzX2TRx
+	 qdIX69cCUrtGIfcybw6s/S8+eMYmeg2oaEPDaKU9bC5k0tJVVb7iOc1BX2ACEbGhnQA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F220F606A337
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 06:17:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F220F606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=pQIPJhuw
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b1b12de661so7542a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 23:17:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792563467; cv=none;
-        d=google.com; s=arc-20260327;
-        b=sy/e16KEtI+3bzcrlC9ONvKZiihl7NYIqJBpNC1shtJeOdLM1gETUG7JdflfTkBXO4
-         arLKX1FA+AzgI5CiD4z4AmSdxYtx0EimMIWr5wNPX6P66s3jZ23nIXWPLGLQgRsS9+Ip
-         YqSlDG7ckUL06xPFDR0eeByx0j3gP+NVxgyTFrCYMhuKDfjPdxOrKg/NzwBwJ4hbetKJ
-         0/0s0QpUvxGWCbXIyJODKh8izU+YBw1xRUD/13UpiaR6/Ag/ksqToRh7Vt0aOn4zin7M
-         p56iG3JWgW4fGwlfNFN0wZmDGkNR8L+7r1d3ePIdIGXcAeNysSRH4cd9txkvCXNQKNuG
-         Zbqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OpMUSfXjYdpw9tHtxpMBZ2ptmbz/1TA55D+obf0dVY0=;
-        fh=ik5+ne/wCQ2uxhhmhbNB2Vwnv/s93bZKa8+RSoxOGYg=;
-        b=MCJsZ33bcF1v13cDDamHa190//WAdRzSSzyqeUZ6xK4sgsoYyaXdXBj0EUJ1yUIklW
-         GZmUBXjr/IqdmhsISZpV+rFy6T4JK5D0OmMvy3SybY0qXHj9oZLbZaDz/Nb544EanWMI
-         tTQWJHkRQzCPcU0n7Cj/6AGqV2g4y41PFotxsy9RedDEkTQzMhbGEo7Ybt769LIrlk0j
-         0mspE2r0h1Kn//qAK/ZOLr0hcLR5sitHrUV9M0Z2wIvVjUnHC4tNnHujzBf6AKdXGaXX
-         E1btz4VIsoh/WRi/QPpcQZgdvs6DAe9LCbXALUxn+slB+hhr2zGGeSTjma1guwStMVCx
-         l/qw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792563467; x=1793168267; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OpMUSfXjYdpw9tHtxpMBZ2ptmbz/1TA55D+obf0dVY0=;
-        b=pQIPJhuwRgwitqjGA3ItWVLOGRQSBJ2UxZPYrPAWnSbOgQb7bum+xLkiJsThMZqhOH
-         dwhP0Tb7gfDJbRLLmYO0L58nN/lbc0ijCbj7vD9/AsO9AN+96fT1k2yklolZXbSXuPwo
-         LvDI+a8olKugTFENbi6HjsCC3zDMl6Iz1h6NBkZRClcTcPd8ggh/X4oK3qTp3lqZ6g+A
-         1/vCcb7V+C3SGzXl2pN5Qza6vN7p6/inIC4foXEFviRK7uLerabWIo3jtiqgZBXKVU0E
-         35IRXsTcGT6NK/j4Qt7Yug3jaRtwJPct+J6CNc9iCK/DHqCogYkMU/l3zqzSbvR0IHLw
-         KzOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792563467; x=1793168267;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OpMUSfXjYdpw9tHtxpMBZ2ptmbz/1TA55D+obf0dVY0=;
-        b=sCRicazIwe+vqkSpKNXvY/8m88o7AggVV6+3AH1nvbX5SLwpnoaw46jcjYzRl/4qCg
-         d9JuzdzpID9dI/HEg3DzOxI3M4u65D86MoaX2jp7URuLzeqRdxBjbqid2Jyf0jgzl/+b
-         HJB1cfHvGV795LG79SwX+8S0zHbMNLbmYcQTSA1FHZE+7s93K89UwPWFKGMustammBeh
-         FFZgOYnF+u0D0Ay5xXtufLIJ2oIudNDtdnMPWoAOg7wV3pOu98pDjjkGStDB9/GgBjl2
-         JSQieLDdTZbbtnxSWdV8Kd+75YWDJPS4brUvUp6L9t2zs+x4PEE1r4pbN7Xuxx5HJ42N
-         Laxw==
-X-Forwarded-Encrypted: i=1; AKwUvBz2fqqEeMKG1rQ9lVZ1ZcmQ9Pu6LJYbNjpKDgljk8gkTcERulIqmtojnr8qpkGi6BYtzzcRpghTNVWTNVjCR74=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKm0zH0lL7liePtibp/bb4bP26rG+Sf6Pv5lawyO68C+73OZTj0
-	2JKXaIXxH9anERpmywx43v3qgiK3pZ1M0y/frfKObNrs6AHLKetsNFXGxihPtaOor3CTxqIvEzs
-	Ad/8PnHQtESKpFR3xeMTDuxolLhwM0PNWonLp3MJdvJTFptWRnEcKakDN
-X-Gm-Gg: AYBFou25HrIRZ3u0umDxESB/oodKBbWuH0kaFPdomq46wIuLPbp6TiJ1ND7J7Edvf1v
-	lE2XxsFjbq8IiIvrGeXRf+ZCVRJY/C8JiZmv6XBHWK+YlrGF11E/WW+4kpRIxR8/aiucjmjPR7m
-	pO7ayO2GCsKzImpATNx7mIw/g9/hVb32Ph/xkFW9m9beQtUWtT3t25JseoceI0saghDV26cEac2
-	8J/VP9hEyHh3k/XUNQh+fKjQq3JtPYUa7cy/IGRfMALUuIltaSdQHaYzWEs7dDVAZhPV1sxI8d/
-	jDHKqYJj839Xs7vYCKxute5G/XeC0fz4xlEioFRU6hISGxEf7L5bbPGPco2+M4HUIPz5fmRwwww
-	L3OI83w2sgBQaKXnd8anBo0zQFA8lDDbBdw==
-X-Received: by 2002:a05:6402:4050:20b0:6b1:bce6:1220 with SMTP id
- 4fb4d7f45d1cf-6b3e77153d8mr91222a12.12.1792563466679; Tue, 20 Oct 2026
- 23:17:46 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id E78B61F000C9;
+	Wed, 21 Oct 2026 07:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792568806;
+	bh=4wOKV3uTe7ngC/bk4GM0xP88MMKFpUGtrZfXCCbot38=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=oCLpk7rWW7TpHQevsjxLQtVY8CxEPj+EerbTMKdbgkykM6IvxH6wVtBt7XNuZtuAc
+	 ri7ET6t3Nss5rnkiyE2S2h+oNfN8qJ5Ml6WqQ28Gx7FxG86SzcVbBQALY+OKbjfTZa
+	 uz8ur0/jXc8MTXChMuIqknYvleTuaYiBnGtE9N9B2N040tgPbzJ6Owgy9QJuL/3RT8
+	 oRMjh9Foji0H2PhwL5IMla22o77qBbwU/f0LJYKPMv304ToNU77KWQyuEgBN2GrJeJ
+	 g1DOFo4lP+Os8ZwflJ/gdgPGDRG7c1jtJr0QaCzcVlC4K8pF5WX1bfQypzjb/akK4j
+	 8FRroVlq419Bw==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 5BBE043316;
+	Wed, 21 Oct 2026 07:46:45 +0000 (UTC)
+From: Henrik Enquist via B4 Relay <devnull+henrik.enquist.gmail.com@kernel.org>
+Date: Wed, 21 Oct 2026 09:46:46 +0200
+Subject: [PATCH 2/2] selftests/alsa: Check the aloop PCM Slave controls for
+ a matching playback
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,56 +83,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261015163915.1166043-1-almasrymina@google.com>
- <20261015163915.1166043-4-almasrymina@google.com> <20261020121858.3b9107c5@kernel.org>
-In-Reply-To: <20261020121858.3b9107c5@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 20 Oct 2026 23:17:34 -0700
-X-Gm-Features: AclHuK9x4qWdNnjJvUjsI2EHUcAIAKj09plc1NcLTKxrSfCtCSi6D5JlUi63xuU
-Message-ID: <CAHS8izPwWT+vbgAe49m5vXsRxT3unbfjLTkVZBScgAPdQTo2dQ@mail.gmail.com>
-Subject: Re: [PATCH net v4 3/4] netdevsim: support devmem RX and TX bindings
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Taehee Yoo <ap420073@gmail.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>, Bobby Eshleman <bobbyeshleman@meta.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Dragos Tatulea <dtatulea@nvidia.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Tariq Toukan <tariqt@nvidia.com>, 
-	Kaifeng Wang <kaifengw@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261021-aloop-slave-controls-v1-2-62297727177f@gmail.com>
+References: <20261021-aloop-slave-controls-v1-0-62297727177f@gmail.com>
+In-Reply-To: <20261021-aloop-slave-controls-v1-0-62297727177f@gmail.com>
+To: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Henrik Enquist <henrik.enquist@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792568804; l=2678;
+ i=henrik.enquist@gmail.com; s=20261003; h=from:subject:message-id;
+ bh=VSTLeRkvDN+ZF+CMMCj3hMx1dw85nE2aZG16Hn9p9sY=;
+ b=4K+sccxtaLcCx3g/oIrpq0WvrzVqWT2n9N/fZgRhtxxFFt3xzzSD4MXm05dmLtnzT3DmtJpJQ
+ y1idqp+KfGtBDCvZNBWaTTPywRrxhYCq5wW+kUXwFGpI/PEv4qMbf2M
+X-Developer-Key: i=henrik.enquist@gmail.com; a=ed25519;
+ pk=ctrSXwtuuiWIZbc1qNzu+n+1PkhB/a+2nlRyXd5j2pg=
+X-Endpoint-Received: by B4 Relay for henrik.enquist@gmail.com/20261003 with
+ auth_id=1105
+X-Original-From: Henrik Enquist <henrik.enquist@gmail.com>
+Reply-To: henrik.enquist@gmail.com
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 20, 2026 at 12:19=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
-rote:
->
-> On Thu, 15 Oct 2026 16:39:14 +0000 Mina Almasry wrote:
-> > Set a 64-bit DMA mask on nsim_bus_dev, enable NETMEM_TX_DMA on the
-> > netdevsim net_device, and configure page_pool instances with
-> > PP_FLAG_ALLOW_UNREADABLE_NETMEM and queue_idx, plus PP_FLAG_DMA_MAP |
-> > PP_FLAG_DMA_SYNC_DEV when CONFIG_HAS_DMA is set, so devmem bind-rx and
-> > bind-tx netlink operations can be tested against netdevsim in software
-> > selftests.
->
-> Slightly worried this will bring a bunch of maintenance burden and
-> "bugs" in netdevsim. IOW that this will be more pain than gain.
+From: Henrik Enquist <henrik.enquist@gmail.com>
 
-I felt the same way when I noticed many reported bugs against this
-series because I didn't add proper support.
+Add a test that starts a playback with the same parameters as a running
+capture, and checks that the capture keeps running and that the
+"PCM Slave" controls report the playback's parameters, with a value
+event for each control that changed. Before the previous patch, the
+controls keep the parameters of the earlier stream and the test fails.
 
-But on the other hand the test coverage is nice, and maybe one day if
-we add enough devmem support in netdevsim we'll be able to fuzz the
-data path or something. Is there a way to get the best of both worlds?
-Like put a comment on top of netdevsim that this is test simulator
-device and any missing functionality and/or bugs in it should be
-medium criticality max or something? Or is it too much trouble and I
-should drop the netdevsim support and tests?
+Signed-off-by: Henrik Enquist <henrik.enquist@gmail.com>
+---
+ tools/testing/selftests/alsa/aloop-test.c | 40 +++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
---
-Thanks,
-Mina
+diff --git a/tools/testing/selftests/alsa/aloop-test.c b/tools/testing/selftests/alsa/aloop-test.c
+index a58b9fdbdc..74d6ccc127 100644
+--- a/tools/testing/selftests/alsa/aloop-test.c
++++ b/tools/testing/selftests/alsa/aloop-test.c
+@@ -323,6 +323,46 @@ TEST_F(aloop, params_change_stops_capture_with_notify) {
+ 	snd_pcm_close(capt);
+ }
+ 
++/*
++ * A playback that joins a running capture with the same parameters doesn't
++ * stop it, and the "PCM Slave" controls still report the playback's
++ * parameters rather than those of an earlier stream.
++ */
++TEST_F(aloop, matching_playback_updates_controls) {
++	snd_pcm_t *capt, *play;
++	unsigned int events;
++
++	/* Leave the controls at other parameters than the ones used below. */
++	ASSERT_EQ(open_pcm(&play, self->play_name, SND_PCM_STREAM_PLAYBACK, &playback_params), 0);
++	ASSERT_EQ(start_playback(play, &playback_params), 0);
++	snd_pcm_close(play);
++
++	ASSERT_EQ(set_notify(self->ctl, false), 0);
++	ASSERT_EQ(open_pcm(&capt, self->capt_name, SND_PCM_STREAM_CAPTURE, &capture_params), 0);
++	ASSERT_EQ(snd_pcm_start(capt), 0);
++	read_events(self->ctl);
++
++	ASSERT_EQ(open_pcm(&play, self->play_name, SND_PCM_STREAM_PLAYBACK, &capture_params), 0);
++	ASSERT_EQ(start_playback(play, &capture_params), 0);
++
++	EXPECT_EQ(snd_pcm_state(capt), SND_PCM_STATE_RUNNING);
++
++	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Active"), 1);
++	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Format"), capture_params.format);
++	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Rate"), capture_params.rate);
++	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Channels"), capture_params.channels);
++	EXPECT_EQ(cable_ctl_get(self->ctl, "PCM Slave Access Mode"), 0);
++
++	events = read_events(self->ctl);
++	EXPECT_TRUE(events & EV_FORMAT);
++	EXPECT_TRUE(events & EV_RATE);
++	EXPECT_TRUE(events & EV_CHANNELS);
++	EXPECT_TRUE(events & EV_ACCESS);
++
++	snd_pcm_close(play);
++	snd_pcm_close(capt);
++}
++
+ /* With notify, a capture opened second is still pinned to the playback's parameters. */
+ TEST_F(aloop, capture_constrained_with_notify) {
+ 	struct probe_result res;
+
+-- 
+2.53.0
+
+
