@@ -1,75 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792573747;
-	b=d52PyuWo29HB/y2tnR2PamGChOp1czCfx6OchfveYD+P85/r8NeXmDhOagMwZq422Ns8
-	 k22UfursURRDIMB65iMya378rozMi2/OTzwN1x8z6Hf72fP0YJQZZ/m2cazFqnqxWFp32
-	 YEP07avf13Y+CowfloKinUbWDkBlJoCE74uW3gFQD+fEy4tM5gK+dR3GqBmmV/CJYP/ly
-	 D86xGxbG7qzHwnMYQ5AIK6p+gzc8H4sDkpeXHotZRf4Y/4ePcL5RxNapN+hm0c50K7HpQ
-	 RgvJaQYL5guYosxKVAgdU6nxwT/jZDkiwqcicwGV5oZwAvQ7LAUOkuE/fsIz/yYwKUA==
+	t=1792575401;
+	b=CoaiyEBAuhrG523EUsYeA8afs9YpZK6TMcXklKR/dG0q7um6pNQxeaPLoZR/l7uAPdH5
+	 DgfIvI769X4R/a/O8/zp0s+WEhlAH/oiTxTgD94YfXmVVfjJUGWohUu3bZeJcGsecqNgT
+	 2iiXYosHvi5fNAlsFSTR1JKtBG3AhVE3b5vcAfqHKt6RSuH8vl8TlbNS2hIsyJ56osJWG
+	 C6dhLweeUgSsul9TzjriFUMS6WX6HqZveEYHwSknXKZTBcSvabjmp1+Qt8uAelxEmajhv
+	 JSYt82ZqNcTB5rqHFAo14cZvytXhHc41EzLe8XbIpjTgAxlVRxL+BVVrIRvdR2s7ojA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792573747;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
-	bh=m4m+8auzD/3I9aBzl5NjCoQklre0jbzlsPnF0O/VYTM=;
-	b=ceP4XLbyo/fMk4zXjqWrNYWqiWcFOwbjrR6oTnz5yJY2mzZNMdUTQtMpjtRMl5veW0eJ
-	 NKIm4vrSB4NZfMBVM2Epz70U+oL/SNGkqTyIwDjp3gfF+ltpju+bvq8+ZoFxX/tsKhWUS
-	 h3FyqFXe7xVw4s+io6m8aG6zmvd4QNs+A0Zo5nquxDKgMaZP2z3Ohtn+NWhulrqLnPWgx
-	 lqCJ8P+1KwCK9Z+qkEQdiRDVcFqsCA2P8VZWPAAknybVW+461qSxPns8Ui4rqVUT4Iqzm
-	 M6UGIEO0nf66TetKDIKfU+EfMHg2BACE7s7AYRl/W+pIxAalLwG2h1463yNaLkt1rmg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792575401;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
+	 X-Spamd-Result:X-Spam-Score:X-Spam-Level:X-Spam-Flag;
+	bh=Qefb26IGP5AOdsfXsbEKDWsh35frzAzUc/TON+gbyqA=;
+	b=lLOMVUjrKvtSp953eYQtI76k2CWjAc4/+I2sB8zaTTAQM2uqHoRs67KpIJjyck1ezqtv
+	 u21/yRWwbUFvEKpRXdZM5003tiU8iWQcvz4qZChah4c5j+CCNDUTPCQcdqVoP0gHKpHsX
+	 MuHMcldshqd7bWLZHUDjQIJ0tfaLLw8lMViSj9a6EXrdyT2xx3kWaWDbQy09vs7Xsz4ED
+	 l7d8hbAGQO01MYyOTWRRI/HOeN16sZHfiiYpKI0s1FckbqgbjRddPAM30m7ioN75C4nvK
+	 yaAp2f8gFBumDh22zDSa6r5t0LLm5MkIjoKpiWgk6heff4a6vyEgJpizkj7T4F5CQUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=yZQo5++J;
-	arc=none smtp.remote-ip=185.171.202.116
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XbSgxa0b;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=xJ6A5euU;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XbSgxa0b;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=xJ6A5euU;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D45606A32D;
-	Wed, 21 Oct 2026 09:09:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4D45606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8AD606A319;
+	Wed, 21 Oct 2026 09:36:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E8AD606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=yZQo5++J
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id A7973C5CD73;
-	Wed, 21 Oct 2026 09:10:02 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BDF8A606E3;
-	Wed, 21 Oct 2026 09:09:03 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5945810328D3A;
-	Wed, 21 Oct 2026 11:08:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1792573742; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=m4m+8auzD/3I9aBzl5NjCoQklre0jbzlsPnF0O/VYTM=;
-	b=yZQo5++JcnYNWNXWd0vHBue5PUMvZ6865ctrT4zoe2JrbgrRHJ86isl6CN0ky4hiy+4pHf
-	KyVMZlLhg1Gs+3vI4jnTDXHpoFj/9Ya+NbQpfy9b7u0nIhrmq0sXHT1Y4LeKOfU0FnEyE7
-	4b7RCljF2m/0sRwQtQGL+vzXD/kceq/NQwFTPxAEHnH3fxGojN8xoxfwP+IE+vQV8GVjZc
-	dM6HJkK9T77PXSWZ70Kzade1WUQKstj1HgDuMJiyJEwhJ9c7p7DSlh7eMzR0/+5EceK3UW
-	c8hsfuvh8eHKo1HXWJbDts+Rbf5P7GTKT6Fjrn4Iz0ALOsAPW9IP/qYMyf39lg==
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: Andrew Lunn <andrew@lunn.ch>,
-	Jakub Kicinski <kuba@kernel.org>,
-	davem@davemloft.net,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Bobby Eshleman <bobbyeshleman@meta.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Breno Leitao <leitao@debian.org>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	thomas.petazzoni@bootlin.com,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: drv-net: devmem: Skip when hugetlbfs isn't supported
-Date: Wed, 21 Oct 2026 11:08:51 +0200
-Message-ID: <20261021090852.996899-1-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XbSgxa0b;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=xJ6A5euU;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XbSgxa0b;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=xJ6A5euU
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 0A7891F798;
+	Wed, 21 Oct 2026 09:36:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1792575398; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qefb26IGP5AOdsfXsbEKDWsh35frzAzUc/TON+gbyqA=;
+	b=XbSgxa0bOIBa5zoEh/9RWoxsPq4EKEehdNGHXAAU+XyEbOvoIW6Tdh0GvTQDfCbYQ53hz9
+	fRstEAtqgIk5LwW78KPY9P6/DN9lBTaTgMZMwuF5QDITN1BsdHFtsHMTZpNH9f52OQX1iH
+	kbT8EimMk29PAS9IB1Kyv2SeLOK2tNs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1792575398;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qefb26IGP5AOdsfXsbEKDWsh35frzAzUc/TON+gbyqA=;
+	b=xJ6A5euUGwlnoHjWFJ/cg1xZNQ7rMZSiGeN6gbG4gvfMCkILcyz+8wQb7Xi6ry1yZZ7idi
+	TrQd6WjVl6UjMjCg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1792575398; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qefb26IGP5AOdsfXsbEKDWsh35frzAzUc/TON+gbyqA=;
+	b=XbSgxa0bOIBa5zoEh/9RWoxsPq4EKEehdNGHXAAU+XyEbOvoIW6Tdh0GvTQDfCbYQ53hz9
+	fRstEAtqgIk5LwW78KPY9P6/DN9lBTaTgMZMwuF5QDITN1BsdHFtsHMTZpNH9f52OQX1iH
+	kbT8EimMk29PAS9IB1Kyv2SeLOK2tNs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1792575398;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qefb26IGP5AOdsfXsbEKDWsh35frzAzUc/TON+gbyqA=;
+	b=xJ6A5euUGwlnoHjWFJ/cg1xZNQ7rMZSiGeN6gbG4gvfMCkILcyz+8wQb7Xi6ry1yZZ7idi
+	TrQd6WjVl6UjMjCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B023F13518;
+	Wed, 21 Oct 2026 09:36:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id s4MgIqWH2GqLHAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Wed, 21 Oct 2026 09:36:37 +0000
+Date: Wed, 21 Oct 2026 11:36:37 +0200
+Message-ID: <874ieffl96.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: HyeongJun An <sammiee5311@gmail.com>
+Cc: Takashi Iwai <tiwai@suse.com>,
+	Ivan Orlov <ivan.orlov0322@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] selftests: ALSA: pcmtest: Fix two test bugs
+In-Reply-To: <cover.1792390197.git.sammiee5311@gmail.com>
+References: <cover.1792390197.git.sammiee5311@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,55 +114,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-1.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TAGGED_RCPT(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.com,gmail.com,kernel.org,perex.cz,vger.kernel.org];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -1.80
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-The devmem selftest requires accessing /proc/sys/vm/nr_hugepages,
-which is only available when hugetlbfs is supported. This isn't the
-case on all CPU architectures, for example it isn't supported on ARM
-32-bits on cores that don't support LPAE.
+On Tue, 20 Oct 2026 12:18:35 +0200,
+HyeongJun An wrote:
+> 
+> Two fixes for the pcmtest selftest. The first makes the playback tests
+> fail when a transfer fails. The second sizes the pattern buffer to the
+> 4096 bytes the driver allows.
+> 
+> Tested on x86_64 with snd-pcmtest. All five tests pass as before. With
+> inject_trigger_err=1 the playback and ni_playback tests passed before
+> and now fail. With a 2000-byte pattern on channel 0 four tests failed
+> before and now pass.
+> 
+> HyeongJun An (2):
+>   selftests: ALSA: pcmtest: Check the frame count of each transfer
+>   selftests: ALSA: pcmtest: Make room for the longest fill pattern
 
-On these devices, the devmem kselftest doesn't skip gracefully, it hits
-an exception while trying to open the nr_hugepages file :
+Applied both patches.  Thanks.
 
-  # Exception|     _reserve_hugepages()
-  # Exception|     ~~~~~~~~~~~~~~~~~~^^
-  # Exception|   File "/usr/lib/kselftests/drivers/net/hw/devmem_lib.py", line 36, in _reserve_hugepages
-  # Exception|     with open(NR_HUGEPAGES_FILE, 'r+', encoding='utf-8') as f:
-  # Exception|          ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  # Exception| FileNotFoundError: [Errno 2] No such file or directory: '/proc/sys/vm/nr_hugepages'
 
-Let's check if the file exists before trying to open it, and return
-immediately if we can't.
-
-The _reserve_hugepages() runs as part of the "require_devmem()", that
-skips if devmem itself isn't supported. Before the blamed commit, this
-check was done prior to accessing nr_hugepages, so the problem wasn't
-showing.
-
-This has been found by trying to run the selftest on stmmac, on an
-Altera CycloneV SoC (Cortex A9, doesn't support hugepages).
-
-Fixes: 8ac4255c1e0c ("selftests/net: devmem.py: add check_rx_large_niov")
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
----
- tools/testing/selftests/drivers/net/hw/devmem_lib.py | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/devmem_lib.py b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-index 3554954a6691..24637fb180ca 100644
---- a/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-+++ b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-@@ -33,6 +33,8 @@ def _restore_nr_hugepages(nr_hugepages):
- 
- def _reserve_hugepages(want=64):
-     """Raise nr_hugepages to @want and arrange for it to be restored."""
-+    if not os.path.exists(NR_HUGEPAGES_FILE):
-+        return
-     with open(NR_HUGEPAGES_FILE, 'r+', encoding='utf-8') as f:
-         nr_hugepages = int(f.read().strip())
-         if nr_hugepages >= want:
--- 
-2.56.0
-
+Takashi
