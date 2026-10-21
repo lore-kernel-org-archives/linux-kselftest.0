@@ -1,100 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792547153;
-	b=MdKcg4KvX03g99Bu52eQDFrItcYVrmXglabTEDYh6+fBIoK/2GqisPUJFqbVYBrbVgeX
-	 5FlZBqQWzwKwuVH8vL9qKMGTrLinchcNQ8D+HjqjdpxXwoGdDtEVrPpPtF4JOh8deYiu9
-	 AJ359vlWh8iVld2l7maRVj+hYEvGnopuB6KVgkQ6PQ+BB+/a3+JqEwdIb0alwQ8LgweD6
-	 co9VptF+ThsMq1/ObcMnwNJWhgrsdN7qCkn/FvFuWix+rcbRqxjPPlHCelqWfMYwfOpGG
-	 tekTbYuDeNyyAcbrhEmhkIno1BQ64trsfISTiJ+bOLtK0YpUlBCFADtes1AbaXkJ0QA==
+	t=1792548070;
+	b=Cs2P6vuYflJWK2Wl39E3MiaTGVVsycmil4DOAi2qPV4sp2YvkTuDNJfvNCRaiokZAHX4
+	 x2GlGKyylOEIfszbwnQoIh+sXYdFiK0y4lUS2TVIohXP/gGPW2skxUy0V0buiCd4UGLs8
+	 PQVfVOXOyOns7rW69fLhIR4ucgedBdbuFj2eYG1vMny7Ni/oUuv5RP7OskAv1aDWf6hc0
+	 0D76yWmwn1j+VbwnRbb+Xbsi0UnN0qP2TFZPnk/2gBSYdhXUknpW+GouK71IsinvCLF3p
+	 Gdd6pxhw7BaE9MLHr9Ik8GgMOZVdG0/e7naS91Jhdv0LqeOpEbcSlTq7ZD64XMkMsfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792547153;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792548070;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=N685GSgBsocOGOaVWgwO0dJAiPky3e+vK7Q06g1oPm0=;
-	b=GCnMX6MeAQET13wS5McOXbIiDumdJh11vIotshfAYjVxSafjx3ARyBA6WtYphTcwS1QG
-	 na1YkCpNsywW0L3+ndraGYpZGBxPyMtapAdMUIBjgow7j2XUZitzQosdzC3WRm3j14gWT
-	 RWJF8gikZpEzojKFKWGxySPsdUTIsbP/bjzizzRjXDjKXCasCF2lgEYLltsWUJCe/vDfK
-	 BmR3m4x/kY+Ak0Pf67znPqbvlCaD+REFjkpZf1BWi3/4dc8a3rcAHN5FJ3DC5XzwCmUqC
-	 0Kk5g7oDI6VdMHFpUBE7QSR8TNKEVSWlaY02u6ItmHnfNdw2G1GVEkXGQc4YFGBxf7A==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Iu0fYDBNq0qM6ieGxF7SKF04cC/pqSqWPF7xJOKvPpg=;
+	b=2jY5++APksb6j2ryS+D4UY4zesTs6aF0ary8KAbLE/aMYwkzzSTXMdSRQ+jEhEgoyfPg
+	 mWfIK6tIANAeNgNL0hi88/Y4K1suUAYHyyhb9eMLJye9wnug4ksY12yp2+ru2s/ewQpxN
+	 w6jLyacuH8g+cX1Iq9mKixjpu8y13Ux7HqQyc57ijpssMFF8X1FZ5dj3Ky6L2RmxldBxv
+	 DJHQMPMBLeY06JHOSi9YiAiqMx3G3u5a6QaBLH9Pa3lQJ/C+px8e7e/YL68dmKj60bkDa
+	 CgAi0uvWnxB4fK17Eh80QO5TfqDLsQg+n9Od1y8WZpCvYeX1VMobJX7uAznDQ4A2pkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=WzAyKkQI;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="H/qc23LJ";
+	arc=none smtp.remote-ip=209.85.210.48
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC701606A319
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 01:45:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC701606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD777606A31A
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 02:01:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD777606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=WzAyKkQI
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a1e477fe16so866295e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 18:45:52 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=H/qc23LJ
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-84a2bea315dso169781a34.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 19:01:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792547151; x=1793151951; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=N685GSgBsocOGOaVWgwO0dJAiPky3e+vK7Q06g1oPm0=;
-        b=WzAyKkQIvP9jsHhriZZX2+NqaSKHWEKR32z2b8t/JWsBJhI9LmHVIAXIBLYTkAYA/r
-         3TGyWsXWtYwy8KpoOhpjH1fl9t0x4k6khmQIJL92JvLawBrNY7VRYtODbZfszkWfDtlk
-         HS0nv1yw2o3ojEl/F9RuwBcjrzTj35JtlKNkAkhlvMWTSlXyVZ0NbGvSXNaCYhh3lowr
-         8K0sT7LNm0C5SEtYt1ojPcHQSTBf7euz4WpBK9GJv7QbGxr3yWS8zNzfRz3gj0S6JFTW
-         mufD344rkM56yUSSjQ5vawwRV2ICenp24WFiu8fR5gwCnnlj0z9aDx00NOzWNERUlClx
-         vtIQ==
+        d=gmail.com; s=20251104; t=1792548068; x=1793152868; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Iu0fYDBNq0qM6ieGxF7SKF04cC/pqSqWPF7xJOKvPpg=;
+        b=H/qc23LJt1zaJUKjsYtuGYdJ0pe02S4mnxUAMJRBt87ufBzk59e56YDAHdz+vpyVGJ
+         MVjkLTkvdFioYj5XfSVFo3WdQx+G9s1sqkDYvTRhmCXBd7E15B/tLnEG4GZZdVFOhX1z
+         g0euFhYYKRjdo/dkgI8tNC9CQ/3U2RG12L7qbxU65its+crA6ffH+whZMbIiwjL/dSkU
+         U+GVOAPwA81SXxvtLbkn4uS9SSiqQKMAyoRRjDO+d8+O97oVPf9EheNXjD4/08CRLYcF
+         Zebnxl97GuCNOC65qWa4IkYSRxI3SQSp3Ek2KpBb3HUI2xWZyhhzTZvp/oDLC0kXNjz6
+         1btA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792547151; x=1793151951;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=N685GSgBsocOGOaVWgwO0dJAiPky3e+vK7Q06g1oPm0=;
-        b=WGCfFKnUtkwRWBp6uh2SZqB8NR5BFT6nW/6c0EvvDk5HNb/VXjJdyJuSAlo6Yhbqcq
-         RQI1eJ6aNUnexIwAg1oQL+FkG27Bn7DUOc1sE/MaDn2SYeeg9yFEry0nUm6CLboE/A87
-         6m76ghiTtDgYApNPmM4ygyLSkdBDI6boP43UvRGwqVgw/Q3nSlqfHiqXgrKXvrR4WWMd
-         kUZlzpB50NC3c5S7/LZIddbeqhSI8cnPGrbWP/9YkVqdYkiuDkJ6QQwSE9WSXdSX5M7Z
-         QQChBjWP1SZ0kQ9w7I6RZPN1PbCclJYxFdoiH0do3Tn/qWxAuoqLUvx62Igk+QN8vPWV
-         3e3w==
-X-Forwarded-Encrypted: i=1; AKwUvBw5lkda37S3LmLNxLqPk2qqSDXf9H9haH+IPOXQ4VBp2N6Z0pfU1IvZWA8TrSQib4CaUFGQkmJ18qDfuuV2uYw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLzZ+U+lGJDVxpSs69kQdF8yoY4twIIJ8U5PpMKPxtK54ncxyGZ
-	pKtVUNHOdYXeJopf7QR0kUeXwk92cmtREWBhVCthiybjrlF7SnDZGkYd
-X-Gm-Gg: AYBFou1kf7bOnDkTrL5ZayB91BuM6dmih8iU6Ri91Kg6pU41UWKiRPLclduRi/GXwp2
-	bxb2D/dyN2DQREB/N/TVebcqPCt7SCLKWFVKC0thxPjsvAvHA7LOg98QbB+6T2ejhQH/IJ2oemN
-	H965kH3NyQJtvvLogPKM3Xuyv6uHLl0XV14Wwz/QJY5xApYa0I3pOKyQUeL/ftbQie4zhcOv1XM
-	FrCt7vE4CXNrPKZ5xcl+tZ2/Y+zWwTTX7/Z06MszGjsw+SfUBB6EFi5J1GEFOmy+WSsCZpkaTLP
-	mIibuIf6NNXMA7PVwnHPH7Ld878UvkNZPwjJAUOTQC/l+0Jhnj6cKgkJNhVYRDW/Jcx78VaJnHb
-	qL6ZBz79mPoWmJiB0qYfPD+bEfrReiXLvY/HeKIXLMhl5S2nX2304XuLA7OM9VZ7pwNmXz9L79P
-	aKploXwUABkUXc21qGbsDY7zjP7D8Y6Cg6P7ydKOAq+UcqLgntM1K7mLRoA1QFcoNQX/HgfNNRb
-	p/LWQMiPtzvLj/bY7cQlwwVBf2H/xdGZh7OzA76+Kc7UIKo/ggMRwgPNbW5L2FKgzvUk59KnMME
-	LGRUcvoZe272Km8bxkCu1EVqOYMPV5EoFLCJmn0fqVuHgZlk2b8KIh4J/pc3+8R3isxrfUm8gN+
-	t/qPNTLWRUWWXKZQ=
-X-Received: by 2002:a05:600c:8714:b0:4a1:d97e:cd60 with SMTP id 5b1f17b1804b1-4a1fdd1604fmr8629335e9.16.1792547150977;
-        Tue, 20 Oct 2026 18:45:50 -0700 (PDT)
-Received: from MacBook-Pro-von-Karl (dynamic-095-117-105-001.95.117.pool.telefonica.de. [95.117.105.1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f2ca3666sm118638605e9.1.2026.10.20.18.45.45
+        d=1e100.net; s=20260707; t=1792548068; x=1793152868;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Iu0fYDBNq0qM6ieGxF7SKF04cC/pqSqWPF7xJOKvPpg=;
+        b=pvaEBR29terJAu+kB2VuWoRxwfvuTI9/GIegAO+XDeLO37M5i8Adf2Bji1MUKrMARe
+         JoeAROGgerGr6Fb6wVCapxvkJY+k2g+YeifbZGpDrr0ZjZeVHEpOOqtZ7HRdSkMGC0ky
+         xPx6AFGHj0a2FP8EwKrn/+Cnx2ud1QaEaD/YZnLwy7eANY64WxYCCApSL8ffv8uhhOKs
+         /nBU6eHKKs8qNm4rV1xeko3jdenNP4g5n1tMkUL6q7GyVeWAF5RgP4JGvO7A5C9SzsR5
+         xlVESiEQE2ZWQJTNPwmAiTFqUwutrmRRB79kQ0HaJV3dw9/vo6hHy6xs34zO68E626zq
+         W0ag==
+X-Forwarded-Encrypted: i=1; AKwUvByfNHQIhspb4NRRpKPBRy6CxjZQxWyyKU+HztDPez7gZXDdEXlvPpju+caBV4cxjQAJ+FKHw9Bi03ZTiuUm608=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKCfqKU/dWFl7s4Kt+cwhjtsAQGuO/hqQa52F7abp20TmcfNpFN
+	vfWOlwr57zg2zsC5NIw9UEU5e40KAHe39MPcifYKaPtWpSxT9Pwym/ke
+X-Gm-Gg: AYBFou0ZVqg5oELFVaYosKSSpFZ4cVblT57EABTFAgmn/cT1TN3JJG7xdbovZ8aH1O7
+	N65gRG1mP/OrVYitsRTSfGxj8C6m7Tw8lBhy8gMqUq70LJfnuPy5idfeic9NjdosREk4SJ/RBLT
+	S4EgKK7uMc2dNTzMm8o7OMCY04yCQSzsgUNnMKPZtEiFn8krhRvFcg7+rJxExlkkesRxOholrYz
+	SCVs+igOmZS69HQ63PT1gVHB12E4gInn/MNxEBhkEJewdK+pV3YplvLtFetmreMEqJObzemTsBd
+	E5afujrqoen0VfytitChNXUvMXNZRcS9hzH42NCg5E0CkwkquYUzhAUQipiu4dVxb8Aiz+RDhVQ
+	zUQ+MDvdOmmNY26Rjw8zUd5i27m3W+kFAokQ4n14ukTocuFpziCdDq9F3PKpEf63lpTEbEQn+uS
+	q8GftGDtr1pysA7fs2h9hUO3NQ9QwckDFEBhSFy3HjkyDO6bEU55mCwFd8BMXlUhaTO65BZh+g9
+	+/lgygQorZj+MsFg8CUQH/x8nI61pOZdv1FWjMC64Dc2gLz8ag6wkxj9dDNBYuTfZb9spI3JYV2
+	HxJu7V7LiGWvTUkZKEBuIjg=
+X-Received: by 2002:a05:6830:680c:b0:81c:5aac:798a with SMTP id 46e09a7af769-84d087fe940mr357225a34.13.1792548068561;
+        Tue, 20 Oct 2026 19:01:08 -0700 (PDT)
+Received: from archlinux.lan ([136.34.156.120])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-84cba7d431esm1071785a34.2.2026.10.20.19.01.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 18:45:50 -0700 (PDT)
-Date: Wed, 21 Oct 2026 03:45:14 +0200
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alistair Popple <apopple@nvidia.com>, 
-	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Thomas Hellstrom <thomas.hellstrom@linux.intel.com>, Vivek Kasireddy <vivek.kasireddy@intel.com>, 
-	dri-devel@lists.freedesktop.org, iommu@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [RFC PATCH 0/6] iommufd: harden DMA-BUF PAL setup and release
-Message-ID: <atgWXLYKOFj5cZ0F@gmail.com>
-References: <cover.1792477872.git.kmehltretter@gmail.com>
- <atdKZpEJVZY0enR2@nvdebian.thelocal>
- <20261020182029.GH3008132@nvidia.com>
+        Tue, 20 Oct 2026 19:01:07 -0700 (PDT)
+From: Danish Khateeb <danishkhateeb03@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Abhinav Saxena <xandfury@gmail.com>,
+	Kees Cook <kees@kernel.org>,
+	linux-serial@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Danish Khateeb <danishkhateeb03@gmail.com>
+Subject: [PATCH] selftests/tty: tiocsti: expect the privileged parent to succeed
+Date: Tue, 20 Oct 2026 21:01:06 -0500
+Message-ID: <20261021020106.94174-1-danishkhateeb03@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,40 +100,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261020182029.GH3008132@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 20, 2026 at 03:20:29PM +0100, Jason Gunthorpe wrote:
-> On Tue, Oct 20, 2026 at 10:16:26PM +1100, Alistair Popple wrote:
-> 
-> > I haven't had a chance to look at these patches yet, but if some of them are
-> > fixing bugs in Jason's series it might be best for us to fold them into that
-> > series, with correct attribution of course. Anyway I will take a closer look in
-> > the morning.
-> 
-> Are any fixing bugs in tree right now? I think one of them is already
-> applied from someone else..
-> 
+The FD passing tests open a pty in a child process, which may drop its
+privileges first, and pass the FD to the parent, which always has
+CAP_SYS_ADMIN. The child's own TIOCSTI is checked against
+.expected_success, and so is the parent's TIOCSTI on the passed FD.
 
-Good catch. None of these fixes a bug in the current mainline tree. I
-based the series on the stale c37cf2824740d topic and missed two fixes
-that landed in mainline afterward:
+TIOCSTI checks the capabilities of the caller, not those of the process
+that opened the tty, so the parent always succeeds. Where the child has
+dropped its privileges and is expected to fail, the parent's check fails
+instead:
 
-- patch 4 is already covered more broadly by f2d70dbd3dce
-  ("iommufd: Destroy the pages content after detaching from dmabuf");
-- patch 5 duplicates Ankit Soni's e745cd2c749e
-  ("iommufd: Take dma_resv lock before dma_buf_unpin() in release path").
+  # tty_tiocsti_test.c:620:test:Expected result (0) == variant->expected_success (-5)
+  # tty_tiocsti_test.c:622:test:FD passing: expected error -5, got 0
+  ...
+  # FAILED: 13 / 16 tests passed.
 
-Patches 1-3 address lifecycle issues introduced by the PAL conversion,
-and patch 6 tests those paths.
+fdpass_pty_restricted_nocap, fdpass_nopty_permissive_nocap and
+fdpass_nopty_restricted_nocap have failed like this since the test was
+added in v6.19. The FD passing tests are skipped without CAP_SYS_ADMIN,
+so these three fail whenever they run.
 
-My main goal with this RFC was to put the concrete lifecycle issues and
-tests on the table and get the discussion moving.
+Checking the opener's credentials instead was proposed together with
+the first version of this test, and the reviewers did not see the
+current behaviour as a problem: a process with CAP_SYS_ADMIN is
+responsible for what it does with the FDs it accepts.
 
-I am not concerned about preserving these as separate commits for
-attribution purposes. Please fold or rework any useful pieces into the
-mapping-type series as makes sense.
+Expect the parent's TIOCSTI to succeed, and drop the log message that
+calls this a security concern.
 
-Thanks,
-Karl
+Fixes: 7553f5173ec3 ("selftests/tty: add TIOCSTI test suite")
+Link: https://lore.kernel.org/all/2025062327-shady-broadcast-237d@gregkh/
+Link: https://lore.kernel.org/all/20250624.3bb75890f0b0@gnoack.org/
+Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+---
+
+Notes:
+    Tested under virtme-ng as root with KASAN/lockdep kernels, next-20261020
+    and next-20260930, two runs each:
+    
+      before: pass:13 fail:3 (the three fdpass_*_nocap variants above)
+      after:  pass:16 fail:0
+    
+    An LLM was used to help with this patch.
+
+ tools/testing/selftests/tty/tty_tiocsti_test.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/tools/testing/selftests/tty/tty_tiocsti_test.c b/tools/testing/selftests/tty/tty_tiocsti_test.c
+index 5e767e6cb3ef..411fb459cbce 100644
+--- a/tools/testing/selftests/tty/tty_tiocsti_test.c
++++ b/tools/testing/selftests/tty/tty_tiocsti_test.c
+@@ -610,17 +610,14 @@ TEST_F(tiocsti, test)
+ 		/* SECURITY TEST: Try TIOCSTI with FD opened by child */
+ 		int result = test_tiocsti_injection(_metadata, received_fd);
+ 
+-		/* Log security concern if demonstrated */
+-		if (result == 0 && !variant->requires_cap) {
+-			TH_LOG("*** SECURITY CONCERN DEMONSTRATED ***");
+-			TH_LOG("Privileged parent can use TIOCSTI on FD from unprivileged child");
+-			TH_LOG("This shows current process credentials are used, not opener credentials");
+-		}
+-
+-		EXPECT_EQ(result, variant->expected_success)
++		/*
++		 * TIOCSTI checks the capabilities of the caller, not those of
++		 * the process that opened the tty, so the privileged parent
++		 * succeeds even where the child failed.
++		 */
++		EXPECT_EQ(result, 0)
+ 		{
+-			TH_LOG("FD passing: expected error %d, got %d",
+-			       variant->expected_success, result);
++			TH_LOG("FD passing: expected success, got %d", result);
+ 		}
+ 
+ 		/* Signal child completion */
+
+base-commit: 1184f87e2790e8af9be3116f608d2e86b4792d7d
+-- 
+2.56.0
+
