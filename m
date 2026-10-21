@@ -1,45 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792579378;
-	b=bkUXehA7T3b1+raezUT7+mFm0Bjy4mgaMyrKvEr/ohNZ3WACu64v+6TCjpFsGb2AxgYm
-	 LZFjZMUILYlWQpc+eZINRWDvPjlzcHc9/9aucetVsW8MLIAI5frVhgPYMg88PTcf2WJgZ
-	 XPY2m9JN1VNXuUHyGVQe1DGOgJXkuYJLB0Rl8mHuIXMjHi57qJFZ0VQexowkJkuNc+KxU
-	 46RurqafZ74vVhdpNMJ86jqlHmOj91pF/WDG/zZniDxBgphrpG8ENMX6hISn87FVDiemd
-	 37HFpHuNGe2/dfJAPFmFrPvXgcA539uDyF+00IfyiuY2Mj9sjLcZUnFOHbilIettH8w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792579378;
-	h=Received:DKIM-Signature:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
-	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=t90tvZS6oZQr0j8LPs+bmUY4QvpEatggf68p5mbwtZ8=;
-	b=3GfDjo6kkFBDZjNECPkB+1JTpySEXdBajlccOPiVYji5NSXEIWMTy1mkoVx6x5BK1pNH
-	 WMb4/vVpBECgpwjuBnUSsG1Hgx7wK9x9uWVRRfX6Na8/Z2dfO+5hEho1QuTusYuyZKJrp
-	 Paf8cLrANQ7wwsmZQxMlJvaHkvky0JVKWlgDc4Zax3KUYZcA3l0cnNzmaFUtpvzIY9Qwb
-	 KzdPa3APxs1m3Uov+BA1LbAyHbj6Usq797emjqloHNEyYWDhyeCuW7PHDfIRnp0WaJv84
-	 vZoXnf8cEuh96vlre+g5QbPp82ucpQdIxGC+oMzadiGAPsDDJJZr4dzwuDu+eucf2dg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dsB1qgjp;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.54
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792579491;
+	b=5KnV0jRKEDLSj1ozOWfM/2NrtZyu9CcOuvM2Cqj/2TQO6vaX5xY3RnADfXDjwqj99ksp
+	 lYuG4UdcgfeZOw0F93wjuTsEXkDV8rhb8jcH+KxfZO9jap3KqDOw4ypKUz0Jzvcy8RSr1
+	 YBHf0YvhZgVtfzx66LIDhNSYOIAC1x+5hpRf2QoaCfrhEX36EK3J3Dauz3/7Wtw3zCKQC
+	 GZ8KjrtbKT/jI8Y7sWdfbK8dMwd3XgKa3Wraws0muI+qZEIGK5FJ4PpIisDQwFiLOJ2eQ
+	 vAGm6jc4bx0882lA5gfgJJrfl7qUS7eOAdemL5RQWnEKJpUuEdf81jaQrSXFXljFQAg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792579491;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=3+Zu9D+KgKA9DXJq7rrfhDe7h3krW5LnH7aKJrVEA3Y=;
+	b=KOWnm/a5G4GZoawW5guLFTuuTSZhxsmb66UsMyhd1rjZizmF1l7vvYvL78jgFjJuvybi
+	 VmgKhK8IktlAXZu9rcFqerSwyG+w6qqp2Xwhf+XSW9sqDAnTRfX/awtJlYpF0jq5U0HSI
+	 FPSHIWhzyxxEYCJPwCLq4Hbli4pOyljGpnI14oz5JFGDk8bTRlkR1o1QaLhXTp2RxP1An
+	 tM1N1Hzo8xURXP/C60LfRUuLGKmBFSIPjelWp0bZp51wlOYSJLEkE4uf2twzZUojBxuii
+	 ILtcvRNwBwV3WUw8V09ifLObfjKhD3lTt0vtpXp7nUqwg3KgnjY8Gf1zCxRldYgqTmw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.54
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598D5606A322;
-	Wed, 21 Oct 2026 10:42:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dsB1qgjp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842F41F000C9;
-	Wed, 21 Oct 2026 10:42:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792579378;
-	bh=t90tvZS6oZQr0j8LPs+bmUY4QvpEatggf68p5mbwtZ8=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=dsB1qgjpAnBJ2mwnX25B8XCsTjcViWTFyHTFd7hup+WM3+qNNpPq1BwW+MfkW2NcY
-	 p/Hkc4u6LeNdbJudbAQczNqkA8JIqDCIqrWPm624L9Wk47A94nph6qSByL+DKfu4HI
-	 U7kehuOF0Mmdx7K3hCQFFWlvukGZIwXKZSL/IamhVOmqW4L1YR7/v2VebS296RWIUe
-	 83+MfF7pLtfVjL1nDdMKPwWlzzQ/l327Iz20SogXjgDAQth0twB7INmV+LRItF4N7G
-	 utHNp5FTlFWPQtuA2F86RuSzddMuHiAFNXG01gS2IdqMNR/cMQ8rMIfrw/PyTRK5Td
-	 HYJ2APtRDYzfg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FD7606A31A
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 10:44:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86FD7606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5bc18f54abbso449442e87.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 03:44:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792579484; cv=none;
+        d=google.com; s=arc-20260327;
+        b=aDRoURY5k8GqsQMr8rOMkmIhEW43z68VJRnvqckFNUjFbK6pU8hSEGzf/5DwMhWNFZ
+         F66MWEj7Tn/A9/GuHLfyy+WFADiogKTFJScagYT812Hs2BIfgRyQEx0IZQGYhFs2xci2
+         /ZCk6777VcKggUlaK6/kzjxg8QdWZY8IWXq4DBwHdeuPficpQM94jbnguNyoUXA9fWiF
+         oCjspr+BZWji3jsyY0Of4mLjBcJDlUOpFfkSl3M28jfhFruJzNJclATvwl7vfTjyKsZY
+         YrIJ8ViiPwNnGj05boZYnaAcYQc+lJ3gsqaWUPNZwpwTiJVcyQfb+OAgniZhyB6Q8rgs
+         h3Hg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=3+Zu9D+KgKA9DXJq7rrfhDe7h3krW5LnH7aKJrVEA3Y=;
+        fh=zuH6g2HHRk0KrvotdTo62efuKVRi94uk8pKNdNv2vDE=;
+        b=OPh0kbMuSq2uaEdVbc9724gQDzIWYa6FfizR7UJgRoGyXZ4ghIbSYyzqSYfy16oKYw
+         n6CTsg3xAGyjBWDkO2X4DwFHE+Ii3JrXYMnDWsMnZd8iKKBe4mvHb33mwI5KzqVseI8X
+         pTZOmVjBOVBlEhjXsjrKt+GXnDW7Ejxap3KcJtzhkSe9W6Uv2MOQpWj4Tz2lyAphdMHJ
+         3uFg1mMwrVjQpC3Xdb00lj/pt4ZpltfPM/QUhc9ZHU9aBSgZ8vzTjbWigCcPkRIVKPSZ
+         cJYADMdoERupK4vm8lL9IgHNCJIVEDSI+hee1bad8v2ciE9VGiYl/CxqBvjNHnFyo8om
+         Tmsw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792579484; x=1793184284; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3+Zu9D+KgKA9DXJq7rrfhDe7h3krW5LnH7aKJrVEA3Y=;
+        b=EMJ2b1Mfsr3z531uo4PbTQcnTiI1V6QP2j5RPccaDPxAHktd9HynIpimNpp3Seb44d
+         dsnZSu24RsiD1Ks8D84LeNAS6pJL8bWtjZerKwun5BXvUwNGyxGGXot1ISBjBaelgNWb
+         +LsiBG3i+1rd2dbFbheMbr8XhypCxbMgaV6YqM7xJmr0A6EhAAIIaRAWbMN/NPY/BODc
+         BCFbyAj3A1UEcGi6L+CouAWi/U+85lD9TRk45mfBdIk4o2Hk6O3GAD0V/DT6h5+fMwhB
+         HDu/WXCbJOx9fw8q3qCmbhmO4OLj0UJdhHDMNfw0tSpNpbOvILJCArJ7ODv+AMQ9ddWI
+         UNSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792579484; x=1793184284;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=3+Zu9D+KgKA9DXJq7rrfhDe7h3krW5LnH7aKJrVEA3Y=;
+        b=UN1Bu2afLRoNCp59SYqaoBVsnnWrCGbEqUv5SK0jZIDOnMVtugLFTuyMZ9vE/X8g4A
+         NKoxSh6HEEYRlWXRCyJKe2u+0eOGstkGmMVLTLxbo/SmpeUlHDHVDyGRhmfH/oXvA3uf
+         tbfO5YhsG4bOV3/8lObEP0KOiVMQcxAavDkufxqfVlrY9UYYcsPyzhSFsCQcJSo1EWqy
+         aLeGNGkruRHm1j3ZgzyLbILZk/l5frdWW8KL/k4FlccNrK6djyW4roLcqxEcdHOQ7IhZ
+         FMPbfY0F21rHhQL1zcmrXVb3RovvSoJKJl8d7Py68zCK8W5sv8l0oWu+I7NSoP47qAr2
+         +Xdw==
+X-Forwarded-Encrypted: i=1; AKwUvBz//Wfaekq7A8QhUPlSK6lm60PwQSj4iVO94h9ZrhwtXy1pqmG/pdKnJPk9G3qIbE9sOXuZbeMuvFe1o30s0Wg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJi/QkJuzY40wrnK9M7dJi5FCVXgEO6A8VgfYI7sTmEBj/LtkcA
+	6spwU6LWLfXuz7n8niG/otozcvtmRyWdK5A6wiUAkaRE8NNTw62aaWxc/HM5fl23Iv0S8lhROpm
+	dFF7rD3b2Kn8ZYvHzp2OLMSZk+5LExy0=
+X-Gm-Gg: AYBFou3I6OutEwSgKi9qN0U97h85UVv1d1SLR7Zc6CLPpT6EP1pIPo9I6Qh3nq+MBFy
+	GUcEVfkuZE+Ah4+W51PdlMwIbbKVpKMj9sm9lAj4pMo6yGQQwVD7xsSz93m+a/EqICro4Gh4Pmh
+	tCX69/uxVjklKkEwqQaHQM/xeJPkBkpRTfk8V4NLp87hjmhQOKKuE6gtK0I1b1bWI0RO89aX2YY
+	kEk95J8EgTkp5Y4XOIEnFI/50TYtEpKhN3jhiq+SjQOle/3LwVKWOGplZFaDVVSozAI0N8v+rkg
+	Z0NJ+OSmuSCDcJZrVBEwBvADJLv8jxAU20t+kfhhEfTaS08B/cUArBXUShB0XInpUbKtjlLrurJ
+	Wk+CxuNH5K50LTL8yX+bpfowe//VFwdsz/ozZu3JAsjKIj2Qqra23xXHnV/NfsvxIweE2
+X-Received: by 2002:a05:6512:158b:b0:5be:50d6:af8a with SMTP id
+ 2adb3069b0e04-5bfa1ceb37cmr564734e87.33.1792579483402; Wed, 21 Oct 2026
+ 03:44:43 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,83 +100,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v1] pidfs: do not report fields that do not fit into
- the caller's struct
-From: Christian Brauner <brauner@kernel.org>
-To: Nickolai Zeldovich <nickolai@csail.mit.edu>
-Cc: Christian Brauner <brauner@kernel.org>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
- Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
- Luca Boccassi <luca.boccassi@gmail.com>, linux-fsdevel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20261017020634.792390-1-nickolai@csail.mit.edu>
-References: <20261017020634.792390-1-nickolai@csail.mit.edu>
-Date: Wed, 21 Oct 2026 12:42:51 +0200
-Message-Id: <20261021-trauen-wirft-hegen-847ed3b60f61@brauner>
-X-Mailer: b4 0.17-dev-3d1b8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2907; i=brauner@kernel.org;
- h=from:subject:message-id; bh=pTFgFr7+/hXlFUZ+wq+itkgyJLMrzj6irJNX8yUZYyI=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTdmK6bNL12jeIUriqpeUujV05YuumCd77jzkkn799aO
- VtJ7FSYWkcpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBE7iUwMjzx9boXu5Q39Q7H
- u8z/mzc8WL5QkOVVx/37vl2HO6Q0PvYxMty5rbuxkkul9KoVd4Z9yozaCULrrlSd7vr1yt17V+b
- Kdg4A
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+References: <20261012011707.3378-4-sigefriedhyy@gmail.com> <179185709988.434549.15422498299449004512@kernel.org>
+ <CA+7S2v+LHUWXQMD-cYPEzT5-f3Qhw_vz+LEssQH_A_oqDKtnnA@mail.gmail.com>
+ <8dcd9564-e9a3-4b00-93b8-3cb023d68047@redhat.com> <CA+7S2v+rWYvz9xKPEeM6=3HPz3o7TbX2uRfRKk95f9Y60HnEiA@mail.gmail.com>
+ <976d815d-a9ec-4fa0-9b16-8e55695706c2@redhat.com> <CA+7S2vLWvQd7GrnwB+B+DiqAgST8EjfWwBKzJXtjGRBPVgmOBg@mail.gmail.com>
+ <d3a1b219-84da-4ed8-9d87-5619e74bd1f5@redhat.com>
+In-Reply-To: <d3a1b219-84da-4ed8-9d87-5619e74bd1f5@redhat.com>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+Date: Wed, 21 Oct 2026 19:44:35 +0900
+X-Gm-Features: AclHuK-rJH5v9EVEYVeh2aYcnbIBH6iiXDeQCmZP7VNDudjBotFAAvZQy4bP1zQ
+Message-ID: <CA+7S2vKt_n5MyyiG0wf01wyzTW-SUzyyRSw+eui3CL5rx0Zavw@mail.gmail.com>
+Subject: Re: [PATCH net-next v11 3/6] net: add a generation counter for
+ dev->mc changes
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev-bot+sashiko@kernel.org, ajay.kathat@microchip.com, 
+	aleksandr.loktionov@intel.com, andrew+netdev@lunn.ch, 
+	claudiu.beznea@tuxon.dev, davem@davemloft.net, dsahern@kernel.org, 
+	donald.hunter@gmail.com, edumazet@google.com, idosch@nvidia.com, 
+	jacob.e.keller@intel.com, kuba@kernel.org, johannes@sipsolutions.net, 
+	kees@kernel.org, kory.maincent@bootlin.com, kuniyu@google.com, 
+	nicolas.dichtel@6wind.com, nickgarlis@gmail.com, sd@queasysnail.net, 
+	shuah@kernel.org, horms@kernel.org, sdf.kernel@gmail.com, 
+	vadim.fedorenko@linux.dev, willemb@google.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-> The documentation of struct pidfd_info promises that "If the structure
-> size is too small to contain a field (requested or not), to avoid
-> confusion the mask will not contain a bit for that field", and asks
-> userspace to trust the returned mask when deciding which fields hold
-> valid data.
-> 
-> pidfd_info() does not keep that promise. It builds kinfo.mask without
-> looking at the size encoded in the ioctl command, and
-> copy_struct_to_user() then truncates the copy to that size. A caller
-> that passes a 64-byte struct (PIDFD_INFO_SIZE_VER0) and requests
-> PIDFD_INFO_COREDUMP or PIDFD_INFO_SUPPORTED_MASK gets a mask with
-> PIDFD_INFO_COREDUMP, PIDFD_INFO_COREDUMP_SIGNAL, PIDFD_INFO_COREDUMP_CODE
-> and PIDFD_INFO_SUPPORTED_MASK set, while the coredump_* and
-> supported_mask fields behind the 64 bytes were never written. Trusting
-> the mask as documented, userspace then reads whatever its own buffer
-> held at those offsets. The same happens for a 72- or 80-byte struct
-> and the fields added after it.
-> 
-> Clear the bits of the fields that lie beyond the caller's size before
-> the copy, in the one place that knows both the final mask and the size.
-> A request for a field that cannot be returned is thereby answered the
-> way the header describes: the field is simply absent from the mask.
-> 
-> The added selftest issues PIDFD_GET_INFO with the first published size
-> over a full-size, poisoned struct and checks that the mask names none
-> of the fields beyond that size and that the poison is intact. It fails
-> on an unpatched kernel and passes with this change.
-> 
-> Found by formal verification of fs/pidfs.c against the kernel binary.
-> 
-> Fixes: 1d8db6fd698d ("pidfs, coredump: add PIDFD_INFO_COREDUMP")
-> Signed-off-by: Nickolai Zeldovich <nickolai@csail.mit.edu>
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
-> ---
-> Notes:
->     The three size thresholds follow the field layout: coredump_mask and
->     coredump_signal end at PIDFD_INFO_SIZE_VER1 (72), coredump_code at
->     PIDFD_INFO_SIZE_VER2 (80), supported_mask at PIDFD_INFO_SIZE_VER3 (88).
->     Masking the request bits early instead (before the coredump and
->     supported_mask blocks run) would save a little work for such callers
->     but leaves the bits set in the task->mm fallback path; clearing the
->     result once before copy_struct_to_user() covers every way a bit can be
->     set. No stable tag: the only callers affected pass a struct size
->     smaller than the fields they request, and the consequence is a wrong
->     mask bit, not a crash or corruption.
-> 
->  fs/pidfs.c                                    |  8 ++++
->  tools/testing/selftests/pidfd/pidfd.h         | 16 +++++++
->  .../testing/selftests/pidfd/pidfd_info_test.c | 48 +++++++++++++++++++
+> TL;DR: please include the relevant information in later revisions, at
+> least as a reference link.
 
-Semantic changes and selftest changes in separate patches, please.
+Understood, thanks for mentioning the background, next time I will
+make sure to include all relevant information in the cover-letter.
 
--- 
-
+Thanks,
+Yuyang
