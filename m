@@ -1,66 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792546503;
-	b=o9p4i9oj/DsJc7IFSRlW4gx0Dm9M/svvJUTONKs+LTxNiW/ZtRFLy/1PvM2P9uU2m3fr
-	 vh2ktC1k4SJsMlASIJZSbVi37pciLUORYb6+q7rzJ2xarMzlnIK5hSLbKVt2uRsap6Wfj
-	 E1aXf4ztxRkTXgdgG2wFqyA2pGFerAzKauR8n9p5qTTjItOf0aHkeASoC+J4h5/iZ72WG
-	 lsFhdonVqdY5kWIwPPQtc+8dWSx771iu25TruEtV6fVW97onpYRQLp4lXbKLZbu+Re9UU
-	 3Czx7Fsyb6l3q0zpoTdDxyI3qxxxZSODUETLq3GLkcabWJVcepQzS7K5d74Hu7Cb0kg==
+	t=1792547153;
+	b=MdKcg4KvX03g99Bu52eQDFrItcYVrmXglabTEDYh6+fBIoK/2GqisPUJFqbVYBrbVgeX
+	 5FlZBqQWzwKwuVH8vL9qKMGTrLinchcNQ8D+HjqjdpxXwoGdDtEVrPpPtF4JOh8deYiu9
+	 AJ359vlWh8iVld2l7maRVj+hYEvGnopuB6KVgkQ6PQ+BB+/a3+JqEwdIb0alwQ8LgweD6
+	 co9VptF+ThsMq1/ObcMnwNJWhgrsdN7qCkn/FvFuWix+rcbRqxjPPlHCelqWfMYwfOpGG
+	 tekTbYuDeNyyAcbrhEmhkIno1BQ64trsfISTiJ+bOLtK0YpUlBCFADtes1AbaXkJ0QA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792546503;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=RrrCMgJ3wDXc/zCjSsVsylYamdUiiZGnBksOK3TkOQw=;
-	b=i1kVf8VFT1UdyTzoGTt9NcbtHvxHvQcO85Sz44gP5IUkkRXkW8KT1IVAbWCmomMRPWpN
-	 gC8CPxT5xhgoxSWaWG2lJMuCgfhRiisHOzV1MYE+O2wHFXdFK89fyGLKPiqbLbpjdMZtY
-	 4YV3yS+TYsJyKNtNESOujthvqOuAjRfPMLcom+KxpSi8ZR1AB5Plcm2sNn0RQH89ORHE2
-	 DWnOb1bPqCxyTY9+j8ppOS7NCy0H+F4HpmleJ3oVABXJf7o759HcfQsjUyICxmmM/tzPC
-	 kiVidrFfQrWiUeSNu4vYHDBIksGOjhhfCcsXaT97N973UA6zOLgBtJKxj22+hOPqx9w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792547153;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=N685GSgBsocOGOaVWgwO0dJAiPky3e+vK7Q06g1oPm0=;
+	b=GCnMX6MeAQET13wS5McOXbIiDumdJh11vIotshfAYjVxSafjx3ARyBA6WtYphTcwS1QG
+	 na1YkCpNsywW0L3+ndraGYpZGBxPyMtapAdMUIBjgow7j2XUZitzQosdzC3WRm3j14gWT
+	 RWJF8gikZpEzojKFKWGxySPsdUTIsbP/bjzizzRjXDjKXCasCF2lgEYLltsWUJCe/vDfK
+	 BmR3m4x/kY+Ak0Pf67znPqbvlCaD+REFjkpZf1BWi3/4dc8a3rcAHN5FJ3DC5XzwCmUqC
+	 0Kk5g7oDI6VdMHFpUBE7QSR8TNKEVSWlaY02u6ItmHnfNdw2G1GVEkXGQc4YFGBxf7A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PwgxXx23;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=WzAyKkQI;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A67A606A31A;
-	Wed, 21 Oct 2026 01:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC701606A319
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 01:45:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC701606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PwgxXx23
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1861F000CA;
-	Wed, 21 Oct 2026 01:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792546503;
-	bh=RrrCMgJ3wDXc/zCjSsVsylYamdUiiZGnBksOK3TkOQw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=PwgxXx230dZhFycujY1r3ztRThXg4iwUxZDjYIVcBgrQUfJ1FGKjlkWTZriFTAND5
-	 /zeeA/coMcRyjwMezIZ4TbB8F3dMmDCtQYGKCTmQu64ZyMAYQLvzNWMv6Hf+UZDGzn
-	 7hjAtUHY2+aeQNkarZL3bKAt0tg5s1869fRe7/EurnAAvTs19T9rXzsBVeTSSpu3AV
-	 2q6iC5pTG4UYRJLCIOnG1/yoBO9l58FaawOAWiZoctzXnX4BtJNtAi8XfsZGpSEosc
-	 xwpi5RdHilx/IrkPV1kDYYJN8q+2ya45u8yIXPc7AOPWjyNV78MDtKMHg5ZUl3QhRw
-	 Tn1DC2CHPxJNQ==
-Date: Tue, 20 Oct 2026 18:35:01 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@meta.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>, "David S. Miller"
- <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Stefan Hajnoczi <stefanha@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowangio@gmail.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Eugenio =?UTF-8?B?UMOpcmV6?=
- <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
- <rdunlap@infradead.org>, Donald Hunter <donald.hunter@gmail.com>, Eric
- Dumazet <edumazet@kernel.org>, <virtualization@lists.linux.dev>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <sargun@sargun.me>, <jlinbox@meta.com>,
- Bobby Eshleman <bobbyeshleman@gmail.com>
-Subject: Re: [PATCH net-next v4 0/7] vsock: assign the guest vsock device to
- a network namespace
-Message-ID: <20261020183501.6c15777a@kernel.org>
-In-Reply-To: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
-References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=WzAyKkQI
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a1e477fe16so866295e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2026 18:45:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792547151; x=1793151951; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=N685GSgBsocOGOaVWgwO0dJAiPky3e+vK7Q06g1oPm0=;
+        b=WzAyKkQIvP9jsHhriZZX2+NqaSKHWEKR32z2b8t/JWsBJhI9LmHVIAXIBLYTkAYA/r
+         3TGyWsXWtYwy8KpoOhpjH1fl9t0x4k6khmQIJL92JvLawBrNY7VRYtODbZfszkWfDtlk
+         HS0nv1yw2o3ojEl/F9RuwBcjrzTj35JtlKNkAkhlvMWTSlXyVZ0NbGvSXNaCYhh3lowr
+         8K0sT7LNm0C5SEtYt1ojPcHQSTBf7euz4WpBK9GJv7QbGxr3yWS8zNzfRz3gj0S6JFTW
+         mufD344rkM56yUSSjQ5vawwRV2ICenp24WFiu8fR5gwCnnlj0z9aDx00NOzWNERUlClx
+         vtIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792547151; x=1793151951;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=N685GSgBsocOGOaVWgwO0dJAiPky3e+vK7Q06g1oPm0=;
+        b=WGCfFKnUtkwRWBp6uh2SZqB8NR5BFT6nW/6c0EvvDk5HNb/VXjJdyJuSAlo6Yhbqcq
+         RQI1eJ6aNUnexIwAg1oQL+FkG27Bn7DUOc1sE/MaDn2SYeeg9yFEry0nUm6CLboE/A87
+         6m76ghiTtDgYApNPmM4ygyLSkdBDI6boP43UvRGwqVgw/Q3nSlqfHiqXgrKXvrR4WWMd
+         kUZlzpB50NC3c5S7/LZIddbeqhSI8cnPGrbWP/9YkVqdYkiuDkJ6QQwSE9WSXdSX5M7Z
+         QQChBjWP1SZ0kQ9w7I6RZPN1PbCclJYxFdoiH0do3Tn/qWxAuoqLUvx62Igk+QN8vPWV
+         3e3w==
+X-Forwarded-Encrypted: i=1; AKwUvBw5lkda37S3LmLNxLqPk2qqSDXf9H9haH+IPOXQ4VBp2N6Z0pfU1IvZWA8TrSQib4CaUFGQkmJ18qDfuuV2uYw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLzZ+U+lGJDVxpSs69kQdF8yoY4twIIJ8U5PpMKPxtK54ncxyGZ
+	pKtVUNHOdYXeJopf7QR0kUeXwk92cmtREWBhVCthiybjrlF7SnDZGkYd
+X-Gm-Gg: AYBFou1kf7bOnDkTrL5ZayB91BuM6dmih8iU6Ri91Kg6pU41UWKiRPLclduRi/GXwp2
+	bxb2D/dyN2DQREB/N/TVebcqPCt7SCLKWFVKC0thxPjsvAvHA7LOg98QbB+6T2ejhQH/IJ2oemN
+	H965kH3NyQJtvvLogPKM3Xuyv6uHLl0XV14Wwz/QJY5xApYa0I3pOKyQUeL/ftbQie4zhcOv1XM
+	FrCt7vE4CXNrPKZ5xcl+tZ2/Y+zWwTTX7/Z06MszGjsw+SfUBB6EFi5J1GEFOmy+WSsCZpkaTLP
+	mIibuIf6NNXMA7PVwnHPH7Ld878UvkNZPwjJAUOTQC/l+0Jhnj6cKgkJNhVYRDW/Jcx78VaJnHb
+	qL6ZBz79mPoWmJiB0qYfPD+bEfrReiXLvY/HeKIXLMhl5S2nX2304XuLA7OM9VZ7pwNmXz9L79P
+	aKploXwUABkUXc21qGbsDY7zjP7D8Y6Cg6P7ydKOAq+UcqLgntM1K7mLRoA1QFcoNQX/HgfNNRb
+	p/LWQMiPtzvLj/bY7cQlwwVBf2H/xdGZh7OzA76+Kc7UIKo/ggMRwgPNbW5L2FKgzvUk59KnMME
+	LGRUcvoZe272Km8bxkCu1EVqOYMPV5EoFLCJmn0fqVuHgZlk2b8KIh4J/pc3+8R3isxrfUm8gN+
+	t/qPNTLWRUWWXKZQ=
+X-Received: by 2002:a05:600c:8714:b0:4a1:d97e:cd60 with SMTP id 5b1f17b1804b1-4a1fdd1604fmr8629335e9.16.1792547150977;
+        Tue, 20 Oct 2026 18:45:50 -0700 (PDT)
+Received: from MacBook-Pro-von-Karl (dynamic-095-117-105-001.95.117.pool.telefonica.de. [95.117.105.1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f2ca3666sm118638605e9.1.2026.10.20.18.45.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2026 18:45:50 -0700 (PDT)
+Date: Wed, 21 Oct 2026 03:45:14 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alistair Popple <apopple@nvidia.com>, 
+	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	Thomas Hellstrom <thomas.hellstrom@linux.intel.com>, Vivek Kasireddy <vivek.kasireddy@intel.com>, 
+	dri-devel@lists.freedesktop.org, iommu@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [RFC PATCH 0/6] iommufd: harden DMA-BUF PAL setup and release
+Message-ID: <atgWXLYKOFj5cZ0F@gmail.com>
+References: <cover.1792477872.git.kmehltretter@gmail.com>
+ <atdKZpEJVZY0enR2@nvdebian.thelocal>
+ <20261020182029.GH3008132@nvidia.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,26 +104,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261020182029.GH3008132@nvidia.com>
 
-On Tue, 20 Oct 2026 18:15:03 -0700 Bobby Eshleman wrote:
-> vsock network namespaces let a host put each VM in a namespace of its
-> own. A guest has no equivalent yet. It has a single G2H device that
-> cannot be assigned to a network namespace.
+On Tue, Oct 20, 2026 at 03:20:29PM +0100, Jason Gunthorpe wrote:
+> On Tue, Oct 20, 2026 at 10:16:26PM +1100, Alistair Popple wrote:
+> 
+> > I haven't had a chance to look at these patches yet, but if some of them are
+> > fixing bugs in Jason's series it might be best for us to fold them into that
+> > series, with correct attribution of course. Anyway I will take a closer look in
+> > the morning.
+> 
+> Are any fixing bugs in tree right now? I think one of them is already
+> applied from someone else..
+> 
 
-## Form letter - net-next-closed
+Good catch. None of these fixes a bug in the current mainline tree. I
+based the series on the stale c37cf2824740d topic and missed two fixes
+that landed in mainline afterward:
 
-The merge window for Linux v7.4 has begun, and the net-next
-tree is now closed for new drivers, features, code refactoring
-and optimizations. We are currently accepting bug fixes only.
+- patch 4 is already covered more broadly by f2d70dbd3dce
+  ("iommufd: Destroy the pages content after detaching from dmabuf");
+- patch 5 duplicates Ankit Soni's e745cd2c749e
+  ("iommufd: Take dma_resv lock before dma_buf_unpin() in release path").
 
-Please repost when net-next reopens. There is some uncertainty
-about how long this merge window will last, so please check
-https://netdev.bots.linux.dev/net-next.html
-before reposting. net-next _may_ reopen on Nov 2nd.
+Patches 1-3 address lifecycle issues introduced by the PAL conversion,
+and patch 6 tests those paths.
 
-See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
--- 
-pw-bot: defer
-pv-bot: closed
+My main goal with this RFC was to put the concrete lifecycle issues and
+tests on the table and get the discussion moving.
+
+I am not concerned about preserving these as separate commits for
+attribution purposes. Please fold or rework any useful pieces into the
+mapping-type series as makes sense.
+
+Thanks,
+Karl
