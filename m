@@ -1,74 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792575471;
-	b=gLTJzlxSTZxHwsKzQO5/RSzBwgRWo4E5Iu6zBFS7QzSulnP9TbWdan2FFYpHGBzcrCWu
-	 xkcfF6dkNgqc4qCKL64bve3e2mtnIGY+uLPFzf+uLQYoSWtiBqTRtsWkUwq5rrGRuPG6K
-	 C+6gdykw+hUMkoI8gzZuFf2YsvX9NQvVwb5d8h0Rc404U3UwHGOLo4OerY/DqjaxshwJ+
-	 B3ZurY7kCYul03nvP6bhf9Hk0say+t9iTbsMHXWiMcNS4OiqzcCSYB76ZU5JJksYBDZ5S
-	 ZzZZgtbk1yR3pPp/vnJccWo8uvPP/X/VshJ252D5fKba5ZFYSzsgPpIXBYlAmZfqaOQ==
+	t=1792576045;
+	b=vU2R8e6SfnfnS6lTjzL5afHV9tggXOvFCLFGpWFAaQD9qgJYmAWa44kmpPglH4KlfeFQ
+	 ZyqxCRa5M/tcQtN9Jbe2aSHB7VajVmmMXlXnM3AIgPxeTmL7XE+hYCj+0WA0lG1VCaVdu
+	 /5LPzQfjpRG9EO4SSyyefsOh+HCUv5mZ8GnKWCqnoT0Tx8UKmD55FvSseMXlCz3Ypb1lZ
+	 HbveVq28ZfI4zcHFBun8Wg0yfNjbgiiq04UTw/y9Htt60hLPx77gp82wV4i0vO9S2kzVR
+	 rQ4PJwrECwz5t18nSzURbmauTLVmgM2Ysz5hQMoYbOkTnJVomWTeJTdn2k1piFbkMHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792575471;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:To:Cc:
-	 Subject:In-Reply-To:References:User-Agent:Date:Message-ID:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Last-TLS-Session-Version;
-	bh=PO++a8z3xVSOrsSCzcnJsYBIAhxcpwS/rPUxumQkRLA=;
-	b=zFbAi+mTKquVkeEH9gNrKnDjTMXCeU4A209WTO/+W4g1fvC47eWooPN0n+9t+Tsfaza4
-	 xq/+IR6nyc5GCvL6xi7UfgR/3tlv+/7WmNKEglJVEy7og1hieP9VmrARuIWAQ6X29xwnc
-	 S2aFS0Ise8cuqnDwDkA3J/7prTxlMcfjg9sC15cb520ie3B5S4DxrIZsd1Yf1odTKRO3j
-	 P2Rk8mUyPwDQvtsth6Qn/Qv4v9b5RhhiwHXCBILq4LX8Ijr2xv4VAsMPMwJXsoX0+eKxW
-	 OnWTF3EgebRxDJUTi+9q6Ih6qukqXug1+n54QSKXnDfcw+8+uCNC3XqA+VCD1hahlZw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792576045;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=6jxbovViT1dwleMaJSyVR1xtPDE5gaIC6VKfIzW7oqs=;
+	b=osurjl69hAu9QsFJmALPrAVQ9JPTk2WA8SkpiAe8+w57sLf+g6T0L1C+X74jz8rf9OOr
+	 HUvtzqDEGR+SwGAg73KueJIFJ4IjDMlBOXPWsMlYko85M0TkDIBzyTQwrYSPjdSWzsT2T
+	 3cRRi/CWCNnbyo+bzrwjO/Zql/aM2fNMI9mpXYznSZjYveXFXBEjs+Xc5+NE/+5jDtiSi
+	 LLnjJCxtTmEuQZeyfnZRtiJIOZUNuX06tR9vmQDwSAQ0MdYvk6OD2RQO+e/iaKSkB8LnW
+	 LnKQaklCaWEIGjrTOOCOEmZa6krmaU7A+Gs9DGjqeVwiALvqKoG9nnbIPjUipz9uqOQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=CGBoqbwp;
-	arc=none smtp.remote-ip=185.171.202.116
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lWgSk3P2;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A59606A321;
-	Wed, 21 Oct 2026 09:37:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01A59606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D655606A319;
+	Wed, 21 Oct 2026 09:47:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=CGBoqbwp
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 17F8EC5CD74;
-	Wed, 21 Oct 2026 09:38:46 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 2D741606E3;
-	Wed, 21 Oct 2026 09:37:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 35856103289A8;
-	Wed, 21 Oct 2026 11:37:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1792575466; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=PO++a8z3xVSOrsSCzcnJsYBIAhxcpwS/rPUxumQkRLA=;
-	b=CGBoqbwpj9xTkVn6WWXitamQrNNLf19slUfZI+4ruQfN9t8GL0sXg2fjd33/7/B/r/nLx+
-	N0hPE5qWOIoKnNnB1H5M6PQkd5KlM50V8HHwmo5bUv+6MMnib5DVJtVkPZn2tLCsLgE5+P
-	x7H9zgf5loFIPZfCEYJwx978WollkDP2OLlX39sLtG6aM6+IyT4wZPtQRHozYz9BOb40u2
-	siBiQJtBpzaJiyky/qAXNiAHvGquswO4Qd0V96veXxMaWU656/vhNOmNjF/+AIjIHJbIkT
-	mFWCzR+DuU3ZXnvja4CayAQ4MzwH3LIYpaD1blGXGJ0R8A+mu6103BOYzVH0wg==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Brian Masney <bmasney@redhat.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,  Stephen Boyd
- <sboyd@kernel.org>,  Maxime Ripard <mripard@kernel.org>,  Alberto Ruiz
- <aruiz@redhat.com>,  Brendan Higgins <brendan.higgins@linux.dev>,  David
- Gow <david@davidgow.net>,  Rae Moar <raemoar63@gmail.com>,
-  linux-clk@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  kunit-dev@googlegroups.com
-Subject: Re: [PATCH v8 3/8] clk: introduce new helper
- clk_hw_get_children_lcm() to calculate LCM of all child rates
-In-Reply-To: <8733u0u22z.fsf@bootlin.com> (Miquel Raynal's message of "Tue, 20
-	Oct 2026 11:57:08 +0200")
-References: <20260327-clk-scaling-v8-0-86cd0aba3c5f@redhat.com>
-	<20260327-clk-scaling-v8-3-86cd0aba3c5f@redhat.com>
-	<8733u0u22z.fsf@bootlin.com>
-User-Agent: mu4e 1.12.12; emacs 30.2
-Date: Wed, 21 Oct 2026 11:37:42 +0200
-Message-ID: <874iefs8bd.fsf@bootlin.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lWgSk3P2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6497A1F000C9;
+	Wed, 21 Oct 2026 09:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792576044;
+	bh=6jxbovViT1dwleMaJSyVR1xtPDE5gaIC6VKfIzW7oqs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=lWgSk3P21BYenopQ2upzfYo3d/TE4oDtM4SR3JFBUhdZMD5viF2Re7D/QpEpSa/Zf
+	 7sP4LYeo+yENInG+nqx12ZhtdozTQ7uVR5+vPueCegxy/4dKbzGtBagLjmXU4m4ejw
+	 S6fbTZhBvonPWyvEU+c92IRdzvs/8V71KuIQH+fruYepE4uUuHiEvjXUgxbaLPzgoC
+	 RQJcYewDbmMS51g9DMnjQTHLr4pxQibEDPd298cncqLzxtyL/GoSNc9+xc1NfB6pBj
+	 YBtO3ds+fKMrJkfQMRLlUHYvmBrPqxjHp/fz+HeDYXMQL5IuYlHcuknSZSsopx2xSp
+	 US+0SlOFkY2mg==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
+ <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Russell King <linux@armlinux.org.uk>, Shuah
+ Khan <skhan@linuxfoundation.org>, Bobby Eshleman <bobbyeshleman@meta.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Breno Leitao <leitao@debian.org>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ thomas.petazzoni@bootlin.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net] selftests: drv-net: devmem: Skip when hugetlbfs
+ isn't supported
+In-Reply-To: <20261021090852.996899-1-maxime.chevallier@bootlin.com>
+References: <20261021090852.996899-1-maxime.chevallier@bootlin.com>
+Date: Wed, 21 Oct 2026 11:47:21 +0200
+Message-ID: <87qzhj75cm.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,112 +66,56 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
 
-On 20/10/2026 at 11:57:08 +02, Miquel Raynal <miquel.raynal@bootlin.com> wr=
-ote:
+Maxime Chevallier <maxime.chevallier@bootlin.com> writes:
 
-> Hi Brian,
+> The devmem selftest requires accessing /proc/sys/vm/nr_hugepages,
+> which is only available when hugetlbfs is supported. This isn't the
+> case on all CPU architectures, for example it isn't supported on ARM
+> 32-bits on cores that don't support LPAE.
 >
-> On 27/03/2026 at 15:31:58 -04, Brian Masney <bmasney@redhat.com> wrote:
+> On these devices, the devmem kselftest doesn't skip gracefully, it hits
+> an exception while trying to open the nr_hugepages file :
 >
->> Introduce a new helper that recursively walks through all children and
->> their descendants, calculating the lowest common multiple (LCM) of their
->> rates. For the requesting child, it uses the requested rate; for other
->> enabled children, it uses their current rate. This is useful for
->> determining what parent rate can satisfy all children through simple
->> integer dividers.
->>
->> Link: https://lore.kernel.org/linux-clk/aUSWU7UymULCXOeF@redhat.com/
->> Link: https://lpc.events/event/19/contributions/2152/
->> Signed-off-by: Brian Masney <bmasney@redhat.com>
->> ---
+>   # Exception|     _reserve_hugepages()
+>   # Exception|     ~~~~~~~~~~~~~~~~~~^^
+>   # Exception|   File "/usr/lib/kselftests/drivers/net/hw/devmem_lib.py",=
+ line 36, in _reserve_hugepages
+>   # Exception|     with open(NR_HUGEPAGES_FILE, 'r+', encoding=3D'utf-8')=
+ as f:
+>   # Exception|          ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   # Exception| FileNotFoundError: [Errno 2] No such file or directory: '/=
+proc/sys/vm/nr_hugepages'
 >
-> Thanks a lot for this proposal, it is very interesting.
+> Let's check if the file exists before trying to open it, and return
+> immediately if we can't.
 >
->>  drivers/clk/clk.c            | 54 +++++++++++++++++++++++++++++++++++++=
-+++++++
->>  include/linux/clk-provider.h |  2 ++
->>  2 files changed, 56 insertions(+)
->>
->> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
->> index 47093cda9df32223c1120c3710261296027c4cd3..bb602c07df9a2b523a72e1e0=
-5cc3a27956e7198b 100644
->> --- a/drivers/clk/clk.c
->> +++ b/drivers/clk/clk.c
->> @@ -14,6 +14,7 @@
->>  #include <linux/err.h>
->>  #include <linux/hashtable.h>
->>  #include <linux/init.h>
->> +#include <linux/lcm.h>
->>  #include <linux/list.h>
->>  #include <linux/module.h>
->>  #include <linux/mutex.h>
->> @@ -838,6 +839,59 @@ void clk_hw_set_rate_range(struct clk_hw *hw, unsig=
-ned long min_rate,
->>  }
->>  EXPORT_SYMBOL_GPL(clk_hw_set_rate_range);
->>=20=20
->> +/**
->> + * clk_hw_get_children_lcm - Calculate LCM of all children's rates recu=
-rsively
->> + * @hw: The parent clock hardware
->> + * @requesting_hw: The child clock that is requesting a rate change (ca=
-n be NULL)
->> + * @requesting_rate: The target rate for the requesting clock
->> + *
->> + * This helper recursively walks through all children and their descend=
-ants,
->> + * calculating the lowest common multiple (LCM) of their rates. For the
->> + * requesting child, it uses the requested rate; for other enabled chil=
-dren, it
->> + * uses their current rate. This is useful for determining what parent =
-rate can
->> + * satisfy all children through simple integer dividers.
->> + *
->> + * Returns: The LCM of all non-zero rates found in the subtree, or 0 if=
- no valid rates.
->> + */
->> +unsigned long clk_hw_get_children_lcm(struct clk_hw *hw, struct clk_hw =
-*requesting_hw,
->> +				      unsigned long requesting_rate)
->> +{
->> +	unsigned long lcm_rate =3D 0;
->> +	unsigned long child_rate;
->> +	struct clk_core *child;
->> +
->> +	lockdep_assert_held(&prepare_lock);
->> +
->> +	hlist_for_each_entry(child, &hw->core->children, child_node) {
->> +		/* Use requesting rate for the requesting child, current rate for oth=
-ers */
->> +		if (child->hw =3D=3D requesting_hw) {
+> The _reserve_hugepages() runs as part of the "require_devmem()", that
+> skips if devmem itself isn't supported. Before the blamed commit, this
+> check was done prior to accessing nr_hugepages, so the problem wasn't
+> showing.
 >
-> This is not working on my end (imx8mp) because the clock requesting the
-> rate is not identified correctly. Here you use the hw clock, but in the
-> imx8mp case there are many composite clocks which are made of inner
-> core clocks (like gate, divider and mux). I believe we should iterate
-> over
+> This has been found by trying to run the selftest on stmmac, on an
+> Altera CycloneV SoC (Cortex A9, doesn't support hugepages).
+>
+> Fixes: 8ac4255c1e0c ("selftests/net: devmem.py: add check_rx_large_niov")
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> ---
+>  tools/testing/selftests/drivers/net/hw/devmem_lib.py | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/drivers/net/hw/devmem_lib.py b/tools=
+/testing/selftests/drivers/net/hw/devmem_lib.py
+> index 3554954a6691..24637fb180ca 100644
+> --- a/tools/testing/selftests/drivers/net/hw/devmem_lib.py
+> +++ b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
+> @@ -33,6 +33,8 @@ def _restore_nr_hugepages(nr_hugepages):
+>=20=20
+>  def _reserve_hugepages(want=3D64):
+>      """Raise nr_hugepages to @want and arrange for it to be restored."""
+> +    if not os.path.exists(NR_HUGEPAGES_FILE):
+> +        return
 
-I meant "made of inner hw clocks" here. Just to be more clear, if my
-understanting is correct:
-- requesting_hw is the hw clock associated to the composite clock
-- child->hw is one of the inner composite clocks
-So the comparaison cannot work. Iterating over the core clock therefore
-solves this incompatibility.
+Maybe raise a KsftSkipEx() would be more robust? No biggie...
 
-However, while trying to understand better the values of the pointers
-there, I realized the initialization of the various inner hw->core
-pointers are made all over the place (?) and in certain cases, they are
-even not done at all. For instance, a composite clock with a single
-parent would not go through __clk_hw_set_clk(), at least not during
-registration. Either this never happened before, or maybe some
-recalc_rate() spuriously set it by chance (because __clk_hw_set_clk()
-calls are made a bit everywhere), or maybe because this problem was not
-really a problem without the v2 rate parenting Brian is proposing.
-
-Anyway, I think this situation can be fixed easily, so I will propose
-something on top of this series.
-
-Thanks,
-Miqu=C3=A8l
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
