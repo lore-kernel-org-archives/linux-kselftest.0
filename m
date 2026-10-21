@@ -1,69 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.209.128.28
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792581909;
-	b=4qJyOzW6GvaUbAE+Ya4LaH5nBbKnCKtqG5YPFwnmytSaPYpwDoYp0Foy9mgp219QQJvY
-	 Np3zaYXItYzlxKSXMh3u4DRP35u1mEPlHYfrJixO4Z9wok1XdaXcSsIO9pxIDqbnLkBmp
-	 xHqSWUz8QgguA6DZjL12YJx3RpfQPXvc54WXdPfs3GR81IvpBGLmQlEFr68fixc/VEt59
-	 jXThQnD7wTqNmku/0MBPaDLzdBJKKVft30pRS0iWaS/L4F+24fC9ZNi+vuRaYgImGvS8D
-	 AM+smBpxfvxTSApq9iNbcqLc9nYijqdV71fG4N8/sfDMazph5U8PlhVNEequcQ7zAxw==
+	t=1792581962;
+	b=Pnk5J/jYMkj/YKxaq0tZJJn5ALxlpeb7ELAiDVe0kXgcbsenFwhDoOACxj31jF6Dm1W+
+	 RcklOfEGB0E6S6SNqwuSWVR6/5FMI8/wuckktj0qs9CDmuy1diI3kDXB1pzrzbABzB1TP
+	 IFyN3vTnUIETUBIyuGHd35z0PmEmrcDq227mzZJuCPEylHDg/u6s/VYdz3EL3+jb5Tuxd
+	 xJU7kMewBNO5plaum7nkpBoB2UXC5aoTJ/CSHyPqkMI/cpzkfOogJio026APFcWjkFxOE
+	 fxNuGyHkqJFMz5/VoEcgOUzZkXp/n7ym1dpC4Sq8M1NBf79dUjNeseqKqWRpATFGBNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792581909;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
-	 X-HM-Tid:X-HM-MType:X-HM-Spam-Status;
-	bh=RAG/2ax1ucQUbAiCg/s1Qqe5BmQBfpQgRvDtOVmHwa4=;
-	b=BGSVg4XSTJHGPLK6M4f8z9/hnVwxXQMwFy91aXSNjLS7S13KLAyFjpRO+AWCshT1++x7
-	 G0lH19GwDTvf08V3zyH4PzH8V8YUyd8IupFsiF8enTJsLzQdJGguYnQ0Ba0utNDxB1B4m
-	 jTbSvx6513STcUqKbVaJ3rqYRkIgyZ4+WYUIRtd1o7SMyiCU0aWPVahHFJXQdCxh+RJcC
-	 oZ8ChjFb0TDoNnEDddnI9jGelUKy2t4eTLoQ3NvvTNNGC58WQ3xgye31EMFgoELY6lYB0
-	 MMGVAOZDGKbarPiewgKuhQulyginh5CyQbgu8+kedyMxbCZ5U7SZdcgjiiEsKOPGtDg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792581962;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=uSgU66UvvSwylDygU94JyWQL1mKuGXT9QBuCeFw9T5Y=;
+	b=oWssPTIgn9MVkX5p94T7JaRY2ucy7IftqW8W9OtAy95AaCRy0pGJ0U77PadP0058xin2
+	 Lt/wLOOjgsVg2et1Vo/JYxvgEzwv7L9zUFJOzC8cvAROA0tPJK6ZKEVXIFEX1qXF62vew
+	 kbzio9KR7IMVT4ik5lz7kvcZyNGEUAfFkXc91OhxMVISp9o5RB3fVtwjccIY1mfSI8xAz
+	 1GJx+/8w1lq7eazsMM9HN48re+kBH6t33eZA7ZnY+xsG2m/xyR6VTfnyG4AORANXK3a6h
+	 JaYTUmezNLiNC107r2NndNe0YCM+sZlXvuZPEyj1Qu0VI0wol6zy1r74fOawLSCUD1g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=easystack.cn;
-	spf=pass smtp.mailfrom=easystack.cn;
-	arc=none smtp.remote-ip=103.209.128.28
-Received: from mail-m12828.netease.com (mail-m12828.netease.com [103.209.128.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=KkLC7HeY;
+	arc=none smtp.remote-ip=74.125.82.174
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE18A606A333;
-	Wed, 21 Oct 2026 11:25:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE18A606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from localhost.localdomain (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 204f151ae;
-	Wed, 21 Oct 2026 19:24:56 +0800 (GMT+08:00)
-From: Zhen Ni <zhen.ni@easystack.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	akpm@linux-foundation.org,
-	vbabka@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	brendan.jackman@linux.dev,
-	hannes@cmpxchg.org,
-	ziy@nvidia.com,
-	shuah@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-mm@kvack.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB82606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 11:26:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAB82606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=KkLC7HeY
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-35c76e9614aso1083973eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 04:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792581961; x=1793186761; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=uSgU66UvvSwylDygU94JyWQL1mKuGXT9QBuCeFw9T5Y=;
+        b=KkLC7HeYFLkHWL6a/YJIjripfrp8Tlbapk9ls0aJmQSlRiHSs3GU0Xa2g9vkueejnn
+         WGepQ0sG8Mu4CLV8tsdpkkx5sVuMVlnWNE3BU7BnRQNGMqEdP+T9wl40+sYZIT9BZjA8
+         akn2KMFElAh6pXjn86N+wFie2wmntjE5RYBkBxqwaHx5kamu8DjWGrwqgPHrU1RMrSIb
+         kUeX40BH0ZXQ9y92VNIusYxBx+5sp60OUrmIX3dojenW2z0AyyH+N4nd8CpixI/EQqK3
+         ft3iATIbj+/QXBxEUpGMwDSOs9powJaopfl7VRpwByD1k6ZQZitxxiSW/J1EHUeC+TJc
+         C57g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792581961; x=1793186761;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uSgU66UvvSwylDygU94JyWQL1mKuGXT9QBuCeFw9T5Y=;
+        b=lsb4kCDMKKiB7cnUIT8628z4ua4POTXqo36py+SU7sPJJk0AL7Ma7ZLjmrgbhlgpMD
+         ma+vROrU06JcuPWmk131Y2eVKOfoCHq74SXrlU1T894Rwb4YPDiqVDycSTmQ6PI1z8Ft
+         RXpif07B4Dx0Lqb6iKxvKZa/2WW15czij6EjQrDW/+p0DaE4o0Alq2cz3ta1uPCTiYCq
+         TUTCcM5y9o1dRsq42B0CcCEDjsZ4Rymj3zeGvpNneaHj45wuehb5fm8lo5VEg4IwodGu
+         VZx72w0xjbyFGMFxB7Ubq60fF7nZS36aczLe1r9ZbqOe9QFp4H4Yf7HywLXks+SNjSEe
+         jPKA==
+X-Forwarded-Encrypted: i=1; AKwUvBwpdq/3w3TMflie7roycEJoEAhLJ/IdpXqSeQT9FvBbbDepAnW5+Tg0bCN7oQeMhNA8ZeZFZr5NOU7SJA5+WNQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL7khR+dpp1WNM8wk76kWibvYMEpXxb1lCI3aDI97CfAOlk020a
+	n7oMyzTAwAYavEKln0Zjk3/ZN4nAPr2wygxtbuRSDr2Uf0V4eLjQQfOw
+X-Gm-Gg: AYBFou33alIYw8w30qwVxicaju7M6Vrx21QbVz5hZmtNkcgYjLID3GzQmt8DgasHRV1
+	0GK0/3R3D5EBrpEkjGsgoO3xiU9lyC4EpIDiaz9WiR5FWkNhOJ0x3pMQc4Gc8T7P3r/tyA7zmO7
+	8cPpAKmqXwX2qfqBgz+y6nefdACHzpBIJ4V9Wwa86EPZUj3CdVNlvfec5yq3+yesbewT2Nt4PSU
+	zDX7tTwJ19IJSWdncjC3nl/+DkYBGpyhrqFlSaSyhaDlBwk+AzMPRWa5PfERMklhtzYswbkL71L
+	UrNGRsjMsthfsTPCiETpL8HUm9DBWq2u0uz/6+6WRUW1JLCvTfvmMZHZe3kY8hdBY9L0qrG7iid
+	tLlc9l7Kgu0T2fZOduliKmYlJ4a4Gn5B/jUJfG9MZsfUcL2L0EZaRSM5ZCHcdnSpEvDA0Y5LRTJ
+	Gn76hLZAiSKsI1SnqtFcFXI9wGcwUMIUz87Rp6A8k623Y3gO5m1R+kWnvPSsD/CsKcQZS/AD1oj
+	nx45RVxRNKYU3UBydE9ZbUv3DvOYUhBLIGzpiziFEkm92WgDc7ThQWcHaXwnf6at5EAyfdmA4SD
+	rlFVb/EO4q9c/U9eB0ZL6o2mwuR+krZAXYyGRU8AEMeBXUF78NcjMMXd5AVcxS3IA54=
+X-Received: by 2002:a05:701b:2051:20b0:18a:d0b5:fa42 with SMTP id a92af1059eb24-190a604f7f6mr2326894c88.19.1792581960622;
+        Wed, 21 Oct 2026 04:26:00 -0700 (PDT)
+Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903ca044d4sm5810344c88.17.2026.10.21.04.25.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2026 04:26:00 -0700 (PDT)
+From: HyeongJun An <sammiee5311@gmail.com>
+To: Takashi Iwai <tiwai@suse.com>
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-sound@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Zhen Ni <zhen.ni@easystack.cn>
-Subject: [PATCH v3 6/7] mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
-Date: Wed, 21 Oct 2026 19:24:36 +0800
-Message-Id: <20261021112437.1799213-7-zhen.ni@easystack.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20261021112437.1799213-1-zhen.ni@easystack.cn>
-References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
+	HyeongJun An <sammiee5311@gmail.com>
+Subject: [PATCH] selftests: ALSA: pcmtest: Compare all captured bytes in ni_capture
+Date: Wed, 21 Oct 2026 20:25:54 +0900
+Message-ID: <20261021112554.4037107-1-sammiee5311@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,295 +101,34 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa15e350a610229kunme08c1fd526acf1
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaSUxJVhpLTBlLHxlJThhMT1YVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
-	lPT09IVUpLS1VKQktLWQY+
 
-Expose per-page memcg information to BPF programs, so that a bpf_iter
-over page_owner can aggregate and filter allocations by memcg.
-Attributing an allocation to a specific cgroup needs its full cgroup
-path, not just the memcg name.
+The ni_capture test reads rate * time frames into each channel buffer
+and then compares rate * time bytes. A frame is sample_size bytes per
+channel, so with S16_LE only the first half of each channel is checked.
+If the second half is wrong the test still passes.
 
-Split memcg info collection out of print_page_owner_memcg() into
-get_page_memcg_info(), which fills struct memcg_info and, when given a
-caller-provided buffer, writes the full cgroup path via cgroup_path().
-print_page_owner_memcg() now consumes the struct; this introduces no
-functional change to the debugfs output.
+Compare rate * time * sample_size bytes per channel.
 
-The helper takes a single READ_ONCE snapshot within one RCU read-side
-critical section, so the flags and cgroup path reflect a consistent
-view of the page. cgroup_path() returns the path relative to the cgroup
-hierarchy root, so memcg attribution works on both cgroup v1 and v2.
-
-Because scan->pfn is selected by a lockless scan, the kfunc re-resolves
-it with pfn_to_online_page() under get_online_mems() to avoid accessing
-a hot-removed section. If the PFN is offline or removed, the kfunc
-returns -ENODATA instead of dereferencing memcg_data.
-
-Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
+Fixes: 10b98a4db11a ("selftests: ALSA: Add test for the 'pcmtest' driver")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
 ---
-Changes in v3:
-- Check the page_owner_inited static key.
-- Resolve the page with pfn_to_online_page() under get_online_mems().
+ tools/testing/selftests/alsa/test-pcmtest-driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v2:
-- bpf_page_owner_get_memcg_info() now resolves the page with
-  pfn_to_online_page() for an offline or removed pfn.
-- Buffer/info args renamed to info__uninit/buf__uninit/buf__sz.
-
-v2: https://lore.kernel.org/linux-mm/20261013122125.843451-6-zhen.ni@easystack.cn/
-v1: https://lore.kernel.org/linux-mm/20261009112308.240769-6-zhen.ni@easystack.cn/
----
- kernel/bpf/helpers.c |  1 +
- mm/page_owner.c      | 85 ++++++++++++++++++++++++++++++++++----------
- mm/page_owner.h      |  9 +++++
- mm/page_owner_iter.c | 48 +++++++++++++++++++++++++
- 4 files changed, 124 insertions(+), 19 deletions(-)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 0ba836f77957..bba9eeb076c3 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4954,6 +4954,7 @@ BTF_ID_FLAGS(func, bpf_iter_page_owner_next,
- BTF_ID_FLAGS(func, bpf_iter_page_owner_destroy,
- 	     KF_ITER_DESTROY | KF_SLEEPABLE | KF_PERFMON)
- BTF_ID_FLAGS(func, bpf_page_owner_stack_snprint, KF_SLEEPABLE | KF_PERFMON)
-+BTF_ID_FLAGS(func, bpf_page_owner_get_memcg_info, KF_SLEEPABLE | KF_PERFMON)
- #endif
- BTF_ID_FLAGS(func, __bpf_trap)
- BTF_ID_FLAGS(func, bpf_strcmp, KF_PERFMON);
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 8bc15bcdc24e..7470b5d002be 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -538,16 +538,22 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
+diff --git a/tools/testing/selftests/alsa/test-pcmtest-driver.c b/tools/testing/selftests/alsa/test-pcmtest-driver.c
+index e025a7bac26b..18ee72d5d4c9 100644
+--- a/tools/testing/selftests/alsa/test-pcmtest-driver.c
++++ b/tools/testing/selftests/alsa/test-pcmtest-driver.c
+@@ -265,7 +265,7 @@ TEST_F(pcmtest, ni_capture) {
+ 	snd_pcm_close(handle);
  
- #ifdef CONFIG_MEMCG
- /*
-- * Looking for memcg information and print it out
-+ * Collect memcg information of @page into @info; when @buf and a
-+ * nonzero @size are given, also copy the full cgroup path of the
-+ * charged memcg into @buf.
-+ *
-+ * Return: 0 if @page is charged to an attributable memcg; -ENODATA
-+ * otherwise.
-  */
--static inline int print_page_owner_memcg(char *kbuf, size_t count, int ret,
--					 struct page *page)
-+int get_page_memcg_info(struct page *page, struct memcg_info *info,
-+			char *buf, int size)
- {
- 	unsigned long memcg_data;
- 	struct obj_cgroup *objcg;
- 	struct mem_cgroup *memcg;
--	bool online;
--	char name[80];
-+	int ret = -ENODATA;
-+
-+	*info = (struct memcg_info){};
- 
- 	rcu_read_lock();
- 	memcg_data = READ_ONCE(page->memcg_data);
-@@ -555,31 +561,68 @@ static inline int print_page_owner_memcg(char *kbuf, size_t count, int ret,
- 		goto out_unlock;
- 
- 	if (memcg_data & MEMCG_DATA_OBJEXTS) {
--		ret += scnprintf(kbuf + ret, count - ret,
--				"Slab cache page\n");
-+		info->is_slab = true;
- 		goto out_unlock;
+ 	for (i = 0; i < CH_NUM; i++) {
+-		for (j = 0; j < params.rate * params.time; j++)
++		for (j = 0; j < params.rate * params.time * params.sample_size; j++)
+ 			ASSERT_EQ(chan_samples[i][j], patterns[i].buf[j % patterns[i].len]);
+ 		free(chan_samples[i]);
  	}
- 
- 	objcg = (void *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
--	memcg = objcg ? obj_cgroup_memcg(objcg) : NULL;
-+	if (!objcg)
-+		goto out_unlock;
-+
-+	memcg = obj_cgroup_memcg(objcg);
- 	if (!memcg)
- 		goto out_unlock;
- 
--	online = css_is_online(&memcg->css);
--	cgroup_name(memcg->css.cgroup, name, sizeof(name));
--	ret += scnprintf(kbuf + ret, count - ret,
--			"Charged %sto %smemcg %s\n",
--			(memcg_data & MEMCG_DATA_KMEM) ? "(via objcg) " : "",
--			online ? "" : "offline ",
--			name);
-+	info->is_kmem = (memcg_data & MEMCG_DATA_KMEM) != 0;
-+	info->is_online = css_is_online(&memcg->css);
-+	cgroup_name(memcg->css.cgroup, info->name, sizeof(info->name));
-+
-+	if (buf && size)
-+		cgroup_path(memcg->css.cgroup, buf, size);
-+	ret = 0;
- out_unlock:
- 	rcu_read_unlock();
- 
-+	if (ret < 0 && buf && size)
-+		buf[0] = '\0';
-+
-+	return ret;
-+}
-+
-+/*
-+ * Print memcg information from memcg_info
-+ */
-+static inline int print_page_owner_memcg(char *kbuf, size_t count, int ret,
-+					 const struct memcg_info *info)
-+{
-+	if (!info)
-+		return ret;
-+
-+	if (info->is_slab)
-+		ret += scnprintf(kbuf + ret, count - ret,
-+				"Slab cache page\n");
-+
-+	if (info->name[0])
-+		ret += scnprintf(kbuf + ret, count - ret,
-+				"Charged %sto %smemcg %s\n",
-+				info->is_kmem ? "(via objcg) " : "",
-+				info->is_online ? "" : "offline ",
-+				info->name);
-+
- 	return ret;
- }
- #else
-+int get_page_memcg_info(struct page *page, struct memcg_info *info,
-+			char *buf, int size)
-+{
-+	*info = (struct memcg_info){};
-+	if (buf && size)
-+		buf[0] = '\0';
-+	return -EOPNOTSUPP;
-+}
-+
- static inline int print_page_owner_memcg(char *kbuf, size_t count, int ret,
--					 struct page *page)
-+					 const struct memcg_info *info)
- {
- 	return ret;
- }
-@@ -589,7 +632,8 @@ static ssize_t
- print_page_owner(char __user *buf, size_t count, unsigned long pfn,
- 		struct page *page, struct page_owner *page_owner,
- 		depot_stack_handle_t handle,
--		struct page_owner_filter_state *state)
-+		struct page_owner_filter_state *state,
-+		const struct memcg_info *memcg_info)
- {
- 	int ret, pageblock_mt, page_mt;
- 	char *kbuf;
-@@ -639,7 +683,7 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
- 			migrate_reason_names[page_owner->last_migrate_reason]);
- 	}
- 
--	ret = print_page_owner_memcg(kbuf, count, ret, page);
-+	ret = print_page_owner_memcg(kbuf, count, ret, memcg_info);
- 
- 	ret += snprintf(kbuf + ret, count - ret, "\n");
- 	if (ret >= count)
-@@ -822,6 +866,7 @@ static ssize_t
- read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- {
- 	struct page_owner_scan scan;
-+	struct memcg_info memcg_info;
- 	struct page_owner_filter_state *state = file->private_data;
- 
- 	if (!static_branch_unlikely(&page_owner_inited))
-@@ -855,8 +900,10 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 		/* Record the next PFN to read in the file offset */
- 		*ppos = scan.pfn + 1;
- 
-+		get_page_memcg_info(page, &memcg_info, NULL, 0);
- 		ret = print_page_owner(buf, count, scan.pfn, page,
--				&scan.po_snap, scan.po_snap.handle, state);
-+				&scan.po_snap, scan.po_snap.handle, state,
-+				&memcg_info);
- 		put_online_mems();
- 		return ret;
- 
-diff --git a/mm/page_owner.h b/mm/page_owner.h
-index 934bc9f84d6f..65598415af73 100644
---- a/mm/page_owner.h
-+++ b/mm/page_owner.h
-@@ -41,7 +41,16 @@ struct page_owner_scan {
- 	int nid;
- };
- 
-+struct memcg_info {
-+	char name[80];
-+	bool is_slab;
-+	bool is_kmem;
-+	bool is_online;
-+};
-+
- bool page_owner_next_eligible(struct page_owner_scan *scan);
-+int get_page_memcg_info(struct page *page, struct memcg_info *info,
-+			char *buf, int size);
- 
- /*
-  * mm/page_owner_iter.c
-diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
-index b7e0ce1dfa80..a649e1207e24 100644
---- a/mm/page_owner_iter.c
-+++ b/mm/page_owner_iter.c
-@@ -181,4 +181,52 @@ __bpf_kfunc int bpf_page_owner_stack_snprint(struct page_owner_scan *scan,
- 	return len;
- }
- 
-+/**
-+ * bpf_page_owner_get_memcg_info - Report the memcg charged for the current page
-+ * @scan: page_owner scan handle.
-+ * @info__uninit: output buffer for the memcg_info.
-+ * @buf__uninit: optional output buffer for the full cgroup path.
-+ * @buf__sz: size of @buf__uninit.
-+ *
-+ * Fills @info__uninit with the memcg charged for the page backing
-+ * @scan->pfn.  If @buf__uninit and @buf__sz are provided, the full
-+ * cgroup path is also copied out, so a BPF program can attribute a
-+ * page_owner allocation to a specific cgroup.
-+ *
-+ * @scan->pfn is resolved to a struct page under get_online_mems(),
-+ * so the page cannot be accessed after its memory section is offlined
-+ * or removed.
-+ *
-+ * Returns:
-+ * * 0 on success
-+ * * -ENODATA if the page is not online or not charged to a memcg
-+ * * -EOPNOTSUPP if built without CONFIG_MEMCG
-+ */
-+__bpf_kfunc int bpf_page_owner_get_memcg_info(struct page_owner_scan *scan,
-+					      struct memcg_info *info__uninit,
-+					      char *buf__uninit, u32 buf__sz)
-+{
-+	struct page *page;
-+	int ret = -ENODATA;
-+
-+	if (!static_branch_unlikely(&page_owner_inited))
-+		goto nodata;
-+
-+	get_online_mems();
-+	page = pfn_to_online_page(scan->pfn);
-+	if (!page) {
-+		put_online_mems();
-+		goto nodata;
-+	}
-+	ret = get_page_memcg_info(page, info__uninit, buf__uninit, buf__sz);
-+	put_online_mems();
-+	return ret;
-+
-+nodata:
-+	*info__uninit = (struct memcg_info){};
-+	if (buf__uninit && buf__sz)
-+		buf__uninit[0] = '\0';
-+	return ret;
-+}
-+
- __bpf_kfunc_end_defs();
 -- 
-2.20.1
+2.43.0
 
