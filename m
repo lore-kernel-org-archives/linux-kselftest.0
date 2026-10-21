@@ -1,117 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792590092;
-	b=OsXKHQyVlC34wURzI8SuHJh30zIDb5e3bYchVHTOcAKsadzXO4riAIdGQcecdMo355qC
-	 yKwajPI+gOfp4WzL0eU1bP3x2hKKg77D8IWgs13a6NGmPzrySKq0+ZbyfwqH12shfJleI
-	 wHt/Yt5Qd5wXA1J81SB5zfL9cfZfgJtMcKd0nYn7tRTY4xE1QYY9u07LM3IeyhLbbiE2B
-	 nlYuaKbC6UY9WJSy3R+IubvJcZysdN/xVGftArOq+yGNb0+UENDyVH+m/VytUMRpsXKTG
-	 DuLJEJOsWphEQfQZL3uvX9jr9YBCTj4q9J+q/p8Jss3LnOTuAXxUivX2JBD1Y0/zVqw==
+	t=1792590689;
+	b=kMY1Jgjg4QzmmgCVbYarIDxUGsFv8iE42H/ed93lif9x85KRWdtQOvYOTq8bPtFfNNuu
+	 JOl1uT5o508CLrikJJ6KbJH7PNyuqpMEtyf8Rfq4kxSNBgRZhnOwFjncacOw43MmJuNTB
+	 zVrUasPgJm/+sWQ1xnejSv/DNaz/XgtD1wyFgpDeOecnUslzRpfK0wvC0WkIdJQY6iqgq
+	 Osoy89JQ9bQ4LB547sKorPUtRZlIqj56RymNwdXnn1tfY6OIsyAJn6dg9iUG79V/MM5fY
+	 4D8qNqNwRn7OP5Jb+P/uGL77lnAGd5n7i9iTsNe/WZ/TZF1eLuN66fejy0kSf8lzMpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792590092;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:User-Agent;
-	bh=9bv850EBQTH85bFk68nVgqk9mnj/LRa+SIuQDt9yO3k=;
-	b=3/IUtLE1O5NMT/LjSvFLnSYLHDqejLIA+rCLaXYRxcSU7TxsKJiiKwNJpI7UhtYHSjAc
-	 y8xobgm9TXpvoGxkUThRoV7wMSMaMvBKgppjKPERwyZVRVof8xnku6HI6HYFm6DGDpTVn
-	 KyFjmxry61MfS363CKF2muyKruWe8cMBKRW/nZtLkDgNmPl5xtcol9KLqWhWBDnrCLKsB
-	 /p+JR99ShwPY+re44PwdkGfSj4r3hZs5mBVZnTLIBuxGJCihXmQvd1V5LbofdsR9W9ckr
-	 ox/1Dog60VMpiWiDr4pW5djVfCTzfwHfPVJ7vlIEqViwhmlxVFDzWVQPOhhkNWg+LJA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792590689;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=Xd64Zq1uLWmEwdyiZowwwuTEWgkyHj5f3A34g4v8y3Y=;
+	b=4eZ5AlifmnzdEaVbH4A2k+SwGPdBk5ri+bEfU6FArMXhC4OoD+z0HwCFrYxq6+cqyd61
+	 IPWhzh41oucN2w/tTP7Dj6qFrLcj2n7q7wlTgycAj2i6bHSTcDPBPCbJPJFmbHfcoKQ+o
+	 fjNdUMm5vzvGRO4ke7p84VmfZB3ZDxlO1ZRQMpRAPZvi5h/ELZh1N6HctYKADhU59mmub
+	 3oAejUU02++YF6TRGzIWYA+de2sYko+mW9p6mYg1HYw2euaHOdnb8B2pnQX8Mk+k1A810
+	 IBgYBPwncCEwkkaKmMyO+SaJhrZtbZ0+yI/mD0oeajaG2nBmTCJLtXjLn5nsX3o6lsA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ZJccSif+;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b="Vo/gfEI9";
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M38LlApZ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0AC606A319
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 13:41:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B0AC606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71286606A31B;
+	Wed, 21 Oct 2026 13:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ZJccSif+;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Vo/gfEI9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792590090;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9bv850EBQTH85bFk68nVgqk9mnj/LRa+SIuQDt9yO3k=;
-	b=ZJccSif+bN+wWXyGEe70tSLHpBhUNKw0dUGHPnIPyltiCoaBWjcC58SFVAaLz0Dq5cvDxs
-	Txus2u7TmpuEeQgc6SZ+uXGb/dIXpAhe1It6Upyqt1dg3THwyVx1zNktg5/4M4+R4W1I3M
-	nBIDvkDIt35OOulnVaS2TEDXzjxgsjQ=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-202-d8GlXscvN5GnEdfG4x99GA-1; Wed, 21 Oct 2026 09:41:28 -0400
-X-MC-Unique: d8GlXscvN5GnEdfG4x99GA-1
-X-Mimecast-MFC-AGG-ID: d8GlXscvN5GnEdfG4x99GA_1792590088
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-93caf7856ffso191301385a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 06:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1792590088; x=1793194888; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=9bv850EBQTH85bFk68nVgqk9mnj/LRa+SIuQDt9yO3k=;
-        b=Vo/gfEI9F7cOYKyEkehqA4dhNl61L1PyaKEWjqfDE9h+GyilCPgN0m1zGnyJr8l6YM
-         r1BwIo9//XFFPmgh/EPGavymTGTf2PPrfVMpMfXyEl9FqTM20+V8jer1c5Iow1LooMws
-         R+Kc8KACz+wEeIERwWWlcaVQKN/45NaX8kx282N/eCsp9NTh1vY2GyfP7eOD5dyjufYN
-         UdbL1k9Hy4RQtHUUObvNjwKsELm+fSSbqhSq52mmYOGHta3DTMHqucm/i9R1ZqrKpjQ8
-         nBGlFT9g+dkBQyX+agD9c/jM64Um3npiCOFTa6iNWLTzHmLHQmiegVhRGLToTrscKtkC
-         q54w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792590088; x=1793194888;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9bv850EBQTH85bFk68nVgqk9mnj/LRa+SIuQDt9yO3k=;
-        b=ADjBxSp0q3oHSBrYHN0q6N3AiOUxIQQpmyApXo1kQchFaJGP7vuntVU3kPE+/ipwVr
-         Xonp/k6GvDNtNAJxdwLX67zAtczXW7RrnqWNW+hwh7jPtOqgfma36N89g/mTd077Phts
-         hto3F5h3870OZFw52eqESU1ciVO0RbcFKqL44Hwg5G+yPN18n1B028VAKL42z62ERtMI
-         LZZ7hKy6479uRNq9b9WwSpcIL4YCAlsEmXlhJdYrj+FwJrr/Rl6efwI2WeYKP/IauUSw
-         i+oQqNKe30TqBPA9no8a0a4r6jA2b2k3NGpa6JzVy8mvtkJ2yQvVFuKsS65zQYgjOL/C
-         /IFA==
-X-Forwarded-Encrypted: i=1; AKwUvBwxx3rZ808aN3hPxLrWSlBcAp5RjRE6rSKiCp3KXMWPB//GP80fH48KaZxFPWsvEHFgnCKpGIVIPGenqtpQ/uI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL5H8zZfuet9/SUXybkzXqRTdz53jbD2oD0Ry3clkLcbNpm6pcO
-	ZI4Muo95XqtHkCp0qQXF0eJeW6ztG6OIKFOP23TgFkd1z3mmNT7oYItNTWI+/TTAHMwFhG6fjtD
-	QNksSQaYbBxmG4xvcwuV3PvV9GdDKugFBmY3z2S/+NV88TY855dDvPkmTy1QBHs1SdaZyAg==
-X-Gm-Gg: AYBFou2fSzipvm7aqng36/d943AtP0Yy+uwsZ60kvyFrADj/UdTEzxIQyYk9j3QoZeU
-	mpQ4c3BukbvQ5LSCG3wLLeIW5xKyKEXiXYs/g36ofEJqJTPCU/yxQ9kDoWO2fjS9pAX6lSyFufB
-	/zXLgmq8qfJ5P+rZrDjV6SLuB9QaIbvFUAu5KtFiYVlw5i9X5ysStmTqIGnzPyE0PSN9502OBbn
-	U17EGrorfZy6wHNBZGSGAQd5fa5P6QvzkGz1gYaZ/lv2DcDj10si9D5i6uNriAvfqcum8Cq3FQo
-	VXtUSGccOE0e83dqztt2e0I4U+kS8S6Xhu3lhGY8pw/BW05vw9NCUnRqNq8Z2ttFlMBwdEFSkqY
-	W3LEO4OJBCaXVlEPozYPtMic0lJ6v0Ds7w5zbXH2ew7BFI36goN6w3RhHrF2twD2beUQ=
-X-Received: by 2002:a05:620a:2b91:b0:939:f978:c1aa with SMTP id af79cd13be357-93f57ecf03fmr403504785a.11.1792590087906;
-        Wed, 21 Oct 2026 06:41:27 -0700 (PDT)
-X-Received: by 2002:a05:620a:2b91:b0:939:f978:c1aa with SMTP id af79cd13be357-93f57ecf03fmr403501185a.11.1792590087408;
-        Wed, 21 Oct 2026 06:41:27 -0700 (PDT)
-Received: from redhat.com (c-73-183-53-213.hsd1.pa.comcast.net. [73.183.53.213])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f56d9a495sm259379385a.13.2026.10.21.06.41.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 06:41:26 -0700 (PDT)
-Date: Wed, 21 Oct 2026 09:41:24 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-	Alberto Ruiz <aruiz@redhat.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH v8 0/8] clk: add support for v1 / v2 clock rate
- negotiation and kunit tests
-Message-ID: <atjBBPgt72Pug6IY@redhat.com>
-References: <20260327-clk-scaling-v8-0-86cd0aba3c5f@redhat.com>
- <87wlrcsmv9.fsf@bootlin.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M38LlApZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3548E1F000C4;
+	Wed, 21 Oct 2026 13:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792590689;
+	bh=Xd64Zq1uLWmEwdyiZowwwuTEWgkyHj5f3A34g4v8y3Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=M38LlApZrpXFiacDZE9ySkfj5c6ajkf4gvB2Pa7UUmcfbUdqoBkwfm9zRduZknNMS
+	 MDKf1B8wmRO7vwOEnU+kygKL2NDifbyMGONaEmViNUn7/ga960ByN0Wy0Kq5K8C6Uw
+	 ribD/vGXNXFjZB1X2yzgkLQ2TaKHJ/vqKVEUA5ZE3bYwQ4ZpH4uIRCLVF/hYmNddQE
+	 t0yopF93FuxlxVCpLWJ+ZuDVmaLXRuJg0q9rpdOVEdw5f3OgTltq1NPpJHm0M2EavE
+	 kTdJGtHHv3sdOsGbXzbJ/sCcxY1MN3W68nPUGdp8RQfvNknWSekMzbMxVB/r7idlPE
+	 L2joG/asf4NKg==
+Date: Wed, 21 Oct 2026 15:51:21 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Fan Wu <wufan@kernel.org>
+Cc: manuelh@nvidia.com, David Howells <dhowells@redhat.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Andrew Halaney <andrew@amutable.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, linux-security-module@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 2/4] keys: add KEY_SPEC_IPE_KEYRING
+Message-ID: <20261021-kerbholz-kindheit-skurril-c3ebcdab0653@brauner>
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+ <20261019-b4-ipe-keyring-rfc-v1-2-156f0b93e843@nvidia.com>
+ <f35b0ff4-6479-4670-9883-77b3f918de20@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -121,32 +65,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87wlrcsmv9.fsf@bootlin.com>
-User-Agent: Mutt/2.4.2 (2026-08-30)
+In-Reply-To: <f35b0ff4-6479-4670-9883-77b3f918de20@kernel.org>
 
-On Tue, Oct 20, 2026 at 12:11:06PM +0200, Miquel Raynal wrote:
-> To be fairly honest, the discussion at LPC about how to handle this case
-> (and the transition) did not exist because time was flying but I do not
-> generally like the approaches were we introduce "the good" alternative
-> without enabling it by default. It just makes the transitions endless
-> and more painful for people who already suffer from a problem. I am
-> fine keeping the old behaviour available, but I would be in favour of
-> making the legacy way available with an explicity flag, rather than the
-> opposite. We may break users, yes, but otherwise we will have to support
-> the two calculations forever and nobody will ever notice the new
-> alternative.
-
-Honestly making the new behavior the default would also be my preference
-as well. I think it'd be good to get additional opinions about this.
-
-> That being said, it works! So:
+On Mon, Oct 19, 2026 at 04:24:29PM -0700, Fan Wu wrote:
 > 
-> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> 
+> On 10/19/2026 2:40 PM, Manuel Huber via B4 Relay wrote:
+> > From: Manuel Huber <manuelh@nvidia.com>
+> > 
+> > The IPE policy keyring is allocated unlinked, so userspace would
+> > otherwise have to scrape /proc/keys to name it.
+> > 
+> > Signed-off-by: Manuel Huber <manuelh@nvidia.com>
+> > ---
+> 
+> I'm ok with this id addition, but why can't Kata use keyctl to find the keyring by name? e.g. keyctl padd asymmetric "" %:.ipe < cert.der.
+> 
+> If the concern is that /proc/keys can be spoofed, that would mean other processes are already running while the keyring is still unsealed, which seems even less appropriate.
 
-Thanks!
-
-Brian
-
+Why do you object to a reliable and trivial way for userspace to
+interact with a security sensitive kernel keyring in a dedicated
+reserved namespace just for this purpose?
