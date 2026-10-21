@@ -1,49 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792543807;
-	b=f25h62Zk2R38iPeCawiZZaoqsMLNmGV8evwMNZBccARGD6jH2z2ISaY9CGD8Xn9ReM3K
-	 5GVtv733DaYqvtmjeDMDIUO6x9d85jBdz1LfGyR1ubL3amRqAaOqDMo/84q3pY4SIApgu
-	 QuybG2MKy87IhKHAF+NGT5GFmAT34LfoIv4DiOiyC60AdehaT+TALf49VtbAkqF8vnQXW
-	 tQkm1z57il81dsaqSX89lTQjMpt+euJ/QdjHFIpZVf57HqVUUK+M5coFVAOsnH00K2fGv
-	 QDNXPXSWlr+fo4qV6ZXterzT5R4u7BvNs4g7okme2GiFDnQAFPzXKPcjCVLKPF8LMfg==
+	t=1792545341;
+	b=b9SqrzWyjjd7+IBOtkEAdf/LSZcDKtIPqCZAqJkn6BtXzQ7/K0UV1RvEErOBBYZPaNqe
+	 eznRCbwOkVIp0zLwyKgujCXDr60ve74+gs59ZbpfMs58HT/9LQ2nUDySCMliUymX6h+wO
+	 nfby9iFUhkAZersmq+35ifF132Qhq7E3I/9sR5eTd26SbXzc73ZrwMmvulWJqoGEgaTm6
+	 DnF90L39RQMzJYqfYx+OrMxQgbtqo+6k7ANc1jBebi8JPqOBK7B+D9NUICgHKA5qnRq7V
+	 +DQ5H0mGlfBxQB2MVJ+vaxzM5fp7Kctf2xuw9vW3pWqPHHWO/KifCmUwZBTWe3Y0gkA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792543807;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=btzv8yxdLMuufig8GN8fOweJKrlu33F8NF1e7HqNh6Y=;
-	b=5nQj1D7Mlh19OXzZVpGTiwQfWOQH8STeLaMPOQDouHvsPrRNxc6tfTWZVUzc0ZuPE++9
-	 7Cf5PaJswoTDhQ0z2kVg2d0133zTZTWTp04NZTD3z40+1xsRaxijVi563Ub2IGFb7v82m
-	 3KXLrDbVIpFbY3oHnUK3iZrrddfQnXnxXeTKMAq0rfQX/M9qHSNW1jnirM1VzUAkjcnPw
-	 By/6CFIJ4/wAoR74LylAHLTe+IwFCtNdCvUkzwN1p3DkzAGxAClUX+inLxIIOzXIGs4OL
-	 zeu8N87vXq9BO+FoVp008P70g5WY9JPeX/0fESu1qTs0mtp/Buy5AZL6AdBGJsXI68A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792545341;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:Date:
+	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-ID:References:In-Reply-To:To:CC:X-Mailer:X-Originating-IP:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Virus-Version;
+	bh=+Rd+3kEkCsDWN0DvinxQu6xg72gBQ+FigAcOTspXtfI=;
+	b=VeRBqkzB7StJfggFqj9ow8tDxasSo8eNSd9tj/MziVpQ8YcW9Vmu2F0BkWB5lVojmICm
+	 K8LtJsakQUcEw9oo33fbSvHanuN+uV5KRnKwTcrD6oB4X7Sz4/Eau6MndfNJRkq4mvCzv
+	 TU7Qu3nwJWWKp3ATzNw7v1X8fG6+4JotQ16NUHzKMFb2Bb/H/XU+3w/6LfJ+KqsxYR78m
+	 HdD6tEyk3MhNPMTXQt7LhLHU185bGDYjHGPH0yaauOWXmNWfM5yVSY9fxGCFxRqnelcr7
+	 uePR5pXvqCnj7MRaihP8ZQJiJxQiNWMA8Jx058BJQ5CMv6kCDFhgOOMbwonauT6jymA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="lo/4Gd8t";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=YJ+jeKMS;
+	arc=none smtp.remote-ip=67.231.153.30
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0AC606A319;
-	Wed, 21 Oct 2026 00:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3AC3606A322;
+	Wed, 21 Oct 2026 01:15:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3AC3606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lo/4Gd8t
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 063971F000C9;
-	Wed, 21 Oct 2026 00:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792543807;
-	bh=btzv8yxdLMuufig8GN8fOweJKrlu33F8NF1e7HqNh6Y=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=lo/4Gd8t0xdKeFxm8pH2mSZnImTANzVJqqmkMenB9IpMPWKCC4AXLET2TsKHl518z
-	 FdeK0Ww0uc1FcyEEbapDCgX1ly2TdxHFkGrVIzQWQ0oEHde5w/CadH+H4lOwBgNsMH
-	 y3t3Ai5I7Ox9ot/Hp2DwzI6rubKIAiV52S92p7DI+ryVbCNW4Z634QS0rur81KFYAD
-	 x/zWMwa+OnBQiib9y9EtazxSeRyAheLakIDYaPD96sCaAZBJDineWoyRvVqwtnbW1r
-	 s31drer5t8JoDxK0We9IOMiWYeJvDZGHEQVc6aAR+gSgsewuLJ7tgaeDSGmabdI2EI
-	 WlTwmd+VxOY7Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F152C3809A0C;
-	Wed, 21 Oct 2026 00:50:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=YJ+jeKMS
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 69KNF4pr3405467;
+	Tue, 20 Oct 2026 18:15:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	pps82601-s2048-2026-q3; bh=+Rd+3kEkCsDWN0DvinxQu6xg72gBQ+FigAcOT
+	spXtfI=; b=YJ+jeKMSD21K3MZJTczf5YmZWWC1p9vRLgTDIuEsyHHeCddJOCLXk
+	QJgo0+djv3jHSpNkN8Wy7c184fYTa/cwrBnlz6v+gU36LV1ELWaDPTci6NFHqSyw
+	4H7MaGzVaM493bk8N3ucdB2KW/bQ/SyxipQ7myXakOCdyi5eCVHPp1OY0hlxSc9K
+	kv2CLVjQOUcWUv0TsoDl/MjvCOjUOkB6xy8AlWZAVH4mNXNJzy04cHAiUdUu2HNs
+	b2y4phmlmUlKhb07awjPpI/4Tr0mJPMsU/diwgctyAJKEMRtSltKD4bmYntVZ8gS
+	1r92zc3LXKTXbgfUIYP1oh0St88pttXfA==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by m0089730.ppops.net (PPS) with ESMTPS id 4hdw56rsqq-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Tue, 20 Oct 2026 18:15:17 -0700 (PDT)
+Received: from localhost (2620:10d:c085:208::f) by mail.thefacebook.com
+ (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Wed, 21 Oct
+ 2026 01:15:16 +0000
+From: Bobby Eshleman <bobbyeshleman@meta.com>
+Date: Tue, 20 Oct 2026 18:15:04 -0700
+Subject: [PATCH net-next v4 1/7] vsock: constify the transport in
+ vsock_for_each_connected_socket()
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,50 +70,104 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Time tc_edt from its first
- packet with data
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179254380580.297162.17752534638843075425.git-patchwork-notify@kernel.org>
-Date: Wed, 21 Oct 2026 00:50:05 +0000
-References: <20261019-selftests-bpf-tc-edt-serial-v2-1-41c3813e7916@gmail.com>
-In-Reply-To: 
- <20261019-selftests-bpf-tc-edt-serial-v2-1-41c3813e7916@gmail.com>
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, alexis.lothore@bootlin.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20261020-vsock-guest-ns-v4-1-047527cfccfc@meta.com>
+References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
+In-Reply-To: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
+To: Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller"
+	<davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>,
+        Simon Horman <horms@kernel.org>, Jonathan Corbet
+	<corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Stefan Hajnoczi
+	<stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang
+	<jasowangio@gmail.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+        Shuah Khan
+	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Donald Hunter
+	<donald.hunter@gmail.com>,
+        Eric Dumazet <edumazet@kernel.org>,
+        Eric Dumazet
+	<edumazet@kernel.org>
+CC: <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <sargun@sargun.me>, <jlinbox@meta.com>,
+        Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Bobby Eshleman
+	<bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
+X-Proofpoint-GUID: 9fqTzDTEQh1sPHL2-ALqesEAwd0XA8GN
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIxMDAwNCBTYWx0ZWRfX9oxiZxNHmwl4
+ SXW8jeOYVrzHlmk2RTOcwdNX4zfMP45XQsLPyRBvfNRETBbs8H1fbjoYvtuYggpuM1JpEVeMXAl
+ EAJCQA/VAGf81A5wHlFSYZw2UqkXPiiRYPyup1L+C3MDGLAAfChhs5QgHVSk/WkWKuEw+2mUfH8
+ /wkiFhozbQRbYrRQrZjISPRQ+XUvC3+V9SQUNKb0cXw5mCWsdg3uc/IkT5+4emuS7BmSXLU6jVd
+ 2VnQ+85nAv7fk1X5SXeIdbsnMO7V9pXPytIh381xliClSrqEBr+pc/fnLy5T3rJtkDgF7KDvaXn
+ fNze8GW6OOlBQwRhDiNfIKkPycSMgNkk9aYuaul/Gg1QDkb1W/c06AQSJaHHJysvUkrTzZqHEYI
+ o0+C3ro5eNVGEwjDoK5xPF00nE0uto1WG4Q5LPheJMc22rgYKRA2d41AA4HdqdKgtmsbRkzZGx/
+ j5U3rfcjQmcSfdwZgYA==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIxMDAwNCBTYWx0ZWRfX4lf85LZnjz89
+ nh6EkLV9vG/yrOPAM/haveJALy8ikmy3eo3AwJ6JfjoKwSHkoBwAAsCPEUyNqQUjiopUVAwkIOW
+ 0bgo4oaJ4hLi9/yPxJtCLtpnB4sRCGg=
+X-Authority-Analysis: v=2.4 cv=J+Q/fwnS c=1 sm=1 tr=0 ts=6ad81225 cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=855S8uPTkML1Oy45N9_h:22 a=20KFwNOVAAAA:8
+ a=VabnemYjAAAA:8 a=YkCHES2veT9o9JeyN-cA:9 a=QEXdDO2ut3YA:10
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-ORIG-GUID: 9fqTzDTEQh1sPHL2-ALqesEAwd0XA8GN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-20_04,2026-10-19_02,2025-10-01_01
 
-Hello:
+Allow const transports to be passed too. The function only compares the
+pointer against vsk->transport, which is itself const, and never writes
+through it.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+No functional change.
 
-On Mon, 19 Oct 2026 14:35:55 +0800 you wrote:
-> tc_edt sends 1MB over a TCP connection that a BPF program shapes with
-> EDT, and checks that the rate it measures is within 2% of the target
-> rate. The transfer takes about 200ms, so the margin is about 4ms.
-> 
-> The measurement starts before send_recv_data(), which first creates the
-> sender thread and accepts the connection. On a KASAN kernel, x86_64 VM
-> with 32 vCPUs, that takes 0.7ms when idle and up to 4.7ms with all
-> CPUs busy, while the BPF program spreads the data over 200.08ms in the
-> median. The test also fails without test_progs -j where everything runs
-> slower, e.g. on s390x and with ASAN in BPF CI.
-> 
-> [...]
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+---
+ include/net/af_vsock.h   | 2 +-
+ net/vmw_vsock/af_vsock.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - [bpf-next,v2] selftests/bpf: Time tc_edt from its first packet with data
-    https://git.kernel.org/bpf/bpf-next/c/7c3188f84b54
+diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+index 5549298c1ec6..370fcd3ddabc 100644
+--- a/include/net/af_vsock.h
++++ b/include/net/af_vsock.h
+@@ -233,7 +233,7 @@ bool vsock_check_source(const struct vsock_sock *vsk,
+ 			const struct vsock_transport *transport,
+ 			const struct sockaddr_vm *src);
+ void vsock_remove_sock(struct vsock_sock *vsk);
+-void vsock_for_each_connected_socket(struct vsock_transport *transport,
++void vsock_for_each_connected_socket(const struct vsock_transport *transport,
+ 				     void (*fn)(struct sock *sk));
+ int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk);
+ bool vsock_find_cid(unsigned int cid);
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index 483af15a5109..5a0ba068bfd1 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -480,7 +480,7 @@ void vsock_remove_sock(struct vsock_sock *vsk)
+ }
+ EXPORT_SYMBOL_GPL(vsock_remove_sock);
+ 
+-void vsock_for_each_connected_socket(struct vsock_transport *transport,
++void vsock_for_each_connected_socket(const struct vsock_transport *transport,
+ 				     void (*fn)(struct sock *sk))
+ {
+ 	int i;
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0-Meta
 
