@@ -1,79 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792711695;
-	b=Yz9LnGyDN616CD4xjSdSdMOjPR8a4tZ3z1x5pLIRWJghI/G8v2V4Vz9ayD4bnkcS+e19
-	 10ujbECIr/Uss9gROU1sc4qwIt1jimOTQbTbeoO3JIHk1lxoKUVM9LbmNgSW0ioHpP+Hs
-	 0Z+WDGgS5Xp9O+9bqppSXWAr1Q23DeoHx030CIQzYiBQP5oOko4DflcuYtWX5QEW73lMc
-	 vukO/czU3yUcbVB1M1bQBgYhHrFbVbJQ+ikIj8+3lWR0mXGRh0XO4tl1Pq6Cy8K9BoUN/
-	 2WivLDacbtWmHqdLJblS/TLwKYeUb6bItDkQ3ztd6oj54f5XaGa7xr2A+HQ3OJDEwWA==
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1792711693;
+	b=pQGOilMCkvZUer9RmNODfGpCOFVoUcHXq36R+bLfjNu45aAqXveRYSO6CBJD6Ldt8vfL
+	 i8LcKKfGBRlvjeNXIio9l7DUubgT37QVhI4osV5T1PVW4MyHLYMmTKF32Y2BpkZYJHfgx
+	 v6pU1vBPbcwSyer9dtEXMCRVqn33HjkavWgIEqPvCTS34GSmG0IsBbTPVGfaFA0kdj5SR
+	 Z82h9AAShQxAAll3/bVG8otbDiJSAOMnbgeT65u/w7oWrZHS+xOEtujQMq1/NKIxwfOIZ
+	 1h4IOvXpKfVVIm9neNuZ8gcIqA5liklk4S2QxXYY958tVlW5I+fc33eaKh0dwocHkaQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792711695;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792711693;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=s9Em7JiSqBxr9vQHe4Z5P+Gdy/l3yPJpaTZ+MCrLk0M=;
-	b=lxiHavzLw04QrWoz88dsCmrJzW/yr7KxWHepitVpDNLHMnqN0xKTafSvDkv1kKy+juv3
-	 dekP6uQquD3HoBNsUSHhKfZi11d9U86QryvpaeF0Daat0Udazf5lEtPsrkCdqf1Q+2E3c
-	 gZOPfvhwPRzeFF+qMoMYIEv49IQcb0nm+OOAUPHBu+3dO1M7xX+tikC9pXwDOUlstWeuJ
-	 EAUMrNl0S+XKra7ud47Z6PiJrUmJaRelKl8IOxreMPChBs6SfG7klWZOIqHEUVBW10pOQ
-	 h2lyH20NeGRQHudAuit8i+zpPc6AZELN5vAHqbhDyigY1acW3nXaOB2Urld0pZeD/oA==
+	bh=/ahL4TP/omD5Vlmg3sgYIZkznIxNyj2E4z7Lb7O0L7o=;
+	b=et/2zWN5dco52nz+HLa4I7Ivoq1urj1eTev3hZMqh6CXyNpawDZfjS1lNysMhULCRNnG
+	 QJ/3aHBkTB6s8nyUlUeIUjXkOGmJb++daqkBnCsPXE8cZCE51+etox6L7FYuA7a1cIYyY
+	 FL7Kv/+nly8jUTY7h2YTgY5m51ynS4pXIuHiNlIjozU4kxRNAcCwJiIaweD4EESYWlV07
+	 3Kfa16FT+OMrWosxjJUkk+cIzQoDwnkD6A/rqujSt5GfE5I0HonfatGGFr07qtwSDlEf+
+	 ztkE+k3aaBG3bvDnlE+OGpimKzz4JOKvCjMZqBcD2qwTKn97fe8LeXESP1cbp+0HO+w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QfDXGiwI;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=akznfBkv;
+	arc=fail smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737AF606F48A;
-	Thu, 22 Oct 2026 23:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD07606E792;
+	Thu, 22 Oct 2026 23:28:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QfDXGiwI
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=akznfBkv
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792711695;
-	b=z4HGCd754ubFjhB2SXMctX5pKmanQQmL5V3liJkpuHfSUrdaHzvF6lwgHYK1+CAI9Bap
-	 utLAo7kXRvQ7W8uwUP3q+fL2+JG6OsN2XZOxrcSAlr5MTaAaqBxKN0hEQmFiuCIcP7S55
-	 JxVlv/GojqOitW0legOfrNb78RV4hC2Ze+oULSz02tAoHLePdiNtTkDti3HTxtsKFAsjG
-	 v88V/3fl7vF2tIEMv9hsr5yZxn/xSZdTjqzTAqBQk7mJgJwBrQR/cGu5s/Udjt/DWD8F/
-	 lBFqDob+YuCQuSJ9p5Nu0C40loaCzlnI0qBNtQuhn604MfYSPS0OCigMc3jIhJ+2i+A==
+	t=1792711693;
+	b=aQ/2lHoCNowyTs4+qDuz50kZmQGsrjj85kFi0K39nfswxuDu3ocflxFzurouJJMeeScw
+	 uzAkxkggNPgKMCDs+OhsYHbxJv8IyQxb3tjNfujJRoujYF0DRuwJIkDcNriOCxdPGYtRt
+	 C7QFflyMVdxOKpTd4FSbiGWeMd2fBMx3Pjp/8zjrR8rzX+mAWI04BE7ROnf9ob3ZUzXDa
+	 EzHltIu4c+4XdOgHIvQFKeY5oQprcwqGiYmMUR+7e2UOkBerZNv1dx9kEMO/Uo+dU7o2B
+	 zN5vp72Jamq0Mpp0IgTvPg54n4qDtvd3zjhVoatAxb81f8uKuQ64y877zp1ZuufH81w==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792711695;
+	c=relaxed/relaxed; t=1792711693;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=s9Em7JiSqBxr9vQHe4Z5P+Gdy/l3yPJpaTZ+MCrLk0M=;
-	b=UIRYEe7oAY1Dulf46HPRvi8wPhv/1cS9w7ujIiaYmCY3xsEZaL+zJVa9pJX4FYth0g0K
-	 y8GsT4/78OPHnfP6JiX0UPFljVOqNcDvJKIQ0p2dc0SlFnrMBnbx23S4l5o36KNdNH50C
-	 ISnAm3JdEa5s4VRcr14qax9/yNXyxWBEUpgIrWlPWmlqz+SptLqackumitzqC8AIz+zE+
-	 qQNddftk7y8E9DCLkjJuX/cQGwe9vdTZpBykftQJ8LmVaX2kQPxK5Jkuyy8K7gMK6aF/n
-	 9NuXvLHGBEHB/T8r6Q5V1FfkFG6NK6+XXT4aTlKWpPrSQ+CVptGnGcxjErnUNtGxSlw==
+	bh=/ahL4TP/omD5Vlmg3sgYIZkznIxNyj2E4z7Lb7O0L7o=;
+	b=WENU9fIDjSZu5lPd+8BlQsV4LXc3b7uaebcrUKHNVz1Pwb0wsReHa4wvlAclYeW/6H8A
+	 WK8hrJUVUOT0k1PVbgp41hSMqKLm0No9a7JkdKHax7NwBM9GUb/IvWrbEZ85HIjs9/xu6
+	 6GuGW+N9B/JqPU06juQ06aTlPCYbNKr+jNdLRAYVQHJxOFXC1F+nPeUJr4mrew7/kKJFy
+	 r8oKD/BCkTj+iBCLM78E3xb7Pe1za3HrOBY+BoJchDx8l7cEFauZuk8vpfLSBzGW4/UjI
+	 PqSH6U1QRp0HKshHlOBQKHTx+mAqrpWLM5Zpttt1c7TFP6Wn2kSpeGn1IXqNltKUUSA==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6645F1F011AE;
-	Thu, 22 Oct 2026 23:28:07 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8FF561F01180;
+	Thu, 22 Oct 2026 23:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792711695;
-	bh=s9Em7JiSqBxr9vQHe4Z5P+Gdy/l3yPJpaTZ+MCrLk0M=;
+	s=k20260515; t=1792711693;
+	bh=/ahL4TP/omD5Vlmg3sgYIZkznIxNyj2E4z7Lb7O0L7o=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=QfDXGiwIL2vXE1Qz6N7peoRB395dEJRZAdji98jnW3XViH0klGaA5LbehXvqrB2Yw
-	 ER+SRAIhfZh14ccpKSg9nzIqY88wFq92HF5f8PUPNnUTIYQqoSJ6MAA/FmCy/FxGwm
-	 j2Z0DrX9cLS40BjCYcmGiNfoqn+bt29BjN1g1c3Ogj/wnFRrK0AZrnQ4HIJJf7e3xu
-	 mFRnrSKgdAFLOM78vhDpr9eHumZk7WRzRNhPcRF7wYADGFL1yarIDX4Oahf2yW0fw6
-	 hCyQPv5luyZ6JHGDnE9fK7ITHLQeszbtlrS8eeQnLCGpm0KufmpbBgpVc1PLzF7xVV
-	 R+bPFO1WNkkHg==
+	b=akznfBkvda1EdCIgc0eTx9SRFSTr4nATaEn74QtSOTL86CsikVlWtlBIQ+Bn9L4Om
+	 Drma/nw1sXBRwyXpVLgOPmaxK29E3ZaHlN3TYkz3wYT4d3nWsl7Pm7e91Os/d9ZlMl
+	 /bu5e+hCkEjrFgA8ViyBvVwMfWBmNOvsXNgtskfZ9kmlh10uCjuPK9J39Z9i3seTyc
+	 JLbh2aW/boGfbP7HWRy+7rJsFcpuLwYBGRv9KTDI/N9utZ+aERyNXEBaOjhZXpyS6r
+	 t3fldebW3ujBUfqVScQCQH1pwogeo6N0M9kqsKhXaVk8wmFrD1kK/sqyQIKUJP2put
+	 NUb1rZQbHzmjA==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 99306420B4;
+	by lkml.kernel.org (Postfix) with ESMTP id BE966420C0;
 	Thu, 22 Oct 2026 23:27:49 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Thu, 22 Oct 2026 16:28:00 -0700
-Subject: [PATCH RFC v2 28/50] samples/kvm: Make provider files independent
- of a root pool
+Date: Thu, 22 Oct 2026 16:28:03 -0700
+Subject: [PATCH RFC v2 31/50] KVM: guest_memfd: Support getting PFNs for
+ stage 2 from providers
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261022-gmem-alternative-providers-v2-28-5dd1dc6c660a@google.com>
+Message-Id: <20261022-gmem-alternative-providers-v2-31-5dd1dc6c660a@google.com>
 References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
 In-Reply-To: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
 To: Alex Williamson <alex@shazbot.org>, Alexander Graf <graf@amazon.de>, 
@@ -135,11 +135,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792711665; l=14373;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792711665; l=6020;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=XWrssdqecvYTeKbgOR3E/4j1UfbxSbeVXECooite7yU=;
- b=i/Iy61ZCwiUC4kTb/Nd2/YuidtxPfYUDIcAa7k0EK0jeHEpNScT/4csBpKeRZOHryQhI9hDAR
- ab5BeDMRwsoDUJytRerHVs77xeigY7Ns51BLKpnAXvyE0vyMYtf0rBu
+ bh=jEkr/nY1nFVQLtsltdN4AJnwp36Iu4m7TarLTGyPZVc=;
+ b=vAkluFarmlZI1TwtSGhLOd+jHlS0DLSrWj3cCriODu55Bs8Tz1V4Ot2NifETUEWZCMUMWV2GD
+ CtaY4a2NaZCCpOvCQwRHzJ6wEKfOMC4mO8bqs82RiiNQXQnqSLT2A0P
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -150,477 +150,171 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Remove the root pool concept (mps_root) and allow each provider file to
-directly allocate its own contiguous memory range from alloc_contig_pages.
+Add .get_pfn callback to struct guest_memfd_provider_operations to
+support physical memory providers (e.g. devices, DAX, or pre-allocated
+ranges) that supply PFNs directly without folio allocation or page cache
+insertion.
 
-Because children are effectively independent and no longer share or
-transfer ownership of memory regions, managing a global root pool is
-unnecessary and adds artificial restrictions.
+Define GUEST_MEMFD_FLAG_PFN_MODE in uapi/linux/kvm.h and define
+kvm_gmem_is_pfn_mode() to check for this flag in gi->flags.
+
+In __kvm_gmem_get_pfn(), query .get_pfn() directly when in PFN mode
+and return NULL on success (instead of a struct folio *).
+
+Note that .alloc_folio is still required by kvm_gmem_attach_resource() and
+GUEST_MEMFD_FLAG_PFN_MODE is not yet enabled for userspace.  Subsequent
+patches will update the rest of guest_memfd (e.g. mmap, fallocate,
+truncation, and attributes) to support PFN mode before enabling the flag
+and allowing external PFN-backed providers to be attached.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- samples/kvm/mem_provider_sample.c | 264 ++++++++++----------------------------
- samples/kvm/mem_provider_sample.h |  37 ++----
- 2 files changed, 77 insertions(+), 224 deletions(-)
+ include/linux/guest_memfd.h |  8 ++++++++
+ include/uapi/linux/kvm.h    |  1 +
+ virt/kvm/guest_memfd.c      | 42 +++++++++++++++++++++++++++++++++++++-----
+ 3 files changed, 46 insertions(+), 5 deletions(-)
 
-diff --git a/samples/kvm/mem_provider_sample.c b/samples/kvm/mem_provider_sample.c
-index 294b2d65fc29d..a8d40f3c631ed 100644
---- a/samples/kvm/mem_provider_sample.c
-+++ b/samples/kvm/mem_provider_sample.c
-@@ -2,12 +2,12 @@
- /*
-  * mem_provider_sample - a sample memory provider.
+diff --git a/include/linux/guest_memfd.h b/include/linux/guest_memfd.h
+index f3e6077c39ac3..10c48f41a6d7e 100644
+--- a/include/linux/guest_memfd.h
++++ b/include/linux/guest_memfd.h
+@@ -18,6 +18,12 @@ struct mempolicy;
+  *               Must return a pointer to a struct folio on success, or an
+  *               ERR_PTR() error code on failure. Must never return NULL.
+  * @invalidate_folio: Notify provider that a folio has been invalidated.
++ * @get_pfn: Obtain a PFN for a given index. The provider must ensure backing
++ *           memory is present and is responsible for its contents, such as
++ *           zeroing if necessary. On success, return 0 with the physical frame
++ *           number in @pfn and, if @max_order is non-NULL, the maximum page
++ *           order of contiguous backing memory containing @pfn. Returns a
++ *           negative error code on failure.
   *
-- * The module owns a region of physical memory and lends it through child
-- * files.
-+ * The module provides physical memory through provider files.
-  *
-- * The control device /dev/mem_provider_sample creates child files.
-- * NEW_CHILD carves part of the region into a child file. A page can also
-- * be taken away. See mem_provider_sample.h.
-+ * The control device /dev/mem_provider_sample creates provider files.
-+ * Each file allocates its own contiguous memory from alloc_contig_pages().
-+ * Pages can be dynamically marked present or absent.
-+ * See mem_provider_sample.h.
-  *
-  * Confidential VMs are not supported.
+  * Used by filesystems and device drivers that provide memory for guest_memfd.
   */
-@@ -27,43 +27,18 @@
- #include "mem_provider_sample.h"
- 
- /*
-- * One child file.
-- *
-- * Lock order: mps_root.lock, then mps_info.lock.
-+ * One provider file.
-  */
- struct mps_info {
- 	struct mutex lock;		/* the bitmaps */
- 
- 	unsigned long base_pfn;
- 	unsigned long npages;
--	struct page *cma_pages;		/* from alloc_contig_pages(), or NULL */
-+	struct page *cma_pages;		/* from alloc_contig_pages() */
- 
- 	unsigned long *absent;		/* taken away by CTL_SET_PRESENT */
--
--	/*
--	 * A child of the root: its first page in the root, and whether it
--	 * was carved out from the root (is_child).
--	 */
--	unsigned long root_index;
--	bool is_child;
--	struct list_head root_link;	/* mps_root.children, mps_root.lock */
+@@ -27,6 +33,8 @@ struct guest_memfd_provider_operations {
+ 	struct folio *(*alloc_folio)(void *provider, pgoff_t index,
+ 				     struct mempolicy *mpol);
+ 	void (*invalidate_folio)(void *provider, struct folio *folio);
++	int (*get_pfn)(void *provider, pgoff_t index, unsigned long *pfn,
++		       int *max_order);
  };
  
--/*
-- * The root region, owned by the control device.  Changes of ownership run
-- * under @lock, which is taken before any child's lock.
-- */
--static struct mps_root {
--	struct mutex lock;		/* everything below */
--	unsigned long base_pfn;
--	unsigned long npages;
--	struct page *cma_pages;
--	unsigned long *allocated;	/* pages allocated to a child */
--	struct list_head children;
--} mps_root;
--
--/* ---- Child file --------------------------------------------------------- */
--
- /* Byte range [offset, offset + len) of @info as page indices. */
- static int mps_range(struct mps_info *info, u64 offset, u64 len,
- 		     unsigned long *start, unsigned long *end)
-@@ -93,8 +68,7 @@ static long mps_get_stats(struct mps_info *info, void __user *uarg)
- 	struct mps_stats st = {};
+ #endif /* _LINUX_GUEST_MEMFD_H */
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index f4108bf7e3192..6798056f50e32 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -1675,6 +1675,7 @@ struct kvm_memory_attributes2 {
+ #define GUEST_MEMFD_FLAG_MMAP		(1ULL << 0)
+ #define GUEST_MEMFD_FLAG_INIT_SHARED	(1ULL << 1)
+ #define GUEST_MEMFD_FLAG_USE_RESOURCE	(1ULL << 2)
++#define GUEST_MEMFD_FLAG_PFN_MODE	(1ULL << 3)
  
- 	mutex_lock(&info->lock);
--	st.region_offset = (u64)info->root_index << PAGE_SHIFT;
--	st.region_len = (u64)info->npages << PAGE_SHIFT;
-+	st.size = (u64)info->npages << PAGE_SHIFT;
- 	st.absent_pages = bitmap_weight(info->absent, info->npages);
- 	mutex_unlock(&info->lock);
- 
-@@ -102,9 +76,8 @@ static long mps_get_stats(struct mps_info *info, void __user *uarg)
+ struct kvm_create_guest_memfd {
+ 	__u64 size;
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index 84877beed6701..3d89bc76f3867 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -54,6 +54,11 @@ static __always_inline struct gmem_inode *GMEM_I(struct inode *inode)
+ 	return container_of(inode, struct gmem_inode, vfs_inode);
  }
  
- /*
-- * A child fd is read-only to its holder: only GET_STATS.  The owner changes a
-- * child's pages through the control device (MPS_CTL_SET_PRESENT), so a VMM
-- * that holds a child cannot.
-+ * A provider fd is read-only to its holder: only GET_STATS. The owner changes
-+ * a file's pages through the control device (MPS_CTL_SET_PRESENT).
-  */
- static long mps_file_ioctl(struct file *file, unsigned int cmd,
- 			   unsigned long arg)
-@@ -117,18 +90,10 @@ static long mps_file_ioctl(struct file *file, unsigned int cmd,
- 	return -ENOTTY;
- }
- 
--/* Every consumer has detached: each one holds a reference to the file. */
- static int mps_file_release(struct inode *inode, struct file *file)
- {
- 	struct mps_info *info = file->private_data;
- 
--	/* A child gives the pages it has back to the root. */
--	if (info->is_child) {
--		mutex_lock(&mps_root.lock);
--		list_del(&info->root_link);
--		bitmap_clear(mps_root.allocated, info->root_index, info->npages);
--		mutex_unlock(&mps_root.lock);
--	}
- 	if (info->cma_pages)
- 		free_contig_range(info->base_pfn, info->npages);
- 	bitmap_free(info->absent);
-@@ -143,124 +108,13 @@ static const struct file_operations mps_file_fops = {
- 	.compat_ioctl	= compat_ptr_ioctl,
- };
- 
--/*
-- * Make a provider file over [base_pfn, base_pfn + npages).  The fd is
-- * reserved but not installed, so that the caller can finish setting up
-- * @info before another thread can reach it.
-- */
--static int mps_new_file(unsigned long base_pfn, unsigned long npages,
--			u32 flags, struct mps_info **infop,
--			 struct file **filep)
--{
--	struct mps_info *info;
--	struct file *file;
--	int fd, ret;
--
--	info = kzalloc_obj(*info);
--	if (!info)
--		return -ENOMEM;
--	info->base_pfn = base_pfn;
--	info->npages = npages;
--	info->absent = bitmap_zalloc(npages, GFP_KERNEL);
--	if (!info->absent) {
--		ret = -ENOMEM;
--		goto err_free;
--	}
--	mutex_init(&info->lock);
--	INIT_LIST_HEAD(&info->root_link);
--
--	fd = get_unused_fd_flags(O_CLOEXEC);
--	if (fd < 0) {
--		ret = fd;
--		goto err_free;
--	}
--	file = anon_inode_getfile("[mem-provider-sample]", &mps_file_fops,
--				  info, O_RDWR);
--	if (IS_ERR(file)) {
--		put_unused_fd(fd);
--		ret = PTR_ERR(file);
--		goto err_free;
--	}
--	*infop = info;
--	*filep = file;
--	return fd;
--
--err_free:
--	bitmap_free(info->absent);
--	kfree(info);
--	return ret;
--}
--
--static struct page *mps_alloc_region(unsigned long npages)
--{
--	struct page *pages;
--
--	pages = alloc_contig_pages(npages, GFP_KERNEL | __GFP_ZERO,
--				   numa_node_id(), NULL);
--	return pages;
--}
--
--/* ---- Root and children -------------------------------------------------- */
--
--/* Create the root on the first NEW_CHILD of @size. */
--static int mps_root_ensure(u64 size)
--{
--	struct page *pages;
--	unsigned long npages;
--
--	lockdep_assert_held(&mps_root.lock);
--	if (mps_root.npages)
--		return 0;
--
--	if (!size || !PAGE_ALIGNED(size))
--		return -EINVAL;
--	npages = size >> PAGE_SHIFT;
--	pages = mps_alloc_region(npages);
--	if (!pages)
--		return -ENOMEM;
--	mps_root.base_pfn = page_to_pfn(pages);
--	mps_root.allocated = bitmap_zalloc(npages, GFP_KERNEL);
--	if (!mps_root.allocated) {
--		free_contig_range(page_to_pfn(pages), npages);
--		return -ENOMEM;
--	}
--	mps_root.cma_pages = pages;
--	mps_root.npages = npages;
--	return 0;
--}
--
--static void mps_root_teardown(void)
--{
--	if (!mps_root.npages)
--		return;
--	WARN_ON(!list_empty(&mps_root.children));
--	if (mps_root.cma_pages)
--		free_contig_range(mps_root.base_pfn, mps_root.npages);
--	bitmap_free(mps_root.allocated);
--}
--
--/* A page-aligned byte range of the root as page indices [first, last). */
--static int mps_root_range(u64 offset, u64 length, unsigned long *first,
--			  unsigned long *last)
--{
--	if (!length || !PAGE_ALIGNED(offset) || !PAGE_ALIGNED(length))
--		return -EINVAL;
--	*first = offset >> PAGE_SHIFT;
--	*last = *first + (length >> PAGE_SHIFT);
--	if (*last <= *first || *last > mps_root.npages)
--		return -EINVAL;
--	return 0;
--}
--
--/* Return a referenced child file made by NEW_CHILD. */
--static struct file *mps_get_child(int fd, struct mps_info **infop)
-+static struct file *mps_get_file(int fd, struct mps_info **infop)
- {
- 	struct file *file = fget(fd);
- 
- 	if (!file)
- 		return ERR_PTR(-EBADF);
--	if (file->f_op != &mps_file_fops ||
--	    !((struct mps_info *)file->private_data)->is_child) {
-+	if (file->f_op != &mps_file_fops) {
- 		fput(file);
- 		return ERR_PTR(-EINVAL);
- 	}
-@@ -268,55 +122,76 @@ static struct file *mps_get_child(int fd, struct mps_info **infop)
- 	return file;
- }
- 
--static long mps_ctl_new_child(void __user *uarg)
-+static long mps_ctl_new_file(void __user *uarg)
- {
--	struct mps_new_child nc;
--	unsigned long first, last;
-+	struct mps_new_file nf;
- 	struct mps_info *info;
-+	struct page *pages;
- 	struct file *file;
-+	unsigned long npages;
- 	int fd, ret;
- 
--	if (copy_from_user(&nc, uarg, sizeof(nc)))
-+	if (copy_from_user(&nf, uarg, sizeof(nf)))
- 		return -EFAULT;
--	if (nc.flags || nc.pad)
-+	if (nf.flags || nf.pad)
-+		return -EINVAL;
-+	if (!nf.size || !PAGE_ALIGNED(nf.size))
-+		return -EINVAL;
++static bool kvm_gmem_is_pfn_mode(struct gmem_inode *gi)
++{
++	return gi->flags & GUEST_MEMFD_FLAG_PFN_MODE;
++}
 +
-+	npages = nf.size >> PAGE_SHIFT;
-+	if (npages > KMALLOC_MAX_SIZE * BITS_PER_BYTE)
- 		return -EINVAL;
+ static void *gmem_native_attach(struct inode *gmem_inode,
+ 				struct file *resource_file)
+ {
+@@ -124,6 +129,20 @@ static struct folio *gmem_provider_alloc_folio(struct gmem_inode *gi,
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
  
--	mutex_lock(&mps_root.lock);
--	ret = mps_root_ensure(nc.offset + nc.len);
--	if (ret)
--		goto out_unlock;
--	ret = mps_root_range(nc.offset, nc.len, &first, &last);
--	if (ret)
--		goto out_unlock;
--
--	if (find_next_bit(mps_root.allocated, last, first) < last) {
--		ret = -EBUSY;
--		goto out_unlock;
-+	info = kzalloc_obj(*info);
-+	if (!info)
-+		return -ENOMEM;
++static int gmem_provider_get_pfn(struct gmem_inode *gi, pgoff_t index,
++				 kvm_pfn_t *pfn, int *max_order)
++{
++	unsigned long raw_pfn;
++	int r;
 +
-+	info->absent = bitmap_zalloc(npages, GFP_KERNEL);
-+	if (!info->absent) {
-+		ret = -ENOMEM;
-+		goto err_free_info;
++	r = gi->provider_ops->get_pfn(gi->provider, index, &raw_pfn, max_order);
++	if (r)
++		return r;
++
++	*pfn = raw_pfn;
++	return 0;
++}
++
+ static void gmem_provider_invalidate_folio(struct gmem_inode *gi,
+ 					   struct folio *folio)
+ {
+@@ -1270,15 +1289,17 @@ void kvm_gmem_unbind(struct kvm_memory_slot *slot)
+ 	filemap_invalidate_unlock(file->f_mapping);
+ }
+ 
+-/* Returns a locked folio on success.  */
++/* On success, return a locked folio in folio mode and NULL in PFN mode. */
+ static struct folio *__kvm_gmem_get_pfn(struct file *file,
+ 					struct kvm_memory_slot *slot,
+ 					pgoff_t index, kvm_pfn_t *pfn,
+ 					int *max_order)
+ {
+ 	struct file *slot_file = READ_ONCE(slot->gmem.file);
++	struct gmem_inode *gi = GMEM_I(file_inode(file));
+ 	struct gmem_file *f = file->private_data;
+ 	struct folio *folio;
++	int r;
+ 
+ 	if (file != slot_file) {
+ 		WARN_ON_ONCE(slot_file);
+@@ -1290,6 +1311,13 @@ static struct folio *__kvm_gmem_get_pfn(struct file *file,
+ 		return ERR_PTR(-EIO);
  	}
  
--	fd = mps_new_file(mps_root.base_pfn + first, last - first, nc.flags,
--			  &info, &file);
-+	pages = alloc_contig_pages(npages, GFP_KERNEL | __GFP_ZERO,
-+				   numa_node_id(), NULL);
-+	if (!pages) {
-+		ret = -ENOMEM;
-+		goto err_free_absent;
++	if (kvm_gmem_is_pfn_mode(gi)) {
++		r = gmem_provider_get_pfn(gi, index, pfn, max_order);
++		if (r)
++			return ERR_PTR(r);
++		return NULL;
 +	}
 +
-+	info->cma_pages = pages;
-+	info->base_pfn = page_to_pfn(pages);
-+	info->npages = npages;
-+	mutex_init(&info->lock);
-+
-+	fd = get_unused_fd_flags(O_CLOEXEC);
- 	if (fd < 0) {
- 		ret = fd;
--		goto out_unlock;
-+		goto err_free_pages;
+ 	folio = kvm_gmem_get_folio(file_inode(file), index);
+ 	if (IS_ERR(folio))
+ 		return folio;
+@@ -1338,8 +1366,10 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 		r = kvm_arch_gmem_make_private(kvm, gfn, *pfn,
+ 					       (kvm_pfn_t)1 << *max_order);
+ 
+-	folio_unlock(folio);
+-	folio_put(folio);
++	if (folio) {
++		folio_unlock(folio);
++		folio_put(folio);
 +	}
-+
-+	file = anon_inode_getfile("[mem-provider-sample]", &mps_file_fops,
-+				  info, O_RDWR);
-+	if (IS_ERR(file)) {
-+		put_unused_fd(fd);
-+		ret = PTR_ERR(file);
-+		goto err_free_pages;
+ 
+ out:
+ 	filemap_invalidate_unlock_shared(file_inode(file)->i_mapping);
+@@ -1366,7 +1396,8 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 		goto out_unlock;
  	}
  
--	bitmap_set(mps_root.allocated, first, last - first);
--	info->is_child = true;
--	info->root_index = first;
--	list_add(&info->root_link, &mps_root.children);
--	mutex_unlock(&mps_root.lock);
- 	fd_install(fd, file);
- 	return fd;
+-	folio_unlock(folio);
++	if (folio)
++		folio_unlock(folio);
  
--out_unlock:
--	mutex_unlock(&mps_root.lock);
-+err_free_pages:
-+	free_contig_range(page_to_pfn(pages), npages);
-+err_free_absent:
-+	bitmap_free(info->absent);
-+err_free_info:
-+	kfree(info);
+ 	if (!kvm_is_private_gfn(kvm, gfn)) {
+ 		ret = -EINVAL;
+@@ -1376,7 +1407,8 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 	ret = post_populate(kvm, gfn, pfn, src_page, opaque);
+ 
+ out_put_folio:
+-	folio_put(folio);
++	if (folio)
++		folio_put(folio);
+ out_unlock:
+ 	filemap_invalidate_unlock(file->f_mapping);
  	return ret;
- }
- 
- /*
-- * CTL_SET_PRESENT changes a child's pages, by the owner on the control device.
-- * A VMM that holds the child fd cannot, so it cannot undo them.
-+ * CTL_SET_PRESENT changes a file's pages, by the owner on the control device.
-  */
- static long mps_ctl_set_present(void __user *uarg)
- {
-@@ -330,7 +205,7 @@ static long mps_ctl_set_present(void __user *uarg)
- 		return -EFAULT;
- 	if (cr.value > 1)
- 		return -EINVAL;
--	file = mps_get_child(cr.fd, &info);
-+	file = mps_get_file(cr.fd, &info);
- 	if (IS_ERR(file))
- 		return PTR_ERR(file);
- 	ret = mps_range(info, cr.offset, cr.len, &start, &end);
-@@ -346,8 +221,8 @@ static long mps_ctl_ioctl(struct file *file, unsigned int cmd,
- 	void __user *uarg = (void __user *)arg;
- 
- 	switch (cmd) {
--	case MPS_NEW_CHILD:
--		return mps_ctl_new_child(uarg);
-+	case MPS_NEW_FILE:
-+		return mps_ctl_new_file(uarg);
- 	case MPS_CTL_SET_PRESENT:
- 		return mps_ctl_set_present(uarg);
- 	default:
-@@ -369,22 +244,13 @@ static struct miscdevice mps_dev = {
- 
- static int __init mps_init(void)
- {
--	int ret;
--
--	mutex_init(&mps_root.lock);
--	INIT_LIST_HEAD(&mps_root.children);
--
--	ret = misc_register(&mps_dev);
--	if (ret)
--		return ret;
--	return 0;
-+	return misc_register(&mps_dev);
- }
- module_init(mps_init);
- 
- static void __exit mps_exit(void)
- {
- 	misc_deregister(&mps_dev);
--	mps_root_teardown();
- }
- module_exit(mps_exit);
- 
-diff --git a/samples/kvm/mem_provider_sample.h b/samples/kvm/mem_provider_sample.h
-index b520b49e56f60..c4cb10b4aadeb 100644
---- a/samples/kvm/mem_provider_sample.h
-+++ b/samples/kvm/mem_provider_sample.h
-@@ -8,41 +8,28 @@
- /*
-  * A sample memory provider.
-  *
-- * Every fd that this module returns is a child file. Pass it to
-+ * Every fd that this module returns is a provider file. Pass it to
-  * KVM_CREATE_GUEST_MEMFD.
-  */
- 
- #define MPS_IOCTL_BASE		'P'
- 
- /*
-- * ---- A tree of owners --------------------------------------------------
-- *
-- * The control device owns one region, the root.  NEW_CHILD carves part of
-- * it into a new provider fd for one VM.
-- *
-- * The owner changes a child's pages through the control device
-- * (CTL_SET_PRESENT).  A child fd is read-only to its holder: a VMM can
-- * only GET_STATS, never change the memory.
-- */
--
--/*
-- * ioctl on /dev/mem_provider_sample: carve [@offset, @offset + @len) of the
-- * root into a new child fd. Returns the child fd.
-+ * ioctl on /dev/mem_provider_sample: create a new provider fd of @size.
-+ * Returns the provider fd.
-  */
--struct mps_new_child {
-+struct mps_new_file {
- 	__u32 flags;	/* Reserved, must be 0 */
- 	__u32 pad;
--	__u64 offset;	/* bytes into the root, page aligned */
--	__u64 len;	/* bytes, page aligned */
-+	__u64 size;	/* bytes, page aligned */
- };
- 
--#define MPS_NEW_CHILD \
--	_IOW(MPS_IOCTL_BASE, 5, struct mps_new_child)
-+#define MPS_NEW_FILE \
-+	_IOW(MPS_IOCTL_BASE, 5, struct mps_new_file)
- 
--/* ioctl on a child fd: read the child's state, for tests. */
-+/* ioctl on a provider fd: read the file's state, for tests. */
- struct mps_stats {
--	__u64 region_offset;	/* the child's range in the root */
--	__u64 region_len;
-+	__u64 size;
- 	__u64 absent_pages;	/* pages taken away by CTL_SET_PRESENT */
- };
- 
-@@ -50,14 +37,14 @@ struct mps_stats {
- 	_IOR(MPS_IOCTL_BASE, 10, struct mps_stats)
- 
- /*
-- * ioctl on /dev/mem_provider_sample: CTL_SET_PRESENT on child @fd, by the
-+ * ioctl on /dev/mem_provider_sample: CTL_SET_PRESENT on file @fd, by the
-  * owner. @value is the present value (1 = present, 0 = absent), and @offset
-- * and @len are a byte range within the child, page aligned.
-+ * and @len are a byte range within the file, page aligned.
-  */
- struct mps_ctl_range {
- 	__s32 fd;
- 	__u32 value;
--	__u64 offset;	/* bytes into the child, page aligned */
-+	__u64 offset;	/* bytes into the file, page aligned */
- 	__u64 len;	/* bytes, page aligned */
- };
- 
 
 -- 
 2.56.0.257.gf7497c7d27-goog
