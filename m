@@ -1,60 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792699059;
-	b=5bMYupvgrGSe5erurRxUsjcFmoTNIJedUCzixHKsVKaqYYWUxCrdwA8zgdKsVHjBkRmP
-	 7k6saCvFBKKDFsRpfM+CPZb0gitvQ6BcgPX4I+bPxptYNo8mXzV1o8Gkrwo45LVUmgU7O
-	 lIkR2Di3Vev89Gk/9rp/87giT/5wbwOweJWjC1UbjRt5UVGrpUp/Wx1yTUcCNOWKlNHWg
-	 0y31OAr5wfUfxLK5Vzh8S4YGPs19o7omc50oqNSJnaG15S1U7/D4wOtz50kLvpS9kyY4x
-	 dFg6W3COBbyC/A4Hmvjyv7pHfzH+YMcc7otUsXhu2xGBm3fG8b27TKs8cC4gMp5KAuQ==
+	t=1792700750;
+	b=RP+Kpa7q8WXVhpsuXFWXbz9xl5MXKhWHNg/4fASg+J8pzhkd9JfOoMxPLQzYwm0wpXwv
+	 DWID8ZO45FW3lzA0SZanc1uyu5VHI3dtGZedrpPe0xEOCxHLlitt7gvxsvAkuoEgp4wnw
+	 VMmr2UyK+w3E2sSJb03D2BHfqHtuSBhsvT6yxJ2HJZhGgiGawC6wuoNFX++ws+Zya9OA9
+	 3L/U364SeYmPPwEZNoVb3K9kJVxX0hzWcB+Ng27NHV3eaWJGzY3ehoUbqFRdmkNDC68X/
+	 oRtdJ84UV6nvlonPOa93ZaTyoxNh0wX5u+A3Ro6l+fxjDH94Pwnfzc+av9azmVr6ZMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792699059;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=iBvVCxS8o32Gutem6VL4VG0g7X95pS786Gjq6RUsRSc=;
-	b=zzuQkHxlPqhQ7jwhDoPwH0ErYBzNHAGQJnOPVA4tHqNmttlIiZTD+LUTRrgzx7l7Lpdy
-	 mcxfJfHwXIRmjsReV0ul1ADUtlwuPnFQjPS1qlf9akvfdj/YZ3mRsyp/nIUfkwUPj7YDO
-	 0n0gtJpPvBvm9ILAHo6J8w/rLYdmGNTTIzh48HY94jTwWvrAzWeFAVcONZSrf4nf3d6/E
-	 UNrLp1sj2stkpQUjPRvpBPDopE74tRrdM+Cwu4ATbwbZNez3mA2yPjlASMHDZHeVlHxXS
-	 VM+wek79owWaPeVtQtF9S2PCfZ/SxkRCCUkiY2kHfF53S22w6hKDIdllz+u74SRnpPg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792700750;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=ux1UTnRjOyGqJzOYM5Hv6XVTNeyYxnuotg3pXhf5HHs=;
+	b=mYDDdAEfGSWbvMqccXauyXpRbGa6RnygkJeHphXlZ40tw8bGoVZ7TdfVA0DCOmzDDyIa
+	 V+qSLNMo3o0XsnAW6gPFRe+tV2U3HcSR+7fnW9vqUBBJkVDObT9UkrQrT2QeCS7RJVTSc
+	 VKPgLmKjtHbY87uSxdg5sqQ7NWRwNwNYm2DATUtPQB+TKqDhenhELnSFTESYAW4alX4ZN
+	 5WBO0AVrKxzuLotOD8ERiu1NWYe8Ki9duwPTQjQs0LsKaNWjN+e27hJPkCsjERQW4MOeN
+	 bEuEbwOGVSanTKNdUXk71BTFaGQjO3GxdXIOo2Us7bpX5u/XFAK9J5OIATU9fqcoeCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ooaoLVY3;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RLMS0l8S;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6677A606A324;
-	Thu, 22 Oct 2026 19:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5955606A322
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 20:25:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ooaoLVY3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D56E1F01825;
-	Thu, 22 Oct 2026 19:57:38 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RLMS0l8S
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C341F031E8
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 20:25:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792699059;
-	bh=iBvVCxS8o32Gutem6VL4VG0g7X95pS786Gjq6RUsRSc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ooaoLVY3787X3TWnKxSb2ExdSGsZTtIsg+0vK3sumyR5UR3Pqfx8gvc70YOxwg6II
-	 qYo+nAPURAV8cxu9JX4lG8uEyQQhp13usMokO9QobOTtwjgSDIArFLJvQ5T0RN++Rr
-	 KNC+3G8JGIGcD6fzJeDygFkECms7kcE1ANqPOcwuh81vxFCqBL9NFLu7fzG7zKCMZO
-	 /NJLEfWVX8kePYf2rMZcEfxS4s1oi3s/j/gtOi6LefRhso4vuujxIKZb243CwOc1MD
-	 McbwX9IGl13sLFq9X97ypHmTyUdY9fp9+fszKkb8OCx/Ae41eygJiLxsSgXzkJrNS2
-	 Cs6ML/DIot5FA==
-Subject: Re: [PATCH net-next v6 8/9] selftests: tls: Extend coverage for
- zero-length records
-From: netdev-bot+sashiko@kernel.org
-To: cel@kernel.org
-Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
- davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
- shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Thu, 22 Oct 2026 19:57:37 +0000
-Message-ID: <179269905793.1189532.10522541488678622443@kernel.org>
-In-Reply-To: <20261019-tls-follow-on-v6-8-ab01c4ecca0c@kernel.org>
-References: <20261019-tls-follow-on-v6-8-ab01c4ecca0c@kernel.org>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1792700749;
+	bh=ux1UTnRjOyGqJzOYM5Hv6XVTNeyYxnuotg3pXhf5HHs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=RLMS0l8SrlVSlB+xSKm6w6FYJ1BVIP2OUvpbyz9MikbM20bH8i83IdqYLHnzS4qj9
+	 vo6B8FxfAsRueY9WSJTqmuWYCQSQkIN60PxS1EOjtlPkF8g30tel+vLlAPnohHXmRv
+	 /Vbi1+UaOcDgUZ0i0fi6x/na8nusRwiADaFX9FXU32HXstuRnUFimv6wlTGqn34WfD
+	 QMfTzkYILeeei8YsWI50/UKTnIXVBnU/aSI39gffsIi6/ScqbVu8/ubBXYIWQU9gCd
+	 GSwDnvTkIbRy4NYjw2TbXlJoApzGgMFRPZgGDgCAPArwrn6dScfyWS8TCD77ysDeE5
+	 19uIGvmDPyrRA==
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-14394530ec6so221907c88.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 13:25:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBw3Mygh4KQVTvNttDV9kHU/+USFsIH7hgUABMrJ4UUqUj8yDUux2mWsXP0RjRVVTIvgHTtsPwdKSMFFUi96Cbs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL8yI3Q58v4ofsflmTtvl786uME/HpblFBScL1LJUuE72jnTQuy
+	AeFErFBtMppV//E0q3UnT6xAv+CYh/sYGdJY1/Gre1VnGfNBSO1VHcN0Su86j1baM4W1FDuOmZh
+	G06H5qcXhqMcFrN6RgI2cIUX78I8E2Hs=
+X-Received: by 2002:a05:7022:1707:b0:166:9e0d:3b56 with SMTP id
+ a92af1059eb24-1959a382fb4mr475195c88.38.1792700748990; Thu, 22 Oct 2026
+ 13:25:48 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,105 +59,93 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+ <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
+ <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org> <DM4PR12MB61369D00ED2FCFEDAE0E4597DE652@DM4PR12MB6136.namprd12.prod.outlook.com>
+In-Reply-To: <DM4PR12MB61369D00ED2FCFEDAE0E4597DE652@DM4PR12MB6136.namprd12.prod.outlook.com>
+From: Fan Wu <wufan@kernel.org>
+Date: Thu, 22 Oct 2026 13:25:36 -0700
+X-Gmail-Original-Message-ID: <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
+X-Gm-Features: AclHuK-w0c1onI8im_hxrE8Vj8Tb7-7Hy-SNC8hLk4Qv6iomWwee3Oh6ZTdAJrg
+Message-ID: <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
+To: Manuel Huber <manuelh@nvidia.com>
+Cc: Fan Wu <wufan@kernel.org>, David Howells <dhowells@redhat.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
+	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+On Thu, Oct 22, 2026 at 11:02=E2=80=AFAM Manuel Huber <manuelh@nvidia.com> =
+wrote:
+>
+> On Mon, Oct 19, 2026 at 04:15:57PM -0700, Fan Wu wrote:
+> > You might need to explain why the existing keyrings, i.e.
+> > builtin/secondary/platform cannot be used in your scenario. Like the
+> > firmware is not trusted?
+>
+> As touched upon in [1], the scenario uses an ephemeral VM whose
+> IEP policy would be assembled after boot. There is a mix of explicitly
+> trusted dm-verity root hashes and possibly signed dm-verity layers
+> which can vary per VM, so the final IPE policy would not necessarily
+> be known ahead of time.
+>
+> This specific scenario is Kata Containers on Kubernetes. Each
+> Kubernetes pod runs in a headless Kata VM with a static dm-verity
+> protected rootfs, while its container image layers are delivered
+> dynamically as dm-verity protected block devices. The kata-agent acts
+> as trusted bootstrap userspace and would author the IPE policy for that
+> particular guest before starting its workload containers.
+>
+> The firmware is trusted in this scenario. A public policy-signing
+> certificate could be compiled into the builtin keyring or provisioned
+> through the platform or secondary keyrings. Because the policy would be
+> authored inside the guest, however, the corresponding private key would
+> also have to be shipped as a static artifact in the guest rootfs and
+> shared by every guest using that build.
+>
+> Instead, the kata-agent would generate an ephemeral, per-guest
+> policy-signing key pair, provision its public certificate, sign the
+> policy, destroy the private key, and restrict the keyring before
+> allowing untrusted code to execute.
+>
+> A dedicated .ipe keyring thus provides a purpose-specific runtime
+> provisioning path for this scenario. Once the certificate has been
+> added, the keyring can be restricted against further enrollment.
+>
+> I envision other scenarios with similar characteristics may benefit from
+> a dedicated .ipe keyring as well.
+>
+> I could elaborate more on this, e.g., on the how users' deployed
+> container images translate to dm-verity protected image layers etc.
+> (the erofs snapshotter is used and there is no filesystem sharing
+> between host and guest, image layer transport is realized via block
+> device attachment), but I am trying to keep this response brief. Some
+> more breadcrumbs on the combination of containerd, IPE, Kata can be
+> found in [2] and [3].
+>
+> [1] https://lore.kernel.org/r/SJ1PR12MB61246B0BF58BC2B6F0A79D30DE9F2@SJ1P=
+R12MB6124.namprd12.prod.outlook.com
+> [2] https://github.com/containerd/containerd/issues/12081
+> [3] https://github.com/kata-containers/kata-containers/issues/10943
 
-Low priority / nit picks for your consideration:
+Thanks for the explanation. This clarifies a lot. Please include this
+context in the commit message and doc for v2.
 
-- [Low] This patch adds TEST_F(zero_len_splice, test) in
-  tools/testing/selftests/net/tls.c.
+Also, one thing I missed earlier: before the policy verification call,
+please also check:
 
---
+ipe_keyring->restrict_link->check =3D=3D restrict_link_reject
 
-selftests: tls: Extend coverage for zero-length records
+so we make sure the restriction function is the right one.
 
-This adds the zero_len_splice and zero_len_peek fixtures to the TLS
-selftests. They check that splice() and MSG_PEEK get past runs of
-zero-length application_data records. It also adds a data_0data_data
-variant to zero_len, which checks that recv() does not read through an
-empty record sitting between two data records.
-
-> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-> index 0bc43728262e..aa66d0bbd1b5 100644
-> --- a/tools/testing/selftests/net/tls.c
-> +++ b/tools/testing/selftests/net/tls.c
-
-[ ... ]
-
-> +/* Splicing must skip a run of empty data records to reach the payload
-> + * behind it, since a zero-byte splice reads as EOF. Splice reports
-> + * EAGAIN for a run with no payload behind it, and EINVAL for a control
-> + * record behind the run.
-> + */
-> +TEST_F(zero_len_splice, test)
-> +{
-> +	struct pollfd pfd = { .fd = self->cfd, .events = POLLIN };
-> +	const struct raw_rec *payload;
-> +	unsigned char buf[128];
-> +	ssize_t ret;
-> +	int p[2];
-> +
-> +	if (self->notls)
-> +		SKIP(return, "no TLS support");
-> +
-> +	ASSERT_GE(pipe(p), 0);
-> +
-> +	payload = zero_len_send_recs(_metadata, self->fd, variant->recs);
-> +
-> +	if (variant->splice_ret < 0) {
-> +		ret = splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
-> +			     SPLICE_F_NONBLOCK);
-> +		EXPECT_EQ(ret, -1);
-> +		EXPECT_EQ(errno, -variant->splice_ret);
-> +	} else {
-> +		/* ASSERT so a zero return stops the test before the read
-> +		 * below blocks until the harness timeout.
-> +		 */
-> +		ASSERT_EQ(splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
-> +				 SPLICE_F_NONBLOCK), variant->splice_ret);
-
-[Severity: Low]
-Both splice() calls in TEST_F(zero_len_splice, test) pass
-SPLICE_F_NONBLOCK, and nothing sets O_NONBLOCK on cfd. Is the socket
-O_NONBLOCK path in tls_sw_splice_read() ever covered by this test?
-
-net/tls/tls_sw.c:tls_sw_splice_read() {
-    ...
-	nonblock = (flags & SPLICE_F_NONBLOCK) ||
-		   (sock->file->f_flags & O_NONBLOCK);
-    ...
-}
-
-The earlier commit "tls: Honor O_NONBLOCK in tls_sw_splice_read()"
-added the f_flags check above. It names this selftest, run on a
-nonblocking socket, as its reproducer.
-
-As of this patch, SPLICE_F_NONBLOCK on its own makes the wait return
--EAGAIN. A kernel that lost the O_NONBLOCK term would still pass every
-zero_len_splice variant.
-
-This looks resolved later in the series. "selftests: tls: Cover splice
-on a nonblocking socket" moves the body into zero_len_do_splice() with
-a splice_flags parameter. It also adds TEST_F(zero_len_splice,
-nonblock_socket), which sets O_NONBLOCK on cfd with fcntl(F_SETFL) and
-then splices with flags 0.
-
-Would it make sense to fold that coverage into this patch, so the
-reproducer named by the fix is in place from the start?
-
-> +		ret = read(p[0], buf, sizeof(buf));
-> +		EXPECT_EQ(ret, variant->splice_ret);
-> +		if (ret == variant->splice_ret)
-> +			EXPECT_EQ(memcmp(buf, payload->plain_data,
-> +					 variant->splice_ret), 0);
-> +
-> +		/* The empty records were consumed, not left queued */
-> +		EXPECT_EQ(poll(&pfd, 1, 0), 0);
-> +	}
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261019-tls-follow-on-v6-0-ab01c4ecca0c%40kernel.org
+Fan
