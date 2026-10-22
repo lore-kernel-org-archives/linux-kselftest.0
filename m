@@ -1,100 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792663304;
-	b=HQ9XJspV5Tx3D21nw2aJgFeVMovGb6Gh5cowzn02JyBSVEqKlHKvi7MEo1dXr+Zwjr1T
-	 m8fgyHf0/rmr0H2qJqgZIYGdREUITXu8SV8eugIvHlNIdXjUCS8bTjGnInj9ghTzCfV49
-	 /kxxHUiOWwOVKJFKGU1S2Xtl5G1onl7PiMjb2tK/ojvkjjo8tot5yg1H9T8vXYdSravOs
-	 UpMVgfZUoj0djVV6D85Etzs8Qf8UP2zXyvxgNqtF3AiwgLLIiVHPPYi6z31offWG4nKTU
-	 0RXe43Mbisl+cum1E9hrXODlnjtDUZ4fXny2XhkjKWCvnrdDG5+968GTVyAPFe0KC4w==
+	t=1792664343;
+	b=jxaY4NZt4a7lD1LJixt3SipbaIWuomiItm9XUzIvMyt1FxqII1Dbv8ga8YD7r8K7+IlP
+	 33nWJqRSIfPLL05FhU0eLkweLdsCE3pK/14euWGXdTOlI9afAbKEeTAyGK9/dswItBW+u
+	 negxNIdav4PNXq2vMXQZDeyx26aqtN+Srl/+pwcPr41MCbKlwlAmnMYAlP7Z42DBkWGE4
+	 Ky+HOn3onD9EFoDZxiziHtuwvFULdP1ZzJ6EGjgxqUqvkJCt7doIC7aTJCqZZTDTLbZZ6
+	 GUzcwD8sBX/v58QuKt8Q23jIi/7A8+b9Uv+k3qUF4BZrx6PCyLbf3f5pueRrIxSpfeQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792663304;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=AdFl+c9HTfOJHnKVulHF/KABJga7rr2KkdaAezk90/U=;
-	b=uQl+sC/jqUGcgwjX/13q5RWddBeKWnWKx0N4d2QmEfrUi+BeZTdCdAJj5h1XBo/W86tV
-	 /dLJdZpzlZtwFwGiCLiSbd2Vg6xKFx4+ZAyrAg2KdcVbwSn0rqKHbiogzj90bVNwQSPtc
-	 M3kKmAj8yGvHCpv5ehoIclk4Jy16pcixDmnfBpht0FKisFhuO7uP9DWv1ncaBssIDi62r
-	 grI5hAugXwi3iXlNfWDiS31FuxxdFSgy3mtjuxpQGJc/80bMIl03Ae7lrWyvn+FIN521b
-	 DDOgIA7Eb2xH+bpuy70z6dArSI9kzMzDpuWcwWHwydd/Oe6/1P1ZCCZnoZNHnzGqn2A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792664343;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 X-Developer-Signature:X-Developer-Key:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=Z7CjTsmoRi+0w+ZhFFRXXTz8JLrTIF6dRBCGuBaLV2M=;
+	b=bmZ+YAlzORec4yf5UFA16az2GRrc8yhnlc1OiFdQjD0uiA+8TTcej10zYjNS2rpNO/SM
+	 AtfGAq/fsa3t34GBNf5w1CRzYs/TMtlQt+npsSeD2mXlG/0I9gHvQ9MkLi8IvS0K0u6UV
+	 csnh+34Zg9djjfGsRS2IJfEFLqU5dIGzT6QK9/2k53N3icbu8YG1S+13I5ebP6UUqg//D
+	 7kkzmWoPiM04uGIlZTcqNwKoMfNG/dbiAVMgSbVzol0v59OY3/lUiuyRYDxzb2YKDBENO
+	 Z5/3QBpViK+n0buqX5mPR3faaQ/YfyZCHFp5e9WW/devSyJuZ4cPeWSOAYNAiq+3WPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=C6ohaFvw;
-	arc=none smtp.remote-ip=209.85.218.53
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PJ8QgVKJ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0F9606A31B
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 10:01:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C0F9606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0463606A319;
+	Thu, 22 Oct 2026 10:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=C6ohaFvw
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c2afa22e1dcso211885366b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 03:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792663301; x=1793268101; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=AdFl+c9HTfOJHnKVulHF/KABJga7rr2KkdaAezk90/U=;
-        b=C6ohaFvwBXq3n1+WrpazbmGLbZXHZy60WksniPnyv0/fNqqeJc2ArAPv1CA0E3vAAD
-         UFehNO6fcMQRNycAOm8AQyoEL008xSbsc90gUFwfKXoG0xYSxGRwnj70jKu96m/OxoQn
-         SSFTnKp1uAFXptEyosauGwZ2SyWFiXSNSDxwSNCBiqiw23NELBMP2OC7siYj1jqnWmVt
-         xZE+4bXdGFB+XvfVDEzsKUKFnNMGI9lUR2FnWa85Pnn6mHSJBp9s4XHY5HgdBVQzPemW
-         TJihuhTHNCarHGh5O9KpXHR7Cy83DyDmN0sOoohXmyq5L6E/8hHgDUN0yuADfu8lyP6p
-         512g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792663301; x=1793268101;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=AdFl+c9HTfOJHnKVulHF/KABJga7rr2KkdaAezk90/U=;
-        b=JnYKSVDu9xCu/OYUIVo0kPnuM2yH/kPee2GoCjhmZCeVsAF1iX6Ovm5v2MSon74WLR
-         h0vtqB812wOb95TrxO0hZt7DubZZfjU+esmxQ4vf2x1U48n8ijL6xCCfX56Dw3nQcYiO
-         D4O3kyxXt8pqC9Fnv5lOSYBhVV6Zjcz91rMfvYsUTIHV5/a0Tw0r5hMYZVBjutfQ0ma3
-         hP/nEBSomG4rO7KhlTMgqSi42qKDXiHdd4hE3F35a+HZNYZOn2LrA/SlMRUNUkv1wR0o
-         vOi4KkrPawOOL71dehI9RtO6sIUnV3g4TKO7Nuwp9ESDFZs0RhbVnWZ+fy9NZSt9kLUk
-         rUuQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxmU3aWlBp3aEQ1n8hJM/oxjm8YupV2mrJHRLgipsAmfb+qlKJhxDhJUIvnwMSybcLHNecB2ItItMkN3QxCGds=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLRIwTl12r6ECXcFlR8hbM5K13W95HtjtsjG9KVssePiY0/2J1D
-	qftxSqGKNIZnZzfMFsO9hcMehkAEFqDEJwNVOmuYElY0MBQQtmRzq5Do
-X-Gm-Gg: AYBFou3/1vnJnX25LoqYXVjDZ+/2EfHCoxe79pp/RYewT5MlQwXx2L7fKqeMP/GxxFN
-	tCRnlDehodpme1JC/L/cVEW4YBwhZ/cHIHNKNKNpXSQqGp0TJ/JdkV35CyTcYuLOCEEZtLEtRZU
-	wlu1AVdsa9Mbg5ZrCkeoJ9AA0T73Hru2XzJ0BIxZTnWSsBiCGTl6r2WI2tO3DP6JGABOegyGu/r
-	z/ZIhcGEnYZfvICZjf3p/tR5SU3MxE7LnOnleUvmdAsyamFWLdKnuYkoZ+UIJJwpxHJ+7ERrko4
-	y7tVuJJn0RxNW8bKFFvgmTBpdTAvLeUZryl2Ce88IxJ9nRVdRLwO2DoeTUCddlXn/df0nwyX4Pj
-	96XxgqbprlJgVxQ6EAnjkWF0nTgaPh4vDjvLaf46WrPFeEOg+2hSvOmzHHYNA9lwwmx8A3DChzG
-	sxkiIx4/9sG2a1BD3z7NTvWR+jHNFXRd0KI/sQjrr+Xn740r+eEFqFnvtH0MWjaFokHRZrDBxzu
-	mCJlzRMbYVWJBhF3MjSE/fKCxLV237d+sXdHM1ZaX0=
-X-Received: by 2002:a17:906:dc89:b0:c40:f9ea:7387 with SMTP id a640c23a62f3a-c46791a979emr451363266b.6.1792663301007;
-        Thu, 22 Oct 2026 03:01:41 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e2a034fc2sm7287470f8f.5.2026.10.22.03.01.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 03:01:40 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 22 Oct 2026 12:01:37 +0200
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, linux-mm@kvack.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, linux-kselftest@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [RFC bpf-next 0/9] bpf: Add support to allocate user page
-Message-ID: <atnfAUWzdsoWQKe8@krava>
-References: <20261021195759.119421-1-jolsa@kernel.org>
- <DMAUMG9WL4X6.12UEJJMJSW54Z@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PJ8QgVKJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD461F000C6;
+	Thu, 22 Oct 2026 10:18:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792664343;
+	bh=Z7CjTsmoRi+0w+ZhFFRXXTz8JLrTIF6dRBCGuBaLV2M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=PJ8QgVKJZLMn1J0ApZiCJ5Tz/bA/4eJpuTqvjc+kfrI3kSPJCRNLwNBWFUD61FXT4
+	 rKvp/VXRfO6gQk5hL+Efc5LHGOFWXM7RSd/nq7CWkynoSKrcIUbY15rNQX/C/dSNTG
+	 LTNlXlnL9E505zYjLJKrr2MU3iVebUKmoNdH+zxcojkrmBWjNCpAx9FK2wUGinCowb
+	 qZzMpJgec4hhSHXurkaKqhQFauAvHacXh+4HkdQ921rnQUsck2wCOQ60yN7y/bOkyu
+	 Zct/BNdh5sNExojRmzQO8PYFpCAwQUElk6cla29I5RzU11SzU8pdo6ExOgTRDkABj2
+	 N+zk51yg79kPQ==
+Date: Thu, 22 Oct 2026 12:18:56 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Fan Wu <wufan@kernel.org>, Manuel Huber <manuelh@nvidia.com>, 
+	David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Andrew Halaney <andrew@amutable.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, linux-security-module@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
+Message-ID: <20261022-hausbank-dozent-hurtig-9443f3777475@brauner>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6420; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=Gz2q9noNMRTVpIenqHmgVL/IPY7t7BAHJ6uIbpyczwI=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTdfKDtd2F1yYYNN6SUVj4LiYsPtuiujX+RO2cLQ/mZA
+ wZcWUvKOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACZicIvhfyxLpY/ue92q7Zvk
+ LlXfSci/eEvy5FS/htmTfqyQTrv29Qsjw+ac534R/dOCGdzCbqUW57/kDlVpdOyY9e3chPjjajr
+ tnAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+ <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
+ <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org>
+ <20261021-groll-donnerstag-erfuhren-ce34a0ed4e97@brauner>
+ <CAHC9VhTHUU0h9k74CMT6wYhMwyY3YhbSSFwJoDTvoFRyTFVZwg@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,151 +76,114 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <DMAUMG9WL4X6.12UEJJMJSW54Z@gmail.com>
+In-Reply-To: <CAHC9VhTHUU0h9k74CMT6wYhMwyY3YhbSSFwJoDTvoFRyTFVZwg@mail.gmail.com>
 
-On Wed, Oct 21, 2026 at 09:53:47PM +0000, Alexei Starovoitov wrote:
-> On Wed, Oct 21, 2026 at 12:57 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> > hi,
-> > we have few use cases where having the ability to allocate normal
-> > or executable user space memory would help (like to replace function
-> > in live process or change environment variables)
-> 
-> I think it's better to do what debuggers do:
-> vm_mmap() with the final prot and
-> access_process_vm(FOLL_FORCE | FOLL_WRITE), like PTRACE_POKETEXT,
-> to fill it. It faults the pages in, writes into r-x private mapping
-> and copy_to_user_page() takes care of icache.
-> Then no need for bpf_user_page_exec(), do_mprotect_pkey_locked(),
-> the marker, READ_IMPLIES_EXEC special case, get_user_pages(), etc.
-> No mm changes.
+On Wed, Oct 21, 2026 at 12:51:35PM -0400, Paul Moore wrote:
+> Just a quick point of clarification, you're using the pattern you
+> described for other keyrings, not necessarily a dedicated IPE keyring
+> described in this patchset, correct?
 
-great, much better, will use it in next version, thanks
+Correct. The .dm-verity keyring and the .bpf keyring both work like
+this: sealed empty by default, opened for a single boot via a kernel
+parameter, and only ever consulted once the keyring is non-empty and
+restricted. Manuel modeled the .ipe keyring on them after talking to
+Fan.
 
-> 
-> Like:
-> 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 648abe1..ca1d88d 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -29,6 +29,7 @@
->  #include <linux/task_work.h>
->  #include <linux/irq_work.h>
->  #include <linux/buildid.h>
-> +#include <linux/mman.h>
-> 
->  #include "../../lib/kstrtox.h"
-> 
-> @@ -3834,6 +3835,60 @@ __bpf_kfunc int bpf_copy_from_user_task_str(void *dst, u32 dst__sz,
->  	return ret;
->  }
-> 
-> +/**
-> + * bpf_copy_to_user_task() - Copy data to a task's address space
-> + * @unsafe_ptr__ign: Destination address in the task's address space
-> + * @src:             Source address, in kernel space
-> + * @src__sz:         Number of bytes to copy
-> + * @tsk:             The task whose address space will be used
-> + * @flags:           Reserved for future use; must be zero
-> + *
-> + * Faults in the destination and writes the way ptrace(PTRACE_POKETEXT) does:
-> + * a private mapping doesn't have to be writable.
-> + *
-> + * Return: 0 on success, -EINVAL if @flags is non-zero, or -EFAULT if the copy
-> + * fails or is partial.
-> + */
-> +__bpf_kfunc int bpf_copy_to_user_task(void __user *unsafe_ptr__ign, const void *src,
-> +				      u32 src__sz, struct task_struct *tsk, u64 flags)
-> +{
-> +	int ret;
-> +
-> +	if (unlikely(flags))
-> +		return -EINVAL;
-> +
-> +	if (unlikely(!src__sz))
-> +		return 0;
-> +
-> +	ret = access_process_vm(tsk, (unsigned long)unsafe_ptr__ign, (void *)src,
-> +				src__sz, FOLL_FORCE | FOLL_WRITE);
-> +	return ret == src__sz ? 0 : -EFAULT;
-> +}
-> +
-> +/**
-> + * bpf_user_mmap() - Map private anonymous memory into the current process
-> + * @len:  Length of the mapping
-> + * @prot: PROT_* flags of mmap(2)
-> + *
-> + * Return: The address of the mapping on success, or a negative error code.
-> + */
-> +__bpf_kfunc long bpf_user_mmap(unsigned long len, unsigned long prot)
-> +{
-> +	return vm_mmap(NULL, 0, len, prot, MAP_PRIVATE | MAP_ANONYMOUS, 0);
-> +}
-> +
-> +/**
-> + * bpf_user_munmap() - Unmap a range of addresses of the current process
-> + * @addr: Start of the range
-> + * @len:  Length of the range
-> + *
-> + * Return: 0 on success, or a negative error code.
-> + */
-> +__bpf_kfunc int bpf_user_munmap(unsigned long addr, unsigned long len)
-> +{
-> +	return vm_munmap(addr, len);
-> +}
-> +
->  /* Keep unsigned long in prototype so that kfunc is usable when emitted to
->   * vmlinux.h in BPF programs directly, but note that while in BPF prog, the
->   * unsigned long always points to 8-byte region on stack, the kernel may only
-> @@ -5139,6 +5194,25 @@ static const struct btf_kfunc_id_set generic_kfunc_set = {
->  	.set   = &generic_btf_ids,
->  };
-> 
-> +BTF_KFUNCS_START(user_mem_btf_ids)
-> +BTF_ID_FLAGS(func, bpf_copy_to_user_task, KF_SLEEPABLE | KF_PERFMON)
-> +BTF_ID_FLAGS(func, bpf_user_mmap, KF_SLEEPABLE | KF_PERFMON)
-> +BTF_ID_FLAGS(func, bpf_user_munmap, KF_SLEEPABLE | KF_PERFMON)
-> +BTF_KFUNCS_END(user_mem_btf_ids)
-> +
-> +static int user_mem_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
-> +{
-> +	if (!btf_id_set8_contains(&user_mem_btf_ids, kfunc_id))
-> +		return 0;
-> +	return security_locked_down(LOCKDOWN_BPF_WRITE_USER);
+> I know you/Lennart/systemd made the decision to implement your own
+> version of IPE instead of working with Fan to augment the existing
+> implementation to meet your needs, so I'm not sure if you've also done
+> something with an out-of-tree patch, BPF, etc. to implement your own
+> keyring.
 
-ah right.. all of those kfuncs should be behing write_user lockdown
+There is no out-of-tree anything and there is no keyring of our own.
 
-> +}
-> +
-> +static const struct btf_kfunc_id_set user_mem_kfunc_set = {
-> +	.owner  = THIS_MODULE,
-> +	.set    = &user_mem_btf_ids,
-> +	.filter = user_mem_kfunc_filter,
-> +};
-> +
->  BTF_ID_LIST(generic_dtor_ids)
->  BTF_ID(struct, task_struct)
->  BTF_ID(func, bpf_task_release_dtor)
-> @@ -5266,6 +5340,8 @@ static int __init kfunc_init(void)
->  	};
-> 
->  	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
-> +	/* Sleepable kprobe prog can only be attached to uprobe */
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_KPROBE, &user_mem_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &generic_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
-> 
-> But I'm not at all sure that it's a good idea
-> to inject code into a process.
+RestrictFileSystemAccess= is a BPF LSM program that PID 1 loads. It
+denies exec, executable mappings and W^X transitions for anything that
+isn't on a signed dm-verity device or the initramfs. That's it. It
+uses the hooks BPF LSM exposes.
 
-well FWIW it's still guarded with the LOCKDOWN_BPF_WRITE_USER same as
-bpf_probe_write_user helper
+> As far as I'm concerned the decision of how IPE uses an IPE keyring is
+> up to Fan.
 
-at the moment we have fragile way of live patching a userspace process,
-this would give us a more direct and reliable way for that
+This is really not an argument. Manuel posted an RFC that follows two
+existing in-tree keyrings to the letter. Fan asked to deviate from them.
+I explained what that costs.
 
-thanks,
-jirka
+> Of course, fitting in with existing norms is important,
+> but if it causes IPE or existing IPE uses a lot of pain, that can a
+> good reason to diverge from those solutions.
+
+Which pain? The keyring is dead unless the kernel command line opens
+it, and it is only consulted after the system keyrings have already
+rejected the signature. Existing IPE users see no change whatsoever.
+
+Fan's reasons were that it "looks kind of awkward" and that fs-verity
+does it differently. I haven't yet heard a single technical reason to
+deviate. The properties we get and the other model loses are:
+
+(1) Fail closed by default. Without the boot parameter the keyring is
+    sealed empty for the whole boot and can never be provisioned. With
+    the fs-verity model the keyring is open on every kernel that has
+    it and stays open until someone remembers to restrict it. If
+    nobody does, root in the "untrusted" phase enrolls its own cert
+    and loads its own policy.
+
+(2) The opt-in is per boot and lives on the kernel command line, i.e.
+    in the measured/signed boot chain. A Kconfig knob can't express
+    "this boot", only "this kernel", and a distro kernel with the
+    option on is simply open everywhere.
+
+(3) Activation is tied to restriction. The keyring is only consulted
+    once it can't be extended anymore, so there is never a window
+    where a half-provisioned keyring is a trust anchor. With the
+    fs-verity model it is a trust anchor from the first key on and
+    extensible until sealed.
+
+(4) That's what gives Manuel's Kata case the throwaway key: generate
+    an ephemeral key pair, enroll the cert, restrict, sign the policy,
+    load it, destroy the private key. After that nothing can be added
+    to the keyring and nothing new can be signed. With the fs-verity
+    model the same sequence leaves the keyring extensible unless the
+    agent also seals, and the kernel doesn't care whether it did.
+
+Note that IPE's own CI already does padd followed by restrict_keyring
+on .fs-verity in the initrd (anchor-fsverity.service). So IPE relies
+on exactly this sequence today. The pattern just has the kernel
+enforce it instead of hoping that userspace gets it right.
+
+So what does IPE gain from a keyring that is open by default and
+consulted before it's sealed?
+
+> These days everyone is
+> going to implement whatever they please, but if you have
+> needs/requirements about how you want things to behave in LSM land, I
+> think it would be helpful to engage with us before you make a decision
+> and then start pleading with the LSM folks to adopt your approach.
+
+I'm not pleading with anyone. And the engagement you're asking for
+happened. You just didn't engage:
+
+- You read Daniel's bpf keyring series yourself in August, Cc'd the
+  keyring folks "for obvious reasons", and had nothing to say about
+  the model. The cover letter spelled out in detail that systemd would
+  provision that keyring the same way as .dm-verity.
+
+- On 2026-10-11 Manuel announced in the KEY_SPEC thread that he'd
+  propose a .ipe keyring "modeled after the .dm-verity keyring" after
+  "initial discussions with Fan Wu". You and linux-security-module
+  were on Cc.
+
+As for "everyone is going to implement whatever they please"... In May
+you told the bpf folks that "we just need to be willing to accept that
+we have different needs and show a willingness to accept different
+solutions as a result" [1]. I don't see why that shouldn't apply to
+systemd using BPF LSM.
+
+Frankly, I couldn't care less whether IPE chooses to model the keyring
+the same way. It just means it can't give equivalent security
+guarantees. I'm confused why you have to speak for Fu and why you're so
+defensive about this.
+
+[1]: https://lore.kernel.org/all/CAHC9VhQ-cq-nD7uq3kv=SFSJyzO_CEgwzFeMcdbznTmPWJoy6g@mail.gmail.com
