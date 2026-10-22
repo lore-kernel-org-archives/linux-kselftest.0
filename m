@@ -1,55 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792655541;
-	b=CtIUIWL6/AaDCkygseEPivdwH8ONZoEnGeXN9jBUUX2gyGJjRS963zpOfj8bM11Q2B5a
-	 wJbnU9c+XEFLiGe74jSgb8hqi/si92LOowOKSsG+66SBUPUqDw2HzKggOOqU42dA3IGXz
-	 y/U6Q5y+T+6zsru35eyW5ONj/u7iyhdebsULdNhLxX7JEW4OwUzSDKgrMtuIBnA7/ShhI
-	 RW/TSc42JbkrscZNFC39jU/A/OUdJLXtmhYF/mnyjEvqjO6N6CXU1y9RgCaKFM4TkzCp/
-	 iztg1NprXBmyNZfbleRLKHGsxoaN13WSCAYE62h+iDO+ikmsNf9YXgyhg9fsRzDgRQA==
+	t=1792656437;
+	b=TurU6ip9uAbMFp/8/Kylo+bhxfJ7z9qxEcYabs8UOucG7jHDy4vus9HeKllzNGe3dn8Q
+	 +We5LWHF7KTf3Fe7ECG8MjUNux40XXmIvDCx2XmemAMX1/oJYfw6puHPHzcq/qARXzzuy
+	 dbiKqvlyJxfc5cqVFHUo8E9ZUBZFbNrLLod5lAMzG9iVlA/inf4HhWUEpcesp1aQcG4+G
+	 pPRK2lmqaG/Ely4HDSUn9GQoTUZla84Jfz9Iq5grUIEktl8o2tOpWSXIQ4DeDg0EcVBU6
+	 NXliIIMMn37UIcSxD2UfInB9dee3LJaLMVjYmShQSD7EcUsDBu7czj4oRS2LP6+cTBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792655541;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792656437;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=72aFLp27/R8ZjB6rNWZA1eIaUhpL3oNIObCJ0g+GS6I=;
-	b=h0mO8kOhti771nfKAjIil6rz417WBblOgNbI/ZOsMUmepnRMSCckyWIlbywhr68Fvcq+
-	 3taM1WBtuEYzQ9AaJn09uIjxGUEDadzdQsfkNRiKaQ6epZl4eKQlfARC0PLvcGTPkoe6o
-	 jAteVc+N3Rzb7VemQuB3MbFh06niL6VpEHXlkBcY/nfaknSNtaYZIjalwjwRf1ddeb7Ld
-	 AwL4nTTBd1XBQWLNgHYT+nGJ5hRqkmu7+M0cuH2p3hIVvwnO+5H99PS2RMru6dWDIG1oj
-	 l/dQbGW3pxxQsZpygGjeJkA/t5cfoERHOejTbqwPCqyCkljJMOokJ3+2sTdr00X5UAw==
+	bh=IK3vlu7wIXXSLKBylI9CXBQS+y3D6BVh2hkB8AeGdBU=;
+	b=138MNImpSewbjmy68W5k9HOSUBdp6s+75Mj1sGfVt7yqHsJTKURvPeYb2crwHl8+r4Hx
+	 2YqllYeunhwDb8gcP1QTEgUxkPXaiT/JJe6rzynb3S1BDWXrejjIqwh2Z2ZrpIHzpY9Ol
+	 HDeMusJUQcSPPbQ3aABI9hKkcViV0MK+6HgTS/96b5Tsy0cPVNzkCmWNJiiOrmhT89uKT
+	 tUCk45HFI58v1JK3Ur9t7amlzucvOLew6XLKp8wnOu/FTaAnfLgZW0hiVa5Cq6ZvhhUe5
+	 mvEIVx5Fd6gUSXeT9UB1ej9yvnAJ0i2SUrLtXFfLlVLsPijfM8gmAVvJ9O6YhJ5F+hA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZgE59edo;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W8OWakWc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF12606A321;
-	Thu, 22 Oct 2026 07:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08BFE606A319;
+	Thu, 22 Oct 2026 08:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZgE59edo
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE761F000C2;
-	Thu, 22 Oct 2026 07:52:20 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W8OWakWc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4890C1F000C2;
+	Thu, 22 Oct 2026 08:07:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792655541;
-	bh=72aFLp27/R8ZjB6rNWZA1eIaUhpL3oNIObCJ0g+GS6I=;
+	s=k20260515; t=1792656436;
+	bh=IK3vlu7wIXXSLKBylI9CXBQS+y3D6BVh2hkB8AeGdBU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZgE59edo0VoZGNbFZua/HV3eM6MFXhh387eRzNtOtDKX4te01aAj3rqBVczj02RRR
-	 fi4zR5Qnfk9vQwL1rnFj1tzg81oVVNCOQ4/PaO1Gj35+22kwqDophr7AToG89fjLl3
-	 i+DcA3dI33SYUFaVipG37XRrwnI9NleSVs2UMSLRn161PXNDxQGMlUARvyzPH8U2Ax
-	 b5YSjSsZRbIaa1wHpdyULtVPuzjXfzmYp3MoDuhK57SP4AzGRp5kRIe2BLNFIACqcK
-	 dX9LYP9oyPWCs278TvLycjm3tjhz8i//XoHu/wNq8DSQiYKqtU/lop3hYFEQrxkUhl
-	 vVwP435G4YJXw==
-Date: Thu, 22 Oct 2026 09:52:18 +0200
-From: Antoine Tenart <atenart@kernel.org>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Hangbin Liu <liuhangbin@kylinos.cn>
-Subject: Re: [PATCH net] selftests: gro: remove unused variable total_data
-Message-ID: <atnAmOuzTuL-0f4u@kwain>
-References: <20261022-self_unused_var-v1-1-8ab10a6b7f44@kylinos.cn>
+	b=W8OWakWcVu6p39n/i/pswI3AEMxPh3lVJFQRbJlRBkHWiGvyfX0zXNVk2SA4fB53g
+	 JHz4wNXmab5xisFmoVJgNFDkp+pI303W5So1d0OPUiMMHVQJWz8xuIK2aEajORCG++
+	 reNbr9AqxfCgM8sCBsaPNlNAtM/M7qg+ZuOxPYKUvOrJRA2PnNbcCNNvkN2coaJAdq
+	 FP7utVEamab8mGO32rjrrQwCCeXrVEPqqsXIZBlr2QOEY3hDSZgnzuU+phWNMEaN5b
+	 82XCF3BVPJKHXalMygYHHKD5QJ+Hda5VHcVnDI/8kyvAqN7UYo8dXeht0md63zKLNg
+	 Y4d6s9egOW1PA==
+Date: Thu, 22 Oct 2026 09:07:09 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Konstantin Khorenko <khorenko@virtuozzo.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"David Hildenbrand (Arm)" <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
+	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>, 
+	Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org, 
+	=?utf-8?B?TG/Dr2M=?= Molinari <loic.molinari@collabora.com>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v4 1/4] mm/rmap: duplicate a PMD mapping as one in
+ folio_dup_file_rmap_pmd()
+Message-ID: <atnEFyGRYGGf9shA@gremlin>
+References: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-0-66f00b7a564c@virtuozzo.com>
+ <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-1-66f00b7a564c@virtuozzo.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,54 +69,52 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261022-self_unused_var-v1-1-8ab10a6b7f44@kylinos.cn>
+In-Reply-To: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-1-66f00b7a564c@virtuozzo.com>
 
-On Thu, Oct 22, 2026 at 11:09:35AM +0800, Hangbin Liu wrote:
-> From: Hangbin Liu <liuhangbin@kylinos.cn>
-> 
-> I hit a build warning when building the net selftests.
-> 
->   gro.c: In function 'check_capacity_pkts':                                                                                                                                                                                     gro.c:1249:13: warning: variable 'total_data' set but not used [-Wunused-but-set-variable=]
->    1249 |         int total_data = 0;
->         |             ^~~~~~~~~~
-> 
-> Remove the total_data variable, as it is no longer used.
-> 
-> Fixes: d97348474708 ("selftests: drv-net: gro: always wait for FIN in the capacity test")
-> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+On Wed, Oct 21, 2026 at 10:36:00PM +0200, Konstantin Khorenko wrote:
+> folio_dup_file_rmap_pmd() passes PGTABLE_LEVEL_PTE to
+> __folio_dup_file_rmap() for HPAGE_PMD_NR pages, so it adds HPAGE_PMD_NR
+> PTE mappings to the folio instead of one PMD mapping. Each unmap of the
+> PMD removes one PMD mapping:
+>
+> - the folio's mapcount never returns to zero, and removing the folio
+>   from the page cache reports "Bad page cache", or hits a VM_BUG_ON
+>   with CONFIG_DEBUG_VM;
+> - the first unmap already counts as the last one and drops the
+>   PMD-mapped statistics while the other mm still maps the folio;
+> - the second one drives the entire mapcount below zero and drops them
+>   again.
+>
+> The helper has no caller yet, the next patch adds the first one. Pass
+> PGTABLE_LEVEL_PMD, as folio_try_dup_anon_rmap_pmd() does.
+>
+> Fixes: d8ef5e311d7b ("mm/rmap: convert page_dup_file_rmap() to folio_dup_file_rmap_[pte|ptes|pmd]()")
 
-Reviewed-by: Antoine Tenart <atenart@kernel.org>
+Was this a mistake in d8ef5e311d7b, or actually intentional for whatever reason?
+If the latter this shouldn't be a fixes.
 
+> Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
 > ---
->  tools/testing/selftests/net/lib/gro.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
-> index 7a333155de1a..1bc92e7a625f 100644
-> --- a/tools/testing/selftests/net/lib/gro.c
-> +++ b/tools/testing/selftests/net/lib/gro.c
-> @@ -1246,7 +1246,6 @@ static void check_capacity_pkts(int fd)
->  	int coalesced[num_flows];
->  	struct tcphdr *tcph;
->  	int ip_ext_len = 0;
-> -	int total_data = 0;
->  	int pkt_size = -1;
->  	int data_len = 0;
->  	int flow_id;
-> @@ -1309,7 +1308,6 @@ static void check_capacity_pkts(int fd)
->  		}
->  
->  		num_pkt++;
-> -		total_data += data_len;
->  	}
->  
->  	/* Check flow ordering. We expect to see all non-coalesced first segs
-> 
-> ---
-> base-commit: e0a958ddfc89f2e1c43448cdaeb5b30e54e19448
-> change-id: 20261022-self_unused_var-d54af8d61a56
-> 
-> Best regards,
-> --  
-> Hangbin Liu <liuhangbin@kylinos.cn>
-> 
+>  include/linux/rmap.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+> index 0b332770abeed..7562017416094 100644
+> --- a/include/linux/rmap.h
+> +++ b/include/linux/rmap.h
+> @@ -558,7 +558,7 @@ static inline void folio_dup_file_rmap_pmd(struct folio *folio,
+>  		struct page *page, struct vm_area_struct *dst_vma)
+>  {
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> -	__folio_dup_file_rmap(folio, page, HPAGE_PMD_NR, dst_vma, PGTABLE_LEVEL_PTE);
+> +	__folio_dup_file_rmap(folio, page, HPAGE_PMD_NR, dst_vma, PGTABLE_LEVEL_PMD);
+>  #else
+>  	WARN_ON_ONCE(true);
+>  #endif
+>
+> --
+> 2.43.0
+>
+
+--
+Cheers, Lorenzo
