@@ -1,64 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792659563;
-	b=YGSrxwCIt2qWzS3vQyly66uadTqM90KqUpSQHWr5ok8UlSLWb+7fmQRUL+9YLrBxAI3y
-	 2d3ULk/+X4D+MEW2eSIS6fYBsRH9vDprTfIPeJs5gDGEOjVGvXmHJsmhsx9RPTsq8HTaE
-	 +bBhNoKYXBb2L0rnGebmfy9jVYwfpG2RVz1fFQoqGOYYARY9yvPzWvLo4SlEwo77YTHds
-	 xDVuSjWbXUfvenGnsEqZ9/bdczYLHjUGfwj/g1j4C5HvMFi6tNvxPnYlNFnmoicsLfc1t
-	 x/V0V2uEABaLvmtKHbG4ZkKksM1qJexdK17AbK2LogKqIJUKzKn73AfJKW1Ibl1F/gw==
+	t=1792661270;
+	b=HmFo6cfKT80/KXuQEZtGcDa66DrMKiSaAxFzLcs4RfgdFCcpI5TXHksbXtMLFZo5/Wnm
+	 DJ1Q523BNo+PFnF7ezWvQMDaKbELjD/j/K0bK/GHzAQY1wxTAf1/4KM5nb0PSRW+q+SlA
+	 7ScVg4B/JJcNry9qAgFt9iu82oPIPtzicDHiSX+AvXdobJPyREU8nqVkE2/ZKBjP3lLe8
+	 3nNS6u0UQOprEjsuOSPJdbYo+2vXhP/TT2TCdg1c9OOe9avDD0d3kOp0iNpScSccH5sDe
+	 OsJqLYxEtOYeV4HoLa7uapra2te6SYa1joo0LSxyrh6zslUuciRnkG9doDdc+c1kaIQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792659563;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=ZMk/Z/bZy+BI5/W0PT4Wtme0XLTO5nzW8fyutMCfad0=;
-	b=KWe+db5XBmZwPuVupSZ7/rddfQApnjgOS7vZiwnm8kE0mse/daX81vbSL9nIcA1MiNWz
-	 y5CM1hEpvrfYc96mPFt8i8vfZp0T4flgpOC798WHAhEKF/pEJujOs6XaFH+/0njkLX+ur
-	 xWsqrQjoV/eg8U3NRiLSr0AcSBOj+bjjzpwv6mSy4SpstgG2Wm5Bm129o09A7r41cAqgI
-	 5nzuGueKseVRuTrmesU6wMcT86SmkOZTNQk3XwkvLpWze+FN17d3m0+mgG69sZH4bklK8
-	 6HtqNtQTrwnjKO0PHlQEa2fCuRiiQU+drJJNu73JzTy7xSw7/yhEQeiIjrmJvwnU0dg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792661270;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=+ONt4F1TGuj2D4gQ5Y9zhiAKxe2DyLjInWzcKZuuWlA=;
+	b=q7H0ca0hOtuim8A7KHRrY3FCwhVs/NS42eyv+HaFdfg6JvWV8jIy9kW38zY/CilBoA5t
+	 cf3PDAZqf0UzWsT4b14qoDko8Kh2EhJ95Y2C2QPou7tEGIrvM20swyEoXurTYxU/IrEFh
+	 b/BndfCk/YE9sz39gfSwIrG4ZcyDkYZBH5n7ymNaN6vKpDhaizrQhV9gRMltvMDYWrE65
+	 VfdZS8CEu4/2nVwzB72UvW7HzPezxmYIXOu2TDCBBUu9qHlW7K5sT50+t2aAUDoqc+Z6L
+	 TJEu8os4mITgIyMAtsNqkzRKHVPIVsPpQX4zTpbL5fGRtLgwFev3X8/NMe+R+wRH8hA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=byvtiKI8;
-	arc=none smtp.remote-ip=220.197.31.4
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ShdJO+V6;
+	arc=none smtp.remote-ip=198.175.65.14
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE94606A323;
-	Thu, 22 Oct 2026 08:59:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9AE94606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE6C606A32F;
+	Thu, 22 Oct 2026 09:27:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CE6C606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=byvtiKI8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=ZM
-	k/Z/bZy+BI5/W0PT4Wtme0XLTO5nzW8fyutMCfad0=; b=byvtiKI84ZxBHjW6xy
-	O1HfJlWVoORKY+VFxflWs+iUz2axoL7Dfg5tRMfUV77DK1XCpNWuOJ+LdEB4rJyP
-	aflyoNjmtSisC5l7x3XlX41VXAtNV7gnN2uiu7BPzgP48bXixOS7XWVXLOyF6Ju+
-	zSxDHoUFvJaEu7BlXZ+hgvbT8=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgB3lRxP0NlqnOotBQ--.27898S2;
-	Thu, 22 Oct 2026 16:58:56 +0800 (CST)
-From: Xia Yan <yana06070@163.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	horms@kernel.org,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	yana06070@163.com,
-	stable@vger.kernel.org
-Subject: [PATCH net v3 1/2] veth: keep carrier off when resizing channels with a down peer
-Date: Thu, 22 Oct 2026 16:58:41 +0800
-Message-Id: <20261022085842.2527-1-yana06070@163.com>
-X-Mailer: git-send-email 2.33.0
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ShdJO+V6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792661270; x=1824197270;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rK5sIX1DXwk1tF+cbYqZC1RpKRClNvCK9hC7fUt7PpE=;
+  b=ShdJO+V6REirnz1pz6uKRgBhNLE2fBibKr4TlyEV5lx141c6edaxYWES
+   qqyDSbe8TW5iKbMvgkgt7p00k145nQ3v7Dc58ECoE/FNcFAcNU+05vroR
+   wJYS4+QmQupYjVglEMxTcixAiSkVVW6vCv/gcPzW8n+8tqgHIhuwAorqh
+   PG60OtWWwxNoNLYo1PXeyBJcHADh3ZpsVav/dFRpJknKyeZ5jmTfkBs9g
+   zc+PxP3dGsrQbzAtKw+a/cXqRfkuNgNrXwnrXLAElKE4wSkKS+3+/AGJc
+   S9T+8lRyqU8+MsvS4UO8vLj51z8LcMXEYSVwBp9dsy9wEL17b/nl1WIdO
+   Q==;
+X-CSE-ConnectionGUID: 8cTjpWbdSbaHD1DVkZSYOg==
+X-CSE-MsgGUID: rtR1K3WARySoa2eAExVktQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11942"; a="1276480"
+X-IronPort-AV: E=Sophos;i="6.27,171,1787036400"; 
+   d="scan'208";a="1276480"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2026 02:27:49 -0700
+X-CSE-ConnectionGUID: 5ZcempBrR2CHCHyjA59+2w==
+X-CSE-MsgGUID: eEQlHikqQoqFh/RjbTax3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,171,1787036400"; 
+   d="scan'208";a="3675540"
+Received: from unknown (HELO [10.238.0.148]) ([10.238.0.148])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2026 02:27:43 -0700
+Message-ID: <1e219be9-e7c8-455c-a3ff-10f80515d4dc@linux.intel.com>
+Date: Thu, 22 Oct 2026 17:27:40 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,86 +72,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 01/28] KVM: VMX: Enable support for secondary VM exit
+ controls
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: kvm@vger.kernel.org, x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+ Shivansh Dhiman <shivansh.dhiman@amd.com>,
+ David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
+ Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
+ David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+ <20260911213659.2025974-2-sohil.mehta@intel.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <20260911213659.2025974-2-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:PSgvCgB3lRxP0NlqnOotBQ--.27898S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXF4ktF4kGr17ur1rGw43GFg_yoW5GFyxpF
-	4fJay5uryxXF1jyw4vg3yUCryUta1xJ3y5WF95K3yFvwn8JFs8XrWFyayj9F1UKFnYqFW2
-	vrZ09rnrZ34DZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pilfO7UUUUU=
-X-CM-SenderInfo: p1dqtiawqxiqqrwthudrp/xtbC3xFZ32rZ0FHBogAA3Z
 
-veth_set_channels() temporarily turns carrier off while reconfiguring a
-running interface. It then turns carrier on for both ends without
-checking whether the peer is administratively up. If only one end is up,
-changing its channel counts therefore reports LOWER_UP even though the
-peer remains down.
+On 9/12/2026 5:36 AM, Sohil Mehta wrote:
+> From: "Xin Li (Intel)" <xin@zytor.com>
+> 
+> Introduce infrastructure to support secondary VM exit controls.
+> 
+> Always load the controls when supported by hardware, though all control
+> bits remain clear in this patch.
+> 
+> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
-For example, after creating a pair with two RX and TX queues per end:
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
-  ip link set vca up
-  ethtool -L vca rx 1 tx 1
+[...]
 
-vca incorrectly reports LOWER_UP while vcb is still down.
-
-Only restore carrier when the peer has IFF_UP, matching veth_open().
-The local interface is already known to be running at this point.
-
-Found during LLM-assisted source review and reproduced with a veth pair
-in network namespaces, without kernel instrumentation or error injection.
-With the complete default veth.sh on x86_64 QEMU/KVM (three vCPUs), the
-four mixed up/down cases fail before the fix and all six carrier cases
-pass after it. All 55 existing checks pass on both kernels.
-
-Fixes: 4752eeb3d891 ("veth: implement support for set_channel ethtool op")
-Cc: stable@vger.kernel.org
-Assisted-by: LLM
-Signed-off-by: Xia Yan <yana06070@163.com>
----
-
-Notes:
-    Changes in v3:
-    - Driver code is unchanged from v2.
-    - The companion selftest is now part of veth.sh.
-
-    v2: https://lore.kernel.org/netdev/20261020135544.24441-1-yana06070@163.com/
-
-    Testing on the v2 baseline 513444cc62e2:
-    - Complete default veth.sh on x86_64 QEMU/KVM, three vCPUs:
-      before: 57 checks pass, four mixed up/down carrier checks fail;
-      after: all 61 checks pass. The 55 existing checks pass on both.
-    - bash -n and git diff --check pass.
-    - If creating the veth pair fails, the case is skipped without
-      masking failures from earlier test cases.
-
-    Both patches also apply to net/main ffdf678dd166
-    (application check only, checked on 2026-10-22).
-
-    The QEMU guests failed to power off cleanly (initramfs issue) after
-    the tests completed; the exit codes above are the veth.sh results.
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 504630f0eb40..b4aec4218b7d 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2751,8 +2751,9 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>  	u32 _cpu_based_exec_control = 0;
+>  	u32 _cpu_based_2nd_exec_control = 0;
+>  	u64 _cpu_based_3rd_exec_control = 0;
+> -	u32 _vmexit_control = 0;
+>  	u32 _vmentry_control = 0;
+> +	u32 _vmexit_control = 0;
+> +	u64 _vmexit2_control = 0;
 
 
- drivers/net/veth.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Nit:
+Could be _vmexit_2nd_control to be consistent with _cpu_based_2nd_exec_control
+above, as well as vmexit_2nd_control in struct vmcs_config.
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 643b97d..4e75830 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1372,9 +1372,10 @@ static int veth_set_channels(struct net_device *dev,
- 		 * to identify the range we have to disable
- 		 */
- 		veth_disable_range_safe(dev, new_rx_count, old_rx_count);
--		netif_carrier_on(dev);
--		if (peer)
-+		if (peer && (peer->flags & IFF_UP)) {
-+			netif_carrier_on(dev);
- 			netif_carrier_on(peer);
-+		}
- 	}
- 
- 	/* update XDP supported features */
-
-base-commit: 513444cc62e231a11c9b15ea88de0890da9b2b4f
--- 
-2.43.0
-
+>  	u64 basic_msr;
+>  	u64 misc_msr;
+>  
