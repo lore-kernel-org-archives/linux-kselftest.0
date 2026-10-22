@@ -1,82 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.155.198.111
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792633590;
-	b=oEru0qzQKywC2qNLesItcc5ZnjK4anjDUWjLx5qXaYPhALtF0ObnNfTk93TyR4+Tc+D5
-	 oS+/Ve3z75mBZlRFUThJbKoFc2ZPpLnt4V3iboZCljLlh+eow01SFF+2Bqd88CbWTwjNr
-	 kBuOZjMI4iJw4fbubwy3KMJntohstZhwbIjvIQ+i1sZFbTS3r07VLUFQa1SN5xWD9H4H/
-	 2iUMkm8/ZWzhMcx/lzcH0F9928lHkeOkP1L9LdvtGiuhJqUrDj+VfZJXB5qtL/1Rs6SX1
-	 FsA3zcofOn2Ovpq+ZVvpvzxuKN9dJijTuk3MOxxrp+fOtwMxFzSdPg34fpjcR5aNxfA==
+	t=1792634329;
+	b=xFeGzJgkXDP8x8m5febeNgsz0DOB5FWzr/eOBu25vx0Pi5WfuUiKu5AMGrEGSBRB6PcQ
+	 4QvQvHC8bxKC9WaumbdYCT427q0m5wYBaC6wfp2gICzrllBTKXvaeZE5nF+LJiiIdMfRc
+	 8gvtovW7vMjxpRzBq0mpISeWPzuj7oeO9JsaXO0kElYn59szIfGP85GToin2l0VXpF1lP
+	 fJMfNMXKkP3DmEP52+pLPmN2GA1QohCnuy0NZb8YUKux34HDAemJ3pAGE1IZOONQsWbv/
+	 Gx1+WuabW1KtbOrqZZ4o9UstGIjNCNn135aA4mucsoztse83sQijlUoQZpkbPDYnNiQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792633590;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=WAr0I7YRFOjqJY0tBlhl9CiHBKCgUZmp0eNrbHjruCg=;
-	b=T7wCyT2321zClmFbYqObhvJIr2VxzrDmM4WrHspkOXHnO0RagK3rHgWPHFEEtC70D0xf
-	 v94Lsc6VavcLajLy3fDCKQGzMjNHhKRjy23WbRphkEHDLf7FyljtBk/lJhG7CTjqDK5g8
-	 k2D62EqU+4LaMMOunGMF+4ZVLnW+wZCwg0wJCEldd5A2Bd/z49B+QXI3uRHNUrKNprdcO
-	 1GzMGzMomgWgxsB1qqhS7tcWn5IAJsu+JjK5PRA6JAdNkWrEERVqiSxk8AmlVomS571OR
-	 R3T7P1RSTBduaWK0QHk/wvQTxSHY2c5vnBeZHUdi8olfc2t+bmaKpjLs9l6NqpRjaww==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792634329;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=HijCuOpDuAK6PXX4hhiO509M0K5rwPq4Jmik4wLwBWg=;
+	b=1wjOZB4Up7deu7EbOsF6qRHVDn1NNabWz9PV/2pOBdKE9Og6gDF+Sgdp/SfJXxjsfS2E
+	 I04lMS0Q+b3Yg3OnSXpxt2sBCWhxwhVnKaQdWA77Ly4uJSQZNeYU8ZE30vbXJ16DsDhr7
+	 JJLBm6LINstJZqf0CkAWhADrJgtQ3TOUC8XjdZBVbyFCjosN1hWxf/yX8EPlne4e8Vmfz
+	 /93FntZhCXHEOe3+jL4WrNZVo+MPMfDUBwIDY1IADYcEIu++EjLBdbr+D+wkN9bRFZORd
+	 qAX7mJ6E2DoV4vF8HCqZMzJUqrxqHDYEfHzfyFwk3d0DqEUF1WzgiqME4toT5dTnC/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=QglQnnM3;
-	arc=none smtp.remote-ip=35.155.198.111
-Received: from pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.155.198.111])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=ILYd2YrI;
+	arc=none smtp.remote-ip=209.85.222.172
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F96A606A336
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 01:46:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F96A606A336
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CF7606A319
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 01:58:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18CF7606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=QglQnnM3
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=ILYd2YrI
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-93e64d52949so118083585a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 18:58:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1792633590; x=1824169590;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WAr0I7YRFOjqJY0tBlhl9CiHBKCgUZmp0eNrbHjruCg=;
-  b=QglQnnM3puktLHnAbMIcplJ73KuJA6DZUFFtwl2lPX8LpWeVOSqWqxCT
-   saf9y9oUKkodMMw3Aw+T/WGWKFfkMBJeGgnoML2Ghq9s0ksX0eLgbmMHu
-   hpArHS4Zd4vYcq5Q53PCsTLkxS3xT3k+xNpJI4N0UVkK9DhNnA2MFPMZK
-   m9v373/tntX0hxS7AnppnZJ1XXkKCUmupj0Z30f5hSdEYcFewghJUWjCU
-   yELEF4FgAGuIXCFUafO+aBpILnnL0waJ0LHntDtmx5pgV2sVQvmZDh6JP
-   hLC3vr974mQJm+eUq/bP9FDD1JPzxxldxSEAqdvIoXjxRRlOeNMna0Xpn
-   w==;
-X-CSE-ConnectionGUID: qWJ1OrN5RpO37eBxqGLnig==
-X-CSE-MsgGUID: NrGM2B7DRxyQafWW3Nmbsw==
-X-IronPort-AV: E=Sophos;i="6.27,171,1787011200"; 
-   d="scan'208";a="31822201"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2026 01:46:29 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.48:28595]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.22.5:2525] with esmtp (Farcaster)
- id 9d617943-0c35-4a6a-8576-7d5b2483345b; Thu, 22 Oct 2026 01:46:29 +0000 (UTC)
-X-Farcaster-Flow-ID: 9d617943-0c35-4a6a-8576-7d5b2483345b
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Thu, 22 Oct 2026 01:46:29 +0000
-Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.53;
- Thu, 22 Oct 2026 01:46:28 +0000
-From: Jimmy Zuber <jamz@amazon.com>
-To: NeilBrown <neil@brown.name>
-CC: Miklos Szeredi <miklos@szeredi.hu>, <fuse-devel@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, "Bernd
- Schubert" <bernd@bsbernd.com>, Jim Harris <jiharris@nvidia.com>, "Horst
- Birthelmer" <horst@birthelmer.de>, Luis Henriques <luis@igalia.com>
-Subject: Re: [PATCH 0/3] fuse: atomic open
-Date: Thu, 22 Oct 2026 01:46:15 +0000
-Message-ID: <20261022014616.2503204-1-jamz@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <179253922666.1724252.16392934420146585044@noble.neil.brown.name>
-References: <20261020141647.3271341-1-jamz@amazon.com> <179253922666.1724252.16392934420146585044@noble.neil.brown.name>
+        d=soleen.com; s=google; t=1792634328; x=1793239128; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=HijCuOpDuAK6PXX4hhiO509M0K5rwPq4Jmik4wLwBWg=;
+        b=ILYd2YrI9qIwIWCdoSXQ/yf8+4firDkwcRlIzKEP39SUfiLAhJkv4itz8By0QiL+Kd
+         rD8RDzoD7hOIvbGKLfiDKMnDRkJNFl+xoHiiOk/Ruy2tYO9zDjDlyFs8ePUZkhGKuDuX
+         CCbm6QhGx9uKUsVYqhWZSDE8kdmv6lBl6sHgOSUXC3Ur2EBXvtU+HcdcvTrcVG1DlkRU
+         SJOLLRni9yGQ3JkmvKLXKCUD924DivrYXhXhJro6ZhKqjRR55XZ9WnCvmEkQ0F5tpm4o
+         91zWN3hElWnI4Pr2ttxEyEf7b6m3mHwFQLcOrNX7g4k1iutCDDDshQP2L0Kbx4wbKhMr
+         25pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792634328; x=1793239128;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=HijCuOpDuAK6PXX4hhiO509M0K5rwPq4Jmik4wLwBWg=;
+        b=q4k1MFvR9Q4Ww03ha9F18tklPfoz3/pewOeU2oJn5sLyk7KbdC72Zb9DWZNMhygcBP
+         tVQxc/tg54dEZecnVecyu3CfNDV9crEa1oZfJxttLQNY518/WXQtvzxGNLVrcFg4usYa
+         zduacZ8ODK3XhXVuyUmaZKiKqIBHqR3BtSsKPRhnjEtxaUY0bbaMBz6rn0uZPimNfCZP
+         LCYbF3n3G8JpjAt/m3VUMSOqdmnvDPtBmq8u9j8ynesX/3APPKoztX+6NCgcMye+XkA5
+         DUK7TLR06rxZLNyyfrxpZG0+nMs0XeBtwJZrKehDzG7O35JDg6JIaHII2pAhRtYD+VZR
+         zzaw==
+X-Gm-Message-State: AFq9FYLrSmhOE2EAJzx5AYkRa4VD/cB7WDEBhlEBpQJSKyJKhdsxdBgM
+	1iw8ZjmQvUi779R8Fda31EmT3ERt3ASJpMXREo2QwaRawalj3xdZA8hACMcRZSNDjEOqVaApmCS
+	lx9P/
+X-Gm-Gg: AYBFou2uW2RrYBEasVLgw9bzsHd/WA7s7WDkXskOSBnEa+aLCWVwn5Yqbqn4qbMTcnk
+	+Nq9Grm9nn0FOmLRE6OxR9oxwT9fIHS3Nqfn/JXllR1a1v8UiryJY22nvC8j5em+tvDhd3CTOGw
+	LqaTdSkI6ixds1HHT6Mik8O4Nu8V29PV9o8Yo/WQIfdITeFHIUqza+XalVxjKMRKlJ5x/yv1fs1
+	5jK4qMcWdWk6LtiX06rj4Bw847DI0lE4x5I9M67M4gyG4eNmhZaESoI/te9fyqEVH8r9EqdWLqm
+	Pw7ZuyiQ4TdPf5WG56o4mmHK1No3C14GYwdRR0uRBfqJVePhXQmZ3xowOJmwHg6NK79i2brVH0s
+	3YI9o/8rn20X+fOkJbDXbQA3G5UKS/qnDajmRlf6yuh5ko0ZrbxYg27k0VFRFQtmVHC+gNNkAhz
+	hxmPJeQ88LDkBdHFxCFQ7j8FeSI7HMA7IvrvSynQbslNgoxA7oerIdpwhRIg1F4IX5l6eA/9mM4
+	BUUNcIYDuLsL814gpS2+s8SufvWs9tnazJxRacfudMOUrPP2lClmEbel55EH+9F3XA3iUwn88WO
+	v0IFzYM94JiPGSPyQcBW3iFslqRw9vOy6BLGFgSZZbUWj1Qu0NmlL0IuHpnn8IBXkZmr/5V2jI5
+	j
+X-Received: by 2002:a05:620a:2989:b0:93e:e4d1:797b with SMTP id af79cd13be357-93f57fac2a1mr783266085a.56.1792634327158;
+        Wed, 21 Oct 2026 18:58:47 -0700 (PDT)
+Received: from soleen.c.googlers.com.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f56e247ffsm397383285a.39.2026.10.21.18.58.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2026 18:58:46 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: linux-kselftest@vger.kernel.org,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	akpm@linux-foundation.org,
+	linux-mm@kvack.org,
+	vipinsh@google.com,
+	linux-kernel@vger.kernel.org,
+	pasha.tatashin@soleen.com,
+	dmatlack@google.com,
+	kexec@lists.infradead.org,
+	pratyush@kernel.org,
+	graf@amazon.com
+Subject: [PATCH v3 0/2] liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl
+Date: Wed, 21 Oct 2026 21:58:38 -0400
+Message-ID: <20261022015844.2795816-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.56.0.218.g1ec904b173-goog
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,40 +104,69 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Wed, 21 Oct 2026, NeilBrown wrote:
-> This all looks like a reasonably sensible design. As permission checking
-> happens in the client, not on the server, it is appropriate that
-> FUSE_OPEN_ATOMIC only opens the file if it actually created it.
-> So it doesn't make sense to implement O_TRUNC.
->
-> However the code seems to suggest that the server might open the file if
-> it was found to already exist.  In that case, were does the permission
-> check happen...
->
-> Maybe I need a more explicit statement of what FUSE_OPEN_ATOMIC is meant
-> to do in the various cases.  Or maybe I just don't know enough about
-> fuse.
+Currently, LUO sessions are frozen automatically only inside the
+reboot(LINUX_REBOOT_CMD_KEXEC) path, where luo_session_serialize()
+iterates through all outgoing sessions under global write locks and
+freezes them serially during shutdown.
 
-FUSE_OPEN_ATOMIC will open an existing regular file unless O_TRUNC is
-specified. If the server opens an existing file, the kernel will perform a
-permission check after the reply (do_open() calls may_open()). If that
-permission check fails, we will release the file. This matches other file
-systems that support atomic_open(), such as ceph, where a file can be opened
-before a kernel check is performed. Servers that don't want this should just
-return the entry only to have the kernel check permissions and open. I'll try
-to make the expected behavior of FUSE_OPEN_ATOMIC implementations more clear
-in v2.
+This series introduces the LIVEUPDATE_SESSION_FREEZE ioctl on session
+file descriptors so userspace can freeze a session as soon as it is done
+with it, rather than delaying until auto-freeze at kexec time. Because
+luo_session_freeze() only acquires the per-session mutex, userspace can
+also freeze multiple sessions concurrently in advance, reducing kexec
+blackout time.
 
-> There is work underway to support O_CREAT|O_DIRECTORY so that a
-> directory can be created and opened in a single operation.  Would it
-> make sense to include this in FUSE_OPEN_ATOMIC ??
+Once frozen, no further files can be preserved in the session and
+subsequent freeze attempts return -EBUSY (or -EINVAL on incoming
+sessions). During kexec, already-frozen sessions skip the late
+auto-freeze step; if an early-frozen session is closed before kexec, its
+files are rolled back via .unfreeze() before being unpreserved.
 
-Oh thanks for the heads up. This would be a nice fit. If that series is
-accepted I can update this one accordingly. That said, even with that series
-it might be nice to have an init flag in case implementations want to
-selectively support atomic file but not directory open/create (ENOSYS is too
-coarse grained).
+This series is based on liveupdate/next commit 27be83a12b24 ("Merge
+branch 'lu-pci-preservation' into next").
+
+Changelog:
+v3:
+- Renamed session->frozen to session->user_frozen, - Pratyush
+- Added Reviewed-by's
+v2:
+- Rebased onto liveupdate/next (commit 27be83a12b24 ("Merge branch
+  'lu-pci-preservation' into next")) and split out early session freeze
+  into a standalone series (tmpfs preservation and its per-file user
+  argument plumbing were spun out into a separate series).
+- Patch 1:
+  - Drop struct luo_file_set_ser * from luo_file_freeze() and
+    luo_file_unfreeze(), and rename the session helpers to
+    luo_session_serialize_one() / luo_session_unserialize_one() so all
+    of struct luo_session_ser is populated and cleared in one place
+    (Suggested by Pratyush Yadav).
+  - Unfreeze the session's files if luo_ucmd_respond() fails in
+    luo_session_freeze().
+  - Update remaining reboot-only wording in luo_file.c kernel-doc
+    comments.
+- Patch 2:
+  - Add checks verifying that non-zero reserved bits and freezing an
+    incoming post-kexec session fail with -EINVAL.
+Link: https://lore.kernel.org/all/20261015093816.2438942-1-pasha.tatashin@soleen.com/ # v1
+
+Pasha Tatashin (2):
+  liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl to freeze sessions
+    early
+  selftests: liveupdate: Add tests for LIVEUPDATE_SESSION_FREEZE
+
+ include/linux/liveupdate.h                    |  3 +-
+ include/uapi/linux/liveupdate.h               | 25 ++++++
+ kernel/liveupdate/luo_file.c                  | 73 +++++++---------
+ kernel/liveupdate/luo_internal.h              |  9 +-
+ kernel/liveupdate/luo_session.c               | 87 +++++++++++++++----
+ mm/memfd_luo.c                                |  5 +-
+ .../liveupdate/lib/include/libliveupdate.h    |  1 +
+ .../selftests/liveupdate/lib/lu_utils.c       | 10 +++
+ .../testing/selftests/liveupdate/liveupdate.c | 49 +++++++++++
+ .../selftests/liveupdate/luo_kexec_simple.c   |  8 ++
+ 10 files changed, 207 insertions(+), 63 deletions(-)
+
+-- 
+2.56.0.218.g1ec904b173-goog
+
