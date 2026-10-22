@@ -1,97 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.34
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792676532;
-	b=R/YaIQM15mxAs1ELSCDfVZlXlCjRyTupU7O/QJ8u+XFQJLc901lYvQsXG+CXL2FmRlFK
-	 m15VIXZqOI9U1xPIjMa8I4PpTPlWse8/3ezf7I8uzbWMZ4TU8CCywzNPRDd+kjY2ea0Vb
-	 t9XvZTuzAypTuhRDIqaFkaz37H30RugFMGUHEL6tplEOqMf9QHIerRJQ6U0lIPhf6pVYG
-	 2CT9AyxGmVTJBjkd2Md6WO5Pm4os/5seNwrd321YUBm9iUrU6LkKoWYfiAonuFJ9igHyU
-	 OhOnK6zeIqWjPITONTeaNme4AvyuNLklHwIvBm1Pby1HKHiaqjRrM3yg8VHI8GxzYKw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792676532;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:CC:
-	 References:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-EOPAttributedMessage:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=k0lEg9AtN7A6GwPkZqxbTkNorffmZLvBBJVSZcN1WGY=;
-	b=B0lVzDbQZenuLLPNna+qMFsV9qD8HtbVFHLYrq5J/gR/yLijKP+eoUcpeiJakN7XWjVR
-	 u8KiRiRcVeYfAgfpm+bsFHfLqvcUNkSB9Ba/wuozKZfx+cvPbO0+JkcycUy8M8kRaR5/a
-	 ZPUMTUc5+BVLajI1KBHhQ8G2L4Jx+jNdXMYyCdY6NtXad4hw69YjWbgwTQjW3itBfwap3
-	 NXxNH78g5Yr6ynL4PjHmWoO8SjwDiF6tvmCfdZlZKBo+P2CnXxwKMLx8y0LPv2pjd1qJ8
-	 NsDbfj0pO0WiUcA6Fq4Y/PPXhWVqTlZkBslKfDhhLt70AdHf6L/23CPjyUHvseyL3pA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amd.com;
-	spf=fail smtp.mailfrom=amd.com;
-	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=lTirRIu1;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.34
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010034.outbound.protection.outlook.com [52.101.193.34])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.248
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792676749;
+	b=vMllehOqA3Kno59cs9yjtYaQFJUfVYz2qtPhqUytjMtd1DMWX/Zh0EWq9USARyPsG+1P
+	 PTMeguEwJxB32NX3XX9irw8eJ9tthNxIc7wlRhoVnhUQs6p5eWIvkTt+ZsMMLbdya99M2
+	 fiVgzVp6hKXYxIKpoExRtBiVP47O4dZeMrVauAJCUMekmM9H+vF6yxhzvrYrnJWPmb00W
+	 D4c7s7rjENCqh1tBEew6AK0+HuuParLEliUVHH5R/V53w3RRaeLjya/Oc2JmTsRYhZhmA
+	 Rmn8QcGnSUZJO+ysr4ZiFpQpw+unDp20nr/4Tnh/TNd7fqJLfAh6sXp9qoyBV0iMTyg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792676749;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=LicF3euAGsgn/y9upA2MV2kVHqGzu+8Hct81aaTE13E=;
+	b=b2dv4ZjByqqYXCR/ff9IkfiHiy70LwcA4RYKKrZyvHFUULkVwnq0HWush+RIkUGJ3sY1
+	 ZoPLhCr4OQ7iWXGd4PouoPm1dJjPGaNroI9otjoTOlVpnRVlnSPjHnuJzV+7LIFn61fku
+	 U+bexpYXVZhFo1PDZ52Dw4UFPhLoIR9Smk8ufFdORIDJmeEcglXTrNwMS2ext4o/oEjzT
+	 avSuhV5JBZeg2esscxAdEFIs411GQfO+gESooaAAjC30wIW+Gsimj4PFxGG2jGPv73MBL
+	 ZwHMJfxajDomX4gxqRX9Vz9rhLmjE4KQ/fkS0HfqLeMT2WBwV62LmFYxC6avpzWRgeA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PZC8UgFy;
+	arc=none smtp.remote-ip=91.218.175.248
+Received: from mta0.migadu.com (out-248.mta0.migadu.com [91.218.175.248])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B7E606A323;
-	Thu, 22 Oct 2026 13:42:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0B7E606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9499E60A6F43
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 13:45:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9499E60A6F43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=lTirRIu1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tRi6i11tU4NNDdkZks5OGnEhF0kRF1TP9SU8TVbIu9nsD5d8x50sar9DzK7Ia5+dBJ1OC87x5CjM5KwfDdflXG13S8o1GD3JcvV0n7CI63epKgYxSOkJeRGMjtNgf+ZzG/C8KPPzFkvmT4F5B+oQWTl5hRR5M0JVQOTIKlL7LGSVc7JRvjxVlfGwDGCflRgG2LNejN9LMeGpy8BkLd62nKStugIG06Bs9SocmTJQYWmjQr6DHtHp+jE8fVyncAS9kBy9UR2FJdAHH5gEFbu3SuGL8kwWtR5pUuRImvxViyiyi0dhIUQZCu24u1m5OcnCmr58Cw3/b/w3iJN5bTKwFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k0lEg9AtN7A6GwPkZqxbTkNorffmZLvBBJVSZcN1WGY=;
- b=zPxrbc2X6CSIVPyZetD2ICHNoDVjeuDeqiGZ2ZZuZJLJzIDHWVXuJKERhBgC+NuZt7tP67Capp9BRZI2Nr9FjoIT9gDOmpvLzXgzL/XhNFdse98F092ISVpYGwSN23HYYLE5gNGRWVAsHUW4yP4O5XS/tqg+OkVm8PIaP6lUX9oUXTRIm+2qMYjFfPkmBNJm+Y1BTkVtAa/5EJitG/UhHlhdoNziYmWaMxYP/++VfaKnGvjoK7sOMz+6y0YxrIuShSXTB6B8AnRlLT/nPQu85kbjz0ceNeR/vRibSLYLcBfoJJsdVlZxVgKON5OYhHvpYPMo6cYcUeTqSoa1VEqGsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k0lEg9AtN7A6GwPkZqxbTkNorffmZLvBBJVSZcN1WGY=;
- b=lTirRIu1zoB9+u9yvaeiQTJTLeVbEUEoz6/VKY8NiRTS8LL8lFvn8mmoxNR28rXppPXk+GqwlV4j2vYzVcvclLO0KayvpLSS7SklbnqVKWMwSMEH+yoXodBT22fNLVKFyLhm2V4MKbn0HXu8T73//dgIs/p+WFWBse+VGqTj2OY=
-Received: from PH7P220CA0098.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:32d::9)
- by DS0PR12MB9422.namprd12.prod.outlook.com (2603:10b6:8:1bb::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.15; Thu, 22 Oct
- 2026 13:42:04 +0000
-Received: from CY4PEPF000392D7.namprd03.prod.outlook.com
- (2603:10b6:510:32d:cafe::12) by PH7P220CA0098.outlook.office365.com
- (2603:10b6:510:32d::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.546.16 via Frontend Transport; Thu,
- 22 Oct 2026 13:42:03 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- CY4PEPF000392D7.mail.protection.outlook.com (10.167.247.117) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.546.15 via Frontend Transport; Thu, 22 Oct 2026 13:42:03 +0000
-Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.53; Thu, 22 Oct
- 2026 08:42:02 -0500
-Received: from [192.168.0.103] (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.53 via Frontend
- Transport; Thu, 22 Oct 2026 08:41:58 -0500
-Message-ID: <73b6b045-c305-4d8f-a37b-00fc4a810b59@amd.com>
-Date: Thu, 22 Oct 2026 19:11:52 +0530
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PZC8UgFy
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ZIT7Fqc5IrH7ow8aVqftwoQ7RTkPnyB9D7PkliUjm24=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792676745; v=1; x=1793281545;
+ b=PZC8UgFyfrl73FfvNIkRiY1GoW2l5BlBFnnA5qkjqmLl3QdCYRUnvkyqGG4TSSMm1uSvQd7W
+ bVHn91XMI4u14q2bEdkkdZ2nwf23WhXl9uQEizFzgYZlSdFpPreNSEHMpDQvtf+QDTAhCkBLt0s
+ 87vZTQV+qfrMlHFdJp7ojfLU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id bfeba91be5b9f80b;
+	Thu, 22 Oct 2026 13:45:45 +0000
+X-Mizu-Trace-ID: bfeba91be5b9f80b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <c65208d9-aba6-4e9a-affa-4f7cd8794a0c@linux.dev>
+Date: Thu, 22 Oct 2026 21:45:37 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,77 +59,226 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/5] selftests/resctrl: Add MBM and MBA test support
- for AMD
-To: Reinette Chatre <reinette.chatre@intel.com>, <tony.luck@intel.com>,
-	<babu.moger@amd.com>, <fenghua.yu@intel.com>, <shuah@kernel.org>
-CC: <Dave.Martin@arm.com>, <james.morse@arm.com>, <peternewman@google.com>,
-	<eranian@google.com>, <tan.shaopeng@fujitsu.com>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<x86@kernel.org>
-References: <20260810184806.1089507-1-swapnil.sapkal@amd.com>
- <3bd1195d-35fb-44b4-bc96-4ec32c70e3d1@amd.com>
- <5193ca97-0ad4-4a3a-ac01-5b5efcbc249d@intel.com>
-Content-Language: en-GB
-From: Swapnil Sapkal <swapnil.sapkal@amd.com>
-In-Reply-To: <5193ca97-0ad4-4a3a-ac01-5b5efcbc249d@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF000392D7:EE_|DS0PR12MB9422:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39873698-0d48-4def-1fa3-08df3042418b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|82310400026|36860700016|1800799024|7416014|22082099003|18002099003|13003099007|11063799006|4143699003|261009223027099003|10067099003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	DfTgPww3zPwQUFYxaJj5yuuSKGnjeDossbYLHXSUicSSriGkCbVj+HOIkHYnAVSeGEbxIvKMrkwstLNnUUMrkgWXS3z+4JTk2//PrjXu+xzioqwNr2pzwIdtdRvnggDkHLLbShiZIDoddJzBoIYk8xEGXeQeQuvGrbnhjU6ZuFNu0p68NzILEj6V3hPS8vPyt3SDpsRniUb7g3Q+VzAxe+UMVCcj5Z99qeaUSJ6xU8xG+1P1LTdHCB5daMrgvjTaNRQBc4YURYrzMjiSRG2tG8kT7TXhB9d4q/lXhvE8Kxh+jwoQhTwPKQD/1fpePOwCw8lyZ62w/hfRfDfQFweBkTaBgwVf7tFC7pJW+s7b4ES182EZb3nVjSpktfpXmNZCforIkszHq8+ypDoEpcmLWIygHFAER+XjqTBMF86efmLAhdRH7+1q4vdM7zixJd9Gye+mtoygMUt28oYyjw5TygLC1Lax5OPSYjARKhRd4ubYMu7d0/k7p5lWDQWiAvmyLj/07jkA/xaQf+1Dil/UC2gy4hc3z3lOcX0R0VX8cqkl8+Kkio7d5qpC9SMjSb3cQTcAfu5D0vEZFzUpoGSXyDyKGEM4JRXTXS4HG/q1e5o8tw0ifjeMXNdl1Rm3kY4PYmBBH1e/XU+rpHHTz9uWXNI5T5yFn2CInpucD6zyy5w=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(376014)(82310400026)(36860700016)(1800799024)(7416014)(22082099003)(18002099003)(13003099007)(11063799006)(4143699003)(261009223027099003)(10067099003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	crdTUI6V+ZE8ba80fiRKIFAbAtQ4tRMX4bx/SfprQpHOGYa+iMnCwWcsGWv7L9N7/KOg0L5otn9/Y/MmgcAQl6ml7/2Egx3SdRCzCU+HTbYHMDe7eA+TpcTkl3O93dnvDkPtN9IU6yVp2QKRNIO3Ji/xpx6dG/v6WWllR+1/myO95sFHR6aMjAiJj5CyKClDAtfudJznZ5bjqRxny4O4JejzcP21DXkZr4b04OiVpew5hRYBA3aD+v/pxB42cFra4rcPePne+Tvq499aKSJWTl3Ln1HdG/rV26wdH+orthqLwcUeBYRdWXJ6wRABJIJoWLTE18Gcab1OZ0I4BlmXqoA94cwfaIfbkGRONb+4SI9e0Px+gNEp/xLlABawoKO6ySpkoXWPYEoMPpUDopahIcYjo9LCIL74PdnnisYIZsjdKqs1fuC4r7j3G9jp+Tp/
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2026 13:42:03.4848
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39873698-0d48-4def-1fa3-08df3042418b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF000392D7.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9422
+Subject: Re: [PATCH-next 2/6] cgroup/cpuset: Properly compute effective xcpus
+ in update_parent_effective_cpumask()
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261022031643.1351877-1-longman@redhat.com>
+ <20261022031643.1351877-3-longman@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261022031643.1351877-3-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Reinette,
+Hi Longman,
 
-Thank you for the response.
-
-On 30-09-2026 00:10, Reinette Chatre wrote:
-> Hi Swapnil,
+在 2026/10/22 11:16, Waiman Long 写道:
+> Since the introduction of cpuset.cpus.exclusive in commit
+> e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
+> compute_effective_exclusive_cpumask() helper which is later renamed to
+> compute_excpus() is added to compute the effective xcpus of a partition
+> root. However update_parent_effective_cpumask() is not updated in all
+> proper places to use the new helper to check if a given cpuset should
+> remain a valid partition root. This can cause a cpuset to incorrectly
+> remain a valid partition root even if no effective xcpus is left.
 > 
-> On 9/28/26 9:23 AM, Swapnil Sapkal wrote:
->> Gentle Ping
-> It is in my review queue. Unfortunately during this same time resctrl received
-> many contributions (including a couple from AMD) on the kernel side and I prioritized
-> that at the expense of this work. Others are always welcome to take a look.
+> Fix that problem by using compute_excpus() to compute the effective xcpus
+> into delmask in all cases except partcmd_disable and partcmd_invalidate
+> and use it for tasks_nocpu_error() check as well as checking its
+> emptiness. This enables us to catch invalid partition root more
+> accurately in update_parent_effective_cpumask().
 > 
 
-Ack.
+I re-tested the repro from the link below on top of this series
+(applied on cgroup/for-7.4-fixes), and it still fails:
 
-> To help with the review, could you please take the queued resctrl selftest
-> changes into account by rebasing this series on top of the "next" branch of
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+  https://lore.kernel.org/all/20261010075947.333549-3-guopeng.zhang@linux.dev/
+
+  cd /sys/fs/cgroup
+  echo +cpuset > cgroup.subtree_control
+  mkdir A
+  echo 0-7 > A/cpuset.cpus
+  echo 0-7 > A/cpuset.cpus.exclusive
+  echo root > A/cpuset.cpus.partition
+  cat A/cpuset.cpus.partition
+  echo 1 > A/cpuset.cpus.exclusive
+  cat A/cpuset.cpus.partition
+
+The last command still shows "root invalid (Parent unable to distribute
+cpu downstream)".
+
+In this case compute_excpus() returns the stale user mask unchanged.
+user_xcpus() is gone from update_parent_effective_cpumask(), but the
+dependency just moved one level down: the new code calls
+compute_excpus(cs, tmp->delmask), and its first line is
+
+  cpumask_and(excpus, user_xcpus(cs), parent->effective_xcpus)
+
+Here user_xcpus(cs) is cs->exclusive_cpus, which still holds the old
+0-7 when compute_excpus() runs: update_exclusive_cpumask() publishes
+cs->exclusive_cpus only after partition_cpus_change(). Nothing corrects
+it either - the sibling trim is skipped as exclusive_cpus is non-empty,
+and for a direct child of the root cpuset the intersection with
+parent->effective_xcpus is a no-op. So the stale 0-7 mask still reaches
+tasks_nocpu_error() and PERR_NOCPUS is set again. Please point it out
+if I got the analysis wrong.
+
+I have rebased my fix on top of this series and the partition recovers
+correctly with it applied. Should the fix be folded into this patch,
+or is there a better way to fix it? Happy to hear your thoughts.
+
+Also, is the test case below worth adding here as well? Note that it
+fails until the fix is in:
+
+    # An invalid local partition that took all the CPUs from its
+    # populated parent should recover after its cpuset.cpus.exclusive
+    # list is changed to a valid one.
+    "C0-7:X0-7:P1  .      .      .     X1      .      .      .     0 A1:1|XA1:1 A1:P1 ."
+
+Thanks,
+Guopeng
+
+> Some test case are added to test_cpuset_prs.sh for invalidating a
+> partition root due to its effective xcpus becoming empty as well as
+> making sure that an invalid partition can only be revived when exclusive
+> CPUs are available agin.
 > 
-
-I have rebased and sent v5 patches on top of kselftest/next.
-V5: 
-https://lore.kernel.org/all/20261022132517.46805-1-swapnil.sapkal@amd.com/
-
-> Thank you
+> Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c                        | 36 +++++++++----------
+>  .../selftests/cgroup/test_cpuset_prs.sh       |  6 ++++
+>  2 files changed, 22 insertions(+), 20 deletions(-)
 > 
-> Reinette
---
-Thanks and Regards,
-Swapnil
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 7ead8c3b7974..db6e4663f4be 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1798,7 +1798,6 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  	int deleting;	/* Deleting cpus from parent's effective_cpus	*/
+>  	int old_prs, new_prs;
+>  	int part_error = PERR_NONE;	/* Partition error? */
+> -	struct cpumask *xcpus = user_xcpus(cs);
+>  	int parent_prs = parent->partition_root_state;
+>  	bool nocpu;
+>  
+> @@ -1841,30 +1840,29 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  	if (!newmask && xcpus_empty(cs))
+>  		return PERR_CPUSEMPTY;
+>  
+> -	nocpu = tasks_nocpu_error(parent, cs, xcpus);
+> +	/*
+> +	 * Except for partcmd_disable, use delmask to compute the current
+> +	 * effective xcpus value and use it for tasks_nocpu_error check.
+> +	 */
+> +	if (cmd != partcmd_disable) {
+> +		compute_excpus(cs, tmp->delmask);
+> +		nocpu = tasks_nocpu_error(parent, cs, tmp->delmask);
+> +	}
+>  
+>  	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
+> -		/*
+> -		 * Need to call compute_excpus() in case
+> -		 * exclusive_cpus not set. Sibling conflict should only happen
+> -		 * if exclusive_cpus isn't set.
+> -		 */
+> -		xcpus = tmp->delmask;
+> -		if (compute_excpus(cs, xcpus))
+> -			WARN_ON_ONCE(!cpumask_empty(cs->exclusive_cpus));
+>  		new_prs = (cmd == partcmd_enable) ? PRS_ROOT : PRS_ISOLATED;
+>  
+>  		/*
+>  		 * Enabling partition root is not allowed if its
+>  		 * effective_xcpus is empty.
+>  		 */
+> -		if (cpumask_empty(xcpus))
+> +		if (cpumask_empty(tmp->delmask))
+>  			return PERR_INVCPUS;
+>  
+> -		if (prstate_housekeeping_conflict(new_prs, parent_prs, xcpus, NULL))
+> +		if (prstate_housekeeping_conflict(new_prs, parent_prs, tmp->delmask, NULL))
+>  			return PERR_HKEEPING;
+>  
+> -		if (tasks_nocpu_error(parent, cs, xcpus))
+> +		if (nocpu)
+>  			return PERR_NOCPUS;
+>  
+>  		/*
+> @@ -1876,9 +1874,8 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  		 *
+>  		 * Warn if it is not the case.
+>  		 */
+> -		cpumask_and(tmp->new_cpus, xcpus, cpu_active_mask);
+> +		cpumask_and(tmp->new_cpus, tmp->delmask, cpu_active_mask);
+>  		WARN_ON_ONCE(!cpumask_subset(tmp->new_cpus, parent->effective_cpus));
+> -
+>  		deleting = true;
+>  	} else if (cmd == partcmd_disable) {
+>  		/*
+> @@ -1973,7 +1970,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  		 * A partition error happens when parent has tasks and all
+>  		 * its effective CPUs will have to be distributed out.
+>  		 */
+> -		if (nocpu) {
+> +		if (nocpu || cpumask_empty(tmp->delmask)) {
+>  			part_error = PERR_NOCPUS;
+>  			if (is_partition_valid(cs))
+>  				adding = cpumask_and(tmp->addmask,
+> @@ -1986,8 +1983,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  				cpumask_copy(tmp->addmask, cs->effective_xcpus);
+>  				adding = true;
+>  			}
+> -		} else if (is_partition_invalid(cs) && !cpumask_empty(xcpus) &&
+> -			   cpumask_subset(xcpus, parent->effective_xcpus)) {
+> +		} else if (is_partition_invalid(cs)) {
+>  			struct cgroup_subsys_state *css;
+>  			struct cpuset *child;
+>  			bool exclusive = true;
+> @@ -1998,7 +1994,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  			 * check.
+>  			 */
+>  			if (prstate_housekeeping_conflict(cs->partition_root_state,
+> -							  parent_prs, xcpus, NULL)) {
+> +							  parent_prs, tmp->delmask, NULL)) {
+>  				part_error = PERR_HKEEPING;
+>  				goto write_error;
+>  			}
+> @@ -2014,7 +2010,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  			rcu_read_unlock();
+>  			if (exclusive)
+>  				deleting = cpumask_and(tmp->delmask,
+> -						xcpus, parent->effective_cpus);
+> +						tmp->delmask, parent->effective_cpus);
+>  			else
+>  				part_error = PERR_NOTEXCL;
+>  		}
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index d04aad697b96..47791591002f 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -359,6 +359,8 @@ TEST_MATRIX=(
+>  								       A1:P0|A2:P1|A3:P2|B1:P1 2-4|3"
+>  	"  C1-6:P1 C3-6:P1 C5-6:P1 .      .      P2      .      .    0 A1:1-2|A2:3-6|A3:5-6 \
+>  								       A1:P1|A2:P2|A3:P-1 3-6"
+> +	"  C1-6:P2 C3-6:P2 C3-4:P2 .      .     C5-6     .      .    0 A1:1-4|A2:5-6|A3:5-6 \
+> +								       A1:P2|A2:P2|A3:P-2 1-6"
+>  	" C1-4:X2-4 C2-4:X3-4:P1 C3-4:X4:P2 \
+>  				   .      .      X5      .      .    0 A1:1-4|A2:2-4|A3:3-4 \
+>  								       A1:P0|A2:P-1|A3:P-2 ."
+> @@ -427,6 +429,10 @@ TEST_MATRIX=(
+>  	# cpuset.cpus is allowed, but those extra CPUs are ignored.
+>  	"  C2-3:P1   C3:P1  .      .      .     C2-4    .      .     0 A1:|A2:2-3 A1:P1|A2:P1"
+>  
+> +	# A child cannot recover until its exclusive CPUs are available again.
+> +	" CX1-4:P1 CX3-4:P1 .     .     X1-2     .      .      .     0 A1:1-2|A2:1-2|XA2: A1:P1|A2:P-1"
+> +	" CX1-4:P1 CX3-4:P1 .     .  X1-2:X1-4   .      .      .     0 A1:1-2|A2:3-4|XA2:3-4 A1:P1|A2:P1"
+> +
+>  	# Taking away all CPUs from parent or itself if there are tasks
+>  	# will make the partition invalid.
+>  	"  C2-3:P1   C3:P1  .      .      T     C2-3    .      .     0 A1:2-3|A2:2-3 A1:P1|A2:P-1"
+
