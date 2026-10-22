@@ -1,103 +1,133 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792634331;
-	b=n+khPWg/MZyzbrzGTSdWR0KsmRpjEwOn5Va38TtivHCASHBDVqj3kVzWDpcLFsjmlxEl
-	 39sqkWRuIka/uCwYMUdeJYWNAuAIJwTpbrOOAR9sqof0Nw4ej050haawljTQKhhV2h6Dc
-	 4zmD+lG1eWLjhb9WI/ORsXxvItHwRKwLBFGcSwsOpcxZz2IHjyjM+JWors4Vq19ZjC6Ef
-	 Jbyl3EX184EMO82wI478g5cg5jXTyKD2BEUDWBRzGZ5SowOm+s7e/2/nlipM29o+aiVXK
-	 v2OELnvHShiK3ry91aREdVtLNSl9BWUQqUTYJNKNOf7FA1jg2LXxu2TmK14RfAVTX/w==
+	t=1792635520;
+	b=ObsA1ylubYe68xySV2jaYR8VP5g6m+3AbJ9r60IErL5yaUVxInAJ3fyDnrGYVXKkeXJx
+	 IsVI5CdaLeC1Yx/+DS5egEHdHnOfwkutyBzq/1Hshgmctm6tfhGumum9FEOwMy9gpAvgL
+	 Pv7lrUOnynnj8EAyDLc3rHU9vAjEF8TAw5s2FLmXAeEu9n6NsOv2h6v/SNDXSnxDUjhIZ
+	 uI+35Wam7Afnvw+2Z7QvoTT+u8sn+nmPe7AxAC2MgLHE88DmYzC4ZHKlwM91QC2KqpVuR
+	 1eNK/wgNxHMe2Z1zkXU4jgozsf5P/n3ofOxNBHjQn2nnB9vwBoabPO7gMRUIJy2VHog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792634331;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792635520;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=J0kSQmA6WteBQ8jad2iaYF5h9jM/IeqgPz50Jq+mBV0=;
-	b=XBPuoa92RQjNRQXE4xecX7KrX7j/vfsJJMqWLZIkViKNwf4NjYaHD37UpbAzV9IRaSLg
-	 ysGNrlJx4oWHBsCauemDDYMolqkems+9cxyUrHOCsovFjWtk5nENkR8MxWAXu7qGTMyYO
-	 52xYS1rbHEHO92uQPBVavCYCtwIuoUveLuwckcTJbeBp2y/WnQCpyDfZ7W6wVYQX3muKY
-	 xRbLNIuE2djPAWr/AdNXmabR7ZIdIgBU0kywTgs40k/9SeAJA708zuQuuxrGXuBs0MdXO
-	 B9xPTZQxoSxbSR1YVWz6cBlkWkkTaT6VQxPkJsnuoO1Pqb/pNZKlP+VJ6qtmYC9H+QQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=YVLKVn5aYrORuK3mJHdyAM2K05yQ1I4f1Gd2eeFrBFc=;
+	b=p+ZbxqYT2drNQj4yrPHEavcM9IPgUE9WcdkEY2tqByUYKESKhX64aeHizF/3uvj8StKP
+	 yFFdJ8c8fJY4kjAOItvUYTI3+6Fmsvm3WIPXC701PPtrvZC+5mRq+nwNEAdQmQBrg9/lA
+	 ieXR0WuNdMCfpUXLVhHaIzPOjQ1w4jp38RgiCmsRVu038CcNXdyYXnUULa6fUsAn3YazC
+	 7IIjk+IPmJh+TYPFfKA5PopSrYZgg8Q7nIGbxpoXUv46JgLA/mKpy9vOjG9cXK+tXPHTK
+	 oIaKnHSFc7n9Mq9n0jRRTbpEk5/xsgWuGI5L2XM8ONBuhqTMGNWq8OKE3OkHgORC6kg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=soleen.com;
-	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=PUmVa8P4;
-	arc=none smtp.remote-ip=209.85.222.173
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=H+eszt1v;
+	arc=none smtp.remote-ip=74.125.82.181
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C87606A32E
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 01:58:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97C87606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47E7606A31F
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 02:18:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A47E7606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=PUmVa8P4
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-93f3c8958d5so157131485a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 18:58:50 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=H+eszt1v
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-3514b90bb89so3733932eec.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2026 19:18:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1792634329; x=1793239129; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792635519; x=1793240319; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=J0kSQmA6WteBQ8jad2iaYF5h9jM/IeqgPz50Jq+mBV0=;
-        b=PUmVa8P4GAgDqH00UYGRrrwYFCEVFzMNSlfWBitcFu8SGNBdJ/D+S4HRMeA088Bm0Z
-         AaMm2p/uUMllBU8JfTriJUR2UgwEsFxFUpv/c3J82qXPLkg0mmDAn3ZJPQraciJ5STpP
-         j0vb0ZNmKsF3XekJL7DOVsJNfVbdSRKciJUQIK7hjSuxpL4sB7CUdc7UQfcGdDh7uFNH
-         YgUazbQ7VI25dJLLj6FpCgxawS5x1mymdqtjbBclGVeTZoaiXGP8e+YJTnoRvR3njh6Z
-         a25nqsQ2dTRJvCocbJDn6oH7yFGnk6J8YgTLuZu7Qy8iZywDQWjzyWVPooFHjplp4r4W
-         ME6g==
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=YVLKVn5aYrORuK3mJHdyAM2K05yQ1I4f1Gd2eeFrBFc=;
+        b=H+eszt1vKQtCU3/KB7Qzaij69qenfu0lG2XuIF4ZWISg5dYrkmC9asbrjtgR4CXkce
+         TBXb4GKHG/wsSGQ+UrZ8+zEcA1NQgtYK91w+B80ULkg3ASikYfCo9UWfYmfwpvEte4XE
+         jTTxbKPQVXpeU8ktIhq/YTivJtLdLSAXqmVf38FDGxukqYkaW7iUTpvQyxAALnq6XXGD
+         ci38T/qydDnsRZLVQQuKo0hUWVY5R+df+t/heaKrcLMGs9Hz98Sz5r75F5L7LBqWlFQI
+         egjfA+nNUHRlxwEXpwXcYyyWcLr+UjLA/NnupQKuiAMqRo8yIe4c9Dms37/DiCtx6ifF
+         hfCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792634329; x=1793239129;
+        d=1e100.net; s=20260707; t=1792635519; x=1793240319;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=J0kSQmA6WteBQ8jad2iaYF5h9jM/IeqgPz50Jq+mBV0=;
-        b=gA8rUugJuvIIlq+bnwUrNc6WZK9shMWEaCVJFgMTRcZtK/B8bIPLSr+Pc9kCCc1Uur
-         ZRR6+LoKukpQUwho8K5s+k7TOmWTmmzFSuKlYzICg5cyf2hGdgh9+/c1jw+iksQgX5rc
-         jTZXS2mpukYd37VeaY2OHsCqijZDThgBcJvnihhP+9g1bhLGiy5MCJ8o8Nol5ScNtg6l
-         OVv2/HuETlMnEo51jWDoreCYhNicW63N41km2YbWEIPdm1yhF6hctylJxfdDcYQeV6Ud
-         6yZxo6HuYe2HRteDkM3uwO3UtZf1z47PfeH15tcySTgVpmNWb6eZHrvje72Pt+8uLVrd
-         KL8g==
-X-Gm-Message-State: AFq9FYL3SojzehVUcQyEngmmVoKeqm9NhGNfLrCzkSt93Lbsgmfvrwd4
-	JQua9Qn4W4M8e1/hlfG9awuQ/LA0Pbr+9gyojUIBVU/D0N8nD8TJALCEERwzZ1HhdVaJlrft159
-	eYG5r
-X-Gm-Gg: AYBFou3opGlaAan/tSKmZf/uxLg9g77/gmDi75xSXAGL3jSZ/lTySinSCJjWAV247LF
-	JcQZQtnLHs+DKXeOkFKRkhd7po9kPa69osS6JSk54PYmldVqlnsnED06Bj95bmQ9qlnQcbivvvq
-	8Nuti3D0e98j/A23W4LRPalc7Xkax7NKtn/xjDIpK9jtyWYbBE7YLUeTCueIJA6rD/rJjgACpP8
-	bksjMjA0jToNls8QYOPaLWsooiCGYYFHxswXF8XOdlHGWZp/FlKqkFcmgfunmpfW/5o2QDYhdPd
-	uwsZISyqZ1T6bJadGqpWQ6zABccNcpnQvAGaCBAH/w50CB2MJ5A7B5OMKcNCMeKOiSEYlAAY+vu
-	PKDnQTX3uF0AgUCVNkWljmEcWdI9gPxNCCpKuH8yh8eGbBnaFLWjiGTtM0H8LQe9BuHUbqw0aj0
-	E5Swbbzj4qg5Brlj/aWDqep/5e75NaXr7sAoYLa8XX1rmXvpfWbCSykYJDYRQJHZFLoITLqb2j/
-	S4OjLDnxMR67bZnjkqVqh8G9SNVKKnrgDzoxZah+po0Py4kt0awcCuMh3SzndUNF8PT+003CII2
-	PjdNpZnv3SLlmPpNVxrKMzw2oZgifdOHsuvaySk7AGVONUNEzKcTD//5Fc2f2NjWhksSAkkpG2R
-	fBy7jibevwd1KrJ1CZOaKiQ==
-X-Received: by 2002:a05:620a:2851:b0:93e:4d60:d389 with SMTP id af79cd13be357-93f57f1ecf1mr807656985a.25.1792634329416;
-        Wed, 21 Oct 2026 18:58:49 -0700 (PDT)
-Received: from soleen.c.googlers.com.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f56e247ffsm397383285a.39.2026.10.21.18.58.48
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YVLKVn5aYrORuK3mJHdyAM2K05yQ1I4f1Gd2eeFrBFc=;
+        b=L7x6MJtAkaB+lodxBG9k+5cuhx8S6wP+OHfmSG7omu34bPzPdFgsx1118tLlRAms4H
+         pkdb7gxMgEZecHrNVo/DvzcsLzr8JNjklb1R10JenSDn6tGb9a1IG+HR5nIBSMO2WoK8
+         ZPKvGZme4uQCp3DFhCoiZ4Zj8XrjIiiZu9Np2+I+/e9g08Sh/b7y+ALy4LCMzbrqr2/S
+         JiEBfWajmpPvzjCnhArqFNX5jXQZEQqz18+jnkoQhviL+Wy0tzFxdSEade5VQg2rPoeP
+         PACCD9JKJA69eiGaTeUC2+FBCn1b0X4hVzLNX/RoM5ctDYHHTIl/wGUxulu8rz6lSZMB
+         YH+w==
+X-Forwarded-Encrypted: i=1; AKwUvBzoU9EwjtogfWXBgXH4v49+64rTvjtHMXRmFGZ0c0YwI/C2/uaeOi8Tau4wIYrdh8ndjIB2hU/33dVIjqPS9MQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJlq0C31CBy/JVpiGIlSZrcoUd5ICoJBS10+pAEbzyEw0e3NS95
+	MMFtmJU0F+7aBWHvrhKWOiwFYWQ0x8ltOv5qQcnOvPwKrE+1oRGkR0nK
+X-Gm-Gg: AYBFou2b8Nolvl2s8m09DDq7PteP1R2bxykau5tw1Q00yb4/KsBnH/FOF58FzvWlpvf
+	GqK2deRbLpWnpIq9RCYQZBIfNU7C690XTlw1KhOVq+5SFC/spR2TrM1UCkwk1DhzXsriI6782gs
+	91ORibpF6Sl8sEaHo+Q4YaLUm0/Iv0eFPzL37RCVRbcZ0RXq42PnPUcK71CF39F1ftTmhtSaBCy
+	oROqEj3/K7FOuQjvIK86fm1bOwA+gemNXZSrQVBooozxI/YTBY+rPSdK3klVaesBC+fMWRowdGO
+	DGt+OzAljeR3NTEmpdbtK3feCFOyw9+grGnXRfypA90zToWKQArkfACLfRwfKc/nzTTegrz8O9n
+	1DWIOre2EjSSW5zoLnLiUoNqiA22dOUG0CSg4LbM/IMoYaqZG6eocbDLuSjrxqOos4MY7DJ1Oq2
+	yyTFV52zL5gU69fHl+5c+Mg1A1WAMgsf3Kc4G4cy1azQGFc0xGA2LFCLE6e/3LBbWb/ojl6gIgE
+	eo64Cum2Dq+UjrxGm7/RLXGsqNwcA4Jzwx8ZX709TY5s4o=
+X-Received: by 2002:a05:7301:618e:20b0:35e:2c6:d46c with SMTP id 5a478bee46e88-3674c63d579mr5523810eec.10.1792635518735;
+        Wed, 21 Oct 2026 19:18:38 -0700 (PDT)
+Received: from ubuntu.. ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-368b4b8e9c6sm3556805eec.1.2026.10.21.19.18.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 18:58:48 -0700 (PDT)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: linux-kselftest@vger.kernel.org,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	akpm@linux-foundation.org,
-	linux-mm@kvack.org,
-	vipinsh@google.com,
+        Wed, 21 Oct 2026 19:18:38 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+To: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Marco Elver <elver@google.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Kees Cook <kees@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	pasha.tatashin@soleen.com,
-	dmatlack@google.com,
-	kexec@lists.infradead.org,
-	pratyush@kernel.org,
-	graf@amazon.com
-Subject: [PATCH v3 2/2] selftests: liveupdate: Add tests for LIVEUPDATE_SESSION_FREEZE
-Date: Wed, 21 Oct 2026 21:58:40 -0400
-Message-ID: <20261022015844.2795816-3-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.56.0.218.g1ec904b173-goog
-In-Reply-To: <20261022015844.2795816-1-pasha.tatashin@soleen.com>
-References: <20261022015844.2795816-1-pasha.tatashin@soleen.com>
+	linux-hardening@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-mm@kvack.org,
+	Peter Collingbourne <peter@pcc.me.uk>
+Subject: Re: [PATCH 1/2] word-at-a-time: check the first byte in load_unaligned_zeropad()
+Date: Thu, 22 Oct 2026 10:18:20 +0800
+Message-ID: <20261022021820.1789083-1-odys.yuan@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAPAsAGyrH1quaLuyui6Qm5sokid8=yjNbAM3cOunynfPNQtfgg@mail.gmail.com>
+References: <20261019-bug-word-at-a-time-zeropad-kasan-v1-0-f21a3ed6a477@gmail.com> <20261019-bug-word-at-a-time-zeropad-kasan-v1-1-f21a3ed6a477@gmail.com> <CAPAsAGyrH1quaLuyui6Qm5sokid8=yjNbAM3cOunynfPNQtfgg@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,143 +139,17 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Provide luo_session_freeze() in the liveupdate test library and add unit
-tests in liveupdate.c covering the LIVEUPDATE_SESSION_FREEZE ioctl. The
-tests verify that non-zero reserved bits are rejected with -EINVAL, an
-outgoing session with preserved files can be frozen early, freezing an
-already frozen session returns -EBUSY, and attempting to preserve an
-additional file descriptor into a frozen session fails with -EBUSY.
+On Tue, 20 Oct 2026 12:58:54 -0400, Andrey Ryabinin wrote:
+>> +	/* open-coded instrument_read(addr, 1), as in read_word_at_a_time() */
+>
+> Why it's open-coded ?
 
-Also freeze the test session early in luo_kexec_simple.c to exercise
-LIVEUPDATE_SESSION_FREEZE across a kexec reboot, and verify that
-attempting to freeze a retrieved incoming session returns -EINVAL.
+For the same reason as read_word_at_a_time(): commit ece69af2ede1
+("rwonce: handle KCSAN like KASAN in read_word_at_a_time()") open-coded
+it "to avoid having to pull the entire instrumented.h header into
+rwonce.h". I kept the six asm/word-at-a-time.h headers to the same two
+small headers, kasan-checks.h and kcsan-checks.h, rather than pulling in
+instrumented.h with linux/bug.h and kmsan-checks.h.
 
-Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- .../liveupdate/lib/include/libliveupdate.h    |  1 +
- .../selftests/liveupdate/lib/lu_utils.c       | 10 ++++
- .../testing/selftests/liveupdate/liveupdate.c | 49 +++++++++++++++++++
- .../selftests/liveupdate/luo_kexec_simple.c   |  8 +++
- 4 files changed, 68 insertions(+)
-
-diff --git a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-index fa07fed08364..15a7db3a6b3e 100644
---- a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-+++ b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-@@ -26,6 +26,7 @@ int luo_create_session(int luo_fd, const char *name);
- int luo_retrieve_session(int luo_fd, const char *name);
- int luo_session_finish(int session_fd);
- int luo_get_session_name(int session_fd, char *name, size_t name_len);
-+int luo_session_freeze(int session_fd);
- 
- int luo_ensure_nofile_limit(long min_limit);
- int luo_session_preserve_fd(int session_fd, int fd, __u64 token);
-diff --git a/tools/testing/selftests/liveupdate/lib/lu_utils.c b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-index 74d41115c281..6315746ff08f 100644
---- a/tools/testing/selftests/liveupdate/lib/lu_utils.c
-+++ b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-@@ -198,6 +198,16 @@ int luo_session_finish(int session_fd)
- 	return 0;
- }
- 
-+int luo_session_freeze(int session_fd)
-+{
-+	struct liveupdate_session_freeze arg = { .size = sizeof(arg) };
-+
-+	if (ioctl(session_fd, LIVEUPDATE_SESSION_FREEZE, &arg) < 0)
-+		return -errno;
-+
-+	return 0;
-+}
-+
- void create_state_file(int luo_fd, const char *session_name, int token,
- 		       int next_stage)
- {
-diff --git a/tools/testing/selftests/liveupdate/liveupdate.c b/tools/testing/selftests/liveupdate/liveupdate.c
-index 2dedd5fc2534..74004e4276f5 100644
---- a/tools/testing/selftests/liveupdate/liveupdate.c
-+++ b/tools/testing/selftests/liveupdate/liveupdate.c
-@@ -530,4 +530,53 @@ TEST_F(liveupdate_device, preserve_many_files)
- 	ASSERT_EQ(close(session_fd), 0);
- }
- 
-+/*
-+ * Test Case: Session Freeze
-+ *
-+ * Verifies that an outgoing session can be frozen early via
-+ * LIVEUPDATE_SESSION_FREEZE, rejects non-zero reserved bits with -EINVAL,
-+ * that subsequent freeze attempts return -EBUSY, and that attempting to
-+ * preserve an additional file descriptor into a frozen session fails with
-+ * -EBUSY.
-+ */
-+TEST_F(liveupdate_device, session_freeze)
-+{
-+	struct liveupdate_session_freeze bad_arg = {
-+		.size = sizeof(bad_arg),
-+		.reserved = 1,
-+	};
-+	int session_fd, mem_fd1, mem_fd2;
-+
-+	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
-+	if (self->fd1 < 0 && errno == ENOENT)
-+		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
-+	ASSERT_GE(self->fd1, 0);
-+
-+	session_fd = luo_create_session(self->fd1, "session-freeze-test");
-+	ASSERT_GE(session_fd, 0);
-+
-+	mem_fd1 = memfd_create("freeze-memfd-1", 0);
-+	ASSERT_GE(mem_fd1, 0);
-+	ASSERT_EQ(luo_session_preserve_fd(session_fd, mem_fd1, 0x1111), 0);
-+
-+	/* Non-zero reserved field must fail with -EINVAL */
-+	EXPECT_EQ(ioctl(session_fd, LIVEUPDATE_SESSION_FREEZE, &bad_arg), -1);
-+	EXPECT_EQ(errno, EINVAL);
-+
-+	/* Freeze the session early */
-+	ASSERT_EQ(luo_session_freeze(session_fd), 0);
-+
-+	/* Subsequent freeze attempt on an already frozen session must fail with -EBUSY */
-+	EXPECT_EQ(luo_session_freeze(session_fd), -EBUSY);
-+
-+	/* Preserving a file after freeze must fail with -EBUSY */
-+	mem_fd2 = memfd_create("freeze-memfd-2", 0);
-+	ASSERT_GE(mem_fd2, 0);
-+	EXPECT_EQ(luo_session_preserve_fd(session_fd, mem_fd2, 0x2222), -EBUSY);
-+
-+	ASSERT_EQ(close(session_fd), 0);
-+	ASSERT_EQ(close(mem_fd1), 0);
-+	ASSERT_EQ(close(mem_fd2), 0);
-+}
-+
- TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/liveupdate/luo_kexec_simple.c b/tools/testing/selftests/liveupdate/luo_kexec_simple.c
-index 786ac93b9ae3..9bc8dab2e074 100644
---- a/tools/testing/selftests/liveupdate/luo_kexec_simple.c
-+++ b/tools/testing/selftests/liveupdate/luo_kexec_simple.c
-@@ -40,6 +40,11 @@ static void run_stage_1(int luo_fd)
- 			  TEST_MEMFD_TOKEN);
- 	}
- 
-+	ksft_print_msg("[STAGE 1] Freezing session '%s' early...\n",
-+		       TEST_SESSION_NAME);
-+	if (luo_session_freeze(session_fd) < 0)
-+		fail_exit("luo_session_freeze for '%s'", TEST_SESSION_NAME);
-+
- 	close(luo_fd);
- 	daemonize_and_wait();
- }
-@@ -60,6 +65,9 @@ static void run_stage_2(int luo_fd, int state_session_fd)
- 	if (session_fd < 0)
- 		fail_exit("luo_retrieve_session for '%s'", TEST_SESSION_NAME);
- 
-+	if (luo_session_freeze(session_fd) != -EINVAL)
-+		fail_exit("luo_session_freeze on incoming session did not return -EINVAL");
-+
- 	ksft_print_msg("[STAGE 2] Restoring and verifying memfd (token %#x)...\n",
- 		       TEST_MEMFD_TOKEN);
- 	mfd = restore_and_verify_memfd(session_fd, TEST_MEMFD_TOKEN,
--- 
-2.56.0.218.g1ec904b173-goog
-
+Thanks,
+Qiliang
