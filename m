@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792707450;
-	b=LZGY0bG2M0u7RToPmBIHfbb3XwsXVKU/HF4ednvF3RqEdGOz1cXubS6NvubElaqGYlFk
-	 IrVTBO0+qVlJgDjFPS1R9GNF020Bi5dH75hn3w6up26Z51hG1jQTh8zJc33e6HPMbUTGX
-	 j+uGUYtv/JosQOtJlgy81t0a0l5GoLboYc58E8u700lNPRsWrGZg4K7w0YTh0+8mC2+Ow
-	 8cq/pbqj6/bRMqZaMBspLuOxtrm5PTWF74SZTUEczWFRp9ZCY/Qyw3B2BE9LAMIWsLGzU
-	 cL6Qdc9i50krfo4R0vWk0ixPcPA5HR5CtteCosEscTA6JJR4/AeKjbX76dXnC0/uozw==
+	t=1792707454;
+	b=e/tvuLdAiQQp6B3bGBjcL5ZKRSUDJXCQdZB4Hkblfq0mebxdA8+L/4bY/nSn5eHUbNqA
+	 aiJlVYZgD8vgOJHbf+L6ruZnJSiYixKMoBepwJSaLqBMwyXzXjvdw46PHhX7yuGwZpyOu
+	 +wJTEcxYuVUbJBJOE9MFQH18Ex6W6L/bAFmsaX1DffBIB9V64/3wLoCSN5e4JH/ZojnN5
+	 BAFBBqcOSZ3gk5G+Velbg0Yyyi9G89DbPsPJzfWj8bW1YUvJeTM/GOubo5ZquI5EiFXYF
+	 L5PT6e9EKoES/FbjsN77TElePHsA45i8dynwalatXeDMcqYLHRPY+q6XcIhEI32N1gQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792707450;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792707454;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=lomsEIzafjLVZya86Pfl4U9atLbvZi9DCA+wyh807aw=;
-	b=wawq/YTcLsV9qbtiMqOJ1P/t3vwQxFA0sECVoPE/Gm5kl2DOnhIMGWRg8SRSXS5f+hiC
-	 qsodx/uwwNTCe/a+fIbsdUL2wP5PVFYh4ykzlQxhd0OQuAB+9XXPHO72pZTh2dnIuE4LR
-	 CjuGlSCbHsnmwnxvHgiNS+eWIiJ6L7IvcISIIFOZ0D1Ga/AtQ0PQ7//pxVo3Zcu5Pf4NG
-	 1jdRLZwl+WNWn/IaP8blOqPbAlgRUWN/Uw1fjtJtwwFISP2Yl+n1+Q0ICdmK5fEzbQeAV
-	 oA/V8TaWvLAzA/9ZAQWsJaNXZ7PscaeAMrGlMBUq6yumdlkh2XB2rF+pnOTemjLnVHg==
+	bh=/WIkpltfnb+vy/iRWdcQeenTOR+kthNZwD1BDIJsCtY=;
+	b=zK+BywdDHOsEgVy08QkVG/zjkaFkffKJ41d48s55jn0LEJBxPHvD1FatCv7jdhyxYUjd
+	 Mjf+xJbsTUtYjcOKP9ZNbWeD4uCTQx+RTAF2Pxs72Loilh6iHWn53g+lnfMKOCRcV/rEO
+	 DepvXv2piCaFHCWR7ZUxHe3CTyqEacXcTYKbfk2x/ZEC2EzQQBlaneailXQAdz0puB33i
+	 pQ/Io9Km2fpaN1aIC95bUEr6TMyweIOOeY5dz/WemCSQt280xa6TyOiJTCOCnugwLfylg
+	 Pr2u/+/Awac6pdoNdTRg7esTlQzQi4aaHfb2ZtkpCAkTjxNPHMG3FWGLVweBektIg1Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UGp6xEo4;
-	arc=none smtp.remote-ip=209.85.221.177
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JFpZ94Ob;
+	arc=none smtp.remote-ip=209.85.221.182
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42B1606A31A
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 22:17:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B42B1606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8839606A31D
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 22:17:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E8839606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UGp6xEo4
-Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-5eae12762c9so159589e0c.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 15:17:29 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JFpZ94Ob
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-5eafa528803so130975e0c.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 15:17:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792707448; x=1793312248; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792707453; x=1793312253; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=lomsEIzafjLVZya86Pfl4U9atLbvZi9DCA+wyh807aw=;
-        b=UGp6xEo46X7hYGvsFsa/zX4GnG5h62cMJTqHLj8i8AKrS9J3hbUQrjgzFhQipOB5s0
-         hCxwO0BSTsvVFwyx5H+uP2v2FKo5IInzNPnr0u0dUnEcQ3YPFbSzJVc4eXZAJG+j8NLb
-         tSPUe8oEQSj9qbppiYXKURYXMHrj3PZbj8ekQuBAzgtsgoX6EzPtpixHmmCuj75hZX9C
-         DaIeyR/G+EZyir/jT5XvHZ3HMlKd1Ub3kwmD/yklUnqz7a5LrPCbKekEAN7kN85d3mbh
-         diyanZfKbfsdUp25hWiQMSXGYxyDEmbSflG/8REV/USoftVz+HLZcUtcJ/HGlMUXVlRk
-         GoMQ==
+        bh=/WIkpltfnb+vy/iRWdcQeenTOR+kthNZwD1BDIJsCtY=;
+        b=JFpZ94Ob3Fm6+qT3OvTYTxeHkpIEU9c+VZ8lDQaWmzPXF/uzU7JrLsmPMCYrUuiLQZ
+         1Wtx830OvhlAppc3G4T8svioQktLUvKgcZ1KZ3v03L38/G98omE3XjY0OAmiH6DmV3ar
+         iNs2BkVv9aPFu0Ck7fqp1MbCrDMvzbcrKtbLnpRYO9esYY5a0rpVfaZeST8FDrRLZ0rw
+         JL3+G/uUiDflNKH7CHP3Nlk/zXwq97RxcLtFlvcXrIBOpsXfAHtyPvsF09Lqb76JVHHq
+         jYyQMy7aMRjpbqqg/cZb2pE3wbP8ckVY5j9uytlgLoOjBec8ATLlTrk36iNJhhBXKKlS
+         n3Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792707448; x=1793312248;
+        d=1e100.net; s=20260707; t=1792707453; x=1793312253;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lomsEIzafjLVZya86Pfl4U9atLbvZi9DCA+wyh807aw=;
-        b=zN/VrlDN7BCEA1RYEhjh9MXnOgDYOJCFskeL0vVzalnp0vxsB5FVJ7bHtVe4PliusU
-         ywUEvHRwUKV55w5kGOfxilF+HB894gpdxW2wI/9Z68toI9mpn0jyKYJsyMt7NRslfatN
-         tJlIpndbfd8WTK6OkummAuAbZ57DTptP/CJbGaILqMpdgYo6q/KiAgsmYxTfoL3Pqxfw
-         nbKC3afWV4hD3HDw5PL/tqkFBfhhzXYZ2IA99WAzqNAPZ3OsBPS5x3DjYkHfvtO0Cp6G
-         aKMiBU7k6tQnX24s55kh/pGfqrvv2I1UkkNGU1jNfr+hbjl2mHyM4GubXMnOJTwJHY0r
-         CMUg==
-X-Forwarded-Encrypted: i=1; AKwUvByz9edeoJvDRqNsYTJCsg2hy3zww288W6q9dJu9ElJbkH7N/HJEJDaNZUipZfLSIr17yp+47O+n4sYjHQiaSIU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLMkyE5v1q1WrecXayP/qjw8/0dFzIXQALOLNVtjkLD90FdsBQR
-	/a5ReZYI0M7aKsLWVFp1LFkYoHzmq8HX4sWxMPBXCe/7in8YiqhtsVYh
-X-Gm-Gg: AYBFou2w3tK0xUUN1Or0eMmHNkqvJoUF2p4EX/S22s0LZKUd8ESTRiRfjEaSy36rlW3
-	RIeDxITQV8D3q8IHq6D63rc4Q1xLUEjmXc8ZTLa0TA5YGbcvhI6u/g43lwDFz1Ix/66APk3r7NN
-	ZI83zysQBUAmypVMyIwmZzLNH6GeNouppuPclQC+qmU//oK21zcekrzDA9A1xitgrZvHy95XUal
-	Hz1D8Q6sNVlBtLszRKYUSpcE3nYQ1OYrJVPvd7cOuspivAcO8u+ACLItkPo54hcI6MygyrDUwjw
-	ABkiunZfx4RfR+JtZXzEw2Q+GTNmshjLhfby9Uf8OJRc5uYJe8SYpzTJ377DotMIbL1zdOZGftI
-	DSy2XkefwSalGcqQ8H/ixwSjZf9Dbx8T45DaSH5kTSRWqZX3kg9/53urLIs38OKhk7+O9xgPNt0
-	Qy4kEJrKSRa6INoBzws80EBFVqtznihH1utsFglqxeDnN8WDI6dScXhDMjRNcm8JmFNB2V+X98z
-	scDwS5kU9bwGQ0txbA02m2d12sGpX/BKxvnRxrEip1CRAfOIQ==
-X-Received: by 2002:a05:6122:3d08:b0:5ea:c084:6f19 with SMTP id 71dfb90a1353d-5ec14a789ebmr114559e0c.12.1792707448568;
-        Thu, 22 Oct 2026 15:17:28 -0700 (PDT)
+        bh=/WIkpltfnb+vy/iRWdcQeenTOR+kthNZwD1BDIJsCtY=;
+        b=jJcXBSbk9xX7ZuFtMl1RafgWxhfp/GOPXn9AcyfqqVeezkmbGaag4VGZdCGHfh5gpR
+         5zoSfl9mVDZqnTb1XwrwhzlxRxVFICTA3JobSLLFt+L/iy2n450R579RyYzsDvdNRQo4
+         xoiUnc7feF+HxJ2MbP2xKfr8HlCc9AsT14yrQ8ZivZ6ezj2do7FXw/FwHsLYcjZSa7T2
+         0TOFyS0uRw/NTp+ivI+qNYStmGZKTbnT2n83TLQJN8M593W6sN3Gn60lTgDkNP59ucSN
+         yEJrhGxXwqeYClteGu6uHMDzCQaT6A6UWTdxev1L6a3KTuX+XU3nJXlw+uVY35uIUjw4
+         2n8g==
+X-Forwarded-Encrypted: i=1; AKwUvBz4KFPGb8TgHz/eDzpJLhgXm4YWFYDtNjY10uMA+ottHz2DeIIRKI7jDnzkFwL6jDICdhGs83kfZqjBW2sAWAM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKBUKDQTrbvYF6Q4MmsqMR8jRvQ8PguEzc50CSFhMQyjDUiUFe+
+	zUezu9OFKCgLJ1XFZfS6oXwa0gJHCd4EdYMyV57l1CrAIgl37igsRGZm
+X-Gm-Gg: AYBFou2yauFTXtuy6ghLFG7jhwmUcVjj4Jort+eEevTLCTa8cBENWec8pb3n77HL4tV
+	LQuFf8Sjuk4h4UkWpQe2bYitrSZ0FWV65SwvhFwwORRGLRDQbi5PolSGWRIuiZ/qJPjUzy9k6hs
+	YCNjupXkyGTW+jk8l7l4nJFfB1mVQy5My+1nstOAZwLzQ4T0KaT9LfPRerBUSJNQwbbZ42UR8sA
+	kt+CZMgZHc8tnL03bdzp+JI1+uJ1dVqnHw7NYOvJ04PP4mXB3rKHTuWSLqqP1i4JGnRnOa5Vf0l
+	blF5Ot/kW9aEVgT3/mWtV99GuK07E956bqI//VSmLf9QTGttxrZIiQ5E7oiKi/NqRhYZz7Gw808
+	fkhegw8B42+VhdR49ugCHw4vJXeFusVcsYQ/afuPwwb+qhtsxOyROKmtOBlfuTmTfL5jbhJwc9G
+	7V2KxEV34EqadIs0VU4KfU4UZkEKcfl7Vg0LeK3xuFDR6nMFbxbgA4ZXS91mAKgjeKEsnzuL50c
+	WMVufPW/TBe0meqlk0tu03YmbQOc2RmvYxFF+O54yLQVgsF4A==
+X-Received: by 2002:a05:6122:178c:b0:5ea:ae99:9b2c with SMTP id 71dfb90a1353d-5ec14ab087cmr87153e0c.14.1792707452787;
+        Thu, 22 Oct 2026 15:17:32 -0700 (PDT)
 Received: from unix.. ([181.229.23.179])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5ec13f2cfe0sm456271e0c.14.2026.10.22.15.17.24
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5ec13f2cfe0sm456271e0c.14.2026.10.22.15.17.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 15:17:28 -0700 (PDT)
+        Thu, 22 Oct 2026 15:17:32 -0700 (PDT)
 From: =?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
 To: Thomas Gleixner <tglx@kernel.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -90,13 +90,15 @@ Cc: "H . Peter Anvin" <hpa@zytor.com>,
 	Rick Edgecombe <rick.p.edgecombe@intel.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	=?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
-Subject: [PATCH v2 0/2] x86/shstk: don't leak a shadow stack when clone TLS fails
-Date: Thu, 22 Oct 2026 19:17:19 -0300
-Message-ID: <20261022221722.619233-1-ivanrwcm25@gmail.com>
+	=?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2 1/2] x86/shstk: free shadow stack when copy_thread() fails
+Date: Thu, 22 Oct 2026 19:17:20 -0300
+Message-ID: <20261022221722.619233-2-ivanrwcm25@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261015023147.519257-1-ivanrwcm25@gmail.com>
+In-Reply-To: <20261022221722.619233-1-ivanrwcm25@gmail.com>
 References: <20261015023147.519257-1-ivanrwcm25@gmail.com>
+ <20261022221722.619233-1-ivanrwcm25@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,59 +111,76 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-copy_thread() maps a shadow stack and set_new_tls() can still fail.
-That error goes to bad_fork_cleanup_io and skips exit_thread().
-bad_fork_cleanup_thread calls exit_thread() only after copy_thread()
-has returned 0.
+copy_thread() maps a shadow stack for a CLONE_VM child and can still
+fail in set_new_tls(). That error returns through bad_fork_cleanup_io,
+which does not call exit_thread(). bad_fork_cleanup_thread does, but
+only after copy_thread() has returned 0.
 
 commit 748c90c69336 ("x86/shstk: Remove useless clone error handling")
-removed the shstk_free() on the set_new_tls() failure. Restoring it
-only there puts back the single free. The allocation-error return
-still aliases the parent, and the exit_thread() path is left alone,
-so the double unmap that commit avoided does not come back.
+removed the shstk_free() on this path, assuming exit_thread() would
+run. It does not. Each rejected clone leaves one shadow-stack VMA in
+the parent's mm until the mm dies: one map_count slot, pages not
+populated. The size follows the clone stack, or RLIMIT_STACK when
+that size is zero.
 
-The selftest uses kselftest.h / KTAP. Feature and clone3 availability
-skips run before ksft_set_plan(). Missing /proc/self/smaps is SKIP.
-Read errors, truncated smaps lines, and a VMA range without VmFlags
-are FAIL. A valid-TLS clone3 must succeed before EPERM on a bad TLS
-counts as the leak path; ENOSYS/EPERM/EACCES SKIP that control.
+Free only after set_new_tls() fails, via a dedicated cleanup label.
+Nest the TLS error check under CLONE_SETTLS so the successful path
+returns 0 explicitly. The allocation error returns earlier, while
+the child's base still aliases the parent. shstk_free() ignores a
+cleared base and a different mm, so CLONE_VFORK and !CLONE_VM stay
+no-ops. The exit_thread() path is left alone, so the double unmap
+that commit avoided does not come back. The io bitmap is still
+shared only when TLS setup succeeds.
 
-Regression (CONFIG_X86_USER_SHADOW_STACK=y, host and one-vCPU KVM
--cpu host,migratable=off):
+Tested with user shadow stack enabled, on one config with and without
+this change. Sixteen clone3() calls with CLONE_VM|CLONE_SETTLS and an
+out-of-range TLS leaked 16 shadow-stack VMAs without the fix. With it,
+the VMA count was unchanged and call/return on the parent still used
+the original shadow stack.
 
-  Scenario                         Without fix          With fix
-  16 bad-TLS clone3                +16 ss VMAs          +0 ss VMAs
-  Parent shadow stack              kept + call/ret OK   kept + call/ret OK
-  KTAP                             2/3 (test 3 fail)    3/3 pass
+Fixes: 748c90c69336 ("x86/shstk: Remove useless clone error handling")
+Cc: stable@vger.kernel.org
+Assisted-by: LLM
+Signed-off-by: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
+---
+ arch/x86/kernel/process.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-Changes in v2:
-
-- Nest the TLS error check under CLONE_SETTLS, as suggested by Rick
-  Edgecombe.
-
-- Use a dedicated shadow-stack cleanup label.
-
-- Return zero explicitly on the successful path.
-
-- Remove the redundant cleanup comment.
-
-- Selftest: rewrite on kselftest.h / KTAP (plan 3). Fix RDSSPQ
-  comment; align get_ssp() with test_shadow_stack; SKIP only
-  ENOSYS/EPERM/EACCES on the valid-TLS control; FAIL on truncated or
-  incomplete smaps records that would under-count ss VMAs.
-
-Link: https://lore.kernel.org/lkml/20261015023147.519257-1-ivanrwcm25@gmail.com/
-
-Iván Ezequiel Rodriguez (2):
-  x86/shstk: free shadow stack when copy_thread() fails
-  selftests/x86: shadow stack must survive a bad TLS
-
- arch/x86/kernel/process.c                     |  13 +-
- tools/testing/selftests/x86/Makefile          |   3 +-
- tools/testing/selftests/x86/shstk_clone_tls.c | 334 ++++++++++++++++++
- 3 files changed, 346 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/x86/shstk_clone_tls.c
-
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 346c438ac880..451594fa5481 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -176,7 +176,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+ 	struct fork_frame *fork_frame;
+ 	struct pt_regs *childregs;
+ 	unsigned long new_ssp;
+-	int ret = 0;
++	int ret;
+ 
+ 	childregs = task_pt_regs(p);
+ 	fork_frame = container_of(childregs, struct fork_frame, regs);
+@@ -263,12 +263,19 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+ 	}
+ 
+ 	/* Set a new TLS for the child thread? */
+-	if (clone_flags & CLONE_SETTLS)
++	if (clone_flags & CLONE_SETTLS) {
+ 		ret = set_new_tls(p, tls);
++		if (ret)
++			goto shstk_free;
++	}
+ 
+-	if (!ret && unlikely(test_tsk_thread_flag(current, TIF_IO_BITMAP)))
++	if (unlikely(test_tsk_thread_flag(current, TIF_IO_BITMAP)))
+ 		io_bitmap_share(p);
+ 
++	return 0;
++
++shstk_free:
++	shstk_free(p);
+ 	return ret;
+ }
+ 
 -- 
 2.43.0
 
