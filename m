@@ -1,87 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792658932;
-	b=nvlxffJN/8b0HOGm54erfYFvZwwtM/c0CnJPnyb5elkxkZMxcQMAF5e23s5OS8kZoBcC
-	 os04B8aPonkEMu0Luc1hegaOWtlF7QT6ssgl/KUY9GP0mnOU0DLxGwwz/Nm2HDLXpbpTw
-	 URYa/XwZQrA7+q02+Tenrmavqdfjzuq0NhN5iMZsUfmsSAQQm52EOqznw5J54OgvmoRyS
-	 8RZRTbALJEM0/esQpfuL05+LPvIg1dd05bNYhv+pnccrxLGwlVez9bMfSopLEOz5u2SFA
-	 DlsrS8hELEdIDnpbV8N9DG4rMA6dDG6+RrIwjQPB9WzDFxobwVSQkhfPi1USeLbW7Fw==
+	t=1792658936;
+	b=2UhqLEZD7Vz4KA31/POF+TvmJ3oB5+En2DR1indwIHeaT9dtE/CQbz0LCN2gwKXWQoLu
+	 0ZSrA6Z4BzGKJbKyuMo7tDPB62W42Mxwai+Y26IdBg47jWc9nYSFA4pJLnMVpa/g+fgJD
+	 fvYz3Ao/dqH+dgKuczR9JxbOjHuzVGDWzngTqueNNKu4rogUf9GLTExkq+sU3br+HEqip
+	 ePGep9KswuvViDbUJuYNRKAPBETMZFjA7BKX3oKOzREsCWJRuvrESJS47RK9WR/Y3prIG
+	 wtAs5TlPO2mqHSLtLXW3OXQfbpmMiSDc7XyTCIg5dLABy8DhIkQzxWOYYteycMsUdlQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792658932;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792658936;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=ZgxGYakB4OAbqmfUpoRBZ1h/Ym4Uy7aZcRmLcKkfZ3E=;
-	b=CkK3Cp/9IJsujn3u9ZONZA+rNI2hlI2fBwFY2aM8EOCN7VBr96PZhT2SM8XjGVMZhZCL
-	 CayEgiS2B9PGiPT+5iN3Np8Im+foZIjbA8Ma8cfdyrd0hGCVp7JfhxvpC+M7QRTpYts/L
-	 k4I/R+LPeqEgGXpHeDUFAv8weLhklX5wR0laHIRLb/q1+QPsGE3VISAtks3J5PHc4APHi
-	 A6VNPvOvsVn4yjrUPF7x6Yb/fP7MMuvnG6Wji3YqdSQi+xWElJXFY6R9ZAOlH0hFQ24D6
-	 bbf6bLOXwM3zsPfUu75ao61R/rR6ZSmVxge4hyk9WiLvcqzMIXIsipttSRdnYMJd0Hw==
+	bh=uLcQwB9RQyvK/WfjSKPSsVJ5A2Co4WxMpfFxo4/WCSY=;
+	b=C2QiTl97wE27OabpllL/aXE0nevpXVPNeSEKGYHHViBH6qwVH+kXe5c+lAcE3zncZYTn
+	 mUQNjUX8Nw0J7u5urbJsPvFyDgGFc9Vm8oge9PrfDgA+QQNHj+O198cnLn3ehGf+ybAZ4
+	 PnXDOVdJv2+m1waNUwHdQObot3A8IrlQeo+n2fn+Xfbm5DtrkpQ1xaPnToBShc5/Ebw+k
+	 iH3ugMnVFg9KYxdS30veEu5MTR9D0QnqvBRrjH0Aecoj8J50eXJR7R3RraGVUhN7wihBP
+	 asonn+15SNjVvAGpMsg+pax0bAfKypjjCrgjEsgelN+ssKzhWMXQDq7QsKOJ9ue4YtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=VthhSAZa;
-	arc=none smtp.remote-ip=74.125.82.180
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=d35drGQJ;
+	arc=none smtp.remote-ip=74.125.82.181
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DBD606A31D
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 08:48:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7DBD606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D6B606A322
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 08:48:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24D6B606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=VthhSAZa
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-353804b591eso2936575eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 01:48:51 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=d35drGQJ
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-35cd4e8bdbdso2826956eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 01:48:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792658931; x=1793263731; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792658935; x=1793263735; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ZgxGYakB4OAbqmfUpoRBZ1h/Ym4Uy7aZcRmLcKkfZ3E=;
-        b=VthhSAZaIu93ccIM+niIeQn2HJ3ppWySTcvgZII3J3/FW08bGRYdhYCWc/sDlR6DKl
-         EQrsyEGsFDyJQ4ZW1/2MBY/YUGWy/yFtiLD6f0OQhjpgH14hJnIs67sjNYs3grMdQNi+
-         sXfs+IeK9S+QWQoz9VQP1+z63C0x5OjL7k4dUCn3m/hTw2MKGuGxLGeKRG412vqKk4DD
-         Rch6C/2OJZDJXQoWaqdG9i3uRU4oBFcabPyC8jl3RDOZi5yNVIMLmJRm8bsM8izsB0Wp
-         rD13hfKY6IKi7MjAyrFGBoju8SNp5eV/M87mbDyZwrM7FuVNYRr2qk8PCSsunASAyyDb
-         Gs0w==
+        bh=uLcQwB9RQyvK/WfjSKPSsVJ5A2Co4WxMpfFxo4/WCSY=;
+        b=d35drGQJZHpnW2CHtY26G8Ohal4aPyCB4DL4hSQ6eEmfitMWL4UJSvHUcB9Socarjz
+         4P5g1BZiBKfnfNGmXNRL32FrY0v5f8Au5HoeZtmRwnQU7xnbbMF4KoFbP2ZWG8M9lnxu
+         /O9gJgG10MlR5qOM+4JF5om4JNktL+moQMGqGeNG6SQlRfIjm14ve19uH6WAJPRvsEws
+         y8vYy0uCXw38Otc9xoH/3N6pPJMzpCqPNFIuD1Lv4jEdsPlC6c/JtH32bKQI4VuzKhkC
+         OKrmYHruxnNCb6jzZucbx2uwwVNCEt0Ai7ErbaRz7W1lIdiwSWdb/3VsEHB7GiDrBbB8
+         2Sxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792658931; x=1793263731;
+        d=1e100.net; s=20260707; t=1792658935; x=1793263735;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZgxGYakB4OAbqmfUpoRBZ1h/Ym4Uy7aZcRmLcKkfZ3E=;
-        b=vLyJ/OPm/YFYh1/znUNvTDFsNw3mdKwwZUR/45VtDgTPEbSOfG/v5s6a1JzPa1DuFs
-         Lf4Zomr00mCPhYDssjvyUc8rR4xDwGPXYkhErHYT3EMG64JD0zuDUbvDRc5A5PnpX+nR
-         sbWd3zxKwC87WxjckAV4/rl7g3+vC3S02B6Mk/mYFZSO87mHUH2qzbC09rb+4Shhwh3U
-         hUHOipEc2Gxa52eYytRabm77jLWUnJLknwNiTKPbdDUl+X38qo8reEj7wdWlu4KjpUSs
-         FGozn9rmXRcfa6ldFNVYm4UxIBQx2Xxo80Lk+ZbZ8P2tAj8Lk4gXnoPvYcl6O9BQYKNP
-         aVxA==
-X-Forwarded-Encrypted: i=1; AKwUvByBfWPjXWx5GVaPcdnMnVH/EMIUHq2cGZqg1+Wk8a+xUjcUyUrFAR7Ej88RqFoEG2jrtXZ0IwaAHlVR/3fghOI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIq0UYMv1CXsmQahpRUMJIPeTSpO849RUF7yCEEK3tN3imI1r9C
-	JlFELt5RCeo9AtBjlvLoIRotiZZOY2UU5Nt3UqBu6Mo9/3UIxvzGwont
-X-Gm-Gg: AYBFou3pWPNEQSbjon4bEEpk5034rUOzbwg72FkYWSN1/qfB0jiJeMbuoljzoXgI3ck
-	Qlo3QKKjhhOzfkFA/dfsmaIm4DDahF+IPp0DosytVmkwHjPkZJe5Vnz/qv59NIWSZ0vdXoKNNwA
-	oDMU84J+y3wvgNRrtBJsA/nFExbrla7DlJFnDKnR3cXI7AV09nRucUhQs22zd6Y/HTdW+rstAA4
-	axVr/2uvnPO2s5hgPGzDn/hM/HB2r+xr0vZZgvyFDUVb1CG1T24QLj2VHADmdSG1Qs988jqbF+g
-	unfrbHzpUjxH0THAqRYmMecdNNWeEfZsrLTvaNkxm5B0NkNuAARmCnfCOBVyuArbmjB60EeKeKx
-	kW7TwybGTspAOQbdflqjnnovITI1+NU1WQZURWMJm+XCegnsh17sFUKaw5t6IE1HdaL+perW8UQ
-	0qdxET247kdDCXqvbRZOxp5rrTnLi8TJxg73tlo6zklRO5GSsGdm8Oo8eGSf/xMwzdCwpN/d74Q
-	459qhRNVX+gEn8mfrPgvFl7uNtavCPf6cYK8sf5IMrTe23EdbR8ZykJsKJAx1tIUJnSLsoB
-X-Received: by 2002:a05:7300:ea8e:b0:369:38e3:5363 with SMTP id 5a478bee46e88-36938e357a4mr859137eec.7.1792658930788;
-        Thu, 22 Oct 2026 01:48:50 -0700 (PDT)
+        bh=uLcQwB9RQyvK/WfjSKPSsVJ5A2Co4WxMpfFxo4/WCSY=;
+        b=gBoCPKiobIV0LNy++lo/StmMJHG227l42lTJDx+i3nB+gg8Z6uKuNeuimzIbRC7iaj
+         A46jIiIz1M9seJsD7HxziYgg4zk74rmX8bqSmypJz6mQ5vam9Mw8EreUqRj5TygIOuM/
+         dmTuzHgbvG21oyyEfddQBfo8/sVMuCtW/9VMR7ltN7e+aWCsncRGfS/bC8iJ8qZQWHcV
+         tK3Q1dCXN9p6wPiI6ViI3NBDXVwVy44SMc1m19Rl33PJE3VZ5D8g4Dwvac9z+GJEMky2
+         HFg+4wx1mmDCySoFHunFIDDqXM6f73HopH0b5w4YBT4EmeqRCoN2ZHruf7aOjnsM3zAi
+         fYnw==
+X-Forwarded-Encrypted: i=1; AKwUvBzI8qsSpXUBJsNE6TZK+ORyw6MndiooQDmHNpnw+By701pQvAwvGOtSCc2Ga3XGHByllU4gtnnfdOvHppsKX6w=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK6P45Z0DK+LwxYd0ZGvYSwOb7G4F0wBpimiVtPO8u63NONfXDi
+	1PEvUIqzvOekLCulEQMrE6pWnrs/HR451/UxQLc/L+5yUofpMpik0q76
+X-Gm-Gg: AYBFou1RUN6DRQEaD2VKJfGu1DgNz34Gv9xg9OBnIQO7DXqn9MpPcBK1+0LDCnLzLqc
+	yHlK6soA43H2keMJmYvBXvD9v/rp9sU4gmsTvaMsDilNOsqQGQmHBj+okLf9da//jM0fSBDKh/9
+	ljAvy+KM8PD4iwOYRAYl2vlPkkVcBwgz1D9cxKKGknVVYCnxDRhc0oCbzhh9QxgfKUlPMS8RfeW
+	Hr1Amfm7kd3zOM90OK7b+iDQ/QuZ4AcLc9IcuUu0sdc4AWCoV0tkzDU1HHOLCm+WoGy+PNfPX3v
+	LZPwbwEN6I/IA+3K5XGeHMZ3nIjuhJOBCKqFRmprk1gwVdEq7s33wPqMoPXuZCGxnDN4eGtDTEV
+	vBdK37PY1NTZbHduNROjE3mISATFutMSV0hiDDcy3NeRL+Tmc45luYYGou4TbM00b8r5xqAF5bM
+	MU9q3WiuyW1fZg24OrT0nIq7BCPRIAf66JcEfHwgbae2RzQ469fhCK9ItOWUaFCHmfrhAtGLPcJ
+	P6TAaAiDqXfVMH125lOPQ8D1BdktWQZSPEAciNhfAuStiidrPcd7afHlC0FKk+rQRWDm9Tiqg==
+X-Received: by 2002:a05:7300:fe4a:b0:351:4a80:d94c with SMTP id 5a478bee46e88-3674df578abmr6225113eec.21.1792658935117;
+        Thu, 22 Oct 2026 01:48:55 -0700 (PDT)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367417a2fadsm13962472eec.21.2026.10.22.01.48.46
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367417a2fadsm13962472eec.21.2026.10.22.01.48.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 01:48:50 -0700 (PDT)
+        Thu, 22 Oct 2026 01:48:54 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Thu, 22 Oct 2026 16:48:37 +0800
-Subject: [PATCH bpf-next v6 2/4] bpf: Dissociate struct_ops progs before
- the grace period of the map
+Date: Thu, 22 Oct 2026 16:48:38 +0800
+Subject: [PATCH bpf-next v6 3/4] selftests/bpf: Test freeing a struct_ops
+ map under a running prog
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,7 +93,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261022-selftests-bpf-struct-ops-assoc-timer-v6-2-2c0f18e82582@gmail.com>
+Message-Id: <20261022-selftests-bpf-struct-ops-assoc-timer-v6-3-2c0f18e82582@gmail.com>
 References: <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
 In-Reply-To: <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -109,116 +109,151 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-A struct_ops prog is associated with its map without a reference on the
-map, and finds the struct_ops through bpf_prog_get_assoc_struct_ops()
-under RCU. For a struct_ops map, bpf_map_put() waits for an RCU grace
-period before it calls bpf_struct_ops_map_free(), which clears the
-association and then frees the trampoline and the kdata right away.
+st_ops_assoc_in_timer_no_uref drops every reference to the struct_ops
+map while a timer callback of its prog calls .test_1 through the
+association, and checks that the callback ends up with no struct_ops.
 
-Nothing waits for a prog that reads the association after that grace
-period started and before the association is cleared. A timer callback
-of a struct_ops prog that calls test_1 of bpf_testmod's multi_st_ops
-through the association while the map is freed returns into the freed
-trampoline, whose image is filled with int3. RAX holds MAP_MAGIC (1234),
-which test_1 has just returned:
+The timer first fires 500ms later and .test_1 returns right away, so the
+callback hardly ever runs .test_1 while the map is freed, and the test
+can't catch a map that is freed under a running .test_1.
 
-  Oops: int3: 0000 [#1] SMP KASAN NOPTI
-  CPU: 2 UID: 0 PID: 31 Comm: ksoftirqd/2 ...
-  RIP: 0010:0xffffffffc043114d
-  Code: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc <cc> cc cc cc
-  RAX: 00000000000004d2 ...
-  Call Trace:
-   bpf_prog_ec591f4f9d13f364_timer_cb+0x96/0x1e2
-   bpf_timer_cb+0x15d/0x240
-   __hrtimer_run_queues+0x264/0x5a0
-   hrtimer_run_softirq+0x1a7/0x3b0
-   handle_softirqs+0x18c/0x5b0
+Add st_ops_assoc_in_timer_free, which starts the timer right away,
+restarts it with no delay until the association is gone, and makes
+.test_1 spin in bpf_loop() when the timer callback calls it. Share the
+steps of st_ops_assoc_in_timer_no_uref with it through a helper, which
+stops when associating or running syscall_prog fails instead of waiting
+for a timer that never starts.
 
-Dissociate the progs in map_free_pre_rcu(), so that the grace period of
-bpf_map_put() follows it, and make that an RCU tasks trace grace period
-for every struct_ops map. It then also waits for the progs that read
-the association under RCU tasks trace, e.g. from a bpf_wq callback or a
-sleepable prog, as a tasks trace grace period implies an RCU one.
-Stop setting free_after_rcu_gp, which bpf_map_put() no longer reads for
-a struct_ops map, and update the comment of free_after_mult_rcu_gp in
-struct bpf_struct_ops, which now only picks the grace period of a cgroup
-prog array.
+st_ops_assoc_in_timer_free run in a loop on kernels of the same bpf-next
+commit with KASAN enabled, x86_64 VM with 32 vCPUs, without and with
+the previous fix:
 
-The st_ops_assoc_in_timer_free subtest of test_progs reproduces it. Its
-timer callback keeps calling test_1 through the association while the
-map is freed, and test_1 spins in bpf_loop() when called from there:
+              without the fix           with the fix
+  outcome     Oops (int3) on run 1      100 of 100 passed, median 0.28 s
 
-  $ cd tools/testing/selftests/bpf
-  $ make test_progs
-  $ ./test_progs -t struct_ops_assoc/st_ops_assoc_in_timer_free
-
-On kernels of the same bpf-next commit with KASAN enabled, x86_64 VM
-with 32 vCPUs, before and after this patch:
-
-            before                     after
-  outcome   Oops (int3) on run 1       100 of 100 runs passed, no Oops
-
-Fixes: 5db69b0fbdc8 ("bpf: Make struct_ops tasks_rcu grace period optional")
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- include/linux/bpf.h         |  8 +++++---
- kernel/bpf/bpf_struct_ops.c | 10 ++++++----
- 2 files changed, 11 insertions(+), 7 deletions(-)
+ .../bpf/prog_tests/test_struct_ops_assoc.c         | 37 ++++++++++++++++++----
+ .../bpf/progs/struct_ops_assoc_in_timer.c          | 16 ++++++++++
+ 2 files changed, 47 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 17b2a425e05eb..ff04367812935 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2240,9 +2240,11 @@ struct btf_member;
-  *                           and its progs. It is unnecessary if the @unreg
-  *                           has waited for the correct rcu gp or the @unreg
-  *                           has ensured all struct_ops prog has finished running.
-- * @free_after_mult_rcu_gp: Same as @free_after_tasks_rcu_gp but waiting for
-- *                          both tasks_trace_rcu and regular rcu grace period.
-- *                          It is usually needed if the struct_ops has sleepable prog.
-+ * @free_after_mult_rcu_gp: Set to true if the cgroup prog array of this
-+ *                          struct_ops needs a tasks_trace_rcu gp, besides a
-+ *                          regular rcu gp, before it is freed. It is usually
-+ *                          needed if the struct_ops has sleepable prog. A
-+ *                          struct_ops map always waits for both.
-  */
- struct bpf_struct_ops {
- 	const struct bpf_verifier_ops *verifier_ops;
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index a1ae30b145a03..7c5cd6086e273 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -1030,6 +1030,7 @@ static void bpf_struct_ops_map_free_pre_rcu(struct bpf_map *map)
- 	struct bpf_struct_ops_map *st_map = (struct bpf_struct_ops_map *)map;
- 
- 	bpf_struct_ops_map_del_ksyms(st_map);
-+	bpf_struct_ops_map_dissoc_progs(st_map);
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
+index 461ded7223515..6c85d368bf167 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
+@@ -136,7 +136,8 @@ static void test_st_ops_assoc_in_timer(void)
+ 	struct_ops_assoc_in_timer__destroy(skel);
  }
  
- static void bpf_struct_ops_map_free(struct bpf_map *map)
-@@ -1045,8 +1046,6 @@ static void bpf_struct_ops_map_free(struct bpf_map *map)
- 	if (btf_is_module(st_map->btf))
- 		module_put(st_map->st_ops_desc->st_ops->owner);
+-static void test_st_ops_assoc_in_timer_no_uref(void)
++static void run_st_ops_assoc_in_timer_no_uref(int timer_ns, int wait_map_free,
++					      int spin_loops)
+ {
+ 	struct struct_ops_assoc_in_timer *skel = NULL;
+ 	struct bpf_link *link;
+@@ -148,7 +149,8 @@ static void test_st_ops_assoc_in_timer_no_uref(void)
  
--	bpf_struct_ops_map_dissoc_progs(st_map);
--
- 	if (tasks_rcu && IS_ENABLED(CONFIG_TASKS_RCU))
- 		synchronize_rcu_tasks();
+ 	err = bpf_program__assoc_struct_ops(skel->progs.syscall_prog,
+ 					    skel->maps.st_ops_map, NULL);
+-	ASSERT_OK(err, "bpf_program__assoc_struct_ops");
++	if (!ASSERT_OK(err, "bpf_program__assoc_struct_ops"))
++		goto out;
  
-@@ -1162,8 +1161,11 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
+ 	link = bpf_map__attach_struct_ops(skel->maps.st_ops_map);
+ 	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
+@@ -157,12 +159,18 @@ static void test_st_ops_assoc_in_timer_no_uref(void)
+ 	/*
+ 	 * Run .test_1 by calling kfunc bpf_kfunc_multi_st_ops_test_1_prog_arg() and checks
+ 	 * the return value. .test_1 will also schedule timer_cb that runs .test_1 again.
+-	 * timer_cb will run 500ms after syscall_prog runs, when the user space no longer
+-	 * holds a reference to st_ops_map.
++	 * timer_cb will run timer_ns after syscall_prog runs and, with wait_map_free, every
++	 * timer_ns after that until the map is freed. With 500ms, it first runs when the
++	 * user space no longer holds a reference to st_ops_map.
+ 	 */
+-	skel->bss->timer_ns = 500000000;
++	skel->bss->timer_ns = timer_ns;
++	skel->bss->wait_map_free = wait_map_free;
++	skel->bss->spin_loops = spin_loops;
+ 	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.syscall_prog), NULL);
+-	ASSERT_OK(err, "bpf_prog_test_run_opts");
++	if (!ASSERT_OK(err, "bpf_prog_test_run_opts")) {
++		bpf_link__destroy(link);
++		goto out;
++	}
  
- 	mutex_init(&st_map->lock);
- 	bpf_map_init_from_attr(map, attr);
--	map->free_after_mult_rcu_gp = st_ops_desc->st_ops->free_after_mult_rcu_gp;
--	map->free_after_rcu_gp = true;
-+	/*
-+	 * A prog dissociated in map_free_pre_rcu() may still run the struct_ops
-+	 * from a bpf_wq callback or a sleepable prog, under RCU tasks trace.
-+	 */
-+	map->free_after_mult_rcu_gp = true;
+ 	/* Detach and close struct_ops map to cause it to be freed */
+ 	bpf_link__destroy(link);
+@@ -178,6 +186,21 @@ static void test_st_ops_assoc_in_timer_no_uref(void)
+ 	struct_ops_assoc_in_timer__destroy(skel);
+ }
  
- 	return map;
++static void test_st_ops_assoc_in_timer_no_uref(void)
++{
++	run_st_ops_assoc_in_timer_no_uref(500000000, 0, 0);
++}
++
++/*
++ * Keep calling .test_1 through the association from the timer callback, and
++ * stay in it for a while each time, while the map is being freed. The map
++ * must not be freed under a running .test_1.
++ */
++static void test_st_ops_assoc_in_timer_free(void)
++{
++	run_st_ops_assoc_in_timer_no_uref(0, 1, 1 << 20);
++}
++
+ void test_struct_ops_assoc(void)
+ {
+ 	if (test__start_subtest("st_ops_assoc"))
+@@ -188,4 +211,6 @@ void test_struct_ops_assoc(void)
+ 		test_st_ops_assoc_in_timer();
+ 	if (test__start_subtest("st_ops_assoc_in_timer_no_uref"))
+ 		test_st_ops_assoc_in_timer_no_uref();
++	if (test__start_subtest("st_ops_assoc_in_timer_free"))
++		test_st_ops_assoc_in_timer_free();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_assoc_in_timer.c b/tools/testing/selftests/bpf/progs/struct_ops_assoc_in_timer.c
+index 0bed49e9f2170..47a44c8e8b114 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_assoc_in_timer.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_assoc_in_timer.c
+@@ -25,6 +25,13 @@ int test_err;
+ int timer_ns;
+ int timer_test_1_ret;
+ int timer_cb_run;
++int wait_map_free;
++int spin_loops;
++
++static int spin(u32 i, void *ctx)
++{
++	return 0;
++}
  
+ __noinline static int timer_cb(void *map, int *key, struct bpf_timer *timer)
+ {
+@@ -34,6 +41,12 @@ __noinline static int timer_cb(void *map, int *key, struct bpf_timer *timer)
+ 	timer_test_1_ret = bpf_kfunc_multi_st_ops_test_1_assoc(&args);
+ 	recur--;
+ 
++	/* Try again later until the map is freed */
++	if (wait_map_free && timer_test_1_ret != -1) {
++		bpf_timer_start(timer, timer_ns, 0);
++		return 0;
++	}
++
+ 	timer_cb_run++;
+ 
+ 	return 0;
+@@ -53,6 +66,9 @@ int BPF_PROG(test_1, struct st_ops_args *args)
+ 		bpf_timer_init(timer, &array_map, 1);
+ 		bpf_timer_set_callback(timer, timer_cb);
+ 		bpf_timer_start(timer, timer_ns, 0);
++	} else if (spin_loops) {
++		/* Stay in the trampoline while the map may be freed */
++		bpf_loop(spin_loops, spin, NULL, 0);
+ 	}
+ 
+ 	return MAP_MAGIC;
 
 -- 
 2.43.0
