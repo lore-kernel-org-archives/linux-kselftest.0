@@ -1,54 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.70
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792679016;
-	b=ENxQ1E2mafcOCBPABuunodf9OewcDThb3asxqVn6eKLiA8IQdo/VsE/OxF0ZtEBjsGsa
-	 alRp4kmRAFxe6sNmYrDUWhDKrI34d3nCqfsAg7iSmRofsZX8VpX37qdBJmdAeDq6XEg8+
-	 ZkQXW/oy/j3aq2VIg+Bf+B6eZ+3JT5j5WVN1XtjXX8In86/XIwUGVGQiWlcQ1F3c7+MTF
-	 CFZdRV/qO/GLBqK21Hs/MZYadpLbWHdsZf2dQkXFjInj6nbe7COrIXqHZ5mCfPcXSqJl3
-	 61+saFbUP0n1wRfeilrfHyS36S5MOuj7npwJgwy7FbJGjPXGNoiLrE4XIHUZPEFBlsw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792679016;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=l4pPJAHIzCiz4ik/sPvwtmYl98ivKUwHi/L5wDE89bM=;
-	b=orGKWVkVMfRsuQxEPaNEga0B6MZptmtgKg+KLegeQ7Xw2Hy9RW2m5UG8TIJthNvQlsn+
-	 viJ8wpJDjqyLW77Tr/EssbaxRNauCB+PSdc/zqNoWRMd6giU894oWXAOa6+ipY/SqjMjW
-	 uEFoaVTc7lk+/OMnJVloUW3XC45FSQOAIxagzP1+GEApSKMVGBZSb+/JrpwGnv7koXDwe
-	 UBDPDzZzcPEVWLpZPiJYejcOtR3p9GIXXQr9XU0bLX1Zx6WShoeOLhRARETR4IvIv65GW
-	 oid7lotzlPzNJQMRusabL3kgKguG+IdZDr+k01ATJ/DBXDDQhCqAgmMYKcvxZ4XxYeA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MAXTKOWN;
-	arc=none smtp.remote-ip=95.215.58.70
-Received: from mta1.migadu.com (out-70.mta1.migadu.com [95.215.58.70])
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=74.125.224.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1792679618;
+	b=RKaYQy6YrmH0D/DOmREuFiU1C44ZpYz9893Tp6gb4NmQrUJyFrNyanNNo7mshGtTHInI
+	 QG6fx3xSP797zCqgEhXzaBAUi/SysKe3Vp4ienU/kmHsnYuK0l2YcvOqi4S8AQwDmUNHW
+	 li5UFVOhA6iRkC+IDd1uB3szsxxidxITKDcSW6qqJmUWfurjL/iCPmQ9B/H80+L89TPZq
+	 CUxzFlkK/2rY6No7poBdYqtyxSdGMlSrxmEveIWvVlxr21YU1sCid5b4DLdS4fiEOQDMI
+	 QxtJMzDQOCb8a0lN4lHqzM1gQVVu5CSel7h2sSBitbF51RUEu5UQgvBJdqGfFP+Fqog==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792679618;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Received:From:In-Reply-To:References:MIME-Version:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=y/nVz+Qmk+Tq2vmwCZBWANvE9dUy6Fp4Dxh9VLxLk90=;
+	b=Vb2NclyHZUolhNkBVqzp5Td7JYov7KgWEDBMIeiOA1LZaVuDMtwSnyI2/SBzkPpes+VX
+	 /XZEGKcgWVGqDmyCnjzPlbAStzW9GpujsiKEWFuwBl9GBuZ+tyLhMHC7gfZBXSRoxzdlR
+	 mfIQNy3xvCKEVg6LPTU79nSoc7CUTEVkj8YyzBJkcVZfI+jtNmYkYoD8YJFvMgO8gWuR0
+	 cCvntCaxtqblM1T1lNgaUzVgzc+FkQxPWWljuAUhcsJq6KXcSFAYiwo2Zqy6Ys8s4P9Cq
+	 MA4wofN+63wIpvGUbDusBsXErN3lrKOR5jibHvCL1V/L5xMbUl6KdwKjBLBFA4/3IAg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PRAZE+RY;
+	arc=fail smtp.remote-ip=74.125.224.51
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AD9606A319
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 14:23:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2AD9606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A42606A326
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 14:33:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3A42606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MAXTKOWN
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=u+IWVqBqxlupddJdL1ZfQ+qoMepjEEQs03oihWDurP0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792679007; v=1; x=1793283807;
- b=MAXTKOWN14PvtPFaLEzQWYPGDvFojHG/SdtlALC4OOP9h3N5KcK3RV6dEE2f6bvjmAC33dCa
- Bt0vXa2/izycxVGsbCDERQ4Ht6bPMPCrmigvO30LxoJ2bh4pWy6JTnUSbh2cMcOyPkdIB9Fb+Hl
- jk8eXdi0wm5Nx8MQUIGQt96U=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d588a8abfc2b5b3c;
-	Thu, 22 Oct 2026 14:23:27 +0000
-X-Mizu-Trace-ID: d588a8abfc2b5b3c
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d2e1f385-6730-4ce4-8be9-1de3d830eeef@linux.dev>
-Date: Thu, 22 Oct 2026 22:23:24 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PRAZE+RY
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-6790c2eb033so279271d50.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 07:33:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792679617; cv=none;
+        d=google.com; s=arc-20260327;
+        b=bFYL5NbGvc6fS82qQh2qbYb/AKpDBKsqQqdbTlvwjHV4ZJF8hkx1DccTjfI1HiJ3DG
+         rsJKVB4p/ihye28uD7U/wmXt4lGFSchMveEghhxJ16Yv8m/lRxxLIdl7jo2phg9f+T/O
+         szy/X2KfpMV036rdbdDewazmZLEzZjSTYbt12yS1ei6IuuYIsyi6xvpTYofz/to1lYqE
+         +BXPswE+gPEMEPH0UyYGj1CkXwqU2i6Ibov1m5k2liTK5k82p6hHkVSY+MuQ78uJ4tmI
+         HA59/5BvQvX0wzek95sPVSmJqbPWhFtgrE3t/7aVaSEyN8shPGzkub9YXhGKG/lXQxz9
+         apBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=y/nVz+Qmk+Tq2vmwCZBWANvE9dUy6Fp4Dxh9VLxLk90=;
+        fh=wkOeQ8LZMG3z4lWVcP838o3Zdze3GUM1Rhdon7iU2Ek=;
+        b=XgW+srTx/U5Kfve8SXOYbD7xKgcHmwhdpQCoA63DRgc7yWjb+E8jCT5S7PZ40rBfSb
+         hxnwxgcPchP1LA+6elSL4Zyd9WfUapSrRTGXBKIRlh2Ph6Xzz9hzcDdCLd71c6u62mmQ
+         ad79LG75itQwl46IN2oiiOyJyDYKGpcQ3neQ/w5kQiSfC9O/wu6pYp7QV9srcYAn8c2t
+         TGfu9IphCgxUS8ystBd1EeWCPEiwA67oZZygv4SJ5t0TJxMLqA3uHXBuh+5I8nZ9DIvO
+         +CpBFsZxZzVHgIy6oRjOhlNVJu/1r+wjf5LzeKR+Z+JMstz7AlwtQWuMu3sSJw8w4Ewk
+         l3mg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792679617; x=1793284417; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=y/nVz+Qmk+Tq2vmwCZBWANvE9dUy6Fp4Dxh9VLxLk90=;
+        b=PRAZE+RYa/Hi/i7xszdGfO18YYUcERJGPuFa0TwZR0t/KCrkPe/l8S2bcMOAWdZjqn
+         hDDsdq5ywxDCW1BdnWmT1Vx22odyBbS51VQ8aTxh7sVxlPj39MtKsFf9kaDZRZt6I+VS
+         Awo2q4mT5v2dp3Hr8ECD5NRpuvxWXUlDcw+V0hlIOsJyWgEZj3HdmYJzoUsq1EaOzM3Y
+         GnFKT0Gabxv9cGavL7y7NU3KcEKv/Ze//jDMDIzwAsmpPiE0Y8yEZRy4JpdbLEC6egvy
+         0OB1FVsaeSIl/Y8D7dEWMAKxf5Thjt+K5PGVV7iuV7wyIYxknzWorZgiLk16hIoN5wAO
+         u2Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792679617; x=1793284417;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=y/nVz+Qmk+Tq2vmwCZBWANvE9dUy6Fp4Dxh9VLxLk90=;
+        b=yhtC2O42aaPNx7JSgg8fuE+PWU7KyvECS9Nz1YfaO9i4vjw7d9dsuyiMcmEfS5aTPj
+         7CaZEotjzGSP5i31ywvKdc86nfAwW8HeZog7DXunvdD/cwxFBXWd16SaSHJ+Sad6kQaI
+         EW6vPWAhj5Yn5xgaSJi+AUwAfGnBXX5tusnHcZ1mcvYAW00mS8FdtMPpb/KGtGFnBjsX
+         3Hq5hFJmEwZlA+1SI4aMY3RG2IFOkd4ZcxOjv+pRfIjUamKoEseRi8dqfH+mKr+LFvqv
+         41eo8kfZ6hdY1VWUA87CdCt2HM8+b8fkDHWqREFy3PlTYbpIIEcLd0o4XZgcLxhABif4
+         4/6A==
+X-Forwarded-Encrypted: i=1; AKwUvBywYl93sanwNmluVJ9AM4mZbJqfrpPUnH3P8hjl7LJh30c46xx/gGjzQEoUqkk7bXiu8FfFW2m2w/x3Nassf6c=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKAW842fSUhM/n6DECWlcjlsKGLfLdk9JUuxc7nlD42w+cZX7Rq
+	IUdLBJYNcwwNJWtmoCjc7AhGBqY/2pWXAx47YIsyjjGPkUjVhosZoEcR+Wkpvdjag181xINDQSb
+	7F2UQdxEhGDmPRYTbtM+I4UFfiH9V2Ns=
+X-Gm-Gg: AYBFou1Xhn2LHhlyXwYT1xh7wGIv3FgMEPg4K1ojmowWnwkvqA9i6ttVhKgVZwI1pbK
+	68kK6yCYAz3rfr4eXAWbj8oEh/2OBmP7MATuwuStOVUC460dcLlS2z+6C4aKV36Ucl64WjoZQfu
+	Pa/ht9k2qiaNCEPoW0Do7klRpDPwIkuXYDbqYkkwydRS4NksXaX5aH8eNQ4TmdProcZspAoq1eW
+	g5lHLFvzadQ+PWHOH1g8e2OOG8QJCi1cyb8ki46Ykgd11oM9p0M/w//UO+w/Hy4+jWI0lf64ZBG
+	i0/rctSHCIw3JpTl2zIgQ5P5IFuUL2Fb8QV/rlHYzUz6kyGuSAzBCNS+IxMoTTUaoettr5sLnup
+	Dj4g2zPnhP+FeX9k5au+ufmQOHRoAL4k73VM=
+X-Received: by 2002:a05:690e:4504:20b0:679:9e25:316c with SMTP id
+ 956f58d0204a3-67a0e4f7118mr3858513d50.5.1792679616649; Thu, 22 Oct 2026
+ 07:33:36 -0700 (PDT)
+Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 22 Oct 2026 07:33:35 -0700
+Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 22 Oct 2026 07:33:35 -0700
+From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+In-Reply-To: <20261022021820.1789083-1-odys.yuan@gmail.com>
+References: <20261019-bug-word-at-a-time-zeropad-kasan-v1-0-f21a3ed6a477@gmail.com>
+ <20261019-bug-word-at-a-time-zeropad-kasan-v1-1-f21a3ed6a477@gmail.com>
+ <CAPAsAGyrH1quaLuyui6Qm5sokid8=yjNbAM3cOunynfPNQtfgg@mail.gmail.com> <20261022021820.1789083-1-odys.yuan@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,139 +112,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next 6/6] cgroup/cpuset: Prevent recursive call of
- remote_cpus_update() via update_cpumasks_hier()
-To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20261022031643.1351877-1-longman@redhat.com>
- <20261022031643.1351877-7-longman@redhat.com>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <20261022031643.1351877-7-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Thu, 22 Oct 2026 07:33:35 -0700
+X-Gm-Features: AclHuK9KZnLcDmcb3UzjebEw_JXnOgl4qhgoWZHIOId6L7KU5VJDln5TqsxLBMU
+Message-ID: <CAPAsAGyA=WG=z6a==N3O6oan6WVmZS-VrxEA7SrxRQs5d+Dsfg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] word-at-a-time: check the first byte in load_unaligned_zeropad()
+To: Qiliang Yuan <odys.yuan@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, Shrikanth Hegde <sshegde@linux.ibm.com>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Marco Elver <elver@google.com>, 
+	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-arm-kernel@lists.infradead.org, 
+	Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kasan-dev@googlegroups.com, 
+	linux-mm@kvack.org, Peter Collingbourne <peter@pcc.me.uk>
+Content-Type: text/plain; charset="UTF-8"
 
+Qiliang Yuan <odys.yuan@gmail.com> writes:
 
+> On Tue, 20 Oct 2026 12:58:54 -0400, Andrey Ryabinin wrote:
+>>> +	/* open-coded instrument_read(addr, 1), as in read_word_at_a_time() */
+>>
+>> Why it's open-coded ?
+>
+> For the same reason as read_word_at_a_time(): commit ece69af2ede1
+> ("rwonce: handle KCSAN like KASAN in read_word_at_a_time()") open-coded
+> it "to avoid having to pull the entire instrumented.h header into
+> rwonce.h". I kept the six asm/word-at-a-time.h headers to the same two
+> small headers, kasan-checks.h and kcsan-checks.h, rather than pulling in
+> instrumented.h with linux/bug.h and kmsan-checks.h.
+>
 
-在 2026/10/22 11:16, Waiman Long 写道:
-> Guopeng reports that changing the cpumask of a remote partition root
-> may set the effective_cpus of the top_cpuset incorrectly. It is
-> due to the following call sequence:
-> 
->   update_cpumask()
->    -> partition_cpus_change()
->     -> remote_cpus_update()
->      -> update_sibling_cpumasks()
->       -> update_cpumasks_hier()
->        -> remote_cpus_update()
-> 
-> The second remote_cpus_update() call passes in the cs->effective_xcpus
-> instead of the trialcs->effective_xcpus of the first remote_cpus_update()
-> call.  As a result, the second call can revert what has been done in
-> the first call leading to incorrect effective_cpus of the top_cpuset
-> as well as subpartitions_cpus.
-> 
-> Fix that by adding a new remote_partition_updating flag into the cpuset
-> structure to indicate that a remote partition is being updated and
-> update_cpumasks_hier() should skip the whole subtree as update_cpumask()
-> or update_exclusive_cpumask() which calls partition_cpus_change()
-> will eventually calls update_cpumasks_hier() for that subtree anyway.
-> 
-> This new flag is currently set only in remote_cpus_update() to prevent
-> recursive call of remote_cpus_update() on the same cpuset.
-> 
-> A test case is added to test_cpuset_prs.sh to verify this change.
-> 
-> Reported-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-> Link: https://lore.kernel.org/lkml/20261010075947.333549-2-guopeng.zhang@linux.dev
-> Fixes: f62a5d39368e ("cgroup/cpuset: Remove remote_partition_check() & make update_cpumasks_hier() handle remote partition")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  kernel/cgroup/cpuset-internal.h                   |  5 +++++
->  kernel/cgroup/cpuset.c                            | 13 +++++++++----
->  tools/testing/selftests/cgroup/test_cpuset_prs.sh |  1 +
->  3 files changed, 15 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
-> index 2e44dc8634dc..1ba94ffaff9d 100644
-> --- a/kernel/cgroup/cpuset-internal.h
-> +++ b/kernel/cgroup/cpuset-internal.h
-> @@ -161,6 +161,11 @@ struct cpuset {
->  	 */
->  	bool remote_partition;
->  
-> +	/*
-> +	 * Set to true when a remote partition is undergoing update.
-> +	 */
-> +	bool remote_partition_updating;
-> +
->  	/*
->  	 * number of SCHED_DEADLINE tasks attached to this cpuset, so that we
->  	 * know when to rebuild associated root domain bandwidth information.
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 6e1bef12f86d..952b31246d62 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1736,6 +1736,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
->  			goto invalidate;
->  	}
->  
-> +	cs->remote_partition_updating = true;
->  	spin_lock_irq(&callback_lock);
->  	if (adding)
->  		partition_xcpus_add(prs, NULL, tmp->addmask);
-> @@ -1757,6 +1758,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
->  	 */
->  	cpuset_update_tasks_cpumask(&top_cpuset, tmp->new_cpus);
->  	update_sibling_cpumasks(&top_cpuset, NULL, tmp);
-> +	cs->remote_partition_updating = false;
->  	return;
->  
->  invalidate:
-> @@ -2208,16 +2210,19 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->  		old_prs = new_prs = cp->partition_root_state;
->  
->  		/*
-> -		 * For child remote partition root (!= cs), we need to call
-> -		 * remote_cpus_update() if effective_xcpus will be changed.
-> -		 * Otherwise, we can skip the whole subtree.
-> +		 * For a child remote partition with remote_partition_updating
-> +		 * set, we can skip the whole subtree as the this function will
-> +		 * be called eventually. We can also skip the subtree if the
-> +		 * effective_xcpus isn't going to be changed. Otherwise, we
-> +		 * will have to call remote_cpus_update().
->  		 *
->  		 * remote_cpus_update() will reuse tmp->new_cpus only after
->  		 * its value is being processed.
->  		 */
->  		if (remote && (cp != cs)) {
->  			compute_excpus(cp, tmp->new_cpus);
-> -			if (cpumask_equal(cp->effective_xcpus, tmp->new_cpus)) {
-> +			if (cp->remote_partition_updating ||
-> +			    cpumask_equal(cp->effective_xcpus, tmp->new_cpus)) {
->  				pos_css = css_rightmost_descendant(pos_css);
->  				continue;
->  			}
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index 5bc144836bdf..19c50819065c 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -347,6 +347,7 @@ TEST_MATRIX=(
->  	"   C0-3    C1-3  C2-3    C4    X2-3   X2-3  X2-3:P2 P2:C4-5 0 A3:2-3|B1:4-5 A3:P2|B1:P2 2-5"
->  	"  C4:X0-3  X1-3  X2-3     .      .      P2     .      .     0 A1:4|A2:1-3|A3:1-3 A2:P2 1-3"
->  	"  C4:X0-3  X1-3  X2-3     .      .      .      P2     .     0 A1:4|A2:4|A3:2-3 A3:P2 2-3"
-> +	"   CX1-6  C1-4:P1  .    C4-5     .    C1-3     .      .     0 A1:4-6|A2:1-3|B1:4-5 A2:P1"
->  
->  	# Nested remote/local partition tests
->  	"   C0-3    C1-3  C2-3   C4-5   X2-3  X2-3:P1   P2     P1    0 A1:0-1|A2:|A3:2-3|B1:4-5 \
+That concern is specific to rwonce.h being included from very low-level header
+like compiler.h It doesn't cary over to word-at-a-time.h
 
-Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Tested-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-
-Thanks,
-Guopeng
+> Thanks,
+> Qiliang
