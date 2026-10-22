@@ -1,67 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792685996;
-	b=Ba1Y/+xH3abJx2Z+QoikERo0XS6OtUcUy1cjHsiwWdACq1T6+B9++Vqy72PbPWdyiIwy
-	 fLwG+ZjG77u+dDRDRHsHwajaOPls0dqU/B9wvnsyFNqa5zcFdxCcuO7F6/iUqssJfmP+X
-	 BoYFHWXf3x1ROmDVDDRwAhc8jJtt5aRp+sucYr7E2+K9hb8lbSMGzO95fW29Qn5Ytxu9V
-	 GVSRMxXCNYooqftGrgmeJnUpJRRHRf3UcrbMKMFgDCnWP3qu97S0YFR77bA0mts/9ysR7
-	 r460mRqpasFJ5eqC7h+cfSCx74NOTOBziucEwtzPdPEFH18WzAeyEOhL8MaEnxty9Tw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792685996;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=+OIAQk3Za1k/OmM22e/vZ/85baJ7TqcBx/dUHxwFUHk=;
-	b=2NiI7AEy0E6OhyjNHAUHWF9mjPGp1Vonhm/hWB4RU7wY0RYZqXSuW8aj+RDKcnx89KBv
-	 /xtL/aboz0O7yK5d4PPQLE3gK4Vyz1YhuYWmqq8bCEyejcHK07ZyvDPpLnn5dqTJBtrPn
-	 iDFuKew7TXcLPInm3j7yyX+cdltcoGX0B7Mq2IS19UOyLWOHU5pEzUm5pz8vg9pEF7K2Y
-	 Mg8F0DvlGYTkt/GxS3bXU4KMDhXweeHaEY5ER6rCxtbsOeMheg8HSmJmvBBd99g3Q2Dfb
-	 MZJZXSXiUaS9bllMdObKAqFDR8Ax61viyLQnfQifEz2UNhAnT37+JXVohchxEqaf5uw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VzrEK1iV;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792688330;
+	b=TFEfWhHuqOerHjYJfzFVp7GEmVPZEQUV7OmXjzJyk5shi5NSPW1vNjObcBSZB1kYGWMw
+	 kemvHJCoyMwNtcsPJiBMOTeuy06l6dRquMtyibV7rO0PVo2aimC6Q9fcPC6F2C5bwyRR1
+	 kg+VQtoN70Z4qwRoMdqEFDqIOdJsVF4rOB+URcodHXVh9w5A9us1ZoSZ7UEIyTb9QTmDt
+	 9+ifqTcWElsdiyC/lSvjoseIBz/bGsjt02jtkZuCn8m/mzuSVKBjkt0BkDDvknf/HvAD4
+	 lYzDCD7JlijNFtx2vFJORnowdnWF1mYCJxr+HuAnW2w7GIK7tCfLbBRYP1thO8CLptg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792688330;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
+	 X-Proofpoint-Virus-Version;
+	bh=OlvxhZaFNNxPSruewKqVsjl2oNISZrjoCUrWTQhSzto=;
+	b=jSeemCu1UhuNpLQX8b/XDRCgjSl2llLFfXWSc3su+7RptDKe3QOhb9lVgwNAJnkeVA5c
+	 e7W3curUb9RioULcQbBsh+/zfc5r/iBsNhurOuRrh/5RgWEGHxSsjpra+Dmdap+9QdT3H
+	 Y6psxvgowhLvYWgR1DW8W1pL+GeQWpgxFAuhJ60U5+OL/Q0AP3qXx5uG8itf2wHq0lDwp
+	 sPkvpG7efffvQS0mL6dWzQJY8dMCMkrbmaypQouKwzk36VrpmyRuivVm2BDldjw6sRdCy
+	 3af+G57t59mNlV88w1m/GuAKhS6WCTS+/cikBLBfUBQNEXNIID7iPm77OtESF4jAGWQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=TXn9CHwd;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C623606A31D
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 16:19:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C623606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8790D606A32F
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 16:58:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8790D606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VzrEK1iV
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792685994;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+OIAQk3Za1k/OmM22e/vZ/85baJ7TqcBx/dUHxwFUHk=;
-	b=VzrEK1iVBTeLdxQP03MBYGtACR5JayxaPbCk2aBvPoTXNehtgmiCCN898JrNr92A3rKI4d
-	IQjOXeJN8Sxtx6XTSsV34AbiHKx59Y3fcmIzFVOfb3htu7LcZGiVDUGmiwSMSEx6JKcPM+
-	HrhRPi/WkjO+slHwZxXPEfpEgScHgcU=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-374-J7ACjSg2O-Oc2aoX5WKI9g-1; Thu,
- 22 Oct 2026 12:19:43 -0400
-X-MC-Unique: J7ACjSg2O-Oc2aoX5WKI9g-1
-X-Mimecast-MFC-AGG-ID: J7ACjSg2O-Oc2aoX5WKI9g_1792685982
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A28351955F3C;
-	Thu, 22 Oct 2026 16:19:41 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E9E6C180057F;
-	Thu, 22 Oct 2026 16:19:39 +0000 (UTC)
-Message-ID: <ac570c76-5677-4058-94c0-2eb9540526eb@redhat.com>
-Date: Thu, 22 Oct 2026 12:19:38 -0400
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=TXn9CHwd
+Received: from pps.filterd (m0528008.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69MGgYhZ969641
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 09:58:49 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=OlvxhZaFNNx
+	PSruewKqVsjl2oNISZrjoCUrWTQhSzto=; b=TXn9CHwdi2W4NrcyOm/YUyLxnR8
+	OUHcxOlfW4xTdJW26FXK1z9ozbqZGrc3LbIP2hDwwddpkllbZDuyhUYaZXw2Xtk9
+	i6IaiMVMZL2tyc0NVeV4A06b7Hv3lICyaI88Lm72gRdkQ4mGIAYYx820x5GMJJ/Q
+	nQK7E7W5is4G3a3kMu9HwjM96znznIemvk61fSmEHDAtDR0pfDkiprmtGa75vAje
+	7mGQUGl/uX1FP6UcUEhAmSXJ8vom40qV0zC/XEJwGN+V/5hmqD6dXbFpP+iVW2y8
+	T1dj2QQpYyYrw6Ub0da2P9GcBsooPzOS4j+llwimH4LHMUj/Pp3ProGC/pA==
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hfjf6hvqy-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 09:58:48 -0700 (PDT)
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-48e00f3929bso801843f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 09:58:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792688327; cv=none;
+        d=google.com; s=arc-20260327;
+        b=o5v3y/YNhPCxVkpXfwobmPyOXByXQOvolkKd6rKskBWWlVP68kbp4f0Flhkm/T6xSG
+         aMH00AsZLEGFYo4+wx+2hfE7d6bQoWP0hNKnkkU52exnGQ7KuHonCqExIJFfQeMkHtLH
+         VNeWuQdM7XyJ1+bGlvAGnzdbvOrbo0d1aUEjLWGNa46Hlq6a9wdwmBxb4VTnGtP8kBfr
+         alu/SHGCdUJ0pN65tJYIEAyEe/us6y8i7cG/59VSWWVqPJ29nisLSxoB2zdDmlxl+0Ac
+         rlXcyPVcix9FbV/lrLySoXMUXlcG23oAZcBAMpNS3KQpjIioWyIMEUc9PwdAKmL5U96y
+         vaKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version;
+        bh=OlvxhZaFNNxPSruewKqVsjl2oNISZrjoCUrWTQhSzto=;
+        fh=c+VXvb7/2Smdr1NmfuGCwSBsKvN1Tj0qnoBBxSpP+Os=;
+        b=jISqIRTU8e6sPYLiXCPcmSgAz5MNASAgMJpLO8hYhv5WDQ6ipoDG0B8WnlUCBae1ML
+         QlgDnNVbvRSbkWvRjx235QRR/IspeHyOPQ5fd9QOJY/3fL3uCCiMfyaF26TeYXriwRg+
+         oOuXCAXqMZImSCI73yNhuWanur5Dun527VvpHUmDUaIryt1tUJ0ZLa9ZarMGxCF2VE6l
+         rxm8dRbKaIxhJKNOSlNJirW1cq0u0ZhY7q8gKaSguFP/P/Jr9FZdlAQCwt5CiiXlJuWG
+         Tl5T4RN9R3Ifit5LqlB8pkl0+ZNqFEM4VQxaTeEyYAjnI+A9A1EGi2IV3T23asNBtFiw
+         4cZA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792688327; x=1793293127;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=OlvxhZaFNNxPSruewKqVsjl2oNISZrjoCUrWTQhSzto=;
+        b=ZyGpHXHLt1bM45vJAdKEleE8pqT368EiQ0jRw0GcTnktgxESF0qiEe0D4F3ld0ln5O
+         jiQN0M7NgZn4zTyixLSFOpMhKUeR8I9x3aN6HHCcDvczJvQn6CHJbw+nhJP71mWq3Bks
+         QxJ/rokws4OTS6pTd4khLUHFcB+s1uvU4qTVVNea5D1IvbkuuAr5+aBCoDBtp52ODs01
+         UebBAPCkdiG+2rc4SGbEm8YLM4gjnBuZMhpzohXzyT+Hs6qm5qMRcW3EqwWHm77Y9IVv
+         v50+QbTThklPsuy20Fc+as4YoR6r1SlygHsGvyhbflxKbzBvVxbLa9C9+88XoFq3YbRw
+         nhUQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw2XdJq7a990E144Q2zr4h14fAzxzsvwCe51YB8UY72kVsiSsGNxZ4VBq7xjrtV5x1Vnbzh1bgsNx92VbQqoeQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIbflF3QSBv4weWmzZy6wKo5Co8uy8rUXrc9Fh5c2f22L8hygLQ
+	U9RmJH7DiIJStEbZb0SrTksv9YqPSs4E/W4E5HJCtnLx6jAUXuVbH2sBlGtlwFc987g1/cRWOtM
+	pt/krgWufb9lvlZTI0QTTv4o2X4/vjzLrnzEq6yPgV2erVEldGUBLgj/bvo7bUu7glpn/AkclFs
+	o1nXi0+NbyFGNNQsbKCtst2fbq2B9XwqMnr4zmHz38AE0=
+X-Gm-Gg: AYBFou3qrLvCoEl1gdooYg+bBS7rpcwluyG3XqYOauq8Je6Q0I7CLJ/rB9zPZX37aC9
+	1i8mZd8MorV+jzomKpY2ioFe5kFsOzzAJV0qfK0coxvHRLD1UYMh5fzvlpt/yRovG2/dufbprn/
+	afpuN12BRZR8RwIU+tugFyaK4PinCAiVlg9uJW973SgMsd4WZnFpkQWmhQi/qn8vBQpW4r54LEe
+	mKAA3GBONSlcHsj8Sz3AB/qbEannyyb
+X-Received: by 2002:a05:6000:4026:b0:48a:fad8:52a2 with SMTP id ffacd0b85a97d-48e2d133c16mr7174887f8f.23.1792688327255;
+        Thu, 22 Oct 2026 09:58:47 -0700 (PDT)
+X-Received: by 2002:a05:6000:4026:b0:48a:fad8:52a2 with SMTP id
+ ffacd0b85a97d-48e2d133c16mr7174839f8f.23.1792688326856; Thu, 22 Oct 2026
+ 09:58:46 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,74 +111,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next 1/6] cgroup/cpuset: Find furthest isolated ancestor
- for invalidated isolated partition
-To: Guopeng Zhang <guopeng.zhang@linux.dev>,
- Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261022031643.1351877-1-longman@redhat.com>
- <20261022031643.1351877-2-longman@redhat.com>
- <f22f4cdf-eebe-437a-8b3a-5f98aa0df5a8@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <f22f4cdf-eebe-437a-8b3a-5f98aa0df5a8@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+References: <20261021210200.788191-1-toddfreed@meta.com> <willemdebruijn.kernel.31749cef483da@gmail.com>
+In-Reply-To: <willemdebruijn.kernel.31749cef483da@gmail.com>
+From: Todd Bert Freed <toddfreed@meta.com>
+Date: Thu, 22 Oct 2026 09:58:33 -0700
+X-Gm-Features: AclHuK_NBD94GFwukMTzDWZnzFQVpepA-a7ilcg4xIfDlIrtJsUvYJLY7PXSbnA
+Message-ID: <CADh2yMydLVUozaXJR=uvkkw5AjnxYhFs7V4dUAkfBs66i8D4ZQ@mail.gmail.com>
+Subject: Re: [PATCH net 0/2] psp: drop packets with extension headers in
+ transport mode
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, Daniel Zahka <daniel.zahka@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+        Shuah Khan <shuah@kernel.org>,
+        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+        Raed Salem <raeds@nvidia.com>, Cosmin Ratiu <cratiu@nvidia.com>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-GUID: tauSvtdwEQQucGFWdgag1NcqXSLsukU4
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIyMDA2NyBTYWx0ZWRfX2wHXagNs0DPh
+ cSmoD1GUpBXRBfFUsv0bzR32j7RNNNxQyuyj9bYfunhd7u+DVYXo7/+gCFBuqTd5UxAdAJBE6W0
+ MneRWFpzyEJLZ0T6ucCsOllcHKQ0OLo=
+X-Proofpoint-ORIG-GUID: tauSvtdwEQQucGFWdgag1NcqXSLsukU4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIyMDA2NyBTYWx0ZWRfX1SPsaeSzHW6e
+ F3TULaehl9qJrA54a08DXlRg6/rHVKdG2zB82knAIon3YqBTeqI/IdRY1jBMPOtq61V0s0OOZ8R
+ 3uLsllfgYU25ItPi3rpBUfDfFUCVc5EL3SQS/OZ9iWSKo0wAPYyz3ksUq8RtdbF00sy0XV1woep
+ ZUetvV/RfjPmbrMyJ4JfoDUaggpsmogavhGtrSpcSNiA8BCveeB7SOJdrPX/XWYKYkZ/eRb8caT
+ JPlJXlwKDooKAPX6bYG/cqwi4ZIHj97ELIkPo1W6QnZ7dbYzYYFulRAjyY8iYqL7VO4+waJg4aE
+ lPfPN3ZUxQsQ8/yvqD5mP1bBBFi4hjArYHfRz9JMLzMbPnfdBGgL7hRloDegV6N0IFoCRzA2wHQ
+ IogNUchoKsEB6OoiNL2sbQf59NWkeN/MsUJDEu6JuQucriAlj1DbmqGrys7sB1sQgmPqNxOUuZH
+ Es/EJH8cQKv6PQCtnkg==
+X-Authority-Analysis: v=2.4 cv=HOVWhYtv c=1 sm=1 tr=0 ts=6ada40c8 cx=c_pps
+ a=CsXZvLRfiTx/ye2xXAwb9g==:117 a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=_1IyUuN4QrATX339ibzo:22
+ a=v5nOu5Z_PtvP9meoUtAA:9 a=QEXdDO2ut3YA:10 a=F7q00xkr9EfWfQvbdVXI:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-10-22_05,2026-10-21_02,2025-10-01_01
 
-On 10/22/26 9:25 AM, Guopeng Zhang wrote:
+> Todd Freed wrote:
+> > While working on adding support for socket-less psp associations, I
+> > noticed that this case was not being handled correctly. It will be more
+> > relevant with that series, because it adds udp support, for which the
+> > psp nexthdr will be taken from the inner packet.
 >
-> 在 2026/10/22 11:16, Waiman Long 写道:
->> Commit 46b885416c27 ("cgroup/cpuset: Fix a missing isolated_cpus
->> update in update_cpumasks_hier()") searches for the closet partition
->> root ancestor to determine if the isolated CPUs in a to be invalidated
->> isolation partition should be removed from isolated_cpus or not.
->>
->> As reported by sashiko, this method may not work when there is a deeply
->> nested isolated partition hierarchy. For instance, Consider a nested
->> hierarchy A0 -> A1 -> A2 -> A3 where all four are PRS_ISOLATED:
->>
->>    A0: effective_xcpus = 0-4
->>    A1: effective_xcpus = 1-4
->>    A2: effective_xcpus = 2-4
->>    A3: effective_xcpus = 3-4
->>
->> When A1 shrinks its exclusive_cpus from 1-4 to 1-2, A2 will update it
->> effective_xcpus to 2. A3 will find its closet partition root ancestor
->> A2 and decides that its effective_xcpus 3-4 should be removed from
->> isolated_cpus which is incorrect.
->>
->> Address this corner case by searching for the furthest isolated partition
->> root ancestor instead to decide if its isolated CPUs should be returned
->> to isolated_cpus.
->>
-> This looks good to me. Would it be worth adding a test case for the
-> scenario described above, something like:
+> Just curious: what is the plan for replay protection for UDP?
 >
->      # A middle isolated parent shrunk below coverage: the released
->      # CPUs of the invalidated child stay isolated as a higher
->      # ancestor still covers them.
->      " CX0-4:P2 CX2-4:P2 CX3-4:P2 .      .      X2     .      .     0 A1:0-1,3-4|A2:2|A3:2 A1:P2|A2:P2|A3:P-2 0-4"
+> As PSP depends on the inner L4 for replay protection today.
 >
-> Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-> Tested-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->
-> Thanks,
-> Guopeng
+> FWIW agreed on the ext_hdr conclusion in this thread.
 
-Thanks for the review. This patch fixes a specific problem reported by 
-sashiko. However, there are other pre-existing problem that will still 
-fail test case that you have proposed above. Patches 2 & 3 of this 
-series are there to address the other existing problems so that test 
-cases like what you have proposed above will work. The first test case 
-added in patch 2 was to test this though it is somewhat different from 
-yours. I don't add any test case to patch 1 because I don't want to 
-break bisection. I can add your test case in patch 2 though.
+To clarify, socket-less psp associations will apply tunnel-mode psp encap.
+So it is in this sense that UDP will be supported (not e.g. adding support
+for udp sockets with transport mode psp encap).
 
-Cheers,
-Longman
+That being said, UDP which is PSP encrypted (transport or tunnel mode)
+would be susceptible to replay attacks, just like regular UDP. Except in
+the sense that after enough time has passed, the packet would not
+decrypt if received again (operator has rotated the keys, etc).
 
+Not sure if you had some other kind of replay protection in mind.
+
+-Todd
