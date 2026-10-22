@@ -1,55 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792700750;
-	b=RP+Kpa7q8WXVhpsuXFWXbz9xl5MXKhWHNg/4fASg+J8pzhkd9JfOoMxPLQzYwm0wpXwv
-	 DWID8ZO45FW3lzA0SZanc1uyu5VHI3dtGZedrpPe0xEOCxHLlitt7gvxsvAkuoEgp4wnw
-	 VMmr2UyK+w3E2sSJb03D2BHfqHtuSBhsvT6yxJ2HJZhGgiGawC6wuoNFX++ws+Zya9OA9
-	 3L/U364SeYmPPwEZNoVb3K9kJVxX0hzWcB+Ng27NHV3eaWJGzY3ehoUbqFRdmkNDC68X/
-	 oRtdJ84UV6nvlonPOa93ZaTyoxNh0wX5u+A3Ro6l+fxjDH94Pwnfzc+av9azmVr6ZMg==
+	t=1792701359;
+	b=df329Xil4ZJY47oItwdqOF9f2EEAruuo/+Df5kxkbblyQzZ16Sa4jqF8WgICN7ev9tif
+	 AP9FfJom/dzHeF+OnZpvl6zhnVmr6mIjT8AAr+3+OObvgpuvLKZvwP7xqGnpio3tuj9g+
+	 fL7MB1XMr9gX6MylWLMe3ZVW+iJEuEzj1NdXSwtmYeQdrysMVdIQOBIH/kvDcMmTpqF2V
+	 AV+43VOyYaPcWxP2JxFth/NXjmO4qAREWaw1xcJe9ciyE10VXk+9213v/Do2NPuCc44Pd
+	 +pTNYxEhq1tn0iuTO+ZVhFYABPRFJk/XNDly8WPtbMAhLuLweFnsBYpDUBD7wzwWwNw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792700750;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ux1UTnRjOyGqJzOYM5Hv6XVTNeyYxnuotg3pXhf5HHs=;
-	b=mYDDdAEfGSWbvMqccXauyXpRbGa6RnygkJeHphXlZ40tw8bGoVZ7TdfVA0DCOmzDDyIa
-	 V+qSLNMo3o0XsnAW6gPFRe+tV2U3HcSR+7fnW9vqUBBJkVDObT9UkrQrT2QeCS7RJVTSc
-	 VKPgLmKjtHbY87uSxdg5sqQ7NWRwNwNYm2DATUtPQB+TKqDhenhELnSFTESYAW4alX4ZN
-	 5WBO0AVrKxzuLotOD8ERiu1NWYe8Ki9duwPTQjQs0LsKaNWjN+e27hJPkCsjERQW4MOeN
-	 bEuEbwOGVSanTKNdUXk71BTFaGQjO3GxdXIOo2Us7bpX5u/XFAK9J5OIATU9fqcoeCw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792701359;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=O3SMo0NE3DLwpih2KEd64CxyKuLYy3YU4G3rWnR4pLE=;
+	b=cXe/Gv3AS00U+I2FYfXbeDwmT4nHbVLKuy6fwq0vQbCHpPfN1ReSSp+1Rl6sXSqpKvkG
+	 CEbtONlfJHPCreKxAd+k6S53w1N10htbcZZPxF1yYS4yQBatJf0cJ1kdWL3tj9n20OK5E
+	 hmsoSkg8QPoCUHxeikQ6keA/dG+D+6Tm50KsIsW8SGF2oZfAqIaw9T+WYFsdoToeqvKEw
+	 kLCz9TD/NrIZAEDGbZRF+NHy3V2a/nMxyA2mAPla/riZkHBVVz5VZE54aaqgRgwpaKMru
+	 EcfFZ2fikT5slA2jFOdPjvwYtNC0C2cXdjKBTLjHG0nE19STEsKSjkkU4P0NevGeCsQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RLMS0l8S;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="exiE/1Qo";
+	arc=none smtp.remote-ip=209.85.221.178
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5955606A322
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 20:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646ED606A31B
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 20:35:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 646ED606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RLMS0l8S
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C341F031E8
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 20:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792700749;
-	bh=ux1UTnRjOyGqJzOYM5Hv6XVTNeyYxnuotg3pXhf5HHs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=RLMS0l8SrlVSlB+xSKm6w6FYJ1BVIP2OUvpbyz9MikbM20bH8i83IdqYLHnzS4qj9
-	 vo6B8FxfAsRueY9WSJTqmuWYCQSQkIN60PxS1EOjtlPkF8g30tel+vLlAPnohHXmRv
-	 /Vbi1+UaOcDgUZ0i0fi6x/na8nusRwiADaFX9FXU32HXstuRnUFimv6wlTGqn34WfD
-	 QMfTzkYILeeei8YsWI50/UKTnIXVBnU/aSI39gffsIi6/ScqbVu8/ubBXYIWQU9gCd
-	 GSwDnvTkIbRy4NYjw2TbXlJoApzGgMFRPZgGDgCAPArwrn6dScfyWS8TCD77ysDeE5
-	 19uIGvmDPyrRA==
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-14394530ec6so221907c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 13:25:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBw3Mygh4KQVTvNttDV9kHU/+USFsIH7hgUABMrJ4UUqUj8yDUux2mWsXP0RjRVVTIvgHTtsPwdKSMFFUi96Cbs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL8yI3Q58v4ofsflmTtvl786uME/HpblFBScL1LJUuE72jnTQuy
-	AeFErFBtMppV//E0q3UnT6xAv+CYh/sYGdJY1/Gre1VnGfNBSO1VHcN0Su86j1baM4W1FDuOmZh
-	G06H5qcXhqMcFrN6RgI2cIUX78I8E2Hs=
-X-Received: by 2002:a05:7022:1707:b0:166:9e0d:3b56 with SMTP id
- a92af1059eb24-1959a382fb4mr475195c88.38.1792700748990; Thu, 22 Oct 2026
- 13:25:48 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=exiE/1Qo
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5eafb65e169so204790e0c.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 13:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792701358; x=1793306158; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=O3SMo0NE3DLwpih2KEd64CxyKuLYy3YU4G3rWnR4pLE=;
+        b=exiE/1Qozj5ypis2bDJhhKzYBSjGcr534nMvbfngWGniIu/6R9Msw+nBY1APTgiVbP
+         VaI4PxOMSijd2+vhySeJq3GEoZSarPiWPQGzEby5iuFK6MtKqanox11GJ+Jze/cfX62N
+         +k+SpSqSOeiSoXrvGUvbSlwPb7CDXlWhgviiWi8Isv8yTipm1WAql3Lt6zZUaojCSjJJ
+         AP6anqAQT5EW82wBMgUKG7q8rJehluPiL+rwJ5XvGd4pivv06qzSnSkZyQMuxKvL2M6x
+         rQzdST0Jscgv0KlF7yfN93Thj0XqFo+VSBkvsV3pe6gq8fSLci+GwE74fPoZjvqn9nyi
+         OzBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792701358; x=1793306158;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=O3SMo0NE3DLwpih2KEd64CxyKuLYy3YU4G3rWnR4pLE=;
+        b=r3bbrcIfAUmrQelU32ofkA4jJ7plUwb3Njq6LHrzif1fBb4E/jcjeRtMslpwUloXe+
+         HcsveTo8x9Iu34TnszT9GGsx4fqpT5c0OID+JcfpXcqPbSK7SNDbrcsFdjwPHNhKvYUF
+         2EjbuQDZIFw3cxIC7U2K34WpCTdrW7nH8Xi1TdL2ijjwOWzrJnABl/HI/VlixyS/Q5GC
+         ahrJWDsohKgDYB2tJyVYgyW3sK4W26vuxTnpEL7MorUBw7eryX7R/Bs+JsfSf46mJI5z
+         Dtb/MIP7AZnJeEjIz3y510ddQvfeK+oOupVezMNFkRoSdOQBnS1dytZgLYppWVC5Xu72
+         Tb4A==
+X-Forwarded-Encrypted: i=1; AKwUvBxEJYjChMSSlRz6ou49n+Xb2/6RzJA9o/Ua97TnijTzu9avBfprt76EcePkzPOlU8Ry37tsawQDDLizq4o3Hio=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK/uAEdyRTwAv7M7zvQ9Th+WOATvQEC1S+wmQGvCvNzPJCfHDRc
+	ZPg9plM8Vje1ct1aXBNdsrZZuO40FDKvpHNZpbpCLkKQtg5tztEDFmPE
+X-Gm-Gg: AYBFou0uiqDbI2Pw5feWfL1lsG7kWdGpbuoYZf78eotQ24+nkj3ExLQTpG7wCGRZk6T
+	cyiG8hKmAwtygEURwwNFfQKhDsyql6LX0/33Mac1zdkn7BdzUJ34APKYzfuEALO2F0L9Iow8I8y
+	Sg4Y+pBaaxPp7BqbqIuhyBLm+Q3O4h4MrEM27yXw9dqup3HpeoFuqV7hbcNDR5upTA+9VE+mCK6
+	PQwMktZO8sYlkowcBU53lnALZqM5f8K1J9wrj0d1Rdh7T/VqC/FMUJ16dmxsVlAYF09iSbGpARL
+	mxSDUleOMH/2FIkTGXf0s3KqFoSXdWjB/W/CwbX+5KtIUJDkIn23LSic0S4IgUgeFhp+9iiNgq2
+	zXFb3ONH+mbSsqg83wxGvs82eqtaV234vaiLcGCBjDLKdUbOL7x7saBSk3uemEZgOJ3Y46qJYi7
+	6e2980utC2pFkynD0d4SKD2o4cHEK4fIVL8HI4BaKE6VWwAVpbws6gbYIoC9VQKyP4BuO1VFm7H
+	qfLdeKEEl5MaQF7NwffbgXpgtE7PZkWyniDF9teaYbhXVRo1zjeZBY5cShuUd8TL3MSjWMen1Pu
+	3CGmZ+den1ZNwdrXL4ogCx5jIjdppTqaQLPoXwIM+Cu/sb4aEDRMo7ZSSu7gl07EL54Ls/fffL6
+	K1CbxfOKBn/p1rvspZv4=
+X-Received: by 2002:a05:6102:5708:b0:7cc:2c52:47aa with SMTP id ada2fe7eead31-7ccc2c697d6mr355449137.0.1792701358326;
+        Thu, 22 Oct 2026 13:35:58 -0700 (PDT)
+Received: from gmail.com (111.46.245.35.bc.googleusercontent.com. [35.245.46.111])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5ec13f674c5sm218083e0c.16.2026.10.22.13.35.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2026 13:35:57 -0700 (PDT)
+Date: Thu, 22 Oct 2026 16:35:57 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Todd Bert Freed <toddfreed@meta.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, 
+ Daniel Zahka <daniel.zahka@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Rahul Rameshbabu <rrameshbabu@nvidia.com>, 
+ Raed Salem <raeds@nvidia.com>, 
+ Cosmin Ratiu <cratiu@nvidia.com>, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.fe159199a64e@gmail.com>
+In-Reply-To: <CADh2yMydLVUozaXJR=uvkkw5AjnxYhFs7V4dUAkfBs66i8D4ZQ@mail.gmail.com>
+References: <20261021210200.788191-1-toddfreed@meta.com>
+ <willemdebruijn.kernel.31749cef483da@gmail.com>
+ <CADh2yMydLVUozaXJR=uvkkw5AjnxYhFs7V4dUAkfBs66i8D4ZQ@mail.gmail.com>
+Subject: Re: [PATCH net 0/2] psp: drop packets with extension headers in
+ transport mode
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,93 +113,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
- <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
- <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org> <DM4PR12MB61369D00ED2FCFEDAE0E4597DE652@DM4PR12MB6136.namprd12.prod.outlook.com>
-In-Reply-To: <DM4PR12MB61369D00ED2FCFEDAE0E4597DE652@DM4PR12MB6136.namprd12.prod.outlook.com>
-From: Fan Wu <wufan@kernel.org>
-Date: Thu, 22 Oct 2026 13:25:36 -0700
-X-Gmail-Original-Message-ID: <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
-X-Gm-Features: AclHuK-w0c1onI8im_hxrE8Vj8Tb7-7Hy-SNC8hLk4Qv6iomWwee3Oh6ZTdAJrg
-Message-ID: <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
-To: Manuel Huber <manuelh@nvidia.com>
-Cc: Fan Wu <wufan@kernel.org>, David Howells <dhowells@redhat.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, 
-	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
-	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 22, 2026 at 11:02=E2=80=AFAM Manuel Huber <manuelh@nvidia.com> =
-wrote:
+Todd Bert Freed wrote:
+> > Todd Freed wrote:
+> > > While working on adding support for socket-less psp associations, I
+> > > noticed that this case was not being handled correctly. It will be more
+> > > relevant with that series, because it adds udp support, for which the
+> > > psp nexthdr will be taken from the inner packet.
+> >
+> > Just curious: what is the plan for replay protection for UDP?
+> >
+> > As PSP depends on the inner L4 for replay protection today.
+> >
+> > FWIW agreed on the ext_hdr conclusion in this thread.
+> 
+> To clarify, socket-less psp associations will apply tunnel-mode psp encap.
+> So it is in this sense that UDP will be supported (not e.g. adding support
+> for udp sockets with transport mode psp encap).
 >
-> On Mon, Oct 19, 2026 at 04:15:57PM -0700, Fan Wu wrote:
-> > You might need to explain why the existing keyrings, i.e.
-> > builtin/secondary/platform cannot be used in your scenario. Like the
-> > firmware is not trusted?
->
-> As touched upon in [1], the scenario uses an ephemeral VM whose
-> IEP policy would be assembled after boot. There is a mix of explicitly
-> trusted dm-verity root hashes and possibly signed dm-verity layers
-> which can vary per VM, so the final IPE policy would not necessarily
-> be known ahead of time.
->
-> This specific scenario is Kata Containers on Kubernetes. Each
-> Kubernetes pod runs in a headless Kata VM with a static dm-verity
-> protected rootfs, while its container image layers are delivered
-> dynamically as dm-verity protected block devices. The kata-agent acts
-> as trusted bootstrap userspace and would author the IPE policy for that
-> particular guest before starting its workload containers.
->
-> The firmware is trusted in this scenario. A public policy-signing
-> certificate could be compiled into the builtin keyring or provisioned
-> through the platform or secondary keyrings. Because the policy would be
-> authored inside the guest, however, the corresponding private key would
-> also have to be shipped as a static artifact in the guest rootfs and
-> shared by every guest using that build.
->
-> Instead, the kata-agent would generate an ephemeral, per-guest
-> policy-signing key pair, provision its public certificate, sign the
-> policy, destroy the private key, and restrict the keyring before
-> allowing untrusted code to execute.
->
-> A dedicated .ipe keyring thus provides a purpose-specific runtime
-> provisioning path for this scenario. Once the certificate has been
-> added, the keyring can be restricted against further enrollment.
->
-> I envision other scenarios with similar characteristics may benefit from
-> a dedicated .ipe keyring as well.
->
-> I could elaborate more on this, e.g., on the how users' deployed
-> container images translate to dm-verity protected image layers etc.
-> (the erofs snapshotter is used and there is no filesystem sharing
-> between host and guest, image layer transport is realized via block
-> device attachment), but I am trying to keep this response brief. Some
-> more breadcrumbs on the combination of containerd, IPE, Kata can be
-> found in [2] and [3].
->
-> [1] https://lore.kernel.org/r/SJ1PR12MB61246B0BF58BC2B6F0A79D30DE9F2@SJ1P=
-R12MB6124.namprd12.prod.outlook.com
-> [2] https://github.com/containerd/containerd/issues/12081
-> [3] https://github.com/kata-containers/kata-containers/issues/10943
+> That being said, UDP which is PSP encrypted (transport or tunnel mode)
+> would be susceptible to replay attacks, just like regular UDP. Except in
+> the sense that after enough time has passed, the packet would not
+> decrypt if received again (operator has rotated the keys, etc).
+> 
+> Not sure if you had some other kind of replay protection in mind.
 
-Thanks for the explanation. This clarifies a lot. Please include this
-context in the commit message and doc for v2.
+Got it, thanks.
 
-Also, one thing I missed earlier: before the policy verification call,
-please also check:
+No. I'm just slightly concerned that casual users of such a feature
+might assume that the security protocol handles replay protection.
 
-ipe_keyring->restrict_link->check =3D=3D restrict_link_reject
-
-so we make sure the restriction function is the right one.
-
-Fan
