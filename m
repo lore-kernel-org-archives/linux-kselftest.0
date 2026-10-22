@@ -1,84 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792682254;
-	b=CFtgWssaMNVx3gKIWYxX3SC2PFn5GVsZ0d53OWxxyWM9wUGHXhs12/y1DpcgMUBpVoyL
-	 LKcHbx8NucKMTwPqP0WDZ9+0sT4xV0EbLKY0xGKX/1UzOi/M2CxzuWk/6XnMnF0zxuHFS
-	 WRXCIn+grwj3IDHOqVBm70AHX3CYHjG1T1dDrcqUP8+tJlUyHy6+9vQaCaoR3svH2JbSE
-	 1TGDXKI9ZNEGavgaoLdf9AoGhoC2abAfPEgfm/B5Go01CBOfjOwg5jwFUEkoNXODSJTTN
-	 r1S76eEp/muJb7/dAYYQ/IVwDglr341Ng/X0Z61BCxNbcU1Q+XfKXqTHFS5dcYq03/g==
+	t=1792682399;
+	b=VcfIVuflR1j490en/+2dNc6fwr94yaFW9xh/dy2aQwUbuCmSLs0lLkt4B3+dwbOeQKMk
+	 wABDncTiCrvMdfEPPZBNOcK2cN8zmoRNSFGva7x/M2jaJcqmUrHYEIRVLfLfOCwnvWQP0
+	 Otqj72j28cX3RSWrCbHPZYhHCWZuIMMnHcKOSItmLPpOaWUzjEGQ1CjQosDq5OeBt3XI6
+	 zjSEwJhSqHhZWho5OnUmClCuEdB/UT4o6YaZoHT22pZZbbbXGpeL9/z98S4uGONQNZ57k
+	 OvKcRss8+kdhXtBRkt/B5Ct45NSv9BBDxCoCaxnQHpEjGVv4oqCPovqV7iRzG7rmUug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792682254;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792682399;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:From:To:
-	 Cc:In-Reply-To:References:Date:Message-Id:X-Mailer;
-	bh=nw86MTT9QYJNuk6B5SLe4LXpcyaG0CYCN6se45mv/xk=;
-	b=1OesM91on+6AcGhraN978NerIZufbB5dLhsVAd9Vk16LWvczym8BJFs2p3AW8SqNOHti
-	 w+OYU40gb09mFR6vpZCmz7pw9TiuJY6xmOlEa4ipL2sIx07bN8G4UZ3o+H5wMhpQWwxMg
-	 fE+UnURmXIsHlAtIospbHbXGnAw5VkFoZNLkf7/uExkzrlE78da28Ld5WFDoEdhb7aarl
-	 mnOiipAQHbOHn0r9IEb42wZjOLmCGcZv6wdMcRVl9eJwg9kXCH5jkYDkr3POWH8yah7r8
-	 Ub2/k4kFnb1ChiENTyLc+VkT1m1ttAXfGemLPNVUzI/KOBkjXx3oDtpsAbaM6MBCDCg==
+	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=BnrGb+jh61PMEN1A1ot9ztMiZjRmoi86+DfRlEdShv8=;
+	b=myVTmlR+QJU0Amqql08KfZ2V6DqFLgS8HR9EZS25alBxqYwh5t7ge0tIhJ6NX0QD7Qh9
+	 UuCqJkUG4FXlgCLVQ0WlnbtIy61tK4pKpTA0+v/cx5ERhj690n0lz1TTUmyOpuu0m5wh0
+	 y0FNMG6csO6oQi5MNuyyOo+XINlCRrv9OR922WREZIJqYZZv4tYRz3N4Kaju4Sj4QvwDV
+	 LvVlLsVSDlZXQWysvihOmrpOiL1UN276Y48nK8yw//VPIiu38E5/wUtNSXeGOVYusPMkF
+	 DCdibFMMV57msiBHLn+hhrrUz2Th07Zu8TyR6MoZZdST8EfmBIIxFPGpibf4Cr0z6VA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=gourry.net;
-	spf=pass smtp.mailfrom=gourry.net;
-	dkim=pass header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b=ggwPTk0p;
-	arc=none smtp.remote-ip=209.85.160.169
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UGo3sWyD;
+	arc=none smtp.remote-ip=209.85.222.52
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32E2606BE63
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 15:17:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D32E2606BE63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD35606ACCF
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 15:19:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0FD35606ACCF
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b=ggwPTk0p
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-53639b8903bso13041031cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 08:17:33 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UGo3sWyD
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-9903fde8db8so568072241.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 08:19:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1792682253; x=1793287053; darn=vger.kernel.org;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:from:to:cc
+        d=gmail.com; s=20251104; t=1792682398; x=1793287198; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=nw86MTT9QYJNuk6B5SLe4LXpcyaG0CYCN6se45mv/xk=;
-        b=ggwPTk0pasWSGURpBXG+Hx0NtC9nfHdt9/oYX4WsjDNReWfInHOmWAb/eE6uvhDCUi
-         rlfJ/BCp/WYeix0KpUBdKO3FiSMHjH8uXlLmQabFvoarhqVu9yRrIXAO2SdpDaW1fOpv
-         9bLsrnCgfGoQQ7KzECxILLPbbArhuCddZ4uiFuRFX/RW1r0SaXRaSipo1RV79FoiUAG/
-         JwD45Nu3Lbcv/J/HoPUUXj6hvpsVik4SuAl0iOHnUpWBtkIZ0S2e+ZJ8+hGDzJ4JLCBA
-         GGjWawyBWfTS4oikfDwN8f8StP64GX6h29tsgi2sKy3sZr4XZ+EBAQ7BHRdJHjr8aJYw
-         DpEQ==
+        bh=BnrGb+jh61PMEN1A1ot9ztMiZjRmoi86+DfRlEdShv8=;
+        b=UGo3sWyDPsmJGz5uiFj1jATefs6I8baOo4CdN5OOqaS2lnhSCS4q9Nh48633sePedo
+         8yZUX8MHrBCHZbIiwZLHOeDGZhOMUwuiN2cOSdZCcHecU4YcoMgEFojk9xBmS22ocEDc
+         VouDirwRRkx9nKyKuEdyCoiOb6Ra7mVtyfIXEgdECFSfdWO0Y50mf/4ex6uyfecOfCaH
+         Vj5y3jVHqY+CLi3tEvClmRodsbiu1bebCp0/KNDDKBrtkwT6r40disEYaJr1yURTUQ3L
+         tWOIlQCeAthkeLE/sN05iTgAX7omusfraSySvsyY+dyxVOQ8tpgrsLFP8q25WJQS3VW9
+         +Z7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792682253; x=1793287053;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792682398; x=1793287198;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nw86MTT9QYJNuk6B5SLe4LXpcyaG0CYCN6se45mv/xk=;
-        b=b1b315P+UMss0zsy49+A3avu4lCKkK5Va81N0Z3a77NT6fgW1zSTzGmbrO6rBYnU2Z
-         UBvcDfnGyxNaoxCPW4wff5Ok/jQ7GQBQp8aGAPdJXx6jgOEUANtgm9qmSY4yuuJTf6eZ
-         Z0L1cOeQ54txMJ4EhQO/VIMKeEe3lFd0Jm9lAE83E63AtcXkKyoZZ6d60q9FC4EBWW20
-         wKWpAuVipnsupf0S4ubu4O4VBjHTsrgaAkhxzXLaenZZnrlZ4Bi70p6sDzcYL5ZDcIBA
-         rCJlEI37mk6qA5bnkSLNF79ZZQOML9pOJxOKznlphZuYpQd+UEu90Gl75UegGj3bhFJC
-         Ja4A==
-X-Forwarded-Encrypted: i=1; AKwUvBxP8h1v983o3sBSqzwPGLKQkssFYyaaWjvJYTWa5Cplz+6j+ifICkAOC2N4r5U7XLqqNwRIUtgkJYsMaC4kiK8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYINepv9zafveP3BhuHcQe6J2VTFrZ41+zhYYLRZ8gjsIiVMBpcA
-	LOZOv8RHUxkexDZRnbCYV2gqBh5OFR7G6yhApIteRXhek4CB09DiLA+9o5TsbYlA9wo=
-X-Gm-Gg: AYBFou3kcRY+L4k46FfjqDfw/m6KJIHvfqweJnIsnOP09fPYx2Myd0NmlKiAaAcsWHB
-	+sNaWNrJARLIsnWtF0/k+qvM/MvL14XjHIPidTgWgmKv2kbuE8JUvq5yiP58DLh5+d2zPpH1Q9r
-	OyL+lFoFRoK7TQXNkNrX6lvGE3eculbasP04HQW1q8pMWuWtkKg0V647E7L4CEqejqXVhqCamNq
-	9LRiXIMrANiIxdDFYtIb/PKUgX7htPzv/paHFTHuyEbsK5rzsErUPjkW26rOi2ubD5QsSPqV0/e
-	9zV2Ix2xp81pBnCjrIXlAYMNmHUvY8uuhLSmklXg+QNA4Z4NLZekXqWmzPz9LeSNpExE+tCadRp
-	ipmpq2Cp+c/EPVfClFgiQ5IrFl0rZ0Y6DgirdNFkked8fEUTjP4gl3y3vGUsbUxJrvyw2o1o25D
-	NRKl/oa7c7GbumBJcMpUTpTwsQ8hFuAMaSbts63g2dflnJqnkT1JLMrHEym8PKuttRJ92BPh4rj
-	5m4eGfdpWHkHNeayHInLS9SparrYEonQvV7lwFnuvfEUVPXFEwd3bvgf3vWYzkROdRJSPI/DxQ4
-	JYjoeXEcUl1D//XBOZ+aWE/LzH3OAQ1Xg7pj7mCbA6rEb0hF
-X-Received: by 2002:a05:622a:4084:b0:536:18c0:ab9c with SMTP id d75a77b69052e-536ae2086edmr43246221cf.43.1792682252769;
-        Thu, 22 Oct 2026 08:17:32 -0700 (PDT)
-Received: from [192.168.86.58] (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91c10beb7eesm53022736d6.28.2026.10.22.08.17.31
+        bh=BnrGb+jh61PMEN1A1ot9ztMiZjRmoi86+DfRlEdShv8=;
+        b=FWlCZsm8d440IntNR/2tgJN2USK9OQF7yy23od8DIwwY2XVo4jfWKZX8PYdUCiiMFO
+         aVagc2awTtu7KOnJQq+k6huvTWdAslPB8XNe5udptJ1SzOPsGH+H2VJDehk+meJUj4hE
+         qn9ecOz3591x5XXpROE1gmbWLoCcGUCQ+egogAIImL8SxFKqVcA/8NchW/fY97/Pq1x7
+         +b32OIickXB2UpDZIOO4l5O5LnBowV8imgZcw8MBMEAOZb0G7SqTPr1YSVkIJ/v58Yg+
+         jlA+5YIXsYv2RkFlcPsgAqXXAvE3lXYeFOeebtmvkF9GHJ+G/WX2w9UcfHvLblosiQAD
+         OjOA==
+X-Forwarded-Encrypted: i=1; AKwUvBwMYolDwOi54bo8pnA9qpYRREdJa/HUSrGUjUI4iMuTdwS7TUn2KdPZff8vcSPdkpLuYflIbgVvQE9YtYokrXg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJRv5szAoypuYwcNq2VEDy/BFH65qbVK/83d/Uz0kDagBOMzFWX
+	u88gdjsRInOQ7ibv2y/2GZSBMCyBn+DBc6EiuqhljlHVbYb7X7q3fmK+
+X-Gm-Gg: AYBFou3zGx9Mp5ljkC5JFbs0d0gWaCcDHgoRSsPkd2pg6K8lmlYPQ5RBa0C5Rs7Dvxo
+	0CtynYIIjp0B3COcGiOBEYQqRbT2A918NbrX0nJyvOo3UZllK85KCtG6MxwHId2fW1BpDWeCSS7
+	mWAYi2gLSPP2+wkI9Bb+oEtD2JXf6Z7nSzGYo1BteZ97Wit038sfdDKoYs9+rO7l2RUG6xbjo3V
+	JE6swqwGpOMwmMiR23tdtCmgPaEh64wnQ/glIewyvrsqiqjsxK2VmNygIPHlsC4oBEyumHjYSSc
+	LTa9rKZaQSU88ce3FHkOrO6hHigZMhEa+El+mq8eppduojfK3CLP0cfvNyFEGnHixr2C3P7nZb3
+	GnSrOM8vM/4N+QsBvzFdCAjPhFHAvsY4Nx6mTzAuYsNPIFsSIMDzStCr96gY47NJxMPQBn/stRA
+	UT0dGK9wuYpLYEQhafOktEhihV3jHxVTti/ZgSuQgKxYg6EzBZym4qtDJwd4JSpEJ046AnmkEyG
+	s9/d0MuNRUsnuvW8s3H0ab/U7w+9eG4vWNl35DO1OyQz8rlYNrKKBhcEffBEouq7lreR8+WiOCN
+	fteJk4/jycdSS9FJgZxsv/Z4Lvz1WeISsLrhdhDAJkqdVIlvvRn7gAY+uwF1DJYHLWGLKhIo9xO
+	oXkZlywMCoF01g+wZV0U=
+X-Received: by 2002:a05:6102:160e:b0:7a7:195a:1b2a with SMTP id ada2fe7eead31-7cc9276a1f7mr1817213137.36.1792682397951;
+        Thu, 22 Oct 2026 08:19:57 -0700 (PDT)
+Received: from gmail.com (111.46.245.35.bc.googleusercontent.com. [35.245.46.111])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7cc9237bbf7sm6580982137.6.2026.10.22.08.19.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 08:17:32 -0700 (PDT)
+        Thu, 22 Oct 2026 08:19:57 -0700 (PDT)
+Date: Thu, 22 Oct 2026 11:19:56 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Todd Freed <toddfreed@meta.com>, 
+ netdev@vger.kernel.org, 
+ toddfreed@meta.com
+Cc: Daniel Zahka <daniel.zahka@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Rahul Rameshbabu <rrameshbabu@nvidia.com>, 
+ Raed Salem <raeds@nvidia.com>, 
+ Cosmin Ratiu <cratiu@nvidia.com>, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.31749cef483da@gmail.com>
+In-Reply-To: <20261021210200.788191-1-toddfreed@meta.com>
+References: <20261021210200.788191-1-toddfreed@meta.com>
+Subject: Re: [PATCH net 0/2] psp: drop packets with extension headers in
+ transport mode
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,55 +112,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v3] selftests/mm: merge: keep the far mremap() targets
- in the carveout
-From: "Gregory Price (Meta)" <gourry@gourry.net>
-To: Danish Khateeb <danishkhateeb03@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
- Gregory Price <gourry@gourry.net>, "Liam R. Howlett" <liam@infradead.org>, 
- Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
- David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20261022121837.28723-1-danishkhateeb03@gmail.com>
-References: <20261022121837.28723-1-danishkhateeb03@gmail.com>
-Date: Thu, 22 Oct 2026 11:17:31 -0400
-Message-Id: <179268225123.3943303.2482161052665688188.b4-reply@b4>
-X-Mailer: b4 0.17-dev
 
-On 2026-10-22 07:18 -0500, Danish Khateeb wrote:
-> The merge tests map their areas at fixed addresses within a 30-page
-> PROT_NONE carveout. Several mremap() tests move an area 1000 or 2000
-> pages away to separate it from the others, but those targets are outside
-> the carveout, and MREMAP_FIXED unmaps whatever is mapped there.
-> 
-> Under virtme-ng, the shared libraries are packed right above the
-> carveout and the dynamic linker starts about 4 MiB above it. The moves
-> then replace part of its text with an anonymous mapping, and the test
-> crashes in its next lazily bound call:
-> 
->   merge[6980]: segfault at 7f7ebb3c1e60 ip 00007f7ebb3c1e60 sp 00007ffd35fbaec8 error 14
-> 
-> Two to four of the mremap() tests then fail with "Test terminated
-> unexpectedly by signal 11", depending on the exact layout. On a host
-> where libc is mapped at a 2 MiB aligned address, the targets happen to
-> land above the dynamic linker and the tests pass.
-> 
-> Since the areas are all within the first 30 pages, moving one by 30
-> pages is enough to keep it apart from the others. Add FAR_PAGES for
-> that distance, move areas by FAR_PAGES or 2 * FAR_PAGES pages, and make
-> the carveout 3 * FAR_PAGES pages so that it covers every target.
-> 
-> Fixes: 4e25f85b9f85 ("tools/testing/selftests: add mremap() unfaulted/faulted test cases")
-> Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+Todd Freed wrote:
+> While working on adding support for socket-less psp associations, I
+> noticed that this case was not being handled correctly. It will be more
+> relevant with that series, because it adds udp support, for which the
+> psp nexthdr will be taken from the inner packet.
 
-Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
+Just curious: what is the plan for replay protection for UDP?
 
--- 
-~Gregory
+As PSP depends on the inner L4 for replay protection today.
+
+FWIW agreed on the ext_hdr conclusion in this thread.
 
