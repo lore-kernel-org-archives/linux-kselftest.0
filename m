@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792711686;
-	b=mXbNp2umIGettitMCInqxdI/gptcQBx9nAI5DpmsyzWz9wyyiMdQhWzNw9hrOR71uhZf
-	 KH29ehwK1WF5dgyDObVjDxhp/Fh155900SFy2CXRSyihRuHWUKayz1zZHUZ88R2zKiIdF
-	 TO/5x9y48lDS0vgFbAm6pJJnOXX/k/rYw2E4XBuVLM2Ezj1nzfJb2C7rReEduZsyzsjtF
-	 chWGyArsNd0HWivbqCuDj+gF/pU75MUO8QY44POP5QWeqA6hUKR9hZKq3uBpCVO4NQEtm
-	 aBNDgHF04OVZcd3cm9CmQ8erK5+Oa8/bMibfGMML1FM2eG6loFbGbegxa4SsQfUMkXw==
+	t=1792711692;
+	b=zeamuqrFgL11FbRJH/CAwDvvblmJ7Ax32h2r4ZDk5/BvYHRl6Onyn6y5SH9csOj8UtUM
+	 VuDSEVCHgAdt8YI6SL5TvRGZ/CvhLDdrU6lA40efBHG5/42DSep2D2ADCBy4LhxABGjMZ
+	 7qvob0cdhSVug7+9990KJNF4Hw9dEnCoNBBxOM8DUxkCPcWKY5fmFeUxaRrjEHHrtTrvX
+	 dyb4xF9u6Z5QlvRfYnxs+Z41HFTqHNxyCbSeUlqRolYgTB4VxUvXZkVWH+uD+mbTEsUr3
+	 9zMMaXCCpedyAtfGPuy8fMun1wEPo2eEtx0VB1nkuc/JvPNK1M0Qg3ri2Ut42Ld3DtQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792711686;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792711692;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=7twd+WSZtzZqzcG2MmjFTpIoH9oGJ/O9bNcXdaq/s+I=;
-	b=RymDwuuQHGnZ46sD/2gLOVC6MyiSgyZF1a2enkziZZ7pW+qIe5hs6xYGFnQ690loYrdL
-	 DymAxq+t9NGTMdYyNoso3e+gQZ7SxP5twXesi7aJ/RJRyjfNFmvC3DyDsN2dazklYfOPP
-	 /vRgPe1tuSj4EJkS2lnQ33ZVGN4+Thoo1PaR5QubwCtdKNu0v7EfbIJ+bPzEgL3TGhx48
-	 P+uCMpDZhc+cEMML9yxH0zDWgSaueS18Sqk87+BsNN5dlAwVJc4rRYdHtRYA+V9b7m8xj
-	 oWzyvznb5lizdXWTgZJ9Eh1GDZIojdkzBQ1ugS0yLu+YG6CnOK02ybQ574q1MNu94Ag==
+	bh=UfoJvRdnSYaPW5tcsWoDmFMzG2OClB4lCGBYS0tS+UI=;
+	b=GinLC71bR4RWAUlHsVgmzOMPhW59YMNDeta/N3EGd+V2SXA1P/C6hg539Q8HsfUZFGaM
+	 KaBs1+J3v9ELmX6E4x4nf+mSaaLO9o4EkGFemT0y806DGiDFZ+TR53wNfNQGn5Dlwj2CV
+	 uKkEcp/f7YXfiFwroPrOlJSoLKe1yZxYGwI17fsSVGnYWAbNYXid/ISyMiSMtlNTrzhQ0
+	 9IHZGJwrVox4dE23vyBm8buzqK2YlU9Yo2L9HIgMNe/TOQZakQpgpzrAIiADFzuFjSl6Q
+	 IaLEs39sbrbFYz/iaz9tRzJQyberCf/DbDfd/kZiZvRtbuiV8CCZJOXl0wXR061+dfg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=anNWY8zl;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IVCQBbwO;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2F0606A748;
-	Thu, 22 Oct 2026 23:28:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54735606D9E9;
+	Thu, 22 Oct 2026 23:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=anNWY8zl
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IVCQBbwO
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792711685;
-	b=0lpZaCl10Ntmy1elZ3Qx/1gpc07iV0fbsCJwQ5/aZ77C99ikDNG8JmbFQNBpIdOCQ7Ar
-	 misMKEWBcpAbqOef5ZE2W+ykEadVajMEhbkId3y58QVDO7JtF2pzZXKmTJBLrsjTAzmQz
-	 4+0JU9pBPQmKHh3SVcXcuK69peRT0zdR+tiwqPHy2eV/qH1JxyuE/iI0s/FDkugUHqAxW
-	 mgWuAOgPosBiDnBVHIOHU2bJIm8bhGSPnYLrAxSZf4lelqgvEvtwHeCELW5qccUY4RlsG
-	 6QpYdKl407cOMTzPL4GKaQciVIN42PS4y9IIu7CV6H+qAlNoB7RT82jf5Sth1tqVTTw==
+	t=1792711691;
+	b=E5XTRPHzWBgW/VVXuX1jR/cuPleWmJ3CVRepis7ly53FoY0jDhd5HRJhs/KdEAlZidp+
+	 pLLEhfhK3Lc1iUA2znLRLs7Oqp2oWwAZjMop+xfN08Cm3xbOmiCYYmzwblRuuEl6RVTxf
+	 ifl7hDvG1pNGlqtOJV98DyEEjsOrTliK1KD9TT/ijmIQcPkKMKrqkuunuP5RDAgY/WJUR
+	 tzi5DzkLOOhWVU8QTl0jGBodlNx12QDTUnVm3Bj+TYEI8WcWM13SlVbn+AhBDPL27K2VZ
+	 KnXUICsQrg356AjL8gN9eiW8ymikBMZvW0PHM0HferKyRgE8+o2Nwhmpf1YGNdgZrSQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792711685;
+	c=relaxed/relaxed; t=1792711691;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=7twd+WSZtzZqzcG2MmjFTpIoH9oGJ/O9bNcXdaq/s+I=;
-	b=tTqmPh4Y5lW1D71FuN0KQLRYxK+CDMCagIlBcJrcidGSHKjeArIK2s50hLpw20SFHo90
-	 qZq3PQmS2gvEJ9fRVdy5Y1SeEXE5LmCTaTiUar+8fN+zG3H/vyB3/s9oFGEyZt88XH0no
-	 niEZE0kw1jd1pie79hxKtDsH01uAk/JIE1QeeSAGoGVGn7m1O2P98GAqTE76pPq0gB6fQ
-	 uVIxV9ELf5TUZbh/nmVy1b6bnYsqRBMo+3VQGwPARQA7pNXOB6+XvlmHB+a1D5g6cIInU
-	 TCoSUKu9SlMNDSL+Rtzqxdnm25hWEwsEGbMXppMrro2iv8KKHeMCmstRe3cN3jSYVTw==
+	bh=UfoJvRdnSYaPW5tcsWoDmFMzG2OClB4lCGBYS0tS+UI=;
+	b=ChdOPALgfGrseGDmR/Rawu3cf0JL1ZbH2ZktN36pEDk8p6Ojlpu0ZxIFWvLSSnLEbLtU
+	 Xy/81LrJ11jP49ya2Om092j0uXrYoyJTm0Iue3pcsMSMHzFfcQPH0TLZv0fhgPdJcQjzq
+	 BIslDeo7a+2x2MRdZb+dJ5Hr5jWsUHutP12NKYcBftzjRuG42EA4nUYDL59Hy/J2xLbN7
+	 NJwiUqugoRF7b+GRiOSf2uYz7ScSKX5vK6EyQIemCLOmTRwO/iZAi5wdly1D9xwU/tp8e
+	 uy1DdhaUU1n6brUJeal5lbvtxeqBj4NJNxsyflBwZq7NVS5I+ISzJ31w6w9EegXjJOw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 579C81F011B3;
-	Thu, 22 Oct 2026 23:28:00 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 927F81F01181;
+	Thu, 22 Oct 2026 23:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792711685;
-	bh=7twd+WSZtzZqzcG2MmjFTpIoH9oGJ/O9bNcXdaq/s+I=;
+	s=k20260515; t=1792711691;
+	bh=UfoJvRdnSYaPW5tcsWoDmFMzG2OClB4lCGBYS0tS+UI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=anNWY8zl6H4ptpNFtI1sMlOJnjw9tZKJmkP71LouszJusgtYlkBxtKngp+BCEuiHA
-	 SnbU7elJiP1zVAYPkPCutBxSxTUDBSPtEUnyuDvvDVgOU9J7xjRXRmH306fa9LQjjO
-	 8pgBbrL123somEIBdNzbbx46RO7YqepK4QioYViKD4U2O2Aq58TZ2D2duUY1iKQUS3
-	 x6Gvg85KiRbvPBS76GRHxWcOCQ7xL1ROn3oA8pftNVLbHTylcr+VTO4LVgG0htMTJu
-	 2eq2cOwWUFkV95AWDCkP/eKCrU8RGTUmtjS5yEB+ZIWsy2uHE59e2JPx9RyEChR9I8
-	 40NTk2pNT++/A==
+	b=IVCQBbwOU880u7JcUOsR732565ZyzBFwGWqdUQrqr6ZXVwwjIvUINIqpO4MTnHAJA
+	 zNTDFfz3QgjHK5Shja0KBDmPdqUHdVtFgB+LleKWptwiv1mfpajNXhfsIwE0wuQ+iq
+	 nUCqV1JSS00Fk7cB1FBKUnI2uGSV4A7oDmiOWBWbOR5c4C3xuGIU3L2KoRv1GeKS8A
+	 YkIxcGjev8umnX1+jnE6BdeV+iwYUIXWq4Oyvp/pKatDU9w7iFO48wocD5r4TM6U1V
+	 o2t/5ZmB/TKxzebaeejHz0wCwZqo76W2USUQKGWodsAG3mx6Ks5HsBkL5krnh4w5JI
+	 Kgv84UA4cH/4Q==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 45D1442097;
+	by lkml.kernel.org (Postfix) with ESMTP id 8D3B3420B0;
 	Thu, 22 Oct 2026 23:27:49 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Thu, 22 Oct 2026 16:27:53 -0700
-Subject: [PATCH RFC v2 21/50] samples/kvm: Remove donate, reclaim, and move
- operations from sample provider
+Date: Thu, 22 Oct 2026 16:27:59 -0700
+Subject: [PATCH RFC v2 27/50] samples/kvm: Remove mem_provider_ops from
+ sample provider
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261022-gmem-alternative-providers-v2-21-5dd1dc6c660a@google.com>
+Message-Id: <20261022-gmem-alternative-providers-v2-27-5dd1dc6c660a@google.com>
 References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
 In-Reply-To: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
 To: Alex Williamson <alex@shazbot.org>, Alexander Graf <graf@amazon.de>, 
@@ -135,11 +135,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792711665; l=5139;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792711665; l=8340;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=WTi8GNiGg+F2aaBuaZCq/EDwN8kKCvY/mAo+mn6OX58=;
- b=v3QhsSEVYXAd028viNm8E7C+qHr9nyYz39aTz3RD6uY14m1o/VGPWhbErWNd6ZfBbEsWDSTBQ
- MLBj6iPluokDwyJ+aEIZoq+Eozr60nK1kdDQ10JAa8cCaEYuDLEqG3P
+ bh=S5v5jXc6PnMRtZUZ0DKjcX62D7jtBt/5hL1gymz+OBQ=;
+ b=6MeGzyOwEhN0CpX45Vc/yYXmowtUHXg5L6FY6U7eb8Xb34dSRrBcAnrw5ieYLOWztt9ggnpF5
+ azh+Buf814NBfVhk0xg6LGh9LdYVZtt55/yKbXawF9c4lsIH0TneUkL
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -150,169 +150,247 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Remove the MPS_MOVE, MPS_DONATE, and MPS_RECLAIM ioctls from the sample
-memory provider.
+Trim this memory provider down to just the memory provider parts first,
+removing mem_provider_ops and related callbacks.
 
-These operations manage dynamic ownership transfers and returning memory
-to the root pool, which adds complexity that is not needed for the core
-interface design.
+Leave the integration with guest_memfd alternative providers to future
+patches.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- samples/kvm/mem_provider_sample.c | 86 ---------------------------------------
- samples/kvm/mem_provider_sample.h | 35 ----------------
- 2 files changed, 121 deletions(-)
+ samples/Kconfig                   |   4 +-
+ samples/kvm/mem_provider_sample.c | 121 ++++----------------------------------
+ samples/kvm/mem_provider_sample.h |   8 +--
+ 3 files changed, 18 insertions(+), 115 deletions(-)
 
+diff --git a/samples/Kconfig b/samples/Kconfig
+index a06eafb5d7ba4..29a0efe49ac3a 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -328,9 +328,9 @@ source "samples/damon/Kconfig"
+ 
+ config SAMPLE_KVM_MEM_PROVIDER
+ 	tristate "Build sample memory provider -- loadable module only"
+-	depends on MEM_PROVIDER && CONTIG_ALLOC && X86_64 && m
++	depends on CONTIG_ALLOC && X86_64 && m
+ 	help
+-	  This builds a sample memory provider (include/linux/mem_provider.h).
++	  This builds a sample memory provider.
+ 	  Its files can back a guest_memfd and be mapped by iommufd.
+ 	  It allocates a contiguous region with alloc_contig_pages()
+ 	  and carves out child provider files on the fly.
 diff --git a/samples/kvm/mem_provider_sample.c b/samples/kvm/mem_provider_sample.c
-index 8180959ab78ff..5afc433dce6e8 100644
+index 574c712a11389..294b2d65fc29d 100644
 --- a/samples/kvm/mem_provider_sample.c
 +++ b/samples/kvm/mem_provider_sample.c
-@@ -674,86 +674,6 @@ static bool mps_child_owns(struct mps_info *info, unsigned long first,
- 	       find_next_zero_bit(info->owned, e, s) >= e;
+@@ -2,13 +2,10 @@
+ /*
+  * mem_provider_sample - a sample memory provider.
+  *
+- * The module owns a region of physical memory and lends it through provider
+- * files (include/linux/mem_provider.h).  A VMM passes the same file to
+- * KVM_CREATE_GUEST_MEMFD, for the guest, and to IOMMU_IOAS_MAP_FILE, for the
+- * guest's devices.  The module calls neither KVM nor iommufd: it answers
+- * "what is page N" and revokes a range when the answer changes.
++ * The module owns a region of physical memory and lends it through child
++ * files.
+  *
+- * The control device /dev/mem_provider_sample creates provider files.
++ * The control device /dev/mem_provider_sample creates child files.
+  * NEW_CHILD carves part of the region into a child file. A page can also
+  * be taken away. See mem_provider_sample.h.
+  *
+@@ -21,7 +18,6 @@
+ #include <linux/fs.h>
+ #include <linux/gfp.h>
+ #include <linux/io.h>
+-#include <linux/mem_provider.h>
+ #include <linux/miscdevice.h>
+ #include <linux/mm.h>
+ #include <linux/module.h>
+@@ -31,14 +27,11 @@
+ #include "mem_provider_sample.h"
+ 
+ /*
+- * One provider file.
++ * One child file.
+  *
+- * Lock order: mps_root.lock, then mps_info.lock, then the consumers' locks
+- * (taken by their revoke callbacks).  get_page() takes no lock, so a
+- * consumer can call it from its fault paths and its revoke callback.
++ * Lock order: mps_root.lock, then mps_info.lock.
+  */
+ struct mps_info {
+-	struct mem_provider_file mpf;
+ 	struct mutex lock;		/* the bitmaps */
+ 
+ 	unsigned long base_pfn;
+@@ -69,89 +62,7 @@ static struct mps_root {
+ 	struct list_head children;
+ } mps_root;
+ 
+-/* Does @info have page @index now?  Called with or without info->lock. */
+-static bool mps_page_present(struct mps_info *info, unsigned long index)
+-{
+-	return !test_bit(index, info->absent);
+-}
+-
+-/*
+- * The length of the run from @index of pages with the same state as @index:
+- * present.
+- */
+-static unsigned long mps_run(struct mps_info *info, unsigned long index)
+-{
+-	unsigned long end = info->npages;
+-
+-	end = min(end, find_next_bit(info->absent, info->npages, index + 1));
+-	return end - index;
+-}
+-
+-/* ---- Provider operations ------------------------------------------------ */
+-
+-static struct mem_provider_file *
+-mps_mp_attach(struct file *file, loff_t size)
+-{
+-	struct mps_info *info = file->private_data;
+-
+-	if (size > (loff_t)info->npages << PAGE_SHIFT)
+-		return ERR_PTR(-EINVAL);
+-	return &info->mpf;
+-}
+-
+-static void mps_mp_detach(struct mem_provider_file *mpf)
+-{
+-}
+-
+-/*
+- * Reads the bitmaps without info->lock.  A change runs under the lock and
+- * revokes the range afterwards, so an answer that a change makes out of date
+- * is dropped by the consumer.
+- */
+-static int mps_mp_get_page(struct mem_provider_file *mpf, pgoff_t index,
+-			   unsigned long *pfn, int *max_order, u32 *attrs)
+-{
+-	struct mps_info *info = container_of(mpf, struct mps_info, mpf);
+-	unsigned long run;
+-
+-	if (index >= info->npages)
+-		return -EINVAL;
+-
+-	if (!mps_page_present(info, index))
+-		return -EFAULT;
+-
+-	/* The aligned block around @index must be one run. */
+-	run = mps_run(info, index);
+-	while (*max_order) {
+-		unsigned long first = ALIGN_DOWN(index, 1UL << *max_order);
+-
+-		if (first + (1UL << *max_order) <= index + run &&
+-		    (first == index || mps_page_present(info, first)) &&
+-		    mps_run(info, first) >= 1UL << *max_order)
+-			break;
+-		(*max_order)--;
+-	}
+-
+-	*pfn = info->base_pfn + index;
+-	return 0;
+-}
+-
+-static const struct mem_provider_ops mps_mp_ops = {
+-	.attach		= mps_mp_attach,
+-	.detach		= mps_mp_detach,
+-	.get_page	= mps_mp_get_page,
+-};
+-
+-/* Tell the consumers that pages [start, end) of @info changed. */
+-static void mps_revoke(struct mps_info *info, unsigned long start,
+-		       unsigned long end)
+-{
+-	if (end > start)
+-		mem_provider_revoke(&info->mpf, (loff_t)start << PAGE_SHIFT,
+-				    (loff_t)(end - start) << PAGE_SHIFT);
+-}
+-
+-/* ---- Provider file ------------------------------------------------------ */
++/* ---- Child file --------------------------------------------------------- */
+ 
+ /* Byte range [offset, offset + len) of @info as page indices. */
+ static int mps_range(struct mps_info *info, u64 offset, u64 len,
+@@ -174,7 +85,6 @@ static void mps_set_present(struct mps_info *info, unsigned long start,
+ 		bitmap_clear(info->absent, start, end - start);
+ 	else
+ 		bitmap_set(info->absent, start, end - start);
+-	mps_revoke(info, start, end);
+ 	mutex_unlock(&info->lock);
  }
  
--static long mps_ctl_move(void __user *uarg)
--{
--	struct mps_move mv;
--	struct mps_info *src, *dst;
--	unsigned long first, last;
--	struct file *sf, *df;
--	long ret;
--
--	if (copy_from_user(&mv, uarg, sizeof(mv)))
--		return -EFAULT;
--	sf = mps_get_child(mv.src_fd, &src);
--	if (IS_ERR(sf))
--		return PTR_ERR(sf);
--	df = mps_get_child(mv.dst_fd, &dst);
--	if (IS_ERR(df)) {
--		fput(sf);
--		return PTR_ERR(df);
--	}
--
--	mutex_lock(&mps_root.lock);
--	ret = mps_root_range(mv.offset, mv.len, &first, &last);
--	if (ret)
--		goto out;
--	if (src == dst || !mps_child_owns(src, first, last) ||
--	    !mps_child_covers(dst, first, last)) {
--		ret = -EINVAL;
--		goto out;
--	}
--	/* Revoke from the source before the destination gets the pages. */
--	mps_child_lose(src, first, last);
--	mps_child_gain(dst, first, last);
--out:
--	mutex_unlock(&mps_root.lock);
--	fput(df);
--	fput(sf);
--	return ret;
--}
--
--static long mps_ctl_donate(void __user *uarg, bool reclaim)
--{
--	struct mps_donate d;
--	unsigned long first, last;
--	struct mps_info *info;
--	struct file *file;
--	long ret;
--
--	if (copy_from_user(&d, uarg, sizeof(d)))
--		return -EFAULT;
--	if (d.pad)
--		return -EINVAL;
--	file = mps_get_child(d.fd, &info);
--	if (IS_ERR(file))
--		return PTR_ERR(file);
--
--	mutex_lock(&mps_root.lock);
--	ret = mps_root_range(d.offset, d.len, &first, &last);
--	if (ret)
--		goto out;
--	if (!reclaim) {
--		if (!mps_child_owns(info, first, last)) {
--			ret = -EINVAL;
--			goto out;
--		}
--		mps_child_lose(info, first, last);
--		bitmap_set(mps_root.donated, first, last - first);
--	} else {
--		if (!mps_child_covers(info, first, last) ||
--		    find_next_zero_bit(mps_root.donated, last, first) < last) {
--			ret = -EINVAL;
--			goto out;
--		}
--		bitmap_clear(mps_root.donated, first, last - first);
--		mps_child_gain(info, first, last);
--	}
--out:
--	mutex_unlock(&mps_root.lock);
--	fput(file);
--	return ret;
--}
--
+@@ -226,15 +136,11 @@ static int mps_file_release(struct inode *inode, struct file *file)
+ 	return 0;
+ }
+ 
+-static const struct mem_provider_fops mps_file_fops = {
+-	.fops = {
+-		.owner		= THIS_MODULE,
+-		.fop_flags	= FOP_MEM_PROVIDER,
+-		.release	= mps_file_release,
+-		.unlocked_ioctl	= mps_file_ioctl,
+-		.compat_ioctl	= compat_ptr_ioctl,
+-	},
+-	.ops = &mps_mp_ops,
++static const struct file_operations mps_file_fops = {
++	.owner		= THIS_MODULE,
++	.release	= mps_file_release,
++	.unlocked_ioctl	= mps_file_ioctl,
++	.compat_ioctl	= compat_ptr_ioctl,
+ };
+ 
  /*
-  * CTL_SET_READONLY and CTL_SET_PRESENT change a child's pages, by the owner on
-  * the control device.  A VMM that holds the child fd cannot, so it cannot undo
-@@ -795,12 +715,6 @@ static long mps_ctl_ioctl(struct file *file, unsigned int cmd,
- 		return mps_ctl_setup(uarg);
- 	case MPS_NEW_CHILD:
- 		return mps_ctl_new_child(uarg);
--	case MPS_MOVE:
--		return mps_ctl_move(uarg);
--	case MPS_DONATE:
--		return mps_ctl_donate(uarg, false);
--	case MPS_RECLAIM:
--		return mps_ctl_donate(uarg, true);
- 	case MPS_CTL_SET_READONLY:
- 		return mps_ctl_set_range(uarg, true);
- 	case MPS_CTL_SET_PRESENT:
+@@ -253,7 +159,6 @@ static int mps_new_file(unsigned long base_pfn, unsigned long npages,
+ 	info = kzalloc_obj(*info);
+ 	if (!info)
+ 		return -ENOMEM;
+-	mem_provider_file_init(&info->mpf);
+ 	info->base_pfn = base_pfn;
+ 	info->npages = npages;
+ 	info->absent = bitmap_zalloc(npages, GFP_KERNEL);
+@@ -269,7 +174,7 @@ static int mps_new_file(unsigned long base_pfn, unsigned long npages,
+ 		ret = fd;
+ 		goto err_free;
+ 	}
+-	file = anon_inode_getfile("[mem-provider-sample]", &mps_file_fops.fops,
++	file = anon_inode_getfile("[mem-provider-sample]", &mps_file_fops,
+ 				  info, O_RDWR);
+ 	if (IS_ERR(file)) {
+ 		put_unused_fd(fd);
+@@ -354,7 +259,7 @@ static struct file *mps_get_child(int fd, struct mps_info **infop)
+ 
+ 	if (!file)
+ 		return ERR_PTR(-EBADF);
+-	if (file->f_op != &mps_file_fops.fops ||
++	if (file->f_op != &mps_file_fops ||
+ 	    !((struct mps_info *)file->private_data)->is_child) {
+ 		fput(file);
+ 		return ERR_PTR(-EINVAL);
 diff --git a/samples/kvm/mem_provider_sample.h b/samples/kvm/mem_provider_sample.h
-index 0e036d1c76a45..acff5785099b5 100644
+index 51eaf39acbad1..b520b49e56f60 100644
 --- a/samples/kvm/mem_provider_sample.h
 +++ b/samples/kvm/mem_provider_sample.h
-@@ -68,41 +68,6 @@ struct mps_new_child {
- #define MPS_NEW_CHILD \
- 	_IOW(MPS_IOCTL_BASE, 5, struct mps_new_child)
+@@ -6,12 +6,10 @@
+ #include <linux/types.h>
  
--/*
-- * ioctl on /dev/mem_provider_sample: move [@offset, @offset + @len) of the root
-- * from child @src_fd to child @dst_fd.  @src_fd must have every page of the
-- * range, and the range must be inside @dst_fd's.  The pages are revoked from
-- * the source before the destination gets them, so the consumers of the two
-- * children never map them at the same time.
-- */
--struct mps_move {
--	__s32 src_fd;
--	__s32 dst_fd;
--	__u64 offset;	/* bytes into the root, page aligned */
--	__u64 len;	/* bytes, page aligned */
--};
--
--#define MPS_MOVE \
--	_IOW(MPS_IOCTL_BASE, 6, struct mps_move)
--
--/*
-- * ioctls on /dev/mem_provider_sample: DONATE takes [@offset, @offset + @len) of
-- * the root from child @fd, which must have all of it, and keeps it at the
-- * root.  RECLAIM gives a donated range to child @fd, whose range must
-- * contain it.  The sample does not scrub the pages.
-- */
--struct mps_donate {
--	__s32 fd;
--	__u32 pad;
--	__u64 offset;	/* bytes into the root, page aligned */
--	__u64 len;	/* bytes, page aligned */
--};
--
--#define MPS_DONATE \
--	_IOW(MPS_IOCTL_BASE, 7, struct mps_donate)
--#define MPS_RECLAIM \
--	_IOW(MPS_IOCTL_BASE, 8, struct mps_donate)
--
- /* ioctl on a child fd: read the child's state, for tests. */
- struct mps_stats {
- 	__u64 region_offset;	/* the child's range in the root */
+ /*
+- * A sample memory provider (include/linux/mem_provider.h).
++ * A sample memory provider.
+  *
+- * Every fd that this module returns is a provider file.  Pass it as
+- * resource_fd to KVM_CREATE_GUEST_MEMFD with GUEST_MEMFD_FLAG_USE_RESOURCE,
+- * and as fd to IOMMU_IOAS_MAP_FILE.  Both consumers follow every change that
+- * the ioctls below make.
++ * Every fd that this module returns is a child file. Pass it to
++ * KVM_CREATE_GUEST_MEMFD.
+  */
+ 
+ #define MPS_IOCTL_BASE		'P'
 
 -- 
 2.56.0.257.gf7497c7d27-goog
