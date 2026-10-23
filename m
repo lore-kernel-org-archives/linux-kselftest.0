@@ -1,73 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.3.242.97
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792720489;
-	b=ppn1LXmy01zmJA3U72htKW+sk50u7+yabc9Fw8/PpQVTIeXCVuaR+RUESFkbXKPAiSPK
-	 H2+W2mPL/UmKm8aM5Y31iKOww2oEICK8oARl9vO1KBJ6jtEY4i08rpNmWg18lzjhbY6fg
-	 BqZEmxxLaEKSpGmekKRtuUsC/vyAFq8hr+tW3JnVjGNNp/jdFB7McJRQoNvTTzjlBDrBJ
-	 xo+Jb3IU1SnNQYmuYFioyolT/HNTlaOQp2bAqg3uaui9kYZ/tLQJ0jAMsLJQ6ybTOQcZa
-	 yHOxhjuFA/vKEYthise6GZ/t4+9vmjbQ1581cJS+yE/4Wub7EFhl5DWT91SoBCET77Q==
+	t=1792720606;
+	b=JbkbVLKJipyebNx3ZWP/cIEgVg/4RAT+MkaLpcg8FgYg+DcG6o4dCFovl3SNqyC57eOm
+	 0vdfl0VE5T1bzkEFqzQ8xH+bJNplvUvchW5V/GkWozmJw41FjmJsxSjvLo3SU5BI4EWHv
+	 mxjDkGCm4R+Io73L0W3/VtPD9pTkD9jIiThdvi7cKVrBNzy4v6QqX1coY8g5G7FoioOcJ
+	 dLIJ8w8JfXUV6AMDhx4Yu+qkTQkPfsiuIVgkSRzTbl/y4A5dBXQlcszj6WeDIyltiGkI2
+	 6YWSeNLD+1ZKbBtgHW8wRDGoUqTyB5yyTABtAonrrrVfBsTuViMqGHF6Oz82QNJ25/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792720489;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CO-INDEX;
-	bh=PJkZhkXXrchYq4gsC5K2d7L85eJ1XLiR7+w6n85/cPg=;
-	b=wSI5z0ZOED8x0ZVF1t/WBrkCH/LV9ski38yD7usluUEGo2icpD/YAoXvI8e2hiCq2O3b
-	 DRHa4Lke1Z9tZlpoe0nF7mlZlVo6jg2YiA3kKKvIb9lg2ZKJKEp19SdrYyl8WJI5KYo0P
-	 BNhaUcHpEVsAyfBj7X1PxIhBaBY8WEfp021Tp1OtSgyOdYjOIjH7i8R6xivyHpOi/1GuR
-	 yfhTlye+5Sy/TpSG7EMEHsnMXFGuBfHnwdtl66o8Xy8tALFcfctMzeMLZx2kbp7hf9DG+
-	 igRkD8fWqlJFjfdVsAupHHXPD4FiWJ/7t2gRqPzwwP2RLH73F5aooi+x1oDtmugLHag==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792720606;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=oJFZy9ViA1hdkCiyEzcB0JcdRGfXjVzuA0WGwLAmCs4=;
+	b=IkCXYNN07EI2w4s5hixAU0YgBu8AJJ8aED3RU+cLPdmKxqzyYXAPFN0M0aYK5BQd9PrD
+	 Y1qqv8OMZrgKTN1utAi1+Pm3GCnvhwPWkokF9xjHgq0v8bCnlIlx53hKepSSW9MqX/rri
+	 ioh+XkY/uGVNFi6vX+TVmCq/ZD/5sREO3ujpsGEl3qo5rUrlQW4mKm5LLQcIyZ6muJrnn
+	 DxlcnMJj+ThiCK4BwWPG/P4Fp3jwlOZXUqEdkfPBIPpSzzuUyUfzg8VAJ+RHmN/SrSmu1
+	 WYof8JS3F0Vx+3EooOaoEs6f2z2WYv9Zwy6/Zqd44Sc8F2p7Rqw3LjkMmMaBIHXnbWA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=mailfence.com;
-	spf=pass smtp.mailfrom=mailfence.com;
-	dkim=pass header.d=mailfence.com header.i=brianwitte@mailfence.com header.a=rsa-sha256 header.s=20240605-akrp header.b=FubXlR6z;
-	arc=none smtp.remote-ip=212.3.242.97
-Received: from mailout-l3b-97.contactoffice.com (mailout-l3b-97.contactoffice.com [212.3.242.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lFDEReVK;
+	arc=none smtp.remote-ip=95.215.58.175
+Received: from mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E06606A31A;
-	Fri, 23 Oct 2026 01:54:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 00E06606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailfence.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailfence.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D52606A31E
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 01:56:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86D52606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mailfence.com header.i=brianwitte@mailfence.com header.a=rsa-sha256 header.s=20240605-akrp header.b=FubXlR6z
-Received: from smtpauth1.co-bxl (smtpauth1.co-bxl [10.2.0.15])
-	by mailout-l3b-97.contactoffice.com (Postfix) with ESMTP id 1EB2A60A8;
-	Fri, 23 Oct 2026 03:54:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1792720477;
-	s=20240605-akrp; d=mailfence.com; i=brianwitte@mailfence.com;
-	h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:From;
-	bh=PJkZhkXXrchYq4gsC5K2d7L85eJ1XLiR7+w6n85/cPg=;
-	b=FubXlR6z1yM5mVmHNiqSXEFKDp30ljJDES3DB5U9Ify16xMUoLFYMQ//XPSHuHNO
-	N/MjJqVhRoCj1/eRDwfWz6ovg1HmcOT7Mn2WrSks/5hhVGzXekxABaPQt1o7N+Y8l/7
-	Tk1CSB1xneHqutOwSrNY3Gk3FQUkzR1TtwNKBErskGd4fr+sviDRirHXtoqGQWWU2QC
-	aWt4P+iWGupxjYi+VKbuBbFZ7e9q2+oLf9ryhkb0q0JHGjPPkAT2LRnb5mfM0SXdjvS
-	K8cWA2xZN/d9Nre63mB/6KyYaj7TAwqDa1XJqn5iHwV9et72wdJulRJci+pjoWUXPEA
-	hGjF9g1UFA==
-Received: by smtp.mailfence.com with ESMTPSA ; Fri, 23 Oct 2026 03:54:36 +0200 (CEST)
-From: Brian Witte <brianwitte@mailfence.com>
-To: Kees Cook <kees@kernel.org>
-Cc: Brian Witte <brianwitte@mailfence.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Jann Horn <jannh@google.com>,
-	Helge Deller <deller@gmx.de>,
-	Justin Stitt <justinstitt@google.com>,
-	Daniel Micay <danielmicay@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-hardening@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] exec: randomize the argument block's in-page offset
-Date: Fri, 23 Oct 2026 03:54:37 +0200 (CEST)
-Message-ID: <20261023015345.1594514-1-brianwitte@mailfence.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lFDEReVK
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=uX9E3o73V748llMETRdDfpWjDG+k2zeZTW03xJwVkb0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792720603; v=1; x=1793325403;
+ b=lFDEReVKixlCCV8aln0VUOKnuYSlp8pGFtrke7nXPTicTCunZ0H8IlsIY4l4xMkG6xCOdQub
+ qnGxz1sHC4r301LLvNBrT/Au2ztMkB7/IAGCmIC3V7Ws1h61Pjg4urSiVsPv8Lf/Z/reEb56Vtk
+ q48DpLvM5j1fEAqr7eg9wOq4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 1f1f20d373d9e1ae;
+	Fri, 23 Oct 2026 01:56:43 +0000
+X-Mizu-Trace-ID: 1f1f20d373d9e1ae
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 23 Oct 2026 09:56:32 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Xia Yan <yana06070@163.com>
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@kernel.org, horms@kernel.org, kuba@kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	pabeni@redhat.com, shuah@kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH net v3 1/2] veth: keep carrier off when resizing channels
+ with a down peer
+Message-ID: <atq-0HbV71AcQi5t@fedora>
+References: <20261022085842.2527-1-yana06070@163.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,49 +66,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CO-INDEX: xeqgj8PHouPosme+woQh6pFtig5yQF5AvYLqRg7GJhc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261022085842.2527-1-yana06070@163.com>
 
-Patch 1 randomizes where the argv, envp and execfn strings sit within
-the first stack page, as KSPP issue 283 asks; today their low address
-bits never change. Patch 2 adds a selftest.
+On Thu, Oct 22, 2026 at 04:58:41PM +0800, Xia Yan wrote:
+> veth_set_channels() temporarily turns carrier off while reconfiguring a
+> running interface. It then turns carrier on for both ends without
+> checking whether the peer is administratively up. If only one end is up,
+> changing its channel counts therefore reports LOWER_UP even though the
+> peer remains down.
+> 
+> For example, after creating a pair with two RX and TX queues per end:
+> 
+>   ip link set vca up
+>   ethtool -L vca rx 1 tx 1
+> 
+> vca incorrectly reports LOWER_UP while vcb is still down.
+> 
+> Only restore carrier when the peer has IFF_UP, matching veth_open().
+> The local interface is already known to be running at this point.
+> 
+> Found during LLM-assisted source review and reproduced with a veth pair
+> in network namespaces, without kernel instrumentation or error injection.
+> With the complete default veth.sh on x86_64 QEMU/KVM (three vCPUs), the
+> four mixed up/down cases fail before the fix and all six carrier cases
+> pass after it. All 55 existing checks pass on both kernels.
+> 
+> Fixes: 4752eeb3d891 ("veth: implement support for set_channel ethtool op")
+> Cc: stable@vger.kernel.org
+> Assisted-by: LLM
+> Signed-off-by: Xia Yan <yana06070@163.com>
+> ---
+> 
+> Notes:
+>     Changes in v3:
+>     - Driver code is unchanged from v2.
+>     - The companion selftest is now part of veth.sh.
+> 
+>     v2: https://lore.kernel.org/netdev/20261020135544.24441-1-yana06070@163.com/
+> 
+>     Testing on the v2 baseline 513444cc62e2:
+>     - Complete default veth.sh on x86_64 QEMU/KVM, three vCPUs:
+>       before: 57 checks pass, four mixed up/down carrier checks fail;
+>       after: all 61 checks pass. The 55 existing checks pass on both.
+>     - bash -n and git diff --check pass.
+>     - If creating the veth pair fails, the case is skipped without
+>       masking failures from earlier test cases.
+> 
+>     Both patches also apply to net/main ffdf678dd166
+>     (application check only, checked on 2026-10-22).
+> 
+>     The QEMU guests failed to power off cleanly (initramfs issue) after
+>     the tests completed; the exit codes above are the veth.sh results.
+> 
+> 
+>  drivers/net/veth.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 643b97d..4e75830 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -1372,9 +1372,10 @@ static int veth_set_channels(struct net_device *dev,
+>  		 * to identify the range we have to disable
+>  		 */
+>  		veth_disable_range_safe(dev, new_rx_count, old_rx_count);
+> -		netif_carrier_on(dev);
+> -		if (peer)
+> +		if (peer && (peer->flags & IFF_UP)) {
+> +			netif_carrier_on(dev);
+>  			netif_carrier_on(peer);
+> +		}
+>  	}
+>  
+>  	/* update XDP supported features */
+> 
+> base-commit: 513444cc62e231a11c9b15ea88de0890da9b2b4f
+> -- 
+> 2.43.0
+> 
 
-Patch 1 repeats bprm_fill_uid()'s set-id checks; I can send a shared
-helper as a preparatory patch if preferred.
+This one looks good to me. I can reproduce the report issue.
 
-Tested in QEMU, compared with unpatched for-next/execve (b36b990c50b1),
-on x86_64 with ia32, arm64 (4K pages with AArch32, and 64K pages), and
-parisc 32-bit and 64-bit (STACK_GROWSUP):
-
- - The selftest passes; unpatched, it fails.
- - 10000 execs give 3709-3764 distinct offsets with 4K pages and 9259
-   with 64K, as a uniform draw predicts.
- - Cost: about 0.5 more minor page faults per exec on average, and up
-   to a page of RLIMIT_STACK; exec time is within noise.
- - No change in LTP execve and execveat, CRIU dump and restore, or
-   programs that rewrite argv[0] (setproctitle(), sshd, postgres), and
-   no KASAN, UBSAN or lockdep reports under exec and chmod races.
-
-The series is based on mainline (864c07de0c7d), which now includes
-for-next/execve and the const mnt_idmap conversion. On that base it adds
-no W=1 warnings with GCC 14 or clang 19 on x86_64 and arm64, and the
-selftest passes on x86_64.
-
-Brian Witte (2):
-  exec: randomize the argument block's offset within its page
-  selftests/exec: test the argument block's in-page offset
-
- fs/exec.c                                     |  32 +++
- tools/testing/selftests/exec/.gitignore       |   3 +
- tools/testing/selftests/exec/Makefile         |   5 +
- .../testing/selftests/exec/argblock-offset.c  | 214 ++++++++++++++++++
- .../testing/selftests/exec/argblock-report.c  |  24 ++
- 5 files changed, 278 insertions(+)
- create mode 100644 tools/testing/selftests/exec/argblock-offset.c
- create mode 100644 tools/testing/selftests/exec/argblock-report.c
-
-
-base-commit: 864c07de0c7dcbca58b61625dfa2e461ae63b242
--- 
-2.47.3
-
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
