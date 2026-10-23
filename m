@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1792754770;
-	b=EbHMJGGH5yJ5WMRO44LRdE4KpXeU0c34n+PnaCXc1Fb/ZshFkBBbgOcYIv8fULuTltsW
-	 HcendgdSlUj6gsDPPML/pGrUzvRnHgRzM5HJxWWi+/gbiufCe5v8EjqO3x/LQDQTEbVcF
-	 T+V7yny4nSdmKCSdKRWeNI+6wSwkAsZBSkEkTSWFDBYw1MbC4r7RJkiUWGkxOfoOp1CPa
-	 RvgzaLMU/sOno3AvDo28KYv80h2kMb14JYQqzh2rRpNsuPorFjZQFassYYMjU8bzWt4o6
-	 sPeOZ43AlulJCGR11mQReC7rjDOEOUk3e3IgoMixc3b+gF/0aOtvEM+GTtxh/CCSUXw==
+	b=eilRtzts5eRcqoZbzSEA8jspGnS0elwtrqoanVW3P/RuJb6S9ViPr5qcJ7WKJ3jYDcFM
+	 Vvsj7y4X4YL+AIFOm/pSV3gVHd4D9oa2mo4nNAQC1buEW2YS5PCN3yhmk2mU7gue2oL+1
+	 YdvWS8JMoWI4kW1Axnv05t9EIGVQ4CbAnXkfmJ6vgwb05FXx5IviEq/Lc4EDzYTiGJrwA
+	 ZOljW93faRYlyinrLiWioai02BSfZGx5850PYxjGSnlmvpIyUXoNs/qMSIES8Fbi+IDhq
+	 1udLBfUEIGvXfmbjTh2Ue8Kn3cRc9ngZNOw86kcfBrpRwJ3to123iXjQpTkFE8ep4EA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792754770;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=m3L8EXlPHb5J1kGsbqjDR6RwyzNa2wuhY3sau14O7rw=;
-	b=CWQdHAypy+1r0Zt5Pud5mdBTiZtBfEC7kWCrw1rM4ZDqif1An4hHaK/AvcbVxRhZXnln
-	 qXAaMaaCYCP+DRFJcP+CjOq8rzVJX4FrzwcuoLVRqtWqP7LnmPbmpbXZg4QYT5ayUhPxL
-	 a2SZCGegTbQZ+le1QgzdO/VTKjQ4P/Edc7bZsjc9DmqJUipGiW+LSaeyR9WIDVVF/ZYNU
-	 TTiC/A1mDAVAqsBvqkrvPUdDn5JMODaOM/NaYalRsd6FUpfrbYAGSeOjDK9O9G/WuxZlA
-	 aIbkvJORXbyjBF3Ipc8yc+HMH2tKn36k4tk0HuLT0FB/7eGeCXkoaq5NJmeuibolhtQ==
+	bh=7V05kjnhOHwz9Rn9HHAePSObxd8ClZWF7ntAaDTI6WA=;
+	b=sTS/wDFFwHkGMkr9lBjYbNAsnEf/ZIdVjfrG0YpogmMpqzILmoOO8uw1naCBV9p7ya3p
+	 BARtghZwDyP0syqw0DKIO0yZTJSJ34Kj2kaYRh5sKT0v1Rx4P75zdRQO8LED5p/C/UmGB
+	 hNvac3p353IPSLaXTfKnFmfT6g6r87C1xS5C7S74rKyrndVHibtsLaf9vQ1uTwCyHvK0+
+	 YzrKNk+10qs6DwzC3cSZcgW4vFBeanGWZG5cp5xg5TsJfMjtCxNFWbKoHJgExVBww0cFq
+	 liAA4u6FWl+k9T//RVJjTzQu6bZw8e4eYP8gisUPfDvsw+WZw9MMS1fyz4+t8IbnynQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EbVQUPG4;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fjoApjQN;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C510606A31B;
-	Fri, 23 Oct 2026 11:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C08606A31A;
+	Fri, 23 Oct 2026 11:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EbVQUPG4
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fjoApjQN
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792754769;
-	b=aY4P3DtySF6E2M3pCX4I43QNG/4KKM5xoayZk7Qh9Qvke3BFjSJNtzaYfNQGvXb0uuPf
-	 tkqHqUQ6eqZX8bbYs1e9CbNZ3zl6Eq5vLSGF59fGIjn7cWwAyiKPK/wG//aakYe1GOOZm
-	 IpNdV79Yhr/nGDVuInRDcPXpDrpPVY2ZMN+8LDXiRCFq6j7b8ru5JhbSouMUVj9xIWNDT
-	 +ddMUhmCPqMtXoVJ8gFuURpcTS7cc663hxt030hGUcPEI9H769feACl8OmB9tABwTy35I
-	 xTFxayw24fsFUCkBdIEjjVHSfa324sUt1qxlL1gq5sl5oZwXhSWJwissE6jYFAqJ6/w==
+	t=1792754770;
+	b=YNPEt+dZ0b3ET/cOA0kU+xVhYiDpgNJk6aTV9aBFj+f3mYahyKUpFDEKzBPrH39fEA35
+	 5Pc8iphuOcRoeua2BvOQVyzHFCD7HIATGOzBdghlDAC6eZ6JXfs4r2JVw4Rxan210bsZX
+	 HofdRa/RIT1seHAyiLF4guTU+HNZYFFLJLbr9NupB77YNZ90reQixiPVtNPQl1df8xwIk
+	 GGaOtZLauMxLiboJDWc0Qg1k2GLLTd1VWvm7wMY+LtXitzEFILwbJmHnpBkch0YuoBf6v
+	 SEXziilcTVSvS7PJScEMwpichS9/j3k5LBJX9raerRJrKB5MsiAtovyPYlHUvVFGqzw==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792754769;
+	c=relaxed/relaxed; t=1792754770;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=m3L8EXlPHb5J1kGsbqjDR6RwyzNa2wuhY3sau14O7rw=;
-	b=kbw3HNq05OI5cOxkgE3TJ1dABkzMN/n26+OtSkFEAlU9/gkbTT4yZqbU+5OpNTukRDSA
-	 Ju7m/l5b/xHPpNhqtOabGlQY8hlWclfHwd7NAKKVHDbz6uytteKdVpyougLmKtrkkbFeT
-	 CU9SQMDtEbCaadzsO7Xj4uKDTE7eMIM6Zh6IDgnbPM6j45iIPKwY4Vw92fnFe/gkAJ7lG
-	 27jrgmHsrih68vNu/HsyObavpTyEYsaBk/XNWuyXmrySnMb0UYhBss/jkWqJ/PdSWRv8T
-	 Gg0qbNV2lOvNC6R+JL+HpZKoi4VTZRZreKVvuZmdBLj39bd4is5KZCWbYj4zlNrLoTQ==
+	bh=7V05kjnhOHwz9Rn9HHAePSObxd8ClZWF7ntAaDTI6WA=;
+	b=bTbx4+4w4C305koCqdz9KSEx0bWdZMJvGlZhlOks/2uIRF4Agdtec9Y5IW6dsqRK3OGM
+	 6DAo6c3ALBzNS16FtbU/xdWYk/AHMLNk3qmK2IWmcgpunxu1F3kAyj+Ir7hCN3/aRj3E2
+	 dqXEbImwsPKnN28jhVRR2aub7C4xD/Li35rfTI4ySjBBJxsDEA+gNQmia/7L1Uonyqdq4
+	 Xm1XqosAza6iixkyUyiZpgINKzxgMYaty9OUVfczUBETbQJf8MpQdH0rl1FeYrgEowUBu
+	 e3hh11fWzWpqpd/Ihm0KYVEVb+1gZykUH40waHp69ivOloKRb2hfVEMMMY89enSKiqw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2FBBD1F01828;
+	by smtp.kernel.org (Postfix) with ESMTPS id 2FC8A1F01829;
 	Fri, 23 Oct 2026 11:26:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792754769;
-	bh=m3L8EXlPHb5J1kGsbqjDR6RwyzNa2wuhY3sau14O7rw=;
+	s=k20260515; t=1792754770;
+	bh=7V05kjnhOHwz9Rn9HHAePSObxd8ClZWF7ntAaDTI6WA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=EbVQUPG4m9yST4lPaHDSHyXty2mo4Pfp+ovUYCxOcj1sod+mQ7RhsbHIpK7MAX3X2
-	 cAZV1UFNdJctI5qFV+XKjky0/4/OW2j8ygVbbh1HdtHoZQnaifg2fGOusf6JcOHQDr
-	 ZcbuIfze1kModTEnVHGQLgMXDlRdLKvMsGlQiDJpp+gWwidq1Z78wrp0hBPBvwst7n
-	 fp0eRibJxmcK9MtRN3vwROi0ut/I+TKFUuksyyQ51s9WEE4+BwpqCECMd0QgQLrMd5
-	 TZ/TsGfvNP6pVJ6IGzNj+GdjEMYnVsJanT66UfXwiXzKwFpHj0kmydq6MgHVgC1tVX
-	 pAaHj1W6GUSlQ==
+	b=fjoApjQNXcgg95WqAPYQVZPsqTGkkfp0sn8tYM7fR/2RQ9IT7sQROuUeyuu84N96T
+	 JI5M1vBqJ4+JCUuQsu8bDfYsNDlZb8mEhVI7W2w3/wpFwJ0VTZGL/BUZHGLOQqbwh2
+	 X1DoW6vLPgGM24GdQposb1ctk9htgp1XZG/9r2AYByNUaZ1K4XkZTsezen8JkosspU
+	 dZQ8Ffk8W4AN/TXtADfWioHDdNiUahmdcEGW2MCkhguyAKaIlkF5Bmrpqep+oLG8zs
+	 GCzKx6p3i3YcxSHQP6DnfBFKEznjBqJlW76wM1UBldIagY7US1aw43lwFvx0DuaLy3
+	 mmTy1eA0Ll61w==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 92CE7444C2;
+	by lkml.kernel.org (Postfix) with ESMTP id 9AFDE444E7;
 	Fri, 23 Oct 2026 11:26:08 +0000 (UTC)
 From: Jhonata Poma-Hansen via B4 Relay <devnull+jhonata.poma.gmail.com@kernel.org>
-Date: Fri, 23 Oct 2026 13:26:07 +0200
-Subject: [PATCH net 1/2] netlink: retry a dump skb that does not fit with
- the minimum size
+Date: Fri, 23 Oct 2026 13:26:08 +0200
+Subject: [PATCH net 2/2] selftests: net: netlink-dumps: start a dump with a
+ notification queued
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261023-netlink-dump-livelock-v1-1-478214a635d2@gmail.com>
+Message-Id: <20261023-netlink-dump-livelock-v1-2-478214a635d2@gmail.com>
 References: <20261023-netlink-dump-livelock-v1-0-478214a635d2@gmail.com>
 In-Reply-To: <20261023-netlink-dump-livelock-v1-0-478214a635d2@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -95,13 +95,13 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
  Jhonata Poma-Hansen <jhonata.poma@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2113;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3524;
  i=jhonata.poma@gmail.com; h=from:subject:message-id;
- bh=wpiSXo5U0PAbR1oO+UlU/ssinpjnck+7Z7pQkTuLTv8=;
- b=owGbwMvMwCX21S6Y7aK9oS7jabUkhqzbLv4TN7/T0dzqESTLuX5WpoopX9pVz5DKved6xaR7j
- x/ReqfdUcrCIMbFICumyOJz9nEPt+LHHf8f7rgMM4eVCWQIAxenAEyEj53hF9Pm395xN2rPsbas
- n3ZZWjZEf0/StDndDSGNKTeWfthwbSIjw8q23LKf0QdzH/J/F1dOWVp2kEHm+M/NNYr9m+aofwh
- 5ywIA
+ bh=f+a8MC9imhU/+9RhQSahUYzMxPQaNUJwAl0pyGoew3k=;
+ b=owGbwMvMwCX21S6Y7aK9oS7jabUkhqzbLv5s5vKyU8XutQhXJs9qZ/lTqNcqrtmwfI5vi8SlD
+ 8uZRSs6SlkYxLgYZMUUWXzOPu7hVvy44//DHZdh5rAygQxh4OIUgInU+DH8ZpmxIuPLw5sCalPC
+ lcoWT3Kas13UPMvm1IrM/T2/nsRfO8PwP6yALS61scmVvarvH68n7yf34oJfATulug8/3nHx/zk
+ tBgA=
 X-Developer-Key: i=jhonata.poma@gmail.com; a=openpgp;
  fpr=4CCDE38C0B21F1B8FFE1B8D3F53E5306D13F312D
 X-Endpoint-Received: by B4 Relay for jhonata.poma@gmail.com/default with
@@ -112,58 +112,127 @@ Content-Transfer-Encoding: 7bit
 
 From: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
 
-netlink_dump() sizes the skb after the largest buffer the reader passed
-to recvmsg(), up to 32KiB. Since commit ae8f160e7eb2 ("netlink: Fix
-wraparounds of sk->sk_rmem_alloc.") the skb is only queued if it fits
-in sk_rcvbuf, or if nothing else is charged to the socket.
+Add a test which starts a link dump on a socket with a small receive
+buffer while a link notification is still queued, after a large read
+made the kernel attempt large dump skbs. The test reads like libnl
+does, peeking before each read, and expects the dump to complete.
 
-A reader with a small receive buffer that still has data charged to
-its socket when a dump starts gets ENOBUFS, even when a minimum size
-skb would fit. The dump stays marked as running and every recvmsg()
-retries it, so a reader that peeks before reading, as libnl does,
-never consumes the data at the head of the queue and spins forever.
-
-"iw dev wlan0 scan" hits this: its socket has an 8KiB buffer, it joins
-the nl80211 multicast groups, and it dumps the scan results as soon as
-it has read the NEW_SCAN_RESULTS notification. When it preempts the
-sender, the notification is still charged to its socket until
-netlink_broadcast() returns, the dump fails to start and iw spins at
-100% CPU.
-
-Retry with alloc_min_size before failing the dump.
-
-Fixes: ae8f160e7eb2 ("netlink: Fix wraparounds of sk->sk_rmem_alloc.")
 Signed-off-by: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
 ---
- net/netlink/af_netlink.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/testing/selftests/net/netlink-dumps.c | 93 +++++++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
 
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index a904dc3bc..b750e79fe 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -2318,10 +2318,21 @@ static int netlink_dump(struct sock *sk, bool lock_taken)
- 	if (!skb)
- 		goto errout_skb;
+diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
+index 51129c564..6f66a478d 100644
+--- a/tools/testing/selftests/net/netlink-dumps.c
++++ b/tools/testing/selftests/net/netlink-dumps.c
+@@ -3,8 +3,10 @@
+ #define _GNU_SOURCE
  
-+retry:
- 	rcvbuf = READ_ONCE(sk->sk_rcvbuf);
- 	rmem = atomic_add_return(skb->truesize, &sk->sk_rmem_alloc);
- 	if (rmem != skb->truesize && rmem >= rcvbuf) {
- 		atomic_sub(skb->truesize, &sk->sk_rmem_alloc);
-+		/* A skb sized after max_recvmsg_len may not fit next to data
-+		 * still charged to the socket, while a minimum size one does.
-+		 */
-+		if (alloc_size > alloc_min_size) {
-+			kfree_skb(skb);
-+			alloc_size = alloc_min_size;
-+			skb = alloc_skb(alloc_size, GFP_KERNEL);
-+			if (skb)
-+				goto retry;
+ #include <fcntl.h>
++#include <sched.h>
+ #include <stdio.h>
+ #include <string.h>
++#include <sys/ioctl.h>
+ #include <sys/socket.h>
+ #include <sys/stat.h>
+ #include <sys/syscall.h>
+@@ -260,4 +262,95 @@ TEST(close_with_ref)
+ 	usleep(100 * 1000);
+ }
+ 
++static int lo_set_up(int sock, bool up)
++{
++	struct ifreq ifr = {};
++
++	strcpy(ifr.ifr_name, "lo");
++	if (ioctl(sock, SIOCGIFFLAGS, &ifr))
++		return -1;
++	if (up)
++		ifr.ifr_flags |= IFF_UP;
++	else
++		ifr.ifr_flags &= ~IFF_UP;
++	return ioctl(sock, SIOCSIFFLAGS, &ifr);
++}
++
++static const struct {
++	struct nlmsghdr nlhdr;
++	struct ifinfomsg ifm;
++} dump_links = {
++	.nlhdr = {
++		.nlmsg_len	= sizeof(dump_links),
++		.nlmsg_type	= RTM_GETLINK,
++		.nlmsg_flags	= NLM_F_REQUEST | NLM_F_ACK | NLM_F_DUMP,
++		.nlmsg_seq	= 1,
++	},
++	.ifm = {
++		.ifi_family	= AF_UNSPEC,
++	},
++};
++
++// A dump started while a notification is still queued must make progress
++// for a reader which peeks before reading, like libnl does
++TEST(dump_with_queued_ntf)
++{
++	struct sockaddr_nl addr = {
++		.nl_family	= AF_NETLINK,
++		.nl_groups	= RTMGRP_LINK,
++	};
++	int netlink_sock, inet_sock, i;
++	int rcvbuf = 8192;
++	bool done = false;
++	char buf[32768];
++	ssize_t n;
++
++	ASSERT_EQ(unshare(CLONE_NEWNET), 0);
++
++	inet_sock = socket(AF_INET, SOCK_DGRAM, 0);
++	ASSERT_GE(inet_sock, 0);
++	netlink_sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
++	ASSERT_GE(netlink_sock, 0);
++	ASSERT_EQ(setsockopt(netlink_sock, SOL_SOCKET, SO_RCVBUF,
++			     &rcvbuf, sizeof(rcvbuf)), 0);
++	ASSERT_EQ(bind(netlink_sock, (struct sockaddr *)&addr,
++		       sizeof(addr)), 0);
++
++	// A large read makes the kernel attempt large dump skbs
++	ASSERT_EQ(lo_set_up(inet_sock, true), 0);
++	n = recv(netlink_sock, buf, sizeof(buf), 0);
++	ASSERT_GE(n, (ssize_t)sizeof(struct nlmsghdr));
++
++	// Leave one notification queued, then start the dump
++	ASSERT_EQ(lo_set_up(inet_sock, false), 0);
++	n = send(netlink_sock, &dump_links, sizeof(dump_links), 0);
++	ASSERT_EQ(n, sizeof(dump_links));
++
++	for (i = 0; i < 100 && !done; i++) {
++		struct nlmsghdr *nlh;
++
++		n = recv(netlink_sock, buf, sizeof(buf),
++			 MSG_PEEK | MSG_TRUNC | MSG_DONTWAIT);
++		if (n < 0)
++			continue;
++		n = recv(netlink_sock, buf, sizeof(buf), MSG_DONTWAIT);
++		if (n < 0)
++			continue;
++
++		for (nlh = (struct nlmsghdr *)buf; NLMSG_OK(nlh, n);
++		     nlh = NLMSG_NEXT(nlh, n)) {
++			if (nlh->nlmsg_seq != dump_links.nlhdr.nlmsg_seq)
++				continue;
++			if (nlh->nlmsg_type == NLMSG_ERROR)
++				EXPECT_EQ(*(int *)NLMSG_DATA(nlh), 0);
++			if (nlh->nlmsg_type == NLMSG_DONE)
++				done = true;
 +		}
- 		goto errout_skb;
- 	}
- 
++	}
++	EXPECT_TRUE(done);
++
++	close(netlink_sock);
++	close(inet_sock);
++}
++
+ TEST_HARNESS_MAIN
 
 -- 
 2.54.0
