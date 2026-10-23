@@ -1,54 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.84
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.3.242.97
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792720408;
-	b=RUMLGCP5xmeX4TaXNEiEuOJfPtDsVCBl2oJPF0xKPIpIff9K90L3teaR185rwiJ1J1to
-	 zsS7Pi6WqWTqYEVKJhao/VFxViNoj9XmVOkEjrU7NvbWgHmm3/6+AhuRspoOawB8aPcYD
-	 lws9UmmChS0/QK+oV/em+JT9kf0GzM+A0TZIEcpZ7+zMKgusqGqipdHpCwE35fhOjgSgD
-	 pn9zwtaro0Gu1eJKhrarB05ac51lY34LIxkDT1Tcd9cAV/mVS/KAxQ+rn2s8b1U4zRgxR
-	 h7kzBkE5lkQYHO1wItCPonJRQGsldGQ9iQ+1eZK4uBU8k2g8P08ZI1uS+WSGnFuXeBw==
+	t=1792720488;
+	b=hDv7Ewqr6PmuVEoZJ4AWKNQK+n4aYDfbHKKMZQTniKntTyGBb5j+VDKYeJ9SpgAxNVyM
+	 F4JA7fP/zCEWKvwuVMJDmRG1g5Gk2BGfC8TRYhdDbui779alIuniQobBbA8pnjRWeJRh2
+	 j+wiPwNVXjrmLzVcNx7jhG0xynD6H7JgjnpU8NILlMGBVlTI2P8mbgxzOhcEFSH15QjHg
+	 5NwB0XH6kpq6jwX7wHzxCPziectZL8ZACxPyUYGneQecNP1VT1YPJar+T+6yoAliWl2bM
+	 2LwjVNEO01kXabuAgd0Fp9Q+jmCFF6GJUFEmxWhcGNZl5PJ1IajbOdylLEvCeqteJ1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792720408;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=D07eyQXW6CyfYGV/GLKHH76F8XoU44KN7tbJsOmA9ec=;
-	b=Mejay//AZcaB2Vw6ycTmrrAeFznx9p4nNnx0rvty4OKcJO+VPlmtZYV6+aM3VIh9yXdR
-	 c61MErU+R9bBXoOWjYHQNmixWVBOCLv8RiBynUdOzlQdn+qGFJspFOO6qxP7lZNFJzBvq
-	 zFq1Tkcwxl2+31LbUgqn8OFpx5wHTB3bsnBnph4Q2TasaHCrea55iATS5DNiQ3dDyKMdG
-	 VD6KrMWs7yN5MqHqWeS+UHZMxnHdG5t0PKaRoP4wZMqZzd7dD/1Davl31wzLeSf74LZjh
-	 M3afQLoTaobw7pmmebU4G6rPYxie8d5AKH6nO68Jo+AIZDkFsC1yzcTVJEbE3+Bl6Zg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792720488;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CO-INDEX;
+	bh=kEfN+lz4jC9aTNLTOmPGU5NO0fDKtkjBweUc+hWx6MM=;
+	b=vRMmzRqbp/UeKLbhJi9eCoSpHERFqIbQ3I5ahdgG3CEsSFfWH4aTYW8PWCBcEW1jRPLo
+	 lUa1kvaQNdJLPaEXSMcY4IckR9lBliVv9kZdLTwvGTKXjbPyXe1v0UO8FmUZxzBCBjIr+
+	 tEn4+JVQ4YrpSuwRTgJz1zOvNJDZVOSe2isUBWFK4d5k+SGk9KJXzLcrRv8OPzDKgzuw1
+	 RF5ca2QA8+hCl4Bjk6xMbvt6D8buxGPty5vlNw7maflZLGPVnOMh8jsZ+zYM7+B6krcke
+	 9TwyTZaesJyRsV4GHIKAam728mCrIjQ8882H79YRn3qOtJF74weeyDNg/DCBuoBX4tg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SB7DLNbz;
-	arc=none smtp.remote-ip=95.215.58.84
-Received: from mta1.migadu.com (out-84.mta1.migadu.com [95.215.58.84])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=mailfence.com;
+	spf=pass smtp.mailfrom=mailfence.com;
+	dkim=pass header.d=mailfence.com header.i=brianwitte@mailfence.com header.a=rsa-sha256 header.s=20240605-akrp header.b=EDrVvGmx;
+	arc=none smtp.remote-ip=212.3.242.97
+Received: from mailout-l3b-97.contactoffice.com (mailout-l3b-97.contactoffice.com [212.3.242.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28AF606A328
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 01:53:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C28AF606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D43606A319;
+	Fri, 23 Oct 2026 01:54:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 00D43606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailfence.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailfence.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SB7DLNbz
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ERNQcTMDaUHOgt1ezW5NchEKQ3p5W3gtHeKeBSygDso=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792720404; v=1; x=1793325204;
- b=SB7DLNbzQGdY6heJepkyIeeaXYgjdxfnMhQ33jYud6x20z0l0qP1fqURSHHlcwF9F0exzarz
- OAXwWqwglOXHhfXHW0ewCg8iV6DmZaPoHADNjnYRN4RZhC8tS4TY8Ht8hPy3FYU5gi6zavnaHvL
- Sdhc11rX+DrJ4Pxo/OZtbUVc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id cd14fa31b589aab4;
-	Fri, 23 Oct 2026 01:53:24 +0000
-X-Mizu-Trace-ID: cd14fa31b589aab4
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <776306f8-2200-486b-8c43-2b5fd9b5eeb5@linux.dev>
-Date: Fri, 23 Oct 2026 09:53:20 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=mailfence.com header.i=brianwitte@mailfence.com header.a=rsa-sha256 header.s=20240605-akrp header.b=EDrVvGmx
+Received: from smtpauth1.co-bxl (smtpauth1.co-bxl [10.2.0.15])
+	by mailout-l3b-97.contactoffice.com (Postfix) with ESMTP id 633C060B4;
+	Fri, 23 Oct 2026 03:54:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1792720481;
+	s=20240605-akrp; d=mailfence.com; i=brianwitte@mailfence.com;
+	h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From;
+	bh=kEfN+lz4jC9aTNLTOmPGU5NO0fDKtkjBweUc+hWx6MM=;
+	b=EDrVvGmxri9ofREdVPpPBZNnNxHebFqjfRzzXJJ93GYzrgzG12/r8IJOJpkT9Ews
+	00N8wbDFz0w87sQbiN3sIeTV9aJYbKoS2F9yRSEi7HrhCbcXgUswpDLqy3Ea9EQoxKO
+	rAH2bduHukf20f3FqXAPlN8cY6eOVWwlsfd1jrjYEuAKn9NPIDDgTOrHWZJuYJUQ/xJ
+	fBXS/j/FmobO4vXiHl5m3tcQIJvcV/svlKSVmsNv0F7hM9T6rRyvXeO57wdnDncSriN
+	qUvfpPMczS83cciA6qu+vg5AvoItHHhJyUQTS1pD44AmYhGRx82KfOcKDuDl2cf3Vbf
+	Sowd8Uq20g==
+Received: by smtp.mailfence.com with ESMTPSA ; Fri, 23 Oct 2026 03:54:40 +0200 (CEST)
+From: Brian Witte <brianwitte@mailfence.com>
+To: Kees Cook <kees@kernel.org>
+Cc: Brian Witte <brianwitte@mailfence.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Jann Horn <jannh@google.com>,
+	Helge Deller <deller@gmx.de>,
+	Justin Stitt <justinstitt@google.com>,
+	Daniel Micay <danielmicay@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-hardening@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] exec: randomize the argument block's offset within its page
+Date: Fri, 23 Oct 2026 03:54:41 +0200 (CEST)
+Message-ID: <20261023015345.1594514-2-brianwitte@mailfence.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261023015345.1594514-1-brianwitte@mailfence.com>
+References: <20261023015345.1594514-1-brianwitte@mailfence.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,90 +79,99 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next 2/6] cgroup/cpuset: Properly compute effective xcpus
- in update_parent_effective_cpumask()
-To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261022031643.1351877-1-longman@redhat.com>
- <20261022031643.1351877-3-longman@redhat.com>
- <c65208d9-aba6-4e9a-affa-4f7cd8794a0c@linux.dev>
- <a3caf0f6-da89-4b5c-b80f-3baf6c82a2c4@redhat.com>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <a3caf0f6-da89-4b5c-b80f-3baf6c82a2c4@redhat.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CO-INDEX: 5Hfd5iwv96PZ+oxlg2+SbbocvRakgd9BwmPCE7Z93iA=
 
+bprm->p starts one word below STACK_TOP_MAX, and setup_arg_pages()
+moves the stack only by whole pages, so the argv, envp and execfn
+strings sit at the same offset within their page on every exec. Three
+execs on x86_64 put argv[0] at 0x7ffeee30af9f, 0x7ffdf3709f9f and
+0x7ffc871e0f9f.
 
+Lower bprm->p by a random amount under a page before the strings are
+copied: about 12 bits of entropy with 4K pages and 16 with 64K.
+bprm->argmin is derived from bprm->p, so the argument size limit is
+unchanged, but up to a page of RLIMIT_STACK is used.
 
-在 2026/10/22 23:00, Waiman Long 写道:
-> 
-> On 10/22/26 9:45 AM, Guopeng Zhang wrote:
->> Hi Longman,
->>
->> 在 2026/10/22 11:16, Waiman Long 写道:
->>> Since the introduction of cpuset.cpus.exclusive in commit
->>> e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
->>> compute_effective_exclusive_cpumask() helper which is later renamed to
->>> compute_excpus() is added to compute the effective xcpus of a partition
->>> root. However update_parent_effective_cpumask() is not updated in all
->>> proper places to use the new helper to check if a given cpuset should
->>> remain a valid partition root. This can cause a cpuset to incorrectly
->>> remain a valid partition root even if no effective xcpus is left.
->>>
->>> Fix that problem by using compute_excpus() to compute the effective xcpus
->>> into delmask in all cases except partcmd_disable and partcmd_invalidate
->>> and use it for tasks_nocpu_error() check as well as checking its
->>> emptiness. This enables us to catch invalid partition root more
->>> accurately in update_parent_effective_cpumask().
->>>
->> I re-tested the repro from the link below on top of this series
->> (applied on cgroup/for-7.4-fixes), and it still fails:
->>
->>    https://lore.kernel.org/all/20261010075947.333549-3-guopeng.zhang@linux.dev/
->>
->>    cd /sys/fs/cgroup
->>    echo +cpuset > cgroup.subtree_control
->>    mkdir A
->>    echo 0-7 > A/cpuset.cpus
->>    echo 0-7 > A/cpuset.cpus.exclusive
->>    echo root > A/cpuset.cpus.partition
->>    cat A/cpuset.cpus.partition
->>    echo 1 > A/cpuset.cpus.exclusive
->>    cat A/cpuset.cpus.partition
->>
->> The last command still shows "root invalid (Parent unable to distribute
->> cpu downstream)".
->>
->> In this case compute_excpus() returns the stale user mask unchanged.
->> user_xcpus() is gone from update_parent_effective_cpumask(), but the
->> dependency just moved one level down: the new code calls
->> compute_excpus(cs, tmp->delmask), and its first line is
->>
->>    cpumask_and(excpus, user_xcpus(cs), parent->effective_xcpus)
->>
->> Here user_xcpus(cs) is cs->exclusive_cpus, which still holds the old
->> 0-7 when compute_excpus() runs: update_exclusive_cpumask() publishes
->> cs->exclusive_cpus only after partition_cpus_change(). Nothing corrects
->> it either - the sibling trim is skipped as exclusive_cpus is non-empty,
->> and for a direct child of the root cpuset the intersection with
->> parent->effective_xcpus is a no-op. So the stale 0-7 mask still reaches
->> tasks_nocpu_error() and PERR_NOCPUS is set again. Please point it out
->> if I got the analysis wrong.
->>
->> I have rebased my fix on top of this series and the partition recovers
->> correctly with it applied. Should the fix be folded into this patch,
->> or is there a better way to fix it? Happy to hear your thoughts.
-> 
-> You are right. My patch series won't fix this particular issue. However, converting an invalid partition back to a valid one is done on a best effort basis. There is no guarantee that it will always happen. Just echo "root" to "cpuset.cpus.partition" again will make it valid again. So it is not a real bug from my point of view. It is just a nice to have feature.
-> 
-Thanks for the explanation. This helps me better understand the
-intended behavior of partition recovery.
+ADDR_NO_RANDOMIZE disables the offset; PF_RANDOMIZE cannot be used,
+since load_elf_binary() sets it after the strings are copied.
+PER_CLEAR_ON_SETID also clears the flag for set-id execs only after the
+copy, and moving the strings then would mean copying them all. So
+bprm_fill_uid()'s set-id checks are repeated early, without its
+inode_lock(), and a set-id exec gets the offset regardless of the flag.
+A racing chmod or sysctl write can make the offset disagree with the ELF
+loader but never affects the credentials. Only the file passed to
+execve() is checked: set-id interpreters, file capabilities and LSM
+transitions keep today's fixed offset under the flag. The checks need
+bprm->file, so they run in bprm_mm_init(), not create_init_stack_vma().
 
-Thanks,
-Guopeng
+The idea comes from PaX RANDUSTACK; linux-hardened carries a version by
+Daniel Micay and Levente Polyak.
+
+Suggested-by: Daniel Micay <danielmicay@gmail.com>
+Link: https://github.com/KSPP/linux/issues/283
+Signed-off-by: Brian Witte <brianwitte@mailfence.com>
+---
+ fs/exec.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 5d7b0fe32dbf..1070f0799b27 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -70,6 +70,7 @@
+ #include <linux/user_events.h>
+ #include <linux/rseq.h>
+ #include <linux/ksm.h>
++#include <linux/random.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/mmu_context.h>
+@@ -195,6 +196,33 @@ static bool valid_arg_len(struct linux_binprm *bprm, long len)
+ 	return len <= MAX_ARG_STRLEN;
+ }
+ 
++/*
++ * Called before credentials exist: treat ADDR_NO_RANDOMIZE as cleared for
++ * files bprm_fill_uid() will treat as set-id.
++ */
++static bool bprm_randomize_args(struct linux_binprm *bprm)
++{
++	struct file *file = bprm->file;
++	const struct mnt_idmap *idmap = file_mnt_idmap(file);
++	struct inode *inode = file_inode(file);
++	/* bprm->cred, not yet set, will be in the caller's namespace. */
++	struct user_namespace *ns = current_user_ns();
++	umode_t mode;
++
++	if (!READ_ONCE(randomize_va_space))
++		return false;
++	if (!(current->personality & ADDR_NO_RANDOMIZE))
++		return true;
++	if (!mnt_may_suid(file->f_path.mnt) || task_no_new_privs(current))
++		return false;
++	mode = READ_ONCE(inode->i_mode);
++	if (!(mode & S_ISUID) &&
++	    (mode & (S_ISGID | S_IXGRP)) != (S_ISGID | S_IXGRP))
++		return false;
++	return vfsuid_has_mapping(ns, i_uid_into_vfsuid(idmap, inode)) &&
++	       vfsgid_has_mapping(ns, i_gid_into_vfsgid(idmap, inode));
++}
++
+ #else
+ 
+ static inline void acct_arg_size(struct linux_binprm *bprm, unsigned long pages)
+@@ -279,6 +307,10 @@ static int bprm_mm_init(struct linux_binprm *bprm)
+ 	err = create_init_stack_vma(bprm->mm, &bprm->vma, &bprm->p);
+ 	if (err)
+ 		goto err;
++
++	/* Randomize the strings' offset within their page; keep the top word. */
++	if (bprm_randomize_args(bprm))
++		bprm->p -= get_random_u32_below(PAGE_SIZE - sizeof(void *));
+ #endif
+ 
+ 	return 0;
+-- 
+2.47.3
+
