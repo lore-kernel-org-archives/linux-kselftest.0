@@ -1,68 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792735687;
-	b=R+C3/hjhdG+cwIIza/kw/H0T9q1xr9h6MO8guJTo0WBytkVwYlSRJNzMa3pFSVf+Eslv
-	 8Hb4ASVAvcRuJjht384MLhNLLkqFulM9Gu4akPF3AxpITpPJllgJDn5Zn07PugFmqFwPC
-	 JepLFrE8flHtyOw3wKYJ/yHWoa/VvbUh93oP5cF0gy0UqU1yizm9A7F2GEvSYfvkEhK43
-	 1oXYdOE0DAyEDPcy8l1yNynwCmsYczEsqTO8NqXn8b/659V7KkSDs9c5NjbQC7jeONYx7
-	 gFWPUs4225YzoK8wKL17XJ5RmypPTNY4bNfqzt2JU0LV21U9wfwtfOiG3yGMIyk+bvQ==
+	t=1792736678;
+	b=gsSn27G6EwaJwzi3VuLBhiH3ewuN3njB/CIntQ2DHokc+d3ik7EVGvOlcCE8CIy1YKPd
+	 V9cjCatP2HY8NeJ9yaW0QCnVTaSg4NhIcfZ9tDobhte7F6Zwu6Gk0r6pDRoLFmA5vIiZH
+	 H9ffNX1ZlmlTc8AGtzjX++ntDArBVNkKANm4/J3Bl7NTvIkAirCIS5aEWqixTfm1tUi+k
+	 JFfDDb1ko17lehXSf9fHus7Dk+4uQe5YTs8en2jNuctyIwe3bgbViO5gqa3VJi/fyusbM
+	 Kh8aaYA0xJxsNmnzjYK9+PJnowqn518+qzwMs8j/T3OcXzB/olo5Fl1ohnap70IiHMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792735687;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=PtMbD2L/4lUTkQw591ynv8uNvYteldWADj8nmIYhx9w=;
-	b=WqpCeIoIaXTiz0nRu39rGegTHvw/QTruL12TgBvzzJt6fkPnka0YcO5BI83Unqqex2s4
-	 kT7m7dCsVgF4MSVB8qCjEJiMi+RRNKZjBzn2qrK+LNin3QpUYJAwQ2kZXTkurV5UnX3n9
-	 4FvAawNhKvYx6ZyfkQPiUiNI84/gVVTLZcLRXVoOSFDxGbr9ZkhJWaqiWAWAQXVlVZMZv
-	 N19YN1o/adbpFYIhxNbIkJ+9e8aB9EpTr7Yg75EHQyw1L0n+aC3PPnDTsC3wQxo7aog4L
-	 hoc8G8gHDgiH6LJqZuyi9R1gjyW1FZ5IB9jPZjfYwMJvkA/ziTDwgKGjcjuQhl8R0rw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792736678;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=y0NcD85P4YuQlHetNwNJI+QSXD/4mVy6NLxkpgdSMcU=;
+	b=GV78AlmdlnXKg1xy9+hHOjg3oQes56waQKI7kG/n0gkRbGAiJIZmaOx1lzDM+S24B90m
+	 E7N4jN1PikrGWayvKqX+V5vK29UMdYxHzFVR/YFTIrJiGu618IqcCrW77ik+Znr3Kxf8v
+	 vpmkS8b97F3gfvK4a6etWj9nngV24+HhOS29F1qWp2tdfpivuk8KMwAHvnAS4CisOk86J
+	 xT/KScWV6lHXphQNMQ+5XA11ScKnDB5cugoR3GAIXnrumqvMqWtj6PigkzlY8IQNW1ky6
+	 2NtelY8J49BPYZ6WTPORg7G8ykx6OC1n/Q84c7Dgb148U9jgbmiX0LfA+PVs3Rvc+zg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=SEaClo2N;
-	arc=none smtp.remote-ip=192.198.163.19
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MbX5RvbZ;
+	arc=none smtp.remote-ip=95.215.58.38
+Received: from mta1.migadu.com (out-38.mta1.migadu.com [95.215.58.38])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0381E606A31A;
-	Fri, 23 Oct 2026 06:08:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0381E606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0801606A31A
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 06:24:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D0801606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=SEaClo2N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792735687; x=1824271687;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=C81i/82DeDeE1JH62JhWsNHM4gE4jeuRndx5t5ttChs=;
-  b=SEaClo2NQIaW06zL7l6Ya5IrE7Ai8AZpeFMVRq0rjHIT1S6X2OcfpBPd
-   ZtdBbR77y2CKjeIYDoCYfneZfHlNHqFXktnYsIFNiwHBRHZdeBBjEMfCG
-   Z4UctXPEFHu0OOQGlbiniJOvrzP2RLrqn4IKMNh1ynQYdK0zEkdwh7dh4
-   8EZJUQU2Oe1NZTrCKnOlrdQ6OYalJNmrEadieNq0KazHMTto5vFPmyrVY
-   l7PcWlfLA0YG/v6Pt2eBGByEDDYuiymX7ujlJUTlBbpC1xxJUNT9orWDD
-   kizjXrI7MK+UsVKFdrW/4dEQyTFCYu/GNWc/fTo1hX6ZEUB2z8SbX1Lt9
-   Q==;
-X-CSE-ConnectionGUID: 5ki/el3GTWujjChBfZlZPQ==
-X-CSE-MsgGUID: p52PFYlJTeeBE4OLLNMrpg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11943"; a="1599103"
-X-IronPort-AV: E=Sophos;i="6.27,173,1787036400"; 
-   d="scan'208";a="1599103"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2026 23:08:06 -0700
-X-CSE-ConnectionGUID: jbxrQI+LQeyEO93z/LGx9g==
-X-CSE-MsgGUID: oty+PjFtR7aIMb5gzI1E2g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,173,1787036400"; 
-   d="scan'208";a="3592890"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2026 23:08:00 -0700
-Message-ID: <64e27c4c-23e1-4539-a812-e81d5f322003@linux.intel.com>
-Date: Fri, 23 Oct 2026 14:07:57 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MbX5RvbZ
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=DuMewOc/Oc4cYh9XSaYEomynuxuFlTvkkFfrgqfljXE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792736674; v=1; x=1793341474;
+ b=MbX5RvbZvj7SqIl9hlCrW9lmY2C1kM1yiYB8EkrRhVo1VGkT+z7ln9V3nqqGKwH1ZAlo62j8
+ my3w1E5yDmdXC7CXznyzBXUbn7L12BylFUWGd/1OttAjDJsTfrlj7Rc15HuVsEboukTi50P4XXT
+ +Mqpt3Bn7W2xeSSVLQ2dNJbU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id bd516687889a695d;
+	Fri, 23 Oct 2026 06:24:34 +0000
+X-Mizu-Trace-ID: bd516687889a695d
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <c0a4470f-ef81-47a2-9d4b-a28a7fe1a529@linux.dev>
+Date: Fri, 23 Oct 2026 14:24:28 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,94 +59,131 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 05/28] x86/cea: Use array indexing to simplify
- exception stack access
-To: Sohil Mehta <sohil.mehta@intel.com>, kvm@vger.kernel.org, x86@kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
- <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Andrew Cooper <andrew.cooper3@citrix.com>,
- Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
- Shivansh Dhiman <shivansh.dhiman@amd.com>,
- David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
- Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
- David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260911213659.2025974-1-sohil.mehta@intel.com>
- <20260911213659.2025974-6-sohil.mehta@intel.com>
-From: Binbin Wu <binbin.wu@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <20260911213659.2025974-6-sohil.mehta@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH-next 1/6] cgroup/cpuset: Find furthest isolated ancestor
+ for invalidated isolated partition
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20261022031643.1351877-1-longman@redhat.com>
+ <20261022031643.1351877-2-longman@redhat.com>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20261022031643.1351877-2-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/12/2026 5:36 AM, Sohil Mehta wrote:
-> From: "Xin Li (Intel)" <xin@zytor.com>
+
+
+On 10/22/2026 11:16 AM, Waiman Long wrote:
+> Commit 46b885416c27 ("cgroup/cpuset: Fix a missing isolated_cpus
+> update in update_cpumasks_hier()") searches for the closet partition
+> root ancestor to determine if the isolated CPUs in a to be invalidated
+> isolation partition should be removed from isolated_cpus or not.
 > 
-> Refactor struct cea_exception_stacks to leverage array indexing for
-> exception stack access, improving code clarity and eliminating the
-> need for the ESTACKS_MEMBERS() macro.
+> As reported by sashiko, this method may not work when there is a deeply
+> nested isolated partition hierarchy. For instance, Consider a nested
+> hierarchy A0 -> A1 -> A2 -> A3 where all four are PRS_ISOLATED:
 > 
-> Convert __this_cpu_ist_{bottom,top}_va() from macros to functions,
-> allowing removal of the now-obsolete CEA_ESTACK_BOT and CEA_ESTACK_TOP
-> macros.
+>    A0: effective_xcpus = 0-4
+>    A1: effective_xcpus = 1-4
+>    A2: effective_xcpus = 2-4
+>    A3: effective_xcpus = 3-4
 > 
-> Also drop CEA_ESTACK_SIZE, which just duplicated EXCEPTION_STKSZ.
+> When A1 shrinks its exclusive_cpus from 1-4 to 1-2, A2 will update it
+> effective_xcpus to 2. A3 will find its closet partition root ancestor
+> A2 and decides that its effective_xcpus 3-4 should be removed from
+> isolated_cpus which is incorrect.
 > 
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Address this corner case by searching for the furthest isolated partition
+> root ancestor instead to decide if its isolated CPUs should be returned
+> to isolated_cpus.
+> 
+> Fixes: 46b885416c27 ("cgroup/cpuset: Fix a missing isolated_cpus update in update_cpumasks_hier()")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   kernel/cgroup/cpuset.c | 36 +++++++++++++++++-------------------
+>   1 file changed, 17 insertions(+), 19 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 585a982249ad..7ead8c3b7974 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2156,22 +2156,20 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>   }
+>   
+>   /*
+> - * ancestor_partition - Find and return the closest valid partition root ancestor
+> + * iancestor_partition - Return furthest isolated partition root ancestor available
+>    * @cs: the current cpuset
+> - *
+> - * Return: The closet partition root ancestor cpuset
+> + * Return: The furthest isolated partition root ancestor available or NULL if
+> + *	   not found.
+>    */
+> -static struct cpuset *ancestor_partition(struct cpuset *cs)
+> +static struct cpuset *iancestor_partition(struct cpuset *cs)
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+Nit.
 
-One nit below.
+iancestor is confusing.
+Can we renmae it furthest_isolated_ancestor?
 
-[...]>  
-> +/*
-> + * The exception stack ordering in [cea_]exception_stacks
-> + */
-> +enum exception_stack_ordering {
-> +	ESTACK_DF,
-> +	ESTACK_NMI,
-> +	ESTACK_DB,
-> +	ESTACK_MCE,
-> +	ESTACK_VC,
-> +	ESTACK_VC2,
-> +	N_EXCEPTION_STACKS
-> +};
-> +
->  /* Macro to enforce the same ordering and stack sizes */
+>   {
+>   	struct cpuset *ancestor = parent_cs(cs);
+> +	struct cpuset *iancestor = NULL;
+>   
+> -	/*
+> -	 * The top_cpuset is always a valid partition root which will stop
+> -	 * the loop if it is reached.
+> -	 */
+> -	while (!is_partition_valid(ancestor))
+> -		ancestor = parent_cs(ancestor);
+> -	return ancestor;
+> +	for (; ancestor; ancestor = parent_cs(ancestor))
+> +		if (ancestor->partition_root_state == PRS_ISOLATED)
+> +			iancestor = ancestor;
+> +	return iancestor;
+>   }
+>   
+>   /*
+> @@ -2283,23 +2281,23 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+>   				 * For a to be invalidated isolated partition,
+>   				 * its isolated CPUs may or may not need to be
+>   				 * removed from isolated_cpus depending on if
+> -				 * its closest partition root ancestor is a root
+> -				 * or isolated partition. With a PRS_ISOLATED
+> -				 * ancestor, the CPUs are checked against its
+> -				 * effective xcpus to see if any of them needed
+> -				 * to be removed.
+> +				 * there is a furthest isolated partition root
+> +				 * ancestor available. When such a PRS_ISOLATED
+> +				 * ancestor is available, the CPUs are checked
+> +				 * against its effective xcpus to see if any of
+> +				 * them needed to be removed.
+>   				 */
+>   				if (is_partition_valid(cp))
+>   					new_prs = -old_prs;
+>   
+>   				if (old_prs == PRS_ISOLATED) {
+> -					struct cpuset *ancestor = ancestor_partition(cp);
+> +					struct cpuset *iancestor = iancestor_partition(cp);
+>   
+> -					if (ancestor->partition_root_state == PRS_ROOT)
+> +					if (!iancestor)
+>   						del_cpus = cp->effective_xcpus;
+>   					else if (cpumask_andnot(tmp->delmask,
+>   								cp->effective_xcpus,
+> -								ancestor->effective_xcpus))
+> +								iancestor->effective_xcpus))
+>   						del_cpus = tmp->delmask;
+>   
+>   					if (del_cpus) {
 
-Nit:
-Is this still hold ? ...
+Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+Thanks.
 
->  #define ESTACKS_MEMBERS(guardsize, optional_stack_size)		\
->  	char	ESTACK_DF_stack_guard[guardsize];		\
-> @@ -39,37 +52,22 @@ struct exception_stacks {
->  
->  /* The effective cpu entry area mapping with guard pages. */
->  struct cea_exception_stacks {
-> -	ESTACKS_MEMBERS(PAGE_SIZE, EXCEPTION_STKSZ)
-> +	struct {
-> +		char stack_guard[PAGE_SIZE];
-> +		char stack[EXCEPTION_STKSZ];
-> +	} event_stacks[N_EXCEPTION_STACKS];
-> +	char IST_top_guard[PAGE_SIZE];
+-- 
+Best regards
+Ridong
 
-... Before this change, ESTACKS_MEMBERS() is used both in exception_stacks and
-cea_exception_stacks, so ESTACKS_MEMBERS() can enforce the order and stack
-sizes.
-
-After the change, ESTACKS_MEMBERS() only used in one place, so it doesn't have
-the capability to enforce them.
-
-The order consistency depends on the consistency b/t ESTACKS_MEMBERS and
-enum exception_stack_ordering now.
-
->  };
-
-[...]
