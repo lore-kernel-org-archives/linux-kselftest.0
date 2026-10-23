@@ -1,65 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1792785665;
-	b=nY5Njcmr8SO/Uo+BH9AFUrv6taQjZUfYcN8k8T9rS1oZAN0xrv5dPIbQSyNlVKGqTJc7
-	 OigDE/6Te903B6FMhPZPya7Z7PKDfJDigw75xtlIaUPUUJNk3oGYZMO1U2IUvhJx5iTdq
-	 xTbEfYnYD38u/KDon3NS0PKL1q65J5rB22Z/OC58RuPgClc/Wt4H9UwSUbxfI86h3/NWN
-	 DRNO4aWVrEJM1aYn40KoOaIa6vqRfqM+WXcwtQZLVJZBUIgALahXmgAUAnNKFVxzam8qf
-	 qVdYh4Fk9KBwOrl9iYjOsSI6q3NiT+uH0AsvPrmUWLS2QjojiiJ03eZOkkWsPtklJZQ==
+	b=XWSlQz6snespj5CsznTz/XtCRn95S7aN0430IZ9phWJHQUyHJerq38enVD8pZQwu3QeZ
+	 VOzsXVFitQyTobl5IlNosenJ/ulrkmp9Lh3agzNBD1236QVAcNbnD/7U/uujTeKvyWPp+
+	 3OnnHpos60jjWcD8+Fgd4i2kDqhCUT4ty7cdtK8JV3RfhiADJLPcW07428VjRm4LLmRdf
+	 OZUnprPpLJops0SoKyJedTVECcbtLKSeQ3sumXMlTY1fLffFXyd+Jyk3F9k27DmWPz167
+	 klyFIMK3/ufKuf+y1Yo3abMSYHVxcNHNzUHWu/OrG2rx1jP3AcGgFosoOrJ8L0fFD+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792785665;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=CY66h1/hR77G09Fc0FyLcpz0yWmb9t9yDWXf907PRJk=;
-	b=oIsqQqozyIT+HJv0Ld7cRQn3nkdh3U4RsmIlLSPOHL/ctHSvhc6GfjZO5xujltfkxSoH
-	 sgnb65y2NBsotj6hlk5GoATy4WqK34iD1/9UNgLy5m6/xb7ftxjlEhvac843EV5CRT96D
-	 t/pd1HmhlkEYdGQ3oaHkunk387OGgG8tEWT59mZ0Q3gNEqqliC4iahXPgot+cPEGZEnUh
-	 vGyQGkgeO5mCqN56FMOuP2Ukt6sWmFUYogmwfc4m2c6jVRl+ErtW9lU19KoirQe3SGrBG
-	 KWZrLtbG5bJB/chzSyauRjlmcbVqGN+uUAp6hmquofSRpv+dxsT26oDIM8tH7SM326w==
+	bh=t6K//W4VcL1SC5nLhi5TUGX6yNi2HIfAu/bUBgDdyxM=;
+	b=vqJbGgY9nKiQ8kDSIsJCb47pwKnWZs57gi6fB5aCbfpXd9cxpGbwnpiHB33o2vJ4tnpQ
+	 ty7RcQfUtbR49b4GWyargiZaU5cq3+qTtGy/jKbhLkvjIllpQQVoh3gSONAtC3BFtr2cU
+	 xOe1KRDKgKya0TNCesxhFThDSOd6nDE3LcHGMgsSB7e5zIz9JttKcHHARZf4/iiqyYuwi
+	 RYwz/+Nf9XA78Msi5VPFn/TzCogkqxr3mT8wQSVoJFX0DdHqSFs73hlUD5h7OTL9/dQuq
+	 256QnzRUTNU1UP9ChO4Vgdq4T4UhMolYaGxEc1jvqAqr8efmItzoaCJqW9Kek7RNJUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=YqDwDAZB;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=at+W0kPy;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299B7606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51372606A322
 	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 20:01:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 299B7606A31A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51372606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=YqDwDAZB
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=at+W0kPy
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	s=mimecast20190719; t=1792785664;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=CY66h1/hR77G09Fc0FyLcpz0yWmb9t9yDWXf907PRJk=;
-	b=YqDwDAZBj2NX3S+SnTaw8dRwS7Y5H9DQ+NPOf6q1LbePEH2dHJs809YeANLNuMftYOUKi4
-	ySxP973/k1Ybl4ZHT1dpGzv47kquFEU5BGf4oo9RzCoVl2Nnk7oVcFz18ijjQHHG3hI2VV
-	B1nDuIuWTbQLH2Q9bMaEirEIRxjmg2c=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=t6K//W4VcL1SC5nLhi5TUGX6yNi2HIfAu/bUBgDdyxM=;
+	b=at+W0kPyEsp3uvUBOPjT1MV+PiR4vIhHNo5RdPu1hN5Cww68LpBHqiE10p56ernAPtBqYn
+	yWuPLust1bfvUvZ0AX4yyKTeuzmlJ0+aeW0Aze9jbS0RFFggJSSJnEVe2x8P63sbpS5InR
+	dod5iPhrCJ4LwTSDG8lN6sP9eEvhS6k=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-29-zaW6JV2XN-WGuQI_L0HVWw-1; Fri,
- 23 Oct 2026 16:01:01 -0400
-X-MC-Unique: zaW6JV2XN-WGuQI_L0HVWw-1
-X-Mimecast-MFC-AGG-ID: zaW6JV2XN-WGuQI_L0HVWw_1792785659
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-320-Z00jYS-VPn675JvEsUBb4g-1; Fri,
+ 23 Oct 2026 16:01:02 -0400
+X-MC-Unique: Z00jYS-VPn675JvEsUBb4g-1
+X-Mimecast-MFC-AGG-ID: Z00jYS-VPn675JvEsUBb4g_1792785661
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2BEC9195DE21;
-	Fri, 23 Oct 2026 20:00:59 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 246321956043;
+	Fri, 23 Oct 2026 20:01:01 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E38B71956089;
-	Fri, 23 Oct 2026 20:00:56 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5CDAB1956088;
+	Fri, 23 Oct 2026 20:00:59 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Ridong Chen <ridong.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
@@ -70,11 +70,10 @@ Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Waiman Long <longman@redhat.com>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH-next v2 06/10] cgroup/cpuset: Prevent recursive call of remote_cpus_update() via update_cpumasks_hier()
-Date: Fri, 23 Oct 2026 16:00:32 -0400
-Message-ID: <20261023200036.60560-7-longman@redhat.com>
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH-next v2 07/10] cgroup/cpuset: Make sure compute_partition_effective_cpumask() is only called for valid partition
+Date: Fri, 23 Oct 2026 16:00:33 -0400
+Message-ID: <20261023200036.60560-8-longman@redhat.com>
 In-Reply-To: <20261023200036.60560-1-longman@redhat.com>
 References: <20261023200036.60560-1-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -89,118 +88,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Guopeng reports that changing the cpumask of a remote partition root
-may set the effective_cpus of the top_cpuset incorrectly. It is
-due to the following call sequence:
+With visual inspection to make sure that
+compute_partition_effective_cpumask() is only called for valid partition
+root, it was found that the function can be called for an invalidated
+partition near the end of cpuset_hotplug_update_tasks(). When partcmd is
+set, update_parent_effective_cpumask() is called to either invalidate a
+valid partition or with partcmd_update to check if an invalid partition
+can be switched back to valid. In both cases, cpuset_force_rebuild()
+should be invoked. However, compute_partition_effective_cpumask()
+should only be called when an invalid partition is switched back to
+valid. When a partition is invalidated, compute_effective_cpumask()
+should be called instead.
 
-  update_cpumask()
-   -> partition_cpus_change()
-    -> remote_cpus_update()
-     -> update_sibling_cpumasks()
-      -> update_cpumasks_hier()
-       -> remote_cpus_update()
+Also add a WARN_ON_ONCE() in compute_partition_effective_cpumask() to
+ensure that a valid partition root is passed in.
 
-The second remote_cpus_update() call passes in the cs->effective_xcpus
-instead of the trialcs->effective_xcpus of the first remote_cpus_update()
-call.  As a result, the second call can revert what has been done in
-the first call leading to incorrect effective_cpus of the top_cpuset
-as well as subpartitions_cpus.
-
-Fix that by adding a new remote_partition_updating flag into the cpuset
-structure to indicate that a remote partition is being updated and
-update_cpumasks_hier() should skip the whole subtree as update_cpumask()
-or update_exclusive_cpumask() which calls partition_cpus_change()
-will eventually calls update_cpumasks_hier() for that subtree anyway.
-
-This new flag is currently set only in remote_cpus_update() to prevent
-recursive call of remote_cpus_update() on the same cpuset.
-
-A test case is added to test_cpuset_prs.sh to verify this change.
-
-Reported-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Link: https://lore.kernel.org/lkml/20261010075947.333549-2-guopeng.zhang@linux.dev
-Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Tested-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Fixes: f62a5d39368e ("cgroup/cpuset: Remove remote_partition_check() & make update_cpumasks_hier() handle remote partition")
+Fixes: 72c6303acfa1 ("cgroup/cpuset: Take isolated CPUs out of workqueue unbound cpumask")
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset-internal.h                   |  5 +++++
- kernel/cgroup/cpuset.c                            | 13 +++++++++----
- tools/testing/selftests/cgroup/test_cpuset_prs.sh |  1 +
- 3 files changed, 15 insertions(+), 4 deletions(-)
+ kernel/cgroup/cpuset.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
-index 2e44dc8634dc..1ba94ffaff9d 100644
---- a/kernel/cgroup/cpuset-internal.h
-+++ b/kernel/cgroup/cpuset-internal.h
-@@ -161,6 +161,11 @@ struct cpuset {
- 	 */
- 	bool remote_partition;
- 
-+	/*
-+	 * Set to true when a remote partition is undergoing update.
-+	 */
-+	bool remote_partition_updating;
-+
- 	/*
- 	 * number of SCHED_DEADLINE tasks attached to this cpuset, so that we
- 	 * know when to rebuild associated root domain bandwidth information.
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 5585d02ef0f8..d995f1ec5259 100644
+index d995f1ec5259..2c3a148fa40b 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -1736,6 +1736,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
- 			goto invalidate;
+@@ -2116,6 +2116,8 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+ 	struct cpuset *child;
+ 	bool populated = partition_is_populated(cs, NULL);
+ 
++	WARN_ON_ONCE(!is_partition_valid(cs));
++
+ 	/*
+ 	 * Check child partition roots to see if they should be
+ 	 * invalidated when
+@@ -4023,9 +4025,12 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+ 
+ 	if (partcmd >= 0) {
+ 		update_parent_effective_cpumask(cs, partcmd, NULL, tmp);
+-		if ((partcmd == partcmd_invalidate) || is_partition_valid(cs)) {
++		if (is_partition_valid(cs)) {
+ 			compute_partition_effective_cpumask(cs, &new_cpus);
+ 			cpuset_force_rebuild();
++		} else if (partcmd == partcmd_invalidate) {
++			compute_effective_cpumask(&new_cpus, cs, parent);
++			cpuset_force_rebuild();
+ 		}
  	}
  
-+	cs->remote_partition_updating = true;
- 	spin_lock_irq(&callback_lock);
- 	if (adding)
- 		partition_xcpus_add(prs, NULL, tmp->addmask);
-@@ -1757,6 +1758,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
- 	 */
- 	cpuset_update_tasks_cpumask(&top_cpuset, tmp->new_cpus);
- 	update_sibling_cpumasks(&top_cpuset, NULL, tmp);
-+	cs->remote_partition_updating = false;
- 	return;
- 
- invalidate:
-@@ -2207,16 +2209,19 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
- 		old_prs = new_prs = cp->partition_root_state;
- 
- 		/*
--		 * For child remote partition root (!= cs), we need to call
--		 * remote_cpus_update() if effective_xcpus will be changed.
--		 * Otherwise, we can skip the whole subtree.
-+		 * For a child remote partition with remote_partition_updating
-+		 * set, we can skip the whole subtree as the this function will
-+		 * be called eventually. We can also skip the subtree if the
-+		 * effective_xcpus isn't going to be changed. Otherwise, we
-+		 * will have to call remote_cpus_update().
- 		 *
- 		 * remote_cpus_update() will reuse tmp->new_cpus only after
- 		 * its value is being processed.
- 		 */
- 		if (remote && (cp != cs)) {
- 			compute_excpus(cp, tmp->new_cpus);
--			if (cpumask_equal(cp->effective_xcpus, tmp->new_cpus)) {
-+			if (cp->remote_partition_updating ||
-+			    cpumask_equal(cp->effective_xcpus, tmp->new_cpus)) {
- 				pos_css = css_rightmost_descendant(pos_css);
- 				continue;
- 			}
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 3c9f67f91366..f0d98da3cfd8 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -347,6 +347,7 @@ TEST_MATRIX=(
- 	"   C0-3    C1-3  C2-3    C4    X2-3   X2-3  X2-3:P2 P2:C4-5 0 A3:2-3|B1:4-5 A3:P2|B1:P2 2-5"
- 	"  C4:X0-3  X1-3  X2-3     .      .      P2     .      .     0 A1:4|A2:1-3|A3:1-3 A2:P2 1-3"
- 	"  C4:X0-3  X1-3  X2-3     .      .      .      P2     .     0 A1:4|A2:4|A3:2-3 A3:P2 2-3"
-+	"   CX1-6  C1-4:P1  .    C4-5     .    C1-3     .      .     0 A1:4-6|A2:1-3|B1:4-5 A2:P1"
- 
- 	# Nested remote/local partition tests
- 	"   C0-3    C1-3  C2-3   C4-5   X2-3  X2-3:P1   P2     P1    0 A1:0-1|A2:|A3:2-3|B1:4-5 \
 -- 
 2.56.0
 
