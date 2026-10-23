@@ -1,100 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792768472;
-	b=mv/0vdE/JZMavf6f/hlPGtgEoO8Yfw4H23MLCAnHJQRD0sBN71VFtQBX7cI263jqYC+K
-	 EQSziS1HWJRmpmQrbSnO8vohTQmJ8A3FDZIyDwZ1Pnx7xwUnGfiXYSetUMLtyFw41nbQm
-	 xDXsdj24et6LauKAh6qFKRlfXfKD9kZ8tsboZawkn4iJv4FimAy4G+spDqRLXsXcgx33u
-	 zMkpZevZXZ8EWOSOnorOwxt/OevJD5B3Dv9j7bzag/r7E/jMviiLIoSrjNjsKJQAJ5anr
-	 Z9z4YTi8/bmpArZfekpJGQ9xbKnB85NfgdkN7rccMGnhLOPS9FUqV/zT+40WegnNdFA==
+	t=1792768531;
+	b=PIGcAQapcMmaX7J29J5n7/ecNTS7eu/sHf98XEUBnrw+J+VtxjrrSTqzlYsPGjUesnkw
+	 kEwZkkj0cZGCeDvHGkWhl7cQzZWC1ByPRDYgq5Gc7u2t4zfhUm3BG4TAE7gdbTiExFeYV
+	 yIhS/pW9e5H0kRTVuV9V388XIswxdFkot2kTCVWh6bAsCfUZTQ3w5fT1hNyqI1eEDpnua
+	 BHfyVZvr6O9jRFfH7SjR9SqmNeBsjJkToqr5EkchYy0eF/ziByR4jQg8/baDcO2B5NIZE
+	 KVruJL6oEVcb8ujPfxZDmCNS3yzwcPHUMsy6K2aog/t4INS6EolaueGphsjMt8HS+Mg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792768472;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=uYsXVdni1md+83PijIpFoxA8BV79W4PZ5dUTF0szV4w=;
-	b=K2ujy16gR5lOFxjjDdt/FOiFbBlCODzfMufXxlh5Eo7TFqG+cEYWYjkCcUS1NiFzAeLM
-	 iwyCVa3OzuhqahnplJRwpIkb9hDZnbmaQCYVRkeujPkC3U+22vqlqQxCaATzKWWntmK/E
-	 0nkXmId4xjGJ1kCF+UnZcbRgkmPuCzelA2M37M6F5skg9Qkrro4En69zX6CtQ7ShjUeyN
-	 HuppvV7g1uNnsaL+WvkA/v8WudNHhmv2+JRQFnr+HOUu8RoVAV4snA3HA7XTXz6HME3uc
-	 pIcLU8BF4w0qoCxoAwhLVmd2d1VDQUJZG2T/3TKTlWpbtTr3Qrihfjr7fJBqN4wYfew==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792768531;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=n3iOAGlkC+FkFfz7XihQCahJx8tfVvvTkUKXRSo49zc=;
+	b=GV/Gqma9Rl0QGu53xrKQzPP2f+GfcUKS7gzJipyvzrPJUzT+crSLxw414S9X4mnKaZsM
+	 DQKWow7WKLfn09fiN6kXd4RygHYzVA2Y/0w0Bm4E6eJv2Obyz6NZqsDSJhe3OuAMxMmLZ
+	 l5jRMJMELnrOk4dWNhWOSFXdFT86VM3yMgzSqhhZiD7oWEedSAZtgAtrCuitIA3Rfzmxd
+	 /jnC7HMbNd28L2eI0nIpXUz2IzVD/Bo671b8sD+LUMMc6BXJxN65+XBho/8RAKpPz/87J
+	 ZyY1UF157RTzLU7D9ptgt+SX8AuJ+zg55b6G/KjrDrWftln0MlfEHnjQvY1jC/o/5AQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CxihBLMX;
-	arc=none smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gimej7v1;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED201606A331
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 15:14:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED201606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0891A606A320;
+	Fri, 23 Oct 2026 15:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CxihBLMX
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-398b3c37877so603277a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 08:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792768471; x=1793373271; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=uYsXVdni1md+83PijIpFoxA8BV79W4PZ5dUTF0szV4w=;
-        b=CxihBLMXTDIBn+anE+uCpmjLkrvxoSA3hyKWVjlSCuMnuo82nEdfAGQ9o0g/3LVewC
-         /z4P9NeXyQf/26phPZ6Owm4OtA82QnO3cLGAK8dJzvlbjmc8E3bUtzSayWycsUri4cjc
-         2Jx+Qtig85c97pZBSfmyFJo+r8ZmNSV3WEWyjSJYr3EjMm3bJTP08G3os8WF9MyNZamq
-         /ILCk4et44Q/wv7CrfgL3DJglK8Ka0BPmhZObrqCKNK8wO+FPPcCgNOYWKE4Qe0qN5Mr
-         9xCd3Ze/SeNFBtI5Vzacce3fbucLfU1sAnDRUYGqnnikkvqiSGCYdH2fSb34Y0H359l3
-         k/ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792768471; x=1793373271;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uYsXVdni1md+83PijIpFoxA8BV79W4PZ5dUTF0szV4w=;
-        b=WmCm5fUE8XRlnYyHtR/9TUzIh4Zm+byxf7uThZKzXZg8crZJn2WI+6jsO8wgNwkQNP
-         U852yolYWEdv5182TeNr4QH9ee9McNoQyk3hozQmrkntiXAGUhQrYamx+EUI+iElEJj7
-         d9xOtq2LEadyKH/i1kfg/Jd8vI/+aWDAXVeWCoACG3drOoanmwHE0nSuVANyY3XwV5C0
-         m1KeJ23bL9/Dhb4cNPHJOsS7Iyk7URzgIN4/eQjiB4LlZ1a4kHUuUy9VFalhzlj1l/SN
-         s0I25POmNAMKrmLjGT+ZQZ9R5yQYd33xIhVSkvLOXlym62NhTP3m+fMoUG8M4kVBKvhc
-         ho0A==
-X-Forwarded-Encrypted: i=1; AKwUvBzuHua+Ig5BjYCmsccpq2jEvZXWAu7qPXP9xdUiFhpt1I3BGD/9YfMDFp/lysRLPGlPs1+7P5vgD/NC9ATrFvA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKfUYeLH78vXKpy5U9KT/7xnpaf6TbnuoUEIm2oFwBDEvAl1M+3
-	CgKywGlUNxZlDwCyH7ryjJy/p0IQZEW8deFc/mbvOFJIwgHBkubkkdab
-X-Gm-Gg: AYBFou1eRm+b0b034NnjrCtGHMI1UZAZ8wQuOKOyCrdC0v3URO3f4Wu2kevRSGLHgt0
-	vSDt5usUUYI3UW6uoEoMykj1btRphekG1VK8saD/ObLfQkDEwNLDIvrmjAa9yNnMkjs+5egv6+y
-	RB2TbcCzWxae/qwFXJUx/FvHnheupgk3w6IcMuQEKYSBzc3Mtp111xvG+w8+6L6Ht6uJ8Nk4wg5
-	8oYCtG9MQ50BKi2IrYQsTnPU3r6gS3a8/GbcGdZP6FKDXumZtqUowZeGDO7SQEXvWN2CHYdcHg4
-	tHr2HKcMYmQylLnhIsaPiWsGDden87zqSj7254vjh8K/uE7aqs/wHCiGRydmsPNV1OcHXyr5r+B
-	sAeC6w/kIpEvWRSVOeutUKyG/fsJ5D08rZ0HYS57xSuN8u+Z77xJvEusaIuNat6VTq0ETzaL23U
-	1KmvC6JbCRu/VOnLbmPZeoIm4ZDCUPO7Ni+HWgrDFATYQkUzVNQ8iZFGXHA/0QVALxbS7nmAPiR
-	xIfFKulrEfRn4LHxGMKBNA8B9cXukRh4onbNKaN+kO5wT6SnHJPWlcCq07YOSo116qMBtSex+fN
-	gk6zq8DUk5G2pmtDkeLOfRv+4bpbP9uYwA1nEvQlIsWrAFqQcStqpRP52FsUkw==
-X-Received: by 2002:a17:90b:4b0e:b0:3ab:2737:3392 with SMTP id 98e67ed59e1d1-3adce0d3dc1mr2276865a91.53.1792768471109;
-        Fri, 23 Oct 2026 08:14:31 -0700 (PDT)
-Received: from localhost.localdomain (111-255-192-187.dynamic-ip.hinet.net. [111.255.192.187])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3addd84c87esm590809a91.11.2026.10.23.08.14.27
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 23 Oct 2026 08:14:30 -0700 (PDT)
-From: Hung-Jui Lin <alex.lin.programmer@gmail.com>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Hung-Jui Lin <alex.lin.programmer@gmail.com>,
-	John Stultz <jstultz@google.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Miroslav Lichvar <mlichvar@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/2] selftests: timers: Add a test for disarmed SIGEV_NONE timers
-Date: Fri, 23 Oct 2026 23:14:11 +0800
-Message-ID: <20261023151411.28685-2-alex.lin.programmer@gmail.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261023151411.28685-1-alex.lin.programmer@gmail.com>
-References: <20261023151411.28685-1-alex.lin.programmer@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gimej7v1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 543A31F01828;
+	Fri, 23 Oct 2026 15:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792768530;
+	bh=n3iOAGlkC+FkFfz7XihQCahJx8tfVvvTkUKXRSo49zc=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=Gimej7v1/v0wTVFvdHlRJmhJ49fClgopyax8GXVSXvHnRSOfw50gzDVrgB8yBKbTb
+	 RS3/6YhUFALci5Co/9F+qsp4Otm3WhFl33244lp1KnxtGJS8rdWulhB2V0aFxJmkc8
+	 81lqf6uND1CL2WhFbqlzLKtlBqf+QHA792v/UtKFGS4258lTKitDJ6U0SA+TtgL/j2
+	 0ypYIu/floTOKkWFoQ9wcZllkh3q24U7fY4p8+MbRCe96ND+Ig5KQjC2jVj92YRCV1
+	 8EVWtb+6vC/92PrlOPNcCNv/1J6w26tejCbI6U4SUZFvy2ihh7tCJAsFS9WJVRef4h
+	 nbsnxzaIT4GVg==
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 9DC25F40066;
+	Fri, 23 Oct 2026 11:15:29 -0400 (EDT)
+Received: from phl-imap-15 ([10.202.2.104])
+  by phl-compute-10.internal (MEProxy); Fri, 23 Oct 2026 11:15:29 -0400
+X-ME-Sender: <xms:EXrbakjJY7UgDwJTKbZNF4ElmfvH9fABOChRxQYSzQScP-Udl1XgKg>
+    <xme:EXrban03Qrw0qUVcDRcmzdAt6zxtbIB-Tp1B8Z2APD7KIgkqIRO3HeqmzVo1eQj34
+    sThEG8tMrowbnj9GsjeQtPzFC-WnV-EVoU9WrMAskgA8MSAkj85_ao>
+X-ME-Proxy-Cause: dmFkZTEQsLx0PwaPYyK4QgkZcxkuswYMF4VADeH3rqBffibsumIFS6lJseJ3sFuHkHoef1
+    YMiaGsfTST/BmgDScxqDI0/JyNTjTrCo/gn/MldC5L5z+oHVrXyWhU4bOl3RmsbEhu0ZZh
+    UKEKxqTSb4Nfkl8zKLkHNzum8qHXz6o1hD+mkUaFG9a1zrkoQ3pGETwjgWO7x/YpX0vF0o
+    +ZZr+Ocj8CZGQYL2GxihZ4R4gQ0LcZ8h1c2zS4b+toxaJnvwdFv5AVwwomGzOY3wBPCXIc
+    wchK2lQsgwzxvIA7b61OS75f3gBreEQqw0gwddS7chJEHZGnKanJmLM0F7GbmZFYCtM2CN
+    /4bYSlxeKfTvOSKisZnOTlS/2XqHHNgx03xcQo0vXjoIUNiNow6JiIrC0fdZzYcH0u9pj7
+    LoVTWP/md2rKE0+8VVrmIqTvE4CZGWi+PIOo694UgRRHM76TDEegYRmntu6iuQwIHOyb05
+    gY9idM4/u4+2Vu+WWGlvgk7fyrhOMheD+cWMWf35bdHXf4PLvIIVTspMNgsJd6fO+YLpGI
+    AHKauUgYBAUGqhM0yRO8IaUXLtQUiGHtpjgrxerrZTHlKNYc4pLebfl/+RNyRKaUI+AgRh
+    ROsRtTFg3upWeX4EKzKGqqb79rNYuDMjiKdQPPpqTwoZlJuVylXHywvyVrcw
+X-ME-Proxy: <xmx:EXrbatUZ4WksbiAwAbD-DDoOAxDlGUgImZ4G_vTET7dnWLICuUEd2w>
+    <xmx:EXrbaqSpE-aSaLrvL6PlYMbcuM3jU3BWEdnAF3vdSR4pKVHMNyTbEQ>
+    <xmx:EXrbatR15rVNP60EHxcWUB6xTN8UqJYG9-74vF6jA30FRkr65PtzBA>
+    <xmx:EXrbaqeWMpb2aYH9UcyULXdk79Zoyl_hrhS7OtZ-JhE0VKAYeA0UnA>
+    <xmx:EXrbard8T-IUICBdQwT4m0ELVMPf7RjtrCZkC-V2p_P5ClY32gjYVEiZ>
+Feedback-ID: ifa6e4810:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 7BC8678273C; Fri, 23 Oct 2026 11:15:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,92 +77,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: ApVy2ZgDP3UR
+Date: Fri, 23 Oct 2026 11:15:09 -0400
+From: "Chuck Lever" <cel@kernel.org>
+To: netdev-bot+sashiko@kernel.org
+Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
+ davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
+ shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Message-Id: <7d69b735-fa5c-46f2-bfe8-38937380fac9@slotpi15m67>
+In-Reply-To: <179269905526.1189532.975361221217060549@kernel.org>
+References: <20261019-tls-follow-on-v6-1-ab01c4ecca0c@kernel.org>
+ <179269905526.1189532.975361221217060549@kernel.org>
+Subject: Re: [PATCH net-next v6 1/9] tls: Bound consecutive no-data records in
+ tls_sw_read_sock()
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-timer_gettime() must report a zero it_value for a disarmed timer. For
-SIGEV_NONE timers, common_timer_get() reported the remaining time of the
-previous arming instead.
+On Thu, 22 Oct 2026, netdev-bot+sashiko@kernel.org wrote:
+> [Severity: Medium]
+> Can this break return 0 while the next record is still being parsed, with
+> nothing left to wake nvme-tcp?
+>
+> data_ready_work is only queued if msg_ready is already set. For the 16th
+> empty record, tls_rx_rec_done() calls tls_strp_check_rcv(&ctx->strp, false).
+> If tls_strp_read_sock() returns -ENOMEM, the parse is handed off to
+> strp->work and msg_ready stays 0:
 
-Add check_sigev_none_disarm(). It arms a SIGEV_NONE oneshot timer, checks
-that a remaining time is reported, disarms the timer and checks that
-it_value is zero. Run it for CLOCK_MONOTONIC and CLOCK_PROCESS_CPUTIME_ID,
-as CPU timers use a separate implementation.
+Agreed... but the gap it leads to is not one this patch opens.
+When the strparser defers a parse to strp->work, tls_strp_work()
+announces the record through saved_data_ready alone, and a
+read_sock consumer that installed its own callback after the
+handshake never hears about it. That is reachable today after
+any record, data or empty.
 
-Without the preceding fix, the CLOCK_MONOTONIC case fails.
+What the cap changes is the number of allocation failures that
+reach that state at one point in the loop, from two to one. Both
+need GFP_ATOMIC to fail during a run of sixteen consecutive empty
+records, and both end in the same place. The fix is in the deferred
+announce, so that a parse completed by strp->work reaches the
+callback the consumer installed. My preference would be to fix that
+as a separate patch so it can get backported.
 
-Signed-off-by: Hung-Jui Lin <alex.lin.programmer@gmail.com>
----
- tools/testing/selftests/timers/posix_timers.c | 43 ++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+If netdev maintainers would rather have the work item queued whenever
+the receive queue is non-empty at the break, that is a one-line
+change and I can send a v7 with it. Otherwise I plan to leave this
+patch as is. Let me know.
 
-diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-index 52b7289e1..464609b8c 100644
---- a/tools/testing/selftests/timers/posix_timers.c
-+++ b/tools/testing/selftests/timers/posix_timers.c
-@@ -496,6 +496,45 @@ static void check_sigev_none(int which)
- 			 "check_sigev_none %s\n", name);
- }
- 
-+static void check_sigev_none_disarm(int which)
-+{
-+	const char *name = clock_name(which);
-+	struct itimerspec its;
-+	struct sigevent sev;
-+	timer_t timerid;
-+	bool armed;
-+
-+	memset(&sev, 0, sizeof(sev));
-+	sev.sigev_notify = SIGEV_NONE;
-+
-+	if (timer_create(which, &sev, &timerid))
-+		fatal_error(name, "timer_create()");
-+
-+	/* Start a oneshot timer which does not expire during the test */
-+	memset(&its, 0, sizeof(its));
-+	its.it_value.tv_sec = 100;
-+	if (timer_settime(timerid, 0, &its, NULL))
-+		fatal_error(name, "timer_settime()");
-+
-+	if (timer_gettime(timerid, &its))
-+		fatal_error(name, "timer_gettime()");
-+	armed = its.it_value.tv_sec || its.it_value.tv_nsec;
-+
-+	/* Disarm it. The remaining time must be reported as 0 */
-+	memset(&its, 0, sizeof(its));
-+	if (timer_settime(timerid, 0, &its, NULL))
-+		fatal_error(name, "timer_settime()");
-+
-+	if (timer_gettime(timerid, &its))
-+		fatal_error(name, "timer_gettime()");
-+
-+	if (timer_delete(timerid))
-+		fatal_error(name, "timer_delete()");
-+
-+	ksft_test_result(armed && !its.it_value.tv_sec && !its.it_value.tv_nsec,
-+			 "%s %s\n", __func__, name);
-+}
-+
- static void check_gettime(int which)
- {
- 	const char *name = clock_name(which);
-@@ -681,7 +720,7 @@ int main(int argc, char **argv)
- 
- 	ksft_print_header();
- 	if (run_sig_ign_tests) {
--		ksft_set_plan(19);
-+		ksft_set_plan(21);
- 	} else {
- 		ksft_set_plan(10);
- 	}
-@@ -715,6 +754,8 @@ int main(int argc, char **argv)
- 		check_delete();
- 		check_sigev_none(CLOCK_MONOTONIC);
- 		check_sigev_none(CLOCK_PROCESS_CPUTIME_ID);
-+		check_sigev_none_disarm(CLOCK_MONOTONIC);
-+		check_sigev_none_disarm(CLOCK_PROCESS_CPUTIME_ID);
- 		check_gettime(CLOCK_MONOTONIC);
- 		check_gettime(CLOCK_PROCESS_CPUTIME_ID);
- 		check_gettime(CLOCK_THREAD_CPUTIME_ID);
+
 -- 
-2.56.0
-
+Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
