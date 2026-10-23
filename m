@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792776231;
-	b=2VEuoO+lVnOYWSnxW3BOxgD34vwVOIkXDiFiRvPMpRIiRHUd4Ei27DQfLLJchqPvCa67
-	 L30/78bcyFU2l477Ryy4P34dZNTIe3focZDINdjAGlScQoMWZioZ87NYJUWg7tUQyrzoD
-	 kPD29xvip4Wujzx3H1sAUmKFhtwkMM5Hmah0HQ/aj3mseWMPamx30iz7wPxA+0zNydKUn
-	 nLiYINk6IK3RItCtyOGn1fb0LhPU04AbiPKV13a9fBuv7pCOR7ZsKQQopVGbO3EWDmCgY
-	 zQZsh2j5FML2IbQeQtNDXvTzt8SENvbIru2RaCxVMvjjC0h8OLPFC7bMxbKeJfMvReg==
+	t=1792776556;
+	b=mzpbysNBSraZzjq3+uCIGA2QREMpTM0cb6mxeClnw9W69/Ma1lJhH+bBH1fWEMqnEoXw
+	 uhsW1MY54fYGt3B53b/H+zV3zKrgC/QuDDI7iwvqsDQ5zdVMujHzhmNq/XCBQMBPzSBmR
+	 WoCf9GL7WfZUZ0reCYo77lkRf06jKELt8PspKWzsIqpDCkWolRQ7mKjVNVDATWswGLxqa
+	 7rPOOH3nbSOmoPsLyR+fXwbRvlhVPxsz/3qgt8pjtZaLZwMcKM3Y0H6vwTydAySVmI9E1
+	 CzdQWHtlu5MNcnonyId3Sqt/HHEv3StxwxvTFrW7tEkvTs/wgP5HZDH86zLu7rZymBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792776231;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792776556;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=b9U8BJjnSyQLu8vlmMN8CV+h3S1yPSnSBNwOLGcNxzs=;
-	b=xStOPoCOdA6bb0kzgGx/FVQX6obkdthrF75ZpRXJ0gj7tSANjcHY8/CixUtBSoebDhIm
-	 J7qEE+jIeJ1YNxD+97kY4rPoH2f2aw3bW2JuewiWZ+GOlp2y14KytntCLY2Iaa0Tu59bb
-	 /UX/5D0bxNT+AB/wQvcYsygc5eSsdxUZNLsxMWSVp5lBbpVUPwrIt2C8YqmDLY9n4Gnzs
-	 q/6oMrb+sM4bQNeSuHLbLyqjuvlxd/igEK+hTtGsNSbP/750dvAav3iLmiwLprL97vOJw
-	 WSVdIut5hW6Fa141I9HQg1lBAZzTkiALoe2LtnlzpoDngTs8t57ijjeeYg6SgXCAulA==
+	bh=3Qj0y3/sB7EeSLYwSP8RPCK8AZrmLUoRtMMcxttoCbM=;
+	b=vOb7g11OQrqe6enHYuv3SM3Q9maVLYxJ20BWeCvAUraBHS2KQ3oB5ZZwYupGLTB3BR3d
+	 ZR0JgD3eqRskjoiqhPM6af0tOte5iCQsUxMXSeNENSLMeCFu63ZC97tdHBgqu41vMmVR/
+	 /67DLeibB0x93pH2bUQ+qpfxWpQmAqNHqoRyCBqwiwflpE/98rPt724b1fErp+Fs14nHc
+	 FAgCGM2PpWC1/B/KpC/o9dgyfhNjHKgwB2UFkrFEbLzIpLAy1XxGGorIZ6pX2mHoE7q9/
+	 jGrMy/t0odZi7smGtb/knOAifNR5Mu96vLb9AElVSs0R+b8AxX90ga9qS+Z9wD2whmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FMFbak2L;
-	arc=none smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FsXey+P0;
+	arc=none smtp.remote-ip=209.85.221.44
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2071E606A31B
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 17:23:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2071E606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270C5606A31A
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 17:29:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 270C5606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FMFbak2L
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a1e477fe16so8907885e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 10:23:50 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FsXey+P0
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-48b060ec084so757236f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 10:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792776229; x=1793381029; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792776554; x=1793381354; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=b9U8BJjnSyQLu8vlmMN8CV+h3S1yPSnSBNwOLGcNxzs=;
-        b=FMFbak2Lv2lhOGCjKEw71ctCzxUX3t9FkWqUHf/sC4QitZrRCuemkodjqFDbh1yQ8w
-         4z15z4rWbF3wPybQwis3PyyUxs2U8Iyw+mFJ4+9V64wFam2di8sCwgyIRMyi5dRZiVzy
-         vspiC+CWDlUBn+exNtdA0wkxcrcYfzf5UE1V8TcNtfqEa7dUGw8ZHKu8DeljBe4vWgMW
-         +Yi8SZW6EliRrb3z2ZE1pUDFuOorhmb/AfhW0VsZ18YtOh148nPEd4UBXGky9OlizkBF
-         mAkIIK1cG5XIXYwFhwBT/ez0PEpG2OC1Ci5yvpsIFoWKf6uYIj0x89qSftEX2s/X/iaR
-         NMpg==
+        bh=3Qj0y3/sB7EeSLYwSP8RPCK8AZrmLUoRtMMcxttoCbM=;
+        b=FsXey+P0eeIEmJhBgBeUCGTebbSsxCz3o6QZLKul+LrAXxI5Iq6haR8I+mfQ26X3rv
+         jdictCITfezDnQnCYZ7j4HTg/tTcyUC/Drgp3vmWKgBrr8QxD8Lc9OWWfgyy8NXh/aVp
+         FU1i0kULfGHjxWSDkzzHhNYPQMA22NfAV96rytMgupGsdGonuZFqafUHqB4ni9qYpDM0
+         pMnX6nPNZmJtDzCa3r+7pjhGX+9lIH4WS1e9IAJRnvCXCHaSmtntU37q/aLnIzJzsrgt
+         wez8tRl8q/zWBYrqF7uksh+EHPqd6RxIvPagUfBww3wDRIPgVXt5ZOLUSwxJKgSTrUuS
+         E6Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792776229; x=1793381029;
+        d=1e100.net; s=20260707; t=1792776554; x=1793381354;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=b9U8BJjnSyQLu8vlmMN8CV+h3S1yPSnSBNwOLGcNxzs=;
-        b=Y9h8iV+kJvaZyMNiW9goDrir3LT2znsBSYpf0naNHbIjqIrONz95B6Ro7iGOxfA1eY
-         Oj5PYizLmYQOuorpn8rL/zGbfaC6o+szcE9dMLfWC2U4Vznzn8Xkd4jk3FVEW6FUpTJm
-         CzR8Vm9pxU/6ekyi7QLzz+pEm6Ok/iMaJvkoG5BENWJw+IourvtkzD/oXaNgJWqPfXQZ
-         WEwyVCtB5cf1uYlKqDiCbAFvC06LfqV8Z6K4JMb1n0eWU8YAXVfkYdl2qXQLvit1EkwJ
-         j/Xc4LQaHtfXoTtXkeeQ9nBIo96ppP2LNkDWNXkvr3mQh4CBAU4pgn8v5ypOokR1wznB
-         /CAQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxIGGCfBIiaiqlvOgV9hNy0Re1V9kiuyhh6TgkgojwxHct4EUFskFqLb3IZbDy5cccK2urw8tw1Vsmw81dT/wI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL3la/cH4XKFwjX1035W1iZGi33qIbC5+LkKArF5C1U8Gw+6BXx
-	k6cB9U7n9qgJQWTWCO9iyFXzvRGg1oKfBDJroUKNqaZBEbfIOF+Rp/VX
-X-Gm-Gg: AYBFou1PnQY6PUPxDiAUVVCvzsLSszr/mBMJvf/G08ZFpaN4+qXdHIiOojSgd9IZKwd
-	V3b5oX+ACQxC5Pql9Wp5fyB43XGfoIhz1trtOiatz3DX7PwCKuLNh/ZMADhTIfQ42Q3OEQ+Mw7e
-	TJO/ie8gtESxVEWGGlSntGS3rOt8YG6qkiHrxpAATKAy8BpX3Si+c+atDyUt1pIVtqI0ftiLhLq
-	5Z4QsMcozTCjSZw/HNGhDwTNxUJDr6s945GGyScgoUxxqdgumEExY7ninAmWeCLLbSSRnM1B6MW
-	XMcDHyeUrsPdWODn21riDu6r5sO5P5LlRp8H8GgClCa2l4VYEDOAydLyeJksT64DN8zS9fdl2iU
-	QwNHKnyinQ8QWC60rMdGyrlqa0ysp5/npn28yGVL9JHXuvHrZsrASdQ17gkkvsgdjgYERs2l7xy
-	9Y6hcvGemOFA+zijEo6WpelyeIKAGvXoqmzaZ3xuxXHggNqGRGl6EfMtLBdMdH7sV+dbc4DiQkI
-	NuTokMppOpj+qMY4gpMpegObtNbrctdMbmlGbYqMbETfrV0UrvXK1xQ+2bwZpzc63rKwU73cZIb
-	3avRtEPD40x/p4PQOEoDAzYd/b8+WkJCZkw5lI44BMJpeYY35PjXrUP0LO/4bVWyuWpRJ5kb2gG
-	EYKx3cUuijpLIeORO
-X-Received: by 2002:a05:600c:354c:b0:4a2:1197:1de0 with SMTP id 5b1f17b1804b1-4a211cb23f3mr50233895e9.19.1792776229374;
-        Fri, 23 Oct 2026 10:23:49 -0700 (PDT)
+        bh=3Qj0y3/sB7EeSLYwSP8RPCK8AZrmLUoRtMMcxttoCbM=;
+        b=G+QUgT0Ot4J8wkRYRNec4Ba2wEK+uDBzGPIgw6i46R52bjQdNK1FqMtouoai8sNSYc
+         UO2McKXsWAoVsI8OtpR9iBvfJrpwW7V1v9jD077DvdTwmajLGt41DZlDvEOyTKsOTqwd
+         zGSWLqWkEjTYg/9zQK5OW48Gx9U/xRmouf52BDg01eNlzWF34GnfpeIsGo6n1htGYbpX
+         9DZXPQWL2q7BCBTj5T7OsrRPcxzweuRjTHXrJJTgK+cZRRq6RxwtmZVDHcZU0MlaFrum
+         yzHn/Dp8ROU/UWDYuiQAzDtza1Z21WoFbKYkUgUVtwABgGP8KTaGFghC0szgrtNsdiYs
+         G7Fg==
+X-Forwarded-Encrypted: i=1; AKwUvBynZfSDFpM4b8u2GrPBol/anULClkTC7hCB4/uA6jGyo/iE7aD6xFiyA8flRKiTybm2+3riBwHaBJeiRVcEer0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLEzULZqcecERr8QGVtfJ8CjFLSFn4g9a6CBVU1Tj2PcI37ZBTE
+	oG0Tk5U4CNMCKMelQ0ZJGVX/QPnB4waXUmcFgYhU3QKfbhYg0jj/LkOb
+X-Gm-Gg: AYBFou0LzlXX6qF3zMOH2BNUG9S5cObjxUyFnkGKWRzdbH3Zo5cKxglo4oZ4LypBmsA
+	YwhqnIvJQSIbXauw6q8WzDy64DmXWzIb4NKzoZ/Ex2oFCAJiOfsZV8kicaE8CPo22GD6WN4CPUP
+	FTwCNl3ugjzh/Na9gJILjmycAo72mEHIugH33JsTnHQ4Z3o4rYQy2mv2weVegmdZaO48ARuXjFC
+	zQj8jxySKNzK0t0RWAE3b84R3c9ag8MSkADAsgXXmFgdbC+v9RjeB79AX16foLIZANXw3thP2RH
+	1DRpsZkyzhn9LHPfr2W74JVc1YkY0omIHET7GqAJhMvSHmrIt+nBFkaLkAfAHeCfpzI6PVuSAcG
+	+oljH0VnI4vePXPF+qn0UxksQu5s0jvjVM3Np141iy+ksJ/Q7oB65CKnIzWcM/EAffUxpxvJK0N
+	i+W5me/EkK+I5Q10wnvPkpR7AkgsZE5rnfcoPBjr++NVpiPSlj3Lp0Pj9Hmy1XgwgGsX3klOGTI
+	ziHL1ApzL8zAyHL+kGIq+Xsd5gMlo66cP/wffjoQA3+1xXQQiPofAkLUcFtMRfH2uxYQDDiHuAA
+	xJp1Z71Sk1wlz9sTkL9GA5Utz1mg9Q+VP6RHsIA4x8kOZaw5bgSNXcT+lMvwtliCAXH4NVozoJU
+	wg+aaANaPW9YtNOh2
+X-Received: by 2002:a05:6000:2004:b0:486:f9ea:796f with SMTP id ffacd0b85a97d-48e387d65ddmr4932292f8f.41.1792776554351;
+        Fri, 23 Oct 2026 10:29:14 -0700 (PDT)
 Received: from dev-dsk-fgriffo-1c-93421965.eu-west-1.amazon.com (54-240-197-234.amazon.com. [54.240.197.234])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a30764e9e7sm17932475e9.2.2026.10.23.10.23.47
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3d4144f8sm1120262f8f.41.2026.10.23.10.29.12
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 23 Oct 2026 10:23:48 -0700 (PDT)
+        Fri, 23 Oct 2026 10:29:13 -0700 (PDT)
 From: Fred Griffoul <griffoul@gmail.com>
 To: Ackerley Tng <ackerleytng@google.com>
 Cc: Alex Williamson <alex@shazbot.org>,
@@ -156,12 +156,12 @@ Cc: Alex Williamson <alex@shazbot.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH RFC v2 31/50] KVM: guest_memfd: Support getting PFNs for stage 2 from providers
-Date: Fri, 23 Oct 2026 17:23:47 +0000
-Message-ID: <20261023172347.88443-1-griffoul@gmail.com>
+Subject: Re: [PATCH RFC v2 34/50] KVM: guest_memfd: Skip checking outstanding references in PFN mode
+Date: Fri, 23 Oct 2026 17:29:11 +0000
+Message-ID: <20261023172911.17557-1-griffoul@gmail.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261022-gmem-alternative-providers-v2-31-5dd1dc6c660a@google.com>
-References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com> <20261022-gmem-alternative-providers-v2-31-5dd1dc6c660a@google.com>
+In-Reply-To: <20261022-gmem-alternative-providers-v2-34-5dd1dc6c660a@google.com>
+References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com> <20261022-gmem-alternative-providers-v2-34-5dd1dc6c660a@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -173,23 +173,23 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-> +	int (*get_pfn)(void *provider, pgoff_t index, unsigned long *pfn,
-> +		       int *max_order);
+> +		if (!kvm_gmem_is_pfn_mode(gi) &&
+> +		    kvm_gmem_has_outstanding_references(inode, start, nr_pages,
+> 							err_index)) {
 
-Should get_pfn() also return attributes of the frame? Only the provider
-knows them, and every mapping of the frame has to follow them. Two
-examples:
+In folio mode this check is also what guarantees that a private page
+belongs to the guest alone. In PFN mode there is nothing like it: if
+the provider also exposes the frame somewhere else, say a ring shared
+with a device, the VMM can still make it private.
 
-- Read only. A provider may lend a page that the guest can read but not
-  write. I know you dropped this from the sample to keep things simple,
-  but without it guest_memfd maps every frame writable, and there is no
-  other way to make a guest_memfd page read only.
+And it is not only this guest that suffers then. Whoever else uses the
+frame breaks: an RMP fault on SEV-SNP, a poisoned page or a machine
+check on TDX, a granule protection fault on CCA, or, with
+SW_PROTECTED, silent access to "private" memory.
 
-- Aliased. The frame is also reachable somewhere else, e.g. a ring
-  shared with a device. Such a frame must not become private; see my
-  reply to 34/50.
-
-A u32 of flags, with 0 for today's behaviour, would cover both and
-leave room for more later.
+Only the provider knows about such frames. With an attributes output
+from get_pfn() (see my reply to 31/50), it could flag them as aliased,
+and guest_memfd would keep them shared: refuse the conversion, treat a
+private fault as a hole, and refuse populate.
 
 Fred
