@@ -1,65 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792725333;
-	b=AbayQRtXV/I/w7RDnKR2yDf7rq2mBMsPrqb+PZLZ0ICIkxxE8IEJhfXeXmq7BX/YGQgu
-	 PKZlokASnJrUOSUSECgUWKDFc6TD9qCXYQLy4ZJkLgd7mqMAtiVYI6B+LR6I0q2V3L7Pf
-	 74Z9rol6W6KvrHboceDLDKCCokkVdGBjWFYQAN49dB1fROt/LLh4Mnhtb9QJYhETnRVKN
-	 4i3becev1k03mwzAaT+IIdDGsVqgYG7Uu+UecvrMZOTPX+nUgM8Fdb7DLoNXqAjtee9AM
-	 vfMK5oKTWf20T/TCfalFSkCnSNK0TqxaKS7A/kvG87rH/L1i1iQkY+9WPQlIiSiqzSQ==
+	t=1792726589;
+	b=AI7upyw62pVgfYkgZxLrF/cn3gWpFHQD6G9XuPowKk3vSnZJA3JgT6pJuCWjHSjVnA1I
+	 eQ3/jEXsJYW1qsd9IbSUoSIOucbEVHyxj2MMo91myN+vA/k/5cVN0A+5H4MLsvVFk08gJ
+	 JRCb0GUuYJVkHoBm9HZbiC++BnQslcqBo8EV66VjkJm3/cOE4a7KryMrKxwhk0oFWFGiX
+	 lmDJ3UnUzhywlFG79uS9qZ7ff0YzUd3rcQAcoSNUHYQ+ivx6SjC3f0llHdjgH3+tZuemo
+	 8SlKF4pwrdmQmLS1iQoO1VqPcxIOTZEl4JwQvA426iI9EG8/GnLhnrGR/lFnjidKq7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792725333;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=zVAKIg7XqiPBVNuocH1Hoh+zfouG9OOWB6QRApYQMW8=;
-	b=GBmGmLHJwPyGtVoGzT5w9Lq/UBs+94KShRFVsja0+RQujGOOd393OtEjCtQ2Qeau7kMM
-	 stpOgvLCKZAcIdKzyukUuC4YYNDhryzEc/GUjqX+3m/cjmmVlyjHTlF5it08dGlDrm5EP
-	 Qz/ZRQc6qkMCeCoJbZ8CVJ3+pj2cELv5mVhML3p5yYhQDO74t7MfRkevbSjdYvtswtl+J
-	 5QDhkO5F9NbJM6zW2K5TDHUGPxJgnONCE6P5+yfdS6iy8VxL0G5gITHwqyG788XEjalex
-	 POMUMLcC/MX5aqdWiks6YMZycJ1sn1TQKtBNDdisV4sM2UDY8Pyn1ma8gKvziS5VI8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792726589;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=TOyWCJxiwJNLQOYYjn5OoQEzpRc1jzexLEaKMhuigBQ=;
+	b=PyU/Q+1kLYVweNgDRG9B+xvzpdx4kCujUsGeyHSPFx+bDyraLYrJCQYX+YXMEW9gVJek
+	 joap0Wbz+QDYxbolAdqz1f542U4rUvOvGcM7Ln5OeNvm01wUKr+NXZT4R6vVEI0LMXaZJ
+	 OGQtIw6bpGuAA2MbSmlZD0fTLnYJLpvGGtHTPLiM6Ynkb+1ffWZ+Mcpi7oqnHaxvtex5k
+	 GZywkBpiyeTEgJ6J/cFYM+z/51nlsuWnHF5/TsWCvBEZyH6nEd0JiUV7ack7Xnk1Qrwe2
+	 6unsxSM/+3VC44tABVZJH6vGm1FLt9pdt8rBPbhLGrYorh9exmFUw27sQcc1EY07f2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=R2NEnJGS;
-	arc=none smtp.remote-ip=91.218.175.138
-Received: from mta0.migadu.com (out-138.mta0.migadu.com [91.218.175.138])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=eQkWn0bP;
+	arc=none smtp.remote-ip=220.197.31.5
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A5E606A31D
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 03:15:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1A5E606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD7A606A319;
+	Fri, 23 Oct 2026 03:36:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCD7A606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=R2NEnJGS
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/Zq1baKOLuThcBsVDU3+UzpzigXWioU0C5AmZNp+Tio=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792725331; v=1; x=1793330131;
- b=R2NEnJGShOdOls3InG6FOO0Dcu2OlU3tWm1gORf70l/vvdNfiOpR5So+V/QCQof31KmGXHH9
- BYL9aDOjnGE7mwQM+mh1r45jwmtu1YjbznMnHJiJKan5YJrt/PnKFMovQy827lC3koLFhbg9S7H
- M5ZEzOr6OHhdZNg5q0LOBwGo=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 2050942c7c50d671;
-	Fri, 23 Oct 2026 03:15:26 +0000
-X-Mizu-Trace-ID: 2050942c7c50d671
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 23 Oct 2026 11:15:15 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Xia Yan <yana06070@163.com>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@kernel.org, horms@kernel.org, kuba@kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com, shuah@kernel.org
-Subject: Re: [PATCH net v3 2/2] selftests: net: check veth carrier after
- changing channel counts
-Message-ID: <atrRQzn2prYbF1vF@fedora>
-References: <20261022085842.2527-1-yana06070@163.com>
- <20261022085842.2527-2-yana06070@163.com>
- <atq8yKbnqtLBVucH@fedora>
- <20261023023350.7225-1-yana06070@163.com>
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=eQkWn0bP
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
+	Content-Type; bh=TOyWCJxiwJNLQOYYjn5OoQEzpRc1jzexLEaKMhuigBQ=;
+	b=eQkWn0bPUgQPv1ELrEfu3lZzFnaPNWH/9Km9ESMpFJ0FBoj4YPy4pgfDtxtGqU
+	L39Oa2RHf/WTZxTskjSo/Oy9TVa3D8Z7Ej7P3VcuvH+L3v+fksxGU7WIMEsfX4Ak
+	ARFLsweXifFIIeuMfecSaCZ4dNcc090YGRJWjPwWcIpx8=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgBH2XMN1tpqaj95BQ--.57865S2;
+	Fri, 23 Oct 2026 11:35:42 +0800 (CST)
+From: Xia Yan <yana06070@163.com>
+To: hangbin.liu@linux.dev
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	horms@kernel.org,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	yana06070@163.com
+Subject: Re: [PATCH net v3 2/2] selftests: net: check veth carrier after changing channel counts
+Date: Fri, 23 Oct 2026 11:35:29 +0800
+Message-Id: <20261023033529.8575-1-yana06070@163.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <atrRQzn2prYbF1vF@fedora>
+References: <20261022085842.2527-1-yana06070@163.com> <20261022085842.2527-2-yana06070@163.com> <atq8yKbnqtLBVucH@fedora> <20261023023350.7225-1-yana06070@163.com> <atrRQzn2prYbF1vF@fedora>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,28 +71,20 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261023023350.7225-1-yana06070@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:PCgvCgBH2XMN1tpqaj95BQ--.57865S2
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjTRNb18UUUUU
+X-CM-SenderInfo: p1dqtiawqxiqqrwthudrp/xtbC-A4KkGra1g6vfgAA3R
 
-On Fri, Oct 23, 2026 at 10:33:50AM +0800, Xia Yan wrote:
-> Hi Hangbin,
-> 
-> Thanks for reproducing the issue and reviewing the driver fix.
-> 
-> > Why do you do gro setting in rx/tx set ups?
-> 
-> I included GRO off/on to cover both queue reconfiguration paths.
-> No XDP program is attached in these cases. With GRO on,
-> veth_enable_range_safe() and veth_disable_range_safe() set up or tear
-> down per-RX-queue NAPI instances as the RX queue count changes. With
-> GRO off, those helpers do not need to reconfigure NAPI.
-> 
-> The carrier bug reproduces in both configurations, so the test checks
-> the same carrier state with and without the NAPI resource changes.
+Hi Hangbin,
 
-I mean this doesn't seem related to the carrier on/off (LOWER_UP) issue.
-Or did I miss something?
+You're right. The GRO on/off coverage isn't needed for this carrier
+regression test. I'll drop it in the next revision and keep the
+up/up, up/down and down/up cases, checking carrier after each
+channel change.
 
-Thanks
-Hangbin
+Thanks,
+Xia Yan
+
