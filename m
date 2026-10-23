@@ -1,86 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.84
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792720219;
-	b=sinP4pSls++v+7IryYfhPEfwYSYSruRX1pzjUCnEdLeujwpfsb0qPiSVei8n3NShwk+b
-	 6puz4WNoxXQ/fYuddh1ZiJox9289M6+qZDqAifH4dj9IYMvgd+vwXxwngtlZ4aZhYY8C/
-	 jK9hqfTRkcbMkz1LdDSPOm9o5mNWyHIPbJjhSUc711lOlIvQvzAL4IFu9cZpXjfQYSbvr
-	 tC9cXqJRqjC1owNC7lGOR6i1NINGQSwb4W/sqSwntYcTvfDkAhfg2XoC+kdZTkSrbLQr/
-	 W6hKD/gCR+aKjGaFrnFyHwyJGAo7lAiyqqn+UpxaM/EK+4iCmLGafOwUCw34Wbq1DQg==
+	t=1792720408;
+	b=RUMLGCP5xmeX4TaXNEiEuOJfPtDsVCBl2oJPF0xKPIpIff9K90L3teaR185rwiJ1J1to
+	 zsS7Pi6WqWTqYEVKJhao/VFxViNoj9XmVOkEjrU7NvbWgHmm3/6+AhuRspoOawB8aPcYD
+	 lws9UmmChS0/QK+oV/em+JT9kf0GzM+A0TZIEcpZ7+zMKgusqGqipdHpCwE35fhOjgSgD
+	 pn9zwtaro0Gu1eJKhrarB05ac51lY34LIxkDT1Tcd9cAV/mVS/KAxQ+rn2s8b1U4zRgxR
+	 h7kzBkE5lkQYHO1wItCPonJRQGsldGQ9iQ+1eZK4uBU8k2g8P08ZI1uS+WSGnFuXeBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792720219;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=X468p48PfOB0WmzJ6kNGiEZKtoooeWVaYKhSdbR2LN8=;
-	b=L3ajE6/VnmI3M19FoZsbM9mZOntnRbTJGxvki1H6ir+kCdpMyHXNgm8aXJtnz11EZJyE
-	 wdm04L3F3NEhrycZFe8CjnEKCnEwSlbHgZjmwXdzZUdcwoED9ZhDcv3nrE6oTyqFIIyhS
-	 wqbf2149vhB+huPRIzJ/v/ZUyMUij1n0A4eR6JapNMfMBgSBJqt5S7x7LQNyBjq277MQ7
-	 hXZSHm2Q8jV+OkonJG3RN1/O1jU9JEbaxYpdx12Vxi1Cyiz7RLfc02IdmKiqDaRxnJG8b
-	 O1mkKPW9hCHJzJ7k+3aGKjxdhCjpS9oSJFzAwFlBwL5RYDa4HRnA7DziuAUYXURNtig==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792720408;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=D07eyQXW6CyfYGV/GLKHH76F8XoU44KN7tbJsOmA9ec=;
+	b=Mejay//AZcaB2Vw6ycTmrrAeFznx9p4nNnx0rvty4OKcJO+VPlmtZYV6+aM3VIh9yXdR
+	 c61MErU+R9bBXoOWjYHQNmixWVBOCLv8RiBynUdOzlQdn+qGFJspFOO6qxP7lZNFJzBvq
+	 zFq1Tkcwxl2+31LbUgqn8OFpx5wHTB3bsnBnph4Q2TasaHCrea55iATS5DNiQ3dDyKMdG
+	 VD6KrMWs7yN5MqHqWeS+UHZMxnHdG5t0PKaRoP4wZMqZzd7dD/1Davl31wzLeSf74LZjh
+	 M3afQLoTaobw7pmmebU4G6rPYxie8d5AKH6nO68Jo+AIZDkFsC1yzcTVJEbE3+Bl6Zg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Rp8a0nB0;
-	arc=none smtp.remote-ip=74.125.82.170
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SB7DLNbz;
+	arc=none smtp.remote-ip=95.215.58.84
+Received: from mta1.migadu.com (out-84.mta1.migadu.com [95.215.58.84])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6741A606A31D
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 01:50:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6741A606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28AF606A328
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 01:53:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C28AF606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Rp8a0nB0
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-368581df789so369543eec.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 18:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792720218; x=1793325018; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=X468p48PfOB0WmzJ6kNGiEZKtoooeWVaYKhSdbR2LN8=;
-        b=Rp8a0nB0sJ+TJDR4hlmpgIpdVyGie5oBwLC0PFdydmMtqnyLfTvFup4nWx4OJIpd2D
-         /0nqKXWsIu5jqq4imY11lyfjYev/8OExuK7Q/OxHuhOu+pzzZpTTeTiYx/F49RMSUzmt
-         GccSr96gdC2DqGPOsPztHQgBSqn1ACJig8rztK0kgxx6Gea9Ck+5Xlj61UOtcZIedsp9
-         2K8Mmg1SrottEj+86QdTk9X5iO+xMAXf8q0Rsd1uy/ZXcFhOOPsyHifwcG2ONoxKcfEW
-         CpkDdF+5YUGAXHkpwXQORt34Ay1acS1LK0wiHEEbMpZhAYUW7HX3YNCtZr6OkoJjolGz
-         H5Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792720218; x=1793325018;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=X468p48PfOB0WmzJ6kNGiEZKtoooeWVaYKhSdbR2LN8=;
-        b=lacEuAxGc0pxLWaugCwCrna7eNNOfsV3rHWfRnZ+VR731pZwtXxuKz+0sRarkq8xsT
-         QrfgeNpNoyFpCzoz1BGq1qg5zlUHCQxCxZ1ZWoeTqdj7+ysnYxQ6Iaa/RFPMnBGadJpO
-         gDZJZ6924pAakNHIZyvDwjLimqKiNYC2+vfHqufTtwmhGB0MHnS+tMKF++yoaGgoYIZn
-         KEOSICU/ehijXqs1lNWoeOjZ4CKNhKw7U33K6ZBNDLDxeKjFjns0aBQUGqzVig0NBGI4
-         u3XljzrnKI/kkGxqZgpZKatZSBlHAaczzWgBOHXSx6tFZL96G9axHxkDqb+6ZMQMVNDa
-         A+9Q==
-X-Forwarded-Encrypted: i=1; AKwUvBz9+RdWaSDtJNCb/x1vLm9sVuV1W8zUCy7zTCCdCsTCO5PRgHE72s3gM6L/eqmgpuehKBqAaVnWJoyctEY32/Y=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKVmuJTrad/bI925llGe4/129gkON8fI3+VcnGAziLIDeBo1T4i
-	AMNpSqy3LIBLpmyGrNs1u+nw6+U4llIileRr7Vli+CzPbTiyOztznkj7
-X-Gm-Gg: AYBFou3TE24AgIZPzsfAXVthNMQf0z/HQ4ZRg5XIXspURQ5rp/rUfNSes+k/iDUtSIT
-	UY8mZ/LvEcZbnU4UlNmjeNC92mCQX8SJMWYlgoHWAUNTb7/VOLROk/qQNCB7dSCi5dqxh+9R9HU
-	Qq8gTHYeHd/5Bx6XDfm32DGAmJO5O8wAFXmWfYT2+P/Vz8vbHIKErH6nWKZg5H64SdwrGv6PNPD
-	gXlvwnSNNWIlJQAKXKYHZtTtR6hlIFYqatNrIZxl8KqabFt7aKyw1U8B4jGof26UJhgpflJUILM
-	Xy5oPBVs3tWnc/liz76xOyPLn09RccZFVnV4+PNZb7TI9SvjsE08KpGfmasVX5uuVBffinSQqkC
-	ap2VIBWWXQbxShjVC9su5DjWlhEPOAgQJz05DMVqNP0AHmVo6TM5W++/ghMUXVQQuth4UHv9h9L
-	yuovlp05LmLr3Yhgg+6tDL+AhaE7pVcp8E/HNTStgfVV2bOncrW7L8eCI4QYpdBXwQlBgR5OVF+
-	yRqvnjIBh+H9MlHnaedmldKIeGVpkmc4De5MbzyWdMdSuuBQiM=
-X-Received: by 2002:a05:693c:69c3:b0:368:2c6d:ddfe with SMTP id 5a478bee46e88-368afd86765mr4796119eec.9.1792720218428;
-        Thu, 22 Oct 2026 18:50:18 -0700 (PDT)
-Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369d9c0e60dsm1971091eec.2.2026.10.22.18.50.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 18:50:18 -0700 (PDT)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 23 Oct 2026 09:49:49 +0800
-Subject: [PATCH v2 2/2] kasan/test: cover load_unaligned_zeropad()
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SB7DLNbz
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ERNQcTMDaUHOgt1ezW5NchEKQ3p5W3gtHeKeBSygDso=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792720404; v=1; x=1793325204;
+ b=SB7DLNbzQGdY6heJepkyIeeaXYgjdxfnMhQ33jYud6x20z0l0qP1fqURSHHlcwF9F0exzarz
+ OAXwWqwglOXHhfXHW0ewCg8iV6DmZaPoHADNjnYRN4RZhC8tS4TY8Ht8hPy3FYU5gi6zavnaHvL
+ Sdhc11rX+DrJ4Pxo/OZtbUVc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id cd14fa31b589aab4;
+	Fri, 23 Oct 2026 01:53:24 +0000
+X-Mizu-Trace-ID: cd14fa31b589aab4
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <776306f8-2200-486b-8c43-2b5fd9b5eeb5@linux.dev>
+Date: Fri, 23 Oct 2026 09:53:20 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,113 +58,90 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261023-bug-word-at-a-time-zeropad-kasan-v2-2-be0ecfbae847@gmail.com>
-References: <20261023-bug-word-at-a-time-zeropad-kasan-v2-0-be0ecfbae847@gmail.com>
-In-Reply-To: <20261023-bug-word-at-a-time-zeropad-kasan-v2-0-be0ecfbae847@gmail.com>
-To: Russell King <linux@armlinux.org.uk>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Mark Rutland <mark.rutland@arm.com>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
- "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, 
- Shrikanth Hegde <sshegde@linux.ibm.com>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>, 
- Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
- Marco Elver <elver@google.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
- Alexander Potapenko <glider@google.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-arm-kernel@lists.infradead.org, Kees Cook <kees@kernel.org>, 
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
- linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- kasan-dev@googlegroups.com, linux-mm@kvack.org, 
- Qiliang Yuan <odys.yuan@gmail.com>
-X-Mailer: b4 0.13.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next 2/6] cgroup/cpuset: Properly compute effective xcpus
+ in update_parent_effective_cpumask()
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261022031643.1351877-1-longman@redhat.com>
+ <20261022031643.1351877-3-longman@redhat.com>
+ <c65208d9-aba6-4e9a-affa-4f7cd8794a0c@linux.dev>
+ <a3caf0f6-da89-4b5c-b80f-3baf6c82a2c4@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <a3caf0f6-da89-4b5c-b80f-3baf6c82a2c4@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On architectures with CONFIG_DCACHE_WORD_ACCESS, load_unaligned_zeropad()
-does the word loads of the dcache name compare and of path name
-hashing.
 
-None of the KASAN test cases reads memory through it, so nothing
-noticed that KASAN did not check these loads at all.
 
-Add a case that reads a freed object through load_unaligned_zeropad()
-and expects a report. Skip it with hardware tag-based KASAN, since
-arm64 turns tag checking off for this load:
+在 2026/10/22 23:00, Waiman Long 写道:
+> 
+> On 10/22/26 9:45 AM, Guopeng Zhang wrote:
+>> Hi Longman,
+>>
+>> 在 2026/10/22 11:16, Waiman Long 写道:
+>>> Since the introduction of cpuset.cpus.exclusive in commit
+>>> e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
+>>> compute_effective_exclusive_cpumask() helper which is later renamed to
+>>> compute_excpus() is added to compute the effective xcpus of a partition
+>>> root. However update_parent_effective_cpumask() is not updated in all
+>>> proper places to use the new helper to check if a given cpuset should
+>>> remain a valid partition root. This can cause a cpuset to incorrectly
+>>> remain a valid partition root even if no effective xcpus is left.
+>>>
+>>> Fix that problem by using compute_excpus() to compute the effective xcpus
+>>> into delmask in all cases except partcmd_disable and partcmd_invalidate
+>>> and use it for tasks_nocpu_error() check as well as checking its
+>>> emptiness. This enables us to catch invalid partition root more
+>>> accurately in update_parent_effective_cpumask().
+>>>
+>> I re-tested the repro from the link below on top of this series
+>> (applied on cgroup/for-7.4-fixes), and it still fails:
+>>
+>>    https://lore.kernel.org/all/20261010075947.333549-3-guopeng.zhang@linux.dev/
+>>
+>>    cd /sys/fs/cgroup
+>>    echo +cpuset > cgroup.subtree_control
+>>    mkdir A
+>>    echo 0-7 > A/cpuset.cpus
+>>    echo 0-7 > A/cpuset.cpus.exclusive
+>>    echo root > A/cpuset.cpus.partition
+>>    cat A/cpuset.cpus.partition
+>>    echo 1 > A/cpuset.cpus.exclusive
+>>    cat A/cpuset.cpus.partition
+>>
+>> The last command still shows "root invalid (Parent unable to distribute
+>> cpu downstream)".
+>>
+>> In this case compute_excpus() returns the stale user mask unchanged.
+>> user_xcpus() is gone from update_parent_effective_cpumask(), but the
+>> dependency just moved one level down: the new code calls
+>> compute_excpus(cs, tmp->delmask), and its first line is
+>>
+>>    cpumask_and(excpus, user_xcpus(cs), parent->effective_xcpus)
+>>
+>> Here user_xcpus(cs) is cs->exclusive_cpus, which still holds the old
+>> 0-7 when compute_excpus() runs: update_exclusive_cpumask() publishes
+>> cs->exclusive_cpus only after partition_cpus_change(). Nothing corrects
+>> it either - the sibling trim is skipped as exclusive_cpus is non-empty,
+>> and for a direct child of the root cpuset the intersection with
+>> parent->effective_xcpus is a no-op. So the stale 0-7 mask still reaches
+>> tasks_nocpu_error() and PERR_NOCPUS is set again. Please point it out
+>> if I got the analysis wrong.
+>>
+>> I have rebased my fix on top of this series and the partition recovers
+>> correctly with it applied. Should the fix be folded into this patch,
+>> or is there a better way to fix it? Happy to hear your thoughts.
+> 
+> You are right. My patch series won't fix this particular issue. However, converting an invalid partition back to a valid one is done on a best effort basis. There is no guarantee that it will always happen. Just echo "root" to "cpuset.cpus.partition" again will make it valid again. So it is not a real bug from my point of view. It is just a nice to have feature.
+> 
+Thanks for the explanation. This helps me better understand the
+intended behavior of partition recovery.
 
-  kasan_load_unaligned_zeropad, x86_64, generic KASAN
-  without "word-at-a-time: check the first byte in
-  load_unaligned_zeropad()"                                 FAILED
-  with it                                                   PASSED
-
-Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
----
- mm/kasan/kasan_test_c.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/mm/kasan/kasan_test_c.c b/mm/kasan/kasan_test_c.c
-index b9e167ed5be32..c791512f6fc49 100644
---- a/mm/kasan/kasan_test_c.c
-+++ b/mm/kasan/kasan_test_c.c
-@@ -28,6 +28,9 @@
- #include <trace/events/printk.h>
- 
- #include <asm/page.h>
-+#ifdef CONFIG_DCACHE_WORD_ACCESS
-+#include <asm/word-at-a-time.h>
-+#endif
- 
- #include "kasan.h"
- 
-@@ -1673,6 +1676,26 @@ static void kasan_memcmp(struct kunit *test)
- 	kfree(ptr);
- }
- 
-+static void kasan_load_unaligned_zeropad(struct kunit *test)
-+{
-+#ifdef CONFIG_DCACHE_WORD_ACCESS
-+	char *ptr;
-+
-+	/* The tag check is turned off for this load on arm64 with MTE. */
-+	KASAN_TEST_NEEDS_CONFIG_OFF(test, CONFIG_KASAN_HW_TAGS);
-+
-+	ptr = kmalloc(64, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
-+	kfree(ptr);
-+
-+	OPTIMIZER_HIDE_VAR(ptr);
-+	KUNIT_EXPECT_KASAN_FAIL_READ(test,
-+		kasan_int_result = load_unaligned_zeropad(ptr));
-+#else
-+	kunit_skip(test, "Test requires CONFIG_DCACHE_WORD_ACCESS=y");
-+#endif
-+}
-+
- static void kasan_strings(struct kunit *test)
- {
- 	char *ptr;
-@@ -2264,6 +2287,7 @@ static struct kunit_case kasan_kunit_test_cases[] = {
- 	KUNIT_CASE(kasan_alloca_oob_right),
- 	KUNIT_CASE(kasan_memchr),
- 	KUNIT_CASE(kasan_memcmp),
-+	KUNIT_CASE(kasan_load_unaligned_zeropad),
- 	KUNIT_CASE(kasan_strings),
- 	KUNIT_CASE(kasan_bitops_generic),
- 	KUNIT_CASE(kasan_bitops_tags),
-
--- 
-2.43.0
-
+Thanks,
+Guopeng
