@@ -1,63 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792795641;
-	b=VwIYAj0JYdyBH6IbOfFEN16Ro0S49oNilTPGfq/KbSVW+DWgim5rRFJB1pn7O1AM5cId
-	 K1T3KlZmTuCUj6OvaA3A+2hfPnEh6XJfnXIcQRgknWn2BokAafGeABLQExSzhK6wy1W8f
-	 5DyLvlmJ0LIcqtfvfzOxxY/3F/3qu3NeujvMKn4z/YHZs8Xjlhg/UOFJjoKChT5vKWNEG
-	 Gope7mIh9Ubdnukdg1gclYKfpCAVgH2hCP57/eXIgZXC3ABtfHpRaQ3cBSSsPuKOAaNTj
-	 enXbqNdK15q17iwC0/VRI+OiKG1dHdeKosXRCiY0Iwa6SKDfvgGIAodKgwFC9Qi2/Gg==
+	t=1792797007;
+	b=Mrahb5kIZTpu+pIf7DhlSYfAPOSzaO6X+mUdzz3C8EddxMMJZmbTXfnHzqi36A8Yfbfl
+	 uFPqHZmcJUXkkt7yTSL9vZLVQ+7nCV+Z6b5E2SPhSYPpYmBMK9e+rosBeT2QpENM1PRJf
+	 qJXbC3TiX2Z+BelttcPhbvTFnV8gk/e5oiM5k6D13gfzQaY1LCzqdGwpj6Qho4KqOkBsR
+	 cS6OcU09n1xbRcdRqJKmw67sDKoOS05eiCYI7Ebi66xaMCQ6L1txhWb6HG8YvIcRIxQD2
+	 SR6LdYDcUFa1fgqQoVRL2QvCo/W/8+R6DOQpC9YnBCJiWSxYP6gXX4SwAJHJTh/CwyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792795641;
-	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References;
-	bh=NYqDm/1QvLb9/cOBOgwdPYESEm3xrv+yvgkisJotDv4=;
-	b=4PlmQ5Ae/hPUw+oZacxuDVhU0+NIdaoTKPQZI5HUXcJ88nkUQ+lN/vvcL1YMdhIBwkVv
-	 bhKNX/BxOGYd5v6nd9XJJl+aFb9NBseR1nAHGP/RxOWIj3ANJ6bMrUwKOxMIFe2HPUh4t
-	 ZdSiDDY3NKmzjBU2MD71Z2zlZ5M7uyvyU0prXu28amWySAK3fZUg77UlltB8FCuLAX7M6
-	 jMjCpE3ues7hsfIbfuXFhaQJVn67uAbwCEsQlrnH5mlhtqJ1CIFvyveqvqvqwQtUBc0ed
-	 UpoVayl4tepDAZEY3s0irNv11D06f1bqqx+BRBhkjWL8ytMvBn8emaVAgc1WwtSzxbg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792797007;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=zHM+aLkD38BiAi+MSbLLo5ugg7Hz6jXiVc5/KY4ht3g=;
+	b=HGcHjhpm66MEQkTdezys5SvmY6p2jsFNLGpy5r+YVEzbROrhe3ubRyRShNIkcNRSFeW4
+	 Y/BCURqrTPJRX5R8oM6Prgmmn295UiCobYXhmGD096ni3IKkSQpbTu+R9RJqnX9Zw2cRv
+	 5MgrclrycvzeKAsKQwZlc8ze44nioWBehcd+/czphIZFgEF7URULq5loV295Jt82SDhNJ
+	 hmZyuPvzp8RBX3zh/MqD+hzhe6d/ShaP1k4dvCi549hBy88QBg6fRNFX4EIPrjiKceRO7
+	 N6ovhpPrJG0LWiuyyMgTrmhzweRWKqs/7m2QnAV7lTbl4YMGEnlOdpWUNLeeF63s9Uw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FPXcpDeL;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QgoGoZYP;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A3B606A31A;
-	Fri, 23 Oct 2026 22:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AE5606A31A;
+	Fri, 23 Oct 2026 23:10:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FPXcpDeL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994111F01825;
-	Fri, 23 Oct 2026 22:47:20 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QgoGoZYP
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E7691F01825;
+	Fri, 23 Oct 2026 23:10:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792795640;
-	bh=NYqDm/1QvLb9/cOBOgwdPYESEm3xrv+yvgkisJotDv4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=FPXcpDeLDDUrNjD122pYRGp9vXVSRY9A3Vj2VTwesPT4PstebgEpsheDmXw2k4Z+R
-	 9G1Zmrw51U4tOvPe1zd9V5WOhPXlD21dWUUxtHn+pPKlwoNyAXUQkr2QseEYReunXV
-	 KwL5DZy5bHETzAAmpM/ATU5pojkhoMcx2YVJt4oe/b4nVf3gM7vHpPh+pfC1LWGyTT
-	 8tozX1vMyuO6cNNIKCUcM+GP7fdXRE40GAC6F1+YMgmni6/3KD61v4pMy80bBYqoEY
-	 Xpc+7bYY69s17OszXi3RPaJUogLO63TYUp1kPaeJa0PRkYsx2cZZVSTR/GybijZYQe
-	 2ELfAvmxrnsgA==
-Date: Fri, 23 Oct 2026 12:47:19 -1000
-Message-ID: <a5551d69c989776eeb576456f0056fb9@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
-	Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	sched-ext@lists.linux.dev
-Subject: Re: [PATCH bpf-next v6 0/4] bpf: Fix a struct_ops use-after-free behind a flaky assoc_in_timer test
-In-Reply-To: <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
-References: <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
+	s=k20260515; t=1792797006;
+	bh=zHM+aLkD38BiAi+MSbLLo5ugg7Hz6jXiVc5/KY4ht3g=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=QgoGoZYPi/e6cV2iFUxXOCzmH0Ig5R8L2zq36mgsrRIa59lDrZD1GJPcYsAraJhv9
+	 DQYrP1yPnr1t97yT/kty/z5/kLWjCNY8FkHTdHTVw/BAAbFxYwWbrW6ovcnvxhy6/w
+	 YWkvirEff55h1Qac39FURO/UCYSHhzBhwVRB+qKLv0ezzjd5sAFNBWSBO9QIlUc1OK
+	 rO0KWK1BZb9CIIDMpKSTQQlOmX1UHTEvtkpilvz+IT/nkyoga+vCkwhEAVBOq1eWlI
+	 AV3HDu6X1nZp1M73dsQkFwdqp4nJu3tvIzhnANemKyYc48su/DtDSHFLYBohJHgYwn
+	 /K+I1ppMYVB9Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 44427391B16B;
+	Fri, 23 Oct 2026 23:10:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,25 +52,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] selftests/net: tcp_mmap: remove unused -k option and
+ keepflag
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179279700507.1316845.5519230638747198240.git-patchwork-notify@kernel.org>
+Date: Fri, 23 Oct 2026 23:10:05 +0000
+References: <20261021152658.2618709-1-gthelen@google.com>
+In-Reply-To: <20261021152658.2618709-1-gthelen@google.com>
+To: Greg Thelen <gthelen@google.com>
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, soheil@google.com,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-Hello,
+Hello:
 
-The following is a Claude-generated review.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, Oct 22, 2026 at 04:48:35PM +0800, Qiliang Yuan wrote:
-> grace period of bpf_map_put(), so nothing waits for a prog that reads
-> the association in between.
+On Wed, 21 Oct 2026 08:26:58 -0700 you wrote:
+> Commit aacb0c2e524c ("selftests: net: tcp_mmap must use
+> TCP_ZEROCOPY_RECEIVE") removed the only read of keepflag in child_thread(),
+> leaving the file-scope keepflag variable set by the -k option in main() but
+> never read. This triggers a Clang 23 warning:
+> 
+>   tcp_mmap.c:91:12: error: variable 'keepflag' set but not used
+>   [-Werror,-Wunused-but-set-global]
+> 
+> [...]
 
-sched_ext hits the same use-after-free. Its kfuncs find the scheduler
-through bpf_prog_get_assoc_struct_ops() in scx_prog_sched(), from bpf_timer
-callbacks too, such as central_timerfn() in scx_central. The series fixes
-that as well.
+Here is the summary with links:
+  - [net] selftests/net: tcp_mmap: remove unused -k option and keepflag
+    https://git.kernel.org/netdev/net/c/5536d5553f27
 
-5db69b0fbdc8 ("bpf: Make struct_ops tasks_rcu grace period optional") is in
-the bpf-next-7.4 pull, so the bug lands in 7.4-rc1. Can the fix go through
-bpf for 7.4-rc?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks.
 
---
-tejun
