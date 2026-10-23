@@ -1,40 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=156.224.83.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=94.136.29.106
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792767131;
-	b=yZdD6lVsZSbCyBDZlbNwgn+ejumqQxryBE/Wj/q8cEjng4j37xX07WiAtWKnEY0jVmxZ
-	 rwLo2D4w263IE+9C83RHQE6HInrLMAuSWQWyG6oj6lpI0JMPFqpmOXjLSGjvIzsmWOK9k
-	 F4y0E2sLICqEKcPgNWJorQm35KcASW7ZqR6C9KnFq6CGDneZSKo7Lnbe2DCSZGroAmGwF
-	 eROdzTE0g1Dbw39cXnVXjVSKJwB/hXr8cM2aurho3Z++lKSHyr2BWNb6Mc8xrel/MnFfr
-	 nvJAiFW0hI6KGwqEursPCmlLkl0qCrPG3BglHBxYfgO8ppMVUTwWhdt5py02J5NV3lg==
+	t=1792767442;
+	b=0jbbKa6g1t8BD/LnRg8P9MKnIX6PiYO/oJsNYxum69WzRaomjyiH90gruOn2jQ/gbkDN
+	 lFqFmJslgu9j4VDjk8NozjdfLZPM+98r9uODfJr96M8NYQ3du4n69BFio6GDwBo0SwQvK
+	 GjxqwxOgjcG4XmXGzg1VvjLPYzwvsjcsVn31xk1OMzXu5gCGhsEK+2M+KqZCAH21pB6N6
+	 qeUfgWbMJ+3+se3+xplOLwH1Dh8buuk791OMb3lJ8ZYAGii49qRbXvHf8oPm70zY6YFGW
+	 9s3akYb20ldqGyi5uw9eqjKF4dnz26m0PCD2zHlY690gGcRI0LI2tymKdAUxNTdYdTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792767131;
-	h=DMARC-Filter:Received:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-HM-Tid:X-HM-MType:X-HM-Spam-Status;
-	bh=XSYsF9HWbYppz9Cbcbdfh68sAbHvBzwUOKcY1+7QiNw=;
-	b=cIk3ncuSrRtJsFwt8Ym7ugY8H2mRNmb1xQHUenvybHCH0d1zkCXaRCGvGQZoS+bSNP5k
-	 +fZzDATnO0AWABrj/Jrgav0tVcq+wUPvShVjgMds1cEd9KzjKivgZ67etdrALyt9cYCzt
-	 4futyBumD+o3pndB1V3vZFfPnL8I44QnziSeF43BvPgRnnsN1PUxKALzNeCxk2qmsJFbQ
-	 F8qlnMrRgpWWGtM4L+Hw0bUiE297ejm/xqHgAOyvYu+PpT9ou22ga5K40zkURpnOO3V3B
-	 KgGPF/kvQ231CQBXFvCt1L8iN3CKWUk5BfIDpakcHqOYoiQFFR4T2S4hfxurytMZ5/g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792767442;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:User-Agent:
+	 X-Bm-Milter-Handled:X-Bm-Transport-Timestamp;
+	bh=0lwMOiNkthhctaKLDDOIKiUMr88TjVYuo1oUG7xr05Q=;
+	b=vTcaWNj5Xazf0U6vakZPuJ1cZi6XDeGPTA3msMWlEla9HXTRY3YYwaSoPAfpHGYX2K7x
+	 C3u9IJGNF21+sKQOT6xSLrxAhfBryXP6/Orv5SzzDGjPsDKLq0vfVDH601zQlPlSd8yra
+	 S3oduMUOMtv7rHKZaeQWIVKOBt8J+m/ARvsufu3WPdk/E2oCUteEmCBVq4KNQzfvrnIlg
+	 vRvhKUiOLY+GJjrLxzdoCjpz1zYf87WlvPMLwB0geuDyw/UkjnksT7+XZ8aU1pYuCSoBH
+	 PMHoC7b+aoro5Ksgm/4V0WaIkiOmUBanLoUXWfZaZNRuQt6ar2E7lGSPbc26q+iKXkQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=easystack.cn;
-	spf=pass smtp.mailfrom=easystack.cn;
-	arc=none smtp.remote-ip=156.224.83.43
-Received: from mail-m8343.xmail.ntesmail.com (mail-m8343.xmail.ntesmail.com [156.224.83.43])
+	dmarc=none header.from=proxmox.com;
+	spf=pass smtp.mailfrom=proxmox.com;
+	arc=none smtp.remote-ip=94.136.29.106
+Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A01606A31B;
-	Fri, 23 Oct 2026 14:52:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5A01606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from [IPV6:2409:8a20:e23:2ae4:8810:8f74:8c26:2] (unknown [IPV6:2409:8a20:e23:2ae4:8810:8f74:8c26:2])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 206722931;
-	Fri, 23 Oct 2026 22:51:56 +0800 (GMT+08:00)
-Message-ID: <d39db4fb-e511-440e-9065-72c34a1a295a@easystack.cn>
-Date: Fri, 23 Oct 2026 22:51:56 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8265606A31D;
+	Fri, 23 Oct 2026 14:57:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8265606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
+Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
+	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 81EF440EB5;
+	Fri, 23 Oct 2026 16:57:18 +0200 (CEST)
+Date: Fri, 23 Oct 2026 16:57:16 +0200
+From: Gabriel Goller <g.goller@proxmox.com>
+To: Hannes Laimer <h.laimer@proxmox.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
+	Petr Machata <petrm@nvidia.com>, David Ahern <dsahern@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 0/2] vxlan: keep reserved_bits on changelink
+Message-ID: <att1fackTBBZxPgy@luna.proxmox.com>
+References: <20261023-b4-vxlan-changelink-gbp-v1-0-f0d13951c09b@proxmox.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -44,134 +55,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/7] mm/page_owner: add bpf_iter and kfuncs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- akpm@linux-foundation.org, vbabka@kernel.org, surenb@google.com,
- mhocko@suse.com, brendan.jackman@linux.dev, hannes@cmpxchg.org,
- ziy@nvidia.com, shuah@kernel.org
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
- <DMAURQCKK6CG.10CZ7MFXGJO3V@gmail.com>
-From: "zhen.ni" <zhen.ni@easystack.cn>
-In-Reply-To: <DMAURQCKK6CG.10CZ7MFXGJO3V@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa1693f463b0229kunmd586c24b3116c6
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCTx8fVh0ZS0gYGB8dSUgeHlYVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJT0tCQUMaSUtBHklIQUkaHk9BQ0NKS0FDHUxPQUMYSU
-	1BSVlXWRYaDxIVHRRZQVlPS0hVSktJT09PSFVKS0tVSkJLS1kG
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261023-b4-vxlan-changelink-gbp-v1-0-f0d13951c09b@proxmox.com>
+User-Agent: NeoMutt/20260504
+X-Bm-Milter-Handled: 55990f41-d878-4baa-be0a-ee34c49e34d2
+X-Bm-Transport-Timestamp: 1792767437956
 
-
-在 2026/10/22 06:00, Alexei Starovoitov 写道:
-> On Wed, Oct 21, 2026 at 04:24 AM Zhen Ni <zhen.ni@easystack.cn> wrote:
->> Exposing the same walk to eBPF lets a program filter and aggregate in
->> the kernel and surface only the records it cares about. This series
->> adds that access as a seq_file bpf_iter target and an open-coded
->> iterator.
+On 23.10.2026 13:14, Hannes Laimer wrote:
+> Currently reserved_bits are reset on every changelink. This leads to
+> packets using extensions that were enabled on creation being dropped
+> after a changelink. The first commit describes the problem and
+> solution in more detail and the second just adds a selftest for this.
 > 
-> This is overkill. Two iterators, two kfuncs that print strings,
-> a rewrite of read_page_owner(), a new file and a new header.
+> Signed-off-by: Hannes Laimer <h.laimer@proxmox.com>
+
+Gave it a quick spin in a vng instance, consider:
+
+Tested-by: Gabriel Goller <g.goller@proxmox.com>
+Reviewed-by: Gabriel Goller <g.goller@proxmox.com>
+
+> ---
+> Hannes Laimer (2):
+>       vxlan: keep reserved_bits across changelink
+>       selftests: forwarding: vxlan_reserved: add gbp changelink test
 > 
-
-Thanks for the detailed review and the sketch. I agree with the
-principle that a thin data kfunc would be ideal if it were sufficient,
-but I’d like to explain why the current design ended up this way.
-
-On the two iterator surfaces:
-They aren’t duplicate implementations. Both are thin shells over the
-single page_owner_next_eligible() extracted from read_page_owner(), so
-the eligibility rules exist exactly once. There’s no code redundancy;
-the two iters only differ in access patterns while sharing the same
-underlying iteration logic. This shape is also what Documentation/bpf/
-bpf_iterators.rst prescribes:
-
-When adding a new BPF iterator program, it is expected that similar
-functionality will be added as open-coded iterator for maximum
-flexibility.
-It's also expected that iteration logic and code will be maximally 
-shared and reused between two iterator API surfaces.
-
-On the two “print strings” kfuncs:
-These are things a prog genuinely cannot do on its own. The record only
-carries an opaque stack-depot handle, and resolving it is not reachable
-from BPF. Likewise, the cgroup path is built by cgroup_path() walking
-the kernfs parent chain — a prog has no way to format it. Given the 512-
-byte BPF stack limit, the caller-provides-buffer pattern (as in
-bpf_d_path() and bpf_snprintf_btf()) is the standard shape for this kind
-of kfunc. I agree they could have been mentioned earlier rather than
-left to the diff.
-
-On “a rewrite of read_page_owner()”:
-This is really an extraction of common functions, not a rewrite. Aside
-from the fix for mem-hotplug locking (which addresses a pre-existing bug
-in the debugfs interface), there are no substantial logic changes. It’s
-not a large-scale refactoring.
-
-On the new file and header:
-This is for code clarity — to distinguish the traditional interface from
-the BPF interface and make maintenance easier.
-
-> All that the prog needs from the kernel is the page_owner record
-> of a pfn. That's one kfunc. The walk, the eligibility rules and
-> the filters belong in the bpf prog:
+>  drivers/net/vxlan/vxlan_core.c                           |  2 +-
+>  tools/testing/selftests/net/forwarding/vxlan_reserved.sh | 15 +++++++++++++++
+>  2 files changed, 16 insertions(+), 1 deletion(-)
+> ---
+> base-commit: 734bef548a96e8774d6eef5dfa2026c6edc4e80b
+> change-id: 20261023-b4-vxlan-changelink-gbp-de5e81eed8d1
 > 
->    bpf_for(i, 0, ctx->nr) {
->            pfn = ctx->start + i;
->            if (bpf_page_owner_read(pfn, &po) ||
->                pfn & ((1ul << po.order) - 1))
->                    continue;
->            if (po.pid != pid || bpf_page_cgroup_ino(pfn) != cgrp)
->                    continue;
->            /* add 1 << po.order to a hash map keyed by po.handle */
->    }
-> 
-
-On why the prog can't actually execute it:
-
-1. What range to scan. Where do ctx->start and ctx->nr come from? No
-in-tree iterator context provides them, and a prog cannot derive them:
-min_low_pfn..max_pfn, memblock holes, and offline sections are all
-kernel state. The loop bounds alone require either another kfunc or a
-kernel-side walk — which is exactly what the iter target already is.
-
-2. What makes a page eligible. The alignment test in the sketch is the
-only part the kernel agrees is expressible in a prog. Everything before
-it reads state a prog doesn’t have a handle to: pfn_valid() over
-MAX_ORDER_NR_PAGES areas, pfn_to_online_page() under get_online_mems(),
-skip_buddy_pages(), the PAGE_EXT_OWNER / PAGE_EXT_OWNER_ALLOCATED flags
-in page_ext, and taking the record snapshot inside the RCU window so the
-checked value and the reported value are the same copy.
-
-3. The walk is deliberately lockless, so exposing struct page to the
-prog is not safe. The pfn validity check and the page_ext dereference
-must happen under the same kernel-controlled RCU window. Otherwise the
-prog could observe offlined pages or stale page_ext data, breaking
-consistency between the check and the snapshot. Keeping the walk in the
-kernel guarantees that the page_owner record is read atomically with
-respect to mem-hotplug and RCU protection.
-
-4. One record doesn’t give the prog the useful data. The record holds
-only opaque handle/free_handle tokens; stack-depot resolution exists
-solely in the kernel. The memcg is neither in the record nor trivially
-reachable — the path is built by cgroup_path() walking the kernfs parent
-chain. The NUMA node comes from page_owner_get_nid(), which bypasses
-page_to_nid()’s poison check. And so on.
-
-
-Thanks again for pushing on this. I’m still concerned that the sketch
-may not be workable in practice, and that it would also lose some useful
-capabilities. I hope the above clarifies the reasoning. Happy to discuss
-further.
-
-
-
-Thanks,
-Zhen
+> Best regards,
+> --  
+> Hannes Laimer <h.laimer@proxmox.com>
 
