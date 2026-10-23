@@ -1,68 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792740008;
-	b=2gmXX57jcZ+MoBdH9PisqgWk7ljZszPUJBpAVSnRZ+NF09HyRb1gjbU5IVbZhmG0jf+N
-	 LwfiBBLtbXncoMu8//6Y3gY9NvQuuLhgc3WuV3ma08iDubMJwy3+jXodO8TaICBl758BE
-	 m3QHCr4ga3puyXnjcQUvGaWp/T1g7ei/Acg+eBMcOxw+NIYz+KckxWr4EONdmgGMD0UAn
-	 l/ghfHtvZdB3m4oRRKqLcQUR5fY0haOyH+2x8SOmTfQRaR6MAXeqWFqYAZKagfKCsUFNG
-	 niVLTHqJ5+AfAmyodOyiUzdxFtYAztZg2uoMiQ847G6izzTTKLGwf+weiINjzMHxFig==
+	t=1792740461;
+	b=So7I5F0UEC5zcD2VQqmBEfleEHlLsZzvcXPw+ZRInPyM+IBsE1BVc5hWZh+QVKix3DEm
+	 L1R5PT2iW7v2+mSwRVa814aZElsKIU4h0yfbVj+UlOCDMOvMGkOL/MHctbI4ylMxg80R+
+	 4VKOR3jiO7fmtP+lb9JFvel2aeSnbVSIrJOmaqj/KyQ3zYLSBwW+UYxcGvUxDRmTkemxk
+	 FDB2vVRQex05xMRqw3cFQCAV8uybZjINcjFfg9zbaDlpZ661UK769EpBfQbI81Y5Lu1th
+	 9FxKPjiDBPO7LmdeLAeOGXQ0akiMw05rcdknnyCXyKkba9PCWFwk9huasGPMYG03Isw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792740008;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=DBIigRwOmB3mzDWu/BG0DQ3cCq9erW6+W+oz6DRhxbQ=;
-	b=T9aKQitNFwaSdmZ76fCddElU0YpXVFv7XpZ1KEFfyU2KNrrdowtxkHI7kvkq9McXkfGH
-	 Boqy52CjMU5K2u8v43sK8WuajXUb1AWA9icROiHzQL/8whD7kZoaHIa5GtHvu9YuwpFwV
-	 YHfq9+Oya9AjdrWEeZtwSQ8PKGTwm9R3o5APz9964+ulXniSJ4vGmLi1C3rT4EI55DIeU
-	 MZ9NipnHw2OmFvfMfQzAt8ckT+w9ClUKnu5QGpXPsz16Qc7k0ZGRGpjmzoFsYGNU+gS3g
-	 i7ssEEhQeGmNrEc5C5xjqYt/NJ07x6Md0/85Lo+EZ8e80YLKctDI4GCknB0BpFbIoAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792740461;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=Bt3g7cG/T+dUsUClX1/GlTBepGeumJSA4Ti6aIN23uo=;
+	b=EH1H+xSx7fHy/MTJsYIB5s2TwZGR/Bkcg966SbRIUEAbnAaAgE4b/ClxIsAWXtqE3NkP
+	 kKnxn18Xl9BF8/MM5rytZad9mNmS43XN8jmHFgfbXt9CEAOT08fchNgxWIc8Mdyquc+ct
+	 dKp6R0dJC++aIqWn/iKqKtwrvBASVyJfWG2WrI2kscWRdBPqjRMHMcbK8sUuR0hln0mHj
+	 CyQkshFT1fpt0UJM4bsPmOHfZusW//OO2fxLEuVSCGCbdirh5VC4kq3eVmXmh+/6+oh1W
+	 IQogHC+0wE6SLPOdkfHHxlthW2mpUk/YaToadYWCzVDdkdXqRrhopekXo59xbZItlsA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ii5evdw4;
-	arc=none smtp.remote-ip=198.175.65.14
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WFM7byuF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F4E606A31A;
-	Fri, 23 Oct 2026 07:20:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1F4E606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 302DA606A31A;
+	Fri, 23 Oct 2026 07:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ii5evdw4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792740007; x=1824276007;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rRh9ZEz2g8+VK7Li/T7iOfryrSAg1VQ9stT0b/ftOU8=;
-  b=ii5evdw4AT95YEQREfVzy/9GUeUTLbKT6oT5VsjK7rN1k67H1tCdWwDv
-   fy3SxvqFcLnuvz/Fw4GoUR3fpRwBPoqhhtbpOWFwExTENKDjTwgjRkrb9
-   CZVOz7BJ/HHeRcurxLcrL4V8zGJwCWTbsIn8SVPqGonhO+Y2qj9WwfWH5
-   +lZkWXup5p4WG7NON05g0AFpZqnmCnanzHBdoaHdKfpOlrq5zNesZNnW8
-   9ICQ7FSZgrpn5zGk26BL6sa25wsKN4mOZ7Y6u1iIOofAgFl0v0Qrf3VbL
-   /zLo0OYlzHW33TO3tPWUxD7JUNN2kDjFi7vXq0gJ/veMbeI11zBhWDkcP
-   g==;
-X-CSE-ConnectionGUID: BSF8oZ4UT1KAHO+cPTrQgg==
-X-CSE-MsgGUID: bo8n8MHcTw6v7w3mjWFOLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11943"; a="1372831"
-X-IronPort-AV: E=Sophos;i="6.27,173,1787036400"; 
-   d="scan'208";a="1372831"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2026 00:20:07 -0700
-X-CSE-ConnectionGUID: VTopvUN2QhyUpAaTN2kSFg==
-X-CSE-MsgGUID: 1lnYNjwSSN2J1gdWxYXDxQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,173,1787036400"; 
-   d="scan'208";a="3516182"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2026 00:19:59 -0700
-Message-ID: <d742f446-4632-4d15-a6ca-9d0ba144b223@linux.intel.com>
-Date: Fri, 23 Oct 2026 15:19:57 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WFM7byuF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431B21F01825;
+	Fri, 23 Oct 2026 07:27:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792740460;
+	bh=Bt3g7cG/T+dUsUClX1/GlTBepGeumJSA4Ti6aIN23uo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WFM7byuFQdos23jYHwQymyRwbRbvu75+SI/zKK8InCuKcALgXefCam3Za1Y07BB6U
+	 hfjcZn2WFoeiPIASjFpKdRRJs+pN9vCM5FO0F7iSI0MxXzzuQZJ6CDAH75XMWqGuE6
+	 TS1ZpsNdBzCZa6cQgbHeHsmefjZjPZgK4LTiqnRlwY1vNTa/ZdJR9LVZmxiN4KgQnt
+	 fyANJ2q9zjO8IjNlUzyPigxGxn777U28odFuRL88K4pGWBPtpYdjI112Meu7iyluLE
+	 OY7ikHMpBdvVG/zGUkcSVJuRizhgtD1IT1MKrjitJzZWI4VPThgMuvyoXZz1wjQH0j
+	 rC+7m5c659BRQ==
+Date: Fri, 23 Oct 2026 10:27:33 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org,
+	akpm@linux-foundation.org, linux-mm@kvack.org, vipinsh@google.com,
+	linux-kernel@vger.kernel.org, dmatlack@google.com,
+	kexec@lists.infradead.org, pratyush@kernel.org, graf@amazon.com
+Subject: Re: [PATCH v2 1/2] liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl
+ to freeze sessions early
+Message-ID: <atsMZW4ChOWj7Lqv@kernel.org>
+References: <20261020144710.4154339-1-pasha.tatashin@soleen.com>
+ <20261020144710.4154339-2-pasha.tatashin@soleen.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,148 +61,292 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 07/28] KVM: VMX: Initialize VMCS FRED fields
-To: Sohil Mehta <sohil.mehta@intel.com>, kvm@vger.kernel.org, x86@kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
- <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Andrew Cooper <andrew.cooper3@citrix.com>,
- Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
- Shivansh Dhiman <shivansh.dhiman@amd.com>,
- David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
- Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
- David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260911213659.2025974-1-sohil.mehta@intel.com>
- <20260911213659.2025974-8-sohil.mehta@intel.com>
-From: Binbin Wu <binbin.wu@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <20260911213659.2025974-8-sohil.mehta@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261020144710.4154339-2-pasha.tatashin@soleen.com>
 
-On 9/12/2026 5:36 AM, Sohil Mehta wrote:
-> From: "Xin Li (Intel)" <xin@zytor.com>
+On Tue, Oct 20, 2026 at 10:47:03AM -0400, Pasha Tatashin wrote:
+> Currently, LUO sessions are frozen automatically only inside the
+> reboot(LINUX_REBOOT_CMD_KEXEC) pathway, where luo_session_serialize()
+> iterates through all outgoing sessions under global write locks and
+> freezes them serially during shutdown. Allowing userspace to decide when
+> to freeze a session once it is done with it (and to freeze multiple
+> sessions in parallel, since luo_session_freeze() only acquires the
+> per-session mutex) avoids postponing this work to kexec shutdown and
+> reduces blackout time.
 > 
-> Initialize host VMCS FRED fields with host FRED MSRs' value and
-> guest VMCS FRED fields to 0.
+> Introduce LIVEUPDATE_SESSION_FREEZE on session file descriptors to freeze
+> a session early. The ioctl runs .freeze() across all preserved files in the
+> session and serializes their metadata. Once frozen, no additional files can
+> be added to the session, and subsequent freeze calls return -EBUSY. Freeze
+> is only valid on outgoing sessions and returns -EINVAL on incoming ones.
 > 
-> FRED CPU state is managed in 9 new FRED MSRs:
->         IA32_FRED_CONFIG,
->         IA32_FRED_STKLVLS,
->         IA32_FRED_RSP0,
->         IA32_FRED_RSP1,
->         IA32_FRED_RSP2,
->         IA32_FRED_RSP3,
->         IA32_FRED_SSP1,
->         IA32_FRED_SSP2,
->         IA32_FRED_SSP3,
-> as well as a few existing CPU registers and MSRs:
->         CR4.FRED,
->         IA32_STAR,
->         IA32_KERNEL_GS_BASE,
->         IA32_PL0_SSP (also known as IA32_FRED_SSP0).
+> During kexec, sessions that were already frozen early are skipped, while
+> sessions that did not invoke this ioctl auto-freeze as before. If an
+> early-frozen session is released before kexec, its files are rolled back
+> via .unfreeze() before being unpreserved.
 > 
-> CR4, IA32_KERNEL_GS_BASE and IA32_STAR are already well managed.
-> Except IA32_FRED_RSP0 and IA32_FRED_SSP0, all other FRED CPU state
-> MSRs have corresponding VMCS fields in both the host-state and
-> guest-state areas.  So KVM just needs to initialize them, and with
-> proper VM entry/exit FRED controls, a FRED CPU will keep tracking
-> host and guest FRED CPU state in VMCS automatically.
-> 
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
-> Reviewed-by: Chao Gao <chao.gao@intel.com>
-> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 > ---
-> v10:
->  - s/rdmsrl/rdmsrq (Chao)
->  - Remove a terse comment which doesn't help at all (Sean).
->  - Replace direct, raw use of __this_cpu_ist_top_va() with a self-
->    explanatory this_cpu_fred_rsp() helper for better readability (Sean).
->  - Add cpu_feature_enabled(X86_FEATURE_FRED) to patch out accesses to
->    VMCS FRED fields (Sean).
->  - Remove "#ifdef CONFIG_X86_64" after switching to this_cpu_fred_rsp()
->    (Sean).
-
-[...]
-
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 2a2218e0983b..dc80ca5f804d 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -1562,6 +1562,12 @@ void vmx_vcpu_load_vmcs(struct kvm_vcpu *vcpu, int cpu)
->  				    (unsigned long)(cpu_entry_stack(cpu) + 1));
->  		}
+>  include/linux/liveupdate.h       |  3 +-
+>  include/uapi/linux/liveupdate.h  | 25 ++++++++++
+>  kernel/liveupdate/luo_file.c     | 73 +++++++++++++---------------
+>  kernel/liveupdate/luo_internal.h |  9 ++--
+>  kernel/liveupdate/luo_session.c  | 82 +++++++++++++++++++++++++-------
+>  mm/memfd_luo.c                   |  5 +-
+>  6 files changed, 134 insertions(+), 63 deletions(-)
+> 
+> diff --git a/include/linux/liveupdate.h b/include/linux/liveupdate.h
+> index 6051abc0612c..851692571e13 100644
+> --- a/include/linux/liveupdate.h
+> +++ b/include/linux/liveupdate.h
+> @@ -59,7 +59,8 @@ struct liveupdate_file_op_args {
+>   *                compatible with the given file.
+>   * @preserve:     Required. Performs state-saving for the file.
+>   * @unpreserve:   Required. Cleans up any resources allocated by @preserve.
+> - * @freeze:       Optional. Final actions just before kernel transition.
+> + * @freeze:       Optional. Prepares final state before kexec (via
+> + *                LIVEUPDATE_SESSION_FREEZE or during reboot).
+>   * @unfreeze:     Optional. Undo freeze operations.
+>   * @retrieve:     Required. Restores the file in the new kernel.
+>   * @can_finish:   Optional. Check if this FD can finish, i.e. all restoration
+> diff --git a/include/uapi/linux/liveupdate.h b/include/uapi/linux/liveupdate.h
+> index 4043d4038712..1644c502521e 100644
+> --- a/include/uapi/linux/liveupdate.h
+> +++ b/include/uapi/linux/liveupdate.h
+> @@ -60,6 +60,7 @@ enum {
+>  	LIVEUPDATE_CMD_SESSION_RETRIEVE_FD = 0x41,
+>  	LIVEUPDATE_CMD_SESSION_FINISH = 0x42,
+>  	LIVEUPDATE_CMD_SESSION_GET_NAME = 0x43,
+> +	LIVEUPDATE_CMD_SESSION_FREEZE = 0x44,
+>  };
 >  
-> +		if (cpu_feature_enabled(X86_FEATURE_FRED) && kvm_cpu_cap_has(X86_FEATURE_FRED)) {
+>  /**
+> @@ -236,4 +237,28 @@ struct liveupdate_session_get_name {
+>  #define LIVEUPDATE_SESSION_GET_NAME					\
+>  	_IO(LIVEUPDATE_IOCTL_TYPE, LIVEUPDATE_CMD_SESSION_GET_NAME)
+>  
+> +/**
+> + * struct liveupdate_session_freeze - ioctl(LIVEUPDATE_SESSION_FREEZE)
+> + * @size:     Input; sizeof(struct liveupdate_session_freeze)
+> + * @reserved: Input; Must be zero. Reserved for future use.
+> + *
+> + * Freezes the session early from userspace before the reboot kexec phase.
+> + *
+> + * When this ioctl is called, the kernel executes the .freeze() callback on all
+> + * preserved files in the session and serializes their metadata. Once frozen,
+> + * no further files can be preserved in the session.
+> + *
+> + * During the subsequent reboot kexec, this session is recognized as already
 
-Nit:
-I was wondering why cpu_feature_enabled(X86_FEATURE_FRED) was needed for a while.
-Sorry I missed the version history :(
+Nit: kexec reboot
 
-This seems to be the first time this cpu_feature_enabled() && kvm_cpu_cap_has() combination is used,
-maybe have a mention in the changelog?
-
-> +			vmcs_write64(HOST_IA32_FRED_RSP1, this_cpu_fred_rsp(FRED_STACK_LEVEL_1));
-> +			vmcs_write64(HOST_IA32_FRED_RSP2, this_cpu_fred_rsp(FRED_STACK_LEVEL_2));
-> +			vmcs_write64(HOST_IA32_FRED_RSP3, this_cpu_fred_rsp(FRED_STACK_LEVEL_3));
-> +		}
+> + * frozen and is skipped from the late auto freeze.
+> + *
+> + * Return: 0 on success, negative error code on failure.
+> + */
+> +struct liveupdate_session_freeze {
+> +	__u32		size;
+> +	__u32		reserved;
+> +};
 > +
->  		vmx->loaded_vmcs->cpu = cpu;
+> +#define LIVEUPDATE_SESSION_FREEZE					\
+> +	_IO(LIVEUPDATE_IOCTL_TYPE, LIVEUPDATE_CMD_SESSION_FREEZE)
+> +
+>  #endif /* _UAPI_LIVEUPDATE_H */
+> diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+> index a39992da504f..7f79890beb31 100644
+> --- a/kernel/liveupdate/luo_file.c
+> +++ b/kernel/liveupdate/luo_file.c
+> @@ -31,9 +31,9 @@
+>   *   - unpreserve(): Cleans up any resources allocated by .preserve(), called
+>   *     if the preservation process is aborted before the reboot (i.e. session is
+>   *     closed).
+> - *   - freeze(): A final pre-reboot opportunity to prepare the state for kexec.
+> - *     We are already in reboot syscall, and therefore userspace cannot mutate
+> - *     the file anymore.
+> + *   - freeze(): Prepares the final state for kexec. Invoked either early via
+
+Nit: I'd drop "early", it seems relevant only to the current change, but
+will be more confusing than useful later.
+
+> + *     the LIVEUPDATE_SESSION_FREEZE ioctl once userspace is done modifying
+> + *     the session's files, or during the reboot() syscall.
+>   *   - unfreeze(): Undoes the actions of .freeze(), called if the live update
+>   *     is aborted after the freeze phase.
+>   *   - retrieve(): Reconstructs the file in the new kernel from the preserved
+> @@ -48,7 +48,8 @@
+>   *    handler, calls its .preserve() operation, and creates an internal &struct
+>   *    luo_file to track the live state.
+>   *
+> - * 2. Freeze (Pre-Reboot): Just before the kexec, luo_file_freeze() is called.
+> + * 2. Freeze (Pre-Reboot): Either explicitly via LIVEUPDATE_SESSION_FREEZE or
+> + *    just before the kexec during reboot(), luo_file_freeze() is called.
+>   *    It iterates through all preserved files, calls their respective .freeze()
+>   *    operation, and serializes their final metadata (compatible string, token,
+>   *    and data handle) into a contiguous memory block for KHO.
+> @@ -74,15 +75,16 @@
+>   *
+>   * 1. Abort Before Reboot: If the userspace agent aborts the live update
+>   *    process before calling reboot (e.g., by closing the session file
+> - *    descriptor), the session's release handler calls
+> - *    luo_file_unpreserve_files(). This invokes the .unpreserve() callback on
+> - *    all preserved files, ensuring all allocated resources are cleaned up and
+> - *    returning the system to a clean state.
+> + *    descriptor), the session's release handler unfreezes the files if the
+> + *    session was already frozen and calls luo_file_unpreserve_files(). This
+> + *    invokes the .unpreserve() callback on all preserved files, ensuring all
+> + *    allocated resources are cleaned up and returning the system to a clean
+> + *    state.
+>   *
+> - * 2. Freeze Failure: During the reboot() syscall, if any handler's .freeze()
+> - *    op fails, the .unfreeze() op is invoked on all previously *successful*
+> - *    freezes to roll back their state. The reboot() syscall then returns an
+> - *    error to userspace, canceling the live update.
+> + * 2. Freeze Failure: During LIVEUPDATE_SESSION_FREEZE or the reboot() syscall,
+> + *    if any handler's .freeze() op fails, the .unfreeze() op is invoked on all
+> + *    previously *successful* freezes to roll back their state, and an error is
+> + *    returned to userspace.
+
+I think we still want to say that freeze failure at reboot cancels live
+update.
+
+>   *
+>   * 3. Finish Failure: In the new kernel, if a handler's .finish() op fails,
+>   *    the luo_file_finish() operation is aborted. LUO retains ownership of
+> @@ -440,12 +442,11 @@ static void __luo_file_unfreeze(struct luo_file_set *file_set,
+>  
+>  /**
+>   * luo_file_freeze - Freezes all preserved files and serializes their metadata.
+> - * @file_set:     The file_set whose files are to be frozen.
+> - * @file_set_ser: Where to put the serialized file_set.
+> + * @file_set: The file_set whose files are to be frozen.
+>   *
+> - * This function is called from the reboot() syscall path, just before the
+> - * kernel transitions to the new image via kexec. Its purpose is to perform the
+> - * final preparation and serialization of all preserved files in the file_set.
+> + * This function is called from LIVEUPDATE_SESSION_FREEZE or from the reboot()
+> + * syscall path. Its purpose is to perform the preparation and serialization of
+
+Nit:                                          ^ final?
+
+> + * all preserved files in the file_set.
+>   *
+>   * It iterates through each preserved file in FIFO order (the order of
+>   * preservation) and performs two main actions:
+> @@ -457,22 +458,20 @@ static void __luo_file_unfreeze(struct luo_file_set *file_set,
+>   *
+>   * 2. Serializes Metadata: After a successful freeze, it copies the final file
+>   *    metadata—the handler's compatible string, the user token, and the final
+> - *    private data handle—into the pre-allocated contiguous memory buffer
+> - *    (file_set->files) that will be handed over to the next kernel via KHO.
+> + *    private data handle—into the pre-allocated serialization blocks
+> + *    (file_set->block_set) that will be handed over to the next kernel via KHO.
+>   *
+>   * Error Handling (Rollback):
+>   * This function is atomic. If any handler's .freeze() operation fails, the
+> - * entire live update is aborted. The __luo_file_unfreeze() helper is
+> - * immediately called to invoke the .unfreeze() op on all files that were
+> - * successfully frozen before the point of failure, rolling them back to a
+> - * running state. The function then returns an error, causing the reboot()
+> - * syscall to fail.
+> + * __luo_file_unfreeze() helper is immediately called to invoke the .unfreeze()
+> + * op on all files that were successfully frozen before the point of failure,
+> + * rolling them back to an unfrozen state, and an error is returned to the
+> + * caller.
+
+Don't you want to say that reboot is canceled here too?
+
+>   *
+> - * Context: Called only from the liveupdate_reboot() path.
+> + * Context: Called from LIVEUPDATE_SESSION_FREEZE or the liveupdate_reboot() path.
+>   * Return: 0 on success, or a negative errno on failure.
+>   */
+> -int luo_file_freeze(struct luo_file_set *file_set,
+> -		    struct luo_file_set_ser *file_set_ser)
+> +int luo_file_freeze(struct luo_file_set *file_set)
+>  {
+>  	struct luo_file *luo_file;
+>  	struct kho_block_set_it it;
+> @@ -506,9 +505,6 @@ int luo_file_freeze(struct luo_file_set *file_set,
+>  		file_ser->token = luo_file->token;
 >  	}
->  }
-> @@ -4500,6 +4506,17 @@ void vmx_set_constant_host_state(struct vcpu_vmx *vmx)
->  	 */
->  	vmcs_write16(HOST_DS_SELECTOR, 0);
->  	vmcs_write16(HOST_ES_SELECTOR, 0);
-> +
-> +	if (cpu_feature_enabled(X86_FEATURE_FRED) && kvm_cpu_cap_has(X86_FEATURE_FRED)) {
-> +		/* FRED CONFIG and STKLVLS are the same on all CPUs */
-> +		vmcs_write64(HOST_IA32_FRED_CONFIG, kvm_host.fred_config);
-> +		vmcs_write64(HOST_IA32_FRED_STKLVLS, kvm_host.fred_stklvls);
-> +
-> +		/* Linux doesn't support kernel shadow stacks, thus SSPs are 0s */
-> +		vmcs_write64(HOST_IA32_FRED_SSP1, 0);
-> +		vmcs_write64(HOST_IA32_FRED_SSP2, 0);
-> +		vmcs_write64(HOST_IA32_FRED_SSP3, 0);
-> +	}
->  #else
->  	vmcs_write16(HOST_DS_SELECTOR, __KERNEL_DS);  /* 22.2.4 */
->  	vmcs_write16(HOST_ES_SELECTOR, __KERNEL_DS);  /* 22.2.4 */
-> @@ -5030,6 +5047,17 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->  	}
 >  
->  	vmx_setup_uret_msrs(vmx);
-> +
-> +	if (cpu_feature_enabled(X86_FEATURE_FRED) && kvm_cpu_cap_has(X86_FEATURE_FRED)) {
-> +		vmcs_write64(GUEST_IA32_FRED_CONFIG, 0);
-> +		vmcs_write64(GUEST_IA32_FRED_RSP1, 0);
-> +		vmcs_write64(GUEST_IA32_FRED_RSP2, 0);
-> +		vmcs_write64(GUEST_IA32_FRED_RSP3, 0);
-> +		vmcs_write64(GUEST_IA32_FRED_STKLVLS, 0);
-> +		vmcs_write64(GUEST_IA32_FRED_SSP1, 0);
-> +		vmcs_write64(GUEST_IA32_FRED_SSP2, 0);
-> +		vmcs_write64(GUEST_IA32_FRED_SSP3, 0);
-> +	}
->  }
->  
->  static void __vmx_vcpu_reset(struct kvm_vcpu *vcpu)
-> @@ -8883,6 +8911,11 @@ __init int vmx_hardware_setup(void)
->  
->  	kvm_caps.inapplicable_quirks &= ~KVM_X86_QUIRK_IGNORE_GUEST_PAT;
->  
-> +	if (cpu_feature_enabled(X86_FEATURE_FRED) && kvm_cpu_cap_has(X86_FEATURE_FRED)) {
-> +		rdmsrq(MSR_IA32_FRED_CONFIG, kvm_host.fred_config);
-> +		rdmsrq(MSR_IA32_FRED_STKLVLS, kvm_host.fred_stklvls);
-> +	}
-> +
+> -	file_set_ser->count = file_set->count;
+> -	file_set_ser->files = kho_block_set_head_pa(&file_set->block_set);
+> -
 >  	return 0;
+>  
+>  err_unfreeze:
+> @@ -519,28 +515,25 @@ int luo_file_freeze(struct luo_file_set *file_set,
+>  
+>  /**
+>   * luo_file_unfreeze - Unfreezes all files in a file_set and clear serialization
+> - * @file_set:     The file_set whose files are to be unfrozen.
+> - * @file_set_ser: Serialized file_set.
+> + * @file_set: The file_set whose files are to be unfrozen.
+>   *
+>   * This function rolls back the state of all files in a file_set after the
+> - * freeze phase has begun but must be aborted. It is the counterpart to
+> - * luo_file_freeze().
+> + * freeze phase has begun. It is the counterpart to luo_file_freeze().
+>   *
+>   * It invokes the __luo_file_unfreeze() helper with a NULL argument, which
+> - * signals the helper to iterate through all files in the file_set and call
+> - * their respective .unfreeze() handler callbacks.
+> + * signals the helper to iterate through all files in the file_set, call their
+> + * respective .unfreeze() handler callbacks, and clear the serialized blocks.
+>   *
+>   * Context: This is called when the live update is aborted during
+> - *          the reboot() syscall, after luo_file_freeze() has been called.
+> + *          the reboot() syscall, after luo_file_freeze() has been called,
+> + *          or when an early-frozen session is released before kexec.
+>   */
+> -void luo_file_unfreeze(struct luo_file_set *file_set,
+> -		       struct luo_file_set_ser *file_set_ser)
+> +void luo_file_unfreeze(struct luo_file_set *file_set)
+
+I went several time back and forth trying to understand why we remove
+*file_set_ser here.
+
+Maybe add a preparation patch that does the renames and moves file_set_ser
+handling?
+
+>  {
+>  	if (!file_set->count)
+>  		return;
+>  
+>  	__luo_file_unfreeze(file_set, NULL);
+> -	memset(file_set_ser, 0, sizeof(*file_set_ser));
 >  }
 >  
+>  /**
+> diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+> index dac6644bfb18..b3fc3dcf5f36 100644
+> --- a/kernel/liveupdate/luo_internal.h
+> +++ b/kernel/liveupdate/luo_internal.h
+> @@ -64,6 +64,8 @@ struct luo_file_set {
+>   *              previous kernel) sessions.
+>   * @retrieved:  A boolean flag indicating whether this session has been
+>   *              retrieved by a consumer in the new kernel.
+> + * @frozen:     A boolean flag indicating whether this session has been
+> + *              frozen early from userspace.
 
+s/early/explicitly
+
+>   * @file_set:   A set of files that belong to this session.
+>   * @mutex:      protects fields in the luo_session.
+>   */
+> @@ -71,6 +73,7 @@ struct luo_session {
+>  	char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+>  	struct list_head list;
+>  	bool retrieved;
+> +	bool frozen;
+>  	struct luo_file_set file_set;
+>  	struct mutex mutex;
+>  };
+
+-- 
+Sincerely yours,
+Mike.
