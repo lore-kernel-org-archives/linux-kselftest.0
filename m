@@ -1,61 +1,43 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=94.136.29.106
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792752004;
-	b=RmF+ex4guTBt1rom7UqxK3zPvfbJh7a9iVv4y146ttIwazHrKCyB3XNzVnlqzWS2saEI
-	 hFFwCN2sILsDumeKm6aynLnLJHJ+b3C64PkBCuQya6Cz0RqBMRUq3iD2XFOta3fmPpD6F
-	 wPwyDXoVpP67iY8h0NIiuW7IMGtv/zJmaV1ME8M/vpi76cg2oUk3X9Pn5/pOnzvmqY/n9
-	 Tg7M1RHB6EiYMJfgpDt/nLi25uVifu7uvutj4rVVFrBKOJgn+rPSx9si6G2qtUvZ3n3dG
-	 8+98L71dXQTmK5e/nV4Zu8HWVa+eNISrrSjh2jT4ZSSVuMk3D0AJEGMRSHW05pKmIYA==
+	t=1792754101;
+	b=IGntRKmNumKbpU/0kjvgj6waZDCPYDorrB11JtLbGvPWknf/2SaCs/Qu0YEuFxMPAJjR
+	 VGEtsdp54Kq28iYYlMjS4+vBipMyL62y288gxGOiB8hBDEAZZivFL8rKJM4t6374AMXgU
+	 CvyBQNPuuSzNMRX3f2y6VRWDCK2Sk6g0RfYI16GBTeIoSR0eG2snokapiMLTLnUaPgQU+
+	 Ua+oYc8guGpL4u3oYzYkNWVikUyStEWrGvbkDSJ9QKdZvqEpkvnFSEW4eTVRW7lh+Drv0
+	 ESPxluLocG6snld3NFyAkGVfApYNzMylys1NKls+SMvm/k3WJjbfha9sSsMaFJMlDsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792752004;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=EyHN7bZEc4KnHTHbjA7noUFJQlM8pFHIuba01Jbwrdg=;
-	b=Cpkp1PbjeW6svs0aEJEv6R/lnelgOiw6sXKJ50m5wNAPa7lS53Fm5N8GyNWwfWZ3WY3M
-	 6on43Q+aA4qEK0jRisbwa6IQVYqqka3Cbe7ULrwusSAAAkJskRjDzhaV+OkC8IaNBp+IS
-	 t0eYp20kBO7mn0/fjjwhx1jgDRfugrH1ZOivwPnnMbVzEDEQpn8Dg8gNd2vTW4Ssgws3T
-	 6UyqSHDtzqWcxCHdfupy78+YfUQDfowAj1hxWp+NN8YXDg0F8WItKVNfBnP2rrBUbfA4w
-	 dUBInxVmOCdMI07kMsGVcE5X2B1KDj09j5r/Og1YEuhjsV3OWjjXF8d/9Q3/bpLaQug==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792754101;
+	h=DMARC-Filter:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Bm-Milter-Handled:
+	 X-Bm-Transport-Timestamp;
+	bh=VJ7iCvRg9RnOJ4Ff3zurHi0KjOzE/lesnjDitUS+xUA=;
+	b=YOYGEBILolEzPAMQmCibVy7a7C768VuuGQDrXmwnVK4rmqHZnkEi6p0PQjRccOPpkn8/
+	 0ER3lrbP9CiOQOTdTnuXnfIrN7SU7SysHb0Qy7IpDSy6Ac2l8mSq8EirBxyxAEolcuf4C
+	 hla7FittnHX9INWR1GSE1OqC5h0tFcmn6sxdsrYVV7ryBeIjRgcck1mUiFQVlxSA470Pg
+	 gR8s402WeQCl9bgrYWDkhErOEWX2Zr+TuYSUty3OYtdTbapVNXA0zjl20e13/CESlSroi
+	 2hg3LFozkWVnURNFgJopkOJLiUAfC7EKzTM9qMldPGykaUhU3PpaEzCmi8fycXT5IqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DM0eF15C;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=proxmox.com;
+	spf=pass smtp.mailfrom=proxmox.com;
+	arc=none smtp.remote-ip=94.136.29.106
+Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C368A606A31D;
-	Fri, 23 Oct 2026 10:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DM0eF15C
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783F71F01825;
-	Fri, 23 Oct 2026 10:40:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792752003;
-	bh=EyHN7bZEc4KnHTHbjA7noUFJQlM8pFHIuba01Jbwrdg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=DM0eF15CrEP/oO3KgrGIQoUN5mKMGnFPUgIQ5b6bcyt3nVP/dT+P6wIWGqer9CbBr
-	 ZcryR5e6QZYqJqdUJutmhomt1Jz0IaHTNCwvvJcQhR8HfaA8rsn0o7Dmd+99HXaY0W
-	 WrFyzOsy22FCpZNmGVyq4kPukOC/FwiPcgwYLKuDNxuR/jm0hNOw3pTyUXZSFkkJeb
-	 Z3OvYv20Phhux2NEqm8R/1UK+O5kwW4KzGGr63wEEB84i0+CPZyG914ui9A62ls4rH
-	 0/DjIAm4uZfaaxwnUH9TMDNY6x7AqKmeaRPJq09B/nBR4Qx7IxNHxJa4gbiZP8sLrO
-	 z88Yr+8jEKcVA==
-Subject: Re: [PATCH net v2 2/2] selftests: net: packetdrill: add test for
- negative sk_forward_alloc in tcp_wmem_schedule()
-From: netdev-bot+sashiko@kernel.org
-To: tavip@google.com
-Cc: edumazet@kernel.org, ncardwell@google.com, kuniyu@google.com,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, willemb@google.com, weiwan@google.com,
- shakeel.butt@linux.dev, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Fri, 23 Oct 2026 10:40:01 +0000
-Message-ID: <179275200199.3134.7814025017986694129@kernel.org>
-In-Reply-To: <20261020163835.4076594-3-tavip@google.com>
-References: <20261020163835.4076594-3-tavip@google.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFB3606A31D;
+	Fri, 23 Oct 2026 11:14:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDFB3606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
+Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
+	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id D62B645DC6;
+	Fri, 23 Oct 2026 13:14:57 +0200 (CEST)
+From: Hannes Laimer <h.laimer@proxmox.com>
+Subject: [PATCH net 0/2] vxlan: keep reserved_bits on changelink
+Date: Fri, 23 Oct 2026 13:14:26 +0200
+Message-Id: <20261023-b4-vxlan-changelink-gbp-v1-0-f0d13951c09b@proxmox.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,155 +47,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJJB22oC/yWM0QqDMBAEf0XuuQcmrSL9ldIHY1Y9laskKoL47
+ 03r4+wyc1BEEER6ZgcFbBLlownMLaOmr7UDi09MNrelye2d3YO3faqVr3sSHblzM3sUqAzgK28
+ o2XNAK/u//CLFQu9rjKsb0Cy/Jp3nF1Fon8uAAAAA
+X-Change-ID: 20261023-b4-vxlan-changelink-gbp-de5e81eed8d1
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
+ Petr Machata <petrm@nvidia.com>, David Ahern <dsahern@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Hannes Laimer <h.laimer@proxmox.com>
+X-Mailer: b4 0.16-dev-4217c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=855; i=h.laimer@proxmox.com;
+ h=from:subject:message-id; bh=8OhAupMg1xmd2XfvSuc1zQ7gZFbk6qz3UedeRwYzeMw=;
+ b=owGbwMvMwCU2e2Iv83RDTSPG02pJDFm3HTf0GG/+8TVoimGPwzb/EpOn6rvWh/lKv1jBLjJlW
+ fzhfbzLOkpZGMS4GGTFFFku2+//Oqt3apzR6c1cMHNYmUCGMHBxCsBEuFUZGRaeFQ5hNNyxPtVK
+ gG0794w5dyffOl9tL/5EcVGNqJLohBqG/6EdBw9+PVCdr58nb8lqwdKa5Tw3OdjSRfeunH9vhNU
+ GZgA=
+X-Developer-Key: i=h.laimer@proxmox.com; a=openpgp;
+ fpr=64D04F905C35D23EBE24D079FA418E647F2175D1
+X-Bm-Milter-Handled: 55990f41-d878-4baa-be0a-ee34c49e34d2
+X-Bm-Transport-Timestamp: 1792754097328
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+Currently reserved_bits are reset on every changelink. This leads to
+packets using extensions that were enabled on creation being dropped
+after a changelink. The first commit describes the problem and
+solution in more detail and the second just adds a selftest for this.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Signed-off-by: Hannes Laimer <h.laimer@proxmox.com>
+---
+Hannes Laimer (2):
+      vxlan: keep reserved_bits across changelink
+      selftests: forwarding: vxlan_reserved: add gbp changelink test
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+ drivers/net/vxlan/vxlan_core.c                           |  2 +-
+ tools/testing/selftests/net/forwarding/vxlan_reserved.sh | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+---
+base-commit: 734bef548a96e8774d6eef5dfa2026c6edc4e80b
+change-id: 20261023-b4-vxlan-changelink-gbp-de5e81eed8d1
 
-- [Medium] In tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_n
-  egative_fwd_alloc.pkt, the new test reports FAIL instead of SKIP when…
-- [Low] The packetdrill config fragment
-  (tools/testing/selftests/net/packetdrill/config line 4) adds…
-- [Low] The init command writes `echo +memory >
-  "${cgroot}/cgroup.subtree_control"` (line 17) on the root of the…
+Best regards,
+--  
+Hannes Laimer <h.laimer@proxmox.com>
 
---
 
-selftests: net: packetdrill: add test for negative sk_forward_alloc in tcp_wmem_schedule()
-
-This patch adds a packetdrill test. The test drives sk->sk_forward_alloc
-negative through tcp_collapse() while sk_wmem_queued is above tcp_wmem[0].
-It then checks that a non-blocking write() under memcg pressure fails with
-EAGAIN, not EFAULT. The runner can now also skip any test whose
-REQUIRES_PAGESIZE does not match the host.
-
-> diff --git a/tools/testing/selftests/net/packetdrill/config b/tools/testing/selftests/net/packetdrill/config
-> index b7df8bf309200..dc3cd72a8da8c 100644
-> --- a/tools/testing/selftests/net/packetdrill/config
-> +++ b/tools/testing/selftests/net/packetdrill/config
-> @@ -1,6 +1,7 @@
->  CONFIG_HZ=1000
->  CONFIG_HZ_1000=y
->  CONFIG_IPV6=y
-> +CONFIG_MEMCG=y
-
-[Severity: Low]
-Should this fragment also add CONFIG_CGROUPS=y?
-
-In init/Kconfig, config MEMCG sits inside the "if CGROUPS" block, and
-menuconfig CGROUPS has no default. If this fragment is merged onto a base
-config with CGROUPS=n, merge_config only prints a warning and MEMCG stays
-off.
-
-In that case the new test fails in its init command and never gets to
-run. For comparison, tools/testing/selftests/cgroup/config lists
-CONFIG_CGROUPS=y next to CONFIG_MEMCG=y.
-
->  CONFIG_NET_NS=y
->  CONFIG_NET_SCH_FIFO=y
->  CONFIG_NET_SCH_FQ=y
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
-> new file mode 100644
-> index 0000000000000..96a5d60a52cb1
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
-> @@ -0,0 +1,117 @@
-
-[ ... ]
-
-> +`set -e
-> +./defaults.sh
-> +ip link set dev tun0 mtu 65535
-> +sysctl -q net.ipv4.tcp_rmem="4096 131072 6291456"
-> +sysctl -q net.ipv4.tcp_wmem="4096 16384 4194304"
-> +cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-> +[ -n "$cgroot" ]
-> +echo +memory > "${cgroot}/cgroup.subtree_control"
-
-[Severity: Medium]
-Will this give a failure instead of a skip when cgroup v2 or the memory
-controller can't be used?
-
-The init command runs under set -e. It aborts, and packetdrill exits
-non-zero, in any of these cases:
-
-  - there is no cgroup2 mount
-  - on hybrid v1/v2 hosts, the first cgroup2 mount is the
-    controller-less /sys/fs/cgroup/unified
-  - the kernel was booted with cgroup_disable=memory
-  - the cgroupfs is read-only or delegated inside a container
-  - the cgroup namespace root already holds processes (EBUSY)
-
-ksft_runner.sh only looks at packetdrill's exit status:
-
-	unshare -n packetdrill ${ip_args[$ip_version]} ${optargs[@]} $script > /dev/null \
-		&& ktap_test_pass $ip_version || $failfunc $ip_version
-
-So any of these cases gives three FAIL results, one for each default IP
-version.
-
-The same patch adds a skip gate for REQUIRES_PAGESIZE. The cleanup
-command already handles a missing mount with:
-
-  [ -n "$cgroot" ] || exit 0
-
-There is no equivalent check for the cgroup prerequisite, though.
-Documentation/dev-tools/kselftest.rst says a test should not make the
-top-level "make run_tests" fail when its feature is unconfigured.
-
-This is also the first .pkt in this directory to use cgroups, so none of
-the other packetdrill tests had this requirement before.
-
-Could the runner or the test detect this case and skip instead?
-
-> +mkdir -p "${cgroot}/pkt_${PPID}"
-> +echo $PPID > "${cgroot}/pkt_${PPID}/cgroup.procs"
-> +`
-
-[ ... ]
-
-> +// Untimed cleanup command executed by packetdrill on both pass and early failure.
-> +`cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-> +[ -n "$cgroot" ] || exit 0
-> +runner_pid=$(awk '/^PPid:/ {print $2}' /proc/$PPID/status)
-> +orig_cg=$(sed -n 's/^0:://p' /proc/$runner_pid/cgroup)
-> +echo $PPID > "${cgroot}${orig_cg}/cgroup.procs" 2>/dev/null || true
-> +echo $$ > "${cgroot}${orig_cg}/cgroup.procs" 2>/dev/null || true
-> +rmdir "${cgroot}/pkt_${PPID}"`
-
-[Severity: Low]
-Does this leave the memory controller enabled in the host's root
-cgroup.subtree_control?
-
-The init command does:
-
-  echo +memory > "${cgroot}/cgroup.subtree_control"
-
-ksft_runner.sh runs the test under "unshare -n" only. That creates a new
-network namespace, but not a new cgroup or mount namespace, so cgroot
-points at the host's real cgroup2 root.
-
-The tcp_rmem and tcp_wmem sysctls are per-netns and go away with the
-netns. The subtree_control change applies to the whole host.
-
-The cleanup moves the processes back and removes pkt_${PPID}. It never
-writes -memory or restores the earlier state.
-
-On systems where memory was not already enabled at the root, such as
-minimal virtme-ng or CI VMs without systemd, memcg would stay enabled for
-all child cgroups after the test exits.
-
-Should the previous subtree_control state be saved and restored here?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261020163835.4076594-1-tavip%40google.com
