@@ -1,61 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792785913;
-	b=bZBd6u8bjIxHLgz0+O2x3Yn2wh4ea1wu2IR2M+Zj7ROQFQ2fO8KantqtE2Hr+mHYKKZk
-	 yRLya8yFF9r8Mck11yFYsygJoiD/4+K3WP9ygHGUsFATT0FxwvwAInZ2afk6SS002JhLF
-	 UKJ6qNUnje+xPBukkEpFsliJa0N162RNnGGpRi2aAsH0z618tqLkj2KACfNSj2xTUxe/O
-	 L5+JUaKuyyiDupW1Q4aJ/euDBZR3dT68ozjS5jaoS0h+W4iPzwKRFS5brLL3ogMYS+6D3
-	 SuvFTVg84C0XPAW4Tw6qBoQiOD8/ZqmA3xPt6TGfQW8DdEUMaZGPTa1qWTYUs2Ag0IA==
+	t=1792788350;
+	b=CM+g+QzB3zaD/gvKl47TJ/svM6VN7rAgg+DoPn6yZuxQHlfgRmXDs63doTEwT8EP2gvm
+	 ikO9Bts2CcbWO2IdjECFiIDyrNUidfqEctKeV2tmrV/6T8m/Y/izgjAxvOz6hRWsRJ3cI
+	 Z5RM0/GwvOtzkLlnn1scSsucl92NQzb8Oo5y2laycbI0syjWppxqDwStxnvPkUKCM3nHS
+	 JoTN4Bx2WMIw4YkF975n66Z7TiXufUcLVaRHW0HVAapKRaRcjxsV7d8nvX6SaEmkUDcPg
+	 h+vRroI0M4pjcXW3EjF9P6kZ4radNlLgq38eVLeXiBNzshTRjPo2AKogKnxf3tyCzcQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792785913;
-	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References;
-	bh=NMpzoe28Li6scyvq7gG95vJno5EdAW6a0YsgQjZX2q0=;
-	b=KeyKytHOSKohge4GEa9yl2C8JQvGIxuGdIo78FrLv+JB0UHtw9yjoRtnkDV/xiOUT7GL
-	 QhW8zuNqwvyY9rOac5jlbBDkNQfT44ElVSNJ8TXn0qxd+lLs+e8SPP8jP4vQCzLstSbka
-	 MQtgS64HiDHXpM4WDjQ71sVH1YyPKIbbwqvBOHB0CA60V2PdUgNPcMc7C0TrtkhMdOz33
-	 DVpa+DLMH8SMXByyxJbqjLOmcLFwhQS0qq/Ux5Os1ARX31rAXO1XzX0n3OzwfuxAwIY2a
-	 uswGChTv7WXviCgHr4N5rl+LobQPAQtcLRH8gSxvgNHMwccCYScmwBsHCzxoz1tXXrQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792788350;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=bFFffzUvgnJue3yyaiYiiCh8qM+TcfI9WgeY9k8g54M=;
+	b=HD9xN4ys9cPEcgAK/0E/efrXyRntLMUxA/Vxfh7k/rcY0rzAue/yFCouSr+zwlb+rJW1
+	 QfdApGAXduNPiL3V+3iCq4nbmqhLhc8K+/D0PLqOOl5/Z0frXVgINtuRsombGLdQ/EJ/p
+	 R6am4OqszGfE66zUn5QDX6aV6zN0kwt965furykH+qx1UHbYY5VKIDtDiU8Y6+T+22PMi
+	 BSDo7+BvHjpl0RnzEGg04zaryROZX1K4rqKsZHCuVwr4LeBLRxBtfeJ4Y49X4xvOh/ejF
+	 CQ6JOCdHkGgBUGwHQKFN7bDhAHG+7p0U/NJrpjZ8g4SGW6OmTS1fAWmKVlwp+m1s44w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BGve7nPZ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=cE+saJg2;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CDE606A31A;
-	Fri, 23 Oct 2026 20:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED41B606A322
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 20:45:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED41B606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BGve7nPZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 813B61F01825;
-	Fri, 23 Oct 2026 20:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792785912;
-	bh=NMpzoe28Li6scyvq7gG95vJno5EdAW6a0YsgQjZX2q0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=BGve7nPZbSwa2LqTQNHByaYKCoffL8elEuhk+jlz/gI5i7hV1ZK7iwu/qtmG9KnfW
-	 qDLQ6u36lWhx7UicKyDcMUNChfBFrWn3JenrDFldoBbRTNPnoVuGnXK7yry9/I+UhS
-	 MWE4pDnSM609ghIOhSw3yImpZyKuDOHWSrhjgRD5US80G6Qkq1oMwCM7PasP4Odoa5
-	 eWESoT+iBiqSqRyLeo/eyLiBZIlzhddfENhxpqe5rRVvDNGrCXD9ZfhommNweBCA6Y
-	 MohZtgivmb5EyOPKL9f0ST9iqF4qVtUezx3RIOK809+Ej3U/6BhD3Jc4as7eFyeM2/
-	 DlEx8t9aemyMg==
-Date: Fri, 23 Oct 2026 10:05:11 -1000
-Message-ID: <100602397eadeaae2e3206e1d9aae55e@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Wilson Felipe Pereira <wfelipe@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Yosry Ahmed <yosry@kernel.org>,
- Nhat Pham <nphamcs@gmail.com>, Chengming Zhou <chengming.zhou@linux.dev>,
- Shuah Khan <shuah@kernel.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>,
- Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/cgroup: convert cg_read_key_*() helpers to s64
-In-Reply-To: <20261022042921.711624-1-wfelipe@google.com>
-References: <20261022042921.711624-1-wfelipe@google.com>
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=cE+saJg2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792788349;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bFFffzUvgnJue3yyaiYiiCh8qM+TcfI9WgeY9k8g54M=;
+	b=cE+saJg2EB7ra5E/CUQA3ryzmZ8hcX87ZdfQ1CkuTKdemzdlcZ2YM68hsSwXHqM5CpuQ8D
+	CHb+KeNds4S18b9+bJdM/ZMdK/Ki6oB8pdopN4Nvkazy83ELcYBzrbID3z+5e4ptkgKrv4
+	J9WAZ0etB4ZmN6smdhXmqgTaH3Eqjfc=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-55-75Gnvlz7Pc20nvVELP8pTA-1; Fri,
+ 23 Oct 2026 16:45:45 -0400
+X-MC-Unique: 75Gnvlz7Pc20nvVELP8pTA-1
+X-Mimecast-MFC-AGG-ID: 75Gnvlz7Pc20nvVELP8pTA_1792788343
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8F2AD1800841;
+	Fri, 23 Oct 2026 20:45:43 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 060071800446;
+	Fri, 23 Oct 2026 20:45:41 +0000 (UTC)
+Message-ID: <8c8f27eb-26af-406e-9766-537dbe9c173a@redhat.com>
+Date: Fri, 23 Oct 2026 16:45:41 -0400
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,75 +70,96 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next 2/6] cgroup/cpuset: Properly compute effective xcpus
+ in update_parent_effective_cpumask()
+To: Guopeng Zhang <guopeng.zhang@linux.dev>,
+ Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261022031643.1351877-1-longman@redhat.com>
+ <20261022031643.1351877-3-longman@redhat.com>
+ <c65208d9-aba6-4e9a-affa-4f7cd8794a0c@linux.dev>
+ <a3caf0f6-da89-4b5c-b80f-3baf6c82a2c4@redhat.com>
+ <776306f8-2200-486b-8c43-2b5fd9b5eeb5@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <776306f8-2200-486b-8c43-2b5fd9b5eeb5@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Hello, Wilson.
+On 10/22/26 9:53 PM, Guopeng Zhang wrote:
+>
+> 在 2026/10/22 23:00, Waiman Long 写道:
+>> On 10/22/26 9:45 AM, Guopeng Zhang wrote:
+>>> Hi Longman,
+>>>
+>>> 在 2026/10/22 11:16, Waiman Long 写道:
+>>>> Since the introduction of cpuset.cpus.exclusive in commit
+>>>> e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
+>>>> compute_effective_exclusive_cpumask() helper which is later renamed to
+>>>> compute_excpus() is added to compute the effective xcpus of a partition
+>>>> root. However update_parent_effective_cpumask() is not updated in all
+>>>> proper places to use the new helper to check if a given cpuset should
+>>>> remain a valid partition root. This can cause a cpuset to incorrectly
+>>>> remain a valid partition root even if no effective xcpus is left.
+>>>>
+>>>> Fix that problem by using compute_excpus() to compute the effective xcpus
+>>>> into delmask in all cases except partcmd_disable and partcmd_invalidate
+>>>> and use it for tasks_nocpu_error() check as well as checking its
+>>>> emptiness. This enables us to catch invalid partition root more
+>>>> accurately in update_parent_effective_cpumask().
+>>>>
+>>> I re-tested the repro from the link below on top of this series
+>>> (applied on cgroup/for-7.4-fixes), and it still fails:
+>>>
+>>>     https://lore.kernel.org/all/20261010075947.333549-3-guopeng.zhang@linux.dev/
+>>>
+>>>     cd /sys/fs/cgroup
+>>>     echo +cpuset > cgroup.subtree_control
+>>>     mkdir A
+>>>     echo 0-7 > A/cpuset.cpus
+>>>     echo 0-7 > A/cpuset.cpus.exclusive
+>>>     echo root > A/cpuset.cpus.partition
+>>>     cat A/cpuset.cpus.partition
+>>>     echo 1 > A/cpuset.cpus.exclusive
+>>>     cat A/cpuset.cpus.partition
+>>>
+>>> The last command still shows "root invalid (Parent unable to distribute
+>>> cpu downstream)".
+>>>
+>>> In this case compute_excpus() returns the stale user mask unchanged.
+>>> user_xcpus() is gone from update_parent_effective_cpumask(), but the
+>>> dependency just moved one level down: the new code calls
+>>> compute_excpus(cs, tmp->delmask), and its first line is
+>>>
+>>>     cpumask_and(excpus, user_xcpus(cs), parent->effective_xcpus)
+>>>
+>>> Here user_xcpus(cs) is cs->exclusive_cpus, which still holds the old
+>>> 0-7 when compute_excpus() runs: update_exclusive_cpumask() publishes
+>>> cs->exclusive_cpus only after partition_cpus_change(). Nothing corrects
+>>> it either - the sibling trim is skipped as exclusive_cpus is non-empty,
+>>> and for a direct child of the root cpuset the intersection with
+>>> parent->effective_xcpus is a no-op. So the stale 0-7 mask still reaches
+>>> tasks_nocpu_error() and PERR_NOCPUS is set again. Please point it out
+>>> if I got the analysis wrong.
+>>>
+>>> I have rebased my fix on top of this series and the partition recovers
+>>> correctly with it applied. Should the fix be folded into this patch,
+>>> or is there a better way to fix it? Happy to hear your thoughts.
+>> You are right. My patch series won't fix this particular issue. However, converting an invalid partition back to a valid one is done on a best effort basis. There is no guarantee that it will always happen. Just echo "root" to "cpuset.cpus.partition" again will make it valid again. So it is not a real bug from my point of view. It is just a nice to have feature.
+>>
+> Thanks for the explanation. This helps me better understand the
+> intended behavior of partition recovery.
 
-The following is a Claude-generated review.
+I did find the reason why your test case isn't working. I have made some 
+adjustment in patch 2 which should make your test case work now with the 
+v2 series.
 
-On Thu, Oct 22, 2026 at 04:28:57AM +0000, Wilson Felipe Pereira wrote:
-> On 32-bit platforms, cg_read_key_long() relies on atol(), which returns a
-> 32-bit signed long. When values in memory.stat or event counters exceed
-> 2.14GB (such as on 32-bit systems with large memory), the parsed value
-> overflows and wraps into negative numbers, leading to subtle bugs and
-> false test failures.
+Cheers,
+Longman
 
-On 32-bit, glibc's atol() saturates at LONG_MAX instead of wrapping:
-atol("3000000000") returns 2147483647. Event counters are counts, not
-bytes. No test reads a value near 2^31 from its cgroups, so the false
-failures are hypothetical. Can the description be updated to match?
-
-cg_read_long() and cg_read_long_fd() still use atol() and return long.
-They read memory.current, memory.peak and the swap counters, which the
-same reasoning covers.
-
-> - Migrate helper functions (get_cg_wb_count(), get_zswpout(),
->   get_zswap_incomp(), wait_for_writeback(), and cg_check_freezetime())
->   and their callers to s64.
-
-In test_freezer.c, only test_cgfreezer_time_empty() is converted.
-test_cgfreezer_time_simple(), _populate(), _migrate(), _parent(),
-_child() and _nested() still store cg_check_freezetime() results in
-long and print them with %ld. In test_cpu.c, overprovision_validate()
-still computes "long delta" from two s64 usage values. A 32-bit build
-with -Wshorten-64-to-32 flags all of these.
-
->     rebased on top of mm-stable to complete the s64 conversion across the
->     cgroup selftests (including updating test_no_kmem_bypass() to s64).
-
-This doesn't apply to mainline. The test_zswap.c hunks depend on the
-test_zswap fixes in mm-stable, which aren't in mainline yet. The
-tcp_client() hunk in test_memcontrol.c conflicts with eb69e955de7b
-("selftests: cgroup: make test_memcg_sock check flushed sock stats"),
-which went in through the cgroup tree for v7.4. Can it be rebased on
-v7.4-rc1 once that's out?
-
-> +typedef signed long long s64;
-
-This is the main problem. The KVM selftests build libcgroup too:
-kvm/Makefile.kvm includes ../cgroup/lib/libcgroup.mk and links
-cgroup_util.o into every KVM test, and access_tracking_perf_test.c
-includes cgroup_util.h. That build uses -I tools/include, and
-tools/include/linux/types.h has "typedef int64_t s64;", which is long
-on 64-bit.
-
-cgroup_util.c then fails with "typedef redefinition with different
-types ('long long' vs 'int64_t' (aka 'long'))", so none of the KVM
-selftests build on 64-bit. Maybe use int64_t with PRId64 from
-<inttypes.h> instead of the local typedef and %lld?
-
-> -
->  	ret = KSFT_PASS;
-
-The blank line removal is unrelated to the conversion, same for the one
-in test_cpu.c.
-
-> +		ksft_print_msg("debug: zswpout=%lld zswapped=%lld zswap_b=%lld\n",
-> +				zswpout, zswapped, zswap_b);
-
-The continuation line was aligned with the opening parenthesis before
-and now isn't.
-
-Thanks.
-
---
-tejun
