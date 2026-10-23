@@ -1,82 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=103.117.158.93
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792759618;
-	b=wJ+vujBORhCuobqWNF59K2SlNH6y6bRnqDYux2PzMNuMEi4BUvwj5wymTWvLq6lRk4tj
-	 4RzUeJKaFyWpGKJHyv3r9cjBfoYUEnfKbO0mI3kBXao+XecqCv9dTYibRYCxm+qzMwobU
-	 nwEbp9/juUqVmADQQMJgt0fWMRhj9tKHC6lkVzRoeqSifplvC8nDIrig/8mEifTi4dPwz
-	 XNE+VTOlCRjtfylWXX4qVHHmMoB2ql+92oziJlKxpMMgD4xjlxeEm1/LxfxWijMWArkpe
-	 n4/Yo6a9QbQqbIathi9rKnDVIhbp/LdYRG1EarpzkZqhW+HlnVykyYLoM3O+z/7Qn/Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792759618;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Importance:User-Agent:X-Mailer;
-	bh=jKGpNzJlpQU9HdMndBuwrQolERcgxUCu0cmVRINNp2w=;
-	b=Bd0+jyZhn025ZG51ijQAhaMQmlLzVtNCni9AhLtla54Tx2ojhk+ISzOdVVPhlQizSVKo
-	 TKeoxUY+d9edBP6899aflkvQT5wYLnrbbqiMWXgpMepnbY5WBYwwo0Im54wDEk+L60pge
-	 Zr1ryAxoUADeKv6s8FSOqxPOpjrsUuXlCYgBulOk0ZebwkTj30OAiG/VamYipknPqmYPv
-	 vHbq4CzwJzvFP8mm3G4efE2G9uKXwLr/QmVMMJEmhdsKJ37wBbr6/xBwZ4ibbIaiWQoE4
-	 fF3rSuy039rjulhHofkS1X5SGtH/SREKFMbBcIc3nDj3kQtsHnp7WPpY8VZILT5/OTQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=zohomail.in;
-	spf=pass smtp.mailfrom=zohomail.in;
-	dkim=pass header.d=zohomail.in header.i=adi.sharma@zohomail.in header.a=rsa-sha256 header.s=zoho header.b=yF34Q8X6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=103.117.158.93
-Received: from sender-pp-o93.zoho.in (sender-pp-o93.zoho.in [103.117.158.93])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792762515;
+	b=tE/QW2DKVWgRpDHwU7+HqhyJHQth4tKiu+re9q028eaFzJ811FTiNZGtLbNTSIKpEb3J
+	 JJSAJ6pt49KQ9EkhTb5JS9Y0A0SjEwfzO13e21rMdkEUIO5LB2DG/37rx1YJY5VUT02hu
+	 D1yIrPmp8PAfv8lua4gRW82OkWegGeYAfmdHJdy96NT5pp+tYJgmazMwa8pWQfI4OaA6L
+	 DcfSMl+5N7hhcGpwUDy+yd6i8Yg6f5hAzzuOwY5LI7WV7yoe+oA91rd/vEAua90NQxTiv
+	 3YRV3OGewGVa3UAIWWRK2+A+ujyhwWizf9zTIH1o8iuU66UtVsu98E63pou0J7hFFAw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792762515;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
+	 X-Spam-Flag:X-Spam-Level:X-Spamd-Result:X-Spam-Score;
+	bh=Cltn9Ed0Zh7jf5AL4S/SU/r3hpPxlGQaFj2fHrN7BPw=;
+	b=JItx2EbY0azAZfh/irZ969v5z3TBdpytZj25JnOtcChVjodzueMe8EWJUhD6BsNerdVg
+	 Rc2k3ThSf1u/Kwr6ERk0ovuAk1xL/U6NLeTEO2jvYGbbIUVfNGAvq89gAgSQjdwytyFRX
+	 ccbCRUCBshrdldh62Tdfsq082m3BsNqe5Xl8HIDmQQ92cTWwdSVkfU8QeL5I2c/jk9/Y/
+	 DTFBJsD1arHeN2kiweltwj97MLwy7a0Ne8NGKSrD94s4/QxQphQVCyNC5Pii7KzkoVLw0
+	 dvqLunw53dLuiZQgy6DkjgTaL/rRek66gMzSqtfulIh8Du5D2T2RQj15OMksrgz/LVA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=1ryBie12;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=cO5xoIez;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=1ryBie12;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=cO5xoIez;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDAF606A322;
-	Fri, 23 Oct 2026 12:46:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FDAF606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.in
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD51B606A31A;
+	Fri, 23 Oct 2026 13:35:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD51B606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.a=rsa-sha256 header.s=zoho header.b=yF34Q8X6
-ARC-Seal: i=1; a=rsa-sha256; t=1792759556; cv=none; 
-	d=zohomail.in; s=zohoarc; 
-	b=TSVDsccwJ0O3wjYlVfv2+Y0kHd55rTVY3I74MKTvKNIJxLY33apzqe576ygeRg5pNSVWYacnbJ4sAJIRFULOv3wPAViB5kWXe/FGh0/TJkEwz6BX12cmU87uTmJh8uhhTa/Z3YUv8CL0occngFqxXA1jfwpHBhPvTogxwt+bnrk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-	t=1792759556; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=jKGpNzJlpQU9HdMndBuwrQolERcgxUCu0cmVRINNp2w=; 
-	b=cQNEi+l9n/mTTg9k2QcHtnJAM/dLgEQa91l3VKKujxKzf+kh6FcxpoQxVTJgpi3Gdv/1VeO/S0CFUCwPE1ik7mP7Zk8GGC06kP+R9VINSpfv+QZlUyQGPc5Zp1Jy1mKsd939LDk+7N3FNr6FyUP5ey/e5tPP0VpYJ15P5WGmRpg=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-	dkim=pass  header.i=zohomail.in;
-	spf=pass  smtp.mailfrom=adi.sharma@zohomail.in;
-	dmarc=pass header.from=<adi.sharma@zohomail.in>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1792759556;
-	s=zoho; d=zohomail.in; i=adi.sharma@zohomail.in;
-	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=jKGpNzJlpQU9HdMndBuwrQolERcgxUCu0cmVRINNp2w=;
-	b=yF34Q8X6zg8/+DSFfmyI9IlpeeeTqpLXoTNXupyvwiRzWO8JlRa55GWzZKqDnr0M
-	uJQ20n7Ilgb0Bi5CiQcaMjBAHExw8riV/EKT62sYPwxC1UIwlHXAKQaTZbron7jMkTH
-	vu5gglNg0QjuxRUChfxcefRMbnrfqGpOJIG3T5x4=
-Received: from mail.zoho.in by mx.zoho.in
-	with SMTP id 1792759554228386.54064309795945; Fri, 23 Oct 2026 18:15:54 +0530 (IST)
-Received: from  [14.139.128.24] by mail.zoho.in
-	with HTTP;Fri, 23 Oct 2026 18:15:54 +0530 (IST)
-Date: Fri, 23 Oct 2026 18:15:54 +0530
-From: Aditya Sharma <adi.sharma@zohomail.in>
-To: "bpf" <bpf@vger.kernel.org>, "andrii" <andrii@kernel.org>
-Cc: "ast" <ast@kernel.org>, "daniel" <daniel@iogearbox.net>,
-	"eddyz87" <eddyz87@gmail.com>, "memxor" <memxor@gmail.com>,
-	"martin.lau" <martin.lau@linux.dev>, "song" <song@kernel.org>,
-	"yonghong.song" <yonghong.song@linux.dev>,
-	"jolsa" <jolsa@kernel.org>, "emil" <emil@etsalapatis.com>,
-	"ihor.solodrai" <ihor.solodrai@linux.dev>,
-	"kpsingh" <kpsingh@kernel.org>, "matt" <matt@bobrowski.net>,
-	"rostedt" <rostedt@goodmis.org>, "mhiramat" <mhiramat@kernel.org>,
-	"mathieu.desnoyers" <mathieu.desnoyers@efficios.com>,
-	"shuah" <shuah@kernel.org>, "puranjay" <puranjay@kernel.org>,
-	"linux-kernel" <linux-kernel@vger.kernel.org>,
-	"linux-trace-kernel" <linux-trace-kernel@vger.kernel.org>,
-	"linux-kselftest" <linux-kselftest@vger.kernel.org>,
-	"Aditya Sharma" <adi.sharma@zohomail.in>
-Message-ID: <1a168cbe0aa.30b7e048183449.4003649852775097641@zohomail.in>
-In-Reply-To: <20261001072449.1377267-1-adi.sharma@zohomail.in>
-References: <20261001072449.1377267-1-adi.sharma@zohomail.in>
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix bpf_send_signal_task() from
- kernel thread context
+	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=1ryBie12;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=cO5xoIez;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=1ryBie12;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=cO5xoIez
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 3917422173;
+	Fri, 23 Oct 2026 13:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1792762513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Cltn9Ed0Zh7jf5AL4S/SU/r3hpPxlGQaFj2fHrN7BPw=;
+	b=1ryBie12y8rEU/qmc9hFaFQk/wQOcPx6AYaPZ2d+CAQen1U0F6gOPWd6Fg/CEfvLWUf2On
+	6cOiXN4PvBPaD6vnnJ3nPuVQ65ua5dfTwbHIjUBQR0vfpiGVHNZ6457E/P9PjNBPC6l8kk
+	UptzIcepkQHc637YaOYqjNiN5dwkbJs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1792762513;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Cltn9Ed0Zh7jf5AL4S/SU/r3hpPxlGQaFj2fHrN7BPw=;
+	b=cO5xoIezBBleQLtD9+usVvsHEHml5CvALxXc4ZRc1D1mr2g7v/T3NLc3GKMUEuHM1pDbkG
+	hr0e9BNDrh/FcyBg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1792762513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Cltn9Ed0Zh7jf5AL4S/SU/r3hpPxlGQaFj2fHrN7BPw=;
+	b=1ryBie12y8rEU/qmc9hFaFQk/wQOcPx6AYaPZ2d+CAQen1U0F6gOPWd6Fg/CEfvLWUf2On
+	6cOiXN4PvBPaD6vnnJ3nPuVQ65ua5dfTwbHIjUBQR0vfpiGVHNZ6457E/P9PjNBPC6l8kk
+	UptzIcepkQHc637YaOYqjNiN5dwkbJs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1792762513;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Cltn9Ed0Zh7jf5AL4S/SU/r3hpPxlGQaFj2fHrN7BPw=;
+	b=cO5xoIezBBleQLtD9+usVvsHEHml5CvALxXc4ZRc1D1mr2g7v/T3NLc3GKMUEuHM1pDbkG
+	hr0e9BNDrh/FcyBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CC61D133F6;
+	Fri, 23 Oct 2026 13:35:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HFwGKJBi22pvUAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 23 Oct 2026 13:35:12 +0000
+Date: Fri, 23 Oct 2026 15:35:12 +0200
+Message-ID: <87ecdga6b3.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: HyeongJun An <sammiee5311@gmail.com>
+Cc: Takashi Iwai <tiwai@suse.com>,
+	Ivan Orlov <ivan.orlov0322@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] selftests: ALSA: pcmtest: Test error injection and pause
+In-Reply-To: <cover.1792660433.git.sammiee5311@gmail.com>
+References: <cover.1792660433.git.sammiee5311@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,21 +114,62 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spamd-Result: default: False [-10.80 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.com,gmail.com,kernel.org,perex.cz,vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -10.80
 
-Hi,
+On Thu, 22 Oct 2026 13:12:41 +0200,
+HyeongJun An wrote:
+> 
+> The pcmtest driver can return errors from its PCM callbacks and
+> supports pause, but the selftest covers neither. This series adds tests
+> for both.
+> 
+> Patch 1 moves the capture data check into a helper, so patch 3 can
+> reuse it. Patch 2 tests each inject_*_err parameter. Patch 3 tests
+> pausing a capture stream.
+> 
+> Tested on x86_64 with the sound/for-next driver, built for a 6.17 host.
+> All 10 tests pass in three runs. To check that the pause test catches
+> real bugs, I loaded two broken drivers. One keeps running on PAUSE_PUSH.
+> The other restarts the data on PAUSE_RELEASE. Only capture_pause fails
+> on each.
+> 
+> HyeongJun An (3):
+>   selftests: ALSA: pcmtest: Move the capture data check into a helper
+>   selftests: ALSA: pcmtest: Test errors from the PCM callbacks
+>   selftests: ALSA: pcmtest: Test pausing a capture stream
+
+JFYI, I postpone merging this for 7.5, as it doesn't look like a
+regression fix.
 
 
-Gentle ping on this series.
+thanks,
 
-Andrii - patch 1 now removes the nmi_uaccess_okay() check entirely, as
-suggested on v1. Is this what you had in mind, or should I change
-something?
-
-Thanks,
-Aditya
+Takashi
