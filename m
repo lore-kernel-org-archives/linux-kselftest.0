@@ -1,51 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=94.136.29.106
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792767442;
-	b=0jbbKa6g1t8BD/LnRg8P9MKnIX6PiYO/oJsNYxum69WzRaomjyiH90gruOn2jQ/gbkDN
-	 lFqFmJslgu9j4VDjk8NozjdfLZPM+98r9uODfJr96M8NYQ3du4n69BFio6GDwBo0SwQvK
-	 GjxqwxOgjcG4XmXGzg1VvjLPYzwvsjcsVn31xk1OMzXu5gCGhsEK+2M+KqZCAH21pB6N6
-	 qeUfgWbMJ+3+se3+xplOLwH1Dh8buuk791OMb3lJ8ZYAGii49qRbXvHf8oPm70zY6YFGW
-	 9s3akYb20ldqGyi5uw9eqjKF4dnz26m0PCD2zHlY690gGcRI0LI2tymKdAUxNTdYdTA==
+	t=1792768472;
+	b=mv/0vdE/JZMavf6f/hlPGtgEoO8Yfw4H23MLCAnHJQRD0sBN71VFtQBX7cI263jqYC+K
+	 EQSziS1HWJRmpmQrbSnO8vohTQmJ8A3FDZIyDwZ1Pnx7xwUnGfiXYSetUMLtyFw41nbQm
+	 xDXsdj24et6LauKAh6qFKRlfXfKD9kZ8tsboZawkn4iJv4FimAy4G+spDqRLXsXcgx33u
+	 zMkpZevZXZ8EWOSOnorOwxt/OevJD5B3Dv9j7bzag/r7E/jMviiLIoSrjNjsKJQAJ5anr
+	 Z9z4YTi8/bmpArZfekpJGQ9xbKnB85NfgdkN7rccMGnhLOPS9FUqV/zT+40WegnNdFA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792767442;
-	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:User-Agent:
-	 X-Bm-Milter-Handled:X-Bm-Transport-Timestamp;
-	bh=0lwMOiNkthhctaKLDDOIKiUMr88TjVYuo1oUG7xr05Q=;
-	b=vTcaWNj5Xazf0U6vakZPuJ1cZi6XDeGPTA3msMWlEla9HXTRY3YYwaSoPAfpHGYX2K7x
-	 C3u9IJGNF21+sKQOT6xSLrxAhfBryXP6/Orv5SzzDGjPsDKLq0vfVDH601zQlPlSd8yra
-	 S3oduMUOMtv7rHKZaeQWIVKOBt8J+m/ARvsufu3WPdk/E2oCUteEmCBVq4KNQzfvrnIlg
-	 vRvhKUiOLY+GJjrLxzdoCjpz1zYf87WlvPMLwB0geuDyw/UkjnksT7+XZ8aU1pYuCSoBH
-	 PMHoC7b+aoro5Ksgm/4V0WaIkiOmUBanLoUXWfZaZNRuQt6ar2E7lGSPbc26q+iKXkQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792768472;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=uYsXVdni1md+83PijIpFoxA8BV79W4PZ5dUTF0szV4w=;
+	b=K2ujy16gR5lOFxjjDdt/FOiFbBlCODzfMufXxlh5Eo7TFqG+cEYWYjkCcUS1NiFzAeLM
+	 iwyCVa3OzuhqahnplJRwpIkb9hDZnbmaQCYVRkeujPkC3U+22vqlqQxCaATzKWWntmK/E
+	 0nkXmId4xjGJ1kCF+UnZcbRgkmPuCzelA2M37M6F5skg9Qkrro4En69zX6CtQ7ShjUeyN
+	 HuppvV7g1uNnsaL+WvkA/v8WudNHhmv2+JRQFnr+HOUu8RoVAV4snA3HA7XTXz6HME3uc
+	 pIcLU8BF4w0qoCxoAwhLVmd2d1VDQUJZG2T/3TKTlWpbtTr3Qrihfjr7fJBqN4wYfew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=proxmox.com;
-	spf=pass smtp.mailfrom=proxmox.com;
-	arc=none smtp.remote-ip=94.136.29.106
-Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CxihBLMX;
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8265606A31D;
-	Fri, 23 Oct 2026 14:57:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8265606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 81EF440EB5;
-	Fri, 23 Oct 2026 16:57:18 +0200 (CEST)
-Date: Fri, 23 Oct 2026 16:57:16 +0200
-From: Gabriel Goller <g.goller@proxmox.com>
-To: Hannes Laimer <h.laimer@proxmox.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
-	Petr Machata <petrm@nvidia.com>, David Ahern <dsahern@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 0/2] vxlan: keep reserved_bits on changelink
-Message-ID: <att1fackTBBZxPgy@luna.proxmox.com>
-References: <20261023-b4-vxlan-changelink-gbp-v1-0-f0d13951c09b@proxmox.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED201606A331
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 15:14:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED201606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CxihBLMX
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-398b3c37877so603277a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 08:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792768471; x=1793373271; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uYsXVdni1md+83PijIpFoxA8BV79W4PZ5dUTF0szV4w=;
+        b=CxihBLMXTDIBn+anE+uCpmjLkrvxoSA3hyKWVjlSCuMnuo82nEdfAGQ9o0g/3LVewC
+         /z4P9NeXyQf/26phPZ6Owm4OtA82QnO3cLGAK8dJzvlbjmc8E3bUtzSayWycsUri4cjc
+         2Jx+Qtig85c97pZBSfmyFJo+r8ZmNSV3WEWyjSJYr3EjMm3bJTP08G3os8WF9MyNZamq
+         /ILCk4et44Q/wv7CrfgL3DJglK8Ka0BPmhZObrqCKNK8wO+FPPcCgNOYWKE4Qe0qN5Mr
+         9xCd3Ze/SeNFBtI5Vzacce3fbucLfU1sAnDRUYGqnnikkvqiSGCYdH2fSb34Y0H359l3
+         k/ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792768471; x=1793373271;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=uYsXVdni1md+83PijIpFoxA8BV79W4PZ5dUTF0szV4w=;
+        b=WmCm5fUE8XRlnYyHtR/9TUzIh4Zm+byxf7uThZKzXZg8crZJn2WI+6jsO8wgNwkQNP
+         U852yolYWEdv5182TeNr4QH9ee9McNoQyk3hozQmrkntiXAGUhQrYamx+EUI+iElEJj7
+         d9xOtq2LEadyKH/i1kfg/Jd8vI/+aWDAXVeWCoACG3drOoanmwHE0nSuVANyY3XwV5C0
+         m1KeJ23bL9/Dhb4cNPHJOsS7Iyk7URzgIN4/eQjiB4LlZ1a4kHUuUy9VFalhzlj1l/SN
+         s0I25POmNAMKrmLjGT+ZQZ9R5yQYd33xIhVSkvLOXlym62NhTP3m+fMoUG8M4kVBKvhc
+         ho0A==
+X-Forwarded-Encrypted: i=1; AKwUvBzuHua+Ig5BjYCmsccpq2jEvZXWAu7qPXP9xdUiFhpt1I3BGD/9YfMDFp/lysRLPGlPs1+7P5vgD/NC9ATrFvA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKfUYeLH78vXKpy5U9KT/7xnpaf6TbnuoUEIm2oFwBDEvAl1M+3
+	CgKywGlUNxZlDwCyH7ryjJy/p0IQZEW8deFc/mbvOFJIwgHBkubkkdab
+X-Gm-Gg: AYBFou1eRm+b0b034NnjrCtGHMI1UZAZ8wQuOKOyCrdC0v3URO3f4Wu2kevRSGLHgt0
+	vSDt5usUUYI3UW6uoEoMykj1btRphekG1VK8saD/ObLfQkDEwNLDIvrmjAa9yNnMkjs+5egv6+y
+	RB2TbcCzWxae/qwFXJUx/FvHnheupgk3w6IcMuQEKYSBzc3Mtp111xvG+w8+6L6Ht6uJ8Nk4wg5
+	8oYCtG9MQ50BKi2IrYQsTnPU3r6gS3a8/GbcGdZP6FKDXumZtqUowZeGDO7SQEXvWN2CHYdcHg4
+	tHr2HKcMYmQylLnhIsaPiWsGDden87zqSj7254vjh8K/uE7aqs/wHCiGRydmsPNV1OcHXyr5r+B
+	sAeC6w/kIpEvWRSVOeutUKyG/fsJ5D08rZ0HYS57xSuN8u+Z77xJvEusaIuNat6VTq0ETzaL23U
+	1KmvC6JbCRu/VOnLbmPZeoIm4ZDCUPO7Ni+HWgrDFATYQkUzVNQ8iZFGXHA/0QVALxbS7nmAPiR
+	xIfFKulrEfRn4LHxGMKBNA8B9cXukRh4onbNKaN+kO5wT6SnHJPWlcCq07YOSo116qMBtSex+fN
+	gk6zq8DUk5G2pmtDkeLOfRv+4bpbP9uYwA1nEvQlIsWrAFqQcStqpRP52FsUkw==
+X-Received: by 2002:a17:90b:4b0e:b0:3ab:2737:3392 with SMTP id 98e67ed59e1d1-3adce0d3dc1mr2276865a91.53.1792768471109;
+        Fri, 23 Oct 2026 08:14:31 -0700 (PDT)
+Received: from localhost.localdomain (111-255-192-187.dynamic-ip.hinet.net. [111.255.192.187])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3addd84c87esm590809a91.11.2026.10.23.08.14.27
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 23 Oct 2026 08:14:30 -0700 (PDT)
+From: Hung-Jui Lin <alex.lin.programmer@gmail.com>
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Hung-Jui Lin <alex.lin.programmer@gmail.com>,
+	John Stultz <jstultz@google.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Miroslav Lichvar <mlichvar@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/2] selftests: timers: Add a test for disarmed SIGEV_NONE timers
+Date: Fri, 23 Oct 2026 23:14:11 +0800
+Message-ID: <20261023151411.28685-2-alex.lin.programmer@gmail.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261023151411.28685-1-alex.lin.programmer@gmail.com>
+References: <20261023151411.28685-1-alex.lin.programmer@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -55,39 +104,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261023-b4-vxlan-changelink-gbp-v1-0-f0d13951c09b@proxmox.com>
-User-Agent: NeoMutt/20260504
-X-Bm-Milter-Handled: 55990f41-d878-4baa-be0a-ee34c49e34d2
-X-Bm-Transport-Timestamp: 1792767437956
+Content-Transfer-Encoding: 8bit
 
-On 23.10.2026 13:14, Hannes Laimer wrote:
-> Currently reserved_bits are reset on every changelink. This leads to
-> packets using extensions that were enabled on creation being dropped
-> after a changelink. The first commit describes the problem and
-> solution in more detail and the second just adds a selftest for this.
-> 
-> Signed-off-by: Hannes Laimer <h.laimer@proxmox.com>
+timer_gettime() must report a zero it_value for a disarmed timer. For
+SIGEV_NONE timers, common_timer_get() reported the remaining time of the
+previous arming instead.
 
-Gave it a quick spin in a vng instance, consider:
+Add check_sigev_none_disarm(). It arms a SIGEV_NONE oneshot timer, checks
+that a remaining time is reported, disarms the timer and checks that
+it_value is zero. Run it for CLOCK_MONOTONIC and CLOCK_PROCESS_CPUTIME_ID,
+as CPU timers use a separate implementation.
 
-Tested-by: Gabriel Goller <g.goller@proxmox.com>
-Reviewed-by: Gabriel Goller <g.goller@proxmox.com>
+Without the preceding fix, the CLOCK_MONOTONIC case fails.
 
-> ---
-> Hannes Laimer (2):
->       vxlan: keep reserved_bits across changelink
->       selftests: forwarding: vxlan_reserved: add gbp changelink test
-> 
->  drivers/net/vxlan/vxlan_core.c                           |  2 +-
->  tools/testing/selftests/net/forwarding/vxlan_reserved.sh | 15 +++++++++++++++
->  2 files changed, 16 insertions(+), 1 deletion(-)
-> ---
-> base-commit: 734bef548a96e8774d6eef5dfa2026c6edc4e80b
-> change-id: 20261023-b4-vxlan-changelink-gbp-de5e81eed8d1
-> 
-> Best regards,
-> --  
-> Hannes Laimer <h.laimer@proxmox.com>
+Signed-off-by: Hung-Jui Lin <alex.lin.programmer@gmail.com>
+---
+ tools/testing/selftests/timers/posix_timers.c | 43 ++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
+index 52b7289e1..464609b8c 100644
+--- a/tools/testing/selftests/timers/posix_timers.c
++++ b/tools/testing/selftests/timers/posix_timers.c
+@@ -496,6 +496,45 @@ static void check_sigev_none(int which)
+ 			 "check_sigev_none %s\n", name);
+ }
+ 
++static void check_sigev_none_disarm(int which)
++{
++	const char *name = clock_name(which);
++	struct itimerspec its;
++	struct sigevent sev;
++	timer_t timerid;
++	bool armed;
++
++	memset(&sev, 0, sizeof(sev));
++	sev.sigev_notify = SIGEV_NONE;
++
++	if (timer_create(which, &sev, &timerid))
++		fatal_error(name, "timer_create()");
++
++	/* Start a oneshot timer which does not expire during the test */
++	memset(&its, 0, sizeof(its));
++	its.it_value.tv_sec = 100;
++	if (timer_settime(timerid, 0, &its, NULL))
++		fatal_error(name, "timer_settime()");
++
++	if (timer_gettime(timerid, &its))
++		fatal_error(name, "timer_gettime()");
++	armed = its.it_value.tv_sec || its.it_value.tv_nsec;
++
++	/* Disarm it. The remaining time must be reported as 0 */
++	memset(&its, 0, sizeof(its));
++	if (timer_settime(timerid, 0, &its, NULL))
++		fatal_error(name, "timer_settime()");
++
++	if (timer_gettime(timerid, &its))
++		fatal_error(name, "timer_gettime()");
++
++	if (timer_delete(timerid))
++		fatal_error(name, "timer_delete()");
++
++	ksft_test_result(armed && !its.it_value.tv_sec && !its.it_value.tv_nsec,
++			 "%s %s\n", __func__, name);
++}
++
+ static void check_gettime(int which)
+ {
+ 	const char *name = clock_name(which);
+@@ -681,7 +720,7 @@ int main(int argc, char **argv)
+ 
+ 	ksft_print_header();
+ 	if (run_sig_ign_tests) {
+-		ksft_set_plan(19);
++		ksft_set_plan(21);
+ 	} else {
+ 		ksft_set_plan(10);
+ 	}
+@@ -715,6 +754,8 @@ int main(int argc, char **argv)
+ 		check_delete();
+ 		check_sigev_none(CLOCK_MONOTONIC);
+ 		check_sigev_none(CLOCK_PROCESS_CPUTIME_ID);
++		check_sigev_none_disarm(CLOCK_MONOTONIC);
++		check_sigev_none_disarm(CLOCK_PROCESS_CPUTIME_ID);
+ 		check_gettime(CLOCK_MONOTONIC);
+ 		check_gettime(CLOCK_PROCESS_CPUTIME_ID);
+ 		check_gettime(CLOCK_THREAD_CPUTIME_ID);
+-- 
+2.56.0
 
