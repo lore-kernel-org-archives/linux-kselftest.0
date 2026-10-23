@@ -1,56 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.159
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792740612;
-	b=yAlgkkvIFZFQ48EIMwlCMSiC/mrZ4u3Bb/gWoBWqGi/G6XrqWgxEpvt9ASpTXnZ+vkny
-	 qFpgxaq0Bf/8xDUsByaeg4QXt/mHGbrbs3eyUP+as8M9k/ZiJHH9BS5XFQ75nKvcLiz9v
-	 eHWLMwfqDtXW+y+koGq8xZHR7GxkPtYavPlIswjRqZYPr9MPUMY22yVt8Bd/7RrDY72cY
-	 a6+6xNFKqBxST0DVC6mrOOo5+R8KSdUtkG7DvophLTh4SmvwUxu2DCbubjBWS224JSwTX
-	 HuD369SDT822+N21DI6kKj1bmqjNXuXojnFrRd+GOsf/8HKOvV/De01fOxMTz4sN96w==
+	t=1792741363;
+	b=P9Wo5siNBtMk9GWoYJn2R/qJfPDztx+Y3bVkFHQqVDHdtjBPdU8m3kTp+9dvUSq/576s
+	 wyucUaJ7eYfq3oUSRd8QEqd5wavpL219buPwb7OgFnWfTF9unTTt9k45Xke2vp2CdSuhs
+	 NOYUaXdFe1GcYzT6qY9wZa0rM+3O/1rS1Qo0xaiwXjmYIlEBPpdCRdXbHljnkEQER0Hxy
+	 gYcuFPr/Joi66+mYtxBnZ75J0bDlfbG7TDIWMbwejsMX5RWJkSq+oTLXi/VwVcjlotZPl
+	 CGdZYkSUXgvYKPHmUXvtH/MdKWB+UBwcsBi2CHf2CwcKYBvWZf8LA0qyOLyoLPbT9YQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792740612;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=r4wmPWcRwAYNvROfFkIzQ3+TvTf3iBKeJ+QLx3ENVDU=;
-	b=qI7NawJYudbklohsNslE705yCgZ648RvsmPumO0G1Xz6AHi+hmLMoSQvw8x070vDS9eY
-	 yUmLlaREg4k/QCrOtJOVE4+2loAdJQ3FpLWCCPvX3GQQxg5Hub9Zql2otZMuc2R/Kwcfm
-	 BOs5DeYn8NYTAzqrSSURjcOvkhaJLK9FudZXOq6ePlrJIfqydE3PnHiPe8NBUpGF/tBF0
-	 yPRGLcjvaw8+sGZ4e+bwp1KXePkojvifK43M3jrGe9qxPE6R3vdDbOVeLtSsG8OKFr7Jr
-	 QGRSg7QFcvDLQaR5px2CK+SdfwfwpBNQDsexh7DevMBl+N2fuAedCu+RWwjVNKRSLwg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792741363;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=EX2NYxg1qCpK7kBynX4o8sp1YSY3XpDU409ZyBkbTLc=;
+	b=xAQHuUL6SF4iU5BLD0NFwbjwgS4v2MvSi4nG6FDkAZ1OCIg5YrzoBs4XUNM8mZxiF8Su
+	 hKDaq72aplY0LV/BFS0ImCcjEqYfe+X1MIXI+UEZ3+rku9UuTlnkiTbElfAJ8ixXqIVAz
+	 igqzjSALOiy2KTiZtzDh9v6gT5g7unI6qjjnPXWzdYb+y1b9Vf80G7id0llJ6PcWzXgpH
+	 LSPk6IlErqg4e1KgFjIWPbbh6TkOnHNYp1S/qfwkgiXSY0OUh0w9NdzvCW/3wT9hlKwMx
+	 XufQwQsVZs4I3RbeNHeNGvKyQQvBUabvtbGgAo1pHzmVMcxmZ9dESgJZqDs7mOUcsvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Qec53LB/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FtOOwCLH;
+	arc=none smtp.remote-ip=91.218.175.159
+Received: from mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9BF606A325;
-	Fri, 23 Oct 2026 07:30:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F26F606A31B
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 07:42:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F26F606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qec53LB/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CFBD1F01828;
-	Fri, 23 Oct 2026 07:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792740612;
-	bh=r4wmPWcRwAYNvROfFkIzQ3+TvTf3iBKeJ+QLx3ENVDU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Qec53LB/A1eayaCEjYLDFL9z+iuJE7bAuXTc06fl/8KJFTDdrImX2I5Dt6mpPtgZi
-	 J4YK9HrpfUneKeQyozUR739UvzP0CwZeRE3vf8si30GCWKbiNowKUqUECkKz/c++GY
-	 VFKz57zcN5q/l0HebM2mGTVbJffz17gB2dS3/A93a45UKO70+FZDsOixTXd6bqqXvy
-	 y3LiPc1ShAWQty+3eIo8ATnpQcJL7zoHv3Om65qullG30F91UT0l+nvNAj35DUdXc8
-	 UrpvYCVdiiZfgsTMn3ipa0c/FgKnYXK7Q8hdXNnA0d5M1FLkfZotYY+NoVjdbNgD5B
-	 sgtH2DdeBTRXw==
-Date: Fri, 23 Oct 2026 10:30:05 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org,
-	akpm@linux-foundation.org, linux-mm@kvack.org, vipinsh@google.com,
-	linux-kernel@vger.kernel.org, dmatlack@google.com,
-	kexec@lists.infradead.org, pratyush@kernel.org, graf@amazon.com
-Subject: Re: [PATCH v2 2/2] selftests: liveupdate: Add tests for
- LIVEUPDATE_SESSION_FREEZE
-Message-ID: <atsM_WTjuZNl1EGG@kernel.org>
-References: <20261020144710.4154339-1-pasha.tatashin@soleen.com>
- <20261020144710.4154339-3-pasha.tatashin@soleen.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FtOOwCLH
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=nDTfAFtUX+DrIrStzCs3LFmwsV7yvA6x2yoxwbUozcM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792741359; v=1; x=1793346159;
+ b=FtOOwCLHjntYCnjkON2wmZBYEnAXNP0nzt9xGoCPRxd9gqPu//G/+58zj5jVbkskC4Qr+Jo7
+ +EFQXta6MOuPZHNcFrjKqbcBK2iixgvIm9KAHXkiwQtdidO6ZY5PjpFvJgaGMloFO/gdVwVxI7E
+ m9yywTujle763oIlz+0fEwJ8=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 9f858a2b1d4eeb7c;
+	Fri, 23 Oct 2026 07:42:39 +0000
+X-Mizu-Trace-ID: 9f858a2b1d4eeb7c
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <4abaeb6b-3c6c-4712-9935-0492cc130014@linux.dev>
+Date: Fri, 23 Oct 2026 15:42:34 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -60,34 +58,161 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261020144710.4154339-3-pasha.tatashin@soleen.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next 2/6] cgroup/cpuset: Properly compute effective xcpus
+ in update_parent_effective_cpumask()
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261022031643.1351877-1-longman@redhat.com>
+ <20261022031643.1351877-3-longman@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261022031643.1351877-3-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 20, 2026 at 10:47:04AM -0400, Pasha Tatashin wrote:
-> Provide luo_session_freeze() in the liveupdate test library and add unit
-> tests in liveupdate.c covering the LIVEUPDATE_SESSION_FREEZE ioctl. The
-> tests verify that non-zero reserved bits are rejected with -EINVAL, an
-> outgoing session with preserved files can be frozen early, freezing an
-> already frozen session returns -EBUSY, and attempting to preserve an
-> additional file descriptor into a frozen session fails with -EBUSY.
+Hi Longman,
 
-Please teach your LLM to use shorter paragraphs :)
+While re-reading and studying this patch, I noticed a few comments
+in update_parent_effective_cpumask() that still describe the pre-patch
+behavior.
 
-Do we need the entire list of what the test checks in the changelog?
- 
-> Also freeze the test session early in luo_kexec_simple.c to exercise
-> LIVEUPDATE_SESSION_FREEZE across a kexec reboot, and verify that
-> attempting to freeze a retrieved incoming session returns -EINVAL.
+在 2026/10/22 11:16, Waiman Long 写道:
+> Since the introduction of cpuset.cpus.exclusive in commit
+> e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
+> compute_effective_exclusive_cpumask() helper which is later renamed to
+> compute_excpus() is added to compute the effective xcpus of a partition
+> root. However update_parent_effective_cpumask() is not updated in all
+> proper places to use the new helper to check if a given cpuset should
+> remain a valid partition root. This can cause a cpuset to incorrectly
+> remain a valid partition root even if no effective xcpus is left.
 > 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Fix that problem by using compute_excpus() to compute the effective xcpus
+> into delmask in all cases except partcmd_disable and partcmd_invalidate
+> and use it for tasks_nocpu_error() check as well as checking its
+> emptiness. This enables us to catch invalid partition root more
+> accurately in update_parent_effective_cpumask().
+> 
+> Some test case are added to test_cpuset_prs.sh for invalidating a
+> partition root due to its effective xcpus becoming empty as well as
+> making sure that an invalid partition can only be revived when exclusive
+> CPUs are available agin.
+> 
+> Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 > ---
->  .../liveupdate/lib/include/libliveupdate.h    |  1 +
->  .../selftests/liveupdate/lib/lu_utils.c       | 10 ++++
->  .../testing/selftests/liveupdate/liveupdate.c | 49 +++++++++++++++++++
->  .../selftests/liveupdate/luo_kexec_simple.c   |  8 +++
->  4 files changed, 68 insertions(+)
+>  kernel/cgroup/cpuset.c                        | 36 +++++++++----------
+>  .../selftests/cgroup/test_cpuset_prs.sh       |  6 ++++
+>  2 files changed, 22 insertions(+), 20 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 7ead8c3b7974..db6e4663f4be 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1798,7 +1798,6 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
 
--- 
-Sincerely yours,
-Mike.
+The function doc header above says:
+
+    Otherwise, effective_xcpus is assumed to remain the same.
+
+With this patch applied, the no-newmask path recomputes the effective
+xcpus via compute_excpus() and invalidates the partition when the
+result is empty, so that sentence no longer matches the actual
+behavior. Maybe:
+
+    Otherwise, the requested cpu list is unchanged, but the effective
+    xcpus is recomputed and an empty result invalidates the partition.
+
+or some better wording.
+
+>  	int deleting;	/* Deleting cpus from parent's effective_cpus	*/
+>  	int old_prs, new_prs;
+>  	int part_error = PERR_NONE;	/* Partition error? */
+> -	struct cpumask *xcpus = user_xcpus(cs);
+>  	int parent_prs = parent->partition_root_state;
+>  	bool nocpu;
+>  
+> @@ -1841,30 +1840,29 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  	if (!newmask && xcpus_empty(cs))
+>  		return PERR_CPUSEMPTY;
+>  
+> -	nocpu = tasks_nocpu_error(parent, cs, xcpus);
+> +	/*
+> +	 * Except for partcmd_disable, use delmask to compute the current
+> +	 * effective xcpus value and use it for tasks_nocpu_error check.
+> +	 */
+> +	if (cmd != partcmd_disable) {
+> +		compute_excpus(cs, tmp->delmask);
+> +		nocpu = tasks_nocpu_error(parent, cs, tmp->delmask);
+> +	}
+>  
+>  	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
+> -		/*
+> -		 * Need to call compute_excpus() in case
+> -		 * exclusive_cpus not set. Sibling conflict should only happen
+> -		 * if exclusive_cpus isn't set.
+> -		 */
+> -		xcpus = tmp->delmask;
+> -		if (compute_excpus(cs, xcpus))
+> -			WARN_ON_ONCE(!cpumask_empty(cs->exclusive_cpus));
+>  		new_prs = (cmd == partcmd_enable) ? PRS_ROOT : PRS_ISOLATED;
+>  
+>  		/*
+>  		 * Enabling partition root is not allowed if its
+>  		 * effective_xcpus is empty.
+>  		 */
+> -		if (cpumask_empty(xcpus))
+> +		if (cpumask_empty(tmp->delmask))
+>  			return PERR_INVCPUS;
+>  
+> -		if (prstate_housekeeping_conflict(new_prs, parent_prs, xcpus, NULL))
+> +		if (prstate_housekeeping_conflict(new_prs, parent_prs, tmp->delmask, NULL))
+>  			return PERR_HKEEPING;
+>  
+> -		if (tasks_nocpu_error(parent, cs, xcpus))
+> +		if (nocpu)
+>  			return PERR_NOCPUS;
+>  
+>  		/*
+> @@ -1876,9 +1874,8 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  		 *
+>  		 * Warn if it is not the case.
+>  		 */
+> -		cpumask_and(tmp->new_cpus, xcpus, cpu_active_mask);
+> +		cpumask_and(tmp->new_cpus, tmp->delmask, cpu_active_mask);
+>  		WARN_ON_ONCE(!cpumask_subset(tmp->new_cpus, parent->effective_cpus));
+> -
+>  		deleting = true;
+>  	} else if (cmd == partcmd_disable) {
+
+The comment in this partcmd_disable branch still refers to "xcpus",
+
+    /* ... xcpus may contain CPUs that shouldn't be removed ... */
+
+but the xcpus variable is removed by this patch.
+
+>  		/*
+> @@ -1973,7 +1970,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  		 * A partition error happens when parent has tasks and all
+>  		 * its effective CPUs will have to be distributed out.
+>  		 */
+> -		if (nocpu) {
+> +		if (nocpu || cpumask_empty(tmp->delmask)) {
+The header comment of this "partcmd_update w/o newmask" branch above
+still says
+
+  /*  delmask = effective_xcpus & parent->effective_cpus ... */
+
+That matched the old code where the branch computed delmask from
+user_xcpus() itself. Now delmask comes from the compute_excpus() call
+at the top of the function, and the branch only intersects it with
+parent->effective_cpus when reviving an invalid partition.
+
+All minor comment updates, of course.
+
+Thanks,
+Guopeng
