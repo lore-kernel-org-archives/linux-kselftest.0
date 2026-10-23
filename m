@@ -1,65 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792785661;
-	b=j15CMM0t9BNU2iJzI+VW2+vvDsa15cVkOCeyQBnZpc2bua52TOTHZ+IyugipzV/SKdWI
-	 6sldJnDF6VDQNXIDorZ6UpngQp11INrx4drPLSbFHwx0X3O+Bg9O1o0/vHczmoLCZSf2B
-	 bY1wIHRzBDVmGA3pculG2o7ecFlYqO7q/syH91xWqcs+bubWEaBtDW7GQDSuJ6wGLjFKj
-	 7/cdladlt0u1qt0J67+sWrLltFa71N6MQv35uUEK67WGcPF5EHDUb1bzkBbKu403xBrGg
-	 DF63OdAWERaQ7TkrmJnZL56W2JozjJqrL7bzezfA8mWiafePqobnMsH3Gh/hcVUdh1A==
+	t=1792785663;
+	b=OvexRGsXd+ZPNZnGCBFVzbz8+SnlewI7gF/o6tmQ2RBjfWrxbAcdqeAs4AntdCakydPK
+	 0MmJHQK+6rZJm4WlkfRO72zW/iadZRK5ZrgBJDjpBhnGr26lO9pef910W7VBbE9MeNwVa
+	 xGXY7nJy+m4Liaym6EIl6Uq1dt+JfX7Dikp/uyp9T7LRb3OnLdQ1FukofnCtex8flAHgh
+	 kC3wBFb8RSeeBaIKqE+kKhbWkYl3rOcK++uygZutBi6mQqxZoOd4A7OU+9Xb5ovNVgrBv
+	 c/anRxBTKSY0venNUD5nxdBMBO8O9CdgPTiA4iU4u5T9xXBEXmTz+LDdYqIH1TNNSbQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792785661;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792785663;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=3hEtCt1RpiFDvg9q07yX6m6YXcHmA6FTr+B0qJwNCZ8=;
-	b=RDW3s/aqlUtDxqyWXOoZyP+ZzZFl1/nc/JC9TK4wyfy5mBhbwpOB0V30NDYgfRXvYhxp
-	 pqKZVNyTBTn8fl/w2+CEkDBAQhyA6j2KDkjMu999HvXed2z59OoAOhDJJaKCa/Rr0WGOJ
-	 2p4iFW7Db+ayXhl6PH6ujAikr897EpxVIxwTaNa1Ti4j65Z5uJqOa3yZoYNS45jyQkldF
-	 mQkDpgvRzDGioldQb8hupGoxD9/lUqrgrZdNV8hR3mEPB6623oyQKUuYPh6MPHwgdMtcy
-	 SQDFlCThwkr4BlxXli+JZGs81hxg3n3S1j5YJ0OCl19JoS09OebAGoK512XTJsDCvsA==
+	bh=41akheXLDiu5sa/hLvnKGPpvOk6X/oqZPDwHABeQ4+A=;
+	b=QrxYCnRPVGS2xBtpsj2EnSWxtQSwfiju31oGIvkYqDozajA22vGH6DXU0hMitTV6CDHD
+	 Z9koyxo0T33LckZiEf+T01CXqXpCwdf4UGWV0bVFgqNiaz4az6rVns5m7eSMt0bHqDXBY
+	 ebtrt1J+DiTwgTAtKNBXzaDA36R8O5GrKdxE21yGjMpFHa7W/wv3vvV9cVTjgO/Kp67Bh
+	 ja8zyGrlwRY8QzfZEPUg9YBvxc+NjzDTPNmkPIkN/6K70dhENjulK/RJijEwp+Hfrso4J
+	 J3pcnN0Gol90RN/Sm/RdWcbSJNZtE+WqhqnRhE+j+imOpIKmBqhIOJBF2eKjWEiAUsw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=YMO40bvB;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=PEJO2Nf1;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE24A606A337
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 20:01:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE24A606A337
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF89360A2611
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 20:01:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF89360A2611
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=YMO40bvB
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=PEJO2Nf1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792785660;
+	s=mimecast20190719; t=1792785662;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3hEtCt1RpiFDvg9q07yX6m6YXcHmA6FTr+B0qJwNCZ8=;
-	b=YMO40bvBtx3S6BTF8ZJPhJnj2yAIUwBahMHe1HRSqfPe2BxzWbWZGIYN7DNxLNHYJLjgZG
-	/G2vewVM5qjWtjeNrIAT0RdGmTgWF8DaciVcV2y0/zdvlr5MO6i+POS3xSX8n+RbcmFHhP
-	o4GwwH9W0TddH8SQbmGkxpNdH3/iSmw=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=41akheXLDiu5sa/hLvnKGPpvOk6X/oqZPDwHABeQ4+A=;
+	b=PEJO2Nf1i3Y3bZM0jw6nl5KWacEF39qGacGLTxMZTmaiaMESeasmotYRq1h821wmPLAtIn
+	XodmeyExyF2P+FMiSviHQqU8ti0EruM+XjRbB0cyZAEcf6iW6RhR3+kvWwqxSy1C78GA3a
+	KAd3B3lnOJuqN9imabZuKfIArzgm21c=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-348-uNNf8CJsO6aIykFgthYORQ-1; Fri,
- 23 Oct 2026 16:00:56 -0400
-X-MC-Unique: uNNf8CJsO6aIykFgthYORQ-1
-X-Mimecast-MFC-AGG-ID: uNNf8CJsO6aIykFgthYORQ_1792785654
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-167-_pcV6CCsOoak6Q-1Wj-fKw-1; Fri,
+ 23 Oct 2026 16:00:52 -0400
+X-MC-Unique: _pcV6CCsOoak6Q-1Wj-fKw-1
+X-Mimecast-MFC-AGG-ID: _pcV6CCsOoak6Q-1Wj-fKw_1792785650
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CCA6C195DE38;
-	Fri, 23 Oct 2026 20:00:54 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 49BF41944B38;
+	Fri, 23 Oct 2026 20:00:49 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4F2281955F24;
-	Fri, 23 Oct 2026 20:00:53 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4C8611955F25;
+	Fri, 23 Oct 2026 20:00:46 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Ridong Chen <ridong.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
@@ -70,10 +70,11 @@ Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v2 04/10] cgroup/cpuset: Minor fixes to prstate_housekeeping_conflict()
-Date: Fri, 23 Oct 2026 16:00:30 -0400
-Message-ID: <20261023200036.60560-5-longman@redhat.com>
+	Waiman Long <longman@redhat.com>,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>
+Subject: [PATCH-next v2 01/10] cgroup/cpuset: Find furthest isolated ancestor for invalidated isolated partition
+Date: Fri, 23 Oct 2026 16:00:27 -0400
+Message-ID: <20261023200036.60560-2-longman@redhat.com>
 In-Reply-To: <20261023200036.60560-1-longman@redhat.com>
 References: <20261023200036.60560-1-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -88,129 +89,110 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Commit 9527ff78a413 ("cgroup/cpuset: Consider all the exclusive CPUs when
-doing housekeeping check") changes the way prstate_housekeeping_conflict()
-is being used by considering all the exclusive xcpus to be owned by the
-partition when doing housekeeping check. However there are two minor
-issues reported by sashiko with that patch:
+Commit 46b885416c27 ("cgroup/cpuset: Fix a missing isolated_cpus
+update in update_cpumasks_hier()") searches for the closet partition
+root ancestor to determine if the isolated CPUs in a to be invalidated
+isolation partition should be removed from isolated_cpus or not.
 
- 1) In partition_cpus_change(), prstate_housekeeping_conflict() can
- be called with an invalid partition root. In that case, there are
- no isolated CPUs that are going to be returned back to the system to
- become housekeeping CPUs, so the calculation of the del_cpus cpumask
- is meaningless.
+As reported by sashiko, this method may not work when there is a deeply
+nested isolated partition hierarchy. For instance, Consider a nested
+hierarchy A0 -> A1 -> A2 -> A3 where all four are PRS_ISOLATED:
 
- 2) The checking of del_cpus in prstate_housekeeping_conflict() to see
- if it can contain an active housekeeping CPU that can be returned to the
- system ignores the fact that an active CPU not in HK_TYPE_DOMAIN_BOOT HK
- cpumask will not become an active housekeeping CPU when it is released
- by an isolated partition.
+  A0: effective_xcpus = 0-4
+  A1: effective_xcpus = 1-4
+  A2: effective_xcpus = 2-4
+  A3: effective_xcpus = 3-4
 
-Update the existing code to handle these two issues properly to make
-prstate_housekeeping_conflict() produce more accurate result.
+When A1 shrinks its exclusive_cpus from 1-4 to 1-2, A2 will update it
+effective_xcpus to 2. A3 will find its closet partition root ancestor
+A2 and decides that its effective_xcpus 3-4 should be removed from
+isolated_cpus which is incorrect.
 
-Fixes: 9527ff78a413 ("cgroup/cpuset: Consider all the exclusive CPUs when doing housekeeping check")
+Address this corner case by searching for the furthest isolated partition
+root ancestor instead to decide if its isolated CPUs should be returned
+to isolated_cpus.
+
+There are other pre-existing problems that will still prevent the
+above test case to work correctly. These problems will be addressed in
+subsequent patches.
+
+Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Tested-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+Fixes: 46b885416c27 ("cgroup/cpuset: Fix a missing isolated_cpus update in update_cpumasks_hier()")
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 45 +++++++++++++++++++++++++++++-------------
- 1 file changed, 31 insertions(+), 14 deletions(-)
+ kernel/cgroup/cpuset.c | 36 +++++++++++++++++-------------------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 69fc02cd7469..5585d02ef0f8 100644
+index 585a982249ad..1ca548cd50fd 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -1397,6 +1397,9 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
- 	    !cpumask_subset(new_cpus, housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT)))
- 		return true;
- 
-+	if (del_cpus && cpumask_empty(del_cpus))
-+		del_cpus = NULL;
-+
- 	/*
- 	 * Exit 2nd check early and return false if
- 	 * 1) there is no boot time isolated nohz_full CPU
-@@ -1405,8 +1408,7 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
- 	 *    be returned back to the parent.
- 	 */
- 	if (!housekeeping_enabled(HK_TYPE_KERNEL_NOISE) ||
--	    (new_prs == parent_prs) ||
--	    ((new_prs == PRS_ROOT) && (!del_cpus || cpumask_empty(del_cpus))))
-+	    (new_prs == parent_prs) || (!del_cpus && (new_prs == PRS_ROOT)))
- 		return false;
- 
- 	/*
-@@ -1417,20 +1419,29 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
- 	if (parent_prs == PRS_ISOLATED)
- 		swap(new_cpus, del_cpus);
- 
--	if (del_cpus &&
--	   (cpumask_first_and_and(del_cpus, housekeeping_cpumask(HK_TYPE_KERNEL_NOISE),
--				   cpu_active_mask) < nr_cpu_ids))
--		return false;
--
- 	if (!alloc_cpumask_var(&full_hk_cpus, GFP_KERNEL))
- 		return true;
- 
-+	/*
-+	 * Check if del_cpus may contain a CPU that can become an active
-+	 * housekeeping CPU again.
-+	 */
-+	if (del_cpus) {
-+		cpumask_and(full_hk_cpus, housekeeping_cpumask(HK_TYPE_KERNEL_NOISE),
-+			    housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
-+		if (cpumask_first_and_and(del_cpus, full_hk_cpus,
-+					  cpu_active_mask) < nr_cpu_ids) {
-+			res = false;
-+			goto out;
-+		}
-+	}
-+
- 	cpumask_and(full_hk_cpus, housekeeping_cpumask(HK_TYPE_KERNEL_NOISE),
- 		    housekeeping_cpumask(HK_TYPE_DOMAIN));
- 	cpumask_andnot(full_hk_cpus, full_hk_cpus, isolated_cpus);
- 	cpumask_and(full_hk_cpus, full_hk_cpus, cpu_active_mask);
- 	res = !cpumask_weight_andnot(full_hk_cpus, new_cpus);
--
-+out:
- 	free_cpumask_var(full_hk_cpus);
- 	return res;
+@@ -2156,22 +2156,20 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
  }
-@@ -2474,23 +2485,29 @@ static void partition_cpus_change(struct cpuset *cs, struct cpuset *trialcs,
- 				  struct tmpmasks *tmp)
+ 
+ /*
+- * ancestor_partition - Find and return the closest valid partition root ancestor
++ * furthest isolated_ancestor - Return furthest isolated partition root ancestor available
+  * @cs: the current cpuset
+- *
+- * Return: The closet partition root ancestor cpuset
++ * Return: The furthest isolated partition root ancestor available or NULL if
++ *	   not found.
+  */
+-static struct cpuset *ancestor_partition(struct cpuset *cs)
++static struct cpuset *furthest_isolated_ancestor(struct cpuset *cs)
  {
- 	enum prs_errcode prs_err;
-+	int parent_prs = is_remote_partition(cs)
-+		       ? PRS_ROOT : parent_cs(cs)->partition_root_state;
+ 	struct cpuset *ancestor = parent_cs(cs);
++	struct cpuset *iancestor = NULL;
  
- 	if (cs_is_member(cs))
- 		return;
+-	/*
+-	 * The top_cpuset is always a valid partition root which will stop
+-	 * the loop if it is reached.
+-	 */
+-	while (!is_partition_valid(ancestor))
+-		ancestor = parent_cs(ancestor);
+-	return ancestor;
++	for (; ancestor; ancestor = parent_cs(ancestor))
++		if (ancestor->partition_root_state == PRS_ISOLATED)
++			iancestor = ancestor;
++	return iancestor;
+ }
  
- 	prs_err = validate_partition(cs, trialcs);
--	if (!prs_err && !cpumask_empty(trialcs->effective_xcpus)) {
-+	if (!prs_err && (parent_prs > 0) &&
-+	    !cpumask_empty(trialcs->effective_xcpus)) {
- 		int prs = cs->partition_root_state;
--		int parent_prs = is_remote_partition(cs)
--			       ? PRS_ROOT : parent_cs(cs)->partition_root_state;
-+
- 		/*
- 		 * Check for housekeeping conflict by passing the whole
- 		 * effective_xcpus as well as those CPUs that are to be
- 		 * removed from cs as delmask.
- 		 */
--		cpumask_andnot(tmp->delmask, cs->effective_xcpus, trialcs->effective_xcpus);
--		if (parent_prs > 0 &&
--		    prstate_housekeeping_conflict(prs, parent_prs,
-+		if (prs > 0)
-+			cpumask_andnot(tmp->delmask, cs->effective_xcpus,
-+				       trialcs->effective_xcpus);
-+		else
-+			cpumask_clear(tmp->delmask);
-+
-+		if (prstate_housekeeping_conflict(prs, parent_prs,
- 						  trialcs->effective_xcpus, tmp->delmask))
- 			prs_err = PERR_HKEEPING;
- 	}
+ /*
+@@ -2283,23 +2281,23 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+ 				 * For a to be invalidated isolated partition,
+ 				 * its isolated CPUs may or may not need to be
+ 				 * removed from isolated_cpus depending on if
+-				 * its closest partition root ancestor is a root
+-				 * or isolated partition. With a PRS_ISOLATED
+-				 * ancestor, the CPUs are checked against its
+-				 * effective xcpus to see if any of them needed
+-				 * to be removed.
++				 * there is a furthest isolated partition root
++				 * ancestor available. When such a PRS_ISOLATED
++				 * ancestor is available, the CPUs are checked
++				 * against its effective xcpus to see if any of
++				 * them needed to be removed.
+ 				 */
+ 				if (is_partition_valid(cp))
+ 					new_prs = -old_prs;
+ 
+ 				if (old_prs == PRS_ISOLATED) {
+-					struct cpuset *ancestor = ancestor_partition(cp);
++					struct cpuset *iancestor = furthest_isolated_ancestor(cp);
+ 
+-					if (ancestor->partition_root_state == PRS_ROOT)
++					if (!iancestor)
+ 						del_cpus = cp->effective_xcpus;
+ 					else if (cpumask_andnot(tmp->delmask,
+ 								cp->effective_xcpus,
+-								ancestor->effective_xcpus))
++								iancestor->effective_xcpus))
+ 						del_cpus = tmp->delmask;
+ 
+ 					if (del_cpus) {
 -- 
 2.56.0
 
