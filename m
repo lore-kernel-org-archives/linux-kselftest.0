@@ -1,65 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792785656;
-	b=ecHFirZFlKnDhAyk/SePrmLsXx15Wjxnve46p95HcLtNjpXI0WR1hkiJwoMJjhSChTUu
-	 FX9D/qaNu/QOPUCj5e9EUHY6ta4XqhJ4J9xf5SJU2NDYrteQlF5JljNwdryhANTkvnpsE
-	 1A8ZhjECTeYf7I6D2PG38SRv+CXyoAho7ermutxaxqU7Q6mxK+jlerLzzVulEn3m/89MD
-	 KExw9HFA1pxA0dQlavZG083I2ht4jPt23FddDjMBjbWUod7tTXqfYvS9kizmxLYHFGJLg
-	 Wj1ehFAwq3AadurcWCGTNZPT2W0RzJBHA25vfi5Rn6MS3GtpQ08TZejkbtNdV7cyPsg==
+	t=1792785660;
+	b=zLMm5TfhLSFJ0uDhneDMAgfL8QxkWpMiCJWodgbPNf3E8bGwrJy5ypev5LnmoujMSm2N
+	 E4XvNvX4dKHM85yvAaxETt7jvj8PbUHfnOsJGpGoIXRA+wNUY78vsiqM5rF0RXaBPDzW1
+	 0HycNTkcUTT34DQaIeiC2Bi2RvTvgawwgem5Ito4IU0D1D2eTtmPN/tEk61+/dwkuV8MW
+	 YMNu9XR8aC22rQBhdAr7vt2jpMFr2OWwe1nsoWjU5M8qSATsde1hQQxryJCDUcvi6pna9
+	 /bHGeGZhd9RMyr1OxEqspWFPjW3ZNQMghbd1HxBKvYS9UKH6M9NPYSy78hJkSNZ/mWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792785656;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792785660;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=aDog0cwFprcmOhBqY1U+Au/ledekVgUgovHWk46fOl8=;
-	b=5ZGOBxvG28Ct7tg20+Bgbe3zkBskqi5BZcvpm2CtGuKTaS7xoE2KkondCuFuxjBZAmmm
-	 UgeLcakGQGxfRL8S96eyl4yQKbSgEDmN4njvNSdTBlQcsENfqVupnFBokoH9Tee1izLki
-	 n5XO97TfM+n21Eftd5I3dCmmP92l3+gUPQA9Ehh4VS/p8X32O+DozOTY21hqQ1kePhVGd
-	 LcOML+puxm7Bw+L5LvpuChiFXH+uTxldr7q6c6TRqrruh3+TNnxoOu/C8wRtd8Op0oYs8
-	 934k0ZcZKVbMWaZrcwpOfh/yoIhRNuKLitz7Lyok+wIUq4UdvsktmiqnqqLd9K4/CJw==
+	bh=W2zdrfASIgne8nhIAu/3iGRmmi2su/VRFMJWYm0YZkA=;
+	b=uLI1+QHhdJhapvEw/6w+x8qdtD6wCzX5iEwgLVPlb0v9TffE85zbnirNZ/+k+TMTXy3T
+	 5d073CGPXDJIqEt4CXgAjwp67TV80ytqZvAqZb3fc6qN8SwLJXHJEd8ixdAEFHzKrFPsW
+	 mD07zJIy1lJVvpobTjNf55c2Qj9e8vvJs27raFJ8iOgzWGIRDDI6w5Pc5y3/LE4MWxEd2
+	 CGVCGKUL1Ged44Tbkpim2EK/HBIkbMOaNX6IzoWhD6A77KFIsrQNH4qfWeRXH9EYSqhcM
+	 uzE6OZULhqNLoXBdARd4uvzXloopL5UwAE/+2ZeBlB5SIkJevQpWDrT4L6qJOI8RBOQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dP16EDTC;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=cTesWCTV;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE4C606A322
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 20:00:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BE4C606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24EB0606A336
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 20:00:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24EB0606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dP16EDTC
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=cTesWCTV
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792785654;
+	s=mimecast20190719; t=1792785658;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aDog0cwFprcmOhBqY1U+Au/ledekVgUgovHWk46fOl8=;
-	b=dP16EDTCcTyzWoKjBAuw0i6AeERBoW2D+ZpyyecR5pwusraEon+oXE5y2GwRitG3F73y+3
-	GtQNYPW/5+fMXNeGlOV2mQZ/j3QGqNegRHvQqSRHChyq8j3KuEwdcWuyxkiwPwqfNqTCTK
-	TkHyKql/pklE61a+pnnV0oF0cUzXfU8=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=W2zdrfASIgne8nhIAu/3iGRmmi2su/VRFMJWYm0YZkA=;
+	b=cTesWCTV5hk8ajOcehHNO0mzEraK4puLnb22vEfYSujQCT2qOFLMRZI68oA+bRZX9UfAgt
+	HRU4qVy0GPKXETcgXyJm6n3V6EGymUdYUcUu5hw9q2X7pxfY/qj9U/eSqVA2XcD0yuHZwd
+	sqS8C03oft9vAgjdaYAratpRa7l+abc=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-589--75bblV7PDe_Zy4h5h1kZQ-1; Fri,
- 23 Oct 2026 16:00:53 -0400
-X-MC-Unique: -75bblV7PDe_Zy4h5h1kZQ-1
-X-Mimecast-MFC-AGG-ID: -75bblV7PDe_Zy4h5h1kZQ_1792785651
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-610-u0XX_IM4OGSrcEcGpijfmQ-1; Fri,
+ 23 Oct 2026 16:00:54 -0400
+X-MC-Unique: u0XX_IM4OGSrcEcGpijfmQ-1
+X-Mimecast-MFC-AGG-ID: u0XX_IM4OGSrcEcGpijfmQ_1792785653
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 41D351955DE9;
-	Fri, 23 Oct 2026 20:00:51 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 161CD1801360;
+	Fri, 23 Oct 2026 20:00:53 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AC06F1955F0A;
-	Fri, 23 Oct 2026 20:00:49 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 770CC1956089;
+	Fri, 23 Oct 2026 20:00:51 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Ridong Chen <ridong.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
@@ -71,9 +71,9 @@ Cc: cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v2 02/10] cgroup/cpuset: Properly compute effective xcpus in update_parent_effective_cpumask()
-Date: Fri, 23 Oct 2026 16:00:28 -0400
-Message-ID: <20261023200036.60560-3-longman@redhat.com>
+Subject: [PATCH-next v2 03/10] cgroup/cpuset: Fix incorrect effective_cpus bug in update_cpumasks_hier()
+Date: Fri, 23 Oct 2026 16:00:29 -0400
+Message-ID: <20261023200036.60560-4-longman@redhat.com>
 In-Reply-To: <20261023200036.60560-1-longman@redhat.com>
 References: <20261023200036.60560-1-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -88,231 +88,63 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Since the introduction of cpuset.cpus.exclusive in commit
-e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
-compute_effective_exclusive_cpumask() helper which is later renamed to
-compute_excpus() is added to compute the effective xcpus of a partition
-root. However update_parent_effective_cpumask() is not updated in all
-proper places to use the new helper to check if a given cpuset should
-remain a valid partition root. This can cause a cpuset to incorrectly
-remain a valid partition root even if no effective xcpus is left.
+With the introduction of cpuset.cpus.exclusive, the computation of
+effective_cpus differs depending on if a cpuset is a valid partition
+root or not.
 
-Fix that problem by using compute_excpus() to compute the effective xcpus
-into delmask in all cases except partcmd_disable, partcmd_invalidate
-or partcmd_update with newmask set and use it for tasks_nocpu_error()
-check as well as checking its emptiness. This enables us to catch invalid
-partition root more accurately in update_parent_effective_cpumask().
+In update_cpumasks_hier(), effective_cpus is computed early
+to check if the current subtree can be skipped. Later on
+update_parent_effective_cpumask() may be called which can change the
+partition state from valid to invalid or vice versa. If the partition
+state changes, the previously computed effective_cpus may no longer be
+valid. Fix that by recomputing effective_cpus again when that happens.
 
-In the case of partcmd_update with newmask set, the passed in new
-effective xcpus value will directly be used in the tasks_nocpu_error()
-check without relying on old data in the cpuset.
-
-Some test case are added to test_cpuset_prs.sh for invalidating a
-partition root due to its effective xcpus becoming empty as well as
-making sure that an invalid partition can only be revived when exclusive
-CPUs are available agin.
+Also add a new test case into test_cpuset_prs.sh to verify this change.
 
 Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c                        | 59 +++++++++----------
- .../selftests/cgroup/test_cpuset_prs.sh       | 11 ++++
- 2 files changed, 38 insertions(+), 32 deletions(-)
+ kernel/cgroup/cpuset.c                            | 10 ++++++++--
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh |  3 +++
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 1ca548cd50fd..06b8a67cbd3d 100644
+index 06b8a67cbd3d..69fc02cd7469 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -1756,7 +1756,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
-  * update_parent_effective_cpumask - update effective_cpus mask of parent cpuset
-  * @cs:      The cpuset that requests change in partition root state
-  * @cmd:     Partition root state change command
-- * @newmask: Optional new cpumask for partcmd_update
-+ * @newmask: Optional new effective xcpus for partcmd_update
-  * @tmp:     Temporary addmask and delmask
-  * Return:   0 or a partition root state error code
-  *
-@@ -1771,11 +1771,11 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
-  * given back to parent's effective_cpus. 0 will always be returned.
-  *
-  * For partcmd_update, if the optional newmask is specified, the cpu list is
-- * to be changed from effective_xcpus to newmask. Otherwise, effective_xcpus is
-- * assumed to remain the same. The cpuset should either be a valid or invalid
-- * partition root. The partition root state may change from valid to invalid
-- * or vice versa. An error code will be returned if transitioning from
-- * invalid to valid violates the exclusivity rule.
-+ * to be changed from effective_xcpus to newmask. Otherwise, effective_xcpus
-+ * will be computed and a valid partition will be invalidated if it is the new
-+ * cpumask is empty. The cpuset should either be a valid or invalid partition
-+ * root. The partition root state may change from valid to invalid or vice
-+ * versa.
-  *
-  * For partcmd_invalidate, the current partition will be made invalid.
-  *
-@@ -1798,7 +1798,6 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 	int deleting;	/* Deleting cpus from parent's effective_cpus	*/
- 	int old_prs, new_prs;
- 	int part_error = PERR_NONE;	/* Partition error? */
--	struct cpumask *xcpus = user_xcpus(cs);
- 	int parent_prs = parent->partition_root_state;
- 	bool nocpu;
- 
-@@ -1841,30 +1840,30 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 	if (!newmask && xcpus_empty(cs))
- 		return PERR_CPUSEMPTY;
- 
--	nocpu = tasks_nocpu_error(parent, cs, xcpus);
-+	/*
-+	 * Except for partcmd_disable and non-NULL newmask, use delmask
-+	 * to compute the current effective xcpus value and use it for
-+	 * tasks_nocpu_error check.
-+	 */
-+	if ((cmd != partcmd_disable) && !newmask) {
-+		compute_excpus(cs, tmp->delmask);
-+		nocpu = tasks_nocpu_error(parent, cs, tmp->delmask);
-+	}
- 
- 	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
--		/*
--		 * Need to call compute_excpus() in case
--		 * exclusive_cpus not set. Sibling conflict should only happen
--		 * if exclusive_cpus isn't set.
--		 */
--		xcpus = tmp->delmask;
--		if (compute_excpus(cs, xcpus))
--			WARN_ON_ONCE(!cpumask_empty(cs->exclusive_cpus));
- 		new_prs = (cmd == partcmd_enable) ? PRS_ROOT : PRS_ISOLATED;
- 
- 		/*
- 		 * Enabling partition root is not allowed if its
- 		 * effective_xcpus is empty.
- 		 */
--		if (cpumask_empty(xcpus))
-+		if (cpumask_empty(tmp->delmask))
- 			return PERR_INVCPUS;
- 
--		if (prstate_housekeeping_conflict(new_prs, parent_prs, xcpus, NULL))
-+		if (prstate_housekeeping_conflict(new_prs, parent_prs, tmp->delmask, NULL))
- 			return PERR_HKEEPING;
- 
--		if (tasks_nocpu_error(parent, cs, xcpus))
-+		if (nocpu)
- 			return PERR_NOCPUS;
- 
- 		/*
-@@ -1876,16 +1875,14 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 		 *
- 		 * Warn if it is not the case.
- 		 */
--		cpumask_and(tmp->new_cpus, xcpus, cpu_active_mask);
-+		cpumask_and(tmp->new_cpus, tmp->delmask, cpu_active_mask);
- 		WARN_ON_ONCE(!cpumask_subset(tmp->new_cpus, parent->effective_cpus));
--
- 		deleting = true;
- 	} else if (cmd == partcmd_disable) {
- 		/*
- 		 * May need to add cpus back to parent's effective_cpus
- 		 * (and maybe removed from subpartitions_cpus/isolated_cpus)
--		 * for valid partition root. xcpus may contain CPUs that
--		 * shouldn't be removed from the two global cpumasks.
-+		 * for valid partition root.
- 		 */
- 		if (is_partition_valid(cs)) {
- 			cpumask_copy(tmp->addmask, cs->effective_xcpus);
-@@ -1905,8 +1902,8 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 			goto write_error;
- 		}
- 
--		/* Check newmask again, whether cpus are available for parent/cs */
--		nocpu |= tasks_nocpu_error(parent, cs, newmask);
-+		/* Check newmask whether cpus are available for parent/cs */
-+		nocpu = tasks_nocpu_error(parent, cs, newmask);
- 
- 		/*
- 		 * partcmd_update with newmask:
-@@ -1961,7 +1958,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 		/*
- 		 * partcmd_update w/o newmask
- 		 *
--		 * delmask = effective_xcpus & parent->effective_cpus
-+		 * delmask = newly computed effective xcpus value
- 		 *
- 		 * This can be called from:
- 		 * 1) update_cpumasks_hier()
-@@ -1973,7 +1970,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 		 * A partition error happens when parent has tasks and all
- 		 * its effective CPUs will have to be distributed out.
- 		 */
--		if (nocpu) {
-+		if (nocpu || cpumask_empty(tmp->delmask)) {
- 			part_error = PERR_NOCPUS;
- 			if (is_partition_valid(cs))
- 				adding = cpumask_and(tmp->addmask,
-@@ -1986,8 +1983,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 				cpumask_copy(tmp->addmask, cs->effective_xcpus);
- 				adding = true;
- 			}
--		} else if (is_partition_invalid(cs) && !cpumask_empty(xcpus) &&
--			   cpumask_subset(xcpus, parent->effective_xcpus)) {
-+		} else if (is_partition_invalid(cs)) {
- 			struct cgroup_subsys_state *css;
- 			struct cpuset *child;
- 			bool exclusive = true;
-@@ -1998,7 +1994,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 			 * check.
+@@ -2315,10 +2315,16 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+ 		if (update_parent) {
+ 			update_parent_effective_cpumask(cp, partcmd_update, NULL, tmp);
+ 			/*
+-			 * The cpuset partition_root_state may become
+-			 * invalid. Capture it.
++			 * Capture current partition_root_state as it may have
++			 * changed. Recompute effective cpumask if changed.
  			 */
- 			if (prstate_housekeeping_conflict(cs->partition_root_state,
--							  parent_prs, xcpus, NULL)) {
-+							  parent_prs, tmp->delmask, NULL)) {
- 				part_error = PERR_HKEEPING;
- 				goto write_error;
- 			}
-@@ -2013,8 +2009,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 			}
- 			rcu_read_unlock();
- 			if (exclusive)
--				deleting = cpumask_and(tmp->delmask,
--						xcpus, parent->effective_cpus);
-+				deleting = !cpumask_empty(tmp->delmask);
- 			else
- 				part_error = PERR_NOTEXCL;
+ 			new_prs = cp->partition_root_state;
++			if (new_prs != old_prs) {
++				if (new_prs > 0)
++					compute_partition_effective_cpumask(cp, tmp->new_cpus);
++				else
++					compute_effective_cpumask(tmp->new_cpus, cp, parent);
++			}
  		}
+ 
+ 		spin_lock_irq(&callback_lock);
 diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index d04aad697b96..8bdda955b4a7 100755
+index 8bdda955b4a7..f4eb984752a0 100755
 --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
 +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -359,6 +359,8 @@ TEST_MATRIX=(
- 								       A1:P0|A2:P1|A3:P2|B1:P1 2-4|3"
- 	"  C1-6:P1 C3-6:P1 C5-6:P1 .      .      P2      .      .    0 A1:1-2|A2:3-6|A3:5-6 \
- 								       A1:P1|A2:P2|A3:P-1 3-6"
-+	"  C1-6:P2 C3-6:P2 C3-4:P2 .      .     C5-6     .      .    0 A1:1-4|A2:5-6|A3:5-6 \
-+								       A1:P2|A2:P2|A3:P-2 1-6"
+@@ -364,6 +364,9 @@ TEST_MATRIX=(
  	" C1-4:X2-4 C2-4:X3-4:P1 C3-4:X4:P2 \
  				   .      .      X5      .      .    0 A1:1-4|A2:2-4|A3:3-4 \
  								       A1:P0|A2:P-1|A3:P-2 ."
-@@ -427,6 +429,10 @@ TEST_MATRIX=(
- 	# cpuset.cpus is allowed, but those extra CPUs are ignored.
- 	"  C2-3:P1   C3:P1  .      .      .     C2-4    .      .     0 A1:|A2:2-3 A1:P1|A2:P1"
- 
-+	# A child cannot recover until its exclusive CPUs are available again.
-+	" CX1-4:P1 CX3-4:P1 .     .     X1-2     .      .      .     0 A1:1-2|A2:1-2|XA2: A1:P1|A2:P-1"
-+	" CX1-4:P1 CX3-4:P1 .     .  X1-2:X1-4   .      .      .     0 A1:1-2|A2:3-4|XA2:3-4 A1:P1|A2:P1"
-+
- 	# Taking away all CPUs from parent or itself if there are tasks
- 	# will make the partition invalid.
- 	"  C2-3:P1   C3:P1  .      .      T     C2-3    .      .     0 A1:2-3|A2:2-3 A1:P1|A2:P-1"
-@@ -503,6 +509,11 @@ TEST_MATRIX=(
- 	"  C1-3:P2 C2:P2    .      .       .     P1     .      .     0 A1:1-3|A2:2 A1:P2|A2:P-1 1-3"
- 	"  C1-3:P2 C2:P1    .      .       .    C2-3    .      .     0 A1:1-3|A2:2-3 A1:P2|A2:P-1 1-3"
- 
-+	# A middle isolated parent shrunk below coverage: the released CPUs of
-+	# an invalidated child stay isolated as a higher ancestor still covers them.
-+	" CX0-4:P2 CX2-4:P2 CX3-4:P2 .     .     X2     .      .     0 A1:0-1,3-4|A2:2|A3:2 \
-+								       A1:P2|A2:P2|A3:P-2 0-4"
-+
- 	#
- 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
- 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
++	" C1-5:X3-5:P2 C3-5:X4-5:P2 C4-5:X5:P2 \
++				   .    X1-4     .       .      .    0 A1:1-3|A2:4|A3:4 \
++								       A1:P2|A2:P2|A3:P-2 1-4"
+ 	" C1-4:X2-4 C1-4:X3-4:P1 C3-4:X4:P2 \
+ 				   .      .      .      X1      .    0 A1:1-2|A2:3-4|A3:3-4 \
+ 								       A1:P0|A2:P1|A3:P-2 ."
 -- 
 2.56.0
 
