@@ -1,73 +1,72 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792756773;
-	b=s7c4kdtFll7pfOmogi2q4BkBS1CZCbriwxFas5TVr373vEfUPV2KcY5YM9tIuEtzduoG
-	 4qOSSKjZDxgHHon7kTEgkgElj5el8zJVkRxCjLvJ3J3SvSGim0zuKMeItWCWfpsslaOya
-	 wNoDtxJ3VIowU+2r/GKLHtRFsHOSllbfG2BJvTQk8+lifsPPdlHaZ+Dus4SR0h7e3Jnwp
-	 vJh7Jkv+Wh6iGwos3VmYVpMvlGi9cYx9Tb8DGQ5u1JER5YKoW2kxLm+71sNKTIqTrCWZ4
-	 0LsLI4NllLn5wwT4y57VePYAtInEbqteHN46kfOzjvGRjr2FtSa3+RBHQiyvoRQk8QA==
+	t=1792758520;
+	b=ISWEHRIRX6MmAc1Logu+7myU/1awBowabKOvEfFNI5KrEP1eTktP9P3vRhB9B0uDavi2
+	 zWl10Ep9UInCYqXy2R/+pCEbN+9sbyItERIyJw26gDt8+vD3D7C+Ii4DcZvsHZHCgFEl+
+	 VukiBsSOonbfSeWpnv7jiKORSAtkTVg8+7aRYEfCS544MUJ9XDqEzrXNNhaN6JNhN9gyl
+	 450QZDTVohcgPfAw0cvOgfgtemKbCZ1Zyxi2D6+Kip2OWYuLoVjLKqfablXpkCyBKUlcT
+	 bJgvseoTagYdN5ldt4VhBjZQdxWRRuYPd3LKAQ2vGA8KfdPzpl1kXkgTDX4mCcmBSsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792756773;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792758520;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:Content-Disposition:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=5K0OBWvP6XN4AJpcqKwEAeoGjToHWAl6P5TGp/mreF4=;
-	b=pLt2KPW6l8AHF++E9e8/gZbMK9KRsns3Uwuu6m1DJDCscVRC8IXhG1YM034ArUNg/7zq
-	 QRSKpTNFrrGSpS3swcSPv52SuAmRmiVtsJJubeRsPoaqPPebPnfXwXD8pz9fCcUL8IviW
-	 2n6RPkJ1n7l59hwheSAI5i7QfFZfwCvX4vTRDZHnEtOqPkLnXfknviCrKQOw72rICpL81
-	 ffUZPapSAJsOxfS/ia5F7+EXaEe6JQmstLa3z+9DnVUAe29IQ6pHM0mtzDTmbHtD4ikwC
-	 sDIO+EdJCjpqrQOFQyiDT9E/x8sy0oL4a61VGbO8sRUoqYk66dNFpH+1u+o3PC2/4WA==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=d0/08Y7FCHEGVevGTNjTfPTBox7sBeP1ImWEFHXBc7U=;
+	b=arTF8pZ1aiDHTSNJWnJvzS2yRpbkOARpIF+Ad7i9hmaqOiPbQAL4LNapkFYacs3skELF
+	 3Oy3/w2lmoLvgs2VgLVFlDnIoEL7f9b953SYZlu7BBQVRXx+PjDJpX4n4+T8WjQD0hqEU
+	 24Onb/cfgWoVpR+LWO5EwFrILm1bCj7swzkok9g/mUmuUb7UqYwzXq9LWTtJynWq+hSN4
+	 sby4Nfez0mTsHMoD6vItWFdNxW1aWIvcyReNmjvDYErHhgwlK9wKZM0xgdBGy81ZDl/+S
+	 J6rd+5x27SF5TfzL00u5oADhr8KWR1V5k7A1TC5QpaWr3LFCAnav1YZ+vrVmSk/WmnA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bZ4Z3epe;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D9h5ueCh;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3F4606A330;
-	Fri, 23 Oct 2026 11:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id A234F606A31B;
+	Fri, 23 Oct 2026 12:28:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bZ4Z3epe
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B0331F031E1;
-	Fri, 23 Oct 2026 11:59:27 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D9h5ueCh
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id A11871F01825;
+	Fri, 23 Oct 2026 12:28:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792756772;
-	bh=5K0OBWvP6XN4AJpcqKwEAeoGjToHWAl6P5TGp/mreF4=;
+	s=k20260515; t=1792758519;
+	bh=d0/08Y7FCHEGVevGTNjTfPTBox7sBeP1ImWEFHXBc7U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=bZ4Z3epeXYXwpZ3tWg9wJXUibCizeqWhBcTTOJbFSLHdglyRZwgQqYZHJblL/YKQ4
-	 +bsZRTZUd9IePtONjuD4nlWZMN+AD8tZSZwhk8EXpwGi0kVkUNDxIil2kubIkYd5o1
-	 5fwniwoaauxkMuCt6zbBWE4hVAxxfq6alQ5kAyUXSByAGGXhpyuPE3j+FTjmbDLcHe
-	 Ve5D7JPGvipVQavc2VvLKXnkZtZaA1pNhn9k9rgXnpbc6FAXEc59VJevmUeVRw1FPG
-	 Ifcx//PW8liiNViGTcjjvtWjMSvGDJkHQKdXqoaGVBZ9HC99nbWERAllbMdLGT4IPE
-	 Y5uHX9GvZdniw==
-From: Christian Brauner <brauner@kernel.org>
-To: Fan Wu <wufan@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Manuel Huber <manuelh@nvidia.com>,
-	David Howells <dhowells@redhat.com>,
+	b=D9h5ueCh/HmoVl/YWOMqX73NXQvEpRAPoVC1sghyt5i02VbbQSXIwe7GdWztENeam
+	 lz5tRuAbBNIco6cIBhYN7G12385d4luQqEok6GjvhOuPU0Dz2sz2paszfrBra4M7LQ
+	 Ec9n/o0SODRbxLsTSpy3Ppd5LyT5HNHFORySsTg+HvDnb8ENZ0mhVyZkD9rz66Uug0
+	 ykLTxnv8ldhqGa19X6R7XIzcXjbMuGrx7EWFG4D93qEHIJ1mGLUP7cF9UVaW5ml8HF
+	 9OWg7QeZ7MsR3BW2YNd1JuQ/zxpBGl22lWXo8cbuRjEBXzxWfCWAsfoQXR4S4E9S2h
+	 RHVCwgvVyOvNg==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: keyrings@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
-	Andrew Halaney <andrew@amutable.com>,
+	Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	Paul Moore <paul@paul-moore.com>,
 	James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	linux-security-module@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
-Date: Fri, 23 Oct 2026 13:59:14 +0200
-Message-ID: <20261023-kettenglied-vorsorge-beharrlich-d4aeb08f69ca@brauner>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
-References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com> <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com> <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org> <DM4PR12MB61369D00ED2FCFEDAE0E4597DE652@DM4PR12MB6136.namprd12.prod.outlook.com> <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
+	Christian Brauner <brauner@kernel.org>,
+	dm-devel@lists.linux.dev (open list:DEVICE-MAPPER  (LVM)),
+	linux-kernel@vger.kernel.org (open list),
+	fsverity@lists.linux.dev (open list:FSVERITY: READ-ONLY FILE-BASED AUTHENTICITY PRO...),
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH v2 4/6] KEYS: Introduce keyring_is_empty()
+Date: Fri, 23 Oct 2026 15:09:24 +0300
+Message-ID: <20261023120953.1206778-5-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261023120953.1206778-1-jarkko@kernel.org>
+References: <20261023120953.1206778-1-jarkko@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,56 +76,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1870; i=brauner@kernel.org; h=from:subject:message-id; bh=odpJiAcrzQlZy6uyTsV28Y4dhy5i8t2c+Ng1Hl1sjjI=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTd9pHWqvWTUbFbtl+D08P7wNJZJyuzpGxPsV6TFd9ff +kL502BjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIm8tGP4zXo9ZFdblNzEgAub /lk/FwpeYNyembB/gvktYa6Gsw6TXjP8070qzdVjk6FzVsny3bkzGRwPTUPDfz+f3TM9N/2pvFY bCwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 22, 2026 at 01:25:36PM -0700, Fan Wu wrote:
-> Also, one thing I missed earlier: before the policy verification call,
-> please also check:
->
-> ipe_keyring->restrict_link->check == restrict_link_reject
->
-> so we make sure the restriction function is the right one.
+Introduce keyring_is_empty() in order to decouple for dm-verity and
+fs-verity how keyring internally manages the keys.
 
-I would advise against this. I'll explain why. Which restriction goes
-onto the keyring is intentionally userspace's policy. The two supported
-ones are:
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/md/dm-verity-verify-sig.c                      |  2 +-
+ fs/verity/signature.c                                  |  2 +-
+ include/linux/key.h                                    |  1 +
+ security/keys/keyring.c                                | 10 ++++++++++
+ .../selftests/dm-verity/test-dm-verity-keyring.sh      |  2 +-
+ 5 files changed, 14 insertions(+), 3 deletions(-)
 
-    keyctl restrict_keyring $id
+diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+index b2b55c41e2cb..2ccb71bfb3ca 100644
+--- a/drivers/md/dm-verity-verify-sig.c
++++ b/drivers/md/dm-verity-verify-sig.c
+@@ -153,7 +153,7 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+ 	if (ret != -ENOKEY && ret != -EKEYREJECTED)
+ 		return ret;
+ 
+-	if (dm_verity_keyring->keys.nr_leaves_on_tree &&
++	if (!keyring_is_empty(dm_verity_keyring) &&
+ 	    dm_verity_keyring->restrict_link)
+ 		ret = verify_pkcs7_signature(root_hash, root_hash_len,
+ 					     sig_data, sig_len,
+diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+index 0302a4e506ec..890d33b9d812 100644
+--- a/fs/verity/signature.c
++++ b/fs/verity/signature.c
+@@ -67,7 +67,7 @@ int fsverity_verify_signature(const struct fsverity_info *vi,
+ 		return 0;
+ 	}
+ 
+-	if (fsverity_keyring->keys.nr_leaves_on_tree == 0) {
++	if (keyring_is_empty(fsverity_keyring)) {
+ 		/*
+ 		 * The ".fs-verity" keyring is empty, due to builtin signatures
+ 		 * being supported by the kernel but not actually being used.
+diff --git a/include/linux/key.h b/include/linux/key.h
+index 3b8af14fb323..df2034fc5436 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -439,6 +439,7 @@ extern int restrict_link_reject(struct key *keyring,
+ 				struct key *restriction_key);
+ 
+ extern int keyring_clear(struct key *keyring);
++bool keyring_is_empty(const struct key *keyring);
+ 
+ extern key_ref_t keyring_search(key_ref_t keyring,
+ 				struct key_type *type,
+diff --git a/security/keys/keyring.c b/security/keys/keyring.c
+index 5281da9d5bf7..4642754db6bf 100644
+--- a/security/keys/keyring.c
++++ b/security/keys/keyring.c
+@@ -443,6 +443,16 @@ static void keyring_destroy(struct key *keyring)
+ 	assoc_array_destroy(&keyring->keys, &keyring_assoc_array_ops);
+ }
+ 
++/**
++ * keyring_is_empty - Check whether a keyring contains any links
++ * @keyring: The keyring to check.
++ */
++bool keyring_is_empty(const struct key *keyring)
++{
++	return READ_ONCE(keyring->keys.nr_leaves_on_tree) == 0;
++}
++EXPORT_SYMBOL(keyring_is_empty);
++
+ /*
+  * Describe a keyring for /proc.
+  */
+diff --git a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+index 1f9601ef22f8..792449d356cf 100755
+--- a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
++++ b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+@@ -746,7 +746,7 @@ test_keyring_inactive_when_empty() {
+     log_info "TEST: Verify dm-verity keyring is inactive when sealed empty"
+ 
+     # When keyring_unsealed=0, the keyring is sealed immediately while empty
+-    # This means it should NOT be used for verification (nr_leaves_on_tree=0)
++    # An empty keyring should NOT be used for verification.
+ 
+     log_info "Keyring state (should be empty and sealed):"
+     list_keyring_keys
+-- 
+2.47.3
 
-seals the keyring for good. Nothing can ever be added again. And
-
-    keyctl restrict_keyring $id asymmetric key_or_keyring:0:chain
-
-only allows certificates that are signed by a key that is already in
-the keyring.
-
-This allows userspace to enroll a vendor CA during boot and let
-per-image certificates that chain to it be added later after the trusted
-phase.
-
-systemd-keyring-setup uses that second form for .dm-verity, .fs-verity
-and .bpf and then drops KEY_USR_SETATTR, so neither the restriction nor
-the permission mask can be changed anymore while root keeps write
-permission to enroll chained certificates.
-
-Both are proper seals. A restriction can only be set once as afterwards
-keyring_restrict() returns -EEXIST. So there is no way to remove it.
-
-So whoever restricts the keyring is the provisioner and whatever they
-pick is the policy. A random root process after the seal can't extend
-the set of trust anchors either way. With the chain restriction it needs
-a signature from a key that is already trusted.
-
-That's why .dm-verity and .bpf only test that restrict_link is set.
-"Restricted" is the state the kernel knows about. The policy belongs to
-userspace.
-
-So it would be really nice if we could've the same behavior for all
-these keyrings. I think that this is a really nice model and allows
-userspace to have a kernel enforced policy.
-
-Christian
