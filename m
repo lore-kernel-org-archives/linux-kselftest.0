@@ -1,62 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.143
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792743465;
-	b=0cfxqvOml9Y71pgvrV+EGJBe55YEoLCxY7fkcCtx8X3yr9V9jkReOrk4EWYajVgJSgz0
-	 3umHPQO94RVCubGa9YRtrtlZbNFxHxuDi5boOmba+Q1whUlmTeemYCHu1JOeCUQbe+2Hd
-	 mlVGDEM//hLulJBAisp0mxOvF+NODAfWeRM3mdrRsQCeA+SJJ8JfNEhfJZ0NOjO6spuQY
-	 sxoWaAFNltB7O0exjm/nuNw1hCyAFj5D6ia2vkn6C8+CS/liOVNhQ1lJa2HnUAvUqlKT8
-	 NWtD7uzRXcX6eGCE9ZVXvdyxcXC5Sq9FrPD/Ovn68yCjcs0Sx7V2OHJAenQ3lWnDWuQ==
+	t=1792745973;
+	b=rLVm7VRZtrmKi/8khPgcc1VQrdvzPJhdwd7YUne+QsKXSGqVrKjGQlrhIbSTdbyTwhPd
+	 VYspqRoZNmFPiNJas+rOmuqi5C8a/Ck+i32XD2qc0R87NVYYrDRorEyPB+tli10j9e0DJ
+	 sHzZrmcxhQHZ0Yc9A2CMwwec7k+4p3mWU+mJE5ev1m8/JtnIKDuhPeXQQanW7DoHISTOi
+	 T5godaguIQsPAzYBQ1CXCmeTp9DRN8omnk6KxIMYTf25KT8ZLI9uW62tn+vYwYMsUMmxM
+	 Oy5aJnjA1t2TzLdjgyoysxfBStDz+cXswYWH6R3+mgPAEa3Y5TcCXuwTvJTFwZj8jTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792743465;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type;
-	bh=qNsB+WdeCj5VypVcxsMZSCwyt6cdxmOolUo5Fs1wHvU=;
-	b=yVihJw1FuIjukOjX3Kb6OOG879iBI3KeCv8c46OFy65G3GvJcmP/W9JZCNE/T1hTA2DL
-	 lq7n4NfRlLiEFlfrkbntQ5e72ZdCsNavvYCWaDC8wTd1VxOTV82t5nEzVN1RUQgngowHT
-	 tO6Q6msQ44p+JE/9dUJqpTvaXlO4KCC6DY5h0GSa2zUfvRwdyQhEE8BOOHIBmvpgXox8f
-	 QzekfV+bSnZKp0kwXOdxW1f6Pi4PXPjiSf7AocfPnbwZMRASbAQ1RiBtFEQxd1F3Vd+G8
-	 I7TCbaa+IKXZVWvD842342ICQNcn3HirHH9clehhosC14Uvj5CMdJ6d68GlBU6niABg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792745973;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=p+CZWrgFfkHo8tPZ0mXySilU+u9oXL3M5JdKwfFfvv8=;
+	b=t14zmXvJzySD7QlBA8UL6gQkNshhZ8FnCNwmSxgZBCPP/RLmwkDDBIQueQ5bJCh3xvf6
+	 RBCJqyhuQkiA4CWUVwNis5iZY7d2lUdoi08qMnI56WB1cSDQS200l0y2XJAlqqOWRqsEL
+	 TYqy1D/0YATwBywE+ikLpQr57Y1u9VcEHMpS6pGgI90wFSjYT9uO30dAsUIEdGqjU0F8d
+	 MZMvtZjHI9fEY+k0S7zRrV6HZoZbqVcAl1Q6SJmw8gxrOVFn5Nw5/q4ozNuMV48eUolvC
+	 PT97HJKpYLE5xIYt46RMRB2JAMhZKrz1y5rw75VDiO9XOrIaMPJmwXyVtYkPoPjaFLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xXkZ1C93;
-	arc=none smtp.remote-ip=91.218.175.143
-Received: from mta0.migadu.com (out-143.mta0.migadu.com [91.218.175.143])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="iIo82/U3";
+	arc=none smtp.remote-ip=192.198.163.11
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB676606A326
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 08:17:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB676606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB7A606A32C;
+	Fri, 23 Oct 2026 08:59:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8DB7A606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xXkZ1C93
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=3q8FYPFV6/mr5bsm1f2R+ib1owIqgidysonIiS2gMzA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792743462; v=1; x=1793348262;
- b=xXkZ1C93sH0d9nWku2jz64eg86LFtyD4d+7g/hRHlLSjdd1CGo0g9kZlOh0/2zXvF+uMu35a
- yWJ/TDUx0k8lZzhhzewjugIn3a3T5tmjlDAlw8oZogN//DQLAKM18yj5LibgvlkdjQ9Fo4jN/VF
- X+/09nCL6CsM4gCFs6Gu9JtU=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6339bcfde15bd1cf;
-	Fri, 23 Oct 2026 08:17:42 +0000
-X-Mizu-Trace-ID: 6339bcfde15bd1cf
-X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5bcbb378fc9so5876e87.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 01:17:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzK3X+BMQIFWT0R11PCyNljO3xMOwRwwXdhoZlIIav0feJ4fULNOR17rV5xKegbGCZITQpSDNUYI93BZ3T9IwU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK66S3ddw6w9B/s3axTSim1/sQO/BLeR638LhEy/wvkhZGwNs3W
-	7LfDJibh3Mit5dqLOpfn/hY7f57ab+Uel3nnk/uHtDLWl6I3wnyMo1SIuNXIb4CrQjObqXL/qJx
-	5ibAyi/rQxX8uqqcoDcGk/5lSmhOcGzb12bCOgYig
-X-Received: by 2002:a05:6512:1111:b0:5bf:aeea:6e42 with SMTP id
- 2adb3069b0e04-5bfb06d38f2mr78643e87.8.1792743457929; Fri, 23 Oct 2026
- 01:17:37 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=iIo82/U3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792745973; x=1824281973;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NkRv8z1fvcjDDzk6L4DTc04fc1cw9emCL6L4ICuk5DM=;
+  b=iIo82/U3TIb/VpYasGdp9Ne7HmmKXAW1Bodrc+MQ0v5Qr3yHbbV1HQrY
+   kkTF7UFZRJ2Gs4T0JWf7WY56II1PVJnB5W2lqg2Y31dzibqn1tdp0zmpM
+   ZM97KcRaARQdYKQUCcDWGmFEzMALlb7/F2/yKqXZNx4OR3v1RTIUVkub9
+   54kL0b/bcqRSMJs/HdIJtPThuJCU6bcxnIU4FhO+2PUK3wh1FyFcW0oED
+   XiqSyG4gmt6DOninQkS0b5CR0ufKmm78llM7zvFCpLOhCHoreZbszweit
+   9jXtL3UXBP9jD+ji3PaX1yoZT35JmoEfZi3eSRLodqezkPm/4b4+ODjRQ
+   Q==;
+X-CSE-ConnectionGUID: zilVgmVmTqW/ux67oHL2mg==
+X-CSE-MsgGUID: iVcVsNkBSfacEOPyuhtqmA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11943"; a="1406343"
+X-IronPort-AV: E=Sophos;i="6.27,174,1787036400"; 
+   d="scan'208";a="1406343"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2026 01:59:32 -0700
+X-CSE-ConnectionGUID: RjghvquPTNSn/VJSTo1ghA==
+X-CSE-MsgGUID: BOZpR02HRBeDHo18NCIVKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,174,1787036400"; 
+   d="scan'208";a="3656910"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2026 01:59:25 -0700
+Message-ID: <9ef4e795-1222-49bb-a6a5-0823c57afce1@linux.intel.com>
+Date: Fri, 23 Oct 2026 16:59:23 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,69 +72,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261022-b4-vncr-mapping-test-v2-1-033e63ee055d@fujitsu.com>
-In-Reply-To: <20261022-b4-vncr-mapping-test-v2-1-033e63ee055d@fujitsu.com>
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Fri, 23 Oct 2026 09:17:01 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTwoY0e6oaJoQg3-1Ns=RVPfdACAaVuJE-_DgLUHhMqg9A@mail.gmail.com>
-X-Gm-Features: AclHuK_ZP2kPcYLceD_8xYePQ21UVh1ALRPCnQDdUQxEW_qnQ2BndoyxjgDJICM
-Message-ID: <CA+EHjTwoY0e6oaJoQg3-1Ns=RVPfdACAaVuJE-_DgLUHhMqg9A@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: arm64: selftests: Test VNCR translation invalidation
-To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 10/28] KVM: VMX: Add support for saving and restoring
+ FRED MSRs
+To: Sohil Mehta <sohil.mehta@intel.com>, kvm@vger.kernel.org, x86@kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+ Shivansh Dhiman <shivansh.dhiman@amd.com>,
+ David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
+ Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
+ David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+ <20260911213659.2025974-11-sohil.mehta@intel.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <20260911213659.2025974-11-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Itaru,
+On 9/12/2026 5:36 AM, Sohil Mehta wrote:
+> From: "Xin Li (Intel)" <xin@zytor.com>
+> 
+> Introduce support for handling FRED MSR access requests, enabling both
+> host and guest to read and write FRED MSRs, which is essential for VM
+> save/restore and live migration, and allows userspace tools such as QEMU
+> to access the relevant MSRs.
+> 
+> Specially, intercept accesses to the FRED SSP0 MSR (IA32_PL0_SSP), which
+> remains accessible when FRED is enumerated even if CET is not. 
 
-On Thu, 22 Oct 2026 09:11:18 +0100, Itaru Kitayama
-<itaru.kitayama@fujitsu.com> wrote:
-> Add a standalone KVM selftest that checks VNCR accesses after L1
-> updates its stage-1 mapping and issues a TLBI.
+Nit:
+It sounds like the patch adds interception. But the patch emulates the access
+of the MSR. 
 
-Could you add a sentence on what this guards? KVM caches L1's
-translation of VNCR_EL2 and has to drop it when L1 invalidates that
-mapping, in kvm_handle_s1e2_tlbi().
+> This
+> ensures the guest value is fully virtual and does not alter the hardware
+> FRED SSP0 MSR.
+> 
+> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> Reviewed-by: Chao Gao <chao.gao@intel.com>
+> ---
+> v10:
+>  - Fix a corner case identified by Chao Gao.
+> ---
+>  arch/x86/include/asm/kvm_host.h  |  5 ++
+>  arch/x86/include/asm/msr-index.h |  2 +
+>  arch/x86/kvm/msrs.c              | 89 ++++++++++++++++++++++++++++++--
+>  arch/x86/kvm/vmx/vmx.c           | 45 ++++++++++++++++
+>  4 files changed, 138 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 8d3999772ac2..0fd5d4edeebb 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1032,6 +1032,11 @@ struct kvm_vcpu_arch {
+>  #if IS_ENABLED(CONFIG_HYPERV)
+>  	hpa_t hv_root_tdp;
+>  #endif
+> +	/*
+> +	 * Stores the FRED SSP0 MSR when CET is not supported, prompting KVM
+Nit:
+CET could be more specific, i.e. SHSTK. I am not sure if there is a situation
+that one is supported, but the other is not.
+
+"prompting KVM to intercept its accesses" is confusing to me.
+> +	 * to intercept its accesses.
+> +	 */
+> +	u64 fred_ssp0_fallback;
+>  };
 
 [...]
-> diff --git a/tools/testing/selftests/kvm/arm64/nv_vncr_tlbi_test.c b/tools/testing/selftests/kvm/arm64/nv_vncr_tlbi_test.c
-[...]
-> +static void handle_l2_hvc(struct ex_regs *regs)
-[...]
-> +       case 2:
-> +               /* Check invalidation again, with the mapping reversed. */
-> +               GUEST_ASSERT_EQ(regs->regs[0], WRITE_A);
-> +               GUEST_ASSERT_EQ(READ_ONCE(*cfg.slot_a), WRITE_A_AGAIN);
-> +               GUEST_ASSERT_EQ(READ_ONCE(*cfg.slot_b), WRITE_B);
-> +
-> +               GUEST_DONE();
-> +       default:
 
-Could you add a break here? GUEST_DONE() isn't noreturn, so this falls
-through into default:.
-
-[...]
-> +int main(void)
-[...]
-> +               case UCALL_DONE:
-> +                       pr_info("PASS: VNCR accesses followed A -> B -> A mappings; "
-> +               "inactive backing slots remained unchanged\n");
-
-Could you align the second line of the string under the first?
-
-I ran it on QEMU with kvm-arm.mode=nested and it passes. With the VNCR
-invalidation in kvm_handle_s1e2_tlbi() disabled, it fails at the round
-1 check, so it catches the bug it's meant to.
-
-Tested-by: Fuad Tabba <fuad.tabba@linux.dev>
-
-With the issues above fixed:
-Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
-
-Cheers,
-/fuad
