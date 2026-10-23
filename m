@@ -1,54 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.159
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792741363;
-	b=P9Wo5siNBtMk9GWoYJn2R/qJfPDztx+Y3bVkFHQqVDHdtjBPdU8m3kTp+9dvUSq/576s
-	 wyucUaJ7eYfq3oUSRd8QEqd5wavpL219buPwb7OgFnWfTF9unTTt9k45Xke2vp2CdSuhs
-	 NOYUaXdFe1GcYzT6qY9wZa0rM+3O/1rS1Qo0xaiwXjmYIlEBPpdCRdXbHljnkEQER0Hxy
-	 gYcuFPr/Joi66+mYtxBnZ75J0bDlfbG7TDIWMbwejsMX5RWJkSq+oTLXi/VwVcjlotZPl
-	 CGdZYkSUXgvYKPHmUXvtH/MdKWB+UBwcsBi2CHf2CwcKYBvWZf8LA0qyOLyoLPbT9YQ==
+	t=1792742855;
+	b=PYtgdK874xrF8ZpY+6JRxzl9sgVuI25r6N8IeabqlkcycusMkM8zjPEylKj4u/0r7krz
+	 ogslcp6NZGFUQukfFymFmPhdObcTlf3IRCiY1YjtwHMB08K/PC3/ZqVICO+sPuXYXUkGY
+	 UVqzj5aSiBZDnuXzD85JEXAftm4pz0rMkkRU0nBg/3/lMtWw9hlfD4dMtqpn7RR3yhWXy
+	 N2ncs2Hn3eUXYpVtbmDiXBOFmL5BfQ3beC3Vb/VUySZ1LxK63iB7ZppYbKuJ5n8cmMQ5y
+	 zGkTfrmbk8rdEMvlA/Hbsaco2uMYLH/Bu56TI38tNgaud6mwmivT4cKGwKZT4b7eyvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792741363;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=EX2NYxg1qCpK7kBynX4o8sp1YSY3XpDU409ZyBkbTLc=;
-	b=xAQHuUL6SF4iU5BLD0NFwbjwgS4v2MvSi4nG6FDkAZ1OCIg5YrzoBs4XUNM8mZxiF8Su
-	 hKDaq72aplY0LV/BFS0ImCcjEqYfe+X1MIXI+UEZ3+rku9UuTlnkiTbElfAJ8ixXqIVAz
-	 igqzjSALOiy2KTiZtzDh9v6gT5g7unI6qjjnPXWzdYb+y1b9Vf80G7id0llJ6PcWzXgpH
-	 LSPk6IlErqg4e1KgFjIWPbbh6TkOnHNYp1S/qfwkgiXSY0OUh0w9NdzvCW/3wT9hlKwMx
-	 XufQwQsVZs4I3RbeNHeNGvKyQQvBUabvtbGgAo1pHzmVMcxmZ9dESgJZqDs7mOUcsvw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792742855;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=jlN5MG4Fpgy30J3ONiXbjfBzcc96GEsJO9KiHqanrNc=;
+	b=S/svUH1gI53Zmb9m+JmFnchTZ1u54XQU3LqVTdEInO/toFqgBdru8ancvsoVS4F7NKD1
+	 jbEbVHy07r0xoDfi09Z/tmyWKeLGzM9BKnKCYQjxBtc6RQ5JFau0ILuEj49HE/NWzyLxl
+	 Al+N10tHUQ5lSvLA4H9uP2qbLVRl5i93BTbvxZFBRFPNYDrAAkcdg7lHMK7GhurY2o3Em
+	 E/qj/jJj4NDbX8IjTpNsKOW2cFxq0NS64/lYwurzopYon+UWOolbqnG+BV2oWjwK7OvcY
+	 TN5X+yqso8L7cf3ULfuXAWour/kS8Iu2A/kOm1PkI4Nqkkb7NlpzOU6VC4t5152NCRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FtOOwCLH;
-	arc=none smtp.remote-ip=91.218.175.159
-Received: from mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=DpURiec6;
+	arc=none smtp.remote-ip=198.175.65.12
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F26F606A31B
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 07:42:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F26F606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0A9606A31A;
+	Fri, 23 Oct 2026 08:07:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B0A9606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FtOOwCLH
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=nDTfAFtUX+DrIrStzCs3LFmwsV7yvA6x2yoxwbUozcM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792741359; v=1; x=1793346159;
- b=FtOOwCLHjntYCnjkON2wmZBYEnAXNP0nzt9xGoCPRxd9gqPu//G/+58zj5jVbkskC4Qr+Jo7
- +EFQXta6MOuPZHNcFrjKqbcBK2iixgvIm9KAHXkiwQtdidO6ZY5PjpFvJgaGMloFO/gdVwVxI7E
- m9yywTujle763oIlz+0fEwJ8=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9f858a2b1d4eeb7c;
-	Fri, 23 Oct 2026 07:42:39 +0000
-X-Mizu-Trace-ID: 9f858a2b1d4eeb7c
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <4abaeb6b-3c6c-4712-9935-0492cc130014@linux.dev>
-Date: Fri, 23 Oct 2026 15:42:34 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=DpURiec6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792742855; x=1824278855;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CvtKOm7DSnSzUQs/e7a7HvEGVAGsSOGL+2qDB/eNTPA=;
+  b=DpURiec67uyQ7cQlxbaIBo+Z/78rA3Ch7H8HXb2IKOh7y8EvdAt4wO6H
+   7MUjIt/obXIyOO3qK/2jJofOLBGzg6+n0iJMhn4dN38wvEDZGdImHWmpb
+   +fKYN6fYpX+SLYAnGyNzW/69QNaYB8VTX7K+bhqb/8lD6NN3p5zHcQf4m
+   5xeUoXE0T8sAC5Wu/Muh6p7l13m/0DNgvxYmve7oqHmOCLIGMINecxzk3
+   nM1PeJ2ncu32NefaLm9zKjW1G1uumM+vCo+sxidt4ScBOdvlSEXN+gz3U
+   yA+SkotWihOwuiP2KeZBw2eJKgH2Wnqh9ndg6n1Rbn3hBveHO3APN0ktq
+   Q==;
+X-CSE-ConnectionGUID: Flfobat7TnWuGUopiArr1g==
+X-CSE-MsgGUID: 7dsmwzHMROW+0TvDocVpIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11943"; a="1384441"
+X-IronPort-AV: E=Sophos;i="6.27,173,1787036400"; 
+   d="scan'208";a="1384441"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2026 01:07:34 -0700
+X-CSE-ConnectionGUID: 6RC7x1WoTJqwCd5/PXyqVg==
+X-CSE-MsgGUID: R7R2Qnn6TimF020oZDzjDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,173,1787036400"; 
+   d="scan'208";a="3645708"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2026 01:07:29 -0700
+Message-ID: <c596a758-2440-4a30-b124-07f9b978d05e@linux.intel.com>
+Date: Fri, 23 Oct 2026 16:07:26 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,160 +73,191 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next 2/6] cgroup/cpuset: Properly compute effective xcpus
- in update_parent_effective_cpumask()
-To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261022031643.1351877-1-longman@redhat.com>
- <20261022031643.1351877-3-longman@redhat.com>
+Subject: Re: [PATCH v10 08/28] KVM: VMX: Set FRED MSR intercepts
+To: Sohil Mehta <sohil.mehta@intel.com>, kvm@vger.kernel.org, x86@kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+ Shivansh Dhiman <shivansh.dhiman@amd.com>,
+ David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
+ Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
+ David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+ <20260911213659.2025974-9-sohil.mehta@intel.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
 Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <20261022031643.1351877-3-longman@redhat.com>
+In-Reply-To: <20260911213659.2025974-9-sohil.mehta@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Longman,
+On 9/12/2026 5:36 AM, Sohil Mehta wrote:
+> From: "Xin Li (Intel)" <xin@zytor.com>
+> 
+> On a userspace MSR filter change, set FRED MSR intercepts.
+> 
+> Because the following eight FRED MSRs,
+>         MSR_IA32_FRED_RSP[123], MSR_IA32_FRED_STKLVLS,
+>         MSR_IA32_FRED_SSP[123], MSR_IA32_FRED_CONFIG,
+> are used by the kernel itself to take an exception at any time, they
+> should be context-switched by Intel VT-x automatically in order to
+> preserve the FRED architectural invariant that there should NEVER be
+> a "gap" during which it is unsafe to take an exception.
+> 
+> KVM leverages Intel VT-x hardware to automatically context switch the
+> eight FRED MSRs using:
+> 
+>   1) Dedicated host and guest VMCS fields for each MSR.
+> 
+>   2) VM-entry/exit controls to manage the automated loading and saving
+>      of the eight FRED MSRs.
+> 
+> Consequently, passing these MSRs through to the guest would only add
+                  ^
+"passing" or "intercepting"?
+The sentence says "... add unnecessary handling code without benefit"
 
-While re-reading and studying this patch, I noticed a few comments
-in update_parent_effective_cpumask() that still describe the pre-patch
-behavior.
-
-在 2026/10/22 11:16, Waiman Long 写道:
-> Since the introduction of cpuset.cpus.exclusive in commit
-> e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
-> compute_effective_exclusive_cpumask() helper which is later renamed to
-> compute_excpus() is added to compute the effective xcpus of a partition
-> root. However update_parent_effective_cpumask() is not updated in all
-> proper places to use the new helper to check if a given cpuset should
-> remain a valid partition root. This can cause a cpuset to incorrectly
-> remain a valid partition root even if no effective xcpus is left.
+> unnecessary handling code without benefit.
 > 
-> Fix that problem by using compute_excpus() to compute the effective xcpus
-> into delmask in all cases except partcmd_disable and partcmd_invalidate
-> and use it for tasks_nocpu_error() check as well as checking its
-> emptiness. This enables us to catch invalid partition root more
-> accurately in update_parent_effective_cpumask().
+> Both MSR_IA32_FRED_RSP0 and MSR_IA32_FRED_SSP0 (aka MSR_IA32_PL0_SSP)
+> are dedicated for userspace event delivery, IOW they are NOT used in
+> any kernel event delivery and the execution of ERETS.  Thus KVM can
+> run safely with guest values in the two MSRs.  As a result, save and
+> restore of their guest values are deferred until vCPU context switch,
+> Host MSR_IA32_FRED_RSP0 is restored upon returning to userspace, and
+> Host MSR_IA32_PL0_SSP is managed with XRSTORS/XSAVES.
 > 
-> Some test case are added to test_cpuset_prs.sh for invalidating a
-> partition root due to its effective xcpus becoming empty as well as
-> making sure that an invalid partition can only be revived when exclusive
-> CPUs are available agin.
+> MSR_IA32_PL0_SSP (aka MSR_IA32_FRED_SSP0) is part of CET supervisor
+> state, but all four FRED SSP MSRs are architecturally visible on any
+> processor that enumerates FRED.  Even if CET is absent, these MSRs
+> remain accessible via RDMSR/WRMSR, though FRED transitions will not
+> use them.
 > 
-> Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> Intercept MSR_IA32_PL0_SSP if CET shadow stacks are unsupported (even
+> with FRED present).  Since this MSR is rarely accessed and ignored by
+> XSAVES in this configuration, interception avoids the overhead of
+> manually context switching the hardware MSR during vcpu_load/put.
+> 
+> This behavior is consistent with the current setup in
+> vmx_recalc_msr_intercepts(), so no change is needed to the interception
+> logic for MSR_IA32_PL0_SSP.
+> 
+> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 > ---
->  kernel/cgroup/cpuset.c                        | 36 +++++++++----------
->  .../selftests/cgroup/test_cpuset_prs.sh       |  6 ++++
->  2 files changed, 22 insertions(+), 20 deletions(-)
+> v10:
+>  - Improve the commit message and code comment with an explanation
+>    from hpa (Chao Gao and Dave Hansen).
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 67 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 67 insertions(+)
 > 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 7ead8c3b7974..db6e4663f4be 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1798,7 +1798,6 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
-
-The function doc header above says:
-
-    Otherwise, effective_xcpus is assumed to remain the same.
-
-With this patch applied, the no-newmask path recomputes the effective
-xcpus via compute_excpus() and invalidates the partition when the
-result is empty, so that sentence no longer matches the actual
-behavior. Maybe:
-
-    Otherwise, the requested cpu list is unchanged, but the effective
-    xcpus is recomputed and an empty result invalidates the partition.
-
-or some better wording.
-
->  	int deleting;	/* Deleting cpus from parent's effective_cpus	*/
->  	int old_prs, new_prs;
->  	int part_error = PERR_NONE;	/* Partition error? */
-> -	struct cpumask *xcpus = user_xcpus(cs);
->  	int parent_prs = parent->partition_root_state;
->  	bool nocpu;
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index dc80ca5f804d..09bbbc680aa7 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -4304,6 +4304,72 @@ static void vmx_recalc_pmu_msr_intercepts(struct kvm_vcpu *vcpu)
+>  				  MSR_TYPE_RW, intercept);
+>  }
 >  
-> @@ -1841,30 +1840,29 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  	if (!newmask && xcpus_empty(cs))
->  		return PERR_CPUSEMPTY;
->  
-> -	nocpu = tasks_nocpu_error(parent, cs, xcpus);
+> +static void vmx_set_intercept_for_fred_msr(struct kvm_vcpu *vcpu)
+
+Nit:
+Maybe follow the name of the function above, i.e. vmx_recalc_xxx_intercepts().
+vmx_recalc_fred_msr_intercepts()?
+
+> +{
+> +	bool intercept = !guest_cpu_cap_has(vcpu, X86_FEATURE_FRED);
+
+This assignment could be moved after the check below.
+
+> +
+> +	if (!kvm_cpu_cap_has(X86_FEATURE_FRED))
+> +		return;
+> +
 > +	/*
-> +	 * Except for partcmd_disable, use delmask to compute the current
-> +	 * effective xcpus value and use it for tasks_nocpu_error check.
+> +	 * Because the following eight FRED MSRs,
+> +	 * 	MSR_IA32_FRED_RSP[123], MSR_IA32_FRED_STKLVLS,
+> +	 * 	MSR_IA32_FRED_SSP[123], MSR_IA32_FRED_CONFIG,
+> +	 * are used by the kernel itself to take an exception at any time, they
+> +	 * should be context-switched by Intel VT-x automatically in order to
+> +	 * preserve the FRED architectural invariant that there should NEVER be
+> +	 * a "gap" during which it is unsafe to take an exception.
+> +	 *
+> +	 * KVM leverages Intel VT-x hardware to automatically context switch the
+> +	 * eight FRED MSRs using:
+> +	 *
+> +	 *   1) Dedicated host and guest VMCS fields for each MSR.
+> +	 *
+> +	 *   2) VM-entry/exit controls to manage the automated loading and saving
+> +	 *      of the eight FRED MSRs.
+> +	 *
+> +	 * Consequently, passing these MSRs through to the guest would only add
+                           ^
+Ditto.> +	 * unnecessary handling code without benefit.
 > +	 */
-> +	if (cmd != partcmd_disable) {
-> +		compute_excpus(cs, tmp->delmask);
-> +		nocpu = tasks_nocpu_error(parent, cs, tmp->delmask);
-> +	}
+
+
+I am not sure whether it needs to repeats the changelog almost the same description.
+But I see the version history mentions it was suggested by Dave and Chao?
+
+Can this be just a summary instead?
+
+
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP1, MSR_TYPE_RW, intercept);
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP2, MSR_TYPE_RW, intercept);
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP3, MSR_TYPE_RW, intercept);
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_STKLVLS, MSR_TYPE_RW, intercept);
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP1, MSR_TYPE_RW, intercept);
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP2, MSR_TYPE_RW, intercept);
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP3, MSR_TYPE_RW, intercept);
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_CONFIG, MSR_TYPE_RW, intercept);
+> +
+> +	/*
+> +	 * MSR_IA32_FRED_RSP0 and MSR_IA32_PL0_SSP (aka MSR_IA32_FRED_SSP0) are
+> +	 * designed for event delivery while executing in userspace.  Since KVM
+> +	 * operates entirely in kernel mode (CPL is always 0 after any VM exit),
+> +	 * it can safely retain and operate with guest-defined values for these
+> +	 * MSRs.
+> +	 *
+> +	 * Disabling interception of the two MSRs offers two advantages:
+> +	 *   1) Simplicity: Eliminates dedicated MSR handling code.
+> +	 *   2) Performance: Avoids frequent VM-exits since the two MSRs are
+> +	 *      per user thread variables and frequently accessed.
+> +	 *
+> +	 * MSR_IA32_PL0_SSP (aka MSR_IA32_FRED_SSP0) is part of CET supervisor
+> +	 * state, but all four FRED SSP MSRs are architecturally visible on any
+> +	 * processor that enumerates FRED.  Even if CET is absent, these MSRs
+> +	 * remain accessible via RDMSR/WRMSR, though FRED transitions will not
+> +	 * use them.
+> +	 *
+> +	 * Intercept MSR_IA32_PL0_SSP if CET shadow stacks are unsupported (even
+> +	 * with FRED present).  Since this MSR is rarely accessed and ignored by
+> +	 * XSAVES in this configuration, interception avoids the overhead of
+> +	 * manually context switching the hardware MSR during vcpu_load/put.
+> +	 *
+> +	 * This behavior is consistent with the current setup in
+> +	 * vmx_recalc_msr_intercepts(), so no change is needed to the interception
+> +	 * logic for MSR_IA32_PL0_SSP.
+> +	 */
+> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP0, MSR_TYPE_RW, intercept);
+> +}
+> +
+>  static void vmx_recalc_msr_intercepts(struct kvm_vcpu *vcpu)
+>  {
+>  	bool intercept;
+> @@ -4371,6 +4437,7 @@ static void vmx_recalc_msr_intercepts(struct kvm_vcpu *vcpu)
+>  	}
 >  
->  	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
-> -		/*
-> -		 * Need to call compute_excpus() in case
-> -		 * exclusive_cpus not set. Sibling conflict should only happen
-> -		 * if exclusive_cpus isn't set.
-> -		 */
-> -		xcpus = tmp->delmask;
-> -		if (compute_excpus(cs, xcpus))
-> -			WARN_ON_ONCE(!cpumask_empty(cs->exclusive_cpus));
->  		new_prs = (cmd == partcmd_enable) ? PRS_ROOT : PRS_ISOLATED;
+>  	vmx_recalc_pmu_msr_intercepts(vcpu);
+> +	vmx_set_intercept_for_fred_msr(vcpu);
 >  
->  		/*
->  		 * Enabling partition root is not allowed if its
->  		 * effective_xcpus is empty.
->  		 */
-> -		if (cpumask_empty(xcpus))
-> +		if (cpumask_empty(tmp->delmask))
->  			return PERR_INVCPUS;
->  
-> -		if (prstate_housekeeping_conflict(new_prs, parent_prs, xcpus, NULL))
-> +		if (prstate_housekeeping_conflict(new_prs, parent_prs, tmp->delmask, NULL))
->  			return PERR_HKEEPING;
->  
-> -		if (tasks_nocpu_error(parent, cs, xcpus))
-> +		if (nocpu)
->  			return PERR_NOCPUS;
->  
->  		/*
-> @@ -1876,9 +1874,8 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  		 *
->  		 * Warn if it is not the case.
->  		 */
-> -		cpumask_and(tmp->new_cpus, xcpus, cpu_active_mask);
-> +		cpumask_and(tmp->new_cpus, tmp->delmask, cpu_active_mask);
->  		WARN_ON_ONCE(!cpumask_subset(tmp->new_cpus, parent->effective_cpus));
-> -
->  		deleting = true;
->  	} else if (cmd == partcmd_disable) {
+>  	/*
+>  	 * x2APIC and LBR MSR intercepts are modified on-demand and cannot be
 
-The comment in this partcmd_disable branch still refers to "xcpus",
-
-    /* ... xcpus may contain CPUs that shouldn't be removed ... */
-
-but the xcpus variable is removed by this patch.
-
->  		/*
-> @@ -1973,7 +1970,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  		 * A partition error happens when parent has tasks and all
->  		 * its effective CPUs will have to be distributed out.
->  		 */
-> -		if (nocpu) {
-> +		if (nocpu || cpumask_empty(tmp->delmask)) {
-The header comment of this "partcmd_update w/o newmask" branch above
-still says
-
-  /*  delmask = effective_xcpus & parent->effective_cpus ... */
-
-That matched the old code where the branch computed delmask from
-user_xcpus() itself. Now delmask comes from the compute_excpus() call
-at the top of the function, and the branch only intersects it with
-parent->effective_cpus when reviving an invalid partition.
-
-All minor comment updates, of course.
-
-Thanks,
-Guopeng
