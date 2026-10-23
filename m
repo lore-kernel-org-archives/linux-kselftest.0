@@ -1,60 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792777980;
-	b=xGtBGZ1Uwe2qw27p6ZTDnitjsIUpLA1cL7FCe1O8x8PiNm4G6X1M18uRmyxyv+3Gp+yt
-	 h3XG3S52TFCiovvqQiVCQBMmlHtYw8FuHKXtciSqxXXvmyjAdjX9h3k3rxmXx2kYwvGE8
-	 wZmVpebII8SRR0LrR8Hj68lkRHIa8Q8QF2gxfUvXNtUljFrswz2aCM48VbLasFQbLx8Go
-	 r9vjotAL7oveY8hD0RjNKP5eGCgHwn2oEiFSKs2Ugqvw5nENV6BpFVoZ/twnuuHc4cwnc
-	 xFaJvswKC6usu4sleffPh+vy/75W+ptCXsYdnNEg4YOawcgEhjo40JIlk0HyDAs7KVA==
+	t=1792785654;
+	b=kHB+kr3LCpfzgw2pa1X/v9Y44Pom+ENjo9usthVa+WXhVARz8LgbCnWYRNXn1xIWZdCe
+	 YglnsncGOTthe2paNXeDaSuk15WfNW+//j9mPxXQElXlNDOxciiLepOBfUGG/MQ9Yy+LO
+	 06s+Ewe5Z0WLunfc8it/pAFepmIfGIr3H4q0bLFIzBqN7e3uN8TN17tyM2+Y8HyqGg2Ve
+	 ms1ScDh6c4u9c3uZagxykEGeNl/imNKiEcdw+x6oHf3Kc0tEI0tHhkIJsYJlez++smGYT
+	 t77WmBly3FOHiD9nlB7MjGmViguWu57Bbn4IlaLkBQfnUnZpYCfHdcpzzr16v0khg3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792777980;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=zfbSS3RV3vTYd7uVbgoNjRsvAB3uNZqAW+R3s+y6inM=;
-	b=r1VkZ3vz3bs3lk3w5A/fbSpOVUwz2Dagl6sYRssKUUktp9fxOP2WFJHsY9F/K2V4bqqM
-	 r8UB5Dixqj1wMwo6QZQhQHZami1JnX2cqHvtfj0EnreAcqTx7Mwv3fEQ+g0QNF8oiAIFm
-	 yhQ7au4kr13ndAqRe/dXVhJ/wa5akR+fKD39CDaSn6qIBH8AZlAho8I1gYlrnUNyeu/5G
-	 nhFq4CG1x+N2vkeKh+lGwm3+9OIpM5PoIwQagu5y1nWlOeWIg11dQn7wlehsCmNHyBCUk
-	 aezw09DWqIwqy4GxeWAOjR6QmE3HW7nSO0GKfJqD5Ix4skKR8uNs58tf8UVCPMuultw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792785654;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:MIME-Version:Content-Transfer-Encoding:X-Scanned-By;
+	bh=LOjczTFU62fH5OmF+0SVjvko0moJ0Pzk+EdY7j/COVg=;
+	b=f7rM5BWULNdPvTwbt8eQbeBwpPl0F+NMM/zGcM5n/kDgMxTEeWIyPsGDKVFHh8Bb5qKM
+	 fY5/NQuuQrAP3sH/q4wZyJGrdHH2dpLucAeEVjVyqce2ck46xVo2bxxUpFVaLKqnAuY2p
+	 V4K0liMWijkaAuVXAT+hm6lgpszenYufRusCu86Po/B1hUSgZSnHBzVkhZuBUQYPrB/0q
+	 i6kReGTEZMFy4JqXxXpRfIURXKxnmHmo0VWFPcJFE+5IULxMeQFIlIt9fT53wqYO/OMiX
+	 dRuTOJ6pTCoIxC0c/PvIbf05FIeuWgXjrpkdu1PWXJvrn3pTPWI4a7t98FjiFEJtHbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PKny6dER;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=gBcZNUZV;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E66606A31A;
-	Fri, 23 Oct 2026 17:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9652F606A321
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 20:00:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9652F606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PKny6dER
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B0491F01829;
-	Fri, 23 Oct 2026 17:52:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792777979;
-	bh=zfbSS3RV3vTYd7uVbgoNjRsvAB3uNZqAW+R3s+y6inM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=PKny6dER+6L/Mjcok1LxNLmAR9TlSETIeARYYC8lZz/POezFlqcvt6LtFRk2DgP9M
-	 PjTOKdDvRSdM2o4kD9CFl9weMLBIppzuchXQP9RO+iP23ESPmXwfjed3nxEEqtFrei
-	 ZCxUHgO+GJ4zfcDajn118QmnT8WLlfsM/O5BisvPFKOtRAsy2llaD6L/TE5HbdfGuv
-	 Qde6CcjDa7qtaNkoiLW+g3o/LVcRjrkRRVFqUxf9zqeorPub02nNy9I53CHSP838OS
-	 bRtk+9NRgc59eYsaj0eiETH0YJEHAxmvMO9FvCb9qvcAQbZM40E4bSmWSTNFGrmd+Z
-	 ejyycknZ4S5hA==
-Date: Fri, 23 Oct 2026 10:52:58 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Russell King <linux@armlinux.org.uk>, Shuah Khan
- <skhan@linuxfoundation.org>, Bobby Eshleman <bobbyeshleman@meta.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Breno Leitao <leitao@debian.org>,
- thomas.petazzoni@bootlin.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] selftests: drv-net: devmem: Skip when hugetlbfs
- isn't supported
-Message-ID: <20261023105258.2a6349f9@kernel.org>
-In-Reply-To: <20261021090852.996899-1-maxime.chevallier@bootlin.com>
-References: <20261021090852.996899-1-maxime.chevallier@bootlin.com>
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=gBcZNUZV
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792785652;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LOjczTFU62fH5OmF+0SVjvko0moJ0Pzk+EdY7j/COVg=;
+	b=gBcZNUZVohuFuNXSNKjVFiYCfHZofcK/MyBjX2xqnwxPzl/QclDPryO8iSrBfhQoIEWaod
+	v9UatbDx8sM69X7VFOJBbCH4hKhk58ZW5Vqzsw00igOw2DVM4oWm/TlcGsX91d/QeS5xHr
+	xYoJ6d9kiLHw37zZ4ezsyCoHn+GvJLU=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-132-q3lSk8OqMrec9_RfDsozlw-1; Fri,
+ 23 Oct 2026 16:00:49 -0400
+X-MC-Unique: q3lSk8OqMrec9_RfDsozlw-1
+X-Mimecast-MFC-AGG-ID: q3lSk8OqMrec9_RfDsozlw_1792785647
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DACC01955DC2;
+	Fri, 23 Oct 2026 20:00:46 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BDBAA1956088;
+	Fri, 23 Oct 2026 20:00:44 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Ridong Chen <ridong.chen@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Guopeng Zhang <guopeng.zhang@linux.dev>,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH-next v2 00/10] cgroup/cpuset: Miscellaneous bug fixes & cleanup
+Date: Fri, 23 Oct 2026 16:00:26 -0400
+Message-ID: <20261023200036.60560-1-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,22 +81,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Wed, 21 Oct 2026 11:08:51 +0200 Maxime Chevallier wrote:
-> The devmem selftest requires accessing /proc/sys/vm/nr_hugepages,
-> which is only available when hugetlbfs is supported. This isn't the
-> case on all CPU architectures, for example it isn't supported on ARM
-> 32-bits on cores that don't support LPAE.
-> 
-> On these devices, the devmem kselftest doesn't skip gracefully
+ v2:
+   - Update patch 2 to resolve problem reported by sashiko and Guopeng.
+   - Add 2 more fix patches to resolve problem found by inspection and
+     sashiko.
+   - Add 2 more cleanup patches suggested by Ridong Chen.
 
-We don't require graceful skipping. If anything IMO hiding the stack
-traces isn't great.
+This patch series incorporates 8 fix patches for problems reported
+by sashiko, Guopenp Zhang and by inspection. The last 2 patches are
+cleanup patches suggested by Ridong Chen.
 
-If the check is extraneous and makes us fail some tests which don't
-actually require huge pages please make that clear in the commit
-message. Otherwise the net benefit of the changes is unclear.
+Waiman Long (10):
+  cgroup/cpuset: Find furthest isolated ancestor for invalidated
+    isolated partition
+  cgroup/cpuset: Properly compute effective xcpus in
+    update_parent_effective_cpumask()
+  cgroup/cpuset: Fix incorrect effective_cpus bug in
+    update_cpumasks_hier()
+  cgroup/cpuset: Minor fixes to prstate_housekeeping_conflict()
+  selftests/cgroup: Check for a single range nohz_full CPUs before
+    running test matrix
+  cgroup/cpuset: Prevent recursive call of remote_cpus_update() via
+    update_cpumasks_hier()
+  cgroup/cpuset: Make sure compute_partition_effective_cpumask() is only
+    called for valid partition
+  cgroup/cpuset: Update isolated_cpus if necessary in
+    compute_partition_effective_cpumask()
+  cgroup/cpuset: Relocate compute_*effective_cpumask() and
+    compute_effective_nodemask()
+  cgroup/cpuset: Integrate compute_partition_effective_cpumask() into
+    compute_effective_cpumask()
+
+ kernel/cgroup/cpuset-internal.h               |   5 +
+ kernel/cgroup/cpuset.c                        | 409 +++++++++---------
+ .../selftests/cgroup/test_cpuset_prs.sh       |  27 +-
+ 3 files changed, 231 insertions(+), 210 deletions(-)
+
 -- 
-pw-bot: cr
+2.56.0
+
