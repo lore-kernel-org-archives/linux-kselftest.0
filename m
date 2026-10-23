@@ -1,63 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.205
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792720091;
-	b=t7GvoaGtvOCL4zFTz902qDn9gwFp3hSZRYh0d473wgpBiiP54dq4ytBtQZyiISa8QBEU
-	 iaqaQUW8xqUbU55ZUTBndUvPHcmrpmjliRh79KV727ea+4d8b0zJ7tmJXNjdcbg6vrvrc
-	 7diNF9FkVFhw9+3/1rmLcI1u1cl6MYbj7FI1LtJ3+vbNGrBBBZxSMy6MP5W1CWw/DwURp
-	 y3eLSGYofiCAuFu3VPQKz34DogR7x80/+95s+PcR2+/JFxghZYBkVOiyn7uFWYKJDJ7WD
-	 Exjt6cLy2BJD43HI93eRKjiG/UqlCeMy4O921rfccGNLflyf6glaGTG37Y9xeFMfsXQ==
+	t=1792720199;
+	b=OCtP5aNdOpqTcByl6eYDnpN4GWZMyVJzDeKRPsjshUkOF3E+jiiJeGN+tbGpTwJqOMvk
+	 +OSddgJ0QArHICDjTtKqVhMldMs5DtWTrvDekq7slYUSGwDb1HWAjJrLuFcWf7DbrqnFk
+	 XVFIxL5X3JtHHXXWwLF9tsTWiImWuO0PHFzgaigOLp2mmlPDcHfKYoeqcAowcZUpfVXLD
+	 Oux5pFhjRPc9JJIZ26rNnI/Tyb5SyhsR3tHCZILbW6uLQU6txw6CYQtnjEMVPDDoUppf9
+	 YNM19ttvmDwywRewvrY3lPbYVnj6wntuE/ni57j66BEX0NoOvsM3dKErDf34hHvCjKw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792720091;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=K974vEkl7HviH9zH+bkMsQvo+7f18yyRhOODa6fRHas=;
-	b=SxCCqUidd8ZAhHedxuGhKCBEjSGXerVPyRM/w8ThTn4EZOal+oucWa2XcFQpLg6Vj09B
-	 uxIUsUl1yLYkTBJstMKaimpFsJY1F4/IZmkYf+XcnB/TgoXbMjIa76reCWtlBC9prHjIp
-	 zQV6d7XEYqQMHH9RBrAR6oTu5pYtVPEg4G2cX+4ynYhZpDzqF44577yJzK8D7wvSLE7kf
-	 +CipLkj7x0+YKj/1XPLQb/muu8zxSrQxoL5ODMJu8sdttp7Ssky+Uue0+jzxo47RSc1aP
-	 Fbmf5LbmXDtqVX9PtP4CCtvO6TkI/5h59WqFb2C2KaByUHJdwfLsouwd0POoawQjV1g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792720199;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:To:Cc:X-Mailer;
+	bh=+p8cIpnt0YjLXT/3n6WuKQxFq68+6JJEn3PVDsIrB3s=;
+	b=aWcVidWp/AOPlTwAD/lbp1gDG5IoACVa6fFxsBYXelPcvKIy34bkvu2mdsmylG2E9yun
+	 sPw7hzJ2PqIFL6BJTACnYY71jdHhFzcbiRc5BzTTrAOHIEa5aCn/XdazJFR62cKF0hZIe
+	 LsuJm89DuIj+OKqfR/hWU3vLIFR8G9/hMZvmcXNRSM3vQXBqdhUNu+Vass5m4B7JOITGX
+	 jQDqwlIU4jHYmOg3sbFfKLD9AQ8Em0EnU+Ro9wNOMzwybbb88GPd240cvHV/RtUYJGKaV
+	 Z0M9UIVdlhyMd+NQgAkm6+bLbq3c8A3tpK71SHERRy8Y1yjx6xLs19RPOXCuKN4044g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UcZx8e3J;
-	arc=none smtp.remote-ip=95.215.58.205
-Received: from mta1.migadu.com (out-205.mta1.migadu.com [95.215.58.205])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PHs0evTi;
+	arc=none smtp.remote-ip=74.125.82.179
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0881C606A31A
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 01:48:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0881C606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76530606A31E
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 01:49:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76530606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UcZx8e3J
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=VPNQpDtmsXoZKn9VI7oWOvmenOOysxW0h45w0IjOb3A=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792720087; v=1; x=1793324887;
- b=UcZx8e3JK3XGSYivhELEbhl9l+Ly9HMO4Z74Gl8uPfbMSWBZj1ZAF5WFCZv3EfEQALm5aq+o
- AELrVaTkCamn06bIPGghlqwu82F6XhKghdyUy9NG5nGLUFP9MR6pvnCm3hd+QwclXEWismoWnRC
- YwIm8UD4f+7GgmAPMeJYsux0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id cd0afe3d7227279f;
-	Fri, 23 Oct 2026 01:48:06 +0000
-X-Mizu-Trace-ID: cd0afe3d7227279f
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 23 Oct 2026 09:47:52 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Xia Yan <yana06070@163.com>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@kernel.org, horms@kernel.org, kuba@kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com, shuah@kernel.org
-Subject: Re: [PATCH net v3 2/2] selftests: net: check veth carrier after
- changing channel counts
-Message-ID: <atq8yKbnqtLBVucH@fedora>
-References: <20261022085842.2527-1-yana06070@163.com>
- <20261022085842.2527-2-yana06070@163.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PHs0evTi
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-354ba08cfd1so725990eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2026 18:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792720198; x=1793324998; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=+p8cIpnt0YjLXT/3n6WuKQxFq68+6JJEn3PVDsIrB3s=;
+        b=PHs0evTiNgq7bTCxWxmObhVX3ilYIc4d8fs7f6MAKtrZpjcCuj6KvG4PaaNKaCq5OP
+         vd0bn33Vmr/5vjZ/OgMwLA7+m/y+AGHg46jurwktN5DTEhdbX3DBjeLk8QkRfaS6Aao/
+         SbxIQWUMZ+xqre+Z3Nwo7JAlI8CQdOX9RJEafX7unWxlJsUhZF2Re1wNvzkWBo3YVvyC
+         Sm2ZJFfP7nSxLE6xo0DC+Zv9m19JmbCRS5JuHSkwa2zpHDknf5RDPlTYWVx4aNCFPsZk
+         93M5iuKr/eLBeRBe01Va3QWhV75VKJ3DHKUbvSiL1d+g0P04+8WVrTfCeFmzkCI3PQUc
+         kYZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792720198; x=1793324998;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=+p8cIpnt0YjLXT/3n6WuKQxFq68+6JJEn3PVDsIrB3s=;
+        b=W2PzLYB4Mpp3TB6IDkEkaoU5QE+RhvNflBbn3hRK9Tpt0HPAp4IXbapOlMLMjTJ+4V
+         lq6gD8WE83GhbmUGwMaRx8j8P6QDEa3sfp0Py8asKRGZKTJoTaHAaFttutaUXzZzXSyL
+         oD5XAofaCt55DgNTQ3M+02BEXsjZ5JnBFcEJLanOgJ3g3z8Q84muRu/3psgOiqnlYVsb
+         0d+KYPtq4Qj1AaJKxCh+oW2Pkz5S20X3S0E5TvKifqHuVty5vPsxQNxwM4byqhNMiD0g
+         ffHR3ZSAaOjnXflfZRmM8TkhYEdIQZWX6M1Qz8P9QOyQHP6Y1+Pn3t68O2oe3zab1h+5
+         yz1A==
+X-Forwarded-Encrypted: i=1; AKwUvByYuCiMviMcnujMGR97gHcblXH11OqhmtQmjkmcDIQbh2EiRWwdbI8rSLupEGEdj6kchNF64QmFIL9svkyXl94=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKscol5JwZ8mcSedQYMWCu0BP+pGUXYqOBKVowuf0Kvo7bI9zy2
+	hg8SzuMILEzl1cfIQMdLvQqeOgL99kfTiBuDZAEBIRSSRfMZ/2ikarUK
+X-Gm-Gg: AYBFou3X1Dw/UtWsThXPS/L2heWX4vVYqB5OmXyaMumdtPd1NXeJy/dbB5UGgvATv7W
+	uCdY0CC7Wo4oLRvXZbCowAXY2U3W3EcgwwvvUFvQv9o2AU+8DCE2gzyedvmEVJzkFhmzqEnKUAP
+	3u0bj0Wegb46o4oFwpuT4XGLf3fuarby+DNmk4UavGTgYPezPIgqV1EAHhRDE3AXfNkoZDchzmO
+	JxM19bvThk1amLxied9hnOloIFRejdscAf4ao8upLouP/o9x39luPpkrcxsAqu3/Dr+LplGB9vz
+	82aY4VbKTAIY3Hn8jBtk4XSa2OQaPJsSgY9axJpBJxUbcVIV5vXS9sCu7nZzawZI/vrEuju8/Bz
+	en/FbSPJDl1abs4wFHxDlq7d8tco7S67Am330MjVjdHx6+xAAGEpJZk5GG5mby54rHNMkmnrAEh
+	bquSPcpATEE7JVfgEhSDdip+1fF6JQw7zbE5F+6+28bKxgWVMwpPC8dsWyqbgZeucrV+e6GocRE
+	j8riesd5u5tOkrAuZAGekKjAna9WUHRABq2qq3FQumZdBg6Riw=
+X-Received: by 2002:a05:7300:c00d:10b0:35f:4780:518e with SMTP id 5a478bee46e88-369d97155f0mr1233857eec.16.1792720198309;
+        Thu, 22 Oct 2026 18:49:58 -0700 (PDT)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369d9c0e60dsm1971091eec.2.2026.10.22.18.49.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2026 18:49:57 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Subject: [PATCH v2 0/2] word-at-a-time: let KASAN see
+ load_unaligned_zeropad()
+Date: Fri, 23 Oct 2026 09:49:47 +0800
+Message-Id: <20261023-bug-word-at-a-time-zeropad-kasan-v2-0-be0ecfbae847@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,127 +91,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261022085842.2527-2-yana06070@163.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADu92moC/5WNSw6CMBBAr0Jm7Zi2khJdeQ/DYqQDTBRK2oofw
+ t2t3MDle4v3FogchCOcigUCzxLFjxnMroCmp7FjFJcZjDJWK33E66PDpw8OKSFhkoHxw8FP5PB
+ GkUak1pRWldYyW8iZKXArr21xqTP3EpMP7+0465/9Iz5rVNgaTQd2lsqqOncDyX3f+AHqdV2/W
+ tfq3NAAAAA=
+To: Russell King <linux@armlinux.org.uk>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Mark Rutland <mark.rutland@arm.com>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+ "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, 
+ Shrikanth Hegde <sshegde@linux.ibm.com>, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>, 
+ Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
+ Marco Elver <elver@google.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+ Alexander Potapenko <glider@google.com>, 
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org, Kees Cook <kees@kernel.org>, 
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+ linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ kasan-dev@googlegroups.com, linux-mm@kvack.org, 
+ Qiliang Yuan <odys.yuan@gmail.com>, Peter Collingbourne <peter@pcc.me.uk>
+X-Mailer: b4 0.13.0
 
-Hi Yan Xia,
-On Thu, Oct 22, 2026 at 04:58:42PM +0800, Xia Yan wrote:
-> Extend veth.sh to check carrier state after changing channel counts.
-> A running interface must keep carrier off while its peer is down.
-> 
-> Cover up/up and both mixed up/down combinations with GRO on and off.
-> Resize RX and TX queues in both directions on each endpoint, and check
-> that rejecting an out-of-range request also preserves carrier state.
-> Use two queues explicitly so these cases also run on single-CPU systems.
-> 
-> Keep these cases with the existing veth tests and reuse their namespace
-> setup, cleanup and aggregate failure status. Only check LOWER_UP on
-> running interfaces, where that flag exposes carrier state.
-> 
-> The four mixed up/down cases fail with the unfixed driver. All six
-> carrier cases and the existing checks pass with the fix.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Xia Yan <yana06070@163.com>
-> ---
-> 
-> Notes:
->     Changes in v3:
->     - Move the six carrier cases into veth.sh following review of v2.
->     - Reuse namespace setup, cleanup and error reporting.
->     - Allow explicit queue counts in create_ns().
-> 
->     v2: https://lore.kernel.org/netdev/20261020135544.24441-1-yana06070@163.com/
-> 
->     Testing on the v2 baseline 513444cc62e2:
->     - Complete default veth.sh on x86_64 QEMU/KVM, three vCPUs:
->       before: 57 checks pass, four mixed up/down carrier checks fail;
->       after: all 61 checks pass. The 55 existing checks pass on both.
->     - bash -n and git diff --check pass.
->     - If creating the veth pair fails, the case is skipped without
->       masking failures from earlier test cases.
-> 
->     Both patches also apply to net/main ffdf678dd166
->     (application check only, checked on 2026-10-22).
-> 
->     The QEMU guests failed to power off cleanly (initramfs issue) after
->     the tests completed; the exit codes above are the veth.sh results.
-> 
-> 
->  tools/testing/selftests/net/veth.sh | 84 ++++++++++++++++++++++++++++-
->  1 file changed, 83 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-> index 8b867e0..901ba51 100755
-> --- a/tools/testing/selftests/net/veth.sh
-> +++ b/tools/testing/selftests/net/veth.sh
-> @@ -41,13 +41,15 @@ create_ns() {
->  		ip -n $ns link set dev lo up
->  	done
->  
-> -	ip link add name veth$SRC type veth peer name veth$DST
-> +	ip link add name veth$SRC "$@" type veth peer name veth$DST "$@" || return 1
->  
->  	for ns in $SRC $DST; do
->  		ip link set dev veth$ns netns $BASE$ns up
->  		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V4$ns/24
->  		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V6$ns/64 nodad
->  	done
-> +
-> +	return 0
->  }
->  
->  __chk_flag() {
-> @@ -130,6 +132,80 @@ chk_channels() {
->  	fi
->  }
->  
-> +chk_carrier() {
-> +	local target=$1
-> +	local state=$2
-> +	local expected=$3
-> +	local carrier=0
-> +	local link
-> +
-> +	# IFF_LOWER_UP is reported only for running interfaces.
-> +	[ "$state" = up ] || return 0
-> +
-> +	if ! link=$(ip -n $BASE$target -o link show dev veth$target); then
-> +		echo " fail - cannot read veth$target link state"
-> +		return 1
-> +	fi
-> +	case "$link" in
-> +		*LOWER_UP*) carrier=1 ;;
-> +	esac
-> +	if [ "$carrier" -ne "$expected" ]; then
-> +		echo " fail - veth$target carrier is $carrier, expected $expected"
-> +		return 1
-> +	fi
-> +}
-> +
-> +chk_channels_carrier() {
-> +	local src_state=$1
-> +	local dst_state=$2
-> +	local gro=$3
-> +	local expected=0
-> +	local err=0
-> +	local target count
-> +	local msg="carrier after channel change ($src_state/$dst_state, GRO $gro)"
-> +
-> +	if ! create_ns numtxqueues 2 numrxqueues 2; then
-> +		printf "%-60s" "$msg"
-> +		echo " skip - cannot create veth pair"
-> +		cleanup
-> +		return
-> +	fi
-> +
-> +	ip -n $NS_SRC link set dev veth$SRC "$src_state" || err=1
-> +	ip -n $NS_DST link set dev veth$DST "$dst_state" || err=1
-> +	ip netns exec $NS_SRC ethtool -K veth$SRC gro "$gro" >/dev/null || err=1
-> +	ip netns exec $NS_DST ethtool -K veth$DST gro "$gro" >/dev/null || err=1
+load_unaligned_zeropad() is inline assembly, so KASAN and KCSAN never
+see the word loads that sized_strscpy(), the dcache name compare, path
+name hashing and x86 csum_partial() do through it. While reviewing a
+strscpy() KASAN fix, Peter Collingbourne suggested checking the first
+byte inside load_unaligned_zeropad() itself, as read_word_at_a_time()
+does [1].
 
-Why do you do gro setting in rx/tx set ups?
+Patch 1 adds that check on the six architectures that implement
+load_unaligned_zeropad(). Patch 2 adds a KASAN KUnit case for it.
 
-Thanks
-Hangbin
+[1] https://lore.kernel.org/r/CAPQLkRhXZwozmfhNd_PEx1ihwdH1_5qthP6PANYJ_m-v9vfQTw@mail.gmail.com
+
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+---
+V1 -> V2:
+- Call instrument_read() instead of open-coding it (Andrey Ryabinin)
+- Keep Marco Elver's Reviewed-by, as the check itself is unchanged
+- Rebase onto 7be4bc52fd9e, which drops the big-endian branch of the
+  arm64 header and rewrites the s390 load_unaligned_zeropad()
+
+v1: https://lore.kernel.org/r/20261019-bug-word-at-a-time-zeropad-kasan-v1-0-f21a3ed6a477@gmail.com
+
+---
+Qiliang Yuan (2):
+      word-at-a-time: check the first byte in load_unaligned_zeropad()
+      kasan/test: cover load_unaligned_zeropad()
+
+ arch/arm/include/asm/word-at-a-time.h              |  5 +++++
+ arch/arm64/include/asm/word-at-a-time.h            |  4 ++++
+ arch/powerpc/include/asm/word-at-a-time.h          |  4 ++++
+ arch/riscv/include/asm/word-at-a-time.h            |  4 ++++
+ arch/s390/include/asm/word-at-a-time.h             |  4 ++++
+ arch/x86/include/asm/word-at-a-time.h              |  4 ++++
+ mm/kasan/kasan_test_c.c                            | 24 ++++++++++++++++++++++
+ .../powerpc/primitives/linux/instrumented.h        |  3 +++
+ 8 files changed, 52 insertions(+)
+---
+base-commit: 7be4bc52fd9e0e55dc9a2e0232b89427d2c4b614
+change-id: 20261019-bug-word-at-a-time-zeropad-kasan-af2460466ee6
+
+Best regards,
+-- 
+Qiliang Yuan <odys.yuan@gmail.com>
+
