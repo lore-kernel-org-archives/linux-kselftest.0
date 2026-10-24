@@ -1,104 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792843647;
-	b=FdHSygupi+0v8P5kQ/7sJQOuS9kbM9zBvFmie2u0siH+ZQNgQErVrSL1QAfWgpY+xZAf
-	 0UMQUocBAM7Ka/d/RIKlmf/y9HngTADSuKR3dJWf0v5GOmgrwAlw9EjblTS00j5poTRlX
-	 1acJdnGZpWPBbRb9Ci6h+6GyQGeAE/mz1XnK0m32W7nUzNb/ZRX7CLbves622WCBrUiy5
-	 THIgS4kbdgWOiFf8h9tHbOLmEDnWVOOFJzn85719VgAb1dIUwkCYRJpoGftWP1YeID2c1
-	 PMuuxidUn5vfxerlNrZ7q4roa0oc/zfz+h6gnxu1hrfHjGER2sRAE6x1RksKqOdfOkw==
+	t=1792850976;
+	b=beya6KBer4jClyjj8I+JFJniQgo01phr1FneKQcASWHS5XuK6UV1vfskLzzoiMr0CoqV
+	 fp2ZjLV21HAaHi+RMOBYZCvIeD4ac/oMqQ+cLzZclOuMIzJeoqpQUzsfPOIG12GnUacU/
+	 5ifS7tC1svoPZIgB4wfOmJAXS7VPndus4A18DvWIKUyV8cGXEMuD+QoslhVMxTaCDYVNJ
+	 PTc99/X1qw8ysafNcSJ6V90JaCbxIwYEWA761epqK026mtSsSpeosUtrjD8KAZ0y97Aod
+	 HyPvrT/HESzIWLxxkNSJ2hGE79rSEZ7OYlEHBfCIurf+6hi71X+DNo/6/wUV0BjWmWg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792843647;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	a=rsa-sha256; c=relaxed/relaxed; t=1792850976;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=zLNM9fxN8Q0mYWX/OgajYSxuCiy7NImfGuJpx0sAOuU=;
-	b=5jkEg4Jjl93UZ82DvNtWmLEPhco9OkjLjrlkJ7xfCw9otg3Ag4pO86VBb63t1Jur0gfu
-	 w8rB+/BFgYQWPPcNh61m1Y0XfaI/SxFBF8RWN4Fpe99X8QnVaJDk7SGglk4UijpoyxGsH
-	 MkPT85q9tEY2GU9ehaQKYDaVFPHXtk5CbejpWR4mMCZBz4TBJCyF3KxJXuj3n4E3EwCbL
-	 TAOdXfT0WR5wS73SSZKdbzeRT5ZfbwhjbsHheAC8LRrjR2HO9rozCX7a2z66pJfa/p9s2
-	 zDh3Jvu0aUo4Im/QsCMSZi9dWrOFyqzgR5maJYYGLaOPfeibzqSiiWR3GNmy0AoVK7Q==
+	bh=NbevVEv2qKfvdR+VHCdrsNToVr6babHAyFlUpwtlbls=;
+	b=eNdqADlK+qilb+GwS0yV/JaOBQhL2VG9YJD1ROAGJmScjtSMEzV5WJdgXZRWSgZ0dcLN
+	 heLJ7BLN0CX/+eVAXlQU5PwygUDHUKQlzZJ9+7+Qi4WDNTq4PW7yuilpjbuvsijTX8LY4
+	 fJGNQbJMI7fh050mGhRGytqPnIx486HfLlxeZQprPmaCMvLz7TMsVgyY4ehWGE74LfpNV
+	 qNccsBx9erAeG8lonCpKqxAGK1Bw4jnTMFKpM/GdLGgND4moa40BZQFodhan4dQ4YWYYL
+	 633dS+5ger2t/65rc8NRu5Hw9LxlpJc1Sf0SjcW3D9E3prEZv4i75zAU7KkO5OWxAjQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jbkjwaQH;
-	arc=none smtp.remote-ip=74.125.82.170
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T2BhZcIB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E27360A2610
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 12:07:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E27360A2610
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD10606A31A;
+	Sat, 24 Oct 2026 14:09:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jbkjwaQH
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-35b2c599f43so320734eec.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 05:07:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792843628; x=1793448428; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=zLNM9fxN8Q0mYWX/OgajYSxuCiy7NImfGuJpx0sAOuU=;
-        b=jbkjwaQHOM9PvR1//nhAnjt8kj/2TksQ4yOsFvy5FOP0dbrbBcz3Za7a7PKHXZYz36
-         sZS1qtulphs4jCdlYqqjek2qB+1vZoV295ubms5R1QFlKO9i5SOOdwRgoOCqdJ9yQ7Wy
-         dpB62kKcPiBHBqfOH/T2NltriOyz6mN+AW7DwZo64Jqh2VbJDp+FpLwJRHrOo5O8kf0p
-         zPTNtlOkmz0p27ORnExmYq3J0kTMWFAwJBF1D88NpYt4zj/8VcEH8VG4meK23sNTM7Ft
-         JvtEWROLMn7nXRvCnQ8gaLABalcEMonDfO/0KQGgHgHOWPSl4ChKdJBIz7VemKTH5n4A
-         7xMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792843628; x=1793448428;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zLNM9fxN8Q0mYWX/OgajYSxuCiy7NImfGuJpx0sAOuU=;
-        b=rOlinhvgcIE6r2YqkHc/s/bvBNa4yqa18No4BN8JkSk9mUsGEZJITdbtmRZwZqVAVB
-         /aMvKE8hz+phbqctkU4XYzvT4BU0I7dQLfmB5SpmE/1nTTBZKeTTj4fSScJkBORONdIr
-         A4jWSP9oMG5utHPpB6fkpW6BpOdbfc0j9W/YBuEf3WxbUm1ePWn95l6OP0mOVPM1HDXA
-         5lZrs35aQr7OtageBPEOcV716TKYa35Tw13486fI0uoLLjmzBsZmJufejreVKMsa7Ecd
-         n7yknBYxRanKqGHepEeUjAleaUQtGXdkx4d1gf9/Cb90LWrFCFtpOPSz0Lb9qH9YsFea
-         kgPg==
-X-Forwarded-Encrypted: i=1; AKwUvBw+Zso0db+8y9SeIx6MFbk1hD9UZOTUkkgM6PsOQozWbuDX7AevXIUZEZkwsGC+S39/KvzWZNEIT7yqlzUCFEI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLsWHYF7zhsz/Mb/wjJ7qNjCtC4PKUne8YgCVgQHvYGUs7Ou2LJ
-	Hw3/nRKpktK9K3SyiR/mCkBHxiETL0VcLxxKMR8WfXsjVtqWRkbp2HO0
-X-Gm-Gg: AYBFou3qJWzlmtwjV2f/6IhC/DgoOzNCi5RmbXdvtzFmo3IpG9kPNYNcxjwsw5qDOhd
-	29KKlRDG4nbrEe+16oGmWPvir7yWQ7b7faMoPbop+hMmRn9+NhbW809h/KbmbffkSCxLbXVzjIm
-	U3M+p4HnAAgskiwx7J2UdXUJrMtJu7CH+O6dZLmvGvVAoOgJuqlFBlCrMtCkN0zBXnHHCpy3P0K
-	oFqMJ7Ee0/q5mwSrgp3EXOVCsOSIN3uwq2XRIHHnyQz3+R2qXfPZyZ341ke7FgNzcc+UQ0sCqEk
-	wFjBVWUqyrrCKxtyR0khW0RXrNoURpdmVhhQbCu4f4JkAquQnJFakH7IRs4uIpH6SVAF8CjMMsz
-	gqgTWpCwKFJOnlBQ3K8VTXCQ8jWwxfpaQMZhodBPtdLpRLOewXn6bDhzQf7kKhQQjRuiR5u+UpF
-	PhTQP9ZccA7/kxoEtD0GjSu0QIwWXeSUojWGe3AwT3D3bjrz+YiF7NZpUBl92Ow/lzpjpXxrrne
-	bwXu/t87MZDgh90zjwB9XWsTmkN8EG0SfG5umBoF7mk2n96RvjdmRd3ajVjNdIUkIBefPOcxNHc
-	5djVSD4Q1v6FzWJqUgAK+0/D/Q==
-X-Received: by 2002:a05:7301:4205:b0:369:d793:328d with SMTP id 5a478bee46e88-369e84bd8b1mr2964461eec.31.1792843628051;
-        Sat, 24 Oct 2026 05:07:08 -0700 (PDT)
-Received: from localhost.localdomain ([136.25.42.214])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8d95e91sm8120722eec.15.2026.10.24.05.07.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Oct 2026 05:07:07 -0700 (PDT)
-From: Tim Budding <tim.budding@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-sctp@vger.kernel.org
-Cc: Xin Long <lucien.xin@gmail.com>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T2BhZcIB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE2241F01825;
+	Sat, 24 Oct 2026 14:09:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792850975;
+	bh=NbevVEv2qKfvdR+VHCdrsNToVr6babHAyFlUpwtlbls=;
+	h=From:To:Cc:Subject:Date;
+	b=T2BhZcIBvhrLZ+P5+Mw67X9xy7gAx/zXwoWKujoo2DvocMTA3srsBbK7VW9brahf5
+	 fnjM4HGTQenrsWjaRjKW/Uw+Ig/KWqmyKN+Hr/ETyFHzRtcyPwyNOLrFolBgZ4fPv/
+	 XM0iGPmm1m7aHiwrwDHoNG4iLQ8p3nhBW4ApCR5os4J0rBeIirUqBQYADbJT1Wkav7
+	 0hpecnCc1w4GzV+MkrOtpkMEjijx/6YsQCUzwFrCtK4wmDxbKf6O9IRGvjkDpYU7Pt
+	 NnbQcUd4Ia4Dhw4U+cAJ9WV2+zmHL/M2eV6VQpJUc622CYZvul6ieyni32Cs4mg4mt
+	 SHJwAd6FHA4UQ==
+From: Sasha Levin <sashal@kernel.org>
+To: Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tim Budding <tim.budding@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH net 3/4] sctp: don't treat an I-FORWARD-TSN as an association reset
-Date: Sat, 24 Oct 2026 05:06:26 -0700
-Message-Id: <20261024120627.837568-4-tim.budding@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261024120627.837568-1-tim.budding@gmail.com>
-References: <20261024120627.837568-1-tim.budding@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/cgroup: Don't count cgroup.threads in test_cgcore_proc_migration
+Date: Sat, 24 Oct 2026 10:09:33 -0400
+Message-ID: <20261024140933.315221-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,80 +62,95 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-sctp_report_iftsn() handles both a received I-FORWARD-TSN and the SSN/TSN
-reset request and response of RFC 6525, where all queued data has to be
-discarded. It tells them apart by checking whether the New Cumulative
-TSN equals the highest TSN seen, and if so calls sctp_intl_abort_pd(),
-which aborts partial delivery on every stream, skips the MIDs being
-partially delivered and flushes the whole ulpq.
+test_cgcore_proc_migration() moves a process with 13 extra threads to
+cg_dst and checks that they all moved by counting the lines of
+cg_dst/cgroup.threads.
 
-However, sctp_tsnmap_skip() runs first and raises the highest TSN seen
-to the New Cumulative TSN, so the check is also true for any
-I-FORWARD-TSN that arrives before data with a higher TSN, e.g. when the
-abandoned message was the last one sent, or after a burst of loss. All
-partially received messages on all streams are then dropped. A stream
-that was in partial delivery also has its MID skipped, so the next
-fragment of that message fails sctp_validate_idata() as stale, and the
-association is aborted with a protocol violation.
+test_stress.sh runs test_core while enabling and disabling cpuset in the
+root cgroup.subtree_control in a loop. Each change moves every task in
+the hierarchy to a new css_set. Reading cgroup.threads walks the
+cgroup's css_sets without holding cgroup_mutex, so when such a change
+lands in the middle of the read, threads that were already listed from
+the old css_set are listed again from the new one. The test then fails
+with "not ok 8 test_cgcore_proc_migration" although the migration
+worked.
 
-Drop the check from sctp_report_iftsn() and have the reset paths call
-abort_pd() explicitly. For DATA chunks this changes nothing, as
-sctp_report_fwdtsn() already aborts partial delivery and
-sctp_ulpq_abort_pd() returns early when none is in progress. For I-DATA
-the reset paths still discard everything as before.
+Running the test's steps 40000 times in a 2 CPU KVM guest with the
+cpuset changes going on, 5 reads listed the 14 threads two or three
+times over (up to 36 lines), and a second read right after gave 14.
+Without the cpuset changes it did not happen in 40000 runs. With
+test_stress.sh, the test failed in 2 of 150 runs.
 
-This relies on the previous patch, which makes sctp_intl_skip() abort an
-unordered partial delivery of the skipped message; the check removed
-here used to do that at the leading edge.
+Check the cgroup of each thread of the process in /proc instead, which
+other migrations can't affect.
 
-Found by an AI assistant while working on the first patch in this
-series. Reproduced on an unmodified kernel with the leading_edge test of
-the sctp_ifwdtsn.sh selftest added later in this series, which passes
-with this fix. Its reset test checks that an SSN/TSN association reset
-still works with interleaving.
-
-Fixes: 47b20a88566f ("sctp: implement report_ftsn for sctp_stream_interleave")
-Cc: stable@vger.kernel.org
-Signed-off-by: Tim Budding <tim.budding@gmail.com>
+Fixes: 1a99fcc035fb ("selftests: cgroup: Run test_core under interfering stress")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sctp/stream.c            | 2 ++
- net/sctp/stream_interleave.c | 3 ---
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ tools/testing/selftests/cgroup/test_core.c | 36 +++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
 
-diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-index e4354d58f20b..d5e71a2027f5 100644
---- a/net/sctp/stream.c
-+++ b/net/sctp/stream.c
-@@ -749,6 +749,7 @@ struct sctp_chunk *sctp_process_strreset_tsnreq(
- 	 */
- 	max_tsn_seen = sctp_tsnmap_get_max_tsn_seen(&asoc->peer.tsn_map);
- 	asoc->stream.si->report_ftsn(&asoc->ulpq, max_tsn_seen);
-+	asoc->stream.si->abort_pd(&asoc->ulpq, GFP_ATOMIC);
- 
- 	/* G1: Compute an appropriate value for the Receiver's Next TSN -- the
- 	 *     TSN that the peer should use to send the next DATA chunk.  The
-@@ -1028,6 +1029,7 @@ struct sctp_chunk *sctp_process_strreset_resp(
- 			LIST_HEAD(temp);
- 
- 			asoc->stream.si->report_ftsn(&asoc->ulpq, mtsn);
-+			asoc->stream.si->abort_pd(&asoc->ulpq, GFP_ATOMIC);
- 
- 			sctp_tsnmap_init(&asoc->peer.tsn_map,
- 					 SCTP_TSN_MAP_INITIAL,
-diff --git a/net/sctp/stream_interleave.c b/net/sctp/stream_interleave.c
-index 77fe0db5ff77..f49b534ff78f 100644
---- a/net/sctp/stream_interleave.c
-+++ b/net/sctp/stream_interleave.c
-@@ -1225,9 +1225,6 @@ static void sctp_report_iftsn(struct sctp_ulpq *ulpq, __u32 ftsn)
- {
- 	/* Move the Cumulattive TSN Ack ahead. */
- 	sctp_tsnmap_skip(&ulpq->asoc->peer.tsn_map, ftsn);
--	/* abort only when it's for all data */
--	if (ftsn == sctp_tsnmap_get_max_tsn_seen(&ulpq->asoc->peer.tsn_map))
--		sctp_intl_abort_pd(ulpq, GFP_ATOMIC);
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index 20d2b63774c37..53592bf309fac 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -9,6 +9,7 @@
+ #include <sys/stat.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
++#include <dirent.h>
+ #include <fcntl.h>
+ #include <sched.h>
+ #include <stdio.h>
+@@ -567,6 +568,39 @@ static void *dummy_thread_fn(void *arg)
+ 	return (void *)(size_t)pause();
  }
  
- static void sctp_handle_fwdtsn(struct sctp_ulpq *ulpq, struct sctp_chunk *chunk)
++/*
++ * Count the threads of the current process, or return -1 if any of them
++ * is not in @cgroup. Unlike reading cgroup.threads, this is not affected
++ * by other migrations happening at the same time.
++ */
++static int count_threads_in_cgroup(const char *root, const char *cgroup)
++{
++	char line[PATH_MAX];
++	struct dirent *de;
++	int cnt = 0;
++	DIR *dir;
++
++	snprintf(line, sizeof(line), CG_PATH_FORMAT, cgroup + strlen(root));
++
++	dir = opendir("/proc/self/task");
++	if (!dir)
++		return -1;
++
++	while ((de = readdir(dir))) {
++		if (de->d_name[0] == '.')
++			continue;
++
++		if (proc_read_strstr(atoi(de->d_name), false, "cgroup", line)) {
++			cnt = -1;
++			break;
++		}
++		cnt++;
++	}
++
++	closedir(dir);
++	return cnt;
++}
++
+ /*
+  * Test threadgroup migration.
+  * All threads of a process are migrated together.
+@@ -597,7 +631,7 @@ static int test_cgcore_proc_migration(const char *root)
+ 	}
+ 
+ 	cg_enter_current(dst);
+-	if (cg_read_lc(dst, CG_THREADS_FILE) != n_threads + 1)
++	if (count_threads_in_cgroup(root, dst) != n_threads + 1)
+ 		goto cleanup;
+ 
+ 	ret = KSFT_PASS;
 -- 
-2.34.1
+2.53.0
 
