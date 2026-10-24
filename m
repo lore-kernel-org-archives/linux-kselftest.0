@@ -1,63 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792824959;
-	b=KQINTwUrWUEsHtvuHI/SM+hdZhjtt++r9xAevtSi+D8H6kiiO0vfryzyAgx4/bK8bLNK
-	 FUtMLiPJGImpRKuCQUIjHeYCSum9GEBE3VtQI0RLy8X+rtLGwdDjoQja1eKtpbFjE2jYi
-	 OH74jF9NCJ+IMybJ6zbTveWYniORezAcFsLzGC6zztU5KZA2wyMIceJulZ/vmUX5VuTY5
-	 E5qOrwQSYCJDK0k3xC5MNk5VQfDul2EK22FRxfdCET6iWjki0DOTQQeZeg6uvMi2SG4uv
-	 XDv8V7qyJvSi8Av4eu6rhci/MoyBfZpMUo9P0e5d7XzV9fisoYyPr80TGT9Ld+blP0Q==
+	t=1792825528;
+	b=USv6k8/JDkKBhkDicoWJEpmEDeuBeFXyLHGcpvkEbqpfRyGlUkiy81mnroMFuq+vgJcj
+	 CumBiwe9LFvwUtWkl2LusH60wtLKgswD8dwVV9Liheiwu/Fx1Og7EX7U/Q4EyhuG5Ipeq
+	 O7bHTx/jsvFohmnnRAtgDO1hjREWNBylQxOgt5IiUq1hOES57bti6jss1LVTKCx6/O+Dw
+	 IoIzdfxtlLj4FkdfetIfOTnQzNsQ29jaEyiSJSPJSm+fdZA/hm655U9jxXnYaRC48TKlM
+	 VYauXHb4OQQK5l+AJcW2cXHtP6sQA8Xe59cyJ5cqI1pV+Ap7bVKFdiNHnh+Sjm82doQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792824959;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=6+VMZP4/imQFRcxhHNIAtyuoExenFQEkCplGv1ihNMc=;
-	b=g2I51h2OvyNACFk4P3bgBBg7kpH4NxyYn5nQFii/MVo3Gvx56EOX58oAkEU95Sp32URB
-	 RqoG0DfIMnZG55phe+8AKJogybZw8cY136oo3BHOzd+4RBgvDK7NDORisKFTjbwzJSfhO
-	 H8aDobGNoRcunKYPn6zorIPGialZWeeHxbHqQim6IMKTnTKJdxGtYYJ/yV80LckD5OhOe
-	 9rAjeLWI1M/U11NN+4vI21f00jpvg4a9NnRy4KZGmiyNLbFUIvyVC3zkAEkY0gePJ5PTA
-	 FdGRjnWeIsi8UOAMlVaRAMST1fcOjNEZ60dVntXysV6cwJE4zBO0UMBprGyVwYiHUsQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792825528;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=rAuzurPfsLQhSEiLbgaU/pfbgL67ZN11Nrab8/1fyE8=;
+	b=QoRJr7UyZE8mxACpwr8hPEv1maDdXFR7fCkYQ3YaG6sjrTTGic73rvpe4H60ZSE+EtDe
+	 Zk8tIfyHxI98YjRRMW4iDe63Yu2htK2w3cA7cvC/4749twr4HfoQK2UOy5frmMMOxy03i
+	 FHJbprrIgKu/qIVKlmiiIwYQDp5eLhkvp9EvMei51/wofuvtj+sZq59e94PAoIW0HORYa
+	 gYPEERlGq64fZdODdG7GMExuax1kOLwutJt+UJX9nPqfpQFzVm0+84KrcqhJZnluEOLpY
+	 aCNbD7SeBFQb9tL4Zpzxm6sl2aIMjcUOq2DKJ4sIK4igOr+49nv63NgRPadF3rBn5UQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cWG1PEKB;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TbR7RRDy;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D9A606A31B;
-	Sat, 24 Oct 2026 06:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FDD606A31A;
+	Sat, 24 Oct 2026 07:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cWG1PEKB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 849EF1F01825;
-	Sat, 24 Oct 2026 06:55:58 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TbR7RRDy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637B61F01825;
+	Sat, 24 Oct 2026 07:05:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792824958;
-	bh=6+VMZP4/imQFRcxhHNIAtyuoExenFQEkCplGv1ihNMc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=cWG1PEKBSyP/Azxo7QWRPw7O0At9SIcnBK3p6Ebqohr42LjPoUDMYXSIkuSkIiMrh
-	 feqUkXJNYkHqoQYkAtRJBSZK6VKS0PSRet/LOOM65IynGSY2Z7egGmaT3d7mB8KxpF
-	 6FioWI4KokejBGS/RMK7Hm3nSgyL48YI2q9dG5xPqln+rkVk6HM0ow5cBn85lDmOHa
-	 U0s98dmuTcGS4Hm7uSpFG9lSzOCoV5Ke46g466114qOX32mAwnpGwhAzCbYMqpaJUX
-	 esiVY6142btfJ+pdnDPBUd27FzKqA/jhKEU3OuRNsp8zEvF5r95JYT6V4GTPum4udX
-	 TEADT+I1GCSDw==
-Date: Fri, 23 Oct 2026 23:55:57 -0700
-From: Oliver Upton <oupton@kernel.org>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Marc Zyngier <maz@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Eric Auger <eric.auger@redhat.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/3] KVM: arm64: Preserve level IRQ re-pending
-Message-ID: <atxWfRsNNK8vdeSr@kernel.org>
-References: <20261022064628.4206-1-kmehltretter@gmail.com>
+	s=k20260515; t=1792825527;
+	bh=rAuzurPfsLQhSEiLbgaU/pfbgL67ZN11Nrab8/1fyE8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TbR7RRDyKk7k20qZjfNpSBmbfuECJu/WQfwP2rVMhAoTTHCsnaQyaNGie8bCVqgtH
+	 DIkrKoG3DwOIQBfRuLcMFtBEBQ61RJkcmcGhnzKtp+2Qt01XORo0sp9aqXBqLrxSph
+	 tiajVXiLwzrToRWyWWaWyDI9ohjyL/ikt+pHdV60pD+oKKT+xaf+8ThtA3UaMnpGGH
+	 g/9HfLMP2CEsV8Pp+Oan0z8HJiNbESeAcULccpn26NlOBTou1JYq8ClHB/zsO182NM
+	 UoG3VG9KW4rRTh8Jbvc3nfn7IIpxEMbEfU4vMMsW2B87XZvsRLlhq3h7aj6bf8YVcN
+	 6Hf1qEZiU9pnw==
+Content-Type: multipart/mixed; boundary="===============2269967893526965054=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,47 +49,108 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261022064628.4206-1-kmehltretter@gmail.com>
+Message-Id: <4fc72796a6ccf2acff87fc27a0f73bb64b74199cad21829b1c6a59fbf0b474d4@mail.kernel.org>
+In-Reply-To: <20261024062329.264086-1-hackerowskiy@gmail.com>
+References: <20261024062329.264086-1-hackerowskiy@gmail.com>
+Subject: Re: [PATCH] bpftool: fix line info in multi-function CFG dumps
+From: bot+bpf-ci@kernel.org
+To: hackerowskiy@gmail.com,bpf@vger.kernel.org
+Cc: qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,hackerowskiy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 24 Oct 2026 07:05:27 +0000 (UTC)
 
-On Thu, Oct 22, 2026 at 08:46:25AM +0200, Karl Mehltretter wrote:
-> A guest can set a level interrupt pending again while handling it. The
-> GIC records Active and Pending and delivers the interrupt after
-> deactivation. KVM instead drops the second pending state for both the
-> GICv2 and GICv3 backends.
-> 
-> The VGIC keeps software pending state outside the LR because commit
-> 67b5b673ad4d stopped placing Pending and Active together for level
-> interrupts. When the LR is folded, KVM cannot distinguish the pending
-> state used to populate the LR from a later ISPENDR write. This series
-> records the later write and preserves it across deactivation. The last
-> patch adds a two-vCPU GICv3 selftest.
-> 
-> The awkward case, and the reason for the RFC, is a write from another
-> vCPU while the interrupt remains in an LR. KVM cannot know whether the
-> write preceded or followed the guest ack. This series preserves the
-> write. A pre-ack write can therefore cause one extra delivery, while a
-> post-ack write is no longer lost.
-> 
-> The exact alternative is to stop and synchronize the target vCPU
-> before applying such a write, as the active-state accessors do. Is the
-> conservative replay acceptable here, or should ISPENDR pay that
-> synchronization cost?
+--===============2269967893526965054==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Yes, just kick the target vCPU out and sync the LRs back into the VGIC
-state. That's consistent with the approach we're taking everywhere else
-where this sort of issue arises.
+> bpftool: fix line info in multi-function CFG dumps
 
-If we're lucky the vCPU is just poking at its own redistributor and the
-synchronization is free.
+TL;DR:
+- Selftest's expected string likely never matches: it doesn't escape '>' in
+  "skb->len", unlike the DOT output
+- Even if fixed, the check may not distinguish fixed from old code
 
-> The issue was reproduced with Zephyr, NuttX and RT-Thread guests. On a
-> Raspberry Pi 400 host with a GIC-400, each GICv2 guest handled the SPI
-> once before the fix and twice afterwards.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
+> new file mode 100644
+> index 000000000000..7d5b80927b65
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
+> @@ -0,0 +1,41 @@
 
-Have you configured these guests in such a way to reproduce the issue?
-What exactly are they doing that is susceptible to this issue?
+[ ... ]
 
-Thanks,
-Oliver
+> +void test_bpftool_cfg(void)
+> +{
+> +	struct bpftool_cfg *skel = NULL;
+> +	struct bpf_prog_info info = {};
+> +	__u32 info_len = sizeof(info);
+> +	char output[MAX_BPFTOOL_OUTPUT_LEN];
+> +	char cmd[MAX_BPFTOOL_CMD_LEN];
+> +	const char *expected = "return\\ bpf_ktime_get_ns()\\ ?\\ skb->len\\ :\\ 0;";
+> +	int err;
+
+Can this expected string ever match the bpftool output?
+
+The DOT output prints source lines through btf_dump_linfo_dotlabel() ->
+dotlabel_puts(), which escapes '>' as well as ' ':
+
+    static void dotlabel_puts(const char *s)
+    {
+        for (; *s; ++s) {
+            switch (*s) {
+            ...
+            case '<':
+            case '>':
+            case '|':
+            case ' ':
+                putchar('\\');
+
+So the line "return bpf_ktime_get_ns() ? skb->len : 0;" is printed as:
+
+    return\ bpf_ktime_get_ns()\ ?\ skb-\>len\ :\ 0;
+
+The expected string escapes the spaces but not the '>', so it contains
+"skb->len" where the output has "skb-\>len".  Would the string need to be
+"skb-\\>len" for the strstr() in ASSERT_HAS_SUBSTR() to find it?
+
+As far as I can tell, no other part of the visual output contains this source
+text unescaped, since print_insn_for_graph() escapes '>' as well.
+
+[ ... ]
+
+> +	err = get_bpftool_command_output(cmd, output, sizeof(output));
+> +	if (ASSERT_OK(err, "dump program CFG")) {
+> +		ASSERT_HAS_SUBSTR(output, "cluster_1", "second function in CFG");
+> +		ASSERT_HAS_SUBSTR(output, expected, "second function line info");
+
+Even with the escaping corrected, can this check tell the fixed code from the
+old code?
+
+In this program the main function is only two instructions (call; exit) and
+helper() is longer.  With the old function-relative lookup, the basic blocks
+of helper() at relative index 2 or higher already resolve to helper()'s own
+line info records, because their global insn_off is also 2 or higher, and
+those records all point at this same source line:
+
+    return bpf_ktime_get_ns() ? skb->len : 0;
+
+So that line probably appears in cluster_1 before the fix as well.
+
+The commit message says the selftest "checks the second function source line
+in visual output".  Would it discriminate better to check that the main
+function's line, "return\ helper(skb);", does not appear in cluster_1, or that
+the helper() line comes right before the first instruction of the cluster?
+
+> +	}
+> +
+> +cleanup:
+> +	bpftool_cfg__destroy(skel);
+> +}
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40071369261
+--===============2269967893526965054==--
