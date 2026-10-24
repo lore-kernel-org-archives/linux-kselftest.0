@@ -1,45 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792825528;
-	b=USv6k8/JDkKBhkDicoWJEpmEDeuBeFXyLHGcpvkEbqpfRyGlUkiy81mnroMFuq+vgJcj
-	 CumBiwe9LFvwUtWkl2LusH60wtLKgswD8dwVV9Liheiwu/Fx1Og7EX7U/Q4EyhuG5Ipeq
-	 O7bHTx/jsvFohmnnRAtgDO1hjREWNBylQxOgt5IiUq1hOES57bti6jss1LVTKCx6/O+Dw
-	 IoIzdfxtlLj4FkdfetIfOTnQzNsQ29jaEyiSJSPJSm+fdZA/hm655U9jxXnYaRC48TKlM
-	 VYauXHb4OQQK5l+AJcW2cXHtP6sQA8Xe59cyJ5cqI1pV+Ap7bVKFdiNHnh+Sjm82doQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792825528;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=rAuzurPfsLQhSEiLbgaU/pfbgL67ZN11Nrab8/1fyE8=;
-	b=QoRJr7UyZE8mxACpwr8hPEv1maDdXFR7fCkYQ3YaG6sjrTTGic73rvpe4H60ZSE+EtDe
-	 Zk8tIfyHxI98YjRRMW4iDe63Yu2htK2w3cA7cvC/4749twr4HfoQK2UOy5frmMMOxy03i
-	 FHJbprrIgKu/qIVKlmiiIwYQDp5eLhkvp9EvMei51/wofuvtj+sZq59e94PAoIW0HORYa
-	 gYPEERlGq64fZdODdG7GMExuax1kOLwutJt+UJX9nPqfpQFzVm0+84KrcqhJZnluEOLpY
-	 aCNbD7SeBFQb9tL4Zpzxm6sl2aIMjcUOq2DKJ4sIK4igOr+49nv63NgRPadF3rBn5UQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TbR7RRDy;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.181
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792832811;
+	b=5cxCdQxPHaiH3ZuzNcAxoxpPdBaoQ4VvGC94Zy5Edy4mzYCcYhCl7SlalIWHHmJr08jW
+	 BLX2Efv1ZjQEsHLvrxx4N6lSId2Mxk72bDXcCASTWDCHrMeXreN2WW9fmDfvwNeAcxan5
+	 qoqEwl8pS3DCMZkAkRnWZujrtWJqnctAOaHp74OiMAZln0q0XYZmZDogdEewrBWXcfqPp
+	 UfFYPj/dTpx7YIXXM8WoTVkpZftLG9jIOIZ9y/KmADQoEFcAXZh8pW12APb2xyzh+qPYy
+	 GFuCLcYklpj+/C8aRuEQiQSj5u0BTbrZk7bBvuEdR9aM8TwpJdlLhQy/P3Une0WnLPg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792832811;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=bwcOgZhzB8pVzIxjNmq1w6fxr7yFdfROLxQ8KM4F66w=;
+	b=fncTSFbbA/SefT8VRC4UVYhQ4qxd8NRHOHBL5P1SGQaJPRUVTzeLh2ByRvmDzxVBoAv4
+	 8NjY0xQCe+bwvCDBBd0NhXr6MrB70N6pLCePCzPO9DvWhit/o46Kb5+c7UHgpQThjZgjs
+	 pSjVB2cfOW3+4k+ILHYsfiApOfSwQ+Hq32YD46RfkMvTRcZF3r0tSwrqkpzL8EG6cxhfF
+	 OhMEBmMF0iWIcZHfSvQhViiTLsCyc78U/0wtIDwL01xQtJfYlEVVB3TAmRtipSWN4+sJQ
+	 oHjqa0Jer+naYxmJTG8TuxgQcYhmdo6Z2CFtSqGXr+hUg74pY5pb+MUnn7D5VbFNA3A==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=peA8j1u8;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.181
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FDD606A31A;
-	Sat, 24 Oct 2026 07:05:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09718606A31A
+	for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 09:06:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 09718606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TbR7RRDy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637B61F01825;
-	Sat, 24 Oct 2026 07:05:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792825527;
-	bh=rAuzurPfsLQhSEiLbgaU/pfbgL67ZN11Nrab8/1fyE8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TbR7RRDyKk7k20qZjfNpSBmbfuECJu/WQfwP2rVMhAoTTHCsnaQyaNGie8bCVqgtH
-	 DIkrKoG3DwOIQBfRuLcMFtBEBQ61RJkcmcGhnzKtp+2Qt01XORo0sp9aqXBqLrxSph
-	 tiajVXiLwzrToRWyWWaWyDI9ohjyL/ikt+pHdV60pD+oKKT+xaf+8ThtA3UaMnpGGH
-	 g/9HfLMP2CEsV8Pp+Oan0z8HJiNbESeAcULccpn26NlOBTou1JYq8ClHB/zsO182NM
-	 UoG3VG9KW4rRTh8Jbvc3nfn7IIpxEMbEfU4vMMsW2B87XZvsRLlhq3h7aj6bf8YVcN
-	 6Hf1qEZiU9pnw==
-Content-Type: multipart/mixed; boundary="===============2269967893526965054=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=peA8j1u8
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-8ac4806e210so12807577b3.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 02:06:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792832810; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JOt+7kIcpZh/m5nSdKqZH+2BRll4Zpct4CjwXwSSuZe0j80UPvZ+otdDZT3dMXir5R
+         3WrXsVvMiHi/8ZH6vrQyhaezEvT6tmieaxNBi5ao55dLJPXpB9ECn/jTZzv7wmAw4jZq
+         2xdVOmLhMwMBkufgb+VqASlhce/RO5LkZdwdIWSOJJ8LHrQsPGMp5601VxW/qOkDkANa
+         EuKfd7ws/N09yLiCD2rAdnciTzpc1u5uurtbbW6RBZnmtJ4TflKuExWE/KuespRfAXaN
+         ccJ9TAdKa+Tkqx62zDIKcgQkrvkTGx1pGemaPgosX4K7lxWkBgC6wnRiiN7nRs1qqMc1
+         XVUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=bwcOgZhzB8pVzIxjNmq1w6fxr7yFdfROLxQ8KM4F66w=;
+        fh=1cPnH1iqz1pDgNf83AEaAVF2zKc8iAxFGC+KASNIsj0=;
+        b=V8jmSA8ebvoiPAk/FZp/BhvRviL5+C6MJqn8Sxp0+30g1JzXX4368PUS0p8dKidlUJ
+         xnMdOw0vduRsbdxLgoyna1VeNOsFH2rBseCDbaqc85IkHZmZgphddOIGiBuWbfzGYaH0
+         71o0N2e9P32KcsD3Kr/fvNFcR0mAh9iYkh01rMzA4tGNZ11eIauU9BnmQSUCMXLlchLx
+         5kDej33HyMaoF++5Z6GxvPsi9j0f1X+lBLnfNuIVsnQMuCcHwBATqWwBWndV/nXdUepW
+         azwnsE6eKTvCrymsnV5ApTCg8sNel3zTsKGQ6wCcJdTjOsBfwnQLkApFHT8St7tpmQFv
+         7DVw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792832810; x=1793437610; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bwcOgZhzB8pVzIxjNmq1w6fxr7yFdfROLxQ8KM4F66w=;
+        b=peA8j1u8fL46r7ULUkBuBOrWgZjcZROMYGZ7QeWZumuU39NtAgwbi4lKLjEZaLpi47
+         QUg2Z6kytDvoBooMMz+RxpxpxOyX0nTLXumOofYA3zDvaLw3eSjq6g8XG5abZjxmwb1X
+         lwYYayYMe06KZol633gBGMa9TG9uuDAUqcj7dXfLtMD6f3NfIwLnsj1LL/momBthowgu
+         QZx5ma2WqvHDDmnQ4+lOruyPixXvHY9CzMrDSVsXvXD2T8AS9pqeR52DysctWcB8Pdn6
+         1ceY6Rd1dN+cDp2NgeNqz3BGo7J1Yzd+gMjD3f229idHPJxrCUHKfs6N1Z8N+QrzXgr4
+         Yaug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792832810; x=1793437610;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=bwcOgZhzB8pVzIxjNmq1w6fxr7yFdfROLxQ8KM4F66w=;
+        b=IEx7U7g/p5mdmX3LEXHO2LxN8uszVMHAtk/o+gvkx6aZf3aCHuMFlvhz5i06cbOsfk
+         eUG28yzsUmasKxbqKlWrIUi+qGcQ41Oc1zYQbwI5PenTc4zlPwkco1Q4YlNn8NkSBggj
+         jYRUO6bjwFFBr6/s7MTEZLzXP3pMsx27sipD53FQZjFMyVi/lx+17O3/L0IyZWbp3cTS
+         6r8pQJDmZSxZYzAsmz3P8KVDelS4vAPrJyM6HfGVtkVo1IRr69w7dkbPOMOdVPX8BvQE
+         8shq7pjbKurkkWQaYWdFief0+udFGMU5oBts7X2nd3oj9BcdY6k8vwhAfxsQYsodD8vl
+         NF2g==
+X-Forwarded-Encrypted: i=1; AKwUvBzf2io6nAZto71gX2p5CqZiiKAETpYdS8CIKwT9ghHN8Ohw9sW+aJSoiGjDGC/EYTSoDsz7KGyJLMJPgsjZj5g=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIl8vftHVr0Pbc791yEzFqY3JcU3bF25e6d7TgcXta1rP/qGuXY
+	bCNI2hz0VGigbJOphOyieZ+7RD3K94LwSsczRemZVoRa7MWhPd1vM5BHsu0KK97BNBxcfEl5AkC
+	CXTeHHXKuKvoVxTucBT/NQUjKuDREW1A=
+X-Gm-Gg: AYBFou1C4PHpiCrujMRsQNKCZG1aTN94EXlUgmvo77k/LcKuhKKLPio//zSG6k6t/1j
+	2dcd8gYhW1SBS90CxSYR1XY5ZErMTAzrF4Jg0Z6LYdJr/2BYJxY+TlWnguCUHZHQoW07n9TCUr/
+	n8KXfHpUIieoywrVYdH4g7XdmLbRyQdAiSyk1WVoch0RqumAc/wxoDDIXAaOFcKUyx12PQBtkJm
+	ycvHUw+oxjk0+QONDcVavdvvYAo/2pbI62dRrFzI8w5VePM8K3TKSqf5f5NhWZ5sjclh4fUUWbp
+	o5UVeAowPWBrdU7tqgZhVGWou9ovjeYqBmJt+JA2rwUoj+zwAjjmJloZgeaEZlx3RCmyaPmtJ4S
+	XTOyy7VUWnH4IeXPHRwzuzIyM5+1cTZQqRZKAWeB2GAyRipKs+fshdqk8dB0j1bZ6F+sgL4Q=
+X-Received: by 2002:a05:690c:f07:b0:873:5c0f:28b with SMTP id
+ 00721157ae682-8b166cb996cmr13153177b3.53.1792832809935; Sat, 24 Oct 2026
+ 02:06:49 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,108 +103,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <4fc72796a6ccf2acff87fc27a0f73bb64b74199cad21829b1c6a59fbf0b474d4@mail.kernel.org>
-In-Reply-To: <20261024062329.264086-1-hackerowskiy@gmail.com>
-References: <20261024062329.264086-1-hackerowskiy@gmail.com>
-Subject: Re: [PATCH] bpftool: fix line info in multi-function CFG dumps
-From: bot+bpf-ci@kernel.org
-To: hackerowskiy@gmail.com,bpf@vger.kernel.org
-Cc: qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,hackerowskiy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 24 Oct 2026 07:05:27 +0000 (UTC)
+References: <20261017020634.792390-1-nickolai@csail.mit.edu>
+ <20261024041334.831273-1-nickolai@csail.mit.edu> <20261024041334.831273-2-nickolai@csail.mit.edu>
+In-Reply-To: <20261024041334.831273-2-nickolai@csail.mit.edu>
+From: Luca Boccassi <luca.boccassi@gmail.com>
+Date: Sat, 24 Oct 2026 10:06:37 +0100
+X-Gm-Features: AclHuK-67mTcSnyua7KyheG5Qgmdf3UD4Himo3_0JnMqb1NB2HpTAb2W0dS9rpE
+Message-ID: <CAMw=ZnRpCvUBzHb+-vbvgoefZetrnqJc2DNjDKiKKup=J+SVqg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] pidfs: do not report fields that do not fit into
+ the caller's struct
+To: Nickolai Zeldovich <nickolai@csail.mit.edu>
+Cc: linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---===============2269967893526965054==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sat, 24 Oct 2026 at 05:13, Nickolai Zeldovich <nickolai@csail.mit.edu> wrote:
+>
+> The documentation of struct pidfd_info promises that "If the structure
+> size is too small to contain a field (requested or not), to avoid
+> confusion the mask will not contain a bit for that field", and asks
+> userspace to trust the returned mask when deciding which fields hold
+> valid data.
+>
+> pidfd_info() does not keep that promise. It builds kinfo.mask without
+> looking at the size encoded in the ioctl command, and
+> copy_struct_to_user() then truncates the copy to that size. A caller
+> that passes a 64-byte struct (PIDFD_INFO_SIZE_VER0) and requests
+> PIDFD_INFO_COREDUMP or PIDFD_INFO_SUPPORTED_MASK gets a mask with
+> PIDFD_INFO_COREDUMP, PIDFD_INFO_COREDUMP_SIGNAL, PIDFD_INFO_COREDUMP_CODE
+> and PIDFD_INFO_SUPPORTED_MASK set, while the coredump_* and
+> supported_mask fields behind the 64 bytes were never written. Trusting
+> the mask as documented, userspace then reads whatever its own buffer
+> held at those offsets. The same happens for a 72- or 80-byte struct
+> and the fields added after it.
+>
+> Clear the bits of the fields that lie beyond the caller's size before
+> the copy, in the one place that knows both the final mask and the size.
+> A request for a field that cannot be returned is thereby answered the
+> way the header describes: the field is simply absent from the mask.
+>
+> Fixes: 1d8db6fd698d ("pidfs, coredump: add PIDFD_INFO_COREDUMP")
+> Signed-off-by: Nickolai Zeldovich <nickolai@csail.mit.edu>
+> ---
+>
+> Notes:
+>     The three size thresholds follow the field layout: coredump_mask and
+>     coredump_signal end at PIDFD_INFO_SIZE_VER1 (72), coredump_code at
+>     PIDFD_INFO_SIZE_VER2 (80), supported_mask at PIDFD_INFO_SIZE_VER3 (88).
+>     Masking the request bits early instead (before the coredump and
+>     supported_mask blocks run) would save a little work for such callers
+>     but leaves PIDFD_INFO_COREDUMP set by the dumpable-state fallback for a
+>     live task; clearing the result once before copy_struct_to_user() covers
+>     every way a bit can be set.
+>
+>  fs/pidfs.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-> bpftool: fix line info in multi-function CFG dumps
-
-TL;DR:
-- Selftest's expected string likely never matches: it doesn't escape '>' in
-  "skb->len", unlike the DOT output
-- Even if fixed, the check may not distinguish fixed from old code
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
-> new file mode 100644
-> index 000000000000..7d5b80927b65
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
-> @@ -0,0 +1,41 @@
-
-[ ... ]
-
-> +void test_bpftool_cfg(void)
-> +{
-> +	struct bpftool_cfg *skel = NULL;
-> +	struct bpf_prog_info info = {};
-> +	__u32 info_len = sizeof(info);
-> +	char output[MAX_BPFTOOL_OUTPUT_LEN];
-> +	char cmd[MAX_BPFTOOL_CMD_LEN];
-> +	const char *expected = "return\\ bpf_ktime_get_ns()\\ ?\\ skb->len\\ :\\ 0;";
-> +	int err;
-
-Can this expected string ever match the bpftool output?
-
-The DOT output prints source lines through btf_dump_linfo_dotlabel() ->
-dotlabel_puts(), which escapes '>' as well as ' ':
-
-    static void dotlabel_puts(const char *s)
-    {
-        for (; *s; ++s) {
-            switch (*s) {
-            ...
-            case '<':
-            case '>':
-            case '|':
-            case ' ':
-                putchar('\\');
-
-So the line "return bpf_ktime_get_ns() ? skb->len : 0;" is printed as:
-
-    return\ bpf_ktime_get_ns()\ ?\ skb-\>len\ :\ 0;
-
-The expected string escapes the spaces but not the '>', so it contains
-"skb->len" where the output has "skb-\>len".  Would the string need to be
-"skb-\\>len" for the strstr() in ASSERT_HAS_SUBSTR() to find it?
-
-As far as I can tell, no other part of the visual output contains this source
-text unescaped, since print_insn_for_graph() escapes '>' as well.
-
-[ ... ]
-
-> +	err = get_bpftool_command_output(cmd, output, sizeof(output));
-> +	if (ASSERT_OK(err, "dump program CFG")) {
-> +		ASSERT_HAS_SUBSTR(output, "cluster_1", "second function in CFG");
-> +		ASSERT_HAS_SUBSTR(output, expected, "second function line info");
-
-Even with the escaping corrected, can this check tell the fixed code from the
-old code?
-
-In this program the main function is only two instructions (call; exit) and
-helper() is longer.  With the old function-relative lookup, the basic blocks
-of helper() at relative index 2 or higher already resolve to helper()'s own
-line info records, because their global insn_off is also 2 or higher, and
-those records all point at this same source line:
-
-    return bpf_ktime_get_ns() ? skb->len : 0;
-
-So that line probably appears in cluster_1 before the fix as well.
-
-The commit message says the selftest "checks the second function source line
-in visual output".  Would it discriminate better to check that the main
-function's line, "return\ helper(skb);", does not appear in cluster_1, or that
-the helper() line comes right before the first instruction of the cluster?
-
-> +	}
-> +
-> +cleanup:
-> +	bpftool_cfg__destroy(skel);
-> +}
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40071369261
---===============2269967893526965054==--
+Acked-by: Luca Boccassi <luca.boccassi@gmail.com>
