@@ -1,77 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792833990;
-	b=sNu/5oLmbBCNixL87MMEdR8Y9ZskjbKWXJNGces31SpXBfV/3DRuIPBoZVCQK/jYULTf
-	 lET4vhR3QaiwghxBiUjoexayeY0Q47Mrw95fb1Hh5i6btxqjcRySjKKKUH96NnzHdnJ2V
-	 4PcEJmfvkLMEOjJXJAdvy8hT9I5xWsjn8jBlB6U6nWgIzic2dlGHm6+zqEYzbcfEriEMn
-	 KCrH+guqas2CWrZDRZynsfKxsb0VcavzcszLwqreJkLRicOl/Al10udShLqphL/0VLjIt
-	 xWavpe3AEyYTrXfSNx+yrwnz0t1DvsM90W/toQc0KoavvCyFiAhsXHjevNG9Kr/PUtw==
+	t=1792834108;
+	b=evHCkV8vfVLp0Y9WS6p9wgD5boof6R8LaXkSpRTkRhPm9OG19oUl47e0nJ/DDEdFVXx7
+	 AmR8DaQmfQIxOLCFaT5fPHUegIAMQ2FS4fHp0ORD0OanKKGfj+H3XMyaujxdHWXP58F/f
+	 GLaONQxeCugWDMMlK+tZIGr5x3Zjh0+1xSQnOnZF23OB1piTN7zWErtVOUWFFLBe3P/Zu
+	 bQ50nQ5SX1shQRiOAWjrlm9b95wFwMDr9Q2Sg1l8DjyIUDVpzBVAgFyj1Bnynbjdd6KwI
+	 o0k3eML5aLIEPltkGvIZDPG2dmcI1/MRaOpu3WlSWtz1coQlWCIujLWyY/HFAMfEvAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792833990;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
-	bh=wubUMW0jJyYmyI7ZV0p6Qrd5w4mPGgJX3sk31gd3sHY=;
-	b=Q0oNYgSYgh9u80iFGSQG3uIRMH8IP5CjQCBIFio0RXrmHTIJzZilTVG1eikSkZDqqXQt
-	 u0k25uOTGFpFyGCxLrWuSd0T1wsSh71k6IzQqMRak7OuxT42MHlfvEZ+pcy4qKNp9mheE
-	 +8rkErOr+s5/flVY4q6El0Le5TcoYUtUKPud7EuvbJnYfDMBWjdZAxufynOTok4wo6RVp
-	 2LLbAeJel2K384Zg0bwSnslFSZZUVUgkilCVnkLezoZkixLVLBjqhzki6VPRnOAupActu
-	 O78fOkYCBj8/YmSrFxFcvi5VxR9UOHtQV003AxTp7LdCA+d4r96ALp7ItBonxy2V7+Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792834108;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=BlUUlyu0tLkS0StKgW3SUYx8agTboJGWzFSZtZkcXsU=;
+	b=g3h3jxaSw0YRy0lTXeXkN6tgJ+HF+Z39c9MNp0ODDCs4GQP5Q79D0iUc0TUdOISDNO2U
+	 Hdf8MkwONHHspD4+yPhhdpA4T31nhIqcdE4LK8EwUD7tDKARrAGoeTkUq5hYQOyJ0KCce
+	 g3o4tHBV8WAc9kart/mpxUOLTNF8vxpPmFW+5jW85Pjxc6mBJOgF5997KsouT3CYrZuHk
+	 R8YLyJcrXmBA7RyzsPvTAaM80zKBNExgHy8PpuqQ9fda/5sN/Hz+ev61nIehIWlux9dx+
+	 eWRP/rOiRp+bINrUtU79BWV/PZSrN/kqUQr9xl37WY+wCbTPAuS1aqfmU6zmzsz7Kng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mandelbit.com;
-	spf=pass smtp.mailfrom=mandelbit.com;
-	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=dBCnsxrs;
-	arc=none smtp.remote-ip=195.10.208.50
-Received: from mout-b-105.mailbox.org (mout-b-105.mailbox.org [195.10.208.50])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=b9nh1GtH;
+	arc=none smtp.remote-ip=74.125.82.170
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A1B60A5BC2;
-	Sat, 24 Oct 2026 09:26:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85A1B60A5BC2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C446606BF36
+	for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 09:28:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C446606BF36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=dBCnsxrs
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-b-105.mailbox.org (Postfix) with ESMTPS id 4jBZJT3Lfqz9tWQ;
-	Sat, 24 Oct 2026 11:26:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1792833977;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wubUMW0jJyYmyI7ZV0p6Qrd5w4mPGgJX3sk31gd3sHY=;
-	b=dBCnsxrs1VfbRoRY+ev5LWBsWH1vhFXV6rcUAQPWjR8mAdbBmVhxJbYvPUbrTOIi9bpYUD
-	iFMNL04w6XX8jlJiYjw4VWzG9agybJNqlDmYX02yw8PLYH3m0fOHVnSovpWxpyMAeYhTr8
-	F7XGQKd1/znj0edNa6VpIRkrg8hWxvlaEO02W7/aXe2yPahG4acYmdzWfVmZ608eHTBsBV
-	BdgNIWawwikKp3EtoHIrTrBFEe9BVqHiStXE3sC63zFy5mc1KF/co6VgduiqTqJcI2nNSd
-	DCSLgcp0VyRNpFu/rfzxAQTQqxOVNB9dy/bWRsq0sZbh2oAuHj9wd7oEtYqx+A==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of ralf@mandelbit.com designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=ralf@mandelbit.com
-From: Ralf Lici <ralf@mandelbit.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	=?UTF-8?q?Daniel=20Gr=C3=B6ber?= <dxld@darkboxed.org>,
-	Antonio Quartulli <antonio@mandelbit.com>,
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=b9nh1GtH
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-36681e85e87so159551eec.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 02:28:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792834107; x=1793438907; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=BlUUlyu0tLkS0StKgW3SUYx8agTboJGWzFSZtZkcXsU=;
+        b=b9nh1GtH2+skTNF5DZP9gibDmo1B8XDJqOyw8/vQ6Hd74v9sFQ35s9Tesqt2FOb1pP
+         Qo+VkuBPh1UAfxNNdXvzZGy5dqQMvfL8wWV0KkiOjlsFAuZ0jB6LU7PN3kr0OA5okfZ1
+         dCa8a0oNrk/TJERvUoac8eX8GqwJLdaZZWx8w6Oy6xH8AeLiCbXskMox7qS6zJHcGA/U
+         Lba7qXFG+eJRjcwzpwWBJ3wKgSpWdlLk6fRDtV/K8AOowXnUzZknZB8RmFwwORREa4Eu
+         pmaYVLGyAojs5xhQUTZoEUiULZRwwY9pWKlF4nr5LKVBGz3/bIONFndeO7oDFWw+ILxa
+         2Ycg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792834107; x=1793438907;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BlUUlyu0tLkS0StKgW3SUYx8agTboJGWzFSZtZkcXsU=;
+        b=dF1guctLOFLb/zkS4MQzN3IHpz12opQvL4HkYuCfpDaWZRBIBvh04aEeFmwaRke7aS
+         d8dnEii+sBLqSwayOLfGIfT0+L3soNG39542osY+t+cydZnbwDUpGnaf4cKGSDuD9kJ1
+         +J23ach7MYH07UNGtOBaeLSv+05g0jHAobAVMbUjVvxK7efPFWaEt5u1ni3ELEK0EdQP
+         qTErRNTLctDRcEhKbrMVk3jrKyLhMq4E1V7CHF0HmW5RBk93oQjO18YCIHTi3cRTikzz
+         7RHTjnePbcTGJKYG4yGDeeDpKLAVCf427pwWTG1ykdBcWffFeAZBNdqZh32OiNd2KD4l
+         1tng==
+X-Forwarded-Encrypted: i=1; AKwUvBx7MoFl7ZvTP4CY5UHng/7+Mm11VCEWzsmdS1JKH6/D6YFk2L2YUHP27f+VdyJ9SHezGPms8IrKrh9eRAAZzTo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKK1YdXAEugrIRl9h12UbFCNQblwUCtKFZSPuI6HqXE3JBE40i7
+	s7H0LUHO+HpjZwP9+KhTPp/McyGthpOe3ucQ+AfmbFE460rHGUCpZKMc
+X-Gm-Gg: AYBFou17CMHYKEr5QEarvgTkCUawiYxjG4uSpbI1fJ4UOYYJohRvG0zducksW4qaw+f
+	XP1sZ0AANIwwntAR4yd13pZwbJQRMk2QVoCtcjk6EnmeyJx61aq+3wP8JfvzPbc9yX2BkQX1TiE
+	aJWBKnRyozgIdiJo3DBk43WIbctnl9k2MzF1DY3wWSwIyFYks29Lu7cSUNladWKQ4m2X88jwsoI
+	16FJ2W1QHJGZYLisxbzrYA4ffyPCUHLBvi3T3LgHp3ps6VELgHPuEZQ4qgnmh5O5/hE+Z5th8r9
+	ML+QZEDQLfOK89RV/ND8IprzYxnfc38yY4BRyp9mseUeMOs3vvdPlU5JitBrUgxxBfPWxWkp3kW
+	iWviMs5J/DGPFGvkm/txPQ6Lr5all1wIhOw7P/V3n+C4gT9YRsqJrVM+hheIKU/YXQZOJe/0d1+
+	I4lU2mTRCr1Jf8Dl+ZHFozSzADYJBNc5RaIrxOakZJ31q0c7DK8Ocbv7UCTcJM7QnMs9ua98WP9
+	7Dwb54piRNcZywMw/4fWq1LA74+O3yn0zTGSW4brQHO0xpnBM6ihWH6jBDSXaKf0dIO4NaAKL2/
+	cOkOW6KF8YQZ9EkIfXWyXxB2t9+g8Q1pT3qf1vDKNP1Cq91skITzc5jLYJEuIzn+fNYFFH0yiA=
+	=
+X-Received: by 2002:a05:7300:d086:b0:366:dbf9:32bd with SMTP id 5a478bee46e88-369e842df55mr2190770eec.9.1792834107430;
+        Sat, 24 Oct 2026 02:28:27 -0700 (PDT)
+Received: from nixos ([2405:201:c40d:9039:e1f8:b9bb:b037:3cab])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8daf444sm5236604eec.18.2026.10.24.02.28.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Oct 2026 02:28:26 -0700 (PDT)
+From: Ayushman Rout <ayushmanrout27@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	Ayushman Rout <ayushmanrout27@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
 	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC net-next v2 17/18] selftests: net: add ipxlat coverage
-Date: Sat, 24 Oct 2026 11:25:27 +0200
-Message-ID: <20261024092532.172005-18-ralf@mandelbit.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261024092532.172005-1-ralf@mandelbit.com>
-References: <20261024092532.172005-1-ralf@mandelbit.com>
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf 3/3] selftests/bpf: Test overlapping dynptr copies on xdp frags
+Date: Sat, 24 Oct 2026 14:56:58 +0530
+Message-ID: <20261024092659.76422-4-ayushmanrout27@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20261024092659.76422-1-ayushmanrout27@gmail.com>
+References: <20261024092659.76422-1-ayushmanrout27@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,645 +117,189 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jBZJT3Lfqz9tWQ
 
-Exercise forwarded and local translation, native fallback, target-family
-conntrack and NAT, checksumless UDP, route-PMTU fragmentation, conntrack
-reassembly followed by refragmentation, PMTU feedback and ICMP errors.
+Add four dynptr tests. Three use an xdp packet with frags, and in each
+the range goes from the linear part into frag0:
 
-Signed-off-by: Ralf Lici <ralf@mandelbit.com>
+- test_dynptr_copy_xdp_overlap: bpf_dynptr_copy() of 1200 bytes with
+  the destination 100 bytes above the source.
+- test_dynptr_read_xdp_overlap: bpf_dynptr_read() into a slice of the
+  same packet.
+- test_dynptr_write_xdp_overlap: bpf_dynptr_write() from a slice of the
+  same packet.
+
+The fourth, test_dynptr_skb_load_overlap, reads a range that spans the
+head and the frags of an skb. It passes with and without the fixes and
+checks that skbs are not affected.
+
+The new tests set err when the data is wrong. The existing
+test_dynptr_copy_xdp does not, so it can pass on corrupted data.
+
+Without the fixes to bpf_xdp_copy_buf() and bpf_dynptr_copy(), the three
+xdp tests fail. With them, all four tests pass.
+
+Signed-off-by: Ayushman Rout <ayushmanrout27@gmail.com>
+Assisted-by: LLM
 ---
-Changes since RFC v1 https://lore.kernel.org/netdev/20260319151230.655687-15-ralf@mandelbit.com/
-- Replace the v1 netdevice/YNL suite with an iproute2/LWT namespace
-  topology.
-- Add coverage for local and forwarded LWT translation, native fallback,
-  translated-family conntrack and masquerade, route-PMTU fragmentation,
-  reassembly/refragmentation, and PMTU feedback.
-- Verify zero-checksum UDPv4 at a real translated-family receiver
-  instead of treating a packet capture as proof of successful delivery.
-  (Sashiko)
-- Keep forwarding, sysctls, routes, and translator state inside
-  disposable network namespaces so a failed test cannot leave host
-  networking changed. (Sashiko)
-- Remove the dedicated UDP generator and produce the required packet
-  shapes with existing selftest tools, avoiding the v1 helper's
-  undeclared padding bytes. Remove the old fragmented-ICMP capture
-  filter whose fixed offset could miss ICMP after an IPv6 Fragment
-  Header. (Sashiko)
+ .../testing/selftests/bpf/prog_tests/dynptr.c |   4 +
+ .../selftests/bpf/progs/dynptr_success.c      | 128 ++++++++++++++++++
+ 2 files changed, 132 insertions(+)
 
- tools/testing/selftests/Makefile             |   1 +
- tools/testing/selftests/net/ipxlat/Makefile  |   5 +
- tools/testing/selftests/net/ipxlat/config    |  13 +
- tools/testing/selftests/net/ipxlat/ipxlat.sh | 554 +++++++++++++++++++
- 4 files changed, 573 insertions(+)
- create mode 100644 tools/testing/selftests/net/ipxlat/Makefile
- create mode 100644 tools/testing/selftests/net/ipxlat/config
- create mode 100755 tools/testing/selftests/net/ipxlat/ipxlat.sh
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 1198e570898d..339a74d509b8 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -90,6 +90,7 @@ TARGETS += net/af_unix
- TARGETS += net/can
- TARGETS += net/forwarding
- TARGETS += net/hsr
-+TARGETS += net/ipxlat
- TARGETS += net/mptcp
- TARGETS += net/netfilter
- TARGETS += net/openvswitch
-diff --git a/tools/testing/selftests/net/ipxlat/Makefile b/tools/testing/selftests/net/ipxlat/Makefile
-new file mode 100644
-index 000000000000..d54a89a84337
---- /dev/null
-+++ b/tools/testing/selftests/net/ipxlat/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+TEST_PROGS := ipxlat.sh
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/net/ipxlat/config b/tools/testing/selftests/net/ipxlat/config
-new file mode 100644
-index 000000000000..ced834911830
---- /dev/null
-+++ b/tools/testing/selftests/net/ipxlat/config
-@@ -0,0 +1,13 @@
-+CONFIG_INET=y
-+CONFIG_IPV6=y
-+CONFIG_LWTUNNEL=y
-+CONFIG_NET_IPXLAT=m
-+CONFIG_NET_IPXLAT_LWT=m
-+CONFIG_NET_NS=y
-+CONFIG_NF_CONNTRACK=m
-+CONFIG_NF_NAT=m
-+CONFIG_NF_TABLES=m
-+CONFIG_NF_TABLES_IPV4=y
-+CONFIG_NF_TABLES_IPV6=y
-+CONFIG_NFT_NAT=m
-+CONFIG_VETH=m
-diff --git a/tools/testing/selftests/net/ipxlat/ipxlat.sh b/tools/testing/selftests/net/ipxlat/ipxlat.sh
-new file mode 100755
-index 000000000000..955a50ac8231
---- /dev/null
-+++ b/tools/testing/selftests/net/ipxlat/ipxlat.sh
-@@ -0,0 +1,554 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# IPXLAT lightweight-tunnel selftests
-+#
-+# Copyright (C) 2026- Mandelbit SRL
-+# Copyright (C) 2026- Daniel Gröber <dxld@darkboxed.org>
-+#
-+# Author: Antonio Quartulli <antonio@mandelbit.com>
-+#         Daniel Gröber <dxld@darkboxed.org>
-+#         Ralf Lici <ralf@mandelbit.com>
-+#
-+#   ipxlat_ns4 (IPv4 host) --- ipxlat_nsx --- ipxlat_ns6 (IPv6 host)
-+
-+set -o pipefail
-+
-+TEST_DIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
-+readonly TEST_DIR
-+source "$TEST_DIR/../lib.sh"
-+
-+# All addresses come from documentation ranges. The EAM replaces
-+# 198.51.100.0/24 with 2001:db8:200::/120 and preserves only the final host
-+# byte. V4_XLAT therefore becomes V6_EAM_XLAT, while V4_NEAR becomes
-+# V6_EAM_NEAR. EAM takes precedence in both directions.
-+#
-+# Addresses outside the EAM use the RFC 6052 fallback. With a /96 prefix it
-+# appends the complete 32-bit IPv4 address, so V4_REMOTE and V4_PMTU become
-+# V6_REMOTE and V6_PMTU. V6_NATIVE is deliberately outside both mappings and
-+# exists only to exercise native output when ipxlat declines a packet.
-+#
-+# nsx also needs an IPv6 gateway address. We deliberately choose V6_XLAT as
-+# the RFC 6052 form of V4_XLAT so that, if the kernel uses it as the source of
-+# an ICMPv6 error, translation produces the meaningful V4_XLAT source instead
-+# of the 192.0.0.8 dummy fallback. V6_XLAT is not the normal 4-to-6 result for
-+# V4_XLAT: EAM still produces V6_EAM_XLAT. Both IPv6 addresses map back to
-+# V4_XLAT, each through its respective algorithm.
-+
-+readonly V4_NEAR_PREFIX=198.51.100.0/24
-+readonly V4_XLAT=198.51.100.1
-+readonly V4_NEAR=198.51.100.2
-+readonly V4_REMOTE_PREFIX=192.0.2.0/24
-+readonly V4_REMOTE=192.0.2.33
-+readonly V4_PMTU=192.0.2.34
-+
-+readonly V6_RFC6052_PREFIX=2001:db8:100::/96
-+readonly V6_XLAT=2001:db8:100::c633:6401
-+readonly V6_REMOTE=2001:db8:100::c000:221
-+readonly V6_PMTU=2001:db8:100::c000:222
-+readonly V6_NATIVE=2001:db8:100:0:1::1
-+readonly V6_EAM_PREFIX=2001:db8:200::/120
-+readonly V6_EAM_XLAT=2001:db8:200::1
-+readonly V6_EAM_NEAR=2001:db8:200::2
-+
-+readonly IPERF_PORT=5201
-+readonly UDP_PORT=5202
-+
-+BG_PIDS=()
-+TMP_FILES=()
-+
-+# setup_ns assigns these variables indirectly
-+ipxlat_ns4=
-+ipxlat_nsx=
-+ipxlat_ns6=
-+
-+cleanup()
+diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+index 4396560365e8..08382ed076a2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+@@ -22,6 +22,10 @@ static struct {
+ 	{"test_dynptr_data", SETUP_SYSCALL_SLEEP},
+ 	{"test_dynptr_copy", SETUP_SYSCALL_SLEEP},
+ 	{"test_dynptr_copy_xdp", SETUP_XDP_PROG},
++	{"test_dynptr_copy_xdp_overlap", SETUP_XDP_PROG},
++	{"test_dynptr_read_xdp_overlap", SETUP_XDP_PROG},
++	{"test_dynptr_write_xdp_overlap", SETUP_XDP_PROG},
++	{"test_dynptr_skb_load_overlap", SETUP_SKB_PROG_NONLINEAR},
+ 	{"test_dynptr_memset_zero", SETUP_SYSCALL_SLEEP},
+ 	{"test_dynptr_memset_notzero", SETUP_SYSCALL_SLEEP},
+ 	{"test_dynptr_memset_zero_offset", SETUP_SYSCALL_SLEEP},
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
+index b668ebd61fc7..b6c3abb66e4b 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -759,6 +759,134 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
+ 	return XDP_DROP;
+ }
+ 
++static __always_inline int fill_xdp(struct bpf_dynptr *ptr, __u32 start, __u32 n)
 +{
-+	local file pid
++	__u8 b;
++	int i;
 +
-+	for pid in "${BG_PIDS[@]}"; do
-+		kill "$pid" 2>/dev/null || true
-+		wait "$pid" 2>/dev/null || true
-+	done
-+	for file in "${TMP_FILES[@]}"; do
-+		rm -f "$file"
-+	done
-+	cleanup_all_ns
++	bpf_for(i, 0, n) {
++		b = (start + i) % 251;
++		if (bpf_dynptr_write(ptr, start + i, &b, 1, 0))
++			return 1;
++	}
++	return 0;
 +}
 +
-+counter_nonzero()
++static __always_inline int check_xdp(struct bpf_dynptr *ptr, __u32 at, __u32 n, __u32 from)
 +{
-+	local packets
-+	local ns=$1
-+	local family=$2
-+	local table=$3
-+	local counter=$4
++	__u8 b;
++	int i;
 +
-+	packets=$(ip netns exec "$ns" nft list counter \
-+		  "$family" "$table" "$counter" |
-+		  awk '/packets/ { print $2; exit }') || return 1
-+	((packets > 0))
++	bpf_for(i, 0, n) {
++		if (bpf_dynptr_read(&b, 1, ptr, at + i, 0))
++			return 1;
++		if (b != (__u8)((from + i) % 251))
++			return 1;
++	}
++	return 0;
 +}
 +
-+tcp_listener_ready()
++SEC("?xdp")
++int test_dynptr_copy_xdp_overlap(struct xdp_md *xdp)
 +{
-+	[[ -n $(ip netns exec "$ipxlat_ns4" ss -Hln \
-+		 "sport = :$IPERF_PORT" 2>/dev/null) ]]
++	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(long)xdp->data;
++	__u32 off = data_end - data - 1000;
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_xdp(xdp, 0, &ptr);
++	if (fill_xdp(&ptr, off, 1300)) {
++		err = 1;
++		return XDP_DROP;
++	}
++	err = bpf_dynptr_copy(&ptr, off + 100, &ptr, off, 1200);
++	if (err)
++		return XDP_DROP;
++	if (check_xdp(&ptr, off + 100, 1200, off))
++		err = 2;
++	return XDP_DROP;
 +}
 +
-+udp_listener_ready()
++SEC("?xdp")
++int test_dynptr_read_xdp_overlap(struct xdp_md *xdp)
 +{
-+	[[ -n $(ip netns exec "$ipxlat_ns6" ss -Hlun \
-+		 "sport = :$UDP_PORT" 2>/dev/null) ]]
++	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(long)xdp->data;
++	__u32 lin = data_end - data;
++	struct bpf_dynptr ptr;
++	char *dst;
++
++	bpf_dynptr_from_xdp(xdp, 0, &ptr);
++	if (fill_xdp(&ptr, lin - 10, 84)) {
++		err = 1;
++		return XDP_DROP;
++	}
++	dst = bpf_dynptr_slice_rdwr(&ptr, lin + 10, NULL, 64);
++	if (!dst) {
++		err = 2;
++		return XDP_DROP;
++	}
++	err = bpf_dynptr_read(dst, 64, &ptr, lin - 10, 0);
++	if (err)
++		return XDP_DROP;
++	if (check_xdp(&ptr, lin + 10, 64, lin - 10))
++		err = 3;
++	return XDP_DROP;
 +}
 +
-+file_has_size()
++SEC("?xdp")
++int test_dynptr_write_xdp_overlap(struct xdp_md *xdp)
 +{
-+	local file=$1
-+	local expected=$2
++	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(long)xdp->data;
++	__u32 lin = data_end - data;
++	struct bpf_dynptr ptr;
++	char *src;
 +
-+	[[ -f $file ]] && [[ $(stat -c %s "$file") -eq $expected ]]
++	bpf_dynptr_from_xdp(xdp, 0, &ptr);
++	if (fill_xdp(&ptr, lin - 64, 118)) {
++		err = 1;
++		return XDP_DROP;
++	}
++	src = bpf_dynptr_slice_rdwr(&ptr, lin - 64, NULL, 64);
++	if (!src) {
++		err = 2;
++		return XDP_DROP;
++	}
++	err = bpf_dynptr_write(&ptr, lin - 10, src, 64, 0);
++	if (err)
++		return XDP_DROP;
++	if (check_xdp(&ptr, lin - 10, 64, lin - 64))
++		err = 3;
++	return XDP_DROP;
 +}
 +
-+pmtu_is_1260()
++SEC("?tc")
++int test_dynptr_skb_load_overlap(struct __sk_buff *skb)
 +{
-+	ip -n "$ipxlat_ns4" route get "$V4_PMTU" |
-+		grep -Eq 'mtu[[:space:]]+1260'
++	struct bpf_dynptr ptr;
++	char ref[24];
++	char *dst;
++
++	bpf_dynptr_from_skb(skb, 0, &ptr);
++	if (bpf_dynptr_read(ref, 24, &ptr, 20, 0)) {
++		err = 1;
++		return 0;
++	}
++	dst = bpf_dynptr_slice_rdwr(&ptr, 10, NULL, 24);
++	if (!dst) {
++		err = 2;
++		return 0;
++	}
++	if (bpf_dynptr_read(dst, 24, &ptr, 20, 0)) {
++		err = 3;
++		return 0;
++	}
++	if (bpf_memcmp(dst, ref, 24))
++		err = 4;
++	return 0;
 +}
 +
-+setup_topology()
-+{
-+	# The IPv4-only host reaches the IPv6-only host through the translator.
-+	# EAM gives IPv6 identities to the IPv4 endpoints, while RFC 6052 gives
-+	# IPv4 identities to the IPv6 endpoints. The test-only V6_NATIVE
-+	# address is omitted from the operational topology below.
-+	#
-+	# Topology:
-+	# +------------------------------------------------------------------+
-+	# |                            IPXLAT_NS4                            |
-+	# |                                                                  |
-+	# |                          +------------+                          |
-+	# |                       v4 | V4_NEAR/24 |                          |
-+	# +------------------------------------------------------------------+
-+	#                                  |
-+	#                                  |
-+	# +------------------------------------------------------------------+
-+	# |                       x4 | V4_XLAT/24 |                          |
-+	# |                          +------------+                          |
-+	# |                                                                  |
-+	# |                            IPXLAT_NSX                            |
-+	# |                                                                  |
-+	# |                       +-----------------+                        |
-+	# |                       | V6_XLAT/64      |                        |
-+	# |                    x6 | V6_EAM_XLAT/128 |                        |
-+	# +------------------------------------------------------------------+
-+	#                                  |
-+	#                                  |
-+	# +------------------------------------------------------------------+
-+	# |                    v6 | V6_REMOTE/64    |                        |
-+	# |                       | V6_PMTU/128     |                        |
-+	# |                       | V6_NATIVE/128   |                        |
-+	# |                       +-----------------+                        |
-+	# |                                                                  |
-+	# |                            IPXLAT_NS6                            |
-+	# +------------------------------------------------------------------+
-+
-+	ip link add v4 type veth peer name x4
-+	ip link set v4 netns "$ipxlat_ns4"
-+	ip link set x4 netns "$ipxlat_nsx"
-+	ip link add v6 type veth peer name x6
-+	ip link set v6 netns "$ipxlat_ns6"
-+	ip link set x6 netns "$ipxlat_nsx"
-+
-+	ip -n "$ipxlat_ns4" addr add "$V4_NEAR/24" dev v4
-+	ip -n "$ipxlat_nsx" addr add "$V4_XLAT/24" dev x4
-+
-+	# These are selftest controls, not ipxlat requirements: nodad avoids
-+	# asynchronous address setup, while noprefixroute keeps the EAM address
-+	# from creating a main-table route that would bypass the tested route.
-+	ip -n "$ipxlat_nsx" -6 addr add "$V6_XLAT/64" dev x6 nodad
-+	ip -n "$ipxlat_nsx" -6 addr add "$V6_EAM_XLAT/128" dev x6 nodad \
-+		noprefixroute
-+	ip -n "$ipxlat_ns6" -6 addr add "$V6_REMOTE/64" dev v6 nodad
-+	ip -n "$ipxlat_ns6" -6 addr add "$V6_PMTU/128" dev v6 nodad
-+	# avoid waiting for DAD on the isolated fallback-test address
-+	ip -n "$ipxlat_ns6" -6 addr add "$V6_NATIVE/128" dev v6 nodad
-+
-+	ip -n "$ipxlat_ns4" link set v4 up
-+	ip -n "$ipxlat_nsx" link set x4 up
-+	ip -n "$ipxlat_nsx" link set x6 up
-+	ip -n "$ipxlat_ns6" link set v6 up
-+
-+	ip netns exec "$ipxlat_nsx" sysctl -qw net.ipv4.ip_forward=1
-+	ip netns exec "$ipxlat_nsx" sysctl -qw net.ipv6.conf.all.forwarding=1
-+
-+	ip -n "$ipxlat_ns4" route add default via "$V4_XLAT"
-+	# explicitly use the ordinary endpoint for non-PMTU traffic since ns6
-+	# has two addresses
-+	ip -n "$ipxlat_ns6" -6 route add "$V6_EAM_PREFIX" via "$V6_XLAT" \
-+		src "$V6_REMOTE"
-+
-+	# constrain only the PMTU endpoint while all other traffic uses the
-+	# normal 1500-byte veth MTU
-+	ip -n "$ipxlat_nsx" -6 route add "$V6_PMTU/128" dev x6 mtu 1280
-+
-+	ip -n "$ipxlat_nsx" route add "$V4_REMOTE_PREFIX" \
-+		encap ipxlat rfc6052-prefix6 "$V6_RFC6052_PREFIX" \
-+		eam "$V4_NEAR_PREFIX" "$V6_EAM_PREFIX" dev x6
-+
-+	ip -n "$ipxlat_nsx" -6 route add "$V6_EAM_PREFIX" \
-+		encap ipxlat rfc6052-prefix6 "$V6_RFC6052_PREFIX" \
-+		eam "$V4_NEAR_PREFIX" "$V6_EAM_PREFIX" dev x4
-+	# address assignment creates a metric-zero kernel local route so remove
-+	# it before adding the LWT
-+	ip -n "$ipxlat_nsx" -6 route del local "$V6_EAM_XLAT/128" table local
-+	ip -n "$ipxlat_nsx" -6 route add local "$V6_EAM_XLAT/128" table local \
-+		encap ipxlat rfc6052-prefix6 "$V6_RFC6052_PREFIX" \
-+		eam "$V4_NEAR_PREFIX" "$V6_EAM_PREFIX" dev x6
-+}
-+
-+warm_up_neighbors()
-+{
-+	# keep first-packet ARP/NDP delays out of the translation assertions
-+	ip netns exec "$ipxlat_nsx" ping -c 1 -W 2 "$V4_NEAR" \
-+		>/dev/null 2>&1
-+	ip netns exec "$ipxlat_nsx" ping -6 -c 1 -W 2 "$V6_REMOTE" \
-+		>/dev/null 2>&1
-+}
-+
-+setup_refragment_nft()
-+{
-+	# Enable conntrack only for IPv6 here. If IPv4 conntrack were already
-+	# active, it would reassemble the source frags before ipxlat saw them.
-+	ip netns exec "$ipxlat_nsx" nft -f - <<EOF
-+add table ip6 ipxlat_refragment
-+add counter ip6 ipxlat_refragment tracked_udp
-+add chain ip6 ipxlat_refragment postrouting { type filter hook postrouting \
-+priority filter; policy accept; }
-+add rule ip6 ipxlat_refragment postrouting ip6 saddr $V6_EAM_NEAR \
-+ip6 daddr $V6_PMTU udp dport $UDP_PORT ct state { new, established } \
-+counter name tracked_udp
-+EOF
-+}
-+
-+setup_nft()
-+{
-+	# count the translated IPv4 errors returned to the IPv4 host
-+	ip netns exec "$ipxlat_ns4" nft -f - <<EOF
-+add table ip ipxlat_test
-+add counter ip ipxlat_test frag_needed
-+add counter ip ipxlat_test port_unreachable
-+add chain ip ipxlat_test input { type filter hook input priority filter; policy accept; }
-+add rule ip ipxlat_test input icmp type destination-unreachable icmp code frag-needed counter name frag_needed
-+add rule ip ipxlat_test input icmp type destination-unreachable icmp code port-unreachable counter name port_unreachable
-+EOF
-+
-+	# count the translated IPv6 error returned to the IPv6 host
-+	ip netns exec "$ipxlat_ns6" nft -f - <<EOF
-+add table ip6 ipxlat_test
-+add counter ip6 ipxlat_test port_unreachable
-+add chain ip6 ipxlat_test input { type filter hook input priority filter; policy accept; }
-+add rule ip6 ipxlat_test input icmpv6 type destination-unreachable icmpv6 code port-unreachable counter name port_unreachable
-+EOF
-+
-+	# count locally translated packets that reach IPv6 LOCAL_OUT
-+	ip netns exec "$ipxlat_nsx" nft -f - <<EOF
-+add table ip6 ipxlat_output
-+add counter ip6 ipxlat_output translated_echo
-+add chain ip6 ipxlat_output output { type filter hook output priority filter; policy accept; }
-+add rule ip6 ipxlat_output output ip6 saddr $V6_EAM_XLAT ip6 daddr $V6_REMOTE icmpv6 type echo-request counter name translated_echo
-+EOF
-+}
-+
-+setup_nat64_nft()
-+{
-+	# MASQUERADE proves that translated IPv4 traffic reaches conntrack and
-+	# POSTROUTING. Install it after the refragmentation test because enabling
-+	# IPv4 conntrack earlier would reassemble its source fragments.
-+	ip netns exec "$ipxlat_nsx" nft -f - <<EOF
-+add table ip ipxlat_nat
-+add counter ip ipxlat_nat translated_tcp
-+add chain ip ipxlat_nat postrouting { type nat hook postrouting priority srcnat; policy accept; }
-+add rule ip ipxlat_nat postrouting ip saddr $V4_REMOTE ip daddr $V4_NEAR tcp dport $IPERF_PORT counter name translated_tcp masquerade
-+EOF
-+}
-+
-+# translate a forwarded IPv4 echo request to IPv6 and its reply back to IPv4
-+test_forwarded_echo()
-+{
-+	RET=0
-+	ip netns exec "$ipxlat_ns4" ping -c 1 -W 2 "$V4_REMOTE" \
-+		>/dev/null 2>&1
-+	check_err $? "IPv4 echo did not cross the translator"
-+	log_test "forwarded ICMP translation"
-+}
-+
-+# require locally generated IPv4 traffic to pass through IPv6 LOCAL_OUT
-+test_local_output()
-+{
-+	RET=0
-+	ip netns exec "$ipxlat_nsx" ping -I "$V4_XLAT" -c 1 -W 2 \
-+		"$V4_REMOTE" >/dev/null 2>&1
-+	check_err $? "locally originated IPv4 echo failed"
-+	slowwait 2 counter_nonzero "$ipxlat_nsx" ip6 ipxlat_output \
-+		translated_echo
-+	check_err $? "translated packet did not traverse IPv6 LOCAL_OUT"
-+	log_test "locally originated CLAT traffic"
-+}
-+
-+# return valid packets unsupported by SIIT to the original route
-+test_native_fallback()
-+{
-+	RET=0
-+
-+	# Test native input fallback
-+
-+	# remove the cached ethernet address for V6_REMOTE from nsx so that the
-+	# next packet must perform IPv6 neighbor discovery
-+	ip -n "$ipxlat_nsx" -6 neigh flush to "$V6_REMOTE" dev x6 \
-+		>/dev/null 2>&1
-+
-+	# The sequence here is:
-+	# 1. nsx sends a neighbor solicitation;
-+	# 2. ns6 replies with a neighbor advertisement;
-+	# 3. because the solicitation used V6_EAM_XLAT as its source, the
-+	#    advertisement is addressed to V6_EAM_XLAT (the local route for
-+	#    V6_XLAT is an ordinary IPv6 route, it does not carry ipxlat);
-+	# 4. the local route for V6_EAM_XLAT carries the ipxlat input LWT, so
-+	#    the advertisement enters ipxlat_lwt_input;
-+	# 5. both NA endpoints are translatable, but the ICMPv6 type is not so
-+	#    the input cb restores the original metadata and calls orig_input;
-+	# 6. normal IPv6 neighbor discovery then consumes the unchanged
-+	#    advertisement and updates the neighbor table;
-+	# 7. the ping itself is allowed to fail because its echo reply is
-+	#    addressed to V6_EAM_XLAT and, unlike the NA, an echo reply is
-+	#    translatable, so the input LWT translates it to IPv4 instead of
-+	#    delivering it to the IPv6 ping socket.
-+	ip netns exec "$ipxlat_nsx" ping -6 -I "$V6_EAM_XLAT" \
-+		-c 1 -W 1 "$V6_REMOTE" >/dev/null 2>&1 || true
-+
-+	# if the neighbor entry exists in one of these usable states, the NA
-+	# must have passed through native IPv6 input (not swallowed by ipxlat)
-+	ip -n "$ipxlat_nsx" -6 neigh show "$V6_REMOTE" dev x6 |
-+		grep -Eq '\b(REACHABLE|STALE|DELAY|PROBE)\b'
-+	check_err $? "Neighbor Advertisement was intercepted by the local LWT"
-+
-+	# Test native output fallback
-+
-+	# V6_XLAT was already reachable through the connected /64, but this
-+	# /128 route takes precedence and forces locally generated traffic for
-+	# that address through ipxlat_lwt_output
-+	ip -n "$ipxlat_ns6" -6 route add "$V6_XLAT/128" \
-+		encap ipxlat rfc6052-prefix6 "$V6_RFC6052_PREFIX" \
-+		eam "$V4_NEAR_PREFIX" "$V6_EAM_PREFIX" dev v6
-+	check_err $? "could not install native-output fallback route"
-+
-+	# The source is outside both mappings, so native output must send the
-+	# unchanged packet across the existing IPv6 link.
-+	#
-+	# The sequence is:
-+	# 1. ipxlat_prepare validates the IPv6 packet returns -EOPNOTSUPP
-+	#    because it cannot convert V6_NATIVE;
-+	# 2. the output callback restores the skb metadata and calls the
-+	#    route's saved orig_output callback;
-+	# 3. native IPv6 sends the echo request over the existing veth link.
-+	#
-+	# nsx owns V6_XLAT, whose normal local route does not carry ipxlat, so
-+	# it answers normally. The reply returns to the ordinary local route
-+	# for V6_NATIVE, and the ping succeeds.
-+	ip netns exec "$ipxlat_ns6" ping -6 -I "$V6_NATIVE" \
-+		-c 1 -W 1 "$V6_XLAT" >/dev/null 2>&1
-+	check_err $? "untranslatable packet did not cross native output"
-+	ip -n "$ipxlat_ns6" -6 route del "$V6_XLAT/128" >/dev/null 2>&1 || true
-+	log_test "native input and output fallback"
-+}
-+
-+# run IPv6-initiated TCP through translation and target-family MASQUERADE
-+test_stateful_nat64()
-+{
-+	local server_pid
-+
-+	RET=0
-+	timeout 10 ip netns exec "$ipxlat_ns4" iperf3 -s -1 -p "$IPERF_PORT" \
-+		>/dev/null 2>&1 &
-+	server_pid=$!
-+	BG_PIDS+=("$server_pid")
-+	slowwait 2 tcp_listener_ready
-+	check_err $? "iperf3 server did not start"
-+
-+	timeout 10 ip netns exec "$ipxlat_ns6" iperf3 -6 \
-+		-c "$V6_EAM_NEAR" -B "$V6_REMOTE" -p "$IPERF_PORT" \
-+		-n 256K >/dev/null 2>&1
-+	check_err $? "TCP transfer through stateful NAT64 failed"
-+	wait "$server_pid"
-+	check_err $? "iperf3 server failed"
-+
-+	slowwait 2 counter_nonzero "$ipxlat_nsx" ip ipxlat_nat translated_tcp
-+	check_err $? "translated IPv4 traffic did not reach MASQUERADE"
-+	log_test "target-family conntrack and NAT"
-+}
-+
-+# require a large checksumless IPv4 UDP datagram to survive IPv6 fragmentation
-+test_zero_checksum_postfragment()
-+{
-+	local target="UDP4-DATAGRAM:$V4_PMTU:$UDP_PORT"
-+	local payload_len=1400
-+	local receiver_pid
-+	local output
-+
-+	RET=0
-+	output=$(mktemp)
-+	TMP_FILES+=("$output")
-+
-+	timeout 4 ip netns exec "$ipxlat_ns6" socat -u \
-+		"UDP6-RECVFROM:$UDP_PORT,reuseaddr" \
-+		"CREATE:$output" >/dev/null 2>&1 &
-+	receiver_pid=$!
-+	BG_PIDS+=("$receiver_pid")
-+	slowwait 2 udp_listener_ready
-+	check_err $? "IPv6 UDP receiver did not start"
-+
-+	head -c "$payload_len" /dev/zero |
-+		ip netns exec "$ipxlat_ns4" socat -u - \
-+		"$target,so-no-check=1,ip-mtu-discover=0"
-+	# SO_NO_CHECK creates a real CHECKSUM_NONE packet and PMTUDISC_DONT
-+	# leaves DF clear, so the 1280-byte translated route must fragment the
-+	# complete IPv6 datagram.
-+	check_err $? "checksumless IPv4 UDP send failed"
-+	slowwait 3 file_has_size "$output" "$payload_len"
-+	check_err $? "translated IPv6 UDP datagram was not delivered intact"
-+
-+	kill "$receiver_pid" 2>/dev/null || true
-+	wait "$receiver_pid" 2>/dev/null || true
-+	log_test "UDP zero checksum and route-PMTU fragmentation"
-+}
-+
-+# preserve local fragmentation ownership across target-family conntrack defrag
-+test_conntrack_refragment()
-+{
-+	local target="UDP4-DATAGRAM:$V4_PMTU:$UDP_PORT"
-+	local payload_len=1900
-+	local receiver_pid
-+	local output
-+
-+	RET=0
-+	output=$(mktemp)
-+	TMP_FILES+=("$output")
-+
-+	timeout 4 ip netns exec "$ipxlat_ns6" socat -u \
-+		"UDP6-RECVFROM:$UDP_PORT,reuseaddr" \
-+		"CREATE:$output" >/dev/null 2>&1 &
-+	receiver_pid=$!
-+	BG_PIDS+=("$receiver_pid")
-+	slowwait 2 udp_listener_ready
-+	check_err $? "IPv6 UDP receiver did not start"
-+
-+	# The IPv4 sender first splits the datagram at 1400 bytes. Translation
-+	# produces IPv6 fragments larger than the 1280-byte target route. IPv6
-+	# conntrack reassembles them in LOCAL_OUT, then IPv6 output must
-+	# fragment the complete datagram again for that route.
-+	ip -n "$ipxlat_ns4" link set v4 mtu 1400
-+	head -c "$payload_len" /dev/zero |
-+		ip netns exec "$ipxlat_ns4" socat -u - \
-+		"$target,ip-mtu-discover=0"
-+	check_err $? "fragmented IPv4 UDP send failed"
-+	ip -n "$ipxlat_ns4" link set v4 mtu 1500
-+
-+	slowwait 3 file_has_size "$output" "$payload_len"
-+	check_err $? "conntrack-defragmented IPv6 datagram was not delivered"
-+	slowwait 2 counter_nonzero "$ipxlat_nsx" ip6 ipxlat_refragment \
-+		tracked_udp
-+	check_err $? "reassembled IPv6 datagram did not acquire conntrack state"
-+
-+	kill "$receiver_pid" 2>/dev/null || true
-+	wait "$receiver_pid" 2>/dev/null || true
-+	log_test "conntrack defrag and target-route refragmentation"
-+}
-+
-+# translate IPv6 PTB feedback and install the resulting IPv4 PMTU exception
-+test_pmtu_feedback()
-+{
-+	RET=0
-+	ip netns exec "$ipxlat_ns4" ping -M "do" -s 1300 -c 1 -W 1 \
-+		"$V4_PMTU" >/dev/null 2>&1 || true
-+
-+	slowwait 3 counter_nonzero "$ipxlat_ns4" ip ipxlat_test frag_needed
-+	check_err $? "translated IPv4 Fragmentation Needed was not received"
-+	slowwait 3 pmtu_is_1260
-+	check_err $? "IPv4 PMTU was not updated to 1260"
-+	log_test "translated-family PMTU feedback"
-+}
-+
-+# translate an IPv6 Port Unreachable response back to the IPv4 sender
-+test_icmp_error_46()
-+{
-+	RET=0
-+	printf x | ip netns exec "$ipxlat_ns4" socat -u - \
-+		"UDP4-DATAGRAM:$V4_REMOTE:$UDP_PORT" >/dev/null 2>&1
-+	check_err $? "IPv4 UDP trigger failed"
-+	slowwait 3 counter_nonzero "$ipxlat_ns4" ip ipxlat_test \
-+		port_unreachable
-+	check_err $? "translated IPv4 Port Unreachable was not received"
-+	log_test "ICMP error translation 4 to 6"
-+}
-+
-+# translate an IPv4 Port Unreachable response back to the IPv6 sender
-+test_icmp_error_64()
-+{
-+	RET=0
-+	printf x | ip netns exec "$ipxlat_ns6" socat -u - \
-+		"UDP6-DATAGRAM:[$V6_EAM_NEAR]:$UDP_PORT" >/dev/null 2>&1
-+	check_err $? "IPv6 UDP trigger failed"
-+	slowwait 3 counter_nonzero "$ipxlat_ns6" ip6 ipxlat_test \
-+		port_unreachable
-+	check_err $? "translated IPv6 Port Unreachable was not received"
-+	log_test "ICMP error translation 6 to 4"
-+}
-+
-+if [[ $(id -u) -ne 0 ]]; then
-+	echo "SKIP: this test needs root privileges"
-+	exit "$ksft_skip"
-+fi
-+
-+require_command ip
-+require_command iperf3
-+require_command nft
-+require_command ping
-+require_command socat
-+require_command ss
-+require_command timeout
-+
-+if ! grep -qw ipxlat < <(ip route help 2>&1); then
-+	echo "SKIP: iproute2 does not support the ipxlat LWT encapsulation"
-+	exit "$ksft_skip"
-+fi
-+
-+trap cleanup EXIT
-+
-+set -e
-+setup_ns ipxlat_ns4 ipxlat_nsx ipxlat_ns6
-+setup_topology
-+warm_up_neighbors
-+setup_nft
-+
-+# test_conntrack_refragment requires setup_refragment_nft
-+setup_refragment_nft
-+set +e
-+test_conntrack_refragment
-+ip netns exec "$ipxlat_nsx" nft delete table ip6 ipxlat_refragment
-+
-+# the rest of the tests require setup_nat64_nft
-+set -e
-+setup_nat64_nft
-+set +e
-+
-+test_forwarded_echo
-+test_local_output
-+test_native_fallback
-+test_stateful_nat64
-+test_zero_checksum_postfragment
-+test_pmtu_feedback
-+test_icmp_error_46
-+test_icmp_error_64
-+
-+exit "$EXIT_STATUS"
+ char memset_zero_data[] = "data to be zeroed";
+ 
+ SEC("?tp/syscalls/sys_enter_nanosleep")
 -- 
-2.55.0
+2.54.0
 
