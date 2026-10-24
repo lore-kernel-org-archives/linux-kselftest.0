@@ -1,87 +1,86 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792874382;
-	b=UqhmzHjjXCuQd3Xf5RA54C3x3/Ffdf3DF+RzP/DEQP/2CtKbeK4IclPBeCVjzKTUnQH+
-	 Yk7uinXh916MMPGSlxpIN+FxoSMuTrbll6r2k/Sf3oJKEXIijWCfSUSLSZu8OTx0SZfsI
-	 l2nCFD+tFJguEAU9qak67Oya8tl4/8UtHswYrvhjngU1kfADCrNMTbNJO0mU1TWHexU5B
-	 UvYTj5DZAU3vN1BEQZRcOpt5u+Amxtbu/azjLF76UrEhK3pAw1vrk4Na6GmYz2uRW1DSR
-	 NwVDlWE7hRoZAMRo5E4U5KSOhFndB1f09/xFp0dgRwmqEb48BtvwOhzpc4cz4o/6GzA==
+	t=1792874383;
+	b=cWwe9VyxBN5F6Zo0qS6eSFwJ1ZUPrGLrAPsnj8qaFEeuhiyIRZrSmR7uPSMXqEn9QABS
+	 zAw1kEfVrju3xsfmfrJVnRI16wDb0Ox51B1Pv/k8nYaOMyhV0xesy+C5KWGURM6qwkJkA
+	 50Zkh42W7iCwqfRXIzOkS9zVwc78J7mbf5V3DkgjPPuwmtPLWyZ0Qg33Q0o6qgAeguwCa
+	 yNclBz2GriUvnpBXd2uzlxcbRnBpDqFQWPIeMCJS5idbfPKiVCHlvTrlLZsUpR/lbnfUE
+	 +6fvo/8fBiYerJ9faMq/vnl7dA874pRAwUNCnTHWIpDRgKM5zCxjOA1XT+U9qOesBiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792874382;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792874383;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=2/XF0CUDnW6R6lIlNke+9b08IY9KYK5NcupSvZbkTSI=;
-	b=QTuCNGS4FilpFllBnhotLsAD1qEhDPitIoLA6u48wWWWiovfUHMkwP69DNimHBe8RSbU
-	 va4g/bYRdza7JnWYTGK3k1NnNkMVDwDzyyPWA5ugu9mmarLsElRMbP20aaxphTD8cP0bt
-	 JNVH1n5EL6rzdxkH5YiozGGAOT+erQwVqoTshctRiyOzDtwtkq8oQK2CMTKUf6dM8UMHh
-	 R/uuz1LXEM2yXJaQOyjcATlV2aEK382YceYP3hy7tNK5ZrAD9Uz6/a0qtfXL/b2qsjiCD
-	 ZQXn9+EaDmTFbVXQTMPN/mhSARBWEaWR1JviAJYXz+a+NWfku1x7AuvHuHG6lP06auA==
+	bh=h4E3S9EDiGMgYhCegYxU13RBx+r3/6a8Bv+UvPiYpqg=;
+	b=yvGXDwdBcKjYJY4UAUccNJYQd52IhrdIQplMEkI05RrtGUQzS3IkRbgK8gOkQ+m/6fK+
+	 vVQSfpiiLPrv7kTzwCUMcAfPvcqRqTEP582rPAg5ju9SrLtGjMvMTQAAwYwf9nNcq6L6B
+	 6/rvtzWoKv8sZHCzgRHyA5wuEIXBg1wEzWECfF4HW6otu3cGGfw75LJ4j3XiqzTbUvKkh
+	 iXdB20Ul2lqXjR2X6ts/cD4cWgnhuH5IOeguGyC4A7zeqgNaRceJGTq+/7WwoiBIDaBeH
+	 rEP9v59GoI3tmznu7E5j+kdIN8qF67/H15VLGEFDC07L6Q3Eon28vyneto/fhgH7+7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ny7DlEzb;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Ml1X2ag1;
 	arc=none smtp.remote-ip=74.125.82.171
 Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98D5606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9740606A322
 	for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 20:39:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A98D5606A329
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A9740606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ny7DlEzb
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-369f33df08eso424738eec.0
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Ml1X2ag1
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-3535a54bed9so3017634eec.1
         for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 13:39:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1792874381; x=1793479181; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2/XF0CUDnW6R6lIlNke+9b08IY9KYK5NcupSvZbkTSI=;
-        b=ny7DlEzbQgSfdcm+uRZCkdg7h1Mda48FRZD2+H4+8WVU2M/FCSc0TIJLapuWetIUGr
-         4sT1NIYhx0ZxVJTHeel2FVheuNCPJRFkpBEbleY9t3r+++SAnBG3ffhNZ9CoGjpSREHh
-         7rcKE6DWQTEZfC/jLl93u1k3008/GrZ/fMDEqhKEl8SBj3yy1sS2b4MlUl7q/6wuIaBl
-         iH4eRMDYYxKP9d10Qex6qIoGVIvEsjGgBnSxO8P/1JRc5U1FCepeWj15kqN44o6t21H2
-         C/SuBwFslM/A72KDDSnxSM3Hm7CDjIYZcvaSFZBONNCDCjS09G8GH08PT6Go33T5sonW
-         qkNQ==
+        bh=h4E3S9EDiGMgYhCegYxU13RBx+r3/6a8Bv+UvPiYpqg=;
+        b=Ml1X2ag1LJau8sdw94Uvd0+Af0Ho+WujMLDvZ1CYkd/TcbEu2hshwm19Puu4oCuW+q
+         6Zrh8dR4/QhuIs1mJ7yNlSo70Iy3qHh/6h0Bup0vJAWvuCWMvkvzGawy1D3BDp2972HM
+         tQxIOopnaeJ6PXi1ZF75hXoGkEJss0AWJ2t3N93SGG3/TuvXgVgEo/ExOHe1R34QM8JH
+         NaMxdgnfbjYpdL5PmkQCYaOxzgeryVTTYWah6S277IJzYYhla5w/NHPw3UjvA1XLwEKu
+         6wLGtpagwho8wWZaDAHMTDYWxOcd3xwvasxyI8Mvw2jF4tOImkLJyk0f/MYdZ93i7/kd
+         AeCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1792874381; x=1793479181;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2/XF0CUDnW6R6lIlNke+9b08IY9KYK5NcupSvZbkTSI=;
-        b=VhQ+VxGdEoI+rWb0rZIergraZiz5wmbXmyv+ToenKC7QGnCD2UgVulBvQD6l3f1b9C
-         9PbB5tPWj6RPtugTBLQDSCX/IlJD8UFryLZhs0OgnG64rfJ0US5fcP2GM37folM1yx+L
-         03SYsapVrc3Ihcz6hbO4MYZ4YtW1CTGxxkmkagBDZ46NZhMeEj8kiM1q9gLfxirrHLd+
-         sbV3SFKYwBVzLk/ZX1AJ8aht/LUPtxfQebYQefnK6QOYVgCeaGKopnop0uPkcidR/g61
-         4g31qDG8URxPkqhJX9WLQuZ88/rhoKjKQZPHfIIA8vtCf+xL704QTaoX6HdQkGzhM6wb
-         SGVA==
-X-Forwarded-Encrypted: i=1; AKwUvByO4ytDKUpbKJwvcSLUy3/rPzwJFu4P49Kkc985s0g4p/wj3LrVpvYaXAGmrMGIkDzHiN5uWBvhsRtoXIkCDhg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJussPKzTEHx4k3L+OkVHSj5BeZPO9lRykgNmQaF8Lif+Vtm4XV
-	rsk7LSbglyqEHPlqPsZblmP+6u0e2kJEhWe9FSxyM0fx0MCDHMU2W3s9
-X-Gm-Gg: AYBFou2b93G0UIX5axoU/Rh3IReZkA30G1yzbiCMUNEqSBBwIwx8CklbPXoYkNsG1lL
-	1gbnmQbKJIml0ssqfbw9TLe2OCFImY2rT5wGO9RCgyWCC0AG55/261NtL1zl2CpNHcEMnyElw1U
-	ertj5bRwNgJcUArCj+D2UiJA+nr0DyHS3EELEaYLzSipOf54/7QFSRB0qF3dhLggB8XI9w11dwd
-	JQszFUpxj9d7kN0j7Xo/WU/S+5DoOxQrjFEUsoma1aMMNFoa5w2bHl0C2Y3Ms7b0Aj4C7HoFgvt
-	kS2MbiA/QJHwr1l//8ANdviYGNyXZQJmhH12NcIdC47Pa54c2+xsBVMoJnhMV7N8dsN34NxG29y
-	MmHm6WA3dxGfdZht6DP9yJrSaPJFkBNh4kYdIX4QllZ44wKqSEqfiXMrfx6+YtTNa6tGvWN5Hho
-	qAmjVmFneiLMR5rNcAEZkpPTz+Pq582uTPN7+8kcbPsZM7LBfi4n9IW7CDIfatrtxFBILTqBJkP
-	1Tb9A2r6gOF7qkWJLRzz4nkq0zISXlHC5KnHlT6995j4xJNUGPkLrXv0j2CsD+WCqv5V9k8rHLp
-	8MBvCz0=
-X-Received: by 2002:a05:7022:b05c:b0:164:ae59:935 with SMTP id a92af1059eb24-199363a338bmr3729020c88.34.1792874380668;
-        Sat, 24 Oct 2026 13:39:40 -0700 (PDT)
+        bh=h4E3S9EDiGMgYhCegYxU13RBx+r3/6a8Bv+UvPiYpqg=;
+        b=iOxmHlfqpYUS1B+sVyNEFhzFkQoL9U3DPO2mo36DIgY5MzJSJlBA7eHhGFJg/saBlD
+         SLqR5n0o3HSKbM9+cJ4veD0JrdVP/Y76LcKfXRxoMIykgm8Xpg/UNiR1cBB8QOuBhSMf
+         laM1C6ex3eoBLg9l1yLbEB+vf14ypQoYZ6FPY1+AcdsiKa5qEeaWeiOTZn46Klde7lIr
+         qa2duy7PKHs81gV1/VGtM30Ig9sVDm/3qtPhoJimui5Kkc0U3WgC/xC/QyBqrUP3wDEW
+         8bGs6tY0gm2G64Uce3+20HkGKCVgsXDA45lbHRFBjrZam95SzUfUfKRiRVBlTdm9U86b
+         PlRA==
+X-Forwarded-Encrypted: i=1; AKwUvBzZT1YWmldCJcU+R/VSvl1T925wAEiUbiJSKyQg3LH3qnBbEzPVFv6kxXzWdiX4wxo0ktjCngYpUlVLSayZOjo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI0HEVjYF8asW2bHNuKRqKQ5O6TcTmknDjDqAJIoBw4GTcoyYPr
+	yra6D9w0nBCV1968R2Hxi/DlDl8OG8FWuTn932+XQcq0jWPCed6HbgR8
+X-Gm-Gg: AYBFou1JcaJwOGRpFvS5rF8s+W7EAVycN2skMaROqi1yWFkKwQZHJmuPx5CtNiqoMrJ
+	Aqa7NEF1k4bPp8FYK7xPne3X4LusDPawBmACVy6gkPzHvl/NCB6kBpFYBfd5xxiGI6XvQev3Zgh
+	WFkzkzMOD4z+Ua8chvib56gmMj5DSSkv4ix0YhwKsrKu2OYE48d48Fx/S9qLRkvUkpvaRMgXDyc
+	96Suq/47Amb0fe1dZB+Dy2Dh4y/mlY15h+sa8yT6Ggbws3htrADQQ8AEjFMVDInohnnPn+ikS0X
+	bdNUp+QvG2+60BhSqXUySeljYNn4QDK3Y0CZUr/fCSawpy+unjaJ6669EHs+ZU51SxZxO9RK7h4
+	9Cm1lygEhweuMRBhSFZOVbr8Q0x13gcwWUzolRc1/MIN4UtXGdkgODTVMzfThxlffPj1uXVgM8W
+	pdZ0zcK98pJE4i//DXuCN282zMzFBB3iOCyWyi0dbpx6Y4TAqAfUoGciO2ZvUWduiXKG+EDs3FG
+	ffvJgPzmEDRHutjjOLvoaDKcvTokQ/przrGOPmMSt+STblXYBsbIXIct/n1cw==
+X-Received: by 2002:a05:7022:5f09:b0:15e:6541:3099 with SMTP id a92af1059eb24-19933e10e21mr4253273c88.7.1792874379642;
+        Sat, 24 Oct 2026 13:39:39 -0700 (PDT)
 Received: from [127.0.0.2] ([73.222.46.22])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-198a1bfaf25sm9764737c88.14.2026.10.24.13.39.39
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-198a1bfaf25sm9764737c88.14.2026.10.24.13.39.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Oct 2026 13:39:40 -0700 (PDT)
+        Sat, 24 Oct 2026 13:39:39 -0700 (PDT)
 From: Farid Zakaria <farid.m.zakaria@gmail.com>
-Date: Sat, 24 Oct 2026 13:39:19 -0700
-Subject: [PATCH RFC 3/3] selftests/landlock: Test LANDLOCK_ADD_RULE_CREATED
+Date: Sat, 24 Oct 2026 13:39:18 -0700
+Subject: [PATCH RFC 2/3] landlock: Add access rights on created files
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,7 +92,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261024-landlock-created-rights-v1-3-77c8db3f6bd2@gmail.com>
+Message-Id: <20261024-landlock-created-rights-v1-2-77c8db3f6bd2@gmail.com>
 References: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
 In-Reply-To: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
 To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
@@ -106,257 +105,883 @@ Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
  Farid Zakaria <farid.m.zakaria@gmail.com>
 X-Mailer: b4 0.15.2
 
-Cover the new flag: entries created directly in the directory are
-usable while the directory and its existing entries stay unreadable, a
-renamed file keeps the rights it had at its source and gains none, a
-parent layer covers the files a nested domain creates, an unrelated
-domain with the same policy cannot use them, and invalid flag
-combinations are rejected.
+Landlock ties access rights to inodes that exist when a ruleset is
+built. A directory where a sandboxed task may only create entries is
+then hard to use: LANDLOCK_ACCESS_FS_MAKE_* lets the task create
+entries, but the entries are only covered by the rules of their parent
+directories, and granting read access on the directory to cover them
+also exposes every entry already there.
+
+A shared package store such as /nix/store has this shape. A build
+sandbox should read only its declared inputs and use the outputs it
+creates, without being able to list or read the rest of the store. The
+outputs do not exist when the ruleset is built, so no rule can name
+them.
+
+Add a LANDLOCK_ADD_RULE_CREATED flag for LANDLOCK_RULE_PATH_BENEATH
+rules on a directory. Its access rights are not granted on the
+directory but on each file hierarchy that a task of the domain, or of a
+nested domain, creates directly in it. The inode_init_security hook
+observes the creation, and each layer's hierarchy keeps the granted
+rights and pins the created inodes until the hierarchy is freed. A file
+linked or renamed into the directory only gets the rights it already
+had at its source, which keeps the LANDLOCK_ACCESS_FS_REFER guarantee
+that a reparented file gains nothing.
+
+This bumps the Landlock ABI version to 13.
 
 Assisted-by: LLM
 Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
 ---
- tools/testing/selftests/landlock/fs_test.c | 227 +++++++++++++++++++++++++++++
- 1 file changed, 227 insertions(+)
+ Documentation/userspace-api/landlock.rst     |  42 +++++++
+ include/uapi/linux/landlock.h                |  18 +++
+ security/landlock/domain.c                   | 182 ++++++++++++++++++++++++++-
+ security/landlock/domain.h                   |  28 +++++
+ security/landlock/fs.c                       | 176 ++++++++++++++++++++++++--
+ security/landlock/object.h                   |   6 +
+ security/landlock/ruleset.c                  |   6 +
+ security/landlock/ruleset.h                  |  14 +++
+ security/landlock/syscalls.c                 |  20 ++-
+ tools/testing/selftests/landlock/base_test.c |   2 +-
+ 10 files changed, 471 insertions(+), 23 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 7e25a6f6073c..84980d426436 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -2640,6 +2640,233 @@ TEST_F_FORK(layout1, refer_mount_root_deny)
- 	EXPECT_EQ(0, close(root_fd));
+diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
+index 3d45b956b640..d347f157fb79 100644
+--- a/Documentation/userspace-api/landlock.rst
++++ b/Documentation/userspace-api/landlock.rst
+@@ -418,6 +418,41 @@ In this case, granting read-write access to ``~/tmp/``, instead of write-only
+ access, would potentially allow moving ``~/tmp/`` to a non-readable directory
+ and still keep the ability to list the content of ``~/tmp/``.
+ 
++Created file hierarchies
++------------------------
++
++Some directories are shared between trusted and sandboxed tasks.  For instance,
++a package store may hold the declared inputs of a build sandbox, other packages
++that this sandbox must not read, and the outputs that this sandbox creates.
++Granting the ``LANDLOCK_ACCESS_FS_MAKE_*`` access rights on such a directory
++enables the sandbox to create new entries, but these entries are then only
++covered by the rules of their parent directories.  They cannot be the target of
++a rule either, because they do not exist yet when the ruleset is created.
++
++A rule added with the ``LANDLOCK_ADD_RULE_CREATED`` flag grants its access
++rights on each file hierarchy that the sandboxed tasks create directly in a
++directory, instead of on the directory itself.  For instance, the following
++rule enables a sandboxed task to use the entries it creates in ``/nix/store``,
++but not the other entries of this directory:
++
++.. code-block:: c
++
++    struct landlock_path_beneath_attr created_attr = {
++        .allowed_access = ruleset_attr.handled_access_fs,
++        .parent_fd = open("/nix/store", O_PATH | O_CLOEXEC),
++    };
++
++    err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
++                            &created_attr, LANDLOCK_ADD_RULE_CREATED);
++
++A file hierarchy linked or renamed into such a directory only gets these access
++rights if it already had them at its source.  This enables building an entry in
++another directory and then moving it in place.  These access rights are tied to
++the created inodes, which are kept in memory for as long as the domain (or one
++of its nested domains) exists.  Entries created through an OverlayFS merge
++directory do not get these access rights, because OverlayFS creates them on its
++upper layer on behalf of the task that mounted it.
++
+ Layers of file path access rights
+ ---------------------------------
+ 
+@@ -1051,6 +1086,13 @@ fd-reference acquisition (:manpage:`open_tree(2)`, :manpage:`fsmount(2)`) with
+ the new ``LANDLOCK_PERMISSION_NAMESPACE_USE`` permission flag and
+ ``LANDLOCK_RULE_NAMESPACE`` rule type.
+ 
++Created file hierarchies (ABI < 13)
++-----------------------------------
++
++Starting with the Landlock ABI version 13, it is possible to grant access
++rights on the file hierarchies created by a sandboxed task in a directory with
++the new ``LANDLOCK_ADD_RULE_CREATED`` rule flag.
++
+ .. _kernel_support:
+ 
+ Kernel support
+diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
+index 24510e5d8479..a92324bba41e 100644
+--- a/include/uapi/linux/landlock.h
++++ b/include/uapi/linux/landlock.h
+@@ -129,10 +129,28 @@ struct landlock_ruleset_attr {
+  *     allowed_access in the passed in rule_attr.  When this flag is
+  *     present, the caller is also allowed to pass in an empty
+  *     allowed_access.
++ *
++ * %LANDLOCK_ADD_RULE_CREATED
++ *     Only valid for a %LANDLOCK_RULE_PATH_BENEATH rule on a directory.
++ *     Instead of granting allowed_access on the directory hierarchy, this
++ *     grants it on each file hierarchy that a task of the resulting domain
++ *     (or of a nested domain) creates directly in this directory.  A file
++ *     hierarchy linked or renamed into this directory only gets these access
++ *     rights if it already had them at its source.
++ *
++ *     This enables a sandboxed task to use the files it creates in a
++ *     directory without being able to read the rest of this directory, e.g.
++ *     build outputs in a shared package store.  Creating files still requires
++ *     the related ``LANDLOCK_ACCESS_FS_MAKE_*`` rights on the directory.
++ *
++ *     These access rights are tied to the created inodes for as long as the
++ *     domain exists.  This flag cannot be combined with
++ *     %LANDLOCK_ADD_RULE_QUIET.
+  */
+ 
+ /* clang-format off */
+ #define LANDLOCK_ADD_RULE_QUIET			(1U << 0)
++#define LANDLOCK_ADD_RULE_CREATED		(1U << 1)
+ /* clang-format on */
+ 
+ /**
+diff --git a/security/landlock/domain.c b/security/landlock/domain.c
+index 4c0b1f0e1db5..f8dc771724e1 100644
+--- a/security/landlock/domain.c
++++ b/security/landlock/domain.c
+@@ -57,6 +57,7 @@ static struct landlock_domain *create_domain(const u32 num_layers)
+ 
+ 	refcount_set(&new_domain->usage, 1);
+ 	new_domain->rules.root_inode = RB_ROOT;
++	new_domain->rules.root_inode_created = RB_ROOT;
+ 
+ #if IS_ENABLED(CONFIG_INET)
+ 	new_domain->rules.root_net_port = RB_ROOT;
+@@ -98,9 +99,9 @@ void landlock_put_domain_deferred(struct landlock_domain *const domain)
  }
  
-+/* clang-format off */
-+#define ACCESS_CREATED ( \
-+	ACCESS_RW | \
-+	LANDLOCK_ACCESS_FS_MAKE_REG | \
-+	LANDLOCK_ACCESS_FS_MAKE_DIR)
-+/* clang-format on */
-+
-+/*
-+ * Creates a ruleset where dir_s2d1 plays a shared store: tasks may create and
-+ * remove entries in it and use what they create, but not read it otherwise.
-+ * dir_s1d1 is a read-write source and dir_s3d1 a source without read access.
+ /* The returned access has the same lifetime as the domain. */
+-static const struct landlock_rule *
+-find_rule(const struct landlock_domain *const domain,
+-	  const struct landlock_id id)
++const struct landlock_rule *
++landlock_find_rule(const struct landlock_domain *const domain,
++		   const struct landlock_id id)
+ {
+ 	const struct rb_root *root;
+ 	const struct rb_node *node;
+@@ -152,7 +153,7 @@ bool landlock_unmask_layers(const struct landlock_domain *const domain,
+ 	if (!masks)
+ 		return true;
+ 
+-	rule = find_rule(domain, id);
++	rule = landlock_find_rule(domain, id);
+ 	if (!rule)
+ 		return false;
+ 
+@@ -198,6 +199,166 @@ bool landlock_unmask_layers(const struct landlock_domain *const domain,
+ 	return true;
+ }
+ 
++/**
++ * struct landlock_created - Access rights granted on a created inode
 + */
-+static int create_created_ruleset(struct __test_metadata *const _metadata)
-+{
-+	const struct rule rules[] = {
-+		{
-+			.path = dir_s1d1,
-+			.access = ACCESS_RW | LANDLOCK_ACCESS_FS_REFER |
-+				  LANDLOCK_ACCESS_FS_REMOVE_FILE,
-+		},
-+		{
-+			.path = dir_s2d1,
-+			.access = LANDLOCK_ACCESS_FS_MAKE_REG |
-+				  LANDLOCK_ACCESS_FS_MAKE_DIR |
-+				  LANDLOCK_ACCESS_FS_REFER |
-+				  LANDLOCK_ACCESS_FS_REMOVE_FILE,
-+		},
-+		{
-+			.path = dir_s3d1,
-+			.access = LANDLOCK_ACCESS_FS_REFER |
-+				  LANDLOCK_ACCESS_FS_REMOVE_FILE,
-+		},
-+		{},
-+	};
-+	const int ruleset_fd = create_ruleset(
-+		_metadata, ACCESS_CREATED | LANDLOCK_ACCESS_FS_REFER |
-+				   LANDLOCK_ACCESS_FS_REMOVE_FILE,
-+		rules);
++struct landlock_created {
++	/**
++	 * @node: Node in &landlock_hierarchy.created .
++	 */
++	struct rb_node node;
++	/**
++	 * @object: Object tied to the created inode.
++	 */
++	struct landlock_object *object;
++	/**
++	 * @access: Access rights granted on the created file hierarchy.
++	 */
++	access_mask_t access;
++};
 +
-+	add_path_beneath(_metadata, ruleset_fd, ACCESS_CREATED, dir_s2d1,
-+			 LANDLOCK_ADD_RULE_CREATED);
-+	return ruleset_fd;
++static struct landlock_hierarchy *
++get_layer_hierarchy(const struct landlock_domain *const domain,
++		    const size_t layer_level)
++{
++	struct landlock_hierarchy *hierarchy = domain->hierarchy;
++
++	for (size_t i = domain->num_layers - 1; i > layer_level && hierarchy;
++	     i--)
++		hierarchy = hierarchy->parent;
++	return hierarchy;
 +}
 +
-+/* Creates a new regular file and returns 0 or the open(2) errno. */
-+static int create_file_at(const char *const path)
++/**
++ * landlock_add_created - Grant access rights on a created inode
++ *
++ * @domain: The domain of the task which created the inode.
++ * @layer_level: The layer of @domain which granted @access.
++ * @object: The object tied to the created inode.
++ * @access: The access rights to grant on the created file hierarchy.
++ *
++ * The access rights are tied to the hierarchy of the layer, which is shared
++ * with nested domains, and keep @object alive until this hierarchy is freed.
++ *
++ * Return: 0 on success, -errno on failure.
++ */
++int landlock_add_created(const struct landlock_domain *const domain,
++			 const size_t layer_level,
++			 struct landlock_object *const object,
++			 const access_mask_t access)
 +{
-+	const int fd = open(path, O_CREAT | O_EXCL | O_WRONLY | O_CLOEXEC, 0700);
++	struct landlock_hierarchy *const hierarchy =
++		get_layer_hierarchy(domain, layer_level);
++	struct landlock_created *new_created;
++	struct rb_node **walker_node, *parent_node = NULL;
 +
-+	if (fd < 0)
-+		return errno;
-+	close(fd);
++	if (WARN_ON_ONCE(!hierarchy))
++		return -EINVAL;
++
++	new_created = kzalloc_obj(*new_created, GFP_KERNEL_ACCOUNT);
++	if (!new_created)
++		return -ENOMEM;
++
++	spin_lock(&hierarchy->created_lock);
++	walker_node = &hierarchy->created.rb_node;
++	while (*walker_node) {
++		struct landlock_created *const this =
++			rb_entry(*walker_node, struct landlock_created, node);
++
++		if (this->object == object) {
++			this->access |= access;
++			spin_unlock(&hierarchy->created_lock);
++			kfree(new_created);
++			return 0;
++		}
++		parent_node = *walker_node;
++		if (this->object < object)
++			walker_node = &(*walker_node)->rb_right;
++		else
++			walker_node = &(*walker_node)->rb_left;
++	}
++	landlock_get_object(object);
++	new_created->object = object;
++	new_created->access = access;
++	rb_link_node(&new_created->node, parent_node, walker_node);
++	rb_insert_color(&new_created->node, &hierarchy->created);
++	spin_unlock(&hierarchy->created_lock);
++	WRITE_ONCE(object->created, true);
 +	return 0;
 +}
 +
-+/*
-+ * Checks that entries created directly in a LANDLOCK_ADD_RULE_CREATED
-+ * directory are usable, while the directory, its pre-existing entries, and
-+ * entries created deeper in pre-existing subdirectories stay inaccessible.
-+ */
-+TEST_F_FORK(layout1, created_rule)
++static access_mask_t get_created(struct landlock_hierarchy *const hierarchy,
++				 const struct landlock_object *const object)
 +{
-+	const char *const new_file = TMP_DIR "/s2d1/new";
-+	const char *const new_dir = TMP_DIR "/s2d1/newdir";
-+	const char *const new_nested = TMP_DIR "/s2d1/newdir/f";
-+	const int ruleset_fd = create_created_ruleset(_metadata);
++	const struct rb_node *node;
++	access_mask_t access = 0;
 +
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	ASSERT_EQ(0, close(ruleset_fd));
++	spin_lock(&hierarchy->created_lock);
++	node = hierarchy->created.rb_node;
++	while (node) {
++		const struct landlock_created *const this =
++			rb_entry(node, struct landlock_created, node);
 +
-+	/* The directory and its existing entries are not readable. */
-+	ASSERT_EQ(EACCES, test_open(dir_s2d1, O_RDONLY | O_DIRECTORY));
-+	ASSERT_EQ(EACCES, test_open(file1_s2d1, O_RDONLY));
-+	ASSERT_EQ(EACCES, test_open(dir_s2d2, O_RDONLY | O_DIRECTORY));
-+
-+	/* New entries are usable. */
-+	ASSERT_EQ(0, create_file_at(new_file));
-+	ASSERT_EQ(0, test_open(new_file, O_RDWR));
-+	ASSERT_EQ(0, mkdir(new_dir, 0700));
-+	ASSERT_EQ(0, test_open(new_dir, O_RDONLY | O_DIRECTORY));
-+	ASSERT_EQ(0, create_file_at(new_nested));
-+	ASSERT_EQ(0, test_open(new_nested, O_RDWR));
-+
-+	/*
-+	 * Only direct children of the directory are covered.  The file is
-+	 * created before open(2) fails, and the layout teardown expects
-+	 * dir_s2d2 to contain only its own files.
-+	 */
-+	ASSERT_EQ(EACCES, create_file_at(TMP_DIR "/s2d1/s2d2/new"));
-+	ASSERT_EQ(0, unlink(TMP_DIR "/s2d1/s2d2/new"));
-+}
-+
-+/*
-+ * Checks that a file renamed into a LANDLOCK_ADD_RULE_CREATED directory keeps
-+ * the access rights it had at its source and gains none it did not have, by
-+ * moving one file from a readable source and one from an unreadable source.
-+ */
-+TEST_F_FORK(layout1, created_rule_refer)
-+{
-+	const char *const moved_rw = TMP_DIR "/s2d1/moved_rw";
-+	const char *const moved_ro = TMP_DIR "/s2d1/moved_ro";
-+	const int ruleset_fd = create_created_ruleset(_metadata);
-+
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	ASSERT_EQ(0, close(ruleset_fd));
-+
-+	/* Keeps the access rights a file already had at its source. */
-+	ASSERT_EQ(0, rename(file1_s1d1, moved_rw));
-+	ASSERT_EQ(0, test_open(moved_rw, O_RDWR));
-+
-+	/* Does not gain access rights a file did not have at its source. */
-+	ASSERT_EQ(EACCES, test_open(file1_s3d1, O_RDONLY));
-+	ASSERT_EQ(0, rename(file1_s3d1, moved_ro));
-+	ASSERT_EQ(EACCES, test_open(moved_ro, O_RDONLY));
-+}
-+
-+/*
-+ * Checks that the layer holding the LANDLOCK_ADD_RULE_CREATED rule grants
-+ * access to files created by a nested domain, by stacking a permissive layer
-+ * and creating the file from within it.
-+ */
-+TEST_F_FORK(layout1, created_rule_nested_domain)
-+{
-+	const char *const new_file = TMP_DIR "/s2d1/new";
-+	const struct rule rules[] = {
-+		{
-+			.path = TMP_DIR,
-+			.access = ACCESS_CREATED,
-+		},
-+		{},
-+	};
-+	const int ruleset_fd = create_created_ruleset(_metadata);
-+
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	ASSERT_EQ(0, close(ruleset_fd));
-+	enforce_fs(_metadata, ACCESS_CREATED, rules);
-+
-+	/* The parent layer grants access to what nested domains create. */
-+	ASSERT_EQ(0, create_file_at(new_file));
-+	ASSERT_EQ(0, test_open(new_file, O_RDWR));
-+	ASSERT_EQ(EACCES, test_open(file1_s2d1, O_RDONLY));
-+}
-+
-+/*
-+ * Checks that an unrelated domain with the same policy cannot use a file
-+ * another domain created, by keeping the creating child alive while the
-+ * parent enforces its own domain and tries to read the file.
-+ */
-+TEST_F_FORK(layout1, created_rule_other_domain)
-+{
-+	const char *const new_file = TMP_DIR "/s2d1/new";
-+	int pipe_created[2], pipe_done[2], status;
-+	pid_t child;
-+	char buf;
-+
-+	ASSERT_EQ(0, pipe2(pipe_created, O_CLOEXEC));
-+	ASSERT_EQ(0, pipe2(pipe_done, O_CLOEXEC));
-+
-+	child = fork();
-+	ASSERT_LE(0, child);
-+	if (child == 0) {
-+		const int ruleset_fd = create_created_ruleset(_metadata);
-+
-+		ASSERT_EQ(0, close(pipe_created[0]));
-+		ASSERT_EQ(0, close(pipe_done[1]));
-+
-+		enforce_ruleset(_metadata, ruleset_fd);
-+		ASSERT_EQ(0, create_file_at(new_file));
-+		ASSERT_EQ(1, write(pipe_created[1], ".", 1));
-+		ASSERT_EQ(1, read(pipe_done[0], &buf, 1));
-+		_exit(_metadata->exit_code);
++		if (this->object == object) {
++			access = this->access;
++			break;
++		}
++		if (this->object < object)
++			node = node->rb_right;
++		else
++			node = node->rb_left;
 +	}
++	spin_unlock(&hierarchy->created_lock);
++	return access;
++}
 +
-+	/*
-+	 * Closing the unused ends makes a read return if the other process
-+	 * fails before writing.
++/**
++ * landlock_unmask_created - Remove the access rights in @masks which are
++ *                           granted on a created inode
++ *
++ * @domain: The Landlock domain to check against.
++ * @object: The object tied to the inode, which may have been created by a
++ *          task of @domain, a parent domain, or a nested domain.
++ * @masks: A matrix of unfulfilled access rights for each layer.
++ *
++ * Return: True if the request is allowed (i.e. @masks has no leftover set
++ * bits).
++ */
++bool landlock_unmask_created(const struct landlock_domain *const domain,
++			     const struct landlock_object *const object,
++			     struct layer_masks *masks)
++{
++	struct landlock_hierarchy *hierarchy = domain->hierarchy;
++
++	if (!masks)
++		return true;
++
++	if (!READ_ONCE(object->created))
++		return false;
++
++	for (size_t i = domain->num_layers; i > 0 && hierarchy;
++	     i--, hierarchy = hierarchy->parent)
++		masks->layers[i - 1].access &= ~get_created(hierarchy, object);
++
++	for (size_t i = 0; i < ARRAY_SIZE(masks->layers); i++) {
++		if (masks->layers[i].access)
++			return false;
++	}
++	return true;
++}
++
++void landlock_free_created(struct landlock_hierarchy *const hierarchy)
++{
++	struct landlock_created *freeme, *next;
++
++	might_sleep();
++	rbtree_postorder_for_each_entry_safe(freeme, next, &hierarchy->created,
++					     node) {
++		landlock_put_object(freeme->object);
++		kfree(freeme);
++	}
++}
++
+ typedef access_mask_t
+ get_access_mask_t(const struct landlock_domain *const domain,
+ 		  const u16 layer_level);
+@@ -331,11 +492,15 @@ static int merge_ruleset(struct landlock_domain *const dst,
+ 	dst->layers[dst->num_layers - 1] =
+ 		landlock_upgrade_handled_layer_config(src->layer);
+ 
+-	/* Merges the @src inode tree. */
++	/* Merges the @src inode trees. */
+ 	err = merge_tree(dst, src, LANDLOCK_KEY_INODE);
+ 	if (err)
+ 		return err;
+ 
++	err = merge_tree(dst, src, LANDLOCK_KEY_INODE_CREATED);
++	if (err)
++		return err;
++
+ #if IS_ENABLED(CONFIG_INET)
+ 	/* Merges the @src network port tree. */
+ 	err = merge_tree(dst, src, LANDLOCK_KEY_NET_PORT);
+@@ -386,11 +551,15 @@ static int inherit_ruleset(struct landlock_domain *const parent,
+ 	if (!parent)
+ 		return 0;
+ 
+-	/* Copies the @parent inode tree. */
++	/* Copies the @parent inode trees. */
+ 	err = inherit_tree(parent, child, LANDLOCK_KEY_INODE);
+ 	if (err)
+ 		return err;
+ 
++	err = inherit_tree(parent, child, LANDLOCK_KEY_INODE_CREATED);
++	if (err)
++		return err;
++
+ #if IS_ENABLED(CONFIG_INET)
+ 	/* Copies the @parent network port tree. */
+ 	err = inherit_tree(parent, child, LANDLOCK_KEY_NET_PORT);
+@@ -463,6 +632,7 @@ landlock_merge_ruleset(struct landlock_domain *const parent,
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	refcount_set(&new_dom->hierarchy->usage, 1);
++	spin_lock_init(&new_dom->hierarchy->created_lock);
+ 
+ 	/* ...as a child of @parent... */
+ 	err = inherit_ruleset(parent, new_dom);
+diff --git a/security/landlock/domain.h b/security/landlock/domain.h
+index 935e18b12b3c..21d6bb4453d1 100644
+--- a/security/landlock/domain.h
++++ b/security/landlock/domain.h
+@@ -19,6 +19,7 @@
+ #include <linux/refcount.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
++#include <linux/spinlock.h>
+ #include <linux/workqueue.h>
+ 
+ #include "access.h"
+@@ -98,6 +99,17 @@ struct landlock_hierarchy {
+ 	 * domain.
+ 	 */
+ 	refcount_t usage;
++	/**
++	 * @created_lock: Protects @created.
 +	 */
-+	ASSERT_EQ(0, close(pipe_created[1]));
-+	ASSERT_EQ(0, close(pipe_done[0]));
++	spinlock_t created_lock;
++	/**
++	 * @created: Red-black tree of &struct landlock_created, one per inode
++	 * which got access rights from a %LANDLOCK_ADD_RULE_CREATED rule of
++	 * this layer.  Each node holds a reference to its object, and thus to
++	 * its inode, until this hierarchy is freed.
++	 */
++	struct rb_root created;
+ 
+ #ifdef CONFIG_SECURITY_LANDLOCK_LOG
+ 	/**
+@@ -187,6 +199,8 @@ landlock_get_hierarchy(struct landlock_hierarchy *const hierarchy)
+ 		refcount_inc(&hierarchy->usage);
+ }
+ 
++void landlock_free_created(struct landlock_hierarchy *const hierarchy);
 +
-+	/* A domain with the same policy can't use what another one created. */
-+	ASSERT_EQ(1, read(pipe_created[0], &buf, 1));
-+	enforce_ruleset(_metadata, create_created_ruleset(_metadata));
-+	ASSERT_EQ(EACCES, test_open(new_file, O_RDONLY));
-+	ASSERT_EQ(1, write(pipe_done[1], ".", 1));
+ static inline void landlock_put_hierarchy(struct landlock_hierarchy *hierarchy)
+ {
+ 	while (hierarchy && refcount_dec_and_test(&hierarchy->usage)) {
+@@ -194,6 +208,7 @@ static inline void landlock_put_hierarchy(struct landlock_hierarchy *hierarchy)
+ 
+ 		landlock_log_free_domain(hierarchy);
+ 		landlock_free_hierarchy_details(hierarchy);
++		landlock_free_created(hierarchy);
+ 		hierarchy = hierarchy->parent;
+ 		kfree(freeme);
+ 	}
+@@ -321,6 +336,19 @@ bool landlock_unmask_layers(const struct landlock_domain *const domain,
+ 			    struct layer_masks *masks,
+ 			    const struct landlock_rule **matched_rule);
+ 
++const struct landlock_rule *
++landlock_find_rule(const struct landlock_domain *const domain,
++		   const struct landlock_id id);
 +
-+	ASSERT_EQ(child, waitpid(child, &status, 0));
-+	ASSERT_EQ(1, WIFEXITED(status));
-+	ASSERT_EQ(EXIT_SUCCESS, WEXITSTATUS(status));
++int landlock_add_created(const struct landlock_domain *const domain,
++			 const size_t layer_level,
++			 struct landlock_object *const object,
++			 const access_mask_t access);
++
++bool landlock_unmask_created(const struct landlock_domain *const domain,
++			     const struct landlock_object *const object,
++			     struct layer_masks *masks);
++
+ access_mask_t
+ landlock_init_layer_masks(const struct landlock_domain *const domain,
+ 			  const access_mask_t access_request,
+diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+index 2ab67bcad198..64a344725433 100644
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -332,12 +332,15 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+ {
+ 	int err;
+ 	struct landlock_id id = {
+-		.type = LANDLOCK_KEY_INODE,
++		.type = (flags & LANDLOCK_ADD_RULE_CREATED) ?
++				LANDLOCK_KEY_INODE_CREATED :
++				LANDLOCK_KEY_INODE,
+ 	};
+ 
+ 	/* Files only get access rights that make sense. */
+ 	if (!d_is_dir(path->dentry) &&
+-	    !access_mask_subset(access_rights, ACCESS_FILE))
++	    ((flags & LANDLOCK_ADD_RULE_CREATED) ||
++	     !access_mask_subset(access_rights, ACCESS_FILE)))
+ 		return -EINVAL;
+ 
+ 	/* Transforms relative access rights to absolute ones. */
+@@ -428,6 +431,16 @@ static bool unmask_layers_fs(const struct landlock_domain *const domain,
+ 	return ret;
+ }
+ 
++static bool unmask_layers_created(const struct landlock_domain *const domain,
++				  const struct landlock_id id,
++				  struct layer_masks *masks)
++{
++	if (RB_EMPTY_ROOT(&domain->rules.root_inode_created))
++		return false;
++
++	return landlock_unmask_created(domain, id.key.object, masks);
++}
++
+ /*
+  * Allows access to pseudo filesystems that will never be mountable (e.g.
+  * sockfs, pipefs), but can still be reachable through
+@@ -869,9 +882,11 @@ is_access_to_paths_allowed(const struct landlock_domain *const domain,
+ 						    LANDLOCK_MASK_ACCESS_FS,
+ 						    &_layer_masks_child1,
+ 						    LANDLOCK_KEY_INODE);
+-		if (handled && get_inode_id(dentry_child1, &id))
++		if (handled && get_inode_id(dentry_child1, &id)) {
+ 			unmask_layers_fs(domain, id, handled,
+ 					 &_layer_masks_child1, dentry_child1);
++			unmask_layers_created(domain, id, &_layer_masks_child1);
++		}
+ 		layer_masks_child1 = &_layer_masks_child1;
+ 		child1_is_directory = d_is_dir(dentry_child1);
+ 	}
+@@ -885,9 +900,11 @@ is_access_to_paths_allowed(const struct landlock_domain *const domain,
+ 						    LANDLOCK_MASK_ACCESS_FS,
+ 						    &_layer_masks_child2,
+ 						    LANDLOCK_KEY_INODE);
+-		if (handled && get_inode_id(dentry_child2, &id))
++		if (handled && get_inode_id(dentry_child2, &id)) {
+ 			unmask_layers_fs(domain, id, handled,
+ 					 &_layer_masks_child2, dentry_child2);
++			unmask_layers_created(domain, id, &_layer_masks_child2);
++		}
+ 		layer_masks_child2 = &_layer_masks_child2;
+ 		child2_is_directory = d_is_dir(dentry_child2);
+ 	}
+@@ -945,13 +962,17 @@ is_access_to_paths_allowed(const struct landlock_domain *const domain,
+ 				unmask_layers_fs(domain, id,
+ 						 access_masked_parent1,
+ 						 layer_masks_parent1,
+-						 walker_path.dentry);
++						 walker_path.dentry) ||
++				unmask_layers_created(domain, id,
++						      layer_masks_parent1);
+ 			allowed_parent2 =
+ 				allowed_parent2 ||
+ 				unmask_layers_fs(domain, id,
+ 						 access_masked_parent2,
+ 						 layer_masks_parent2,
+-						 walker_path.dentry);
++						 walker_path.dentry) ||
++				unmask_layers_created(domain, id,
++						      layer_masks_parent2);
+ 		}
+ 
+ 		/* Stops when a rule from each layer grants access. */
+@@ -1148,8 +1169,9 @@ static bool collect_domain_accesses(const struct landlock_domain *const domain,
+ 
+ 		/* Gets all layers allowing all domain accesses. */
+ 		if (get_inode_id(dir, &id) &&
+-		    unmask_layers_fs(domain, id, access_masked_dom,
+-				     layer_masks_dom, dir)) {
++		    (unmask_layers_fs(domain, id, access_masked_dom,
++				      layer_masks_dom, dir) ||
++		     unmask_layers_created(domain, id, layer_masks_dom))) {
+ 			/*
+ 			 * Stops when all handled accesses are allowed by at
+ 			 * least one rule in each layer.
+@@ -1359,8 +1381,130 @@ static int current_check_refer_path(struct dentry *const old_dentry,
+ 	return -EXDEV;
+ }
+ 
++static const struct landlock_rule *
++get_created_rule(const struct landlock_domain *const domain,
++		 const struct inode *const dir)
++{
++	const struct landlock_id id = {
++		.key.object = rcu_access_pointer(landlock_inode(dir)->object),
++		.type = LANDLOCK_KEY_INODE_CREATED,
++	};
++
++	if (!id.key.object)
++		return NULL;
++
++	return landlock_find_rule(domain, id);
++}
++
++/**
++ * grant_created - Grant the access rights of a LANDLOCK_ADD_RULE_CREATED rule
++ *
++ * @domain: The domain of the current task.
++ * @rule: The rule tied to the parent directory of @inode.
++ * @inode: The created, linked, or renamed inode.
++ * @src_masks: If not NULL, the unfulfilled access rights of @inode at its
++ *             source.  Only the layers which already granted their access
++ *             rights there grant them on @inode.
++ *
++ * Return: 0 on success, -errno on failure.
++ */
++static int grant_created(const struct landlock_domain *const domain,
++			 const struct landlock_rule *const rule,
++			 struct inode *const inode,
++			 const struct layer_masks *const src_masks)
++{
++	struct landlock_object *object;
++	int err = 0;
++
++	object = get_inode_object(inode);
++	if (IS_ERR(object))
++		return PTR_ERR(object);
++
++	for (size_t i = 0; i < rule->num_layers && !err; i++) {
++		const struct landlock_layer *const layer = &rule->layers[i];
++
++		if (src_masks &&
++		    (src_masks->layers[layer->level - 1].access & layer->access))
++			continue;
++
++		err = landlock_add_created(domain, layer->level - 1, object,
++					   layer->access);
++	}
++	landlock_put_object(object);
++	return err;
 +}
 +
 +/*
-+ * Checks that LANDLOCK_ADD_RULE_CREATED is rejected on a file, combined with
-+ * LANDLOCK_ADD_RULE_QUIET, or with an empty allowed_access.
++ * Grants the access rights of @new_dir's LANDLOCK_ADD_RULE_CREATED rule on
++ * the reparented @old_dentry, for the layers which already granted them at
++ * its source.  This must only be called once the refer action is allowed.
 + */
-+TEST_F_FORK(layout1, created_rule_invalid)
++static int refer_created(struct dentry *const old_dentry,
++			 const struct path *const new_dir)
 +{
-+	const int ruleset_fd = create_ruleset(_metadata, ACCESS_CREATED, NULL);
-+	struct landlock_path_beneath_attr path_beneath = {
-+		.allowed_access = ACCESS_RW,
++	const struct landlock_cred_security *const subject =
++		landlock_get_applicable_subject(current_cred(), any_fs, NULL);
++	/* The mount points are the same for old and new paths, cf. EXDEV. */
++	const struct path old_path = {
++		.mnt = new_dir->mnt,
++		.dentry = old_dentry,
 +	};
++	const struct landlock_rule *rule;
++	struct layer_masks layer_masks;
++	access_mask_t access = 0;
 +
-+	path_beneath.parent_fd = open(file1_s1d1, O_PATH | O_CLOEXEC);
-+	ASSERT_LE(0, path_beneath.parent_fd);
-+	ASSERT_EQ(-1, landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
-+					&path_beneath,
-+					LANDLOCK_ADD_RULE_CREATED));
-+	ASSERT_EQ(EINVAL, errno);
-+	ASSERT_EQ(0, close(path_beneath.parent_fd));
++	if (!subject ||
++	    RB_EMPTY_ROOT(&subject->domain->rules.root_inode_created) ||
++	    old_dentry->d_parent == new_dir->dentry)
++		return 0;
 +
-+	path_beneath.parent_fd = open(dir_s1d1, O_PATH | O_CLOEXEC);
-+	ASSERT_LE(0, path_beneath.parent_fd);
-+	ASSERT_EQ(-1, landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
-+					&path_beneath,
-+					LANDLOCK_ADD_RULE_CREATED |
-+						LANDLOCK_ADD_RULE_QUIET));
-+	ASSERT_EQ(EINVAL, errno);
++	rule = get_created_rule(subject->domain,
++				d_backing_inode(new_dir->dentry));
++	if (!rule)
++		return 0;
 +
-+	path_beneath.allowed_access = 0;
-+	ASSERT_EQ(-1, landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
-+					&path_beneath,
-+					LANDLOCK_ADD_RULE_CREATED));
-+	ASSERT_EQ(ENOMSG, errno);
-+	ASSERT_EQ(0, close(path_beneath.parent_fd));
-+	ASSERT_EQ(0, close(ruleset_fd));
++	for (size_t i = 0; i < rule->num_layers; i++)
++		access |= rule->layers[i].access;
++
++	/* Only compares the access rights which make sense for files. */
++	if (!d_is_dir(old_dentry))
++		access &= ACCESS_FILE;
++
++	access = landlock_init_layer_masks(subject->domain, access,
++					   &layer_masks, LANDLOCK_KEY_INODE);
++	is_access_to_paths_allowed(subject->domain, &old_path, access,
++				   &layer_masks, NULL, NULL, 0, NULL, NULL,
++				   NULL);
++	return grant_created(subject->domain, rule,
++			     d_backing_inode(old_dentry), &layer_masks);
 +}
 +
- TEST_F_FORK(layout1, refer_part_mount_tree_is_allowed)
+ /* Inode hooks */
+ 
++static int hook_inode_init_security(struct inode *const inode,
++				    struct inode *const dir,
++				    const struct qstr *const qstr,
++				    struct xattr *const xattrs,
++				    int *const xattr_count)
++{
++	const struct landlock_cred_security *const subject =
++		landlock_get_applicable_subject(current_cred(), any_fs, NULL);
++	const struct landlock_rule *rule;
++	int err;
++
++	if (!subject || !dir ||
++	    RB_EMPTY_ROOT(&subject->domain->rules.root_inode_created))
++		return -EOPNOTSUPP;
++
++	rule = get_created_rule(subject->domain, dir);
++	if (!rule)
++		return -EOPNOTSUPP;
++
++	/* Landlock does not provide any xattr. */
++	err = grant_created(subject->domain, rule, inode, NULL);
++	return err ?: -EOPNOTSUPP;
++}
++
+ static void hook_inode_free_security_rcu(void *inode_security)
  {
- 	const struct rule layer1[] = {
+ 	struct landlock_inode_security *inode_sec;
+@@ -1623,7 +1767,8 @@ static int hook_path_link(struct dentry *const old_dentry,
+ 			  struct dentry *const new_dentry)
+ {
+ 	return current_check_refer_path(old_dentry, new_dir, new_dentry, false,
+-					false, false);
++					false, false) ?:
++		       refer_created(old_dentry, new_dir);
+ }
+ 
+ static int hook_path_rename(const struct path *const old_dir,
+@@ -1632,10 +1777,16 @@ static int hook_path_rename(const struct path *const old_dir,
+ 			    struct dentry *const new_dentry,
+ 			    const unsigned int flags)
+ {
++	int err;
++
+ 	/* old_dir refers to old_dentry->d_parent and new_dir->mnt */
+-	return current_check_refer_path(old_dentry, new_dir, new_dentry, true,
+-					!!(flags & RENAME_EXCHANGE),
+-					!!(flags & RENAME_WHITEOUT));
++	err = current_check_refer_path(old_dentry, new_dir, new_dentry, true,
++				       !!(flags & RENAME_EXCHANGE),
++				       !!(flags & RENAME_WHITEOUT));
++	if (err || (flags & RENAME_EXCHANGE))
++		return err;
++
++	return refer_created(old_dentry, new_dir);
+ }
+ 
+ static int hook_path_mkdir(const struct path *const dir,
+@@ -2083,6 +2234,7 @@ static void hook_file_free_security(struct file *file)
+ }
+ 
+ static struct security_hook_list landlock_hooks[] __ro_after_init = {
++	LSM_HOOK_INIT(inode_init_security, hook_inode_init_security),
+ 	LSM_HOOK_INIT(inode_free_security_rcu, hook_inode_free_security_rcu),
+ 
+ 	LSM_HOOK_INIT(sb_delete, hook_sb_delete),
+diff --git a/security/landlock/object.h b/security/landlock/object.h
+index 5f28c35e8aa8..61bd8589862d 100644
+--- a/security/landlock/object.h
++++ b/security/landlock/object.h
+@@ -54,6 +54,12 @@ struct landlock_object {
+ 	 * Lock ordering: inode->i_lock nests inside this.
+ 	 */
+ 	spinlock_t lock;
++	/**
++	 * @created: Set once the underlying inode got access rights from a
++	 * %LANDLOCK_ADD_RULE_CREATED rule, which enables to skip looking up
++	 * such access rights for other inodes.
++	 */
++	bool created;
+ 	/**
+ 	 * @underobj: Used when cleaning up an object and to mark an object as
+ 	 * tied to its underlying kernel structure.  This pointer is protected
+diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
+index 11776b138a56..44168537648c 100644
+--- a/security/landlock/ruleset.c
++++ b/security/landlock/ruleset.c
+@@ -49,6 +49,7 @@ struct landlock_ruleset *landlock_create_ruleset(
+ 	refcount_set(&new_ruleset->usage, 1);
+ 	mutex_init(&new_ruleset->lock);
+ 	new_ruleset->rules.root_inode = RB_ROOT;
++	new_ruleset->rules.root_inode_created = RB_ROOT;
+ 
+ #if IS_ENABLED(CONFIG_INET)
+ 	new_ruleset->rules.root_net_port = RB_ROOT;
+@@ -110,6 +111,7 @@ static bool is_object_pointer(const enum landlock_key_type key_type)
+ {
+ 	switch (key_type) {
+ 	case LANDLOCK_KEY_INODE:
++	case LANDLOCK_KEY_INODE_CREATED:
+ 		return true;
+ 
+ #if IS_ENABLED(CONFIG_INET)
+@@ -342,6 +344,10 @@ void landlock_free_rules(struct landlock_rules *const rules)
+ 					     node)
+ 		free_rule(freeme, LANDLOCK_KEY_INODE);
+ 
++	rbtree_postorder_for_each_entry_safe(freeme, next,
++					     &rules->root_inode_created, node)
++		free_rule(freeme, LANDLOCK_KEY_INODE_CREATED);
++
+ #if IS_ENABLED(CONFIG_INET)
+ 	rbtree_postorder_for_each_entry_safe(freeme, next,
+ 					     &rules->root_net_port, node)
+diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
+index 3a38d7079dc2..4ed347a0c3a5 100644
+--- a/security/landlock/ruleset.h
++++ b/security/landlock/ruleset.h
+@@ -74,6 +74,11 @@ enum landlock_key_type {
+ 	 * keys.
+ 	 */
+ 	LANDLOCK_KEY_NET_PORT,
++	/**
++	 * @LANDLOCK_KEY_INODE_CREATED: Type of
++	 * &landlock_rules.root_inode_created's node keys.
++	 */
++	LANDLOCK_KEY_INODE_CREATED,
+ };
+ 
+ /**
+@@ -130,6 +135,13 @@ struct landlock_rules {
+ 	 */
+ 	struct rb_root root_inode;
+ 
++	/**
++	 * @root_inode_created: Root of a red-black tree containing &struct
++	 * landlock_rule nodes with directory inode object, for rules added with
++	 * %LANDLOCK_ADD_RULE_CREATED.  Immutable for domains.
++	 */
++	struct rb_root root_inode_created;
++
+ #if IS_ENABLED(CONFIG_INET)
+ 	/**
+ 	 * @root_net_port: Root of a red-black tree containing &struct
+@@ -237,6 +249,8 @@ landlock_get_rule_root(struct landlock_rules *const rules,
+ 	switch (key_type) {
+ 	case LANDLOCK_KEY_INODE:
+ 		return &rules->root_inode;
++	case LANDLOCK_KEY_INODE_CREATED:
++		return &rules->root_inode_created;
+ 
+ #if IS_ENABLED(CONFIG_INET)
+ 	case LANDLOCK_KEY_NET_PORT:
+diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+index fb5af318b69b..755f6574539d 100644
+--- a/security/landlock/syscalls.c
++++ b/security/landlock/syscalls.c
+@@ -191,7 +191,7 @@ static const struct file_operations ruleset_fops = {
+  * If the change involves a fix that requires userspace awareness, also update
+  * the errata documentation in Documentation/userspace-api/landlock.rst .
+  */
+-const int landlock_abi_version = 12;
++const int landlock_abi_version = 13;
+ 
+ /**
+  * sys_landlock_create_ruleset - Create a new ruleset
+@@ -397,9 +397,15 @@ static int add_rule_path_beneath(struct landlock_ruleset *const ruleset,
+ 	 * are ignored in path walks.  However, the rule is not useless if it is
+ 	 * there to hold a quiet flag.
+ 	 */
+-	if (!flags && !path_beneath_attr.allowed_access)
++	if (!(flags & LANDLOCK_ADD_RULE_QUIET) &&
++	    !path_beneath_attr.allowed_access)
+ 		return -ENOMSG;
+ 
++	/* Created file hierarchies are not covered by quiet flags. */
++	if ((flags & LANDLOCK_ADD_RULE_QUIET) &&
++	    (flags & LANDLOCK_ADD_RULE_CREATED))
++		return -EINVAL;
++
+ 	/* Checks that allowed_access matches the @ruleset constraints. */
+ 	mask = ruleset->layer.handled.fs;
+ 	if ((path_beneath_attr.allowed_access | mask) != mask)
+@@ -450,6 +456,9 @@ static int add_rule_net_port(struct landlock_ruleset *ruleset,
+ 	if (flags & LANDLOCK_ADD_RULE_QUIET && !ruleset->quiet_access.net)
+ 		return -EINVAL;
+ 
++	if (flags & LANDLOCK_ADD_RULE_CREATED)
++		return -EINVAL;
++
+ 	/* Denies inserting a rule with port greater than 65535. */
+ 	if (net_port_attr.port > U16_MAX)
+ 		return -EINVAL;
+@@ -618,7 +627,7 @@ static int add_rule_capability(struct landlock_ruleset *const ruleset,
+  *             %LANDLOCK_RULE_PATH_BENEATH, %LANDLOCK_RULE_NET_PORT,
+  *             %LANDLOCK_RULE_NAMESPACE, or %LANDLOCK_RULE_CAPABILITY.
+  * @rule_attr: Pointer to a rule (matching the @rule_type).
+- * @flags: Must be 0 or %LANDLOCK_ADD_RULE_QUIET.
++ * @flags: Must be 0, %LANDLOCK_ADD_RULE_QUIET, or %LANDLOCK_ADD_RULE_CREATED.
+  *
+  * This system call enables to define a new rule and add it to an existing
+  * ruleset.
+@@ -640,6 +649,9 @@ static int add_rule_capability(struct landlock_ruleset *const ruleset,
+  * - %EINVAL: &landlock_net_port_attr.port is greater than 65535;
+  * - %EINVAL: LANDLOCK_ADD_RULE_QUIET is passed but the ruleset has no
+  *   quiet access bits set for the corresponding rule type.
++ * - %EINVAL: LANDLOCK_ADD_RULE_CREATED is passed with
++ *   LANDLOCK_ADD_RULE_QUIET, for a rule which is not a
++ *   %LANDLOCK_RULE_PATH_BENEATH one, or for a file which is not a directory.
+  * - %ENOMSG: Empty accesses (e.g. &landlock_path_beneath_attr.allowed_access is
+  *   0) and no flags;
+  * - %ENOMSG: &landlock_namespace_attr.permissions is 0, or both
+@@ -667,7 +679,7 @@ SYSCALL_DEFINE4(landlock_add_rule, const int, ruleset_fd,
+ 	if (!is_initialized())
+ 		return -EOPNOTSUPP;
+ 
+-	if (flags && flags != LANDLOCK_ADD_RULE_QUIET)
++	if (flags & ~(LANDLOCK_ADD_RULE_QUIET | LANDLOCK_ADD_RULE_CREATED))
+ 		return -EINVAL;
+ 
+ 	/* Gets and checks the ruleset. */
+diff --git a/tools/testing/selftests/landlock/base_test.c b/tools/testing/selftests/landlock/base_test.c
+index 89c0d96607de..14078ad203d8 100644
+--- a/tools/testing/selftests/landlock/base_test.c
++++ b/tools/testing/selftests/landlock/base_test.c
+@@ -76,7 +76,7 @@ TEST(abi_version)
+ 	const struct landlock_ruleset_attr ruleset_attr = {
+ 		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_FILE,
+ 	};
+-	ASSERT_EQ(12, landlock_create_ruleset(NULL, 0,
++	ASSERT_EQ(13, landlock_create_ruleset(NULL, 0,
+ 					      LANDLOCK_CREATE_RULESET_VERSION));
+ 
+ 	ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr, 0,
 
 -- 
 2.55.0
