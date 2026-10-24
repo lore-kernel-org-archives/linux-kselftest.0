@@ -1,92 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792799280;
-	b=zQdYizih4o+Jx9F4KLzNtVe5CCMmljAIQAVlY8S+hQyoifgEmAM8OWc7x+xGJDCb6lNR
-	 aQVa3+Uefd8MU7ui5aYG4F9hxzNwgPzGaMnbWY5WaakSL110z4jyaOr+APCjgXVYL/N+u
-	 4FyDrjNeV5MArpPj/104M26ERH+2ZF0EwNrQv1AOojTTd5ZJn7AnYfTaNgjnX3MO+jR07
-	 FIqFxNMxAthysGFwdo65hlT7Ot9cNTZGcaXJh7un5iTWTxrcPzmPkPSIhWv+6wYBXMZvN
-	 xZYEHL+tXkKyxxYybv3+c0uyUXcyG4O8GBrT6t0vAj5Z51Mkg7r6bhQzxy5uv9sgdSw==
+	t=1792801330;
+	b=v7Jj2HCQ33X3Vp/2V9alaLe9qmzCqTJpJ9M4KRY+WZPS9ipQBcF+vGWlCbz5gHTl4He5
+	 sYUP5MDCzeoQLXj2egSVmpetFw4ByRECuj7LpdcU42QRZWv8vszlotu/jeuo6qsMkXS1H
+	 YGspF6GiwJ1DiTtcJFWN5l7ahQOnzri7H61M/TC5XL8c0VMSl5AfCGLGu8LnbwAZUi2jp
+	 7nhpsJN2RFDLdjXOE2gGuscFSbYhwjCkKcjON3cuHtTN4IwGfsO5n9ii6WEB8ozf2U60Y
+	 X2BH54JEthpgezH0i2pgatJgiJzTCaDNASjtfm0CAo5GxzlMDPJsy8A2Rt8IbFHPjgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792799280;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Virus-Version;
-	bh=V0KRSnTQgsuyoCnqcOCSP7hPdfB/sup6xM+GXkHFEg4=;
-	b=xTaysACaKFlUSbRxfCoAB+mP2jI2od3afZOi5LzxacmGxV1br23tcFia981YJsuN/Zj6
-	 grsJVtsWtsc3HGWNosT6IFmKupe8FgnM4DaAreguuSXCjZVodwH7n9FSlQUk4qfk31Ffq
-	 5VYxj7T5Gq46weY2jFuSHodywTcFfcOKsaVN4bn0UV8OtU7hs/r9FBgsw87Rfcpoi1ZTC
-	 mWAdIYVzSdgI3WcpsGuZvMddtMBjtB/ub3Ah09tLJGoqYuZlA3cLYHFC5JJQdWnpSVKzf
-	 uxsoPoqLdNhsOktv3oMSxn7X+57W2OKi3IjnL+ZLzYJxGEYb2OOLzWOTWYRTzK/A9VQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792801330;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:User-Agent:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=HxaRVRenX1FR+iZ0AONAeVn2JQUzRoeRNX74fibnxLs=;
+	b=aGo4eAnI1qkiHtqh+KioUSs6C5QluX7ztKjqwpcvc+CSJs2ZBY+ZDj3FGqm3QyviPANr
+	 Cfd+UcIX4NqoNRvuvIU5vHTs+setHmwTm19Z2LtHl06FaSDMSc7m7CxX7a5iznQ9OuSKb
+	 IKoCvNAzv+nFq21dTfu/7SQ7qQEUdiq/o912aysejTUF34iYnZZy1lDCUA9TxBNI/nn7d
+	 6Y0FSreAM50Nr9am/NHt0CNW3saHAeBMLWRJ/QBNxUbAQ+aOoYfD3biFNtg8NG+hpu249
+	 PFRPURLzB3KMzfUgGyC+d7LSp6v+GLMOtfggZNFfRhBdcSvf0ZOqggw0T+r4PBI/QQQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b="KXH8OX7/";
-	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Zvl1hG2O;
+	arc=none smtp.remote-ip=209.85.161.69
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBE7606A332;
-	Fri, 23 Oct 2026 23:47:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDBE7606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE943606A31A
+	for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 00:22:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE943606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=KXH8OX7/
-Received: from pps.filterd (m0528005.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69NLwaIt363340;
-	Fri, 23 Oct 2026 16:47:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=V0KRSnTQgsuyoCnqcOCSP7hPdfB/sup6xM+GX
-	kHFEg4=; b=KXH8OX7/8Bbzm3JJCagUcMRm9DCm/Wm/SmqrbhKY44qpUcWbfd54M
-	VN2zv99SHc6LoSyxytgq67hS5wCnXvJZoTjGha/mLB4h1IcDxU/Aq+HFZ5dTsctW
-	xbgcPaEXcdU1QYR3Oq07zG14wHe+LnildxosEgxUe7fqAzym3ekNzrx2eR8baMSN
-	+qVjp5IX56KHNQvwBIatxuY2COmCvuV3JIpS+CSCqohSfICfAlVgZLAi/NFL4bfk
-	m17gBSqwtNnXvLz8UrsXSwZNMLK77i5ovqfP61zVLX630A62jsiCjtkEG2yLgs4l
-	pDgbMZ0ynl6E/p77w0zsPerOvxK9fMIbw==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hfjf6mnvs-7
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 23 Oct 2026 16:47:45 -0700 (PDT)
-Received: from localhost (2620:10d:c085:208::f) by mail.thefacebook.com
- (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Fri, 23 Oct
- 2026 23:47:44 +0000
-From: Todd Freed <toddfreed@meta.com>
-To: <netdev@vger.kernel.org>, <toddfreed@meta.com>
-CC: Boris Pismenny <borisp@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-        "Mark
- Bloch" <mbloch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S.
- Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@kernel.org>,
-        "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Daniel Zahka
-	<daniel.zahka@gmail.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Cosmin Ratiu
-	<cratiu@nvidia.com>, Raed Salem <raeds@nvidia.com>,
-        Rahul Rameshbabu
-	<rrameshbabu@nvidia.com>,
-        <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Dragos Tatulea
-	<dtatulea@nvidia.com>
-Subject: [PATCH net v3 4/4] selftests: drv-net: psp: test ipv6 tcp socket with extension headers
-Date: Fri, 23 Oct 2026 16:46:40 -0700
-Message-ID: <20261023234640.1459291-5-toddfreed@meta.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261023234640.1459291-1-toddfreed@meta.com>
-References: <20261023234640.1459291-1-toddfreed@meta.com>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Zvl1hG2O
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-703a37d970eso1919212eaf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2026 17:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792801329; x=1793406129; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:user-agent:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=HxaRVRenX1FR+iZ0AONAeVn2JQUzRoeRNX74fibnxLs=;
+        b=Zvl1hG2OHWs9ZOSbEVoI3cqRFny74TEz0aBMW29gKSEGCAtaAEi13N1ZeWWDbKCeBv
+         m2821jvEXtbAEXPiQbpEcXPKCS9ulKwu6eLyTGUtA1d4wv9/bB9f5hbh/EXyKXRwr9tB
+         drIQXnjBwv9l4h8Vm9l411NpRrHG31xXi4aSvR0x9j1tfWX3L0Hm09p06NV4ojJymjEf
+         U4M6iXt9hPtXoDgx6KWzNyc5Y7zrg9E+NgqVYXv2B8eGLX/kgBM/qpqH4IF1IS3zi4xU
+         3m19Qj9DKhGISCvZdB4Wo60GoCEsL/4Rl7deMDH9rxinedvh/0263zpKPve1lZJXJGcO
+         HhXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792801329; x=1793406129;
+        h=content-type:cc:to:from:subject:message-id:user-agent:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HxaRVRenX1FR+iZ0AONAeVn2JQUzRoeRNX74fibnxLs=;
+        b=DcxLB6FceUOxR5kyarc1q3tcJe0V2N8hrJvFoqRKIdu352bThXLxQV4CDgeznfCaF5
+         b/TJ8n8NyBAxq/Gqkwy9dfxY8fXI7x4nfVbpatxoBjNrCaoNcS9PxezKFYAY7a3wuh4K
+         cqUXEvDfopygKBwjMuWxJeH8fEQJMfX4sjeodj6BY0cVjSWx0N1zDiZ9APMvedz4i+YO
+         y6Znek86fxDGfKuBI8CMX3YBzHHVDCcRPRFC/WjFvV8M+2SEUxlHYJkBJd5XYzRffIy4
+         gTR0V3J3V20O7Sp/i4j92VN+/XAAMKKMsip4E458UQOnZnvXSXER3aZb/k5ch7WN/ddA
+         ORCg==
+X-Forwarded-Encrypted: i=1; AKwUvByzvy9NCoMzYh3zO5MIXYvszsy+81+8VYyqPAXOE/cVu6/MROC9aCCr40MRr1OSw21HWORvJOL0REyAAm6NkU0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL6cHCWcSDbizP0D4GU9W1eCg1ef2qcjWVGtVpbf0x6vH9OHr+y
+	nYvp9iXerUaIBrmp6ii6mXXNzVMxxHOFz8m07cmaB/Bq0fVf76jLTi0YnjkMUFozTq+QVPDmyxe
+	Tcet7rtCdVQ==
+X-Received: from oara11-n2.prod.google.com ([2002:a05:6870:534b:20b0:4a7:c9:bf73])
+ (user=wfelipe job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6820:f027:b0:704:417f:a571
+ with SMTP id 006d021491bc7-70ba0b5aa65mr348934eaf.5.1792801328540; Fri, 23
+ Oct 2026 17:22:08 -0700 (PDT)
+Date: Sat, 24 Oct 2026 00:22:07 +0000
+In-Reply-To: <100602397eadeaae2e3206e1d9aae55e@kernel.org> (Tejun Heo's
+ message of "Fri, 23 Oct 2026 10:05:11 -1000")
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -95,258 +79,109 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: tN8MEShNm2XChcwZRmfDImvy0DOI_x2o
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIzMDA5MyBTYWx0ZWRfX1QZSx8dSBEnO
- +ftIZCQLUnYBkIgcjiyPJjwPA1TK0uiaXsVqW/kA6U4yJoXvDbc/ou0gCsXKJbEEflK+k5jTkpt
- kt+BSCm5rdY4WmlEglOyBRMtD7i+pt2jO4QcQi1ktfXmtaUwYuK6hhthy+w31k0H04umAwBMunw
- 3uzDmtbwCMkBI9smr5gJsyvdh0U8lUlVIb/u6YsBJTP9g9vHAoasbhWl6WOmgAp5yeVFMdaKhxp
- LrUEH5VnVmQ2kL3ZjZ3xC81BYfFEuSvG02kYbIDmwutIUehbuIDmFr8lvqlJWhaH0PBPaGgUecG
- Z8X4RaP8kaHEd9F/Ea87UPjzdVlTtFz77W+VKEAGxHUDv0r5mdMkpISmB/F9++L8nEDVzVN/VMT
- C9Ioe5QddHiuTrIJx4tayp/F8GUEZuzD8nEiYIBFouiW5zHW43BO+CjFP3I1aYlmUj4zMWijNB1
- RwZRn26TeiAlHyZjMBw==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIzMDA5MyBTYWx0ZWRfXwWooCrDkrTNP
- snJ4beN+Zxpo4YueZlNE/bQ6hVk2c5gVVtHT0MZQHm74S3VgRn1zzton/KdPqDm16+I37pJ8gsa
- Oyw3l2YWPZBWZQb1O8YdgH8D4faNY6E=
-X-Authority-Analysis: v=2.4 cv=PNaaavqC c=1 sm=1 tr=0 ts=6adbf221 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=jCddH8ec0KUNCymVuxII:22 a=VabnemYjAAAA:8 a=lTER4rxrKETuIA4zvy0A:9
- a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: tN8MEShNm2XChcwZRmfDImvy0DOI_x2o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-10-23_06,2026-10-21_02,2025-10-01_01
+Mime-Version: 1.0
+References: <20261022042921.711624-1-wfelipe@google.com> <100602397eadeaae2e3206e1d9aae55e@kernel.org>
+User-Agent: mu4e 1.12.15; emacs 30.2
+Message-ID: <p973fqxwymkw.fsf@wfelipe-west1.c.googlers.com>
+Subject: Re: [PATCH] selftests/cgroup: convert cg_read_key_*() helpers to s64
+From: Wilson Felipe Pereira <wfelipe@google.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Michal =?utf-8?Q?Koutn?= =?utf-8?Q?=C3=BD?=" <mkoutny@suse.com>, Johannes Weiner <hannes@cmpxchg.org>, Yosry Ahmed <yosry@kernel.org>, 
+	Nhat Pham <nphamcs@gmail.com>, Chengming Zhou <chengming.zhou@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-send on a psp tcp socket in three phases, and after each, check that the
-data was sent, counted in the device's tx-packets, and received by the
-peer. phases:
+Tejun Heo <tj@kernel.org> writes:
 
- 1/ no socket options.
+> Hello, Wilson.
+>
+> The following is a Claude-generated review.
+>
+> On Thu, Oct 22, 2026 at 04:28:57AM +0000, Wilson Felipe Pereira wrote:
+>> On 32-bit platforms, cg_read_key_long() relies on atol(), which returns a
+>> 32-bit signed long. When values in memory.stat or event counters exceed
+>> 2.14GB (such as on 32-bit systems with large memory), the parsed value
+>> overflows and wraps into negative numbers, leading to subtle bugs and
+>> false test failures.
+>
+> On 32-bit, glibc's atol() saturates at LONG_MAX instead of wrapping:
+> atol("3000000000") returns 2147483647. Event counters are counts, not
+> bytes. No test reads a value near 2^31 from its cgroups, so the false
+> failures are hypothetical. Can the description be updated to match?
+>
+> cg_read_long() and cg_read_long_fd() still use atol() and return long.
+> They read memory.current, memory.peak and the swap counters, which the
+> same reasoning covers.
+>
+>> - Migrate helper functions (get_cg_wb_count(), get_zswpout(),
+>>   get_zswap_incomp(), wait_for_writeback(), and cg_check_freezetime())
+>>   and their callers to s64.
+>
+> In test_freezer.c, only test_cgfreezer_time_empty() is converted.
+> test_cgfreezer_time_simple(), _populate(), _migrate(), _parent(),
+> _child() and _nested() still store cg_check_freezetime() results in
+> long and print them with %ld. In test_cpu.c, overprovision_validate()
+> still computes "long delta" from two s64 usage values. A 32-bit build
+> with -Wshorten-64-to-32 flags all of these.
+>
+>>     rebased on top of mm-stable to complete the s64 conversion across the
+>>     cgroup selftests (including updating test_no_kmem_bypass() to s64).
+>
+> This doesn't apply to mainline. The test_zswap.c hunks depend on the
+> test_zswap fixes in mm-stable, which aren't in mainline yet. The
+> tcp_client() hunk in test_memcontrol.c conflicts with eb69e955de7b
+> ("selftests: cgroup: make test_memcg_sock check flushed sock stats"),
+> which went in through the cgroup tree for v7.4. Can it be rebased on
+> v7.4-rc1 once that's out?
+>
+>> +typedef signed long long s64;
+>
+> This is the main problem. The KVM selftests build libcgroup too:
+> kvm/Makefile.kvm includes ../cgroup/lib/libcgroup.mk and links
+> cgroup_util.o into every KVM test, and access_tracking_perf_test.c
+> includes cgroup_util.h. That build uses -I tools/include, and
+> tools/include/linux/types.h has "typedef int64_t s64;", which is long
+> on 64-bit.
+>
+> cgroup_util.c then fails with "typedef redefinition with different
+> types ('long long' vs 'int64_t' (aka 'long'))", so none of the KVM
+> selftests build on 64-bit. Maybe use int64_t with PRId64 from
+> <inttypes.h> instead of the local typedef and %lld?
+>
+>> -
+>>  	ret = KSFT_PASS;
+>
+> The blank line removal is unrelated to the conversion, same for the one
+> in test_cpu.c.
+>
+>> +		ksft_print_msg("debug: zswpout=%lld zswapped=%lld zswap_b=%lld\n",
+>> +				zswpout, zswapped, zswap_b);
+>
+> The continuation line was aligned with the opening parenthesis before
+> and now isn't.
+>
+> Thanks.
 
- 2/ an extension header set on the socket.
+Thanks for the review and I'm sorry for the build failures! I believe I
+messed up with I rebased it on mm-stable and didn't check all places
+that had changed.
 
- 3/ option removed.
+I've updated the patch locally to:
+* Use `typedef int64_t s64` and to use `PRId64` from <inttypes.h>,
+  similar to how KVM selftests are using, while fixing the build
+  failures.
+* Convert cg_read_long(), cg_read_long_fd(), and cg_write_numeric() to
+  s64 along with the remaining callers in test_freezer.c, test_cpu.c,
+  test_hugetlb_memcg.c, test_kmem.c, test_memcontrol.c, and
+  test_zswap.c.
+* Update the commit description to reflect atol() clamping at LONG_MAX
+  and clean up the whitespace changes.
 
-the test has a variant for each supported extension header type. for
-the routing header, the test enables seg6_enabled on the peer, which
-otherwise drops packets with a segment routing header.
+I'll wait until 7.4-rc1 is out and send the v2 that applies cleanly on
+mm-stable and cgroup tree.
 
-a software filter on the peer also counts udp packets from the socket's
-address to the peer's. the psp packets reach the peer as decrypted tcp
-packets, as expected. malformed or unencrypted packets show up as udp,
-and the test asserts there are none. if the peer can't take the filter,
-the test is skipped.
-
-tx-packets is read after it has quiesced, because some devices refresh
-counters periodically (mlx5 takes about a second).
-
-without the fixes in the preceding patches:
-
-- with netdevsim, the peer receives none of the data of phase 2. it
-  stays in the send queue, and the test fails after waiting for it to
-  drain.
-- with mlx5 (connectx-7), the packets go out unencrypted and aren't
-  counted in tx-packets. the test fails on the udp packets which reach
-  the peer. capturing on the peer,
-
-    tcpdump -i <dev> -nn -A 'ip6 and src host <sender> and not tcp'
-
-  shows them as udp, with the test's payload readable
-
-Signed-off-by: Todd Freed <toddfreed@meta.com>
----
- tools/testing/selftests/drivers/net/config |   1 +
- tools/testing/selftests/drivers/net/psp.py | 137 ++++++++++++++++++++-
- 2 files changed, 135 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
-index 4838adf27fa1..409f9a96a102 100644
---- a/tools/testing/selftests/drivers/net/config
-+++ b/tools/testing/selftests/drivers/net/config
-@@ -4,6 +4,7 @@ CONFIG_DEBUG_INFO_BTF_MODULES=n
- CONFIG_INET_PSP=y
- CONFIG_IPV6=y
- CONFIG_MACSEC=m
-+CONFIG_NET_ACT_GACT=m
- CONFIG_NET_ACT_SKBEDIT=m
- CONFIG_NET_CLS_ACT=y
- CONFIG_NET_CLS_BPF=y
-diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index a5b1e14f120f..2a56a7bf5d24 100755
---- a/tools/testing/selftests/drivers/net/psp.py
-+++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -16,12 +16,12 @@ from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import ksft_true, ksft_eq, ksft_ne, ksft_gt, ksft_raises
- from lib.py import ksft_not_none
- from lib.py import ksft_variants, KsftNamedVariant
--from lib.py import KsftSkipEx, KsftFailEx
-+from lib.py import KsftSkipEx, KsftFailEx, CmdExitFailure
- from lib.py import NetDrvEpEnv, NetDrvContEnv
- from lib.py import Netlink, NlError, PSPFamily, RtnlFamily
- from lib.py import NetNSEnter
- from lib.py import bkg, rand_port, wait_port_listen
--from lib.py import ip
-+from lib.py import cmd, ip, tc
- 
- TCP_ULP = 31
- 
-@@ -120,6 +120,57 @@ def _check_data_outq(s, exp_len, force_wait=False):
- def _get_stat(cfg, key):
-     return cfg.pspnl.get_stats({'dev-id': cfg.psp_dev_id})[key]
- 
-+
-+def _get_quiesced_stat(cfg, key, timeout=10):
-+    """
-+    Like _get_stat(), but wait till the value stops changing. Note
-+    that some devices refresh flow counters periodically, e.g. once
-+    per second with mlx5.
-+    """
-+    val = _get_stat(cfg, key)
-+    end = time.monotonic() + timeout
-+    while True:
-+        time.sleep(1.5)
-+        new = _get_stat(cfg, key)
-+        if new == val:
-+            return val
-+        val = new
-+        if time.monotonic() >= end:
-+            ksft_pr(f"{key} still changing after {timeout}s: {val}")
-+            return val
-+
-+
-+def _remote_udp_from(cfg, src, dst):
-+    """
-+    Count what reaches the remote from @src to @dst as UDP, with a software
-+    filter on its ingress (offloaded filter counters are refreshed
-+    periodically). Returns a function reading the count, or None if the
-+    filter can't be installed.
-+    """
-+    flt = (f"dev {cfg.remote_ifname} ingress protocol ipv6 pref 1 "
-+           f"handle 0x5053 flower")
-+    try:
-+        qdiscs = tc(f"qdisc show dev {cfg.remote_ifname}", json=True,
-+                    host=cfg.remote)
-+        if not any(q['kind'] == 'clsact' for q in qdiscs):
-+            tc(f"qdisc add dev {cfg.remote_ifname} clsact", host=cfg.remote)
-+            defer(tc, f"qdisc del dev {cfg.remote_ifname} clsact",
-+                  host=cfg.remote)
-+        tc(f"filter add {flt} skip_hw src_ip {src} dst_ip {dst} "
-+           f"ip_proto udp action drop", host=cfg.remote)
-+    except CmdExitFailure as e:
-+        ksft_pr(f"Can't count UDP on the remote: {e}")
-+        return None
-+    defer(tc, f"filter del {flt}", host=cfg.remote)
-+
-+    def count():
-+        filters = tc(f"-s filter get {flt}", json=True, host=cfg.remote)
-+        for f in filters:
-+            for act in f.get("options", {}).get("actions", []):
-+                return act["stats"]["packets"]
-+        raise KsftFailEx("no action on the remote filter")
-+    return count
-+
- #
- # Test case boiler plate
- #
-@@ -624,6 +675,85 @@ def removal_device_bi(cfg):
-         _close_conn(cfg, s)
- 
- 
-+def _ipv6_exthdr_variants():
-+    padn = bytes([0, 0, 1, 4, 0, 0, 0, 0])  # one PadN option
-+
-+    def srh(peer):
-+        """ segment routing header, with @peer as its only segment """
-+        return (bytes([0, 2, 4, 0, 0, 0, 0, 0]) +
-+                socket.inet_pton(socket.AF_INET6, peer))
-+
-+    yield KsftNamedVariant("dstopts", socket.IPV6_DSTOPTS, lambda peer: padn)
-+    yield KsftNamedVariant("hopopts", socket.IPV6_HOPOPTS, lambda peer: padn)
-+    yield KsftNamedVariant("rthdr", socket.IPV6_RTHDR, srh)
-+
-+
-+def _remote_seg6_enable(cfg):
-+    """ Make the remote accept segment routing headers """
-+    for conf in ("all", cfg.remote_ifname):
-+        # slashes, so that sysctl doesn't split a dotted ifname
-+        key = f"net/ipv6/conf/{conf}/seg6_enabled"
-+        old = cmd(f"sysctl -n {key}", host=cfg.remote).stdout.strip()
-+        cmd(f"sysctl -qw {key}=1", host=cfg.remote)
-+        defer(cmd, f"sysctl -qw {key}={old}", host=cfg.remote)
-+
-+
-+@ksft_variants(_ipv6_exthdr_variants())
-+def data_send_ipv6_exthdr(cfg, opt, val):
-+    """ Test PSP on IPv6 packets with an extension header """
-+    cfg.require_ipver("6")
-+    _init_psp_dev(cfg)
-+    if opt == socket.IPV6_RTHDR:
-+        _remote_seg6_enable(cfg)
-+
-+    s = _make_psp_conn(cfg, 0, "6")
-+    try:
-+        # In happy path, PSP traffic arrives at the remote decrypted as TCP
-+        remote_udp = _remote_udp_from(cfg, s.getsockname()[0],
-+                                      s.getpeername()[0])
-+        if not remote_udp:
-+            raise KsftSkipEx("can't count UDP on the remote")
-+
-+        rx_assoc = cfg.pspnl.rx_assoc({"version": 0,
-+                                       "dev-id": cfg.psp_dev_id,
-+                                       "sock-fd": s.fileno()})
-+        tx = _spi_xchg(s, rx_assoc['rx-key'])
-+        cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-+                            "version": 0,
-+                            "tx-key": tx,
-+                            "sock-fd": s.fileno()})
-+        _check_data_outq(s, 0)
-+
-+        total = 0
-+
-+        def send(phase):
-+            """ Sent encrypted, counted, and received. Nothing reaches the
-+            peer as plain UDP.
-+            """
-+            nonlocal total
-+            tx_pkts = _get_quiesced_stat(cfg, 'tx-packets')
-+            udp = remote_udp()
-+            total += _send_careful(cfg, s, 20)
-+            for _ in range(100):
-+                if _get_outq(s) == 0:
-+                    break
-+                time.sleep(0.5)
-+            _check_data_outq(s, 0)
-+            ksft_gt(_get_quiesced_stat(cfg, 'tx-packets'), tx_pkts,
-+                    comment=phase)
-+            ksft_eq(remote_udp(), udp, comment=f"{phase}: UDP at the remote")
-+            _check_data_rx(cfg, total)
-+
-+        send("no option")
-+        # UDP + PSP go after the extension header
-+        s.setsockopt(socket.IPPROTO_IPV6, opt, val(s.getpeername()[0]))
-+        send("with the option")
-+        s.setsockopt(socket.IPPROTO_IPV6, opt, b'')
-+        send("option removed")
-+    finally:
-+        _close_psp_conn(cfg, s)
-+
-+
- def _get_psp_ver_ip_variants():
-     for ver in range(4):
-         for ipv in ("4", "6"):
-@@ -1019,7 +1149,8 @@ def main() -> None:
-                                                           cfg.comm_port),
-                                                          timeout=1)
- 
--                cases = [data_basic_send, data_mss_adjust]
-+                cases = [data_basic_send, data_mss_adjust,
-+                         data_send_ipv6_exthdr]
- 
-                 if has_cont:
-                     cases += [
--- 
-2.53.0-Meta
-
+Thanks!
