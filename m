@@ -1,49 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=128.30.2.78
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792813808;
-	b=z7n8NJaBegycUV0i7T4/o/FjaoWCaYUglEVmEzVdEkD8/bd8QpSnH6uz7/+DcJ3BPASR
-	 Af+GqC/94A0mdyfa6k+l+QUA0xHEaHtweeRcnwDVVX0Dr1MCK7Y9xn/+BkFAvlDcymJOL
-	 oeTCIeO8Xz7Hge6/T2wdN0XgvPiAgp96/GhlB+fu80KPpKN1LhSjbpIi2EtQ2T7mE+B9Z
-	 FTpfgtDx2qAqnWAter1qWmEuLzcSFcSnS8tf996u889aWK/zfj63cOA/b99g0BekO4Ju9
-	 Op2lkvst/vD/3jmCggNJJSA9qfuM1Dq6H9SbAplJyuzRePoR0AchbyajyweLesFoYXQ==
+	t=1792815225;
+	b=hwXu/5KmA0cp1PqLU41rdszW7bPZiR6C/mKf6k+27uNb1Vt11mej67jlICsZIYy7VQSH
+	 oLHiVVGfCEZ5OTiWVWWHaTFHtz3uCjEpQHBKvMKTMUPi4Ft/ktBcS28l4b8Tgo7LcObpC
+	 FLghqxh1eI7/XPtAhCIEKemlIKhYYU1I+CPgQZ2bisNFBAMPqUZIgYRgOYe2iXTqo21gY
+	 b5eXCG0GBIVmUOXTYhRY1IsDYYaXCym8Op1XmhBX6OPd5hzeFvZOCJpAES870I7NPxF1V
+	 Q7XdjG9hiL/RicMGCeEtHTFZD457N/i4M3viMegCjHfi6ZY797wQDZvPqcO496/kzNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792813808;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=+4MejMJKUNb+D836272CdqqFDwtARUtaxiK/ZKGgMMo=;
-	b=wQUgIA5KQTopcpwwLTfpTGmieRjj8/2ayJJGCZbMOTR6VAiicgECjUNy7TZPC4onZp8y
-	 Tp8TKDzYneW2ayHveZsvoBFyI49FtZ0u6rpCd24j6GlG03FQR9bhl31VsoyoQ8HbQMr5f
-	 BAX0XbePrWC0SklsdOD/1v//HqKtfHzDhgLRhxDdq4vGReiWhNcgwoilGx8Oa6nwpcsLv
-	 3dNO/NW7imK+tmA+HHuEASJNkUSSrErwnJQZVZ0rA2tim4HY/iir8m6in0fdf3DZr2I40
-	 tx2KT0/lcd3k1om7xaIDq0g38zsxKP1G3XcBtgMHHSBoR4pmfMpSSePB0/MdTP4MV3g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792815225;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=VTbLNMP+UpXniIrujxXe7sYDHvjBTEb8cMy7ABMULcc=;
+	b=mRPOG9ZLzWypheFaSZDAaxC+G9ICu1ZXbWrcSrzTuq24t2hdaxkcMT/k+hMi/24deHo5
+	 bAkrcv4SmLf3ygeBQYHLPd8jmVH+BdaIhVgqLNHv/+HKTfnHrxMKTKszWVGIOPArhrzS3
+	 eX0KgID3c2EKfiQYGQDpZoxvtybcWVCFHkFZts0irwi6TBXuEg5acWhJ/S635Drk5r+rJ
+	 kKz7nmWuNeIK/1ijCTf/nItpUmCucpdNGXaM/bUuIrUkzZcJzq9L8f7Ldx8IxpR3lmqam
+	 CtAVj2EXWyDIAzSJOg0giZxK5563paxLlQmwTl71HsiQqP/6Jyj3Icv/f9u2O1fERaw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eMAYmtgD;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=csail.mit.edu;
+	spf=pass smtp.mailfrom=csail.mit.edu;
+	arc=none smtp.remote-ip=128.30.2.78
+Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.78])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541BD606A31A;
-	Sat, 24 Oct 2026 03:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eMAYmtgD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C84C81F01825;
-	Sat, 24 Oct 2026 03:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792813807;
-	bh=+4MejMJKUNb+D836272CdqqFDwtARUtaxiK/ZKGgMMo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=eMAYmtgDJz5a7ZDzdgMnxmnHA5Dwh38jeasxLTyZlZQ4ipP1bdAcbNjsVSLTr8EOO
-	 f0AC0NeL71EJib5TaYSQLr9QZfYCQXf7V0RBoBLZ2oK+qmWBw9mwmUTmwxKdbXR0Ou
-	 8954kxymnh3W0g0rIAc+TW4bvOTjjh4xTAGlJMYLkBQVRug3aQMvke0DMHoe90Xow3
-	 hwRf7+vY1X0LPPUfhRZEsPZQLo4pmKHhXUIkis2Y2ROz42enSsKc3rGimfbpTCC0Tx
-	 CJXVszNMSNCyY69b9bERrROb6inl+YXQ4gTgoEwh9/a2O16iTUBkPGlCd0DgFAjZ9Y
-	 gwKnWQKW8RFPQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BE7BC391B179;
-	Sat, 24 Oct 2026 03:50:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BE2606A31A;
+	Sat, 24 Oct 2026 04:13:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38BE2606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csail.mit.edu
+Received: from escalante.csail.mit.edu ([128.52.128.198])
+	by outgoing2021.csail.mit.edu with esmtp (Exim 4.95)
+	(envelope-from <nickolai@csail.mit.edu>)
+	id 1xKT8Q-00EPeW-TB;
+	Sat, 24 Oct 2026 00:13:34 -0400
+From: Nickolai Zeldovich <nickolai@csail.mit.edu>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	Shuah Khan <shuah@kernel.org>,
+	Jann Horn <jannh@google.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Luca Boccassi <luca.boccassi@gmail.com>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nickolai Zeldovich <nickolai@csail.mit.edu>
+Subject: [PATCH v2 2/2] selftests/pidfd: test that fields beyond the struct size are not reported
+Date: Sat, 24 Oct 2026 00:13:34 -0400
+Message-ID: <20261024041334.831273-3-nickolai@csail.mit.edu>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261024041334.831273-1-nickolai@csail.mit.edu>
+References: <20261017020634.792390-1-nickolai@csail.mit.edu>
+ <20261024041334.831273-1-nickolai@csail.mit.edu>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -54,56 +63,119 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v6 0/4] bpf: Fix a struct_ops use-after-free
- behind a flaky assoc_in_timer test
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179281380657.1449642.15113400726872173798.git-patchwork-notify@kernel.org>
-Date: Sat, 24 Oct 2026 03:50:06 +0000
-References: 
- <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
-In-Reply-To: 
- <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, shuah@kernel.org, ameryhung@gmail.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
 
-Hello:
+PIDFD_GET_INFO must not set the mask bit of a field that lies beyond
+the struct size encoded in the ioctl command. Add a test that requests
+the coredump fields and the supported mask with PIDFD_INFO_SIZE_VER0
+over a full-size, poisoned struct, and checks that the mask names none
+of those fields and that the poison behind the first 64 bytes is
+intact.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Add fallback definitions of PIDFD_INFO_SIZE_VER0 to VER3 to pidfd.h,
+like the other uapi constants there.
 
-On Thu, 22 Oct 2026 16:48:35 +0800 you wrote:
-> st_ops_assoc_in_timer_no_uref drops every reference to a struct_ops map
-> and expects a timer callback of its prog, 500ms later, to find no
-> struct_ops associated anymore. It fails now and then while test_progs
-> runs other tests in parallel.
-> 
-> Since commit 5db69b0fbdc8 ("bpf: Make struct_ops tasks_rcu grace period
-> optional"), a struct_ops map clears the association only after the RCU
-> grace period of bpf_map_put(), so nothing waits for a prog that reads
-> the association in between. A timer callback can then return into a
-> freed trampoline, and the kernel hits an int3 Oops.
-> 
-> [...]
+Signed-off-by: Nickolai Zeldovich <nickolai@csail.mit.edu>
+---
 
-Here is the summary with links:
-  - [bpf-next,v6,1/4] bpf: Protect the struct_ops association with a spinlock
-    https://git.kernel.org/bpf/bpf/c/232475c32994
-  - [bpf-next,v6,2/4] bpf: Dissociate struct_ops progs before the grace period of the map
-    https://git.kernel.org/bpf/bpf/c/377ab5f2ef79
-  - [bpf-next,v6,3/4] selftests/bpf: Test freeing a struct_ops map under a running prog
-    https://git.kernel.org/bpf/bpf/c/a451867eb5f6
-  - [bpf-next,v6,4/4] selftests/bpf: Wait for the struct_ops map to be freed in assoc_in_timer
-    https://git.kernel.org/bpf/bpf/c/ac3df711a428
+Notes:
+    Result in a QEMU x86_64 guest on mainline 17bb0e2f6c80, without
+    patch 1:
+    
+      # pidfd_info_test.c:801:info_size_ver0_mask:Expected 0 (0) == !!(info.mask & (PIDFD_INFO_COREDUMP | ...)) (1)
+      not ok 3 global.info_size_ver0_mask
+    
+    With patch 1:
+    
+      ok 3 global.info_size_ver0_mask
 
-You are awesome, thank you!
+ tools/testing/selftests/pidfd/pidfd.h         | 16 +++++++
+ .../testing/selftests/pidfd/pidfd_info_test.c | 48 +++++++++++++++++++
+ 2 files changed, 64 insertions(+)
+
+diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
+index 5a4e78c10f434..cf146d3273348 100644
+--- a/tools/testing/selftests/pidfd/pidfd.h
++++ b/tools/testing/selftests/pidfd/pidfd.h
+@@ -160,6 +160,22 @@
+ #define PIDFD_INFO_COREDUMP_CODE	(1UL << 7)
+ #endif
+ 
++#ifndef PIDFD_INFO_SIZE_VER0
++#define PIDFD_INFO_SIZE_VER0		64 /* sizeof first published struct */
++#endif
++
++#ifndef PIDFD_INFO_SIZE_VER1
++#define PIDFD_INFO_SIZE_VER1		72 /* sizeof second published struct */
++#endif
++
++#ifndef PIDFD_INFO_SIZE_VER2
++#define PIDFD_INFO_SIZE_VER2		80 /* sizeof third published struct */
++#endif
++
++#ifndef PIDFD_INFO_SIZE_VER3
++#define PIDFD_INFO_SIZE_VER3		88 /* sizeof fourth published struct */
++#endif
++
+ #ifndef PIDFD_COREDUMPED
+ #define PIDFD_COREDUMPED	(1U << 0) /* Did crash and... */
+ #endif
+diff --git a/tools/testing/selftests/pidfd/pidfd_info_test.c b/tools/testing/selftests/pidfd/pidfd_info_test.c
+index 597012ed195f0..ee08df3dc3d2b 100644
+--- a/tools/testing/selftests/pidfd/pidfd_info_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_info_test.c
+@@ -764,4 +764,52 @@ TEST(supported_mask_with_other_fields)
+ 	close(pidfd);
+ }
+ 
++/*
++ * Test: fields beyond the caller's struct size are not reported
++ *
++ * Request the coredump and supported_mask fields with a struct of the
++ * first published size. None of those fields fit, so the returned mask
++ * must not name them and the memory behind the struct must be untouched.
++ */
++TEST(info_size_ver0_mask)
++{
++	struct pidfd_info info = {
++		.mask = PIDFD_INFO_COREDUMP | PIDFD_INFO_SUPPORTED_MASK,
++		.coredump_mask = 0xdeadbeef,
++		.coredump_signal = 0xdeadbeef,
++		.coredump_code = 0xdeadbeef,
++		.supported_mask = 0xdeadbeefdeadbeefULL,
++	};
++	unsigned int cmd = _IOC(_IOC_READ | _IOC_WRITE, PIDFS_IOCTL_MAGIC, 11,
++				PIDFD_INFO_SIZE_VER0);
++	int pidfd;
++	pid_t pid;
++
++	pid = create_child(&pidfd, 0);
++	ASSERT_GE(pid, 0);
++
++	if (pid == 0)
++		pause();
++
++	ASSERT_EQ(ioctl(pidfd, cmd, &info), 0);
++
++	/* The fields that fit are reported as usual. */
++	ASSERT_TRUE(!!(info.mask & PIDFD_INFO_PID));
++	ASSERT_TRUE(!!(info.mask & PIDFD_INFO_CREDS));
++
++	/* The fields that do not fit are neither reported nor written. */
++	ASSERT_FALSE(!!(info.mask & (PIDFD_INFO_COREDUMP |
++				     PIDFD_INFO_COREDUMP_SIGNAL |
++				     PIDFD_INFO_COREDUMP_CODE |
++				     PIDFD_INFO_SUPPORTED_MASK)));
++	ASSERT_EQ(info.coredump_mask, 0xdeadbeef);
++	ASSERT_EQ(info.coredump_signal, 0xdeadbeef);
++	ASSERT_EQ(info.coredump_code, 0xdeadbeef);
++	ASSERT_EQ(info.supported_mask, 0xdeadbeefdeadbeefULL);
++
++	sys_pidfd_send_signal(pidfd, SIGKILL, NULL, 0);
++	sys_waitid(P_PIDFD, pidfd, NULL, WEXITED);
++	close(pidfd);
++}
++
+ TEST_HARNESS_MAIN
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0
 
