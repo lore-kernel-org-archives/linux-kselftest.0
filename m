@@ -1,113 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792834108;
-	b=evHCkV8vfVLp0Y9WS6p9wgD5boof6R8LaXkSpRTkRhPm9OG19oUl47e0nJ/DDEdFVXx7
-	 AmR8DaQmfQIxOLCFaT5fPHUegIAMQ2FS4fHp0ORD0OanKKGfj+H3XMyaujxdHWXP58F/f
-	 GLaONQxeCugWDMMlK+tZIGr5x3Zjh0+1xSQnOnZF23OB1piTN7zWErtVOUWFFLBe3P/Zu
-	 bQ50nQ5SX1shQRiOAWjrlm9b95wFwMDr9Q2Sg1l8DjyIUDVpzBVAgFyj1Bnynbjdd6KwI
-	 o0k3eML5aLIEPltkGvIZDPG2dmcI1/MRaOpu3WlSWtz1coQlWCIujLWyY/HFAMfEvAw==
+	t=1792834267;
+	b=rFOpCwERCC4GkykZrMtZfncL+WKlgzlIHzmnqunoj6XVOWlV1Hqt3By/pVttAps7awRJ
+	 Mus4omEVJO5cKk/ES5x6HLapi5ei0/pEuMSikLbznVdDDvtO2r+kdnJFD9KvsmoU4PCNa
+	 GGlFW44HS9KZ8sy01vFiWpsdo+dyXMeZ9MwVtEMkL8rMbExqv8ZHSJOGA37Cwkbyq9hd8
+	 /C0USrCQzDIj2tlUg7M2bvMGFg/DcU4p20sWeEuh1p3YLRL3QN7tdfzITw46CuKjyCtqm
+	 2cUHAZhr+xj/pnsYlbDVYry/ohEB1+TokM8SM31lRp3KWV4WAJAJAiIAE1gsv+sFzow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792834108;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=BlUUlyu0tLkS0StKgW3SUYx8agTboJGWzFSZtZkcXsU=;
-	b=g3h3jxaSw0YRy0lTXeXkN6tgJ+HF+Z39c9MNp0ODDCs4GQP5Q79D0iUc0TUdOISDNO2U
-	 Hdf8MkwONHHspD4+yPhhdpA4T31nhIqcdE4LK8EwUD7tDKARrAGoeTkUq5hYQOyJ0KCce
-	 g3o4tHBV8WAc9kart/mpxUOLTNF8vxpPmFW+5jW85Pjxc6mBJOgF5997KsouT3CYrZuHk
-	 R8YLyJcrXmBA7RyzsPvTAaM80zKBNExgHy8PpuqQ9fda/5sN/Hz+ev61nIehIWlux9dx+
-	 eWRP/rOiRp+bINrUtU79BWV/PZSrN/kqUQr9xl37WY+wCbTPAuS1aqfmU6zmzsz7Kng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792834267;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=4kB+oCvMNA58pfhmwFvYubC2faFkfDxCdQSIlTSMT20=;
+	b=AJA+d3KGXsI+iNZNjqaX0ZZWwh1FdXwq+S7o8xjBfiLf4Z33VXRqPbwdBlgfYyghbugl
+	 erXt88nS5phefZ+CIToUI/C0vbd2fBBVSWFU3959ZYn1tNamsHQX3aWaqK9rlaR3lbbH5
+	 gsMV4J/JV2uUj3k9zd1I57lCrxUqqpIzUyG60VaCI9bM07dZQt+NgvKYHTb/UgKfUpHES
+	 LLyDqVJlHnzO97CnM+D2Y3/QW/bCBZuR3iPD1oWybz1oEX1VNEd9L74piGlXCVwcwwM+h
+	 w6S2XXvLbfj87Tr+DiUJBWEw51X9i4shY6FcUiHVd6u7VWsZlhnxufn7RN0B9ckD5RQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=b9nh1GtH;
-	arc=none smtp.remote-ip=74.125.82.170
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=PfgqQzIA;
+	arc=none smtp.remote-ip=117.135.210.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C446606BF36
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 09:28:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C446606BF36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188DF606A31F;
+	Sat, 24 Oct 2026 09:31:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 188DF606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=b9nh1GtH
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-36681e85e87so159551eec.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 02:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792834107; x=1793438907; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BlUUlyu0tLkS0StKgW3SUYx8agTboJGWzFSZtZkcXsU=;
-        b=b9nh1GtH2+skTNF5DZP9gibDmo1B8XDJqOyw8/vQ6Hd74v9sFQ35s9Tesqt2FOb1pP
-         Qo+VkuBPh1UAfxNNdXvzZGy5dqQMvfL8wWV0KkiOjlsFAuZ0jB6LU7PN3kr0OA5okfZ1
-         dCa8a0oNrk/TJERvUoac8eX8GqwJLdaZZWx8w6Oy6xH8AeLiCbXskMox7qS6zJHcGA/U
-         Lba7qXFG+eJRjcwzpwWBJ3wKgSpWdlLk6fRDtV/K8AOowXnUzZknZB8RmFwwORREa4Eu
-         pmaYVLGyAojs5xhQUTZoEUiULZRwwY9pWKlF4nr5LKVBGz3/bIONFndeO7oDFWw+ILxa
-         2Ycg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792834107; x=1793438907;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BlUUlyu0tLkS0StKgW3SUYx8agTboJGWzFSZtZkcXsU=;
-        b=dF1guctLOFLb/zkS4MQzN3IHpz12opQvL4HkYuCfpDaWZRBIBvh04aEeFmwaRke7aS
-         d8dnEii+sBLqSwayOLfGIfT0+L3soNG39542osY+t+cydZnbwDUpGnaf4cKGSDuD9kJ1
-         +J23ach7MYH07UNGtOBaeLSv+05g0jHAobAVMbUjVvxK7efPFWaEt5u1ni3ELEK0EdQP
-         qTErRNTLctDRcEhKbrMVk3jrKyLhMq4E1V7CHF0HmW5RBk93oQjO18YCIHTi3cRTikzz
-         7RHTjnePbcTGJKYG4yGDeeDpKLAVCf427pwWTG1ykdBcWffFeAZBNdqZh32OiNd2KD4l
-         1tng==
-X-Forwarded-Encrypted: i=1; AKwUvBx7MoFl7ZvTP4CY5UHng/7+Mm11VCEWzsmdS1JKH6/D6YFk2L2YUHP27f+VdyJ9SHezGPms8IrKrh9eRAAZzTo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKK1YdXAEugrIRl9h12UbFCNQblwUCtKFZSPuI6HqXE3JBE40i7
-	s7H0LUHO+HpjZwP9+KhTPp/McyGthpOe3ucQ+AfmbFE460rHGUCpZKMc
-X-Gm-Gg: AYBFou17CMHYKEr5QEarvgTkCUawiYxjG4uSpbI1fJ4UOYYJohRvG0zducksW4qaw+f
-	XP1sZ0AANIwwntAR4yd13pZwbJQRMk2QVoCtcjk6EnmeyJx61aq+3wP8JfvzPbc9yX2BkQX1TiE
-	aJWBKnRyozgIdiJo3DBk43WIbctnl9k2MzF1DY3wWSwIyFYks29Lu7cSUNladWKQ4m2X88jwsoI
-	16FJ2W1QHJGZYLisxbzrYA4ffyPCUHLBvi3T3LgHp3ps6VELgHPuEZQ4qgnmh5O5/hE+Z5th8r9
-	ML+QZEDQLfOK89RV/ND8IprzYxnfc38yY4BRyp9mseUeMOs3vvdPlU5JitBrUgxxBfPWxWkp3kW
-	iWviMs5J/DGPFGvkm/txPQ6Lr5all1wIhOw7P/V3n+C4gT9YRsqJrVM+hheIKU/YXQZOJe/0d1+
-	I4lU2mTRCr1Jf8Dl+ZHFozSzADYJBNc5RaIrxOakZJ31q0c7DK8Ocbv7UCTcJM7QnMs9ua98WP9
-	7Dwb54piRNcZywMw/4fWq1LA74+O3yn0zTGSW4brQHO0xpnBM6ihWH6jBDSXaKf0dIO4NaAKL2/
-	cOkOW6KF8YQZ9EkIfXWyXxB2t9+g8Q1pT3qf1vDKNP1Cq91skITzc5jLYJEuIzn+fNYFFH0yiA=
-	=
-X-Received: by 2002:a05:7300:d086:b0:366:dbf9:32bd with SMTP id 5a478bee46e88-369e842df55mr2190770eec.9.1792834107430;
-        Sat, 24 Oct 2026 02:28:27 -0700 (PDT)
-Received: from nixos ([2405:201:c40d:9039:e1f8:b9bb:b037:3cab])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8daf444sm5236604eec.18.2026.10.24.02.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Oct 2026 02:28:26 -0700 (PDT)
-From: Ayushman Rout <ayushmanrout27@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	Ayushman Rout <ayushmanrout27@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=PfgqQzIA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=4k
+	B+oCvMNA58pfhmwFvYubC2faFkfDxCdQSIlTSMT20=; b=PfgqQzIAU+3Uw+BPyB
+	cbf2VsCKfgMBCB7chcGVuv+kf0hKPWJsnwiAEvboR25vfiyDtizzwym48YtM7AwX
+	jRe9Ww7plYLtJd1jDaSIE95MuxvT9vI7sICyqIZKV5D81PuCG+OySY4IE2BL8dQr
+	3a6fS77Nacnsd78FSl007+iBU=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDX35eretxqoPpsCg--.62139S2;
+	Sat, 24 Oct 2026 17:30:21 +0800 (CST)
+From: Xia Yan <yana06070@163.com>
+To: netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	horms@kernel.org,
+	kuba@kernel.org,
 	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf 3/3] selftests/bpf: Test overlapping dynptr copies on xdp frags
-Date: Sat, 24 Oct 2026 14:56:58 +0530
-Message-ID: <20261024092659.76422-4-ayushmanrout27@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261024092659.76422-1-ayushmanrout27@gmail.com>
-References: <20261024092659.76422-1-ayushmanrout27@gmail.com>
+	linux-kselftest@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	hangbin.liu@linux.dev,
+	yana06070@163.com,
+	stable@vger.kernel.org
+Subject: [PATCH net v4 1/2] veth: keep carrier off when resizing channels with a down peer
+Date: Sat, 24 Oct 2026 17:30:06 +0800
+Message-Id: <20261024093007.12981-1-yana06070@163.com>
+X-Mailer: git-send-email 2.33.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -117,189 +69,79 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_____wDX35eretxqoPpsCg--.62139S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF4rZF1rAFWxJr47WFy3urg_yoW5Jry3pa
+	1fAa4ruF18WF1Utw40g34jkFyjga1fXa45WF9Yg3yru3Z8JFn8Zr1Fyayj9F1UKFn5XF4I
+	qrZ09r1kZa98uF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piJ3ktUUUUU=
+X-CM-SenderInfo: p1dqtiawqxiqqrwthudrp/xtbC3w2bImrceq1-DQAA34
 
-Add four dynptr tests. Three use an xdp packet with frags, and in each
-the range goes from the linear part into frag0:
+veth_set_channels() temporarily turns carrier off while reconfiguring a
+running interface. It then turns carrier on for both ends without
+checking whether the peer is administratively up. If only one end is up,
+changing its channel counts therefore reports LOWER_UP even though the
+peer remains down.
 
-- test_dynptr_copy_xdp_overlap: bpf_dynptr_copy() of 1200 bytes with
-  the destination 100 bytes above the source.
-- test_dynptr_read_xdp_overlap: bpf_dynptr_read() into a slice of the
-  same packet.
-- test_dynptr_write_xdp_overlap: bpf_dynptr_write() from a slice of the
-  same packet.
+For example, after creating a pair with two RX and TX queues per end:
 
-The fourth, test_dynptr_skb_load_overlap, reads a range that spans the
-head and the frags of an skb. It passes with and without the fixes and
-checks that skbs are not affected.
+  ip link set vca up
+  ethtool -L vca rx 1 tx 1
 
-The new tests set err when the data is wrong. The existing
-test_dynptr_copy_xdp does not, so it can pass on corrupted data.
+vca incorrectly reports LOWER_UP while vcb is still down.
 
-Without the fixes to bpf_xdp_copy_buf() and bpf_dynptr_copy(), the three
-xdp tests fail. With them, all four tests pass.
+Only restore carrier when the peer has IFF_UP, matching veth_open().
+The local interface is already known to be running at this point.
 
-Signed-off-by: Ayushman Rout <ayushmanrout27@gmail.com>
+Found during LLM-assisted source review and reproduced with a veth pair
+in network namespaces, without kernel instrumentation or error injection.
+The companion veth.sh test reproduces the two mixed up/down failures
+before the fix and passes after it.
+
+Fixes: 4752eeb3d891 ("veth: implement support for set_channel ethtool op")
+Cc: stable@vger.kernel.org
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
 Assisted-by: LLM
+Signed-off-by: Xia Yan <yana06070@163.com>
 ---
- .../testing/selftests/bpf/prog_tests/dynptr.c |   4 +
- .../selftests/bpf/progs/dynptr_success.c      | 128 ++++++++++++++++++
- 2 files changed, 132 insertions(+)
+Changes in v4:
+- Driver code is unchanged. Add Hangbin's Reviewed-by.
+- The companion test drops the extra GRO on/off runs, as discussed
+  with Hangbin, and keeps up/up and both mixed up/down states.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-index 4396560365e8..08382ed076a2 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -22,6 +22,10 @@ static struct {
- 	{"test_dynptr_data", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_copy", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_copy_xdp", SETUP_XDP_PROG},
-+	{"test_dynptr_copy_xdp_overlap", SETUP_XDP_PROG},
-+	{"test_dynptr_read_xdp_overlap", SETUP_XDP_PROG},
-+	{"test_dynptr_write_xdp_overlap", SETUP_XDP_PROG},
-+	{"test_dynptr_skb_load_overlap", SETUP_SKB_PROG_NONLINEAR},
- 	{"test_dynptr_memset_zero", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_memset_notzero", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_memset_zero_offset", SETUP_SYSCALL_SLEEP},
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
-index b668ebd61fc7..b6c3abb66e4b 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_success.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
-@@ -759,6 +759,134 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
- 	return XDP_DROP;
- }
+v3: https://lore.kernel.org/netdev/20261022085842.2527-1-yana06070@163.com/
+
+Testing on 513444cc62e2, x86_64 QEMU/KVM with three vCPUs:
+- Complete default veth.sh:
+  before: 56 checks pass, two mixed up/down carrier checks fail;
+  after: all 58 checks pass. The 55 existing checks pass on both.
+- Script exit status: 1 before, 0 after. No checks were skipped.
+- Both guests powered down normally.
+- bash -n and git diff --check pass.
+
+ drivers/net/veth.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 643b97dc52456df80de10068ccac9af2ada70256..4e75830061ccd3def0476b19a2f92e818464fce9 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1372,9 +1372,10 @@ out:
+ 		 * to identify the range we have to disable
+ 		 */
+ 		veth_disable_range_safe(dev, new_rx_count, old_rx_count);
+-		netif_carrier_on(dev);
+-		if (peer)
++		if (peer && (peer->flags & IFF_UP)) {
++			netif_carrier_on(dev);
+ 			netif_carrier_on(peer);
++		}
+ 	}
  
-+static __always_inline int fill_xdp(struct bpf_dynptr *ptr, __u32 start, __u32 n)
-+{
-+	__u8 b;
-+	int i;
-+
-+	bpf_for(i, 0, n) {
-+		b = (start + i) % 251;
-+		if (bpf_dynptr_write(ptr, start + i, &b, 1, 0))
-+			return 1;
-+	}
-+	return 0;
-+}
-+
-+static __always_inline int check_xdp(struct bpf_dynptr *ptr, __u32 at, __u32 n, __u32 from)
-+{
-+	__u8 b;
-+	int i;
-+
-+	bpf_for(i, 0, n) {
-+		if (bpf_dynptr_read(&b, 1, ptr, at + i, 0))
-+			return 1;
-+		if (b != (__u8)((from + i) % 251))
-+			return 1;
-+	}
-+	return 0;
-+}
-+
-+SEC("?xdp")
-+int test_dynptr_copy_xdp_overlap(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 off = data_end - data - 1000;
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	if (fill_xdp(&ptr, off, 1300)) {
-+		err = 1;
-+		return XDP_DROP;
-+	}
-+	err = bpf_dynptr_copy(&ptr, off + 100, &ptr, off, 1200);
-+	if (err)
-+		return XDP_DROP;
-+	if (check_xdp(&ptr, off + 100, 1200, off))
-+		err = 2;
-+	return XDP_DROP;
-+}
-+
-+SEC("?xdp")
-+int test_dynptr_read_xdp_overlap(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 lin = data_end - data;
-+	struct bpf_dynptr ptr;
-+	char *dst;
-+
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	if (fill_xdp(&ptr, lin - 10, 84)) {
-+		err = 1;
-+		return XDP_DROP;
-+	}
-+	dst = bpf_dynptr_slice_rdwr(&ptr, lin + 10, NULL, 64);
-+	if (!dst) {
-+		err = 2;
-+		return XDP_DROP;
-+	}
-+	err = bpf_dynptr_read(dst, 64, &ptr, lin - 10, 0);
-+	if (err)
-+		return XDP_DROP;
-+	if (check_xdp(&ptr, lin + 10, 64, lin - 10))
-+		err = 3;
-+	return XDP_DROP;
-+}
-+
-+SEC("?xdp")
-+int test_dynptr_write_xdp_overlap(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 lin = data_end - data;
-+	struct bpf_dynptr ptr;
-+	char *src;
-+
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	if (fill_xdp(&ptr, lin - 64, 118)) {
-+		err = 1;
-+		return XDP_DROP;
-+	}
-+	src = bpf_dynptr_slice_rdwr(&ptr, lin - 64, NULL, 64);
-+	if (!src) {
-+		err = 2;
-+		return XDP_DROP;
-+	}
-+	err = bpf_dynptr_write(&ptr, lin - 10, src, 64, 0);
-+	if (err)
-+		return XDP_DROP;
-+	if (check_xdp(&ptr, lin - 10, 64, lin - 64))
-+		err = 3;
-+	return XDP_DROP;
-+}
-+
-+SEC("?tc")
-+int test_dynptr_skb_load_overlap(struct __sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+	char ref[24];
-+	char *dst;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	if (bpf_dynptr_read(ref, 24, &ptr, 20, 0)) {
-+		err = 1;
-+		return 0;
-+	}
-+	dst = bpf_dynptr_slice_rdwr(&ptr, 10, NULL, 24);
-+	if (!dst) {
-+		err = 2;
-+		return 0;
-+	}
-+	if (bpf_dynptr_read(dst, 24, &ptr, 20, 0)) {
-+		err = 3;
-+		return 0;
-+	}
-+	if (bpf_memcmp(dst, ref, 24))
-+		err = 4;
-+	return 0;
-+}
-+
- char memset_zero_data[] = "data to be zeroed";
- 
- SEC("?tp/syscalls/sys_enter_nanosleep")
+ 	/* update XDP supported features */
+
+base-commit: 513444cc62e231a11c9b15ea88de0890da9b2b4f
+
 -- 
-2.54.0
+2.39.0.windows.2
 
