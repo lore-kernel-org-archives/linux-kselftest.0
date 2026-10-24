@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792859165;
-	b=G/tLgC1X3M++/f0k+INf/Nm0KQ6NoPsNs+gpbipjGxz2ILNRyECfCdhqqrhARfwS8R5f
-	 Q9Est/ksY/JZeXA6j9balTBqM+tIyPeYOz/PTdWOy5icAYqMhnQMpmkCnU7NiM7u+c64C
-	 ca66G0IrSTft9K2mAoD1XBvxEMTrhYpU5uAMCYqhBe7usXDrzu7CmexJhO6yT0gdhBS0J
-	 ZxCTmSIkQxsbECFXpCqFZqOe9oiVklOWi5lTatMLlr5GkEQ9Vz8wxZrKmsocj8pdaoqkm
-	 4ggP+qM5Prf1czLlASI0dJcw0rW6EZgm/2WwbiPAkxu1dvuFaiVpKjssPUlDzgSE3kw==
+	t=1792859184;
+	b=f5CuGpTp7/mTpgVRAdCj56QPRjA83Z9PuihXjrfuYRXIeYgaaDfN7FpjdpEchsU6kMgr
+	 I5yU/eDpoQUB2yCaJfLZKCiISmOKN58x+zpVAMYwvB6S8oQ85k0X//CPaySMwnx0JLpBa
+	 WeyJYxzo7n9zd/++unpasueoeCCO1DvCSPA68FjCFnuEgTxs1ol14is9nCPaZ3mGR6hYC
+	 Twc7txopPYgyCCyK2IK6xXG3tXySmjOmGKrvCxyP1DooYFgJ+BlX5rQmO+Ipsi/MkJuyv
+	 xFxA0TgZkfYIurkp1LqSIW8YXH3jaGi4bI3tnFBqIn356QDYkVNwEXmIxoEVyT7jxHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792859165;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792859184;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=TBimbwroIx2OTPTGvBjQy4VhvmlUpwRqE5PO0gwaMTc=;
-	b=sylUkP5cg33zfmVwbshdkKrbi2h9FonRer5BM2H6mj2tFLgRz0liPaxnQLDjFa0MQfy1
-	 JQtOBwi7xdk+R3EFyfxS5+phdNzBGerR1FuGLO5HtKR7PgBkxX/OvzVZw4Z+5NBsDVcxc
-	 jCUBth1V4lRJcjbHXu0vCEfdISW8muFcP7ZYXNbj2OX8XW+xRfJxK76IeqVzjqekteFzY
-	 rBl470/cXqfAeQR5Y5IprpPoBT03rvML6asBnPcksp9z8tgPC4McuAYXt8AQxE0j0k3LT
-	 gJ35DF2lsmW1pbcaxw9VNsG14i5x/h4HxBMbNsrHlts5ufO8KbuNlP6uAatfUe8b5EA==
+	bh=x2K+JcgEXwjAprRXTw7X+lnifU24Dsjycf8GetwMrOQ=;
+	b=lHYZ8GDjUmGZ8ouqo6/lZQm2DP1jiZdWdHsivGs8urUKANIWBZXnVASKUTK6cDU55/2J
+	 a+VpNsaXkCW8YlvGoJRZX5QOFdPMSPTtNDOTQ+9p2ucdO7YAVwSfMYc92zkxnGCJp1f5U
+	 Adq5mnEkDzxqc+Mi+4T2X5oPXm9ztusx+xSrk5M2kqbIky2ghf6KbP1MMz3Okrn++gvPY
+	 7TpmSdObbQ6fRWB3/eaNuOQITL9quvf7l7FQnlWIyJrIbzhKBRcBmuNezxyD5gey+h6zC
+	 pUIxVeAqwh1EyG9LYGW9l2wgLneYD6dFXdsGx13tFouFTuxEZQUf5mg95kucJlh8lVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NH8kniEl;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fcFIVXgc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44235606A31A;
-	Sat, 24 Oct 2026 16:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D37606A31B;
+	Sat, 24 Oct 2026 16:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NH8kniEl
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730011F01828;
-	Sat, 24 Oct 2026 16:26:03 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fcFIVXgc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C27F1F031E6;
+	Sat, 24 Oct 2026 16:26:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792859165;
-	bh=TBimbwroIx2OTPTGvBjQy4VhvmlUpwRqE5PO0gwaMTc=;
+	s=k20260515; t=1792859183;
+	bh=x2K+JcgEXwjAprRXTw7X+lnifU24Dsjycf8GetwMrOQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=NH8kniElpLfFguNp8fKdKaQG8XAaMIJxQFjn3LyGGNEFjj/fVkT6Dh6470BZWotwK
-	 6RdGY8qEJiX8NzFSFr4AqE0ForYJU9JdaOh8eDFiUJEggMPhpVeYEqIEAjyvkXAamb
-	 dxt2RUunT9Wd901wWRiaNk3GDXLksGZk1FzZ1n8PL9nAJb36u6Lk2/b4vJ0beShtNd
-	 tEJU/PWKVNU5JEUTIQTzCOuZsJn86zD0/wR7L4epAxzWL2fuLN0gc4kh5wH48UAAGQ
-	 4U8SNo7oqfL9qi1F/Tb9jkks4vakdzrQmkIIYCY8FtpYRFIKqbnHok+7F8ShB0cK7Y
-	 PwIbBIi8TfCpg==
+	b=fcFIVXgchmUWbCb+FUuU6Cqyi5HGlRCYqJISKGkNbqII4DFJ61xML9CiBAMprxI/X
+	 2gx6yQD0FouPMLbwGL45ukx/noJpfCxNGglLWVFVwEs2eISKje0NFPnE5DFXtUIJF/
+	 4Y6pNsksd4RoNDivoqPfatue0IYHmq6cmmz9agYCYAVy6J6Rfu04PuwdGe+A9N3wbh
+	 Ihm/zxb0w5IzjMavgs3MmZO1CKznaz/dQAPKXwSlBPrEzXjvXxV39t/H2U2wvFW5lx
+	 2qSRdJTV2FVGiYCeY6nQCSPtcB3kU1SxD3XQgXusXUbbJcZiwORmyoX2KucaNBxgz4
+	 6GiGGhl8gKcFA==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
@@ -48,9 +48,9 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 04/10] tracing/filters: Handle out-of-range CPU for OP_NE in cpumask comparison
-Date: Sun, 25 Oct 2026 01:26:01 +0900
-Message-ID: <179285916115.466249.16061782430177051612.stgit@devnote2>
+Subject: [PATCH 06/10] tracing/filters: Fix function event operand parsing in parse_pred()
+Date: Sun, 25 Oct 2026 01:26:19 +0900
+Message-ID: <179285917977.466249.218328175465077201.stgit@devnote2>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <179285912318.466249.7425922682086130057.stgit@devnote2>
 References: <179285912318.466249.7425922682086130057.stgit@devnote2>
@@ -69,34 +69,92 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-In filter_pred_##size##_cpumask(), if the event's scalar CPU value is
-out of range (cpu >= nr_cpu_ids), it unconditionally returns 0.
+In parse_pred(), the ftrace_event_is_function(call) branch has several
+bugs when parsing the string operand:
 
-However, if the predicate operation is OP_NE (e.g., field != CPUS{0,1}),
-an out-of-range CPU cannot match any valid CPU in the user-provided
-cpumask and the condition is satisfied. Returning 0 produces a false
-negative.
+1. The loop 'for (i++; str[i]; i++)' unconditionally increments 'i' before
+   checking whether str[i] is the NUL terminator. When the operand is empty
+   (e.g. 'ip == '), this advances 'i' past the NUL terminator and reads
+   out-of-bounds memory until another zero byte is encountered.
 
-Return "pred->op == OP_NE" instead of 0 when cpu >= nr_cpu_ids.
+2. When the operand is quoted (q != 0), the loop breaks with str[i] at the
+   closing quote, but 'i' is never incremented past it (unlike the regular
+   string literal parser which does 'i++'). Furthermore, it does not check
+   for a missing closing quote (!str[i]). Returning 'i' at the closing
+   quote causes predicate_parse() to immediately re-invoke parse_pred() on
+   the closing quote and fail with FILT_ERR_TOO_MANY_PREDS.
 
-Fixes: 3cbec9d7b93d ("tracing/filters: Enable filtering a scalar field by a cpumask")
+3. If the operand length is 0 (e.g. 'ip == )' or 'ip == ""'), it accepts an
+   empty pattern instead of rejecting it with FILT_ERR_INVALID_VALUE.
+
+4. When the operand is unquoted (q == 0), stray quotes or '(' inside the
+   operand are consumed as part of the pattern, desynchronizing
+   parse_pred() from calc_stack().
+
+Fix this by advancing 'i' and 's' past the opening quote before the loop,
+starting the loop at the current 'i' without a blind increment, checking
+for missing closing quotes, advancing 'i' past the closing quote, and
+rejecting empty operands or stray quotes/'(' in unquoted operands.
+
+Fixes: 80765597bc58 ("tracing: Rewrite filter logic to be simpler and faster")
 Cc: stable@vger.kernel.org
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- kernel/trace/trace_events_filter.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/trace_events_filter.c |   37 ++++++++++++++++++++++++++----------
+ 1 file changed, 27 insertions(+), 10 deletions(-)
 
 diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-index 69da95f42541..d9aeeec4ed91 100644
+index 7e119c7164f0..96eac7ccd488 100644
 --- a/kernel/trace/trace_events_filter.c
 +++ b/kernel/trace/trace_events_filter.c
-@@ -762,7 +762,7 @@ static int filter_pred_##size##_cpumask(struct filter_pred *pred, void *event)	\
- 	unsigned int cpu = *addr;						\
- 										\
- 	if (cpu >= nr_cpu_ids)							\
--		return 0;							\
-+		return pred->op == OP_NE;					\
- 										\
- 	return do_filter_scalar_cpumask(pred->op, cpu, pred->mask);		\
- }
+@@ -1833,22 +1833,39 @@ static int parse_pred(const char *str, void *data,
+ 		 * Quotes are not required, but if they exist then we need
+ 		 * to read them till we hit a matching one.
+ 		 */
+-		if (str[i] == '\'' || str[i] == '"')
+-			q = str[i];
+-		else
++		if (str[i] == '\'' || str[i] == '"') {
++			q = str[i++];
++			s = i;
++		} else {
+ 			q = 0;
++		}
+ 
+-		for (i++; str[i]; i++) {
++		for (; str[i]; i++) {
+ 			if (q && str[i] == q)
+ 				break;
+-			if (!q && (str[i] == ')' || str[i] == '&' ||
+-				   str[i] == '|'))
+-				break;
++			if (!q) {
++				if (str[i] == ')' || str[i] == '&' ||
++				    str[i] == '|')
++					break;
++				if (str[i] == '(' || str[i] == '\'' ||
++				    str[i] == '"') {
++					parse_error(pe, FILT_ERR_INVALID_VALUE,
++						    pos + i);
++					goto err_free;
++				}
++			}
++		}
++		if (q && !str[i]) {
++			parse_error(pe, FILT_ERR_MISSING_QUOTE, pos + i);
++			goto err_free;
+ 		}
+-		/* Skip quotes */
+-		if (q)
+-			s++;
+ 		len = i - s;
++		if (q)
++			i++;
++		if (!len) {
++			parse_error(pe, FILT_ERR_INVALID_VALUE, pos + i);
++			goto err_free;
++		}
+ 		if (len >= MAX_FILTER_STR_VAL) {
+ 			parse_error(pe, FILT_ERR_OPERAND_TOO_LONG, pos + i);
+ 			goto err_free;
 
