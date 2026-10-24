@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792843632;
-	b=WvfwrzITBCKkwFnZOcIb3fY0IMjLjDVK//HYMqosOZNCpnHzbmsDUUrwLPTo/Tmq+9MW
-	 EPk/TGl1SiwyQKKf3ExU7RfaT6YkD3uc2BWiFQpZ586KLbH2bBR8UTizW+KFly7y0fvsQ
-	 qEStBOfVSMnGu15I3ecKBJfnHVRNwUoxwNIGkYq0A9aGDhmD3a7c1gf7zeW7VIkJ4RVIh
-	 qjHzPqMAo4IAHdc+VW2sS7LUVOaArNv3aMb7o7U65+2xu7NJU9ngqltb0dY7pdsgYbgEd
-	 HyS5Uq2qDQz/8/W4DjDA6HKOjJL9TnQiO1u3elss3RkKoyRwPKG+JL0hYn4UvXjm8aw==
+	t=1792843647;
+	b=FdHSygupi+0v8P5kQ/7sJQOuS9kbM9zBvFmie2u0siH+ZQNgQErVrSL1QAfWgpY+xZAf
+	 0UMQUocBAM7Ka/d/RIKlmf/y9HngTADSuKR3dJWf0v5GOmgrwAlw9EjblTS00j5poTRlX
+	 1acJdnGZpWPBbRb9Ci6h+6GyQGeAE/mz1XnK0m32W7nUzNb/ZRX7CLbves622WCBrUiy5
+	 THIgS4kbdgWOiFf8h9tHbOLmEDnWVOOFJzn85719VgAb1dIUwkCYRJpoGftWP1YeID2c1
+	 PMuuxidUn5vfxerlNrZ7q4roa0oc/zfz+h6gnxu1hrfHjGER2sRAE6x1RksKqOdfOkw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792843632;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792843647;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=BWqMKRtpRqvbPNIk6DggD6V5/6zJIJbBMHDL7fmuUUo=;
-	b=mnHOO2OAZjY+9AUXVTtGKHkGJ4xsyJ7/7t/e5PJOEhL1orTFi5npNwcIwr3nFbId1TXT
-	 UZjVVC0ibs7HSJ0j4x/vP1L4A904D/v8O/3xB+Ev7kx50PEDX8vDQltrBMG141yh7ubpl
-	 xmHFuf4MQm8sqnTGCWs9jN/CtoXgfUWuULTjfJqA4NjE/JU+mwUFSjsVYdMUjBfOfa4/l
-	 pCDL2B4I0ur8vHTln3JS2Di/oxX74kTKwq/3KGZs5K3tuUz1d1Qj1W49SCKCWJteW6vGp
-	 B10su55k5P4Xyd1eXIQBtYqA8oVHwIxLIis3MbMAb2ZB8GD2ttj9uM4JXpGz0b+RXTA==
+	bh=zLNM9fxN8Q0mYWX/OgajYSxuCiy7NImfGuJpx0sAOuU=;
+	b=5jkEg4Jjl93UZ82DvNtWmLEPhco9OkjLjrlkJ7xfCw9otg3Ag4pO86VBb63t1Jur0gfu
+	 w8rB+/BFgYQWPPcNh61m1Y0XfaI/SxFBF8RWN4Fpe99X8QnVaJDk7SGglk4UijpoyxGsH
+	 MkPT85q9tEY2GU9ehaQKYDaVFPHXtk5CbejpWR4mMCZBz4TBJCyF3KxJXuj3n4E3EwCbL
+	 TAOdXfT0WR5wS73SSZKdbzeRT5ZfbwhjbsHheAC8LRrjR2HO9rozCX7a2z66pJfa/p9s2
+	 zDh3Jvu0aUo4Im/QsCMSZi9dWrOFyqzgR5maJYYGLaOPfeibzqSiiWR3GNmy0AoVK7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=d99l1XNi;
-	arc=none smtp.remote-ip=74.125.82.172
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jbkjwaQH;
+	arc=none smtp.remote-ip=74.125.82.170
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE75606A331
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 12:07:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4AE75606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E27360A2610
+	for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 12:07:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E27360A2610
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=d99l1XNi
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-36661f953e4so2978747eec.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 05:07:11 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jbkjwaQH
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-35b2c599f43so320734eec.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 05:07:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792843630; x=1793448430; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792843628; x=1793448428; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BWqMKRtpRqvbPNIk6DggD6V5/6zJIJbBMHDL7fmuUUo=;
-        b=d99l1XNicUMMXaK/0ox5HhQyDntzGeL4f/MqQMB4JGBhAl4zKXNq8Xz4JRVIUMaosf
-         bamUG+QdswvY+PAUTWvxLA5w+V1Bkzab5vuUb8ulBMs+k+kaROZTgozDr7+0WuYMiJd4
-         Z/esWGdU3FuLzri8bY91M6IFSa1chzK4Ihf/IKWOfK8cos8nOGYuAbTPlHXpNRc+ws6H
-         +dIjPAVz8LG/ETlVXPyToVEZ5xdQuq6Dv5awkEGFwKEIG2SlvORLh90S2YBmJLitrlZH
-         78vPyOD3F65NKvgyR6UuoT6qk414R/FHC8FTK1rhzRq3p2Uo0zxrKSGvBxPt7CjbYSWC
-         /FYA==
+        bh=zLNM9fxN8Q0mYWX/OgajYSxuCiy7NImfGuJpx0sAOuU=;
+        b=jbkjwaQHOM9PvR1//nhAnjt8kj/2TksQ4yOsFvy5FOP0dbrbBcz3Za7a7PKHXZYz36
+         sZS1qtulphs4jCdlYqqjek2qB+1vZoV295ubms5R1QFlKO9i5SOOdwRgoOCqdJ9yQ7Wy
+         dpB62kKcPiBHBqfOH/T2NltriOyz6mN+AW7DwZo64Jqh2VbJDp+FpLwJRHrOo5O8kf0p
+         zPTNtlOkmz0p27ORnExmYq3J0kTMWFAwJBF1D88NpYt4zj/8VcEH8VG4meK23sNTM7Ft
+         JvtEWROLMn7nXRvCnQ8gaLABalcEMonDfO/0KQGgHgHOWPSl4ChKdJBIz7VemKTH5n4A
+         7xMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792843630; x=1793448430;
+        d=1e100.net; s=20260707; t=1792843628; x=1793448428;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BWqMKRtpRqvbPNIk6DggD6V5/6zJIJbBMHDL7fmuUUo=;
-        b=jz3so6jph5fUdjSa/+FWMZ+od4RIJ5TckVHWeAQkWHxAe20VC+XiJAKB42I13s6GSQ
-         dttsdAaQm2Nms9J1ulo1BbqwTr3JCIIQdP0CbTTUcfWpB12Y8cNK2/X7mmBoTQDBT66q
-         nTuGZo13lKtiWcoTZAqGRgwb6hocVVyeK4rg/40OztcMkrq79XlLTJB8nRfArocR1Ihm
-         w2BBIBEp1N5AeaaAEx20hC4Nrgw8NzdRI6F46xEbs8XHdsuD2uOxUfuyLlhP2PL6T0sQ
-         1MrjCe4XOLrJnb5UsLua8zE2zBAiGkOWIclSPoqwKprS7WcWI5bWnBO3XDGi4Q0QupiD
-         mDrg==
-X-Forwarded-Encrypted: i=1; AKwUvBzz4OYS+S4obgrr7MOR8EunVit8/QFcso0g5bXDSOzJtkFjPKq49BzJuEZHywx6R19xZp2r7SqxSzYg0vrgHUE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJvV7Pp6/4JWZfuMQD7VI3ngYV7e1YyaeKwEkZkvQK08EHltJxs
-	xqylIg1iRWMxlCVjTJpqpZJkfvcsc666IEeLAcj0WsX/8U2VXtM5fGcE
-X-Gm-Gg: AYBFou3dVy6jKvrGxtAo5iMf6iFLtRoukYFqnVdeT7OhoBSgen+2RwEFlxSgMovOLPg
-	lSyAHeitpwYis2INFY3bzaT8UnL/ahUo23Xe+vUw45wLcHxIV790Bnbs6/LaZU8gOL2omU2ACRx
-	Mz5TXpnHLBHvXPNpbwy/RFCIr3lL+BTZ86uVj7nD4XwlFNNSh1gGS/0+qu9c0FC3p5jud+QA1ZL
-	qmt0K4JffLA1jB0PJHSPUGjMGYsQUj4XM9jqicIcdltJRhmxmWB8qxQUOPt0vIZhMgdqUNgy/7Q
-	iSt4efIjqTU8duD5f6EFytOz9/MSyew0LoxQ2Piyz5Vm32LogSF5dAppPGCGbYOxAFtHJnjk+si
-	mQrSrkMdxIVTY/vBTBzW/Db+kJqQE1JzF7N41AfcGtzt8JRiIyEWaluYxGEvbgdUU01ck2n/so4
-	ePheSp2wtPxpzNqNV+3CszRJmob+HbLFRGDjSh+ejiqLCYwO2MPlPKoL41Jej7lDbMhMLhkGw3g
-	XjM1oxWI4Njrjjt4ZvXZYKqZZ9M8Q8gCtNyIC50HbkICEgr1f8zLQ4zI5QrhvfyHqJ6LFbiyec6
-	4MQF3v16pDEaQDmyZP+4eynhvQ==
-X-Received: by 2002:a05:693c:8943:10b0:368:9553:f2da with SMTP id 5a478bee46e88-369e85074b2mr2973587eec.31.1792843630026;
-        Sat, 24 Oct 2026 05:07:10 -0700 (PDT)
+        bh=zLNM9fxN8Q0mYWX/OgajYSxuCiy7NImfGuJpx0sAOuU=;
+        b=rOlinhvgcIE6r2YqkHc/s/bvBNa4yqa18No4BN8JkSk9mUsGEZJITdbtmRZwZqVAVB
+         /aMvKE8hz+phbqctkU4XYzvT4BU0I7dQLfmB5SpmE/1nTTBZKeTTj4fSScJkBORONdIr
+         A4jWSP9oMG5utHPpB6fkpW6BpOdbfc0j9W/YBuEf3WxbUm1ePWn95l6OP0mOVPM1HDXA
+         5lZrs35aQr7OtageBPEOcV716TKYa35Tw13486fI0uoLLjmzBsZmJufejreVKMsa7Ecd
+         n7yknBYxRanKqGHepEeUjAleaUQtGXdkx4d1gf9/Cb90LWrFCFtpOPSz0Lb9qH9YsFea
+         kgPg==
+X-Forwarded-Encrypted: i=1; AKwUvBw+Zso0db+8y9SeIx6MFbk1hD9UZOTUkkgM6PsOQozWbuDX7AevXIUZEZkwsGC+S39/KvzWZNEIT7yqlzUCFEI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLsWHYF7zhsz/Mb/wjJ7qNjCtC4PKUne8YgCVgQHvYGUs7Ou2LJ
+	Hw3/nRKpktK9K3SyiR/mCkBHxiETL0VcLxxKMR8WfXsjVtqWRkbp2HO0
+X-Gm-Gg: AYBFou3qJWzlmtwjV2f/6IhC/DgoOzNCi5RmbXdvtzFmo3IpG9kPNYNcxjwsw5qDOhd
+	29KKlRDG4nbrEe+16oGmWPvir7yWQ7b7faMoPbop+hMmRn9+NhbW809h/KbmbffkSCxLbXVzjIm
+	U3M+p4HnAAgskiwx7J2UdXUJrMtJu7CH+O6dZLmvGvVAoOgJuqlFBlCrMtCkN0zBXnHHCpy3P0K
+	oFqMJ7Ee0/q5mwSrgp3EXOVCsOSIN3uwq2XRIHHnyQz3+R2qXfPZyZ341ke7FgNzcc+UQ0sCqEk
+	wFjBVWUqyrrCKxtyR0khW0RXrNoURpdmVhhQbCu4f4JkAquQnJFakH7IRs4uIpH6SVAF8CjMMsz
+	gqgTWpCwKFJOnlBQ3K8VTXCQ8jWwxfpaQMZhodBPtdLpRLOewXn6bDhzQf7kKhQQjRuiR5u+UpF
+	PhTQP9ZccA7/kxoEtD0GjSu0QIwWXeSUojWGe3AwT3D3bjrz+YiF7NZpUBl92Ow/lzpjpXxrrne
+	bwXu/t87MZDgh90zjwB9XWsTmkN8EG0SfG5umBoF7mk2n96RvjdmRd3ajVjNdIUkIBefPOcxNHc
+	5djVSD4Q1v6FzWJqUgAK+0/D/Q==
+X-Received: by 2002:a05:7301:4205:b0:369:d793:328d with SMTP id 5a478bee46e88-369e84bd8b1mr2964461eec.31.1792843628051;
+        Sat, 24 Oct 2026 05:07:08 -0700 (PDT)
 Received: from localhost.localdomain ([136.25.42.214])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8d95e91sm8120722eec.15.2026.10.24.05.07.09
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8d95e91sm8120722eec.15.2026.10.24.05.07.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Oct 2026 05:07:09 -0700 (PDT)
+        Sat, 24 Oct 2026 05:07:07 -0700 (PDT)
 From: Tim Budding <tim.budding@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-sctp@vger.kernel.org
@@ -91,10 +91,11 @@ Cc: Xin Long <lucien.xin@gmail.com>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Tim Budding <tim.budding@gmail.com>
-Subject: [PATCH net 4/4] selftests: net: add SCTP I-FORWARD-TSN tests with message interleaving
-Date: Sat, 24 Oct 2026 05:06:27 -0700
-Message-Id: <20261024120627.837568-5-tim.budding@gmail.com>
+	Tim Budding <tim.budding@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH net 3/4] sctp: don't treat an I-FORWARD-TSN as an association reset
+Date: Sat, 24 Oct 2026 05:06:26 -0700
+Message-Id: <20261024120627.837568-4-tim.budding@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261024120627.837568-1-tim.budding@gmail.com>
 References: <20261024120627.837568-1-tim.budding@gmail.com>
@@ -109,760 +110,80 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add tests for the receiver side of I-FORWARD-TSN with user message
-interleaving (RFC 8260) and partial reliability. The first four tests
-interleave a 64KB reliable message on stream 0 with a PR-SCTP message on
-stream 1, which an nft rule drops so that the sender abandons it. The
-tests are:
+sctp_report_iftsn() handles both a received I-FORWARD-TSN and the SSN/TSN
+reset request and response of RFC 6525, where all queued data has to be
+discarded. It tells them apart by checking whether the New Cumulative
+TSN equals the highest TSN seen, and if so calls sctp_intl_abort_pd(),
+which aborts partial delivery on every stream, skips the MIDs being
+partially delivered and flushes the whole ulpq.
 
-- ordered, unordered: the large message, ordered and unordered, must be
-  delivered intact, and the abandoned message's received fragments must
-  be freed.
-- leading_edge: with the large message in partial delivery, drop all
-  data after the abandoned message until the I-FORWARD-TSN arrives; this
-  must not be treated as an association reset.
-- uo_pd: abandon an unordered message during its partial delivery; the
-  partial delivery must be aborted and the next unordered message on the
-  stream must be delivered on its own.
-- reset: an SSN/TSN association reset with interleaving completes and
-  leaves a working association.
+However, sctp_tsnmap_skip() runs first and raises the highest TSN seen
+to the New Cumulative TSN, so the check is also true for any
+I-FORWARD-TSN that arrives before data with a higher TSN, e.g. when the
+abandoned message was the last one sent, or after a burst of loss. All
+partially received messages on all streams are then dropped. A stream
+that was in partial delivery also has its MID skipped, so the next
+fragment of that message fails sctp_validate_idata() as stale, and the
+association is aborted with a protocol violation.
 
-The PR-SCTP message is abandoned after one retransmission (RTX policy),
-which keeps the tests stable on slow or loaded machines.
+Drop the check from sctp_report_iftsn() and have the reset paths call
+abort_pd() explicitly. For DATA chunks this changes nothing, as
+sctp_report_fwdtsn() already aborts partial delivery and
+sctp_ulpq_abort_pd() returns early when none is in progress. For I-DATA
+the reset paths still discard everything as before.
 
+This relies on the previous patch, which makes sctp_intl_skip() abort an
+unordered partial delivery of the skipped message; the check removed
+here used to do that at the leading edge.
+
+Found by an AI assistant while working on the first patch in this
+series. Reproduced on an unmodified kernel with the leading_edge test of
+the sctp_ifwdtsn.sh selftest added later in this series, which passes
+with this fix. Its reset test checks that an SSN/TSN association reset
+still works with interleaving.
+
+Fixes: 47b20a88566f ("sctp: implement report_ftsn for sctp_stream_interleave")
+Cc: stable@vger.kernel.org
 Signed-off-by: Tim Budding <tim.budding@gmail.com>
 ---
- tools/testing/selftests/net/.gitignore      |   1 +
- tools/testing/selftests/net/Makefile        |   2 +
- tools/testing/selftests/net/sctp_ifwdtsn.c  | 538 ++++++++++++++++++++
- tools/testing/selftests/net/sctp_ifwdtsn.sh | 141 +++++
- 4 files changed, 682 insertions(+)
- create mode 100644 tools/testing/selftests/net/sctp_ifwdtsn.c
- create mode 100755 tools/testing/selftests/net/sctp_ifwdtsn.sh
+ net/sctp/stream.c            | 2 ++
+ net/sctp/stream_interleave.c | 3 ---
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 21412510ac26..ca451bfeda75 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -34,6 +34,7 @@ reuseport_bpf_numa
- reuseport_dualstack
- rxtimestamp
- sctp_hello
-+sctp_ifwdtsn
- sk_bind_sendto_listen
- sk_connect_zero_addr
- sk_so_peek_off
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index df215e1a6262..58ca9fc23979 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -90,6 +90,7 @@ TEST_PROGS := \
- 	run_afpackettests \
- 	run_netsocktests \
- 	rxtimestamp.sh \
-+	sctp_ifwdtsn.sh \
- 	sctp_vrf.sh \
- 	skf_net_off.sh \
- 	srv6_encap_lookup_l3vpn_test.sh \
-@@ -164,6 +165,7 @@ TEST_GEN_FILES := \
- 	reuseport_addr_any \
- 	rxtimestamp \
- 	sctp_hello \
-+	sctp_ifwdtsn \
- 	skf_net_off \
- 	so_netns_cookie \
- 	so_rcv_listener \
-diff --git a/tools/testing/selftests/net/sctp_ifwdtsn.c b/tools/testing/selftests/net/sctp_ifwdtsn.c
-new file mode 100644
-index 000000000000..15346aca10ef
---- /dev/null
-+++ b/tools/testing/selftests/net/sctp_ifwdtsn.c
-@@ -0,0 +1,538 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Helper for sctp_ifwdtsn.sh: I-FORWARD-TSN handling with SCTP user message
-+ * interleaving (RFC 8260) and partial reliability (RFC 3758).
-+ *
-+ * Runs both endpoints of one association: the server socket is created in
-+ * the current network namespace, the client socket in the namespace given
-+ * on the command line. The caller sets up the link and any nft rule that
-+ * drops chunks. Messages sent by the client:
-+ *
-+ *   big:    64KB on stream 0, reliable, fragmented into ~66 I-DATA chunks
-+ *   small:  on stream 1, PR-SCTP "RTX" policy allowing one retransmission;
-+ *           the nft rule drops (part of) it, so it gets abandoned
-+ *   marker: short ordered message on stream 0
-+ *
-+ * Usage: sctp_ifwdtsn <client netns> <test>
-+ * Exit status: 0 pass, 1 fail, 4 skip.
-+ */
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <time.h>
-+#include <unistd.h>
-+#include <arpa/inet.h>
-+#include <netinet/in.h>
-+#include <sys/socket.h>
-+#include <linux/sctp.h>
-+
-+#include "kselftest.h"
-+
-+#ifndef SOL_SCTP
-+#define SOL_SCTP	132
-+#endif
-+
-+#define SRV_ADDR	"10.0.0.1"
-+#define SRV_PORT	5000
-+#define BIG_LEN		(64 * 1024)
-+#define BUF_LEN		(BIG_LEN + 1024)
-+#define MAXSEG		1000
-+#define TIMEOUT_MS	5000
-+#define MARKER		"marker"
-+#define UO_MARKER	"uo-marker"
-+
-+struct test {
-+	const char *name;
-+	bool big_uo;		/* send big unordered */
-+	int small_len;		/* 0: don't send the small message */
-+	bool small_uo;		/* send small unordered */
-+	int pd_point;		/* server SCTP_PARTIAL_DELIVERY_POINT */
-+	bool expect_pd_abort;	/* PD on stream 1 must be aborted */
-+	bool uo_marker;		/* then send an unordered marker on 1 */
-+	bool reset;		/* SSN/TSN association reset after big */
-+};
-+
-+static const struct test tests[] = {
-+	{ .name = "ordered", .small_len = 3000 },
-+	{ .name = "unordered", .big_uo = true, .small_len = 3000 },
-+	{ .name = "leading_edge", .small_len = 1000, .pd_point = 2000 },
-+	{ .name = "uo_pd", .small_len = 20000, .small_uo = true,
-+	  .pd_point = 2000, .expect_pd_abort = true, .uo_marker = true },
-+	{ .name = "reset", .reset = true },
-+};
-+
-+static const struct test *t;
-+
-+static void die(const char *what)
-+{
-+	fprintf(stderr, "%s: %s\n", what, strerror(errno));
-+	exit(KSFT_FAIL);
-+}
-+
-+static void setopt(int fd, int opt, const void *val, socklen_t len,
-+		   const char *name)
-+{
-+	if (setsockopt(fd, SOL_SCTP, opt, val, len) < 0) {
-+		fprintf(stderr, "setsockopt(%s): %s\n", name, strerror(errno));
-+		/* Interleaving disabled, or option not supported. */
-+		exit(errno == EPERM || errno == ENOPROTOOPT ?
-+		     KSFT_SKIP : KSFT_FAIL);
-+	}
-+}
-+
-+static void set_assoc_opt(int fd, int opt, unsigned int val, const char *name)
-+{
-+	struct sctp_assoc_value av = {
-+		.assoc_id = SCTP_FUTURE_ASSOC,
-+		.assoc_value = val,
-+	};
-+
-+	setopt(fd, opt, &av, sizeof(av), name);
-+}
-+
-+static void subscribe(int fd, int type)
-+{
-+	struct sctp_event ev = {
-+		.se_assoc_id = SCTP_FUTURE_ASSOC,
-+		.se_type = type,
-+		.se_on = 1,
-+	};
-+
-+	setopt(fd, SCTP_EVENT, &ev, sizeof(ev), "SCTP_EVENT");
-+}
-+
-+static int sctp_socket(void)
-+{
-+	struct sctp_initmsg im = {
-+		.sinit_num_ostreams = 2,
-+		.sinit_max_instreams = 2,
-+	};
-+	struct sctp_paddrparams pp = {
-+		.spp_assoc_id = SCTP_FUTURE_ASSOC,
-+		.spp_flags = SPP_HB_DISABLE,
-+	};
-+	struct sctp_rtoinfo rto = {
-+		.srto_assoc_id = SCTP_FUTURE_ASSOC,
-+		.srto_initial = 300,
-+		.srto_min = 300,
-+		.srto_max = 1000,
-+	};
-+	int fd, val;
-+
-+	fd = socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP);
-+	if (fd < 0) {
-+		perror("socket");
-+		exit(errno == EPROTONOSUPPORT ? KSFT_SKIP : KSFT_FAIL);
-+	}
-+	val = 1;
-+	setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
-+
-+	setopt(fd, SCTP_INITMSG, &im, sizeof(im), "SCTP_INITMSG");
-+	setopt(fd, SCTP_RTOINFO, &rto, sizeof(rto), "SCTP_RTOINFO");
-+	/* No HEARTBEATs: the nft rules only look at the first chunk of a
-+	 * packet, and a HEARTBEAT bundled in front of DATA would bypass them.
-+	 */
-+	setopt(fd, SCTP_PEER_ADDR_PARAMS, &pp, sizeof(pp),
-+	       "SCTP_PEER_ADDR_PARAMS");
-+	set_assoc_opt(fd, SCTP_PR_SUPPORTED, 1, "SCTP_PR_SUPPORTED");
-+	val = 2;
-+	setopt(fd, SCTP_FRAGMENT_INTERLEAVE, &val, sizeof(val),
-+	       "SCTP_FRAGMENT_INTERLEAVE");
-+	set_assoc_opt(fd, SCTP_INTERLEAVING_SUPPORTED, 1,
-+		      "SCTP_INTERLEAVING_SUPPORTED");
-+	if (t->reset) {
-+		set_assoc_opt(fd, SCTP_RECONFIG_SUPPORTED, 1,
-+			      "SCTP_RECONFIG_SUPPORTED");
-+		set_assoc_opt(fd, SCTP_ENABLE_STREAM_RESET,
-+			      SCTP_ENABLE_RESET_ASSOC_REQ,
-+			      "SCTP_ENABLE_STREAM_RESET");
-+		subscribe(fd, SCTP_ASSOC_RESET_EVENT);
-+	}
-+	val = 1;
-+	setopt(fd, SCTP_RECVRCVINFO, &val, sizeof(val), "SCTP_RECVRCVINFO");
-+
-+	return fd;
-+}
-+
-+static void send_msg(int fd, int sid, bool uo, const void *buf, size_t len,
-+		     bool pr)
-+{
-+	char cbuf[CMSG_SPACE(sizeof(struct sctp_sndinfo)) +
-+		  CMSG_SPACE(sizeof(struct sctp_prinfo))] = {};
-+	struct iovec iov = { .iov_base = (void *)buf, .iov_len = len };
-+	struct msghdr msg = {
-+		.msg_iov = &iov,
-+		.msg_iovlen = 1,
-+		.msg_control = cbuf,
-+		.msg_controllen = CMSG_SPACE(sizeof(struct sctp_sndinfo)),
-+	};
-+	struct sctp_sndinfo *si;
-+	struct sctp_prinfo *pi;
-+	struct cmsghdr *cm;
-+
-+	cm = CMSG_FIRSTHDR(&msg);
-+	cm->cmsg_level = IPPROTO_SCTP;
-+	cm->cmsg_type = SCTP_SNDINFO;
-+	cm->cmsg_len = CMSG_LEN(sizeof(*si));
-+	si = (struct sctp_sndinfo *)CMSG_DATA(cm);
-+	si->snd_sid = sid;
-+	si->snd_flags = uo ? SCTP_UNORDERED : 0;
-+
-+	if (pr) {
-+		/* Abandon once the chunk would need a second retransmission:
-+		 * only a chunk that is lost again after being retransmitted
-+		 * qualifies, so abandonment does not depend on timing.
-+		 */
-+		msg.msg_controllen += CMSG_SPACE(sizeof(*pi));
-+		cm = CMSG_NXTHDR(&msg, cm);
-+		cm->cmsg_level = IPPROTO_SCTP;
-+		cm->cmsg_type = SCTP_PRINFO;
-+		cm->cmsg_len = CMSG_LEN(sizeof(*pi));
-+		pi = (struct sctp_prinfo *)CMSG_DATA(cm);
-+		pi->pr_policy = SCTP_PR_SCTP_RTX;
-+		pi->pr_value = 1;
-+	}
-+
-+	if (sendmsg(fd, &msg, 0) != (ssize_t)len)
-+		die("sendmsg");
-+}
-+
-+static unsigned char pattern(size_t i)
-+{
-+	return (i * 7 + (i >> 8)) & 0xff;
-+}
-+
-+static long long now_ms(void)
-+{
-+	struct timespec ts;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	return ts.tv_sec * 1000LL + ts.tv_nsec / 1000000;
-+}
-+
-+/* Wait until the client has abandoned a sent message. */
-+static bool wait_abandoned(int fd)
-+{
-+	long long end = now_ms() + TIMEOUT_MS;
-+	struct sctp_prstatus ps;
-+	socklen_t len;
-+
-+	while (now_ms() < end) {
-+		memset(&ps, 0, sizeof(ps));
-+		ps.sprstat_policy = SCTP_PR_SCTP_RTX;
-+		len = sizeof(ps);
-+		if (getsockopt(fd, SOL_SCTP, SCTP_PR_ASSOC_STATUS, &ps,
-+			       &len) < 0)
-+			die("SCTP_PR_ASSOC_STATUS");
-+		if (ps.sprstat_abandoned_sent)
-+			return true;
-+		usleep(10000);
-+	}
-+	return false;
-+}
-+
-+/* Wait for a notification of @type on @fd, discarding anything else. */
-+static bool wait_event(int fd, int type)
-+{
-+	long long end = now_ms() + TIMEOUT_MS;
-+	char buf[256];
-+
-+	while (now_ms() < end) {
-+		struct pollfd pfd = { .fd = fd, .events = POLLIN };
-+		struct iovec iov = { buf, sizeof(buf) };
-+		struct msghdr msg = { .msg_iov = &iov, .msg_iovlen = 1 };
-+		union sctp_notification *sn = (void *)buf;
-+
-+		if (poll(&pfd, 1, end - now_ms()) <= 0)
-+			break;
-+		if (recvmsg(fd, &msg, 0) <= 0)
-+			break;
-+		if ((msg.msg_flags & MSG_NOTIFICATION) &&
-+		    sn->sn_header.sn_type == type)
-+			return true;
-+	}
-+	return false;
-+}
-+
-+/* Bytes held by the server association (/proc/net/sctp/assocs RX_QUEUE). */
-+static long assoc_rx_queue(void)
-+{
-+	/* 7 columns, TX_QUEUE, RX_QUEUE, UID, INODE, LPORT */
-+	const char *fmt = "%*s %*s %*s %*s %*s %*s %*s %*u %lu %*s %*s %d";
-+	unsigned long rxq;
-+	char line[512];
-+	long ret = -1;
-+	FILE *f;
-+	int lport;
-+
-+	f = fopen("/proc/net/sctp/assocs", "r");
-+	if (!f)
-+		return -1;
-+	while (fgets(line, sizeof(line), f)) {
-+		if (sscanf(line, fmt, &rxq, &lport) == 2 && lport == SRV_PORT)
-+			ret = rxq;
-+	}
-+	fclose(f);
-+	return ret;
-+}
-+
-+struct server_state {
-+	unsigned char *buf[2];	/* message being received, per stream */
-+	size_t len[2];
-+	bool big, marker, uo_marker, reset_event;
-+	int pd_aborts[2];
-+	int errors;
-+};
-+
-+static void check_msg(struct server_state *s, int sid)
-+{
-+	unsigned char *m = s->buf[sid];
-+	size_t len = s->len[sid];
-+	size_t i;
-+
-+	s->len[sid] = 0;
-+	if (sid == 0 && len == sizeof(MARKER) && !memcmp(m, MARKER, len)) {
-+		s->marker = true;
-+		return;
-+	}
-+	if (sid == 1 && len == sizeof(UO_MARKER) &&
-+	    !memcmp(m, UO_MARKER, len)) {
-+		s->uo_marker = true;
-+		return;
-+	}
-+	if (sid == 0 && len == BIG_LEN) {
-+		for (i = 0; i < BIG_LEN && m[i] == pattern(i); i++)
-+			;
-+		if (i == BIG_LEN) {
-+			s->big = true;
-+			return;
-+		}
-+		printf("big message corrupted at offset %zu\n", i);
-+	} else if (sid == 1 && len > sizeof(UO_MARKER) &&
-+		   !memcmp(m + len - sizeof(UO_MARKER), UO_MARKER,
-+			   sizeof(UO_MARKER))) {
-+		printf("unordered marker appended to the abandoned message\n");
-+	} else if (sid == 1 && t->small_len) {
-+		printf("abandoned message delivered (%zu bytes)\n", len);
-+	} else {
-+		printf("unexpected %zu byte message on stream %d\n", len, sid);
-+	}
-+	s->errors++;
-+}
-+
-+/* Receive until @done(s) is true or the timeout expires. */
-+static bool server_recv(int fd, struct server_state *s,
-+			bool (*done)(const struct server_state *s))
-+{
-+	long long end = now_ms() + TIMEOUT_MS;
-+	static char cbuf[CMSG_SPACE(sizeof(struct sctp_rcvinfo))];
-+	static unsigned char buf[BUF_LEN];
-+
-+	while (!done(s)) {
-+		struct pollfd pfd = { .fd = fd, .events = POLLIN };
-+		struct iovec iov = { buf, sizeof(buf) };
-+		struct msghdr msg = {
-+			.msg_iov = &iov,
-+			.msg_iovlen = 1,
-+			.msg_control = cbuf,
-+			.msg_controllen = sizeof(cbuf),
-+		};
-+		union sctp_notification *sn = (void *)buf;
-+		struct sctp_rcvinfo *ri = NULL;
-+		struct cmsghdr *cm;
-+		long long left;
-+		ssize_t n;
-+		int sid;
-+
-+		left = end - now_ms();
-+		if (left <= 0 || poll(&pfd, 1, left) <= 0) {
-+			printf("timeout waiting for data\n");
-+			return false;
-+		}
-+		n = recvmsg(fd, &msg, 0);
-+		if (n <= 0) {
-+			printf("recvmsg: %s\n", n ? strerror(errno) : "EOF");
-+			return false;
-+		}
-+
-+		if (msg.msg_flags & MSG_NOTIFICATION) {
-+			int type = sn->sn_header.sn_type;
-+
-+			if (type == SCTP_PARTIAL_DELIVERY_EVENT) {
-+				sid = sn->sn_pdapi_event.pdapi_stream;
-+				if (sid > 1)
-+					sid = 1;
-+				s->pd_aborts[sid]++;
-+				s->len[sid] = 0;
-+			} else if (type == SCTP_ASSOC_RESET_EVENT) {
-+				s->reset_event = true;
-+			}
-+			continue;
-+		}
-+
-+		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm))
-+			if (cm->cmsg_level == IPPROTO_SCTP &&
-+			    cm->cmsg_type == SCTP_RCVINFO)
-+				ri = (struct sctp_rcvinfo *)CMSG_DATA(cm);
-+		sid = ri ? ri->rcv_sid : 0;
-+		if (sid > 1 || s->len[sid] + n > BUF_LEN) {
-+			printf("unexpected data on stream %d\n", sid);
-+			return false;
-+		}
-+		memcpy(s->buf[sid] + s->len[sid], buf, n);
-+		s->len[sid] += n;
-+		if (msg.msg_flags & MSG_EOR)
-+			check_msg(s, sid);
-+	}
-+	return true;
-+}
-+
-+static bool got_big(const struct server_state *s)
-+{
-+	return s->big || s->errors;
-+}
-+
-+static bool got_all(const struct server_state *s)
-+{
-+	return (s->big && s->marker && (!t->uo_marker || s->uo_marker)) ||
-+	       s->errors;
-+}
-+
-+static int client_socket(const char *netns)
-+{
-+	int self, other, fd;
-+	char path[256];
-+
-+	snprintf(path, sizeof(path), "/run/netns/%s", netns);
-+	self = open("/proc/self/ns/net", O_RDONLY);
-+	other = open(path, O_RDONLY);
-+	if (self < 0 || other < 0)
-+		die("open netns");
-+	if (setns(other, CLONE_NEWNET))
-+		die("setns");
-+	fd = sctp_socket();
-+	if (setns(self, CLONE_NEWNET))
-+		die("setns");
-+	close(other);
-+	close(self);
-+	return fd;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct sockaddr_in sa = {
-+		.sin_family = AF_INET,
-+		.sin_port = htons(SRV_PORT),
-+	};
-+	struct server_state s = {};
-+	unsigned char *big, *small;
-+	int lfd, sfd, cfd, i;
-+	sctp_assoc_t id = 0;
-+	bool ok;
-+	long rxq;
-+
-+	if (argc != 3) {
-+		fprintf(stderr, "usage: %s <client netns> <test>\n", argv[0]);
-+		return KSFT_FAIL;
-+	}
-+	for (i = 0; i < (int)ARRAY_SIZE(tests); i++)
-+		if (!strcmp(argv[2], tests[i].name))
-+			t = &tests[i];
-+	if (!t) {
-+		fprintf(stderr, "unknown test %s\n", argv[2]);
-+		return KSFT_FAIL;
-+	}
-+	inet_pton(AF_INET, SRV_ADDR, &sa.sin_addr);
-+
-+	lfd = sctp_socket();
-+	if (t->pd_point) {
-+		setopt(lfd, SCTP_PARTIAL_DELIVERY_POINT, &t->pd_point,
-+		       sizeof(t->pd_point), "SCTP_PARTIAL_DELIVERY_POINT");
-+		subscribe(lfd, SCTP_PARTIAL_DELIVERY_EVENT);
-+	}
-+	if (bind(lfd, (struct sockaddr *)&sa, sizeof(sa)) || listen(lfd, 1))
-+		die("bind/listen");
-+
-+	cfd = client_socket(argv[1]);
-+	set_assoc_opt(cfd, SCTP_MAXSEG, MAXSEG, "SCTP_MAXSEG");
-+	/* Round robin, so that the small message is sent between fragments
-+	 * of the big one.
-+	 */
-+	set_assoc_opt(cfd, SCTP_STREAM_SCHEDULER, SCTP_SS_RR,
-+		      "SCTP_STREAM_SCHEDULER");
-+	if (connect(cfd, (struct sockaddr *)&sa, sizeof(sa)))
-+		die("connect");
-+	sfd = accept(lfd, NULL, NULL);
-+	if (sfd < 0)
-+		die("accept");
-+
-+	big = malloc(BIG_LEN);
-+	small = malloc(t->small_len + 1);
-+	s.buf[0] = malloc(BUF_LEN);
-+	s.buf[1] = malloc(BUF_LEN);
-+	if (!big || !small || !s.buf[0] || !s.buf[1])
-+		die("malloc");
-+	for (i = 0; i < BIG_LEN; i++)
-+		big[i] = pattern(i);
-+	memset(small, 's', t->small_len);
-+
-+	send_msg(cfd, 0, t->big_uo, big, BIG_LEN, false);
-+	if (t->small_len)
-+		send_msg(cfd, 1, t->small_uo, small, t->small_len, true);
-+
-+	if (t->reset) {
-+		ok = server_recv(sfd, &s, got_big);
-+		if (ok && setsockopt(sfd, SOL_SCTP, SCTP_RESET_ASSOC, &id,
-+				     sizeof(id)))
-+			die("SCTP_RESET_ASSOC");
-+		/* Only send the marker once the reset is done. */
-+		if (ok && !wait_event(cfd, SCTP_ASSOC_RESET_EVENT)) {
-+			printf("client: no association reset event\n");
-+			return KSFT_FAIL;
-+		}
-+	}
-+	send_msg(cfd, 0, false, MARKER, sizeof(MARKER), false);
-+
-+	if (t->small_len && !wait_abandoned(cfd)) {
-+		printf("client: small message was not abandoned\n");
-+		return KSFT_FAIL;
-+	}
-+	if (t->uo_marker)
-+		send_msg(cfd, 1, true, UO_MARKER, sizeof(UO_MARKER), false);
-+
-+	ok = server_recv(sfd, &s, got_all);
-+	rxq = assoc_rx_queue();
-+
-+	if (!s.big)
-+		printf("big message not delivered intact\n");
-+	if (!s.marker)
-+		printf("marker not delivered\n");
-+	if (t->uo_marker && !s.uo_marker)
-+		printf("unordered marker not delivered as its own message\n");
-+	if (s.pd_aborts[0] || (s.pd_aborts[1] && !t->expect_pd_abort)) {
-+		printf("unexpected partial delivery abort\n");
-+		ok = false;
-+	}
-+	if (t->expect_pd_abort && !s.pd_aborts[1]) {
-+		printf("partial delivery on stream 1 not aborted\n");
-+		ok = false;
-+	}
-+	if (t->reset && !s.reset_event) {
-+		printf("server: no association reset event\n");
-+		ok = false;
-+	}
-+	if (rxq < 0) {
-+		printf("association is gone\n");
-+		ok = false;
-+	} else if (rxq > 0) {
-+		printf("%ld bytes left queued on the association\n", rxq);
-+		ok = false;
-+	}
-+
-+	return ok && !s.errors ? KSFT_PASS : KSFT_FAIL;
-+}
-diff --git a/tools/testing/selftests/net/sctp_ifwdtsn.sh b/tools/testing/selftests/net/sctp_ifwdtsn.sh
-new file mode 100755
-index 000000000000..2bf8d28cee52
---- /dev/null
-+++ b/tools/testing/selftests/net/sctp_ifwdtsn.sh
-@@ -0,0 +1,141 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# SCTP I-FORWARD-TSN handling with user message interleaving (RFC 8260).
-+#
-+# TOPO: CLI_NS (veth, 10.0.0.2) <---> (veth, 10.0.0.1) SRV_NS
-+#
-+# A large reliable message on stream 0 is sent interleaved with a PR-SCTP
-+# message on stream 1 that an nft rule in SRV_NS drops, so the sender
-+# abandons it and sends an I-FORWARD-TSN. The netem delay keeps the sender
-+# window-limited, so the two messages' fragments interleave. Most of the
-+# checks are done by sctp_ifwdtsn, see there.
-+
-+source lib.sh
-+
-+ALL_TESTS="
-+	test_ordered
-+	test_unordered
-+	test_leading_edge
-+	test_uo_pd
-+	test_reset
-+"
-+
-+# nft matches on the first chunk of a packet: chunk type at byte 12 of the
-+# SCTP header, flags at byte 13, I-DATA stream id at byte 20 and FSN at
-+# byte 28. SCTP_MAXSEG limits fragments to 1000 bytes and GSO is limited
-+# to the MTU, so no two full-size fragments share a packet.
-+NFT_SCTP="meta l4proto sctp"
-+NFT_CHUNK_IDATA="@th,96,8 64"
-+NFT_CHUNK_IFWDTSN="@th,96,8 194"
-+NFT_FLAG_B="@th,104,8 & 0x02 == 0x02"
-+NFT_SID1="@th,160,16 1"
-+NFT_FSN5="@th,224,32 5"
-+
-+setup()
-+{
-+	setup_ns CLI_NS SRV_NS || return
-+	defer cleanup_all_ns
-+
-+	ip -n "$SRV_NS" link add veth0 type veth peer name veth0 \
-+		netns "$CLI_NS" || return
-+	ip -n "$SRV_NS" addr add 10.0.0.1/24 dev veth0 || return
-+	ip -n "$CLI_NS" addr add 10.0.0.2/24 dev veth0 || return
-+	for ns in "$SRV_NS" "$CLI_NS"; do
-+		ip -n "$ns" link set veth0 gso_max_size 1500 up || return
-+		tc -n "$ns" qdisc add dev veth0 root netem delay 50ms || return
-+		ip netns exec "$ns" sysctl -wq net.sctp.intl_enable=1 \
-+			net.sctp.prsctp_enable=1 net.sctp.reconf_enable=1 ||
-+			return
-+	done
-+}
-+
-+# $1: nft rules for the server's input hook (may be empty)
-+nft_rules()
-+{
-+	ip netns exec "$SRV_NS" nft -f - <<-EOF
-+		table ip sctp_test {
-+			set blk {
-+				type ipv4_addr
-+				flags dynamic
-+			}
-+			chain input {
-+				type filter hook input priority 0;
-+				$1
-+			}
-+		}
-+	EOF
-+}
-+
-+# $1: test name for sctp_ifwdtsn, $2: description, $3: nft rules (optional)
-+run_helper()
-+{
-+	if ! setup || { [ -n "$3" ] && ! nft_rules "$3"; }; then
-+		log_test_skip "$2"
-+		return
-+	fi
-+	ip netns exec "$SRV_NS" ./sctp_ifwdtsn "$CLI_NS" "$1"
-+	RET=$?
-+	[ "$RET" -eq "$ksft_skip" ] || [ "$RET" -eq 0 ] || RET=$ksft_fail
-+	log_test "$2"
-+}
-+
-+# Fragments of the abandoned message must not take fragments of a live
-+# message below the New Cumulative TSN with them, and the abandoned
-+# message's own received fragments must be freed.
-+test_ordered()
-+{
-+	run_helper ordered \
-+		"abandoned message does not purge ordered message" \
-+		"$NFT_SCTP $NFT_CHUNK_IDATA $NFT_SID1 $NFT_FLAG_B drop"
-+}
-+
-+test_unordered()
-+{
-+	run_helper unordered \
-+		"abandoned message does not purge unordered message" \
-+		"$NFT_SCTP $NFT_CHUNK_IDATA $NFT_SID1 $NFT_FLAG_B drop"
-+}
-+
-+# Drop the abandoned message and every packet after it until one starting
-+# with the I-FORWARD-TSN arrives, so that its New Cumulative TSN is the
-+# highest TSN received. This must not abort the partial delivery of the
-+# message on stream 0.
-+test_leading_edge()
-+{
-+	run_helper leading_edge \
-+		"I-FORWARD-TSN at the highest TSN is not a reset" "
-+		$NFT_SCTP $NFT_CHUNK_IFWDTSN delete @blk { ip saddr }
-+		$NFT_SCTP $NFT_CHUNK_IDATA $NFT_SID1 add @blk { ip saddr } drop
-+		$NFT_SCTP ip saddr @blk drop"
-+}
-+
-+# Abandon an unordered message during its partial delivery: the partial
-+# delivery must be aborted, and the next unordered message on the stream
-+# must not be appended to it.
-+test_uo_pd()
-+{
-+	run_helper uo_pd "abandoned unordered partial delivery is aborted" \
-+		"$NFT_SCTP $NFT_CHUNK_IDATA $NFT_SID1 $NFT_FSN5 drop"
-+}
-+
-+# An SSN/TSN association reset with interleaving completes and leaves a
-+# working association.
-+test_reset()
-+{
-+	run_helper reset "association reset with interleaving"
-+}
-+
-+require_command nft
-+require_command tc
-+modprobe -q sctp
-+if [ ! -d /proc/net/sctp ]; then
-+	echo "SKIP: SCTP not available"
-+	exit "$ksft_skip"
-+fi
-+
-+trap defer_scopes_cleanup EXIT
-+
-+tests_run
-+
-+exit "$EXIT_STATUS"
+diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+index e4354d58f20b..d5e71a2027f5 100644
+--- a/net/sctp/stream.c
++++ b/net/sctp/stream.c
+@@ -749,6 +749,7 @@ struct sctp_chunk *sctp_process_strreset_tsnreq(
+ 	 */
+ 	max_tsn_seen = sctp_tsnmap_get_max_tsn_seen(&asoc->peer.tsn_map);
+ 	asoc->stream.si->report_ftsn(&asoc->ulpq, max_tsn_seen);
++	asoc->stream.si->abort_pd(&asoc->ulpq, GFP_ATOMIC);
+ 
+ 	/* G1: Compute an appropriate value for the Receiver's Next TSN -- the
+ 	 *     TSN that the peer should use to send the next DATA chunk.  The
+@@ -1028,6 +1029,7 @@ struct sctp_chunk *sctp_process_strreset_resp(
+ 			LIST_HEAD(temp);
+ 
+ 			asoc->stream.si->report_ftsn(&asoc->ulpq, mtsn);
++			asoc->stream.si->abort_pd(&asoc->ulpq, GFP_ATOMIC);
+ 
+ 			sctp_tsnmap_init(&asoc->peer.tsn_map,
+ 					 SCTP_TSN_MAP_INITIAL,
+diff --git a/net/sctp/stream_interleave.c b/net/sctp/stream_interleave.c
+index 77fe0db5ff77..f49b534ff78f 100644
+--- a/net/sctp/stream_interleave.c
++++ b/net/sctp/stream_interleave.c
+@@ -1225,9 +1225,6 @@ static void sctp_report_iftsn(struct sctp_ulpq *ulpq, __u32 ftsn)
+ {
+ 	/* Move the Cumulattive TSN Ack ahead. */
+ 	sctp_tsnmap_skip(&ulpq->asoc->peer.tsn_map, ftsn);
+-	/* abort only when it's for all data */
+-	if (ftsn == sctp_tsnmap_get_max_tsn_seen(&ulpq->asoc->peer.tsn_map))
+-		sctp_intl_abort_pd(ulpq, GFP_ATOMIC);
+ }
+ 
+ static void sctp_handle_fwdtsn(struct sctp_ulpq *ulpq, struct sctp_chunk *chunk)
 -- 
 2.34.1
 
