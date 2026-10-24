@@ -1,56 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792882835;
-	b=n7ZzW3VJWYgtnTJcSRcWHamaNWq3DB0h0qhCr6E6WtaTmlYHYgnGiCYXFhfX4fpdfpcr
-	 ziCWIfsK7FXm3L7/8cu0PEF7GaHUkDAxMtWKtM74+qeJ2rDI6tsEFeDdbwHKk8V2k8sIY
-	 ytcBrOrHthAI7A7qr/CggqU9w+c3loM+FlczJbhzAXyMKYkG5iHBr89I58rhEuQbMRl0P
-	 Ds/afHSA03jrpz4hyWj74EYdYWI4ECt/nhGNnqrDjyj63KAYMTmrM7dKgf0eD9tUpuh1F
-	 8HgwJCTeyaEh6oEFcWNAOfIBH0RNm4Q67Vc9gwmi965KqswD3pBBZ9HDEMeBETbbb1g==
+	t=1792885702;
+	b=PrfpiLCuLB2YhDgbJKbNzGosiRlhmfNm9ECvSZT4wJEMkF67afxBtE0mGNllNlWo9Tp+
+	 tRm8bBriDu+Mn0wv5K56eKS1VyRXk1Ut71o2hk2V4vkl6RRXkUZRpTB+zzLOp6aBs6DSt
+	 L26XakkVBeIg770iU5RckFH47s2ilSHCskpF/VDAz5IRLCgLDyuRk9PSbOkYDHAdMODxT
+	 Oiow2rEwnv3Toaisn0jjJ/ftuyFzP7mfIOBN8o/IbxCBIGjIlWUlIUn6yAmpEfESE+ng1
+	 tnILLRMk6wyz/dZ4cvxAC2atJfs7J+InXWaPsTf8h2jSxhTstWvYtEcZmDFb+ImN+WA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792882835;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=MIBaBlgFfKNp4SB/CQNEvITaAygX5mK6xOYuzCcBJ2U=;
-	b=XmOi8ls3WO06eROnnDf96RbEX1h+pfPORTvvsUUapxB+CbC6K9WJD6h5jHIS1SFI++rp
-	 E7Dm1Le6lPSdJkNLX7rNuZ4NYi2MswxA5Of6vnLG4AXECq6ixV3lmxM07/DruWZ7IOPar
-	 I5eQghnif+enh+iQE7eKRk90Chik19a+4Oor1cqMHEqqrLBzQRwCOahbeJvzj1xwMciyw
-	 DqVodfjRhKaspn1G9aDULL4JDFC4IcwTzn82GanYG9lKZJLirqMBTITc7W996NhL0CyFV
-	 pZQSAYo96FZNi59sw20KjDAyAc5CqCNLoCS7jrN1kml+r0s2X+rcQPo7H4tVsFPv7Tw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792885702;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=N/S5p3ClsDWesXk5Z4KBRIEVgb22vgbzOMvRltxMdN4=;
+	b=KJOvRjHvK6S7s/VD8HxnmngYndO51Nwmom0l7FMVdsrQxUiVClxTIWK0GjlDHu7P2wNB
+	 /yYPqY2LIYoh5wSAxLkopkfbjUfZvf8TP4WN92XQnY54SieHKQ00MtKFkBh/bkN6STv3B
+	 ZIWtAWje8F7ZpOZDQzH4zKxEjLfe3Br6zgfCmem/AI0m7X9KSyLK+INsG2UQs/yDUf+7u
+	 K7wmmJeLCmb8UTVAgYAcz+QETuyyOCNcyVWV+AVK2oKcLHd5kbL+6vfGeEjt4QGTa38t2
+	 VrVWlMG1fsG9rWKJ9uJztGTbtPyfOv/p4NKGvl8rSJeTwTumHKU2TTNNNHUfeBzSrKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=zytor.com;
-	spf=pass smtp.mailfrom=zytor.com;
-	dkim=pass header.d=zytor.com header.i=@zytor.com header.a=rsa-sha256 header.s=2026092801 header.b=0CBtduUA;
-	arc=none smtp.remote-ip=198.137.202.136
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QXfCREPT;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB8E606A31B;
-	Sat, 24 Oct 2026 23:00:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8FB8E606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC922606A31A;
+	Sat, 24 Oct 2026 23:48:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=zytor.com header.i=@zytor.com header.a=rsa-sha256 header.s=2026092801 header.b=0CBtduUA
-Received: from [IPV6:2601:646:8001:6901:13a7:2ebc:3952:fbbd] ([IPv6:2601:646:8001:6901:13a7:2ebc:3952:fbbd])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 69OMxhmV2132992
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Sat, 24 Oct 2026 15:59:43 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 69OMxhmV2132992
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026092801; t=1792882785;
-	bh=MIBaBlgFfKNp4SB/CQNEvITaAygX5mK6xOYuzCcBJ2U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=0CBtduUAoLw1x5TA22tszcwJQFG+8XVc0R4VuieSyeZD062+rFAtm96hSIDORFy6R
-	 wUDecMMQPuDndXw/oMco55pKM52Levm7ukf/T6kiZADrs+qtL/OX1Wi4B7IFjQ9YUS
-	 n6132lPn76xoW8mPHJW0H/gqlQz43uzNr4VKt98Jzvs9xA6N7UzvGsdOiFQuEkvS2n
-	 g0Q6MTJez4li9x4/PMU4XCn3U0gbdUboV0XOtYhrbFguLGvsTA9wsUkfQnNWeNZRI2
-	 jfow8BuNVl06TW5yAaf821zEbU9PrkD9HWJn4YReZk56nrN8/090CJllfTAw1wwXRZ
-	 a/Ylk9ohAl//Q==
-Message-ID: <9467c7b6-d797-4462-bee1-1406bb8469cd@zytor.com>
-Date: Sat, 24 Oct 2026 15:59:37 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QXfCREPT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB3A1F01825;
+	Sat, 24 Oct 2026 23:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792885701;
+	bh=N/S5p3ClsDWesXk5Z4KBRIEVgb22vgbzOMvRltxMdN4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=QXfCREPTpDrP3jw+ylhf/HN8fkeyTzPEfNHOwYl/owbbhFHyQDIN8eT+LyNZSs3m6
+	 aJJUE2/hkzgf2tVLLulLLDaH0dHJCvXnv72j6cljvW51IHeKj10ZTv5BocMKscNv0z
+	 uO7mLONOa6BQH7ig6J3YpBpbLAQE/yOF55MRFEPpOCRqi2xcz8wzmKhZ/cPxITJ9Bt
+	 oVvdREkIwqJmiekxSQ61Jcrmy6NuTQ316N28FQKdmURz8z0cCz15nZRrPtYk0O9Iwn
+	 gqmQfwxOMwG+kC44HbL/01b6xpzANJ2Xf3lyzbFTANWtR6w9oKkKohg6ohUICv/JWd
+	 4xPrIwktozT1g==
+Subject: Re: [PATCH net v3 1/4] net/mlx5e: psp: tso: replace only the length
+ in checksum seed
+From: netdev-bot+sashiko@kernel.org
+To: toddfreed@meta.com
+Cc: netdev@vger.kernel.org, borisp@nvidia.com, saeedm@nvidia.com,
+ leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ daniel.zahka@gmail.com, willemdebruijn.kernel@gmail.com, horms@kernel.org,
+ shuah@kernel.org, cratiu@nvidia.com, raeds@nvidia.com, rrameshbabu@nvidia.com,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bjorn@kernel.org, dtatulea@nvidia.com
+Date: Sat, 24 Oct 2026 23:48:19 +0000
+Message-ID: <179288569938.3134.7210568419074045775@kernel.org>
+In-Reply-To: <20261023234640.1459291-2-toddfreed@meta.com>
+References: <20261023234640.1459291-2-toddfreed@meta.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -60,61 +67,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 00/28] KVM: Enable FRED support with KVM VMX
-To: Xin Li <xin@zytor.com>, Sohil Mehta <sohil.mehta@intel.com>
-Cc: kvm@vger.kernel.org, x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski
- <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Shivansh Dhiman <shivansh.dhiman@amd.com>,
-        David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
-        Binbin Wu <binbin.wu@linux.intel.com>, Zhao Liu <zhao1.liu@intel.com>,
-        Yosry Ahmed <yosry@kernel.org>, David Matlack <dmatlack@google.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260911213659.2025974-1-sohil.mehta@intel.com>
- <E7D55C5F-91DF-45AC-BCC8-BD2759CEE0C4@zytor.com>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <E7D55C5F-91DF-45AC-BCC8-BD2759CEE0C4@zytor.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 2026-09-14 23:03, Xin Li wrote:
-> 
->> On Sep 11, 2026, at 2:36 PM, Sohil Mehta <sohil.mehta@intel.com> wrote:
->>
->> I mainly rebased the patches to the latest kvm-x86/next branch and fixed
->> a handful of issues reported during internal testing and basic AI
->> reviews. I've avoided making any major code changes or commit message
->> updates as this is the first iteration that I am posting. 
-> 
-> Thanks a lot for taking care of the patch series.
-> 
->>
->> Going forward, based on the feedback, I'll rework the patches as needed.
->> I've listed a few opens below that need additional discussion or
->> clarification. I'm relatively new to the KVM subsystem, so please feel
->> free to provide suggestions on the series structure, code organization
->> as well as commit log clarity to smoothen the review process.
-> 
-> I’ve been thinking about an optimization: because FRED drops most of the old    
-> syscall MSRs (IA32_LSTAR/IA32_CSTAR/IA32_SFMASK), we should be able to omit     
-> them from KVM's uret MSR tracking entirely as if host enables FRED (no matter   
-> whether a guest uses FRED).
-> 
-Yes, although they will need to be handled properly between VCPU switches, of
-course.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-	-hpa
+Low priority / nit picks for your consideration:
 
+- [Low] Commit message dependency.
+
+--
+
+net/mlx5e: psp: tso: replace only the length in checksum seed
+
+This patch changes mlx5e_psp_handle_tx_skb() so that, for PSP TSO packets,
+it adjusts only the length part of the TCP checksum seed instead of
+recomputing the seed from the l3 header addresses. The goal is to avoid
+bad checksums when the l3 header daddr is an intermediate hop.
+
+> the length difference is expected by the device. however, the
+> difference in addresses is incorrect in cases where the l3 header daddr
+> is an intermediate hop (e.g. IPV6_RTHDR). this causes every segment of
+> the tso packet to go out with a bad tcp checksum, in this case.
+
+[Severity: Low]
+The code change in mlx5e_psp_handle_tx_skb() looks correct. However, is
+IPV6_RTHDR the right example for this patch on its own?
+
+At this point in the series, psp_dev_encapsulate() still writes the
+nexthdr of the base IPv6 header unconditionally:
+
+net/psp/psp_main.c:psp_dev_encapsulate() {
+    ...
+	} else {
+		ipv6_hdr(skb)->nexthdr = IPPROTO_UDP;
+		be16_add_cpu(&ipv6_hdr(skb)->payload_len, PSP_ENCAP_HLEN);
+	}
+    ...
+}
+
+With a routing header present, this overwrites NEXTHDR_ROUTING in the base
+header, while the UDP+PSP headers go in after the routing header. That
+means the packet is already malformed before the TCP checksum seed
+matters. So this patch alone doesn't appear to fix the IPv6 RTHDR case.
+
+The IPv6 case seems to be fixed later in the series by "psp: support ipv6
+extension headers in psp_dev_encapsulate()", which has its own Fixes: tag.
+The only mention of that dependency here is the testing note:
+
+> tested on connectx-7 with the rest of this series applied, with a psp
+> tcp socket whose segment routing header's first hop isn't the final
+> destination, and the peer checking tcp checksums in software.
+
+The case this patch fixes by itself looks like IPv4 source routing
+(IP_OPTIONS with SRR/LSRR). There, ip_hdr(skb)->daddr is the first hop,
+but tcp_v4_send_check() seeded the checksum with inet->inet_daddr.
+
+Could the commit message mention the IPv4 SRR/LSRR case? Could it also
+say that the IPv6 RTHDR case depends on the psp_dev_encapsulate() patch?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261023234640.1459291-1-toddfreed%40meta.com
