@@ -1,61 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792958056;
-	b=Ts1U137HiHcBmTvCUyxJk2lxGKsUuL+Z9r1XgvX3/swrJxiB+Zcz+w20qAdmCEJpgVyx
-	 j4HI+O8c7N8n+WBTkpE4gchLiDcOQg9MlFSrFbAXNOoN9zmIYelZYZqz3pfEUQ9eItK1q
-	 jRtpTaJJrczOw8in59L5o4oW1+S7BPqGIrhrMO+IqWFU/Kmx73EBEJBYoV9XZD/DVAH9z
-	 8piWacoBIy2dMIFhPdX2PbyXLZ6o9qpfA3CmHb7JDFem8voveqSLAFSt0a3eg+xX0eTuQ
-	 7sRySulcMKlaexg7ytj+Ns+ay1+EXeKdTfJJSQ3ZbLYWl3+4ONGAj+C8cvPQFQU5tYg==
+	t=1792960234;
+	b=OpSwmcbYgTS6Bm0rusgOdQfdgdxKt0GstQxZV4F+0dXwqtRtnu6kPG9qfqP5O09bkkEI
+	 dgRUjWLOKHmzmwSxBxpymrG0EV+RYTUuw1nMB7smAz02TlNgG3Ul2pLOEI1dMqfnGMVBQ
+	 5lxK9Owjyn7PMYDyykupuOoJxOIIDjCBRpbKzdrgOuWk5oI8uuTpqjRXZtbJDU/HJP/A6
+	 p+kdOdfYvSEAKFd0fbNR8y14z4okjLZC+ygvZubnJFuwIAl76O39EtnuAoFpxPceHSYFv
+	 Al1vVLqdnj4buxQqRk8LpKnhxe876pD5zBqQ9b1/29ogSCv2hi5FcUkrDVOFeaAMhlA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792958056;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=A2fbBd3lncypSd1BgVJOsxD8tOiD3nHL4ZH2qWAz2rc=;
-	b=tsqj/HgXZhhUp2JVveFuFSwkf29NmYLG4Hks+tn2iT9ME4Z0NgH48xRuLfIs57S8t/FQ
-	 lW1r+OCwL/aLtuETnLbFnQUn6BHWAasnYK1FyDD/6+eaDqzgVqMNrHxiL8hZibfUOau20
-	 doUDWbQoLh9l99R1/WDTqun5ZPISN9c3f9rn+6q7+DMhE53hJyYGldi631/+bB8phyJu4
-	 YBGXiqSkElUxQzysS502FufsRyEYSornlGnS1Dl+H1JNiuHwn8F0r+vqtXwCmScwe0vzf
-	 YMirhhlooMASaR/n2SRN/4v2kbRxIYe7VZGxluL1oPuWmO04Ukab6u796M4KaoueqGA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792960234;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=xhfm/FnI3dgYatG4alzCY4CMRbBwFdv1fIdjJsOp9rQ=;
+	b=qYqznAoIiClggls+nzOeTTyXp7TOWfL0Ds6MdOcFSt2umaWpuv5qFM/5xK8lScB8X2qd
+	 /UOtsJ+FSypRjbXsf4e7Nd8r0MRTkmTfveNYuSIR0+mzsJBYN2n9olcfR9/xWtwNhpHZA
+	 2Lcr5uliDdIz+s5Sv3PncoEdCLaYlcPb/0qNuoUGNlo9Mgwddb5R0QU1RNzhYzohG3CHN
+	 UDX4o0A70LmJ82W2vq6c5tc/voDEB/+mQctO3mBq1gSJWO0CUhR8GddLT8c2i6YYeGnWu
+	 rnTIcchUGC/WZScdN4eIWMGBQpQzaryCfni/5aH/Mf1R+IPKbf/U4GG7DinKFCHqsoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dqREGDgl;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="hDS/99aC";
+	arc=none smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B23606A31A;
-	Sun, 25 Oct 2026 19:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA64C606A31E
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 20:30:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA64C606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dqREGDgl
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC6B1F01825;
-	Sun, 25 Oct 2026 19:54:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792958055;
-	bh=A2fbBd3lncypSd1BgVJOsxD8tOiD3nHL4ZH2qWAz2rc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=dqREGDglrzhvFyVnFV9r6bTJ2N87po4Fliq8CLL4x8S+ci5LJMl9DfOVjEKfcEuQX
-	 6tcglt18vOavCpjWMmiH74aK5x0CJ75LYDF6TBQf1lb1WzmNyJw7hIAHLTCpbwwbd8
-	 7zzWe62bcWqDecwGmTzV9GgoCf/KOcr9CCxFKDODo1C22sPfCkDn26I63gB4+IT4Fs
-	 Ia363p7XP7qe3U4MQT6fuzG1NM8BptophIK0NTBDFlaCfKzhMHcT4W+oLd34AVWHY4
-	 UChJxdaVH+2NNVe7yZJnVMpN6Wb/k97kKw68SaJaIlRxUKVUTbql+jjeSKKwJpH8Rp
-	 mYFAiK11KBLIA==
-Subject: Re: [PATCH v3 2/2] selftests: net: packetdrill: add test for negative
- sk_forward_alloc in tcp_wmem_schedule()
-From: netdev-bot+sashiko@kernel.org
-To: tavip@google.com
-Cc: edumazet@kernel.org, ncardwell@google.com, kuniyu@google.com,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, willemb@google.com, weiwan@google.com,
- shakeel.butt@linux.dev, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Sun, 25 Oct 2026 19:54:13 +0000
-Message-ID: <179295805393.3134.356638042840285869@kernel.org>
-In-Reply-To: <20261021185447.2914274-3-tavip@google.com>
-References: <20261021185447.2914274-3-tavip@google.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hDS/99aC
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49d05d51553so16082105e9.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 13:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792960232; x=1793565032; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xhfm/FnI3dgYatG4alzCY4CMRbBwFdv1fIdjJsOp9rQ=;
+        b=hDS/99aCeF7CJxsoTTpZ0+zronkwQywQHbjg0mGFpMqPy+P33plzbb03DSSh3yWcFE
+         XdokAJchxaBwkz1TGf7v1Gs0AnodKhKfLIPwCMU/jCH/+DUiIpraVT7SZv3j1rnWdIZ+
+         CWKSD7mo/0UxzGlOMn8LKZtslmb/kPKp1WGmrz8q2kjdCkJgANiCoAjh1iK5k9MJXUdB
+         ReeG6l/aUIsPWkG4MRK1QRz2l4gspNxWA2cEf5A7Mn/2ViokXWssTASVkm6mYDVm4giP
+         uVDtfai7MqPXeUsoS/ww2h35N8E8p/6jY49tQGi6mPliQE/8W1aCSdPnV4V29mt8S4pP
+         IjPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792960232; x=1793565032;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xhfm/FnI3dgYatG4alzCY4CMRbBwFdv1fIdjJsOp9rQ=;
+        b=WGpaDMvC21FS6ky2YwkHMJAOv7tG/ZOhkOIROeUeWam/HHUIpj4CLb+tY7H5LNs69C
+         Ajnhc1dEgutga82+ndAoGn7mgMTQAPjFu/vNzooKUv+AaTeAJd/wiK/ekXnUTUIe1f1R
+         WHnn2/lGu80x3OeJ/wygd7cCA0oHF4T0H5Nfbh5xlCDNQpc8xckFgnc9kFTtIZztz37m
+         nWQ7I+iV5XhtLAKawBXzQZy3jtzA5FmS4vFpWg/HMMlnL6XPbmcb98lQXyo1Ufs21o2q
+         g1wBRk9BaH7HXVmf/YVIcA0Q8lgFgMUwa5c8r8uP2ZhxYlKxkcVBkLeKoK/qrhmc5qXQ
+         nHeQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwxdJm2SH3kc8BhB2uVu6+w/qVYXllomx1+kt557teu0w4+TK7vIkD+JzCzdE+7FSF0lyKTr57BzafULIqszcI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI6E23oaWvUsRypsz9qY9GMvuHOTwBZZiPji+0MXwcZgg1KIpG/
+	RicmCnlb8O8hhYXFSVm53aBxAvxRT/RyD3uEhJLad+8s/3E4MPuYfY28
+X-Gm-Gg: AYBFou2VuUFUIzVOSr2Q8dRSfqB+eYvZq2sLUxRsyrLWA9vZP85jtJhKcpPwnnLDfmD
+	O4PYzvL3EoD16bSbiFr/uNHhk8ZphT5deOv3M9xCuVdg+ZwCADorQnPkgr2pSt7u4ElvPBI+3eF
+	6XVHGdMNJGpJNFPPLVOu5/Xu/1hR3FqqIhxsDpZNXNHCqCj5DpoP4snOtawsvsdlJIuJL4jfLRU
+	REKmGg9BKdCiY6b94ATby2/kBjCqQ43zyLxYgYOx547ydfqxB2X7Ku8quRZ7HB8AhEfED4NtbAe
+	cHNkXJc4YrpjkJx3+GIndwHFCUEpBdPdZAZtIb/IvikdA8gnT9he3nKuekCZFNqiXQSwsc7X5oP
+	uh/E/MHF7F4r78VTA3dk7Qh8bQKjf8O7M3Xt5ZUdd0gBvZgcB0xebcQJn8mTpDatF40JBsSZP2a
+	5XnqqcO4XwSkvlB6KIazb3bZTT9YkAdsgixpyrndQlxwGvieKJVpUq0rS/N3D+pr2r2nG5zW1c8
+	MYB6DR9d5JdN5OzGC+6mw/4GYTgjZ3BjL3Fw3wE8/Yre8JWQfJnMZkOuPTnA321T87ZMSB+2HNa
+	Md6J38hZW8s5DJbVnFUPQfvgwEtymEFviWNXcKrTBq/vAwL2/sC81DQj+zzGo3lGBW4YzMQGqTw
+	lUzqmgexYPTvsk1UvsdN1VX0P/A667hA2OAh/lrRcsupRZ/MBDaule5K7o9w2pFfWsBc78Rcfno
+	g5
+X-Received: by 2002:a05:600c:4583:b0:4a1:825a:56fd with SMTP id 5b1f17b1804b1-4a35acc2773mr98426965e9.32.1792960232061;
+        Sun, 25 Oct 2026 13:30:32 -0700 (PDT)
+Received: from unknown748F3CBA5068 (dynamic-2a02-3100-a9cc-4401-09c3-9199-30c4-c6a3.310.pool.telefonica.de. [2a02:3100:a9cc:4401:9c3:9199:30c4:c6a3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ebc3cfasm12003158f8f.17.2026.10.25.13.30.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 13:30:31 -0700 (PDT)
+Date: Sun, 25 Oct 2026 21:30:29 +0100
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Oliver Upton <oupton@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>, 
+	Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Eric Auger <eric.auger@redhat.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/3] KVM: arm64: Preserve level IRQ re-pending
+Message-ID: <at5k-_Ign30fPuHE@gmail.com>
+References: <20261022064628.4206-1-kmehltretter@gmail.com>
+ <atxWfRsNNK8vdeSr@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,216 +105,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <atxWfRsNNK8vdeSr@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issue(s) to consider.
+On Fri, Oct 23, 2026 at 11:55:57PM +0100, Oliver Upton wrote:
+> > The exact alternative is to stop and synchronize the target vCPU
+> > before applying such a write, as the active-state accessors do. Is the
+> > conservative replay acceptable here, or should ISPENDR pay that
+> > synchronization cost?
+> 
+> Yes, just kick the target vCPU out and sync the LRs back into the VGIC
+> state. That's consistent with the approach we're taking everywhere else
+> where this sort of issue arises.
+> 
+> If we're lucky the vCPU is just poking at its own redistributor and the
+> synchronization is free.
 
-Critical: 0 · High: 0 · Medium: 3 · Low: 1
+That makes sense. In my current v2, vgic_mmio_write_spending() uses
+vgic_access_active_prepare() and vgic_access_active_finish() under
+config_lock, and drops the extra struct vgic_irq flag.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> 
+> > The issue was reproduced with Zephyr, NuttX and RT-Thread guests. On a
+> > Raspberry Pi 400 host with a GIC-400, each GICv2 guest handled the SPI
+> > once before the fix and twice afterwards.
+> 
+> Have you configured these guests in such a way to reproduce the issue?
+> What exactly are they doing that is susceptible to this issue?
+> 
 
-- [Medium] When cgroup v2 or a usable memory controller is missing,
-  tcp_wmem_schedule_negative_fwd_alloc.pkt reports FAIL instead of SKIP.
-- [Medium] Step 4 only gets EAGAIN if the per-CPU memcg_stock holds no
-  leftover charge for pkt_${PPID} when write(4, ..., 16384) charges…
-- [Medium] Between the init command (line 23, `echo $PPID >
-  pkt_${PPID}/cgroup.procs`) and the move-back command (lines 38-41),…
-- [Low] Test teardown does not mirror setup.
+Yes, the runs used a small test harness in each guest. Each test
+configures unused SPI 150 as level-sensitive, pends it from thread
+context, and pends it once more from the ISR before deactivation:
 
---
+- Zephyr (qemu_cortex_a53): k_irq_set_pending() -> GICD_ISPENDR.
+- NuttX (qemu-armv8a): up_set_irq_type(IRQ_HIGH_LEVEL) and
+  up_trigger_irq() -> GICD_ISPENDR.
+- RT-Thread (qemu-virt64-aarch64, pic.gicv2_eoimode=1):
+  rt_pic_irq_set_state_raw() -> GICD_ISPENDR.
 
-selftests: net: packetdrill: add test for negative sk_forward_alloc in tcp_wmem_schedule()
+A driver that hits the same pattern is RT-Thread's
+components/drivers/mailbox/mailbox-pic.c, which amp.dtsi configures with
+level-high SPIs and rings via GICD_ISPENDR. 
 
-This adds a packetdrill test that pushes sk->sk_forward_alloc negative
-through tcp_collapse() while sk_wmem_queued is above sysctl_tcp_wmem[0].
-It then checks that a non-blocking write() under memcg pressure fails
-with EAGAIN rather than EFAULT. It also adds CONFIG_CGROUPS and
-CONFIG_MEMCG to the packetdrill config, and a PAGE_SIZE based skip to
-ksft_runner.sh.
+pic_mbox_isr() reads MAILBOX_ISTATE once at entry and clears only those
+bits at exit.
 
-> diff --git a/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
-> new file mode 100644
-> index 0000000000000..f8b7386fe77e2
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
-> @@ -0,0 +1,108 @@
+Sending on another channel while pic_mbox_isr() is active sets the new
+MAILBOX_ISTATE bit and writes GICD_ISPENDR. Without this RFC fix,
+deactivation drops the second pending state on both GICv2 and GICv3 and
+leaves the new channel bit stuck.
 
-[ ... ]
-
-> +`set -e
-> +./defaults.sh
-> +ip link set dev tun0 mtu 65535
-> +sysctl -q net.ipv4.tcp_rmem="4096 131072 6291456"
-> +sysctl -q net.ipv4.tcp_wmem="4096 16384 4194304"
-> +cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-> +[ -n "$cgroot" ]
-> +echo +memory > "${cgroot}/cgroup.subtree_control"
-
-[Severity: Medium]
-What happens with this init command on a system where cgroup2 is not
-mounted, or where the memory controller can't be enabled here? Because of
-set -e, the init command aborts if any of these steps fails:
-
-  - no cgroup2 mount, so [ -n "$cgroot" ] fails
-  - memory is bound to cgroup v1 in a hybrid setup, CONFIG_MEMCG=n, or
-    cgroup_disable=memory, so the cgroup.subtree_control write fails
-  - the first cgroup2 mount is a non-root cgroup that holds tasks, which
-    is common in containers, so enabling +memory fails with EBUSY
-
-packetdrill then exits non-zero, and ksft_runner.sh counts that as a
-failure:
-
-	unshare -n packetdrill ${ip_args[$ip_version]} ${optargs[@]} $script > /dev/null \
-		&& ktap_test_pass $ip_version || $failfunc $ip_version
-
-The result is three failures (ipv4, ipv6, ipv4-mapped-ipv6) instead of a
-skip. The only new prerequisite check in ksft_runner.sh is for PAGE_SIZE.
-
-Could a matching skip be added for a missing cgroup2 memory controller?
-
-> +rmdir "${cgroot}/pkt_${PPID}" 2>/dev/null || true
-> +mkdir "${cgroot}/pkt_${PPID}"
-> +echo $PPID > "${cgroot}/pkt_${PPID}/cgroup.procs"
-> +`
-
-[ ... ]
-
-> +// Move packetdrill back to its original cgroup so subsequent packetdrill allocations are not charged to pkt_${PPID}
-> ++0.000 `cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-> +runner_pid=$(awk '/^PPid:/ {print $2}' /proc/$PPID/status)
-> +orig_cg=$(sed -n 's/^0:://p' /proc/$runner_pid/cgroup)
-> +echo $PPID > "${cgroot}${orig_cg}/cgroup.procs"`
-
-[Severity: Medium]
-Does moving packetdrill back also move the memory charged while it ran in
-pkt_${PPID}?
-
-Between the init command's cgroup.procs write and this move-back, any
-anonymous pages packetdrill touches for the first time (heap growth for
-injected or sniffed packets, or stack) are charged to pkt_${PPID}. Cgroup
-v2 does not move charges when a task migrates, so those pages stay
-charged to pkt_${PPID}.
-
-In step 4 the memory.high write is a blocking echo, so memory_high_write()
-keeps calling:
-
-		reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages - high,
-					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP, NULL);
-
-Socket memory can't be reclaimed, so the memcg never gets under high=0,
-and reclaim continues until it stops making progress. If swap or zswap is
-available, packetdrill's leftover anon pages can be swapped out at this
-point.
-
-memory.max is then set to 0. When packetdrill touches one of those pages
-again, mem_cgroup_swapin_charge_folio() charges the memcg recorded in the
-swap entry, as long as that memcg is still online:
-
-	memcg = mem_cgroup_from_private_id(id);
-	if (!memcg || !css_tryget_online(&memcg->css))
-		memcg = get_mem_cgroup_from_mm(mm);
-
-pkt_${PPID} stays online until the final rmdir. try_charge_memcg() can't
-reclaim the socket memory, and the memcg OOM killer finds no tasks in
-pkt_${PPID}. The fault would return VM_FAULT_OOM and be retried forever.
-
-Can packetdrill livelock here? If the kselftest timeout then kills the
-runner, the packetdrill child could be left spinning. Its cleanup command
-would never run, and pkt_${PPID} would be left behind.
-
-This depends on packetdrill touching new anonymous pages during that
-window, and on swap or zswap being present.
-
-[ ... ]
-
-> +// 4. Drain per-CPU memcg stock via memory.high=0, cap memory.max=0 (O_NONBLOCK
-> +//    avoids synchronous reclaim/OOM), and expect -EAGAIN on a 16 KB non-blocking
-> +//    write. Because copy (16 KB) minus sk_forward_alloc (<= -16.4 KB) exceeds
-> +//    PAGE_ALLOC_COSTLY_ORDER (32 KB), try_charge_memcg() fails without invoking
-> +//    the memcg OOM killer.
-> ++0.010 `cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-> +echo 0 > "${cgroot}/pkt_${PPID}/memory.high"
-> +printf 0 | dd of="${cgroot}/pkt_${PPID}/memory.max" oflag=nonblock status=none`
-> ++0.000 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-> ++0.000 write(4, ..., 16384) = -1 EAGAIN (Resource temporarily unavailable)
-
-[Severity: Medium]
-Can this write() succeed because of leftover per-CPU memcg stock?
-
-The comment relies on memory.high=0 to drain the stock, but
-drain_all_stock() is best-effort. It returns right away if another drain
-is running anywhere on the system:
-
-mm/memcontrol.c:drain_all_stock() {
-    ...
-	/* If someone's already draining, avoid adding running more workers. */
-	if (!mutex_trylock(&percpu_charge_mutex))
-		return;
-    ...
-}
-
-For remote CPUs it only queues the drain work and does not wait for it.
-
-The memory.max write uses oflag=nonblock, so memory_max_write() takes the
-early exit and never drains:
-
-	if (of->file->f_flags & O_NONBLOCK)
-		goto out;
-
-The receive-side charges from step 3 go through try_charge_memcg() with a
-MEMCG_CHARGE_BATCH batch, and refill_stock() leaves the surplus on the
-charging CPU.
-
-When write() charges memory through
-tcp_wmem_schedule()->sk_wmem_schedule()->__sk_mem_raise_allocated()->
-mem_cgroup_sk_charge()->try_charge_memcg(), the stock is consumed before
-memory.max is checked:
-
-retry:
-	if (consume_stock(memcg, nr_pages))
-		return 0;
-
-consume_stock() accepts any nr_pages up to MEMCG_CHARGE_BATCH, and the
-charge here is about 9 pages.
-
-If the stock was not fully drained, the charge would succeed even with
-memory.max=0, and write() would return 16384 instead of -1 EAGAIN. Could
-this make the test flaky when other memcg activity is running on the
-system?
-
-> +
-> ++0.000 close(4) = 0
-> ++0.000 close(3) = 0
-> +
-> +// Untimed cleanup command executed by packetdrill on both pass and early failure.
-> +`cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-> +[ -n "$cgroot" ] || exit 0
-> +runner_pid=$(awk '/^PPid:/ {print $2}' /proc/$PPID/status)
-> +orig_cg=$(sed -n 's/^0:://p' /proc/$runner_pid/cgroup)
-> +echo $PPID > "${cgroot}${orig_cg}/cgroup.procs" 2>/dev/null || true
-> +echo $$ > "${cgroot}${orig_cg}/cgroup.procs" 2>/dev/null || true
-> +rmdir "${cgroot}/pkt_${PPID}"`
-
-[Severity: Low]
-The init command writes +memory to the root cgroup.subtree_control, but
-this cleanup never restores the previous state. Is it intended that this
-system-wide change stays in place after the test, whether it passes or
-fails?
-
-pkt_${PPID} is also removed only by this cleanup command, which never runs
-if packetdrill is killed from outside, for example by the kselftest
-timeout. The rmdir at the start of the init command only removes a
-directory left by the same PID:
-
-	rmdir "${cgroot}/pkt_${PPID}" 2>/dev/null || true
-
-ksft_runner.sh starts a new unshare -n packetdrill for each of the three
-IP versions, and each one gets a new PID. Can stale pkt_* cgroups pile up
-across killed runs?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261021185447.2914274-1-tavip%40google.com
+Thanks,
+Karl
