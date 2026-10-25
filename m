@@ -1,100 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792926438;
-	b=O+pBQBphEdyU7p2w2ICK/uesVd0BykaZ2loEjXnSlWGZjnxESJRRi+QIfwFAZ8Pz+Rlh
-	 lp88BJcd9wo8WW+FDvEpDCiGK9/IAZ3eZ8ArG+afsdaQxz5QST50PyNDJoGBvN1EObinP
-	 oy5vlVRZyGUNI/RpnfLfHGkGprkGT4aeevOIjawz3hqWn++dsWKSLv61yXV+Z3FQ99j/b
-	 iVlFatd0FCJptiN9U671LZoCK4kVzoGqg7zAE/SFDRE6IGd74+yUY5TvbWz6mPKp7dkLX
-	 N1x0A37264eVj/TIno7suXPBwKbrysyM1gu1H++/+A2UPSlUvO8/af+Tef1uEtmvDNA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792926438;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To;
-	bh=HNmWqF1JTLCSQrPqjI1jaX+dUsgvu4DGBpBuWqz6xVM=;
-	b=Ioxbru7PYGD7aKyn++jZo9aJ2EUvjnITzzgAePeGsqBPzbwRINbplGZ9oA9caPFiaZSP
-	 CEwA/9eKf8YBAUTQS+SBE4X9BiNwRTQhWp2E0V0Ftm4ywVjd3jdeXxn4Shw5Pzog1GkA/
-	 eKl4ERxi+tnyX9dE+aDtRhGBm0DVCLRmbEDcfUraZ788KqQvKjAD724SXgvhPFx6rQt4W
-	 L3i8mltXw/aNt5D8qhNHl7miiQWPGQpxV9B+G55bQNbEz287tEZ5A8eVi5wQ88yl/975q
-	 X/6jGhD1TKQmKbAb22gcnGnog/LY9R4S2a6t98KDG8I4YvETDp0tkHl85YKIQ7bz5bQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ODS+EAZs;
-	arc=none smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.19
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792927244;
+	b=vr/mYKCt2mQqfOR+QjOTre/+mONai2fEj4VZLp6I4o6U+kC0hMgtORY5wlZMREAg1BUI
+	 IBQZMb1wZKbbJQ4kkrsjwJ1CucNcWV51vN7c7udqImwExXAwpu8oXA5tQPBEakKs3gD6Q
+	 GMwmypqDKR/eQxlAmWWX0Ddsa85btIJi6oHI116nJ8AhA1B8frTsxkDYLFEosWhrUd+Ik
+	 x4LB/ycoteuRLtD/vUSlBlQlDl8m4cfz28XpParOYX7z5KZvA3I6ZTEi5U6lmVGo632vI
+	 gIVdf6fe05xWmpr1c67h/PwFcWg79qcAS8U66qhMHX5r6IuA6ItPtmwNQmkL5j6/T4g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792927244;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:Content-Type:Content-Disposition:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=rRTmRJR4ayysXzjoNAAdOZ6AWxQWsjJL1/RwmeItpQQ=;
+	b=Zu8JETVkKL6ppwEcCIwvrMrC17YjiHLPxu7jN+ADekgFLOxBCtvbw1Q7qRT70oSUk61U
+	 eGg9vsbInAIDTwUUgomT93qE6GT3T0w7bfbVKdIgqmV4S4RG/2FRzbdGa0GLGDC0vk0I2
+	 VL9a+AWUY3yZwmF9wZpYmMPVHXLdUUCPferQjTeQYQV1ErScuHlsuENJ6KVZG3EhktfoC
+	 y5JFCzPZe7ZyTEDPy5f0KouyleOFMZfHAgenvZo79Hts6mghjefuWDXDqj/z/T7/Ubuet
+	 w6nVWmpQkhg4rspBjkH5XLW6iDYiPlJDYpwxUtDERprYPF6DJ82ULnRyQg4nY1Bh4Sw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=AjA835ss;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.19
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010019.outbound.protection.outlook.com [52.101.193.19])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E38D606A31B
-	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 11:07:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E38D606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100AA606A31A;
+	Sun, 25 Oct 2026 11:20:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 100AA606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ODS+EAZs
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a208d93758so24086395e9.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 04:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792926437; x=1793531237; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HNmWqF1JTLCSQrPqjI1jaX+dUsgvu4DGBpBuWqz6xVM=;
-        b=ODS+EAZsfQsQqYnYDNcBMTL5sH2KJriCY5hM05coRfGpI9gQbLYP6jnTuqcZuWkam9
-         rkHxAwt/KFDkKPF79ZJEdtrgvylh/6UKgEatmQKNDrQIpePLuXEYPmuhKmOoEFMIfSXa
-         EwW9vGXk7rbThpoluUtt1lF4N4iHPMrBk8VE8eojm50tfSnjXsd83vP6F8ljeRTfJmNg
-         jpC1Cs7cCMMNfT4wqf786El5BMOQA2X9R/gAyOib57oQJ6KCVmOzFU956Eo51mJxFxK5
-         IN72E2vX62+X+WRaa4snaXzhtjqf6dE3LTNyfoWYdm5kVc9hnOxfIzBg4p95s9DXsyZq
-         NOBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792926437; x=1793531237;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=HNmWqF1JTLCSQrPqjI1jaX+dUsgvu4DGBpBuWqz6xVM=;
-        b=F1pgvwYNVU35z7pn02i25OF9Ksjcrex7ALd4u/ADWkvDvrKBMi+nqFePDmH8CjJ6JC
-         Tcb/ZaYV/3SpnzoguVvkh4q341j9d67iMJuVDAw49JRx93Z7t9lTdeXbLeb2nrPOaz+b
-         GhO3uVAK75XSS0702tVCtn3ROvTlF97vJhzkq6ka+7HbORPCnUmbQsPyw2Sun2oL1aK+
-         R9YFK014lEUQ5fY/F45cRO3W5+6OcMjetf5CPixLpoMXACryBCmxceycrdig7tcKxnpR
-         gg49UtPKjwFl9WspexuxIg9j9OEqoKzkt79GCg5OCPnPdwhzBdHmJa2q3uXcsrryyNnO
-         wVhQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxHywyLzleS0+p0tBsgan0UsaSjZTGrXSz+c7UJ8TBiSneH9NGm4R1XaJRrAAfcm62wW2PoKU5d5/n09GYctwQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKrDFiJHwaovL5gm0NoqU0zSzKFsViVZuD49K08ViLhyFSn3q1V
-	S/1pw5FgDzmtkXOJ1C2xIPvHVakVm0Ry7kcfTgpsIUOVc6Qs9EV2WiYn
-X-Gm-Gg: AYBFou0oE6MLE9X9m7tf29AF58xqYVFNohohcLj5mVOjzDGXQDVaNqrFaQzNxPTyY3Y
-	LhkDeNPUHw3qpo6ykfYIIZNUuSdm2QMPE5H+aYGNfOvK/05dk7ncNvhCW0LUEfpS9RvaZ2zVi8Z
-	6iPbshAyLF6OpZ3drQ4HN8FZB85nqwiK3ZKpwUKol+UehfK7wEbQdIYMxZE9I+SLQSmKUiGnng3
-	jSWOMdXppV4rQb7efxFC4Z2dJJbvIaK6R1iEF7IXUxCwjvorY7MrH1fYIdg1UUI8hKJjvpLFfF3
-	RoGkUGjGZKZPBCGwzPe9Ehk3NS4d5zVcOmRn8q7GOu7x2szSNnPcp+wj52b1v3ZhuJWPyy1PhS3
-	ETP+a7gadL0kSA8PIlDMvGu9nQzGuJF0+piGXX2uIQqZU7eYfnSQ19tUZmox2l4KcCNN5MiZ/eo
-	B0UMBGNk0zD2Gay4gLCNgbzLL1fwLWAmiwsOzdtspEmjCawTeWGC/um0bx87+ybuBjVM0lQ9rcB
-	1H2lQt3HQQgphHyQ+XRRD6K85bBrE3kjrNocl+ElUGDDE3lRWqEz9IpWEnGxVHvZjkQn8kkZYal
-	yJqREQ==
-X-Received: by 2002:a05:600c:870f:b0:4a1:f7f4:7ced with SMTP id 5b1f17b1804b1-4a35ac9d1cdmr64334395e9.17.1792926436490;
-        Sun, 25 Oct 2026 04:07:16 -0700 (PDT)
-Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a35a029332sm102825965e9.4.2026.10.25.04.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 04:07:16 -0700 (PDT)
-Date: Sun, 25 Oct 2026 12:07:10 +0100
-From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	John Ericson <mail@johnericson.me>,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 0/3] landlock: Add access rights on created files
-Message-ID: <20261025.769b43a39e24@gnoack.org>
-References: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=AjA835ss
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=seFK9ozXsEicq95aGiZOtCR/Degd5Z0ml1FuCS3YOG5fHV2V1teGkDC0XOSKtLYaPqdPXaPmMdeacNph6Xs5R4qyK6nvKZZnxIgpdTtb/ef/P/Op54qam0sdJg0PEqcGaRJVo3hof+hL0OciQNaWzJpxiTTpUtI0ipE1A8Ze41hJYweuJxVPHpExc1P9xIhicyzUhVJFIq+gwI6KXWZvqdwiPATFBims8ba6wPASwcKfNo1SsvTVyvJDRByK6ovCsLKqN6j8KkRbmstjzrWYEgE5RstZ22a1NIZbsM1GD37akU/9vk3DqgMYAtX6RespL4mwEevFid5Hza9e34w+4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rRTmRJR4ayysXzjoNAAdOZ6AWxQWsjJL1/RwmeItpQQ=;
+ b=kFGvP3cjtYzAKF2tZ6qRJTTXb1b/V6UXKLmTTLvC/n415EnynKD9vUFSq7ihtqeinv56phfcIzF4n8tUpLHHM4DU0MDLHsa1J3B9EjZue3Gt6+T0Xsg3YAVmVBmD54Ijhns/Z2yg47JCZw/QMHqmwUeRQeDxZoq4slQNHGoD4fbvIOfxufs+t6MVNsxmlCL55z2Hv4LfeUFZa5KWkeFKsCRnYZgQoZTGPVOXDfFpoeQOXoLaZrCPn/rXUTTs06BvdX42yjn8lcR35NylQl3cC/B8G8tr0OKvuJhO/WuU6BBphQN/J/SIhNktN8SoLTtCWM+a9ZZ0caimbnpWyAAd9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rRTmRJR4ayysXzjoNAAdOZ6AWxQWsjJL1/RwmeItpQQ=;
+ b=AjA835ssyr05YPY2PRJOdwJ762Iv6nTpoGkul5yfCDmrnOwvO+3eO1Mos2Li+xyqNummNkfTXO6jTyCywGqWDZrGKnO9TXzgPSgtXFj+7lcR2DKE7vyVYCaP5z2XcBA3De2rgtxJuuWL4KVm3gjMWbhWiBn2H63jZUv36r7WhGEOMnLLw4FDn/IUu6U7nJ+/Tc6UpZuDn+KW+iVsng1CCtxfMCMmU+4kYrLrcugrUwyG0la4xBDVTDxIummGVwfBYy1lWNJWnIKqltAM7UAXuYPbSwhvjHhXBE3aI0IN0cAHgHqMQWf9hnLP7R99hoAhZTTrt/5xcUXncyYebXfGNw==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH0PR12MB7957.namprd12.prod.outlook.com (2603:10b6:510:281::22)
+ by CY5PR12MB6249.namprd12.prod.outlook.com (2603:10b6:930:23::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.15; Sun, 25 Oct
+ 2026 11:20:39 +0000
+Received: from PH0PR12MB7957.namprd12.prod.outlook.com
+ ([fe80::9251:acc2:cc63:3499]) by PH0PR12MB7957.namprd12.prod.outlook.com
+ ([fe80::9251:acc2:cc63:3499%3]) with mapi id 15.21.0546.021; Sun, 25 Oct 2026
+ 11:20:39 +0000
+Date: Sun, 25 Oct 2026 13:20:30 +0200
+From: Ido Schimmel <idosch@nvidia.com>
+To: Jin Li <jinli@lanxincomputing.com>
+Cc: shuah@kernel.org, dsahern@kernel.org, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2] selftests: net: forwarding:
+ bridge_vlan_mcast: Allow default startup query interval to vary by HZ
+Message-ID: <20261025112030.GA136792@shredder>
+References: <20261012115414.GA704996@shredder>
+ <20261022103023.834927-1-jinli@lanxincomputing.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261022103023.834927-1-jinli@lanxincomputing.com>
+X-ClientProxiedBy: FR4P281CA0361.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:f8::17) To PH0PR12MB7957.namprd12.prod.outlook.com
+ (2603:10b6:510:281::22)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,182 +99,76 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR12MB7957:EE_|CY5PR12MB6249:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee41107d-99f6-4752-f08b-08df3289ffad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|23010399003|261009223027099003|11063799006|56012099006|4143699003|10067099003|18002099003|22082099003|261022105027099003|261022075727099003;
+X-Microsoft-Antispam-Message-Info:
+	KBMd2PB4U44k05NeEHADMk92EIcl93qrMhSnZEbLDd9c4gke8pbvZEpD79c3fGplsAVKMJFWtrYPgFf1IRb9KX4vXoVdkx1L/N8c9sKF+ngkZ/HF6FDNw3SOrEg9Ba3mTr9dSgTwxGMG0l9li+7tnaZLAPVfSeQEi0ayuhGpmqVIal4zb8tRjE66A/i23ZCfNoh5Z00nfIdY1ZoRp8iKTtPX3O3hUs1YmkhiDgU2nGnipwxJa66M5uQNvRCmHeX6YIvp4jWuLNBv6mdtYsb8EZNXyQTR4ojQlHN3GPMt6FUwytSyx0E9bVbyq8lwIL4l4uhd9djFXiwIJ2groTsj8RHPoT2e7aFXS+hf1noj5weZvZ7lFhuwlKQL2gRWqkR4hLgw6ZhjFqn18IzWKdcZ4MOkGz1tmzwcjiS17SMcqrxS0uaidPBn9m+FsHvIk/cth4AjWw8cC2HEmgNq+X3YtUrNbc5ePFwnBiSa0KzZjxkKROgG1SEHPrkJkBk/sTZyLpLniJUXYHiAUFCVwV7lG5GiYaSJOnFGRztJRYSj/GkXlJVL802Xw69wPl0k+WGLkeXDrRrIfLnH6fhb/g7lvW8zqR732M+DhUmNJe9JqKsvRwIWuiRwMOCGhcN8wunCjTNTyL12LQpKK++7Hf4rlEamdKUiVHCHaDycqDCCCB0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB7957.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(23010399003)(261009223027099003)(11063799006)(56012099006)(4143699003)(10067099003)(18002099003)(22082099003)(261022105027099003)(261022075727099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?IrhLG6sq9Q5UMAj7S/XXc2FzQewyAiJlhs/RI1qCIxagGNo54fkEabwVV6sK?=
+ =?us-ascii?Q?FIcIEyN0jvaKFAZpKKXGBBA+TASQcV8TZ//arzjpwYHq91Lcdfl41DaqJShs?=
+ =?us-ascii?Q?dctbohU8OzgKhhK0nO8+264vyQ/ZWjpcWwnMyKA0feFFa/G7WL+lWCZMaNlp?=
+ =?us-ascii?Q?L4KPg2eNRmQbar7rpdtsY9dI+TIGLGFKnBt0I875pSGIimQAci3k0NSgPM9n?=
+ =?us-ascii?Q?KaIMsbGWNrxyjyTl+F74gNSQokxviIA958jGVlv0mOD33cUKBceEf8sFO4JB?=
+ =?us-ascii?Q?3JaRUrkA0lRivbRfj6Ps0r3yl3hTIXZPWP8krC+pD9LCB9WOKH3sxZSXB31w?=
+ =?us-ascii?Q?P9mOCvlca+nzaonBfMlN4KyZMZxX/s0szrJQpay/+9djgvHJHpMMwQr59EY0?=
+ =?us-ascii?Q?0a1ImuX+qpjbH9ba2tiRU/CM3DjBj/tRHH9k7lc4BhIaQ7zGW97lRK/Mjm/h?=
+ =?us-ascii?Q?WlGFjD6+PG0n3Qs9GACpCK7bQ+WfWfAdbSqKcYrxjXIxbd5xeyBLw0drGA64?=
+ =?us-ascii?Q?1WDWzQSZvJCJitY0wR6X3suyb1BMN/sJ+qwo0KXexktMS9PpK2Zn0dZMt7mQ?=
+ =?us-ascii?Q?lm/ts5fPCvlnMlM4xHCdsjOW9nhvhI//AmKZbL+c30ZId+6Lrdzz9d81J8Nw?=
+ =?us-ascii?Q?voE0KRH2bKLMwrpB87l55PsiMjuAVIu/gi51nLqYsBVDRVgoIWkQxbCctI/l?=
+ =?us-ascii?Q?XPkFfH2HvD3vHaOmv6KqLG1aXjniFppUG9UtaOeN4a7lhFOHQQrjro0DQS6d?=
+ =?us-ascii?Q?6Es2OJTvFWTli9kUoi67dnvRk8ICB7khVneb1wx/Brqcro+kQ/uVpgUNu1/j?=
+ =?us-ascii?Q?Gs2LhVLbOhuK3kfAteqf3qCYVoXMCLYdaD1DEN4oMi6UVcBbyYBi6ze+1L+k?=
+ =?us-ascii?Q?LSNuDZAW6/TFQnNhZZEgGjTd7PwKXNPHlYg/jonZBnYZu8QICSDvVabECvA0?=
+ =?us-ascii?Q?KwhwDPpH+m4HyvLypbFyXKAJzN/ONqXQZN34crioctEMXwfrTsuSx6xTHtc5?=
+ =?us-ascii?Q?UhjtXaCf5pRW1lDs0N5GjiPoqRhBEAtZsZkv1Pp1ISQiSI2fNs4PZD4uhDE1?=
+ =?us-ascii?Q?tXbX+fUW3y75OztUopIH5ueWUxpVImnMm9qxwi1GDrPe3vdAqAwx4QymxacA?=
+ =?us-ascii?Q?Nv8mAHPaiHzPxtfZRId7JPKQuD0aibgC8O7H8eTMJEyBrYG6J9V27J9rE85m?=
+ =?us-ascii?Q?LgPB2lrcBu2Z3h37BlFAxjixRkCFB6W9zHbghEXInKpG21xNMJ99+dy0w9ao?=
+ =?us-ascii?Q?+yX1ygzQytA1j5gNozihllR4VqP25Y15wHrNzhNk+S1zXo8K8Lz9VqG9xLAw?=
+ =?us-ascii?Q?w9ebzWduhL12RK6Zo7P2p9YCj8ywX11o6xCy0BytHeAXTy+Vwrj0W6ukP2pe?=
+ =?us-ascii?Q?RH8TjlUSRDLNv2BXBjwNGXsQWZ4h0g7Ya0erMGk23FRJyFdAnWrm7bIotx8d?=
+ =?us-ascii?Q?PiEVUL49KCal1FGrZ/OW8gfhaf5xyDtWvE1Za6ro3WjY5oBMABqrd4Da+7px?=
+ =?us-ascii?Q?/9Q1k8h+oab4ik+UUwmKGK/xA5o4uXT/yKMEsgop9k/DISkIVb0DEhPHMZrf?=
+ =?us-ascii?Q?q7i1hI4BqAUGSkCiYjDwNhvL2L12QyOO3O7XnbJCk/MOWtKeQTgcJPBEO82J?=
+ =?us-ascii?Q?cYXRGXktrj0svvHjZmoI5EagSzHZDrTqxQfWnNMhqaWlxmaKv4Lgh+NFsnDx?=
+ =?us-ascii?Q?RNNxfNeMSGr40A8Ry6cm2L9VJYDJD+eXiupZjgsAcb4cgmei?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee41107d-99f6-4752-f08b-08df3289ffad
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB7957.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2026 11:20:39.2172
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bYcN/fpI0lxbUhm9TIk7XPQC48qW8eyBcWSkFq6joBmkRepncIEfoHF58YuSz4I4FtEav8NDYtmPfM7GtaFICQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6249
 
-Hello Farid!
-
-On Sat, Oct 24, 2026 at 01:39:16PM -0700, Farid Zakaria wrote:
-> This is a proposal for an idea to add support for landlock to work
-> better with build systems such as Nix where they want to apply
-> restrictions but the paths may not yet exist.
+On Thu, Oct 22, 2026 at 06:30:22PM +0800, Jin Li wrote:
+> The mcast_startup_query_interval default value is calculated as
+> 125 * HZ / 4. With CONFIG_HZ=250, this results in 3124 instead of
+> 3125 due to integer truncation. The test currently hardcodes 3125,
+> which fails on kernels built with CONFIG_HZ=250.
 > 
-> TL;DR;
-> ========
+> Allow a +/- 1 tolerance for the default value check to account for
+> this rounding, while still catching genuine regressions in the
+> default value.
 > 
-> Landlock rules attach to inodes that exist when a ruleset is built.
-> That makes a directory shared between trusted and sandboxed tasks hard
-> to confine: the sandbox may create entries there with
-> LANDLOCK_ACCESS_FS_MAKE_*, but no rule can name those entries ahead of
-> time, and granting read access on the directory to cover them exposes
-> every other entry as well. This series adds a rule flag that grants
-> access rights on the entries a domain creates in a directory, instead
-> of on the directory.
-> 
-> Motivation
-> ==========
-> 
-> The motivating user is the Nix build sandbox. Every Nix build runs in
-> its own sandbox, and a build may only read its declared inputs in
-> /nix/store and must be able to write and read back the outputs it
-> creates there. Nix enforces this with a private mount namespace: it
-> creates an empty store directory and bind-mounts each input path into
-> it, one mount per input. Nix has paid this per-input cost since the
-> sandbox was introduced [1].
-> 
-> The cost is paid per build and grows with the size of the input
-> closure. Nix is moving towards much finer-grained builds (many small
-> derivations instead of a few large ones), so the number of sandboxes
-> grows while each build's own work shrinks, and the sandbox setup is
-> becoming the bottleneck. A typical build has hundreds of inputs; large
-> ones have thousands.
-> 
-> A microbenchmark sets up and tears down a Nix-like sandbox (user,
-> mount, PID, IPC, UTS and network namespaces, pivot_root into a chroot,
-> removing the chroot afterwards). It compares one bind mount per input
-> with a single bind mount of the whole store plus one Landlock rule per
-> input. Median latency per sandbox, one sandbox at a time, Linux 7.1,
-> ext4, 16 cores:
-> 
->   inputs   bind mount per input   one bind mount + Landlock   speedup
->       10         3.2 ms                    2.3 ms               1.4x
->      100        11.6 ms                    2.8 ms               4.1x
->     1000        79.3 ms                    6.4 ms              12.4x
->     5000       400.1 ms                   24.4 ms              16.4x
-> 
-> With Landlock, an input costs an O_PATH open and a landlock_add_rule()
-> call: there is a single mount, and no mountpoint directory to create
-> before the build and remove after it (removing the 1000 empty
-> mountpoints alone took 17 ms).
-> 
-> The single bind mount is only sound if the store listing and the
-> undeclared store paths stay unreadable while the build can still use
-> its outputs. Without this series, covering the outputs requires a rule
-> on /nix/store itself, which makes every store path readable again.
-> 
-> [1] https://github.com/NixOS/nix/issues/179
+> Signed-off-by: Jin Li <jinli@lanxincomputing.com>
 
-I have not done a thorough code review yet, and will focus on the
-general approach.
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
-I am generally in favor of this approach where we keep track of the
-directory inode plus the file name.
+net-next is closed:
 
-Other projects that have run into the problem before are:
+https://netdev.bots.linux.dev/net-next.html
 
-(1) Justine Tunney's Landlocked Make experiment
-    (https://github.com/jart/landlock-make).  This one shares the same
-    "build system" problem, I believe the topic came up during code
-    review at the time.
-
-    So I think this is a general problem in build systems that use
-    Landlock.
-
-(2) Michael Stapelberg's Go rsync implementation.
-
-    https://github.com/gokrazy/rsync/commit/f85bc9b98cdda705ff8e76ebcd8fba03c6560467
-
-In the rsync case, the issue is not a rule for *creation*, but for
-*reading* files.  But it could still be resolved with the same
-mechanism: When allow-listing the /etc/resolv.conf file, the policy
-works for a while, but eventually a system-level network management
-daemon might exchange the file for a new one with an atomic rename,
-changing the inode number.  It would be desirable to express a policy
-in this case as well, which is tied to the /etc inode plus the
-"resolv.conf" filename, for opening files for reading.
-
-The same problem also exists for allow-listing of Pathname Unix Domain
-Sockets, where the common way to restart these is to unlink the socket
-file and recreate it during bind(2).
-
-In both cases, the best current workaround is to grant the access
-right on the parent directory, which is arguably often granting more
-than necessary.
-
-Do you think your patch would generalize for the non-creation use
-cases as well?
-
-
-> Series
-> ======
-> 
-> Patch 1 lets an LSM observe inode creation through the
-> inode_init_security hook when no LSM provides an xattr. Patch 2 adds
-> the LANDLOCK_ADD_RULE_CREATED flag for path-beneath rules and bumps the
-> ABI to 13. Patch 3 adds selftests.
-
-I only had a short look so far, but stumbled across the words "package
-store" / "store" etc.  In other packaging systems, I have not come
-across the term "package store" before.  In the kernel code, please
-let's not assume that readers have a familiarity with Nix, and let's
-please explain features in more general terms.  (Note to self, on
-review, grep for the word "store".)
-
-(FWIW, I suspect that this wording might have been put there by an AI.
-I've observed in the past that AIs sometimes have an unfortunate
-tendency to blur the lines between abstraction layers and
-cross-reference implementation internals across abstraction layers.
-Maybe something to watch out for?)
-
-
-> Testing
-> =======
-> 
-> The series applies to the Landlock next branch (3e271a27c46f) and was
-> tested on Linux 7.3 with that branch applied.
-> 
-> Without patch 2, the five new tests and the ABI version check fail.
-> 
-> Open questions
-> ==============
-> 
-> - A created inode stays pinned until the layer's hierarchy is freed, so a
->   sandbox that creates many entries in such a directory keeps them all in
->   memory. Should this be bounded?
-
-Is that a preexisting problem that predates your patch?
-
-
-> - Creation is detected in inode_init_security, so on filesystems that do
->   not call security_inode_init_security() created entries get no rights.
->   Is there a better hook?
-
-We are already hooking into hook_path_mknod(), hook_path_symlink()
-etc.  Is the feature not possible based on that hook as well?
-
-In fact, I would have assumed that you would only need to change the
-logic in the path walk so that it can pick up the special rule type?
-Does that not work?
-
-> - Through overlayfs, created entries get no rights either, because the
->   upper inode is created with the mounter's credentials. Should overlayfs
->   be handled, e.g. via security_dentry_create_files_as()?
-
-Landlock does generally provide the normal semantics when you use
-files through an OverlayFS mount.  We have exhaustive tests for it in
-fs_test.c as well.
-
-
-> - A file renamed or linked in keeps only the rights it had at its source.
->   Should it get none instead?
-
-Please see the logic and discussions around the
-LANDLOCK_ACCESS_FS_REFER access right: When linking or renaming a file
-to a new location, we must make sure that a landlocked program can not
-move it to a place where it suddenly has more access rights on the
-file because it is now accessible under different parent directories.
-
-Thanks,
-–Günther
+So you will need to re-post after it re-opens.
