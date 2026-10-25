@@ -1,67 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792964894;
-	b=0anK2rkhGGDR3KrbrwX2PSPoq42Ay5JeeCUkU6LCHLHhdo4P7HR+agEgaX46KL2xHC76
-	 GtCZYh75V8ZhFeKlwG/xmg/aVUJllDEz7eDYxRN/2lpQ9pPLGA61prKEOj/XkH+sZfvyb
-	 QbJvRcfEzMaYY673zp51gNTM2j1vflVE4Bi+LjLk89VidNmBMgZj3Y7gO+v5qGECtzpCH
-	 pheISbfl/UVoId5sfLzz/vNfn5cZXl5CY+9jqpDyWEPuFVMKODsvXaI1ieIKO2IJqndi1
-	 Y+zGCz3SG+YAbrHaqFf/yXcshkt1aLcc59fxriPD+MWTd5Mpw28c5N6Zr5kxE01FknQ==
+	t=1792970966;
+	b=dLPIiEOw8fy2f7IwgoskqaaXcC+SN/vHe03zPMI+S+SCTFHfKue45mOdY7A9c7R3G4ic
+	 cDZILyX3q9qY4j5X6LCqmbtobIbmEJy+QPCwlKYWJjfvsfLtnW8lr6gxq+fKxfQask7+Z
+	 hJ13cd6tK4Ohr0mUn+V4XKAtd4Eie67eGm7x+zYPy04IGNwP830clGdvTlfOV75upgwAa
+	 UetBUGrTjVNaMhhg+4+TIO9HtU5tmFqy3qwkhAsle3rbNtrfg3zujS9iTXbspGhJg8BW0
+	 3by8znuZWV8cia7KAecRC6u/41ywHID2sQCax/bGwIda/YXYPuCmIzDQCgFWyC+c9ew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792964894;
-	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 X-Cookie;
-	bh=hDiTTg5aqjPLEBuvxWemMxO8n0pna/rsjNCyQxTZjbA=;
-	b=GivsaRKAFiNMm7rQSc/fhDTeUrFXRWqySn7o5yHXHYttTpaKr3v1gs/BJKO/p4dKUJ6J
-	 mgkKcsPVxHz38Lp6RvOYBVIKCYOEMCUW9BA+ABeQSFBPU2gdAlXNnRN7RvEU0/R5LpEW9
-	 OQ+hgZXV95VDcjDKbGLZrkvMQHEa7bDwyrbGAAIJPvk33YKHJ8X7G46rfydFJkQpua84b
-	 l2ovAij2801Hye0s1b3HsvlLDGLppEQ21silkrinXsXOrJ/o+7lcaw/upXcDlvZPYqvMx
-	 NwI0v4IBwy4aFSRsUEYEvcnok3MY+timOYr9ECcbt4KaVThafbx/aFZCujLaX6MszJw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792970966;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=jYOFBLSGEnNdhnGY76tZesZu7gNZ9rzFYzDOwois3Cg=;
+	b=Y84H3Hoc4cvqS6X2INPxAaI4mEry4SIJ0tOV+9JN3GFFj7nGnreoxjikh9/eYtcl3x7B
+	 w/xhXvnzzpYtx1vYp98dRZ9eYrmS3WQvr9nBsYWqesA9H6iSEV0PaVboX64cbYLVrGKOO
+	 i7vWU9gRhc1fXRG962dNqGbgy1p1hqWvI2fW+vtAr7RezoRipgFQ+PSWU886t24XHHGqt
+	 kgV0G4RwNkc3YjeUx8Ijb7CQTvh2LVvrA0FodqccoxVuIGgDvlCB/LrM775aKB7NqRfXB
+	 ZoHlWStpbJeKa9MXKi2hACdjKgxzXQvI/wY7mClWEfPcV4kZBeqsDIS/msfPn2lSpiQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RZlGFo4G;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=IMTZvbtA;
+	arc=none smtp.remote-ip=198.137.202.133
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF592606A31B;
-	Sun, 25 Oct 2026 21:48:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FEF606A31A;
+	Sun, 25 Oct 2026 23:29:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1FEF606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RZlGFo4G
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A6A1F01825;
-	Sun, 25 Oct 2026 21:48:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792964893;
-	bh=hDiTTg5aqjPLEBuvxWemMxO8n0pna/rsjNCyQxTZjbA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=RZlGFo4GhsbFHSK9ofCYklD9mxJX6RDlW5nMeJqwBzaIhMeZVbyQhtm8Pht13aBUR
-	 N5H2XX+HWnWprbfYsWvw/J5cApSoeX2zzOYbqxy85tpfvD059F9v0grCwJsIOKAuQG
-	 kTzCQC7kDS9lO0NCB5/DVxrKb1zCkbbeEBVWgw7yeDF1GKd744CpAu/smx9T4lO4JK
-	 zZECt8Y5BWSUUEg8iIHeg2IXFbbpKvbj1NKR5HLhoyKkgqMvHlw+5tAhVjDSg47L2i
-	 SoEZuOciwHXr7s4WuKOlrUVnZZu3dqiEitjMl4fjy5wfjqifO/N8oQntht3VJIhPwc
-	 ANFnmObSBJj3w==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id 8C8FE1AC5994; Sun, 25 Oct 2026 21:48:10 +0000 (GMT)
-Date: Sun, 25 Oct 2026 21:48:10 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
-	Itaru Kitayama <itaru.kitayama@fujitsu.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: arm64: selftests: Skip ignored AArch32 ID regs in
- the failed-run test
-Message-ID: <at55GhnsD67k2Xkg@sirena.co.uk>
-References: <20261024161118.1007472-1-sashal@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=IMTZvbtA
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=jYOFBLSGEnNdhnGY76tZesZu7gNZ9rzFYzDOwois3Cg=; b=IMTZvbtAq5pXyO+aBUA877UWDg
+	2eh195KrazJoEWqz+idrnFJeg7qYmOnC81FS2AWuaKFwlxwUpwUgyxE1Ff+t9uWC3DR70JeMJSbV4
+	QdUOUF+BBYD08pSfkr/KkK9wBpcU2tyuRjxzWrxWWEdYfc5+5qOsvIxDBbUDeCsmhVmIPcYz4ECqy
+	XSpJH2J7PMetNL7E5PcwEC0AcFLuDGMh8h7zQ5HL2NcXKGzz4ksUAzU1D/58oH0rMjSKcK9dmFGYi
+	i6Xuo13E1yUWZfJ56oMA/jCIgCES+8pmH/62YIc1NhS6rPBzDza82rggebR2j2Tp36DGe6kKjoMDW
+	5iSta3yA==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xL7eL-00000001VBZ-2PkI;
+	Sun, 25 Oct 2026 23:29:13 +0000
+Message-ID: <94b36a91-4fe8-480e-a49a-23a81cdcdc60@infradead.org>
+Date: Sun, 25 Oct 2026 16:29:11 -0700
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,70 +58,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XZ3wpwJ3w0pXiMRa"
-Content-Disposition: inline
-In-Reply-To: <20261024161118.1007472-1-sashal@kernel.org>
-X-Cookie: FEELINGS are cascading over me!!!
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to
+ /proc/kallsyms
+To: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: kernel-team@android.com, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20261023001603.560210-8-wusamuel@google.com>
+ <20261023001603.560210-9-wusamuel@google.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20261023001603.560210-9-wusamuel@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
---XZ3wpwJ3w0pXiMRa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Sat, Oct 24, 2026 at 12:11:18PM -0400, Sasha Levin wrote:
+On 10/22/26 5:16 PM, Samuel Wu wrote:
 
-> An ignored write leaves the register unchanged, so the ID registers are
-> still immutable and only the test's expectation is wrong. Skip the
-> AArch32 ID registers that KVM_ARM_GET_REG_WRITABLE_MASKS reports as not
-> writable for this VM, which is decided by the same
-> kvm_supports_32bit_el0() check as the write path. The aarch64_only flag
+...
+> ---
+>  include/uapi/linux/fs.h |  41 +++++++++++++
+>  kernel/kallsyms.c       | 132 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 173 insertions(+)
+> 
+> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+> index 34c6f219462a..b43f227dad0e 100644
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -674,6 +674,47 @@ struct procmap_query {
+>  	__u64 build_id_addr;		/* in */
+>  };
+>  
+> +/* /proc/kallsyms ioctl */
+> +#define KALLSYMS_QUERY	_IOWR(PROCFS_IOCTL_MAGIC, 18, struct kallsyms_query)
+...
 
-Another approach if we're going to change the test would be to have the
-test support WI registers like the kernel does and also accept a
-successful write that does not change the value, as you say this is also
-maintaining immutability.  Doing that would handle anything else that
-gets made WI.
 
-> This does not change the AArch32 ID register readback issue under nested
-> virtualization that Itaru reported:
-> https://lore.kernel.org/all/as8x38o9taXgKZym@sm-arm-grace07/
+Documentation/userspace/ioctl/ioctl-number.rst doesn't seem to know
+about PROCFS_IOCTL_MAGIC and what range of @nr values that it uses.
 
-It's been reported by a bunch of people, including me with the test
-fixup that Itaru was mentioning.  It does seem like if we're going to
-fix this in the test we should fix all the instances rather than just
-one, or we should just fix the kernel like Marc previously requested
-(given that we've just stepped on the same landmine...).
+Please update it.
 
-> +		/*
-> +		 * KVM ignores writes to the AArch32 ID registers when it can't
-> +		 * expose AArch32 EL0, and reports them as not writable.
-> +		 */
-> +		if (sys_reg_CRm(reg_id) < 4 && !masks[encoding_to_range_idx(reg_id)])
-> +			continue;
-> +
-> +		val = vcpu_get_reg(vcpu, reg);
+-- 
+~Randy
 
-This is checking for AArch32 AFAICT because we're currently seeing
-issues due to the lack of AArch32 making the registers WI but one would
-expect the same issue to recur for any other ID registers which we end
-up doing the same thing for.  If we're going to do this shouldn't we
-just check for writability?  Adding the check for AAarch32 as well seems
-to have the same papering over the cracks concern that Marc raised.
-
-If writes are being accepted to things reported as unwritable at all
-that seems like a separate issue to the finalization, we should test for
-that separately.
-
---XZ3wpwJ3w0pXiMRa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQReagvpf3TrrA7BoYYv73Ows9A4iQUCat55GgAKCRAv73Ows9A4
-iWvMAQCfmdP6zPYprHHX9YOoVU356Zhd4rFs5rfa4rIZuFFTJwEAm+X1RFxCBYQi
-PZV+kXkd55f3HK82Y3dOjL/RBH2InwA=
-=6dZ9
------END PGP SIGNATURE-----
-
---XZ3wpwJ3w0pXiMRa--
