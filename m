@@ -1,75 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792901138;
-	b=jmIksNXhND8/Aa1+hgrp1ndIwrXlbqA/lmkW9qKjBhOyxPVPZXNINuwgahx5h7Q39mjk
-	 GwZ0ko2DFXyjAdQoAZBh2U1kX5WQksFmGvhF/ew9T+95HWEw72MMUXZtDq02usEJ6gnk6
-	 pc0OTK/pl8g4BN3ccCScoSaWdlj/S33DBPFqnlXLMW7l8q/O7XgYsb4RLm3eyaCv1YcBX
-	 cB+0LX0PwFZ6/ygWngPUtLncuB2GYze177Nm5FaJV83M3veqOUVp2u/EC7qCRQZlcE4o7
-	 351m9WlTBAg3x+yUi13hxQbcTEG41fmYfUr/yczqhaf6P/Mf32yguXAqBIhnAutRYUg==
+	t=1792913403;
+	b=p0FPHaTy22toVq7bs+ZB+Boc4Ei9W64ERMeq01W9+2OXMwWOzW/w7jT//FFoUU6DFq7d
+	 gK7RbN7zxsZtSLFyu+sZ4pZJ8FNF953/DW6Gdp9PaM+JUe+hsnox2oh46VuIe8+y70+/h
+	 EqWtLIBRJKkoku0FJezjYTCmsw8vVc8zoluCGB3wTgJJ7yRCKbRO2aEZ1fwcXz3hoMNI/
+	 O5Oad/PUZP2MOVBOLDvb7ZVm41CYqmlL8TAGLb2lIuDu4aEN0ZQnDWPsX3Rqfzj3j4AwY
+	 cyflVeCFrDOlNCHjd1Wv5V82QCMMEcmVspivMHwwI5OPMgK0Udk0wpRvyY6uj79rw7g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792901138;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792913403;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=gTPwTs6KQ9y0OogJsarYNN8wQnpNX/uHSQbAgmpcfg8=;
-	b=bbifiWVAfO4tniRXRB901gZVse761G2jxT5P5zRB2iSYUEY3jCsMXAEHQk6R2RYx+lhf
-	 SS7zwGEuQS9r+T2cFTeYfvnyllbmjjr6PsgSq77BYJvNstjLnWQ6Pi2wI5UaU2T/LxDu9
-	 SfFLQL11AFf58fEWewYTrZefmK3Z9n6Wa1I0rZNLjSyrW81bkISORT1K+La7ANvgWQYvF
-	 4/YXC/F5ACvx4Rq2QXAXJyBmt11XLCokfqThpizKG1fe5NCbJZIjeOncj1yKvkhJqVaAb
-	 fEU4EkoHeP4gkBCu2l/HUVupPxBNAs38hPMDXmMC7/ysN8d4RQmDZj7VuE2XYVddJBA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Ca84V1D9B8Ybj/7LgOQ6VhiC3u886cles4dpmUcGdP0=;
+	b=KVd8l+yGR1gKRn4+J3NfLl06JbyVKBgBAuGp6yKIVFvGcfStSE1TZe9kHmrGvxD5ndLW
+	 7a5MPkdb3kOkfBGSLf6FIVSRCfP3mFHWzlHoQOY1a6fD0hWAt/aDZqXF2Ia2iKbPv/mo2
+	 4tPuFQS9Lj3r/oPLQDregTAbXPg6EqwFWKXQ+X8Ne7fi3WMZMCGPiztMMPjVkbsPfYP8o
+	 Pmr4haSfaAiWvhVM9e5pIY2K4wQxM9X5GDE/aO+rhtG9XzIu+nyzl0vQ3P7e+Eh3SOQg0
+	 NDTlpjzghGRPn8oAr8uVJ4z+GMDCy4xajCCcQY+7n6fn7yjuvnh0zratKbAb4Gu81EQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=WruFuch8;
-	arc=none smtp.remote-ip=209.85.210.199
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=sbXu8TmW;
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DA6606A33D
-	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 04:05:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67DA6606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F60606A31E
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 07:30:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25F60606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=WruFuch8
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-89fb6a45c48so2001084b3a.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 21:05:32 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=sbXu8TmW
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2dd76b1361dso11205635ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 00:30:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792901132; x=1793505932; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gTPwTs6KQ9y0OogJsarYNN8wQnpNX/uHSQbAgmpcfg8=;
-        b=WruFuch8yfURzb8ZGFIy5pQuDQ0rbwdUz8UzGedqewcmOlonpl+TOvKkBhHCS8k7zx
-         QbbfksQH3++GId6saBoRpRwOtzWEtX6yya4XyH7zRfW4znWbi+Q6wbCwCu+HvfT+/oKa
-         f0hgXQ+kVNIdVUPgt6H528AxLSEoLJsjnCiGSjrqwSNnUW3DvSvSQUhb/pK44zMMW8ys
-         IU1zTOsnm/isPBN2KEbK7VvbwTpV1hE9bKnRPuVQCWg2TcEvKIk/jy2iJKswN6mOKNv9
-         08xshmL2GCo1FzaG8S91+IEuypW7MhOx//Z2sjjDb8PiuxjMeKILtghCGZ0KoUs1yqsZ
-         hrsA==
+        d=gmail.com; s=20251104; t=1792913401; x=1793518201; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Ca84V1D9B8Ybj/7LgOQ6VhiC3u886cles4dpmUcGdP0=;
+        b=sbXu8TmWoOHQrI8owKBYY+cShhIySq2CbLFlzir2i5fc2R9j8kIlcd1bA32HTv1ljK
+         s1c2pu7rkeKozyEjYZYB2Se7ES828YwyltBHAF4G/PBj12X2ENqFNv/QOHoiHY85ldEr
+         Er99edSVkY9kP97jiC21DjEYoMpySlGGzgtBxikkbnOTpQEXQa+wAMHSOZ2Y3lnJEcjn
+         XcnLmHktz3Z6c3s1dTd4bxl3NmpHIGbdFh63JcXGLlyERo9Jc0iuoGSp+HNZQzv9KW1g
+         njhcF7ceKgvztm6cz8xMA+PAGFaFY/iqmp6RtdZFZXfbcQ7PimdO446S0ZuU/OBO4xt0
+         U6Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792901132; x=1793505932;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1792913401; x=1793518201;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gTPwTs6KQ9y0OogJsarYNN8wQnpNX/uHSQbAgmpcfg8=;
-        b=dPdBxlCah7B3KslOzCn2x12338EDQmrE9AY2rzgGUj4VoEYI7rdwyp2MEM0a/wNOvn
-         Jm6VTbl0CulX/LdniN0IUYcCMK1q0jwGh6b1f69rcykLgS8Pkwd6Pv4nTt9AmRSVJ7yQ
-         TaxfRS6BmJN8l6Awplmiit5DCM6ePnDefsuC004EF0zRHrPxpUduvVFAxKDFOsVtLsTn
-         Yon8WoGRoUl1Cnfzej2R9Del0t4WDGnzXvS9pCPV6QAOQ2wnWP963AYEUM3BP47LC536
-         7nQ9tvA9Q8zhCEvTrjl5Z0/6YqQnIzod7bKm/LYb5NgLDkJQB7SK5JqEOhzxyAyB0WFI
-         IDwg==
-X-Forwarded-Encrypted: i=1; AKwUvBz25Rn5ohGANmR/ytHVjoaqF3oJ14QyysAktxNes45cprKJzxSJoo2yMAdGwhn3E+TK3Rd3dlKp5pNBjH1OhBQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJZj/a6jtbsjkWYKwaXyD3hQlgdc0jH57D83TbRNchnP/RkFOpZ
-	+Y6zeMmoqn+FOMd001KQkPZS/KkW684RFbqo9gGg0X8KcHTYXt+wVk+9WE3GKr9YMYAp5dwSD4S
-	e3wSAhw==
-X-Received: from pfbeb23.prod.google.com ([2002:a05:6a00:4c97:b0:894:b24f:9540])
- (user=weiwan job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:b56:b0:89c:6036:c63
- with SMTP id d2e1a72fcca58-8a366d7a4e4mr2631352b3a.32.1792901131466; Sat, 24
- Oct 2026 21:05:31 -0700 (PDT)
-Date: Sun, 25 Oct 2026 04:05:23 +0000
-In-Reply-To: <20261025040523.678027-1-weiwan@google.com>
+        bh=Ca84V1D9B8Ybj/7LgOQ6VhiC3u886cles4dpmUcGdP0=;
+        b=P/jK8LU2SIJC5AFohTMDJlst/7vr45gr9LeYYx8u3qbeEcjbmJxjJCzLj1L0plZ2Em
+         mM2lPQn2fLC+0tGJkdDwd9sEuv342U0ClZKIMSh37LLVhf7kx4HJrou/iuVL7Db5Qtw1
+         m0XSVet81I1mshpzfcXTlpouwyfMHtWbDHK1lfYOV5eIaWkTIvQM5XJK8y/fnnhN1Pos
+         AwcD7RBU6DeF3x7w7mGowIU7KINV80R5MWJM2DjVPtDTN0mAoznJfqQjegwG5pxBNtVc
+         P9Eg7T6agXeUGm2ySlw3xTiBk4buapi4cdU/baRiaePkahQ9jeP8yergXCRAfeQG/P35
+         GsSg==
+X-Forwarded-Encrypted: i=1; AKwUvBwaKekJKyTH7qdvZQzNH/6Rxf1Lln7fiMViy7mF69YhC5eY/38X4Rhxn/UtkTI7VqzEsYRCv1B+JxqpK8ZrkqE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIzMbqwuKZcEgHPt41OIErJj0tYN3tWrJUddU8jDQpWeH+tCmZn
+	LMUwoKuDGylFfxT41M1fooJYcuVki4f+dYDYbz3QQZe9ahFHm4exF/az
+X-Gm-Gg: AYBFou1lqcEoHk/ujeWermfk5w5NDfcy4u3hZrc2fKlpXpHQanh5+BmcsbeykG6rujr
+	eDCKYWxD94UePMdhUuRA/i9f7JbunWEMvcCbrjcIq2uPD3BT0RWqTR2ZlcOddHiNQs+BI1+hlf0
+	b0fUlGqZglC0knRl8xp6wZoIk036CqhZHKy6OPfj8kBfxpgFPYoawrO1jkhM2Zi7pqYSdRLHbX6
+	dL3ZWqggvhDaV7CI6c8NFC2qZgxiXCQThL8QbM1Q0606jkDOBNBs7mxVzcZHzAs2+QUWVEAUQTJ
+	fn8sZ5g1L13LY2dXOjPYOjxeLTmppVhbPrR6Sk4Dfk5E8/WcMSfMUb979QfIWiFPIC2vg4tIDLw
+	d+UvLjkoGylzHAThsuzQk3z1j0JrTburKWYg75QHmPPGtvhStdbphP8qrqdMBLNgJ4JfQ2rU4eQ
+	Iu+dVipHAH70tR851SvfuNdo+7cc5bd1FqrFfcCEXdUjNSzP6KiJLBostOvLQJZ30ady7V+0v/r
+	p8iLCnW715NPaSSN08+1Uohn8+YtzGUCg/8wRDxJ0KNQIZk1/hEZgY=
+X-Received: by 2002:a17:902:ce03:b0:2e2:e3aa:7a35 with SMTP id d9443c01a7336-2ea9c7fb4c2mr32015315ad.36.1792913401389;
+        Sun, 25 Oct 2026 00:30:01 -0700 (PDT)
+Received: from localhost ([182.216.53.174])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b121725sm7788525ad.14.2026.10.25.00.30.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 00:30:01 -0700 (PDT)
+From: Jaewon Jung <jaewon8868@gmail.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: Add debugfs requirement suffix
+Date: Sun, 25 Oct 2026 16:29:41 +0900
+Message-ID: <20261025072956.1739981-1-jaewon8868@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,68 +96,86 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261025040523.678027-1-weiwan@google.com>
-X-Mailer: git-send-email 2.56.0.257.gf7497c7d27-goog
-Message-ID: <20261025040523.678027-3-weiwan@google.com>
-Subject: [PATCH net 2/2] selftests/net: psp: test bidirectional data transfer
-From: Wei Wang <weiwan@google.com>
-To: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
-Cc: Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Daniel Zahka <daniel.zahka@gmail.com>, Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Wei Wang <weiwan@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-_data_basic_send() and _data_basic_send_netkit_psp_assoc() currently
-only verify unidirectional data transmission from the test socket to
-psp_responder. As a result, they do not exercise the receive path for
-PSP-encrypted TCP data segments arriving at the test socket (such as
-packets redirected across a netkit interface associated via dev-assoc).
+Add a :debugfs requirement suffix to check interfaces under debugfs.
+Use it in the kprobe optimization test to report unsupported instead
+of failed when debugfs is unavailable.
 
-Use the existing "data echo" command in psp_responder to verify that the
-test socket can also receive PSP-encrypted data from the peer in both
-_data_basic_send() and _data_basic_send_netkit_psp_assoc().
+Tested on x86_64 with QEMU:
+- debugfs not mounted: UNSUPPORTED
+- debugfs mounted: PASS
 
-Signed-off-by: Wei Wang <weiwan@google.com>
+Signed-off-by: Jaewon Jung <jaewon8868@gmail.com>
 ---
- tools/testing/selftests/drivers/net/psp.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/testing/selftests/ftrace/test.d/functions        | 10 ++++++++++
+ .../selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc |  4 ++--
+ tools/testing/selftests/ftrace/test.d/template         |  1 +
+ 3 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index 473500901879..e507951b440b 100755
---- a/tools/testing/selftests/drivers/net/psp.py
-+++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -120,6 +120,12 @@ def _check_data_rx(cfg, exp_len):
-     ksft_eq(read_len, exp_len)
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index 826141e299e5..3cf8ac5fb4d4 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -145,6 +145,7 @@ check_requires() { # Check required files and tracers
+ 	p=${i%:program}
+         r=${i%:README}
+         t=${i%:tracer}
++	d=${i%:debugfs}
+ 	if [ "$p" != "$i" ]; then
+ 	    if ! which "$p" ; then
+                 echo "Required program $p is not found."
+@@ -166,6 +167,15 @@ check_requires() { # Check required files and tracers
+                 echo "Required feature pattern \"$r\" is not in README."
+                 exit_unsupported
+             fi
++	elif [ "$d" != "$i" ]; then
++	    DEBUGFS_DIR=$(awk '$3 == "debugfs" { print $2; exit }' /proc/mounts)
++	    if [ -z "$DEBUGFS_DIR" ]; then
++		echo "Required filesystem debugfs is not mounted."
++		exit_unsupported
++	    elif [ ! -e "$DEBUGFS_DIR/$d" ]; then
++		echo "Required debugfs interface $d doesn't exist."
++		exit_unsupported
++	    fi
+         elif [ ! -e "$i" ]; then
+             echo "Required feature interface $i doesn't exist."
+             exit_unsupported
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+index 9f5d99328086..25f7192f887b 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+@@ -2,7 +2,7 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ # Copyright (C) 2023 Akanksha J N, IBM corporation
+ # description: Register/unregister optimized probe
+-# requires: kprobe_events
++# requires: kprobe_events kprobes/list:debugfs
  
- 
-+def _check_data_echo(cfg, s):
-+    _send_with_ack(cfg, b'data echo\0')
-+    s.settimeout(1.0)
-+    ksft_eq(s.recv(5), b'echo\0')
-+
-+
- def _check_data_outq(s, exp_len, force_wait=False):
-     outq = 0
-     for _ in range(10):
-@@ -478,6 +484,7 @@ def _data_basic_send(cfg, version, ipver):
- 
-     data_len = _send_careful(cfg, s, 100)
-     _check_data_rx(cfg, data_len)
-+    _check_data_echo(cfg, s)
-     _close_psp_conn(cfg, s)
- 
- 
-@@ -726,6 +733,7 @@ def _data_basic_send_netkit_psp_assoc(cfg, version, ipver):
- 
-         data_len = _send_careful(cfg, sock, 100)
-         _check_data_rx(cfg, data_len)
-+        _check_data_echo(cfg, sock)
-         _close_psp_conn(cfg, sock)
- 
+ case `uname -m` in
+ x86_64)
+@@ -22,7 +22,7 @@ for i in `seq 0 255`; do
+         echo  "p:testprobe $FUNCTION_FORK+${i}" > kprobe_events || continue
+         echo 1 > events/kprobes/enable || continue
+         (echo "forked")
+-	PROBE=$(grep $FUNCTION_FORK /sys/kernel/debug/kprobes/list)
++	PROBE=$(grep $FUNCTION_FORK "$DEBUGFS_DIR/kprobes/list")
+         echo 0 > events/kprobes/enable
+         echo > kprobe_events
+ 	if echo $PROBE | grep -q OPTIMIZED; then
+diff --git a/tools/testing/selftests/ftrace/test.d/template b/tools/testing/selftests/ftrace/test.d/template
+index 2cd8947edf72..d4a2500498f6 100644
+--- a/tools/testing/selftests/ftrace/test.d/template
++++ b/tools/testing/selftests/ftrace/test.d/template
+@@ -5,6 +5,7 @@
+ # The required tracer needs :tracer suffix, e.g. function:tracer
+ # The required README string needs :README suffix, e.g. "x8/16/32/64":README
+ # and the README string is treated as a fixed-string instead of regexp pattern.
++# The required debugfs interface needs :debugfs suffix, e.g. kprobes/list:debugfs
+ # you have to add ".tc" extention for your testcase file
+ # Note that all tests are run with "errexit" option.
  
 -- 
-2.56.0.257.gf7497c7d27-goog
+2.43.0
 
