@@ -1,100 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.52
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792934732;
-	b=g3Mnwck3R+EDL2qWvH55163Um2W1Yf8qnmGhgNsNFN1XHoh0d5tuKBXkYoPa8Qv/kRFc
-	 74K8jAisjDoQSsd0+3B+NFd+3YFfDLl6RpQFsiqoaILc3A9QSXRgVbuAHmT/Jnav7zwHQ
-	 HKRveCJLFjUG9dM2aaiypxqr646M8vZmmVqfs/pNlcqZlZKNRXzExu5icUo96ELYnqneg
-	 v7VBrqa7JlTFimW4plmvWwzWB8jeqIa1qy2xP6Q1oRl1RNPOZGHwuINaQILZrby2rwTqf
-	 5LKxSRW0HwBpCZBwI1csaGWXxk+b7xYBQO20mynYjBC9ScIApeHic0uC93XohAIOHwg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792934732;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792940256;
+	b=gPpZM9/D8DJ7UH8Bq3KMBaAEJkyrnpj96pg1rVBfBSipODT/Qsjcy9sXX0R0gEzSJR7N
+	 928tbBEsQGFbnj28eFPWdfSE8pKPnLE/utVFv72BKIEuw4KKYwKE0ivPtQj7CvTyB2i3/
+	 JfSKPNNtFNnGSy90ONpyQuUrtgrYgufXe5ptG7Li+k73epYgKqdL4KOs4VP7/i/Eo1Bbt
+	 Rng65Amm7IqZ3gob6FJCGSUqNSSXYI2Hve1kPhkA2hb0UcijqfHtGFepI0XJ58tYRAhZX
+	 j/iTEMix2NAfS6RO9oSCyd8W4c7dQ7NhK8kWVmgRZXd/LLIDQbt1KusJT/83gjMt7oQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792940256;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=guXEOoyLZuS3syWsAlTfoo1CnrsW8IABAZ2MXop4xeM=;
-	b=EWZvdk8sdNiP48ookcLAfIGg8cjQa4xca3JawPTCZIW073z18BtGhUT9UdVqcaeqkAAV
-	 XtrNZ6rh8Z8i766lmAkRNMy+ELwgH9uWQ68FGqd9KMKjITICz6xTCVb8Yk9LVGfaj8KKa
-	 qBGjy70lR/rK/BqBX9LPl4cffY7BmvtK6R8swPsbx5pDIq1nduR+xGLeEoVrYP/Nxorvh
-	 nTnWLUbIrPq91uCsH6sn2fsEjyubUJ2vFDfZU49DeJRoHIMW2Cx2/iXPtYjEuwacO7D3X
-	 jYA+VjwysIxPft811ba7UHGqZylKD9I7ga98CUJweR5pp3YPvD8ac/B6mnsJ/AF7sWA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To;
+	bh=IExH7VqrZ8oPD6Z8eyPZrnBoWcrKLM561SgLi8Akt3Q=;
+	b=bVTDylSC+K2fVlAcBuPVx6ElRMu+QRAjiceJ/PFTp3UobiuJ7uaRDlvkYqpa8TGKsuor
+	 qNSxM690exRT72nzXDHOsjbFvGhuTyUfX3hxAiy+RlqSXqTQxcMNDu4q+ZskMgR/oMzvN
+	 p2DqGWNGLcpio0Euj6uC4N3OsLeNZx7+DizGTHOmmxmnmDxLTH4ZGVIS9TamRtJxd8dJ6
+	 vMJb/48b045zSQlAzS8R4g+L9sHQ4MfqYgmSfrL81vbNcIrp4cFzbyxlDCOFIOy6ncRht
+	 LsuUlttWhselQ5EfXlhb18/yimn1Xlt+bfpsMGGdklo+AvM5qUeGXOOqroAGQllqj1w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=EHrJZaLt;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.52
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=P7Ipz8vv;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7FC606A31A
-	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 13:25:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD7FC606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00537606A31E
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 14:57:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 00537606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=EHrJZaLt
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-91ba8fcc684so22664256d6.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 06:25:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792934731; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IQ0c+79q86SWrUXtMELeWbnAv4YfFZUck1qlhEMXeRbeVsRC+LNaTiOzlT3N77j6qY
-         DgvrSaWPrUPyPhv6S8lyFY8kF2J3J2PuRiNv+Gac0a3szxwEX9Xr4BviQPgMZGIyXWtg
-         hzxoC1tlSVJyFY77UZl40q9b+ZoOwfYM660lT3hY8OkInBPlsLQ71tBYFkBI7kt23BYh
-         fp8GdQNrlULYAbXKdv+GWFcs5hthAacCfqr+7oroZKAlZEs+uDNwhX+MBASvfFJyUAEv
-         sdm4f2+j8aD5kBnXZ87GxURx0A04TclGd44D8Dexy1gy+rHYrYGN+2pCt3Q5sT/Da3SM
-         ewgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=guXEOoyLZuS3syWsAlTfoo1CnrsW8IABAZ2MXop4xeM=;
-        fh=kL5i+C59/0u+DPASg+5VIe2RDyurdwsx8oFWQ+Q6wVw=;
-        b=ZTSJnzgA26VjDkp2itNEcVn5msq9f7sWqdoSlmfYRueGYwMCccAg30pzxAE3F87FZw
-         lPj7EoHxv+pMPZPwPRyuIb4gYuj1GkyKGr/TUHGX3Dz9tTFIFToREdcrG4xDEq5fL01O
-         TOJDfx5HmBXRcrXRAAX7NwMPalaHubMXuMwzTPmVu6HfXkkz9tL7udktNwsplWgGscQU
-         zW+jNnJKKEmeTEhu8Bft+5RCaGnaCBae/98YdLfr6+iCEjHxkET/M2iv2nLJ42CfB/61
-         uedoyTjysp4XpVa/yb82eIrVcY2CUFHozFgbqd16fvmvxKlVyDiaadX7sIDKQ1lo8gxD
-         BT6g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=P7Ipz8vv
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a4d7ae1ae9so6152125e9.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 07:57:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792934731; x=1793539531; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=guXEOoyLZuS3syWsAlTfoo1CnrsW8IABAZ2MXop4xeM=;
-        b=EHrJZaLt7VtHx1yPQ10O8lA7efwKTyBBrss4U2TzyzskcZWD/Cl1vDMWLSemzmGcSy
-         05pxNF//4W5lw3GnguMsycI1rXKU+yVLV2WQ0ZOWd48jO4wHr65waWsdjrqxm58RM4NU
-         W9RmPpCzZS4d79Y0NBPb/wChJHF3kDBY1B3/Logmoe4mkOlsV5NES9XQ6WuZwFIVGUwy
-         BCbTn/cPLibvdW3WevChQIYSS+f4WJN7IUoEX+/ZdPO/S+WbIwfoec+Pyz1hOM58DajV
-         lKkztwJvGAo7pd5IXqaLpkxdK+KIuQuZfR7UDO6kZD2ZlpyuGWUAsCw6/siT57GKeir+
-         Rsvg==
+        d=gmail.com; s=20251104; t=1792940254; x=1793545054; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IExH7VqrZ8oPD6Z8eyPZrnBoWcrKLM561SgLi8Akt3Q=;
+        b=P7Ipz8vvUWjpF6FHXG21uKZKLgsCCgQG3zNgpPHYI7kNj/SzMLzfA1i8Yh+l5L67RN
+         +lnFJijTHERB8MBgM7MQvq+ia5BTwqQ+O8Bo3eAuXvyGDVJndQfLIC5iz8rLKEU0vvmd
+         ZusY0rRuHxrxpmAikb5wG1YGTMRRjtt66YeGaMSLIb17IdJV98dYTI8m+xZFFfU2kHB1
+         pv+EGQv+SQuyEERCUbNj6Hcq/N1N4qao5PUPxTYz6Lbcl1ls5SFzU+14Jj0yzoI3cfWi
+         OiMy4HjCXERNI8dveVidEVDlFuHqzs1iTNtr0VOIfnLhVFWziFqavrN9q3ne+IysQUZD
+         GtpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792934731; x=1793539531;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=guXEOoyLZuS3syWsAlTfoo1CnrsW8IABAZ2MXop4xeM=;
-        b=Bcec+EOZB0oQN8eUahHlQXfOs+lkskpZII7sIR2d2yp57nAw6KUy0hmxalgf8H5BSi
-         pu8IHkMZYCCPBJaXJVCsXBVWXBzySbXBzJWronzprAAzsVNkrhDRXlFyfcxWYOu2C6oi
-         wSka2c4sgpWOpGnUBigIWwihlb0NNAkkrPfqUzgJjvrOAGjn/dNDVNZh+1JLxP647AbF
-         ZXzx318XMpiHJKmzJRYI/WSZY0Na4nsssCnubLUX7yr9fWAkRpI3nvDmpoZWFmzxr69n
-         z+eXHikPBoOar377qv6BERWb5brFftImjvi6KmS+dYkpw3FDw7mKsqNzN5sBv4zFP7Ly
-         IgdQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxM1W1zjmLWF9BDskuysW1Jbfxhj8+68gPFWFUJir5hRXmEGA5NcmdXn6KiKeXGzFfrki1MxJM6bdxeJqxOXZs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYINwAW7YhJoB94AyhDTCwuDSfu476JXVKcu/xpizyzf9y2Bo6Te
-	9jcVwmYF752nUkJUfvoUyxHAGmsmN7uRUjq53uyYV4TdnlQMgxVbIHE5QNGzfcB/xRk/Hqu1Pzy
-	CyX2tuuLvC24rFEsQvlYnu7n8WGVB900=
-X-Gm-Gg: AYBFou1K6oofzdpFHqCHr10OMtnxY2R2FqNzYl32eprgDyFnBs6klnk1Q/1MAdyIg87
-	QtkgsI2OPFUnj95Aj0ab4NRmzrR+v4VQDjqe1oo3V1S/YOG022ORlmLDeHkaLnVPT+tb0cH+J2S
-	beNH4vaJxftVj+2E1OS+coCLJZcy2ZwHfRLI9ZQt2oNbC/5LTWbY7i33KGn5NnE+jvt/4q1aF3s
-	tiZjzKhecgdnbFKE41KRolc/IWT2twdoOueHMWCsSI2eLQnP/5jy8BiOGZ9yPDGZkVqtiJDRZXF
-	0VxKaW5iGVHYweb3s8WGahfGqvU8MpYI5ADdWRYOgOQfw9W4fgeOamUaYhOo2Hwvnnq9JX3NVjh
-	hiNV8hyk8oAZUXPvBpnCBHae6HvfPUvAYGQSoKyQMMQk7LnS8ob8xlF+n8xkgM8IntRayG5Tfz9
-	BDj6Ov/ZZ1wcBRtNotQiG36io1yj43++ulLXfJjuEEbaGzgq1qgG2ZRkGJV18Ya3RMpyew5G7s
-X-Received: by 2002:a05:6214:76e:b0:914:4376:4ef8 with SMTP id
- 6a1803df08f44-91c48d17173mr71961046d6.6.1792934730661; Sun, 25 Oct 2026
- 06:25:30 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792940254; x=1793545054;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=IExH7VqrZ8oPD6Z8eyPZrnBoWcrKLM561SgLi8Akt3Q=;
+        b=0JJUixfBEEhRmDtC9UcUs8dcGvYgr/tVMq/uz7gniAwxpifmCXfTR4NHGC9KAgVaK6
+         rAq6hET+s9qti9xX4uoiDMzRCWSxMYahnXdzrfyLEPTO2ruVNzeKOncVDXa2aE/D6IEH
+         QSQx8/gQ2lC36ip48PSIpRMeMrv8zUt9H6OekawsmK6Qy8SfdW4aLIIPWMRBHmoZBkc+
+         hxXJEFixTtVwqEBh/P5/9w0l50Sms1dOPvzaJR8f9DB0UawodAUzXLXZSk5uxDRT5hpR
+         GLgXjK8LbHkAADKWSHuhFqdJ2RSJT9M04UG/TW6+Tmbbj1l+NMskEaMypzy+8JM5gqsm
+         07Iw==
+X-Forwarded-Encrypted: i=1; AKwUvBywHxamznRHAjpLxd3rjZ92z69YUHkujQPJ53Hqy27kR/XWg11BuwN9ZIGg9/cw6m1Y1wsfHCLQozacbokgbMk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKJKvkt/keBpMpQsCOYr5NlUxkNCvJhvgQN9vKRfu/fT/6HV6/x
+	1uFDtmlO4Fa+G/HiATdMMysfPswDk5Y6DBRABrmXK5caOycNYhI/p7wZ
+X-Gm-Gg: AYBFou0/p+hAVl8JG9vSMS09uIdfm4DT11gRjB8izb5DY+CfxA2YW63k8PoTvPZL7Q4
+	+hTRs8F7DatpzdlB+dw2pqm1FEq7+TxFCmcSI2fgl8cut1Oe+EOkahOPbUyayXF+MEbjdI4BPJK
+	OWqa5KwQ7VXrnUImnjgqmiPcxiAJ+c0gYKQQXO66pxJ1Sxy3gxQDhG7RyV9WwzbZpZl2jnbSz/K
+	YJjP0Sh+WtWoLurJxffeYThv3ud1SYnndGj8/96Xo8GFIv9xyZxLF41YNtKiscDmOIxVtKzZlJ7
+	Oc7D5BWRE5WvL6IU/FW9ThOgBUWiq3PZ62bC61ojAIkeJ1FuBySwt19M9jP0RAcaqJFLaib6LtV
+	9l8s3AlY/9AwOCLJZJgccek5V537pJx2uugcVMHWKCR/ltmW62yzbaf4m8Ul+Q9s/F5gZ4po/l/
+	J+lAULVBjgamEeFGe80kjVTolUHx/oUKQEFK93jcRrB0FdeFvRIxYLQeHaTU5nCz2C18b4WPHXF
+	jYs5vMX5o6VKTf26qaSpqlQ4nYVHOJ7kGDhMI/3g5dowfioX01OYipAy47W6RLjxTEP3ZzO95sA
+	2tK3
+X-Received: by 2002:a05:600c:6095:b0:49f:e701:51c8 with SMTP id 5b1f17b1804b1-4a35ac7f0d2mr64643565e9.9.1792940254154;
+        Sun, 25 Oct 2026 07:57:34 -0700 (PDT)
+Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ebd48e0sm11218693f8f.38.2026.10.25.07.57.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 07:57:33 -0700 (PDT)
+Date: Sun, 25 Oct 2026 15:57:32 +0100
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: Farid Zakaria <farid.m.zakaria@gmail.com>
+Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	John Ericson <mail@johnericson.me>,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/3] landlock: Add access rights on created files
+Message-ID: <20261025.8e22954c9c47@gnoack.org>
+References: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
+ <20261025.769b43a39e24@gnoack.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,66 +105,130 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <179250646543.2190262.8632957027583518623@gmail.com>
-In-Reply-To: <179250646543.2190262.8632957027583518623@gmail.com>
-From: Daniel Pereira <danielmaraboo@gmail.com>
-Date: Sun, 25 Oct 2026 10:25:19 -0300
-X-Gm-Features: AclHuK9kZbLYrL_1P7Nb5PvMxv1l7G9aeHa0aDH5ksgUMzl9ooOaFs_24PQ2VeA
-Message-ID: <CAMAsx6cniehFSgKz0+FRbGV=A=TGvogwx87xcqhiZNQGfeFFYQ@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: document --summary and --failed options
-To: eugenio.zuccarelli@gmail.com
-Cc: brendan.higgins@linux.dev, david@davidgow.net, corbet@lwn.net, 
-	raemoar63@gmail.com, skhan@linuxfoundation.org, rdunlap@infradead.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261025.769b43a39e24@gnoack.org>
 
-On Tue, Oct 20, 2026, Eugenio Zuccarelli wrote:
-> +- ``--summary``: If set, prints only the summary line for parsed test
-> + results, rather than the result of every individual test. Does nothing
-> + if ``--raw_output`` is set.
-> +
-> +- ``--failed``: If set, prints only the tests that failed or crashed, along
-> + with the summary line, once all tests have run. Does nothing if
-> + ``--raw_output`` is set.
+On Sun, Oct 25, 2026 at 12:07:10PM +0100, Günther Noack wrote:
+> Hello Farid!
+> 
+> On Sat, Oct 24, 2026 at 01:39:16PM -0700, Farid Zakaria wrote:
+> > This is a proposal for an idea to add support for landlock to work
+> > better with build systems such as Nix where they want to apply
+> > restrictions but the paths may not yet exist.
+> > 
+> > TL;DR;
+> > ========
+> > 
+> > Landlock rules attach to inodes that exist when a ruleset is built.
+> > That makes a directory shared between trusted and sandboxed tasks hard
+> > to confine: the sandbox may create entries there with
+> > LANDLOCK_ACCESS_FS_MAKE_*, but no rule can name those entries ahead of
+> > time, and granting read access on the directory to cover them exposes
+> > every other entry as well. This series adds a rule flag that grants
+> > access rights on the entries a domain creates in a directory, instead
+> > of on the directory.
+> > 
+> > Motivation
+> > ==========
+> > 
+> > The motivating user is the Nix build sandbox. Every Nix build runs in
+> > its own sandbox, and a build may only read its declared inputs in
+> > /nix/store and must be able to write and read back the outputs it
+> > creates there. Nix enforces this with a private mount namespace: it
+> > creates an empty store directory and bind-mounts each input path into
+> > it, one mount per input. Nix has paid this per-input cost since the
+> > sandbox was introduced [1].
+> > 
+> > The cost is paid per build and grows with the size of the input
+> > closure. Nix is moving towards much finer-grained builds (many small
+> > derivations instead of a few large ones), so the number of sandboxes
+> > grows while each build's own work shrinks, and the sandbox setup is
+> > becoming the bottleneck. A typical build has hundreds of inputs; large
+> > ones have thousands.
+> > 
+> > A microbenchmark sets up and tears down a Nix-like sandbox (user,
+> > mount, PID, IPC, UTS and network namespaces, pivot_root into a chroot,
+> > removing the chroot afterwards). It compares one bind mount per input
+> > with a single bind mount of the whole store plus one Landlock rule per
+> > input. Median latency per sandbox, one sandbox at a time, Linux 7.1,
+> > ext4, 16 cores:
+> > 
+> >   inputs   bind mount per input   one bind mount + Landlock   speedup
+> >       10         3.2 ms                    2.3 ms               1.4x
+> >      100        11.6 ms                    2.8 ms               4.1x
+> >     1000        79.3 ms                    6.4 ms              12.4x
+> >     5000       400.1 ms                   24.4 ms              16.4x
+> > 
+> > With Landlock, an input costs an O_PATH open and a landlock_add_rule()
+> > call: there is a single mount, and no mountpoint directory to create
+> > before the build and remove after it (removing the 1000 empty
+> > mountpoints alone took 17 ms).
+> > 
+> > The single bind mount is only sound if the store listing and the
+> > undeclared store paths stay unreadable while the build can still use
+> > its outputs. Without this series, covering the outputs requires a rule
+> > on /nix/store itself, which makes every store path readable again.
+> > 
+> > [1] https://github.com/NixOS/nix/issues/179
+> 
+> I have not done a thorough code review yet, and will focus on the
+> general approach.
+> 
+> I am generally in favor of this approach where we keep track of the
+> directory inode plus the file name.
 
-Hi Eugenio,
+Apologies, I think I was jumping to conclusions here when I read this
+too superficially - I realize that you have implemented something
+different;
 
-Thanks for documenting these. I compared both entries with kunit.py and
-kunit_parser.py and the descriptions match the code: --summary silences
-the per-test output and only prints the summary line, --failed prints
-only the failed or crashed tests plus the summary once everything has
-been parsed, and both are ignored with --raw_output.
+If I understand correctly, your proposed patch set is granting the
+access rights on every file that you are creating freshly, but not on
+files that were created by other processes in the same directory.  The
+semantics, from what I can see, seem like a Landlock variant to what
+the "sticky bit" does in /tmp -- you have access to what you create
+yourself, but not to the files created by other processes.
 
-I noticed two things while testing the patch, in case they are useful
-to the KUnit maintainers:
 
-1) With the patch applied, "make SPHINXDIRS=dev-tools htmldocs"
-reports two new warnings, and that file had none before:
+## Alternative suggestion
 
-run_wrapper.rst:331: WARNING: Bullet list ends without a blank
-line; unexpected unindent. [docutils]
-run_wrapper.rst:335: WARNING: Bullet list ends without a blank
-line; unexpected unindent. [docutils]
+I have been discussing the other approach with Mickaël a while back.
+This would also work in use cases where we want to express a rule on a
+path whose underlying file inode might change, with examples being
+/etc/resolv.conf (recreated by a DHCP client) or Pathname Unix Domain
+Sockets (commonly recreated when services restart).
 
-The continuation lines of the new items are indented by one space.
-Docutils wants them aligned with the text after "- ", that is two
-spaces, like the --json and --junit items just above. I checked
-that with two spaces both warnings go away, so this may be a simple
-fix for whoever applies the patch.
+In that approach, we'd add a rule like
 
-2) "Assisted-by: LLM" is not a tag that Documentation/process/ describes
-in docs-next, and
-"https://www.google.com/url?q=http://checkpatch.pl&source=gmail&ust=1793021034312000&sa=E
---strict" reports it ("Unrecognized
-email address: 'LLM'"). Documentation/process/generated-content.rst
-asks for the use of a tool to be described in the changelog instead,
-so maybe the trailer could be dropped, or turned into a sentence in
-the commit message.
+/* pseudocode; name and exact layout TBD */
+struct landlock_path_beneath2_attr {
+	__u64 allowed_access;
+        __s32 parent_fd;
+        char  *basename;
+}
 
-These are only suggestions; how to proceed is of course up to you and
-the maintainers.
+During the path walk when checking for an access right, it would match
+if the parent_fd matches an inode and the name of the next path
+component is basename.  For example, to access a (potentially
+changing) /etc/resolv.conf:
 
-Thanks,
-Daniel
+struct landlock_path_beneath_attr2 attr = {
+	.allowed_access = READ_ONLY_ACCESSES,
+        .parent_fd      = open("/etc", O_PATH|O_CLOEXEC),
+        .basename       = "resolv.conf",
+}
+
+Or to allow the creation of an output file:
+
+struct landlock_path_beneath_attr2 attr = {
+	.allowed_access = READ_WRITE_ACCESSES | LANDLOCK_ACCESS_FS_MAKE_REG,
+        .parent_fd      = open("/output/directory", O_PATH|O_CLOEXEC),
+        .basename       = "mymodule.o",
+}
+
+Would that be a model that would work for your Nix use case as well?
+I'm imagining that you are declaring the exact list of output files,
+is that correct?
+
+–Günther
