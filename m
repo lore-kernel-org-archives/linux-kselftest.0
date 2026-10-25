@@ -1,79 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792926251;
-	b=Dch3v3eACBpiOzJQ3KHsN4nH1DEDXd4WVBbDA3jfO7jaTO4JrGsAIjPvBN8bkvFKxdif
-	 GcFsjUthi8cvBXb4yniRRs3YXkqgOGVRhr5p8sJ5c+FoFY/QQwKNGzbZ+aLTDRt1Sv9uk
-	 ueFzQpb1pAEDKW6jd/4sIYkXbWEOOXMA6bUQsSHGiMjS8lSc4uF/Fkib2rJI+pyI9CurP
-	 shwxRwdiX2SDQcl87BxYc7YAP8QZmz3JhPztRMIFboe2uX2RwJ+QREhUo0Q8vcFJvC4e6
-	 Y8UTEn8PSKRL8Q+Iu2fNW+7/eoVIxfIP+p5/kfLWmR8jpfoM2CW87wPrfHM45upssqg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792926251;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ISuBoUvMJ7kEOnnLWzxJks2SuDZwYGjQZJJOiq9GIfU=;
-	b=zO8XAfR75qZc6meHj/B4eKLvAtkL27S9xm8/iQ/hujRp/TCIveA34oSFWRaRO8DC2CCK
-	 3Z16FoO1JG24fg0xwkSb4lPLNPa1IQWRnP3xLs1eUQ25NfSVAhC0N6jHPYocHVZhEENIV
-	 T6W6o8yywNBGN/1nRW0IFxi/KBxdx9vEsnCIocV/011kQDuiC4U3yQ4mIb8t+z8yj+dsg
-	 D+7sk9/EyyZ5jVdDc2Zdt/G6ApEbxI2Xzi4ytVlysG/dR08YkLMf3f8PW6Fy0sgEweg4b
-	 7x25z7LQXWOeI4jkuUm3mBZVtVhl+NmeJTi5/9Ypqf5YgHAzprjOnQyww7WJkH/Nz6w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XgS9Gnag;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21244606A320;
-	Sun, 25 Oct 2026 11:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XgS9Gnag
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792926245;
-	b=cDGEu7HVkh/nV0lIcfZZAc4gDkZk0DRpamesdHGYBSJduUJoCIOfvUyQQ2bsy2yKAUrf
-	 we7OvrntBxe0LLn/JIM325FeFz8Y2+EFO3zzUpjzNwm0T5VAHDYGmXLvRgGcn+v2X6m4R
-	 mJLdnvxe/u7wvwR9o0cYePLc3Iopb/qnYb0sho0i3CiCl8xz40RHVqwbH3l9VaxwIYNu0
-	 VD2hJjy1+Jx+cgIEbuTl3wxswpezI3NpL9VYFBNK/AEfSzReaexktLQITl7KMnJPFMDBW
-	 omSwIhenyMn8SAJDefIQPrewBt940+ATyG2/STReSXv5MmchzKsbrtWUKcda9o0bmuA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792926245;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ISuBoUvMJ7kEOnnLWzxJks2SuDZwYGjQZJJOiq9GIfU=;
-	b=qguA+Z+O8EEBPeDwco6f+HBwwV963+Skn7gbusydN5JsQCn3azl8pKpgkGRme7XyMuGs
-	 XB4//7ykO627/hQBYY7MXWAbThQDHNOAgMk5WF5MpL1Qun+J+2mx2SiuYhntoytWCnJzs
-	 wOZGRqo+x+jI5NTVDGsihLd5HBgmk10v9e0c2R+/JBlZiZEJa50jENmWiaNHeTKAHyxt8
-	 t9VmHb0sr1ZCebcaaE7KfH7RCHL5D550wYYL/tcGEP4V07GU9P5oNltnGlaWrQ/T5R8TY
-	 jR31MgMK+CmdhzzTwM4FrSy3MllUx37y0TS5y2h+XUveGobRLUh9/RksRB7Fd1I+rTw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792926438;
+	b=O+pBQBphEdyU7p2w2ICK/uesVd0BykaZ2loEjXnSlWGZjnxESJRRi+QIfwFAZ8Pz+Rlh
+	 lp88BJcd9wo8WW+FDvEpDCiGK9/IAZ3eZ8ArG+afsdaQxz5QST50PyNDJoGBvN1EObinP
+	 oy5vlVRZyGUNI/RpnfLfHGkGprkGT4aeevOIjawz3hqWn++dsWKSLv61yXV+Z3FQ99j/b
+	 iVlFatd0FCJptiN9U671LZoCK4kVzoGqg7zAE/SFDRE6IGd74+yUY5TvbWz6mPKp7dkLX
+	 N1x0A37264eVj/TIno7suXPBwKbrysyM1gu1H++/+A2UPSlUvO8/af+Tef1uEtmvDNA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792926438;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To;
+	bh=HNmWqF1JTLCSQrPqjI1jaX+dUsgvu4DGBpBuWqz6xVM=;
+	b=Ioxbru7PYGD7aKyn++jZo9aJ2EUvjnITzzgAePeGsqBPzbwRINbplGZ9oA9caPFiaZSP
+	 CEwA/9eKf8YBAUTQS+SBE4X9BiNwRTQhWp2E0V0Ftm4ywVjd3jdeXxn4Shw5Pzog1GkA/
+	 eKl4ERxi+tnyX9dE+aDtRhGBm0DVCLRmbEDcfUraZ788KqQvKjAD724SXgvhPFx6rQt4W
+	 L3i8mltXw/aNt5D8qhNHl7miiQWPGQpxV9B+G55bQNbEz287tEZ5A8eVi5wQ88yl/975q
+	 X/6jGhD1TKQmKbAb22gcnGnog/LY9R4S2a6t98KDG8I4YvETDp0tkHl85YKIQ7bz5bQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ODS+EAZs;
+	arc=none smtp.remote-ip=209.85.128.53
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8F4A61F01828;
-	Sun, 25 Oct 2026 11:04:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792926245;
-	bh=ISuBoUvMJ7kEOnnLWzxJks2SuDZwYGjQZJJOiq9GIfU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=XgS9GnagqR1ifM5j3z/6PnsICs3XEV6r4nDIDoJwwcrIJ6d3JHj9qqN5RVWyE/oSa
-	 WXFrF4guytrzZNrjE8Z/mQzzaXnTiFZJXbN+H9vA1S7PGIQjXviQ2c0bnuPdn39p7a
-	 4VU0IxkB11MysUnxcyjG5o9aE0CauTU3SScaitEWeXZfV4VQEreblrngsiUL9W1o7Q
-	 6WlE1NPOFw8PLatq5/lILFmyWsV88BkKCnrBWqZd1Lquri1MvBMsq9s5A+ynMgKrQe
-	 CKTmTCwRO/Tb65xm3BPCwA/wQMJEM1nD+EIwPz4GBim6JvS4b4yodbwtVcohJStC3f
-	 kQzEGEdZe1teQ==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id F3729449B4;
-	Sun, 25 Oct 2026 11:04:03 +0000 (UTC)
-From: Mike Bazov via B4 Relay <devnull+mikeba.sentinelone.com@kernel.org>
-Date: Sun, 25 Oct 2026 13:02:58 +0200
-Subject: [PATCH RFC bpf-next 1/2] bpf: Keep recursion-checked trampoline
- programs non-preemptible on !PREEMPT_RT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E38D606A31B
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 11:07:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E38D606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ODS+EAZs
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a208d93758so24086395e9.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 04:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792926437; x=1793531237; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=HNmWqF1JTLCSQrPqjI1jaX+dUsgvu4DGBpBuWqz6xVM=;
+        b=ODS+EAZsfQsQqYnYDNcBMTL5sH2KJriCY5hM05coRfGpI9gQbLYP6jnTuqcZuWkam9
+         rkHxAwt/KFDkKPF79ZJEdtrgvylh/6UKgEatmQKNDrQIpePLuXEYPmuhKmOoEFMIfSXa
+         EwW9vGXk7rbThpoluUtt1lF4N4iHPMrBk8VE8eojm50tfSnjXsd83vP6F8ljeRTfJmNg
+         jpC1Cs7cCMMNfT4wqf786El5BMOQA2X9R/gAyOib57oQJ6KCVmOzFU956Eo51mJxFxK5
+         IN72E2vX62+X+WRaa4snaXzhtjqf6dE3LTNyfoWYdm5kVc9hnOxfIzBg4p95s9DXsyZq
+         NOBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792926437; x=1793531237;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=HNmWqF1JTLCSQrPqjI1jaX+dUsgvu4DGBpBuWqz6xVM=;
+        b=F1pgvwYNVU35z7pn02i25OF9Ksjcrex7ALd4u/ADWkvDvrKBMi+nqFePDmH8CjJ6JC
+         Tcb/ZaYV/3SpnzoguVvkh4q341j9d67iMJuVDAw49JRx93Z7t9lTdeXbLeb2nrPOaz+b
+         GhO3uVAK75XSS0702tVCtn3ROvTlF97vJhzkq6ka+7HbORPCnUmbQsPyw2Sun2oL1aK+
+         R9YFK014lEUQ5fY/F45cRO3W5+6OcMjetf5CPixLpoMXACryBCmxceycrdig7tcKxnpR
+         gg49UtPKjwFl9WspexuxIg9j9OEqoKzkt79GCg5OCPnPdwhzBdHmJa2q3uXcsrryyNnO
+         wVhQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxHywyLzleS0+p0tBsgan0UsaSjZTGrXSz+c7UJ8TBiSneH9NGm4R1XaJRrAAfcm62wW2PoKU5d5/n09GYctwQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKrDFiJHwaovL5gm0NoqU0zSzKFsViVZuD49K08ViLhyFSn3q1V
+	S/1pw5FgDzmtkXOJ1C2xIPvHVakVm0Ry7kcfTgpsIUOVc6Qs9EV2WiYn
+X-Gm-Gg: AYBFou0oE6MLE9X9m7tf29AF58xqYVFNohohcLj5mVOjzDGXQDVaNqrFaQzNxPTyY3Y
+	LhkDeNPUHw3qpo6ykfYIIZNUuSdm2QMPE5H+aYGNfOvK/05dk7ncNvhCW0LUEfpS9RvaZ2zVi8Z
+	6iPbshAyLF6OpZ3drQ4HN8FZB85nqwiK3ZKpwUKol+UehfK7wEbQdIYMxZE9I+SLQSmKUiGnng3
+	jSWOMdXppV4rQb7efxFC4Z2dJJbvIaK6R1iEF7IXUxCwjvorY7MrH1fYIdg1UUI8hKJjvpLFfF3
+	RoGkUGjGZKZPBCGwzPe9Ehk3NS4d5zVcOmRn8q7GOu7x2szSNnPcp+wj52b1v3ZhuJWPyy1PhS3
+	ETP+a7gadL0kSA8PIlDMvGu9nQzGuJF0+piGXX2uIQqZU7eYfnSQ19tUZmox2l4KcCNN5MiZ/eo
+	B0UMBGNk0zD2Gay4gLCNgbzLL1fwLWAmiwsOzdtspEmjCawTeWGC/um0bx87+ybuBjVM0lQ9rcB
+	1H2lQt3HQQgphHyQ+XRRD6K85bBrE3kjrNocl+ElUGDDE3lRWqEz9IpWEnGxVHvZjkQn8kkZYal
+	yJqREQ==
+X-Received: by 2002:a05:600c:870f:b0:4a1:f7f4:7ced with SMTP id 5b1f17b1804b1-4a35ac9d1cdmr64334395e9.17.1792926436490;
+        Sun, 25 Oct 2026 04:07:16 -0700 (PDT)
+Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a35a029332sm102825965e9.4.2026.10.25.04.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 04:07:16 -0700 (PDT)
+Date: Sun, 25 Oct 2026 12:07:10 +0100
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: Farid Zakaria <farid.m.zakaria@gmail.com>
+Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	John Ericson <mail@johnericson.me>,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/3] landlock: Add access rights on created files
+Message-ID: <20261025.769b43a39e24@gnoack.org>
+References: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,114 +104,182 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261025-b4-bpf-trampoline-preempt-v1-1-198dcdc0c6ac@sentinelone.com>
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
-In-Reply-To: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mike Bazov <mikeba@sentinelone.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792926242; l=3369;
- i=mikeba@sentinelone.com; s=20261022; h=from:subject:message-id;
- bh=im30M5hxZEzaHqyEhAAnmhe/8ENnb4qNYKDcXtbtVVo=;
- b=GrLfHA1TCeRD1/d8BI/1u+pE6udJo7/utUi8Et3C/aczd72dGCkpJjvj6+21yG6GPVJsVToff
- tgyp5k/12nuBMhR/8xDWMNTdHniBbK+QYY7GABsqk2+s73MsjpXNA9f
-X-Developer-Key: i=mikeba@sentinelone.com; a=ed25519;
- pk=DBXcQ0qoCkgacRsRwT1JU7oOWpWSYuTyLiXMfNLcP+A=
-X-Endpoint-Received: by B4 Relay for mikeba@sentinelone.com/20261022 with
- auth_id=1284
-X-Original-From: Mike Bazov <mikeba@sentinelone.com>
-Reply-To: mikeba@sentinelone.com
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
 
-From: Mike Bazov <mikeba@sentinelone.com>
+Hello Farid!
 
-__bpf_prog_enter_recur() acquires the per-CPU recursion counter
-(prog->active) under rcu_read_lock_dont_migrate(), which disables CPU
-migration but leaves preemption enabled.
+On Sat, Oct 24, 2026 at 01:39:16PM -0700, Farid Zakaria wrote:
+> This is a proposal for an idea to add support for landlock to work
+> better with build systems such as Nix where they want to apply
+> restrictions but the paths may not yet exist.
+> 
+> TL;DR;
+> ========
+> 
+> Landlock rules attach to inodes that exist when a ruleset is built.
+> That makes a directory shared between trusted and sandboxed tasks hard
+> to confine: the sandbox may create entries there with
+> LANDLOCK_ACCESS_FS_MAKE_*, but no rule can name those entries ahead of
+> time, and granting read access on the directory to cover them exposes
+> every other entry as well. This series adds a rule flag that grants
+> access rights on the entries a domain creates in a directory, instead
+> of on the directory.
+> 
+> Motivation
+> ==========
+> 
+> The motivating user is the Nix build sandbox. Every Nix build runs in
+> its own sandbox, and a build may only read its declared inputs in
+> /nix/store and must be able to write and read back the outputs it
+> creates there. Nix enforces this with a private mount namespace: it
+> creates an empty store directory and bind-mounts each input path into
+> it, one mount per input. Nix has paid this per-input cost since the
+> sandbox was introduced [1].
+> 
+> The cost is paid per build and grows with the size of the input
+> closure. Nix is moving towards much finer-grained builds (many small
+> derivations instead of a few large ones), so the number of sandboxes
+> grows while each build's own work shrinks, and the sandbox setup is
+> becoming the bottleneck. A typical build has hundreds of inputs; large
+> ones have thousands.
+> 
+> A microbenchmark sets up and tears down a Nix-like sandbox (user,
+> mount, PID, IPC, UTS and network namespaces, pivot_root into a chroot,
+> removing the chroot afterwards). It compares one bind mount per input
+> with a single bind mount of the whole store plus one Landlock rule per
+> input. Median latency per sandbox, one sandbox at a time, Linux 7.1,
+> ext4, 16 cores:
+> 
+>   inputs   bind mount per input   one bind mount + Landlock   speedup
+>       10         3.2 ms                    2.3 ms               1.4x
+>      100        11.6 ms                    2.8 ms               4.1x
+>     1000        79.3 ms                    6.4 ms              12.4x
+>     5000       400.1 ms                   24.4 ms              16.4x
+> 
+> With Landlock, an input costs an O_PATH open and a landlock_add_rule()
+> call: there is a single mount, and no mountpoint directory to create
+> before the build and remove after it (removing the 1000 empty
+> mountpoints alone took 17 ms).
+> 
+> The single bind mount is only sound if the store listing and the
+> undeclared store paths stay unreadable while the build can still use
+> its outputs. Without this series, covering the outputs requires a rule
+> on /nix/store itself, which makes every store path readable again.
+> 
+> [1] https://github.com/NixOS/nix/issues/179
 
-When a task executing a non-sleepable fentry/fexit program on CPU N is
-preempted mid-program, prog->active remains 1 on CPU N while the
-preempted task is off-CPU. Any unrelated task scheduled onto CPU N that
-triggers the same hook observes prog->active != 1 in
-bpf_prog_get_recursion_context(), increments recursion_misses, and has
-its BPF program invocation silently skipped, even though no recursion
-occurred.
+I have not done a thorough code review yet, and will focus on the
+general approach.
 
-Before Linux 7.0 this was mostly masked on distribution kernels that
-defaulted to PREEMPT_VOLUNTARY, because non-sleepable BPF programs
-contain no voluntary scheduling points. Commit 7dadeaa6e851 ("sched:
-Further restrict the preemption modes") removed PREEMPT_NONE and
-PREEMPT_VOLUNTARY on x86 and arm64, so every distribution kernel now
-runs with lazy or full preemption and triggers these false recursion
-drops during normal multi-task execution on the same CPU.
+I am generally in favor of this approach where we keep track of the
+directory inode plus the file name.
 
-Simply switching prog->active to per-task tracking is not sufficient:
-since commit a76ab5731e32 ("bpf: Find eligible subprogs for private
-stack support"), recursion-checked trampoline programs also rely on
-prog->active to guarantee exclusive ownership of the single per-CPU
-private stack (prog->aux->priv_stack_ptr), as well as per-CPU scratch
-maps.
+Other projects that have run into the problem before are:
 
-Match the guarantee already provided by kprobe and classic perf
-tracepoint BPF callbacks (commit 16718274ee75 ("tracing: perf: Have perf
-tracepoint callbacks always disable preemption")) by disabling
-preemption in __bpf_prog_enter_recur() / __bpf_prog_exit_recur() when
-!IS_ENABLED(CONFIG_PREEMPT_RT). This preserves preemptible BPF execution
-on PREEMPT_RT while eliminating false recursion drops and protecting
-per-CPU private stacks on non-RT kernels.
+(1) Justine Tunney's Landlocked Make experiment
+    (https://github.com/jart/landlock-make).  This one shares the same
+    "build system" problem, I believe the topic came up during code
+    review at the time.
 
-Fixes: ca06f55b9002 ("bpf: Add per-program recursion prevention mechanism")
-Assisted-by: Devin:gemini-4-argon-high
-Signed-off-by: Mike Bazov <mikeba@sentinelone.com>
----
- kernel/bpf/trampoline.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+    So I think this is a general problem in build systems that use
+    Landlock.
 
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index bf4cb3dd444d..632c104112b2 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -1339,7 +1339,15 @@ static __always_inline u64 notrace bpf_prog_start_time(void)
- static u64 notrace __bpf_prog_enter_recur(struct bpf_prog *prog, struct bpf_tramp_run_ctx *run_ctx)
- 	__acquires(RCU)
- {
--	rcu_read_lock_dont_migrate();
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
-+		rcu_read_lock_dont_migrate();
-+	} else {
-+		/* prog->active and the private stack are per-CPU: don't let
-+		 * another task run on this CPU while we hold them.
-+		 */
-+		preempt_disable_notrace();
-+		rcu_read_lock();
-+	}
- 
- 	run_ctx->saved_run_ctx = bpf_set_run_ctx(&run_ctx->run_ctx);
- 
-@@ -1388,7 +1396,12 @@ static void notrace __bpf_prog_exit_recur(struct bpf_prog *prog, u64 start,
- 
- 	update_prog_stats(prog, start);
- 	bpf_prog_put_recursion_context(prog);
--	rcu_read_unlock_migrate();
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
-+		rcu_read_unlock_migrate();
-+	} else {
-+		rcu_read_unlock();
-+		preempt_enable_notrace();
-+	}
- }
- 
- static u64 notrace __bpf_prog_enter_lsm_cgroup(struct bpf_prog *prog,
+(2) Michael Stapelberg's Go rsync implementation.
 
--- 
-2.43.0
+    https://github.com/gokrazy/rsync/commit/f85bc9b98cdda705ff8e76ebcd8fba03c6560467
+
+In the rsync case, the issue is not a rule for *creation*, but for
+*reading* files.  But it could still be resolved with the same
+mechanism: When allow-listing the /etc/resolv.conf file, the policy
+works for a while, but eventually a system-level network management
+daemon might exchange the file for a new one with an atomic rename,
+changing the inode number.  It would be desirable to express a policy
+in this case as well, which is tied to the /etc inode plus the
+"resolv.conf" filename, for opening files for reading.
+
+The same problem also exists for allow-listing of Pathname Unix Domain
+Sockets, where the common way to restart these is to unlink the socket
+file and recreate it during bind(2).
+
+In both cases, the best current workaround is to grant the access
+right on the parent directory, which is arguably often granting more
+than necessary.
+
+Do you think your patch would generalize for the non-creation use
+cases as well?
 
 
+> Series
+> ======
+> 
+> Patch 1 lets an LSM observe inode creation through the
+> inode_init_security hook when no LSM provides an xattr. Patch 2 adds
+> the LANDLOCK_ADD_RULE_CREATED flag for path-beneath rules and bumps the
+> ABI to 13. Patch 3 adds selftests.
+
+I only had a short look so far, but stumbled across the words "package
+store" / "store" etc.  In other packaging systems, I have not come
+across the term "package store" before.  In the kernel code, please
+let's not assume that readers have a familiarity with Nix, and let's
+please explain features in more general terms.  (Note to self, on
+review, grep for the word "store".)
+
+(FWIW, I suspect that this wording might have been put there by an AI.
+I've observed in the past that AIs sometimes have an unfortunate
+tendency to blur the lines between abstraction layers and
+cross-reference implementation internals across abstraction layers.
+Maybe something to watch out for?)
+
+
+> Testing
+> =======
+> 
+> The series applies to the Landlock next branch (3e271a27c46f) and was
+> tested on Linux 7.3 with that branch applied.
+> 
+> Without patch 2, the five new tests and the ABI version check fail.
+> 
+> Open questions
+> ==============
+> 
+> - A created inode stays pinned until the layer's hierarchy is freed, so a
+>   sandbox that creates many entries in such a directory keeps them all in
+>   memory. Should this be bounded?
+
+Is that a preexisting problem that predates your patch?
+
+
+> - Creation is detected in inode_init_security, so on filesystems that do
+>   not call security_inode_init_security() created entries get no rights.
+>   Is there a better hook?
+
+We are already hooking into hook_path_mknod(), hook_path_symlink()
+etc.  Is the feature not possible based on that hook as well?
+
+In fact, I would have assumed that you would only need to change the
+logic in the path walk so that it can pick up the special rule type?
+Does that not work?
+
+> - Through overlayfs, created entries get no rights either, because the
+>   upper inode is created with the mounter's credentials. Should overlayfs
+>   be handled, e.g. via security_dentry_create_files_as()?
+
+Landlock does generally provide the normal semantics when you use
+files through an OverlayFS mount.  We have exhaustive tests for it in
+fs_test.c as well.
+
+
+> - A file renamed or linked in keeps only the rights it had at its source.
+>   Should it get none instead?
+
+Please see the logic and discussions around the
+LANDLOCK_ACCESS_FS_REFER access right: When linking or renaming a file
+to a new location, we must make sure that a landlocked program can not
+move it to a place where it suddenly has more access rights on the
+file because it is now accessible under different parent directories.
+
+Thanks,
+–Günther
