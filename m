@@ -1,94 +1,114 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.48.3
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792948447;
-	b=ZzyhANV4N+AgXKSbKqNobX8yXjeLuAsz96I54RwXZAlmwSi+OYsUhQCgvcbqC+d6m3sT
-	 H9f1pZ0K1II2OpIkIQCpM8bASURJ1N6ZjhkBLkpsjATXhoR8EgC3onD0VvRYBtzb2F0ge
-	 Iu2AnVB48f8Sgtan3Z5EIRmv80wuxXkQ6hExej7nsMuvVlBOtqntJJdRpJ+xHJJUshERF
-	 /u9Y7e3MaMCHMW824UeL/j9Kz+Zn+j8cWrVZdAVkXFbSIxXMRzaS553LMtHjl6s1tgjiG
-	 iEhKBxzCQsfcjMusRzcqr8hTmT4O7jik3AGdN3CN5ghcdryFYhvEa8QsvvI5u9f1iDg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792948447;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=8SfEc++oKqDfhYtILOtMbMaUv7rOhhFzoWDnUyyiMzw=;
-	b=4h3itJ+fa35fEMoGsk9X7bWEg6zQuyLryJqUuJ3+YIwl60N5yKfELzLmRzigrNjtGg0q
-	 9gjXZmSviLaF4e/NVUZRoiBsLZW1e5xJitSoIPupeg43xE4IziWH8iKYC4WzPN29td+g5
-	 0HTIzfY9W+n6x/iZs0hVdkTVTFoItAim8Ow54GlNAPUpI3EYTOJInNf8/sQPufnHcUBgu
-	 G7HT2tQ9hg7jqwGoqzOPCfbybMjUPkPjVGNSHtKmXpgW9YHNhkzavmt664h9IRLGF+b6l
-	 euGIsUwN+lL9u6Ah2iWpyMfxfv9fM6wSG8CgRzgiQzze6RbCyjCxiEbQfnJbEsLyJ9A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=P6zxOB42;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.48.3
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012003.outbound.protection.outlook.com [52.101.48.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.169
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792950022;
+	b=xpeBe3tlJexe1kZBheiNBJCmm4vubBPdgTNVInCgEy6zFllLEgDxxXJjjSV7BdphfD63
+	 1AVziOm88phScbEWyxqIc2J1LsviMoKFIadKm13jACaRjx0qC5DJmbc5aOokGcCeBtzrW
+	 SdecfSHJAyghhnq9d7+dP/W9EkQECyGSMnlU8wehFrjpt73f4M2EqwmY71R9Zp/BnvbF1
+	 hfBnfBDyWlIW8YzvdirXAkrVZg/FboxZ0V1uLev5TS24sWj9l7YvULj6xzxitlUwL62qM
+	 RZ6ZRDDXC9GuBRQq5tStoAAHU1DK4zZUnz+/BQanvoLP2pR28hf3m5lS2LQzPga4LjQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792950022;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=h3QApbBlAYhRMvgt4baVTZSCZ7KrzPHAuh9ddC7G5Kg=;
+	b=va+/k49olpWLZoXlqKpk6VOemz90Qi82ck9GwJfrBBNGnp1ACjgzthHT2xQs7SgUr1nN
+	 Qyqmn6oRghrA2BQ6p7AgXvTDJZerZBumrQT1Zxl1kMCYDDUSbn2qhOVOFyyFBKwrgBt91
+	 t9Zd9FhVvi2kyRjvWrEOa+tHzRT5Ru4l5cYle1ZaTF258oQmoxGGg9U9PHYAoDfmu9koi
+	 /+foyWX41rSmZtLojRwdrR2HjMRgw1Mxa7P4QWDP+LAl3h4v0LRl3huYtHvb/yhwdksv0
+	 jToqbjqzL12VmTX8PQTxf4mnYI5Z5oXJzpfHOlwlXjm0hjaJsHjSxUvRk0rttzqVZSA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=HJ4fE0hW;
+	arc=none smtp.remote-ip=209.85.221.169
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3338606A31D;
-	Sun, 25 Oct 2026 17:14:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D3338606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC36606A31A
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 17:40:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BC36606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=P6zxOB42
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HM/G22OWn4vZNmaTaUunZWBEeOYDYK1+oSfbMHrktZPDwWZVGO/I2NYDeccLd85gFT7kftftQgtHyr78lwWEhlc8SsaCdtFjBk3M8m//VwQ+b55pnZYKOUu+bYuAiswwbDJB+rd4HGvTHYcCPQw8wMLynNOfxgaKbZYMUQPygXBO1zjKMa2/Sui+VnfqAai8+lRRIru50HgBTmYBbJogzre1RJfNbevcaaz6jdjLUP99RXALJtyRHzZ+Vzrgu20IFgJISxBTMoISPY/WaRcXm+efCdF9j3gkzqevGl7cNap/vEFdl1DOAQGU3MBVaSq15hd1e+1R3o6V0xweLaj1zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8SfEc++oKqDfhYtILOtMbMaUv7rOhhFzoWDnUyyiMzw=;
- b=FmLaEv6Lb7oRA6Kd23kk/lEQgDujobW6EfsbgPBEs6L7fL4dZ+PtMJI7Xb2E3vv6B8nHbf9A1oBEG55ykd6mLZ+crhs7u6yeRPoFbcPvcS+iuPiynBmOFP3RsYhYYeFsQXEIFjz3lUtBvLU0SUPqOBbkC/Rvuj3z9/fB1XySjr0PeApTFSFA2m68njwJCOBa0cnc82n82Pha7B9OIVsGxtFpqK0BAkyCeq6W0io8Biipp2yGdxTSwKnuGi/EoS37STAD5cSGGqhBDee09GiXPtwJKWzNiBtRoWqdX7izASxz3sNIP2NQ/oau5KodhIKKN7aRbP2Du3rMrngUDBGyYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8SfEc++oKqDfhYtILOtMbMaUv7rOhhFzoWDnUyyiMzw=;
- b=P6zxOB42/8FmjStt5CvFYjNFa1umX1B60Ft3hIPzaQmY4lnq1KXDgIzggARyJyq1xRGHRB1zqVGlQ63xebe28qLUCsMpkb7MeO3VmfolTmAUlBdXSWz+xgyIgHLBRckccWVtpLiuDGTtPazE1gyDgeAsTnqeepjvs2n1Fydvw/KqYzw4cDMAjjbsIFIt8Ury6rIN/H6s14Dl+Ufz+lIpdycLMSCAI6tKJo1YsGggUcAH3B85UutWgpLwELge11pmWro56Mv9KBBuig+ZU4g3/ONaBiOep9hQPWcnSKdhpYqGXrBmOfldIvCHHyBkiFA/I+ZpWDIuaDlfIVgbFzlGYQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB7948.namprd12.prod.outlook.com (2603:10b6:8:152::17)
- by CY5PR12MB6431.namprd12.prod.outlook.com (2603:10b6:930:39::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Sun, 25 Oct
- 2026 17:14:03 +0000
-Received: from DS0PR12MB7948.namprd12.prod.outlook.com
- ([fe80::5acf:54a9:f68e:6952]) by DS0PR12MB7948.namprd12.prod.outlook.com
- ([fe80::5acf:54a9:f68e:6952%4]) with mapi id 15.21.0546.021; Sun, 25 Oct 2026
- 17:14:03 +0000
-Date: Sun, 25 Oct 2026 19:13:48 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: liamsmith827 <liamsmith827@grapheneos.org>
-Cc: netdev@vger.kernel.org, dsahern@kernel.org, davem@davemloft.net,
-	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, liamsmith827 <liamsmith827@proton.me>
-Subject: Re: [RFC net-next 1/2] ipv4: Honor prohibit when oif specified
-Message-ID: <20261025171348.GA233026@shredder>
-References: <20261019032406.88874-1-liamsmith827@grapheneos.org>
- <20261019032406.88874-2-liamsmith827@grapheneos.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261019032406.88874-2-liamsmith827@grapheneos.org>
-X-ClientProxiedBy: FR4P281CA0012.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:c8::20) To DS0PR12MB7948.namprd12.prod.outlook.com
- (2603:10b6:8:152::17)
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=HJ4fE0hW
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-5ec3561ad43so23917e0c.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 10:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1792950020; x=1793554820; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=h3QApbBlAYhRMvgt4baVTZSCZ7KrzPHAuh9ddC7G5Kg=;
+        b=HJ4fE0hWm0GPzGiTRdzgiJWmIZSHIcVLcYLfo94QFpMgVa7XLpQTlZA8sJxUoeLtIZ
+         RVya7NksaNAOC9Jk0CuRFPf0FXq4Ipib2epkgBlnOAWcQAt5yr5vwIUGtp7Liw0nUyNX
+         jlelfpk+IBf0YGaVB33YFSVkKxnw1dWC35D2oLrc+b76Jq3f5NSDQ83KQbjfWaUQeWhX
+         KJftkkmHeVBashFCTu6evCal59cAFA8MHdZOMyegmqy8jgRLe8fNBz6uP1dgtEmOWFo3
+         8aURPUnmjefvPlEaTdB27h1dUYta9gHfKwYyUPd7EyZieSzqsBSGqCplVc387hVin7Wy
+         R65A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792950020; x=1793554820;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=h3QApbBlAYhRMvgt4baVTZSCZ7KrzPHAuh9ddC7G5Kg=;
+        b=lfaKdQ4M7A5eL2mkQeM1gkIKK6dFQIab18etBvon290/rPXiGybfpsecCtkaPYVgS+
+         2q1sVBYQHHg2uViE+8A4NAoYMA132pZ7yqzBONHgv6x5lC1p0tbCYvyWoGXRZagSYqUW
+         dKdGF+ZbHCZQ0SkGc8ObvI91lje13nJfi8faE4kqyhlultVhbXwD2/6G/x6kPgDNrz8u
+         DriDoasyC+InCNMLjFsP0GVLUCOoGdX/rY3D6reYpDYLWEZu+gcaJYNbnMEHX0N82YSu
+         SE0OEfB2h4ic7Z9eHQ9WYCx1BTzlRP80sZ3aJKX7lQ/qUYJjnU8RY+lYiq+zKlEbUOcV
+         xfIQ==
+X-Gm-Message-State: AFq9FYJnHcsfHBjE6K9gLlK32QHCKJU4rqVfGVaZeccw4Qa+v5QAbHLm
+	pMeBvyv6+jCacAP4cK0RgjujNjLAH7YlXp47qSR7QD+oZ3RweQRKCN867JzPaTKUR8tfdGMXsAm
+	MOuYw
+X-Gm-Gg: AYBFou1ZuX53w0lKpFuPLg8OyQ6I26b2Fmb8jMhyYOtzjiRZrD66MhqwyRmD3qvkgyJ
+	1DHTZsWcqxfpEqk5ZR7iolui7NeGOCymcuZWsyoNWN6fOfmhJTfjeKaREpS7GEQdnvn6xtrzNoc
+	vcnsA7a/1u2ASyWEllebJl42b7XzAMix1FZ1px1x9sWcZDMG7Rv/ErPjxdxcb0sW+fJYmB0JOau
+	JWSbVI29DVYYAmS/sdjcjncTEGqowifoKJ1im2VezzhhSsO/GF0hj3smUD4iKtoxLfIjItXAsCx
+	25HGngx11icSdC1R7cEaEY8EK7Hp1WkP4+GQhCmY6S0Tr9+tLgv/0liFGjHnLwMrfetIfqMuUdB
+	hWg1g3dDKQUGvHdckfaQ452O0i5y39+/U66rKKbQpHQs1a7GeKa5Yg2L8puFn9WhMroLJH2srfm
+	3Ya/CHccOLVltXm1ozrOEXgrOTtXdaUo9ktS42mVgseyov9dguLI/US2CDuoavT0NN36Ffun38W
+	FUdWuCBGbuutTM16A/AJsMvUM3aUwNf7UMoGiH4vOGm1GmdhtLlH0sPS9dz2DcuLjJohVW5vVdg
+	GtgOXDu7FLjE5odpT2xb8T8BlrVMGXNxRXLT4fm5e/hq2JsIZG35bY+96qyyzIpMs0OQx2szjrS
+	b
+X-Received: by 2002:a05:6122:4893:b0:5ea:c45f:6c4d with SMTP id 71dfb90a1353d-5ec23326819mr1425104e0c.22.1792950020005;
+        Sun, 25 Oct 2026 10:40:20 -0700 (PDT)
+Received: from soleen.c.googlers.com.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5ec234673ebsm5783333e0c.13.2026.10.25.10.40.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 10:40:19 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: linux-kselftest@vger.kernel.org,
+	rppt@kernel.org,
+	kuba@kernel.org,
+	enelsonmoore@gmail.com,
+	bp@alien8.de,
+	shuah@kernel.org,
+	david@kernel.org,
+	akpm@linux-foundation.org,
+	linux-mm@kvack.org,
+	ljs@kernel.org,
+	mhocko@suse.com,
+	skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	vbabka@kernel.org,
+	dapeng1.mi@linux.intel.com,
+	linux-kernel@vger.kernel.org,
+	corbet@lwn.net,
+	surenb@google.com,
+	pasha.tatashin@soleen.com,
+	kexec@lists.infradead.org,
+	pratyush@kernel.org,
+	rdunlap@infradead.org,
+	elver@google.com,
+	graf@amazon.com,
+	lirongqing@baidu.com,
+	liam@infradead.org,
+	jlayton@kernel.org
+Subject: [PATCH v2 0/9] kho: add read-only Kexec Handover mode
+Date: Sun, 25 Oct 2026 13:40:07 -0400
+Message-ID: <20261025174017.3870481-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -98,172 +118,167 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB7948:EE_|CY5PR12MB6431:EE_
-X-MS-Office365-Filtering-Correlation-Id: b5d27380-3a87-4d1a-148b-08df32bb5dc4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|7416014|376014|1800799024|366016|18002099003|22082099003|3023799007|56012099006|11063799006|4143699003|261021123027099003|261022075727099003|261021121427099003|10067099003|261009223027099003|261021135927099003|261022105027099003;
-X-Microsoft-Antispam-Message-Info:
-	wdRWoxNKvQnihTQVk8P48X0ci7mF9rb+4RrhXsGcqNKu+DNzhqz/ECDdvD9hrRJBHUqjhrlHdj1w5EWlSKSDSxV1VKPHTa4xZkhpekMJ4dn8LPtA6cAwCMyjfUGG5OJiwtJ/VCz5dBkoxsm8JYY1D4uXS6tJK8KmqXi5OOxr5pIPHE/81wr6mvYIpi5Agbud5gjESGd48zqEh2m8I9ET+Y2w1kQnGxraEDApO8TElyao3DnddtGjsiIZ1RAlX6gNQ+X0ReTHDUK1IiCEoyWq+5ewcy8s6xOLoO5t5Q79dPuYM4IawIVztYZK++yi2Wxqp63kPf0/xzsUyBooKupvlLhnHw7BO6prOAf36w03Pi8odTTViFBznPT58GDpejsQ+VDx5zx0ThmieuPEhSE7bW0iQRRLEDfVuvrdBHZJDexhG/iA/Sbwt/A45+fFH1gB6NigYlfGkyhpYBPQDWflIaXO7N3e9WY1tsB/U1eowG/ThZf36QSP1dfKiio/b38985ILm/56Mro4JOR/Clx0SsaQHCnu+91svXCt8ZkaMUrhph3Q/AKtPXNYNzFLJGaxr+AI5oMP2U7S/vY+9yp+ugYlQpkEU26bQbgiBHhPcYsjRPy4pI7Ncqt2zDsXgloqb4q3UpXj8GgNnfCy+VnkOukYlbgkzV09PXqsqQW6KTY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7948.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(1800799024)(366016)(18002099003)(22082099003)(3023799007)(56012099006)(11063799006)(4143699003)(261021123027099003)(261022075727099003)(261021121427099003)(10067099003)(261009223027099003)(261021135927099003)(261022105027099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?TkvD6qRqoPXpuiHnHQ+wGqiB9AVVYyvev8nZAaQPnN6gN81KCVSCP8Mbcm1i?=
- =?us-ascii?Q?kYPvUt/175Ex00RQFERMSL2Y3BLxOw2ljRhU+aQjhjnPSh38CK25mxKdM5+7?=
- =?us-ascii?Q?MYLcor5rdHl0FLVwNGTGCjReK/7nJerp4HW6hJnhIJLSwQ3t1cNMt4k1T5bN?=
- =?us-ascii?Q?qpjngXcNZzrHWnSK3OoFDv+AS5M4lz3NA+ZkbRB99Obru2V6L9oSETO76LCP?=
- =?us-ascii?Q?8eKVcqgUZdxv+2iD+nrMKLHFg0kBRcKsD+kAJXfIvYXVanSksOlLEmsF5gBh?=
- =?us-ascii?Q?nLnDGUk1e2SjNrN4VlxQdPyHIjZNFlmblz29y5QpbyryMhcB0smDrnAXFILw?=
- =?us-ascii?Q?7lmaqYYVzkFYtGis9xQcvwJxERzmkh2/M+TxFite/8Nz8wX1QHqMLEQwvr44?=
- =?us-ascii?Q?/pbFkJe4F6vgGK35SeofrxNFnNMOUA9urDLo5Z/xccsOUaF0XOfbWvp1YIzg?=
- =?us-ascii?Q?25TRhnwidJ0ktPjL9Jsr0PW3G4HIfmUsYbzC7zJMaSdTp/e0h+rbMKemUpMH?=
- =?us-ascii?Q?ZTuDFlljBsAxA3PBxZTsqqbGYV4hunklz+P6/sDpxp5IdaGyS5m/o5hrVULX?=
- =?us-ascii?Q?Vwt37XdrR54iFJ6Ic8TLiJJa9vtzkvMgMV59wNQuY2TIbEeoKBU6BeYo7zCe?=
- =?us-ascii?Q?fBanOxPSgycwqbrWXGDTZ3Y2FvOhyIiWDWxvDVwAsarKDJsdrJztNDk8Y0VC?=
- =?us-ascii?Q?fUfBs5D6uHLOZhzUYMFyhvz+ABUEDhV9MB7/FvwNOWclR3AVpUXPEM/itoUs?=
- =?us-ascii?Q?mEUmVf19b64RGEpTZ5x4/36J0l/FwK+rJJ9XigOTKDfQC8lY3qPJwrXF/KbW?=
- =?us-ascii?Q?Xp4mYB8naiZJR21sUhzz11+GW0nc6z4QU1jhtUD28RhMy+zJTiYkSQPkW2Bk?=
- =?us-ascii?Q?SiwfvWwmDL5jQ/o+xU0VDstEp0bCn8p9DGpQwyyfbuSxL85r4FYvtlMXBRgd?=
- =?us-ascii?Q?T4Tn52tCc2QhxoGwZKrioURyLJi9iuMKbXMbjl6oCgLph9m4GLXK+1ED91CB?=
- =?us-ascii?Q?oauc4FX95Kc8iChWUxKnhpf9TSfxlH72eOLdTO8AfvJuNKCBvSFXesTbrO2T?=
- =?us-ascii?Q?LKqfMC5dRpVLPJDNjqskjgnwOLTBPhwlCHX8hyZ1+Kspl8aHGlIqbHfLloYS?=
- =?us-ascii?Q?rCUfNPMGontiBt7Fi0Sq4Vel6ijuaTnfl93AinbRNst8j35JIPO8ONBSU+8c?=
- =?us-ascii?Q?ybc5itBIMhqf9lW0HcM/Ir0eDImVj/rQ7sxOvz2LPe95K7UkBywYCs1O7Z5Z?=
- =?us-ascii?Q?UCdjSYVUW393yOa+2sO9QlY2rgFvZI7eUQQ+eYjzJ9No2GC9sNewJ9VQJla5?=
- =?us-ascii?Q?nkdrdu6vrtS4WT/PIW1fCFuFLy0zAXye1pu7PLrWop5C0MlZ+Viz4hT8FQBm?=
- =?us-ascii?Q?Tmc3ZYyQQB1Itkde0LlS0b7/ydE4oxaGY4VootVvgd8P0PSPlnnL3YV3TZ0C?=
- =?us-ascii?Q?FqLswD8JHfkFyMRkEIK2XLxXHO5pDXKGCfngAhF6lcX/xchbCyp2sx+6wZ9Q?=
- =?us-ascii?Q?yzvA3ZugUdf7A9muHfEKDzDPxedXTOIgDiT9o5nrddoKGzJz5CawgscRmJuN?=
- =?us-ascii?Q?P15LgoiKy60KQNU2fhzLBmaIbGdtXtj7DYo+3+VEJppr5nVogUwgVKiy/Qu+?=
- =?us-ascii?Q?eaI9mQ7Kxl5Q1HoZLuuM+/Ge8ztxhjitqL1nwtyepVc+LreAkGB/kY8UsAvd?=
- =?us-ascii?Q?6KCZcSxBdo12W/VgY/ykRFSUMUWfd8g7T2WEyzZTZSP1QtZd?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5d27380-3a87-4d1a-148b-08df32bb5dc4
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7948.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2026 17:14:03.3290
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GQeM+BSsUhmkB+B8fGeoUGNru5n14L3z0Me1ZsrrERvU3hIhIm7hYHvccwxPIrguXGOQBfAuZ/C8xH553IqR8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6431
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 19, 2026 at 03:24:05AM +0000, liamsmith827 wrote:
-> From: liamsmith827 <liamsmith827@proton.me>
-> 
-> When flowi4_oif is set (SO_BINDTODEVICE, IP_PKTINFO, IP_UNICAST_IF,
-> etc), prohibit rules and routes cause fib_lookup() to return -EACCES,
-> but still allow the packet (and any necessary ARP) to be transmitted.
-> This is documented as the expected behavior in the tests, but is
-> confusing for route and rule maintainers. Specifically, Android uses
-> prohibit rules as the basis for its VPN "kill switch", with the
-> expectation that any packet encountering such a rule will not be allowed
-> out. Due to this interface binding exemption, apps can trivially bypass
-> the kill switch. This is most serious on cellular networks, where a
-> connection to an arbitrary IPv4 address can be established without
-> requiring ARP resolution.
-> 
-> Preserve -EACCES from fib_lookup() instead of constructing an on-link
-> route when an output interface is specified. This honors prohibit rules
-> and routes while retaining the existing fallback for other lookup
-> errors.
+This series introduces a read-only Kexec Handover mode, enabled at boot
+via 'kho_ro=<pa>' pointing to the physical address of the KHO FDT.
 
-My understanding is that the original intent was to only ignore the "no
-route" error (-ENETUNREACH). The comment in the code says so: "we are
-allowed to send to iface even if it has NO routes".
+In standard KHO, the outgoing kernel shuts down or serializes all
+devices into LUO state, releases machine control, and passes the KHO
+FDT physical address through the kexec_file_load() reboot path to the
+next kernel, which becomes the sole "Machine Owner" (MO), initializes
+struct pages for preserved folios during early boot, and reclaims KHO
+metadata and preserved pages back into the page allocator as they are
+restored.
 
-Ignoring unreachable, blackhole and prohibit routes / rules is merely a
-side-effect of not checking for a specific error code. I find it very
-hard to believe that anyone is relying on this behavior:
+In the "Linux Caretaker" (LC) model (as well as inspection kernels or
+firmware), a minimal LC kernel runs concurrently on dedicated CPUs
+offlined from the MO scheduler while MO is still active or undergoing a
+standard KHO-preserved kexec reboot (Live Update). LC is given
+read-only access to KHO so a minimal VMM inside LC can keep VMs
+responsive (<30ms VM blackout time) by servicing software-only, fully
+virtualized devices (such as virtio-console, pvpanic, virtio-rng, etc.)
+that do not require host hardware interrupts or global machine state,
+while leaving the preserved KHO tree intact for the incoming MO kernel
+to retrieve normally once it boots.
 
-1. It's confusing. The ip-route man page says that unreachable,
-blackhole and prohibit routes all discard packets.
+LC is never MO: it has no PCI support, does not handle device
+interrupts, and is booted inside a small LUO-preserved memfd region
+(e.g., ~128MB of RAM on a host with terabytes of memory). Because LC's
+direct map only covers its own small memory footprint (both for
+isolation and to avoid struct page overhead for host memory), the KHO
+FDT, radix tree, and preserved memory all reside outside of LC's direct
+map. Furthermore, because LC is configured and launched from userspace
+while MO is still running rather than through a kexec reboot handoff
+from a shutting-down kernel, userspace reads the KHO FDT physical
+address from /sys/kernel/debug/kho/out/fdt_phys and explicitly passes
+'kho_ro=<pa>' on LC's kernel command line.
 
-2. These rules and routes are honored in the VRF case.
+Both CONFIG_KEXEC_HANDOVER and CONFIG_KEXEC_HANDOVER_READONLY can be
+compiled into the same kernel image, with the active mode selected at
+boot via the kernel command line ('kho=on' vs 'kho_ro=<pa>'; passing
+'kho_ro=<pa>' disables regular KHO).
 
-3. IPv6 behaves differently. These rules are honored, but IPv6 will
-backtrack to a shorter prefix route if it hits an unreachable, blackhole
-or prohibit route with a strict oif. Will look into it, looks like a
-bug.
+Overview of the series:
+- Patch 1 exposes the physical address of the outgoing KHO FDT via
+  /sys/kernel/debug/kho/out/fdt_phys so userspace tooling can pass it
+  to a 'kho_ro=<pa>' kernel.
+- Patch 2 moves the shared radix-tree key encoding, indexing, leaf
+  lookup (kho_radix_find_leaf()), FDT validation, and
+  kho_retrieve_subtree() helpers into a shared
+  kernel/liveupdate/kexec_handover_common.c compilation unit with
+  declarations in kernel/liveupdate/kexec_handover_internal.h, while
+  also checking that fdt_totalsize(fdt) does not exceed PAGE_SIZE in
+  kho_check_fdt() and using get_unaligned() for 64-bit FDT property
+  reads in kho_retrieve_subtree().
+- Patch 3 hardens kho_restore_vmalloc() and factors out shared vmalloc
+  helpers by introducing kho_vmalloc_validate() and kho_vmalloc_walk()
+  in kernel/liveupdate/kexec_handover_common.c to validate the
+  preservation metadata header and walk the chunk list.
+- Patch 4 avoids modifying ser->next and bs->head_pa in kho_block_add()
+  and kho_block_set_shrink_one() when operating on an incoming block
+  set, as the chain is already linked and incoming blocks must not be
+  modified in KHO read-only mode.
+- Patch 5 adds CONFIG_KEXEC_HANDOVER_READONLY and
+  kernel/liveupdate/kexec_handover_ro.c. When booted with
+  'kho_ro=<pa>', the KHO FDT is mapped and validated once in an
+  early_initcall, and radix-tree nodes, leaves, and folio/vmalloc
+  mappings are cached on first visit in a unified RCU-protected hash
+  table for the lifetime of the read-only KHO kernel, providing
+  kho_is_ro(), kho_ro_lookup_folio_order(), kho_ro_map_folio(), and
+  kho_ro_map_vmalloc().
+- Patch 6 wires read-only KHO mode into KHO core (kho_populate(),
+  kho_memory_init(), and kho_retrieve_subtree()).
+- Patch 7 updates kho_block to map incoming serialized blocks read-only
+  via kho_ro_map_folio() in read-only KHO mode.
+- Patches 8 and 9 extend test_kho and tools/testing/selftests/kho/vmtest.sh
+  to build a single kernel with both CONFIG_KEXEC_HANDOVER=y and
+  CONFIG_KEXEC_HANDOVER_READONLY=y and test both standard KHO and
+  read-only KHO handover when preserved memory lies outside the boot
+  kernel's initial memory range on x86_64 and arm64.
 
-Given the above, I think that the patch is too specific to your use
-case. It doesn't make sense to only honor prohibit rules / routes. How
-about checking for 'err == -ENETUNREACH' [1]?
+This series is based on liveupdate/next commit 27be83a12b24 ("Merge
+branch 'lu-pci-preservation' into next").
 
-It doesn't allow us to distinguish between "no route" and "unreachable
-rule", but we can probably ignore it given that it has always been the
-case and nobody complained. It needs to be explained in the commit
-message.
+Changelog:
+v2:
+- Expand the cover letter with the LC architecture, explaining why
+  'kho_ro=<pa>' takes the FDT physical address on the command line and
+  describing the expected users of the read-only KHO APIs (Suggested by
+  Mike Rapoport).
+- Patch 2 (Suggested by Mike Rapoport):
+  - Move the shared radix-tree, FDT, and subtree retrieval helpers into
+    a dedicated kernel/liveupdate/kexec_handover_common.c file instead
+    of static inline functions in
+    kernel/liveupdate/kexec_handover_internal.h, and factor out
+    kho_radix_find_leaf() for radix leaf lookup.
+  - Check that fdt_totalsize(fdt) does not exceed PAGE_SIZE in
+    kho_check_fdt(), drop the "setup: " log prefix from FDT validation
+    warnings, and use get_unaligned() when reading 64-bit FDT properties
+    in kho_retrieve_subtree().
+- Patch 3:
+  - Move kho_flags_to_vmalloc() to kexec_handover_common.c alongside
+    kho_vmalloc_validate() and add a shared kho_vmalloc_walk() chunk
+    walker used by both kho_restore_vmalloc() and kho_ro_map_vmalloc().
+- Patches 5 and 6:
+  - Allow CONFIG_KEXEC_HANDOVER and CONFIG_KEXEC_HANDOVER_READONLY to be
+    compiled into the same kernel image and select the active mode via
+    the kernel command line ('kho_ro=<pa>' forces regular KHO disabled).
+  - Split the KHO core integration (kho_populate(), kho_memory_init(),
+    and kho_retrieve_subtree()) into a separate patch (Patch 6) so
+    Patch 5 only introduces the read-only KHO backend.
+  - Map and validate the KHO FDT and preserved-memory-map root once in
+    an early_initcall so kho_ro_get_fdt() and kho_retrieve_subtree() do
+    not sleep or map lazily.
+  - Replace kho_ro_restore_vmalloc() (which allocated RAM and copied
+    pages) with kho_ro_map_vmalloc() to map preserved kho_vmalloc
+    regions read-only in place using kho_vmalloc_walk().
+  - Cache radix-tree node, leaf, folio, and vmalloc mappings in a
+    unified RCU-protected hash table (kho_ro_map_ht) keyed by address,
+    size, and protection for the lifetime of the read-only KHO kernel,
+    and drop kho_ro_unmap().
+- Patch 9:
+  - Build the kernel and initrd only once in vmtest.sh with both
+    CONFIG_KEXEC_HANDOVER=y and CONFIG_KEXEC_HANDOVER_READONLY=y
+    enabled, running both the standard KHO test and the read-only KHO
+    test on the same kernel image.
+Link: https://lore.kernel.org/all/20261019021111.990394-1-pasha.tatashin@soleen.com/ # v1
 
-Note that multicast needs to be exempted because of VRF. The lookup
-fails on the unreachable default route in the VRF table (-EHOSTUNREACH)
-and we construct the route anyway. It is also consistent with IPv6 where
-these routes / rules do not affect multicast traffic since the
-per-interface ff00::/8 routes in the local table are matched first.
+Pasha Tatashin (9):
+  kho: expose physical address of outgoing FDT
+  kho: move radix tree and FDT helpers to common file
+  kho: validate preservation metadata in kho_restore_vmalloc()
+  kho: do not modify incoming serialized blocks
+  kho: add read-only Kexec Handover mode
+  kho: support read-only KHO mode in KHO core
+  kho: support read-only KHO mode in kho_block
+  kho: test: support read-only KHO mode in test_kho
+  selftests: kho: add read-only KHO test to vmtest.sh
 
-This change will allow you to uncomment all the test cases in
-ipv4_ping_novrf(), so that it matches ipv6_ping_novrf().
+ .../admin-guide/kernel-parameters.txt         |   8 +
+ Documentation/admin-guide/mm/kho.rst          |   3 +
+ Documentation/core-api/kho/index.rst          |   6 +
+ include/linux/kexec_handover.h                |  44 +-
+ kernel/liveupdate/Kconfig                     |  10 +
+ kernel/liveupdate/Makefile                    |   3 +-
+ kernel/liveupdate/kexec_handover.c            | 284 +++---------
+ kernel/liveupdate/kexec_handover_common.c     | 298 ++++++++++++
+ kernel/liveupdate/kexec_handover_debugfs.c    |  22 +-
+ kernel/liveupdate/kexec_handover_internal.h   |  47 +-
+ kernel/liveupdate/kexec_handover_ro.c         | 429 ++++++++++++++++++
+ kernel/liveupdate/kho_block.c                 |  78 +++-
+ lib/Kconfig.debug                             |   2 +-
+ lib/test_kho.c                                |  71 ++-
+ tools/testing/selftests/kho/arm64.conf        |   1 +
+ tools/testing/selftests/kho/init.c            |  38 +-
+ tools/testing/selftests/kho/vmtest.sh         |  65 ++-
+ tools/testing/selftests/kho/x86.conf          |   1 +
+ 18 files changed, 1121 insertions(+), 289 deletions(-)
+ create mode 100644 kernel/liveupdate/kexec_handover_common.c
+ create mode 100644 kernel/liveupdate/kexec_handover_ro.c
 
-> 
-> Signed-off-by: liamsmith827 <liamsmith827@proton.me>
-> ---
->  net/ipv4/route.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-> index 595a3b7f1783..616c20299334 100644
-> --- a/net/ipv4/route.c
-> +++ b/net/ipv4/route.c
-> @@ -2853,7 +2853,7 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
->  	if (err) {
->  		res->fi = NULL;
->  		res->table = NULL;
-> -		if (fl4->flowi4_oif &&
-> +		if (fl4->flowi4_oif && err != -EACCES &&
->  		    (ipv4_is_multicast(fl4->daddr) || !fl4->flowi4_l3mdev)) {
->  			/* Apparently, routing tables are wrong. Assume,
->  			 * that the destination is on link.
-> @@ -2864,13 +2864,14 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
->  			 * addresses. When oif is specified, routing
->  			 * tables are looked up with only one purpose:
->  			 * to catch if destination is gatewayed, rather than
-> -			 * direct. Moreover, if MSG_DONTROUTE is set,
-> -			 * we send packet, ignoring both routing tables
-> -			 * and ifaddr state. --ANK
-> -			 *
-> +			 * direct.
 
-Why modify this hunk? Looks like an unrelated change.
-
->  			 *
->  			 * We could make it even if oif is unknown,
->  			 * likely IPv6, but we do not.
-> +			 *
-> +			 * Additionally, when oif is specified, routing lookup
-> +			 * allows us to check if destination is prohibited
-> +			 * (-EACCES). LS.
-
-Please remove the signature. It's unnecessary in the git era.
-
->  			 */
-
-[1]
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 595a3b7f1783..b10ea8bec090 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -2854,7 +2854,8 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
- 		res->fi = NULL;
- 		res->table = NULL;
- 		if (fl4->flowi4_oif &&
--		    (ipv4_is_multicast(fl4->daddr) || !fl4->flowi4_l3mdev)) {
-+		    (ipv4_is_multicast(fl4->daddr) ||
-+		     (!fl4->flowi4_l3mdev && err == -ENETUNREACH))) {
- 			/* Apparently, routing tables are wrong. Assume,
- 			 * that the destination is on link.
- 			 *
+base-commit: 27be83a12b246b6b3783e7d3ac5c378ff7520f25
+-- 
+2.56.0.307.g5fe7bd680c-goog
 
