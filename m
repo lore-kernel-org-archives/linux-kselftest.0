@@ -1,114 +1,40 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=154.81.10.254
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792891159;
-	b=xmRCMV45iNSYi10jsJkO7B1jP3dgopcYAsZHlI/Eb/RbARLDJTvD0qcodRd9+0421VMy
-	 q2qqs93UlxPVP+aJ0A8SYVIkWtExc0sBZ0j8k0o8NKrM9PsLyiFrZPdOPFTFDO2uLjI66
-	 Y3KVcxcwIw72zdWF07tqX+YrdeufdwRt+rigMMs0/zgysfGNGGilOU58qwSgZ8tRFSHbM
-	 R+2gHuWGYr6+APhgNgwmAFqordeIgp51QuE4f8hMkkWO5OrSuOCqiatzkKT27P5AN6VEe
-	 Bw5EzqUTh6hCEynawb+nqTq92ObYD27RuQKWTWmnYrHa4avChd+3xOf8vhZKKrRPbSw==
+	t=1792894629;
+	b=A41nWKX3tlfyPiQnb4F7YNm6FAgyPSqMKaG2WF4xGket1L7kwhkfXCkXDopprTdgjxG5
+	 fKZqUD4PPAHEM6dioWPLyRUnMy7VWZisaWUY1NWYEgcm4eyf96MfB/k0Vornh/qUrv8NI
+	 Wy1Kq4V+vO03enbV5L0XmQtvLh0W3VYRt272d1pSWsMrkCKtq/DsJ0dlk7pYNiwkBoWyX
+	 Fsx0ynBBrTptOJwO/6lpMS//Rp2ZDPwVfopM4jct9imZ65RPmeHF1gVHZYL0YOh7exKJ2
+	 pmDJlCBHGQCT6lUwiIoogK46jtK/y9bJe3/9WeK9BK+qEao9elJbGY7XZlD591dmYaQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792891159;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=zZQiqU7HN1B6GTDcBYXT/sQqb91Q6ayBvJSvSKkioZE=;
-	b=5OY0C70EfKO1lZdZXwqn2pYqGIcKbpNqPpDUN7dKsshkm2Id+fWySkOlM4TbGyKxwBfo
-	 ybEwILEltZqWGN9Tl0KVzgMT+jNEc5jNcvUBZCEYCl/lUoZhJ3a4SHsG897vxP2XzGlZt
-	 0YEPaxXAUkflLQ9JjRz29mcxW5Ubyw2g+Biztc4AAYhtqGIKvK8LY26NZl75U2jHR4bDf
-	 ay8tyLN4dxFXedZcC8xsmmE0AkPyuVAmMwug4GRDt0iBJFsFXxlKZxldwtJUqkOubgB0y
-	 I+HyDBPbaNY7p7Zw20IlvRF0IFMXDJf+WjaymHDhmKSgaF+CZEFCvAa/Lu6Px9K2eiA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792894629;
+	h=DMARC-Filter:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-HM-Tid:X-HM-MType:X-HM-Spam-Status;
+	bh=FnEFDsNw6/OpFTmHzBgKlLwdZuANPYxCz09uyvQgX8A=;
+	b=qW2RsqjrRgXIONo5y1nWBO53L6XLyYMCf1tQr5ClS7fUH3ItR3ZP0qOduIYCmMjB1B1u
+	 KTR7/vDUa9QI4uWVauS72jwp5g78BxXPvhF7qucznX1cl6GYbQef0FCVdiOtMwlfJJtqI
+	 s1pFvkk6y0bAk+syxc4zPOKdcF2+j2+oBKUDbAPLtN4vo5nyic+i1aXRU4aHz0oI8OWXq
+	 Hr3Tp1H2eH11jt1uNgadvUqBBdUgMEXvZBsmDN2KTvOIhbKVFSTbCHJjAq0dmrVz30la3
+	 noh/lCXDKqFRyLjztaKpxOC93uijV+MurYJac4wEKjk4pirZE007quee4I4yVuBIzqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=nyUFwVcj;
-	arc=none smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=easystack.cn;
+	spf=pass smtp.mailfrom=easystack.cn;
+	arc=none smtp.remote-ip=154.81.10.254
+Received: from mail-m10254.netease.com (mail-m10254.netease.com [154.81.10.254])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BBD606A31D
-	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 01:19:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5BBD606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=nyUFwVcj
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e985106c0cso16708035ad.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 24 Oct 2026 18:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792891158; x=1793495958; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=zZQiqU7HN1B6GTDcBYXT/sQqb91Q6ayBvJSvSKkioZE=;
-        b=nyUFwVcjgd6g3xuNlSD/rMAoH+5rhnVhKVDNLCsK4WeHGC6W0qiL1ts8cv2tR1rrUV
-         25HBD5SR+xxXKkJEZAgiBcwUwzFB/8BmOaZyQfXgksIEQPAA7hzt77jyYLP8tiOFUItI
-         W9iZBfz9LCduMPMN5NGg4KhetNlKWFha5VYkZea131wCfXvhV3PdR6ebjUC9EoVAVyn2
-         AH/Evm6Z7YrF7QQ6sOLK36AH4Sy4N30imPWThuGRMJQXCQD/m6QVbiS8UFrPoTvwbgoy
-         C5oM7nXa3UKdOZ8ZAuZnhUnSXyuO1smqDpTLCqvs//S/k1X8Fb5g6Tk/wRdQk1gvuJ9F
-         qGJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792891158; x=1793495958;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zZQiqU7HN1B6GTDcBYXT/sQqb91Q6ayBvJSvSKkioZE=;
-        b=1NMCknktNo/It/ofw9ju049TNBmugdIZSVhiVC5RLIpVoQjLT1tl64J9XSRTIN+jRR
-         i+v9hF2idq+tE08HUWK5IlDbQ6jNkNrvBTaRsLpK4Dt/mRd8pfAZ8O5Y/9WogkchEGsg
-         4qfcX+UE1wwhmtoolMrhb7jihP91XJfF82UZJEhKSVvjLRhY3bHTk9mzXTNwYCC1NbSy
-         Q8ydrx/uhF6hPErghjXesAwRCyGzYIqxYC5OtWGK/ImvJr8x8zmiP0uaxr3+uwU6aMzQ
-         t8yyxyRIQBO8XC6ejdSA+k2xkRXP9NF8hpduYR8JtOoCo4U8vfbj5ahwRjbS0VQT/EOI
-         1GVg==
-X-Forwarded-Encrypted: i=1; AKwUvBxZwChdDzCuRy5tjKVEdK0gKZH4CbnPyU8BR85cZ/yYqMyJ2JIeSiq+EGldWWtX8sSqEljfq/ZGKLhmfnmIlJ4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJLxayP8hItl5ShI6y/VCDj6mvJuncJq50VRGcUlR9Bmd8AGCjl
-	uq/wachM7uRKXHdZQpSiR7a4oJhkxjei4OxeBnEnvQrxL2goQAsF0/0K
-X-Gm-Gg: AYBFou3YC97wn4tIj/gvRFPsreHEHfP88IoKcmetcVFO1G09xcBHp1SAO5RSvO6JJ1l
-	ZWjyG23Y1M26e1EwoB+9/aE1sbCyPGAKddNcUy04GmjnOctvk5/P2Y00s87CDP4mo6GHgYOw5OI
-	kLqxJr8VWoyqCLVYsDs6+4RdezjC7seqCELwUf8w4AUArRhfhST8QQmOcmy7LhYq+4Uj4kiWyv5
-	j5Pd28TpkiqszOjONES5QutIYoe3wIdCn/EPVzaF88yBjvUrXgajH4KN28yhkTLJjmIJNC6RxUY
-	hlQH1ZzjX16kIcrKjJls8/P29xsQOtDY9R/C1QLQ43CaDEzjWK3vwXd1F8nzeDkp3NMqB52k1km
-	DW8XEl+OKR4W8oBf87HL3EvPPj2+a9eiBfOuK05YXen9quTyBCyjyJ20ywa/7Ib0pmnCvzCnt3t
-	vx0Bainw/c8g1JyBQWFzv2H68J6r7uA/If57hgl+vH9R6bVVyQo8t6GdSoElos/YsyxJfxSLb0O
-	x7teycPQI8rRgatsQLWgHIld2UwRhXkSmBIgKgtVolImPL2oTiymQG7IYiKLiKg4Uo2RGFNT2EU
-	qN2hYld8O+2eFBpK1MO6Wmz2sBIf3b5wogr/flr+AxM7rdClgvkiSCnyoNUN
-X-Received: by 2002:a17:90b:1a92:b0:3a0:bbd8:5ba7 with SMTP id 98e67ed59e1d1-3adeafd7770mr2867415a91.62.1792891158057;
-        Sat, 24 Oct 2026 18:19:18 -0700 (PDT)
-Received: from localhost ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba32f70sm3963081a91.1.2026.10.24.18.19.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Oct 2026 18:19:17 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 25 Oct 2026 01:19:16 +0000
-Message-Id: <DMDIVEW7P9QN.1TB58XDPD7V3A@gmail.com>
-Cc: "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S . Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
- <sdf@fomichev.me>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers"
- <mathieu.desnoyers@efficios.com>, "Shuah Khan" <shuah@kernel.org>,
- "Kuniyuki Iwashima" <kuniyu@google.com>, "Hangbin Liu"
- <liuhangbin@gmail.com>, "Martin Karsten" <mkarsten@uwaterloo.ca>, "Masashi
- Honma" <masashi.honma@gmail.com>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v4 2/6] bpf: Add syscall common attrs support
- for xdp link_create
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
-In-Reply-To: <20261024153608.58569-3-leon.hwang@linux.dev>
-References: <20261024153608.58569-1-leon.hwang@linux.dev> <20261024153608.58569-3-leon.hwang@linux.dev>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC26C606A31A;
+	Sun, 25 Oct 2026 02:17:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC26C606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from [IPV6:2409:8a20:e23:2ae4:8810:8f74:8c26:2] (unknown [IPV6:2409:8a20:e23:2ae4:8810:8f74:8c26:2])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 206d49bda;
+	Sun, 25 Oct 2026 10:16:54 +0800 (GMT+08:00)
+Message-ID: <7f9a9da5-1250-4be3-bfa2-70e4b6051197@easystack.cn>
+Date: Sun, 25 Oct 2026 10:16:54 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -118,172 +44,131 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/7] mm/page_owner: add bpf_iter and kfuncs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ akpm@linux-foundation.org, vbabka@kernel.org, surenb@google.com,
+ mhocko@suse.com, brendan.jackman@linux.dev, hannes@cmpxchg.org,
+ ziy@nvidia.com, shuah@kernel.org
+Cc: bpf@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
+ <DMAURQCKK6CG.10CZ7MFXGJO3V@gmail.com>
+ <d39db4fb-e511-440e-9065-72c34a1a295a@easystack.cn>
+ <DMCCBEPCIWH0.2JEDKE64WPJRQ@gmail.com>
+ <06925440-8df8-4f2e-aea0-ede1a98435fa@easystack.cn>
+ <DMDAZW82I9LT.3FNX2WI80GNE2@gmail.com>
+From: "zhen.ni" <zhen.ni@easystack.cn>
+In-Reply-To: <DMDAZW82I9LT.3FNX2WI80GNE2@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa170d8bcd60229kunm6cc80f93366ac1
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaGE0fVkNMQh0aGRlCTUgaHlYVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJT0tCQUMaSUtBHklIQUkaHk9BQ0NKS0FDHUxPQUMYSU
+	1BSVlXWRYaDxIVHRRZQVlPS0hVSktJT09PSFVKS0tVSkJLS1kG
 
-On Sat, Oct 24, 2026 at 08:36 AM Leon Hwang <leon.hwang@linux.dev> wrote:
-> Instead of passing bpf log or extack to bpf_xdp_link_attach(), pass an
-> errmsg pointer to receive the kstrdup() error msg, because
 
-[...]
 
-> 2) passing extack will access underlying driver string out of dev_put()
->    guard, which will crash kernel when the device is unloaded
->    concurrently.
+在 2026/10/25 03:08, Alexei Starovoitov 写道:
+> On Sat, Oct 24, 2026 at 10:19 AM zhen.ni <zhen.ni@easystack.cn> wrote:
+>> For this one node alone, about 97% of spanned is holes. With
+>> bpf_for(pfn, start, end) plus a bpf_page_owner_read() per iteration,
+>> that is at least 16,712,944 kfunc calls, and bpf_for has no scheduling
+>> point inside, and all of them are wasted work. The gap grows with memory
+> 
+> Right. spanned includes the holes. So don't pass them.
+> /sys/devices/system/memory/ has memoryN only for present blocks.
+> /sys/devices/system/node/nodeN/ links to the blocks of that node.
+> /proc/iomem has "System RAM" ranges.
 
-Netlink does exactly that.
-rtnl_setlink() looks up the dev with __dev_get_by_index(), so no refcnt,
-do_setlink() -> dev_change_xdp_fd(dev, extack, ...) calls into the same
-drivers that set the same strings, rtnl is unlocked, and only then
-netlink_rcv_skb() -> netlink_ack() does strlen(extack->_msg).
-All extack users work this way. kstrdup() in one of them fixes nothing.
+Thanks for taking the time to review this.
 
-Instead of patches 1 and 2:
+ From /sys/devices/system/memory/ you get a discrete list of memory
+blocks. The prog (or userspace) still has to walk those blocks, handle
+boundaries, and track progress. That is traversal logic that an iterator
+already absorbs into a single next() call. Pushing it out just moves the
+complexity; it doesn't eliminate it.
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index c0ae442..6f7fec2 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -4440,7 +4440,8 @@ struct sk_buff *validate_xmit_skb_list(struct sk_buff *skb, struct net_device *d
- struct sk_buff *dev_hard_start_xmit(struct sk_buff *skb, struct net_device *dev,
- 				    struct netdev_queue *txq, int *ret);
+Therefore, this only demonstrates feasibility, not superiority.
 
--int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
-+int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog,
-+			struct netlink_ext_ack *extack);
- u8 dev_xdp_prog_count(struct net_device *dev);
- int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf);
- int dev_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 90bc723..0ce75ee 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5862,8 +5862,12 @@ err_put:
- }
+> 523024 pages in a 32G node looks like 64K pages.
+> Then the whole 256G box is 4M pfns.
+> When a hole is passed anyway the call ends at !online_section() in
+> pfn_to_online_page(). /proc/kpageflags does that plus put_user()
+> for every pfn, holes included.
 
- #define BPF_LINK_CREATE_LAST_FIELD link_create.uprobe_multi.path_fd
--static int link_create(union bpf_attr *attr, bpfptr_t uattr)
-+static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
-+		       bpfptr_t uattr_common, u32 size_common)
- {
-+	struct netlink_ext_ack extack = {};
-+	struct bpf_verifier_log *log;
-+	struct bpf_log_attr attr_log;
- 	struct bpf_prog *prog;
- 	int ret;
+True, the kernel safely returns an error for offline PFNs. But paying a
+kfunc call just to learn that a PFN is ineligible is exactly the waste
+the iterator eliminates — the kernel-side cursor skips holes and
+ineligible pages before the prog ever sees them.
 
-@@ -5873,14 +5877,24 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- 	if (attr->link_create.attach_type == BPF_STRUCT_OPS)
- 		return bpf_struct_ops_link_create(attr);
+> Syscall progs run under migrate_disable() only.
 
-+	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, size_common);
-+	if (IS_ERR(log))
-+		return PTR_ERR(log);
-+
- 	prog = bpf_prog_get(attr->link_create.prog_fd);
--	if (IS_ERR(prog))
--		return PTR_ERR(prog);
-+	if (IS_ERR(prog)) {
-+		bpf_log(log, "Invalid prog_fd.\n");
-+		ret = PTR_ERR(prog);
-+		prog = NULL;
-+		goto out;
-+	}
+Agreed, migrate_disable() pins the task to one CPU without disabling
+preemption on PREEMPT_RT. But being preemptible doesn't mean the loop is
+free — an 8M-iteration tight loop still consumes CPU, delays RCU grace
+periods, and piles up softirq work. Skipping ineligible pages up front
+reduces that pressure.
 
- 	ret = bpf_prog_attach_check_attach_type(prog,
- 						attr->link_create.attach_type);
--	if (ret)
-+	if (ret) {
-+		bpf_log(log, "Invalid attach_type.\n");
- 		goto out;
-+	}
+> 
+>> front. The spanned of this node is already 17.23M, so a single bpf_for
+>> cannot cover it; you have to split it into N chunks and poll, with the
+>> chunking state kept in a prog map, i.e. a loop nested in a loop.
+> 
+> The loop over chunks is in user space. One bpf_prog_test_run_opts()
+> per range with start and nr in ctx_in. No map, no nested loop.
+> 
 
- 	switch (prog->type) {
- 	case BPF_PROG_TYPE_CGROUP_SKB:
-@@ -5931,7 +5945,7 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- 		break;
- #ifdef CONFIG_NET
- 	case BPF_PROG_TYPE_XDP:
--		ret = bpf_xdp_link_attach(attr, prog);
-+		ret = bpf_xdp_link_attach(attr, prog, &extack);
- 		break;
- 	case BPF_PROG_TYPE_SCHED_CLS:
- 		if (attr->link_create.attach_type == BPF_TCX_INGRESS ||
-@@ -5959,12 +5973,22 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- 			ret = bpf_uprobe_multi_link_attach(attr, prog);
- 		break;
- 	default:
-+		bpf_log(log, "Invalid prog type.\n");
- 		ret = -EINVAL;
- 	}
+The outer loop being in userspace doesn't remove the chunking burden —
+it just relocates it. Userspace still has to parse sysfs, construct
+ranges, issue one syscall per chunk, read the map, accumulate results
+into a global aggregate, clear the map, and handle partial failures. And
+in the snippet, i is an offset within the chunk while start and pfn are
+64-bit — the chunking arithmetic itself is non-trivial. An iterator
+absorbs all of this into next().
 
- out:
--	if (ret < 0)
--		bpf_prog_put(prog);
-+	if (ret < 0) {
-+		int err;
-+
-+		if (extack._msg)
-+			bpf_log(log, "%s\n", extack._msg);
-+		err = bpf_log_attr_finalize(&attr_log, log);
-+		ret = err ? err : ret;
-+		if (prog)
-+			bpf_prog_put(prog);
-+	}
-+	kfree(log);
- 	return ret;
- }
+>> for 52-bit PA. A 32-bit PFN range will overflow here.
+> 
+> The snippet was:
+>    bpf_for(i, 0, ctx->nr) {
+>            pfn = ctx->start + i;
+> i is an offset within the chunk. start and pfn are 64-bit.
+> 
+>> Solving all of this requires yet another, more complex kfunc—and it
+>> looks increasingly like bpf iter. So why not just use the iter?
+> 
+> Nothing of the above needs kernel code.
 
-@@ -6536,7 +6560,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
- 		err = bpf_map_do_batch(&attr, uattr.user, BPF_MAP_DELETE_BATCH);
- 		break;
- 	case BPF_LINK_CREATE:
--		err = link_create(&attr, uattr);
-+		err = link_create(&attr, uattr, &attr_common, uattr_common, size_common);
- 		break;
- 	case BPF_LINK_UPDATE:
- 		err = link_update(&attr);
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 1a09e78..4aa5525 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10882,11 +10882,11 @@ static const struct bpf_link_ops bpf_xdp_link_lops = {
- 	.update_prog = bpf_xdp_link_update,
- };
+Feasibility isn't in question. The question is whether we want every
+prog writer to reinvent this traversal plumbing, or let the kernel do
+what iterators are designed for.
 
--int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-+int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog,
-+			struct netlink_ext_ack *extack)
- {
- 	struct net *net = current->nsproxy->net_ns;
- 	struct bpf_link_primer link_primer;
--	struct netlink_ext_ack extack = {};
- 	struct bpf_xdp_link *link;
- 	struct net_device *dev;
- 	int err, fd;
-@@ -10895,6 +10895,7 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 	dev = dev_get_by_index(net, attr->link_create.target_ifindex);
- 	if (!dev) {
- 		rtnl_unlock();
-+		NL_SET_ERR_MSG(extack, "Invalid target_ifindex.");
- 		return -EINVAL;
- 	}
+> v3 is +474 -83 lines on the kernel side. The diff I sent is +55 -1
+> and it doesn't touch the debugfs path.
+> 
 
-@@ -10916,14 +10917,14 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 	}
+That diff includes my improvements to the page_owner infrastructure, so
+the line count doesn't really establish that bpf_for is better than
+iter. The iter approach only adds an exit on the debugfs path — thin
+shells over the single page_owner_next_eligible() extracted from
+read_page_owner(). It changes no logic on the debugfs path (aside from
+the mem-hotplug locking fix, which addresses a pre-existing bug in the
+debugfs interface).
 
- 	netdev_lock_ops(dev);
--	err = dev_xdp_attach_link(dev, &extack, link);
-+	err = dev_xdp_attach_link(dev, extack, link);
- 	netdev_unlock_ops(dev);
- 	rtnl_unlock();
+And the fact that the bpf_for approach doesn't touch the debugfs path
+is, if anything, a disadvantage: it means two sets of eligibility rules
+would have to be maintained going forward.
 
- 	if (err) {
- 		link->dev = NULL;
- 		bpf_link_cleanup(&link_primer);
--		trace_bpf_xdp_link_attach_failed(extack._msg);
-+		trace_bpf_xdp_link_attach_failed(extack->_msg);
- 		goto out_put_dev;
- 	}
+With the iter approach, any future change only needs to be made in
+page_owner_next_eligible().
 
-I'm think I gave this suggestion earlier. Why did you go with strdup()?
 
-pw-bot: cr
+
+Thanks,
+Zhen
+
