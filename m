@@ -1,80 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792971945;
-	b=MCvgJphM1b79H+F1TmWGQhCjFIf8ZORBXQqQEwRz/SmL3V4491OSOLASgGS0ZXAmjpUv
-	 JDZpMFxQP/xO7Y8+r+9b9ujffo572MUsUFw1iAFFAx6iS6LLcua7eRz0YSoYy4vB85Fif
-	 kLq1wkObSH24XrcQMYcqNsVfOB3X63pQXJoc8aQSHukpIpw2GK4lIIu4k8zd5VwSspxlQ
-	 Y3uXNXtS8j6KQFpuzKGLzwsmIdWT9NRioDCG1apdkGJbHjhBQ8muoYmcibAzaHtHUkmXk
-	 iKhBfNdOQnWaTGl7LCP08NK0deH9Q9gLNbSrvoHb4j5bkT/LluwZ+zk9hRKAkotkjnw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792971945;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=nDw9i3Z2SirvRvn+BaVz+MSjkgG+3Zolh5xd3HzvrVo=;
-	b=mr2Z4JKva9yfBMVuL0kVPutN1QUfWwsfEGeJ1Q797eLZudziEJhxqEDiZWjn28u6FMLo
-	 qQZGgvLe3hvQYb3UW1P3O5z+UgDIsKknodR14QM1+GGLelmC8rikSNa9MU0Qhk1rNKZcM
-	 l11kwRawlw0dobjGQNJdkAxmO0sCW2GzlNLAW43f+LnEUUrETyVBmjMWL3lSmdtKjKORr
-	 weFMo9kKH7+d0xnBpr3tBT7+p7QBlAu1NQqn94Brs5y6ljVjU5MHq0JPuTGwY77bJp74V
-	 QpPPkWeuEqqyBRvBHd5ROE+cgv2SWvnLQCzMxEliqKL5ALWhuR05TMYlqX3TgCsU/HQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ergdZ05P;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1D2606A31A;
-	Sun, 25 Oct 2026 23:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ergdZ05P
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792971944;
-	b=K9k9lyhSXnfRapDSnG9lvMWg5wxZqez+wIiZPoos7L8/lYvq7U74PbxMVAJWB9Ci/Js5
-	 WQDanfb9DhwwgatB+0Tgg4QM+IuvNXAoBuLB+twUhNoybuuZNtgKL8O9x3gWTXX8C078U
-	 IvIYUZSmlh4b2Eq7l+AB58XE2b+EWgq2oIEfZ33kUznkK+KaGghsFunBWMHY7Vk9B8re7
-	 vZP1yIRqSaTAjwIaFw6gWF5vPVSitXPq08ZU84XRtEV4+Ai3uhSnjDSFUHCWrk6k1apNf
-	 JYlLUIfw+CTSpcbHVCYzNUBf8f6J9I8TxSMkhQq2lSZ1J62LMQdWpuk5R0aKxF+zaRQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792971944;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=nDw9i3Z2SirvRvn+BaVz+MSjkgG+3Zolh5xd3HzvrVo=;
-	b=aATNW+gR4PlQ9JWNDL4lxHUIstI6uBYDIqKGrYO5PGY8iqS6LXo7j6MHjcccwMPei4b7
-	 k4sGbgHIvEupCWHeDyXRl4iokUOYKIn5ZR8pavXj0awD1M7ks5TAOWoeqn+gBKqjYwB6Z
-	 H+JIoQqYgOlqc71EQbD3RlE6wEKqf4TTwFLTjfenxk03SNRSSk1nqz2wYigjgWNS4wbWI
-	 beSghhn2/0SM4ul2GJxS4SpZyhsqi74ioj2SjOCbcT9kUzAj2iBfgqnJm1PixynZWumCO
-	 w/xMwjIVVKJaKvmHXuSnV15S/hRiv5SrhIcv2PKV/d85v5oiBQzR58RtNa6hvilQG5Q==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792972496;
+	b=11Lj0/mPcdyPiA5rU/mszjxjh/RAgSIjLS/L0XgsuOAqog79EJrW0fvQK05MToiTwVfl
+	 lJl7iq+4nHV2yUVk2SAH8Xse1FVypF1hLV6t2N4iLI0VxkyaBVFiqPwYgQzI1J64EwCtK
+	 mN1McidU4ZY+N0shq9MRyAKrZ/8LYNlkZ0CX3gchDQbfqv1J/5sNlcvsn0Ye4KoxLN+Jv
+	 ge2mVCagvHhQCWD7Tx5i/VYybP2d2XssLlElyvnYx6dB3zoom7nGlXM0IUh+26Kzhxr5q
+	 KR09M4NtBN3Aj407kagVu9JkAYEQQf3H1uPzBhGRnWq/V253uuHBl0AmKkcvD4aTSKQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792972496;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Scanned-By;
+	bh=m56SEHVn2Gf58KYNLr++62czlSGJ8VvgNElhZ8qMKFk=;
+	b=bMt00ZLEbJzOhmTy/9lYGWHH7bpMfDLmzIpaMHKJN/6fjB5E4G8E7i/7JKCnSSQmCBv7
+	 nlu5GtIXBWXySaoiGKfq+zXsBkn7+WH/KPfsUlzk3oxTraBpYSIsalnRBfBUJdFkJP6Es
+	 u05xBfcgqmw9B+vDHv3d5RZsa1FimkLTLpjhwfhC8uiexi8fP+1fPW/DmTNL4UybDFLgb
+	 AJ4JgB+me8LmIcDtXFW8WNW57l5Rej7Zn84P4cWD5cPHo0Yb4BDkuJ5LkVAgGz7ID8Wkn
+	 zPRoueqqX/OLJ6GDfg1Ubp2zX8BBarwNqwT59M4Id2HlIpaDgkBTA0h3zsWUEpm4O6Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=R9abTRDI;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DA6E31F01825;
-	Sun, 25 Oct 2026 23:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792971944;
-	bh=nDw9i3Z2SirvRvn+BaVz+MSjkgG+3Zolh5xd3HzvrVo=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=ergdZ05PSlkrgvyJUE0RMjWhQ/BFYhPHbsfaJnvbF9a81FFeO2m0lkty8VHXSndL2
-	 rosTagI37VyeYY/3AHK9+JrT+9iw0dFRPf3RS34iJl6EmNXdajMKgMprLHL0T3L27B
-	 n3OEiMeUPpBH9U4QeKmPba9gAsUoM9/5lV28RTOEYZ50j4ehYAfaokT02WjBF/498T
-	 scao/9HVjvbN67OUr9U5/9mHv+efE0pgupeoVwC/W6qig4iSddFjG3jsdMOUAtjBYP
-	 uqavIS3XKZZBDNvmf0NapMFWBq9njUfJ07fua8ow5OQnWo4MxoHLYxcV8CGsbo70QC
-	 Tqtis3PW9dyjw==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 6804F44B2D;
-	Sun, 25 Oct 2026 23:45:43 +0000 (UTC)
-From: Eli Skeggs via B4 Relay <devnull+kernel.eliskeggs.com@kernel.org>
-Subject: [PATCH bpf 0/2] bpf, sockmap: Fix dropped data and EPIPE on empty
- skb redirect
-Date: Sun, 25 Oct 2026 16:41:56 -0700
-Message-Id: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4046606A31D
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 23:54:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F4046606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=R9abTRDI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792972493;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=m56SEHVn2Gf58KYNLr++62czlSGJ8VvgNElhZ8qMKFk=;
+	b=R9abTRDI4wx16xT3RasNHZcIsgSp/JsFq0KeiaFYVHjJrCOGMaGaYbIbsIEhf/ZzmRptiq
+	jnGHegHWifKRQF0/5mpqSwya/hg29iWOiZMyXe5xAfB5tuM8C1GbBMeE+DNtBJgGgrbahI
+	wV4C0nwuwZmdaDbX3NHY3+wv22d9er0=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-315-R-ngUY51MPWr_VeGH7EJXw-1; Sun,
+ 25 Oct 2026 19:54:38 -0400
+X-MC-Unique: R-ngUY51MPWr_VeGH7EJXw-1
+X-Mimecast-MFC-AGG-ID: R-ngUY51MPWr_VeGH7EJXw_1792972476
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 24B4E19560BA;
+	Sun, 25 Oct 2026 23:54:36 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C071E18002B7;
+	Sun, 25 Oct 2026 23:54:33 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Ridong Chen <ridong.chen@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Guopeng Zhang <guopeng.zhang@linux.dev>,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH-next v3.1 09/11] cgroup/cpuset: Release invalid isolated CPUs with a shrunk root partition parent
+Date: Sun, 25 Oct 2026 19:53:59 -0400
+Message-ID: <20261025235359.320155-1-longman@redhat.com>
+In-Reply-To: <20261025214449.310715-10-longman@redhat.com>
+References: <20261025214449.310715-10-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,82 +85,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMwQrCMBAFf6W8swtJhCr+inhI1o2uYhqyVYTSf
- zfqcQZmFpg0FcNhWNDkpaZT6eA3A/gay0VIz50RXBi9C45s4vsjVkqxCWUtJD7v/eh4y7uEntU
- mWd+/5RGpZpz+0p7pJjx/Z1jXDweIJxJ5AAAA
-X-Change-ID: 20261020-sockmap-bare-fin-e1f8160c3c7b
-To: John Fastabend <john.fastabend@gmail.com>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- Jiayuan Chen <jiayuan.chen@linux.dev>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Cong Wang <cong.wang@bytedance.com>, 
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Eli Skeggs <kernel@eliskeggs.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792971941; l=1845;
- i=kernel@eliskeggs.com; s=20261021; h=from:subject:message-id;
- bh=Wlyiie0CKDzxYgDQSpvxa4sS+tMNMfU2M/Qk54ENhjw=;
- b=tbyYi/j3qg52YiRw/uGwHTvdc1MwNPTaY4YyjbYq3J6a31YmybW5d/zOUFmKzo8P67EOjxD7h
- kZuWm2tJq1YBrVWeIvDgbj0Jp5hebWFSYVm5EGihK9IZk/NKBTSYo5y
-X-Developer-Key: i=kernel@eliskeggs.com; a=ed25519;
- pk=38k+FqQ3STTnr2H4HZ7IEseBOHWRDYVhvyMmQlB51gc=
-X-Endpoint-Received: by B4 Relay for kernel@eliskeggs.com/20261021 with
- auth_id=1252
-X-Original-From: Eli Skeggs <kernel@eliskeggs.com>
-Reply-To: kernel@eliskeggs.com
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-When a socket receives a bare FIN, tcp_read_skb() hands an empty skb to
-the attached BPF stream_verdict program. The program may redirect that
-skb to another socket. Doing so causes the target socket to report EPIPE
-and stop transmitting redirected data. A proxy may see the erroneous
-EPIPE and truncate a half-closed connection. Instead of treating a
-redirected empty skb as an error, treat a 0 return as an error only when
-there is more data to send.
+It is also reported by sashiko that there may be leakages of isolated
+CPUs when a root partition parent shrinks its effective_xcpus with
+isolated partition children. Leakage here means that isolated_cpus may
+contain extra CPUs that are not in any isolated partitions and not boot
+time isolated. Those CPUs cannot be used in any isolated partitions
+anymore.
 
-Patch 2 adds a selftest that fails without patch 1.
+There are 2 different cases here. The effective_xcpus becomes empty and
+the isolated partition should be invalidated in this case. Alternatively
+some of its effective_xcpus are not in parent's effective xcpus but
+still have some valid effective_xcpus left. The isolated partition can
+remain valid. In both cases, the invalid isolated CPUs will have to be
+released from isolated_cpus if appropriate.
 
-Tested on x86_64 with virtme-ng, under QEMU without KVM. The new subtest
-fails on bpf/master without patch 1, and passes with it. The full
-test_progs -t sockmap passes all seven tests and 802 subtests with patch
-1.
+Fix that by calling isolated_cpus_release() to release those isolated
+CPUs from isolated_cpus.
 
-The bug dates from v6.0 (965b57b469a5), so please consider queueing
-patch 1 for stable.
+New test cases are added to test_cpuset_prs.sh to test this.
 
-Found while building a sockmap proxy between TCP and MPTCP sockets,
-running out-of-tree MPTCP sockmap patches, where the EPIPE caused
-half-closed connections to prematurely abort. An LLM helped locate and
-reproduce the issue, and proposed an initial fix. I traced the code
-path, reviewed and verified the LLM-written test, and simplified its
-proposal to a one-line fix.
-
-Signed-off-by: Eli Skeggs <kernel@eliskeggs.com>
+Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
+Signed-off-by: Waiman Long <longman@redhat.com>
 ---
-Eli Skeggs (2):
-      bpf, sockmap: Stop reporting EPIPE on zero-length skb redirect
-      selftests/bpf: Redirect a bare FIN to another socket's egress
+ kernel/cgroup/cpuset.c                           | 16 +++++++++++++++-
+ .../testing/selftests/cgroup/test_cpuset_prs.sh  |  6 ++++++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
- net/core/skmsg.c                                   |  2 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c       | 74 ++++++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_pass_prog.c   |  8 +++
- 3 files changed, 83 insertions(+), 1 deletion(-)
----
-base-commit: f909e534f5e34feb2ea2701d54df63e21aa506fc
-change-id: 20261020-sockmap-bare-fin-e1f8160c3c7b
+ [v3.1] Fix the typo "cs->effective_cpus" => "cs->effective_xcpus".
 
-Best regards,
---  
-Eli Skeggs <kernel@eliskeggs.com>
-
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 6d224e614e74..9a2a6f727929 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -2012,8 +2012,22 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+ 		 *
+ 		 * A partition error happens when parent has tasks and all
+ 		 * its effective CPUs will have to be distributed out.
++		 *
++		 * For an isolated partition with a shrunk root partition parent
++		 * we may need to return some or all of its isolated CPUs.
+ 		 */
+-		if (nocpu || cpumask_empty(tmp->delmask)) {
++		nocpu |= cpumask_empty(tmp->delmask);
++		if ((parent_prs == PRS_ROOT) && (old_prs == PRS_ISOLATED)) {
++			cpumask_clear(tmp->addmask);
++			if (nocpu)
++				cpumask_copy(tmp->addmask, cs->effective_xcpus);
++			else if (!cpumask_subset(cs->effective_xcpus, parent->effective_xcpus))
++				cpumask_andnot(tmp->addmask, cs->effective_xcpus,
++							     parent->effective_xcpus);
++			if (!cpumask_empty(tmp->addmask))
++				isolated_cpus_release(cs, tmp->addmask);
++		}
++		if (nocpu) {
+ 			part_error = PERR_NOCPUS;
+ 			if (is_partition_valid(cs))
+ 				adding = cpumask_and(tmp->addmask,
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index d7d0bef0a17a..ceb1a3b4f94e 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -522,6 +522,12 @@ TEST_MATRIX=(
+ 	# its effective xcpus will be removed from isolated_cpus.
+ 	" C1-4:P1 C3-4:P2   .      .    T:C3-4   .      .      .     0 A1:3-4|A2:3-4 A1:P1|A2:P-2 ."
+ 
++	# When a root partition parent with an isolated partition child is shrunk
++	# so that its effective xcpus is no longer a superset of its child effective
++	# xcpus, the invalid isolated CPUs should be removed from cpuset.cpus.isolated.
++	" C1-4:P1 C3-4:P2   .      .    T:C4-6   .      .      .     0 A1:5-6|A2:4 A1:P1|A2:P2 4"
++	" C1-4:P1 C1-2:P2   .      .    T:C4-6   .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
++
+ 	#
+ 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+ 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+-- 
+2.56.0
 
