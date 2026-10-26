@@ -1,145 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=198.175.65.14
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1792990851;
-	b=l0oYF4NL8qirkhEPOkbPtomBv70YhLevOwCzKFHSP2S9+CuN51bLzIXsL0fAY1KxgxeU
-	 dpXzIT66nX48GfckfoqJHmUtLpy1w6txpqXMXl/qwNPnBvh9xxQDlaw4tFsxl/f7LYOtV
-	 BYD3rI+WHznox4fIQSdACiJM02P+ExgRE768lJdqOM2d71ZQEtxNR2+rbTgqV3Y1eP+RE
-	 E7jyupzKgjc4gVc2LyaG7nrLX+dmeOgVOP0TZIl+8HjUdqSuNL19BM+82G3e6GCrQnopq
-	 lVlZXomPW0HpNZ7L192CvOTEINqMKXBF+pX2MSdB5KB6qzxqas+YsS+00yM/S7NGe4Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792990851;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
-	 Received:Received:Received:Message-ID:Date:User-Agent:Subject:
-	 Content-Language:From:To:CC:References:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-LD-Processed:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
-	bh=gMiVr0sKbJYBbZsFJmhkPQG5yJSSKc+QHx3UdPsjGp4=;
-	b=peD9SMfSe9jtY+gI4CtdcWrLOkjhdrW6GUYbjth27lLBX4srSd7kqTE+Ee/BUJNIr5r6
-	 qBzr02SrPOxD+T5Jzythk1Dz/AGj1936BbT0PgCQ0IayVQ0ZlEJDmKst0JRo41JmvV/Se
-	 wWNDY1ONAwdWPRGABBLzY7UDsvzKA3gu3qlnMRFXHIs2du+k31hEY2tH6K67rXZH0SL3D
-	 ElcDdMxcx7XJB6yj9ho/9XDqrdW4Y6xyXHw8l624wxAWMd4+GjN9tL3/bsWiiTbIywY58
-	 qsuBTbqbffck4DUmfqoMjbMvZA1DrM1LuDx7zjXWpr0XM4uWqToxnS4Y0vnbRdc9dpw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="Vd/fxVX5";
-	arc=fail smtp.remote-ip=198.175.65.14
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792991126;
+	b=J2tZ3fJwEQRMdqvjhCRLCybIioCLompyps3ECdrGFjnWfyPQ+B5KnHNmSfAhZqFhZEZE
+	 rcsJ9L3R2+tO5OMeXxSroS7EmZH8OiVKwnrhoWokxpX56ZFWzjEeFFd6GPnJRyB+FRpfw
+	 V44T+Spdy1jfcRGCSdmGr+fZYWilY6oEN9XFqg73tcqBuEBuM0mxWmLBE0AlQwhSJFcik
+	 SZHeYRlHVefuVIeny3PH9MnsIZUdZB2tqt9gXTNTPerFeKd4Al8TskcwOM3npxCb3gxFg
+	 TNzmRbni8W1IVfqny7Uto7kqbV3ewSU/Oopk/fX5V/Cb0yHhYQvMR3PuBoYR8vKmpZA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792991126;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=2mJ2Dm6CqrM0byK/8f5SbclEqaonqfPePomOFdNTjzQ=;
+	b=eUOCQ57Sny64IwfcwMebk0VyhF/cJbm1f0SXCZaS5UlHNmo8rO4//viw+iojGODoAgBp
+	 6BnnBOmYlGqeV0XKK6+lacYvchww0vqmDhtjwuC3m894I8pIMKedCdFtHUQ32Te4ZTlBZ
+	 fDAvufJYemRE9otrHHpByAJ3gKmZqP+hGms56ortFX0R1BGh/zKb4d+Ap52si8dMqojru
+	 wwNsa7ZTZWV1MYOCCZiL5+MULdNfy6SgyvD5mak60e032HOSlrvs7pYTSW3gY+ZcENxPH
+	 bIGPXV+YpQ+fYHvXnOGQ9qqF/9ALu96EcEchTyhmwF9rbg7JTOG3iNcloQs882vtaCw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AsTQ9v3C;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067FF606A31B;
-	Mon, 26 Oct 2026 05:00:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 067FF606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89034606A31A;
+	Mon, 26 Oct 2026 05:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Vd/fxVX5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792990848; x=1824526848;
-  h=message-id:date:subject:from:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=RmbnGDgmtVCwoLoIxfGQGHGIKsBiwnYPJsPqJ/vAnL4=;
-  b=Vd/fxVX5AirLU7fvgbtvWQ4tUVm2UwMjUO9mxwPrUYo3nWk1L1+3rz5O
-   JFNT1e3A9eVXPlzYDkphNzqoJpKehWeuRFSgwbdeOi6JgweeehOd0wGUk
-   fdnptWeMBmWSaJtgXzzz40yWoGdQD4/7icjwRFoKNtEelzWkhi+BDN6od
-   BnSi10Shxuh2vsbi0bQfwpr7rEJzic8Se4nbPr+7ECqT3TBJetYxmEx0y
-   uUEXTlq1hq52Gx5Hw2uvoZ5vln+7ojG8yk5k1jqnfBAC8HeSMArAMiwSt
-   lNFMFm30kM0ztPBz5asBiNh0vgDISVeR00uosuISmODQZzcPSGAvUyZBs
-   w==;
-X-CSE-ConnectionGUID: CycZd7AnSzWQpcun08rYzg==
-X-CSE-MsgGUID: mhWGtTb6R52pI1FgjfbNTg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11946"; a="1522190"
-X-IronPort-AV: E=Sophos;i="6.27,178,1787036400"; 
-   d="scan'208";a="1522190"
-Received: from fmviesa013.fm.intel.com ([10.60.135.153])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2026 22:00:48 -0700
-X-CSE-ConnectionGUID: meamlQx6TRyh58w4eVU+5Q==
-X-CSE-MsgGUID: M/jIXsn/RROaGybGP9emtw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,178,1787036400"; 
-   d="scan'208";a="5996531"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by fmviesa013.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2026 22:00:47 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49; Sun, 25 Oct 2026 22:00:46 -0700
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49 via Frontend Transport; Sun, 25 Oct 2026 22:00:46 -0700
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (40.93.195.0) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49; Sun, 25 Oct 2026 22:00:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oMWPwKODZzhrMQVDkwxN40RbGb7qPdrZj6w4HsJ8b+rDrRpW4AYr+3X6hm9JkWnwlITslfMJ3o0c3zirBpph0PuBGZeaLvzBZaC+wA9WYrgwFCQh1MywOEkcX9zYzdpC8+wQ32TyhddCC/bPttrffhPn6Ix15pMttpaPiGbQJYT4ETxLYRAKTwdcIwJHX77njFttK1S0NWzFeR8iILxSTMeKxxlxDcSBuWkZgsV81eN554nOcuV8pKujyGDQpSfOtKU81Ghlf/y7HBXFyqngpWtACPOVb4As6gkqn4M8mRXfZZQ6uNCJ4476gqEYn1d0P/0JRsSgZORzqMokyx+7Xw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gMiVr0sKbJYBbZsFJmhkPQG5yJSSKc+QHx3UdPsjGp4=;
- b=Kg0bJF4XTcVdsSJqtVPG/uB/J4WjV2GJd9n3g+z9rQkCq0XZxg7Kd0GHCvZLgou/9yaJ595Hhgnj1aoP3CZiD9AxaJXbgU29Pj0lVOdrAWNefeemhGOciqmxDewOHsCEqR0w6VvO7KFm+OopSVp3zHUxmM4VtvYCYKGbxO9/9jcntuUJy08yBMufTxZvfA73U5Fr+T1MTMwO3d9GmD/RhU8IguuLJlx3tbXMuBWqo1cQxiC2Qjq9rLBpEITp0mLHcT5ZJ9ikvtM8lHABOMsPftHp5CQjJ/tkeYs9L2lnfvR0v6O52fZzHCuBeDqFFTTooJ6+lPr1ggqqusltroWeLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY8PR11MB7846.namprd11.prod.outlook.com (2603:10b6:930:79::14)
- by SJ5PPF12B0A4A9B.namprd11.prod.outlook.com (2603:10b6:a0f:fc02::811) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.21; Mon, 26 Oct
- 2026 05:00:37 +0000
-Received: from CY8PR11MB7846.namprd11.prod.outlook.com
- ([fe80::cae0:d05c:b2fc:c395]) by CY8PR11MB7846.namprd11.prod.outlook.com
- ([fe80::cae0:d05c:b2fc:c395%5]) with mapi id 15.21.0546.021; Mon, 26 Oct 2026
- 05:00:36 +0000
-Message-ID: <5af354c7-9bbb-4ff2-b450-c08cc5b46304@intel.com>
-Date: Sun, 25 Oct 2026 22:00:33 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 02/28] KVM: VMX: Initialize VM entry/exit FRED
- controls in vmcs_config
-Content-Language: en-US
-From: Sohil Mehta <sohil.mehta@intel.com>
-To: Binbin Wu <binbin.wu@linux.intel.com>
-CC: <kvm@vger.kernel.org>, <x86@kernel.org>, Paolo Bonzini
-	<pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, "Jonathan
- Corbet" <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, "Thomas
- Gleixner" <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
-	<hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>, Andrew Cooper
-	<andrew.cooper3@citrix.com>, Tom Lendacky <thomas.lendacky@amd.com>, "Nikunj
- A Dadhania" <nikunj@amd.com>, Shivansh Dhiman <shivansh.dhiman@amd.com>,
-	"David Woodhouse" <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>, Zhao
- Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>, David Matlack
-	<dmatlack@google.com>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20260911213659.2025974-1-sohil.mehta@intel.com>
- <20260911213659.2025974-3-sohil.mehta@intel.com>
- <acc168cc-e021-43dc-8846-ed1b2d69facb@linux.intel.com>
- <a0f99d8b-b67d-42f3-b76b-90187a0bea5d@intel.com>
-In-Reply-To: <a0f99d8b-b67d-42f3-b76b-90187a0bea5d@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ2P220CA0004.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:a03:5da::11) To CY8PR11MB7846.namprd11.prod.outlook.com
- (2603:10b6:930:79::14)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AsTQ9v3C
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 441BE1F01825;
+	Mon, 26 Oct 2026 05:05:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792991126;
+	bh=2mJ2Dm6CqrM0byK/8f5SbclEqaonqfPePomOFdNTjzQ=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=AsTQ9v3CAO5fnoCL7YFentEDArMsIW42dzNouGP+XtbzNzWlIhfUto998NxbjN4F5
+	 qfVWmiH247iDy4axd6Uf9WVWOnYQ1Nj5AUwZhOqGZqewh7E1aIZTlI7uwIMU8CTkB0
+	 WIGXI1zCNZ8wudc4JgvbVqC+aBBjLC1GMBieQo4JMDcSWbUsUiUWGrIXmzWW4+VfIi
+	 zFFT/AjqXFaB3oaKc4x9Ulmjq6eHx6EePSbPXB98npaCtP2Wwy+WfEuxSkOhIIJtYG
+	 pvGZMdDgX3Dx8r6g4lsP/AzJFoK46YQJAvYgrm44JFEfZGN3PsFX20T7WBIPX8GCKW
+	 j9/ckR3c8FsJg==
+Subject:
+ Re: [PATCH net 1/2] net: Make PSP skb extension survive packet scrubbing
+From: netdev-bot+sashiko@kernel.org
+To: weiwan@google.com
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, shuah@kernel.org, horms@kernel.org,
+ jakub@cloudflare.com, daniel.zahka@gmail.com, willemb@google.com,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Date: Mon, 26 Oct 2026 05:05:24 +0000
+Message-ID: <179299112474.3134.2003199816680362406@kernel.org>
+In-Reply-To: <20261025040523.678027-2-weiwan@google.com>
+References: <20261025040523.678027-2-weiwan@google.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -149,107 +65,202 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY8PR11MB7846:EE_|SJ5PPF12B0A4A9B:EE_
-X-MS-Office365-Filtering-Correlation-Id: 78c34fd3-f209-433a-7752-08df331e12d1
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|23010399003|1800799024|366016|4143699003|11063799006|56012099006|261009223027099003|261022105027099003|10067099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info: jxnuyAtar8J1+6+DnbO4t0Hx8g6vwDQYrnVmoYmf+/sCvsu/AjrBQqOYx55VA3Gx26p0D/OG1XbSpaXTcL47GRiNhwdC8olscvtqqPjoop3Bvlahr7x8JBJHlNkf1Xz8ns6zHRLujdYod5ceqMSv+JX1PYfd1Ro+B7Z4KP06lHUNomU1MFepqMqOWYWIe7anG/LdJ9M5CP9kSXr++QljZkPoJrjdG1YXNRuk3Z/XVYz7FTH+O+7okcuVNSs+zb566pumr0hIiBPo19OPZ08xhdDwpCRIqg1l6m9MlcKjo62aox8xMgQrj1peEP1Q88XhNGcvCkR+QHRTqDLYODfLHDQVLWZE8Elo/4J3z4F4icYcDwS6Xb9jQzl6BGlyv2RVkMUWsBHU3XkmS7+XzbwMiH8JgQu7LVfWNO5dYtwEbj1UQopRWV7mV+KqKUcbs54EM2v4NA+vvT6B5IqyWakDGzW1ujrBplKLtgb/pSjEV2unzs4UgHbt3JgKoMO+WdyaVBu+XAqrCxYNDqlqoRZ2ePSrV53XtQpoKuFscZhqhSD/cpDdHFw8zT36KHPOu7OBTi++tCRhlcC9IPZ7BEE0imWn595s0MoBdA2/VX1pGSWsPNrJDSP7BkzAUzdnP1v1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7846.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(1800799024)(366016)(4143699003)(11063799006)(56012099006)(261009223027099003)(261022105027099003)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VkVCTVNJTUtBZ21SaTJheWVENE14WmwrQktxMFdDTzRiVnhlOU5LU3dSd1VH?=
- =?utf-8?B?Wm00Tm81eFpoNTdjK1ZpL3ZFbm9ISE1yNkcwRnlFSmpaMXNvZGlZQjVTcjNC?=
- =?utf-8?B?WkN6Wkt4dXBQSG80YmNMUU8rY3Qwano1NGFrRHMyMGFPSzJGdjBsV0NuRUpu?=
- =?utf-8?B?SWNCaW1FQ1RSQVB5dWtMcm5tajlXUTNSVVJLQmhEZ1RTSVJpQnpCb1U5UEpw?=
- =?utf-8?B?a05BMDUxOWpKOFRUTDNOTkNZVC9JMzRqOU02a1d3YWFXL256ei9aRU1VK3k1?=
- =?utf-8?B?d0pvZmFDL2dHTmYwYiswY1l1S1c1czhERXBEaWNlaGpTVGd4UGJ2ZVduQ0F5?=
- =?utf-8?B?akpmUGFrTU5RN094VU0vaVFib2ZZN3RSZ3pmaGVqdkZhcm14Vm53b0I3TVBt?=
- =?utf-8?B?NTN4cEEyeC9OYWR0WXpSQS9hYWxEbVU3KzA1M3F2emtaVnZvVzJOTzJ3WnNI?=
- =?utf-8?B?TitZRjBaYlpvS3M1cUx5M3NlZDhmcktSNjlha1JQdVZxNDRmNjBjSDVYZTR1?=
- =?utf-8?B?aTltd0JXR1NDY294TVJhdDE5VnNFZmpRa2s4WHUzcDR6OHhpaHMveXhVZUpP?=
- =?utf-8?B?b2pWQXBtenE1S0hKTHFwdkZrWWFMc0hQcHloTklvNC9MZ3FOcXRQSFhvM21a?=
- =?utf-8?B?a3N1TG5mVkJBK2dXa0NabFFFVHdYUFlzUDZ0Nkpua3dXQ1EvWWZ2WmIvb21s?=
- =?utf-8?B?K0FkMUNmRFE2SHlYcDZXQ0pOWWVmdE1XU1AwdEdDUEJlS3BwMEU2Q2VpQkhF?=
- =?utf-8?B?ODNxVTczMi9ESHZXdk1vZnhPTk5oTE5jcHN0MnZBa2xWQVBkOGcyVlZCdHY2?=
- =?utf-8?B?bTRZdGNsejdQVmNoMStOd0FvLy9sQnFOam1kQkNwWFFucmJGeDNKQ1hhSjQ2?=
- =?utf-8?B?YkZsYmloQ2VyaldJSWR3b01IaUFmQUQ3cWFnZWkwVjhRczFIQ2N2WXgzY2Yy?=
- =?utf-8?B?M2puS25VSUNJa1NKSnJ5dVZOa0ZubEJQOHdmb1hsVlIwMWhEL2MycTV5TGxC?=
- =?utf-8?B?MkR4ekVsczFFTjNJVHIrL3NGNFl4SlhzRUpWNkNZK3BUdDRDQlh3VnVpSHFK?=
- =?utf-8?B?ZWFsQklkVDdlcXhNb0xlZjZIZXpzcDJyM1pyaG5kaDZRL3FQcE45WmJiR2Zj?=
- =?utf-8?B?SVhOeGtwdVVxbG03c1FNRUVDMnY0QzJzbkNBSmdJU2EwOHNvQ28weUFZMG8v?=
- =?utf-8?B?ZnRWMFNLa01yTUZ2Z3FRaC8yKzVUSGtUYTNPMmZyQTNjaE45VUZlWWpVeUZN?=
- =?utf-8?B?Y053ZUIrYzBwL2Q1NHlaa2hKKzJqUlpDOE1mQUhveGhKTzBtd1FuMnU4S3A2?=
- =?utf-8?B?bWNxeXhVbE1selFXRUZDNnh5NHVQV1VtNGc3eVVEbDZzd013Skh6aGtzRldo?=
- =?utf-8?B?L2pTUUlBeUtQVG9NQnZPbjZZZ2R3WklmQWVXVURuZ2MvNTdIalFNamtFKzJT?=
- =?utf-8?B?QkFyL3dseitOUWp2djlmck9lenE1bmxuaTgrU1lXSStYOTB5V0ozaXlZS1VK?=
- =?utf-8?B?YmxzSjh4ZzhpUjkvSGE3aHJYa2tkQTg5czQ1UW5LbXdRSEg1czcrNmFQdHcy?=
- =?utf-8?B?Slp2MG41M1JOU2VVVnd5cU1jUEZzQmxXWVAzS2dLSFFhdmNyeUErTS90Rk5S?=
- =?utf-8?B?bGlBSnc3cUlrd0YwaFhwTnQ0SjZjTmV2a2dGME5mQ0lUOW9pWGJ5YllieTZt?=
- =?utf-8?B?WGhzemRMM0hhVSszb2R2WkhJWnJYaE9oSTBHK3dIekZJZnU1UlZHMTBia3By?=
- =?utf-8?B?cXlscm9JWmI3RHFIR2djbnA4TlAwZ1JDOENKdkpweEhsYkp5cmN3NWgrRWVU?=
- =?utf-8?B?dmFkL0s1a3dVV0VxRURyMHRXK3NLbXRWZGxoMmZUMmdYOWtNcFRLYmN3aC9y?=
- =?utf-8?B?d2ZHbFg4YmduL21QUVhISzRNVWlnK2pjajdvVUNnTEJKK2I3RklqY3BoNlNy?=
- =?utf-8?B?UzJrNjNJSTFUL245dlRoc0MrVTQ4Vzl5L0NKYWkxeEhLTWgyUGp0K2FwUTRx?=
- =?utf-8?B?WENMTGRJL0VtR0dtTE1USzBqem5ubjFiYW5ZY0huNmlkZ3kxSXRGTnRXOUY3?=
- =?utf-8?B?NFBnNm9sYmZKOVMvQ2MvbjVaZmFoRlVYVldLZllIcnVsUnoxRDFGUXQwb3VK?=
- =?utf-8?B?bzdFWDRCNXlZVFZlQ09HYklqUVRiaWJLcjFSMmwvSjdmQ0hOR0hZdi82Ymc1?=
- =?utf-8?B?QTJWb1RrT1ZOeHlhV1BRL0tqWitLQW5SekU4dy9wbHhrTDVCbmc4NERyUFpK?=
- =?utf-8?B?c25CamhXSnVQN29ld2JuV25VU05xbUtJc2Z5M1o3VGtZMkp3UDhmaW8wSys1?=
- =?utf-8?B?RTZTbWFmditiT3lxaEtXazZWbnNUZ1dWU0pYaHVDejdrQUQwYytLZz09?=
-X-Exchange-RoutingPolicyChecked: XOPPQYJdW7DqpwEwfkgftmWqvSl+jWXRkLAutrE4e7+ismb/a/y9rYvhxwUqGQhcHMSH4S2qj5lrV3BNFk1tqwG/Ez9xSMuG0zVu5zTYuyNk/FITl2aNmJBnoVBEPAMSy1jYorwPtpY8XGTRiDiNZU1oVi2nTFjh/PII7NpR4y3NQvEGp+QZvKXYoubs4q4h/vyxHCfleHSMF1XltVWMGxk0K2dRpZRJ/P5v0TWJWOFCIsR40PyWEkI5xXnf29ZvTa23lcbVaX47RQxf3PupgLGkXAdd0+R1+0rENE42HjdVjgY6AoubSacHykPaBO0sxALZL/9qcGM5mo7FYeGV2w==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78c34fd3-f209-433a-7752-08df331e12d1
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7846.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2026 05:00:36.8973
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1A5/N2LpOM/XRTnN18MYfZdT71Pui/zadubpLZRs9pO64JRH7Tnsfeq7eogJfP2zFxEt6Y9qRPzZivLpq4ENYA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF12B0A4A9B
-X-OriginatorOrg: intel.com
 
-On 10/22/2026 8:10 PM, Sohil Mehta wrote:
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-> I couldn't find any precedent for this. I don't have a strong preference
-> here. Is it worth making future-proof?
+Critical: 0 · High: 1 · Medium: 1 · Low: 0
 
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-I did a bit of digging. The current entry in the table is the result of
-Sean's preference provided early on in the FRED series. See
+- [High] In net/core/skbuff.c, skb_ext_scrub() (lines 7446-7461) deletes
+  extensions one at a time with skb_ext_del() and keeps SKB_EXT_PSP…
+- [Medium] Keeping SKB_EXT_PSP across tunnel decap in skb_scrub_packet()
+  (net/core/skbuff.c:6402) means inner IP fragments taken from a PSP-…
 
-https://lore.kernel.org/all/Z739wdGmk4ZuWJ8v@google.com/
-https://lore.kernel.org/all/ZUz3cPmnqSq7Lol9@google.com/
+--
 
-IIUC, we want the FRED entry/exit controls to be consistent without
-depending on the ordering.
+net: Make PSP skb extension survive packet scrubbing
 
-The current vmx_check_entry_exit_pairs() doesn't cover the FRED case (a
-single entry bit mapping to two exit bits). So, the updated check would
-cover this scenario.
+This patch adds skb_ext_scrub(), which deletes every skb extension except
+SKB_EXT_PSP. It uses the new helper in skb_scrub_packet() in place of
+skb_ext_reset(). The goal is to keep the PSP extension on packets
+redirected into another netns, for example through netkit associated
+with a PSP device.
 
-> if (!(entry_controls & n_ctrl) == !(exit_controls & x_ctrl) &&
->     !(entry_controls & n_ctrl) == ((exit_controls & x_ctrl) != x_ctrl))
-> 		continue;
-> 
+Link: https://lore.kernel.org/r/20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com
+Closes: https://lore.kernel.org/netdev/DLODSKPY6ON6.1G6SP3CFFLCPJ@gmail.com/
 
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 48f6764117243..4269d91cf6078 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
 
-1st line: the entry control is set if and only if *any* exit bit is set.
-2nd line: the entry control is set if and only if *all* exit bits are
-set (which is specific to FRED for now).
+[ ... ]
 
-Also, to make it easier to read, planning to reformat it as:
+> @@ -6398,7 +6399,7 @@ void skb_scrub_packet(struct sk_buff *skb, bool xnet)
+>  	skb->skb_iif = 0;
+>  	skb->ignore_df = 0;
+>  	skb_dst_drop(skb);
+> -	skb_ext_reset(skb);
+> +	skb_ext_scrub(skb);
 
-struct {
-	u32 entry_control;
-	u64 exit_control;
-} const vmcs_entry_exit2_pairs[] = {
-	{ VM_ENTRY_LOAD_IA32_FRED, SECONDARY_VM_EXIT_SAVE_IA32_FRED |
-				   SECONDARY_VM_EXIT_LOAD_IA32_FRED },
-};
+[Severity: Medium]
+skb_scrub_packet() also runs on tunnel decap, for example in
+ip_tunnel_rcv() and in vxlan_rcv()->__iptunnel_pull_header(). With this
+change, inner IP fragments taken from a PSP-decrypted tunnel payload now
+carry SKB_EXT_PSP.
 
-Please let me know if you disagree with the approach.
+Before this patch, a PSP extension could only be on whole transport-mode
+packets. Those have no inner IP header, so they can't be fragmented.
 
+IP reassembly takes the extensions from the head fragment only:
 
+net/ipv4/inet_fragment.c:inet_frag_reasm_prepare() {
+    ...
+	skb_morph(skb, head);
+    ...
+}
+
+inet_frag_reasm_finish() never compares the extensions of the other
+fragments.
+
+Could a reassembled TCP segment keep a valid PSP extension when only its
+head fragment came through PSP? The remaining fragments could arrive
+unprotected, as plain IP or plain VXLAN with a spoofed inner source.
+
+__psp_sk_rx_policy_check() only compares spi, generation, version and
+dev_id through psp_pse_matches_pas(). It looks like such a segment would
+be accepted by the PSP socket.
+
+This seems hard to exploit:
+
+  - The PSP peer would have to send inner fragments, and inner TCP
+    usually sets DF.
+  - The attacker would have to guess the IP ID.
+  - Mismatched ip_summed forces CHECKSUM_NONE, so the attacker's
+    fragments must reproduce the checksum of encrypted, unknown data.
+
+The commit message only justifies keeping the PSP extension for
+cross-netns forwarding. Was keeping it across tunnel decapsulation also
+intended?
+
+>  	nf_reset_ct(skb);
+>  	nf_reset_trace(skb);
+>  
+> @@ -7441,6 +7442,23 @@ void __skb_ext_put(struct skb_ext *ext)
+>  	kmem_cache_free(skbuff_ext_cache, ext);
+>  }
+>  EXPORT_SYMBOL(__skb_ext_put);
+> +
+> +void skb_ext_scrub(struct sk_buff *skb)
+> +{
+> +	unsigned int id;
+> +
+> +	if (likely(!skb->active_extensions))
+> +		return;
+> +
+> +	for (id = 0; id < SKB_EXT_NUM; id++) {
+> +#if IS_ENABLED(CONFIG_INET_PSP)
+> +		if (id == SKB_EXT_PSP)
+> +			continue;
+> +#endif
+> +		skb_ext_del(skb, id);
+> +	}
+
+[Severity: High]
+Can this loop leave a shared extension block half-deleted, and later
+cause an xfrm_state refcount underflow?
+
+Take skb A with ext block E, where SKB_EXT_PSP and SKB_EXT_SEC_PATH are
+both active and E is shared with clone B (refcnt 2). When the loop
+reaches SKB_EXT_SEC_PATH, __skb_ext_del() does:
+
+	skb->active_extensions &= ~(1 << id);
+	if (skb->active_extensions == 0) {
+		...
+	}
+
+	if (refcount_read(&ext->refcnt) > 1)
+		return;
+
+PSP is still active, so this returns early. E keeps offset[SEC_PATH] set,
+and sp->len still holds the N xfrm_state references.
+
+Now suppose skb_ext_add() runs on A while B is still alive. Callers that
+can do this include nf_bridge_alloc(), tc_skb_ext_alloc() and MPTCP.
+skb_ext_maybe_cow() copies the whole block, stale sec_path included, but
+only takes references for active ids:
+
+	memcpy(new, old, old->chunks * SKB_EXT_ALIGN_VALUE);
+	refcount_set(&new->refcnt, 1);
+
+#ifdef CONFIG_XFRM
+	if (old_active & (1 << SKB_EXT_SEC_PATH)) {
+		...
+			xfrm_state_hold(sp->xvec[i]);
+	}
+
+__skb_ext_put() releases based on offsets, not active bits:
+
+	if (__skb_ext_exist(ext, SKB_EXT_SEC_PATH))
+		skb_ext_put_sp(skb_ext_get_ptr(ext, SKB_EXT_SEC_PATH));
+
+Freeing A puts the N states through the copy. Freeing B puts the same N
+states again through E.
+
+Wouldn't that underflow the xfrm_state refcount and allow a
+use-after-free of the xfrm_state?
+
+If B is freed first instead, a later secpath_set() on A can leak the
+references. This happens when the inner packet is ESP again. skb_ext_add()
+reuses the stale slot through this path:
+
+		if (__skb_ext_exist(new, id))
+			goto set_active;
+
+secpath_set() then sees tmp == NULL and sets sp->len = 0. That loses the
+N references still stored in xvec[].
+
+One possible path:
+
+  - A PSP packet whose nexthdr is ESP gets a sec_path from host xfrm.
+  - After ESP decap, an AF_PACKET tap clones it in packet_rcv(), so the
+    ext block is now shared.
+  - The inner packet is VXLAN, so
+    vxlan_rcv()->__iptunnel_pull_header()->skb_scrub_packet() runs.
+  - The VXLAN device is a bridge port with br_netfilter, so
+    nf_bridge_alloc() triggers the COW.
+
+The commit message says:
+
+    Scrubbing is safe when the extension slab is shared with clones:
+    deleting an extension only clears the per-skb active_extensions bit,
+    and the shared slab payload is released lazily by __skb_ext_put()
+    once the last reference goes away.
+
+Does that still hold once the scrubbed skb is COWed or re-adds the slot?
+The previous skb_ext_reset() dropped the whole block and never left one
+in this state.
+
+The same COW/put asymmetry already exists for secpath_reset() callers
+such as l2tp_eth_dev_recv() and xfrmi_scrub_packet(). This patch makes it
+reachable from every tunnel encap/decap and netns forward.
+
+Instead of looping over skb_ext_del(), could this call skb_ext_reset()
+when PSP is not active? When PSP is active, it could attach a fresh
+extension that holds only the PSP payload. Another option might be for
+skb_ext_maybe_cow() to clear the offsets of inactive ids in the copy.
+
+> +}
+> +EXPORT_SYMBOL(skb_ext_scrub);
+>  #endif /* CONFIG_SKB_EXTENSIONS */
+>  
+>  static void kfree_skb_napi_cache(struct sk_buff *skb)
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261025040523.678027-1-weiwan%40google.com
