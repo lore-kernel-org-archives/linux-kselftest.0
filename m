@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.162
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.190
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792993605;
-	b=TPnc4z7bdCbAC9E3U1cVQvBW1Hk0E5k8du+btHpDvdnhI+Oh25NkObNxjetCfKSc8C/G
-	 HSpneI7YZlvMrxhjH+KljaimwON8WNPPpCO6Mj03nGPni81WzNxieOs2MgJMkI3xdVoh4
-	 Hvn8slsRtShT0aGABk/WoefPjL3eaXhTahbir6XJq0s84fMb+H6vzdwGSpvH25KRV4wcT
-	 w/AMVibIKo564HN+4ehnDcpYiUJp8gmYZN7EM72DWP2MrTP37RrourA02HCC9u4r9OUt2
-	 sN5/7CThzW12iEgngaKPCuy92dqlQiDyJWSMUzPCHeJMzQv1lsUCxA9Tu0TZ+bB1A7w==
+	t=1792996369;
+	b=FLW9j/j+RWl70iiMGv5hheWfivZbgefosV0aDJwtvxJVMvO9xXyjBKO2lhMWcxLYPFdZ
+	 4ixM+Q1hm3ml/34s70cukDANHdNbRIYxtHjQBTPOQzoNdLOwX8+yZblGiEoukn3GNZbYQ
+	 1CkNks+MZBv3cqlGD2QBcwX/IbTvmVMYatrp0C/c0S8Xo1PFFyAWkecEBnhuRBt1y/ppV
+	 HrzXCkh/UZvcXI2rkGwrVfNBafPsGhmigc0pniyLIJUQQq6/WkjlDGS0gtkjrh8xUJWa+
+	 V3CFb0dogtUJ/80PokcyeVxDE4RmHNC00rcLSzPVBvGCUU0hMqTxixmNLjO3AH+heoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792993605;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792996369;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=uQLlasw/IxJ+4pKyXG1ZY91FKtsq+8znejKtb+FOn8Y=;
-	b=yNNxwccofLTYDZ9f9rhsK+rFjWmNJnt+LC8glg+ar3icvt51fIXN6Pny0L5UXeKEcgYK
-	 VSUntydnPcZGBtNWYxgY92WqxWKh2iUSwacHXPOaIAbqo6hf1tARhU8rOmXRG04i+RZHF
-	 JKUE32js7XjwU1jHluEt6kadMDRKLYgg/vgNqpKSsduMkBpKXsTrQaLukZfb/y9d0HkdZ
-	 Uy8Xo0v0ZTt4bK5NMynbRW20hwcTvT/udrT8XFDFOQGWmYFdoWkgNPAp1ggXP2qP9rIds
-	 cemwsLpBVBFjkVJBQkV1EzQiZBXX1eu8c4/o5FHYeN/kkbOevuKM8/iT5nmG9p0gG1g==
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=CC59iY1aw6OyV8aTURcQLbLL17pBSNRBVzyiXs5pORM=;
+	b=duy8j0P0zo7443vWscs2Df2wo0CF4wbYH1DoMMP29MQmwd3pDFciytfw2UE9BL/3iwE1
+	 IWIzakTmOkhjljTg+qy5rfRdYTyIyeD8wd4lW1CEUi4WrltY89G2ruE4nxBxBzpxZZcBv
+	 Z5oGhy5A0ohmRr0clJCBwBJuYzCEt+wmapV6RrFWIFj/PmHR21Ab2Dwdb5eiFsv/OUftx
+	 KhKGP9ZRWsEWJeCSn0ZWy5ZulwGMIP/veMjYHDCp6IljxbpT63R/wh4QJGiJzenC1QPc1
+	 dyFr2iRuoI5iLSPoVcG8hcZQE4cTOy09jPs8qx1REb2Vkig33TTGezRmeRRFVbku44g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=95.215.58.162
-Received: from mta1.migadu.com (out-162.mta1.migadu.com [95.215.58.162])
+	arc=none smtp.remote-ip=95.215.58.190
+Received: from mta1.migadu.com (out-190.mta1.migadu.com [95.215.58.190])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448CE606A321
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 05:46:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 448CE606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBB9606A31A
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:32:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9EBB9606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=hu/DyBoO3+WUq6/3FILwmjguLln6byz8HGIo9SgKR7s=;
+DKIM-Signature: a=rsa-sha256; bh=CC59iY1aw6OyV8aTURcQLbLL17pBSNRBVzyiXs5pORM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792993602; v=1; x=1793598402;
- b=nonwGZ5UnOoM1ju14GBwGwKx5rfLK+IMs5458HfJv/MzSJyIWckVG1Jfy101j4k6F69cFHmH
- zliub99k3+o5LDamIAL9AACQjVO0/DxNmWGrI2+Z2kGbqIyimIbMHJGcedvX/2LvVcSDXWy7vAn
- x9A6CCflT/P/bWoEEF4ahIwc=
+ t=1792996358; v=1; x=1793601158;
+ b=i+8Ult+S6zvD9Bg7VMNe5iRbHrfBhZVRsULgmUnxm37S/8jDYdapDB+FvUaGp2zrcK/aaEFE
+ D8uzEsO15Z75t2TuY3WKWU/zKZGkAG0ewvT/UeMW/bCmF9V8zzU8BjTtMkycyGJ2BJD8jbI40oI
+ AMmWhlsG/2P/E2gnd59fe7fw=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 8956af835298cb35;
-	Mon, 26 Oct 2026 05:46:42 +0000
-X-Mizu-Trace-ID: 8956af835298cb35
+Received: by smtp.migadu.com with ESMTPS id b6a4888feb48e90f;
+	Mon, 26 Oct 2026 06:32:38 +0000
+X-Mizu-Trace-ID: b6a4888feb48e90f
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <485c2661-cf99-406f-8881-094ab28795cf@linux.dev>
-Date: Mon, 26 Oct 2026 13:46:37 +0800
+Message-ID: <50b12d32-891c-46d4-bd5f-8924cb8db60f@linux.dev>
+Date: Mon, 26 Oct 2026 14:32:23 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,99 +56,85 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next 2/6] cgroup/cpuset: Properly compute effective xcpus
- in update_parent_effective_cpumask()
-To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on zero-length
+ skb redirect
+To: Eli Skeggs <kernel@eliskeggs.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-References: <20261022031643.1351877-1-longman@redhat.com>
- <20261022031643.1351877-3-longman@redhat.com>
- <c65208d9-aba6-4e9a-affa-4f7cd8794a0c@linux.dev>
- <a3caf0f6-da89-4b5c-b80f-3baf6c82a2c4@redhat.com>
- <776306f8-2200-486b-8c43-2b5fd9b5eeb5@linux.dev>
- <8c8f27eb-26af-406e-9766-537dbe9c173a@redhat.com>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <8c8f27eb-26af-406e-9766-537dbe9c173a@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
+ <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
+ <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
+ <010101a176362646-06b53e65-6c20-4ac2-9e05-b74eb5376abf-000000@us-west-2.amazonses.com>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <010101a176362646-06b53e65-6c20-4ac2-9e05-b74eb5376abf-000000@us-west-2.amazonses.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-
-在 2026/10/24 04:45, Waiman Long 写道:
-> On 10/22/26 9:53 PM, Guopeng Zhang wrote:
->>
->> 在 2026/10/22 23:00, Waiman Long 写道:
->>> On 10/22/26 9:45 AM, Guopeng Zhang wrote:
->>>> Hi Longman,
->>>>
->>>> 在 2026/10/22 11:16, Waiman Long 写道:
->>>>> Since the introduction of cpuset.cpus.exclusive in commit
->>>>> e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
->>>>> compute_effective_exclusive_cpumask() helper which is later renamed to
->>>>> compute_excpus() is added to compute the effective xcpus of a partition
->>>>> root. However update_parent_effective_cpumask() is not updated in all
->>>>> proper places to use the new helper to check if a given cpuset should
->>>>> remain a valid partition root. This can cause a cpuset to incorrectly
->>>>> remain a valid partition root even if no effective xcpus is left.
->>>>>
->>>>> Fix that problem by using compute_excpus() to compute the effective xcpus
->>>>> into delmask in all cases except partcmd_disable and partcmd_invalidate
->>>>> and use it for tasks_nocpu_error() check as well as checking its
->>>>> emptiness. This enables us to catch invalid partition root more
->>>>> accurately in update_parent_effective_cpumask().
->>>>>
->>>> I re-tested the repro from the link below on top of this series
->>>> (applied on cgroup/for-7.4-fixes), and it still fails:
->>>>
->>>>     https://lore.kernel.org/all/20261010075947.333549-3-guopeng.zhang@linux.dev/
->>>>
->>>>     cd /sys/fs/cgroup
->>>>     echo +cpuset > cgroup.subtree_control
->>>>     mkdir A
->>>>     echo 0-7 > A/cpuset.cpus
->>>>     echo 0-7 > A/cpuset.cpus.exclusive
->>>>     echo root > A/cpuset.cpus.partition
->>>>     cat A/cpuset.cpus.partition
->>>>     echo 1 > A/cpuset.cpus.exclusive
->>>>     cat A/cpuset.cpus.partition
->>>>
->>>> The last command still shows "root invalid (Parent unable to distribute
->>>> cpu downstream)".
->>>>
->>>> In this case compute_excpus() returns the stale user mask unchanged.
->>>> user_xcpus() is gone from update_parent_effective_cpumask(), but the
->>>> dependency just moved one level down: the new code calls
->>>> compute_excpus(cs, tmp->delmask), and its first line is
->>>>
->>>>     cpumask_and(excpus, user_xcpus(cs), parent->effective_xcpus)
->>>>
->>>> Here user_xcpus(cs) is cs->exclusive_cpus, which still holds the old
->>>> 0-7 when compute_excpus() runs: update_exclusive_cpumask() publishes
->>>> cs->exclusive_cpus only after partition_cpus_change(). Nothing corrects
->>>> it either - the sibling trim is skipped as exclusive_cpus is non-empty,
->>>> and for a direct child of the root cpuset the intersection with
->>>> parent->effective_xcpus is a no-op. So the stale 0-7 mask still reaches
->>>> tasks_nocpu_error() and PERR_NOCPUS is set again. Please point it out
->>>> if I got the analysis wrong.
->>>>
->>>> I have rebased my fix on top of this series and the partition recovers
->>>> correctly with it applied. Should the fix be folded into this patch,
->>>> or is there a better way to fix it? Happy to hear your thoughts.
->>> You are right. My patch series won't fix this particular issue. However, converting an invalid partition back to a valid one is done on a best effort basis. There is no guarantee that it will always happen. Just echo "root" to "cpuset.cpus.partition" again will make it valid again. So it is not a real bug from my point of view. It is just a nice to have feature.
+On 10/26/26 11:17 AM, Eli Skeggs wrote:
+> On Mon, Oct 26, 2026 at 09:59:00AM +0800, Jiayuan Chen wrote:
+>> On 10/26/26 7:41 AM, Eli Skeggs via B4 Relay wrote:
+>>> From: Eli Skeggs <kernel@eliskeggs.com>
 >>>
->> Thanks for the explanation. This helps me better understand the
->> intended behavior of partition recovery.
-> 
-> I did find the reason why your test case isn't working. I have made some adjustment in patch 2 which should make your test case work now with the v2 series.
-> 
+>>> Treat a return of 0 as success when there is no data to send, while
+>>> continuing to fail on a 0 return with residual bytes. The loop exits
+>>> without incident on an empty skb, and the skb gets cleaned up as usual.
+>>> On an ingress redirect, the empty message is still queued as before, but
+>>> the target socket no longer reports EPIPE.
+>> The target can't receive anything after that though. The empty msg sits
+>> at the head of psock->ingress_msg and nothing ever dequeues it:
+>>
+>> [...]
+>>
+>> So the user gets EOF on a socket whose peer never closed, and everything
+>> redirected to it after the FIN is lost. Without a verdict prog on the
+>> target it is worse, tcp_bpf_recvmsg() returns -EFAULT forever.
+>>
+>> Since this patch is already about the zero-length skb, can you handle
+>> the ingress side too? E.g. in sk_psock_skb_ingress(), don't queue an
+>> empty msg when len is 0 and the skb was redirected (skb->sk != sk). The
+>> self PASS case must keep its empty msg since is_next_msg_fin() depends
+>> on it.
+> Yep, thanks for pointing that out.
+>
+> Alexei suggested skipping empty skbs in sk_psock_backlog():
+> https://lore.kernel.org/all/DMEE6SW3UE97.2DF11HBEBKYYI@gmail.com/
+>
+> To your point, I think the critical difference between these approaches
+> happens when the sk's backlog queue is not empty and the socket's own
+> FIN (the self PASS FIN) gets queued. In that case, we rely on the empty
+> msg to correctly update copied_seq, and skipping it means the copied
+> sequence number ends up 1 behind rcv_nxt.
+>
+> This path is already broken: when a socket's FIN gets queued behind
+> other skbs, the backlog reports the erroneous EPIPE just as in the
+> redirect case.
+>
+> I do like the simplicity of skipping the empty skbs entirely. I don't
+> immediately see what the consequence is for copied_seq being behind in
+> this terminal state, but the approach that updates copied_seq does seem
+> strictly more correct.
+>
+> Is that the right interpretation? Let me know what direction I should
+> take for v2.
 
-Thanks for looking into this issue again.
 
-Cheers,
-Guopeng
-
+Yes, go with Alexei's suggestion. Skipping zero-length skbs in
+sk_psock_backlog() also covers the ingress redirect case I raised,
+since the empty msg is never queued. copied_seq being 1 behind
+rcv_nxt is fine now, plain TCP sits in that state until the user reads
+EOF, and nothing on the psock side depends on it.
 
