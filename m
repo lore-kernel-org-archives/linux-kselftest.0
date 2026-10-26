@@ -1,87 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.244
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793001539;
-	b=NHktv7HVHwsn4Ydxv0x40ooqhMO/5athEhZcnXB6YhnhrWI14FIMuaC7tm0366HtLzHM
-	 B1GaZIpc2cMR8C2fCawOQdcSnZKX2jH+1GR4cOw4oGznTIme8t//3O0wIwslE8IivhpNi
-	 earEFynJHMa3Io8I2h/B8kSK768Van8FkG+MQVYj03NP/EBnMyjtl5zSzs7i0MTSMruJN
-	 IJeswtgQpa9uEi7RsmOsUwORW/vRr4Mt2hZg6ZHii/h4D/6dZrwXat7rxOcRdn3Dbw8oA
-	 WYCE4OQ84fFXwerJb0ZgOg5yjSpDMsouqGPcePYn8/PKSQ+/3/8jXAhglYyt8ZFS6MA==
+	t=1793002218;
+	b=pCi5Cffxfz8lGcP4g9SP8jYXPr92xhZJwivpoEOqGjFUtaSu4nWX24nPAF7elHBeN7pq
+	 xrzYVjnKoZCHrrnL+NddDL7+vwdLy0RfdLktMIivoQbyWJzlsL93vzVLVD7DN/WsZfXy4
+	 lUjp3vRuhQSIJiwRXnWK1ZzMh89QYaXaza8GlG9TZ3ZCmBMWBP5z3yCd7leMUVsuGPiGx
+	 HUCaG3v/FZIeq53mUOdqmuf+YdzXbrPz9RvXYAqMI0lgafduyW9jL6CRPYSDN66wEcbqi
+	 lt1UUYJEfOsBCJCbFR6JIGq8VWfhLqAR+JicbDAZdEw56+d4P1YlFS91vaS9OZaKIIw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793001539;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:To:
-	 Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=ENqpIp5OCMvGLbQfuRT56moz6XxyZs/DH9YB2R1VAX4=;
-	b=wY22MFrvmLrjq7Y6unNV0wvi6phfUcrJL825Juog8B8I7GgTt3/xoePHojNVP+qUROYA
-	 M24kfMXaeamZjOMV4dTl1gg8bHvB2FbYsZglp2aQszDUanEHQufm5Mj+oQTZLVimP0Gxb
-	 Fp43QcXi+Hl/tBr93Ni28WAwhtxUzPfzR0/X6RqVNX7khp8UK/dYo3OD22HtHhmC849mN
-	 BOc11XAD5dFOmbshGGykxGPtjL9O53ersnHoEbjC6JHTZJ/a+sC5m+YN+2eSXfhixIu6O
-	 5ib4ZfECyxKWJTi9lFWz0ACy6UCzNXnuxwExXUv/bCNC/2DLrHoOCNfp/olW3TNithg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793002218;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type;
+	bh=SU/p59HmrY1l63uWO1J6fBGj9iSaP1sfb4BVk3OH0dM=;
+	b=NOtiMI5EAsr4n5sTrLofAAaWHzqsWq1kuyWmqqx3cTwfrmueNRZxoxI5O85vM/QoHnzs
+	 1Rj3IGMv1uTi/qH7N6VgHursa8kRrXj9dI5pjWDzMzJTMnSv1EJS3ErIc/EQRg3YAexN5
+	 javffhNy9q4MYXsg1fTFfQGnnRynwn4BJjzPk7LWWn51Wiq2xenE+n5hBDOPsxSQaH/DW
+	 99Ygspnnqvol3PAQpVE848WAt4RSWFKyjTe50IYNc64/8vIdUWJV1WAhEouoPgrgpsKi4
+	 mnbcGPjK7b9kftMboDs1olzQAEO1DTYtjXWbpF6YqFYNy1B8P2h5z35IN6uHBC94XIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=blackwall.org;
-	spf=none smtp.mailfrom=blackwall.org;
-	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=YIkiyv88;
-	arc=none smtp.remote-ip=209.85.128.52
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xo3+QzWz;
+	arc=none smtp.remote-ip=91.218.175.244
+Received: from mta0.migadu.com (out-244.mta0.migadu.com [91.218.175.244])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7D5606A31A
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 07:58:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF7D5606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34541606A31F
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 08:10:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34541606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=YIkiyv88
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a2069b9710so25185965e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 00:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1793001537; x=1793606337; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ENqpIp5OCMvGLbQfuRT56moz6XxyZs/DH9YB2R1VAX4=;
-        b=YIkiyv88wEEaX9fcSbw7nvWAWwnKoGCpr68rh8SmVrnPxrMcW6i9lXw/gEkPqfFhM2
-         Bi1bYj966tUFjI83HwGRD0kb1x4mwoQUdBo0tYT/3xHhIy0pancQ9TR5VXrmUoow3B8W
-         RlUhVzzYnLVHUS8XO7S7GNahgM08iD/hnciCfwkxkqAQBRcXVZfX7DvM1JNTgaCtnHir
-         fChs2UF2cPdCpY/nM39VMhXhDrQs6MSQRqKmhyLFukXx/c+rGEU13D2cXlwk4+aRI8Xt
-         0ElwE487d5xkJZg3S62lGaXygv/SZlDeZIhe3CosQ0+blDs69NwWZ4ywEHW1WjamGOxR
-         A37g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793001537; x=1793606337;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ENqpIp5OCMvGLbQfuRT56moz6XxyZs/DH9YB2R1VAX4=;
-        b=bxwXjQ64YZQgLP3Zc5iiPv5lAbKNJ5EeicYN/2WsB1gRtmR5TrCdW18PfWKZlqkDA3
-         3rV8iYXm4E7nYBb53DFXuDk6AE/ORniF78CBzHZmVvbZ1/UccxT7VV2YHsSlr1GrlKKd
-         zm0Q5VAePMQ4kDJZve/19Kbk6yW/hGSHhF5+k9F8hPd7xXKpLyHKA3A54WdwEIPVBt5f
-         8J4l04kzX/ryMZLPG0Ta9wpbSISl6XmZYEl4MoG0sK3tDjVrxdSX9I6qqeEjuTY3eWKv
-         8rZ/o+4Rk9i2K85aTxliRFJX/QTakj9mRgL6sPwpGmCAXPObxJtxeGhzx4BE1Wmm0mwg
-         u1MA==
-X-Forwarded-Encrypted: i=1; AKwUvBxrN2l8SJr6NhFP1Nqk3r2Tnq3sx1rSnXJ1acTrfkugmYKOywTovnivdpUJVPVrFvPcST4VRn21+jkd74TmzZE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI3r227ELKs/4wnwvU/mvO0zBoU1yx/Yh90SB17mFdLLvViws1+
-	QyUMhn93GKAWk/MAmfpkU7tN57HK1wtR6U0VCD4Gny50w5XILgowFvb8P23VUcFLoNU=
-X-Gm-Gg: AYBFou1XxPADgCKaEKNDFmVcWa5NtVA4HR422o3NgOgXLGAt+s1tLRJXGrGMy0MtORy
-	a5d/MxvcOvhzSdpg3SvGgUEiozYfzyjyiXM7N9lTIHpX5/cOjeVOHl6qFrarXAyy6C/QN0J+Gro
-	05uFirNQRlMu8Qpu9vHioqTKrjNVOTQloVJt37vLhdnhtXktKiWmn/G6kkFdNJ3PZrXVHJK/FjR
-	iuW5UdJIo0UxLmqgdDtLlw6xNk2iBb5sn86omceccSRrrLynSub46KKBVZTm4vkutt+dEMK1492
-	02UDup78G6mf/Ge9r2qstYsVJNDPqYADfe2QsbcXYlzQRAzecU0VeKH1oqjSM1mSAAI/Ye3Aq39
-	+MG/L6kXIZT2C6qDYwgLyv2T/hpd7hp/RjGAcA7T38gKGs7WhwoI/rAypNDA75ZC92KENG9EMil
-	5Gwl9Ablg1g6pMxIs2zf1UsxDjr/yt1OlxSZwEGUd48vzgcxxd6T6jqGaotSqFm6hZ6p5Q8QNLj
-	xKEJIXwDiqvBgzccsqPyy09YIrNNfw2DeKQDQjbbBwy1tBWxWd6/MX00QoCyZvTWr0MwgjqEnly
-	zV2rfrpneQ==
-X-Received: by 2002:a05:600d:c:b0:4a3:7344:13b5 with SMTP id 5b1f17b1804b1-4a373be2a9emr75329375e9.16.1793001537419;
-        Mon, 26 Oct 2026 00:58:57 -0700 (PDT)
-Received: from [192.168.0.161] (78-154-14-127.ip.btc-net.bg. [78.154.14.127])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a35a5697a7sm170954675e9.7.2026.10.26.00.58.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Oct 2026 00:58:56 -0700 (PDT)
-Message-ID: <c561b8e2-40f3-48d4-8f2f-85b46163466b@blackwall.org>
-Date: Mon, 26 Oct 2026 09:58:55 +0200
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xo3+QzWz
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=SU/p59HmrY1l63uWO1J6fBGj9iSaP1sfb4BVk3OH0dM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793002215; v=1; x=1793607015;
+ b=xo3+QzWzJteLbNU3D1rBb0LpexN/nOrP7sDl+8i4KFfDJcU9wNZ2WIWFqwnFUoj1ib7qZThH
+ lFjHr0YLkJCsd/hWTefzgbNhW2rrkXKc8xl7pus2z5UaMUQyNPBW9xQ+ffavvCLLWI8xl+6ormc
+ 2wV70k43g48QzCeHXIBFAAug=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id cc84be8be0ab8bb8;
+	Mon, 26 Oct 2026 08:10:15 +0000
+X-Mizu-Trace-ID: cc84be8be0ab8bb8
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5be4a7b9e6fso6226e87.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 01:10:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBwv+upKjgxHRIXmt5itsgdWxoHvX8RroFHZSjmOgbTpyVR2DnL0CA5FMsbEBBs2YDEn+oI5zZGmzQk0zx//suo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIjS8NUCywUklAiysUHzdUz0KIx/jWhGOim2IBQFlvJrkx7CzvN
+	ly3yiNOBIPPvq8yFjYjnv8J4MmNQr653K972IkE6e+sYRlzwptT+xJYex9E10f47KwlsBcV00oG
+	+wHW59Kdk6lq7OmbKNtjkoUUU1wEhsRlVpxGbfIrf
+X-Received: by 2002:a05:6512:3f03:b0:5bf:a28a:f2d9 with SMTP id
+ 2adb3069b0e04-5bfb79dafd3mr111700e87.4.1793002210084; Mon, 26 Oct 2026
+ 01:10:10 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -91,69 +66,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 2/2] selftests: forwarding: vxlan_reserved: add gbp
- changelink test
-Content-Language: en-US, bg
-To: Hannes Laimer <h.laimer@proxmox.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>,
- Petr Machata <petrm@nvidia.com>, David Ahern <dsahern@kernel.org>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261023-b4-vxlan-changelink-gbp-v1-0-f0d13951c09b@proxmox.com>
- <20261023-b4-vxlan-changelink-gbp-v1-2-f0d13951c09b@proxmox.com>
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20261023-b4-vxlan-changelink-gbp-v1-2-f0d13951c09b@proxmox.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20261026012128.2270251-1-sashal@kernel.org>
+In-Reply-To: <20261026012128.2270251-1-sashal@kernel.org>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Mon, 26 Oct 2026 08:09:33 +0000
+X-Gmail-Original-Message-ID: <CA+EHjTzF5PsNt+riasW-SK-nhkLYh3kojMFyCEqs372-Mficnw@mail.gmail.com>
+X-Gm-Features: AclHuK9ieRbKRZ3vlLRpK7x9lOVSGw-njZY_CzO5qLbrpHOtyOHbR5m8v7LhEMQ
+Message-ID: <CA+EHjTzF5PsNt+riasW-SK-nhkLYh3kojMFyCEqs372-Mficnw@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: arm64: selftests: Skip unwritable ID fields in
+ the failed-run test
+To: Sasha Levin <sashal@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Steffen Eiden <seiden@linux.ibm.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+	"Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Itaru Kitayama <itaru.kitayama@fujitsu.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 23/10/2026 14:14, Hannes Laimer wrote:
-> On a device created with gbp, run the reserved bit probes before and
-> after an unrelated changelink. Check that what the device accepts has
-> not changed.
-> 
-> Signed-off-by: Hannes Laimer <h.laimer@proxmox.com>
-> ---
->   tools/testing/selftests/net/forwarding/vxlan_reserved.sh | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/forwarding/vxlan_reserved.sh b/tools/testing/selftests/net/forwarding/vxlan_reserved.sh
-> index 709845123727..0ce264cc57f8 100755
-> --- a/tools/testing/selftests/net/forwarding/vxlan_reserved.sh
-> +++ b/tools/testing/selftests/net/forwarding/vxlan_reserved.sh
-> @@ -40,6 +40,7 @@
->   	reserved_31_test
->   	reserved_56_test
->   	reserved_63_test
-> +	gbp_changelink_test
->       "}
->   
->   NUM_NETIFS=4
-> @@ -338,6 +339,20 @@ reserved_63_test()
->   	    reserved_test 63
->   }
->   
-> +gbp_changelink_test_do()
-> +{
-> +	vxlan_device_add gbp
-> +	__default_test_do 25 "gbp"
-> +	ip link set dev vx1 type vxlan ageing 300
-> +	__default_test_do 25 "gbp after changelink"
-> +}
-> +
-> +gbp_changelink_test()
-> +{
-> +	in_defer_scope \
-> +	    gbp_changelink_test_do
-> +}
-> +
->   trap cleanup EXIT
->   
->   setup_prepare
-> 
+Hi Sasha,
 
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+On Mon, 26 Oct 2026 01:21:28 +0000, Sasha Levin <sashal@kernel.org> wrote:
+> test_idreg_frozen_after_failed_run() checks that changing a feature ID
+> register after a failed first KVM_RUN is rejected with -EBUSY, and does
+> so for every field of every register in test_regs.
+[...]
 
+I tested v2 on the FVP AEM model configured with no AArch32 at any EL
+and with PMUv3, under nVHE: set_id_regs fails on ID_DFR0_EL1_PerfMon
+without this patch and passes with it. It also passes on QEMU (which
+supports AArch32 at EL0) under VHE, nVHE and pKVM.
+
+Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
+Tested-by: Fuad Tabba <fuad.tabba@linux.dev>
+
+Cheers,
+/fuad
