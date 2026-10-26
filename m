@@ -1,55 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793021340;
-	b=PBC3j/OrRoyRtRhRSujHsL5oUzKDwPsyL0eDrG8xKxF2K8P1oMNdpIcWW53wTnv+CkOy
-	 BBdrD+hZAEMpHJSNx4+jHUx4L8SjENwXK6hJXX5qV4jko66pzXmYpzpLT3aUcQUL13u7P
-	 CT5eAO71uS/oOfmcFF2h/Td8lfVjSrFL8oaxaDyjNUbyNLQrwpzQwa6hPzVuKZK3+xk2d
-	 beslMO/c67m0D9WmgZX/0cM9/KgWWAILIyAE7iCEsXK37rZLoAjeuxl+RIWJgr1x6Eu7h
-	 2zWgW46YovNpmYsx/IKx2Hju2Eof++p+YZmhPU+gzSi7Wj4TL2bKlvlt7HGU/cr7kqw==
+	t=1793022300;
+	b=44v++jg5x453rZKdWJnh5To7jl2FnAyMf5QNnCQWBhUaWS7L0AKfZoFRl1lPI1U4wxyt
+	 ZgLuehd4TEYGdeCQUU3aixJXaXdhIcuUEBtSWbJF8ZimHY7CyUzFAgpbnIb5upumfPebZ
+	 uEFO6AXG8NYID/wgabwOAFjxWoUf+vStlDSGCeoken1MgE0K17oiy8csU7tXnNWU0xJsP
+	 xnbRlVJ6eguLeElkLkxk0+YaapqJOwnfmuDTgVysxitDhLB3FSl6kYeZubEUOqKXABFAr
+	 wrjgbqTXvFSIClbu7WbAGhk6C3Z6/ME8ybFgcVVByu1GZlzyVpufZHNO196HIKJs74w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793021340;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=04ULgjusWlSg32LjKqce99PoYE98Nn7GHteRBpuo00o=;
-	b=oDJe5k9I+CYCE2Twm6HNj18Zf5S7g2zZhxXaioZx3ZzvKJvL2tj+86+6vT6GNnFJUjwt
-	 otCzE2yygpue6rkyy5T6r/UoIUD/ZsflCRsgGSB/pGrHChd2A6VVGrwcOjrflnaOYV3y7
-	 Lb8qZj1MS9UAjDMfUWWeAXoI29wBxQMVBSZYFeeHmdIVEcSt0wg5K949GSwXwoIAfG3TR
-	 0XIOVe0HcsS/UHHNE8fMIQCSkfnSqvZt7Fp+UxBzO/N8zYujlfUBxNtFwz1Bswb170AVy
-	 EqM8MfJZuakRUacEcK2ipMLhhwVvt93NnfV5+hpQBTDLHH5QtCaUKUWkAmgWYP2KEpQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793022300;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Spam-Status:X-Rspamd-Server:
+	 X-Stat-Signature:X-Rspamd-Queue-Id:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=eG65rhCNpyJLKGU96gIUFxD719knZ1vO0jygU6hbTRw=;
+	b=ZeSKTSLV/phUsCvEmXXVM66cm99MOk7dYZxJKq3CMgt7DBv3MbqCjShmnR/jBdlBthfE
+	 K5Wo6HVI0eZGEmTN7x2CyciaYtfivru8EOAwzhhBqHDeRaQ/3no8haPT9mC4dn4npjtH8
+	 GLglwS802svs9kLWAmqu9SEQ/skaBAf/N8ef62IwlO09uEB6urfkI7Y4Gw/J9Qdfk8Dk6
+	 lZ3W04nTvIljyK/W6PP7TMt6WTxa992omJlILSXgG3TeyNvoE7iMxy1ywd+w1aqNctUo+
+	 Y2ozRksVtLutwsXWfEqKi1zUJ98hMRvXBEVr2sIb9v2nkEpdrscVGJEz8wEfr/DcTRw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kMnAFsYT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=XwVuTAqO;
+	arc=none smtp.remote-ip=216.40.44.12
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85319606A31D
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 13:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6839606A31A;
+	Mon, 26 Oct 2026 13:44:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6839606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kMnAFsYT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A5D31F031E8
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 13:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793021339;
-	bh=04ULgjusWlSg32LjKqce99PoYE98Nn7GHteRBpuo00o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=kMnAFsYTdeRlFlai4nhvqWF9NBW4YEJ6tnFv7BHj8vOhHyZHx8nm0zfckOofb/EHe
-	 sA4kA8Yhyp5kwQg3lCKaHqbVjc5os9XfGijBFc4v+74SH/u10UrLDcbwASf73DX5Qa
-	 L5Df3QZUZnywZIXm8py9ROWJGl67ZBsokPP1gpgERoNwf4BhqAs2qez7RtWiUhBGAy
-	 wTpLAH6EgUXF2cU7QSSkIzbyv8/pI3qPp9AZN7iSTUi3xo6mang8Og+ObyTczfVPcI
-	 7IZCNAuxk+txSpxzOBmU6KhVeKr/yW7kQ3EjbhDMGZw8+ZBl/2F8kUvW6dne22qjz5
-	 iyF9xWG3kQW2A==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-49ddddefadbso1310323fac.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:28:59 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBy8pN6mLLiJ6d8ZAzmPDol/tczYgxAr54n9AkSU2B3NxjeNlQ1R86hUo04ARu6c+hi82OVFw39HHlPHxoHHrcM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIVfJVnPaq9NCkCYp3lmBpqqF356MGa3bVEhhs5jRDgTboDkw4q
-	ym6uut6z58OywQY0oOqqNvl9P9uReeav2KGQ4JZ+IOEoGtqhbA2rk7fUbLhM5glBcAmqwUrhshI
-	eOpXqR7SAOpn9GZvolCF4suIdAyFLvRM=
-X-Received: by 2002:a05:6870:3c89:b0:4a2:4c6c:c9bc with SMTP id
- 586e51a60fabf-4a83f4eb527mr4042375fac.19.1793021338390; Mon, 26 Oct 2026
- 06:28:58 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=XwVuTAqO
+Received: from omf08.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id C1C77A07AE;
+	Mon, 26 Oct 2026 13:44:51 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id E7F6820027;
+	Mon, 26 Oct 2026 13:44:49 +0000 (UTC)
+Date: Mon, 26 Oct 2026 09:44:48 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/10] tracing/filters: Fix event filter parsing and
+ matching bugs
+Message-ID: <20261026094448.4eb65e73@gandalf.local.home>
+In-Reply-To: <179285912318.466249.7425922682086130057.stgit@devnote2>
+References: <179285912318.466249.7425922682086130057.stgit@devnote2>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,57 +61,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
-In-Reply-To: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
-From: Eric Dumazet <edumazet@kernel.org>
-Date: Mon, 26 Oct 2026 14:28:47 +0100
-X-Gmail-Original-Message-ID: <CAL4WiirsfX-j2uP0HWq4dSPGK15N9GqjY6yz+fMFKreo=1MR7Q@mail.gmail.com>
-X-Gm-Features: AclHuK_7Y8Msockoq5cYfVUJitRoh-SWV4M7WKxBOBmiLFfT1caFqcdtwGCa_Us
-Message-ID: <CAL4WiirsfX-j2uP0HWq4dSPGK15N9GqjY6yz+fMFKreo=1MR7Q@mail.gmail.com>
-Subject: Re: [PATCH net 0/2] Revert advertising the TCP MSS from the
- configured MTU
-To: echoowall@gmail.com
-Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>, 
-	David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, Shuah Khan <shuah@kernel.org>, 
-	Thorsten Leemhuis <regressions@leemhuis.info>, regressions@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout06
+X-Stat-Signature: ito5bg1q49otoqhtt9priqhe5tigg5wq
+X-Rspamd-Queue-Id: E7F6820027
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+OGu00ge1kP+3n7MwFyIvRXDgr8kpK0gM=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=eG65rhCNpyJLKGU96gIUFxD719knZ1vO0jygU6hbTRw=; b=XwVuTAqOz9Hq+nqOkN7dfhvT/Ne3bdoAYxoZtS2vY9B+Rk4YVleR9YMeWQgB+94L4J4/3H/vlBpAkvCjn+hI6iehRZUv02ie5qUu8P7QWY6/oHrCKbU+kJVHSUOESvKZLpauc3Wifyf5Pj4n0dJ7N7Mdkwiju1hnj5xY5xc+w2E=
+X-HE-Tag: 1793022289-62506
+X-HE-Meta: U2FsdGVkX1/3Nj3UrZZDK7v+rx7qWlfY71TAnFkO7QZZQDoy1cijmT4XUw4CD0QlxzyF4EBeIcnlIBTg0GQlXagY3rv00zByuzB1E6cZbbUdB5f2KbGNcgqk67a4iNrDzipMKq4YOAqRjV2OBS8VVD/4FDHwHKRAWShslCH66Tk4QzfCm3OnzHEAg0DGXnjt7LliOwiUHAQ36gAz0CxrKuyVKNOD3pOaZEY7VqKnWEpEIk0qXUU7CpJ/AaQ+Yzd00iOm3wdO2izc0drXP7+dnnossmCw5xoiYZas3rqafLC76fuEgUgXjlXtS9XKSs9AlNmv+ARBkWK4BRS1tfjUEHNfPqXuhABi
 
-Le lun. 26 oct. 2026 =C3=A0 08:23, Esko Mobius via B4 Relay
-<devnull+echoowall.gmail.com@kernel.org> a =C3=A9crit :
->
-> Commit 2640e6419594 ("net: advertise TCP MSS from the configured MTU,
-> not the learned PMTU") breaks TCP for clients behind networks that
-> filter inbound ICMP, when the server reaches them through a hop with a
-> smaller MTU: the handshake completes, then the connection stalls as
-> soon as the client sends full-size segments. This was reported in [1]
-> and confirmed on 7.3-rc7; reverting the commit on top of 7.3-rc7 fixes
-> it. Details and numbers are in patch 2.
->
-> The asymmetric (DSR-style) case that commit targets can still be served
-> by the existing per-route advmss metric, which overrides the default
-> after the revert; patch 2 includes a test of that as well. If you would
-> rather keep the new behaviour as an explicit opt-in some other way, I
-> am happy to test or rework this.
->
-> Patch 1 removes the packetdrill tests that assert the reverted
-> behaviour, patch 2 is the revert itself.
->
-> [1] https://lore.kernel.org/regressions/4F0FAEB6-A13B-47F3-BFF1-C706686C6=
-F64@gmail.com/
+On Sun, 25 Oct 2026 01:25:23 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-Reviewed-by: Eric Dumazet <edumazet@kernel.org>
+> Hi,
+> 
+> Here is a series of fixes for various bugs in the trace event filter
+> parser and predicate evaluation in kernel/trace/trace_events_filter.c,
+> along with a new ftracetest test case covering filter syntax checks.
+> 
 
-Even if the reverted behavior was closer to RFC 2923 / RFC 1122, it
-was a long-standing
-user visible behavior and should not have been tagged for stable.
+FYI, even though the Assisted-by tag is considered obsolete, any AI usage
+should still be stated in the change log.
 
-Relays should really clamp MSS (nft "tcp option maxseg size set rt mtu"),
-but a revert is the right call for net and stable trees.
+-- Steve
 
-If needed, the asymmetric/DSR case can be revisited in net-next as an opt-i=
-n.
+P.S. I'm 100% *against* the removal of that tag :-p
+
+(but I wasn't at the Maintainers Summit to argue my case :-( )
