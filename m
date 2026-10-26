@@ -1,100 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792979226;
-	b=5Ld2QW/tqn30n94VQ9plUZIOCYaE1Y1B9dRyXr/ymdp77UTx50gVwS/VMXJ/ZWSaKWCX
-	 jW2n/IWlwI+BMQyW6TktvtVnsYMNfTg1LWimlkfGOBZtF7z3ej0VUZRdFjPC88fqyRjET
-	 eAMLfu9EGVq+ESHwS+HknPaoNnvOhRXytMS+Sj1TzIZ0kiSQQpFt7EaRQaIFOfEPjQSHb
-	 QpIV7TJWekULDQgfvTw3CryhXWSwk+OQFZmRWUCKkeFQurBjTXA4VpbGd5zgPO4O+19Rv
-	 SRXRFEoW+zMeOZm3rF5sTEPUhJp3tAcOLz1h409cP17cvnZEVpWWHiELhxbWEmAYfHw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792979226;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.42
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792979392;
+	b=ETIVMkrXlLVHi3aDKaCxRrVF4SUPDbnCiDTMwZzjw/jZXt3QC7bJVB/Ls4e2mvFawmZw
+	 W/aAxRbwL9a4Ke+02TO4ZHhhnEHVrkU4+nBaxhla0UuWL7HPBbNa7dvPiieEqb7i03L3e
+	 CUX/u0WzFm8km7DubN3wDnpIwnVPE+1OLLEwn9ydgI5kNyO6Sze0JkX4S00gMlGa9U3TR
+	 9uuVfRDPQn0kxWNEWCp8tHDNsufIlRJlJCohUzO59Zo/U98bjMIsGhnYjsq/6yDuOp/Pj
+	 L5WAgPj7wR9q0fMMnKnP/nptwEmgyE6f/la939cSTN5W3V8v4OzSlRL92V5tyROwXLA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792979392;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=rnwoUK5XDDy7Zhx5M1Bzg5ZJeDG0xIbp8ITla+PiXAA=;
-	b=ldUVLGDIIX7+Z0Nte4lCQqbUyTIBlRTPTWfUerfLiTjNNszvTCe0UxrAp473xYas4ySg
-	 0fCl1WJfsN3wAlA1qdQw+tEn4lOpMrA8gb49V0RDt8s/sKsHeROAVL7FhxzIm20YjmbEc
-	 7GNeg57Dj9wuTHTTqcfpnMiQqK4zkxSl6mHqFLxOyTqOLQIEJAq9DG8tPW9orj/6MlxYc
-	 bViAL2sIQ/hcw6EzluJ44SM1WbQhfugbBvoM/k1gOKrv7q7SwynI24OR3NdCnp06x1Oa+
-	 WTwihdtSYhPBQdHla9dzDLXTKSFDmGiOpJJ0cbyWx+3caag5SxNQYRyL7m0JO+7vZcw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=k1mpcIkw;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=AN3Hjw/HZft2MXUgGNWgsqw3kkl3NUYJU0ViE8j1aeU=;
+	b=czkV4MVe5yH5TOaSTNawCxYPk1V/W3PUwlHHSY42loI1EyPbAwRCrySzmymHDrFUbchz
+	 HjcZxONABCNBItx0KKTuiZfKcIe66APThvE54LYEElfbhBB/T/px+cB7E5hMTkQuZy6F7
+	 HMfDSHYMuQFqh9jL9Rjaa7cDWdEkuh3NIeHME7x9prHqv6dPpr+/OSZggLFVX9q/z9vv2
+	 5r9D1ZEM2HaR3debeD3xcv43srleH5vmjnknGcCvLuWufFf7fzYQIy5SGL8sR9z1tzqW1
+	 VPeLyUOnCPGmUNhVe/HpKVfqVhvzAaBgTCPREHqfOYQs5rvjc1b6f/Ie6hygI38zlOA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=aOD24LJr;
+	arc=none smtp.remote-ip=209.85.217.42
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A02606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 01:47:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40A02606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC1F606A31A
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 01:49:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFC1F606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=k1mpcIkw
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-5366ae57896so27059541cf.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 18:47:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792979225; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jgO8ElWrwkS0VxAz8MTgvODt4Kv3BD/i5v57AawDCoZ/Q1hYLVa4Urfe5P2tAmyI1D
-         AhOyu7YFr6an/rqU/tyPnF63N5WfmZxMuLY6dBeOZsK/hGB9JcGgUYvWo+Tu6lbSmSjh
-         t20/FlmBh9oGqF2t7rBmCzt/vJmn1/tWdLjkWQAk8NAExm5GySCJhpswW7tnaPVrdG4/
-         5Zt7N+8sTvnbP1UOGzbGIlSjaJQZ5o9yaAjcN+5XdyzzU9URPK+DzbWp5my3cTzHSQ4S
-         GR52BDz1dzfjwdtfMDayQ93xVWZvV4GCpbHTc1mTsOYYM5K/V+BMA/JQyVnMqquOqeLU
-         vR+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=rnwoUK5XDDy7Zhx5M1Bzg5ZJeDG0xIbp8ITla+PiXAA=;
-        fh=LQyy5O7FZzSndV+26X/ElI7BkMuzFgtlnTQbf8G4Nv0=;
-        b=ND+B6jL3xQxTSWcVwAnDKbWBNJiFQMs97NrrkBF4YpofKDtqiTxj8mWg5pv/BuTPjt
-         fi5MHPQVjZiLgOuvRsFilPtoO/1twQF3azh1iiQQJrwiWq3BNqXCvj+qkk74oUtNOqg/
-         xopoX35Mpn/Bjseo6y5beqd5IVew50lubE5KQRQm+Fbx8hBwuZt9Kg71FnORePfF/oh+
-         2R+xZOk4NK0brjvk8geo+KT602G6m7itfPWKCWNH6QyFkd9yBgRHfHTCtFmYRX24BxeG
-         vtFQsm68xY1sLiPCiD3R+lPVzM1VAJY1z4dWpvKOHejMRZQRVVbOVW4k52caCQDREd4z
-         qvfg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=aOD24LJr
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-7907f01e487so717835137.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 18:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792979225; x=1793584025; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rnwoUK5XDDy7Zhx5M1Bzg5ZJeDG0xIbp8ITla+PiXAA=;
-        b=k1mpcIkwc1AXi9hb/mRiT22ro6h4FquWA+zMu8daRo1fzf4vKr5xnlakJSPrkylW+W
-         BPZQZxoIuCc5J1ChOieBApdEw58hxaJegMTS+iftUo0MadwCUXP2cJ0B0whCpwZ+01Z1
-         6IFaEE0VrSDv+WIDEJhZYV3SGEAowbSvdCmVw2p7/G1g4A78LmsmBHbkZqb0mvuv4dFC
-         snhoe1grlRyEbSyotA1Q1Juwg3f2IhHshZugchVTm4VdHPkeEDh8eoNcsGy+04ZLaZg4
-         bAOcnKmJU4DoOw6K23d2WUiJhP80dgi1VFqxTXSid1Z8+QvzOJfNJ36nkwBbaaX5ci4b
-         ea6A==
+        d=soleen.com; s=google; t=1792979391; x=1793584191; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=AN3Hjw/HZft2MXUgGNWgsqw3kkl3NUYJU0ViE8j1aeU=;
+        b=aOD24LJrfDvg8u9uruLVXXfxTwTkeGpltStOTXyCoMQ4f/ufxIgEuHjZrUtuhh1uqW
+         C9vOMjR1Ag0qZdLVBpZfZtHIUZEzOFE+cbscEh/RqLfrpEfAkkTQa0A8RG07kU+nX/PE
+         HBOn9Gc3dNZPPW5ttkJERs9vNZpKtXPasD93QhAYS8mNlqy5RLfbQaIn+xfmT2HKEKFE
+         R6+9F+aw/pLhLklHdkzO18ETKTbEiATuBPVNzZcFG+weSyjvEUwtglP4rFCLUV32zFtV
+         Yo9GGD9fMYtcS0sWF7gSHAcF4F4cHUzbrwGCv3S4xrD5t6kXuLn1sMb+il0RPOAyclww
+         aGYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792979225; x=1793584025;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=rnwoUK5XDDy7Zhx5M1Bzg5ZJeDG0xIbp8ITla+PiXAA=;
-        b=EsuOHC1YObquDaS4USo+Qdo+Il+JQQUOGkY0QX8x+AAp5cvttHBo7DReVHMnedH4Ce
-         QpvUGUbqmHD3mkHE4OU4sLHvtNzXtcaMCFKy3ApDaOX6RA+dGzecFQcrD4ke9FWBlSuN
-         FrsqRgV84da4PqUL8VOhrXhGk+Nn9cKkxht7tOYLxIXojXGG623E1Jglp3PaBiu0gnJO
-         /eantv+E7+U4mEAbgMFy2Y+WgTOGHtrW4HdLZbDNq+gMpkUa2e1zUUDBipoIzijEjtFG
-         Ex883Fx+I4QNBgWl2zqBVuGg15PcaOD7iduRBS5Z8ClR0FEjhVQcrtc+isHP7TtNLVoP
-         Aiuw==
-X-Forwarded-Encrypted: i=1; AKwUvBzzOgRenjz4pRYZQ8kXzCfIpNv1QhFoRRvhWYT/4lZorLm/1gJY365Pymhbn2eDVtZFXaSG0ZcC3bcI6FVmu7E=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIvmcrEueZGu6VxUHRzBT9EKf2aY1oORXxIZbWOaOrVujCk6gHW
-	3UTPOkXFeiO5YwjOiIMrqem0F8QgAKCwRNTiRfjAM6sX/BW3CZd4MgZeWyvrOQW5qt3TVXQ7oSF
-	u87ZGqVNhyT6VuhgA7FM8UE1YTMdCozk=
-X-Gm-Gg: AYBFou1gvPog2/sH6BigtzWs3kmWKYSP0eZkQ9vXbwa1K7DOQCqDmwMr9/J9jI1iWxH
-	78LJ6DvxfMNea6g7JIg+6YglK8//8aBdgAeHH0GdNBKs50j8nVOHxm6UN2DZqrt1o7gBIf/Z+gz
-	HSSHktQsqj8ktnSpOumQmG53Dh6LKhjTK+QT9bbi2pWPsupfaGlmYwd35yQLxRZydnhuenyodiq
-	upV+6leySNQicUv0cDoSbNn7BQHXc/NalvNhGVi8StUd9H+RC29DzXd1Gb7Yztaz/1rTX6vNtct
-	2hWh0la/cSg43DewGwJAosZ5le+EV1yEPjCEMhnNeDjPBY1XZElTpOD1bCOk7JIiTbNuI+dUdaX
-	hubmkoAGw+8Q7vH2hpzB+6oIAMZTEXbTxzbWfkcbUhcYNAIIAOGe2D/M4S7dj3r40bvdV+gMovh
-	x1qFmRHzVKrvmffv30vcKjhvfGx+fBCB3OOvQa9M2NqEECuNQafaI=
-X-Received: by 2002:a05:622a:410e:b0:536:8ab3:cb01 with SMTP id
- d75a77b69052e-5383b5ebdc7mr72082141cf.26.1792979225119; Sun, 25 Oct 2026
- 18:47:05 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792979391; x=1793584191;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=AN3Hjw/HZft2MXUgGNWgsqw3kkl3NUYJU0ViE8j1aeU=;
+        b=vYgwr8rNdOF2j+VYV/Quqz4cy2GDf0lfXpasOaLNpPkPDQLFrLhlGT8BEW89nhSmag
+         HPE8xN5gUv/26pj9Qkjf/oMpwang4tlTHkU24LAAvjypXPB3Fw45c3mN+dRt4PV5nU/B
+         NMEHZftizjoCji7yww34E30pRJmkRZgHPwuU/cOX/tXYV6GlYIZwLmJiD9SSOxkItJ4u
+         5JAtzK8gIuDm+ES4XqC3aVpt3y3gcUmDwW9dCsn/mcs1oj/He6zz0kQ/AlXX0ghozVi1
+         qjfJIQ+sDbJPNls82phCuT0UimveQQbJC7eLUg6ZIQQPGmX2gpGRAoH/04zahrqhrPUz
+         e2cw==
+X-Gm-Message-State: AFq9FYLY/urfIp63oFA16F5jjWj1fkwvawiwhL4X32WH9M6LFY1fDTFy
+	u5RDti1zu5Hq/I6N+Qq7s+MA60XOrz6iaBS8Y46hE5YnyNeqquBcFBMOv7pIdXjJy6z+Q8TZpVC
+	rKqAT
+X-Gm-Gg: AYBFou3zTWNZ+FXoZ/3QxG985NgGrWEFbvkHqcqkGjrEY5RKrDWGDk9m7JNSqc8trA5
+	hp7cJL6lBtwBYcBM+KQczNzGAjHtW2BDzIaIT0wkhpow2OsoFROZ9yCDuIDEuek5DwhNAcc4Ony
+	gZK5dSf50kyiSJzCdd448Lb16Z2sMfCXzO3VWghSf2dJNUUioMV0IIi5vPXkD5ebgz+HgOd3b0b
+	gX25R1QCka3UVhMj8+/bopSFeK9MOwuEHBFBefToraZ0B4n13jXSe3KXv5DOSzvNihgy3E8TqUQ
+	0esQ5EgTyFOy96MmrSxg6i1ZPHnf/1fPoptvVAck6BanpLFd5dHsHAs8vA0J6g2y/R5WAJx384M
+	8B2MBu2InfZKMPI45cXviSA8PzRpfJmiCRk72QgpXYixrvHGnqJh2IHj5E4T0xGhxRNSitlOvXo
+	M/izvR89AxSc6kGrRHroRhNcOkAca081NvFgLeWKcxDW5jSP5Ws6JO4w8Vgv0c4PsOf60Z4qP5G
+	juEqoVV6sY3L3flZRMS3aDehIe6uD4k8kGxNlA8wRTVnV8F0vo9C7muGWXkPjyU4+ulBHqYts2y
+	uPHgYFE5AMrnabgmsgJS9eUjNcaCwG+9PJXel2+xaGIWA/XFkA7blkY9ikk/ennz4oW909tryS8
+	g
+X-Received: by 2002:a05:6102:5ccc:b0:7cc:2a3c:9a33 with SMTP id ada2fe7eead31-7ce5ce4d7d4mr1365539137.34.1792979390767;
+        Sun, 25 Oct 2026 18:49:50 -0700 (PDT)
+Received: from soleen.c.googlers.com.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7ce5df73970sm6099917137.1.2026.10.25.18.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 18:49:50 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: linux-kselftest@vger.kernel.org,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	akpm@linux-foundation.org,
+	linux-mm@kvack.org,
+	vipinsh@google.com,
+	linux-kernel@vger.kernel.org,
+	pasha.tatashin@soleen.com,
+	dmatlack@google.com,
+	kexec@lists.infradead.org,
+	pratyush@kernel.org,
+	graf@amazon.com
+Subject: [PATCH v4 0/3] liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl
+Date: Sun, 25 Oct 2026 21:49:43 -0400
+Message-ID: <20261026014948.162559-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,45 +103,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <179250646543.2190262.8632957027583518623@gmail.com>
- <CAMAsx6cniehFSgKz0+FRbGV=A=TGvogwx87xcqhiZNQGfeFFYQ@mail.gmail.com> <179297820302.2598507.5712076951623488183@gmail.com>
-In-Reply-To: <179297820302.2598507.5712076951623488183@gmail.com>
-From: Daniel Pereira <danielmaraboo@gmail.com>
-Date: Sun, 25 Oct 2026 22:46:53 -0300
-X-Gm-Features: AclHuK9JgkkXlRw89V59iiWDYLD2QDEw_R-Zfh6fzK_yYgw4tVW-PfwZ2k_irrQ
-Message-ID: <CAMAsx6dhGibUuwBzj6k+A3C4ZGAxPSdLyDbjNfawpKR0Ufj7nQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: kunit: document --summary and --failed options
-To: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
-Cc: brendan.higgins@linux.dev, david@davidgow.net, corbet@lwn.net, 
-	raemoar63@gmail.com, skhan@linuxfoundation.org, rdunlap@infradead.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 26, 2026, Eugenio Zuccarelli wrote:
-> An LLM-based coding assistant helped draft these entries; I checked them
-> against kunit.py and kunit_parser.py.
+Currently, LUO sessions are frozen automatically only inside the
+reboot(LINUX_REBOOT_CMD_KEXEC) path, where luo_session_serialize()
+iterates through all outgoing sessions under global write locks and
+freezes them serially during shutdown.
 
-Hi Eugenio,
+This series introduces the LIVEUPDATE_SESSION_FREEZE ioctl on session
+file descriptors so userspace can freeze a session as soon as it is done
+with it, rather than delaying until auto-freeze at kexec time. Because
+luo_session_freeze() only acquires the per-session mutex, userspace can
+also freeze multiple sessions concurrently in advance, reducing kexec
+blackout time.
 
-Resending to the list, as my previous reply went only to you.
+Once frozen, no further files can be preserved in the session and
+subsequent freeze attempts return -EBUSY (or -EINVAL on incoming
+sessions). During kexec, already-frozen sessions skip the late
+auto-freeze step; if an early-frozen session is closed before kexec, its
+files are rolled back via .unfreeze() before being unpreserved.
 
-Thanks for the v2. Moving the tool disclosure to the changelog looks
-good to me and matches Documentation/process/generated-content.rst.
-The two entries match kunit.py and kunit_parser.py: --summary only
-prints the summary line, --failed prints only the failed or crashed
-tests plus the summary, and both are ignored with --raw_output.
+This series is based on liveupdate/next commit 27be83a12b24 ("Merge
+branch 'lu-pci-preservation' into next").
 
-About the indentation: sorry for the noise in my review of v1. I
-checked the raw v2 (the mbox from patchwork) instead of the copy in my
-mail client, and the continuation lines of the new items do have two
-spaces, aligned with the --json and --junit items. The one-space
-indentation I saw was introduced on my side, not by your patch. Applied
-to docs-next, "make SPHINXDIRS=dev-tools htmldocs" builds
-run_wrapper.rst with no warnings, so please disregard my first point.
+Changelog:
+v4:
+- Split out a preparatory patch that drops struct luo_file_set_ser *
+  from luo_file_freeze() / luo_file_unfreeze() and moves file_set_ser
+  handling into luo_session_serialize_one() /
+  luo_session_unserialize_one() (Suggested by Mike Rapoport).
+- Few more nits from Mike.
+v3:
+- Renamed session->frozen to session->user_frozen, - Pratyush
+- Added Reviewed-by's
+v2:
+- Rebased onto liveupdate/next (commit 27be83a12b24 ("Merge branch
+  'lu-pci-preservation' into next")) and split out early session freeze
+  into a standalone series (tmpfs preservation and its per-file user
+  argument plumbing were spun out into a separate series).
+- Patch 1:
+  - Drop struct luo_file_set_ser * from luo_file_freeze() and
+    luo_file_unfreeze(), and rename the session helpers to
+    luo_session_serialize_one() / luo_session_unserialize_one() so all
+    of struct luo_session_ser is populated and cleared in one place
+    (Suggested by Pratyush Yadav).
+  - Unfreeze the session's files if luo_ucmd_respond() fails in
+    luo_session_freeze().
+  - Update remaining reboot-only wording in luo_file.c kernel-doc
+    comments.
+- Patch 2:
+  - Add checks verifying that non-zero reserved bits and freezing an
+    incoming post-kexec session fail with -EINVAL.
+Link: https://lore.kernel.org/all/20261015093816.2438942-1-pasha.tatashin@soleen.com/ # v1
 
-Reviewed-by: Daniel Pereira <danielmaraboo@gmail.com>
+Pasha Tatashin (3):
+  liveupdate: Move file_set_ser handling to session serialization
+    helpers
+  liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl to freeze sessions
+    early
+  selftests: liveupdate: Add tests for LIVEUPDATE_SESSION_FREEZE
 
-Thanks,
-Daniel
+ include/linux/liveupdate.h                    |  3 +-
+ include/uapi/linux/liveupdate.h               | 25 ++++++
+ kernel/liveupdate/luo_file.c                  | 73 +++++++---------
+ kernel/liveupdate/luo_internal.h              |  9 +-
+ kernel/liveupdate/luo_session.c               | 87 +++++++++++++++----
+ mm/memfd_luo.c                                |  5 +-
+ .../liveupdate/lib/include/libliveupdate.h    |  1 +
+ .../selftests/liveupdate/lib/lu_utils.c       | 10 +++
+ .../testing/selftests/liveupdate/liveupdate.c | 45 ++++++++++
+ .../selftests/liveupdate/luo_kexec_simple.c   |  8 ++
+ 10 files changed, 203 insertions(+), 63 deletions(-)
+
+-- 
+2.56.0.307.g5fe7bd680c-goog
+
