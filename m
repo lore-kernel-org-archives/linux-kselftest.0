@@ -1,88 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.54
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793048448;
-	b=YYxJP7CvTr18rXgJJZkGCpzODrO9c9WaCOshccp5wpyzJnYQVWqM7Ip7Vl4ur78TS2He
-	 5ULEiDylECh/sruw1QmOKZqi/Lij2ysc/U8clbL2z6d62Qb51/wQU9JcFGoQgfhUAA+BC
-	 kRiNUUVmkuMhdFnvBH+jZ5h8H11NwmeM8pN681l4WXz4E+XCH8Zod5y4JuE+JTFfuww80
-	 5D1hfmTqbmRsdjcAqbxl4iu/TvSUfRR6qzaKgOH4vHRn0uFAhkwYjeaQEIug2xNTUTKbH
-	 pY3tskeIH7zcRlX+keGnVyuOvVmev3Js/Qetj14JfRFukLYA/LY5jKs1x6MhxxYjOeg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793048448;
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.210.181
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793049848;
+	b=EmT5s9/UR/dD8aHlgPJp7GfyF/pOn90Jc7+ee6smMtRaI3X9Yrx7fiB0uA4qOAlAI0cW
+	 ZSUHzp1/vASSyou0bh5R7I3h3YUjGD02h7Rr2HPjOP8E2ht40hid/Vq10VlJGS0A/cBHh
+	 pN0+oFqC3kW25fSzalLzuIWDiZmKzXe4fiINH8lvFupG2T1nmZRnoS3s6btXWZkN++Fjt
+	 v5NDfntOqreo+zrEhTC4/gJ3lslz2JrYWKO6jB15+X7xSMefAvAH0z+NTsx+pERv4bofI
+	 pkl2TWgzeuduHs+r/zY/O0vSJtsnokRTeucfBIe5sersRVIkCmJ4koRUVmVYYhtDZ0g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793049848;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key;
-	bh=Qz7r+A/D6KnqK0PO5YdI2E3CPVQcCuCNvAghnich9pU=;
-	b=2MiIg3syb2+rdpyH72dRlXfOZDlUyAI4G7h6Ekag7g+wJ0tdjHkjOpRguWiCqDkH6Lf/
-	 XON5abWZ5ud2bE5n3Ux0knZI7slavHwi6W2AAwelDwPHxnAYXbh0mBaMGOqo5C9Gu6amD
-	 rr1aq75LLojdIc85Mn3OSOeLnDjs20lRVaacdqXQfM4MGwYp25vPn8hp2wSykJm32cNYb
-	 grpSbwA7GWmX/lCMxUKsr0XoXqHh9V6LrM/eKfSr5+zIqPR/Ukm9On9+cMyzfuXAfWHKA
-	 QnGidpWSNBKLdtsVH/af6Mw4h2HitsrrDN9Bfhd/pUATxFkJ0Zv0qzLvWhD1uFqXd0Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=toxicpanda.com;
-	spf=pass smtp.mailfrom=toxicpanda.com;
-	dkim=pass header.d=toxicpanda.com header.i=@toxicpanda.com header.a=rsa-sha256 header.s=google header.b=BLwKQn6F;
-	arc=none smtp.remote-ip=209.85.219.54
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=GKPa9M5PoAhtNnZV69xKXcRKiwNy/DZc5TLsis+amX4=;
+	b=VT/8RoY8H7fUuOAdenvUdJo/JFQVxYpPn3qF8fl7LZ2jNJ9UEtcKxDL2ZuhkbkzK40a2
+	 5yolH+QWorY7VPzwo2vGVAV3I7+rIMd9yUboWCb4vzy4GD4bWIz0H53PdPhyT0BSm0iWB
+	 QcnF+TbFPCAuHKB4lSYfLdxppK0hY+B4xQJCKpVdlmeXekG0YFnMNtQGWTAuPdxJNP9er
+	 HUmk5vi43BeOQU7q1NYp7rJaYEriz7XauQGZjIvEmh3FjJgweUhV/hmxIGrAgHnk4+Ecw
+	 pA/4wgP7/QbsTM9ekqZLGmipVMlAqQwQGxGFE65X/lAL01vOobygCJKY8g+0rJwXTbQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JvW9vDSK;
+	arc=fail smtp.remote-ip=209.85.210.181
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD33460A261A
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 21:00:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AD33460A261A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A0B606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 21:24:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8A0B606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=toxicpanda.com header.i=@toxicpanda.com header.a=rsa-sha256 header.s=google header.b=BLwKQn6F
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-917c04630c2so38267466d6.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 14:00:36 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=JvW9vDSK
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8a05da1cc1fso1199704b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 14:24:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793049847; cv=none;
+        d=google.com; s=arc-20260327;
+        b=H3YRu+11wt3MOpVaWMZ1G0mEiGY6J6O+mRVGTgJxrJ5DcAQ+cCElRX0Ff+VGClw2Y0
+         BVhQzgGdCO+eMRW7oskjSG8z4Oes4MIR1yPeChl6q+RUkbJJNyH9Z8WEey8l9nBs8wMr
+         U8xqq02gi/+eH81acK7xZHfKYQ5GiR8OgrxxHdHshEucoLDXzkDnpVWB0TZGeOWLwxd/
+         atoj1hAQiRBSWW9ZiZ3fSZZPhfkNr7O2jDRnT6a/RpwBFJHVvSd3hIE+1o9PutiuE91S
+         ziHmWEaMlGapc2Dx/zqtZ0wiT8h6l6Lw6wELrTB+tGkosZDGGOuSk2JyZm6JKp/icQTx
+         WcIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GKPa9M5PoAhtNnZV69xKXcRKiwNy/DZc5TLsis+amX4=;
+        fh=Vb3rbBzXz5QYIpHMr1A0W3srDj3yYJml3ueFbpyS9H0=;
+        b=Rdl2n7JVz7scxtSZHKvDNQEFJMgMLvxcy7dIFSKmiG+mxHxPI4nAXnrZIEX3H3oztu
+         WVvMI/bDnmYq5ztagaZQOiFhahxTatkhTGOuNfYLPsQG4OXUhU2QQWjjhibl0Erxr6fI
+         +AwiNWLSupDexArSU7jrl3Gp2SavngkkUO5+nRyQYwKKQuqxZWlXdwwIKHtTHM8iE6z6
+         rmlUIXHZotksVWfOFjXgAZJXwt1npdnORk4alx02fzIKla2wX+7+uNd9mi/RZh02XP9f
+         Z0Mah8SaGX/JcKW9hUGN9hs1DGIBuhWsoe5fi1avkNjv1S77NgDPTTsEcDcnnZxV9BYu
+         gkWg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1793048435; x=1793653235; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Qz7r+A/D6KnqK0PO5YdI2E3CPVQcCuCNvAghnich9pU=;
-        b=BLwKQn6Fi5H8ZbNI2H+RkZ+vtrmfkK10wJfH2YotYolD3P5zkZC3dpJCYhVG+yQkkU
-         gzEHqfsnYt9XIvRLmAmzlWl9usdArchsDaEoKilvn+8SiGMMZq1/Tl6kyR++mInvc1Yt
-         gc71x3LmV7nwBV8WVEXKU0Ct2RSn4EbLqln9jvCMDUV5v3szTXev9NysLHxFBKpSwNud
-         ZMup73VzAooVoTzafh7y5/dDaRrX4d71IDmIpePvKC6ndbxyc083TRla7ytJvbP2KDRg
-         j+YpBK2OurtSgIyO+4X701KGgtp37/+F7f4C3BCRMSWGRkuvLA2bQeeoF6z2DvZKcyEe
-         ZVCA==
+        d=gmail.com; s=20251104; t=1793049847; x=1793654647; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GKPa9M5PoAhtNnZV69xKXcRKiwNy/DZc5TLsis+amX4=;
+        b=JvW9vDSKDQCQ/Iv5gH7W5O3cS0g69FgaSrzXh+G3mKOnwtx1dD5k2+/f8z9S5LGEJp
+         qhfC119t2DQCRsdUB4RiBMCgW9qeU+bxBSK401Bk+wzfGwWxnoFATTv6HCNP19AxhKn5
+         4q8CfdqkdshtIy14X3UgKdFIgmQ8I8OYThvgeWi6M5mHA5jj/IEmz5LzhYukJ5xRd7Iu
+         69idP10I+bJCRRgR++AoP9HgxnDUUM1isC1kbmQG8h/snlHwe8L53Xc5dXrxDDUYZ3dW
+         ov5as3DD2BB9Qd+hgBkonsm2UFAu+VwMBLKG3UrP+36q9N8IuBaXClaE+/WlNYJ877aL
+         GaaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793048435; x=1793653235;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1793049847; x=1793654647;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Qz7r+A/D6KnqK0PO5YdI2E3CPVQcCuCNvAghnich9pU=;
-        b=Ww9dZHG291IOk9mNYRJGOkDQ+wDJ8wprNKd99urIbCnSJSZ5Nvka6HZV93x/ihupE+
-         x4KOgi8wpCRJqADvmIVHgugHili1uq8s4qM8ZgC2h5dqW8gRvvaPpp+b/8c0U2WSUqP5
-         cCVJXzY4jYdm0YV2ZM73Ed7oNrspkGqpidLBNFERDZCJ+puz0se3l0N8lSlRe/L7FVIo
-         tdNAbVMvBH3FjIF32RK65cnVk4ubSwdl2SGvEDZByWXdF4LkXVyNRj3dp82n1i739RmE
-         9ctBP3/+AbUV1O6arP1sbrfHuVsp2cU67UF3bdXhy/F0fApuQwwXKzpOzP0kOIt3CeAx
-         XRHA==
-X-Forwarded-Encrypted: i=1; AKwUvBxfEqo2gcpiV97i/yF0ijy5hA2nOVlVRUuGPrMuSuKFspqS8K2FdHkplNvV0obB/shWHQUnFOpjCxi+Uj7kbmE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK6BfHTSAKikzQ2ZKjnobLaosUxnz5eGic8XoQY8QsYEOmFW6yf
-	VVSuUAqQ6H/IiOWJJS0B/jro3YPh9D2XJ5bQHUaBNpQnhsTISvrBru3FC4E8as3DrY8=
-X-Gm-Gg: AYBFou1CRMvx7yD7XeORJJpMA1/1PEUTa65h6eoIJvR58YnUsUf4GSWUv6NvMjoalVp
-	41a6y9q/rZYyAOFtPMfrQQth1LEnqygCEZ/oMk4GT4MvfG1guwaIRMOGS2LqjcbfvXOAcdbfCnY
-	936MDnlRtp7jDE1zjjyxEEjDYnTJ58pLDloQ7rG6peblazG3kZhTNYme8Xj8UW/g7mWZ4PaceHE
-	5Lq5qu2BGvNLzkOi8t4ch6eg9IXIzNHB/IE6IGdice8KDZAg16z6gkqMe9FLSkGC2at3rzp+dB7
-	IgZMfQdbrxAYlSj9pLYlU2Nt/nim0yt0tO5qkm1VhvOsONR3KL2KM5F7ZHeZ/Z7b4X16LFT/4PW
-	ECNCCqEftmx7S7dACL3/c/pedLEmEer8zp1D6M4imzLBurGE3QWfSuOAy6obDDMAcbUOxsz4kcX
-	m9f1vlQpG2X10h5SM5Jh+kBeXFtNTOBAcgc4AI3jztPDQwcxcdFUVZJl8r01DIj+Fp8SeXOML3O
-	mEWbnSFYyHkjf3evXmxDSWxGknt+NYyiKkcs6jft2IxUlxHk3atTazsQzCBs1ENAXtXUBeK+tGm
-	OGvT7reZkFqUKK3EAQ==
-X-Received: by 2002:a05:6214:21e4:b0:91b:8fc9:417d with SMTP id 6a1803df08f44-91c48e7fca1mr138560226d6.35.1793048435019;
-        Mon, 26 Oct 2026 14:00:35 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.245])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91c47c96375sm82875786d6.33.2026.10.26.14.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 14:00:34 -0700 (PDT)
-From: Josef Bacik <josef@toxicpanda.com>
-Date: Mon, 26 Oct 2026 21:00:20 +0000
-Subject: [PATCH v7 2/6] userns: don't let setns() lend CAP_SETFCAP
+        bh=GKPa9M5PoAhtNnZV69xKXcRKiwNy/DZc5TLsis+amX4=;
+        b=RnF/ROxmFmvefUJ0wkNLdxaSj4bqE8YgI90D0mzo0I8LZWtE7IDTIP+621bGdrMoQu
+         mvZGWlmCeeyr4nfjnkUxgDpn0oyHqAsbk8kxPOMMP6OwWzUZflEYhWMC3en7csYV4Wef
+         /evAil2csZrST6Sl19GAmXovOjQoDM/VsnscRCr+Y3jQmkwx+Xnl8jAIWOt87ajEDfCB
+         XFyQ5EfqOiJPDRI6B4id+oyi5a4q/MYaw33PTlH5kKBWPOul2PPvBin5KuFDwCn+zexS
+         YwnYZ+dV/X9k2TEsw0slFAuFFYFkfCPv5YbSKgty4AEExCElmm7tnlJHSLe4kT2FvSFo
+         0KXw==
+X-Forwarded-Encrypted: i=1; AKwUvBxRgfBXBmGyq7P21LLUvpDF0Jy6uzHoaASAW8Ry2n3uK26rIOYaumoWWdEzQ8HPBR3A49bCysgzSriiCs56PlI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLoWIO9tcYX8CFDB6Oz2v3XBH96r3tB0dB9ZvDF5Hd6mDHmWwvh
+	fiRKQQrjf7AM/VD919So+g+oTbir8n2aNzxuD/9V3u4PXenl8VrI8oZI8DA+Jma6WCt0t0b93mS
+	KiYwtkXn9uVgSIBMsgqK6bt1uYEr/9UU=
+X-Gm-Gg: AYBFou1OYBnu7wYis4+sgjIMjAi8ySkSAu8g1b2D9+lNKf+JLWu+tGK3/ycqCoajuiE
+	V0tkF9qinbjEjcCr7lh5el5dLorIepS1DkrsxTaBBc8jBCCZ3pzItmZ4Ao5igHFazzlveDjXUqO
+	3Ke1oQm12Vs0vERDPvWmbA1pr3HJtnT5TyuMKXt13vtYn8QQbUvg+KuelwT6w5HDPMhIsS0uHjx
+	XSPOWBX2InBtgB8mutJ8j5bO/R7V5Zo2G4Ay4px3pmGc698HufRgtQ/Fvc7Iqn6ePr3WL/RHru7
+	NA3T8mR1tHlfTHEFmY6S5mOhD9/lV8Zgwx9ivR7WvivaLG8bgFrUFDfohA7ywMZgDp8BjEK9Woo
+	n7hkdtWNaqOOpIcEa7P2czwdi/4FbTgnpwqmTCgao09uMakdqnp3u5OMsfHMNzw4Oa1shhC8Cgd
+	Q71GjtRKBh5hP65xVBcsOXCBvgmPphlH5dmw==
+X-Received: by 2002:a05:6a00:12d6:b0:89e:3742:3e16 with SMTP id
+ d2e1a72fcca58-8a3666af17cmr6585603b3a.18.1793049847178; Mon, 26 Oct 2026
+ 14:24:07 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,180 +105,165 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261026-b4-setfcap-userns-v7-2-bf8a576f7259@toxicpanda.com>
-References: <20261026-b4-setfcap-userns-v7-0-bf8a576f7259@toxicpanda.com>
-In-Reply-To: <20261026-b4-setfcap-userns-v7-0-bf8a576f7259@toxicpanda.com>
-To: Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>, 
- Christian Brauner <brauner@kernel.org>
-Cc: James Morris <jmorris@namei.org>, David Howells <dhowells@redhat.com>, 
- Jarkko Sakkinen <jarkko@kernel.org>, "Andrew G. Morgan" <morgan@kernel.org>, 
- Serge Hallyn <sergeh@kernel.org>, linux-security-module@vger.kernel.org, 
- linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1793048427; l=6171;
- i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=n4GgDASw93W0W4hVR9BfgOUvZQHADy8KOEbGO3+EfSU=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
- JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QKRP9p7Y4tKjH9ZoGRozJ4Df14LwNX7qnG5PhuVi/E2OgFp6a281oSYOheOdJtkwSplfOhyguvX
- 7Rlr9blxsvwY=
-X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
- fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
+References: <20261024120627.837568-2-tim.budding@gmail.com>
+ <179293012722.3134.13316596865856977030@kernel.org> <20261026052706.187296-1-tim.budding@gmail.com>
+In-Reply-To: <20261026052706.187296-1-tim.budding@gmail.com>
+From: Xin Long <lucien.xin@gmail.com>
+Date: Mon, 26 Oct 2026 17:23:55 -0400
+X-Gm-Features: AclHuK_mrIu1EVf0x2dV3mIZYP2JHGyJuazQowznGXy4YPuBCm1N0ChSU-JmIKI
+Message-ID: <CADvbK_du=-oT19kKBKYSjFKYscnQSH1mekRKMXgmLPMXTEH_=w@mail.gmail.com>
+Subject: Re: [PATCH net 1/4] sctp: purge abandoned I-DATA fragments by stream
+ and MID, not by TSN
+To: Tim Budding <tim.budding@gmail.com>
+Cc: netdev-bot+sashiko@kernel.org, netdev@vger.kernel.org, 
+	linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com, davem@davemloft.net, 
+	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Mapping uid 0 of the parent into a user namespace requires CAP_SETFCAP,
-because a task in such a namespace can write file capabilities that are
-honoured in the parent.  A task that is already in the namespace has a
-full capability set there and can't be asked any more, so
-verify_root_map() goes by what the creator had, now ns->setfcap_level.
+On Mon, Oct 26, 2026 at 1:27=E2=80=AFAM Tim Budding <tim.budding@gmail.com>=
+ wrote:
+>
+> On Sun, 25 Oct 2026 12:08:47 +0000, netdev-bot+sashiko@kernel.org wrote:
+> > > +           if (event->stream < sid)
+> > > +                   continue;
+> >
+> > [Severity: Low]
+> > Each call to sctp_intl_reasm_flush_mid() starts at the head of the queu=
+e.
+>
+> [...]
+>
+> Agreed. Walking each queue once per I-FORWARD-TSN would be a separate
+> change. I could send that to net-next.
+>
+> > > -   /* purge the fragmentation queue */
+> > > -   sctp_intl_reasm_flushtsn(ulpq, ftsn);
+> >
+> > [Severity: Medium]
+> > With the TSN-based purge removed, what frees an unordered fragment of a=
+n
+> > abandoned message that arrives after the I-FORWARD-TSN naming that
+> > message has been processed?
+>
+> [...]
+>
+> > Should the commit message also mention the lost rwnd and receive buffer
+> > space? Alternatively, could these fragments be dropped when they arrive=
+,
+> > or when the cumulative TSN moves past them?
+>
+> Correct, and the commit message is wrong to say such fragments stay
+> until the association is freed. An unordered fragment of an abandoned
+> message that first arrives after the last I-FORWARD-TSN naming that
+> message, with a TSN above the cumulative TSN, can't be reassembled. It
+> keeps its rwnd and receive buffer charge until a later unordered skip
+> on that stream with the same or a higher MID, a reset, or teardown. At
+> the tail of reasm_uo it also stops reneging, as any fragment below the
+> cumulative TSN already can.
+>
+> One late fragment is enough if nothing after it has arrived: the
+> receiver then delays its SACK for the I-FORWARD-TSN, the fragment fills
+> the gap within that delay, and the sender never names the message
+> again. With the last fragment of an abandoned three-fragment message
+> arriving in that window, that fragment stays queued (RX_QUEUE 1232). A
+> duplicate can't do it, as the TSN map drops the second copy.
+>
+> Before this patch a later I-FORWARD-TSN covering its TSN would have
+> freed it, so if another message is abandoned later, this patch keeps
+> it longer. Without such a later I-FORWARD-TSN, this patch frees more
+> than before: in the same test, the TSN-based purge leaves the
+> message's received fragments above the New Cumulative TSN queued
+> (RX_QUEUE 2464 without the delay), and this patch frees all but the
+> late one.
+>
+> For an ordered message the same late fragment aborts the association
+> instead: its MID is below the next expected one, so
+> sctp_validate_idata() fails. That happens on net today as well. I
+> could look at it separately.
+>
+> Freeing fragments once the cumulative TSN moves past them doesn't work
+> with interleaving: a live unordered message can have fragments below
+> the cumulative TSN, and freeing those is the loss this patch fixes.
+> Dropping late fragments on arrival needs new per-stream state, the
+> highest skipped unordered MID, which must be cleared on resets and must
+> not go stale when MIDs wrap. I'd rather do that in a separate patch
+> than grow this fix (question at the end). Either way, v2 will spell out
+> the cost in the commit message.
+>
+> > >     /* abort only when it's for all data */
+> > >     if (ftsn =3D=3D sctp_tsnmap_get_max_tsn_seen(&ulpq->asoc->peer.ts=
+n_map))
+> > >             sctp_intl_abort_pd(ulpq, GFP_ATOMIC);
+> >
+> > [Severity: High]
+> > Can this branch still flush the whole ulpq for an ordinary I-FORWARD-TS=
+N?
+>
+> [...]
+>
+> > A later patch in this series, "sctp: don't treat an I-FORWARD-TSN as an
+> > association reset", seems to address this. It drops the max_tsn_seen
+> > check from sctp_report_iftsn() and makes the stream reset paths call
+> > si->abort_pd() directly. This patch is tagged for stable on its own.
+> > Should that change be folded in here, or should the two be backported
+> > together?
+>
+> Yes. At this commit an I-FORWARD-TSN whose New Cumulative TSN is at or
+> above the highest TSN received still takes that branch, and
+> sctp_intl_abort_pd() frees every queued fragment, including those of a
+> message still being received on another stream: the same loss this
+> patch fixes below the leading edge. If that message is ordered and in
+> partial delivery, its MID is also skipped, and the association is
+> aborted when its next fragment arrives. With this patch alone the
+> ordered and unordered tests pass and leading_edge fails. The later
+> patch fixes it. v2 adds a leading_edge case without partial delivery,
+> which shows the loss directly.
+>
+> I kept the two apart because they are different mistakes in
+> sctp_report_iftsn(): the TSN-based purge, and treating ftsn =3D=3D
+> max_tsn_seen as a reset. But they share the Fixes: tag and the
+> symptom, so folding them is reasonable too. The later patch needs
+> patch 2 and the new pdapi_seq patch (see the reply to 3/4), and
+> neither of those needs this one, so folding would mean those two
+> first, then this patch and the later one as a single patch (question
+> at the end). If they stay separate, this commit message will say in v2
+> that the leading-edge case is only fixed by "sctp: don't treat an
+> I-FORWARD-TSN as an association reset". All three fixes are Cc: stable
+> and apply cleanly, in order, to the v5.10 through v6.18 release tags.
+>
+> > >                     sctp_intl_stream_abort_pd(ulpq, sid, mid, 0x1,
+> > >                                               GFP_ATOMIC);
+> > >             }
+> > > +           sctp_intl_reasm_flush_mid(&ulpq->reasm_uo, sid, mid);
+> >
+> > [Severity: Medium]
+> > This is a pre-existing issue, not one introduced by this patch. Does th=
+e
+> > new flush leave unordered partial delivery stuck when the skipped MID i=
+s
+> > the message currently being partially delivered?
+>
+> Yes, and that is the next patch in this series, "sctp: abort unordered
+> partial delivery when its message is skipped". At this commit no abort
+> notification is sent and the next unordered message on the stream is
+> delivered as the rest of the skipped one. The uo_pd test fails at this
+> commit and passes from the next patch on.
+>
+> Xin, Marcelo, two questions for v2:
+>
+> 1. Fold "sctp: don't treat an I-FORWARD-TSN as an association reset"
+>    into this patch, or keep it separate?
+> 2. Should dropping late unordered fragments be part of this series, or
+>    a follow-up to net?
+>
+Please try to fold it into this patch, and leave the drop to a follow-up.
 
-But setns() lets other tasks in, and they get the full set as well:
+Thanks.
 
-  task A: uid 0, full caps          task B: uid 0, no CAP_SETFCAP
-  unshare(CLONE_NEWUSER)
-                                    setns(A's user ns)
-                                      allowed, euid == ns->owner
-                                    write "0 0 1" to /proc/self/uid_map
-                                      ns->setfcap_level is A's -> allowed
-
-or, if A's namespace maps uid 0 already, B sets security.capability on a
-file.  Either way B ends up with file capabilities that are honoured in
-the initial namespace, which it could not have written there, nor in a
-namespace it created itself.
-
-Refuse setns() into a user namespace whose tasks can write file
-capabilities for the root user of an ancestor that the joiner's
-CAP_SETFCAP doesn't reach.  That is the case when the namespace maps
-such a root user, or has no uid map yet and its parent maps one.
-cred_may_setfcap_userns() checks it, and cred_setfcap_reaches() is the
-comparison it and the later checks use.  Then every task in such a
-namespace is entitled to what its setfcap_level says, and the checks on
-the way to file capabilities can go by the namespace.
-
-An idmapped mount can store a root user that the namespace doesn't map,
-for example a "0 100000" container whose rootfs maps 100000 to host uid
-0.  That is a deliberate setup and up to whoever creates the mount, so
-it is not considered here.
-
-The change in behaviour is that a task without CAP_SETFCAP gets -EPERM
-when it tries to setns() into a user namespace that maps the root user
-of an ancestor, and was created by a task whose CAP_SETFCAP reached that
-far.  Containers that don't map host uid 0, tasks with CAP_SETFCAP, and
-unprivileged users joining their own namespaces are not affected.
-
-Link: https://lore.kernel.org/all/20261021-bioenergie-allheilmittel-undurchdringlichen-35666eb62cff@brauner/
-Fixes: db2e718a4798 ("capabilities: require CAP_SETFCAP to map uid 0")
-Assisted-by: LLM
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
----
- include/linux/capability.h |  3 +++
- kernel/user_namespace.c    |  6 +++++
- security/commoncap.c       | 58 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 67 insertions(+)
-
-diff --git a/include/linux/capability.h b/include/linux/capability.h
-index 026974a5111b..e4199b03668b 100644
---- a/include/linux/capability.h
-+++ b/include/linux/capability.h
-@@ -224,5 +224,8 @@ int cap_convert_nscap(const struct mnt_idmap *idmap, struct dentry *dentry,
- 		      const void **ivalue, size_t size);
- 
- int cap_setfcap_level(const struct cred *cred, struct user_namespace *ns);
-+bool cred_setfcap_reaches(const struct cred *cred, struct user_namespace *ns,
-+			  int level);
-+bool cred_may_setfcap_userns(const struct cred *cred, struct user_namespace *ns);
- 
- #endif /* !_LINUX_CAPABILITY_H */
-diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-index a5a94367600d..7bd3692c2f3e 100644
---- a/kernel/user_namespace.c
-+++ b/kernel/user_namespace.c
-@@ -1390,6 +1390,12 @@ static int userns_install(struct nsset *nsset, struct ns_common *ns)
- 	if (!ns_capable(user_ns, CAP_SYS_ADMIN))
- 		return -EPERM;
- 
-+	/* Tasks in the namespace may have CAP_SETFCAP that counts outside of
-+	 * it, so only let in tasks whose own counts as far.
-+	 */
-+	if (!cred_may_setfcap_userns(current_cred(), user_ns))
-+		return -EPERM;
-+
- 	cred = nsset_cred(nsset);
- 	if (!cred)
- 		return -EINVAL;
-diff --git a/security/commoncap.c b/security/commoncap.c
-index 4f49dba65426..8a9d998b1897 100644
---- a/security/commoncap.c
-+++ b/security/commoncap.c
-@@ -158,6 +158,64 @@ int cap_setfcap_level(const struct cred *cred, struct user_namespace *ns)
- 	return cred->user_ns->level + 1;
- }
- 
-+/**
-+ * cred_setfcap_reaches - Check how far up CAP_SETFCAP of a cred reaches
-+ * @cred: The credentials to use
-+ * @ns: The user namespace to look from
-+ * @level: The ->level of the ancestor of @ns it has to count in
-+ *
-+ * Return: true if CAP_SETFCAP of @cred counts in @ns and in its ancestors
-+ * up to the one at @level.
-+ */
-+bool cred_setfcap_reaches(const struct cred *cred, struct user_namespace *ns,
-+			  int level)
-+{
-+	return cap_setfcap_level(cred, ns) <= level;
-+}
-+
-+/*
-+ * The topmost ancestor of @ns whose root user tasks in @ns can write file
-+ * capabilities for: within @ns->setfcap_level, and mapped into @ns, or into
-+ * its parent while @ns has no uid_map yet.  NULL if there is none.  An
-+ * idmapped mount can store other root users, but that is up to whoever sets
-+ * up the mount.
-+ */
-+static struct user_namespace *setfcap_top(struct user_namespace *ns)
-+{
-+	struct user_namespace *seen, *p, *top = NULL;
-+
-+	if (ns->setfcap_level >= ns->level)
-+		return NULL;
-+
-+	seen = READ_ONCE(ns->uid_map.nr_extents) ? ns : ns->parent;
-+	for (p = ns->parent; p; p = p->parent) {
-+		if (p->level < ns->setfcap_level)
-+			break;
-+		if (kuid_has_mapping(seen, make_kuid(p, 0)))
-+			top = p;
-+	}
-+
-+	return top;
-+}
-+
-+/**
-+ * cred_may_setfcap_userns - Check whether a cred covers what a userns can do
-+ * @cred: The credentials to use
-+ * @ns: The user namespace
-+ *
-+ * Tasks in @ns can have CAP_SETFCAP that counts in ancestors of @ns, see
-+ * cap_setfcap_level().  Check that CAP_SETFCAP of @cred reaches as far up as
-+ * tasks in @ns can make use of theirs.
-+ *
-+ * Return: true if it does.
-+ */
-+bool cred_may_setfcap_userns(const struct cred *cred, struct user_namespace *ns)
-+{
-+	struct user_namespace *top = setfcap_top(ns);
-+
-+	return !top || cred_setfcap_reaches(cred, ns->parent, top->level);
-+}
-+
- /**
-  * cap_settime - Determine whether the current process may set the system clock
-  * @ts: The time to set
-
--- 
-2.55.0
-
+> Unless you prefer otherwise, v2 keeps them separate and leaves the drop
+> to a follow-up.
+>
+> pw-bot: cr
