@@ -1,75 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.85
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792997074;
-	b=E8opvEg6Gr3b5rSbYZt59xo/AQVR+dhMTsXBDnwwaCBCDDvFSCU6cn0rUf3zFvythrsF
-	 eFFBf8JVm4e41cCE9GP1kCrqQx/TVMHtDdftKxGOsPKHXGEQzVL9dsJcE8E4l61GIXLff
-	 Frl8P7KjQNHaQYxmE6DsbJHW0IFKxKc0pG84t/sDap3H6jFZEDbnlCMVXaVIyF87l/Sd6
-	 RAYLshorX8jnHN2FBRdgee1NNhLLqHkRI7zKM7bhvrHTNot2P/nSuT0ORaBdUti5Nf4/m
-	 HqR3PSSUgdtTmp/c9DH01oPhSEEj0iJ0xdxp95XmLdOy6Qx+0Xyd22ouBLOdf6L/AIA==
+	t=1792997218;
+	b=Mm/JCh38s/jN62eLmO7zI53a8tbC6u86G2BBxvM3HnmZ6Yk61cq5fl8efpbFoR9fXpKh
+	 tYN+vRZcxBogNUfISeqWP1a5Uk/56K+F+nj4GxDn3k5/mrjawCshCgvlS8TgGmFS4VNBd
+	 13mlb8TUvDii7+cgJ5lpMCk+HNVTGXjhk1mAMNSL431KoNjo1FcZGB8cPo4un1zcyjprP
+	 Day2C+Co3J/igVpB24LRPNWoUBF5MNPI5ZqCLu3n3WNGoMaHRLmyvp4uMlvNXCoP5jUF0
+	 nufBKU4cOCaNqa81okGbzwokMPMr9fZjIUuvTCXdBLxI0dGXMGYUCHFwP3oHBB9r4IQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792997074;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=58apWv8SnWxURioEmc2rCRpcmZoJ2LiMw8AwcvEDIus=;
-	b=eCD3BNEtCQS93jRlsC2O12sxg1Y4VxitfYwHY/rvBMzyeUlWClpaTJXwD8UuNpeWWC7y
-	 DYD10BS0YPb6LfF/FhFuYtv+rqCD+M3jLFQe0yKgAPtYDRbglbXFai31KfIDd/NP5ksCJ
-	 TBZhyEwcf9z3UgHr/fB5tW9TAZ8uT+Uu+4mmEZ1AmJRzwMNe37edClV+ChUSKjQnx3nbT
-	 Yhz5xaesM/VBZTSheQWoV/SswqtGgb7wizp1QfVKj0p0KsO1fB5em7533H/qca6gINGdx
-	 tN0pTnJBPC8D9FuqneBF+82WqS6w4bT+MIxisD0gfmWwI+CIxNQUszbUZ8MZJDsofPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792997218;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=lqqASOx9ifYZB66aP1V0hiXpK1AV/oYgH5ZBw9yXVsc=;
+	b=3izbreGcz/eLSCHen0tBE/DmT/tKDC56PWYxy6wLR+ErsxNv9pfL/8q5AQx83Wo/NCCE
+	 u/riXZDQVwJihI5vlJefXpNWtq63iETNKW9BSX+pNJBbKb2OFt0QmBr0x8Jd7s7UuKSYP
+	 xGwIqg799/nuEDP6XKdzKchWZ9V61nigwy9xg/Kl+bCpz7GnOVbBLfttmMJFBP/8KSmKA
+	 +4cb8/U0cXp1nPCZK1dTsy52lOT/lt0PPJq6QZh8kBKgMzuSMcRZewKTBcqaHvMfvHlwb
+	 pyHo3GiCDiA+1OzcGwMvEaTKaVNPHsGLTqvPAYgsPIE877E5ydVbS5UVvSZYNIt61Ag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--gongtao.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=QxkHCvhy;
-	arc=none smtp.remote-ip=209.85.215.200
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pOG4jBEj;
+	arc=none smtp.remote-ip=95.215.58.85
+Received: from mta1.migadu.com (out-85.mta1.migadu.com [95.215.58.85])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813DF606A33B
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:44:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 813DF606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gongtao.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4082606A31B
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:46:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4082606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=QxkHCvhy
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cd68bf391e1so1664126a12.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 23:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792997073; x=1793601873; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=58apWv8SnWxURioEmc2rCRpcmZoJ2LiMw8AwcvEDIus=;
-        b=QxkHCvhyRPZ1v2Nn37FOh7pQH8Q0M+yCM4T/Hpe0eMJINkEwtSw72tlqAX9t7P/TLY
-         A9iXBHu/MCsqe7qnl/xAPEWmAqr04wpInQ4qI2RoeHyBVtYwifXd2JDr2HCFt3Qj2AZJ
-         Uq4qps40UQkiRFQGZkDqsNVw4nUpPDJgbx+JHWcyIjiWHL5VYSWeImn2OE9W0HlekZLZ
-         QKfObwBL2P73zCGjwqzj8jZmqKj1/dtSH78d4GsLnrDwewnCcxV3nBbTLiMpbVbwowgq
-         uLH/1+TV909gtWrFHWKJ1yk4C7vktfYYf4tPovY30B61pbvCvnpGfMEjtNY7g3oFXVI2
-         IL7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792997073; x=1793601873;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=58apWv8SnWxURioEmc2rCRpcmZoJ2LiMw8AwcvEDIus=;
-        b=cHHNI4+BlvuxdavRmZjAP+/YlzLiurdfGOVXtQOZCzGozmwz9U70Q3Ww/glXoRCbD+
-         mYqGg7LxHt9aEbyazCALyNsJpUo+9Lu0BfMP9F0bOW6C/kW2FVYQqc/E5P5bbbFEG94g
-         al/F7+vyGrQml3JXRHPHD302q5B1AGTMU0nNkuX8yZ9VK1F6gMgGVk7cvBHnVjV+TlpM
-         RFBk+KZXBsbkUKlrmeFGTxsP88qN63Q7vTicPfx4/2AM3o97+wORWXA74hD0U3f0g7bX
-         OrGhoVykoI9+whbPshE2Xjz++KjF5yH1J0TKAdBHK+Qy2So+HDpFadiWCCtnCH6Jaz/l
-         rLlg==
-X-Forwarded-Encrypted: i=1; AKwUvBwQUsfq5h42I80IX/8s8nV0T1VABCX0QB9LFRWBtI8SkqCOpsC9tiSU6Z2RuM+3Daicwgbv6oOvnYM0S24vZ1w=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ5xhTW6TMtfx6iT9FgmWPT9evegLSIpglC7aSZaD6sCCQE8Zpg
-	sdcJ81n8xzZvRUgUXX8yF0APbhL+w3QnO9aUtFJjQITm8ecgobnv3n7hfJRgifEsalNe4Yt829H
-	vVKh0Gn5PYQ==
-X-Received: from pjbme8.prod.google.com ([2002:a17:90b:17c8:b0:3ab:8c4:a67d])
- (user=gongtao job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4985:b0:3ac:aa8d:19eb
- with SMTP id 98e67ed59e1d1-3adea0acafemr4460561a91.3.1792997072639; Sun, 25
- Oct 2026 23:44:32 -0700 (PDT)
-Date: Sun, 25 Oct 2026 23:44:24 -0700
-In-Reply-To: <20261026064424.3003536-1-gongtao@google.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pOG4jBEj
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=QQilnpc1/DiIxNOEQgnIkrmo1rXlpeywIQLIMe3oivU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792997214; v=1; x=1793602014;
+ b=pOG4jBEjq530CxRe+BoMsmTnH2gxtDe5ni3KTzi7BQTOXXyYrPCKtZQhWhGYc/xCh+EoX1Si
+ HD0bzjtUcrhP/yMIehVPkTahNYKMBiArpBua80XI0Ey+7P3Dwx4NFtqwdVSnpEJJehnV2q+rBj+
+ DqZNMfU/mKJgk30PJx0yiqs0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 46f43af3f22f1e09;
+	Mon, 26 Oct 2026 06:46:54 +0000
+X-Mizu-Trace-ID: 46f43af3f22f1e09
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a72f4a2d-4028-4bf9-906e-e270ab21623b@linux.dev>
+Date: Mon, 26 Oct 2026 14:46:47 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,182 +57,86 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261026064424.3003536-1-gongtao@google.com>
-X-Mailer: git-send-email 2.56.0.257.gf7497c7d27-goog
-Message-ID: <20261026064424.3003536-6-gongtao@google.com>
-Subject: [RFC PATCH v3 5/5] KVM: selftests: Test transferring private memory
- to another VM
-From: Tao Gong <gongtao@google.com>
-To: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, David Hildenbrand <david@kernel.org>, 
-	Ryan Afranji <afranji@google.com>, Vishal Annapurve <vannapurve@google.com>, 
-	Sagi Shahar <sagis@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Tao Gong <gongtao@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v3 03/11] cgroup/cpuset: Fix incorrect effective_cpus
+ bug in update_cpumasks_hier()
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261025214449.310715-1-longman@redhat.com>
+ <20261025214449.310715-4-longman@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261025214449.310715-4-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Ackerley Tng <ackerleytng@google.com>
 
-Add private_mem_migrate_tests to verify that private memory backed by
-guest_memfd can be linked into another VM of the same type
-(KVM_X86_SW_PROTECTED_VM) on the same host via KVM_LINK_GUEST_MEMFD,
-and that data written by the source VM is visible to the destination VM.
 
-Also verify that linking a guest_memfd into a VM of a different VM type
-is rejected with EINVAL.
+在 2026/10/26 05:44, Waiman Long 写道:
+> With the introduction of cpuset.cpus.exclusive, the computation of
+> effective_cpus differs depending on if a cpuset is a valid partition
+> root or not.
+> 
+> In update_cpumasks_hier(), effective_cpus is computed early
+> to check if the current subtree can be skipped. Later on
+> update_parent_effective_cpumask() may be called which can change the
+> partition state from valid to invalid or vice versa. If the partition
+> state changes, the previously computed effective_cpus may no longer be
+> valid. Fix that by recomputing effective_cpus again when that happens.
+> 
+> Also add a new test case into test_cpuset_prs.sh to verify this change.
+> 
+> Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c                            | 10 ++++++++--
+>  tools/testing/selftests/cgroup/test_cpuset_prs.sh |  3 +++
+>  2 files changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index b850aba4d907..37bc79d0c647 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2327,10 +2327,16 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+>  		if (update_parent) {
+>  			update_parent_effective_cpumask(cp, partcmd_update, NULL, tmp);
+>  			/*
+> -			 * The cpuset partition_root_state may become
+> -			 * invalid. Capture it.
+> +			 * Capture current partition_root_state as it may have
+> +			 * changed. Recompute effective cpumask if changed.
+>  			 */
+>  			new_prs = cp->partition_root_state;
+> +			if (new_prs != old_prs) {
+> +				if (new_prs > 0)
+> +					compute_partition_effective_cpumask(cp, tmp->new_cpus);
+> +				else
+> +					compute_effective_cpumask(tmp->new_cpus, cp, parent);
+> +			}
+>  		}
+>  
+>  		spin_lock_irq(&callback_lock);
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 8bdda955b4a7..f4eb984752a0 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -364,6 +364,9 @@ TEST_MATRIX=(
+>  	" C1-4:X2-4 C2-4:X3-4:P1 C3-4:X4:P2 \
+>  				   .      .      X5      .      .    0 A1:1-4|A2:2-4|A3:3-4 \
+>  								       A1:P0|A2:P-1|A3:P-2 ."
+> +	" C1-5:X3-5:P2 C3-5:X4-5:P2 C4-5:X5:P2 \
+> +				   .    X1-4     .       .      .    0 A1:1-3|A2:4|A3:4 \
+> +								       A1:P2|A2:P2|A3:P-2 1-4"
+>  	" C1-4:X2-4 C1-4:X3-4:P1 C3-4:X4:P2 \
+>  				   .      .      .      X1      .    0 A1:1-2|A2:3-4|A3:3-4 \
+>  								       A1:P0|A2:P1|A3:P-2 ."
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Co-developed-by: Ryan Afranji <afranji@google.com>
-Signed-off-by: Ryan Afranji <afranji@google.com>
-Co-developed-by: Tao Gong <gongtao@google.com>
-Signed-off-by: Tao Gong <gongtao@google.com>
----
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../kvm/x86/private_mem_migrate_tests.c       | 118 ++++++++++++++++++
- 2 files changed, 119 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/private_mem_migrate_tests.c
+Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 239bc61ea384f..cffa0d165a945 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -108,6 +108,7 @@ TEST_GEN_PROGS_x86 += x86/pmu_counters_test
- TEST_GEN_PROGS_x86 += x86/pmu_event_filter_test
- TEST_GEN_PROGS_x86 += x86/private_mem_conversions_test
- TEST_GEN_PROGS_x86 += x86/private_mem_kvm_exits_test
-+TEST_GEN_PROGS_x86 += x86/private_mem_migrate_tests
- TEST_GEN_PROGS_x86 += x86/save_restore_pf_stress_test
- TEST_GEN_PROGS_x86 += x86/set_boot_cpu_id
- TEST_GEN_PROGS_x86 += x86/set_sregs_test
-diff --git a/tools/testing/selftests/kvm/x86/private_mem_migrate_tests.c b/tools/testing/selftests/kvm/x86/private_mem_migrate_tests.c
-new file mode 100644
-index 0000000000000..17bebf850b4c4
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/private_mem_migrate_tests.c
-@@ -0,0 +1,118 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "kvm_util.h"
-+#include "test_util.h"
-+#include "ucall_common.h"
-+#include <linux/kvm.h>
-+#include <linux/sizes.h>
-+
-+#define TRANSFER_PRIVATE_MEM_TEST_SLOT 10
-+#define TRANSFER_PRIVATE_MEM_GPA ((uint64_t)(1ull << 32))
-+#define TRANSFER_PRIVATE_MEM_GVA TRANSFER_PRIVATE_MEM_GPA
-+#define TRANSFER_PRIVATE_MEM_VALUE 0xdeadbeef
-+
-+static const struct vm_shape protected_shape = {
-+	.mode = VM_MODE_DEFAULT,
-+	.type = KVM_X86_SW_PROTECTED_VM,
-+};
-+
-+static void transfer_private_mem_guest_code_src(void)
-+{
-+	uint64_t *ptr = (uint64_t *)TRANSFER_PRIVATE_MEM_GVA;
-+
-+	WRITE_ONCE(*ptr, TRANSFER_PRIVATE_MEM_VALUE);
-+
-+	GUEST_SYNC1(READ_ONCE(*ptr));
-+}
-+
-+static void transfer_private_mem_guest_code_dst(void)
-+{
-+	uint64_t *ptr = (uint64_t *)TRANSFER_PRIVATE_MEM_GVA;
-+
-+	GUEST_SYNC1(READ_ONCE(*ptr));
-+}
-+
-+static void add_private_mem(struct kvm_vm *vm, int memfd)
-+{
-+	vm_mem_add(vm, DEFAULT_VM_MEM_SRC, TRANSFER_PRIVATE_MEM_GPA,
-+		   TRANSFER_PRIVATE_MEM_TEST_SLOT, 1, KVM_MEM_GUEST_MEMFD,
-+		   memfd, 0, 0);
-+
-+	virt_map(vm, TRANSFER_PRIVATE_MEM_GVA, TRANSFER_PRIVATE_MEM_GPA, 1);
-+
-+	/*
-+	 * guest_memfd memory is private by default if guest_memfd tracks
-+	 * memory attributes, otherwise it must be converted via the VM.
-+	 */
-+	if (!kvm_has_gmem_attributes)
-+		vm_mem_set_private(vm, TRANSFER_PRIVATE_MEM_GPA, SZ_4K);
-+}
-+
-+static void test_transfer_private_mem(void)
-+{
-+	struct kvm_vm *src_vm, *dst_vm;
-+	struct kvm_vcpu *src_vcpu, *dst_vcpu;
-+	int src_memfd, dst_memfd;
-+	struct ucall uc;
-+
-+	/* Build the source VM, use it to write to private memory */
-+	src_vm = __vm_create_shape_with_one_vcpu(protected_shape, &src_vcpu, 0,
-+						 transfer_private_mem_guest_code_src);
-+	src_memfd = vm_create_guest_memfd(src_vm, SZ_4K, 0);
-+
-+	add_private_mem(src_vm, src_memfd);
-+
-+	vcpu_run(src_vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(src_vcpu, KVM_EXIT_IO);
-+	get_ucall(src_vcpu, &uc);
-+	TEST_ASSERT(uc.args[0] == TRANSFER_PRIVATE_MEM_VALUE,
-+		    "Source VM should be able to write to private memory");
-+
-+	/* Build the destination VM with linked fd */
-+	dst_vm = __vm_create_shape_with_one_vcpu(protected_shape, &dst_vcpu, 0,
-+						 transfer_private_mem_guest_code_dst);
-+	dst_memfd = vm_link_guest_memfd(dst_vm, src_memfd, 0);
-+
-+	add_private_mem(dst_vm, dst_memfd);
-+
-+	vcpu_run(dst_vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(dst_vcpu, KVM_EXIT_IO);
-+	get_ucall(dst_vcpu, &uc);
-+	TEST_ASSERT(uc.args[0] == TRANSFER_PRIVATE_MEM_VALUE,
-+		    "Destination VM should be able to read value transferred");
-+
-+	close(dst_memfd);
-+	close(src_memfd);
-+	kvm_vm_free(dst_vm);
-+	kvm_vm_free(src_vm);
-+}
-+
-+static void test_link_different_vm_type(void)
-+{
-+	struct kvm_vm *src_vm, *dst_vm;
-+	int src_memfd, ret;
-+
-+	src_vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
-+	src_memfd = vm_create_guest_memfd(src_vm, SZ_4K, 0);
-+
-+	dst_vm = vm_create_barebones_type(KVM_X86_DEFAULT_VM);
-+
-+	ret = __vm_link_guest_memfd(dst_vm, src_memfd, 0);
-+	TEST_ASSERT(ret == -1 && errno == EINVAL,
-+		    "Linking into a VM of a different type should fail, ret: %d, errno: %d",
-+		    ret, errno);
-+
-+	close(src_memfd);
-+	kvm_vm_free(dst_vm);
-+	kvm_vm_free(src_vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_GUEST_MEMFD_LINK));
-+
-+	test_transfer_private_mem();
-+	test_link_different_vm_type();
-+
-+	return 0;
-+}
--- 
-2.56.0.257.gf7497c7d27-goog
-
+Thanks,
+Guopeng
