@@ -1,54 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793056285;
-	b=F2yG/DjeT/kI6gzs5AxMZ6pbBwUSks0J/8JQ4RMODqB/sO7bBSpG1o4HIutf9ezi253+
-	 jDfZZ+UFTL9wcu+0qDexuiJv8f+8XSexiKC3fJTEv8oPjKTA2csWcigzEEffWhCtWMyf5
-	 MGEEIuCutMdSUcw/dTtsFZNFOLhm1IJ4qEQuGA7mKp74aq8n8ZbsIY1A6eDmY0r0PKQkv
-	 zGX0c/hBtCTej5/DYTQvr+mnmGLgla4dYY9dzan9Q040LD+ECzwSyAHt2vXgvXEG1Nrro
-	 df9E2zkyqArlRi2mH3imHByAysNb7SHKNASWVSrFo2jHJQx3snmH6G21PCjEVlQiQ4g==
+	t=1793056950;
+	b=f+1YUj9/Xl/P2ZPRl8yDxc67L4vm/p+BFDW6C+h8NWOGdmRIlbpGTUsg5V0mM9oLxohV
+	 4OvLRg/bzOpHZg996ILRYc00eJwYUb/nhrDekPEKwbZTif9nh7YxjWUs0qOQlACK//G4F
+	 nzJ0BvTmY4CI3zsEBoTl0hDuHGmhhJUczmHoIneJ/q5Q4HFrTITYeSSFJYv9JdnHNflvv
+	 HXSu/2t4pWf95inAnyYxIkB7i4ZMvw/NYJh2nW4Ngw043vv0cEFjJ2p9OU9kykhUKE/eZ
+	 Nf3cifa4k023UMvcw6g77DzJ89dBIlQAagK5TH2U6aC19ZiUJPxsOdWmSaObrZQevXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793056285;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=Sq8U6qRkxAVCxLJVMdW3PdUBR2QnCqOWhnBaz9IJe/k=;
-	b=kVDFXlEKxjK2kTNGdKWbrBqqdV4qhilqMqiK8T+39OrYAyJ+ZDQBDUMH5VsM8syhMR/H
-	 Yku/0yhByWs+O06OVHUpcUhipt+mGO618gI7HN7iZiczYkC3dlTkG0La+znf43jb3zeh3
-	 Umz5kSTgi1EmsnMsgbyj5/uIlPU97JawTWOuqKp4G/oZDiPqZN2kXe/cEXJf+DWNVr728
-	 V3eHp1FcH+Vz43l40SYLTgWmDFZ/3gSZ8fV/FwopaIdE2zI/ggAtfZ2GprjR7m7SB/cQf
-	 1+NvhsiyVtOmDJgNQ9Wm/l84+Lb++qBcGNDjmANR4HAvER5bxWukTpMY/dGuiaMkrLw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793056950;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=VQi76aZsHSnfP5+RWnTNJp9RYYg8+NeBCNLcRHQmMbo=;
+	b=1kj29DpypyZTSUrpaJ3n1xG0JV7ogOXCS5QPwxMDyC9XMY8peMo2ibPeenZCrw51x/nU
+	 L9n/REj8S+3KGdwmFPoLIahwq6Ou0GRc3Z8mIgRggBusHtKN3hf/Ysr8hNqVXnXauQIk3
+	 1ljrgHQM1BcfDIa2Zbzoo6xJoOeNYXrpWah3e30ZUaB5eaUvh0LnIhNBJoRP55aoKlrx0
+	 0knWysvJmrawsxuEaAYYZDVaQSiHI8OID47fvq7VQHuies177YMLUQtBEJUrME60+OjBK
+	 pYfm32SmCdzs15qNMz+uRtBFqyUX44Lh0Mrk+HKhanI96W/MPQtC0+wuNghGxzF0+AQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jhCj6au1;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n1acaGHA;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7914B606A31A;
-	Mon, 26 Oct 2026 23:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C75606A322;
+	Mon, 26 Oct 2026 23:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jhCj6au1
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D223F1F01825;
-	Mon, 26 Oct 2026 23:11:23 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n1acaGHA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A689B1F01828;
+	Mon, 26 Oct 2026 23:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793056285;
-	bh=Sq8U6qRkxAVCxLJVMdW3PdUBR2QnCqOWhnBaz9IJe/k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=jhCj6au1k5AOhOtgclDmE+QL9AVzh5MUBFxg00YqaxsnCigg+6Kn9VbFM7CG08sHs
-	 Gny7d7kNGKTfG/VZCLtihttNO48vi1iNnTWXrE9HFY9ww1zwAXbYGe9V1Gfs0NvZiG
-	 sejWtQqWvIn8YadQqIHsqE43iS5VBbw4/rm691IxxmQLxvkakhWat/jSG624n1ZjmV
-	 6zbC+BsZB6oQ+jhQE9yKqUrp6xJ+8Vwf0vdZFoa7l1dRu+d4UHf38BiQpWL6tf/Dbp
-	 Mk2U1n8yQM0/6xhRwUiStuZt3bqAy2yBqiERoCNTTmC+cJryvPvjo3DHU9sQ9GMv50
-	 8l8JUan1ZDktA==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/9] tracing/filters: Fix MATCH_END_ONLY regex matching for fixed-size strings
-Date: Tue, 27 Oct 2026 08:11:22 +0900
-Message-ID: <undine-1793056282077825155-5234c76709b60359@undined.local>
-X-Mailer: UndineD 0.1
-In-Reply-To: <179291743946.492959.9624495647021680807.stgit@devnote2>
-References: <179291742944.492959.11659339795290028998.stgit@devnote2> <179291743946.492959.9624495647021680807.stgit@devnote2>
+	s=k20260515; t=1793056949;
+	bh=VQi76aZsHSnfP5+RWnTNJp9RYYg8+NeBCNLcRHQmMbo=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=n1acaGHAVUUzPJs65rtszWmauyrOg2LYJUYCYKXtC9YshIYeAyp46aLezhDULMxTg
+	 UGOLl5DYfICbGiypWgJDFA7C0aeYojsoA5zeLMpXGz0qdpymRDboLcnFPitm8DIrNb
+	 i9wXYatq3EsU3xvivVZ4SOhkU6qsmLqDslS2A+aVqdfKn3gijCNx8vHsGBNpDPROJD
+	 1cM/wLmb6Kk6plw6CZBtZT7YZVz9uUSfD7DHBdC6op6ux67Dxc74hV2C9RNlTSYn/+
+	 O27yQ67eEZW0DdjbMH0L0MLeExdJ7+yWgUfYbGvBwO99Tkj/OlRwhNJ8KORrgq+a5d
+	 7b1h8pYgKNFWA==
+Subject: Re: [PATCH net v2 1/2] psp: fix transport mode encap with ipv6
+ extension headers
+From: netdev-bot+sashiko@kernel.org
+To: toddfreed@meta.com
+Cc: netdev@vger.kernel.org, daniel.zahka@gmail.com, kuba@kernel.org,
+ willemdebruijn.kernel@gmail.com, davem@davemloft.net, edumazet@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+ raeds@nvidia.com, rrameshbabu@nvidia.com, cratiu@nvidia.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bjorn@kernel.org
+Date: Mon, 26 Oct 2026 23:22:28 +0000
+Message-ID: <179305694824.3134.18415422493301271111@kernel.org>
+In-Reply-To: <20261022223014.556388-2-toddfreed@meta.com>
+References: <20261022223014.556388-2-toddfreed@meta.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,76 +66,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
 
-On Sun, 25 Oct 2026 17:37:19 +0900, Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> regex_match_end() calculated string length as "len - 1", assuming @len is
-> the string length including trailing '\0'. However, for fixed-size string
-> fields, filter_pred_string() passes field->size as @len, and for "comm",
-> filter_pred_comm() passes TASK_COMM_LEN as @len.
-> 
-> Because @len in these cases represents the buffer capacity rather than the
-> actual length of the string, regex_match_end() tests against the tail of
-> the buffer (typically trailing '\0' padding) rather than the end of the
-> string. Furthermore, if @len is 0 (denoting an empty dynamic array without
-> trailing '\0'), "len - 1" underflows to -1.
-> 
-> First check "len < r->len" and return 0, which safely rejects negative
-> lengths and cases where the buffer capacity is smaller than the pattern.
-> Then compute the actual string length using strnlen(str, len), which
-> bounds the scan by @len (stopping at the first '\0') without dereferencing
-> past the buffer.
-> 
-> Fixes: a3291c14ecf0 ("tracing/filters: Fix MATCH_END_ONLY filter matching")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
-> Changes in v2:
->  - Check "len < r->len" to guard against negative lengths and avoid
->    calling strnlen() when the buffer capacity is smaller than the pattern.
->  - Use strnlen(str, len) directly instead of calling strlen(str) when
->    len is 0, avoiding an out-of-bounds read on 0-length dynamic arrays.
-> ---
->  kernel/trace/trace_events_filter.c |   10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> index 5e74d2dae40a..fac51a2953dd 100644
-> --- a/kernel/trace/trace_events_filter.c
-> +++ b/kernel/trace/trace_events_filter.c
-> @@ -1075,10 +1075,14 @@ static int regex_match_middle(char *str, struct regex *r, int len)
->  
->  static int regex_match_end(char *str, struct regex *r, int len)
->  {
-> -	int strlen = len - 1;
-> +	int slen;
->  
-> -	if (strlen >= r->len &&
-> -	    memcmp(str + strlen - r->len, r->pattern, r->len) == 0)
-> +	if (len < r->len)
-> +		return 0;
-> +
-> +	slen = strnlen(str, len);
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Hmm, this fixes 2 different issues. One is out-of-bound access issue (len == 0 case)
-and MATCH_END_ONLY for COMM/STATIC_STRING issue. For example, FILTER_COMM will pass
-the TASK_COMM_LEN as @len, thus "str + (len - 1)" points the end of comm array.
-Thus in most cases, the filter checks only the zero padding area.
+Low priority / nit picks for your consideration:
 
-OK, let me split this into 2 patches.
+- [Low] The updated kernel-doc comment on the exported
+  psp_dev_encapsulate() says "With IPv6, they go after any extension…
 
-Thanks,
+--
 
-> +	if (slen >= r->len &&
-> +	    memcmp(str + slen - r->len, r->pattern, r->len) == 0)
->  		return 1;
->  	return 0;
+psp: fix transport mode encap with ipv6 extension headers
+
+This patch changes psp_dev_encapsulate() to walk the IPv6 extension
+header chain. It now rewrites the nexthdr of the last header in the chain
+to UDP, instead of always rewriting the fixed header. Fragment, routing,
+NEXTHDR_NONE and unknown header types are rejected, and psp_dev_rcv()
+does the reverse on receive using ipv6_skip_exthdr().
+
+> diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
+> index c9c1a8826b7f9..0c009d7b08c00 100644
+> --- a/net/psp/psp_main.c
+> +++ b/net/psp/psp_main.c
+
+[ ... ]
+
+> +static int psp_ipv6_nexthdr_off(const u8 *hdr, unsigned int len)
+> +{
+
+[ ... ]
+
+> +		if (!ipv6_ext_hdr(type) || type == NEXTHDR_NONE ||
+> +		    type == NEXTHDR_FRAGMENT || type == NEXTHDR_ROUTING)
+> +			return -1;
+
+[ ... ]
+
+> @@ -243,7 +280,7 @@ static void psp_write_headers(struct net *net, struct sk_buff *skb, __be32 spi,
 >  }
-> 
->
+>  
+>  /* Encapsulate a TCP packet with PSP by adding the UDP+PSP headers and filling
+> - * them in.
+> + * them in. With IPv6, they go after any extension headers.
+>   */
+>  bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
+>  			 u8 ver, __be16 sport)
+> @@ -251,10 +288,17 @@ bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
+>  	u32 network_len = skb_network_header_len(skb);
+>  	u32 ethr_len = skb_mac_header_len(skb);
+>  	u32 bufflen = ethr_len + network_len;
+> -
+> -	if (skb->protocol != htons(ETH_P_IP) &&
+> -	    skb->protocol != htons(ETH_P_IPV6))
+> +	int nh_off = 0;
+> +
+> +	if (skb->protocol == htons(ETH_P_IPV6)) {
+> +		/* UDP + PSP after the extension headers, if any */
+> +		nh_off = psp_ipv6_nexthdr_off(skb_network_header(skb),
+> +					      network_len);
+> +		if (nh_off < 0)
+> +			return false;
+
+[Severity: Low]
+This isn't a bug, but do the comments on psp_dev_encapsulate() describe
+more than the code accepts?
+
+The kernel-doc says "With IPv6, they go after any extension headers", and
+the inline comment says "UDP + PSP after the extension headers, if any".
+However, psp_ipv6_nexthdr_off() rejects routing, fragment, NEXTHDR_NONE
+and unknown header types. For those, psp_dev_encapsulate() returns false.
+
+Callers such as mlx5e_psp_handle_tx_skb() and nsim_do_psp() drop the skb
+in that case. In the selftest, a socket with IPV6_RTHDR set ends up with
+its data stuck in the send queue.
+
+On the RX side, psp_dev_rcv() already says that fragment and routing
+headers are not supported in transport mode. Could the TX helper's
+comment state the same restriction, so driver authors know that some
+extension header layouts make encapsulation fail?
+
+> +	} else if (skb->protocol != htons(ETH_P_IP)) {
+>  		return false;
+> +	}
+
+[ ... ]
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261022223014.556388-1-toddfreed%40meta.com
