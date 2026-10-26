@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.121
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.143
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793027267;
-	b=UV9Y5azycOUXxPbh1+EUV5paLrKaEIXOh4KMnUXW9O3kXaonC7e/cFMg/d2zBp987gf8
-	 YnCQsCURQtfVcMK0x3zmBnp5KCi0ZYu11FvRCcykz0xaX7CrNEsq4ZLrGzXeFREI5jcCM
-	 zRyPYMEOih98fYlNIImKNsCZA28axDLAlgPernZhyyhaSclnfpZdzv+hQ4wWr5ngNWiuA
-	 /UsgrEmo/rnXEQB6md+6vuJg9Q4OGuIHRV0DrZG/vHDLfhIwhyp0H3vbEz3lo5QM/jYWI
-	 wx4kDOIxnaIGhxAOLnvb2GrAjDoxlypBzH6p9uyuaeWNfLxAQ49/jYrHXoj3fvdVdQg==
+	t=1793027305;
+	b=lahOpzZx5eLZUQ01rojzVAFdFWzWYQ4nRHsJGmadUfUYEpIfK7xuS+D3j+k1nDLwnSC0
+	 d7TSwBFlc2uEo07xtZsPkjDK0kqnZP8ZV9i7D1o6gbU2ichlzxKhKQ47cVZALEcHxFZs8
+	 hUb7ExB7TNS8lEz2lo9YYayxEyODxYXC/B91nTrYfitlw8JUA9hbbCmXG2YY8VwlzqZm0
+	 GIZP7UaGru4kZRDOERBQmWtwtJBjpmGS3owrSwo/9wRAHLsdkFUrPgAldMNl6+Eq3INE8
+	 pgmE9MXPsQNOTlG0pQ34OgKrtCtwp/D6rx+GssY8W/Cb99ZAsahyzaUzuISA0tu2ahg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793027267;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793027305;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=wnhw2bwataB6NDJxxOJekLvhPHu4AY/2Eqvomh/enxc=;
-	b=uBHLoYSZb7XV+h82i2Rv0t/J+idPopbwtT3U0Kh8fY4vFJCwzLgbKnxQqi1/9WdaollZ
-	 whFpU76H86HsC7jr2dlQszPXG9MRB2/rZx+4pjactY57asCi2SNIbOqbLdERSVfcOH53e
-	 KZ43tQ2I/bJm4kGF12El9Tfc6AsHabtod10dvxyfzjfhXrFs0svusULdSEcGAOZiP58Wr
-	 sCppL3/sBrhfrzifXiFqBZj2aAdiz8yuJDnkbF+aNjAJC2JZjay+S2zZARASkeoMAvJgg
-	 mNFjhLQO3VP2Rbvd8ZU/vbe8j7uhWHDC01WWFWLUTatMhOJIq9/y7pEDkQVGg/rowsw==
+	bh=HNreiUYcspl7YugOb0Db/eH9LRraTeCQh01ZdY4GdHw=;
+	b=wgTsMnB6qBxefTOjt7xXMvene8YrQSlyHJPQ6Pkysgm2VxNhtQyonsL3zK6eKgkF3YAI
+	 5cvKiMwvZE2xF7t/MwE7l3ndwU16g9AlZ3U9l1OJz9wFZ55CBM4V6fgnZYiUiUx1FMJq9
+	 tODiM1+dbbgXqNFbQymgokI+SGimrzNcPRTf/Z1QqFyg959jr7EMAlTKdO+1Vqv+EqYlq
+	 v/VLq6jegDWrVdsWWOgZohGUUF1iOfvcW5hyFGi5ZqeBMig074c6lqu7B6hUGPX6+BKpr
+	 KUwnCWI5RXl4cgjBcXxOwUkc/LmsEXnDVTkX59yG/PBktr2psKf+iLcmRLbJwBacA1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FYUbSmh1;
-	arc=none smtp.remote-ip=91.218.175.121
-Received: from mta0.migadu.com (out-121.mta0.migadu.com [91.218.175.121])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Zf4NzXgp;
+	arc=none smtp.remote-ip=91.218.175.143
+Received: from mta0.migadu.com (out-143.mta0.migadu.com [91.218.175.143])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3BC606A31F
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:07:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AD3BC606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9482606A320
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:08:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9482606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FYUbSmh1
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Zf4NzXgp
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uFNLB3HiqIo+JkFlJtk4vr4134/LdgXjZ5iBc9vByl8=;
+DKIM-Signature: a=rsa-sha256; bh=9VzmVr+0UwIq+fSbTHVnNUIENIph+6m5EvRUd51Uhks=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793027259; v=1; x=1793632059;
- b=FYUbSmh1HZNpzOVb/j9jQiGPtlRSf+EmWoeTZKP6NNptf1MfXjXvgCBUBYfxKPCUsnqQzOry
- B6c9VkeyrvG9AnJqnmN12juYRb6EnLcyUeeA298swzv8xWG0IXGxLWeSVGWblQCUZh45xKBcx1e
- 4HiG58XT29EpLBntuaMgTpEg=
+ t=1793027303; v=1; x=1793632103;
+ b=Zf4NzXgpfukRAt7zk8tXeYxqY6znKac0MvfIrXGjb1+jsZ/uIlMljrdT8N2FO2Tk1LIqV2cu
+ FOYsd4vDCsYBROhIdUPR6BX6ySHfr4cZmsOrbMtEmxMj5FOi8Uf9dWBKECkgP4w+jIZHhkkpXoT
+ yUJFhHF+XfPtu3v9vdey5eiw=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e3fb3f0e5d8099b8;
-	Mon, 26 Oct 2026 15:07:39 +0000
-X-Mizu-Trace-ID: e3fb3f0e5d8099b8
+Received: by smtp.migadu.com with ESMTPS id d747c137ff7b1668;
+	Mon, 26 Oct 2026 15:08:22 +0000
+X-Mizu-Trace-ID: d747c137ff7b1668
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <3d70768f-8d0a-496a-ac3a-9ee3438b2091@linux.dev>
-Date: Mon, 26 Oct 2026 23:07:28 +0800
+Message-ID: <8b2c8f88-d03b-4146-9bf7-95c4981ecacc@linux.dev>
+Date: Mon, 26 Oct 2026 23:08:11 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,7 +59,8 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 4/6] libbpf: Factor out __sys_bpf_fd helper
+Subject: Re: [PATCH bpf-next v4 5/6] libbpf: Add log_opts support for
+ bpf_link_create
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
  kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
@@ -73,95 +74,102 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
  linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  martin.lau@kernel.org, mason@kernel.org
-References: <20261024153608.58569-5-leon.hwang@linux.dev>
- <5d94730579f232c7be1c83bc7287e91af9a858bcea83765e58bdd2fc3956a229@mail.kernel.org>
+References: <20261024153608.58569-6-leon.hwang@linux.dev>
+ <c6da6df95673d3a5ab5c4e757500658821e9e9e8d0652f737eca82690765a9a8@mail.kernel.org>
 Content-Language: en-US
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <5d94730579f232c7be1c83bc7287e91af9a858bcea83765e58bdd2fc3956a229@mail.kernel.org>
+In-Reply-To: <c6da6df95673d3a5ab5c4e757500658821e9e9e8d0652f737eca82690765a9a8@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 2026/10/25 00:13, bot+bpf-ci@kernel.org wrote:
->> libbpf: Factor out __sys_bpf_fd helper
+>> libbpf: Add log_opts support for bpf_link_create
 > 
-> TL;DR: Nit only, not a bug: the new libbpf helper __sys_bpf_fd() has a
-> misleading name and a different argument order (cmd not first) than
-> sys_bpf_fd(); a name like sys_bpf_fd_log() is suggested.
+> TL;DR: In bpf_link_create(), the shared iter_info/log_opts slot is keyed only
+> on iter_info_len, so an iter_info pointer with len 0 may be misread as
+> log_opts, possibly causing out-of-bounds reads/writes in libbpf.
 > 
 >> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
->> index b49822d212ae..9a2107d4f6d8 100644
+>> index 9a2107d4f6d8..00efa90a6ed9 100644
 >> --- a/tools/lib/bpf/bpf.c
 >> +++ b/tools/lib/bpf/bpf.c
->> @@ -203,6 +203,30 @@ int bump_rlimit_memlock(void)
->>  	return 0;
->>  }
->>
->> +static int __sys_bpf_fd(union bpf_attr *attr, const size_t attr_sz, enum bpf_cmd cmd,
->> +			struct bpf_log_opts *log_opts)
->> +{
->> +	const size_t attr_common_sz = sizeof(struct bpf_common_attr);
->> +	struct bpf_common_attr attr_common;
->> +	int fd;
->> +
->> +	if (!OPTS_VALID(log_opts, bpf_log_opts))
->> +		return libbpf_err(-EINVAL);
->> +
->> +	if (log_opts && feat_supported(NULL, FEAT_BPF_SYSCALL_COMMON_ATTRS)) {
->> +		memset(&attr_common, 0, attr_common_sz);
->> +		attr_common.log_buf = ptr_to_u64(OPTS_GET(log_opts, buf, NULL));
->> +		attr_common.log_size = OPTS_GET(log_opts, size, 0);
->> +		attr_common.log_level = OPTS_GET(log_opts, level, 0);
->> +		fd = sys_bpf_ext_fd(cmd, attr, attr_sz, &attr_common, attr_common_sz);
->> +		OPTS_SET(log_opts, true_size, attr_common.log_true_size);
->> +	} else {
->> +		fd = sys_bpf_fd(cmd, attr, attr_sz);
->> +		OPTS_SET(log_opts, true_size, 0);
->> +	}
->> +	return fd;
->> +}
->> +
 > 
 > [ ... ]
 > 
->> @@ -248,20 +270,7 @@ int bpf_map_create(enum bpf_map_type map_type,
->>  	attr.excl_prog_hash_size = OPTS_GET(opts, excl_prog_hash_size, 0);
->>
->>  	log_opts = OPTS_GET(opts, log_opts, NULL);
->> -	if (!OPTS_VALID(log_opts, bpf_log_opts))
->> -		return libbpf_err(-EINVAL);
->> -
->> -	if (log_opts && feat_supported(NULL, FEAT_BPF_SYSCALL_COMMON_ATTRS)) {
->> -		memset(&attr_common, 0, attr_common_sz);
->> -		attr_common.log_buf = ptr_to_u64(OPTS_GET(log_opts, buf, NULL));
->> -		attr_common.log_size = OPTS_GET(log_opts, size, 0);
->> -		attr_common.log_level = OPTS_GET(log_opts, level, 0);
->> -		fd = sys_bpf_ext_fd(BPF_MAP_CREATE, &attr, attr_sz, &attr_common, attr_common_sz);
->> -		OPTS_SET(log_opts, true_size, attr_common.log_true_size);
->> -	} else {
->> -		fd = sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
->> -		OPTS_SET(log_opts, true_size, 0);
->> -	}
->> +	fd = __sys_bpf_fd(&attr, attr_sz, BPF_MAP_CREATE, log_opts);
->>  	return libbpf_err_errno(fd);
->>  }
+>> @@ -803,6 +805,14 @@ int bpf_link_create(int prog_fd, int target_fd,
+>>  	iter_info_len = OPTS_GET(opts, iter_info_len, 0);
+>>  	target_btf_id = OPTS_GET(opts, target_btf_id, 0);
+>>  
+>> +	if (iter_info_len && attach_type != BPF_TRACE_ITER)
+>> +		return libbpf_err(-EINVAL);
+>> +
+>> +	if (iter_info_len)
+>> +		iter_info = OPTS_GET(opts, iter_info, (void *)0);
+>> +	else
+>> +		log_opts = OPTS_GET(opts, log_opts, (void *)0);
+>> +
+>>  	/* validate we don't have unexpected combinations of non-zero fields */
+>>  	if (iter_info_len || target_btf_id) {
+>>  		if (iter_info_len && target_btf_id)
 > 
-> This isn't a bug, but __sys_bpf_fd() is a higher-level wrapper that
-> dispatches to sys_bpf_fd() or sys_bpf_ext_fd() after validating log_opts and
-> probing FEAT_BPF_SYSCALL_COMMON_ATTRS, while a leading double underscore
-> usually marks the lower-level variant of a function.
+> For BPF_TRACE_ITER, iter_info_len is now the only thing that decides whether
+> the shared iter_info/log_opts slot holds a union bpf_iter_link_info pointer
+> or a struct bpf_log_opts pointer.
 > 
-> The helper also takes (attr, attr_sz, cmd, log_opts), whereas sys_bpf(),
-> sys_bpf_fd(), sys_bpf_ext() and sys_bpf_ext_fd() all take cmd first, so the
-> new call reads differently from the nearby calls:
+> Can a caller that sets opts->iter_info but leaves opts->iter_info_len at 0
+> end up with its union bpf_iter_link_info being read as a struct
+> bpf_log_opts here?
+
+Users should not do like this. By convention, iter_info_len==0 means no
+iter_info.
+
 > 
->     fd = __sys_bpf_fd(&attr, attr_sz, BPF_MAP_CREATE, log_opts);
+> bpf_program__attach_iter() copies opts->link_info into
+> link_create_opts.iter_info and opts->link_info_len into iter_info_len
+> without checking that they agree, and nothing in bpf.h or libbpf.h says
+> log_opts is only used when iter_info_len == 0, or that iter_info needs
+> iter_info_len.
 > 
-> Would a name that describes what the helper adds (for example something like
-> sys_bpf_fd_log()), with cmd as the first argument like the other sys_bpf*()
-> wrappers, read more naturally next to sys_bpf_fd() and sys_bpf_ext_fd()?
+> Before this patch the pointer went to the kernel, and bpf_iter_link_attach()
+> rejected the mismatch cleanly:
 > 
-I'd like to move cmd as the first argument, and keep name __sys_bpf_fd()
-for the helper.
+>     if (bpfptr_is_null(ulinfo) ^ !linfo_len)
+>         return -EINVAL;
+> 
+> With this patch, __sys_bpf_fd() runs OPTS_VALID(log_opts, bpf_log_opts) on
+> the 16-byte union bpf_iter_link_info.  The first 8 bytes of that union
+> (map.map_fd, or task.tid/pid, or cgroup.order/cgroup_fd) become
+> log_opts->sz:
+> 
+> - If map_fd or tid is in the range 8..27, sz passes validation, and size and
+>   level are read from bytes 16..24, which lie past the end of the 16-byte
+>   object.
+> 
+> - If sz is 28 to 31, OPTS_HAS(log_opts, true_size) is true, so
+>   OPTS_SET(log_opts, true_size, ...) writes 4 bytes at offset 24, which is 8
+>   bytes past the end of the caller's object.  Can this corrupt the caller's
+>   stack or heap?
+> 
+> - If sz is larger (a typical tid, or a cgroup fd shifted into the high 32
+>   bits), libbpf_is_mem_zeroed() scans caller memory from offset 28 up to sz.
+>   It usually stops with a "bpf_log_opts has non-zero extra bytes" warning,
+>   but it reads out of bounds first.
+> 
+> In addition, attr.link_create.iter_info is now NULL with iter_info_len of 0,
+> which the kernel accepts.  If validation does pass, could a task iterator
+> attach to all tasks instead of the requested tid, and a map iterator fail
+> with -EBADF instead of -EINVAL?
+> 
+> The commit message says log_opts support for iter links is future work.
+> Would it be better to treat the slot as iter_info whenever
+> attach_type == BPF_TRACE_ITER, and read log_opts only for other attach
+> types, instead of keying only on iter_info_len?  That would keep the old
+> behaviour for iter links exactly.
+
+Not exactly. iter_info and iter_info_len must be set at the same time
+for iter links. If iter_info_len is 0, iter_info must be NULL or zeroed
+memory. Users must not misuse them by iter_info_len==0 but iter_info is
+not zeroed memory.
 
 Thanks,
 Leon
