@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.98
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793029834;
-	b=yQDawbUGWTNUq9N3eWOOLn4AgbD29byJeMqpHIICa0PdJfhZcee8tLwU/+QT2Jqf/XZW
-	 BwM12l9vKirm3RPgMkpjRzjZF3c+QofT0/sM8bHFFWJn3Y72RSTRiWnprnhSLi/YSwAXP
-	 7VoP9ANpIQ1Ji8vuJnUez9EWi7RBgWjNZl+4JbJW9lS4sPKFHzZ9P1dZMFvC8XVYASIa3
-	 bBojuNiM+5rztlTNQFOGOGX+BE0/eLWLjOuJ7euU+A5+6qrDjI9QQR81Az1P5DnHSnOsv
-	 qyMxScgJpowV0egusa2VBDCFV5/h5/CxpFDW3RC1LNgtk0KJyXNfRTxvvISqxmz3KiQ==
+	t=1793029843;
+	b=oAme/N0m1Hia6KS4jw0xGTDy9HehIygPZKtsA/is2nnGuxom5KiXg4/irFHbavDWgAvU
+	 Kn8AJLo5mD87JwrGqdB3ijSVNhEkigs1SR2Q9U+cjotTwp2boG96NromW72A5wIvGyyR9
+	 RWx+uxN9uyQhrNa3ML0tX92r8gmHFYVwq4hsF+0gK7H9FZvQTAbnJOTbJme/MIgjMMvV8
+	 mBrMO2gXnZn1Kczx9U8PagOrS5hqNXxr0wid2pf9fRAkponTs3J0e3Mc8AGmvmjhL8bHo
+	 QD1Bh2X28L9ACWW2zmgmYIUrkKUBxou3xqsTLkzSKJxDera5aU3Ve6xCNsGwOtsqrTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793029834;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793029843;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=bPzOvuX5VgrTU9yIIudolJJSPSRHz/AbtYrEX5LP0UI=;
-	b=WbkZwzPWWr3icI//7PH+IUq6X40R3dztPBn18T8BVJtB0HdiYRMqV/yj1PvUVOLE2SQr
-	 h0NYg53hFwfBF874uAkUezRL1+3+zSBX/REMilSIDevCWUJ0H5Tc0tHAS11FGkzHG1Bwk
-	 PrOvHZkp2HjvRcFYyTqm+00IJnFZycFtnvw/GUNMD6Gcbo3pxVsI6aCI7yl1DlbRBC/18
-	 klXK9W/0m5U8sL6hmakhDKSXDx0877owtxK0UqMqhvglJlEz2hVSYzQhGJdDB3b2Jx8wA
-	 v4wQCciNiUPYb45hhiyIGwXfUhRD1F5sf+W4Luvdcngh6QWoKuPCOpCGIxm4MNOvj7w==
+	bh=0GgTwwPhxHKDJaxjp3ZsZQ2i5SCoinxggJ42Y8Wa7ww=;
+	b=ImatEhel6QFU+8xQNOSVtkl6OCyXxfrPn1y06UcpNEhk71eXc153lDFpA7sawcCCrMpf
+	 8Mm8IEqkg73K3C45aCwNIw89eHbYYhzLR3J+ZuYcpnGDMaA4REKBGHRGCy/ArK58MSPzt
+	 t+eBXPKNl9F23g7Jp8fSXv2zaJxZIw957UiUcGg+wq/2arC7Nf2Ddv+IeFrDXOldWpl7I
+	 EbLA3C2I2ZAKngeaA5/JYWu63Kb+NLHwtaTUv6EA8lD4Rk+hO7sOMPjotAS4wRUwgfZ2y
+	 CZTVQzgzrj7GH66uW8SaQDRaaTKhDo1M0jaHNI+14J1sC+h4viI/2tuB8pZOeRTLtaw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MBF0qe5e;
-	arc=none smtp.remote-ip=95.215.58.3
-Received: from mta1.migadu.com (out-3.mta1.migadu.com [95.215.58.3])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="xV+fCm/n";
+	arc=none smtp.remote-ip=91.218.175.98
+Received: from mta0.migadu.com (out-98.mta0.migadu.com [91.218.175.98])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5779606A31F
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:50:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5779606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EEF4606A31D
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:50:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6EEF4606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MBF0qe5e
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xV+fCm/n
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=miCtniVHMbA/PYAbgBN5voicnBaPD8dFe3tGyzcmStY=;
+DKIM-Signature: a=rsa-sha256; bh=HU2bpjyoPB1h+oxYZZwxq+ebGFwnC2mOUeNtg2/lv7w=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793029831; v=1; x=1793634631;
- b=MBF0qe5eCnHpG7DK3QcgGiOttHOj1CRmcwdBGM7SO2Av36+rLuCaAEjUe6QW4vSq/w0bE1Nh
- js2t+g5wN4C3+pKGAjgHnzg3CvBtTjHlTPQXK4an3INLTI2T15cOmKilPJ5Nl0xke0x3yl8dTuV
- EqRvFsWZGK6xGaxkivEPhAYM=
+ t=1793029840; v=1; x=1793634640;
+ b=xV+fCm/n/oq6kc6tkfgPsB0yslbYkOcvnhytKPy7wW74zcL7uY/jxzlmuwckKtVoU5QXJyhl
+ yeE2Xgd6kN9JoikagUnt+NEhKt3X0UOcbGGkjGvMuMyRr595T5cazfnmYGHzX9PSygLdt4owTCU
+ 9JKW7lGcUTazzAOdCNacA1Ng=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id db4da94b28b9c1d8;
-	Mon, 26 Oct 2026 15:50:15 +0000
-X-Mizu-Trace-ID: db4da94b28b9c1d8
+Received: by smtp.migadu.com with ESMTPS id 6930a7365b8b169f;
+	Mon, 26 Oct 2026 15:50:40 +0000
+X-Mizu-Trace-ID: 6930a7365b8b169f
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -82,9 +82,9 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next v5 1/6] bpf: Add syscall common attrs support for link_create
-Date: Mon, 26 Oct 2026 23:49:42 +0800
-Message-ID: <20261026154948.99408-2-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v5 2/6] bpf: Add syscall common attrs support for xdp link_create
+Date: Mon, 26 Oct 2026 23:49:43 +0800
+Message-ID: <20261026154948.99408-3-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026154948.99408-1-leon.hwang@linux.dev>
 References: <20261026154948.99408-1-leon.hwang@linux.dev>
@@ -99,100 +99,110 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Similar to the syscall common attrs support for map_create [1], add the
-syscall common attrs support for link_create.
+With the syscall common attrs support for link_create, add syscall common
+attrs support for xdp link_create in order to report the invalid target
+ifindex error and the underlying driver's error.
 
-Create and finalize the internal verifier log instance.
+Instead of passing bpf log to bpf_xdp_link_attach(), pass an extack to
+receive the underlying driver's error message. If pass bpf log to
+bpf_xdp_link_attach(), it will introduce bpf_verifier.h dependency for
+net/core/dev.c, which is not acceptable for maintainability.
 
-Then, report the error messages for invalid prog fd, invalid attach type,
-and invalid prog type.
-
-Links:
-[1] https://lore.kernel.org/bpf/20260514004634.3DA09C19425@smtp.kernel.org/
-
-Link: https://lore.kernel.org/bpf/20260514004634.3DA09C19425@smtp.kernel.org/
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/syscall.c | 35 ++++++++++++++++++++++++++++-------
- 1 file changed, 28 insertions(+), 7 deletions(-)
+ include/linux/netdevice.h | 3 ++-
+ kernel/bpf/syscall.c      | 6 +++++-
+ net/core/dev.c            | 9 +++++----
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index c0ae442c4344..6f7fec24ca5f 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -4440,7 +4440,8 @@ struct sk_buff *validate_xmit_skb_list(struct sk_buff *skb, struct net_device *d
+ struct sk_buff *dev_hard_start_xmit(struct sk_buff *skb, struct net_device *dev,
+ 				    struct netdev_queue *txq, int *ret);
+ 
+-int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
++int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog,
++			struct netlink_ext_ack *extack);
+ u8 dev_xdp_prog_count(struct net_device *dev);
+ int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf);
+ int dev_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf);
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 90bc7230afa8..db870e795d04 100644
+index db870e795d04..ca72b35cdcc9 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -5862,8 +5862,11 @@ static int bpf_map_do_batch(const union bpf_attr *attr,
- }
- 
- #define BPF_LINK_CREATE_LAST_FIELD link_create.uprobe_multi.path_fd
--static int link_create(union bpf_attr *attr, bpfptr_t uattr)
-+static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
-+		       bpfptr_t uattr_common, u32 size_common)
+@@ -5865,6 +5865,7 @@ static int bpf_map_do_batch(const union bpf_attr *attr,
+ static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
+ 		       bpfptr_t uattr_common, u32 size_common)
  {
-+	struct bpf_verifier_log *log;
-+	struct bpf_log_attr attr_log;
++	struct netlink_ext_ack extack = {};
+ 	struct bpf_verifier_log *log;
+ 	struct bpf_log_attr attr_log;
  	struct bpf_prog *prog;
- 	int ret;
- 
-@@ -5873,14 +5876,24 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- 	if (attr->link_create.attach_type == BPF_STRUCT_OPS)
- 		return bpf_struct_ops_link_create(attr);
- 
-+	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, size_common);
-+	if (IS_ERR(log))
-+		return PTR_ERR(log);
-+
- 	prog = bpf_prog_get(attr->link_create.prog_fd);
--	if (IS_ERR(prog))
--		return PTR_ERR(prog);
-+	if (IS_ERR(prog)) {
-+		bpf_log(log, "Invalid prog_fd.\n");
-+		ret = PTR_ERR(prog);
-+		prog = NULL;
-+		goto out;
-+	}
- 
- 	ret = bpf_prog_attach_check_attach_type(prog,
- 						attr->link_create.attach_type);
--	if (ret)
-+	if (ret) {
-+		bpf_log(log, "Invalid attach_type.\n");
- 		goto out;
-+	}
- 
- 	switch (prog->type) {
- 	case BPF_PROG_TYPE_CGROUP_SKB:
-@@ -5959,12 +5972,20 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- 			ret = bpf_uprobe_multi_link_attach(attr, prog);
+@@ -5944,7 +5945,7 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_a
  		break;
- 	default:
-+		bpf_log(log, "Invalid prog type.\n");
- 		ret = -EINVAL;
+ #ifdef CONFIG_NET
+ 	case BPF_PROG_TYPE_XDP:
+-		ret = bpf_xdp_link_attach(attr, prog);
++		ret = bpf_xdp_link_attach(attr, prog, &extack);
+ 		break;
+ 	case BPF_PROG_TYPE_SCHED_CLS:
+ 		if (attr->link_create.attach_type == BPF_TCX_INGRESS ||
+@@ -5980,6 +5981,9 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_a
+ 	if (ret < 0) {
+ 		int err;
+ 
++		if (extack._msg)
++			bpf_log(log, "%s\n", extack._msg);
++
+ 		err = bpf_log_attr_finalize(&attr_log, log);
+ 		ret = err ? err : ret;
+ 		if (prog)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 1a09e7869118..4aa55259d5eb 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -10882,11 +10882,11 @@ static const struct bpf_link_ops bpf_xdp_link_lops = {
+ 	.update_prog = bpf_xdp_link_update,
+ };
+ 
+-int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
++int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog,
++			struct netlink_ext_ack *extack)
+ {
+ 	struct net *net = current->nsproxy->net_ns;
+ 	struct bpf_link_primer link_primer;
+-	struct netlink_ext_ack extack = {};
+ 	struct bpf_xdp_link *link;
+ 	struct net_device *dev;
+ 	int err, fd;
+@@ -10895,6 +10895,7 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 	dev = dev_get_by_index(net, attr->link_create.target_ifindex);
+ 	if (!dev) {
+ 		rtnl_unlock();
++		NL_SET_ERR_MSG(extack, "Invalid target_ifindex.");
+ 		return -EINVAL;
  	}
  
- out:
--	if (ret < 0)
--		bpf_prog_put(prog);
-+	if (ret < 0) {
-+		int err;
-+
-+		err = bpf_log_attr_finalize(&attr_log, log);
-+		ret = err ? err : ret;
-+		if (prog)
-+			bpf_prog_put(prog);
-+	}
-+	kfree(log);
- 	return ret;
- }
+@@ -10916,14 +10917,14 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 	}
  
-@@ -6536,7 +6557,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
- 		err = bpf_map_do_batch(&attr, uattr.user, BPF_MAP_DELETE_BATCH);
- 		break;
- 	case BPF_LINK_CREATE:
--		err = link_create(&attr, uattr);
-+		err = link_create(&attr, uattr, &attr_common, uattr_common, size_common);
- 		break;
- 	case BPF_LINK_UPDATE:
- 		err = link_update(&attr);
+ 	netdev_lock_ops(dev);
+-	err = dev_xdp_attach_link(dev, &extack, link);
++	err = dev_xdp_attach_link(dev, extack, link);
+ 	netdev_unlock_ops(dev);
+ 	rtnl_unlock();
+ 
+ 	if (err) {
+ 		link->dev = NULL;
+ 		bpf_link_cleanup(&link_primer);
+-		trace_bpf_xdp_link_attach_failed(extack._msg);
++		trace_bpf_xdp_link_attach_failed(extack->_msg);
+ 		goto out_put_dev;
+ 	}
+ 
 -- 
 2.55.0
 
