@@ -1,85 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.101
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793026929;
-	b=ozJCk8Rg64iQCSHO+JFo6urUNs5I6PoNHR+s0ys/xarmAkNydTNU8WY85YEpPwo5y82d
-	 PeZenJUrbWccwL73ZVemf8FM5tnRgRK5UW9XF9hJKDOloQb17gvxmB/b+p9cY67LwfdBI
-	 xbBH2iPcyYWrHryGwVgSqi/7Y1koe16i1SLxV5ouHe5e/0FBvsx6HQBsYZkTqJEzj2vyr
-	 jHgflKyIJ/V3P0WZ70PzA0+Ly71wU9KnCf3ZMAdnKUos2C1Ohg0wNluQeiIuwq/X949kf
-	 89DDPJTZ0DWAFwoDz8FeSuCMnnqROaJOj/VUDaUA6ZZh3rISTdpZD6t5+bcmXSiWVYQ==
+	t=1793027224;
+	b=U6y6PnzQfsyVwYJIheMyrENJm/m5p/yybl88GmVt+Bl7N0pUXpvrRvovIFhfjN8EZCFK
+	 52yAHrQUSuckixrX15wn6IVpbCdQPtY4HQVphSxHPCoMS+/leKznvGAX9UIRfVUm7NZm0
+	 12ufcPEWT6WB96te30YvwIoXopILGX/J07f/rR7cnsQW7h6V4pcPGUB8gEQAUCmgSAWB1
+	 Y/3xna+DG06UrBIeO+EADSTIV9fTvYqogDoX4yM9DcklznPgZuy2nQTXZFOiivND9p+eD
+	 olDKFPGwmGC5n7Ivb7A8FQ33SWQWSQYOgjAD/6PeIKkhJ0Nidl2Imfdj18wtv1i+WsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793026929;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
-	bh=m9xXitEiI+hi1F9clvRlUMjS8JnuPFDTdYXDE0kyjzc=;
-	b=KM04mACNdHYQJbt7WIvaJY9I9A3ffDzkcuDcdHpb0tavuVCML6B0RXPTLdewiPBMMx5D
-	 FHefHIA7lsglTfrMAl64uPGuNvpUVlf2mJZGVNAhQCB2yG1CAo5fFrqiFBRfK4eZlRldH
-	 sVBFg2BjGmKkzuzC9opH6WQTbirNO+nU/ZHWCFeProPy8FXX7o11/5yhjOdmIw2/sZMdg
-	 OtkczIXxaCCGuibp7ubHS+C36LDIVpGPUA/kV+YuZ96OXmG46GBg7Pcao3vYKdctO+ytE
-	 4nkCyuxaWOE02zwfZHZiEep5EahxrR/L0xtkqGHJF1EaGcJxMbOJfxPHDKjM61Mpa+A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793027224;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=J0h2FhD1/ZqD4NmuBs6+MD7h5IX24/kXFYvf/GTy2DY=;
+	b=e0DRo/TPHrnXjJm+ijPrcsVPQfEumfMTq4CnRu6lopdrifhX5qqEydDlxqJ8RAZhfEEi
+	 g8xFrsPEVZUtY3ztvCAwnchvGDGaRx1isIvCSjMhttKgN4KwxwssdsR5K8Ig6kpSkmGEd
+	 cnqYx5x10lzMTC59LEj7Qb5n9Snihn2Sj/2AOeWt/HF8voECrQ5qpXXZJE55tMnnak4zT
+	 y6nxiNrUsmEt8raPrVzy8gVYZizRkPJlIn7kqanAnuj/g7WdFVOKlhEwjUBu8C/YyPj4t
+	 2fMX1yzCoDF1uvzeCXlsuQYZYtkY/26KklBwX/Yyyc6fpzA36qcvRnvp0j6+499jCtw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Fq8fBUGG;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 767E1606A31D;
-	Mon, 26 Oct 2026 15:02:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 767E1606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=U1jWtkhE;
+	arc=none smtp.remote-ip=91.218.175.101
+Received: from mta0.migadu.com (out-101.mta0.migadu.com [91.218.175.101])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F35F606A31F
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:07:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F35F606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Fq8fBUGG
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEA1B1655;
-	Mon, 26 Oct 2026 08:02:03 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2EA793F7B4;
-	Mon, 26 Oct 2026 08:02:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793026926; bh=v+zgyK0QwsGg1V453RC6kjK16TjZSW8MMUUh5EUtImA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Fq8fBUGGhyKB1XXODIVt6BLwqv4o1xkXZa7X2pGzhE3cWxE1Dx6V2Agz2JruU6v8B
-	 e6+kt1FW/KX9OCoA7zQKe+M/qRq4dDfLlyRJhVUpUX6qmLxdWvCOV5AohG8CCGKOyh
-	 lOSGCTkE5jrlgqOKG5he5sUj7qM29vi1N67m9FTc=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Tian Zheng <zhengtian10@huawei.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	Oliver Upton <oupton@kernel.org>,
-	maz@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	corbet@lwn.net,
-	pbonzini@redhat.com,
-	yuzenghui@huawei.com,
-	wangzhou1@hisilicon.com,
-	yangjinqian1@huawei.com,
-	caijian11@h-partners.com,
-	liuyonglong@huawei.com,
-	tangchengchang@huawei.com,
-	yezhenyu2@huawei.com,
-	yubihong@huawei.com,
-	linuxarm@huawei.com,
-	joey.gouly@arm.com,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	fuad.tabba@linux.dev,
-	mark.rutland@arm.com,
-	seanjc@google.com,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 01/15] KVM: arm64: pgtables: Change write bit from S2AP_W to DBM
-Date: Mon, 26 Oct 2026 15:02:00 +0000
-Message-ID: <at9raEVrsbb7rj6n@LeoBrasDK>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <8ca88576-651a-4b7f-91ff-2cb2359aa79e@huawei.com>
-References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-2-zhengtian10@huawei.com> <arxW4PUY3qqRkogl@kernel.org> <8ca88576-651a-4b7f-91ff-2cb2359aa79e@huawei.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=U1jWtkhE
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=kiILAlyer4KDpB0b5u3nzcUamLQxdEs4r06HO3T5veo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793027221; v=1; x=1793632021;
+ b=U1jWtkhEvPVicrPfdsHIpVLOXo72c7aLMno8krFfUvbgKnzQsQpIlLhKe3tWUCA4k/pcRgwN
+ qErXJJ4YbcFpURTDKybz1aMWxpjWl0W3BHrLy0z/i5nPS7cZc4kBHMa7M0k/VJ3qs7NRUf3T0cZ
+ 7lu0GyCuVUrxV99CeJ12NyK8=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 873537cec047169a;
+	Mon, 26 Oct 2026 15:07:00 +0000
+X-Mizu-Trace-ID: 873537cec047169a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f971dbdc-cc00-42fc-8989-5e6460f88c22@linux.dev>
+Date: Mon, 26 Oct 2026 23:06:51 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,56 +58,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 2/6] bpf: Add syscall common attrs support for
+ xdp link_create
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
+ Hangbin Liu <liuhangbin@gmail.com>, Martin Karsten <mkarsten@uwaterloo.ca>,
+ Masashi Honma <masashi.honma@gmail.com>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261024153608.58569-1-leon.hwang@linux.dev>
+ <20261024153608.58569-3-leon.hwang@linux.dev>
+ <DMDIVEW7P9QN.1TB58XDPD7V3A@gmail.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <DMDIVEW7P9QN.1TB58XDPD7V3A@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 30, 2026 at 10:44:26AM +0800, Tian Zheng wrote:
-> On 9/30/2026 8:25 AM, Oliver Upton wrote:
-> > Hmm... I'd actually like to see this structured where the "write" bit
-> > could either be S2AP_W or DBM depending on if the system supports
-> > FEAT_HAFDBS. Look at how HVHE is handled for selecting the right AP
-> > encoding for the hyp stage-1 page tables.
-> > 
+On 2026/10/25 09:19, Alexei Starovoitov wrote:
+> On Sat, Oct 24, 2026 at 08:36 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>> Instead of passing bpf log or extack to bpf_xdp_link_attach(), pass an
+>> errmsg pointer to receive the kstrdup() error msg, because
 > 
-> Hi Oliver,
+> [...]
 > 
-> Thanks for the suggestion. I missed the case where FEAT_HAFDBS is not
-> supported. Systems without the feature should keep the original
-> encoding, with S2AP[1] as the write permission bit. I'll follow the HVHE
-> pattern to select between the two encodings in the next version.
+>> 2) passing extack will access underlying driver string out of dev_put()
+>>    guard, which will crash kernel when the device is unloaded
+>>    concurrently.
 > 
-> Thanks!
-> Tian
+> Netlink does exactly that.
+> rtnl_setlink() looks up the dev with __dev_get_by_index(), so no refcnt,
+> do_setlink() -> dev_change_xdp_fd(dev, extack, ...) calls into the same
+> drivers that set the same strings, rtnl is unlocked, and only then
+> netlink_rcv_skb() -> netlink_ack() does strlen(extack->_msg).
+> All extack users work this way. kstrdup() in one of them fixes nothing.
+
+Oops, I was overthinking about it when self-reviewing the patch. Failed
+to verify the describing crash issue just now. I should verify my review
+when self-reviewing.
+
+> 
+> Instead of patches 1 and 2:
 > 
 
-Hi Oliver, Tian,
+Will change like this.
 
-After some digging, I think it would be better if we kept using S2AP[1] as 
-a writable bit, while DBM can be treated as "Can promote a non-writable 
-page to writable if HAFDBS=on". 
+> 
+> I'm think I gave this suggestion earlier. Why did you go with strdup()?
+> 
 
-I know it's not that intuitive, as the Arm ARM even introduced the concept 
-of Writable-clean an Writable-dirty, but I think it will be the best way of 
-referring to what was intended of the bit.
+Sorry for my overthinking. Will verify my review to my patches in the
+future.
 
-I wrote down what I mean by that:
-https://lore.kernel.org/all/20261026144413.441566-1-leo.bras@arm.com/
+Thanks,
+Leon
 
-tl;dr: 
-- DBM + S2AP[1] is set on writable entries (KVM_PGTABLE_PROT_W)
-- Writable detection is made only on S2AP[1], so no changes
-- Wrprotect sets S2AP[1]=0 from the PTE, and also DBM=0 if it's a block
-
-On dirty-tracking:
-- If HAFDBS=0 : no functional change, DBM bit there but unused
-- If HDBSS=1
-  - Pages: writable-clean promoted to writable-dirty on write, HDBSS does 
-    the tracking
-  - Blocks: faults on write, splits in pages, pages get DBM=1. 
-  	(argh, I think we need a PROT_DBM for that) 
-
-Does that make sense?
-
-Thanks!
-Leo
