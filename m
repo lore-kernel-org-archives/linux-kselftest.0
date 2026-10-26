@@ -1,61 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792991126;
-	b=J2tZ3fJwEQRMdqvjhCRLCybIioCLompyps3ECdrGFjnWfyPQ+B5KnHNmSfAhZqFhZEZE
-	 rcsJ9L3R2+tO5OMeXxSroS7EmZH8OiVKwnrhoWokxpX56ZFWzjEeFFd6GPnJRyB+FRpfw
-	 V44T+Spdy1jfcRGCSdmGr+fZYWilY6oEN9XFqg73tcqBuEBuM0mxWmLBE0AlQwhSJFcik
-	 SZHeYRlHVefuVIeny3PH9MnsIZUdZB2tqt9gXTNTPerFeKd4Al8TskcwOM3npxCb3gxFg
-	 TNzmRbni8W1IVfqny7Uto7kqbV3ewSU/Oopk/fX5V/Cb0yHhYQvMR3PuBoYR8vKmpZA==
+	t=1792992458;
+	b=eCdXWmPWNsUp1wNEgFs7ICyGoFz9v0VR7COLf5TgFYwxA4C8I9pXLbMnrLG2F9biMdqR
+	 KUHV1M46Nf+lsuyttj3g1ai1hHMyBrjsbfZTGDWW6jImajj2TzGPhecXYBbBBAUbvEGMq
+	 DizhIW2aVB8scWNyu/QAy65jDbl8ZNCVUP0bIKw3hdsHz6cHDDBW9IhDk21HsxtSMJvlp
+	 DbLAf7k1kUROolNsg5oBtYRSdRITbDWAHHCUpKX8Hw7uD/3a8pWl0mBsYqQ5sixaSamEy
+	 PPE7N3V2hcrIEhseF8xEarSdQTtcZ2qNsJDeJ9IyIhpiLmmnIJAIdDpQW+kV18JqISA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792991126;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=2mJ2Dm6CqrM0byK/8f5SbclEqaonqfPePomOFdNTjzQ=;
-	b=eUOCQ57Sny64IwfcwMebk0VyhF/cJbm1f0SXCZaS5UlHNmo8rO4//viw+iojGODoAgBp
-	 6BnnBOmYlGqeV0XKK6+lacYvchww0vqmDhtjwuC3m894I8pIMKedCdFtHUQ32Te4ZTlBZ
-	 fDAvufJYemRE9otrHHpByAJ3gKmZqP+hGms56ortFX0R1BGh/zKb4d+Ap52si8dMqojru
-	 wwNsa7ZTZWV1MYOCCZiL5+MULdNfy6SgyvD5mak60e032HOSlrvs7pYTSW3gY+ZcENxPH
-	 bIGPXV+YpQ+fYHvXnOGQ9qqF/9ALu96EcEchTyhmwF9rbg7JTOG3iNcloQs882vtaCw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792992458;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=RCGPlQz9/nbP749pKlUHj7iqUI3R/GYuLrhh68VMhX4=;
+	b=nGQg11CpNzw6KgKqL2ABGpTG4GbehG98WGC4+RAS6LtgREEE70erAzIuTzXp8xwfOFxX
+	 VXUo+kuPnjsG7NFzE6HD7ZrU86jLXUppIvPinkK44y+5d+bKPtElD21teSBqbD/DhDadY
+	 tH4QLz1LnvJHEp9mmVNE5Nq8PBviEl4TgNgtrJ2eWWIg6ecEMuYU5rB5ZWx8rcwnAzVjD
+	 kubzYK3fV34celJrRW8+i2OxbIy+Iy5QQrospZPN4XYArm1B/UsWDG5H0fXDz/2j3E+x0
+	 TqI9hsIYAXWyWbkhhX37ZQ5OYZ8LL9X/r2geM+lcDPw8AW4QzV85yA80Ee+4qVRItBw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AsTQ9v3C;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=azji0Yvb;
+	arc=none smtp.remote-ip=74.125.82.51
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89034606A31A;
-	Mon, 26 Oct 2026 05:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9D9606A31D
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 05:27:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C9D9606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AsTQ9v3C
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 441BE1F01825;
-	Mon, 26 Oct 2026 05:05:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792991126;
-	bh=2mJ2Dm6CqrM0byK/8f5SbclEqaonqfPePomOFdNTjzQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=AsTQ9v3CAO5fnoCL7YFentEDArMsIW42dzNouGP+XtbzNzWlIhfUto998NxbjN4F5
-	 qfVWmiH247iDy4axd6Uf9WVWOnYQ1Nj5AUwZhOqGZqewh7E1aIZTlI7uwIMU8CTkB0
-	 WIGXI1zCNZ8wudc4JgvbVqC+aBBjLC1GMBieQo4JMDcSWbUsUiUWGrIXmzWW4+VfIi
-	 zFFT/AjqXFaB3oaKc4x9Ulmjq6eHx6EePSbPXB98npaCtP2Wwy+WfEuxSkOhIIJtYG
-	 pvGZMdDgX3Dx8r6g4lsP/AzJFoK46YQJAvYgrm44JFEfZGN3PsFX20T7WBIPX8GCKW
-	 j9/ckR3c8FsJg==
-Subject:
- Re: [PATCH net 1/2] net: Make PSP skb extension survive packet scrubbing
-From: netdev-bot+sashiko@kernel.org
-To: weiwan@google.com
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- andrew+netdev@lunn.ch, shuah@kernel.org, horms@kernel.org,
- jakub@cloudflare.com, daniel.zahka@gmail.com, willemb@google.com,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Mon, 26 Oct 2026 05:05:24 +0000
-Message-ID: <179299112474.3134.2003199816680362406@kernel.org>
-In-Reply-To: <20261025040523.678027-2-weiwan@google.com>
-References: <20261025040523.678027-2-weiwan@google.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=azji0Yvb
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-156cbe59622so1812970c88.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 22:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792992457; x=1793597257; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RCGPlQz9/nbP749pKlUHj7iqUI3R/GYuLrhh68VMhX4=;
+        b=azji0YvbQpXonPfhYaQOd4vN8DayEMzg6nrWZ+k9qUgnGH+Qty9ZoVl2H1T0DpoB2Y
+         S6PuW3zslfumGLO5cOFGQXqvB6FlhXNk1x3xWJzy9jzfdAYMeGnxpgXkO+CHEFl6ILHf
+         CSe5/3oPDppMSzPeO+hbvs3/kG6jBs3+IA3yc65Vo3LWxwbW6oT0qRXAY3cp/bJesXIh
+         9qjma+u8mCKxWUdvJR4ixY6vkgsuUSn/3KJHzOnsY+TMu7akbq7B+spnmniyndnMOXfs
+         Or0qSgsY25u8uz1rqn7FjFgUDPMKRFbovrmNX3RwS6i4cze+wwfJ7njGnbzAQbv4UYjU
+         UMSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792992457; x=1793597257;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RCGPlQz9/nbP749pKlUHj7iqUI3R/GYuLrhh68VMhX4=;
+        b=rLLCkcv18rUms/+HzIHDY79vJPQ0Gl9xpt5ZGW8YqQJInBPRe045TVoqtlTU5ZfZHW
+         Sp/7UN9XhkSJDpCCCe0ud9rH+/bcierb6LAMUedMESj1p1RBS63I6c84b98JUVhU9rXB
+         0enip4bqP1sxGqLPAQzyQy4IUbmoGVz3panUrGzFxOb7d9tcF6Q4Vv5ZQm8HMSuZQeBm
+         E7dPnProkk4HlIkoKxvPCSUf77PhTFnf93gMPy12idgRmk7P21JcjOdQLq0xZ5q1cclu
+         qD4fuarfG41hIb7W42ZBWVhxolsHR1vI9kwSI+jYuR03ea0OjaMfPhuxQ4bEPY/LJJE+
+         dJNw==
+X-Forwarded-Encrypted: i=1; AKwUvBzAHnWfeDz66H6Aqdcz81xVy6cCuXrzrZ5IpKPB3kPOzXeXKF+epv1m+61qKYwmedSpqkPQC5CC12wVoW6SQ2g=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLwUzCd6EUC647FVKuCsczNq3uix+5ozl1FT1PIYrzQY+L+87uy
+	O5X9cEqWcCkyht9WfYpA35emjc2cAoKggCRFCwEIf417ebEnu0bJdRzt
+X-Gm-Gg: AYBFou0hmhbD2dxpkHrvOk14FGYx6wcdDyHxxCMGVn9FaHR0HzVKN3CHVbnxcO8vB8N
+	tP3vhoiwZLovfziTrjPXcvH2Hl/fqn0z8wtMqZB5/GriOoybFNYFhRZ2MdDW9GF4tDDzxiP3sFr
+	b8Lvy0m29Ou2OmjgihHKlMwQe5MflASLlLYnYWb1+WDSTu8iV9Z9YKTER7GDfUJSqk4d33GBZag
+	wU5wae+s5b13cd40Mja0R74Mfdjcsewnx0zUYjWEg3FKf9cZvjfOV/RGrFCTkVGuWpuTs9WvOA4
+	ZZI67WwzTmYhDpPuvhj5Gd8Gxur/eGbKZM1wJkVQbLHtenmmyfpOoEFh3DfixCqTlGtoR58rQm2
+	Twtr2d8pNluglt9bALc0BGnuXY1rKkITSOmJ3USAFHiyJCUpOk5+/8rDoBF4QolaHezYGcV/gwb
+	VJwBiMEfGPQquMC/ANuTOzUzgAezilgoRm8thW49XCVxN+mB6LDc/8lLbzWzdNSiENUpTgsLIK0
+	QLXKBAyUmbvMGEMSdk/OqOZs+hhqkPqgXN3owIo5nuFlD+iXqpDwmCBae5mbO7zmF+VYwQGf6GA
+	CE9xI0S+E8ofymQyWsJnJ1/fhw==
+X-Received: by 2002:a05:7022:3b8a:b0:166:f097:6f12 with SMTP id a92af1059eb24-19934a9278cmr9164130c88.15.1792992457049;
+        Sun, 25 Oct 2026 22:27:37 -0700 (PDT)
+Received: from localhost.localdomain ([136.25.42.214])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-198a1bfaebfsm21437866c88.15.2026.10.25.22.27.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 22:27:36 -0700 (PDT)
+From: Tim Budding <tim.budding@gmail.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-sctp@vger.kernel.org,
+	lucien.xin@gmail.com,
+	marcelo.leitner@gmail.com,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH net 1/4] sctp: purge abandoned I-DATA fragments by stream and MID, not by TSN
+Date: Sun, 25 Oct 2026 22:27:05 -0700
+Message-Id: <20261026052706.187296-1-tim.budding@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <179293012722.3134.13316596865856977030@kernel.org>
+References: <20261024120627.837568-2-tim.budding@gmail.com> <179293012722.3134.13316596865856977030@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,202 +108,135 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Sun, 25 Oct 2026 12:08:47 +0000, netdev-bot+sashiko@kernel.org wrote:
+> > +		if (event->stream < sid)
+> > +			continue;
+>
+> [Severity: Low]
+> Each call to sctp_intl_reasm_flush_mid() starts at the head of the queue.
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 0
+[...]
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Agreed. Walking each queue once per I-FORWARD-TSN would be a separate
+change. I could send that to net-next.
 
-- [High] In net/core/skbuff.c, skb_ext_scrub() (lines 7446-7461) deletes
-  extensions one at a time with skb_ext_del() and keeps SKB_EXT_PSP…
-- [Medium] Keeping SKB_EXT_PSP across tunnel decap in skb_scrub_packet()
-  (net/core/skbuff.c:6402) means inner IP fragments taken from a PSP-…
+> > -	/* purge the fragmentation queue */
+> > -	sctp_intl_reasm_flushtsn(ulpq, ftsn);
+>
+> [Severity: Medium]
+> With the TSN-based purge removed, what frees an unordered fragment of an
+> abandoned message that arrives after the I-FORWARD-TSN naming that
+> message has been processed?
 
---
+[...]
 
-net: Make PSP skb extension survive packet scrubbing
+> Should the commit message also mention the lost rwnd and receive buffer
+> space? Alternatively, could these fragments be dropped when they arrive,
+> or when the cumulative TSN moves past them?
 
-This patch adds skb_ext_scrub(), which deletes every skb extension except
-SKB_EXT_PSP. It uses the new helper in skb_scrub_packet() in place of
-skb_ext_reset(). The goal is to keep the PSP extension on packets
-redirected into another netns, for example through netkit associated
-with a PSP device.
+Correct, and the commit message is wrong to say such fragments stay
+until the association is freed. An unordered fragment of an abandoned
+message that first arrives after the last I-FORWARD-TSN naming that
+message, with a TSN above the cumulative TSN, can't be reassembled. It
+keeps its rwnd and receive buffer charge until a later unordered skip
+on that stream with the same or a higher MID, a reset, or teardown. At
+the tail of reasm_uo it also stops reneging, as any fragment below the
+cumulative TSN already can.
 
-Link: https://lore.kernel.org/r/20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com
-Closes: https://lore.kernel.org/netdev/DLODSKPY6ON6.1G6SP3CFFLCPJ@gmail.com/
+One late fragment is enough if nothing after it has arrived: the
+receiver then delays its SACK for the I-FORWARD-TSN, the fragment fills
+the gap within that delay, and the sender never names the message
+again. With the last fragment of an abandoned three-fragment message
+arriving in that window, that fragment stays queued (RX_QUEUE 1232). A
+duplicate can't do it, as the TSN map drops the second copy.
 
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 48f6764117243..4269d91cf6078 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
+Before this patch a later I-FORWARD-TSN covering its TSN would have
+freed it, so if another message is abandoned later, this patch keeps
+it longer. Without such a later I-FORWARD-TSN, this patch frees more
+than before: in the same test, the TSN-based purge leaves the
+message's received fragments above the New Cumulative TSN queued
+(RX_QUEUE 2464 without the delay), and this patch frees all but the
+late one.
 
-[ ... ]
+For an ordered message the same late fragment aborts the association
+instead: its MID is below the next expected one, so
+sctp_validate_idata() fails. That happens on net today as well. I
+could look at it separately.
 
-> @@ -6398,7 +6399,7 @@ void skb_scrub_packet(struct sk_buff *skb, bool xnet)
->  	skb->skb_iif = 0;
->  	skb->ignore_df = 0;
->  	skb_dst_drop(skb);
-> -	skb_ext_reset(skb);
-> +	skb_ext_scrub(skb);
+Freeing fragments once the cumulative TSN moves past them doesn't work
+with interleaving: a live unordered message can have fragments below
+the cumulative TSN, and freeing those is the loss this patch fixes.
+Dropping late fragments on arrival needs new per-stream state, the
+highest skipped unordered MID, which must be cleared on resets and must
+not go stale when MIDs wrap. I'd rather do that in a separate patch
+than grow this fix (question at the end). Either way, v2 will spell out
+the cost in the commit message.
 
-[Severity: Medium]
-skb_scrub_packet() also runs on tunnel decap, for example in
-ip_tunnel_rcv() and in vxlan_rcv()->__iptunnel_pull_header(). With this
-change, inner IP fragments taken from a PSP-decrypted tunnel payload now
-carry SKB_EXT_PSP.
+> >  	/* abort only when it's for all data */
+> >  	if (ftsn == sctp_tsnmap_get_max_tsn_seen(&ulpq->asoc->peer.tsn_map))
+> >  		sctp_intl_abort_pd(ulpq, GFP_ATOMIC);
+>
+> [Severity: High]
+> Can this branch still flush the whole ulpq for an ordinary I-FORWARD-TSN?
 
-Before this patch, a PSP extension could only be on whole transport-mode
-packets. Those have no inner IP header, so they can't be fragmented.
+[...]
 
-IP reassembly takes the extensions from the head fragment only:
+> A later patch in this series, "sctp: don't treat an I-FORWARD-TSN as an
+> association reset", seems to address this. It drops the max_tsn_seen
+> check from sctp_report_iftsn() and makes the stream reset paths call
+> si->abort_pd() directly. This patch is tagged for stable on its own.
+> Should that change be folded in here, or should the two be backported
+> together?
 
-net/ipv4/inet_fragment.c:inet_frag_reasm_prepare() {
-    ...
-	skb_morph(skb, head);
-    ...
-}
+Yes. At this commit an I-FORWARD-TSN whose New Cumulative TSN is at or
+above the highest TSN received still takes that branch, and
+sctp_intl_abort_pd() frees every queued fragment, including those of a
+message still being received on another stream: the same loss this
+patch fixes below the leading edge. If that message is ordered and in
+partial delivery, its MID is also skipped, and the association is
+aborted when its next fragment arrives. With this patch alone the
+ordered and unordered tests pass and leading_edge fails. The later
+patch fixes it. v2 adds a leading_edge case without partial delivery,
+which shows the loss directly.
 
-inet_frag_reasm_finish() never compares the extensions of the other
-fragments.
+I kept the two apart because they are different mistakes in
+sctp_report_iftsn(): the TSN-based purge, and treating ftsn ==
+max_tsn_seen as a reset. But they share the Fixes: tag and the
+symptom, so folding them is reasonable too. The later patch needs
+patch 2 and the new pdapi_seq patch (see the reply to 3/4), and
+neither of those needs this one, so folding would mean those two
+first, then this patch and the later one as a single patch (question
+at the end). If they stay separate, this commit message will say in v2
+that the leading-edge case is only fixed by "sctp: don't treat an
+I-FORWARD-TSN as an association reset". All three fixes are Cc: stable
+and apply cleanly, in order, to the v5.10 through v6.18 release tags.
 
-Could a reassembled TCP segment keep a valid PSP extension when only its
-head fragment came through PSP? The remaining fragments could arrive
-unprotected, as plain IP or plain VXLAN with a spoofed inner source.
+> >  			sctp_intl_stream_abort_pd(ulpq, sid, mid, 0x1,
+> >  						  GFP_ATOMIC);
+> >  		}
+> > +		sctp_intl_reasm_flush_mid(&ulpq->reasm_uo, sid, mid);
+>
+> [Severity: Medium]
+> This is a pre-existing issue, not one introduced by this patch. Does the
+> new flush leave unordered partial delivery stuck when the skipped MID is
+> the message currently being partially delivered?
 
-__psp_sk_rx_policy_check() only compares spi, generation, version and
-dev_id through psp_pse_matches_pas(). It looks like such a segment would
-be accepted by the PSP socket.
+Yes, and that is the next patch in this series, "sctp: abort unordered
+partial delivery when its message is skipped". At this commit no abort
+notification is sent and the next unordered message on the stream is
+delivered as the rest of the skipped one. The uo_pd test fails at this
+commit and passes from the next patch on.
 
-This seems hard to exploit:
+Xin, Marcelo, two questions for v2:
 
-  - The PSP peer would have to send inner fragments, and inner TCP
-    usually sets DF.
-  - The attacker would have to guess the IP ID.
-  - Mismatched ip_summed forces CHECKSUM_NONE, so the attacker's
-    fragments must reproduce the checksum of encrypted, unknown data.
+1. Fold "sctp: don't treat an I-FORWARD-TSN as an association reset"
+   into this patch, or keep it separate?
+2. Should dropping late unordered fragments be part of this series, or
+   a follow-up to net?
 
-The commit message only justifies keeping the PSP extension for
-cross-netns forwarding. Was keeping it across tunnel decapsulation also
-intended?
+Unless you prefer otherwise, v2 keeps them separate and leaves the drop
+to a follow-up.
 
->  	nf_reset_ct(skb);
->  	nf_reset_trace(skb);
->  
-> @@ -7441,6 +7442,23 @@ void __skb_ext_put(struct skb_ext *ext)
->  	kmem_cache_free(skbuff_ext_cache, ext);
->  }
->  EXPORT_SYMBOL(__skb_ext_put);
-> +
-> +void skb_ext_scrub(struct sk_buff *skb)
-> +{
-> +	unsigned int id;
-> +
-> +	if (likely(!skb->active_extensions))
-> +		return;
-> +
-> +	for (id = 0; id < SKB_EXT_NUM; id++) {
-> +#if IS_ENABLED(CONFIG_INET_PSP)
-> +		if (id == SKB_EXT_PSP)
-> +			continue;
-> +#endif
-> +		skb_ext_del(skb, id);
-> +	}
-
-[Severity: High]
-Can this loop leave a shared extension block half-deleted, and later
-cause an xfrm_state refcount underflow?
-
-Take skb A with ext block E, where SKB_EXT_PSP and SKB_EXT_SEC_PATH are
-both active and E is shared with clone B (refcnt 2). When the loop
-reaches SKB_EXT_SEC_PATH, __skb_ext_del() does:
-
-	skb->active_extensions &= ~(1 << id);
-	if (skb->active_extensions == 0) {
-		...
-	}
-
-	if (refcount_read(&ext->refcnt) > 1)
-		return;
-
-PSP is still active, so this returns early. E keeps offset[SEC_PATH] set,
-and sp->len still holds the N xfrm_state references.
-
-Now suppose skb_ext_add() runs on A while B is still alive. Callers that
-can do this include nf_bridge_alloc(), tc_skb_ext_alloc() and MPTCP.
-skb_ext_maybe_cow() copies the whole block, stale sec_path included, but
-only takes references for active ids:
-
-	memcpy(new, old, old->chunks * SKB_EXT_ALIGN_VALUE);
-	refcount_set(&new->refcnt, 1);
-
-#ifdef CONFIG_XFRM
-	if (old_active & (1 << SKB_EXT_SEC_PATH)) {
-		...
-			xfrm_state_hold(sp->xvec[i]);
-	}
-
-__skb_ext_put() releases based on offsets, not active bits:
-
-	if (__skb_ext_exist(ext, SKB_EXT_SEC_PATH))
-		skb_ext_put_sp(skb_ext_get_ptr(ext, SKB_EXT_SEC_PATH));
-
-Freeing A puts the N states through the copy. Freeing B puts the same N
-states again through E.
-
-Wouldn't that underflow the xfrm_state refcount and allow a
-use-after-free of the xfrm_state?
-
-If B is freed first instead, a later secpath_set() on A can leak the
-references. This happens when the inner packet is ESP again. skb_ext_add()
-reuses the stale slot through this path:
-
-		if (__skb_ext_exist(new, id))
-			goto set_active;
-
-secpath_set() then sees tmp == NULL and sets sp->len = 0. That loses the
-N references still stored in xvec[].
-
-One possible path:
-
-  - A PSP packet whose nexthdr is ESP gets a sec_path from host xfrm.
-  - After ESP decap, an AF_PACKET tap clones it in packet_rcv(), so the
-    ext block is now shared.
-  - The inner packet is VXLAN, so
-    vxlan_rcv()->__iptunnel_pull_header()->skb_scrub_packet() runs.
-  - The VXLAN device is a bridge port with br_netfilter, so
-    nf_bridge_alloc() triggers the COW.
-
-The commit message says:
-
-    Scrubbing is safe when the extension slab is shared with clones:
-    deleting an extension only clears the per-skb active_extensions bit,
-    and the shared slab payload is released lazily by __skb_ext_put()
-    once the last reference goes away.
-
-Does that still hold once the scrubbed skb is COWed or re-adds the slot?
-The previous skb_ext_reset() dropped the whole block and never left one
-in this state.
-
-The same COW/put asymmetry already exists for secpath_reset() callers
-such as l2tp_eth_dev_recv() and xfrmi_scrub_packet(). This patch makes it
-reachable from every tunnel encap/decap and netns forward.
-
-Instead of looping over skb_ext_del(), could this call skb_ext_reset()
-when PSP is not active? When PSP is active, it could attach a fresh
-extension that holds only the PSP payload. Another option might be for
-skb_ext_maybe_cow() to clear the offsets of inactive ids in the copy.
-
-> +}
-> +EXPORT_SYMBOL(skb_ext_scrub);
->  #endif /* CONFIG_SKB_EXTENSIONS */
->  
->  static void kfree_skb_napi_cache(struct sk_buff *skb)
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261025040523.678027-1-weiwan%40google.com
+pw-bot: cr
