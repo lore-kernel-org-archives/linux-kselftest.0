@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792997072;
-	b=Ox2DSiaDSGgQ9V0BAqASp5iYJjPP37pBmz0zMkSBq9tgQXrSCsB1Y/pXq4CYcHVuxC3/
-	 BufBVDu6gg26cdGzBNwinBg0356LaZtw+mlwkkm1YzuXcSyLX5K1q/ysHIUEmUP3Tq5qN
-	 nuEV6BS8sA7er2dBbdDI1MxoSqJxpwgg3Ap/anKA3K5oF9b6niK40lfJnjsUu5urxHRKZ
-	 YQoUb2/GVWdRjWPOUqmkup3z5crGlAyLUgTOWn/KJtcGtgog1n2I6NJGv419KtzZieoGS
-	 AgDRwpNNZ8qgjqP1JetnIVk5WbvfCv0tZuUzycTOHwp9ebDpWDlUgGEUb1gwee7RGwg==
+	t=1792997074;
+	b=E8opvEg6Gr3b5rSbYZt59xo/AQVR+dhMTsXBDnwwaCBCDDvFSCU6cn0rUf3zFvythrsF
+	 eFFBf8JVm4e41cCE9GP1kCrqQx/TVMHtDdftKxGOsPKHXGEQzVL9dsJcE8E4l61GIXLff
+	 Frl8P7KjQNHaQYxmE6DsbJHW0IFKxKc0pG84t/sDap3H6jFZEDbnlCMVXaVIyF87l/Sd6
+	 RAYLshorX8jnHN2FBRdgee1NNhLLqHkRI7zKM7bhvrHTNot2P/nSuT0ORaBdUti5Nf4/m
+	 HqR3PSSUgdtTmp/c9DH01oPhSEEj0iJ0xdxp95XmLdOy6Qx+0Xyd22ouBLOdf6L/AIA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792997072;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792997074;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=BkMA6KiIZX+x6Fw055agcWqeTm5DVghF6ToY3p976RY=;
-	b=UhpVhLWXzmqxtu+1hNKDqBMsCiXU/5MjwnYJQwuzmseS3yHHn2aDxRpzvfJbncN1AsWM
-	 iIpUNMRrfloQmXyiBDIec3c05Psaka4jk4ugaYb3vbZE1igmBgokSOAqnz5B4mNt2VgXo
-	 ByYLW6DidhZ0RiLMM3mYZEb1cBLjM7kh4VvKplYEaISuJQqurxzY0QegdSN5DInkCQiT/
-	 hKMJtHpUDuxZdvejq5pVfBgxA9BmpMQqbCDc713jVDJyGMiqnbmA/WXmw1SZ3jV41zBgE
-	 g9ddQyYP3oFr+2Pn6+ko4UE8ta4o3C9mdwkaIRf1RWonjdZ9kyqFkQbyVpRJZWa71/w==
+	bh=58apWv8SnWxURioEmc2rCRpcmZoJ2LiMw8AwcvEDIus=;
+	b=eCD3BNEtCQS93jRlsC2O12sxg1Y4VxitfYwHY/rvBMzyeUlWClpaTJXwD8UuNpeWWC7y
+	 DYD10BS0YPb6LfF/FhFuYtv+rqCD+M3jLFQe0yKgAPtYDRbglbXFai31KfIDd/NP5ksCJ
+	 TBZhyEwcf9z3UgHr/fB5tW9TAZ8uT+Uu+4mmEZ1AmJRzwMNe37edClV+ChUSKjQnx3nbT
+	 Yhz5xaesM/VBZTSheQWoV/SswqtGgb7wizp1QfVKj0p0KsO1fB5em7533H/qca6gINGdx
+	 tN0pTnJBPC8D9FuqneBF+82WqS6w4bT+MIxisD0gfmWwI+CIxNQUszbUZ8MZJDsofPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--gongtao.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=L6vHx7Hd;
-	arc=none smtp.remote-ip=209.85.215.197
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=QxkHCvhy;
+	arc=none smtp.remote-ip=209.85.215.200
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDC6606A330
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:44:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FDC6606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813DF606A33B
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:44:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 813DF606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gongtao.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=L6vHx7Hd
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cd5ca3840c5so3146931a12.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 23:44:32 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=QxkHCvhy
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cd68bf391e1so1664126a12.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 23:44:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792997072; x=1793601872; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1792997073; x=1793601873; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=BkMA6KiIZX+x6Fw055agcWqeTm5DVghF6ToY3p976RY=;
-        b=L6vHx7HdclpTy+278zPV8cd/WtS/GAWbTpArL9bsAKKGtfx7lDOZyxlU5x27346+O+
-         1wiSpDhhwlaxxn35+FyHgYrPS5FGIaIDq8PYv7Ha7K8tCajyLyR1V+ZSUYlqKBgVgxrl
-         4J415R8kpbqc0F+Kn48OHcZHxSzMRRfhRNUwx7Gm9/bkIQAAAAQhu6s5/Q7ym5ZUv3pT
-         FNQy4Vu36JpNkeP2V+A7N2qXc7BeoFEf/HqS5zSY2BAdsRzmEbWZE+bT+45jJUJKnK/J
-         Da0F4KX1dwlGNKqc4T+ZiSGvAFA/9YeY3rLySv9yF4Tv3WZKe1rxbWtd6wrx654mbRyU
-         NYkA==
+        bh=58apWv8SnWxURioEmc2rCRpcmZoJ2LiMw8AwcvEDIus=;
+        b=QxkHCvhyRPZ1v2Nn37FOh7pQH8Q0M+yCM4T/Hpe0eMJINkEwtSw72tlqAX9t7P/TLY
+         A9iXBHu/MCsqe7qnl/xAPEWmAqr04wpInQ4qI2RoeHyBVtYwifXd2JDr2HCFt3Qj2AZJ
+         Uq4qps40UQkiRFQGZkDqsNVw4nUpPDJgbx+JHWcyIjiWHL5VYSWeImn2OE9W0HlekZLZ
+         QKfObwBL2P73zCGjwqzj8jZmqKj1/dtSH78d4GsLnrDwewnCcxV3nBbTLiMpbVbwowgq
+         uLH/1+TV909gtWrFHWKJ1yk4C7vktfYYf4tPovY30B61pbvCvnpGfMEjtNY7g3oFXVI2
+         IL7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792997072; x=1793601872;
+        d=1e100.net; s=20260707; t=1792997073; x=1793601873;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BkMA6KiIZX+x6Fw055agcWqeTm5DVghF6ToY3p976RY=;
-        b=CEwHEB/+C8IiJuVsGgdvX84/Zpb1npUZJLNG9r8rVc+0IKagTAdufPB7kt1VbjacT6
-         CRu6pap5mwmOOOkebdg4/FhzbdJeskXyCA3nAemikL7sgXZBMMZ2KRX4l4P8XfVp98de
-         Beq2z06uhaJRIhpIZ5ahjucgOMg1HeI2qwh5f+PGlXuP6SUvLsoghGj+joQebOVUu3TM
-         0IRIjhZJLOR5vamX6yQmn0pG+9mE5K3ivBUZvodH/G7S14IV1vZ6C+0fkgFNf2x/r+Cd
-         FHfg2JoDLUjGtQE4q2JaAVK0cS9DgPFNVKOXZ1W9MKcRH07swhF0OAtvrBqhJ3IpgIMh
-         4R3Q==
-X-Forwarded-Encrypted: i=1; AKwUvByIiqsXmGYCyAa/CZ9YBlhHpLVRo97hqfUy4tsRVDn3XVTT9sI/+t7JAxmo0Hviht2CYSPQlIwux862zTXj1xA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJQbWvCMR6qczKojSfVUG3BArlkCppn/WIZ4dNp2uQ+dslLrhHz
-	+YLIoiY1+oSDxrWD9wXkddxIkOyNNGWzfp10zcuz0RaSRSzzI0Pn7SDWQmB5YiGi7fS6SNUrTFn
-	BQy3XFwuD0Q==
-X-Received: from pgbd15-n1.prod.google.com ([2002:a05:6a02:64cf:10b0:cd8:bc38:3b48])
- (user=gongtao job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:7905:b0:3e2:2b76:bf40
- with SMTP id adf61e73a8af0-3e7bfa8d2f6mr4070475637.26.1792997071679; Sun, 25
- Oct 2026 23:44:31 -0700 (PDT)
-Date: Sun, 25 Oct 2026 23:44:23 -0700
+        bh=58apWv8SnWxURioEmc2rCRpcmZoJ2LiMw8AwcvEDIus=;
+        b=cHHNI4+BlvuxdavRmZjAP+/YlzLiurdfGOVXtQOZCzGozmwz9U70Q3Ww/glXoRCbD+
+         mYqGg7LxHt9aEbyazCALyNsJpUo+9Lu0BfMP9F0bOW6C/kW2FVYQqc/E5P5bbbFEG94g
+         al/F7+vyGrQml3JXRHPHD302q5B1AGTMU0nNkuX8yZ9VK1F6gMgGVk7cvBHnVjV+TlpM
+         RFBk+KZXBsbkUKlrmeFGTxsP88qN63Q7vTicPfx4/2AM3o97+wORWXA74hD0U3f0g7bX
+         OrGhoVykoI9+whbPshE2Xjz++KjF5yH1J0TKAdBHK+Qy2So+HDpFadiWCCtnCH6Jaz/l
+         rLlg==
+X-Forwarded-Encrypted: i=1; AKwUvBwQUsfq5h42I80IX/8s8nV0T1VABCX0QB9LFRWBtI8SkqCOpsC9tiSU6Z2RuM+3Daicwgbv6oOvnYM0S24vZ1w=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ5xhTW6TMtfx6iT9FgmWPT9evegLSIpglC7aSZaD6sCCQE8Zpg
+	sdcJ81n8xzZvRUgUXX8yF0APbhL+w3QnO9aUtFJjQITm8ecgobnv3n7hfJRgifEsalNe4Yt829H
+	vVKh0Gn5PYQ==
+X-Received: from pjbme8.prod.google.com ([2002:a17:90b:17c8:b0:3ab:8c4:a67d])
+ (user=gongtao job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4985:b0:3ac:aa8d:19eb
+ with SMTP id 98e67ed59e1d1-3adea0acafemr4460561a91.3.1792997072639; Sun, 25
+ Oct 2026 23:44:32 -0700 (PDT)
+Date: Sun, 25 Oct 2026 23:44:24 -0700
 In-Reply-To: <20261026064424.3003536-1-gongtao@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,8 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261026064424.3003536-1-gongtao@google.com>
 X-Mailer: git-send-email 2.56.0.257.gf7497c7d27-goog
-Message-ID: <20261026064424.3003536-5-gongtao@google.com>
-Subject: [RFC PATCH v3 4/5] KVM: selftests: Add tests for KVM_LINK_GUEST_MEMFD ioctl
+Message-ID: <20261026064424.3003536-6-gongtao@google.com>
+Subject: [RFC PATCH v3 5/5] KVM: selftests: Test transferring private memory
+ to another VM
 From: Tao Gong <gongtao@google.com>
 To: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
 	Sean Christopherson <seanjc@google.com>
@@ -98,12 +99,13 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Test that
+Add private_mem_migrate_tests to verify that private memory backed by
+guest_memfd can be linked into another VM of the same type
+(KVM_X86_SW_PROTECTED_VM) on the same host via KVM_LINK_GUEST_MEMFD,
+and that data written by the source VM is visible to the destination VM.
 
-+ Invalid inputs should be rejected with EINVAL
-+ Successful inputs return a new (destination) fd
-+ Destination and source fds have the same inode number
-+ No crash on program exit
+Also verify that linking a guest_memfd into a VM of a different VM type
+is rejected with EINVAL.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 Co-developed-by: Ryan Afranji <afranji@google.com>
@@ -111,121 +113,147 @@ Signed-off-by: Ryan Afranji <afranji@google.com>
 Co-developed-by: Tao Gong <gongtao@google.com>
 Signed-off-by: Tao Gong <gongtao@google.com>
 ---
- .../testing/selftests/kvm/guest_memfd_test.c  | 64 +++++++++++++++++++
- .../testing/selftests/kvm/include/kvm_util.h  | 18 ++++++
- 2 files changed, 82 insertions(+)
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../kvm/x86/private_mem_migrate_tests.c       | 118 ++++++++++++++++++
+ 2 files changed, 119 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86/private_mem_migrate_tests.c
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 2233d871a38f4..ccde4d735c77c 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -418,6 +418,68 @@ static void test_guest_memfd_flags(struct kvm_vm *vm)
- 	}
- }
- 
-+static void test_link(struct kvm_vm *vm, int src_fd, size_t total_size)
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 239bc61ea384f..cffa0d165a945 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -108,6 +108,7 @@ TEST_GEN_PROGS_x86 += x86/pmu_counters_test
+ TEST_GEN_PROGS_x86 += x86/pmu_event_filter_test
+ TEST_GEN_PROGS_x86 += x86/private_mem_conversions_test
+ TEST_GEN_PROGS_x86 += x86/private_mem_kvm_exits_test
++TEST_GEN_PROGS_x86 += x86/private_mem_migrate_tests
+ TEST_GEN_PROGS_x86 += x86/save_restore_pf_stress_test
+ TEST_GEN_PROGS_x86 += x86/set_boot_cpu_id
+ TEST_GEN_PROGS_x86 += x86/set_sregs_test
+diff --git a/tools/testing/selftests/kvm/x86/private_mem_migrate_tests.c b/tools/testing/selftests/kvm/x86/private_mem_migrate_tests.c
+new file mode 100644
+index 0000000000000..17bebf850b4c4
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86/private_mem_migrate_tests.c
+@@ -0,0 +1,118 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "kvm_util.h"
++#include "test_util.h"
++#include "ucall_common.h"
++#include <linux/kvm.h>
++#include <linux/sizes.h>
++
++#define TRANSFER_PRIVATE_MEM_TEST_SLOT 10
++#define TRANSFER_PRIVATE_MEM_GPA ((uint64_t)(1ull << 32))
++#define TRANSFER_PRIVATE_MEM_GVA TRANSFER_PRIVATE_MEM_GPA
++#define TRANSFER_PRIVATE_MEM_VALUE 0xdeadbeef
++
++static const struct vm_shape protected_shape = {
++	.mode = VM_MODE_DEFAULT,
++	.type = KVM_X86_SW_PROTECTED_VM,
++};
++
++static void transfer_private_mem_guest_code_src(void)
 +{
-+	struct kvm_link_guest_memfd params = {};
-+	struct stat src_stat, dst_stat;
-+	struct kvm_vm *dst_vm;
-+	int dst_fd, bad_fd;
-+	int ret;
++	uint64_t *ptr = (uint64_t *)TRANSFER_PRIVATE_MEM_GVA;
 +
-+	/* guest_memfd can only be linked between VMs of the same type. */
-+	dst_vm = vm_create_barebones_type(vm->type);
++	WRITE_ONCE(*ptr, TRANSFER_PRIVATE_MEM_VALUE);
 +
-+	/* Linking with an fd that isn't open */
-+	bad_fd = dup(src_fd);
-+	TEST_ASSERT(bad_fd >= 0, "dup() failed");
-+	close(bad_fd);
-+	ret = __vm_link_guest_memfd(dst_vm, bad_fd, 0);
-+	TEST_ASSERT_EQ(ret, -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
++	GUEST_SYNC1(READ_ONCE(*ptr));
++}
 +
-+	/* Linking with an out-of-range fd, i.e. KVM must not truncate fd */
-+	params.fd = (1ULL << 32) | src_fd;
-+	ret = __vm_ioctl(dst_vm, KVM_LINK_GUEST_MEMFD, &params);
-+	TEST_ASSERT_EQ(ret, -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
++static void transfer_private_mem_guest_code_dst(void)
++{
++	uint64_t *ptr = (uint64_t *)TRANSFER_PRIVATE_MEM_GVA;
 +
-+	/* Linking with a non-gmem fd */
-+	ret = __vm_link_guest_memfd(dst_vm, dst_vm->fd, 0);
-+	TEST_ASSERT_EQ(ret, -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
++	GUEST_SYNC1(READ_ONCE(*ptr));
++}
 +
-+	/* Linking with invalid flags */
-+	ret = __vm_link_guest_memfd(dst_vm, src_fd, 1);
-+	TEST_ASSERT_EQ(ret, -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
++static void add_private_mem(struct kvm_vm *vm, int memfd)
++{
++	vm_mem_add(vm, DEFAULT_VM_MEM_SRC, TRANSFER_PRIVATE_MEM_GPA,
++		   TRANSFER_PRIVATE_MEM_TEST_SLOT, 1, KVM_MEM_GUEST_MEMFD,
++		   memfd, 0, 0);
 +
-+	/* Linking with non-zero reserved fields */
-+	params.fd = src_fd;
-+	params.reserved[5] = 1;
-+	ret = __vm_ioctl(dst_vm, KVM_LINK_GUEST_MEMFD, &params);
-+	TEST_ASSERT_EQ(ret, -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
++	virt_map(vm, TRANSFER_PRIVATE_MEM_GVA, TRANSFER_PRIVATE_MEM_GPA, 1);
 +
-+	/* Linking with an already-associated vm */
-+	ret = __vm_link_guest_memfd(vm, src_fd, 0);
-+	TEST_ASSERT_EQ(ret, -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
++	/*
++	 * guest_memfd memory is private by default if guest_memfd tracks
++	 * memory attributes, otherwise it must be converted via the VM.
++	 */
++	if (!kvm_has_gmem_attributes)
++		vm_mem_set_private(vm, TRANSFER_PRIVATE_MEM_GPA, SZ_4K);
++}
 +
-+	dst_fd = __vm_link_guest_memfd(dst_vm, src_fd, 0);
-+	TEST_ASSERT(dst_fd >= 0, "linking should succeed with valid inputs");
-+	TEST_ASSERT(src_fd != dst_fd, "linking should return a different fd");
++static void test_transfer_private_mem(void)
++{
++	struct kvm_vm *src_vm, *dst_vm;
++	struct kvm_vcpu *src_vcpu, *dst_vcpu;
++	int src_memfd, dst_memfd;
++	struct ucall uc;
 +
-+	ret = fstat(src_fd, &src_stat);
-+	TEST_ASSERT_EQ(ret, 0);
-+	ret = fstat(dst_fd, &dst_stat);
-+	TEST_ASSERT_EQ(ret, 0);
-+	TEST_ASSERT(src_stat.st_ino == dst_stat.st_ino,
-+		    "src and dst files should have the same inode number");
++	/* Build the source VM, use it to write to private memory */
++	src_vm = __vm_create_shape_with_one_vcpu(protected_shape, &src_vcpu, 0,
++						 transfer_private_mem_guest_code_src);
++	src_memfd = vm_create_guest_memfd(src_vm, SZ_4K, 0);
 +
-+	close(dst_fd);
++	add_private_mem(src_vm, src_memfd);
++
++	vcpu_run(src_vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(src_vcpu, KVM_EXIT_IO);
++	get_ucall(src_vcpu, &uc);
++	TEST_ASSERT(uc.args[0] == TRANSFER_PRIVATE_MEM_VALUE,
++		    "Source VM should be able to write to private memory");
++
++	/* Build the destination VM with linked fd */
++	dst_vm = __vm_create_shape_with_one_vcpu(protected_shape, &dst_vcpu, 0,
++						 transfer_private_mem_guest_code_dst);
++	dst_memfd = vm_link_guest_memfd(dst_vm, src_memfd, 0);
++
++	add_private_mem(dst_vm, dst_memfd);
++
++	vcpu_run(dst_vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(dst_vcpu, KVM_EXIT_IO);
++	get_ucall(dst_vcpu, &uc);
++	TEST_ASSERT(uc.args[0] == TRANSFER_PRIVATE_MEM_VALUE,
++		    "Destination VM should be able to read value transferred");
++
++	close(dst_memfd);
++	close(src_memfd);
 +	kvm_vm_free(dst_vm);
++	kvm_vm_free(src_vm);
 +}
 +
- #define ____gmem_test(__test, __vm, __flags, __gmem_size, args...)	\
- do {									\
- 	int fd = vm_create_guest_memfd(__vm, __gmem_size, __flags);	\
-@@ -467,6 +529,8 @@ static void __test_guest_memfd(struct kvm_vm *vm, u64 flags)
- 	gmem_test(fallocate, vm, flags);
- 	gmem_test(invalid_punch_hole, vm, flags);
- 	gmem_test_vm(invalid_binding, vm, flags);
-+	if (kvm_has_cap(KVM_CAP_GUEST_MEMFD_LINK))
-+		gmem_test_vm(link, vm, flags);
- }
- 
- static void test_guest_memfd(unsigned long vm_type)
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 777fa3dbf88d6..f8eca3f7993d0 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -787,6 +787,24 @@ static inline int vm_create_guest_memfd(struct kvm_vm *vm, u64 size,
- 	return fd;
- }
- 
-+static inline int __vm_link_guest_memfd(struct kvm_vm *vm, int fd, u64 flags)
++static void test_link_different_vm_type(void)
 +{
-+	struct kvm_link_guest_memfd params = {
-+		.fd = fd,
-+		.flags = flags,
-+	};
++	struct kvm_vm *src_vm, *dst_vm;
++	int src_memfd, ret;
 +
-+	return __vm_ioctl(vm, KVM_LINK_GUEST_MEMFD, &params);
++	src_vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
++	src_memfd = vm_create_guest_memfd(src_vm, SZ_4K, 0);
++
++	dst_vm = vm_create_barebones_type(KVM_X86_DEFAULT_VM);
++
++	ret = __vm_link_guest_memfd(dst_vm, src_memfd, 0);
++	TEST_ASSERT(ret == -1 && errno == EINVAL,
++		    "Linking into a VM of a different type should fail, ret: %d, errno: %d",
++		    ret, errno);
++
++	close(src_memfd);
++	kvm_vm_free(dst_vm);
++	kvm_vm_free(src_vm);
 +}
 +
-+static inline int vm_link_guest_memfd(struct kvm_vm *vm, int fd, u64 flags)
++int main(int argc, char *argv[])
 +{
-+	int new_fd = __vm_link_guest_memfd(vm, fd, flags);
++	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_GUEST_MEMFD_LINK));
 +
-+	TEST_ASSERT(new_fd >= 0, KVM_IOCTL_ERROR(KVM_LINK_GUEST_MEMFD, new_fd));
-+	return new_fd;
++	test_transfer_private_mem();
++	test_link_different_vm_type();
++
++	return 0;
 +}
-+
- void vm_set_user_memory_region(struct kvm_vm *vm, u32 slot, u32 flags,
- 			       gpa_t gpa, u64 size, void *hva);
- int __vm_set_user_memory_region(struct kvm_vm *vm, u32 slot, u32 flags,
 -- 
 2.56.0.257.gf7497c7d27-goog
 
