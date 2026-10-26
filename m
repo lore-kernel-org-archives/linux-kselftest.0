@@ -1,80 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792999392;
-	b=3xhdP0u6UC/cXM1lcbm15XmsGlFKjzHcIz0Mu5IQWhvTV9u0MvOBjvlMsL0Nu6I4P/F4
-	 iihU0ONHFiWzLT2t2zox0y/TJLD6e26nTsLcsfADCl4NrPSQpFQ3oSEov01aNWOPKrT+n
-	 O+gwIsB/xTxInbX29nHR2F9wc0wRkcB720okYZLnGBEWzfbThf9uGSE8XUIxE2MlqjVYJ
-	 z/ww/6nBbu9+vk9ujpmvWK9tZHgYHqmPf4kUDxXZkKvEblIWwPUE8EZjpuB1EHikOJaJD
-	 scqkbhqT9Qg681G6iDlMcqVFyT7ekNnCU2LU5y419o0rRkE6RQdp6gQ847OTYnfmaGg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792999392;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=gL4Y4LLW2G3VJwIBXj9jDelLMgccnmv4YV0UaBDP1+Q=;
-	b=uKfpUdYbyJYj811qOa6eIPNktfabcaJyytg/dQE3NoxEVQt4ljFhP6Qu4ZOZBhHtEasr
-	 A3V7yrfuEGwDEBeFPPSEWrVR9C52vKaY7wlrX5Mil4ID4coM5XXNEYV3zpoFZzUCX/vlH
-	 70LWt0KyFPRosH1QGBivqD4MJ4+1wq/fJKCNzAJgjHyaNld4+M/ZDUWfiq69yUM711qN7
-	 K3yVasK17UBLmmPAe8VbnMdtZbDFchuL7H1+g7LUhIlWjxddrNaqVLUmwEwfJ8VUTSs2s
-	 LdKtoF34FiCnX+wEbo/knaI9r9wpM28zMh2V63XMbO963rpxWcFUtBOYjQWMdyL82hw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZwcsoOIh;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295CB606A31B;
-	Mon, 26 Oct 2026 07:23:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZwcsoOIh
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792999390;
-	b=1uHATkRNaiCFPvI+w4S2Ha/fItRC0ElH92cR2IS0+w6TqH0xrDVe1yLVUQ+s7oIaFRqU
-	 Vrxc8XEZN0kvyJHAg60e6mA2OWKqkKersmECJWf/+d2ZENDMk4mrO7TPJ5oMDdmrq5Njx
-	 qXOUzDZlNa3eW2bma2rfi2UA7UJNsauEtrUG32mzUh0U92p6+b+iWsQEvLYplfl1ZhVEq
-	 lC41Go1jnQym/mqCIGvWe5U3iK8MuDjdFR5wnbG8wgq6sYm0WMpuchkslDNDgV/ddzMSu
-	 TH+fMI9i8CeDlI8wgQ5ffxr3ZuoxTfjwJTLOsGfqgyT4irbPT0WVypvg8612WhrGzng==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792999390;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=gL4Y4LLW2G3VJwIBXj9jDelLMgccnmv4YV0UaBDP1+Q=;
-	b=FQjAGlZul4hz/L2JzYVHxDfm9P+Q6PZ/7AS8w7Hxr40UgUOGv7O7DzwG5aX983Onq0s6
-	 JEmLBIwow7QkjQFQ0QW6DZJrOfxRQh6eGLxcdGggupEdtbQ1LfV76yF/A2EJJe+vXHdhy
-	 Yw9UMuxq4Z+KCk3EC7n7RK3S1eKrzkIt9Eo1SUFeBVo6eWDVoDQBobXUPgF/2E5v+JrI6
-	 TJ5QLar16+IQepNa7YXuLNuxUz2MUXBdQqV+sb9Hvg8PiuFNkMGtfHOUjW6tEWHSITk6K
-	 Db6kOtsIJcHfHnCAxLFslqcJKLcCCo/qdXBd8SCHITT4xESw39vuQ3cSxWBD/Dg3AhQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792999670;
+	b=eFYwgBkr6GUlPF0/ULpMJnBD/CmFRtBS0dhfw9KtVSrTPea7XPHO7lOq4noNdBtiuY3k
+	 A6s7n2DBd3Dl3RA5lhdLOlJIsWdhfUhIdkTLl+RJ46QiVVJ96o8Bdl0TNwxFWJ2868zIk
+	 R1bgz/aJxc14IfcKs7wc3n0K3cFTRWaj+S1bnAjxCDLLCne4Q+tk/0DsgetV/fnwumiW+
+	 1iNM9rGrJ2esr90u8JCbFXOmzYiyD3vj5pqN5yz8dX3rQx0V0ZWjPLpBD6txlFe8lBblM
+	 MmZ4NsCIdr/rmBG/vfHkq0CkEUiK9eJ58N/MSsHhkH8mlYvFwxg81945Jayiq3PVfWQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792999670;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Rspamd-Queue-Id:X-Spam-Level:
+	 X-Rspamd-Server:X-Rspamd-Action:X-Spam-Flag:X-Spamd-Result:
+	 X-Spam-Score;
+	bh=xd+Q2GNr8nIy5+L7Fq89NHZ6U8XPfuMrTobDomthdxI=;
+	b=rXKGDVtRvtInJ1SkbgZvsLrF4BX1jUECKbz8+ZCxGJfQLZ7peDJ0W1oF+s8wHjuggfVs
+	 KKIj7urH2mpFTS5nWruczJv1IymXVU5KBcPCHo6p7AVEuXTdWEgB+d0gfOPY2QL4ZRihJ
+	 YvI3hS9LvD1AH/wdsM9j2klkDrw3FkoaF1JoEoNRKxELBuCAexxhihlrzZf5tkqMTDx7t
+	 ndtmC7lnKHUWRM9G4LskKiXiOtTkb1nc6693FmUPVOf6d7Q6FUCj0wmWchibH7xbWKvA1
+	 jQ+LEeK8GvX74JT3ZhB9rQ5C6a11s8ng8cU3f+ZLzux+UentU+viYuIRJJV/Sn5v46Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XFmpJEfN;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b="DhH8VB/E";
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b="v4Lrp/Vh";
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=surgh2wM;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3E2661F01825;
-	Mon, 26 Oct 2026 07:23:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792999390;
-	bh=gL4Y4LLW2G3VJwIBXj9jDelLMgccnmv4YV0UaBDP1+Q=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=ZwcsoOIh97NogTnRDp/9R0PVea18/TOaCQ1mmcvhCLQEz+Set1y5naNcfnetzY0jF
-	 y2O88qwWb6ZtWhx39wpCFqI1ctDOMbNqCAQiiq2lWFrnKpWu/uecwIQNMrjgowtft8
-	 wSOtpPw3A/azXVma2cMgC/NvNKdEZStzyi0RqNZPxU9b5z9C79YGSHRtGT0I147Z5C
-	 Ceg7l3CvxGWAcEQhlyOL/pJKM5bFkElnp0aD9JEMEgOou2H7+3r7z6vRkgZHecE62S
-	 Uian5GSLXSNESgDEjl97s4joBQQNkMbx9neHJ8MUG/1oRvyUU0xiOw2IaNUU3qcrjm
-	 MyBvGB2sVijTQ==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id C477244C43;
-	Mon, 26 Oct 2026 07:23:09 +0000 (UTC)
-From: Esko Mobius via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
-Subject: [PATCH net 0/2] Revert advertising the TCP MSS from the configured
- MTU
-Date: Mon, 26 Oct 2026 15:23:07 +0800
-Message-Id: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FFD606A31D;
+	Mon, 26 Oct 2026 07:27:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7FFD606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=XFmpJEfN;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=DhH8VB/E;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=v4Lrp/Vh;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=surgh2wM
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 28DB01F74D;
+	Mon, 26 Oct 2026 07:27:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1792999660; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xd+Q2GNr8nIy5+L7Fq89NHZ6U8XPfuMrTobDomthdxI=;
+	b=XFmpJEfN+4BximqlWLj734i2buybpqq7hSBUakhvVdFCDA0ETnerOQobVI9bR092EnW023
+	4O2jHcdJ9hnWOyJbucj25hZcoJWNAJTH9D9C0nYhiJEzlY92tYp5+bE1sajGN02Do1u88/
+	PoA+Jnyp6/hQ2YTJtpyyTO4udiQGAsE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1792999660;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xd+Q2GNr8nIy5+L7Fq89NHZ6U8XPfuMrTobDomthdxI=;
+	b=DhH8VB/EEl18g9rmCBEKrLTEazdhGCHMdmfz2cXpV6C0PhFF/MEOWvljPRG3LSE44332zu
+	D1uJF1/0rT8ypEDQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="v4Lrp/Vh";
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=surgh2wM
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1792999659; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xd+Q2GNr8nIy5+L7Fq89NHZ6U8XPfuMrTobDomthdxI=;
+	b=v4Lrp/Vh4IDINCIDmCuvVBOR7XBMupafNbV/FgT0/bCZPm7Mz1gUzPPN9M/pjXoyQnWFUR
+	0X21T8Ciijm6RHojTKQahKBP2xESGFmpoqqSidBRGTZ/RUPObhkjXzgc92HtI02F5QghhC
+	zQhiMOEqs0yVVNeL0kG0ISnw0XJVEdk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1792999659;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xd+Q2GNr8nIy5+L7Fq89NHZ6U8XPfuMrTobDomthdxI=;
+	b=surgh2wMSmw14witl+4e5hq+ISCfaVtVy/CTFbeBFCjXw8XQL41QW9GgiNqpB8amLWwebe
+	2XlSadtOKNm0lJAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 357E213319;
+	Mon, 26 Oct 2026 07:27:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id DOCtAOoA32o6dwAAD6G6ig
+	(envelope-from <hare@suse.de>); Mon, 26 Oct 2026 07:27:38 +0000
+Message-ID: <c75aa5d6-5037-4489-99e0-3e38528e10d0@suse.de>
+Date: Mon, 26 Oct 2026 08:27:37 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,72 +108,99 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANv/3moC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzNDINZNTCnLLS7WBapNLSrRNbUwME1JNTQ3NrNMUwLqKShKTcusAJsXrZS
- XWqIUCxEsLk3KSk0uAZmkVFsLAFqhlOV2AAAA
-X-Change-ID: 20261026-advmss-revert-5805de17369f
-To: netdev@vger.kernel.org
-Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>, 
- David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
- Jiayuan Chen <jiayuan.chen@linux.dev>, Shuah Khan <shuah@kernel.org>, 
- Thorsten Leemhuis <regressions@leemhuis.info>, regressions@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Esko Mobius <echoowall@gmail.com>, 
- Eric Dumazet <edumazet@kernel.org>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792999388; l=1884;
- i=echoowall@gmail.com; s=20261026; h=from:subject:message-id;
- bh=XaR0Gk8SmZ1BSXypb/zmzgZFcyeFs/xIK7D652IwkuE=;
- b=1UtGo0a2fgm7Z14XWVa6/EaFpZ4ZKjTgedpVnVQW7PmVrgnzJb5IAT2ykAQfhMa27+gN/Y4Su
- 9CVc7UOGdAYCpkkdt3jSZAgu/96ThC6LY37mBdYYOdPI1tHLgZrpP84
-X-Developer-Key: i=echoowall@gmail.com; a=ed25519;
- pk=9XP6JhqjjPsHCF6UZZZTeqTRnXIa4+ufggnxXtTJ+no=
-X-Endpoint-Received: by B4 Relay for echoowall@gmail.com/20261026 with
- auth_id=1323
-X-Original-From: Esko Mobius <echoowall@gmail.com>
-Reply-To: echoowall@gmail.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC net-next 1/5] tls: add HKDF-Expand-Label for the TLS
+ 1.3 key schedule
+To: martin.nvme.dev@gmail.com, John Fastabend <john.fastabend@gmail.com>,
+ Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Hannes Reinecke <hare@kernel.org>, Chuck Lever <cel@kernel.org>,
+ kernel-tls-handshake@lists.linux.dev, linux-nvme@lists.infradead.org,
+ Alistair Francis <alistair.francis@wdc.com>,
+ Martin Belanger <martin.belanger@dell.com>
+References: <20261025-keyupdate-rfc-v1-0-60b7756eccbd@gmail.com>
+ <20261025-keyupdate-rfc-v1-1-60b7756eccbd@gmail.com>
+Content-Language: en-US
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20261025-keyupdate-rfc-v1-1-60b7756eccbd@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 28DB01F74D
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-12.00 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	XM_UA_NO_VERSION(0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:email];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org,queasysnail.net,davemloft.net,redhat.com,lwn.net,linuxfoundation.org,infradead.org];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from]
+X-Spam-Score: -12.00
 
-Commit 2640e6419594 ("net: advertise TCP MSS from the configured MTU,
-not the learned PMTU") breaks TCP for clients behind networks that
-filter inbound ICMP, when the server reaches them through a hop with a
-smaller MTU: the handshake completes, then the connection stalls as
-soon as the client sends full-size segments. This was reported in [1]
-and confirmed on 7.3-rc7; reverting the commit on top of 7.3-rc7 fixes
-it. Details and numbers are in patch 2.
+On 10/26/26 1:36 AM, Martin Belanger via B4 Relay wrote:
+> From: Martin Belanger <martin.belanger@dell.com>
+> 
+> A TLS 1.3 KeyUpdate derives the next traffic secret, key and IV with
+> HKDF-Expand-Label (RFC 9846, section 7.2). Add the helper for the
+> kernel to do this itself.
+> 
+> Only the part of the key schedule after the handshake is needed. The
+> input is a traffic secret, which is already a pseudorandom key, so
+> HKDF-Extract is not needed. Each output is at most Hash.length bytes,
+> so each derivation is a single HMAC with the library SHA-256 or SHA-384
+> functions.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Martin Belanger <martin.belanger@dell.com>
+> ---
+>   net/tls/Kconfig    |  2 ++
+>   net/tls/Makefile   |  2 +-
+>   net/tls/tls.h      |  2 ++
+>   net/tls/tls_hkdf.c | 82 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 87 insertions(+), 1 deletion(-)
+> 
+And another HKDF implementation. Maybe it's time to split if off (again).
+But anyway.
 
-The asymmetric (DSR-style) case that commit targets can still be served
-by the existing per-route advmss metric, which overrides the default
-after the revert; patch 2 includes a test of that as well. If you would
-rather keep the new behaviour as an explicit opt-in some other way, I
-am happy to test or rework this.
+Reviewed-by: Hannes Reinecke <hare@kernel.org>
 
-Patch 1 removes the packetdrill tests that assert the reverted
-behaviour, patch 2 is the revert itself.
+Cheers,
 
-[1] https://lore.kernel.org/regressions/4F0FAEB6-A13B-47F3-BFF1-C706686C6F64@gmail.com/
-
-Signed-off-by: Esko Mobius <echoowall@gmail.com>
----
-Esko Mobius (2):
-      Revert "selftests: net: packetdrill: add tests for advertised MSS with PMTU exceptions"
-      Revert "net: advertise TCP MSS from the configured MTU, not the learned PMTU"
-
- include/net/ip.h                                   | 25 --------
- include/net/ip6_route.h                            | 37 ------------
- net/ipv4/route.c                                   |  4 +-
- net/ipv6/route.c                                   |  2 +-
- .../net/packetdrill/tcp_advmss_pmtu_ipv4.pkt       | 67 ----------------------
- .../net/packetdrill/tcp_advmss_pmtu_ipv6.pkt       | 67 ----------------------
- 6 files changed, 3 insertions(+), 199 deletions(-)
----
-base-commit: 7076f684d5132e6a6145e1da2fa74771ecd052e5
-change-id: 20261026-advmss-revert-5805de17369f
-
-Best regards,
---  
-Esko Mobius <echoowall@gmail.com>
-
-
+Hannes
+-- 
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
