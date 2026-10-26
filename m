@@ -1,58 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793043532;
-	b=2j8lScdmTmODhSd4OgsJPM68cc79d9Y7D61G5mZec4V2T+iaeqqj1B9v2D8BEExSPPSY
-	 GVN9nw4WljXq9Fz0BnbZ+a+ut3emng6JIN6P61CmIxonr3Se4D7+0ZkbA7+wvPDp1AAF1
-	 VD1AUo/91YnFY2XqwzaFcp1RosCTA3GUsjlj0N3+L4up1GbJnHs28QVJ8WqCuELQ/g9R9
-	 u9iCW7UBDO/C/f6v8GKeUmGhK8KQxIBNh0LCnT4KZw/+mJJNCUnBMJcjoD9Q0v8xBJ1/F
-	 3X0iSLHgw7k2DBTbGa/jLJkZYjPjN9a6YKDQU1zxsHt1Qkbc3lT1PvKpcWnqpvuce2A==
+	t=1793043611;
+	b=qzKoEqzuz9CIXmtBuFAA9USz1PlxIEuulzBEeBcgkkyxMFLGxRTcIwFB/2Xsat0RGe6n
+	 Ee1XIyKEaa9dTU0iqkJVYrkIeF8mHHZgeSR/uOv06+0WbGyBNOanYryDexzasEMIx7eDp
+	 /0Hu2o1/oOD5T3warOcHRaixncQpuxMdnKkp9b++KDKpZSPoTSM4RZQUNEygv0a3Y3GRs
+	 E3lqBnvEcPVC7IMe7ZJiS7tMVAZTJzVagwF0+M0HlzjArm2pKEcLdzQSt46CyecDDB6wl
+	 j9wUI7RjmSHOwbl3+kIKalH2NCbP5YM2I41vsYLW6W3IYc1YnJ0ku96wp2wXUQtJt9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793043532;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Spam-Status:X-Rspamd-Server:
-	 X-Stat-Signature:X-Rspamd-Queue-Id:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=IG6lC5VmLeqP65oSAtdAx1VbFAtk7d9g8bHTWsFni2o=;
-	b=2Iy4pKuUXqn95FV7or6f7v+vzs96GbSQAUbcPt7KG4ldSFU0vd63Mv+YEzf1B7hTf2Oj
-	 BVEmXHM02PTdToUS518HLz1Xx8VkLXnp6aU17/21mhwfjdiUjNdAY4CPU1PahvtFW0WAb
-	 O7+b/nhvt2HTfMyZnD8rrNBXoiweIBvu8WR1X4qBV9aLpr0KpC4Tv4hwKVnYncbL6zeXw
-	 0Hb8HeOjDqU3vavLaHGWD0BHTcJsiuKY1uIu8elXvI4o9UHWg9lBUrBLucYhynkX01cOD
-	 vaPJ4mbV1+5uC8NjrgECo8OtpJZKf6QPvTp7BPR9hqPvPSQ8/jQEkyt6AzTgHqwJJIQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793043611;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=ffTkvk1rfJfkBRMi2MyNyvy85ELVUN80pjUBdv6nFjQ=;
+	b=q0Q8ON1tH5WDuP6ztHIg8wMCgb3O37oPsyTIGc4o3di5n3bH9KSfoFTdPQ2SwgCVP6E3
+	 WDvRAqxoTK55kPvyy5poraXx4PLoZIMp5JSSKDAAHKNlQREYsky0aOVBFArs/7WSnYJRh
+	 0nMV4bJmCIwU/nb6jpogiBE0fs5PuDSAyGe7vdNu8oP84XsR15AzV6A5p3x0Z4OxbI0NQ
+	 UgPpWwL0pxthB5wLQbl708JdJ7h48TR6Qi76D37GngTZDC2/B8ksiug/6r1PXcJK+zCRZ
+	 46ZJz7RqHsY7zHiLvadBqhDed3MC82bjqV+7F4vs32hGuNmOpdyVi4I8SHBPtTbaOsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=ozFpx+Tn;
-	arc=none smtp.remote-ip=216.40.44.11
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XgaP1jU+;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D60A606A31A;
-	Mon, 26 Oct 2026 19:38:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D60A606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802B7606A31A;
+	Mon, 26 Oct 2026 19:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=ozFpx+Tn
-Received: from omf16.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id 97AC3120860;
-	Mon, 26 Oct 2026 19:38:49 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id B9CF420013;
-	Mon, 26 Oct 2026 19:38:47 +0000 (UTC)
-Date: Mon, 26 Oct 2026 15:38:46 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 04/10] tracing/filters: Handle out-of-range CPU for
- OP_NE in cpumask comparison
-Message-ID: <20261026153846.672c760e@gandalf.local.home>
-In-Reply-To: <179285916115.466249.16061782430177051612.stgit@devnote2>
-References: <179285912318.466249.7425922682086130057.stgit@devnote2>
-	<179285916115.466249.16061782430177051612.stgit@devnote2>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XgaP1jU+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A871F01825;
+	Mon, 26 Oct 2026 19:40:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793043611;
+	bh=ffTkvk1rfJfkBRMi2MyNyvy85ELVUN80pjUBdv6nFjQ=;
+	h=From:To:Cc:Subject:Date;
+	b=XgaP1jU+fEN5sj227lCA0SM9/qpJGUvQKwKiGM3vBlDlz+4CpL3cY1yrj077URtNj
+	 KXhYyjqSQJychUZoMfLqhca1sze7H8ryzKN8mWOFQbdTCRzEUcUG2tAuSGiRioWmPl
+	 UNwjjnjMLuhh6+JI/9zY4kbkIzrLIioAihjS4SOPMNnLquYfPMZ6tMNbo7D+w/Qdpc
+	 Y7uUUz+SDsKcRxTluzAlwFW/Fy3NEui+vf+4qXwgscaf4ef0Jl8ZhMhwFPKPUAfafQ
+	 0Qv8+TsieREg7fX41hB1unf2am5U5TnkepZG3fLzGXWW9zyduaCv/fdtTcsmJHibQ5
+	 T6el0LjF7+ixw==
+From: Sasha Levin <sashal@kernel.org>
+To: Miklos Szeredi <miklos@szeredi.hu>
+Cc: Luis Henriques <luis@igalia.com>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	fuse-devel@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] selftests/fuse: add the missing symlink caching test
+Date: Mon, 26 Oct 2026 15:40:08 -0400
+Message-ID: <20261026194008.274349-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,61 +62,206 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout06
-X-Stat-Signature: 64t3e63arizw83rcbc5fx5s75m9wrc9d
-X-Rspamd-Queue-Id: B9CF420013
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18EbIdT0THeRj4MNb530kbySwriKu0IMtI=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=IG6lC5VmLeqP65oSAtdAx1VbFAtk7d9g8bHTWsFni2o=; b=ozFpx+Tn95HddNuk6ZaCvSoh43etYOsqebLGMZVg+4agvzInce5r/nN7WfNVJGS5YVwUsoaDPKt4HAmaTQEkT8mVvOqJiWRRAbfXTOK0fSyMzdW4R0mbLTZEoyAQBb0UBHsxizGeOVJVR7P3fE/SjoNAkRz8H1Fyjiot3sZ4Ang=
-X-HE-Tag: 1793043527-359451
-X-HE-Meta: U2FsdGVkX1+ADCmTBohVlg/PkjfzLah0vItZkBRMDzproUuHADahppCw+HPRpzy8Pm2UEfwxrBq90944zVeIRbrEHo/EIu0ZiX/NMwYwNtDngv4XlcUzI7JZpfSgLTmpiT3xwMdsmhThdD5OEJ0Xo2ocg8IPTNxPr2Q0P35Ot86ykFYYOLeUvCbid4ubF82C9lbAM3DsQBXEjYgjpPFoo4Jc4F1CBezvv+iMRBumH6QuCdgXMvb+4h0v7seRzKIEPeaWbbN8iLwJM3clkoxr4okbfW/Si3B4KmIHAFIuIB75n3Y4OyJAdwUnBcuSLwGT1/piS3aXPFjiAAFM52jNWGFNMOWO+38j
+Content-Transfer-Encoding: 8bit
 
-On Sun, 25 Oct 2026 01:26:01 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Commit 3e14f079d7a0 ("selftests/fuse: add fuse symlink caching test")
+registered fuse_symlink_cache_test in the fuse selftest Makefile and
+.gitignore, but the test source was not part of the applied commit, so
+building the fuse selftests fails:
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> In filter_pred_##size##_cpumask(), if the event's scalar CPU value is
-> out of range (cpu >= nr_cpu_ids), it unconditionally returns 0.
-> 
-> However, if the predicate operation is OP_NE (e.g., field != CPUS{0,1}),
-> an out-of-range CPU cannot match any valid CPU in the user-provided
-> cpumask and the condition is satisfied. Returning 0 produces a false
-> negative.
-> 
-> Return "pred->op == OP_NE" instead of 0 when cpu >= nr_cpu_ids.
-> 
-> Fixes: 3cbec9d7b93d ("tracing/filters: Enable filtering a scalar field by a cpumask")
-> Cc: stable@vger.kernel.org
+  make[1]: *** No rule to make target 'fuse_symlink_cache_test.c', needed by '.../fuse_symlink_cache_test'.
 
-BTW, a lot of these are just "stupid input produces stupid results" and I
-personally feel it doesn't deserve a stable tag. I don't even think it
-deserves the "fixes" tag.
+Add fuse_symlink_cache_test.c as posted in Luis Henriques's v5
+submission. The test serves a file and a symlink to it from a libfuse
+low-level filesystem, resolves the symlink 100 times, and counts the
+readlink requests that reach the server: one when FUSE_CAP_CACHE_SYMLINKS
+is set during FUSE_INIT, and all 100 when it is not.
 
-Now if the stupid input were to produce a crash or warning, then that's
-different.
+Fixes: 3e14f079d7a0 ("selftests/fuse: add fuse symlink caching test")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/r/202610170822.oEJ1Autq-lkp@intel.com/
+Link: https://lore.kernel.org/r/20261001164916.15311-8-luis@igalia.com
+Originally-by: Luis Henriques <luis@igalia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+As with e64a46aefc01 ("selftests/fuse: add the missing FUSE_HAS_SYNCFS
+privilege test"), the new file in the posted patch is not in the applied
+commit; the other files did land.
 
--- Steve
+ .../fuse/fuse_symlink_cache_test.c            | 162 ++++++++++++++++++
+ 1 file changed, 162 insertions(+)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c
 
+diff --git a/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c b/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c
+new file mode 100644
+index 0000000000000..7b53734995736
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c
+@@ -0,0 +1,162 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Simple filesystem to test FUSE symlink cache
++ *
++ * This is a simple FUSE filesystem that contains two objects: a file named
++ * 'file' and a symlink to that file named 'link'.  If symlink caching is
++ * disabled (i.e. FUSE_CAP_CACHE_SYMLINKS is reset during FUSE_INIT), whenever
++ * the ->readlink() is executed to resolve 'link' a counter will be incremented.
++ *
++ * If symlink caching is enabled (i.e. FUSE_CAP_CACHE_SYMLINKS is set during
++ * FUSE_INIT), resolving a symlink will only call into user-space the first
++ * time.
++ */
++
++#define FUSE_USE_VERSION 31
++
++#include <stdio.h>
++#include <fuse_lowlevel.h>
++
++#include "kselftest_harness.h"
++
++#include "fuse_common.h"
++
++#define FILENAME "file"
++#define FILE_INO 42
++
++#define LINKNAME "link"
++#define LINK_INO 43
++
++#define TIMEOUT	86400.0f
++
++struct test_state {
++	pthread_mutex_t lock;
++	int readlink_counter;
++	bool cache;
++} test_state = {
++	.lock = PTHREAD_MUTEX_INITIALIZER,
++};
++
++static void fs_init(void *userdata, struct fuse_conn_info *conn)
++{
++	pthread_mutex_lock(&test_state.lock);
++	if (test_state.cache)
++		fuse_set_feature_flag(conn, FUSE_CAP_CACHE_SYMLINKS);
++	else
++		fuse_unset_feature_flag(conn, FUSE_CAP_CACHE_SYMLINKS);
++	pthread_mutex_unlock(&test_state.lock);
++}
++
++static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *name)
++{
++	struct fuse_entry_param e = {};
++
++	if (parent != FUSE_ROOT_ID ||
++	    (strcmp(name, FILENAME) != 0 && strcmp(name, LINKNAME) != 0)) {
++		fuse_reply_err(req, ENOENT);
++		return;
++	}
++
++	if (!strcmp(name, FILENAME)) {
++		e.ino = FILE_INO;
++		e.attr.st_mode = S_IFREG | 0444;
++		e.attr.st_nlink = 2;
++	} else if (!strcmp(name, LINKNAME)) {
++		e.ino = LINK_INO;
++		e.attr.st_mode = S_IFLNK | 0444;
++		e.attr.st_nlink = 1;
++		e.attr.st_size = strlen(FILENAME);
++	}
++	e.attr_timeout = TIMEOUT;
++	e.entry_timeout = TIMEOUT;
++
++	fuse_reply_entry(req, &e);
++}
++
++static void fs_readlink(fuse_req_t req, fuse_ino_t ino)
++{
++	char buf[PATH_MAX];
++	size_t sz = strlen(FILENAME);
++
++	if (ino != LINK_INO) {
++		fuse_reply_err(req, ENOENT);
++		return;
++	}
++
++	memcpy(buf, FILENAME, sz);
++	buf[sz] = '\0';
++	pthread_mutex_lock(&test_state.lock);
++	test_state.readlink_counter++;
++	pthread_mutex_unlock(&test_state.lock);
++
++	fuse_reply_readlink(req, buf);
++}
++
++static const struct fuse_lowlevel_ops fs_ops = {
++	.init           = fs_init,
++	.lookup		= fs_lookup,
++	.readlink	= fs_readlink,
++};
++
++FIXTURE(symlink_cache)
++{
++	struct fuse_common_ctx ctx;
++};
++FIXTURE_VARIANT(symlink_cache)
++{
++	const bool cache;
++};
++FIXTURE_VARIANT_ADD(symlink_cache, symlinks_nocache)
++{
++	/* Variant with symlink cache disabled */
++	.cache = false,
++};
++FIXTURE_VARIANT_ADD(symlink_cache, symlinks_cache)
++{
++	/* Variant with symlink cache enabled */
++	.cache = true,
++};
++
++FIXTURE_SETUP(symlink_cache)
++{
++	char err[MAX_ERR_MSG];
++
++	pthread_mutex_lock(&test_state.lock);
++	test_state.readlink_counter = 0;
++	test_state.cache = variant->cache;
++	pthread_mutex_unlock(&test_state.lock);
++
++	if (fs_setup(&fs_ops, &self->ctx, err))
++		SKIP(return, err);
++}
++
++FIXTURE_TEARDOWN(symlink_cache)
++{
++	fs_teardown(&self->ctx);
++}
++
++TEST_F(symlink_cache, test_symlink_cache)
++{
++	char pathname[PATH_MAX];
++	char buf[PATH_MAX];
++	ssize_t sz;
++	int counter;
++	int i;
++
++	sprintf(pathname, "%s/%s", self->ctx.mountpoint, LINKNAME);
++	for (i = 0; i < 100; i++) {
++		sz = readlink(pathname, buf, PATH_MAX);
++		ASSERT_NE(sz, -1);
++	}
++	pthread_mutex_lock(&test_state.lock);
++	counter = test_state.readlink_counter;
++	pthread_mutex_unlock(&test_state.lock);
++
++	if (variant->cache) {
++		ASSERT_EQ(counter, 1);
++	} else {
++		ASSERT_EQ(counter, 100);
++	}
++}
++
++TEST_HARNESS_MAIN
 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  kernel/trace/trace_events_filter.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> index 69da95f42541..d9aeeec4ed91 100644
-> --- a/kernel/trace/trace_events_filter.c
-> +++ b/kernel/trace/trace_events_filter.c
-> @@ -762,7 +762,7 @@ static int filter_pred_##size##_cpumask(struct filter_pred *pred, void *event)	\
->  	unsigned int cpu = *addr;						\
->  										\
->  	if (cpu >= nr_cpu_ids)							\
-> -		return 0;							\
-> +		return pred->op == OP_NE;					\
->  										\
->  	return do_filter_scalar_cpumask(pred->op, cpu, pred->mask);		\
->  }
+base-commit: 9b1da7b4a4e197072e630c3b85d4100a399752ff
+-- 
+2.53.0
 
