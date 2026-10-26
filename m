@@ -1,113 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793032235;
-	b=Fc4ap5ulT7YVVL/BAkCvK+WP/d5ofvVMFL7DaRlqZfhHcO5VSX9PntTmQNCoBmQjewHs
-	 t6fDvK1+j5sB7NC8ylZy/VO+aFxRurMPWo7zcb1HJci4j9duWOLINm7JdhLW3tdgybVIP
-	 e1W9aWf6kdZ+u6YC9jVWNf6pjd71cICDzRIcm65bYaDbdVARxlOtPppKU8fKVlfySILOl
-	 zKvyfQh2+SpZEkayQKz5rocym+eFibkRUsdtjRDNBSTLGrzKIENz4GhzjigsltMfEPSyP
-	 Y7aM3m1qnsJh/XQYEfa0bncAXGwFCY/2NQp5ZdrgAchV3W4Ch3+W82S0PFgKyTeqzXw==
+	t=1793033382;
+	b=cTJ5+k9tm2am0BA2FJuBt0u5zqnZmlCM9zReP34G1yYgm5fj+0EnazWmTswr892QfSnN
+	 8G0wngKrp0fWON25+pLS95zEHf7Vw6dtcarzsUS4ukuCcF5/O0ooiIXlf1VGBl9XTR/Sw
+	 3yu+m/RL4UdhWW2zkoW6OyUeZfVMujVMO475afdv7D/LL3bpxh/F1cXOaWU4yE3gFT7b+
+	 sfUKqMw/UagVEFkc7EXJqDl+GNgauu7wQj+xYa9tGieZhEop0Mh3A84uj+e3sUxvIPk/c
+	 ggvHx3P6WcLz0jnD8r96edHUdqwl1mmHxK7FbUpJkBnWXsYo8giXVZlHVFo0XJ2BE8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793032235;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=WGd8hv6dQ0jpXHntVrEKsl2n+adOY8jZkAHXTXnqh7c=;
-	b=ncCZGz6uMv24ADDhfackb7aJQAFxZbVUfrrlwGCLEAiZgdAkM/IK+ia/vrQk29O7qVQl
-	 iNEytHqvG+ARv7Zf1UDm9I1fuYmNAKokhxumtYr4PqCIprht2JtiG8rtjqxjwysRsv3cM
-	 QDxTAgnjLHHDis5iZPjo+VO8Q8pGrxPO6k2p6/pvxflYsF2sBrmrnnP5Lf8qG5GEdFdH7
-	 er+N4wyGp3XnwrjxGvL4jweBJn5d4arAXvxQkPzGMKtGinBZPQPJBtiRzMXNgFmjQjZ8X
-	 oiVHIxpWYsAvulrrUjKw1uc4r8xxBGFo5CrLysIBU+pGtiCDltrjoY128zRr+pno33Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793033382;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=y23T2h2GqwoD/whugkXIP7aaex8iTjdAPLzd5mbQF8c=;
+	b=ribm8DUxpGG0Baoye6cInDVa8FuL0pv8pS2tBHKW6LpOAMcAr1VhcuWAffwxa2j9q6oo
+	 YLIEilpiQSsg3MSlV193Ol9B6byVY2CdPmIUXIVndzwBqpa90F1QBphNvqpTJACy+4Egz
+	 O2OiF6hDfqVU0Vc0Y4NM7thFbvxypJ+hKQFcOsKkk3XWm+GqUbrKAPnsIE750+9UKWROW
+	 HS899fzb+kInlw49H470K57BJKjynVl/fNVHz7wo5g+W1Xloxcs34Yu7KCdsx9UYS1EQG
+	 irsjThfv/0rYOMC6+RVnJlLbFNpRlH3yTFT/ny0t53TRxMOUv2upwH1RNEjaEB1x/Qw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=OWgrT87Q;
-	arc=none smtp.remote-ip=74.125.82.179
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="eSIUbj/f";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1E1606A32D
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 16:30:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F1E1606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF2B606A325;
+	Mon, 26 Oct 2026 16:49:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=OWgrT87Q
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-35c76e9614aso5146624eec.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 09:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793032234; x=1793637034; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=WGd8hv6dQ0jpXHntVrEKsl2n+adOY8jZkAHXTXnqh7c=;
-        b=OWgrT87Qj/2zyW8smzZBl773SMPrPIzcvxCXye5uBT8QFVCCjI9Rok0yb22yySWm7Z
-         XxKPx1VpKgrJr1Z9ev71PvTb8vFPBIiAiIBfFBPkCyV5KkbZiZfxLW1hrjRMlIoXXzQv
-         Pi2jcEap2puXyNfA+70UuljWtojYba002F5ZqLUETRQBGKklcmM2NkLVq+uvOYvQxHH1
-         FK25Og2Kk078DLTMCVWxJcKUk6lVI7qlVD3UJcaeKOEYhOscCtsRqlWx2eRPix3JrhTR
-         m7vjPzGwMMuwHNDEd+a41fikRJO53eLxA5tTjkQJBnY2A1xWp+M5V7bzqk69179sGXSa
-         gXLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793032234; x=1793637034;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WGd8hv6dQ0jpXHntVrEKsl2n+adOY8jZkAHXTXnqh7c=;
-        b=TbpW8Ic3fJwWnhmOib4B8ZWxc0igj0rsXre+lSVAJHyO1fO889cQPvMlWLUvvfVcBs
-         RPNmSYf2GqZyZ39hWo7rxnURTtDNkXBLwmkZ8knCdd53MCqJvcJfU9FI2AfCfthKIErz
-         GnmpWyhGeE46rdBu2vbKwg2mj0Bt9nISk/KsANGYRXXUkr6MyKyqdR7LjeO1KynETp+x
-         9FYuD9ylGwHxDAuyUDlMPnrBW7+hWHebLJp2wVC1arAPJ59iPx8npHiQNoMP9gjxPHxg
-         6qFTU39yewHetado/8+roVMBqSq5cgyIR4+XIm02XLBTeyPWx2K6j++muoUtPkpN3pXz
-         o6Kg==
-X-Forwarded-Encrypted: i=1; AKwUvBx/dhk/jZzeQHjkS8WFLHOQgF7CgjLR3U03U471Bxwc05elKaGJZHMRnar2nkKYtRBDxV/H0rfvA/+4eeF+N18=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLJGo5tU7xKEM4LVkK+mIMPvH9HJi9i/HWs2P6gO9+mPrA/1h2Q
-	bENV8Nw8SKqAGHjVl/6EH1+69ZJNs8hM2ysDpVEWqM8BVSjCH6SWsZwT
-X-Gm-Gg: AYBFou0seRGGgaUhd363UqG/uhMGzqGowXsasuqn2S5AxT2gskgl/HQrVEHxB8G8atV
-	tYaYNklvyKv/8txna46bAGq28KolpskLst5NLykZGAueuTqR6pWK2YRjZ9qub2NNBBJr7z7xv19
-	4Lqdd8MiQwMBcz6ENE00nsEbKRio6eh9IFLsh14lXmbyuY4bmi3k0NBwfpMYofQiorf3bWDyRdk
-	W8asG8PEPdzu4wpOv/D32sWg4rOsZqnlpipIdk+GX6xlco7FXNzqVBV/yVsw5VkSuBH+BNEn2F5
-	ywHc/9ZI213OKS0Aq1qUozBa/aXwRhv/in5tmVK40UxLkt/JyX2jK/iart49MN+Ei6bGhaXX0+M
-	9Qxltx6Dn0VQgewaaQ7qK12tt71u2vpHbjoZi0YE3q/I/kXVtw/HHmJs7XMmPxVwGei30m4qQ2U
-	xVrmhph7wwe0agv/zrGu3cIqM10gDT3fx/rJ4bBZg2TywugWpO8M5jiKQZtaF0gB1BBBMF43YfD
-	NVK84vot6yWxxHUHoS5rWDqnSIl3CRLdX36b9lcVdCNapAMrZyay82f+m2b7IyLooWpBKRQTHKL
-	HLPSUUfGV9tzhEGb9LunAKgmBCF0jIjLdh9joLMp4xc4/MBSoZFJFogmKzDGgQONGSYaF7BmBSQ
-	=
-X-Received: by 2002:a05:7301:1530:b0:35e:da0a:75b0 with SMTP id 5a478bee46e88-369e84e94a7mr11024368eec.25.1793032233734;
-        Mon, 26 Oct 2026 09:30:33 -0700 (PDT)
-Received: from nixos ([2405:201:c40d:9039:f859:3f74:c064:3281])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8db7b23sm36119014eec.19.2026.10.26.09.30.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 09:30:32 -0700 (PDT)
-From: Ayushman Rout <ayushmanrout27@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	Ayushman Rout <ayushmanrout27@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Test overlapping dynptr copies on xdp frags
-Date: Mon, 26 Oct 2026 21:58:09 +0530
-Message-ID: <20261026162810.12862-3-ayushmanrout27@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261026162810.12862-1-ayushmanrout27@gmail.com>
-References: <20261026162810.12862-1-ayushmanrout27@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eSIUbj/f
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25FFF1F01825;
+	Mon, 26 Oct 2026 16:49:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793033381;
+	bh=y23T2h2GqwoD/whugkXIP7aaex8iTjdAPLzd5mbQF8c=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=eSIUbj/fyojBq3HQRFxeIxkdrXfEVy5YRekWnqL35S2BnC5Bf/oiaHYfBdAH8oNEY
+	 2i/i01wzlokhmE/3L1Ww4kgiNjWe/HwTf+CiwHVFdkI119DRPPpOXVrUEd0jxtrrnH
+	 2H36+acnUxai2XOlTF5HfH3qMsgxsqQRzU9xgCEXkiDCL4Mt0ZXu97VRi7SpIjINtv
+	 GmThBhfL8OuXuH2KAaOiOUlr+4Uy6+yrl7ReQPLBmdw6a5cixPqG9Ly8q/npqOvtks
+	 BQ+lJzRetFSi0aPDJj6zFVtJ3N+L2XpF/MKrCmFzsU8lVGXYFgS7dB9/EAiUbV/NHU
+	 cfchkEP8B0Tcg==
+Subject: Re: [PATCH net v3] selftests/net: test network sysctl extremes
+From: netdev-bot+sashiko@kernel.org
+To: sahaj123.sc@gmail.com
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hangbin.liu@linux.dev,
+ netdev-bot+sashiko@kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Mon, 26 Oct 2026 16:49:40 +0000
+Message-ID: <179303338069.3134.8407087775481756454@kernel.org>
+In-Reply-To: <20261025160927.3934600-1-sahaj123.sc@gmail.com>
+References: <20261025160927.3934600-1-sahaj123.sc@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -117,147 +63,319 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add dynptr tests for copies within one xdp packet with frags, where the
-source and the destination overlap and the destination is above the
-source:
+Thank you for your contribution! Sashiko AI review found 7 potential
+issue(s) to consider.
 
-- test_dynptr_copy_xdp_overlap: both ranges cross from the linear part
-  into frag0. bpf_dynptr_copy() of 1200 bytes with the destination 100
-  bytes above the source.
-- test_dynptr_copy_xdp_overlap_src_linear: the source is in the linear
-  part and the destination crosses into frag0.
-- test_dynptr_copy_xdp_overlap_dst_frag: the source crosses into frag0
-  and the destination is in frag0.
+Critical: 0 · High: 0 · Medium: 4 · Low: 3
 
-The new tests set err when the data is wrong. The existing
-test_dynptr_copy_xdp does not, so it can pass on corrupted data.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Without the fix to bpf_dynptr_copy(), test_dynptr_copy_xdp_overlap
-fails. With it, all the new tests pass.
+- [Medium] Several splat patterns in check_kernel_log()
+  (tools/testing/selftests/net/sysctl_net_test.c) do not match what this…
+- [Medium] The test says it exercises TCP and UDP loopback traffic at
+  every accepted lower and upper bound of tcp_rmem/tcp_wmem, but its…
+- [Medium] Every whole-test skip path in main() calls
+  ksft_test_result_skip() and then ksft_finished().
+- [Medium] check_kernel_log() can still be spoofed by text a task
+  controls, even though the v3 notes claim "Match kernel splat…
+- [Low] The permanent commit message mixes revision history into the
+  change description, overstates scope, and leaves out behaviour that…
+- [Low] The test's verdict depends on global kernel log activity that has
+  nothing to do with the sysctls under test.
+- [Low] The boundary search has no expected value to compare against.
 
-Signed-off-by: Ayushman Rout <ayushmanrout27@gmail.com>
----
- .../testing/selftests/bpf/prog_tests/dynptr.c |  3 +
- .../selftests/bpf/progs/dynptr_success.c      | 90 +++++++++++++++++++
- 2 files changed, 93 insertions(+)
+--
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-index 4396560365e8..cbb2cc9969be 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -22,6 +22,9 @@ static struct {
- 	{"test_dynptr_data", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_copy", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_copy_xdp", SETUP_XDP_PROG},
-+	{"test_dynptr_copy_xdp_overlap", SETUP_XDP_PROG},
-+	{"test_dynptr_copy_xdp_overlap_src_linear", SETUP_XDP_PROG},
-+	{"test_dynptr_copy_xdp_overlap_dst_frag", SETUP_XDP_PROG},
- 	{"test_dynptr_memset_zero", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_memset_notzero", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_memset_zero_offset", SETUP_SYSCALL_SLEEP},
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
-index b668ebd61fc7..56be4eafc270 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_success.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
-@@ -759,6 +759,96 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
- 	return XDP_DROP;
- }
- 
-+static __always_inline int fill_xdp(struct bpf_dynptr *ptr, __u32 start, __u32 n)
-+{
-+	__u8 b;
-+	int i;
-+
-+	bpf_for(i, 0, n) {
-+		b = (start + i) % 251;
-+		if (bpf_dynptr_write(ptr, start + i, &b, 1, 0))
-+			return 1;
-+	}
-+	return 0;
-+}
-+
-+static __always_inline int check_xdp(struct bpf_dynptr *ptr, __u32 at, __u32 n, __u32 from)
-+{
-+	__u8 b;
-+	int i;
-+
-+	bpf_for(i, 0, n) {
-+		if (bpf_dynptr_read(&b, 1, ptr, at + i, 0))
-+			return 1;
-+		if (b != (__u8)((from + i) % 251))
-+			return 1;
-+	}
-+	return 0;
-+}
-+
-+SEC("?xdp")
-+int test_dynptr_copy_xdp_overlap(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 off = data_end - data - 1000;
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	if (fill_xdp(&ptr, off, 1300)) {
-+		err = 1;
-+		return XDP_DROP;
-+	}
-+	err = bpf_dynptr_copy(&ptr, off + 100, &ptr, off, 1200);
-+	if (err)
-+		return XDP_DROP;
-+	if (check_xdp(&ptr, off + 100, 1200, off))
-+		err = 2;
-+	return XDP_DROP;
-+}
-+
-+SEC("?xdp")
-+int test_dynptr_copy_xdp_overlap_src_linear(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 lin = data_end - data;
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	if (fill_xdp(&ptr, lin - 64, 118)) {
-+		err = 1;
-+		return XDP_DROP;
-+	}
-+	err = bpf_dynptr_copy(&ptr, lin - 10, &ptr, lin - 64, 64);
-+	if (err)
-+		return XDP_DROP;
-+	if (check_xdp(&ptr, lin - 10, 64, lin - 64))
-+		err = 2;
-+	return XDP_DROP;
-+}
-+
-+SEC("?xdp")
-+int test_dynptr_copy_xdp_overlap_dst_frag(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 lin = data_end - data;
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	if (fill_xdp(&ptr, lin - 10, 84)) {
-+		err = 1;
-+		return XDP_DROP;
-+	}
-+	err = bpf_dynptr_copy(&ptr, lin + 10, &ptr, lin - 10, 64);
-+	if (err)
-+		return XDP_DROP;
-+	if (check_xdp(&ptr, lin + 10, 64, lin - 10))
-+		err = 2;
-+	return XDP_DROP;
-+}
-+
- char memset_zero_data[] = "data to be zeroed";
- 
- SEC("?tp/syscalls/sys_enter_nanosleep")
+selftests/net: test network sysctl extremes
+
+This adds a new kselftest, sysctl_net_test. It unshares a network
+namespace, searches for the accepted lower and upper bounds of each value
+in ipv4/tcp_rmem and ipv4/tcp_wmem, and runs TCP and UDP loopback traffic
+at each bound. While it runs, it also watches /dev/kmsg for kernel splats.
+
+Link: https://lore.kernel.org/r/20261014041446.2821085-1-sahaj123.sc@gmail.com
+
+> selftests/net: test network sysctl extremes
+>
+> Probe the accepted lower and upper bounds of per-network-namespace TCP
+> receive and send memory sysctls, then exercise loopback traffic at each
+> bound.
+>
+> Drop udp_rmem_min and udp_wmem_min: one-byte UDP traffic does not create
+> the memory pressure needed to test them. Keep UDP loopback only as a
+> transport smoke check.
+
+[ ... ]
+
+> Tested: W=1 selftest build; x86_64 QEMU with CONFIG_NET_NS=y.
+
+[Severity: Low]
+This isn't a bug, but the "Drop udp_rmem_min and udp_wmem_min" paragraph
+describes a change from an earlier posting. This commit creates
+sysctl_net_test.c from scratch, so nothing is dropped in git history.
+Should that text go below the --- line with the rest of the changelog?
+
+The subject "test network sysctl extremes" also sounds broader than the
+code. representative_sysctls[] only lists ipv4/tcp_rmem and
+ipv4/tcp_wmem.
+
+The body doesn't say that the test reads the global /dev/kmsg and fails
+on any kernel splat. It also doesn't say that the test skips when
+/dev/kmsg can't be opened or seeked, or when printk records are lost.
+Could the commit message describe this?
+
+Also, "Tested:" isn't a standard trailer.
+
+> diff --git a/tools/testing/selftests/net/sysctl_net_test.c b/tools/testing/selftests/net/sysctl_net_test.c
+> new file mode 100644
+> index 0000000000000..81b9b32245f42
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/sysctl_net_test.c
+> @@ -0,0 +1,982 @@
+
+[ ... ]
+
+> +static bool check_kernel_log(void)
+> +{
+> +	static const char * const splats[] = {
+> +		"WARNING: possible circular locking dependency",
+> +		"BUG: unable to handle",
+> +		"------------[ cut here ]",
+> +		"Kernel panic - not syncing:",
+> +		"BUG: KASAN:",
+> +		"watchdog: BUG: soft lockup",
+> +		"watchdog: BUG: hard LOCKUP",
+> +	};
+> +	static const char * const error_prefixes[] = {
+> +		"Oops:",
+> +		"divide error:",
+> +		"general protection fault:",
+> +		"invalid opcode:",
+> +	};
+
+[Severity: Medium]
+Do these patterns match what the kernel prints today? Several of them
+don't seem to line up with the current format strings.
+
+For WARN, __warn() in kernel/panic.c prints:
+
+	pr_warn("WARNING: %s:%d at %pS, CPU#%d: %s/%d\n", ...
+	pr_warn("WARNING: at %pS, CPU#%d: %s/%d\n", ...
+
+So the "WARNING: CPU: <n> PID: <n>" parser later in check_kernel_log()
+can never match. WARNs are only caught by the "cut here" entry.
+
+For x86 oopses, __die_header() in arch/x86/kernel/dumpstack.c prints:
+
+	"Oops: %s: %04lx [#%d]%s%s%s%s\n", str, err & 0xffff,
+
+page_fault_oops() passes "Oops" as str, so the record reads
+"Oops: Oops: 0000 [#1] ...". The error_prefixes check:
+
+	splat = *p == ' ' && isxdigit((unsigned char)p[1]);
+
+rejects that record ('O' is not a hex digit). It also rejects
+"Oops: general protection fault: ..." and "Oops: invalid opcode: ...".
+No record starts with the bare "general protection fault:" or
+"invalid opcode:" prefixes. Only "Oops: divide error" matches, and only
+because 'd' happens to be a hex digit.
+
+On x86, a kernel NULL dereference goes through show_fault_oops() in
+arch/x86/mm/fault.c:
+
+	pr_alert("BUG: kernel NULL pointer dereference, address: %px\n",
+
+That string isn't in splats[], which only has the "BUG: unable to
+handle" branch. The die() path prints no "cut here" line, so nothing
+matches a NULL dereference.
+
+On arm64, __die() in arch/arm64/kernel/traps.c prints
+"Internal error: %s: %016lx [#%d] SMP", and die_kernel_fault() prints
+"Unable to handle kernel %s at virtual address". Neither is matched,
+even though the commit notes cite an arm64 run.
+
+watchdog_hardlockup_check() in kernel/watchdog.c prints:
+
+	pr_emerg("CPU%u: Watchdog detected hard LOCKUP on cpu %u\n", ...);
+
+So the "watchdog: BUG: hard LOCKUP" entry never matches anything.
+
+Lockdep also prints "WARNING: possible recursive locking detected",
+"WARNING: inconsistent lock state", "WARNING: suspicious RCU usage",
+"WARNING: bad unlock balance detected!" and others with no "cut here"
+line. Only the circular dependency report is listed.
+
+An oops can happen in softirq, a timer or a kworker, for example in TCP
+timers or loopback RX at an extreme rmem/wmem value. If it does, the
+test keeps running and reports a pass. Could these patterns be updated
+to match the current format strings?
+
+[ ... ]
+
+> +		/* Ignore messages that userspace wrote to /dev/kmsg. */
+> +		prefix = strtoul(record, NULL, 10);
+> +		if (prefix >> 3 != 0)
+> +			continue;
+
+[Severity: Medium]
+Can a task still fake a splat here? The v3 notes say the matcher no
+longer matches task-controlled "BUG:" text. However, some facility 0
+kernel records start with the task comm, and those get past this
+filter.
+
+On x86, show_signal_msg() in arch/x86/mm/fault.c does:
+
+	printk("%s%s[%d]: segfault at %lx ip %px sp %px error %lx",
+		loglvl, tsk->comm, task_pid_nr(tsk), address,
+
+show_unhandled_signals defaults to 1. On arm64, arm64_show_signal()
+does:
+
+	pr_info("%s[%d]: unhandled exception: ", tsk->comm, ...);
+
+TASK_COMM_LEN is 16, so a comm can be up to 15 characters. /dev/kmsg
+isn't namespaced, so any unprivileged process on the host can do this:
+
+	prctl(PR_SET_NAME, "BUG: KASAN:");
+	/* then take an unhandled SIGSEGV */
+
+The record "BUG: KASAN:[pid]: segfault at ..." matches the
+"BUG: KASAN:" entry in splats[], so the test fails with "kernel splat
+detected".
+
+Other comms work the same way:
+
+  "Oops: 0" matches the "Oops:" prefix, since a space and a hex digit
+  follow it.
+
+  "divide error: a" is exactly 15 characters.
+
+  "UBSAN: x" passes the isalpha() check.
+
+The validation in the notes only used the comm "BUG:", which is shorter
+than every pattern, so it doesn't cover this case.
+
+[ ... ]
+
+> +static int find_bound(const char *path,
+> +		      const struct sysctl_values *original, size_t index,
+> +		      bool lower, bool unsigned_domain,
+> +		      struct sysctl_number *bound)
+> +{
+
+[ ... ]
+
+> +	*bound = unsigned_domain ? number_from_unsigned(valid) :
+> +		 number_from_signed(unordered_value(valid));
+> +	return 0;
+> +}
+
+[Severity: Low]
+Should the bound found here be checked against an expected value?
+find_bound() takes whatever value the kernel accepts as the correct
+bound.
+
+Documentation/networking/ip-sysctl.rst says each tcp_rmem value "cannot
+be set below 4096". net/ipv4/sysctl_net_ipv4.c enforces this with:
+
+	.extra1		= &tcp_min_rcvbuf,
+
+Suppose that minimum regresses. The notes describe a vendor 6.12.57
+kernel that accepted tcp_rmem[1]=1 and sent zero-window SYN/SYN-ACKs.
+The test would just find the new bound and run traffic there.
+
+The verdict in main() only needs one success, so the arm64 run with TCP
+11/12 would still pass.
+
+[ ... ]
+
+> +int main(int argc, char **argv)
+> +{
+
+[ ... ]
+
+> +	if (unshare(CLONE_NEWNET)) {
+> +		ksft_test_result_skip("cannot create network namespace: %s\n",
+> +				      strerror(errno));
+> +		ksft_finished();
+> +	}
+
+[Severity: Medium]
+Does this exit with KSFT_PASS instead of KSFT_SKIP?
+ksft_test_result_skip() increments ksft_cnt.ksft_xskip, and
+ksft_finished() is defined as:
+
+	#define ksft_finished()			\
+		ksft_exit(ksft_plan ==		\
+			  ksft_cnt.ksft_pass +	\
+			  ksft_cnt.ksft_xpass +	\
+			  ksft_cnt.ksft_xfail +	\
+			  ksft_cnt.ksft_xskip)
+
+With a plan of 1 and one skip, the condition is true and
+ksft_exit_pass() exits with 0. run_one() in kselftest/runner.sh tells
+pass from skip only by the exit code, so the run is recorded as a pass.
+
+main() uses the same pattern for the /dev/kmsg open and seek failures,
+for the loopback failure, and for the "no selected writable numeric
+network sysctls found" case. It also uses it for the
+kernel_log_incomplete case, which v3 added so that an incomplete splat
+check would not count as a pass.
+
+Would ksft_exit_skip() be the right call for these whole-test skips?
+
+> +
+> +	kmsg_fd = open("/dev/kmsg", O_RDONLY | O_NONBLOCK | O_CLOEXEC);
+
+[Severity: Low]
+Should the result of this test depend on the global kernel log?
+unshare(CLONE_NEWNET) isolates the sysctls, but /dev/kmsg is
+system-wide.
+
+check_kernel_log() runs after every probe and traffic step. A WARN from
+unrelated work running at the same time, such as other selftests,
+drivers or kworkers, would fail this test with "kernel splat detected".
+
+Also, a printk burst that causes EPIPE sets kernel_log_incomplete. The
+whole run is then reported as a skip, even if every sysctl and traffic
+check passed:
+
+	if (kernel_log_incomplete) {
+		...
+		ksft_test_result_skip("cannot complete kernel splat check\n");
+
+netdev CI already scans dmesg after each test. Is a separate check
+needed here?
+
+[ ... ]
+
+> +	if (!failure[0] && (!tcp_successes || !udp_successes))
+> +		set_failure("loopback delivery incomplete: TCP %zu/%zu, UDP %zu/%zu",
+> +			    tcp_successes, tcp_attempts,
+> +			    udp_successes, udp_attempts);
+
+[Severity: Medium]
+Is this check strict enough? When delivery fails,
+run_loopback_traffic() only copies the first error into
+tcp_delivery_failure or udp_delivery_failure. That string is printed as
+a '#' comment, and set_failure() is never called.
+
+So the test only fails here when every TCP attempt fails or every UDP
+attempt fails. With TCP 1/12 or UDP 1/12, main() still reaches:
+
+	ksft_test_result_pass("TCP/UDP loopback smoke: TCP %zu/%zu, UDP %zu/%zu\n",
+
+The arm64 run in the notes had one TCP timeout in 12 attempts at
+tcp_rmem[1]=1, and it would be reported as a pass.
+
+Should a delivery failure at any bound fail the test?
+
+[ ... ]
+
 -- 
-2.54.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261025160927.3934600-1-sahaj123.sc%40gmail.com
