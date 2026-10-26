@@ -1,54 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.88
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793039797;
-	b=Lc/O6E65IIqXCo0um9f4yKlqZzC2KLZDm6qnzpkfPc/mq23J+aSTAV5XKi41LwnZTuBR
-	 scMbMHoB7j0w3efHM7t5m3rwxrYTu09f5/5P8sRqo69Zx5p9yxzjx0qiqlOJxzrvmj7yD
-	 UKwh02+5+NszuvVRCfZ+G81cazcTyf/QRABWqOhsxMkSehPpujySFzaSmiQjy0MIQKBlW
-	 iXX+tfIl1s7hKjCFYnAf71xbYwW8U9ksYr+816yew/poJk6LHST9Xx41NuhmaZvpBv+Dq
-	 iccBQ+RPlUP8fk8R+UORCDsf8P/s96K1wRbuqU1DL9MGSnNju3Y/iktyYKKhrQ7PstQ==
+	t=1793041680;
+	b=Wth2k/HmdfNlJloZvpXBoPRtR+TcrnCQioOSH4lY+f5Zw+hoJXgWT/lxRqy/BdLnPywe
+	 2CUbEenIaJaAifgthCLx/hfXJxNSxksWAij+95PA5fkCMIj7oKTAPy3ikkz5fzlbMoZee
+	 y0znPTchKZVB0yHO1WXWHdHwVzEgEGz2k/WKN1+qlPdQCVpRnYuDiW0l9BbsT4CayE2H0
+	 7eiYm/o6M91JNAfPgQ41vwiyrDdfKO8L8htr4XqvFi/92i4wHlPbxrRgO0Is65agvc51N
+	 fODV4DwPvtYDAi0eGK/oj3e1xcWAKxCE7T9Uk7RtzSx3j0/p6SuhKLRdu4nEtuZNBFw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793039797;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=EicdVyt3cuI1JNRmtgirZBSbKkrRIqYDXX+D7aKA+VQ=;
-	b=qkcO51Z2M7D6dNBQp+6rO3sIVRdWEHCaevvpbpKicAsmWtb2aRiBqVY5ny/r2gseH/c0
-	 eLe1dxdsyhmDGZ6YkbF1uzsCWEoD/YTVZRqXPE09hyBh6upuKz1SM/GpGRDd3RDKZgfSP
-	 64L9l/76AAGpfbkyfwjRSFnJHVhWK2LFlDhaOQgQwnY+Ie3/piSTTu+AHPtQ/6XDjTAyU
-	 O8jbOqS91wpgfLDheP2lzNIGh1yMiUzIiEBzeCwwj+59PKXZcqr2PDIxqeVEnVat7lTT5
-	 NJ0GKTIhkCm7g30F6ZXP1wPLvNEoSXkOBAeCosv0QV4fi3CdDT4qSXcQVFvb2rf0a/g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793041680;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=urfO6D4hqsaWObIrpF6xBqN7wc2zXiiEIXZMlS0+D0s=;
+	b=FK4hrf2vdazSVMQZM9A7SbF6AenNylOVtLFQylKHnF74/GoFRGq2cajkef9PjjeJejE2
+	 /x71PFp/Rou1Hd7+/OWIMO0iMU/tAYINn8lt0W16yyBlaB3oPAxiw2nzFG3BNQH+t526J
+	 WWIRa/cnlPWuQG6hffhXWiySbMWqZeVuc2JciZvkajEcYny5+j4ubN9pkkMhawUGZuPwA
+	 1hm3zjBGuJVGMUAPAZAn1UHU2tr48WfjbVfOSH3MbKTFltnuGmB5+mGUa+kF8hCeWwJRn
+	 DPdnEMSIMZdEvpdrQOrHFUM34Z+ae1ehS2q1rCQzqUCNfKykQGE72f4SVZM9lE/m6hA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cvx8D4lz;
-	arc=none smtp.remote-ip=95.215.58.88
-Received: from mta1.migadu.com (out-88.mta1.migadu.com [95.215.58.88])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UY2ho6jA;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8018960A260F
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 18:36:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8018960A260F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA25B606A31D
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 19:07:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cvx8D4lz
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=O7bendn+vz7GZlgufTDXpvtWbXs4Nv+hlyvLUyv9A6g=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793039794; v=1; x=1793644594;
- b=cvx8D4lzMyNaE6VlzcBxxkQd5kfu5UCI2Rb5Kl+44DEufBBxpibKx+V7R7tEFrYS2IhTxW+J
- xRcvKn3gyJ1vU4/sIsbyXH/U5d8ij4x3fkLemVRjPbpBC4HaMfy9/gB4ECfUxyRstJWjqYyCO0Z
- 95oOFDan1D30a+pVk6VtBCn0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id efd915cbd3990552;
-	Mon, 26 Oct 2026 18:36:34 +0000
-X-Mizu-Trace-ID: efd915cbd3990552
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2a2d0450-01f5-4a87-9e4b-7ebecdbf165a@linux.dev>
-Date: Mon, 26 Oct 2026 11:36:23 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UY2ho6jA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A891F031E0
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 19:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793041679;
+	bh=urfO6D4hqsaWObIrpF6xBqN7wc2zXiiEIXZMlS0+D0s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=UY2ho6jArPqIFaWq+Nzej3FIZZMDU+HH3zUAv5RWoTZJFF26qENwlX/PuSzeave9B
+	 up8sNePlt/i79wnID0Z/QzG6yOp22f8t2E8ojlYTLzLcdvr7CpUlNjlIVBpKtqKliR
+	 f6xADGHY9N43BI2fSnDjZC6UuGKYf+ZBeTykk9+zwmk1kaVMvCuVi6fI2WbKuD2y3m
+	 PZ01ROgqxUWWOgz3acwz09J7CWAKdmIs9IhIMlDBIxHYoOVIDgL9OqyUhOKbMtWXAt
+	 1O6MY7L4QAYAI4Z1EBBQA52A7u5aLR3P/7ZVDxz08JM6067J766dpceYp7Zfopvhun
+	 h0Z3AENqJiBLw==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5be3ed646a5so2884554e87.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 12:07:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBxmDMjI5LEln2UoLpWOoOCu5l6g0Vq2hiuKrGvC9VY6UoElS+SKA6VskUyPzp8QN+kNrXoMWlwYXaUytmXNcPw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKnVJ1rZoicoV3eaGWtYk1dwq7iDeTYRSGc5qoeFFBYI7DbnlSK
+	fO5mNfoydluQ6w//V9G7Hf9p5Jzmt5Zhm49NqLHQHKBShpLMLNu80fOXVCnI8y+SYNPUj9Ps5xY
+	IrEpATgPI/uwD9qkQkXYibDZdiDd93Uw=
+X-Received: by 2002:a05:6512:3d91:b0:5bf:c4d2:b074 with SMTP id
+ 2adb3069b0e04-5bfc4d2b178mr465139e87.55.1793041677961; Mon, 26 Oct 2026
+ 12:07:57 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,156 +59,102 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 05/12] selftests/bpf: Cover the low-32 link
- for zero-extending movs
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20261020161907.2115379-6-vineet.gupta@linux.dev>
- <3e177386ed0ff37815ee705fb2cb8195952b4301858e4ff4e2b4638d14d94c3d@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <3e177386ed0ff37815ee705fb2cb8195952b4301858e4ff4e2b4638d14d94c3d@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20261014200127.1363472-1-sashal@kernel.org> <20261014200127.1363472-4-sashal@kernel.org>
+In-Reply-To: <20261014200127.1363472-4-sashal@kernel.org>
+From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Date: Mon, 26 Oct 2026 20:07:44 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hN1xj6wnf53QAD_OZxJHyy3DNAXeMWBnVrTZ4xcBBG5A@mail.gmail.com>
+X-Gm-Features: AclHuK8f4uksRxlVflTjoQx-AJmosU8fA-9vAMQQLIJZ0eA6F1YTlLjjzwLCkvw
+Message-ID: <CAJZ5v0hN1xj6wnf53QAD_OZxJHyy3DNAXeMWBnVrTZ4xcBBG5A@mail.gmail.com>
+Subject: Re: [PATCH 3/5] selftests/thermal: allow cross builds of the Intel tests
+To: Sasha Levin <sashal@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/20/26 9:53 AM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: Cover the low-32 link for zero-extending movs
-> TL;DR:
-> - Selftest comment calls the mixed-kind no-sync case unsound, but the program
->    is safe; it is only lost precision
-> - Commit message says "Twelve" programs, but there are thirteen
+On Wed, Oct 14, 2026 at 10:01=E2=80=AFPM Sasha Levin <sashal@kernel.org> wr=
+ote:
 >
->>      selftests/bpf: Cover the low-32 link for zero-extending movs
->>
->>      Twelve programs, one per decision the previous patch makes:
->>
->>       - zext_mov_narrow_src: narrowing the source reaches the destination
->>       - zext_sync_makes_member_const: and over all 64 bits, since the member
->>         is the zero-extension
->>       - zext_narrow_dst_keeps_base: the reverse must not happen
->>       - zext_u32_src_is_full_link: a provably-u32 source still propagates
->>       - zext_self_mov_no_link: a self-mov mints no id
->>       - zext_chain_drops_link: a second 32-bit mov drops the link
->>       - zext_no_sync_between_mixed_kinds: differing kinds do not reach each
->>         other, in either direction
->>       - zext_no_sync_from_subreg_base: nor does a member reach a base whose
->>         high half it knows nothing about
->>       - zext_sync_between_two_subregs: two low-32 links on one base do
->>       - zext_unlinked_path_stays_reachable: one unlinked path keeps the
->>         guarded div reachable
->>       - zext_mov_breaks_linked_src: forming the link drops the source's own
->>       - zext_sync_keeps_narrower_member: narrowing the base does not widen a
->>         member that already proved itself tighter
->>       - zext_contradiction_keeps_range_sane: a contradiction leaves no empty
->>         range behind, under BPF_F_TEST_REG_INVARIANTS so the violation is a
->>         load failure rather than something only dmesg sees
->>
->>      Written in asm so the bytecode is the same whichever compiler built the
->>      suite.
->>
->>      Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-> The changelog says "Twelve programs", but the list below it has thirteen
-> bullets, and the patch adds thirteen programs:
+> The power_floor and workload_hint Makefiles build nothing when
+> CROSS_COMPILE is set, even for an x86 target, and they include lib.mk
+> only on x86. Other architectures therefore have no install or
+> emit_tests rules for these suites, and their installation fails with a
+> missing target.
 >
-> zext_mov_narrow_src, zext_sync_makes_member_const,
-> zext_contradiction_keeps_range_sane, zext_narrow_dst_keeps_base,
-> zext_u32_src_is_full_link, zext_self_mov_no_link, zext_chain_drops_link,
-> zext_no_sync_between_mixed_kinds, zext_no_sync_from_subreg_base,
-> zext_sync_between_two_subregs, zext_sync_keeps_narrower_member,
-> zext_unlinked_path_stays_reachable and zext_mov_breaks_linked_src.
+> Select the x86 tests from the target ARCH when it is given and from the
+> host's SUBARCH otherwise, and include lib.mk unconditionally so that the
+> suites install and emit an empty runlist on other architectures. Use a
+> private ARCH_PROCESSED instead of the ARCH override added by
+> commit 5a1292137e89 ("selftests: fix ARCH normalization to handle
+> command-line argument"): the override changed the value lib.mk uses to
+> pick the clang target, whereas leaving ARCH unset lets lib.mk use the
+> compiler's native triple. A command-line ARCH such as x86_64 is still
+> normalized for the selection, while an ARCH spelling that lib.mk does
+> not know, such as i686 with LLVM=3D1, is rejected as in other selftests.
 >
-> The count looks like it was not updated when
-> zext_contradiction_keeps_range_sane was added.  It is the last bullet, but the
-> third program in the file.  Should "Twelve" be "Thirteen"?
-
-Yes there was a last minute test update and this missed the update.
-
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-> [ ... ]
->
->> @@ -710,4 +710,352 @@ l_exit_%=:							\
-> [ ... ]
->
->> +/*
->> + * Two members of one id set carrying different link kinds do not propagate
->> + * to each other: r7 is (u32)base and r8 is base + 3, and the deltas were
->> + * added at different ALU widths, so narrowing r8 says nothing about r7.
->> + * sync_linked_regs() declines the pair on the kinds before the deltas are
->> + * ever consulted. Note neither register is the base -- that is r6.
->> + */
->> +SEC("socket")
->> +__failure __msg("div by zero")
->> +__naked void zext_no_sync_between_mixed_kinds(void)
->> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	w7 = w6;		/* forms the link */		\
->> +	r8 = r6;						\
->> +	r8 += 3;		/* r8 is BPF_REG_LINK_FULL, r7 is BPF_REG_LINK_ZEXT */	\
->> +	if r8 != 3 goto 1f;	/* must not propagate to r7 */	\
->> +	if w7 == 0 goto 1f;					\
->> +	r0 /= 0;						\
->> +1:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
->> +}
->                  ^^^^
->
-> This isn't a bug, but is the comment accurate for this direction?  It says
-> narrowing r8 "says nothing about r7", and the asm comment says the narrowing
-> "must not propagate to r7".
->
-> r8 is a BPF_REG_LINK_FULL member, so r8 == r6 + 3 over all 64 bits.  That
-> relation inverts exactly, so knowing r8 pins the base, and r7 == (u32)(r8 - 3)
-> follows.
->
-> In this program the fall-through of "if r8 != 3 goto 1f" forces r6 == 0, so
-> r7 == 0, "if w7 == 0 goto 1f" is always taken, and "r0 /= 0" cannot be reached
-> at runtime.  The program is safe.  The verifier rejects it only because
-> sync_linked_regs() skips every pair with differing kinds:
->
->      if (reg->link_kind && known_reg->link_kind &&
->          reg->link_kind != known_reg->link_kind)
->              continue;
->
-> That check exists for the other direction, a ZEXT known_reg against a FULL
-> member (scalars_alu32_alu64_cross_type), where the 32-bit wrap really does
-> break the relation.  If the differencing arm ran for known=r8 (FULL, delta 3)
-> and reg=r7 (ZEXT, delta 0), it would compute r8 + (0 - 3) and then
-> zext_32_to_64(), which gives exactly (u32)(r8 - 3).  That is sound.
->
-> So this test pins a deliberate loss of precision, not a soundness requirement,
-> but the comment presents it as unsound.  The text is unchanged at the tip of
-> the series.  Someone who later makes the verifier propagate FULL -> ZEXT will
-> see this test fail, and the comment will suggest the improvement is wrong.
->
-> zext_chain_drops_link and zext_mov_breaks_linked_src also reject runtime-safe
-> programs, but their comments say the link is dropped by rule.  Could this one
-> be worded the same way, for example "sync_linked_regs() declines mixed kinds
-> even where, as here, the relation would hold"?
-
-Yes this is correct as well, I'll update the comments.
-
-Thx,
--Vineet
-
->
->
+> Fixes: 27801542b2b8 ("selftests/thermel/intel: Add test to read workload =
+hint")
+> Fixes: d4d27e5a1a88 ("selftests/thermel/intel: Add test to read power flo=
+or status")
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>  .../selftests/thermal/intel/power_floor/Makefile     | 12 +++++-------
+>  .../selftests/thermal/intel/workload_hint/Makefile   | 12 +++++-------
+>  2 files changed, 10 insertions(+), 14 deletions(-)
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39458500836
+> diff --git a/tools/testing/selftests/thermal/intel/power_floor/Makefile b=
+/tools/testing/selftests/thermal/intel/power_floor/Makefile
+> index 07463c2160e09..16d26eab55652 100644
+> --- a/tools/testing/selftests/thermal/intel/power_floor/Makefile
+> +++ b/tools/testing/selftests/thermal/intel/power_floor/Makefile
+> @@ -1,12 +1,10 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -ifndef CROSS_COMPILE
+> -ARCH ?=3D $(shell uname -m 2>/dev/null || echo not)
+> -override ARCH :=3D $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64=
+/x86/)
+> +top_srcdir =3D ../../../../../..
+> +include $(top_srcdir)/scripts/subarch.include
+> +ARCH_PROCESSED :=3D $(shell echo $(or $(ARCH),$(SUBARCH)) | sed -e s/i.8=
+6/x86/ -e s/x86_64/x86/)
+>
+> -ifeq ($(ARCH),x86)
+> +ifeq ($(ARCH_PROCESSED),x86)
+>  TEST_GEN_PROGS :=3D power_floor_test
+> +endif
+>
+>  include ../../../lib.mk
+> -
+> -endif
+> -endif
+> diff --git a/tools/testing/selftests/thermal/intel/workload_hint/Makefile=
+ b/tools/testing/selftests/thermal/intel/workload_hint/Makefile
+> index 49e3bc2b20f9d..e53d6ecd9f8de 100644
+> --- a/tools/testing/selftests/thermal/intel/workload_hint/Makefile
+> +++ b/tools/testing/selftests/thermal/intel/workload_hint/Makefile
+> @@ -1,12 +1,10 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -ifndef CROSS_COMPILE
+> -ARCH ?=3D $(shell uname -m 2>/dev/null || echo not)
+> -override ARCH :=3D $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64=
+/x86/)
+> +top_srcdir =3D ../../../../../..
+> +include $(top_srcdir)/scripts/subarch.include
+> +ARCH_PROCESSED :=3D $(shell echo $(or $(ARCH),$(SUBARCH)) | sed -e s/i.8=
+6/x86/ -e s/x86_64/x86/)
+>
+> -ifeq ($(ARCH),x86)
+> +ifeq ($(ARCH_PROCESSED),x86)
+>  TEST_GEN_PROGS :=3D workload_hint_test
+> +endif
+>
+>  include ../../../lib.mk
+> -
+> -endif
+> -endif
+> --
 
+Applied as 7.4-rc material, thanks!
