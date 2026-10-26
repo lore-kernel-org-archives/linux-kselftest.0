@@ -1,68 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792985648;
-	b=hjQles0Fau3ypD6wmBgW9QHMumjueDQwZMHJ4e/7qsQz7558VypeKf19gi0B97QMzQ39
-	 JNAqWbkw1hxKKtLCY2N01CoIFfqGN4X6iy7en7hB6YRk5iITR2585TEYkmE/bxiTLOtRf
-	 +tinAmwRTSPPUaGftMt5p5MEGNXMxzgc9khFuCuR6FJqQlur20A9XTkgYaJJ8f0MoOYrT
-	 ytQg5iEC6SFRt4kSchlUEVFAM/OL1mTzcsA1Buq3u7mjG2/Es6Ck6iIxzJ2Ni3h38Uwao
-	 yyVitl/54oNWgmgUQ0YtXb7IBS52MisbBJU8HxKcxNaDy0PYB5fdeYjyt9JjztkmWAQ==
+	t=1792989007;
+	b=IXysd95Qj3HT6QwenF+YCg2zTfuK0NfT2I7TwsSC0hmtCfMj4x06lqLD+0QNYL18me5R
+	 6wU2E8IQ7KiqfloKR1o2hiY48NOEwxBieZhpsRU3+xDxul8I1ohz4NTrsLvCpFqlOO3sB
+	 FbtWVFm/1DBlXfakToLFe3kPU+l2QMYIi6gQF376lU831NeyE8dyqrD8vzpgThNynDeDa
+	 gKr5oTLAa8uTLbt7YiDnwt4iV31fLEtRI57FLzxcgtHHJ+8CglUkiH/HsS2PZ54r24rbR
+	 KonOxw3yxplhG1ot/Tk9utmYnEcS9Aia1QjBFnptmSRva1LYYQBOBii5AN+MSjS9HiQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792985648;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=HOMB46FaXOpquuAn/2bTfQsNhQ9lVa4wMoEdUfqxF+w=;
-	b=Uonk0YexuqmYkFjHenhvi/UA8DYavjTFyiUK1yHEfeniUAyVSLt2vm/T8CG6wQVCK2nd
-	 J8yMYZMvj5zjhCvtwRnMjySYu47pzOtKvV+oF9BRdSgGwpfcuUAuS+UwAgj+Ya1oKnSco
-	 H63jxgHNfv6unbd6rnJ/G9hwJeDbRTKkhO0qyWpgpMSiryqbQW1ZaxuJEVpgtIvYXz24v
-	 qFFdhP5YoL2K9rkFnvJO/QaboS0m34S2mI3PRQYfN9ltMUgO/ql56cY6FwJy1vLpjcEMB
-	 QJQQW4GX39tuky+VRo63+NmiXeaI4ydvMXELo2PTc2qXzLQvbCrfTpMiOTncr8zRNCA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792989007;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=EuveSYZxvjMwdG3eWJqms3fOhDKBp2n6TwGN5Hewj7o=;
+	b=0T1gnQk9d1ot5XDCYmxcvZVtxcqfQAf/SFwTBzHFFnKn+jgF4Q8jtJ9vkgcON76Yi0Fz
+	 ZDbAXwCwbjxSf7P8ugHyFF7Ed8cdya25xq4xY+h6vhkrwlC3vmih6DibQDbcCgFlnG+ew
+	 6DjeWpS9lBFqvQ5sWFBMYTdvvzTgb+Czw8WjHV526Q4TV42eUaze5cOrLJ8s8fT1s1GUT
+	 VHMxdzlBVBxcazHRB0V0YQtJdjkfYCxqc7eeqmFOiGNZcxY4/8kC6hPnVqM7IDjaMG53G
+	 unsy4SBtVMMNz09Gg28uNi4t3gd35DW5gREYhL3WkYOwMIyxB3E/H1dcc1g2l0UAAKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=G7ZVU5I6;
-	arc=none smtp.remote-ip=117.135.210.3
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vpkw1aFL;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AF2606A31A;
-	Mon, 26 Oct 2026 03:34:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71AF2606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161C9606A31E;
+	Mon, 26 Oct 2026 04:30:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=G7ZVU5I6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:Content-Type:
-	MIME-Version; bh=HOMB46FaXOpquuAn/2bTfQsNhQ9lVa4wMoEdUfqxF+w=;
-	b=G7ZVU5I6JUq8beuP9V2UV/5vGzRLM1Dgt4QB+B0IgSUqEkjScefIH9dzL4KVyu
-	3uRH4E11vlRn14WnUa8VSofKylS346pbRh/vIz4c0dMbiszI2E3Nh1Z38IMZdQ+I
-	Kt2VSPesF0qs1Gg9lUNCPZ7Zqq7iP37JV/VYtAmLakQRA=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgD3VEAJyt5qVHyJCA--.4364S2;
-	Mon, 26 Oct 2026 11:33:30 +0800 (CST)
-From: Xia Yan <yana06070@163.com>
-To: hangbin.liu@linux.dev
-Cc: yana06070@163.com,
-	netdev@vger.kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	horms@kernel.org,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org
-Subject: Re: [PATCH net v4 2/2] selftests: net: check veth carrier after changing channel counts
-Date: Mon, 26 Oct 2026 11:33:17 +0800
-Message-Id: <20261026033317.15680-1-yana06070@163.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <at6_pw9Ng-UEFVB6@fedora>
-References: <20261024093007.12981-1-yana06070@163.com> <20261024093007.12981-2-yana06070@163.com> <at6_pw9Ng-UEFVB6@fedora>
-Content-Type: text/plain; charset="us-ascii"
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vpkw1aFL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896181F01825;
+	Mon, 26 Oct 2026 04:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792989006;
+	bh=EuveSYZxvjMwdG3eWJqms3fOhDKBp2n6TwGN5Hewj7o=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Vpkw1aFLHADKuYm2VNkS50RygSCi664Ys3rNrH4lKnAomEmA9vJocvnMx813p0N1k
+	 i12bUf6w1VjNE5ooYVX4Wkapaux/jcy3k5EYVflvl2CEhWdeW1GtTjEHidWSe1pT7V
+	 BwQF6EnfsvZqTVhXWF19ojaoEwiL5KI03xyU4B+G8qtsCKUKXg167TmgzY/X29Qlak
+	 qUnLL4aGLSue/qNzymvhjMwloYZTd/NfP+qUmvrqNgum0Qfh4acsBqyrkG/hlwjFJg
+	 z8snjsB6ApkKjSsStMFfLi4W9LJFgf89Sbgp6WRg9eS0WWZ1z0C3SjufkUwjbnTfmP
+	 pGgVHVZGcfS2w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 815B939EA761;
+	Mon, 26 Oct 2026 04:30:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,27 +53,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:PigvCgD3VEAJyt5qVHyJCA--.4364S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjTRNb18UUUUU
-X-CM-SenderInfo: p1dqtiawqxiqqrwthudrp/xtbC4AoHjWreygrGQgAA3Q
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v3 1/2] bpf: Validate stack arg reads against caller
+ state
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179298900532.2459690.805384045244174324.git-patchwork-notify@kernel.org>
+Date: Mon, 26 Oct 2026 04:30:05 +0000
+References: <20261026015250.1674676-1-bestswngs@gmail.com>
+In-Reply-To: <20261026015250.1674676-1-bestswngs@gmail.com>
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, co+eada64ce90ecebce@bugs.sh, xmei5@asu.edu,
+ alexei.starovoitov@gmail.com
 
-Hi Hangbin,
+Hello:
 
-Thanks for testing and reviewing this.
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> Which single-value arguments do you mean?
+On Sun, 25 Oct 2026 18:52:49 -0700 you wrote:
+> check_stack_arg_read() bounds a stack argument index with the callee's
+> BTF-derived argument count, then uses the index in the caller's
+> stack_arg_regs[] array. The array's actual logical length is recorded in
+> caller->out_stack_arg_cnt, so the bound and indexed object can diverge.
+> 
+> A crafted BPF_PROG_LOAD can use an argument mismatch to mark a static
+> subprogram's BTF information unreliable. Later calls return from
+> btf_check_subprog_call() before check_outgoing_stack_args(), while
+> check_func_call() continues the static call on -EINVAL. The callee can
+> then read a slot that the caller never allocated or initialized. The
+> earlier commit 4286f5deee14 ("bpf: Validate outgoing stack args when
+> btf_prepare_func_args fails") closed this hole for the first call, but
+> not for later calls after the subprogram has been marked unreliable.
+> 
+> [...]
 
-I meant variable expansions used as command arguments, such as
-"$BASE$target" and "veth$target". "Quote variable expansions" would have
-been clearer wording.
+Here is the summary with links:
+  - [bpf,v3,1/2] bpf: Validate stack arg reads against caller state
+    https://git.kernel.org/bpf/bpf/c/90aedf8854c0
+  - [bpf,v3,2/2] selftests/bpf: Test missing and callback stack arguments
+    https://git.kernel.org/bpf/bpf/c/195a3519ff27
 
-> Nit: there is an extra "" quote.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You're right, the literal up does not need quotes. I'll drop those
-quotes and clarify the changelog if another revision is needed.
-
-Thanks,
-Xia
 
