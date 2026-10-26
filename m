@@ -1,79 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=50.112.246.219
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793043439;
-	b=W4yRNDZB8BT/+HmlYqqbMpcWv+YI0O2V1gBKWygDijpchA304EaE055WBf6276+eC35m
-	 5XUqO3E32LfXCtrSpTVEWRYFKCS4n5RJ41fPccLzuOF+uPWcci2EIgPtEZVis9dB0kXu9
-	 Z7K1YvsqhAvh02lLdCvBsnZfShCthNHe4pCISniR3kw+b/a229fdSM/eSC5aQngTf/j4g
-	 d5Cv+dTuvvFCPUfieBzm+upbbcAcgFaocVv0CEK99/7ksHAx6xiVJowTxrFbj2Ep6jUYp
-	 QJbss26xjuxpyYUsyNfWIuxQo3BV6LoZavcnypRmgwaU+oW3IeUZAYryQtHZKW7sdSQ==
+	t=1793043532;
+	b=2j8lScdmTmODhSd4OgsJPM68cc79d9Y7D61G5mZec4V2T+iaeqqj1B9v2D8BEExSPPSY
+	 GVN9nw4WljXq9Fz0BnbZ+a+ut3emng6JIN6P61CmIxonr3Se4D7+0ZkbA7+wvPDp1AAF1
+	 VD1AUo/91YnFY2XqwzaFcp1RosCTA3GUsjlj0N3+L4up1GbJnHs28QVJ8WqCuELQ/g9R9
+	 u9iCW7UBDO/C/f6v8GKeUmGhK8KQxIBNh0LCnT4KZw/+mJJNCUnBMJcjoD9Q0v8xBJ1/F
+	 3X0iSLHgw7k2DBTbGa/jLJkZYjPjN9a6YKDQU1zxsHt1Qkbc3lT1PvKpcWnqpvuce2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793043439;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=uH9+rYAAqPQiJuFrT+WBrpO1LgkYx3Jka6HX8hIzNrQ=;
-	b=Mjjd1yGU/uKihYETFm3b+Jp6tvK7pfmYXWwQ1eMVzKR8+q5JsdTupeEmGkRMzVSsLujC
-	 nkbnnFiWD5zHY6MEnw7t0/aucWZq7KKTUFF8LkqxRT1xVulTa0ZdTmqqVUbicSOsMwwmh
-	 hLc7Rnc0VmrnyR0f/NmVEPY3EkEw/y3tXwAl5m2q2vMgcnBTqTQC7UGwmUKWdY9VY2SFb
-	 47SKmlKwNqZPQkObtpu2OEBlOj0Y/ddTkgLpFWBluXr387a2zZvdp0doTSdzsHAbK/y3J
-	 ATeJVTUY65BhuKl0DJqFF7a6FjkI4HSZlv34/W78ear45D2u2aDdoNinXGz6w9XyguQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793043532;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Spam-Status:X-Rspamd-Server:
+	 X-Stat-Signature:X-Rspamd-Queue-Id:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=IG6lC5VmLeqP65oSAtdAx1VbFAtk7d9g8bHTWsFni2o=;
+	b=2Iy4pKuUXqn95FV7or6f7v+vzs96GbSQAUbcPt7KG4ldSFU0vd63Mv+YEzf1B7hTf2Oj
+	 BVEmXHM02PTdToUS518HLz1Xx8VkLXnp6aU17/21mhwfjdiUjNdAY4CPU1PahvtFW0WAb
+	 O7+b/nhvt2HTfMyZnD8rrNBXoiweIBvu8WR1X4qBV9aLpr0KpC4Tv4hwKVnYncbL6zeXw
+	 0Hb8HeOjDqU3vavLaHGWD0BHTcJsiuKY1uIu8elXvI4o9UHWg9lBUrBLucYhynkX01cOD
+	 vaPJ4mbV1+5uC8NjrgECo8OtpJZKf6QPvTp7BPR9hqPvPSQ8/jQEkyt6AzTgHqwJJIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	arc=none smtp.remote-ip=50.112.246.219
-Received: from pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com [50.112.246.219])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=ozFpx+Tn;
+	arc=none smtp.remote-ip=216.40.44.11
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E1F606A31A
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 19:37:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62E1F606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1793043434; x=1824579434;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uH9+rYAAqPQiJuFrT+WBrpO1LgkYx3Jka6HX8hIzNrQ=;
-  b=l4O/Gp2XuxIHNvtoh8HI+X6GvZo+Z7kjLcfPBQXimZaB4rI0hj92eOHL
-   M0TxdFX8rN08sruxmjkz4GxUJKJh9vB6F/8Lx93zmPh/V4l9h7t4KzI0j
-   1xWDAAzfoTFr9By/vw7G0HCUkH+ToMaUvJc7RSAW1Um9G7hzjPDIkrU6i
-   04O0S+OX7hSzzPCJW2H9W60F1mxx8jY7ph/b1nQztAJCjjN6+wAlPrrPm
-   s0aIxwmVG9mGdTMsgmnBo6xY3IfiD42xY983EVyC6l//pavSke7IDLzhb
-   2jsye2BYl+b/QJkT2Kf/gigxljgS509UHGtTy9bn7fu01jSMyuwpgwYYT
-   A==;
-X-CSE-ConnectionGUID: cB3i5KkzQZG0C4euPCX6gg==
-X-CSE-MsgGUID: qVbeLyasTsCSskDFEJPeJg==
-X-IronPort-AV: E=Sophos;i="6.27,180,1787011200"; 
-   d="scan'208";a="32065322"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 19:37:13 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:25760]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.12.188:2525] with esmtp (Farcaster)
- id 0cd77dc4-7152-42ca-8b01-ed50c7578bcf; Mon, 26 Oct 2026 19:37:13 +0000 (UTC)
-X-Farcaster-Flow-ID: 0cd77dc4-7152-42ca-8b01-ed50c7578bcf
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Mon, 26 Oct 2026 19:37:13 +0000
-Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Mon, 26 Oct 2026 19:37:11 +0000
-From: Jimmy Zuber <jamz@amazon.com>
-To: Bernd Schubert <bernd@bsbernd.com>
-CC: Miklos Szeredi <miklos@szeredi.hu>, <fuse-devel@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, Jim Harris
-	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
-	<luis@igalia.com>, NeilBrown <neil@brown.name>
-Subject: Re: [PATCH v2 0/3] fuse: atomic open
-Date: Mon, 26 Oct 2026 19:36:57 +0000
-Message-ID: <20261026193657.2715998-1-jamz@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <1c71c9a2-e3dd-4edc-a467-36b389b02d92@bsbernd.com>
-References: <20261026151828.562870-1-jamz@amazon.com> <1c71c9a2-e3dd-4edc-a467-36b389b02d92@bsbernd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D60A606A31A;
+	Mon, 26 Oct 2026 19:38:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D60A606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=ozFpx+Tn
+Received: from omf16.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 97AC3120860;
+	Mon, 26 Oct 2026 19:38:49 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id B9CF420013;
+	Mon, 26 Oct 2026 19:38:47 +0000 (UTC)
+Date: Mon, 26 Oct 2026 15:38:46 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 04/10] tracing/filters: Handle out-of-range CPU for
+ OP_NE in cpumask comparison
+Message-ID: <20261026153846.672c760e@gandalf.local.home>
+In-Reply-To: <179285916115.466249.16061782430177051612.stgit@devnote2>
+References: <179285912318.466249.7425922682086130057.stgit@devnote2>
+	<179285916115.466249.16061782430177051612.stgit@devnote2>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,15 +62,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWA004.ant.amazon.com (10.13.139.19) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout06
+X-Stat-Signature: 64t3e63arizw83rcbc5fx5s75m9wrc9d
+X-Rspamd-Queue-Id: B9CF420013
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18EbIdT0THeRj4MNb530kbySwriKu0IMtI=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=IG6lC5VmLeqP65oSAtdAx1VbFAtk7d9g8bHTWsFni2o=; b=ozFpx+Tn95HddNuk6ZaCvSoh43etYOsqebLGMZVg+4agvzInce5r/nN7WfNVJGS5YVwUsoaDPKt4HAmaTQEkT8mVvOqJiWRRAbfXTOK0fSyMzdW4R0mbLTZEoyAQBb0UBHsxizGeOVJVR7P3fE/SjoNAkRz8H1Fyjiot3sZ4Ang=
+X-HE-Tag: 1793043527-359451
+X-HE-Meta: U2FsdGVkX1+ADCmTBohVlg/PkjfzLah0vItZkBRMDzproUuHADahppCw+HPRpzy8Pm2UEfwxrBq90944zVeIRbrEHo/EIu0ZiX/NMwYwNtDngv4XlcUzI7JZpfSgLTmpiT3xwMdsmhThdD5OEJ0Xo2ocg8IPTNxPr2Q0P35Ot86ykFYYOLeUvCbid4ubF82C9lbAM3DsQBXEjYgjpPFoo4Jc4F1CBezvv+iMRBumH6QuCdgXMvb+4h0v7seRzKIEPeaWbbN8iLwJM3clkoxr4okbfW/Si3B4KmIHAFIuIB75n3Y4OyJAdwUnBcuSLwGT1/piS3aXPFjiAAFM52jNWGFNMOWO+38j
 
-On 10/26/26 17:04, Bernd Schubert wrote:
-> Hi Jimmy, I will try to review today or tomorrow. Did you see the
-> Sashiko reports?
+On Sun, 25 Oct 2026 01:26:01 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-Thank you for the pointer to Sashiko - I've addressed its feedback in v3:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> In filter_pred_##size##_cpumask(), if the event's scalar CPU value is
+> out of range (cpu >= nr_cpu_ids), it unconditionally returns 0.
+> 
+> However, if the predicate operation is OP_NE (e.g., field != CPUS{0,1}),
+> an out-of-range CPU cannot match any valid CPU in the user-provided
+> cpumask and the condition is satisfied. Returning 0 produces a false
+> negative.
+> 
+> Return "pred->op == OP_NE" instead of 0 when cpu >= nr_cpu_ids.
+> 
+> Fixes: 3cbec9d7b93d ("tracing/filters: Enable filtering a scalar field by a cpumask")
+> Cc: stable@vger.kernel.org
 
-https://lore.kernel.org/fuse-devel/20261026190747.2373775-1-jamz@amazon.com/
+BTW, a lot of these are just "stupid input produces stupid results" and I
+personally feel it doesn't deserve a stable tag. I don't even think it
+deserves the "fixes" tag.
+
+Now if the stupid input were to produce a crash or warning, then that's
+different.
+
+-- Steve
+
+
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>  kernel/trace/trace_events_filter.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+> index 69da95f42541..d9aeeec4ed91 100644
+> --- a/kernel/trace/trace_events_filter.c
+> +++ b/kernel/trace/trace_events_filter.c
+> @@ -762,7 +762,7 @@ static int filter_pred_##size##_cpumask(struct filter_pred *pred, void *event)	\
+>  	unsigned int cpu = *addr;						\
+>  										\
+>  	if (cpu >= nr_cpu_ids)							\
+> -		return 0;							\
+> +		return pred->op == OP_NE;					\
+>  										\
+>  	return do_filter_scalar_cpumask(pred->op, cpu, pred->mask);		\
+>  }
+
