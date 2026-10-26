@@ -1,67 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793016312;
-	b=hE2rlYYqaxbcHn4CY0NnFlbQDjSppriCgYQF6WcAr/nqTuglZ+1WDqrdB/KZSS53sjKy
-	 VJz8T42BuqTz4X+wUXtHpgQIZzt/l9qTHiF9phgYK7pMnDXNAWb8n1dysaxSb15K1OcP2
-	 XhqPI/10VLQSgRLF2y8eHV4pEP5O0tWkU7EjFRG/JBwxU2Q6oHLRiJAIQ00TStUXB09V5
-	 qLEpnntQaoKXGnn3P0ByK4RSu1bydPTQQVBn1v5+1XK4J/aLcflLL06HkJmDEvOq4L9C8
-	 PSAeHDUB6QIL7E7KHZiuIQ5SbQXQ1YbtK7/IANilB+ZtywEP+jJjSPseIxNV/keSYFw==
+	t=1793016430;
+	b=BTHebIAOLK3yVXtuaM55K7ZZ//qsSx9uPYhVyh5zEDAdI3ATe2u1POVadGJFY9JYiFda
+	 SWO/y3yRwxOuxaZM3DGrsO4IPZ6MlC9f9SzzR+1KxFT9Y8U8PmRpsqRycVfaVk4aliycl
+	 W1lXHww9WEeVyQqAowbFzNTykmboomZIAhvrbIz0WgMgiC4VcHw9pn40DJ3a7xZeMWsDd
+	 25Ym7pqbYGi8E4AJX6aQozA21+wWtIFvLNPoAdI42OGWsIl75Vk4oNe10Ile/1kHvvxtB
+	 HkHKNOwDFnhVkC19BddF7thgXQFf7V1kRQkowHy4fhoMXWhydlZ686lxnSsepgwYouw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793016312;
-	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 X-Cookie;
-	bh=XrszyOJWwJTV90LIZM95zHwP5tXDmJojQtjJsIJz+qU=;
-	b=JDozdlGV91pq6S6c63PhpSTQ5r6T9XT0KHuW3LQLjNjY56y2fw+k4hzLs9jp6ytoQfAj
-	 U8pk983tNoAk8s2YuFFTBJ56wlWXlt0JHmOLee8I5lMjDtLlKqWfCrcfKRNcladNAoA2m
-	 cNLHhWM8aXi3RY/2sBda0ubfUE6bU3UkTzrWOKKD+vH9uRzY4Wut15UOQo9ZqA+EFOX3l
-	 IHiFwgSiRfBG78NsZw1OfH5EM9EZFjDc2zQHa6894P3bvW6XgA/4voNDnC7lZ2Dg6qoqY
-	 wYD5D+DAahlgqoJN+hhU5yhFf3leuk7T+2GPekWUfC7oqn01rDMySsSDgNMuIErS1aA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793016430;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=luljZsF+iWnO3KszIjhYznebYyZpvyomwy+SI1LfIaU=;
+	b=ZfZzZBGxVhfnbtj4xqfxk21Wrkq7vITa5Y7z1HHUstHmn6flvy7o8YFGoveeY/ALSBpw
+	 VXXtAXrtSabtvlPxCPp0P4P6EoMRl8QeMdjKm+kPkuCBKWR89Cgqlp6vTa3EeFaJwPSvG
+	 Wc8sX4w9HTL7HtY55g6C9Zw5a3xeiGo7mfLJLz27vZOaBqjNNkYlrz9t2D7qCc0SatfQg
+	 ayBoBxL0Zaqcqfs3buY1g8cDBP2yYHDSMncHkzVa1IIulekD3oRjGlX21SosIDeLF53Rt
+	 BiKlxgmIECZVoYfXb70RLYfkU9Mn12ioIWPLe7JlNdbG0n9T/iOLhMu5PjoMJgyjaVw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="oj6JZE/k";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NHwjHkeO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165EF606A31F;
-	Mon, 26 Oct 2026 12:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F29606A31E
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 12:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oj6JZE/k
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E6741F01825;
-	Mon, 26 Oct 2026 12:05:11 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NHwjHkeO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 378AF1F01828
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 12:07:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793016311;
-	bh=XrszyOJWwJTV90LIZM95zHwP5tXDmJojQtjJsIJz+qU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=oj6JZE/kG+hhqZxoQ+yODE7mTOSfVM9r0neDNfQu+XgJYnH9BMCJLbAczYPub7N+L
-	 smVfNhxDG3ihVKIfBKNdKfYMtETvU9dG6NVfyExtT9Y4M8mDJrLb8CkdXz51LPA2GR
-	 L4ibCVaR977YPgdL9njvzFJO6gLBo9LVJUjOhbpcOgCy062lZv5b0nKTnvlwS5zGI2
-	 dFe/RbFRsinmNpkiYdkIi8BYqNUu93ZeaFCMNDrvU8xOzoGtToulgIdCczYKBX5qwa
-	 +hnLr9BA9QYs/0c+oLEu88TJgQk2n0Xg7juHz4wT83M1laZqakSTxkWxbVahW+8fRB
-	 +r6GQhzwBMiVQ==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id 3CA051AC5994; Mon, 26 Oct 2026 12:05:08 +0000 (GMT)
-Date: Mon, 26 Oct 2026 12:05:08 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
-	Itaru Kitayama <itaru.kitayama@fujitsu.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: arm64: selftests: Skip unwritable ID fields in
- the failed-run test
-Message-ID: <at9B9N-90QwLPv5i@sirena.co.uk>
-References: <20261026012128.2270251-1-sashal@kernel.org>
+	s=k20260515; t=1793016429;
+	bh=luljZsF+iWnO3KszIjhYznebYyZpvyomwy+SI1LfIaU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=NHwjHkeOkstPEJqCjHX8/2xdRelRt4agBTWQ3Twr9HTsmkxSEUFvN+HcXUjuIGYaB
+	 WpJbiqLAbUW6qgFIyqQk3SdmfvrtlLo4eI6xtE/YJZ4YUwuW9GWK6NT64IpZI6hZPy
+	 h7BNGKljhKfH+dnaoqKiYC08vaLiPzYkwRbL3jTTnwMeKHyAEw+GrGmVnYJfei9mo8
+	 tE0tq54Uv7bjLYbr42jj0mpmNSVZTOSR6EuwDJvIOjGAnsSVuObumKZddJEZVVfkFM
+	 Joxah5gfTQrt91IbyiGhj30pF4BO0iL8M6daodIRIVicRWawwAMBEuTsXWOVA6tDHT
+	 jpRof49PCO9GQ==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6dd7070699eso2089840eaf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 05:07:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBxGn9LiR3mweU1rcWby1HU4gEvNx/Fj7x3IoYJO0dQ0q3vEoels8zeWsh/XjGSOdyfpsaAe/VMTRyqtzIBwSLs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIPBfEN43RB0ddF9H2Obj8Evsn04iA4LkBjJzSpVx9YrmjA7Syp
+	smYV5duclrceJC0z5evXFFF6wtaMnt0UVbeW6JbzWVa1Hty8h7xKbdTuGLKK2Y1GGdu7cqb53NH
+	DAaacydNzzng/QsTIIxsQI9oonaOEKqQ=
+X-Received: by 2002:a05:6820:5601:b0:703:a9bc:b7f4 with SMTP id
+ 006d021491bc7-70ba0da2fb8mr2169046eaf.17.1793016428464; Mon, 26 Oct 2026
+ 05:07:08 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,44 +59,119 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lOlYcF5yfFB7kmfM"
-Content-Disposition: inline
-In-Reply-To: <20261026012128.2270251-1-sashal@kernel.org>
-X-Cookie: Victory or defeat!
+References: <20261026032216.1145201-1-tavip@google.com> <20261026032216.1145201-2-tavip@google.com>
+In-Reply-To: <20261026032216.1145201-2-tavip@google.com>
+From: Eric Dumazet <edumazet@kernel.org>
+Date: Mon, 26 Oct 2026 13:06:56 +0100
+X-Gmail-Original-Message-ID: <CAL4WiiqQ3cychvCccpNW+WOU2SYCfNt6L=wgPkNmfTLHLy605Q@mail.gmail.com>
+X-Gm-Features: AclHuK8KFiQyICMplHqTxpaHZz8TgAR3YnqBxsQA3a7KGxLqx573_i0CLVWtPMI
+Message-ID: <CAL4WiiqQ3cychvCccpNW+WOU2SYCfNt6L=wgPkNmfTLHLy605Q@mail.gmail.com>
+Subject: Re: [PATCH net v4 1/2] tcp: clamp return value of tcp_wmem_schedule()
+ to non-negative
+To: Octavian Purdila <tavip@google.com>
+Cc: Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, "David S . Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Le lun. 26 oct. 2026 =C3=A0 04:22, Octavian Purdila <tavip@google.com> a =
+=C3=A9crit :
+>
+> When sk_wmem_schedule(sk, copy) fails under TCP memory pressure and
+> sk->sk_wmem_queued already reaches or exceeds sysctl_tcp_wmem[0],
+> tcp_wmem_schedule() returns min(copy, sk->sk_forward_alloc).
+>
+> However, sk->sk_forward_alloc is a signed int that can transiently
+> become negative when tcp_collapse() re-packs partially read or high
+> payload-to-truesize SKBs in the receive queue and charges newly
+> allocated SKBs via sk_mem_charge() before freeing the original SKB.
+>
+> If tcp_wmem_schedule() returns a negative value, tcp_sendmsg_locked()
+> passes that negative copy length to skb_copy_to_page_nocache() ->
+> copy_from_iter_full() -> check_copy_size(), where it is converted to an
+> unsigned size_t > INT_MAX, triggering a WARN_ON_ONCE(bytes > INT_MAX)
+> in production and returning -EFAULT instead of waiting for memory or
+> returning -EAGAIN:
+>
+>   WARNING: CPU: 1 PID: 939331 at include/linux/thread_info.h:249 tcp_send=
+msg+0x10c1/0x1530
+>   Call Trace:
+>    <TASK>
+>    __sys_sendmsg+0x292/0x490
+>    do_syscall_64+0x88/0x340
+>    entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>
+> Clamp the return value of tcp_wmem_schedule() to [0, copy] so callers
+> treat negative sk_forward_alloc as 0 available bytes.
+>
+> Fixes: 849b425cd091 ("tcp: fix possible freeze in tx path under memory pr=
+essure")
+> Assisted-by: LLM
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Reviewed-by: Eric Dumazet <edumazet@kernel.org>
+> Signed-off-by: Octavian Purdila <tavip@google.com>
+> ---
+>  net/ipv4/tcp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 87ef6d5cbfeba..0e062fcd94a6c 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -1037,7 +1037,7 @@ int tcp_wmem_schedule(struct sock *sk, int copy)
+>         left =3D READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_wmem[0]) - sk->s=
+k_wmem_queued;
+>         if (left > 0)
+>                 sk_forced_mem_schedule(sk, min(left, copy));
+> -       return min(copy, sk->sk_forward_alloc);
+> +       return clamp(sk->sk_forward_alloc, 0, copy);
+>  }
+>
+>  void tcp_free_fastopen_req(struct tcp_sock *tp)
 
---lOlYcF5yfFB7kmfM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I do wonder if the following fix could be better (no change in the fast pat=
+h)
 
-On Sun, Oct 25, 2026 at 09:21:28PM -0400, Sasha Levin wrote:
+Before a complete fix in tcp_collapse() (in net-next)
 
-> Only a field that userspace can change can be frozen, and KVM reports
-> these registers as not writable in KVM_ARM_GET_REG_WRITABLE_MASKS. Skip
-> the fields that the writable mask does not cover. test_vm_ftr_id_regs()
-> already requires the mask to cover every other field in test_regs, so
-> this only drops the fields KVM never lets userspace change. Whether KVM
-> accepts writes to fields it reports as not writable is a separate
-> question from finalization.
+    tcp: do not let tcp_collapse() drive sk_forward_alloc negative
 
-It would be nice to apply the same thing to the NV instances as well but
-in any case:
+    tcp_collapse() charges each newly allocated skb with skb_set_owner_r()
+    before the skbs it replaces are freed, without scheduling memory first.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+    Since sk_mem_uncharge() reclaims eagerly, sk->sk_forward_alloc has no
+    cushion and can become negative. This can be durable when the collapsed
+    skbs had a high payload/truesize ratio or were partially read, because
+    the new skbs can have a bigger total truesize than the old ones.
 
-I didn't redo the testing that Fuad already did since it'd just be the
-same thing.
+    A negative sk_forward_alloc then confuses tcp_wmem_schedule(), which
+    can return a negative length to tcp_sendmsg_locked(), triggering
+    a WARN_ON_ONCE(bytes > INT_MAX) in check_copy_size().
 
---lOlYcF5yfFB7kmfM
-Content-Type: application/pgp-signature; name="signature.asc"
+    Call sk_forced_mem_schedule() before charging nskb.
 
------BEGIN PGP SIGNATURE-----
+    Fixes: 4890b686f408 ("net: keep sk->sk_forward_alloc as small as possib=
+le")
 
-iHUEABYKAB0WIQReagvpf3TrrA7BoYYv73Ows9A4iQUCat9B9AAKCRAv73Ows9A4
-iUn/AP977I6nqPZmrTudLmqcb4MROLcy9GYgz1jVFIocLXDrrwEAnUi0j81aTjSo
-ef9JvnGQ0OBh4UI9WY6xdmk4v/IezgY=
-=G2In
------END PGP SIGNATURE-----
-
---lOlYcF5yfFB7kmfM--
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 1ddce9c4b7e8cf91bfd4f5361abec3925fe25046..e879bdfddf1abe2ced80b12ea8a=
+40c1f7c958708
+100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -5847,6 +5847,10 @@ tcp_collapse(struct sock *sk, struct
+sk_buff_head *list, struct rb_root *root,
+                        __skb_queue_before(list, skb, nskb);
+                else
+                        __skb_queue_tail(&tmp, nskb); /* defer rbtree
+insertion */
++               /* nskb is charged before the skbs it replaces are freed.
++                * Make sure sk->sk_forward_alloc can not become negative.
++                */
++               sk_forced_mem_schedule(sk, nskb->truesize);
+                skb_set_owner_r(nskb, sk);
+                mptcp_skb_ext_move(nskb, skb);
