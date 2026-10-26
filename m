@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792992458;
-	b=eCdXWmPWNsUp1wNEgFs7ICyGoFz9v0VR7COLf5TgFYwxA4C8I9pXLbMnrLG2F9biMdqR
-	 KUHV1M46Nf+lsuyttj3g1ai1hHMyBrjsbfZTGDWW6jImajj2TzGPhecXYBbBBAUbvEGMq
-	 DizhIW2aVB8scWNyu/QAy65jDbl8ZNCVUP0bIKw3hdsHz6cHDDBW9IhDk21HsxtSMJvlp
-	 DbLAf7k1kUROolNsg5oBtYRSdRITbDWAHHCUpKX8Hw7uD/3a8pWl0mBsYqQ5sixaSamEy
-	 PPE7N3V2hcrIEhseF8xEarSdQTtcZ2qNsJDeJ9IyIhpiLmmnIJAIdDpQW+kV18JqISA==
+	t=1792992468;
+	b=dn2OruXKAsYHzAms+jTHs0H2GbXMOv3Uvgq4CFgY808EKEuaaOKD+cWPRzkDd6vVDoFs
+	 qm+YgVfdABl1jOzPpsVnOUqqy/H5XWc3MJCkiSC+1zObyFTErqBJfG7YUyi7KGIoZ4PVg
+	 Gvnu5b8pnqNqU0M6Nm+5BAIIpO7lARz6ABrbNERkaUr/n8JHRSRa/jidUwfcxcEh18DdV
+	 0LYbpiKrp5KXY6q7R/WrkIyF8ImzAy7e+9ihp7my+9eCs3FhjDBLuhZ/5UprVH8HfB+vU
+	 dI7jvR/4+sQDb40V/MY+D7r4s84GsS6GSzvqlKlQkUIEcO5xo8WiSq+0fHHzdj2PDkA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792992458;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792992468;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=RCGPlQz9/nbP749pKlUHj7iqUI3R/GYuLrhh68VMhX4=;
-	b=nGQg11CpNzw6KgKqL2ABGpTG4GbehG98WGC4+RAS6LtgREEE70erAzIuTzXp8xwfOFxX
-	 VXUo+kuPnjsG7NFzE6HD7ZrU86jLXUppIvPinkK44y+5d+bKPtElD21teSBqbD/DhDadY
-	 tH4QLz1LnvJHEp9mmVNE5Nq8PBviEl4TgNgtrJ2eWWIg6ecEMuYU5rB5ZWx8rcwnAzVjD
-	 kubzYK3fV34celJrRW8+i2OxbIy+Iy5QQrospZPN4XYArm1B/UsWDG5H0fXDz/2j3E+x0
-	 TqI9hsIYAXWyWbkhhX37ZQ5OYZ8LL9X/r2geM+lcDPw8AW4QzV85yA80Ee+4qVRItBw==
+	bh=KJHbuu9YNunQc2098aJOeh/4wneftBInLaZd5ecyQ20=;
+	b=P8lEiLfHOF4thQpSsdHcxkGv/aL9DCea1jWGoUtqhlKHY+sDqs02WaY0F9rmmUq2BAw3
+	 exSv8xyfpcxkesOFPiSR0PnySFeNxuhQXCCHwYVhwFgIkq3pLjK/UmGhpWO5PHdNjo+eA
+	 GGqp7tTonkM9fMWn4OqG0QImrjzxcaLS7B2cPwY8SHTzD2zvM8TyaCixeMvJb6/wxRDSc
+	 xaZ5oava5u/MYcRv3O/oXnk6jIA794qIe+1T2/3Wj+Qh0xZzzbdkVuANB6K7E2/R9wy2X
+	 cSGYzyKZZ9uJOtay/5SQV0fGU6g7t5SF+y2+mDEyFKB9ch5p4VOLBJmVx39ILvjmuTw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=azji0Yvb;
-	arc=none smtp.remote-ip=74.125.82.51
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=cg0E+dri;
+	arc=none smtp.remote-ip=74.125.82.177
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9D9606A31D
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 05:27:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C9D9606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC43A606A31F
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 05:27:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC43A606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=azji0Yvb
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-156cbe59622so1812970c88.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 22:27:38 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=cg0E+dri
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-353804b591eso4879314eec.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 22:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792992457; x=1793597257; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792992467; x=1793597267; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=RCGPlQz9/nbP749pKlUHj7iqUI3R/GYuLrhh68VMhX4=;
-        b=azji0YvbQpXonPfhYaQOd4vN8DayEMzg6nrWZ+k9qUgnGH+Qty9ZoVl2H1T0DpoB2Y
-         S6PuW3zslfumGLO5cOFGQXqvB6FlhXNk1x3xWJzy9jzfdAYMeGnxpgXkO+CHEFl6ILHf
-         CSe5/3oPDppMSzPeO+hbvs3/kG6jBs3+IA3yc65Vo3LWxwbW6oT0qRXAY3cp/bJesXIh
-         9qjma+u8mCKxWUdvJR4ixY6vkgsuUSn/3KJHzOnsY+TMu7akbq7B+spnmniyndnMOXfs
-         Or0qSgsY25u8uz1rqn7FjFgUDPMKRFbovrmNX3RwS6i4cze+wwfJ7njGnbzAQbv4UYjU
-         UMSg==
+        bh=KJHbuu9YNunQc2098aJOeh/4wneftBInLaZd5ecyQ20=;
+        b=cg0E+dritt0P6TfxAW9Q255khPeEmu+69fU8a2+/61exzipudfLtte3lz6pHT99rWJ
+         NYh0W4TJ029dbTawErQ+RMpBmQSz611482As9+CYIbrL8/dA1OIcBJkDJUQtVhq3uKft
+         8Xho4cBVbfyF3g1PoekWa2iOGxAm3ryDdP3tigjYTJU89NCwQVhS7FyZ/CTgfrLFDkts
+         rbNE2r1zXGpM+8Zn07zrtdJ8ntU6kprsxSvad4T7fL3WFTq4nXGqK89wr56ZdHihhPSN
+         gebvQ1afjV7bvIobenNv1K8k5v76Yd6zWZXiWvWLM4QKCNB62wf5aWZ1/f3BsqpjZdOV
+         NA/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792992457; x=1793597257;
+        d=1e100.net; s=20260707; t=1792992467; x=1793597267;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RCGPlQz9/nbP749pKlUHj7iqUI3R/GYuLrhh68VMhX4=;
-        b=rLLCkcv18rUms/+HzIHDY79vJPQ0Gl9xpt5ZGW8YqQJInBPRe045TVoqtlTU5ZfZHW
-         Sp/7UN9XhkSJDpCCCe0ud9rH+/bcierb6LAMUedMESj1p1RBS63I6c84b98JUVhU9rXB
-         0enip4bqP1sxGqLPAQzyQy4IUbmoGVz3panUrGzFxOb7d9tcF6Q4Vv5ZQm8HMSuZQeBm
-         E7dPnProkk4HlIkoKxvPCSUf77PhTFnf93gMPy12idgRmk7P21JcjOdQLq0xZ5q1cclu
-         qD4fuarfG41hIb7W42ZBWVhxolsHR1vI9kwSI+jYuR03ea0OjaMfPhuxQ4bEPY/LJJE+
-         dJNw==
-X-Forwarded-Encrypted: i=1; AKwUvBzAHnWfeDz66H6Aqdcz81xVy6cCuXrzrZ5IpKPB3kPOzXeXKF+epv1m+61qKYwmedSpqkPQC5CC12wVoW6SQ2g=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLwUzCd6EUC647FVKuCsczNq3uix+5ozl1FT1PIYrzQY+L+87uy
-	O5X9cEqWcCkyht9WfYpA35emjc2cAoKggCRFCwEIf417ebEnu0bJdRzt
-X-Gm-Gg: AYBFou0hmhbD2dxpkHrvOk14FGYx6wcdDyHxxCMGVn9FaHR0HzVKN3CHVbnxcO8vB8N
-	tP3vhoiwZLovfziTrjPXcvH2Hl/fqn0z8wtMqZB5/GriOoybFNYFhRZ2MdDW9GF4tDDzxiP3sFr
-	b8Lvy0m29Ou2OmjgihHKlMwQe5MflASLlLYnYWb1+WDSTu8iV9Z9YKTER7GDfUJSqk4d33GBZag
-	wU5wae+s5b13cd40Mja0R74Mfdjcsewnx0zUYjWEg3FKf9cZvjfOV/RGrFCTkVGuWpuTs9WvOA4
-	ZZI67WwzTmYhDpPuvhj5Gd8Gxur/eGbKZM1wJkVQbLHtenmmyfpOoEFh3DfixCqTlGtoR58rQm2
-	Twtr2d8pNluglt9bALc0BGnuXY1rKkITSOmJ3USAFHiyJCUpOk5+/8rDoBF4QolaHezYGcV/gwb
-	VJwBiMEfGPQquMC/ANuTOzUzgAezilgoRm8thW49XCVxN+mB6LDc/8lLbzWzdNSiENUpTgsLIK0
-	QLXKBAyUmbvMGEMSdk/OqOZs+hhqkPqgXN3owIo5nuFlD+iXqpDwmCBae5mbO7zmF+VYwQGf6GA
-	CE9xI0S+E8ofymQyWsJnJ1/fhw==
-X-Received: by 2002:a05:7022:3b8a:b0:166:f097:6f12 with SMTP id a92af1059eb24-19934a9278cmr9164130c88.15.1792992457049;
-        Sun, 25 Oct 2026 22:27:37 -0700 (PDT)
+        bh=KJHbuu9YNunQc2098aJOeh/4wneftBInLaZd5ecyQ20=;
+        b=Y+k18Q031gVvjLXsUL9ABOjaLEAsrlLzL+J2+EZrFIiEO+vxuQsSAJu/B0RhyZ9JUN
+         jKO7oCR8uLK+TXdieamMeNoSexoTatd5ZEKI8o8E2NNoM6EyupM8WQbej1hLIuBotlk3
+         /IS7Zp/37HsJF9EvCqdnwwJrzJzEE4cjr0XVlqYEGK1GYQTP6nTLQTfSOsWfPktyHaq4
+         M/AaGIC0UqrXfoPJkGlg81HAgVVqvUgDp6ocSlVnE0WJYJM8kQ+EA5/aCDzmSKoSSpi5
+         OjBWjWJF9hleclMWQRZQScix1hGk2RUsM23Pu1ESrDx7pZLadpAAx5zND32ng0STSlpz
+         MuOg==
+X-Forwarded-Encrypted: i=1; AKwUvBwiK4L+UTKHOd4yJWiLao3uYlQ+MCh/9qWKkC6jfjuXn2IVGMspYKiMmeThRmry1BbGiu473agijCDlf3cFC8c=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLppV7a1fiL0uRPZpVNSbrxrQB7W7aogkcghiYGS0r0XrQJqhfd
+	5ZLWOzyN+CjiEF2aljhVJ9WcAQoA7IQ+p2quLuRCi1cgUQZaL1rqYfmJ
+X-Gm-Gg: AYBFou2ydwNfEYUkY3s7fEscKxP8b5ot7b8SHvT1OD0/lQHWImAvnQx/kG7FhTrmd8H
+	T/dVjPCwafwXyN3MldAC1w+2ol+wyJFYz6+dzScv/D9Z97TiVPFCz6CeIYIV+x8CqkPW7AGSHRS
+	5Yt2smCWJoa71smDKqyOXUYY2Sor53skZHNkG18srAapnswdCuycIVDt1L/YmDxNcVJPS8XSgKa
+	1jC4R+7ks04HEjVcw4obOeHENxIhJddU91yzSE93b6Ty5+2l23P7YHvinZkyWzeZP3cnRJjLJWB
+	zusY5VsVIGviuHBzic6LuGCPlDCWiCiXfpFBBDe9mgb4pzt0m14swua2+MDkSrqpzy6KDlxCliE
+	QHR5SshxH1iOVYY9jbILsfDT/y0iBW9xcSyzeyyTf2uizjBykt7DQKdewvS/MdkQNtNHKZKawmU
+	EZ8FoV3IQg8/wZaqfMkUj7G9jaPpUEK4tfKacZ00EQAQLDtqOfvYE9tdvFdmy5M1olpsYCIqNAm
+	3+usjeLsianzH48NscdV8fKvP2sCMp2hRoRVjGkPyyjzslA4MagcMKNyyRaN3B8nqaqSDz5eiV+
+	8YdrUbA78qnTsxG1wN99HUJuHQ==
+X-Received: by 2002:a05:7022:3a09:b0:195:76af:b810 with SMTP id a92af1059eb24-19935fc69dfmr10272975c88.25.1792992466519;
+        Sun, 25 Oct 2026 22:27:46 -0700 (PDT)
 Received: from localhost.localdomain ([136.25.42.214])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-198a1bfaebfsm21437866c88.15.2026.10.25.22.27.35
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1989ff2ee69sm29188566c88.4.2026.10.25.22.27.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 22:27:36 -0700 (PDT)
+        Sun, 25 Oct 2026 22:27:46 -0700 (PDT)
 From: Tim Budding <tim.budding@gmail.com>
 To: netdev-bot+sashiko@kernel.org
 Cc: netdev@vger.kernel.org,
@@ -93,12 +93,12 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: Re: [PATCH net 1/4] sctp: purge abandoned I-DATA fragments by stream and MID, not by TSN
-Date: Sun, 25 Oct 2026 22:27:05 -0700
-Message-Id: <20261026052706.187296-1-tim.budding@gmail.com>
+Subject: Re: [PATCH net 3/4] sctp: don't treat an I-FORWARD-TSN as an association reset
+Date: Sun, 25 Oct 2026 22:27:40 -0700
+Message-Id: <20261026052740.187459-1-tim.budding@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <179293012722.3134.13316596865856977030@kernel.org>
-References: <20261024120627.837568-2-tim.budding@gmail.com> <179293012722.3134.13316596865856977030@kernel.org>
+In-Reply-To: <179293012867.3134.16497481637722705271@kernel.org>
+References: <20261024120627.837568-4-tim.budding@gmail.com> <179293012867.3134.16497481637722705271@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,133 +110,30 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Sun, 25 Oct 2026 12:08:47 +0000, netdev-bot+sashiko@kernel.org wrote:
-> > +		if (event->stream < sid)
-> > +			continue;
->
-> [Severity: Low]
-> Each call to sctp_intl_reasm_flush_mid() starts at the head of the queue.
-
-[...]
-
-Agreed. Walking each queue once per I-FORWARD-TSN would be a separate
-change. I could send that to net-next.
-
-> > -	/* purge the fragmentation queue */
-> > -	sctp_intl_reasm_flushtsn(ulpq, ftsn);
->
+On Sun, 25 Oct 2026 12:08:48 +0000, netdev-bot+sashiko@kernel.org wrote:
 > [Severity: Medium]
-> With the TSN-based purge removed, what frees an unordered fragment of an
-> abandoned message that arrives after the I-FORWARD-TSN naming that
-> message has been processed?
+> With this call gone, sctp_intl_skip() now sends
+> SCTP_PARTIAL_DELIVERY_ABORTED for an I-FORWARD-TSN at the leading edge.
+> Is the pdapi_seq it reports still the message that was being partially
+> delivered?
 
 [...]
 
-> Should the commit message also mention the lost rwnd and receive buffer
-> space? Alternatively, could these fragments be dropped when they arrive,
-> or when the cumulative TSN moves past them?
+> Could sctp_intl_skip() pass sin->mid_uo (unordered) or sin->mid
+> (ordered) to sctp_intl_stream_abort_pd() for the notification, and
+> keep using the skip MID for the flush and sctp_mid_skip()?
 
-Correct, and the commit message is wrong to say such fragments stay
-until the association is freed. An unordered fragment of an abandoned
-message that first arrives after the last I-FORWARD-TSN naming that
-message, with a TSN above the cumulative TSN, can't be reassembled. It
-keeps its rwnd and receive buffer charge until a later unordered skip
-on that stream with the same or a higher MID, a reset, or teardown. At
-the tail of reasm_uo it also stops reneging, as any fragment below the
-cumulative TSN already can.
+Thanks, this is a real bug. sctp_intl_skip() has always reported the
+skip entry's MID, which is the largest MID skipped on that stream, so
+for an I-FORWARD-TSN below the leading edge pdapi_seq could already be
+wrong when more than one message on the stream was skipped. For
+unordered streams it was wrong whenever the abort was reported at all,
+as the old check only fired when the skip MID was larger than the one
+being delivered. This patch removes the path that happened to report
+the right MID at the leading edge, so it now shows up there too.
 
-One late fragment is enough if nothing after it has arrived: the
-receiver then delays its SACK for the I-FORWARD-TSN, the fragment fills
-the gap within that delay, and the sender never names the message
-again. With the last fragment of an abandoned three-fragment message
-arriving in that window, that fragment stays queued (RX_QUEUE 1232). A
-duplicate can't do it, as the TSN map drops the second copy.
-
-Before this patch a later I-FORWARD-TSN covering its TSN would have
-freed it, so if another message is abandoned later, this patch keeps
-it longer. Without such a later I-FORWARD-TSN, this patch frees more
-than before: in the same test, the TSN-based purge leaves the
-message's received fragments above the New Cumulative TSN queued
-(RX_QUEUE 2464 without the delay), and this patch frees all but the
-late one.
-
-For an ordered message the same late fragment aborts the association
-instead: its MID is below the next expected one, so
-sctp_validate_idata() fails. That happens on net today as well. I
-could look at it separately.
-
-Freeing fragments once the cumulative TSN moves past them doesn't work
-with interleaving: a live unordered message can have fragments below
-the cumulative TSN, and freeing those is the loss this patch fixes.
-Dropping late fragments on arrival needs new per-stream state, the
-highest skipped unordered MID, which must be cleared on resets and must
-not go stale when MIDs wrap. I'd rather do that in a separate patch
-than grow this fix (question at the end). Either way, v2 will spell out
-the cost in the commit message.
-
-> >  	/* abort only when it's for all data */
-> >  	if (ftsn == sctp_tsnmap_get_max_tsn_seen(&ulpq->asoc->peer.tsn_map))
-> >  		sctp_intl_abort_pd(ulpq, GFP_ATOMIC);
->
-> [Severity: High]
-> Can this branch still flush the whole ulpq for an ordinary I-FORWARD-TSN?
-
-[...]
-
-> A later patch in this series, "sctp: don't treat an I-FORWARD-TSN as an
-> association reset", seems to address this. It drops the max_tsn_seen
-> check from sctp_report_iftsn() and makes the stream reset paths call
-> si->abort_pd() directly. This patch is tagged for stable on its own.
-> Should that change be folded in here, or should the two be backported
-> together?
-
-Yes. At this commit an I-FORWARD-TSN whose New Cumulative TSN is at or
-above the highest TSN received still takes that branch, and
-sctp_intl_abort_pd() frees every queued fragment, including those of a
-message still being received on another stream: the same loss this
-patch fixes below the leading edge. If that message is ordered and in
-partial delivery, its MID is also skipped, and the association is
-aborted when its next fragment arrives. With this patch alone the
-ordered and unordered tests pass and leading_edge fails. The later
-patch fixes it. v2 adds a leading_edge case without partial delivery,
-which shows the loss directly.
-
-I kept the two apart because they are different mistakes in
-sctp_report_iftsn(): the TSN-based purge, and treating ftsn ==
-max_tsn_seen as a reset. But they share the Fixes: tag and the
-symptom, so folding them is reasonable too. The later patch needs
-patch 2 and the new pdapi_seq patch (see the reply to 3/4), and
-neither of those needs this one, so folding would mean those two
-first, then this patch and the later one as a single patch (question
-at the end). If they stay separate, this commit message will say in v2
-that the leading-edge case is only fixed by "sctp: don't treat an
-I-FORWARD-TSN as an association reset". All three fixes are Cc: stable
-and apply cleanly, in order, to the v5.10 through v6.18 release tags.
-
-> >  			sctp_intl_stream_abort_pd(ulpq, sid, mid, 0x1,
-> >  						  GFP_ATOMIC);
-> >  		}
-> > +		sctp_intl_reasm_flush_mid(&ulpq->reasm_uo, sid, mid);
->
-> [Severity: Medium]
-> This is a pre-existing issue, not one introduced by this patch. Does the
-> new flush leave unordered partial delivery stuck when the skipped MID is
-> the message currently being partially delivered?
-
-Yes, and that is the next patch in this series, "sctp: abort unordered
-partial delivery when its message is skipped". At this commit no abort
-notification is sent and the next unordered message on the stream is
-delivered as the rest of the skipped one. The uo_pd test fails at this
-commit and passes from the next patch on.
-
-Xin, Marcelo, two questions for v2:
-
-1. Fold "sctp: don't treat an I-FORWARD-TSN as an association reset"
-   into this patch, or keep it separate?
-2. Should dropping late unordered fragments be part of this series, or
-   a follow-up to net?
-
-Unless you prefer otherwise, v2 keeps them separate and leaves the drop
-to a follow-up.
-
-pw-bot: cr
+v2 will add a patch before this one that does that: report sin->mid_uo
+/ sin->mid in the notification and keep the skip MID for the flush and
+sctp_mid_skip(). The selftest will check pdapi_seq for an I-FORWARD-TSN
+below the leading edge that skips two messages on the stream being
+partially delivered.
