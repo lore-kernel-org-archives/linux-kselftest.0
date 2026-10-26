@@ -1,107 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793052624;
-	b=MFueBPK6wQJEAqKkwWmvmIj6roqV4i1YhtyckvvSKeZIrAhvlqHaCu2B5RovEoxPkg8U
-	 h6+QYYAWgs/oBK69ZDIgahqZ9xRaVI09kT88ALsuyyJNeXplPHxa+Q3ioBh3aQmVHnfQo
-	 355L9M69BppQ66YGq3mCxzItm3huqP5qrGaitSKNiNeJdKKFEyA4uz+mQe3i/95oYlvY0
-	 Gu4Ghy28smAfU5zSMMYB427gpDfDzvh0xDd6MwWvEYtV8osxzZ+QzhvkhlP4ejzvgNh8F
-	 v2JODMnkcv4xwEGOqOHkowChwGCohBRewQSb9WodL5fC4jp+e78Axwf4fRDOgTgGGKg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793052624;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Virus-Version;
-	bh=Jf+loG0vAvnxt28Kqn9IrWU5X0/8DtmZggaMgC0lLF8=;
-	b=pyIfjLNLeBUMT6B59sc8TsNFJfD9Ut02FQqOTOe6xFgLCivqLddI9YT8UvTapjrY9cm8
-	 mOVOSuJemR07Gub5XMCCUf/qn3936jMIta/WePshVJhvDvi3wYhXnMCqf9cCh24mvES2h
-	 dpKiZz6brAfYi4eznGaR7dC6ZQfsmVd8wYDp1fh0h1KtIUPfb3hU9oveWPQayzCGRTD6V
-	 wOdHhphawhAp/SdE74DJcFVPR/IVJB00wipEIoO7dTNbnUp6/UEiY0ElWDgodJTOky1Gy
-	 LrTXmb2t8eXWIkVnbRSnnf1MC1TF+tgUGRssIgZkIECiIMmcXnucafbnYufSatCY3lQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=dZ9tR9L1;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.245.243.92
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793053013;
+	b=OqpjR0wxI1DdKw5vKZSzFOWrbMp5/6JdLspp5v8InFBkFH/6PIHaW6GN3Cbcuet5285V
+	 lPUZMSVe74I4J/3MlOYfpjt5U0bM8B/VpAPBJD86HWLZc8qJ5942HEDlJn3UhrNGH1u7v
+	 Tl9SV1AjzlohdNKQSNc8s0sxsbcNfglGWJkHfVC1lYSnuQLXPdnWraQ48nc+mMRoIBWMP
+	 ZhnGVs2RPXq+EpZxFeYWApr2njUpGvAivU/5pUhrp6L2geMLfw3tZwkRafsg1eOiSg9cH
+	 b9HROD25BsxrkZauhCm2vGQdNOQ+rj7q2qYm7WvV1shdgKF1SJbONlBfr+TFs5Td24Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793053013;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=oYLNp/KBd8cWClCriPTlevazgiupONa/MEd8NDSNKdQ=;
+	b=wSm51GCVyc5sxfiVpEhgDFIrXSPL4htEtiO3gGL3rj70D+QBoXfcEzcHeD71Rc9Fyxrn
+	 +kJw2jRa3MveYq9ALjxi44zOgvI7JT+XVT5fWmHlNFhnNrrCefHPXcd2a1RPty/aPDpKo
+	 4+bFqK4oYKAl7RJiQRB0Z4yfJ6oMKXkgNfi/KwORXOaPE5xtyCZphstGxjWFZKYync/Iz
+	 6GjfnulxAQ1Dj1S1hw+qxubnkNLfcCc3v2aso/numIrq8UjH5ArjA/PmNlL3GVp4uJKpR
+	 Br4lITVxG5XSXGfKOB4rbU/Dr93ayJseU4+vdcbD2GkLsg93hrnpDbIL6VB8QuGffrw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=kFsWGRIq;
+	arc=none smtp.remote-ip=44.245.243.92
+Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67866606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 22:10:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67866606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118F4606A31A
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 22:16:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 118F4606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=dZ9tR9L1
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69QImsRL3007935
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:10:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=Jf+loG0vAvn
-	xt28Kqn9IrWU5X0/8DtmZggaMgC0lLF8=; b=dZ9tR9L1/IcxcsH4mEsKPx0GW5e
-	UTGvTAWR0q1qhi/B1g7OHS+XHoohqe5XI+h4y/PThlpFE9BsEbWgJiN7eBQlxbFk
-	c+8mY+yz8bMouKprc8O3DjrQU3Akz4oTvZpi4r2DjPk2vqEtNi0gM420ieQ5TBGQ
-	OLZnhdv/E4lSiGhyExxYkBHSxocmkny3xTMO6kroAjj09D91kBCL+7qodbBM+UfB
-	Z/cMVDLbA4rw5O2SP6MupF/qOmMi4axMzQQM+aUiaVU2MBQB2wI3Po4/YvMr8hp2
-	zb5Z2ASgUu/S8qEr+ZMjM3GYoWb0Wyrhh5iLDNjyCR15YzzgAKPjekwpR9Q==
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hgtc15v40-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:10:22 -0700 (PDT)
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-8a086f5d91aso5080683b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:10:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793052622; cv=none;
-        d=google.com; s=arc-20260327;
-        b=SGqHMU0A3FVdP4zaEzZ3unqiWrR5G3fNzS02jOWlP7vyqoi5g1BIh42Tve2HL6K+PY
-         Uu9vByJnVHe9i+2SdsCc3BPuv0stNozRDzuZPu005ZGPHML/aLh1jIKB83CGCaefBaUE
-         Eo3BY0pfUb7PZX9/FpinEDri2ISEs4F8DPPNpwADsE3XUgBe8h0xKnNEN72Cq/FD12IU
-         /2k6uJwqNJHjlN6CrC157E34DP32BLmjHRPUS7c5jhaKwXU/Uz9rw9PoHoBdzMx7iPpu
-         Bvg0kRGos+WlTLEEPjHct1rUqehdKpQW/A0hh8wMt0oVJXY867F1ncO1I/G1bwsdO3ML
-         6kpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version;
-        bh=Jf+loG0vAvnxt28Kqn9IrWU5X0/8DtmZggaMgC0lLF8=;
-        fh=hpUqQc4I/6R8YuWQxGVaPQ8PdfRcr2YUKzM8TtLVwVU=;
-        b=LjIl3cIdsiXw/mbwsfeN8Cw2yeGw/THzi7B3Wyz3dP0ftue/Sv5ST8EPQXEuUwPDby
-         UfHS0w7JBUSSDbRlyFTea+DlUQl4qxDAPuYqzc38L30eWcyIvRQ7KHUTAhMPsmJMp4cg
-         7PZSK92vvWnvjqXc0QNOcd4rbh5EFD8yHJ04UvyCX0f043RD9a1tA3tecYxQmpE+qwbN
-         WKRzR7VkHAf0tfMp5Li0grDX+cp5A0Ib0/BhEfdxJQ8Kmr+5N4R3V//3HcI6PskU9fWO
-         zewEIBGqBxAR5NnnjJumTZQ/qu1TL7ccHPUeKNEzGjPEeN991maSqlRCY8TynHuS9y1n
-         G+EQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793052622; x=1793657422;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Jf+loG0vAvnxt28Kqn9IrWU5X0/8DtmZggaMgC0lLF8=;
-        b=sci/di45y7rynkpr/e8aII6dJBqdseifbLzU4reRosWST6gz40UU/LifjDMwFIUw4h
-         W+Jxab84oEvEbj/yR4B8Kxm8u74/CD4I+4K0bKNjd6hK9PsWsNf190axk4Acjs6Oic0g
-         P+vfjfL4xQzp/Vzuo1bb4YqZX8Xovsqpn0RiPT3LeaKEalKU+ocWKcBgj5DqL/20pXtD
-         XGyjWXmOX4/TNRFbguzQFbrySTDIuFcTQh7UXQuSx3LluHwLB0TOferikWMB3O/TTbc5
-         MT4YV1qvEF45Bac3LjOw0D1Vw02RWLjKGQMibICstFjIUNJU1tuOZPdNNGnlIAE9ZtCi
-         0p4g==
-X-Forwarded-Encrypted: i=1; AKwUvByYYpSMDByT6FLk3zLcopNgyxj4q+CLtmh52sVn6yQpHd+ZUSE90Djmrj3HaTWGTDJrSxpA5ZlsLWUhpCdMpoc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKgEEFaVhCtX/eHO5rXszKlZPu8w3lEigAFrzZOMCBae9uBtJtl
-	bJ2ocwK4nLJDNliN61UT4qoGNvZAz/7xabOxcfQzhSSCSTxYpkWqBffUhYXJo/xSIzjyC/fRNYJ
-	yps2qHixIQe9kjXWvzBNbU7MJFKDZawo3yoPUiMYjYlGiKtSAIbda+TY8OR3hqBmiu9ojuKRw9Q
-	EWkfivCZnQvBuULwH3HF7NHBbd7+VSGuNqWERJCpQZ64E=
-X-Gm-Gg: AYBFou226C5UJKSfCX/3oIDeGaS1prXS4TEK+UdZyXjoI0F4c4J5bKI2YGlzUbtrkOS
-	bUPmRWfnXXh40u2txkPISFiGb1r0bsA64FZBnq3rJ1DUiREfeuxGu5FfV5uKtRlMFHvW8Ih4Nyj
-	m0hlRQJtok2PuiU8xdK53OmTsF35RIbF6221Q6HZh/BezD32wT2+yA5bAZZXdHV9aZVOeNtlHnB
-	ZDX0xJZtRAISso/HlRB+V2FBfaRvoMyMFyrKFi4s34XbZcxFgM=
-X-Received: by 2002:a05:6a00:a211:b0:887:3fca:835d with SMTP id d2e1a72fcca58-8a36772cabemr7073914b3a.29.1793052622040;
-        Mon, 26 Oct 2026 15:10:22 -0700 (PDT)
-X-Received: by 2002:a05:6a00:a211:b0:887:3fca:835d with SMTP id
- d2e1a72fcca58-8a36772cabemr7073902b3a.29.1793052621627; Mon, 26 Oct 2026
- 15:10:21 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=kFsWGRIq
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1793053013; x=1824589013;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oYLNp/KBd8cWClCriPTlevazgiupONa/MEd8NDSNKdQ=;
+  b=kFsWGRIq9JG21OT586/AUbkz8SnknA2Pa656aqJhwiwd/sIbEOmcAoqo
+   gU+SmVqV6duUCq4waEuNSwTZViKmGebgTbxpK0SnrpeCxU4++d9VdNjqU
+   4ckRI7ZuB25tmWfRK7C00W8Wj1tahMbTcjyCV0EWHjRlApKpcrSXXkuju
+   j72ZOnQ1RxWumnrxT4MfccSvSOU2bRo6bMcsOv4b4IEZphOxW9Op1SPUx
+   d2OPzFJjFXytevPYX4peOpV09P625xrAsh/irKcF+6huNa+lZluQls6G5
+   fpYJjtsa7dak4bLw3+Xk8y4yUrbMO5XrtV07n8cdh6iQXIvQm6rCFiLOP
+   w==;
+X-CSE-ConnectionGUID: cgixTkttS++4MWkxjhPAxA==
+X-CSE-MsgGUID: Eg57CI57S6226rJE7vI+ew==
+X-IronPort-AV: E=Sophos;i="6.27,180,1787011200"; 
+   d="scan'208";a="31811820"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 22:16:52 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:27532]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.51.230:2525] with esmtp (Farcaster)
+ id 60fdc627-6883-4e31-a72c-849f5f907a07; Mon, 26 Oct 2026 22:16:52 +0000 (UTC)
+X-Farcaster-Flow-ID: 60fdc627-6883-4e31-a72c-849f5f907a07
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Mon, 26 Oct 2026 22:16:51 +0000
+Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Mon, 26 Oct 2026 22:16:50 +0000
+From: Jimmy Zuber <jamz@amazon.com>
+To: Miklos Szeredi <miklos@szeredi.hu>
+CC: <fuse-devel@lists.linux.dev>, <linux-kselftest@vger.kernel.org>, "Shuah
+ Khan" <shuah@kernel.org>, Bernd Schubert <bernd@bsbernd.com>, Jim Harris
+	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
+	<luis@igalia.com>, NeilBrown <neil@brown.name>
+Subject: [PATCH v4 0/3] fuse: atomic open
+Date: Mon, 26 Oct 2026 22:16:36 +0000
+Message-ID: <20261026221639.628325-1-jamz@amazon.com>
+X-Mailer: git-send-email 2.50.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,53 +84,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023234640.1459291-5-toddfreed@meta.com> <179288570316.3134.17338958323067090592@kernel.org>
-In-Reply-To: <179288570316.3134.17338958323067090592@kernel.org>
-From: Todd Bert Freed <toddfreed@meta.com>
-Date: Mon, 26 Oct 2026 15:10:10 -0700
-X-Gm-Features: AclHuK_YNIc8WR5zn4HQHJZd6E-TfuSZHowIMObN80et51S8RIsFb5U_2Jx7cYA
-Message-ID: <CADh2yMxPi+eNkQSVo5hUr=pNsnG21ZLjYf=GMFPS5eOtyedrAg@mail.gmail.com>
-Subject: Re: [PATCH net v3 4/4] selftests: drv-net: psp: test ipv6 tcp socket
- with extension headers
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, borisp@nvidia.com, saeedm@nvidia.com,
-        leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
-        andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, daniel.zahka@gmail.com,
-        willemdebruijn.kernel@gmail.com, horms@kernel.org, shuah@kernel.org,
-        cratiu@nvidia.com, raeds@nvidia.com, rrameshbabu@nvidia.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bjorn@kernel.org, dtatulea@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI2MDA4OCBTYWx0ZWRfX9EGb3BlYmkSD
- Jg62o0XYuqOb7qiqvq93Z9vob92Be8oCrX69dPIlzI13l8HNkSrhljo77wzA0WROjbr0pBHgWav
- P01tR5hpIK2K4Y9nLD9U/JDSLQxj9DzPzku1lSMb7mTq4/4uWt0lurCOq7g5Ny0WGdhR5Urc04Z
- WPNBhHsv8YzGpInQObhrwn9B1PYi+E5oxMNY4b6eEh70kUTg7y0XdMsUI/w6iyjVSNuntd75toh
- 9iqyCdDUJ+mBD+PMrfJe72IDy7LDpxo0A0t/OPxdVNFa31VBL+DqlQTiH7/7BSJwstQRdD4WHNE
- 6WNCvAuOQZv/KmcQ5ZFvg40GiI1R1+suM9A5PU7EkL8AraBXPzuR9lNyf5nvLijjWbMDMYL2TAT
- /PdNx0BmJBWOh9K8iLvWBAnE9cro7KwH06hpmhXpb5/Ndq7uGGBu/4XYTFlgyx55UJ4/RFkjLXP
- CMNC7gS72snCS3t+IHA==
-X-Proofpoint-GUID: Xt9A0IedmJi1amRGQHZ3cR6lCf8-u_0f
-X-Proofpoint-ORIG-GUID: Xt9A0IedmJi1amRGQHZ3cR6lCf8-u_0f
-X-Authority-Analysis: v=2.4 cv=eIGGH3p1 c=1 sm=1 tr=0 ts=6adfcfce cx=c_pps
- a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=PAz_-FQ8hEVmOPYdF0yf:22
- a=wrF_2KVHrNPQTX-trsUA:9 a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI2MDA4OCBTYWx0ZWRfXxLSgg0Kv4uBk
- Zx/Bgk1M7Do/jBPHw0fQMdV1FzXh1Cw3tF3TgJlYaniW13Y8g2YNOVEVgYuH7oV+Q0LTuuB9nZt
- p6mJTPnmmt98qjcfVJMIdP4ysVTYUuA=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-10-26_04,2026-10-21_02,2025-10-01_01
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWC001.ant.amazon.com (10.13.139.241) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-> [Severity: Medium]
-> Can this skip path end up reported as a failure?
->
-> Could the remote filter be installed before _make_psp_conn() is called?
-> Another option would be to finish the key exchange before any early exit.
+Add FUSE_OPEN_ATOMIC, allowing the kernel to skip LOOKUP to improve
+performance. A server implementing FUSE_OPEN_ATOMIC will look up
+the name, create it if O_CREAT is supplied, and open it in one request.
 
-This is a good suggestion. I'll apply it to v4 if it makes sense (though it may
-no longer be relevant based on the other changes I'll be making in v4 due
-to the other finding.
+The reply says whether the file was created, as Miklos suggested in [1].
+The overall pattern follows his sketch in [2]. For a cached
+name, the kernel compares the returned nodeid with the cached one and
+looks the name up again on a mismatch.
 
--Todd
+A server without FUSE_OPEN_ATOMIC replies -ENOSYS and keeps today's
+behaviour.
+
+This series applies on top of "fuse: fix use-after-free in
+fuse_create_open() error path" [3].
+
+Tested with a new selftest under UML and KVM.
+
+Changes in v4 (from the Sashiko review of v3 [5]):
+- Patch 1: when the VFS dropped O_CREAT or O_TRUNC (no write access to
+  the directory, read-only mount), send FUSE_LOOKUP, so that O_CREAT |
+  O_EXCL fails with EEXIST and O_TRUNC with EROFS. Reject a reply that
+  opened an existing file for O_EXCL. On -EACCES from the check before
+  opening, refresh the attributes and check again, as fuse_permission()
+  does.
+- Patch 2: fuse_open() checks the name on every open of an expired, hashed
+  regular file, with no flag, so concurrent opens each check it. An open
+  that did not look the name up and finds it changed returns
+  -EOPENSTALE, and the retry opens the dropped dentry by nodeid. Backing
+  files open by nodeid. O_CREAT opens keep the LOOKUP. The check after
+  the reply uses inode_permission() and the O_NOATIME owner check, with
+  or without default_permissions. Revalidate before fuse_open() prepares
+  O_TRUNC and calls generic_file_open(). Keep an entry timeout of zero,
+  and leave a name renamed during the request hashed.
+- Patch 3: test O_CREAT | O_EXCL without write access to the directory,
+  O_TRUNC on a read-only mount, and concurrent reopens of an expired
+  name.
+
+Changes in v3 (from the Sashiko review [4]):
+- Patch 1: strip FOPEN_CREATED from the open flags, which broke
+  passthrough. Check name_max before FUSE_OPEN_ATOMIC. Reject a reply
+  whose inode is not a regular file or is bad, and skip page cache
+  invalidation for DAX, as fuse_open() does. With default_permissions,
+  check the attributes in the reply before opening an existing file.
+- Patch 2: only an open that skipped the LOOKUP checks the name, so
+  reopens through /proc/self/fd, open_by_handle_at() and other
+  vfs_open() callers open by nodeid. Keep the LOOKUP for directory
+  opens, and with default_permissions while the cached attributes have
+  expired. Check the open again against the attributes in the reply.
+  Set the open flags only after the reply checks, so a mismatched
+  passthrough reply is released without an inode. Read the parent and
+  name under rename_lock, and send RELEASE before FORGET.
+- Patch 3: test the above. Skip without /dev/fuse, and leave the server
+  state mapped at teardown.
+
+Changes in v2:
+- Drop the d_drop() before d_splice_alias() for an entry-only reply, and
+  use d_splice_alias() for FUSE_CREATE and FUSE_OPEN_ATOMIC replies.
+  FUSE_TMPFILE keeps d_instantiate(), as its dentry stays unhashed
+  (NeilBrown).
+- Describe what the server does and when the kernel checks permission
+  in each case (NeilBrown).
+- Check in the selftest that an O_TMPFILE file has no name in its
+  directory.
+- Rebase onto fuse for-next, which has f1ac607f786f ("VFS: enhance
+  d_splice_alias() to handle hashed dentries"). Accept a fuse_open_out
+  without backing_id_64, as FUSE_CREATE and FUSE_OPEN now do, and test
+  it.
+
+v3: https://lore.kernel.org/fuse-devel/20261026190747.2373775-1-jamz@amazon.com/
+v2: https://lore.kernel.org/fuse-devel/20261026151828.562870-1-jamz@amazon.com/
+v1: https://lore.kernel.org/fuse-devel/20261020141647.3271341-1-jamz@amazon.com/
+
+[1] https://lore.kernel.org/all/CAJfpeguEK4JsFo60=yHkpLL6XkDGS7cQ5GOhiFL379KsYk0TsQ@mail.gmail.com/
+[2] https://lore.kernel.org/all/CAJfpegvXtXY=Pbxv+dMGFR8mvWN0DUwhSo6NwaVexk6Y6sao+w@mail.gmail.com/
+[3] https://lore.kernel.org/fuse-devel/20261026180649.1265825-1-jamz@amazon.com/
+[4] https://sashiko.dev/#/patchset/20261026151828.562870-1-jamz@amazon.com
+[5] https://sashiko.dev/#/patchset/20261026190747.2373775-1-jamz@amazon.com
+
+Jimmy Zuber (3):
+  fuse: add FUSE_OPEN_ATOMIC
+  fuse: open cached files with FUSE_OPEN_ATOMIC
+  selftests/fuse: add test for FUSE_OPEN_ATOMIC
+
+ fs/fuse/dir.c                                 | 499 ++++++++++++--
+ fs/fuse/file.c                                |  22 +-
+ fs/fuse/fuse_i.h                              |   7 +
+ include/uapi/linux/fuse.h                     |   8 +-
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   3 +-
+ .../filesystems/fuse/atomic_open_test.c       | 645 ++++++++++++++++++
+ 7 files changed, 1120 insertions(+), 65 deletions(-)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/atomic_open_test.c
+
+
+base-commit: 9b1da7b4a4e197072e630c3b85d4100a399752ff
+prerequisite-patch-id: 95a6559bc4490d7d82bc80ba961ac52e80429b34
+-- 
+2.50.1
+
