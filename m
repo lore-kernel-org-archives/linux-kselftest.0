@@ -1,100 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.52
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793054813;
-	b=MK/8BnNJCLyKvyxMN8glOA6O18Uao/fLSdogXW+lWyF+4ZTfqQ7f4yZrIeGhjljXX/mU
-	 hQhsZKyOdANjusA3tqVYoSntJRXQ2X2mPxJFiXveK1vcloVqIQzO8AsnQNia9xOK8wxlo
-	 f/14m5wDRXUjxge3m4fMzUCEvn+FmAaMMXXy26wuDnsKrXvqNyTjjaPTtv46C2fYltB06
-	 kA+RukI0KCMihbUZrDqMbe7ZNYhRzl9/4skpXocZYCEq+7bIgEna9k80Cm4OyXDkpNKyL
-	 ebkaTkdGJwgI3qO4fHrDSLqS1cUizEwzTxg6G38f7jQ9fBjuJUgKX3VMj9ZASwic+cg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793054813;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=sKnr+HaOzY7Irrp2H9F7r4w2uph5h2kmhEeFaXwyEMA=;
-	b=18GcYEve1F8u40RzNTT8nIgEwnxsW71olLAfaxZEBnPJDQIay2c7+0NP/zHMLJuFgnGg
-	 ZY/UuqSKwZdIawWB+lbsqStYf4KC7FtneUuvEWeUy3ahrDPSh7Td2EN3ZOcAdHO6WOB9W
-	 HOXFIfmGML/03S4uGRi6UJ+o0XyBYuzNf2E6wnUjEu3hyubtlZvNNmmnhavZhwZBnEThp
-	 fmNX7PLbaHNQP6/NqwyuDND/uicnzBJExZKtBOE8a25gKBZNsNuTPFX0bQ+2X9Kic218v
-	 EJe/Lq83NkhmizwVQRNTCxllQAfqDD8l3nIMUmWNFYx2omb162prSMPhRfRuvRYe9yA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=amacapital.net;
-	spf=pass smtp.mailfrom=amacapital.net;
-	dkim=pass header.d=amacapital-net.20251104.gappssmtp.com header.i=@amacapital-net.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=IOFsVvG3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.52
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.75
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793055157;
+	b=juDMYGutzQBxAhTUvpnFZKx/u81JhoIV5MKEC1lnRR8+Rh1IlIBIPraWeFpDSKq9vZXj
+	 NKT5LaoxyI5f4HQWRMvl8TXT77cQwgVJZQKd7QEoLz52dgO/QVCtNUNtg+v7OQKFbbHcE
+	 zzNbTh2RZhf6baQpXxcmbNjPmcxuWWCXkW6gZyCSx1kJN5H06Bwm7FH+iEIMN7E2MSd+2
+	 gNjZ6cpOqPxS0gXQvpd5VkPXOrtvsUr7xuqR9wJdi/33xoXeA4Y4CyaI9DXYcIFDthx3D
+	 JEXlXrnDXpy6nNyFBnKRZ14tY1O7213vXL5CKoh68GapGrtmAg5WUFpRBjR1ZubNobg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793055157;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=zKAIbj4E71O6v5DHc3HNYXOZPG7g4zgY8frqPiT/8xg=;
+	b=CMVLCh/PEUgqylOnTRWUBOvs/6ty7SM53Xmf0w6cnoICrX8dxFYynQG1UOaXJlLGdS8G
+	 hyD9LEorloiXkTRq+fynmIUq/5gxR8SH/8/O98Mb1/rvXO9vGfTCZIlal5OBj41xDcZ2x
+	 ai6CSBehfLMdICe0ju4QLTlLVangK3MkNZvJae5KmNcOXRbkaOYWdzGS2l7yc2SQ+xQNz
+	 xvwlGqqOus7ne+1EbKtEUmDz+GnvlHkshqfWzPwDsjrooplCzQi75gHRqfhOSZts0E+kf
+	 Bosz/IQ95bxWgmAdWvhKXGkKx0gAjF93moRLMkT/PxBCqeOlybKsXEa2cUnIxySn7ug==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=gUrpU0Eo;
+	arc=none smtp.remote-ip=95.215.58.75
+Received: from mta1.migadu.com (out-75.mta1.migadu.com [95.215.58.75])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D66606A323
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 22:46:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52D66606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EB2606A31A
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 22:52:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41EB2606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amacapital-net.20251104.gappssmtp.com header.i=@amacapital-net.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=IOFsVvG3
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5be3ed646a5so3019631e87.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:46:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793054806; cv=none;
-        d=google.com; s=arc-20260327;
-        b=l//I9IAcsuMMrq18eIeTYNq4gVloNDDdaEmo/D1WPUsGcbXCSS8bi30k4PlswNSe4H
-         7oW3fb56ZCtE6VGRBllVZ4P/TJLqsn+MiwHEtGxjtgM8YTFYr1MQZASqGISA4xGf3TB2
-         hJganLmftY758BpnNhe4XPv+Z5AU/NXWRFsihBnVBIlA3YEgegvcqfTPH2oHque7OuUc
-         ypR7uzjjnPrQMcOvXF85jcAi/16wq0ruAIzDgyKifBCCbz/FfBYbJR87K4xUEFTdBePF
-         dMMCuJ0xzG0cHI5gnLQ0DJALyX711oqEgSbCR2201LUwO7GAc/O8BkAoOHDNW3ZjV6Tz
-         8bxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=sKnr+HaOzY7Irrp2H9F7r4w2uph5h2kmhEeFaXwyEMA=;
-        fh=8u4G9L4hBnQ7ZDBrbkKM3dOeGuR002du6jguO30+kAU=;
-        b=siW2GBZkawhYJ7OeXEbFs5tXrbe2Lxqrsp/drKFQJbcrz9+NqWWTHGipuavUi6P1qk
-         6XdvKXaajCv9TAXE3iwkUqW1CwgS7paB8f0hJfN1Cb213Zkj7OsJ+le5onPfU9SaA98n
-         QzMX5PBoFomH0/zYSAMS3aKstVFk2ZtufWb09oyRBnA2UmR3rb0b8eRf0mQL6mWs1btm
-         vAHTA0Fw9YKvUltxb3LjvD7agBaiRROgf4N+OshvZNTRwSLPkt+fbloEPZAnox7zHrql
-         b91LfWCAQSYJGipRG8+AMtAqGzB9JmmUJTLUrEh4tDuK1va0S81fiNLgZuHzMNRnJadr
-         ueDg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20251104.gappssmtp.com; s=20251104; t=1793054806; x=1793659606; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=sKnr+HaOzY7Irrp2H9F7r4w2uph5h2kmhEeFaXwyEMA=;
-        b=IOFsVvG3NSAD3HQiNhWpL3xOBWeFRtR3M7DeFYRGlG9024CAVL0BclZq+S6ghRSIWE
-         E0Kt3NMTpMvEFh9m8yx+vpnYuCtqzZQ28yrkGkOHmwbJ+OS/FnBciKMvh34M+kcoCCOl
-         Z2Ecmb6YILV0KENHnULJ6ha+jfnuhTE9OmQOtmZ4JYXTLGs8Ff0itsup6BKnrxJgen/W
-         L8r30Qn2tTTSYPH+0TiIunxBTdq1zvhjrLsS3Hp9Fc6rUz+0kj+oXRMP1K7i4huM3ZrC
-         CXMi12Rhds0KfLfi2+y10IxrDw+vVJgAyThh0UFHJXCkL+0SIlxgIVMgZv1LIlbPYKCO
-         87Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793054806; x=1793659606;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sKnr+HaOzY7Irrp2H9F7r4w2uph5h2kmhEeFaXwyEMA=;
-        b=JLZ71/brJUBNWQva+Opfb4l3OVPnf9MUZkVPa2VrMGEINWzlM7Lfd8/Lfwe5Nvu8bK
-         TmjD537Wug4LFBuUkOVu+x1ROcxK79LMA/9U6GIWh1yc72QSHiDBoVPp/32000E7bMYI
-         Ms7HTr0L/dvW4alM0sGpTwF2nJlDlxErNZpRolx3KHh9Ma+ALQZi0KEW77t869It70/o
-         nxy9JzbDYdkzvCNoRNxHG2c6lcYvNvx6kIyUqfULXdvjLpsa5ap+bX9U7FeVMDj3Q66k
-         B6LNP+HSuxj4XDa08+1Vq1iPsRi+o4Yc7Nm6WNPxA3xQ+N90EE77HcOZWZw8unZiUV7M
-         uBJA==
-X-Forwarded-Encrypted: i=1; AKwUvBz+aysp9OOAaq3kddhObt7/vUBLQh4ZOkHKj9N3Ofdj3GqxCz3Jf6Ac7MAB8nCian5IQ6SEPXOSAlfczDq002Y=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJJ2v+3zg+MPZoEqH42OShii/TY/tOpXefEN+msiFc+6fWkcYO+
-	/VT8klnGsI31NbOcD0UC3Fig3FeXuhINK+LeYLOL1ib4jTwjM67NeUrUh1t8XdK4VzcclpLoqfK
-	kvx9N5gJO+zvldf1Mgtfk571LW86gO9VYui5w9P0g
-X-Gm-Gg: AYBFou1AUmO+g2pfs75uhbnH/ilLMLAQF0qWX9DV6WmhrV/fhBNZdtdDPzUalnNasks
-	bCJ22Q8DFNc3PlKJZ1rovi4COfI3GAS3qlcWhivpcUrEAUkFQgsFQ6M+HVkWeolbvK+L841JtJW
-	tEjrYweub5e+jVB1xTZ5forGvXceaGXr80Lf3XNhWB8Ump9I//JBMv11vmxqVysOeck12pdyUqk
-	iJ8Z+2+Xl9Qn34Waz+i/zGRjGllonxDIqIL+SJebhdDVDV2ediZihPJ10vnHxObE3QVP6hX2pHN
-	mnc0kZqRXfNSCg/ZSDgOC/6+muLxuTF4XU0vVfb0W2ll4Joh4eqXewZM6VBTVsXrke8lO82/ysi
-	MI61oK4gODSzhuX6L7LP9ePCuml42UmgS9A==
-X-Received: by 2002:a05:6512:3e0d:b0:5bc:e28c:1349 with SMTP id
- 2adb3069b0e04-5bfb71fd555mr2854881e87.56.1793054806319; Mon, 26 Oct 2026
- 15:46:46 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=gUrpU0Eo
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Z8funXGuTqu+er/8n1etAxsCUdLvAe+wEnAdyvy1xIQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793055153; v=1; x=1793659953;
+ b=gUrpU0Eorbs3yADq20OuUJ7ELWR1tyFJ+LDvKwMuyQpFrqTSU6y/Ga3rr2eRJExL112ljoBK
+ CBDS18LKpncnGqrL17DH+Rt/TZFhErtsCsIDHiZxBsUl+EyNZidCBF4VGY4K8KRPnDeJMnJ73gh
+ S56GBVe9pUh+oJxrFhd2MMI0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 76e094ffeec065c5;
+	Mon, 26 Oct 2026 22:52:33 +0000
+X-Mizu-Trace-ID: 76e094ffeec065c5
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <66f1317a-4107-4e31-a3cb-6378fc63d07d@linux.dev>
+Date: Mon, 26 Oct 2026 15:52:24 -0700
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,79 +58,132 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261026220546.3114241-1-skhawaja@google.com>
-In-Reply-To: <20261026220546.3114241-1-skhawaja@google.com>
-From: Andy Lutomirski <luto@amacapital.net>
-Date: Mon, 26 Oct 2026 15:46:34 -0700
-X-Gm-Features: AclHuK_ddIvC0f7JBYWchwOFfRRqT-a0AZ_RsWY_MxD_DGe6_YpRsBjkP2gzVDw
-Message-ID: <CALCETrXNEWQNPjtuHnTfVFOafeJ7APXq288Cq16Q5adDNYx9+A@mail.gmail.com>
-Subject: Re: [PATCH 0/2] mm/memfd: add F_SEAL_PUNCH_HOLE
-To: Samiullah Khawaja <skhawaja@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Hugh Dickins <hughd@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel.org>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	Jeff Layton <jlayton@kernel.org>, Chuck Lever <cel@kernel.org>, 
-	Alexander Aring <alex.aring@gmail.com>, Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Gerd Hoffmann <kraxel@redhat.com>, Vivek Kasireddy <vivek.kasireddy@intel.com>, 
-	Jeff Xu <jeffxu@google.com>, David Matlack <dmatlack@google.com>, 
-	Pasha Tatashin <tatashin@google.com>, linux-mm@kvack.org, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 03/12] bpf: Prepare linked scalars for
+ relations narrower than 64 bits
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20261020161907.2115379-4-vineet.gupta@linux.dev>
+ <443e1351eed4f46cf6c202e5f1130b189e9c5eb09cfcffd24d752c6ec73d450c@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <443e1351eed4f46cf6c202e5f1130b189e9c5eb09cfcffd24d752c6ec73d450c@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 26, 2026 at 3:06=E2=80=AFPM Samiullah Khawaja <skhawaja@google.=
-com> wrote:
+On 10/20/26 10:08 AM, bot+bpf-ci@kernel.org wrote:
+>> bpf: Prepare linked scalars for relations narrower than 64 bits
+> TL;DR: Commit message only: regs_exact() now also rejects states whose linked
+> scalars share a base id in old but not in cur, a stricter infinite-loop check
+> the changelog doesn't mention.
 >
-> This series introduces F_SEAL_PUNCH_HOLE, a new memfd seal that prevents
-> holes from being punched into a shmem or hugetlbfs memfd while leaving
-> the file fully writable.
+>> bpf: Prepare linked scalars for relations narrower than 64 bits
+>>
+>> Two scalars sharing an ->id are always related by full 64-bit equality
+>> today: reg == base + delta over all 64 bits (this is true for
+>> BPF_ADD_CONST32 as well, which implies upper bits to be all zero).
+>> Sign-extension needs a genuinely low32 equal only relationship kind
+>> with bit 31 supplying upper 32-bits.
+>>
+>> Today the following 2 relationships exist
+>>
+>>    #define BPF_ADD_CONST64 (1U << 31)
+>>    #define BPF_ADD_CONST32 (1U << 30)
+>>
+>> Model them differently as
+>>
+>>    enum bpf_reg_link_kind { BPF_REG_LINK_NONE, BPF_REG_LINK_FULL,
+>>                             BPF_REG_LINK_ZEXT, BPF_REG_LINK_SEXT };
+>>
+>> So BPF_ADD_CONST64 becomes BPF_REG_LINK_FULL and BPF_ADD_CONST32 becomes
+>> BPF_REG_LINK_ZEXT with the exact same semantics as today. But this paves
+>> the way for a future BPF_REG_LINK_SEXT in the same framework.
+>>
+>> The implementation needs to change as well. Today the above 2 bits are
+>> shoe-horned into ->id, needing masking and OR'ing to get ->id and kind
+>> bits: with more types and bits needed, move them out into an enum
+>> bitfield of its own. To avoid growing the storage (and stay within the
+>> 1K allocator bucket), borrow 2 bits out of ->map_uid, 31 -> 29, which is
+>> still far more ids than a program can generate.
+>>
+>> ->id becomes a plain identifier, so check_scalar_ids() loses its "compare
+>> the compound id, then the base id" dance in favour of one check_ids().
+>>
+>> With the kind out of ->id it also leaves the idmap key, so regs_exact()
+>> and regsafe()'s explore_alu_limits arm have to compare it explicitly.
+>>
+>> One case changes behaviour -- old {r2.id=A+delta32} against
+>> cur {r2.id=B+delta64} was accepted and is now rejected, correctly, since
+>> alu32 and alu64 deltas diverge in sync_linked_regs().
+>>
+>> Clearing a link is no longer just ->id = 0: any stale ->link_kind needs
+>> to be cleared out as well. And given this needs to be done in the newly
+>> added kernel/bpf/scev.c, it is moved into bpf_verifier.h as
+>> bpf_clear_scalar_id().
+>>
+>> The helper also zeroes ->delta, which the open-coded clear left behind.
+>> Unlike ->id that field is inside the memcmp() prefix state comparison
+>> uses, so a leftover value could keep two otherwise-identical states
+>> apart; clearing it can only help pruning.
+>>
+>> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> The changelog lists only the delta32/delta64 mismatch as a case that changes
+> behaviour.  Is that the only one?
 >
-> Background
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> regs_exact() also changes.  It used to run check_ids() on the compound id,
+> so old {r2.id=A, r3.id=A|BPF_ADD_CONST64} against cur {r2.id=B,
+> r3.id=C|BPF_ADD_CONST64} built two independent idmap entries (A->B and
+> A|flag->C|flag) and was accepted as exact.
 >
-> Drivers such as udmabuf and iommufd (via IOMMU_IOAS_MAP_FILE) use
-> memfd_pin_folios() to pin the folios backing a memfd and hand them to a
-> device for DMA. Pinning keeps those folios allocated, but it does not
-> keep them in the file. If userspace later calls
-> fallocate(FALLOC_FL_PUNCH_HOLE) or madvise(MADV_REMOVE) on the range,
-> the folios are dropped from the page cache while the device continues
-> to use them. The pin holder is never notified, and from that point on
-> the device and the file silently diverge.
+> With the kind moved out of ->id, the same pair now maps A->B and then A->C,
+> and check_ids() rejects it:
 >
-> The existing seals only partially address this. F_SEAL_SHRINK prevents
-> pages from being dropped by truncation, which is why udmabuf requires
-> it. Hole punching, however, is only blocked by F_SEAL_WRITE and
-> F_SEAL_FUTURE_WRITE, and both of those also forbid writes. That makes
-> them unusable for memory that must stay writable, such as guest RAM or
-> DMA buffers, and udmabuf explicitly rejects memfds that carry them.
+>      return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+>             rold->link_kind == rcur->link_kind &&
+>             check_ids(rold->id, rcur->id, idmap) && ...
 >
-> Proposal
-> =3D=3D=3D=3D=3D=3D=3D=3D
+> regs_exact() is reached through regsafe(..., EXACT) from the infinite loop
+> check in bpf_is_state_visited():
 >
-> F_SEAL_PUNCH_HOLE fills this gap. Once it is set,
-> fallocate(FALLOC_FL_PUNCH_HOLE) and madvise(MADV_REMOVE) fail with
-> -EPERM, while reads, writes and resizing are unaffected. Combined with
-> F_SEAL_SHRINK, it guarantees that userspace cannot remove pages from
-> the memfd while the memfd remains writable.
+>      states_equal(env, &sl->state, cur, EXACT)
+>
+> so this is a stricter comparison than before.
+>
+> Could the changelog also say that regs_exact() now enforces base-id
+> consistency for linked scalars, which the old compound-id idmap key did not?
 
-How does this solve the problem?  F_SEAL is about a userspace
-contract, and if there are existing users of the APIs in question, it
-makes very little sense to start making those users fail because they
-haven't taken the appropriate seal.
+Right. The example you mention is new.
 
-Would it make more sense for the drivers in question to set some flag
-(refcount?) on the file to block hole punching?  Or perhaps to have
-the hole punch code notice that it's trying to punch out a folio that
-is pinned or otherwise referenced and to refuse to do it?
+Basically v2 had a patch of its own on this topic and it listed two cases
 
-To some extent, the issue you're describing is maybe broader than just
-the APIs you're contemplating.  If I open a file and then do something
-in thread A that GUP's the file and punch a hole in the file in thread
-B, I'm doing something weird, and I can imagine plenty of ways it
-could go wrong.  (Especially if it's GUP for write.  I hope we already
-get that case right.)
+     old {r1.id=A, r2.id=A+delta}  vs cur {r1.id=B, r2.id=B}
+     old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
 
---=20
-Andy Lutomirski
-AMA Capital Management, LLC
+Both were same category: one register whose kind differs between old and 
+cur, caught by the new
+rold->link_kind == rcur->link_kind line.
+
+What you mention here is a different scenario:
+
+     old {r2.id=A, r3.id=A|BPF_ADD_CONST64}
+     cur {r2.id=B, r3.id=C|BPF_ADD_CONST64}
+
+kinds match but it is still rejected, by check_ids().
+
+v4 mentions both mechanisms.
+
+Thx,
+-Vineet
+
+> --
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39458500836
+
