@@ -1,47 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.36
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.162
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793051584;
-	b=CuewNdQetJpO8ejhrd95MgyfCKFQxqU7fGjP4Hp8ICkzs54QNnXXU+dzrmVU4OeFVyxL
-	 Qf7H9EtoMvMiGR45O42XMSlGmtp6QjTCeiR6+TwmbRbWeFf5i0b7LxJZQUy096HbTNvy2
-	 SZjdNcOLvzH/jfdYK6bLAaiie1MvKbmd5U3IOXX+jh/3F/mb73CXQgXaciFRO1M3a72bZ
-	 mtUtGS54GkfHQaFbK6jT4L4sbtlKLslKOSgxJA15QKDqhSqyL8GRXLgKOX7SdIO83u7FH
-	 YXpe4PsgiyLXiSQuz5wf78WQchq5Cz/A8aoJ8GcX7xX5iq1h8yH/ujOo4ASi/QTnR+A==
+	t=1793051593;
+	b=35fl61cIBpgrINvQhxiMR3NDeqFgVW8l7Wkb7DCsUIy6LIEBmqCsg8vZFCIp+5y0AUnk
+	 fz34dYwzpcR8hgp+lLCV5IpeHJz7u2EICAiWxs4Kt19ZDwh6EZF5fbzzDnKZBP2Pgnz9b
+	 3iMdUndlRoNH2LgWnBJqYiT+MO/ytAlmYgDhPo74V+I2k8rSk0LG4NwQu7UIROs1C3gqm
+	 G738HKOx1y+sRYXOtToC+o5OFcmABwOIVazrI4s73NXlI7xESmiDxbnswzSXexCeaOdTr
+	 iOTYzTXyVVTlVRw829ZJrJfNVVflOaDly7HMvQ/FqzInKMRHS+640KZFGwo09g+OcSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793051584;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793051593;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=S25b244wTaMqVJjFfln8keXH6fPLP/cirrhFiRLHhew=;
-	b=St6qRtHvZJgtvjWymFF+3LDJTMaYyTNQoWxwD/U+FnQW+iJpz/rDDo8NdCKVWYhGJjE3
-	 J13/N5E6RcN0DNJbq63T+55OgDBDuGxrowbGf7VqPoKjiBBI70MmE9DeVEGTkLzsgok2W
-	 7rLQPREjnHrOULOs3UkNLHQHZT6taM3Pp9R7o4bNuIUEZFX/NUq9f9CfSBF9VVJG3g461
-	 +ES6pyEdXwzMgTRc/uIvm1+g3VRYEVPdinu51BM/Z1g7eolXhmGGD5SOFu6XkUwz5k7Pn
-	 Xo1Lys5pJuPreeaa6Kg1IGrfJaxTBfjb9j6Mf3jRYdKQWGe9onSn3xvfUsKHVskpLLg==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=iXNjFw3AXuPpgBzB2dIpW73+ZJUcvLCFYjzMcFVldhQ=;
+	b=B3CjR1C7tlc1m3E6QLU3nf42cRfdbojf3IycFt3BY0KsJMBgwa9gJu4NOHmondckETIV
+	 7Ala3y+gOs7lAKLsmkmkTscxeVakjtHzwSWVTzlNtbJacrM7Arw3HIZQzxQ9PJU7WcRba
+	 tJgdoWQKaRIH9MGRE9tNdx4030VWBk4wTUfNMCCrR/AA17JIa0/DK0TO/VKRktkvfeHPQ
+	 XOyCucB3m4Gah91tJD/cz77micfpTUxO6uRBzez/A55emkf9h2YVHFTjRSGSeSDSTGy+O
+	 RWyWtf8u18jriAS/jisgnqGtvqN9knUHLcqnZhlMCE0hwTE2ilnBqh+oRmJDWwLqaeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=95.215.58.36
-Received: from mta1.migadu.com (out-36.mta1.migadu.com [95.215.58.36])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Q9oRpon5;
+	arc=none smtp.remote-ip=91.218.175.162
+Received: from mta0.migadu.com (out-162.mta0.migadu.com [91.218.175.162])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5D060A382A
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 21:52:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E5D060A382A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70AD560A260C
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 21:53:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70AD560A260C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Q9oRpon5
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=LVUzn4xBpWP3HV1084cxZXPEcEqRbTp4ZtSvD+kaGOk=;
+DKIM-Signature: a=rsa-sha256; bh=W3vVu5Uphs0NM4YFbvd5w2RlKRAMIIH16asxmDrJhQo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793051571; v=1; x=1793656371;
- b=eZIU/Wcp8IfRCktVUwJSLfW7SUUgdsNW4D978XQVeMPCD2QLQW+TAi2vP/4W1mnKYU8QhXJQ
- xdIm8MTwWPw7gvUIo65OgSHx3wH+wW3sgXPl0E/x+8U7Qstk2YXXYpqaKLqTegCmHFm8VP8Ww3m
- EUMwyaXiRLyBsI4vBt3efhJg=
+ t=1793051581; v=1; x=1793656381;
+ b=Q9oRpon5zA+UHTc/zNA1CfOEj7tzi+hM9f3kaNawsSSJ8mdg3JWGxgYvIyn/111onNDap1X2
+ sNtJNpKVNh9BpqgXFsSQZjRAlkXHmTWxvdgnZ+YwApZ8XuoidzSOdq5NHVywEJo6VzWASgpxTk3
+ papqwVddycMV1y3KZDcUxrjI=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id cadc261c74d7667d;
-	Mon, 26 Oct 2026 21:52:51 +0000
-X-Mizu-Trace-ID: cadc261c74d7667d
+Received: by smtp.migadu.com with ESMTPS id 45d9b29136f833cb;
+	Mon, 26 Oct 2026 21:53:01 +0000
+X-Mizu-Trace-ID: 45d9b29136f833cb
 X-Migadu-Flow: FLOW_OUT
 From: Zhu Yanjun <yanjun.zhu@linux.dev>
 To: jgg@ziepe.ca,
@@ -51,10 +55,12 @@ To: jgg@ziepe.ca,
 	linux-rdma@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	yanjun.zhu@linux.dev
-Subject: [PATCH v4 0/2] selftests/rdma: Add an eBPF-based testcase using netkit for RXE
-Date: Mon, 26 Oct 2026 14:52:34 -0700
-Message-ID: <20261026215236.60054-1-yanjun.zhu@linux.dev>
+Subject: [PATCH v4 2/2] selftests/rdma: Add netkit-based automated test script for RXE
+Date: Mon, 26 Oct 2026 14:52:36 -0700
+Message-ID: <20261026215236.60054-3-yanjun.zhu@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261026215236.60054-1-yanjun.zhu@linux.dev>
+References: <20261026215236.60054-1-yanjun.zhu@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,68 +72,105 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new self-test case to verify RXE (Soft-RoCE) traffic using
-netkit virtual interfaces and an eBPF tcx ingress program to dump
-and parse RDMA transport headers (BTH, etc.).
+Add a shell script to automate functional and tracing tests for the
+Soft-RoCE (RXE) driver over netkit network interfaces. The script creates
+an isolated network namespace, sets up a netkit link pair (nk0/nk1),
+attaches RXE links, and runs an rping client/server verification test
+along with kernel tracing output collection.
 
-The test results:
-
-# make -C tools/testing/selftests/ TARGETS=rdma run_tests
-make: Entering directory '/root/linux/tools/testing/selftests'
-clang -g -O2 -target bpf -D__TARGET_ARCH_x86 -I../../../../usr/include -I../../../../include/uapi -I../bpf -I/root/linux/tools/testing/selftests/rdma -c rxe_pkg_kernel_dump.c -o /root/linux/tools/testing/selftests/rdma/rxe_pkg_kernel_dump.o
-bpftool gen skeleton /root/linux/tools/testing/selftests/rdma/rxe_pkg_kernel_dump.o > /root/linux/tools/testing/selftests/rdma/rxe_pkg_kernel.skel.h
-gcc -D_GNU_SOURCE= -I/root/linux/tools/testing/selftests/../../../tools/testing/selftests  -g -Wall -I../../../../usr/include -I../../../../include/uapi -I../bpf -I/root/linux/tools/testing/selftests/rdma rxe_pkg_user_dump.c  -lbpf -lelf -lz -o /root/linux/tools/testing/selftests/rdma/rxe_netkit_dump
-# timeout set to 45
-# selftests: rdma: rxe_rping_between_netns.sh
-# client DISCONNECT EVENT...
-ok 1 selftests: rdma: rxe_rping_between_netns.sh
-# timeout set to 45
-# selftests: rdma: rxe_ipv6.sh
-ok 2 selftests: rdma: rxe_ipv6.sh
-# timeout set to 45
-# selftests: rdma: rxe_socket_with_netns.sh
-ok 3 selftests: rdma: rxe_socket_with_netns.sh
-# timeout set to 45
-# selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-ok 4 selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-# timeout set to 45
-# selftests: rdma: rxe_sent_rcvd_bytes.sh
-# server DISCONNECT EVENT...
-# wait for RDMA_READ_ADV state 10
-# client DISCONNECT EVENT...
-ok 5 selftests: rdma: rxe_sent_rcvd_bytes.sh
-# timeout set to 45
-# selftests: rdma: rxe_netns_names.sh
-# 1..0 # SKIP rdma netns exclusive mode is not supported
-ok 6 selftests: rdma: rxe_netns_names.sh # SKIP
-# timeout set to 45
-# selftests: rdma: rxe_pkg_netkit.sh
-# server DISCONNECT EVENT...
-# wait for RDMA_READ_ADV state 10
-# ./rxe_pkg_netkit.sh: line 28:  9866 Killed                  "$CUR_WD/rxe_netkit_dump"
-ok 7 selftests: rdma: rxe_pkg_netkit.sh
-make: Leaving directory '/root/linux/tools/testing/selftests'
-
+Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
 ---
-V3 - > V4: Fix problems in user space app
-V2 - > V3: Fix problems in user space application
-V1 - > V2: Fix problems from sashiko
----
-
-Zhu Yanjun (2):
-  selftests/rdma: Introduce eBPF kernel and user dump utilities for RXE
-  selftests/rdma: Add netkit-based automated test script for RXE
-
- tools/testing/selftests/rdma/Makefile         |   23 +-
- tools/testing/selftests/rdma/config           |    3 +
- .../selftests/rdma/rxe_pkg_kernel_dump.c      |   62 +
- .../testing/selftests/rdma/rxe_pkg_netkit.sh  |   63 +
- .../selftests/rdma/rxe_pkg_user_dump.c        | 1275 +++++++++++++++++
- 5 files changed, 1425 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/rdma/rxe_pkg_kernel_dump.c
+ .../testing/selftests/rdma/rxe_pkg_netkit.sh  | 81 +++++++++++++++++++
+ 1 file changed, 81 insertions(+)
  create mode 100755 tools/testing/selftests/rdma/rxe_pkg_netkit.sh
- create mode 100644 tools/testing/selftests/rdma/rxe_pkg_user_dump.c
 
+diff --git a/tools/testing/selftests/rdma/rxe_pkg_netkit.sh b/tools/testing/selftests/rdma/rxe_pkg_netkit.sh
+new file mode 100755
+index 000000000000..181e2d85eed7
+--- /dev/null
++++ b/tools/testing/selftests/rdma/rxe_pkg_netkit.sh
+@@ -0,0 +1,81 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
++# Copyright (c) 2026 Zhu Yanjun <yanjun.zhu@linux.dev>
++if [ "$(id -u)" -ne 0 ]; then
++    echo "SKIP: This test must be run as root"
++    exit 4
++fi
++
++for cmd in ip rdma rping; do
++    if ! command -v "$cmd" >/dev/null 2>&1; then
++        echo "SKIP: Required tool '$cmd' not found"
++        exit 4
++    fi
++done
++
++if ! modprobe -n netkit >/dev/null 2>&1 || ! modprobe -n rdma_rxe >/dev/null 2>&1; then
++    echo "SKIP: Required kernel modules (netkit or rdma_rxe) are not available"
++    exit 4
++fi
++
++exec > /dev/null
++
++set -e
++
++CUR_WD="$(dirname "$0")"
++[ "$CUR_WD" = "." ] && CUR_WD="$(pwd)"
++
++cleanup() {
++    set +e
++    [ -n "$DUMP_PID" ] && kill -9 "$DUMP_PID" 2>/dev/null
++    unset DUMP_PID
++
++    rdma link del rxe1 2>/dev/null
++    ip link del nk0 2>/dev/null
++    ip netns delete ns0 2>/dev/null
++}
++
++trap cleanup EXIT INT TERM
++
++# Clear tracing buffer
++echo > /sys/kernel/debug/tracing/trace
++
++# Create network namespace and netkit peer links
++ip netns add ns0
++ip link add nk0 type netkit mode l2 peer name nk1
++ip link set nk0 up
++ip link set nk1 up
++
++# Configure namespace interface
++ip link set nk1 netns ns0
++ip netns exec ns0 ip addr add 10.0.0.1/24 dev nk1
++ip netns exec ns0 ip link set nk1 up
++
++# Configure host interface
++ip addr add 10.0.0.2/24 dev nk0
++
++# Start dump utility in background
++"$CUR_WD/rxe_netkit_dump" &
++DUMP_PID=$!
++
++# Add RXE links over netkit devices
++ip netns exec ns0 rdma link add rxe0 type rxe netdev nk1
++rdma link add rxe1 type rxe netdev nk0
++
++# Start rping server in namespace
++ip netns exec ns0 rping -s -a 10.0.0.1 -C 3 &
++
++# Add wait time
++sleep 1
++
++# Run rping client on host
++rping -c -a 10.0.0.1 -C 3
++
++# Tear down RDMA links and netkit devices
++ip netns exec ns0 rdma link del rxe0
++rdma link del rxe1
++ip link del nk0
++ip netns delete ns0
++
++# Display kernel trace output
++cat /sys/kernel/debug/tracing/trace
 -- 
 2.54.0
 
