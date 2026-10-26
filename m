@@ -1,80 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.240.27.27
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792984623;
-	b=Y1Gnmx6PkzxzObLgvnd/CUffXgsSqU2O2u3dprG9EV9MuE5CxfcG5xZr/zfXB982ecx1
-	 a34IXmiYBKNhI0Yh2ZJQPvHgKNmlhhgu4hIgMgLFwox7o/UFKVNilQ4mI//R8Q6cSpLFf
-	 wJA8JLLyrY37ScmO1AZUvubPSDVlGEFGrLlu7sPGfOKheaNwLb1+5f9nBD53CzEfrgv+O
-	 px3gc74hK46vfysnUi2ZAtRomfhLcVIpb74VwgBE818895zN6B1tvKYgjj7+c9K4fVz7P
-	 dhBL1z9mE8Wg5jYU0iebPArcrENY10sH5TLIfttomHrVPi5B+tgnzr2MB2Cwr/qOH+w==
+	t=1792984940;
+	b=bp3wbv7YUzrEIXXISDGP8XJSkq76FHcdl/gsQlkG8cczyp1NyxDKNPuSk5uITwcM+FMX
+	 EHqG9j3RLDx5JepWgq4OjYou4sFxWR2Q15g4sZ9zC95uOmErWo5abnnBIAUA9KCiSBjzg
+	 Xo6B4xRkuzvWVA8o0wymBYYJCZD4ndRVFWyXSnDOsoAu40e2FyUWbA/VYju91MWJ74OZs
+	 x3Sy4rfNtPnqBQBJjIaEwZOavHayxGp4gqWD39sOZx5vF+FY00h5n6NAFsBySnYrjDwFD
+	 FAsuVDxr2TKQN/Z7jyFUw+3XyLSLl8CUL95a4yodbjdYaUGEkEl/K23L/tdN5fC8SRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792984623;
-	h=DMARC-Filter:DKIM-Signature:DKIM-Signature:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:Feedback-ID:X-SES-Outgoing;
-	bh=A2LbPxlANFscuDu+5t6LoJ+YO+qfoCuiwkLsdsczSs4=;
-	b=f4GSGujn37LyepSbaajVAuIAWnT1zUfQvGAE98vk72b7GZK9dYL5Ad0vfSAmZN9dfUPY
-	 JnOpmRRwm9N3DtduNj8E210FdZybFmCEYFqKW6tcFXoP7k3bmZ4Os+/i0qZRDVqcq+5UP
-	 EWjFkL3EOGIejn8DgAvHce+K87rXlKpJ1zVT5Sp4JLQRuKwNFemBgYoyNgyhnC4WTz0Hl
-	 slCci+2PbcG6Ru39SeOB5WC5UMD8WO/OjCCh2yK2eKBG7dKaFbAW8Aukjvz6mc6SLvneV
-	 Vr4Tjhn6fcr0ZVpUp2XfIfMbpJZFxd4q9+j/rX69kmBQJ/uuzRTvgzfDT7fhD0zJhJg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792984940;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=QTkGoh7JVetp3qKSKYheTjXfXOD9uDVC36zPXxqDxM0=;
+	b=4jdsDVK0NEZq6yPU7Oc3YFfP1cVR+5LewnRzHBj+W0wTkxNNaoWuxbKkQ4pNkGkL8Vrj
+	 p7xyJKH4kxuVJcGe5DIybLjqYBrQNRfXJsITNRHrhNcXY15v0bHq+dQ6ES/yYpZPTQTBh
+	 U44VZx/QZ8we2/u/ooXh5jdbBV0YlgkNFEB7PDXAbBvdwRC39lvfUjJ0cXAy5oca8R2CT
+	 wyY1x6vlF8Tk/pNf8a2A3p8b8H3oXRgj9afUGcmDntMvkgQzXx/Zy6MxXacpeRarcm9Cx
+	 d8Knl2dw0pl+DV/nZJgD8H1dpWiF7ZMBVwY5BfnI/y++qZHrwDnS8ubrL6BpLjHIdJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=eliskeggs.com;
-	spf=pass smtp.mailfrom=us-west-2.amazonses.com;
-	dkim=pass header.d=eliskeggs.com header.i=@eliskeggs.com header.a=rsa-sha256 header.s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk header.b=aMIieMyq;
-	dkim=pass header.d=amazonses.com header.i=@amazonses.com header.a=rsa-sha256 header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=iLi5uCYL;
-	arc=none smtp.remote-ip=54.240.27.27
-Received: from a27-27.smtp-out.us-west-2.amazonses.com (a27-27.smtp-out.us-west-2.amazonses.com [54.240.27.27])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--tavip.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=CNRxYf9Y;
+	arc=none smtp.remote-ip=209.85.216.71
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6186A606A322;
-	Mon, 26 Oct 2026 03:17:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6186A606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eliskeggs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=us-west-2.amazonses.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296D3606A321
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 03:22:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 296D3606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tavip.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=eliskeggs.com header.i=@eliskeggs.com header.a=rsa-sha256 header.s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk header.b=aMIieMyq;
-	dkim=pass (1024-bit key, unprotected) header.d=amazonses.com header.i=@amazonses.com header.a=rsa-sha256 header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=iLi5uCYL
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk; d=eliskeggs.com; t=1792984622;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To;
-	bh=A2LbPxlANFscuDu+5t6LoJ+YO+qfoCuiwkLsdsczSs4=;
-	b=aMIieMyqNmiWx5SOQvYw/09ThJHTSl0FHiX1rGynNpEov/suluJAC5W0VjmvIDdI
-	LkXm9GjwRhLuo8mtFs0s9tnMeogzIaK5m/vDaEFuedukU5RD9PQFVx8SmHZGqQgyOBp
-	Jpdu+cOaXgS+akchCwEcb/Q5siMP/2gGozanjEQM=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1792984622;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Feedback-ID;
-	bh=A2LbPxlANFscuDu+5t6LoJ+YO+qfoCuiwkLsdsczSs4=;
-	b=iLi5uCYLf2AE1CoxngD8YySv3oj7AGYaAU8tetFyCThPuzNBMLfp2oVjtWWQik+4
-	C3wEYhpzsmJBU9K87XNj321/nuSZivjf+p94infmSheOkArLpkvsaDbjxtFg99FZWkO
-	Dn/OhE1HUOO7DAjta2U5phrokcqYYBmbTG3KSjeM=
-Date: Mon, 26 Oct 2026 03:17:02 +0000
-From: Eli Skeggs <kernel@eliskeggs.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, 
-	"David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on
- zero-length skb redirect
-Message-ID: <010101a176362646-06b53e65-6c20-4ac2-9e05-b74eb5376abf-000000@us-west-2.amazonses.com>
-References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
- <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
- <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=CNRxYf9Y
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3ab7f1efe5dso4615080a91.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 20:22:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792984939; x=1793589739; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=QTkGoh7JVetp3qKSKYheTjXfXOD9uDVC36zPXxqDxM0=;
+        b=CNRxYf9YdRSnf3Rd6rkB+ZGcpteiBCjIHm8g4tOFI6uQbEu8eXSuMShXxZ8i6n3d2n
+         u5xumqpg/qTnd8rVBOm4lRqtLcCZIR8wIp8xk2Qu46n7hir5zIV7Kx3wZ0ouUxxhnLHW
+         IJNPpRpnxBBLmgXKC83tgL1/iS9tf5Fc1fjXOFc1wg8UFfsZ409s1QBrCX/6rlIzZewU
+         nOxAENUQfVeI5EZT9LFyz/WVhxVKCykavzgO0h3+sMIK6HpuVqvw/QUcG9CSva6leN0z
+         OSJU+r+p4I5gb+bJF4uKqRIOkZawbQ3/IdDtHlugIzEeRqADRepW02lGiDmZ1mcT6wsE
+         zDIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792984939; x=1793589739;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QTkGoh7JVetp3qKSKYheTjXfXOD9uDVC36zPXxqDxM0=;
+        b=wkbLaXI80+VtJlx+luJq94mD/HBvUu9evTZDg71BJIXglO6nsNpHubdj+jfkuamnto
+         hIuyHCv0YHyDhy7dwMB7U8q0iL8eAMNnH5bd2epMcCrDRr6fi7girW1pRuARsfIa2kqP
+         jMAHSLe3NY2t/fTtb/IuTYi6+QNbvPs/aspDKECt/3ZqxO5RG6c51Lks3VvAM8lUxjrr
+         dMbYbJrDoJtqBUkj0BSzLh+dM21lcdLnHE5jYZRasFVo/vGWtXV8KVKUiMoNeir1bn6i
+         pxBLYESbr2qR9728BxYRHYKPncjUzGBttGoDtWYvSxmC/VGcJXRAE5exLid8Qd7mHUHX
+         vdXA==
+X-Forwarded-Encrypted: i=1; AKwUvBx3ANFIZf+u7+yn8+oO36mObNvW3Wu7m88YIAsSjIMVR3vVcZ4zGbP8ybdaFUJp8Mv38pIeD9Pfc+ha/1/OUaE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIeQaA3nQp8jD082DGiPbQ2vIhSl2+0wB3mNFUuOBkxnaVyJERB
+	monslS2QgCfqiViz4dGWCh4IRHswig6xWXMP9CaTW5tjdwFj73XpUvcNwvFRAciAdcKWgYQkkSC
+	8mQ==
+X-Received: from pjbml5.prod.google.com ([2002:a17:90b:3605:b0:3a4:b8b3:a08e])
+ (user=tavip job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4490:b0:3ac:53e0:4ed5
+ with SMTP id 98e67ed59e1d1-3adeafd1e8bmr4604045a91.39.1792984939373; Sun, 25
+ Oct 2026 20:22:19 -0700 (PDT)
+Date: Mon, 26 Oct 2026 03:22:14 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,58 +75,79 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
-Feedback-ID: ::1.us-west-2.aEUYuRRC8Z+WeC8mlWAQBpqJLV0VswmaEnHpVsice/Y=:AmazonSES
-X-SES-Outgoing: 2026.10.26-54.240.27.27
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.257.gf7497c7d27-goog
+Message-ID: <20261026032216.1145201-1-tavip@google.com>
+Subject: [PATCH net v4 0/2] tcp: clamp return value of tcp_wmem_schedule() to non-negative
+From: Octavian Purdila <tavip@google.com>
+To: Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, "David S . Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>
+Cc: Simon Horman <horms@kernel.org>, Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Octavian Purdila <tavip@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 26, 2026 at 09:59:00AM +0800, Jiayuan Chen wrote:
->
-> On 10/26/26 7:41 AM, Eli Skeggs via B4 Relay wrote:
-> > From: Eli Skeggs <kernel@eliskeggs.com>
-> >
-> > Treat a return of 0 as success when there is no data to send, while
-> > continuing to fail on a 0 return with residual bytes. The loop exits
-> > without incident on an empty skb, and the skb gets cleaned up as usual.
-> > On an ingress redirect, the empty message is still queued as before, but
-> > the target socket no longer reports EPIPE.
->
-> The target can't receive anything after that though. The empty msg sits
-> at the head of psock->ingress_msg and nothing ever dequeues it:
->
-> [...]
->
-> So the user gets EOF on a socket whose peer never closed, and everything
-> redirected to it after the FIN is lost. Without a verdict prog on the
-> target it is worse, tcp_bpf_recvmsg() returns -EFAULT forever.
->
-> Since this patch is already about the zero-length skb, can you handle
-> the ingress side too? E.g. in sk_psock_skb_ingress(), don't queue an
-> empty msg when len is 0 and the skb was redirected (skb->sk != sk). The
-> self PASS case must keep its empty msg since is_next_msg_fin() depends
-> on it.
+This series fixes a bug discovered in production in tcp_wmem_schedule()
+where a negative sk->sk_forward_alloc under TCP memory pressure causes
+tcp_wmem_schedule() to return a negative copy length when
+sk->sk_wmem_queued already reaches or exceeds sysctl_tcp_wmem[0].
 
-Yep, thanks for pointing that out.
+sk->sk_forward_alloc can transiently become negative when tcp_collapse()
+re-packs partially read or high payload-to-truesize SKBs in the receive
+queue and charges newly allocated SKBs via sk_mem_charge() before
+freeing the original SKBs. When a subsequent send hits memory pressure
+in sk_wmem_schedule() with sk->sk_wmem_queued >= sysctl_tcp_wmem[0],
+tcp_wmem_schedule() returns min(copy, sk->sk_forward_alloc) < 0.
+Callers such as tcp_sendmsg_locked() then pass that negative copy length
+to skb_copy_to_page_nocache() -> copy_from_iter_full() ->
+check_copy_size(), triggering WARN_ON_ONCE(bytes > INT_MAX) in
+production and returning -EFAULT instead of waiting for memory or
+returning -EAGAIN.
 
-Alexei suggested skipping empty skbs in sk_psock_backlog():
-https://lore.kernel.org/all/DMEE6SW3UE97.2DF11HBEBKYYI@gmail.com/
+Patch 1 clamps the return value of tcp_wmem_schedule() to [0, copy] so
+a negative sk->sk_forward_alloc is treated as 0 available bytes.
+Patch 2 adds a packetdrill selftest that reproduces the negative
+sk->sk_forward_alloc condition via tcp_collapse() under memory pressure
+and verifies that a non-blocking write fails with EAGAIN rather than
+EFAULT.
 
-To your point, I think the critical difference between these approaches
-happens when the sk's backlog queue is not empty and the socket's own
-FIN (the self PASS FIN) gets queued. In that case, we rely on the empty
-msg to correctly update copied_seq, and skipping it means the copied
-sequence number ends up 1 behind rcv_nxt.
+Changes in v4:
+- Add --define=REQUIRES_MEMCG="1" support in ksft_runner.sh to skip the
+  test when the cgroup2 memory controller is unavailable and clean up
+  pkt_* cgroups and cgroup.subtree_control via an EXIT trap.
+- Pin packetdrill to CPU 0, write 0 to memory.high twice to guarantee
+  local per-CPU memcg stock is drained synchronously, and set
+  memory.swap.max=0 in the test cgroup.
+- Fix checkpatch warnings (duplicate Signed-off-by trailer and comment
+  line length) and preserve the "net" target prefix on all patches.
 
-This path is already broken: when a socket's FIN gets queued behind
-other skbs, the backlog reports the erroneous EPIPE just as in the
-redirect case.
+Changes in v3:
+- Fix packetdrill test failure in netdev CI (CONFIG_MAX_SKB_FRAGS=17):
+  adjust segment sizes (35 KB) and buffer limits so the receive SKB
+  truesize is identical across CONFIG_MAX_SKB_FRAGS=17 and 45, and
+  tcp_collapse() deterministically drives sk_forward_alloc below -16 KB
+  without invoking the memcg OOM killer.
 
-I do like the simplicity of skipping the empty skbs entirely. I don't
-immediately see what the consequence is for copied_seq being behind in
-this terminal state, but the approach that updates copied_seq does seem
-strictly more correct.
+Changes in v2:
+- Include production warning trace in Patch 1 commit message.
+- Skip the packetdrill test when PAGE_SIZE != 4096 via
+  --define=REQUIRES_PAGESIZE="4096" in ksft_runner.sh.
+- Collect Reviewed-by tags from Kuniyuki Iwashima and Eric Dumazet.
 
-Is that the right interpretation? Let me know what direction I should
-take for v2.
+Octavian Purdila (2):
+  tcp: clamp return value of tcp_wmem_schedule() to non-negative
+  selftests: net: packetdrill: add test for negative sk_forward_alloc in
+    tcp_wmem_schedule()
+
+ net/ipv4/tcp.c                                |   2 +-
+ .../testing/selftests/net/packetdrill/config  |   2 +
+ .../selftests/net/packetdrill/ksft_runner.sh  |  28 +++++
+ .../tcp_wmem_schedule_negative_fwd_alloc.pkt  | 116 ++++++++++++++++++
+ 4 files changed, 147 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
+
+-- 
+2.56.0.257.gf7497c7d27-goog
+
