@@ -1,82 +1,145 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.13.214.179
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793053099;
-	b=x33G7Aq6KrNuTRD3VYoRibKTClTGSTv4LxaENGaxC+sUUvl1ZWGyKvrf1LBla2r+B+/I
-	 HYk0r1W6BT9XOcFSXXSWkdnULv9aYE9BE01UrQJMwPUdHQF5bwufuIEEi3B/BBgiRWJ8m
-	 /YMcgQXXFzbDpLefXiwsbTpY4hyrMU9Z59wmzpBma+eBl/CmMk+4IhgKem3//IPxl24Jo
-	 g26JFyvs2WAFYn8Op7s1aBsrQ0DYhU9egxNex+JqCo1LiPj7I6sKaZEt3KO7CElhj5zk9
-	 l/EIIllSfxQoAO0HmU+VoK/rkiKHLS8IvzBOqUeX+VbGCUJMNUEdwGCeB2a/npc/liA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793053099;
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=192.198.163.8
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793053362;
+	b=hX1aM271Dcf+ptaSGJDpvl8AbTJYNRX9yfMAFPeAXZHDk/S0o/lsjKkPnwqZDN1S4vXd
+	 5paY/29DyJsopdywZRgqrMlQLlP9izr1GyETCoAQSghwjnNLrldObinYzyxHfeLnQYq3l
+	 FUvRxihxXc1C5NuzL7WoUQDsXigkTlJAgXEUFa95sKphocNjxaUsZyDQluTg41eUmq3hv
+	 3g69Nvh/UxHci5I+wSTq6D2UoheHJF70sH/pdd6/EKluuFiqUd/HN1rbIy5LC4NkZUbX2
+	 wuzY6f400NzvFq2BhTvSIBIm9HNh24FT5s11GfGAyWMR4hUeMf6PmmgCEGZ+IMBmeww==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793053362;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=C08zoQ9oP6H+XiBnTr+uQ9WmZpT2KbsMbTcRxYAAP6s=;
-	b=S67Q3i9p6iPx/NWHgoNwZeFenQ43P1Aw8fhZrMZCSClJYO7C4kXv50YyFNWbyQzU3qzW
-	 m19ijiAGUoXH/kT9hDqmFL8mMgvcBbxEy3ll4SzC+TvIGLj3WZmO4unJB0AlsF/IuAQ3p
-	 DRxb7eCNYHeya459etMHE8sCBxk7CUyZDLaUDhV084Curw0wrjOoAxUVQOPbMjvdL//xD
-	 E48z3jBjzrPGfVBVzx/4HOtz86lp1g8+LKHRVevZkkRf26PSrhtbzGVX2AUGDxYfTI7p/
-	 ioT5A+axplXwHZLkiD3Sh85WCAbyz7F7dY8Qp6b0bWqZS6DRHtM0hjJ82gl1ygxjvDg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=rkstCe0A;
-	arc=none smtp.remote-ip=52.13.214.179
-Received: from pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.13.214.179])
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
+	 Received:Received:Received:Message-ID:Date:User-Agent:Subject:
+	 Content-Language:From:To:CC:References:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-LD-Processed:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+	bh=rehZe7U/wyedc5jTgaX4C9eagA7Zjupg9C1Vi8AXi48=;
+	b=DbyFAE/fFoQvalHBQ8UY8QCvyTZ37BRj2j4uwQ5pbJzUzRiATOyd14xr7gRgpHc7Dsrp
+	 kIiRACu/TYxvrwasDSaROJIJS1jGP7a6I9DqMr5ecE8+4MBOTu2to98lApH1kEUvVo6Wz
+	 3iwRUYjbJRWkq4bbzN5vRX9IMvySINOIaiwL0DA40GzKE+LdVjhOuDWmAqh1UEB1Iptdp
+	 ht3MP5LVtPYHmZD+Ld2lZinxh3KP/o6B26RwL7F0rPYxwTPXXZoEmJbczKR5xqrhJWOSn
+	 kvVDas4yLbG9q+89bfvuPaTdC/XTcr16lPFfJ7CZcsjlp9ukj0NBqE9vcYefKm8vWQg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YT5wgasZ;
+	arc=fail smtp.remote-ip=192.198.163.8
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6497606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 22:18:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6497606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2369606A320;
+	Mon, 26 Oct 2026 22:22:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2369606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=rkstCe0A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1793053098; x=1824589098;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=C08zoQ9oP6H+XiBnTr+uQ9WmZpT2KbsMbTcRxYAAP6s=;
-  b=rkstCe0A8G6qWipzbz9OZBLKG/IEih16RrD69WsJ/lUyZ6rD5060Nr5D
-   QmbbaefoFBTFtZoru0izODS37hMXatzbrPaXbYQNNv4TY1/eN1VvMuPJ8
-   1tV2B5uAFR+tmJLk/RrVji+jzhAdokQ84/QatVXYXAdq9t+2NOxVyxoy+
-   pqrXR6X7SdtjVH1wSBevHnpEe2tSWFy1MQXvnEWpOn79N0bbea8ABwOMw
-   0VY40VGbpX7cGANz3NoLIuQ1UjRafQRNUU2rA+6g7cyiDEIceE9jDNjoi
-   KU5wzFYt7jbOCf+au+2+/j5Eit+jYjYMk+7k0kUrqucFLBzs6WYHRPDtF
-   w==;
-X-CSE-ConnectionGUID: /Y5s1Qf5S9aDK//fhEa5qA==
-X-CSE-MsgGUID: GoNv2e1GTta2GEsXkEb82g==
-X-IronPort-AV: E=Sophos;i="6.27,180,1787011200"; 
-   d="scan'208";a="32282162"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 22:18:18 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.182:18858]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.29.97:2525] with esmtp (Farcaster)
- id f701918d-3602-4d6b-ad62-fb9df35781c8; Mon, 26 Oct 2026 22:18:18 +0000 (UTC)
-X-Farcaster-Flow-ID: f701918d-3602-4d6b-ad62-fb9df35781c8
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Mon, 26 Oct 2026 22:18:17 +0000
-Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Mon, 26 Oct 2026 22:18:16 +0000
-From: Jimmy Zuber <jamz@amazon.com>
-To: Miklos Szeredi <miklos@szeredi.hu>
-CC: <fuse-devel@lists.linux.dev>, <linux-kselftest@vger.kernel.org>, "Shuah
- Khan" <shuah@kernel.org>, Bernd Schubert <bernd@bsbernd.com>, Jim Harris
-	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
-	<luis@igalia.com>, NeilBrown <neil@brown.name>
-Subject: [PATCH v4 3/3] selftests/fuse: add test for FUSE_OPEN_ATOMIC
-Date: Mon, 26 Oct 2026 22:16:39 +0000
-Message-ID: <20261026221639.628325-4-jamz@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20261026221639.628325-1-jamz@amazon.com>
-References: <20261026221639.628325-1-jamz@amazon.com>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YT5wgasZ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793053361; x=1824589361;
+  h=message-id:date:subject:from:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=jIgBvgHNcqgJwnico9tDeJ1VcxvhmrzEUj4cl5gbuMU=;
+  b=YT5wgasZaxV1tsV/QzlRSfxK/g11FU/vqby8DeEXnsjz6amfQPVasiD/
+   xTMQRwvvkaXWbS94o6jYvLtAQcKMNwp+JhO+rsXqAcYiz5FLF+hLA4GvQ
+   sDvTUeqghadjrxlpFYn/RneFH35ikES5O3u7RBK8FJFwnvuAvYlApkRE2
+   Et2QrJI1RFXN5w4kawzkMKflvvzsGMYmmZhsZvTyQ+Aad4nvw7sStcJWd
+   wfbIl7z4+Pgm53SvqX+RgnJeNpO3Kf8ba1hr2bf2FSu0PhCk8wQT0ssPj
+   DRS4Z8zqOCuVAyO1+7vL0IrXE1QwmRNzdbqylqXJMEFy/ZFfDjLVgoRX5
+   A==;
+X-CSE-ConnectionGUID: Y2v1KcblR5yW54uARdpg7A==
+X-CSE-MsgGUID: N7wHNne/Qk6kUCZPD1ROXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11947"; a="1635537"
+X-IronPort-AV: E=Sophos;i="6.27,180,1787036400"; 
+   d="scan'208";a="1635537"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 15:22:40 -0700
+X-CSE-ConnectionGUID: sibI9IAmTWeBrQvIlVhFQA==
+X-CSE-MsgGUID: sv/IJHL8RZSZJvEm2E7aZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,180,1787036400"; 
+   d="scan'208";a="4732418"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 15:22:40 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Mon, 26 Oct 2026 15:22:39 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49 via Frontend Transport; Mon, 26 Oct 2026 15:22:39 -0700
+Received: from CY7PR03CU001.outbound.protection.outlook.com (40.93.198.22) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Mon, 26 Oct 2026 15:22:38 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=k9CItEjeTA+aKU/WXtFMPqJ+RIgCM/3SS2YglqiYE9b5infJPjUi9T55XjXAWxl+jlL5BwTq3fPP4ohLXT2syXKxl9RAFKYnoCwFYlJ1dWC4oU2WwybmPFTJ7kqcNK0pcAORt1JLRlRtvkWkdzJ/fe6X7NoqJUvRu+oU0PLk45GXL3//+KynlF3vnZmzpYYnb/NTugAil6VUB2JOwNiUj9VCTIU3NMnOklbuMDF0/e58SHQci9EW7fywl1ILIW5YSa8MGndmR0MXf8xSA5pfXEu/05yLMq622jb6kERUnEZ0BPjRXWeqqrop7XpZVq6mKjJlrkxbB49pA+uQfcEK0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rehZe7U/wyedc5jTgaX4C9eagA7Zjupg9C1Vi8AXi48=;
+ b=kQ1OevFkrRam+gRMDGMSnGP1KY4F7kOuKGGcDsmo8dB2WdLe4xiVQR46fzzmUd5+DzhhSz+dAOnN7CK2WVG9qyDOrkS/fP0Ll6CdMtBUycqYD66TRDYSRdIOXpLtdIg8FhPxIbubiGOUZNWKHEZGU4SOJe1mKShE8YIbmBWFRkmnn4aRcGq6vG0yDDGDimLLE0ehvNCJzoL2pmay3j4Q+81nzrrfEbsj6yWr5dIJkKpg8qeXJig5DhFJz3NSaN0b/DHH4TtKQOeLcldgyS9viYZvWmd5gdBqFdFFfNV+tzu9suq0q6aIdrw8VTBSoImT10bkqlfTsp5WROhi4QzJ5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY8PR11MB7846.namprd11.prod.outlook.com (2603:10b6:930:79::14)
+ by IA1PR11MB6145.namprd11.prod.outlook.com (2603:10b6:208:3ef::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.19; Mon, 26 Oct
+ 2026 22:22:36 +0000
+Received: from CY8PR11MB7846.namprd11.prod.outlook.com
+ ([fe80::cae0:d05c:b2fc:c395]) by CY8PR11MB7846.namprd11.prod.outlook.com
+ ([fe80::cae0:d05c:b2fc:c395%5]) with mapi id 15.21.0546.021; Mon, 26 Oct 2026
+ 22:22:35 +0000
+Message-ID: <dd5fa920-2ac6-41c9-a86a-11d5ad929b34@intel.com>
+Date: Mon, 26 Oct 2026 15:22:32 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 00/28] KVM: Enable FRED support with KVM VMX
+Content-Language: en-US
+From: Sohil Mehta <sohil.mehta@intel.com>
+To: Sean Christopherson <seanjc@google.com>, "H. Peter Anvin" <hpa@zytor.com>
+CC: Xin Li <xin@zytor.com>, <kvm@vger.kernel.org>, <x86@kernel.org>, "Paolo
+ Bonzini" <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, "Peter
+ Zijlstra" <peterz@infradead.org>, Andrew Cooper <andrew.cooper3@citrix.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+	Shivansh Dhiman <shivansh.dhiman@amd.com>, David Woodhouse
+	<dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>, Binbin Wu
+	<binbin.wu@linux.intel.com>, Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed
+	<yosry@kernel.org>, David Matlack <dmatlack@google.com>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+ <E7D55C5F-91DF-45AC-BCC8-BD2759CEE0C4@zytor.com>
+ <9467c7b6-d797-4462-bee1-1406bb8469cd@zytor.com>
+ <at96Aex_dl8-yUk6@google.com>
+ <20d0feae-9aa0-43cf-8357-fcdf617a5a97@intel.com>
+In-Reply-To: <20d0feae-9aa0-43cf-8357-fcdf617a5a97@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0068.namprd03.prod.outlook.com
+ (2603:10b6:a03:331::13) To CY8PR11MB7846.namprd11.prod.outlook.com
+ (2603:10b6:930:79::14)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,713 +149,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY8PR11MB7846:EE_|IA1PR11MB6145:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ca6e8f9-b342-4a59-0fbd-08df33afa306
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|23010399003|366016|1800799024|261026140227099003|4143699003|11063799006|56012099006|261022105027099003|10067099003|261021121427099003|18002099003|22082099003|6133799003;
+X-Microsoft-Antispam-Message-Info: 8/xW2AOUWNWL/AsCPf9qgGITdVXsTwxLs3uDNFoNZQ2pveuZ/hmfkd28wE+JeOkqRuzo7FA48Ha+C36+KRaixce737OJVCKrx1dmB+VnnbvYpMuDK2Uc+7VIuWI4m1DPdvoQW1PIpDMQYwPsxZxybzKoUBJYuzCOuOkabdbDZZNw8TXQLgdJD2/keaexC2HLMKuU4XxKMIAbOnRC58V97ebKG/44CmWvdqLCtz3PiTwZ0goQRRqdrlP8QCaLG4ckdbkG5T0DU1i/CVWKHAAR4nSPGA9o9wpvu4etCcsCdByM2uU1F09Nqx41EwmjRSwGa2v6Jx23v742IZ0IoxT2lbwTNTGf3dMQTHRBblyn2dYn2ptMu7tCaENV2ixO/MuJB6bdY1HvoqN1r7y6aJvicW+/e9ewrdbYVuKOBvIXXYuclD/9KZNEacQbbZCg54Vks/ahwxGLB8Hb4qAYJheuD8BCwV6DAxwPgPcZ2JomckZwja6/lDNF5y8o9MxJk8Ugyf33FN8ZKqt1Y4a6GCBWtElcGlWQUBBLuKcfXiMjB+84nG0BID0NF/zHfPi0tBl+tLBlmha5owg40Ru7kvAbPhbES4MwgdieOtC9sL5s2xuRkNFEnXZ804oB9tphBOWNWeRcgHuZx3inQ9SPJRKN0rHVQYVkP4MAGioyojnFOEI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7846.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(366016)(1800799024)(261026140227099003)(4143699003)(11063799006)(56012099006)(261022105027099003)(10067099003)(261021121427099003)(18002099003)(22082099003)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?czVpMS9KZmRkcG55VTd6Z2tDWnpuNldMcHJJdG1ldTRjdkYvTjVKV0w0cE5D?=
+ =?utf-8?B?eVdCRkxVblowSGZNN1BwcEFxUktCQ0dKenpwNWpZSXBpNlZkVzZhdzVBV01B?=
+ =?utf-8?B?bWNlRnBPNFBkaTN3Zzhpank2bDcvMVRRZnV5cStyTGpPTlY2R3BzelpmdzdY?=
+ =?utf-8?B?cldMY0R2a0N1NzdITW5TU0NmWEpGblJWdDZEWmhHTUZxMXlWYzlwTkdOcEVh?=
+ =?utf-8?B?NVhjMzI2eEZCaE1kbDNaRENiSGE5Rm5BZVE0M1d3cUJmRGRqbWRYcFRQbHFZ?=
+ =?utf-8?B?RzN4d1hYelRpd2JaVlNtVTFCMHNNYVBaQW9KT1pKcFVlUU1lZ0NPdFZxYjY0?=
+ =?utf-8?B?WlNmenVtdGhWUTZ4YUxpUktpTE55Z1FRb2tZNzl0cE1IM1R0ZnpBdVNFeXZG?=
+ =?utf-8?B?YnlCclc0WjdMajdEbEkzYWlBQ05BOVMxd0lSQ2QvbCtGbkNDTDVscm1iVHdo?=
+ =?utf-8?B?SnVvaTJNdm1WY01YOHlXMXFtQzZWZG9OVzFmK1J3Z2tFRmlzWlhwc3p3a0Z4?=
+ =?utf-8?B?QlBneXFMbERFdEk4K1hRK2xxS1ZSTTREaHRjcUlkblRrWFFhTlRMaFFBN2tv?=
+ =?utf-8?B?YjJ0ckE0aHBZN29YaGpydDVWOW5YMnI2KzZ5OWtWcWxnT1dDeG51MHRyak9j?=
+ =?utf-8?B?bzhuQkp1NC9IR0xpcCtsay9Ubms1Mk5hS3prVUZUL08zZGhjak9WNFU2UlVw?=
+ =?utf-8?B?L3VLbnJJak44Y2dWK2RTRWhrUmh5aTBIcjl1Um5aYUozSWF6ZjRxWFZzb2pH?=
+ =?utf-8?B?bThqeERBTzZwc0w1N1FSMFRKcVN1WU1TanFrQzNJZjhVSElETkVJRnFuZGMr?=
+ =?utf-8?B?SEJEK3hhaTVmZVVBdS9EaGxlZ0N0N0pDWUF0Z0ZOSEV0LzkzaTBORHZzUU02?=
+ =?utf-8?B?eG9tWnM2QTlpelVZWEZzZVJLMnpadEsrdG9Hd0hqcWF4NFpYQzQ3L2p4QmVZ?=
+ =?utf-8?B?b3lFYjZ6bFdUSTZoMmZoc0x3N3ExZnlFU1RaNlRNQXBRNnRSQzRMM1RDY25W?=
+ =?utf-8?B?Ly81bUN2b2htcjRja3lPVGpUOUxlQzBRTlJObURJYmJzek9GY3Q4M3FTOVRB?=
+ =?utf-8?B?bkNsUmsyWHQvMHFLYnVEbGhOTGpUTFA2UTN0OWFjUjZFdFoyREppSWVWbGRo?=
+ =?utf-8?B?VVRNQzBrcHpZUHN6MFh2VlUrYm1aMUVYQmtWa3pjRVc4ZGQ4RHhlK29rWU5u?=
+ =?utf-8?B?WCtWQmt1WmxmWW9oVXozeFVoRGQ0a1pTSitJVnBRN3ExSWJFSTQ2bVRWNTIy?=
+ =?utf-8?B?UEhPN3BxUGRmdEo2c0Nkc3hQOUlTT1ptM29QNkVqbXJkYi84OFd4ZXBQdmtW?=
+ =?utf-8?B?blV3QkYxeGk4ZG1rQ1RodVduUWF2VWhkemRDcVlESFpLMXBlWnN3U3VrNnQv?=
+ =?utf-8?B?dnhxYTc3UU9HVDVuMkpYbnpabk5XNTNiVm15UXYzRXkxZzB3Y0VvMkhuRk5j?=
+ =?utf-8?B?TlRTWXZJTjJmS2FaRXEvVVlzNTRHQlRUdDZtSWZuYmNMZGd4RmVnQkxSQ0tl?=
+ =?utf-8?B?eGJ3eGFyVTFYV0lxZjcrMmhxMlRsbGV6UHFtUzBhQlR6Z3BFNUgwekFCZnVE?=
+ =?utf-8?B?aFdSRllNR3ExcnV6N0VpdjlCTTlMRHJleTlhUTVIVEwwanpjYVZoRnpkcW54?=
+ =?utf-8?B?Tnp2MHpaVWlXY2oxdS9xYW5RWXlWTVovVVBBTnVEWUZxNUQwZjFjUlAydlY3?=
+ =?utf-8?B?b21QdURHUDU5b1lKMDE3OWJBaUxwcWxMU2xqNklCbEVVbEUzVnBuL1o5cmpv?=
+ =?utf-8?B?RjF3TTdlMWI1T3A1WlF3aVJ6ZXpWV2o0WGdZek1JVWQydE5GeHZTbG9vYjR0?=
+ =?utf-8?B?Q0NFYzNNZDA3UnA2T0hkcnZOUlU1Zk1WbFdmOWtUbHVNVCtSTzZRa1hSTGZt?=
+ =?utf-8?B?ZFVvSElrNVFDYjdKbTlnRXJIQmVtckc0NFVvVzNVcVJlS091SXUwdjh2Uk1w?=
+ =?utf-8?B?dUNQWEJweDd4NGF3RUZXbkx3bjZKaVA1UlJwNFZPd28rSElCb1NpQUtnL3ky?=
+ =?utf-8?B?UEFuZlpwM0J5bDlTOHVJRSt5LzJYRmJFd2tmb0JJZytSWE8ySG9lb0ZDOHgy?=
+ =?utf-8?B?dDRIL3ZKR3NCZHhrMWhwQzBrNTd2WEFkbmxoN1pNQ0locm4yQTc3YnArNHp3?=
+ =?utf-8?B?c1QvQjhuczg3c2ZtUVVyUW1aV3FqNldUMk5jL2NlNlJpYjJoMzdNdDVhYml0?=
+ =?utf-8?B?NHMwMXh1MVVYcUhwbEV2SE1CMmdydXZQSUJWMzR0andWbTY5bzZQcC94dTJF?=
+ =?utf-8?B?VjlOVEJ5RldCOFgwV2U0TDEzZ3BjUnJhM3BEdk1aQzJTT0R1RmdRajhHUGhv?=
+ =?utf-8?B?MU9zZXpsNE5YYk1FclpmNmd0ZFJNRUhlQUwxMXhhM1cwcklHQy9mZz09?=
+X-Exchange-RoutingPolicyChecked: qfMrdJllo9zx7VoBOAb1LdHmuzQlgKsb/F1bk9PTY8hQi37qLsCIGtd4HhiSRLwe0qVdPIR4090XwKc2gL89FGoNvVlJNOlcpND4u8DAJ/xOOUO+L/0mDx/VGSKshVlxm+YZLnjkaxF0QpwekPJYSBoOi88sdCIT3MFjttqRBifGLynC6w8R1nsyMsVHJwL02qEA7KpoKUuNXTxAPt03Lb6rVxTNnklGFS+rScuYWGvTqlnkzVDjvsr7FqHX/5OUS/9wg9xMMYUGTiwrMBXVbIJFD2EvjxL8XjYgjXXQ8j0CY5htSHGvhU448npubOWSwybXPNZLDHxOGVJqNpDaDg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ca6e8f9-b342-4a59-0fbd-08df33afa306
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7846.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2026 22:22:35.8667
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3fpY8/ZqYiG3PDJNV429xZ+wOHDHeR+5ajg9TfKnzLyN9GuYVIhw8QnAbTrV3xZ8p7y3HArTiAD+8LqyBumF9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6145
+X-OriginatorOrg: intel.com
 
-Check the requests sent when opening and creating new, existing, missing
-and expired names, against a raw /dev/fuse server with and without
-FUSE_OPEN_ATOMIC, and that opening an existing read-only file is still
-permission checked. Also check that an O_TMPFILE file has no name in
-its directory, that a fuse_open_out without backing_id_64 is accepted,
-that a name longer than name_max fails, that a reopen through
-/proc/self/fd opens by nodeid, that an expired name sees a directory
-replacing it and permissions the server revoked, and that O_CREAT |
-O_EXCL without write access to the directory and O_TRUNC on a read-only
-mount fail with EEXIST and EROFS.
+On 10/26/2026 10:22 AM, Sohil Mehta wrote:
+> On 10/26/2026 9:04 AM, Sean Christopherson wrote:
+> 
+>> And we'd want to keep the optimizations to elide writes when vCPUs are using the
+>> same value(s).  So, compile tested only...
+>>
+> 
+> Will test this out on real hardware with the MSR_STAR change below.
+> 
+With MSR_STAR not restored (original patch), the kernel boots fine, but
+a guest's STAR stays loaded and it triggers a ERETS #GP as expected when
+CS/SS has a mismatch.
 
-Assisted-by: Claude:claude-opus-5-5 [Claude-Code]
-Signed-off-by: Jimmy Zuber <jamz@amazon.com>
----
- .../selftests/filesystems/fuse/.gitignore     |   1 +
- .../selftests/filesystems/fuse/Makefile       |   3 +-
- .../filesystems/fuse/atomic_open_test.c       | 645 ++++++++++++++++++
- 3 files changed, 648 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/filesystems/fuse/atomic_open_test.c
+With MSR_STAR dropped from kvm_is_msr_used_in_host(), it works as
+expected. x86 KVM selftests pass and the systems runs without issues.
 
-diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
-index 7c787313e69b6..faac6d969ef94 100644
---- a/tools/testing/selftests/filesystems/fuse/.gitignore
-+++ b/tools/testing/selftests/filesystems/fuse/.gitignore
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+atomic_open_test
- fuse_mnt
- fusectl_test
- test_syncfs
-diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
-index e3ae3acff1139..8390d6019513b 100644
---- a/tools/testing/selftests/filesystems/fuse/Makefile
-+++ b/tools/testing/selftests/filesystems/fuse/Makefile
-@@ -3,7 +3,7 @@
- CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
- 
- TEST_GEN_PROGS := fusectl_test test_syncfs
--TEST_GEN_PROGS += write_extend_eof_test
-+TEST_GEN_PROGS += write_extend_eof_test atomic_open_test
- TEST_GEN_PROGS += fuse_acl_cache_test
- TEST_GEN_PROGS += fuse_symlink_cache_test
- TEST_GEN_PROGS += fuse_readdir_cache_test
-@@ -12,6 +12,7 @@ TEST_GEN_FILES := fuse_mnt
- include ../../lib.mk
- 
- $(OUTPUT)/write_extend_eof_test: LDLIBS += -lpthread
-+$(OUTPUT)/atomic_open_test: LDLIBS += -lpthread
- 
- VAR_CFLAGS := $(shell pkg-config fuse3 --cflags 2>/dev/null)
- ifeq ($(VAR_CFLAGS),)
-diff --git a/tools/testing/selftests/filesystems/fuse/atomic_open_test.c b/tools/testing/selftests/filesystems/fuse/atomic_open_test.c
-new file mode 100644
-index 0000000000000..075162a9e8804
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fuse/atomic_open_test.c
-@@ -0,0 +1,645 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test open() and create with and without FUSE_OPEN_ATOMIC.
-+ *
-+ * Requires root to mount fuse.
-+ */
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <limits.h>
-+#include <pthread.h>
-+#include <stddef.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/mman.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
-+#include <linux/fuse.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#define FUSE_ROOT_ID	1
-+#define MAX_WRITE	(128 * 1024)
-+#define MAX_ENTRIES	16
-+#define NOBODY		65534
-+
-+struct entry {
-+	char name[64];
-+	uint64_t nodeid;
-+	uint32_t mode;
-+	uint64_t entry_valid;
-+	uint64_t attr_valid;
-+};
-+
-+/* Server state, shared with the responder thread. */
-+struct server {
-+	int fd;
-+	int atomic;
-+	struct entry ent[MAX_ENTRIES];
-+	int nent;
-+	int nr_lookup, nr_create, nr_open, nr_open_atomic, nr_setattr;
-+	int nr_getattr;
-+	/* Send fuse_open_out without backing_id_64, as older servers do */
-+	int short_open;
-+};
-+
-+static size_t open_out_size(struct server *s)
-+{
-+	if (s->short_open)
-+		return offsetof(struct fuse_open_out, backing_id_64);
-+	return sizeof(struct fuse_open_out);
-+}
-+
-+static void reply(int fd, uint64_t unique, int error, void *data, size_t len)
-+{
-+	struct fuse_out_header oh = {
-+		.len = sizeof(oh) + (data ? len : 0),
-+		.error = error,
-+		.unique = unique,
-+	};
-+	struct iovec iov[2] = { { &oh, sizeof(oh) }, { data, len } };
-+
-+	/* Errors here are teardown races (device closed on unmount); ignore. */
-+	if (writev(fd, iov, data ? 2 : 1) < 0)
-+		return;
-+}
-+
-+static struct entry *find(struct server *s, const char *name)
-+{
-+	int i;
-+
-+	for (i = 0; i < s->nent; i++)
-+		if (!strcmp(s->ent[i].name, name))
-+			return &s->ent[i];
-+	return NULL;
-+}
-+
-+static struct entry *add(struct server *s, const char *name, uint32_t mode)
-+{
-+	struct entry *e = &s->ent[s->nent];
-+
-+	snprintf(e->name, sizeof(e->name), "%.63s", name);
-+	e->nodeid = FUSE_ROOT_ID + 1 + s->nent++;
-+	e->mode = mode;
-+	e->entry_valid = 3600;
-+	e->attr_valid = 3600;
-+	return e;
-+}
-+
-+/* A NULL entry is a negative entry, cached like a found one. */
-+static void fill_entry(struct fuse_entry_out *out, struct entry *e)
-+{
-+	memset(out, 0, sizeof(*out));
-+	out->entry_valid = e ? e->entry_valid : 3600;
-+	if (!e)
-+		return;
-+	out->nodeid = e->nodeid;
-+	out->attr_valid = e->attr_valid;
-+	out->attr.ino = e->nodeid;
-+	out->attr.mode = e->mode;
-+	out->attr.nlink = S_ISDIR(e->mode) ? 2 : 1;
-+	out->attr.blksize = 4096;
-+}
-+
-+static void *server_thread(void *arg)
-+{
-+	struct server *s = arg;
-+	static char buf[MAX_WRITE + 4096];
-+
-+	for (;;) {
-+		ssize_t n = read(s->fd, buf, sizeof(buf));
-+		struct fuse_in_header *ih = (void *)buf;
-+
-+		if (n < 0) {
-+			if (errno == EINTR || errno == EAGAIN)
-+				continue;
-+			return NULL;	/* device closed on unmount */
-+		}
-+		if (n < (ssize_t)sizeof(*ih))
-+			continue;
-+
-+		switch (ih->opcode) {
-+		case FUSE_INIT: {
-+			struct fuse_init_in *in = (void *)(ih + 1);
-+			struct fuse_init_out out = {0};
-+
-+			out.major = FUSE_KERNEL_VERSION;
-+			out.minor = FUSE_KERNEL_MINOR_VERSION;
-+			out.max_readahead = in->max_readahead;
-+			out.max_write = MAX_WRITE;
-+			out.max_background = 16;
-+			out.congestion_threshold = 12;
-+			out.flags = FUSE_INIT_EXT;
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_GETATTR:
-+		case FUSE_SETATTR: {
-+			struct fuse_attr_out out = {0};
-+			struct fuse_entry_out eo;
-+			int i;
-+
-+			if (ih->opcode == FUSE_SETATTR)
-+				s->nr_setattr++;
-+			else
-+				s->nr_getattr++;
-+			out.attr_valid = 3600;
-+			if (ih->nodeid == FUSE_ROOT_ID) {
-+				out.attr.ino = FUSE_ROOT_ID;
-+				out.attr.mode = S_IFDIR | 0777;
-+				out.attr.nlink = 2;
-+			}
-+			for (i = 0; i < s->nent; i++) {
-+				if (s->ent[i].nodeid == ih->nodeid) {
-+					fill_entry(&eo, &s->ent[i]);
-+					out.attr = eo.attr;
-+					out.attr_valid = eo.attr_valid;
-+				}
-+			}
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_LOOKUP: {
-+			struct fuse_entry_out out;
-+
-+			s->nr_lookup++;
-+			fill_entry(&out, find(s, (char *)(ih + 1)));
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_CREATE:
-+		case FUSE_OPEN_ATOMIC: {
-+			struct fuse_create_in *in = (void *)(ih + 1);
-+			const char *name = (char *)(in + 1);
-+			struct entry *e = find(s, name);
-+			struct {
-+				struct fuse_entry_out entry;
-+				struct fuse_open_out open;
-+			} out = {0};
-+
-+			if (ih->opcode == FUSE_CREATE)
-+				s->nr_create++;
-+			else
-+				s->nr_open_atomic++;
-+			if (ih->opcode == FUSE_OPEN_ATOMIC && !s->atomic) {
-+				reply(s->fd, ih->unique, -ENOSYS, NULL, 0);
-+				break;
-+			}
-+			if (e && (in->flags & O_CREAT) &&
-+			    (in->flags & O_EXCL)) {
-+				reply(s->fd, ih->unique, -EEXIST, NULL, 0);
-+				break;
-+			}
-+			if (!e && !(in->flags & O_CREAT)) {
-+				fill_entry(&out.entry, NULL);
-+				reply(s->fd, ih->unique, 0, &out.entry,
-+				      sizeof(out.entry));
-+				break;
-+			}
-+			if (e && (!S_ISREG(e->mode) || (in->flags & O_TRUNC))) {
-+				fill_entry(&out.entry, e);
-+				reply(s->fd, ih->unique, 0, &out.entry,
-+				      sizeof(out.entry));
-+				break;
-+			}
-+			if (!e) {
-+				e = add(s, name, S_IFREG | in->mode);
-+				if (ih->opcode == FUSE_OPEN_ATOMIC)
-+					out.open.open_flags = FOPEN_CREATED;
-+			}
-+			fill_entry(&out.entry, e);
-+			reply(s->fd, ih->unique, 0, &out,
-+			      sizeof(out.entry) + open_out_size(s));
-+			break;
-+		}
-+		case FUSE_TMPFILE: {
-+			struct fuse_create_in *in = (void *)(ih + 1);
-+			struct entry e = {
-+				.nodeid = 100,
-+				.mode = S_IFREG | in->mode,
-+				.entry_valid = 3600,
-+				.attr_valid = 3600,
-+			};
-+			struct {
-+				struct fuse_entry_out entry;
-+				struct fuse_open_out open;
-+			} out = {0};
-+
-+			fill_entry(&out.entry, &e);
-+			reply(s->fd, ih->unique, 0, &out,
-+			      sizeof(out.entry) + open_out_size(s));
-+			break;
-+		}
-+		case FUSE_OPEN: {
-+			struct fuse_open_out out = {0};
-+
-+			s->nr_open++;
-+			reply(s->fd, ih->unique, 0, &out, open_out_size(s));
-+			break;
-+		}
-+		case FUSE_OPENDIR: {
-+			struct fuse_open_out out = {0};
-+
-+			reply(s->fd, ih->unique, 0, &out, open_out_size(s));
-+			break;
-+		}
-+		case FUSE_FLUSH:
-+		case FUSE_RELEASE:
-+		case FUSE_RELEASEDIR:
-+			reply(s->fd, ih->unique, 0, NULL, 0);
-+			break;
-+		case FUSE_FORGET:
-+		case FUSE_BATCH_FORGET:
-+			break;
-+		default:
-+			reply(s->fd, ih->unique, -EOPNOTSUPP, NULL, 0);
-+			break;
-+		}
-+	}
-+}
-+
-+FIXTURE(fuse)
-+{
-+	struct server *srv;
-+	char dir[64];
-+	int mounted;
-+};
-+
-+FIXTURE_VARIANT(fuse)
-+{
-+	int atomic;
-+};
-+
-+FIXTURE_VARIANT_ADD(fuse, atomic)
-+{
-+	.atomic = 1,
-+};
-+
-+FIXTURE_VARIANT_ADD(fuse, plain)
-+{
-+	.atomic = 0,
-+};
-+
-+FIXTURE_SETUP(fuse)
-+{
-+	struct entry *e;
-+	char opts[128];
-+	struct stat st;
-+	pthread_t t;
-+
-+	if (geteuid() != 0)
-+		SKIP(return, "need root to mount fuse");
-+
-+	self->srv = mmap(NULL, sizeof(*self->srv), PROT_READ | PROT_WRITE,
-+			 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, self->srv);
-+	self->srv->fd = -1;
-+	self->srv->atomic = variant->atomic;
-+	add(self->srv, "ro", S_IFREG | 0444);
-+	add(self->srv, "rw", S_IFREG | 0644);
-+	add(self->srv, "stale", S_IFREG | 0644)->entry_valid = 0;
-+	add(self->srv, "rodir", S_IFDIR | 0755);
-+	add(self->srv, "shared", S_IFREG | 0666)->entry_valid = 0;
-+	e = add(self->srv, "noac", S_IFREG | 0644);
-+	e->entry_valid = 0;
-+	e->attr_valid = 0;
-+
-+	self->srv->fd = open("/dev/fuse", O_RDWR);
-+	if (self->srv->fd < 0 && (errno == ENOENT || errno == ENODEV))
-+		SKIP(return, "no /dev/fuse");
-+	ASSERT_GE(self->srv->fd, 0);
-+
-+	strcpy(self->dir, "/tmp/fuse_aopen_XXXXXX");
-+	ASSERT_NE(NULL, mkdtemp(self->dir));
-+
-+	snprintf(opts, sizeof(opts),
-+		 "fd=%d,rootmode=40000,user_id=0,group_id=0,default_permissions,allow_other",
-+		 self->srv->fd);
-+	ASSERT_EQ(0, mount("fuse", self->dir, "fuse", 0, opts));
-+	self->mounted = 1;
-+
-+	ASSERT_EQ(0, pthread_create(&t, NULL, server_thread, self->srv));
-+	pthread_detach(t);
-+
-+	/* Wait for FUSE_INIT: the root GETATTR is queued behind it */
-+	ASSERT_EQ(0, stat(self->dir, &st));
-+}
-+
-+FIXTURE_TEARDOWN(fuse)
-+{
-+	if (self->mounted)
-+		umount2(self->dir, MNT_DETACH);
-+	/* The detached server thread may still use self->srv */
-+	if (self->srv && self->srv != MAP_FAILED && self->srv->fd >= 0)
-+		close(self->srv->fd);
-+	if (self->dir[0])
-+		rmdir(self->dir);
-+}
-+
-+/* Open @name as an unprivileged user and return the errno, or 0. */
-+static int open_as_nobody(const char *dir, const char *name, int flags)
-+{
-+	char path[128];
-+	int status, fd;
-+	pid_t pid;
-+
-+	snprintf(path, sizeof(path), "%s/%s", dir, name);
-+	pid = fork();
-+	if (pid < 0)
-+		return -1;
-+	if (pid == 0) {
-+		if (setgid(NOBODY) || setuid(NOBODY))
-+			_exit(255);
-+		fd = open(path, flags, 0644);
-+		_exit(fd < 0 ? errno : 0);
-+	}
-+	if (waitpid(pid, &status, 0) != pid || !WIFEXITED(status))
-+		return -1;
-+	return WEXITSTATUS(status);
-+}
-+
-+static int open_at(const char *dir, const char *name, int flags)
-+{
-+	char path[128];
-+
-+	snprintf(path, sizeof(path), "%s/%s", dir, name);
-+	return open(path, flags, 0644);
-+}
-+
-+TEST_F(fuse, create_new)
-+{
-+	char link[64], path[PATH_MAX];
-+	ssize_t len;
-+	int fd;
-+
-+	fd = open_at(self->dir, "a", O_CREAT | O_WRONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	fd = open_at(self->dir, "b", O_CREAT | O_EXCL | O_WRONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	fd = open(self->dir, O_TMPFILE | O_RDWR, 0600);
-+	ASSERT_GE(fd, 0);
-+	snprintf(link, sizeof(link), "/proc/self/fd/%d", fd);
-+	len = readlink(link, path, sizeof(path) - 1);
-+	ASSERT_GT(len, 0);
-+	path[len] = '\0';
-+	/* The tmpfile has no name in the directory */
-+	EXPECT_NE(NULL, strstr(path, " (deleted)"));
-+	close(fd);
-+
-+	EXPECT_EQ(0, self->srv->nr_open);
-+	if (variant->atomic) {
-+		EXPECT_EQ(2, self->srv->nr_open_atomic);
-+		EXPECT_EQ(0, self->srv->nr_lookup);
-+		EXPECT_EQ(0, self->srv->nr_create);
-+	} else {
-+		EXPECT_EQ(1, self->srv->nr_open_atomic);
-+		EXPECT_EQ(2, self->srv->nr_lookup);
-+		EXPECT_EQ(2, self->srv->nr_create);
-+	}
-+}
-+
-+TEST_F(fuse, create_existing)
-+{
-+	int fd;
-+
-+	ASSERT_EQ(-1, open_at(self->dir, "ro", O_CREAT | O_EXCL | O_WRONLY));
-+	ASSERT_EQ(EEXIST, errno);
-+	ASSERT_EQ(EACCES, open_as_nobody(self->dir, "ro", O_CREAT | O_RDWR));
-+
-+	/* Truncation goes through FUSE_OPEN and SETATTR. */
-+	fd = open_at(self->dir, "rw", O_CREAT | O_TRUNC | O_WRONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	EXPECT_EQ(0, self->srv->nr_create);
-+	EXPECT_EQ(1, self->srv->nr_open);
-+	EXPECT_EQ(1, self->srv->nr_setattr);
-+	if (variant->atomic) {
-+		EXPECT_EQ(3, self->srv->nr_open_atomic);
-+		EXPECT_EQ(0, self->srv->nr_lookup);
-+	} else {
-+		EXPECT_EQ(1, self->srv->nr_open_atomic);
-+		EXPECT_EQ(2, self->srv->nr_lookup);
-+	}
-+}
-+
-+TEST_F(fuse, open_existing)
-+{
-+	int fd;
-+
-+	ASSERT_EQ(EACCES, open_as_nobody(self->dir, "ro", O_RDWR));
-+
-+	fd = open_at(self->dir, "ro", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	ASSERT_EQ(-1, open_at(self->dir, "missing", O_RDONLY));
-+	ASSERT_EQ(ENOENT, errno);
-+	ASSERT_EQ(-1, open_at(self->dir, "missing", O_RDONLY));
-+	ASSERT_EQ(ENOENT, errno);
-+
-+	EXPECT_EQ(1, self->srv->nr_open);
-+	if (variant->atomic) {
-+		EXPECT_EQ(2, self->srv->nr_open_atomic);
-+		EXPECT_EQ(0, self->srv->nr_lookup);
-+	} else {
-+		EXPECT_EQ(1, self->srv->nr_open_atomic);
-+		EXPECT_EQ(2, self->srv->nr_lookup);
-+	}
-+}
-+
-+TEST_F(fuse, open_stale)
-+{
-+	struct stat st;
-+	int fd;
-+
-+	fd = open_at(self->dir, "stale", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	/* The entry has expired, the reopen checks the name. */
-+	fd = open_at(self->dir, "stale", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	/* Another file takes the name: the open finds the new one. */
-+	find(self->srv, "stale")->nodeid = 200;
-+	fd = open_at(self->dir, "stale", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_EQ(0, fstat(fd, &st));
-+	EXPECT_EQ(200, st.st_ino);
-+	close(fd);
-+
-+	if (variant->atomic) {
-+		EXPECT_EQ(4, self->srv->nr_open_atomic);
-+		EXPECT_EQ(0, self->srv->nr_lookup);
-+		EXPECT_EQ(0, self->srv->nr_open);
-+	} else {
-+		EXPECT_EQ(1, self->srv->nr_open_atomic);
-+		EXPECT_EQ(4, self->srv->nr_lookup);
-+		EXPECT_EQ(3, self->srv->nr_open);
-+	}
-+}
-+
-+TEST_F(fuse, open_stale_first)
-+{
-+	char path[128];
-+	struct stat st;
-+	int fd;
-+
-+	/* The first FUSE_OPEN_ATOMIC comes from reopening a cached name */
-+	snprintf(path, sizeof(path), "%s/stale", self->dir);
-+	ASSERT_EQ(0, stat(path, &st));
-+	fd = open(path, O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	EXPECT_EQ(1, self->srv->nr_open_atomic);
-+	if (variant->atomic) {
-+		EXPECT_EQ(1, self->srv->nr_lookup);
-+		EXPECT_EQ(0, self->srv->nr_open);
-+	} else {
-+		EXPECT_EQ(2, self->srv->nr_lookup);
-+		EXPECT_EQ(1, self->srv->nr_open);
-+	}
-+}
-+
-+TEST_F(fuse, short_open_out)
-+{
-+	int fd;
-+
-+	self->srv->short_open = 1;
-+
-+	fd = open_at(self->dir, "a", O_CREAT | O_WRONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	fd = open_at(self->dir, "rw", O_RDWR);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	/* The entry has expired, so the second open checks the name */
-+	fd = open_at(self->dir, "stale", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+	fd = open_at(self->dir, "stale", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+}
-+
-+TEST_F(fuse, name_too_long)
-+{
-+	char path[1200];
-+	int len;
-+
-+	len = snprintf(path, sizeof(path), "%s/", self->dir);
-+	memset(path + len, 'x', 1100);
-+	path[len + 1100] = '\0';
-+	ASSERT_EQ(-1, open(path, O_CREAT | O_WRONLY, 0644));
-+	EXPECT_EQ(ENAMETOOLONG, errno);
-+	EXPECT_EQ(0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(0, self->srv->nr_create);
-+}
-+
-+TEST_F(fuse, reopen_by_fd)
-+{
-+	char link[64];
-+	int fd, fd2;
-+
-+	fd = open_at(self->dir, "stale", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+
-+	/*
-+	 * The server renames the file: the reopen finds the name gone, and the
-+	 * retry opens the file by nodeid
-+	 */
-+	strcpy(find(self->srv, "stale")->name, "moved");
-+	snprintf(link, sizeof(link), "/proc/self/fd/%d", fd);
-+	fd2 = open(link, O_RDONLY);
-+	ASSERT_GE(fd2, 0);
-+	close(fd2);
-+	close(fd);
-+
-+	if (variant->atomic) {
-+		EXPECT_EQ(2, self->srv->nr_open_atomic);
-+		EXPECT_EQ(1, self->srv->nr_open);
-+	}
-+}
-+
-+TEST_F(fuse, open_directory_replaced)
-+{
-+	struct entry *e;
-+	int fd;
-+
-+	fd = open_at(self->dir, "stale", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	/* The server replaces the file with a directory */
-+	e = find(self->srv, "stale");
-+	e->nodeid = 300;
-+	e->mode = S_IFDIR | 0755;
-+	fd = open_at(self->dir, "stale", O_RDONLY | O_DIRECTORY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+}
-+
-+TEST_F(fuse, open_permission_revoked)
-+{
-+	int fd;
-+
-+	fd = open_at(self->dir, "shared", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	/* The cached attributes still allow writing; the server's do not */
-+	find(self->srv, "shared")->mode = S_IFREG | 0644;
-+	EXPECT_EQ(EACCES, open_as_nobody(self->dir, "shared", O_WRONLY));
-+}
-+
-+TEST_F(fuse, open_attrs_expired)
-+{
-+	int fd;
-+
-+	fd = open_at(self->dir, "noac", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+	fd = open_at(self->dir, "noac", O_RDONLY);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	/* may_open() needs fresh attributes, so the reopen looks the name up */
-+	if (variant->atomic) {
-+		EXPECT_EQ(1, self->srv->nr_lookup);
-+		EXPECT_EQ(0, self->srv->nr_open);
-+	}
-+}
-+
-+TEST_F(fuse, create_excl_no_write)
-+{
-+	/* Without write access to the directory, O_EXCL still sees the name */
-+	EXPECT_EQ(EEXIST, open_as_nobody(self->dir, "rodir/rw",
-+					 O_CREAT | O_EXCL | O_WRONLY));
-+}
-+
-+TEST_F(fuse, trunc_read_only)
-+{
-+	ASSERT_EQ(0, mount(NULL, self->dir, NULL,
-+			   MS_REMOUNT | MS_BIND | MS_RDONLY, NULL));
-+	ASSERT_EQ(-1, open_at(self->dir, "rw", O_RDONLY | O_TRUNC));
-+	EXPECT_EQ(EROFS, errno);
-+	/* The server leaves the file unopened */
-+	EXPECT_EQ(0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(0, self->srv->nr_open);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.50.1
+A few AI generated scripts and tests confirmed that STAR is restored
+each time and LSTAR/SYSCALL_MASK is left at the guest's values when FRED
+is enabled. Also, SYSCALL in each guest still lands on its own LSTAR
+when two VMs alternate on one pCPU.
 
+
+Tested-by: Sohil Mehta <sohil.mehta@intel.com>
