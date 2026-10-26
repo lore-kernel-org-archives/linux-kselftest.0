@@ -1,109 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792979506;
-	b=Iju00OuaSqXBxESzxFEvdkKCh2wAOq1eT0L4dqpzoQKpv9jfPJDu/f+E4gKwEdBLe0fZ
-	 nYlaoewpT6Azdb6aoAMTeZ6EwFfWvxnLhSAjBxYL05s/RQ9KHmWGiKaPlXzLikuDyMY6f
-	 M1+plvmnStKF/kpOp/yk++5CRVey1+F3ZRerXPVE3IZ2SY8tiCgkTZrY5XWimOuYuQ1lJ
-	 I0aM7hXtLB+j2M1Oe9dOfJACMmZj19apK5S3HY4mjnZ4X6NhRCebo7qe30B6PW0+l5ZdR
-	 eS0u/q9J6z98zjfEuzveXJLUcOKLH8N8jFgllcbTe/l0IDUgHHc+wh/iDGxnh0IrTvA==
+	t=1792979592;
+	b=XSdld6pFWX4kPVfxA2d2VDRHJqgdOEGD2vnDTTpDSdUAwwU3j/sO6/GN2XU2ygBWu13Z
+	 3zjBDD7STbbJeyplJ5y6hCkYEpdTssq+TjAKxrELyXST7PARwxYLyAquZz+1BzgtGJWAM
+	 Gs1RWbRozTQ+hfkoU5ALmzMCDruFDwXiRnYXJV0fRhMPAh8RIlqc+iq73eGS+SnOSYJ2y
+	 PsrDFyBEXmcT6+mLa3D3Uf1iFLmRsb9dvGwG8ArkkDy9nrWVeJQ3e7rPwJUwnfX5ZcUkW
+	 yfywtC73fA5xwF/rlgQjL4iBi1qaUti3mo7OuXvrafM+OPBjbMqI05yBnUGqTPwUqfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792979506;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792979592;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=IXt5xvOrWgVG3N+GpdyyPOrA9kPOQI1oYFj+yIA1B0M=;
-	b=BANZAYvfHFAl9DdOFBreSP8SwgTGUaKkqh9QaFNXg38FrMAVbz0vcE/alhQoJRvGw407
-	 tsdpDfreT6AvcfCQuluw0HMlX4DZBKlHYT40P4vKchnyEyPhaqLq9jsq88Yq/wR1grP5v
-	 b/V0pDxxtIUE7O8doGTfFQZ6JOrsRzkebDGeGm3/uyfXUC/drf/wS+v408ksH4ZZVkhAA
-	 3xMFi6Kw4zKZqGF5j9yWn1zBOQ6U8K2yfmrACPkxgSLFiXswBABJ8Q/L+fiNm+mRhdeEY
-	 C2DVPHYFlZ7CDmUZbr5iX9qqwAQDZaoiwzx4Kh/J483tozeHeiakp5m0mN+7BYIQrIw==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=tkGyQEb1F9hHz/xznoehXSDNs1CLiz2rTicTpUpSfbo=;
+	b=iiaNerp0imwwO/1swKAZAA+ovh9yRvI7kwF5SSFFAlt+HTnFGuisw00MzdtMiI2EP7o1
+	 jxYjMqL3MGp0Yy70vtYFtk/gVyR/4RZWezgIhHuKitLz+2YxcZKbqilzytjFiR+czsEBP
+	 oBM5pm2tVAN0SN34kni4hfpYJEQDC6+jAhioHrvGn+/m5j8vx/O0SQiOpXZ2dWnj2oWEQ
+	 1T1I2c7+PvmEHJ+gpU74ExIocqzDlFas/o3VDK8fok0o5uCDyynQjPnwMgGoY9JNtSlPt
+	 FZyP6MDiIYR2rRtaHAHx6SdTwryuQRCGJguvNs3vHF25xjVTGi0gvFV6lzX7OuGrd8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=kpYYbdm4;
-	arc=none smtp.remote-ip=209.85.216.48
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=aCbxvSOx;
+	arc=none smtp.remote-ip=209.85.214.170
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F812606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 01:51:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F812606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0EC606A31D
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 01:53:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A0EC606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=kpYYbdm4
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3a4b3ac8fb7so1268671a91.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 18:51:45 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=aCbxvSOx
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2e9d7791b00so14779245ad.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 18:53:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792979505; x=1793584305; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IXt5xvOrWgVG3N+GpdyyPOrA9kPOQI1oYFj+yIA1B0M=;
-        b=kpYYbdm4UIaNLa+4gA2O6vViuDhEEOp89PGqsr6EZIpTsN4tT9rOukWJvOxKhiMzeL
-         GZsL88QdGFZkEGpbWgmYAFWisgtS4+VmFYBxz5F/QASaNM18840QlkwDndtICLSkDsYT
-         +wm+sqLmhdtZ0wQYO/YYpFSkRwbXYA8hTeJsttvMdEb3hJ17KHaxACnHIddAhMAUVsc8
-         zMiQZ/e/rOloj5PbH/wf2fzd0LKgnBXs3jpJ0hLVcoXa7yWfqzFCfpgz9PHDRvw+ZpKY
-         9dQj8TE8BR25EYre0sIPa9V9z1wBOa6KnuohoN8g3q6QdscMbq/p2/JPiJeBQ9mgjIk+
-         1qEw==
+        d=gmail.com; s=20251104; t=1792979591; x=1793584391; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tkGyQEb1F9hHz/xznoehXSDNs1CLiz2rTicTpUpSfbo=;
+        b=aCbxvSOxwsThWLKE0MsJS5hHxV0kdTRowgCgVwHYIl9kQID2jYpEWIQO4hFIrS6md2
+         q6MPryXGuVhtMtb545P1A7QR2PjKZI6SyIIJGzlBHkuvpojfdInfvdDAWdbIw5YKt+g7
+         yGQxuZzCDJAx7vpxBmFWN3czElUqVF6facxQA3ldeaoSrK2SFR3Wq09ViqPLY2N2f9Hc
+         ws/gzxBcqPfoOjuQRO2T9UqB2qIhF6U3h1OTdEleetSE7BaFlvI3K4Xcivm/TR19+Lwi
+         kyKs6NDQ22n4GYNtdYCtFa9xIMEUOBTeZDKXhbrUoAEzV5y8zfUk9odtDFLVK4MQlxPg
+         btiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792979505; x=1793584305;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IXt5xvOrWgVG3N+GpdyyPOrA9kPOQI1oYFj+yIA1B0M=;
-        b=NTNIBo9lrYqDf0RHPvhuoPa7TQC0K2Fvhe8abFwqc1hN3Xbr46uz1sUyfa1ZOBfidE
-         Yf7NevxWf143I/V31gh4HzcQ34xzjYO8GHEGml4Bb8FzcLkPz4TkbT5oEreUB4KF90E8
-         eyeZmOrXuZeGGx9SfvkXzRZc6uNFHNUPvOo9A6oDzL4EHf39LK0QGPettNmr3zINJc4X
-         nUuWR2771+bt4paAzkmNUos1BAX7fD4AZw1OnUg9gAqWCuZOxa3zIZJ8ANGVzQxoV8Q1
-         4D5gm3s9sstv9ew7/1IE6KA8CBjn4Qd4WYu9jRrQRelUE42uWHnnku08uns+6U4XlzSY
-         ACug==
-X-Forwarded-Encrypted: i=1; AKwUvBzgFyphk7pTmm46wp6f7SGfZXEZdklYwFhUTA9PW3rFmjHjuKT4AvgBujGQzgkTrm7vU659stJCM/QjQr8om38=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJEUhpRbOwYS8u3pLqOkUMfpnO357fmPyRI13uNjNNA8cH4U+sP
-	i33Mcz4ucBM1FjCs8SDgczKUlWBzThJi3HAwbAgE35HKetEx+YD/sGe/
-X-Gm-Gg: AYBFou2e4J6EKF8Fm6j21bljRyQHDxTJeZ01IObA43Ee+Pp1cl72UtiB+59Ds0gygPt
-	aMFd/nSxvZLUgiekeVqwSMlZKPrKYSwn7mA1377YbS0IMHagrYJx0Ne3WxV5MYcxfAsv3K5ER7N
-	Wzkvba97BZ8cAPl6TGrwemDY5T1n7vibIdRmultPTS1+1tccnSrpaWwKvV+TrN5mW5iBpA4C3pz
-	sF7NwA/uVRvIs9Hy/5q4FTUIs8gu1ypD7guRK/hE9ENub37U/uQ6qBtvr+JbagagMUyDmnf7ADa
-	UAbZvZDc4ZwDSXSJL3qJQKxy2rB3xdcL2Jyia/D1eWzbIhKD5N1eHPZ6h1aQ0V6oM6rAi7QBs3F
-	cY24qzMhoBepz40y7MnlNQ7xx2SFNEJynNkFuXfsUSbyAZN8Au3y6HLz/wNQOUU7MwFRg5OJEOG
-	8fKBccIGF0VibRh7XMi7SRwMZVqBph3g78KkS7hU15ID8rHx1YLEBJGiAQO/kEqDmIL3VdKsR27
-	UEr2bwkhBWHfUmg3ru7N1OC4q/O1vyiztfqWIUWB2TPl5zl+7k0+K4WZvYbHdhm7zmTt+/lO0os
-	RHH2j148E1PUXK12r4cVCz1hjJsw+PrWtDoBnaNrYp63mortCfybgJdPyJvl4Q==
-X-Received: by 2002:a17:90b:17cc:b0:3ac:a5ff:2cc3 with SMTP id 98e67ed59e1d1-3ade9b2ff58mr4868899a91.8.1792979504834;
-        Sun, 25 Oct 2026 18:51:44 -0700 (PDT)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebac408asm6281205a91.0.2026.10.25.18.51.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Oct 2026 18:51:44 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 26 Oct 2026 01:51:43 +0000
-Message-Id: <DMEE6SW3UE97.2DF11HBEBKYYI@gmail.com>
-Cc: "Geliang Tang" <geliang@kernel.org>, <netdev@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on
- zero-length skb redirect
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <kernel@eliskeggs.com>, "John Fastabend" <john.fastabend@gmail.com>,
- "Jakub Sitnicki" <jakub@cloudflare.com>, "Jiayuan Chen"
- <jiayuan.chen@linux.dev>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Cong Wang"
- <cong.wang@bytedance.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
-In-Reply-To: <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
-References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com> <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1792979591; x=1793584391;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=tkGyQEb1F9hHz/xznoehXSDNs1CLiz2rTicTpUpSfbo=;
+        b=ni1L0Acbnfs/zTddJbTjNRBimevLtRcy50DYjeMLkcPHCQKBg7Hu4E3J2PBtB3rEGA
+         tfBfDsSph7JzYfuc/zovZn32iHkFRQIwozhYrwauW9rKpxV1Y7y5X7OzKSajHPldDnwf
+         VIRAN5bPJXuSwfhTQC+UCSGk9WJRMZ64XR8MLomqVGi4rRILchGznoRoNtE7cc4PtKX3
+         49ys/s4phJ8g6QMu+KIgrNq1PfXF9NdjUMUUut/T3lXeYLAVEvh16rFD8Hdj++a8O9zp
+         aiMv82GuVqo9Hr3mCeZ9te5sKbVYRZzWJGR6kjXSSsO/dsGJBougRP29znnwzWTM660D
+         VVrg==
+X-Forwarded-Encrypted: i=1; AKwUvBzXSs9V2DA6rQMM5mcZN2i727xfMqBmTH95QiPedfcw9qCnK012Cs7zO9Kcg1na0/OsLbMpdmvE8tZuqWj97lg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLBjIe4oRTnKI9KF0wAXCH7PxMzM6q+S4PX7j+GHRmiSXL67AKA
+	1FdE7Vv2PxTp0YF+WH5pmCYm4cYNM+klCtCSqYkxSwadeTh9v/57807t
+X-Gm-Gg: AYBFou2RZO7ex0+ix99VtdHY517oKyebTNH04zmid1z0SRDh/1Fbazva6So4ZvZfhCT
+	qd0bE6DXef1NbJZjTHdEqm1phKRFXx0oGWWOT4LEET7k0xk9LU+htBuD70VoRgNTFo49+ncGAeH
+	TRtUlLk+6I1z1MoxU4LS/gcIFRkFRkoIf4y60YWMWOA5jiIIU/2eSNoTbOidLhTvbgL2y6EAgg+
+	I2W1TLrLIkQ+Vo0qgkpEH8h6x4mvc+urHwoG/D3jTYVtQxxfIZetbKZL86QwkvanrhXYm8qkWQ4
+	jLG/8Ka3b+n7ebgujT3ZsZgkGPc/trJKpoQmCPrUpm6aPL/hA5UvCaXd4ymRwWf6TsKjqccTl95
+	kKS9W60gt3IeAWOqyt0t137YzKJBiU1WI41yM0SA7I5QNNCqdzeyrwf2+CumXRlRnyt7t6MLuyu
+	uHlkLCUTlt/UMZiUfNDLU6O+m9FEb7WfmAXFRPshmrryD8ocRDVxKaRBzUoSkk4SpcBArnnMG1N
+	HEiLBi31CCnBRwpN7ej21oteS4OySZpjgcuAjFmzJRxwNI8JYhRNZf56OhXpAIfrzKsvpzcNDIl
+	bZkb0pKCyYVV6JH123IKnDF0DWn7T5rkl6O5zaYTIFPgl9wx8w==
+X-Received: by 2002:a17:902:e5cd:b0:2e9:658f:c33e with SMTP id d9443c01a7336-2ea9c0d4beamr44584065ad.8.1792979590768;
+        Sun, 25 Oct 2026 18:53:10 -0700 (PDT)
+Received: from Terra.tail0ac356.ts.net ([198.176.50.208])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9af3232bsm10137655ad.10.2026.10.25.18.52.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 18:53:09 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	co+eada64ce90ecebce@bugs.sh,
+	Xiang Mei <xmei5@asu.edu>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v3 1/2] bpf: Validate stack arg reads against caller state
+Date: Sun, 25 Oct 2026 18:52:49 -0700
+Message-ID: <20261026015250.1674676-1-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,52 +109,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun, Oct 25, 2026 at 04:41 PM Eli Skeggs via B4 Relay <devnull+kernel.eliskeggs.com@kernel.org> wrote:
-> On an ingress redirect, the empty message is still queued as before, but
-> the target socket no longer reports EPIPE.
+check_stack_arg_read() bounds a stack argument index with the callee's
+BTF-derived argument count, then uses the index in the caller's
+stack_arg_regs[] array. The array's actual logical length is recorded in
+caller->out_stack_arg_cnt, so the bound and indexed object can diverge.
 
-That leaves the target broken.
-Nothing dequeues the empty sk_msg. __sk_msg_recvmsg() sees
-sge->length == 0, returns -EFAULT and leaves it at the head of ingress_msg.
-tcp_bpf_recvmsg_parser() finds FIN in is_next_msg_fin(), returns 0 and
-does copied_seq++ on a socket that didn't receive any FIN.
-So every recv() on the target returns 0 and moves its copied_seq further
-past rcv_nxt, and the data redirected from other sockets stays behind
-that msg forever.
+A crafted BPF_PROG_LOAD can use an argument mismatch to mark a static
+subprogram's BTF information unreliable. Later calls return from
+btf_check_subprog_call() before check_outgoing_stack_args(), while
+check_func_call() continues the static call on -EINVAL. The callee can
+then read a slot that the caller never allocated or initialized. The
+earlier commit 4286f5deee14 ("bpf: Validate outgoing stack args when
+btf_prepare_func_args fails") closed this hole for the first call, but
+not for later calls after the subprogram has been marked unreliable.
 
-[...]
+Callbacks have a related problem. The verifier can make incoming stack
+arguments readable from outgoing slots at the helper call site. However,
+helpers and kfuncs invoke callbacks through an ABI that passes at most five
+arguments, so the runtime callback receives no stack arguments. Async
+callback verification can also reach check_stack_arg_read() without a
+caller frame.
 
-> -			if (ret <= 0) {
-> +			if (ret < 0 || (!ret && len)) {
+On x86-64, KASAN reports the direct-call out-of-bounds copy as:
 
-Lets skip empty skbs instead. That covers both directions.
-The socket's own FIN that goes through the backlog is not queued either,
-but SOCK_DONE check in tcp_bpf_recvmsg_parser() returns 0 anyway.
+  BUG: KASAN: slab-out-of-bounds in check_load_mem+0xb51/0xc60
+  Read of size 80 at addr ffff8881009af550 by task poc/131
+  Call Trace:
+   check_stack_arg_read at kernel/bpf/verifier.c:4234
+   (inlined by) check_load_mem at kernel/bpf/verifier.c:6645
+   do_check_common at kernel/bpf/verifier.c:19568
+   bpf_check at kernel/bpf/verifier.c:21318
+   bpf_prog_load at kernel/bpf/syscall.c:3134
 
-Something like this (compile tested only):
+Reject callback subprograms with incoming stack arguments before their
+state is pushed. For direct calls, retrieve the slot with
+bpf_get_spilled_stack_arg(), which validates the index against the caller's
+out_stack_arg_cnt and rejects uninitialized slots before copying the
+register state.
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index df385a5..a5003c7 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -711,7 +711,7 @@ static void sk_psock_backlog(struct work_struct *work)
+Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+Reported-by: <co+eada64ce90ecebce@bugs.sh>
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Assisted-by: LLM
+Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+---
+Changes in v3:
+- Rebase onto the bpf tree at commit 00d2cdf1637e ("Merge branch
+  'bpf-track-borrowed-iterator-result-lifetimes'").
 
- 		ingress = skb_bpf_ingress(skb);
- 		skb_bpf_redirect_clear(skb);
--		do {
-+		while (len) {
- 			ret = -EIO;
- 			if (!sock_flag(psock->sk, SOCK_DEAD))
- 				ret = sk_psock_handle_skb(psock, skb, off,
-@@ -735,7 +735,7 @@ static void sk_psock_backlog(struct work_struct *work)
- 			}
- 			off += ret;
- 			len -= ret;
--		} while (len);
-+		}
+Changes in v2:
+- Reject callback subprograms that declare stack arguments.
+- Drop the curframe-zero check because only async callbacks can reach that
+  state, and callbacks with stack arguments are now rejected earlier.
+- Explain that commit 4286f5deee14 closed the hole for the first call only.
 
- 		/* The entire skb sent, clear state */
- 		sk_psock_skb_state(psock, state, 0, 0);
+ kernel/bpf/verifier.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-pw-bot: cr
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c223bf3bc9cdb6..a0a5f075d2018a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4666,7 +4666,12 @@ static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf_func_st
+ 	}
+ 
+ 	caller = vstate->frame[vstate->curframe - 1];
+-	arg = &caller->stack_arg_regs[spi];
++	arg = bpf_get_spilled_stack_arg(spi, caller);
++	if (!arg) {
++		verbose(env, "invalid read from uninitialized stack arg off %d\n", off);
++		return -EACCES;
++	}
++
+ 	cur = vstate->frame[vstate->curframe];
+ 	bpf_diag_mod_begin(env, &cur->regs[dst_regno], arg, BPF_DIAG_MOD_WRITE);
+ 	cur->regs[dst_regno] = *arg;
+@@ -11451,6 +11456,10 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 	err = btf_check_subprog_call(env, subprog);
+ 	if (err == -EFAULT)
+ 		return err;
++	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog])) {
++		verbose(env, "callback subprog cannot have stack args\n");
++		return -EINVAL;
++	}
+ 
+ 	/* set_callee_state is used for direct subprog calls, but we are
+ 	 * interested in validating only BPF helpers that can call subprogs as
+-- 
+2.56.0
+
