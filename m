@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793033612;
-	b=JbPlw0wHV2njeQpp1nxjZlYNlTW5KTEfNrLoRzljUf8AzQdKGZMCWNaLs5zre/UaFbA7
-	 S7PAAUi4KkR3yj2a4gEDEkqVwwfhv2q5L3Kcf2n6ZCGMdeUYdCNHZiv/1Sy7oVzYeBu+p
-	 nLLLZz5P4+tGSVor51qFUP4LhapZbpVF0Ic6Bkx8d8B+bdrug1Hf53fIE/OGED7tADDXM
-	 r7AI+xBdMmM/IDCs8OtwELQj6/zbU+oSwfdQ/cUNB91pjKTtk6737EASRQfArYpnrNxEM
-	 ujFVhymzfDQR9s0GYuRWsamG8rN+LUiAUlNAobXggvWabPeFal1mm4JomrSdNZjS0xQ==
+	t=1793033629;
+	b=z2rj7g1cwaP0k5mVFSAs3DDMZKlnjuzLwnCbZ5KB+SM4xkFngcFOAMoXDU+p5/vxGq5Z
+	 t3M1AI4UI9HOr/+VsuTDRnzNTIW+cEE4UEEsRx7TOilwBL/Ljdlj+4rdi3IAyEeQsnbTZ
+	 tpSJQyQQ1KPf9wAg9JSug3G0Y9O9iT9dtYknHN1H+zuaEVRjROtpJxAuhipHXcgtSENUX
+	 4zgFgcd+n3LPXGmnvp9dCSduvANitEapSPiz/GprTtwOY2OenMpCLVOzTj8TFmo6/rZ2t
+	 g798cXzBOScCXE1Fuuc0GpnH94n8GKPjc5WhmpKC/7/KfLBTAZ0bUFk+7OXabmRHVCQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793033612;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793033629;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=npiwoGlUI3XgozENEsH36EsRteGrJOb6/rz8ZfwuW80=;
-	b=uTpZGEz7em9ojoPNuGF47J3gigmReL9Ev98BGF/xSnysIlTmWTZoCO8ToS3LemoAOcyh
-	 w6hMUiZkEA8YPDdYHK+IsLIl9HFh0dQpzXr9Dfbr5e9plHOoh1ujkJbTtoMv7depkGBrq
-	 d7UpXgm83xs26fb7V3Nb3ybB6MtFqEoHN/aNx2TJvKcZ/JweeiLRskOTohatqNUU6eTbN
-	 T39VnTw580tXAbw9wBNcDowOhUtDSXioOeS9Nh9OmNaULmXBaJTxEQ4sxXcpt+fVJoqFa
-	 XrIjnRpErX2KyJZK9siF7EgIswoCBUnfpmc5TCpPcudUsADm6OlCJNrtvs1LDdUJIjA==
+	bh=eJgiamc/PB4nOvEdna/9ww9zH5/FmpDd5GGoCZJYw5Q=;
+	b=I0SlD4BUuWmQNWWkxg4EgEPHw3AHZWODBexe6hbiVhLErnYUJn3SWmq1Tyk+OIHysE0G
+	 ydDsdbtjtwH6ZEBfJW1o+xwOyfxIkTPj9jtByKZtV/JbqFfIUNxCbfUBK5gRV4NGb5pnL
+	 0MYjLJaShtL/SuUOoFK5CM2MOIP7O7LoFiIwJcYTe/oH4A8auz/cBoFcsxLrhjIGOe037
+	 elXv8ymuAE2vTnIyA8GLfhCiDs0pkamnDIrIDGnhe2KLcqMtfT4PNZoU6yEG/Kr9TcaUS
+	 olqsWkbQ1Dv3Y3BTtQow2wHs7SroAPQ7WKPazPwple5ZEEW7pJn2kfZoHtDv8rnOOWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Hey+lG0T;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nTyS1YJZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E804606A31A;
-	Mon, 26 Oct 2026 16:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14ABE606A31A;
+	Mon, 26 Oct 2026 16:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Hey+lG0T
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F04E1F01825;
-	Mon, 26 Oct 2026 16:53:29 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nTyS1YJZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F5801F01825;
+	Mon, 26 Oct 2026 16:53:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793033611;
-	bh=npiwoGlUI3XgozENEsH36EsRteGrJOb6/rz8ZfwuW80=;
+	s=k20260515; t=1793033628;
+	bh=eJgiamc/PB4nOvEdna/9ww9zH5/FmpDd5GGoCZJYw5Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Hey+lG0TAhUsAJP0mNh8EOzWe+NQI+eYyrS5mauLlWjYSoD0BsWVw7acM+48vYlUc
-	 JT7k9tmBuJialMzYNk3QW6DGWvwaNy2/QNoNN/HE5Tpg3+8moOZUm4mL3zJXOMBXlx
-	 QV/ePAj+fryNgmE/fNL6rnl36RpH70GAy0O43wo8Whx4JRdEGTT8XghmIvRlULbIMJ
-	 fH1S1qzn3DTaE/mKpNPiYuGiZnbRQk6xDrrakFVc8Enpvr68y4LaBkR5q4yXJ8NfVU
-	 2c78K2TKEv8zbl58xTvHKL2JqO9KDudqlLRI943zqI7ow7yp/7fAXlIVxgMNaDt5R7
-	 3Dg8itv4BBJfg==
-Date: Mon, 26 Oct 2026 16:53:27 +0000
+	b=nTyS1YJZC8tPsfzJpHnlpmsGNvVNwxPNKLO6gAgKCM5ekDsnWCEfA1MzqSZqh4s05
+	 d97xAoKKkF4+a5yyR0BcgofogrjFOUUhkgG8k6gsfiiLfAGkeHLKJ7e0VksqU9lPBH
+	 toGwsXbM3ue2zDHRwbO8pKi3dGC7N5G/O1IpnetfQ6mE/S7vzZMDewfvobsLCpku63
+	 n1BLkyRBhGGkhfbNQ4CYIixFnN+c2NUP1Et3SyKSmxNOKikq+b0abh0QDGPClVNtmp
+	 oKNnZJ8d9h0L3YqGWFBBPeSv9k1a2FQjMM2ifzy2SUycuP/9dlvgu9H46A4eqgyxbS
+	 54caNohlAxNvg==
+Date: Mon, 26 Oct 2026 16:53:44 +0000
 From: Simon Horman <horms@kernel.org>
 To: Alexandre Cassen <acassen@corp.free.fr>
 Cc: Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
@@ -49,11 +49,11 @@ Cc: Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
 	Vladimir Oltean <vladimir.oltean@nxp.com>,
 	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
 	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 1/2] net/sched: act_api: inherit filter offload flags
- only on new actions
-Message-ID: <20261026165327.GD257209@horms.kernel.org>
+Subject: Re: [PATCH net 2/2] selftests: tc-testing: test offload flags of
+ reused matchall actions
+Message-ID: <20261026165344.GE257209@horms.kernel.org>
 References: <20261021193222.1318333-1-acassen@corp.free.fr>
- <20261021193222.1318333-2-acassen@corp.free.fr>
+ <20261021193222.1318333-3-acassen@corp.free.fr>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,41 +65,14 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261021193222.1318333-2-acassen@corp.free.fr>
+In-Reply-To: <20261021193222.1318333-3-acassen@corp.free.fr>
 
-On Wed, Oct 21, 2026 at 09:32:18PM +0200, Alexandre Cassen wrote:
-> tcf_action_init() gives the skip_sw and skip_hw flags of a filter to the
-> actions it binds. An action that another filter created gets them too,
-> they then apply to every filter that uses this action. When a
-> skip_sw filter reuses the action of a software filter, the software
-> filter silently stops running it. This happens even when the filter add
-> fails on a later action. A skip_hw filter likewise prevents a later
-> filter without flags from reusing the action.
+On Wed, Oct 21, 2026 at 09:32:19PM +0200, Alexandre Cassen wrote:
+> Check that a skip_hw filter leaves the flags of an action it reuses
+> unchanged, even when the filter add fails on a later action. Also check
+> that a filter without skip_hw still cannot reuse a skip_hw action. The
+> dummy device has no tc offload, so skip_hw stands in for skip_sw.
 > 
-> Give the flags only to the actions that the filter creates. The mismatch
-> check still rejects a filter that reuses an action with a flag that the
-> filter does not have.
-> 
-> Discovered by manual code inspection after the Sashiko AI review [1] of
-> a tunnel_key patch questioned how actions get the filter flags.
-> Reproduced on netdevsim without kernel changes. The egress filter below
-> runs in software only, since netdevsim offloads only ingress filters.
-> Once the skip_sw filter reuses its drop action, the last command shows
-> skip_sw on this action and the egress filter stops dropping packets:
-> 
->   ethtool -K eth0 hw-tc-offload on
->   tc qdisc add dev eth0 clsact
->   tc filter add dev eth0 egress protocol ip flower dst_ip 192.0.2.1 \
->      action gact drop index 1
->   tc filter add dev eth0 ingress protocol ip flower skip_sw \
->      dst_ip 192.0.2.2 action gact drop index 1
->   tc actions get action gact index 1
-> 
-> Tested with the reproducer and the tc-testing action, matchall and
-> flower tests.
-> 
-> Fixes: 34d35b4edbbe ("net/sched: act_api: deny mismatched skip_sw/skip_hw flags for actions created by classifiers")
-> Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009051930.3619697-1-acassen%40corp.free.fr [1]
 > Signed-off-by: Alexandre Cassen <acassen@corp.free.fr>
 
 Reviewed-by: Simon Horman <horms@kernel.org>
