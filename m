@@ -1,72 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793052392;
-	b=g9wy4inmeK6yTzKvg7G41ZvMqLTe+cUkUzmtAUdKCotWkZ5AHRASvRWafWaOs1+6M40M
-	 Fc0tCtVEWKFC+xUSIW6COGAI4Hg/QKWMFyhWljCB5QXijuhGrw7nckUwMRAp5p5f0Enfm
-	 w+q9LBMFQUISk6NQt3BaF3c09A76AJVYRBVzbscBk4aFdw3F+wFh9I9pPIKNhl3rKcNV9
-	 ZmLqColFKd245bHiIFprjTcFxZGOPqkEWMk56Xz1jDm8+PRAvwTWSI0Y1RXAxamQas5yh
-	 k8kfmoFXKEEXgrXcTjYNkmYmPA1mK4tqNDHwKkyK4jl3GpRjzXD1nljZWi0LvJ2pFZw==
+	t=1793052393;
+	b=mvtDzzky7lKfX7+9GY/kgYABKstyd/P6cKXp7QJT3h8SYIJmpvb9wE7qBjwuoaTE+pfu
+	 MHD03/zKssCc/hSWjyL2tKUFLoTJTOl1d4fsvniYB5q5h22+M6pR/7G2XK5b/kib6ktVy
+	 zuu9oNs1E7HTSmnfxMbBcnJimnUAhRqmjdD+2H7kxuVG0v+tTyoy8Oon+cGevInZDcTw2
+	 vY3aPcaxXB78wV++Fpz/qlohzZyYU+I96tVCQiym4+uGcJSsDkvmpw9KSwMqzy4mG+XRl
+	 9peAfEyRZ52gRETtauP8Z4HjRD1ExG6ZLIj8/TZSw+J59PX6TU1uY+0ncoC0Qkgjz0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793052392;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793052393;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=4Disj2F29OKR5YWAXzU4pjttlvpvFspexRzVXwUoCj0=;
-	b=2t+MitdI/zQeBVzvLVR5YWBj/K1TOcSJXb3kLLnImU2tCdhFp4MUxzugbYXxTM7ptvT9
-	 tW5EnAiWMQ4qfHuduKyV5Pa1Ib4XY11/xeQ4XonovYvZNfwG1FKULSkj+vBVEOXijneVi
-	 yrTRJThJhYD/ETpSwqkEhMT+LpqJouhB1/0HRDlrR/Na20R6qdl/7y9poloTFUV3+rbmS
-	 RVVFx7wnW/omrC3yoCoOKp+P3MePdXP3njCxqR0wcxeh8NlitIoLD7To4qWb0lproVR9V
-	 VpHWaur65SzcaF7KgOIUOm71Mux7Nut9tb9/qk+sY97qrMac1wjdFg/Q519kvOAtVcA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=J8qqAYIAfPgq1UPwTJslv5kHWAuX4fEMnW0g2gFuydk=;
+	b=yoe9yrToMt/azApIGLajx9XmVIRwrMbETYeWfM8r+FMrxlroXqOHeXeGwgMneLoebbgO
+	 /BmnD/OwYBmk5mIIPnCIZWXrbZm8S1cjtboaSXMCoNhXHT3jmP94r8W29M4qcBKpjiIIE
+	 WlTih8/fEUbGDmqzGeLGWE7q0z2gQKaC7xjLKS2g9z0TiBOyV/MU6Kj90SUwKfz3/yFcN
+	 0BtT3UCGIxIHNVZLr06edDc27OPHFs8pcW9MaJA0k1etcFaUWd4AFG34rx+GtTD7NNsiB
+	 nRSiH3ixO9Dwbd3wvNdLJl/y6hLjzT3qYQPFWN/zSHemXhuUiilYdepJAEFAwwCMRoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b="HdLd/6k1";
-	arc=none smtp.remote-ip=209.85.215.197
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=pmobPYnf;
+	arc=none smtp.remote-ip=209.85.214.198
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF6B606A31B
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 22:06:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8EF6B606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8FF606A327
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 22:06:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C8FF606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=HdLd/6k1
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cdac99e77d0so288684a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:06:31 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=pmobPYnf
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2e869e00005so56452765ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 15:06:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1793052391; x=1793657191; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4Disj2F29OKR5YWAXzU4pjttlvpvFspexRzVXwUoCj0=;
-        b=HdLd/6k1Vn3/4JJBps1LmdwjQ4X79XpP/LH725YPOhZXCz4X4QTFggZUzYVISvXqmw
-         4jew6YxeUf6yvf/qibWlWFYzNwu216oAPbx/1sAGfUdCoULXE5SN4gfR5GapdmeTZh9c
-         pDHVlDR2wWd13tKtnCMeM4qD3ch+Dsb6MWhpX1Xv51Jwo4eNnqMF8p3bmUwvgLH9YrvZ
-         PfWL5P9xinxpahNsTeOfnYxBIIMJojHTy1vjDHrrEaRawn5zEogAyitwihkRkbBpl3dT
-         K6qReh9NN8qUCryz40TH3XOQMqCw2V7WKvFXN/a6XsPIKgTJJotQJp/lR/f2Aym2i8JU
-         qh9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793052391; x=1793657191;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1793052392; x=1793657192; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=4Disj2F29OKR5YWAXzU4pjttlvpvFspexRzVXwUoCj0=;
-        b=d3oxjTYH/SyT0vRhY3HeDvKr6fzW2BJuBpDhR2EEwUOhXEfbjgFApt9/KOacYb0NsA
-         oeVlCUcWapFYY2dGnCL1BuziqVpyoydvboI5kCs2cnxIcLx0k+TD4p7go0JE3bSmh1Ij
-         SKOvcchlI02Aa0Q1Cmf7gsnni3HkcbkJEgWAK3kjWlcjgj6NeXpcynsdUKrq1epfVKK8
-         eeetof9Eldd8Ex7nKliLQFrTEpJra18zN0NoQ5FYHVO4ve4n2uC5VQsZ7qezR/6lLSIB
-         V0JRwhuisaT29ta8Pnl5/pFb5nxKjdi9cW5a4aWERcd/U7Oevwnbq9RbFygFo0LUxnZ/
-         2/Qg==
-X-Forwarded-Encrypted: i=1; AKwUvBxjCii/Ixuypf0BjMwqSPjmZq54YkxaR3WR3OEeN4IaA+UJjGZsgtocBmEcLDAlinZSkEQelW3t5A0g/iZcdk4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIiECpQzemKvFzXDWsxHc8FRCd/+FsCVGfmbHr/5YpMCowjPcNp
-	U0s1xHbpe8BswIw0Fy9KHw/HGNlxgz0c+7jkc2XtwZm0waCTTJ/3CrXLIjzV+xLJAefvw6pbJQ/
-	N87HEdPDrYiDDYw==
-X-Received: from plblk3.prod.google.com ([2002:a17:903:8c3:b0:2e5:ff91:ecf1])
+        bh=J8qqAYIAfPgq1UPwTJslv5kHWAuX4fEMnW0g2gFuydk=;
+        b=pmobPYnfMJPqBM9Z2kYaYIgwBT2yWQssyZu5gvBp2NKVN36E2dDLYsrHEFRe5KgliF
+         4hy5KUYQ+476vAgt4RxvQpkVgT+z4C+aVr6SO9j+NN4uSpNMMLDM5W0JOfLydG9X6W26
+         6tsR2VHZYXtaoro27T7eQ65iH0o7KXbsGl60BUaOb4ytZCIg80t34G+1Gtoe2pjjoTy5
+         lt99/WwCPg1IeTfNJgku25/LiVIBtv/XqyiRxtW4KE5QtbvBrofxt93NuHTLQ6zmplXo
+         I1f0/BWxMB696eG2Zj1903ndtVAWoh2o/bIQVU5tCTp6NT2kXs1AbEzt/ADPI2wnNQfz
+         aqzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793052392; x=1793657192;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=J8qqAYIAfPgq1UPwTJslv5kHWAuX4fEMnW0g2gFuydk=;
+        b=N3ZvBwFnFMKy77yBwriaF3hYQG45/AsPBgEjgIJLbxjkuhCEVKeDJgr7QRbE67LaTE
+         mvnO3q+5Cbx3HAWbfex5pncagx6usZO3WW+yblAGNdHYyc7buzM66jxXl6v3BeWOkeNO
+         6LaeIt8gC3pjpdEF/8prJX0qIr94hGexKBAU74xG5LGJCH+SE38gbz5PQ9B1AmeU0ZqE
+         XvxeHOtZMn+0+d1o5C+AaDcnWRc/2hoYal98dkGRgFLepFniCvZSxzYmm3b9RB1WyUNF
+         Eh/ObWxvdqdBWL8aN8N8/cHvnmVs+D/Lra81DX/lMgfsf3Nj0xGo6XqThf7mOJ7JuW16
+         CMIg==
+X-Forwarded-Encrypted: i=1; AKwUvBwJKWwN1IIfabjG+b5PHCN3hgWAG3NMtBCoMTkgr3yRg6OmWrF8Q+kFwWNa1gmLHcjqbrL2LIjG+5oWpCv7uNQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJoekMwjNjAdLguSznKk3OzY0qWNFqrAUkM36rMQePzTn+B79bv
+	5e4g8UgOYi+XlH3JORWrtawgQ1LjmkE/xlLaFLng2zp03C/EwZW8awrWa1ADu9hwd216tP3QN9A
+	PEinFqsojWpgTXQ==
+X-Received: from plbjv3.prod.google.com ([2002:a17:903:583:b0:2ea:7f89:8fce])
  (user=skhawaja job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:3803:b0:2e9:5829:9b48 with SMTP id d9443c01a7336-2ea9c6c359dmr62263545ad.20.1793052390732;
- Mon, 26 Oct 2026 15:06:30 -0700 (PDT)
-Date: Mon, 26 Oct 2026 22:05:44 +0000
+ 2002:a17:902:d4c4:b0:2e9:5c55:c46a with SMTP id d9443c01a7336-2ea9c03edbfmr70987685ad.7.1793052391484;
+ Mon, 26 Oct 2026 15:06:31 -0700 (PDT)
+Date: Mon, 26 Oct 2026 22:05:45 +0000
+In-Reply-To: <20261026220546.3114241-1-skhawaja@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,9 +79,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
+References: <20261026220546.3114241-1-skhawaja@google.com>
 X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
-Message-ID: <20261026220546.3114241-1-skhawaja@google.com>
-Subject: [PATCH 0/2] mm/memfd: add F_SEAL_PUNCH_HOLE
+Message-ID: <20261026220546.3114241-2-skhawaja@google.com>
+Subject: [PATCH 1/2] mm/memfd: add F_SEAL_PUNCH_HOLE
 From: Samiullah Khawaja <skhawaja@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Hugh Dickins <hughd@google.com>
 Cc: Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel.org>, 
@@ -92,79 +96,97 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel
 	linux-kernel@vger.kernel.org, Samiullah Khawaja <skhawaja@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This series introduces F_SEAL_PUNCH_HOLE, a new memfd seal that prevents
-holes from being punched into a shmem or hugetlbfs memfd while leaving
-the file fully writable.
+Users of memfd_pin_folios(), such as udmabuf and iommufd
+(IOMMU_IOAS_MAP_FILE), pin the folios backing a memfd range and keep
+using them for DMA. A pin keeps a folio alive, but it does not keep the
+folio in the file. If userspace later punches a hole with
+fallocate(FALLOC_FL_PUNCH_HOLE) or madvise(MADV_REMOVE), the folio is
+removed from the page cache while the pin still holds it, and the pin
+holder is not told. From then on the device and the file no longer
+share memory: data written by the device is not visible through the
+file, and data written through the file never reaches the device.
 
-Background
-==========
+udmabuf already requires F_SEAL_SHRINK so that truncation cannot remove
+pages, but there is no seal that prevents punching holes without also
+preventing writes. F_SEAL_WRITE and F_SEAL_FUTURE_WRITE do block hole
+punching, but they cannot be used for memory that has to stay writable,
+and udmabuf rejects memfds that carry them.
 
-Drivers such as udmabuf and iommufd (via IOMMU_IOAS_MAP_FILE) use
-memfd_pin_folios() to pin the folios backing a memfd and hand them to a
-device for DMA. Pinning keeps those folios allocated, but it does not
-keep them in the file. If userspace later calls
-fallocate(FALLOC_FL_PUNCH_HOLE) or madvise(MADV_REMOVE) on the range,
-the folios are dropped from the page cache while the device continues
-to use them. The pin holder is never notified, and from that point on
-the device and the file silently diverge.
+Add F_SEAL_PUNCH_HOLE, which makes fallocate(FALLOC_FL_PUNCH_HOLE) fail
+with -EPERM on shmem and hugetlbfs memfds. MADV_REMOVE is covered as
+well, because it is implemented with vfs_fallocate() and
+FALLOC_FL_PUNCH_HOLE.
 
-The existing seals only partially address this. F_SEAL_SHRINK prevents
-pages from being dropped by truncation, which is why udmabuf requires
-it. Hole punching, however, is only blocked by F_SEAL_WRITE and
-F_SEAL_FUTURE_WRITE, and both of those also forbid writes. That makes
-them unusable for memory that must stay writable, such as guest RAM or
-DMA buffers, and udmabuf explicitly rejects memfds that carry them.
+Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
+---
+ fs/hugetlbfs/inode.c       | 3 ++-
+ include/uapi/linux/fcntl.h | 1 +
+ mm/memfd.c                 | 4 +++-
+ mm/shmem.c                 | 3 ++-
+ 4 files changed, 8 insertions(+), 3 deletions(-)
 
-Proposal
-========
-
-F_SEAL_PUNCH_HOLE fills this gap. Once it is set,
-fallocate(FALLOC_FL_PUNCH_HOLE) and madvise(MADV_REMOVE) fail with
--EPERM, while reads, writes and resizing are unaffected. Combined with
-F_SEAL_SHRINK, it guarantees that userspace cannot remove pages from
-the memfd while the memfd remains writable.
-
-Motivation
-==========
-
-The immediate user is IOMMU live update. Before iommufd preserves a
-memfd-backed mapping across kexec, it must confirm that every pinned
-page still belongs to the file. Today this requires walking each mapped
-page at preserve time, which is costly for large mappings. With
-F_SEAL_PUNCH_HOLE and F_SEAL_SHRINK in place, iommufd can verify the
-seals once at IOMMU_IOAS_MAP_FILE time and skip the walk entirely.
-udmabuf can benefit in the same way. Neither user is changed in this
-series.
-
-The iommufd change that would use the seal is discussed in the IOMMU
-live update series:
-https://lore.kernel.org/all/arVYa_90j0oN1hnu@google.com/
-
-Testing
-=======
-
-Patch 2 extends the memfd selftests to cover the new seal on both shmem
-and hugetlbfs. Both "memfd_test" and "memfd_test hugetlbfs" pass in
-QEMU.
-
-The hugetlbfs run depends on a separately posted fix. Without it, the
-run aborts in the existing SEAL-EXEC test before it reaches the new
-tests:
-https://lore.kernel.org/all/20261026-fixes_shmem-v1-5-703206d5fa0c@kernel.org/
-
-Samiullah Khawaja (2):
-  mm/memfd: add F_SEAL_PUNCH_HOLE
-  selftests/memfd: add F_SEAL_PUNCH_HOLE tests
-
- fs/hugetlbfs/inode.c                       |   3 +-
- include/uapi/linux/fcntl.h                 |   1 +
- mm/memfd.c                                 |   4 +-
- mm/shmem.c                                 |   3 +-
- tools/testing/selftests/memfd/memfd_test.c | 111 ++++++++++++++++++++-
- 5 files changed, 118 insertions(+), 4 deletions(-)
-
-
-base-commit: 7bf01f16a4d05028fbeff4d90bab40df25142a24
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index e8a05d3de327..65034b72b98e 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -660,7 +660,8 @@ static long hugetlbfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ 	inode_lock(inode);
+ 
+ 	/* protected by i_rwsem */
+-	if (info->seals & (F_SEAL_WRITE | F_SEAL_FUTURE_WRITE)) {
++	if (info->seals & (F_SEAL_WRITE | F_SEAL_FUTURE_WRITE |
++			   F_SEAL_PUNCH_HOLE)) {
+ 		inode_unlock(inode);
+ 		return -EPERM;
+ 	}
+diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+index e43e3de3e9ee..f9dd929adaf4 100644
+--- a/include/uapi/linux/fcntl.h
++++ b/include/uapi/linux/fcntl.h
+@@ -50,6 +50,7 @@
+ #define F_SEAL_WRITE	0x0008	/* prevent writes */
+ #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
+ #define F_SEAL_EXEC	0x0020  /* prevent chmod modifying exec bits */
++#define F_SEAL_PUNCH_HOLE	0x0040  /* prevent punching holes */
+ /* (1U << 31) is reserved for signed error codes */
+ 
+ /*
+diff --git a/mm/memfd.c b/mm/memfd.c
+index 0f6fff004f5e..3f0ef72fb301 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -227,7 +227,8 @@ static unsigned int *memfd_file_seals_ptr(struct file *file)
+ 		     F_SEAL_SHRINK | \
+ 		     F_SEAL_GROW | \
+ 		     F_SEAL_WRITE | \
+-		     F_SEAL_FUTURE_WRITE)
++		     F_SEAL_FUTURE_WRITE | \
++		     F_SEAL_PUNCH_HOLE)
+ 
+ int memfd_add_seals(struct file *file, unsigned int seals)
+ {
+@@ -253,6 +254,7 @@ int memfd_add_seals(struct file *file, unsigned int seals)
+ 	 *   SEAL_GROW: Prevent the file from growing
+ 	 *   SEAL_WRITE: Prevent write access to the file
+ 	 *   SEAL_EXEC: Prevent modification of the exec bits in the file mode
++	 *   SEAL_PUNCH_HOLE: Prevent punching holes into the file
+ 	 *
+ 	 * As we don't require any trust relationship between two parties, we
+ 	 * must prevent seals from being removed. Therefore, sealing a file
+diff --git a/mm/shmem.c b/mm/shmem.c
+index fd0953d55fd6..e79a298d6292 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -3853,7 +3853,8 @@ static long shmem_fallocate(struct file *file, int mode, loff_t offset,
+ 		DECLARE_WAIT_QUEUE_HEAD_ONSTACK(shmem_falloc_waitq);
+ 
+ 		/* protected by i_rwsem */
+-		if (info->seals & (F_SEAL_WRITE | F_SEAL_FUTURE_WRITE)) {
++		if (info->seals & (F_SEAL_WRITE | F_SEAL_FUTURE_WRITE |
++				   F_SEAL_PUNCH_HOLE)) {
+ 			error = -EPERM;
+ 			goto out;
+ 		}
 -- 
 2.56.0.307.g5fe7bd680c-goog
 
