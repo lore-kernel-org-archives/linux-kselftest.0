@@ -1,55 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.246.77.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793041680;
-	b=Wth2k/HmdfNlJloZvpXBoPRtR+TcrnCQioOSH4lY+f5Zw+hoJXgWT/lxRqy/BdLnPywe
-	 2CUbEenIaJaAifgthCLx/hfXJxNSxksWAij+95PA5fkCMIj7oKTAPy3ikkz5fzlbMoZee
-	 y0znPTchKZVB0yHO1WXWHdHwVzEgEGz2k/WKN1+qlPdQCVpRnYuDiW0l9BbsT4CayE2H0
-	 7eiYm/o6M91JNAfPgQ41vwiyrDdfKO8L8htr4XqvFi/92i4wHlPbxrRgO0Is65agvc51N
-	 fODV4DwPvtYDAi0eGK/oj3e1xcWAKxCE7T9Uk7RtzSx3j0/p6SuhKLRdu4nEtuZNBFw==
+	t=1793041682;
+	b=KF8wkhHDT5FAdcTLOAEjnWXweTXr/K6UBhel2eSNXReHFjqEMheH8Of0krpJTreRbxDg
+	 Vjk044Xoz3wAL+JQ39Dp2WWOxlfv7pdNQ/FnaJG9qtw5M7TdN6ZMU0a+guHYIsSiyHfn7
+	 nGSaJr04Kearlssp+kz2hYcT3bw42o7C+YgyFhVgm8nzIQqDtbbDx+4rAwrIyBfakYbkt
+	 c62s16V+Qc2IEJGHLlD7xFm72UfJhC7VJZdaVI0+iql1JbsQ1weM/lgGzmc1cJ1STSOqK
+	 7cavsuo+eXCplIf4YE+kToC7i1fhr/ZrzNUnvUPPIPo3rJL759UX/VgBQM/64Hs8I+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793041680;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=urfO6D4hqsaWObIrpF6xBqN7wc2zXiiEIXZMlS0+D0s=;
-	b=FK4hrf2vdazSVMQZM9A7SbF6AenNylOVtLFQylKHnF74/GoFRGq2cajkef9PjjeJejE2
-	 /x71PFp/Rou1Hd7+/OWIMO0iMU/tAYINn8lt0W16yyBlaB3oPAxiw2nzFG3BNQH+t526J
-	 WWIRa/cnlPWuQG6hffhXWiySbMWqZeVuc2JciZvkajEcYny5+j4ubN9pkkMhawUGZuPwA
-	 1hm3zjBGuJVGMUAPAZAn1UHU2tr48WfjbVfOSH3MbKTFltnuGmB5+mGUa+kF8hCeWwJRn
-	 DPdnEMSIMZdEvpdrQOrHFUM34Z+ae1ehS2q1rCQzqUCNfKykQGE72f4SVZM9lE/m6hA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793041682;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=MZeUKMxixS+I1u0ULWTGNUTBLp1on++UqguuEraVu/8=;
+	b=pwdwX+6r0mfPLe5lxSJcYPLH7NCBsE/zkp/02Gcmf02H6eKrfmlNTa1uUbQx1NrCPiYK
+	 iCISXwxfgZMFo/HWzGRcnCmQ/0QRl+2l/EkE16W6ayCYbilM1dtu1WCd6c3yNsqfZQnPH
+	 YNPeoSO45mZ0yQbT/zShwlL9an0S/i5I3wynDfoN20Ss/neL9VF4T+14i3pq+M+Pb01Gc
+	 BFWYNDQl8TWT4YAYACPCbIVvHNs7+Z2eiaMt9G42Oa23wYiN9QY28tnANCOPWQa42XLaQ
+	 R1Yls+lSpQ7E2RMOltFUYbZ7tqhY0PXbY+BNXKMzYDc+NU1/NkJKVcGSxx1GpC0OSPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UY2ho6jA;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=oTi9ZBZM;
+	arc=none smtp.remote-ip=44.246.77.92
+Received: from pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.77.92])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA25B606A31D
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 19:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CB4606A328
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 19:08:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5CB4606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UY2ho6jA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A891F031E0
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 19:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793041679;
-	bh=urfO6D4hqsaWObIrpF6xBqN7wc2zXiiEIXZMlS0+D0s=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=UY2ho6jArPqIFaWq+Nzej3FIZZMDU+HH3zUAv5RWoTZJFF26qENwlX/PuSzeave9B
-	 up8sNePlt/i79wnID0Z/QzG6yOp22f8t2E8ojlYTLzLcdvr7CpUlNjlIVBpKtqKliR
-	 f6xADGHY9N43BI2fSnDjZC6UuGKYf+ZBeTykk9+zwmk1kaVMvCuVi6fI2WbKuD2y3m
-	 PZ01ROgqxUWWOgz3acwz09J7CWAKdmIs9IhIMlDBIxHYoOVIDgL9OqyUhOKbMtWXAt
-	 1O6MY7L4QAYAI4Z1EBBQA52A7u5aLR3P/7ZVDxz08JM6067J766dpceYp7Zfopvhun
-	 h0Z3AENqJiBLw==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5be3ed646a5so2884554e87.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 12:07:59 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBxmDMjI5LEln2UoLpWOoOCu5l6g0Vq2hiuKrGvC9VY6UoElS+SKA6VskUyPzp8QN+kNrXoMWlwYXaUytmXNcPw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKnVJ1rZoicoV3eaGWtYk1dwq7iDeTYRSGc5qoeFFBYI7DbnlSK
-	fO5mNfoydluQ6w//V9G7Hf9p5Jzmt5Zhm49NqLHQHKBShpLMLNu80fOXVCnI8y+SYNPUj9Ps5xY
-	IrEpATgPI/uwD9qkQkXYibDZdiDd93Uw=
-X-Received: by 2002:a05:6512:3d91:b0:5bf:c4d2:b074 with SMTP id
- 2adb3069b0e04-5bfc4d2b178mr465139e87.55.1793041677961; Mon, 26 Oct 2026
- 12:07:57 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=oTi9ZBZM
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1793041681; x=1824577681;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MZeUKMxixS+I1u0ULWTGNUTBLp1on++UqguuEraVu/8=;
+  b=oTi9ZBZMlC4KVAmkZs3TFZpcUwV/uz2HP5NMte37ePiHNmJyE24carvy
+   wsn31FbXojFnO8Fasl7BtMFX1BgHwIBlBmg8TMe5sUO2Ejdh0Uo12qAGG
+   ucCgJluk62loRfF/W68bg30MfMpmMVw0F5AJUQXCHx9ZtktWOMJxYMTgh
+   PYCxh/WLVnJZSSAKNq727cPCX4mdHS979b6+ZS4jG5K79hjoobu7K9VK5
+   0aa5GZLRyRcMsH/q8D3NHin6HVpJdj+xhFUrlqZ7XfcGEczZgY9gxTbZI
+   sRs0ho/RWs9273JymxKejL4UgUFwlaw1Foj8JMYf13jrvkJ3bNzq7VSJ8
+   g==;
+X-CSE-ConnectionGUID: m5bOT9+aSNebNif2LbUrkw==
+X-CSE-MsgGUID: wwDp98KER6iy1waYEMcB0g==
+X-IronPort-AV: E=Sophos;i="6.27,180,1787011200"; 
+   d="scan'208";a="32284549"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 19:08:01 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:8357]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.4.29:2525] with esmtp (Farcaster)
+ id b817f386-7e46-4266-b3ea-95762c605afd; Mon, 26 Oct 2026 19:08:01 +0000 (UTC)
+X-Farcaster-Flow-ID: b817f386-7e46-4266-b3ea-95762c605afd
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Mon, 26 Oct 2026 19:08:00 +0000
+Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Mon, 26 Oct 2026 19:07:59 +0000
+From: Jimmy Zuber <jamz@amazon.com>
+To: Miklos Szeredi <miklos@szeredi.hu>
+CC: <fuse-devel@lists.linux.dev>, <linux-kselftest@vger.kernel.org>, "Shuah
+ Khan" <shuah@kernel.org>, Bernd Schubert <bernd@bsbernd.com>, Jim Harris
+	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
+	<luis@igalia.com>, NeilBrown <neil@brown.name>
+Subject: [PATCH v3 0/3] fuse: atomic open
+Date: Mon, 26 Oct 2026 19:07:44 +0000
+Message-ID: <20261026190747.2373775-1-jamz@amazon.com>
+X-Mailer: git-send-email 2.50.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,102 +84,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261014200127.1363472-1-sashal@kernel.org> <20261014200127.1363472-4-sashal@kernel.org>
-In-Reply-To: <20261014200127.1363472-4-sashal@kernel.org>
-From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Date: Mon, 26 Oct 2026 20:07:44 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hN1xj6wnf53QAD_OZxJHyy3DNAXeMWBnVrTZ4xcBBG5A@mail.gmail.com>
-X-Gm-Features: AclHuK8f4uksRxlVflTjoQx-AJmosU8fA-9vAMQQLIJZ0eA6F1YTlLjjzwLCkvw
-Message-ID: <CAJZ5v0hN1xj6wnf53QAD_OZxJHyy3DNAXeMWBnVrTZ4xcBBG5A@mail.gmail.com>
-Subject: Re: [PATCH 3/5] selftests/thermal: allow cross builds of the Intel tests
-To: Sasha Levin <sashal@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWC003.ant.amazon.com (10.13.139.252) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Wed, Oct 14, 2026 at 10:01=E2=80=AFPM Sasha Levin <sashal@kernel.org> wr=
-ote:
->
-> The power_floor and workload_hint Makefiles build nothing when
-> CROSS_COMPILE is set, even for an x86 target, and they include lib.mk
-> only on x86. Other architectures therefore have no install or
-> emit_tests rules for these suites, and their installation fails with a
-> missing target.
->
-> Select the x86 tests from the target ARCH when it is given and from the
-> host's SUBARCH otherwise, and include lib.mk unconditionally so that the
-> suites install and emit an empty runlist on other architectures. Use a
-> private ARCH_PROCESSED instead of the ARCH override added by
-> commit 5a1292137e89 ("selftests: fix ARCH normalization to handle
-> command-line argument"): the override changed the value lib.mk uses to
-> pick the clang target, whereas leaving ARCH unset lets lib.mk use the
-> compiler's native triple. A command-line ARCH such as x86_64 is still
-> normalized for the selection, while an ARCH spelling that lib.mk does
-> not know, such as i686 with LLVM=3D1, is rejected as in other selftests.
->
-> Fixes: 27801542b2b8 ("selftests/thermel/intel: Add test to read workload =
-hint")
-> Fixes: d4d27e5a1a88 ("selftests/thermel/intel: Add test to read power flo=
-or status")
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  .../selftests/thermal/intel/power_floor/Makefile     | 12 +++++-------
->  .../selftests/thermal/intel/workload_hint/Makefile   | 12 +++++-------
->  2 files changed, 10 insertions(+), 14 deletions(-)
->
-> diff --git a/tools/testing/selftests/thermal/intel/power_floor/Makefile b=
-/tools/testing/selftests/thermal/intel/power_floor/Makefile
-> index 07463c2160e09..16d26eab55652 100644
-> --- a/tools/testing/selftests/thermal/intel/power_floor/Makefile
-> +++ b/tools/testing/selftests/thermal/intel/power_floor/Makefile
-> @@ -1,12 +1,10 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -ifndef CROSS_COMPILE
-> -ARCH ?=3D $(shell uname -m 2>/dev/null || echo not)
-> -override ARCH :=3D $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64=
-/x86/)
-> +top_srcdir =3D ../../../../../..
-> +include $(top_srcdir)/scripts/subarch.include
-> +ARCH_PROCESSED :=3D $(shell echo $(or $(ARCH),$(SUBARCH)) | sed -e s/i.8=
-6/x86/ -e s/x86_64/x86/)
->
-> -ifeq ($(ARCH),x86)
-> +ifeq ($(ARCH_PROCESSED),x86)
->  TEST_GEN_PROGS :=3D power_floor_test
-> +endif
->
->  include ../../../lib.mk
-> -
-> -endif
-> -endif
-> diff --git a/tools/testing/selftests/thermal/intel/workload_hint/Makefile=
- b/tools/testing/selftests/thermal/intel/workload_hint/Makefile
-> index 49e3bc2b20f9d..e53d6ecd9f8de 100644
-> --- a/tools/testing/selftests/thermal/intel/workload_hint/Makefile
-> +++ b/tools/testing/selftests/thermal/intel/workload_hint/Makefile
-> @@ -1,12 +1,10 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -ifndef CROSS_COMPILE
-> -ARCH ?=3D $(shell uname -m 2>/dev/null || echo not)
-> -override ARCH :=3D $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64=
-/x86/)
-> +top_srcdir =3D ../../../../../..
-> +include $(top_srcdir)/scripts/subarch.include
-> +ARCH_PROCESSED :=3D $(shell echo $(or $(ARCH),$(SUBARCH)) | sed -e s/i.8=
-6/x86/ -e s/x86_64/x86/)
->
-> -ifeq ($(ARCH),x86)
-> +ifeq ($(ARCH_PROCESSED),x86)
->  TEST_GEN_PROGS :=3D workload_hint_test
-> +endif
->
->  include ../../../lib.mk
-> -
-> -endif
-> -endif
-> --
+Add FUSE_OPEN_ATOMIC, allowing the kernel to skip LOOKUP to improve
+performance. A server implementing FUSE_OPEN_ATOMIC will look up
+the name, create it if O_CREAT is supplied, and open it in one request.
 
-Applied as 7.4-rc material, thanks!
+The reply says whether the file was created, as Miklos suggested in [1].
+The overall pattern follows his sketch in [2]. For a cached
+name, the kernel compares the returned nodeid with the cached one and
+looks the name up again on a mismatch.
+
+A server without FUSE_OPEN_ATOMIC replies -ENOSYS and keeps today's
+behaviour.
+
+This series applies on top of "fuse: fix use-after-free in
+fuse_create_open() error path" [3].
+
+Tested with a new selftest under UML and KVM.
+
+Changes in v3 (from the Sashiko review [4]):
+- Patch 1: strip FOPEN_CREATED from the open flags, which broke
+  passthrough. Check name_max before FUSE_OPEN_ATOMIC. Reject a reply
+  whose inode is not a regular file or is bad, and skip page cache
+  invalidation for DAX, as fuse_open() does. With default_permissions,
+  check the attributes in the reply before opening an existing file.
+- Patch 2: only an open that skipped the LOOKUP checks the name, so
+  reopens through /proc/self/fd, open_by_handle_at() and other
+  vfs_open() callers open by nodeid. Keep the LOOKUP for directory
+  opens, and with default_permissions while the cached attributes have
+  expired. Check the open again against the attributes in the reply.
+  Set the open flags only after the reply checks, so a mismatched
+  passthrough reply is released without an inode. Read the parent and
+  name under rename_lock, and send RELEASE before FORGET.
+- Patch 3: test the above. Skip without /dev/fuse, and leave the server
+  state mapped at teardown.
+
+Changes in v2:
+- Drop the d_drop() before d_splice_alias() for an entry-only reply, and
+  use d_splice_alias() for FUSE_CREATE and FUSE_OPEN_ATOMIC replies.
+  FUSE_TMPFILE keeps d_instantiate(), as its dentry stays unhashed
+  (NeilBrown).
+- Describe what the server does and when the kernel checks permission
+  in each case (NeilBrown).
+- Check in the selftest that an O_TMPFILE file has no name in its
+  directory.
+- Rebase onto fuse for-next, which has f1ac607f786f ("VFS: enhance
+  d_splice_alias() to handle hashed dentries"). Accept a fuse_open_out
+  without backing_id_64, as FUSE_CREATE and FUSE_OPEN now do, and test
+  it.
+
+v2: https://lore.kernel.org/fuse-devel/20261026151828.562870-1-jamz@amazon.com/
+v1: https://lore.kernel.org/fuse-devel/20261020141647.3271341-1-jamz@amazon.com/
+
+[1] https://lore.kernel.org/all/CAJfpeguEK4JsFo60=yHkpLL6XkDGS7cQ5GOhiFL379KsYk0TsQ@mail.gmail.com/
+[2] https://lore.kernel.org/all/CAJfpegvXtXY=Pbxv+dMGFR8mvWN0DUwhSo6NwaVexk6Y6sao+w@mail.gmail.com/
+[3] https://lore.kernel.org/fuse-devel/20261026180649.1265825-1-jamz@amazon.com/
+[4] https://sashiko.dev/#/patchset/20261026151828.562870-1-jamz@amazon.com
+
+Jimmy Zuber (3):
+  fuse: add FUSE_OPEN_ATOMIC
+  fuse: open cached files with FUSE_OPEN_ATOMIC
+  selftests/fuse: add test for FUSE_OPEN_ATOMIC
+
+ fs/fuse/dir.c                                 | 456 +++++++++++--
+ fs/fuse/file.c                                |   4 +-
+ fs/fuse/fuse_i.h                              |   7 +
+ include/uapi/linux/fuse.h                     |   8 +-
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   3 +-
+ .../filesystems/fuse/atomic_open_test.c       | 624 ++++++++++++++++++
+ 7 files changed, 1043 insertions(+), 60 deletions(-)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/atomic_open_test.c
+
+
+base-commit: 9b1da7b4a4e197072e630c3b85d4100a399752ff
+prerequisite-patch-id: 95a6559bc4490d7d82bc80ba961ac52e80429b34
+-- 
+2.50.1
+
