@@ -1,66 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793017512;
-	b=X3JqZxqW9babhdcdGVYZ2G1U1R2NPpUIHz/dorcJTKbeeSIN6CwNerAtEg9YSlndPu6z
-	 v5gl5QyClpbTEfjj9rPjogqSpvUpsSmmleW4GQVKCPpDtcP8iKSs2lCnnz+4IXuOgLdJd
-	 T3h/z0nQZOWCJCuzmSmWkzj+0VKJlWkswhi2jTO1pDlUNar5HGUrmpkuiRyYvFbLyxd/C
-	 d7Tik8lcbiOPxUsWqLDWkRLL7lZYJlupQZMSjl64tljtovN+QIxZRFjUVgEID7SOk3OEN
-	 9ou3H1ZmtLfLTt+k4CD8HWmhYDqCBod7IqRJoZI2dzKn2o3oCx+exAqd6Le7Dp/h85Q==
+	t=1793021340;
+	b=PBC3j/OrRoyRtRhRSujHsL5oUzKDwPsyL0eDrG8xKxF2K8P1oMNdpIcWW53wTnv+CkOy
+	 BBdrD+hZAEMpHJSNx4+jHUx4L8SjENwXK6hJXX5qV4jko66pzXmYpzpLT3aUcQUL13u7P
+	 CT5eAO71uS/oOfmcFF2h/Td8lfVjSrFL8oaxaDyjNUbyNLQrwpzQwa6hPzVuKZK3+xk2d
+	 beslMO/c67m0D9WmgZX/0cM9/KgWWAILIyAE7iCEsXK37rZLoAjeuxl+RIWJgr1x6Eu7h
+	 2zWgW46YovNpmYsx/IKx2Hju2Eof++p+YZmhPU+gzSi7Wj4TL2bKlvlt7HGU/cr7kqw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793017512;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=wa7YoBBd7JzA0bL8omeqz71lvo/LcqYa/z0727D7QW8=;
-	b=oWJqA29buCazwjK8ejAen0XLxAWwJWVvLCve3JbQ/uwEpwM/b3E07G9TlFqTiJBoli8p
-	 zyf55zw2UrAzwUvAe8zVr1oeqyXSe/8sr43QxSse96T2lcQPkW4v0b0ENIZdyW5BrPBHi
-	 Z2RC6nFSFqFyAE9Kh/Tzpja6/CWIavl2GhUPR5v+/e7VGYckxL9jO5HfwjdWh/MIk7QsR
-	 eKtSGVCDsH2KYjbIQMwJW3+kIX3GkS8QfTGqXBz/8uMt6xyfKhvD5Uw1iQ2Y36IlB0Ruv
-	 h+oEOgOx/7SVNZgejjQaH+xpy9fu4k8p/UtsfMIVyLZPMIrJWe1Kg/7Bg1tEzu9LFWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793021340;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=04ULgjusWlSg32LjKqce99PoYE98Nn7GHteRBpuo00o=;
+	b=oDJe5k9I+CYCE2Twm6HNj18Zf5S7g2zZhxXaioZx3ZzvKJvL2tj+86+6vT6GNnFJUjwt
+	 otCzE2yygpue6rkyy5T6r/UoIUD/ZsflCRsgGSB/pGrHChd2A6VVGrwcOjrflnaOYV3y7
+	 Lb8qZj1MS9UAjDMfUWWeAXoI29wBxQMVBSZYFeeHmdIVEcSt0wg5K949GSwXwoIAfG3TR
+	 0XIOVe0HcsS/UHHNE8fMIQCSkfnSqvZt7Fp+UxBzO/N8zYujlfUBxNtFwz1Bswb170AVy
+	 EqM8MfJZuakRUacEcK2ipMLhhwVvt93NnfV5+hpQBTDLHH5QtCaUKUWkAmgWYP2KEpQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=virtuozzo.com;
-	spf=pass smtp.mailfrom=virtuozzo.com;
-	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=dFgsTXxN;
-	arc=none smtp.remote-ip=130.117.225.111
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kMnAFsYT;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E92606A31A;
-	Mon, 26 Oct 2026 12:25:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57E92606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85319606A31D
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 13:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=dFgsTXxN
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=wa7YoBBd7JzA0bL8omeqz71lvo/LcqYa/z0727D7QW8=; b=dFgsTXxNYG6J
-	+E/f4BNFuOF4LeltcVBbHCXvwL5i5z0X8eaahCjNi1RAa3baflqXGcwI6i2pwtR9GiptwNiQfWpDQ
-	sNQeINdmD4ridjIgy8+f7str2qk8IR6XDi3vADJt9qnBRNy4LhdWdQYE9I+QkGl4n9bm/RsWZuau7
-	LotIr+TxSILlMAliuLFK/vnmt1MV0qwnTJeAzyMQwkEDP9EW2OZq0FW8prbwBnpWMpO/YDpjR1Goj
-	FE7HaoSGLUDoJjzmWNa3GtcC16U93qDAdmAtoa9bD0aydsV1fM63vOZ1n401ZMUCB6uNY9ai5gpiY
-	bdhrlMWawdOqsUkRWReeCg==;
-Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
-	by relay.virtuozzo.com with esmtp (Exim 4.96)
-	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1xLJhK-0029cR-0C;
-	Mon, 26 Oct 2026 13:24:48 +0100
-From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: net: veth: check UDP GRO forwarding on forwarded traffic
-Date: Mon, 26 Oct 2026 14:24:35 +0200
-Message-ID: <20261026122440.603302-1-eva.kurchatova@virtuozzo.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kMnAFsYT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A5D31F031E8
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 13:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793021339;
+	bh=04ULgjusWlSg32LjKqce99PoYE98Nn7GHteRBpuo00o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=kMnAFsYTdeRlFlai4nhvqWF9NBW4YEJ6tnFv7BHj8vOhHyZHx8nm0zfckOofb/EHe
+	 sA4kA8Yhyp5kwQg3lCKaHqbVjc5os9XfGijBFc4v+74SH/u10UrLDcbwASf73DX5Qa
+	 L5Df3QZUZnywZIXm8py9ROWJGl67ZBsokPP1gpgERoNwf4BhqAs2qez7RtWiUhBGAy
+	 wTpLAH6EgUXF2cU7QSSkIzbyv8/pI3qPp9AZN7iSTUi3xo6mang8Og+ObyTczfVPcI
+	 7IZCNAuxk+txSpxzOBmU6KhVeKr/yW7kQ3EjbhDMGZw8+ZBl/2F8kUvW6dne22qjz5
+	 iyF9xWG3kQW2A==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-49ddddefadbso1310323fac.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:28:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBy8pN6mLLiJ6d8ZAzmPDol/tczYgxAr54n9AkSU2B3NxjeNlQ1R86hUo04ARu6c+hi82OVFw39HHlPHxoHHrcM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIVfJVnPaq9NCkCYp3lmBpqqF356MGa3bVEhhs5jRDgTboDkw4q
+	ym6uut6z58OywQY0oOqqNvl9P9uReeav2KGQ4JZ+IOEoGtqhbA2rk7fUbLhM5glBcAmqwUrhshI
+	eOpXqR7SAOpn9GZvolCF4suIdAyFLvRM=
+X-Received: by 2002:a05:6870:3c89:b0:4a2:4c6c:c9bc with SMTP id
+ 586e51a60fabf-4a83f4eb527mr4042375fac.19.1793021338390; Mon, 26 Oct 2026
+ 06:28:58 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,99 +59,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
+In-Reply-To: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
+From: Eric Dumazet <edumazet@kernel.org>
+Date: Mon, 26 Oct 2026 14:28:47 +0100
+X-Gmail-Original-Message-ID: <CAL4WiirsfX-j2uP0HWq4dSPGK15N9GqjY6yz+fMFKreo=1MR7Q@mail.gmail.com>
+X-Gm-Features: AclHuK_7Y8Msockoq5cYfVUJitRoh-SWV4M7WKxBOBmiLFfT1caFqcdtwGCa_Us
+Message-ID: <CAL4WiirsfX-j2uP0HWq4dSPGK15N9GqjY6yz+fMFKreo=1MR7Q@mail.gmail.com>
+Subject: Re: [PATCH net 0/2] Revert advertising the TCP MSS from the
+ configured MTU
+To: echoowall@gmail.com
+Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>, 
+	David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+	Thorsten Leemhuis <regressions@leemhuis.info>, regressions@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The rx-udp-gro-forwarding checks fail with "got 10 packets, expected 1"
-on a host where something has a UDP tunnel socket, a vxlan say, and
-pass on a host where nothing does. Since commit 36707061d6ba ("udp:
-allow forwarding of plain (non-fraglisted) UDP GRO packets") the
-feature aggregates only datagrams GRO finds no socket for, and GRO
-looks the socket up only once a tunnel socket exists on the host; the
-checks send to a socket in the receiving namespace, so they pass only
-while nothing looks it up.
+Le lun. 26 oct. 2026 =C3=A0 08:23, Esko Mobius via B4 Relay
+<devnull+echoowall.gmail.com@kernel.org> a =C3=A9crit :
+>
+> Commit 2640e6419594 ("net: advertise TCP MSS from the configured MTU,
+> not the learned PMTU") breaks TCP for clients behind networks that
+> filter inbound ICMP, when the server reaches them through a hop with a
+> smaller MTU: the handshake completes, then the connection stalls as
+> soon as the client sends full-size segments. This was reported in [1]
+> and confirmed on 7.3-rc7; reverting the commit on top of 7.3-rc7 fixes
+> it. Details and numbers are in patch 2.
+>
+> The asymmetric (DSR-style) case that commit targets can still be served
+> by the existing per-route advmss metric, which overrides the default
+> after the revert; patch 2 includes a test of that as well. If you would
+> rather keep the new behaviour as an explicit opt-in some other way, I
+> am happy to test or rework this.
+>
+> Patch 1 removes the packetdrill tests that assert the reverted
+> behaviour, patch 2 is the revert itself.
+>
+> [1] https://lore.kernel.org/regressions/4F0FAEB6-A13B-47F3-BFF1-C706686C6=
+F64@gmail.com/
 
-Let the destination forward the datagrams to a receiver in a namespace
-behind it: no local socket is found there, tunnel or not, and the
-checks count what the destination receives as before.
+Reviewed-by: Eric Dumazet <edumazet@kernel.org>
 
-Fixes: 1c3cadbe0242 ("self-tests: add veth tests")
-Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Link: https://lore.kernel.org/netdev/CAF=yD-LZSec9g_0bBgrcQvq2OO1BrxMSRHH=uU7eamCmWcTO_A@mail.gmail.com/
-Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
----
- tools/testing/selftests/net/veth.sh | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+Even if the reverted behavior was closer to RFC 2923 / RFC 1122, it
+was a long-standing
+user visible behavior and should not have been tagged for stable.
 
-diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-index 8b867e0675a7..be7c6b9213a9 100755
---- a/tools/testing/selftests/net/veth.sh
-+++ b/tools/testing/selftests/net/veth.sh
-@@ -9,12 +9,17 @@ readonly DST=1
- readonly DST_NAT=100
- readonly NS_SRC=$BASE$SRC
- readonly NS_DST=$BASE$DST
-+# The receiver of the GRO checks, behind the destination
-+readonly RCV=3
-+readonly NS_RCV=$BASE$RCV
- # shellcheck disable=SC2155 # prefer RO variable over return value from cmd
- readonly YNL="$(dirname "$(readlink -f "$0")")/../../../net/ynl/pyynl/cli.py"
- 
- # "baremetal" network used for raw UDP traffic
- readonly BM_NET_V4=192.168.1.
- readonly BM_NET_V6=2001:db8::
-+# Network between the destination and the receiver
-+readonly RCV_NET_V4=192.168.2.
- 
- readonly CPUS=`nproc`
- ret=0
-@@ -26,7 +31,7 @@ cleanup() {
- 	[ -n "${jobs}" ] && kill -1 ${jobs} 2>/dev/null
- 	rm -f $STATS
- 
--	for ns in $NS_SRC $NS_DST; do
-+	for ns in $NS_SRC $NS_DST $NS_RCV; do
- 		ip netns del $ns 2>/dev/null
- 	done
- }
-@@ -48,6 +53,17 @@ create_ns() {
- 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V4$ns/24
- 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V6$ns/64 nodad
- 	done
-+
-+	# Forwarded, the datagrams find no local socket, whatever tunnel the host has
-+	ip netns add $NS_RCV
-+	ip -n $NS_RCV link set dev lo up
-+	ip link add name fwd$DST type veth peer name fwd$RCV
-+	ip link set dev fwd$DST netns $NS_DST up
-+	ip link set dev fwd$RCV netns $NS_RCV up
-+	ip -n $NS_DST addr add dev fwd$DST $RCV_NET_V4$DST/24
-+	ip -n $NS_RCV addr add dev fwd$RCV $RCV_NET_V4$RCV/24
-+	ip netns exec $NS_DST sysctl -wq net.ipv4.ip_forward=1
-+	ip -n $NS_RCV route add default via $RCV_NET_V4$DST
- }
- 
- __chk_flag() {
-@@ -134,15 +150,17 @@ chk_gro() {
- 	local msg="$1"
- 	local expected=$2
- 
--	ip netns exec $BASE$SRC ping -qc 1 $BM_NET_V4$DST >/dev/null
-+	# Taking veth$SRC down drops the route, so set it for every check
-+	ip -n $NS_SRC route replace ${RCV_NET_V4}0/24 via $BM_NET_V4$DST
-+	ip netns exec $BASE$SRC ping -qc 1 $RCV_NET_V4$RCV >/dev/null
- 	NSTAT_HISTORY=$STATS ip netns exec $NS_DST nstat -n
- 
- 	printf "%-60s" "$msg"
--	ip netns exec $BASE$DST ./udpgso_bench_rx -C 1000 -R 10 &
-+	ip netns exec $NS_RCV ./udpgso_bench_rx -C 1000 -R 10 &
- 	local spid=$!
- 	sleep 0.1
- 
--	ip netns exec $NS_SRC ./udpgso_bench_tx -4 -s 13000 -S 1300 -M 1 -D $BM_NET_V4$DST
-+	ip netns exec $NS_SRC ./udpgso_bench_tx -4 -s 13000 -S 1300 -M 1 -D $RCV_NET_V4$RCV
- 	local retc=$?
- 	wait $spid
- 	local rets=$?
--- 
-2.56.0
+Relays should really clamp MSS (nft "tcp option maxseg size set rt mtu"),
+but a revert is the right call for net and stable trees.
 
+If needed, the asymmetric/DSR case can be revisited in net-next as an opt-i=
+n.
