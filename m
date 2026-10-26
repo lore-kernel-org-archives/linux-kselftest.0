@@ -1,54 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792996764;
-	b=n60BPgmnKxBzoEkILWAfRiPgFkS2BvoMVbDLEI0rmdn7jonOki1hhE3OgL2rL6ci1Ady
-	 /w6IK95EK0cBgC/7rarfW5NsoM1seBBhq0+i14B/w12X56Lx8kCXj/BTTc1JOcvMGYjsd
-	 GER29xo/2HnONPBQXAv0ATsP84XhZIIi5O/TNtWZgJLxI3wIbNbfFguxxLnODSSjGJrAk
-	 Rbiig6ydHyGym6Byj5CpzxYpoqU+WGO9c+ogPYWC5twT+S1eacVodQZCo56Y+PwMxSIaF
-	 h/dJNHhL0RIJ6VpVpialOdkkIfVQR4bHAziEgXtYzad12cHnWGbttgCZFAYiVe7GXNA==
+	t=1792997067;
+	b=vbRvu0Cundg9Ft13zKqKgYwq/hzUuazL/o3zMPKNsSTrgzxjMTL6u/+d0GkQvLP4ITSk
+	 cAmFnuhZqZtMglA3dclnIiL+G890BfCNQT44VPV+E5dbR3q7P0TE3c66lsamG7QgVDhxH
+	 M6KInFa0FdVh8ZLrltzM6Eor6Ry/VmLIyL5HHo7MBId+EbQj4VUA3bb5pgLPILgoBjXxP
+	 8cinSYKoYhuHI2yNXr5Fl1vN1+QNbgYyyxOmU4VkpaGtxAv0GTqQ0i3IRqj40Jz29G9Wg
+	 ZiBbnq0E8oUgCq/eKcxP23b70Uk9TE+89rUnaanjLukMPldECBa3XAE04jhNMjE0MBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792996764;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=/N/xE84PocqyOAP0Dt4y/I58wEJZRZjEFHwItj6N+Rk=;
-	b=YUv39jD0vmtwZV9iOh8a7evFYhM3qJ3MZZx386ykqBxHzyH++usK18f4XieuHs6raU93
-	 jEAZWzg/M/9mzKoXe5/fK5vk7o1azSiEL2JWYE3KT//VeKZdYelYVh0vGydNEUvtrX7rl
-	 o5m0b00DTyzUWp8ETmR5DmPOtA+ZYESWqxCrJdWA083ujG5SYP+FVpI9W2c5KrJ07+e9s
-	 TFCTlDMjkGvCppXv3quBd9PBY9MtIPznACnmaNiF1toRBox3Fc1izmc5wGv+LfdKmeh3k
-	 E73LfTg+lg+Yo2QwNqjp+sKZ2knmOlwkN52AcU10Y0e2OVBHHek7UkCMbwL3vbyHoUQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792997067;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=4z6v3tcaLUknSyizTZBG4Psqu25Q3ieXoWj4ZLsIugA=;
+	b=EGUWcoqP6IVcc1EiBc9Lnx9aILAWRKrnHAsPFvi1GhSUHABx7qRLw4DivsBHTFnAjqow
+	 NNZCyW51SWNjWzgNOSUWfQVDq1sYDAMUudd6ldpBvbBKkAYmDxnLlTahzMjFAvpFVmVU0
+	 uE+ffjuWgdNSG3BhCH+5fTi9cLqyBYOL0ZotglHli66b565nfRkXXxSz7qWURiU0vq4+a
+	 azL/Z+F6ecH6KaUZTQZxptjua4FznMLOZxluuVv1xPqx+sQmqVwfpGajZUx7w7wFBG9ZS
+	 +YxY9p4ZTP28x2IFmvlFFCZhdT4eDv19KoHLf7L59orjatinvSml38IS1nTY6v4v9SA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nkVPhuPb;
-	arc=none smtp.remote-ip=95.215.58.124
-Received: from mta1.migadu.com (out-124.mta1.migadu.com [95.215.58.124])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--gongtao.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=VswrmlK2;
+	arc=none smtp.remote-ip=209.85.215.199
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D3D606A31D
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:39:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 98D3D606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FAE606A324
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:44:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23FAE606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gongtao.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nkVPhuPb
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=6a75/GLo+zgQm/2IZiuenZ69fWTStQnvKmbm4FFx2Ro=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792996761; v=1; x=1793601561;
- b=nkVPhuPbcoT5mqNdCwKhUf7FJ0WYcSOasvtkJBy0lyAAufKDbgtACFXknghxoEGxSD0+FLuI
- g/tUhnHsn4akwtpp2xKOm3EmB1RUM4XMhieTKzFNAifnDCzo1thJhjXY8mh/pM2IsXo4YdTuQmX
- wJsdBCG4UaHb+MHRTugrZ1iY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e717e60d4673babe;
-	Mon, 26 Oct 2026 06:39:21 +0000
-X-Mizu-Trace-ID: e717e60d4673babe
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <b6b32541-7add-48b4-af00-af276c8b016f@linux.dev>
-Date: Mon, 26 Oct 2026 14:39:14 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=VswrmlK2
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cdac8b7169eso65087a12.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 23:44:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792997065; x=1793601865; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=4z6v3tcaLUknSyizTZBG4Psqu25Q3ieXoWj4ZLsIugA=;
+        b=VswrmlK2OiETfO8j/RGU9kxD1BMJj8tSQf8QofGUHuurk4smjH0NCs6Ja9QHxFZgKT
+         2S5xpV+/44dIjfyDibstLfcimnS1N9Bwa0PJFoUFqGDIraXuJ3griPYazSWpRk6JyRIk
+         +GDCJwN82pyZuymxkd7Kg73MY6Ojnj4wQBTulAJANN1eH2zSIjMTBbhPcMm5badb0rNq
+         P/OyzfKkczaEwQfm2XvNBRCkwi871/TNiYiV0if+S+gLVtuQa3kr5+IvMSb4Bs3KRk/h
+         ffH+cz2LVCsG7PQi+EKfLLo4Xc6TMYegrC+ZpV87SJKo1SEAfgZUzWhRby6gFnlQOfEt
+         bY+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792997065; x=1793601865;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4z6v3tcaLUknSyizTZBG4Psqu25Q3ieXoWj4ZLsIugA=;
+        b=FR5+yA8UYcPgc2ACntOUYTnbvW4kLMSjZaoWM6jm92Sl2nGfQ4Fe4ibO+FDyACzR25
+         RyA3HRPL0CRK/38ca8Ji3IsQdpxeD57pfQkV1DZa3wJ8Gki2ztFTmOxqg9rLHtic2d94
+         y+Azp21OCn02bVqIPic/aQmqSoQSVeGkT1DMvl+8oAWhWUIYdXzlIRzFLSMBIEko4PDZ
+         b/IPuqiUjaHCmDS3W+xMzlDKppeNzRf2OeKT5/TLbEdZ/WIfrlMpGR1Vv0BfVto5Mm/M
+         +7yHQVkPa/kpUS68b2NOhrJOxnYTFIyfGkBmJEYaKV/CdP+MM0+VZyXspxum9aCh9qd0
+         rDcQ==
+X-Forwarded-Encrypted: i=1; AKwUvByhor5/EGNy8shy3Q+F2vApTi5kpMLqVCNPlBVZdG7/wWFnjaccEvLldweKLkcJrzTdXOrqV7u5lGCVoCRaYA0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKBKTKwVf4SDdTLdGv4Z1KkPPsObeyczrGBQwIsKZNTVjJaOy9H
+	tsEY0batT1c9qGZbepSaVdG3WS0Uy7t8hgSCTd3/ZQ5QXsfl30TDXnZy/dOAEPnS/+hifKkECFD
+	sLv+SrS5M+Q==
+X-Received: from pgbcq4.prod.google.com ([2002:a05:6a02:4084:b0:cca:dcca:4599])
+ (user=gongtao job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:3f94:b0:3e5:396d:1f89
+ with SMTP id adf61e73a8af0-3e7af7e9aa3mr4608722637.6.1792997065214; Sun, 25
+ Oct 2026 23:44:25 -0700 (PDT)
+Date: Sun, 25 Oct 2026 23:44:19 -0700
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -57,289 +75,203 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v3 02/11] cgroup/cpuset: Properly compute effective
- xcpus in update_parent_effective_cpumask()
-To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261025214449.310715-1-longman@redhat.com>
- <20261025214449.310715-3-longman@redhat.com>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <20261025214449.310715-3-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.257.gf7497c7d27-goog
+Message-ID: <20261026064424.3003536-1-gongtao@google.com>
+Subject: [RFC PATCH v3 0/5] KVM: guest_memfd: Add KVM_LINK_GUEST_MEMFD ioctl
+From: Tao Gong <gongtao@google.com>
+To: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>
+Cc: Tao Gong <gongtao@google.com>, David Hildenbrand <david@kernel.org>, 
+	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, 
+	Vishal Annapurve <vannapurve@google.com>, Sagi Shahar <sagis@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+This series adds KVM_LINK_GUEST_MEMFD, a VM ioctl that takes an existing
+guest_memfd fd and returns a new guest_memfd fd, bound to the VM on which
+the ioctl is invoked, that refers to the same underlying guest_memfd
+inode.
+
+It is v3 of the gmem linking RFC [1][2], rebased onto kvm-x86/coco and
+reduced to the linking part: the prerequisites from RFC v2 are upstream
+now, and the KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM memory context changes will
+be posted as a follow-up series on top of this one.
+
+Problem
+-------
+
+A guest_memfd is bound to the VM that created it: binding a memslot to
+a guest_memfd requires the file's owning VM to be the memslot's VM, and
+there is no way to reassign a guest_memfd instance to a different KVM
+instance. Passing the fd to another process does not change that.
+
+For VMs with private memory this is a hard limit. Private memory is not
+accessible to the host, so it cannot be copied through userspace into a
+new VM's guest_memfd. The only way to move a confidential VM to a new VM
+instance on the same host (intra-host migration, e.g. to replace the
+VMM) is for the new VM to take over the same memory in place.
+
+Design
+------
+
+guest_memfd already splits state between the file and the inode: memslot
+bindings and the owning VM belong to the file (struct gmem_file), while
+the memory itself, its flags and (with in-place conversion) the
+shared/private attributes belong to the inode (struct gmem_inode).
+Linking creates another file for the same inode, so a second VM can bind
+the same guest memory to its memslots without the memory being copied or
+going through userspace.
+
+Linking is only allowed between distinct, compatible VMs. On x86 both
+VMs must have the same VM type, so that e.g. memory private to a TDX
+guest can never be mapped into a non-TDX VM; the generic fallback
+requires both VMs to agree on kvm_arch_has_private_mem(). These checks
+are defensive; the underlying rule is that KVM must never create a
+stage-2 mapping for a confidential VM to another confidential VM's
+private memory (see the cutover question below). Linking therefore
+does not make private memory shareable between VMs: a private page
+remains usable only by the VM that owns it.
+
+Use cases
+---------
+
+1. Intra-host migration of VMs with private memory, where the
+   destination VM takes over the source VM's guest memory in place:
+
+   a. Userspace passes the source VM's guest_memfd fd to the destination
+      VM, e.g. over a Unix socket.
+   b. The destination VM calls KVM_LINK_GUEST_MEMFD to get a new fd for
+      the same inode, bound to the destination VM.
+   c. The destination VM binds the new fd to its memslots with
+      KVM_SET_USER_MEMORY_REGION2, at the same offsets as the source.
+   d. The remaining VM state is moved with KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM
+      (SEV only today; generalized by the follow-up series) and the
+      destination VM is run as normal.
+
+   Linking does not revoke the source VM's access; the source simply
+   stops using the memory, so every private page keeps a single owner.
+
+2. Sharing guest memory between non-confidential VMs. Both VMs bind the
+   same inode at the same time, each through its own file, and the
+   memory keeps its guest_memfd properties: neither VMM needs a
+   userspace mapping of it, and inode-level operations such as a hole
+   punch apply to every linked VM.
+
+   A related use raised in discussion is Nitro Enclaves-style memory
+   donation, where a guest gives part of its memory to a sibling VM on
+   the same host ("nesting without real nesting").
+
+Alternatives considered
+-----------------------
+
+* Passing the VM fd to the new VMM and adding a way to reset the VM
+  while keeping its vCPUs and guest_memfds. A KVM VM is bound to the mm
+  that created it (VM, vCPU and device ioctls from another process fail
+  with -EIO), and its memslots and MMU notifier refer to that address
+  space. Re-homing a VM would be considerably more invasive than
+  creating a new VM and moving state into it, which is the model KVM
+  already uses for SEV intra-host migration
+  (KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM); linking extends that model to
+  guest_memfd.
+
+* Keeping the memory and its attributes in a "memory provider" and
+  creating two independent guest_memfd instances on top of it. The
+  guest_memfd inode already plays that role today (page cache,
+  attributes and the list of files), so linking gets the same result
+  without a new abstraction. If guest_memfd grows a provider layer,
+  linking could be expressed on top of it.
+
+Open questions
+--------------
+
+* Cutover: for confidential VMs, an explicit cutover that delinks the
+  source VM's file at handover, instead of relying on the source to
+  stop, may be required for security: it is what guarantees that a
+  private page is never usable by two VMs when memory is transferred.
+  That would be a separate operation on top of this series;
+  non-confidential VMs probably do not need it.
+
+* IOMMU and DMA: whether iommufd page tables and in-flight DMA keep
+  working across a handover, and how they would be transferred, is not
+  addressed here. The pages themselves stay alive for as long as any
+  linked file exists.
+
+* Conversions: with in-place conversion the shared/private attributes
+  live on the inode, so a conversion by one VM applies to, and
+  invalidates, every linked VM. That is the intended behavior for
+  migration, where only one VM is live. Between confidential VMs it is
+  also required: with today's hardware they can at best share their
+  shared ranges.
+
+Patches 1-2 add the ioctl, patch 3 advertises KVM_CAP_GUEST_MEMFD_LINK,
+and patches 4-5 add selftests, including a test that transfers private
+memory between two KVM_X86_SW_PROTECTED_VMs.
+
+The series is based on kvm-x86/coco at commit ad06cf5338bc ("KVM:
+guest_memfd: Avoid deadlock in error_remove_folio()").
+
+Tested with the KVM selftests (guest_memfd_test, set_memory_region_test,
+guest_memfd_conversions_test, private_mem_conversions_test,
+private_mem_kvm_exits_test, private_mem_migrate_tests) on an Intel host,
+both with and without kvm.gmem_in_place_conversion.
+
+Changes from RFC v2 [2]:
++ Dropped the anon inode and guest_memfd inode patches, which are
+  upstream now (anon_inode_make_secure_inode() and commit a63ca4236e67
+  ("KVM: guest_memfd: Use guest mem inodes instead of anonymous
+  inodes")).
++ Dropped the KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM memory context patches
+  and their selftests, to be posted separately on top of this series.
++ Rebased onto kvm-x86/coco: uses struct gmem_file and the inode's
+  gmem_file_list, and takes the mapping's invalidate_lock when adding a
+  linked file to the list.
++ Renamed kvm_gmem_alloc_view() to kvm_gmem_alloc_file().
++ Only allow linking between compatible VMs (same VM type on x86).
++ Reject non-zero reserved fields and fds larger than INT_MAX.
++ Dropped the i_nlink increment, which had no matching decrement.
++ Take the inode reference before creating the linked file.
++ Added KVM_CAP_GUEST_MEMFD_LINK and gated the selftests on it.
++ Documented KVM_LINK_GUEST_MEMFD in Documentation/virt/kvm/api.rst.
++ Selftests: fixed the negative tests to exercise the intended checks,
+  added tests for out-of-range fds, non-zero reserved fields and VM type
+  mismatch, and made private_mem_migrate_tests work with in-place
+  conversion.
+
+[1] https://lore.kernel.org/all/cover.1691446946.git.ackerleytng@google.com/
+[2] https://lore.kernel.org/all/cover.1747368092.git.afranji@google.com/
+
+Ackerley Tng (4):
+  KVM: guest_memfd: Refactor out kvm_gmem_alloc_file()
+  KVM: guest_memfd: Add ioctl KVM_LINK_GUEST_MEMFD
+  KVM: selftests: Add tests for KVM_LINK_GUEST_MEMFD ioctl
+  KVM: selftests: Test transferring private memory to another VM
+
+Vishal Annapurve (1):
+  KVM: guest_memfd: Advertise support for KVM_LINK_GUEST_MEMFD
+
+ Documentation/virt/kvm/api.rst                |  50 ++++++
+ arch/x86/kvm/x86.c                            |  10 ++
+ include/linux/kvm_host.h                      |   1 +
+ include/uapi/linux/kvm.h                      |   9 ++
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../testing/selftests/kvm/guest_memfd_test.c  |  64 ++++++++
+ .../testing/selftests/kvm/include/kvm_util.h  |  18 +++
+ .../kvm/x86/private_mem_migrate_tests.c       | 118 ++++++++++++++
+ virt/kvm/guest_memfd.c                        | 150 ++++++++++++++----
+ virt/kvm/guest_memfd.h                        |   1 +
+ virt/kvm/kvm_main.c                           |  12 ++
+ 11 files changed, 407 insertions(+), 27 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/private_mem_migrate_tests.c
 
 
+base-commit: ad06cf5338bc5501bd989584db6dc71972bb436a
+-- 
+2.56.0.257.gf7497c7d27-goog
 
-在 2026/10/26 05:44, Waiman Long 写道:
-> Since the introduction of cpuset.cpus.exclusive in commit
-> e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
-> compute_effective_exclusive_cpumask() helper which is later renamed to
-> compute_excpus() is added to compute the effective xcpus of a partition
-> root. However update_parent_effective_cpumask() is not updated in all
-> proper places to use the new helper to check if a given cpuset should
-> remain a valid partition root. This can cause a cpuset to incorrectly
-> remain a valid partition root even if no effective xcpus is left.
-> 
-> Fix that problem by using compute_excpus() to compute the effective xcpus
-> into delmask in all cases except partcmd_disable, partcmd_invalidate
-> or partcmd_update with newmask set and use it for tasks_nocpu_error()
-> check as well as checking its emptiness. This enables us to catch invalid
-> partition root more accurately in update_parent_effective_cpumask().
-> 
-> In the case of partcmd_update with newmask set, the passed in new
-> effective xcpus value will directly be used in the tasks_nocpu_error()
-> check without relying on old data in the cpuset.
-> 
-> For the partcmd_update with NULL newmask case, the cpu exclusivity test
-> there is also relaxed to be performed only if exclusive_cpus is empty.
-> 
-> Some test case are added to test_cpuset_prs.sh for invalidating a
-> partition root due to its effective xcpus becoming empty as well as
-> making sure that an invalid partition can only be revived when exclusive
-> CPUs are available agin.
-> 
-> Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  kernel/cgroup/cpuset.c                        | 87 ++++++++++---------
->  .../selftests/cgroup/test_cpuset_prs.sh       | 11 +++
->  2 files changed, 56 insertions(+), 42 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index bbd44782d4bf..b850aba4d907 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1795,7 +1795,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
->   * update_parent_effective_cpumask - update effective_cpus mask of parent cpuset
->   * @cs:      The cpuset that requests change in partition root state
->   * @cmd:     Partition root state change command
-> - * @newmask: Optional new cpumask for partcmd_update
-> + * @newmask: Optional new effective xcpus for partcmd_update
->   * @tmp:     Temporary addmask and delmask
->   * Return:   0 or a partition root state error code
->   *
-> @@ -1810,11 +1810,11 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
->   * given back to parent's effective_cpus. 0 will always be returned.
->   *
->   * For partcmd_update, if the optional newmask is specified, the cpu list is
-> - * to be changed from effective_xcpus to newmask. Otherwise, effective_xcpus is
-> - * assumed to remain the same. The cpuset should either be a valid or invalid
-> - * partition root. The partition root state may change from valid to invalid
-> - * or vice versa. An error code will be returned if transitioning from
-> - * invalid to valid violates the exclusivity rule.
-> + * to be changed from effective_xcpus to newmask. Otherwise, effective_xcpus
-> + * will be computed and a valid partition will be invalidated if it is the new
-> + * cpumask is empty. The cpuset should either be a valid or invalid partition
-> + * root. The partition root state may change from valid to invalid or vice
-> + * versa.
->   *
->   * For partcmd_invalidate, the current partition will be made invalid.
->   *
-> @@ -1837,7 +1837,6 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  	int deleting;	/* Deleting cpus from parent's effective_cpus	*/
->  	int old_prs, new_prs;
->  	int part_error = PERR_NONE;	/* Partition error? */
-> -	struct cpumask *xcpus = user_xcpus(cs);
->  	int parent_prs = parent->partition_root_state;
->  	bool nocpu;
->  
-> @@ -1880,30 +1879,30 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  	if (!newmask && xcpus_empty(cs))
->  		return PERR_CPUSEMPTY;
->  
-> -	nocpu = tasks_nocpu_error(parent, cs, xcpus);
-> +	/*
-> +	 * Except for partcmd_disable and non-NULL newmask, use delmask
-> +	 * to compute the current effective xcpus value and use it for
-> +	 * tasks_nocpu_error check.
-> +	 */
-> +	if ((cmd != partcmd_disable) && !newmask) {
-> +		compute_excpus(cs, tmp->delmask);
-> +		nocpu = tasks_nocpu_error(parent, cs, tmp->delmask);
-> +	}
->  
->  	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
-> -		/*
-> -		 * Need to call compute_excpus() in case
-> -		 * exclusive_cpus not set. Sibling conflict should only happen
-> -		 * if exclusive_cpus isn't set.
-> -		 */
-> -		xcpus = tmp->delmask;
-> -		if (compute_excpus(cs, xcpus))
-> -			WARN_ON_ONCE(!cpumask_empty(cs->exclusive_cpus));
->  		new_prs = (cmd == partcmd_enable) ? PRS_ROOT : PRS_ISOLATED;
->  
->  		/*
->  		 * Enabling partition root is not allowed if its
->  		 * effective_xcpus is empty.
->  		 */
-> -		if (cpumask_empty(xcpus))
-> +		if (cpumask_empty(tmp->delmask))
->  			return PERR_INVCPUS;
->  
-> -		if (prstate_housekeeping_conflict(new_prs, parent_prs, xcpus, NULL))
-> +		if (prstate_housekeeping_conflict(new_prs, parent_prs, tmp->delmask, NULL))
->  			return PERR_HKEEPING;
->  
-> -		if (tasks_nocpu_error(parent, cs, xcpus))
-> +		if (nocpu)
->  			return PERR_NOCPUS;
->  
->  		/*
-> @@ -1915,16 +1914,14 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  		 *
->  		 * Warn if it is not the case.
->  		 */
-> -		cpumask_and(tmp->new_cpus, xcpus, cpu_active_mask);
-> +		cpumask_and(tmp->new_cpus, tmp->delmask, cpu_active_mask);
->  		WARN_ON_ONCE(!cpumask_subset(tmp->new_cpus, parent->effective_cpus));
-> -
->  		deleting = true;
->  	} else if (cmd == partcmd_disable) {
->  		/*
->  		 * May need to add cpus back to parent's effective_cpus
->  		 * (and maybe removed from subpartitions_cpus/isolated_cpus)
-> -		 * for valid partition root. xcpus may contain CPUs that
-> -		 * shouldn't be removed from the two global cpumasks.
-> +		 * for valid partition root.
->  		 */
->  		if (is_partition_valid(cs)) {
->  			cpumask_copy(tmp->addmask, cs->effective_xcpus);
-> @@ -1944,8 +1941,8 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  			goto write_error;
->  		}
->  
-> -		/* Check newmask again, whether cpus are available for parent/cs */
-> -		nocpu |= tasks_nocpu_error(parent, cs, newmask);
-> +		/* Check newmask whether cpus are available for parent/cs */
-> +		nocpu = tasks_nocpu_error(parent, cs, newmask);
->  
->  		/*
->  		 * partcmd_update with newmask:
-> @@ -2000,7 +1997,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  		/*
->  		 * partcmd_update w/o newmask
->  		 *
-> -		 * delmask = effective_xcpus & parent->effective_cpus
-> +		 * delmask = newly computed effective xcpus value
->  		 *
->  		 * This can be called from:
->  		 * 1) update_cpumasks_hier()
-> @@ -2012,7 +2009,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  		 * A partition error happens when parent has tasks and all
->  		 * its effective CPUs will have to be distributed out.
->  		 */
-> -		if (nocpu) {
-> +		if (nocpu || cpumask_empty(tmp->delmask)) {
->  			part_error = PERR_NOCPUS;
->  			if (is_partition_valid(cs))
->  				adding = cpumask_and(tmp->addmask,
-> @@ -2025,38 +2022,44 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  				cpumask_copy(tmp->addmask, cs->effective_xcpus);
->  				adding = true;
->  			}
-> -		} else if (is_partition_invalid(cs) && !cpumask_empty(xcpus) &&
-> -			   cpumask_subset(xcpus, parent->effective_xcpus)) {
-> +		} else if (is_partition_invalid(cs)) {
->  			struct cgroup_subsys_state *css;
->  			struct cpuset *child;
->  			bool exclusive = true;
->  
->  			/*
->  			 * Convert invalid partition to valid has to pass the
-> -			 * cpu exclusivity test as well as the housekeeping
-> -			 * check.
-> +			 * cpu exclusivity test when cpuset.cpus.exclusive is
-> +			 * empty as well as the housekeeping check.
->  			 */
->  			if (prstate_housekeeping_conflict(cs->partition_root_state,
-> -							  parent_prs, xcpus, NULL)) {
-> +							  parent_prs, tmp->delmask, NULL)) {
->  				part_error = PERR_HKEEPING;
->  				goto write_error;
->  			}
-> -			rcu_read_lock();
-> -			cpuset_for_each_child(child, css, parent) {
-> -				if (child == cs)
-> -					continue;
-> -				if (!cpusets_are_exclusive(cs, child)) {
-> -					exclusive = false;
-> -					break;
-> +			if (cpumask_empty(cs->exclusive_cpus)) {
-> +				rcu_read_lock();
-> +				cpuset_for_each_child(child, css, parent) {
-> +					if (child == cs)
-> +						continue;
-> +					if (!cpusets_are_exclusive(cs, child)) {
-> +						exclusive = false;
-> +						break;
-> +					}
->  				}
-> +				rcu_read_unlock();
->  			}
-> -			rcu_read_unlock();
->  			if (exclusive)
-> -				deleting = cpumask_and(tmp->delmask,
-> -						xcpus, parent->effective_cpus);
-> +				deleting = !cpumask_empty(tmp->delmask);
->  			else
->  				part_error = PERR_NOTEXCL;
->  		}
-> +		/*
-> +		 * When both cs and parent remain valid, parent's
-> +		 * compute_partition_effective_cpumask() call would have removed
-> +		 * cs's effective_xcpus from the parent's effective_cpus. So
-> +		 * there is no need to adjust parent's effective_cpus here.
-> +		 */
->  	}
->  
->  write_error:
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index d04aad697b96..8bdda955b4a7 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -359,6 +359,8 @@ TEST_MATRIX=(
->  								       A1:P0|A2:P1|A3:P2|B1:P1 2-4|3"
->  	"  C1-6:P1 C3-6:P1 C5-6:P1 .      .      P2      .      .    0 A1:1-2|A2:3-6|A3:5-6 \
->  								       A1:P1|A2:P2|A3:P-1 3-6"
-> +	"  C1-6:P2 C3-6:P2 C3-4:P2 .      .     C5-6     .      .    0 A1:1-4|A2:5-6|A3:5-6 \
-> +								       A1:P2|A2:P2|A3:P-2 1-6"
->  	" C1-4:X2-4 C2-4:X3-4:P1 C3-4:X4:P2 \
->  				   .      .      X5      .      .    0 A1:1-4|A2:2-4|A3:3-4 \
->  								       A1:P0|A2:P-1|A3:P-2 ."
-> @@ -427,6 +429,10 @@ TEST_MATRIX=(
->  	# cpuset.cpus is allowed, but those extra CPUs are ignored.
->  	"  C2-3:P1   C3:P1  .      .      .     C2-4    .      .     0 A1:|A2:2-3 A1:P1|A2:P1"
->  
-> +	# A child cannot recover until its exclusive CPUs are available again.
-> +	" CX1-4:P1 CX3-4:P1 .     .     X1-2     .      .      .     0 A1:1-2|A2:1-2|XA2: A1:P1|A2:P-1"
-> +	" CX1-4:P1 CX3-4:P1 .     .  X1-2:X1-4   .      .      .     0 A1:1-2|A2:3-4|XA2:3-4 A1:P1|A2:P1"
-> +
->  	# Taking away all CPUs from parent or itself if there are tasks
->  	# will make the partition invalid.
->  	"  C2-3:P1   C3:P1  .      .      T     C2-3    .      .     0 A1:2-3|A2:2-3 A1:P1|A2:P-1"
-> @@ -503,6 +509,11 @@ TEST_MATRIX=(
->  	"  C1-3:P2 C2:P2    .      .       .     P1     .      .     0 A1:1-3|A2:2 A1:P2|A2:P-1 1-3"
->  	"  C1-3:P2 C2:P1    .      .       .    C2-3    .      .     0 A1:1-3|A2:2-3 A1:P2|A2:P-1 1-3"
->  
-> +	# A middle isolated parent shrunk below coverage: the released CPUs of
-> +	# an invalidated child stay isolated as a higher ancestor still covers them.
-> +	" CX0-4:P2 CX2-4:P2 CX3-4:P2 .     .     X2     .      .     0 A1:0-1,3-4|A2:2|A3:2 \
-> +								       A1:P2|A2:P2|A3:P-2 0-4"
-> +
->  	#
->  	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
->  	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
-
-Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Tested-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-
-Thanks,
-Guopeng
