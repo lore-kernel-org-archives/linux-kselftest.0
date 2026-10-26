@@ -1,66 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.159
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.162
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792992990;
-	b=qD6ahdiux2v1myR9UksDbUJv/oMx0jRd3Oq0zgs8Gs2zOCu4yLRtTakjcM1OfeLIFa2Z
-	 cLWzfP6QcvwCPySNBED0ehaSC/Rgphh4WYeOYlCf/gUjTDY+hDTqFTNlAw4QxSBYlMBTk
-	 Ni1xtG8imfUA1JEEdXMlPBZeBGU61HjxKqM3LzyTOT6skn2cW8my2h5iFmcb7P+QlYkpO
-	 7BSn8bv+dW1SZKxKUdrjUtOfUDlOGfi0p7e8Al5LMrcX7cXr52tWq6KEm/DBLIJcovsil
-	 bnC2x+tHdA4QPaPlwqgJi6LgBVPXC73ATwv7Pc9HBUdJajC71AgWGTYINVTv4Wy+G/g==
+	t=1792993605;
+	b=TPnc4z7bdCbAC9E3U1cVQvBW1Hk0E5k8du+btHpDvdnhI+Oh25NkObNxjetCfKSc8C/G
+	 HSpneI7YZlvMrxhjH+KljaimwON8WNPPpCO6Mj03nGPni81WzNxieOs2MgJMkI3xdVoh4
+	 Hvn8slsRtShT0aGABk/WoefPjL3eaXhTahbir6XJq0s84fMb+H6vzdwGSpvH25KRV4wcT
+	 w/AMVibIKo564HN+4ehnDcpYiUJp8gmYZN7EM72DWP2MrTP37RrourA02HCC9u4r9OUt2
+	 sN5/7CThzW12iEgngaKPCuy92dqlQiDyJWSMUzPCHeJMzQv1lsUCxA9Tu0TZ+bB1A7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792992990;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792993605;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=4FzJ80Q5D/VPRLbKelDy3UZsEYnGkuTYp52tkB+Plws=;
-	b=GRZR9beItgh9ieFSMDXawHI5PJLnOL8nyoRiDEWHFIHNXkDGI4s8x/pV9CeRafdXsSsu
-	 sTUkpSQ8sCiH5rqKP/qtRpeclKRvhMU29wuPcYE8kL1Wh6I7Xrg8oY38w0coCkmik1F4M
-	 FcZQfGudZD+ZoSj8ByE23DvEzJrPEVyIsFjPormN0jEknYopc6eL49vEJ2XXi9RXJfQ1v
-	 TDSDLKuYRaWJBdYEoW4Ne/ShA1HxJ0C8wNoKxk9asF8bAbKTJfyVMtR09+X3tLYtQc6rn
-	 dcOiiTrPr3MGhx+OIIUv5O8pNzFxZXWokNrBnO3prQS2ZEKI/9z4XSUP6Xeuxx9MvTw==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=uQLlasw/IxJ+4pKyXG1ZY91FKtsq+8znejKtb+FOn8Y=;
+	b=yNNxwccofLTYDZ9f9rhsK+rFjWmNJnt+LC8glg+ar3icvt51fIXN6Pny0L5UXeKEcgYK
+	 VSUntydnPcZGBtNWYxgY92WqxWKh2iUSwacHXPOaIAbqo6hf1tARhU8rOmXRG04i+RZHF
+	 JKUE32js7XjwU1jHluEt6kadMDRKLYgg/vgNqpKSsduMkBpKXsTrQaLukZfb/y9d0HkdZ
+	 Uy8Xo0v0ZTt4bK5NMynbRW20hwcTvT/udrT8XFDFOQGWmYFdoWkgNPAp1ggXP2qP9rIds
+	 cemwsLpBVBFjkVJBQkV1EzQiZBXX1eu8c4/o5FHYeN/kkbOevuKM8/iT5nmG9p0gG1g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tRRbi7yy;
-	arc=none smtp.remote-ip=91.218.175.159
-Received: from mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
+	arc=none smtp.remote-ip=95.215.58.162
+Received: from mta1.migadu.com (out-162.mta1.migadu.com [95.215.58.162])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA25606A320
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 05:36:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DBA25606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448CE606A321
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 05:46:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 448CE606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tRRbi7yy
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=IKpBcbwGcEt6VGnkPgPXGL4icYZfO5gorFdDU5Rf/FY=;
+DKIM-Signature: a=rsa-sha256; bh=hu/DyBoO3+WUq6/3FILwmjguLln6byz8HGIo9SgKR7s=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792992985; v=1; x=1793597785;
- b=tRRbi7yy8SJo8ciJTUdPXbaOm+5p5NTFyG0G676n7F0K2cId8wczbUoPtmsLOROASobAwUoq
- 1O2iARQbikjoDwAd3Z5lWPf+teoXg1euUsokLpxKB4Ve44bMbNrDiL2ENCCELbgvWfnhaRv8HF7
- dgcXA3kHOavFi6tVCCVQtyJg=
+ t=1792993602; v=1; x=1793598402;
+ b=nonwGZ5UnOoM1ju14GBwGwKx5rfLK+IMs5458HfJv/MzSJyIWckVG1Jfy101j4k6F69cFHmH
+ zliub99k3+o5LDamIAL9AACQjVO0/DxNmWGrI2+Z2kGbqIyimIbMHJGcedvX/2LvVcSDXWy7vAn
+ x9A6CCflT/P/bWoEEF4ahIwc=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id c7a288749cf7c812;
-	Mon, 26 Oct 2026 05:36:25 +0000
-X-Mizu-Trace-ID: c7a288749cf7c812
+Received: by smtp.migadu.com with ESMTPS id 8956af835298cb35;
+	Mon, 26 Oct 2026 05:46:42 +0000
+X-Mizu-Trace-ID: 8956af835298cb35
 X-Migadu-Flow: FLOW_OUT
-Date: Mon, 26 Oct 2026 13:36:13 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Hannes Laimer <h.laimer@proxmox.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
-	David Ahern <dsahern@kernel.org>, Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 0/2] vxlan: keep reserved_bits on changelink
-Message-ID: <at7mzU0z89CVdjki@fedora>
-References: <20261023-b4-vxlan-changelink-gbp-v1-0-f0d13951c09b@proxmox.com>
+Message-ID: <485c2661-cf99-406f-8881-094ab28795cf@linux.dev>
+Date: Mon, 26 Oct 2026 13:46:37 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,33 +55,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261023-b4-vxlan-changelink-gbp-v1-0-f0d13951c09b@proxmox.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next 2/6] cgroup/cpuset: Properly compute effective xcpus
+ in update_parent_effective_cpumask()
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261022031643.1351877-1-longman@redhat.com>
+ <20261022031643.1351877-3-longman@redhat.com>
+ <c65208d9-aba6-4e9a-affa-4f7cd8794a0c@linux.dev>
+ <a3caf0f6-da89-4b5c-b80f-3baf6c82a2c4@redhat.com>
+ <776306f8-2200-486b-8c43-2b5fd9b5eeb5@linux.dev>
+ <8c8f27eb-26af-406e-9766-537dbe9c173a@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <8c8f27eb-26af-406e-9766-537dbe9c173a@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 23, 2026 at 01:14:26PM +0200, Hannes Laimer wrote:
-> Currently reserved_bits are reset on every changelink. This leads to
-> packets using extensions that were enabled on creation being dropped
-> after a changelink. The first commit describes the problem and
-> solution in more detail and the second just adds a selftest for this.
+
+
+在 2026/10/24 04:45, Waiman Long 写道:
+> On 10/22/26 9:53 PM, Guopeng Zhang wrote:
+>>
+>> 在 2026/10/22 23:00, Waiman Long 写道:
+>>> On 10/22/26 9:45 AM, Guopeng Zhang wrote:
+>>>> Hi Longman,
+>>>>
+>>>> 在 2026/10/22 11:16, Waiman Long 写道:
+>>>>> Since the introduction of cpuset.cpus.exclusive in commit
+>>>>> e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2"), a
+>>>>> compute_effective_exclusive_cpumask() helper which is later renamed to
+>>>>> compute_excpus() is added to compute the effective xcpus of a partition
+>>>>> root. However update_parent_effective_cpumask() is not updated in all
+>>>>> proper places to use the new helper to check if a given cpuset should
+>>>>> remain a valid partition root. This can cause a cpuset to incorrectly
+>>>>> remain a valid partition root even if no effective xcpus is left.
+>>>>>
+>>>>> Fix that problem by using compute_excpus() to compute the effective xcpus
+>>>>> into delmask in all cases except partcmd_disable and partcmd_invalidate
+>>>>> and use it for tasks_nocpu_error() check as well as checking its
+>>>>> emptiness. This enables us to catch invalid partition root more
+>>>>> accurately in update_parent_effective_cpumask().
+>>>>>
+>>>> I re-tested the repro from the link below on top of this series
+>>>> (applied on cgroup/for-7.4-fixes), and it still fails:
+>>>>
+>>>>     https://lore.kernel.org/all/20261010075947.333549-3-guopeng.zhang@linux.dev/
+>>>>
+>>>>     cd /sys/fs/cgroup
+>>>>     echo +cpuset > cgroup.subtree_control
+>>>>     mkdir A
+>>>>     echo 0-7 > A/cpuset.cpus
+>>>>     echo 0-7 > A/cpuset.cpus.exclusive
+>>>>     echo root > A/cpuset.cpus.partition
+>>>>     cat A/cpuset.cpus.partition
+>>>>     echo 1 > A/cpuset.cpus.exclusive
+>>>>     cat A/cpuset.cpus.partition
+>>>>
+>>>> The last command still shows "root invalid (Parent unable to distribute
+>>>> cpu downstream)".
+>>>>
+>>>> In this case compute_excpus() returns the stale user mask unchanged.
+>>>> user_xcpus() is gone from update_parent_effective_cpumask(), but the
+>>>> dependency just moved one level down: the new code calls
+>>>> compute_excpus(cs, tmp->delmask), and its first line is
+>>>>
+>>>>     cpumask_and(excpus, user_xcpus(cs), parent->effective_xcpus)
+>>>>
+>>>> Here user_xcpus(cs) is cs->exclusive_cpus, which still holds the old
+>>>> 0-7 when compute_excpus() runs: update_exclusive_cpumask() publishes
+>>>> cs->exclusive_cpus only after partition_cpus_change(). Nothing corrects
+>>>> it either - the sibling trim is skipped as exclusive_cpus is non-empty,
+>>>> and for a direct child of the root cpuset the intersection with
+>>>> parent->effective_xcpus is a no-op. So the stale 0-7 mask still reaches
+>>>> tasks_nocpu_error() and PERR_NOCPUS is set again. Please point it out
+>>>> if I got the analysis wrong.
+>>>>
+>>>> I have rebased my fix on top of this series and the partition recovers
+>>>> correctly with it applied. Should the fix be folded into this patch,
+>>>> or is there a better way to fix it? Happy to hear your thoughts.
+>>> You are right. My patch series won't fix this particular issue. However, converting an invalid partition back to a valid one is done on a best effort basis. There is no guarantee that it will always happen. Just echo "root" to "cpuset.cpus.partition" again will make it valid again. So it is not a real bug from my point of view. It is just a nice to have feature.
+>>>
+>> Thanks for the explanation. This helps me better understand the
+>> intended behavior of partition recovery.
 > 
-> Signed-off-by: Hannes Laimer <h.laimer@proxmox.com>
-> ---
-> Hannes Laimer (2):
->       vxlan: keep reserved_bits across changelink
->       selftests: forwarding: vxlan_reserved: add gbp changelink test
-> 
->  drivers/net/vxlan/vxlan_core.c                           |  2 +-
->  tools/testing/selftests/net/forwarding/vxlan_reserved.sh | 15 +++++++++++++++
->  2 files changed, 16 insertions(+), 1 deletion(-)
-> ---
-> base-commit: 734bef548a96e8774d6eef5dfa2026c6edc4e80b
-> change-id: 20261023-b4-vxlan-changelink-gbp-de5e81eed8d1
-> 
-> Best regards,
-> --  
-> Hannes Laimer <h.laimer@proxmox.com>
-> 
+> I did find the reason why your test case isn't working. I have made some adjustment in patch 2 which should make your test case work now with the v2 series.
 > 
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Thanks for looking into this issue again.
+
+Cheers,
+Guopeng
+
+
