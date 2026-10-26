@@ -1,79 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792975014;
-	b=e62j9UY1hTr1GjIjVlL3XKP1eAJXUE6ycHlOOloXhhzmnHm6tBE0tVDAljT3NzftLjCZ
-	 YN988E8X0hJGPrBDEluINzZcQOoEj5mXVchDFyl4p5Dn+w3TijgljY/vr8gIhzh1pJgtb
-	 4xQznlonjMb7Fc0jKL/PRUmrTw8HttEPlfKNnt1Cai/5LlEmg+bxj0291+j2NzBVWpFhx
-	 KjHYfQ5miPmeZHLN7Oz72KLsufgte9HHrmMPnmuXrA2iZf6ii5cibZlNmoIzsZr3Z6dKL
-	 8ysRRCxrLy/UsqDflVDfUl+VPzsq23ihoX2w50prmj2A/YoPM8+CqsiVh80ZAEKehjg==
+	t=1792977042;
+	b=kVRxCV4CsqcMsQbSTzz4xC5THCyO+Butf1cjD9QwsnUJZ1xKQw5j/bhlrhgCdOtodvWU
+	 f/vyWHFRACdm9X7qTavaLIj3K4wV62swUixu3XPAHps2mwJICpqwbAGsoyZCNUB7sHWZy
+	 O88/UhfGCE17GPlGz4OJWaW/wHRXxobYelfqBZZSY2u2NxXCTinvImuCPKHCQ5w8pz5e6
+	 Xs/PMLLtHlCZVHDXwCFFggpj+fbUBI4mXM4i94abemUKF7MvSw9s/v6MQtwFV005Ikq9n
+	 U1xYw1rJZWhIjl/ZtG+8Lp6zDObRn0iNydEgiqfJvG6Uh9PrnsOp3VReJykn0G4nFxw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792975014;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=jEfZ5R4FSozjLO0Zv56VX5Utg/dxxI39TSzbY5TNJdM=;
-	b=0LO+99orJMHsPvu4boGOfU1+oVaRVMsnAMD7rylt2HFz/d/zndy4NnQUFWo6hjsyiyBa
-	 oF1c9FsutRlpsNYP+wWh+yBotcaQAkcTMWOhLzKppBKPOAI9KuSFxiClnWcuWjgwTKRlB
-	 hWZuyezsOq6HQgPPsraKF0m1FQSnKHg1d+FTfgxMb21VyCCg11qpI0j4L0H1O0iX3FlEQ
-	 1lBkIUzNPyaa1Jv0gcxZno7Gq/4YmMli6/CjqkdFODGt4PLHvIYCVevQM/GaGrMsGew5U
-	 g6FyrczSTOut375JGjTKgxYcXzlMkz7FXwjZ7KhPfjBmW+69ETp4H2lA9UStJqMLAoA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792977042;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=serC0Qr3v1AkQ41cs9qFoAlejUw/dVTynlDISylCuz8=;
+	b=g0HevzAcb5k/dW5H9gsZsj9H74uze41r8IyXGT3FrK9fbgMsQwlZoeB7c3/jw+SRwaNT
+	 VXdOvV1RsnjrvDrFeVTlBg4dZoKYxPeDtphdneKt/mSLNc/b+EJgPrgVMuqqs6dna8LuW
+	 1Vh0UnoDhRxUGrOfikAcCVMv4P5osca6SctDLZnrUHd2tvnP174W2AaNHhFGxwOpL3T/+
+	 vEuxjnt4P7oYuqmxIHBWpa5kLe+/KhVb+areRoRg29MuYOUNmQp55FPYbnzugJjk8lCOP
+	 ukIzpM+Ure6KGOGrR7EerBKGomFKLmkOwEp5IfqqOvws2WaopKRzamxEY8pBXogLE3w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M5sVcatE;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0DA606A333;
-	Mon, 26 Oct 2026 00:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M5sVcatE
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792975013;
-	b=yq0vq6HJ24geOgAD1LuBi07GJ5b1M+BIz1XoW9CDoBXSQiGHHdCn6SkCmfCJMetX4QaL
-	 GfjXHediy2dNA5SygK8DroUjz/gnSpb4Mnnvih8U5OXwbGzMDeZDTdfKOBiHo+mO54/0v
-	 SiFcSV7vK51W26KpjPB5WlvHXElVnBKGSx/ojLYs/RFxFB5go9/fB4X2QIGHIYDpC6/rX
-	 CaVHdGpP1/ZunBL5/o1KS+dRc5RLVcjDOQT/HQKaEPnq0vL/LF+7wx9xW0xzrrVEXKa1s
-	 1XmJqMVSeXRXcRxp7Hq1TsVKGJTebWs2ZEyOo4tToqBnAucs8+KP7kZFuyC/ml6EcjQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792975013;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=jEfZ5R4FSozjLO0Zv56VX5Utg/dxxI39TSzbY5TNJdM=;
-	b=dBdxqq9NXw1VOUKK4qpt/I+0lc6IWSR24ZMTbqj6RkRzw9CLkxZX1eFZDA+90BVn0GMW
-	 Q9cLOMwk5DN2k3Evc+33s1i8jY3+Hix/lpNW2CDeIjaVgdARxd6UfJ6W/7O4m7eQRPZl7
-	 F0KsGNbF/c4WpRdhGVer86boiz4Y+Q+CoNBPMDQeQVi4wtBpo9SAMFDhn4AwnUpQ0FuZ0
-	 06vUW3UjP3V+QOPaRza6CGsUV2pb6aXm5p0+gFTbsNrktnPMYmLqwg4cf6xeRYMPIwP7p
-	 gwChPkGK6VbgTJOMGCO8zpCBN5eht2tWyo5bi0tsbL1Y6Mp83opNbISdaaCQ3XI27VA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=br+Ue3PJ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C931C1F01825;
-	Mon, 26 Oct 2026 00:36:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792975013;
-	bh=jEfZ5R4FSozjLO0Zv56VX5Utg/dxxI39TSzbY5TNJdM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=M5sVcatEIZ2QvoKm5g1gGwF+QGjnksRy9D6rrsbVx4El4yZLqpbjCHc/z3VbJ5E/W
-	 ElvGjuQ5EmnsQnPon8k0IoIlgiWjNEqOFYMS+6o2f1Q2uTT/N0omO1Fnz1NNXWtScG
-	 kl4adT7eKE7vQ9IXTiQDxIB9mKsovJq1SQwFlwzsKSIO0qhLTevlp/1SVJCBMMT8CD
-	 3VzhuC3+OdY37mHymYuzms0Q3an3SUCOsvTy5A6jhIFzzMl+8ybsbra5TuKE7u8vbJ
-	 leXaOxD7YMMf+TnDzEGcYSItMlwfvSW902iH1q3LyNiL9+Qg2SXg/sXKN6Kia4cRum
-	 UCMmfXMe7+cHA==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 33FAF44B35;
-	Mon, 26 Oct 2026 00:36:51 +0000 (UTC)
-From: Martin Belanger via B4 Relay <devnull+martin.nvme.dev.gmail.com@kernel.org>
-Date: Sun, 25 Oct 2026 20:36:48 -0400
-Subject: [PATCH RFC net-next 1/5] tls: add HKDF-Expand-Label for the TLS
- 1.3 key schedule
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE46606A31A
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 01:10:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8DE46606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=br+Ue3PJ
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b45f9ec1ceso585214a12.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 18:10:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792977040; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Put92pa8zwJBJ0MmQQsLsXipQ55YE03+juRTW4YniZw6x7n/XsFla32MGaCDdcJC82
+         SkdSIKOvadBhF9GfcL2mP2bBX9sUzvey1DjR3fx4G9LMUmydNxvekpmhSMIHgLT3t5LM
+         PRyXoZBGJt7aHBD28aEYemITq3P2JqRYufJMArxl8XOCCG24QECBqFuIwxRaB4jSFErB
+         RgP2/QeNpoazPxmv4PM7++fElqSQPxzIAerF/lj2UpGkGWUMjy6eVO/YAfXjKsOj1aGb
+         0in1CJR42wGzDQtCT3PdH+ANytwgUIOitHiilAdgZ/7edX2yduvgGTtApROZrY6sgjzv
+         TGFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=serC0Qr3v1AkQ41cs9qFoAlejUw/dVTynlDISylCuz8=;
+        fh=elwkcZ+AF1w498+e23eRN0mNQmKqnKJvEUc0Su2/kDw=;
+        b=WReDejeTkBqpRGVr2qjE6S6CpgjGyiGE3RjsUm/zsba57kbHbv4DEOMeXQBNgcIzLD
+         iAT2wFBMmoNvCrf+HHyzRknOvT/4/I4N9CTRQVHwTYD+dziWU35wFk1RzCrm/HXL6Bsk
+         IGDYUoF3rvf9odMqSpdy8G1UoXSprb5tpk4ccE4iswi67CKR+uuSNOlR1wN1528Fs+3h
+         rQLBYbrnFPNHQuB+YkHQn9u8KYSEoKLsxALDG2+lgMhyYUgmjbzJicoCbPWUAY88Ib81
+         C3TUDjx5cqGIIS5MnIYPmPYtcEYXwgByCSzln2HYYankszMC31x0qkzPWbPQfRymgyIf
+         EQSQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1792977040; x=1793581840; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=serC0Qr3v1AkQ41cs9qFoAlejUw/dVTynlDISylCuz8=;
+        b=br+Ue3PJQpGcd8GInxLVZG4vHJuACWu0SsJliX3CpZFvh6IeACLKqGSTl4zZUqfK4U
+         om/IB9LbJu4SRvZxvuTXN/WYzHNKrXPTjz4KtYTVtr+fgDfKwYk17ao/DGU88cKmycgQ
+         1Cq1/rfphPX9oaOfjozzj8oWVq6eBbKrKft3iPbLNcalnTwRkNFxOU9O85Jir1/ZGV2B
+         GWri79rKSD6Nb8bgfhy5LdvT6JFpLzJ73K85B9jc2XszHrSE+NdSOFLdPKqqoHiV067l
+         cPq57ySVwn1y3o569b4y7LmnIRoaPELdWUt+W7A/y0mM8BnWgq52jvb5jTl3Ui4xN1Z5
+         dbpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792977040; x=1793581840;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=serC0Qr3v1AkQ41cs9qFoAlejUw/dVTynlDISylCuz8=;
+        b=PVVdXSNsHDcwxgM7ShVKIVUdm9XQGQegl5rN/DZi55Jo8mchm2V+NeRY+iXbPOQDPs
+         C2P6dFG8iEXoWjelT7CQUN36QZfYoIezQaWm9CwIXCgqAki5dmcqjy69LRNOpPRi167s
+         /AendyVsAGjRjvdZ1xXL7pnByzbFsMPKg9/SsNN8nl857JbG7AlsF/HnY129IBRVT+DF
+         1z3/A+i06jxcf35EjbSQ8zyum7yc1DU+ruUYLUI5BWmu/9SOL5TE5IBaFiwm7otq0Knt
+         FftwHdLU0xgnQm5SigduCJ+paZ8ucA1KbDtoXlCO2cBTeGdYV71YH3QrlYkYZqJUxRLx
+         rL1A==
+X-Gm-Message-State: AFq9FYLy8mD6x8zl36uXOoHewUUeYNuVqAOub+1kAx2v0iVWFu2QcpvO
+	ENMobDPuuqmKdtDZf0YvWNt7YIiNmMrj6HbblpbAEQbSPD6yRG75ZBdp0KOcy71Xk+sTvK8j+ta
+	v1hfNcEsEXzaV/HRNcDZ5blPRr3AbOyH6Rlp32AH7pw==
+X-Gm-Gg: AYBFou0Pz2oKvhysoIW4oxbEEJNx9ErpvdVQgRY+h1JGuh5VrhCR6lN8Jg6snuDWDFj
+	DtldDaosCNSBBiS8FpXFjwpNVEqI234lXyAwDackNKwFnIFRahzB+uGQnQrhsriK+F3BlOB8UQr
+	iqDUCJ7uz1bkHK6VOfO3Y3BbGSc3/v4oakeW88yBfMTiwJ2om8BkEGw99cRO+dUdDADz+WyCw4T
+	r4/LxLCcR3QreQ0aZhaV7jK+1Q5J3+7HdNZlvogM3op/hEuoOmUB67WyfpLAlHlb0wjv6LrbYiQ
+	GBYnPCkgQ2vzDu3AKRo1GbIBghRLEOjHQIBqwjEd9vGoiFsfHMM8uBwZUGry7TBXCirTJCzRmfx
+	6jpLdBJ6aUc8+Zhe37ikRMpz8xCiqFq7ExQomzZB6yqCcqORNFuEvXYueEbcai7DZ6yp2/Q==
+X-Received: by 2002:a05:6402:440b:b0:6ac:62c2:bd39 with SMTP id
+ 4fb4d7f45d1cf-6b442fe12famr6368009a12.10.1792977039532; Sun, 25 Oct 2026
+ 18:10:39 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,185 +103,412 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261025-keyupdate-rfc-v1-1-60b7756eccbd@gmail.com>
-References: <20261025-keyupdate-rfc-v1-0-60b7756eccbd@gmail.com>
-In-Reply-To: <20261025-keyupdate-rfc-v1-0-60b7756eccbd@gmail.com>
-To: John Fastabend <john.fastabend@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Hannes Reinecke <hare@kernel.org>, Chuck Lever <cel@kernel.org>, 
- kernel-tls-handshake@lists.linux.dev, linux-nvme@lists.infradead.org, 
- Alistair Francis <alistair.francis@wdc.com>, 
- Martin Belanger <martin.belanger@dell.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792975010; l=5260;
- i=martin.nvme.dev@gmail.com; s=20261014; h=from:subject:message-id;
- bh=KFb/WEz4iFeKmXNASo0mrUcGnSDIwkKN7bp4a4n7vAw=;
- b=11as8MymhIqjTUV33YbNlHSCn+8eFNAFoLHlPaUSFZLiwaVGnlI1Z9yvksdSX6rBSU1CsePy0
- rhKPHLDxLE+A1fWltSiJWemh4K40WlemrBL0FOyyZ6QFBQjzIcki8Qp
-X-Developer-Key: i=martin.nvme.dev@gmail.com; a=ed25519;
- pk=4K+XXetGK35w2LzRRddd/bbHawZU222BN+YZRuSpN+k=
-X-Endpoint-Received: by B4 Relay for martin.nvme.dev@gmail.com/20261014
- with auth_id=1176
-X-Original-From: Martin Belanger <martin.nvme.dev@gmail.com>
-Reply-To: martin.nvme.dev@gmail.com
+References: <20261020144710.4154339-1-pasha.tatashin@soleen.com>
+ <20261020144710.4154339-2-pasha.tatashin@soleen.com> <atsMZW4ChOWj7Lqv@kernel.org>
+In-Reply-To: <atsMZW4ChOWj7Lqv@kernel.org>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Sun, 25 Oct 2026 21:10:02 -0400
+X-Gm-Features: AclHuK-SGyJEu7JWPJQ5FgiFjB9NPuO2-XlJh__utMnCfsTc4KvmMW8PdPmX4kI
+Message-ID: <CA+CK2bD_=gwB-py6U3Y9pdc7RRoACeK9cqyHo65Q2ZKTyKaC2w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl to
+ freeze sessions early
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org, 
+	akpm@linux-foundation.org, linux-mm@kvack.org, vipinsh@google.com, 
+	linux-kernel@vger.kernel.org, dmatlack@google.com, kexec@lists.infradead.org, 
+	pratyush@kernel.org, graf@amazon.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Martin Belanger <martin.belanger@dell.com>
+On Fri, Oct 23, 2026 at 3:27=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+te:
+>
+> On Tue, Oct 20, 2026 at 10:47:03AM -0400, Pasha Tatashin wrote:
+> > Currently, LUO sessions are frozen automatically only inside the
+> > reboot(LINUX_REBOOT_CMD_KEXEC) pathway, where luo_session_serialize()
+> > iterates through all outgoing sessions under global write locks and
+> > freezes them serially during shutdown. Allowing userspace to decide whe=
+n
+> > to freeze a session once it is done with it (and to freeze multiple
+> > sessions in parallel, since luo_session_freeze() only acquires the
+> > per-session mutex) avoids postponing this work to kexec shutdown and
+> > reduces blackout time.
+> >
+> > Introduce LIVEUPDATE_SESSION_FREEZE on session file descriptors to free=
+ze
+> > a session early. The ioctl runs .freeze() across all preserved files in=
+ the
+> > session and serializes their metadata. Once frozen, no additional files=
+ can
+> > be added to the session, and subsequent freeze calls return -EBUSY. Fre=
+eze
+> > is only valid on outgoing sessions and returns -EINVAL on incoming ones=
+.
+> >
+> > During kexec, sessions that were already frozen early are skipped, whil=
+e
+> > sessions that did not invoke this ioctl auto-freeze as before. If an
+> > early-frozen session is released before kexec, its files are rolled bac=
+k
+> > via .unfreeze() before being unpreserved.
+> >
+> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > ---
+> >  include/linux/liveupdate.h       |  3 +-
+> >  include/uapi/linux/liveupdate.h  | 25 ++++++++++
+> >  kernel/liveupdate/luo_file.c     | 73 +++++++++++++---------------
+> >  kernel/liveupdate/luo_internal.h |  9 ++--
+> >  kernel/liveupdate/luo_session.c  | 82 +++++++++++++++++++++++++-------
+> >  mm/memfd_luo.c                   |  5 +-
+> >  6 files changed, 134 insertions(+), 63 deletions(-)
+> >
+> > diff --git a/include/linux/liveupdate.h b/include/linux/liveupdate.h
+> > index 6051abc0612c..851692571e13 100644
+> > --- a/include/linux/liveupdate.h
+> > +++ b/include/linux/liveupdate.h
+> > @@ -59,7 +59,8 @@ struct liveupdate_file_op_args {
+> >   *                compatible with the given file.
+> >   * @preserve:     Required. Performs state-saving for the file.
+> >   * @unpreserve:   Required. Cleans up any resources allocated by @pres=
+erve.
+> > - * @freeze:       Optional. Final actions just before kernel transitio=
+n.
+> > + * @freeze:       Optional. Prepares final state before kexec (via
+> > + *                LIVEUPDATE_SESSION_FREEZE or during reboot).
+> >   * @unfreeze:     Optional. Undo freeze operations.
+> >   * @retrieve:     Required. Restores the file in the new kernel.
+> >   * @can_finish:   Optional. Check if this FD can finish, i.e. all rest=
+oration
+> > diff --git a/include/uapi/linux/liveupdate.h b/include/uapi/linux/liveu=
+pdate.h
+> > index 4043d4038712..1644c502521e 100644
+> > --- a/include/uapi/linux/liveupdate.h
+> > +++ b/include/uapi/linux/liveupdate.h
+> > @@ -60,6 +60,7 @@ enum {
+> >       LIVEUPDATE_CMD_SESSION_RETRIEVE_FD =3D 0x41,
+> >       LIVEUPDATE_CMD_SESSION_FINISH =3D 0x42,
+> >       LIVEUPDATE_CMD_SESSION_GET_NAME =3D 0x43,
+> > +     LIVEUPDATE_CMD_SESSION_FREEZE =3D 0x44,
+> >  };
+> >
+> >  /**
+> > @@ -236,4 +237,28 @@ struct liveupdate_session_get_name {
+> >  #define LIVEUPDATE_SESSION_GET_NAME                                  \
+> >       _IO(LIVEUPDATE_IOCTL_TYPE, LIVEUPDATE_CMD_SESSION_GET_NAME)
+> >
+> > +/**
+> > + * struct liveupdate_session_freeze - ioctl(LIVEUPDATE_SESSION_FREEZE)
+> > + * @size:     Input; sizeof(struct liveupdate_session_freeze)
+> > + * @reserved: Input; Must be zero. Reserved for future use.
+> > + *
+> > + * Freezes the session early from userspace before the reboot kexec ph=
+ase.
+> > + *
+> > + * When this ioctl is called, the kernel executes the .freeze() callba=
+ck on all
+> > + * preserved files in the session and serializes their metadata. Once =
+frozen,
+> > + * no further files can be preserved in the session.
+> > + *
+> > + * During the subsequent reboot kexec, this session is recognized as a=
+lready
+>
+> Nit: kexec reboot
 
-A TLS 1.3 KeyUpdate derives the next traffic secret, key and IV with
-HKDF-Expand-Label (RFC 9846, section 7.2). Add the helper for the
-kernel to do this itself.
+Ok
 
-Only the part of the key schedule after the handshake is needed. The
-input is a traffic secret, which is already a pseudorandom key, so
-HKDF-Extract is not needed. Each output is at most Hash.length bytes,
-so each derivation is a single HMAC with the library SHA-256 or SHA-384
-functions.
+>
+> > + * frozen and is skipped from the late auto freeze.
+> > + *
+> > + * Return: 0 on success, negative error code on failure.
+> > + */
+> > +struct liveupdate_session_freeze {
+> > +     __u32           size;
+> > +     __u32           reserved;
+> > +};
+> > +
+> > +#define LIVEUPDATE_SESSION_FREEZE                                    \
+> > +     _IO(LIVEUPDATE_IOCTL_TYPE, LIVEUPDATE_CMD_SESSION_FREEZE)
+> > +
+> >  #endif /* _UAPI_LIVEUPDATE_H */
+> > diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.=
+c
+> > index a39992da504f..7f79890beb31 100644
+> > --- a/kernel/liveupdate/luo_file.c
+> > +++ b/kernel/liveupdate/luo_file.c
+> > @@ -31,9 +31,9 @@
+> >   *   - unpreserve(): Cleans up any resources allocated by .preserve(),=
+ called
+> >   *     if the preservation process is aborted before the reboot (i.e. =
+session is
+> >   *     closed).
+> > - *   - freeze(): A final pre-reboot opportunity to prepare the state f=
+or kexec.
+> > - *     We are already in reboot syscall, and therefore userspace canno=
+t mutate
+> > - *     the file anymore.
+> > + *   - freeze(): Prepares the final state for kexec. Invoked either ea=
+rly via
+>
+> Nit: I'd drop "early", it seems relevant only to the current change, but
+> will be more confusing than useful later.
 
-Assisted-by: LLM
-Signed-off-by: Martin Belanger <martin.belanger@dell.com>
----
- net/tls/Kconfig    |  2 ++
- net/tls/Makefile   |  2 +-
- net/tls/tls.h      |  2 ++
- net/tls/tls_hkdf.c | 82 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 87 insertions(+), 1 deletion(-)
+Good point, will do.
 
-diff --git a/net/tls/Kconfig b/net/tls/Kconfig
-index 4f4d5973a28f..6183ebe954ee 100644
---- a/net/tls/Kconfig
-+++ b/net/tls/Kconfig
-@@ -8,6 +8,8 @@ config TLS
- 	select CRYPTO
- 	select CRYPTO_AES
- 	select CRYPTO_GCM
-+	select CRYPTO_LIB_SHA256
-+	select CRYPTO_LIB_SHA512
- 	select NET_SOCK_MSG
- 	default n
- 	help
-diff --git a/net/tls/Makefile b/net/tls/Makefile
-index 4c7d296081ee..6edcf1271b75 100644
---- a/net/tls/Makefile
-+++ b/net/tls/Makefile
-@@ -7,6 +7,6 @@ CFLAGS_trace.o := -I$(src)
- 
- obj-$(CONFIG_TLS) += tls.o
- 
--tls-y := tls_main.o tls_sw.o tls_proc.o trace.o tls_strp.o
-+tls-y := tls_main.o tls_sw.o tls_proc.o trace.o tls_strp.o tls_hkdf.o
- 
- tls-$(CONFIG_TLS_DEVICE) += tls_device.o tls_device_fallback.o
-diff --git a/net/tls/tls.h b/net/tls/tls.h
-index 60a37bdaaa25..b2061f6bf065 100644
---- a/net/tls/tls.h
-+++ b/net/tls/tls.h
-@@ -147,6 +147,8 @@ void tls_strp_abort_strp(struct tls_strparser *strp, int err);
- int init_prot_info(struct tls_prot_info *prot,
- 		   const struct tls_crypto_info *crypto_info,
- 		   const struct tls_cipher_desc *cipher_desc);
-+int tls_hkdf_expand_label(const u8 *secret, size_t secret_len,
-+			  const char *label, u8 *out, size_t out_len);
- int tls_set_sw_offload(struct sock *sk, int tx,
- 		       struct tls_crypto_info *new_crypto_info);
- void tls_update_rx_zc_capable(struct tls_context *tls_ctx);
-diff --git a/net/tls/tls_hkdf.c b/net/tls/tls_hkdf.c
-new file mode 100644
-index 000000000000..49e33146ac7e
---- /dev/null
-+++ b/net/tls/tls_hkdf.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2026 Dell Technologies Inc. or its subsidiaries.
-+ *
-+ * TLS 1.3 HKDF-Expand-Label, RFC 9846 section 7.1.
-+ *
-+ * TLS 1.3 derives all of its secrets and keys with HKDF (RFC 5869). The
-+ * TLS handshake runs in user space and gives the kernel one application
-+ * traffic secret for each direction. For a KeyUpdate, the kernel derives
-+ * the next traffic secret from the current one (section 7.2), and the
-+ * new key and IV from the next traffic secret (section 7.3). Both steps
-+ * use only HKDF-Expand-Label, so this file implements only that
-+ * function, not the full key schedule of the handshake.
-+ *
-+ * The input is always a traffic secret. It is already a random key of
-+ * the hash length, so HKDF-Extract is not needed. No output is longer
-+ * than the hash, so HKDF-Expand is a single HMAC.
-+ */
-+
-+#include <crypto/sha2.h>
-+#include <linux/errno.h>
-+#include <linux/string.h>
-+#include <linux/unaligned.h>
-+
-+#include "tls.h"
-+
-+#define TLS_HKDF_LABEL_PREFIX		"tls13 "
-+#define TLS_HKDF_LABEL_PREFIX_LEN	(sizeof(TLS_HKDF_LABEL_PREFIX) - 1)
-+#define TLS_HKDF_LABEL_MAX		32
-+
-+/**
-+ * tls_hkdf_expand_label - HKDF-Expand-Label with an empty context
-+ * @secret: the secret
-+ * @secret_len: length of @secret, which selects the hash: SHA-256 for
-+ *	SHA256_DIGEST_SIZE, SHA-384 for SHA384_DIGEST_SIZE
-+ * @label: the label, without the "tls13 " prefix
-+ * @out: output buffer
-+ * @out_len: number of bytes to derive, at most @secret_len
-+ *
-+ * Return: 0 on success, -EINVAL if a length is not valid.
-+ */
-+int tls_hkdf_expand_label(const u8 *secret, size_t secret_len,
-+			  const char *label, u8 *out, size_t out_len)
-+{
-+	u8 info[2 + 1 + TLS_HKDF_LABEL_PREFIX_LEN + TLS_HKDF_LABEL_MAX + 1 + 1];
-+	size_t label_len = strlen(label);
-+	u8 tmp[SHA384_DIGEST_SIZE];
-+	size_t pos = 0;
-+
-+	if (secret_len != SHA256_DIGEST_SIZE &&
-+	    secret_len != SHA384_DIGEST_SIZE)
-+		return -EINVAL;
-+	if (!out_len || out_len > secret_len || label_len > TLS_HKDF_LABEL_MAX)
-+		return -EINVAL;
-+
-+	/* struct {
-+	 *	uint16 length;
-+	 *	opaque label<7..255>;
-+	 *	opaque context<0..255>;
-+	 * } HkdfLabel;
-+	 *
-+	 * followed by the HKDF-Expand counter for the first output block.
-+	 */
-+	put_unaligned_be16(out_len, info);
-+	pos += 2;
-+	info[pos++] = TLS_HKDF_LABEL_PREFIX_LEN + label_len;
-+	memcpy(info + pos, TLS_HKDF_LABEL_PREFIX, TLS_HKDF_LABEL_PREFIX_LEN);
-+	pos += TLS_HKDF_LABEL_PREFIX_LEN;
-+	memcpy(info + pos, label, label_len);
-+	pos += label_len;
-+	info[pos++] = 0;	/* empty context */
-+	info[pos++] = 1;	/* counter */
-+
-+	if (secret_len == SHA256_DIGEST_SIZE)
-+		hmac_sha256_usingrawkey(secret, secret_len, info, pos, tmp);
-+	else
-+		hmac_sha384_usingrawkey(secret, secret_len, info, pos, tmp);
-+
-+	memcpy(out, tmp, out_len);
-+	memzero_explicit(tmp, sizeof(tmp));
-+
-+	return 0;
-+}
+>
+> > + *     the LIVEUPDATE_SESSION_FREEZE ioctl once userspace is done modi=
+fying
+> > + *     the session's files, or during the reboot() syscall.
+> >   *   - unfreeze(): Undoes the actions of .freeze(), called if the live=
+ update
+> >   *     is aborted after the freeze phase.
+> >   *   - retrieve(): Reconstructs the file in the new kernel from the pr=
+eserved
+> > @@ -48,7 +48,8 @@
+> >   *    handler, calls its .preserve() operation, and creates an interna=
+l &struct
+> >   *    luo_file to track the live state.
+> >   *
+> > - * 2. Freeze (Pre-Reboot): Just before the kexec, luo_file_freeze() is=
+ called.
+> > + * 2. Freeze (Pre-Reboot): Either explicitly via LIVEUPDATE_SESSION_FR=
+EEZE or
+> > + *    just before the kexec during reboot(), luo_file_freeze() is call=
+ed.
+> >   *    It iterates through all preserved files, calls their respective =
+.freeze()
+> >   *    operation, and serializes their final metadata (compatible strin=
+g, token,
+> >   *    and data handle) into a contiguous memory block for KHO.
+> > @@ -74,15 +75,16 @@
+> >   *
+> >   * 1. Abort Before Reboot: If the userspace agent aborts the live upda=
+te
+> >   *    process before calling reboot (e.g., by closing the session file
+> > - *    descriptor), the session's release handler calls
+> > - *    luo_file_unpreserve_files(). This invokes the .unpreserve() call=
+back on
+> > - *    all preserved files, ensuring all allocated resources are cleane=
+d up and
+> > - *    returning the system to a clean state.
+> > + *    descriptor), the session's release handler unfreezes the files i=
+f the
+> > + *    session was already frozen and calls luo_file_unpreserve_files()=
+. This
+> > + *    invokes the .unpreserve() callback on all preserved files, ensur=
+ing all
+> > + *    allocated resources are cleaned up and returning the system to a=
+ clean
+> > + *    state.
+> >   *
+> > - * 2. Freeze Failure: During the reboot() syscall, if any handler's .f=
+reeze()
+> > - *    op fails, the .unfreeze() op is invoked on all previously *succe=
+ssful*
+> > - *    freezes to roll back their state. The reboot() syscall then retu=
+rns an
+> > - *    error to userspace, canceling the live update.
+> > + * 2. Freeze Failure: During LIVEUPDATE_SESSION_FREEZE or the reboot()=
+ syscall,
+> > + *    if any handler's .freeze() op fails, the .unfreeze() op is invok=
+ed on all
+> > + *    previously *successful* freezes to roll back their state, and an=
+ error is
+> > + *    returned to userspace.
+>
+> I think we still want to say that freeze failure at reboot cancels live
+> update.
 
--- 
-2.53.0
+OK
 
+>
+> >   *
+> >   * 3. Finish Failure: In the new kernel, if a handler's .finish() op f=
+ails,
+> >   *    the luo_file_finish() operation is aborted. LUO retains ownershi=
+p of
+> > @@ -440,12 +442,11 @@ static void __luo_file_unfreeze(struct luo_file_s=
+et *file_set,
+> >
+> >  /**
+> >   * luo_file_freeze - Freezes all preserved files and serializes their =
+metadata.
+> > - * @file_set:     The file_set whose files are to be frozen.
+> > - * @file_set_ser: Where to put the serialized file_set.
+> > + * @file_set: The file_set whose files are to be frozen.
+> >   *
+> > - * This function is called from the reboot() syscall path, just before=
+ the
+> > - * kernel transitions to the new image via kexec. Its purpose is to pe=
+rform the
+> > - * final preparation and serialization of all preserved files in the f=
+ile_set.
+> > + * This function is called from LIVEUPDATE_SESSION_FREEZE or from the =
+reboot()
+> > + * syscall path. Its purpose is to perform the preparation and seriali=
+zation of
+>
+> Nit:                                          ^ final?
 
+OK
+
+>
+> > + * all preserved files in the file_set.
+> >   *
+> >   * It iterates through each preserved file in FIFO order (the order of
+> >   * preservation) and performs two main actions:
+> > @@ -457,22 +458,20 @@ static void __luo_file_unfreeze(struct luo_file_s=
+et *file_set,
+> >   *
+> >   * 2. Serializes Metadata: After a successful freeze, it copies the fi=
+nal file
+> >   *    metadata=E2=80=94the handler's compatible string, the user token=
+, and the final
+> > - *    private data handle=E2=80=94into the pre-allocated contiguous me=
+mory buffer
+> > - *    (file_set->files) that will be handed over to the next kernel vi=
+a KHO.
+> > + *    private data handle=E2=80=94into the pre-allocated serialization=
+ blocks
+> > + *    (file_set->block_set) that will be handed over to the next kerne=
+l via KHO.
+> >   *
+> >   * Error Handling (Rollback):
+> >   * This function is atomic. If any handler's .freeze() operation fails=
+, the
+> > - * entire live update is aborted. The __luo_file_unfreeze() helper is
+> > - * immediately called to invoke the .unfreeze() op on all files that w=
+ere
+> > - * successfully frozen before the point of failure, rolling them back =
+to a
+> > - * running state. The function then returns an error, causing the rebo=
+ot()
+> > - * syscall to fail.
+> > + * __luo_file_unfreeze() helper is immediately called to invoke the .u=
+nfreeze()
+> > + * op on all files that were successfully frozen before the point of f=
+ailure,
+> > + * rolling them back to an unfrozen state, and an error is returned to=
+ the
+> > + * caller.
+>
+> Don't you want to say that reboot is canceled here too?
+
+Sure
+
+>
+> >   *
+> > - * Context: Called only from the liveupdate_reboot() path.
+> > + * Context: Called from LIVEUPDATE_SESSION_FREEZE or the liveupdate_re=
+boot() path.
+> >   * Return: 0 on success, or a negative errno on failure.
+> >   */
+> > -int luo_file_freeze(struct luo_file_set *file_set,
+> > -                 struct luo_file_set_ser *file_set_ser)
+> > +int luo_file_freeze(struct luo_file_set *file_set)
+> >  {
+> >       struct luo_file *luo_file;
+> >       struct kho_block_set_it it;
+> > @@ -506,9 +505,6 @@ int luo_file_freeze(struct luo_file_set *file_set,
+> >               file_ser->token =3D luo_file->token;
+> >       }
+> >
+> > -     file_set_ser->count =3D file_set->count;
+> > -     file_set_ser->files =3D kho_block_set_head_pa(&file_set->block_se=
+t);
+> > -
+> >       return 0;
+> >
+> >  err_unfreeze:
+> > @@ -519,28 +515,25 @@ int luo_file_freeze(struct luo_file_set *file_set=
+,
+> >
+> >  /**
+> >   * luo_file_unfreeze - Unfreezes all files in a file_set and clear ser=
+ialization
+> > - * @file_set:     The file_set whose files are to be unfrozen.
+> > - * @file_set_ser: Serialized file_set.
+> > + * @file_set: The file_set whose files are to be unfrozen.
+> >   *
+> >   * This function rolls back the state of all files in a file_set after=
+ the
+> > - * freeze phase has begun but must be aborted. It is the counterpart t=
+o
+> > - * luo_file_freeze().
+> > + * freeze phase has begun. It is the counterpart to luo_file_freeze().
+> >   *
+> >   * It invokes the __luo_file_unfreeze() helper with a NULL argument, w=
+hich
+> > - * signals the helper to iterate through all files in the file_set and=
+ call
+> > - * their respective .unfreeze() handler callbacks.
+> > + * signals the helper to iterate through all files in the file_set, ca=
+ll their
+> > + * respective .unfreeze() handler callbacks, and clear the serialized =
+blocks.
+> >   *
+> >   * Context: This is called when the live update is aborted during
+> > - *          the reboot() syscall, after luo_file_freeze() has been cal=
+led.
+> > + *          the reboot() syscall, after luo_file_freeze() has been cal=
+led,
+> > + *          or when an early-frozen session is released before kexec.
+> >   */
+> > -void luo_file_unfreeze(struct luo_file_set *file_set,
+> > -                    struct luo_file_set_ser *file_set_ser)
+> > +void luo_file_unfreeze(struct luo_file_set *file_set)
+>
+> I went several time back and forth trying to understand why we remove
+> *file_set_ser here.
+>
+> Maybe add a preparation patch that does the renames and moves file_set_se=
+r
+> handling?
+
+Yes, this is a good suggestion. I will add another patch  to rename,
+and change the argument.
+
+>
+> >  {
+> >       if (!file_set->count)
+> >               return;
+> >
+> >       __luo_file_unfreeze(file_set, NULL);
+> > -     memset(file_set_ser, 0, sizeof(*file_set_ser));
+> >  }
+> >
+> >  /**
+> > diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_i=
+nternal.h
+> > index dac6644bfb18..b3fc3dcf5f36 100644
+> > --- a/kernel/liveupdate/luo_internal.h
+> > +++ b/kernel/liveupdate/luo_internal.h
+> > @@ -64,6 +64,8 @@ struct luo_file_set {
+> >   *              previous kernel) sessions.
+> >   * @retrieved:  A boolean flag indicating whether this session has bee=
+n
+> >   *              retrieved by a consumer in the new kernel.
+> > + * @frozen:     A boolean flag indicating whether this session has bee=
+n
+> > + *              frozen early from userspace.
+>
+> s/early/explicitly
+
+OK
+
+>
+> >   * @file_set:   A set of files that belong to this session.
+> >   * @mutex:      protects fields in the luo_session.
+> >   */
+> > @@ -71,6 +73,7 @@ struct luo_session {
+> >       char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+> >       struct list_head list;
+> >       bool retrieved;
+> > +     bool frozen;
+> >       struct luo_file_set file_set;
+> >       struct mutex mutex;
+> >  };
+>
+> --
+> Sincerely yours,
+> Mike.
