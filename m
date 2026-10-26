@@ -1,100 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.182
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792978214;
-	b=sBFuPYz547PK9M6ELEmfSVVAAZPLhxNGbYw7ngzhzPJyqPEHsTTjQI1gT0q1UvfSc1jo
-	 IiLUXBuyTfnfU9XafAz+Cgjwszs+4eDdWTDM1Ct+IpZiJc2+xLjnqwSGzLaz+sTc32oOh
-	 IKm1OfdKRnlblse7oHAsUlj5QQxZg6t+JoVQ3cL+p7r2qHpyJipY0cDeOLXDtZF5FQ/Ao
-	 4velPzVdZdXQzb5WTsSugCr6Xqti5VYdj3n2ot1q4r9Rm4Hy9EyVJNNT5kUr+7rU6ms9j
-	 HPBWTOJ3xSIFqdTemhgpamMoF3hjFdZ8CJmDxgiQK9G6y8dr9OQE94sUaulanKM3Rww==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792978214;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792979226;
+	b=5Ld2QW/tqn30n94VQ9plUZIOCYaE1Y1B9dRyXr/ymdp77UTx50gVwS/VMXJ/ZWSaKWCX
+	 jW2n/IWlwI+BMQyW6TktvtVnsYMNfTg1LWimlkfGOBZtF7z3ej0VUZRdFjPC88fqyRjET
+	 eAMLfu9EGVq+ESHwS+HknPaoNnvOhRXytMS+Sj1TzIZ0kiSQQpFt7EaRQaIFOfEPjQSHb
+	 QpIV7TJWekULDQgfvTw3CryhXWSwk+OQFZmRWUCKkeFQurBjTXA4VpbGd5zgPO4O+19Rv
+	 SRXRFEoW+zMeOZm3rF5sTEPUhJp3tAcOLz1h409cP17cvnZEVpWWHiELhxbWEmAYfHw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792979226;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 In-Reply-To:References:From:Date:Subject:To:Cc:Message-ID:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=3XwoGg+mB8JTGKSf2elhh7MQy4y9CDrVr50JHH0II1k=;
-	b=iWauyg3nKFjqaExX97YciANKoJuUBBP9btvWs/nWq9o3BNTrUr2gks0A/xFRsvTptUXm
-	 jrHpirYL8LhMPm0BB2vBSGUHZ1IrrWHMzqVhJljZWId79+HEsMyffYrojZ5x31GP/UXJV
-	 Z0FfiDwYs+g3skqf4ifA1y2KSRyRaNXbYFrfKwqntu9t19MYsPDazRsN666TJ0YqoNTP2
-	 9+e0dq5oD7sn554eQ9cqRxgfYk7KUuLeFugiWhS9YCMGsjCFx/Tgq9PiBzrUfe2kTw5nq
-	 xggsQuoasE7wuQfOLAZfzypSrmX1QvkGhMp2f37imtmqgN4W+4bwr8pPLN4/jcMHfTg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=rnwoUK5XDDy7Zhx5M1Bzg5ZJeDG0xIbp8ITla+PiXAA=;
+	b=ldUVLGDIIX7+Z0Nte4lCQqbUyTIBlRTPTWfUerfLiTjNNszvTCe0UxrAp473xYas4ySg
+	 0fCl1WJfsN3wAlA1qdQw+tEn4lOpMrA8gb49V0RDt8s/sKsHeROAVL7FhxzIm20YjmbEc
+	 7GNeg57Dj9wuTHTTqcfpnMiQqK4zkxSl6mHqFLxOyTqOLQIEJAq9DG8tPW9orj/6MlxYc
+	 bViAL2sIQ/hcw6EzluJ44SM1WbQhfugbBvoM/k1gOKrv7q7SwynI24OR3NdCnp06x1Oa+
+	 WTwihdtSYhPBQdHla9dzDLXTKSFDmGiOpJJ0cbyWx+3caag5SxNQYRyL7m0JO+7vZcw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=bN4CDDSI;
-	arc=none smtp.remote-ip=209.85.160.182
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=k1mpcIkw;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C1D606A31F
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 01:30:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77C1D606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A02606A31E
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 01:47:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40A02606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=bN4CDDSI
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-53394bffe0fso40595631cf.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 18:30:14 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=k1mpcIkw
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-5366ae57896so27059541cf.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2026 18:47:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792979225; cv=none;
+        d=google.com; s=arc-20260327;
+        b=jgO8ElWrwkS0VxAz8MTgvODt4Kv3BD/i5v57AawDCoZ/Q1hYLVa4Urfe5P2tAmyI1D
+         AhOyu7YFr6an/rqU/tyPnF63N5WfmZxMuLY6dBeOZsK/hGB9JcGgUYvWo+Tu6lbSmSjh
+         t20/FlmBh9oGqF2t7rBmCzt/vJmn1/tWdLjkWQAk8NAExm5GySCJhpswW7tnaPVrdG4/
+         5Zt7N+8sTvnbP1UOGzbGIlSjaJQZ5o9yaAjcN+5XdyzzU9URPK+DzbWp5my3cTzHSQ4S
+         GR52BDz1dzfjwdtfMDayQ93xVWZvV4GCpbHTc1mTsOYYM5K/V+BMA/JQyVnMqquOqeLU
+         vR+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=rnwoUK5XDDy7Zhx5M1Bzg5ZJeDG0xIbp8ITla+PiXAA=;
+        fh=LQyy5O7FZzSndV+26X/ElI7BkMuzFgtlnTQbf8G4Nv0=;
+        b=ND+B6jL3xQxTSWcVwAnDKbWBNJiFQMs97NrrkBF4YpofKDtqiTxj8mWg5pv/BuTPjt
+         fi5MHPQVjZiLgOuvRsFilPtoO/1twQF3azh1iiQQJrwiWq3BNqXCvj+qkk74oUtNOqg/
+         xopoX35Mpn/Bjseo6y5beqd5IVew50lubE5KQRQm+Fbx8hBwuZt9Kg71FnORePfF/oh+
+         2R+xZOk4NK0brjvk8geo+KT602G6m7itfPWKCWNH6QyFkd9yBgRHfHTCtFmYRX24BxeG
+         vtFQsm68xY1sLiPCiD3R+lPVzM1VAJY1z4dWpvKOHejMRZQRVVbOVW4k52caCQDREd4z
+         qvfg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792978213; x=1793583013; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:message-id:cc:to:subject
-         :date:from:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=3XwoGg+mB8JTGKSf2elhh7MQy4y9CDrVr50JHH0II1k=;
-        b=bN4CDDSItCtt/QdxJizZA1Za1opqZMedq/YPSVbx9jVRAv+IQ7BFhAlMW/7NWv7ESx
-         FOoNXzrrhQ70rmZRcW0No3Ylb+06pJxeoqOtFVFIorI404RFF6MVzF3J07lZ+JXWLnu0
-         1OogcxTj5x5ZvERUql8WIiWWtEvKJpNIRWrukVprl/HOa0/eQaodZXXR4TIWJznoPfGz
-         WavttMySLc0Eu8wWcw7mvnRfL0vkXcISSk+dgoaOGTsyaoI5HbC6Hj4RuSz3JG9/T1kI
-         gg+c7bDGE/WyczdoMvnqKbAXOTkO88ZjMyMyz77+GcBMs/G4//5VjKd/6u7OZDW5awkn
-         5SVw==
+        d=gmail.com; s=20251104; t=1792979225; x=1793584025; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rnwoUK5XDDy7Zhx5M1Bzg5ZJeDG0xIbp8ITla+PiXAA=;
+        b=k1mpcIkwc1AXi9hb/mRiT22ro6h4FquWA+zMu8daRo1fzf4vKr5xnlakJSPrkylW+W
+         BPZQZxoIuCc5J1ChOieBApdEw58hxaJegMTS+iftUo0MadwCUXP2cJ0B0whCpwZ+01Z1
+         6IFaEE0VrSDv+WIDEJhZYV3SGEAowbSvdCmVw2p7/G1g4A78LmsmBHbkZqb0mvuv4dFC
+         snhoe1grlRyEbSyotA1Q1Juwg3f2IhHshZugchVTm4VdHPkeEDh8eoNcsGy+04ZLaZg4
+         bAOcnKmJU4DoOw6K23d2WUiJhP80dgi1VFqxTXSid1Z8+QvzOJfNJ36nkwBbaaX5ci4b
+         ea6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792978213; x=1793583013;
-        h=content-transfer-encoding:content-type:message-id:cc:to:subject
-         :date:from:references:in-reply-to:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=3XwoGg+mB8JTGKSf2elhh7MQy4y9CDrVr50JHH0II1k=;
-        b=SdoBGkVONrqht8/oHnViXp2ZVC3lEW5nM2Cmo1kY8UINtA30OQDUUXBg/qvvhkG84P
-         pxRdGxPfYljrjuHvTMLziEpwncWLbQNaLh6Ef2aLz8IzlCy+Jbp9SswH8U2irS5ymzuA
-         4frcIF58+JL0L2faw+NOkxzBzOx2gYlAXOEZYJzLOnbOnuar1/ZdY39d168xQdRta6xu
-         rela+WKqXmjyO1sm8HH0XmSJpj/o2nSXRoIX8p+Q7piLtHVWDOxdDGmsnwDQH8oakEHS
-         RBFevyuRBdhEJtYvUNHKfZPjLc25/rwXm0mAPfEHqjSvzs2IBUi6wMwhdH1YmXPaezFH
-         gVHg==
-X-Forwarded-Encrypted: i=1; AKwUvBxIGfVgyXjMKmfUJGmKQumIZGXAxTHB+yNTbS+2nhQ1gMjngW7KbkSR/a38PByDSSi0L3CWY/mZ8IZ6MAaQNJE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKdFbAFyH2VaF+Uq+/Fd9XApJDXOXTLQ/YMlslHU922PC+tkc/4
-	1E1QEFyqMZxEPLrG7YvH0/rWasx1SEokJTiYTMGFUPNzvRpgESbjxko=
-X-Gm-Gg: AYBFou28DJzAXa+oFeiWaFcMSM18LiEBoRDR2giCbunIfXNYWd7jOo+tZB/3bPmrr4Z
-	pmXHWJSUjHwRfbkz7GAmLuB5aYFtjfNZzJtK9nZnWvThNqVVFyaAaB6Qa4AwvI8/EyLmTgjGwCn
-	nMXskROltFYf2sZwcQZpqvxL/QkiuF/AlX7qt9q+z1B8MUZxoyWTbJqKhTOtHb+gx4choADsAmh
-	cYrAGm3vkpOW+2a54V1ugv8rk+vLDeJHcHgBAkyy7NVHiSKas1EFlIVpaww3mr/BEyTGu6Kvn71
-	W6xfF07NEkrv5clZwl1B+GpivMVIloQnOTLNgFoFgw3GrCfV57G2hGdOoi47NLPNAO9/ZGlbE8c
-	69Yu/SZQaPZutdUGDwd3bZRPnQ0InNreNkK3ls9WVNBeqZB5gbtKRdy82Q1ner4znj3sZ85IZw+
-	gYCg6276+Hhq8++Zzq48tw1Fd1/MyVKoGEdVg518wW0e43U0ITx3bITeGqRHVr+1aAkW+WVRRrR
-	inGJv6uwhEnlKI6AGXhpaxc6j+eusLbfTY31ESR8MTEP6/kJXQ0BOr63pmP3smGTymPDo6qI72G
-	iJX0mkW8jCZKfkydhk6744D7hOuRuwRV+lTr5gcwUv8eZ+hpFoP9a/BSdX0GDInoz1fY4c73Mce
-	1VtYnGy31Yn7VtV4pcmPA
-X-Received: by 2002:ac8:5d8d:0:b0:535:1d5b:a7fa with SMTP id d75a77b69052e-5383ba8566dmr80965731cf.14.1792978213302;
-        Sun, 25 Oct 2026 18:30:13 -0700 (PDT)
-Received: from [127.0.1.1] (207-237-119-98.s2383.c3-0.nyr-cbr1.nyr.ny.cable.rcncustomer.com. [207.237.119.98])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5383970a2basm44270051cf.18.2026.10.25.18.30.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 18:30:10 -0700 (PDT)
-In-Reply-To: 
- <CAMAsx6cniehFSgKz0+FRbGV=A=TGvogwx87xcqhiZNQGfeFFYQ@mail.gmail.com>
-References: <179250646543.2190262.8632957027583518623@gmail.com>
- <CAMAsx6cniehFSgKz0+FRbGV=A=TGvogwx87xcqhiZNQGfeFFYQ@mail.gmail.com>
-From: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
-Date: Mon, 26 Oct 2026 01:30:03 -0000
-Subject: [PATCH v2] Documentation: kunit: document --summary and --failed
- options
-To: brendan.higgins@linux.dev, david@davidgow.net, corbet@lwn.net
-Cc: danielmaraboo@gmail.com, raemoar63@gmail.com, skhan@linuxfoundation.org,
- rdunlap@infradead.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <179297820302.2598507.5712076951623488183@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1792979225; x=1793584025;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=rnwoUK5XDDy7Zhx5M1Bzg5ZJeDG0xIbp8ITla+PiXAA=;
+        b=EsuOHC1YObquDaS4USo+Qdo+Il+JQQUOGkY0QX8x+AAp5cvttHBo7DReVHMnedH4Ce
+         QpvUGUbqmHD3mkHE4OU4sLHvtNzXtcaMCFKy3ApDaOX6RA+dGzecFQcrD4ke9FWBlSuN
+         FrsqRgV84da4PqUL8VOhrXhGk+Nn9cKkxht7tOYLxIXojXGG623E1Jglp3PaBiu0gnJO
+         /eantv+E7+U4mEAbgMFy2Y+WgTOGHtrW4HdLZbDNq+gMpkUa2e1zUUDBipoIzijEjtFG
+         Ex883Fx+I4QNBgWl2zqBVuGg15PcaOD7iduRBS5Z8ClR0FEjhVQcrtc+isHP7TtNLVoP
+         Aiuw==
+X-Forwarded-Encrypted: i=1; AKwUvBzzOgRenjz4pRYZQ8kXzCfIpNv1QhFoRRvhWYT/4lZorLm/1gJY365Pymhbn2eDVtZFXaSG0ZcC3bcI6FVmu7E=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIvmcrEueZGu6VxUHRzBT9EKf2aY1oORXxIZbWOaOrVujCk6gHW
+	3UTPOkXFeiO5YwjOiIMrqem0F8QgAKCwRNTiRfjAM6sX/BW3CZd4MgZeWyvrOQW5qt3TVXQ7oSF
+	u87ZGqVNhyT6VuhgA7FM8UE1YTMdCozk=
+X-Gm-Gg: AYBFou1gvPog2/sH6BigtzWs3kmWKYSP0eZkQ9vXbwa1K7DOQCqDmwMr9/J9jI1iWxH
+	78LJ6DvxfMNea6g7JIg+6YglK8//8aBdgAeHH0GdNBKs50j8nVOHxm6UN2DZqrt1o7gBIf/Z+gz
+	HSSHktQsqj8ktnSpOumQmG53Dh6LKhjTK+QT9bbi2pWPsupfaGlmYwd35yQLxRZydnhuenyodiq
+	upV+6leySNQicUv0cDoSbNn7BQHXc/NalvNhGVi8StUd9H+RC29DzXd1Gb7Yztaz/1rTX6vNtct
+	2hWh0la/cSg43DewGwJAosZ5le+EV1yEPjCEMhnNeDjPBY1XZElTpOD1bCOk7JIiTbNuI+dUdaX
+	hubmkoAGw+8Q7vH2hpzB+6oIAMZTEXbTxzbWfkcbUhcYNAIIAOGe2D/M4S7dj3r40bvdV+gMovh
+	x1qFmRHzVKrvmffv30vcKjhvfGx+fBCB3OOvQa9M2NqEECuNQafaI=
+X-Received: by 2002:a05:622a:410e:b0:536:8ab3:cb01 with SMTP id
+ d75a77b69052e-5383b5ebdc7mr72082141cf.26.1792979225119; Sun, 25 Oct 2026
+ 18:47:05 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,49 +103,46 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <179250646543.2190262.8632957027583518623@gmail.com>
+ <CAMAsx6cniehFSgKz0+FRbGV=A=TGvogwx87xcqhiZNQGfeFFYQ@mail.gmail.com> <179297820302.2598507.5712076951623488183@gmail.com>
+In-Reply-To: <179297820302.2598507.5712076951623488183@gmail.com>
+From: Daniel Pereira <danielmaraboo@gmail.com>
+Date: Sun, 25 Oct 2026 22:46:53 -0300
+X-Gm-Features: AclHuK9JgkkXlRw89V59iiWDYLD2QDEw_R-Zfh6fzK_yYgw4tVW-PfwZ2k_irrQ
+Message-ID: <CAMAsx6dhGibUuwBzj6k+A3C4ZGAxPSdLyDbjNfawpKR0Ufj7nQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: kunit: document --summary and --failed options
+To: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
+Cc: brendan.higgins@linux.dev, david@davidgow.net, corbet@lwn.net, 
+	raemoar63@gmail.com, skhan@linuxfoundation.org, rdunlap@infradead.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Commit 062a9dd9bad7 ("kunit: tool: Only print the summary") and commit
-3c67a2c09b3c ("kunit: tool: print failed tests only") added the --summary
-and --failed options to kunit.py, but the matching entries in the
-run_wrapper documentation were never added.
+On Mon, Oct 26, 2026, Eugenio Zuccarelli wrote:
+> An LLM-based coding assistant helped draft these entries; I checked them
+> against kunit.py and kunit_parser.py.
 
-Add descriptions for both options next to the other output options, so
-the documentation lists the arguments the tool actually accepts.
+Hi Eugenio,
 
-An LLM-based coding assistant helped draft these entries; I checked them
-against kunit.py and kunit_parser.py.
+Resending to the list, as my previous reply went only to you.
 
-Signed-off-by: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
----
-Changes in v2:
-- Moved the tool disclosure into the changelog text; the Assisted-by
-  trailer is no longer described in Documentation/process.
+Thanks for the v2. Moving the tool disclosure to the changelog looks
+good to me and matches Documentation/process/generated-content.rst.
+The two entries match kunit.py and kunit_parser.py: --summary only
+prints the summary line, --failed prints only the failed or crashed
+tests plus the summary, and both are ignored with --raw_output.
 
- Documentation/dev-tools/kunit/run_wrapper.rst | 8 ++++++++
- 1 file changed, 8 insertions(+)
+About the indentation: sorry for the noise in my review of v1. I
+checked the raw v2 (the mbox from patchwork) instead of the copy in my
+mail client, and the continuation lines of the new items do have two
+spaces, aligned with the --json and --junit items. The one-space
+indentation I saw was introduced on my side, not by your patch. Applied
+to docs-next, "make SPHINXDIRS=dev-tools htmldocs" builds
+run_wrapper.rst with no warnings, so please disregard my first point.
 
-diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-index cecc110a..641ab50a 100644
---- a/Documentation/dev-tools/kunit/run_wrapper.rst
-+++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-@@ -327,6 +327,14 @@ command line arguments:
- - ``--junit``: If set, stores the test results in JUnit XML format and prints to `stdout` or
-   saves to a file if a filename is specified.
- 
-+- ``--summary``: If set, prints only the summary line for parsed test
-+  results, rather than the result of every individual test. Does nothing
-+  if ``--raw_output`` is set.
-+
-+- ``--failed``: If set, prints only the tests that failed or crashed, along
-+  with the summary line, once all tests have run. Does nothing if
-+  ``--raw_output`` is set.
-+
- - ``--filter``: Specifies filters on test attributes, for example, ``speed!=slow``.
-   Multiple filters can be used by wrapping input in quotes and separating filters
-   by commas. Example: ``--filter "speed>slow, module=example"``.
+Reviewed-by: Daniel Pereira <danielmaraboo@gmail.com>
 
-base-commit: c03c1a14507dfaf8b856c2608f9ac216021fc222
--- 
-2.34.1
-
-
+Thanks,
+Daniel
