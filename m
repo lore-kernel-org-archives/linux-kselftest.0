@@ -1,76 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.57
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793003410;
-	b=1/g//3nLN4OPXj9L4q4rfBwWrAkgwdWeQlqTIlgHsy3IvS5XmljfgJfxtCF6g/s28z0G
-	 nnpbNNcfh+1FUo1mPhOXGFgOdZyIF+wXNzJqMwgFEkPl3ixxDletcgQ9pNq9/W0ALJQJq
-	 YeZhI9u0+hFLV0oLagL0D2Fqx5f0eqN4KnObPZBlkLZscxSB6miwU0Ckt2UBoCifXzISJ
-	 8LMlJOirA+4wBPNJTaN8Yt7RYQG9PwD96XPaydY/ukz97Qm0hFAd0I4Ax5uuJhlSIHYTB
-	 oqIbXpNyrMk0ucSlpb+h6LAAvN0Uug4TFXPxghn48+HJbV4J81rBM0/X5be6Wge44ng==
+	t=1793004599;
+	b=ZxZFNImxT4OT8ieHwcvZb1Exy9qfakxA3hIYab3FQwxd+rIEdIRqyyzQf6xq7R1de6ih
+	 on/t1Fes86fnVEfwune3tbHPLgIHJMpHfcOWILOWvqNqrLUkTcyHApe/2oyDkXS3Odabl
+	 31kS1DYwH74OY5caENxsNjJN+qo/P9v3+zY7KpKlbvEGIOMRBlrHU1fmGtz0LffWFbQv+
+	 nGjP6pdT/gZVAP5KhFH3ZrYoIkBCXWcBNsgANHpqNSkuOBena939Btg0aVizdsy0lm2nU
+	 uFK7ANc4Ujr7sNKKQTTh9fnGf6CCfKkUKDBz4EeiwJw7Ct59PvXGNJg0jxaXirBC+Qg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793003410;
-	h=Received:DKIM-Signature:Received:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
-	 X-SA-Exim-Connect-IP:X-SA-Exim-Rcpt-To:X-SA-Exim-Mail-From:
-	 X-SA-Exim-Scanned;
-	bh=G63bq4wpgZslgc8Jrbf5zqBVwNjBpTm05EKH4grfb9g=;
-	b=NFmlvwjOy7lmBgJG9AS9vbdK72ginn+ultA0bf/GnF7Pj3AxgQIDbeBMJEUA7NgWkCzv
-	 zD0dtPWVPijOdbHkgJYERUpjDcd4bWBr96IJp0zK1b5V4zOD7wDeM8uyGwGWQ+P6gZkea
-	 1T/CDLJc0YOX04JqlJQrkzpCTUqgKDtHudg/Htpw/yeIRX/vBeAZ4c2qT3bwOz5d9yMNm
-	 QThQo67onFEqwAEyhh15lA7GMlwWnBIcRNpAwi3NIdzp/ikXIXV8W7EqYyvC0xy662msm
-	 8iLiBvs2XHR0J2vULelbuliq726WhRNfiaomnaEJORaWl6Tnm1VqrqDMjMUzOfBIkfw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793004599;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=xTCncqWwkGyvWmFCnNOjI4Ctl5a4Y1hNNgZFEF7i6Sc=;
+	b=efWXrWn1HIfoXr2DsN/C2JXa4jEW8eB4GhQq/VT2cHwIYTW8cct/Ud90egZENgERXOSo
+	 c+LdjUPFjKHjX0eX8UYUunXUEDYvA5jIN6jc3LsDkDDDszxzPlelkgK1KRNDF+SfdO3bB
+	 I5fDLGxzopap0KcwiyDQC7TiOD3HIQn7IrXz6swttpMwYGK6k0UY4i/BPjeH7o29HcViI
+	 60mgqitdKpKqXSTWKFYxreIov2VzzRQ76Vml5DmQ0Q+EZjVnbdeLDczST/t0Qo6JWLVM0
+	 xIBJVReojXZvJmMGHe6sXxg6fhL5nCz/hpkDIMBXGjxRqDoKfcgqPkAivDkWlXupdcA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eNjS8GtB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Fcvbt7V2;
+	arc=none smtp.remote-ip=95.215.58.57
+Received: from mta1.migadu.com (out-57.mta1.migadu.com [95.215.58.57])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453E2606A32C;
-	Mon, 26 Oct 2026 08:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8664606A31F
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 08:49:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8664606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eNjS8GtB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF321F01825;
-	Mon, 26 Oct 2026 08:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793003409;
-	bh=G63bq4wpgZslgc8Jrbf5zqBVwNjBpTm05EKH4grfb9g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=eNjS8GtBeBPyA8EYl+0IroArRKZqddmttCe/pqhYkfWRzMvjs0xHUdFA5zBuwJ/dB
-	 cexNnd49Tts1u13A+p4i8tn4a6PQV0NVL4aKqOnr5UNq3cxWOoYv8fpIfiswUtP92d
-	 Z/9qaxzZpNLLPgIMFYE9xf3BEexK7pTS8AmZRw3kFDaXrDQy/VvVUq+JtED9OnVfGc
-	 ZydQEiSyZc1cxdXcaC5pdQtGfR9YCuabQKeK0u7lqpU5YbBU1ouoQYk3TpT3VuHNZj
-	 +NcclCy7JnHtweFs19IZK/1wJ01Z598SreYQSegk757HsENmnfVqZE/Na5wDhrrM/1
-	 utx8qgxT6pVpQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1xLG5n-00000007ABg-2krT;
-	Mon, 26 Oct 2026 08:30:07 +0000
-Date: Mon, 26 Oct 2026 08:30:07 +0000
-Message-ID: <861p9czwxc.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev
-Subject: Re: [PATCH v3] KVM: arm64: selftests: Test VNCR translation invalidation
-In-Reply-To: <20261026-b4-vncr-mapping-test-v3-1-7c094a00d46e@fujitsu.com>
-References: <20261026-b4-vncr-mapping-test-v3-1-7c094a00d46e@fujitsu.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Fcvbt7V2
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=aJ85KleHsdb6375xJChkcgqa/AGS2OmDzCxBgEDf+QY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793004596; v=1; x=1793609396;
+ b=Fcvbt7V2CoxVpw3hYaKc20x1nauvHcffAQmhCiSBDPlGF/NmM2kd4ly/D9/cTWMM+OhREaZm
+ HPvmkpT2UNoi2ZOSaCjFZuSwHqdYaaJXZMKtO7grmILazMGiLYeaze2Z44D655UtpU/YpT7FlSy
+ 77fKpKLUMid7BPCuJgxX9118=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 7f4f4f5d460e380d;
+	Mon, 26 Oct 2026 08:49:56 +0000
+X-Mizu-Trace-ID: 7f4f4f5d460e380d
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <c51ae201-ed72-48e0-a29c-d31ecc6e6391@linux.dev>
+Date: Mon, 26 Oct 2026 16:49:36 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,35 +57,155 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: itaru.kitayama@fujitsu.com, pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org, oupton@kernel.org, fuad.tabba@linux.dev, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v3 08/11] cgroup/cpuset: Release invalid isolated
+ CPUs in compute_partition_effective_cpumask()
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261025214449.310715-1-longman@redhat.com>
+ <20261025214449.310715-9-longman@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261025214449.310715-9-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, 26 Oct 2026 03:10:10 +0000,
-Itaru Kitayama <itaru.kitayama@fujitsu.com> wrote:
+
+
+在 2026/10/26 05:44, Waiman Long 写道:
+> It is found by sashiko that when a child isolated partition with parent
+> root partition is invalidated in compute_partition_effective_cpumask(),
+> the switching of the isolated exclusive CPUs from child to parent will
+> not be reflected in isolated_cpus leading to CPU leakage. Fix that by
+> calling isolated_cpus_update() when that happens.
 > 
-> Add a standalone KVM selftest that checks VNCR accesses after L1
-> updates its stage-1 mapping and issues a TLBI. This guards against
-> stale VNCR translations, as KVM caches L1's translation of
-> VNCR_EL2 and must drop it when L1 invalidates the mapping in
-> kvm_handle_s1e2_tlbi().
+> Also simplify compute_partition_effective_cpumask() by doing
+> child partition invalidation only for the special case of no more
+> effective_cpus left in a populated parent. The other case doesn't
+> actually warrant invalidation at this stage and subsequent iteration
+> in update_cpumasks_hier() and update_parent_effective_cpumask() for
+> that child should handle that.
 > 
-> Keep VNCR_EL2 unchanged while remapping its backing page A to B then
-> again to A. At each step, L2 reads and writes TPIDR_EL2, and L1
-> verifies that the accesses reach the selected page while leaving the
-> other page unchanged.
+> Also drop the make_partition_invalid() helper by inlining it into
+> compute_partition_effective_cpumask() as it is the only caller.
+> 
+> A new test case is add to test_cpuset_prs.sh to verify this.
+> 
+> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c                        | 46 +++++++------------
+>  .../selftests/cgroup/test_cpuset_prs.sh       |  4 ++
+>  2 files changed, 21 insertions(+), 29 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 53fa3970946e..6d224e614e74 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -254,15 +254,6 @@ static inline bool cs_is_member(const struct cpuset *cs)
+>  	return cs->partition_root_state == PRS_MEMBER;
+>  }
+>  
+> -/*
+> - * Callers should hold callback_lock to modify partition_root_state.
+> - */
+> -static inline void make_partition_invalid(struct cpuset *cs)
+> -{
+> -	if (cs->partition_root_state > 0)
+> -		cs->partition_root_state = -cs->partition_root_state;
+> -}
+> -
+>  /*
+>   * Send notification event of whenever partition_root_state changes.
+>   */
+> @@ -2153,8 +2144,6 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>   * or update_cpumasks_hier() where parent and children are modified
+>   * successively, we don't need to call update_parent_effective_cpumask()
+>   * and the child's effective_cpus will be updated in later iterations.
+> - *
+> - * Note that rcu_read_lock() is assumed to be held.
+>   */
+>  static void compute_partition_effective_cpumask(struct cpuset *cs,
+>  						struct cpumask *new_ecpus)
+> @@ -2166,15 +2155,16 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>  	WARN_ON_ONCE(!is_partition_valid(cs));
+>  
+>  	/*
+> -	 * Check child partition roots to see if they should be
+> -	 * invalidated when
+> -	 *  1) child effective_xcpus not a subset of new
+> -	 *     excluisve_cpus
+> -	 *  2) All the effective_cpus will be used up and cp
+> -	 *     has tasks
+> +	 * Check child partition roots to see if they should be invalidated
+> +	 * when all the effective_cpus will be used up and cs is populated.
+> +	 * It is better to sacrifice a child partition root than invalidating
+> +	 * the whole subtree.
+> +	 *
+> +	 * Return early if the effective_cpus is already empty.
+>  	 */
+>  	compute_excpus(cs, new_ecpus);
+> -	cpumask_and(new_ecpus, new_ecpus, cpu_active_mask);
+> +	if (!cpumask_and(new_ecpus, new_ecpus, cpu_active_mask))
+> +		return;
+>  
+>  	rcu_read_lock();
+>  	cpuset_for_each_child(child, css, cs) {
+> @@ -2186,22 +2176,20 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>  		 * partition root.
+>  		 */
+>  		WARN_ON_ONCE(is_remote_partition(child));
+> -		WRITE_ONCE(child->prs_err, 0);
+> -		if (!cpumask_subset(child->effective_xcpus,
+> -				    cs->effective_xcpus))
+> -			WRITE_ONCE(child->prs_err, PERR_INVCPUS);
+> -		else if (populated &&
+> -			 cpumask_subset(new_ecpus, child->effective_xcpus))
+> -			WRITE_ONCE(child->prs_err, PERR_NOCPUS);
+> -
+> -		if (child->prs_err) {
+> +		if (populated && cpumask_subset(new_ecpus, child->effective_xcpus)) {
+>  			int old_prs = child->partition_root_state;
+> +			int parent_prs = cs->partition_root_state;
+>  
+>  			/*
+> -			 * Invalidate child partition
+> +			 * Invalidate child partition and update isolated_cpus
+> +			 * if necessary.
+>  			 */
+>  			spin_lock_irq(&callback_lock);
+> -			make_partition_invalid(child);
+> +			WRITE_ONCE(child->prs_err, PERR_NOCPUS);
+> +			if ((old_prs == PRS_ISOLATED) && (parent_prs == PRS_ROOT))
+> +				isolated_cpus_update(PRS_ISOLATED, PRS_ROOT,
+> +						     child->effective_xcpus);
+> +			child->partition_root_state = -old_prs;
+>  			spin_unlock_irq(&callback_lock);
+>  			notify_partition_change(child, old_prs);
+>  			continue;
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index f0d98da3cfd8..d7d0bef0a17a 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -518,6 +518,10 @@ TEST_MATRIX=(
+>  	" CX0-4:P2 CX2-4:P2 CX3-4:P2 .     .     X2     .      .     0 A1:0-1,3-4|A2:2|A3:2 \
+>  								       A1:P2|A2:P2|A3:P-2 0-4"
+>  
+> +	# When an isolated partition child with root partition parent is invalidated,
+> +	# its effective xcpus will be removed from isolated_cpus.
+> +	" C1-4:P1 C3-4:P2   .      .    T:C3-4   .      .      .     0 A1:3-4|A2:3-4 A1:P1|A2:P-2 ."
+> +
+>  	#
+>  	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+>  	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
 
-If you were tracking cross vcpu invalidation and exercising all the
-architecture corner cases (such as permission changes and co), that
-would be helpful.
+Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Tested-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
-But as it is, it doesn't help much as a validation tool. Its scope is
-way too narrow.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Thanks,
+Guopeng
