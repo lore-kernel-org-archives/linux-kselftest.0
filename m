@@ -1,103 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792999357;
-	b=mAC020kIeCnGJjg3XsKZtskvzx/93rza07fYa9cqk1RsOKqAj2pTQGxIjmSiZJEzSHKy
-	 jUTcnHd/HFbXk1NXfNFke0oQpRR3cTZjicFeUvc9KBajF1w+NagwgfYfh4HtwZCKhKebT
-	 3N656WxHhTzl3p2P57eHbCVgRomUtlpixe+7feAm7+Mwp5Re77bzQcGRJmlXwZxZckAIw
-	 KENxk919dqQ8pPECpmA6usxV4zKZyy+vA3fmXIGXDBBBAsCF7Pa0USH6mEAJXl7GdAMp+
-	 wyFHGf6iYERng3gLDTGoIGlvZiolAVQtZjb/VMhC1YOTGfgdvweS25pOF/Y7iZTx2KA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792999357;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To;
-	bh=HJZtmQZPEueeCiwg4sV5mAgkGS8BZr7Xf8cF5fmkfCA=;
-	b=yinYxqo0BcGM2O5YJiodPINndA4OUuG9wtWG80FGuss8SZ9mxUUCP554aQRMY9E4Pi+k
-	 BSJC1ELf/QuO309YEkKqIjWNn2jCbcLv1mX9/fwW0uzaj7ZXIZwr035fUz3BHgU8G5qX1
-	 wHOszvHc8KnTLMYdgp1hOmcox+JjjK2gnNahBNiieGH+O10zjuscvKredfwBmaDnRhEEJ
-	 dDe3/O4szI8TNDvBA51ax/ElGWZM/bHtRwDoW4w87CIjKH4UG5PiNBbUepYCDZOvEQJ3N
-	 9vco0Nj72DeqJvTfHXhXBCTBwHKLFHpRGZKsj2TG/XFErkINMTyYWN6ZekNzgP2XPMg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PHi3VkvJ;
-	arc=none smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792999392;
+	b=TfhJfM2LsdAmtBRTGrredXNOlzaSA6bVpvpyt2OomGX6z7QzIfVLh9dGRD5kVfG+7ruf
+	 4oONi1NVWYx4EEJaFds0MveVyghlpQSpFO28UB86qtTrtvSI4l9gea4eC7uhhE8/g7QX4
+	 a7CZnZai9bhTUCwZFUhV3Im55uAcM3n58eBH/M7FwFqypeb9/XS27E+nHK5zxfQpyWDAO
+	 hfR5y/fnrcX+pRFbuJhQPrIPOdVU8XZX1zeyaeBvU7wra6PUGvmi+ny8M8kZgSesAg/q7
+	 u6qil7LpGD6F1/X/CNz/fe3cNd5GHnnmjrdfuYCte/mA02fjps1Z7nFV+o1sI/CHbCA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792999392;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=t3ZjtwgrD/gzd7YIbWTU8D3+CAezX9gdRtFNrEWBVK0=;
+	b=CrkmBMs9Gyfw01kIKZpkNh3tW3O4NDpF0RNE3x/+gvBK6+PIncY/5Dl8F4eITcBP0r3p
+	 Bqkhk5K4nW1NDiOAPxllAF5pNLSm7gOaRXfYruudQ7NtU563zreCkDo/VvLX3Vr2lHvHR
+	 Ub02c9CUggue9O4P53NlYOJOUitM72PAQKVa1YOMgiZtrnh77EkEjx3le2pFgn1EMsaCe
+	 zIGp326PZZCGzhtRmya6jlBg2I4Sn8T6nM/DsR5zLl4fahs28NIoiEXQRYyDJMDtvh5iw
+	 7w3xMqXmPChmiUKzSd/fZcCYWRaBNWwjnUK1C0FnGPqKJxDeqhw57OvS7I4PtSs8DjA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FealGjTE;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58C8606A325;
+	Mon, 26 Oct 2026 07:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FealGjTE
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1792999391;
+	b=2GdBrx/HJxTNmzkf3ge6cHhBHiBXjwQRWHAjCsLdrTFjqS/tsQgKszefYEZpuAWsj6dS
+	 z7Rglxm2+IEdnpyN8no2jQeL4y+8CJZHtw1lIWiKCz5DMbV7ysy+HwstcApcddptJKk9M
+	 D7x2PZw66gh8WaYtjxaoN40RN8vodLI5iULjOZ1tGznxZ4xyaog+VP7NeRXGKdSUc4gTo
+	 /R360RVt6dCU1rqs/+/s45fKz7AKO9q1ZF7Sj9JUnGc1ooe/VmH847rEH5KTy2V2WZhUl
+	 qvs8U8GsOOW48XZ3PfBQioWj0DzjV92QhpGYoiYo8SB72wXoFjMei/mDe7iji+18l7Q==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792999391;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=t3ZjtwgrD/gzd7YIbWTU8D3+CAezX9gdRtFNrEWBVK0=;
+	b=V4Kuhd6RkF3aHl+2JiC4lw3fb1G1Z1L1ltHAOGCGu1FuaJ6k0SL5CWsXBJ4jYH8pvJAf
+	 Bs1/XZxNufattxPa5ZwqchhOzP1KoMrDK2Bo5HpGtFIihOftzYeZKVx2q4SZA+goUMChl
+	 R0EMd9U5HXJ+mafxhZrS84CiyvkVfLa8f9nnEf+piUXVNgWXjUyWksfw2KZFlPZMJdIs5
+	 gP4tN4O7arHnEowc4lC2YLkjPNNmMYqFs6B45FPJgaZJV7ekDr58+K9rl+HR1gFdEq9BV
+	 ywQlPUvzlGOZJgioDlfR3Hk031Vht3aHY6TQ4pj3ILoo8916KlYcFHaK+o5esJIjuWA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899A1606A31D
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 07:22:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 899A1606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PHi3VkvJ
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a60f9474c4so6096245e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 00:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792999356; x=1793604156; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HJZtmQZPEueeCiwg4sV5mAgkGS8BZr7Xf8cF5fmkfCA=;
-        b=PHi3VkvJzLMPj8R1/whCS+guMKXQNQ7sbyf7+jCM6ssCp7yNs/alG9/dqGX4U5tT65
-         wpQParAJvvCWuz//hHzfbPXsJsUAVnpk0zNv1XfIzboShrlBl1BPzm5UWfAE9apaxDPa
-         /Bgt0+1z58inytsxoTvxOauRUasdefC8hCtKehHRa4ShYQoFHjfULm1ui6hcE1W+vYfO
-         10v9oNYrrmzypnfRNG413fv+YgZl9TyrZ1vXorxqljIgKzr9ZREqNqOLdfr2YQ2Sup3k
-         6UOiH3JPhP/D/02GBs7YDgxQEDEkOhFbB/zNGQ7Gg0tNB0wIjXBkcLeO6oqHvPv3njjC
-         uHuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792999356; x=1793604156;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=HJZtmQZPEueeCiwg4sV5mAgkGS8BZr7Xf8cF5fmkfCA=;
-        b=qWOTBtuSfqXnjhbNrtSMnPIPr/GesLy/DCjxe0ESRYP/2rQC60TWS1bUa9hCxnr1EB
-         GtnnJQwQUt8a3DIRK2762P3mXb5vIhQ4IviKw0rggv694f35/GUkh1MfpUfbJrN5zUKh
-         g6Jf8QiTGkvL+ikdrC7ofGNkxViWgLwp68g1yMoIFE9YerXssgcijjeFeyuPlR2Re1WS
-         elPAS2QN5lqVYLB4y1dpEmEsQbCvZwTrNIqFfjHM8Lo44+HoK5CVxbaWmaYwHcS8P3eI
-         4pC+pUui+rsrvtH9Fzw2PG7lzVKYXRQ5jjVvG68b3t3X9EYvQXx3ohEdh7B1RYczqAkX
-         pFSQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzQnnqUnWWgWvDXq3pgPFHuqoH77R/rbT2M3gTeIqax5vYPRmwezm60vixA2jb3L7Zta1iqZqskCPN+O8B4ifk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLJrkanfFqy5l6WNGQvENb9D1xTdaH50ZwmpXVOwIjm3E8PDdJP
-	3ST3fbW9YV8bV/MbfnvAYSssPCkAVvE+rvVIWIlF8zZJ9JAS4tU/4aFK
-X-Gm-Gg: AYBFou0n7xje2iD3bTLMT9pTqPmDdn52bKA/PCuhjtOLn4glhmQpvVBnZCZdDLDhb+i
-	5sSoyFGjp3TkYgEBO7+qatZzBeafs3f4aIpUKLLSruj7hARR/n6EQeYUsIAJRDK0gAUINWoNFUR
-	Lllu2YYI4Dxn9MEZqG/UOvuInWZmm4Z0TQIhHVvZRMtpp6h3Oblx4s7tqh07r3ggcADaCtCMGMu
-	ih8xFXWUo5fxqDF7lyoQcQVeyBuxUVriwUiMWKXSLb/3MU/Svwz94+8z+Cu+Nerp4Pgi18ec6pB
-	Ui85rq33SDGWU7QPWFZbZO6EKZ7e0O722FPzwCp/rTRbn1hThC4LOfxeTyAPSjR+NKY6sz4sKuj
-	DsYQ2r+mz5Gf/iQr3vXCyV69AJuUjfNfafDEWLSqhXEt2zjRxgEW8/OLJNAAIcBraqqRIvCH7d9
-	3Hj5sBE7HQMG1fREIeUmO2FeaT1zBwjLrzaJTnE3o8eUYk+C5RSaMHxIZZg/iKHUQVPbyZa5cHP
-	cdGHlaJcDZd0BIZAXf6DOyzqRFqDRiIPWfDG807d5dIe9YrkCAQVAlRXmneSnDnACzfjN2kPYQK
-	5Ptl
-X-Received: by 2002:a05:600c:3d8d:b0:4a2:150f:1601 with SMTP id 5b1f17b1804b1-4a35ac94951mr108366005e9.12.1792999355465;
-        Mon, 26 Oct 2026 00:22:35 -0700 (PDT)
-Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a35b4a8bc1sm84113045e9.4.2026.10.26.00.22.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 00:22:35 -0700 (PDT)
-Date: Mon, 26 Oct 2026 08:22:30 +0100
-From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	John Ericson <mail@johnericson.me>,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 0/3] landlock: Add access rights on created files
-Message-ID: <20261026.dd06418f7fd4@gnoack.org>
-References: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
- <20261025.769b43a39e24@gnoack.org>
- <20261025.8e22954c9c47@gnoack.org>
- <DME3ZOI3Z6VE.1XGI920DJV4LE@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 58BD41F01829;
+	Mon, 26 Oct 2026 07:23:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792999391;
+	bh=t3ZjtwgrD/gzd7YIbWTU8D3+CAezX9gdRtFNrEWBVK0=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=FealGjTEYVZ9QPNXMLYxBlSHiyWkNzb5HMAvQ6rFSTWLG7K8KJnWHIUu6enqqjVrU
+	 WFHB35luN3wK28AGH+kUgO7aDj2WM410nI0kWu05Ya+BQjYcjW/1kpXW+T2JehdnQl
+	 GuicV0akvVEZfud2vromRaVLFhRnS23ZdPtR8XRhdqwc65SdBiY/UGK7cHwl2OK0ud
+	 nMJgI1Nk7Akvanjf8C69aKYSRSvh076MN1RVLDCWsuGlUA2sSUj28nQOb5Lm5J7eV8
+	 KNbIjE++3zTW/Y7C/uOdrk914b9+tNmXyEBKGwWvElYAM6G9+RtjQQu4fo3BDlI4IY
+	 2ZPPgZwbF2ogA==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id D9BFB44C4B;
+	Mon, 26 Oct 2026 07:23:09 +0000 (UTC)
+From: Esko Mobius via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
+Date: Mon, 26 Oct 2026 15:23:09 +0800
+Subject: [PATCH net 2/2] Revert "net: advertise TCP MSS from the configured
+ MTU, not the learned PMTU"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -107,170 +83,209 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DME3ZOI3Z6VE.1XGI920DJV4LE@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261026-advmss-revert-v1-2-272fa4b7ecb6@gmail.com>
+References: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
+In-Reply-To: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ "David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>, 
+ David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+ Jiayuan Chen <jiayuan.chen@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ Thorsten Leemhuis <regressions@leemhuis.info>, regressions@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Esko Mobius <echoowall@gmail.com>, 
+ Eric Dumazet <edumazet@kernel.org>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792999388; l=7106;
+ i=echoowall@gmail.com; s=20261026; h=from:subject:message-id;
+ bh=fL0gKXuPe+I5V6mRdeFfmPyR7mfZWM2UrUUi/fbzPNQ=;
+ b=PwtWXbh/QSU8s8/6UZXtK7P2iALPCmzcQe2h88iYL9ZiLRSFfrVpjL0toZoDDrCUpykbJHxxh
+ 87/1+l0HfDLAC9s0m+bTv7L12i7SWDqAr5P0gEVgmwSoh9z9LEpKKll
+X-Developer-Key: i=echoowall@gmail.com; a=ed25519;
+ pk=9XP6JhqjjPsHCF6UZZZTeqTRnXIa4+ufggnxXtTJ+no=
+X-Endpoint-Received: by B4 Relay for echoowall@gmail.com/20261026 with
+ auth_id=1323
+X-Original-From: Esko Mobius <echoowall@gmail.com>
+Reply-To: echoowall@gmail.com
+Content-Transfer-Encoding: 7bit
 
-On Sun, Oct 25, 2026 at 10:52:14AM -0700, Farid Zakaria wrote:
-> On Sun Oct 25, 2026 at 7:57 AM PDT, Günther Noack wrote:
-> > On Sun, Oct 25, 2026 at 12:07:10PM +0100, Günther Noack wrote:
-> >> Hello Farid!
-> >> 
-> >> On Sat, Oct 24, 2026 at 01:39:16PM -0700, Farid Zakaria wrote:
-> >> > This is a proposal for an idea to add support for landlock to work
-> >> > better with build systems such as Nix where they want to apply
-> >> > restrictions but the paths may not yet exist.
-> >> > 
-> >> > TL;DR;
-> >> > ========
-> >> > 
-> >> > Landlock rules attach to inodes that exist when a ruleset is built.
-> >> > That makes a directory shared between trusted and sandboxed tasks hard
-> >> > to confine: the sandbox may create entries there with
-> >> > LANDLOCK_ACCESS_FS_MAKE_*, but no rule can name those entries ahead of
-> >> > time, and granting read access on the directory to cover them exposes
-> >> > every other entry as well. This series adds a rule flag that grants
-> >> > access rights on the entries a domain creates in a directory, instead
-> >> > of on the directory.
-> >> > 
-> >> > Motivation
-> >> > ==========
-> >> > 
-> >> > The motivating user is the Nix build sandbox. Every Nix build runs in
-> >> > its own sandbox, and a build may only read its declared inputs in
-> >> > /nix/store and must be able to write and read back the outputs it
-> >> > creates there. Nix enforces this with a private mount namespace: it
-> >> > creates an empty store directory and bind-mounts each input path into
-> >> > it, one mount per input. Nix has paid this per-input cost since the
-> >> > sandbox was introduced [1].
-> >> > 
-> >> > The cost is paid per build and grows with the size of the input
-> >> > closure. Nix is moving towards much finer-grained builds (many small
-> >> > derivations instead of a few large ones), so the number of sandboxes
-> >> > grows while each build's own work shrinks, and the sandbox setup is
-> >> > becoming the bottleneck. A typical build has hundreds of inputs; large
-> >> > ones have thousands.
-> >> > 
-> >> > A microbenchmark sets up and tears down a Nix-like sandbox (user,
-> >> > mount, PID, IPC, UTS and network namespaces, pivot_root into a chroot,
-> >> > removing the chroot afterwards). It compares one bind mount per input
-> >> > with a single bind mount of the whole store plus one Landlock rule per
-> >> > input. Median latency per sandbox, one sandbox at a time, Linux 7.1,
-> >> > ext4, 16 cores:
-> >> > 
-> >> >   inputs   bind mount per input   one bind mount + Landlock   speedup
-> >> >       10         3.2 ms                    2.3 ms               1.4x
-> >> >      100        11.6 ms                    2.8 ms               4.1x
-> >> >     1000        79.3 ms                    6.4 ms              12.4x
-> >> >     5000       400.1 ms                   24.4 ms              16.4x
-> >> > 
-> >> > With Landlock, an input costs an O_PATH open and a landlock_add_rule()
-> >> > call: there is a single mount, and no mountpoint directory to create
-> >> > before the build and remove after it (removing the 1000 empty
-> >> > mountpoints alone took 17 ms).
-> >> > 
-> >> > The single bind mount is only sound if the store listing and the
-> >> > undeclared store paths stay unreadable while the build can still use
-> >> > its outputs. Without this series, covering the outputs requires a rule
-> >> > on /nix/store itself, which makes every store path readable again.
-> >> > 
-> >> > [1] https://github.com/NixOS/nix/issues/179
-> >> 
-> >> I have not done a thorough code review yet, and will focus on the
-> >> general approach.
-> >> 
-> >> I am generally in favor of this approach where we keep track of the
-> >> directory inode plus the file name.
-> >
-> > Apologies, I think I was jumping to conclusions here when I read this
-> > too superficially - I realize that you have implemented something
-> > different;
-> >
-> > If I understand correctly, your proposed patch set is granting the
-> > access rights on every file that you are creating freshly, but not on
-> > files that were created by other processes in the same directory.  The
-> > semantics, from what I can see, seem like a Landlock variant to what
-> > the "sticky bit" does in /tmp -- you have access to what you create
-> > yourself, but not to the files created by other processes.
-> >
-> >
-> > ## Alternative suggestion
-> >
-> > I have been discussing the other approach with Mickaël a while back.
-> > This would also work in use cases where we want to express a rule on a
-> > path whose underlying file inode might change, with examples being
-> > /etc/resolv.conf (recreated by a DHCP client) or Pathname Unix Domain
-> > Sockets (commonly recreated when services restart).
-> >
-> > In that approach, we'd add a rule like
-> >
-> > /* pseudocode; name and exact layout TBD */
-> > struct landlock_path_beneath2_attr {
-> > 	__u64 allowed_access;
-> >         __s32 parent_fd;
-> >         char  *basename;
-> > }
-> >
-> > During the path walk when checking for an access right, it would match
-> > if the parent_fd matches an inode and the name of the next path
-> > component is basename.  For example, to access a (potentially
-> > changing) /etc/resolv.conf:
-> >
-> > struct landlock_path_beneath_attr2 attr = {
-> > 	.allowed_access = READ_ONLY_ACCESSES,
-> >         .parent_fd      = open("/etc", O_PATH|O_CLOEXEC),
-> >         .basename       = "resolv.conf",
-> > }
-> >
-> > Or to allow the creation of an output file:
-> >
-> > struct landlock_path_beneath_attr2 attr = {
-> > 	.allowed_access = READ_WRITE_ACCESSES | LANDLOCK_ACCESS_FS_MAKE_REG,
-> >         .parent_fd      = open("/output/directory", O_PATH|O_CLOEXEC),
-> >         .basename       = "mymodule.o",
-> > }
-> >
-> > Would that be a model that would work for your Nix use case as well?
-> > I'm imagining that you are declaring the exact list of output files,
-> > is that correct?
-> >
-> > –Günther
-> 
-> Gunther,
-> 
-> From my reading of your suggestion and the code, I think that would work
-> for Nix and maybe a little simpler. Nix does know ahead of time the
-> output directory (/nix/store/<hash>-<name>, one per output), so
-> a parent_fd and a basename that we walk uptowards would be sufficient
-> without creating inodes.
-> 
-> This sounds like a good approach to me and my research upon your
-> suggestion is that it would simplify the proposal as well (drop
-> a patch). Should I try to implement this and send a new patch series?
-> (Disclosure: Will use AI to help me write the code, but will review and
-> test it myself.)
+From: Esko Mobius <echoowall@gmail.com>
 
-I'm on board with this approach, but I'd recommend briefly waiting for
-Mickaël's ack, because he is the one who gives final approval on these
-patches.  (In the interest of everyone's time, might be better to
-first figure out which of these approaches is viable, before we jump
-into more implementation details.)
+This reverts commit 2640e6419594 ("net: advertise TCP MSS from the
+configured MTU, not the learned PMTU").
 
-Mickaël, can you please double check and confirm that the approach I
-described above is in line with the one you also had in mind when we
-discussed it at LSS?
+That commit stopped the learned PMTU from lowering the MSS we advertise
+in SYN and SYN-ACK. For symmetric paths it argued that "the peer runs
+its own PMTU discovery and usually already knows the real path MTU".
+That only holds if ICMP "fragmentation needed" can reach the peer. When
+the peer sits behind a firewall that drops inbound ICMP, its PMTU
+discovery is a black hole (RFC 2923, section 2.1), and the smaller MSS
+we advertised was the only thing keeping its full-size segments off the
+narrow hop.
+
+Inbound ICMP filtering is very common in enterprise and carrier
+networks, and it is pervasive in mainland China. We hit this in
+production after the commit was backported to 6.12.111: TCP connections
+that reach a server through a relay with a smaller-MTU hop complete the
+handshake, then stall as soon as the client sends full-size segments.
+Clients on networks that let ICMP through, and connections that bypass
+the relay, are unaffected, which made it hard to trace back to the
+kernel.
+
+Reproducer, network namespaces on a single host:
+
+  cli --(1500)-- r1 --(1456)-- r2 --(1500)-- srv
+
+r1 drops ICMP frag-needed towards cli. srv has already learned PMTU
+1456 towards cli, then cli uploads 1 MB to srv:
+
+  kernel                     SYN-ACK MSS   1 MB upload
+  6.12.107                   1416          OK
+  6.12.111                   1460          stalls, times out
+  7.3-rc7                    1460          stalls, times out
+  7.3-rc7 + this revert      1416          OK
+
+The asymmetric case the commit was written for does not need a new
+default: the advertised MSS can already be set per route with the
+advmss metric, which takes precedence over default_advmss(). With this
+revert applied, on an asymmetric path where srv learned PMTU 1456
+towards cli while cli->srv is 1500 end to end:
+
+  srv route to cli           SYN-ACK MSS   largest cli->srv segment
+  default                    1416          1404
+  advmss 1460                1460          1448
+
+So DSR-style setups can opt in with "ip route ... advmss <mss>", while
+hosts whose peers cannot complete PMTU discovery keep working by
+default.
+
+Fixes: 2640e6419594 ("net: advertise TCP MSS from the configured MTU, not the learned PMTU")
+Reported-by: Esko Mobius <echoowall@gmail.com>
+Closes: https://lore.kernel.org/regressions/4F0FAEB6-A13B-47F3-BFF1-C706686C6F64@gmail.com/
+Cc: stable@vger.kernel.org
+Signed-off-by: Esko Mobius <echoowall@gmail.com>
+---
+ include/net/ip.h        | 25 -------------------------
+ include/net/ip6_route.h | 37 -------------------------------------
+ net/ipv4/route.c        |  4 ++--
+ net/ipv6/route.c        |  2 +-
+ 4 files changed, 3 insertions(+), 65 deletions(-)
+
+diff --git a/include/net/ip.h b/include/net/ip.h
+index 618b9806c..0acc4ba5e 100644
+--- a/include/net/ip.h
++++ b/include/net/ip.h
+@@ -513,31 +513,6 @@ static inline unsigned int ip_dst_mtu_maybe_forward(const struct dst_entry *dst,
+ 	return res;
+ }
+ 
+-/* Configured/administrative MTU of a route, for advertising the TCP MSS.
+- *
+- * Unlike ip_dst_mtu_maybe_forward(), this deliberately ignores the
+- * ICMP-learned path MTU (rt->rt_pmtu).  The advertised MSS bounds what the
+- * peer may send to us and must reflect our receive capability (the device or
+- * route-configured MTU), not a path MTU learned on the reverse (send)
+- * direction, which may not apply to the peer->us path and outlives the fnhe
+- * for the whole connection.  See RFC 2923 section 2.3 and the comment above
+- * tcp_advertise_mss().
+- */
+-static inline unsigned int ip_dst_mtu_configured(const struct dst_entry *dst)
+-{
+-	unsigned int mtu, res;
+-
+-	rcu_read_lock();
+-	mtu = dst_metric_raw(dst, RTAX_MTU);
+-	if (!mtu)
+-		mtu = READ_ONCE(dst_dev_rcu(dst)->mtu);
+-	mtu = min_t(unsigned int, mtu, IP_MAX_MTU);
+-	res = mtu - lwtunnel_headroom(dst->lwtstate, mtu);
+-	rcu_read_unlock();
+-
+-	return res;
+-}
+-
+ static inline unsigned int ip_skb_dst_mtu(struct sock *sk,
+ 					  const struct sk_buff *skb)
+ {
+diff --git a/include/net/ip6_route.h b/include/net/ip6_route.h
+index 5f47cef0b..95f936be3 100644
+--- a/include/net/ip6_route.h
++++ b/include/net/ip6_route.h
+@@ -396,43 +396,6 @@ static inline unsigned int ip6_dst_mtu_maybe_forward(const struct dst_entry *dst
+ 	return mtu - lwtunnel_headroom(dst->lwtstate, mtu);
+ }
+ 
+-/* Configured/administrative MTU of a route, for advertising the TCP MSS.
+- *
+- * Unlike ip6_dst_mtu_maybe_forward(), this ignores any ICMPv6-learned path
+- * MTU (which is kept on the RTF_CACHE exception route) and returns the MTU of
+- * the underlying route (fib6_pmtu) or the egress device.  The advertised MSS
+- * bounds what the peer may send to us and must reflect our receive
+- * capability, not a path MTU learned on the reverse (send) direction.  See
+- * RFC 2923 section 2.3 and the comment above tcp_advertise_mss().
+- */
+-static inline unsigned int ip6_dst_mtu_configured(const struct dst_entry *dst)
+-{
+-	const struct rt6_info *rt = dst_rt6_info(dst);
+-	const struct fib6_info *from;
+-	struct inet6_dev *idev;
+-	unsigned int mtu = 0;
+-
+-	rcu_read_lock();
+-	/* IPv6 keeps the learned PMTU and the configured MTU in the same
+-	 * RTAX_MTU slot: the learned value sits on this (possibly RTF_CACHE)
+-	 * dst, the configured one on the underlying route.  Reach the latter
+-	 * via ->from (fib6_pmtu), populated by ip6_route_info_create().
+-	 */
+-	from = rcu_dereference(rt->from);
+-	if (from)
+-		mtu = from->fib6_pmtu;
+-	if (!mtu) {
+-		mtu = IPV6_MIN_MTU;
+-		idev = __in6_dev_get(dst_dev_rcu(dst));
+-		if (idev)
+-			mtu = max_t(unsigned int, mtu, READ_ONCE(idev->cnf.mtu6));
+-	}
+-	rcu_read_unlock();
+-
+-	mtu = min_t(unsigned int, mtu, IP6_MAX_MTU);
+-	return mtu - lwtunnel_headroom(dst->lwtstate, mtu);
+-}
+-
+ u32 ip6_mtu_from_fib6(const struct fib6_result *res,
+ 		      const struct in6_addr *daddr,
+ 		      const struct in6_addr *saddr);
+diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+index 595a3b7f1..93b9f4189 100644
+--- a/net/ipv4/route.c
++++ b/net/ipv4/route.c
+@@ -1365,8 +1365,8 @@ static unsigned int ipv4_default_advmss(const struct dst_entry *dst)
+ 
+ 	rcu_read_lock();
+ 	net = dst_dev_net_rcu(dst);
+-	advmss = max_t(unsigned int, ip_dst_mtu_configured(dst) - header_size,
+-		       net->ipv4.ip_rt_min_advmss);
++	advmss = max_t(unsigned int, ipv4_mtu(dst) - header_size,
++				   net->ipv4.ip_rt_min_advmss);
+ 	rcu_read_unlock();
+ 
+ 	return min(advmss, IPV4_MAX_PMTU - header_size);
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index 94e5ef1c4..5760a357e 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -3239,7 +3239,7 @@ void ip6_sk_redirect(struct sk_buff *skb, struct sock *sk)
+ 
+ static unsigned int ip6_default_advmss(const struct dst_entry *dst)
+ {
+-	unsigned int mtu = ip6_dst_mtu_configured(dst);
++	unsigned int mtu = dst6_mtu(dst);
+ 	struct net *net;
+ 
+ 	mtu -= sizeof(struct ipv6hdr) + sizeof(struct tcphdr);
+
+-- 
+Git-157)
 
 
-The use of AI is fine in Landlock, I've used it myself for patches in
-the past.  (The Linux-wide rules apply of course, as documented in [1]
--- Take full responsibility for the contribution and make sure you
-understand it the same as if you had written it by hand.)
-
-–Günther
-
-
-[1] https://docs.kernel.org/process/coding-assistants.html
-
-P.S.: The requirement for the "Assisted-by" tag has been dropped in
-commit 1e035297ffda ("docs: remove Assisted-by references") now.
