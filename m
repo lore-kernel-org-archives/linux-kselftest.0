@@ -1,51 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.190
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.83
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792996369;
-	b=FLW9j/j+RWl70iiMGv5hheWfivZbgefosV0aDJwtvxJVMvO9xXyjBKO2lhMWcxLYPFdZ
-	 4ixM+Q1hm3ml/34s70cukDANHdNbRIYxtHjQBTPOQzoNdLOwX8+yZblGiEoukn3GNZbYQ
-	 1CkNks+MZBv3cqlGD2QBcwX/IbTvmVMYatrp0C/c0S8Xo1PFFyAWkecEBnhuRBt1y/ppV
-	 HrzXCkh/UZvcXI2rkGwrVfNBafPsGhmigc0pniyLIJUQQq6/WkjlDGS0gtkjrh8xUJWa+
-	 V3CFb0dogtUJ/80PokcyeVxDE4RmHNC00rcLSzPVBvGCUU0hMqTxixmNLjO3AH+heoA==
+	t=1792996407;
+	b=vPjjL/TOg1aEwa5/DBMPkixlXKixvS5oAtKeuu+epNS1tTBnDp6fhM74nduhPRiTr2ZE
+	 chfjDUanIqcBAVb1wZRY7JMZqhQzOYKg4a8AwRIkj6f/aSs2il1hsfWweJJxsjfcUuTVf
+	 ss6oebX2AsCD1SrpWQVzl7fc47DxLpaazAyXZISAcGfx+tUbRJCR+Gi+r5yvI1TllPo29
+	 wpn9tLTPvSNtksReZYKNBt37jQuMAkR6s2+XlhkCV+nklQZw5qVgnpsmK8dFaIVtF6+pW
+	 K73sz/fn9+5ZKrxDz8CI7SNtZ9gw9OqYbQ6p4HCt966VESTbKYfzVhPiV0qwVw8tz/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792996369;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792996407;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=CC59iY1aw6OyV8aTURcQLbLL17pBSNRBVzyiXs5pORM=;
-	b=duy8j0P0zo7443vWscs2Df2wo0CF4wbYH1DoMMP29MQmwd3pDFciytfw2UE9BL/3iwE1
-	 IWIzakTmOkhjljTg+qy5rfRdYTyIyeD8wd4lW1CEUi4WrltY89G2ruE4nxBxBzpxZZcBv
-	 Z5oGhy5A0ohmRr0clJCBwBJuYzCEt+wmapV6RrFWIFj/PmHR21Ab2Dwdb5eiFsv/OUftx
-	 KhKGP9ZRWsEWJeCSn0ZWy5ZulwGMIP/veMjYHDCp6IljxbpT63R/wh4QJGiJzenC1QPc1
-	 dyFr2iRuoI5iLSPoVcG8hcZQE4cTOy09jPs8qx1REb2Vkig33TTGezRmeRRFVbku44g==
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=uUoKt/goi6/gdJH+xfQQEGMWPgHYjoWcetRx8SRGhMo=;
+	b=C/9QAWc1Ee6OZwsaYRqAZjSFr4Xma1t17BTAjMZ944hpFARyY5qZU22pEauWVZiL/CSH
+	 t3jpSGMH/0Uy3OgrQeJEUZveDGyMDob8XAUsHymJm4/cV+0GNMlKVfcB3tLmm8k9qgmjW
+	 mSvF0Y7YuRHrFFVUQRXNRz80baMfRP/EbSPfDIrdDdg1b5QYUVdHekXDeEwMfVZhUrUWQ
+	 RBinyZ7XxhNObJYkR+2gTHZMuQFYwOhSvcHKvxCvekFPlg7YXh4Luq21zMyx+jP7pA7OS
+	 n5xMuRJ4CzeAoOE6IJOaPO/oyrzjyT8gjhCIcj4KvM2llpOVtxhuSopzvQSQQiVvNIw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=95.215.58.190
-Received: from mta1.migadu.com (out-190.mta1.migadu.com [95.215.58.190])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=D0i9EJmn;
+	arc=none smtp.remote-ip=91.218.175.83
+Received: from mta0.migadu.com (out-83.mta0.migadu.com [91.218.175.83])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBB9606A31A
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:32:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9EBB9606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59E7606A31B
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 06:33:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B59E7606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=D0i9EJmn
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=CC59iY1aw6OyV8aTURcQLbLL17pBSNRBVzyiXs5pORM=;
+DKIM-Signature: a=rsa-sha256; bh=j9y/gJSpMQGmuIOH4DvgaG5yYS9ycUpPlogqZlKBAY4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792996358; v=1; x=1793601158;
- b=i+8Ult+S6zvD9Bg7VMNe5iRbHrfBhZVRsULgmUnxm37S/8jDYdapDB+FvUaGp2zrcK/aaEFE
- D8uzEsO15Z75t2TuY3WKWU/zKZGkAG0ewvT/UeMW/bCmF9V8zzU8BjTtMkycyGJ2BJD8jbI40oI
- AMmWhlsG/2P/E2gnd59fe7fw=
+ t=1792996403; v=1; x=1793601203;
+ b=D0i9EJmnH3zyPuRGUbFg5dFF3EvyrTMoMKqnSqVkXHwY1YEcRc6eh7Ajqo7cDZc33TvFCuJu
+ AqWnqwzzxskhS+UGTcorUBjmLWTq1HiOjmTGoMhVeSq/Qn1n6tNNjjMjPdmsYXutUZXRy8mhhV9
+ 3gyAptbjw8w+3cZerF5pmz4Q=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b6a4888feb48e90f;
-	Mon, 26 Oct 2026 06:32:38 +0000
-X-Mizu-Trace-ID: b6a4888feb48e90f
+Received: by smtp.migadu.com with ESMTPS id ffcdcf60b4644b82;
+	Mon, 26 Oct 2026 06:33:23 +0000
+X-Mizu-Trace-ID: ffcdcf60b4644b82
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <50b12d32-891c-46d4-bd5f-8924cb8db60f@linux.dev>
-Date: Mon, 26 Oct 2026 14:32:23 +0800
+Message-ID: <48408c54-8fdd-443e-94b3-2aca07d298dc@linux.dev>
+Date: Mon, 26 Oct 2026 14:33:17 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,85 +59,220 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on zero-length
- skb redirect
-To: Eli Skeggs <kernel@eliskeggs.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+Subject: Re: [PATCH-next v3 01/11] cgroup/cpuset: Find furthest isolated
+ ancestor for invalidated isolated partition
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
- <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
- <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
- <010101a176362646-06b53e65-6c20-4ac2-9e05-b74eb5376abf-000000@us-west-2.amazonses.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <010101a176362646-06b53e65-6c20-4ac2-9e05-b74eb5376abf-000000@us-west-2.amazonses.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20261025214449.310715-1-longman@redhat.com>
+ <20261025214449.310715-2-longman@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261025214449.310715-2-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
-On 10/26/26 11:17 AM, Eli Skeggs wrote:
-> On Mon, Oct 26, 2026 at 09:59:00AM +0800, Jiayuan Chen wrote:
->> On 10/26/26 7:41 AM, Eli Skeggs via B4 Relay wrote:
->>> From: Eli Skeggs <kernel@eliskeggs.com>
->>>
->>> Treat a return of 0 as success when there is no data to send, while
->>> continuing to fail on a 0 return with residual bytes. The loop exits
->>> without incident on an empty skb, and the skb gets cleaned up as usual.
->>> On an ingress redirect, the empty message is still queued as before, but
->>> the target socket no longer reports EPIPE.
->> The target can't receive anything after that though. The empty msg sits
->> at the head of psock->ingress_msg and nothing ever dequeues it:
->>
->> [...]
->>
->> So the user gets EOF on a socket whose peer never closed, and everything
->> redirected to it after the FIN is lost. Without a verdict prog on the
->> target it is worse, tcp_bpf_recvmsg() returns -EFAULT forever.
->>
->> Since this patch is already about the zero-length skb, can you handle
->> the ingress side too? E.g. in sk_psock_skb_ingress(), don't queue an
->> empty msg when len is 0 and the skb was redirected (skb->sk != sk). The
->> self PASS case must keep its empty msg since is_next_msg_fin() depends
->> on it.
-> Yep, thanks for pointing that out.
->
-> Alexei suggested skipping empty skbs in sk_psock_backlog():
-> https://lore.kernel.org/all/DMEE6SW3UE97.2DF11HBEBKYYI@gmail.com/
->
-> To your point, I think the critical difference between these approaches
-> happens when the sk's backlog queue is not empty and the socket's own
-> FIN (the self PASS FIN) gets queued. In that case, we rely on the empty
-> msg to correctly update copied_seq, and skipping it means the copied
-> sequence number ends up 1 behind rcv_nxt.
->
-> This path is already broken: when a socket's FIN gets queued behind
-> other skbs, the backlog reports the erroneous EPIPE just as in the
-> redirect case.
->
-> I do like the simplicity of skipping the empty skbs entirely. I don't
-> immediately see what the consequence is for copied_seq being behind in
-> this terminal state, but the approach that updates copied_seq does seem
-> strictly more correct.
->
-> Is that the right interpretation? Let me know what direction I should
-> take for v2.
 
+在 2026/10/26 05:44, Waiman Long 写道:
+> Commit 46b885416c27 ("cgroup/cpuset: Fix a missing isolated_cpus
+> update in update_cpumasks_hier()") searches for the closet partition
+> root ancestor to determine if the isolated CPUs in a to be invalidated
+> isolation partition should be removed from isolated_cpus or not.
+> 
+> As reported by sashiko, this method may not work when there is a deeply
+> nested isolated partition hierarchy. For instance, Consider a nested
+> hierarchy A0 -> A1 -> A2 -> A3 where all four are PRS_ISOLATED:
+> 
+>   A0: effective_xcpus = 0-4
+>   A1: effective_xcpus = 1-4
+>   A2: effective_xcpus = 2-4
+>   A3: effective_xcpus = 3-4
+> 
+> When A1 shrinks its exclusive_cpus from 1-4 to 1-2, A2 will update it
+> effective_xcpus to 2. A3 will find its closet partition root ancestor
+> A2 and decides that its effective_xcpus 3-4 should be removed from
+> isolated_cpus which is incorrect.
+> 
+> Address this corner case by adding a new isolated_cpus_release() helper
+> to replace the existing ancestor_partition() helper. This new helper
+> will search for the furthest isolated partition root ancestor to decide
+> if some or all of its isolated CPUs should be removed from isolated_cpus
+> and also perform the removal when appropriate.
+> 
+> The is_remote_partition() and is_local_partition() helpers are also
+> moved up so they can be used in earlier functions.
+> 
+> There are other pre-existing problems that will still prevent the
+> above test case to work correctly. These problems will be addressed in
+> subsequent patches.
+> 
+> Fixes: 46b885416c27 ("cgroup/cpuset: Fix a missing isolated_cpus update in update_cpumasks_hier()")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c | 104 +++++++++++++++++++++--------------------
+>  1 file changed, 53 insertions(+), 51 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 585a982249ad..bbd44782d4bf 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1257,6 +1257,16 @@ static void reset_partition_data(struct cpuset *cs)
+>  		cpumask_copy(cs->effective_cpus, parent->effective_cpus);
+>  }
+>  
+> +static inline bool is_remote_partition(struct cpuset *cs)
+> +{
+> +	return cs->remote_partition;
+> +}
+> +
+> +static inline bool is_local_partition(struct cpuset *cs)
+> +{
+> +	return is_partition_valid(cs) && !is_remote_partition(cs);
+> +}
+> +
+>  /* Return true if isolated_cpus changes. */
+>  static bool isolated_cpu_update(int new_prs, int cpu)
+>  {
+> @@ -1299,6 +1309,45 @@ static void isolated_cpus_update(int old_prs, int new_prs, struct cpumask *xcpus
+>  		update_housekeeping = true;
+>  }
+>  
+> +/*
+> + * isolated_cpus_release - Remove the relevant CPUs in @xcpus from isolated_cpus
+> + * @cs: the current cpuset
+> + * @xcpus: the set of effective xcpus to be considered for removal
+> + *
+> + * This function is called when an isolated partition is invalidated or when
+> + * some of its effective xcpus are to be removed from isolated_cpus due to
+> + * changes in parent cpuset. The given @xcpus must be modifiable as the function
+> + * will update its value to determine the right set of CPUs to be removed.
+> + */
+> +static void isolated_cpus_release(struct cpuset *cs, struct cpumask *xcpus)
+> +{
+> +	struct cpuset *ancestor = parent_cs(cs);
+> +	struct cpuset *iancestor = NULL;
+> +
+> +	/*
+> +	 * Search the furthest isolated partition root ancestor available
+> +	 * until top_cpuset or a remote partition root is hit.
+> +	 */
+> +	for (; ancestor; ancestor = parent_cs(ancestor)) {
+> +		if (ancestor->partition_root_state == PRS_ISOLATED)
+> +			iancestor = ancestor;
+> +		if (is_remote_partition(ancestor))
+> +			break;
+> +	}
+> +
+> +	/*
+> +	 * If a furthest isolated partition acnestor is found, use it to
+> +	 * determine which of the CPUs in @xcpus should be removed from
+> +	 * isolated_cpus. Otherwise, all of them will be removed.
+> +	 */
+> +	if (iancestor && !cpumask_andnot(xcpus, xcpus, iancestor->effective_xcpus))
+> +		return; /* No CPU should be removed from isolated_cpus */
+> +
+> +	spin_lock_irq(&callback_lock);
+> +	isolated_cpus_update(PRS_ISOLATED, PRS_ROOT, xcpus);
+> +	spin_unlock_irq(&callback_lock);
+> +}
+> +
+>  /*
+>   * partition_xcpus_add - Add new exclusive CPUs to partition
+>   * @new_prs: new partition_root_state
+> @@ -1571,16 +1620,6 @@ static int compute_trialcs_excpus(struct cpuset *trialcs, struct cpuset *cs)
+>  	return rm_siblings_excl_cpus(parent, cs, excpus);
+>  }
+>  
+> -static inline bool is_remote_partition(struct cpuset *cs)
+> -{
+> -	return cs->remote_partition;
+> -}
+> -
+> -static inline bool is_local_partition(struct cpuset *cs)
+> -{
+> -	return is_partition_valid(cs) && !is_remote_partition(cs);
+> -}
+> -
+>  /*
+>   * remote_partition_enable - Enable current cpuset as a remote partition root
+>   * @cs: the cpuset to update
+> @@ -2155,25 +2194,6 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>  	rcu_read_unlock();
+>  }
+>  
+> -/*
+> - * ancestor_partition - Find and return the closest valid partition root ancestor
+> - * @cs: the current cpuset
+> - *
+> - * Return: The closet partition root ancestor cpuset
+> - */
+> -static struct cpuset *ancestor_partition(struct cpuset *cs)
+> -{
+> -	struct cpuset *ancestor = parent_cs(cs);
+> -
+> -	/*
+> -	 * The top_cpuset is always a valid partition root which will stop
+> -	 * the loop if it is reached.
+> -	 */
+> -	while (!is_partition_valid(ancestor))
+> -		ancestor = parent_cs(ancestor);
+> -	return ancestor;
+> -}
+> -
+>  /*
+>   * update_cpumasks_hier - Update effective cpumasks and tasks in the subtree
+>   * @cs:  the cpuset to consider
+> @@ -2267,7 +2287,6 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+>  		 */
+>  		if ((cp != cs) && old_prs) {
+>  			int parent_prs = parent->partition_root_state;
+> -			struct cpumask *del_cpus = NULL;
+>  
+>  			switch (parent_prs) {
+>  			case PRS_ROOT:
+> @@ -2281,32 +2300,15 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+>  				 * child partition roots become invalid too.
+>  				 *
+>  				 * For a to be invalidated isolated partition,
+> -				 * its isolated CPUs may or may not need to be
+> -				 * removed from isolated_cpus depending on if
+> -				 * its closest partition root ancestor is a root
+> -				 * or isolated partition. With a PRS_ISOLATED
+> -				 * ancestor, the CPUs are checked against its
+> -				 * effective xcpus to see if any of them needed
+> -				 * to be removed.
+> +				 * call return_isolated_cpus() to remove the
+> +				 * relevant CPUs from isolated_cpus.
+>  				 */
+>  				if (is_partition_valid(cp))
+>  					new_prs = -old_prs;
+>  
+>  				if (old_prs == PRS_ISOLATED) {
+> -					struct cpuset *ancestor = ancestor_partition(cp);
+> -
+> -					if (ancestor->partition_root_state == PRS_ROOT)
+> -						del_cpus = cp->effective_xcpus;
+> -					else if (cpumask_andnot(tmp->delmask,
+> -								cp->effective_xcpus,
+> -								ancestor->effective_xcpus))
+> -						del_cpus = tmp->delmask;
+> -
+> -					if (del_cpus) {
+> -						spin_lock_irq(&callback_lock);
+> -						isolated_cpus_update(old_prs, new_prs, del_cpus);
+> -						spin_unlock_irq(&callback_lock);
+> -					}
+> +					cpumask_copy(tmp->delmask, cp->effective_xcpus);
+> +					isolated_cpus_release(cp, tmp->delmask);
+>  				}
+>  				WRITE_ONCE(cp->prs_err,
+>  					   is_partition_invalid(parent)
 
-Yes, go with Alexei's suggestion. Skipping zero-length skbs in
-sk_psock_backlog() also covers the ingress redirect case I raised,
-since the empty msg is never queued. copied_seq being 1 behind
-rcv_nxt is fine now, plain TCP sits in that state until the user reads
-EOF, and nothing on the psock side depends on it.
+Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
+Thanks,
+Guopeng
