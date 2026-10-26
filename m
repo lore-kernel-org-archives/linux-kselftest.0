@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793057831;
-	b=iqS0ySi+LmP/O7gBz85NxsggN6M6mssZ1vI35SWd64NrOrcXjgU3ZnRcGE8ic/mCjjd8
-	 sfjNC4SjfLYg95K2FptnKKxixL/GZlGLZoxzbE5YoxDrxzErC22fDIQJOBcJ7cQ2uDdKR
-	 bty9hgF2ESEiCsfRvghNEmwJCnI6sKf9fbv4T/vYwBteIyFyZbNxoH2bav4gfL/jDL6+R
-	 7tYpWtMMPXV8A8yvyO3XhUt+njgVv2BwrE38DH4wRL4yIRDXf9v9intqCfNwkSDOmVKrx
-	 TkcqKVzYTms91htBMoeC2Ty8ZjVO1WWJBWQhsc6GZaqt9V0B5mBNor7gSRqdqH4LYBA==
+	t=1793058646;
+	b=zlH25FYWHI0NfeR+t1HyWSNCcqS7w/SxBdx17McHelL02ACj3qBItsBxI3Tvya1XswDo
+	 cR/KziYHD++3WznXBZA5rZ7U4HmDChI3RA8lUB8bE4IDrak0W0N8Ea/JHPgWcPKQSMxtz
+	 7bYWRC4kPlkrX9C8KJlGZ8ZayYxrblE4WHnBAsEWH1tTq82X9MU+3wpBJoXvZsjCdJjGA
+	 2SAlYG0mw9DjiuuL9O+AC+3UkT6DU9+cWGrkGGV5q7m29zggv6WSJKHqs8RnG7JflyQ02
+	 0kCbN2hkxSArmEkxxaMbmAXKeVYZe3T5z+GgJFgbeVQP56eu+fQ6JK/oUVE5GDjan+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793057831;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793058646;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=pk/mtS+0WhX623GdQEiMbzyi6Wx6/eJTJDB5Jrjhiag=;
-	b=qlOjbmcnFqQ2ey4vDjmvN9rZm9Z8NaFlcB/DuTc0w3zKOfh60dawpDw6JMzBxz+BM1J8
-	 Hv1ZYLW8T64hccrU+e2QMLzEN5st+zrKGOIOQKyyDZksfTXOdVl4cuDLZQYKnt35tpkRv
-	 OrLYqkygIN4ijVOjNiHyRxoBlQi85Y87x6wGnmN28nKVJ04ptXwRioXBD5uygXuPhfxg6
-	 TFK4UqruqZ5VizASnrwOOzVbmDLSBEWhrFDhH6Foa4ZGF6vy2PkEjjgA5dC/LgSo9PWmO
-	 2ciCgCOaqH7eQsaThwIlWyhqiYOc9emShCb79AVWSmfA5xza+ranGBnaOQD30VG+X7g==
+	bh=eKMgwSook61EDS9Ne7hFx7zRENHFPLDEV6vHhdbMFhc=;
+	b=rnfbhsEmO6N429fuxGEw7j+KXUnLIAf7vTSEo5w9KOy+NuA6CjQF5WoP/cB4yG4eqqw0
+	 3VPyw9LUqkvlMqISMJijX2ERCr7plVpSa8bG8hh7FUxouuqKs3bwOnWX1Nxlzxyy1RYXo
+	 7oi7Abz7599cHmyGyG3g8hc5X+Ks2H03b3EKECMtY3sDbjFWFHHj9IGveuu9whygH9WAY
+	 7YY5do2ew0TRzyaFU+OOYDLUOvkYgPK/CgBztziV7N3TZY2qxYMLis4bRcibjVjMTQ0zE
+	 /ThD9YcXahSIJLFEfqPz/QCsSYnPFGl9wDvPctP4aIouTu83WbZ0xnOHKxvOm3Z/nAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PcvIhIwJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UerVmejG;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFAB606A31A;
-	Mon, 26 Oct 2026 23:37:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7689D606A322;
+	Mon, 26 Oct 2026 23:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PcvIhIwJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD081F01825;
-	Mon, 26 Oct 2026 23:37:08 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UerVmejG
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDD961F01828;
+	Mon, 26 Oct 2026 23:50:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793057830;
-	bh=pk/mtS+0WhX623GdQEiMbzyi6Wx6/eJTJDB5Jrjhiag=;
+	s=k20260515; t=1793058646;
+	bh=eKMgwSook61EDS9Ne7hFx7zRENHFPLDEV6vHhdbMFhc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=PcvIhIwJJZQzDmtFm8vneQ6eepFRdOh5c5F2xHokGmHaOqAjp629FPLN41cvCxvdQ
-	 OUlKZQr8OP5Tr0PPa9XGxa6T8fNOr3xkE1KrvNAEzR0l/KocvNgMVf9I8XAmHFqO7A
-	 LiXKTqm91rlnyVAf0KQBaHNjQZoOjY6Xa/yVtlqQ/pGVEH+PQpvtTOzaEWlBoSXZb6
-	 SAtjHfceJ0Q/kv9ljRvLemP8JYj9gHkeahepKBm3aChQSYcjL3my/3Xd3usOkC+gWT
-	 vRGYaofYutuxLc8VzY1ACKLGqUaFz7DGKWwBPlOQEE8wNmPA7bfoUobv+87xKs3Iu3
-	 EOe60m4ms7o0g==
+	b=UerVmejGpPfwfechyUjZ7s/odgEBGEcn6imDKun6cOj90XeOFzUYpxAU5/x7Mo8aB
+	 mjadX1AdXAbmtiF+Rf3+mWVVFv6eparS+ttfS1Inu58CNceIrnlH5Uiw3vHznf8sFc
+	 ELtaoh2c3JK0MVUECB+9sgvB8ZTg/Y0SH+RIxDJ2TuJw90XwVJOTjk2N7lMVKq9Lka
+	 0FSDob4G3iUwGK8TTlXjetA3xw7D3+H3mobn8Tshwc6GjclAp7Q1T0IW2b5Mdx9tWF
+	 /8zUf900pPojy+RzsSg+cp5Z6G6B9qU7LehpxZxHCwO7RKhlJLQaVcFXfGs51089PZ
+	 Q9JpPeqxYmECw==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>
 Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 5/9] tracing/filters: Fix function event operand parsing in parse_pred()
-Date: Tue, 27 Oct 2026 08:37:07 +0900
-Message-ID: <undine-1793057827062030336-5034219911522d56@undined.local>
+Subject: Re: [PATCH v2 6/9] tracing/filters: Skip second character of '&&' and '||' in calc_stack()
+Date: Tue, 27 Oct 2026 08:50:42 +0900
+Message-ID: <undine-1793058642821980546-e873f302f6a6d563@undined.local>
 X-Mailer: UndineD 0.1
-In-Reply-To: <20261026163257.434af154@gandalf.local.home>
-References: <179291742944.492959.11659339795290028998.stgit@devnote2> <179291747675.492959.6739928041718890503.stgit@devnote2> <20261026163257.434af154@gandalf.local.home>
+In-Reply-To: <20261026164727.0d1636cb@gandalf.local.home>
+References: <179291742944.492959.11659339795290028998.stgit@devnote2> <179291748555.492959.3275503783612449972.stgit@devnote2> <20261026164727.0d1636cb@gandalf.local.home>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,90 +61,116 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 
-On Mon, 26 Oct 2026 16:32:57 -0400, Steven Rostedt <rostedt@goodmis.org> wrote:
-> On Sun, 25 Oct 2026 17:37:56 +0900
+On Mon, 26 Oct 2026 16:47:27 -0400, Steven Rostedt <rostedt@goodmis.org> wrote:
+> On Sun, 25 Oct 2026 17:38:05 +0900
 > "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 > 
 > > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > > 
-> > In parse_pred(), the ftrace_event_is_function(call) branch has several
-> > bugs when parsing the string operand:
+> > In calc_stack(), when encountering '||' or '&&' (where str[i+1] == str[i]),
+> > the loop sets 'is_pred = false' and continues without advancing 'i' past
+> > the second character of the operator. On the next iteration, the second '|'
+> > or '&' sees str[i+1] != str[i], breaks out of the switch statement, and is
+> > counted as the start of a new predicate (incrementing nr_preds and setting
+> > is_pred = true).
 > > 
-> > 1. The loop 'for (i++; str[i]; i++)' unconditionally increments 'i' before
-> >    checking whether str[i] is the NUL terminator. When the operand is empty
-> >    (e.g. 'ip == '), this advances 'i' past the NUL terminator and reads
-> >    out-of-bounds memory until another zero byte is encountered.
+> > Consequently, a trailing logical operator (e.g. 'common_pid == 1 ||') is
+> > counted as having 2 predicates instead of 1, and any subsequent non-space
+> > character before a delimiter fails to increment nr_preds.
 > 
-> Can't this part simply be fixed with:
+>  "common_pid ||' is an invalid expression.
 > 
-> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> index 5e74d2dae40a..6a14c964c115 100644
-> --- a/kernel/trace/trace_events_filter.c
-> +++ b/kernel/trace/trace_events_filter.c
-> @@ -1733,6 +1733,11 @@ static int parse_pred(const char *str, void *data,
->  	while (isspace(str[i]))
->  		i++;
+> > 
+> > Increment 'i' when matching '||' or '&&' so the entire two-character
+> > operator is skipped.
+> 
+> This is just wrong.
+> 
+> Masami, don't blindly trust AI.
+> 
+
+Oops, I might mislead by the code. (I thought I've checked it...)
+
+> I purposely did it this way. Because && and || creates a new predicate.
+> 
+>  If you have "x||y"
+>               ^
+>               i
+
+OK,
+
+> 
+>  Start with i = 0; is_pred = false; nr_preds = 0;
+> 
+>    str[i] == 'x'
+>    if (!is_pred) {
+> 	nr_preds++;  // nr_preds = 1
+>         is_pred = true;
+>    }
+> 
+>  in for loop i++;  // i = 1; str[i] = '|'
+> 
+>    switch (str[i])
+>    case '|':
+>       if (str[i+1] != str[i]) // false
+
+Ah, somehow I completely misread this is if (str[i+1] == str[i]) ....
+
+>       is_pred = false;
+>       continue;
+> 
+>  in for loop i++; // i = 2; str[i] == '|';
+> 
+>    switch (str[i])
+>    case '|':
+>       if (str[i+1] != str[i]) // true
+>           break;
+> 
+>    if (!is_pred) {
+> 	nr_preds++;  // nr_preds = 2
+>         is_pred = true;
+>    }
+> 
+>  in for loop i++; // i = 3; str[i] == 'y';
 >  
-> +	if (!str[i]) {
-> +		parse_error(pe, FILT_ERR_INVALID_FILTER, pos + i);
-> +		goto err_free;
-> +	}
-> +
->  	s = i;
->  
->  	pred = kzalloc_obj(*pred);
+>    if (!is_pred) { // false because is_pred == true
+> 
+> Loop ends.
+> 
+> nr_preds == 2. This is correct.
+> 
+> This patch is garbage.
 
-Yeah, looks good the me. 
+OK, let me drop it.
+
+Thanks,
 
 > 
-> > 
-> > 2. When the operand is quoted (q != 0), the loop breaks with str[i] at the
-> >    closing quote, but 'i' is never incremented past it (unlike the regular
-> >    string literal parser which does 'i++'). Furthermore, it does not check
-> >    for a missing closing quote (!str[i]). Returning 'i' at the closing
-> >    quote causes predicate_parse() to immediately re-invoke parse_pred() on
-> >    the closing quote and fail with FILT_ERR_TOO_MANY_PREDS.
+> -- Stevwe
 > 
-> This is a separate bug and needs to be a separate patch.
-
-OK. Let's make it a separate patch.
-
 > 
-> > 
-> > 3. If the operand length is 0 (e.g. 'ip == )' or 'ip == ""'), it accepts an
-> >    empty pattern instead of rejecting it with FILT_ERR_INVALID_VALUE.
 > 
-> Well, empty value ("") is actually valid. May be meaningless, but it's not
-> wrong.
-
-OK, I will also add this case in the test.
-
-> 
-> > 
-> > 4. When the operand is unquoted (q == 0), stray quotes or '(' inside the
-> >    operand are consumed as part of the pattern, desynchronizing
-> >    parse_pred() from calc_stack().
-> 
-> This is a separate bug and needs to be a separate patch, although it may be
-> the same as #2 above.
-
-OK.
-
-Thanks for your comments!
-
-> 
-> -- Steve
-> 
-> > 
-> > Fix this by advancing 'i' and 's' past the opening quote before the loop,
-> > starting the loop at the current 'i' without a blind increment, checking
-> > for missing closing quotes, advancing 'i' past the closing quote, and
-> > rejecting empty operands or stray quotes/'(' in unquoted operands.
 > > 
 > > Fixes: 80765597bc58 ("tracing: Rewrite filter logic to be simpler and faster")
 > > Cc: stable@vger.kernel.org
 > > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > > ---
+> >  kernel/trace/trace_events_filter.c |    1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+> > index 3bd0b47a627f..bcd37fd6c109 100644
+> > --- a/kernel/trace/trace_events_filter.c
+> > +++ b/kernel/trace/trace_events_filter.c
+> > @@ -2208,6 +2208,7 @@ static int calc_stack(const char *str, int *parens, int *preds, int *err)
+> >  		case '&':
+> >  			if (str[i+1] != str[i])
+> >  				break;
+> > +			i++;
+> >  			is_pred = false;
+> >  			continue;
+> >  		case '(':
+> 
 >
 
 -- 
