@@ -1,61 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793105120;
-	b=QU9LOZ0ML1Ap04AFFYjJg2biV9CBZEnUryx0yAwbJpCx1hxDb2S5jluVPqEbtivsqxJQ
-	 zX2cZWfMGA+ob9jSPE5K3wAa4xcdRbB05+cfakVNFRT64iUNpz/+v5CZ1odYYOy8JAmv0
-	 BkBTZ+RhUTmRyqEUxQtpqC4jYeymXPGGLVHcx8P4eQezghfOW6i4nQWfe0exWgHFlfmAj
-	 QprAAsT8xSFV4OdPmM1rQ380aetlLRa9IDTVtnlcSJUsYZmpjNSX33iWyyBRDQDUkdk76
-	 Z62ZfTioKOjlsKWvXpYqreYEW2wVsPMVtgfzliLUTXuYRdHW/0lh7DrMPHXAvLEBzZA==
+	t=1793105146;
+	b=3tIi2gS4909dhLOY9oCgnGbCdBjjBYsc0oIxMbmO2+5cM78MB93hQWXQ+Lco+60ikBYr
+	 JnOoKdyvfNxanrZoyXoP6RG4aJtgwh3ZnqUX7nMgah4B9PTUxA4rglgla9bMr2U0H50Qq
+	 JFEuRtI3Mwfk+i98nBOO/xOizGwO+1F5RIOm/4mJg9+nPbUw3EGow3fE20ux+CXv0GpW2
+	 2UaiGEkH3SxpyvUrC/ka9osklIdrQ+7SWBH/dLfki1K6jOglTTtM0gBKGomUBR1RkqtmO
+	 mbGsWjGaBsLA4cmpVSDDQ7rETykLB+it1NzlPV29bueJSSxDZIWlRmQtieRyrwWw4Xg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793105120;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Stat-Signature:X-Rspamd-Server:
-	 X-Rspamd-Queue-Id:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=cp5F5plX1o9uNVRyUnVlyzWtsNabM89/L+nyYHXZXX8=;
-	b=EhfuI1OSGf74KevBak/85hVDVwbRRVBCjAtufXfK9llFid1tIQcxHXD8nAxG3bB+FcoQ
-	 Rrl574lOmVwMQxtOOPdGMgm0Og9oftTOvIp0IS+/brj+y/7CFyjeYa2do3O9POvmrVTBZ
-	 jQmY6zGHHQguKjjqimth3NqeJhG0/ImQqKkBbjjGSAkBl/HY3jY0hjHGrjqbUpRTEV95E
-	 9jTqYyK9SwKV4CQNmnUTQscgS8N1dc/Nrm8r1UrwL/wwQU+JTEkK3BuSorBlhKslR5K48
-	 F9EPHjqu7KEVJZ2yB1OT4q9Afyhs50DicMtTXu5TLzSFFGHHaHFW32qYSydGgRCsUlg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793105146;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=koFtvkLfr2oI9uXtX/n3Ay3Dy+ycp8hbA1U6raVcKYE=;
+	b=j/+oTwWgyB+qU4EH1RiQUIDrYTLSZekzR8D/zQ0F6p9f6sCbEBWdkY0eGEPHmHsWg/rb
+	 0hwl0ig46ZYJgqOKn4MK+Rj7chVbugWmi5B/y8ybBVzyvBzzt2Wja+I3tWys6ZAkzy0kT
+	 zjNKBzRtf0MN/pryKmc/GU1pKKf1zVCMgwb2luJNfJ0NmHcIjgW9jf3+AvgmcjJaXKbcP
+	 03ZDiyuar27hzNiEOS4WLsfmJR/p3zbogabPbKCzIQXkghHxkkRxrYxupVjr/8ZvRSUfD
+	 N8T+6DsJUgHf0fSpRj8z4jjkh0QHCYGg/TMM3IcQtK/2YbDygcxyqzdj5hU19Gk6Qvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=Q9pYh5eX;
-	arc=none smtp.remote-ip=216.40.44.15
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=o5B1imMU;
+	arc=none smtp.remote-ip=95.215.58.38
+Received: from mta1.migadu.com (out-38.mta1.migadu.com [95.215.58.38])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529BD606A330;
-	Tue, 27 Oct 2026 12:45:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 529BD606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA60F606A332
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 12:45:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA60F606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=Q9pYh5eX
-Received: from omf05.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 03BCB1C3F4F;
-	Tue, 27 Oct 2026 12:45:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 1F84E20018;
-	Tue, 27 Oct 2026 12:45:15 +0000 (UTC)
-Date: Tue, 27 Oct 2026 08:45:13 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 6/9] tracing/filters: Skip second character of '&&'
- and '||' in calc_stack()
-Message-ID: <20261027084513.16dcb663@gandalf.local.home>
-In-Reply-To: <undine-1793059963392038141-496f89524ad52c64@undined.local>
-References: <179291742944.492959.11659339795290028998.stgit@devnote2>
-	<179291748555.492959.3275503783612449972.stgit@devnote2>
-	<20261026164727.0d1636cb@gandalf.local.home>
-	<undine-1793058642821980546-e873f302f6a6d563@undined.local>
-	<undine-1793059963392038141-496f89524ad52c64@undined.local>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=o5B1imMU
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7hyLZnCptglh6ZfX27cwvtA9DMVa5PLCr9Si8AAJnHA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793105144; v=1; x=1793709944;
+ b=o5B1imMUAsXMIe68c9yZ8nUysrg9IA3E5gU6Jo69SRBPFqKt990Xab1s4cfAE2x9M7THBwwA
+ 3+KbCVOHBt2XqQu4lrWHGQzoKEqn1BBqv8Aob+fNaFgruL63suAcGmi5Ee11M9EUXcFkeTN66Sd
+ ikXmkP6AWUjk+DkrHmtBniH4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id c7f68ba690e126ba;
+	Tue, 27 Oct 2026 12:45:23 +0000
+X-Mizu-Trace-ID: c7f68ba690e126ba
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e25fd292-5391-41fc-a324-0ec260828415@linux.dev>
+Date: Tue, 27 Oct 2026 20:45:14 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,29 +58,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 2/2] Revert "net: advertise TCP MSS from the
+ configured MTU, not the learned PMTU"
+To: echoowall@gmail.com, netdev@vger.kernel.org
+Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>,
+ David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+ Shuah Khan <shuah@kernel.org>, Thorsten Leemhuis
+ <regressions@leemhuis.info>, regressions@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, Eric Dumazet <edumazet@kernel.org>
+References: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
+ <20261026-advmss-revert-v1-2-272fa4b7ecb6@gmail.com>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20261026-advmss-revert-v1-2-272fa4b7ecb6@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Stat-Signature: whotn9q6szo35b7buf4zhw3e6c6kk6is
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 1F84E20018
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+zguBbqu5krc6CbB7lx/helQypDPpL6/o=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=cp5F5plX1o9uNVRyUnVlyzWtsNabM89/L+nyYHXZXX8=; b=Q9pYh5eXyKKG3lpi69ZRFB7U6Oi+Qe1mPKkgGR4SRLc0tBzDQesXRZ/Gllo8DgkqN6Q33qoWaS51imiTYdmcdIb2U42pj+WJH+t5qYABWVz0XvYfE/oCWsi6i3X4i/TcKTkFO+hDd/vmboDs/Q+CWqHMh9qzD1HCI9o1DRUbdLI=
-X-HE-Tag: 1793105115-725216
-X-HE-Meta: U2FsdGVkX1/Td6Ojvo70Dsv0u/cRljFIAxmwzShFO+L7SxtpEthVgsRY+yTpTFkxKgocBQZ7yXh2flLfdwZWRexMCZgTAH5yCYRXDkUtMlxsGmpM64LVXdnQ1ljKYQTxQoSrHbzlMdZDtbAYnFB1RGhb14RU3Kc0YvrxCBJpWw8k5a3GBoAWb2/pbMDPktbihTNJvwXGpc6L81QHoQbEZruQad3e99I/7bYRklF8p2PQQTWppziz7u8jzb294rw3NAvh4esWlkra3bN2TzXjW62mywMgKrSP7BNpj2RpyaX7CVcUiigcjDgzfjwR2oAElS5WCOA3ex1nUal42HH79Aq7aOizuWY7
 
-On Tue, 27 Oct 2026 09:12:43 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-> BTW, to check the correct input is encoded correctly, we may need
-> in kernel selftest or a feature to dump the interpreted pred after
-> "#" line via filter file. Latter one allows us to test it via tracefs
-> (ftracetest).
+On 10/26/26 3:23 PM, Esko Mobius via B4 Relay wrote:
+> From: Esko Mobius <echoowall@gmail.com>
+>
+> This reverts commit 2640e6419594 ("net: advertise TCP MSS from the
+> configured MTU, not the learned PMTU").
+>
+> That commit stopped the learned PMTU from lowering the MSS we advertise
+> in SYN and SYN-ACK. For symmetric paths it argued that "the peer runs
+> its own PMTU discovery and usually already knows the real path MTU".
+> That only holds if ICMP "fragmentation needed" can reach the peer. When
+> the peer sits behind a firewall that drops inbound ICMP, its PMTU
+> discovery is a black hole (RFC 2923, section 2.1), and the smaller MSS
+> we advertised was the only thing keeping its full-size segments off the
+> narrow hop.
 
-Hmm, I guess we can update the filter file, although I'm a bit nervous
-about backward compatibility.
 
-IIRC, the libtracefs does self tests and clears filters. That may be a way
-to see if it breaks user space.
+A client that cannot receive ICMP is broken beyond this: QUIC's DPLPMTUD
+hits the same black hole, and nothing the server advertises can help it.
 
--- Steve
+
+>
+> Inbound ICMP filtering is very common in enterprise and carrier
+> networks, and it is pervasive in mainland China. We hit this in
+> production after the commit was backported to 6.12.111: TCP connections
+> that reach a server through a relay with a smaller-MTU hop complete the
+> handshake, then stall as soon as the client sends full-size segments.
+
+
+
+The learned PMTU is keyed per destination address. If your relay
+masquerades the clients, the server sees a single address, and one
+client's download seeds the entry for everyone behind it. That is why
+this looked reliable. Once the clients are spread over their own
+addresses, each one needs its own fresh entry and it falls apart. The
+old behaviour was never a mechanism for this.
+
+
+> Clients on networks that let ICMP through, and connections that bypass
+> the relay, are unaffected, which made it hard to trace back to the
+> kernel.
+>
+> Reproducer, network namespaces on a single host:
+>
+>    cli --(1500)-- r1 --(1456)-- r2 --(1500)-- srv
+>
+> r1 drops ICMP frag-needed towards cli. srv has already learned PMTU
+> 1456 towards cli, then cli uploads 1 MB to srv:
+
+
+This precondition does all the work. The server only learns the PMTU
+when it sends a full-size segment itself. If it only sends ACKs or small
+replies it never learns it, the SYN-ACK MSS is 1460 on 6.12.107 as well,
+and the upload stalls the same way. The entry also expires after 10
+minutes (ip_rt_mtu_expires), so the server must have received a
+frag-needed within the last 10 minutes before each new connection.
+
+Please re-run the 6.12.107 case without seeding the PMTU.
+
+
+>
+>    kernel                     SYN-ACK MSS   1 MB upload
+>    6.12.107                   1416          OK
+>    6.12.111                   1460          stalls, times out
+>    7.3-rc7                    1460          stalls, times out
+>    7.3-rc7 + this revert      1416          OK
+>
+> The asymmetric case the commit was written for does not need a new
+> default: the advertised MSS can already be set per route with the
+> advmss metric, which takes precedence over default_advmss(). With this
+> revert applied, on an asymmetric path where srv learned PMTU 1456
+> towards cli while cli->srv is 1500 end to end:
+>
+>    srv route to cli           SYN-ACK MSS   largest cli->srv segment
+>    default                    1416          1404
+>    advmss 1460                1460          1448
+>
+> So DSR-style setups can opt in with "ip route ... advmss <mss>", while
+> hosts whose peers cannot complete PMTU discovery keep working by
+> default.
+>
+> Fixes: 2640e6419594 ("net: advertise TCP MSS from the configured MTU, not the learned PMTU")
+> Reported-by: Esko Mobius <echoowall@gmail.com>
+> Closes: https://lore.kernel.org/regressions/4F0FAEB6-A13B-47F3-BFF1-C706686C6F64@gmail.com/
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Esko Mobius <echoowall@gmail.com>
+
+
+
+
+Maybe a better way out than a plain revert:
+
+Revert in stable, and in net-next add a sysctl, something like 
+net.ipv4.tcp_advmss_use_pmtu,
+that decides whether an endpoint uses the PMTU it learned on its send
+side for the MSS it advertises (even though these are two opposite
+directions). Default on keeps your setup working, DSR-style setups turn
+it off
+
+
