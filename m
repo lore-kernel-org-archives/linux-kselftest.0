@@ -1,83 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.233
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793104722;
-	b=SpQUi5p3Cc7uGz0R028cMRCQfGgVxSjPJJWugypBOhqwCnvGHzHFGArezXx0F3DLtxx9
-	 T1hbfH4rNG7kmXhibOuUxVjgNZg0AyWJGh4BX/FkSpefy+9CQFeyhmLY/5PPDXOLlmHyt
-	 ERA5dSJHPAJ8fqTbT3DMwmyClKkIaNNiVfVoum6lWo0jI2LLKERy4dxlSdRq77Ffauxgw
-	 5NazvgQWkkWArGPAcnwBe/p69FjPwASR2AQiOYAMB7BqoYnHzzROQshh9mHyTLvjQ9BIF
-	 Z9OevR5+5ZyXZCeopzNoGmGj3oe5Bic9+s1UJaIuLTta8xtMFQOsTKjVq+ZtOpQeolg==
+	t=1793104739;
+	b=y6NCdAv5FTEuBhH/BxwzSOLD+ys/4PAXFPZFkUjExWK2oQZ2Zkw/RR7Xj5LYXJjCJuir
+	 l4qvzFrjn3meIBD9fLXp1pqOLHekEphhygUSKSJ2oGMFjCubH1oh0awlbkfB6XE4nyOdt
+	 S5Af2D6Owp57Ci/ZAMPIPpIhh6R8pDXk6Ba7cBkjySgV7r/u2uX3ZzTH8OufjyOFGfAoC
+	 +hI019xKnFaZnAqh6ggtwqLcJCizZadGSvqxUi8vFG1m2pB2NFer/GjBq0DOt7AFekfUU
+	 hWrG1kMSpUFWewbCd93ZVloAHT8T5iGUFf4K/PoXKbJCIv5k5wWcGaatMu7lzIe5fgQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793104722;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=k+2t1cyvTHNrJyCbVMQW5rekaM6HtX5EkecAGatJW+o=;
-	b=I3yJkMtnhA+UetBgzlfP/tE5+w4REFENTsu4FV72UTC8aO+b+6Z9cjwxDsqDUwVYdii4
-	 e3QGNLA11f9THnQ/qoa/paSb0t0MFoz0xxem6HRwQdhpmKhRxjev6eo81lHsXp8fWEYhh
-	 QnEI4ZRwQ7N5ZkdbbYokcx0blx8MMTkGw7H18zsKiFfa9UMvNMYr/QHfX7b+yz31dX+ln
-	 sppTAgrScEr956lGqWg4E4mFvDq3xvkF1yKQmGVxMpU/6mDaQSd5cWqv4M4dX+Iw9fHNd
-	 V9M6eDeV0jV6uKpd8uhT16+FUFMGy43s42AhFU6yNfaneTHNrQFFkfoAww+4NjwO9pQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793104739;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=zQRlKbdi45Fb4to1TV3mDMDiTTP8xbQo1lX9AeY86T4=;
+	b=fGNl++5XchCN9HFoM8PaoJ74pznL05Xn6BqvEp/egKrjP8pbDdOVoKT2gZOKbwD3+ie8
+	 qtZExRfzIa4JnS9K9LCJsOlTZ7c7OJVkg6GxyYs9SgImwya7/X7EDVZVl+ch17hBJ7NT5
+	 3ywxxojpiBQkYRnyQKSixzAPs2/SI5hFX9/9khd+TOKTCyjGwt279vC7aoKm81SCYEFIp
+	 EWhhAeXEWy+C7mL/LyvKcPRgDgNEA6SribYPZVpvlclTdS0fNsy8wtL/yruqiTQm8nZOR
+	 Hw54NukAS1zAiYUu0bKfnYvB3PsJNXmGKenY1xCMNmZbJjvveCqgKCcY+1fX/OKeAYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DWd0KxDa;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=95.215.58.233
+Received: from mta1.migadu.com (out-233.mta1.migadu.com [95.215.58.233])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B0860A261E;
-	Tue, 27 Oct 2026 12:38:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DWd0KxDa
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 894DB1F031E4;
-	Tue, 27 Oct 2026 12:38:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793104721;
-	bh=k+2t1cyvTHNrJyCbVMQW5rekaM6HtX5EkecAGatJW+o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=DWd0KxDaK80pFuGqi90D4Nrp/O3Ay03rJVOcphlqDOpC5VwyooaMvPqtWSp7jcmOZ
-	 lmtgIXSFL0cTE6mastyBXTv6cbOhzZ/7VWbHCt1yHtWAYgYpaXQOMMwafaE9Wq7lNO
-	 llXJcTBFPjXt7iVvR3aWg8MbFbet73ELyp15wqg6WrA4PdpdvP7wA9J7bGrrVbOoGr
-	 5VevwKY56KtvoYOk/g75qeX/6LhmyLcsSVuIGmD8JvM0sMDPBz9nruinq01rtU1Ust
-	 HCKfQEUALjKYYA7rOu5rPQOnGy28tIIUuwqVDLwm3B4y+d7ifl0lNs7WsB0xocKHtI
-	 3cgk4VtI0GVrw==
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 5825B198003A;
-	Tue, 27 Oct 2026 08:38:37 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Tue, 27 Oct 2026 08:38:39 -0400
-X-ME-Sender: <xms:TJvgak7JmRXSu5-X0Vdx9dcpIvf3ek5Qv3ccgTrK5K26CpZ09mW5dg>
-    <xme:TJvgap0RaWPiLmBjI62Az9VRBesF0YOk-44p0b7RPnkAnfwFA8iHjubvdCn6IE0_f
-    m0P00MdGHpAaiVg-nILXlX4ic1_W7u6wEXMIw1j0kQcodEJP-OiH1MV>
-X-ME-Received: <xmr:TJvgar_NCGVhRTQ2gbWsHcxqKHeURzgP5Ky51kfmdxfUNHpuVyDGw0nyiuM>
-X-ME-Proxy-Cause: dmFkZTFifNxF028tALiGBKVlh5Wy369MFPvYrj+99z7meFDB4RuiCUvj+DHIXqgXLIkCRn
-    Q5TfW2Ea4AadTP3BtEjnoJG9TfURWYAWABlivX1ELh3+o3jlP3JbW5Z+GpCVf1ffF5O+JA
-    RmA9DEKwKtT5+xShVrI/I/VUqcHsFsoYGBWTqAy23txKKKzUM+onqOvZLsU8TdVtJP4sNv
-    ilZmCYPik+0kxktvG2u51a1liN8ZL5kGnlnLPqZ2DztMrPAbmms4mbDFVQsF1jwC3/NR+c
-    v3Rkmyi4U27GqOzNMueyo695aZuHP58GJiOlPm8QHawcowZl17/kwyU9rbFZa56/RzCHZl
-    nuDRVEy0Z0vA4R0t0TnaTi/b7snEFTXk+yVLC4bvUyBibMZ7+//zYmPQolg+Ve9k1Y8Jv5
-    0tXp7K+ik8shGmUeFJuP+9R8YL5+NLXdykQC5X05s7xaE5Bem001Kt93cAYEZZYOnrriJV
-    vvl6fSVBdHhh8YFhpiMyrU9vpt3EPJoRSGXHneUgNtoQqHiwgZOE3fl8gKjmvAoc9Fr6HY
-    cXNWM5ppuUUoSBkTkNALo9rP3Brj+k95DE7sd3ueNQR/b87RVLwID2LTHk/N5h5Du/th9x
-    TJnRY5oDK174qwrwit2pJ6C7DZ0I2DZQ+9xXHxPV2OPeXv1Mh8PgqGmPEfPg
-X-ME-Proxy: <xmx:TJvgaitFia2BledahPcZx-R4DD1WuEaphsLwEIyLo5k-7Fv7bTvWww>
-    <xmx:TJvgavpnAxQA-G6o8IEmGJsS9zvlg0t4INOvnqCC9kf9DCbf3ZyIog>
-    <xmx:TJvgalHznjoNqsYjGYjHVHWl8DsGNN6ur4vT-7WiacXhKG029p_XxQ>
-    <xmx:TJvgaq6F5aDKBTyU10Bq1MMpCEVHee22NHlqnYRbiFvwwnn9kamgtQ>
-    <xmx:TJvgagBu3jBlt7weUEH_FyYjoLZ-l3wF-36MkLyg8_gw1ObMny_E8yNV>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 27 Oct 2026 08:38:36 -0400 (EDT)
-Date: Tue, 27 Oct 2026 12:38:35 +0000
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Zenghui Yu <zenghui.yu@linux.dev>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com
-Subject: Re: [PATCH] selftests/mm: fix khugepaged_race build with older glibc
-Message-ID: <auCbOg62Ym4Ic-qj@thinkstation>
-References: <20261027122013.4286-1-zenghui.yu@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534B0606A321
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 12:38:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 534B0606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=H5/6cghSYjlUdBX/4hU2ACkhZSzFOjZAQQW0OApn7GA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793104730; v=1; x=1793709530;
+ b=TmpcqLM9fPDvgmSkt2jl8vLQ4yeldWK8WHxbmhJPgPGVSN2eONf7WqefPme6rcxjkv4GiIjs
+ OsO0k2ajo4sIg1411ztVmIl7ev6qV8bjRxWX9Ic/F18YT4k8NgI3ggmlviUAOpBeSkeK0cYu1ua
+ /9wsus3HR8nnWPbNscnOyEsc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 1ab54019d47de0d5;
+	Tue, 27 Oct 2026 12:38:50 +0000
+X-Mizu-Trace-ID: 1ab54019d47de0d5
+X-Migadu-Flow: FLOW_OUT
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+To: longman@redhat.com
+Cc: ridong.chen@linux.dev,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>
+Subject: [PATCH] cgroup/cpuset: Fix missing effective_xcpus accounting of child partitions
+Date: Tue, 27 Oct 2026 20:38:37 +0800
+Message-ID: <20261027123837.100909-1-guopeng.zhang@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,33 +67,104 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261027122013.4286-1-zenghui.yu@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 27, 2026 at 08:20:13PM +0800, Zenghui Yu wrote:
-> From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
-> 
-> glibc versions before 2.37 do not define MADV_COLLAPSE in <sys/mman.h>, so
-> khugepaged_race fails to build against them (e.g. glibc 2.34):
-> 
-> [root@localhost mm]# make
->   CC       khugepaged_race
-> khugepaged_race.c: In function 'main':
-> khugepaged_race.c:506:23: error: 'MADV_COLLAPSE' undeclared (first use in this function); did you mean 'MADV_COLD'?
->   506 |       hpage_pmd_size, MADV_COLLAPSE);
->       |                       ^~~~~~~~~~~~~
->       |                       MADV_COLD
-> khugepaged_race.c:506:23: note: each undeclared identifier is reported only once for each function it appears in
-> make: *** [../lib.mk:225: /data/code/mm/tools/testing/selftests/mm/khugepaged_race] Error 1
-> 
-> Include <linux/mman.h> to get the UAPI definition of MADV_COLLAPSE.
-> 
-> Fixes: 66c374464438 ("selftests/mm: add khugepaged race harness")
-> Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+From: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
-Reviewed-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+When a partition root expands its exclusive CPUs, a valid child
+partition will be able to claim more CPUs from its parent. As
+update_cpumasks_hier() always updates a cpuset before its descendants,
+the parent has already been committed when the child partition is
+reached. Its effective_cpus is computed with the child's old
+effective_xcpus subtracted and no further adjustment is made
+after the child commits its new effective_xcpus.
 
+The additional CPUs are thus granted to both the parent and the child
+partitions. generate_sched_domains() then emits the warning below
+about the overlapping sched domains:
 
+  WARNING: kernel/cgroup/cpuset.c:919 at rebuild_sched_domains_locked+0x1ec/0x2e0, CPU#21: bash/1225
+
+Fix that by taking the CPUs newly added to a valid child partition
+away from its parent at the commit point of update_cpumasks_hier()
+right before the new effective_xcpus is committed. The tasks in the
+parent cpuset as well as its other children will be updated if its
+effective_cpus is changed.
+
+A new test case is added to test_cpuset_prs.sh to test this patch.
+
+Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
+Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+---
+ kernel/cgroup/cpuset.c                        | 25 +++++++++++++++++++
+ .../selftests/cgroup/test_cpuset_prs.sh       |  4 +++
+ 2 files changed, 29 insertions(+)
+
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 3219f927c35e..ec0ef3ad0726 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -2241,6 +2241,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+ 		struct cpuset *parent = parent_cs(cp);
+ 		bool remote = is_remote_partition(cp);
+ 		bool update_parent = false;
++		bool xcpus_added = false;
+ 
+ 		old_prs = new_prs = cp->partition_root_state;
+ 
+@@ -2356,6 +2357,19 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+ 		}
+ 
+ 		spin_lock_irq(&callback_lock);
++		/*
++		 * A child partition may claim more CPUs when its parent expands
++		 * the exclusive CPUs. Take the newly granted CPUs away from the
++		 * parent which was committed earlier in this walk.
++		 */
++		if (!remote && new_prs > 0) {
++			compute_excpus(cp, tmp->addmask);
++			if (cpumask_andnot(tmp->delmask, tmp->addmask,
++					   cp->effective_xcpus)) {
++				partition_xcpus_add(new_prs, parent, tmp->delmask);
++				xcpus_added = true;
++			}
++		}
+ 		cpumask_copy(cp->effective_cpus, tmp->new_cpus);
+ 		cp->partition_root_state = new_prs;
+ 		/*
+@@ -2375,6 +2389,17 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+ 
+ 		cpuset_update_tasks_cpumask(cp, tmp->new_cpus);
+ 
++		/*
++		 * The parent's effective_cpus may have been changed by
++		 * partition_xcpus_add() above. Update the tasks in the parent
++		 * cpuset and its other children, if necessary.
++		 */
++		if (xcpus_added) {
++			cpumask_copy(tmp->addmask, parent->effective_cpus);
++			cpuset_update_tasks_cpumask(parent, tmp->addmask);
++			update_sibling_cpumasks(parent, cp, tmp);
++		}
++
+ 		/*
+ 		 * On default hierarchy, inherit the CS_SCHED_LOAD_BALANCE
+ 		 * from parent if current cpuset isn't a valid partition root
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 83ef6c781af3..09e430570815 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -437,6 +437,10 @@ TEST_MATRIX=(
+ 	" CX1-4:P1 CX3-4:P1 .     .     X1-2     .      .      .     0 A1:1-2|A2:1-2|XA2: A1:P1|A2:P-1"
+ 	" CX1-4:P1 CX3-4:P1 .     .  X1-2:X1-4   .      .      .     0 A1:1-2|A2:3-4|XA2:3-4 A1:P1|A2:P1"
+ 
++	# The extra CPUs gained by a child partition when its parent expands the
++	# exclusive CPUs have to be taken away from the parent.
++	" C2-6:X2-5:P1 C3-6:X3-6:P1 .      .      X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P1 ."
++
+ 	# Taking away all CPUs from parent or itself if there are tasks
+ 	# will make the partition invalid.
+ 	"  C2-3:P1   C3:P1  .      .      T     C2-3    .      .     0 A1:2-3|A2:2-3 A1:P1|A2:P-1"
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.43.0
+
