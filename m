@@ -1,109 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793082994;
-	b=Cuigfgwq83dnkzGyUFhW9zls8BeIfZVUjHZjTD/qWjWiRGVHjvTFVdfry0obHpCHp1l2
-	 2HHVvz96NoQn0AtMguNaQcLptCuAkvYn2KyOUoNhlZk8LcuN8v4sz4cdRVJpJsUsesS41
-	 4ydmJD2Dc+O6VVxKLSzZaw+2sBpsin3deqACPWd40C+bPSkj5gC7SGO0fX8gAe/uKpVRX
-	 DJiHEWZ5dmopGhmKT+S7hgCXtEnPRUQU2CR3ma/Nx9L0B0htjYfHLK0ac6vOvowmlWwH3
-	 +PQT9hmC6OADFc1379GYn07iW1a+cIaOTcUaY14rl72Sw0aDQ322ys5Vq9QHftrvQMQ==
+	t=1793090371;
+	b=2RF2L/skWqpP84RojdjiNAIcP73xnJIToxK0mzl/KjpbRruxaEQFz94wm8NNjiMpIECm
+	 Vp0H6CjwlwS3P436uGcPPC2xWO8dE3qafAskODvxloIWmkqVQtRtsVgW/1juMYhd1w44d
+	 Sgpf0fHzA5drX6rzvUAfwv/blhpolivUUW1CIJMGEhBnHtc6EwAc/sjAoGPAiIva1xw2C
+	 1nr7jcfgEVRSrwOchlsIwVUZ+TK3q0AB4mb3/EzX1jJoHgOTanDJEsA2fW4SpMcDkU9aH
+	 b+M3wWqiW8cnc/QPOrzycjECtxg2A60lZUTc4/iKzwlqXrbvSURaVaqkWkc/0q1zjfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793082994;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793090371;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:User-Agent;
-	bh=dYFbbcr2uYZUTl7G/v0LoaX9lneqHtmhHpczJAH5sbg=;
-	b=Zpe/GWK+I3Nwo1u/OutnDaloFbrd+03q2A1LQgxO6dA6FJdveXbS8uqvs9noFl7bs0lC
-	 eapryUh8n4z8tEYPvlYXs4gJudFza80yL/DEwM2r9HNcjcxgX4G/zITV3O9cVcuALD8Qv
-	 NblSzJEGuNiKX3oFf4cYYMXuQ3ydYTylUEB1qSN/Vj932IMKYE7d2FdFRcMuBR/UEGC7n
-	 XpgpdOUUU/WXVrEu8NIazr9rp4cLSMD4siy7c2AnWPI7ASIu+HDrsL/aHEkwW0+nGgOwL
-	 mONSsEoGvSnUyo6ATxn0kTV71T61LInz92S49Cw6GmnZdV9w29yau5cj96D1bjyQ1Cg==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=1z6u6B82Pr3/hzW5YMWmMP5A7ww17vCOqXR2hKgLl9c=;
+	b=1+ge3GvUglORlaHCED7ubPvs+mEuwhRJFKxT4pBN/H4izXEyleyOsLhiak4EgBjKRQLa
+	 KSfyL/WaB98w/vaNOY/iOwe0JOj9hNt1aszTQB5s6GkHfAtqLFYov4WDGa357rimUHjfN
+	 cWBWFRy4zjWzlXmf7TJDiVarrS1Wsm5kGO3OajjLW0/UaJ9uadnOABMl+wXvSZYl72oSi
+	 0uEGXj2kidkgNLaKnTIgNDSB+TI7R1ScT8zKHU3nczRqo41353m5wkD7u2sSIeo5NaN0e
+	 LKLoibTxKZHnV2Iba40uHlvk/VAAmP1j3Aaw7qSLSVtzM9Mc1T4N0K6v/T0sR5GR2cw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chrisdown.name;
-	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=CSpdWQ5s;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=oSdjbadH;
+	arc=none smtp.remote-ip=209.85.215.177
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583DE606A321
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 06:36:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 583DE606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7761B606A31D
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 08:39:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7761B606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=CSpdWQ5s
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cdab6ae1ee9so731442a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Oct 2026 23:36:33 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=oSdjbadH
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cd5d2dafeccso1402663a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 01:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1793082993; x=1793687793; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=dYFbbcr2uYZUTl7G/v0LoaX9lneqHtmhHpczJAH5sbg=;
-        b=CSpdWQ5sW1tM9TEYi7fzC1hlNCiQyd5Sxmr/vYfmVU2KSb+XVcPTsiehoQ5jknIMuF
-         JTP6RgKoJAV/cshortkM393JqA4eFHgzst3osKjj6xSzVB93VoeGsdI/7zR6ZwdlpbNv
-         ccNchm+EY8fwa76i84kMtlSxGKBXE2C6bXW24=
+        d=gmail.com; s=20251104; t=1793090371; x=1793695171; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1z6u6B82Pr3/hzW5YMWmMP5A7ww17vCOqXR2hKgLl9c=;
+        b=oSdjbadHGHjMx6m92nhrDQflhJGALNSv+UxevBBC5BaLg3+8GAsVik0aVme73SHE8e
+         d7VUZ+GR2k3kyC9HFXLEIqrpRpT8zg/RxMPQv0r/jJTaYUrlE3uXhnmCnj+AQsDG451/
+         EUquDDFPcdq6qZqoFf7XAZiE2S1fSQq94sAWA+YjIvjlvG4R8rUP1gl4GewWR+eTcg+L
+         OtGcAodpql3gqVlUKiIZUEAUKBz0CjDDK3yDoW+LGSVmMlx/VNmlBpfb7w4bKu8+IiPC
+         4WtlJxWpc2ZZ4v3TedSwMmtl0HIw83vBuq5/8Ns7+meabVHRc2PLmvpZ2V8O2tPhkRPW
+         1fng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793082993; x=1793687793;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dYFbbcr2uYZUTl7G/v0LoaX9lneqHtmhHpczJAH5sbg=;
-        b=c8VYqK+Xry0uG5evD8rBwhUm0aQ9tAtE/Oc8/HYWCKcyZ+8rCKZxYaoMIA2aq/0Egk
-         EAtl+l7ZWlJc05x+oO2oMs8pSbRj6o8ijYB69y4kmt8VQhQkdiG7L0K76l7gdD3Xd9jh
-         7WePxzQ2vboTHMNsGSPn6PRYafL6p+3kRxqR0x9gO8k4PviccbqZk8/J14xEKY128HR2
-         s6G1Ena68drlDpgkbkH74OGsXdnHWCxKw9/YVVlIE7nm4c0UySZBv569punZL6KID9XE
-         C8pMuHR8V+/eabbS34F5ZzZ9pVrVvtN61uTX7oLMUnv7N0PgqXHBn+yjM7ojJUywNBF+
-         MxiA==
-X-Forwarded-Encrypted: i=1; AKwUvBwZR7fKox2n8gIDwedouRoBTpLN9a9x8tx6PbeaW3/ToVhp/6fhHEGe6IlP5IPuA4BtFwTkwjItpCjE84hr6xI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIlOXzeoskB5I3fhZ0D8vnp8ekQxNdpcVTMmth1fy+XaCUSY4we
-	Py0Jz7N1WvsbA4lZAjPsU6kLBpE/F6vMwXnc7dOJQfjO79amLW2ji/Xr3U+W33+0j00=
-X-Gm-Gg: AYBFou3mWfV3ntk6T0G+KpMG2U3CiA84PxUfOfzSW3XbSk+cefnqkuROSLx7uR6u+s7
-	oUgX/tjJRKxiAEDVOGiMTbqBFiBUZIJOx56TL5i71uu+46AA2h0cIWk6PWTxvojs5DELnAe4+pv
-	7vQbDJXgy+At2C2a/8TMWNuGyenhuzHyvkjlOiMeJfN0tnIswrdS3J09YNS/K/kjgPCtwb2ia90
-	3Eb3cdJ4JAsRQ0GFUIqxT+2LyUmpqxVfXZ8TQZFsWha56fwzBtYRvUA4XHPsazUQ5HeFe8455/E
-	xe7gXJBkRhGzli32xmu0ezIDIi5174PCPmRuCHdXDQkKC4TD6EEbZ+wcSc0OSQdRkiSH6lvGKcf
-	h/FDGdHQVGyLKfUmXhtcYtWOxWIRHHPeGF9ROUqLU3Xx/7M9OdDq9/R+uraZD1TKj4SeJAmO9/b
-	vKwRz0PKqMS1O7blJev0HXml3mn1m8nUq4Zk21G15FH/I8z4VUgb3e6PkQdIF8eUJoYaLxBH5G+
-	ndhxDjHiIyZM+Ob/MOuDPF1tErgDJFiV84OFC8SUeKZHONkUGabUX2/AAzPnxZeBTz4ZKcOW1Kq
-	WhoVYA0SJRvKyfMM0ldwRogOO3K6Mji1gVKsizXFD0vDraOgex+3AK+Ey1PUezlhe9JOZudHnxj
-	T+NWBaityv8Xk9kKNHB+Xp/4=
-X-Received: by 2002:a17:90b:3ec2:b0:3a8:1a1a:7895 with SMTP id 98e67ed59e1d1-3adeae6d30bmr6210081a91.18.1793082993200;
-        Mon, 26 Oct 2026 23:36:33 -0700 (PDT)
-Received: from localhost ([116.86.153.182])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae40456f65sm2331529a91.13.2026.10.26.23.36.32
+        d=1e100.net; s=20260707; t=1793090371; x=1793695171;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1z6u6B82Pr3/hzW5YMWmMP5A7ww17vCOqXR2hKgLl9c=;
+        b=xH86bZQIg/TAq7pWuWKxY5hlv7JoKGmwDCGH+7K0E7ESH7dFpreP8zCw6olZjJqncS
+         kWbSyOEZ2GfPL7qu3AaNbkFyuMtCkucq62OaGHNlarPVjGT64+CnNQqckXrGjQ30mjev
+         X5NEPgvs/TFv+xJnGte9ijpM/Sy8PNv9/JQJuY0i1wIEjhJL1NH6bpLKVL9Gvt+FX4md
+         fUYUyMweyzquWncYlGyezGRwihhMTRnelmLwfVd+5pNKSGDdkFLAtXthFgkbcutyD09/
+         EFVzrgvDnWyAnU+gFzCnmkljZfmSnAD6mw/rRbe9tJ6IElPVL+TNxGZuc30YVreG7GqH
+         6a9w==
+X-Forwarded-Encrypted: i=1; AKwUvBw2bUvyBYh7orVvzMZnBONW0ayh4CtNgdr6iFYfFmMS+RnssFzamtf0sC7qjwAyf8SFOzKgoGgTeZ4V5a3UdXU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL5C2pIxFVm2lVhvnYiXZvjkT2ECnmGm2Htumg5RKZhXUsJMHlW
+	kta+05qTiQw740wWoO5CzHmDmQhuH4f8FTu8T9TmeGoD+uyFSo7GpAae
+X-Gm-Gg: AYBFou18IEEnOtnvTVcfSUFXzZbDRNlICSrU6NrTl+5ENGJt+D9s/EuwjOMtyz6fQwo
+	gqOLKClaYxlDEdrvjtwa6OSBjuPuQsoPcLaFG56tONqQmXGKWJy1cGgvUbLx9B65DktrOjj6tVJ
+	vh68rQDJsl4KrYsNQayVjOV48P7SFcY6KxgnsK++ShsPs9uY17qYccm2JsKtog5+HciS4bRtXQf
+	tkcLEC5tRO67gNkQIeFsW7Hzr7EeqiR0u6Dyk5EeRQk983hL8X6wej1Re4Gx5q/XQ/9sHyL8fsl
+	yStzGaonSG4pKOWjBgSdafcOz3x1W1ICD/+wkPIS3sPT4/OtSuweGGgKSthTwTiaA+ehX7vzMtg
+	GPEmWN/P0h8i5r22HVEJAao+7KO/XqmxZoVSV5HK5ylO/HjB3KN93im4CJUnCUoZuMoQWHwIjc3
+	ep65z8rJTW+n1/88h96DLlyAiV7KZ/vAZZ2kICv1kGX2cJuOdBK9fkaArfUbOBLgGsjy9m0IHFs
+	qMq5bNyBCAk0+/BrO/AZ3yJPWHSy/v3QLiN34x1JjiVAK6FpzIBMMAMDGsmgfTSTNR6RpiZ
+X-Received: by 2002:a17:90a:e18c:b0:3ad:3e8:12 with SMTP id 98e67ed59e1d1-3adeb126491mr6478782a91.48.1793090370681;
+        Tue, 27 Oct 2026 01:39:30 -0700 (PDT)
+Received: from osman.mioffice.cn ([43.224.245.178])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae4041fafcsm3618951a91.0.2026.10.27.01.39.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 23:36:32 -0700 (PDT)
-Date: Tue, 27 Oct 2026 14:36:28 +0800
-From: Chris Down <chris@chrisdown.name>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Kees Cook <kees@kernel.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH 3/3] lkdtm/bugs: Add CORRUPT_STACK_END to test the scheduler
- stack end check
-Message-ID: <7c4627a57202b505bc03837680f6b43c2683bc07.1793082868.git.chris@chrisdown.name>
-References: <cover.1793082868.git.chris@chrisdown.name>
+        Tue, 27 Oct 2026 01:39:30 -0700 (PDT)
+From: Zhan Xusheng <zhanxusheng1024@gmail.com>
+To: akpm@linux-foundation.org
+Cc: hannes@cmpxchg.org,
+	mhocko@kernel.org,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev,
+	muchun.song@linux.dev,
+	penguin-kernel@I-love.SAKURA.ne.jp,
+	tj@kernel.org,
+	mkoutny@suse.com,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	zhanxusheng@xiaomi.com
+Subject: [PATCH] selftests: cgroup: test memcg OOM on a process whose leader has exited
+Date: Tue, 27 Oct 2026 16:39:23 +0800
+Message-ID: <20261027083923.2412015-1-zhanxusheng1024@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261026120248.2188024-1-zhanxusheng1024@gmail.com>
+References: <20261026120248.2188024-1-zhanxusheng1024@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,70 +108,179 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1793082868.git.chris@chrisdown.name>
-User-Agent: Mutt/2.3.3 (9073d26d) (2026-06-12)
+Content-Transfer-Encoding: 8bit
 
-There's no existing test for this, so let's add one.
+From: Zhan Xusheng <zhanxusheng@xiaomi.com>
 
-Signed-off-by: Chris Down <chris@chrisdown.name>
+Moving a process whose thread group leader has exited leaves the leader
+behind, so its live threads sit in the destination memcg with nothing
+listed in cgroup.procs.  Check that an OOM there still kills the process.
+
+Without "mm: memcontrol: don't miss processes whose leader has exited in
+OOM scans" no task is selected and the test fails after five seconds.
+
+Signed-off-by: Zhan Xusheng <zhanxusheng@xiaomi.com>
 ---
- drivers/misc/lkdtm/bugs.c               | 21 +++++++++++++++++++++
- tools/testing/selftests/lkdtm/tests.txt |  1 +
- 2 files changed, 22 insertions(+)
+ .../selftests/cgroup/test_memcontrol.c        | 123 ++++++++++++++++++
+ 1 file changed, 123 insertions(+)
 
-diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
-index 3eca2ef64aff..929a60db00d6 100644
---- a/drivers/misc/lkdtm/bugs.c
-+++ b/drivers/misc/lkdtm/bugs.c
-@@ -215,6 +215,26 @@ static noinline void lkdtm_CORRUPT_STACK_STRONG(void)
- 	__lkdtm_CORRUPT_STACK((void *)&data);
- }
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index bb673012dcf0..bddbe923fa42 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -4,6 +4,8 @@
+ #include <linux/limits.h>
+ #include <linux/oom.h>
+ #include <fcntl.h>
++#include <sched.h>
++#include <signal.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -18,6 +20,7 @@
+ #include <netdb.h>
+ #include <errno.h>
+ #include <sys/mman.h>
++#include <sys/syscall.h>
+ #include <sys/sysinfo.h>
  
-+static void lkdtm_CORRUPT_STACK_END(void)
+ #include "kselftest.h"
+@@ -1417,6 +1420,125 @@ static bool memcg_sockets_disabled(void)
+  * The TCP client interleaves reads from the socket with check whether
+  * memory.current and memory.stat.sock are similar.
+  */
++static int exited_leader_pipe[2];
++
++static int exited_leader_thread(void *arg)
 +{
-+	unsigned long *stack_end = end_of_stack(current);
++	char c;
 +
-+	if (READ_ONCE(*stack_end) != STACK_END_MAGIC) {
-+		pr_err("FAIL: stack end magic is already corrupted\n");
-+		return;
-+	}
-+
-+	pr_info("Corrupting stack end magic and calling schedule() ...\n");
-+	WRITE_ONCE(*stack_end, ~STACK_END_MAGIC);
-+	schedule_timeout_uninterruptible(1);
-+
-+	/* Still alive, so let's restore the magic so nothing else trips over it. */
-+	WRITE_ONCE(*stack_end, STACK_END_MAGIC);
-+	pr_err("FAIL: corrupted stack end was not detected by the scheduler\n");
-+	pr_expected_config_param(CONFIG_SCHED_STACK_END_CHECK,
-+				 "sched_stack_end_check");
++	/* Wait until the process has been moved, then fill memory. */
++	if (read(exited_leader_pipe[0], &c, 1) == 1)
++		alloc_anon(NULL, (void *)MB(100));
++	for (;;)
++		pause();
++	return 0;
 +}
 +
- static pid_t stack_pid;
- static unsigned long stack_addr;
- 
-@@ -854,6 +874,7 @@ static struct crashtype crashtypes[] = {
- 	CRASHTYPE(EXHAUST_STACK),
- 	CRASHTYPE(CORRUPT_STACK),
- 	CRASHTYPE(CORRUPT_STACK_STRONG),
-+	CRASHTYPE(CORRUPT_STACK_END),
- 	CRASHTYPE(REPORT_STACK),
- 	CRASHTYPE(REPORT_STACK_CANARY),
- 	CRASHTYPE(UNALIGNED_LOAD_STORE_WRITE),
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index bec57a02913a..2d856ed77a64 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -10,6 +10,7 @@ EXCEPTION
- #EXHAUST_STACK Corrupts memory on failure
- #CORRUPT_STACK Crashes entire system on success
- #CORRUPT_STACK_STRONG Crashes entire system on success
-+#CORRUPT_STACK_END Crashes entire system on success
- ARRAY_BOUNDS call trace:|UBSAN: array-index-out-of-bounds
- FAM_BOUNDS call trace:|UBSAN: array-index-out-of-bounds
- PTR_BOUNDS call trace:|UBSAN: array-index-out-of-bounds
++/* Start a thread and exit only the thread group leader. */
++static int exited_leader_fn(const char *cgroup, void *arg)
++{
++	const size_t stack_size = 64 * 1024;
++	char *stack = malloc(stack_size);
++
++	if (!stack)
++		return EXIT_FAILURE;
++
++	if (clone(exited_leader_thread, stack + stack_size,
++		  CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND |
++		  CLONE_THREAD | CLONE_SYSVSEM, NULL) < 0)
++		return EXIT_FAILURE;
++
++	syscall(SYS_exit, 0);
++	return EXIT_FAILURE;
++}
++
++/*
++ * Moving a process whose leader has exited leaves the leader behind, so
++ * the destination's cgroup.procs is empty.  Check that the destination's
++ * OOM killer still finds the process using its memory.
++ */
++static int test_memcg_oom_exited_leader(const char *root)
++{
++	char *parent = NULL, *src = NULL, *dst = NULL;
++	int ret = KSFT_FAIL;
++	pid_t pid = -ESRCH;
++	int i;
++
++	if (pipe(exited_leader_pipe))
++		return KSFT_FAIL;
++
++	parent = cg_name(root, "memcg_test_exited_leader");
++	if (!parent)
++		goto cleanup;
++	src = cg_name(parent, "src");
++	if (!src)
++		goto cleanup;
++	dst = cg_name(parent, "dst");
++	if (!dst)
++		goto cleanup;
++
++	if (cg_create(parent))
++		goto cleanup;
++	if (cg_write(parent, "cgroup.subtree_control", "+memory"))
++		goto cleanup;
++	if (cg_create(src) || cg_create(dst))
++		goto cleanup;
++	if (cg_write(dst, "memory.max", "30M"))
++		goto cleanup;
++	if (cg_write(dst, "memory.swap.max", "0"))
++		goto cleanup;
++
++	pid = cg_run_nowait(src, exited_leader_fn, NULL);
++	if (pid < 0)
++		goto cleanup;
++
++	for (i = 0; i < 100; i++) {
++		if (!proc_read_strstr(pid, false, "stat", ") Z "))
++			break;
++		usleep(10000);
++	}
++	if (i == 100)
++		goto cleanup;
++
++	/* The exited leader stays in src, the live thread moves. */
++	if (cg_enter(dst, pid))
++		goto cleanup;
++	if (cg_read_strcmp(dst, "cgroup.procs", ""))
++		goto cleanup;
++
++	if (write(exited_leader_pipe[1], "x", 1) != 1)
++		goto cleanup;
++
++	if (cg_read_key_long_poll(dst, "memory.events", "oom_kill ", 1,
++				  50, 100000) != 1)
++		goto cleanup;
++
++	if (cg_read_strcmp_wait(dst, "cgroup.events", "populated 0\n"))
++		goto cleanup;
++
++	ret = KSFT_PASS;
++
++cleanup:
++	if (dst)
++		cg_write(dst, "cgroup.kill", "1");
++	if (pid > 0) {
++		kill(pid, SIGKILL);
++		waitpid(pid, NULL, 0);
++	}
++	close(exited_leader_pipe[0]);
++	close(exited_leader_pipe[1]);
++	if (dst)
++		cg_destroy(dst);
++	if (src)
++		cg_destroy(src);
++	if (parent)
++		cg_destroy(parent);
++	free(dst);
++	free(src);
++	free(parent);
++	return ret;
++}
++
+ static int test_memcg_sock(const char *root)
+ {
+ 	int bind_retries = 5, ret = KSFT_FAIL, pid, err;
+@@ -1816,6 +1938,7 @@ struct memcg_test {
+ 	T(test_memcg_oom_group_leaf_events),
+ 	T(test_memcg_oom_group_parent_events),
+ 	T(test_memcg_oom_group_score_events),
++	T(test_memcg_oom_exited_leader),
+ 	T(test_memcg_inotify_delete_file),
+ 	T(test_memcg_inotify_delete_dir),
+ };
+
+base-commit: d135ab453a7400a34930bdda1ef4bdc8acfac80e
 -- 
-2.54.0
+2.43.0
 
