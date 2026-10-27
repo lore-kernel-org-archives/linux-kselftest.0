@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793101752;
-	b=Xn2fqd6D92uQJF/Um9ar/GFDz61vnwPAtJh8q9xyxDsdCMNdwI0zJjJAjIh3HCjBXiIh
-	 ydNBfFSmiGBGsoN7VVrSYnhxqWsj52Iqu0NdVzs6ukrCf8aYMbibPJ2tiAlkWlD/wiE2o
-	 1balM8pLEWepz4B/jVV2VjgPFNXsgA2CRbVcRW8dIJBsqRBRJFbLne5cHTxCYkNndpsI5
-	 IErhFEjf0llw5wtHAN6tA3TNpkcMVp+SxPJU+zO69CSUdDoRLFIggIUvILSKL6mU3prDQ
-	 6sm58hpCVHRp6Y4YnmigzhwX5Yrqfzi9WIuT2Kdj+8ESBCNgdHHgxiOH0skCFxS8EKw==
+	t=1793101754;
+	b=e02ieup7aNpR5Uo9LrihPYknFEGGrzWEIFLIKmJA/YYrckEH49Sfhf/m5RlP4VYYzL4V
+	 5uHvZfsr0N4xlKEsb/WuhSQaKraxiYXI2KUSOyybi7bLFmsQAUFJg8tSpYuvvf2/gMNqu
+	 wkxSoC7LoSEpcOQyjMJxDOfkXRGrFgtDR3E/FMI76+kc3EVNzCfAQDQhmNvDne26bP6Up
+	 7ePPpUi145w8HJNeiH8wdfPopitYjNhBFj0UcukRKX4iOwv/JbfDIJm8cvA8rLA6nvhgm
+	 Z/drIJKcoWMrk+9adXsux7LjDZqxi8LkNG35oZ+TeenVx6Ds+RGGHQsSAQy/9kFimTw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793101752;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793101754;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=4fyuBJ+a3h7buKYW0HFnv+SBVn1FNv0YDNNGL3FIiEM=;
-	b=i3nCIrxFerqlHIzlES2SZONBDKVKmqGqw0S8GPwbe/VA0qR4cpu0+vDF3OxgqlnsMbOH
-	 zz8TP1ela1sTMA3W70Sly5jMdFNRdjG2+SlyUQXuHUmi/PIhsLJtvL5JCWGlDupoV+Gts
-	 6GHkXHsLQKKN232TPstLGIqzJ2IS/DeN35ST3vb5QL8v/oADCF2pIWuu+xnZtmGif4585
-	 idiOvZvdjDyh58CCHAfyRe77BVDzguQ8PpDDDpjKX8bgzf2LSlTnsQPE3/Oxnwn0Mpebp
-	 vzrgJkS6jt3rE+YrVdEx7/oaIP0DuwxQ0bDiWCuqOR5zlXR+oG+Xm+ZmFtVtZGrrlzw==
+	bh=TTJmA88cQwl8RM34llTru5b4J/+2xPkGiT4W3SD2CjI=;
+	b=uRtJK/j+3LGsGZxmpN5qT2mjqfPxSfNBoLo4IKjBGA1EFHqVVhn79wiQQX1+ibT1wuHY
+	 r7xzOeuxcyohUxTz6lbxhklK22qRnDO8EX4eeqzCFkwRK0q4m6X/zT0Capa0WTwFHUrC5
+	 9jG295JMzed5v1/KPSMk+xQkKgkzJqyaF8yj1ETiZSnjeihG8rHq+87h5iZtxwYqo6uA/
+	 i44lvPvTJmqKEDi3erbjY9EYo0MofHpjoSN8IqFoIA8gx3xkm6BX7LSN7yBOYRP3RRo6U
+	 MJD6j0gr4mJDHImN67FqdYxdngWJUC4lFucAYsFQRjlY6J2YI45vHrAIA/4oeFda+6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ARq3XbOw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dKQrZ86V;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88545606A327;
-	Tue, 27 Oct 2026 11:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3393606A336;
+	Tue, 27 Oct 2026 11:49:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ARq3XbOw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943CF1F01825;
-	Tue, 27 Oct 2026 11:49:11 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dKQrZ86V
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA7C61F031E2;
+	Tue, 27 Oct 2026 11:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793101752;
-	bh=4fyuBJ+a3h7buKYW0HFnv+SBVn1FNv0YDNNGL3FIiEM=;
+	s=k20260515; t=1793101753;
+	bh=TTJmA88cQwl8RM34llTru5b4J/+2xPkGiT4W3SD2CjI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ARq3XbOw+OUFVGZRZcouLDKo1UTdUsaKCYr6QMSAFCJa+y+ZowBtWS7nHpyyw40Ya
-	 mtCUj9CuSXig6qpjMiU/Fqc59+7sDHcl2liIQz3WCt+/ESXN+skbSBStbQ3RwjTasm
-	 ziC3bAEDdeVsPyljX4kOiBE+sY16m3PF/8Enf/gd93Lp+swSHPV+vD8IKwBL3Efwyn
-	 JwgVqreEyxEhnqxPi1XDAW1WqqZhSC/7x7e9XL9pjWH+wvyCpeS/NACpUstvW3CEA9
-	 v9ZzyeqzYKjh6FltEyDNpagt7pWqbzoQKSTPATVxuk0sFKm7gntH7oYF1xOjiev99r
-	 VtO4beVAIkn3g==
-Subject: Re: [PATCH net 1/2] netlink: retry a dump skb that does not fit with
- the minimum size
+	b=dKQrZ86V/MgtlDd9erFpBEbDINUFDYKxpaJ0c9GzZddPcL5izD/JvS3GMduWQRsw+
+	 +uX2yxVaBqp4gpGP4/GlC23UHC8FEMb7v8Mre72s/egjMKM3o/iDfoRo68XUPG9KZL
+	 xCU/38JGHWavOHWo12+O3L41eRPHH+UX8KpcuoP9xDu/ERlIYCUzmP++Ujuw7qYPsf
+	 FurDh2Uvz1kHhbZZxIs0wBf53AGC2kk6HqyXEtnxsXFn15jvnfE+C1nCbLt9e1/tKZ
+	 PweYLnUIRKvaa3CuJXTpPmlrHfZtzS7KBSEkoyHx8GpEDlPf0di9KENeUIUU9nm/2C
+	 n34EB43LaI+SA==
+Subject: Re: [PATCH net 2/2] selftests: net: netlink-dumps: start a dump with
+ a notification queued
 From: netdev-bot+sashiko@kernel.org
 To: jhonata.poma@gmail.com
 Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  kuniyu@google.com
-Date: Tue, 27 Oct 2026 11:49:11 +0000
-Message-ID: <179310175111.3134.9177648236285208856@kernel.org>
-In-Reply-To: <20261023-netlink-dump-livelock-v1-1-478214a635d2@gmail.com>
-References: <20261023-netlink-dump-livelock-v1-1-478214a635d2@gmail.com>
-X-sashiko-severity: High
+Date: Tue, 27 Oct 2026 11:49:12 +0000
+Message-ID: <179310175236.3134.7064612436495160668@kernel.org>
+In-Reply-To: <20261023-netlink-dump-livelock-v1-2-478214a635d2@gmail.com>
+References: <20261023-netlink-dump-livelock-v1-2-478214a635d2@gmail.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,118 +65,126 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [High] The fix is incomplete: the ENOBUFS livelock it targets is still
-  reachable whenever a minimum-size dump skb also does not fit.
+- [Low] The new test dump_with_queued_ntf in
+  tools/testing/selftests/net/netlink-dumps.c needs privileges that the…
+- [Low] dump_with_queued_ntf sets done = true as soon as it sees any
+  NLMSG_DONE with nlmsg_seq == 1.
 
 --
 
-netlink: retry a dump skb that does not fit with the minimum size
+selftests: net: netlink-dumps: start a dump with a notification queued
 
-When the skb sized after max_recvmsg_len is rejected by the sk_rcvbuf
-admission check, netlink_dump() now frees it and retries once with an
-alloc_min_size skb. The goal is to fix a livelock added by commit
-ae8f160e7eb2, where a reader that peeks before reading, such as libnl,
-spins on ENOBUFS.
+This adds a test, dump_with_queued_ntf, to netlink-dumps.c. It starts an
+RTM_GETLINK dump on a socket with a small receive buffer while a link
+notification is still queued. The reader peeks before each read, the way
+libnl does, and the test expects the dump to complete.
 
-> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> index a904dc3bcad6b..b750e79fed2ed 100644
-> --- a/net/netlink/af_netlink.c
-> +++ b/net/netlink/af_netlink.c
-> @@ -2318,10 +2318,21 @@ static int netlink_dump(struct sock *sk, bool lock_taken)
->  	if (!skb)
->  		goto errout_skb;
->  
-> +retry:
->  	rcvbuf = READ_ONCE(sk->sk_rcvbuf);
->  	rmem = atomic_add_return(skb->truesize, &sk->sk_rmem_alloc);
->  	if (rmem != skb->truesize && rmem >= rcvbuf) {
->  		atomic_sub(skb->truesize, &sk->sk_rmem_alloc);
-> +		/* A skb sized after max_recvmsg_len may not fit next to data
-> +		 * still charged to the socket, while a minimum size one does.
-> +		 */
-> +		if (alloc_size > alloc_min_size) {
-> +			kfree_skb(skb);
-> +			alloc_size = alloc_min_size;
-> +			skb = alloc_skb(alloc_size, GFP_KERNEL);
-> +			if (skb)
-> +				goto retry;
-> +		}
->  		goto errout_skb;
->  	}
+> diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
+> index 51129c564d0a6..6f66a478d72f3 100644
+> --- a/tools/testing/selftests/net/netlink-dumps.c
+> +++ b/tools/testing/selftests/net/netlink-dumps.c
 
-[Severity: High]
-Does this fully close the livelock described in the commit message?
+[ ... ]
 
-The admission rule is unchanged. The minimum size skb is still rejected
-when rmem_before != 0 and rmem_before + T_min >= sk_rcvbuf, where T_min
-is the truesize of an alloc_min_size skb. The comment says a minimum
-size skb "does" fit, but nothing here guarantees that.
+> +// A dump started while a notification is still queued must make progress
+> +// for a reader which peeks before reading, like libnl does
+> +TEST(dump_with_queued_ntf)
+> +{
+> +	struct sockaddr_nl addr = {
+> +		.nl_family	= AF_NETLINK,
+> +		.nl_groups	= RTMGRP_LINK,
+> +	};
+> +	int netlink_sock, inet_sock, i;
+> +	int rcvbuf = 8192;
+> +	bool done = false;
+> +	char buf[32768];
+> +	ssize_t n;
+> +
+> +	ASSERT_EQ(unshare(CLONE_NEWNET), 0);
 
-On the recvmsg side, the dump is only re-run once rmem drops to half of
-sk_rcvbuf:
+[Severity: Low]
+Should this skip instead of fail when the test lacks privileges?
 
-net/netlink/af_netlink.c:netlink_recvmsg() {
+unshare(CLONE_NEWNET) needs CAP_SYS_ADMIN. lo_set_up() calls
+ioctl(SIOCSIFFLAGS), which needs CAP_NET_ADMIN. Both results go through
+ASSERT_EQ, so an unprivileged run reports FAIL rather than SKIP.
+
+The other tests in this binary (dump_extack, test_sanity,
+close_in_progress, close_with_ref) only open netlink sockets, send dump
+requests and use mq_open/mq_notify. They already run as a normal user, so
+this is the first test that makes the binary need privileges.
+
+Would checking for errno == EPERM and calling SKIP() be enough here?
+
+> +
+> +	inet_sock = socket(AF_INET, SOCK_DGRAM, 0);
+> +	ASSERT_GE(inet_sock, 0);
+
+[ ... ]
+
+> +		for (nlh = (struct nlmsghdr *)buf; NLMSG_OK(nlh, n);
+> +		     nlh = NLMSG_NEXT(nlh, n)) {
+> +			if (nlh->nlmsg_seq != dump_links.nlhdr.nlmsg_seq)
+> +				continue;
+> +			if (nlh->nlmsg_type == NLMSG_ERROR)
+> +				EXPECT_EQ(*(int *)NLMSG_DATA(nlh), 0);
+> +			if (nlh->nlmsg_type == NLMSG_DONE)
+> +				done = true;
+
+[Severity: Low]
+Can this pass when the dump ends with an error?
+
+netlink_dump_done() writes the final dump status into the NLMSG_DONE
+payload:
+
+net/netlink/af_netlink.c:netlink_dump_done() {
     ...
-	if (READ_ONCE(nlk->cb_running) &&
-	    atomic_read(&sk->sk_rmem_alloc) <= sk->sk_rcvbuf / 2) {
-		ret = netlink_dump(sk, false);
-		if (ret) {
-			WRITE_ONCE(sk->sk_err, -ret);
-			sk_error_report(sk);
-		}
-	}
+	memcpy(nlmsg_data(nlh), &nlk->dump_done_errno, sizeof(nlk->dump_done_errno));
     ...
 }
 
-When sk_rcvbuf < 2 * T_min, that check does not guarantee
-rmem + T_min < sk_rcvbuf. A few configurations appear to land in that
-window:
+If cb->dump() returns -EMSGSIZE with an empty skb, netlink_dump() keeps
+the negative value:
 
-- On 4K pages T_min is roughly 4352 bytes. An unprivileged
-  SO_RCVBUF=4096 gives sk_rcvbuf=8192 via __sock_set_rcvbuf(). Any
-  rmem_before in roughly [3840, 4096] then fails both the large attempt
-  and the retry.
+net/netlink/af_netlink.c:netlink_dump() {
+    ...
+		if (nlk->dump_done_errno == -EMSGSIZE && skb->len)
+			nlk->dump_done_errno = skb->len;
+    ...
+}
 
-- On PAGE_SIZE >= 8K, NLMSG_GOODSIZE is SKB_WITH_OVERHEAD(8192), so
-  T_min is roughly 8448. With iw's 16KiB sk_rcvbuf, rmem in roughly
-  [7936, 8192] fails both attempts. A few notifications that are still
-  charged could reach that range, since do_one_broadcast() holds them
-  via skb_get() until netlink_broadcast() returns.
+The dump then ends with an NLMSG_DONE that carries -EMSGSIZE. Other
+negative dump errors end the same way.
 
-- When cb->min_dump_alloc is at least the capped max_recvmsg_len,
-  alloc_size > alloc_min_size is never true and the retry never runs.
-  smc_diag_handler_dump() is one example: it uses
-  SKB_WITH_OVERHEAD(32768).
+A dump that starts successfully sends no separate NLMSG_ERROR ack. That
+makes the NLMSG_DONE payload the only place the result is reported. This
+loop checks the errno only for NLMSG_ERROR, so EXPECT_TRUE(done) still
+passes. The test also never checks that an RTM_NEWLINK reply for lo
+arrived.
 
-In those states the original sequence still looks reachable:
+The no-progress case this test targets is still caught, because no DONE
+arrives there. The gap is a future regression in skb sizing that ends the
+dump early with an error.
 
-__netlink_dump_start()
-  netlink_dump()            -> -ENOBUFS, cb_running stays true
-netlink_recvmsg(MSG_PEEK)
-  netlink_dump()            -> -ENOBUFS, sk_err = ENOBUFS
-netlink_recvmsg()
-  __skb_try_recv_datagram()
-    sock_error()            -> ENOBUFS returned, nothing dequeued
+The existing nl_get_extack() helper in this file decodes the errno from
+NLMSG_DONE as well:
 
-rmem never changes, so the peek/read loop keeps spinning at 100% CPU.
+	ea->err = -*(int *)NLMSG_DATA(nlh);
 
-Before ae8f160e7eb2, the dump skb was admitted whenever
-rmem_before < rcvbuf, so a dump triggered from recvmsg could not fail
-this way.
+Could the new test check the NLMSG_DONE payload in the same way, and also
+check that at least one RTM_NEWLINK message was received?
 
-Would it be better to relax the admission rule for dump skbs, instead of
-adding a second, smaller skb size?
+> +		}
+> +	}
+> +	EXPECT_TRUE(done);
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261023-netlink-dump-livelock-v1-0-478214a635d2%40gmail.com
