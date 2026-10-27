@@ -1,161 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.68
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793131949;
-	b=1SYHaPpo9buZthMdV7rXAruHAf18rgBMHE5F8hoN7iGFuV5vxGEtsytfg+1bQH0HZm+O
-	 w1QIUxQPZ2isWNlbxBXjWYTrJM5flvp5qtScNzwU0ldPJajOzm7Dsrp9QStM8XXPo9Xxo
-	 l1OPFPDm6LKtEiGXt4QSA0SQ6RD9jd5HCUU3NKQpuEOj5IOOjyYlB86tCheSI5OFbOqey
-	 q+Sm39V3sLlatuDCT95f17HGmp2mE+mhlCwejcAHpClbcywUvfMwGsZZkGpWJZO4WBg9O
-	 KqOB07tl8RJfy7WHuqdHbHYN4E6EeNkbkwSb/Ui90hNwD9A16b/ZxuGnbrE463t5nmA==
+	t=1793132533;
+	b=SA7fQbthNys0M42RLGGxJ/1eggRs/kloOScrcc4pwfJb/1TbmQcIeuFgoAy7oaQ5WNVk
+	 SVTZIYJaA0g0sPjsbCkL1gpOZoeE0rk8CFoOf32cxj1yr4IhTZoMtUJJpAV1koJw4QvZ9
+	 UIFXN4plmWyWpeaZLWz2cz4sNAn82EnKE191d9ILC2pMEkuw9diOTzab99RqPEBCBQSBa
+	 Jekgtg9LTUcAKdMqVGDa8w7MZJG4xObPgZ+PArj/Y51KfDWXgzPFU4bAb42EYdXnDrpCB
+	 kNIr+xunE6hJZZaoAvS26N0sqvbAsVQ/U1pZzpzUOcgOC0aJcK/iT6bXiavZJa0xpKQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793131949;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=Oybe5L6xfI4XZa50mB2aI1YpPe/X9kT3ClR/NEDODWQ=;
-	b=uhW+PDw+Wt3QGYGV9CXEaq26CICWB/DEcDA349wCc/EQ1lcPcl42f9pzqEW+X2Z52D1L
-	 BBvsplGpIRDE5/DkC9X52TwUjO6DEUvJZbjIS/dDVo36izVidMEFzYzSkMUWAJ0eG5ZX4
-	 Xkad7qAgGh3CSxSeor2s/enQn/1poTdmK74wNA1w6RRFn0f4kI22auv/09bnhNoBW4lde
-	 prK4qpWhIpuDDfxwiTCkXOFZM5/tONzZ2c7EWnm4UVg5A48tiViQRIy72u5xGpv8Lt8Oc
-	 QVbcazyMd5n/idKGkbNrYkcUd45FhP07AapvXTJsYEravsnYcYFk9j1c0IdYmA1CKfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793132533;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=tBAQlmEXepTgtGHbE6tvj/aE+zNCVZKL0FkVewuVwjE=;
+	b=BSAks5NJLXngVR71gJE/gKVWocXLmn0qvbiYCcGhHxlzwYjyJBTWgTiq2+7+WEXIn6Da
+	 a6y0MKel95hjH4s0lGO5vfsdRzTa21tD/gMHcMh8brDxeXuWVLTI9N2PRT/WNmpYm6H4C
+	 TPbBpxsub5Vo4wILVNwERHUwJL9NxEDWBO55yqCgLKG5HzgT4RslKQ59n+EnP71RVzE67
+	 kiWFg5MycvI/0wdVMDeanVFmxoNvt52aLcSEjhH9JZACOR3yCjugJu3lTaZZn2bVf3+lB
+	 bvEv7ZGyQNEzfBcZ3d61HurFvwlRmFUv7rVP8+qffmIjN3TQNe5pdK9SLWm0cUJQUNQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=hGfPsc5J;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.68
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013068.outbound.protection.outlook.com [40.93.196.68])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k7iX0wor;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E8E606A31A;
-	Tue, 27 Oct 2026 20:12:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 22E8E606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA69606A325;
+	Tue, 27 Oct 2026 20:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=hGfPsc5J
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oyvAfgEaNesqbjVxVXVpoMzXz6AobLlmYXoRJvA4LyG6Nj6zQui/AjGlWKrRAZaYSQNDu/3H1NZn55/Lw/xGcJpvIktDosv66p4NyfR7CbMefVxUGXUrrsO+XSyJjvx9HzOYRyHKZDmGdtOk23LKUyX1qQUkMHTb2GUwvcoxwvsjs56f/fJG2vNcXGAm9uN3Xzp8PeMNx2SxNfV4Nrh6DrAyTOxHIM/5U7EvqR7x+gBvUoxc5XYSwaa3zNGcbAkURH3jAc1YyHcWrZYdFJ5ontXCu8TUie5xyXXV5rDeWCwpqGn7V4DLidXM16CoK3mem39VPM7U+xCxlE9QkVDWIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Oybe5L6xfI4XZa50mB2aI1YpPe/X9kT3ClR/NEDODWQ=;
- b=kBMUGHCsrDeeHpYvvQQxfV0YipfbTh1IhlKWxhX/fx4u4V4GWRqEkSF5xx1ezwIFczsuhCrhRH0lYhV6ovBziT78cAeVF/mwKr7dmR4ewL5RCA7c6v0hjCVQSrxLzODjSWnvwnVQdTA6tJ/08+x7bHKkTGWCVlot01mq9kwE4nMruqDvG0MWRV+ekM5To4tnDYDud7fooN0VConKY4Owb3nQqKEe4afmHb4ean/wtBZ9aDv3AZyL9q+iG8wblo4HnJyHqLllBML2PkFlrDE1LTW96ogEDFHet27x4LC7uydCRdyPKyTbrLpK85JKi5tu2Mom95pgZLErYrvmqhGbPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Oybe5L6xfI4XZa50mB2aI1YpPe/X9kT3ClR/NEDODWQ=;
- b=hGfPsc5JvftS0Bz/xtAmU+v3sKvrmPRkIRCB2ZAbUiIb0zfUrDA6nkL0f9+G3gLGyM62O6XPSMZ7+4kDd5gk5Ynj63r+1E6Lnk0oKVkQLKlfu235mFZ0xvmvJAdRU3qwX9jgHJlOOMLrwVg5WkngS74IwgEILkV4Z+V31wpHGxNVyQqpDrEcvAdse9o1kq0mQKaEdESB5j6fOMGeLLq8ZCraikWyiDj09morRZfohbRXNT9QSbvgSyF6Haqw3QYncMVZwsq9SWnnDRILWqwgglZbvvyBsHDO4xYUmkl6QbiLkQ4r3ZNr2JoA0sO2WPX1czBJHA9XqaY57fFLHRykeQ==
-Received: from DM4PR12MB6136.namprd12.prod.outlook.com (2603:10b6:8:a9::14) by
- SN7PR12MB7153.namprd12.prod.outlook.com (2603:10b6:806:2a4::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Tue, 27 Oct
- 2026 20:12:25 +0000
-Received: from DM4PR12MB6136.namprd12.prod.outlook.com
- ([fe80::75c4:de57:e254:243a]) by DM4PR12MB6136.namprd12.prod.outlook.com
- ([fe80::75c4:de57:e254:243a%4]) with mapi id 15.21.0546.021; Tue, 27 Oct 2026
- 20:12:25 +0000
-From: Manuel Huber <manuelh@nvidia.com>
-To: Fan Wu <wufan@kernel.org>, David Howells <dhowells@redhat.com>, Jarkko
- Sakkinen <jarkko@kernel.org>
-CC: Christian Brauner <brauner@kernel.org>, Andrew Halaney
-	<andrew@amutable.com>, Paul Moore <paul@paul-moore.com>, James Morris
-	<jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet
-	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
-	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>, "keyrings@vger.kernel.org"
-	<keyrings@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
-Thread-Topic: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
-Thread-Index: AQHdYBKBjBwQ1KDODEujGWIc0cwMXLcFf3KAgAwwgjA=
-Date: Tue, 27 Oct 2026 20:12:25 +0000
-Message-ID:
- <DM4PR12MB6136C6E1BE1E6D675AFFF0EDDE602@DM4PR12MB6136.namprd12.prod.outlook.com>
-References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
- <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
- <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org>
-In-Reply-To: <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org>
-Accept-Language: en-CA, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB6136:EE_|SN7PR12MB7153:EE_
-x-ms-office365-filtering-correlation-id: e309b5ea-0392-4ae6-3550-08df34669e0e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|23010399003|376014|7416014|366016|38070700021|261026121527099003|11063799006|56012099006|261009223027099003|4143699003|261022113327099003|10067099003|261022105027099003|18002099003|22082099003|261026140227099003;
-x-microsoft-antispam-message-info:
- NSNEYtxYfQzpPPSljt5Ya37WtybBXN9GfgQEPjbT+2Vw8Lo2jdCN3iFE5Y8VPZSkVp8o/Blo0wdFZocy+EaXacZpT1W1885g168TE+4x2T1PGBGgtQRGdcWw8MHy4lTlINWEnJnXhHj8xhh8PftQ8yTED1jDK83JpgICgTpYDvQWqoXnlSnGjozIjVMeNXkbo7KhF55o7lVaMVZMSNC0V+GUvfeZFd+mBqW36xRXCfm5ZBQGpbu9jzbI4FWaSukuw93OmqKWkc7IUk8poPjpsEdaAzT7rDY5bSm3knDZclZM/3UB4n3TsJjEEa84DAm7mlAZ6q52OnoYBUgOQ8YSB8wuzyDAiZ65h2730CQ3KaxW+faD3330YChAbnh6Jio51CiXo8THKMrXwBW5dbPTT4uulkMc07/3uf4XCnLu09y6gsIZOeuBS3flc8DOTuccnFsfS7Lr93a2KuipbDraaHUa2FetdJr1VzDVe4ZvSxzttzbygFu2gbhEMTrjJa+quRpa1ATstXrIWdAEhz55HlAZz/HXw0V6VFXqoJmVlYxyeEiEOqs6pqYoRrFR2UzomD/X5+idxNVGXDo95pSsbc96ibU6sOqHLjBCKMX+Kj2gvgQEXq68F3Vj/p+/SayTfG/wOxFkb7mSBffQPo96I74As6OlgZ3ClE8gyH2FywjwbgMpjZX0Z+/nL0rFrCL+tTPIKWoAhzMKxSycfEEwbg3YElTzCDOkzx4wii3Fwi8=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6136.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(376014)(7416014)(366016)(38070700021)(261026121527099003)(11063799006)(56012099006)(261009223027099003)(4143699003)(261022113327099003)(10067099003)(261022105027099003)(18002099003)(22082099003)(261026140227099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?bzJnUGhpNU5QMkdxcFlpM3FKbklZYkZqczd0czNqRkgxdEJZa0Q1OGJJWTRL?=
- =?utf-8?B?L3ZFcjlCMXhwZHlIR3AvZFdXQjlzbUtuWmpHRjZpVlpKbXg0dGRib2hheW5l?=
- =?utf-8?B?K2t2cUw0eFljRE9PSG50Zk9JWTM0cDdqYVg5ZXViZkhnV3Bvdi8vcVRNL3A4?=
- =?utf-8?B?dkMvUUo0emFmSmN2ck95YXhZbXF2citkaE52K2c1akkxZVV0TXFIMGNBN1A5?=
- =?utf-8?B?WEVWTWxqOU5lZkpzajhxN2c1NS9rVk5JR3ZSeXBoaWdOaWwvQUh2RzE0ZjBT?=
- =?utf-8?B?S0N3T25MaEFRSkh6M0tQTkQvcnNyKzVhVzRidysydktKSEc5RVRyWFVya0tj?=
- =?utf-8?B?Szh2Z2F4dG1tNUNNa1EvU3RRVjhRb1E4RTF4dlcrN091S0ltbkl4QXRMdk5Z?=
- =?utf-8?B?aUVqWTk0TFVRQVhtZWZ0ODUzTGVnaWRRSWxBaStRWlBNMDN6UDdsVlJkei91?=
- =?utf-8?B?S3NuU0lwbTRLbU1Pa2pWT2VXb28yVXlHTlN5OGNRc0pydytrTTMweXVxMHNm?=
- =?utf-8?B?azJZaFFoU3Z3QzBHYVNDUGF0N0tUS2xqZG94eUZBNGpTa2hIa3JGNTlCYXk2?=
- =?utf-8?B?L0xWRXMwdlJTQWJ2aDFlUDNGUGpZYU1hUENGMFhmZ1ZDZDBqVkJlTUFVQ2p4?=
- =?utf-8?B?Mm5vbnR0WWxNWXgrV1IrTXovZmZ3cURTMlhubXQ3dFh5WFV6WHJIanBFN3pK?=
- =?utf-8?B?Ry9EWnpqWWhsMnZWbWk1d3dzeW5yMTd3d0FhQ1hrYVR5dHY5V3Z5RHhodFVE?=
- =?utf-8?B?YWt2SmR5SHRNWUdrekFKNG1PSFRIdDA1UnIxUERlSU1LaW1WcDl2aUxrYWlI?=
- =?utf-8?B?Ynh4My9PMUhSVFZTOTNLSHExajJRQmhDdCtBM25FOFg5a0RLRG1TZ1BiYkhI?=
- =?utf-8?B?L3BhWmJkeEEvK3Zya0xWU2k0WThWaHhpeExKWkhwRDVzVjFwK0Q3Q280anli?=
- =?utf-8?B?WEZhdVBkb3ZZMERxaEEwY2t1SFRqUTVZbFNjZGE2bGFacHdGcFVOWlZ4WFk3?=
- =?utf-8?B?REtjc1VTdjAyelgzZmlaSExXSG9aYnVBUXR0L2xLM29oL0FTdnlObFNCZkF1?=
- =?utf-8?B?UnNqdjJQV0I5UnpWZ1Z3YmVxZjZsMWN1UDVYOEhheXQrZkp2K2pzYTBZNlVP?=
- =?utf-8?B?S1BvQmhHclRzMjBjN1dSWXY5eEJsTnJna1lvNWtUV2U3SmFHNXZHUklTMkJG?=
- =?utf-8?B?WmpOZGxaaW5ndndEdlQ4cHAzV3Zpd0dVOGRBaU1DdFkrSVVSQXFJOHRCZEFx?=
- =?utf-8?B?MFhFcFFGRFRPNnhNRFVLZ2dRNnZrWTdKVHM4eHpNVnZ2bzYrOFB2VmVCRHhn?=
- =?utf-8?B?VWczeEw5YnhRb0xVQ1ZkNHBveTU3UjAxQWR3cDRUVHV5N1hFSmhPUDVZU0RN?=
- =?utf-8?B?a21mMGJPSUtpUW0vWk9PdkZyWmpKTjhlenBDWVVCM0ZUQUdzU1BmUzErUHRx?=
- =?utf-8?B?ZkxyaHh1cHZBaUE4Sm93U1RQYThmNU0yZEJvbzh5d2p3USs2SGZxMU04TzRq?=
- =?utf-8?B?NTVyMjhPZ2ZRVmpFbzFLSjV5OVpHOU95aXlnR0R3QzBSRmNmUzV3TGdrM2dZ?=
- =?utf-8?B?aDBMWVdYUXRBZlNTb0NQSjA5dSsrc3YydkdvYVVVRy9NRUpQa2FTOGRoS083?=
- =?utf-8?B?TytUVUwzNkQyMlpMNFcyUDBYcENlTWtkNlNnM1NSUHpRZWMxeVNNb1V0TENZ?=
- =?utf-8?B?ODBQM05VaVBMaThGa1BtZ0hBM1F1Z0VLTWxOMUpacDNnZEdYRTRXOWFkYUFH?=
- =?utf-8?B?UFVtSzJMV281Z1lkcWcvcWZHcFhORkdXbms5cGgrZU9rT1dtbU5TM2JoTGto?=
- =?utf-8?B?ajU2by9UTEdYTmNseHRyd0hKVm4ybitYcHVTakYrRWFZWnZDQ1VKMXBlMmkx?=
- =?utf-8?B?ZjBqbU9LZE9rSkNGSmpGMVcrWmYwUnhLQUJvTVNDWjdsOEhkaExocjRIVy95?=
- =?utf-8?B?eVlFUXFMakhFdUZYSXExTDhQNjAwbEF0THVZai9INkxyU0g2Y0xVWURuLytn?=
- =?utf-8?B?cTdBeFROQWpuRDBPeldFZnNrUXI1THVuSlZCZkt6b1lNYi9mb3BFcHhIOXN3?=
- =?utf-8?B?SGRmaWUxeE9vY2lLc08wdzFzU1lSMmlieXRtQXZYN2FQdGRkakYxaVA0STho?=
- =?utf-8?B?bVliSGN6NjI0ZEViazZZTytOVEhmTGJ0WWNQeU1yNFB3eVROOUgzNG1vaWRr?=
- =?utf-8?B?UXBBbzVsRkVJaFAzR3J3QWNuTnBlQzF6a1M2SWR4TitYWE1LWFJGUDhaQys0?=
- =?utf-8?B?UnZJUFFNb043aGxnSzVheno5Q2dtL0Z5eE43T3dvQXhqd01IYXJ5NjYwMThP?=
- =?utf-8?Q?r+Qhv1hgFvQlPdCDYS?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k7iX0wor
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793132532;
+	b=1Wp0ZSnJzCbsJETpL4RooenykqqD6yN8lDm8MlzMnj9wkRXB1NZJufWv72UBg8MMuesO
+	 lAnMll8tnJY1bueBs0fdzskW+ik4INVVcmNSycvQ3wGKeyD072667+qcazaflijr5F9yM
+	 TbQ+NWTmNp1QiOvWRA4rXFYRMUyTK59gpjpp19gsbxzTdr+PahedapnJ/8mTxZKYYQznK
+	 hrPlSm4XidN8t+BJi4vZEB27Rw5we/QhzctR077q3B8LfwM3Zc8YiSlha4zhwzk6tE17F
+	 J5mMQfvMXiNcp4quig3WCxL06I6ECQp84oyNALl7t40CvWe+f/5kj3Wvey3xf6Yqmqg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793132532;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=tBAQlmEXepTgtGHbE6tvj/aE+zNCVZKL0FkVewuVwjE=;
+	b=TdoZp3Bd8LKciAjroIoN632CyTHJzgNSFnkKWubsvCd1nDGuZDnxO4prqxZb+/fly0uV
+	 otZfmaw1+8OvZQtFfwEp7U1PDlowTGbwOi+jDItzFGbrvpNX4M6EeUcLklVN/vQ48mrGC
+	 UisLf5UUZewfCIZv3AeyennUNUiUFegP5Hh6/kw+nyt7eqchX5TRzdXpDSFrenGt5oFB7
+	 XS27rUETEz2KOxaYb60EjNWR7a7JF3PZzRTMcxwtoti5h6T6qhTmvABc3MXD0KdHFA7a1
+	 SrLyj1eIpe+sJjIiIxW8ad2xCAUmSAsbACTPMgeOWe5h9BjfZnU6mieuBgEREktPZaw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2FF7A1F01825;
+	Tue, 27 Oct 2026 20:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793132532;
+	bh=tBAQlmEXepTgtGHbE6tvj/aE+zNCVZKL0FkVewuVwjE=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=k7iX0wor/+VuOK5ufQdpx4SQymn8dX5TJy2V4uPFdXGRCTR1pX3IWgY8MnvUQJtp/
+	 lD26juKMXoiBeqHh831ppzZhlSxSm8uf9YFFA3SyWdSHKqsTRyZeXhYCXzZmQmW+Sk
+	 07M2cYzFJ28OFyRkmH9Ehea8HY/eiESdTyLnxEKPUNXQrf2kXFwdqO/pNbPgP4erQF
+	 0tdyNKs43oStRmcqEM5K+Z3K7gYcqzRH5zDftbglWfcy+gEiJNcuGhi1UfEYlTzVMB
+	 aiu9JTnnJTxI2wOVIazhUFdhXVMlsxj1PMDEaPMeuggDx+HrcBA8ZPpQAOe9I60MjJ
+	 vEGwt54F3iX+w==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 7F427451F5;
+	Tue, 27 Oct 2026 20:22:09 +0000 (UTC)
+From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
+Subject: [PATCH v13 00/39] dyndbg: Fix classmaps API for subsystems, query
+ extensions, selftests
+Date: Tue, 27 Oct 2026 14:22:00 -0600
+Message-Id: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -165,36 +84,445 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6136.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e309b5ea-0392-4ae6-3550-08df34669e0e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2026 20:12:25.2166
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ziSszhzqaafmviMjl9zPg137kdv83ZbkYnGB2x92GJOy2RpMX8mywIPtk0WC0btSJDwkzw7NEnUibgkqBU+Fyg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7153
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XPXUvDMBQG4L8yclsjOWmatoKw+QHilOHNhogX4
+ SRpA+sH7ayto//dtqCUOS/PC+c57zmS2lTO1ORqcSSVaVztinwYwL9YEExVnhjq9BAQzrhkMQO
+ qNcVMlbRU1YFT3BuVU1/GBiEWRihLhs2yMta1E/v2Psypqw9F1U1XmmhMf7zgrNdElFElEJkMh
+ ZVWL5NMuf0lFhkZvSaeG9F5Ix4MX/lWcrBCATs1gM0QkOcRYGMTK9CKUIYhC/8oMCm3q0f7cdO
+ 2OkqfLdtgvll7n/Slc19q/Xq9W4ntk2e74s7v5H39sAOvSJYTdMrx31LAgP9Tio+vYYQYhDzQx
+ s5L9X3/DRgPUzjWAQAA
+X-Change-ID: 20260901-dd-cmap-part2-clean-369ec194e4af
+To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Jonathan Corbet <corbet@net.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+ Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+ John Ogness <john.ogness@linutronix.de>, 
+ Sergey Senozhatsky <senozhatsky@chromium.org>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>, 
+ Louis Chauvet <louis.chauvet@bootlin.com>, 
+ kernel test robot <lkp@intel.com>, Philipp Hahn <phahn-oss@avm.de>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=20406;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=kDrTY8C/wo8aezXGXhYXO2SXTthFcIgW93R9l7m1boE=;
+ b=W1fg6GFaVL0wRhnMQQmSlbUfn+18guYyhED9PTr6MF+K2d8f4jdC+X02uspnhyYRdpc5L2JUT
+ E7eljS4lnzYAfYenivm8cuu2loCQUrdynQUtYziBofCygo4+lYjn2RD
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
+X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
+ auth_id=958
+X-Original-From: Jim Cromie <jim.cromie@gmail.com>
+Reply-To: jim.cromie@gmail.com
 
-T24gTW9uLCBPY3QgMTksIDIwMjYgYXQgMDQ6MTU6NTdQTSAtMDcwMCwgRmFuIFd1IHdyb3RlOg0K
-PiBJIHdvdWxkIHByZWZlciBhIEtjb25maWcgQ09ORklHX1NFQ1VSSVRZX0lQRV9LRVlSSU5HIGRl
-ZmF1bHQgdG8gTiBpbnN0ZWFkLA0KPiBsaWtlIHRoZSBmc3Zlcml0eSBrZXlyaW5nLiBJbiB0aGUg
-a2NvbmZpZyB5b3UgY2FuIGFsc28gZGVzY3JpYmUgaW4gd2hpY2gNCj4gY2FzZXMgc2hvdWxkIHRo
-aXMgb3B0aW9uIGJlIHR1cm5lZCBvbi4NCg0KVGhhbmtzIHRvIGV2ZXJ5b25lIGZvciB0aGUgZGlz
-Y3Vzc2lvbi4gU29tZSBvZiB0aGUgcG9pbnRzIHJhaXNlZCBhcmUNCmFjdGlvbmFibGUsIGJ1dCB0
-d28gcmV2aWV3IHF1ZXN0aW9ucyBzdGlsbCBzZWVtIHRvIGJlIG9wZW46DQoNCjEuIFdoZXRoZXIg
-dG8gdXNlIENPTkZJR19TRUNVUklUWV9JUEVfS0VZUklORyBvciB0aGUgJ3Blci1ib290DQogICBw
-cm92aXNpb25pbmcnIHBhdHRlcm4gd2l0aCBhIGtlcm5lbCBjb21tYW5kLWxpbmUgcGFyYW1ldGVy
-DQoyLiBXaGV0aGVyIElQRSBzaG91bGQgYWNjZXB0IGFueSBpcnJldmVyc2libGUga2V5cmluZyBy
-ZXN0cmljdGlvbiBvcg0KICAgc3BlY2lmaWNhbGx5IG1hbmRhdGUgcmVzdHJpY3RfbGlua19yZWpl
-Y3QuDQoNCkkgd2FudCB0byByZW1haW4gY29tcGxldGVseSBuZXV0cmFsIGhlcmUgYmVjYXVzZSBJ
-IGFtIG9ubHkgYSBwb3RlbnRpYWwNCmZpcnN0LXRpbWUgY29udHJpYnV0b3IsIGFuZCBiZWNhdXNl
-IHRoZSBzY2VuYXJpbyBJIGVsYWJvcmF0ZWQgb24gY2FuIGJlDQpyZWFsaXplZCB3aXRoIGVpdGhl
-ciByZXNvbHV0aW9uLiBGYW4sIHdvdWxkIHlvdSBwcmVmZXIgdGhhdCBJOg0KDQphLiBtb3ZlIGZv
-cndhcmQgd2l0aCBhIG5vbi1SRkMgdjIgaW5jb3Jwb3JhdGluZyB5b3VyIGluaXRpYWwNCiAgIHN1
-Z2dlc3Rpb25zOw0KYi4gcmV2aXNlIHRoZSBzdWdnZXN0aW9ucyBnaXZlbiB0aGUgc3Vic2VxdWVu
-dCBkaXNjdXNzaW9uOyBvcg0KYy4gd2FpdCBmb3IgbW9yZSBpbnB1dCBiZWZvcmUgbWFraW5nIGEg
-ZGVjaXNpb24/DQoNCkFwb2xvZ2llcyBpZiB0aGlzIGZvbGxvdy11cCBjYXVzZXMgdW5uZWNlc3Nh
-cnkgY2h1cm4gYW5kIHR1cm5vdmVycy4gSWYNCnRoZSB0aHJlYWQgcmVtYWlucyBxdWlldCwgSSB3
-aWxsIHByb2NlZWQgd2l0aCAoYSkuDQo=
+The drm subsystem has *lots* of debug statements, in 11 categories:
+
+     $> ack '\bdrm_(dev_)?dbg\w*' drivers/gpu/drm/ | wc
+        3147   16494  300889
+     $> ack '\bDRM_(DEV_)?DEBUG\w*' drivers/gpu/drm/ | wc
+        2572   14809  248193
+
+All of these are bit-tests on __drm_debug, exposed to users as
+/sys/module/drm/parameters/debug. Many of these are done often;
+vblank is done ~100/sec for some displays. Over the uptime of many
+boxes, this is a lot of cpu cycles on bits that are almost always off.
+
+Dynamic-debug excels at replacing such tests with NOOPs (via static
+keys). Classmaps was devised to bring that 0-off-cost to drm's
+categories.
+
+Classmaps-v1 went into the kernel in Sept 2022, in 2 chunks:
+  b7b4eebdba7b..6ea3bf466ac6    # core dyndbg changes
+  0406faf25fb1..ee7d633f2dfb    # drm adoption
+
+Sadly DRM-CI found a regression during init with drm.debug=<initval>;
+the static-keys underneath the drm-dbgs in drm.ko got enabled, but
+those in drivers & helpers did not.
+
+So in Feb 2023, it got pulled:
+commit bb2ff6c27bc9 ("drm: Disable dynamic debug as broken")
+
+Root Problem:
+
+DECLARE_DYNDBG_CLASSMAP defined the classmap, but its repeated use in
+both core and drivers violated a K&R rule "define once, refer
+afterwards". This flaw resulted in a regression; with drm.debug=0xFF
+boot arg, drm-core got enabled, but drivers/helpers did not.
+
+This patchset replaces DECLARE_DYNDBG_CLASSMAP with:
+- DYNAMIC_DEBUG_CLASSMAP_DEFINE (invoked once in the exporting module)
+- DYNAMIC_DEBUG_CLASSMAP_USE (invoked repeatedly in drivers & helpers)
+
+_DEFINE exports the classmap it creates (in drm.ko), and other modules
+_USE the classmap. The _USE adds a record referencing the _DEFINEd (&
+exported) classmap in a 2nd __dyndbg_class_users section.
+
+At modprobe, dyndbg scans the new section after __dyndbg_class_maps,
+follows the linkage to the _DEFINEr module, finds the (optional)
+kernel-param controlling the classmap, examines its drm.debug=<initval>,
+and applies it to the module being initialized.
+
+To recapitulate the multi-module problem wo DRM involvement, we add:
+
+- tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh:
+  Alters pr_debugs in builtins and test modules,
+  checks results against checksums of expected results
+
+- lib/test_dynamic_debug.c & test_dynamic_debug_submod.c:
+  Builds parent & _submod modules with _DEFINE and _USE inside #if/#else
+  blocks, reproducing the 2-module scenario under selftests.
+
+Series Breakdown (40 Patches):
+
+0. Subsystem separation: Drop bulk DRM opt-in patches to route
+   separately via dri-devel / drm-misc, keeping core dyndbg
+   infrastructure focused for -mm. Patch 40 (marking __drm_debug as
+   __read_mostly) is included here as a now-or-later patch: akpm can
+   take it now alongside core dyndbg, or leave it for dri-devel later.
+
+1. Selftest up front: Introduce dyndbg_selftest.sh early (commit 1) to
+   verify syntax and query baseline; subsequent testpoints are phased in
+   alongside the exact features they test. Strict mode (K=0) validates
+   exact golden output, while "I know" mode (K=1) tracks drift.
+
+2. Linker script 32-bit fixes & cleanup: Refactor BOUNDED_SECTION* into
+   include/asm-generic/bounded_sections.lds.h. Add dyndbg sections to
+   scripts/module.lds.S to prevent lost sections in loadable modules.
+   Fix 8-byte alignment omission causing i386 NULL pointer derefs.
+
+3. Classmap foundation & representation: Convert classmaps from
+   linked-list to packed vector array-slice. Tighten signatures, reduce
+   class parameter storage to u32, and restructure _ddebug_info.
+
+4. Multi-module client-server API: Replace DECLARE_DYNDBG_CLASSMAP with
+   DYNAMIC_DEBUG_CLASSMAP_DEFINE and DYNAMIC_DEBUG_CLASSMAP_USE. Add
+   compile-time validation (__DYNAMIC_DEBUG_CLASSMAP_CHECK) and detect
+   class ID reservation conflicts. Exercise inheritance via
+   FT_classmap_inheritance. Promote DYNAMIC_DEBUG_CLASSMAP_PARAM to API.
+
+5. Parser & grammar extensions: Treat comma as a token separator. Add
+   multi-query splitting via '@'. Bump max tokens per command from 9 to
+   15. Resolve class callsite protection via pre-publication parameter
+   binding.
+
+6. Instrumentation, bugfix & cacheline isolation: Add mutable buffer to
+   fix RO string modification on default parameters. Add +c call counting
+   flag and reset_stats control command. Add FT_count_calls verification
+   test. Mark __drm_debug as __read_mostly (now-or-later) to eliminate
+   SMP cacheline false sharing.
+
+What's Unchanged:
+0. /proc/dynamic_debug/control format and output: Module names remain
+   strictly identical to KBUILD_MODNAME; no userspace breakage.
+1. struct _ddebug footprint: Callsites maintain zero pointer overhead;
+   no per-callsite module pointers or classmap references are added.
+2. Query grammar backwards compatibility: Existing queries using
+   module, file, format, line, and flags continue to operate unchanged.
+
+Testing:
+- Tested locally using virtme-ng on x86_64 across ~10 configs.
+- dyndbg_selftest.sh passes all checksum tests through the series.
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+Changes in v13:
+- Fix overzealous pr_fmt in pr_debug_ratelimited (Philipp Hahn, Petr Mladek):
+  . Pass raw fmt to DEFINE_DYNAMIC_DEBUG_METADATA in pr_debug_ratelimited(),
+    restoring pre-515a9adce0f0 behavior and unbreaking argument-bearing
+    pr_fmt definitions.
+  . Drop vestigial '...' from DEFINE_DYNAMIC_DEBUG_METADATA_CLS, leaving
+    include/linux/dynamic_debug.h untouched.
+  . Rewrite commit log chronologically and attribute Philipp Hahn with
+    Reported-by.
+
+- Core dyndbg fixes & concurrency hardening (Sashiko review):
+  . In param_set_dyndbg_module_classes(), update *dcp->bits and *dcp->lvl via
+    WRITE_ONCE before ddebug_apply_class_bitmap(), closing the publication
+    window so concurrent module loaders in ddebug_sync_classbits() see the
+    new target state immediately. Document sysfs writer serialization.
+  . Drop unreachable dead return 0 after exhaustive switch statement in
+    param_get_dyndbg_classes().
+
+- Test module offset fix (Sashiko review):
+  . In test_dynamic_debug.c, bump DYNAMIC_DEBUG_CLASSMAP_USE_(map_level_num, 7)
+    to 8, matching the 8 classes (V1..V8) and cat_level_offset (Vu1 = V1 + 8).
+    Eliminates bisect-point mismatch where Vu8 was pushed out-of-bounds.
+
+- Documentation corrections (Sashiko review):
+  . In dynamic-debug-howto.rst, document the full 3-argument signature for
+    DYNAMIC_DEBUG_CLASSMAP_PARAM(name, var, flags).
+
+- Selftest regex fix & checksum overhaul (Sashiko review):
+  . In FT_classmap_inheritance, fix regex from '\[test_dynamic_debug*\]' to
+    '\[test_dynamic_debug.*\]' so POSIX BRE matches both parent module and
+    _submod during load-time vs runtime parameter equivalence validation.
+  . Re-synchronize and overhaul golden record checksums (#K=) in
+    dyndbg_selftest.sh across the series following submod inclusion.
+
+- Link to v12: https://lore.kernel.org/r/20261012-dd-cmap-part2-clean-v12-0-3c8cc5725def@gmail.com
+
+Changes in v12:
+- Drop "dyndbg: Bind callsites and classmaps to DDEBUG_MODNAME":
+  Avoids module-name divergence hazard for loadable modules identified in
+  sashiko review (where overriding DDEBUG_MODNAME != mod->name would drop
+  modular classmaps). Retains strict KBUILD_MODNAME binding throughout.
+- Core dyndbg fixes prompted by sashiko review:
+  . Fix read-only string modification crash in ddebug_exec_queries()
+    when fallback flags "+p" from ddebug_dyndbg_param_cb() were passed
+    to in-place string strip. Added "dyndbg: fix attempt to modify an
+    RO string" to pass a mutable buffer, and replaced strstrip() in the
+    reset_stats parser with non-mutating strncmp + delimiter checks.
+  . Eliminate race window in class'd callsite protection: move
+    ddebug_bind_class_params() before list_add_tail(&dt->link,
+    &ddebug_tables) so controlling_param is bound prior to publishing dt
+    to global query loops. Factor ddebug_find_class_kparam() and drop
+    unlocked fallback check in param_set_dyndbg_module_classes().
+  . Fix signedness warning: change struct _ddebug_class_users.len to
+    unsigned int to match section_objs() signature and other sections.
+- Grammar & parsing clarifications:
+  . Clarify comma token delimiter: uniform lexical terminator matching
+    space/tab; tokens with punctuation delimiters require quotes.
+  . Clarify '@' multi-query delimiter: quote-aware splitting protects
+    nested quotes passed from boot parameters.
+- Selftest updates:
+  . Add FT_count_calls to dyndbg_selftest.sh to exercise +c call counting,
+    scaling, reset_stats zeroing, class-scoped counting, and syslog
+    print suppression.
+  . In FT_classmap_inheritance, broaden modprobe vs sysfs equivalence
+    check pattern from '\[test_dynamic_debug\]' to '\[test_dynamic_debug*\]'
+    to simultaneously verify supermod and submod callsites.
+  . Document 5-keyword query re-enablement in FT_grammar_ok dependent on
+    15-token parser expansion.
+  . Update golden record checksums across modified testpoints.
+- Performance & cacheline false-sharing isolation:
+  . Mark __drm_debug as __read_mostly in drivers/gpu/drm/drm_print.c
+    (now-or-later: take in -mm or route via dri-devel), isolating
+    residual bit-tests from hot locks and eliminating false-sharing
+    cacheline bouncing during multi-client workloads.
+- Link to v11: https://lore.kernel.org/all/CAJfuBxxd8hMf0OcnOK+w-QyizaKY=WA4VL+fyoD3y6EsHW1+og@mail.gmail.com/
+
+Changes in v10:
+- Builtin module naming across revisions:
+  Recognized that v8, v9 were misadventures: both altered modname in
+  dynamic_debug/control to avoid a hypothetical collision that was not
+  going to happen (and could be addressed if it ever did). While
+  improved built-in module names (non-fragmented names amongst them)
+  might have merit someday, that is not for now; existing ambiguity is
+  better than new novel bugs.
+  . v8 used KBUILD_MODFILE to disambiguate built-ins sharing
+    KBUILD_MODNAME="main" (init/main.c, drivers/.../main.c).
+  . sashiko review noted the hyphen/underscore mismatch problem across
+    module names.
+  . v9 tried further changes to "main" via KBUILD_DD_MODNAME in
+    scripts/Makefile.lib to synthesize subsystem prefixes (e.g. [init],
+    [power]), mutating column 2 in dynamic_debug/control.
+  . Dropped KBUILD_DD_MODNAME from scripts/Makefile.lib and dropped
+    hyphen-underscore matching (match_wildcard_hyphen).
+  . Introduced DDEBUG_MODNAME defaulting cleanly to KBUILD_MODNAME as
+    a lightweight hook preserving dynamic_debug/control invariants.
+- Reorganize dyndbg_selftest.sh so tests are phased in alongside the
+  features they verify rather than defined in advance.
+- Address review findings from sashiko-9 across core dyndbg:
+  . Elevate NULL dp->format check to top of ddebug_match_desc() to guard
+    format-less queries.
+  . Add const qualifier to struct ddebug_class_user.mod_name.
+  . Pass init_bits computed from _DPRINTK_CLASSBITS_INIT in
+    ddebug_sync_classbits() to properly disable -DDEBUG callsites.
+  . Define _DPRINTK_CLASSBITS_INIT, initialize static bitvectors, and
+    add module_param_named fallback for DYNAMIC_DEBUG_CLASSMAP_PARAM*
+    under !CONFIG_DYNAMIC_DEBUG.
+  . Add "V8" and Vu8 to classmaps and do_levels().
+  . Replace strpbrk() with quote-aware ddebug_find_delimiter() to ignore
+    '@' inside quotes.
+  . Drop dead #if 0 ddebug_apply_class_maps() block.
+  . Fix pr_warn_ratelimited() line wrap in ddebug_match_desc().
+  . Pass raw fmt to DEFINE_DYNAMIC_DEBUG_METADATA in
+    pr_debug_ratelimited() to avoid mangled control file strings.
+  . Fix ddebug_proc_start() epilogue token boundary check (n <= 1).
+  . Handle "reset_stats" inside ddebug_exec_queries() to preserve
+    batched multi-queries.
+  . Add __DYNAMIC_DEBUG_BRANCH() checking _ENABLED while
+    DYNAMIC_DEBUG_BRANCH() checks _ACTIVE; add early return guards in
+    __dynamic_*_dbg() helpers.
+- Link to v9: https://lore.kernel.org/r/20260908-dd-cmap-part2-clean-v9-0-3a3f621f4a10@gmail.com
+
+Changes in v9:
+- Decouple DRM core setup and driver opt-in commits to route separately
+  through dri-devel / drm-misc, keeping this foundation series 100%
+  focused on core dynamic_debug infrastructure for -mm.
+- Incorporate review findings and automated test fixes prompted by
+  sashiko:
+  . Rework Kbuild naming heuristic in scripts/Makefile.lib to assign
+    clean subsystem-scoped names to built-ins and shared helpers
+    (e.g. [init], [power], [coco/sev], [mmc/host]), eliminating
+    multi-token whitespace in column 2 of dynamic_debug/control.
+  . Fix missing DYNAMIC_DEBUG_CLASSMAP_USE_() stub under
+    !CONFIG_DYNAMIC_DEBUG.
+  . Make ddebug_add_module() non-fatal on failure during
+    dynamic_debug_init().
+  . Fix off-by-one assertions in __DYNAMIC_DEBUG_CLASSMAP_CHECK and
+    ddebug_add_module().
+  . Prevent loop wrapping lockup in test_dynamic_debug:do_bulk() on
+    UINT_MAX and add cond_resched() to bulk print loops.
+  . Fix 4-argument signature on DYNAMIC_DEBUG_CLASSMAP_PARAM_REF
+    fallback macro stub.
+  . Assign map->controlling_param to enforce classmap protection on
+    parameterized classes.
+  . Update ddebug_proc_start() seeking to return EPILOGUE_TOKEN
+    when n == 0.
+  . Free temporary buffer in reset_stats handler and iterate across
+    possible CPUs for dynamic debug call counter.
+  . Selftests: sanitize "$K", drop duplicate declarations, fix
+    unquoted error output, align LACK_DD_BUILTIN filters to labels,
+    add K=2 silent mode, and prime params with +p in
+    FT_comma_terminators.
+- Link to v8: https://lore.kernel.org/r/20260905-dd-cmap-part2-clean-v8-0-a4cc0674f6fd@gmail.com
+
+Changes in v8:
+- Unified 44-patch series (incorporating follow-on compile-time checks,
+  comma-token delimiters, '@' multi-query separator, and inheritance
+  tests).
+- Rebased onto upstream v7.3-rc1.
+- Passing on dyndbg_selftest.sh under KASAN + KMEMLEAK.
+- Link to v7: https://lore.kernel.org/r/20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com
+
+Changes in v6..v7:
+- Add compile-time validation for classmap parameters and offset
+bounds (__DYNAMIC_DEBUG_CLASSMAP_CHECK).
+- Harden modprobe-time error detection for unknown class names and
+  class ID reservation conflicts.
+- Promote DYNAMIC_DEBUG_CLASSMAP_PARAM to public API.
+- Shrink class parameter storage to u32.
+- Hoist classmap filtering up to ddebug_add_module().
+
+Changes in v4..v5:
+- Tighten function signatures (ddebug_apply_class_bitmap,
+  param_set_dyndbg_classes).
+- Replace classmap linked-list with vector / array-slice.
+- Add for_subvec() loop helper and restructure _ddebug_info substructs.
+- Move mod_name down from struct ddebug_table to _ddebug_info.
+
+Changes in v2..v3:
+- Refactor BOUNDED_SECTION* macros from
+  include/asm-generic/vmlinux.lds.h into
+  include/asm-generic/bounded_sections.lds.h.
+- Add dyndbg output sections to scripts/module.lds.S to fix lost
+  sections in loadable modules.
+- Fix 8-byte section alignment omission causing i386 NULL pointer deref.
+- Move dyndbg_selftest.sh to the front of the series for bisectability.
+
+Changes in v12 (DRM combined series):
+- Refactor vmlinux.lds.h and add bounded_sections.lds.h and
+  dyndbg.lds.h.
+- Refine DYNAMIC_DEBUG_CLASSMAP_USE*() with extern'd classmap linkages
+  and compile-time offset checks.
+- Include patch from Philipp Hahn <phahn-oss@avm.de> (Ignore additional
+  arguments from pr_fmt).
+- Link to v12: https://lore.kernel.org/lkml/20260326175533.1402867-1-jim.cromie@gmail.com/
+
+Changes in v11 (DRM combined series):
+- Rebase on drm-misc-next for DRM-CI testing.
+- Fix 32-bit truncation error in drm_buddy.
+- Fix drm_printer_debug_fn message spew causing test timeouts.
+- Verify on DRM-CI Pipeline #1622778 (621 KUnit tests, 370 i915-CML
+  tests passed, 0 failures).
+- Link to v11: https://lore.kernel.org/lkml/20260313132103.2529746-1-jim.cromie@gmail.com/
+
+Changes in v10 (DRM combined series):
+- Initial replacement of DECLARE_DYNDBG_CLASSMAP with
+  DYNAMIC_DEBUG_CLASSMAP_DEFINE and DYNAMIC_DEBUG_CLASSMAP_USE.
+- Add tools/testing/selftests/dynamic_debug/ and
+  test_dynamic_debug_submod.ko.
+- Drop class "protection" special-casing per Jason Baron's feedback.
+- Link to v10: https://lore.kernel.org/lkml/20250125064619.8305-1-jim.cromie@gmail.com/
+
+---
+Jim Cromie (39):
+      selftests/dyndbg: Add kselftest script to verify dynamic-debug
+      vmlinux.lds.h: refactor BOUNDED_SECTION_* macros into bounded_sections.lds.h
+      vmlinux.lds.h: drop unused HEADERED_SECTION* macros
+      vmlinux.lds.h: Fix ALIGN(8) omission causing NULL ptr on i386
+      vmlinux.lds.h: remove redundant ALIGN(8) directives
+      dyndbg.lds.S: fix lost dyndbg sections in modules
+      dyndbg: factor ddebug_match_desc out from ddebug_change
+      dyndbg: add stub macro for DECLARE_DYNDBG_CLASSMAP
+      dyndbg: reword "class unknown," to "class:_UNKNOWN_"
+      dyndbg-API: remove DD_CLASS_TYPE_(DISJOINT|LEVEL)_NAMES and code
+      dyndbg: drop NUM_TYPE_ARGS
+      dyndbg: bump num-tokens in a query-cmd from 9 to 15
+      dyndbg: reduce verbose/debug clutter
+      dyndbg: refactor param_set_dyndbg_classes and below
+      dyndbg: tighten fn-sig of ddebug_apply_class_bitmap
+      dyndbg: replace classmap list with an array-slice
+      dyndbg: macrofy a 2-index for-loop pattern
+      dyndbg: reduce class param storage to u32
+      dyndbg,module: make proper substructs in _ddebug_info
+      dyndbg: move mod_name down from struct ddebug_table to _ddebug_info
+      dyndbg: hoist classmap-filter-by-modname up to ddebug_add_module
+      dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP
+      selftests/dyndbg: add FT_classmap_inheritance
+      dyndbg: detect class_id reservation conflicts
+      dyndbg: check DYNAMIC_DEBUG_CLASSMAP_{DEFINE,USE_} args at compile-time
+      dyndbg-test: add do_bulk testpoint, rename do_prints to do_classes
+      dyndbg-API: promote DYNAMIC_DEBUG_CLASSMAP_PARAM to API
+      dyndbg: control-parser: treat comma as a token separator
+      selftests: enable comma-terminator tests
+      dyndbg: split multi-query strings with @
+      dyndbg: resolve "protection" of class'd pr_debug
+      docs/dyndbg: add classmap info to howto
+      dyndbg: add epilogue to dynamic_debug/control file
+      dyndbg: fix attempt to modify an RO string
+      dyndbg: add +c flag to count pr_debug calls without printing
+      dyndbg: add DEBUG-biased fallback stubs for _dynamic_func_call_cls
+      selftests/dyndbg: Add FT_count_calls to test +c flag
+      printk.h: fix overzealous pr_fmt in pr_debug_ratelimited
+      drm: Mark __drm_debug as __read_mostly
+
+ Documentation/admin-guide/dynamic-debug-howto.rst  |  157 ++-
+ MAINTAINERS                                        |    2 +
+ drivers/gpu/drm/drm_print.c                        |    4 +-
+ include/asm-generic/bounded_sections.lds.h         |   32 +
+ include/asm-generic/dyndbg.lds.h                   |   22 +
+ include/asm-generic/vmlinux.lds.h                  |   68 +-
+ include/drm/drm_print.h                            |    2 +-
+ include/linux/dynamic_debug.h                      |  369 +++++--
+ include/linux/printk.h                             |    2 +-
+ kernel/module/main.c                               |   15 +-
+ lib/Kconfig.debug                                  |   24 +-
+ lib/Makefile                                       |    3 +
+ lib/dynamic_debug.c                                | 1049 ++++++++++++++------
+ lib/test_dynamic_debug.c                           |  331 ++++--
+ lib/test_dynamic_debug_submod.c                    |   21 +
+ scripts/module.lds.S                               |    2 +
+ tools/testing/selftests/dynamic_debug/Makefile     |   10 +
+ tools/testing/selftests/dynamic_debug/config       |    8 +
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     |  872 ++++++++++++++++
+ .../dynamic_debug/syslog_hash_validation.sh        |  393 ++++++++
+ 20 files changed, 2859 insertions(+), 527 deletions(-)
+---
+base-commit: 001735629ed127eb6b4fb2bff5fb006406aac11f
+change-id: 20260901-dd-cmap-part2-clean-369ec194e4af
+
+Best regards,
+-- 
+Jim Cromie <jim.cromie@gmail.com>
+
+
