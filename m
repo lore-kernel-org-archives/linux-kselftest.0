@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793132545;
-	b=Fwhy0W03xutjM0yRV+SjDHroNuh6s4P8qkwJaAhDC4vnB69GuFTzo8/HcgCurXEIJJ7z
-	 t7nho0pz/KtRLjqNUhU7XUifMAy8TFlyNTJfY4qnpz6x0D6xD17lVMGye5suCodBCjXXL
-	 cozOjQ3XqnomE0qkbkp8YB4QZP57Z+bVlKi/BiiAe/SBhpMa++LcItSl4L0VzX22OI+vr
-	 R98r61Sa7STcFKISY/FKW+CCtfNGXw9T/y8zaT+K6U1Q0fCXqXpZjeR7sc8Re8RQrv4IW
-	 mwbbhDjymtMAlO77nOJXbTlg6i3zZqeqEWOphEB+JCnRbiZUxeNkLkt+102TsdeKYaw==
+	t=1793132546;
+	b=yzzp9qTX9DIdXUhIb6H2lDtS8rOicWzzu/e1Bp4npnDUPcjr9AoU57La2IQOg80R+0CH
+	 b2EjBI1qdZjN+Kudn4HJOSjdXwVNkTu0L3lRGUZsac3RP3wk3eWO9PPNwSAEMpIYv4ImT
+	 ix8rvz2zS7ghBwZd87sAy3AJlWZkwx1Wm3gkLzKOWN/fOC1SrDrViolTpT9Z7snmqS+Op
+	 00SDK6XmMf15R8SgZoDk3VqJZHvtovK99eJ1usF1E01aYIzmykvCZHCvMMdYc+x5GcqEz
+	 tuaB3WJqtKZOJNGVURuEitCw2OZ8L+e4r0GNcdNBzwB1e52J7tDJFhcQoWOcBY3LVOA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793132545;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793132546;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=7irLKmzjDJCrQVxQYI/Jd8l60rk00tZqlZ6y0Y14hI4=;
-	b=y08AsqE1AZ4k3c0RjirMfBza9YiWUkMFEKwvLlVxn7P1tB+OjL6U0tj6ibwjHJjXiz8W
-	 DYha1t3q0ejTpM/PcMdyYxznTVqpFTDbrQjniJfN83gCdIsDrhAJ8XwdAhQQ6wH73h5js
-	 H96dOwYl0fNb8CicaWpvujK8w5UA0rmm0zHxt6Vd00P7tz62g5wKvgfpA1NCEZ2eZb5Tu
-	 nBZM0GznMW86cFKjBZ0/mQe/HF7/+GIV7lOzPrpwr6EG3xFBArkydslHsNc0zr0PbV21Q
-	 9FnBpuicj3yXD09igo15mZ2YGu7OgNfGv3Iu5806h1YU/TENlUQYt8/Np9RkwFwgEJw==
+	bh=qDF2HU5HYTyY24acBukEzCv6gxdX0qa94jrmJpjZl0c=;
+	b=fVywVjXVnSV4orvxX48Sx0OErfWjZZW2xh3poJQrxfOV8wsUFoF4Agna5xgBKWXDTdp5
+	 Its8qweebTD5pe/exwYzAwh2xeUZEDtVq2RVMSu8h5qEBQEEDx/Pj6ctdu7Jo9fuWfElz
+	 af5cFlN9dXHMY2nwwfcyVn/h5Oe/+VQTOAnDIwdXB9i4qEEV64u0Fs6GU/LnMC0AQTidH
+	 XGqKP0zZWJiGdC2D31ws9EBS3vrT+e+dkHAflkdgwRdOBs1KuWlvlU4NU2goCUtu7nXBH
+	 bMfPnrS1OPXI3eceRzwlDkGKzYtjoMcd7m4yDoNQqsTCQq+H24qn6PA6ZPwtH7bOZMw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kNP18L8A;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nv+yN6BW;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8750860A5BE5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E86FB60A5BFD;
 	Tue, 27 Oct 2026 20:22:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kNP18L8A
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nv+yN6BW
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1793132545;
-	b=o38YOFXVGFTjIost5fFVIMM4bs6pO8bUZ6ZEiQJMh6rh1+aA8k4H43NJvxUkfhECQL3A
-	 7wxUH2HzDqakBSyGksUq/WAt3QUMWQyXwZ9A+q9U2MlcgS36dSWThdI45Ps9LZSqBaqjs
-	 nAwTutAPgyAWUxlnK8BaFL9i+30URjHjI+vuWBFUQ53tG0iktg7DjRqR+Forr/G4qt7fV
-	 9WQtmaOo4d5pA65X9e1X1z4fHlDSRMye/mlDJGLPJ+e69PdUiQXCVj0/Dxr5ZACyb0DdA
-	 Q5D2ijUczTa5Fbow3dmZUQe5N+kUVXpuFIAcoeJdledjbULUmNh0rZNqKyXUNK6rnyQ==
+	b=JPzL80H+0oTDewbRbx+7YwAC/597kDHoyZK/e2aL7dpW23Wyd+bebM7tJLH5kflPvZUZ
+	 c8yfJ458mbNEL9RnJVVmEk5ys0gGl0zRngl6J2QDFDhvHSkPzIU4+PK8osYpIrDWdYptE
+	 J+/j2e/8NHl/SzAWbC0nTAbK1YExZ8GkTY58YRtW80b/iQE5XymHajYBs3FrItSlEeY+s
+	 0hfpjYYHctcHXuuJfvkBRSCqgdfWzDOTvylnfdAg+/FzFxId5xlnpsclfkKrMZUP21cBN
+	 WU99WryJnuYmXVy9w36W45FC3YyRXYkTc+6s+KoJxsGRBK0X2KJ7nhizV4agw17OYtg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1793132545;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=7irLKmzjDJCrQVxQYI/Jd8l60rk00tZqlZ6y0Y14hI4=;
-	b=AzhUN7N7wlWOXVVnQ8byJBdE+fDaCvVA7hPfxxML4OQ7IybQMOO8EPTc5E2A4APGC0a6
-	 Mog2rk349LBaYMobLQI8kmkZtWiHUBzRu0sjz6sEAxuxglzAaFaOlDODWsWA/3x+sQe/6
-	 kCkOr+0CylRQkIn0vtevmr70YYN2A5rHz1ME5xKjh/EeYZLkn6bYLM5Nk2F443FADkBx6
-	 cC8tx1mtRh2h1v4lgOX41eABU14z5GjrdXr/lTyhTgI9VESbuIL9gvzoEVG4UDLJFVy1I
-	 ef3++rNTJ2kbQ35YOVhwOQtfOUJr2Zu+pLmvh4MlhWpy5bVO9Ph9xeGiTMtKn928JjQ==
+	bh=qDF2HU5HYTyY24acBukEzCv6gxdX0qa94jrmJpjZl0c=;
+	b=vg2fA0mQNI6me1wUPyuyszx68TpABp/0zPUbNrN9rSt03X883w1XpRlTFXRtOLw9o1io
+	 K8j0fjmzrDwuBbQl6zN3THEADgqMd4Z18qJq4Ht8ajdzh5bSC8QvMnzvtu8TG8leu8WBk
+	 XdCRKuKIfXZhIV+Gl/bRpIJNEj2gx7WTf7pCkTwVs1u1HlTmdoDL/GZKNtHzG8Q8eYVHq
+	 3TCDnUAdwM7YjOmGd0/+Ewo63qc9y0CkLbB4bJX0qwS2473wRBtSGoVjsLvaGlLpJFzxv
+	 pF3DJjsQaNphGe8DpnkDGEL+WDiRwULbNodC4cmi+zCuUjxpNlaBNEA0bj9SzUBDoOw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A0C6A1F01341;
-	Tue, 27 Oct 2026 20:22:17 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 802F71F031E9;
+	Tue, 27 Oct 2026 20:22:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1793132545;
-	bh=7irLKmzjDJCrQVxQYI/Jd8l60rk00tZqlZ6y0Y14hI4=;
+	bh=qDF2HU5HYTyY24acBukEzCv6gxdX0qa94jrmJpjZl0c=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=kNP18L8At5mdIa0W5eTLbTlUtb+6/5Ig+mW0tWgBm0PiS2FvrTyX7fmrGhOkWWnHe
-	 mk80RnDQ/0nqoglaXLKS5g3QB1ULxYhsAO0Tbix7GvwnPTFsmSGrJsxMvG7TEmJGuU
-	 w7t3n8tf5ZEZJM6jHpO2CnI2vG69c0uSHq848G12M+EPEzZLg+Q2ePQ4M1MRtWeeI9
-	 q5ZC4/mh6+5h5E3W+W54uP9HxzzgwIC+UukCgTaw0o8Q5MeaaDqNITCKSkc0xyptaS
-	 PxU1dK9FewzqtBZ9QrbY+llBdR2t4Y+G2Boy8TauWXQ0B6mVkpD0/mqWqJmMwQo0Vs
-	 wsz5rrfCm40Zw==
+	b=nv+yN6BW7lKn9Zcz6D6RpCf3uDhGXleFosAkKydCOUKcZhoxivKtFyVucv/wn+6t1
+	 vfaQBCJ/VTHSIZYOfWGr+u7ZueuYQBOMgoauTSwiPEqKzoZCXljc0qRdajAZEpwALF
+	 q+bZILCjq+nyPS81vJuaf3PV0jK42XO6K/PVTBShBMYTi1zl05DU+wqxVHqQPiss/5
+	 IcA7vOUBYt85iKmLaZxMPjxFxzLMyiFQ/6qtBktbAjmDE0woW1Vbv0Ts99Wmkj4LWL
+	 +CXTGFAVv8vWZY92qw3tVbn7GaLbi4zc5fxLAvzmIL2YulLii+LPrvLAIKDvq+fLM0
+	 a0FdTJXu/7hAg==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id D585245255;
+	by lkml.kernel.org (Postfix) with ESMTP id 4661945229;
 	Tue, 27 Oct 2026 20:22:10 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Tue, 27 Oct 2026 14:22:25 -0600
-Subject: [PATCH v13 25/39] dyndbg: check
- DYNAMIC_DEBUG_CLASSMAP_{DEFINE,USE_} args at compile-time
+Date: Tue, 27 Oct 2026 14:22:14 -0600
+Subject: [PATCH v13 14/39] dyndbg: refactor param_set_dyndbg_classes and
+ below
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261027-dd-cmap-part2-clean-v13-25-9267923be612@gmail.com>
+Message-Id: <20261027-dd-cmap-part2-clean-v13-14-9267923be612@gmail.com>
 References: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 In-Reply-To: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -111,13 +111,14 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
  linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
- Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>
+ Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>, 
+ Louis Chauvet <louis.chauvet@bootlin.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=3645;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=6792;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=ghzwH3o3jabLz27l0hBrJ1+AjVePZJA2GuQHvcYhnZA=;
- b=Qw8iwXHrNuklN9pySdX9NVg+OD0LBTiLUTpqUc+i4QoX2kZ0MePdE8iGpJuEV/J5dO3QVBQWi
- ccwBWGjhzNQBSZAHFn2wT16N1cN+Qc3QnQdxO44/gqKS9bOUcg6n+iZ
+ bh=odl1V/VMh+UIrrmqU9jDNQVvpvKfmGuh3/VT//0V6/4=;
+ b=NK6EqDIyhkD93auOgsrSuZ6NkNhd9Ilil+4Iqe0pC3+ypRARvhOE6+vNcZXjjTakHI9E/I5q8
+ GTjQFM6uIOWCthvDs36khCn15aPhkv55YzMCR5KNltfdOMXI8SEEw8f
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -128,94 +129,173 @@ Content-Transfer-Encoding: 7bit
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-Add __DYNAMIC_DEBUG_CLASSMAP_CHECK to implement the following
-arg-checks at compile-time:
+Refactor the callchain below param_set_dyndbg_classes(1) to allow
+mod-name specific settings.  Split (1) into upper/lower fns, adding
+modname param to lower, and passing NULL in from upper.  Below that,
+add the same param to ddebug_apply_class_bitmap(), and pass it thru to
+_ddebug_queries(), replacing NULL with the param.
 
-        0 <= _base < 63
-        class_names is not empty
-        class_names[0] is a string
-        class_names.length <= 32
-        (class_names.length + _base) < 63
-        dd-map-type is known value
+This allows the callchain to update the classmap in just one module,
+vs just all as currently done.  While the sysfs param is unlikely to
+ever update just one module, the callchain will be used for modprobe
+handling, which should update only that just-probed module.
 
-These compile-time checks will prevent several simple misuses, issuing
-obvious errors if violated.
-
-Several bad examples are ifdef DD_MACRO_ARGCHECK qualified in
-test_dynamic_debug_submod.c and will fail compilation if enabled.
+In ddebug_apply_class_bitmap(), also check for actual changes to the
+bits before announcing them, to declutter logs.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- include/linux/dynamic_debug.h | 14 ++++++++++++++
- lib/test_dynamic_debug.c      | 20 +++++++++++++++++---
- 2 files changed, 31 insertions(+), 3 deletions(-)
+v2: move RvB after SoB
+v8: drop kdoc on static fn,
+---
+ lib/dynamic_debug.c | 73 ++++++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 47 insertions(+), 26 deletions(-)
 
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 72e2efa86e33..c786b589c87e 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -185,6 +185,19 @@ struct ddebug_class_param {
-  * __pr_debug_cls(22, "no such class"); compiles but is not reachable
-  */
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index d0e793a05655..bbe32fab74e8 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -618,9 +618,10 @@ static int ddebug_exec_queries(char *query, const char *modname)
+ 	return nfound;
+ }
  
-+#define __DYNAMIC_DEBUG_CLASSMAP_CHECK(_clnames, _base, _mapty)		\
-+	static_assert(((_base) >= 0 && (_base) < _DPRINTK_CLASS_DFLT),	\
-+		      "_base must be in 0..62");			\
-+	static_assert(__DDEBUG_ARRAY_SIZE(_clnames) > 0,				\
-+		      "classnames array size must be > 0");		\
-+	static_assert(__DDEBUG_ARRAY_SIZE(_clnames) <= 32,			\
-+		      "classnames array size must be <= 32");		\
-+	static_assert((__DDEBUG_ARRAY_SIZE(_clnames) + (_base)) <= _DPRINTK_CLASS_DFLT, \
-+		      "_base + classnames.length must be <= 63");	\
-+	static_assert(((_mapty) >= DD_CLASS_TYPE_DISJOINT_BITS) &&	\
-+		      ((_mapty) <= DD_CLASS_TYPE_LEVEL_NUM),		\
-+		      "unknown class_map_type")
+-/* apply a new bitmap to the sys-knob's current bit-state */
++/* apply a new class-param setting */
+ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+-				     unsigned long *new_bits, unsigned long *old_bits)
++				     unsigned long *new_bits, unsigned long *old_bits,
++				     const char *query_modname)
+ {
+ #define QUERY_SIZE 128
+ 	char query[QUERY_SIZE];
+@@ -628,7 +629,9 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+ 	int matches = 0;
+ 	int bi, ct;
+ 
+-	v2pr_info("apply: 0x%lx to: 0x%lx\n", *new_bits, *old_bits);
++	if (*new_bits != *old_bits)
++		v2pr_info("apply bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
++			  *old_bits, query_modname ?: "'*'");
+ 
+ 	for (bi = 0; bi < map->length; bi++) {
+ 		if (test_bit(bi, new_bits) == test_bit(bi, old_bits))
+@@ -637,12 +640,16 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+ 		snprintf(query, QUERY_SIZE, "class %s %c%s", map->class_names[bi],
+ 			 test_bit(bi, new_bits) ? '+' : '-', dcp->flags);
+ 
+-		ct = ddebug_exec_queries(query, NULL);
++		ct = ddebug_exec_queries(query, query_modname);
+ 		matches += ct;
+ 
+ 		v2pr_info("bit_%d: %d matches on class: %s -> 0x%lx\n", bi,
+ 			  ct, map->class_names[bi], *new_bits);
+ 	}
++	if (*new_bits != *old_bits)
++		v2pr_info("applied bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
++			  *old_bits, query_modname ?: "'*'");
 +
- /**
-  * DYNAMIC_DEBUG_CLASSMAP_DEFINE - define debug classes used by a module.
-  * @_var:   name of the classmap, exported for other modules coordinated use.
-@@ -198,6 +211,7 @@ struct ddebug_class_param {
-  */
- #define DYNAMIC_DEBUG_CLASSMAP_DEFINE(_var, _mapty, _base, ...)		\
- 	static const char *_var##_classnames[] = { __VA_ARGS__ };	\
-+	__DYNAMIC_DEBUG_CLASSMAP_CHECK(_var##_classnames, (_base), (_mapty)); \
- 	extern struct ddebug_class_map _var;				\
- 	struct ddebug_class_map __aligned(8) __used			\
- 		__section("__dyndbg_class_maps") _var = {		\
-diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
-index 3a69cc3cae6d..01ce07001d4c 100644
---- a/lib/test_dynamic_debug.c
-+++ b/lib/test_dynamic_debug.c
-@@ -148,12 +148,26 @@ DYNAMIC_DEBUG_CLASSMAP_USE_(map_level_num, 7);
+ 	return matches;
+ }
  
- enum cat_level_offset { Vu1 = V1 + 7, Vu2, Vu3, Vu4, Vu5, Vu6, Vu7 };
+@@ -651,22 +658,17 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
  
--#endif
--
-+#if defined(DD_MACRO_ARGCHECK)
- /*
-- * now add the sysfs-params
-+ * Exersize compile-time arg-checks in DYNAMIC_DEBUG_CLASSMAP_DEFINE.
-+ * These will break compilation.
-  */
-+DYNAMIC_DEBUG_CLASSMAP_DEFINE(fail_base_neg, 0, -1, "NEGATIVE_BASE_ARG");
-+DYNAMIC_DEBUG_CLASSMAP_DEFINE(fail_base_big, 0, 100, "TOOBIG_BASE_ARG");
-+DYNAMIC_DEBUG_CLASSMAP_DEFINE(fail_str_type, 0, 0, 1 /* not a string */);
-+DYNAMIC_DEBUG_CLASSMAP_DEFINE(fail_emptyclass, 0, 0 /* ,empty */);
-+DYNAMIC_DEBUG_CLASSMAP_DEFINE(fail_maptype, 3, 10, "no such type");
-+DYNAMIC_DEBUG_CLASSMAP_DEFINE(fail_base_len, 0, 60,
-+			      "base", "plus", "classes", "length", "too-big");
-+DYNAMIC_DEBUG_CLASSMAP_USE_(fail_offset_big, 100);
-+#endif /* DD_MACRO_ARGCHECK */
-+
-+#endif /* TEST_DYNAMIC_DEBUG_SUBMOD */
+ #define CLASSMAP_BITMASK(width) ((1UL << (width)) - 1)
  
+-/**
+- * param_set_dyndbg_classes - class FOO >control
+- * @instr: string echo>d to sysfs, input depends on map_type
+- * @kp:    kp->arg has state: bits/lvl, map, map_type
+- *
+- * Enable/disable prdbgs by their class, as given in the arguments to
+- * DECLARE_DYNDBG_CLASSMAP.  For LEVEL map-types, enforce relative
+- * levels by bitpos.
+- *
+- * Returns: 0 or <0 if error.
 +/*
-+ * now add the sysfs-params to both sub/super-mods
-+ */
- DYNAMIC_DEBUG_CLASSMAP_PARAM(disjoint_bits, p);
- DYNAMIC_DEBUG_CLASSMAP_PARAM(level_num, p);
++ * param-setter helper to validate numeric input, clamp its value by
++ * the classmap type and size, and apply the bits.
+  */
+-int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
++static int param_set_dyndbg_module_classes(const char *instr,
++					   const struct kernel_param *kp,
++					   const char *mod_name)
+ {
+ 	const struct ddebug_class_param *dcp = kp->arg;
+ 	const struct ddebug_class_map *map = dcp->map;
+-	unsigned long inrep, new_bits, old_bits;
++	unsigned long inrep, new_bits, old_bits, old_val;
+ 	int rc, totct = 0;
  
+ 	rc = kstrtoul(instr, 0, &inrep);
+@@ -686,9 +688,10 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
+ 				KP_NAME(kp), inrep, CLASSMAP_BITMASK(map->length));
+ 			inrep &= CLASSMAP_BITMASK(map->length);
+ 		}
+-		v2pr_info("bits:%lx > %s\n", inrep, KP_NAME(kp));
+-		totct += ddebug_apply_class_bitmap(dcp, &inrep, dcp->bits);
+-		*dcp->bits = inrep;
++		old_val = READ_ONCE(*dcp->bits);
++		v2pr_info("bits:0x%lx > %s.%s\n", inrep, mod_name ?: "*", KP_NAME(kp));
++		totct += ddebug_apply_class_bitmap(dcp, &inrep, &old_val, mod_name);
++		WRITE_ONCE(*dcp->bits, inrep);
+ 		break;
+ 	case DD_CLASS_TYPE_LEVEL_NUM:
+ 		/* input is bitpos, of highest verbosity to be enabled */
+@@ -697,11 +700,12 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
+ 				KP_NAME(kp), inrep, map->length);
+ 			inrep = map->length;
+ 		}
+-		old_bits = CLASSMAP_BITMASK(*dcp->lvl);
++		old_val = READ_ONCE(*dcp->lvl);
++		old_bits = CLASSMAP_BITMASK(old_val);
+ 		new_bits = CLASSMAP_BITMASK(inrep);
+ 		v2pr_info("lvl:%ld bits:0x%lx > %s\n", inrep, new_bits, KP_NAME(kp));
+-		totct += ddebug_apply_class_bitmap(dcp, &new_bits, &old_bits);
+-		*dcp->lvl = inrep;
++		totct += ddebug_apply_class_bitmap(dcp, &new_bits, &old_bits, mod_name);
++		WRITE_ONCE(*dcp->lvl, inrep);
+ 		break;
+ 	default:
+ 		pr_warn("%s: bad map type: %d\n", KP_NAME(kp), map->map_type);
+@@ -710,16 +714,33 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
+ 	vpr_info("%s: total matches: %d\n", KP_NAME(kp), totct);
+ 	return 0;
+ }
++
++/**
++ * param_set_dyndbg_classes - classmap-based kernel parameter setter
++ * @instr: string value to set (numeric bitmask or level)
++ * @kp:    kernel parameter info referencing classmap state
++ *
++ * Enable or disable all class'd pr_debug callsites in the classmap,
++ * independent of the module they're in.
++ *
++ * Returns: 0 on success, or a negative error code.
++ */
++int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
++{
++	return param_set_dyndbg_module_classes(instr, kp, NULL);
++}
+ EXPORT_SYMBOL(param_set_dyndbg_classes);
+ 
+ /**
+- * param_get_dyndbg_classes - classes reader
++ * param_get_dyndbg_classes - classmap kparam getter
+  * @buffer: string description of controlled bits -> classes
+  * @kp:     kp->arg has state: bits, map
+  *
+- * Reads last written state, underlying prdbg state may have been
+- * altered by direct >control.  Displays 0x for DISJOINT, 0-N for
+- * LEVEL Returns: #chars written or <0 on error
++ * Reads last written state, underlying pr_debug states may have been
++ * altered by direct >control.  Displays 0x for DISJOINT classmap
++ * types, 0-N for LEVEL types.
++ *
++ * Returns: ct of chars written or <0 on error
+  */
+ int param_get_dyndbg_classes(char *buffer, const struct kernel_param *kp)
+ {
 
 -- 
 2.56.0
