@@ -1,54 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.76
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793101510;
-	b=GVOHu/wWOipqC+y8RvE6sTFPpyBSnwZrkGvREpI1GdB3GgA9kFsFr5gy8Sr09GC9/YNW
-	 xeC35toILt+moMVMHmdR3qDoRnyOPeBC19OAxsY9XuoVwQFhu7hSpo+yapJ7VZP8KssMG
-	 bYXf5c40XoxVV60+X+P4oH0NK6vv+PgVlbHbLOXpKuRNc+r7qcc1bSPvGzvp5gEfd/iWz
-	 zEZA7utnNKmnrMUPyr9s6MFSVOfJIeLZqH1WN7icd6X1Q/axR3ZL8oS+qiGyL9UULeGAo
-	 2jVYL/i9QXLpAXbWDvkx0S0TVxWSj2TY10hXQOxIqNqqAGzWPFjNtbMuU5MLlebHHnw==
+	t=1793101752;
+	b=Xn2fqd6D92uQJF/Um9ar/GFDz61vnwPAtJh8q9xyxDsdCMNdwI0zJjJAjIh3HCjBXiIh
+	 ydNBfFSmiGBGsoN7VVrSYnhxqWsj52Iqu0NdVzs6ukrCf8aYMbibPJ2tiAlkWlD/wiE2o
+	 1balM8pLEWepz4B/jVV2VjgPFNXsgA2CRbVcRW8dIJBsqRBRJFbLne5cHTxCYkNndpsI5
+	 IErhFEjf0llw5wtHAN6tA3TNpkcMVp+SxPJU+zO69CSUdDoRLFIggIUvILSKL6mU3prDQ
+	 6sm58hpCVHRp6Y4YnmigzhwX5Yrqfzi9WIuT2Kdj+8ESBCNgdHHgxiOH0skCFxS8EKw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793101510;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=w+micUHMJCLc/lb75lysczApibjwbQk5zFEVurbT23g=;
-	b=AMBn4Ba5E1MNz//oMyZlQDwN4FcJ4n/i9QM+OLd8B1TqYQw/m7Cohv8VTJ0PSm8HXeZr
-	 bnrxbTYbzQ4QUCKTMKjJfQMCArzq/knSJGqpqo4/5Tnu5HvIAvMTtuFSAqbu8wjfn9foU
-	 WP2ZoTBU6KGNDf8orptytz6y92zK0tb2+q6WtXx881oR/Ydw5hd/vYpA+SrkLFCrD4ijh
-	 KAZpnJ62cng/UHR70lRe+nIM5NAzUqPqGCgTfoy1GKAZ/ROULUIuYHOSTZ49G4VpnGhAl
-	 EF/VZAZhYulKdbZdiZbCkR47e7I1b8MUiWVB0ECV3N7x6Ev3Q40DzFABxVax9F8sb+Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793101752;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=4fyuBJ+a3h7buKYW0HFnv+SBVn1FNv0YDNNGL3FIiEM=;
+	b=i3nCIrxFerqlHIzlES2SZONBDKVKmqGqw0S8GPwbe/VA0qR4cpu0+vDF3OxgqlnsMbOH
+	 zz8TP1ela1sTMA3W70Sly5jMdFNRdjG2+SlyUQXuHUmi/PIhsLJtvL5JCWGlDupoV+Gts
+	 6GHkXHsLQKKN232TPstLGIqzJ2IS/DeN35ST3vb5QL8v/oADCF2pIWuu+xnZtmGif4585
+	 idiOvZvdjDyh58CCHAfyRe77BVDzguQ8PpDDDpjKX8bgzf2LSlTnsQPE3/Oxnwn0Mpebp
+	 vzrgJkS6jt3rE+YrVdEx7/oaIP0DuwxQ0bDiWCuqOR5zlXR+oG+Xm+ZmFtVtZGrrlzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JKO0xROa;
-	arc=none smtp.remote-ip=95.215.58.76
-Received: from mta1.migadu.com (out-76.mta1.migadu.com [95.215.58.76])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ARq3XbOw;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E82606C912
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 11:45:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16E82606C912
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88545606A327;
+	Tue, 27 Oct 2026 11:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JKO0xROa
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=OYRd2GGQ+I0qeQXyHrVJjv4+JLHcc0nyipskIeZzEDk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793101508; v=1; x=1793706308;
- b=JKO0xROaCSWb3UCrmtd8gHzC9UDCajuqbquvbdi6v3l5T/Y0CExDZXnsNKg0B8kHnqi3AVdK
- lvAhep4Gf3aTSig7Uy0qJp/DT5NxW/BkPMUVXdsdKJhc0lCyUTORouU4pkvW3gm0FdgLqrOfAup
- hSUW2+TohkP7uhOLf7agnhUA=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 452bcd924be0fdff;
-	Tue, 27 Oct 2026 11:45:06 +0000
-X-Mizu-Trace-ID: 452bcd924be0fdff
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <bf5f8ecd-f2bc-4ceb-bafc-100bf7d7f697@linux.dev>
-Date: Tue, 27 Oct 2026 19:44:59 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ARq3XbOw
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943CF1F01825;
+	Tue, 27 Oct 2026 11:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793101752;
+	bh=4fyuBJ+a3h7buKYW0HFnv+SBVn1FNv0YDNNGL3FIiEM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=ARq3XbOw+OUFVGZRZcouLDKo1UTdUsaKCYr6QMSAFCJa+y+ZowBtWS7nHpyyw40Ya
+	 mtCUj9CuSXig6qpjMiU/Fqc59+7sDHcl2liIQz3WCt+/ESXN+skbSBStbQ3RwjTasm
+	 ziC3bAEDdeVsPyljX4kOiBE+sY16m3PF/8Enf/gd93Lp+swSHPV+vD8IKwBL3Efwyn
+	 JwgVqreEyxEhnqxPi1XDAW1WqqZhSC/7x7e9XL9pjWH+wvyCpeS/NACpUstvW3CEA9
+	 v9ZzyeqzYKjh6FltEyDNpagt7pWqbzoQKSTPATVxuk0sFKm7gntH7oYF1xOjiev99r
+	 VtO4beVAIkn3g==
+Subject: Re: [PATCH net 1/2] netlink: retry a dump skb that does not fit with
+ the minimum size
+From: netdev-bot+sashiko@kernel.org
+To: jhonata.poma@gmail.com
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kuniyu@google.com
+Date: Tue, 27 Oct 2026 11:49:11 +0000
+Message-ID: <179310175111.3134.9177648236285208856@kernel.org>
+In-Reply-To: <20261023-netlink-dump-livelock-v1-1-478214a635d2@gmail.com>
+References: <20261023-netlink-dump-livelock-v1-1-478214a635d2@gmail.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,191 +64,119 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/2] Revert "selftests: net: packetdrill: add tests
- for advertised MSS with PMTU exceptions"
-To: echoowall@gmail.com, netdev@vger.kernel.org
-Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>,
- David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
- Shuah Khan <shuah@kernel.org>, Thorsten Leemhuis
- <regressions@leemhuis.info>, regressions@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, Eric Dumazet <edumazet@kernel.org>
-References: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
- <20261026-advmss-revert-v1-1-272fa4b7ecb6@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261026-advmss-revert-v1-1-272fa4b7ecb6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-On 10/26/26 3:23 PM, Esko Mobius via B4 Relay wrote:
-> From: Esko Mobius <echoowall@gmail.com>
->
-> This reverts commit e5c8e301b497 ("selftests: net: packetdrill: add
-> tests for advertised MSS with PMTU exceptions").
->
-> These tests assert the behaviour introduced by commit 2640e6419594
-> ("net: advertise TCP MSS from the configured MTU, not the learned
-> PMTU"), which is reverted in the next patch because it causes a
-> regression. Remove them first so the series stays bisectable.
->
-> Signed-off-by: Esko Mobius <echoowall@gmail.com>
+Critical: 0 · High: 1 · Medium: 0 · Low: 0
 
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+- [High] The fix is incomplete: the ENOBUFS livelock it targets is still
+  reachable whenever a minimum-size dump skb also does not fit.
 
+--
 
-> ---
->   .../net/packetdrill/tcp_advmss_pmtu_ipv4.pkt       | 67 ----------------------
->   .../net/packetdrill/tcp_advmss_pmtu_ipv6.pkt       | 67 ----------------------
->   2 files changed, 134 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt b/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt
-> deleted file mode 100644
-> index f2ef931b7..000000000
-> --- a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt
-> +++ /dev/null
-> @@ -1,67 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -//
-> -// Test that IPv4 advertised MSS in SYN-ACK is derived from the configured
-> -// interface MTU (1500 -> MSS 1460), not the ICMP-learned Path MTU.
-> -
-> ---ip_version=ipv4
-> -
-> -`./defaults.sh
-> -ethtool -K tun0 tso off
-> -`
-> -
-> -//
-> -// Connection 1: Learn PMTU exception (MTU 1200 -> MSS 1160)
-> -//
-> -    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-> -   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-> -   +0 bind(3, ..., ...) = 0
-> -   +0 listen(3, 1) = 0
-> -
-> -   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
-> -   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-> -  +.1 < . 1:1(0) ack 1 win 257
-> -   +0 accept(3, ..., ...) = 4
-> -
-> -// Send a full 1460-byte segment
-> -   +0 write(4, ..., 1460) = 1460
-> -   +0 > P. 1:1461(1460) ack 1
-> -
-> -// ICMP Fragmentation Needed arrives indicating next-hop MTU 1200
-> -   +0 < icmp unreachable frag_needed mtu 1200 [1:1461(1460)]
-> -
-> -// Local host retransmits using the learned MTU 1200 (MSS = 1200 - 40 = 1160)
-> -   +0 > . 1:1161(1160) ack 1
-> -   +0 > P. 1161:1461(300) ack 1
-> -   +0 < R 1:1(0) ack 1461 win 0
-> -
-> -// Close connection 1 and listener
-> -   +0 close(4) = 0
-> -   +0 close(3) = 0
-> -
-> -//
-> -// Connection 2: New connection from the same peer
-> -//
-> -   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-> -   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-> -   +0 bind(3, ..., ...) = 0
-> -   +0 listen(3, 1) = 0
-> -
-> -   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
-> -
-> -// Verify: SYN-ACK MUST advertise configured MSS 1460, NOT the learned PMTU MSS 1160
-> -   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-> -   +0 < . 1:1(0) ack 1 win 257
-> -   +0 accept(3, ..., ...) = 4
-> -
-> -// Verify: Outgoing transmit MSS is still constrained by the learned PMTU 1200
-> -   +0 write(4, ..., 1460) = 1460
-> -   +0 > . 1:1161(1160) ack 1
-> -   +0 > P. 1161:1461(300) ack 1
-> -   +0 < . 1:1(0) ack 1461 win 257
-> -
-> -// Clean up
-> -   +0 close(4) = 0
-> -   +0 > F. 1461:1461(0) ack 1
-> -   +0 < F. 1:1(0) ack 1462 win 257
-> -   +0 > . 1462:1462(0) ack 2
-> -   +0 close(3) = 0
-> diff --git a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt b/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt
-> deleted file mode 100644
-> index c7638b11a..000000000
-> --- a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt
-> +++ /dev/null
-> @@ -1,67 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -//
-> -// Test that IPv6 advertised MSS in SYN-ACK is derived from the configured
-> -// interface MTU (1520 -> MSS 1460), not the ICMPv6-learned Path MTU.
-> -
-> ---ip_version=ipv6
-> -
-> -`./defaults.sh
-> -ethtool -K tun0 tso off
-> -`
-> -
-> -//
-> -// Connection 1: Learn PMTU exception (MTU 1280 -> MSS 1220)
-> -//
-> -    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-> -   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-> -   +0 bind(3, ..., ...) = 0
-> -   +0 listen(3, 1) = 0
-> -
-> -   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
-> -   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-> -  +.1 < . 1:1(0) ack 1 win 257
-> -   +0 accept(3, ..., ...) = 4
-> -
-> -// Send a full 1460-byte segment
-> -   +0 write(4, ..., 1460) = 1460
-> -   +0 > P. 1:1461(1460) ack 1
-> -
-> -// ICMPv6 Packet Too Big arrives indicating next-hop MTU 1280
-> -   +0 < icmp packet_too_big mtu 1280 [1:1461(1460)]
-> -
-> -// Local host retransmits using the learned MTU 1280 (MSS = 1280 - 40 - 20 = 1220)
-> -   +0 > . 1:1221(1220) ack 1
-> -   +0 > P. 1221:1461(240) ack 1
-> -   +0 < R 1:1(0) ack 1461 win 0
-> -
-> -// Close connection 1 and listener
-> -   +0 close(4) = 0
-> -   +0 close(3) = 0
-> -
-> -//
-> -// Connection 2: New connection from the same peer
-> -//
-> -   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-> -   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-> -   +0 bind(3, ..., ...) = 0
-> -   +0 listen(3, 1) = 0
-> -
-> -   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
-> -
-> -// Verify: SYN-ACK MUST advertise configured MSS 1460, NOT the learned PMTU MSS 1220
-> -   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-> -   +0 < . 1:1(0) ack 1 win 257
-> -   +0 accept(3, ..., ...) = 4
-> -
-> -// Verify: Outgoing transmit MSS is still constrained by the learned PMTU 1280
-> -   +0 write(4, ..., 1460) = 1460
-> -   +0 > . 1:1221(1220) ack 1
-> -   +0 > P. 1221:1461(240) ack 1
-> -   +0 < . 1:1(0) ack 1461 win 257
-> -
-> -// Clean up
-> -   +0 close(4) = 0
-> -   +0 > F. 1461:1461(0) ack 1
-> -   +0 < F. 1:1(0) ack 1462 win 257
-> -   +0 > . 1462:1462(0) ack 2
-> -   +0 close(3) = 0
->
+netlink: retry a dump skb that does not fit with the minimum size
+
+When the skb sized after max_recvmsg_len is rejected by the sk_rcvbuf
+admission check, netlink_dump() now frees it and retries once with an
+alloc_min_size skb. The goal is to fix a livelock added by commit
+ae8f160e7eb2, where a reader that peeks before reading, such as libnl,
+spins on ENOBUFS.
+
+> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+> index a904dc3bcad6b..b750e79fed2ed 100644
+> --- a/net/netlink/af_netlink.c
+> +++ b/net/netlink/af_netlink.c
+> @@ -2318,10 +2318,21 @@ static int netlink_dump(struct sock *sk, bool lock_taken)
+>  	if (!skb)
+>  		goto errout_skb;
+>  
+> +retry:
+>  	rcvbuf = READ_ONCE(sk->sk_rcvbuf);
+>  	rmem = atomic_add_return(skb->truesize, &sk->sk_rmem_alloc);
+>  	if (rmem != skb->truesize && rmem >= rcvbuf) {
+>  		atomic_sub(skb->truesize, &sk->sk_rmem_alloc);
+> +		/* A skb sized after max_recvmsg_len may not fit next to data
+> +		 * still charged to the socket, while a minimum size one does.
+> +		 */
+> +		if (alloc_size > alloc_min_size) {
+> +			kfree_skb(skb);
+> +			alloc_size = alloc_min_size;
+> +			skb = alloc_skb(alloc_size, GFP_KERNEL);
+> +			if (skb)
+> +				goto retry;
+> +		}
+>  		goto errout_skb;
+>  	}
+
+[Severity: High]
+Does this fully close the livelock described in the commit message?
+
+The admission rule is unchanged. The minimum size skb is still rejected
+when rmem_before != 0 and rmem_before + T_min >= sk_rcvbuf, where T_min
+is the truesize of an alloc_min_size skb. The comment says a minimum
+size skb "does" fit, but nothing here guarantees that.
+
+On the recvmsg side, the dump is only re-run once rmem drops to half of
+sk_rcvbuf:
+
+net/netlink/af_netlink.c:netlink_recvmsg() {
+    ...
+	if (READ_ONCE(nlk->cb_running) &&
+	    atomic_read(&sk->sk_rmem_alloc) <= sk->sk_rcvbuf / 2) {
+		ret = netlink_dump(sk, false);
+		if (ret) {
+			WRITE_ONCE(sk->sk_err, -ret);
+			sk_error_report(sk);
+		}
+	}
+    ...
+}
+
+When sk_rcvbuf < 2 * T_min, that check does not guarantee
+rmem + T_min < sk_rcvbuf. A few configurations appear to land in that
+window:
+
+- On 4K pages T_min is roughly 4352 bytes. An unprivileged
+  SO_RCVBUF=4096 gives sk_rcvbuf=8192 via __sock_set_rcvbuf(). Any
+  rmem_before in roughly [3840, 4096] then fails both the large attempt
+  and the retry.
+
+- On PAGE_SIZE >= 8K, NLMSG_GOODSIZE is SKB_WITH_OVERHEAD(8192), so
+  T_min is roughly 8448. With iw's 16KiB sk_rcvbuf, rmem in roughly
+  [7936, 8192] fails both attempts. A few notifications that are still
+  charged could reach that range, since do_one_broadcast() holds them
+  via skb_get() until netlink_broadcast() returns.
+
+- When cb->min_dump_alloc is at least the capped max_recvmsg_len,
+  alloc_size > alloc_min_size is never true and the retry never runs.
+  smc_diag_handler_dump() is one example: it uses
+  SKB_WITH_OVERHEAD(32768).
+
+In those states the original sequence still looks reachable:
+
+__netlink_dump_start()
+  netlink_dump()            -> -ENOBUFS, cb_running stays true
+netlink_recvmsg(MSG_PEEK)
+  netlink_dump()            -> -ENOBUFS, sk_err = ENOBUFS
+netlink_recvmsg()
+  __skb_try_recv_datagram()
+    sock_error()            -> ENOBUFS returned, nothing dequeued
+
+rmem never changes, so the peek/read loop keeps spinning at 100% CPU.
+
+Before ae8f160e7eb2, the dump skb was admitted whenever
+rmem_before < rcvbuf, so a dump triggered from recvmsg could not fail
+this way.
+
+Would it be better to relax the admission rule for dump skbs, instead of
+adding a second, smaller skb size?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261023-netlink-dump-livelock-v1-0-478214a635d2%40gmail.com
