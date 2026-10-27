@@ -1,69 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793059285;
-	b=tFJBiT0Plvje1rXjzrASFxYxulS94ZOUJRyOYvSP76eXAysdhzWLTUp57ZrVTc3vsqR7
-	 u6nPNbA16gTmzqaLf10Nb3/ZCv/sfAP73ldtMfIBPDZfkT1PAe7nyMjbZZKNdxENQvbYV
-	 jFSUcJAGLbU7/pPynM2i/MPHv9HZKGoSfqQ8t03esFMZ8/ygPMoil9CzwyoipEcmtMEQv
-	 4bWBzYm+VdEpvQtrpFwBkZJwLnZV9oG3qCSvFzxFsz8eEzzeJU6G/eXoERyfWorgNeu1/
-	 CdqVJWfvFC9WrIanIVtcV7oF+XD1GR9Xuf5E8UuyvbW1WDzWD2tfItARO2AGwWnodfA==
+	t=1793059967;
+	b=fXGMEkhYnKAsELfzHUF2qjXEsGXKQzTRUCxPJKSZymWO3+2o31tnpRCOXmSpZ66BmGUp
+	 aG+QK61nBeyEQpIN0Mq5Rw9/d2VBgjzWwZB7iL89tjGQoSsXU5OPmKc6V+3OV+JSq7HLs
+	 OLC2RLFK3lOwmruCro9j9zX9t+OHQ4XCwfysECVpdmmqUTFiIpQtIfvoWkQjTA92kOXzi
+	 HAH1DiP+er0BxtXYZuCLnP02Vxqc82cgOpz82PIyWC2iEv+D6iiNMn8/4A3Fhx0sdR03e
+	 xgVCcXga9OeJX5R1aT4EhI0tkwQBU68rNgy5PjS2asXnXaIAC7dT3KnCuzhNOp6egbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793059285;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=0LRJqBrRZu8I7CaiJXMHZVTdIs/++2cjuvZ3KSCYX24=;
-	b=w5jhnkKTBJ7512ZH9NWwxEG8v4RHpe2IUSUzhCNrHb4ncmJOcQrajsMqMDcwjKkQ3Eyo
-	 ce9mFqr8nGwJW2hBfgxyvyqr5iJO4VoWZUh45OXwvni8pcCgMaTDGi+VIzHiG/H9w4SQi
-	 oppPxd9n2r6X5aSY5GBL1EjEh00CQJKInKYpS7NRIdadd3MHH6QOZr9i37vKhTvzsmNwC
-	 2BbtXKKNzEnOXxRP4z++IkEv98noJgVXraVVfr0zS7hAmLtXW4Dt+z2DDqSWdRRVEHpRr
-	 t3ChATGn9pQsBRBVgFtwwO19IabKh1KWumVpS4seIeAh9PW6vM18HroSdHvEQpc2Xkw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793059967;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=6NxHfrzCjecfqUYYIBMtEF1a0oXYC5iaevKK2QCBX88=;
+	b=PErkI1MJjsSDHBotXOk+oiBdS8zA4X+UrraXhZ6zUM6bOUA3jMBHVomn0iV418oXGZ50
+	 jjoUORY5PcGVYO40Ivg/RvzoEHfD2+RQXaRnQAJ+UKKk8sns2q4r3t2kHyEWGFwyry6eb
+	 +PFib0JnxcD7NuVb3w2+CFffaHFgvr303tw17j9CmB6qU+G0iZjidWX5JLe1bYpwr3BfH
+	 lP8y3XGdri4o7nnb9za8c1UTx/70k5T7gaMhJeNFacbc/FepgMuXxzZVRY8VR7wIF29FU
+	 cZN5BtXbaAWHENrpQY2RnyvRJl6flekPih+U0tYWt62nsgdOP/1cZv6HgpJ+zr2SuSw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lGHGuc5d;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZxImIoNH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 41EC7606A31A;
-	Tue, 27 Oct 2026 00:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A74606A31E;
+	Tue, 27 Oct 2026 00:12:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lGHGuc5d
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 464D81F031E0;
-	Tue, 27 Oct 2026 00:01:24 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZxImIoNH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA03C1F01828;
+	Tue, 27 Oct 2026 00:12:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793059284;
-	bh=0LRJqBrRZu8I7CaiJXMHZVTdIs/++2cjuvZ3KSCYX24=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lGHGuc5dcRkAffdeH2WdifKM6MiqYDJ94AyVLlffNPp+eUdT5k+99mhaU+/bhy4Re
-	 n4+j6x8DIQM4lkKLxXBYDJJ7aL3M3nCU7SaAXSiyP6dhH4P5cyeavBR8QM2fKDBDc3
-	 RGUwUYtZoVFcAjH+wDEzgcBHLgbzoFs4NZhstuExzdEBLuXC9pL5G533krFDJ2ODri
-	 QbS1TcKVy8ZIHm90MqubYovU3DvzElKK8+zK5mEO1QGE7g4ZOU0xKYNAZoZsHSPeab
-	 /FCCwXrim3GvhhLoQMaKOxlxGla2WfbijmjWTuGclw9oaaMlDWoHdHHDFqj16G665C
-	 KQNJuk4czJiyw==
-Date: Tue, 27 Oct 2026 02:01:21 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>, Thomas Graf <tgraf@suug.ch>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	"open list:DEVICE-MAPPER (LVM)" <dm-devel@lists.linux.dev>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:FSVERITY: READ-ONLY FILE-BASED AUTHENTICITY PRO..." <fsverity@lists.linux.dev>,
-	"open list:RHASHTABLE" <linux-crypto@vger.kernel.org>,
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 4/6] KEYS: Introduce keyring_is_empty()
-Message-ID: <at_p0VD-PsPmIq-u@kernel.org>
-References: <20261025001105.1824178-1-jarkko@kernel.org>
- <20261025001105.1824178-5-jarkko@kernel.org>
- <20261026235528.GA2395@quark>
+	s=k20260515; t=1793059966;
+	bh=6NxHfrzCjecfqUYYIBMtEF1a0oXYC5iaevKK2QCBX88=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ZxImIoNHx8kXLySCT62e36TwqiehoPOB6cJ27sYttuEjlXG8xclt9wCKA3dXYQrc7
+	 sy8UN6f2Y6X66kI+YNuBD9BUAmgpkJqOLoRkdhTxcSxOfbKzmdD9W15Z+pSWPFLhp6
+	 b+ZgYx2jjIGU5yB+R+UEkmgOashbA9Nt2WBYAAhrCMiDhYKidfUIq7lIEkgEmi0CQU
+	 mdcQ61Ji24HDnxWsddAk5EhZfHzCZkwT9fwVVtYjmIT5so5cYvAY5XThfk37iIUUjN
+	 jfgiS6Nw5hcn7/om6bAGPZ7qf0sF93DfbQdzSJ2JXB0Woldz7Lx1XXxCtH+G8beF9Y
+	 3XQ03PlFbFo+A==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 6/9] tracing/filters: Skip second character of '&&' and '||' in calc_stack()
+Date: Tue, 27 Oct 2026 09:12:43 +0900
+Message-ID: <undine-1793059963392038141-496f89524ad52c64@undined.local>
+X-Mailer: UndineD 0.1
+In-Reply-To: <undine-1793058642821980546-e873f302f6a6d563@undined.local>
+References: <179291742944.492959.11659339795290028998.stgit@devnote2> <179291748555.492959.3275503783612449972.stgit@devnote2> <20261026164727.0d1636cb@gandalf.local.home> <undine-1793058642821980546-e873f302f6a6d563@undined.local>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,30 +58,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261026235528.GA2395@quark>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 26, 2026 at 04:55:28PM -0700, Eric Biggers wrote:
-> On Sun, Oct 25, 2026 at 03:10:12AM +0300, Jarkko Sakkinen wrote:
-> > +/**
-> > + * keyring_is_empty - Check whether a keyring contains any links
-> > + * @keyring: The keyring to check.
-> > + */
+On Tue, 27 Oct 2026 08:50:42 +0900, Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> On Mon, 26 Oct 2026 16:47:27 -0400, Steven Rostedt <rostedt@goodmis.org> wrote:
+> > On Sun, 25 Oct 2026 17:38:05 +0900
+> > "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> > 
+> > > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > 
+> > > In calc_stack(), when encountering '||' or '&&' (where str[i+1] == str[i]),
+> > > the loop sets 'is_pred = false' and continues without advancing 'i' past
+> > > the second character of the operator. On the next iteration, the second '|'
+> > > or '&' sees str[i+1] != str[i], breaks out of the switch statement, and is
+> > > counted as the start of a new predicate (incrementing nr_preds and setting
+> > > is_pred = true).
+> > > 
+> > > Consequently, a trailing logical operator (e.g. 'common_pid == 1 ||') is
+> > > counted as having 2 predicates instead of 1, and any subsequent non-space
+> > > character before a delimiter fails to increment nr_preds.
+> > 
+> >  "common_pid ||' is an invalid expression.
+> > 
+> > > 
+> > > Increment 'i' when matching '||' or '&&' so the entire two-character
+> > > operator is skipped.
+> > 
+> > This is just wrong.
+> > 
+> > Masami, don't blindly trust AI.
+> > 
 > 
-> "contains any links" => "contains no links"?  Or even just "is empty".
-> Otherwise it sounds backwards.
+> Oops, I might mislead by the code. (I thought I've checked it...)
 > 
-> Note that another "is the keyring empty" check just showed up in
-> mainline in kernel/bpf/keys.c.  So a new version of this patch will be
-> needed to update that one too.
+> > I purposely did it this way. Because && and || creates a new predicate.
+> > 
+> >  If you have "x||y"
+> >               ^
+> >               i
 > 
-> Otherwise this patch looks good.
+> OK,
+> 
+> > 
+> >  Start with i = 0; is_pred = false; nr_preds = 0;
+> > 
+> >    str[i] == 'x'
+> >    if (!is_pred) {
+> > 	nr_preds++;  // nr_preds = 1
+> >         is_pred = true;
+> >    }
+> > 
+> >  in for loop i++;  // i = 1; str[i] = '|'
+> > 
+> >    switch (str[i])
+> >    case '|':
+> >       if (str[i+1] != str[i]) // false
+> 
+> Ah, somehow I completely misread this is if (str[i+1] == str[i]) ....
+> 
+> >       is_pred = false;
+> >       continue;
+> > 
+> >  in for loop i++; // i = 2; str[i] == '|';
+> > 
+> >    switch (str[i])
+> >    case '|':
+> >       if (str[i+1] != str[i]) // true
+> >           break;
+> > 
+> >    if (!is_pred) {
+> > 	nr_preds++;  // nr_preds = 2
+> >         is_pred = true;
+> >    }
+> > 
+> >  in for loop i++; // i = 3; str[i] == 'y';
+> >  
+> >    if (!is_pred) { // false because is_pred == true
+> > 
+> > Loop ends.
+> > 
+> > nr_preds == 2. This is correct.
+> > 
+> > This patch is garbage.
+> 
+> OK, let me drop it.
 
-I'll fix that up. Related, bpf_keyring_lookup() also needs to be
-addressed now that I have it in my tree. 
+BTW, to check the correct input is encoded correctly, we may need
+in kernel selftest or a feature to dump the interpreted pred after
+"#" line via filter file. Latter one allows us to test it via tracefs
+(ftracetest).
 
-> 
-> - Eric
+Thank you,
 
-Br, Jarkko
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
