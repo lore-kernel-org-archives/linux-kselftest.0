@@ -1,112 +1,112 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793117889;
-	b=sbwJRabvNwXkUAHijWNNV8Xn5pylAcSLg0EIKsqpnVjWeritfmGHg4KvmFiz1R9VjsZ9
-	 1C4I0q87Lccfqvd0o2Bi/kgE7iQWNJYVUDZHJJ+pqwaia4KF0Lde6fEhZEpPT2WxKuQY3
-	 9cqTe2sTMp9QKoqdcmwjxKGKRMMprOzzv//qFXJjYHnhNkL4wBeTWM6MHX07xwk2PjY2p
-	 d9Hlh3NDPzymLW1NWJApOUhS1YT5a4So/FzhJFCQ4F0vZD5c0XdLXtF58SVhWM0tGwvBP
-	 5ZEwux5lrG/8JHThZ7664kAatDePzlC1aw3id3EfHaIJx0ih1tKIOZ7KKKzqiAQ2kuQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793117889;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
-	 X-Authority-Analysis:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=IGDTuUyORqQ9ZtkZ7BRn3HYpiHLzxyIKFVLh6zS3w3s=;
-	b=EEaNRDNMwQORwEYPKDhzaQdgPUrzAoBJg5D7hXDogZZKYIBF7B5HxeBKxNmcoF/s43ps
-	 Y+bIKY3znXqVnvkgRy5B0tC3B57Rbi/iAQlgtm/5LvOYZogjr0fu9Fi9PSwcL5LxkLOLl
-	 0IqjOEgMmhhuRnO3paufHbohNSLcHcw2R6vmYTmjxFOOaovissis0oZvp/RLygeMur0dk
-	 xYZD3T/jmqXr2Sz7Pu0ZYXlzVpft3BgqyklQdQUHzZj/EIOES4CYiMPCPyQZ3HbPzH7vc
-	 wrHrgXb18OHQNLm1EF7tcFBPhefktExaXVPogdwxTKuPqoLuiAXLaeVKTX8S8goi+Iw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.qualcomm.com;
-	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=mkLDoAVu;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=IlLzR2In;
-	arc=none smtp.remote-ip=205.220.168.131
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.14
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793118613;
+	b=hB2wj+J+Vl4oWS0CzKe/u4XVjNafzBPJF7tM9rezFEuiPXQh8pWIpp3yo1qiFpiTDoVE
+	 N3JlPZ+GHgF1fJoEYG6OYZp4nf8tO2kDfMveoPbNGkeD0UqEfAA2UIkdPusNQjHybu8on
+	 7QwuR+8DIq1bC+w+utFA/wk5zygWGY29VDuVpgpbuSiXaqgZ7+sz6oBRGA9KeoAcbNCsc
+	 dwNwd0vTdqkRHiD/elp6BR0EEAUWP1Z5RWn0xQ2Vts8VPT5xhJyJLT6bjhP0Mx+h4tqm2
+	 FA3CPXtw+2+GfQoxQK83LMAx7Wit0/jJF7UoWhHJ7L6uZPI3yPVQIAudSATtfQdiwiQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793118613;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:
+	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
+	 Received:Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type:
+	 X-NV-OnPremToCloud:X-EOPAttributedMessage:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-Id:
+	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=284UMRxBUGDUu63oGfoCGorc3x8OpZwv73h+hLxuTCE=;
+	b=ZaWEcrIUDvLE0j/0dU4Mahx0W7+nee4O4jcopvUuhx3/CnTvbqy4+IMZ6Uy+zGZmB+65
+	 7N6jpOnF1k3LWc3sklk9usVrgDnN8tDRRvIJCnei/043H0PEkRMn/gdWn4HKLFrMJvkvW
+	 zZc1pD2PUGeIe5DsqfSmHNtl8+kcUo8I7q+ojR8+6SBnU3sCYeIU3waBbW0RdUGpIqFlh
+	 1lRSvmNEPSPwoxJxJL/PeuWSGmVCK+xAEIFmRbRY7Si3NauAGuP+SxvhWAECMBSHwaqAJ
+	 CXtKAOasdLSmkh5qyICeVsk+PgdNYwhePAa49dAK33cqwEAC+zfO2SFlRQC/VegbUlQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=uLOIthP4;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.14
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010014.outbound.protection.outlook.com [52.101.193.14])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECBE3606A31A
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 16:18:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ECBE3606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2C7606A325;
+	Tue, 27 Oct 2026 16:30:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E2C7606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=mkLDoAVu;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=IlLzR2In
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69RG6SoR2157434
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 16:18:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	IGDTuUyORqQ9ZtkZ7BRn3HYpiHLzxyIKFVLh6zS3w3s=; b=mkLDoAVufykMfXU9
-	b0wNwshi/OOFS1fGs2PUhkkdJTgKHecVqhmTkGvP5r4qVsM+99YVbuqYp42UzZBm
-	2TI4maBCJKRfRPZLpK4EHZrA4GQCiz0sUK0TDussji1lhYQpdcZ+ik3hIJgvxnM0
-	hZWRaYnTqGItcNiX0Kw7f9A/6jtt8D68cwLTH4CWc1agJ6uhZHLwqnGJA7wS3xzb
-	vyELDZ4MGuWT4alpDXCC/oZm6s0T+j2wvi/ooq5od9IlQ9oV1WXkYa8UMu1FHjnR
-	88tcaYIVwMLXmirQuw4xV27zS3jA/EgftwetVNFFnLWWu1MMo7IZQzPRqk+ELF69
-	G8yO2w==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hjy6g01ys-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 16:18:08 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-93caf7856ffso1027619385a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 09:18:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1793117887; x=1793722687; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IGDTuUyORqQ9ZtkZ7BRn3HYpiHLzxyIKFVLh6zS3w3s=;
-        b=IlLzR2InH2CS98YhZBCaotjhyEygpybW1CmPXgAkPnGDOyPDXOV3gh0D+loR79QpFg
-         k0RNJHqPL35aU+JSC13lBbScU3nKaSVlIiq4h0WxDuJT0bAiQztzlTVd/Z+l32W5Em3O
-         dxtqhznm4Ydsf8oLJitYAVWC7eeS9HGuU+WGJtGL4XuHvlgKMaNxuPPKvJ5f5Q8Zbjh5
-         E21UoR/9IoYX8du5rXjH7b1bSrDqDYpTZLA6Gl6kUvNtYrd4CIr1taUCGxvCLbb9fVu/
-         fS1Ue5Nw9IbMR/0vQS9LHKoEwf++0jm4PA8qlntLZV1rm0n9iClTMG5lGWeIuLi0poLT
-         0+Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793117887; x=1793722687;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=IGDTuUyORqQ9ZtkZ7BRn3HYpiHLzxyIKFVLh6zS3w3s=;
-        b=x7NAqQO0Tp2XEYaSym8iSfCi3gEFycKtMzz99lar+PMZ3/4WYZdVdnm+fbHISGwqJO
-         YuuznYh23ncmAUlCqLv/qa7TSf4y7WX5oavyPFjoSarj+PhBg+9xJLtpnnofxRwiB9f3
-         wO1KXXrvcTD7KN0q57ASC09HhuicaCHHrjqfGLEw3VpNAIdIjKO3VTUKZKPO04m8JymQ
-         SbUzEu8snwUPKGEhZd7Ti5NrnpMx44h4kMb+M0WEd0d7s8eKccSjkB0oMOEbWOgauwi2
-         6lPPfqgpg1f99rKw+jFzl9zlDUtk74xcXwEeJl4KJ/s6KKvVAq6KkDpztnCI+iDNTnKb
-         cmHw==
-X-Forwarded-Encrypted: i=1; AKwUvBypLOAX3z5lVTkFfrwxv40pFpH0wSenKvFVD/1Jd579nzrB9eloXnySUrYnuEkFubXUZjiezmI3FZ1KU+r46uc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLuY5mWCi3zaNNCpR/bzyy4KYjyKqPVMrgdbM1T2PfH47AEP8KW
-	I8CQycCGJLdSATJS+W2GwzOlpe6rVl3l97C7uxkk6bWJnp/QwCidvfPDgSQ4S7DndTEOi3B2iwy
-	ZP0zpbEMk2E2uyOeTHfoMmitYTJvevSIE+4QAbLJzqE4LxhJP/BpT6sTXfpA4J9eklul5KgiCNr
-	93wuQ=
-X-Gm-Gg: AYBFou017xfG/iTnrZxPHRqcvrgnCJvWk9isF0xPtnq2vMxwXvyCaHRj19Rf3pju2T+
-	1dXCW8ABYRKjniO+Excqx6ZD9FWkC4e72DJtIlbWw86E5juAVnehb6rM8VeQbxs4ESgXMnYwygT
-	+I8qbp3tK2A4Vnp9hmZlIObr16DmMWCqAJKM5NUH/UEW4x3hW2w21oP0LW/+ZQggNGujEd19+7v
-	vgCl8UtlYVfJYqaB7dD5AOd6GDoxBlHU691jnSMmWC3Dgo3ISGMknG2eXJMiSsrXBhh3zdTnl+J
-	pwTos2GnHkKQPhk2DzHoHdFDOrRHeSw4tSJFhd6TlEt4snv9lkL5f0m5MBIeS/K/uOSRalNI6Fh
-	n16qmi/YQagIM24aE7ptAkcb0Mvf0IvQ80Xvx1Z6uQQzRDfPnIsOWsBHhaAsnBA==
-X-Received: by 2002:a05:620a:2b91:b0:93f:6e05:22eb with SMTP id af79cd13be357-940ef8f9253mr1634333885a.48.1793117886924;
-        Tue, 27 Oct 2026 09:18:06 -0700 (PDT)
-X-Received: by 2002:a05:620a:2b91:b0:93f:6e05:22eb with SMTP id af79cd13be357-940ef8f9253mr1634328585a.48.1793117886452;
-        Tue, 27 Oct 2026 09:18:06 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:7d20:e20f:a77f:4ef7? ([2a05:6e02:1041:c10:7d20:e20f:a77f:4ef7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd8ddasm25927477f8f.48.2026.10.27.09.18.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2026 09:18:05 -0700 (PDT)
-Message-ID: <8e53d1a3-fc96-4d07-8be7-74f383ed3618@oss.qualcomm.com>
-Date: Tue, 27 Oct 2026 17:18:04 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=uLOIthP4
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mOZzTW7wcJTAVTDO1O6Z9mfGySMIa0qeXjGGYVHFsLBvGV4pmedexCWXnHxcspi2vFzmT+PMncxg+b7i2LLy1WPeXVbFsTlbKWE6PL1fSE0EkMm9y/c6XU7fSe3GWgWWr38aWt1hMvkyj1J8LcSlHrsbPoO3e9buaZjD74CrAR4eYZ+TWGiTEJTOobb7mcc2LE4ZgaF5RP2n/5vA4CJO7rPG7xOXnlrvei/i6IKUtoVGo7l5K1oxw1Vfe9Nm+51+JUDLTQM2/HZG37+6z+mZnQQ44gH4vSDLaT+k9B2rFDppB1YJe/ZM/DpGW4iwmP/3UO+QkgOZhpHCuSFhQfmSrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=284UMRxBUGDUu63oGfoCGorc3x8OpZwv73h+hLxuTCE=;
+ b=o0vOvGmCsc3j3dKLFeg2fzBLAyd+1z9fvtX1I1/nd3CDsVUEKkG0ZtHBWiXqkYIxhkMLZmldUN5G+lBgELsvOzpTRNsXhG9VpeTLmfSS18GHMLUNVc2jTy60PkNI/2OJKxCr6l649iuX5AuVGUKMra90WdSrZ/6dNZXXay0zimlMcweJgQjEFFI8WYI92e4dcZ8J9oX8O2G6YvyuVu49A7xnRdV7xinQE73a2VQEYvlLnFHR/QAnZV+5TFB+gxsvVVV4bMIx26f084M/b/1jsgdi0a5ZXSK+iZiV50/OCpwWp0G5GwHPOfHAyzrIegcwGnJE4C9cVYPo1jZZt42j6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=284UMRxBUGDUu63oGfoCGorc3x8OpZwv73h+hLxuTCE=;
+ b=uLOIthP47L9TuW9K8qRv0Lz6gUYDDjiq/hER1KclBfIs4gyXeD9H0NnUsYcDBwFDwE6inc2Xi8272kXGJCPBW3SA56fFLIBjzoxZzXOOM9O9h3c9jsuEkqwPg+Dda94VVUAFqmunwJH8VEefWXPqf1TG3He83fLqDFRzZ0Ta2CHA75IumBQtZmoqcdgiR21YF2R04X4ApR8FilJsfeOU5awzLx8pFPF6VGnKd/3pwxu7x/EBX5uci9asjZ0cwapT6i1fF7VoVlyjgI49Dw7DlaArXEL3vCVTQHwD/M7GQH3IZZJ3zCdDDsp2bQFNfqhtyh+oV0CTcSTra0IpsKX+yg==
+Received: from BN0PR04CA0170.namprd04.prod.outlook.com (2603:10b6:408:eb::25)
+ by DM3PR12MB9415.namprd12.prod.outlook.com (2603:10b6:8:1ac::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Tue, 27 Oct
+ 2026 16:30:06 +0000
+Received: from BL6PEPF0006C3DC.namprd02.prod.outlook.com
+ (2603:10b6:408:eb:cafe::63) by BN0PR04CA0170.outlook.office365.com
+ (2603:10b6:408:eb::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.546.22 via Frontend Transport; Tue,
+ 27 Oct 2026 16:30:06 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 216.228.118.233) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BL6PEPF0006C3DC.mail.protection.outlook.com (10.167.249.230) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.569.4 via Frontend Transport; Tue, 27 Oct 2026 16:30:06 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.56; Tue, 27 Oct
+ 2026 09:29:45 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Tue, 27 Oct 2026 09:29:45 -0700
+Received: from dgx-1v-42.nvidia.com (10.127.8.11) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.56 via Frontend
+ Transport; Tue, 27 Oct 2026 09:29:45 -0700
+From: Jamie Nguyen <jamien@nvidia.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	<netdev@vger.kernel.org>
+CC: <kerneljasonxing@gmail.com>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH net] selftests: net: txtimestamp: fix out-of-bounds read in raw UDP checksum
+Date: Tue, 27 Oct 2026 09:29:45 -0700
+Message-ID: <20261027162945.2122306-1-jamien@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,97 +116,110 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/6] selftests/powercap: Add powercap hierarchy
- creation API tests
-To: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, Shuah Khan <shuah@kernel.org>,
-        Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        Thomas Huth <thuth@redhat.com>, Vasily Gorbik <gor@linux.ibm.com>
-References: <cover.1792504834.git.daniel.lezcano@oss.qualcomm.com>
- <83799bf79e85e9e2ab77140e632f11d96b17a04f.1792504834.git.daniel.lezcano@oss.qualcomm.com>
- <CAJZ5v0gSLOP4KN3bNB425SaYOLcpJ1c3t5isYEQAdvxqQR0sVQ@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-In-Reply-To: <CAJZ5v0gSLOP4KN3bNB425SaYOLcpJ1c3t5isYEQAdvxqQR0sVQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI3MDA2NCBTYWx0ZWRfX9e2i7Ol+d+T/
- 6JJNiW2RmyvnF9hswygSrSam/hvlIzcTuKjLDlhlPBq5fAttnEZ/BKh/BKf2vWGF4ODkVJM/h72
- FJgCMCDdGiByyCO2eGGv65w1j1DFmi4ByPCvGj40T3RU6lMVRnAxzSqTRnr1/LJ5OyocADbzAoA
- mJ0+5sj7J7Ao95sVzForrX/eBkxuORnUIO/iMP0hhudmx7nMWwBR9eEc+6PIkNwPWC+N8IFa6B4
- qy5jK0nkUOglGZFxMb9cnOh3tr3pz05TIdYpwoIEF0Vb83k7X9vN9Jo2TPHH0RL+2a6OrxjcsGp
- LkeqjoHhHNJpu5zN2dJYgLjAoWGVIab5C2zGyYaCcc/z8bcS0n0hQxumCNEbHrxZ0tgEa6syvGH
- yGwsuyngC24jIxvlKmdbxN2noqr9TNDb1xVNcS5mh5Lml2G+UJ7QY1b6F7pN97Y2RVTeioHEDqz
- XkVn804+jCWBSBq0sLQ==
-X-Proofpoint-GUID: WWJH0T28_wRgS2igum-eQ8nVbN-jHapL
-X-Proofpoint-ORIG-GUID: WWJH0T28_wRgS2igum-eQ8nVbN-jHapL
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI3MDA2NCBTYWx0ZWRfX6Cyn8Xh8EloG
- V4piSQlEsm9dq/uUJjMQ9SKJS/XmYRZjNvkcI1ItAIHOerfmXRZxWMkgWFkefntHB7HymAYaueB
- j2bkLwUYEm0vtucJhFW3XZpBq9t9MJk=
-X-Authority-Analysis: v=2.4 cv=dKgzC+Zb c=1 sm=1 tr=0 ts=6ae0cec0 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22 a=bC-a23v3AAAA:8
- a=EUspDBNiAAAA:8 a=c92rfblmAAAA:8 a=82gYmaJqspjqQrwE4UoA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22 a=FO4_E8m0qiDe52t0p3_H:22
- a=GvGzcOZaWPEFPQC_NcjD:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-10-27_03,2026-10-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 spamscore=0
- suspectscore=0 priorityscore=1501 clxscore=1015 impostorscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610270064
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0006C3DC:EE_|DM3PR12MB9415:EE_
+X-MS-Office365-Filtering-Correlation-Id: f395d200-b589-4533-874c-08df34478f7f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|23010399003|376014|7416014|36860700016|261026135527099003|261026140227099003|261022075727099003|261026130827099003|11063799006|56012099006|261022113327099003|261021133027099003|261021135927099003|261022105027099003|261021130227099003|261021123027099003|261022115727099003|261009223027099003|10067099003|261021121427099003|18002099003|261026121527099003|6133799003;
+X-Microsoft-Antispam-Message-Info:
+	3TAukMUDhcXtHH8Fj46PTAdMT7DadJc72E84PS2J4ZVl88r86OdSpgjQv7r/cYfz1jjF/Dn60bimuK39yh0Rtk4RjfGeVel9lzyW5ssxlaOIowN/8Mv4bOlOII3Vk0PK0/SVekDU+ggNlCqJfKOOJFpmJ/PVr5j708JCL2BlBvAClaJxKjzmZRk682TO7X+isci0m+dTbXreDHjWFpO3m+6cZGP/1xQPLL+ETX03SxcL14LmDygY21O2P0J7FJvPjQEOnp3J55IDhVKHUc5eyQbJJRhk9k36kOWj0O83gRQC3ASnyaa2D8eovRLSdQn57LuNJEa/x8jH81uVlBhG8+/gy3jTHHfzYtEdq5OuD5G6Zgpf97HMXV89zqm/wR9x3NJLMvkG5lMujW7jZpdYFtrivmnhRfLWK/L8AGtrlhSqTXEHnMeVKZcxy5ufVUpxxIKhQ1b2KyV27Sr+xmCueYct7JKPuL3RajQ4X8Rj5lEdeD/CVY7W+urlCvnJZhZNnSlPvYW3TAMDUZFpEstTJa3FrirXmcpi6c2eae0bg9Arw14GXeuJ0BIOIK8bn5Z3ZJmQoQHhslBPbxBs6qah5rzQZD8E6aNEofMKitkyoPOhPc8O6X9oieyK+/8gMMYp1PeSS/e1UXiWtx6yNa2Uozz00cCebNLprSr36pdPCSA4D/VIFgcMdFy+vgbJFfrPJ7nmrxM6mxsInsBY6dGRmQ==
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(23010399003)(376014)(7416014)(36860700016)(261026135527099003)(261026140227099003)(261022075727099003)(261026130827099003)(11063799006)(56012099006)(261022113327099003)(261021133027099003)(261021135927099003)(261022105027099003)(261021130227099003)(261021123027099003)(261022115727099003)(261009223027099003)(10067099003)(261021121427099003)(18002099003)(261026121527099003)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	E1QyS3ji+5ufEsHHTVOQyeztBB1FSM551aEvdsY2sUZtXtOhuHw41MzG4IWgjKjL7qwkP1Jj/kBE9JEFVAcwgK4btDj8zIm589LFhmxBEoJoJvQjUjGxdcT6w81GPxJN0KSsmt4X7bQz52j0B1fStZVoRJYLNTLoTJTVSnHcLTyFDR3n7wp15+1iHxASmZjlVZKp5AOBehkMyXZvwRGldLcno9LOPls7P8FBsmAPkSRotnumhuVmQIybiqGxtasiX6wRR0CYYGGR4D2iD0nphwfmXsWtLmy1SUd1mo6Kc5qqFNosk3PsCD19WJXb5G2bt3Syw7RAZA2AbKNCXf5QT6eUQqhKDuPg+qGmrSSSJN1awsMoggXTRmZpPjo2lqsjWhvjKoIzQyq0evoPLjpbWGbOTYsc0qBDVfSssdEDU4/bVYPHbJl+AGCm8AKcxWJX
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2026 16:30:06.2862
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f395d200-b589-4533-874c-08df34478f7f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0006C3DC.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9415
 
-On 10/27/26 17:10, Rafael J. Wysocki (Intel) wrote:
-> On Tue, Oct 20, 2026 at 4:18 PM Daniel Lezcano
-> <daniel.lezcano@oss.qualcomm.com> wrote:
->>
->> The powercap hierarchy API introduces generic helpers to duplicate,
->> instantiate and destroy a complete powercap hierarchy from a static
->> description.
->>
->> Add a kselftest exercising this API. The test builds a synthetic
->> powercap hierarchy composed of a package, three CPU clusters and twelve
->> CPUs, registers it as a powercap control type and checks the zone count
->> and selected sysfs attribute values. It also checks that the controller
->> directory disappears when the module is unloaded.
->>
->> Exercise direct static creation, duplication, skipped clusters and their
->> descendants, reuse after partial destruction, and repeated creation
->> returning -EBUSY without replacing existing zone pointers. Callback
->> checks verify the controller, name and backend-private data supplied by
->> the helpers.
->>
->> The test consists of:
->>
->> * a kernel module implementing a synthetic powercap hierarchy and
->>    dummy callbacks;
->> * a userspace kselftest script that loads the module, checks 16 zones
->>    and their power and constraint attributes, unloads the module with an
->>    attribute descriptor open, and checks controller removal.
->>
->> Use powercap-owned zone allocations so registration failures are cleaned
->> up by the core. Build generated module files in the selftest output
->> directory and extend the common clean target with Kbuild module cleanup.
->>
->> This provides a regression test for the powercap hierarchy helpers and
->> their integration with the powercap core.
->>
->> Cc: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
->> Link: https://patch.msgid.link/20260806110159.69690-3-daniel.lezcano@oss.qualcomm.com
->> Assisted-by: LLM
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-> 
-> Sashiko is complaining about this one now:
-> 
-> https://sashiko.dev/#/patchset/cover.1792504834.git.daniel.lezcano%40oss.qualcomm.com
+With -r (SOCK_RAW, IPPROTO_UDP) the test writes only the UDP header and
+payload, and the kernel adds the IP header. get_udp_csum() still expects
+the IP source and destination addresses to directly precede the UDP
+header, and reads 2 * alen bytes before the start of the buffer: 8 bytes
+for IPv4, 32 bytes for IPv6.
 
-Thanks, I'll have a look
+ASan reports a heap-buffer-overflow for both -4 -r and -6 -r. Without
+ASan the read usually goes unnoticed, but it faults when the buffer is
+the first chunk in the heap. That happens on Ubuntu 26.04, where the
+kselftest runner wraps the test in uutils stdbuf, and txtimestamp.sh
+fails with SIGSEGV on every run.
+
+Even without a crash, -r packets were sent with a checksum computed
+over unrelated heap memory, so their UDP checksum was invalid.
+
+Build the pseudo-header from the destination address and checksum only
+the UDP header and payload. -R and -P already write daddr as both the
+source and destination address, so their checksums are unchanged. With
+-r the kernel selects the source address, which equals daddr for the
+loopback addresses used by txtimestamp.sh.
+
+Fixes: b52354aa068e ("selftests: expand txtimestamp with ipv6 dgram + raw and pf_packet")
+Signed-off-by: Jamie Nguyen <jamien@nvidia.com>
+---
+ tools/testing/selftests/net/txtimestamp.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
+index 170be19..f7bdf30 100644
+--- a/tools/testing/selftests/net/txtimestamp.c
++++ b/tools/testing/selftests/net/txtimestamp.c
+@@ -418,19 +418,25 @@ static uint16_t get_ip_csum(const uint16_t *start, int num_words,
+ 	return ~sum;
+ }
+ 
+-static uint16_t get_udp_csum(const struct udphdr *udph, int alen)
++static uint16_t get_udp_csum(const struct udphdr *udph, bool is_ipv4)
+ {
+-	unsigned long pseudo_sum, csum_len;
+-	const void *csum_start = udph;
++	const void *addr = is_ipv4 ? (void *)&daddr.sin_addr : &daddr6.sin6_addr;
++	int alen = is_ipv4 ? sizeof(struct in_addr) : sizeof(struct in6_addr);
++	uint16_t addr16[sizeof(struct in6_addr) / sizeof(uint16_t)];
++	unsigned long pseudo_sum;
++	int i;
+ 
+ 	pseudo_sum = htons(IPPROTO_UDP);
+ 	pseudo_sum += udph->len;
+ 
+-	/* checksum ip(v6) addresses + udp header + payload */
+-	csum_start -= alen * 2;
+-	csum_len = ntohs(udph->len) + alen * 2;
++	/* pseudo-header source and destination: both are daddr */
++	memcpy(addr16, addr, alen);
++	for (i = 0; i < alen / 2; i++)
++		pseudo_sum += 2 * addr16[i];
+ 
+-	return get_ip_csum(csum_start, csum_len >> 1, pseudo_sum);
++	/* checksum udp header + payload */
++	return get_ip_csum((const uint16_t *)udph, ntohs(udph->len) >> 1,
++			   pseudo_sum);
+ }
+ 
+ static int fill_header_ipv4(void *p)
+@@ -479,8 +485,7 @@ static void fill_header_udp(void *p, bool is_ipv4)
+ 	udph->len    = ntohs(sizeof(*udph) + cfg_payload_len);
+ 	udph->check  = 0;
+ 
+-	udph->check  = get_udp_csum(udph, is_ipv4 ? sizeof(struct in_addr) :
+-						    sizeof(struct in6_addr));
++	udph->check  = get_udp_csum(udph, is_ipv4);
+ }
+ 
+ static void do_test(int family, unsigned int report_opt)
+-- 
+2.43.0
 
