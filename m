@@ -1,85 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793124824;
-	b=ngzMx9uWbQB8W58mkLyPMCZRWYeq0LU+hP6cQq4SNA+bx+oW+FI1zVrDYFCFKNDIQv6q
-	 mRUcdCu8qcbc2RQU7/Kyo2ruivWnJjWF2CcQJlEBYzbo74LS0Nnszdaglu8nVK964DMFh
-	 KjiDWyUJXgW5F+nGI+f+pXLpsBBvZDgZMfzrC2S4xHh4ytDQU/YNrSLvKwCf6NfZZSP7a
-	 013lgKO2AMkyiT+S8qHBGgg7Ts/Mh1/LdAJJgfSkVATdQ0MV+GhrpOS3Jj3zsCR+ECLIN
-	 7YwV/quJWSplw/EfBnAowAD3uW4c9zxjE+YLmUiafP+/xuphja7CtJEDLEaAO0qnLtA==
+	t=1793125033;
+	b=oNjDGwAYUjufgXvFqfZDOtk8ygR7JOJkqErv5xf9ugCrtTCgjVgxFACe3TpciUA4EPhk
+	 2pj4SAUl6XnAKVGjRyJ+e42O/hNrzVCvSYoRFrzyRl0pCm3lv1eAThowOmOjjQJypXSuc
+	 KH1RSOtlFNIoykUGS1/Jl3IaQ4XDR3xnfCbRwaF5gNHfPlfQ3sMZXYmPUWTRBxY0IJQLB
+	 wZ5BFcnNayl4WBnAl7XQFpAPNnFrVngiASH95VykkiTPdJR1bdEU4zDMI7B2L/f3l3g7I
+	 99QwHF4YgfBP/WOViJs8W1MLUbOPm8MFjXI1FrHg28xGMcoXzPPuJREtO3D40xE+jpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793124824;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
-	bh=SEGsNEKzJFKAXCSwgMTuyhg9hYL4zxxvha+xxLEPLv0=;
-	b=sewc3R0usClwkp4xSE0x8ibWi7/SYP176ci1hSVVu0vHkzly+cWFJQ2711N+19PKHs2N
-	 Nn9SWrYy/XgHZzvnoJRNt94mRKn0PT1x6NIp04QuVPzdV6nGGtcPVZPD8DCuLTYa6me0d
-	 yeEz8iS88ZJBSAk5qtHpiaKYoCcw3Q+52ppMHPyRX7q+Ytn62kcj36P2fze5//E8dGFrX
-	 GC4TKbDB9tL8Q5CGrHzzTutV5AaXM20wGMyzWmXlpfnbh0k2mVVXJtrarh+7VF6F1dsEY
-	 ZYc14jif7rrqcA5tqajvdh+qaVTNhkd3PPgsptU0XqKRWY1u1J1Rn4EZnCowbRDprMw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793125033;
+	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References;
+	bh=BQlG+dpy8YjBQ/Jf8HDAX4aO1LrQ0VKAd1X1FNGlEsc=;
+	b=ydZxHM1FTxOwNYGeKHuCcwOpP2FCqg1peeharRkys3ckSn4oRIJpFd8sM4rE9WMFAWMs
+	 hOFFNxn5Sf2D5Q5R6s+bzbabmL01o/RpN9Po6PeVyzCYiHDz4+v7Df3d7CXlBYAyb+i3K
+	 QwrlJYMwM17G96vc/+4ZQl2PyukcfMEKcrX+i01uKRrBwD8kQAxRkwztdf/YDdnN92/zZ
+	 M4yhfb+9KWDd36FWutp5kObQs8INneuewYT6jhR+GV5pKISabpDieQHwX/tDoyapb3NSj
+	 cVfUryrC9d9Prniftp89AEJNTLvFmsngl2RTUJFIEFhqXafVPi+XtfvIcfgudgDeVAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=MRWCaJvB;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85979606A31F;
-	Tue, 27 Oct 2026 18:13:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85979606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jLPqgKVf;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2CF606A31D;
+	Tue, 27 Oct 2026 18:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=MRWCaJvB
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5256C1650;
-	Tue, 27 Oct 2026 11:13:39 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2746E3F59E;
-	Tue, 27 Oct 2026 11:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793124822; bh=StP32dfIcKd8YphSKpAL+/HMutnlIIEzCaQQmma93NA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MRWCaJvB6Q28OPTMIyyC6DjI8k5TlohZktMkWptC/He2/3HJxzp5kYwhVFDcW74p3
-	 o33mnJ07QNYP5dUnmQi2BdWSac/cz93NF/qOl3XcNpzMvuUI9ZLP8rq0VqQ5Xx4KuG
-	 8wbM62lsVAv+Qy+Es7f5beZKEbQGV8ixw8A3RHbI=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Tian Zheng <zhengtian10@huawei.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	maz@kernel.org,
-	oupton@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	corbet@lwn.net,
-	pbonzini@redhat.com,
-	yuzenghui@huawei.com,
-	wangzhou1@hisilicon.com,
-	yangjinqian1@huawei.com,
-	caijian11@h-partners.com,
-	liuyonglong@huawei.com,
-	tangchengchang@huawei.com,
-	yezhenyu2@huawei.com,
-	yubihong@huawei.com,
-	linuxarm@huawei.com,
-	joey.gouly@arm.com,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	fuad.tabba@linux.dev,
-	mark.rutland@arm.com,
-	seanjc@google.com,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 08/15] KVM: arm64: Flush the HDBSS buffer on VM exit
-Date: Tue, 27 Oct 2026 18:13:35 +0000
-Message-ID: <auDpyRNpeDNzIk3W@LeoBrasDK>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20260929103655.85107-9-zhengtian10@huawei.com>
-References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-9-zhengtian10@huawei.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jLPqgKVf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB6511F031E5;
+	Tue, 27 Oct 2026 18:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793125032;
+	bh=BQlG+dpy8YjBQ/Jf8HDAX4aO1LrQ0VKAd1X1FNGlEsc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=jLPqgKVfOPVsDgLwoMZ16UseK8OHOo8JpJwNW/YVi0kw3fyQlEsd/UVg32FMZs3OW
+	 r4P5KEJCPIj/KOyDQJDreVJVPyrB9ZKlgbeWThq5yAcHYydcr3eWO39CsPMsWs4YzX
+	 ty8ec6TIzned9CARBFQmSPik48yQoBZn5DuK+GyZh73+m/oGiaCpMUsswuEpUy1+/B
+	 23Ww8KgzPaUGxYKedH2WJ6EK08iuAw/pGCySpsh73GwcFgXbpCs1fGhaD+DjqHzW4p
+	 yCNW05kom5Kf5o1qvD3E9oL7GPtzdiHaTHg/5xmtSzKc2wlh09rM45Nyjj1+dO0iMI
+	 u+HyATTnHHaaA==
+Date: Tue, 27 Oct 2026 08:17:11 -1000
+Message-ID: <769e80ffa618327ac03c13c4657e7229@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Muchun Song <muchun.song@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ davem@davemloft.net, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ KP Singh <kpsingh@kernel.org>, Tao Chen <chen.dylane@linux.dev>,
+ Mykyta Yatsenko <yatsenko@meta.com>, Leon Hwang <leon.hwang@linux.dev>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>,
+ Tobias Klauser <tklauser@distanz.ch>, Eyal Birger <eyal.birger@gmail.com>,
+ Rong Tao <rongtao@cestc.cn>, Hao Luo <haoluo@google.com>,
+ Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
+ Jeff Xu <jeffxu@chromium.org>, mkoutny@suse.com, Jan Hendrik Farr <kernel@jfarr.cc>,
+ Christian Brauner <brauner@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Brian Gerst <brgerst@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing <kerneljasonxing@gmail.com>,
+ Paul Chaignon <paul.chaignon@gmail.com>, Lance Yang <lance.yang@linux.dev>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Barry Song <baohua@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [RFC PATCH 0/2] memcg_ext: dynamic memory.low and memory.min protection
+In-Reply-To: <cover.1793086858.git.zhuhui@kylinos.cn>
+References: <cover.1793086858.git.zhuhui@kylinos.cn>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,203 +83,22 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 29, 2026 at 06:36:48PM +0800, Tian Zheng wrote:
-> From: Eillon <yezhenyu2@huawei.com>
-> 
-> HDBSS entries accumulate in the per-vCPU buffer while the guest runs,
-> and must be drained into the dirty bitmap or dirty ring before
-> userspace can observe them.
-> 
-> Drain the buffer at a single point: kvm_arch_vcpu_ioctl_run() flushes
-> it on every VM exit, before the exit reason is handled. Flushing
-> inside the run loop keeps the dirty-ring feedback timely: when a flush
-> pushes the ring past its soft limit, kvm_dirty_ring_push() raises
-> KVM_REQ_DIRTY_RING_SOFT_FULL, which check_vcpu_requests() observes at
-> the top of the next loop iteration, so the vCPU exits to userspace for
-> the harvest before re-entering the guest.
-> 
-> kvm_arch_sync_dirty_log() relies on the exit path to flush: it kicks
-> vCPUs out of guest mode, and the GET/CLEAR protocol tolerates
-> concurrent bitmap writes, so the snapshot is complete without extra
-> synchronization.
-> 
-> Signed-off-by: Eillon <yezhenyu2@huawei.com>
-> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
-> ---
->  arch/arm64/include/asm/kvm_dirty_bit.h | 15 +++++++++
->  arch/arm64/kvm/arm.c                   | 20 ++++++++++++
->  arch/arm64/kvm/dirty_bit.c             | 45 ++++++++++++++++++++++++++
->  3 files changed, 80 insertions(+)
-> 
-> diff --git a/arch/arm64/include/asm/kvm_dirty_bit.h b/arch/arm64/include/asm/kvm_dirty_bit.h
-> index fe703f02626b..d828e6b43fe9 100644
-> --- a/arch/arm64/include/asm/kvm_dirty_bit.h
-> +++ b/arch/arm64/include/asm/kvm_dirty_bit.h
-> @@ -13,6 +13,9 @@
->  #include <asm/sysreg.h>
->  #include <linux/sizes.h>
-> 
-> +#define HDBSS_ENTRY_VALID	BIT(0)
-> +#define HDBSS_ENTRY_IPA	GENMASK_ULL(55, 12)
-> +
->  #define KVM_ARM_HDBSS_DEFAULT_SIZE  PAGE_SIZE
->  #define KVM_ARM_HDBSS_MAX_SIZE      SZ_2M
-> 
-> @@ -22,7 +25,19 @@ static inline u32 kvm_hdbss_buffer_size(struct kvm *kvm)
->  	return kvm->arch.hdbss_buffer_size ?: KVM_ARM_HDBSS_DEFAULT_SIZE;
->  }
-> 
-> +static inline bool kvm_hdbss_enabled(struct kvm *kvm)
-> +{
-> +	return kvm->arch.mmu.vtcr & VTCR_EL2_HDBSS;
-> +}
-> +
-> +static inline bool vcpu_hdbss_enabled(struct kvm_vcpu *vcpu)
-> +{
-> +	return vcpu->arch.hw_mmu &&
-> +		(vcpu->arch.hw_mmu->vtcr & VTCR_EL2_HDBSS);
-> +}
-> +
+Hello, Hui.
 
-IIUC, arch.mmu is always the canonical s2_mmu, while hw_mmu can be the 
-nested s2_mmu, if enabled.
+On Tue, Oct 27, 2026 at 05:11:58PM +0800, Hui Zhu wrote:
+> Why it matters: memory.low and memory.min protect a cgroup by a fixed
+> threshold and have no idea whether it is using the memory.  A
+> high-priority cgroup that holds a large working set and then goes idle
+> keeps suppressing reclaim on its siblings, and that memory is wasted.
+> A policy program sees the real activity - page faults, charges - and
+> can grant or withdraw protection as it changes.
 
-Was that your intend here?
-If not, we could use only kvm* version, which can be called with vcpu->kvm.
+This doesn't justify the changes. Why can't the same be achieved by
+adjusting memory.low and memory.min from userspace? The arguments made
+so far are neither convincing nor proven.
 
-If it was, then I would like to understand the logic here, as IIUC the 
-buffer is accessible only for the non-nested guest, as it's 
-allocated in a per-vcpu structure. (vcpu->arch)
+Thanks.
 
->  int kvm_arm_vcpu_alloc_hdbss(struct kvm_vcpu *vcpu);
->  void kvm_arm_vcpu_free_hdbss(struct kvm_vcpu *vcpu);
-> +void kvm_flush_hdbss_buffer(struct kvm_vcpu *vcpu);
-> 
->  #endif /* __ARM64_KVM_DIRTY_BIT_H__ */
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 5ea4ac26995e..9d7bdece149a 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -1430,6 +1430,14 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
-> 
->  		trace_kvm_exit(ret, kvm_vcpu_trap_get_class(vcpu), *vcpu_pc(vcpu));
-> 
-> +		/*
-> +		 * Drain the HDBSS buffer before the exit is handled, so
-> +		 * entries pushed to the dirty ring are accounted for by
-> +		 * dirty_ring_check_request() on the next iteration.
-> +		 */
-> +		if (vcpu_hdbss_enabled(vcpu))
-> +			kvm_flush_hdbss_buffer(vcpu);
-> +
->  		/* Exit types that need handling before we can be preempted */
->  		handle_exit_early(vcpu, ret);
-> 
-
-
-looks the correct place, haven't looked too much on that, though.
-
-
-> @@ -2017,7 +2025,19 @@ long kvm_arch_vcpu_unlocked_ioctl(struct file *filp, unsigned int ioctl,
-> 
->  void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
->  {
-> +	unsigned long i;
-> +	struct kvm_vcpu *vcpu;
-> 
-> +	if (!kvm_hdbss_enabled(kvm))
-> +		return;
-> +
-> +	/*
-> +	 * The buffer is drained on every VM exit, so kicking running
-> +	 * vCPUs is enough to flush them; the dirty-log GET/CLEAR
-> +	 * protocol tolerates bits set concurrently with the snapshot.
-> +	 */
-> +	kvm_for_each_vcpu(i, vcpu, kvm)
-> +		kvm_vcpu_kick(vcpu);
->  }
-> 
->  static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
-> diff --git a/arch/arm64/kvm/dirty_bit.c b/arch/arm64/kvm/dirty_bit.c
-> index f9aeb9f34ad0..be0d12555c84 100644
-> --- a/arch/arm64/kvm/dirty_bit.c
-> +++ b/arch/arm64/kvm/dirty_bit.c
-> @@ -13,6 +13,7 @@
->  #include <linux/kconfig.h>
->  #include <linux/log2.h>
->  #include <linux/mm.h>
-> +#include <linux/srcu.h>
-> 
-
-Out of curiosity, could you please explain you reasoning on selecting srcu 
-as locking here? 
-
-(Like, what are you protecting against, and why srcu is a good choice)
-
->  int kvm_arm_vcpu_alloc_hdbss(struct kvm_vcpu *vcpu)
->  {
-> @@ -53,3 +54,47 @@ void kvm_arm_vcpu_free_hdbss(struct kvm_vcpu *vcpu)
->  	vcpu->arch.hdbss.hdbss_pg = NULL;
->  	vcpu->arch.hdbss.hdbssbr_el2 = 0;
->  }
-> +
-> +void kvm_flush_hdbss_buffer(struct kvm_vcpu *vcpu)
-> +{
-> +	int idx, curr_idx;
-> +	u64 prod;
-> +	u32 entries;
-> +	u64 *hdbss_buf;
-> +	struct kvm *kvm = vcpu->kvm;
-> +	int srcu_idx;
-> +
-> +	if (!vcpu_hdbss_enabled(vcpu))
-> +		return;
-
-You test this before calling, is it really necessary to test it again, just 
-after calling?
-
-> +
-> +	prod = read_sysreg_s(SYS_HDBSSPROD_EL2);
-> +	curr_idx = HDBSSPROD_IDX(prod);
-> +
-> +	if (curr_idx == 0 || !vcpu->arch.hdbss.hdbss_pg)
-> +		return;
-> +
-> +	hdbss_buf = page_address(vcpu->arch.hdbss.hdbss_pg);
-> +	if (!hdbss_buf)
-> +		return;
-> +
-> +	entries = kvm_hdbss_buffer_size(kvm) / sizeof(u64);
-> +
-> +	/* kvm_vcpu_mark_page_dirty() resolves the memslot under SRCU. */
-> +	srcu_idx = srcu_read_lock(&kvm->srcu);
-> +	for (idx = 0; idx < min_t(u32, curr_idx, entries); idx++) {
-> +		u64 gpa;
-> +
-> +		gpa = hdbss_buf[idx];
-> +		if (!(gpa & HDBSS_ENTRY_VALID))
-> +			continue;
-> +
-> +		gpa &= HDBSS_ENTRY_IPA;
-> +		kvm_vcpu_mark_page_dirty(vcpu, gpa >> PAGE_SHIFT);
-> +	}
-> +	srcu_read_unlock(&kvm->srcu, srcu_idx);
-> +
-> +	prod &= ~HDBSSPROD_EL2_INDEX_MASK;
-> +	write_sysreg_s(prod, SYS_HDBSSPROD_EL2);
-> +	vcpu->arch.hdbss.hdbssprod_el2 = prod;
-> +	isb();
-> +}
-> --
-> 2.43.0
-> 
-
-
-Thanks!
-Leo
-
+--
+tejun
