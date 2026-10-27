@@ -1,80 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1793109845;
-	b=MPaPDv1wkmaYZP8bf2LYQzMyreeTgI399+RDsNui4C8pdDKvcFhm8ALTjx+kTT2A7OJU
-	 BqBcSDEr+uDp6I/P0db5z90md8RZxGrIWi7971LOMHYbzAYVbSZZDVTGVpRo0t+c6ws72
-	 0UoufBaiHw+81f7BZSVO1IiO1iv0wNd8oGkgN0uLjNNgvyPqwfh6NCmcyMuz8C0OsW9PP
-	 8+SrVWcl5ykPQuwZjCRYO2StPgOS+ol1qkDa59OgoOaMFqx+ndt4RABcCGxArt0aDlQre
-	 3SG9yo4dCkyqAPSkJJtRO1Lq6Q/2GrVprWMf4uD0I1zKjfGn3D2XIdeOUuW/7lSDfjA==
+	b=dDXL6K4QTRloZN0P9aKlBp8voPc9iv8gMHWCSrS8GRMWrWwiS4VLrz9+bgJQkgtnFpxs
+	 fMmfeCXmWYgb8+Cga38E+j2xCY2y3ihKjSuNpAltiGYq/xlO+KuUffHMGcbTGgIXXZmGz
+	 RwucsOlHuIIKzZJ+jk+Dtfpsy+8jJqi8vgVgDu7RFivhcHSNajAgyCofKC8wc/zaSajrz
+	 +Q6yV+hRrx95Cv+pM6iNWGJ4T8DsYgzDV66Uvf/Wkwvm2bCoTTzLEaz3o5cTAWnJfcdVG
+	 ZCDtTzX/+FSmDGhrh1jtG06d7v4XzMEgdIVZYj3bs5/A/CXlLck4GjrBSrJ4e1x8kBQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793109845;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=PbJrwzyUK0pW3BmVe/ZETXHMHaNg37K20YRVtMW8l/4=;
-	b=UkEfgIe7gI8e9UHapx5ILO7+eIgD1HsY/VxKP7vdZdiaBWbzRlBFcCK6WW0nPSHibVle
-	 PcYRu0X9GmT3tEFWCGiBHoGosYTzlr9JLPCzMcsWA6MFnnerVbbxk49Lrkjh5nLWez8Fu
-	 0n1G+UrXTr1FAh0L2ceyYjU2jWlmShLFj8WeVY97dhEMZl7cUV/rbRLAzp4txkcRiKtf2
-	 /V5o4ut2wwveudKPD4VQYY14H/Yw49s5e9BdKnDWH+B4gPZyg2wfsCDm2q9H8ncYB0ucm
-	 odZEZfDVVZRDn6BLuFFCeaoPQKlz1hDBMKh+oUIonR7t5hiKOHXzGhcr3eNRjVUiBqg==
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=PAwubzG0EluHiU5dup8GTgVt2g93YS9uz+x9TVlSADc=;
+	b=NR+I8GGig0ifAx2jUe3+cBzMfa0MbYpoiH7Ls89Mu6EVmS3wRS/5uTQ4PT1Hh0xasOaD
+	 lqhFt56jRNSLOKQR7d2s34qg4byaJAPQKR1f+zUw3jR7sETpJXzCVkk/dx+HBtJUMWsl+
+	 1wghHsz9Fiu0yIpFoZ48zNZ58KN42Db/fNatOUqVkOKrLU4RSvyqUEw5Chg/b5sIjoTzd
+	 3mPXrY+YcM87ZAkt23Wb3CJuVM4IEMdHYdbS05pK0vmDxcK1dZXbtbirwmqeFYf0bNKOU
+	 M8vipr6VaAIMbObs8wPvZIYaI1DStLHuYncExjI0DEvc2CHnWOv1vIeikk0V9Lj2bTw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OpPrBUvE;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oTbWgp4B;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1E5606A322;
-	Tue, 27 Oct 2026 14:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F248606A325;
+	Tue, 27 Oct 2026 14:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OpPrBUvE
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oTbWgp4B
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1793109844;
-	b=q/D+njv2AxlG18Szs1VErOz04jfRRRJQfwbTLtYAOyPdIiEO9Fi/AFKZf6AazkN5SwPL
-	 O8XgevTMpkijuuQAal83xTGIxSd52fZBhPI1hz5uT8ku+SJ2hskeJepQOVxI2vyW/Z9Pf
-	 yp3ffVAzbIxt302l9zzOe3TyZI1VB5zlMbFiVDf7MHVm6qcQc1vQVPm1/QdsyBdJGhpnw
-	 DSLBe2bhPJ5bsQPrp3b1FtPqhuFxLgl3+cpnpLIQ28H94wsxyS4iNM7XTAe0R0+TJe47v
-	 meGB4HoTxcDshbaQ9bads7sgv8QaXsk+J5PADI46eURXM/akKKxKH+6+N9ugDEKujfg==
+	b=kT6BoZsIHd2kJW/lKt+IQWtYw6OcwRPmqingq2BAABuLjpE5AcUPmQsSR0LbyFiyg/rB
+	 GyM2o5Ihjr2JQMpr4eD/d7KDQl6WJbiqE2K/k7tg9/ooX26DQkvG53rqoosK0Kh6J050X
+	 /jO0z1C76PNKZk0d5Vqk0kHcKKXq7mnDdR0tZTMlQ6aCA/u7Pa7wO10RPJS92/6D1yzti
+	 2PFBo/hPZ/++qxCPizV7Lde8b4pdARlOYxAl7g2nyTyGLTMSRTQi8xPm8C6m1Jqqj50Dz
+	 lnCjVdDpeS39OqnFXFhFmCR1jEnXMtbWW1i+HVf+5QtwpKsThqB7zC6mrscniniQ/tA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1793109844;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=PbJrwzyUK0pW3BmVe/ZETXHMHaNg37K20YRVtMW8l/4=;
-	b=GHTT9bD1nPwaAurCjMudOzwbOjQVEr3lo3pL4koUo1krP1+OjmgI+m7hDwKKO3OLcYmW
-	 MveNOzC1Ruwa6EpMT7UlRj5a+S2BaVRuta9gFq8u+dL1CPIKq6brmisTcF5wgmx5NV14i
-	 SCo5cFLWDKnvcMncZW9T/jSEPNGkKZPQsd+/o3nOoxpS/FTNsm1lfWBG/dD0u+XIryDlH
-	 HcpKWJxwFlM0Qzjz0OkUg6AfJJJst1som9s7l2iae0mer7VX0b22Cw1VfhBe+dCF1azNM
-	 CsCDN56mFBoCcNUSG14d31K+7I40F/DJQzkpXlz3FGAZMGNoEzjHeKkK/KEmdCtZ/rA==
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=PAwubzG0EluHiU5dup8GTgVt2g93YS9uz+x9TVlSADc=;
+	b=X1MCE1oVQ2ccHkrYzIxSrvcyb5HkoXdg/PJXlMIPR0WNt2ldDrjSqx6gpuOQH4vsGbkp
+	 tMEZRXyeWct+oL1+TgJ7vNQYmeO3qJHZILto1O7QUI+mXOqtWkN3ue0fLQTjouVj+nxW3
+	 ivlVcdJz9ST6D1BaiAEWz8RU4jbcE92tQ3MdCYz9I9qldvWpjNpfyVPg3tFqun0J5cUeN
+	 djF/y1OR9B1qPZxWurPrW2WGeSj3utl92SaRul5x+LANOxBCHspfDGWasGHMEKc7FUWOO
+	 WnpdNArkngCyL7d6NFc10HuuDdQ9bzEJi/AR55XVMi7Q6sgyQuvLQKMvpOZztkJEYzQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E5D2C1F031E0;
+	by smtp.kernel.org (Postfix) with ESMTPS id E5DC31F031E1;
 	Tue, 27 Oct 2026 14:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1793109844;
-	bh=PbJrwzyUK0pW3BmVe/ZETXHMHaNg37K20YRVtMW8l/4=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=OpPrBUvE0wHpCTvBBIBWzgdIi5dsupihMH02xrzrHHFqv2UeeVylQedSAcfeggLEe
-	 G9wpREw32vQHQP5c9RAMqlawnOX8wZHw2ZKwcV75u3miaJLf85lhAx8KfCpluptFL9
-	 DK55mzZ/iJnJeYTMaJtVo0Kw1ipkF6i1JkO1md0Yyk+nQj/Aw5BWN8lVScvqKoHzuq
-	 BRemGtctHzr1jrIoiYrNAtV8N1zvCGo5ZzNaGuu6kAfmxVXzhJh5Zr0cCerjDS5IPi
-	 0JrqBdNX6ueImP61kZe2FN/E8SBqagUFw+OhbSSlQw2kKN4KySfNAR8stmYDydJZV/
-	 Q+o8S1FHOHYwA==
+	bh=PAwubzG0EluHiU5dup8GTgVt2g93YS9uz+x9TVlSADc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=oTbWgp4BldbL55XeTwz5nXuwxHY4tqqWN1WB6E/G5yxUwRDHuxYMp2Pc9d/m4vJQP
+	 FfgKUomDUsVhoY1eFlfhK1gDWtmCWHhxryp3KiGsK1g6q1g3hYSdm7vunlUgY9TaYP
+	 lJ2IW+2wFXUQ/J9AC+Wo4GZBUpbF/WBqiDhQ7H5K6l/nzazQgUmFWwp3BQpORGv0vG
+	 18OGR0fYYkW31HPdb3eDMVobsbCLAX5oW8e2MNemfcAuwrXRSf5V/Cg+W+7XBXpxht
+	 3emKIqlfhsL4fp/w73NW7O3mbV4FuvQ7ekupPFzESWHL8c7hsDiqtw2k8aTHXfS09j
+	 vscANP/WHP+xA==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 3D89D4510A;
+	by lkml.kernel.org (Postfix) with ESMTP id 573D04510D;
 	Tue, 27 Oct 2026 14:04:03 +0000 (UTC)
 From: Jhonata Poma-Hansen via B4 Relay <devnull+jhonata.poma.gmail.com@kernel.org>
-Subject: [PATCH net v2 0/2] netlink: fix a dump livelock with a
- notification queued
-Date: Tue, 27 Oct 2026 15:04:00 +0100
-Message-Id: <20261027-netlink-dump-livelock-v2-0-c4bb05352a33@gmail.com>
+Date: Tue, 27 Oct 2026 15:04:02 +0100
+Subject: [PATCH net v2 2/2] selftests: net: netlink-dumps: start a dump
+ with a notification queued
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,12 +84,9 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFCv4GoC/4WNQQ6CMBREr0L+2hraIqAr72FY1PKBL6UlFBoN4
- e4WPIDLmbx5s4LHidDDLVlhwkCenI1BnBLQnbItMqpjBpGKnKdCMouzIduzehlGZiigcbpnWEr
- dcNlci0JB3I4TNvQ+vA+IE6h+pV+eL9Tzbtyxjvzsps/xHvgB/zkKnKUsK0rBM5XLSy3u7aDIn
- LUboNq27QtWzWty0QAAAA==
-X-Change-ID: 20261023-netlink-dump-livelock-e83cf13f977a
+Message-Id: <20261027-netlink-dump-livelock-v2-2-c4bb05352a33@gmail.com>
+References: <20261027-netlink-dump-livelock-v2-0-c4bb05352a33@gmail.com>
+In-Reply-To: <20261027-netlink-dump-livelock-v2-0-c4bb05352a33@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
@@ -100,67 +96,161 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Marek Szyprowski <m.szyprowski@samsung.com>, 
  Jhonata Poma-Hansen <jhonata.poma@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2041;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4013;
  i=jhonata.poma@gmail.com; h=from:subject:message-id;
- bh=dyqos+YZiGmpIof18fo47Wd6gwZ5wp6SPtEj3CzE5a0=;
- b=owGbwMvMwCX21S6Y7aK9oS7jabUkhqwH64PYTj4Le+I0Kzus1qYz6/xRntUi/1eUnck3+yGeq
- pBYYlzUUcrCIMbFICumyOJz9nEPt+LHHf8f7rgMM4eVCWQIAxenAEzk/BpGhklR7/M+J/vouVrp
- 1YQUd2zg///CziE568YvZ8mkuZ7Vdgz/1EIv7hCNzhM7semvuN+rf4t2hCcuULxU9MbJvWJ2Za4
- eLwA=
+ bh=QvCDY24BNqHaFSZD0SluMGJ84blsufGLlWuNu8gQX+A=;
+ b=owGbwMvMwCX21S6Y7aK9oS7jabUkhqwH64Oktjz70LHhuN/z+bsPVT9ic2zlunBItb7ZKW/ez
+ CcJue+nd5SyMIhxMciKKbL4nH3cw634ccf/hzsuw8xhZQIZwsDFKQATUc1m+Ct5hXee5qeannOO
+ L63VN/EGRmTfnHil1E6o8+3xsmknPd8yMiy/sixsXejrmtCzkqv1LBs8FNk3Cvz/w2k/u2Wl2SV
+ tbm4A
 X-Developer-Key: i=jhonata.poma@gmail.com; a=openpgp;
  fpr=4CCDE38C0B21F1B8FFE1B8D3F53E5306D13F312D
 X-Endpoint-Received: by B4 Relay for jhonata.poma@gmail.com/default with
  auth_id=1288
 X-Original-From: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
 Reply-To: jhonata.poma@gmail.com
+Content-Transfer-Encoding: 7bit
 
-A netlink dump that starts while a notification is still charged to a
-socket with a small receive buffer fails with ENOBUFS, and every retry
-from recvmsg() fails the same way. A reader that peeks before reading,
-as libnl does, never consumes the message at the head of the queue and
-spins forever. I hit this with "iw dev wlan0 scan" on an arm64 board.
+From: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
 
-Patch 1 goes back to checking sk_rcvbuf before charging the dump skb,
-as before commit ae8f160e7eb2. Patch 2 adds a selftest; it fails
-without patch 1 and is skipped without the privileges to create a
-netns.
+Add a test which starts a link dump on a socket with SO_RCVBUF 2048
+while a link notification is still queued, after a large read made the
+kernel attempt large dump skbs. It reads like libnl does, peeking
+before each read, and expects the dump to complete with a zero status
+and at least one link. The notifications come from bringing lo up and
+down, so the test runs in its own netns and is skipped without the
+privileges to create one.
 
+The test fails without the previous patch.
+
+Signed-off-by: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
 ---
-Changes in v2:
-- Patch 1: check sk_rcvbuf before charging instead of retrying with
-  the minimum skb size, which could still be rejected (Sashiko), and
-  refuse a skb that would take sk_rmem_alloc past INT_MAX.
-- Patch 1: say how the bug was found and how the fix was tested.
-- Patch 2: use SO_RCVBUF 2048, which also fails with v1, check the
-  NLMSG_DONE status and that a link was dumped, and skip without
-  privileges (Sashiko).
-- Link to v1: https://patch.msgid.link/20261023-netlink-dump-livelock-v1-0-478214a635d2@gmail.com
-
-To: "David S. Miller" <davem@davemloft.net>
-To: Eric Dumazet <edumazet@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Simon Horman <horms@kernel.org>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-
----
-Jhonata Poma-Hansen (2):
-      netlink: check sk_rcvbuf before charging the dump skb
-      selftests: net: netlink-dumps: start a dump with a notification queued
-
- net/netlink/af_netlink.c                    |   6 +-
  tools/testing/selftests/net/netlink-dumps.c | 102 ++++++++++++++++++++++++++++
- 2 files changed, 107 insertions(+), 1 deletion(-)
----
-base-commit: 734bef548a96e8774d6eef5dfa2026c6edc4e80b
-change-id: 20261023-netlink-dump-livelock-e83cf13f977a
+ 1 file changed, 102 insertions(+)
 
-Best regards,
---  
-Jhonata Poma-Hansen <jhonata.poma@gmail.com>
+diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
+index 51129c564..4a94a2516 100644
+--- a/tools/testing/selftests/net/netlink-dumps.c
++++ b/tools/testing/selftests/net/netlink-dumps.c
+@@ -2,9 +2,12 @@
+ 
+ #define _GNU_SOURCE
+ 
++#include <errno.h>
+ #include <fcntl.h>
++#include <sched.h>
+ #include <stdio.h>
+ #include <string.h>
++#include <sys/ioctl.h>
+ #include <sys/socket.h>
+ #include <sys/stat.h>
+ #include <sys/syscall.h>
+@@ -260,4 +263,103 @@ TEST(close_with_ref)
+ 	usleep(100 * 1000);
+ }
+ 
++static int lo_set_up(int sock, bool up)
++{
++	struct ifreq ifr = {};
++
++	strcpy(ifr.ifr_name, "lo");
++	if (ioctl(sock, SIOCGIFFLAGS, &ifr))
++		return -1;
++	if (up)
++		ifr.ifr_flags |= IFF_UP;
++	else
++		ifr.ifr_flags &= ~IFF_UP;
++	return ioctl(sock, SIOCSIFFLAGS, &ifr);
++}
++
++static const struct {
++	struct nlmsghdr nlhdr;
++	struct ifinfomsg ifm;
++} dump_links = {
++	.nlhdr = {
++		.nlmsg_len	= sizeof(dump_links),
++		.nlmsg_type	= RTM_GETLINK,
++		.nlmsg_flags	= NLM_F_REQUEST | NLM_F_ACK | NLM_F_DUMP,
++		.nlmsg_seq	= 1,
++	},
++	.ifm = {
++		.ifi_family	= AF_UNSPEC,
++	},
++};
++
++// A dump started while a notification is still queued must make progress
++// for a reader which peeks before reading, like libnl does
++TEST(dump_with_queued_ntf)
++{
++	struct sockaddr_nl addr = {
++		.nl_family	= AF_NETLINK,
++		.nl_groups	= RTMGRP_LINK,
++	};
++	int netlink_sock, inet_sock, i, ret, links = 0;
++	int rcvbuf = 2048;
++	bool done = false;
++	char buf[32768];
++	ssize_t n;
++
++	ret = unshare(CLONE_NEWNET);
++	if (ret && errno == EPERM)
++		SKIP(return, "Needs CAP_SYS_ADMIN for a netns");
++	ASSERT_EQ(ret, 0);
++
++	inet_sock = socket(AF_INET, SOCK_DGRAM, 0);
++	ASSERT_GE(inet_sock, 0);
++	netlink_sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
++	ASSERT_GE(netlink_sock, 0);
++	ASSERT_EQ(setsockopt(netlink_sock, SOL_SOCKET, SO_RCVBUF,
++			     &rcvbuf, sizeof(rcvbuf)), 0);
++	ASSERT_EQ(bind(netlink_sock, (struct sockaddr *)&addr,
++		       sizeof(addr)), 0);
++
++	// A large read makes the kernel attempt large dump skbs
++	ASSERT_EQ(lo_set_up(inet_sock, true), 0);
++	n = recv(netlink_sock, buf, sizeof(buf), 0);
++	ASSERT_GE(n, (ssize_t)sizeof(struct nlmsghdr));
++
++	// Leave one notification queued, then start the dump
++	ASSERT_EQ(lo_set_up(inet_sock, false), 0);
++	n = send(netlink_sock, &dump_links, sizeof(dump_links), 0);
++	ASSERT_EQ(n, sizeof(dump_links));
++
++	for (i = 0; i < 100 && !done; i++) {
++		struct nlmsghdr *nlh;
++
++		n = recv(netlink_sock, buf, sizeof(buf),
++			 MSG_PEEK | MSG_TRUNC | MSG_DONTWAIT);
++		if (n < 0)
++			continue;
++		n = recv(netlink_sock, buf, sizeof(buf), MSG_DONTWAIT);
++		if (n < 0)
++			continue;
++
++		for (nlh = (struct nlmsghdr *)buf; NLMSG_OK(nlh, n);
++		     nlh = NLMSG_NEXT(nlh, n)) {
++			if (nlh->nlmsg_seq != dump_links.nlhdr.nlmsg_seq)
++				continue;
++			if (nlh->nlmsg_type == NLMSG_ERROR)
++				EXPECT_EQ(*(int *)NLMSG_DATA(nlh), 0);
++			if (nlh->nlmsg_type == RTM_NEWLINK)
++				links++;
++			if (nlh->nlmsg_type == NLMSG_DONE) {
++				EXPECT_EQ(*(int *)NLMSG_DATA(nlh), 0);
++				done = true;
++			}
++		}
++	}
++	EXPECT_TRUE(done);
++	EXPECT_GE(links, 1);
++
++	close(netlink_sock);
++	close(inet_sock);
++}
++
+ TEST_HARNESS_MAIN
+
+-- 
+2.54.0
 
 
