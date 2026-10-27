@@ -1,62 +1,48 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.230.112
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.230.114
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793072748;
-	b=QqPhjkIqIb1VF0ou7W0PZdd8zqQsXZfN6+veX4SuOOb2bzbugwD0NkAY4LlNbdPU/2j1
-	 73TDs2NLgmHHhD3C/UIh5Om//9vPtVGvlsLi9avd9EyUAir1VcLaMUGh9MYDormid3eQl
-	 RjORcJ88LaqGv/eVNvYeFeOAd0JTKXVNlwCNyaoTWx0qzbKH9U4FenyhwmD2BCVTdYU2j
-	 dRp8ShxWrFAqRRd3OPsNHPWbh3PZH4kkOuFOq3ni7K+RCI3fbOr5pay+tIXT7YGXlYHb1
-	 mJL52SzIR1ddoR5QgWdG0rHcWCdZEm/lHpcCarSC9GIZR7LCWaSzNmFT15SuqZ2g/BA==
+	t=1793072762;
+	b=u5eiovikNK+gRfMenlUNwcrVRVryMmz3+j9jrf5bPPENcqywUqPcNpqRXJXshc8VR+tE
+	 nSbhpWlo04PxMcUEEAXBsxtr0Y8PtjBDQufev3G1PWWkuSjfT0RfER87v2nJbW+pwE3oC
+	 xVvOUo5FU5XKkv2M6JXcZKSHHDDpRpw1hv3SDGnuctN9a+EE0ytSl8j6iFMxYO3XG7KQY
+	 beYN53y5Y1+5WftEYn8wyx1BcWnVLU6v4GBPcHUd2mB2q2qZY5xuQXmivX5Q37XEcoh6c
+	 OtMgrWGusI0/GEUgr3C4StpWUSoTuAIH39mClB8YXkuo7V9tjEQoZGMw3ynaAlKoIgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793072748;
-	h=DMARC-Filter:DKIM-Signature:Cc:Subject:Date:Message-Id:
-	 X-Original-From:To:X-Mailer:Content-Transfer-Encoding:
-	 X-Lms-Return-Path:Content-Type:From:Mime-Version;
-	bh=ULr9bgQ6yFnrOUoUUAJX9WlVlG9/9n0WdEkZqyzIDlU=;
-	b=rwDNj6mCRdptU5Of8Erp215kkUQykjmerDvFBnCAbfvM2RCcL+9zc4/d2E1OZw4Y9yVd
-	 18OM3WDw494gnnuOh+CMjEQlBitX1yl26Ak2OJjlzNO78xXmXHAaghYv4JyvqVqfIICUB
-	 gy0lfOeDN8TyAfS1EdHsbD/SjlyaucbUcOHZTMmV1J2sUuT5swv1tjRRpg/u1d11Es1i6
-	 amNHm6CJZPfEnH4bAUgiHgyOKExOUm65K62sDb45Ngfrq+O3QSH7VO2wb+rwXLE6pQXcz
-	 65hPUDlVZxHiAL80y1T9hEa+0BXwDFLzCJAvgbsGOjiHkrrulpkZVE9Lna6TM30CS4w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793072762;
+	h=DMARC-Filter:DKIM-Signature:From:Mime-Version:X-Mailer:Date:
+	 X-Original-From:References:In-Reply-To:X-Lms-Return-Path:Cc:
+	 Content-Transfer-Encoding:To:Subject:Message-Id:Content-Type;
+	bh=IU6VHGahaQUjfrcJ3t0CrfGoXgu1vrAKIBCseES6bf8=;
+	b=QxSLByOcfwkvyVEJfpwyBdYiHOBRoj1cuSO6Cd8Mra/wh3OTAMf+QZYhWQivc0BAhjwH
+	 bcFepFtQEzjmNy5N/BWWFvB/AAeuDKFym+Q+2l6oQ8kO4pywPenoc/V4Mo8yd75I1SefD
+	 HtJwPv5MytVAyIJ/3/hP3Hjk0Zn8Y7sm69qEqy40chY2GZHHTb980mA5AbRItbmk/Va1U
+	 6l6WR+YUOhOQsahxMk3UN/1NFspcBTwKarLEJJJgkLr/xrht27GY5oXcAgXhsL3GN9Shs
+	 Uy3/bKnnKwuxKvR41pS/xfX8B+oS12Isvz7oxMj/vWksy0kilHWWCSp8pp3uQ637e8A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bytedance.com;
 	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=KRUnrtrp;
-	arc=none smtp.remote-ip=209.127.230.112
-Received: from va-1-112.ptr.blmpb.com (va-1-112.ptr.blmpb.com [209.127.230.112])
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=BXQXAwmn;
+	arc=none smtp.remote-ip=209.127.230.114
+Received: from va-1-114.ptr.blmpb.com (va-1-114.ptr.blmpb.com [209.127.230.114])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27084606A32C
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 03:45:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27084606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62A1606A31A
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 03:46:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A62A1606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=KRUnrtrp
+	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=BXQXAwmn
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=2212171451; d=bytedance.com; t=1793072743; h=from:subject:
+ s=2212171451; d=bytedance.com; t=1793072757; h=from:subject:
  mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
  mime-version:in-reply-to:message-id;
- bh=ULr9bgQ6yFnrOUoUUAJX9WlVlG9/9n0WdEkZqyzIDlU=;
- b=KRUnrtrpDHoHc9xFObs/VqlzU5RuhQYm6qR2sL5250j7/HOS7KOp19kT69VrDHpbdvguUJ
- Jsm9FKzTgb9UqYk+yxX+JhL4y7bxoZQirCbiT2Un9WV9jIN13k/Aah+vsw8R5QVbqGIGcE
- F4WQvQYSKlIbWfM8zx1ZJJ0nAk2drbyeIVWXl0qEm+w5YskqS3cyeE7cDKU+IVoH+L1368
- T3enpr70PR0lWdxvrNH8eVViwbcGgiDnAKSIcUMmEp+s1uFHccriOKZ68Zikfl6LKWAt69
- 7T0JgNqPGiXxnMo88MmcE/n2QtJ9FgmxRGoUh00DhcPNnJEH5xEkIfpj48BI+Q==
-Cc: <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>, 
-	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, 
-	<chang.seok.bae@intel.com>, <shuah@kernel.org>, 
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, 
-	<stable@vger.kernel.org>, "Guixiong Wei" <weiguixiong@bytedance.com>
-Subject: [PATCH v3 0/2] x86/fpu: Fix dynamic fpstate leak on exec()
-Date: Tue, 27 Oct 2026 11:45:25 +0800
-Message-ID: <cover.1793072271.git.weiguixiong@bytedance.com>
-X-Original-From: Guixiong Wei <weiguixiong@bytedance.com>
-To: <x86@kernel.org>
-X-Mailer: git-send-email 2.55.0
-Content-Transfer-Encoding: 7bit
-X-Lms-Return-Path: <lba+26ae01e65+101b7a+vger.kernel.org+weiguixiong@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
+ bh=IU6VHGahaQUjfrcJ3t0CrfGoXgu1vrAKIBCseES6bf8=;
+ b=BXQXAwmnrK+4EbP7eIcaZpgDPDo9WqPpY3ycHdMWr80q/YjYP144tXRbrWdKpQ5OsUGC8O
+ WrB4V4GzI5Wx+s6Ytoy+U3viwbD/fwE6kbbZ76PC6+Fh9UI73DXU0SyXte+M0Z8S+DysFp
+ K8vRNsyiXZc2TOXYyENk7LXQ6dOfB30a+PTcdFNv8gc/pQ1Oxrp9L7sMq6t9zAPJ9imWnv
+ xoC5TSQr+bB5L5aCpMA07U32fGSdaR11L87SLLwwiDRaA3ysMyoV0GxUGzYUygalQQam6G
+ 7EcSyPZJW0AlO95LnO10LPlIJH8C0Ct60nmxntYjQWlqJtyIZP30Pal9Imo4Yw==
 From: "Guixiong Wei" <weiguixiong@bytedance.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,49 +53,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-Message-ID: <20261027034525.n_XFdGRdfYdist2-1b1BUKZ4u1Fn2qa1xpUPfMZRII8@z>
+X-Mailer: git-send-email 2.55.0
+Date: Tue, 27 Oct 2026 11:45:26 +0800
+X-Original-From: Guixiong Wei <weiguixiong@bytedance.com>
+References: <cover.1793072271.git.weiguixiong@bytedance.com>
+In-Reply-To: <cover.1793072271.git.weiguixiong@bytedance.com>
+X-Lms-Return-Path: <lba+26ae01e73+bfd9c3+vger.kernel.org+weiguixiong@bytedance.com>
+Cc: <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>, 
+	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, 
+	<chang.seok.bae@intel.com>, <shuah@kernel.org>, 
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, 
+	<stable@vger.kernel.org>, "Guixiong Wei" <weiguixiong@bytedance.com>
+Content-Transfer-Encoding: 7bit
+To: <x86@kernel.org>
+Subject: [PATCH v3 1/2] x86/fpu: Fix memory leak with dynamic fpstate and exec()
+Message-ID: <f6c7690f8288ad9e95996e0cb37fc4c385df9ee1.1793072271.git.weiguixiong@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Message-ID: <20261027034526.O2Lc3xqfhBd9oRvpPnyQJEr0fCrAmaviMM91u5SO4q0@z>
 
-An exec() after using an XFD-controlled xfeature leaks the dynamically
-allocated fpstate. Fix the cleanup in fpstate_reset() and add an AMX
-regression selftest.
+Using an XFD-controlled xfeature can allocate a larger fpstate. On
+exec(), fpstate_reset() replaces fpu->fpstate with the embedded buffer
+without freeing the dynamic allocation. Once the pointer is overwritten,
+the allocation cannot be freed on task exit.
 
-The selftest reports FAIL on an unfixed kernel (verified 10/10 FAILs
-on 7.1.3 with the leak reproducer present) and OK with the fix applied.
+Free dynamic state at the start of fpstate_reset(). In fpu_clone(),
+clear the pointer copied from the parent before resetting the child's
+state, so the parent's allocation is not freed.
 
-Changes since v2:
-- Free dynamic state at the start of fpstate_reset(), keeping the
-  fpstate_free() interface unchanged. Clear the inherited fpstate
-  pointer in fpu_clone() before resetting it.
-- Replace nested self-exec with a parent fork()/exec() loop.
-- Add a pipe-synchronised pre-flight check that confirms the dynamic
-  allocation is observable via /proc/vmallocinfo before measuring the
-  post-exec() delta. Without that gate "no new entries" is ambiguous
-  between "freed" and "never observed" and would silently PASS on
-  kernels where the allocation is not reachable. /proc/vmallocinfo is
-  the only user-visible signal for a leaked post-exec() fpstate (it
-  has no task scope once the task is gone).
-- Compare the set of allocation start addresses in /proc/vmallocinfo
-  before and after the loop; addresses present only in the "after"
-  snapshot count as new allocations that outlived their task. This
-  compares allocation identity directly, so unrelated vmalloc churn
-  elsewhere does not change the result. SKIP if any matching entry's
-  address is hidden (kptr_restrict) because the diff can no longer
-  distinguish allocations.
-- Report leak failures without preventing subsequent subtests from
-  running, and simplify the commit messages.
+Fixes: 500afbf645a0 ("x86/fpu/xstate: Add fpstate_realloc()/free()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Guixiong Wei <weiguixiong@bytedance.com>
+---
+ arch/x86/kernel/fpu/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-v2: https://lore.kernel.org/r/cover.1791428412.git.weiguixiong@bytedance.com
-v1: https://lore.kernel.org/r/20260929151013.81562-2-weiguixiong@bytedance.com
-
-Guixiong Wei (2):
-  x86/fpu: Fix memory leak with dynamic fpstate and exec()
-  selftests/x86/amx: Test dynamic fpstate cleanup across exec()
-
- arch/x86/kernel/fpu/core.c        |   5 +
- tools/testing/selftests/x86/amx.c | 251 +++++++++++++++++++++++++++++-
- 2 files changed, 254 insertions(+), 2 deletions(-)
-
-
-base-commit: 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index d1aeecd57f5ed..dbe6696fdf8cf 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -594,6 +594,9 @@ static void __fpstate_reset(struct fpstate *fpstate)
+ 
+ void fpstate_reset(struct fpu *fpu)
+ {
++	/* Free dynamic fpstate (if any) before resetting pointer: */
++	fpstate_free(fpu);
++
+ 	/* Set the fpstate pointer to the default fpstate */
+ 	fpu->fpstate = &fpu->__fpstate;
+ 	__fpstate_reset(fpu->fpstate);
+@@ -670,6 +673,8 @@ int fpu_clone(struct task_struct *dst, u64 clone_flags, bool minimal,
+ 	/* The new task's FPU state cannot be valid in the hardware. */
+ 	dst_fpu->last_cpu = -1;
+ 
++	/* Break the link to the other FPU's fpstate: */
++	dst_fpu->fpstate = NULL;
+ 	fpstate_reset(dst_fpu);
+ 
+ 	if (!cpu_feature_enabled(X86_FEATURE_FPU))
 -- 
 2.55.0
