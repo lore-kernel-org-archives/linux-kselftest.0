@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793132535;
-	b=lf/hn+r3SltluW0LgJl4VeNMaOGs7/mQCL0x2B8Na4tqikNQUXREIQ8wspy/knqwGlxO
-	 oJEj9TjH85i8YeJkkrM/m1Uq3VBC7ykhTHpsedl6cNWsCmncFx5VJCqrz3wVvBZKIxXZE
-	 RXOm7qtMq3IedfJiLi+NH3PkC6doMWcrejC8VyR1H6Ka2kKlV0RpyzhgTUstrFD09IM0v
-	 BSCjbSxZmbWvahtN+p1ucenUKYIrmbu4TxXR/A6sp+lsKLn2Pz2CGFz2qgNj9t6HImmwi
-	 A4ijliVHjZ78sOa78HLJkbzkd0l4qFC+v2b6M6cLVD9Y1U83/61TWsGWgcr6ICkE4QA==
+	t=1793132537;
+	b=IFizyEh0SlNj1uc6BCGJsYdfTbZENM0D8pOpNlHNF+ra6X/CXrOgdOr3kHNSZM1lY954
+	 vHCW+b1qQEnGZ8jeOOVbC05xyErI8yx9tpUpzEWJh3der9nV69JrFiJM8RYSGvVyK0WP2
+	 nVdGMC2DHHj0C6L1lxBS/eovzZ0ZtNwSm68RWoKIxbYLsabqGuhtSE8zPllgE63tV6sBJ
+	 cN7J60DHz3E77HaTzjzxP5SF+x9i5Sov0rIOos+As0ttdU8JQkrrv6o8xHF00m/8iJtmy
+	 8/zV1a5mL8x8Eyzs7eTB/U2ll3AojG+6oMRXqTmQDbT7fFF2smhbUhdWOMIBrM96TFQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793132535;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793132537;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ig65voG3tmgCHh9u4uwCMCq6mevIjaCR7JkDi5YM2Jw=;
-	b=WihaxqiHIV67/nfntB1nhHKFH0HC5bbSzCdLD4AXFWsM7y5ctBlIxYxSj66FPrhlAcGv
-	 ShpGSU+dLKp13VlkPJkunHGm0UfBz7yfRc0JTuC5YvJvsqzq28DwS1rJj//NgqsZ6T1l9
-	 eV22gNFBeU/VErqJEHmJ2T8KBvaP7s++wmetFY4uipwRbLa0cIm2cW4ytxTwtE1kvCEXX
-	 qogA4j3nbjEBtpqsg95vBtmc1p9q2yBQJ1tWcseyYyANxOBkmaasniH0EvWVa/HCkDDdw
-	 KuqcKL5YLoBaxdCWW2meIBmObv9wqVjj7ln+VVd5hzyogrG/b6JdcpnoBqa6CCNUObw==
+	bh=VREWUN8AJAKPAW/PnLTB+3AyrdUA3Tp3MbNPAyF7VCQ=;
+	b=c0gztnA7sQ9M+EYfCU9l0Uo/aKFOXETFL1tKBoHqhe0Cdyy/5l9a87WyrWjNkzmjKrt1
+	 38TnKJnoCUGheMc6WULKO7eYo3Ag20db9Q2STpCesebRtGvb4gcS/rDpypYRgCSxWoovq
+	 RGgFdhTUFVxH18YjDrNEIxuPYfcfqJwYBBauuXAtMlu/OOV1obODWqLJmZVYHURxn7VMn
+	 scr4zwCjGa6wB1GjJ4JSe7I981JgVrKqs7iM7F4ptiIqwmyOza7xZCoGa1ZZVDWwxmsEP
+	 ALdryJo6tGoZMslHUN59D73bgQY/QSHmwIe8/f6+QBXEKhFw/NySf/dujOHd6YfuSVg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aG6fpkVT;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NbJ2Gdtt;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42D260A2615;
-	Tue, 27 Oct 2026 20:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9246606A31D;
+	Tue, 27 Oct 2026 20:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aG6fpkVT
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NbJ2Gdtt
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793132534;
-	b=ugcosghMONucAiqYupfUuzls8dCrF82ELJO90GovPd3gcwWspLnSRUlLjCbAI6eBoFxg
-	 zMUI6YF9mDYw9avh84arBKzf8QldKiM8nVXgbfMMssJgCL+O3xOix5X67yRkw1iCdYoSH
-	 2KZzG4dLwbFZDbe+zFoUaan2F/zwA6PeI0XytySN23dA9HHCZdoZN2NZvQ/hWzsg8hz9C
-	 3Nbexjk+MYoz89GgVJjKKkuIsE0quVGpboEMxL2UpGQXtlor9PiH0tRc0ITGbAVBTuYQd
-	 j7q3oxrCEWtPCivB9302IGIwiXaHom6O4LSVtEqyl7nfPnaEUMWoe4h8V3EBt/NbVzQ==
+	t=1793132531;
+	b=Pa4IBJawAp1KbDVw9780Y4zlob+LaiB3nIB+fUJ9zAHZ3BPjugFbGWVI/HU5p8nMmGu/
+	 KW+arMEHuQl77mE5mslf8cFl0k6Ppe8ExBFLVOWmYbQlqSY/YBiPJOrPMZ8DOjiOHPbjF
+	 17SJrYY2xre30fDhr8mCrR7lWgSn3dqpAJfu+SV1FCviCdJXjhzINainFEfO9vOdkEpAb
+	 LY9I87zKvliGLpL0K1G/Vvic816wv2sIxNJQYXUBtUlJ1SVV3OQNaf4FyMTWinniChxry
+	 pkEYbjM1Cxy/xOLRqDY1pWd5OejuFG00S860us9xAcLJ6LePwu+47/rdcS+/Ni/382A==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793132534;
+	c=relaxed/relaxed; t=1793132531;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ig65voG3tmgCHh9u4uwCMCq6mevIjaCR7JkDi5YM2Jw=;
-	b=pa8OUTqEEsV+MXNc7lUdYlp7cseBcuLxSGOySyuV78ZNlkZuAl2OeiOcvk+OmXryQEDe
-	 6sAQFm/GquJ/VUO5m+2ykmocDJuBQKGKnhhjy5pMQAzoqPPLq8mKBZc+HaYZISJbB/kbW
-	 YWm2XeFjLl+liS+fs9O1IF728HxqAPbgMFvLXEUy0n0uyyH2DqP4rEEHJc9J8+rdFbgN+
-	 jySVjggEJ/Az8vYz4LQL422AdkN5zpGeinpYUsI0QLIc60q34LZTYX5ghl1/eU0nDUnTa
-	 l75eR6cfp63m9wTgDLCmnbSxX12IrVLJ4F/zdAnqHV2a1+VmqFnNO2lrbjvTud9Lj1g==
+	bh=VREWUN8AJAKPAW/PnLTB+3AyrdUA3Tp3MbNPAyF7VCQ=;
+	b=ve+9T4sywEgs6x7Zg3/vVL2iqtYyDlU+t1cpnX74vIUnMobGqoIgvC57hAXKrxbSQ22b
+	 IldyoAf/16x/RY3tk3Ke5hNZGKTI1fZQ9nB8KfBZUzW+4ORtbbFdRhEkNozXLZnITne7z
+	 g/ghLDXP2pClNRIt7pvt5F8pdCB3E5LvUpbyW76hwc7crAbRbTwLzKrcLs1PLC2kURqQc
+	 MwBla9Bkk8LgczWRAPKoYE0i1hzulUJ1CzDC3BYmZ4rhPqj8F8Wz7d7/3PdYy/PsFUAMR
+	 IoYhbR5fVARso8/oris1nn/IZE1DuaSbrqo1uSBmIPhoPFUcpVTvRBsv5MORGE+4iJg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 49E101F01828;
-	Tue, 27 Oct 2026 20:22:12 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 319211F031E0;
+	Tue, 27 Oct 2026 20:22:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793132534;
-	bh=ig65voG3tmgCHh9u4uwCMCq6mevIjaCR7JkDi5YM2Jw=;
+	s=k20260515; t=1793132531;
+	bh=VREWUN8AJAKPAW/PnLTB+3AyrdUA3Tp3MbNPAyF7VCQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=aG6fpkVT53bYIo24RPMK5Pr5r8JilFvr62P//WwuNUAMYEgM8dyyom8tSXXqn4YHt
-	 XWQjoo346FkpL/CBaTXZSsMuomRk1pwGaj/l17LLShPrRvRWrsrK9DFtztu2GC5ewp
-	 CqSJV5tdSC2IHb6xK2dY4cCiDI47z/Le2eT7z1coW5XDY8QvosQG0iYWSi0HpAONfN
-	 HMV8lGJgm8MmF+yp8BJMJFZxAxhgPlDsGFR6xitRVIxPr58OHVAvlbMONB0q+tmRXM
-	 4R6SsqwSok2vuzUCD2CZeT30Dx50z/02cX1BDXx47LqaS2Dos2nvx/LDrlQCyzHjpP
-	 JQIhkLkzX7WKQ==
+	b=NbJ2Gdtt+lOeO1ifDsEbtpPS83ECI7A+LgmN9TKOTK7qhqulaa9D0RQh5TD/U15vQ
+	 9yDB9BuSIm9S/7WoSls6YiFiLkVYU5JhEjPiYUlJ+qOfxV+tUdhYAUOxMROo4ekd4P
+	 n0fb9qmnIWeJCXwAq5rDrPcRCY8vuEos5Fx/+M7SqvYjTWMg5SP+a9uE+XQb6uqkB7
+	 qWdwzw11MvgV2rknaALWlPNKvf7mEHS4wEdowklrf40IUFFnaAUlgt+1LuyAI1E4MU
+	 OS98PguGIad+NyQPJEFPna1WMSFS7Wy2EfDz3MSeIVpcN9w2SD9sHLGYGubazj6Ccr
+	 Wwd5hvMv6mjXA==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id DAB6F4520D;
+	by lkml.kernel.org (Postfix) with ESMTP id 9E34A451F9;
 	Tue, 27 Oct 2026 20:22:09 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Tue, 27 Oct 2026 14:22:07 -0600
-Subject: [PATCH v13 07/39] dyndbg: factor ddebug_match_desc out from
- ddebug_change
+Date: Tue, 27 Oct 2026 14:22:02 -0600
+Subject: [PATCH v13 02/39] vmlinux.lds.h: refactor BOUNDED_SECTION_* macros
+ into bounded_sections.lds.h
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261027-dd-cmap-part2-clean-v13-7-9267923be612@gmail.com>
+Message-Id: <20261027-dd-cmap-part2-clean-v13-2-9267923be612@gmail.com>
 References: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 In-Reply-To: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -111,14 +111,13 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
  linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
- Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>
+ Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=5231;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=4249;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=VqORYgdCqMO7jSBKD8Jf9zLnZ5PVT520YsjigPNpQ/k=;
- b=fdCQ6aZAVI6Ap9fXx7BGyfBeta69HG7eSaZ/wVyiCUiBZ3Lz/JjNBHBGKJ8ByP+ipi2K4R5NH
- c8K5Kcua2okC+q5Rn5rgTcS/htY7vdTKLdldk2S2NOqWJLJaXkWa9CP
+ bh=IfyJDb7+5IpRdexBxlsmGvn/hmtnbKQYugc2kC3D/aw=;
+ b=KHNS94dyrwfUat3rUowp1hXeRfJ9tQHVm49+4mt1JUQ+Ulw1bpwgpZJfujitxyqWgrTJ3hc8w
+ 5Efbg3SSImBCMnWdZv+nV2yl8DL4IQcndfox2Jen4LrML51uBm9g+Di
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -129,157 +128,122 @@ Content-Transfer-Encoding: 7bit
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-ddebug_change() is a big (~100 lines) function with a nested for loop.
+Move BOUNDED_SECTION_* macros to a new helper file:
+include/asm-generic/bounded_sections.lds.h and include it back into
+vmlinux.lds.h.  This allows its reuse later to fix a failure to keep
+dyndbg sections in some circumstances.
 
-The outer loop walks the per-module ddebug_tables list, and does
-module stuff: it filters on a query's "module FOO*" and "class BAR",
-failures here skip the entire inner loop.
+NOTES:
 
-The inner loop (60 lines) scans a module's descriptors.  It starts
-with a long block of filters on function, line, format, and the
-validated "BAR" class (or the legacy/_DPRINTK_CLASS_DFLT).
+These macros are only for use in vmlinux.lds.h, where the _start &
+_end symbols are needed.  Modules keep sections separate in ELF
+sections, with their boundaries known, so the _start and _end are not
+useful, and may confuse tools not expecting them.
 
-These filters "continue" past pr_debugs that don't match the query
-criteria, before it falls through the code below that counts matches,
-then adjusts the flags and static-keys.  This is unnecessarily hard to
-think about.
+This patch ignores a checkpatch warning, because new file is covered
+by "GENERIC INCLUDE/ASM HEADER FILES" in MAINTAINERS
 
-So move the per-descriptor filter-block into a boolean function:
-ddebug_match_desc(desc), and change each "continue" to "return false".
-This puts a clear interface in place, so any future changes are either
-inside, outside, or across this interface.
-
-also fix checkpatch complaints about spaces and braces.
-
+CC: Arnd Bergmann <arnd@arndb.de>
+CC: linux-arch@vger.kernel.org
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-v11:
-. move doc comment block down to precede ddebug_change().
-  Sashiko review complaint (patch 7):
-  "Does this placement separate the block comment from its intended
-  target? The comment describes a function that returns the number of
-  matching callsites and takes ddebug_lock, which accurately describes
-  ddebug_change(). However, by inserting ddebug_match_desc()
-  immediately after this comment, does it leave ddebug_change()
-  undocumented and make the comment falsely apply to
-  ddebug_match_desc()..."
-
-v5: check for null format in callsite. shouldnt happen, but pr_debug() isnt illegal
-v7: elevate null format to pr_err adding filename, function, lineno.
+v3: move include to top
 ---
- lib/dynamic_debug.c | 91 ++++++++++++++++++++++++++++++++---------------------
- 1 file changed, 55 insertions(+), 36 deletions(-)
+ include/asm-generic/bounded_sections.lds.h | 36 ++++++++++++++++++++++++++++++
+ include/asm-generic/vmlinux.lds.h          | 31 +------------------------
+ 2 files changed, 37 insertions(+), 30 deletions(-)
 
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 49334d1aa4b3..8682c23b5fe7 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -166,6 +166,60 @@ static struct ddebug_class_map *ddebug_find_valid_class(struct ddebug_table cons
- }
+diff --git a/include/asm-generic/bounded_sections.lds.h b/include/asm-generic/bounded_sections.lds.h
+new file mode 100644
+index 000000000000..8c29293ca7fb
+--- /dev/null
++++ b/include/asm-generic/bounded_sections.lds.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef _ASM_GENERIC_BOUNDED_SECTIONS_H
++#define _ASM_GENERIC_BOUNDED_SECTIONS_H
++
++#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
++	_BEGIN_##_label_ = .;						\
++	KEEP(*(_sec_))							\
++	_END_##_label_ = .;
++
++#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
++	_label_##_BEGIN_ = .;						\
++	KEEP(*(_sec_))							\
++	_label_##_END_ = .;
++
++#define BOUNDED_SECTION_BY(_sec_, _label_)				\
++	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++
++#define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
++
++#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_HDR_##_label_	= .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_label_##_HDR_ = .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_BY(_sec_, _label_)				\
++	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++
++#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
++
++#endif /* _ASM_GENERIC_BOUNDED_SECTIONS_H */
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index b2988aa12f66..b4ece391f7b1 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -50,6 +50,7 @@
+  *               [__nosave_begin, __nosave_end] for the nosave data
+  */
  
- #define __outvar /* filled by callee */
-+static bool ddebug_match_desc(const struct ddebug_query *query,
-+			      struct _ddebug *dp,
-+			      int valid_class)
-+{
-+	/* match site against query-class */
-+	if (dp->class_id != valid_class)
-+		return false;
-+
-+	if (!dp->format) {
-+		pr_err_ratelimited("ddebug: NULL format string at %s:%s:%u\n",
-+				   dp->filename ? dp->filename : "?",
-+				   dp->function ? dp->function : "?",
-+				   dp->lineno);
-+		return false;
-+	}
-+
-+	/* match against the source filename */
-+	if (query->filename &&
-+	    !match_wildcard(query->filename, dp->filename) &&
-+	    !match_wildcard(query->filename,
-+			    kbasename(dp->filename)) &&
-+	    !match_wildcard(query->filename,
-+			    trim_prefix(dp->filename)))
-+		return false;
-+
-+	/* match against the function */
-+	if (query->function &&
-+	    !match_wildcard(query->function, dp->function))
-+		return false;
-+
-+	/* match against the format */
-+	if (query->format) {
-+		if (*query->format == '^') {
-+			char *p;
-+			/* anchored search. match must be at beginning */
-+			p = strstr(dp->format, query->format + 1);
-+			if (p != dp->format)
-+				return false;
-+		} else if (!strstr(dp->format, query->format)) {
-+			return false;
-+		}
-+	}
-+
-+	/* match against the line number range */
-+	if (query->first_lineno &&
-+	    dp->lineno < query->first_lineno)
-+		return false;
-+	if (query->last_lineno &&
-+	    dp->lineno > query->last_lineno)
-+		return false;
-+
-+	return true;
-+}
-+
- /*
-  * Search the tables for _ddebug's which match the given `query' and
-  * apply the `flags' and `mask' to them.  Returns number of matching
-@@ -204,42 +258,7 @@ static int ddebug_change(const struct ddebug_query *query,
- 		for (i = 0; i < dt->num_ddebugs; i++) {
- 			struct _ddebug *dp = &dt->ddebugs[i];
++#include <asm-generic/bounded_sections.lds.h>
+ #include <asm-generic/codetag.lds.h>
  
--			/* match site against query-class */
--			if (dp->class_id != valid_class)
--				continue;
--
--			/* match against the source filename */
--			if (query->filename &&
--			    !match_wildcard(query->filename, dp->filename) &&
--			    !match_wildcard(query->filename,
--					   kbasename(dp->filename)) &&
--			    !match_wildcard(query->filename,
--					   trim_prefix(dp->filename)))
--				continue;
--
--			/* match against the function */
--			if (query->function &&
--			    !match_wildcard(query->function, dp->function))
--				continue;
--
--			/* match against the format */
--			if (query->format) {
--				if (*query->format == '^') {
--					char *p;
--					/* anchored search. match must be at beginning */
--					p = strstr(dp->format, query->format+1);
--					if (p != dp->format)
--						continue;
--				} else if (!strstr(dp->format, query->format))
--					continue;
--			}
--
--			/* match against the line number range */
--			if (query->first_lineno &&
--			    dp->lineno < query->first_lineno)
--				continue;
--			if (query->last_lineno &&
--			    dp->lineno > query->last_lineno)
-+			if (!ddebug_match_desc(query, dp, valid_class))
- 				continue;
+ #ifndef LOAD_OFFSET
+@@ -211,36 +212,6 @@
+ # endif
+ #endif
  
- 			nfound++;
+-#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
+-	_BEGIN_##_label_ = .;						\
+-	KEEP(*(_sec_))							\
+-	_END_##_label_ = .;
+-
+-#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
+-	_label_##_BEGIN_ = .;						\
+-	KEEP(*(_sec_))							\
+-	_label_##_END_ = .;
+-
+-#define BOUNDED_SECTION_BY(_sec_, _label_)				\
+-	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
+-
+-#define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
+-
+-#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
+-	_HDR_##_label_	= .;						\
+-	KEEP(*(.gnu.linkonce.##_sec_))					\
+-	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
+-
+-#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
+-	_label_##_HDR_ = .;						\
+-	KEEP(*(.gnu.linkonce.##_sec_))					\
+-	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
+-
+-#define HEADERED_SECTION_BY(_sec_, _label_)				\
+-	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
+-
+-#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
+-
+ #ifdef CONFIG_TRACE_BRANCH_PROFILING
+ #define LIKELY_PROFILE()						\
+ 	BOUNDED_SECTION_BY(_ftrace_annotated_branch, _annotated_branch_profile)
 
 -- 
 2.56.0
