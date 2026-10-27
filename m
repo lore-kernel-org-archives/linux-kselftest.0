@@ -1,104 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793090371;
-	b=2RF2L/skWqpP84RojdjiNAIcP73xnJIToxK0mzl/KjpbRruxaEQFz94wm8NNjiMpIECm
-	 Vp0H6CjwlwS3P436uGcPPC2xWO8dE3qafAskODvxloIWmkqVQtRtsVgW/1juMYhd1w44d
-	 Sgpf0fHzA5drX6rzvUAfwv/blhpolivUUW1CIJMGEhBnHtc6EwAc/sjAoGPAiIva1xw2C
-	 1nr7jcfgEVRSrwOchlsIwVUZ+TK3q0AB4mb3/EzX1jJoHgOTanDJEsA2fW4SpMcDkU9aH
-	 b+M3wWqiW8cnc/QPOrzycjECtxg2A60lZUTc4/iKzwlqXrbvSURaVaqkWkc/0q1zjfg==
+	t=1793092357;
+	b=wKzOYb6HQ5F4WHkXq4KiaHJysXwPYa9RuMkGJpPZFpZ7uARpr4rGh8jOP+nbmeY/eUIl
+	 PBiBBBUZf5qArb6LHVGzmaeOXS329MUY7WK6DY0EspMPRyNKBMCPTQ9rrEFYXJXaMwcec
+	 zFLloz3x/FiNY2m05VEWwuU0z1Fos8WYBQArhbGqxnOiCc6xEita2Ol8QtN8ToxgjjuBK
+	 Lu6oQrs/MQ0R4fmSjF6URWLD8uFE107tz8psFr6VRy8d0QbyQjo8BaXhU3/+8yivnzwM1
+	 yEZhALtoD7HkgyWkTe3SBNrHUbbFgEo1U+j1QjArkBBtg5xiOKCI5BEmL2uF6boOqoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793090371;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=1z6u6B82Pr3/hzW5YMWmMP5A7ww17vCOqXR2hKgLl9c=;
-	b=1+ge3GvUglORlaHCED7ubPvs+mEuwhRJFKxT4pBN/H4izXEyleyOsLhiak4EgBjKRQLa
-	 KSfyL/WaB98w/vaNOY/iOwe0JOj9hNt1aszTQB5s6GkHfAtqLFYov4WDGa357rimUHjfN
-	 cWBWFRy4zjWzlXmf7TJDiVarrS1Wsm5kGO3OajjLW0/UaJ9uadnOABMl+wXvSZYl72oSi
-	 0uEGXj2kidkgNLaKnTIgNDSB+TI7R1ScT8zKHU3nczRqo41353m5wkD7u2sSIeo5NaN0e
-	 LKLoibTxKZHnV2Iba40uHlvk/VAAmP1j3Aaw7qSLSVtzM9Mc1T4N0K6v/T0sR5GR2cw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793092357;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=Ndi2448wVUZuF68kqWF0v2z9NaMIBNKc9nVCJQzYI1k=;
+	b=qoSY8BaMPqbkh+aV9WrbY8nDoQaIujEySyE2gSUQ0jqFDjqIGgt7J5OjKfYIY+DUlrOA
+	 en0Jms7kXkk4gYwNNZR7p7huxUIt0IFdl7SAZlsHeRAx+zevtZU5fAa1gs3HptozoIJWV
+	 C3gQKE9ldvFs4X9wz/BkS7aK2K0g7mHXMgeEo6cuFnmRTbyvvXINbVl/4XuWBYbqxG8e9
+	 EvC+z+BpSIqqfVrFsqeevAUAkYRiN9xq7NZN/ZO+zIgyls0cT6ClWvuYNw/On+FTCWrCf
+	 xdMtFF0xm5cfmTHsV+5j+QPl0bF/9bXQYqUeiG/k3gsa1pDHwJFTMepbwJS/BGOiFjQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=oSdjbadH;
-	arc=none smtp.remote-ip=209.85.215.177
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="bA2/gm+I";
+	arc=none smtp.remote-ip=91.218.175.172
+Received: from mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7761B606A31D
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 08:39:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7761B606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4BD606A320
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 09:12:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D4BD606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=oSdjbadH
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cd5d2dafeccso1402663a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 01:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793090371; x=1793695171; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=1z6u6B82Pr3/hzW5YMWmMP5A7ww17vCOqXR2hKgLl9c=;
-        b=oSdjbadHGHjMx6m92nhrDQflhJGALNSv+UxevBBC5BaLg3+8GAsVik0aVme73SHE8e
-         d7VUZ+GR2k3kyC9HFXLEIqrpRpT8zg/RxMPQv0r/jJTaYUrlE3uXhnmCnj+AQsDG451/
-         EUquDDFPcdq6qZqoFf7XAZiE2S1fSQq94sAWA+YjIvjlvG4R8rUP1gl4GewWR+eTcg+L
-         OtGcAodpql3gqVlUKiIZUEAUKBz0CjDDK3yDoW+LGSVmMlx/VNmlBpfb7w4bKu8+IiPC
-         4WtlJxWpc2ZZ4v3TedSwMmtl0HIw83vBuq5/8Ns7+meabVHRc2PLmvpZ2V8O2tPhkRPW
-         1fng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793090371; x=1793695171;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1z6u6B82Pr3/hzW5YMWmMP5A7ww17vCOqXR2hKgLl9c=;
-        b=xH86bZQIg/TAq7pWuWKxY5hlv7JoKGmwDCGH+7K0E7ESH7dFpreP8zCw6olZjJqncS
-         kWbSyOEZ2GfPL7qu3AaNbkFyuMtCkucq62OaGHNlarPVjGT64+CnNQqckXrGjQ30mjev
-         X5NEPgvs/TFv+xJnGte9ijpM/Sy8PNv9/JQJuY0i1wIEjhJL1NH6bpLKVL9Gvt+FX4md
-         fUYUyMweyzquWncYlGyezGRwihhMTRnelmLwfVd+5pNKSGDdkFLAtXthFgkbcutyD09/
-         EFVzrgvDnWyAnU+gFzCnmkljZfmSnAD6mw/rRbe9tJ6IElPVL+TNxGZuc30YVreG7GqH
-         6a9w==
-X-Forwarded-Encrypted: i=1; AKwUvBw2bUvyBYh7orVvzMZnBONW0ayh4CtNgdr6iFYfFmMS+RnssFzamtf0sC7qjwAyf8SFOzKgoGgTeZ4V5a3UdXU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL5C2pIxFVm2lVhvnYiXZvjkT2ECnmGm2Htumg5RKZhXUsJMHlW
-	kta+05qTiQw740wWoO5CzHmDmQhuH4f8FTu8T9TmeGoD+uyFSo7GpAae
-X-Gm-Gg: AYBFou18IEEnOtnvTVcfSUFXzZbDRNlICSrU6NrTl+5ENGJt+D9s/EuwjOMtyz6fQwo
-	gqOLKClaYxlDEdrvjtwa6OSBjuPuQsoPcLaFG56tONqQmXGKWJy1cGgvUbLx9B65DktrOjj6tVJ
-	vh68rQDJsl4KrYsNQayVjOV48P7SFcY6KxgnsK++ShsPs9uY17qYccm2JsKtog5+HciS4bRtXQf
-	tkcLEC5tRO67gNkQIeFsW7Hzr7EeqiR0u6Dyk5EeRQk983hL8X6wej1Re4Gx5q/XQ/9sHyL8fsl
-	yStzGaonSG4pKOWjBgSdafcOz3x1W1ICD/+wkPIS3sPT4/OtSuweGGgKSthTwTiaA+ehX7vzMtg
-	GPEmWN/P0h8i5r22HVEJAao+7KO/XqmxZoVSV5HK5ylO/HjB3KN93im4CJUnCUoZuMoQWHwIjc3
-	ep65z8rJTW+n1/88h96DLlyAiV7KZ/vAZZ2kICv1kGX2cJuOdBK9fkaArfUbOBLgGsjy9m0IHFs
-	qMq5bNyBCAk0+/BrO/AZ3yJPWHSy/v3QLiN34x1JjiVAK6FpzIBMMAMDGsmgfTSTNR6RpiZ
-X-Received: by 2002:a17:90a:e18c:b0:3ad:3e8:12 with SMTP id 98e67ed59e1d1-3adeb126491mr6478782a91.48.1793090370681;
-        Tue, 27 Oct 2026 01:39:30 -0700 (PDT)
-Received: from osman.mioffice.cn ([43.224.245.178])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae4041fafcsm3618951a91.0.2026.10.27.01.39.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 01:39:30 -0700 (PDT)
-From: Zhan Xusheng <zhanxusheng1024@gmail.com>
-To: akpm@linux-foundation.org
-Cc: hannes@cmpxchg.org,
-	mhocko@kernel.org,
-	roman.gushchin@linux.dev,
-	shakeel.butt@linux.dev,
-	muchun.song@linux.dev,
-	penguin-kernel@I-love.SAKURA.ne.jp,
-	tj@kernel.org,
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=bA2/gm+I
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Iy2EZRXCQMOBxljPF+GT6qR9TSW/M2vcb/khwUxJInc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793092348; v=1; x=1793697148;
+ b=bA2/gm+InVPxrA8/cUeuKfkv9tlw8WkJfCJkOBEDJtQCHB0HWSave9Iz76npyrcxJMqpPc1t
+ uCc6jbvmBvAjzUUwt9MB4DHn/lLKKxWsS6jwJ3eh4ZlxhovExca29l8pVbWHLXsWABOthurUun7
+ yDoOp3aXMoQ0FUfbTaxkhPds=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id e68cbb451e1e33a5;
+	Tue, 27 Oct 2026 09:12:27 +0000
+X-Mizu-Trace-ID: e68cbb451e1e33a5
+X-Migadu-Flow: FLOW_OUT
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	JP Kobryn <jp.kobryn@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	davem@davemloft.net,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	KP Singh <kpsingh@kernel.org>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Tobias Klauser <tklauser@distanz.ch>,
+	Eyal Birger <eyal.birger@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	Hao Luo <haoluo@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
 	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
 	cgroups@vger.kernel.org,
 	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	zhanxusheng@xiaomi.com
-Subject: [PATCH] selftests: cgroup: test memcg OOM on a process whose leader has exited
-Date: Tue, 27 Oct 2026 16:39:23 +0800
-Message-ID: <20261027083923.2412015-1-zhanxusheng1024@gmail.com>
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [RFC PATCH 0/2] memcg_ext: dynamic memory.low and memory.min protection
+Date: Tue, 27 Oct 2026 17:11:58 +0800
+Message-ID: <cover.1793086858.git.zhuhui@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261026120248.2188024-1-zhanxusheng1024@gmail.com>
-References: <20261026120248.2188024-1-zhanxusheng1024@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,177 +122,60 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Zhan Xusheng <zhanxusheng@xiaomi.com>
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Moving a process whose thread group leader has exited leaves the leader
-behind, so its live threads sit in the destination memcg with nothing
-listed in cgroup.procs.  Check that an OOM there still kills the process.
+This follows the memcg_ext RFC [1], which adds bpf_memcg_ops - a
+struct_ops type attaching memory controller policy to a cgroup - and
+one member, high_policy().  Its cover letter names dynamic protection
+as future work; these two patches are that.
 
-Without "mm: memcontrol: don't miss processes whose leader has exited in
-OOM scans" no task is selected and the test fails after five seconds.
+Why it matters: memory.low and memory.min protect a cgroup by a fixed
+threshold and have no idea whether it is using the memory.  A
+high-priority cgroup that holds a large working set and then goes idle
+keeps suppressing reclaim on its siblings, and that memory is wasted.
+A policy program sees the real activity - page faults, charges - and
+can grant or withdraw protection as it changes.
 
-Signed-off-by: Zhan Xusheng <zhanxusheng@xiaomi.com>
----
- .../selftests/cgroup/test_memcontrol.c        | 123 ++++++++++++++++++
- 1 file changed, 123 insertions(+)
+The hooks are not new: [2] proposed the same below-low and below-min
+decision on its own memcg_bpf_ops type.  Only the carrier changes
+here.  bpf_memcg_ops already supplies attach, the ancestor walk,
+result combination and the re-entry guard, so protection costs two
+members and one walk helper shared with high_policy().
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index bb673012dcf0..bddbe923fa42 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -4,6 +4,8 @@
- #include <linux/limits.h>
- #include <linux/oom.h>
- #include <fcntl.h>
-+#include <sched.h>
-+#include <signal.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -18,6 +20,7 @@
- #include <netdb.h>
- #include <errno.h>
- #include <sys/mman.h>
-+#include <sys/syscall.h>
- #include <sys/sysinfo.h>
- 
- #include "kselftest.h"
-@@ -1417,6 +1420,125 @@ static bool memcg_sockets_disabled(void)
-  * The TCP client interleaves reads from the socket with check whether
-  * memory.current and memory.stat.sock are similar.
-  */
-+static int exited_leader_pipe[2];
-+
-+static int exited_leader_thread(void *arg)
-+{
-+	char c;
-+
-+	/* Wait until the process has been moved, then fill memory. */
-+	if (read(exited_leader_pipe[0], &c, 1) == 1)
-+		alloc_anon(NULL, (void *)MB(100));
-+	for (;;)
-+		pause();
-+	return 0;
-+}
-+
-+/* Start a thread and exit only the thread group leader. */
-+static int exited_leader_fn(const char *cgroup, void *arg)
-+{
-+	const size_t stack_size = 64 * 1024;
-+	char *stack = malloc(stack_size);
-+
-+	if (!stack)
-+		return EXIT_FAILURE;
-+
-+	if (clone(exited_leader_thread, stack + stack_size,
-+		  CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND |
-+		  CLONE_THREAD | CLONE_SYSVSEM, NULL) < 0)
-+		return EXIT_FAILURE;
-+
-+	syscall(SYS_exit, 0);
-+	return EXIT_FAILURE;
-+}
-+
-+/*
-+ * Moving a process whose leader has exited leaves the leader behind, so
-+ * the destination's cgroup.procs is empty.  Check that the destination's
-+ * OOM killer still finds the process using its memory.
-+ */
-+static int test_memcg_oom_exited_leader(const char *root)
-+{
-+	char *parent = NULL, *src = NULL, *dst = NULL;
-+	int ret = KSFT_FAIL;
-+	pid_t pid = -ESRCH;
-+	int i;
-+
-+	if (pipe(exited_leader_pipe))
-+		return KSFT_FAIL;
-+
-+	parent = cg_name(root, "memcg_test_exited_leader");
-+	if (!parent)
-+		goto cleanup;
-+	src = cg_name(parent, "src");
-+	if (!src)
-+		goto cleanup;
-+	dst = cg_name(parent, "dst");
-+	if (!dst)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+	if (cg_write(parent, "cgroup.subtree_control", "+memory"))
-+		goto cleanup;
-+	if (cg_create(src) || cg_create(dst))
-+		goto cleanup;
-+	if (cg_write(dst, "memory.max", "30M"))
-+		goto cleanup;
-+	if (cg_write(dst, "memory.swap.max", "0"))
-+		goto cleanup;
-+
-+	pid = cg_run_nowait(src, exited_leader_fn, NULL);
-+	if (pid < 0)
-+		goto cleanup;
-+
-+	for (i = 0; i < 100; i++) {
-+		if (!proc_read_strstr(pid, false, "stat", ") Z "))
-+			break;
-+		usleep(10000);
-+	}
-+	if (i == 100)
-+		goto cleanup;
-+
-+	/* The exited leader stays in src, the live thread moves. */
-+	if (cg_enter(dst, pid))
-+		goto cleanup;
-+	if (cg_read_strcmp(dst, "cgroup.procs", ""))
-+		goto cleanup;
-+
-+	if (write(exited_leader_pipe[1], "x", 1) != 1)
-+		goto cleanup;
-+
-+	if (cg_read_key_long_poll(dst, "memory.events", "oom_kill ", 1,
-+				  50, 100000) != 1)
-+		goto cleanup;
-+
-+	if (cg_read_strcmp_wait(dst, "cgroup.events", "populated 0\n"))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (dst)
-+		cg_write(dst, "cgroup.kill", "1");
-+	if (pid > 0) {
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+	}
-+	close(exited_leader_pipe[0]);
-+	close(exited_leader_pipe[1]);
-+	if (dst)
-+		cg_destroy(dst);
-+	if (src)
-+		cg_destroy(src);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(dst);
-+	free(src);
-+	free(parent);
-+	return ret;
-+}
-+
- static int test_memcg_sock(const char *root)
- {
- 	int bind_retries = 5, ret = KSFT_FAIL, pid, err;
-@@ -1816,6 +1938,7 @@ struct memcg_test {
- 	T(test_memcg_oom_group_leaf_events),
- 	T(test_memcg_oom_group_parent_events),
- 	T(test_memcg_oom_group_score_events),
-+	T(test_memcg_oom_exited_leader),
- 	T(test_memcg_inotify_delete_file),
- 	T(test_memcg_inotify_delete_dir),
- };
+Patch 1 adds low_policy() and min_policy().  A program gets a
+read-only snapshot of the check the kernel is making - the memcg, the
+reclaim target, the threshold and the usage - and returns a request;
+BPF_MEMCG_PROT_BELOW, the only one so far, treats the cgroup as below
+its threshold, so reclaim skips it and counts it in memory.events.
+The kernel compares elow/emin first and asks BPF only when it found
+the cgroup unprotected, and ORs the answers of the cgroup and every
+ancestor, so a policy can only add protection, never take it away.
 
-base-commit: d135ab453a7400a34930bdda1ef4bdc8acfac80e
+Patch 2 is the prog_tests runner: attach both policies to a child,
+fault 8M of anonymous memory into it, reclaim from its parent, and
+check that both hooks were consulted and that the ctx described the
+check faithfully.  Both answer NO_OPINION, so nothing about reclaim's
+outcome is asserted.  A working example that does answer BELOW, so
+reclaim skips one cgroup and takes the memory from a sibling instead,
+is maintained out of tree at [3], released under GPLv2.
+
+[1] https://lore.kernel.org/all/20260921192559.2619635-1-shakeel.butt@linux.dev/
+[2] https://lore.kernel.org/all/cover.1779760876.git.zhuhui@kylinos.cn/
+[3] https://github.com/teawater/memcg-async-reclaim/tree/memcg_ext_plus
+
+Hui Zhu (2):
+  memcg_ext: add memory.low and memory.min protection policies
+  selftests/bpf: Add bpf_memcg_ops protection test
+
+ include/linux/bpf_memcontrol.h                | 104 ++++++++++-
+ include/linux/memcontrol.h                    |  23 ++-
+ mm/bpf_memcontrol.c                           | 162 ++++++++++++++----
+ .../bpf/prog_tests/memcg_ops_protection.c     | 151 ++++++++++++++++
+ .../bpf/progs/memcg_ops_protection.c          |  72 ++++++++
+ 5 files changed, 470 insertions(+), 42 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_ops_protection.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_ops_protection.c
+
 -- 
 2.43.0
 
