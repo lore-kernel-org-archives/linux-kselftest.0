@@ -1,103 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.76
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793101410;
-	b=YRMczBjtSHaCS698GJ8mR2n0yuX5ciG2qO8vJUUQWdWBSROTKNAUcBihLDfbcn8Dubow
-	 DG/StVU97eyLJZcmmKwR0WvAkdd7RNlUYhfU3hkQlG/VZk25j77xr7s4H/khOGHkcfVpp
-	 oGLXnDtsjY2fN6sKfTynD9ADSENqB+ErukajaOEFukCwhdpLVAVQ/30plWqyGoqqT9u58
-	 U3z8h7+2uwmZ9uqix5m+vYX/6brqZDEUoN2pYHqAVou2NGtPzmrc72p6NylyHfoHE7M8Q
-	 mQCHkI1nTwEiY7/sKSCx4KpAcVKowj3b0shoLfdFBLj6GRHrH8Wfq+lKXcbR7nkQJfw==
+	t=1793101510;
+	b=GVOHu/wWOipqC+y8RvE6sTFPpyBSnwZrkGvREpI1GdB3GgA9kFsFr5gy8Sr09GC9/YNW
+	 xeC35toILt+moMVMHmdR3qDoRnyOPeBC19OAxsY9XuoVwQFhu7hSpo+yapJ7VZP8KssMG
+	 bYXf5c40XoxVV60+X+P4oH0NK6vv+PgVlbHbLOXpKuRNc+r7qcc1bSPvGzvp5gEfd/iWz
+	 zEZA7utnNKmnrMUPyr9s6MFSVOfJIeLZqH1WN7icd6X1Q/axR3ZL8oS+qiGyL9UULeGAo
+	 2jVYL/i9QXLpAXbWDvkx0S0TVxWSj2TY10hXQOxIqNqqAGzWPFjNtbMuU5MLlebHHnw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793101410;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:User-Agent;
-	bh=qRj5nmSVr8oaHYTfwp3nV+7muLaSPF1hwSVuKOsZ4eM=;
-	b=T+FvNC00d63vflq6N6jzBygyNtbIsUB64xH0Tm5xXshUGPaDEeKHAIdXxaKDz81JqTR6
-	 HE6iaKLIWr+Rh88tTPCQUMdjw94uFJGEyLY6DctUm8ZmjhjQz7+RlATMOX9xdBYmB1VnM
-	 432spiteJ3++dwNQEHPfY0yITtx22+OVBQeydUPH69/rlYjmNxJcZMs5J+8hVlexV5XvA
-	 JEcfrzf4DVPdVI9TcmTzGlbvKnOZd10G/SuTs1Nd0tdOEJNzvJH0kY88ORy8R1ubstzYC
-	 2Gt6WPs/B/7XM+ipp2H7bAuRx+z4W+zWkX6BZyIgha6sNuWKYAPV9GfDkqrNB7ppHaA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793101510;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=w+micUHMJCLc/lb75lysczApibjwbQk5zFEVurbT23g=;
+	b=AMBn4Ba5E1MNz//oMyZlQDwN4FcJ4n/i9QM+OLd8B1TqYQw/m7Cohv8VTJ0PSm8HXeZr
+	 bnrxbTYbzQ4QUCKTMKjJfQMCArzq/knSJGqpqo4/5Tnu5HvIAvMTtuFSAqbu8wjfn9foU
+	 WP2ZoTBU6KGNDf8orptytz6y92zK0tb2+q6WtXx881oR/Ydw5hd/vYpA+SrkLFCrD4ijh
+	 KAZpnJ62cng/UHR70lRe+nIM5NAzUqPqGCgTfoy1GKAZ/ROULUIuYHOSTZ49G4VpnGhAl
+	 EF/VZAZhYulKdbZdiZbCkR47e7I1b8MUiWVB0ECV3N7x6Ev3Q40DzFABxVax9F8sb+Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chrisdown.name;
-	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b="iBOg8BS/";
-	arc=none smtp.remote-ip=209.85.214.175
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JKO0xROa;
+	arc=none smtp.remote-ip=95.215.58.76
+Received: from mta1.migadu.com (out-76.mta1.migadu.com [95.215.58.76])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030AB606A321
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 11:43:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 030AB606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E82606C912
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 11:45:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16E82606C912
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=iBOg8BS/
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2e940d5d2beso15486085ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 04:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1793101409; x=1793706209; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=qRj5nmSVr8oaHYTfwp3nV+7muLaSPF1hwSVuKOsZ4eM=;
-        b=iBOg8BS/AfD0VOTVMWP3REB+11vPV7w0ToTM56EJrWZAxVXDxPmG2MqW8hvNvUbI+l
-         YLBtKH1cr2sx6cgkWNqYFi3Vz8TZKPEM4+mP4lXO1mL58LsaQeFs/aZsyjGzeSlcZ0Lb
-         r9YN/CYxzdAX9OSGZqJcz9kVZHtlPumWOo/gM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793101409; x=1793706209;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qRj5nmSVr8oaHYTfwp3nV+7muLaSPF1hwSVuKOsZ4eM=;
-        b=1jufcrJrVCQEIkxX4a1/Kl2PIBVi+Lzn6d/RpjUMirofslTRqgXpBWVnzOZM42Btlk
-         EXdkNeTFE8xmvpyLdf3S0zqtzGXqT4waWt8a0LqgC4IWOm7XMgxrZFwSth0Ea71N/cCH
-         vPRS3NgdauG/EWp1oXbOvJIho2tagD21Xq4R7LjLJAxyMdEBUXvD0X6LH8neD6+yEq3K
-         ywLeMLMFuWg9NxaCgf7Q42c5mcTdeHq+oq5Fr5wBku2JkYanQGFviX9tKGp+ZT8DUw4k
-         VEzNeNh/2m2rzOFmCre/o8RAOiYw7pGjtEoaEECn7Ed1FRPyEVsdmMAMwXPmFwsxKbh0
-         y1pA==
-X-Forwarded-Encrypted: i=1; AKwUvBxy5YKi4y7wegMEOPnG/tKziALZX81Dh9sPojvmkwLV336B1LDyuDZ3VohFLP7fP9a4zCwoBQydWzCPZnL+8sE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIZF8mcXe1oD/LGfSFtSlzgQiCUjOI9ifXWWOChmgvqMGgIZo2e
-	MsrfzRCoAFbIoCymgD9/0RgMLjzPv9elKsndf1KOyBMVT0JiShcEKEZd+sOarVEPdQM=
-X-Gm-Gg: AYBFou2aSYlKXkFNSAPNCBHMfM79Xqo/BuBYSv+cOs8CX2L3v676hwQy0rCnRWxodzt
-	SXIUa00Zrrunb2G4WOwFxuG2+MNBZJKXpPF06HfM4zAe2r33vcylFD9qXg0glaL5+dKndbHiu20
-	zCEC/Nta2zLMqUUId+U5+eObS8HwrANhhiPSxRy2OurbzmHl6BEExfwSCfkvhH+qy5v3PFsQ/W2
-	UenlXzauIFuMa75A91LbRpIclf8afWQS+a+K/IsSkuUFUB2hGXB1jm4mhwvJBuZayi5frS9ox8l
-	x/L2JWkscGp+49wUuliC+QhdTbqiJDTYk4O4xUbkAGSW/qrqg2qQ7dt4YnxpxZT5X46Sk8Fk7Q8
-	hjbB6Q5XQpSASy08bkGSbTVdYv43LIR3IoKetKICQ2pvChbsodIrOa0qEUpWLSh8FioXjgNijtN
-	zAjzrLxjPlD/y4Y1StiCOEuzTwgVh03Ix3MmjUNjB+WmtPhlsP+YzmUFopz7wFsmn8hzIoz4mtS
-	DgHdzhlEN8IgTQaOd40pTgHgnDC5+dLNgT6pkyCcr3oL0wrqDuM+mMM+udYak1OzGPlsz+aFyQp
-	0IS7WUGenNolPpPxnL04eSzER+vcppRRWZvRp29cl+yPAC7iiYEB9LriWx/YTSONzLPM0caxXga
-	+5sGcWlVHzPPTPIOCBhj630I=
-X-Received: by 2002:a17:90b:35c5:b0:3ac:9599:a689 with SMTP id 98e67ed59e1d1-3adeafb079amr6566975a91.34.1793101409391;
-        Tue, 27 Oct 2026 04:43:29 -0700 (PDT)
-Received: from localhost ([116.86.153.182])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adf8f3f22csm7120822a91.3.2026.10.27.04.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 04:43:28 -0700 (PDT)
-Date: Tue, 27 Oct 2026 19:43:25 +0800
-From: Chris Down <chris@chrisdown.name>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>
-Cc: Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>,
-	Pedro Falcato <pfalcato@suse.de>,
-	David Hildenbrand <david@kernel.org>, Kees Cook <kees@kernel.org>,
-	Jeff Xu <jeffxu@chromium.org>, Andrey Vagin <avagin@gmail.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-mm@kvack.org,
-	linux-hardening@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: [PATCH 3/3] selftests/mseal_system_mappings: Test vdso unmap and
- remap
-Message-ID: <621847973ba2ec49d0a58e0261da35a9f3a97eda.1793094611.git.chris@chrisdown.name>
-References: <cover.1793094611.git.chris@chrisdown.name>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JKO0xROa
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=OYRd2GGQ+I0qeQXyHrVJjv4+JLHcc0nyipskIeZzEDk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793101508; v=1; x=1793706308;
+ b=JKO0xROaCSWb3UCrmtd8gHzC9UDCajuqbquvbdi6v3l5T/Y0CExDZXnsNKg0B8kHnqi3AVdK
+ lvAhep4Gf3aTSig7Uy0qJp/DT5NxW/BkPMUVXdsdKJhc0lCyUTORouU4pkvW3gm0FdgLqrOfAup
+ hSUW2+TohkP7uhOLf7agnhUA=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 452bcd924be0fdff;
+	Tue, 27 Oct 2026 11:45:06 +0000
+X-Mizu-Trace-ID: 452bcd924be0fdff
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <bf5f8ecd-f2bc-4ceb-bafc-100bf7d7f697@linux.dev>
+Date: Tue, 27 Oct 2026 19:44:59 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -107,124 +58,191 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1793094611.git.chris@chrisdown.name>
-User-Agent: Mutt/2.3.3 (9073d26d) (2026-06-12)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 1/2] Revert "selftests: net: packetdrill: add tests
+ for advertised MSS with PMTU exceptions"
+To: echoowall@gmail.com, netdev@vger.kernel.org
+Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>,
+ David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+ Shuah Khan <shuah@kernel.org>, Thorsten Leemhuis
+ <regressions@leemhuis.info>, regressions@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, Eric Dumazet <edumazet@kernel.org>
+References: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
+ <20261026-advmss-revert-v1-1-272fa4b7ecb6@gmail.com>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20261026-advmss-revert-v1-1-272fa4b7ecb6@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Chris Down <chris@chrisdown.name>
----
- .../mseal_system_mappings/sysmap_is_sealed.c  | 92 +++++++++++++++++++
- 1 file changed, 92 insertions(+)
 
-diff --git a/tools/testing/selftests/mseal_system_mappings/sysmap_is_sealed.c b/tools/testing/selftests/mseal_system_mappings/sysmap_is_sealed.c
-index ea75ad537620..83b4fadfbfe7 100644
---- a/tools/testing/selftests/mseal_system_mappings/sysmap_is_sealed.c
-+++ b/tools/testing/selftests/mseal_system_mappings/sysmap_is_sealed.c
-@@ -10,6 +10,7 @@
- #include <unistd.h>
- #include <string.h>
- #include <stdbool.h>
-+#include <sys/mman.h>
- #include <sys/utsname.h>
- #include <zlib.h>
- 
-@@ -232,4 +233,95 @@ TEST_F(basic, check_sealed)
- 	EXPECT_EQ(expected, sealed);
- };
- 
-+static bool find_vdso(unsigned long *start, unsigned long *end)
-+{
-+	char line[MAX_LINE_LEN];
-+	bool found = false;
-+	FILE *maps;
-+
-+	maps = fopen("/proc/self/maps", "r");
-+	if (!maps)
-+		return false;
-+
-+	while (fgets(line, sizeof(line), maps)) {
-+		if (strstr(line, "[vdso]") &&
-+		    sscanf(line, "%lx-%lx", start, end) == 2) {
-+			found = true;
-+			break;
-+		}
-+	}
-+
-+	fclose(maps);
-+	return found;
-+}
-+
-+static int vdso_is_sealed(void)
-+{
-+	int sealed = -1;
-+	FILE *maps;
-+
-+	maps = fopen("/proc/self/smaps", "r");
-+	if (!maps)
-+		return -1;
-+	if (has_mapping("[vdso]", maps))
-+		sealed = mapping_is_sealed(maps);
-+	fclose(maps);
-+	return sealed;
-+}
-+
-+/*
-+ * Unmapping or moving [vdso] must fail with EPERM when it is sealed. When it
-+ * is not sealed, it succeeds and leaves glibc with a stale vdso pointer, which
-+ * is fine because each test runs in its own forked child.
-+ */
-+TEST(vdso_munmap)
-+{
-+	int sealed;
-+	unsigned long start, end;
-+	int ret;
-+
-+	if (!find_vdso(&start, &end))
-+		SKIP(return, "could not find the mapping, [vdso]");
-+	sealed = vdso_is_sealed();
-+	if (sealed < 0)
-+		SKIP(return, "could not read the [vdso] sealing state");
-+
-+	ret = munmap((void *)start, end - start);
-+	if (sealed) {
-+		EXPECT_EQ(-1, ret);
-+		EXPECT_EQ(EPERM, errno);
-+	} else {
-+		EXPECT_EQ(0, ret);
-+	}
-+	EXPECT_EQ(sealed, find_vdso(&start, &end));
-+}
-+
-+TEST(vdso_mremap)
-+{
-+	int sealed;
-+	unsigned long start, end, size, new_start;
-+	void *dst, *ret;
-+
-+	if (!find_vdso(&start, &end))
-+		SKIP(return, "could not find the mapping, [vdso]");
-+	sealed = vdso_is_sealed();
-+	if (sealed < 0)
-+		SKIP(return, "could not read the [vdso] sealing state");
-+	size = end - start;
-+
-+	dst = mmap(NULL, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, dst);
-+
-+	ret = mremap((void *)start, size, size, MREMAP_MAYMOVE | MREMAP_FIXED,
-+		     dst);
-+	if (sealed) {
-+		EXPECT_EQ(MAP_FAILED, ret);
-+		EXPECT_EQ(EPERM, errno);
-+	} else {
-+		EXPECT_EQ(dst, ret);
-+	}
-+	ASSERT_TRUE(find_vdso(&new_start, &end));
-+	EXPECT_EQ(sealed ? start : (unsigned long)dst, new_start);
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.54.0
+On 10/26/26 3:23 PM, Esko Mobius via B4 Relay wrote:
+> From: Esko Mobius <echoowall@gmail.com>
+>
+> This reverts commit e5c8e301b497 ("selftests: net: packetdrill: add
+> tests for advertised MSS with PMTU exceptions").
+>
+> These tests assert the behaviour introduced by commit 2640e6419594
+> ("net: advertise TCP MSS from the configured MTU, not the learned
+> PMTU"), which is reverted in the next patch because it causes a
+> regression. Remove them first so the series stays bisectable.
+>
+> Signed-off-by: Esko Mobius <echoowall@gmail.com>
 
+
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
+
+> ---
+>   .../net/packetdrill/tcp_advmss_pmtu_ipv4.pkt       | 67 ----------------------
+>   .../net/packetdrill/tcp_advmss_pmtu_ipv6.pkt       | 67 ----------------------
+>   2 files changed, 134 deletions(-)
+>
+> diff --git a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt b/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt
+> deleted file mode 100644
+> index f2ef931b7..000000000
+> --- a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt
+> +++ /dev/null
+> @@ -1,67 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -//
+> -// Test that IPv4 advertised MSS in SYN-ACK is derived from the configured
+> -// interface MTU (1500 -> MSS 1460), not the ICMP-learned Path MTU.
+> -
+> ---ip_version=ipv4
+> -
+> -`./defaults.sh
+> -ethtool -K tun0 tso off
+> -`
+> -
+> -//
+> -// Connection 1: Learn PMTU exception (MTU 1200 -> MSS 1160)
+> -//
+> -    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
+> -   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+> -   +0 bind(3, ..., ...) = 0
+> -   +0 listen(3, 1) = 0
+> -
+> -   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
+> -   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
+> -  +.1 < . 1:1(0) ack 1 win 257
+> -   +0 accept(3, ..., ...) = 4
+> -
+> -// Send a full 1460-byte segment
+> -   +0 write(4, ..., 1460) = 1460
+> -   +0 > P. 1:1461(1460) ack 1
+> -
+> -// ICMP Fragmentation Needed arrives indicating next-hop MTU 1200
+> -   +0 < icmp unreachable frag_needed mtu 1200 [1:1461(1460)]
+> -
+> -// Local host retransmits using the learned MTU 1200 (MSS = 1200 - 40 = 1160)
+> -   +0 > . 1:1161(1160) ack 1
+> -   +0 > P. 1161:1461(300) ack 1
+> -   +0 < R 1:1(0) ack 1461 win 0
+> -
+> -// Close connection 1 and listener
+> -   +0 close(4) = 0
+> -   +0 close(3) = 0
+> -
+> -//
+> -// Connection 2: New connection from the same peer
+> -//
+> -   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
+> -   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+> -   +0 bind(3, ..., ...) = 0
+> -   +0 listen(3, 1) = 0
+> -
+> -   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
+> -
+> -// Verify: SYN-ACK MUST advertise configured MSS 1460, NOT the learned PMTU MSS 1160
+> -   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
+> -   +0 < . 1:1(0) ack 1 win 257
+> -   +0 accept(3, ..., ...) = 4
+> -
+> -// Verify: Outgoing transmit MSS is still constrained by the learned PMTU 1200
+> -   +0 write(4, ..., 1460) = 1460
+> -   +0 > . 1:1161(1160) ack 1
+> -   +0 > P. 1161:1461(300) ack 1
+> -   +0 < . 1:1(0) ack 1461 win 257
+> -
+> -// Clean up
+> -   +0 close(4) = 0
+> -   +0 > F. 1461:1461(0) ack 1
+> -   +0 < F. 1:1(0) ack 1462 win 257
+> -   +0 > . 1462:1462(0) ack 2
+> -   +0 close(3) = 0
+> diff --git a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt b/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt
+> deleted file mode 100644
+> index c7638b11a..000000000
+> --- a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt
+> +++ /dev/null
+> @@ -1,67 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -//
+> -// Test that IPv6 advertised MSS in SYN-ACK is derived from the configured
+> -// interface MTU (1520 -> MSS 1460), not the ICMPv6-learned Path MTU.
+> -
+> ---ip_version=ipv6
+> -
+> -`./defaults.sh
+> -ethtool -K tun0 tso off
+> -`
+> -
+> -//
+> -// Connection 1: Learn PMTU exception (MTU 1280 -> MSS 1220)
+> -//
+> -    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
+> -   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+> -   +0 bind(3, ..., ...) = 0
+> -   +0 listen(3, 1) = 0
+> -
+> -   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
+> -   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
+> -  +.1 < . 1:1(0) ack 1 win 257
+> -   +0 accept(3, ..., ...) = 4
+> -
+> -// Send a full 1460-byte segment
+> -   +0 write(4, ..., 1460) = 1460
+> -   +0 > P. 1:1461(1460) ack 1
+> -
+> -// ICMPv6 Packet Too Big arrives indicating next-hop MTU 1280
+> -   +0 < icmp packet_too_big mtu 1280 [1:1461(1460)]
+> -
+> -// Local host retransmits using the learned MTU 1280 (MSS = 1280 - 40 - 20 = 1220)
+> -   +0 > . 1:1221(1220) ack 1
+> -   +0 > P. 1221:1461(240) ack 1
+> -   +0 < R 1:1(0) ack 1461 win 0
+> -
+> -// Close connection 1 and listener
+> -   +0 close(4) = 0
+> -   +0 close(3) = 0
+> -
+> -//
+> -// Connection 2: New connection from the same peer
+> -//
+> -   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
+> -   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+> -   +0 bind(3, ..., ...) = 0
+> -   +0 listen(3, 1) = 0
+> -
+> -   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
+> -
+> -// Verify: SYN-ACK MUST advertise configured MSS 1460, NOT the learned PMTU MSS 1220
+> -   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
+> -   +0 < . 1:1(0) ack 1 win 257
+> -   +0 accept(3, ..., ...) = 4
+> -
+> -// Verify: Outgoing transmit MSS is still constrained by the learned PMTU 1280
+> -   +0 write(4, ..., 1460) = 1460
+> -   +0 > . 1:1221(1220) ack 1
+> -   +0 > P. 1221:1461(240) ack 1
+> -   +0 < . 1:1(0) ack 1461 win 257
+> -
+> -// Clean up
+> -   +0 close(4) = 0
+> -   +0 > F. 1461:1461(0) ack 1
+> -   +0 < F. 1:1(0) ack 1462 win 257
+> -   +0 > . 1462:1462(0) ack 2
+> -   +0 close(3) = 0
+>
