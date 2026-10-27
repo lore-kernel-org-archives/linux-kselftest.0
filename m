@@ -1,54 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.132
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793108707;
-	b=4Kamc7TNCxSScxqmvQnMsW9tx/8yFRxhwxH4h7yZr+8Q1FRlJjGYcVCtcS5fHIyLYVgC
-	 GgS+x9dB1Y0Jx0MDyhpnZdyywIJ6kRBZ6y/Fk6dUK2avaiBo9ccvxTSeKcdnkqEKwYeGJ
-	 E+/7ce0mjYtQkoxTZARdZjvmqdnDrnLmdyA8kS0RSfAzH5UjKxamoB/JPNYIVNFkZNNz2
-	 EQ7ZAv2K+Gr/5aeWT4NBs8SxFQQcSKNTA8qx40YhkT1n3hDGgFDLxSZ1vnWXux9kFIhjp
-	 jJZsGQOGKpZriE6AD83WVEudXoHUi2HF60xO+I193Vi313YgUCVWNRZUa8uUw04vGzQ==
+	t=1793109199;
+	b=bHv1iHoGZR7V77o7G78LhJFitdTu4tm8Zx7n6mvse/y/Sd3SKInahU8aXUBkFJJqMyMQ
+	 gbrYKFx3dE46KXbx3BeIFV5CSFobNi8CcOXzOLt5Q9ihVWjP744RbzMdBSjuQKH9UbQh+
+	 dXFrt0JQ/r3zudb8HdBHA568C5WL1xlhJyecm9BDyproZThfxtOIjyxRcDKoRt3rFo/g4
+	 Ti7b88SVZk5SN3eAq79/iezZH2lWNmyAhnQ+bq2ZiiAo9ZAdIRhzREMHuFOnZCB3LALTN
+	 sc0JsqTSZOPROOsK9mb38PE4CWKaD+jejcIXkm+0DmzVzu3YFQrfXDFGi2/u3L7vGbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793108707;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=+zgFas+4hJZZwgPEJMUzFoGVQwC5WpjC0swXnGqt0W0=;
-	b=C9vbDUrzNg7Q0UQxF/1AlCGj/ab5dAoLlxTOpx+qUaqtz0vUP6Wo9sDqEj+TcsrM0NEB
-	 NwbFS0iX+gj8fBTjCm7EhOd+4vaZq4y9HI8/HIV/AroZUrxzEg2QDg2cWtUO7XoaVGPif
-	 vcS4wg0jKBwR49GcdQlstuvY/DYklPX2IOcmbvujuK7u7SjnjMLhcILKAO3zP53VUCpPe
-	 /YOIQtzHIVcQvvydSBcHxZ0LuJfReE0iObF7Lh3vb85UBzFA2whAR6z0EBpRqIWLvQ5CB
-	 QXmZCb2xiFkK79vN8Chqiy264A0Vn+MeZoiVVvWa4o8Ez10UoohEQ4y2KyQEL8IOY5w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793109199;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=wGwT1JNbkqmcP8fUAnZimf+aufAiCIdNGNB+5b8MPdA=;
+	b=SFoRVfp0Sdo8cRZxjhFjDigS0BaYZRd05H758T2ENXdKHYsVje5n8axhAWddEByfTkZ9
+	 6FBjD5Kn5d9me9IhbM1PvRMqW5uwbtNQ3sxQJZxFMvqWuyW7LYJ2bS/YmG456xfXUAfzd
+	 9FCsUAAtqVzARH3jrMZCuyy6Ckkb4IWo8qjcyFsrCNl1oASnQaKi8u6hm1/AmwockSdPG
+	 VerNm9PxVDoWeGzg2xgxr5qZ9NINiVvUNRYHoAjQfinUZj6hzBDzGWsM1PEBHZqo8646Z
+	 V74hn++u5Q5zxlk7chyGD/tKVr/ul0UGj7Wdi2nKnDYmAV3lRhxCqwA25lzFet2jRfg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QwXr001w;
-	arc=none smtp.remote-ip=95.215.58.132
-Received: from mta1.migadu.com (out-132.mta1.migadu.com [95.215.58.132])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mF8zRUbq;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79541606A320
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 13:45:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79541606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA374606A31F
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 13:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QwXr001w
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=aWAzItW6Ln/bOAVvVXsGvaelikw5SSSjsKUtt55BHao=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793108704; v=1; x=1793713504;
- b=QwXr001w6nn/Q+IYZqN6lAH940OXJ15yslwhMkAmfiRCXHN0pJaNCXr1F+MD/i9VM0ysKIqP
- IDd1JsKgoBOJMzJKsOawuVESspuHJdNoIqsNdUxNXoVrrTFbAFSsaGMGNu8iNPBCTf3+6qkpL29
- iX9PIrAHBm/x7ONwBh6bwbS0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 17da54f9e5b41fb1;
-	Tue, 27 Oct 2026 13:45:03 +0000
-X-Mizu-Trace-ID: 17da54f9e5b41fb1
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <f5c6c08f-2978-4c45-b8e3-91f0509b459f@linux.dev>
-Date: Tue, 27 Oct 2026 21:44:53 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mF8zRUbq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A56A1F01828;
+	Tue, 27 Oct 2026 13:53:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793109198;
+	bh=wGwT1JNbkqmcP8fUAnZimf+aufAiCIdNGNB+5b8MPdA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mF8zRUbq653nfj1B5K+Z45VMISn5YnE0sHMQhzG2zkRwMerN1u0TrRYVWk97hvTNM
+	 uZ0lbteq6tg7KdZ6atcsSTAtfYTmzLqgtX1K28V52vEd6MnMqTJRJtXXcFmIky/8m4
+	 WR+SVC3nI3mJmtmiGZw0lBVh9c3YytpGhMYIKmLAbMuSK8tZKjeP376mr2B1DsolpT
+	 npnhhnwphjkK431NhDvezTuq5Ni+Vq5zhl/CRuPB0GylScV7NWGxBzcj26Q0m9qpXO
+	 ybIZxQd/9nNRMeX/DedkmjK8u6shpdQBEcP8ZqLjIeFW1ucPz08OQzMa15z+dB6HJS
+	 6/qy3HLH+nbKA==
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfauth.ams.internal (Postfix) with ESMTP id 85CC7198004A;
+	Tue, 27 Oct 2026 09:53:11 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Tue, 27 Oct 2026 09:53:15 -0400
+X-ME-Sender: <xms:xqzgal-vr3ZeqbXQYJBliutUwh-BPoCNU76xbXs7mx_Ps-IdSmK23A>
+    <xme:xqzgaoksYXGkYGnJF43sYID0Tus98V08BBjG64swDvpdheaZW5VbBJyVOc7DQ6Frl
+    aoZ3R23YOrTA4h2thSa7n_eENBiVLh_oK4jdwW4aOnapsUIANjaAKZd>
+X-ME-Received: <xmr:xqzgajaYJVYfdqtgodH29574WA_vexf-pM5sNeV3dSMQBjrPqxVqpVsiMiw>
+X-ME-Proxy-Cause: dmFkZTEZ/rZ8QL4tKdVH13M4isFoJoqE6mmyk1+ybcvlxgqSp6W0ayLRKd0L7SfTmxuGb5
+    U6+Pfm114T++Wp3SC2FV78EqIZ6zQGqKV5XyNS0Q8g8zeea3kGWywXyvNgIRW79CajYQHr
+    2jF/D3zyUpa8mENlQ2k9kDlrLHG9vuqIwsGPeExjecTgPLyR3BG4mU+4iFcKzGjlB8O7dl
+    rHahXQtAt7H4ct4Hi0ph4caUm45qDhARWvo+NXS6RvFk5in2esxS1VkNF3/wtGoX2gxkDU
+    HYhd+ifyLHB/lQg4TvDcO1vty+4TgdFGCdUfD6xIrm+RnS//HTrIeeMZCfQmeBD5mTfrrt
+    28F2SJuazbG4sdilPjnUK5Xk2C/b77Urnpd+yJpFkxf0srCyBWlhL6vR0USCQldwnnbiLW
+    9q+grn+3rpVTZTV5aFHrdKvOYqBL1I68cy6Ts9EvEo2mG6eqSnlWVGArQuLZTDmYpXGIvS
+    wXLvRFTOpi4viZ4HzYk4qCerKNTdy3232MaWMRw4+fGiHl1k0822eLObmoSxbGhZG/SB+U
+    RY6eT6x1Fr7R33DiHsTIEPGR6+Uf+O9CEjZE+sUhhEJff/MTsubZ9LmOVI85mrAWUqqbJx
+    XWv9aGmJ+yJbAfbRPaNRNIocYryGvdsYvD8pPJi4F3KUYMPNesYsAvQV4dWg
+X-ME-Proxy: <xmx:xqzgaudbz8X2mj1TmcVhbSB5pj192_SKV8vP7t-J3qUs-AsDGR5erQ>
+    <xmx:x6zgar5lbie9c9vsEIGyR4WR5HHpSCBz3DCSwhV-Wl76bl2cm_9stA>
+    <xmx:x6zgaqkT5H7khckA_fD9bSj4bobce4cCO515thNp8GAx2LHLg5LD3g>
+    <xmx:x6zgapYUC1r3US7DHJV2QXJyRoI41UHODbj8ZuE46i0U3Qjz7C1IHw>
+    <xmx:x6zgagOltv2MpGmQj-wyDgIG_3JLhCWmQzbtOVj1MoCubVlHQLT8Bbj6>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 27 Oct 2026 09:53:10 -0400 (EDT)
+Date: Tue, 27 Oct 2026 13:53:09 +0000
+From: Kiryl Shutsemau <kas@kernel.org>
+To: Konstantin Khorenko <khorenko@virtuozzo.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"David Hildenbrand (Arm)" <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
+	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+	Usama Arif <usama.arif@linux.dev>, Peter Xu <peterx@redhat.com>, Alex Williamson <alex@shazbot.org>, 
+	kvm@vger.kernel.org, =?utf-8?B?TG/Dr2M=?= Molinari <loic.molinari@collabora.com>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v4 1/4] mm/rmap: duplicate a PMD mapping as one in
+ folio_dup_file_rmap_pmd()
+Message-ID: <auCsphluu2gwzEPo@thinkstation>
+References: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-0-66f00b7a564c@virtuozzo.com>
+ <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-1-66f00b7a564c@virtuozzo.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,71 +96,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 2/2] Revert "net: advertise TCP MSS from the
- configured MTU, not the learned PMTU"
-To: Esko Mobius <echoowall@gmail.com>, Eric Dumazet <edumazet@kernel.org>
-Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>,
- Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
- Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
- Thorsten Leemhuis <regressions@leemhuis.info>, regressions@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
- <20261026-advmss-revert-v1-2-272fa4b7ecb6@gmail.com>
- <e25fd292-5391-41fc-a324-0ec260828415@linux.dev>
- <CAL4Wiip=TkP2hmOFR-1Y-CU4rYHY_q=TBDhK6RmTj9UEMQ95Gw@mail.gmail.com>
- <D438C59D-09D4-4008-9240-18DA0ABBDCEA@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <D438C59D-09D4-4008-9240-18DA0ABBDCEA@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-1-66f00b7a564c@virtuozzo.com>
 
+On Wed, Oct 21, 2026 at 10:36:00PM +0200, Konstantin Khorenko wrote:
+> folio_dup_file_rmap_pmd() passes PGTABLE_LEVEL_PTE to
+> __folio_dup_file_rmap() for HPAGE_PMD_NR pages, so it adds HPAGE_PMD_NR
+> PTE mappings to the folio instead of one PMD mapping. Each unmap of the
+> PMD removes one PMD mapping:
+> 
+> - the folio's mapcount never returns to zero, and removing the folio
+>   from the page cache reports "Bad page cache", or hits a VM_BUG_ON
+>   with CONFIG_DEBUG_VM;
+> - the first unmap already counts as the last one and drops the
+>   PMD-mapped statistics while the other mm still maps the folio;
+> - the second one drives the entire mapcount below zero and drops them
+>   again.
+> 
+> The helper has no caller yet, the next patch adds the first one. Pass
+> PGTABLE_LEVEL_PMD, as folio_try_dup_anon_rmap_pmd() does.
+> 
+> Fixes: d8ef5e311d7b ("mm/rmap: convert page_dup_file_rmap() to folio_dup_file_rmap_[pte|ptes|pmd]()")
+> Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
 
-On 10/27/26 9:12 PM, Esko Mobius wrote:
-> On 10/27/26 1:45 PM, Jiayuan Chen wrote:
->> This precondition does all the work. The server only learns the PMTU
->> when it sends a full-size segment itself. [...]
->>
->> Please re-run the 6.12.107 case without seeding the PMTU.
-> You are right. Without seeding, 6.12.107 stalls the same way:
->
->    kernel        PMTU seeded   SYN-ACK MSS   1 MB upload
->    6.12.107      no            1460          stalls
->    6.12.107      yes (ping)    1416          OK
->
-> My reproducer took a shortcut there. What it should have modelled is
-> our production setup, which is the masquerading relay you describe:
-> the clients share the relay's address, so ordinary downloads by other
-> clients keep the server's PMTU entry fresh. Modelling that directly,
-> with no artificial seeding (cliA downloads 1 MB, then cliB, behind a
-> firewall dropping frag-needed, uploads 1 MB through the same relay):
->
->    kernel        SYN-ACK MSS to cliB   cliB upload
->    6.12.107      1416                  OK
->    6.12.111      1460                  stalls
+Reviewed-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 
-
-Thanks Esko for the testing, and Eric for the explanation. Agreed.
-
-
-> So I agree it was never a designed mechanism, it is the side effect
-> Eric describes. We have since added MSS clamping on our relays.
->
-> If it helps, I can send a v2 that describes the masquerading case
-> instead of the seeded one in the changelog. And I am happy to test
-> the net-next follow-up on this setup.
-
-
-No need for a v2 from my side, I just wanted to confirm the actual scenario.
-
-I saw your report earlier but was swamped and could not get to it in 
-time, sorry about that.
-
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
->
-> Thanks,
-> Esko
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
