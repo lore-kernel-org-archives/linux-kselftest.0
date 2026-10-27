@@ -1,92 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793109199;
-	b=bHv1iHoGZR7V77o7G78LhJFitdTu4tm8Zx7n6mvse/y/Sd3SKInahU8aXUBkFJJqMyMQ
-	 gbrYKFx3dE46KXbx3BeIFV5CSFobNi8CcOXzOLt5Q9ihVWjP744RbzMdBSjuQKH9UbQh+
-	 dXFrt0JQ/r3zudb8HdBHA568C5WL1xlhJyecm9BDyproZThfxtOIjyxRcDKoRt3rFo/g4
-	 Ti7b88SVZk5SN3eAq79/iezZH2lWNmyAhnQ+bq2ZiiAo9ZAdIRhzREMHuFOnZCB3LALTN
-	 sc0JsqTSZOPROOsK9mb38PE4CWKaD+jejcIXkm+0DmzVzu3YFQrfXDFGi2/u3L7vGbA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793109199;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=wGwT1JNbkqmcP8fUAnZimf+aufAiCIdNGNB+5b8MPdA=;
-	b=SFoRVfp0Sdo8cRZxjhFjDigS0BaYZRd05H758T2ENXdKHYsVje5n8axhAWddEByfTkZ9
-	 6FBjD5Kn5d9me9IhbM1PvRMqW5uwbtNQ3sxQJZxFMvqWuyW7LYJ2bS/YmG456xfXUAfzd
-	 9FCsUAAtqVzARH3jrMZCuyy6Ckkb4IWo8qjcyFsrCNl1oASnQaKi8u6hm1/AmwockSdPG
-	 VerNm9PxVDoWeGzg2xgxr5qZ9NINiVvUNRYHoAjQfinUZj6hzBDzGWsM1PEBHZqo8646Z
-	 V74hn++u5Q5zxlk7chyGD/tKVr/ul0UGj7Wdi2nKnDYmAV3lRhxCqwA25lzFet2jRfg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mF8zRUbq;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793109845;
+	b=2XMRBEyw16m+1CGClmhzZ18cOcUpO/cxXPRn92Nhx600f/Q/yGGx1IhOJyGeMXFD6iHL
+	 bbtxb5DdtpkiD13xHocyxZ+EadB5OJJHG1GXuaRfQuRLBTQN05TQhfGPj3cPJnGkM9jiE
+	 /n2wdx2BpEwiNCQgUkX957Z/gZgPp3fnXRGRg1Uc+b3L8uemXrSfCDlZYz1DgplauCVXm
+	 odODwQysPucdZ610Sxd7/M9CzcNV2SWWqAHc16BcEEN1SrWtEBHATn0fWfc/x4og4cpp2
+	 9dE+TPgncIra5dh8oZwThx/GTyjhUEBRU91K6pDWDZDNMOkPHdAPXSZHzeseqMf6FbQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793109845;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=COJ9uoO7MqU4KGm1MUXzqGQ7EjHssYcGVM/0aDDslQE=;
+	b=sJv+EAJigUauCld5gSZK3uw//hB7kH1CFRPxtcaqxzASyFRlL3K3/6f3cDunn+w9kVy3
+	 dcjopytfOPjwrAf1w1/tvME2tRk1A9ZBZ1t+GfQEJ5fHY4tTKsB4DzyRSwuWXUTR0uebO
+	 USaQBfAwJGJZ0X8519OcXNH8FUbyeuveqW9gyp/3HOU//vh2UlXGYv7LqLuZ9Jt+UGl6A
+	 ZIsUHXwS/DBv9WkIBUqQM2qHdiBxwWJ78hubNZ/Id6SwIQdDiUDM/9BexzCnJw1RFQOmh
+	 /BdrQvdkIgdSMZDv20s9yfGXFLw8BRFk7VzgzWcyuhe+DxfT2b8fRKGC8m3fooQkhCA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="WNQB/lKa";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA374606A31F
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 13:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E57606A323;
+	Tue, 27 Oct 2026 14:04:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mF8zRUbq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A56A1F01828;
-	Tue, 27 Oct 2026 13:53:16 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WNQB/lKa
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793109844;
+	b=FB64uTPU6yNHLn6ieDlw+oepjOrtfPUoZs6kysQDHgj0+cDBUUTQC6qwZxRQbar04NcQ
+	 iwH6cLiLu1HFed1cVqMYjJcJvWL6YMGTHbOjYl+BbjHiVWKRdRP2UUB2AIfb2uDOb6pyF
+	 TSFncQJevhnKFYm/hgKXXLXN/6rXHPaEPOUHfDl0pDv3Dk0YA9gRkFSbifRhsf+mGEkS2
+	 qSxnjVvLEVDNYusHR5jsRbMApbRgeDsvWG/7U4lrsw96i/PrbCG8NVPYX8hVhNP5+La42
+	 6KyfmHevVqesDalSDI1OW2wMELBIosOV8Frzxq3fqt0UHafdl++ZpXch6qpTHe2jsGA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793109844;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=COJ9uoO7MqU4KGm1MUXzqGQ7EjHssYcGVM/0aDDslQE=;
+	b=wRVAl/67htOmp8LIHLF/34LOuwDLDExSJzl/JADq6Dhx4yYBEHjxqTco4+HTO4W+3PcE
+	 wrkUjEoJzFGRdkkGAx0FbpOQri/dCJ/BaBtvyAhoQW00ovOnSyTp1GLX69bIfKcyMdbsS
+	 P7O0ez0KyWr7Ushud5LoHJxS+SuZCj0WmX07F1eI3/ZZz3Xt/FltMwhuZAuiRYk5C+IE0
+	 XcMeJSmWrKGiEpSpK2TXM7TKvBog9pGNIRGV4EFwRT1mbRF4BcffeP5zZt5hsm8jtkp7H
+	 jXAh8RpOmrHuaT7UzU1BKPzBntKkDXGBSPYKKoNkaAitJTulAqgYwccoVp/z8ZDt+3A==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E5D701F01829;
+	Tue, 27 Oct 2026 14:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793109198;
-	bh=wGwT1JNbkqmcP8fUAnZimf+aufAiCIdNGNB+5b8MPdA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=mF8zRUbq653nfj1B5K+Z45VMISn5YnE0sHMQhzG2zkRwMerN1u0TrRYVWk97hvTNM
-	 uZ0lbteq6tg7KdZ6atcsSTAtfYTmzLqgtX1K28V52vEd6MnMqTJRJtXXcFmIky/8m4
-	 WR+SVC3nI3mJmtmiGZw0lBVh9c3YytpGhMYIKmLAbMuSK8tZKjeP376mr2B1DsolpT
-	 npnhhnwphjkK431NhDvezTuq5Ni+Vq5zhl/CRuPB0GylScV7NWGxBzcj26Q0m9qpXO
-	 ybIZxQd/9nNRMeX/DedkmjK8u6shpdQBEcP8ZqLjIeFW1ucPz08OQzMa15z+dB6HJS
-	 6/qy3HLH+nbKA==
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 85CC7198004A;
-	Tue, 27 Oct 2026 09:53:11 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Tue, 27 Oct 2026 09:53:15 -0400
-X-ME-Sender: <xms:xqzgal-vr3ZeqbXQYJBliutUwh-BPoCNU76xbXs7mx_Ps-IdSmK23A>
-    <xme:xqzgaoksYXGkYGnJF43sYID0Tus98V08BBjG64swDvpdheaZW5VbBJyVOc7DQ6Frl
-    aoZ3R23YOrTA4h2thSa7n_eENBiVLh_oK4jdwW4aOnapsUIANjaAKZd>
-X-ME-Received: <xmr:xqzgajaYJVYfdqtgodH29574WA_vexf-pM5sNeV3dSMQBjrPqxVqpVsiMiw>
-X-ME-Proxy-Cause: dmFkZTEZ/rZ8QL4tKdVH13M4isFoJoqE6mmyk1+ybcvlxgqSp6W0ayLRKd0L7SfTmxuGb5
-    U6+Pfm114T++Wp3SC2FV78EqIZ6zQGqKV5XyNS0Q8g8zeea3kGWywXyvNgIRW79CajYQHr
-    2jF/D3zyUpa8mENlQ2k9kDlrLHG9vuqIwsGPeExjecTgPLyR3BG4mU+4iFcKzGjlB8O7dl
-    rHahXQtAt7H4ct4Hi0ph4caUm45qDhARWvo+NXS6RvFk5in2esxS1VkNF3/wtGoX2gxkDU
-    HYhd+ifyLHB/lQg4TvDcO1vty+4TgdFGCdUfD6xIrm+RnS//HTrIeeMZCfQmeBD5mTfrrt
-    28F2SJuazbG4sdilPjnUK5Xk2C/b77Urnpd+yJpFkxf0srCyBWlhL6vR0USCQldwnnbiLW
-    9q+grn+3rpVTZTV5aFHrdKvOYqBL1I68cy6Ts9EvEo2mG6eqSnlWVGArQuLZTDmYpXGIvS
-    wXLvRFTOpi4viZ4HzYk4qCerKNTdy3232MaWMRw4+fGiHl1k0822eLObmoSxbGhZG/SB+U
-    RY6eT6x1Fr7R33DiHsTIEPGR6+Uf+O9CEjZE+sUhhEJff/MTsubZ9LmOVI85mrAWUqqbJx
-    XWv9aGmJ+yJbAfbRPaNRNIocYryGvdsYvD8pPJi4F3KUYMPNesYsAvQV4dWg
-X-ME-Proxy: <xmx:xqzgaudbz8X2mj1TmcVhbSB5pj192_SKV8vP7t-J3qUs-AsDGR5erQ>
-    <xmx:x6zgar5lbie9c9vsEIGyR4WR5HHpSCBz3DCSwhV-Wl76bl2cm_9stA>
-    <xmx:x6zgaqkT5H7khckA_fD9bSj4bobce4cCO515thNp8GAx2LHLg5LD3g>
-    <xmx:x6zgapYUC1r3US7DHJV2QXJyRoI41UHODbj8ZuE46i0U3Qjz7C1IHw>
-    <xmx:x6zgagOltv2MpGmQj-wyDgIG_3JLhCWmQzbtOVj1MoCubVlHQLT8Bbj6>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 27 Oct 2026 09:53:10 -0400 (EDT)
-Date: Tue, 27 Oct 2026 13:53:09 +0000
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Konstantin Khorenko <khorenko@virtuozzo.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"David Hildenbrand (Arm)" <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Peter Xu <peterx@redhat.com>, Alex Williamson <alex@shazbot.org>, 
-	kvm@vger.kernel.org, =?utf-8?B?TG/Dr2M=?= Molinari <loic.molinari@collabora.com>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v4 1/4] mm/rmap: duplicate a PMD mapping as one in
- folio_dup_file_rmap_pmd()
-Message-ID: <auCsphluu2gwzEPo@thinkstation>
-References: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-0-66f00b7a564c@virtuozzo.com>
- <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-1-66f00b7a564c@virtuozzo.com>
+	s=k20260515; t=1793109844;
+	bh=COJ9uoO7MqU4KGm1MUXzqGQ7EjHssYcGVM/0aDDslQE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=WNQB/lKaECOqYSXayXr6ulokARJ9X5SRHPz6pV8++SJDvgM8HttYXBgnswUfr4LeT
+	 VU8/kNOy+VU79pqOV37RcgQagXRXXAVX4mp6iuj+4UbYRc4OzVgoqEFFmXPkeDDTRO
+	 XEzqJMvazjduFfMWV/Bdk3qyR7HH3n2VqdfjlKI1jeINR9XnUesdr139XTirpI5YxZ
+	 we7O2iXe0S8wMXW/8F4FdJ1zIM3Z0qEpxvArgshpmzLGeOQmc6UffTUNZqZt0apEZt
+	 4fUkCHsgs/KogCLuI7/xN1wMhEyfHzEwjSbu1gntZh1yl/ggoZtWkPZYL4hEwHfe13
+	 C93WXP7/wNmBw==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 4BAAA450FD;
+	Tue, 27 Oct 2026 14:04:03 +0000 (UTC)
+From: Jhonata Poma-Hansen via B4 Relay <devnull+jhonata.poma.gmail.com@kernel.org>
+Date: Tue, 27 Oct 2026 15:04:01 +0100
+Subject: [PATCH net v2 1/2] netlink: check sk_rcvbuf before charging the
+ dump skb
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -96,31 +83,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-1-66f00b7a564c@virtuozzo.com>
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261027-netlink-dump-livelock-v2-1-c4bb05352a33@gmail.com>
+References: <20261027-netlink-dump-livelock-v2-0-c4bb05352a33@gmail.com>
+In-Reply-To: <20261027-netlink-dump-livelock-v2-0-c4bb05352a33@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Jhonata Poma-Hansen <jhonata.poma@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2509;
+ i=jhonata.poma@gmail.com; h=from:subject:message-id;
+ bh=dxWm9SYpOxRZ7FCUM9z5c49PD2TEyVD2AQsd/JcdWfE=;
+ b=owGbwMvMwCX21S6Y7aK9oS7jabUkhqwH64NYJ2yQ3ry27o2cgkP4okyx2vztxtmxd59p1dU0Z
+ vMvbQ/sKGVhEONikBVTZPE5+7iHW/Hjjv8Pd1yGmcPKBDKEgYtTACaiXM7I8PPHlgPt13WfL+i4
+ vz78x/3Ch64Z0eyPczjnzJab/vjjpqWMDP0RC0TP6ey5lFrdwlfE/GrOFC3u2694HWzs7F49/DL
+ xAQMA
+X-Developer-Key: i=jhonata.poma@gmail.com; a=openpgp;
+ fpr=4CCDE38C0B21F1B8FFE1B8D3F53E5306D13F312D
+X-Endpoint-Received: by B4 Relay for jhonata.poma@gmail.com/default with
+ auth_id=1288
+X-Original-From: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
+Reply-To: jhonata.poma@gmail.com
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 21, 2026 at 10:36:00PM +0200, Konstantin Khorenko wrote:
-> folio_dup_file_rmap_pmd() passes PGTABLE_LEVEL_PTE to
-> __folio_dup_file_rmap() for HPAGE_PMD_NR pages, so it adds HPAGE_PMD_NR
-> PTE mappings to the folio instead of one PMD mapping. Each unmap of the
-> PMD removes one PMD mapping:
-> 
-> - the folio's mapcount never returns to zero, and removing the folio
->   from the page cache reports "Bad page cache", or hits a VM_BUG_ON
->   with CONFIG_DEBUG_VM;
-> - the first unmap already counts as the last one and drops the
->   PMD-mapped statistics while the other mm still maps the folio;
-> - the second one drives the entire mapcount below zero and drops them
->   again.
-> 
-> The helper has no caller yet, the next patch adds the first one. Pass
-> PGTABLE_LEVEL_PMD, as folio_try_dup_anon_rmap_pmd() does.
-> 
-> Fixes: d8ef5e311d7b ("mm/rmap: convert page_dup_file_rmap() to folio_dup_file_rmap_[pte|ptes|pmd]()")
-> Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
+From: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
 
-Reviewed-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+Since commit ae8f160e7eb2 ("netlink: Fix wraparounds of
+sk->sk_rmem_alloc."), netlink_dump() charges the dump skb first and
+queues it only if sk_rmem_alloc is still below sk_rcvbuf. Commit
+a215b5723922 ("netlink: make sure we allow at least one dump skb")
+added an exception for an empty socket.
+
+A dump that starts while something else is still charged to a socket
+with a small receive buffer fails with ENOBUFS and stays running.
+Every recvmsg() retries it, fails again and sets sk_err, so a reader
+that peeks before reading, as libnl does, gets ENOBUFS on the read
+after each peek, never consumes the message at the head of the queue
+and spins forever.
+
+I hit this with "iw dev wlan0 scan" hanging at 100% CPU on an arm64
+board with a 6.6 based kernel (iw 5.19 sets SO_RCVBUF to 8KiB). A
+kprobe trace showed the scan dump starting while the NEW_SCAN_RESULTS
+notification iw had just read was still charged to its socket,
+because iw had preempted the sender before netlink_broadcast()
+returned.
+
+Check the limit before charging, as before ae8f160e7eb2, which also
+covers the empty socket. netlink_recvmsg() continues a dump only at
+or below half of sk_rcvbuf, so the skb is then always queued, and a
+dump goes over the limit by at most one skb. Refuse a skb that would
+take sk_rmem_alloc past INT_MAX, so the wraparound stays fixed.
+
+Reproduced on net in a KVM guest with a userspace reproducer and the
+selftest in the next patch; both pass with this fix.
+
+Fixes: ae8f160e7eb2 ("netlink: Fix wraparounds of sk->sk_rmem_alloc.")
+Signed-off-by: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
+---
+ net/netlink/af_netlink.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index a904dc3bc..4129e93a9 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -2318,9 +2318,13 @@ static int netlink_dump(struct sock *sk, bool lock_taken)
+ 	if (!skb)
+ 		goto errout_skb;
+ 
++	/* Check the limit before charging the skb: netlink_recvmsg() continues
++	 * the dump at or below half of sk_rcvbuf, and the skb must be queued
++	 * then. Keep sk_rmem_alloc at or below INT_MAX.
++	 */
+ 	rcvbuf = READ_ONCE(sk->sk_rcvbuf);
+ 	rmem = atomic_add_return(skb->truesize, &sk->sk_rmem_alloc);
+-	if (rmem != skb->truesize && rmem >= rcvbuf) {
++	if (rmem - skb->truesize >= rcvbuf || rmem > INT_MAX) {
+ 		atomic_sub(skb->truesize, &sk->sk_rmem_alloc);
+ 		goto errout_skb;
+ 	}
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.54.0
+
+
