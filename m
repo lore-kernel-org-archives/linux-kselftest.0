@@ -1,63 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.230.113
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.230.112
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793072723;
-	b=fTtYAfWgzwi9+wFRQYGkXXe9zDJvFaT3jw35zRj/PQWvIBygAIPA/aSpJdVBZTYsSJy/
-	 sTszyf3VF8ZCQ95pI09D9gHYiKail3Ngdk8V+alP1l/4q6ZxKI2pJVgEIqJ21/6PrPnjb
-	 5UkxWGX7Sc4YS7bTP4DPJhefNT7tlAxVIackdy1/VDUmU1+5KNOv0ZwzRUzR9EtOglAx6
-	 OSqoJRjUEtDAL2nIT4NM/h85/pYV6AtJrCJ++6xrY+Ux8EtA9r3WYJ4OR7eV03lBzrIVj
-	 BD/lwK5YBb1j+KtVmYh7/NemkMiowyx0M1OuJqfCj/IZIGllbBDQA9ejDgPZtUV8baQ==
+	t=1793072748;
+	b=QqPhjkIqIb1VF0ou7W0PZdd8zqQsXZfN6+veX4SuOOb2bzbugwD0NkAY4LlNbdPU/2j1
+	 73TDs2NLgmHHhD3C/UIh5Om//9vPtVGvlsLi9avd9EyUAir1VcLaMUGh9MYDormid3eQl
+	 RjORcJ88LaqGv/eVNvYeFeOAd0JTKXVNlwCNyaoTWx0qzbKH9U4FenyhwmD2BCVTdYU2j
+	 dRp8ShxWrFAqRRd3OPsNHPWbh3PZH4kkOuFOq3ni7K+RCI3fbOr5pay+tIXT7YGXlYHb1
+	 mJL52SzIR1ddoR5QgWdG0rHcWCdZEm/lHpcCarSC9GIZR7LCWaSzNmFT15SuqZ2g/BA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793072723;
-	h=DMARC-Filter:DKIM-Signature:References:Cc:Date:Message-Id:
-	 Content-Transfer-Encoding:Content-Type:From:Subject:X-Mailer:
-	 X-Original-From:To:Mime-Version:X-Lms-Return-Path:In-Reply-To;
-	bh=awjYNd491nH1SZjZGjhroF+c3sVhiRJKmezrWXmeqDU=;
-	b=h3Y8VSBQzJci/2LCFO8u5WggZ5qgFsVLOjJfWLsmvBs27SsdpwZvOZKYHaZG3BP5upig
-	 YyHEi6+TojPyKlmtTfYGz2cxSPZOPiVi8o/PZ12D/aiPZ1xBq1jykRG41KDFrp3CQHe3M
-	 lrUCAZ0fTvCeA/w5Qg7ebEIILxgcBVyhRNHQN6s22Bs+tCwhgN53k/TRNuWbErqz5ZsjF
-	 mqplUiRNvgCi2hKTG0a/ggGPk6/2Xbad7iRoMeJ5mfwabFue2awHM7/CcC1QJIxg25pBH
-	 /Mpf57y8cW3NewLsYIpl1YSzISaitOnZs28eOPmFq6sSdksLr1vAN0xClqummUwo9yA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793072748;
+	h=DMARC-Filter:DKIM-Signature:Cc:Subject:Date:Message-Id:
+	 X-Original-From:To:X-Mailer:Content-Transfer-Encoding:
+	 X-Lms-Return-Path:Content-Type:From:Mime-Version;
+	bh=ULr9bgQ6yFnrOUoUUAJX9WlVlG9/9n0WdEkZqyzIDlU=;
+	b=rwDNj6mCRdptU5Of8Erp215kkUQykjmerDvFBnCAbfvM2RCcL+9zc4/d2E1OZw4Y9yVd
+	 18OM3WDw494gnnuOh+CMjEQlBitX1yl26Ak2OJjlzNO78xXmXHAaghYv4JyvqVqfIICUB
+	 gy0lfOeDN8TyAfS1EdHsbD/SjlyaucbUcOHZTMmV1J2sUuT5swv1tjRRpg/u1d11Es1i6
+	 amNHm6CJZPfEnH4bAUgiHgyOKExOUm65K62sDb45Ngfrq+O3QSH7VO2wb+rwXLE6pQXcz
+	 65hPUDlVZxHiAL80y1T9hEa+0BXwDFLzCJAvgbsGOjiHkrrulpkZVE9Lna6TM30CS4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bytedance.com;
 	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=ZuLoB8aZ;
-	arc=none smtp.remote-ip=209.127.230.113
-Received: from va-1-113.ptr.blmpb.com (va-1-113.ptr.blmpb.com [209.127.230.113])
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=KRUnrtrp;
+	arc=none smtp.remote-ip=209.127.230.112
+Received: from va-1-112.ptr.blmpb.com (va-1-112.ptr.blmpb.com [209.127.230.112])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8FB606A31B
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 03:45:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B8FB606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27084606A32C
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 03:45:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27084606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=ZuLoB8aZ
+	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=KRUnrtrp
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=2212171451; d=bytedance.com; t=1793072717; h=from:subject:
+ s=2212171451; d=bytedance.com; t=1793072743; h=from:subject:
  mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
  mime-version:in-reply-to:message-id;
- bh=awjYNd491nH1SZjZGjhroF+c3sVhiRJKmezrWXmeqDU=;
- b=ZuLoB8aZu0GcNoIXSDA/NjHhSD1t91BOGddrLrfvdWiQ5hb55AYsSo1u6oskXojiRuJC2N
- XjmYNg5TTvCwaCsyIxAZRk3+inO+UW75P1nMiaH4VQG04HeA6T4JVYp1s8Yn2g/i2lqmNs
- dirMMfcAkCmqoWuyzGry4N4/X8QsWtYbFp9sWW3AoEbl6FN2R9f4VnTITr4PTp6DokxigL
- EMd3tCe8ckUPdgU7VCNpdrU0BeQJftYzoTtCXay86M1xxs+dOAJdgfQLDUBvEN3+N8ExpQ
- GI91TPcvVlSbdELk/dm5j+1BYLPzQ3bHVA+GVdrtPi/flWXuV55SMacJ6F3xSg==
-References: <cover.1793072271.git.weiguixiong@bytedance.com>
+ bh=ULr9bgQ6yFnrOUoUUAJX9WlVlG9/9n0WdEkZqyzIDlU=;
+ b=KRUnrtrpDHoHc9xFObs/VqlzU5RuhQYm6qR2sL5250j7/HOS7KOp19kT69VrDHpbdvguUJ
+ Jsm9FKzTgb9UqYk+yxX+JhL4y7bxoZQirCbiT2Un9WV9jIN13k/Aah+vsw8R5QVbqGIGcE
+ F4WQvQYSKlIbWfM8zx1ZJJ0nAk2drbyeIVWXl0qEm+w5YskqS3cyeE7cDKU+IVoH+L1368
+ T3enpr70PR0lWdxvrNH8eVViwbcGgiDnAKSIcUMmEp+s1uFHccriOKZ68Zikfl6LKWAt69
+ 7T0JgNqPGiXxnMo88MmcE/n2QtJ9FgmxRGoUh00DhcPNnJEH5xEkIfpj48BI+Q==
 Cc: <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>, 
 	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, 
 	<chang.seok.bae@intel.com>, <shuah@kernel.org>, 
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, 
 	<stable@vger.kernel.org>, "Guixiong Wei" <weiguixiong@bytedance.com>
-Date: Tue, 27 Oct 2026 11:44:30 +0800
-Message-Id: <f3a1ac9a118970b2025c11ee04c0e4c89459cf29.1793072271.git.weiguixiong@bytedance.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset=UTF-8
-From: "Guixiong Wei" <weiguixiong@bytedance.com>
-Subject: [PATCH v3 2/2] selftests/x86/amx: Test dynamic fpstate cleanup across exec()
-X-Mailer: git-send-email 2.55.0
+Subject: [PATCH v3 0/2] x86/fpu: Fix dynamic fpstate leak on exec()
+Date: Tue, 27 Oct 2026 11:45:25 +0800
+Message-ID: <cover.1793072271.git.weiguixiong@bytedance.com>
 X-Original-From: Guixiong Wei <weiguixiong@bytedance.com>
 To: <x86@kernel.org>
+X-Mailer: git-send-email 2.55.0
+Content-Transfer-Encoding: 7bit
+X-Lms-Return-Path: <lba+26ae01e65+101b7a+vger.kernel.org+weiguixiong@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+From: "Guixiong Wei" <weiguixiong@bytedance.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,321 +67,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-X-Lms-Return-Path: <lba+26ae01e4b+20f62b+vger.kernel.org+weiguixiong@bytedance.com>
-In-Reply-To: <cover.1793072271.git.weiguixiong@bytedance.com>
+Message-ID: <20261027034525.n_XFdGRdfYdist2-1b1BUKZ4u1Fn2qa1xpUPfMZRII8@z>
 
-Add a regression test for dynamic fpstate leaks across exec(). Repeatedly
-fork a child, load XTILEDATA to allocate dynamic state, and exec the test
-binary. Snapshot the start addresses of matching /proc/vmallocinfo entries
-before and after the loop; addresses present only in the "after" snapshot
-count as new allocations that outlived their task.
+An exec() after using an XFD-controlled xfeature leaks the dynamically
+allocated fpstate. Fix the cleanup in fpstate_reset() and add an AMX
+regression selftest.
 
-Before the first exec(), verify that the child's allocation is visible.
-Skip the check if vmallocinfo is inaccessible, if a matching entry's
-address is hidden by kptr_restrict, or if the allocation cannot be
-observed; address-set diff cannot distinguish allocations in those cases.
+The selftest reports FAIL on an unfixed kernel (verified 10/10 FAILs
+on 7.1.3 with the leak reproducer present) and OK with the fix applied.
 
-The test assumes no concurrent workload creates matching allocations.
-A set difference equal to the iteration count indicates a leak; an empty
-difference indicates success. Report other counts as inconclusive.
+Changes since v2:
+- Free dynamic state at the start of fpstate_reset(), keeping the
+  fpstate_free() interface unchanged. Clear the inherited fpstate
+  pointer in fpu_clone() before resetting it.
+- Replace nested self-exec with a parent fork()/exec() loop.
+- Add a pipe-synchronised pre-flight check that confirms the dynamic
+  allocation is observable via /proc/vmallocinfo before measuring the
+  post-exec() delta. Without that gate "no new entries" is ambiguous
+  between "freed" and "never observed" and would silently PASS on
+  kernels where the allocation is not reachable. /proc/vmallocinfo is
+  the only user-visible signal for a leaked post-exec() fpstate (it
+  has no task scope once the task is gone).
+- Compare the set of allocation start addresses in /proc/vmallocinfo
+  before and after the loop; addresses present only in the "after"
+  snapshot count as new allocations that outlived their task. This
+  compares allocation identity directly, so unrelated vmalloc churn
+  elsewhere does not change the result. SKIP if any matching entry's
+  address is hidden (kptr_restrict) because the diff can no longer
+  distinguish allocations.
+- Report leak failures without preventing subsequent subtests from
+  running, and simplify the commit messages.
 
-Assisted-by: LLM
-Signed-off-by: Guixiong Wei <weiguixiong@bytedance.com>
----
+v2: https://lore.kernel.org/r/cover.1791428412.git.weiguixiong@bytedance.com
+v1: https://lore.kernel.org/r/20260929151013.81562-2-weiguixiong@bytedance.com
+
+Guixiong Wei (2):
+  x86/fpu: Fix memory leak with dynamic fpstate and exec()
+  selftests/x86/amx: Test dynamic fpstate cleanup across exec()
+
+ arch/x86/kernel/fpu/core.c        |   5 +
  tools/testing/selftests/x86/amx.c | 251 +++++++++++++++++++++++++++++-
- 1 file changed, 249 insertions(+), 2 deletions(-)
+ 2 files changed, 254 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
-index 40769c16de1bb..ea35d5332dc3f 100644
---- a/tools/testing/selftests/x86/amx.c
-+++ b/tools/testing/selftests/x86/amx.c
-@@ -5,6 +5,7 @@
- #include <errno.h>
- #include <setjmp.h>
- #include <stdio.h>
-+#include <stdlib.h>
- #include <string.h>
- #include <stdbool.h>
- #include <unistd.h>
-@@ -30,6 +31,9 @@
- #define XFEATURE_MASK_XTILEDATA	(1 << XFEATURE_XTILEDATA)
- #define XFEATURE_MASK_XTILE	(XFEATURE_MASK_XTILECFG | XFEATURE_MASK_XTILEDATA)
- 
-+#define EXEC_TEST_ARG		"--exec-test-child"
-+#define EXEC_TEST_ITERS		10
-+
- struct xstate_info xtiledata;
- 
- /* The helpers for managing XSAVE buffer and tile states: */
-@@ -478,11 +482,253 @@ static void test_fork(void)
- 	_exit(0);
- }
- 
--int main(void)
-+/*
-+ * Snapshot start addresses of /proc/vmallocinfo entries whose caller
-+ * matches a dynamic fpstate allocation. Returns false if the file is
-+ * not readable (default mode 0400), or if a matching entry's address
-+ * cannot be used (kptr_restrict hides the address, or parsing fails);
-+ * in those cases the caller cannot distinguish allocations and must
-+ * SKIP rather than report a potentially false PASS.
-+ */
-+struct fpstate_snapshot {
-+	unsigned long *addrs;
-+	size_t len, cap;
-+};
-+
-+static int cmp_ulong(const void *a, const void *b)
-+{
-+	unsigned long x = *(const unsigned long *)a, y = *(const unsigned long *)b;
-+
-+	return (x > y) - (x < y);
-+}
-+
-+static bool snapshot_fpstates(struct fpstate_snapshot *s)
-+{
-+	char *line = NULL;
-+	size_t line_size = 0;
-+	bool ok = true;
-+	FILE *fp;
-+
-+	s->addrs = NULL;
-+	s->len = 0;
-+	s->cap = 0;
-+
-+	fp = fopen("/proc/vmallocinfo", "r");
-+	if (!fp) {
-+		if (errno == EACCES || errno == EPERM || errno == ENOENT)
-+			return false;
-+		fatal_error("fopen /proc/vmallocinfo");
-+	}
-+
-+	while (getline(&line, &line_size, fp) >= 0) {
-+		unsigned long addr;
-+
-+		/*
-+		 * fpstate_realloc() is static and may or may not be inlined
-+		 * into __xfd_enable_feature() depending on build options;
-+		 * match either caller to stay compiler-independent.
-+		 */
-+		if (!strstr(line, "__xfd_enable_feature") &&
-+		    !strstr(line, "fpstate_realloc"))
-+			continue;
-+		/*
-+		 * vmallocinfo prints the start address with %pK. If
-+		 * kptr_restrict hides it (address shown as 0) or the
-+		 * format is unexpected, address-set diff loses the
-+		 * ability to distinguish allocations. Bail out so the
-+		 * caller SKIPs instead of silently masking a leak.
-+		 */
-+		if (sscanf(line, "0x%lx", &addr) != 1 || !addr) {
-+			ok = false;
-+			break;
-+		}
-+		if (s->len == s->cap) {
-+			unsigned long *tmp;
-+
-+			s->cap = s->cap ? s->cap * 2 : 64;
-+			tmp = realloc(s->addrs, s->cap * sizeof(*s->addrs));
-+			if (!tmp)
-+				fatal_error("realloc snapshot");
-+			s->addrs = tmp;
-+		}
-+		s->addrs[s->len++] = addr;
-+	}
-+
-+	if (ferror(fp))
-+		fatal_error("read /proc/vmallocinfo");
-+
-+	free(line);
-+	fclose(fp);
-+	if (!ok) {
-+		free(s->addrs);
-+		s->addrs = NULL;
-+		s->len = 0;
-+		s->cap = 0;
-+		return false;
-+	}
-+	qsort(s->addrs, s->len, sizeof(*s->addrs), cmp_ulong);
-+	return true;
-+}
-+
-+static int count_new(const struct fpstate_snapshot *before,
-+		     const struct fpstate_snapshot *after)
-+{
-+	int n = 0;
-+	size_t i;
-+
-+	for (i = 0; i < after->len; i++)
-+		if (!bsearch(&after->addrs[i], before->addrs, before->len,
-+			     sizeof(*before->addrs), cmp_ulong))
-+			n++;
-+	return n;
-+}
-+
-+static int exec_test_fails;
-+
-+static void check_exec_child_status(int status)
-+{
-+	if (WIFEXITED(status) && !WEXITSTATUS(status))
-+		return;
-+	if (WIFSIGNALED(status))
-+		errx(1, "[FAIL]\texec test child killed by signal %d",
-+		     WTERMSIG(status));
-+	errx(1, "[FAIL]\texec test child exited with status %d",
-+	     WEXITSTATUS(status));
-+}
-+
-+/*
-+ * Fork a child that loads tiledata and blocks on a pipe before exec().
-+ * The parent samples /proc/vmallocinfo while the child is still suspended
-+ * and verifies that the dynamic fpstate allocation is observable. Without
-+ * that visibility the test cannot distinguish "released" from "never
-+ * observed", so it reports SKIP instead of a potentially false PASS.
-+ */
-+static bool observe_dynamic_fpstate(const struct fpstate_snapshot *before)
-+{
-+	struct fpstate_snapshot mid;
-+	int ready_pipe[2], go_pipe[2];
-+	pid_t child;
-+	int status;
-+	bool observable;
-+	char c = 0;
-+
-+	if (pipe(ready_pipe) || pipe(go_pipe))
-+		fatal_error("pipe");
-+
-+	child = fork();
-+	if (child < 0)
-+		fatal_error("fork");
-+	if (!child) {
-+		close(ready_pipe[0]);
-+		close(go_pipe[1]);
-+		if (!load_rand_tiledata(stashed_xsave))
-+			fatal_error("failed to load tiledata");
-+		if (write(ready_pipe[1], &c, 1) != 1)
-+			fatal_error("write ready");
-+		if (read(go_pipe[0], &c, 1) != 1)
-+			fatal_error("read go");
-+		close(ready_pipe[1]);
-+		close(go_pipe[0]);
-+		execl("/proc/self/exe", "amx", EXEC_TEST_ARG, NULL);
-+		fatal_error("exec");
-+	}
-+
-+	close(ready_pipe[1]);
-+	close(go_pipe[0]);
-+
-+	if (read(ready_pipe[0], &c, 1) != 1)
-+		fatal_error("read ready");
-+
-+	observable = snapshot_fpstates(&mid) && count_new(before, &mid) > 0;
-+	free(mid.addrs);
-+
-+	if (write(go_pipe[1], &c, 1) != 1)
-+		fatal_error("write go");
-+
-+	close(ready_pipe[0]);
-+	close(go_pipe[1]);
-+
-+	if (waitpid(child, &status, 0) != child)
-+		fatal_error("waitpid");
-+	check_exec_child_status(status);
-+
-+	return observable;
-+}
-+
-+static void test_exec(void)
-+{
-+	struct fpstate_snapshot before, after;
-+	int new_count, i;
-+
-+	printf("[RUN]\tCheck dynamic fpstate cleanup across exec().\n");
-+
-+	if (!snapshot_fpstates(&before)) {
-+		printf("[SKIP]\tvmallocinfo inaccessible or addresses hidden by kptr_restrict.\n");
-+		return;
-+	}
-+
-+	if (!observe_dynamic_fpstate(&before)) {
-+		free(before.addrs);
-+		printf("[SKIP]\tCannot observe dynamic fpstate allocations via vmallocinfo.\n");
-+		return;
-+	}
-+	free(before.addrs);
-+
-+	if (!snapshot_fpstates(&before))
-+		fatal_error("snapshot before");
-+
-+	for (i = 0; i < EXEC_TEST_ITERS; i++) {
-+		pid_t child;
-+		int status;
-+
-+		child = fork();
-+		if (child < 0)
-+			fatal_error("fork");
-+		if (!child) {
-+			if (!load_rand_tiledata(stashed_xsave))
-+				fatal_error("failed to load tiledata");
-+			execl("/proc/self/exe", "amx", EXEC_TEST_ARG, NULL);
-+			fatal_error("exec");
-+		}
-+
-+		if (waitpid(child, &status, 0) != child)
-+			fatal_error("waitpid");
-+		check_exec_child_status(status);
-+	}
-+
-+	if (!snapshot_fpstates(&after)) {
-+		free(before.addrs);
-+		printf("[SKIP]\tvmallocinfo inaccessible or addresses hidden by kptr_restrict.\n");
-+		return;
-+	}
-+	new_count = count_new(&before, &after);
-+	free(before.addrs);
-+	free(after.addrs);
-+
-+	if (!new_count) {
-+		printf("[OK]\tDynamic fpstate allocations were freed across exec().\n");
-+		return;
-+	}
-+
-+	if (new_count == EXEC_TEST_ITERS) {
-+		printf("[FAIL]\texec() leaked %d dynamic fpstate allocations\n",
-+		       new_count);
-+		exec_test_fails++;
-+		return;
-+	}
-+
-+	printf("[SKIP]\tUnexpected new allocation count %d; result inconclusive.\n",
-+	       new_count);
-+}
-+
-+int main(int argc, char **argv)
- {
- 	unsigned long features;
- 	long rc;
- 
-+	if (argc == 2 && !strcmp(argv[1], EXEC_TEST_ARG))
-+		return 0;
-+
- 	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
- 	if (rc || (features & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE) {
- 		ksft_print_msg("no AMX support\n");
-@@ -504,6 +750,7 @@ int main(void)
- 	req_xtiledata_perm();
- 
- 	test_fork();
-+	test_exec();
- 
- 	/*
- 	 * Perform generic xstate tests for context switching, ptrace,
-@@ -514,5 +761,5 @@ int main(void)
- 	clearhandler(SIGILL);
- 	free_stashed_xsave();
- 
--	return 0;
-+	return exec_test_fails ? 1 : 0;
- }
+
+base-commit: 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e
 -- 
 2.55.0
