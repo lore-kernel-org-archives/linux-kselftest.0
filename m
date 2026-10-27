@@ -1,107 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793119855;
-	b=P++yhPIQLuXAHpFlZhdg1IsjP5J8EfjkwAdKSAUolxVJVBeRB1R6KiQq6c+RniIQQL1v
-	 EwSa3MdaN/ZTEzdEy+hkuHWvcqLOyERJfYVs+PfpwFWgz7hSle198mkoA7Bei6lXVm1R0
-	 SFC81mrnGvE3YUo6BCSsaA2ED+CaHTsIK2YB2ML1y54LKkcSQnMd15Kn656XvE9VaXJ/M
-	 U794hJK8RUH32GQBLE99XmLamTJhKW+IwOoYHvyCzp0sJn9T1KQ/utG7XAOqIRTTHblLx
-	 HogCbJdpD6o0qIuifF9aGtGqJYAydTZWakZzMfRCTjrdYGMD+2RCOmUeFPS3Pmp1PhQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793119855;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Virus-Version;
-	bh=TNVT5SIENBUHIp7NEAsmxJXryvr6yV5ijHD5gywhn5Q=;
-	b=HvuTW91WWVHcdXLGdqQp1+jncEA6iMQvLs4uaOUmShO7RCyTAX0qlKuOQ/mE+2/lK9Il
-	 3c+b4s7p+JzVvAA8l7kq8DB5mwzKN3gStOYB3Ix9lD1kLgDdExgijwZs/T6yNSSQRa6fy
-	 KcsGAlU2tPY79R7N78/xzY77hbVemv6NVzU1U2iVo3ZcId+7Oo1hiA8ZXJOXwBUr4KMFU
-	 3CRQQncpWOBdo/lFfuaERwH04pSl/uLa7z2i7d8aBSg09JMiV4eCAKD3bAHDmss49x5xf
-	 hfXqk7f34rsBI3idpMLYjhEcyH+oB2p0fdCncjD1Wlbvpl6BuzA2jIvKpW0IWULZOSQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=CvGazHpM;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793120233;
+	b=i2zrXDteqQqcUPxHH7obzcL+iPDveecyIJTu4qNU9AKiVSjtKUtDWpCzk3rLD8hMYncR
+	 oKR1Nu9Kr4X52NW6bQntiV/+NSgYJRXQSpCNAtL8MdIV8A0RIGub4gMOq4/WNDc339aeh
+	 2N1qjR3uhw/0NCV2NdlrEHvRd7Dhehkvd0IRMjQ5Pu9RCgYIBV8eW8UCokiOqdrHtEF3t
+	 HJvcVRGfLVEcc4D6imC9orKd3Fxoa/FALtCatwfC3U6iBsy7NuSl7FbvnGQ+Es2RCvT5N
+	 zwjrO6bsY6pohG9bvkYTgaLqpZHFWzLL6p8QpiIKsBR3Hp5U6PcSI2bVvB7g4jJID6A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793120233;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=uZfqPY3Erv/g9mQt4k+Coj1gdlGms1HCX62UMjguoFM=;
+	b=CQ9iKydHjuZiwrWH2bNQWx6+IB6sV2p8wAlBjVYcYPpDOym4Unj6ZoYfEshy21YkdCN1
+	 V5km8YD0D57GT2edkWO+8Ojyg4dtlAhGtsAjgAvhQ2yblExMLbAxtqe0djqYpc9PL5Xxc
+	 T+phBESfS37S0VXdDDO+uRn+jGvA43MlwLtWhoJ25OI5u9ezvWRPIGEm0nfBvgZ/aAJtW
+	 K97NCw6Sdp2KqSu5NQHgkPeo8ABBS7yd1Y7oNh1lJ2eX/zygNcMmrMYhlY17GZECa+/EN
+	 KoefmLBQurzfZhVyQiIjhtbbB2/ygsfeBdyZ4XWdeFUq9uKkVwszjxStfAi75Qo3P7Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h45kPzaH;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B12606A31D
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 16:50:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D0B12606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF784606A31F;
+	Tue, 27 Oct 2026 16:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=CvGazHpM
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69RDn5E92906702
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 09:50:54 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=TNVT5SIENBU
-	HIp7NEAsmxJXryvr6yV5ijHD5gywhn5Q=; b=CvGazHpM7r6oRX3bfZbviQcSr1N
-	4E0Myd1oOxoHpURR8O3ygO/Dpk/n1BaOz19buAwlnVLr0933AuaeEvpDCFHFgYz6
-	abeMKNuKfzjQowKx+jhyOIDNoHJxkAcx98V9472nirEz5YyvT0sbM7FfdvAjRys0
-	myg9dJmXQEXflfKncql+ipZFqVziwE147BeO3Mf+MZRkZ85jYo0DUmrHYwzFSUTJ
-	fuky37CemmmW6A5xNs+7SuYVHono0IQjLn09R2nqGqXdEjB/jtzeZIdsxjt0ZtxA
-	1donqVG410NYAK6Gju6/OsKk5vwG5hhXUeThTDdEFiP5RIa1aM+2sYN+e0Q==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hgtg6twx7-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 09:50:53 -0700 (PDT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2e601800e58so76571435ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 09:50:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793119853; cv=none;
-        d=google.com; s=arc-20260327;
-        b=MFTu9FOHPC+nd3sCZNEr4n1kHdJeQOgWz1ZZJJp04PhLXMJ8kvdpeIwUVMXkzQzE0Z
-         lTmR8Kfyd2qe7SB9qK25ffV9v4Tf82a0XdLkWjI27mYM0fzdWVqe3b/ThQ/J0NxzGPB1
-         jAXLzuYZmDj95UcjWcJFHEUkcCTeqpMfYcIhCRNm1TLsQ+Jl5coI9Rwz1ZYewP9DXgSH
-         PHnnWF97ROwBLwzO/kH1z4BjU0wFt36Yp1H5LmWYgJeGLqXi5Omo0MLdIdv7eKrMM+Q7
-         IaQ+yheL1PkcfZjwRQqzc/2qhGFqg7RJMCFDLGQxo1TqNqaVCII2qnYht13ZVU+tm/KF
-         VA3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version;
-        bh=TNVT5SIENBUHIp7NEAsmxJXryvr6yV5ijHD5gywhn5Q=;
-        fh=/dLiV+tWlWVdttB6ecOy1iVGLitNhouBXEtERcpZ7/U=;
-        b=cXp/Tq8Dz/ZEz5c/cV/iIoJa34UX9a2JkeEwQSjnHVQ9rgkJRYuxZ0HiQlhbWXy/Fj
-         SUNFqgwKgKsassJk9PBS5mCnybPhlAJzkruvVTXPBL9sGQ73PyJdV6TpIS25ombNa2yi
-         ZCmt+YQ2/OFJ+kxxeBATMKs5IvMk5uKCd0z3xma0V0iyeAVkk4pcQZiAFkhvRxyaIbJm
-         quXYU8kFUYDGDv8WU6g0DFIHhqQYdVUdMfRIeVgjUchGZrbSPcYRk6YKaMfGnxe11EP7
-         uTal9ATAryTbNjifWA5nPF0F9TJ0fF0IE+otYS1T+qN5Gdxf2hmNnCIr8sbVDZcpYykf
-         duUw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793119853; x=1793724653;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=TNVT5SIENBUHIp7NEAsmxJXryvr6yV5ijHD5gywhn5Q=;
-        b=YUO1b7s/Q6MW/uBh95n8/3UHUj46DNQZVCtxgVqG+vSHy3rnOC4hHYe+XVVd53hmh3
-         jxEfg0pneMdTtESA534r3D96ZAV6aEWnMGLNf9hvROSc0ulvQfqPur7n7pyL3AO5ktV7
-         wwvlUoKpjr0+GSWCocKyFp1/fagxFHr1VrForv3dup8NLCCLf19yqgKoxxhSuMd8Gcko
-         o2bRk97tRsAbzIg62CZpzb7CFZwhPgUDsCwxdsCnGFz+Naz5pKCeYj200RyqSh4C8Dq5
-         kDQkhTEGC+pN+RZlWGaDKzR+qmq17bVjOgERrpbRvFZDpU5le0JYeJ0r7e8TE4HoNhwI
-         r0lg==
-X-Forwarded-Encrypted: i=1; AKwUvBxMFhkMi2pzo6GOPh4VCtGyyQZpLHKxCYbbx2phI1W4qYYnu8UJ7qyScpzIt3CON8Wz17uuL/trL614+60xLZg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYISbdXrRk/Th99oaOABfV0Y9uee/Z+tGDePpuzlHPhNb68Gf1H4
-	UvPvWlfZezIJDYy8Y7s3jj4f9EEpEWC3W+9FaQ0WUGD3ms+VgbR+5oMHy3j2sOS0NbQknIqmmYP
-	/ElaDzenlwh7C+QUmaVApE9SmVW5FVG38FA117R2ybxNgYtEOda6RHHYqgn6aGdW67z9T+21MYl
-	AIAiB3BjzQu4FKpKcwP/HZehMmo+aoP6aIdyLQFyR0KMo=
-X-Gm-Gg: AYBFou1vpHNPzg2QGEOZVzP8JvqyOmV/ZMeZXSpZEKVuSeXeDVoQwNz9BUOUVNWI0g3
-	g73eidw+UUj6lX/GRT85zcIFlLZZO4g+ZHozgjhLMDtI7fQOYbsc1q4t7qVz7HOuxlyUzk8+XPw
-	LVg4LvkCEmYQD0BclwKjJYcwN3nSCO+mmiTlrSuOXxeW9BE1mGNKvkBtgPbRNCiD5mYF5488qWm
-	2KysVBo3E2wHqXaX098L0e6mrmFIYQz
-X-Received: by 2002:a17:903:2c0e:b0:2e2:c995:b00a with SMTP id d9443c01a7336-2ea9c83f0acmr97399225ad.48.1793119852787;
-        Tue, 27 Oct 2026 09:50:52 -0700 (PDT)
-X-Received: by 2002:a17:903:2c0e:b0:2e2:c995:b00a with SMTP id
- d9443c01a7336-2ea9c83f0acmr97398875ad.48.1793119852321; Tue, 27 Oct 2026
- 09:50:52 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h45kPzaH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D37E1F01825;
+	Tue, 27 Oct 2026 16:57:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793120232;
+	bh=uZfqPY3Erv/g9mQt4k+Coj1gdlGms1HCX62UMjguoFM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=h45kPzaHDhEmZmxxzBvN2+CDEbdEm0+mt6GRoI7wRvz4n1HF7cvhWDVPmaOTBnF1o
+	 IFtcCipfw1D0tHcXiDt7GLPRJAu2IR48LCLriMwZItMjX9kHZGS5thjqZIPd6rC2dZ
+	 3gQ1qAdTzk3RpOOpQjhCdseY4xP3ji5ToY8JRsgMlBnL2jEmS6oLZR/5FGjPDp8dEs
+	 QqClY/jNpHblc8QhmWi0lQYKcjg0StU9r6AaSnDxqOa6QgIVA/5+N+OpBwkxA8OGU4
+	 sXLgGWXSw77DX6FJp+7jgKHmk1Hj+8V8Pcvbipe/IpILejomUcTT8/7lsDjDUQSK2r
+	 i5ljJZN00awjQ==
+Date: Tue, 27 Oct 2026 16:57:04 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Chris Down <chris@chrisdown.name>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Kees Cook <kees@kernel.org>, Jeff Xu <jeffxu@chromium.org>, 
+	Andrey Vagin <avagin@gmail.com>, Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 1/3] mseal sysmap: Add mseal_system_mappings= boot
+ parameter
+Message-ID: <auDTptDQsB4xBcz7@gremlin>
+References: <cover.1793094611.git.chris@chrisdown.name>
+ <5bd3c89d733ad22224f296dfa8900769de937de0.1793094611.git.chris@chrisdown.name>
+ <auCxjbvY3qPv1sV6@gremlin>
+ <auDTMb6WMFUpxeZy@chrisdown.name>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,70 +68,208 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023234640.1459291-3-toddfreed@meta.com> <179288570143.3134.8925369868949382653@kernel.org>
- <CADh2yMyYS-PWP4912En9D6B9up6Kz-hnCthNkWot+e7N8-q7ZA@mail.gmail.com> <DMFQ63T8HLVV.3L1SY71TO7GHU@gmail.com>
-In-Reply-To: <DMFQ63T8HLVV.3L1SY71TO7GHU@gmail.com>
-From: Todd Bert Freed <toddfreed@meta.com>
-Date: Tue, 27 Oct 2026 09:50:41 -0700
-X-Gm-Features: AclHuK-jcpXRH06paBbeGResR_5OkEC2X2pBFWTmfK1GHPn1XqyQ0qM4p7DKnUE
-Message-ID: <CADh2yMyGdz8XR263w9PbMf+pM1MvNh015CUX69NdYCMfjFnv1Q@mail.gmail.com>
-Subject: Re: [PATCH net v3 2/4] psp: support ipv6 extension headers in
- psp_dev_rcv() decap
-To: Daniel Zahka <daniel.zahka@gmail.com>
-Cc: netdev-bot+sashiko@kernel.org, netdev@vger.kernel.org, borisp@nvidia.com,
-        saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com,
-        mbloch@nvidia.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-        edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-        willemdebruijn.kernel@gmail.com, horms@kernel.org, shuah@kernel.org,
-        cratiu@nvidia.com, raeds@nvidia.com, rrameshbabu@nvidia.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bjorn@kernel.org, dtatulea@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-X-Proofpoint-GUID: AA5kkPdf3LaCS-jHHGh5fEKle2lANcaM
-X-Proofpoint-ORIG-GUID: AA5kkPdf3LaCS-jHHGh5fEKle2lANcaM
-X-Authority-Analysis: v=2.4 cv=OJqyTiaB c=1 sm=1 tr=0 ts=6ae0d66d cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=wpfVPzegXHpEFt3DAXn9:22
- a=YJpWPkmKExx_aQuJnOoA:9 a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI3MDA2NiBTYWx0ZWRfXz2g7hCqISIGt
- ZLmA80Nth1jp+2kRMEmHyP102yAOcgiqMvH2utNPDcYp0/mO7LUEIkcG2Y2K6+6WfNd3AYyYwnY
- /21zmaiHleTJP3DGUjPSx7gETObZ7Pwf63vc0PsgpAZRp84rnZqx3OGZdbw0C0PyzMvkmzyLe6G
- SPwKXLqh2cLJ8IZFWMYlb5js7tZVW3dm3ZQCXxDs7wyeQCuwq1P4l3WOBNlvOupWfIH1DFJwVjB
- F/DIKCrAWP6so8PF1LuwghUfBka4uFjO75nixCRPyhS5m5Zor+QEnb+PxUQY7H5rxGfpTTRzU4v
- fbA6573ksuR1MoROeeiPLc0xZC9GeGDapLpc9osa2bBEUGj6sxJcWn03NS0RSIgx0hb7pKhaQtI
- srZTjAtgOS4nzmEb89/2y+VHQN8RtjxwWeh4M4OteSFEwLzaHNMl1+Bl8MXtISlJG7+TtciC1c8
- c+ZCpFjiqNZw5tmKwEA==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI3MDA2NiBTYWx0ZWRfX25t32J4y9UOa
- of75H1hdaCm2MJrhvux82rG3vDnTAdFMQPP1CvuHoqRogLInluXpTMYqwOLBk2ffiavtx971e/P
- gddQYlfb6U27MfQKdj/C4+CCQVtyw4k=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-10-27_03,2026-10-21_02,2025-10-01_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <auDTMb6WMFUpxeZy@chrisdown.name>
 
-> >> Before this patch, all of these packets were dropped at the is_udp check.
-> >> Forwarding the decrypted skb itself looks blocked by
-> >> sk_validate_xmit_skb() ("unencrypted skb with no associated socket -
-> >> dropping"). That leaves the ICMP error path as the open channel.
-> >
-> > Agree with this finding.
-> >
-> > Ok, this puts me back in mind of the approach in v0 of this series ; just drop
-> > packets with extension headers. Actual support for extension headers can be
-> > done separately from this fix.
-> >
-> > pw-bot: cr
-> >
-> > -Todd
+On Wed, Oct 28, 2026 at 12:37:05AM +0800, Chris Down wrote:
+> Hi Lorenzo,
 >
-> Like Jakub points out, this equally could affect tls offload. We need to
-> be careful with any features that can result in device-decrypted data
-> being sent back onto the network. Another gap that exists currently is
-> xdp tx or redirect. That would also affect both PSP and TLS offload. I
-> think we should try and make these features work with crypto offload,
-> rather than building up more and more defensive checks.
+> Thanks for the quick and thorough review!
 
-Adding the skb->decrypted check on the ICMP path makes sense to me, as
-a fix for this specific case. I am a little wary of fixing the known issues, and
-missing some unknowns though.
+No worries!
 
--Todd
+>
+> Lorenzo Stoakes (ARM) writes:
+> > The existing implementation is a bit of a mess, so any work that extends it
+> > has to put in the work to improve things first.
+> >
+> > I _hate_ VM_SEALED_SYSMAP. It's a hack. A tasteful way of doing this is
+> > really required for a series touching this to be taken, honestly.
+> >
+> > See below for implementation ideas.
+>
+> That's fair, I'll do the cleanup first in v2.
+
+Thanks!
+
+>
+> > (Also it's the merge window, so no more revisions until -rc1, when you need
+> > to resend, thanks.)
+>
+> Sure, I'll wait until after -rc1.
+
+Yup :) we are a bit inundated with AI fixes these days.
+
+>
+> > Could we have some actual justification for the use of the feature please?
+> > So far I've seen arm-waving.
+>
+> Sure. At Meta, we build sealing into the kernel for our VM hosts, and we'd
+> like it on as much of the rest of the fleet as possible. The problem is that
+> the rest of the fleet also runs things which it breaks. Just as one example
+> among many, Reverie (which Hermit our deterministic execution tool is built
+> on) patches the vDSO of the processes it traces by injecting an
+> mprotect()[0].
+>
+> So right now the hosts which want sealing need their own kernel image, and
+> this option is one of the things which forces that. We're working towards
+> hopefully running one kernel across the fleet, and with a boot parameter we
+> can build it with CONFIG_MSEAL_SYSTEM_MAPPINGS=y, keep sealing on by
+> default, and turn it off only on the hosts which run those tools.
+>
+> Let me know if you'd like more information. I can also put that in the
+> commit message for v2.
+
+Great, thanks for the background! Yeah it'd be good to include all that!
+
+I guess I'm fishing for the security justification, but maybe that ship sailed
+:) but it'd be helpful to also include that.
+
+>
+> 0: https://docs.rs/reverie-core/latest/reverie/vdso/index.html
+>
+> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > > index e75344f4e0cd..b1ec9a8a979e 100644
+> > > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > > @@ -4270,6 +4270,13 @@ Kernel parameters
+> > >  	MTD_Region=	[MTD] Format:
+> > >  			<name>,<region-number>[,<base>,<size>,<buswidth>,<altbuswidth>]
+> > >
+> > > +	mseal_system_mappings=
+> > > +			[KNL,EARLY] Under CONFIG_MSEAL_SYSTEM_MAPPINGS,
+> > > +			whether system mappings are sealed for this boot.
+> > > +			See Documentation/userspace-api/mseal.rst.
+> > > +			Format: <bool>
+> > > +			Default: 1 (enabled).
+> >
+> > You _have_ to duplicate the list of things this breaks here please.
+>
+> Will do.
+
+Thanks!
+
+>
+> > Let's negate things first. Make the boot flag 'no_mseal_sys_mappings'
+> > rather than confusingly implying mseal_system_mappings=1 could enable it
+> > even with a config option not provided.
+> >
+> > Then add something like:
+> >
+> > static inline bool mseal_system_mappings(void)
+> > {
+> >        return IS_ENABLED(CONFIG_MSEAL_SYSTEM_MAPPINGS) &&
+> >               !mseal_system_mappings_disabled;
+> > }
+> >
+> > And call that in _install_special_mapping().
+>
+> Makes sense. I'll call it in __install_special_mapping(), since that's where
+> we already have a vma_flags_t, so it can just set VMA_SEALED_BIT without
+> going near the legacy flags at all, if that sounds good? Then
+> VM_SEALED_SYSMAP and all of its users can hopefully go away.
+
+Yeah I typo'd that haha, doh! And it just happens to be a function :) yes
+__install_special_mapping().
+
+>
+> > The LLM overlords tell me that only uprobe trampolines would see a delta
+> > from this given the ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS restriction.
+> >
+> > This would improve things a lot.
+>
+> Yes, but there is a wrinkle. Since 07c308eb2bcf ("uprobes/x86: Do not leak
+> trampoline vma mapping on optimization failure"), __arch_uprobe_optimize()
+> unmaps a trampoline it has just created if swbp_optimize() fails, and with
+> the trampoline sealed that would now fail with -EPERM. I can see two ways to
+> deal with that:
+>
+> One is to seal trampolines too, and just leave a sealed trampoline in place
+> on that path. It's already a WARN_ON_ONCE(), and get_uprobe_trampoline()
+> reuses any trampoline which is in reach, so nothing is really leaked.
+>
+> Another way would be to keep trampolines unsealed, but that means bringing
+> back some kind of per-mapping opt-in, which is exactly what we're trying to
+> get rid of.
+>
+> What do you think? Either way I'll Cc Jiri and Oleg on it.
+
+I think the easiest would be to just seal them too.
+
+>
+> > > +#define VM_SEALED_SYSMAP	(mseal_sysmap_enabled ? VM_SEALED : VM_NONE)
+> >
+> > No, you don't use the legacy VMA flags API for new work. Sorry.
+> >
+> > See above as to a pointer as to how this should look.
+>
+> Sure thing.
+
+Thanks, but with the proposed alternative approach, we can just yeet this from
+the code anyway! :)
+
+>
+> > >  static bool range_contains_unmapped(unsigned long start, unsigned long end)
+> > >  {
+> > >  	VMA_ITERATOR(vmi, current->mm, start);
+> > > diff --git a/security/Kconfig b/security/Kconfig
+> > > index f7bf6cdc6229..d5e83af1bfc6 100644
+> > > --- a/security/Kconfig
+> > > +++ b/security/Kconfig
+> > > @@ -67,6 +67,8 @@ config MSEAL_SYSTEM_MAPPINGS
+> > >  	  of writing includes CHECKPOINT_RESTORE, UML, gVisor, rr. Therefore
+> > >  	  this config can't be enabled universally.
+> > >
+> > > +	  Sealing can be turned off at boot with "mseal_system_mappings=0".
+> > > +
+> >
+> > 'With this configuration option set, sealing can...' right now this reads a
+> > little like it's defaulted on.
+> >
+> > Also can we move this Kconfig option out of security and into mm please?
+> > This is explicitly an mm feature, and it should never have been added there
+> > (mm needs to know if somebody sets this default=y or something for
+> > instance).
+>
+> Sure thing.
+
+Thank!
+
+>
+> > Tests as separate commits please.
+>
+> Happy to do so, but aren't you worried about bisect safety? Or would you
+> suggest another way?
+>
+> > This seems total overkill, you're checking whether a boot parameter works?
+>
+> It was mostly there so that the existing test wouldn't fail when booted with
+> mseal_system_mappings=0, which meant parsing a bool. With a negated flag it
+> can be a lot simpler, but I'm not sure which of these you'd prefer:
+>
+> One option is to skip if [vdso] isn't sealed, and otherwise expect all
+> system mappings to be sealed. Then there's parsing at all, and it also stops
+> failing on kernels built without CONFIG_MSEAL_SYSTEM_MAPPINGS, which matters
+> more once it's in run_vmtests.sh. The downside is that it can't notice
+> sealing being broken entirely.
+>
+> Another is to check /proc/cmdline for no_mseal_sys_mappings and expect the
+> mappings to be unsealed if it's there. That's only a few lines now, but the
+> test still fails on kernels without the option, as it does today.
+>
+> Do you have a preference between the two?
+>
+
+Yeah it's awkward, really moving the tests to mm we'd have to skip them if the
+vdso isn't sealed, then assume a sealed vdso for a new process = feature
+enabled.
+
+I guess at that point it's redundant to check if disabled?
+
+> Thanks a lot for the review!
+
+No worries!
+
+--
+Cheers, Lorenzo
