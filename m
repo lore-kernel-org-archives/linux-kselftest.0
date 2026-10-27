@@ -1,76 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793132754;
-	b=adp2MWCb0izZO01wB0Uw3kaysmFaKpg1e3MxZ1LcbzjBnC+Kc2BcApnpzG1ZE3p6oyi4
-	 ByBaFkfeP/UI3feRe155C/IWV4lp3NLtT86BPXfXRQMtrFPHfAZhVNPeGh6anmmuc7EDh
-	 H0w85hYJpJxht5hbzpwf18oKOjkgR1DuAneogz/cnGi5R8tbSsAzDgQzpsKALtiz0eHb5
-	 wohXvsN3B7ki5edKx4aHOZlTNoWuaUihTQI8l1UctReRk5irAMDMgu1UM599QcjH+RGvb
-	 N1V4zaj4BRL6Uc3ruq4AMCrNvFxhhaiEV8cxjaBWS7Zn96lWkabm5yMhvBJIaH+FtbA==
+	t=1793134275;
+	b=WJn1pG8TfE9ADkM3wiJcgg9KtFVBnvWBN4P815d1+x44GACbvraPHE8+2OKMaL5x32nr
+	 lKqHVeqheG8rgo0W8EJv55W/+tOd09vQP36Eov3L30Yl0sR7bQRn0QQgSTZu4VZJrlmQf
+	 fFcuuZjKysLXN7xO65pTMAGJWpdrd/oYSXG1nJsncbMHCNzC3HblZulKI1z2e0lZxsWtx
+	 WBxlndg4dc0bwQQQq187vxGmCZRX7k6w8X30sLic+rmyc6svW5KOsHZBZWUyqlT3LJYQB
+	 /nBH19u44pOQns2xOGviVqfVoXj0u2n68HmBj9vg8PYkKfHmgxSRdfc1sWwXgy+pKMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793132754;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=v43jU0e7RC9RWtFvXaEewucUmBHe6fOFYcJcLeSXNZY=;
-	b=MGaSbBPgcCjo11mxoOTIeegXjXae3sXCu1TtB1J7Eu++keY74QBXUBJotqmSZAkA+cag
-	 lrtQAk3byr2VAHlGPTEGj5h6qyFgmQcoG5YVGCCTJfuUH3Gcomjdj/d773jfgTM5Cf3j7
-	 pZjSdDi7ykDemb7NjKwzGpHmrx+kOA5NudMcChDANyHTTi+4aW9xeimYMQXTmV+FpHBhc
-	 GEU+0GEJY8gEodty81Vcgvki4/djw+ZkTL1DKaahJ6OjzhslES4i3/lJHiVDyPMhv3nBU
-	 nVfYh5gq80Yk7zD8m9cg77l4sG2+oBO2AtHbCczHDHOBOYTmeGVezDt6aoDy1lheazQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793134275;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=CSLm47a7FT6NjfnxYmf/lBzZ+ptNygyn0ERsa1f7ok4=;
+	b=KMbM7l2aroNWA9z8EOpUC5OpitsrEV1hM6s31KjeYanrgLdMBI7OJRQmbXTQJIB/BPSl
+	 OXm7SRYvExvNgMnalENp/555SUVBhwrE7sV4r4kakG01hUXw8vmUd0oB9EfSvZc6RMQjw
+	 nxuMeZWTcZWWc+06SajowJm5IuhNwvo27SPcRMiTGYPz6bxma0I6V9C7fRtMBuuqxooZF
+	 /6ZeOk3bQ0HrjoX4F0cahZV3A7u0G/7w5TRcke2y22pgk96gFd2DUgB2afBKVts6ihqrk
+	 wPCc34LJAHsht8T+Let7kLPMpfyggkAB74dcIB0/P7IHS+LsKWs/rro8V1mhzQUyTBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jMJ2XrUE;
-	arc=none smtp.remote-ip=209.85.215.200
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IutB40zm;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7711F606C901
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 20:25:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7711F606C901
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4465F606A31A;
+	Tue, 27 Oct 2026 20:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jMJ2XrUE
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cd0b795aa8cso888018a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 13:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793132754; x=1793737554; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=v43jU0e7RC9RWtFvXaEewucUmBHe6fOFYcJcLeSXNZY=;
-        b=jMJ2XrUEWIsDJmE2y/9yluM6UnlcY0/ai2kxR+h/Dyd1obZcfWvlFGA5+nK8RbUN/d
-         oOvyNEGJ93bvgk31m4p2B1HnPmXhcyPjt/cIvHLfwgvjiJxz5CzjiOW+sLNPcFIjpMTw
-         gNHuiHdWN5BJ1MeZrf2gf/0dqK/WluZ1az/ffC6vneKt7/AEmqybnHDFaf6ogGPvEFH8
-         XrNWteueV810LRv1RukjO8Sfkc4hKGa9RJVGr2BMvVDWnDjnoFpVAlq3DuLSeLyItdjG
-         atRkkTNa+DCuH7T+tM2AyM7HWkXC2ZqdX19l/on2kMK/HhjM/vioL65ASWHch/zHMvWG
-         jbeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793132754; x=1793737554;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=v43jU0e7RC9RWtFvXaEewucUmBHe6fOFYcJcLeSXNZY=;
-        b=P5v9BHyw5AxgH/HMXHC6e02HbVCW/ZcknVHMGs8aFxk4SHOpyfRArdLy3H2q0O6cLr
-         suEnye4yr4bbRIKMDMpomRkr9HEmfJlyrH0sLCZsk144WFi00CRkqL0VfoMDk+lBLGwU
-         Q+zwvWs9PsrMdeF4vKoGOfgUDIi94eofBkfct1MBmNrd1Vo6gffx9Zi/2loy7wPkeKQo
-         tzBB7YZo5OwSFXySeGc1q8F9IXHlEMZuRceq+Keqw2rgY0jLa86GXcJCdLsVsGJI9oYR
-         t9vnGDgwwlKy04mE52ZNDQwo0tIyyqev8t8CFKgn1IjapwgMXJCfHkgzn6MdJO5cP2yq
-         78TQ==
-X-Forwarded-Encrypted: i=1; AKwUvBws1x2u+S3jReuL2Dc5mgM0KFKJoM83GbGK0nLfOE8YRZdnUEFlxIYXGoIRuBIAu6+qTy5G13gGOxfDQHdAYBY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ5ju7GT739D8H9a/0hO6FTzIGh7AiQ+SQXNCikrIgr+46ju96b
-	fAAP/IfpTT00dksrszCybqXDf1JsJZJ2zCeHF8M1E59D1wdIhOEU63ZlGc2Qj/kguxtqS8emBff
-	99YVPqw==
-X-Received: from pjbhs19.prod.google.com ([2002:a17:90b:2013:b0:3ad:99d8:e894])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4a51:b0:3a6:d2ac:74ce
- with SMTP id 98e67ed59e1d1-3ae580d24a9mr93283a91.19.1793132753147; Tue, 27
- Oct 2026 13:25:53 -0700 (PDT)
-Date: Tue, 27 Oct 2026 13:25:52 -0700
-In-Reply-To: <85b0e3aa-0b84-4a00-852a-821aed4a0649@oracle.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IutB40zm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 703AD1F01825;
+	Tue, 27 Oct 2026 20:51:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793134274;
+	bh=CSLm47a7FT6NjfnxYmf/lBzZ+ptNygyn0ERsa1f7ok4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=IutB40zmBKNxx4M3pZNrzksYDpGtSz4o9lVe5YiPqvjlw/+8B2o1ONubnP6N4ozC9
+	 gnxLLJkWCtIaXcepa4/frGNd5mrtK4ttXP5mR6OZCMCGJa6FDRAdlNhNQE0RlNIc/H
+	 mjFMr3Ejx5T7sMcQmnHyUEJNq2JdgQ/p76LSGXb5lFzYvKzC82OU6mUup76APkFQZz
+	 yrMsNnK3WIbqfUk8bVvacmE+/UL1UDBQb7UNkadB0Dy+Z9PtBFJrc84N7KvrWzoTVy
+	 Vfps1n/0cV2H05QJaZ1KQS6sCGwa/6Ed/mNCmYkbEX/pxKBKLXy97xJ3xDn8KiVAMo
+	 H/F+lVMdKTzAg==
+Message-ID: <271e8930-471e-4685-bed7-756748cb1baf@kernel.org>
+Date: Tue, 27 Oct 2026 13:51:14 -0700
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,258 +50,71 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261027051808.243000-1-partha.satapathy@oracle.com>
- <auDF9WpqW8OCu_8w@google.com> <85b0e3aa-0b84-4a00-852a-821aed4a0649@oracle.com>
-Message-ID: <auEI0B7QkIhg-lLG@google.com>
-Subject: Re: [PATCH 1/2] KVM: x86: Select lowest vCPU ID for aliased xAPIC IDs
-From: Sean Christopherson <seanjc@google.com>
-To: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-Cc: Partha Sarathi Satapathy <partha.satapathy@oracle.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	wim.ten.have@oracle.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
+To: Manuel Huber <manuelh@nvidia.com>, David Howells <dhowells@redhat.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+ Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>,
+ "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+ <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
+ <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org>
+ <DM4PR12MB6136C6E1BE1E6D675AFFF0EDDE602@DM4PR12MB6136.namprd12.prod.outlook.com>
+Content-Language: en-US
+From: Fan Wu <wufan@kernel.org>
+In-Reply-To: <DM4PR12MB6136C6E1BE1E6D675AFFF0EDDE602@DM4PR12MB6136.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 27, 2026, Alejandro Jimenez wrote:
-> On 10/27/26 11:40 AM, Sean Christopherson wrote:
-> > On Tue, Oct 27, 2026, Partha Sarathi Satapathy wrote: > From: Alejandro
-> > Jimenez <alejandro.=E2=80=8Aj.=E2=80=8Ajimenez@=E2=80=8Aoracle.=E2=80=
-=8Acom> > > When
-> > KVM_X2APIC_API_USE_32BIT_IDS is enabled, KVM's x2APIC hotplug > quirk
-> > allows events to target a vCPU
-> >=20
-> > On Tue, Oct 27, 2026, Partha Sarathi Satapathy wrote:
-> >> From: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-> >>=20
-> >> When KVM_X2APIC_API_USE_32BIT_IDS is enabled, KVM's x2APIC hotplug
-> >> quirk allows events to target a vCPU by its x2APIC ID while the vCPU
-> >> is still in xAPIC mode.
-> >>=20
-> >> In xAPIC mode, APIC IDs are truncated to eight bits. Consequently,
-> >> vCPUs with distinct x2APIC IDs can share an effective physical APIC ID=
-.
-> >> KVM's x2APIC erratum specifies that an event targeting an aliased
-> >> physical APIC ID is delivered only to the vCPU with the lowest vCPU ID=
-.
-> >>=20
-> >> However, the optimized physical APIC map does not guarantee lowest-ID
-> >> selection. When rebuilding the map, KVM retains the first xAPIC-mode
-> >> vCPU encountered for an aliased 8-bit xAPIC ID. Since vCPUs can be
-> >> added in any order, that vCPU need not have the lowest vCPU ID.
-> >>=20
-> >> For example, vCPU 19 has x2APIC ID 0x013 and vCPU 275 has x2APIC ID
-> >> 0x113. Both expose xAPIC ID 0x13 while in xAPIC mode. If vCPU 275 is
-> >> created before vCPU 19, the map retains:
-> >>=20
-> >>   phys_map[0x13] =3D vCPU 275
-> >>=20
-> >> An INIT/SIPI targeting physical destination 0x13 then starts vCPU 275
-> >> instead of vCPU 19. vCPU 275 executes the secondary startup path for
-> >> the firmware CPU entry with APIC ID 0x013. After vCPU 275 enables
-> >> x2APIC, Linux observes APIC ID 0x113 and reports:
-> >>=20
-> >>   Firmware: 13 APIC: 113
-> >>=20
-> >> KVM hardcodes a vCPU's x2APIC ID to its vCPU ID. When populating an
-> >> aliased legacy xAPIC entry, retain the vCPU with the lowest vCPU ID.
-> >> This makes optimized-map selection independent of vCPU-add order.
-> >=20
->=20
-> First of all, apologies for the confusion since this is an earlier WIP
-> version and due to a miscommunication it was sent as v1. The selftest als=
-o
-> has changes that are not included in Patch 2. I will send a v2 after the
-> discussion on this thread.
->=20
-> For this patch, the intended commit message is phrased/focused on
-> maintaining the stated KVM hotplug hack behavior i.e. the commit should b=
-e
-> more like:
-> --
-> When KVM_X2APIC_API_USE_32BIT_IDS is enabled, events targeting an aliased
-> xAPIC ID must be delivered to the vCPU with the lowest vCPU ID. However,
-> the optimized physical APIC map does not guarantee lowest-ID
-> selection. When rebuilding the map, KVM retains the first xAPIC-mode
-> vCPU encountered for an aliased xAPIC ID. Since vCPUs can be added in any
-> order, the initial entry does not necessarily map to the APIC of the vCPU
-> with lowest vCPU ID.
->=20
-> Compare vCPU IDs when populating aliased xAPIC entries and retain the
-> lowest one, making destination selection independent of vCPU creation
-> order.
-> --
->=20
-> > I'm genuinely curious.  What VMM adds vCPUs in a "random" order?  I agr=
-ee a fix
-> > is needed, as KVM should be internally consistent (kvm_apic_match_physi=
-cal_addr()
-> > will always try to match the truncated ID).  But this also makes me won=
-der exactly
-> > what userspace is doing, and why.
-> >=20
->=20
-> The issue was triggered with QEMU and a tool that uses libvirt API for
-> resizing guests and balancing their vCPU allocations across NUMA nodes. I
-> am not sure if similar work has been published upstream, so I'll defer to
-> Wim (CC'd) if you want more details.
+On 10/27/2026 1:12 PM, Manuel Huber wrote:
+> On Mon, Oct 19, 2026 at 04:15:57PM -0700, Fan Wu wrote:
+>> I would prefer a Kconfig CONFIG_SECURITY_IPE_KEYRING default to N instead,
+>> like the fsverity keyring. In the kconfig you can also describe in which
+>> cases should this option be turned on.
+> 
+> Thanks to everyone for the discussion. Some of the points raised are
+> actionable, but two review questions still seem to be open:
+> 
+> 1. Whether to use CONFIG_SECURITY_IPE_KEYRING or the 'per-boot
+>    provisioning' pattern with a kernel command-line parameter
+> 2. Whether IPE should accept any irreversible keyring restriction or
+>    specifically mandate restrict_link_reject.
+> 
+> I want to remain completely neutral here because I am only a potential
+> first-time contributor, and because the scenario I elaborated on can be
+> realized with either resolution. Fan, would you prefer that I:
+> 
+> a. move forward with a non-RFC v2 incorporating your initial
+>    suggestions;
+> b. revise the suggestions given the subsequent discussion; or
+> c. wait for more input before making a decision?
+> 
+> Apologies if this follow-up causes unnecessary churn and turnovers. If
+> the thread remains quiet, I will proceed with (a).
 
-Oooh, actual hotplug of vCPUs.  That makes sense.
->=20
-> A basic reproducer (besides the selftest) simply uses QEMU to issue
-> 'device_add' QMP commands and starts with a vCPU placed on socket 1,
-> followed by its "alias" on socket 0. e.g.
->=20
-> { "execute": "device_add", "arguments": { "driver": "host-x86_64-cpu",
-> "id": "cpu117", "socket-id": 1, "die-id": 0, "core-id": 11, "thread-id": =
-1 } }
-> { "execute": "device_add", "arguments": { "driver": "host-x86_64-cpu",
-> "id": "cpu017", "socket-id": 0, "die-id": 0, "core-id": 11, "thread-id": =
-1 } }
->=20
-> I wondered initially if this approach was breaking some convention, but I
-> have not found anything stating even a "random order" is disallowed. So
-> here we are...
+I would prefer using a Kconfig option to enable the keyring itself. If
+you want a kernel command-line parameter, please gate it behind a
+separate Kconfig option and document the detailed scenario for how you
+intend to use it.
 
-It's not disallowed, just unusual, obviously.
+The same applies to the keyring restriction check.
 
-> >> The separate full-ID entry remains unaffected, and destination 0x113
-> >> continues to select vCPU 275.
-> >>=20
-> >> Signed-off-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-> >> Signed-off-by: Partha Sarathi Satapathy <partha.satapathy@oracle.com>
-> >> ---
-> >>  arch/x86/kvm/lapic.c | 4 +++-
-> >>  1 file changed, 3 insertions(+), 1 deletion(-)
-> >>=20
-> >> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> >> index 1597dd0b0cc6..5dedffddebec 100644
-> >> --- a/arch/x86/kvm/lapic.c
-> >> +++ b/arch/x86/kvm/lapic.c
-> >> @@ -245,7 +245,9 @@ static int kvm_recalculate_phys_map(struct kvm_api=
-c_map *new,
-> >>  		if (apic_x2apic_mode(apic) || x2apic_id > 0xff)
-> >>  			new->phys_map[x2apic_id] =3D apic;
-> >> =20
-> >> -		if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
-> >> +		if (!apic_x2apic_mode(apic) &&
-> >> +		    (!new->phys_map[xapic_id] ||
-> >> +		     x2apic_id < new->phys_map[xapic_id]->vcpu->vcpu_id))
-> >=20
-> > Hmm, I don't think KVM should always override a smaller ID.  It should =
-be a moot
->=20
-> Why should it not always override the smaller ID (in cases where
-> KVM_X2APIC_API_USE_32BIT_IDS is enabled)? I interpret the wording from
-> x2APIC section in:
-> https://www.kernel.org/doc/Documentation/virt/kvm/x86/errata.rst
->=20
-> "KVM will deliver events targeting that APIC ID only to the vCPU with the
-> lowest vCPU ID"
+I also suggest adding a dedicated threat model discussion in your next
+version. The proposed model drifts significantly from IPE's current
+threat model, where the root of trust comes from the kernel image or
+firmware, and please also address the kexec interaction that Luca
+pointed out.
 
-Gah, foiled by my own documentation.  I had this wrong in my head.  It's no=
-t the
-aliasing logic that matters, it's literally the behavior of the optimized m=
-ap that
-I was documenting.
-
-> as having the consequence that we should always replace an existing entry
-> in the map with an incoming lower vCPU ID, but the potential corner cases
-> in this space make my head hurt :).
-> I think xAPIC ID is unfortunately writable, so perhaps that is the sort o=
-f
-> scenario you are thinking about?
->=20
-> > point, since xapic_id_mismatch will be set if "xapic_id !=3D (u8)vcpu->=
-vcpu_id",
-> > i.e. if the incoming vCPU has a smaller vCPU ID and a true xAPIC ID col=
-lision
-> > (not due to truncation).  But to match kvm_apic_match_physical_addr(), =
-I think
-> > it would be this?
-> >=20
-> > 		if (!apic_x2apic_mode(apic) &&
-> > 		    (!new->phys_map[xapic_id] ||
-> > 		     (u8)new->phys_map[xapic_id]->vcpu->vcpu_id =3D=3D vcpu->vcpu_id)=
-)
-> >=20
->=20
-> The above works for the case described in the commit, but going one step
-> further, I think it doesn't behave correctly in this case:
->=20
-> vCPU 531 (0x213) is created first
-> vCPU 275 (0x113) is created after
->=20
-> the map is not updated and will still point to the lapic of vCPU 531.
-> Reversing the creation order above leaves the map with vCPU 275.
-> If my reading of errata.rst is accurate, then vCPU 275 (i.e. the lowest
-> vCPU ID) should always be selected regardless of creation order.
-
-Yeah, ignore that.
-
-Backing up a step, what exactly is the problem you're trying to solve?  Bec=
-ause
-I suspect there's no solution that will magically fix everything.  E.g. if =
-you're
-trying to resolve an issue where vCPUs aren't recognizing SIPIs, then the e=
-xample
-you provided means vCPU_531 will never wakeup, i.e. which vCPU is  "buggy" =
-changes,
-but the bug itself is still there.
-
-If this is about SIPIs hitting the all CPUs, then I think to have a robust =
-(well,
-as robust as this mess can get) implementation, we'd have to disable use of=
- the
-optimized map when processing SIPIs with PHYSICAL delivery, e.g.
-
-diff --git a/Documentation/virt/kvm/x86/errata.rst b/Documentation/virt/kvm=
-/x86/errata.rst
-index a9cf0e004651..65b8a612bfff 100644
---- a/Documentation/virt/kvm/x86/errata.rst
-+++ b/Documentation/virt/kvm/x86/errata.rst
-@@ -63,10 +63,10 @@ When KVM_X2APIC_API_USE_32BIT_IDS is enabled, KVM activ=
-ates a hack/quirk that
- allows sending events to a single vCPU using its x2APIC ID even if the tar=
-get
- vCPU has legacy xAPIC enabled, e.g. to bring up hotplugged vCPUs via INIT-=
-SIPI
- on VMs with > 255 vCPUs.  A side effect of the quirk is that, if multiple =
-vCPUs
--have the same physical APIC ID, KVM will deliver events targeting that API=
-C ID
--only to the vCPU with the lowest vCPU ID.  If KVM_X2APIC_API_USE_32BIT_IDS=
- is
--not enabled, KVM follows x86 architecture when processing interrupts (all =
-vCPUs
--matching the target APIC ID receive the interrupt).
-+have the same physical APIC ID, KVM *may* deliver events targeting that AP=
-IC ID
-+to only one of the vCPUs.  If KVM_X2APIC_API_USE_32BIT_IDS is not enabled,=
- KVM
-+follows x86 architecture when processing interrupts (all vCPUs matching th=
-e
-+target APIC ID receive the interrupt).
-=20
- MTRRs
- -----
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index ecf611845fb1..255c8dc00e0a 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -1181,6 +1181,10 @@ static inline bool kvm_apic_map_get_dest_lapic(struc=
-t kvm *kvm,
- 		return false;
-=20
- 	if (irq->dest_mode =3D=3D APIC_DEST_PHYSICAL) {
-+		if (kvm->arch.x2apic_format &&
-+		    irq->delivery_mode =3D=3D APIC_DM_STARTUP)
-+			return false;
-+
- 		if (irq->dest_id > map->max_apic_id) {
- 			*bitmap =3D 0;
- 		} else {
-
+Fan
