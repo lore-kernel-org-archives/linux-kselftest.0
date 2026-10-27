@@ -1,112 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.14
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793118613;
-	b=hB2wj+J+Vl4oWS0CzKe/u4XVjNafzBPJF7tM9rezFEuiPXQh8pWIpp3yo1qiFpiTDoVE
-	 N3JlPZ+GHgF1fJoEYG6OYZp4nf8tO2kDfMveoPbNGkeD0UqEfAA2UIkdPusNQjHybu8on
-	 7QwuR+8DIq1bC+w+utFA/wk5zygWGY29VDuVpgpbuSiXaqgZ7+sz6oBRGA9KeoAcbNCsc
-	 dwNwd0vTdqkRHiD/elp6BR0EEAUWP1Z5RWn0xQ2Vts8VPT5xhJyJLT6bjhP0Mx+h4tqm2
-	 FA3CPXtw+2+GfQoxQK83LMAx7Wit0/jJF7UoWhHJ7L6uZPI3yPVQIAudSATtfQdiwiQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793118613;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
-	 Received:Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:
-	 X-NV-OnPremToCloud:X-EOPAttributedMessage:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=284UMRxBUGDUu63oGfoCGorc3x8OpZwv73h+hLxuTCE=;
-	b=ZaWEcrIUDvLE0j/0dU4Mahx0W7+nee4O4jcopvUuhx3/CnTvbqy4+IMZ6Uy+zGZmB+65
-	 7N6jpOnF1k3LWc3sklk9usVrgDnN8tDRRvIJCnei/043H0PEkRMn/gdWn4HKLFrMJvkvW
-	 zZc1pD2PUGeIe5DsqfSmHNtl8+kcUo8I7q+ojR8+6SBnU3sCYeIU3waBbW0RdUGpIqFlh
-	 1lRSvmNEPSPwoxJxJL/PeuWSGmVCK+xAEIFmRbRY7Si3NauAGuP+SxvhWAECMBSHwaqAJ
-	 CXtKAOasdLSmkh5qyICeVsk+PgdNYwhePAa49dAK33cqwEAC+zfO2SFlRQC/VegbUlQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=uLOIthP4;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.14
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010014.outbound.protection.outlook.com [52.101.193.14])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793119030;
+	b=1Y8/squLIwu+P9UByEtQuCsj4HMAdEuO1V3x3gzoGmzW/TGnmCSxQDo48lp8Oe9aujZH
+	 WyYxLcEwaPzMSeozB3+1xzVg6nYS8lRJWxmX9b1YGriDspTlCW+9btl+4VjQ8Ui7VHcz4
+	 kyIhMCOJSOQN1WH6ejozpT/lgZ9uISZOu6DjzmFLoBrcuc5wyanbDuek0ONqY7ApOLhpP
+	 EgBVK9kvqVOqNHdzXKDdWO3CD6i3V2y34TNZFGygYBTLyUaDYKtdz9Wi8tVM3iyH6BD4f
+	 OC/1wzZcNlnR9MmNKeZJK2JKsCiTIRb9bhcj9AdNXRqVoyOI265lbNc22OIS0i4kqhA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793119030;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:User-Agent;
+	bh=+X+xT+MsVt3lGpJbnEZ9ySkDtUCJMEXiKO19vcrDGU0=;
+	b=WU3sbDyFSdOYIwvZ4VfWJN001f7A9RiFH77OgmkuIwfcclMY1o6OApE4fjkiffd3pn2R
+	 DzHmHDQ8wFZM5vuQbbZw/jyf320iQwygILbYO1tNvfrGUoVYKsaaOMUYcTG7tziUZ1RrQ
+	 52+ZdPrZ9AeWWFXHRzlWOdWJVpu0eo9bpuuDFWHz46ir6Zb2EaaF8mFpxJRi8uWBDy7hX
+	 NVXyxiY43EGJSvo7b8vn8U0g+d4dsqYhD164YYarRbMZf4ld3//UXq829ahl9n8Mg0G30
+	 VSg0tgUqgOsv0OLbJKvVbEXoBWra0GVZMMfkX+u7rZdSr8OTTVh7ZDJ95B9WeWUKRAA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=chrisdown.name;
+	spf=pass smtp.mailfrom=chrisdown.name;
+	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=tZacLRqx;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2C7606A325;
-	Tue, 27 Oct 2026 16:30:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E2C7606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53313606A31F
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 16:37:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 53313606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=uLOIthP4
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mOZzTW7wcJTAVTDO1O6Z9mfGySMIa0qeXjGGYVHFsLBvGV4pmedexCWXnHxcspi2vFzmT+PMncxg+b7i2LLy1WPeXVbFsTlbKWE6PL1fSE0EkMm9y/c6XU7fSe3GWgWWr38aWt1hMvkyj1J8LcSlHrsbPoO3e9buaZjD74CrAR4eYZ+TWGiTEJTOobb7mcc2LE4ZgaF5RP2n/5vA4CJO7rPG7xOXnlrvei/i6IKUtoVGo7l5K1oxw1Vfe9Nm+51+JUDLTQM2/HZG37+6z+mZnQQ44gH4vSDLaT+k9B2rFDppB1YJe/ZM/DpGW4iwmP/3UO+QkgOZhpHCuSFhQfmSrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=284UMRxBUGDUu63oGfoCGorc3x8OpZwv73h+hLxuTCE=;
- b=o0vOvGmCsc3j3dKLFeg2fzBLAyd+1z9fvtX1I1/nd3CDsVUEKkG0ZtHBWiXqkYIxhkMLZmldUN5G+lBgELsvOzpTRNsXhG9VpeTLmfSS18GHMLUNVc2jTy60PkNI/2OJKxCr6l649iuX5AuVGUKMra90WdSrZ/6dNZXXay0zimlMcweJgQjEFFI8WYI92e4dcZ8J9oX8O2G6YvyuVu49A7xnRdV7xinQE73a2VQEYvlLnFHR/QAnZV+5TFB+gxsvVVV4bMIx26f084M/b/1jsgdi0a5ZXSK+iZiV50/OCpwWp0G5GwHPOfHAyzrIegcwGnJE4C9cVYPo1jZZt42j6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=284UMRxBUGDUu63oGfoCGorc3x8OpZwv73h+hLxuTCE=;
- b=uLOIthP47L9TuW9K8qRv0Lz6gUYDDjiq/hER1KclBfIs4gyXeD9H0NnUsYcDBwFDwE6inc2Xi8272kXGJCPBW3SA56fFLIBjzoxZzXOOM9O9h3c9jsuEkqwPg+Dda94VVUAFqmunwJH8VEefWXPqf1TG3He83fLqDFRzZ0Ta2CHA75IumBQtZmoqcdgiR21YF2R04X4ApR8FilJsfeOU5awzLx8pFPF6VGnKd/3pwxu7x/EBX5uci9asjZ0cwapT6i1fF7VoVlyjgI49Dw7DlaArXEL3vCVTQHwD/M7GQH3IZZJ3zCdDDsp2bQFNfqhtyh+oV0CTcSTra0IpsKX+yg==
-Received: from BN0PR04CA0170.namprd04.prod.outlook.com (2603:10b6:408:eb::25)
- by DM3PR12MB9415.namprd12.prod.outlook.com (2603:10b6:8:1ac::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Tue, 27 Oct
- 2026 16:30:06 +0000
-Received: from BL6PEPF0006C3DC.namprd02.prod.outlook.com
- (2603:10b6:408:eb:cafe::63) by BN0PR04CA0170.outlook.office365.com
- (2603:10b6:408:eb::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.546.22 via Frontend Transport; Tue,
- 27 Oct 2026 16:30:06 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 216.228.118.233) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BL6PEPF0006C3DC.mail.protection.outlook.com (10.167.249.230) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.569.4 via Frontend Transport; Tue, 27 Oct 2026 16:30:06 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.56; Tue, 27 Oct
- 2026 09:29:45 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Tue, 27 Oct 2026 09:29:45 -0700
-Received: from dgx-1v-42.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.56 via Frontend
- Transport; Tue, 27 Oct 2026 09:29:45 -0700
-From: Jamie Nguyen <jamien@nvidia.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	<netdev@vger.kernel.org>
-CC: <kerneljasonxing@gmail.com>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH net] selftests: net: txtimestamp: fix out-of-bounds read in raw UDP checksum
-Date: Tue, 27 Oct 2026 09:29:45 -0700
-Message-ID: <20261027162945.2122306-1-jamien@nvidia.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key, unprotected) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=tZacLRqx
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3adf5f6833cso59430a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 09:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google; t=1793119029; x=1793723829; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=+X+xT+MsVt3lGpJbnEZ9ySkDtUCJMEXiKO19vcrDGU0=;
+        b=tZacLRqxH99A8UkRZg7EIpYVsa2ClCCKpGUA1pyOPVa6AV+Gx7hFYSgg1JrQV6TnJH
+         ahwGbAHP5zt6PqkUDUr3X9oIMHqTHbUUqjHkbqg/tU9+RrzJko/hXR03U7b1wrKJyV51
+         9xNzAc6lgvjfRnh8nv3JqxqKqlvQebyVnR3Uw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793119029; x=1793723829;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+X+xT+MsVt3lGpJbnEZ9ySkDtUCJMEXiKO19vcrDGU0=;
+        b=16n22ga1zFVAADd84Ph/t9KV5Od/Tb0i0Vkr7lat2/7sQUSb0BLlAwUtIzNqT3Osds
+         rQMzAveWkXLdWVZ/pG4rJIFr3CDplTPY96xC+yaOQU+Omvk8kRyvQIRmddA4INU6T6CE
+         WOxN9syFmH7FXWsL730/PHJh29LO0Sp8JNWfBIvmXE1x8k17Gybgdb4m/WxGbEo8NsbR
+         aw8qXqRV8F8K3vwzbo/szBNRe9Pwfw1WMvyuk4AVYp4eAVSD1ylpgZAZDVlG/V91eVS5
+         Y+xMdWwPjvgafnpSlnfX0opA8uj8muJTFi7rFOPhvlGTEdYu9Q9ySz256RwIg67mtYKs
+         IYIg==
+X-Forwarded-Encrypted: i=1; AKwUvByzoP6LYjWwGoieH8DSjuDA/N6nm3+Cg1nLsP35eISK0g7asuB0sRRAiT2bnjE1xonCsK0WEwLZiuaB4OI6pgA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJYCCpjzz65SUWIuZPNn0AHK2tjptv0U+mrV70lJ7cCZT+1xxak
+	4nOi6vBpLkmM6qfKlZpgdTw50+d0DyBPdUea+DeJLvlC5jHMp8ewskSZAxG8QMMSghg=
+X-Gm-Gg: AYBFou2Cs04W8xKaTv016qjUruM2ByvNSrVqJeBQUG12hEq29/Mzy4x2k5YVZIR0LoU
+	GTB36xMVara+ndKTGlhy1nTVCIhBNOizeI2s3yZfmccf4A2Np9eEe8Xmsne0IXXsA0bUvpbWhE9
+	pMKQtMnSAHDZIbwj3Z/gr6QvNE9p8/hUQs9lK6/SQ1x+iXU1IOJAma/bOulClFDI04VxRsUXM6Z
+	hdPMXQiceS7Zt0xHNFDh1zpDtbx9v4M44NDgTLH4UGzQ2lgMEiL7hbBFnfTt8GXMgTxayUaNTWX
+	Twgg66TSHJN83eAJzgSEktgt0z43w/LkqSFhSQ1MhQekHsee1hxS22bzynPGldaGxcg5Wspw8XF
+	UmO4zmLacxON5xxFy+VQyYWvae8oW/XyF/qitt1/YZkljseSlernBi8VeUUHSwJIx7D3UnAHv5F
+	uxQCemHAZS4Jpn54puEywoyqKk76slnAUTh068fKopMZv+UKrvwdd2dcMomNlZM7xuxIt2w4Yc+
+	SwEGlyGCeIaxDnn67ap8hzyDtGCmCen5YrBcbm9ZX4WdLabwnj8883jWokkaC20MqjEoSCjQGEE
+	uHgaOhrlZrnEObwE1Alzyk143L9isEM6apXKs6QlehlkaW8uIS6TYybeH8l3gQ6u6aVuX6E9Opp
+	ACqbcbKSVJflgii7y3v/oQIlny0lNes28GI/4Ytb+gsDhMrQifky2/H5CWdqsdIAKNBOz9UlE
+X-Received: by 2002:a17:90b:4a4f:b0:3ad:4a8b:c6fd with SMTP id 98e67ed59e1d1-3adeabe5366mr7820847a91.28.1793119028562;
+        Tue, 27 Oct 2026 09:37:08 -0700 (PDT)
+Received: from localhost ([116.86.153.182])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae55d63b7csm11729a91.3.2026.10.27.09.37.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2026 09:37:07 -0700 (PDT)
+Date: Wed, 28 Oct 2026 00:37:05 +0800
+From: Chris Down <chris@chrisdown.name>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>,
+	David Hildenbrand <david@kernel.org>, Kees Cook <kees@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>, Andrey Vagin <avagin@gmail.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, linux-mm@kvack.org,
+	linux-hardening@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 1/3] mseal sysmap: Add mseal_system_mappings= boot
+ parameter
+Message-ID: <auDTMb6WMFUpxeZy@chrisdown.name>
+References: <cover.1793094611.git.chris@chrisdown.name>
+ <5bd3c89d733ad22224f296dfa8900769de937de0.1793094611.git.chris@chrisdown.name>
+ <auCxjbvY3qPv1sV6@gremlin>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,110 +109,163 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0006C3DC:EE_|DM3PR12MB9415:EE_
-X-MS-Office365-Filtering-Correlation-Id: f395d200-b589-4533-874c-08df34478f7f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|23010399003|376014|7416014|36860700016|261026135527099003|261026140227099003|261022075727099003|261026130827099003|11063799006|56012099006|261022113327099003|261021133027099003|261021135927099003|261022105027099003|261021130227099003|261021123027099003|261022115727099003|261009223027099003|10067099003|261021121427099003|18002099003|261026121527099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	3TAukMUDhcXtHH8Fj46PTAdMT7DadJc72E84PS2J4ZVl88r86OdSpgjQv7r/cYfz1jjF/Dn60bimuK39yh0Rtk4RjfGeVel9lzyW5ssxlaOIowN/8Mv4bOlOII3Vk0PK0/SVekDU+ggNlCqJfKOOJFpmJ/PVr5j708JCL2BlBvAClaJxKjzmZRk682TO7X+isci0m+dTbXreDHjWFpO3m+6cZGP/1xQPLL+ETX03SxcL14LmDygY21O2P0J7FJvPjQEOnp3J55IDhVKHUc5eyQbJJRhk9k36kOWj0O83gRQC3ASnyaa2D8eovRLSdQn57LuNJEa/x8jH81uVlBhG8+/gy3jTHHfzYtEdq5OuD5G6Zgpf97HMXV89zqm/wR9x3NJLMvkG5lMujW7jZpdYFtrivmnhRfLWK/L8AGtrlhSqTXEHnMeVKZcxy5ufVUpxxIKhQ1b2KyV27Sr+xmCueYct7JKPuL3RajQ4X8Rj5lEdeD/CVY7W+urlCvnJZhZNnSlPvYW3TAMDUZFpEstTJa3FrirXmcpi6c2eae0bg9Arw14GXeuJ0BIOIK8bn5Z3ZJmQoQHhslBPbxBs6qah5rzQZD8E6aNEofMKitkyoPOhPc8O6X9oieyK+/8gMMYp1PeSS/e1UXiWtx6yNa2Uozz00cCebNLprSr36pdPCSA4D/VIFgcMdFy+vgbJFfrPJ7nmrxM6mxsInsBY6dGRmQ==
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(23010399003)(376014)(7416014)(36860700016)(261026135527099003)(261026140227099003)(261022075727099003)(261026130827099003)(11063799006)(56012099006)(261022113327099003)(261021133027099003)(261021135927099003)(261022105027099003)(261021130227099003)(261021123027099003)(261022115727099003)(261009223027099003)(10067099003)(261021121427099003)(18002099003)(261026121527099003)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	E1QyS3ji+5ufEsHHTVOQyeztBB1FSM551aEvdsY2sUZtXtOhuHw41MzG4IWgjKjL7qwkP1Jj/kBE9JEFVAcwgK4btDj8zIm589LFhmxBEoJoJvQjUjGxdcT6w81GPxJN0KSsmt4X7bQz52j0B1fStZVoRJYLNTLoTJTVSnHcLTyFDR3n7wp15+1iHxASmZjlVZKp5AOBehkMyXZvwRGldLcno9LOPls7P8FBsmAPkSRotnumhuVmQIybiqGxtasiX6wRR0CYYGGR4D2iD0nphwfmXsWtLmy1SUd1mo6Kc5qqFNosk3PsCD19WJXb5G2bt3Syw7RAZA2AbKNCXf5QT6eUQqhKDuPg+qGmrSSSJN1awsMoggXTRmZpPjo2lqsjWhvjKoIzQyq0evoPLjpbWGbOTYsc0qBDVfSssdEDU4/bVYPHbJl+AGCm8AKcxWJX
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2026 16:30:06.2862
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f395d200-b589-4533-874c-08df34478f7f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0006C3DC.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9415
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <auCxjbvY3qPv1sV6@gremlin>
+User-Agent: Mutt/2.3.3 (9073d26d) (2026-06-12)
 
-With -r (SOCK_RAW, IPPROTO_UDP) the test writes only the UDP header and
-payload, and the kernel adds the IP header. get_udp_csum() still expects
-the IP source and destination addresses to directly precede the UDP
-header, and reads 2 * alen bytes before the start of the buffer: 8 bytes
-for IPv4, 32 bytes for IPv6.
+Hi Lorenzo,
 
-ASan reports a heap-buffer-overflow for both -4 -r and -6 -r. Without
-ASan the read usually goes unnoticed, but it faults when the buffer is
-the first chunk in the heap. That happens on Ubuntu 26.04, where the
-kselftest runner wraps the test in uutils stdbuf, and txtimestamp.sh
-fails with SIGSEGV on every run.
+Thanks for the quick and thorough review!
 
-Even without a crash, -r packets were sent with a checksum computed
-over unrelated heap memory, so their UDP checksum was invalid.
+Lorenzo Stoakes (ARM) writes:
+>The existing implementation is a bit of a mess, so any work that extends it
+>has to put in the work to improve things first.
+>
+>I _hate_ VM_SEALED_SYSMAP. It's a hack. A tasteful way of doing this is
+>really required for a series touching this to be taken, honestly.
+>
+>See below for implementation ideas.
 
-Build the pseudo-header from the destination address and checksum only
-the UDP header and payload. -R and -P already write daddr as both the
-source and destination address, so their checksums are unchanged. With
--r the kernel selects the source address, which equals daddr for the
-loopback addresses used by txtimestamp.sh.
+That's fair, I'll do the cleanup first in v2.
 
-Fixes: b52354aa068e ("selftests: expand txtimestamp with ipv6 dgram + raw and pf_packet")
-Signed-off-by: Jamie Nguyen <jamien@nvidia.com>
----
- tools/testing/selftests/net/txtimestamp.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+>(Also it's the merge window, so no more revisions until -rc1, when you need
+>to resend, thanks.)
 
-diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
-index 170be19..f7bdf30 100644
---- a/tools/testing/selftests/net/txtimestamp.c
-+++ b/tools/testing/selftests/net/txtimestamp.c
-@@ -418,19 +418,25 @@ static uint16_t get_ip_csum(const uint16_t *start, int num_words,
- 	return ~sum;
- }
- 
--static uint16_t get_udp_csum(const struct udphdr *udph, int alen)
-+static uint16_t get_udp_csum(const struct udphdr *udph, bool is_ipv4)
- {
--	unsigned long pseudo_sum, csum_len;
--	const void *csum_start = udph;
-+	const void *addr = is_ipv4 ? (void *)&daddr.sin_addr : &daddr6.sin6_addr;
-+	int alen = is_ipv4 ? sizeof(struct in_addr) : sizeof(struct in6_addr);
-+	uint16_t addr16[sizeof(struct in6_addr) / sizeof(uint16_t)];
-+	unsigned long pseudo_sum;
-+	int i;
- 
- 	pseudo_sum = htons(IPPROTO_UDP);
- 	pseudo_sum += udph->len;
- 
--	/* checksum ip(v6) addresses + udp header + payload */
--	csum_start -= alen * 2;
--	csum_len = ntohs(udph->len) + alen * 2;
-+	/* pseudo-header source and destination: both are daddr */
-+	memcpy(addr16, addr, alen);
-+	for (i = 0; i < alen / 2; i++)
-+		pseudo_sum += 2 * addr16[i];
- 
--	return get_ip_csum(csum_start, csum_len >> 1, pseudo_sum);
-+	/* checksum udp header + payload */
-+	return get_ip_csum((const uint16_t *)udph, ntohs(udph->len) >> 1,
-+			   pseudo_sum);
- }
- 
- static int fill_header_ipv4(void *p)
-@@ -479,8 +485,7 @@ static void fill_header_udp(void *p, bool is_ipv4)
- 	udph->len    = ntohs(sizeof(*udph) + cfg_payload_len);
- 	udph->check  = 0;
- 
--	udph->check  = get_udp_csum(udph, is_ipv4 ? sizeof(struct in_addr) :
--						    sizeof(struct in6_addr));
-+	udph->check  = get_udp_csum(udph, is_ipv4);
- }
- 
- static void do_test(int family, unsigned int report_opt)
--- 
-2.43.0
+Sure, I'll wait until after -rc1.
 
+>Could we have some actual justification for the use of the feature please?
+>So far I've seen arm-waving.
+
+Sure. At Meta, we build sealing into the kernel for our VM hosts, and we'd like 
+it on as much of the rest of the fleet as possible. The problem is that the 
+rest of the fleet also runs things which it breaks. Just as one example among 
+many, Reverie (which Hermit our deterministic execution tool is built on) 
+patches the vDSO of the processes it traces by injecting an mprotect()[0].
+
+So right now the hosts which want sealing need their own kernel image, and this 
+option is one of the things which forces that. We're working towards hopefully 
+running one kernel across the fleet, and with a boot parameter we can build it 
+with CONFIG_MSEAL_SYSTEM_MAPPINGS=y, keep sealing on by default, and turn it 
+off only on the hosts which run those tools.
+
+Let me know if you'd like more information. I can also put that in the commit 
+message for v2.
+
+0: https://docs.rs/reverie-core/latest/reverie/vdso/index.html
+
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index e75344f4e0cd..b1ec9a8a979e 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -4270,6 +4270,13 @@ Kernel parameters
+>>  	MTD_Region=	[MTD] Format:
+>>  			<name>,<region-number>[,<base>,<size>,<buswidth>,<altbuswidth>]
+>>
+>> +	mseal_system_mappings=
+>> +			[KNL,EARLY] Under CONFIG_MSEAL_SYSTEM_MAPPINGS,
+>> +			whether system mappings are sealed for this boot.
+>> +			See Documentation/userspace-api/mseal.rst.
+>> +			Format: <bool>
+>> +			Default: 1 (enabled).
+>
+>You _have_ to duplicate the list of things this breaks here please.
+
+Will do.
+
+>Let's negate things first. Make the boot flag 'no_mseal_sys_mappings'
+>rather than confusingly implying mseal_system_mappings=1 could enable it
+>even with a config option not provided.
+>
+>Then add something like:
+>
+>static inline bool mseal_system_mappings(void)
+>{
+>        return IS_ENABLED(CONFIG_MSEAL_SYSTEM_MAPPINGS) &&
+>               !mseal_system_mappings_disabled;
+>}
+>
+>And call that in _install_special_mapping().
+
+Makes sense. I'll call it in __install_special_mapping(), since that's where we 
+already have a vma_flags_t, so it can just set VMA_SEALED_BIT without going 
+near the legacy flags at all, if that sounds good? Then VM_SEALED_SYSMAP and 
+all of its users can hopefully go away.
+
+>The LLM overlords tell me that only uprobe trampolines would see a delta
+>from this given the ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS restriction.
+>
+>This would improve things a lot.
+
+Yes, but there is a wrinkle. Since 07c308eb2bcf ("uprobes/x86: Do not leak 
+trampoline vma mapping on optimization failure"), __arch_uprobe_optimize() 
+unmaps a trampoline it has just created if swbp_optimize() fails, and with the 
+trampoline sealed that would now fail with -EPERM. I can see two ways to deal 
+with that:
+
+One is to seal trampolines too, and just leave a sealed trampoline in place on 
+that path. It's already a WARN_ON_ONCE(), and get_uprobe_trampoline() reuses 
+any trampoline which is in reach, so nothing is really leaked.
+
+Another way would be to keep trampolines unsealed, but that means bringing back 
+some kind of per-mapping opt-in, which is exactly what we're trying to get rid 
+of.
+
+What do you think? Either way I'll Cc Jiri and Oleg on it.
+
+>> +#define VM_SEALED_SYSMAP	(mseal_sysmap_enabled ? VM_SEALED : VM_NONE)
+>
+>No, you don't use the legacy VMA flags API for new work. Sorry.
+>
+>See above as to a pointer as to how this should look.
+
+Sure thing.
+
+>>  static bool range_contains_unmapped(unsigned long start, unsigned long end)
+>>  {
+>>  	VMA_ITERATOR(vmi, current->mm, start);
+>> diff --git a/security/Kconfig b/security/Kconfig
+>> index f7bf6cdc6229..d5e83af1bfc6 100644
+>> --- a/security/Kconfig
+>> +++ b/security/Kconfig
+>> @@ -67,6 +67,8 @@ config MSEAL_SYSTEM_MAPPINGS
+>>  	  of writing includes CHECKPOINT_RESTORE, UML, gVisor, rr. Therefore
+>>  	  this config can't be enabled universally.
+>>
+>> +	  Sealing can be turned off at boot with "mseal_system_mappings=0".
+>> +
+>
+>'With this configuration option set, sealing can...' right now this reads a
+>little like it's defaulted on.
+>
+>Also can we move this Kconfig option out of security and into mm please?
+>This is explicitly an mm feature, and it should never have been added there
+>(mm needs to know if somebody sets this default=y or something for
+>instance).
+
+Sure thing.
+
+>Tests as separate commits please.
+
+Happy to do so, but aren't you worried about bisect safety? Or would you 
+suggest another way?
+
+>This seems total overkill, you're checking whether a boot parameter works?
+
+It was mostly there so that the existing test wouldn't fail when booted with 
+mseal_system_mappings=0, which meant parsing a bool. With a negated flag it can 
+be a lot simpler, but I'm not sure which of these you'd prefer:
+
+One option is to skip if [vdso] isn't sealed, and otherwise expect all system 
+mappings to be sealed. Then there's parsing at all, and it also stops failing 
+on kernels built without CONFIG_MSEAL_SYSTEM_MAPPINGS, which matters more once 
+it's in run_vmtests.sh. The downside is that it can't notice sealing being 
+broken entirely.
+
+Another is to check /proc/cmdline for no_mseal_sys_mappings and expect the 
+mappings to be unsealed if it's there. That's only a few lines now, but the 
+test still fails on kernels without the option, as it does today.
+
+Do you have a preference between the two?
+
+Thanks a lot for the review!
