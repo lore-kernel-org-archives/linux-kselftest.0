@@ -1,79 +1,78 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793132549;
-	b=q+4UbG22aAn5cpOhMC/GpLzKtFBfwD2aNmZPCdZK6hMmxIVRkpRfYP38h22AupuCGV4S
-	 PNkQ7rcE97eIJlWXfIxcnMHCUYrif6MR3CH3rGjZCd2fMkWkTK+N1wIrepAy9TC7VdNmo
-	 HHGVNSwAZsX/jWHJ+jz2TfBAsUyN6PYP5m0Fe0PSBJG6LKMfIiEku0EYm4BKE5b7lDuDS
-	 qG1VjHgjq5YzpY5yuvuu0RpFgRkMH/ifoNcrI8BNswyMXugA0RSpnergUBu4OtjW60H+A
-	 R9esRYt52FYKD2mH947D/enY2X/rKDvzUj0QONgE02G25ViJ1xh5Tg23sxA3ek5HgFQ==
+	t=1793132551;
+	b=MzYACcPbZY5BNkeIZdFJQEOofQxtXs8a9rBqam7zppkZKfEwbUak/B2xUpCiGzUepDTg
+	 UJA/QDD15wEwtYM1j9Z4YOw+LQbzcCZ+lWC7FQAWVI+r+VAUh0mWppJ/WVxt5lbHbhRG+
+	 bcDTpNyNFqTPzJ0Sowhv/7NS7TGHrFkvSqAV+lP8RYfgXObdByuZfdDf0te6ZeSMBio21
+	 nNwauzMy1QrBgKz+HcKvLBRVJSZKHhyuSfz88toiddHWNFqCfPbFg3lvkU6t1Z/jnSife
+	 gyaZ9SpZLwgKacdVl1ArlcRPTV/K6EAgxqalFQZ0BxvfvKnCR8K2nPZf7Vsi9HL3tcQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793132549;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793132551;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=qmJaWAM7FyiJnR1RXpXVdlJYkcZ6k524c07t7WNMxYQ=;
-	b=Ral9cd9/zKx2BIf6VJ55bxRlTYRsxKgi8yj+55qh49pVeagK9jq5L0xFzzUx5OlpzGDt
-	 NS0hjkasG5rtfRqutBVj1FdFTsMBiShXIwC0xmO7WX6Mw3gMKzE104rBazWS41ueJbHu/
-	 NBPVWSi4xqrlCtXH/914KcLgvAfonbjVk0LyLbT628tWDWXmyJXzN9fC3Ue4oB7QQBRhb
-	 cZunb9m9GPxCBDchkX0Hl+DMqV8pgRVB+psJpdvr3V932vN48hbhw1wgCqP3C/M5ATKpl
-	 Bm7djSP4K8pByG9R24NmEKR8uez7M8d93Hrsj6d0Qhxldqtql5jeKTLSPPy39CUVMyQ==
+	bh=QFqpzviPc62m2+b1N8YCwl/uYJvBexNvvOd3y1LZQaE=;
+	b=cYKwI4J7ZBiLtpbXZSuY2Z7fhO0DRKA6a7FmI1S/5woKv/DP8+8IbiBp5CYV+BTuSJnZ
+	 OcdwCyxpHrwSPu/ieQ0M89MVK/ex6T+IvGJ6GvDedwOLU5/PdLnWHEzq/G9HtxYTJT+3f
+	 3OOyJ9aad3hYHJpug6u8yYy2EWXDyqaLNujbPX9RYcLDU1id25S3RQMimSM+T5TiHJwiC
+	 iofRYZiLBGTHN2Bi74kK2IQ4+9fWWVn5TmEVbI/UVr8gpJaMJkwx4t/OQF5H8oQCqk50f
+	 fSn5CamCFD/el7ob17GcMNzvH+r1btT97Bgm3HRnfqWR0nEKaNatyl6hyGd2ep3xGOQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HrKX9Icx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YNjgLP15;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997516073569;
-	Tue, 27 Oct 2026 20:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A099D606A911;
+	Tue, 27 Oct 2026 20:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HrKX9Icx
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YNjgLP15
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793132549;
-	b=ERll22cj45nSrDnO4uqQBXTsz8P30PNYrON8qku9QJ7RVqHAfj6myjwbR9BoyhwCclv7
-	 NPhLyToLo3AY+SVvr/CI9uEHffOPt+lHeyyuOlISkbk/AUCt1m0Pnqcuv1sGB9W04TWiJ
-	 Jr2iHnIjCLi50hiD72VCqXhp60rf7qXxYvjZzxZig1XU+jR+rJFlTZ1RX3MvWyf5/ipVa
-	 4C0KKJQ6GQVaVcxBl45X6ASyIn2BM+r77xX9GQnMmzMcg88CfvRax/kEznfuMyLOwP4Pt
-	 hFWNA8iZ/Bsl1+Ups3PgGorj7w4rtucF9GRioAGPB4gAjBgXcF07odxqqdm7C5iAw+A==
+	t=1793132550;
+	b=eVGO/CShdI8p8b3RHTZA/I8pgrJNB1y4xoRqbH2J5/0/fKZ8gYrWnHon6rE1M9P8ctn5
+	 cAuvBPvvl+oy62GguoGEXLozPyhK7xCroex9bwA6Tq0HB91ZMv0XMoSQERnAmNQjW6Cyu
+	 XvMlziiO7TM+VrKntN3+ldOKm/5iTUW9IjlfYOSHqtMDiMwnIHUisr4EBMhltmqQD2fUw
+	 cyZCxvpyHDXuCvqbTHXLyw8z+OJa8XWOu0EsAf7vMEIdFgak/T+tjQXaVsO5MvMerx1Uj
+	 AQDd47E3zxX8MYK5s1ouv9kwvo6oH83jBpO7vWuLlVZLpG1MIGic6ZzeON/Z782ISTA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793132549;
+	c=relaxed/relaxed; t=1793132550;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=qmJaWAM7FyiJnR1RXpXVdlJYkcZ6k524c07t7WNMxYQ=;
-	b=kr0De2UFg+se6Dzo+T6/Le7hnjdk58tY0MqMlMdn8Eeuze38rroHGk6DrM5AhdK9lO76
-	 fQJRPdFEmYEnmOOwVmjlaYHoiNl0JaIsf0g/mg+aKKLqs4sh/Pf3m7/guV1Z1dzG5uwye
-	 4bkPk99RpRcNlnYFwn1C2xZEKXwAerH8rAopZZLjRi04AB9HQsWIXRZz16YlEMLLH4yMx
-	 tDRdgJPE5OR0zBs3WbC6oVYB2JVPEA8YBmDPC28ZZOkj5Yw6b4VGa8cTwTzlD/vy8wyzW
-	 iE+yNOD2KmS0ierTV+h2axx8RixC0Hn8IGdK+Id/vHbpGcRW82YoGhwXg26JeR5Clzg==
+	bh=QFqpzviPc62m2+b1N8YCwl/uYJvBexNvvOd3y1LZQaE=;
+	b=1TCfyP7MpTMiiG0YJl7VYhgua1kf5J9sFusLhzFdlDYNTWFDKsGSGVpigD8k4vcqZHSE
+	 lU99UYmnMoagav5mPbb4cYPUk+n6uHDNXdfmiojUN6bVYGts/fjvEg78q6fxlBPHl3Azx
+	 89jjFI1ItJwVzYCMiBeaACIOVHLQaWTUcKVJxUugFjO9+sz7+ZqB/Pak2KGwYYQM+clHr
+	 cDQHglwGFIm8Gq0qgx5deX0HzFnfrz1jtTJF9GoP4EMRCcE8x8iw5XuEOzMXpK9fPL0Vt
+	 owZqwJvMSAnbNJKsXj+wVWE5WDHaUWPgxFlm+AsxoVyjgCwBHVuM94feX6yJV4npepg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2AD5B1F01340;
-	Tue, 27 Oct 2026 20:22:17 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 84AE31F0135F;
+	Tue, 27 Oct 2026 20:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793132549;
-	bh=qmJaWAM7FyiJnR1RXpXVdlJYkcZ6k524c07t7WNMxYQ=;
+	s=k20260515; t=1793132550;
+	bh=QFqpzviPc62m2+b1N8YCwl/uYJvBexNvvOd3y1LZQaE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=HrKX9IcxPu6WMUQm08x4IEk0QVfX8KzvdYkLMSXC/JhJoxFWdH7zGMjYSYwsauOFT
-	 sMkhapyZOKT7ImUmBbQ95PA2/ATYM8DzTm3/2N22g+sHvZR6i/fSgp357f5dGTVvRZ
-	 osNhfoYc6TEkMeM/H5aZ17C8StL9GjoWJu/9e9IoiBZAecFnCwTyL4MB13n40fJ2rd
-	 rLiVdorUZ/CtaMJ1ath3DTz3IvI3isW7ll1hP9i1WC6msxq7ndwGcNlRWbcYIG23U/
-	 VSxWLTwF2aZlj9/UgFV7eRXuebDNPQI4711hBwac0tYUGo62dtyrZXDJxDw2KLYgis
-	 mitH5lAei36Jg==
+	b=YNjgLP15d7ARK+Z4Bda3ofnJn5CdcU4Oyxsilndn6k1YBeXXmpFiIXwGNYU7NOKmt
+	 zOvufcxjl9Ns1LjzoZVMg4FCIeMiS5DAhHFMi/K89pZi44f+1XUCyymRqNFcRDtoZy
+	 dgzyETMt68ldRtpRmadMwEcJGAgpF8E8Ur5UnKaEYsKrDsMq4sK8Y/jeRndtZr/X+l
+	 V0CSaKHKMBSM1+mzAjae9YRO2KtAneKUVze/v3rumhfmnYiV0J10yLHy04iWG2KI1z
+	 4bUoVsAd+RExqwgFzLt/KdAzev0OiJieIi0d3/5W0Rt/DeToSdcnR/93NMYk5xwc/t
+	 wwfEaloTzm+Sw==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id A2F1B45245;
-	Tue, 27 Oct 2026 20:22:10 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 0EA9245264;
+	Tue, 27 Oct 2026 20:22:11 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Tue, 27 Oct 2026 14:22:21 -0600
-Subject: [PATCH v13 21/39] dyndbg: hoist classmap-filter-by-modname up to
- ddebug_add_module
+Date: Tue, 27 Oct 2026 14:22:29 -0600
+Subject: [PATCH v13 29/39] selftests: enable comma-terminator tests
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +83,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261027-dd-cmap-part2-clean-v13-21-9267923be612@gmail.com>
+Message-Id: <20261027-dd-cmap-part2-clean-v13-29-9267923be612@gmail.com>
 References: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 In-Reply-To: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -111,14 +110,13 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
  linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
- Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>
+ Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=5946;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=3975;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=PB0GIt3ET4Ab4p9mTW7eHh3u21VWB8JI22spx3248sY=;
- b=SZ+F9Bd2p2eh30w8K74kkaIrAALD9DQxrIu6aixxVrugMVUKQy9r2m0i4X5n2O6Nq/WTCye/C
- GlgUcwRSJIZCxgItIjab73TbQGVcjB18er2Lg9+Yi9YWIDuvbW4fzvU
+ bh=NxQmKtv0eDJHiMhYB7Dsgkr2EoP7NbBP01ImDvAfxdw=;
+ b=qbn/L3/n+uApxRkFQR7jbqsIdGX1ATWtKG8Pm04sW0nk8M66EbqdpedcS02w/6VJfKwmzxsj1
+ ye2G4u900UzAbrsDfqBkQB1C3QDuD9LzhapimtIefqBuBECl5+nAffC
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -129,169 +127,95 @@ Content-Transfer-Encoding: 7bit
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-The body of ddebug_attach_module_classes() is just a code-block that
-finds the contiguous subrange of classmaps matching on modname, and
-saves it into the ddebug_table's info record.
-
-Implement this block in a macro to accommodate different component
-vectors in the "box" (as named in the for_subvec macro).  We will
-reuse this macro shortly.
-
-And hoist its invocation out of ddebug_attach_module_classes() up into
-ddebug_add_module().  This moves the filtering step up closer to
-dynamic_debug_init(), which already segments the builtin pr_debug
-descriptors on their mod_name boundaries.
+Enable the FT_comma_terminators test block in dyndbg_selftest.sh to
+verify control query parsing when queries are terminated by commas.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-v8: set maps.len = nc unconditionally
-v3: expand block-comment in ddebug_add_module
-
-v2: move RvB after SoB
-
-finish hoist - drop old fn - ddebug_attach_module_classes
-
-the v1 rev left the old ddebug_attach_module_classes in place, but it
-is completely redundant now, since it already lost the list-linking
-job it was doing.
-
-It was being cut out later in the patchset (in the unsent API
-adaptation phase), but for cleaner review, lets excise it now.
-
-OLD all-in-1-series (pre split into reviewable chunks)
-
-v10?- reordered params to match kdoc
-
-v12- refactor/rename: s/dd_mark_vector_subrange/dd_set_module_subrange/
-
-1. Renamed the macro from dd_mark_vector_subrange to
-   dd_set_module_subrange to better reflect its purpose of narrowing a
-   vector to a module-specific subrange.
-
-2. Simplified the arguments by removing the redundant _dst, as the _di
-   pointer already provides access to the target _ddebug_info struct.
-
-3. Refactored for Clarity: Instead of overwriting the struct's start
-   pointer while the for_subvec loop is using it to iterate, I
-   introduced a temporary __start variable. This avoids the "subtle"
-   side effect and makes the logic easier to follow.
-
-4. Updated Documentation: Improved the comment block to explicitly
-   state that the macro scans for the first match and counts
-   contiguous elements.
-
-fiuxp
+v11:
+. convert modprobe dyndbg parameters in FT_test_classes and
+  FT_classmap_inheritance to use comma separators
+  ("class,D2_CORE,+pf;...").
+  Sashiko review complaint (patch 24):
+  "Are these load-time parameters truncated during module load due to
+  how the shell handles quotes? When bash evaluates and strips the
+  double quotes before executing modprobe, modprobe constructs the
+  kernel options string without adding quotes around the parameters.
+  The kernel's parse_args() function (using next_arg() in lib/cmdline.c)
+  splits module parameters at unquoted spaces... treats D2_CORE and +pf
+  as separate unknown parameters."
 ---
- lib/dynamic_debug.c | 79 +++++++++++++++++++++++++++++------------------------
- 1 file changed, 43 insertions(+), 36 deletions(-)
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 29 ++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 1627e40efc8f..18289ca7170b 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -1174,33 +1174,34 @@ static const struct proc_ops proc_fops = {
- 	.proc_write = ddebug_proc_write
- };
+diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+index d7681cdcd012..f4078ad112f0 100755
+--- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
++++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+@@ -340,6 +340,25 @@ function FT_basic_queries {
+     ddcmd "file $f =_" "$f"
+ }
  
--static void ddebug_attach_module_classes(struct ddebug_table *dt, struct _ddebug_info *di)
--{
--	struct ddebug_class_map *cm;
--	int i, nc = 0;
--
--	/*
--	 * Find this module's classmaps in a subrange/wholerange of
--	 * the builtin/modular classmap vector/section.  Save the start
--	 * and length of the subrange at its edges.
--	 */
--	for_subvec(i, cm, di, maps) {
--		if (!strcmp(cm->mod_name, dt->info.mod_name)) {
--			if (!nc) {
--				v2pr_info("start subrange, class[%d]: module:%s base:%d len:%d ty:%d\n",
--					  i, cm->mod_name, cm->base, cm->length, cm->map_type);
--				dt->info.maps.start = cm;
--			}
--			nc++;
--		} else if (nc) {
--			/* end of matching classmaps */
--			break;
--		}
--	}
--	dt->info.maps.len = nc;
--	if (nc)
--		vpr_info("module:%s attached %d classes\n", dt->info.mod_name, nc);
--}
-+/*
-+ * dd_set_module_subrange - find matching subrange of classmaps
-+ * @_i:   caller-provided index var
-+ * @_sp:  cursor into @_vec
-+ * @_di:  pointer to the struct _ddebug_info to be narrowed
-+ * @_vec: name of the vector member (must have .start and .len)
-+ *
-+ * Narrow a _ddebug_info's vector (@_vec) of classmaps to the
-+ * contiguous subrange of elements where ->mod_name matches
-+ * @__di->mod_name.  This is primarily for builtins, loadable modules
-+ * have only their classmaps, and dont need this sub-selection.
-+ */
-+#define dd_set_module_subrange(_i, _sp, _di, _vec) ({			\
-+	struct _ddebug_info *__di = (_di);				\
-+	typeof(__di->_vec.start) __start = NULL;			\
-+	int __nc = 0;							\
-+	for_subvec(_i, _sp, __di, _vec) {				\
-+		if (!strcmp((_sp)->mod_name, __di->mod_name)) {		\
-+			if (!__nc++)					\
-+				__start = (_sp);			\
-+		} else if (__nc) {					\
-+			break; /* end of consecutive matches */		\
-+		}							\
-+	}								\
-+	__di->_vec.len = __nc;						\
-+	if (__nc)							\
-+		__di->_vec.start = __start;				\
-+})
++# test parsing on spaces, commas. testing against builtin file kernel/params.c
++function FT_comma_terminators {
++    v_echo "${GREEN}# COMMA_TERMINATOR_TESTS ${NC}"
++    if [ $LACK_DD_BUILTIN -eq 1 ]; then
++	echo "SKIP - test requires dynamic_debug built into kernel"
++	return
++    fi
++    local f='kernel/params.c'
++    ddcmd =_
++    ddcmd "file $f +p" "$f"
++
++    ddcmd "file,$f,=_" "$f"
++    ddcmd "file,$f,+mf" "$f"
++    # ignore empty tokens
++    ddcmd ",file ,, ,  $f, -p" "$f"
++    ddcmd " , file ,,, ,  $f, -m" "$f"
++
++    ddcmd =_
++}
+ # testing classmap-based query enablers and class configurations
+ function FT_test_classes {
+     v_echo "${GREEN}# TEST_CLASSES - classmap-based query enablers and class configs ${NC}"
+@@ -350,7 +369,7 @@ function FT_test_classes {
  
- /*
-  * Allocate a new ddebug_table for the given module
-@@ -1209,6 +1210,8 @@ static void ddebug_attach_module_classes(struct ddebug_table *dt, struct _ddebug
- static int ddebug_add_module(struct _ddebug_info *di)
- {
- 	struct ddebug_table *dt;
-+	struct ddebug_class_map *cm;
-+	int i;
+     # 1. Verify initial multi-query enablement state via file slice
+     my_modprobe test_dynamic_debug \
+-        dyndbg="class D2_CORE,+pf;class D2_KMS,+ps;class D2_ATOMIC +pm"
++        dyndbg="class,D2_CORE,+pf;class,D2_KMS,+ps;class,D2_ATOMIC,+pm"
+     verify_control_slice '\[test_dynamic_debug\]'
  
- 	if (!di->descs.len)
- 		return 0;
-@@ -1221,17 +1224,21 @@ static int ddebug_add_module(struct _ddebug_info *di)
- 		return -ENOMEM;
- 	}
- 	/*
--	 * For built-in modules, name (as supplied in di by its
--	 * callers) lives in .rodata and is immortal. For loaded
--	 * modules, name points at the name[] member of struct module,
--	 * which lives at least as long as this struct ddebug_table.
-+	 * For built-in modules, di is a partial cursor into the
-+	 * builtin dyndbg data; the descriptors are the subrange
-+	 * matching the modname, but the classmaps are the full set.
-+	 * We find and set the relevant subrange of classmaps here.
-+	 *
-+	 * The modname string is in .rodata, the descriptors and
-+	 * classmaps are in writable .data. All are immortal.
-+	 *
-+	 * For loaded modules, mod_name points at the name[] member
-+	 * of struct module, and the descriptors and classmaps point
-+	 * at the module's ELF sections; all have lifetimes matching
-+	 * the module's presence.
- 	 */
- 	dt->info = *di;
--
--	INIT_LIST_HEAD(&dt->link);
--
--	if (di->maps.len)
--		ddebug_attach_module_classes(dt, di);
-+	dd_set_module_subrange(i, cm, &dt->info, maps);
+     # 2. Verify state transition and live-printing end-to-end via ddcmd_load!
+@@ -368,7 +387,7 @@ function FT_classmap_inheritance {
  
- 	mutex_lock(&ddebug_lock);
- 	list_add_tail(&dt->link, &ddebug_tables);
+     # 1. Load submod directly (which auto-loads supermod with default parameters)
+     my_modprobe test_dynamic_debug_submod \
+-	"dyndbg=+p;class D2_CORE +pfs;class D2_KMS +pts;class D2_ATOMIC +pmf"
++	"dyndbg=+p;class,D2_CORE,+pfs;class,D2_KMS,+pts;class,D2_ATOMIC,+pmf"
+     verify_control_slice 'test_dynamic_debug'
+ 
+     # 2. Runtime parameter changes to supermod propagate to submod descriptors
+@@ -447,6 +466,7 @@ builtin_tests=(
+     FT_grammar_ok
+     FT_grammar_errs
+     FT_basic_queries
++    FT_comma_terminators
+ )
+ 
+ # Modular Feature Tests (Require CONFIG_MODULES=y and test_dynamic_debug*.ko available)
+@@ -537,6 +557,11 @@ function GOLDEN_RECORDS {
+ #K= 02e4fd94602e108cb89bfc70d47a5dad FT_basic_queries.5
+ #K= f03a7ca7316e8db4c0e16523dc41e75d FT_basic_queries.6
+ #K= c518a50ba30ba8099d0dc874a27ecf16 FT_basic_queries.7
++#K= c8bbbac639f244ed9088208ebb7d83a6 FT_comma_terminators.1
++#K= bed6350f058f600910837dae83a12f56 FT_comma_terminators.2
++#K= 6e8599556a312200fb6d484565b6c52f FT_comma_terminators.3
++#K= 68b329da9893e34099c7d8ad5cb9c940 FT_comma_terminators.4
++#K= adc1ef04304c861c87fe294a8ba4e402 FT_comma_terminators.5
+ #K= 91838b4012c50a1dc1d9e210ba8d68f8 FT_test_classes.1
+ #K= a15ec4843acd721fbdfddc0b512c8032 FT_test_classes.2
+ #K= 2cee6842c9cdee5cb3bf50b2e3914813 FT_test_classes.3
 
 -- 
 2.56.0
