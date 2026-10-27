@@ -1,60 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.160
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793101754;
-	b=e02ieup7aNpR5Uo9LrihPYknFEGGrzWEIFLIKmJA/YYrckEH49Sfhf/m5RlP4VYYzL4V
-	 5uHvZfsr0N4xlKEsb/WuhSQaKraxiYXI2KUSOyybi7bLFmsQAUFJg8tSpYuvvf2/gMNqu
-	 wkxSoC7LoSEpcOQyjMJxDOfkXRGrFgtDR3E/FMI76+kc3EVNzCfAQDQhmNvDne26bP6Up
-	 7ePPpUi145w8HJNeiH8wdfPopitYjNhBFj0UcukRKX4iOwv/JbfDIJm8cvA8rLA6nvhgm
-	 Z/drIJKcoWMrk+9adXsux7LjDZqxi8LkNG35oZ+TeenVx6Ds+RGGHQsSAQy/9kFimTw==
+	t=1793103645;
+	b=hXjHVDJRY0jKo8B05Ivk3TqUmiytP+haSs/9lFn6fTCpjfNuhx9E5d1v8gPHCjUI2epJ
+	 sF072G2MAujLFg8Yz84u3Kh4afTbSgktTt0ZMKgkkZMACIT0KPIxmmO4AARoe+IlycNoW
+	 L3lljIZ6+Ikdss9dMpd1/eNR45MQNDgkbLJ1wpySQR4vSB8DmE/jWNpGzhrAoB912lTov
+	 yxbxyIHUA8vcTX5Yl84vyayHMEprmbtxT5eHsIsW2TPniRM7+lxcMU2oOYFQfsQodilzj
+	 aTIeO2uLAcyzjnaPCJux8itV+yC66lDH2xlWCaTXRn9xByUeeQfZh29yvnLO9FV7ugw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793101754;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=TTJmA88cQwl8RM34llTru5b4J/+2xPkGiT4W3SD2CjI=;
-	b=uRtJK/j+3LGsGZxmpN5qT2mjqfPxSfNBoLo4IKjBGA1EFHqVVhn79wiQQX1+ibT1wuHY
-	 r7xzOeuxcyohUxTz6lbxhklK22qRnDO8EX4eeqzCFkwRK0q4m6X/zT0Capa0WTwFHUrC5
-	 9jG295JMzed5v1/KPSMk+xQkKgkzJqyaF8yj1ETiZSnjeihG8rHq+87h5iZtxwYqo6uA/
-	 i44lvPvTJmqKEDi3erbjY9EYo0MofHpjoSN8IqFoIA8gx3xkm6BX7LSN7yBOYRP3RRo6U
-	 MJD6j0gr4mJDHImN67FqdYxdngWJUC4lFucAYsFQRjlY6J2YI45vHrAIA/4oeFda+6g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793103645;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=3uHNkIbz1W2hVmZzTNOsS0vwkqrVetO/PC31U24Oh2o=;
+	b=UvO+PgskjDluTIIfcu30L/E7uqD6+E0N/c2jSd6bWaQc3klLtENaGgH3Aus/++CeDhpz
+	 m6u0Hm3oDOjQ+nFpXSo7iDIO89bZF5RJRyF0cYAY63fKEdk0e1akByPs6/rxVezDVgV/m
+	 j7hEF6R52u4OHNRm2pCHa/MP0XwLjPCE05saL5Zyo9wkz+AAGPaCybKpbP6QfjaFnb+hJ
+	 Oa8lKzFpKBRvforiCv8qgHvz0Anhg3RLx416xKUndxDZkYc0UO8sJngThzu1QjlILh5rl
+	 W3hSIFEFjv2QDRRHGLtHu++UkZUveUI9XUAg0PmfoiuE7Cphi9sAVCmchiQ5esHE2ew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dKQrZ86V;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=k6+zS+vG;
+	arc=none smtp.remote-ip=95.215.58.160
+Received: from mta1.migadu.com (out-160.mta1.migadu.com [95.215.58.160])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3393606A336;
-	Tue, 27 Oct 2026 11:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA34606A31D
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 12:20:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0AA34606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dKQrZ86V
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA7C61F031E2;
-	Tue, 27 Oct 2026 11:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793101753;
-	bh=TTJmA88cQwl8RM34llTru5b4J/+2xPkGiT4W3SD2CjI=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=dKQrZ86V/MgtlDd9erFpBEbDINUFDYKxpaJ0c9GzZddPcL5izD/JvS3GMduWQRsw+
-	 +uX2yxVaBqp4gpGP4/GlC23UHC8FEMb7v8Mre72s/egjMKM3o/iDfoRo68XUPG9KZL
-	 xCU/38JGHWavOHWo12+O3L41eRPHH+UX8KpcuoP9xDu/ERlIYCUzmP++Ujuw7qYPsf
-	 FurDh2Uvz1kHhbZZxIs0wBf53AGC2kk6HqyXEtnxsXFn15jvnfE+C1nCbLt9e1/tKZ
-	 PweYLnUIRKvaa3CuJXTpPmlrHfZtzS7KBSEkoyHx8GpEDlPf0di9KENeUIUU9nm/2C
-	 n34EB43LaI+SA==
-Subject: Re: [PATCH net 2/2] selftests: net: netlink-dumps: start a dump with
- a notification queued
-From: netdev-bot+sashiko@kernel.org
-To: jhonata.poma@gmail.com
-Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kuniyu@google.com
-Date: Tue, 27 Oct 2026 11:49:12 +0000
-Message-ID: <179310175236.3134.7064612436495160668@kernel.org>
-In-Reply-To: <20261023-netlink-dump-livelock-v1-2-478214a635d2@gmail.com>
-References: <20261023-netlink-dump-livelock-v1-2-478214a635d2@gmail.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=k6+zS+vG
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=cF4VhcKCkracUo6gNIATmuRN1hHW/I53fxt0RDVbk+M=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793103643; v=1; x=1793708443;
+ b=k6+zS+vGc0DuFZGWaTqzhdhz1NQwKEixaQvY0If8/c5h9gJnI5Qhrbgys/3hsQWHb+iH8/Ta
+ 55Hv9OEC+PWZQY4Zmr//7zwrafI66hmZvydjK3xqWB7nXtPcIMS+aeavKFcZt1Gdx7Mo985pjyL
+ hh1z0reSYhL/SZIG2GUzq5pg=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5ae49ba9d3797755;
+	Tue, 27 Oct 2026 12:20:43 +0000
+X-Mizu-Trace-ID: 5ae49ba9d3797755
+X-Migadu-Flow: FLOW_OUT
+From: Zenghui Yu <zenghui.yu@linux.dev>
+To: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	kas@kernel.org,
+	"Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
+Subject: [PATCH] selftests/mm: fix khugepaged_race build with older glibc
+Date: Tue, 27 Oct 2026 20:20:13 +0800
+Message-ID: <20261027122013.4286-1-zenghui.yu@linux.dev>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,127 +73,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
 
-Low priority / nit picks for your consideration:
+glibc versions before 2.37 do not define MADV_COLLAPSE in <sys/mman.h>, so
+khugepaged_race fails to build against them (e.g. glibc 2.34):
 
-- [Low] The new test dump_with_queued_ntf in
-  tools/testing/selftests/net/netlink-dumps.c needs privileges that the…
-- [Low] dump_with_queued_ntf sets done = true as soon as it sees any
-  NLMSG_DONE with nlmsg_seq == 1.
+[root@localhost mm]# make
+  CC       khugepaged_race
+khugepaged_race.c: In function 'main':
+khugepaged_race.c:506:23: error: 'MADV_COLLAPSE' undeclared (first use in this function); did you mean 'MADV_COLD'?
+  506 |       hpage_pmd_size, MADV_COLLAPSE);
+      |                       ^~~~~~~~~~~~~
+      |                       MADV_COLD
+khugepaged_race.c:506:23: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [../lib.mk:225: /data/code/mm/tools/testing/selftests/mm/khugepaged_race] Error 1
 
---
+Include <linux/mman.h> to get the UAPI definition of MADV_COLLAPSE.
 
-selftests: net: netlink-dumps: start a dump with a notification queued
+Fixes: 66c374464438 ("selftests/mm: add khugepaged race harness")
+Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+---
+ tools/testing/selftests/mm/khugepaged_race.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-This adds a test, dump_with_queued_ntf, to netlink-dumps.c. It starts an
-RTM_GETLINK dump on a socket with a small receive buffer while a link
-notification is still queued. The reader peeks before each read, the way
-libnl does, and the test expects the dump to complete.
-
-> diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
-> index 51129c564d0a6..6f66a478d72f3 100644
-> --- a/tools/testing/selftests/net/netlink-dumps.c
-> +++ b/tools/testing/selftests/net/netlink-dumps.c
-
-[ ... ]
-
-> +// A dump started while a notification is still queued must make progress
-> +// for a reader which peeks before reading, like libnl does
-> +TEST(dump_with_queued_ntf)
-> +{
-> +	struct sockaddr_nl addr = {
-> +		.nl_family	= AF_NETLINK,
-> +		.nl_groups	= RTMGRP_LINK,
-> +	};
-> +	int netlink_sock, inet_sock, i;
-> +	int rcvbuf = 8192;
-> +	bool done = false;
-> +	char buf[32768];
-> +	ssize_t n;
-> +
-> +	ASSERT_EQ(unshare(CLONE_NEWNET), 0);
-
-[Severity: Low]
-Should this skip instead of fail when the test lacks privileges?
-
-unshare(CLONE_NEWNET) needs CAP_SYS_ADMIN. lo_set_up() calls
-ioctl(SIOCSIFFLAGS), which needs CAP_NET_ADMIN. Both results go through
-ASSERT_EQ, so an unprivileged run reports FAIL rather than SKIP.
-
-The other tests in this binary (dump_extack, test_sanity,
-close_in_progress, close_with_ref) only open netlink sockets, send dump
-requests and use mq_open/mq_notify. They already run as a normal user, so
-this is the first test that makes the binary need privileges.
-
-Would checking for errno == EPERM and calling SKIP() be enough here?
-
-> +
-> +	inet_sock = socket(AF_INET, SOCK_DGRAM, 0);
-> +	ASSERT_GE(inet_sock, 0);
-
-[ ... ]
-
-> +		for (nlh = (struct nlmsghdr *)buf; NLMSG_OK(nlh, n);
-> +		     nlh = NLMSG_NEXT(nlh, n)) {
-> +			if (nlh->nlmsg_seq != dump_links.nlhdr.nlmsg_seq)
-> +				continue;
-> +			if (nlh->nlmsg_type == NLMSG_ERROR)
-> +				EXPECT_EQ(*(int *)NLMSG_DATA(nlh), 0);
-> +			if (nlh->nlmsg_type == NLMSG_DONE)
-> +				done = true;
-
-[Severity: Low]
-Can this pass when the dump ends with an error?
-
-netlink_dump_done() writes the final dump status into the NLMSG_DONE
-payload:
-
-net/netlink/af_netlink.c:netlink_dump_done() {
-    ...
-	memcpy(nlmsg_data(nlh), &nlk->dump_done_errno, sizeof(nlk->dump_done_errno));
-    ...
-}
-
-If cb->dump() returns -EMSGSIZE with an empty skb, netlink_dump() keeps
-the negative value:
-
-net/netlink/af_netlink.c:netlink_dump() {
-    ...
-		if (nlk->dump_done_errno == -EMSGSIZE && skb->len)
-			nlk->dump_done_errno = skb->len;
-    ...
-}
-
-The dump then ends with an NLMSG_DONE that carries -EMSGSIZE. Other
-negative dump errors end the same way.
-
-A dump that starts successfully sends no separate NLMSG_ERROR ack. That
-makes the NLMSG_DONE payload the only place the result is reported. This
-loop checks the errno only for NLMSG_ERROR, so EXPECT_TRUE(done) still
-passes. The test also never checks that an RTM_NEWLINK reply for lo
-arrived.
-
-The no-progress case this test targets is still caught, because no DONE
-arrives there. The gap is a future regression in skb sizing that ends the
-dump early with an error.
-
-The existing nl_get_extack() helper in this file decodes the errno from
-NLMSG_DONE as well:
-
-	ea->err = -*(int *)NLMSG_DATA(nlh);
-
-Could the new test check the NLMSG_DONE payload in the same way, and also
-check that at least one RTM_NEWLINK message was received?
-
-> +		}
-> +	}
-> +	EXPECT_TRUE(done);
-
-[ ... ]
-
+diff --git a/tools/testing/selftests/mm/khugepaged_race.c b/tools/testing/selftests/mm/khugepaged_race.c
+index abb0678522cd..1a27cb39745b 100644
+--- a/tools/testing/selftests/mm/khugepaged_race.c
++++ b/tools/testing/selftests/mm/khugepaged_race.c
+@@ -8,6 +8,7 @@
+ #define _GNU_SOURCE
+ #include <errno.h>
+ #include <fcntl.h>
++#include <linux/mman.h>
+ #include <pthread.h>
+ #include <stdio.h>
+ #include <stdlib.h>
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261023-netlink-dump-livelock-v1-0-478214a635d2%40gmail.com
+2.56.0
+
