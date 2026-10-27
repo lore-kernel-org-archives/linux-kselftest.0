@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793065938;
-	b=uPPoz28DF6ck7bwb2gFu0xgcGNmRzrrDUaKuFe1kdMt/sK/LSFKRKjqWz1YqhzD/qXcm
-	 P9cES4PivXZ864mYl5AH38z6VDUVbs9VdObvLaldpKPjNl91C/7TGDN5TIcT59wsz9IGP
-	 sW+lACT+9K6HX25JRA2NQWWO0eRv43HUcDpTnUBuimoNdsgtBKs8Yte/pfdadvdcybxbH
-	 umls5w2zz7tAsURLztEBS3YiSu4eRkU/eCkjcX0vxJfgf3VJgWfzTCFP8vbRmd5xoxCaA
-	 qSPjcgNSdsqXwE4CI3EI1qoS21O+V3qvxouGIOVEevNB9lEhUam0zbwjhag3qXmKn9A==
+	t=1793065939;
+	b=xe3/QD64Kfuc0WhE4VSBOgr1Fa/jQ/GGVWjuKgX9np0eqmH1huzjYP+OMWXNcrCN2tCe
+	 O+vPWaGh0QMNgx2X2aKRpm3QCXSPPsN1lFtO8ot/FUq95a1l1LsLtfMB1aUTTRHrZ/7/4
+	 nCLDSTeF0lC7A2tIClXztyGXW9izZvFoI8KUcECC7VmfXP7t83z1oqqYQavL59yS4uWD0
+	 P7hf1FRAJ/HZfN+y2XbnFhl1dqcAMCSOvrM5bJQblz0cDi9kjYb5tj6leq2QjuCaQnjjx
+	 PRAhF1Iqyj6MSXJfUxxElFRkPyy88UBbm7uoOCCU0pDUTc+J0crfAUjx3oiVtQG5GXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793065938;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793065939;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=8Xz/O4SoFdzeWrW3v+OQB6Ik0lhhudsEz7WYi/c75v4=;
-	b=T4fPMySBGuQ22XAKxsmldEPGVkKw9RwW0ETGmxgL1uLAcDAhZLyxuL2kktZPHqylrZDb
-	 gJ6YDByKVEwDFwMze5ggDiK0r4NaORr12y7IEJqK7ojuFfeLMlVnzbutpBNQsILzFLdgB
-	 2JvrwY7+5G+sUXUztLzi8xq2MMydm9rpYw+QLRZw0RoHwlweuy8IXHKCBKDg0TzjRopw/
-	 3X7WpLJ+g8VEDXv5R+CHhQUsxW8PaYfcO8wlH0LONJeF5+6VQhgJ79L5k2QPYID9XqGr8
-	 CH3IWjBARq9GVQKie8VCGH173t2tMcD7COKGaxM70fVNGiVPRdyk+azS8Hemx2dpqeA==
+	bh=O0e5UsRX/437Pcb2PaCWs3jzNLS3KGar6zSSzPiYqic=;
+	b=4Pi14aY3E1vqRLmridMs8KE8X+B6Cfy+WsihCkWSAXi6xX5aIpQxwb5iuqLb56gif9HZ
+	 49/0LGRCuWdNWfjZeVndu6z18cRSEckYslbNMYIzHbODvU5WpOQzVYl1vkdGd+Lb7lPfV
+	 yzQIwpLRldW4hp+Tob51LaxjjozKUwl74gotuGIkJRazVr+S9/cBRoebEHItRUhptGtu9
+	 eWKEc9/lO2IpIydj6742MPcupJ/ydhgePGW2psetFhEbzhYbuTWjmK2LLUxRQ4gAhLksV
+	 fGehaDmIAzbiFK6JQwxnCdGpVxNKnPkTUyAbhYEdyiGKvshYAxXHqp6X+OEnHi3tK9Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vx0MbS5w;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GU5enusX;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619A9606A31D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA529606A32A;
 	Tue, 27 Oct 2026 01:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vx0MbS5w
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD1CA1F031E3;
-	Tue, 27 Oct 2026 01:52:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GU5enusX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 532A71F031E4;
+	Tue, 27 Oct 2026 01:52:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1793065938;
-	bh=8Xz/O4SoFdzeWrW3v+OQB6Ik0lhhudsEz7WYi/c75v4=;
+	bh=O0e5UsRX/437Pcb2PaCWs3jzNLS3KGar6zSSzPiYqic=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Vx0MbS5wREwM8lfqmytYlNyB1CbyV/HFXVYS1KFqhu+c+wKLGPMO+CaYvkx4LPdhV
-	 vkb21x4m4D7Lp9lq1d5AXJPhtLCnZ5iwamYEb9RamQnkqW+Y7g7aJ4KynKsCAX3TpL
-	 tLv/DJ5K+Lsc6kvkPSh/JDxSARWq0nBG7xbmcBGoETMh1ba19apl0rMgobRh/tj8HU
-	 CBKh6P5RSbDnEbsjyh9rvwTjkvT7Jybpx2Cnl1TUnnCVZE0u69lTIcHsRfVwe5Xg3e
-	 d2YUmUisnUZrEyNJxBXj/5hzSl5xOQqUuxWcHlA+rV95oiiIRH3edXq+8FVoKS25Jk
-	 EDoB512loCExw==
+	b=GU5enusX6mVcAYYB7fNC9Bb6UTxt2Ppqi9UY9H5T4RrWzLQTXOFUB4iH/2skPnx2l
+	 cnqKtjIt52o/T650isHpw7gqT1oJ6S6CHx5bNmN1jqwN5TDWZeXt9LV+/gbS4RJDPS
+	 Yl2XplhROyZC1NHxmIkdW7OEYjfNVInsx3ACrrlga/vP8EDTfwX4Yce8RT9vuIhYSh
+	 O3RCfaJEtK63HO6ABzFwZOZiWGuMaNTFQm0KPByWLXZWBhlyP/MP/ZzoooikaHTLeG
+	 D96ehsEkQcSB9fguX6cStE0BUdl962bl1vCdsZUzqtOLDLs0UXZTa2Wa5YzkG9kXoy
+	 5mvUFNPmaA5nw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc: netdev@vger.kernel.org,
 	cel@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net 1/2] tls: Honor O_NONBLOCK in tls_sw_splice_read()
-Date: Mon, 26 Oct 2026 18:52:14 -0700
-Message-ID: <20261027015215.605919-2-kuba@kernel.org>
+Subject: [PATCH net 2/2] selftests: tls: Cover splice on a nonblocking socket
+Date: Mon, 26 Oct 2026 18:52:15 -0700
+Message-ID: <20261027015215.605919-3-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261027015215.605919-1-kuba@kernel.org>
 References: <20261027015215.605919-1-kuba@kernel.org>
@@ -71,70 +71,66 @@ Content-Transfer-Encoding: 8bit
 
 From: Chuck Lever <cel@kernel.org>
 
-tls_sw_splice_read() takes its blocking behavior from
-SPLICE_F_NONBLOCK alone. When splicing from a socket to a pipe,
-do_splice() sets that flag from the pipe's O_NONBLOCK, not the
-socket's. On a nonblocking socket, a splice(2) call without
-SPLICE_F_NONBLOCK therefore sleeps in tls_rx_rec_wait() until a
-record arrives. tcp_splice_read() instead reads sock->file->f_flags
-and returns -EAGAIN.
+Every existing splice call in this file either passes
+SPLICE_F_NONBLOCK or runs on a blocking socket, so nothing
+exercises the socket's own O_NONBLOCK on the splice path. A change
+that stops consulting sock->file->f_flags puts splice(2) and
+sendfile(2) back to sleeping in tls_rx_rec_wait(), and the suite
+still reports pass.
 
-Polling first does not avoid the sleep once tls_sw_splice_read()
-consumes zero-length records, as it does after a later patch in this
-series. tls_sw_sock_is_readable() reports the socket readable while
-any record sits on rx_list, including a zero-length record that
-delivers no bytes to the pipe. For TLS 1.3 the strparser announces a
-record before decryption, when its plaintext length is still unknown,
-so the readiness test cannot screen such a record out. A splice that
-consumes the record and waits for the next stalls every connection
-an event loop multiplexes.
+Splice from a nonblocking socket without SPLICE_F_NONBLOCK, first
+with no record queued, which must return EAGAIN, then with a record
+to deliver. A kernel that ignores the socket flag sleeps until the
+harness timeout rather than returning.
 
-An LLM audit of the TLS read paths found this defect.
-
-Treat the socket's O_NONBLOCK as nonblocking too. A caller that
-sets O_NONBLOCK on the socket and splices without SPLICE_F_NONBLOCK
-now gets -EAGAIN where the splice blocked before. sendfile(2) from
-a TLS socket changes the same way, because do_sendfile() leaves the
-input file's O_NONBLOCK out of the splice flags. Both now behave as
-they do on a plain TCP socket.
-
-Fixes: c46234ebb4d1 ("tls: RX path for ktls")
 Signed-off-by: Chuck Lever <cel@kernel.org>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- net/tls/tls_sw.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ tools/testing/selftests/net/tls.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 312e51270f29..771e02bff519 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -2007,10 +2007,14 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
- 	struct tls_msg *tlm;
- 	struct sk_buff *skb;
- 	ssize_t copied = 0;
-+	bool nonblock;
- 	int chunk;
- 	int err;
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 9d3cd4fff062..c4203401c4bf 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -889,6 +889,37 @@ TEST_F(tls, splice_to_pipe)
+ 	EXPECT_EQ(memcmp(mem_send, mem_recv, send_len), 0);
+ }
  
--	err = tls_rx_reader_lock(sk, ctx, flags & SPLICE_F_NONBLOCK);
-+	nonblock = flags & SPLICE_F_NONBLOCK ||
-+		   sock->file->f_flags & O_NONBLOCK;
++/* The socket's O_NONBLOCK governs the record wait, as on a plain TCP
++ * socket, even without SPLICE_F_NONBLOCK.
++ */
++TEST_F(tls, splice_nonblock_socket)
++{
++	struct pollfd pfd = { .fd = self->cfd, .events = POLLIN };
++	int send_len = TLS_PAYLOAD_MAX_LEN;
++	char mem_send[TLS_PAYLOAD_MAX_LEN];
++	char mem_recv[TLS_PAYLOAD_MAX_LEN];
++	int flags, p[2];
 +
-+	err = tls_rx_reader_lock(sk, ctx, nonblock);
- 	if (err < 0)
- 		return err;
- 
-@@ -2024,8 +2028,7 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
- 	} else {
- 		struct tls_decrypt_arg darg;
- 
--		err = tls_rx_rec_wait(sk, flags & SPLICE_F_NONBLOCK,
--				      true, false);
-+		err = tls_rx_rec_wait(sk, nonblock, true, false);
- 		if (err <= 0)
- 			goto splice_read_end;
- 
++	flags = fcntl(self->cfd, F_GETFL, 0);
++	ASSERT_GE(flags, 0);
++	ASSERT_EQ(fcntl(self->cfd, F_SETFL, flags | O_NONBLOCK), 0);
++
++	memrnd(mem_send, sizeof(mem_send));
++
++	ASSERT_GE(pipe(p), 0);
++	EXPECT_EQ(splice(self->cfd, NULL, p[1], NULL, send_len, 0), -1);
++	EXPECT_EQ(errno, EAGAIN);
++
++	/* The record may still be in flight, wait for it. A failed splice()
++	 * would leave the read() below blocking until the harness timeout.
++	 */
++	EXPECT_EQ(send(self->fd, mem_send, send_len, 0), send_len);
++	ASSERT_EQ(poll(&pfd, 1, 5000), 1);
++	ASSERT_EQ(splice(self->cfd, NULL, p[1], NULL, send_len, 0), send_len);
++	EXPECT_EQ(read(p[0], mem_recv, send_len), send_len);
++	EXPECT_EQ(memcmp(mem_send, mem_recv, send_len), 0);
++}
++
+ TEST_F(tls, splice_cmsg_to_pipe)
+ {
+ 	char *test_str = "test_read";
 -- 
 2.56.0
 
