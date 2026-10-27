@@ -1,81 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793096246;
-	b=0ak9bKgH7dYuQRezjOYu3M92W3vidhTel9rESCETe1JBF/ZnuNTIz0j4I+xUuvYqMwch
-	 CZmkKUI/b3gBgbvsyZVvtXvyuD7l6vweXoyQJJ6Hky409W8Cc7rAA22wC9+XPHnn70hcn
-	 dP5sZv3oFGa/4qmogRTmEBvluZHNuoRUL7VCJNYEJLEJWG5ZPL+o0CrXY5RLFv9K1ycAi
-	 z857WUe8g72miTjOUJ8AWsNryhezkmBSVldoTJ1GYBToD7VVL0p78UiaLMSTthJR70X36
-	 e3uW26tVppCc5eTMKCLKkRqeI95dPQbcU29E2lFDj8y858Awn3pJ/MIT9uTKvsF7Mkw==
+	t=1793097031;
+	b=GmJnN2t7HsNmaVCZ1wmMjMBo4f4Lph1xC2JxUI9uzgyyaki9D3IENoU8vky+7UE2PHfw
+	 ScvnRuDMJMIb4RJw7rTT8H4IwLfVKavb7p+1WSbcT8gaXX79+KBJ7JR2kDuD/J1pKxmwi
+	 ohnVoKXzr2g7AZrKqtyct3iLQPYewewo10qbuDRtmFRZkgfvtpbIyaR3yrXK1j7Ri+JA8
+	 eGKohAR4wK3dw2aOIk9tmep4LTRIWTucTJnsNBd7EtE11SySYIkVeo70Nt3NpJPLYcq9l
+	 zyCxTr8lxR7KN5TQ6I4GVIGUPjCQNRTrSZEAec/EnxpwKRnP7RptMv2M+t2stB8nRtg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793096246;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=z0ECnIZcfjaHWvnEWv9CS9AUxde5/Sd5zctaZmB4Mes=;
-	b=u4oqBGKdV2iHrj1AkdgjsjUHKkLmnIRlpicmIGXtimWXDPE3tWi65zFbKosStDKzL1UF
-	 HdHI7UehxtG+3Frv/PstVMJOvayVpPpwQqLHugJBesYEazEmLJ6Z7WNdox5mxUENkhUPi
-	 /JBNdndDiNGeLgkvaPBQ5LuxePQqvP2bok5DGzZnqhe0L8w786xu5sqCMwvNkMvXfpj9G
-	 Wp0GIsd47gF+ysZbcQWqrObCn2UTrQ6I6+cUtC9he9Xdo4wJHZ1zSbne86tiiUprL3SKg
-	 TAhdiBLeYw+HSAxoJXIw6qiXfgVDBppmZdgbMYOvGpJnsOQ+0VGP5sVkTeZ+IJilYmw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793097031;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type;
+	bh=atsgBdyBqegGK3OVxmB2Ib4i2Mom+Mos8vzmgTui5jE=;
+	b=2jljJjTqSrx3jhHursNnQx1LhaeGPgoFqQ1PmD12mxdwou3GdLqiyWPHoVnbVTmgjbCF
+	 jsT4X/p8v8ZA+eatRZAaY8XN7q2uN+ASTaGg3xS3GSHFkCjVfJmdksezXopCHvr0IQ/hP
+	 DaJSZ8sFsm/Rkrz31uTW/M8mrco0cfWOPT4mXZBHWuysP+9WNj5U2HQSN6R/E5OMlkDJG
+	 4lF4MYN9iN7ZO3Kn/dl+Is7VU0zumZICDzbpa9XvSqNBI8r8kL+MfYgmWKUa33pbE+hcS
+	 kZHdV0TMyTk6qCsmilox34nTLlrDChQBaBxp3Ii5QnaggA0a7adfypXPBLuzJ31MZ1g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b="J/OytH94";
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ibEQ5JRM;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C751606A320;
-	Tue, 27 Oct 2026 10:17:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C751606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD8E606A31D;
+	Tue, 27 Oct 2026 10:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=J/OytH94
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=z0ECnIZcfjaHWvnEWv9CS9AUxde5/Sd5zctaZmB4Mes=; b=J/OytH94niERjjNnCyanm0sACp
-	9oX+BES4yTwe9x2jTflF5mZJPoPoMgWl7AyswlY+/XigL1zHv7gzrmgxbJoxhzi59XbOn7Y73QLow
-	Y4sIGVdAJUT5JxFbPHfXn+lQbax9Arcc6UZGhPH0VU1XhL3zRyxtEfmaS0pAQ8qiJpq7J2b/ODrV5
-	akhmUwaPYmpHCamFXp9CHTcqKNHP3CsXi/p3gjhKglmmoVY2LEFbkdElG7ZU87lQCf7h45VJfDBcB
-	pWlqfSt0JfTW3llPsaCZkQFda+FNuN3lJhb4IpbDQc08bZnSxUo5M2rAqIwfKfeICScQYhn9Ndg7M
-	0UlDbFlw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xLeEq-0000000EiPL-3Sv6;
-	Tue, 27 Oct 2026 10:17:06 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 75DE43014C0; Tue, 27 Oct 2026 11:17:03 +0100 (CET)
-Date: Tue, 27 Oct 2026 11:17:03 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Chris Down <chris@chrisdown.name>
-Cc: Ingo Molnar <mingo@redhat.com>, Kees Cook <kees@kernel.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH 2/3] sched/core: Add sched_stack_end_check= boot parameter
-Message-ID: <20261027101703.GB2668564@noisy.programming.kicks-ass.net>
-References: <cover.1793082868.git.chris@chrisdown.name>
- <3d2bb6a8508b9d801878bb82c88165a1b1ff5f40.1793082868.git.chris@chrisdown.name>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ibEQ5JRM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA5C1F01825;
+	Tue, 27 Oct 2026 10:30:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793097030;
+	bh=atsgBdyBqegGK3OVxmB2Ib4i2Mom+Mos8vzmgTui5jE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=ibEQ5JRM+nfVFJq71Qq0Afypd9bmp6lFF7bzm1lzHy8GqnPTZ5RWE0cE93UKnrNPO
+	 tzFqXukA/l1OZRRAbQ/1pnPIUl5Y1u4nGSWS1flr8p/+1Ui9tDabfwD9jnDyOxyhLR
+	 k/ALoULdgPTNgeyhhnotKEXWx5FgiiyTZ2yaeJq/yO9fJsb7/z99pNo+8BgC9nKE6d
+	 VyDf6gCz/7l68rlWVLMLB/V2a2ZZNU2CrFXmzyB11Egpnq6Z4NrKzrgOY9h3ZABeYU
+	 GFLIUyncemQuAtiKBGs68MTnobMNsY5X/WNKqtWQ8PECCsfqXEDWZXqCq86lTxuUxA
+	 afsj8Y2pq3oQQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>, Todd Bert Freed <toddfreed@meta.com>
+Cc: netdev-bot+sashiko@kernel.org, netdev@vger.kernel.org,
+ borisp@nvidia.com, saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com,
+ mbloch@nvidia.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, pabeni@redhat.com, daniel.zahka@gmail.com,
+ willemdebruijn.kernel@gmail.com, horms@kernel.org, shuah@kernel.org,
+ cratiu@nvidia.com, raeds@nvidia.com, rrameshbabu@nvidia.com,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, dtatulea@nvidia.com
+Subject: Re: [PATCH net v3 2/4] psp: support ipv6 extension headers in
+ psp_dev_rcv() decap
+In-Reply-To: <20261026175805.6d4dcae5@kernel.org>
+References: <20261023234640.1459291-3-toddfreed@meta.com>
+ <179288570143.3134.8925369868949382653@kernel.org>
+ <CADh2yMyYS-PWP4912En9D6B9up6Kz-hnCthNkWot+e7N8-q7ZA@mail.gmail.com>
+ <20261026175805.6d4dcae5@kernel.org>
+Date: Tue, 27 Oct 2026 11:30:26 +0100
+Message-ID: <874ie75tbx.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,103 +67,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d2bb6a8508b9d801878bb82c88165a1b1ff5f40.1793082868.git.chris@chrisdown.name>
+Content-Type: text/plain
 
-On Tue, Oct 27, 2026 at 02:36:21PM +0800, Chris Down wrote:
-> CONFIG_SCHED_STACK_END_CHECK makes schedule_debug() check the magic at
-> the end of the outgoing task's stack and panic if it has been
-> overwritten.
-> 
-> Right now this can only be configured by setting the Kconfig option at
-> build time. At Meta we have it on for some hosts and off for others,
-> since it is helpful but adds cost on context switching. That means today
-> we have to build separate kernels for each, which is less than ideal.
-> 
-> So let's make this configurable at boot time. In benchmarking sched pipe
-> and sched messaging performance is unaffected.
-> 
-> Signed-off-by: Chris Down <chris@chrisdown.name>
-> ---
->  .../admin-guide/kernel-parameters.txt         |  8 +++++
->  kernel/sched/core.c                           | 33 +++++++++++++++----
->  2 files changed, 35 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index fbee7b544903..95911d33c0fe 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6811,6 +6811,14 @@ Kernel parameters
->  			core priority to both SMT siblings, so this option
->  			does not favor either sibling.
->  
-> +	sched_stack_end_check= [KNL]
-> +			Format: <bool>
-> +			Check the magic value at the end of the outgoing
-> +			task's stack (and its shadow call stack, if any) on
-> +			every call to schedule(), and panic if it has been
-> +			overwritten.
-> +			Default set by CONFIG_SCHED_STACK_END_CHECK.
-> +
->  	sched_verbose	[KNL,EARLY] Enables verbose scheduler debug messages.
->  
->  	schedstats=	[KNL,X86] Enable or disable scheduled statistics.
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index fc269fd10192..c1fb86b813bb 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -6143,18 +6143,39 @@ static noinline void __schedule_bug(struct task_struct *prev)
->  	add_taint(TAINT_WARN, LOCKDEP_STILL_OK);
->  }
->  
-> +static DEFINE_STATIC_KEY_MAYBE_RO(CONFIG_SCHED_STACK_END_CHECK, sched_stack_end_check);
-> +
-> +static int __init setup_sched_stack_end_check(char *str)
-> +{
-> +	bool enable;
-> +
-> +	if (kstrtobool(str, &enable)) {
-> +		pr_warn("Unable to parse sched_stack_end_check=\n");
-> +		return 0;
-> +	}
-> +
-> +	if (enable)
-> +		static_branch_enable(&sched_stack_end_check);
-> +	else
-> +		static_branch_disable(&sched_stack_end_check);
-> +
-> +	return 1;
-> +}
-> +__setup("sched_stack_end_check=", setup_sched_stack_end_check);
-> +
->  /*
->   * Various schedule()-time debugging checks and statistics:
->   */
->  static inline void schedule_debug(struct task_struct *prev, bool preempt)
->  {
-> -#ifdef CONFIG_SCHED_STACK_END_CHECK
-> -	if (task_stack_end_corrupted(prev))
-> -		panic("corrupted stack end detected inside scheduler\n");
-> +	if (static_branch_maybe(CONFIG_SCHED_STACK_END_CHECK,
-> +				&sched_stack_end_check)) {
-> +		if (task_stack_end_corrupted(prev))
-> +			panic("corrupted stack end detected inside scheduler\n");
->  
-> -	if (scs_is_enabled() && task_scs_end_corrupted(prev))
-> -		panic("corrupted shadow stack detected inside scheduler\n");
-> -#endif
-> +		if (scs_is_enabled() && task_scs_end_corrupted(prev))
-> +			panic("corrupted shadow stack detected inside scheduler\n");
-> +	}
+Jakub Kicinski <kuba@kernel.org> writes:
 
-I just noticed that there's a number of task_stack_end_corrupted()
-checks that:
+> On Mon, 26 Oct 2026 15:05:42 -0700 Todd Bert Freed wrote:
+>> > The PSP ICV doesn't cover the outer IPv6 header or its extension headers.
+>> > An on-path attacker could take a captured PSP packet, insert one of these
+>> > headers, and set saddr to an address they control. This assumes the
+>> > device authenticates such packets, which this patch's premise implies.
+>> >
+>> > Several of those handlers reply with an ICMPv6 error that quotes the
+>> > packet. With default sysctls, this happens for an unrecognized routing
+>> > header type (type 0, for example) with segments_left != 0:
+>> >
+>> > Before this patch, all of these packets were dropped at the is_udp check.
+>> > Forwarding the decrypted skb itself looks blocked by
+>> > sk_validate_xmit_skb() ("unencrypted skb with no associated socket -
+>> > dropping"). That leaves the ICMP error path as the open channel.  
+>> 
+>> Agree with this finding.
+>
+> If we're leaking cleartext in ICMP responses that's also a problem
+> for TLS offload. We should fix that, based on skb->decrypt. right?
 
- - do not also do task_scs_end_corrupted(); should
-   task_scs_end_corrupted() be put inside task_stack_end_corrupted() to
-   make sure they're always done in tandem and the shadow stack check
-   isn't lost?
-
- - should these other sites also respect this switch? It seems weird to
-   only have this one site affected.
+Ugh, interesting. Drop ICMP (no, on v6...), or just include up to, but
+not including transport headers?
