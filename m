@@ -1,79 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793109845;
-	b=dDXL6K4QTRloZN0P9aKlBp8voPc9iv8gMHWCSrS8GRMWrWwiS4VLrz9+bgJQkgtnFpxs
-	 fMmfeCXmWYgb8+Cga38E+j2xCY2y3ihKjSuNpAltiGYq/xlO+KuUffHMGcbTGgIXXZmGz
-	 RwucsOlHuIIKzZJ+jk+Dtfpsy+8jJqi8vgVgDu7RFivhcHSNajAgyCofKC8wc/zaSajrz
-	 +Q6yV+hRrx95Cv+pM6iNWGJ4T8DsYgzDV66Uvf/Wkwvm2bCoTTzLEaz3o5cTAWnJfcdVG
-	 ZCDtTzX/+FSmDGhrh1jtG06d7v4XzMEgdIVZYj3bs5/A/CXlLck4GjrBSrJ4e1x8kBQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793109845;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=PAwubzG0EluHiU5dup8GTgVt2g93YS9uz+x9TVlSADc=;
-	b=NR+I8GGig0ifAx2jUe3+cBzMfa0MbYpoiH7Ls89Mu6EVmS3wRS/5uTQ4PT1Hh0xasOaD
-	 lqhFt56jRNSLOKQR7d2s34qg4byaJAPQKR1f+zUw3jR7sETpJXzCVkk/dx+HBtJUMWsl+
-	 1wghHsz9Fiu0yIpFoZ48zNZ58KN42Db/fNatOUqVkOKrLU4RSvyqUEw5Chg/b5sIjoTzd
-	 3mPXrY+YcM87ZAkt23Wb3CJuVM4IEMdHYdbS05pK0vmDxcK1dZXbtbirwmqeFYf0bNKOU
-	 M8vipr6VaAIMbObs8wPvZIYaI1DStLHuYncExjI0DEvc2CHnWOv1vIeikk0V9Lj2bTw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oTbWgp4B;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793109974;
+	b=ps6w0cUKeTybS2dg7Q6q6diVy3Hh/vOLfQU0R0zlM2B8n8ZivaUHE5ZV2XnR1h5uEghJ
+	 ZnBvZI4CuEnkJxOfKH4JKrV9tOHaIEtAUN5vy9iT6M6/AnfSX3BmV05+jf5Zu0D/BFZoi
+	 bECNkbncALmMLfPPLpbXyHxmqQQK95RkQa6KmzW09LDhRp0d1psVeFbK7XlC2FDRxNtNO
+	 8oHtQvbp8lnh2PGfej1r6rOQ31oX02lr4jbYojMz+q/VH9kSSakD4nEHKzTWTONeLaad7
+	 vR746LXh8Qahp4X4HfFwGsxBtYrpZj2bOpSw6B7MMhhTW41zmloFnIL10Xn+62uexlg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793109974;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=82GVQF/r/unWzQfzjss77Hz55a2gB/UcDEpj21YiSxk=;
+	b=A/05J3WsAYs87ZhwdTQ39JHEWwFllP1aSe4GI4okIbkp+bGuPR+GEg68qq0iSSVAdbaJ
+	 1Oq9OyRRLsuoJCNzTLSJBpi5R9M3AT2dsftSJYwj/oDSfucq78JY/L9iqjLZGYgdi7s2Q
+	 JBMN5NXFfgqsY7T59Efg3oCpZA7YlG2cFEhefmiELOb+BWITrbHdr1iRYsY883g0mC6Y3
+	 +Bb9kfTFQHZvKf07PbSbj9Vg3m2AC9ek4mcby5WWrtVKujhSuhJs8G99HlTxVK2rSs5XS
+	 OOjUx4V8c3p/poqgGlDEbs9ZmO8Mgnv/OPTkhIBs6KUDJqT+V4FHinUzMTShjxxir9g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nZUK+SXF;
+	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F248606A325;
-	Tue, 27 Oct 2026 14:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3C7606A31A;
+	Tue, 27 Oct 2026 14:06:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oTbWgp4B
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793109844;
-	b=kT6BoZsIHd2kJW/lKt+IQWtYw6OcwRPmqingq2BAABuLjpE5AcUPmQsSR0LbyFiyg/rB
-	 GyM2o5Ihjr2JQMpr4eD/d7KDQl6WJbiqE2K/k7tg9/ooX26DQkvG53rqoosK0Kh6J050X
-	 /jO0z1C76PNKZk0d5Vqk0kHcKKXq7mnDdR0tZTMlQ6aCA/u7Pa7wO10RPJS92/6D1yzti
-	 2PFBo/hPZ/++qxCPizV7Lde8b4pdARlOYxAl7g2nyTyGLTMSRTQi8xPm8C6m1Jqqj50Dz
-	 lnCjVdDpeS39OqnFXFhFmCR1jEnXMtbWW1i+HVf+5QtwpKsThqB7zC6mrscniniQ/tA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793109844;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=PAwubzG0EluHiU5dup8GTgVt2g93YS9uz+x9TVlSADc=;
-	b=X1MCE1oVQ2ccHkrYzIxSrvcyb5HkoXdg/PJXlMIPR0WNt2ldDrjSqx6gpuOQH4vsGbkp
-	 tMEZRXyeWct+oL1+TgJ7vNQYmeO3qJHZILto1O7QUI+mXOqtWkN3ue0fLQTjouVj+nxW3
-	 ivlVcdJz9ST6D1BaiAEWz8RU4jbcE92tQ3MdCYz9I9qldvWpjNpfyVPg3tFqun0J5cUeN
-	 djF/y1OR9B1qPZxWurPrW2WGeSj3utl92SaRul5x+LANOxBCHspfDGWasGHMEKc7FUWOO
-	 WnpdNArkngCyL7d6NFc10HuuDdQ9bzEJi/AR55XVMi7Q6sgyQuvLQKMvpOZztkJEYzQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E5DC31F031E1;
-	Tue, 27 Oct 2026 14:04:03 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nZUK+SXF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D0201F01825;
+	Tue, 27 Oct 2026 14:06:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793109844;
-	bh=PAwubzG0EluHiU5dup8GTgVt2g93YS9uz+x9TVlSADc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=oTbWgp4BldbL55XeTwz5nXuwxHY4tqqWN1WB6E/G5yxUwRDHuxYMp2Pc9d/m4vJQP
-	 FfgKUomDUsVhoY1eFlfhK1gDWtmCWHhxryp3KiGsK1g6q1g3hYSdm7vunlUgY9TaYP
-	 lJ2IW+2wFXUQ/J9AC+Wo4GZBUpbF/WBqiDhQ7H5K6l/nzazQgUmFWwp3BQpORGv0vG
-	 18OGR0fYYkW31HPdb3eDMVobsbCLAX5oW8e2MNemfcAuwrXRSf5V/Cg+W+7XBXpxht
-	 3emKIqlfhsL4fp/w73NW7O3mbV4FuvQ7ekupPFzESWHL8c7hsDiqtw2k8aTHXfS09j
-	 vscANP/WHP+xA==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 573D04510D;
-	Tue, 27 Oct 2026 14:04:03 +0000 (UTC)
-From: Jhonata Poma-Hansen via B4 Relay <devnull+jhonata.poma.gmail.com@kernel.org>
-Date: Tue, 27 Oct 2026 15:04:02 +0100
-Subject: [PATCH net v2 2/2] selftests: net: netlink-dumps: start a dump
- with a notification queued
+	s=k20260515; t=1793109973;
+	bh=82GVQF/r/unWzQfzjss77Hz55a2gB/UcDEpj21YiSxk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=nZUK+SXFsAgy++54w5IClDKo7g3++cFiM8TnqT2+LuG2HpPq1/K3HIQXOOIqc8mVi
+	 mimy9pQ3LiHr7Uv0RMQYlxatSPdssmML/JLJvYuIdW+skcb7OAscL1zKzvE/7KFjSi
+	 C5SfM2niQETkzsKlEAsLJjyhwPpgFj3h1BLvGqJKVglngLpLProiWkhE3sxhOwjds8
+	 Y9aYsuyyzfMODkxbCLDMI2MKNmGNxm1x3h2InAoU1pty5v5HJn/qrj2HC5Us/03zJT
+	 /pmxKM0bibEgfhWd8LG22BhwEnrdTBpRB7oS2UKU1CUeUtFxQc4UiWu8EfdKYfprbP
+	 4ptN8qpbOZvCg==
+Message-ID: <99117abf-29eb-420d-bf8e-740c2068a0ba@kernel.org>
+Date: Tue, 27 Oct 2026 15:06:04 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,174 +51,126 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261027-netlink-dump-livelock-v2-2-c4bb05352a33@gmail.com>
-References: <20261027-netlink-dump-livelock-v2-0-c4bb05352a33@gmail.com>
-In-Reply-To: <20261027-netlink-dump-livelock-v2-0-c4bb05352a33@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
- Marek Szyprowski <m.szyprowski@samsung.com>, 
- Jhonata Poma-Hansen <jhonata.poma@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4013;
- i=jhonata.poma@gmail.com; h=from:subject:message-id;
- bh=QvCDY24BNqHaFSZD0SluMGJ84blsufGLlWuNu8gQX+A=;
- b=owGbwMvMwCX21S6Y7aK9oS7jabUkhqwH64Oktjz70LHhuN/z+bsPVT9ic2zlunBItb7ZKW/ez
- CcJue+nd5SyMIhxMciKKbL4nH3cw634ccf/hzsuw8xhZQIZwsDFKQATUc1m+Ct5hXee5qeannOO
- L63VN/EGRmTfnHil1E6o8+3xsmknPd8yMiy/sixsXejrmtCzkqv1LBs8FNk3Cvz/w2k/u2Wl2SV
- tbm4A
-X-Developer-Key: i=jhonata.poma@gmail.com; a=openpgp;
- fpr=4CCDE38C0B21F1B8FFE1B8D3F53E5306D13F312D
-X-Endpoint-Received: by B4 Relay for jhonata.poma@gmail.com/default with
- auth_id=1288
-X-Original-From: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
-Reply-To: jhonata.poma@gmail.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/4] mm/rmap: duplicate a PMD mapping as one in
+ folio_dup_file_rmap_pmd()
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+ Konstantin Khorenko <khorenko@virtuozzo.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ Peter Xu <peterx@redhat.com>, Alex Williamson <alex@shazbot.org>,
+ kvm@vger.kernel.org, =?UTF-8?Q?Lo=C3=AFc_Molinari?=
+ <loic.molinari@collabora.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+ linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-0-66f00b7a564c@virtuozzo.com>
+ <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-1-66f00b7a564c@virtuozzo.com>
+ <atnEFyGRYGGf9shA@gremlin>
+ <71101695-339d-4f8f-b9d8-dfadf7dbd0ed@virtuozzo.com>
+ <atn3SPG5MKpj2Unj@gremlin>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <atn3SPG5MKpj2Unj@gremlin>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-From: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
+On 10/22/26 14:11, Lorenzo Stoakes (ARM) wrote:
+> On Thu, Oct 22, 2026 at 12:44:40PM +0200, Konstantin Khorenko wrote:
+>> On 10/22/26 10:07, Lorenzo Stoakes (ARM) wrote:
+>>
+>>> Was this a mistake in d8ef5e311d7b, or actually intentional for whatever reason?
+>>> If the latter this shouldn't be a fixes.
+>>
+>> commit d8ef5e311d7bfde54b60ab45026f206eff31b2d2
+>>
+>>     mm/rmap: convert page_dup_file_rmap() to folio_dup_file_rmap_[pte|ptes|pmd]()
+>>
+>> ...
+>> +static inline void folio_dup_file_rmap_ptes(struct folio *folio,
+>> +               struct page *page, int nr_pages)
+>> +{
+>> +       __folio_dup_file_rmap(folio, page, nr_pages, RMAP_LEVEL_PTE);
+>> +}
+>>
+>> ...
+>> +static inline void folio_dup_file_rmap_pmd(struct folio *folio,
+>> +               struct page *page)
+>> +{
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +       __folio_dup_file_rmap(folio, page, HPAGE_PMD_NR, RMAP_LEVEL_PTE);
+>> +#else
+>> +       WARN_ON_ONCE(true);
+>> +#endif
+>> +}
+> 
+> OK so it was just wrong at the time :)
+> 
+>>
+>> Both functions were introduced in a single commit, i think it's a simple copy-paste issue.
+>>
+>> The helper never had a caller, so nobody could hit it. If you prefer, I
+>> can drop the Fixes tag and only mention d8ef5e311d7b in the changelog, as
+>> there is nothing to backport.
+> 
+> I mean, it seems like a bug to me? If there's no harm in backporting it I think you
+> should add Cc: stable@vger.kernel.org in that case actually.
 
-Add a test which starts a link dump on a socket with SO_RCVBUF 2048
-while a link notification is still queued, after a large read made the
-kernel attempt large dump skbs. It reads like libnl does, peeking
-before each read, and expects the dump to complete with a zero status
-and at least one link. The notifications come from bringing lo up and
-down, so the test runs in its own netns and is skipped without the
-privileges to create one.
+It was never used, so it's by definition not even a bug. :)
 
-The test fails without the previous patch.
-
-Signed-off-by: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
----
- tools/testing/selftests/net/netlink-dumps.c | 102 ++++++++++++++++++++++++++++
- 1 file changed, 102 insertions(+)
-
-diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
-index 51129c564..4a94a2516 100644
---- a/tools/testing/selftests/net/netlink-dumps.c
-+++ b/tools/testing/selftests/net/netlink-dumps.c
-@@ -2,9 +2,12 @@
- 
- #define _GNU_SOURCE
- 
-+#include <errno.h>
- #include <fcntl.h>
-+#include <sched.h>
- #include <stdio.h>
- #include <string.h>
-+#include <sys/ioctl.h>
- #include <sys/socket.h>
- #include <sys/stat.h>
- #include <sys/syscall.h>
-@@ -260,4 +263,103 @@ TEST(close_with_ref)
- 	usleep(100 * 1000);
- }
- 
-+static int lo_set_up(int sock, bool up)
-+{
-+	struct ifreq ifr = {};
-+
-+	strcpy(ifr.ifr_name, "lo");
-+	if (ioctl(sock, SIOCGIFFLAGS, &ifr))
-+		return -1;
-+	if (up)
-+		ifr.ifr_flags |= IFF_UP;
-+	else
-+		ifr.ifr_flags &= ~IFF_UP;
-+	return ioctl(sock, SIOCSIFFLAGS, &ifr);
-+}
-+
-+static const struct {
-+	struct nlmsghdr nlhdr;
-+	struct ifinfomsg ifm;
-+} dump_links = {
-+	.nlhdr = {
-+		.nlmsg_len	= sizeof(dump_links),
-+		.nlmsg_type	= RTM_GETLINK,
-+		.nlmsg_flags	= NLM_F_REQUEST | NLM_F_ACK | NLM_F_DUMP,
-+		.nlmsg_seq	= 1,
-+	},
-+	.ifm = {
-+		.ifi_family	= AF_UNSPEC,
-+	},
-+};
-+
-+// A dump started while a notification is still queued must make progress
-+// for a reader which peeks before reading, like libnl does
-+TEST(dump_with_queued_ntf)
-+{
-+	struct sockaddr_nl addr = {
-+		.nl_family	= AF_NETLINK,
-+		.nl_groups	= RTMGRP_LINK,
-+	};
-+	int netlink_sock, inet_sock, i, ret, links = 0;
-+	int rcvbuf = 2048;
-+	bool done = false;
-+	char buf[32768];
-+	ssize_t n;
-+
-+	ret = unshare(CLONE_NEWNET);
-+	if (ret && errno == EPERM)
-+		SKIP(return, "Needs CAP_SYS_ADMIN for a netns");
-+	ASSERT_EQ(ret, 0);
-+
-+	inet_sock = socket(AF_INET, SOCK_DGRAM, 0);
-+	ASSERT_GE(inet_sock, 0);
-+	netlink_sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-+	ASSERT_GE(netlink_sock, 0);
-+	ASSERT_EQ(setsockopt(netlink_sock, SOL_SOCKET, SO_RCVBUF,
-+			     &rcvbuf, sizeof(rcvbuf)), 0);
-+	ASSERT_EQ(bind(netlink_sock, (struct sockaddr *)&addr,
-+		       sizeof(addr)), 0);
-+
-+	// A large read makes the kernel attempt large dump skbs
-+	ASSERT_EQ(lo_set_up(inet_sock, true), 0);
-+	n = recv(netlink_sock, buf, sizeof(buf), 0);
-+	ASSERT_GE(n, (ssize_t)sizeof(struct nlmsghdr));
-+
-+	// Leave one notification queued, then start the dump
-+	ASSERT_EQ(lo_set_up(inet_sock, false), 0);
-+	n = send(netlink_sock, &dump_links, sizeof(dump_links), 0);
-+	ASSERT_EQ(n, sizeof(dump_links));
-+
-+	for (i = 0; i < 100 && !done; i++) {
-+		struct nlmsghdr *nlh;
-+
-+		n = recv(netlink_sock, buf, sizeof(buf),
-+			 MSG_PEEK | MSG_TRUNC | MSG_DONTWAIT);
-+		if (n < 0)
-+			continue;
-+		n = recv(netlink_sock, buf, sizeof(buf), MSG_DONTWAIT);
-+		if (n < 0)
-+			continue;
-+
-+		for (nlh = (struct nlmsghdr *)buf; NLMSG_OK(nlh, n);
-+		     nlh = NLMSG_NEXT(nlh, n)) {
-+			if (nlh->nlmsg_seq != dump_links.nlhdr.nlmsg_seq)
-+				continue;
-+			if (nlh->nlmsg_type == NLMSG_ERROR)
-+				EXPECT_EQ(*(int *)NLMSG_DATA(nlh), 0);
-+			if (nlh->nlmsg_type == RTM_NEWLINK)
-+				links++;
-+			if (nlh->nlmsg_type == NLMSG_DONE) {
-+				EXPECT_EQ(*(int *)NLMSG_DATA(nlh), 0);
-+				done = true;
-+			}
-+		}
-+	}
-+	EXPECT_TRUE(done);
-+	EXPECT_GE(links, 1);
-+
-+	close(netlink_sock);
-+	close(inet_sock);
-+}
-+
- TEST_HARNESS_MAIN
+Cc: stable makes sense if we want to backport it along the other things.
 
 -- 
-2.54.0
+Cheers,
 
-
+David
