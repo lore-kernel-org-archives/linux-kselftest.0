@@ -1,78 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793132551;
-	b=MzYACcPbZY5BNkeIZdFJQEOofQxtXs8a9rBqam7zppkZKfEwbUak/B2xUpCiGzUepDTg
-	 UJA/QDD15wEwtYM1j9Z4YOw+LQbzcCZ+lWC7FQAWVI+r+VAUh0mWppJ/WVxt5lbHbhRG+
-	 bcDTpNyNFqTPzJ0Sowhv/7NS7TGHrFkvSqAV+lP8RYfgXObdByuZfdDf0te6ZeSMBio21
-	 nNwauzMy1QrBgKz+HcKvLBRVJSZKHhyuSfz88toiddHWNFqCfPbFg3lvkU6t1Z/jnSife
-	 gyaZ9SpZLwgKacdVl1ArlcRPTV/K6EAgxqalFQZ0BxvfvKnCR8K2nPZf7Vsi9HL3tcQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793132551;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=QFqpzviPc62m2+b1N8YCwl/uYJvBexNvvOd3y1LZQaE=;
-	b=cYKwI4J7ZBiLtpbXZSuY2Z7fhO0DRKA6a7FmI1S/5woKv/DP8+8IbiBp5CYV+BTuSJnZ
-	 OcdwCyxpHrwSPu/ieQ0M89MVK/ex6T+IvGJ6GvDedwOLU5/PdLnWHEzq/G9HtxYTJT+3f
-	 3OOyJ9aad3hYHJpug6u8yYy2EWXDyqaLNujbPX9RYcLDU1id25S3RQMimSM+T5TiHJwiC
-	 iofRYZiLBGTHN2Bi74kK2IQ4+9fWWVn5TmEVbI/UVr8gpJaMJkwx4t/OQF5H8oQCqk50f
-	 fSn5CamCFD/el7ob17GcMNzvH+r1btT97Bgm3HRnfqWR0nEKaNatyl6hyGd2ep3xGOQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YNjgLP15;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A099D606A911;
-	Tue, 27 Oct 2026 20:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YNjgLP15
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793132550;
-	b=eVGO/CShdI8p8b3RHTZA/I8pgrJNB1y4xoRqbH2J5/0/fKZ8gYrWnHon6rE1M9P8ctn5
-	 cAuvBPvvl+oy62GguoGEXLozPyhK7xCroex9bwA6Tq0HB91ZMv0XMoSQERnAmNQjW6Cyu
-	 XvMlziiO7TM+VrKntN3+ldOKm/5iTUW9IjlfYOSHqtMDiMwnIHUisr4EBMhltmqQD2fUw
-	 cyZCxvpyHDXuCvqbTHXLyw8z+OJa8XWOu0EsAf7vMEIdFgak/T+tjQXaVsO5MvMerx1Uj
-	 AQDd47E3zxX8MYK5s1ouv9kwvo6oH83jBpO7vWuLlVZLpG1MIGic6ZzeON/Z782ISTA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793132550;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=QFqpzviPc62m2+b1N8YCwl/uYJvBexNvvOd3y1LZQaE=;
-	b=1TCfyP7MpTMiiG0YJl7VYhgua1kf5J9sFusLhzFdlDYNTWFDKsGSGVpigD8k4vcqZHSE
-	 lU99UYmnMoagav5mPbb4cYPUk+n6uHDNXdfmiojUN6bVYGts/fjvEg78q6fxlBPHl3Azx
-	 89jjFI1ItJwVzYCMiBeaACIOVHLQaWTUcKVJxUugFjO9+sz7+ZqB/Pak2KGwYYQM+clHr
-	 cDQHglwGFIm8Gq0qgx5deX0HzFnfrz1jtTJF9GoP4EMRCcE8x8iw5XuEOzMXpK9fPL0Vt
-	 owZqwJvMSAnbNJKsXj+wVWE5WDHaUWPgxFlm+AsxoVyjgCwBHVuM94feX6yJV4npepg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.200
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793132754;
+	b=adp2MWCb0izZO01wB0Uw3kaysmFaKpg1e3MxZ1LcbzjBnC+Kc2BcApnpzG1ZE3p6oyi4
+	 ByBaFkfeP/UI3feRe155C/IWV4lp3NLtT86BPXfXRQMtrFPHfAZhVNPeGh6anmmuc7EDh
+	 H0w85hYJpJxht5hbzpwf18oKOjkgR1DuAneogz/cnGi5R8tbSsAzDgQzpsKALtiz0eHb5
+	 wohXvsN3B7ki5edKx4aHOZlTNoWuaUihTQI8l1UctReRk5irAMDMgu1UM599QcjH+RGvb
+	 N1V4zaj4BRL6Uc3ruq4AMCrNvFxhhaiEV8cxjaBWS7Zn96lWkabm5yMhvBJIaH+FtbA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793132754;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=v43jU0e7RC9RWtFvXaEewucUmBHe6fOFYcJcLeSXNZY=;
+	b=MGaSbBPgcCjo11mxoOTIeegXjXae3sXCu1TtB1J7Eu++keY74QBXUBJotqmSZAkA+cag
+	 lrtQAk3byr2VAHlGPTEGj5h6qyFgmQcoG5YVGCCTJfuUH3Gcomjdj/d773jfgTM5Cf3j7
+	 pZjSdDi7ykDemb7NjKwzGpHmrx+kOA5NudMcChDANyHTTi+4aW9xeimYMQXTmV+FpHBhc
+	 GEU+0GEJY8gEodty81Vcgvki4/djw+ZkTL1DKaahJ6OjzhslES4i3/lJHiVDyPMhv3nBU
+	 nVfYh5gq80Yk7zD8m9cg77l4sG2+oBO2AtHbCczHDHOBOYTmeGVezDt6aoDy1lheazQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jMJ2XrUE;
+	arc=none smtp.remote-ip=209.85.215.200
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 84AE31F0135F;
-	Tue, 27 Oct 2026 20:22:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793132550;
-	bh=QFqpzviPc62m2+b1N8YCwl/uYJvBexNvvOd3y1LZQaE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=YNjgLP15d7ARK+Z4Bda3ofnJn5CdcU4Oyxsilndn6k1YBeXXmpFiIXwGNYU7NOKmt
-	 zOvufcxjl9Ns1LjzoZVMg4FCIeMiS5DAhHFMi/K89pZi44f+1XUCyymRqNFcRDtoZy
-	 dgzyETMt68ldRtpRmadMwEcJGAgpF8E8Ur5UnKaEYsKrDsMq4sK8Y/jeRndtZr/X+l
-	 V0CSaKHKMBSM1+mzAjae9YRO2KtAneKUVze/v3rumhfmnYiV0J10yLHy04iWG2KI1z
-	 4bUoVsAd+RExqwgFzLt/KdAzev0OiJieIi0d3/5W0Rt/DeToSdcnR/93NMYk5xwc/t
-	 wwfEaloTzm+Sw==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 0EA9245264;
-	Tue, 27 Oct 2026 20:22:11 +0000 (UTC)
-From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Tue, 27 Oct 2026 14:22:29 -0600
-Subject: [PATCH v13 29/39] selftests: enable comma-terminator tests
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7711F606C901
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 20:25:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7711F606C901
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jMJ2XrUE
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cd0b795aa8cso888018a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 13:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793132754; x=1793737554; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=v43jU0e7RC9RWtFvXaEewucUmBHe6fOFYcJcLeSXNZY=;
+        b=jMJ2XrUEWIsDJmE2y/9yluM6UnlcY0/ai2kxR+h/Dyd1obZcfWvlFGA5+nK8RbUN/d
+         oOvyNEGJ93bvgk31m4p2B1HnPmXhcyPjt/cIvHLfwgvjiJxz5CzjiOW+sLNPcFIjpMTw
+         gNHuiHdWN5BJ1MeZrf2gf/0dqK/WluZ1az/ffC6vneKt7/AEmqybnHDFaf6ogGPvEFH8
+         XrNWteueV810LRv1RukjO8Sfkc4hKGa9RJVGr2BMvVDWnDjnoFpVAlq3DuLSeLyItdjG
+         atRkkTNa+DCuH7T+tM2AyM7HWkXC2ZqdX19l/on2kMK/HhjM/vioL65ASWHch/zHMvWG
+         jbeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793132754; x=1793737554;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=v43jU0e7RC9RWtFvXaEewucUmBHe6fOFYcJcLeSXNZY=;
+        b=P5v9BHyw5AxgH/HMXHC6e02HbVCW/ZcknVHMGs8aFxk4SHOpyfRArdLy3H2q0O6cLr
+         suEnye4yr4bbRIKMDMpomRkr9HEmfJlyrH0sLCZsk144WFi00CRkqL0VfoMDk+lBLGwU
+         Q+zwvWs9PsrMdeF4vKoGOfgUDIi94eofBkfct1MBmNrd1Vo6gffx9Zi/2loy7wPkeKQo
+         tzBB7YZo5OwSFXySeGc1q8F9IXHlEMZuRceq+Keqw2rgY0jLa86GXcJCdLsVsGJI9oYR
+         t9vnGDgwwlKy04mE52ZNDQwo0tIyyqev8t8CFKgn1IjapwgMXJCfHkgzn6MdJO5cP2yq
+         78TQ==
+X-Forwarded-Encrypted: i=1; AKwUvBws1x2u+S3jReuL2Dc5mgM0KFKJoM83GbGK0nLfOE8YRZdnUEFlxIYXGoIRuBIAu6+qTy5G13gGOxfDQHdAYBY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ5ju7GT739D8H9a/0hO6FTzIGh7AiQ+SQXNCikrIgr+46ju96b
+	fAAP/IfpTT00dksrszCybqXDf1JsJZJ2zCeHF8M1E59D1wdIhOEU63ZlGc2Qj/kguxtqS8emBff
+	99YVPqw==
+X-Received: from pjbhs19.prod.google.com ([2002:a17:90b:2013:b0:3ad:99d8:e894])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4a51:b0:3a6:d2ac:74ce
+ with SMTP id 98e67ed59e1d1-3ae580d24a9mr93283a91.19.1793132753147; Tue, 27
+ Oct 2026 13:25:53 -0700 (PDT)
+Date: Tue, 27 Oct 2026 13:25:52 -0700
+In-Reply-To: <85b0e3aa-0b84-4a00-852a-821aed4a0649@oracle.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,143 +79,258 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20261027051808.243000-1-partha.satapathy@oracle.com>
+ <auDF9WpqW8OCu_8w@google.com> <85b0e3aa-0b84-4a00-852a-821aed4a0649@oracle.com>
+Message-ID: <auEI0B7QkIhg-lLG@google.com>
+Subject: Re: [PATCH 1/2] KVM: x86: Select lowest vCPU ID for aliased xAPIC IDs
+From: Sean Christopherson <seanjc@google.com>
+To: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+Cc: Partha Sarathi Satapathy <partha.satapathy@oracle.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	wim.ten.have@oracle.com
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261027-dd-cmap-part2-clean-v13-29-9267923be612@gmail.com>
-References: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
-In-Reply-To: <20261027-dd-cmap-part2-clean-v13-0-9267923be612@gmail.com>
-To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Jonathan Corbet <corbet@net.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
- Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
- John Ogness <john.ogness@linutronix.de>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
- Jason Baron <jbaron@redhat.com>, Jim Cromie <jim.cromie@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793132527; l=3975;
- i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=NxQmKtv0eDJHiMhYB7Dsgkr2EoP7NbBP01ImDvAfxdw=;
- b=qbn/L3/n+uApxRkFQR7jbqsIdGX1ATWtKG8Pm04sW0nk8M66EbqdpedcS02w/6VJfKwmzxsj1
- ye2G4u900UzAbrsDfqBkQB1C3QDuD9LzhapimtIefqBuBECl5+nAffC
-X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
- pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
-X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
- auth_id=958
-X-Original-From: Jim Cromie <jim.cromie@gmail.com>
-Reply-To: jim.cromie@gmail.com
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-From: Jim Cromie <jim.cromie@gmail.com>
+On Tue, Oct 27, 2026, Alejandro Jimenez wrote:
+> On 10/27/26 11:40 AM, Sean Christopherson wrote:
+> > On Tue, Oct 27, 2026, Partha Sarathi Satapathy wrote: > From: Alejandro
+> > Jimenez <alejandro.=E2=80=8Aj.=E2=80=8Ajimenez@=E2=80=8Aoracle.=E2=80=
+=8Acom> > > When
+> > KVM_X2APIC_API_USE_32BIT_IDS is enabled, KVM's x2APIC hotplug > quirk
+> > allows events to target a vCPU
+> >=20
+> > On Tue, Oct 27, 2026, Partha Sarathi Satapathy wrote:
+> >> From: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> >>=20
+> >> When KVM_X2APIC_API_USE_32BIT_IDS is enabled, KVM's x2APIC hotplug
+> >> quirk allows events to target a vCPU by its x2APIC ID while the vCPU
+> >> is still in xAPIC mode.
+> >>=20
+> >> In xAPIC mode, APIC IDs are truncated to eight bits. Consequently,
+> >> vCPUs with distinct x2APIC IDs can share an effective physical APIC ID=
+.
+> >> KVM's x2APIC erratum specifies that an event targeting an aliased
+> >> physical APIC ID is delivered only to the vCPU with the lowest vCPU ID=
+.
+> >>=20
+> >> However, the optimized physical APIC map does not guarantee lowest-ID
+> >> selection. When rebuilding the map, KVM retains the first xAPIC-mode
+> >> vCPU encountered for an aliased 8-bit xAPIC ID. Since vCPUs can be
+> >> added in any order, that vCPU need not have the lowest vCPU ID.
+> >>=20
+> >> For example, vCPU 19 has x2APIC ID 0x013 and vCPU 275 has x2APIC ID
+> >> 0x113. Both expose xAPIC ID 0x13 while in xAPIC mode. If vCPU 275 is
+> >> created before vCPU 19, the map retains:
+> >>=20
+> >>   phys_map[0x13] =3D vCPU 275
+> >>=20
+> >> An INIT/SIPI targeting physical destination 0x13 then starts vCPU 275
+> >> instead of vCPU 19. vCPU 275 executes the secondary startup path for
+> >> the firmware CPU entry with APIC ID 0x013. After vCPU 275 enables
+> >> x2APIC, Linux observes APIC ID 0x113 and reports:
+> >>=20
+> >>   Firmware: 13 APIC: 113
+> >>=20
+> >> KVM hardcodes a vCPU's x2APIC ID to its vCPU ID. When populating an
+> >> aliased legacy xAPIC entry, retain the vCPU with the lowest vCPU ID.
+> >> This makes optimized-map selection independent of vCPU-add order.
+> >=20
+>=20
+> First of all, apologies for the confusion since this is an earlier WIP
+> version and due to a miscommunication it was sent as v1. The selftest als=
+o
+> has changes that are not included in Patch 2. I will send a v2 after the
+> discussion on this thread.
+>=20
+> For this patch, the intended commit message is phrased/focused on
+> maintaining the stated KVM hotplug hack behavior i.e. the commit should b=
+e
+> more like:
+> --
+> When KVM_X2APIC_API_USE_32BIT_IDS is enabled, events targeting an aliased
+> xAPIC ID must be delivered to the vCPU with the lowest vCPU ID. However,
+> the optimized physical APIC map does not guarantee lowest-ID
+> selection. When rebuilding the map, KVM retains the first xAPIC-mode
+> vCPU encountered for an aliased xAPIC ID. Since vCPUs can be added in any
+> order, the initial entry does not necessarily map to the APIC of the vCPU
+> with lowest vCPU ID.
+>=20
+> Compare vCPU IDs when populating aliased xAPIC entries and retain the
+> lowest one, making destination selection independent of vCPU creation
+> order.
+> --
+>=20
+> > I'm genuinely curious.  What VMM adds vCPUs in a "random" order?  I agr=
+ee a fix
+> > is needed, as KVM should be internally consistent (kvm_apic_match_physi=
+cal_addr()
+> > will always try to match the truncated ID).  But this also makes me won=
+der exactly
+> > what userspace is doing, and why.
+> >=20
+>=20
+> The issue was triggered with QEMU and a tool that uses libvirt API for
+> resizing guests and balancing their vCPU allocations across NUMA nodes. I
+> am not sure if similar work has been published upstream, so I'll defer to
+> Wim (CC'd) if you want more details.
 
-Enable the FT_comma_terminators test block in dyndbg_selftest.sh to
-verify control query parsing when queries are terminated by commas.
+Oooh, actual hotplug of vCPUs.  That makes sense.
+>=20
+> A basic reproducer (besides the selftest) simply uses QEMU to issue
+> 'device_add' QMP commands and starts with a vCPU placed on socket 1,
+> followed by its "alias" on socket 0. e.g.
+>=20
+> { "execute": "device_add", "arguments": { "driver": "host-x86_64-cpu",
+> "id": "cpu117", "socket-id": 1, "die-id": 0, "core-id": 11, "thread-id": =
+1 } }
+> { "execute": "device_add", "arguments": { "driver": "host-x86_64-cpu",
+> "id": "cpu017", "socket-id": 0, "die-id": 0, "core-id": 11, "thread-id": =
+1 } }
+>=20
+> I wondered initially if this approach was breaking some convention, but I
+> have not found anything stating even a "random order" is disallowed. So
+> here we are...
 
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
-v11:
-. convert modprobe dyndbg parameters in FT_test_classes and
-  FT_classmap_inheritance to use comma separators
-  ("class,D2_CORE,+pf;...").
-  Sashiko review complaint (patch 24):
-  "Are these load-time parameters truncated during module load due to
-  how the shell handles quotes? When bash evaluates and strips the
-  double quotes before executing modprobe, modprobe constructs the
-  kernel options string without adding quotes around the parameters.
-  The kernel's parse_args() function (using next_arg() in lib/cmdline.c)
-  splits module parameters at unquoted spaces... treats D2_CORE and +pf
-  as separate unknown parameters."
----
- .../selftests/dynamic_debug/dyndbg_selftest.sh     | 29 ++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+It's not disallowed, just unusual, obviously.
 
-diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index d7681cdcd012..f4078ad112f0 100755
---- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-+++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -340,6 +340,25 @@ function FT_basic_queries {
-     ddcmd "file $f =_" "$f"
- }
- 
-+# test parsing on spaces, commas. testing against builtin file kernel/params.c
-+function FT_comma_terminators {
-+    v_echo "${GREEN}# COMMA_TERMINATOR_TESTS ${NC}"
-+    if [ $LACK_DD_BUILTIN -eq 1 ]; then
-+	echo "SKIP - test requires dynamic_debug built into kernel"
-+	return
-+    fi
-+    local f='kernel/params.c'
-+    ddcmd =_
-+    ddcmd "file $f +p" "$f"
+> >> The separate full-ID entry remains unaffected, and destination 0x113
+> >> continues to select vCPU 275.
+> >>=20
+> >> Signed-off-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> >> Signed-off-by: Partha Sarathi Satapathy <partha.satapathy@oracle.com>
+> >> ---
+> >>  arch/x86/kvm/lapic.c | 4 +++-
+> >>  1 file changed, 3 insertions(+), 1 deletion(-)
+> >>=20
+> >> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> >> index 1597dd0b0cc6..5dedffddebec 100644
+> >> --- a/arch/x86/kvm/lapic.c
+> >> +++ b/arch/x86/kvm/lapic.c
+> >> @@ -245,7 +245,9 @@ static int kvm_recalculate_phys_map(struct kvm_api=
+c_map *new,
+> >>  		if (apic_x2apic_mode(apic) || x2apic_id > 0xff)
+> >>  			new->phys_map[x2apic_id] =3D apic;
+> >> =20
+> >> -		if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
+> >> +		if (!apic_x2apic_mode(apic) &&
+> >> +		    (!new->phys_map[xapic_id] ||
+> >> +		     x2apic_id < new->phys_map[xapic_id]->vcpu->vcpu_id))
+> >=20
+> > Hmm, I don't think KVM should always override a smaller ID.  It should =
+be a moot
+>=20
+> Why should it not always override the smaller ID (in cases where
+> KVM_X2APIC_API_USE_32BIT_IDS is enabled)? I interpret the wording from
+> x2APIC section in:
+> https://www.kernel.org/doc/Documentation/virt/kvm/x86/errata.rst
+>=20
+> "KVM will deliver events targeting that APIC ID only to the vCPU with the
+> lowest vCPU ID"
+
+Gah, foiled by my own documentation.  I had this wrong in my head.  It's no=
+t the
+aliasing logic that matters, it's literally the behavior of the optimized m=
+ap that
+I was documenting.
+
+> as having the consequence that we should always replace an existing entry
+> in the map with an incoming lower vCPU ID, but the potential corner cases
+> in this space make my head hurt :).
+> I think xAPIC ID is unfortunately writable, so perhaps that is the sort o=
+f
+> scenario you are thinking about?
+>=20
+> > point, since xapic_id_mismatch will be set if "xapic_id !=3D (u8)vcpu->=
+vcpu_id",
+> > i.e. if the incoming vCPU has a smaller vCPU ID and a true xAPIC ID col=
+lision
+> > (not due to truncation).  But to match kvm_apic_match_physical_addr(), =
+I think
+> > it would be this?
+> >=20
+> > 		if (!apic_x2apic_mode(apic) &&
+> > 		    (!new->phys_map[xapic_id] ||
+> > 		     (u8)new->phys_map[xapic_id]->vcpu->vcpu_id =3D=3D vcpu->vcpu_id)=
+)
+> >=20
+>=20
+> The above works for the case described in the commit, but going one step
+> further, I think it doesn't behave correctly in this case:
+>=20
+> vCPU 531 (0x213) is created first
+> vCPU 275 (0x113) is created after
+>=20
+> the map is not updated and will still point to the lapic of vCPU 531.
+> Reversing the creation order above leaves the map with vCPU 275.
+> If my reading of errata.rst is accurate, then vCPU 275 (i.e. the lowest
+> vCPU ID) should always be selected regardless of creation order.
+
+Yeah, ignore that.
+
+Backing up a step, what exactly is the problem you're trying to solve?  Bec=
+ause
+I suspect there's no solution that will magically fix everything.  E.g. if =
+you're
+trying to resolve an issue where vCPUs aren't recognizing SIPIs, then the e=
+xample
+you provided means vCPU_531 will never wakeup, i.e. which vCPU is  "buggy" =
+changes,
+but the bug itself is still there.
+
+If this is about SIPIs hitting the all CPUs, then I think to have a robust =
+(well,
+as robust as this mess can get) implementation, we'd have to disable use of=
+ the
+optimized map when processing SIPIs with PHYSICAL delivery, e.g.
+
+diff --git a/Documentation/virt/kvm/x86/errata.rst b/Documentation/virt/kvm=
+/x86/errata.rst
+index a9cf0e004651..65b8a612bfff 100644
+--- a/Documentation/virt/kvm/x86/errata.rst
++++ b/Documentation/virt/kvm/x86/errata.rst
+@@ -63,10 +63,10 @@ When KVM_X2APIC_API_USE_32BIT_IDS is enabled, KVM activ=
+ates a hack/quirk that
+ allows sending events to a single vCPU using its x2APIC ID even if the tar=
+get
+ vCPU has legacy xAPIC enabled, e.g. to bring up hotplugged vCPUs via INIT-=
+SIPI
+ on VMs with > 255 vCPUs.  A side effect of the quirk is that, if multiple =
+vCPUs
+-have the same physical APIC ID, KVM will deliver events targeting that API=
+C ID
+-only to the vCPU with the lowest vCPU ID.  If KVM_X2APIC_API_USE_32BIT_IDS=
+ is
+-not enabled, KVM follows x86 architecture when processing interrupts (all =
+vCPUs
+-matching the target APIC ID receive the interrupt).
++have the same physical APIC ID, KVM *may* deliver events targeting that AP=
+IC ID
++to only one of the vCPUs.  If KVM_X2APIC_API_USE_32BIT_IDS is not enabled,=
+ KVM
++follows x86 architecture when processing interrupts (all vCPUs matching th=
+e
++target APIC ID receive the interrupt).
+=20
+ MTRRs
+ -----
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index ecf611845fb1..255c8dc00e0a 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1181,6 +1181,10 @@ static inline bool kvm_apic_map_get_dest_lapic(struc=
+t kvm *kvm,
+ 		return false;
+=20
+ 	if (irq->dest_mode =3D=3D APIC_DEST_PHYSICAL) {
++		if (kvm->arch.x2apic_format &&
++		    irq->delivery_mode =3D=3D APIC_DM_STARTUP)
++			return false;
 +
-+    ddcmd "file,$f,=_" "$f"
-+    ddcmd "file,$f,+mf" "$f"
-+    # ignore empty tokens
-+    ddcmd ",file ,, ,  $f, -p" "$f"
-+    ddcmd " , file ,,, ,  $f, -m" "$f"
-+
-+    ddcmd =_
-+}
- # testing classmap-based query enablers and class configurations
- function FT_test_classes {
-     v_echo "${GREEN}# TEST_CLASSES - classmap-based query enablers and class configs ${NC}"
-@@ -350,7 +369,7 @@ function FT_test_classes {
- 
-     # 1. Verify initial multi-query enablement state via file slice
-     my_modprobe test_dynamic_debug \
--        dyndbg="class D2_CORE,+pf;class D2_KMS,+ps;class D2_ATOMIC +pm"
-+        dyndbg="class,D2_CORE,+pf;class,D2_KMS,+ps;class,D2_ATOMIC,+pm"
-     verify_control_slice '\[test_dynamic_debug\]'
- 
-     # 2. Verify state transition and live-printing end-to-end via ddcmd_load!
-@@ -368,7 +387,7 @@ function FT_classmap_inheritance {
- 
-     # 1. Load submod directly (which auto-loads supermod with default parameters)
-     my_modprobe test_dynamic_debug_submod \
--	"dyndbg=+p;class D2_CORE +pfs;class D2_KMS +pts;class D2_ATOMIC +pmf"
-+	"dyndbg=+p;class,D2_CORE,+pfs;class,D2_KMS,+pts;class,D2_ATOMIC,+pmf"
-     verify_control_slice 'test_dynamic_debug'
- 
-     # 2. Runtime parameter changes to supermod propagate to submod descriptors
-@@ -447,6 +466,7 @@ builtin_tests=(
-     FT_grammar_ok
-     FT_grammar_errs
-     FT_basic_queries
-+    FT_comma_terminators
- )
- 
- # Modular Feature Tests (Require CONFIG_MODULES=y and test_dynamic_debug*.ko available)
-@@ -537,6 +557,11 @@ function GOLDEN_RECORDS {
- #K= 02e4fd94602e108cb89bfc70d47a5dad FT_basic_queries.5
- #K= f03a7ca7316e8db4c0e16523dc41e75d FT_basic_queries.6
- #K= c518a50ba30ba8099d0dc874a27ecf16 FT_basic_queries.7
-+#K= c8bbbac639f244ed9088208ebb7d83a6 FT_comma_terminators.1
-+#K= bed6350f058f600910837dae83a12f56 FT_comma_terminators.2
-+#K= 6e8599556a312200fb6d484565b6c52f FT_comma_terminators.3
-+#K= 68b329da9893e34099c7d8ad5cb9c940 FT_comma_terminators.4
-+#K= adc1ef04304c861c87fe294a8ba4e402 FT_comma_terminators.5
- #K= 91838b4012c50a1dc1d9e210ba8d68f8 FT_test_classes.1
- #K= a15ec4843acd721fbdfddc0b512c8032 FT_test_classes.2
- #K= 2cee6842c9cdee5cb3bf50b2e3914813 FT_test_classes.3
-
--- 
-2.56.0
-
+ 		if (irq->dest_id > map->max_apic_id) {
+ 			*bitmap =3D 0;
+ 		} else {
 
