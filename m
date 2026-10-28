@@ -1,86 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793191902;
-	b=fDSAPnzy25uQepU/WvBmMODJeWnLJRh/ci7WRHc26VLz4GqLmi/P7Et/wlw58H+bt/xx
-	 zsUgavoUPcfSeOXe3uVRSWiAK8NP7zGbaLpBX7oY+B8FVic1QjS+8npa4Z39rdySaT22e
-	 S8qBqtsjxEUQBxouzQpaUvK2ABdJ1JW/Jbv+z3QCf+XWvpA1zPYKKgCLZ8B5lcXygq0bJ
-	 rR6etuU2fVUTMXMShLbsaFTo3jGGCxqoO1YTtnMLCB4cxYtR69V+nBKq0KghzEcnnqA5l
-	 yeADM+vxLSQc+WfCa2WHCDC/oK/NPqoVeWrvqsWJfumpOZ3oBlRRAqPBp7ewp+mx5ng==
+	t=1793194138;
+	b=40ec0jH5PlfIoOH72+nzB1/YueuwDQiTIeR3vL6hF3ayVejYf4JwoaXWgilCt19ncfK+
+	 8mZV1cqysT9RnnDWjMU2cWbqF+TKDQFHMDforsCryiSu53PZFYAQrLodlzdZMOLcvO5TB
+	 miMtk7b0u1y33PHjCPbQCV5ilosLEdGNFaUxJSsc8Xxm9pXSWmfUNnZgrKgd/EmxuqTb6
+	 RlOD3oOMc08WkC4RT3LjC2H5twGfMiTdV73DFV6X3pQj0aO5zswcXPhyrz5vdPojm/Pmz
+	 53aGDZl2quAJFcKc0288vgNULR6fTUqEdBAbkZ6WmgvgTQCojZHrbYjbMxsIvTBSSDg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793191902;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=4QgwrBI3wl14x9XOc2FYaDf/AYjSUgDXY7fYshPzgk4=;
-	b=z9n0q+FPxepA+itm/KJkI0Y0ovQs7X1pMLiO3qRmWLFFcN39mrP7gAy7tWS0HWOmgLae
-	 GJgz9SvdE7gxzcGxJILK7EUFAFDMD3DjszykgJqrCmORvsexToZfFtLK/iVulloQQTatJ
-	 FYuTkhseUcDZhcq6sMMnrBCafREaOI2tq0GZ7KhjkKidVVYR+uZ+oUDLZtgCL2JTS6Gfs
-	 YheCvRjTAeDg58DqTVdAgTZ/IDeoUB7lKurABJCeiv1ezMt1RkAdUxmAg9lS7UbJ4HNXb
-	 kuKsARUm6biZtIQHllSb+QtNrSZ4mTw4x8DnP5lr/tOdX4xh8LIuZNPcowPLRLbPQPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793194138;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
+	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=FLKnlRbJD1/tet/3IiAp1mZT2KpI2WVfTfQBZi4MnUQ=;
+	b=l3mfQo/eqfmheQvuC+L73NuSxSHRZAypcozYbMfFR3FxOsxLN2OVY2i5dPOT70erS+PO
+	 kQDBqidfgt3Dqw31g7v5wUA1XpfwpDuGi0GazUQhzBcPPzUx/DzhfFGkBqw/eoISVM1Xv
+	 nbSmLkj5ZVPuhyiNZjqxgaMVEinpv6z2UQyX+zDDPE9OhJa/z1TozDV2ahzdauFMbJmbo
+	 XtbG4aO3MXtYwR3v/+U60MgiW05bGGx+353yu9UGzLVPKjgiHl2bz555uvXiiPTe51KM0
+	 Uw5fEWlfAbfeec3kE+Pq/xNeuyrakM3RhmFJFwdL1DuBEIbI+T5W9JggpDqE6OHUSwg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ao+YfK+n;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=qQvuRZzS;
+	arc=none smtp.remote-ip=216.40.44.15
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87E0E60A3803
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 12:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D67606A31A;
+	Wed, 28 Oct 2026 13:28:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24D67606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ao+YfK+n
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BF81F01407;
-	Wed, 28 Oct 2026 12:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793191902;
-	bh=4QgwrBI3wl14x9XOc2FYaDf/AYjSUgDXY7fYshPzgk4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ao+YfK+nSAQM4GiNp9a/zdqZLC9qaI76opULD7jIjHD/2eOT9jY82EpfycUF/1N81
-	 xYvkdUVcPInNCe1K6ICbzLZGRFNJokRXoJPOC51qVN6eH2J0PIYFc5IzOHyegvMKfO
-	 nWi3vrubywaYejKlhc2OT+IeAht/n+AGAoh9SNA9l48a0mYd0Q42M2F3oq60Zge0F5
-	 Cbn/yc3i5s2lUg2eQ0HBRduwcTegcKmmFozT3nzLrWqEZf810F9EEN4LCyf4fWTDIa
-	 6yUIPd49TUZrlEX6n18bNB/4qVupRhyX8uuuOUk5cyp1p0DDWOpXLayk+Fuo7Lh+bl
-	 S3jdLH8ga9QoQ==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 4DD9C198003A;
-	Wed, 28 Oct 2026 08:51:36 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-10.internal (MEProxy); Wed, 28 Oct 2026 08:51:39 -0400
-X-ME-Sender: <xms:1-_hak0yawTSG6VO74TCldACfwO3HdoRCjQRlREmV1hoRQIc6vOvTQ>
-    <xme:1-_haocqEnrkyUwta2xwErVYeOCIiW5FNRHeoU_NJK3aFAcFRdNyp4NGkHaTm-Ut_
-    OVC30F-b8kah9WafQmmwmUefq4HTVmMliQXuVTtM3ELLUaCAln8Jehe>
-X-ME-Received: <xmr:1-_hamDkh6Epwxm7nIAHt5kwV7S078xkEeZemQLhpsgILXOro2ZsRQ6ToOE>
-X-ME-Proxy-Cause: dmFkZTGE3qyaXVxGyol57PkJZIGWeoKTYQuEzvLABDKdQ+sPhlAGnOjiWdxNbmqxYTkZLW
-    FPOtYF3Mh0BXDufsWNqeP+u1K424UqG0/E7TmpbHb4ukX06jB/9APetf2z9qWTvS6jlpNt
-    FE2AszEFmluzvuiHX6sDb96WV7WyIkQ9Nc9fBCcK2tbCWlZqLQhKyX185ZeAMIDLHF02yX
-    uYcUC2c4r7nNyrceOdZs0exaSF/Yx51DoG06ot6xyfmEvG2un6aO42EF7PMSI5dOAz1uGR
-    HlAySkWe21xaQAcJ1lXFnIC872ASFxKh3j8Zst097HloApiGG/3LCYe70+lEIIl2aUdwZ8
-    oEbpxq/mZKn5r0FGv210ENmig5Au9zdHfgIRCQyt5mMx0vsXbIiQU0EJcagVIfmnzTnICv
-    61YSQBzN1RClpB5jCEd+NIwi7RP38LtABLc3FOislqtD+SJOEDVNxHYfByu7inVkbxTbsW
-    NsDUe4ovMvC2eJ4tRR3yKdzvI8x/BbZBTi6DVZC2JrsQGarSRxqLTUzlFuw/eMbCp7cvWa
-    YlQPjVsYsSBvRnaAucwl0RhZiK8lajB2LICICvdG/Gd6vfKftiBz7Ttubhodhk+Msv9Bg+
-    DwANTLTEo/rKYBRyHGSJ7MyTNqd0LJKKtulcG83ksjGE4F7mVZLZjlXk+t7w
-X-ME-Proxy: <xmx:1-_hag2rZ-ERMvifHFoFYhVm1jTki2folsDUc64gKMMgL_JvZ0hVVw>
-    <xmx:1-_hahNmWBD1bTvVYoE8UCnoS_073bpJvvgkcIwaMjiVsDkrsflSJg>
-    <xmx:1-_havY5Dr_j3lDt7rmUk1dHnpoCwGYymU5Iy_jUlBz1c3h1roCwOQ>
-    <xmx:1-_haj1HgrRVJSrCm5vQRdVYVZIBRhxIC9bths7jdKhz3FwI-08w1Q>
-    <xmx:1-_hamtCvEwO8JyxD2zmga0K7GCLxU15ZgDVmaDefvMsn9KlsBeJ-ggS>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 28 Oct 2026 08:51:35 -0400 (EDT)
-Date: Wed, 28 Oct 2026 12:51:33 +0000
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Zenghui Yu <zenghui.yu@linux.dev>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, david@kernel.org, ziy@nvidia.com, 
-	baolin.wang@linux.alibaba.com, liam@infradead.org, nico.pache@linux.dev, ryan.roberts@arm.com, 
-	dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev, usama.arif@linux.dev, 
-	ljs@kernel.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com
-Subject: Re: [PATCH] selftests/mm: skip collapse_compound_extreme() on THP
- allocation failure
-Message-ID: <auHvwK_vtQYtx_Ui@thinkstation>
-References: <20261028100119.11340-1-zenghui.yu@linux.dev>
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=qQvuRZzS
+Received: from omf20.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 881D080C8B;
+	Wed, 28 Oct 2026 13:28:49 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id B33A320028;
+	Wed, 28 Oct 2026 13:28:47 +0000 (UTC)
+Date: Wed, 28 Oct 2026 09:28:46 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 03/16] tracing/filters: Fix false success return in
+ process_system_preds()
+Message-ID: <20261028092846.3782e698@gandalf.local.home>
+In-Reply-To: <179314823296.684037.17602272705996028005.stgit@devnote2>
+References: <179314820431.684037.4147763044424284198.stgit@devnote2>
+	<179314823296.684037.17602272705996028005.stgit@devnote2>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,26 +62,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261028100119.11340-1-zenghui.yu@linux.dev>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: B33A320028
+X-Stat-Signature: fjmr4z6yb7u84x13waruh7dcciwpi13n
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/7VmVCgvu1oMBM+JBddpevWT5GzRegh8Q=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=FLKnlRbJD1/tet/3IiAp1mZT2KpI2WVfTfQBZi4MnUQ=; b=qQvuRZzS4Mv8IDFULHOF5ttRvBP7irHxHzjl2PfEcCYIG6wUHoKDCLrffdcAchMqblXv0y0tULtIGJr/1mfV7gCtpfx4shnKaMIPH+Dc+qDmS1JDQqo8RJitrGHuwYBzzvbrUQAcFpBXukN87jC9FtfiXkv5lhRrpSrTer6/07c=
+X-HE-Tag: 1793194127-434769
+X-HE-Meta: U2FsdGVkX18QH3hilVK39IPdqSs9Dt6zlZZxHRTm6dS9YMboGgj2f4JbgPnciIgJ+YjTq+rXwomyQl2XifRRpIlon6hlqmkoAyAEXoUS/dDHeM2CKviEyCS9XDDlSiKHYxGLUGUAIXLnSCwwDPjbfPwH8tontCIlC9uAfsxguvi1It3n/BdNvYRcoKgtl+1P/FydI3DHekFyWF2EmSmwbwV76UFzTza/wdReWAP3FHecZgSRWK/SBKiNrY6fY+hJ30cH+FKXzuGS6kR8DXupx3rWnAOVmUGIdLb+2VLVYBsuzkPk3pGebyDDOcEfH6SDbCcYDvXhPC/Mz8YeVb882fjb34M8fKcU
 
-On Wed, Oct 28, 2026 at 06:01:19PM +0800, Zenghui Yu wrote:
-> From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
+On Wed, 28 Oct 2026 09:43:53 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> collapse_compound_extreme() needs hpage_pmd_nr PMD-order allocations in a
-> row, and it kills the whole test binary via ksft_exit_fail_msg() as soon as
-> one of them fails.
+> In process_system_preds(), "fail" is initialized to true to indicate
+> whether any event in the subsystem successfully applied the filter.
+> However, "fail = false;" was placed at the end of the event loop outside
+> the error check, unconditionally clearing "fail" on every iteration even
+> when process_preds() returned an error.
 > 
-> Gating the case by PMD size (commit b36bec6a01b1) -- the current workaround
+> As a result, if every event in the subsystem fails to match the filter
+> (e.g., an invalid field), process_system_preds() returns 0 (success)
+> instead of -EINVAL. Consequently, create_system_filter() considers the
+> operation successful and silently resets the subsystem filter display to
+> the default global filter message instead of reporting the parse error.
+> 
+> Move "fail = false;" into the else branch of the error check so that
+> "fail" is only cleared when at least one event filter succeeds. Because
+> file->filter is still replaced even when process_preds() fails, check
+> !list_empty(&filter_list->list) on the fail and fail_mem paths so any
+> replaced old filters are freed after an RCU grace period via
+> delay_free_filter().
+> 
+> Fixes: 80765597bc58 ("tracing: Rewrite filter logic to be simpler and faster")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>  kernel/trace/trace_events_filter.c |   15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+> index f7c067a58ba4..617bc3c0bb0c 100644
+> --- a/kernel/trace/trace_events_filter.c
+> +++ b/kernel/trace/trace_events_filter.c
+> @@ -2354,8 +2354,10 @@ static int process_system_preds(struct trace_subsystem_dir *dir,
+>  			filter_disable(file);
+>  			parse_error(pe, FILT_ERR_BAD_SUBSYS_FILTER, 0);
+>  			append_filter_err(tr, pe, filter);
+> -		} else
+> +		} else {
+>  			event_set_filtered_flag(file);
+> +			fail = false;
+> +		}
+>  
+>  
+>  		filter_item = kzalloc_obj(*filter_item);
+> @@ -2370,8 +2372,6 @@ static int process_system_preds(struct trace_subsystem_dir *dir,
+>  		filter_item->filter = event_filter(file);
+>  		event_set_filter(file, filter);
+>  		filter = NULL;
+> -
+> -		fail = false;
+>  	}
+>  
+>  	if (fail)
+> @@ -2386,14 +2386,17 @@ static int process_system_preds(struct trace_subsystem_dir *dir,
+>  	return 0;
+>   fail:
+>  	/* No call succeeded */
+> -	free_filter_list(filter_list);
+> +	if (!list_empty(&filter_list->list))
+> +		delay_free_filter(filter_list);
+> +	else
+> +		free_filter_list(filter_list);
+>  	parse_error(pe, FILT_ERR_BAD_SUBSYS_FILTER, 0);
+>  	return -EINVAL;
+>   fail_mem:
+>  	__free_filter(filter);
+>  
+> -	/* If any call succeeded, we still need to sync */
+> -	if (!fail)
+> +	/* If any filter was replaced, we still need to sync */
+> +	if (!list_empty(&filter_list->list))
+>  		delay_free_filter(filter_list);
+>  	else
+>  		free_filter_list(filter_list);
 
-Nit: checkpatch wants the full form:
+I still prefer my suggestion which cleans up the code and gets rid of the
+duplicate if statement for freeing.
 
-  commit b36bec6a01b1 ("selftests/mm: skip collapse_compound_extreme() where the PMD is too large")
+  https://lore.kernel.org/all/20261026153258.5259323d@gandalf.local.home/
 
-Otherwise looks good. Thanks for chasing it.
-
-Reviewed-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+-- Steve
