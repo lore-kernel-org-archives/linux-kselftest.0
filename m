@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.224
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793229281;
-	b=TPDfsao46eOF3zsHSGuhv3XZGKFORq/YoKW316naLavZYC5vOz7t3eFal3dbOJlCtfLw
-	 yxAMY7FHCdlInWkrVW6u9tyhnvWjNLg6BJxln4Vt0gRMqk1+JEezahut0DfvX07KUK0WO
-	 akEK8xW2upl/1ZM9BLo7dZUj0Ek2Q/Zj1qd+LdDEh940FIJdgKBpACOBUhrryDM+NmCWY
-	 jbU7S27H2yu3aFl4XqZzelRi1QKTrWUAzcEXSCeekS5DkEdY6/Z7JpwgddvhcoyYzVT/j
-	 T4eUT5lM9Zk7iUtOAMb+Wt5zLf/Kot9xCwZ0pQ+I2fAEdxxprl3lw9D4XAnSqek9g+w==
+	t=1793231741;
+	b=EeZ3hUMyo7GnMy1lURL9jiicn2/HBIgFdp2u6k6C66cYk2BDB68v1k+TrPXi6l9zy6wX
+	 sSxnLiXPo7ALi6k7CHswVufUGbk/zXsU1L+RNaE5EiT9Buzd4tS0muDA4udn/AQ77zJ97
+	 3yKB4fWqxhG3N/DzdhfS4VBvg/MiKfh4/HOjYCO8IyqPOfQffGlodBrrSmMjx1bubR8/K
+	 LwxTzltQHxD7wJhk+6sxntNDvewK8BKCCQNmrNm/4E/Cbwh6zB8ShCYgd5yBzz/9dQ9md
+	 u5+XbutsfWRM6JO+xaut57x9o641AYaKqOBwz/yyLAlwBNT5u2a9XZw+l1PWOlnMqwQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793229281;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=3MEr9fLZD0azSi0DOKE0xNOrGIBfvLaVqc1C2QcbR/I=;
-	b=bDNIHRl/Jep9P3I9EKqPGveB/PyN1Xok/FPpVWsiy3jYwhlqtAg41NFz7iYbuKa08O4u
-	 PDpqqdgmnA98J9y8tkx0gzMeheDdNNnPFxmCjoyIobeqBMXxlBugHmMU5O25q4G5KClXx
-	 tQD1foCgYF2BNaNlXkuTBtw21aKHLiVyIiSeMi2+yYIsSDIRz5goAjX0OwXXxHfDMuLlF
-	 c9KOoQjjxju0mXggWOwu3kOFd7I6vZmd0SJPrHC2rrTIrjdZKmSotrPEF8R01et+bNExo
-	 UgxjjyEP5/q75HBt4EYyukg/eio/uCPQ67Cz8JW49N9dSis4AuTKbs6Zm6wvFuBXckg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793231741;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=DFG1Jsjwt8/FAlxp4iBJYsZFk7sxWWq4BlOV1rwa14c=;
+	b=yh+ZIkehZssSCms+iMWr4UQgGDYVfF9qNo9CwJFpxPJArDOSFRUlDLo+OWAT87ABhOEB
+	 6gYZqh0K77/o5tYrc1nDs7k2OnEE+Vudn0ouKGDgpE5gP5PciVN2BV5hX85qbJTPietom
+	 UYDFNVdfCx9sp/uqkXr5xAKft6D3d1ihAE7++oWF8KiEXo7K/mlFWR4JebDPSo6GP/s9r
+	 Bduse8i8eiduoCtzuuFw2m4nj1/3qS5KgMCKN9H2wQHByDZ+kzbYgKVFUtLI6dVb5bzBv
+	 ORioOyJ7P2GQ3oFsHjuiTyXg0aVTmZhE987Ehcz28R2HH9KzeTpgbRa058zGuel3U3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qWp54Q7g;
-	arc=none smtp.remote-ip=95.215.58.224
-Received: from mta1.migadu.com (out-224.mta1.migadu.com [95.215.58.224])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PPl/0NQe";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D21B606A31A
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 23:14:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D21B606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC6F606A31A;
+	Wed, 28 Oct 2026 23:55:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qWp54Q7g
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=LnJuu7B/S4VYS5oG0PP7FkWoFrFo1uRdb6upZLPKPHQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793229278; v=1; x=1793834078;
- b=qWp54Q7gPuRsP3lt9+9G+AAFpTUgKF61bBCTcxBL1IHcjH4O+kGNorEbpvcySqhkkICXY/YA
- fJ+UpMZL7JDzW1ADpIqJuAOgZK0NdPDkz5uq1m6nMs/LKUlg3SCO2SASgZcloPM1WRiWy2tN2VU
- QK5uZ6RCtvcuUid8JJLYdm9E=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5eb06f2ffba058c2;
-	Wed, 28 Oct 2026 23:14:37 +0000
-X-Mizu-Trace-ID: 5eb06f2ffba058c2
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <f7bd7c62-7762-4fe9-8aef-d84e92f2bc31@linux.dev>
-Date: Wed, 28 Oct 2026 16:14:28 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PPl/0NQe
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB0731F01825;
+	Wed, 28 Oct 2026 23:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793231741;
+	bh=DFG1Jsjwt8/FAlxp4iBJYsZFk7sxWWq4BlOV1rwa14c=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=PPl/0NQekQphvLogChbYEWl3sq3TqKqR6K5FxV3wzdCTOgYUAp3SEKMfrBcs6y2Pp
+	 AWMVIS0hS5kfGWjCd2WjoylqngSsygY744HB23FDd+DXJ9m8+snL4BvWTf623IqnRn
+	 WxWJmqGXYV+iy6Z3d/Rbiw2ZMytgoQ25+YCHUVu0rbV8Uo3QAmI4oKFynwMaOrwoFV
+	 ewjGRed7ln0gqU77C8X9uZbM9d6+zw8/XCtwSrI0FR07L0tJgz8J07/U8ImROzOFVJ
+	 9ie6hkrNcCqkN4NcKKAUnim3UijVutkSiainqEaIoCkxRUhVQlD4ESKlEYTZouYIlu
+	 pkVU/oOj4SRdg==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 09/16] tracing/filters: Reject stray quotes and parentheses in unquoted function event operand
+Date: Thu, 29 Oct 2026 08:55:37 +0900
+Message-ID: <undine-1793231737781982017-eb6a165f6356f864@undined.local>
+X-Mailer: UndineD 0.1
+In-Reply-To: <20261028095037.39c9109a@gandalf.local.home>
+References: <179314820431.684037.4147763044424284198.stgit@devnote2> <179314828848.684037.8273600995293830928.stgit@devnote2> <20261028095037.39c9109a@gandalf.local.home>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,97 +58,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 7/8] selftests/bpf: write the mixed
- arena/scalar ALU tests in asm
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, john.fastabend@gmail.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- jose.marchesi@oracle.com, david.faust@oss.qualcomm.com,
- martin.lau@kernel.org, mason@kernel.org
-References: <20261028204158.1021284-8-vineet.gupta@linux.dev>
- <e08eb87415801027d75170c930dc709beaea5f20f4afc92ff0affd434faaa9a0@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <e08eb87415801027d75170c930dc709beaea5f20f4afc92ff0affd434faaa9a0@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-On 10/28/26 2:22 PM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: write the mixed arena/scalar ALU tests in asm
-> TL;DR: Test comment only: the new verifier_arena.c comment claiming the r9
-> arena load is needed for addr_space_cast looks stale, since libbpf now binds
-> the arena via fd_array. Suggest dropping or rewording it.
->
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
->> index 21b66d51c61e..b84d8f1e0b39 100644
->> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
->> @@ -539,53 +539,58 @@ int arena_ptr_add_arena_ptr(void *ctx)
->>   	return 0;
->>   }
->>
->> +/*
->> + * The r9 load is never read; it is there so libbpf records the arena map
->> + * as used, which is what lets the verifier accept addr_space_cast at all.
->> + */
->>   SEC("syscall")
->>   __failure __msg("same insn cannot be used with and without arena pointer")
-> Is this comment still accurate?  Commit cd7a395838cb ("libbpf: Bind the arena
-> of an object to every program in it") is already in the base of this series.
-> With it, bpf_object_load_prog() calls bpf_object__bind_arena(), which puts
-> the object's arena into a continuous fd_array when the kernel supports
-> fd_array_cnt:
->
->      obj->fd_array[0] = map->fd;
->      load_attr->fd_array = obj->fd_array;
->      load_attr->fd_array_cnt = obj->fd_array_used;
->
-> The kernel binds that array before it looks at any insn:
->
->      process_fd_array_continuous()
->        add_fd_from_fd_array()
->          __add_used_map()
->            check_map_prog_compatibility()
->              env->prog->aux->arena = (void *)map;
->
-> This happens for every program in verifier_arena.o, including these two,
-> whether or not an insn refers to the map.  The addr_space_cast check in
-> check_alu_op() (if (!env->prog->aux->arena)) and the prevent_zext/needs_zext
-> logic in adjust_reg_min_max_vals() only look at prog->aux->arena, so
-> removing the r9 load would not change what either test does with a kernel and
-> libbpf from this tree.
->
-> The comment also describes the mechanism differently from what happens.
-> libbpf only relocates the ld_imm64 to the map fd, and the verifier records
-> the map as used in add_used_map() during resolve_pseudo_ldimm64().
->
-> The log of the libbpf commit describes referring to the arena artificially,
-> as in asm volatile("" :: "r"(&arena)), as something that change makes
-> unnecessary.  The r9 load would only matter on a kernel that rejects
-> fd_array_cnt, or with the light skeleton loader, which test_loader does not
-> use.
->
-> The same four comment lines are repeated word for word above
-> mixed_arena_scalar_alu64_arena_first().
+On Wed, 28 Oct 2026 09:50:37 -0400, Steven Rostedt <rostedt@goodmis.org> wrote:
+> On Wed, 28 Oct 2026 09:44:48 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> 
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > In parse_pred(), when parsing an unquoted operand for function events,
+> > the loop only stops at ')', '&', '|', or the NUL terminator.
+> > 
+> > However, calc_stack() parses '(', '\'', and '"' independently to
+> > determine stack depth and string boundaries. If an unquoted function
+> > operand contains stray quotes or an open parenthesis (e.g. "ip == foo'bar"
+> > or "ip == foo(bar)"), parse_pred() consumes them as part of the function
+> > name operand, causing parse_pred() and calc_stack() to desynchronize.
+> > 
+> > Reject unquoted function event operands containing '(', '\'', or '"'
+> > by reporting FILT_ERR_INVALID_VALUE.
+> > 
+> > Fixes: 80765597bc58 ("tracing: Rewrite filter logic to be simpler and faster")
+> > Cc: stable@vger.kernel.org
+> 
+> I wouldn't really call this a fix, as I can't see this breaking anything.
+> Yes, the calc_stack may say there's more elements than what parse_pred()
+> sees, but the parsing still fails.
+> 
+> This looks more of a clean up than a fix.
 
-Will remove the duplication.
+Agreed. I think fixin error_log UI issue will be a part of improvement.
+OK, let me remove the Fixes and Cc: stable tags from those patches.
 
-> Could the comment be dropped
-> together with the r9 load, or be reworded to say the load is a fallback for
-> kernels where libbpf cannot bind the arena through fd_array_cnt?
+> 
+> Unless, the current code allows something to actually be broken. Does it?
 
-Yeah the comment mentioned r9 is totally weird, will simplify it.
+No. Hmm, should I split those "improving parse_error()" patches from
+this series?
 
-Thx,
--Vineet
+Thanks,
 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> -- Steve
+> 
+> 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> > Changes in v3:
+> >  - Split from the monolithic function event parsing patch into a
+> >    standalone patch rejecting stray quotes and '(' in unquoted operands.
+> > ---
+> >  kernel/trace/trace_events_filter.c |   14 +++++++++++---
+> >  1 file changed, 11 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+> > index 96977eb9af85..48e16d75be74 100644
+> > --- a/kernel/trace/trace_events_filter.c
+> > +++ b/kernel/trace/trace_events_filter.c
+> > @@ -1863,9 +1863,17 @@ static int parse_pred(const char *str, void *data,
+> >  		for (; str[i]; i++) {
+> >  			if (q && str[i] == q)
+> >  				break;
+> > -			if (!q && (str[i] == ')' || str[i] == '&' ||
+> > -				   str[i] == '|'))
+> > -				break;
+> > +			if (!q) {
+> > +				if (str[i] == ')' || str[i] == '&' ||
+> > +				    str[i] == '|')
+> > +					break;
+> > +				if (str[i] == '(' || str[i] == '\'' ||
+> > +				    str[i] == '"') {
+> > +					parse_error(pe, FILT_ERR_INVALID_VALUE,
+> > +						    pos + i);
+> > +					goto err_free;
+> > +				}
+> > +			}
+> >  		}
+> >  		if (q && !str[i]) {
+> >  			parse_error(pe, FILT_ERR_MISSING_QUOTE, pos + i);
+> 
+> 
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40768193895
 
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
