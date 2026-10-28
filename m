@@ -1,54 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793231741;
-	b=EeZ3hUMyo7GnMy1lURL9jiicn2/HBIgFdp2u6k6C66cYk2BDB68v1k+TrPXi6l9zy6wX
-	 sSxnLiXPo7ALi6k7CHswVufUGbk/zXsU1L+RNaE5EiT9Buzd4tS0muDA4udn/AQ77zJ97
-	 3yKB4fWqxhG3N/DzdhfS4VBvg/MiKfh4/HOjYCO8IyqPOfQffGlodBrrSmMjx1bubR8/K
-	 LwxTzltQHxD7wJhk+6sxntNDvewK8BKCCQNmrNm/4E/Cbwh6zB8ShCYgd5yBzz/9dQ9md
-	 u5+XbutsfWRM6JO+xaut57x9o641AYaKqOBwz/yyLAlwBNT5u2a9XZw+l1PWOlnMqwQ==
+	t=1793231893;
+	b=hfPocCVPfKC5y8vhf03wLRqpDzcVqD1oxzuqGINjglGAAvsmwu5jb/fL+jwZtcradAu7
+	 kDh2NCTyDa4qDxnMK9y/S6FpxXWC0ia1HP7MKhyNFPAgBPb/jnL0r/Bo2MrFnOasURmIl
+	 dDKTX4oTchlRVHeCE/hLVnK/QX67/6NaKV8NgVvs6w9TR5Q0w5gXy6dlqASdwD3tR+laB
+	 uk0C1wXg32f9WPFy6xvZAhjejSVJf7Ca5gsIA4LoWhi9lSZ6/GIIRhVl0xmE1bUwLhzyj
+	 n152pBEDajT1efhUsA5lDiC1jx5po09iuulp4LJyKMaVimXCYqCRiNjXqOqObbq/Jig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793231741;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793231893;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=DFG1Jsjwt8/FAlxp4iBJYsZFk7sxWWq4BlOV1rwa14c=;
-	b=yh+ZIkehZssSCms+iMWr4UQgGDYVfF9qNo9CwJFpxPJArDOSFRUlDLo+OWAT87ABhOEB
-	 6gYZqh0K77/o5tYrc1nDs7k2OnEE+Vudn0ouKGDgpE5gP5PciVN2BV5hX85qbJTPietom
-	 UYDFNVdfCx9sp/uqkXr5xAKft6D3d1ihAE7++oWF8KiEXo7K/mlFWR4JebDPSo6GP/s9r
-	 Bduse8i8eiduoCtzuuFw2m4nj1/3qS5KgMCKN9H2wQHByDZ+kzbYgKVFUtLI6dVb5bzBv
-	 ORioOyJ7P2GQ3oFsHjuiTyXg0aVTmZhE987Ehcz28R2HH9KzeTpgbRa058zGuel3U3Q==
+	bh=bnrI5z48giTBpUWcqK7pPuvlc0Wx2KKMmU5dejUop0Q=;
+	b=GHtVEnQzDE2mxw3t7b+I/Dc+QIGrCp/xI4hUkCGIn4xySbMVFX7uGSbfOyoBXp4cojr5
+	 UBAlaYlbgLcocCOu0XEUoUSQl0arCFxjiKd294P0Bjy68evVBKLdG2riWRqvv6Pz9WOKw
+	 zcF80xrgvK927p9m3Owl0ep5u1lGDZxiJ4lbJeDYtgOVLtZkFxb8evkj3FWwF+64kb16D
+	 gO5SUkYHRUEwAtMVZ8VxxtFtY/PrQR5b//rj07OI0a0T7MrhBXr4fAxntMWTFyMrYkyvn
+	 3zp1XRW2nl/dh5veye//siMDRQvHIcNIPAtaLN+zBe24iBk7WPyTPEPC2cAHVp3wpow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PPl/0NQe";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K7EDLGRw;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC6F606A31A;
-	Wed, 28 Oct 2026 23:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3FA606A31A;
+	Wed, 28 Oct 2026 23:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PPl/0NQe
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB0731F01825;
-	Wed, 28 Oct 2026 23:55:39 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K7EDLGRw
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0421F01825;
+	Wed, 28 Oct 2026 23:58:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793231741;
-	bh=DFG1Jsjwt8/FAlxp4iBJYsZFk7sxWWq4BlOV1rwa14c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=PPl/0NQekQphvLogChbYEWl3sq3TqKqR6K5FxV3wzdCTOgYUAp3SEKMfrBcs6y2Pp
-	 AWMVIS0hS5kfGWjCd2WjoylqngSsygY744HB23FDd+DXJ9m8+snL4BvWTf623IqnRn
-	 WxWJmqGXYV+iy6Z3d/Rbiw2ZMytgoQ25+YCHUVu0rbV8Uo3QAmI4oKFynwMaOrwoFV
-	 ewjGRed7ln0gqU77C8X9uZbM9d6+zw8/XCtwSrI0FR07L0tJgz8J07/U8ImROzOFVJ
-	 9ie6hkrNcCqkN4NcKKAUnim3UijVutkSiainqEaIoCkxRUhVQlD4ESKlEYTZouYIlu
-	 pkVU/oOj4SRdg==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 09/16] tracing/filters: Reject stray quotes and parentheses in unquoted function event operand
-Date: Thu, 29 Oct 2026 08:55:37 +0900
-Message-ID: <undine-1793231737781982017-eb6a165f6356f864@undined.local>
-X-Mailer: UndineD 0.1
-In-Reply-To: <20261028095037.39c9109a@gandalf.local.home>
-References: <179314820431.684037.4147763044424284198.stgit@devnote2> <179314828848.684037.8273600995293830928.stgit@devnote2> <20261028095037.39c9109a@gandalf.local.home>
+	s=k20260515; t=1793231893;
+	bh=bnrI5z48giTBpUWcqK7pPuvlc0Wx2KKMmU5dejUop0Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=K7EDLGRwjHjvtAv2lwMgY+1zn41qCMQDJ6TYGDCpuRRhorZtbVCdwIGpFT6k8+e2r
+	 Wf6sd1uO+EN6RRknM6P/Z5+2d/pyGElHYfxavugtopH3UHU7iKIpIPt9MjWHaEr8xo
+	 ucC8HY0dxcmVrTSdkaOt0j5bX8/e+7eL+Wb3bl7Igf3V2cpFep7on/DF2NlGRK7MFG
+	 RHazaEmuUV6a98HJAQr0E5Kgw3sAYXhsyTLziqSj+vy7TRUN3Lzmax6iitYv79502z
+	 qOQRR0WNvXeEch7eimXFq0coGCHoWiKZAWYt1yXTbY95SdOkw7uRWydntzUIgVd/Yt
+	 NZNLouJ7E+DJg==
+Date: Wed, 28 Oct 2026 16:58:12 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Justin Iurman <justin.iurman@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Hangbin Liu <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH 0/3] net: ioam6: makes IOAM insertion transparent to
+ IPv6 ECMP
+Message-ID: <20261028165812.1b40d1d4@kernel.org>
+In-Reply-To: <auGryXdPv2mx0qlp@fedora>
+References: <20261028-ipv6_ioam_ecmp-v1-0-9b6715b6f4c0@kylinos.cn>
+	<auGryXdPv2mx0qlp@fedora>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,88 +64,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, 28 Oct 2026 09:50:37 -0400, Steven Rostedt <rostedt@goodmis.org> wrote:
-> On Wed, 28 Oct 2026 09:44:48 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+On Wed, 28 Oct 2026 16:01:13 +0800 Hangbin Liu wrote:
+> On Wed, Oct 28, 2026 at 01:45:28PM +0800, Hangbin Liu wrote:
+> > This series makes IOAM insertion transparent to IPv6 ECMP, as required
+> > by RFC 9486 (C2): a packet carrying IOAM options must be forwarded
+> > along the same path as the identical packet without them.  
 > 
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > In parse_pred(), when parsing an unquoted operand for function events,
-> > the loop only stops at ')', '&', '|', or the NUL terminator.
-> > 
-> > However, calc_stack() parses '(', '\'', and '"' independently to
-> > determine stack depth and string boundaries. If an unquoted function
-> > operand contains stray quotes or an open parenthesis (e.g. "ip == foo'bar"
-> > or "ip == foo(bar)"), parse_pred() consumes them as part of the function
-> > name operand, causing parse_pred() and calc_stack() to desynchronize.
-> > 
-> > Reject unquoted function event operands containing '(', '\'', or '"'
-> > by reporting FILT_ERR_INVALID_VALUE.
-> > 
-> > Fixes: 80765597bc58 ("tracing: Rewrite filter logic to be simpler and faster")
-> > Cc: stable@vger.kernel.org
-> 
-> I wouldn't really call this a fix, as I can't see this breaking anything.
-> Yes, the calc_stack may say there's more elements than what parse_pred()
-> sees, but the parsing still fails.
-> 
-> This looks more of a clean up than a fix.
+> Sorry, forgot to add target repo "net". I will add it in next version.
 
-Agreed. I think fixin error_log UI issue will be a part of improvement.
-OK, let me remove the Fixes and Cc: stable tags from those patches.
+CI bot says:
 
-> 
-> Unless, the current code allows something to actually be broken. Does it?
+The new selftest added alongside this series (tools/testing/selftests/net/ioam6_ecmp.sh)
+is failing in our CI on the "Transit input ECMP with/without IOAM" scenario:
 
-No. Hmm, should I split those "improving parse_error()" patches from
-this series?
+  TEST: Transit input ECMP with/without IOAM (diverged on seed 1: without IOAM via
+        link A, with IOAM via link B)   [FAIL]
+  TEST: Transit input ECMP with/without IOAM (seed 2..12)                [ OK ]
+  TEST: Encapsulating node re-lookup ECMP with/without IOAM (seed 1..12) [ OK ]
 
-Thanks,
-
-> 
-> -- Steve
-> 
-> 
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > ---
-> > Changes in v3:
-> >  - Split from the monolithic function event parsing patch into a
-> >    standalone patch rejecting stray quotes and '(' in unquoted operands.
-> > ---
-> >  kernel/trace/trace_events_filter.c |   14 +++++++++++---
-> >  1 file changed, 11 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> > index 96977eb9af85..48e16d75be74 100644
-> > --- a/kernel/trace/trace_events_filter.c
-> > +++ b/kernel/trace/trace_events_filter.c
-> > @@ -1863,9 +1863,17 @@ static int parse_pred(const char *str, void *data,
-> >  		for (; str[i]; i++) {
-> >  			if (q && str[i] == q)
-> >  				break;
-> > -			if (!q && (str[i] == ')' || str[i] == '&' ||
-> > -				   str[i] == '|'))
-> > -				break;
-> > +			if (!q) {
-> > +				if (str[i] == ')' || str[i] == '&' ||
-> > +				    str[i] == '|')
-> > +					break;
-> > +				if (str[i] == '(' || str[i] == '\'' ||
-> > +				    str[i] == '"') {
-> > +					parse_error(pe, FILT_ERR_INVALID_VALUE,
-> > +						    pos + i);
-> > +					goto err_free;
-> > +				}
-> > +			}
-> >  		}
-> >  		if (q && !str[i]) {
-> >  			parse_error(pe, FILT_ERR_MISSING_QUOTE, pos + i);
-> 
-> 
->
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+11 of the 12 "transit input" seeds pass, and the whole "encapsulating node re-lookup"
+scenario passes on all seeds, so this looks like an edge case in the Hop-by-Hop
+nexthdr-recovery logic used for the policy-0 multipath hash, rather than a test
+infra/flake issue. Could you take a look at whether the recovered "virtual" nexthdr
+(or the padding/option-length walk used to compute it) is correct for all IOAM option
+layouts/trace sizes, since one specific packet still ends up hashed to a different ECMP
+sibling than the equivalent packet without IOAM?
