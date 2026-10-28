@@ -1,58 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.84.56
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793171853;
-	b=2DNDmP7gpus9SSedWI6nvugOYHhUqRE3Rafomlya27zQ2suFg/dFXV43+g4spBrvlpCb
-	 lrPgEQR66C5KKQTfSUaBNVsDEYzDdwxEQABN85Qh9oqcYef6CHSABpN0DEGCq9AG57ra6
-	 4j0uLJk7EPgoCIa3S//W9tLJ3U9tporPAnuVti2TaUIkCHBTKzdkLma8GDK1M8oiXKlLX
-	 9hjBJVLn0VFt8uSxrhsbETrYk0brutaAwvI+upfXfppe/6MFnZ+JywkbWhY//xpzQyoPl
-	 mpwScu/bxm8/C3N2T9I63aMXTzzC/IvOq/oxVvFHG0NuJBXq4a4UfOpT6CL4rZpdabg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793171853;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
-	bh=nquMCr1WWqc3g25x4aH4wcYWjEl8Qlo/bCJtAzPywf0=;
-	b=Z8gd5WmqHa2lhFcRUagokRIObJW7RBj5tY5ZwMghY6W0zB5Q77gFVSiCPiDE6O174KEC
-	 oKQx/h9lgDMezkp/QQuzQx+pd1hbMuuVC6x7HeoXi5IVsgOMrWBWT5FyvoDIfzz2UIfhc
-	 rQp0MC4PPrxNj90aU475keJeLbWAdc7lBzcEkF3SDxoNOgw7uVMF6RjTOehIQyoEEygMm
-	 9UJ5SNcqzi3pCvmux5gFR+T6fp+qG/rXKqMcbBBBy8A3RfbvseZ77I0B7gNPLNPydRCoW
-	 fSQ/FaNgvRL4RLS0neeRQ/GbFaceP0Qm4GxskqkO0v7E7uShsq4F+0E58XG2QbXXbHw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Twv5BmZv;
-	arc=none smtp.remote-ip=185.246.84.56
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.174
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793172657;
+	b=nXSyCO5xKgurQu93ehEdmW6S72BM0tFfqdJw9d4UUKXSmx9TNN+LiSw13eAPcEM0ZbGR
+	 NmkX75RvB2JRlqZRtrfGLiXL1hlG1IiUR7OD+aezcM7VC5SCkIuSoMLVKLGoXiDZ/zX59
+	 tqb0wvSa3ZQp088L7gR2ZBIWmzdElp1mIGZTsvW/B2HCMxQPnVbmH76GUxbIXZ5VjUWaB
+	 MrN9Me9InvXp3t9pb+KR6FJm2FCIiaRjtSQDqxMO46ABAevnyXc6Yv8kBnxDzA478xgag
+	 4n/4kfVAQ85p2Y9l++Bb9XnfPJytiWkR77gzh6rRzYmUm57Zvp5y1s7PRI92Oaae29A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793172657;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=4gvBxf1fqNFjM1GSlcwJUneHyiK6lU7SdqO+7rEXKHc=;
+	b=C4dH3ozNDBYNV6e3EK2iWoQHEiCiDf9Eve6o295Pof306wJqKp3bC+xe6n8pJdQIJqvB
+	 Xw5cDRXgYPLTmY59OmFoXUiOckPYc+X5NDXL+NRc6CystRAJHogcWgeESaDeNWiC06Xq3
+	 DPdBll0qXWJ+LsJ0BV3vQc30o9NCOfmxzd1TkkjJTFg5pww0FfuLxkSHgGVpImhec3czd
+	 AoOADjX80m4m3eVxab4qnFq8FYBNeAQnJu8CQQvMfXweh7W/T2sAoI7FLCZGthq71kJlM
+	 O04AryQNFxjfEfMKFqaCCkJkaqSAF62S1YlEZG6GRp+xuyI8K43SM1mP2sSlmFoHfjw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bJneuDjS;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.174
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B530D606A31A;
-	Wed, 28 Oct 2026 07:17:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B530D606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28EA60A2612
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 07:30:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B28EA60A2612
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Twv5BmZv
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id EE37A1A1372;
-	Wed, 28 Oct 2026 07:17:29 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C0F1360769;
-	Wed, 28 Oct 2026 07:17:29 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B30F11032906B;
-	Wed, 28 Oct 2026 08:17:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793171848; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=nquMCr1WWqc3g25x4aH4wcYWjEl8Qlo/bCJtAzPywf0=;
-	b=Twv5BmZvgqoD/QGqoEOSQhAhVHQ3nPsNe4D6eC3nrSg8jO1LgjrhfYxZ5/l9fAGN42EYsz
-	2T3MlCJy66fl0iP/cX42IOrdHihZFjqJ278/1hQLEYMYZkMABQ7TfVcJD/LsIEBE6+qIC2
-	tzdPbOQaUKsUrRu/+OI0hE36f2Lrr3AL+XlzUk62oPNJ97HrFHXOV/Q1NrNTWIiUT6GhQ/
-	I0WkmbxZG46CK0iB1bGfx53h9kVLTEYMLpBDRa90MYcuv1q81btalbtAboOMmWJAcl1WDW
-	24fCmzrQLrK+lLRzh+ZZHMXELGfIKfkDe8Ne7SzvBOfo066t1s9Ogf3E78CTWg==
-Message-ID: <b3216356-fab0-42c0-8a5c-552ca4c5d46a@bootlin.com>
-Date: Wed, 28 Oct 2026 08:17:22 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bJneuDjS
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-36a1865cfdcso70558eec.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 00:30:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793172656; cv=none;
+        d=google.com; s=arc-20260327;
+        b=f3XD+NVPMuoBZaqsAerhtFRq1tQhSivhCv9LBt5IWNwxEsvx6AnUkEOR3pfJ46HhxK
+         AqtaCkXId+t3gV54wcp3japdLGAU51A8StVixvQfDHpAuhIrq0La1mwnnGDywZpTAgAD
+         vLfjns5ZPcH1ogv+R/9l1213PEFbWUnWKrI5FdXWC+DwtMzfDtODos5r9IMCOEe5b0Xz
+         NowfFAn4le7KD/m7wP2eDOq14KXjpqeAbF5jFhIfB1g+dSkOVp+m19lt/9VroNGaG7wy
+         A7m5/rOmnNKkKLOzpgC/Ed614pHBTKmd3YNtXqwSeEDIko7bu8Mm0Tbfl1tIWih3C1t+
+         +NZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4gvBxf1fqNFjM1GSlcwJUneHyiK6lU7SdqO+7rEXKHc=;
+        fh=a2PmI6/T3hkIocbHSNw3eTMImryLLy9FFCKzI4r2ENY=;
+        b=RtfKOGOE1BeRJm+9IY64aK9v20+B8I6DLVTIKo8VTf1gFu+zUCZ7ISxcMzxD8TNToP
+         muW+wX9UXUj19TNfeCMgI/QjnCbGQ/PnHf/cpVHPURsmfq4mAPYEWXosdLgcjmOvUoEt
+         LnWgouRqtQW//je8h4tJ+JZtQozzmlsbfie/ti5QefCOWyfn7m+EF6+hLbzijEdN34jw
+         ciDnESedWhXqnawg3Oxv6hVFGhNWOCp7kUmJpXyQjwWFJiGu544x6bVJ7fixQSKuU+Rk
+         9pMq85OigBDtd3D99Bej+0eFAEljJn4lgd7XAPZkUtK6q6PFwda5Lh404/aEU8yRrHyn
+         /geA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793172656; x=1793777456; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=4gvBxf1fqNFjM1GSlcwJUneHyiK6lU7SdqO+7rEXKHc=;
+        b=bJneuDjSTeRtWYs9gLUzq94HuHAoFwhslEwQvNPXvw2Kkf8nTMJss5fQjjqL7AIBYP
+         +OLGCb5rb4t0f94npzyFIsA8YRFRRJS3NojxyKYSJTYGqAzzTiwFflm66sPuzX630Esq
+         U3/+A+SZl/zdO6wdtAg06Qbmn6YgjeW2B6plLyI6ziP7QOs+2JwIjoD1srOxCaS71ena
+         TKSUL9xnCv0poX1LRcRkjNt+bemTiXtpAY0bB9PdvqM4zrtzXJpw/6xakmmH+zxEYgF2
+         WcH453cXL0XYU6lfAeJTOF3hdMG5zjiZiLe9LTDgWXEcq5DT8WaKE6FbUYWhu1/eoXtr
+         FKJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793172656; x=1793777456;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4gvBxf1fqNFjM1GSlcwJUneHyiK6lU7SdqO+7rEXKHc=;
+        b=bCo3UA7nXKpIGwmqmNdOSoNaitxyq+vuf5Njqgfx1FPHoxxdqtxtqG1NbaXve9FqTg
+         mnzZMClM2wCiauwhTGtqdikI8nD7enYdL8FOXUOy+DlLhMsn/PoRTXN8hL1ZccIZFs8J
+         kjhuoYDR0P8JpuQl8O7t7KcaWYNHQnnywUh+ks24D3k8B2g1eWR2w9u9OeOjYhpzQPb2
+         KU6Dp6/VWMbVWtVi5x0FMi2HMemrCsuf0fgKEhA9twGmSMfOfzb5lFUiInjjIvQgZuqz
+         uC/yIOFZr3//RGVM/rUo2Df+7olceItsO4mm1bMfmcPph1kfkxEogpJU6vrDOViY4urI
+         dYMA==
+X-Forwarded-Encrypted: i=1; AKwUvBzONpMPSWvotmpOj8iHsC6Vdi/V9TWlcvWpH8/RinaS9WL+WgZHevYuVX9FkIlOpEUNFuamIqmVZUgNom1hJ48=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL60P+hK4cbo11P77dxmUPPPZ4qSN+q5E5GQXjF7/wEnAKWURZH
+	zIF/iSgGK/OY2Mq+HO8tUaz5c1Vjh1peZ2zlQBxIk//HhlLtmaKKoxDPpUQryBp4wV0H9y+jdOh
+	zmL7dlur9QEIUD9lfcKLSs90GQ0tH2PU=
+X-Gm-Gg: AYBFou27VrYXUGGbxBmNRQ8c/PCxCWTU7WT30HLFULxC8XMoTiAeJ9b2/7CDpQdtA13
+	32PnouHs2ZEO2JADDxCsV9O8CdJe8Ak4nevJAeptY4VSuiZ2YRQdKFwqCCqMp+UdcbV67MoPepc
+	SaQazF0cYpCW5O2VFYjfHeco6nx38oLcCl8DqLonuqdsdY3OMtX2dgm/ymafwJbP+F3bb6mfZzt
+	SiBvKFW9cvPS5v9BFxEltMdzJAUQJ6HXGBFXRRP9XfVzn7dhbD5VYTqZAlcA4vODlt/M8Ci81MI
+	cubQu1c4njia/SPYTe34QiaBPMVi59bLf2Xu+jTmHetTVGp42eMMDyaJ2OoEs9Z+8ikiBnZBwLo
+	4gNDnppbU/XolW6vdj9ni6Qk/AaQ8i8QzT7s7+/aP1fOSNRtBQ87iapKM5jn56JxM4Q/qtpXcWu
+	p4BL5W/xE8i/rCLGfZKxMxGpKn6u6B7JSTkHqT0AB/Etz3VGZt8VRQgklZeeCDDgs5Y+DbtwLIu
+	nXr+nqO/58YiEacXJ7XAffaZOPyjhVpOelh
+X-Received: by 2002:a05:7300:f484:b0:351:7883:bf47 with SMTP id
+ 5a478bee46e88-36a1fca875dmr3770812eec.0.1793172655949; Wed, 28 Oct 2026
+ 00:30:55 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,65 +106,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] selftests: drv-net: devmem: Skip when hugetlbfs isn't
- supported
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Bobby Eshleman <bobbyeshleman@meta.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Breno Leitao <leitao@debian.org>,
- thomas.petazzoni@bootlin.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261021090852.996899-1-maxime.chevallier@bootlin.com>
- <20261023105258.2a6349f9@kernel.org>
- <ce8f0d43-0078-41e7-a5d2-cf31c6dc97fb@bootlin.com>
- <20261027141555.47156425@kernel.org>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20261027141555.47156425@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20261027-rust-doctest-line-fix-v1-1-0c13185a58b6@younes.io>
+In-Reply-To: <20261027-rust-doctest-line-fix-v1-1-0c13185a58b6@younes.io>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 28 Oct 2026 08:30:43 +0100
+X-Gm-Features: AclHuK_uiWS-PXbCJG5cbGuuSSYIZS7YP8Echn-C46nxtbCkTjeTMaSgo2vlD0w
+Message-ID: <CANiq72ntn6ThPz9Q6+BxU6w-x2jUQ50xpiy1_gCRi6o0peHi8w@mail.gmail.com>
+Subject: Re: [PATCH] rust: doctest: fix line numbers after crate-level attributes
+To: git@younes.io
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+	Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Shuah Khan <skhan@linuxfoundation.org>, rust-for-linux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Oct 27, 2026 at 7:32=E2=80=AFAM Younes Akhouayri via B4 Relay
+<devnull+git.younes.io@kernel.org> wrote:
+>
+> Twelve in-tree doctests start like this, e.g. in `bits.rs`, `devres.rs`,
+> `init.rs` and `std_vendor.rs`.
 
+This looks OK, and I think it fixes all the cases we have currently,
+but it doesn't cover every case one may write (like a multi-line
+attribute), i.e. I was wondering whether the complexity of this is
+worth it or not (especially if later on we try to support every case).
+But it may be that never happens, or happens way less often than even
+this case that we may not even care.
 
-On 10/27/26 22:15, Jakub Kicinski wrote:
-> On Mon, 26 Oct 2026 10:38:50 +0100 Maxime Chevallier wrote:
->> On 10/23/26 19:52, Jakub Kicinski wrote:
->>> On Wed, 21 Oct 2026 11:08:51 +0200 Maxime Chevallier wrote:  
->>>> The devmem selftest requires accessing /proc/sys/vm/nr_hugepages,
->>>> which is only available when hugetlbfs is supported. This isn't the
->>>> case on all CPU architectures, for example it isn't supported on ARM
->>>> 32-bits on cores that don't support LPAE.
->>>>
->>>> On these devices, the devmem kselftest doesn't skip gracefully  
->>>
->>> We don't require graceful skipping. If anything IMO hiding the stack
->>> traces isn't great.
->>>
->>> If the check is extraneous and makes us fail some tests which don't
->>> actually require huge pages please make that clear in the commit
->>> message. Otherwise the net benefit of the changes is unclear.  
->>
->> hugetlbfs isn't required for devmem AFAICS, but the blamed commit
->> moved the access to nr_hugepages before the actual "is devmem
->> actually supported" test.
->>
->> I don't expect the full test suite to gracefully run/skip for devmem
->> on these arm32 platforms TBH, it's likely that devmem is only something
->> that's been used on platforms that support hugetlbfs anyways, but
->> strictly speaking both features are unrelated.
-> 
-> For max clarity I should have simply asked - does it make any test which
-> previously failed pass on any of your platforms? (incl. some WIP
-> patches that'd add devmem support) That's basically the criteria 
-> I think we should use.
+By the way, why `saturating_sub` in particular? I guess because of
+underflow, but can that happen? And if it can (perhaps in a future
+compiler version), wouldn't we want to notice?
 
-I see, then we can drop that patch. It would go from a "file not found"
-python exception trace to a skip. This is a nice criteria for me to follow,
-I'll move on to other tests :)
+Thanks!
 
-Maxime
+Cheers,
+Miguel
