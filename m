@@ -1,54 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793150047;
-	b=DEiaVc9JAGNuTyTBIq5ge++ToZu+vRbggL140yze872qTggS5xWjn0skXJIJijH571rI
-	 SXQUsYRDASeuog3XlKMj9AFqs/DRbP38Th2Ky/eFDgNrq7xBLjCxY5HEN13q/CCGdjcyw
-	 tGlWp69oI43T3rP0d+XOE8Q0kgsH0tpylEHsFgc84HC+wP6j5lK3+7yiluCTSli2PRQ8q
-	 v5ijXyZFbic5CWbPN2UC4kQnjqG27LzHOyqo08wtcjmTFa9Tbzr8ePoaPB2xPdiW7bIMs
-	 +GNEq+10nbGYOMJbIXbuov1RoDhleCSVON7L66OKPACY5cvKimt59CG1eQe8lUJaVAg==
+	t=1793150406;
+	b=3C++7lZGOdYaFWYNEuw7a04ZNUIOvH9n+VZLnl3b7V0zUFUbQ28I3Il86+9kH/TsdMOG
+	 Zxi5KRfudGzCjB13qZQ9eZqNUG+PE1VWRkeO1eJwv9Ycy42VabTZEqKah4zBCHEnbtkvg
+	 jS7rSzLLqkieJ7vUQYBWv/39Gxrar4Fjr6CLvz17RIfIltKIqC3kPw2EGC4jfzDx4ehP2
+	 48KimhBicqoaQXpygA5cCENwbu+r7InJlxKPK+w1Rq4uywxiwaCjf1h2eTDvteGK00BBH
+	 GPEXflflatRj7xKFlh0HP/78bQShdoBUTZESPg7/A2HEYIo3qeXYC/WEsudV7EMucsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793150047;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=KPm5ZXyBlqneN6iKbRT90h5X1QBRtvo9o1Bey5K8fyg=;
-	b=svDWOVqVO3qhhs1euswH3KOenlzhflpQPQTypJl4hQNCf0z9Iy60mzxQMnq8utK4FBQC
-	 ETT6XFfqFybNngSXh9k1XtV6xefbbU+H9DEG4nKsRIZeVW4cOzoGQNEqVeCZNA2U3eKhW
-	 X9Cwh/KREohINRecUanOIDCocP6pD+44utZJyZnBelC/7Fz6ZH2+Ev7bl9MtMHlKVhR2N
-	 5Bi8yxflOeZEVXHZ0P8+g31QBT8HJdmQxu6awG8vfCFoOKt9usoNv1Tqz0lrPV8+8Cl+n
-	 kYGsMUK119IeBdLkEtM6BOKGyRKYujaaKvuK+gsS0NjXJzBaisN4iBexGMEHsjmgM+A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793150406;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=aLduANwv1S0zzwppHfmO8Zkbjseh7UvsZ5j1k5QDDg4=;
+	b=emWIWyxmglTk0f+s9UmJG5akD1LW1R2zkIlKsv8tmoCAjUdRWLQ6829bPGpVTxSsf9bP
+	 CBqZiLf40Gg7MObu3lD/G0UfRUm+Ch+maSpyKEP8lDzrZvHQFpS+eo6faV+/6/XOrIAUt
+	 IJD5ppjjhMqIuRll6Q/2Kgc6tuP82YC3LqUHFsP6uLzQEW4QwRb2tgkor5LWg8IgMKWSA
+	 J3H5IK1JSBFs07xAlq5uFDW7YlT9SHwfa/26NMhxgKkrQjzU32U7kn/tAXcnWh+UJPHql
+	 XQfJ2eooG3QVbxds1qzpvUXvt7HD0sutVs7s9kqv6sAfxOJ82LVzRzQxNt41Ds4VPNQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nlE4D53L;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cYuptatW;
+	arc=none smtp.remote-ip=209.85.210.169
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F67B606A33F;
-	Wed, 28 Oct 2026 01:14:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356B6606A31D
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 01:20:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 356B6606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nlE4D53L
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 819291F031F5;
-	Wed, 28 Oct 2026 01:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793150046;
-	bh=KPm5ZXyBlqneN6iKbRT90h5X1QBRtvo9o1Bey5K8fyg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=nlE4D53LOnUOmmfpXDdRXcu6yYj6frsqWBF5pUMSlACMPKXJOsVSlLGZzb3dFfA2R
-	 KxCF1u3IxLXsGfzbca0Ok2UhO20Gyxps/wp3Bw1HgWyMOuUTvLfGs6Kafn6G/Avnt4
-	 pOv32GfLGj2EcRQjWUMSBFZSJLnkLvkonkcAU5+LWf20UEIE54rj/1+E7KYC10EnGl
-	 KxMBhg88URX2oJUsSojkx9pHKyqGu3c6GOGEfdlApV0+PaVFz9/NpLR3GdcuWQiOjw
-	 0ULi4A38Cd16CBcPcvTeozFko1NvuVbRMsj/1yea+MMtQ0KhjXO2/iD5sd3cCE0lEl
-	 zgJHSTRdyW1qA==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 02/16] tracing/filters: Fix MATCH_END_ONLY regex matching for fixed-size strings
-Date: Wed, 28 Oct 2026 10:14:04 +0900
-Message-ID: <undine-1793150044117136431-e10c2ffa40b9a4bd@undined.local>
-X-Mailer: UndineD 0.1
-In-Reply-To: <179314822364.684037.9099512445135198750.stgit@devnote2>
-References: <179314820431.684037.4147763044424284198.stgit@devnote2> <179314822364.684037.9099512445135198750.stgit@devnote2>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cYuptatW
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-88cfa501c5cso245324b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 18:20:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793150405; x=1793755205; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=aLduANwv1S0zzwppHfmO8Zkbjseh7UvsZ5j1k5QDDg4=;
+        b=cYuptatWk3AIwuv9NVY3j83Ne4A61NfgI8j3FYTY6xXx/cFjxGfsLVtWCjrLpzKhWp
+         25pnxHwRFPtQANPLPSGH6YnFdmPfUI1ByFIlZWoMnzHMztZ/lVvNe2lFch8ihM/BdsN6
+         FNlOmF2TkRk+aBvX4uxxQfIaYJXgRnzmG2F5ajawitg5FWu9W7dR7yTKR7GC+WqhGEZT
+         ETGOsO4n+ZVDpYbADgdtN5+dXKuTPl6KIeqfT6ijS9xdocn4JqhBpSZVnQixv+DE98XD
+         ARMp0gSsgVtXbopws1pGy8qq5vbCPhsXYbXHbbAywwhPtySTAYQULmVzvZ3pHY3rdMA8
+         oJ4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793150405; x=1793755205;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=aLduANwv1S0zzwppHfmO8Zkbjseh7UvsZ5j1k5QDDg4=;
+        b=RXwlEiK/w9GM3WB7/NrHdEDOzMGjQQFTtscx1qkZootoek06NijXkx9xqyYm6uKYB6
+         ami/rTbxYGUwOfqpQLb3F0YnpxIbneDrXkqOkj/teVPXM27KTvoaCWYm9vDZP+BgplbZ
+         4uScC8sG5uEOg1TOjgojDRO/EuWAZd7tiWEJdcVXJQFH9c1cGiJ0J4FYRLmpVho3tOYD
+         CJLeKwhz2zpaEUmGQ/eezqRFV3bu3Oq1A1zyYZsPoybYFiYN5SmsucdapoxM4k9l6ueF
+         BCqKcHhpuS33SFtAXlECIbL1tA9hg87rhNF89KL84/mUuSmInbdFeb4mvdwpir5+7SCs
+         blwQ==
+X-Forwarded-Encrypted: i=1; AKwUvByRzniMIG8QVG1F+w92h63G2YhQhr1WJwS8N7DGrpexLjLiMUzFSFzsQM95n8uNdORSql4xubrLa47Y3H65hC8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJhQ8D32SWUtJ+//POuqxplX92QlZQRxeTYfppf1I2QgKhvUBsK
+	VItsU+jxq6Jok6J6+SeJOLPCbWde8IXx9TWqmX0kQicPMbL2eMKHpmk8fwaYrIe2E0w=
+X-Gm-Gg: AYBFou10cINJBnZl/g57Gfajp/c9i+43QEExaqZCU1NwlyNOw3M85+316XDJbiE85RX
+	NWn/wUaAL77ibAtfaCCXEZQrSOt3bjvCs07iFghVZNjpDuHJzLUkdEQ2er0wFA7RqB8/8R0N+j8
+	3+kHHwfSTUN9htqwDCkiIZe6mtZvgUuP9Az8995BEcLTHOxYGHDGA14F8D/s2f0F+3jqjpMsh2e
+	Dsh4SDVxHk9eZJMSweGLuuMsGK+BLKthXhCsPr6fxAfPy6L81y/r5g203ZLjK3MITro94DqYim+
+	Yrdup0WYHtzoRHF1uOPulg2NIsg/HBd3QgEHRI9ZqEchm5w/N2DUjp3geEMVAspwWIkRJlmvqbM
+	tbhMdoK0LzqUE0y+0e/+aYW2PXIe7WCKvrxKu2UDLe5Bc518ByCqeTCK96VqF4zp548jcPSdqpq
+	VrzDbbUlr05/QOZFBcLM/ZTX5QD+R9EzT7xB/uecVaQMXGC6j88HPxOQCmgeBUB0CMRBi17LLdA
+	TbhQPmawwOnDaZJ1bvqpn5wErOwo5HjpyeeySfKXoo2W8a4vLyxHcDDWIs7bcKyrN7nV7vl9Hc/
+	pDlpvBvjpoA8S8ZGGmJ4clxsR/1beyZfjaXoiQxdl82JWtCciA==
+X-Received: by 2002:a05:6300:49c:b0:3dd:a197:735a with SMTP id adf61e73a8af0-3e902392eddmr613544637.51.1793150405474;
+        Tue, 27 Oct 2026 18:20:05 -0700 (PDT)
+Received: from localhost ([182.216.53.174])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8ccc8f97esm3272997a12.19.2026.10.27.18.20.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2026 18:20:04 -0700 (PDT)
+From: Jaewon Jung <jaewon8868@gmail.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: stable@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2] selftests/ftrace: Add missing spaces after ! in probe syntax tests
+Date: Wed, 28 Oct 2026 10:18:49 +0900
+Message-ID: <20261028011923.2050009-1-jaewon8868@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261025075044.1750113-1-jaewon8868@gmail.com>
+References: <20261025075044.1750113-1-jaewon8868@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,34 +102,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 
-On Wed, 28 Oct 2026 09:43:43 +0900, Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+Add the missing space between ! and grep. Otherwise, the shell tries
+to run !grep and reports "!grep: not found". This always skips the
+conditional checks without checking for kernel return probe argument
+support.
 
-> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> --- a/kernel/trace/trace_events_filter.c
-> +++ b/kernel/trace/trace_events_filter.c
-> @@ -1087,6 +1087,20 @@ static int regex_match_end(char *str, struct regex *r, int len)
-> +{
-> +	int slen;
-> +
-> +	if (len < r->len)
+Fixes: 25f00e40ce79 ("tracing/probes: Support $argN in return probe (kprobe and fprobe)")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jaewon Jung <jaewon8868@gmail.com>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+Changes in v2:
+- Add Fixes, Cc stable and Acked-by tags as suggested by Masami.
 
-BTW, this is required for skipping strnlen().
+ .../selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc  | 4 ++--
+ .../selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc    | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> +		return 0;
-> +
-> +	slen = strnlen(str, len);
-> +	if (slen >= r->len &&
-
-And this also checks actual length.
-
-> +	    memcmp(str + slen - r->len, r->pattern, r->len) == 0)
-> +		return 1;
-> +	return 0;
-
-Thanks,
-
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+index 384209968325..70751573e8de 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+@@ -33,7 +33,7 @@ check_error 'f vfs_read ^$stack10000'	# BAD_STACK_NUM
+ 
+ check_error 'f vfs_read ^$arg10000'	# BAD_ARG_NUM
+ 
+-if !grep -q 'kernel return probes support:' README; then
++if ! grep -q 'kernel return probes support:' README; then
+ check_error 'f vfs_read $retval ^$arg1' # BAD_VAR
+ fi
+ check_error 'f vfs_read ^$none_var'	# BAD_VAR
+@@ -100,7 +100,7 @@ if grep -q "<argname>" README; then
+ check_error 'f vfs_read args=^$arg*'		# BAD_VAR_ARGS
+ check_error 'f vfs_read +0(^$arg*)'		# BAD_VAR_ARGS
+ check_error 'f vfs_read $arg* ^$arg*'		# DOUBLE_ARGS
+-if !grep -q 'kernel return probes support:' README; then
++if ! grep -q 'kernel return probes support:' README; then
+ check_error 'f vfs_read%return ^$arg*'		# NOFENTRY_ARGS
+ fi
+ check_error 'f vfs_read ^hoge'			# NO_BTFARG
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+index b0e6b80ccb01..06efa67e01ff 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+@@ -108,7 +108,7 @@ if grep -q "<argname>" README; then
+ check_error 'p vfs_read args=^$arg*'		# BAD_VAR_ARGS
+ check_error 'p vfs_read +0(^$arg*)'		# BAD_VAR_ARGS
+ check_error 'p vfs_read $arg* ^$arg*'		# DOUBLE_ARGS
+-if !grep -q 'kernel return probes support:' README; then
++if ! grep -q 'kernel return probes support:' README; then
+ check_error 'r vfs_read ^$arg*'			# NOFENTRY_ARGS
+ fi
+ check_error 'p vfs_read+20 ^$arg*'		# NOFENTRY_ARGS
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.43.0
+
