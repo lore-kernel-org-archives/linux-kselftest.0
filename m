@@ -1,85 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.20
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793221605;
-	b=0ivdkfwe4tDKKuGAlactbE0twlKvKEzFx8CjL2009IrQiIia/XbOCG76LB1u9ZHMDBgY
-	 mZBf2LSNlsLPFgykUKULBNi6WHF19KIZClaDAHyVYSZU9uqAwoJaZf0wHH6qmT5l7www0
-	 JOQvEHRnbRS/1dUoP3kk2xV2xFFDtYBgVD7o5DISoGhpzh5BlMYd179LQPmr22rS9bUqs
-	 XSbRJ9eQbiSfIMRvTQrwI6rrhqMQbP9Af21ryMNgtT1RvbRuAddn2vPaHg5rdSAu4L8Kj
-	 BiD3dV6HKWUkinqMBFB1wep+qf3tFrXmFWcreGiAjdLh/Stlu5Cgf9eqIZDA3qgOmzg==
+	t=1793222376;
+	b=gEiH6/iFTImA2v9kybWx7pwc3lpDWuWlUWB6NMRoh84uu7hIcBjr+WVS71rcWk/cJG68
+	 M8+57eIJMY9BxrBSZyMKdHvSEnO5ME3GFCnkkKczrqqk+U2nSsX5+m1ofLcgn5mQVMwV9
+	 oYtyj5O8jfY62KVVYAwbEmVLSQvPvvC0OlhfwimZbnWDJKS5x1aGAniUqLf8NvL+hIddx
+	 0KFAOzVio4lj9O4w5jzKKcWROxvs4YdPJE6EDhOrVVg8tjG9JfMF3doVlJxyp135LuudO
+	 tgJr/luEUJ3o8PFFqfbgGl3O+oWUMa6KHebbLvbbx1GFU529vNdpYsLrsX+wswrezeg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793221605;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=dYdUZQkYdLc0vauWbIqi3zABPNcb2nwtA8yBjqhaLho=;
-	b=AI3ptde6PY+QVHQ6iWOnEWLAj87c/gknQr4Dlm/zhVaK5x302w8y7mEPt+LL/QCv0i3c
-	 11Zva3XLnj/4flUEOtoRRogZZXqgzoZTSd4EfJyyqyGE1WJfG8G9KiM4bxw2JzvZd4xwT
-	 ghEPt37GYN/GQwUBsadFs2rrQLqVGeoisTORBeELNvNj+6yBCLrOev4OBfPtcj99of7Ks
-	 5TyrB5m68LGN4RVV49dfdYJcmWVeU4KqinFHRXeszB8z4ZuWSTh0TT7bI2YobnH2Wie5I
-	 eUhtW2F9RhsLV+3G6Yoi6C4HURqw8TMKz6lpDMLb1jAWS54GRC4nXqwJADqllSA5/tw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793222376;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=WsUSq2k+2aYiN37qb7aSkQdP06LKemiN8mY/m+NRNe8=;
+	b=QDgyMrxCCKQTj1K9f7BO3LeGYjz0fSqAFHbUe7xPZW+p/d7aS9bhvWK7D+6b73Z5G2xq
+	 C84o+h/TXNADjOhdqcfS0FTIQNC19RhpyCAQ36TZIQ4cw8318Fw7fJFnaN5W6gV6qD/yW
+	 cPTBQEk9ZfoL7FyKGEfXXyosYu3s4EWSBjjZSU5PckR5tGbI+qT2DmWVh3IJO6EOhi/tC
+	 q0M9EtF4E9lH4kpfPWN0GhzvQzNeWdXFRk0PDA8nMebeWNfp0GaJgF4uMKIKLnzvqSTDW
+	 SrifB/QBZn/Hc1TZ5wxP/aFG84wXiZjE08iSNyKWLL3AXWyzabAFimwL4umFA32ksxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linuxfoundation.org;
-	spf=pass smtp.mailfrom=linuxfoundation.org;
-	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=RZKnL3TU;
-	arc=none smtp.remote-ip=209.85.160.45
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IUTfhChr;
+	arc=none smtp.remote-ip=91.218.175.20
+Received: from mta0.migadu.com (out-20.mta0.migadu.com [91.218.175.20])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAE5606A31F
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 21:06:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8DAE5606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDE2606A325
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 21:19:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7EDE2606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=RZKnL3TU
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-4a75171af39so408270fac.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 14:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1793221602; x=1793826402; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dYdUZQkYdLc0vauWbIqi3zABPNcb2nwtA8yBjqhaLho=;
-        b=RZKnL3TU91MknhH0PBI6QZVMUcwt1SUpPSrfgEKjkIikcI2UgLeVieNt6W/vKdD+ni
-         ZlzEvAK8j+4uYNKqrUDlDHihQtPPOUoBEy0s0xfMsaOvZ8lBWNpEMl2uWLzPY6g38BiG
-         HkEslqoetMhPitOO7lA3e/fOsmOLctT24KIE4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793221602; x=1793826402;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dYdUZQkYdLc0vauWbIqi3zABPNcb2nwtA8yBjqhaLho=;
-        b=ukeNUv2r7ZxnAB0GtIjcXNpD1XYy82caWnI25DS1OcVsS/+SsRAyJSj0ulRtM/Ez1B
-         Na7VzY9fK9V9LwZuyGkw5k/JK7ZwdiyE0CfO866j7bw9ZZWKpyUc+90hSHG9dlZBwaPm
-         nHnDLGOD4XnxtKB8R1rBt2ypTKagB05bP+HMu+KwoEMY0+BppH/4amdFi+/U1+mQMKIa
-         Ii73w+TWU0w0P/ejqsoOoudD1gAbjqwvTKCD7VDmM6hUvoB7mCK3ESift58Ihc7lW5Cz
-         UjW/EueLhm9iaY6TzJGQmBG2w4YlhYf8N9Byf2CoRYc9NB8spDGYETjgQ1c0BLT0ITjo
-         GClg==
-X-Forwarded-Encrypted: i=1; AKwUvBweT8GV9rBgDDEuq/ADl9Wr1ZIEDmmlf+o04RfLaayFaiIfhyxccWnY8Gjq41eLr50Q9CNDLibD2Utb4VpjejU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKdRmkACzF0vjQMW4SpnKadAx4J7lBuWscHEhJciYEiRBtHdXtw
-	MVKhS6yENr3Dp3GLd0w8RChqdXfMldHMTjRf2QMcmv2ZY6dyMeEzs23g8WmXov2Ty8g=
-X-Gm-Gg: AYBFou2Bnn32bt8PQUayAM8nrv5Wd2U2zUFnBWV53a9Bvoq6outyzozdCAz52GZX1Yf
-	TNSrrb02nKpPxxKxMFkmoftsgcMJp1gyduu5vLRifqgixOYstSDqF0l7mOBly3hWSM8cTnB8H9T
-	AdQrH1Bc76/wbHt16JWsbDp29mGvQhFU2VPXD2f7kLU+OR8pXXYIbFOMuuWApKXZlsAhuIHmfJv
-	Ryyyzu9puZIT1B9Rvf/yWH+OnbmQ1cvLBjF04TNRxyPn4oJvP5pm05rt8nfpNREydN5Iho2XY6o
-	gVlLQrPzixJh1Fo53St+ywbIdmr6JbSp8scCKQOPbEy7TCK/Y5IxGk/8bKDianbjhMqecZsaUEU
-	RcAi6QDNRQpEb/8DnwrBEgro2omIoxTjt/DOW7Xu1PeHED7YUj96sRVr2ocsv0YjQ7pROdjWCTv
-	z+X6XcUmzl8F0lM7cDz+qZqverGwaIgAk8vsqVCmsv4HBNHvPfQhGhBljjQFimKTPJi19hLsFTm
-	75Yvwxna1+Xx4ud47HEc/zkrWFAruzg0aIFOcqhNy1L5JWzGzE3gtdJBeUdeNPyWEdJwyR5jmvY
-	gaC17bzf0d5w//uShh7c8q/jsbWHylhMM48gxiE=
-X-Received: by 2002:a05:6870:d184:b0:49e:4ed0:11d4 with SMTP id 586e51a60fabf-4a8bb701e65mr2458445fac.50.1793221602376;
-        Wed, 28 Oct 2026 14:06:42 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a8b77ac4e4sm3068523fac.3.2026.10.28.14.06.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2026 14:06:29 -0700 (PDT)
-Message-ID: <9c65a285-9144-494b-b4d8-e3d0deb671c7@linuxfoundation.org>
-Date: Wed, 28 Oct 2026 15:06:26 -0600
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IUTfhChr
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=NbKq6I63kMRUcieNKpMBmStZcf0/mybvQYK4JY69Rog=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793222373; v=1; x=1793827173;
+ b=IUTfhChrGaXdSKAPxL8ULFldU5qp4G0COqGFcI5mxjUvVoJy5CyxRcoohbXmwQUdOH3jHbon
+ 5qSplCJKXaRrYyvz1COPD7QThQckz80fFPvwvd//mIAAJhKianmRANYa9wiHbnHnnQUaDTho/9Y
+ w6K/S3rFbC4+smuztWa480m4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 6dc190b38c415713;
+	Wed, 28 Oct 2026 21:19:33 +0000
+X-Mizu-Trace-ID: 6dc190b38c415713
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next] selftests/bpf: don't count skipped reg_bounds cases as skipped tests
+Date: Wed, 28 Oct 2026 14:19:21 -0700
+Message-ID: <20261028211921.1055711-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,40 +76,153 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/ftrace: Add missing spaces after ! in probe
- syntax tests
-To: Jaewon Jung <jaewon8868@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: stable@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20261025075044.1750113-1-jaewon8868@gmail.com>
- <20261028011923.2050009-1-jaewon8868@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20261028011923.2050009-1-jaewon8868@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/27/26 19:18, Jaewon Jung wrote:
-> Add the missing space between ! and grep. Otherwise, the shell tries
-> to run !grep and reports "!grep: not found". This always skips the
-> conditional checks without checking for kernel return probe argument
-> support.
-> 
-> Fixes: 25f00e40ce79 ("tracing/probes: Support $argN in return probe (kprobe and fprobe)")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jaewon Jung <jaewon8868@gmail.com>
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
-> Changes in v2:
-> - Add Fixes, Cc stable and Acked-by tags as suggested by Masami.
-> 
+test_progs-bpf_gcc reports an order of magnitude more skipped tests than it
+lists.  A recent bpf-next run ends with
 
-Thank you. I will take this for 7.4-rc2.
+  Summary: 720/6383 PASSED, 8392 SKIPPED, 105/368 FAILED
 
-thanks,
--- Shuah
+but the log for that same run names only 684 skipped subtests which are
+all accounted for; the other ~7700 are just ghosts.
+
+Nothing here is specific to BPF_GCC; reg_bounds builds its programs
+from hand-written instructions at run time, so the BPF compiler is not
+involved.  That build is just where the inflated total was noticed.
+
+The total is not reproducible either.  Four runs over an identical
+tree reported 8240, 8261, 8405 and 8424 SKIPPED; two of those had
+byte-identical verdicts for every test.
+
+The extra skips come from reg_bounds.  Counting the increments by
+test, every heavy contributor is one of its random tests:
+
+  632 reg_bounds_rand_ranges_s64_u32    576 reg_bounds_rand_consts_s64_u32
+  624 reg_bounds_rand_ranges_u64_u32    564 reg_bounds_rand_consts_u64_u32
+  600 reg_bounds_rand_consts_u64_s32    552 reg_bounds_rand_ranges_u64_s64
+
+The path, for one of them:
+
+  test_reg_bounds_rand_consts_u64_u32()
+  `- validate_rand_ranges()                     100 random cases
+     `- verify_case_opt(..., false /* !is_subtest */)
+        |    if (is_subtest && !test__start_subtest(sb->buf))
+        |            return 0;       <-- no subtest is opened, so
+        |                                env.subtest_state stays NULL
+        `- for (op = OP_LT .. OP_NE)             x6 -> 1200 cases
+           `- verify_case_op()
+              `- if (reg_state_needs_two_arcs(...))
+                    test__skip()
+                    `- else env.test_state->skip_cnt++   <-- once per case
+
+skip_cnt feeds the SKIPPED total, so it grows once per case rather than
+once per test.  The variance has the same source: how many cases are
+unrepresentable depends on the seed.
+
+Report the skip up to verify_case_opt() instead, the one frame that
+knows whether a subtest exists:
+
+  err = verify_case_op(init_t, cond_t, x, y, sub.op, &skipped);
+  if (skipped) {
+          if (is_subtest)
+                  test__skip();
+          else
+                  ctx->skip_case_cnt++;
+  }
+
+with the tally printed once at the end of the test.  The subtest path
+keeps its old behaviour: test__skip() only sets a bool there.
+
+After the change, a run of reg_bounds_rand_consts_u64_u32 -- the test
+contributing 564 above -- reports 0 SKIPPED and logs
+
+  SKIPPED 480/1200 cases needing two range arcs
+
+The two counts differ because the seeds do.
+
+This also stops the rand_* tests reporting themselves as skipped: with
+no subtest open, any non-zero skip_cnt made print_test_result() call
+the whole test SKIP, so a test that ran 1200 cases and checked them all
+was indistinguishable from one that never ran.  18 of the 32 report OK
+instead; the rest were already OK, their type combinations never
+producing an unrepresentable case.
+
+Fixes: bbc631085503 ("bpf: replace min/max fields with struct cnum{32,64}")
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+---
+ .../selftests/bpf/prog_tests/reg_bounds.c     | 25 ++++++++++++++++---
+ 1 file changed, 21 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+index 7f170a69d1d8..6231258b26cc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
++++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+@@ -1504,7 +1504,7 @@ struct ctx {
+ 	struct range *uranges, *sranges;
+ 	struct range *usubranges, *ssubranges;
+ 	int max_failure_cnt, cur_failure_cnt;
+-	int total_case_cnt, case_cnt;
++	int total_case_cnt, case_cnt, skip_case_cnt;
+ 	int rand_case_cnt;
+ 	unsigned rand_seed;
+ 	__u64 start_ns;
+@@ -1541,7 +1541,8 @@ static void subtest_case_str(struct strbuf *sb, struct subtest_case *t, bool use
+  * performed)
+  */
+ static int verify_case_op(enum num_t init_t, enum num_t cond_t,
+-			  struct range x, struct range y, enum op op)
++			  struct range x, struct range y, enum op op,
++			  bool *skipped)
+ {
+ 	char log_buf[256 * 1024];
+ 	size_t log_sz = sizeof(log_buf);
+@@ -1581,7 +1582,7 @@ static int verify_case_op(enum num_t init_t, enum num_t cond_t,
+ 	    !assert_reg_state_eq(&tr2, &te2, "true_reg2")) {
+ 		if (reg_state_needs_two_arcs(&fe1) || reg_state_needs_two_arcs(&fe2) ||
+ 		    reg_state_needs_two_arcs(&te1) || reg_state_needs_two_arcs(&te2)) {
+-			test__skip();
++			*skipped = true;
+ 			return 0;
+ 		}
+ 		failed = true;
+@@ -1629,13 +1630,26 @@ static int verify_case_opt(struct ctx *ctx, enum num_t init_t, enum num_t cond_t
+ 		return 0;
+ 
+ 	for (sub.op = first_op; sub.op <= last_op; sub.op++) {
++		bool skipped = false;
++
+ 		sb->pos = 0; /* reset position in strbuf */
+ 		subtest_case_str(sb, &sub, true /* print op */);
+ 
+ 		if (env.verbosity >= VERBOSE_NORMAL) /* this speeds up debugging */
+ 			printf("TEST CASE: %s\n", sb->buf);
+ 
+-		err = verify_case_op(init_t, cond_t, x, y, sub.op);
++		err = verify_case_op(init_t, cond_t, x, y, sub.op, &skipped);
++		if (skipped) {
++			/*
++			 * Outside a subtest test__skip() bumps the test's skip
++			 * counter, which feeds the SKIPPED total; tally these
++			 * locally instead of reporting each as a skipped test.
++			 */
++			if (is_subtest)
++				test__skip();
++			else
++				ctx->skip_case_cnt++;
++		}
+ 		if (err || env.verbosity >= VERBOSE_NORMAL)
+ 			ASSERT_OK(err, sb->buf);
+ 		if (err) {
+@@ -2167,6 +2181,9 @@ static void validate_rand_ranges(enum num_t init_t, enum num_t cond_t, bool cons
+ 	}
+ 
+ cleanup:
++	if (ctx.skip_case_cnt)
++		printf("SKIPPED %d/%d cases needing two range arcs\n",
++		       ctx.skip_case_cnt, ctx.case_cnt);
+ 	/* make sure we report random seed for reproducing */
+ 	ASSERT_TRUE(true, ctx.progress_ctx);
+ 	cleanup_ctx(&ctx);
+-- 
+2.53.0-Meta
+
