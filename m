@@ -1,56 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.212
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793166562;
-	b=WD+S2x3IkqLSvcP7Wy7Kg5gn7mzNLnAwWhs33TiWUMfcZrWD7iyVRizsmsPk2MUZV1gL
-	 Fz/1KGZtVnN8MnSpX6PTLYIzyQd+la1pzYE/PKsRgZ8sP/iJhAvQrIeaaQpyrk0MFdYgT
-	 X+dIFqqFQ8BXsMfrD4X9sM+dp82N2I4evn9rqBzljKSDrYWjjfDWazkNu2aW5ybQiHudW
-	 5wD1QUdDcbCkUlwCLbADGvauFv4xTy4PXIEO0a/JSalfZVWp4GZIIlioEqltuRnV0ZYBX
-	 Jagyz/B/JxJk0yqdPrIfkK2aeZXYn38YWegLEA0+8aFGQbwGJdoZO+6fXr279iSdjRw==
+	t=1793166694;
+	b=cEwrM7c2EepU2mF2zWYQ2E11/liHEj5nPQx7K5ylMv+oPHkaleq3DS2m6QM9VVnAc1gL
+	 fRRwxGwM7cDbvC+CpqmT6Ocjnv3PHXkfNoFTptSA5j3yWth0bQQdJ85+xraHVxU0lvkIn
+	 721EYyKfRIVAYagFAnDtIPKkc/PUXvr+jp0TziDHIxUvq6O/D4fwG/mjRSgIPTsc8TKV2
+	 vw4hYYc/Z6fgqzrH7zZP714L4NmJ3kCY7fkEt0a6AB32pWG41PdqdkMmPTkkfSAXjhFQP
+	 ycL+VZ+EOwFqIfKzGgg936ED/S4gjM1C/mSqghmivblV/5jTU4tlFQSVvr4wLOrM06w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793166562;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=VivwctnKNESR72tT6DdQwvTU8RMUDdx3h6Qlhmvi9bk=;
-	b=tlWdp1CmnrtTpFRopE4i7cUoMkbdpvCQ3oBSV8oXyZqm+BgPUs5+UZ9sV0Y/qTKVP8u4
-	 4rQrqjtFQN70PROE3Z47XfoqejZmx3zwEWbQOBbjJu/iVBZPk92WJ7AOwHUGwynXKmoqc
-	 ZNVq1kNDWSisqcMJAB30dRZAWs++2U+6BQZaODptchhmkA6/iNo9LjJjjQ/mmVr2oPv9w
-	 ghSaKY5WfigOLfzURZQYte9vQ3juvG9VpmIOW4phHwGzv7FZ5z/fzIiZLqvLkr8sZNRdr
-	 cM/PNkT+e0aeOjZqHY1CF8gW3ob8Qnrh8LT8Ej1iiZUJPQTLKm2va9wp2KQ5Pr134yg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793166694;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:From:To:Cc:References:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=QxYGNtJl3UaYfq3/WJ+CGsHBD9RzKd7TuJpv6lSGbGw=;
+	b=ZAeGJOgQZNt2y+wORv7MAuMcJJsy/oeyJgGF2rmCOaf61vVR/T3wBJd4XX4zyTpAHwtU
+	 phIhbp0h4xIufuGVhhlxyl6+c3zFUqWh0LI915c428T/my3V7mBOQGeYPJfwF7TjX0H4Q
+	 qPrS2fm0uahGT9vItucXO6ITsP48EDT6FU/onfpjyhm71b9aqpQ+IwL+UVhdpVUYn3yYb
+	 rFzYmYWgAfAe0NIAMXxrRqerr2YVWnkQEBmif96IZwOYgHuf6dnwTdYau36fPwy3kuZ0a
+	 TUxpSRwM6aE12ijJImeiLEXkp2VmS60E+V30MTTdGL8dtm1D+mufoo/YYBAeYsH5N1w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=zytor.com;
-	spf=pass smtp.mailfrom=zytor.com;
-	dkim=pass header.d=zytor.com header.i=@zytor.com header.a=rsa-sha256 header.s=2026092801 header.b=ytsnIIMQ;
-	arc=none smtp.remote-ip=198.137.202.136
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="xm4OPG/H";
+	arc=none smtp.remote-ip=95.215.58.212
+Received: from mta1.migadu.com (out-212.mta1.migadu.com [95.215.58.212])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31C8606A31A;
-	Wed, 28 Oct 2026 05:49:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D31C8606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2A3606A31A
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 05:51:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D2A3606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=zytor.com header.i=@zytor.com header.a=rsa-sha256 header.s=2026092801 header.b=ytsnIIMQ
-Received: from [IPV6:2601:646:8001:6901:be1f:9b36:d14e:b747] ([IPv6:2601:646:8001:6901:be1f:9b36:d14e:b747])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 69S5m7Ag1855457
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 27 Oct 2026 22:48:08 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 69S5m7Ag1855457
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026092801; t=1793166491;
-	bh=VivwctnKNESR72tT6DdQwvTU8RMUDdx3h6Qlhmvi9bk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ytsnIIMQ5ORp/7nzaypwJ3rotqZr5IDSfXIW+gRUERdPWmUTXiLOFmvuX64w3ffuW
-	 3zNNjso8xdtIQgy2agFoG53uDXA4+ENNbOexRLND2wZHgYhLtpJ7HL0pjuHpD+WBFv
-	 k0SkO0cNU+Gcz90ui2VvDsTRn6sXyrp8SHzWBcJpU7+/n7iYbeyb4G5eNt1BcanbBx
-	 T+smjtwgTevVeTPs+WkStRp2+/rFbkJHRBIeeT18ZGVE+2r0W9lI0TbHBCXQd3z0R7
-	 Do521+IlRbgDULAkJCG99BsMyTGmVfCKXaVBTIAUutMo358Ba8sfds61GIR80lcvqV
-	 PHgu8Q0RE2ZDw==
-Message-ID: <1008b293-baae-4420-ad83-7902b9c83d6c@zytor.com>
-Date: Tue, 27 Oct 2026 22:48:01 -0700
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xm4OPG/H
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=b/8VMC+UaG0sCWwgu0lRA8UALea4PTGevJoP4P93JR8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793166691; v=1; x=1793771491;
+ b=xm4OPG/HxzZCSOzfP9lFl66bQ4tG/bg66+/rYXsJClWKKXDlV3aEKei/Eit1o3wYGRlWv+4Y
+ wJ0+XN+h6qW4Q8nGiwEH8xyFuOIKZUZAD9zC3hgw67tF0uyzSFF560QG/wSLPCumTgeX60tkvRI
+ SfwUuLUt9ekOfyqHWRkYQ0xs=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4fcc30824bc3b8e7;
+	Wed, 28 Oct 2026 05:51:31 +0000
+X-Mizu-Trace-ID: 4fcc30824bc3b8e7
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <43d07d41-6597-4979-b99d-bd87dddc36b0@linux.dev>
+Date: Wed, 28 Oct 2026 13:51:16 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,52 +59,228 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 00/28] KVM: Enable FRED support with KVM VMX
-To: Shivansh Dhiman <shivansh.dhiman@amd.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Sohil Mehta <sohil.mehta@intel.com>, kvm@vger.kernel.org,
-        x86@kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, Xin Li <xin@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Binbin Wu <binbin.wu@linux.intel.com>, Zhao Liu <zhao1.liu@intel.com>,
-        Yosry Ahmed <yosry@kernel.org>, David Matlack <dmatlack@google.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260911213659.2025974-1-sohil.mehta@intel.com>
- <43fb3d8a-0736-44ae-bd7f-01e701d4b7d9@amd.com>
- <55e7eef19801facfd4ac1cb147ab34f0aed0c331.camel@infradead.org>
- <3901b012-3c13-4ff4-8b6b-007905c380fe@amd.com>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <3901b012-3c13-4ff4-8b6b-007905c380fe@amd.com>
+Subject: Re: [PATCH] cgroup/cpuset: Fix missing effective_xcpus accounting of
+ child partitions
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+To: longman@redhat.com
+Cc: ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+ mkoutny@suse.com, shuah@kernel.org, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20261027123837.100909-1-guopeng.zhang@linux.dev>
+ <8cd8d3e9-da10-4201-ba76-e1ce8ae5d50a@linux.dev>
+Content-Language: en-US
+In-Reply-To: <8cd8d3e9-da10-4201-ba76-e1ce8ae5d50a@linux.dev>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2026-09-25 05:06, Shivansh Dhiman wrote:
->>>
->>> Thanks for the series Sohil. I've been able to run SVM side of vFRED with
->>> changes rebased on top of this series. So, no incompatibilities in common
->>> plumbing as of now. Will let you know if anything comes up.
+
+
+在 2026/10/27 21:44, Guopeng Zhang 写道:
+> 
+> 
+> 在 2026/10/27 20:38, Guopeng Zhang 写道:
+>> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
 >>
->> Can I remove the "Some AMD CPUs (Venice) incorrectly..." part of the
->> commit message of
->> https://git.infradead.org/?p=users/dwmw2/linux.git;a=commitdiff;h=fred
+>> When a partition root expands its exclusive CPUs, a valid child
+>> partition will be able to claim more CPUs from its parent. As
+>> update_cpumasks_hier() always updates a cpuset before its descendants,
+>> the parent has already been committed when the child partition is
+>> reached. Its effective_cpus is computed with the child's old
+>> effective_xcpus subtracted and no further adjustment is made
+>> after the child commits its new effective_xcpus.
+>>
+>> The additional CPUs are thus granted to both the parent and the child
+>> partitions. generate_sched_domains() then emits the warning below
+>> about the overlapping sched domains:
+>>
+>>   WARNING: kernel/cgroup/cpuset.c:919 at rebuild_sched_domains_locked+0x1ec/0x2e0, CPU#21: bash/1225
+>>
+>> Fix that by taking the CPUs newly added to a valid child partition
+>> away from its parent at the commit point of update_cpumasks_hier()
+>> right before the new effective_xcpus is committed. The tasks in the
+>> parent cpuset as well as its other children will be updated if its
+>> effective_cpus is changed.
+>>
+>> A new test case is added to test_cpuset_prs.sh to test this patch.
+>>
+>> Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
+>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>> ---
+>>  kernel/cgroup/cpuset.c                        | 25 +++++++++++++++++++
+>>  .../selftests/cgroup/test_cpuset_prs.sh       |  4 +++
+>>  2 files changed, 29 insertions(+)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 3219f927c35e..ec0ef3ad0726 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -2241,6 +2241,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+>>  		struct cpuset *parent = parent_cs(cp);
+>>  		bool remote = is_remote_partition(cp);
+>>  		bool update_parent = false;
+>> +		bool xcpus_added = false;
+>>  
+>>  		old_prs = new_prs = cp->partition_root_state;
+>>  
+>> @@ -2356,6 +2357,19 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+>>  		}
+>>  
+>>  		spin_lock_irq(&callback_lock);
+>> +		/*
+>> +		 * A child partition may claim more CPUs when its parent expands
+>> +		 * the exclusive CPUs. Take the newly granted CPUs away from the
+>> +		 * parent which was committed earlier in this walk.
+>> +		 */
+>> +		if (!remote && new_prs > 0) {
+>> +			compute_excpus(cp, tmp->addmask);
+>> +			if (cpumask_andnot(tmp->delmask, tmp->addmask,
+>> +					   cp->effective_xcpus)) {
+>> +				partition_xcpus_add(new_prs, parent, tmp->delmask);
+>> +				xcpus_added = true;
+>> +			}
+>> +		}
+>>  		cpumask_copy(cp->effective_cpus, tmp->new_cpus);
+>>  		cp->partition_root_state = new_prs;
+>>  		/*
+>> @@ -2375,6 +2389,17 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+>>  
+>>  		cpuset_update_tasks_cpumask(cp, tmp->new_cpus);
+>>  
+>> +		/*
+>> +		 * The parent's effective_cpus may have been changed by
+>> +		 * partition_xcpus_add() above. Update the tasks in the parent
+>> +		 * cpuset and its other children, if necessary.
+>> +		 */
+>> +		if (xcpus_added) {
+>> +			cpumask_copy(tmp->addmask, parent->effective_cpus);
+>> +			cpuset_update_tasks_cpumask(parent, tmp->addmask);
+>> +			update_sibling_cpumasks(parent, cp, tmp);
+>> +		}
+>> +
+>>  		/*
+>>  		 * On default hierarchy, inherit the CS_SCHED_LOAD_BALANCE
+>>  		 * from parent if current cpuset isn't a valid partition root
+>> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>> index 83ef6c781af3..09e430570815 100755
+>> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>> @@ -437,6 +437,10 @@ TEST_MATRIX=(
+>>  	" CX1-4:P1 CX3-4:P1 .     .     X1-2     .      .      .     0 A1:1-2|A2:1-2|XA2: A1:P1|A2:P-1"
+>>  	" CX1-4:P1 CX3-4:P1 .     .  X1-2:X1-4   .      .      .     0 A1:1-2|A2:3-4|XA2:3-4 A1:P1|A2:P1"
+>>  
+>> +	# The extra CPUs gained by a child partition when its parent expands the
+>> +	# exclusive CPUs have to be taken away from the parent.
+>> +	" C2-6:X2-5:P1 C3-6:X3-6:P1 .      .      X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P1 ."
+>> +
+>>  	# Taking away all CPUs from parent or itself if there are tasks
+>>  	# will make the partition invalid.
+>>  	"  C2-3:P1   C3:P1  .      .      T     C2-3    .      .     0 A1:2-3|A2:2-3 A1:P1|A2:P-1"
 > 
-> Yes, you may go ahead and drop that sentence. AMD Zen 6 (Venice) supports
-> event type 5 for INT1, and the FRED Virtualization spec [1] has been
-> updated to reflect this.
+> Hi Longman,
 > 
-That's wonderful!
+> I thought of another way to fix this problem that attacks the stale
+> value at its source. The comment in
+> update_parent_effective_cpumask() says:
+> 
+>     When both cs and parent remain valid, parent's
+>     compute_partition_effective_cpumask() call would have removed cs's
+>     effective_xcpus from the parent's effective_cpus. So there is no
+>     need to adjust parent's effective_cpus here.
+> 
+> That is the design intent, but compute_partition_effective_cpumask()
+> subtracts the child's old effective_xcpus, which hasn't been updated
+> yet when the parent is processed. What if the parent subtracts the
+> CPUs the child can claim from the newly computed parent mask instead?
+> The rework (on top of the same base as the posted patch) looks like:
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 3219f927c35e..cd02b6b74ca2 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1602,10 +1602,14 @@ static int compute_trialcs_excpus(struct cpuset *trialcs, struct cpuset *cs)
+>  static void compute_partition_effective_cpumask(struct cpuset *cs,
+>  						struct cpumask *new_ecpus)
+>  {
+> +	static cpumask_t child_xcpus;
+>  	struct cgroup_subsys_state *css;
+>  	struct cpuset *child;
+>  	bool populated = partition_is_populated(cs, NULL);
+>  
+> +	lockdep_assert_cpuset_lock_held();
+> +
+>  	/*
+>  	 * Check child partition roots to see if they should be invalidated
+>  	 * when all the effective_cpus will be used up and cs is populated.
+> @@ -1628,7 +1632,16 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>  		 * partition root.
+>  		 */
+>  		WARN_ON_ONCE(is_remote_partition(child));
+> -		if (populated && cpumask_subset(new_ecpus, child->effective_xcpus)) {
+> +		/*
+> +		 * The child has not been updated yet. Compute the CPUs it
+> +		 * can take from this newly computed parent mask, without
+> +		 * overwriting its old effective_xcpus.
+> +		 */
+> +		cpumask_and(&child_xcpus, new_ecpus, user_xcpus(child));
+> +		if (cpumask_empty(child->exclusive_cpus))
+> +			rm_siblings_excl_cpus(cs, child, &child_xcpus);
+> +
+> +		if (populated && cpumask_subset(new_ecpus, &child_xcpus)) {
+>  			int old_prs = child->partition_root_state;
+>  			int parent_prs = cs->partition_root_state;
+>  
+> @@ -1646,8 +1659,7 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>  			notify_partition_change(child, old_prs);
+>  			continue;
+>  		}
+> -		cpumask_andnot(new_ecpus, new_ecpus,
+> -			       child->effective_xcpus);
+> +		cpumask_andnot(new_ecpus, new_ecpus, &child_xcpus);
+>  	}
+>  	rcu_read_unlock();
+>  }
+> 
+> compute_excpus() is not directly reused here as it reads
+> parent->effective_xcpus which hasn't been updated yet at this point.
+> 
+> This fixes the double grant in one step and keeps the accounting
+> inside compute_partition_effective_cpumask(). I boot tested it on a
+> 32-CPU VM with the whole test_cpuset_prs.sh suite and it passes, same
+> as the posted patch.
+> 
 
-	-hpa
+Sorry, the rework I suggested has a problem. I kept testing it and
+found that it fixes the effective_cpus overlap, but misses the
+isolated_cpus accounting.
+
+Test setup (CPUs 2-6, A is a root partition, B is an isolated child):
+
+    A:  cpuset.cpus = 2-6, cpuset.cpus.exclusive = 2-5
+    B:  cpuset.cpus = 3-6, cpuset.cpus.exclusive = 3-6 (clamped to 3-5)
+
+    echo 2-6 > A/cpuset.cpus.exclusive
+
+Expected after the expansion: B holds 3-6 and cpuset.cpus.isolated
+becomes 3-6.
+
+    current code:   B = 3-6, isolated = 3-5, A effective = 2,6
+    rework:         B = 3-6, isolated = 3-5, A effective = 2
+    posted patch:   B = 3-6, isolated = 3-6, A effective = 2
+
+The rework subtracts the child's claim from the parent's effective_cpus
+in one step, but the accounting for a growing child partition isn't
+only about the parent's effective_cpus. partition_xcpus_add() also
+updates subpartitions_cpus and isolated_cpus, e.g. a CPU newly gained
+by an isolated child has to be added to isolated_cpus.
+
+Note that the isolated_cpus miss above exists in the current code too:
+an isolated child that gains CPUs from a parent expansion updates its
+effective_xcpus, but isolated_cpus is never updated. The posted patch
+fixes that as well.
+
+Sorry again for the noise.
+
+Thanks,
+Guopeng
 
