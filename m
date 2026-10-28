@@ -1,75 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.20
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793145910;
-	b=hLUg3ysr3F/XASYTuv9WLV/jVZwjGNx04Alq278LmLaepmh3Z1iWZ/JffAakc1pjsoV/
-	 xc3fdLdDtBQl3sy0fqTWG5VlvV3T7Ur9xySOUxp9VxjJFKrtQNECK7ow/jIZllOdJzLmn
-	 zPW6lUP5swqMUX5BRbUL727xnyhTPyqmRJrnkNRTYvm1YhQdTS1hjRJ6G6iryKRoweV2s
-	 GOs1QuoforMQqKxYptkPMOJNJQ44WyS6LY8DcOCiZ3uBtG5X9u2ASNHoA+n6aiWlDIT1g
-	 E9bEqs3bMOoqW8+//vzRTZJ/cVj9v7IzYKHZhvuaoQ3hNDs5qVzGaysiqzy8fZgSlnA==
+	t=1793148210;
+	b=vFFGQt2t+XL3P+eG248KI7B2O3VJIZr/wsCpJXaiGf3OMPP67CZbg+jLFCN0kEiIgmdc
+	 O0C31CIcUgCNhjyXmvwbp+yCs7LgI4uwrE6D29jUGZN9Ymy8xbbRU5uvCRWLApSb+HAFx
+	 4rh8mTqJyxHGkpEgFw7CwTxjj2WnNXayxMnwi4bYuAHvCIn5glm/Kv5D3zZQi2unDwFPI
+	 tHlWJZJWY/gxF70ldAMHZF8ch43pht6NppWyKW4H8IpLx/d/T/r2owB4j04c+bkqRPUK4
+	 3wI65+8Lm8jPk9C+V8oP0Dn6zXIJLp2FEn45lI+VhbkyzEz70o+s7fjmiaJPWvSC4Yg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793145910;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=LpfshKx9r3VUKJpK4IAmx+D8pUxvMc3zcV//VOwsUHM=;
-	b=BAw8VYkewj1EAecJmWuXyi2+MUfoogmTsNWARZLe1GRR3GuJ58k7j3bTHGanX0jbfZYe
-	 qsg2/sZYtcQdikzqo59MfS5qsw0jtJSXz+Wuawm23DdO1uSwNgteLIvvbGn+5mTffxD+F
-	 K0oS914oHWQOWHGnGICRPbcSCgMkIw2vO5Ck0+O148QTWBkBjc0YelQNxmAB47nzfLieL
-	 85AyJDLEXwHnDfqJQYH7Dke+M79jCHB9lv2vM6KOdYeAiQCtHiIfA2E2+SC6XFLVRK4Td
-	 5UDZueep4eWvr4VtF7z4LaNQGjZmpCiXU4uvmDFAhWd0pfEuazzHZulo5sR8GszVrkA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793148210;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 User-Agent:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=5tVgUGtk9UGck5ve+hDnUjG7SXGj3hc/B0cyug9XWzI=;
+	b=OEwC6NDafsjsD75YaoBx158BXzxsbCRHOx+3V627V5o7NBhl10NKvueLMVbNfgcAKlWQ
+	 yeGAuE2Y/dbMrTXPkfF8VNcAs2trmAS1w+nIOvkS1hyBv0vFndksvJ3UVavTJ6CP+Hl81
+	 8dZRPuJv7mOgaSn9wkXwXveJB2KczDybJAa8r+8qhTXki5WaLtL/IwMXQ0lKzKNp8YFNb
+	 G7Eax+qWGShh7XuXeBrHG9BMv1dBeqWqSAwSFLC793pTcVIDN2EaRxOGo/mg9AIhTWek6
+	 itklHHU5fuwqArH16QOMxJwryrNv9JHuxbdwS8q14sDTRXF+YUZtbdvjlOvq4ZcgglA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xnxQuqcG;
-	arc=none smtp.remote-ip=91.218.175.20
-Received: from mta0.migadu.com (out-20.mta0.migadu.com [91.218.175.20])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RMr+ksoW;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE822606A31E
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 00:05:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE822606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1133606A31A;
+	Wed, 28 Oct 2026 00:43:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xnxQuqcG
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=6brww2x3JHuxuisQJDKfBncVXg9MZoFkRgEqMdU4ia4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793145908; v=1; x=1793750708;
- b=xnxQuqcGadBwoNNE48/S8+/zSI5my4sFZDsbB1gTDc+hTwL1Aajqtu+S8DO1DO4gYvJX1yA+
- KCh3P2v3+/f30j6hExe+5qG553f8Hvbvsgg1tKDs1Lq98XErLqVgoAoPO2U9zCyDklPemIqOF+Y
- mYJaV7+1IrvDnqgzTCK3vjOY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c17dda34776e8be8;
-	Wed, 28 Oct 2026 00:05:06 +0000
-X-Mizu-Trace-ID: c17dda34776e8be8
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	shuah@kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RMr+ksoW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B6E61F01825;
+	Wed, 28 Oct 2026 00:43:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793148209;
+	bh=5tVgUGtk9UGck5ve+hDnUjG7SXGj3hc/B0cyug9XWzI=;
+	h=From:To:Cc:Subject:Date;
+	b=RMr+ksoWbh3gnrbBoQaP2uHlWfQm63ilwvzB80kAE/j0tY4lTKobKbfeGLOUuEg9L
+	 rRkPC3Fv18wg97sRVM/dNtELJ0milwyLp5/FidOxUF32B1ckTpUtfGA45s2/7eLFbI
+	 uijAklCjjLF5nZsk/+niiL5btl7F25NTz6EfaHE+DM11oC/YNaROofTaf+rybPok/l
+	 Af3uJ/V40cXasuoJULs12SGp2jOfqgCTbQ8AGoi5dpIdONFUZSXihquAmcirpkTEEI
+	 nlXB2LzGHlc6S4UKuz9ixuRRRKjr87XibpCFNV7Sihcp4nT/+qRcvpwv7q4/dgX+oz
+	 TI00q4uqGo0pw==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	jose.marchesi@oracle.com,
-	david.faust@oss.qualcomm.com,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v1 7/7] selftests/bpf: write the mixed arena/scalar ALU tests in asm
-Date: Tue, 27 Oct 2026 17:04:11 -0700
-Message-ID: <20261028000411.4010967-8-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.56.0
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 00/16] tracing/filters: Fix event filter parsing and matching bugs
+Date: Wed, 28 Oct 2026 09:43:24 +0900
+Message-ID: <179314820431.684037.4147763044424284198.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,171 +61,156 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-They fail to build with BPF_GCC:
+Hi,
 
-  progs/verifier_arena.c:566:5: error: optimization may eliminate reads and/or writes to register variables [-Werror=volatile-register-var]
+Here is the 3rd version of fixes for various bugs in the trace event
+filter parser and predicate evaluation in kernel/trace/trace_events_filter.c,
+along with a new ftracetest test case covering filter syntax checks.
 
-for
+The previous version is here:
+ https://lore.kernel.org/all/179291742944.492959.11659339795290028998.stgit@devnote2
 
-  volatile register __u64 reg asm("r3");
+This version splitted some combined patches into dedicated patches, dropped a
+wrong patch, and introduced 5 new patches to fix wrong error position reported
+in error_log (this is required to fix syntax test failures).
 
-GCC means it: with the warning silenced it drops both scalar accesses,
-leaving nothing that uses r3 as a scalar:
+Changes in v3:
+[01/16]
+ - Split zero-length string underflow and out-of-bounds fix from
+   fixed-size string matching.
+ - Return 0 immediately if "len <= r->len" in regex_match_end()
+   without scanning the string.
+[02/16]
+ - Split from zero-length string fix into a dedicated patch.
+ - Introduce regex_match_end_str() for fixed-size buffers and assign
+   it in parse_pred() for FILTER_COMM and FILTER_STATIC_STRING, avoiding
+   strnlen() overhead for dynamic and pointer strings in regex_match_end().
+[06/16] ([05/09] in v2)
+ - Check if str[i] is NUL immediately after skipping whitespace after
+   the operator in parse_pred() across all event types, as suggested
+   by Steven Rostedt.
+[07/16] ([05/09] in v2)
+ - Fix quoted operand parsing in function event filter.
+ - Allow empty quoted operand ("") as valid syntax per Steven Rostedt.
+[08/16] ([05/09] in v2)
+ - Reject empty unquoted operands (!q && !len) in function events.
+[09/16] ([05/09] in v2)
+ - Reject stray quotes and '(' in unquoted function event operands.
+([06/09] in v2)
+ - Dropped.
+[11/16]
+ - Introduce filter_check_newline() to convert the first newline to
+   NUL and reject any non-whitespace characters after the newline with
+   an invalid input error (-EINVAL).
+[12/16]
+ - Group parser error position fixes targeting commit 80765597bc58 into
+   a single patch: pass 'next - str' in predicate_parse(), pass
+   'pos + field_pos' for FIELD_NOT_FOUND and IP_FIELD_ONLY, pass
+   'pos + op_pos' for string/numeric operator validation and NOP checks,
+   and update tracing-error-log.tc to match the corrected error position.
+[13/16]
+ - Newly added patch to fix error position for function filter
+   operations targeting commit e6745a4da964, passing 'pos + fn_pos' for
+   ILLEGAL_FIELD_OP and 'pos + op_pos' for INVALID_OP.
+[14/16]
+ - Group error position fixes for CPUS mask parsing targeting commits
+   39f7c41c908b and 3cbec9d7b93d into a single patch: check 'str[i] != '{''
+   before incrementing 'i', and pass 'pos + op_pos' for CPUS operator and
+   comparison function selection checks.
+[15/16]
+ - Newly added patch to fix error position for within filter operator
+   check targeting commit 7884b0bf098c, passing 'pos + op_pos' for
+   GLOB_WITHIN.
+[16/16]
+ - Replace negated pipelines (! cmd) with explicit
+   "if cmd; then exit_fail; fi" checks to properly catch unexpected success
+   under POSIX sh with set -e, as pointed out by Sashiko.
+ - Update expected error caret positions to reflect corrected 0-based
+   indexing from predicate_parse(), FIELD_NOT_FOUND, operator checks,
+   and CPUS brace checks.
+ - Add test cases for empty strings, out-of-range CPU IDs, missing operands,
+   empty operands, type mismatches, brace errors, function event filters
+   (including INVALID_OP and ILLEGAL_FIELD_OP caret checks), and multi-line
+   newline validation.
 
-  call	7
-  if w0 == 0 goto .L136
-  r9 = arena ll;r3 = 0;r3 = addr_space_cast(r3, 0, 1);
-  .L136:
-  r0 = 0
-  exit
+Summary of the patches:
 
-`reg = 1ULL << 32' and `reg += 1' are both gone.  The tests need one
-instruction reached with r3 live as a scalar on one path and as an
-arena pointer on the other; what is left gives the verifier no reason
-to reject anything, so the __failure expectation would not hold.  A
-local register variable is not guaranteed to survive a helper call
-either, which GCC is also entitled to act on.
+- [01/16] Fix regex_match_end() for zero-length strings by returning 0
+  immediately when "len <= r->len".
+- [02/16] Introduce regex_match_end_str() with strnlen() for fixed-size
+  string fields (FILTER_COMM, FILTER_STATIC_STRING) in parse_pred().
+- [03/16] Fix process_system_preds() so that "fail" is only cleared when
+  at least one event in the subsystem succeeds, and use
+  delay_free_filter() when freeing replaced filters on error paths.
+- [04/16] Return "pred->op == OP_NE" when "cpu >= nr_cpu_ids" in
+  DEFINE_CPUMASK_COMPARISON_PRED so "!=" against a cpumask evaluates to
+  true for out-of-range CPU numbers.
+- [05/16] Ensure parse_error() is called on all -EINVAL error paths in
+  parse_pred(), predicate_parse(), and process_preds() instead of
+  leaving lasterr as 0 ("Error: (0)").
+- [06/16] Check if str[i] is NUL immediately after operator whitespace
+  in parse_pred() to prevent out-of-bounds reads on missing operands.
+- [07/16] Fix quoted operand parsing in function event filters, check for
+  missing quotes, and advance past closing quotes.
+- [08/16] Reject empty unquoted operands in function event filters.
+- [09/16] Reject stray quotes and '(' in unquoted function event operands.
+- [10/16] Reject unsupported field sizes in parse_pred() when
+  select_comparison_fn() or CPUS{} size matching leaves pred->fn_num as
+  FILTER_PRED_FN_NOP, avoiding a kernel warning in update_pred_fn().
+- [11/16] Convert the first newline to NUL and reject multi-line input
+  containing non-whitespace characters after the newline in
+  create_filter_start(), apply_event_filter(), and
+  apply_subsystem_event_filter().
+- [12/16] Fix parser error positions for base filter expressions
+  (predicate_parse(), FIELD_NOT_FOUND, IP_FIELD_ONLY, string/numeric
+  operators), and update tracing-error-log.tc.
+- [13/16] Pass 'pos + fn_pos' for ILLEGAL_FIELD_OP and 'pos + op_pos' for
+  INVALID_OP in function filter operations in parse_pred().
+- [14/16] Pass 'pos + op_pos' for CPUS operator checks and check
+  'str[i] != '{'' before incrementing 'i' for MISSING_BRACE_OPEN.
+- [15/16] Pass 'pos + op_pos' for GLOB_WITHIN when '~' is used with a
+  'within' filter.
+- [16/16] Add filter-syntax-check.tc to ftrace selftests to test valid
+  filters, syntax error diagnostics and caret positions, multi-line
+  input validation, and subsystem filter error returns.
 
-Nothing here needs a compiler to allocate registers, so write the
-whole body in asm like mixed_arena_stack_atomic below, which tests the
-same shape.  Both compilers then emit the same sequence, with the
-branch landing on the shared ALU op:
+Notes:
 
-  call 7
-  r6=r0
-  r3=1
-  r3<<=32
-  if w6==0 goto 4          <- lands on r3+=1
-  r9=0 ll
-  r3=0
-  r3 = addr_space_cast(r3, 0, 1)
-  r3+=1                    <- scalar on one path, arena pointer on the other
-  r0=0
-  exit
+- These bugs were identified and the fixes and cover letter were
+prepared with the assistance of an LLM coding assistant.
 
-Take __load_if_JITed() from the sibling while here.  A program binding
-an arena map is rejected in check_map_prog_compatibility() with "JIT is
-required to use arena" during map resolution, before do_check() can
-reach the shared instruction, so without a JIT these would fail on the
-wrong message rather than skip.
+Thank you,
 
-Not exercised by a stock bpf-gcc, which compiles both tests out with the
-rest of the arena block; the build failure above needs a compiler that
-has arena support.  Under clang the rewrite is not a no-op either: the
-pre-image spilled r3 to the stack and did the shared ALU op on r1
-reloaded from it, so the test was not exercising one register live as
-both a scalar and an arena pointer.
-
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- .../selftests/bpf/progs/verifier_arena.c      | 85 ++++++++++---------
- 1 file changed, 45 insertions(+), 40 deletions(-)
+base-commit: 1fdc4164e488916402badddbb1f51e9380dabb91
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index 21b66d51c61e..b84d8f1e0b39 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -539,53 +539,58 @@ int arena_ptr_add_arena_ptr(void *ctx)
- 	return 0;
- }
- 
-+/*
-+ * The r9 load is never read; it is there so libbpf records the arena map
-+ * as used, which is what lets the verifier accept addr_space_cast at all.
-+ */
- SEC("syscall")
- __failure __msg("same insn cannot be used with and without arena pointer")
--int mixed_arena_scalar_alu64_scalar_first(void *ctx)
--{
--	volatile register __u64 reg asm("r3");
--	__u32 pick_arena = bpf_get_prandom_u32();
--
--	reg = 1ULL << 32;
--
--	if (pick_arena) {
--		asm volatile (
--			"r9 = %[arena] ll;"
--			"%[reg] = 0;"
--			"%[reg] = addr_space_cast(%[reg], 0x0, 0x1);"
--			: [reg] "=r"(reg)
--			: __imm_addr(arena)
--			: "r9"
--		);
--	}
--
--	reg += 1;
--
--	return 0;
-+__load_if_JITed()
-+__naked void mixed_arena_scalar_alu64_scalar_first(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 = r0;					\
-+	r3 = 1;						\
-+	r3 <<= 32;					\
-+	if w6 == 0 goto 1f;				\
-+	r9 = %[arena] ll;				\
-+	r3 = 0;						\
-+	r3 = addr_space_cast(r3, 0, 1);			\
-+1:	r3 += 1;					\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_addr(arena),
-+	  __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
- }
- 
-+/*
-+ * The r9 load is never read; it is there so libbpf records the arena map
-+ * as used, which is what lets the verifier accept addr_space_cast at all.
-+ */
- SEC("syscall")
- __failure __msg("same insn cannot be used with and without arena pointer")
--int mixed_arena_scalar_alu64_arena_first(void *ctx)
-+__load_if_JITed()
-+__naked void mixed_arena_scalar_alu64_arena_first(void)
- {
--	volatile register __u64 reg asm("r3");
--	__u32 pick_scalar = bpf_get_prandom_u32();
--
--	asm volatile (
--		"r9 = %[arena] ll;"
--		"%[reg] = 0;"
--		"%[reg] = addr_space_cast(%[reg], 0x0, 0x1);"
--		: [reg] "=r"(reg)
--		: __imm_addr(arena)
--		: "r9"
--	);
--
--	if (pick_scalar)
--		reg = 1ULL << 32;
--
--	reg += 1;
--
--	return 0;
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 = r0;					\
-+	r9 = %[arena] ll;				\
-+	r3 = 0;						\
-+	r3 = addr_space_cast(r3, 0, 1);			\
-+	if w6 == 0 goto 1f;				\
-+	r3 = 1;						\
-+	r3 <<= 32;					\
-+1:	r3 += 1;					\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_addr(arena),
-+	  __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
- }
- 
- SEC("syscall")
--- 
-2.53.0-Meta
+Masami Hiramatsu (Google) (16):
+      tracing/filters: Fix regex_match_end() for zero-length strings
+      tracing/filters: Fix MATCH_END_ONLY regex matching for fixed-size strings
+      tracing/filters: Fix false success return in process_system_preds()
+      tracing/filters: Handle out-of-range CPU for OP_NE in cpumask comparison
+      tracing/filters: Report parse error on all -EINVAL paths in filter parsing
+      tracing/filters: Check for missing operand after operator in parse_pred()
+      tracing/filters: Fix quoted operand parsing in function event filter
+      tracing/filters: Reject empty unquoted operand in function event filter
+      tracing/filters: Reject stray quotes and parentheses in unquoted function event operand
+      tracing/filters: Reject unsupported field sizes in parse_pred()
+      tracing/filters: Check for trailing characters after newline in filter string
+      tracing/filters: Fix error positions in filter parser
+      tracing/filters: Fix error position for function filter operations
+      tracing/filters: Fix error positions for CPUS mask parsing
+      tracing/filters: Fix error position for within filter operator check
+      selftests/ftrace: Add event filter syntax check test case
 
+
+ kernel/trace/trace_events_filter.c                 |  171 ++++++++++++++++----
+ .../ftrace/test.d/filter/filter-syntax-check.tc    |  100 ++++++++++++
+ .../ftrace/test.d/ftrace/tracing-error-log.tc      |    2 
+ 3 files changed, 240 insertions(+), 33 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/filter/filter-syntax-check.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
