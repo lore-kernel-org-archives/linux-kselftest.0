@@ -1,67 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793206587;
-	b=BpqZU/4wYdPwc4EyVcRhAqFyPxJLhwJ4GpmYyVi3Q6mneOShPVMF6TXM1f/f79wQNH91
-	 DNGBeXSh0acUMX8mm5Nlff0A4ahtwMnQ2sM2HaU3Z+zzLa6lex4CahmeBFyqNU9R4fjUw
-	 TF/yYjfn+bi6s41Dwvcsozg0WcFNnWKAFLW6l/MtXDtUSLFwf+RDsHXLFg1Y2vKmLo9av
-	 hN7BqmKyo8I/fmWfZlAvgbzzKQ+0fHZTTMrudtw7i1wrhfozvhawfjyA7NW+eR3xI3DY8
-	 WrhcuaBXsAe6mTqSCah3ZOaFdSbcLt+DGQlrIZXUiyyH6H4PjqufEuZkEJhzSvE7xeA==
+	t=1793206590;
+	b=kD2QCCs4rYXzA+Gfqvjf5WarCaY7nUXJ0k8wYBuByHOcN+SrGJGvMDMrfYXkZ3QrER1K
+	 J7f05B1CkwbIrta3uQsBl9hPGnxbi+nPK7ZvNoBIRf8QBvgVKlvZM+b00qo0ACwdNCEHg
+	 aC9L8mpRjmgtLOxXlgfJOMq66SebF7zrB9J+sLjUR7Zq3ft78gn5+4Qfy/eamuhVcLGw0
+	 1oMUDYDloxIqgHTU9F8KV67yYYaNAZ59rkPZyL1gGv+T3+4LumTlERgGa1wHh2Gjcff86
+	 W5A28ypwBhwsopo6LACGV6rZnxCC4NquE9RaaIUEafCpTaYWqVXLrqiG1ENTab16g/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793206587;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793206590;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
 	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:
-	 X-Proofpoint-Reinject:X-QCInternal:X-QCInternal:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=6cCKb4ZsTJCW0Lg7g7NHqCcpsh5jdyrAoURakZpskAU=;
-	b=J9anIOjrRpixlFIAAT5Zxd9L2pyRkD0dXDUZtNgUKFcMqZwmFnVBeuzsPg4jVMZo0C4G
-	 acWL3VVLkb22CMH3jt4w/vKAAVboBvMGYj6C/7yjEdQM1k28kTXofguLWQTdeKeIUNJvF
-	 OdTHvHiYFQhEd6we1tf3gjwhjX5OP6o8NjDAaefE09NvMVSuW0CK8mX5fDjpTQoBb7Seo
-	 l6pDP/xJs+4Wh65apfBLh7qizcMbvih3PzeuRQaOb4Uxsd/IeJE2gErEzg3TTetb1TP2e
-	 VQXP2crjetmPugf7Pgg5VVpz1Qp9Ct3D3439N4klSz7Hz1EHiSdKaMbZpQWZJevcIAA==
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Proofpoint-Reinject:X-QCInternal:X-QCInternal:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=zA6nw+JqPwJxbmOPnnuxrOtX5OYayEUmF0ewUL3WHI4=;
+	b=Ig7rUJ0FRb+yRbHCkG+2umUXXV52xyXU7LxvKgPmpcL/wBdp/+Vjzash7RCg07jjRmvJ
+	 WrN5OWqwGgxW2RO9+noLGjqZ6Yx6SXUTw144ogs2YHp7zQ92GYt+qVfRFkyb3BFvamqhY
+	 OYPAy0ITrwqm+4UwSa+7LbnZOtC5xYJkI5DBAP5iPo2WGQHvOcaKCWEBwDPJqZ8RQljMe
+	 zKfQukxN1h+DdWHCsMnTgDyjYxwbJht5KIke7OhzHQEKr49hZuyKPJ2L9/UurwqJgayhg
+	 yob65OsogNyPnDqbHz4SiyiZvoWd4kLASOPPWR3AGKSi6+6+qBhWTe2r+OLZbRcc7RA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Ip5ZYmN4;
-	arc=none smtp.remote-ip=205.220.180.131
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=AhMWa9Bw;
+	arc=none smtp.remote-ip=205.220.168.131
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5EE606A320;
-	Wed, 28 Oct 2026 16:56:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A5EE606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EB0606A33B;
+	Wed, 28 Oct 2026 16:56:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73EB0606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Ip5ZYmN4
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69SFAXa81153223;
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=AhMWa9Bw
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69SFB53G1517828;
 	Wed, 28 Oct 2026 16:55:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=6cCKb4ZsTJC
-	W0Lg7g7NHqCcpsh5jdyrAoURakZpskAU=; b=Ip5ZYmN4I4H+kZxTZoMjpho5PMq
-	FT0Wwz+pPGXiR8BURzNQGlswWSykGIjDTfBTURN9k69iUEEfZUwhFNF0JDq5CCPF
-	Q0ixe2nKrUNfXDGt1EGafNs61i7Aiq+r/RedGDedsFr35c3pQW/J8utb2UoVCuIw
-	djg28G69m5aDO9pMyI1okMK1I2DCUWxVsH3YSLbNRGiHV9dNHsVNGkJc8EoG2zVx
-	nooKHGQPwSGCF2lL8tWMc0PIIRhrdw2ECQkcgS1og1YUNf82xHjtdSLYMwJ+e/iH
-	ZgM3sgCfmNw+vrtJMA8dvYZjZWKViTmEnBllZgjU/gMpy2Q/rJix6JSCMEA==
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	zA6nw+JqPwJxbmOPnnuxrOtX5OYayEUmF0ewUL3WHI4=; b=AhMWa9Bw8plaOSBg
+	xsMHQHhiUQhpXeXBxWHmHfgJw/lDvrBsEPbnrCtKJ7uQC4Q8ZEnVI/yE4yFU9u/G
+	mzjoXJGIYV/yjD+SdNw0wulVa3x5S2Bz4lxb3GDa/ysuVPU4fwBvCk36Ht9OsT/8
+	oDGIYK79KMMwtexU0zrDREHXVqOZ6+6pvasoJRVW3NYLnKoRwKa1rev28UnYNdUj
+	SsDn/UHm7VLyUhFWbjxmBTWec1hmpP5O9Sgu/yoL9h5A6dIFInNz/Bu69Bskjlp1
+	66hzXgx279Ia8vicSSErC2pJIpUe0f+oHHkVqy4cjZUwuFAnq4ltqCTKHRCmfVBZ
+	AtZ6pw==
 Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hk6be3knq-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hkbhwahbs-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
 	Wed, 28 Oct 2026 16:55:38 +0000 (GMT)
 Received: from pps.filterd (apblrppmta01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.18.1.11/8.18.1.11) with ESMTP id 69SGtZnM1881587;
+	by APBLRPPMTA01.qualcomm.com (8.18.1.11/8.18.1.11) with ESMTP id 69SGtZgP1881588;
 	Wed, 28 Oct 2026 16:55:35 GMT
 Received: from hu-devc-blr-u24-a.qualcomm.com (hu-anuppate-blr.qualcomm.com [10.131.36.165])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 69SGtZSf1881553
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 69SGtZVu1881555
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
 	Wed, 28 Oct 2026 16:55:35 +0000 (GMT)
 Received: by hu-devc-blr-u24-a.qualcomm.com (Postfix, from userid 486687)
-	id 48D3E252E7; Wed, 28 Oct 2026 22:25:33 +0530 (+0530)
+	id 4027824B6E; Wed, 28 Oct 2026 22:25:33 +0530 (+0530)
 From: Anup Patel <anup.patel@oss.qualcomm.com>
 To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
         Alexandre Ghiti <alex@ghiti.fr>,
@@ -81,10 +82,11 @@ Cc: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>,
         Thomas Gleixner <tglx@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v11 9/9] selftests/riscv: add perf user-stack SSE copy regression test
-Date: Wed, 28 Oct 2026 22:25:31 +0530
-Message-ID: <20261028165531.940336-10-anup.patel@oss.qualcomm.com>
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
+Subject: [PATCH v11 7/9] perf: RISC-V: add support for SSE event
+Date: Wed, 28 Oct 2026 22:25:29 +0530
+Message-ID: <20261028165531.940336-8-anup.patel@oss.qualcomm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261028165531.940336-1-anup.patel@oss.qualcomm.com>
 References: <20261028165531.940336-1-anup.patel@oss.qualcomm.com>
@@ -97,660 +99,1157 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Reinject: loops=2 maxloops=12
 X-QCInternal: smtphost
 X-QCInternal: smtphost
-X-Proofpoint-ORIG-GUID: uMSK7xpzRf240bAXNzjWx1fWxr9aXi8l
-X-Authority-Analysis: v=2.4 cv=HeuB3SE8 c=1 sm=1 tr=0 ts=6ae2290a cx=c_pps
+X-Proofpoint-GUID: riLTzE193iweZDac19HsZR3z7vntmJRL
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI4MDA2NyBTYWx0ZWRfX4JBZ0eU9OP8u
+ GP8n2OpVWa0t4gZ/cBQgAc501RYlsJAAvDzYM034No+D6iiLKBqDAoRLHIuqMrwKCVorwCuXX/F
+ DYc4a61YsJsosWY3iuAEJKKIWvBrZCw=
+X-Authority-Analysis: v=2.4 cv=V+joQuni c=1 sm=1 tr=0 ts=6ae2290a cx=c_pps
  a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
- a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=ZpdpYltYx_vBUK5n70dp:22 a=968KyxNXAAAA:8 a=nrnoi1aWnlDsiPABkzsA:9
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI4MDA2NyBTYWx0ZWRfXx6aI4OjZ5RVc
- C73Lph5VG5Gnw0OQSk2B+7yU5IjoPLo+D1vop+ENSzfp5DfsGDq1o/Mui6LzgwhZOevjmAjWhkE
- 0tUm+u0KIxHoOT0vTNpV92gIuj99elE=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI4MDA2NyBTYWx0ZWRfX7o0Uc03l1Ssp
- yfQe19frwP6RadOmaRK208acrHwNFcOexYKw4ak/1+FhguoIqZWLVFc7GA9AmUYHCvl1Hqjz11a
- KL+p3od4lUtEZFGcOSBCu3BFdChrF2hobjRYGieTDr1dXxZAcfpPY2QVNruPr0z/w4QrCKYoGx/
- guTV3cFsNP2L7ZFDICfvgvM1Nv/sdqSRsdxDz0ZaR+7wf1uj4GF4R/ln6MDkTsUy4qg4lXco3b5
- dRN+5u/VsTl/XXRGxw1BruDNVs/qZGNO9l55IthJKMJYHa0LKs8zJR59uV7mT0W1sxS2X4sXmeH
- JEsM5vgST7LWx3N0ZQlRLTHwQo7hlyDyElajEgNXkzmDJy8DG1hRmOTtTE1m5V9zq6sXXmx2Czz
- TRgvzLFowbuKDmuAXpvyW1HrVBAQhd5zam5y9UJM4zKJuZI+CieJNyjvoWfkC0GxAip7v77C8wB
- BOHdCbwyYVl3aaz37PQ==
-X-Proofpoint-GUID: uMSK7xpzRf240bAXNzjWx1fWxr9aXi8l
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22 a=h0uksLzaAAAA:8
+ a=EUspDBNiAAAA:8 a=968KyxNXAAAA:8 a=W-_n0kkjAAAA:8 a=JfrnYn6hAAAA:8
+ a=aAYUhIEaQGsTeNzxvKUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=MSi_79tMYmZZG2gvAgS0:22 a=qeNa2pbTr82C0GpJEZFS:22 a=1CNFftbPRP8L7MoqJWF3:22
+X-Proofpoint-ORIG-GUID: riLTzE193iweZDac19HsZR3z7vntmJRL
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI4MDA2NyBTYWx0ZWRfX7cY42C22UFFH
+ NvQlnePriqoaikWi6MbNaFvNZGDTpHinT7FLcqL/v4na3WYKOpQX44RiI/QfD/5RiwRqAZAnigg
+ V3nuA/wLmuc4lUJTgrkBW8T4jCunRm03GTPesxqeoZ6Ayo68F+1xH1CCsLb1IcTWEGIYCymSDSe
+ 2hgEVRYbKf35ijYg64867pzZU9PPf4V7BWPMl3XO7TwmXZq0z2yYvkupjtJACApG/4ahkvwyvDG
+ kS5sIyELZUy6ffT/kzMT1Xwf50YVv4yLjbg7/HUer4+i5m3/2guefeaSqvL7S4GWaGTXvWOMKUB
+ I1/bu0oLpQmA4BQuhxzAQ7kHV1we7ETmVZn5thwYhW/FMpCBjpgGSQeWFe2/tj/HsrPNTOItGth
+ /MlI+SN16k4kbDlVVA6+jFy6Ft0imGctiq1vk8dZObVTFOyE2Kxl3weQmt0j11E3V1Q3ru8OVeM
+ GhBktxDFv3W3iEpFM7A==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-10-28_05,2026-10-21_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 adultscore=0 phishscore=0 impostorscore=0 bulkscore=0
- lowpriorityscore=0 spamscore=0 clxscore=1015 priorityscore=1501
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
- definitions=main-2610280067
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 spamscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610280067
 
-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+From: Clément Léger <cleger@rivosinc.com>
 
-On RISC-V, PMU overflow interrupts can be delivered through the SBI
-Supervisor Software Events (SSE) mechanism. A perf event that samples
-the raw user stack (PERF_SAMPLE_STACK_USER, as perf record
---call-graph dwarf does) then copies a chunk of the interrupted task's
-user stack from an NMI-like context. If that copy is allowed to take a
-nested page fault it can corrupt the interrupted task's kernel state and
-hang or crash the machine under load; this is what
-riscv_perf_out_copy_user() and the nofault page-fault change fix.
+Register a handler for the local PMU overflow SSE event so that RISC-V
+perf can receive overflows even when normal S-mode interrupts are masked.
+Reuse the existing overflow handler and pass it the interrupted pt_regs
+rebuilt by the architecture SSE entry path.
 
-The existing SSE selftest module exercises the framework (register,
-enable, inject, complete, priorities, stress) but never drives the perf
-user-stack copy that motivated the no-fault path. Add a userspace test
-that closes that gap:
+Select the delivery mechanism once during PMU probe. Prefer SSE when its
+event can be registered and enabled. If the extension or PMU event is
+explicitly unsupported, use the ordinary PMU interrupt. Do not enable the
+interrupt after any other SSE setup failure or when a crash kernel may
+have inherited firmware state. Install the PMU enable and disable
+callbacks only after SSE delivery becomes active.
 
-  - Open a sampling hardware PMU event with PERF_SAMPLE_STACK_USER over a
-    deep, partially non-resident user stack, drain the ring buffer, and
-    verify every SAMPLE record is well formed and never reports more
-    dumped bytes than were requested. This checks that a non-resident
-    page truncates the dump cleanly instead of faulting or overrunning.
-  - Drive a multi-CPU unix-socket + deep-recursion workload under
-    high-frequency DWARF sampling; the pass criterion is simply that the
-    machine survives, since the original bug took it down.
+Keep the local PMU SSE event disabled across CPU power management. On
+entry, the generic SSE notifier masks the hart before the lower-priority
+PMU notifier disables the event and stops the counters. On exit, the SSE
+notifier first unmasks the hart while the event remains disabled. The PMU
+notifier then restores counters and event userpage state before enabling
+the event. An unmask failure stops the notifier chain and leaves the
+counters stopped. Ordinary PMU interrupts retain their existing notifier
+ordering.
 
-The test reports SKIP when hardware PMU sampling is unavailable or
-perf_event_paranoid forbids it, so it is safe to run unprivileged or in
-constrained environments. It is placed under the RISC-V SSE selftests
-because SSE delivery is the RISC-V-specific condition it protects, and
-is wired into the sse subtarget Makefile alongside the module runner.
+An SSE overflow can arrive as soon as the event is enabled during probe.
+Publish the counter mask before SSE setup, so an early handler can stop
+the counter source even before perf starts admitting normal samples.
+After a real overflow, restart only counters whose perf state is still
+running. Honor a non-zero return from perf_event_overflow() and leave
+throttled events stopped.
 
+Guest attribution is not part of this version. Detect an interrupted guest
+from hstatus.SPV and skip its sample while still updating the period and
+counter state, rather than exposing guest state as a host sample.
+
+The perf PMU callbacks cannot return errors. If an SSE transition or
+interrupted-context read fails, latch the failure per CPU and stop its
+mapped events through the normal perf state transitions. Do not reset the
+firmware counter mapping behind perf, restart a failed event, or attempt a
+runtime switch to IRQ delivery.
+
+During cleanup, close callback admission and synchronously drain each CPU
+before disabling and unregistering the SSE event. If firmware refuses the
+cleanup, stop the counter source and transfer the event to the SSE core so
+later CPU hotplug or shutdown processing can retry without using freed PMU
+callback state.
+
+Signed-off-by: Clément Léger <cleger@rivosinc.com>
+Co-developed-by: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
+Signed-off-by: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
+Co-developed-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 ---
- tools/testing/selftests/riscv/sse/Makefile    |   5 +
- .../selftests/riscv/sse/sse_perf_ustack.c     | 564 ++++++++++++++++++
- 2 files changed, 569 insertions(+)
- create mode 100644 tools/testing/selftests/riscv/sse/sse_perf_ustack.c
+ Documentation/arch/riscv/index.rst     |   1 +
+ Documentation/arch/riscv/pmu-sse.rst   |  55 +++
+ MAINTAINERS                            |   1 +
+ drivers/firmware/riscv/riscv_sbi_sse.c |   9 +
+ drivers/perf/Kconfig                   |  11 +
+ drivers/perf/riscv_pmu.c               |  14 +-
+ drivers/perf/riscv_pmu_sbi.c           | 536 +++++++++++++++++++++----
+ include/linux/perf/riscv_pmu.h         |  20 +-
+ include/linux/riscv_sbi_sse.h          |   6 +
+ 9 files changed, 562 insertions(+), 91 deletions(-)
+ create mode 100644 Documentation/arch/riscv/pmu-sse.rst
 
-diff --git a/tools/testing/selftests/riscv/sse/Makefile b/tools/testing/selftests/riscv/sse/Makefile
-index 7e2677fdce09..646b418de9ff 100644
---- a/tools/testing/selftests/riscv/sse/Makefile
-+++ b/tools/testing/selftests/riscv/sse/Makefile
-@@ -1,5 +1,10 @@
-+CFLAGS += -I$(top_srcdir)/tools/testing/selftests
-+LDLIBS += -lpthread
-+
- TEST_GEN_MODS_DIR := module
- 
-+TEST_GEN_PROGS := sse_perf_ustack
-+
- TEST_PROGS := run_sse_test.sh
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/riscv/sse/sse_perf_ustack.c b/tools/testing/selftests/riscv/sse/sse_perf_ustack.c
+diff --git a/Documentation/arch/riscv/index.rst b/Documentation/arch/riscv/index.rst
+index ac535c52d509..5cb909c83a88 100644
+--- a/Documentation/arch/riscv/index.rst
++++ b/Documentation/arch/riscv/index.rst
+@@ -11,6 +11,7 @@ RISC-V architecture
+     vm-layout
+     hwprobe
+     patch-acceptance
++    pmu-sse
+     uabi
+     vector
+     cmodx
+diff --git a/Documentation/arch/riscv/pmu-sse.rst b/Documentation/arch/riscv/pmu-sse.rst
 new file mode 100644
-index 000000000000..9535b6d7ba4c
+index 000000000000..b7458a9d0116
 --- /dev/null
-+++ b/tools/testing/selftests/riscv/sse/sse_perf_ustack.c
-@@ -0,0 +1,564 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Regression test for the RISC-V perf user-stack copy taken in SSE
-+ * (NMI-like) context.
-+ *
-+ * On RISC-V, PMU overflow interrupts can be delivered through the SBI
-+ * Supervisor Software Events (SSE) mechanism. A perf event that samples the
-+ * raw user stack (PERF_SAMPLE_STACK_USER, as perf record --call-graph dwarf
-+ * does) then copies a large chunk of the interrupted task's user stack from
-+ * that context. If that copy is allowed to take a nested page fault it can
-+ * corrupt the interrupted task's kernel state and hang or crash the machine
-+ * under load.
-+ *
-+ * This test exercises that exact path:
-+ *   - It opens a sampling hardware PMU event with PERF_SAMPLE_STACK_USER.
-+ *   - It samples a child running on a controlled user stack followed by an
-+ *     inaccessible page, so the copy must truncate at that page boundary.
-+ *   - It checks that every user-stack sample record is well formed and that
-+ *     the dumped size never exceeds the requested size (i.e. the copy stops
-+ *     cleanly rather than faulting on).
-+ *   - It then drives a multi-threaded unix-socket + deep-recursion workload
-+ *     under high-frequency per-CPU sampling and requires every active sampler
-+ *     to make progress without taking the machine down.
-+ *
-+ * The test is architecture independent in what it drives; it is placed under
-+ * the RISC-V SSE selftests because SSE delivery is the RISC-V-specific
-+ * condition it is meant to protect.
-+ */
-+#define _GNU_SOURCE
++++ b/Documentation/arch/riscv/pmu-sse.rst
+@@ -0,0 +1,55 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+#include <errno.h>
-+#include <poll.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <time.h>
-+#include <unistd.h>
++========================================
++RISC-V PMU overflow delivery through SSE
++========================================
 +
-+#include <linux/perf_event.h>
-+#include <pthread.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <sys/socket.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
++When ``CONFIG_RISCV_PMU_SBI_SSE`` is enabled and firmware provides the local
++PMU overflow event, the RISC-V SBI PMU driver uses Supervisor Software Events
++(SSE) to deliver counter overflows.
 +
-+#include "../../kselftest.h"
++Delivery selection
++==================
 +
-+#ifndef noinline
-+#define noinline __attribute__((noinline))
++The delivery mechanism is selected once while the PMU device is probed.  The
++driver first tries to register and enable the local PMU overflow SSE event.  It
++tries the ordinary PMU interrupt only when the SSE extension or the local PMU
++event is explicitly unsupported.  It does not change the delivery mechanism
++after the PMU has been registered.
++
++Other SSE setup errors do not prove that firmware released the overflow route,
++so the driver does not enable the ordinary PMU interrupt.  The PMU remains
++available for counting but not sampling.  If setup retained an SSE event, the
++PMU keeps quiescing that event around perf scheduling changes without rearming
++it.  This preserves callback ownership without creating two possible delivery
++mechanisms for the same hardware overflow.
++
++Interrupted context
++===================
++
++SSE enters Linux through a supervisor handler context constructed by firmware.
++The entry contract preserves the interrupted GPRs except ``a6`` and ``a7``,
++which Linux reads from the interrupted-register event attributes.  Linux then
++reconstructs the interrupted ``pt_regs`` and publishes it while dispatching the
++event.
++
++Perf uses that context for register samples and callchains.  Kernel stack
++walking verifies that the interrupted frame belongs to the current task stack
++before dereferencing it.  For sensitive entry paths and IRQ stacks, Linux
++records the interrupted PC without walking a stack whose bounds cannot be
++proved.  User callchains use the existing no-fault user unwinder.  A DWARF
++raw user-stack copy from an SSE handler must not take a page fault, so it
++walks the current task's page tables with fast-only GUP, copies each resident
++page through its kernel mapping, and stops at the first non-resident page,
++preserving perf's truncated-user-stack semantics.
++
++CPU power management
++====================
++
++The PMU and SSE CPU power-management callbacks are ordered according to the
++selected delivery mechanism.  With SSE delivery, SSE events are masked before
++the lower-priority PMU callback disables the local PMU event and stops the
++counters on entry.  On exit, the hart is unmasked while the local PMU event is
++still disabled.  The PMU callback then restores the counters and enables the
++event, so an unmask failure leaves the counters stopped.  The ordinary
++interrupt path retains the existing PMU ordering.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1eb51b04dc42..ac7b17a811ed 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -23580,6 +23580,7 @@ M:	Atish Patra <atish.patra@linux.dev>
+ R:	Anup Patel <anup@brainfault.org>
+ L:	linux-riscv@lists.infradead.org
+ S:	Supported
++F:	Documentation/arch/riscv/pmu-sse.rst
+ F:	drivers/perf/riscv_pmu.c
+ F:	drivers/perf/riscv_pmu_legacy.c
+ F:	drivers/perf/riscv_pmu_sbi.c
+diff --git a/drivers/firmware/riscv/riscv_sbi_sse.c b/drivers/firmware/riscv/riscv_sbi_sse.c
+index e81cfb4b0c56..c7d2a2def00a 100644
+--- a/drivers/firmware/riscv/riscv_sbi_sse.c
++++ b/drivers/firmware/riscv/riscv_sbi_sse.c
+@@ -161,6 +161,15 @@ static int sse_sbi_event_func(struct sse_event *event, unsigned long func)
+ 	return 0;
+ }
+ 
++bool sse_event_is_enabled_local(struct sse_event *event)
++{
++	if (!sse_event_is_global(event->evt_id))
++		lockdep_assert_preemption_disabled();
++
++	return sse_get_reg_evt(event)->is_enabled;
++}
++EXPORT_SYMBOL_GPL(sse_event_is_enabled_local);
++
+ int sse_event_disable_local(struct sse_event *event)
+ {
+ 	if (!sse_event_is_global(event->evt_id))
+diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
+index 245e7bb763b9..10b047856121 100644
+--- a/drivers/perf/Kconfig
++++ b/drivers/perf/Kconfig
+@@ -105,6 +105,17 @@ config RISCV_PMU_SBI
+ 	  full perf feature support i.e. counter overflow, privilege mode
+ 	  filtering, counter configuration.
+ 
++config RISCV_PMU_SBI_SSE
++	depends on RISCV_PMU_SBI && RISCV_SBI_SSE
++	bool "RISC-V PMU SSE events"
++	default n
++	help
++	  Say y if you want to use SSE events to deliver PMU interrupts. This
++	  provides a way to profile the kernel at any level by using NMI-like
++	  SSE events. SSE events being really intrusive, this option allows
++	  to select it only if needed. See Documentation/arch/riscv/pmu-sse.rst
++	  for interrupted-context limitations.
++
+ config STARFIVE_STARLINK_PMU
+ 	depends on ARCH_STARFIVE || COMPILE_TEST
+ 	depends on 64BIT
+diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
+index 8e3cd0f35336..1f65c640b693 100644
+--- a/drivers/perf/riscv_pmu.c
++++ b/drivers/perf/riscv_pmu.c
+@@ -13,6 +13,7 @@
+ #include <linux/irqdesc.h>
+ #include <linux/perf/riscv_pmu.h>
+ #include <linux/printk.h>
++#include <linux/riscv_sbi_sse.h>
+ #include <linux/smp.h>
+ #include <linux/sched_clock.h>
+ 
+@@ -247,6 +248,11 @@ void riscv_pmu_start(struct perf_event *event, int flags)
+ 	if (flags & PERF_EF_RELOAD)
+ 		WARN_ON_ONCE(!(event->hw.state & PERF_HES_UPTODATE));
+ 
++#ifdef CONFIG_RISCV_PMU_SBI_SSE
++	if (unlikely(this_cpu_ptr(rvpmu->hw_events)->sse_failed))
++		return;
 +#endif
 +
-+#define STACK_DUMP_SIZE		8192		/* 8 KiB, 8-byte aligned */
-+#define RB_DATA_PAGES		64		/* power of two */
-+#define SELF_SAMPLE_FREQ	4000
-+#define STRESS_SAMPLE_FREQ	5000
-+#define STRESS_SECONDS		5
-+#define RECURSE_DEPTH		512
-+#define TRUNCATION_RUN_MS	250
-+
-+static long page_size;
-+
-+static int perf_event_open(struct perf_event_attr *attr, pid_t pid, int cpu,
-+			   int group_fd, unsigned long flags)
+ 	hwc->state = 0;
+ 	riscv_pmu_event_set_period(event);
+ 	init_val = local64_read(&hwc->prev_count) & max_period;
+@@ -306,6 +312,7 @@ static int riscv_pmu_event_init(struct perf_event *event)
+ 	struct hw_perf_event *hwc = &event->hw;
+ 	struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
+ 	int mapped_event;
++	int ret;
+ 	u64 event_config = 0;
+ 	uint64_t cmask;
+ 
+@@ -331,8 +338,11 @@ static int riscv_pmu_event_init(struct perf_event *event)
+ 	hwc->idx = -1;
+ 	hwc->event_base = mapped_event;
+ 
+-	if (rvpmu->event_init)
+-		rvpmu->event_init(event);
++	if (rvpmu->event_init) {
++		ret = rvpmu->event_init(event);
++		if (ret)
++			return ret;
++	}
+ 
+ 	if (!is_sampling_event(event)) {
+ 		/*
+diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+index 21a2078eab98..5c797d8bfeb7 100644
+--- a/drivers/perf/riscv_pmu_sbi.c
++++ b/drivers/perf/riscv_pmu_sbi.c
+@@ -17,12 +17,15 @@
+ #include <linux/of_irq.h>
+ #include <linux/of.h>
+ #include <linux/cpu_pm.h>
++#include <linux/crash_dump.h>
++#include <linux/riscv_sbi_sse.h>
+ #include <linux/sched/clock.h>
+ #include <linux/soc/andes/irq.h>
+ #include <linux/workqueue.h>
+ 
+ #include <asm/errata_list.h>
+ #include <asm/sbi.h>
++#include <asm/sse.h>
+ #include <asm/cpufeature.h>
+ #include <asm/vendor_extensions.h>
+ #include <asm/vendor_extensions/andes.h>
+@@ -927,7 +930,7 @@ static int pmu_sbi_get_ctrinfo(int nctr, unsigned long *mask)
+ 	return 0;
+ }
+ 
+-static inline void pmu_sbi_stop_all(struct riscv_pmu *pmu)
++static void pmu_sbi_stop_all_mask(unsigned long *cmask)
+ {
+ 	int i;
+ 
+@@ -936,14 +939,19 @@ static inline void pmu_sbi_stop_all(struct riscv_pmu *pmu)
+ 	 * which may include counters that are not enabled yet.
+ 	 */
+ 	for (i = 0; i < BITS_TO_LONGS(RISCV_MAX_COUNTERS); i++) {
+-		if (!pmu->cmask[i])
++		if (!cmask[i])
+ 			continue;
+ 		sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_STOP,
+-			  i * BITS_PER_LONG, pmu->cmask[i],
++			  i * BITS_PER_LONG, cmask[i],
+ 			  SBI_PMU_STOP_FLAG_RESET);
+ 	}
+ }
+ 
++static void pmu_sbi_stop_all(struct riscv_pmu *pmu)
 +{
-+	return syscall(__NR_perf_event_open, attr, pid, cpu, group_fd, flags);
++	pmu_sbi_stop_all_mask(pmu->cmask);
 +}
 +
-+/* Prevent the compiler from optimizing away a stack buffer. */
-+static void keep_alive(void *p)
+ static inline void pmu_sbi_stop_hw_ctrs(struct riscv_pmu *pmu)
+ {
+ 	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
+@@ -1000,7 +1008,19 @@ static inline void pmu_sbi_start_ovf_ctrs_sbi(struct cpu_hw_events *cpu_hw_evt,
+ 	u64 init_val = 0;
+ 
+ 	for (i = 0; i < BITS_TO_LONGS(RISCV_MAX_COUNTERS); i++) {
+-		ctr_start_mask = cpu_hw_evt->used_hw_ctrs[i] & ~ctr_ovf_mask;
++		unsigned long ctr_ovf_mask_word;
++		int lidx;
++
++		ctr_ovf_mask_word = ctr_ovf_mask >> (i * BITS_PER_LONG);
++		ctr_start_mask = 0;
++		for_each_set_bit(idx, &cpu_hw_evt->used_hw_ctrs[i], BITS_PER_LONG) {
++			lidx = idx + i * BITS_PER_LONG;
++			event = cpu_hw_evt->events[lidx];
++			if (event && !(event->hw.state & PERF_HES_STOPPED))
++				ctr_start_mask |= BIT(idx);
++		}
++		ctr_start_mask &= ~ctr_ovf_mask_word;
++
+ 		/* Start all the counters that did not overflow in a single shot */
+ 		if (ctr_start_mask) {
+ 			sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, i * BITS_PER_LONG,
+@@ -1009,23 +1029,25 @@ static inline void pmu_sbi_start_ovf_ctrs_sbi(struct cpu_hw_events *cpu_hw_evt,
+ 	}
+ 
+ 	/* Reinitialize and start all the counter that overflowed */
+-	while (ctr_ovf_mask) {
+-		if (ctr_ovf_mask & 0x01) {
+-			event = cpu_hw_evt->events[idx];
+-			hwc = &event->hw;
+-			max_period = riscv_pmu_ctr_get_width_mask(event);
+-			init_val = local64_read(&hwc->prev_count) & max_period;
++	for (idx = 0; idx < RISCV_MAX_COUNTERS; idx++) {
++		if (!(ctr_ovf_mask & BIT_ULL(idx)))
++			continue;
++
++		event = cpu_hw_evt->events[idx];
++		if (!event || event->hw.state & PERF_HES_STOPPED)
++			continue;
++
++		hwc = &event->hw;
++		max_period = riscv_pmu_ctr_get_width_mask(event);
++		init_val = local64_read(&hwc->prev_count) & max_period;
+ #if defined(CONFIG_32BIT)
+-			sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, idx,
+-				  1, flag, init_val, init_val >> 32);
++		sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, idx,
++			  1, flag, init_val, init_val >> 32);
+ #else
+-			sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, idx,
+-				  1, flag, init_val);
++		sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, idx,
++			  1, flag, init_val);
+ #endif
+-			perf_event_update_userpage(event);
+-		}
+-		ctr_ovf_mask = ctr_ovf_mask >> 1;
+-		idx++;
++		perf_event_update_userpage(event);
+ 	}
+ }
+ 
+@@ -1054,32 +1076,111 @@ static inline void pmu_sbi_start_ovf_ctrs_snapshot(struct cpu_hw_events *cpu_hw_
+ 	}
+ 
+ 	for (i = 0; i < BITS_TO_LONGS(RISCV_MAX_COUNTERS); i++) {
++		unsigned long ctr_start_mask = 0;
++		int lidx;
++
+ 		/* Restore the counter values to relative indices for used hw counters */
+-		for_each_set_bit(idx, &cpu_hw_evt->used_hw_ctrs[i], BITS_PER_LONG)
+-			sdata->ctr_values[idx] =
+-					cpu_hw_evt->snapshot_cval_shcopy[idx + i * BITS_PER_LONG];
++		for_each_set_bit(idx, &cpu_hw_evt->used_hw_ctrs[i], BITS_PER_LONG) {
++			lidx = idx + i * BITS_PER_LONG;
++			event = cpu_hw_evt->events[lidx];
++			if (event && !(event->hw.state & PERF_HES_STOPPED))
++				ctr_start_mask |= BIT(idx);
++
++			sdata->ctr_values[idx] = cpu_hw_evt->snapshot_cval_shcopy[lidx];
++		}
++
+ 		/* Start all the counters in a single shot */
+-		sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START,
+-			  idx * BITS_PER_LONG,
+-			  cpu_hw_evt->used_hw_ctrs[i], flag);
++		if (ctr_start_mask)
++			sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START,
++				  i * BITS_PER_LONG, ctr_start_mask, flag);
+ 	}
+ }
+ 
++static bool pmu_sbi_sse_failed(struct cpu_hw_events *cpu_hw_evt)
 +{
-+	__asm__ __volatile__("" : : "r"(p) : "memory");
++#ifdef CONFIG_RISCV_PMU_SBI_SSE
++	return READ_ONCE(cpu_hw_evt->sse_failed);
++#else
++	return false;
++#endif
 +}
 +
+ static void pmu_sbi_start_overflow_mask(struct riscv_pmu *pmu,
+ 					u64 ctr_ovf_mask)
+ {
+ 	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
+ 
++	if (unlikely(pmu_sbi_sse_failed(cpu_hw_evt)))
++		return;
++
+ 	if (sbi_pmu_snapshot_available())
+ 		pmu_sbi_start_ovf_ctrs_snapshot(cpu_hw_evt, ctr_ovf_mask);
+ 	else
+ 		pmu_sbi_start_ovf_ctrs_sbi(cpu_hw_evt, ctr_ovf_mask);
+ }
+ 
+-static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
++#ifdef CONFIG_RISCV_PMU_SBI_SSE
 +/*
-+ * Consume a deep user stack and keep it live, so a raw user-stack sample has
-+ * many pages to copy. Returns a value derived from the stack so the compiler
-+ * cannot elide the frames.
++ * A local SSE delivery failure makes the current PMU state unsafe to resume.
++ * Latch the failure before stopping mapped events so the SSE transition and
++ * overflow restart paths cannot undo the fail-safe while they are quiesced.
 + */
-+static noinline unsigned long burn_stack(int depth, unsigned long *sink)
++static void pmu_sbi_fail_sse(struct riscv_pmu *pmu, const char *op, int ret)
 +{
-+	unsigned long frame[32];
-+	unsigned int i;
++	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
++	struct perf_event *event;
++	int idx;
 +
-+	for (i = 0; i < ARRAY_SIZE(frame); i++)
-+		frame[i] = (unsigned long)depth * i + *sink;
++	if (READ_ONCE(cpu_hw_evt->sse_failed))
++		return;
 +
-+	if (depth > 0)
-+		frame[depth & 31] += burn_stack(depth - 1, sink);
++	WRITE_ONCE(cpu_hw_evt->sse_failed, true);
++	pr_err_ratelimited("failed to %s local PMU SSE event: %d; stopping counters\n",
++			   op, ret);
 +
-+	for (i = 0; i < ARRAY_SIZE(frame); i++)
-+		*sink += frame[i];
-+
-+	keep_alive(frame);
-+	return *sink;
-+}
-+
-+static struct perf_event_attr sampling_attr(unsigned long freq)
-+{
-+	struct perf_event_attr attr = {
-+		.type		= PERF_TYPE_HARDWARE,
-+		.size		= sizeof(attr),
-+		.config		= PERF_COUNT_HW_INSTRUCTIONS,
-+		.sample_type	= PERF_SAMPLE_STACK_USER,
-+		.sample_stack_user = STACK_DUMP_SIZE,
-+		.freq		= 1,
-+		.sample_freq	= freq,
-+		.disabled	= 1,
-+		.exclude_kernel	= 1,
-+		.exclude_hv	= 1,
-+	};
-+
-+	return attr;
-+}
-+
-+static bool open_skip_reason(int err, const char **why)
-+{
-+	switch (err) {
-+	case EACCES:
-+	case EPERM:
-+		*why = "insufficient privilege for PMU sampling (perf_event_paranoid)";
-+		return true;
-+	case ENOENT:
-+	case ENODEV:
-+	case EOPNOTSUPP:
-+		*why = "hardware PMU sampling event not available";
-+		return true;
-+	default:
-+		return false;
++	for (idx = 0; idx < RISCV_MAX_COUNTERS; idx++) {
++		event = cpu_hw_evt->events[idx];
++		if (event)
++			riscv_pmu_stop(event, PERF_EF_UPDATE);
 +	}
 +}
 +
-+static bool pmu_sse_route_testable(const char **why)
++static void pmu_sbi_sse_disable(struct pmu *pmu)
 +{
-+	char *line = NULL;
-+	size_t line_size = 0;
-+	FILE *interrupts;
-+	bool testable = true;
++	struct riscv_pmu *rvpmu = to_riscv_pmu(pmu);
++	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(rvpmu->hw_events);
++	int ret;
 +
-+	interrupts = fopen("/proc/interrupts", "re");
-+	if (!interrupts) {
-+		*why = "cannot inspect the active PMU delivery route";
-+		return false;
++	if (!READ_ONCE(rvpmu->sse_active) ||
++	    READ_ONCE(cpu_hw_evt->sse_failed))
++		return;
++
++	ret = sse_event_disable_local(rvpmu->sse_evt);
++	if (unlikely(ret))
++		pmu_sbi_fail_sse(rvpmu, "disable", ret);
++}
++
++static void pmu_sbi_sse_enable(struct pmu *pmu)
++{
++	struct riscv_pmu *rvpmu = to_riscv_pmu(pmu);
++	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(rvpmu->hw_events);
++	int ret;
++
++	if (!READ_ONCE(rvpmu->sse_active) ||
++	    READ_ONCE(cpu_hw_evt->sse_failed))
++		return;
++
++	ret = sse_event_enable_local(rvpmu->sse_evt);
++	if (unlikely(ret))
++		pmu_sbi_fail_sse(rvpmu, "enable", ret);
++}
++#endif
++
++static irqreturn_t pmu_sbi_ovf_handler(struct cpu_hw_events *cpu_hw_evt,
++				       struct pt_regs *regs, bool from_sse,
++				       bool from_guest)
+ {
+ 	struct perf_sample_data data;
+-	struct pt_regs *regs;
+ 	struct hw_perf_event *hw_evt;
+ 	union sbi_pmu_ctr_info *info;
+ 	int lidx, hidx, fidx;
+@@ -1087,7 +1188,6 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
+ 	struct perf_event *event;
+ 	u64 overflow;
+ 	u64 overflowed_ctrs = 0;
+-	struct cpu_hw_events *cpu_hw_evt = dev;
+ 	u64 start_clock = sched_clock();
+ 	struct riscv_pmu_snapshot_data *sdata;
+ 
+@@ -1096,21 +1196,32 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
+ 
+ 	sdata = cpu_hw_evt->snapshot_addr;
+ 
+-	/* Firmware counter don't support overflow yet */
++	/*
++	 * SSE can arrive before perf installs an event. The early exits below
++	 * must stop the PMU source before firmware completes the SSE.
++	 */
+ 	fidx = find_first_bit(cpu_hw_evt->used_hw_ctrs, RISCV_MAX_COUNTERS);
+ 	if (fidx == RISCV_MAX_COUNTERS) {
+-		csr_clear(CSR_SIP, BIT(riscv_pmu_irq_num));
++		if (from_sse)
++			pmu_sbi_stop_all_mask(cmask);
++		else
++			csr_clear(CSR_SIP, BIT(riscv_pmu_irq_num));
+ 		return IRQ_NONE;
+ 	}
+ 
+ 	event = cpu_hw_evt->events[fidx];
+ 	if (!event) {
+-		ALT_SBI_PMU_OVF_CLEAR_PENDING(riscv_pmu_irq_mask);
++		if (from_sse)
++			pmu_sbi_stop_all_mask(cmask);
++		else
++			ALT_SBI_PMU_OVF_CLEAR_PENDING(riscv_pmu_irq_mask);
+ 		return IRQ_NONE;
+ 	}
+ 
+ 	pmu = to_riscv_pmu(event->pmu);
+ 	pmu_sbi_stop_hw_ctrs(pmu);
++	if (unlikely(pmu_sbi_sse_failed(cpu_hw_evt)))
++		return IRQ_NONE;
+ 
+ 	/* Overflow status register should only be read after counter are stopped */
+ 	if (sbi_pmu_snapshot_available())
+@@ -1120,15 +1231,17 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
+ 
+ 	/*
+ 	 * Overflow interrupt pending bit should only be cleared after stopping
+-	 * all the counters to avoid any race condition.
++	 * all the counters to avoid any race condition. When using SSE,
++	 * interrupt is cleared when stopping counters.
+ 	 */
+-	ALT_SBI_PMU_OVF_CLEAR_PENDING(riscv_pmu_irq_mask);
++	if (!from_sse)
++		ALT_SBI_PMU_OVF_CLEAR_PENDING(riscv_pmu_irq_mask);
+ 
+ 	/* No overflow bit is set */
+-	if (!overflow)
++	if (!overflow) {
++		pmu_sbi_start_overflow_mask(pmu, 0);
+ 		return IRQ_NONE;
+-
+-	regs = get_irq_regs();
++	}
+ 
+ 	for_each_set_bit(lidx, cpu_hw_evt->used_hw_ctrs, RISCV_MAX_COUNTERS) {
+ 		struct perf_event *event = cpu_hw_evt->events[lidx];
+@@ -1153,6 +1266,12 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
+ 		if (!(overflow & BIT_ULL(hidx)))
+ 			continue;
+ 
++#ifdef CONFIG_CPU_PM
++		/* Do not let CPU-PM resume override this overflow decision. */
++		if (from_sse)
++			clear_bit(lidx, cpu_hw_evt->pm_resume_hw_ctrs);
++#endif
++
+ 		/*
+ 		 * Keep a track of overflowed counters so that they can be started
+ 		 * with updated initial value.
+@@ -1165,6 +1284,14 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
+ 		hw_evt->state |= PERF_HES_UPTODATE;
+ 		perf_sample_data_init(&data, 0, hw_evt->last_period);
+ 		if (riscv_pmu_event_set_period(event)) {
++			int overflow_ret;
++
++			/* Guest attribution and guest stack sampling are not supported yet. */
++			if (from_guest) {
++				hw_evt->state = 0;
++				continue;
++			}
++
+ 			/*
+ 			 * Unlike other ISAs, RISC-V don't have to disable interrupts
+ 			 * to avoid throttling here. As per the specification, the
+@@ -1173,10 +1300,12 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
+ 			 * TODO: We will need to stop the guest counters once
+ 			 * virtualization support is added.
+ 			 */
+-			perf_event_overflow(event, &data, regs);
++			overflow_ret = perf_event_overflow(event, &data, regs);
++			if (!overflow_ret)
++				hw_evt->state = 0;
++		} else {
++			hw_evt->state = 0;
+ 		}
+-		/* Reset the state as we are going to start the counter after the loop */
+-		hw_evt->state = 0;
+ 	}
+ 
+ 	pmu_sbi_start_overflow_mask(pmu, overflowed_ctrs);
+@@ -1185,116 +1314,282 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
++static irqreturn_t pmu_sbi_ovf_irq_handler(int irq, void *dev)
+ {
+-	struct riscv_pmu *pmu = hlist_entry_safe(node, struct riscv_pmu, node);
+-	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
+-
+-	/*
+-	 * We keep enabling userspace access to CYCLE, TIME and INSTRET via the
+-	 * legacy option but that will be removed in the future.
+-	 */
+-	if (sysctl_perf_user_access == SYSCTL_LEGACY)
+-		csr_write(CSR_SCOUNTEREN, 0x7);
+-	else
+-		csr_write(CSR_SCOUNTEREN, 0x2);
++	return pmu_sbi_ovf_handler(dev, get_irq_regs(), false, false);
++}
+ 
+-	/* Stop all the counters so that they can be enabled from perf */
+-	pmu_sbi_stop_all(pmu);
++#ifdef CONFIG_RISCV_PMU_SBI_SSE
++static int pmu_sbi_ovf_sse_handler(u32 evt, void *arg, struct pt_regs *regs)
++{
++	const struct riscv_sse_interrupted_context *context;
++	struct riscv_pmu *pmu = arg;
++	struct cpu_hw_events *hw_event = raw_cpu_ptr(pmu->hw_events);
++	bool from_guest;
++
++	if (unlikely(!READ_ONCE(pmu->sse_active))) {
++		pmu_sbi_stop_all(pmu);
++		return -EIO;
++	}
+ 
+-	if (riscv_pmu_use_irq) {
+-		cpu_hw_evt->irq = riscv_pmu_irq;
+-		ALT_SBI_PMU_OVF_CLEAR_PENDING(riscv_pmu_irq_mask);
+-		enable_percpu_irq(riscv_pmu_irq, IRQ_TYPE_NONE);
++	if (unlikely(!regs)) {
++		pmu_sbi_fail_sse(pmu, "read interrupted context for", -EIO);
++		return -EIO;
+ 	}
+ 
+-	if (sbi_pmu_snapshot_available())
+-		return pmu_sbi_snapshot_setup(pmu, cpu);
++	context = riscv_sse_get_interrupted_context();
++	from_guest = context && context->regs == regs &&
++		     (context->hstatus & HSTATUS_SPV);
++	pmu_sbi_ovf_handler(hw_event, regs, true, from_guest);
+ 
+ 	return 0;
+ }
+ 
+-static int pmu_sbi_dying_cpu(unsigned int cpu, struct hlist_node *node)
++static int pmu_sbi_setup_sse(struct riscv_pmu *pmu)
+ {
+-	if (riscv_pmu_use_irq) {
+-		disable_percpu_irq(riscv_pmu_irq);
++	int ret;
++	struct sse_event *evt;
++
++	evt = sse_event_register(SBI_SSE_EVENT_LOCAL_PMU_OVERFLOW, 0,
++				 pmu_sbi_ovf_sse_handler, pmu);
++	if (IS_ERR(evt))
++		return PTR_ERR(evt);
++	pmu->sse_evt = evt;
++
++	ret = sse_event_enable(evt);
++	if (ret) {
++		int cleanup_ret;
++
++		cleanup_ret = sse_event_disable(evt);
++		if (cleanup_ret) {
++			pr_warn("failed to disable SSE event after setup error: %d\n",
++				cleanup_ret);
++			return cleanup_ret;
++		}
++
++		cleanup_ret = sse_event_unregister(evt);
++
++		if (cleanup_ret) {
++			pr_warn("failed to unregister SSE event: %d\n",
++				cleanup_ret);
++		} else {
++			pmu->sse_evt = NULL;
++		}
++		return cleanup_ret ?: ret;
+ 	}
+ 
+-	/* Disable all counters access for user mode now */
+-	csr_write(CSR_SCOUNTEREN, 0x0);
++	WRITE_ONCE(pmu->sse_active, true);
++	pr_info("using SSE for PMU event delivery\n");
+ 
+-	if (sbi_pmu_snapshot_available())
+-		return pmu_sbi_snapshot_disable();
++	return ret;
++}
+ 
+-	return 0;
++static void pmu_sbi_stop_all_cpu(void *info)
++{
++	pmu_sbi_stop_all(info);
+ }
+ 
+-static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pdev)
++static void pmu_sbi_cleanup_sse(struct riscv_pmu *pmu)
+ {
++	struct sse_event *sse_evt;
+ 	int ret;
+-	struct cpu_hw_events __percpu *hw_events = pmu->hw_events;
+-	struct irq_domain *domain = NULL;
+ 
++	sse_evt = pmu->sse_evt;
++	if (!sse_evt)
++		return;
++
++	/*
++	 * Close callback admission before draining each CPU. PMU callbacks run
++	 * with local interrupts disabled, so the synchronous IPI cannot complete
++	 * until a callback that observed the old state has returned.
++	 */
++	WRITE_ONCE(pmu->sse_active, false);
++	on_each_cpu(pmu_sbi_stop_all_cpu, pmu, 1);
++
++	ret = sse_event_disable(sse_evt);
++	if (ret) {
++		pr_warn("failed to disable SSE event: %d\n", ret);
++		goto retain;
 +	}
 +
-+	/* The SBI PMU driver registers this name only for ordinary IRQ delivery. */
-+	while (getline(&line, &line_size, interrupts) >= 0) {
-+		if (strstr(line, "riscv-pmu")) {
-+			*why = "ordinary RISC-V PMU IRQ delivery is active";
-+			testable = false;
++	ret = sse_event_unregister(sse_evt);
++	if (ret) {
++		pr_warn("failed to unregister SSE event: %d\n", ret);
++		goto retain;
++	}
++
++	pmu->sse_evt = NULL;
++	return;
++
++retain:
++	sse_event_cleanup(sse_evt);
++	pmu->sse_evt = NULL;
++}
++
++static bool pmu_sbi_sse_state_retained(struct riscv_pmu *pmu)
++{
++	return pmu->sse_evt;
++}
++#else
++static int pmu_sbi_setup_sse(struct riscv_pmu *pmu)
++{
++	return -EOPNOTSUPP;
++}
++
++static void pmu_sbi_cleanup_sse(struct riscv_pmu *pmu) {}
++
++static bool pmu_sbi_sse_state_retained(struct riscv_pmu *pmu)
++{
++	return false;
++}
++#endif
++
++static bool pmu_sbi_select_irq(void)
++{
+ 	if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
+ 		riscv_pmu_irq_num = RV_IRQ_PMU;
+-		riscv_pmu_use_irq = true;
++		return true;
+ 	} else if (IS_ENABLED(CONFIG_ERRATA_THEAD_PMU) &&
+ 		   riscv_cached_mvendorid(0) == THEAD_VENDOR_ID &&
+ 		   riscv_cached_marchid(0) == 0 &&
+ 		   riscv_cached_mimpid(0) == 0) {
+ 		riscv_pmu_irq_num = THEAD_C9XX_RV_IRQ_PMU;
+-		riscv_pmu_use_irq = true;
++		return true;
+ 	} else if (riscv_has_vendor_extension_unlikely(ANDES_VENDOR_ID,
+ 						       RISCV_ISA_VENDOR_EXT_XANDESPMU) &&
+ 		   IS_ENABLED(CONFIG_ANDES_CUSTOM_PMU)) {
+ 		riscv_pmu_irq_num = ANDES_SLI_CAUSE_BASE + ANDES_RV_IRQ_PMOVI;
+-		riscv_pmu_use_irq = true;
++		return true;
+ 	}
+ 
+-	riscv_pmu_irq_mask = BIT(riscv_pmu_irq_num % BITS_PER_LONG);
++	return false;
++}
++
++static int pmu_sbi_setup_irq(struct riscv_pmu *pmu)
++{
++	struct cpu_hw_events __percpu *hw_events = pmu->hw_events;
++	struct irq_domain *domain;
++	int ret;
+ 
+-	if (!riscv_pmu_use_irq)
++	if (!pmu_sbi_select_irq())
+ 		return -EOPNOTSUPP;
+ 
++	riscv_pmu_irq_mask = BIT(riscv_pmu_irq_num % BITS_PER_LONG);
++
+ 	domain = irq_find_matching_fwnode(riscv_get_intc_hwnode(),
+ 					  DOMAIN_BUS_ANY);
+ 	if (!domain) {
+ 		pr_err("Failed to find INTC IRQ root domain\n");
+-		ret = -ENODEV;
+-		goto err;
++		return -ENODEV;
+ 	}
+ 
+ 	riscv_pmu_irq = irq_create_mapping(domain, riscv_pmu_irq_num);
+ 	if (!riscv_pmu_irq) {
+ 		pr_err("Failed to map PMU interrupt for node\n");
+-		ret = -ENODEV;
+-		goto err;
++		return -ENODEV;
+ 	}
+ 
+-	ret = request_percpu_irq(riscv_pmu_irq, pmu_sbi_ovf_handler, "riscv-pmu", hw_events);
++	ret = request_percpu_irq(riscv_pmu_irq, pmu_sbi_ovf_irq_handler,
++				 "riscv-pmu", hw_events);
+ 	if (ret) {
+ 		pr_err("registering percpu irq failed [%d]\n", ret);
+ 		irq_dispose_mapping(riscv_pmu_irq);
+ 		riscv_pmu_irq = 0;
+-		goto err;
++		return ret;
+ 	}
+ 
+ 	return 0;
+-err:
+-	riscv_pmu_use_irq = false;
+-	return ret;
++}
++
++static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
++{
++	struct riscv_pmu *pmu = hlist_entry_safe(node, struct riscv_pmu, node);
++	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
++
++	/*
++	 * We keep enabling userspace access to CYCLE, TIME and INSTRET via the
++	 * legacy option but that will be removed in the future.
++	 */
++	if (sysctl_perf_user_access == SYSCTL_LEGACY)
++		csr_write(CSR_SCOUNTEREN, 0x7);
++	else
++		csr_write(CSR_SCOUNTEREN, 0x2);
++
++	/* Stop all the counters so that they can be enabled from perf */
++	pmu_sbi_stop_all(pmu);
++
++	if (riscv_pmu_use_irq) {
++		cpu_hw_evt->irq = riscv_pmu_irq;
++		ALT_SBI_PMU_OVF_CLEAR_PENDING(riscv_pmu_irq_mask);
++		enable_percpu_irq(riscv_pmu_irq, IRQ_TYPE_NONE);
++	}
++
++	if (sbi_pmu_snapshot_available())
++		return pmu_sbi_snapshot_setup(pmu, cpu);
++
++	return 0;
++}
++
++static int pmu_sbi_dying_cpu(unsigned int cpu, struct hlist_node *node)
++{
++	if (riscv_pmu_use_irq)
++		disable_percpu_irq(riscv_pmu_irq);
++
++	/* Disable all counters access for user mode now */
++	csr_write(CSR_SCOUNTEREN, 0x0);
++
++	if (sbi_pmu_snapshot_available())
++		return pmu_sbi_snapshot_disable();
++
++	return 0;
++}
++
++static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pdev)
++{
++	int irq_ret;
++	int sse_ret;
++
++	/* Do not claim an IRQ route while a crash kernel leaves SSE state intact. */
++	if (is_kdump_kernel() && riscv_sse_available()) {
++		pr_warn("PMU delivery unavailable with retained crash-kernel SSE state\n");
++		return -EUCLEAN;
++	}
++
++	sse_ret = pmu_sbi_setup_sse(pmu);
++	if (!sse_ret) {
++		riscv_pmu_use_irq = false;
++		return 0;
++	}
++	if (pmu_sbi_sse_state_retained(pmu)) {
++		pr_err("PMU-SSE setup failed with firmware state retained: %d\n",
++		       sse_ret);
++		return -EUCLEAN;
++	}
++	/* Only an explicitly unsupported SSE path proves IRQ fallback is safe. */
++	if (sse_ret != -EOPNOTSUPP) {
++		pr_err("PMU-SSE setup failed: %d\n", sse_ret);
++		return sse_ret;
++	}
++
++	irq_ret = pmu_sbi_setup_irq(pmu);
++	if (!irq_ret) {
++		riscv_pmu_use_irq = true;
++		return 0;
++	}
++	return irq_ret;
+ }
+ 
+ #ifdef CONFIG_CPU_PM
+-static int riscv_pm_pmu_notify(struct notifier_block *b, unsigned long cmd,
+-				void *v)
++static int riscv_pm_pmu_update(struct riscv_pmu *rvpmu, unsigned long cmd)
+ {
+-	struct riscv_pmu *rvpmu = container_of(b, struct riscv_pmu, riscv_pm_nb);
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(rvpmu->hw_events);
+ 	bool enabled = !bitmap_empty(cpuc->used_hw_ctrs, RISCV_MAX_COUNTERS);
+ 	struct perf_event *event;
+ 	int idx;
+ 
++	if (cmd == CPU_PM_ENTER)
++		bitmap_zero(cpuc->pm_resume_hw_ctrs, RISCV_MAX_COUNTERS);
++
+ 	if (!enabled)
+ 		return NOTIFY_OK;
+ 
+@@ -1305,6 +1600,8 @@ static int riscv_pm_pmu_notify(struct notifier_block *b, unsigned long cmd,
+ 
+ 		switch (cmd) {
+ 		case CPU_PM_ENTER:
++			if (!(event->hw.state & PERF_HES_STOPPED))
++				set_bit(idx, cpuc->pm_resume_hw_ctrs);
+ 			/*
+ 			 * Stop and update the counter
+ 			 */
+@@ -1312,6 +1609,8 @@ static int riscv_pm_pmu_notify(struct notifier_block *b, unsigned long cmd,
+ 			break;
+ 		case CPU_PM_EXIT:
+ 		case CPU_PM_ENTER_FAILED:
++			if (!test_and_clear_bit(idx, cpuc->pm_resume_hw_ctrs))
++				break;
+ 			/*
+ 			 * Restore and enable the counter.
+ 			 */
+@@ -1325,9 +1624,59 @@ static int riscv_pm_pmu_notify(struct notifier_block *b, unsigned long cmd,
+ 	return NOTIFY_OK;
+ }
+ 
++static int riscv_pm_pmu_notify(struct notifier_block *b,
++			       unsigned long cmd, void *v)
++{
++	struct riscv_pmu *rvpmu = container_of(b, struct riscv_pmu,
++						 riscv_pm_nb);
++
++#ifdef CONFIG_RISCV_PMU_SBI_SSE
++	struct cpu_hw_events *cpuc = this_cpu_ptr(rvpmu->hw_events);
++	int ret;
++
++	if (!riscv_pmu_use_irq && READ_ONCE(rvpmu->sse_active)) {
++		switch (cmd) {
++		case CPU_PM_ENTER:
++			cpuc->pm_resume_sse =
++				sse_event_is_enabled_local(rvpmu->sse_evt);
++			if (cpuc->pm_resume_sse) {
++				ret = sse_event_disable_local(rvpmu->sse_evt);
++				if (ret) {
++					cpuc->pm_resume_sse = false;
++					pmu_sbi_fail_sse(rvpmu, "disable for CPU PM",
++							 ret);
++					return notifier_from_errno(ret);
++				}
++			}
++			break;
++		case CPU_PM_EXIT:
++		case CPU_PM_ENTER_FAILED:
++			ret = riscv_pm_pmu_update(rvpmu, cmd);
++			if (!cpuc->pm_resume_sse)
++				return ret;
++
++			cpuc->pm_resume_sse = false;
++			ret = sse_event_enable_local(rvpmu->sse_evt);
++			if (ret) {
++				pmu_sbi_fail_sse(rvpmu, "enable after CPU PM", ret);
++				return notifier_from_errno(ret);
++			}
++			return NOTIFY_OK;
++		default:
 +			break;
 +		}
 +	}
++#endif
 +
-+	free(line);
-+	fclose(interrupts);
-+	return testable;
++	return riscv_pm_pmu_update(rvpmu, cmd);
 +}
 +
-+static bool ring_copy_from(void *dst, const void *rb, size_t rb_bytes,
-+			   uint64_t pos, size_t size)
+ static int riscv_pm_pmu_register(struct riscv_pmu *pmu)
+ {
+ 	pmu->riscv_pm_nb.notifier_call = riscv_pm_pmu_notify;
++	/* Keep PMU-SSE disabled until counters and userpage state are restored. */
++	pmu->riscv_pm_nb.priority = riscv_pmu_use_irq ? 1 : -1;
++
+ 	return cpu_pm_register_notifier(&pmu->riscv_pm_nb);
+ }
+ 
+@@ -1342,6 +1691,8 @@ static inline void riscv_pm_pmu_unregister(struct riscv_pmu *pmu) { }
+ 
+ static void riscv_pmu_destroy(struct riscv_pmu *pmu)
+ {
++	pmu_sbi_cleanup_sse(pmu);
++
+ 	if (sbi_v2_available) {
+ 		if (sbi_pmu_snapshot_available()) {
+ 			pmu_sbi_snapshot_disable();
+@@ -1353,7 +1704,7 @@ static void riscv_pmu_destroy(struct riscv_pmu *pmu)
+ 		cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
+ }
+ 
+-static void pmu_sbi_event_init(struct perf_event *event)
++static int pmu_sbi_event_init(struct perf_event *event)
+ {
+ 	/*
+ 	 * The permissions are set at event_init so that we do not depend
+@@ -1365,6 +1716,8 @@ static void pmu_sbi_event_init(struct perf_event *event)
+ 		event->hw.flags |= PERF_EVENT_FLAG_USER_ACCESS;
+ 	else
+ 		event->hw.flags |= PERF_EVENT_FLAG_LEGACY;
++
++	return 0;
+ }
+ 
+ static void pmu_sbi_event_mapped(struct perf_event *event, struct mm_struct *mm)
+@@ -1494,6 +1847,7 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
+ 	/* cache all the information about counters now */
+ 	if (pmu_sbi_get_ctrinfo(num_counters, cmask))
+ 		goto out_free;
++	bitmap_copy(pmu->cmask, cmask, RISCV_MAX_COUNTERS);
+ 
+ 	ret = pmu_sbi_setup_irqs(pmu, pdev);
+ 	if (ret < 0) {
+@@ -1503,9 +1857,15 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
+ 	}
+ 	irq_requested = (ret == 0);
+ 
++#ifdef CONFIG_RISCV_PMU_SBI_SSE
++	if (pmu->sse_active) {
++		pmu->pmu.pmu_enable = pmu_sbi_sse_enable;
++		pmu->pmu.pmu_disable = pmu_sbi_sse_disable;
++	}
++#endif
++
+ 	pmu->pmu.attr_groups = riscv_pmu_attr_groups;
+ 	pmu->pmu.parent = &pdev->dev;
+-	bitmap_copy(pmu->cmask, cmask, RISCV_MAX_COUNTERS);
+ 	pmu->ctr_start = pmu_sbi_ctr_start;
+ 	pmu->ctr_stop = pmu_sbi_ctr_stop;
+ 	pmu->event_map = pmu_sbi_event_map;
+diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
+index ecaa40370830..b06abc705100 100644
+--- a/include/linux/perf/riscv_pmu.h
++++ b/include/linux/perf/riscv_pmu.h
+@@ -28,6 +28,8 @@
+ 
+ #define RISCV_PMU_CONFIG1_GUEST_EVENTS 0x1
+ 
++struct sse_event;
++
+ struct cpu_hw_events {
+ 	/* currently enabled events */
+ 	int			n_events;
+@@ -39,6 +41,18 @@ struct cpu_hw_events {
+ 	DECLARE_BITMAP(used_hw_ctrs, RISCV_MAX_COUNTERS);
+ 	/* currently enabled firmware counters */
+ 	DECLARE_BITMAP(used_fw_ctrs, RISCV_MAX_COUNTERS);
++#ifdef CONFIG_RISCV_PMU_SBI_SSE
++	/* Keep counters stopped after an unrecoverable SSE transition failure. */
++	bool sse_failed;
++#endif
++#ifdef CONFIG_CPU_PM
++	/* Counters stopped by CPU PM and still waiting to be restored. */
++	DECLARE_BITMAP(pm_resume_hw_ctrs, RISCV_MAX_COUNTERS);
++#ifdef CONFIG_RISCV_PMU_SBI_SSE
++	/* Restore the local PMU SSE event after counters and userpage state. */
++	bool pm_resume_sse;
++#endif
++#endif
+ 	/* The virtual address of the shared memory where counter snapshot will be taken */
+ 	void *snapshot_addr;
+ 	/* The physical address of the shared memory where counter snapshot will be taken */
+@@ -54,6 +68,10 @@ struct riscv_pmu {
+ 	char		*name;
+ 
+ 	irqreturn_t	(*handle_irq)(int irq_num, void *dev);
++#ifdef CONFIG_RISCV_PMU_SBI_SSE
++	struct sse_event	*sse_evt;
++	bool			sse_active;
++#endif
+ 
+ 	DECLARE_BITMAP(cmask, RISCV_MAX_COUNTERS);
+ 	u64		(*ctr_read)(struct perf_event *event);
+@@ -63,7 +81,7 @@ struct riscv_pmu {
+ 	void		(*ctr_start)(struct perf_event *event, u64 init_val);
+ 	void		(*ctr_stop)(struct perf_event *event, unsigned long flag);
+ 	int		(*event_map)(struct perf_event *event, u64 *config);
+-	void		(*event_init)(struct perf_event *event);
++	int		(*event_init)(struct perf_event *event);
+ 	void		(*event_mapped)(struct perf_event *event, struct mm_struct *mm);
+ 	void		(*event_unmapped)(struct perf_event *event, struct mm_struct *mm);
+ 	uint8_t		(*csr_index)(struct perf_event *event);
+diff --git a/include/linux/riscv_sbi_sse.h b/include/linux/riscv_sbi_sse.h
+index 774a782e556d..f6b3881c8884 100644
+--- a/include/linux/riscv_sbi_sse.h
++++ b/include/linux/riscv_sbi_sse.h
+@@ -42,6 +42,7 @@ int sse_event_enable(struct sse_event *sse_evt);
+ int sse_event_disable(struct sse_event *sse_evt);
+ 
+ /* Local events require the caller to remain on the current CPU. */
++bool sse_event_is_enabled_local(struct sse_event *sse_evt);
+ int sse_event_enable_local(struct sse_event *sse_evt);
+ int sse_event_disable_local(struct sse_event *sse_evt);
+ 
+@@ -76,6 +77,11 @@ static inline int sse_event_disable(struct sse_event *sse_evt)
+ 	return -EOPNOTSUPP;
+ }
+ 
++static inline bool sse_event_is_enabled_local(struct sse_event *sse_evt)
 +{
-+	size_t offset = pos % rb_bytes;
-+	size_t first;
-+
-+	if (size > rb_bytes)
-+		return false;
-+
-+	first = size < rb_bytes - offset ? size : rb_bytes - offset;
-+	memcpy(dst, (const char *)rb + offset, first);
-+	if (first != size)
-+		memcpy((char *)dst + first, rb, size - first);
-+
-+	return true;
++	return false;
 +}
 +
-+static int truncation_child(void *arg)
-+{
-+	int ready_fd = (intptr_t)arg;
-+	char ready = 1;
-+
-+	if (write(ready_fd, &ready, sizeof(ready)) != 1)
-+		return 1;
-+
-+	for (;;)
-+		__asm__ __volatile__("" : : : "memory");
-+}
-+
-+static pid_t start_truncation_child(void **stack_mapping)
-+{
-+	struct pollfd pfd = { .events = POLLIN };
-+	size_t mapping_size = 2 * page_size;
-+	char ready;
-+	void *stack;
-+	pid_t pid;
-+	int pipefd[2];
-+	int saved_errno;
-+
-+	stack = mmap(NULL, mapping_size, PROT_NONE,
-+		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (stack == MAP_FAILED)
-+		return -1;
-+	if (mprotect(stack, page_size, PROT_READ | PROT_WRITE))
-+		goto err_unmap;
-+	if (pipe(pipefd))
-+		goto err_unmap;
-+
-+	/* clone() starts the child below the inaccessible second page. */
-+	pid = clone(truncation_child, (char *)stack + page_size, SIGCHLD,
-+		    (void *)(intptr_t)pipefd[1]);
-+	if (pid < 0)
-+		goto err_pipe;
-+
-+	close(pipefd[1]);
-+	pfd.fd = pipefd[0];
-+	if (poll(&pfd, 1, 1000) != 1 ||
-+	    read(pipefd[0], &ready, sizeof(ready)) != sizeof(ready)) {
-+		saved_errno = ETIMEDOUT;
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+		close(pipefd[0]);
-+		errno = saved_errno;
-+		goto err_unmap;
-+	}
-+	close(pipefd[0]);
-+
-+	*stack_mapping = stack;
-+	return pid;
-+
-+err_pipe:
-+	saved_errno = errno;
-+	close(pipefd[0]);
-+	close(pipefd[1]);
-+	errno = saved_errno;
-+err_unmap:
-+	saved_errno = errno;
-+	munmap(stack, mapping_size);
-+	errno = saved_errno;
-+	return -1;
-+}
-+
-+static void stop_truncation_child(pid_t pid, void *stack_mapping)
-+{
-+	kill(pid, SIGKILL);
-+	while (waitpid(pid, NULL, 0) < 0 && errno == EINTR)
-+		;
-+	munmap(stack_mapping, 2 * page_size);
-+}
-+
-+/*
-+ * Subtest 1: sample a child whose stack is followed by an inaccessible page.
-+ * Every record must be well formed and at least one stack copy must truncate
-+ * at the controlled page boundary rather than fault or overrun.
-+ */
-+static void test_ustack_records_wellformed(void)
-+{
-+	struct perf_event_attr attr = sampling_attr(SELF_SAMPLE_FREQ);
-+	size_t rb_bytes = (size_t)RB_DATA_PAGES * page_size;
-+	struct perf_event_mmap_page *meta;
-+	unsigned long samples = 0, truncated = 0;
-+	void *child_stack;
-+	const char *why;
-+	void *rb;
-+	pid_t child;
-+	int fd;
-+
-+	child = start_truncation_child(&child_stack);
-+	if (child < 0) {
-+		ksft_test_result_fail("ustack records: create guarded stack child: %s\n",
-+				      strerror(errno));
-+		return;
-+	}
-+
-+	fd = perf_event_open(&attr, child, -1, -1, PERF_FLAG_FD_CLOEXEC);
-+	if (fd < 0) {
-+		if (open_skip_reason(errno, &why))
-+			ksft_test_result_skip("ustack records: %s\n", why);
-+		else
-+			ksft_test_result_fail("ustack records: perf_event_open: %s\n",
-+					      strerror(errno));
-+		goto out_child;
-+	}
-+
-+	meta = mmap(NULL, page_size + rb_bytes, PROT_READ | PROT_WRITE,
-+		    MAP_SHARED, fd, 0);
-+	if (meta == MAP_FAILED) {
-+		ksft_test_result_fail("ustack records: mmap ring buffer: %s\n",
-+				      strerror(errno));
-+		close(fd);
-+		goto out_child;
-+	}
-+	rb = (char *)meta + page_size;
-+
-+	ioctl(fd, PERF_EVENT_IOC_RESET, 0);
-+	ioctl(fd, PERF_EVENT_IOC_ENABLE, 0);
-+	usleep(TRUNCATION_RUN_MS * 1000);
-+	ioctl(fd, PERF_EVENT_IOC_DISABLE, 0);
-+
-+	/* Drain the ring buffer and validate every SAMPLE record. */
-+	{
-+		uint64_t head = __atomic_load_n(&meta->data_head, __ATOMIC_ACQUIRE);
-+		uint64_t tail = meta->data_tail;
-+		bool ok = true;
-+
-+		if (head < tail || head - tail > rb_bytes)
-+			ok = false;
-+
-+		while (ok && tail < head) {
-+			struct perf_event_header hdr;
-+			uint64_t available = head - tail;
-+
-+			if (available < sizeof(hdr) ||
-+			    !ring_copy_from(&hdr, rb, rb_bytes, tail, sizeof(hdr)) ||
-+			    hdr.size < sizeof(hdr) || hdr.size > available ||
-+			    hdr.size > rb_bytes) {
-+				ok = false;
-+				break;
-+			}
-+
-+			if (hdr.type == PERF_RECORD_SAMPLE) {
-+				uint64_t dump_size, dyn_size;
-+				size_t cursor = sizeof(hdr);
-+
-+				if (sizeof(dump_size) > hdr.size - cursor ||
-+				    !ring_copy_from(&dump_size, rb, rb_bytes,
-+						    tail + cursor, sizeof(dump_size)) ||
-+				    dump_size > STACK_DUMP_SIZE) {
-+					ok = false;
-+					break;
-+				}
-+				cursor += sizeof(dump_size);
-+				samples++;
-+				if (dump_size) {
-+					/* data blob then trailing dynamic size */
-+					if (dump_size > hdr.size - cursor) {
-+						ok = false;
-+						break;
-+					}
-+					cursor += dump_size;
-+					if (sizeof(dyn_size) > hdr.size - cursor ||
-+					    !ring_copy_from(&dyn_size, rb, rb_bytes,
-+							    tail + cursor,
-+							    sizeof(dyn_size))) {
-+						ok = false;
-+						break;
-+					}
-+					if (dyn_size > dump_size) {
-+						ok = false;
-+						break;
-+					}
-+					if (dyn_size < dump_size)
-+						truncated++;
-+				}
-+			}
-+			tail += hdr.size;
-+		}
-+		__atomic_store_n(&meta->data_tail, head, __ATOMIC_RELEASE);
-+
-+		if (!ok)
-+			ksft_test_result_fail("ustack records: malformed sample record\n");
-+		else if (samples == 0)
-+			ksft_test_result_skip("ustack records: no samples collected\n");
-+		else if (truncated == 0)
-+			ksft_test_result_fail("ustack records: no guarded-stack truncation\n");
-+		else
-+			ksft_test_result_pass("ustack records: %lu samples, %lu truncated\n",
-+					      samples, truncated);
-+	}
-+
-+	munmap(meta, page_size + rb_bytes);
-+	close(fd);
-+out_child:
-+	stop_truncation_child(child, child_stack);
-+}
-+
-+/* ---- Subtest 2: multi-threaded per-CPU sampling stress ---- */
-+
-+struct stress_thread {
-+	pthread_t tid;
-+	int cpu;
-+	int *stop;
-+	int fd;
-+	void *rb;
-+	size_t rb_bytes;
-+};
-+
-+static void *stress_worker(void *arg)
-+{
-+	struct stress_thread *st = arg;
-+	unsigned long sink = 1;
-+	int sv[2];
-+	char buf[64];
-+
-+	if (socketpair(AF_UNIX, SOCK_STREAM, 0, sv) == 0) {
-+		while (!__atomic_load_n(st->stop, __ATOMIC_RELAXED)) {
-+			/* unix-socket ping-pong: takes the socket locks the
-+			 * original bug corrupted, while sampling nests.
-+			 */
-+			if (write(sv[0], buf, sizeof(buf)) > 0)
-+				(void)read(sv[1], buf, sizeof(buf));
-+			burn_stack(RECURSE_DEPTH, &sink);
-+			/* Periodically consume the ring buffer so sampling
-+			 * keeps delivering rather than filling up and stopping.
-+			 */
-+			if (st->rb) {
-+				struct perf_event_mmap_page *m = st->rb;
-+				uint64_t h = __atomic_load_n(&m->data_head,
-+							     __ATOMIC_ACQUIRE);
-+				__atomic_store_n(&m->data_tail, h,
-+						 __ATOMIC_RELEASE);
-+			}
-+		}
-+		close(sv[0]);
-+		close(sv[1]);
-+	}
-+
-+	return (void *)sink;
-+}
-+
-+static void test_sse_stress_no_crash(void)
-+{
-+	struct perf_event_attr attr = sampling_attr(STRESS_SAMPLE_FREQ);
-+	size_t rb_bytes = (size_t)RB_DATA_PAGES * page_size;
-+	struct stress_thread *threads;
-+	cpu_set_t available;
-+	long progressed = 0;
-+	int stop = 0;
-+	const char *why = NULL;
-+	long started = 0;
-+	long nproc;
-+	long slot;
-+	int cpu;
-+
-+	if (sched_getaffinity(0, sizeof(available), &available)) {
-+		ksft_test_result_fail("sse stress: sched_getaffinity: %s\n",
-+				      strerror(errno));
-+		return;
-+	}
-+	nproc = CPU_COUNT(&available);
-+	if (nproc < 1) {
-+		ksft_test_result_skip("sse stress: no available CPUs\n");
-+		return;
-+	}
-+
-+	threads = calloc(nproc, sizeof(*threads));
-+	if (!threads) {
-+		ksft_test_result_fail("sse stress: out of memory\n");
-+		return;
-+	}
-+
-+	slot = 0;
-+	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
-+		struct stress_thread *st;
-+		pthread_attr_t thread_attr;
-+		cpu_set_t set;
-+		void *map;
-+		int ret;
-+
-+		if (!CPU_ISSET(cpu, &available))
-+			continue;
-+		st = &threads[slot++];
-+
-+		st->fd = -1;
-+		st->cpu = cpu;
-+		st->stop = &stop;
-+		st->rb_bytes = rb_bytes;
-+		st->fd = perf_event_open(&attr, -1, cpu, -1,
-+					 PERF_FLAG_FD_CLOEXEC);
-+		if (st->fd < 0) {
-+			if (!started && open_skip_reason(errno, &why))
-+				break;
-+			continue;
-+		}
-+
-+		map = mmap(NULL, page_size + rb_bytes, PROT_READ | PROT_WRITE,
-+			   MAP_SHARED, st->fd, 0);
-+		if (map == MAP_FAILED) {
-+			close(st->fd);
-+			st->fd = -1;
-+			continue;
-+		}
-+		st->rb = map;
-+
-+		CPU_ZERO(&set);
-+		CPU_SET(cpu, &set);
-+		pthread_attr_init(&thread_attr);
-+		ret = pthread_attr_setaffinity_np(&thread_attr, sizeof(set), &set);
-+		if (!ret)
-+			ret = pthread_create(&st->tid, &thread_attr,
-+					     stress_worker, st);
-+		pthread_attr_destroy(&thread_attr);
-+
-+		if (ret) {
-+			munmap(st->rb, page_size + rb_bytes);
-+			close(st->fd);
-+			st->rb = NULL;
-+			st->fd = -1;
-+			continue;
-+		}
-+
-+		ioctl(st->fd, PERF_EVENT_IOC_RESET, 0);
-+		ioctl(st->fd, PERF_EVENT_IOC_ENABLE, 0);
-+		started++;
-+	}
-+
-+	if (started == 0) {
-+		free(threads);
-+		if (why)
-+			ksft_test_result_skip("sse stress: %s\n", why);
-+		else
-+			ksft_test_result_skip("sse stress: could not start any sampler\n");
-+		return;
-+	}
-+
-+	sleep(STRESS_SECONDS);
-+	__atomic_store_n(&stop, 1, __ATOMIC_RELAXED);
-+
-+	for (slot = 0; slot < nproc; slot++) {
-+		struct stress_thread *st = &threads[slot];
-+		struct perf_event_mmap_page *meta;
-+
-+		if (st->fd < 0)
-+			continue;
-+		pthread_join(st->tid, NULL);
-+		ioctl(st->fd, PERF_EVENT_IOC_DISABLE, 0);
-+		meta = st->rb;
-+		if (__atomic_load_n(&meta->data_head, __ATOMIC_ACQUIRE))
-+			progressed++;
-+		munmap(st->rb, page_size + rb_bytes);
-+		close(st->fd);
-+	}
-+
-+	free(threads);
-+	if (progressed != started)
-+		ksft_test_result_fail("sse stress: %ld/%ld samplers made progress\n",
-+				      progressed, started);
-+	else
-+		ksft_test_result_pass("sse stress: %ld samplers x %ds made progress\n",
-+				      started, STRESS_SECONDS);
-+}
-+
-+int main(void)
-+{
-+	const char *why;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+
-+	ksft_print_header();
-+	ksft_set_plan(2);
-+	if (!pmu_sse_route_testable(&why)) {
-+		ksft_test_result_skip("ustack records: %s\n", why);
-+		ksft_test_result_skip("sse stress: %s\n", why);
-+		ksft_finished();
-+	}
-+
-+	test_ustack_records_wellformed();
-+	test_sse_stress_no_crash();
-+
-+	ksft_finished();
-+}
+ static inline int sse_event_enable_local(struct sse_event *sse_evt)
+ {
+ 	return -EOPNOTSUPP;
 -- 
 2.43.0
 
