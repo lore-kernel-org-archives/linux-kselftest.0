@@ -1,147 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.29
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.100
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793169346;
-	b=WgQNwjSpJDU2n5Bdm8UbD2+djJFIBYt+PEec5/OTxcrjmJhaefzBnoyyuGmMjXUvtEEJ
-	 EhPrjfBJY2JDN5eM/40TFiPT+QaRlvatn2NK5aO6wQd+3FEbIaB56MhktZaHryHf1HmjJ
-	 LuwW3ouHOzNdBDHXrtUs0YLyZbck0FnuE3LSibUarknqMRlTECv5xLUxmo3ps5qAYyi2p
-	 cGFeCxjbna9zSisMQKiqQlndDTq18H+jbmkiylExK9Gm5s72xncOvOVrlKPbrc5gs3JZz
-	 hTK9LbodxOlmZI6TBgop85ZXmavPA0NraC1BySvgEB6TY9g5dbJ5qE2nvrk/ksQ4XaA==
+	t=1793169426;
+	b=KcNORNJO/mvJSubPFmDhWhND3mYI7j16z6il6tegKb3XhUXurymHMae/JgayI4TkBofK
+	 jsFD5mH3oZHhdxFz/ECsfzgL3qKSQjHORJkLt8pwiFRkGPR7CW4kzpB6kpqRms55oiA+M
+	 frpEynbH4vz4Or38JM934jaHQfr+rfsg6lJCP22mAN9zk+rEBJ4/YEgt53F6sRzS5fAAr
+	 wjltDDkUzZb0qrr58+1vxhs6D6g3zkxDIvYULT9gZlDOs1DiZ0p6siEm79CK1IB9UAcbZ
+	 GWEbNx4g4jX2W5RQ7Ds6rkpVydJ/p03Wm1U3tSJQT/iMrY240Gjx3VTMdp/hyNX2HtQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793169346;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=9eE1/a8yssEvbe7X1f4l/fXYrb2YdYtQP60xm7pnU4s=;
-	b=l8j1kJ56Wchkeebg4Ag8Li9VRAddmVjaHtWsu06uQ1W/WXiLeRo90agbRR1cY+cpu7/B
-	 tIYXkIHL3ArhfgCa4P8w+mDppZN2fvZ6fcWKHZmT185+hJb9Slu1HnBlsp6TZNPs15oZl
-	 3Qrkz1+QtiHW7jtiKklmt1rLFMNPWznX5f4PrRZxdlyZ1EFbktmElNf4gDwqN8c3HqEY2
-	 eYxn6xJM3tN22rPivSrdHLT1YeWf5U5RKfQh4sM8G45gWQAi0Smw2F1+e+3noZxrqDRZE
-	 PHYXNlumvusB+OVg61YHI7repvmWtsjugeyowpu8KlbJ+yA3/ouBKqCIYX2SsaAEvtQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793169426;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:X-Relaying-Domain:
+	 X-CFilter-Loop:Received:DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Received:X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:X-DetectorID-Processed:
+	 Content-Type;
+	bh=SeYlOquqDLQBH9Y16GXDkKjl3m8NYJwfUOszgy0yDfc=;
+	b=borT+3q2WSmCxuKXMkv5b0IMehBJE6tkOI74X4Btjxcqam23kjTptAhWAJgGCXseQgkv
+	 70nLnxXfUz3PPRThZeRSMJ9jbttjDZl7q5u5qrxwB1YU1vvUccLwVmTAogxYSVmGKrkaH
+	 yh5VhdBDroy0GheO9/gOrw5CK/oBrQu+zRCXEAlohnR9tDs4lcc+2hEGE9FdTCBUzlAGr
+	 0IPrXG4ZkzXozTX0gPeHc+16CGhqbKAFLP84kz42fCfPBPdmZNflHHPm7ov/UaPWU/a+d
+	 ovHwG2by3QIplzPyXYNhu0Oz+eNrihJO0rXylu0jeG8NXaQrer3vCpNfTl1ISso1ZVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="v+Eqgyg/";
-	arc=none smtp.remote-ip=95.215.58.29
-Received: from mta1.migadu.com (out-29.mta1.migadu.com [95.215.58.29])
+	dmarc=pass header.from=broadcom.com;
+	spf=fail smtp.mailfrom=broadcom.com;
+	dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=Huek2mJD;
+	arc=none smtp.remote-ip=209.85.216.100
+Received: from mail-pj1-f100.google.com (mail-pj1-f100.google.com [209.85.216.100])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1501606A333
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 06:35:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1501606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E84606A31F
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 06:37:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5E84606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=v+Eqgyg/
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=OYZNtd/UehHMy4rTfJmNcdZ8v55wgobvj59OuDZbVqk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793169343; v=1; x=1793774143;
- b=v+Eqgyg/dRbTkWyAc33yHFfouIy5qszSeU9hRCF0VOMsp3wrb/u5jvKk5s5AlcSQkoXZP5AI
- VFF64APZp9rUVVVKQrToGsGj+Fo/1On5+SHLFrpmLjPQKkJ6tvDDw83PyryHltlxBxpm60hW/Pl
- iaAVukBHyrP4diOvD/ruHfuw=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 15953ea224fc9372;
-	Wed, 28 Oct 2026 06:35:23 +0000
-X-Mizu-Trace-ID: 15953ea224fc9372
-X-Migadu-Flow: FLOW_OUT
-From: Qingfang Deng <qingfang.deng@linux.dev>
-To: Russell King <linux@armlinux.org.uk>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Linus Walleij <linusw@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Qingfang Deng <qingfang.deng@linux.dev>,
-	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ryota Sakamoto <sakamo.ryota@gmail.com>,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	Paolo Pisati <p.pisati@gmail.com>,
-	Kir Chou <note351@hotmail.com>,
-	Jan Kara <jack@suse.cz>,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-	Catalin Iacob <iacobcatalin@gmail.com>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jes Sorensen <jes@trained-monkey.org>,
-	Mingyu Wang <25181214217@stu.xidian.edu.cn>,
-	Carlos Bilbao <carlos.bilbao@kernel.org>,
-	David Christensen <drc@linux.ibm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Mete Durlu <meted@linux.ibm.com>,
-	Halil Pasic <pasic@linux.ibm.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Julian Braha <julianbraha@gmail.com>,
-	Breno Leitao <leitao@debian.org>,
-	Taegu Ha <hataegu0826@gmail.com>,
-	Norbert Szetei <norbert@doyensec.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-omap@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-ppp@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Paul Mackerras <paulus@ozlabs.org>,
-	Julius Bairaktaris <julius@bairaktaris.de>,
-	Roman Smirnov <r.smirnov@omp.ru>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Linux Verification Center <lvc-project@linuxtesting.org>
-Subject: [RFC net-next] ppp: remove BSD-Compress support
-Date: Wed, 28 Oct 2026 14:33:44 +0800
-Message-ID: <20261028063452.25812-1-qingfang.deng@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key, unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=Huek2mJD
+Received: by mail-pj1-f100.google.com with SMTP id 98e67ed59e1d1-3ac9f49b984so374141a91.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 23:37:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793169425; x=1793774225;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:dkim-signature:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SeYlOquqDLQBH9Y16GXDkKjl3m8NYJwfUOszgy0yDfc=;
+        b=de31N57UlO8hwh/H6lgVQjuF5TmHXyZkDvJ90rYQjCGt9eRLYdM6K4iX1eJUSdPjRs
+         72y04BXc13qaje3NTN4BrFR+xct+80LKsaQzQ+hYqGYI320hYdeanNpTNGQj/27vOhDy
+         WXcOPXdSRH2P+bUJi+LsnG8EmbGbQ8AFPYGDuhh7t61abm7ibEuBYfaULuaGmkJf8U6+
+         YnCUCtTdWqa+NJMZYu+56EHdccXau5wsIYxyqeB24GQGxVZyogj8MwUB2mWacCNFsBLT
+         KxP7+iB+s0nergfMJZIMIlQXft4hpcYcwGRX7tsRN91OyY2oP00tnR1s8JzU4PGUVIBH
+         r0rQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxO37AUepiI55PTuOg9azDiibzKKcOR1QBDOvzjKl9Yf46B/2huvb/LpAHqvNTHz3uv7De4IeOjNSZk7wbRy3g=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIKZwVyUB7tX7DsCC8I+BH/VsgcgNZHSG6TOelgfH4X9ySef752
+	7dtU9ZPnw1lNf+naMocFU9C6JF0bdFSaHpGnomOyi0KeJVIY154PeNcnfKNP1UGteZsFLsJFoeM
+	VZpGNbn7n6qIUQkU4JSljEg29BUvXvdQBJJ6juoWOVB4gND6k7RCAOep//5Cxj9uLue9Xp3OGzB
+	CJteJs+f+lJHuMQCu2KhMTmoqUyuq4+tgO+i/9QzRgpcQl46xbMlIpbuq66h7fhdpjBZ2HDA7g5
+	yGLkvVSxKmoBh5rdhfI5Q==
+X-Gm-Gg: AYBFou3xhPt0VImhgQMQf5i2dKFEtoQYzn86d+MW3Pc8d7R1rGzK+hVSj9Xv3tUJPGU
+	BZxXPQdH21luJjbJpfLjV0fw9MiqRKXwvVp8Rtv1tJfOzTyBh1BXSl5Cy17YWX1FZu51KVgxqWQ
+	vXlki7dZWKMkpc5xD5wQw779CrJxgXUKKjuYdHF7fXdCWxj+WbxqoTC9snucgkZBBAI4Svk1TCk
+	zNdLZ0ERZSuKOaCFAR3XWDn21fpItgFGqUI/Q7+fKn48qogo0Lpqx6tlt0JXad4vrURzGi1d3Bu
+	mo6+6SFYEQT9JnKIC/H1KX8paWhsa+V3ahT3vcc97mR2wG3zbLKXoFSUc9brMxmw66RNjBhRW/r
+	OBhnVM5Yuk7lCDswQxzfKAxhZw4VfHLldkFwhT/c3Ngl/WO4SotvRNRXJ2P5dxlxQFupT8MJ+iw
+	nRJS54hQ7RZQQF/9anfWNlE7dAH/jvIxOQ3Q==
+X-Received: by 2002:a17:90b:3f86:b0:3ac:928a:68ce with SMTP id 98e67ed59e1d1-3ae5c8ab399mr315821a91.33.1793169424832;
+        Tue, 27 Oct 2026 23:37:04 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-13.dlp.protect.broadcom.com. [144.49.247.13])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-3ae5a655d30sm908300a91.7.2026.10.27.23.37.04
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 27 Oct 2026 23:37:04 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8a05b68f851so1673077b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2026 23:37:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1793169423; x=1793774223; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SeYlOquqDLQBH9Y16GXDkKjl3m8NYJwfUOszgy0yDfc=;
+        b=Huek2mJD19KDl/zybgyV6NmRGjAPNxEc1ZErVt/nhca/d3QBvxdkjHCc0hkgmLf73e
+         4hUPjCN1AK37LGF1M0wFdcgjIR7sw0R/NVG99dnHrDqAxoDJJ7jhwSNhR1BFVprtJOl+
+         dTmZTd2XvV3FRY/VaOKZyUrg/AvgNLGhGMhFY=
+X-Forwarded-Encrypted: i=1; AKwUvBwxv00ZILmKQ3S4JAg7mgW04U13068z1RdtI/49VifaziPv90DRO6/N2qej0RquYWItFRJbLc4Yd+lgHhQQSAU=@vger.kernel.org
+X-Received: by 2002:a05:6a00:2ea8:b0:8a0:2882:852c with SMTP id d2e1a72fcca58-8a5a61ebd1bmr2630263b3a.51.1793169423206;
+        Tue, 27 Oct 2026 23:37:03 -0700 (PDT)
+X-Received: by 2002:a05:6a00:2ea8:b0:8a0:2882:852c with SMTP id
+ d2e1a72fcca58-8a5a61ebd1bmr2630256b3a.51.1793169422838; Tue, 27 Oct 2026
+ 23:37:02 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -151,1850 +98,156 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261025040523.678027-1-weiwan@google.com> <20261025040523.678027-2-weiwan@google.com>
+In-Reply-To: <20261025040523.678027-2-weiwan@google.com>
+From: Kiran Kella <kiran.kella@broadcom.com>
+Date: Wed, 28 Oct 2026 12:06:23 +0530
+X-Gm-Features: AclHuK-xiaLaTaJffCEzdjnvnAHPfm-GS44uQy8U-8XXD_ERkLiZ6X7YePgcL9w
+Message-ID: <CAPHeo3e4aySBroVOr9WeScb=nc_NR8dmjc-mhmCYvVNOqQPV5Q@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] net: Make PSP skb extension survive packet scrubbing
+To: Wei Wang <weiwan@google.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Daniel Zahka <daniel.zahka@gmail.com>, Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000848598065ee0ca74"
 
-The BSD-Compress decoder assumes that accm is 32 bits, but declares it
-as unsigned long. On 64-bit systems, consumed code bits survive the
-left shift and corrupt the next code. An x86-64 PPP-over-PTY loopback
-test reproduces a fatal bad-code error on the first compressed packet.
+--000000000000848598065ee0ca74
+Content-Type: text/plain; charset="UTF-8"
 
-pppd normally requests Deflate in preference to BSD-Compress when both
-methods can be negotiated. If BSD-Compress is selected and encounters
-this fatal error, pppd disables compression and logs:
+> +void skb_ext_scrub(struct sk_buff *skb)
+> +{
+> +       unsigned int id;
+> +
+> +       if (likely(!skb->active_extensions))
+> +               return;
+> +
+> +       for (id = 0; id < SKB_EXT_NUM; id++) {
+> +#if IS_ENABLED(CONFIG_INET_PSP)
+> +               if (id == SKB_EXT_PSP)
+> +                       continue;
+> +#endif
+> +               skb_ext_del(skb, id);
+> +       }
+> +}
 
-  Lost compression sync: disabling compression
+Thanks for the fix.
+We saw the same issue with skb extension reset when testing with
+vxlans associated to a psp device.
 
-The link remains up and traffic can continue uncompressed.
+> +EXPORT_SYMBOL(skb_ext_scrub);
+>  #endif /* CONFIG_SKB_EXTENSIONS */
+>
+>  static void kfree_skb_napi_cache(struct sk_buff *skb)
+> --
+> 2.56.0.257.gf7497c7d27-goog
+>
+>
 
-The core compression routine has remained unchanged since Linux 2.1.67
-(1997), and the decompression routine since its introduction in Linux
-1.3.33 (1995). Later changes have updated module integration and
-lifetime handling, kernel APIs, allocation hardening, metadata and code
-organization, without correcting the decoder's accumulator width.
+--000000000000848598065ee0ca74
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-A related problem was reported in 2024, when review suggested using
-unsigned int. The decoder still uses unsigned long. The PPP protocol
-drivers and compressors are orphaned.
-
-Retire the optional and unmaintained BSD-Compress codec and remove its
-Kconfig and Kbuild entries and defconfig/selftest selections. Remove the
-unused internal DO_BSD_COMPRESS definition. Preserve the UAPI protocol
-definitions and generic compressor interface. Deflate and MPPE support
-are unchanged.
-
-With the optional BSD codec absent, PPPIOCSCOMPRESS returns -EINVAL.
-pppd already probes kernel support and disables BSD-Compress negotiation
-when the probe fails.
-
-OpenAI Codex assisted with the commit message, cleanup, and PTY testing.
-
-Link: https://lore.kernel.org/netdev/20240812084312.14127-1-r.smirnov@omp.ru/
-Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
----
-Cc: Paul Mackerras <paulus@ozlabs.org>
-Cc: Julius Bairaktaris <julius@bairaktaris.de>
-Cc: Roman Smirnov <r.smirnov@omp.ru>
-Cc: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: Linux Verification Center <lvc-project@linuxtesting.org>
----
- arch/arm/configs/footbridge_defconfig        |    1 -
- arch/arm/configs/h3600_defconfig             |    1 -
- arch/arm/configs/nhk8815_defconfig           |    1 -
- arch/arm/configs/omap1_defconfig             |    1 -
- arch/arm/configs/omap2plus_defconfig         |    1 -
- arch/arm/configs/pxa_defconfig               |    1 -
- arch/arm/configs/spitz_defconfig             |    1 -
- arch/loongarch/configs/loongson32_defconfig  |    1 -
- arch/loongarch/configs/loongson64_defconfig  |    1 -
- arch/m68k/configs/amiga_defconfig            |    1 -
- arch/m68k/configs/apollo_defconfig           |    1 -
- arch/m68k/configs/atari_defconfig            |    1 -
- arch/m68k/configs/bvme6000_defconfig         |    1 -
- arch/m68k/configs/hp300_defconfig            |    1 -
- arch/m68k/configs/mac_defconfig              |    1 -
- arch/m68k/configs/multi_defconfig            |    1 -
- arch/m68k/configs/mvme147_defconfig          |    1 -
- arch/m68k/configs/mvme16x_defconfig          |    1 -
- arch/m68k/configs/q40_defconfig              |    1 -
- arch/m68k/configs/sun3_defconfig             |    1 -
- arch/m68k/configs/sun3x_defconfig            |    1 -
- arch/mips/configs/bigsur_defconfig           |    1 -
- arch/mips/configs/fuloong2e_defconfig        |    1 -
- arch/mips/configs/gpr_defconfig              |    1 -
- arch/mips/configs/loongson2k_defconfig       |    1 -
- arch/mips/configs/loongson3_defconfig        |    1 -
- arch/mips/configs/mtx1_defconfig             |    1 -
- arch/mips/configs/rb532_defconfig            |    1 -
- arch/parisc/configs/generic-32bit_defconfig  |    1 -
- arch/powerpc/configs/85xx/ge_imp3a_defconfig |    1 -
- arch/powerpc/configs/amigaone_defconfig      |    1 -
- arch/powerpc/configs/chrp32_defconfig        |    1 -
- arch/powerpc/configs/g5_defconfig            |    1 -
- arch/powerpc/configs/pmac32_defconfig        |    1 -
- arch/powerpc/configs/ppc64_defconfig         |    1 -
- arch/powerpc/configs/ppc64e_defconfig        |    1 -
- arch/s390/configs/debug_defconfig            |    1 -
- arch/s390/configs/defconfig                  |    1 -
- arch/sh/configs/titan_defconfig              |    1 -
- arch/sparc/configs/sparc64_defconfig         |    1 -
- drivers/net/Makefile                         |    1 -
- drivers/net/ppp/Kconfig                      |   18 -
- drivers/net/ppp/Makefile                     |    1 -
- drivers/net/ppp/bsd_comp.c                   | 1170 ------------------
- drivers/net/ppp/ppp_generic.c                |    2 +-
- include/linux/ppp-comp.h                     |    3 -
- tools/testing/selftests/net/ppp/config       |    1 -
- 47 files changed, 1 insertion(+), 1235 deletions(-)
- delete mode 100644 drivers/net/ppp/bsd_comp.c
-
-diff --git a/arch/arm/configs/footbridge_defconfig b/arch/arm/configs/footbridge_defconfig
-index 7fa556fb6cf4..79f7304cb718 100644
---- a/arch/arm/configs/footbridge_defconfig
-+++ b/arch/arm/configs/footbridge_defconfig
-@@ -62,7 +62,6 @@ CONFIG_VORTEX=y
- CONFIG_NET_PCI=y
- CONFIG_NE2K_PCI=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPPOE=m
- CONFIG_PPP_ASYNC=m
-diff --git a/arch/arm/configs/h3600_defconfig b/arch/arm/configs/h3600_defconfig
-index 3e8da62d959d..b27977c0f923 100644
---- a/arch/arm/configs/h3600_defconfig
-+++ b/arch/arm/configs/h3600_defconfig
-@@ -38,7 +38,6 @@ CONFIG_PATA_PCMCIA=y
- CONFIG_NETDEVICES=y
- CONFIG_PCMCIA_PCNET=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_ASYNC=m
- # CONFIG_WLAN is not set
-diff --git a/arch/arm/configs/nhk8815_defconfig b/arch/arm/configs/nhk8815_defconfig
-index 7a307bd93730..66e4e5a7288f 100644
---- a/arch/arm/configs/nhk8815_defconfig
-+++ b/arch/arm/configs/nhk8815_defconfig
-@@ -65,7 +65,6 @@ CONFIG_NETCONSOLE=m
- CONFIG_TUN=y
- CONFIG_SMC91X=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_MPPE=m
- CONFIG_PPPOE=m
-diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
-index fcbaaf37bc9b..c2cbdf931311 100644
---- a/arch/arm/configs/omap1_defconfig
-+++ b/arch/arm/configs/omap1_defconfig
-@@ -90,7 +90,6 @@ CONFIG_TUN=y
- CONFIG_PHYLIB=y
- CONFIG_SMC91X=y
- CONFIG_PPP=y
--CONFIG_PPP_BSDCOMP=y
- CONFIG_PPP_DEFLATE=y
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MULTILINK=y
-diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-index 5791953b75ff..1f344ad0aac8 100644
---- a/arch/arm/configs/omap2plus_defconfig
-+++ b/arch/arm/configs/omap2plus_defconfig
-@@ -338,7 +338,6 @@ CONFIG_DP83867_PHY=y
- CONFIG_CAN_C_CAN=m
- CONFIG_CAN_C_CAN_PLATFORM=m
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
-index e7a7ed2b7ef7..972a0610ef7a 100644
---- a/arch/arm/configs/pxa_defconfig
-+++ b/arch/arm/configs/pxa_defconfig
-@@ -186,7 +186,6 @@ CONFIG_MARVELL_PHY=m
- CONFIG_AT803X_PHY=m
- CONFIG_MDIO_BITBANG=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/arm/configs/spitz_defconfig b/arch/arm/configs/spitz_defconfig
-index c7cf089001bf..5c8d875e5d38 100644
---- a/arch/arm/configs/spitz_defconfig
-+++ b/arch/arm/configs/spitz_defconfig
-@@ -85,7 +85,6 @@ CONFIG_PATA_PCMCIA=y
- CONFIG_NETDEVICES=y
- CONFIG_PCMCIA_PCNET=m
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_ASYNC=m
- CONFIG_USB_CATC=m
- CONFIG_USB_KAWETH=m
-diff --git a/arch/loongarch/configs/loongson32_defconfig b/arch/loongarch/configs/loongson32_defconfig
-index dbef879935f3..6e1c92811d37 100644
---- a/arch/loongarch/configs/loongson32_defconfig
-+++ b/arch/loongarch/configs/loongson32_defconfig
-@@ -627,7 +627,6 @@ CONFIG_TXGBE=y
- # CONFIG_NET_VENDOR_XILINX is not set
- CONFIG_MOTORCOMM_PHY=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/loongarch/configs/loongson64_defconfig b/arch/loongarch/configs/loongson64_defconfig
-index 4f8bb77b8a1e..eadf21dc5c47 100644
---- a/arch/loongarch/configs/loongson64_defconfig
-+++ b/arch/loongarch/configs/loongson64_defconfig
-@@ -643,7 +643,6 @@ CONFIG_TXGBE=y
- # CONFIG_NET_VENDOR_XILINX is not set
- CONFIG_MOTORCOMM_PHY=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
-index fefcaa5ad44c..e65fa343ed09 100644
---- a/arch/m68k/configs/amiga_defconfig
-+++ b/arch/m68k/configs/amiga_defconfig
-@@ -339,7 +339,6 @@ CONFIG_HYDRA=y
- CONFIG_APNE=y
- CONFIG_ZORRO8390=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
-index 84d4a6ed1707..9980a7904811 100644
---- a/arch/m68k/configs/apollo_defconfig
-+++ b/arch/m68k/configs/apollo_defconfig
-@@ -312,7 +312,6 @@ CONFIG_NETCONSOLE_DYNAMIC=y
- CONFIG_TUN=m
- CONFIG_VETH=m
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
-index 22d8a8581601..41b9104d644a 100644
---- a/arch/m68k/configs/atari_defconfig
-+++ b/arch/m68k/configs/atari_defconfig
-@@ -332,7 +332,6 @@ CONFIG_NE2000=y
- CONFIG_ETHOC=y
- CONFIG_SMC91X=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
-index 0f79c6382d35..acfd8624e4ca 100644
---- a/arch/m68k/configs/bvme6000_defconfig
-+++ b/arch/m68k/configs/bvme6000_defconfig
-@@ -311,7 +311,6 @@ CONFIG_TUN=m
- CONFIG_VETH=m
- CONFIG_BVME6000_NET=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
-index 2bf412a1713c..cbe21fd75c1d 100644
---- a/arch/m68k/configs/hp300_defconfig
-+++ b/arch/m68k/configs/hp300_defconfig
-@@ -312,7 +312,6 @@ CONFIG_TUN=m
- CONFIG_VETH=m
- CONFIG_HPLANCE=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
-index 5496f1b60531..d9868e39ab7f 100644
---- a/arch/m68k/configs/mac_defconfig
-+++ b/arch/m68k/configs/mac_defconfig
-@@ -327,7 +327,6 @@ CONFIG_MAC89x0=y
- CONFIG_MACSONIC=y
- CONFIG_MAC8390=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
-index a8f593b4fc6a..805afac5a666 100644
---- a/arch/m68k/configs/multi_defconfig
-+++ b/arch/m68k/configs/multi_defconfig
-@@ -388,7 +388,6 @@ CONFIG_ETHOC=y
- CONFIG_SMC91X=y
- CONFIG_PLIP=m
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
-index bbce43b8f7aa..fd4eceb5eb17 100644
---- a/arch/m68k/configs/mvme147_defconfig
-+++ b/arch/m68k/configs/mvme147_defconfig
-@@ -310,7 +310,6 @@ CONFIG_TUN=m
- CONFIG_VETH=m
- CONFIG_MVME147_NET=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
-index a63d09dc8dbd..967a91a28223 100644
---- a/arch/m68k/configs/mvme16x_defconfig
-+++ b/arch/m68k/configs/mvme16x_defconfig
-@@ -311,7 +311,6 @@ CONFIG_TUN=m
- CONFIG_VETH=m
- CONFIG_MVME16x_NET=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
-index d6b7cbab1700..fea2a67e2cca 100644
---- a/arch/m68k/configs/q40_defconfig
-+++ b/arch/m68k/configs/q40_defconfig
-@@ -318,7 +318,6 @@ CONFIG_VETH=m
- CONFIG_NE2000=y
- CONFIG_PLIP=m
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
-index bee5cdd20637..633fc011ccb5 100644
---- a/arch/m68k/configs/sun3_defconfig
-+++ b/arch/m68k/configs/sun3_defconfig
-@@ -308,7 +308,6 @@ CONFIG_VETH=m
- CONFIG_SUN3LANCE=y
- CONFIG_SUN3_82586=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
-index ef2b76a06439..38543ccf26c6 100644
---- a/arch/m68k/configs/sun3x_defconfig
-+++ b/arch/m68k/configs/sun3x_defconfig
-@@ -308,7 +308,6 @@ CONFIG_TUN=m
- CONFIG_VETH=m
- CONFIG_SUN3LANCE=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/mips/configs/bigsur_defconfig b/arch/mips/configs/bigsur_defconfig
-index d2b18d5033be..e53902055ddc 100644
---- a/arch/mips/configs/bigsur_defconfig
-+++ b/arch/mips/configs/bigsur_defconfig
-@@ -106,7 +106,6 @@ CONFIG_SB1250_MAC=y
- CONFIG_CHELSIO_T3=m
- CONFIG_NETXEN_NIC=m
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/mips/configs/fuloong2e_defconfig b/arch/mips/configs/fuloong2e_defconfig
-index 8c80c690624c..35ef851ef803 100644
---- a/arch/mips/configs/fuloong2e_defconfig
-+++ b/arch/mips/configs/fuloong2e_defconfig
-@@ -112,7 +112,6 @@ CONFIG_LXT_PHY=m
- CONFIG_MARVELL_PHY=m
- CONFIG_QSEMI_PHY=m
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/mips/configs/gpr_defconfig b/arch/mips/configs/gpr_defconfig
-index 718a04dbe88d..2bbc03a87d39 100644
---- a/arch/mips/configs/gpr_defconfig
-+++ b/arch/mips/configs/gpr_defconfig
-@@ -159,7 +159,6 @@ CONFIG_QSEMI_PHY=m
- CONFIG_SMSC_PHY=m
- CONFIG_VITESSE_PHY=m
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
-index 8fd863f4f7b0..323fe69bf818 100644
---- a/arch/mips/configs/loongson2k_defconfig
-+++ b/arch/mips/configs/loongson2k_defconfig
-@@ -189,7 +189,6 @@ CONFIG_STMMAC_ETH=y
- # CONFIG_NET_VENDOR_VIA is not set
- # CONFIG_NET_VENDOR_WIZNET is not set
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 12cb1a6a1360..a9b2dd7b2974 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -224,7 +224,6 @@ CONFIG_R8169=y
- # CONFIG_NET_VENDOR_VIA is not set
- # CONFIG_NET_VENDOR_WIZNET is not set
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/mips/configs/mtx1_defconfig b/arch/mips/configs/mtx1_defconfig
-index 095176c3dbee..b1927fb50e2c 100644
---- a/arch/mips/configs/mtx1_defconfig
-+++ b/arch/mips/configs/mtx1_defconfig
-@@ -273,7 +273,6 @@ CONFIG_QSEMI_PHY=m
- CONFIG_SMSC_PHY=m
- CONFIG_VITESSE_PHY=m
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/mips/configs/rb532_defconfig b/arch/mips/configs/rb532_defconfig
-index e2f7d01f4d10..eca70fc35051 100644
---- a/arch/mips/configs/rb532_defconfig
-+++ b/arch/mips/configs/rb532_defconfig
-@@ -108,7 +108,6 @@ CONFIG_IFB=m
- CONFIG_KORINA=y
- CONFIG_VIA_RHINE=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MULTILINK=y
-diff --git a/arch/parisc/configs/generic-32bit_defconfig b/arch/parisc/configs/generic-32bit_defconfig
-index 3550250e8b87..c6554d1e9bae 100644
---- a/arch/parisc/configs/generic-32bit_defconfig
-+++ b/arch/parisc/configs/generic-32bit_defconfig
-@@ -106,7 +106,6 @@ CONFIG_LASI_82596=y
- # CONFIG_NET_VENDOR_TI is not set
- # CONFIG_NET_VENDOR_VIA is not set
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPPOE=m
- # CONFIG_WLAN is not set
-diff --git a/arch/powerpc/configs/85xx/ge_imp3a_defconfig b/arch/powerpc/configs/85xx/ge_imp3a_defconfig
-index 7beb36a41d45..47465017a5fd 100644
---- a/arch/powerpc/configs/85xx/ge_imp3a_defconfig
-+++ b/arch/powerpc/configs/85xx/ge_imp3a_defconfig
-@@ -94,7 +94,6 @@ CONFIG_FS_ENET=y
- CONFIG_UCC_GETH=y
- CONFIG_GIANFAR=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MULTILINK=y
-diff --git a/arch/powerpc/configs/amigaone_defconfig b/arch/powerpc/configs/amigaone_defconfig
-index 11dfd964465a..4a1aa66d54ff 100644
---- a/arch/powerpc/configs/amigaone_defconfig
-+++ b/arch/powerpc/configs/amigaone_defconfig
-@@ -59,7 +59,6 @@ CONFIG_8139CP=y
- CONFIG_8139TOO=y
- CONFIG_PHYLIB=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/powerpc/configs/chrp32_defconfig b/arch/powerpc/configs/chrp32_defconfig
-index 36662f293587..e9a517bfe98a 100644
---- a/arch/powerpc/configs/chrp32_defconfig
-+++ b/arch/powerpc/configs/chrp32_defconfig
-@@ -59,7 +59,6 @@ CONFIG_8139TOO=y
- # CONFIG_8139TOO_PIO is not set
- CONFIG_VIA_RHINE=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/powerpc/configs/g5_defconfig b/arch/powerpc/configs/g5_defconfig
-index 04afb1594890..125751409583 100644
---- a/arch/powerpc/configs/g5_defconfig
-+++ b/arch/powerpc/configs/g5_defconfig
-@@ -98,7 +98,6 @@ CONFIG_TIGON3=y
- CONFIG_E1000=y
- CONFIG_SUNGEM=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPPOE=m
- CONFIG_PPP_ASYNC=m
-diff --git a/arch/powerpc/configs/pmac32_defconfig b/arch/powerpc/configs/pmac32_defconfig
-index 728c8cabfb83..bec560cc6317 100644
---- a/arch/powerpc/configs/pmac32_defconfig
-+++ b/arch/powerpc/configs/pmac32_defconfig
-@@ -157,7 +157,6 @@ CONFIG_MACE=y
- CONFIG_BMAC=y
- CONFIG_SUNGEM=y
- CONFIG_PPP=y
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=y
- CONFIG_PPP_MULTILINK=y
- CONFIG_PPP_ASYNC=y
-diff --git a/arch/powerpc/configs/ppc64_defconfig b/arch/powerpc/configs/ppc64_defconfig
-index 1eb8e3457e8b..098608390ab0 100644
---- a/arch/powerpc/configs/ppc64_defconfig
-+++ b/arch/powerpc/configs/ppc64_defconfig
-@@ -226,7 +226,6 @@ CONFIG_GELIC_WIRELESS=y
- CONFIG_BROADCOM_PHY=m
- CONFIG_MARVELL_PHY=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPPOE=m
- CONFIG_PPP_ASYNC=m
-diff --git a/arch/powerpc/configs/ppc64e_defconfig b/arch/powerpc/configs/ppc64e_defconfig
-index f365b79c7802..f783d15c3548 100644
---- a/arch/powerpc/configs/ppc64e_defconfig
-+++ b/arch/powerpc/configs/ppc64e_defconfig
-@@ -104,7 +104,6 @@ CONFIG_SUNGEM=y
- CONFIG_BROADCOM_PHY=m
- CONFIG_MARVELL_PHY=y
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPPOE=m
- CONFIG_PPP_ASYNC=m
-diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
-index 3892d9dd75d9..eaeebe8f918c 100644
---- a/arch/s390/configs/debug_defconfig
-+++ b/arch/s390/configs/debug_defconfig
-@@ -609,7 +609,6 @@ CONFIG_MLX5_SF=y
- # CONFIG_NET_VENDOR_WIZNET is not set
- # CONFIG_NET_VENDOR_XILINX is not set
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
-index 95720e8ad80d..86a5f24e6c6c 100644
---- a/arch/s390/configs/defconfig
-+++ b/arch/s390/configs/defconfig
-@@ -599,7 +599,6 @@ CONFIG_MLX5_SF=y
- # CONFIG_NET_VENDOR_WIZNET is not set
- # CONFIG_NET_VENDOR_XILINX is not set
- CONFIG_PPP=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPP_FILTER=y
- CONFIG_PPP_MPPE=m
-diff --git a/arch/sh/configs/titan_defconfig b/arch/sh/configs/titan_defconfig
-index 00863ecb228e..0d603c4fbd9e 100644
---- a/arch/sh/configs/titan_defconfig
-+++ b/arch/sh/configs/titan_defconfig
-@@ -184,7 +184,6 @@ CONFIG_PPP_FILTER=y
- CONFIG_PPP_ASYNC=m
- CONFIG_PPP_SYNC_TTY=m
- CONFIG_PPP_DEFLATE=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_MPPE=m
- CONFIG_PPPOE=m
- CONFIG_SLIP=m
-diff --git a/arch/sparc/configs/sparc64_defconfig b/arch/sparc/configs/sparc64_defconfig
-index 34a6a31e6e14..6972b72c3ab7 100644
---- a/arch/sparc/configs/sparc64_defconfig
-+++ b/arch/sparc/configs/sparc64_defconfig
-@@ -107,7 +107,6 @@ CONFIG_PPP_FILTER=y
- CONFIG_PPP_ASYNC=m
- CONFIG_PPP_SYNC_TTY=m
- CONFIG_PPP_DEFLATE=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_MPPE=m
- CONFIG_PPPOE=m
- CONFIG_INPUT_EVDEV=y
-diff --git a/drivers/net/Makefile b/drivers/net/Makefile
-index 88e4c485d6b2..18db7d4c9aab 100644
---- a/drivers/net/Makefile
-+++ b/drivers/net/Makefile
-@@ -57,7 +57,6 @@ obj-$(CONFIG_QCOM_IPA) += ipa/
- obj-$(CONFIG_PLIP) += plip/
- obj-$(CONFIG_PPP) += ppp/
- obj-$(CONFIG_PPP_ASYNC) += ppp/
--obj-$(CONFIG_PPP_BSDCOMP) += ppp/
- obj-$(CONFIG_PPP_DEFLATE) += ppp/
- obj-$(CONFIG_PPP_MPPE) += ppp/
- obj-$(CONFIG_PPP_SYNC_TTY) += ppp/
-diff --git a/drivers/net/ppp/Kconfig b/drivers/net/ppp/Kconfig
-index 4047f13b83dc..be76d645aa78 100644
---- a/drivers/net/ppp/Kconfig
-+++ b/drivers/net/ppp/Kconfig
-@@ -34,24 +34,6 @@ config PPP
- 
- if PPP
- 
--config PPP_BSDCOMP
--	tristate "PPP BSD-Compress compression"
--	help
--	  Support for the BSD-Compress compression method for PPP, which uses
--	  the LZW compression method to compress each PPP packet before it is
--	  sent over the wire. The machine at the other end of the PPP link
--	  (usually your ISP) has to support the BSD-Compress compression
--	  method as well for this to be useful. Even if they don't support it,
--	  it is safe to say Y here.
--
--	  The PPP Deflate compression method ("PPP Deflate compression",
--	  above) is preferable to BSD-Compress, because it compresses better
--	  and is patent-free.
--
--	  Note that the BSD compression code will always be compiled as a
--	  module; it is called bsd_comp and will show up in the directory
--	  modules once you have said "make modules". If unsure, say N.
--
- config PPP_DEFLATE
- 	tristate "PPP Deflate compression"
- 	select ZLIB_INFLATE
-diff --git a/drivers/net/ppp/Makefile b/drivers/net/ppp/Makefile
-index a815e1497179..7257df727217 100644
---- a/drivers/net/ppp/Makefile
-+++ b/drivers/net/ppp/Makefile
-@@ -5,7 +5,6 @@
- 
- obj-$(CONFIG_PPP) += ppp_generic.o
- obj-$(CONFIG_PPP_ASYNC) += ppp_async.o
--obj-$(CONFIG_PPP_BSDCOMP) += bsd_comp.o
- obj-$(CONFIG_PPP_DEFLATE) += ppp_deflate.o
- obj-$(CONFIG_PPP_MPPE) += ppp_mppe.o
- obj-$(CONFIG_PPP_SYNC_TTY) += ppp_synctty.o
-diff --git a/drivers/net/ppp/bsd_comp.c b/drivers/net/ppp/bsd_comp.c
-deleted file mode 100644
-index 63a6d251c746..000000000000
---- a/drivers/net/ppp/bsd_comp.c
-+++ /dev/null
-@@ -1,1170 +0,0 @@
--/*
-- * Update: The Berkeley copyright was changed, and the change
-- * is retroactive to all "true" BSD software (ie everything
-- * from UCB as opposed to other peoples code that just carried
-- * the same license). The new copyright doesn't clash with the
-- * GPL, so the module-only restriction has been removed..
-- */
--
--/* Because this code is derived from the 4.3BSD compress source:
-- *
-- * Copyright (c) 1985, 1986 The Regents of the University of California.
-- * All rights reserved.
-- *
-- * This code is derived from software contributed to Berkeley by
-- * James A. Woods, derived from original work by Spencer Thomas
-- * and Joseph Orost.
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- * 1. Redistributions of source code must retain the above copyright
-- *    notice, this list of conditions and the following disclaimer.
-- * 2. Redistributions in binary form must reproduce the above copyright
-- *    notice, this list of conditions and the following disclaimer in the
-- *    documentation and/or other materials provided with the distribution.
-- * 3. All advertising materials mentioning features or use of this software
-- *    must display the following acknowledgement:
-- *	This product includes software developed by the University of
-- *	California, Berkeley and its contributors.
-- * 4. Neither the name of the University nor the names of its contributors
-- *    may be used to endorse or promote products derived from this software
-- *    without specific prior written permission.
-- *
-- * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-- * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-- * SUCH DAMAGE.
-- */
--
--/*
-- * This version is for use with contiguous buffers on Linux-derived systems.
-- *
-- *  ==FILEVERSION 20000226==
-- *
-- *  NOTE TO MAINTAINERS:
-- *     If you modify this file at all, please set the number above to the
-- *     date of the modification as YYMMDD (year month day).
-- *     bsd_comp.c is shipped with a PPP distribution as well as with
-- *     the kernel; if everyone increases the FILEVERSION number above,
-- *     then scripts can do the right thing when deciding whether to
-- *     install a new bsd_comp.c file. Don't change the format of that
-- *     line otherwise, so the installation script can recognize it.
-- *
-- * From: bsd_comp.c,v 1.3 1994/12/08 01:59:58 paulus Exp
-- */
--
--#include <linux/module.h>
--#include <linux/init.h>
--#include <linux/slab.h>
--#include <linux/vmalloc.h>
--#include <linux/string.h>
--
--#include <linux/ppp_defs.h>
--
--#undef   PACKETPTR
--#define  PACKETPTR 1
--#include <linux/ppp-comp.h>
--#undef   PACKETPTR
--
--#include <asm/byteorder.h>
--
--/*
-- * PPP "BSD compress" compression
-- *  The differences between this compression and the classic BSD LZW
-- *  source are obvious from the requirement that the classic code worked
-- *  with files while this handles arbitrarily long streams that
-- *  are broken into packets.  They are:
-- *
-- *	When the code size expands, a block of junk is not emitted by
-- *	    the compressor and not expected by the decompressor.
-- *
-- *	New codes are not necessarily assigned every time an old
-- *	    code is output by the compressor.  This is because a packet
-- *	    end forces a code to be emitted, but does not imply that a
-- *	    new sequence has been seen.
-- *
-- *	The compression ratio is checked at the first end of a packet
-- *	    after the appropriate gap.	Besides simplifying and speeding
-- *	    things up, this makes it more likely that the transmitter
-- *	    and receiver will agree when the dictionary is cleared when
-- *	    compression is not going well.
-- */
--
--/*
-- * Macros to extract protocol version and number of bits
-- * from the third byte of the BSD Compress CCP configuration option.
-- */
--
--#define BSD_VERSION(x)	((x) >> 5)
--#define BSD_NBITS(x)	((x) & 0x1F)
--
--#define BSD_CURRENT_VERSION	1
--
--/*
-- * A dictionary for doing BSD compress.
-- */
--
--struct bsd_dict {
--    union {				/* hash value */
--	unsigned long	fcode;
--	struct {
--#if defined(__LITTLE_ENDIAN)		/* Little endian order */
--	    unsigned short	prefix;	/* preceding code */
--	    unsigned char	suffix; /* last character of new code */
--	    unsigned char	pad;
--#elif defined(__BIG_ENDIAN)		/* Big endian order */
--	    unsigned char	pad;
--	    unsigned char	suffix; /* last character of new code */
--	    unsigned short	prefix; /* preceding code */
--#else
--#error Endianness not defined...
--#endif
--	} hs;
--    } f;
--    unsigned short codem1;		/* output of hash table -1 */
--    unsigned short cptr;		/* map code to hash table entry */
--};
--
--struct bsd_db {
--    int	    totlen;			/* length of this structure */
--    unsigned int   hsize;		/* size of the hash table */
--    unsigned char  hshift;		/* used in hash function */
--    unsigned char  n_bits;		/* current bits/code */
--    unsigned char  maxbits;		/* maximum bits/code */
--    unsigned char  debug;		/* non-zero if debug desired */
--    unsigned char  unit;		/* ppp unit number */
--    unsigned short seqno;		/* sequence # of next packet */
--    unsigned int   mru;			/* size of receive (decompress) bufr */
--    unsigned int   maxmaxcode;		/* largest valid code */
--    unsigned int   max_ent;		/* largest code in use */
--    unsigned int   in_count;		/* uncompressed bytes, aged */
--    unsigned int   bytes_out;		/* compressed bytes, aged */
--    unsigned int   ratio;		/* recent compression ratio */
--    unsigned int   checkpoint;		/* when to next check the ratio */
--    unsigned int   clear_count;		/* times dictionary cleared */
--    unsigned int   incomp_count;	/* incompressible packets */
--    unsigned int   incomp_bytes;	/* incompressible bytes */
--    unsigned int   uncomp_count;	/* uncompressed packets */
--    unsigned int   uncomp_bytes;	/* uncompressed bytes */
--    unsigned int   comp_count;		/* compressed packets */
--    unsigned int   comp_bytes;		/* compressed bytes */
--    unsigned short  *lens;		/* array of lengths of codes */
--    struct bsd_dict *dict;		/* dictionary */
--};
--
--#define BSD_OVHD	2		/* BSD compress overhead/packet */
--#define MIN_BSD_BITS	9
--#define BSD_INIT_BITS	MIN_BSD_BITS
--#define MAX_BSD_BITS	15
--
--static void	bsd_free (void *state);
--static void	*bsd_alloc(unsigned char *options, int opt_len, int decomp);
--static void	*bsd_comp_alloc (unsigned char *options, int opt_len);
--static void	*bsd_decomp_alloc (unsigned char *options, int opt_len);
--
--static int	bsd_init        (void *db, unsigned char *options,
--			         int opt_len, int unit, int debug, int decomp);
--static int	bsd_comp_init   (void *state, unsigned char *options,
--			         int opt_len, int unit, int opthdr, int debug);
--static int	bsd_decomp_init (void *state, unsigned char *options,
--				 int opt_len, int unit, int opthdr, int mru,
--				 int debug);
--
--static void	bsd_reset (void *state);
--static void	bsd_comp_stats (void *state, struct compstat *stats);
--
--static int	bsd_compress (void *state, unsigned char *rptr,
--			      unsigned char *obuf, int isize, int osize);
--static void	bsd_incomp (void *state, unsigned char *ibuf, int icnt);
--
--static int	bsd_decompress (void *state, unsigned char *ibuf, int isize,
--				unsigned char *obuf, int osize);
--
--/* These are in ppp_generic.c */
--extern int  ppp_register_compressor   (struct compressor *cp);
--extern void ppp_unregister_compressor (struct compressor *cp);
--
--/*
-- * the next two codes should not be changed lightly, as they must not
-- * lie within the contiguous general code space.
-- */
--#define CLEAR	256			/* table clear output code */
--#define FIRST	257			/* first free entry */
--#define LAST	255
--
--#define MAXCODE(b)	((1 << (b)) - 1)
--#define BADCODEM1	MAXCODE(MAX_BSD_BITS)
--
--#define BSD_HASH(prefix,suffix,hshift) ((((unsigned long)(suffix))<<(hshift)) \
--					 ^ (unsigned long)(prefix))
--#define BSD_KEY(prefix,suffix)		((((unsigned long)(suffix)) << 16) \
--					 + (unsigned long)(prefix))
--
--#define CHECK_GAP	10000		/* Ratio check interval */
--
--#define RATIO_SCALE_LOG	8
--#define RATIO_SCALE	(1<<RATIO_SCALE_LOG)
--#define RATIO_MAX	(0x7fffffff>>RATIO_SCALE_LOG)
--
--/*
-- * clear the dictionary
-- */
--
--static void
--bsd_clear(struct bsd_db *db)
--{
--    db->clear_count++;
--    db->max_ent      = FIRST-1;
--    db->n_bits       = BSD_INIT_BITS;
--    db->bytes_out    = 0;
--    db->in_count     = 0;
--    db->ratio	     = 0;
--    db->checkpoint   = CHECK_GAP;
--}
--
--/*
-- * If the dictionary is full, then see if it is time to reset it.
-- *
-- * Compute the compression ratio using fixed-point arithmetic
-- * with 8 fractional bits.
-- *
-- * Since we have an infinite stream instead of a single file,
-- * watch only the local compression ratio.
-- *
-- * Since both peers must reset the dictionary at the same time even in
-- * the absence of CLEAR codes (while packets are incompressible), they
-- * must compute the same ratio.
-- */
--
--static int bsd_check (struct bsd_db *db)	/* 1=output CLEAR */
--  {
--    unsigned int new_ratio;
--
--    if (db->in_count >= db->checkpoint)
--      {
--	/* age the ratio by limiting the size of the counts */
--	if (db->in_count >= RATIO_MAX || db->bytes_out >= RATIO_MAX)
--	  {
--	    db->in_count  -= (db->in_count  >> 2);
--	    db->bytes_out -= (db->bytes_out >> 2);
--	  }
--
--	db->checkpoint = db->in_count + CHECK_GAP;
--
--	if (db->max_ent >= db->maxmaxcode)
--	  {
--	    /* Reset the dictionary only if the ratio is worse,
--	     * or if it looks as if it has been poisoned
--	     * by incompressible data.
--	     *
--	     * This does not overflow, because
--	     *	db->in_count <= RATIO_MAX.
--	     */
--
--	    new_ratio = db->in_count << RATIO_SCALE_LOG;
--	    if (db->bytes_out != 0)
--	      {
--		new_ratio /= db->bytes_out;
--	      }
--
--	    if (new_ratio < db->ratio || new_ratio < 1 * RATIO_SCALE)
--	      {
--		bsd_clear (db);
--		return 1;
--	      }
--	    db->ratio = new_ratio;
--	  }
--      }
--    return 0;
--  }
--
--/*
-- * Return statistics.
-- */
--
--static void bsd_comp_stats (void *state, struct compstat *stats)
--  {
--    struct bsd_db *db = (struct bsd_db *) state;
--
--    stats->unc_bytes    = db->uncomp_bytes;
--    stats->unc_packets  = db->uncomp_count;
--    stats->comp_bytes   = db->comp_bytes;
--    stats->comp_packets = db->comp_count;
--    stats->inc_bytes    = db->incomp_bytes;
--    stats->inc_packets  = db->incomp_count;
--    stats->in_count     = db->in_count;
--    stats->bytes_out    = db->bytes_out;
--  }
--
--/*
-- * Reset state, as on a CCP ResetReq.
-- */
--
--static void bsd_reset (void *state)
--  {
--    struct bsd_db *db = (struct bsd_db *) state;
--
--    bsd_clear(db);
--
--    db->seqno       = 0;
--    db->clear_count = 0;
--  }
--
--/*
-- * Release the compression structure
-- */
--
--static void bsd_free (void *state)
--{
--	struct bsd_db *db = state;
--
--	if (!db)
--		return;
--
--/*
-- * Release the dictionary
-- */
--	vfree(db->dict);
--	db->dict = NULL;
--/*
-- * Release the string buffer
-- */
--	vfree(db->lens);
--	db->lens = NULL;
--/*
-- * Finally release the structure itself.
-- */
--	kfree(db);
--}
--
--/*
-- * Allocate space for a (de) compressor.
-- */
--
--static void *bsd_alloc (unsigned char *options, int opt_len, int decomp)
--  {
--    int bits;
--    unsigned int hsize, hshift, maxmaxcode;
--    struct bsd_db *db;
--
--    if (opt_len != 3 || options[0] != CI_BSD_COMPRESS || options[1] != 3
--	|| BSD_VERSION(options[2]) != BSD_CURRENT_VERSION)
--      {
--	return NULL;
--      }
--
--    bits = BSD_NBITS(options[2]);
--
--    switch (bits)
--      {
--    case 9:			/* needs 82152 for both directions */
--    case 10:			/* needs 84144 */
--    case 11:			/* needs 88240 */
--    case 12:			/* needs 96432 */
--	hsize = 5003;
--	hshift = 4;
--	break;
--    case 13:			/* needs 176784 */
--	hsize = 9001;
--	hshift = 5;
--	break;
--    case 14:			/* needs 353744 */
--	hsize = 18013;
--	hshift = 6;
--	break;
--    case 15:			/* needs 691440 */
--	hsize = 35023;
--	hshift = 7;
--	break;
--    case 16:			/* needs 1366160--far too much, */
--	/* hsize = 69001; */	/* and 69001 is too big for cptr */
--	/* hshift = 8; */	/* in struct bsd_db */
--	/* break; */
--    default:
--	return NULL;
--      }
--/*
-- * Allocate the main control structure for this instance.
-- */
--    maxmaxcode = MAXCODE(bits);
--    db         = kzalloc_obj(struct bsd_db);
--    if (!db)
--      {
--	return NULL;
--      }
--
--/*
-- * Allocate space for the dictionary. This may be more than one page in
-- * length.
-- */
--    db->dict = vmalloc_array(hsize, sizeof(struct bsd_dict));
--    if (!db->dict)
--      {
--	bsd_free (db);
--	return NULL;
--      }
--
--/*
-- * If this is the compression buffer then there is no length data.
-- */
--    if (!decomp)
--      {
--	db->lens = NULL;
--      }
--/*
-- * For decompression, the length information is needed as well.
-- */
--    else
--      {
--        db->lens = vmalloc_array(maxmaxcode + 1, sizeof(db->lens[0]));
--	if (!db->lens)
--	  {
--	    bsd_free (db);
--	    return NULL;
--	  }
--      }
--/*
-- * Initialize the data information for the compression code
-- */
--    db->totlen     = sizeof (struct bsd_db)   +
--		    (sizeof (struct bsd_dict) * hsize);
--
--    db->hsize      = hsize;
--    db->hshift     = hshift;
--    db->maxmaxcode = maxmaxcode;
--    db->maxbits    = bits;
--
--    return (void *) db;
--  }
--
--static void *bsd_comp_alloc (unsigned char *options, int opt_len)
--  {
--    return bsd_alloc (options, opt_len, 0);
--  }
--
--static void *bsd_decomp_alloc (unsigned char *options, int opt_len)
--  {
--    return bsd_alloc (options, opt_len, 1);
--  }
--
--/*
-- * Initialize the database.
-- */
--
--static int bsd_init (void *state, unsigned char *options,
--		     int opt_len, int unit, int debug, int decomp)
--  {
--    struct bsd_db *db = state;
--    int indx;
--
--    if ((opt_len != 3) || (options[0] != CI_BSD_COMPRESS) || (options[1] != 3)
--	|| (BSD_VERSION(options[2]) != BSD_CURRENT_VERSION)
--	|| (BSD_NBITS(options[2]) != db->maxbits)
--	|| (decomp && db->lens == NULL))
--      {
--	return 0;
--      }
--
--    if (decomp)
--      {
--	indx = LAST;
--	do
--	  {
--	    db->lens[indx] = 1;
--	  }
--	while (indx-- > 0);
--      }
--
--    indx = db->hsize;
--    while (indx-- != 0)
--      {
--	db->dict[indx].codem1 = BADCODEM1;
--	db->dict[indx].cptr   = 0;
--      }
--
--    db->unit = unit;
--    db->mru  = 0;
--#ifndef DEBUG
--    if (debug)
--#endif
--      db->debug = 1;
--
--    bsd_reset(db);
--
--    return 1;
--  }
--
--static int bsd_comp_init (void *state, unsigned char *options,
--			  int opt_len, int unit, int opthdr, int debug)
--  {
--    return bsd_init (state, options, opt_len, unit, debug, 0);
--  }
--
--static int bsd_decomp_init (void *state, unsigned char *options,
--			    int opt_len, int unit, int opthdr, int mru,
--			    int debug)
--  {
--    return bsd_init (state, options, opt_len, unit, debug, 1);
--  }
--
--/*
-- * Obtain pointers to the various structures in the compression tables
-- */
--
--#define dict_ptrx(p,idx) &(p->dict[idx])
--#define lens_ptrx(p,idx) &(p->lens[idx])
--
--#ifdef DEBUG
--static unsigned short *lens_ptr(struct bsd_db *db, int idx)
--  {
--    if ((unsigned int) idx > (unsigned int) db->maxmaxcode)
--      {
--	printk ("<9>ppp: lens_ptr(%d) > max\n", idx);
--	idx = 0;
--      }
--    return lens_ptrx (db, idx);
--  }
--
--static struct bsd_dict *dict_ptr(struct bsd_db *db, int idx)
--  {
--    if ((unsigned int) idx >= (unsigned int) db->hsize)
--      {
--	printk ("<9>ppp: dict_ptr(%d) > max\n", idx);
--	idx = 0;
--      }
--    return dict_ptrx (db, idx);
--  }
--
--#else
--#define lens_ptr(db,idx) lens_ptrx(db,idx)
--#define dict_ptr(db,idx) dict_ptrx(db,idx)
--#endif
--
--/*
-- * compress a packet
-- *
-- *	The result of this function is the size of the compressed
-- *	packet. A zero is returned if the packet was not compressed
-- *	for some reason, such as the size being larger than uncompressed.
-- *
-- *	One change from the BSD compress command is that when the
-- *	code size expands, we do not output a bunch of padding.
-- */
--
--static int bsd_compress (void *state, unsigned char *rptr, unsigned char *obuf,
--			 int isize, int osize)
--  {
--    struct bsd_db *db;
--    int hshift;
--    unsigned int max_ent;
--    unsigned int n_bits;
--    unsigned int bitno;
--    unsigned long accm;
--    int ent;
--    unsigned long fcode;
--    struct bsd_dict *dictp;
--    unsigned char c;
--    int hval;
--    int disp;
--    int ilen;
--    int mxcode;
--    unsigned char *wptr;
--    int olen;
--
--#define PUTBYTE(v)			\
--  {					\
--    ++olen;				\
--    if (wptr)				\
--      {					\
--	*wptr++ = (unsigned char) (v);	\
--	if (olen >= osize)		\
--	  {				\
--	    wptr = NULL;		\
--	  }				\
--      }					\
--  }
--
--#define OUTPUT(ent)			\
--  {					\
--    bitno -= n_bits;			\
--    accm |= ((ent) << bitno);		\
--    do					\
--      {					\
--	PUTBYTE(accm >> 24);		\
--	accm <<= 8;			\
--	bitno += 8;			\
--      }					\
--    while (bitno <= 24);		\
--  }
--
--  /*
--   * If the protocol is not in the range we're interested in,
--   * just return without compressing the packet.  If it is,
--   * the protocol becomes the first byte to compress.
--   */
--
--    ent = PPP_PROTOCOL(rptr);
--    if (ent < 0x21 || ent > 0xf9)
--      {
--	return 0;
--      }
--
--    db      = (struct bsd_db *) state;
--    hshift  = db->hshift;
--    max_ent = db->max_ent;
--    n_bits  = db->n_bits;
--    bitno   = 32;
--    accm    = 0;
--    mxcode  = MAXCODE (n_bits);
--
--    /* Initialize the output pointers */
--    wptr  = obuf;
--    olen  = PPP_HDRLEN + BSD_OVHD;
--
--    if (osize > isize)
--      {
--	osize = isize;
--      }
--
--    /* This is the PPP header information */
--    if (wptr)
--      {
--	*wptr++ = PPP_ADDRESS(rptr);
--	*wptr++ = PPP_CONTROL(rptr);
--	*wptr++ = 0;
--	*wptr++ = PPP_COMP;
--	*wptr++ = db->seqno >> 8;
--	*wptr++ = db->seqno;
--      }
--
--    /* Skip the input header */
--    rptr  += PPP_HDRLEN;
--    isize -= PPP_HDRLEN;
--    ilen   = ++isize;	/* Low byte of protocol is counted as input */
--
--    while (--ilen > 0)
--      {
--	c     = *rptr++;
--	fcode = BSD_KEY  (ent, c);
--	hval  = BSD_HASH (ent, c, hshift);
--	dictp = dict_ptr (db, hval);
--
--	/* Validate and then check the entry. */
--	if (dictp->codem1 >= max_ent)
--	  {
--	    goto nomatch;
--	  }
--
--	if (dictp->f.fcode == fcode)
--	  {
--	    ent = dictp->codem1 + 1;
--	    continue;	/* found (prefix,suffix) */
--	  }
--
--	/* continue probing until a match or invalid entry */
--	disp = (hval == 0) ? 1 : hval;
--
--	do
--	  {
--	    hval += disp;
--	    if (hval >= db->hsize)
--	      {
--		hval -= db->hsize;
--	      }
--	    dictp = dict_ptr (db, hval);
--	    if (dictp->codem1 >= max_ent)
--	      {
--		goto nomatch;
--	      }
--	  }
--	while (dictp->f.fcode != fcode);
--
--	ent = dictp->codem1 + 1;	/* finally found (prefix,suffix) */
--	continue;
--
--nomatch:
--	OUTPUT(ent);		/* output the prefix */
--
--	/* code -> hashtable */
--	if (max_ent < db->maxmaxcode)
--	  {
--	    struct bsd_dict *dictp2;
--	    struct bsd_dict *dictp3;
--	    int    indx;
--
--	    /* expand code size if needed */
--	    if (max_ent >= mxcode)
--	      {
--		db->n_bits = ++n_bits;
--		mxcode     = MAXCODE (n_bits);
--	      }
--
--	    /* Invalidate old hash table entry using
--	     * this code, and then take it over.
--	     */
--
--	    dictp2 = dict_ptr (db, max_ent + 1);
--	    indx   = dictp2->cptr;
--	    dictp3 = dict_ptr (db, indx);
--
--	    if (dictp3->codem1 == max_ent)
--	      {
--		dictp3->codem1 = BADCODEM1;
--	      }
--
--	    dictp2->cptr   = hval;
--	    dictp->codem1  = max_ent;
--	    dictp->f.fcode = fcode;
--	    db->max_ent    = ++max_ent;
--
--	    if (db->lens)
--	      {
--		unsigned short *len1 = lens_ptr (db, max_ent);
--		unsigned short *len2 = lens_ptr (db, ent);
--		*len1 = *len2 + 1;
--	      }
--	  }
--	ent = c;
--      }
--
--    OUTPUT(ent);		/* output the last code */
--
--    db->bytes_out    += olen - PPP_HDRLEN - BSD_OVHD;
--    db->uncomp_bytes += isize;
--    db->in_count     += isize;
--    ++db->uncomp_count;
--    ++db->seqno;
--
--    if (bitno < 32)
--      {
--	++db->bytes_out; /* must be set before calling bsd_check */
--      }
--
--    /*
--     * Generate the clear command if needed
--     */
--
--    if (bsd_check(db))
--      {
--	OUTPUT (CLEAR);
--      }
--
--    /*
--     * Pad dribble bits of last code with ones.
--     * Do not emit a completely useless byte of ones.
--     */
--
--    if (bitno != 32)
--      {
--	PUTBYTE((accm | (0xff << (bitno-8))) >> 24);
--      }
--
--    /*
--     * Increase code size if we would have without the packet
--     * boundary because the decompressor will do so.
--     */
--
--    if (max_ent >= mxcode && max_ent < db->maxmaxcode)
--      {
--	db->n_bits++;
--      }
--
--    /* If output length is too large then this is an incomplete frame. */
--    if (wptr == NULL)
--      {
--	++db->incomp_count;
--	db->incomp_bytes += isize;
--	olen              = 0;
--      }
--    else /* Count the number of compressed frames */
--      {
--	++db->comp_count;
--	db->comp_bytes += olen;
--      }
--
--    /* Return the resulting output length */
--    return olen;
--#undef OUTPUT
--#undef PUTBYTE
--  }
--
--/*
-- * Update the "BSD Compress" dictionary on the receiver for
-- * incompressible data by pretending to compress the incoming data.
-- */
--
--static void bsd_incomp (void *state, unsigned char *ibuf, int icnt)
--  {
--    (void) bsd_compress (state, ibuf, (char *) 0, icnt, 0);
--  }
--
--/*
-- * Decompress "BSD Compress".
-- *
-- * Because of patent problems, we return DECOMP_ERROR for errors
-- * found by inspecting the input data and for system problems, but
-- * DECOMP_FATALERROR for any errors which could possibly be said to
-- * be being detected "after" decompression.  For DECOMP_ERROR,
-- * we can issue a CCP reset-request; for DECOMP_FATALERROR, we may be
-- * infringing a patent of Motorola's if we do, so we take CCP down
-- * instead.
-- *
-- * Given that the frame has the correct sequence number and a good FCS,
-- * errors such as invalid codes in the input most likely indicate a
-- * bug, so we return DECOMP_FATALERROR for them in order to turn off
-- * compression, even though they are detected by inspecting the input.
-- */
--
--static int bsd_decompress (void *state, unsigned char *ibuf, int isize,
--			   unsigned char *obuf, int osize)
--  {
--    struct bsd_db *db;
--    unsigned int max_ent;
--    unsigned long accm;
--    unsigned int bitno;		/* 1st valid bit in accm */
--    unsigned int n_bits;
--    unsigned int tgtbitno;	/* bitno when we have a code */
--    struct bsd_dict *dictp;
--    int explen;
--    int seq;
--    unsigned int incode;
--    unsigned int oldcode;
--    unsigned int finchar;
--    unsigned char *p;
--    unsigned char *wptr;
--    int adrs;
--    int ctrl;
--    int ilen;
--    int codelen;
--    int extra;
--
--    db       = (struct bsd_db *) state;
--    max_ent  = db->max_ent;
--    accm     = 0;
--    bitno    = 32;		/* 1st valid bit in accm */
--    n_bits   = db->n_bits;
--    tgtbitno = 32 - n_bits;	/* bitno when we have a code */
--
--    /*
--     * Save the address/control from the PPP header
--     * and then get the sequence number.
--     */
--
--    adrs  = PPP_ADDRESS (ibuf);
--    ctrl  = PPP_CONTROL (ibuf);
--
--    seq   = (ibuf[4] << 8) + ibuf[5];
--
--    ibuf += (PPP_HDRLEN + 2);
--    ilen  = isize - (PPP_HDRLEN + 2);
--
--    /*
--     * Check the sequence number and give up if it differs from
--     * the value we're expecting.
--     */
--
--    if (seq != db->seqno)
--      {
--	if (db->debug)
--	  {
--	    printk("bsd_decomp%d: bad sequence # %d, expected %d\n",
--		   db->unit, seq, db->seqno - 1);
--	  }
--	return DECOMP_ERROR;
--      }
--
--    ++db->seqno;
--    db->bytes_out += ilen;
--
--    /*
--     * Fill in the ppp header, but not the last byte of the protocol
--     * (that comes from the decompressed data).
--     */
--
--    wptr    = obuf;
--    *wptr++ = adrs;
--    *wptr++ = ctrl;
--    *wptr++ = 0;
--
--    oldcode = CLEAR;
--    explen  = 3;
--
--    /*
--     * Keep the checkpoint correctly so that incompressible packets
--     * clear the dictionary at the proper times.
--     */
--
--    for (;;)
--      {
--	if (ilen-- <= 0)
--	  {
--	    db->in_count += (explen - 3); /* don't count the header */
--	    break;
--	  }
--
--	/*
--	 * Accumulate bytes until we have a complete code.
--	 * Then get the next code, relying on the 32-bit,
--	 * unsigned accm to mask the result.
--	 */
--
--	bitno -= 8;
--	accm  |= *ibuf++ << bitno;
--	if (tgtbitno < bitno)
--	  {
--	    continue;
--	  }
--
--	incode = accm >> tgtbitno;
--	accm <<= n_bits;
--	bitno += n_bits;
--
--	/*
--	 * The dictionary must only be cleared at the end of a packet.
--	 */
--
--	if (incode == CLEAR)
--	  {
--	    if (ilen > 0)
--	      {
--		if (db->debug)
--		  {
--		    printk("bsd_decomp%d: bad CLEAR\n", db->unit);
--		  }
--		return DECOMP_FATALERROR;	/* probably a bug */
--	      }
--
--	    bsd_clear(db);
--	    break;
--	  }
--
--	if ((incode > max_ent + 2) || (incode > db->maxmaxcode)
--	    || (incode > max_ent && oldcode == CLEAR))
--	  {
--	    if (db->debug)
--	      {
--		printk("bsd_decomp%d: bad code 0x%x oldcode=0x%x ",
--		       db->unit, incode, oldcode);
--		printk("max_ent=0x%x explen=%d seqno=%d\n",
--		       max_ent, explen, db->seqno);
--	      }
--	    return DECOMP_FATALERROR;	/* probably a bug */
--	  }
--
--	/* Special case for KwKwK string. */
--	if (incode > max_ent)
--	  {
--	    finchar = oldcode;
--	    extra   = 1;
--	  }
--	else
--	  {
--	    finchar = incode;
--	    extra   = 0;
--	  }
--
--	codelen = *(lens_ptr (db, finchar));
--	explen += codelen + extra;
--	if (explen > osize)
--	  {
--	    if (db->debug)
--	      {
--		printk("bsd_decomp%d: ran out of mru\n", db->unit);
--#ifdef DEBUG
--		printk("  len=%d, finchar=0x%x, codelen=%d, explen=%d\n",
--		       ilen, finchar, codelen, explen);
--#endif
--	      }
--	    return DECOMP_FATALERROR;
--	  }
--
--	/*
--	 * Decode this code and install it in the decompressed buffer.
--	 */
--
--	wptr += codelen;
--	p     = wptr;
--	while (finchar > LAST)
--	  {
--	    struct bsd_dict *dictp2 = dict_ptr (db, finchar);
--
--	    dictp = dict_ptr (db, dictp2->cptr);
--#ifdef DEBUG
--	    if (--codelen <= 0 || dictp->codem1 != finchar-1)
--	      {
--		if (codelen <= 0)
--		  {
--		    printk("bsd_decomp%d: fell off end of chain ", db->unit);
--		    printk("0x%x at 0x%x by 0x%x, max_ent=0x%x\n",
--			   incode, finchar, dictp2->cptr, max_ent);
--		  }
--		else
--		  {
--		    if (dictp->codem1 != finchar-1)
--		      {
--			printk("bsd_decomp%d: bad code chain 0x%x "
--			       "finchar=0x%x ",
--			       db->unit, incode, finchar);
--
--			printk("oldcode=0x%x cptr=0x%x codem1=0x%x\n",
--			       oldcode, dictp2->cptr, dictp->codem1);
--		      }
--		  }
--		return DECOMP_FATALERROR;
--	      }
--#endif
--	    *--p    = dictp->f.hs.suffix;
--	    finchar = dictp->f.hs.prefix;
--	  }
--	*--p = finchar;
--
--#ifdef DEBUG
--	if (--codelen != 0)
--	  {
--	    printk("bsd_decomp%d: short by %d after code 0x%x, max_ent=0x%x\n",
--		   db->unit, codelen, incode, max_ent);
--	  }
--#endif
--
--	if (extra)		/* the KwKwK case again */
--	  {
--	    *wptr++ = finchar;
--	  }
--
--	/*
--	 * If not first code in a packet, and
--	 * if not out of code space, then allocate a new code.
--	 *
--	 * Keep the hash table correct so it can be used
--	 * with uncompressed packets.
--	 */
--
--	if (oldcode != CLEAR && max_ent < db->maxmaxcode)
--	  {
--	    struct bsd_dict *dictp2, *dictp3;
--	    unsigned short  *lens1,  *lens2;
--	    unsigned long fcode;
--	    int hval, disp, indx;
--
--	    fcode = BSD_KEY(oldcode,finchar);
--	    hval  = BSD_HASH(oldcode,finchar,db->hshift);
--	    dictp = dict_ptr (db, hval);
--
--	    /* look for a free hash table entry */
--	    if (dictp->codem1 < max_ent)
--	      {
--		disp = (hval == 0) ? 1 : hval;
--		do
--		  {
--		    hval += disp;
--		    if (hval >= db->hsize)
--		      {
--			hval -= db->hsize;
--		      }
--		    dictp = dict_ptr (db, hval);
--		  }
--		while (dictp->codem1 < max_ent);
--	      }
--
--	    /*
--	     * Invalidate previous hash table entry
--	     * assigned this code, and then take it over
--	     */
--
--	    dictp2 = dict_ptr (db, max_ent + 1);
--	    indx   = dictp2->cptr;
--	    dictp3 = dict_ptr (db, indx);
--
--	    if (dictp3->codem1 == max_ent)
--	      {
--		dictp3->codem1 = BADCODEM1;
--	      }
--
--	    dictp2->cptr   = hval;
--	    dictp->codem1  = max_ent;
--	    dictp->f.fcode = fcode;
--	    db->max_ent    = ++max_ent;
--
--	    /* Update the length of this string. */
--	    lens1  = lens_ptr (db, max_ent);
--	    lens2  = lens_ptr (db, oldcode);
--	    *lens1 = *lens2 + 1;
--
--	    /* Expand code size if needed. */
--	    if (max_ent >= MAXCODE(n_bits) && max_ent < db->maxmaxcode)
--	      {
--		db->n_bits = ++n_bits;
--		tgtbitno   = 32-n_bits;
--	      }
--	  }
--	oldcode = incode;
--      }
--
--    ++db->comp_count;
--    ++db->uncomp_count;
--    db->comp_bytes   += isize - BSD_OVHD - PPP_HDRLEN;
--    db->uncomp_bytes += explen;
--
--    if (bsd_check(db))
--      {
--	if (db->debug)
--	  {
--	    printk("bsd_decomp%d: peer should have cleared dictionary on %d\n",
--		   db->unit, db->seqno - 1);
--	  }
--      }
--    return explen;
--  }
--
--/*************************************************************
-- * Table of addresses for the BSD compression module
-- *************************************************************/
--
--static struct compressor ppp_bsd_compress = {
--	.compress_proto =	CI_BSD_COMPRESS,
--	.comp_alloc =		bsd_comp_alloc,
--	.comp_free =		bsd_free,
--	.comp_init =		bsd_comp_init,
--	.comp_reset =		bsd_reset,
--	.compress =		bsd_compress,
--	.comp_stat =		bsd_comp_stats,
--	.decomp_alloc =		bsd_decomp_alloc,
--	.decomp_free =		bsd_free,
--	.decomp_init =		bsd_decomp_init,
--	.decomp_reset =		bsd_reset,
--	.decompress =		bsd_decompress,
--	.incomp =		bsd_incomp,
--	.decomp_stat =		bsd_comp_stats,
--	.owner =		THIS_MODULE
--};
--
--/*************************************************************
-- * Module support routines
-- *************************************************************/
--
--static int __init bsdcomp_init(void)
--{
--	int answer = ppp_register_compressor(&ppp_bsd_compress);
--	if (answer == 0)
--		printk(KERN_INFO "PPP BSD Compression module registered\n");
--	return answer;
--}
--
--static void __exit bsdcomp_cleanup(void)
--{
--	ppp_unregister_compressor(&ppp_bsd_compress);
--}
--
--module_init(bsdcomp_init);
--module_exit(bsdcomp_cleanup);
--MODULE_DESCRIPTION("PPP BSD-Compress compression module");
--MODULE_LICENSE("Dual BSD/GPL");
--MODULE_ALIAS("ppp-compress-" __stringify(CI_BSD_COMPRESS));
-diff --git a/drivers/net/ppp/ppp_generic.c b/drivers/net/ppp/ppp_generic.c
-index 1a610a18893b..339b068fe34f 100644
---- a/drivers/net/ppp/ppp_generic.c
-+++ b/drivers/net/ppp/ppp_generic.c
-@@ -2591,7 +2591,7 @@ ppp_decompress_frame(struct ppp *ppp, struct sk_buff *skb)
- 		skb_pull(skb, 2);	/* pull off the A/C bytes */
- 
- 		/* Don't call __ppp_decompress_proto() here, but instead rely on
--		 * corresponding algo (mppe/bsd/deflate) to decompress it.
-+		 * corresponding algo (mppe/deflate) to decompress it.
- 		 */
- 	} else {
- 		/* Uncompressed frame - pass to decompressor so it
-diff --git a/include/linux/ppp-comp.h b/include/linux/ppp-comp.h
-index fb847e47f148..e63b3fa80d86 100644
---- a/include/linux/ppp-comp.h
-+++ b/include/linux/ppp-comp.h
-@@ -17,9 +17,6 @@ struct module;
-  * various compression methods.
-  */
- 
--#ifndef DO_BSD_COMPRESS
--#define DO_BSD_COMPRESS	1	/* by default, include BSD-Compress */
--#endif
- #ifndef DO_DEFLATE
- #define DO_DEFLATE	1	/* by default, include Deflate */
- #endif
-diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
-index 843545df8f03..b90b5e90d62c 100644
---- a/tools/testing/selftests/net/ppp/config
-+++ b/tools/testing/selftests/net/ppp/config
-@@ -3,7 +3,6 @@ CONFIG_L2TP=m
- CONFIG_PACKET=y
- CONFIG_PPP=m
- CONFIG_PPP_ASYNC=m
--CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPPOE=m
- CONFIG_PPPOE_HASH_BITS_4=y
--- 
-2.43.0
-
+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
+ksPFF8lRQaSHMJFFWI2usTUpS9gKxRAuJyHc0xlNKy4vK2ZEic8RWs34T6LcL98JR51RaKtE0Dw9
+7F/uUf87z+/74aOyyxrTl58LlkxL/+1yMEHZhyn6z30LHQuA52TSp7uD3au8gu0YN+hKIsPBKVbs
+dzf/bW6eDpGSwgwRzqF2BcDBOUA9U2mB2cxinBxOxCVbYRy//Q46OuAx0pXw8trIkPDdp8kHAoWD
+7JxJ70nrdMy8VRmC02NQp185/6szeMFYLA0CAwEAAaOCAdwwggHYMA4GA1UdDwEB/wQEAwIFoDAM
+BgNVHRMBAf8EAjAAMIGTBggrBgEFBQcBAQSBhjCBgzBGBggrBgEFBQcwAoY6aHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyNnNtaW1lY2EyMDIzLmNydDA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyNnNtaW1lY2EyMDIzMGUGA1UdIARe
+MFwwCQYHZ4EMAQUDAzALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgoDAjA0MDIGCCsGAQUFBwIBFiZo
+dHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzBBBgNVHR8EOjA4MDagNKAyhjBo
+dHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAyMy5jcmwwIwYDVR0RBBww
+GoEYa2lyYW4ua2VsbGFAYnJvYWRjb20uY29tMBMGA1UdJQQMMAoGCCsGAQUFBwMEMB8GA1UdIwQY
+MBaAFAApNp5ceroPry1QLdugI4UYsKCSMB0GA1UdDgQWBBS/iTArBeV9hFyyktvkwzGbaKne3zAN
+BgkqhkiG9w0BAQsFAAOCAgEAdavxLwcm6Kj3S7/bA/IO6B6MTHIndKyB630T3CTPeOeuHV7ZS4wr
+rDZbrSjERD36308lnaXSESlcu8LX2SKJ0KqNM3VQNTawSKS4wMXlyTzOBfaslsjtFiT4jQW9Py6u
+6nf1EVoQ6YTCGJ+htyKqFgIljJIdBBOvXY+gECh/DC+VbLUVK9CgZLKkFJ5udhYvw1tOc3zOXGOd
+kwaK7AtwRSLgNt5RSAaikL6bvU1kUWgITNKKhBK5F3CNUbR0hD/i7yG6Afdh27V1T7FEdV07fBbu
+3+AVnAdbZmHfnB2T8lHTaR9GbgkF6lG/a8I+eUG5NPrDEM+afXT7/+zOTjf799qoyhMdfgp90DEW
+9ukfyqfUq37ctBG4TdnDlxtkwy9XYw0Avotf2lrYy+6MYjt3cZFF+AF/F6ANk+Gx9zH5gyeUlruJ
++aqmP1U1lX/n2YEXAfiLJulbb3Jfi8lvyYzHXpHLIFtLfyVOzUXdGdj3dVxxFSPJ4uXmpk2SLExM
+W7+cvJ+PxSJyWK723U609whQmqbVRz5B49CjNt/exjWtBGGjCwLPMGNWbHbwtDVWcoZzE0KoL7EK
+VPB0t6uom5ElZ+qieZghO80tR/MW2eL8i+EiVMwq5GF1Ni3D6uypwZYqgdicI0YGj7JCgrIzr1kC
+xwtQkw5ij2CCUWXxadt/C9gxggJXMIICUwIBATBiMFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBH
+bG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBSNiBTTUlNRSBDQSAyMDIz
+AgxbhXTUwXZ3dIWSpigwDQYJYIZIAWUDBAIBBQCggccwLwYJKoZIhvcNAQkEMSIEIA9Oc71jdteu
+Q7Ubx187XkZx1ZNJDDpO0N0E6LFZsz7ZMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
+hvcNAQkFMQ8XDTI2MTAyODA2MzcwM1owXAYJKoZIhvcNAQkPMU8wTTALBglghkgBZQMEASowCwYJ
+YIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAMDMtL6KInmrnKkQe7mvzgNdLrVIAEcXL2YSXiMEsXeE720k
+pWossB2D7FT4J3bYYsKUKJUMllJP6eL1N8fsdxtuMSNita0TpyEMD0wd108JQiqOjNc5KgXhIkG5
+oF55YHw6OtwhYPbcL8RHgTfCUoPkR0KKdUz5MxyzY2Phx6gU4etlfaurCQmXbGBxmJPR8TNvCK8e
+LsaEStPyKJPz1cnUW5hNi5ZS0648RiZU70o0HzTU4m1PHa5qi+2mdga5f0NMH6d71/P0bwt91c/J
+on8GtbKo/IpLomU3lcEHdN0CxmpHA3t1/oJ7QVB/GEVt/ymHXtf060/grL9Tveua01E=
+--000000000000848598065ee0ca74--
