@@ -1,51 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.243.164.118
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793181776;
-	b=Lt7fAxNPedkMp4UP3BAiUypUR6iv8VG2K68XZfDt/vdLXZ1Y8udo/raTMOB8miJLylLb
-	 tHjw1htOtni7HItnh4upJ7kcuQrV/VsZaCvYy6T+pgS9q1K0glWmkjmhGuwp0x/QplLdT
-	 cj7Y6ZU36TqHbsvFLF9il5sL31+CmHz0hy+YWIIwypRy0DLo5mMjBLPvwxd2s2j0IymhK
-	 a37Wy1edvAPUmU4H4ut3Mw6RIJau+4S/NMLNMhncqhRbcgG+M22v+JYImZRFB9UQSj4J8
-	 It26ngB/VGrVYo6WSXquZ4B7Fol7ywHtWKRbns3gyd5l6/OdmQfnY320t2TELvBxy2Q==
+	t=1793182250;
+	b=2JstdBlLlgVT904jaeb+bo6XXYsPAhnXZ2B6/nEDZwEG4vLyiGIm/x1Qgzyh46auPcNb
+	 2QnQ6um+ABcpXpMocv/6hElA+vOnLaDCXynfRvmrX5+QlKNa7pp56Qtc81aq1kPr/Vy0j
+	 Ar0hKpq47z2N24QsdZQfOsfEjYiob5s0wJ0zoLgFl6wZraUOEFP8DEig/WdmPo+PKi5lN
+	 HAiDl4KoJXdNEaQhDzfKFxSoSnsna1/24sJV3eFNf5GHp5t4heV1DoifTJ7SUP5101YfT
+	 gs5o1d0T50zBvuionUH0dtpqRanC2as8H8FYPNE+MRKP+wWOdIDdVmYUJBSmEvLbyxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793181776;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-Id:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=ddvx5f00z+VIk9kGMVictMEiXeJ0/JrB5XxYTj9h55Q=;
-	b=ceoXUNhz0NC6lQbmq0pCfDrSHXbf1SgBvFjEVvuu0XWNbzPgGxGp8NNmOwRLX/OqPYVg
-	 pJjLi5DLePSCAeEdwHXlkIvAJEOPn7GaU2dPLCc/pUw+tnH/ZLyGsHt/KkLf8ubXpyMb3
-	 CGcP9DLfjFOWH55wZp4OOMzoVL3Dp48zdqSS+x9JevBCl518N6YlC+4PheztYN+NeF9km
-	 ABi4Sp7v76HHq8kJXFsVUHjspSypL5hzRe2WcSnqsNqi6hE7rmdJe80mEZ23Rd2pPi5D/
-	 0//A0GwYXVMplUnqaRsxiTCZXKIgyOZFpI6dZ6WibjgWvGQmgRrmi/TNuWut07o8Haw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793182250;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=19TPKFjxLxxJXmQTxvpO9mlfiQegSPOYzBZe/idkCsk=;
+	b=CE2jvlkb/iGFN5HsnAf8TVDijAJNuyviMd4OnECwHaj6YJ8bgYqSj4rt+J6SKOkRYhDk
+	 fUgoh0Pc2XRK7D3TOUKcSzZRSByrmIdyV/MOvRdDRvaDvO+ieL/TnRIg7yxpRu8bbBYLg
+	 2F672K4He+UVVy4xLONdRWt5N+ciynHlBr9kyVovyBuLwV/JEMU24s2685N3kpUo0zSv2
+	 vUtXCvWot4rx1kz7MuCEWffgAntQgOhK9XljX8FLTiEfh+sSYZaWGF3zLRrMyoKUbz6SM
+	 08bhMvOi1hif1+57LAbE3otyE6GK7YeNUdrPY28SxAAKZsc0MKqthUP/rAe4kBiY9XA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=phytium.com.cn;
-	spf=pass smtp.mailfrom=phytium.com.cn;
-	arc=none smtp.remote-ip=162.243.164.118
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3741606A31C;
-	Wed, 28 Oct 2026 10:02:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3741606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytium.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytium.com.cn
-Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
-	by hzbj-icmmx-6 (Coremail) with UTF8SMTP id AQAAfwAnfdxFyOFq04SlAQ--.14102S2;
-	Wed, 28 Oct 2026 18:02:45 +0800 (CST)
-Received: from phytium.com.cn (unknown [218.76.62.144])
-	by mail (Coremail) with SMTP id AQAAf8DwJnVCyOFqaF3yAA--.16563S3;
-	Wed, 28 Oct 2026 18:02:43 +0800 (CST)
-From: xiong yining <xiongyining1480@phytium.com.cn>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chenbaozi@phytium.com.cn,
-	xiong yining <xiongyining1480@phytium.com.cn>
-Subject: [PATCH v2] selftests: cpufreq: stop CPU hotplug loop after cpufreq update test
-Date: Wed, 28 Oct 2026 18:02:41 +0800
-Message-Id: <20261028100241.189085-1-xiongyining1480@phytium.com.cn>
-X-Mailer: git-send-email 2.34.1
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="lwtT/Voa";
+	arc=none smtp.remote-ip=95.215.58.38
+Received: from mta1.migadu.com (out-38.mta1.migadu.com [95.215.58.38])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE2C606A321
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 10:10:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3FE2C606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lwtT/Voa
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JldTN/ya2t8xpYirdSsWzyVdXdbqZ8hQSNVyw7aaEbs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793182247; v=1; x=1793787047;
+ b=lwtT/Voa3tn0zXEU/PzhEq0Pv8X8RXgswAH8eyPNFDU0mVUoYTJcJVehDdEEREy+Iz54fENy
+ biPGeo1lUF3FCPNyK43SlXfZFKlPiQCPNH6Um7LLz0rjHXCDULctY3z4vy29SE1tGrEP0slcIV+
+ 3C1eREjAnp0IWO8qCENK3LKw=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 3eac00e914e20d2a;
+	Wed, 28 Oct 2026 10:10:19 +0000
+X-Mizu-Trace-ID: 3eac00e914e20d2a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <76f1df75-09cb-45ad-bb08-e34acf93518e@linux.dev>
+Date: Wed, 28 Oct 2026 18:10:03 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -55,120 +58,84 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8DwJnVCyOFqaF3yAA--.16563S3
-X-CM-SenderInfo: x0lr0wp1lqx0bjrumio6sk53xlxphulrpou0/1tbiAQABCmrfqkkNCABOsX
-Authentication-Results: hzbj-icmmx-6; spf=neutral smtp.mail=xiongyinin
-	g1480@phytium.com.cn;
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWF15Kw4rKw4kAF1kuF1xKrg_yoW5XrWUpF
-	WkW3W5twn7CF1qyws3J34UW3y8X3Z3AF47Wrs0qr1Svw15JF90v3WfK3WxWFy3urWkZw4F
-	9anYy3W09r4FyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-	DUYxn0WfASr-VFAU7a7-sFnT9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUU
-	UUUUU
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 02/19] selftests/mm: skip collapse_compound_extreme()
+ where the PMD is too large
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ "David Hildenbrand (Arm)" <david@kernel.org>,
+ "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Muhammad Usama Anjum <usama.anjum@arm.com>, Usama Arif
+ <usama.arif@linux.dev>, "Nico Pache (Red Hat)" <nico.pache@linux.dev>,
+ Zi Yan <ziy@nvidia.com>, Barry Song <baohua@kernel.org>,
+ Dev Jain <dev.jain@arm.com>, Hugh Dickins <hughd@google.com>,
+ Lance Yang <lance.yang@linux.dev>, "Liam R. Howlett" <liam@infradead.org>,
+ Michal Hocko <mhocko@suse.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ Alexander Gordeev <agordeev@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Leon Romanovsky <leon@kernel.org>, kernel-team@meta.com
+References: <20260919002451.496763-1-kirill@shutemov.name>
+ <20260919002451.496763-3-kirill@shutemov.name>
+ <5862cddb-a78f-419f-a5a1-15e16a422bf5@linux.dev>
+ <atiQmWnz8zx2AKI7@thinkstation>
+Content-Language: en-US
+From: Zenghui Yu <zenghui.yu@linux.dev>
+In-Reply-To: <atiQmWnz8zx2AKI7@thinkstation>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Original test uses a fixed 5000 iteration loop to trigger CPU hotplug
-for verifying cpufreq synchronization between CPU hotplug and sysfs
-writes.
+Hi Kiryl,
 
-Two issues exist:
-1. Background hotplug task keeps running after test completes, causing
-redundant CPU on/offline operations.
-2. When cpufreq frequency setup is slow, the hotplug loop may exit
-before frequency updates finish, which breaks test purpose.
+On 10/21/26 6:32 PM, Kiryl Shutsemau wrote:
+> On Thu, Oct 08, 2026 at 07:52:18PM +0800, Zenghui Yu wrote:
+> > Hi Kiryl,
+> >
+> > On 9/19/26 8:24 AM, Kiryl Shutsemau wrote:
+> > > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> > >
+> > > collapse_compound_extreme() builds a PTE table full of distinct PTE-mapped
+> > > compound pages by cycling hpage_pmd_nr fault-time THPs through mremap.  It
+> > > therefore needs hpage_pmd_nr PMD-order allocations in a row.  That is fine
+> > > at a 2M PMD (4K base pages) or a 32M one (16K).  A 512M PMD -- arm64 with
+> > > 64K base pages -- makes each of those an order-13 allocation, which the
+> > > allocator cannot reliably hand out even once, let alone 8192 times.
+> > >
+> > > The failure is not a quiet one: the case calls ksft_exit_fail_msg(), so the
+> > > whole binary stops and every case after it is lost.
+> > >
+> > > Skip the case where the PMD is larger than 32M.  The MADV_COLLAPSE cases
+> > > still cover PMD-order collapse on those configurations, and 4K and 16K
+> > > PMDs are unaffected.
+> >
+> > collapse_compound_extreme() failed on an arm64 virtual machines with 16k
+> > pages.  The VM has 8GB of memory.  Not sure if this is the same issue that
+> > this patch attempts to address.
+> 
+> It is the same issue.
+> 
+> Memory usage for the test case, assuming 64-bit page table entries:
+> 
+>          4K pages:  512 x   2M =  1G
+>         16K pages: 2048 x  32M = 64G
+>         64K pages: 8192 x 512M =  4T
+> 
+> 64G is a lot, but I don't think we want to give up on this test case
+> on 16k machines completely.
 
-Introduce a file-based stop flag to control the infinite hotplug loop.
-After all cpufreq updates complete, create the stop flag file and
-wait for the hotplug task to exit.
+Agreed. This test case passed on other arm64 servers with sufficient
+memory.
 
-This makes hotplug run only during cpufreq sysfs write test,
-align with test objective.
+> Maybe we should treat a failure to allocate a huge page here as a skip,
+> not a fail? And remove the PMD-size gating.
+> 
+> Zenghui, do you want to experiment with this?
 
-Signed-off-by: xiong yining <xiongyining1480@phytium.com.cn>
----
-Changes in v2:
-- Stop the hotplug child process by signal notification instead of
-a stop file, avoiding the predictable temporary path.
-- Add an exit trap so the hotplug child is also cleaned up when the
-main shell terminates abnormally.
-- Link to v1:
-https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2662696.html
+I've just sent a patch for that. Thanks for your suggestion.
 
-This addresses the security and robustness concerns raised by Sashiko.
----
- .../selftests/cpufreq/special-tests.sh        | 30 +++++++++++++++----
- 1 file changed, 24 insertions(+), 6 deletions(-)
+https://lore.kernel.org/20261028100119.11340-1-zenghui.yu@linux.dev
 
-diff --git a/tools/testing/selftests/cpufreq/special-tests.sh b/tools/testing/selftests/cpufreq/special-tests.sh
-index e87ed7c8e5e5..b3ebead1c52a 100755
---- a/tools/testing/selftests/cpufreq/special-tests.sh
-+++ b/tools/testing/selftests/cpufreq/special-tests.sh
-@@ -16,6 +16,8 @@ source cpu.sh
- source cpufreq.sh
- source governor.sh
- 
-+HOTPLUG_PID=""
-+
- # Test 1
- # $1: policy
- __simple_lockdep()
-@@ -92,20 +94,34 @@ governor_race()
- 	restore_all_governors
- }
- 
-+hotplug_cleanup()
-+{
-+	if [[ -n "$HOTPLUG_PID" ]]; then
-+		kill -s SIGTERM "$HOTPLUG_PID"
-+		wait "$HOTPLUG_PID"
-+
-+		HOTPLUG_PID=""
-+	fi
-+}
-+
- # Test 4
- # $1: cpu
- hotplug_with_updates_cpu()
- {
- 	local filepath="$CPUROOT/$1/cpufreq"
- 
-+	(
-+		local quit=0
-+		trap 'quit=1' SIGTERM
-+		while [ "$quit" -eq 0 ]; do
-+			reboot_cpu "$1"
-+		done
-+	) &
-+	HOTPLUG_PID=$!
-+
- 	# switch to ondemand
- 	__switch_governor_for_cpu $1 "ondemand"
- 
--	for i in `seq 1 5000`
--	do
--		reboot_cpu $1
--	done &
--
- 	local freqs=$(cat $filepath/scaling_available_frequencies)
- 	local oldfreq=$(cat $filepath/scaling_min_freq)
- 
-@@ -117,14 +133,16 @@ hotplug_with_updates_cpu()
- 		done
- 	done
- 
-+	hotplug_cleanup
-+
- 	# restore old freq
- 	echo $oldfreq > $filepath/scaling_min_freq
- }
- 
- hotplug_with_updates()
- {
-+	trap 'hotplug_cleanup' EXIT
- 	save_all_governors
- 	for_each_non_boot_cpu hotplug_with_updates_cpu
--	wait
- 	restore_all_governors
- }
--- 
-2.34.1
-
+Thanks,
+Zenghui
