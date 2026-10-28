@@ -1,45 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793201613;
-	b=eIZoujZd5py4RCHo9vBKjOz2NYAUXYKHDT+NOAQYzeGDW1LDh94adlDdNNbbwTROJos3
-	 e2ffvodl6BdvjP2gf4opF7XX50NbkatYQUlB//3BVOfDy+Jnyi4Rtp37+rbApsXeSVJ6n
-	 w70fQvmAbEP3XgsCLJFbrpOP4bl1uDot3iC+100VpDQv6IAY7ksOTplYZOZvLnYNh/vvP
-	 b53cVFl0SXHv8WDkY6yZWu13bGJhEvbdPR2l8eaLgdHqsVF/S+Wy15yd/IT5/Ggo50B9f
-	 WCgg2MT6PBLIZMrAcIdmrvHeEvNvO0IBLrEvWoV0xrNeIVJB8kKxYpk0I19930b6qIw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793201613;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Mk3iDJt5T50uHOGaKewojk6ij6AnqevT7e8ze4YGhNg=;
-	b=kdgQDJHG2UX8FOCbcSkJjibZDyFbmFuWk9pPh3U6mbhsWc1u7m96obmm7NeMyXCz+sPe
-	 PAv7LmfeamBg4803RRZKQheiQzVPvqA2LmCzAjqeZw/biAd4aLX4+bLCX73oWtuMW3gYy
-	 bvDDTJQu9j1MGcBfxG83HU3WaxKsyOAsO/9HXpjf9u+iQ1KpOsjgYLRakwufhzP6Xv+wE
-	 qYb5WcydghJkZDDrmugu02Mv1Z1JR+7F/QX1Q3LDSskwaWxMSokGc2PsuH+MpLi1v6p3t
-	 615UPOp+vUQPXtvEZ6wJwu7yBY5x8P+53Xuq4WAHLNgUNQ50IRMvC71cdUtNQNUy/xw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="onWJ/2mf";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793201687;
+	b=rVbRTR74tnkeYAnR0eV7e8AvQp7d4GAw0WQzAlN8gA+0COJK2emPDJBc9FnARTWFIGFc
+	 vv8JdPJFyXJ91F0Ou3E9v7a3bRhkn5PNvdjwzld+56Gg/AachhP4aA9doe33RaKzClgyU
+	 n5INiL3JcE+ZJX6U/g09XD/Po8QMJUbXjhgJOGEhoqJ9pP4PhEF5WFfglOm84gCAXDxQY
+	 qF88erPERimGqbn9PV7uj5b7r0uy7EPd4daphj6iseTNuzTnBjGgsIE+ovdaM0kTO0QdW
+	 aBk4ZEM5FY/rrACJ9k0GYGJLIddao7ZOOGbiSI8AbUsxm3E1ITC8MvEUq3Q8lyUrHrA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793201687;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=JNFgtKDp87voFFR8yXktG0LWODrSokHg8hARj7IkQYg=;
+	b=VAad3vghLy9dMMtjqNx4Udg0fOb4LcnHO8Ijd1cBkreug1DXWqmbF06BShVuZTIPC1WQ
+	 LYIKZ7l7RURDoic5I4BScYCobwoD/j/FktvFr8TGr9DDzwcQtbaudCYdUmO+zm/O2kiJ+
+	 JBMU8Xq6RlQoQJVFXuthLmYzeqHZLmaXxByJLkViqWFvkdziS9MT5oJfLhjLMz3yzFnYn
+	 TkmV4Ev876U8D6OnzCCMtd8aJZtClFVy2qYWTotkILdDueeXHo0FQf13WC9kFg+GqkFP4
+	 YXtzIb2vvFf54+6Y+FUQ4QryxqAVI2Q37bqLsvWzIATCKm4ZnLeCDTYBv/mC1289ChQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ef7UxKVo;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.41
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803BC606A329;
-	Wed, 28 Oct 2026 15:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A483606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 15:34:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A483606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=onWJ/2mf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E5C1F031E3;
-	Wed, 28 Oct 2026 15:33:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793201613;
-	bh=Mk3iDJt5T50uHOGaKewojk6ij6AnqevT7e8ze4YGhNg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=onWJ/2mfsPmFOOalwByl3eXDdbjjgJ2gN/7iWzacAbLDdGhGigpYF8+cSJqokvBbW
-	 aSUJCOId+FNB98f848eq+C5Ym/hmPnZ6ovYb6zuKOG5mtycnRe2zYZXcVSQBDhbt3/
-	 8rW09EUBpaQ3LqWT9mBnxpjAlr3IGxwnamy3gLoIn3atvQm6DQPU4LNaXgNQ+KM4KB
-	 zoYIzro3bcyWt7uTd+ahPoOLsECrA1y0esopsT6B5JFoLQaR/J7YwVrWaQsKqNBUCv
-	 M64AlWYAvA5+DuJirYEyPPjRyvmsOjjtsGHZDrQ2LL+3r+t5ClkpliCmAR6V2E18RG
-	 fv1HDgVqPIhDg==
-Content-Type: multipart/mixed; boundary="===============5957388155132648867=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ef7UxKVo
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-845788309b4so549813a34.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 08:34:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793201686; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Qx9TGfv3yO9xclllUeNF4hrfudlMwk7sWPQ+UG0jXhyC7EfNjCvnF6926OqpHG7yda
+         yy5rlImwOS5uagPmE4BONMgq0poq5Mwadcum6Znr6cYiRJ0E5yVFaH5EWzcYLtkwnPPj
+         +hP0YdGvmON6uzi+QkbVCfU3ygOTr84AR++hGsPgiw5LFTvwHjK/HxzIQhiteeCbOmfk
+         Kf3YlQIt3Yb62vhoJZXkXiNvZBwwXWS01FbEIsNkBxe8ccOseNOZld37VxWwjuhMVqa7
+         wJmg4Rd58x4RG5lgZdCe8ELaC/3PXNF96JmUBahGqhEiIkDrPfVPOWyrqmdAG6IrkXga
+         RAEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=JNFgtKDp87voFFR8yXktG0LWODrSokHg8hARj7IkQYg=;
+        fh=jncqaoeXzB+JW55o2N0Ymnt3uSqAd53+bdSFjknylr4=;
+        b=Yt08VeQxRnkvvMCzYeb8LMiZZf8q/+2XAHodScfy5/xoKENUtlr7euKLBJL70IMDXs
+         2mRc9SCnGt+cvB75q4DIrMXEkG1z8gtdX2O1LSNh26aeS1ue/MbvEtSht9x0LI/egJ9S
+         v1n/cKVSL4pmQs7bSFEUjlcyyVc9QHTeBBljjTx4MtM9bo9eqbyw3IxV+c7qnSOsyuTk
+         5yVJtcSv//9z/05NteKHEoJJDg+XDquuv7gTocaxqhjeLKHJh6hjCaT1EpHIYg3P44HJ
+         G4y/2QxgPWGZh/BaKYVa4+/Je7fjSvyZhOuUwI8dYu3nx4Q7XfSkU8OvFomvNoyd8Z7m
+         0dRw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793201686; x=1793806486; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JNFgtKDp87voFFR8yXktG0LWODrSokHg8hARj7IkQYg=;
+        b=Ef7UxKVoG+4kGFp5uykkaUkiMgN1G+lhfRLa/HcMnDuSiZ5htbI+UAqy9Z2N2Vu5x2
+         AH+7Nu3jLP/OrYD/VNcTT6FgiRmooO5freMk6bEYmgd57MDL+PIpGjMbnDuc0PsaShxU
+         5/3RUNC4r0BI+PdMJjPh9SHdp3hIH597VpChTatGqzIJSzF5YmFX4jXsJFMoU91acv3O
+         Ue52hoB1ApBbbh+Buda7XrIKg8nxxtjLMGB26NWAc+iJw/l+fGBuodmpm0fGIbJAA621
+         BxIqhM70bRBAAqgrfBdZuKZ1qmZlS/oXwRLDwosHR8d6uPolfMNbRlKOIi4wUlj1PVRO
+         cGVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793201686; x=1793806486;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JNFgtKDp87voFFR8yXktG0LWODrSokHg8hARj7IkQYg=;
+        b=oEH3L9fSZzYlqvU7VEVXShP4buo63UXkGRue8r38VF2POpHN4YvG1PGLk5VvFCNeXa
+         2fSmSsCIcreG/hl8MR8rKQmC+wwn7QRc0zhGAyI4uOTqg60CmBGa/6xcw/KWM7jkedra
+         qXRcRtcRbAtmnxOEg3tBXFxiicdNKlOwxQ0tIDb0zu47SXIr57NV7M4THcb3g9CQlw5E
+         zl/2XLAeQjVmSPFVGEXhLlWM7mWgURIjRwLZCE2YS9zbfVtEtkxjc01JcywlqI6ZA9hn
+         RCaT8RsY5b8xWA+xjM95PVPGIFUhl77rxVgWbIbQ/5nVflC22fesLhBaDaSDufn9xJja
+         Ymbw==
+X-Forwarded-Encrypted: i=1; AKwUvBw+77EjgRYkEzFb6/k6ED0FA1GxydC1zTjx3uOPyKmvHdR/5AHa5CmxiLL7GdJ8r1F7RpVDn6dJILljpQpwa0s=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJIwmSDNuUPphis0ZI1Ujly0A9Xd6wGpJLgbkIgqMMlEtDcRVuQ
+	109kaNC5dWC7MHW5Y+hlFwtC1FWl5QOrMnQBa2xArgTaQ8U4gRZqKJmKLsZquZvLvGA1rXlgcRB
+	vurHUA2w1Vm5/Do7UWOxAlw58r3G95ns=
+X-Gm-Gg: AYBFou2m4pa/dx+idY0whaekYaKLQN4Lzf8myeKBnSKG2a1YwzYdU7miUjoA2GEdeGm
+	1mnuSk/Vw+MGsWVchg0TKY5QdSbX8WaVUejH+2+dGhYm/6YxwaZ0ERzIHEJxuVjFuSbxqlsHThC
+	TH3lcCZqbGScwALe+B4tkR5Kao5m7jdQmqrg2ohk16CHGMwym41YaEpkalwGGthXVci7/lzsZkq
+	D+5/BG6trn+OoIKVOq/GIxHTvaLkambYXoTsLWD25yB1ynwd0N5y1kRr5Db/uIiq6ESY92ozIp3
+	Upmbs/yo3NCRx9Hy6vcAGeP7+KLoHaw2hbIiVO3jeNgpRxYFphmifaTNUAZHwzeX7TVsSDkc+7r
+	MSU4imkaX43D5kJWUAhuer2eK6YEtr84DqPo=
+X-Received: by 2002:a05:6830:2304:b0:846:e5a3:c8bb with SMTP id
+ 46e09a7af769-85ac012e9bamr2225801a34.15.1793201686073; Wed, 28 Oct 2026
+ 08:34:46 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,111 +104,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <db337130fec9f342fe80debfe2b9e4fb4310456bf9a639785e34c931a81e4bbc@mail.kernel.org>
-In-Reply-To: <20261028143534.135968-3-cui.tao@linux.dev>
-References: <20261028143534.135968-3-cui.tao@linux.dev>
-Subject: Re: [PATCH 2/5] blk-iocost: add BPF struct_ops cost model support
-From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ameryhung@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 28 Oct 2026 15:33:33 +0000 (UTC)
+References: <cover.1793094611.git.chris@chrisdown.name>
+In-Reply-To: <cover.1793094611.git.chris@chrisdown.name>
+From: Andrei Vagin <avagin@gmail.com>
+Date: Wed, 28 Oct 2026 08:34:34 -0700
+X-Gm-Features: AclHuK81v527zBLgjPgT7UgeAn0ZRsnw4w8kJ2Fr9s5y5HrZvwNULUli5C61ZOA
+Message-ID: <CANaxB-zEaaDaaR2Fszx0D4TAcKAapOfcxQ2MzZbFVAhR2n3SOA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] mseal sysmap: Choose system mapping sealing at boot
+To: Chris Down <chris@chrisdown.name>
+Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, David Hildenbrand <david@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Jeff Xu <jeffxu@chromium.org>, Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============5957388155132648867==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> blk-iocost: add BPF struct_ops cost model support
-
-TL;DR: Nit only, not a bug: the long iocost_model_ops interface comment in
-blk-iocost.h repeats attach/teardown details documented elsewhere and names
-call sites; suggests trimming it to the model-author contract.
-
-> diff --git a/block/blk-iocost.h b/block/blk-iocost.h
-> index e4e517ef6a0f..6d62b4fd0c54 100644
-> --- a/block/blk-iocost.h
-> +++ b/block/blk-iocost.h
-> @@ -22,6 +22,79 @@
->  #include <asm/local64.h>
->  #include "blk-rq-qos.h"
+On Tue, Oct 27, 2026 at 4:42=E2=80=AFAM Chris Down <chris@chrisdown.name> w=
+rote:
 >
-> +struct bpf_link;
-> +
-> +/*
-> + * Pluggable cost model interface for blk-iocost.
-> + *
-> + * A BPF struct_ops implementation can take over the cost model of one device.
-> + * The device is identified by the dev member, which is set from userspace
-> + * before the program is loaded; the struct_ops core owns the program lifetime.
-> + * Attaching creates the ioc if needed, like an io.cost.model write, and
-> + * switches the device to the BPF model with the queue frozen before
-> + * rq_qos_mutex, like an io.cost.qos write, and delivers iocg_init() to the
-> + * cgroups which already exist on the device. Enabling and disabling the
-> + * controller stays with io.cost.qos.
-> + *
-> + * While a model is attached, io.cost.model selects between it and the builtin
-> + * model: "model=bpf" switches to the attached model and "model=linear" back to
-> + * the builtin. Neither detaches the struct_ops; only detaching does. The
-> + * builtin linear coefficients are kept while the BPF model is in use and take
-> + * effect again when switched back.
-> + *
-> + * While in use, the BPF model prices every charged IO on the device, including
-> + * flushes, from the bio charging path. calc_cost() is called from the IO
-> + * submission path with RCU read lock held and must not sleep. It receives the
-> + * bio itself so that the model can use what it needs (operation flags, size,
-> + * sector, the issuing cgroup through bio->bi_blkg, which is guaranteed
-> + * non-NULL) and returns the cost of the IO in vtime units, where 1 second
-> + * of device time equals VTIME_PER_SEC (2^37,
-> + * available to BPF programs through vmlinux.h). The return value is clamped to
-> + * 1 second of device time per IO.
-> + *
-> + * The struct_ops also carries the transfer cost coefficients, vtime per page
-> + * for reads and writes. While the BPF model is in use, they replace the
-> + * builtin coefficients in the completion-time request sizing of READ and
-> + * WRITE requests, with ZONE_APPEND counted as a write. Taking over the QoS
-> + * side (latency tracking, vrate control) is left for later extensions.
-> + *
-> + * The cgroup callbacks are bound to the iocg policy lifetime, one (cgroup,
-> + * device) pair per invocation. iocg_init() is delivered from ioc_pd_online()
-> + * and on attach to the cgroups already online on the device; iocg_free() on
-> + * detach to the cgroups which still exist then and at pd_free() time for the
-> + * rest, so that init and free pair up exactly. iocg_free() is gated on a
-> + * per-iocg delivered flag, as bios can still be priced between the blkg going
-> + * offline and its free. Both callbacks are called with ioc->lock held and must
-> + * not sleep; the delivery points nest inside queue_lock except for iocg_free()
-> + * from ioc_pd_free() in blkg_free_workfn().
-> + */
+> System mapping sealing is currently a build time choice. Hosts which
+> want it and hosts which need to move or unmap these mappings therefore
+> need separate kernels, which is not ideal. Let's allow the administrator
+> to choose at boot time.
+>
+> Chris Down (3):
+>   mseal sysmap: Add mseal_system_mappings=3D boot parameter
+>   mseal sysmap: Allow with CHECKPOINT_RESTORE, default off
 
-[ ... ]
+This isn't just about CRIU. For example, gVisor does not depend on
+CHECKPOINT_RESTORE, but it still needs to unmap the vDSO. Other
+sandboxing solutions likely need to manipulate vDSO mappings as well. I
+think this toggle should be off by default, regardless of
+CHECKPOINT_RESTORE.
 
-this isn't a bug, but could this interface comment be cut down to the
-contract a model author needs (calling context, units, clamping, locking)?
-
-The attach description repeats what is already at the top of
-block/blk-iocost-bpf.c:
-
- * attaches the model to that device, creating the ioc if needed and switching
- * to the model with the queue frozen before rq_qos_mutex, like io.cost.qos
- * writes, and .unreg detaches it; enabling and disabling the controller stays
- * with io.cost.qos.
-
-The init/free pairing rules and the "bios can still be priced between
-the blkg going offline and its free" reasoning are repeated in the comments
-above ioc_pd_online(), ioc_pd_free() and ioc_bpf_deliver_iocg_callbacks().
-
-The comment also names implementation call sites:
-
- * not sleep; the delivery points nest inside queue_lock except for iocg_free()
- * from ioc_pd_free() in blkg_free_workfn().
-
-Would it be better to leave the attach and teardown mechanics to the
-comments next to that code, so this one does not go stale when those paths
-change?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40710751825
---===============5957388155132648867==--
+Thanks,
+Andrei
