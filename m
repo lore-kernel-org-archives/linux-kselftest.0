@@ -1,67 +1,69 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793206587;
-	b=Rv/xSyJbpi7PWjmbVyGVh6CEYSU9TP9BRtrCniV3T6zt66EO2XMUqLYugJI8dHKG81mw
-	 4ucJwtoCpWSB9LwZqMGUpYbB862BEf4co6LuII8PGmdCzmn2ht3ir3gJeUb9zqfuBV9N0
-	 oHrth6LgpQH32y+KrOG2c08Lm/okZiQDjqA+uW1E4J/iMkRMe7hvu2c/GYK0bSOrkQiAN
-	 rmFCWKVRzvbz+skw5MQ4rA2c3/2TjwPkq9SHlynZshsc7fO7f5Szl+CWOqGh2LH3wHLt0
-	 jMvca7LqKvxcC3N8aFqUYkiNLUsPJflS2kPRdaGzSDWCNWbputPf3ELz3GNFwQgD1vg==
+	t=1793206593;
+	b=UYU1yV9Mjdst0B3/iQsWMTi6nLKatRYR59gv+iJqPhl4ATHR4hkSUGc86Ckw0I36+mx6
+	 XbpKuQS3taTHOFoSawgH8JNX+1H0F2qnCf8NuimHYstNvnC50ve1XOfHZB0wlRUzOjurS
+	 JT6aj/00G70OSjYvTHf+/Jpx2fjix5/NbkP/C1ErIMsR2rwNjYU+6gUrEW3hM3wzWOWbT
+	 rQ3xwxo/LUyvOKdZObD80GGhCBmH20xl0oV7EoDNMAnclZZihhrjAYkUuyHBqog0lbv8R
+	 Z6ls+7ki0T2igqQom4rLUK39b3mFcW4d679TZO5wOsb3GBKeYId2D2ytWMneviYeU4w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793206587;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793206593;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-Proofpoint-Reinject:
-	 X-QCInternal:X-QCInternal:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
-	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Proofpoint-Reinject:X-QCInternal:X-QCInternal:
+	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version:
 	 X-Proofpoint-Spam-Details;
-	bh=M5B9TDbfmanBmXj9WGkg/1GBsSFAT/OXKf+QOZEIqRU=;
-	b=Nwz3kY/LBqvGP4vtwiiD6Ly9CXJkDsVzFzzwnuxdxhjS1+hrl4n03eAj59HgLFbbZZAt
-	 4VD3cbwItQIgxXXWZ0x6CNzy4HNq5V00Opsl3/eR5++3K3QrFxglCU7dxAHTfjmQEc4Dq
-	 sX8x4NJwHWmDomt/+TaKdTOL81z92X7xr3hetf/SdXIumL02bJiv2tl9/qLHliTGP58Do
-	 rGDPSSdwKkin8fYYftdIsOj8+cZvsFlqt3Wfo3VmpII+cX/V8ccpQSs7B1cQyX/KKjQtH
-	 3SJzr7Au3OPq/SLHKaMMuKti+tonhuJGcdReCmJaYFF/RlVnFX2lU7st0G7cgAHSYgA==
+	bh=7ytcAhW8s9pK1VqufDawyuZ6RzlG8KOXsUsBY8XamkI=;
+	b=PE8SLP5Loh2NSQJ4A1JqXUhNXpWMH7YuNw6fA2hpgAQ8rId8ITgXYRCgnstq3XeTNQUZ
+	 /tEt3gICLM47SXAILr1YFo+6T3D9cz+1t8RQnHmD68I7h33fuPoglFcPLu4rThX9KjB5/
+	 R1zi+oFL0L00ThT0tHkI2HI/2v16XlYhQLOyTP7RyP3TyMLsRjZkBApaucjlAedwSNUxM
+	 m3u108BkpbldvEbgvOH966X3rOMjhSYYCeQrA8M3CMrGMm9zAM+m1y7u7nWMfX4Ip9l1U
+	 jUhAX6GfWFiRtr5xgTx8rEnh+QUeow9hnlNsVjsaJqC0agM+FgWHyvgx6FT+q0gR6zg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=U8ZT2jdT;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=I3I+CocF;
 	arc=none smtp.remote-ip=205.220.168.131
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF17606A31D;
-	Wed, 28 Oct 2026 16:56:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAF17606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283BE60A2625;
+	Wed, 28 Oct 2026 16:56:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 283BE60A2625
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=U8ZT2jdT
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69SFAjg71517021;
-	Wed, 28 Oct 2026 16:55:38 GMT
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=I3I+CocF
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69SFA3kX2568787;
+	Wed, 28 Oct 2026 16:55:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=M5B9TDbfmanBmXj9WGkg/1
-	GBsSFAT/OXKf+QOZEIqRU=; b=U8ZT2jdT01SzJZ2APLT4oKPdQDCj7EhjsTtkhS
-	X5SRjhDjdFzzEMIlcFndiyNfr6/c/vniSA4zYKfdY0AVv4ZY//kzTweiXJV5D13S
-	AeetYI2E/muZ3TAk2p22mqtRufPCk1qcODkNOucHA2R9WLPoT/QwM1KKDeLHaSno
-	zi35sdBfvjeZCXZlvH/22/9qaf8TeYlecxuGCM6TxUTazsyK1cZe7tQthCG7ywMP
-	CJqlsBfT/Mvyd5FwyuSQHTwcHRRhYBUeEsrXXC9AhXlJO2fckZXeqU40JywaMi+r
-	w66jcF8FmgIwo8MDHTUUuUsexIggQ7dVKUfF72pdJ0f/p/6w==
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	7ytcAhW8s9pK1VqufDawyuZ6RzlG8KOXsUsBY8XamkI=; b=I3I+CocFvDY0I7gT
+	DgIBQD53shIuNZ4i2D7uZ5w/7wpDO7jflf1he9/ds+vjSbZ7gXfiV2H2PQd3L06m
+	SH01LPdRkhNJoXTRm1lDZnDmB65zmLd5+sMBSh88sWDbAmtgpfOWvXFwgXTBiZdQ
+	OOQ2xoicUniSRVhxQL46aiMEPY7A6CXTBsSgBb45s6LS0A65YJAAeO2YAlxXweAt
+	zW1Rd+KRT48rt7IEQpbP63z8ZN52Hzlm+AzIJnsiFcDW6NmkGjD4H/M/zix/RomD
+	kM461HTNFXBCNA74JT8u03DLt3BVo5JjCvthwN9WUnIXa3C/7Xum56vGV97Y2okF
+	RgmaJw==
 Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hkbhwahbr-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hk12pvpwg-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 28 Oct 2026 16:55:37 +0000 (GMT)
+	Wed, 28 Oct 2026 16:55:38 +0000 (GMT)
 Received: from pps.filterd (apblrppmta01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.18.1.11/8.18.1.11) with ESMTP id 69SGtYQF1881523;
-	Wed, 28 Oct 2026 16:55:34 GMT
+	by APBLRPPMTA01.qualcomm.com (8.18.1.11/8.18.1.11) with ESMTP id 69SGtZWV1881586;
+	Wed, 28 Oct 2026 16:55:35 GMT
 Received: from hu-devc-blr-u24-a.qualcomm.com (hu-anuppate-blr.qualcomm.com [10.131.36.165])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 69SGtYlB1881494
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 69SGtZCl1881556
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 28 Oct 2026 16:55:34 +0000 (GMT)
+	Wed, 28 Oct 2026 16:55:35 +0000 (GMT)
 Received: by hu-devc-blr-u24-a.qualcomm.com (Postfix, from userid 486687)
-	id 244B523334; Wed, 28 Oct 2026 22:25:33 +0530 (+0530)
+	id 44BF124D90; Wed, 28 Oct 2026 22:25:33 +0530 (+0530)
 From: Anup Patel <anup.patel@oss.qualcomm.com>
 To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
         Alexandre Ghiti <alex@ghiti.fr>,
@@ -82,11 +84,13 @@ Cc: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>,
         Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Anup Patel <anup.patel@oss.qualcomm.com>
-Subject: [PATCH v11 0/9] riscv: add SBI Supervisor Software Events support
-Date: Wed, 28 Oct 2026 22:25:22 +0530
-Message-ID: <20261028165531.940336-1-anup.patel@oss.qualcomm.com>
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
+Subject: [PATCH v11 8/9] selftests/riscv: add SSE test module
+Date: Wed, 28 Oct 2026 22:25:30 +0530
+Message-ID: <20261028165531.940336-9-anup.patel@oss.qualcomm.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261028165531.940336-1-anup.patel@oss.qualcomm.com>
+References: <20261028165531.940336-1-anup.patel@oss.qualcomm.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -101,420 +105,1374 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Reinject: loops=2 maxloops=12
 X-QCInternal: smtphost
 X-QCInternal: smtphost
-X-Proofpoint-GUID: Kuvt8ORw7KMjX6H9N6KTkFcek8bDy2Cu
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI4MDA2NyBTYWx0ZWRfXwONSzImYyp9y
- naYBLpKiqnCGnP0Z5WYxx8Y0nnShgik/U1HXF06M+eor+zQcRHou2+EYC4EADbxPQ+csVZZjVjD
- KRAeR3U1Q1gfcwe8egw7SWKLEU+fAi4=
-X-Authority-Analysis: v=2.4 cv=V+joQuni c=1 sm=1 tr=0 ts=6ae2290a cx=c_pps
+X-Proofpoint-ORIG-GUID: Qnv75cJDmOSB6FL6_pIFtkmmWtmeNr8x
+X-Authority-Analysis: v=2.4 cv=DtDDa2/+ c=1 sm=1 tr=0 ts=6ae2290a cx=c_pps
  a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
  a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22 a=VwQbUJbxAAAA:8
- a=968KyxNXAAAA:8 a=h0uksLzaAAAA:8 a=HwFc7jivAAAA:8 a=NEAV23lmAAAA:8
- a=Mwg44Dw2nxROhg5v3AAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=MSi_79tMYmZZG2gvAgS0:22 a=kr7TZk85JJIQSqC0cl8G:22
-X-Proofpoint-ORIG-GUID: Kuvt8ORw7KMjX6H9N6KTkFcek8bDy2Cu
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI4MDA2NyBTYWx0ZWRfX8UpZOsXS9O5i
- ksRBUiL+oBbLrBgwUeIHjYrPJVbUHKHjPWz+fVQosQJ+UbWZhutmb9teoeMmJYUPQWFYvZwvP1g
- Gb2xwlok38/34MrWVx6n0vSeqkpy9yFP858raMnMBzz1QnYg21PIt1t+pMhiLu1DH9oE1ci3XO1
- Ef6iYRlK0HX3UdJb8O8LenKgew0Xo05gJZzTZKEOvaurFntcRx3+xpbG65wzdHRMLPlnQKE4oHc
- QSAXPSanyMmH8rQ5RZ+ORnb/xRAm29rYMabPu6iNhflv5s+0q6igAUcSFGuqBknD3oft3hjLVx7
- jPuHG2VYQNJZML9FTSPNGsQEdJeYV7J0yeUQKm8x2tip1dTjUSdIaOG/zxWEfBBCsHfZP1azvMw
- OZdLrBNu3FNl6CSJ/lyr297z97WQ7TYskZivLBVeuaPRQ65pWE7hgpoDz0LWcdOAsJQyWwmeUQp
- OHHwhxqjPIFE5gnNmKA==
+ a=u7WPNUs3qKkmUXheDGA7:22 a=Um2Pa8k9VHT-vaBCBUpS:22 a=h0uksLzaAAAA:8
+ a=EUspDBNiAAAA:8 a=968KyxNXAAAA:8 a=VwQbUJbxAAAA:8 a=t9496tuAAAAA:8
+ a=Nm_KQGz_UjbYY-8_6PEA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=MSi_79tMYmZZG2gvAgS0:22 a=4wQ91nGE5lQcD7eh5OX0:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI4MDA2NyBTYWx0ZWRfX9fNUBlHcyuS8
+ m4osS2rtE+ziUoE2qvMi8jTPDsdW4xTd0lb1EFarUATVDg6JW6/beXD5rmNnSKt9sj42fwlRK2E
+ MG8qgaG6eoHdPu/2xBSMRd7Eha9pwTLwtgafsuQEepC3lUAKmJnphhCxhPO13EsY5J7SZfqVMji
+ k5qujKWEv/HAkeS+w00GyEb18ZnQYReqIDvR5HN4SIFNixL6Z/uV8gZOlj52kwl2WwiuTwEnWpU
+ HGi6BX6UvWXoKdSF1zCzQkOJ1rrks5EPbB0jgHHJV1xMMGq1XsE7AMKT5d0NqUWNcs1QRFbPvl0
+ wpWpT7Ctb+fO+kt9xFPW8/GgES7yZuJgo0DFFG0dpuyp1l979A1j+deJm/kiJT0+gZ5g+pl+2oz
+ bfWeKpzS1NGeGHPeF5TrSobrh5i5ubflTakET1DEGDSvDoZqkhMicHQ93ft++wX37RhXYmt2Gz9
+ AKZyhzDHKw5tooM81jg==
+X-Proofpoint-GUID: Qnv75cJDmOSB6FL6_pIFtkmmWtmeNr8x
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI4MDA2NyBTYWx0ZWRfXwmYGjfrn07Ms
+ Hde7eogIolmr0uODaWGGE8Y5aSLEEqBGrUIo+En1vnPyMNmRhPiurFMFzpnEAvQS6BQJIOi41I1
+ 3RP54HmZCbwsJ8D8QK/PjE//bPC1LjY=
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-10-28_05,2026-10-21_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 clxscore=1011 bulkscore=0
- phishscore=0 impostorscore=0 priorityscore=1501 spamscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1011 impostorscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610280067
 
-RISC-V does not architecturally define a supervisor-mode non-maskable
-interrupt (NMI). An interrupt that arrives while Linux has cleared SIE stays
-pending and is not observed until interrupts are enabled again. That is
-correct for ordinary interrupt handling, but some kernel work needs an
-NMI-like notification that can run even inside an interrupt-disabled region:
-sampling a PMU overflow at the instruction that caused it, or taking a
-high-priority RAS report promptly, cannot wait for the next unmask boundary.
+From: Clément Léger <cleger@rivosinc.com>
 
-The SBI Supervisor Software Events (SSE) extension [1] fills this gap. It lets
-Linux register handlers for events that the SBI implementation can deliver
-ahead of ordinary traps and interrupts, giving RISC-V the NMI-like supervisor
-notification mechanism it otherwise lacks.
+Add an SSE selftest module and runner. Loading the module executes
+smoke tests for the SSE framework, and the runner reports any error
+emitted by the module.
 
-SSE can carry several event sources: high-priority RAS reports, double traps,
-and PMU overflow, with room for further standard and platform events. This
-series focuses on PMU overflow, its first user. Delivering overflows through
-SSE lets perf sample the code that was actually running while interrupts were
-disabled, rather than the later point where execution reached an
-interrupt-unmask boundary.
+Add stress={0,1,2} modes to exercise repeated handler entry and
+completion, single and multiple read-only SBI calls from a handler, and
+self re-injection. Check the SBI return values so handler execution alone
+cannot produce a false pass, and avoid touching an unreserved PMU counter
+owned by another user.
 
-This series implements the Linux side of that interface: the architecture
-entry machinery, a firmware driver that exposes SSE events to in-kernel
-clients, PMU overflow delivery, and regression tests. Per-hart local events
-and system-wide global events share one client API.
+Harden the test against false failures and leaks by using TEST_PROGS for
+the runner, using phys_addr_t for SBI attribute buffers, adding timeouts
+to busy waits, pinning each priority chain with migrate_disable(), and
+holding the CPU read lock while a fast-test target is selected, injected,
+and completed. Unregister all registered events on error, check teardown
+failures, and let kthread_stop() drive monitor-thread exit.
 
-SSE delivery model
-==================
+Track handler progress across fast, priority, and stress paths. If
+firmware reports injectable events but the test cannot acquire or handle
+any of them, report SKIP instead of silently passing a capability-only
+run.
 
-Linux first registers a handler and an event stack with the SBI
-implementation, then enables the event. When an event source is signalled, the
-M-mode SBI implementation preempts Linux even in an interrupt-disabled region:
-it saves the interrupted supervisor state and constructs an S-mode context
-that enters the registered handler. Linux can now run its own handler, for
-example to take a perf sample or process a RAS report, then completes the
-event with another SBI call, allowing the interrupted context to resume.
-
-The typical hardware-triggered delivery flow is (software-injected events skip
-the hardware trigger):
-
-       <--------- Linux kernel ----------->  <-- Firmware --->  <- Hardware ->
-     interrupted context  SSE handler             OpenSBI          Hardware
-              |                 |                    |                 |
-[1] setup     |                 |-register & enable-->                 |
-              |                 |                    |                 |
-[2] trigger   |                 |                    <----trigger------|
-              |                 |                    |                 |
-[3] save      |                 |            +--------------+          |
-              |                 |            | context save |          |
-              |                 |            +--------------+          |
-              |                 |                    |                 |
-[4] inject    |                 |        +-----------------------+     |
-              |                 |        | handler context setup |     |
-              |                 |        +-----------------------+     |
-              |                 <---inject (mret) ---|                 |
-              |                 |                    |                 |
-[5] handle    |        +----------------+            |                 |
-              |        | event handling |            |                 |
-              |        +----------------+            |                 |
-              |                 |                    |                 |
-[6] complete  |                 |-----complete------->                 |
-              |                 |                    |                 |
-[7] restore   |                 |           +-----------------+        |
-              |                 |           | context restore |        |
-              |                 |           +-----------------+        |
-              |                 |                    |                 |
-[8] resume    <------------resume (mret) ------------|                 |
-              |                 |                    |                 |
-
-The context used to enter the handler exists only for this handoff; it is not
-the task context that the event interrupted. The architecture entry code joins
-the two sides: it moves execution onto the event's dedicated stack and shadow
-call stack, establishes the current task, and presents the interrupted
-registers to the callback as a normal pt_regs. Clients can therefore operate
-on the original interrupted context without depending on the firmware entry
-details.
-
-Linux implementation
-====================
-
-An SSE handler runs in NMI-like context: it must not sleep, must not take a
-page fault, and may interrupt code that holds arbitrary locks or is partway
-through kernel entry. The implementation is shaped by those constraints.
-
-Because it is NMI-like, an SSE can arrive at any point where interrupts are
-disabled, including while Linux is midway through exception entry, a task
-switch, or a KVM guest transition, where the normal kernel entry state is only
-partially established. The SSE entry wrapper (the architecture assembly that
-runs before the client callback) copes with this: it preserves Linux-owned
-stvec, hstatus, and task stack metadata across the handler and any nested
-exception, and its earliest instructions, which run before the event stack and
-current task are set up, are kept outside kprobe instrumentation.
-
-The callback receives the interrupted registers as a pt_regs and is allowed to
-edit them. On RISC-V a6 and a7 carry SBI call arguments and results, so a
-callback that wants to influence an in-flight SBI call the event interrupted
-edits them there. The entry wrapper copies just a6 and a7 from that pt_regs
-back into the context handed to the completion SBI call, so the edit takes
-effect when the interrupted code resumes; the rest of the interrupted state is
-restored by firmware and left untouched.
-
-The firmware driver maps the SBI event state machine onto kernel resource
-ownership. A callback, stack, and attribute buffer stay alive until firmware
-has removed every registration that can refer to them. Failed partial
-operations remain tracked for later cleanup, an aborted CPU-offline operation
-restores the requested event state, and shutdown and kexec mask SSE before
-Linux stops servicing handlers.
-
-PMU overflow and perf
-=====================
-
-The RISC-V SBI PMU driver delivers overflows through ordinary interrupts by
-default. When firmware implements SSE and the local PMU-overflow event, the
-driver routes overflows through SSE instead. The choice is made once at setup
-and is not switched at runtime; an operational failure disables sampling
-rather than risking two active routes for the same overflow.
-
-This changes where perf can observe an overflow, not how applications use
-perf. A normal PMU interrupt raised while S-mode interrupts are masked is
-handled only once they are enabled again, so the resulting sample often points
-at the unmask boundary rather than at the code that consumed the cycles. SSE
-can enter Linux at the original point and remove that source of sampling bias.
-No new perf option or perf.data format is introduced.
-
-The entry code supplies the interrupted pt_regs needed for register samples
-and for kernel and user callchains. DWARF callchains additionally require a
-copy of the interrupted user stack. Since an SSE handler cannot take a normal
-page fault, this series takes a temporary reference to the resident user pages
-with fast-only GUP, copies them through their kernel mappings, and truncates
-the sample at the first page that is not immediately available. The existing
-in-atomic copy remains unchanged outside SSE context.
-
-The PMU integration retains perf's throttling and stopped-event semantics. It
-restarts only runnable counters and orders the CPU power-management callbacks
-so that counters cannot resume after a hart has failed to restore its SSE
-delivery path.
-
-Hardware results
-================
-
-We measured this on a RISC-V server platform. The same kernel source
-and perf binary were used for both routes; one delivered PMU overflows through
-ordinary interrupts and the other through SSE. The table shows the mean of
-three runs of three million single-CPU "perf bench sched pipe" operations. The
-"ops/s" columns are workload throughput (higher is better, so they show the
-profiling overhead); the "samples/s" columns are the sampling rate perf
-actually achieved against the requested -F frequency:
-
-  rate       IRQ ops/s   SSE ops/s   delta   IRQ samples/s   SSE samples/s
-  -F 99        337,707     339,555   +0.55%            98.0            98.6
-  -F 999       338,352     338,289   -0.02%           995.7           998.0
-  -F 5000      329,002     333,034   +1.23%          5001.7          5001.6
-
-There were no lost samples. Across these normal frequency settings, both
-delivery modes reached the requested sample rate and workload throughput
-differed by no more than 1.23%.
-
-The "perf bench sched pipe" workload also shows why the delivery mechanism
-matters to the resulting profile. Ordinary PMU interrupts cannot enter an
-interrupt-disabled kernel critical section. Overflows raised there remain
-pending until interrupts are enabled again. Samples consequently accumulate
-at the enable boundary rather than at the code that consumed the cycles. In
-the IRQ profile, finish_task_switch() and _raw_spin_unlock_irqrestore()
-therefore accounted for 54.99% of all samples.
-
-SSE can enter Linux while S-mode interrupts are disabled. The PMU-SSE
-profile therefore samples inside those critical sections and exposes the
-scheduler, locking, address-space switching, and wake-up paths doing the
-actual work. The leading entries from the two -F 999 reports show the
-difference.
-
-With ordinary PMU interrupt delivery:
-
-  overhead   symbol
-    36.63%   finish_task_switch.isra.0
-    18.36%   _raw_spin_unlock_irqrestore
-     7.66%   __internal_syscall_cancel
-     7.55%   do_trap_ecall_u
-     4.19%   mutex_lock
-     3.64%   mutex_unlock
-     3.06%   exit_to_user_mode_loop
-
-With PMU-SSE delivery:
-
-  overhead   symbol
-     5.48%   __kprobes_text_end
-     5.29%   __schedule
-     5.10%   ret_from_exception
-     4.71%   do_raw_spin_lock
-     4.01%   do_trap_ecall_u
-     3.99%   mutex_lock
-     3.66%   switch_mm
-     3.43%   mutex_unlock
-     3.29%   exit_to_user_mode_loop
-     3.28%   psi_group_change
-
-The ordinary interrupt profile is dominated by two interrupt-enable
-boundaries. With SSE, those two entries account for only 3.37%. The samples
-are instead distributed across scheduler paths within the critical sections.
-
-At perf's configured limit of 100,000 samples per second, both routes still
-made progress without lost samples. In this deliberately saturated regime SSE
-reduced workload throughput by 2.7% to 5.8%, which exposes the additional
-firmware-entry cost and marks a practical upper boundary for sampling.
-Thirty-second perf top runs at the same rate each processed about 3.1 million
-samples with no loss, stalls, or kernel failures.
-
-The DWARF callchain path gets dedicated coverage because it was the source of
-the corruption this series fixes. On the same platform,
-"perf record -a -g --call-graph dwarf,512 -F 999" layered on a concurrent
-"hackbench -g25 -l600" -- the configuration that previously corrupted
-spinlocks and mutexes under SSE -- now completes cleanly, with no lost
-samples, lockups, RCU stalls, or faults, including a 431-iteration soak.
-Patch 9 adds a regression test that drives the non-faulting user-stack copy
-through the SSE handler with 32 concurrent samplers and checks perf's
-truncation semantics.
-
-Changes in v11
-==============
-
-Rebased on latest for-next branch of linux-riscv tree (commit a5ae1bf65cee).
-Also, tested PMU driver with both PMU irqs and PMU SSE events.
-
-Changes in v10
-==============
-
-V10 turns the earlier feature series into a path suitable for sustained perf
-use. In particular, it:
-
-  - reconstructs and publishes the interrupted context for perf register
-    samples and kernel and user callchains;
-  - preserves current, task stack metadata, stvec, hstatus, and shadow-call
-    stack state across synthetic entry and nested exceptions;
-  - prevents fault-disabled accesses from entering the generic RISC-V page
-    fault path and provides a non-faulting SSE user-stack copy;
-  - makes event lifetime and rollback explicit across partial firmware
-    operations, CPU hotplug, shutdown, crash, and kexec;
-  - closes PMU throttle, counter restart, CPU power-management, and cleanup
-    races without adding a runtime SSE-to-IRQ transition; and
-  - expands the framework stress coverage and adds a regression test for
-    high-frequency DWARF user-stack sampling.
-
-Changes in v9:
-  - Rebased the original series onto RISC-V for-next.
-  - Preserved Linux-owned trap, virtualization, and supervisor state across
-    the synthetic SSE handler.
-  - Added framework stress modes and updated MAINTAINERS.
-
-Previous versions:
-  v9:
-    https://lore.kernel.org/r/cover.1778331862.git.zhangzhanpeng.jasper@bytedance.com
-  v8:
-    https://lore.kernel.org/r/20251105082639.342973-1-cleger@rivosinc.com
-
-How to test
-===========
-
-Enable the SSE framework and SSE overflow delivery:
-
-  CONFIG_RISCV_SBI_SSE=y
-  CONFIG_RISCV_PMU_SBI=y
-  CONFIG_RISCV_PMU_SBI_SSE=y
-
-PMU-SSE also requires two OpenSBI fixes:
-
-  f30a54f3b3a0 ("lib: sbi: pmu: Remove MIP clearing from pmu_sse_enable()")
-    [2], included since OpenSBI v1.7,
-    which keeps an overflow pending while its SSE event is temporarily
-    disabled; and
-  35511bc6ee1c ("lib: sbi: sse: clear SPV for non-virtualized events") [3],
-    not yet included in a tagged release,
-    which stops a stale HSTATUS.SPV from being applied to a non-virtualized
-    event.
-
-Build tools/testing/selftests/riscv, then run:
-
-  for stress in 0 1 2; do
-          ./run_sse_test.sh stress=$stress || break
-  done
-  ./sse_perf_ustack
-
-Useful perf regression workloads include:
-
-  perf record -e cycles -a -- sleep 1
-  perf top
-  perf record -g -F 999 -- hackbench
-  perf record --call-graph dwarf,8192 -F 999 -- hackbench
-  perf record -a -C 3 -e cycles -F 999 -- \
-          taskset -c 3 perf bench sched pipe -l 3000000
-
-Limitations and follow-up work
-==============================
-
-This series does not yet deliver SSE events into a guest or unwind a guest
-stack; a later KVM-SSE series will let the host receive an event from firmware
-and inject the corresponding event into the guest.
-
-Hibernation and crash kernels are unsupported: the current SBI interface
-cannot reconstruct firmware registrations after an image is restored, and a
-crash kernel cannot take over the registrations left by the crashed kernel, so
-it leaves SSE masked.
-
-[1] https://docs.riscv.org/reference/sbi/ext-sse.html
-[2] https://github.com/riscv-software-src/opensbi/commit/f30a54f3b3a091c225a00476f4039bf399badd1f
-[3] https://github.com/riscv-software-src/opensbi/commit/35511bc6ee1c9c17b6a89b44c52e2044bb51b979
-
-Acknowledgements
-================
-
-The original five feature patches were developed by Clément Léger and
-Himanshu Chauhan. Thanks to Susheng Yang for reporting the perf callchain
-failure and for providing a workload that made it reproducible.
-
-Sorry for keeping you waiting. Since v9 I spent a good deal of time hardening
-the lifecycle and error paths and reproducing and analysing the bugs that only
-show up in the callchain path, until the series finally passed both functional
-and sustained stress testing on hardware. I am confident in v10, but, echoing
-Clément, SSE is a genuinely complex feature: it adds a new NMI-like entry path
-into the kernel to stand in for a hardware NMI. I would therefore welcome wider
-community testing and feedback, especially under high-frequency delivery and
-more complex handlers.
-
-Clément Léger (5):
-  riscv: add SBI SSE extension definitions
-  riscv: add support for SBI Supervisor Software Events extension
-  drivers: firmware: add riscv SSE support
-  perf: RISC-V: add support for SSE event
-  selftests/riscv: add SSE test module
-
-Zhanpeng Zhang (4):
-  riscv: sse: mask events during shutdown and kexec
-  riscv: mm: avoid enabling interrupts for nofault page faults
-  perf: RISC-V: support callchains with SSE delivery
-  selftests/riscv: add perf user-stack SSE copy regression test
-
- Documentation/arch/riscv/index.rst            |    1 +
- Documentation/arch/riscv/pmu-sse.rst          |   55 +
- MAINTAINERS                                   |   22 +
- arch/riscv/include/asm/asm.h                  |   14 +-
- arch/riscv/include/asm/perf_event.h           |   10 +
- arch/riscv/include/asm/sbi.h                  |   63 +
- arch/riscv/include/asm/scs.h                  |    7 +
- arch/riscv/include/asm/sse.h                  |   82 ++
- arch/riscv/include/asm/thread_info.h          |    1 +
- arch/riscv/kernel/Makefile                    |    1 +
- arch/riscv/kernel/asm-offsets.c               |   14 +
- arch/riscv/kernel/entry.S                     |   14 +
- arch/riscv/kernel/machine_kexec.c             |   11 +
- arch/riscv/kernel/perf_callchain.c            |  142 ++
- arch/riscv/kernel/reset.c                     |   18 +
- arch/riscv/kernel/sbi_sse.c                   |  246 ++++
- arch/riscv/kernel/sbi_sse_entry.S             |  226 +++
- arch/riscv/kernel/smp.c                       |   17 +
- arch/riscv/mm/fault.c                         |   11 +-
- drivers/firmware/Kconfig                      |    1 +
- drivers/firmware/Makefile                     |    1 +
- drivers/firmware/riscv/Kconfig                |   18 +
- drivers/firmware/riscv/Makefile               |    3 +
- drivers/firmware/riscv/riscv_sbi_sse.c        | 1223 +++++++++++++++++
- drivers/perf/Kconfig                          |   11 +
- drivers/perf/riscv_pmu.c                      |   14 +-
- drivers/perf/riscv_pmu_sbi.c                  |  536 ++++++--
- include/linux/cpuhotplug.h                    |    1 +
- include/linux/perf/riscv_pmu.h                |   20 +-
- include/linux/riscv_sbi_sse.h                 |   95 ++
+Signed-off-by: Clément Léger <cleger@rivosinc.com>
+Co-developed-by: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
+Signed-off-by: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
+Co-developed-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+---
+ MAINTAINERS                                   |    2 +
  tools/testing/selftests/riscv/Makefile        |    2 +-
- tools/testing/selftests/riscv/sse/Makefile    |   10 +
+ tools/testing/selftests/riscv/sse/Makefile    |    5 +
  .../selftests/riscv/sse/module/Makefile       |   22 +
- .../riscv/sse/module/riscv_sse_test.c         | 1154 ++++++++++++++++
+ .../riscv/sse/module/riscv_sse_test.c         | 1154 +++++++++++++++++
  .../selftests/riscv/sse/run_sse_test.sh       |   59 +
- .../selftests/riscv/sse/sse_perf_ustack.c     |  564 ++++++++
- 36 files changed, 4592 insertions(+), 97 deletions(-)
- create mode 100644 Documentation/arch/riscv/pmu-sse.rst
- create mode 100644 arch/riscv/include/asm/sse.h
- create mode 100644 arch/riscv/kernel/sbi_sse.c
- create mode 100644 arch/riscv/kernel/sbi_sse_entry.S
- create mode 100644 drivers/firmware/riscv/Kconfig
- create mode 100644 drivers/firmware/riscv/Makefile
- create mode 100644 drivers/firmware/riscv/riscv_sbi_sse.c
- create mode 100644 include/linux/riscv_sbi_sse.h
+ 6 files changed, 1243 insertions(+), 1 deletion(-)
  create mode 100644 tools/testing/selftests/riscv/sse/Makefile
  create mode 100644 tools/testing/selftests/riscv/sse/module/Makefile
  create mode 100644 tools/testing/selftests/riscv/sse/module/riscv_sse_test.c
  create mode 100644 tools/testing/selftests/riscv/sse/run_sse_test.sh
- create mode 100644 tools/testing/selftests/riscv/sse/sse_perf_ustack.c
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ac7b17a811ed..f275e9d48476 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -23506,6 +23506,7 @@ C:	irc://irc.libera.chat/riscv
+ P:	Documentation/arch/riscv/patch-acceptance.rst
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
+ F:	arch/riscv/
++F:	tools/testing/selftests/riscv/
+ N:	riscv
+ K:	riscv
+ 
+@@ -23631,6 +23632,7 @@ F:	arch/riscv/kernel/sbi_sse.c
+ F:	arch/riscv/kernel/sbi_sse_entry.S
+ F:	drivers/firmware/riscv/riscv_sbi_sse.c
+ F:	include/linux/riscv_sbi_sse.h
++F:	tools/testing/selftests/riscv/sse/
+ 
+ RISC-V TENSTORRENT SoC SUPPORT
+ M:	Drew Fustini <dfustini@oss.tenstorrent.com>
+diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
+index 5671b4405a12..43c7c8f97676 100644
+--- a/tools/testing/selftests/riscv/Makefile
++++ b/tools/testing/selftests/riscv/Makefile
+@@ -5,7 +5,7 @@
+ ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+ 
+ ifneq (,$(filter $(ARCH),riscv))
+-RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector cfi
++RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector cfi sse
+ else
+ RISCV_SUBTARGETS :=
+ endif
+diff --git a/tools/testing/selftests/riscv/sse/Makefile b/tools/testing/selftests/riscv/sse/Makefile
+new file mode 100644
+index 000000000000..7e2677fdce09
+--- /dev/null
++++ b/tools/testing/selftests/riscv/sse/Makefile
+@@ -0,0 +1,5 @@
++TEST_GEN_MODS_DIR := module
++
++TEST_PROGS := run_sse_test.sh
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/riscv/sse/module/Makefile b/tools/testing/selftests/riscv/sse/module/Makefile
+new file mode 100644
+index 000000000000..eac4b1c6228b
+--- /dev/null
++++ b/tools/testing/selftests/riscv/sse/module/Makefile
+@@ -0,0 +1,22 @@
++ifneq ($(CONFIG_RISCV_SBI_SSE),)
++obj-m += riscv_sse_test.o
++endif
++
++ifndef KERNELRELEASE
++
++TESTMODS_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= /lib/modules/$(shell uname -r)/build
++
++# Ensure that KDIR exists, otherwise skip the compilation
++modules:
++ifneq ("$(wildcard $(KDIR))", "")
++	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
++endif
++
++# Ensure that KDIR exists, otherwise skip the clean target
++clean:
++ifneq ("$(wildcard $(KDIR))", "")
++	$(Q)$(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
++endif
++
++endif
+diff --git a/tools/testing/selftests/riscv/sse/module/riscv_sse_test.c b/tools/testing/selftests/riscv/sse/module/riscv_sse_test.c
+new file mode 100644
+index 000000000000..cc5c2e46f2fd
+--- /dev/null
++++ b/tools/testing/selftests/riscv/sse/module/riscv_sse_test.c
+@@ -0,0 +1,1154 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2025 Rivos Inc.
++ */
++
++#define pr_fmt(fmt) "riscv_sse_test: " fmt
++
++#include <linux/array_size.h>
++#include <linux/atomic.h>
++#include <linux/completion.h>
++#include <linux/cpu.h>
++#include <linux/cpuhplock.h>
++#include <linux/delay.h>
++#include <linux/err.h>
++#include <linux/hrtimer.h>
++#include <linux/io.h>
++#include <linux/jiffies.h>
++#include <linux/kthread.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/riscv_sbi_sse.h>
++#include <linux/sched.h>
++#include <linux/slab.h>
++#include <linux/smp.h>
++#include <linux/workqueue.h>
++
++#include <asm/sbi.h>
++#include <asm/sse.h>
++
++#define RUN_LOOP_COUNT		1000
++#define SSE_FAILED_PREFIX	"FAILED: "
++#define SSE_SKIP_PREFIX		"SKIP: "
++#define STRESS_DURATION_MS	3000
++#define STRESS_INJECT_NS	10000
++#define STRESS_REINJECT_DEPTH	10
++#define sse_err(...)		pr_err(SSE_FAILED_PREFIX __VA_ARGS__)
++#define sse_skip(...)		pr_info(SSE_SKIP_PREFIX __VA_ARGS__)
++
++enum sse_stress_mode {
++	SSE_STRESS_OFF,
++	SSE_STRESS_AFTER_SMOKE,
++	SSE_STRESS_ONLY,
++};
++
++static int stress;
++module_param(stress, int, 0444);
++MODULE_PARM_DESC(stress, "Stress mode: 0=off, 1=after smoke, 2=stress only");
++
++static char *run_id = "unknown";
++module_param(run_id, charp, 0444);
++MODULE_PARM_DESC(run_id, "Unique identifier used to delimit one test run");
++
++/* Do not report PASS for a capability-only run that handled no event. */
++static atomic_t sse_test_handler_count = ATOMIC_INIT(0);
++static bool sse_stress_event_can_inject;
++
++struct sse_event_desc {
++	u32 evt_id;
++	const char *name;
++	bool can_inject;
++};
++
++static struct sse_event_desc sse_event_descs[] = {
++	{
++		.evt_id = SBI_SSE_EVENT_LOCAL_HIGH_PRIO_RAS,
++		.name = "local_high_prio_ras",
++	},
++	{
++		.evt_id = SBI_SSE_EVENT_LOCAL_DOUBLE_TRAP,
++		.name = "local_double_trap",
++	},
++	{
++		.evt_id = SBI_SSE_EVENT_GLOBAL_HIGH_PRIO_RAS,
++		.name = "global_high_prio_ras",
++	},
++	{
++		.evt_id = SBI_SSE_EVENT_LOCAL_PMU_OVERFLOW,
++		.name = "local_pmu_overflow",
++	},
++	{
++		.evt_id = SBI_SSE_EVENT_LOCAL_LOW_PRIO_RAS,
++		.name = "local_low_prio_ras",
++	},
++	{
++		.evt_id = SBI_SSE_EVENT_GLOBAL_LOW_PRIO_RAS,
++		.name = "global_low_prio_ras",
++	},
++	{
++		.evt_id = SBI_SSE_EVENT_LOCAL_SOFTWARE_INJECTED,
++		.name = "local_software_injected",
++	},
++	{
++		.evt_id = SBI_SSE_EVENT_GLOBAL_SOFTWARE_INJECTED,
++		.name = "global_software_injected",
++	}
++};
++
++static DEFINE_MUTEX(sse_test_cleanup_lock);
++/* Firmware permits only one registration for each event ID. */
++static struct sse_event *sse_test_cleanup_events[ARRAY_SIZE(sse_event_descs)];
++
++static void sse_test_cleanup_workfn(struct work_struct *work);
++static DECLARE_DELAYED_WORK(sse_test_cleanup_work, sse_test_cleanup_workfn);
++
++static void sse_test_queue_cleanup(struct sse_event *event)
++{
++	int i, free_slot = -1;
++
++	mutex_lock(&sse_test_cleanup_lock);
++	for (i = 0; i < ARRAY_SIZE(sse_test_cleanup_events); i++) {
++		if (sse_test_cleanup_events[i] == event)
++			goto out_schedule;
++		if (!sse_test_cleanup_events[i] && free_slot < 0)
++			free_slot = i;
++	}
++
++	if (WARN_ON_ONCE(free_slot < 0))
++		goto out_unlock;
++
++	sse_test_cleanup_events[free_slot] = event;
++
++out_schedule:
++	mod_delayed_work(system_wq, &sse_test_cleanup_work,
++			 msecs_to_jiffies(100));
++out_unlock:
++	mutex_unlock(&sse_test_cleanup_lock);
++}
++
++static struct sse_event_desc *sse_get_evt_desc(u32 evt)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(sse_event_descs); i++) {
++		if (sse_event_descs[i].evt_id == evt)
++			return &sse_event_descs[i];
++	}
++
++	return NULL;
++}
++
++static const char *sse_evt_name(u32 evt)
++{
++	struct sse_event_desc *desc = sse_get_evt_desc(evt);
++
++	return desc ? desc->name : NULL;
++}
++
++static bool sse_test_can_inject_event(u32 evt)
++{
++	struct sse_event_desc *desc = sse_get_evt_desc(evt);
++
++	return desc ? desc->can_inject : false;
++}
++
++/*
++ * Firmware can invoke the callback until unregister succeeds. Pin the module
++ * so its handler text cannot disappear first.
++ */
++static struct sse_event *sse_test_event_register(u32 evt, u32 priority,
++						 sse_event_handler_fn *handler,
++						 void *arg)
++{
++	struct sse_event *event;
++
++	event = sse_event_register(evt, priority, handler, arg);
++	if (!IS_ERR(event))
++		__module_get(THIS_MODULE);
++
++	return event;
++}
++
++static int sse_test_event_unregister(struct sse_event *event)
++{
++	int ret;
++
++	ret = sse_event_unregister(event);
++	if (!ret)
++		module_put(THIS_MODULE);
++	else
++		sse_test_queue_cleanup(event);
++
++	return ret;
++}
++
++static void sse_test_cleanup_workfn(struct work_struct *work)
++{
++	bool retry = false;
++	int i, ret;
++
++	mutex_lock(&sse_test_cleanup_lock);
++	for (i = 0; i < ARRAY_SIZE(sse_test_cleanup_events); i++) {
++		struct sse_event *event = sse_test_cleanup_events[i];
++
++		if (!event)
++			continue;
++
++		ret = sse_event_disable(event);
++		if (!ret)
++			ret = sse_event_unregister(event);
++		if (ret) {
++			retry = true;
++			continue;
++		}
++
++		sse_test_cleanup_events[i] = NULL;
++		module_put(THIS_MODULE);
++	}
++	mutex_unlock(&sse_test_cleanup_lock);
++
++	if (retry)
++		mod_delayed_work(system_wq, &sse_test_cleanup_work,
++				 msecs_to_jiffies(100));
++}
++
++static struct sbiret sbi_sse_ecall(int fid, unsigned long arg0, unsigned long arg1)
++{
++	return sbi_ecall(SBI_EXT_SSE, fid, arg0, arg1, 0, 0, 0, 0);
++}
++
++static int sse_event_attr_read(u32 evt, unsigned long attr_id,
++			       unsigned long *attr_buf)
++{
++	struct sbiret sret;
++	phys_addr_t phys;
++
++	phys = virt_to_phys(attr_buf);
++
++	sret = sbi_ecall(SBI_EXT_SSE, SBI_SSE_EVENT_ATTR_READ, evt, attr_id, 1,
++			 (unsigned long)phys, 0, 0);
++	if (sret.error)
++		return sbi_err_map_linux_errno(sret.error);
++
++	return 0;
++}
++
++static int sse_event_attr_get(u32 evt, unsigned long attr_id,
++			      unsigned long *val)
++{
++	unsigned long *attr_buf;
++	int ret;
++
++	attr_buf = kmalloc_obj(*attr_buf, GFP_KERNEL);
++	if (!attr_buf)
++		return -ENOMEM;
++
++	ret = sse_event_attr_read(evt, attr_id, attr_buf);
++	if (!ret)
++		*val = *attr_buf;
++	kfree(attr_buf);
++
++	return ret;
++}
++
++static int sse_test_signal(u32 evt, unsigned int cpu)
++{
++	unsigned long hart_id = cpuid_to_hartid_map(cpu);
++	struct sbiret ret;
++
++	ret = sbi_sse_ecall(SBI_SSE_EVENT_INJECT, evt, hart_id);
++	if (ret.error) {
++		sse_err("Failed to signal event %x, error %ld\n", evt, ret.error);
++		return sbi_err_map_linux_errno(ret.error);
++	}
++
++	return 0;
++}
++
++static int sse_test_wait_not_running(u32 evt)
++{
++	unsigned long timeout = jiffies + HZ;
++	unsigned long status;
++	int ret;
++
++	do {
++		ret = sse_event_attr_get(evt, SBI_SSE_ATTR_STATUS, &status);
++		if (ret) {
++			sse_err("Failed to get status for evt %x, error %d\n", evt, ret);
++			return ret;
++		}
++		status &= SBI_SSE_ATTR_STATUS_STATE_MASK;
++		cpu_relax();
++	} while (status == SBI_SSE_STATE_RUNNING && time_before(jiffies, timeout));
++
++	if (status == SBI_SSE_STATE_RUNNING) {
++		sse_err("Timed out waiting for event %x to leave RUNNING state\n", evt);
++		return -ETIMEDOUT;
++	}
++
++	return 0;
++}
++
++struct sse_test_wait_status {
++	u32 evt;
++	unsigned long *attr_buf;
++	unsigned long status;
++	int ret;
++};
++
++static void sse_test_read_status_local(void *info)
++{
++	struct sse_test_wait_status *wait = info;
++
++	wait->ret = sse_event_attr_read(wait->evt, SBI_SSE_ATTR_STATUS,
++					wait->attr_buf);
++	if (!wait->ret)
++		wait->status = *wait->attr_buf & SBI_SSE_ATTR_STATUS_STATE_MASK;
++}
++
++static int sse_test_wait_not_running_on_cpu(u32 evt, unsigned int cpu)
++{
++	struct sse_test_wait_status wait = { .evt = evt };
++	unsigned long timeout;
++	int ret = 0;
++
++	if (sse_event_is_global(evt))
++		return sse_test_wait_not_running(evt);
++
++	wait.attr_buf = kmalloc_obj(*wait.attr_buf, GFP_KERNEL);
++	if (!wait.attr_buf)
++		return -ENOMEM;
++
++	timeout = jiffies + HZ;
++	do {
++		ret = smp_call_function_single(cpu, sse_test_read_status_local,
++					       &wait, true);
++		if (ret || wait.ret) {
++			ret = ret ?: wait.ret;
++			break;
++		}
++		if (wait.status != SBI_SSE_STATE_RUNNING)
++			break;
++		usleep_range(100, 200);
++	} while (time_before(jiffies, timeout));
++
++	if (!ret && wait.status == SBI_SSE_STATE_RUNNING) {
++		sse_err("Timed out waiting for event %x on CPU %u\n", evt, cpu);
++		ret = -ETIMEDOUT;
++	}
++
++	kfree(wait.attr_buf);
++
++	return ret;
++}
++
++static int sse_test_inject_event(struct sse_event *event, u32 evt, unsigned int cpu)
++{
++	int res;
++
++	if (sse_event_is_global(evt)) {
++		/*
++		 * Due to the fact the completion might happen faster than
++		 * the call to SBI_SSE_COMPLETE in the handler, if the event was
++		 * running on another CPU, we need to wait for the event status
++		 * to be !RUNNING.
++		 */
++		res = sse_test_wait_not_running(evt);
++		if (res)
++			return res;
++
++		res = sse_event_set_target_cpu(event, cpu);
++		if (res) {
++			sse_err("Failed to set cpu for evt %x, error %d\n", evt, res);
++			return res;
++		}
++	}
++
++	return sse_test_signal(evt, cpu);
++}
++
++struct fast_test_arg {
++	u32 evt;
++	int cpu;
++	bool args_ready;
++	bool completion;
++};
++
++/* A failed unregister may leave firmware holding this handler argument. */
++static struct fast_test_arg fast_test_arg;
++
++static int sse_test_handler(u32 evt, void *arg, struct pt_regs *regs)
++{
++	int ret = 0;
++	struct fast_test_arg *targ = arg;
++	u32 test_evt;
++	int cpu;
++
++	atomic_inc(&sse_test_handler_count);
++
++	/* Pairs with the argument publication in sse_run_fast_test_cpu(). */
++	if (!smp_load_acquire(&targ->args_ready)) {
++		sse_err("Received SSE event %x before its test arguments were published\n",
++			evt);
++		ret = -EINVAL;
++		goto complete;
++	}
++
++	test_evt = READ_ONCE(targ->evt);
++	cpu = READ_ONCE(targ->cpu);
++
++	if (evt != test_evt) {
++		sse_err("Received SSE event id %x instead of %x\n", test_evt, evt);
++		ret = -EINVAL;
++	}
++
++	if (!sse_event_is_global(evt) && cpu != smp_processor_id()) {
++		sse_err("Received SSE event %d on CPU %d instead of %d\n", evt, smp_processor_id(),
++			cpu);
++		ret = -EINVAL;
++	}
++
++complete:
++	WRITE_ONCE(targ->args_ready, false);
++	/* Publish handler-side checks before waking the waiting CPU. */
++	smp_store_release(&targ->completion, true);
++
++	return ret;
++}
++
++static int sse_run_fast_test_cpu(struct fast_test_arg *test_arg,
++				 struct sse_event *event, u32 evt, int cpu)
++{
++	unsigned long timeout;
++	int ret;
++
++	WRITE_ONCE(test_arg->completion, false);
++	WRITE_ONCE(test_arg->args_ready, false);
++	WRITE_ONCE(test_arg->evt, evt);
++	WRITE_ONCE(test_arg->cpu, cpu);
++	/* Publish all arguments before firmware can inject on another hart. */
++	smp_store_release(&test_arg->args_ready, true);
++
++	ret = sse_test_inject_event(event, evt, cpu);
++	if (ret) {
++		sse_err("event %s injection failed, err %d\n",
++			sse_evt_name(evt), ret);
++		return ret;
++	}
++
++	timeout = jiffies + HZ / 100;
++	/* We can not use <linux/completion.h> since they are not NMI safe */
++	/* Pairs with the handler's completion publication. */
++	while (!smp_load_acquire(&test_arg->completion) &&
++	       time_before(jiffies, timeout))
++		cpu_relax();
++	/* Acquire the handler's checks even if the loop observed a timeout. */
++	if (!smp_load_acquire(&test_arg->completion)) {
++		sse_err("Failed to wait for event %s completion on CPU %d\n",
++			sse_evt_name(evt), cpu);
++		return -ETIMEDOUT;
++	}
++
++	return sse_test_wait_not_running_on_cpu(evt, cpu);
++}
++
++static void sse_run_fast_test(struct fast_test_arg *test_arg,
++			      struct sse_event *event, u32 evt)
++{
++	int cpu;
++
++	if (sse_event_is_global(evt)) {
++		/* Keep the selected target online through injection and completion. */
++		cpu_hotplug_disable();
++		for_each_online_cpu(cpu) {
++			if (sse_run_fast_test_cpu(test_arg, event, evt, cpu))
++				break;
++		}
++		cpu_hotplug_enable();
++		return;
++	}
++
++	guard(cpus_read_lock)();
++	for_each_online_cpu(cpu) {
++		if (sse_run_fast_test_cpu(test_arg, event, evt, cpu))
++			return;
++	}
++}
++
++static void sse_test_injection_fast(void)
++{
++	int i, ret = 0, j;
++	u32 evt;
++	struct sse_event *event;
++
++	pr_info("Starting SSE test (fast)\n");
++
++	for (i = 0; i < ARRAY_SIZE(sse_event_descs); i++) {
++		evt = sse_event_descs[i].evt_id;
++		WRITE_ONCE(fast_test_arg.evt, evt);
++		WRITE_ONCE(fast_test_arg.cpu, -1);
++		WRITE_ONCE(fast_test_arg.args_ready, false);
++		WRITE_ONCE(fast_test_arg.completion, false);
++
++		if (!sse_event_descs[i].can_inject)
++			continue;
++
++		event = sse_test_event_register(evt, 0, sse_test_handler,
++						(void *)&fast_test_arg);
++		if (IS_ERR(event)) {
++			if (PTR_ERR(event) == -EEXIST) {
++				pr_info("Event %s already registered, skipping\n",
++					sse_evt_name(evt));
++				continue;
++			}
++			sse_err("Failed to register event %s, err %ld\n", sse_evt_name(evt),
++				PTR_ERR(event));
++			continue;
++		}
++
++		ret = sse_event_enable(event);
++		if (ret) {
++			sse_err("Failed to enable event %s, err %d\n", sse_evt_name(evt), ret);
++			goto err_disable;
++		}
++
++		pr_info("Starting testing event %s\n", sse_evt_name(evt));
++
++		for (j = 0; j < RUN_LOOP_COUNT; j++)
++			sse_run_fast_test(&fast_test_arg, event, evt);
++		pr_info("Finished testing event %s\n", sse_evt_name(evt));
++
++err_disable:
++		ret = sse_event_disable(event);
++		if (ret)
++			sse_err("Failed to disable event %s, err %d\n",
++				sse_evt_name(evt), ret);
++		ret = sse_test_event_unregister(event);
++		if (ret) {
++			sse_err("Failed to unregister event %s, err %d\n",
++				sse_evt_name(evt), ret);
++			return;
++		}
++	}
++	pr_info("Finished SSE test (fast)\n");
++}
++
++struct priority_test_arg {
++	unsigned long evt;
++	struct sse_event *event;
++	bool called;
++	bool enable_attempted;
++	u32 prio;
++	struct priority_test_arg *next_evt_arg;
++	void (*check_func)(struct priority_test_arg *arg);
++};
++
++/* A failed unregister may leave firmware holding these handler arguments. */
++static struct priority_test_arg default_hi_prio_args[] = {
++	{ .evt = SBI_SSE_EVENT_GLOBAL_SOFTWARE_INJECTED },
++	{ .evt = SBI_SSE_EVENT_LOCAL_SOFTWARE_INJECTED },
++	{ .evt = SBI_SSE_EVENT_GLOBAL_LOW_PRIO_RAS },
++	{ .evt = SBI_SSE_EVENT_LOCAL_LOW_PRIO_RAS },
++	{ .evt = SBI_SSE_EVENT_LOCAL_PMU_OVERFLOW },
++	{ .evt = SBI_SSE_EVENT_GLOBAL_HIGH_PRIO_RAS },
++	{ .evt = SBI_SSE_EVENT_LOCAL_DOUBLE_TRAP },
++	{ .evt = SBI_SSE_EVENT_LOCAL_HIGH_PRIO_RAS },
++};
++
++static struct priority_test_arg default_low_prio_args[] = {
++	{ .evt = SBI_SSE_EVENT_LOCAL_HIGH_PRIO_RAS },
++	{ .evt = SBI_SSE_EVENT_LOCAL_DOUBLE_TRAP },
++	{ .evt = SBI_SSE_EVENT_GLOBAL_HIGH_PRIO_RAS },
++	{ .evt = SBI_SSE_EVENT_LOCAL_PMU_OVERFLOW },
++	{ .evt = SBI_SSE_EVENT_LOCAL_LOW_PRIO_RAS },
++	{ .evt = SBI_SSE_EVENT_GLOBAL_LOW_PRIO_RAS },
++	{ .evt = SBI_SSE_EVENT_LOCAL_SOFTWARE_INJECTED },
++	{ .evt = SBI_SSE_EVENT_GLOBAL_SOFTWARE_INJECTED },
++};
++
++static struct priority_test_arg set_prio_args[] = {
++	{ .evt = SBI_SSE_EVENT_GLOBAL_SOFTWARE_INJECTED, .prio = 5 },
++	{ .evt = SBI_SSE_EVENT_LOCAL_SOFTWARE_INJECTED, .prio = 10 },
++	{ .evt = SBI_SSE_EVENT_GLOBAL_LOW_PRIO_RAS, .prio = 15 },
++	{ .evt = SBI_SSE_EVENT_LOCAL_LOW_PRIO_RAS, .prio = 20 },
++	{ .evt = SBI_SSE_EVENT_LOCAL_PMU_OVERFLOW, .prio = 25 },
++	{ .evt = SBI_SSE_EVENT_GLOBAL_HIGH_PRIO_RAS, .prio = 30 },
++	{ .evt = SBI_SSE_EVENT_LOCAL_DOUBLE_TRAP, .prio = 35 },
++	{ .evt = SBI_SSE_EVENT_LOCAL_HIGH_PRIO_RAS, .prio = 40 },
++};
++
++static struct priority_test_arg same_prio_args[] = {
++	{ .evt = SBI_SSE_EVENT_LOCAL_PMU_OVERFLOW, .prio = 0 },
++	{ .evt = SBI_SSE_EVENT_LOCAL_HIGH_PRIO_RAS, .prio = 10 },
++	{ .evt = SBI_SSE_EVENT_LOCAL_SOFTWARE_INJECTED, .prio = 10 },
++	{ .evt = SBI_SSE_EVENT_GLOBAL_SOFTWARE_INJECTED, .prio = 10 },
++	{ .evt = SBI_SSE_EVENT_GLOBAL_HIGH_PRIO_RAS, .prio = 20 },
++};
++
++static int sse_hi_priority_test_handler(u32 evt, void *arg,
++					struct pt_regs *regs)
++{
++	struct priority_test_arg *targ = arg;
++	struct priority_test_arg *next = READ_ONCE(targ->next_evt_arg);
++
++	atomic_inc(&sse_test_handler_count);
++	WRITE_ONCE(targ->called, 1);
++
++	if (next) {
++		sse_test_signal(next->evt, smp_processor_id());
++		if (!READ_ONCE(next->called)) {
++			sse_err("Higher priority event %s was not handled %s\n",
++				sse_evt_name(next->evt), sse_evt_name(evt));
++		}
++	}
++
++	return 0;
++}
++
++static int sse_low_priority_test_handler(u32 evt, void *arg, struct pt_regs *regs)
++{
++	struct priority_test_arg *targ = arg;
++	struct priority_test_arg *next = READ_ONCE(targ->next_evt_arg);
++
++	atomic_inc(&sse_test_handler_count);
++	WRITE_ONCE(targ->called, 1);
++
++	if (next) {
++		sse_test_signal(next->evt, smp_processor_id());
++		if (READ_ONCE(next->called)) {
++			sse_err("Lower priority event %s was handle before %s\n",
++				sse_evt_name(next->evt), sse_evt_name(evt));
++		}
++	}
++
++	return 0;
++}
++
++static void sse_test_injection_priority_arg(struct priority_test_arg *args, unsigned int args_size,
++					    sse_event_handler_fn handler, const char *test_name)
++{
++	unsigned int i;
++	unsigned long timeout;
++	int ret;
++	int target_cpu;
++	struct sse_event *event;
++	struct priority_test_arg *arg, *first_arg = NULL, *prev_arg = NULL;
++
++	pr_info("Starting SSE priority test (%s)\n", test_name);
++	/* Keep the complete priority chain on one CPU. */
++	migrate_disable();
++	target_cpu = smp_processor_id();
++
++	for (i = 0; i < args_size; i++) {
++		arg = &args[i];
++
++		if (!sse_test_can_inject_event(arg->evt))
++			continue;
++
++		WRITE_ONCE(arg->called, false);
++		WRITE_ONCE(arg->next_evt_arg, NULL);
++		WRITE_ONCE(arg->event, NULL);
++		WRITE_ONCE(arg->enable_attempted, false);
++
++		event = sse_test_event_register(arg->evt, arg->prio, handler,
++						(void *)arg);
++		if (IS_ERR(event)) {
++			if (PTR_ERR(event) == -EEXIST) {
++				pr_info("Event %s already registered, skipping\n",
++					sse_evt_name(arg->evt));
++				continue;
++			}
++			sse_err("Failed to register event %s, err %ld\n", sse_evt_name(arg->evt),
++				PTR_ERR(event));
++			goto release_events;
++		}
++		arg->event = event;
++
++		if (sse_event_is_global(arg->evt)) {
++			/* Keep the chain on one stable CPU. */
++			ret = sse_event_set_target_cpu(event, target_cpu);
++			if (ret) {
++				sse_err("Failed to set event %s target CPU, err %d\n",
++					sse_evt_name(arg->evt), ret);
++				goto release_events;
++			}
++		}
++
++		WRITE_ONCE(arg->enable_attempted, true);
++		ret = sse_event_enable(event);
++		if (ret) {
++			sse_err("Failed to enable event %s, err %d\n", sse_evt_name(arg->evt), ret);
++			goto release_events;
++		}
++
++		if (prev_arg)
++			WRITE_ONCE(prev_arg->next_evt_arg, arg);
++
++		prev_arg = arg;
++
++		if (!first_arg)
++			first_arg = arg;
++	}
++
++	if (!first_arg) {
++		pr_info("No injectable event available for %s priority test\n",
++			test_name);
++		goto out;
++	}
++
++	/* Inject first event, handler should trigger the others in chain. */
++	ret = sse_test_inject_event(first_arg->event, first_arg->evt, target_cpu);
++	if (ret) {
++		sse_err("SSE event %s injection failed\n", sse_evt_name(first_arg->evt));
++		goto release_events;
++	}
++
++	/* Lower-priority events run after the handler that injected them completes. */
++	arg = first_arg;
++	while (arg) {
++		timeout = jiffies + HZ;
++		while (!READ_ONCE(arg->called) && time_before(jiffies, timeout))
++			cpu_relax();
++
++		if (!READ_ONCE(arg->called)) {
++			sse_err("Event %s handler was not called\n",
++				sse_evt_name(arg->evt));
++			ret = -EINVAL;
++		}
++
++		event = arg->event;
++		arg = READ_ONCE(arg->next_evt_arg);
++	}
++
++release_events:
++
++	for (i = 0; i < args_size; i++) {
++		arg = &args[i];
++		event = arg->event;
++		if (!event)
++			continue;
++
++		ret = sse_test_wait_not_running_on_cpu(arg->evt, target_cpu);
++		if (ret)
++			sse_err("Event %s did not complete, err %d\n",
++				sse_evt_name(arg->evt), ret);
++
++		if (arg->enable_attempted) {
++			ret = sse_event_disable(event);
++			if (ret) {
++				sse_err("Failed to disable event %s, err %d\n",
++					sse_evt_name(arg->evt), ret);
++				sse_test_queue_cleanup(event);
++				WRITE_ONCE(arg->event, NULL);
++				WRITE_ONCE(arg->enable_attempted, false);
++				continue;
++			}
++		}
++
++		ret = sse_test_event_unregister(event);
++		if (ret) {
++			sse_err("Failed to unregister event %s, err %d\n",
++				sse_evt_name(arg->evt), ret);
++			continue;
++		}
++
++		WRITE_ONCE(arg->event, NULL);
++		WRITE_ONCE(arg->enable_attempted, false);
++	}
++
++	pr_info("Finished SSE priority test (%s)\n", test_name);
++out:
++	migrate_enable();
++}
++
++static void sse_test_injection_priority(void)
++{
++	sse_test_injection_priority_arg(default_hi_prio_args, ARRAY_SIZE(default_hi_prio_args),
++					sse_hi_priority_test_handler, "high");
++
++	sse_test_injection_priority_arg(default_low_prio_args, ARRAY_SIZE(default_low_prio_args),
++					sse_low_priority_test_handler, "low");
++
++	sse_test_injection_priority_arg(set_prio_args, ARRAY_SIZE(set_prio_args),
++					sse_low_priority_test_handler, "set");
++
++	sse_test_injection_priority_arg(same_prio_args, ARRAY_SIZE(same_prio_args),
++					sse_low_priority_test_handler, "same_prio_args");
++}
++
++static int sse_get_inject_status(u32 evt, bool *can_inject)
++{
++	int ret;
++	unsigned long val;
++
++	/* Check if injection is supported */
++	ret = sse_event_attr_get(evt, SBI_SSE_ATTR_STATUS, &val);
++	if (ret == sbi_err_map_linux_errno(SBI_ERR_NOT_SUPPORTED) ||
++	    ret == sbi_err_map_linux_errno(SBI_ERR_INVALID_PARAM)) {
++		*can_inject = false;
++		return 0;
++	}
++	if (ret)
++		return ret;
++
++	*can_inject = !!(val & BIT(SBI_SSE_ATTR_STATUS_INJECT_OFFSET));
++
++	return 0;
++}
++
++static int sse_init_events(void)
++{
++	int i, injectable = 0, ret;
++
++	for (i = 0; i < ARRAY_SIZE(sse_event_descs); i++) {
++		struct sse_event_desc *desc = &sse_event_descs[i];
++
++		ret = sse_get_inject_status(desc->evt_id, &desc->can_inject);
++		if (ret) {
++			sse_err("Failed to read injection status for %s, err %d\n",
++				desc->name, ret);
++			return ret;
++		}
++
++		if (desc->can_inject)
++			injectable++;
++		else
++			pr_info("Can not inject event %s, tests using this event will be skipped\n",
++				desc->name);
++
++		if (desc->evt_id == SBI_SSE_EVENT_LOCAL_SOFTWARE_INJECTED)
++			sse_stress_event_can_inject = desc->can_inject;
++	}
++
++	return injectable;
++}
++
++struct stress_test_ctx {
++	struct sse_event *event;
++	struct hrtimer timer;
++	struct hrtimer stop_timer;
++	struct task_struct *monitor_task;
++	wait_queue_head_t wait_q;
++	atomic_t inject_count;
++	atomic_t handler_count;
++	atomic_t handler_errors;
++	u32 evt_id;
++	int layer;
++	bool running;
++	bool test_done;
++};
++
++static struct stress_test_ctx stress_ctx;
++static DEFINE_PER_CPU(int, stress_reinject_cpu_depth);
++
++static int stress_handler_empty(u32 evt, void *arg, struct pt_regs *regs)
++{
++	struct stress_test_ctx *ctx = arg;
++
++	atomic_inc(&sse_test_handler_count);
++	atomic_inc(&ctx->handler_count);
++
++	return 0;
++}
++
++static int stress_handler_ecall(u32 evt, void *arg, struct pt_regs *regs)
++{
++	struct stress_test_ctx *ctx = arg;
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_SPEC_VERSION,
++			0, 0, 0, 0, 0, 0);
++	if (ret.error)
++		atomic_inc(&ctx->handler_errors);
++	atomic_inc(&sse_test_handler_count);
++	atomic_inc(&ctx->handler_count);
++
++	return 0;
++}
++
++static int stress_handler_multi_ecall(u32 evt, void *arg, struct pt_regs *regs)
++{
++	struct stress_test_ctx *ctx = arg;
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_SPEC_VERSION,
++			0, 0, 0, 0, 0, 0);
++	if (ret.error)
++		atomic_inc(&ctx->handler_errors);
++	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_IMP_ID,
++			0, 0, 0, 0, 0, 0);
++	if (ret.error)
++		atomic_inc(&ctx->handler_errors);
++	ret = sbi_ecall(SBI_EXT_BASE, SBI_EXT_BASE_GET_IMP_VERSION,
++			0, 0, 0, 0, 0, 0);
++	if (ret.error)
++		atomic_inc(&ctx->handler_errors);
++	atomic_inc(&sse_test_handler_count);
++	atomic_inc(&ctx->handler_count);
++
++	return 0;
++}
++
++static int stress_handler_reinject(u32 evt, void *arg, struct pt_regs *regs)
++{
++	struct stress_test_ctx *ctx = arg;
++	int *depth = this_cpu_ptr(&stress_reinject_cpu_depth);
++
++	(*depth)++;
++	if (*depth < STRESS_REINJECT_DEPTH)
++		sse_test_signal(evt, smp_processor_id());
++	else
++		*depth = 0;
++
++	atomic_inc(&sse_test_handler_count);
++	atomic_inc(&ctx->handler_count);
++
++	return 0;
++}
++
++static sse_event_handler_fn *stress_handlers[] = {
++	stress_handler_empty,
++	stress_handler_ecall,
++	stress_handler_multi_ecall,
++	stress_handler_reinject,
++};
++
++static const char * const stress_layer_names[] = {
++	"empty handler",
++	"single SBI ecall in handler",
++	"multiple SBI ecalls in handler",
++	"self re-inject",
++};
++
++static enum hrtimer_restart stress_timer_callback(struct hrtimer *timer)
++{
++	struct stress_test_ctx *ctx = container_of(timer, struct stress_test_ctx, timer);
++
++	if (!READ_ONCE(ctx->running))
++		return HRTIMER_NORESTART;
++
++	if (!sse_test_signal(ctx->evt_id, smp_processor_id()))
++		atomic_inc(&ctx->inject_count);
++	hrtimer_forward_now(timer, ns_to_ktime(STRESS_INJECT_NS));
++
++	return HRTIMER_RESTART;
++}
++
++static enum hrtimer_restart stress_stop_timer_callback(struct hrtimer *timer)
++{
++	struct stress_test_ctx *ctx;
++
++	ctx = container_of(timer, struct stress_test_ctx, stop_timer);
++	WRITE_ONCE(ctx->test_done, true);
++	wake_up(&ctx->wait_q);
++
++	return HRTIMER_NORESTART;
++}
++
++static int stress_monitor_thread(void *data)
++{
++	struct stress_test_ctx *ctx = data;
++	unsigned long last_inject = 0, last_handler = 0;
++
++	while (!kthread_should_stop()) {
++		unsigned long inject = atomic_read(&ctx->inject_count);
++		unsigned long handler = atomic_read(&ctx->handler_count);
++
++		pr_info("stress layer %d: inject=%lu (+%lu), handler=%lu (+%lu)\n",
++			ctx->layer, inject, inject - last_inject,
++			handler, handler - last_handler);
++
++		last_inject = inject;
++		last_handler = handler;
++
++		schedule_timeout_interruptible(HZ);
++	}
++
++	return 0;
++}
++
++static int sse_stress_test_layer(int layer)
++{
++	struct sse_event *event;
++	int inject_count, handler_count;
++	int ret, target_cpu, unregister_ret;
++
++	if (layer < 0 || layer >= ARRAY_SIZE(stress_handlers))
++		return -EINVAL;
++
++	pr_info("Starting SSE stress layer %d (%s)\n",
++		layer, stress_layer_names[layer]);
++
++	memset(&stress_ctx, 0, sizeof(stress_ctx));
++	stress_ctx.evt_id = SBI_SSE_EVENT_LOCAL_SOFTWARE_INJECTED;
++	stress_ctx.layer = layer;
++	WRITE_ONCE(stress_ctx.running, true);
++	atomic_set(&stress_ctx.inject_count, 0);
++	atomic_set(&stress_ctx.handler_count, 0);
++	atomic_set(&stress_ctx.handler_errors, 0);
++	init_waitqueue_head(&stress_ctx.wait_q);
++
++	event = sse_test_event_register(stress_ctx.evt_id, 0,
++					stress_handlers[layer], &stress_ctx);
++	if (IS_ERR(event)) {
++		sse_err("Failed to register stress event, err %ld\n",
++			PTR_ERR(event));
++		return PTR_ERR(event);
++	}
++
++	stress_ctx.event = event;
++
++	ret = sse_event_enable(event);
++	if (ret) {
++		sse_err("Failed to enable stress event, err %d\n", ret);
++		goto err_disable;
++	}
++
++	stress_ctx.monitor_task = kthread_run(stress_monitor_thread,
++					      &stress_ctx, "sse_stress_mon");
++	if (IS_ERR(stress_ctx.monitor_task)) {
++		ret = PTR_ERR(stress_ctx.monitor_task);
++		sse_err("Failed to create stress monitor thread, err %d\n", ret);
++		goto err_disable;
++	}
++
++	/* Keep the pinned timer and its local event on the selected CPU. */
++	cpus_read_lock();
++	migrate_disable();
++	target_cpu = smp_processor_id();
++	hrtimer_setup(&stress_ctx.timer, stress_timer_callback,
++		      CLOCK_MONOTONIC, HRTIMER_MODE_PINNED);
++	hrtimer_start(&stress_ctx.timer, ns_to_ktime(STRESS_INJECT_NS),
++		      HRTIMER_MODE_REL_PINNED);
++	migrate_enable();
++
++	hrtimer_setup(&stress_ctx.stop_timer, stress_stop_timer_callback,
++		      CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	hrtimer_start(&stress_ctx.stop_timer, ms_to_ktime(STRESS_DURATION_MS),
++		      HRTIMER_MODE_REL);
++
++	wait_event(stress_ctx.wait_q, READ_ONCE(stress_ctx.test_done));
++
++	WRITE_ONCE(stress_ctx.running, false);
++	hrtimer_cancel(&stress_ctx.timer);
++	hrtimer_cancel(&stress_ctx.stop_timer);
++	kthread_stop(stress_ctx.monitor_task);
++
++	pr_info("Finished SSE stress layer %d (%s): inject=%d, handler=%d\n",
++		layer, stress_layer_names[layer],
++		atomic_read(&stress_ctx.inject_count),
++		atomic_read(&stress_ctx.handler_count));
++
++	inject_count = atomic_read(&stress_ctx.inject_count);
++	handler_count = atomic_read(&stress_ctx.handler_count);
++	if (!inject_count || !handler_count) {
++		sse_err("Stress layer %d made no progress: inject=%d, handler=%d\n",
++			layer, inject_count, handler_count);
++		ret = -EIO;
++	}
++	if (atomic_read(&stress_ctx.handler_errors)) {
++		sse_err("Stress layer %d observed %d SBI call errors\n", layer,
++			atomic_read(&stress_ctx.handler_errors));
++		ret = -EIO;
++	}
++	if (sse_test_wait_not_running_on_cpu(stress_ctx.evt_id, target_cpu)) {
++		sse_err("Stress event did not complete on CPU %d\n", target_cpu);
++		if (!ret)
++			ret = -ETIMEDOUT;
++	}
++	cpus_read_unlock();
++
++err_disable:
++	if (sse_event_disable(event)) {
++		sse_err("Failed to disable stress event\n");
++		if (!ret)
++			ret = -EIO;
++	}
++	unregister_ret = sse_test_event_unregister(event);
++	if (unregister_ret) {
++		sse_err("Failed to unregister stress event\n");
++		if (!ret)
++			ret = unregister_ret;
++	}
++	stress_ctx.event = NULL;
++
++	return ret;
++}
++
++static void sse_stress_test_all_layers(void)
++{
++	int i, ret;
++
++	pr_info("Starting SSE stress tests: duration=%d ms, interval=%d ns\n",
++		STRESS_DURATION_MS, STRESS_INJECT_NS);
++
++	for (i = 0; i < ARRAY_SIZE(stress_handlers); i++) {
++		ret = sse_stress_test_layer(i);
++		if (ret) {
++			sse_err("Stress layer %d failed, err %d\n", i, ret);
++			break;
++		}
++
++		msleep(100);
++	}
++
++	pr_info("Finished SSE stress tests\n");
++}
++
++static int __init sse_test_init(void)
++{
++	int ret;
++
++	pr_info("RUN %s BEGIN\n", run_id);
++	atomic_set(&sse_test_handler_count, 0);
++
++	if (stress < SSE_STRESS_OFF || stress > SSE_STRESS_ONLY) {
++		sse_err("Invalid stress mode %d\n", stress);
++		pr_info("RUN %s END\n", run_id);
++		return -EINVAL;
++	}
++
++	ret = sse_init_events();
++	if (ret < 0) {
++		pr_info("RUN %s END\n", run_id);
++		return ret;
++	}
++	if (!ret) {
++		sse_skip("No injectable SSE event is available\n");
++		pr_info("RUN %s END\n", run_id);
++		return 0;
++	}
++	if (stress == SSE_STRESS_ONLY && !sse_stress_event_can_inject) {
++		sse_skip("Local software-injected event is unavailable for stress\n");
++		pr_info("RUN %s END\n", run_id);
++		return 0;
++	}
++
++	if (stress != SSE_STRESS_ONLY) {
++		sse_test_injection_fast();
++		sse_test_injection_priority();
++	}
++
++	if (stress == SSE_STRESS_AFTER_SMOKE && !sse_stress_event_can_inject)
++		sse_skip("Local software-injected event is unavailable for stress\n");
++	else if (stress != SSE_STRESS_OFF)
++		sse_stress_test_all_layers();
++	if (!atomic_read(&sse_test_handler_count))
++		sse_skip("No SSE event was handled\n");
++
++	pr_info("RUN %s END\n", run_id);
++
++	return 0;
++}
++
++static void __exit sse_test_exit(void)
++{
++	cancel_delayed_work_sync(&sse_test_cleanup_work);
++}
++
++module_init(sse_test_init);
++module_exit(sse_test_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Clément Léger <cleger@rivosinc.com>");
++MODULE_DESCRIPTION("Test module for SSE");
+diff --git a/tools/testing/selftests/riscv/sse/run_sse_test.sh b/tools/testing/selftests/riscv/sse/run_sse_test.sh
+new file mode 100644
+index 000000000000..e70a2fd14b05
+--- /dev/null
++++ b/tools/testing/selftests/riscv/sse/run_sse_test.sh
+@@ -0,0 +1,59 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (C) 2025 Rivos Inc.
++
++MODULE_NAME=riscv_sse_test
++DRIVER="./module/${MODULE_NAME}.ko"
++ksft_skip=4
++
++check_test_requirements()
++{
++	uid=$(id -u)
++	if [ $uid -ne 0 ]; then
++		echo "$0: Must be run as root"
++		exit $ksft_skip
++	fi
++
++	if ! which insmod > /dev/null 2>&1; then
++		echo "$0: You need insmod installed"
++		exit $ksft_skip
++	fi
++
++	if [ ! -f "$DRIVER" ]; then
++		echo "$0: SSE is disabled or ${MODULE_NAME} is not built"
++		exit $ksft_skip
++	fi
++}
++
++check_test_requirements
++run_id="$$-$(date +%s)"
++
++if ! insmod "$DRIVER" run_id="$run_id" "$@" > /dev/null 2>&1; then
++	echo "${MODULE_NAME}: failed to load, please check dmesg"
++	exit 1
++fi
++
++if ! rmmod "$MODULE_NAME"; then
++	echo "${MODULE_NAME}: failed to unload, please check dmesg"
++	exit 1
++fi
++
++run_log=$(dmesg | sed -n \
++	"/${MODULE_NAME}: RUN ${run_id} BEGIN/,/${MODULE_NAME}: RUN ${run_id} END/p")
++if [ -z "$run_log" ]; then
++	echo "${MODULE_NAME}: unable to find log for run ${run_id}"
++	exit 1
++fi
++
++if echo "$run_log" | grep -q "${MODULE_NAME}: FAILED:"; then
++	echo "${MODULE_NAME} failed, please check dmesg"
++	exit 1
++fi
++
++if echo "$run_log" | grep -q "${MODULE_NAME}: SKIP:"; then
++	echo "${MODULE_NAME}: no injectable SSE event"
++	exit $ksft_skip
++fi
++
++exit 0
 -- 
 2.43.0
 
