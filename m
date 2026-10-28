@@ -1,88 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.133
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793207891;
-	b=Arp1buWDxN5T9SxNSTE9TNlsfUGjRMK1amqwH1hqIrgB8Ru8KwnBIBzP5eCJIVvAMoO4
-	 Md1fwEgSE5vKnfneLUbhgXLdDrfMBHsu2l0p/9tL3zv1Uijk1cWShN6WEosNlRSiyYKKx
-	 sEEB3gmR8bGpQD5k9B75rpF2K1B39WM/FKOp51Ek1YgeVZn/B4r6Iiq+CRBWmGxQE+T09
-	 S/oFEkUiFvwpoBHwUT5al+HV5vVv1+Z8JCjpQ+EBzk8DR/KYjmQgaPlJfGAWzClhownfI
-	 WvaCSM0W8EvcLetCy0Rfd3mmXbnj3B9xwS8AYxmhIJcmcAxoLnuTXObJ6osTyuEWAVg==
+	t=1793207946;
+	b=JHZLRY7YH4ZqzCf2fBBPbAB6eLqfmZ1q7YdHjoCa9awR2twpPBBVH/Mpme6XUbK927O3
+	 T97K3NjSjRWCgPpj/REys7yxSxcGXjXRWpPb48hnVh50myZv7GImiwViR0qH9YaA4wX8h
+	 ty74nM9P4xRLkt/u+PmTfXkKMWFLYvXbrKUMxKVYWns89Bt8Jlfh1HQPR8L/oewyFqCAg
+	 //gsGOwkac0N7sGHF1w9t5qXvc4zMANwV+e3MvMyOmWSH8ty9pi8q0VkV6BBxHeTAlUwS
+	 kZJd7kzdQni2W5WNNmjoPDCmUJ5R7yQUTsYJGV9RBHbWI1j20Cg3xnEoQxDEKmz0ykw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793207891;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=MoqGoVuIDj85F9T+yZlnMdvqGFtpm28q4hBm37Nfu4I=;
-	b=HYo9Yn0Oz3jRkx1lwYgVdWt3BPfnG2Jm9MF+0joY5LhHIU/Pv19DBRkszos8gIHr/cW+
-	 tS7yomc6/BXkYfsi1yGwJM3xJKLPQRcOL3rBAv16jXfePGe3X2P46U8r8RwGb4D3OMn/T
-	 XepPV2BPhRylkEVfb15exa9uXMH5yU2n4kt3Dc5c1PeJbVEE7CSid+ujNP6B6uyrVOWAQ
-	 8s5pBzjXhqMnd9U+wakhKpqUe0E88zdMZ5IEWRPqwRdN7xvK5jtLPCOyZCo38J3ZEuP7y
-	 5IRiD3fuaNxwKm4xpyet2q9eiXJ293T0iZN6HECgTqm4rEFeC4xFkLzm6QQA0TsS4fA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793207946;
+	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References;
+	bh=iA59H/LDNhkaV57ivIpVgCN8zVjfYFqLt84NAT8Jikg=;
+	b=l99B9pCp2t5aVP94SJ+EqpgXtoZoyygLgIKlzF6sSM6um80cZq90yyN0HRET+Yu5Z1+g
+	 lvZIvBe5ZXCQEwCyULtliqzZpGqzXg4Gx4GYUVu1tXociRkIykcJaBtOsn5ECMueJFppH
+	 PPVSuOffBvr16aeEJ2a4UF/EmBpo1eH6HPW8j1OXH+Wc0n6J1zmX6ucO5MBWUEPwGf1V7
+	 bRtecm3rQ36aAdy937ygJoQDhylIsxVu3WHO1/f5oAtWcEO62jQARiDHT2graA6dC1fls
+	 Ef9wZ/PvTZGj1FtNMEsV1jxVreQomHgxnD0XSgPAAxP32Sc8sBW9ZPfF0z7XIZtisSg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lYEa0qkR;
-	arc=none smtp.remote-ip=74.125.224.133
-Received: from mail-yx2-f5.google.com (mail-yx2-f5.google.com [74.125.224.133])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MeiUkkTx;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3B8606A337
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 17:18:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA3B8606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11C0606A31C;
+	Wed, 28 Oct 2026 17:19:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lYEa0qkR
-Received: by mail-yx2-f5.google.com with SMTP id 956f58d0204a3-679b519c952so513038d50.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 10:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793207889; x=1793812689; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MoqGoVuIDj85F9T+yZlnMdvqGFtpm28q4hBm37Nfu4I=;
-        b=lYEa0qkRIXVhCEs6QUd+QxTrzxUKTqAnoMPcLiSx/69Zo6ncYGnv5e/yS4sjbjRFe6
-         iXFwJICl9SG1swyhVr/rRoJPuQcUITDUfumWBofEZtIvVKK3HicIXX8bv+fH6prhNFHh
-         rSjrqNIsEjHcH8FhQUkT+Kknaf+h+ybRFHlJyTjxZBf0biiIlVC3Om+yD8WVjEddUSby
-         u4OiDTAtf8/pXf0kGZdth5g6prsD6TPv3Tss83QEC9wBRd18X2QDE1eQ8fBQ5Gm5H/Vj
-         UV5pnQspPVF9FgmbKZEkd/qgFMdTCY3PJI2HKBtzVzf2mc6UqVY9RLvaTCk/FeG0+RFr
-         znog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793207889; x=1793812689;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=MoqGoVuIDj85F9T+yZlnMdvqGFtpm28q4hBm37Nfu4I=;
-        b=mgSS/gaIk5TzQMlxrfF0tlWoIUswV8BNMnOwk69a94ehqcWh8tWIEOi5UqNa6L06FA
-         hhPTgs1B3D8TiMjiub5DXlTkjFmHS6l0kO318cRhlya6MiRLIo0gQPLGUvd9mZbp/de4
-         hYNF1tN5JhEHmAAhvE04+RniZ9QaR9Edtm/WL/zBsT3KAGsKjmwG/A2N0FQfrfm+G/QL
-         iz7v8E4XZ8WbplppXmWTDUDkNXXqeka/gmC1SoVc6MPzUS0uHmPH58ayyLlTsnFNxzFt
-         LFCWn5Q2nhWKjt0GRLnZg/xBAiwPMLCKdXEW+HqHwyO0Ea7Z2uPZyhhGajaT27ShML0T
-         VTFA==
-X-Forwarded-Encrypted: i=1; AKwUvBwoOXwHpHuz81iLBMFyoHu6cN8UZEPbxAxJaWqqoek/sIHJBeR/SyoQmUzcGEuDt1eBHDx9Vs/zJq5HfqqJWUY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKKztQb5TtG7b7Cfxy434brcSb9u8nmrpQt02gauCZTOF5uG6HD
-	MCONBnvtqSgt0+GGF37NZW8wb7CNaanZIiA27f+ckd0foDr44ggmBlpn
-X-Gm-Gg: AYBFou0W89GBvuZ0ZSUwVE6NhalAQI0Tq5w2Ta1ki7l2t+vjPsBRRaMMNImQ3EP2x4k
-	q1K6dNcl2uRGkvkgv/WHT0hH+T/0X55c3uhDa+Qi9YA3OuaF59FayE6t0g2yU1QEbUmDMeep3Rc
-	n/iHtTitF0ocNVBIwz3IdPiaSoLySr9OUyQnn8XdAGU9QOeFxTfghKCSl2PbIRSiGRp5jWvI1Tz
-	3lNLMICuyzGHB8IgLvgQbwQOzKG7LjtvEbsBpbfDi9k8l9rqF+Z6ovm6cwZGVueHh7N3Rtj2COS
-	aBt7RrPkDOzD6SJJUZ5N5mir2WJmBZTwBHBXiYqpmAd+s9+O3s/QWER1eu7wiWxrZ5YUMS+tXfZ
-	vu9b4oBuoq/L460MTuWRZ58h6D33uQ24REDlYx9xCozhVSv812kLhdfcUqKIb6PxoXquYL4ZiRM
-	b1bzerTTbyYRAZmrXyZJFkvblHNZliw1Tx/IBOZlUuSrdpAa+hh3t4rkHoro1XTXlIfCVkMSoc5
-	X86Fg6EHkBMTmmAAUS/koV//uiPG9vtopTziKu4q6z7Mo/kBiSSizKgyGDo3myLFGkdlIr/k6S/
-	NQk7TjZjnOPMWoN6mioNrty8LQ/faSqkDxU=
-X-Received: by 2002:a05:690c:6602:b0:8a4:d87f:8d52 with SMTP id 00721157ae682-8b1b59cdb34mr17759107b3.2.1793207889578;
-        Wed, 28 Oct 2026 10:18:09 -0700 (PDT)
-Received: from [10.0.0.48] ([71.69.222.122])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b19e43d5c6sm31865247b3.2.2026.10.28.10.18.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2026 10:18:08 -0700 (PDT)
-Message-ID: <0fe51c04-f399-448a-9975-0112cc573e40@gmail.com>
-Date: Wed, 28 Oct 2026 13:18:07 -0400
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MeiUkkTx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCFE1F01825;
+	Wed, 28 Oct 2026 17:19:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793207945;
+	bh=iA59H/LDNhkaV57ivIpVgCN8zVjfYFqLt84NAT8Jikg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=MeiUkkTxcl/ZYalrXsKfZK5vIOlQrmac2J0jzKLvwfTSVkHW/EqJju3D2t5LraDBO
+	 HFBWcUhcKn1N9O9rwcgt7ycPunBlHdJaWWUmKIi5Obw31rPdeq3wBL2J4pJ0nVXidE
+	 JqByT/tUR5FPDpjikQrL4ioCo1Wm45zMK8adF6UPkLnSHnXG0Df4ZvmeRfQWJm7JT/
+	 v6Cf33DnRjATzw74NYdsy5RY49irRJk+HTAvPxntr1fG3+RRLiOPcAkl/iNMPw1Nh8
+	 S+PflWOLZEOebmXde98cg5hbdX57G7CmBYnXk5vhP+A0kOxw6ai7w29GpWVoPhRJFE
+	 dOLHhWgZtzAMQ==
+Date: Wed, 28 Oct 2026 07:19:04 -1000
+Message-ID: <5572f45165fa3ec7d16e1d17eb2c3fb6@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Muchun Song <muchun.song@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ davem@davemloft.net, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ KP Singh <kpsingh@kernel.org>, Tao Chen <chen.dylane@linux.dev>,
+ Mykyta Yatsenko <yatsenko@meta.com>, Leon Hwang <leon.hwang@linux.dev>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>,
+ Tobias Klauser <tklauser@distanz.ch>, Eyal Birger <eyal.birger@gmail.com>,
+ Rong Tao <rongtao@cestc.cn>, Hao Luo <haoluo@google.com>,
+ Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
+ Jeff Xu <jeffxu@chromium.org>, mkoutny@suse.com, Jan Hendrik Farr <kernel@jfarr.cc>,
+ Christian Brauner <brauner@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Brian Gerst <brgerst@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing <kerneljasonxing@gmail.com>,
+ Paul Chaignon <paul.chaignon@gmail.com>, Lance Yang <lance.yang@linux.dev>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Barry Song <baohua@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [RFC PATCH 0/2] memcg_ext: dynamic memory.low and memory.min protection
+In-Reply-To: <c652f3e6198b143fcf29f5540a769228f3d8470c@linux.dev>
+References: <cover.1793086858.git.zhuhui@kylinos.cn>
+ <769e80ffa618327ac03c13c4657e7229@kernel.org>
+ <c652f3e6198b143fcf29f5540a769228f3d8470c@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -91,338 +85,74 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC net-next v2 4/5] tls: send a KeyUpdate at the record
- limit and on request
-To: Hannes Reinecke <hare@suse.de>, John Fastabend
- <john.fastabend@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
- Sabrina Dubroca <sd@queasysnail.net>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hannes Reinecke <hare@kernel.org>, Chuck Lever <cel@kernel.org>,
- kernel-tls-handshake@lists.linux.dev, linux-nvme@lists.infradead.org,
- Alistair Francis <alistair.francis@wdc.com>,
- Martin Belanger <martin.belanger@dell.com>
-References: <20261028-keyupdate-rfc-v2-0-eb5143b4c487@gmail.com>
- <20261028-keyupdate-rfc-v2-4-eb5143b4c487@gmail.com>
- <82963fe6-e908-4c1a-b963-ac1ab86f2bdc@suse.de>
-Content-Language: en-US
-From: Martin Belanger <martin.nvme.dev@gmail.com>
-In-Reply-To: <82963fe6-e908-4c1a-b963-ac1ab86f2bdc@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Hello, Hui.
 
+On Wed, Oct 28, 2026 at 10:27:33AM +0000, Hui Zhu wrote:
+> memory.low is a request, and what reclaim honors is elow, which
+> page_counter_calculate_protection() derives on each pass from the
+> parent's elow, the siblings' requests and the tree's usage.  At the
+> first level below the reclaim root that comes out equal to what was
+> written, and there the knob is enough.  Deeper down it is capped by the
+> parent's budget and shared out between siblings according to what they
+> claimed and what they use, so what a cgroup wrote and what it ends up
+> with can differ.  As far as I can tell none of that is visible from
+> userspace: memory.low reads back the declared value, and I could not
+> find anything that exports elow.
+...
+> So the derived value seems to be usable only where it is derived,
+> inside the check, and that is where low_policy() sits: it is evaluated
+> per pass and is handed that pass's own inputs - the memcg, the reclaim
+> target, the elow just computed, the usage - instead of being state that
+> is read at the check.
 
-On 10/28/26 10:23, Hannes Reinecke wrote:
-> On 10/28/26 2:52 PM, Martin Belanger via B4 Relay wrote:
->> From: Martin Belanger <martin.belanger@dell.com>
->>
->> RFC 9846 section 5.5 requires a key update before the key reaches its
->> usage limit, 2^24.5 full-size records for AES-GCM. The limit counts
->> records, and only the record layer knows where records start and end.
->> Section 4.7.3 also requires a reply to a KeyUpdate with
->> update_requested, sent before the next Application Data record. Both
->> need a KeyUpdate at an exact position in the record stream.
->>
->> For a socket with a registered TX secret, send a KeyUpdate before the
->> next record when the key has protected 2^24 records, as GnuTLS does,
->> or when the peer asked for one. ChaCha20-Poly1305 has no record limit.
->> The KeyUpdate is sent as a handshake record, which closes the open data
->> record first. Pending encryptions are then completed, and only then is
->> the next key installed.
->>
->> Add TLS_TX_KEY_UPDATE to send a KeyUpdate now, optionally asking the
->> peer to update too. It can only bring a KeyUpdate forward: the record
->> limit is enforced either way. Following section 4.7.3, a new request
->> to the peer waits for the answer to the previous one, and no more than
->> 2^48-1 epochs are used.
->>
->> Assisted-by: LLM
->> Signed-off-by: Martin Belanger <martin.belanger@dell.com>
->> ---
->>   Documentation/networking/tls.rst |  17 +++++
->>   include/net/tls.h                |   5 +-
->>   include/uapi/linux/tls.h         |   1 +
->>   net/tls/tls.h                    |   1 +
->>   net/tls/tls_keyupdate.c          |   5 ++
->>   net/tls/tls_main.c               |  38 +++++++++-
->>   net/tls/tls_sw.c                 | 150 +++++++++++++++++++++++++++++ 
->> +++++++++-
->>   7 files changed, 214 insertions(+), 3 deletions(-)
->>
->> diff --git a/Documentation/networking/tls.rst b/Documentation/ 
->> networking/tls.rst
->> index 2e011bd1ce4a..69752a6d67df 100644
->> --- a/Documentation/networking/tls.rst
->> +++ b/Documentation/networking/tls.rst
->> @@ -326,6 +326,23 @@ direction is then left to the application again.
->>   The secrets cannot be read back.
->> +With a registered TX secret, the kernel sends a KeyUpdate before the key
->> +reaches its record limit (RFC 9846, section 5.5): after 2^24 records, 
->> except
->> +for ChaCha20-Poly1305, which has no limit. It also sends one before 
->> the next
->> +record when a received KeyUpdate asks for it. With a registered RX 
->> secret,
->> +the kernel processes a received KeyUpdate and does not pass the 
->> record to
->> +the application. A peer that sends more than 8 KeyUpdates in one 
->> second ends
->> +the connection.
->> +
->> +TLS_TX_KEY_UPDATE
->> +~~~~~~~~~~~~~~~~~
->> +
->> +TLS 1.3 only. Send a KeyUpdate now and install the next TX key. Needs a
->> +registered TX secret. The value is an ``int``: 0 to send a KeyUpdate, 
->> 1 to
->> +also ask the peer to update its key. Asking the peer needs a 
->> registered RX
->> +secret, and fails with ``EBUSY`` until the peer has answered the 
->> previous
->> +request.
->> +
->>   Statistics
->>   ==========
->> diff --git a/include/net/tls.h b/include/net/tls.h
->> index a5bc28a7d1f5..d3123b17030c 100644
->> --- a/include/net/tls.h
->> +++ b/include/net/tls.h
->> @@ -282,9 +282,12 @@ struct tls_context {
->>       union tls_crypto_context crypto_send;
->>       union tls_crypto_context crypto_recv;
->> -    /* Registered for KeyUpdate, protected by the socket lock */
->> +    /* KeyUpdate state, protected by the socket lock */
->>       struct tls_traffic_secret tx_secret;
->>       struct tls_traffic_secret rx_secret;
->> +    u64 tx_key_updates;        /* KeyUpdates sent */
->> +    bool tx_key_update_reply;    /* peer set update_requested */
->> +    bool tx_key_update_asked;    /* we set it, no answer yet */
->>       struct list_head list;
->>       refcount_t refcount;
->> diff --git a/include/uapi/linux/tls.h b/include/uapi/linux/tls.h
->> index d1b136ecea96..c85408cb6ce7 100644
->> --- a/include/uapi/linux/tls.h
->> +++ b/include/uapi/linux/tls.h
->> @@ -44,6 +44,7 @@
->>   #define TLS_TX_MAX_PAYLOAD_LEN    5    /* Maximum plaintext size */
->>   #define TLS_TX_TRAFFIC_SECRET    6    /* TLS 1.3 TX traffic secret */
->>   #define TLS_RX_TRAFFIC_SECRET    7    /* TLS 1.3 RX traffic secret */
->> +#define TLS_TX_KEY_UPDATE    8    /* Send a TLS 1.3 KeyUpdate now */
->>   /* Supported versions */
->>   #define TLS_VERSION_MINOR(ver)    ((ver) & 0xFF)
->> diff --git a/net/tls/tls.h b/net/tls/tls.h
->> index 63ece8074985..d12c9278c814 100644
->> --- a/net/tls/tls.h
->> +++ b/net/tls/tls.h
->> @@ -151,6 +151,7 @@ int tls_hkdf_expand_label(const u8 *secret, size_t 
->> secret_len,
->>                 const char *label, u8 *out, size_t out_len);
->>   int tls_keyupdate_rekey(struct sock *sk, int tx);
->>   int tls_keyupdate_rx(struct sock *sk, struct sk_buff *skb);
->> +int tls_sw_key_update(struct sock *sk, int request);
->>   int tls_set_sw_offload(struct sock *sk, int tx,
->>                  struct tls_crypto_info *new_crypto_info);
->>   void tls_update_rx_zc_capable(struct tls_context *tls_ctx);
->> diff --git a/net/tls/tls_keyupdate.c b/net/tls/tls_keyupdate.c
->> index 543bf57599c7..851d5b54b336 100644
->> --- a/net/tls/tls_keyupdate.c
->> +++ b/net/tls/tls_keyupdate.c
->> @@ -146,5 +146,10 @@ int tls_keyupdate_rx(struct sock *sk, struct 
->> sk_buff *skb)
->>       }
->>       TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXREKEYOK);
->> +    /* Any KeyUpdate from the peer answers our update_requested */
->> +    ctx->tx_key_update_asked = false;
->> +    if (msg[4] == TLS_KEY_UPDATE_REQUESTED)
->> +        ctx->tx_key_update_reply = true;
->> +
->>       return 0;
->>   }
->> diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
->> index 8bb1b2773f3f..d71de99d8890 100644
->> --- a/net/tls/tls_main.c
->> +++ b/net/tls/tls_main.c
->> @@ -765,10 +765,14 @@ static int do_tls_setsockopt_conf(struct sock 
->> *sk, sockptr_t optval,
->>           /* The registered secret no longer matches the key. The RX
->>            * secret also needs the TX one, see 
->> do_tls_setsockopt_secret().
->>            */
->> -        if (tx)
->> +        if (tx) {
->>               memzero_explicit(&ctx->tx_secret,
->>                        sizeof(ctx->tx_secret));
->> +            ctx->tx_key_update_reply = false;
->> +        }
->>           memzero_explicit(&ctx->rx_secret, sizeof(ctx->rx_secret));
->> +        /* the answer now goes to user space */
->> +        ctx->tx_key_update_asked = false;
->>           return 0;
->>       }
->> @@ -987,6 +991,35 @@ static int do_tls_setsockopt_secret(struct sock 
->> *sk, sockptr_t optval,
->>       return rc;
->>   }
->> +static int do_tls_setsockopt_key_update(struct sock *sk, sockptr_t 
->> optval,
->> +                    unsigned int optlen)
->> +{
->> +    struct tls_context *ctx = tls_get_ctx(sk);
->> +    int value, rc;
->> +
->> +    if (sockptr_is_null(optval) || optlen != sizeof(value))
->> +        return -EINVAL;
->> +
->> +    if (copy_from_sockptr(&value, optval, sizeof(value)))
->> +        return -EFAULT;
->> +
->> +    if (value != 0 && value != 1)
->> +        return -EINVAL;
->> +
->> +    rc = mutex_lock_interruptible(&ctx->tx_lock);
->> +    if (rc)
->> +        return rc;
->> +    lock_sock(sk);
->> +    if (ctx->tx_conf == TLS_SW)
->> +        rc = tls_sw_key_update(sk, value);
->> +    else
->> +        rc = -EINVAL;
->> +    release_sock(sk);
->> +    mutex_unlock(&ctx->tx_lock);
->> +
->> +    return rc;
->> +}
->> +
->>   static int do_tls_setsockopt(struct sock *sk, int optname, sockptr_t 
->> optval,
->>                    unsigned int optlen)
->>   {
->> @@ -1020,6 +1053,9 @@ static int do_tls_setsockopt(struct sock *sk, 
->> int optname, sockptr_t optval,
->>                             optname == TLS_TX_TRAFFIC_SECRET);
->>           release_sock(sk);
->>           break;
->> +    case TLS_TX_KEY_UPDATE:
->> +        rc = do_tls_setsockopt_key_update(sk, optval, optlen);
->> +        break;
->>       default:
->>           rc = -ENOPROTOOPT;
->>           break;
->> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
->> index cc0177320e7e..4fe78624859d 100644
->> --- a/net/tls/tls_sw.c
->> +++ b/net/tls/tls_sw.c
->> @@ -40,6 +40,7 @@
->>   #include <linux/module.h>
->>   #include <linux/kernel.h>
->>   #include <linux/splice.h>
->> +#include <linux/unaligned.h>
->>   #include <crypto/aead.h>
->>   #include <net/strparser.h>
->> @@ -1005,6 +1006,151 @@ static int tls_sw_sendmsg_locked(struct sock 
->> *sk, struct msghdr *msg,
->>       return copied > 0 ? copied : ret;
->>   }
->> +/* RFC 9846 section 5.5 allows 2^24.5 full-size records per AES-GCM key.
->> + * Send the KeyUpdate a little earlier.
->> + */
->> +#define TLS_KEYUPDATE_TX_RECORDS    BIT_ULL(24)
->> +
->> +/* Section 4.7.3: the epoch must not exceed 2^48-1. The application
->> + * traffic secrets start at epoch 3.
->> + */
->> +#define TLS_KEYUPDATE_MAX        (BIT_ULL(48) - 4)
->> +
->> +/* Send a KeyUpdate with the current key, then install the next key.
->> + * Called with tx_lock held and the socket locked.
->> + */
->> +static int tls_tx_key_update(struct sock *sk, u8 request, int flags)
->> +{
->> +    u8 body[TLS_KEYUPDATE_MSG_SIZE] = {
->> +        TLS_HANDSHAKE_KEYUPDATE, 0, 0, 1, request
->> +    };
->> +    struct tls_context *tls_ctx = tls_get_ctx(sk);
->> +    struct tls_sw_context_tx *ctx = tls_sw_ctx_tx(tls_ctx);
->> +    u8 record_type = TLS_RECORD_TYPE_HANDSHAKE;
->> +    u8 buf[CMSG_SPACE(sizeof(record_type))];
->> +    struct msghdr msg = {};
->> +    struct cmsghdr *cmsg;
->> +    struct kvec iov;
->> +    int ret;
->> +
->> +    memset(buf, 0, sizeof(buf));
->> +    msg.msg_control = buf;
->> +    msg.msg_controllen = sizeof(buf);
->> +    msg.msg_flags = flags & (MSG_DONTWAIT | MSG_NOSIGNAL);
->> +
->> +    cmsg = CMSG_FIRSTHDR(&msg);
->> +    cmsg->cmsg_level = SOL_TLS;
->> +    cmsg->cmsg_type = TLS_SET_RECORD_TYPE;
->> +    cmsg->cmsg_len = CMSG_LEN(sizeof(record_type));
->> +    memcpy(CMSG_DATA(cmsg), &record_type, sizeof(record_type));
->> +
->> +    iov.iov_base = body;
->> +    iov.iov_len = sizeof(body);
->> +    iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, &iov, 1, sizeof(body));
->> +
->> +    /* A control record closes the open record first, so all data
->> +     * written so far goes out with the current key, ahead of the
->> +     * KeyUpdate.
->> +     */
->> +    ret = tls_sw_sendmsg_locked(sk, &msg, sizeof(body));
->> +    if (ret < 0)
->> +        return ret;
->> +
->> +    /* Nothing may be encrypted with the next key before the KeyUpdate
->> +     * is encrypted with the current one.
->> +     */
->> +    ret = tls_encrypt_async_wait(ctx);
->> +    if (!ret)
->> +        ret = tls_keyupdate_rekey(sk, 1);
->> +    if (ret) {
->> +        /* The peer expects the next key: the connection is lost */
->> +        TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXREKEYERROR);
->> +        tls_err_abort(sk, ret);
->> +        return ret;
->> +    }
->> +
->> +    TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXREKEYOK);
->> +    tls_ctx->tx_key_updates++;
->> +    if (request == TLS_KEY_UPDATE_NOT_REQUESTED)
->> +        tls_ctx->tx_key_update_reply = false;
->> +
->> +    return 0;
->> +}
->> +
->> +/* Send a KeyUpdate if one is due: in reply to the peer's
->> + * update_requested (RFC 9846 section 4.7.3), or before the key reaches
->> + * its record limit (section 5.5). ChaCha20-Poly1305 has no record 
->> limit:
->> + * the sequence number would wrap first.
->> + */
->> +static int tls_tx_key_update_if_due(struct sock *sk, int flags)
-> 
-> '_if_due()' ? Hmm. 'tls_tx_should_update_key()'?
+The visibility of effective values is a problem of wider scope, not an
+argument for implementing bpf struct_ops. There were discussions in the
+past on whether we could expose some meaningful effective value. They
+didn't lead to anything conclusive, and we may yet find a way to expose
+something more useful.
 
-A "should" name usually means a check that returns bool, like
-tcp_should_autocork(). This function also sends the KeyUpdate, and it
-returns -EKEYEXPIRED at the epoch limit.
+Also, the hook doesn't use elow to decide anything. mem_cgroup_below_low()
+and below_min() return true as long as elow or emin covers the usage.
+They ask the policies only once the usage exceeds it, and the only
+answer a policy can give is BELOW, which makes reclaim skip the cgroup.
+So, what the hook buys in the nested case isn't access to the per-pass
+elow. It lets a cgroup escape the ceiling that its parent's protection
+imposes on the subtree.
 
-net/tls already uses "maybe" for a function that acts only when needed:
-tls_rx_msg_maybe_announce() in tls_strp.c. I will rename this one to
-tls_tx_maybe_update_key() in v3.
+Some of that may be innate to nested protection semantics. One
+shortcoming may be that there's no way for a parent to "passthrough" in
+terms of protection, because there's no way for a parent to be neutral.
+If its memory.low is too low, that's the ceiling for the whole
+subhierarchy. If it's set high, the subtree gets the total protection
+one way or another. There may be arguments for a different semantics
+which changes the shape of the protection.
 
-> 
-> But otherwise looks good.
-> 
-> Cheers,
-> 
-> Hannes
+However, it doesn't make sense to let a BPF program escape the parent's
+policy, and, again, none of this is an argument for adding bpf
+struct_ops.
 
+> The other half is what a policy can key on.  memory.low has one
+> dimension, bytes.  A policy program is not limited to the ctx it is
+> handed; it can also use state that other BPF programs keep, so
+> protection can be a function of activity rather than of size - a
+> workingset refault rate, for instance.  [1] reads those counters from
+> BPF and acts on them; it drives reclaim rather than answering a
+> protection hook, but the signal it reads is the one such a policy would
+> want.  The limit is on the output rather than the input: the hook
+> returns a boolean, so it cannot grant anything memory.low cannot.
+
+These signals are all available to userspace. The workingset refault
+counters are in memory.stat, PSI is in memory.pressure, and whatever
+state other BPF programs keep sits in BPF maps which userspace can read.
+So, the inputs aren't the difference. What's left is how quickly and how
+often the protection gets adjusted.
+
+That may be an argument, but nothing so far shows that struct_ops is
+needed for it. Can you demonstrate a realistic and useful scenario which
+can't be achieved from userspace but can be with struct_ops?
+
+Thanks.
+
+--
+tejun
