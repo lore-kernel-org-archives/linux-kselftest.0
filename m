@@ -1,60 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793148357;
-	b=bTIKAPaH78BHFIerDFUwhtrlCeJmMr6iBK8YAPUXbQrgDUNlHtTWDputVM1Jh8adSp2D
-	 7W/3QpDodHERUgUXGaJcIzRkTHwpBbSIwQIumN871FDsG1Yr7VXf0pOcS2q0tzQ/qdZ/X
-	 +N1yKrTBnSPyyK2eO4RD0/MRRqHuYN14p/bLWWGK4rJPF6LBriT0TO0+4SXEFii5unZzl
-	 G4YrJ2KaakjWjnkcRW5Dp9wUScidRbqYMTKWfbTqfXjm8VaxD9Yx/HFxiCYaEqpSC4RTx
-	 qLdB4OuB7J2iEe+lioL9CkW8LIuIwTU1RSiwVAhROj1LD5juqLvsVD8qJ+yu63cJo9g==
+	t=1793148373;
+	b=WK+F3/rXID2gN/5lD6NS11N3OJnSOPxa2uG6kjkH+/t+4C8Hsw5+VprSY5N9juFsRAyy
+	 Ocagrq4NgsMPJpuHGhzHasEHrly/XnXUyDE+bCs1DFxkZfUvyXHc4DDyesYbj9WfoPNjB
+	 KtkpM1Z1048xuC9deKTz+7WZW00BSFCieyAJpTmDD+f4BV56uV+YdmCLZcMXGdGmTZHK1
+	 5b92IjY6SkaoWsYj1i4KGHomMWKhV8cUhJrheShhABXSNJkcvkJw00F97YdXWqhIpSbJR
+	 fCKMhEZht6hHxly9oX7Hfvz1knD/FtxYAgQlHA4jqyLBvcsyZd8ZZ6vPIE5pwGX4XZg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793148357;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=DWQxbmV0bH8re7GX2QHEPfKuuqupaaE79RPxwBK2nIA=;
-	b=CsVSjVNw7PUdI9AvVc53F8kyEs4EYOAWjox2dQCLyS+QY9kjLSo/0VOgrbhl93Mm0RR9
-	 LVIIQW4hIDU2ZBVfnCbXMchwdr0lXu3jibVyZfejROwC2HzkmzlrwN8sTYs/x0+0XL27G
-	 GswTIH7vGWBKSwYiL10VAhlmGW2JEpMoqo42NxoiHgxRiaOKQgjzWLQptRpf5ghvLyZoX
-	 spTRIqA3A9q6clWux1KUXPDe5002HDZyvUF6pHom+6f8CYVUux2cIod5e6seoOBlbSK/r
-	 U+1QEBZe+7dESueZvCSOlIc6InA8g5Wjlf0tNDuG3nW876vhWEZpCC2qbJ+mQM4lTyg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793148373;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=JpxKlsBs0nplsqNGjdVZnc+DN8e3WyN47qn9gI+PJkk=;
+	b=JW19zBxhBeLA/18HDFgpFiRI0wq22khJ6z8swyyqCHTYeayb7W3UL4J0ZK9fBL9oDSij
+	 EdRfQeKqs8eTVtCELX2ygceFh2+jrMdfrYE76MAMg7zciBTL5dtEb9m0TVTUsnZewrPIH
+	 6ffBxqidvcGZNwatW5OsCvNSHi3ijHBu0ZsGSagvCV6SNnZvuMqqcQ/G111K28fe2cos3
+	 y686x0HoalUMzMk58SSZ7ISiCpvPNiRJclTBYHrrVfJ5PJx3pf5/ie/c5J0M4P/lO/P6z
+	 //2XCcDPYh3Eg6ru3X8n3QcotJSxCtm+tUZ5jFTw8BKFJ6Gh827zRb+WuTPyvGpzDGA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gu6mJ4RA;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b1L9K0bO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF4F606A31A;
-	Wed, 28 Oct 2026 00:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A4D606A31D;
+	Wed, 28 Oct 2026 00:46:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gu6mJ4RA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 720501F031E1;
-	Wed, 28 Oct 2026 00:45:55 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b1L9K0bO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA461F01825;
+	Wed, 28 Oct 2026 00:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793148357;
-	bh=DWQxbmV0bH8re7GX2QHEPfKuuqupaaE79RPxwBK2nIA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Gu6mJ4RAip16wkYgzDoTlI/LTzy82ccA1thYJeU6eprt/XgYoDTPw2ePddUizGfI/
-	 GvSN038TE3K5uru6mfy1QD2rrEtQh/jKbUTAdl+9nN/HnhLZHA2sNgJwzaUAAK3mwD
-	 FeI8371SOf/QDrcmb0yl4wvRLjwyyDXBiLmFYucVJV3AGeW6IXx1GfogKuFeGzBXTk
-	 IjsNKo/aIzBVuo2qLnWTxw/ire+CWYIWVMj865ijMA5soUYl6L1P9bQomz5PuTls99
-	 evsvFj67wdfAnhmHOa8CrNV7hDbOzfNjw7gZTzrQTou80jINKnqdfyGOjcFDd3LsQO
-	 lj7pOjSVgewLw==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 16/16] selftests/ftrace: Add event filter syntax check test case
-Date: Wed, 28 Oct 2026 09:45:53 +0900
-Message-ID: <179314835316.684037.6225998891000249085.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <179314820431.684037.4147763044424284198.stgit@devnote2>
-References: <179314820431.684037.4147763044424284198.stgit@devnote2>
-User-Agent: StGit/0.19
+	s=k20260515; t=1793148372;
+	bh=JpxKlsBs0nplsqNGjdVZnc+DN8e3WyN47qn9gI+PJkk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=b1L9K0bOIu+jh5sLGAqI6UsuxIEynRrv7QhLaLTt510Uo3zD/h2QydcZUHjgmf9CW
+	 ODird2lswcOPewGC0mgFv0fb+etPOy0lQMGiixXovQSZ01Urm/I6mXX/UCA0aAa/9E
+	 jR7SBpaapsx1+CL+9aAHL2GshVkJ3ly0kDTw5x9Mk8+m9EAbZ2tpMpLq4Q4GdvZGNL
+	 bKDKWREvcIbbzAhxpHr1eBCs7cNDqpANWniAmYAzEmOblS3smOghVPnA6VyVFXu1/N
+	 dlYHZGujoRlhEItLFdWD8DmauFWv7/EnzFhhMNrFySDr+L12RVmy5nBdcTUCn80UwW
+	 FSxMUgGbEk+Og==
+Content-Type: multipart/mixed; boundary="===============8209792634814655665=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,143 +49,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Message-Id: <804b7fd3c3bf40a5edf65903d90514263e61fc6fa2ef513d35913fe8ed9acad8@mail.kernel.org>
+In-Reply-To: <20261028000411.4010967-2-vineet.gupta@linux.dev>
+References: <20261028000411.4010967-2-vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v1 1/7] selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
+From: bot+bpf-ci@kernel.org
+To: vineet.gupta@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,jose.marchesi@oracle.com,david.faust@oss.qualcomm.com,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 28 Oct 2026 00:46:12 +0000 (UTC)
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--===============8209792634814655665==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Add a new ftracetest test case (filter-syntax-check.tc) to verify valid
-event filter expressions, error_log caret reporting for malformed filter
-expressions (empty filters, missing fields, unbalanced parentheses and
-quotes, dangling logical operators, invalid fields/values/cpulists),
-newline truncation on multi-line filter input, and error returns on
-invalid subsystem filters.
+> selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+TL;DR: Nit only: the new __skip() reason in the callx selftests omits riscv64,
+though riscv64 is supported, so a riscv64 build with a GCC lacking callx
+prints a misleading skip message.
+
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
+> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+
+[ ... ]
+
+> @@ -295,6 +295,13 @@
+>  #define CAN_USE_LOAD_ACQ_STORE_REL
+>  #endif
+>
+> +/* clang always emits callx, gcc only when it defines __BPF_FEATURE_CALLX */
+> +#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
+> +     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) &&		\
+> +	(defined(__clang__) || defined(__BPF_FEATURE_CALLX))
+> +#define CAN_USE_CALLX
+> +#endif
+> +
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
+> --- a/tools/testing/selftests/bpf/progs/verifier_callx.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
+
+[ ... ]
+
+> @@ -1075,6 +1073,7 @@ int callx_c_ops_on_stack(void *ctx)
+>  #else
+>
+>  SEC("socket")
+> +__skip("callx needs x86/arm64 JIT and compiler support")
+>  __success
+>  int dummy(void *ctx)
+>  {
+
+this isn't a bug, but the skip reason leaves out riscv64, even though the
+CAN_USE_CALLX macro above accepts it.
+
+The same string is added to the dummy() program in
+verifier_callx_rodata.c.  The riscv64 JIT implements bpf_jit_supports_callx(),
+and commit 530dfafc6107 ("selftests/bpf: Enable callx related testcases for
+RV64") turned these tests on for RV64.
+
+On a riscv64 build with a bpf-gcc that does not define __BPF_FEATURE_CALLX,
+the arch supports callx and only the compiler lacks it, yet run_subtest()
+prints:
+
+  run_subtest:SKIP: callx needs x86/arm64 JIT and compiler support
+
+That reads as though riscv64 itself were unsupported.
+
+Could the reason say x86/arm64/riscv64, or leave the arch list out (for
+example "toolchain or JIT can't do callx", as the new comment in
+callx_rodata_lskel.c does)?
+
+
 ---
-Changes in v3:
- - Replace negated pipelines (! cmd) with explicit
-   "if cmd; then exit_fail; fi" checks to properly catch unexpected success
-   under POSIX sh with set -e.
- - Add test cases for empty string matching (prev_comm == "",
-   prev_comm ~ "").
- - Add test cases for out-of-range CPU IDs with CPUS{} comparison.
- - Add test cases for missing operands after operators.
- - Add test cases for empty operands and stray operators.
- - Add test cases for operand type mismatches and brace errors.
- - Add test cases for function event filter syntax checks (including
-   INVALID_OP and ILLEGAL_FIELD_OP caret checks).
- - Add test cases for multi-line input validation on event and subsystem
-   filters.
----
- .../ftrace/test.d/filter/filter-syntax-check.tc    |  100 ++++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/filter/filter-syntax-check.tc
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/ftrace/test.d/filter/filter-syntax-check.tc b/tools/testing/selftests/ftrace/test.d/filter/filter-syntax-check.tc
-new file mode 100644
-index 000000000000..02fb2be6e6eb
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/filter/filter-syntax-check.tc
-@@ -0,0 +1,100 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: event filter - test filter syntax error check
-+# requires: set_event events/sched/sched_switch/filter error_log
-+# flags: instance
-+
-+check_error() { # command-with-error-pos-by-^
-+    ftrace_errlog_check 'event filter parse error' "$1" 'events/sched/sched_switch/filter'
-+}
-+
-+# Valid filter expressions
-+echo '(common_pid == 0)' > events/sched/sched_switch/filter
-+echo '((common_pid == 0) && (prev_pid == 0))' > events/sched/sched_switch/filter
-+echo 'prev_comm ~ "*sh"' > events/sched/sched_switch/filter
-+echo 'prev_comm ~ "*"' > events/sched/sched_switch/filter
-+echo 'prev_comm == ""' > events/sched/sched_switch/filter
-+echo 'prev_comm ~ ""' > events/sched/sched_switch/filter
-+echo 'common_pid == CPUS{0}' > events/sched/sched_switch/filter
-+echo 'common_pid != CPUS{0}' > events/sched/sched_switch/filter
-+echo 0 > events/sched/sched_switch/filter
-+
-+# Empty or meaningless filter expressions
-+check_error '^()'						# NO_FILTER
-+check_error '^== 1'						# INVALID_FILTER
-+check_error 'common_pid ==^'					# INVALID_FILTER
-+check_error 'common_pid !=^'					# INVALID_FILTER
-+check_error 'common_pid >=^'					# INVALID_FILTER
-+
-+# Unbalanced parentheses and quotes
-+check_error '^(common_pid == 1'					# TOO_MANY_OPEN
-+check_error 'common_pid == 1^)'					# TOO_MANY_CLOSE
-+check_error 'prev_comm == ^"bash'				# MISSING_QUOTE
-+
-+# Dangling logical operators and empty operands
-+check_error 'common_pid == 1 &&^'				# TOO_MANY_PREDS
-+check_error 'common_pid == 1 ||^'				# TOO_MANY_PREDS
-+check_error 'common_pid == 1 || (common_pid == 2 && ^)'		# INVALID_FILTER
-+check_error '(common_pid == ^)'					# INVALID_VALUE
-+check_error 'common_pid == ^&& common_pid == 0'			# INVALID_VALUE
-+
-+# Invalid field, operator, or operand type
-+check_error '^no_such_field == 1'				# FIELD_NOT_FOUND
-+check_error 'common_pid == ^@'					# INVALID_VALUE
-+check_error 'common_pid == ^"1"'				# EXPECT_DIGIT
-+check_error 'prev_comm == ^0'					# EXPECT_STRING
-+check_error 'common_pid ^~ 1'					# ILLEGAL_FIELD_OP
-+
-+# CPUS{} syntax errors
-+check_error 'common_pid ^> CPUS{0}'				# ILLEGAL_FIELD_OP
-+check_error 'common_pid == CPUS^0}'				# MISSING_BRACE_OPEN
-+check_error 'common_pid == CPUS{0^'				# MISSING_BRACE_CLOSE
-+check_error 'common_pid == CPUS{^}'				# INVALID_CPULIST
-+check_error 'common_pid == CPUS{99999^}'			# INVALID_CPULIST
-+
-+# Function event filter errors (if supported)
-+if [ -f events/kmem/kmem_cache_free/filter ]; then
-+    check_kmem_error() {
-+        ftrace_errlog_check 'event filter parse error' "$1" 'events/kmem/kmem_cache_free/filter'
-+    }
-+    check_kmem_error 'call_site.function == non_exist_func^'	# NO_FUNCTION
-+    check_kmem_error 'call_site.function ==^'			# INVALID_FILTER
-+    check_kmem_error 'call_site.function ^> 0'			# INVALID_OP
-+    check_kmem_error 'common_type^.function == 0'		# ILLEGAL_FIELD_OP
-+    echo 0 > events/kmem/kmem_cache_free/filter
-+fi
-+
-+# Multi-line input with non-whitespace characters after newline must fail
-+if ( printf "common_pid == 0\ncommon_pid == 1" | \
-+     dd of=events/sched/sched_switch/filter bs=4096 ) 2> /dev/null; then
-+    exit_fail
-+fi
-+if ( printf "common_pid == CPUS{0\n\"} && common_pid == 0" | \
-+     dd of=events/sched/sched_switch/filter bs=4096 ) 2> /dev/null; then
-+    exit_fail
-+fi
-+
-+# Trailing whitespace characters after newline are permitted
-+printf "common_pid == 0\n  \n\t \n" | \
-+    dd of=events/sched/sched_switch/filter bs=4096 2> /dev/null
-+echo 0 > events/sched/sched_switch/filter
-+
-+# Subsystem filter must fail on invalid filter expressions
-+echo 'common_pid >= 0' > events/sched/filter
-+if echo 'no_such_field == 1' > events/sched/filter 2> /dev/null; then
-+    exit_fail
-+fi
-+if echo 'common_pid == 1 &&' > events/sched/filter 2> /dev/null; then
-+    exit_fail
-+fi
-+if ( printf "common_pid == 0\nfoo" | \
-+     dd of=events/sched/filter bs=4096 ) 2> /dev/null; then
-+    exit_fail
-+fi
-+
-+# Subsystem filter with trailing whitespace after newline must succeed
-+printf "common_pid == 0\n  \n\t \n" | \
-+    dd of=events/sched/filter bs=4096 2> /dev/null
-+echo 0 > events/sched/filter
-+
-+exit 0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40608355234
+--===============8209792634814655665==--
