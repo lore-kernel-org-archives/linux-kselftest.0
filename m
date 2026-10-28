@@ -1,56 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.26
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793166364;
-	b=wAmHxYb/MrYwuxl63svYPTkDwtqK/469iBqkWbtSpscJMQmuLWMuIjzNK27iaHY+JdMg
-	 DmwloNJWT+lWI/kqmhvSDh3lMKWG/fOmfJoRZgDW+6VblE6RX+IvR0vY+O0hDL9hMzqbG
-	 lipC7Z/gIyECr6RZ0PkwFChxBeDwrKB20R2/furd1ijWHXMw6akgCB9NJeBEdEh1tz/iS
-	 8Vxr2fz9pUBw+oGmB11dacwftVSsb1FSCxt5ypM25B82UKqXjhnXP1NS48ZhGRToo5UoH
-	 RUwfWv29nAxa3NISLQS1lUqmguF8DMvHz2NzUqBc7+qHAIVzWrnY9IqvTS6THL4RUFg==
+	t=1793166376;
+	b=TkY1fRJg2qQtgmv7BQB/2jcDKBg5VJieBS7z1SVMuvgFKGS4GNGqjK9fB29V+xWQMIih
+	 5roDLxtZzks5AhYgR1R2zRAMf9sW+kv8NRJox97XLMTgGW3S2lwJQw2MYXIymB7I9cZzE
+	 dOOB+QNy9gGZKtEVenp+wfBIEUrYvGzMot6tKokCS0qK7th/XkHWTDWVEtoPBhM+jEnN3
+	 9FLvVetiGJotAlR10aZymi6JQWdIvxmEbAOVdq8lwlUZqWCiFYo0lYszgf+2Xcy5QTivg
+	 YCuh+Af9NeNV5I4DWJWotvcZY0hipRNRdVZkwvCz5hg56gLuXDdQakGgJAzULcXHq0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793166364;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793166376;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
 	 In-Reply-To:To:Cc:X-Mailer;
-	bh=kjFfc0DyBz/PhoEfh4CFGhSYK0Li8U1aA84+IyfHCTM=;
-	b=fQlSRCIAgQoKwwX8+FnEpnXy+joXwCGwRn5OWlsYuCtZcWyVh41jHqZLqKssd8RVKRfn
-	 1q4lswrlUzXPbBtPdFoofV8Om+svd0TDwLKMRcXE1en+yiEIlsAQUI33Rn+heKf0d3lO6
-	 s1dWMmikkFrql7R9x5Ba0aO//F/Etdx+5yGkKzbfxi8ICaswf9ZGzc0uWyMitTJCLBMbP
-	 gKDymhlXsZnpnZRTPAxoLxIYCOazeQJ86G5+ttrrOBVZUy/mdKIZY3SPI5ZkLsuQGAq9v
-	 Rz4m0VII3HKHzPR9QBXIUm3Wz/4oYPZXWy8j2rhgpt6Ue2tcOz/RVW4XBldzXwu3b4g==
+	bh=XZRHvRYMyZ0MXnMeI7De2qWfpVAINbF2/A5TNVTOlwI=;
+	b=jQRW/zrmgjJgzkWTs4qcpXN1eEgCh/0YEnjdHSDlP73i/t+3NS0Uuxbqhy6K6tMagPln
+	 Pj6t87YnJMhIvbO3X2/gamK7+epCROFeia3C3yQHXiRHIFUxNC4/Zpb6U2Vi6yOC5KO/I
+	 VAcoNtSw//Wn/gMOeGp46w7RC7YlBDdb6V7XfPQ15cD8pszFhVTbB6poz5f9Svi6o6c2J
+	 viBtXRcvGkivPLo1lQvgiAG/wN2wsLXyhci0U7Iweex04aS/qTVnYdgl1GIUWftrthUIH
+	 XPKXq59V5OERbt59fgsPp0g6Udx8JH+D21snmFyRUERpKzJd5XHen+HfAIPIgm6rdlg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=VOw+vpTk;
-	arc=none smtp.remote-ip=91.218.175.72
-Received: from mta0.migadu.com (out-72.mta0.migadu.com [91.218.175.72])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eocikKj9;
+	arc=none smtp.remote-ip=95.215.58.26
+Received: from mta1.migadu.com (out-26.mta1.migadu.com [95.215.58.26])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7ED606A31F
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 05:46:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C7ED606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88036606A31D
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 05:46:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88036606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=VOw+vpTk
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eocikKj9
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Q7cdOCTYN1OsRVYA/tnnim8OAfOBZPX8C+UEQBNvTwM=;
+DKIM-Signature: a=rsa-sha256; bh=51HH0sC1VsoXjXRR5mBabSBHSG4g5i07L+EtauiNOrk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793166361; v=1; x=1793771161;
- b=VOw+vpTkTqI+uMYqdT+N+xUSyXCGL5KMwWJdAteFa17ZDaueyU34Vvw9pe7Vo6RwUD7apEy2
- +L9lTbVsNd/BBrDsSgMI95qCgNMN02kmAzQbT59mcv7O7P1DeRrGBMMV/FiPPnTr2nvUcFcsbwP
- pCQ92n+6/IrJhnNohtJXAEwo=
+ t=1793166372; v=1; x=1793771172;
+ b=eocikKj950uXnXl0IVVHyHCHY2OQ6uSjY3ADjPeQ0vtO9Le9L5wCjGcaj1Gb6WZ2ULCrW8vn
+ 7a4MXoE1G1zXMHAex3y9asVLC/WZDkqeKNh8dWQFhoJ2jbAlEkSaYqZHv23FVp8eZX7N8nL/8VE
+ 55ApxqyA5H6jt1oMsns3DKps=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 1372610438f61ffd;
-	Wed, 28 Oct 2026 05:46:01 +0000
-X-Mizu-Trace-ID: 1372610438f61ffd
+Received: by mta11.migadu.com with ESMTPS id 44ae0fe89d4468cb;
+	Wed, 28 Oct 2026 05:46:12 +0000
+X-Mizu-Trace-ID: 44ae0fe89d4468cb
 X-Migadu-Flow: FLOW_OUT
 From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Wed, 28 Oct 2026 13:45:30 +0800
-Subject: [PATCH 2/3] ipv6: ioam6: use transformed packet nexthdr for ECMP
- re-lookup
+Date: Wed, 28 Oct 2026 13:45:31 +0800
+Subject: [PATCH 3/3] selftests: net: add ioam6 ECMP test (RFC 9486 C2)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,7 +61,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261028-ipv6_ioam_ecmp-v1-2-9b6715b6f4c0@kylinos.cn>
+Message-Id: <20261028-ipv6_ioam_ecmp-v1-3-9b6715b6f4c0@kylinos.cn>
 References: <20261028-ipv6_ioam_ecmp-v1-0-9b6715b6f4c0@kylinos.cn>
 In-Reply-To: <20261028-ipv6_ioam_ecmp-v1-0-9b6715b6f4c0@kylinos.cn>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
@@ -77,49 +76,390 @@ X-Mailer: b4 0.16.0
 
 From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-RFC 9486 (C2) requires that the ECMP hash of a packet carrying IOAM
-options is the same as the hash of the identical packet without them.
+Add new test ioam6_ecmp.sh, verifying that the ECMP path taken with
+IOAM options is identical to the path of the same packet without them
+under the default hash policy 0, as required by RFC 9486 (C2).
 
-When the ioam6 output path misses the destination cache, it re-looks
-up the route for the transformed packet. Under the default hash
-policy 0 that lookup hashed NEXTHDR_HOP rather than the nexthdr the
-identical packet without IOAM would carry, so it could pick a
-different ECMP sibling.
+  - transit input hashing: the sender inserts an IOAM Hop-by-Hop option
+    (inline mode), the forwarder has a multipath route;
+  - encapsulating node re-lookup: the forwarder itself encapsulates
+    (ioam6 encap mode, tunnel dst equal to the original dst) over a
+    multipath route, with a plain ip6ip6 tunnel as the
+    identical-packet-without-IOAM baseline.
 
-Use the Hop-by-Hop nexthdr already stored by do_inline()/do_encap()
-(eh.nexthdr) for the re-lookup, and precompute the multipath hash
-from the packet: ip6_route_output() lookups carry no skb, so without
-this ICMPv6 errors would stop hashing their quoted flow and L4 hash
-policy packets would lose their ports.
-
-Fixes: 8cb3bf8bff3c ("ipv6: ioam: Add support for the ip6ip6 encapsulation")
 Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 ---
- net/ipv6/ioam6_iptunnel.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/Makefile      |   1 +
+ tools/testing/selftests/net/ioam6_ecmp.sh | 349 ++++++++++++++++++++++++++++++
+ 2 files changed, 350 insertions(+)
 
-diff --git a/net/ipv6/ioam6_iptunnel.c b/net/ipv6/ioam6_iptunnel.c
-index cfb2c41634a0..713e625bfa3a 100644
---- a/net/ipv6/ioam6_iptunnel.c
-+++ b/net/ipv6/ioam6_iptunnel.c
-@@ -13,6 +13,7 @@
- #include <linux/ioam6.h>
- #include <linux/ioam6_iptunnel.h>
- #include <net/dst.h>
-+#include <net/ip6_route.h>
- #include <net/sock.h>
- #include <net/lwtunnel.h>
- #include <net/ioam6.h>
-@@ -412,7 +413,8 @@ static int ioam6_output(struct net *net, struct sock *sk, struct sk_buff *skb)
- 		fl6.saddr = hdr->saddr;
- 		fl6.flowlabel = ip6_flowinfo(hdr);
- 		fl6.flowi6_mark = skb->mark;
--		fl6.flowi6_proto = hdr->nexthdr;
-+		fl6.flowi6_proto = ilwt->tuninfo.eh.nexthdr;
-+		fl6.mp_hash = rt6_multipath_hash(net, &fl6, skb, NULL);
- 
- 		dst = ip6_route_output(net, NULL, &fl6);
- 		if (dst->error) {
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index df215e1a6262..397b19799cc9 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -52,6 +52,7 @@ TEST_PROGS := \
+ 	icmp_redirect.sh \
+ 	io_uring_zerocopy_tx.sh \
+ 	ioam6.sh \
++	ioam6_ecmp.sh \
+ 	ip6_gre_headroom.sh \
+ 	ip6_tunnel.sh \
+ 	ip_defrag.sh \
+diff --git a/tools/testing/selftests/net/ioam6_ecmp.sh b/tools/testing/selftests/net/ioam6_ecmp.sh
+new file mode 100755
+index 000000000000..c5c82884c757
+--- /dev/null
++++ b/tools/testing/selftests/net/ioam6_ecmp.sh
+@@ -0,0 +1,349 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Verify RFC 9486 C2 for ECMP: with hash policy 0 (the default), the ECMP
++# nexthop chosen for a packet carrying IOAM options must be the same as for
++# the identical packet without them.
++#
++# Two scenarios, matching the two places where IOAM changed the hashed
++# IPv6 nexthdr:
++#
++# 1) transit node: alpha inserts an IOAM Hop-by-Hop option (inline mode);
++#    beta forwards with a multipath route. Policy 0 hashed the raw
++#    nexthdr (NEXTHDR_HOP vs IPPROTO_ICMPV6), so beta could pick a
++#    different ECMP sibling than for the same packet without IOAM.
++#
++# 2) encapsulating node: beta itself encapsulates (ioam6 encap mode,
++#    tunnel dst = original dst, tunnel src pinned) over a multipath
++#    route. The ioam6 re-lookup hashed NEXTHDR_HOP instead of the
++#    transformed packet's real nexthdr (IPPROTO_IPV6). The baseline is
++#    the same encapsulation without the IOAM option: a plain ip6ip6
++#    tunnel over the same multipath route, with the same outer
++#    addresses.
++#
++# Hash policy 0 hashes addresses, the flow label and the nexthdr (not L4
++# ports), so whether both variants land on the same ECMP sibling depends
++# on the per-netns hash seed. Each test therefore repeats with several
++# seeds and fails on the first divergence: pre-fix kernels fail with
++# high probability, fixed kernels always pass.
++#
++# Topology:
++#
++#   alpha                   beta                      gamma
++#   veth0 2001:db8:1::2 <-> veth0 2001:db8:1::1
++#                           veth1 2001:db8:2:1::1 <-> veth0 2001:db8:2:1::2
++#                           veth2 2001:db8:2:2::1 <-> veth1 2001:db8:2:2::2
++#
++# beta's ECMP route: 2001:db8:2:1::2/128
++#   nexthop via 2001:db8:2:1::2 dev veth1
++#   nexthop via 2001:db8:2:2::2 dev veth2
++#
++# Scenario 1 sends to 2001:db8:2:1::2 (gamma). Scenario 2 sends to
++# 2001:db8:3::2, which beta encapsulates towards 2001:db8:2:1::2. The
++# link gamma received the packets on is detected from tc flower
++# counters (read via jq) on the ingress of gamma's veth0/veth1. The
++# filters match the exact measurement packets: ICMPv6 echo requests
++# for scenario 1, and the outer addresses of the ip6ip6 packets for
++# scenario 2 (flower classifies outer headers only).
++
++# shellcheck disable=SC2154,SC2329
++source lib.sh
++
++readonly PKTS=3
++readonly SEEDS="1 2 3 4 5 6 7 8 9 10 11 12"
++
++ip6tnl_loaded=0
++
++cleanup()
++{
++	cleanup_all_ns
++
++	if [ "$ip6tnl_loaded" != 0 ]; then
++		modprobe -r ip6_tunnel &>/dev/null
++	fi
++}
++
++# Replace the tc measurement filters on gamma's ECMP links. $1 is the
++# flower match list, e.g. "ip_proto icmpv6 type 128 src_ip <sender>"
++# for plain IPv6 echo requests, or the outer addresses for ip6ip6
++# packets (flower classifies the outer header only, see
++# FLOW_DISSECTOR_F_STOP_BEFORE_ENCAP in cls_flower).
++set_measure_filters()
++{
++	local match=$1
++	local dev
++
++	for dev in veth0 veth1; do
++		tc -n "$ns_gamma" qdisc del dev "$dev" clsact &>/dev/null
++		tc -n "$ns_gamma" qdisc add dev "$dev" clsact || return 1
++		# shellcheck disable=SC2086
++		tc -n "$ns_gamma" filter add dev "$dev" ingress pref 1 \
++			protocol ipv6 flower skip_hw $match action pass || return 1
++	done
++}
++
++# Number of packets counted by the measurement filter on gamma's $1.
++icmp_packets()
++{
++	tc -n "$ns_gamma" -s -j filter show dev "$1" ingress |
++		jq '[.[] | .options.actions[]?.stats |
++		    (.packets // .basic.packets // 0)] | add // 0'
++}
++
++# Send PKTS pings from alpha to $1 and report which of gamma's links
++# received them: "A" (veth0), "B" (veth1), "TIE" or "LOST:<a>:<b>".
++measure_link()
++{
++	local dst=$1
++	local a0 b0 da db
++
++	a0=$(icmp_packets veth0)
++	b0=$(icmp_packets veth1)
++
++	ip netns exec "$ns_alpha" \
++		ping -6 -q -c "$PKTS" -i 0.2 -W 1 -w 2 "$dst" &>/dev/null || true
++
++	da=$(($(icmp_packets veth0) - a0))
++	db=$(($(icmp_packets veth1) - b0))
++
++	if [ $((da + db)) -lt "$PKTS" ]; then
++		echo "LOST:$da:$db"
++		return
++	fi
++
++	if [ "$da" -gt "$db" ]; then
++		echo "A"
++	elif [ "$db" -gt "$da" ]; then
++		echo "B"
++	else
++		echo "TIE"
++	fi
++}
++
++set_alpha_plain()
++{
++	ip -netns "$ns_alpha" -6 route replace 2001:db8:2:1::/64 \
++		via 2001:db8:1::1 dev veth0
++}
++
++set_alpha_ioam()
++{
++	ip -netns "$ns_alpha" -6 route replace 2001:db8:2:1::/64 \
++		encap ioam6 mode inline trace prealloc \
++		type 0x800000 ns 0 size 12 \
++		via 2001:db8:1::1 dev veth0
++}
++
++set_beta_tnl()
++{
++	# Recreate the tunnel: ip6_tnl caches the outer dst per CPU for a
++	# few seconds, and neither the route change below nor the
++	# fib_multipath_hash_seed write resets it. A stale cache would
++	# resolve the outer sibling under a previous seed (or on another
++	# CPU), making the baseline flip between attempts of one seed.
++	ip -netns "$ns_beta" link del ioamcmp &>/dev/null
++	ip -netns "$ns_beta" link add name ioamcmp type ip6tnl \
++		mode ip6ip6 local 2001:db8:2:1::1 remote 2001:db8:2:1::2
++	ip -netns "$ns_beta" link set ioamcmp up
++	ip -netns "$ns_beta" -6 route replace 2001:db8:3::2/128 dev ioamcmp
++}
++
++set_beta_ioam_encap()
++{
++	ip -netns "$ns_beta" -6 route replace 2001:db8:3::2/128 \
++		encap ioam6 mode encap tunsrc 2001:db8:2:1::1 tundst 2001:db8:2:1::2 \
++		trace prealloc type 0x800000 ns 0 size 12 dev veth1
++}
++
++# $1: description; $2: function installing the without-IOAM variant;
++# $3: function installing the with-IOAM variant; $4: destination.
++run_scenario()
++{
++	local desc=$1
++	local plain=$2
++	local ioam=$3
++	local dst=$4
++	local seed pl il
++
++	log_info "$desc"
++
++	for seed in $SEEDS; do
++		RET=0
++		ip netns exec "$ns_beta" \
++			sysctl -wq net.ipv4.fib_multipath_hash_seed="$seed"
++
++		if ! $plain; then
++			RET=$ksft_fail
++			log_test "$desc (plain route setup failed, seed $seed)"
++			continue
++		fi
++		pl=$(measure_link "$dst")
++		if ! $ioam; then
++			RET=$ksft_fail
++			log_test "$desc (ioam route setup failed, seed $seed)"
++			continue
++		fi
++		il=$(measure_link "$dst")
++
++		case "$pl$il" in
++		*LOST*)
++			RET=$ksft_fail
++			log_test "$desc (lost packets, seed $seed: without=$pl with=$il)"
++			continue
++			;;
++		*TIE*)
++			RET=$ksft_fail
++			log_test "$desc (no clear link, seed $seed)"
++			continue
++			;;
++		esac
++
++		if [ "$pl" = "$il" ]; then
++			log_test "$desc (seed $seed: same link $pl)"
++		else
++			RET=$ksft_fail
++			log_test "$desc (diverged on seed $seed: without IOAM via link $pl, with IOAM via link $il)"
++		fi
++	done
++}
++
++setup_topology()
++{
++	local dev
++
++	setup_ns ns_alpha ns_beta ns_gamma || return 1
++
++	ip link add veth0 netns "$ns_alpha" type veth \
++		peer name veth0 netns "$ns_beta" || return 1
++	ip link add veth1 netns "$ns_beta" type veth \
++		peer name veth0 netns "$ns_gamma" || return 1
++	ip link add veth2 netns "$ns_beta" type veth \
++		peer name veth1 netns "$ns_gamma" || return 1
++
++	ip -n "$ns_alpha" addr add 2001:db8:1::2/64 dev veth0 nodad
++	ip -n "$ns_beta" addr add 2001:db8:1::1/64 dev veth0 nodad
++	ip -n "$ns_beta" addr add 2001:db8:2:1::1/64 dev veth1 nodad
++	ip -n "$ns_beta" addr add 2001:db8:2:2::1/64 dev veth2 nodad
++	ip -n "$ns_gamma" addr add 2001:db8:2:1::2/64 dev veth0 nodad
++	ip -n "$ns_gamma" addr add 2001:db8:2:2::2/64 dev veth1 nodad
++
++	ip -n "$ns_alpha" link set veth0 up
++	ip -n "$ns_beta" link set veth0 up
++	ip -n "$ns_beta" link set veth1 up
++	ip -n "$ns_beta" link set veth2 up
++	ip -n "$ns_gamma" link set veth0 up
++	ip -n "$ns_gamma" link set veth1 up
++
++	ip netns exec "$ns_alpha" sysctl -wq net.ipv6.auto_flowlabels=0
++	ip netns exec "$ns_alpha" \
++		sysctl -wq net.ipv6.conf.veth0.accept_ra=0
++	ip netns exec "$ns_beta" sysctl -wq net.ipv6.conf.all.forwarding=1
++	ip netns exec "$ns_beta" \
++		sysctl -wq net.ipv6.fib_multipath_hash_policy=0
++	ip netns exec "$ns_gamma" sysctl -wq net.ipv6.conf.veth0.accept_ra=0
++	ip netns exec "$ns_gamma" sysctl -wq net.ipv6.conf.veth1.accept_ra=0
++
++	for dev in veth0 veth1 veth2
++	do
++		ip netns exec "$ns_beta" \
++			sysctl -wq net.ipv6.conf.$dev.accept_ra=0
++		ip netns exec "$ns_beta" \
++			sysctl -wq net.ipv6.conf.$dev.ioam6_enabled=1
++	done
++
++	# The ECMP route under test (scenario 1 hashes its selection at
++	# beta's input; scenario 2 at the encapsulating re-lookup).
++	ip -netns "$ns_beta" -6 route add 2001:db8:2:1::2/128 \
++		nexthop via 2001:db8:2:1::2 dev veth1 \
++		nexthop via 2001:db8:2:2::2 dev veth2
++
++	ip -netns "$ns_alpha" -6 route add 2001:db8:2:1::/64 \
++		via 2001:db8:1::1 dev veth0
++	ip -netns "$ns_alpha" -6 route add 2001:db8:3::/64 \
++		via 2001:db8:1::1 dev veth0
++	ip -netns "$ns_gamma" -6 route add 2001:db8:1::/64 \
++		via 2001:db8:2:1::1 dev veth0
++
++	# drop unreachable message when ping 2001:db8:3::2
++	tc -n "$ns_alpha" qdisc add dev veth0 clsact
++	tc -n "$ns_alpha" filter add dev veth0 ingress pref 1 \
++                protocol ipv6 flower skip_hw ip_proto icmpv6 type 1 action drop
++
++}
++
++setup_tunnel()
++{
++	if ! lsmod 2>/dev/null | grep -q "ip6_tunnel"; then
++		modprobe ip6_tunnel &>/dev/null
++		lsmod 2>/dev/null | grep -q "ip6_tunnel" || \
++			ip a 2>/dev/null | grep -q "ip6tnl0" || return 1
++		ip6tnl_loaded=1
++	fi
++
++	ip -netns "$ns_beta" link add name ioamcmp type ip6tnl \
++		mode ip6ip6 local 2001:db8:2:1::1 remote 2001:db8:2:1::2 \
++		2>/dev/null || return 1
++	ip -netns "$ns_beta" link set ioamcmp up
++}
++
++################################################################################
++#                                                                              #
++#                                     MAIN                                     #
++#                                                                              #
++################################################################################
++
++require_command ip
++require_command jq
++require_command ping
++require_command tc
++
++if [ ! -e /proc/sys/net/ipv4/fib_multipath_hash_seed ]; then
++	log_test_skip "Kernel without CONFIG_IP_ROUTE_MULTIPATH."
++	exit "${EXIT_STATUS}"
++fi
++
++setup_topology || { log_test_skip "Setup failed."; exit "${EXIT_STATUS}"; }
++trap cleanup EXIT
++
++# Compat check: can this kernel insert an IOAM trace into a route?
++if ! ip -netns "$ns_alpha" -6 route replace 2001:db8:2:1::/64 \
++	encap ioam6 mode inline trace prealloc type 0x800000 ns 0 size 12 \
++	via 2001:db8:1::1 dev veth0 &>/dev/null
++then
++	log_test_skip "Cannot attach an IOAM trace to a route"
++	exit "${EXIT_STATUS}"
++fi
++
++log_info "IOAM + ECMP (RFC 9486 C2, hash policy 0)"
++
++# Warm up both ECMP links (first-packet neighbor/RA activity) and check
++# basic connectivity before measuring.
++set_alpha_plain
++measure_link 2001:db8:2:1::2 >/dev/null
++
++# Scenario 1 counts the ICMPv6 echo requests sent by alpha.
++if ! set_measure_filters "ip_proto icmpv6 type 128 src_ip 2001:db8:1::2"; then
++	log_test_skip "Cannot install tc flower measurement filters"
++	exit "${EXIT_STATUS}"
++fi
++run_scenario \
++	"Transit input ECMP with/without IOAM" \
++	set_alpha_plain set_alpha_ioam 2001:db8:2:1::2
++
++if setup_tunnel; then
++	# Scenario 2 counts the outer ip6ip6 packets: the echo request is
++	# not visible to flower (outer headers only), so match the pinned
++	# tunnel addresses instead. No need to check return value again as
++	# we have done it at scenario 1
++	set_measure_filters "src_ip 2001:db8:2:1::1 dst_ip 2001:db8:2:1::2"
++	set_beta_tnl
++	measure_link 2001:db8:3::2 >/dev/null
++
++	run_scenario \
++		"Encapsulating node re-lookup ECMP with/without IOAM" \
++		set_beta_tnl set_beta_ioam_encap 2001:db8:3::2
++else
++	log_test_skip "Encapsulating node re-lookup ECMP with/without IOAM (no ip6_tunnel)"
++fi
++
++exit "${EXIT_STATUS}"
 
 -- 
 2.56.0
