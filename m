@@ -1,74 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793225910;
-	b=xpHXzl10/4kAmk3l80eRncsoj046DY2IbTnntkAPlqv5MJn6uABLj9eM2iJ7XV9miCv8
-	 fM/3PSoUizd1IrToZCpBz5bCMVhUJNgEIl5D3N06Z0zbcfYJ9gjKrsJWiVBLezhxAqI41
-	 ET8h7JmzUY5gWIgygx2OEtxdWEWKwRe/Nk7/iWUnVnQKwLXRZyTx3Yq5/+ml3XOmXswQ4
-	 0Ya5dYJYgsTeAM0uYdyeQTJ0DxhdnEidswUa9cWY4KLEENgnS6y2IC8xXA0HkpfkDLaMJ
-	 mdCeCoMToSyQqPu49SEDU858IYutmJmuc3q8u9/EwdUMWnJyHvMdzjse4Y3c+lig2iA==
+	t=1793225911;
+	b=ONpzy8MN/+sfv2yURX1/wae/NEnN3wp9R4Rm2ook2vkvIQVBHV38KQP2gEL9chqd8iFM
+	 kI5x7py5I+ExKZUyBquPvFS+YiNEDiBR9q+qJuB2shtO9in++V4WHv/pNjBHy6f33ucwc
+	 Rk0pMF05c7KJggKOQlegDU0wCvEAxZpPyh4o30CKPCyrcqGmifrdcviZHfE+8HD97YgfW
+	 hlPDe+G5w/FXrawwc3r+6csTJFHyexrC9/dcSg4v/F6WDOxwKPP7H8dlVG2M5Okb+Ts1l
+	 AGactzv2kL2gh2KNax5CbNEvxaaUY6IpzQD+m6VEHSIPT0ZGLkbVLEN9BH+XhHpx88A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793225910;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793225911;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=O3jI53IvGMjui3qM6yb8MAnyltVbJGBw/n9i8mncKWg=;
-	b=ccOhVgHmXIrTAJhIBUxMNtjrGGotd46q5d+d3uruKA3lRR6QxNTLj9cbG9KqRqPxjKA2
-	 W0PRsL81L3V4dVmQ9tYR57Acu5/JTRCTrO+amjclyTbgzX/88JKkeJTf1NLEiHq3Oiy5W
-	 KCxhT1Jx48Exilz7UTBoSZIBkE3vQ/D+6MMa9+oxVkKKyBKmIVSXLtF+j7z1riuShcROa
-	 JEYuVg/ZnD1c4XyIJMR5toUggFkARlPEV5pcGmTs2IRWSIuctOEIg5ywEVGmZJ2112mOF
-	 pDwWcfI7AyVS4HdkRJd+IzE/vr1doQf0IVR72ipgZgBEs47HRPx8ZAcEAUXbYEjBYbA==
+	bh=IliLvxEFhtUoKzlsMTRJTupCYDKTYP3W6Uvf0vlrqBM=;
+	b=vkNy0+yq8xP4zxjX6RxW3A3AgxYYhC06cO5U9pFtTf6CO/c+Dz9pl2sH7ExsVFMPHxDX
+	 twVRAYJqqU0yM3oIdLfAOfDoZSuLtfWbHzYumU6oMvXmPODrNJK7Pav31dyOrlGsI+uJ1
+	 Dj2jfX4pmPcpupP9AXb2zmUjzWoEiaAWzXEIvQLP952MUpiC6by+oWSk2z1aqQ1RVh/ZC
+	 EYLRnJmHb79eU5tOLF9s2H7VUjyYnTU6OlkgXbGN0y4/0gQW/zT6DQWqR6lMESALcqz+I
+	 uJBf5J20pwBQpa3KNfIpRcolT23++uEW5YJVq3KjjochT7tOzYRivNjgH6e7NRhX93A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--halg.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ZocZJ6fm;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gYALcxqy;
 	arc=none smtp.remote-ip=209.85.218.71
 Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9380360A383C
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 22:18:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9380360A383C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5E260A6F73
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 22:18:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D5E260A6F73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--halg.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ZocZJ6fm
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c42f98f3571so153302766b.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 15:18:20 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gYALcxqy
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c41f85ee4a3so129688566b.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 15:18:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793225899; x=1793830699; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1793225895; x=1793830695; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=O3jI53IvGMjui3qM6yb8MAnyltVbJGBw/n9i8mncKWg=;
-        b=ZocZJ6fmNbV1TfdYdsOMCEl0qWX8N3eFzH/u4GRw09k6dmxM/tq2H/RruUScFwtoFY
-         LlLlFx/WAwBD+j19yldTxYyQKpxfNoqfQimaMqQ1ZZx9H5MrwNdEgryllmDk834aXdgT
-         n525rXNjQTppvAF3SeM4QeqsRs/nddO07X5aZRYGgacWMN+ovuxez+GkR31/sil69fLK
-         E1MuMlQU8Cvtwpsp+kKlDyunAYnV2JIRJ/WrUnNqwTR6tuTWtZWZsc4pmXwjpr7sK2NK
-         1QFGq77AxEUSq/bZC4ZovdO1+8DqqbFpKRA60xvycYhhr3jS+O2OjNZPaPNicnj4Vm53
-         IAnw==
+        bh=IliLvxEFhtUoKzlsMTRJTupCYDKTYP3W6Uvf0vlrqBM=;
+        b=gYALcxqyt70MQ79J9EPFtsq/ZeSTxirIEH01aK2bomk/GvpfcsAjBJqb4Y09rzuNLt
+         mO44k7f46rtJ9wunMGpfQFt9lPWqgkNaiFl0SALdNHuEVLvyiq5kt/KV0iSWPCT3tP1c
+         zWS2yVnyhtdinRcEUS5DF+dd6ZPtqU4//4OhOvSQSXIQEeSpBlOhVgl5N3HoKZ8HyqgM
+         0mOlVcGpmjZAg21fMo5VhSqBp3oUNBCE57ekigI3J8RJl6Rr/QajW+JDtCDvJeRQt3ph
+         p+hNl2pv82gkoFDKvZA/guZs8SZ56A95NQsHaEdHFIKKnIsIwK+zXnT381OZUxwV0rNz
+         Rg8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793225899; x=1793830699;
+        d=1e100.net; s=20260707; t=1793225895; x=1793830695;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=O3jI53IvGMjui3qM6yb8MAnyltVbJGBw/n9i8mncKWg=;
-        b=mxrX5an7R70quJNXtFLRvoDKqRkDH65URzry24weErLYFqf6HVZ8jzing44T+OQlpl
-         hto99U7Kwy1wFfz38KiZZw02lRxOueXRB6XvLzAMp9yH3Xhh/FQMQGcEwSGIYAWvUHT5
-         Ln+OC3frKDfZ/1vJXTm2tSgEqJON/P0CkUMbRWmUPYXpYQfr15p0ni+wBA5fPzSFt0tV
-         eTE2CCu9MT0AU8vJUi+F563MuJfIi6pEYJ+Jzkr23gdZ7BYFKBcQU68HdrUzp3RkqMaL
-         iNw5oOvDpLYnMJ8e9bvfUEgHjNojsE/Z6VcuNJF9l9cBHrL8y1mVBpmXapEKu/OdiFpp
-         ltog==
-X-Forwarded-Encrypted: i=1; AKwUvBx8eBRL4PiKUuRkcXqjwKPTbvsxDp8oMJa+MG0XGVlLyqEmb1PJ7KrqB5y4atAzCcPQWS/MxcyzKbcwrUECRVU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIUNlC1BPHOJDjaw1p7wmSx0x96Ztxn+FSSU7TbQCUOWmuR7x7n
-	e80AVDbnQKVGN2LSMqgBlWk+AU1eW84xH5mh1FT3WYgTQCdMQikIf8aQUOG+3OYYf5mAMIzCUg=
+        bh=IliLvxEFhtUoKzlsMTRJTupCYDKTYP3W6Uvf0vlrqBM=;
+        b=R+7jvWSOj8mqrnk6H+GFfBCG4K5euToEgCV48DCOx3fFFOd0XzmSuGlX55wymTHTLW
+         ndlckhIK02DS2JGtTJdRNXmQAOxtDjgDI768ilchYCWj7i0XtTZ4kqjzL/ce3MMFp4Wh
+         OyLq2hdl1vTgMoECGK27SWvdiSLviGp1UPYbfS715/QAsPQU4Cpk3fQT4UwicS5YpUQk
+         gUEdE88N5XI0hXYzveqgHlb1mRaMK1pYTSRPf/hiDlybZL2ieECDB6h+oDBkpGLznKCc
+         VvHaLvFZiveNTUgqAJeIx65Aa2oyln8r72xxIOZpFIulYP+ynWqIQE4mSUa0LblEObAY
+         c5tg==
+X-Forwarded-Encrypted: i=1; AKwUvBwCea/qKJ3VpO3draGbPyGmObgMP8sW4OdCzTcJKDgoLh+75EWAmBbrgV7fwFRVeXBO6e51ESZ8cLYST/w/340=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJOeKvPGNXIp1SCx0viYUkjrLQTRBfmZSSXb/RLQI80xrQspg/c
+	XvNcM0cSGxqSFy+pKC8GjGNM+jatmcdxgDT6PIX7++5b57WkzmdYiMrbgQvFDsXdlyKjI7OjTg=
 	=
-X-Received: from ejbch15.prod.google.com ([2002:a17:906:c2cf:b0:c2e:81fe:4522])
- (user=halg job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:980c:b0:c2e:4d39:b5a1
- with SMTP id a640c23a62f3a-c49bdf2c6efmr324604666b.17.1793225898939; Wed, 28
- Oct 2026 15:18:18 -0700 (PDT)
-Date: Wed, 28 Oct 2026 22:17:05 +0000
+X-Received: from ejad9.prod.google.com ([2002:a17:906:409:b0:c32:473d:4a4b])
+ (user=halg job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:3f88:b0:c40:80eb:c54e
+ with SMTP id a640c23a62f3a-c49bddac533mr311667066b.4.1793225894675; Wed, 28
+ Oct 2026 15:18:14 -0700 (PDT)
+Date: Wed, 28 Oct 2026 22:17:01 +0000
 In-Reply-To: <20261028221705.3915340-1-halg@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,8 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261028221705.3915340-1-halg@google.com>
 X-Mailer: git-send-email 2.56.0.313.g2479322e68-goog
-Message-ID: <20261028221705.3915340-9-halg@google.com>
-Subject: [PATCH 8/8] selftests/nsfs: add tests for NS_USER_GET_INFO ioctl
+Message-ID: <20261028221705.3915340-5-halg@google.com>
+Subject: [PATCH 4/8] nsfs: add NS_USER_GET_INFO ioctl to inspect user
+ namespace capabilities
 From: "Hallgrimur H. Gunnarsson" <halg@google.com>
 To: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
 	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
@@ -99,166 +100,102 @@ Cc: Jan Kara <jack@suse.cz>, James Morris <jmorris@namei.org>, Simon Horman <hor
 	linux-kernel@vger.kernel.org, "Hallgrimur H. Gunnarsson" <halg@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add tests for the NS_USER_GET_INFO ioctl to verify user namespace
-capability bounding set inspection and validate error paths.
+With the introduction of a capability bounding set for user namespaces,
+userspace needs a way to inspect the capability ceiling enforced on a
+given user namespace.
+
+Introduce the NS_USER_GET_INFO ioctl on nsfs file descriptors to query
+user namespace metadata, mirroring the extensible structure pattern
+used by NS_MNT_GET_INFO.
 
 Signed-off-by: Hallgrimur H. Gunnarsson <halg@google.com>
 ---
- .../selftests/filesystems/nsfs/.gitignore     |   1 +
- .../selftests/filesystems/nsfs/Makefile       |   4 +-
- .../selftests/filesystems/nsfs/userns.c       | 120 ++++++++++++++++++
- 3 files changed, 123 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/filesystems/nsfs/userns.c
+ fs/nsfs.c                 | 29 +++++++++++++++++++++++++++++
+ include/uapi/linux/nsfs.h | 17 +++++++++++++++++
+ 2 files changed, 46 insertions(+)
 
-diff --git a/tools/testing/selftests/filesystems/nsfs/.gitignore b/tools/testing/selftests/filesystems/nsfs/.gitignore
-index 92a8249006d1..b0a59f5d49fc 100644
---- a/tools/testing/selftests/filesystems/nsfs/.gitignore
-+++ b/tools/testing/selftests/filesystems/nsfs/.gitignore
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- owner
- pidns
-+userns
- iterate_mntns
-diff --git a/tools/testing/selftests/filesystems/nsfs/Makefile b/tools/testing/selftests/filesystems/nsfs/Makefile
-index 231aaa7dfd95..9408d7948621 100644
---- a/tools/testing/selftests/filesystems/nsfs/Makefile
-+++ b/tools/testing/selftests/filesystems/nsfs/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
--TEST_GEN_PROGS := owner pidns iterate_mntns
-+TEST_GEN_PROGS := owner pidns iterate_mntns userns
+diff --git a/fs/nsfs.c b/fs/nsfs.c
+index c3b6ae76594a..50711362d792 100644
+--- a/fs/nsfs.c
++++ b/fs/nsfs.c
+@@ -170,6 +170,17 @@ static int copy_ns_info_to_user(const struct mnt_namespace *mnt_ns,
+ 	return 0;
+ }
  
--CFLAGS := -Wall -Werror
-+CFLAGS += -Wall -Werror $(KHDR_INCLUDES)
++static int copy_user_ns_info_to_user(const struct user_namespace *user_ns,
++				     struct user_ns_info __user *uinfo,
++				     size_t usize, struct user_ns_info *kinfo)
++{
++	kinfo->size = min(usize, sizeof(*kinfo));
++	kinfo->spare = 0;
++	kinfo->cap_bset = user_ns->cap_bset.val;
++
++	return copy_struct_to_user(uinfo, usize, kinfo, sizeof(*kinfo), NULL);
++}
++
+ static bool nsfs_ioctl_valid(unsigned int cmd)
+ {
+ 	switch (cmd) {
+@@ -194,6 +205,8 @@ static bool nsfs_ioctl_valid(unsigned int cmd)
+ 		return extensible_ioctl_valid(cmd, NS_MNT_GET_NEXT, MNT_NS_INFO_SIZE_VER0);
+ 	case _IOC_NR(NS_MNT_GET_PREV):
+ 		return extensible_ioctl_valid(cmd, NS_MNT_GET_PREV, MNT_NS_INFO_SIZE_VER0);
++	case _IOC_NR(NS_USER_GET_INFO):
++		return extensible_ioctl_valid(cmd, NS_USER_GET_INFO, USER_NS_INFO_SIZE_VER0);
+ 	}
  
- include ../../lib.mk
-diff --git a/tools/testing/selftests/filesystems/nsfs/userns.c b/tools/testing/selftests/filesystems/nsfs/userns.c
-new file mode 100644
-index 000000000000..70661a495afc
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/nsfs/userns.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
+ 	return false;
+@@ -360,6 +373,22 @@ static long ns_ioctl(struct file *filp, unsigned int ioctl,
+ 		ret = fd_publish(fdf);
+ 		break;
+ 	}
++	case _IOC_NR(NS_USER_GET_INFO): {
++		struct user_ns_info __user *uinfo = (struct user_ns_info __user *)arg;
++		struct user_ns_info kinfo = {};
++		size_t usize = _IOC_SIZE(ioctl);
 +
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <sys/ioctl.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <linux/nsfs.h>
-+#include <linux/sched.h>
-+#include <linux/types.h>
++		if (ns->ns_type != CLONE_NEWUSER)
++			return -EINVAL;
 +
-+#include "../../clone3/clone3_selftests.h"
-+#include "../../kselftest_harness.h"
++		if (!uinfo)
++			return -EINVAL;
 +
-+TEST(user_get_info_self)
-+{
-+	struct user_ns_info info = {};
-+	int fd;
++		if (usize < USER_NS_INFO_SIZE_VER0)
++			return -EINVAL;
 +
-+	fd = open("/proc/self/ns/user", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(fd, 0) {
-+		TH_LOG("Failed to open /proc/self/ns/user: %m");
++		return copy_user_ns_info_to_user(to_user_ns(ns), uinfo, usize, &kinfo);
 +	}
+ 	default:
+ 		ret = -ENOTTY;
+ 	}
+diff --git a/include/uapi/linux/nsfs.h b/include/uapi/linux/nsfs.h
+index 007fed5971b4..d2996d47c857 100644
+--- a/include/uapi/linux/nsfs.h
++++ b/include/uapi/linux/nsfs.h
+@@ -44,6 +44,23 @@ struct mnt_ns_info {
+ #define NS_GET_MNTNS_ID		_IOR(NSIO, 5,  __u64)
+ #define NS_GET_ID		_IOR(NSIO, 13, __u64)
+ 
++/**
++ * struct user_ns_info - information about a user namespace
++ * @size: size of this structure
++ * @spare: reserved for future use
++ * @cap_bset: capability bounding set of the user namespace
++ */
++struct user_ns_info {
++	__u32 size;
++	__u32 spare;
++	__u64 cap_bset;
++};
 +
-+	ASSERT_EQ(0, ioctl(fd, NS_USER_GET_INFO, &info)) {
-+		TH_LOG("ioctl(NS_USER_GET_INFO) failed on self: %m");
-+	}
-+	close(fd);
++#define USER_NS_INFO_SIZE_VER0 16 /* sizeof first published struct */
 +
-+	EXPECT_EQ(USER_NS_INFO_SIZE_VER0, info.size);
-+	EXPECT_EQ(0, info.spare);
-+	EXPECT_NE(0ULL, info.cap_bset);
-+}
++/* Get information about user namespace. */
++#define NS_USER_GET_INFO	_IOR(NSIO, 14, struct user_ns_info)
 +
-+TEST(user_get_info_restricted_bset)
-+{
-+	struct __clone_args args = {
-+		.flags = CLONE_NEWUSER | CLONE_NEWUSER_BSET,
-+		.exit_signal = SIGCHLD,
-+		.cap_bset = 0,
-+	};
-+	int status;
-+	pid_t pid;
-+
-+	pid = sys_clone3(&args, sizeof(args));
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		struct user_ns_info info = {};
-+		int fd;
-+
-+		fd = open("/proc/self/ns/user", O_RDONLY | O_CLOEXEC);
-+		if (fd < 0)
-+			_exit(1);
-+
-+		if (ioctl(fd, NS_USER_GET_INFO, &info) != 0) {
-+			close(fd);
-+			_exit(2);
-+		}
-+		close(fd);
-+
-+		if (info.cap_bset != 0)
-+			_exit(3);
-+
-+		_exit(0);
-+	}
-+
-+	ASSERT_EQ(pid, waitpid(pid, &status, 0));
-+	ASSERT_TRUE(WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+}
-+
-+TEST(user_get_info_invalid_ns_type)
-+{
-+	struct user_ns_info info = {};
-+	int mntns_fd;
-+
-+	mntns_fd = open("/proc/self/ns/mnt", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(mntns_fd, 0) {
-+		TH_LOG("Failed to open /proc/self/ns/mnt: %m");
-+	}
-+
-+	EXPECT_EQ(-1, ioctl(mntns_fd, NS_USER_GET_INFO, &info));
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	close(mntns_fd);
-+}
-+
-+TEST(user_get_info_buffer_too_small)
-+{
-+	__u32 small_buf = 0;
-+	int fd;
-+
-+	fd = open("/proc/self/ns/user", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(fd, 0);
-+
-+	/* Encode a buffer size smaller than USER_NS_INFO_SIZE_VER0 (4B vs 16B) */
-+	EXPECT_EQ(-1, ioctl(fd, _IOR(NSIO, 14, __u32), &small_buf));
-+
-+	close(fd);
-+}
-+
-+TEST(user_get_info_null_arg)
-+{
-+	int fd;
-+
-+	fd = open("/proc/self/ns/user", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(fd, 0);
-+
-+	EXPECT_EQ(-1, ioctl(fd, NS_USER_GET_INFO, NULL));
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	close(fd);
-+}
-+
-+TEST_HARNESS_MAIN
+ enum init_ns_ino {
+ 	IPC_NS_INIT_INO		= 0xEFFFFFFFU,
+ 	UTS_NS_INIT_INO		= 0xEFFFFFFEU,
 -- 
 2.56.0.313.g2479322e68-goog
 
