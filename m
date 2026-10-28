@@ -1,51 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.84.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793169777;
-	b=vRgC4VNS0Q9uzUSUa0uvWvbW4/D+VBItvUH5YAeFylmMvnjSwtFsSX1NcfD3jo1XW6g8
-	 n/hfKGdJyv3EtjqSaLTla9OmDXQ4A5GIxqLMND5paAx8t9sQqNKNO0EruPoNDsl+3Bsg/
-	 R06x9HfpNvbiTSAlFtpr19SWMjEANuCp1Iqcm7/rC6jAbEL9ulkAs6jDDGPyIrXEsqhtG
-	 wnYZeQUlOiIx5ZHF508EDPmq1EmHXwlwNDPwagHglY8+RWJJAECoZDHz2qtUPotARuZhZ
-	 EATmX1dMRJ+PNGfHkBdjcyZIkD/WqHDAFjTsYD4Rq80BzR52CrRzjNS1IzQ7UKRjYqw==
+	t=1793171853;
+	b=2DNDmP7gpus9SSedWI6nvugOYHhUqRE3Rafomlya27zQ2suFg/dFXV43+g4spBrvlpCb
+	 lrPgEQR66C5KKQTfSUaBNVsDEYzDdwxEQABN85Qh9oqcYef6CHSABpN0DEGCq9AG57ra6
+	 4j0uLJk7EPgoCIa3S//W9tLJ3U9tporPAnuVti2TaUIkCHBTKzdkLma8GDK1M8oiXKlLX
+	 9hjBJVLn0VFt8uSxrhsbETrYk0brutaAwvI+upfXfppe/6MFnZ+JywkbWhY//xpzQyoPl
+	 mpwScu/bxm8/C3N2T9I63aMXTzzC/IvOq/oxVvFHG0NuJBXq4a4UfOpT6CL4rZpdabg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793169777;
-	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=Q6G3nxFD05ygIwY6v+3uq58Goki6iPih8OOteYGgxqQ=;
-	b=Zh0b4op1RLTvp3pA+9GVNbzD25liiOvGkK9QUXUF0tvGzTahx8OimJOVZ9unVouga8qP
-	 sQvHgCszPapjCq4uW0t0Z6lqT1iKz+rgjkTpCp1HlWmQNgjR7aujwar02/utz/xcCqVsd
-	 2CnzMODInvm8AKVOdl8yEXrBbtkw1m7zh90j0a0F7jP0hP+L3vAfQu9LX3Tf+TmlK44jH
-	 yxzgq5PzMIEnLzL21kHlGGnH+MWxGHhsXYWRvw8VDn0uZRHjxsgxcPHIooXVNDpGAgafP
-	 Z8aWxqouCHXIoii/faaL8mnYGvdstMXQ3ndI5mOD81DvUquuOKpnx0EwxqKqXa2mDng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793171853;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+	bh=nquMCr1WWqc3g25x4aH4wcYWjEl8Qlo/bCJtAzPywf0=;
+	b=Z8gd5WmqHa2lhFcRUagokRIObJW7RBj5tY5ZwMghY6W0zB5Q77gFVSiCPiDE6O174KEC
+	 oKQx/h9lgDMezkp/QQuzQx+pd1hbMuuVC6x7HeoXi5IVsgOMrWBWT5FyvoDIfzz2UIfhc
+	 rQp0MC4PPrxNj90aU475keJeLbWAdc7lBzcEkF3SDxoNOgw7uVMF6RjTOehIQyoEEygMm
+	 9UJ5SNcqzi3pCvmux5gFR+T6fp+qG/rXKqMcbBBBy8A3RfbvseZ77I0B7gNPLNPydRCoW
+	 fSQ/FaNgvRL4RLS0neeRQ/GbFaceP0Qm4GxskqkO0v7E7uShsq4F+0E58XG2QbXXbHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gentwo.org;
-	spf=pass smtp.mailfrom=gentwo.org;
-	dkim=pass header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=ex8kivjK;
-	arc=none smtp.remote-ip=62.72.0.81
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Twv5BmZv;
+	arc=none smtp.remote-ip=185.246.84.56
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B11606A31A;
-	Wed, 28 Oct 2026 06:42:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1B11606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B530D606A31A;
+	Wed, 28 Oct 2026 07:17:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B530D606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=ex8kivjK
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1793169775;
-	bh=aLWh42rcMNKepHGFb1obkzRcUt2M03VEF2PDUV87Fpc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=ex8kivjKpCVe3SEW/De1KV7FnRgFJh2XCInhoOieVVGrc3KwwoWpNg71yG4NuLLjL
-	 V2Q43qxbDM2xGhboyKUa+6W4Xs2FD2eoX+qJQ7LpJDiA3WrMMJ0hXAYclVaLJf0UxD
-	 x7NYkedzR/OIceuvbWG9xxv8KmaPdF7AmwQBQp+4=
-Received: from sut02sys-r112.scc-lab.amperecomputing.com (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTPS id 8FAB94006C;
-	Tue, 27 Oct 2026 23:42:55 -0700 (PDT)
-From: "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
-Date: Tue, 27 Oct 2026 23:42:51 -0700
-Subject: [PATCH v2] ipc/msg: prevent msg_qbytes limit bypass in IPC_SET
+	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Twv5BmZv
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id EE37A1A1372;
+	Wed, 28 Oct 2026 07:17:29 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C0F1360769;
+	Wed, 28 Oct 2026 07:17:29 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B30F11032906B;
+	Wed, 28 Oct 2026 08:17:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1793171848; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=nquMCr1WWqc3g25x4aH4wcYWjEl8Qlo/bCJtAzPywf0=;
+	b=Twv5BmZvgqoD/QGqoEOSQhAhVHQ3nPsNe4D6eC3nrSg8jO1LgjrhfYxZ5/l9fAGN42EYsz
+	2T3MlCJy66fl0iP/cX42IOrdHihZFjqJ278/1hQLEYMYZkMABQ7TfVcJD/LsIEBE6+qIC2
+	tzdPbOQaUKsUrRu/+OI0hE36f2Lrr3AL+XlzUk62oPNJ97HrFHXOV/Q1NrNTWIiUT6GhQ/
+	I0WkmbxZG46CK0iB1bGfx53h9kVLTEYMLpBDRa90MYcuv1q81btalbtAboOMmWJAcl1WDW
+	24fCmzrQLrK+lLRzh+ZZHMXELGfIKfkDe8Ne7SzvBOfo066t1s9Ogf3E78CTWg==
+Message-ID: <b3216356-fab0-42c0-8a5c-552ca4c5d46a@bootlin.com>
+Date: Wed, 28 Oct 2026 08:17:22 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -55,224 +62,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] selftests: drv-net: devmem: Skip when hugetlbfs isn't
+ supported
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Bobby Eshleman <bobbyeshleman@meta.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Breno Leitao <leitao@debian.org>,
+ thomas.petazzoni@bootlin.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20261021090852.996899-1-maxime.chevallier@bootlin.com>
+ <20261023105258.2a6349f9@kernel.org>
+ <ce8f0d43-0078-41e7-a5d2-cf31c6dc97fb@bootlin.com>
+ <20261027141555.47156425@kernel.org>
+Content-Language: en-US
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+In-Reply-To: <20261027141555.47156425@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261027-ipc-msg-qbytes-v2-1-48d8f72f1359@gentwo.org>
-X-B4-Tracking: v=1; b=H4sIAGqZ4WoC/3XMyw6CMBCF4Vchs3YMU7nVle9hWFgYyiyk2BKUk
- L67lb3L/yTn2yGwFw5wzXbwvEoQN6VQpwy68TFZRulTg8pVRbmqUeYOn8Hiy2wLByy0oVJfqCt
- NBek0ex7kc4D3NvUoYXF+O/yVfutfaiUkbBpd9abIaxr0zfK0vN3ZeQttjPELLUAjPa0AAAA=
-X-Change-ID: 20261027-ipc-msg-qbytes-49b15931c5b6
-To: Shuah Khan <shuah@kernel.org>, Lu Shuaibing <shuaibinglu@126.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Shubhang Kaushik <shubhang@os.amperecomputing.com>, 
- "Christopher Lameter (Ampere)" <cl@gentwo.org>, 
- Davidlohr Bueso <dave@stgolabs.net>, 
- Manfred Spraul <manfred@colorfullife.com>, 
- Jan Koester <jan.koester@tuxist.de>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- stable@vger.kernel.org, "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793169775; l=6756;
- i=sh@gentwo.org; s=20251010; h=from:subject:message-id;
- bh=aLWh42rcMNKepHGFb1obkzRcUt2M03VEF2PDUV87Fpc=;
- b=dRyGaRLst+jniGlRn6ywhZXdc0t6tj9NAKNv4eIKRbJfLNzdmnYSwGFrWBeHuMFjOsKRR/6/9
- Rlc5Y557XZsAQJyNyRwK3phWekbMlkY/8q4iCQuFhzGtb4WqJ83aZw3
-X-Developer-Key: i=sh@gentwo.org; a=ed25519;
- pk=jc8YIRvxPSyJaBRe5y+a4N0RXKBUEcAh8+OFhlROXPY=
+X-Last-TLS-Session-Version: TLSv1.3
 
-The msg_qbytes field in the msqid64_ds userspace ABI is an unsigned
-long. Commit 889b331724c82 ("ipc/msg.c: consolidate all xxxctl_down()
-functions") passed that value to msgctl_down() as an int.
 
-An unprivileged owner can set msg_qbytes to UINT_MAX. The narrowing
-conversion produces -1 on supported Linux targets, so the check against
-the int-valued msg_ctlmnb sysctl does not reject the request:
 
-	if (msg_qbytes > ns->msg_ctlmnb &&
-	    !capable(CAP_SYS_RESOURCE))
+On 10/27/26 22:15, Jakub Kicinski wrote:
+> On Mon, 26 Oct 2026 10:38:50 +0100 Maxime Chevallier wrote:
+>> On 10/23/26 19:52, Jakub Kicinski wrote:
+>>> On Wed, 21 Oct 2026 11:08:51 +0200 Maxime Chevallier wrote:  
+>>>> The devmem selftest requires accessing /proc/sys/vm/nr_hugepages,
+>>>> which is only available when hugetlbfs is supported. This isn't the
+>>>> case on all CPU architectures, for example it isn't supported on ARM
+>>>> 32-bits on cores that don't support LPAE.
+>>>>
+>>>> On these devices, the devmem kselftest doesn't skip gracefully  
+>>>
+>>> We don't require graceful skipping. If anything IMO hiding the stack
+>>> traces isn't great.
+>>>
+>>> If the check is extraneous and makes us fail some tests which don't
+>>> actually require huge pages please make that clear in the commit
+>>> message. Otherwise the net benefit of the changes is unclear.  
+>>
+>> hugetlbfs isn't required for devmem AFAICS, but the blamed commit
+>> moved the access to nr_hugepages before the actual "is devmem
+>> actually supported" test.
+>>
+>> I don't expect the full test suite to gracefully run/skip for devmem
+>> on these arm32 platforms TBH, it's likely that devmem is only something
+>> that's been used on platforms that support hugetlbfs anyways, but
+>> strictly speaking both features are unrelated.
+> 
+> For max clarity I should have simply asked - does it make any test which
+> previously failed pass on any of your platforms? (incl. some WIP
+> patches that'd add devmem support) That's basically the criteria 
+> I think we should use.
 
-The value is then assigned to the unsigned long q_qbytes field, setting
-it to ULONG_MAX. This bypasses the CAP_SYS_RESOURCE requirement for
-increasing a queue above MSGMNB.
+I see, then we can drop that patch. It would go from a "file not found"
+python exception trace to a skip. This is a nice criteria for me to follow,
+I'll move on to other tests :)
 
-It also bypasses the effective per-queue message-count limit: zero-length
-messages consume kernel memory but not queue bytes. An unprivileged queue
-owner can therefore cause memory pressure or exhaustion beyond the
-configured per-queue allowance, subject to other resource limits.
-
-Keep msg_qbytes as unsigned long through validation and assignment.
-Also preserve its type in ipcctl_obtain_check(), which supplies it to
-the unsigned-long audit field.
-
-Add a regression test which drops CAP_SYS_RESOURCE and verifies that
-IPC_SET with UINT_MAX fails with EPERM. Skip the test when capabilities
-or System V message queues are unavailable.
-
-Fixes: 889b331724c82 ("ipc/msg.c: consolidate all xxxctl_down() functions")
-Cc: stable@vger.kernel.org
-Signed-off-by: Shubhang Kaushik (Ampere) <sh@gentwo.org>
----
-Changes in v2:
-- Skip the selftest when capability syscalls or System V message queues
-  are unavailable.
-- Describe the queued-message-limit and memory-pressure impact.
-
-Link to v1: https://lore.kernel.org/r/20261027-ipc-msg-qbytes-v1-1-8896db4071f9@gentwo.org
----
- ipc/msg.c                                   |  2 +-
- ipc/util.c                                  |  3 +-
- ipc/util.h                                  |  3 +-
- tools/testing/selftests/ipc/Makefile        |  2 +-
- tools/testing/selftests/ipc/msgctl_qbytes.c | 81 +++++++++++++++++++++++++++++
- 5 files changed, 87 insertions(+), 4 deletions(-)
-
-diff --git a/ipc/msg.c b/ipc/msg.c
-index 62996b97f0ac2137dfc2fa109394d6db1fcb4a0f..116126f1235cd6ce9b819cfd317ef039071b95ca 100644
---- a/ipc/msg.c
-+++ b/ipc/msg.c
-@@ -399,7 +399,7 @@ copy_msqid_from_user(struct msqid64_ds *out, void __user *buf, int version)
-  * NOTE: no locks must be held, the rwsem is taken inside this function.
-  */
- static int msgctl_down(struct ipc_namespace *ns, int msqid, int cmd,
--			struct ipc64_perm *perm, int msg_qbytes)
-+			struct ipc64_perm *perm, unsigned long msg_qbytes)
- {
- 	struct kern_ipc_perm *ipcp;
- 	struct msg_queue *msq;
-diff --git a/ipc/util.c b/ipc/util.c
-index 1737d776bc089e27495e810569bf302069db3712..c435b2d93a12e92e930358a8bc53a06314d065f5 100644
---- a/ipc/util.c
-+++ b/ipc/util.c
-@@ -718,7 +718,8 @@ int ipc_update_perm(struct ipc64_perm *in, struct kern_ipc_perm *out)
-  */
- struct kern_ipc_perm *ipcctl_obtain_check(struct ipc_namespace *ns,
- 					struct ipc_ids *ids, int id, int cmd,
--					struct ipc64_perm *perm, int extra_perm)
-+					struct ipc64_perm *perm,
-+					unsigned long extra_perm)
- {
- 	kuid_t euid;
- 	int err = -EPERM;
-diff --git a/ipc/util.h b/ipc/util.h
-index a55d6cebe6d3b0974548a497fcb889248aed0f87..55a76f94667cd4bb248fbcea26323db8d2778a44 100644
---- a/ipc/util.h
-+++ b/ipc/util.h
-@@ -180,7 +180,8 @@ void ipc64_perm_to_ipc_perm(struct ipc64_perm *in, struct ipc_perm *out);
- int ipc_update_perm(struct ipc64_perm *in, struct kern_ipc_perm *out);
- struct kern_ipc_perm *ipcctl_obtain_check(struct ipc_namespace *ns,
- 					     struct ipc_ids *ids, int id, int cmd,
--					     struct ipc64_perm *perm, int extra_perm);
-+					     struct ipc64_perm *perm,
-+					     unsigned long extra_perm);
- 
- static inline void ipc_update_pid(struct pid **pos, struct pid *pid)
- {
-diff --git a/tools/testing/selftests/ipc/Makefile b/tools/testing/selftests/ipc/Makefile
-index fad10f2bb57b0f06f0c741fa89f0489f6952eba6..930a334747a6353c86bebe1f4a521aeee3fe8228 100644
---- a/tools/testing/selftests/ipc/Makefile
-+++ b/tools/testing/selftests/ipc/Makefile
-@@ -12,7 +12,7 @@ endif
- 
- CFLAGS += $(KHDR_INCLUDES)
- 
--TEST_GEN_PROGS := msgque
-+TEST_GEN_PROGS := msgctl_qbytes msgque
- 
- include ../lib.mk
- 
-diff --git a/tools/testing/selftests/ipc/msgctl_qbytes.c b/tools/testing/selftests/ipc/msgctl_qbytes.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..152e3d91557198c468a8d3bd3b05dd82e7e99a50
---- /dev/null
-+++ b/tools/testing/selftests/ipc/msgctl_qbytes.c
-@@ -0,0 +1,81 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <errno.h>
-+#include <limits.h>
-+#include <linux/capability.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <sys/msg.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+
-+#include "kselftest.h"
-+
-+static int drop_cap_sys_resource(void)
-+{
-+	struct __user_cap_header_struct hdr = {
-+		.version = _LINUX_CAPABILITY_VERSION_3,
-+	};
-+	struct __user_cap_data_struct data[_LINUX_CAPABILITY_U32S_3];
-+	unsigned int index = CAP_SYS_RESOURCE / 32;
-+	__u32 mask = 1U << (CAP_SYS_RESOURCE % 32);
-+
-+	if (syscall(SYS_capget, &hdr, data))
-+		return -1;
-+
-+	data[index].effective &= ~mask;
-+	data[index].permitted &= ~mask;
-+
-+	return syscall(SYS_capset, &hdr, data);
-+}
-+
-+int main(void)
-+{
-+	struct msqid_ds ds;
-+	int msqid;
-+	int ret;
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	if (drop_cap_sys_resource()) {
-+		if (errno == ENOSYS)
-+			ksft_exit_skip("capabilities are unavailable\n");
-+		ksft_exit_fail_perror("drop CAP_SYS_RESOURCE");
-+	}
-+
-+	msqid = msgget(IPC_PRIVATE, 0600);
-+	if (msqid == -1) {
-+		if (errno == ENOSYS)
-+			ksft_exit_skip("System V message queues are unavailable\n");
-+		ksft_exit_fail_perror("msgget");
-+	}
-+
-+	ret = msgctl(msqid, IPC_STAT, &ds);
-+	if (ret == -1) {
-+		ksft_perror("msgctl(IPC_STAT)");
-+		goto out_fail;
-+	}
-+
-+	/*
-+	 * msg_ctlmnb is an int, so UINT_MAX must require
-+	 * CAP_SYS_RESOURCE.
-+	 */
-+	ds.msg_qbytes = UINT_MAX;
-+	errno = 0;
-+	ret = msgctl(msqid, IPC_SET, &ds);
-+	if (ret == -1 && errno == EPERM) {
-+		ksft_test_result_pass("IPC_SET rejects oversized msg_qbytes\n");
-+		msgctl(msqid, IPC_RMID, NULL);
-+		ksft_exit_pass();
-+	}
-+
-+	if (ret == -1)
-+		ksft_perror("msgctl(IPC_SET)");
-+	else
-+		ksft_print_msg("msgctl(IPC_SET) unexpectedly succeeded\n");
-+
-+out_fail:
-+	msgctl(msqid, IPC_RMID, NULL);
-+	ksft_test_result_fail("IPC_SET accepted oversized msg_qbytes\n");
-+	ksft_exit_fail();
-+}
-
----
-base-commit: 8a36f53fd5ec3eff01f1b637d42cbdc3821d0493
-change-id: 20261027-ipc-msg-qbytes-49b15931c5b6
-
-Best regards,
--- 
-Shubhang Kaushik (Ampere) <sh@gentwo.org>
-
+Maxime
