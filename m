@@ -1,67 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793201420;
-	b=ojfwpvkXQxqRiZA98xRGY8ivCcDAD0bxc98FaH7PVRDi5wzSwb/F4l86zsZEd6ivYp2G
-	 m//U9fYeH/S/JmR1rS3WgkBg++ypFZow87YKTea0BN88Krrd4rSv+KVBvn8lKgc2SkFx4
-	 s0FuPxNhrjLSsbTyQx46/w0FnxfObuff6lJdPLhIVGz5oBS8vseh1BzIHn2ttc91/1EjU
-	 4Pj8jHBg8d7hYHXCHTnCeogMirb7Dwf9LBqI4klkPLayWUdhscz7LwMC4o6M2zrWJ5V+U
-	 YnwJKI5v4qMEqlWzeZTibMV3QozGIl63c/TLta7JNC19+YEjJE+DoS7xdGsHL2uaqpQ==
+	t=1793201612;
+	b=XcEev5z4icnxQdfmipPfL7zelk281fhKt/dMpDTIoGj0kEKfM+T5VboV3I07eMyUff2n
+	 pH9llUXrd/eAatyOUC32c/KVCGUdQYpJs58oKgLjzDYHLOSrFAVWPqdmbQ3DW22k3gZDa
+	 4zokQy0m0Oil3Vienq5oAyeMKxF8MHE4cgx9D2KK+kZ7M6rRsb1vSae1uJTApNJiASDuh
+	 xSJb/M7ooD2i4rNp6BkUYDxrAahnZlbt5Maxa6f1ceih87cG/5FuthcIXjxv7j2Ulg4Za
+	 lPZJkLMjFXpcICnNR1LyfKlxRPBocQ4DfhxTBtC3P/1mHOQYmYqlNHFcBl/uRuMZp0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793201420;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=MAQTWY4H9RB4ZcqFVf3zxH8rThYlbf1S7+Z6KzC6prk=;
-	b=RsqvTME8MyxEIj/NhsRK3ypgcnQcQJYugGKyq48IKtQeNlv4X1tteKbfMFAm1TjDyRIk
-	 pkE1/BzcQT+E2HME+yxnJQuFEgoX/haIcDArQnmG6WGjAk8Qs5rfNijHIyfHQHOJ8Ezc6
-	 vUhOGc0yBq8aBHq3ijFGKxAEzGCBnOzqFxRooQCs2gsVgoV3xr0I9KKJuAHm3AmQVaMjT
-	 d+tYCLyIZnxR0bj/Ra2YVO06bE7rqXXSBcH6AugkiOJM0Sm27bXiYR3QC/mWfGOs3Q3sw
-	 5uMc/gkTYTfKrzUZ4UUhEnY3NNTOpUviX3eu49JhNrY/n36JYLP2FXZN8tXbVjGlw5Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793201612;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=Sc6OK2gaP5PHJJL+FHAqB8O3d7CSsEQRTSfxIIRDKaA=;
+	b=plVMsBHuAO6KMRV0KFx5yEL7afRHNBFgXw8Vg0ZkiUCCnfwdFcqf7EBzbfhPOYPnmZwf
+	 8sd42g/hD/BPWSR+h4c5aXuWawtlLVwHIj5j847L3TpRYI736J8JR+dxPJd5+6D2yveO8
+	 NWYlYNXhcV4zmkqZSdaBo1n/e3C0QgIlQO7//iZGq/xvDeRd30K/3ELfiriK2REldqP9f
+	 4XWqKd+Pj8eGI7b0l1+smlhi/lBeqhk9aATFjSb6uQ4YAFJswXUe2HHFxVAMBAWamRt5c
+	 kA822nND64EwciiNSLDXASPotfDyzZQUI5hXNUGuc55R1map8Fbjw8npuPRTurTkxgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OnwgtW7t;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DuvAgA6i;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FFE606A320
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 15:30:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9FFE606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085D8606A31A;
+	Wed, 28 Oct 2026 15:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OnwgtW7t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793201419;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MAQTWY4H9RB4ZcqFVf3zxH8rThYlbf1S7+Z6KzC6prk=;
-	b=OnwgtW7tBM3auzzzAlBD4SxCFsIoRF+RgndkXjaTi+y3hc0CTIkTd9B/NEYFzbk0zKekQw
-	L1JWtkNZeTdiCGb8j+oMp8KZdRZUoU+kv5zX2k/jYlleM8zAoX1nYPeBdJumsg02kGe9IS
-	tLodyjWDppDDIkgzrAXVuMGD+JXjBp0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-573-VMZDg5rTPm2_XuKIOIPHFQ-1; Wed,
- 28 Oct 2026 11:30:12 -0400
-X-MC-Unique: VMZDg5rTPm2_XuKIOIPHFQ-1
-X-Mimecast-MFC-AGG-ID: VMZDg5rTPm2_XuKIOIPHFQ_1793201411
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 63D6F1800772;
-	Wed, 28 Oct 2026 15:30:10 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 992D01800446;
-	Wed, 28 Oct 2026 15:30:08 +0000 (UTC)
-Message-ID: <c00f13e5-d048-4d5d-98ea-984ea7ebc13b@redhat.com>
-Date: Wed, 28 Oct 2026 11:30:07 -0400
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DuvAgA6i
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45AE61F01825;
+	Wed, 28 Oct 2026 15:33:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793201611;
+	bh=Sc6OK2gaP5PHJJL+FHAqB8O3d7CSsEQRTSfxIIRDKaA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=DuvAgA6isxh7sOCl6pmimmq5UMQ3yHst6k3mAnooGpLlX5GSth0mRCqtpLusVny2P
+	 OqMnW9qDwC4bmOsg+7NBX5W7JEL+IO5W1SU40Lig/PVE7TMiLCbiQDX2f8IeN1aKrV
+	 NEJpt2rkI0v10RdLBOiCvFDFN9JwqXeXhNcu2C6iZ4Ykp6+CJf73mJsN2rLMW9yeCw
+	 d8qqr76kCfpeiNAxmhtfkQAUHpTml6HD/WJbt/M/5f7od8ySY/HfAm16e444qSBLda
+	 f68tou3HNUIjsCPdBn8FcwKTOWmIBfx3OxqCSTo+g6HZPpse7QLWkatl8DvyVj0e+2
+	 JwcVzaqKy8zww==
+Content-Type: multipart/mixed; boundary="===============5448043565086908133=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,127 +49,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cgroup/cpuset: Fix missing effective_xcpus accounting of
- child partitions
-To: Guopeng Zhang <guopeng.zhang@linux.dev>
-Cc: ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
- mkoutny@suse.com, shuah@kernel.org, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20261027123837.100909-1-guopeng.zhang@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20261027123837.100909-1-guopeng.zhang@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <6e0cec7622bf79c97ff108b4c1499e28b0109ecc8fa9cc8f72cb3c4f1ba47ee8@mail.kernel.org>
+In-Reply-To: <20261028143534.135968-4-cui.tao@linux.dev>
+References: <20261028143534.135968-4-cui.tao@linux.dev>
+Subject: Re: [PATCH 3/5] selftests/bpf: add iocost cost model test
+From: bot+bpf-ci@kernel.org
+To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk
+Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ameryhung@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 28 Oct 2026 15:33:31 +0000 (UTC)
+
+--===============5448043565086908133==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On 10/27/26 8:38 AM, Guopeng Zhang wrote:
-> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
->
-> When a partition root expands its exclusive CPUs, a valid child
-> partition will be able to claim more CPUs from its parent. As
-> update_cpumasks_hier() always updates a cpuset before its descendants,
-> the parent has already been committed when the child partition is
-> reached. Its effective_cpus is computed with the child's old
-> effective_xcpus subtracted and no further adjustment is made
-> after the child commits its new effective_xcpus.
->
-> The additional CPUs are thus granted to both the parent and the child
-> partitions. generate_sched_domains() then emits the warning below
-> about the overlapping sched domains:
->
->    WARNING: kernel/cgroup/cpuset.c:919 at rebuild_sched_domains_locked+0x1ec/0x2e0, CPU#21: bash/1225
->
-> Fix that by taking the CPUs newly added to a valid child partition
-> away from its parent at the commit point of update_cpumasks_hier()
-> right before the new effective_xcpus is committed. The tasks in the
-> parent cpuset as well as its other children will be updated if its
-> effective_cpus is changed.
->
-> A new test case is added to test_cpuset_prs.sh to test this patch.
->
-> Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
-> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> selftests/bpf: add iocost cost model test
 
-Thanks for reporting this bug. Yes, the current code doesn't handle 
-expansion of parent effective_xcpus correctly. I would prefer to handle 
-it inside update_parent_effective_cpumask() and try to minimize 
-partition related changes in update_cpumasks_hier(). I have posted an 
-alternative patch for your review. Let me know how you think about it.
+TL;DR: Nit only: in the iocost_model selftest, the comment before the final
+"pair_balanced_again" assertion describes the re-attach init check, not the
+detach-time init/free pairing it actually tests.
 
-Thanks,
-Longman
+> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
+> new file mode 100644
+> index 000000000000..5373d52d93a6
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
+> @@ -0,0 +1,806 @@
 
-> ---
->   kernel/cgroup/cpuset.c                        | 25 +++++++++++++++++++
->   .../selftests/cgroup/test_cpuset_prs.sh       |  4 +++
->   2 files changed, 29 insertions(+)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 3219f927c35e..ec0ef3ad0726 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -2241,6 +2241,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->   		struct cpuset *parent = parent_cs(cp);
->   		bool remote = is_remote_partition(cp);
->   		bool update_parent = false;
-> +		bool xcpus_added = false;
->   
->   		old_prs = new_prs = cp->partition_root_state;
->   
-> @@ -2356,6 +2357,19 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->   		}
->   
->   		spin_lock_irq(&callback_lock);
-> +		/*
-> +		 * A child partition may claim more CPUs when its parent expands
-> +		 * the exclusive CPUs. Take the newly granted CPUs away from the
-> +		 * parent which was committed earlier in this walk.
-> +		 */
-> +		if (!remote && new_prs > 0) {
-> +			compute_excpus(cp, tmp->addmask);
-> +			if (cpumask_andnot(tmp->delmask, tmp->addmask,
-> +					   cp->effective_xcpus)) {
-> +				partition_xcpus_add(new_prs, parent, tmp->delmask);
-> +				xcpus_added = true;
-> +			}
-> +		}
->   		cpumask_copy(cp->effective_cpus, tmp->new_cpus);
->   		cp->partition_root_state = new_prs;
->   		/*
-> @@ -2375,6 +2389,17 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->   
->   		cpuset_update_tasks_cpumask(cp, tmp->new_cpus);
->   
-> +		/*
-> +		 * The parent's effective_cpus may have been changed by
-> +		 * partition_xcpus_add() above. Update the tasks in the parent
-> +		 * cpuset and its other children, if necessary.
-> +		 */
-> +		if (xcpus_added) {
-> +			cpumask_copy(tmp->addmask, parent->effective_cpus);
-> +			cpuset_update_tasks_cpumask(parent, tmp->addmask);
-> +			update_sibling_cpumasks(parent, cp, tmp);
-> +		}
+[ ... ]
+
+> +void serial_test_iocost_model_removal(void)
+> +{
+
+[ ... ]
+
+> +	err = iocost_model__attach(skel2);
+> +	if (!ASSERT_OK(err, "attach_again"))
+> +		goto out2;
 > +
->   		/*
->   		 * On default hierarchy, inherit the CS_SCHED_LOAD_BALANCE
->   		 * from parent if current cpuset isn't a valid partition root
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index 83ef6c781af3..09e430570815 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -437,6 +437,10 @@ TEST_MATRIX=(
->   	" CX1-4:P1 CX3-4:P1 .     .     X1-2     .      .      .     0 A1:1-2|A2:1-2|XA2: A1:P1|A2:P-1"
->   	" CX1-4:P1 CX3-4:P1 .     .  X1-2:X1-4   .      .      .     0 A1:1-2|A2:3-4|XA2:3-4 A1:P1|A2:P1"
->   
-> +	# The extra CPUs gained by a child partition when its parent expands the
-> +	# exclusive CPUs have to be taken away from the parent.
-> +	" C2-6:X2-5:P1 C3-6:X3-6:P1 .      .      X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P1 ."
+> +	err = readback_model(dev, model, sizeof(model));
+> +	if (ASSERT_OK(err, "readback_again"))
+> +		ASSERT_STREQ(model, "bpf", "model_bpf_again");
+> +	ASSERT_GT(skel2->bss->iocg_inits, 0, "pair_init_again");
 > +
->   	# Taking away all CPUs from parent or itself if there are tasks
->   	# will make the partition invalid.
->   	"  C2-3:P1   C3:P1  .      .      T     C2-3    .      .     0 A1:2-3|A2:2-3 A1:P1|A2:P-1"
+> +	bpf_link__destroy(skel2->links.iocost_2x);
+> +	skel2->links.iocost_2x = NULL;
+> +
+> +	err = readback_model(dev, model, sizeof(model));
+> +	if (ASSERT_OK(err, "readback_after_detach_again"))
+> +		ASSERT_STREQ(model, "linear", "model_linear_again");
+> +
+> +	/* the re-attach walk delivered init for the recreated device */
+> +	ASSERT_EQ(skel2->bss->iocg_frees, skel2->bss->iocg_inits,
+> +		  "pair_balanced_again");
 
+This isn't a bug, but the comment above the final assertion doesn't seem to
+describe the check below it.
+
+The comment says "the re-attach walk delivered init for the recreated
+device", while the assertion that follows compares iocg_frees against
+iocg_inits after bpf_link__destroy(), which is the detach walk delivering a
+matching iocg_free() for every iocg_init().  The init side is the
+ASSERT_GT(skel2->bss->iocg_inits, 0, "pair_init_again") check a few lines
+earlier, right after the attach.
+
+Should this comment sit next to the "pair_init_again" check, or say that the
+detach walk paired every init with a free?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40710751825
+--===============5448043565086908133==--
