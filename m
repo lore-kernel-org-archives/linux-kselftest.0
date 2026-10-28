@@ -1,54 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.38
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.121
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793182250;
-	b=2JstdBlLlgVT904jaeb+bo6XXYsPAhnXZ2B6/nEDZwEG4vLyiGIm/x1Qgzyh46auPcNb
-	 2QnQ6um+ABcpXpMocv/6hElA+vOnLaDCXynfRvmrX5+QlKNa7pp56Qtc81aq1kPr/Vy0j
-	 Ar0hKpq47z2N24QsdZQfOsfEjYiob5s0wJ0zoLgFl6wZraUOEFP8DEig/WdmPo+PKi5lN
-	 HAiDl4KoJXdNEaQhDzfKFxSoSnsna1/24sJV3eFNf5GHp5t4heV1DoifTJ7SUP5101YfT
-	 gs5o1d0T50zBvuionUH0dtpqRanC2as8H8FYPNE+MRKP+wWOdIDdVmYUJBSmEvLbyxQ==
+	t=1793183263;
+	b=KUNSW++TFcUgC0B4pUk7fPa/36kCisDea7MGTxUtZCl6C3LmkBGC79crQNU9n2jqvVbT
+	 zL0I5GKy1YMzwyJFJp9KTDRpwT/EeN2DN/r0ULXBs58/mrG7vs40N/8cRuv63w2iGhFC+
+	 /bdBaZ0K3j/L11rrB8ADf7gHagPSbUPRRIhHYmqm61jxuSpZF4N6ACeKLsIej7qA9sjge
+	 JIbjU/7ZuKKm+HtLRb/iyWEL1snnsnysEl2az6lTLqCtnHnXz9/6VS+0OsHOEkRNCGemb
+	 QpMVjeTPFABGbiF+09REGOtr2DBsZMk6Qstp4epLpKR63Gwk4NaApQJMv/yY1T9COWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793182250;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793183263;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=19TPKFjxLxxJXmQTxvpO9mlfiQegSPOYzBZe/idkCsk=;
-	b=CE2jvlkb/iGFN5HsnAf8TVDijAJNuyviMd4OnECwHaj6YJ8bgYqSj4rt+J6SKOkRYhDk
-	 fUgoh0Pc2XRK7D3TOUKcSzZRSByrmIdyV/MOvRdDRvaDvO+ieL/TnRIg7yxpRu8bbBYLg
-	 2F672K4He+UVVy4xLONdRWt5N+ciynHlBr9kyVovyBuLwV/JEMU24s2685N3kpUo0zSv2
-	 vUtXCvWot4rx1kz7MuCEWffgAntQgOhK9XljX8FLTiEfh+sSYZaWGF3zLRrMyoKUbz6SM
-	 08bhMvOi1hif1+57LAbE3otyE6GK7YeNUdrPY28SxAAKZsc0MKqthUP/rAe4kBiY9XA==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:MIME-Version:Date:Content-Type:
+	 Content-Transfer-Encoding:From:Message-ID:TLS-Required:Subject:To:Cc:
+	 In-Reply-To:References;
+	bh=CAsQNlvEQewVVFce1WqlpSDwej6JOKTiJP6Vd2oTTAg=;
+	b=REgjbUzYViRANqv3TZW9iQiokNjN5RGQzah2F/MjPt0TOJpAJ8/lwc9s9oPBhMVrN6Zo
+	 zN8PevnN47ItVIRauhQ8mHz2V9dipxMv2cHxXIV0o7pjMCBWl3wh3Es9fqiUwSZ6w/nXm
+	 BLh6uFhSAVM6qSiMzqJDB/DP/h9rlgy9nRV8BVi5aGapc03XLfDEMUpdR/tUccVqx57Ra
+	 r9e39vbmxPgc5hwqPmatRSmYx5KllvvC+ouUbruxrMqXOu+2Xjou71TKfLktR8dYZ1r50
+	 Hiq6Gah2oeHI7LRAh0ghuiC66k/Vma0LFjMsaTMiACjuOsY5ISzADJgPP9d8K4cCk6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="lwtT/Voa";
-	arc=none smtp.remote-ip=95.215.58.38
-Received: from mta1.migadu.com (out-38.mta1.migadu.com [95.215.58.38])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="Jmwex/kK";
+	arc=none smtp.remote-ip=91.218.175.121
+Received: from mta0.migadu.com (out-121.mta0.migadu.com [91.218.175.121])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE2C606A321
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 10:10:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3FE2C606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89995606A31C
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 10:27:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89995606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lwtT/Voa
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Jmwex/kK
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JldTN/ya2t8xpYirdSsWzyVdXdbqZ8hQSNVyw7aaEbs=;
+DKIM-Signature: a=rsa-sha256; bh=OSNgAFP+VgQv9q7o9VlptAb+MUtYzG3jKiN7D8DtKj8=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793182247; v=1; x=1793787047;
- b=lwtT/Voa3tn0zXEU/PzhEq0Pv8X8RXgswAH8eyPNFDU0mVUoYTJcJVehDdEEREy+Iz54fENy
- biPGeo1lUF3FCPNyK43SlXfZFKlPiQCPNH6Um7LLz0rjHXCDULctY3z4vy29SE1tGrEP0slcIV+
- 3C1eREjAnp0IWO8qCENK3LKw=
+ t=1793183254; v=1; x=1793788054;
+ b=Jmwex/kK7FpuCV4bqSsS5FCwcMt+EqZgDLePJZ4dvcrpEr4L/YHoyx7QKjmO1CIocO5OCbGr
+ tkZmoFbOPWPIzOshnL3/DpTiXzlghHbrudm38WhVc3KkL5yD0mKtIroNlIaYfbth6p94x+Qcx/Q
+ vj7/M3C4X89z4qZWGeENzS/M=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3eac00e914e20d2a;
-	Wed, 28 Oct 2026 10:10:19 +0000
-X-Mizu-Trace-ID: 3eac00e914e20d2a
+Received: by smtp.migadu.com with ESMTPS id ee56cd7c32368443;
+	Wed, 28 Oct 2026 10:27:33 +0000
+X-Mizu-Trace-ID: ee56cd7c32368443
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <76f1df75-09cb-45ad-bb08-e34acf93518e@linux.dev>
-Date: Wed, 28 Oct 2026 18:10:03 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,84 +56,138 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 02/19] selftests/mm: skip collapse_compound_extreme()
- where the PMD is too large
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- "David Hildenbrand (Arm)" <david@kernel.org>,
- "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Muhammad Usama Anjum <usama.anjum@arm.com>, Usama Arif
- <usama.arif@linux.dev>, "Nico Pache (Red Hat)" <nico.pache@linux.dev>,
- Zi Yan <ziy@nvidia.com>, Barry Song <baohua@kernel.org>,
- Dev Jain <dev.jain@arm.com>, Hugh Dickins <hughd@google.com>,
- Lance Yang <lance.yang@linux.dev>, "Liam R. Howlett" <liam@infradead.org>,
- Michal Hocko <mhocko@suse.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- Alexander Gordeev <agordeev@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, kernel-team@meta.com
-References: <20260919002451.496763-1-kirill@shutemov.name>
- <20260919002451.496763-3-kirill@shutemov.name>
- <5862cddb-a78f-419f-a5a1-15e16a422bf5@linux.dev>
- <atiQmWnz8zx2AKI7@thinkstation>
-Content-Language: en-US
-From: Zenghui Yu <zenghui.yu@linux.dev>
-In-Reply-To: <atiQmWnz8zx2AKI7@thinkstation>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Wed, 28 Oct 2026 10:27:33 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+From: "Hui Zhu" <hui.zhu@linux.dev>
+Message-ID: <c652f3e6198b143fcf29f5540a769228f3d8470c@linux.dev>
+TLS-Required: No
+Subject: Re: [RFC PATCH 0/2] memcg_ext: dynamic memory.low and memory.min
+ protection
+To: "Tejun Heo" <tj@kernel.org>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>, "Michal
+ Hocko" <mhocko@kernel.org>, "Roman Gushchin" <roman.gushchin@linux.dev>,
+ "Shakeel Butt" <shakeel.butt@linux.dev>, "Muchun Song"
+ <muchun.song@linux.dev>, "JP Kobryn" <jp.kobryn@linux.dev>, "Andrew
+ Morton" <akpm@linux-foundation.org>, "Shuah Khan" <shuah@kernel.org>,
+ davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "KP
+ Singh" <kpsingh@kernel.org>, "Tao Chen" <chen.dylane@linux.dev>, "Mykyta
+ Yatsenko" <yatsenko@meta.com>, "Leon Hwang" <leon.hwang@linux.dev>,
+ "Anton Protopopov" <a.s.protopopov@gmail.com>, "Amery Hung"
+ <ameryhung@gmail.com>, "Tobias Klauser" <tklauser@distanz.ch>, "Eyal
+ Birger" <eyal.birger@gmail.com>, "Rong Tao" <rongtao@cestc.cn>, "Hao Luo"
+ <haoluo@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Jeff Xu" <jeffxu@chromium.org>,
+ mkoutny@suse.com, "Jan Hendrik Farr" <kernel@jfarr.cc>, "Christian
+ Brauner" <brauner@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Brian Gerst" <brgerst@gmail.com>, "Masahiro Yamada"
+ <masahiroy@kernel.org>, "Willem de Bruijn" <willemb@google.com>, "Jason
+ Xing" <kerneljasonxing@gmail.com>, "Paul Chaignon"
+ <paul.chaignon@gmail.com>, "Lance Yang" <lance.yang@linux.dev>, "Jiayuan
+ Chen" <jiayuan.chen@linux.dev>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Barry Song"
+ <baohua@kernel.org>, "Geliang Tang" <geliang@kernel.org>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-mm@kvack.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "Hui Zhu" <zhuhui@kylinos.cn>
+In-Reply-To: <769e80ffa618327ac03c13c4657e7229@kernel.org>
+References: <cover.1793086858.git.zhuhui@kylinos.cn>
+ <769e80ffa618327ac03c13c4657e7229@kernel.org>
 
-Hi Kiryl,
+"Tejun Heo" <tj@kernel.org mailto:tj@kernel.org?to=3D%22Tejun%20Heo%22%20=
+%3Ctj%40kernel.org%3E > :
 
-On 10/21/26 6:32 PM, Kiryl Shutsemau wrote:
-> On Thu, Oct 08, 2026 at 07:52:18PM +0800, Zenghui Yu wrote:
-> > Hi Kiryl,
-> >
-> > On 9/19/26 8:24 AM, Kiryl Shutsemau wrote:
-> > > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> > >
-> > > collapse_compound_extreme() builds a PTE table full of distinct PTE-mapped
-> > > compound pages by cycling hpage_pmd_nr fault-time THPs through mremap.  It
-> > > therefore needs hpage_pmd_nr PMD-order allocations in a row.  That is fine
-> > > at a 2M PMD (4K base pages) or a 32M one (16K).  A 512M PMD -- arm64 with
-> > > 64K base pages -- makes each of those an order-13 allocation, which the
-> > > allocator cannot reliably hand out even once, let alone 8192 times.
-> > >
-> > > The failure is not a quiet one: the case calls ksft_exit_fail_msg(), so the
-> > > whole binary stops and every case after it is lost.
-> > >
-> > > Skip the case where the PMD is larger than 32M.  The MADV_COLLAPSE cases
-> > > still cover PMD-order collapse on those configurations, and 4K and 16K
-> > > PMDs are unaffected.
-> >
-> > collapse_compound_extreme() failed on an arm64 virtual machines with 16k
-> > pages.  The VM has 8GB of memory.  Not sure if this is the same issue that
-> > this patch attempts to address.
-> 
-> It is the same issue.
-> 
-> Memory usage for the test case, assuming 64-bit page table entries:
-> 
->          4K pages:  512 x   2M =  1G
->         16K pages: 2048 x  32M = 64G
->         64K pages: 8192 x 512M =  4T
-> 
-> 64G is a lot, but I don't think we want to give up on this test case
-> on 16k machines completely.
 
-Agreed. This test case passed on other arm64 servers with sufficient
-memory.
+>=20
+>=20Hello, Hui.
+>=20
+>=20On Tue, Oct 27, 2026 at 05:11:58PM +0800, Hui Zhu wrote:
+>=20
+>=20>=20
+>=20> Why it matters: memory.low and memory.min protect a cgroup by a fix=
+ed
+> >  threshold and have no idea whether it is using the memory. A
+> >  high-priority cgroup that holds a large working set and then goes id=
+le
+> >  keeps suppressing reclaim on its siblings, and that memory is wasted=
+.
+> >  A policy program sees the real activity - page faults, charges - and
+> >  can grant or withdraw protection as it changes.
+> >=20
+>=20This doesn't justify the changes. Why can't the same be achieved by
+> adjusting memory.low and memory.min from userspace? The arguments made
+> so far are neither convincing nor proven.
+>=20
+>=20Thanks.
+>=20
+>=20--
+> tejun
+>
 
-> Maybe we should treat a failure to allocate a huge page here as a skip,
-> not a fail? And remove the PMD-size gating.
-> 
-> Zenghui, do you want to experiment with this?
+Hi Tejun,
 
-I've just sent a patch for that. Thanks for your suggestion.
+Thanks for taking a look.
 
-https://lore.kernel.org/20261028100119.11340-1-zenghui.yu@linux.dev
+You are right about that paragraph.  It describes what dynamic
+protection does rather than saying why it has to happen in the kernel,
+and at the timescale I described a userspace agent writing memory.low
+would keep up fine.  I will drop it.
+
+Let me try to say what I was reaching for, from the code rather than
+from a benchmark - a comparison between BPF and a userspace agent would
+say at least as much about how well I wrote the agent as about the
+interface, so I am not sure it would settle much.
+
+memory.low is a request, and what reclaim honors is elow, which
+page_counter_calculate_protection() derives on each pass from the
+parent's elow, the siblings' requests and the tree's usage.  At the
+first level below the reclaim root that comes out equal to what was
+written, and there the knob is enough.  Deeper down it is capped by the
+parent's budget and shared out between siblings according to what they
+claimed and what they use, so what a cgroup wrote and what it ends up
+with can differ.  As far as I can tell none of that is visible from
+userspace: memory.low reads back the declared value, and I could not
+find anything that exports elow.
+
+Exporting elow would not help, because elow is not a property of the
+cgroup alone.  It depends on the reclaim root as well, which is why
+page_counter_calculate_protection() warns that it is not stateless and
+is only valid as part of a top-down tree iteration, and why
+mem_cgroup_protection() carries the example of a concurrent global and
+targeted reclaim driving a child's elow to zero.  A file would show
+whichever value the last reclaim happened to leave there.
+
+So the derived value seems to be usable only where it is derived,
+inside the check, and that is where low_policy() sits: it is evaluated
+per pass and is handed that pass's own inputs - the memcg, the reclaim
+target, the elow just computed, the usage - instead of being state that
+is read at the check.
+
+The other half is what a policy can key on.  memory.low has one
+dimension, bytes.  A policy program is not limited to the ctx it is
+handed; it can also use state that other BPF programs keep, so
+protection can be a function of activity rather than of size - a
+workingset refault rate, for instance.  [1] reads those counters from
+BPF and acts on them; it drives reclaim rather than answering a
+protection hook, but the signal it reads is the one such a policy would
+want.  The limit is on the output rather than the input: the hook
+returns a boolean, so it cannot grant anything memory.low cannot.
+
+I would be interested in how you see this - in particular whether the
+nested case is worth supporting at all, and if it is, whether this is
+the right shape for it.  I am happy to rework the patches, and to add a
+demonstration of one concrete policy if that would make it easier to
+judge.
+
+[1] https://github.com/teawater/memcg-async-reclaim/tree/memcg_ext_plus
 
 Thanks,
-Zenghui
+Hui
