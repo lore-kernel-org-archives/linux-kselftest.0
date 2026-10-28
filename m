@@ -1,58 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793194138;
-	b=40ec0jH5PlfIoOH72+nzB1/YueuwDQiTIeR3vL6hF3ayVejYf4JwoaXWgilCt19ncfK+
-	 8mZV1cqysT9RnnDWjMU2cWbqF+TKDQFHMDforsCryiSu53PZFYAQrLodlzdZMOLcvO5TB
-	 miMtk7b0u1y33PHjCPbQCV5ilosLEdGNFaUxJSsc8Xxm9pXSWmfUNnZgrKgd/EmxuqTb6
-	 RlOD3oOMc08WkC4RT3LjC2H5twGfMiTdV73DFV6X3pQj0aO5zswcXPhyrz5vdPojm/Pmz
-	 53aGDZl2quAJFcKc0288vgNULR6fTUqEdBAbkZ6WmgvgTQCojZHrbYjbMxsIvTBSSDg==
+	t=1793194817;
+	b=efTNv4cpIJahBmaGrCVfwOS7RMD7w2WTMTM6xQoKwzzp9pwTwmTnSHHYyUE9O5OvwhA4
+	 qFqbw/HOz6WcnCr3seaZvxei8b9u0KUMYCkPEIKCDk/sTiqjxc47k3XPYNKI7brhbuLrH
+	 2DkrNoIz0cUb0aVp2KJ9ti9xNKk2U37TFMA9m+MfV8L8L9NAtEevmbRYCFO9Ksw7+PVhm
+	 a4uFzCi6hkMOk0RvRwUmU7ASGKvbAay4YPXVRvfFAFnvtoO44xxVtzGVjquVaz1p3Gkv4
+	 qU+kEkKtSS9zbntn0gQ6S3mooY10j93kJP4WxmAmHLdcH5CJWjrR/Fekja3hAmm5t7A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793194138;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=FLKnlRbJD1/tet/3IiAp1mZT2KpI2WVfTfQBZi4MnUQ=;
-	b=l3mfQo/eqfmheQvuC+L73NuSxSHRZAypcozYbMfFR3FxOsxLN2OVY2i5dPOT70erS+PO
-	 kQDBqidfgt3Dqw31g7v5wUA1XpfwpDuGi0GazUQhzBcPPzUx/DzhfFGkBqw/eoISVM1Xv
-	 nbSmLkj5ZVPuhyiNZjqxgaMVEinpv6z2UQyX+zDDPE9OhJa/z1TozDV2ahzdauFMbJmbo
-	 XtbG4aO3MXtYwR3v/+U60MgiW05bGGx+353yu9UGzLVPKjgiHl2bz555uvXiiPTe51KM0
-	 Uw5fEWlfAbfeec3kE+Pq/xNeuyrakM3RhmFJFwdL1DuBEIbI+T5W9JggpDqE6OHUSwg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793194817;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=rTR6fgNF+2TTk5l8yXrK2u6P71Yis/UBObU7lA/CVSY=;
+	b=FlT0XFVnrjr/1HmnqvYp+I4yfgIfR4V8I/KQP2U+XoQbrgRjJBbDXyoTH1FOO8Vuy/4i
+	 b7yqvnlC/IH15x9NrKF3oXR7qxdk2fHF4vCI0KmxFAliNWoee0zKBVU/KD7vLcHkMSAQg
+	 IsEIJLwWXQNLwKD9PpFIR8sN4fsA2cC3/hmWrhZJAcGOajkn9biCMMfZnF4ssrfs2m68w
+	 h3GcQsBh+WAj3HLmO5ea6s2n4DmUEKpDaPPXPH3La32wv+tFrd2JLfCX5lb+L47q0xAXL
+	 zEfDNkEPKZ4FIfb5Az6w7kF6z3H0D5DQLp078v/voMJAKpFIbR8k2hy4oWJ8J9hNflg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=qQvuRZzS;
-	arc=none smtp.remote-ip=216.40.44.15
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=T4eBS8Wg;
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D67606A31A;
-	Wed, 28 Oct 2026 13:28:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24D67606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9194F606A31C
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 13:40:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9194F606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=qQvuRZzS
-Received: from omf20.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 881D080C8B;
-	Wed, 28 Oct 2026 13:28:49 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id B33A320028;
-	Wed, 28 Oct 2026 13:28:47 +0000 (UTC)
-Date: Wed, 28 Oct 2026 09:28:46 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 03/16] tracing/filters: Fix false success return in
- process_system_preds()
-Message-ID: <20261028092846.3782e698@gandalf.local.home>
-In-Reply-To: <179314823296.684037.17602272705996028005.stgit@devnote2>
-References: <179314820431.684037.4147763044424284198.stgit@devnote2>
-	<179314823296.684037.17602272705996028005.stgit@devnote2>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=T4eBS8Wg
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a1fbd52ab6so7865435e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 06:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793194815; x=1793799615; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=rTR6fgNF+2TTk5l8yXrK2u6P71Yis/UBObU7lA/CVSY=;
+        b=T4eBS8Wg2tS8DF2FxDoEzLk87FWGAltZONOWqqijvhnliG+/czE7LgvFt+6WpuWixQ
+         JoL0giCy/cjWdD0Ne1bc1EGAQPvdUpic6VSEjbeOkc4Qxc/nA8+64kkEwHTGNWVj/hcw
+         Ohpjh2dSQWALbSot6oK24tbEpUlpMI/8rxyrSro5tibi/fo2DFSYzf+s+1vyqxKYfvLo
+         XrgA9dUQd65+mVhNnGRNVZaeFKJxG86XUO6IYgm6Rou9lg4QAMd9jEwsjX6tOev+Eag4
+         ktPy6iANe6CUFb13V9Km1VpmaoEpJmi//nnx+suJrOUXG2jBKAYszIucY7rtpIFQi9UR
+         glig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793194815; x=1793799615;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rTR6fgNF+2TTk5l8yXrK2u6P71Yis/UBObU7lA/CVSY=;
+        b=rn0GuJSHxUgWzjvU68gUlgdE5q3S99VjDIkI+wxShV3fCIZlqdsIjeYz/i8kuWbMIR
+         1aGTMaIqZFUQLMQp8lrbXdDlKRv8eHEdufuRTKksEvY4PWjuqMS6k4bYvrupxUbVFY5u
+         yR/qzepn2FEpX5tbCK4H9zxFZcON1VsdufK3Hqjhp8baog0ffhGbIaDTNkevSdfrYIus
+         5sudCDU1yB+ScEzc6fmmQE6YTk+D37XkLWjKqHCXzjshRNiNrqpDpnJn1H2Q5uP3Iooj
+         h5qL7xVPxrRtINP8Zl581pfcTtI3QKJbcrwMqPw2tYLEXo0A5kR2iNAw9Q7KNdJu+JC+
+         Y2Xg==
+X-Forwarded-Encrypted: i=1; AKwUvBzAHL8YWXHuzDww6t4L/s5E8VWc89E8HTOe2I8Es17MLt8l9/DgLln3UoSLxyFMaRzp6/qm6XFYR7v/cbU2S7E=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJOqsjttdHXC0su+yo0ThMo+plthGmSg/ZZFQ/1TZqrS6GJLxoX
+	cfwtn3Hr8Pt7TQy7G+4fpf+B0njUSQO571hxemU/veY2a9PLdWZ5M1wo
+X-Gm-Gg: AYBFou2+uB/Odvo+KRq+w2KIoyT/xyHdvSVOdFok5vtUgSh8V86SBIWSUsfi1s9c0yp
+	kXg3SVMRpRkv6Quh4PaUSWGFLo4YSSq1d9RYU18xsnZKliNvX0sz3mVngnJPWmiUUkrOKbBvpew
+	/FRw2eUKXWUaY0OmJOv0eFpT5sb6Dm7LjtveTWdGidE80jkRVql58upAS5PYkblBB5kIcSGsSFb
+	jMHVk2gGtUolIsDhhrctMIlRN3Xzkru5E1NOOqqC2+PHDmmwaP20sj7/TZfmpxjefGY33vU+TF1
+	7B469Vtxl2ZgECsPhMjXdVf1rE/HwIx/2zrQl21+V+TK+kbxFPCKd/xY8fqCOJXpMmvHel8LEOT
+	bQ6yxgkrmtgiiR6og39VsqA2mHNx+LOQnFf/lftQ5SyLgMPNP5J18B1ZIKqTKChxHXRv99ihi2V
+	BmsYZ0vgevtRKN4NKMDRxkwK9F3+QC6Qo2zPwJvgbF9pObO+SDh14mAms5wK16Ib/suH/y64G3P
+	uIEakrI33Zbb1yUjil1sLGVv9GbvBOhCdak19KvHT+gPYYCdEjfZxQPhVcbwXgYun/m7QnvKQEd
+	raW63PTH4vgbDLKdP0OY+q0hF83eFfUZkw53YFQDs8UxqkXRrdFDt52jK+hbJbf5Ces=
+X-Received: by 2002:a05:600c:6085:b0:4a1:e01e:1927 with SMTP id 5b1f17b1804b1-4a996a9e304mr40226765e9.5.1793194814621;
+        Wed, 28 Oct 2026 06:40:14 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd3c32sm29592978f8f.47.2026.10.28.06.40.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2026 06:40:14 -0700 (PDT)
+Date: Wed, 28 Oct 2026 13:40:12 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
+ <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ kernel-team@android.com, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to
+ /proc/kallsyms
+Message-ID: <20261028134012.01d52e94@pumpkin>
+In-Reply-To: <20261023001603.560210-9-wusamuel@google.com>
+References: <20261023001603.560210-8-wusamuel@google.com>
+	<20261023001603.560210-9-wusamuel@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,96 +115,312 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: B33A320028
-X-Stat-Signature: fjmr4z6yb7u84x13waruh7dcciwpi13n
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/7VmVCgvu1oMBM+JBddpevWT5GzRegh8Q=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=FLKnlRbJD1/tet/3IiAp1mZT2KpI2WVfTfQBZi4MnUQ=; b=qQvuRZzS4Mv8IDFULHOF5ttRvBP7irHxHzjl2PfEcCYIG6wUHoKDCLrffdcAchMqblXv0y0tULtIGJr/1mfV7gCtpfx4shnKaMIPH+Dc+qDmS1JDQqo8RJitrGHuwYBzzvbrUQAcFpBXukN87jC9FtfiXkv5lhRrpSrTer6/07c=
-X-HE-Tag: 1793194127-434769
-X-HE-Meta: U2FsdGVkX18QH3hilVK39IPdqSs9Dt6zlZZxHRTm6dS9YMboGgj2f4JbgPnciIgJ+YjTq+rXwomyQl2XifRRpIlon6hlqmkoAyAEXoUS/dDHeM2CKviEyCS9XDDlSiKHYxGLUGUAIXLnSCwwDPjbfPwH8tontCIlC9uAfsxguvi1It3n/BdNvYRcoKgtl+1P/FydI3DHekFyWF2EmSmwbwV76UFzTza/wdReWAP3FHecZgSRWK/SBKiNrY6fY+hJ30cH+FKXzuGS6kR8DXupx3rWnAOVmUGIdLb+2VLVYBsuzkPk3pGebyDDOcEfH6SDbCcYDvXhPC/Mz8YeVb882fjb34M8fKcU
 
-On Wed, 28 Oct 2026 09:43:53 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+On Thu, 22 Oct 2026 17:16:02 -0700
+Samuel Wu <wusamuel@google.com> wrote:
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Add an extensible KALLSYMS_QUERY ioctl() interface to /proc/kallsyms
+> to support fast point queries without scanning the entire text file.
+> Exactly one query mode must be set in query_flags.
 > 
-> In process_system_preds(), "fail" is initialized to true to indicate
-> whether any event in the subsystem successfully applied the filter.
-> However, "fail = false;" was placed at the end of the event loop outside
-> the error check, unconditionally clearing "fail" on every iteration even
-> when process_preds() returned an error.
+> When KALLSYMS_QUERY_BY_SYMBOL is set in query_flags, KALLSYMS_QUERY
+> resolves a NUL-terminated symbol name in vmlinux or loaded modules and
+> then populates sym_addr:
+> - Searches vmlinux first via kallsyms_lookup_names() (binary search),
+>   which takes precedence over loaded modules, and falls back to
+>   module_kallsyms_on_each_symbol() under module_mutex for module
+>   symbols
+> - Matches names exactly, like kallsyms_lookup_name(), disregarding the
+>   .llvm.<hash> matching, following precedent set by commit fb6a421fb615
+>   ("kallsyms: Match symbols exactly with CONFIG_LTO_CLANG")
+
+Hmmmm....
+What happens when you have functions foo and foo.constprop0
+In some sense they are duplicates.
+
+> - Resolves 0x0 symbol addresses in both vmlinux and modules
+> - Rejects ambiguous symbols (multiple entries with the same name at
+>   different addresses within vmlinux, or across loaded modules) with
+>   -EADDRNOTAVAIL, while allowing same-address aliases
 > 
-> As a result, if every event in the subsystem fails to match the filter
-> (e.g., an invalid field), process_system_preds() returns 0 (success)
-> instead of -EINVAL. Consequently, create_system_filter() considers the
-> operation successful and silently resets the subsystem filter display to
-> the default global filter message instead of reporting the parse error.
+> Userspace symbolizers resolve kernel addresses to symbol names with
+> /proc/kallsyms. This is typically done by reading the entire
+> /proc/kallsyms text file, and keeping a compressed sorted copy of it in
+> order to resolve addresses at runtime.
+
+You could mmap the tables into userspace and have a ioctl that reported
+the offsets of the tables (etc).
+Then user lookup would faster then kernel lookup!
+Especially since you could throw a bit more memory at it to remove the
+linear scans.
+
 > 
-> Move "fail = false;" into the else branch of the error check so that
-> "fail" is only cleared when at least one event filter succeeds. Because
-> file->filter is still replaced even when process_preds() fails, check
-> !list_empty(&filter_list->list) on the fail and fail_mem paths so any
-> replaced old filters are freed after an RCU grace period via
-> delay_free_filter().
+> When KALLSYMS_QUERY_BY_ADDR is set in query_flags, KALLSYMS_QUERY
+> resolves one address to the symbol that contains it:
+> - sym_addr holds the address to resolve on input.
+> - sym_name_addr must point to a user buffer of sym_name_size bytes
+>   that receives the NUL-terminated symbol name. On output,
+>   sym_name_size holds the number of bytes written (including the
+>   terminating NUL). -ENAMETOOLONG is returned if the buffer is too
+>   small; a buffer of KSYM_NAME_LEN (512 at the time of writing) bytes
+>   is always large enough.
+> - Symbols are resolved via kallsyms_lookup(), the same lookup as %pS,
+>   covering vmlinux, loaded modules, BPF JIT images, and freed module
+>   init functions still tracked by ftrace.
 > 
-> Fixes: 80765597bc58 ("tracing: Rewrite filter logic to be simpler and faster")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> On an 8 CPU Cuttlefish (x86-64 VM), using this patchseries to load a BPF
+> program with 11 typeless ksyms has ~220x speedup (157ms -> 0.7ms).
+
+Have you tried measuring it with my patches that speed up the kernel
+'search by name' code?
+That speeds the lookup by a factor of ~18 (testing the code in userspace).
+
+You also should allow for 'find first' and 'find next'.
+As well as letting the code iterate though functions with the same name
+it is absolutely trivial to enhance the 'lookup by name' code to match
+a prefix.
+(Basically it needs to 'return -index' instead of 'return -1' when the
+binary scan fails.)
+
+
+> 
+> On an 8 CPU x86-64 VM with a 175k line kallsyms, there are broad
+> performance and memory savings for the symbolization and callstack
+> sampling tool, Perfetto:
+> - Init time: ~350x speedup (155.7ms -> 0.44ms)
+> - 50k symbolizations: ~12x speedup (25.2ms -> 2.2ms)
+> - VmRSS: -68% (15.1MB -> 4.8MB)
+> 
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
 > ---
->  kernel/trace/trace_events_filter.c |   15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
+>  include/uapi/linux/fs.h |  41 +++++++++++++
+>  kernel/kallsyms.c       | 132 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 173 insertions(+)
 > 
-> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> index f7c067a58ba4..617bc3c0bb0c 100644
-> --- a/kernel/trace/trace_events_filter.c
-> +++ b/kernel/trace/trace_events_filter.c
-> @@ -2354,8 +2354,10 @@ static int process_system_preds(struct trace_subsystem_dir *dir,
->  			filter_disable(file);
->  			parse_error(pe, FILT_ERR_BAD_SUBSYS_FILTER, 0);
->  			append_filter_err(tr, pe, filter);
-> -		} else
+> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+> index 34c6f219462a..b43f227dad0e 100644
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -674,6 +674,47 @@ struct procmap_query {
+>  	__u64 build_id_addr;		/* in */
+>  };
+>  
+> +/* /proc/kallsyms ioctl */
+> +#define KALLSYMS_QUERY	_IOWR(PROCFS_IOCTL_MAGIC, 18, struct kallsyms_query)
+> +
+> +/* Exactly one query mode must be set in query_flags. */
+> +enum kallsyms_query_flags {
+> +	/*
+> +	 * Look up a symbol in vmlinux or loaded modules (vmlinux first; BPF
+> +	 * and ftrace symbols are not searched) by exact NUL-terminated name
+> +	 * at sym_name_addr and return sym_addr. sym_addr and sym_name_size
+> +	 * must be 0 on input.
+> +	 */
+> +	KALLSYMS_QUERY_BY_SYMBOL = 0x01,
+> +	/*
+> +	 * Look up the symbol covering sym_addr and write its NUL-terminated
+> +	 * name to the sym_name_addr buffer of sym_name_size bytes. The same
+> +	 * symbols as %pS are searched: vmlinux, loaded modules, BPF JIT
+> +	 * images, and freed module init functions still tracked by ftrace.
+> +	 * A buffer of KSYM_NAME_LEN (512 at the time of writing) bytes is
+> +	 * always enough. On success, sym_name_size is set to the number of
+> +	 * bytes written (including the terminating NUL).
+> +	 */
+> +	KALLSYMS_QUERY_BY_ADDR = 0x02,
+> +};
+> +
+> +/*
+> + * Returns -ENOENT if no symbol matches, -EADDRNOTAVAIL if the name maps to
+> + * more than one address, -ENAMETOOLONG if the name does not fit in
+> + * KSYM_NAME_LEN (512 at the time of writing) or sym_name_size bytes, and
+> + * -EPERM if kallsyms addresses are hidden from the opener of /proc/kallsyms
+> + * (e.g. kptr_restrict).
+> + */
+> +struct kallsyms_query {
+> +	__u64 size;		/* in - struct size for compatibility */
+
+I'm not sure you need a size here as well as the one in the ioctl command.
+It only complicates things when they differ.
+
+If you need a new version they you add an extra case to the switch statement.
+Simple and easy,
+
+> +	__u64 query_flags;	/* in - query mode (enum kallsyms_query_flags) */
+> +	__u64 sym_name_addr;	/* in - address of symbol name buffer */
+> +	__u64 sym_addr;		/* out (BY_SYMBOL) / in (BY_ADDR) */
+> +	__u64 sym_name_size;	/* in/out - name buffer size / bytes written */
+
+Maybe separate the buffer size from the length of the symbol written?
+The in/out parameter will get annoying in code doing multiple lookups.
+Or just have the buffer size and require it to be '\0' terminated.
+(There is a strncpy_from_user() can that be used.)
+
+The '\0' terminated string handling is likely to be noise against
+all the rest of the lookup code.
+
+David
+
+> +};
+> +
+> +#define KALLSYMS_QUERY_SIZE_VER0	40 /* sizeof first published struct */
+> +
+>  /*
+>   * Shutdown the filesystem.
+>   */
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index aec2f06858af..7caaf3e421c7 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -31,6 +31,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/bsearch.h>
+>  #include <linux/btf_ids.h>
+> +#include <linux/uaccess.h>
+>  
+>  #include "kallsyms_internal.h"
+>  
+> @@ -922,11 +923,142 @@ const char *kdb_walk_kallsyms(loff_t *pos)
+>  }
+>  #endif	/* CONFIG_KGDB_KDB */
+>  
+> +struct kallsyms_mod_find_ctx {
+> +	const char *name;
+> +	unsigned long addr;
+> +	bool found;
+> +};
+> +
+> +static int kallsyms_mod_find_cb(void *data, const char *name, unsigned long addr)
+> +{
+> +	struct kallsyms_mod_find_ctx *ctx = data;
+> +
+> +	if (strcmp(name, ctx->name) != 0)
+> +		return 0;
+> +	if (ctx->found && ctx->addr != addr)
+> +		return -EADDRNOTAVAIL;
+> +	ctx->found = true;
+> +	ctx->addr = addr;
+> +	return 0;
+> +}
+> +
+> +static int do_kallsyms_query(struct kallsym_iter *iter, void __user *uarg)
+> +{
+> +	char namebuf[KSYM_NAME_LEN];
+> +	struct kallsyms_query karg;
+> +	unsigned long addr;
+> +	unsigned int start;
+> +	unsigned int end;
+> +	unsigned int i;
+> +	__u64 usize;
+> +	long len;
+> +	int err;
+> +
+> +	BUILD_BUG_ON(sizeof(struct kallsyms_query) != KALLSYMS_QUERY_SIZE_VER0);
+> +
+> +	/*
+> +	 * The text interface shows zero addresses to openers without permission.
+> +	 * A zeroed point query result is useless (and an address-to-symbol query
+> +	 * would leak KASLR), so fail instead.
+> +	 */
+> +	if (!iter->show_value)
+> +		return -EPERM;
+> +	if (copy_from_user(&usize, uarg, sizeof(usize)))
+> +		return -EFAULT;
+> +	if (usize > PAGE_SIZE)
+> +		return -E2BIG;
+> +	if (usize < KALLSYMS_QUERY_SIZE_VER0)
+> +		return -EINVAL;
+> +
+> +	err = copy_struct_from_user(&karg, sizeof(karg), uarg, usize);
+> +	if (err)
+> +		return err;
+> +
+> +	switch (karg.query_flags) {
+> +	case KALLSYMS_QUERY_BY_SYMBOL:
+> +		if (karg.sym_addr || karg.sym_name_size)
+> +			return -EINVAL;
+> +
+> +		len = strncpy_from_user(namebuf, u64_to_user_ptr(karg.sym_name_addr),
+> +					sizeof(namebuf));
+> +		if (len < 0)
+> +			return len;
+> +		if (len == 0)
+> +			return -EINVAL;
+> +		if (len == sizeof(namebuf))
+> +			return -ENAMETOOLONG;
+> +
+> +		if (kallsyms_lookup_names(namebuf, &start, &end)) {
+> +			struct kallsyms_mod_find_ctx ctx = { .name = namebuf };
+> +
+> +			err = module_kallsyms_on_each_symbol(NULL, kallsyms_mod_find_cb, &ctx);
+> +			/* Check first: maps -EOPNOTSUPP (CONFIG_MODULES=n) to -ENOENT. */
+> +			if (!ctx.found)
+> +				return -ENOENT;
+> +			if (err)
+> +				return err;
+> +			addr = ctx.addr;
 > +		} else {
->  			event_set_filtered_flag(file);
-> +			fail = false;
+> +			addr = kallsyms_sym_address(get_symbol_seq(start));
+> +			for (i = start + 1; i <= end; i++) {
+> +				if (kallsyms_sym_address(get_symbol_seq(i)) != addr)
+> +					return -EADDRNOTAVAIL;
+> +			}
 > +		}
+> +
+> +		karg.sym_addr = addr;
+> +		break;
+> +	case KALLSYMS_QUERY_BY_ADDR:
+> +		if (!karg.sym_name_size)
+> +			return -EINVAL;
+> +		addr = karg.sym_addr;
+> +		/* Reject addresses that do not fit in unsigned long (32-bit). */
+> +		if (addr != karg.sym_addr)
+> +			return -ENOENT;
+> +		if (!kallsyms_lookup(addr, NULL, NULL, NULL, namebuf))
+> +			return -ENOENT;
+> +
+> +		len = strlen(namebuf) + 1;
+> +		if (karg.sym_name_size < len)
+> +			return -ENAMETOOLONG;
+> +		if (copy_to_user(u64_to_user_ptr(karg.sym_name_addr), namebuf, len))
+> +			return -EFAULT;
+> +
+> +		karg.sym_name_size = len;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (copy_to_user(uarg, &karg, min_t(size_t, sizeof(karg), usize)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+> +static long kallsyms_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+> +{
+> +	struct seq_file *m = file->private_data;
+> +
+> +	switch (_IOC_NR(cmd)) {
+> +	case _IOC_NR(KALLSYMS_QUERY):
+> +		if (!extensible_ioctl_valid(cmd, KALLSYMS_QUERY, KALLSYMS_QUERY_SIZE_VER0))
+> +			return -ENOIOCTLCMD;
+> +		return do_kallsyms_query(m->private, (void __user *)arg);
+> +	default:
+> +		return -ENOIOCTLCMD;
+> +	}
+> +}
+> +
+>  static const struct proc_ops kallsyms_proc_ops = {
+>  	.proc_open	= kallsyms_open,
+>  	.proc_read	= seq_read,
+>  	.proc_lseek	= seq_lseek,
+>  	.proc_release	= seq_release_private,
+> +	.proc_ioctl	= kallsyms_ioctl,
+> +#ifdef CONFIG_COMPAT
+> +	.proc_compat_ioctl = compat_ptr_ioctl,
+> +#endif
+>  };
 >  
->  
->  		filter_item = kzalloc_obj(*filter_item);
-> @@ -2370,8 +2372,6 @@ static int process_system_preds(struct trace_subsystem_dir *dir,
->  		filter_item->filter = event_filter(file);
->  		event_set_filter(file, filter);
->  		filter = NULL;
-> -
-> -		fail = false;
->  	}
->  
->  	if (fail)
-> @@ -2386,14 +2386,17 @@ static int process_system_preds(struct trace_subsystem_dir *dir,
->  	return 0;
->   fail:
->  	/* No call succeeded */
-> -	free_filter_list(filter_list);
-> +	if (!list_empty(&filter_list->list))
-> +		delay_free_filter(filter_list);
-> +	else
-> +		free_filter_list(filter_list);
->  	parse_error(pe, FILT_ERR_BAD_SUBSYS_FILTER, 0);
->  	return -EINVAL;
->   fail_mem:
->  	__free_filter(filter);
->  
-> -	/* If any call succeeded, we still need to sync */
-> -	if (!fail)
-> +	/* If any filter was replaced, we still need to sync */
-> +	if (!list_empty(&filter_list->list))
->  		delay_free_filter(filter_list);
->  	else
->  		free_filter_list(filter_list);
+>  static int __init kallsyms_init(void)
 
-I still prefer my suggestion which cleans up the code and gets rid of the
-duplicate if statement for freeing.
-
-  https://lore.kernel.org/all/20261026153258.5259323d@gandalf.local.home/
-
--- Steve
