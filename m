@@ -1,63 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793180003;
-	b=dN3jzlmaBF3u6iMTEJ4ipo1+hQoiqA4qFrNJKnihFZi9WoTbCBmt1CdzLVpRAyH1ijgq
-	 /ZZANDO4gNJDHr2ZcNVx6DBOfZ3p8O+Y0LrLT1lpVhs4uVkAuoocJPiYw2BVIedcbS7lq
-	 Pl3xQIWdaMLmf1KnRccuD7HcpZvUuccTj+God840lnYFAwTs2LP6LHq3DtJW9I0Ir4ga/
-	 SLKqsTlnBIozeAFTALxuRQcL7yUVlDhohINVhnmfOc+X0OyRjY7en4firUv4sodW2Q3a/
-	 YDKqRi0P4v1+SkV27toISwTfsk36eGHPl/8KJDUhV8QhXqlVbQkEFAKxqjTFBCtysaQ==
+	t=1793180958;
+	b=qVM0uMc/NlL/+ZssaklczzXIerG5hPCuY95jYiLgEVx8wREZynT9MwCT7QcLe7NT0ASq
+	 HyzEMkUApHi7QBnsOSxmybw3mXQmc7xHkYW1E2+xez8282ysOUJEcuFHN4/gJT9RrJwX9
+	 ORhnrQTihZmpnbB1n+SDYcM/Jc5T4NjsqWXmuMIfErEmRh7UL4v2npJemnGsvC7xBsHoj
+	 0tQYSm7qDLJYfeMITuwkcTvT3j9yx1aceUtoJ9NrM73Lic7RwiMrh7IlpldYNhG/vnTd1
+	 FYY80ZHTULZ3nBzOFhhuvzjmVmPF6vcIfSsniGqnfDlVkHJVbLpqQy5pjofWIMrJRvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793180003;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:In-Reply-To:
-	 References:Date:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=o48BxfVRKyt8VwocGYiaSs0bwuLsENkNmhgJ5mRhlcg=;
-	b=Prcr4JAf/TImxrnzVoTap/rc9J/iMUiAn84HGVIL4G8feLjVpST95VitwU55ulDILR59
-	 aRK1lI9wmxxmLwajXdj0U1vmujVWd3hcxtXgla5pMNPuQnBcKVBglzS+p8nOvpu1D3vnZ
-	 7jjmb/wo4Von350mlnTbpA/DA9oZxNMzKLUQKb6/PGOMwpnfb6HgETqoBNXcqIri90d9U
-	 xFGpsz43TOOXc89060By3s9s/Qd9seaFduZawhfSdtTmhQ6uJ5NjVvm4/caalZX4VWoSn
-	 hSUnWF8Ln4UJ24qUdzTq23+JJ9lPk+X7f9XSCEG6037gCWx9NXqu3XVGsHbnvU13ffw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793180958;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=j99P5QWiCp9mK5Hf0fpTUVyqcAtcoB4QyeGqeo1OT2s=;
+	b=XpBTqsPWSCLgbBxro/j9rVb7d2euKlI4ilxfFPr8S2Yqj/yS8OOWE56paLCMFaG9gp5a
+	 GuhfpW0+n8MXqWkF1aHxkOtzY4k2jN8KEw4vg+pl2uhjwTmEZHVvM3LHAZEyeI+u6tXSC
+	 DMRJCgHul1Dlzc1qrXvD+zfkE8/JQOqOIo9Ga2U4bqO64R4utYKf1PGqtwkWyHYKT+4Hl
+	 7DB3MKBB55SaV5hPvXzp46wUrl6T7lRH80MIfWmP7uHwe7xDp+uoJbezvuNZHGQlyls87
+	 iIF99LtUT1VL/Yll2cnVuDJ4/4RIVCI8kaa94yiqY+jKBbh5Nmhhase/DafK/suuxDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=igalia.com;
-	spf=pass smtp.mailfrom=igalia.com;
-	dkim=pass header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b="QkmyU/vW";
-	arc=none smtp.remote-ip=213.97.179.56
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="a/rb5U1K";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D936606A31C;
-	Wed, 28 Oct 2026 09:33:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D936606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95EF0606A31A;
+	Wed, 28 Oct 2026 09:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=QkmyU/vW
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
-	Date:Subject:Cc:To:From:From:Reply-To;
-	bh=o48BxfVRKyt8VwocGYiaSs0bwuLsENkNmhgJ5mRhlcg=; b=QkmyU/vWjCV60OWMBHN+43GJJq
-	T4cc9x79JCeL0TxvbjYQLZDzlgWaXu0VkmyYLUC0rHzkt8uUodCM7RIp/5o3yJ67y85h+vzpg7QwW
-	CxJtc6ubM4zs/ipN1Y+DX2uN7Zg6l1dIttfQM13IGlVU6Sl6EskwqqqoPBPDqC/5wQrzy5PTWlF0q
-	LogsmiaYO+FATLPXZ2bbYc/asQHc5cRQP79PQB0es9kDhkrAWZC/f3nsd4B49bO4yVIdTgQSRWAR0
-	A5YHqyOosp2BQQmpahoxT2JgkOFV8aVZ9qmPKKGQ+wJauWTgN9K/MFe79vAM27v+dCGzA1Y8QEl4Q
-	AePlXYSg==;
-Received: from [188.250.79.109] (helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1xM020-00CisY-IC; Wed, 28 Oct 2026 10:33:16 +0100
-From: Luis Henriques <luis@igalia.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Miklos Szeredi <miklos@szeredi.hu>,  Amir Goldstein
- <amir73il@gmail.com>,  Shuah Khan <shuah@kernel.org>,
-  fuse-devel@lists.linux.dev,  linux-fsdevel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,  kernel
- test robot <lkp@intel.com>
-Subject: Re: [PATCH] selftests/fuse: add the missing symlink caching test
-In-Reply-To: <20261026194008.274349-1-sashal@kernel.org>
-References: <20261026194008.274349-1-sashal@kernel.org>
-Date: Wed, 28 Oct 2026 09:34:44 +0000
-Message-ID: <87zevyi2x7.fsf@igalia.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a/rb5U1K
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18371F01825;
+	Wed, 28 Oct 2026 09:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793180958;
+	bh=j99P5QWiCp9mK5Hf0fpTUVyqcAtcoB4QyeGqeo1OT2s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=a/rb5U1K0Gj9rgjjeNICrvcAIx0kQwZx3+rm6ZZYnaEKZaXecdZyKs1e4wZMaPTu8
+	 kOyQlOjw53t+7mEwMLLtfU1AlSR6yN0WdsKoO9r0X5U3l8Ol6z/Gl8gJE6rHxaSGc4
+	 IPU0auxW+r8/9eUEM6X0OeMwkvjfzdoPhcezmbEfKT56H43y/MLYJBq2lhDAcQ3ilA
+	 uhC6NbxVzMhVPsFoY2a92GIuPsayNwHxTd9YAqhxVL6ZEd0tyciCqjEvenCRFpdUqI
+	 HUwCq7TjVx920vPdi7+q1VvFF+pV3u57U/9WO5STKbe+D/NfQHN2FAJZ9F2UB3aP4R
+	 +vL89dEkpf+ag==
+Date: Wed, 28 Oct 2026 09:49:10 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Chris Down <chris@chrisdown.name>
+Cc: Jeff Xu <jeffxu@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Kees Cook <kees@kernel.org>, Jeff Xu <jeffxu@chromium.org>, 
+	Andrey Vagin <avagin@gmail.com>, Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 1/3] mseal sysmap: Add mseal_system_mappings= boot
+ parameter
+Message-ID: <auG8bgpy-m5JUYWp@gremlin>
+References: <cover.1793094611.git.chris@chrisdown.name>
+ <5bd3c89d733ad22224f296dfa8900769de937de0.1793094611.git.chris@chrisdown.name>
+ <auCxjbvY3qPv1sV6@gremlin>
+ <auDTMb6WMFUpxeZy@chrisdown.name>
+ <auDTptDQsB4xBcz7@gremlin>
+ <18e2972cb8520c2e.3137322e32382e342e3434.279dd1.0000sendgmr@google.com>
+ <auGNkhSHpBRd2U_5@chrisdown.name>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,230 +71,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <auGNkhSHpBRd2U_5@chrisdown.name>
 
-On Mon, Oct 26 2026, Sasha Levin wrote:
-
-> Commit 3e14f079d7a0 ("selftests/fuse: add fuse symlink caching test")
-> registered fuse_symlink_cache_test in the fuse selftest Makefile and
-> .gitignore, but the test source was not part of the applied commit, so
-> building the fuse selftests fails:
+On Wed, Oct 28, 2026 at 01:52:18PM +0800, Chris Down wrote:
+> Hi Jeff,
 >
->   make[1]: *** No rule to make target 'fuse_symlink_cache_test.c', needed=
- by '.../fuse_symlink_cache_test'.
+> Thanks for the review!
 >
-> Add fuse_symlink_cache_test.c as posted in Luis Henriques's v5
-> submission. The test serves a file and a symlink to it from a libfuse
-> low-level filesystem, resolves the symlink 100 times, and counts the
-> readlink requests that reach the server: one when FUSE_CAP_CACHE_SYMLINKS
-> is set during FUSE_INIT, and all 100 when it is not.
+> Jeff Xu writes:
+> > Could we please keep the test coverage for the unsealed [vdso] case and
+> > avoid unconditionally skipping whenever [vdso] is unsealed?
+> >
+> > There are two regressions I'd love for us to still be able to catch:
+> >
+> > 1. Kernel or config regressions when sealing is expected to be on:
 >
-> Fixes: 3e14f079d7a0 ("selftests/fuse: add fuse symlink caching test")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/r/202610170822.oEJ1Autq-lkp@intel.com/
-> Link: https://lore.kernel.org/r/20261001164916.15311-8-luis@igalia.com
-> Originally-by: Luis Henriques <luis@igalia.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
-> As with e64a46aefc01 ("selftests/fuse: add the missing FUSE_HAS_SYNCFS
-> privilege test"), the new file in the posted patch is not in the applied
-> commit; the other files did land.
-
-Oh, wow!  I wonder how that happen.  Anyway, thanks for noticing that and
-for fixing it, Sasha.  If it makes any sense (I wrote the test! :-) ) feel
-free to add my
-
-Reviewed-by: Luis Henriques <luis@igalia.com>
-
-Cheers,
---=20
-Lu=C3=ADs
-
-
->  .../fuse/fuse_symlink_cache_test.c            | 162 ++++++++++++++++++
->  1 file changed, 162 insertions(+)
->  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_symlink=
-_cache_test.c
+> Yeah agreed. With the cleanup it matters even more I think because when
+> sealing is set in one place the most likely regression is probably one that
+> unseals everything at once.
 >
-> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_=
-test.c b/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c
-> new file mode 100644
-> index 0000000000000..7b53734995736
-> --- /dev/null
-> +++ b/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c
-> @@ -0,0 +1,162 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Simple filesystem to test FUSE symlink cache
-> + *
-> + * This is a simple FUSE filesystem that contains two objects: a file na=
-med
-> + * 'file' and a symlink to that file named 'link'.  If symlink caching is
-> + * disabled (i.e. FUSE_CAP_CACHE_SYMLINKS is reset during FUSE_INIT), wh=
-enever
-> + * the ->readlink() is executed to resolve 'link' a counter will be incr=
-emented.
-> + *
-> + * If symlink caching is enabled (i.e. FUSE_CAP_CACHE_SYMLINKS is set du=
-ring
-> + * FUSE_INIT), resolving a symlink will only call into user-space the fi=
-rst
-> + * time.
-> + */
-> +
-> +#define FUSE_USE_VERSION 31
-> +
-> +#include <stdio.h>
-> +#include <fuse_lowlevel.h>
-> +
-> +#include "kselftest_harness.h"
-> +
-> +#include "fuse_common.h"
-> +
-> +#define FILENAME "file"
-> +#define FILE_INO 42
-> +
-> +#define LINKNAME "link"
-> +#define LINK_INO 43
-> +
-> +#define TIMEOUT	86400.0f
-> +
-> +struct test_state {
-> +	pthread_mutex_t lock;
-> +	int readlink_counter;
-> +	bool cache;
-> +} test_state =3D {
-> +	.lock =3D PTHREAD_MUTEX_INITIALIZER,
-> +};
-> +
-> +static void fs_init(void *userdata, struct fuse_conn_info *conn)
-> +{
-> +	pthread_mutex_lock(&test_state.lock);
-> +	if (test_state.cache)
-> +		fuse_set_feature_flag(conn, FUSE_CAP_CACHE_SYMLINKS);
-> +	else
-> +		fuse_unset_feature_flag(conn, FUSE_CAP_CACHE_SYMLINKS);
-> +	pthread_mutex_unlock(&test_state.lock);
-> +}
-> +
-> +static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *nam=
-e)
-> +{
-> +	struct fuse_entry_param e =3D {};
-> +
-> +	if (parent !=3D FUSE_ROOT_ID ||
-> +	    (strcmp(name, FILENAME) !=3D 0 && strcmp(name, LINKNAME) !=3D 0)) {
-> +		fuse_reply_err(req, ENOENT);
-> +		return;
-> +	}
-> +
-> +	if (!strcmp(name, FILENAME)) {
-> +		e.ino =3D FILE_INO;
-> +		e.attr.st_mode =3D S_IFREG | 0444;
-> +		e.attr.st_nlink =3D 2;
-> +	} else if (!strcmp(name, LINKNAME)) {
-> +		e.ino =3D LINK_INO;
-> +		e.attr.st_mode =3D S_IFLNK | 0444;
-> +		e.attr.st_nlink =3D 1;
-> +		e.attr.st_size =3D strlen(FILENAME);
-> +	}
-> +	e.attr_timeout =3D TIMEOUT;
-> +	e.entry_timeout =3D TIMEOUT;
-> +
-> +	fuse_reply_entry(req, &e);
-> +}
-> +
-> +static void fs_readlink(fuse_req_t req, fuse_ino_t ino)
-> +{
-> +	char buf[PATH_MAX];
-> +	size_t sz =3D strlen(FILENAME);
-> +
-> +	if (ino !=3D LINK_INO) {
-> +		fuse_reply_err(req, ENOENT);
-> +		return;
-> +	}
-> +
-> +	memcpy(buf, FILENAME, sz);
-> +	buf[sz] =3D '\0';
-> +	pthread_mutex_lock(&test_state.lock);
-> +	test_state.readlink_counter++;
-> +	pthread_mutex_unlock(&test_state.lock);
-> +
-> +	fuse_reply_readlink(req, buf);
-> +}
-> +
-> +static const struct fuse_lowlevel_ops fs_ops =3D {
-> +	.init           =3D fs_init,
-> +	.lookup		=3D fs_lookup,
-> +	.readlink	=3D fs_readlink,
-> +};
-> +
-> +FIXTURE(symlink_cache)
-> +{
-> +	struct fuse_common_ctx ctx;
-> +};
-> +FIXTURE_VARIANT(symlink_cache)
-> +{
-> +	const bool cache;
-> +};
-> +FIXTURE_VARIANT_ADD(symlink_cache, symlinks_nocache)
-> +{
-> +	/* Variant with symlink cache disabled */
-> +	.cache =3D false,
-> +};
-> +FIXTURE_VARIANT_ADD(symlink_cache, symlinks_cache)
-> +{
-> +	/* Variant with symlink cache enabled */
-> +	.cache =3D true,
-> +};
-> +
-> +FIXTURE_SETUP(symlink_cache)
-> +{
-> +	char err[MAX_ERR_MSG];
-> +
-> +	pthread_mutex_lock(&test_state.lock);
-> +	test_state.readlink_counter =3D 0;
-> +	test_state.cache =3D variant->cache;
-> +	pthread_mutex_unlock(&test_state.lock);
-> +
-> +	if (fs_setup(&fs_ops, &self->ctx, err))
-> +		SKIP(return, err);
-> +}
-> +
-> +FIXTURE_TEARDOWN(symlink_cache)
-> +{
-> +	fs_teardown(&self->ctx);
-> +}
-> +
-> +TEST_F(symlink_cache, test_symlink_cache)
-> +{
-> +	char pathname[PATH_MAX];
-> +	char buf[PATH_MAX];
-> +	ssize_t sz;
-> +	int counter;
-> +	int i;
-> +
-> +	sprintf(pathname, "%s/%s", self->ctx.mountpoint, LINKNAME);
-> +	for (i =3D 0; i < 100; i++) {
-> +		sz =3D readlink(pathname, buf, PATH_MAX);
-> +		ASSERT_NE(sz, -1);
-> +	}
-> +	pthread_mutex_lock(&test_state.lock);
-> +	counter =3D test_state.readlink_counter;
-> +	pthread_mutex_unlock(&test_state.lock);
-> +
-> +	if (variant->cache) {
-> +		ASSERT_EQ(counter, 1);
-> +	} else {
-> +		ASSERT_EQ(counter, 100);
-> +	}
-> +}
-> +
-> +TEST_HARNESS_MAIN
+> > 2. Regressions in the new `no_mseal_sys_mappings` boot parameter itself:
 >
-> base-commit: 9b1da7b4a4e197072e630c3b85d4100a399752ff
-> --=20
-> 2.53.0
+> In v2 I can check /proc/cmdline for no_mseal_sys_mappings to do that.
 >
+> Lorenzo, I think that also may inform your question about whether checking
+> for the disabled case is redundant, right?
+>
+> >   When booted with `no_mseal_sys_mappings` (or when unsealed), running
+> >   the assertions in Patch 3 (verifying system mappings have no `sl` flag
+> >   and that `munmap()` / `mremap()` -- and ideally `mprotect(PROT_READ |
+> >   PROT_WRITE)` -- on [vdso] succeed) directly verifies that the boot
+> >   parameter works and doesn't regress.
+>
+> Sounds good.
+>
+> >  or keep strict failure as an option (e.g. `./sysmap_is_sealed` fails if
+> >  unsealed without the boot param, while `run_vmtests.sh` passes a flag
+> >  like `--allow-disabled` when `CONFIG_MSEAL_SYSTEM_MAPPINGS` may not be
+> >  enabled), so CI environments that expect sealing still catch a broken
+> >  seal.
+>
+> I like this and I think we can do it without adding some of the complexity
+> that Lorenzo was not so happy about:
+>
+> - Have check_sealed skip as usual when [vdso] isn't sealed and param is not set
+> - A new test, say expect_sealed, fails in the same case
 
+I'm confused about this one - we want to skip altogether if the feature isn't
+enabled, right?
+
+> - run_vmtests runs with -T expect_sealed when CONFIG_MSEAL_SYSTEM_MAPPINGS=y
+
+run_vmtests I will have to best-guess it, e.g. if /proc/config.gz is present
+check it, I suppose?
+
+>
+> That should be pretty minimal. Lorenzo, Jeff, how does that sound?
+
+Sounds reasonable!
+
+I am a bit leery though of requiring a CI to enable the option when it is known
+to break things, however, as CI's might rely on some of the software this
+impacts.
+
+--
+Cheers, Lorenzo
