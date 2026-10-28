@@ -1,112 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.226
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793208941;
-	b=2sPIcNX7JdnP9BiYl8hHDTT4PMSJLfd6uCb33aweElMK0M2YnbYi9tacl+gZ9S1zo264
-	 Ujbd/566Vwl2TB0GRBdnCcbHXefydzx/7ysE7i7dzNx2ymVUt8xpmB5D7AaESppgIUOEp
-	 G/3lpxeqqzlyFFC75i0eDeSfXqtpx7j2wNA/AH0xDickZhyg6PJF/zShmp8MOtqdi5ueH
-	 LqGot+eG83dg5dT2gpaZj6DRdb+zKwJD0L5T+0mpTrKMlRIzuI7rlcSH/j3en6mzWyeUc
-	 Bf/zWsWcv/ubFVIKSn7a/+EKAGB7bdLp7XPdkyWOiJh1FXBD1EEEw1PMYE8cP+sKhXg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793208941;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793211145;
+	b=tlMsk+o2blfRUE/DemT1840CclErIrYCRB2ekePCGNshexZlNtDwHuhxluEsmVVRlAC6
+	 D7ryPkVEQS02ySIUvkZ9GZV1s6K0f9vohQLx3xfWNhpcQw+rwlpwLoaMtRAUSHEnpJ7ib
+	 KtNYaMgjrvAbJ64HXoVKaImQFITK2f27KAX2eKNMKoEnnyUyeGj/QAvS9LQQBs+6uvk6H
+	 KxJp7c3p+U69Ln1z2wpQrTbr/e9B2F+vdIVQZ+WNQPzc4xg6EicAXr+J07sXKS9RBf3q+
+	 6jxHjdjlV8tc+0+eGafxNaP5OunZZgAWEcuV/30PrPvLhwvy5GwJRAIcYNsKePCUexw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793211145;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 X-Relaying-Domain:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=thT5Xtaus5EICeFAYB7pJ3vHm1y5bAGqDGmf0Zh/xxY=;
-	b=xM91ddB16CTAPmPH+DaiHpoTIRlj19EmADxEKhwyx3DWnZe8jn/TSzyR3E4Rtg6Er+h+
-	 1HcxzEoQEpwBu2ONy/V9nLDbEysc/O+wtuV/g36r6AuLuJSTd+3qJ8kmvF/ScvBMOpdFg
-	 uOEH60JH8yclC2ccKqaretRWrPQGL2D0iHDsIDXJboWod8CKpNxNvIsQVLATzB9ZzxZSo
-	 Z3M2k0qVzk3pZlaEmYvV9t6nQ57H5yWpFRtx8qD8IZ5q3UQCpcebK4sbRaLohWUYJc3KE
-	 46C9Kcwc6qn9P5z17v0tiutqRXMaGCKdcdXrB1napNheVV4imgJI/t8mzmA/1w0NxgA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=purestorage.com;
-	spf=pass smtp.mailfrom=purestorage.com;
-	dkim=pass header.d=purestorage.com header.i=@purestorage.com header.a=rsa-sha256 header.s=google2022 header.b=WAOIWW6l;
-	arc=none smtp.remote-ip=209.85.128.226
-Received: from mail-yw1-f226.google.com (mail-yw1-f226.google.com [209.85.128.226])
+	 Received:From:In-Reply-To:References:MIME-Version:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=p/wxxGxoBJyhbGLsecA52KNGsy8WsqvTWX50Wr5bw0M=;
+	b=BVqOdLjg6dJFwis4AEhvIZxYios11mWPf5gb7ie6SS9tBUIuq1HhUEgpa5E3almv/mI5
+	 WB0DhQU7NKmVDKTdmAnTJ0x+xHU7qlIWgOu17pHtSLt3q6bHkEqjLfaBhSPpTaKigZhTg
+	 /JIO0eiF/BDCA2Dv+S25ZCpHVmuDeyt1JwlmBDM8LR4Hs5OE/2i+jI7qlYaseWRDPiaaV
+	 tpr+F/5NTRMC4tIh1FyPPbXyU6UHCsbf+n+lldWF3X/Wll4VQYuO+yDRomxXgHTJ69krs
+	 0wnY3pV6DEQBX+7K+BIt55mBNQer8Qj/zm3x/R9YVDuwl/03bbmTYRRnv/Jdw46aW9g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ALSf6WKa;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3366E60A2609
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 17:35:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3366E60A2609
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED56606A979
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 18:12:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2ED56606A979
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=purestorage.com header.i=@purestorage.com header.a=rsa-sha256 header.s=google2022 header.b=WAOIWW6l
-Received: by mail-yw1-f226.google.com with SMTP id 00721157ae682-8726acc5eadso12062127b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 10:35:41 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ALSf6WKa
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-677d9c68d09so171082d50.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 11:12:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793211144; cv=none;
+        d=google.com; s=arc-20260327;
+        b=T6CgkAPtIZ4uWu6O1UgDh5R98WvdohtgIg7upVgm0jx5vDC5dJ2G7IUC4APOZuJLYx
+         3wzneWha+DmWKeevasFtWADx8X7ni3yJmOd07tWYa4o8WBtQXS41b9fnlDM0JKY3lMPy
+         b/8fUvwaCTmO2gGTG2qCkaZPNy1C0EUMCMIMmTzo5KIJlZgs/qo22Mto3hmFC0FAGKu7
+         aWC4uNHTaGJVjKF3MEqOJg43X5zycOBVuk3IE/0rFsnq6RPFB7Gc7AHqfGkPqP0cBFpr
+         9wW/3/ehFgLE0AhRUUmH3Pf+GBRwBKkodsxfKM4DwQDE4sNjQAWygc3CJpID46s1JWab
+         3KLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=p/wxxGxoBJyhbGLsecA52KNGsy8WsqvTWX50Wr5bw0M=;
+        fh=6uSE+tI7n2F72f/H3F8wqNmIUyA0I+R05IvyBiCfWXM=;
+        b=TcX1iMwqVOa4jP5PiIL+IJWjbLIyNAkhER96JzJ+jHg147cBBPlM57ngfuieYQbFRM
+         NoWw4dgPMt/RAELZQyyvlA065HD6m3ZCNY18viL1mD5aE1Y9umMk0eAX/fcBQquxFa5q
+         QHDmUKArdhpshw1+8PLvJqBNQ5TK/C5H21t/oWzSMLtHlUL+5JEuCWoojeTV6HQWexn7
+         nX69Tlu7EWxXB/nVnStkmMZdeTyZQNGavVxa9DxNHa7ERjtqOCmpSTdTKYI9i4GGSTfs
+         5r6BThlAM3PmaDnxxmxf9iL7sa7gwQT51XV6K6DUYQcLg0ZqwrmQtSTq2/KBxm6jKOxT
+         xVLg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1793208940; x=1793813740; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=thT5Xtaus5EICeFAYB7pJ3vHm1y5bAGqDGmf0Zh/xxY=;
-        b=WAOIWW6lfDwCIoiqc6s/VoqLDHYzsaNX+n2lESUYltp+53j+QJWOB3gxwxt9OIqEBv
-         Va2R0GH1X9wBbhXeLs7wCc6hZnPqgNhDk+OnDz+ie1IrdLGQI66Tw839jFXjWhXlAok2
-         5unTU1EC/VLeBVEJZVTs5p3bzRPKzSZepevG2Pn2RssIyXtMDpEiSX0Z8UFpiVlT+6I8
-         UqRB9+LIBw5bBGsfgN6zNsGBbNvp5f6lIt6pizwa9Dry7pxHejhlIVZ04pOPBZsOp9Cg
-         hxegkGCbGBSyUFYezKW8l0bfPcSvrpmM8ZfqRUSds5a7RtOqr2mZBdIE7NpbssqCyF7W
-         ZaWQ==
+        d=gmail.com; s=20260707; t=1793211144; x=1793815944; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=p/wxxGxoBJyhbGLsecA52KNGsy8WsqvTWX50Wr5bw0M=;
+        b=ALSf6WKanFx5JvmwlsLgV8fFdqXM6xTDgPgW9yrrFjM6/vBGqYK5MP8vdjEFd6Sd98
+         NBVXpxDxP5phBJEQbTM6ZF819Et3/utRfYgAYvVe1/7CPYGeKwjbZCJN2+eWDd+DPgOJ
+         /JYgpa/2NylgB+nTergZPvZ1EvWvqMF606I1SYcSYUg7ByrEMXm1mMsFZ652rdG5agyO
+         B7s01u4kNZ/56+zsY+mpL/w7IdzRejnSTJl0usSaFROTaNzSYew6f1rFzZzNTYa/jteU
+         Duz/k0QuEMkQ11mraTPIuGOS/qrwrzXXpBwPJitSAC/lEqMeD/uihh/wLI3vDBA6yzMf
+         CDng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793208940; x=1793813740;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=thT5Xtaus5EICeFAYB7pJ3vHm1y5bAGqDGmf0Zh/xxY=;
-        b=Mkmu9fyxNoMsp2Eh0nHTEm5h8QGjfK5N+6o6ddYnSaU3J9QbnE7kJSrSTuUak4ZEjR
-         rsxa8p7nRWZgWTFwkgY3ZmeTICQsEbR6toN0x1O4N3+ulLGbSK7OhSbEJgp4kquTZriQ
-         tqwTEf3ReU1AZJocgYdhsU5jdyYWQe0wb/TW5gbMSh8R+QWUgpiC3IHLZRBR0LVsFrO/
-         CZqS86zZIOZCzYGhJH0mKANfwBJRDman2E1TPCL6QytG33HewEToyBtk/7fOOGL4vzLR
-         txjvEElwxZMSbUysu699TACuNy2CLVYb2HrMz3CV673cuUoy5anzOizUyRBHP8FCgMBU
-         PtMw==
-X-Forwarded-Encrypted: i=1; AKwUvBzqHrfB7FtvgZ+5oYFRI1TigRGvlDIWDWMWXbL5PP38X9hCxuzFPOaymsaGVEU0IsKmnGkmYXK8rknEcj1GsIw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLdT1lte+5yqmBc+wGwyFATVRNKEKR0qMECTMd8mdB8jKXFiEST
-	jqMEeJvbWF0/zm4yjX2L9CspBvuKAouZuisTuhy+VcylSostmO4/M77MaXc8V3/IezCL54vVhcE
-	t6kro3bvP5kNN/aVizbJEbNVRfmhIUSxfJ9gT10MxSrxt3zLJm+tI
-X-Gm-Gg: AYBFou3OVq3X2saERVn34iWBafkcz1C4PUJK5ooGn3AsnNMDThuxQuC35s2QdhQuUH6
-	vhExmo9AmCt+3xmAbis2KiQ+/pEuv+luacaNzxgwLwImukEiblijfY2RmtxZsh4HWU73YsGSBVP
-	7MaE7y+UWMmk1csxJ0k2z/L/6OKfs0v8gzoup/ePs3A2cDj1xtOibaG5c7X1pjV2DBamc/s0E86
-	YnfCi8R5/8uRMSxVMGGbNEt6EBQdAdK+aFe8nBDqo4WhUwLGkUYf628Sx1Q/WGzUQmvt3sMZfd9
-	MKEcMFacP+ajPZNL4mXTozsECVCdOlGHWrbXAPbhso89aVcg+Wx9ZLOjMO72RT29smjbB4lekgy
-	i69c8BDjgtZq2A/swxLfh
-X-Received: by 2002:a05:690c:9990:b0:8a0:76e8:c738 with SMTP id 00721157ae682-8b1b55b2713mr22626297b3.0.1793208940193;
-        Wed, 28 Oct 2026 10:35:40 -0700 (PDT)
-Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
-        by smtp-relay.gmail.com with ESMTPS id 00721157ae682-8b19e5b7755sm756027b3.14.2026.10.28.10.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2026 10:35:40 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-rjethwani.dev.purestorage.com (dev-rjethwani.dev.purestorage.com [10.17.2.234])
-	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 498D54030B;
-	Wed, 28 Oct 2026 11:35:39 -0600 (MDT)
-Received: by dev-rjethwani.dev.purestorage.com (Postfix, from userid 1557719937)
-	id 46F51DCDF71; Wed, 28 Oct 2026 11:35:39 -0600 (MDT)
-From: Rishikesh Jethwani <rjethwani@purestorage.com>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Hannes Reinecke <hare@suse.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Rishikesh Jethwani <rjethwani@purestorage.com>
-Subject: [PATCH net v3 2/2] selftests: tls: test that TLS and KCM are mutually exclusive
-Date: Wed, 28 Oct 2026 11:35:33 -0600
-Message-ID: <20261028173533.2658096-3-rjethwani@purestorage.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20261028173533.2658096-1-rjethwani@purestorage.com>
-References: <20261028173533.2658096-1-rjethwani@purestorage.com>
+        d=1e100.net; s=20260707; t=1793211144; x=1793815944;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=p/wxxGxoBJyhbGLsecA52KNGsy8WsqvTWX50Wr5bw0M=;
+        b=Z8ofOzV+c/Pa2gNI0qPgEYCXrTed79csLXXWSLFpsi57QsrtEmmnJOHB3tEUlqrwSP
+         jOsdRrl09utR+8xU7DcYtwKymT9oV7R+cev45JEmaF377I6K4/E4q415OTvcgOTyHca0
+         tlA5wHxFUW5fEmi+kN3QJxdO5fPaZA4EYGpYjAfcHrj1B04Y6snricDhc2RV0PAiAiLP
+         AGHQ+efUGBXLuDBBOZPnG9Tr6NAwdzkXflhqUJMqxzA1TGKpLl79nKZZymV1LX5ATtqV
+         q3rCpakzBwx3r87D3JHWDdo4PjCVoMidu44cnu8jgUbe73K5uZtdW3mXqxieQjtZPd5l
+         EwLw==
+X-Forwarded-Encrypted: i=1; AKwUvBwiyOVUnoAIgqFZ02hTeo3feDK3F7ea4NRdd8+gSzsItgih1BaYllYpxdVwpky3OfhJZgviyHJwiHmdh/vqdns=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIVcQRqiugppr3FL5UiGvUZ1AmXS5qteKNExutN26Kw1lFOFccU
+	70fIXqWmStEJNL+jvHw3RshpaBca/CjACFmD0IPUr6151dZITYXxz9xcaFByngjWMRot2DERM/h
+	T/ZkM/h6SFlkQt5lJ16hMgYlHUpWtmfw=
+X-Gm-Gg: AYBFou3OlT6Z/IFJUyutL5b+NS2auBV6pfhly4Yhw6/maQwTQTb2KDY5Oo8Al1xlFBh
+	4djJTPegKDWGNsHuTiYBxVaRdZRWEWk3JgBpr3/gS/8L7MfeGk6f0xxEr9FCZ4YAGH/A51HQgBU
+	YyUchT1KQQX8ZwMzDaX2/YooNcrcN5WIgk3TcAIB9ke8XDm4yGet/rfMjwrpDblCPzo/jBu1tBf
+	uRvCLL/sHa8kwhDIhPD9go559K5schaRAwjLLXGJhwERXi1ziiRyTGY/5bGdnR8yKiSLJJT3Ss8
+	mGGDnN4+Q6ZzhBrcdQr9AlNKmeVRDFfNIOB2yTNUzgwoLOYorquCyUP5ksrJNEV2SYGnR0PuNE5
+	hiAgWriFhgLzdBS4EN6jVIHWYPGoizkjeQmI=
+X-Received: by 2002:a05:690e:a4e:b0:675:6f06:5642 with SMTP id
+ 956f58d0204a3-67a7b9945d2mr4650525d50.1.1793211144098; Wed, 28 Oct 2026
+ 11:12:24 -0700 (PDT)
+Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
+ Wed, 28 Oct 2026 11:12:22 -0700
+Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
+ Wed, 28 Oct 2026 11:12:22 -0700
+From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+In-Reply-To: <20261023-bug-word-at-a-time-zeropad-kasan-v2-1-be0ecfbae847@gmail.com>
+References: <20261023-bug-word-at-a-time-zeropad-kasan-v2-0-be0ecfbae847@gmail.com>
+ <20261023-bug-word-at-a-time-zeropad-kasan-v2-1-be0ecfbae847@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,206 +111,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Wed, 28 Oct 2026 11:12:22 -0700
+X-Gm-Features: AclHuK-o5YV67AfwlA9WNsjqOxV_ScugEYWYzUg986KltKOOqPQjM_oQFfVaIog
+Message-ID: <CAPAsAGyEUL1fj2-1=NGBDDO-z47cOHmcFDFexY9T_1_1LCMQJQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] word-at-a-time: check the first byte in load_unaligned_zeropad()
+To: Qiliang Yuan <odys.yuan@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, 
+	Shrikanth Hegde <sshegde@linux.ibm.com>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Marco Elver <elver@google.com>, 
+	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org, Kees Cook <kees@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-mm@kvack.org, 
+	Peter Collingbourne <peter@pcc.me.uk>
+Content-Type: text/plain; charset="UTF-8"
 
-Cover both orders, with TLS RX and TLS TX on the attach side, and check
-that a socket detached from KCM with SIOCKCMUNATTACH can still be
-upgraded to TLS.
+Qiliang Yuan <odys.yuan@gmail.com> writes:
 
-KCM needs a BPF parser program, so the tests are skipped without
-AF_KCM or when the program can't be loaded. Add CONFIG_AF_KCM to the
-net selftest config.
+> load_unaligned_zeropad() reads a word that may run into an unmapped
+> page and recovers through an exception fixup. It does the word loads of
+> sized_strscpy() and of the name compare in dentry_string_cmp(), path
+> components in hash_name() and hashlen_string(), and the trailing bytes
+> in x86's csum_partial().
+>
+> It is inline assembly on every architecture that implements it, so
+> KASAN and KCSAN never see these loads, while read_word_at_a_time() at
+> least checks the first byte of each word. A use-after-free or
+> out-of-bounds read of a name handed to path lookup goes unreported, and
+> so does strscpy() reading from a bad source, which the kasan_strings
+> KUnit case expects to be reported. On x86_64 with generic KASAN:
+>
+>   KASAN and string KUnit suites      failures
+>                                   before    after
+>   CONFIG_FORTIFY_SOURCE=n              1        0
+>   CONFIG_FORTIFY_SOURCE=y              1        0
+>
+> Check the first byte with instrument_read() at the start of
+> load_unaligned_zeropad() on every architecture, as read_word_at_a_time()
+> does. All callers only load a word whose first byte belongs to the
+> string or buffer they read, so the check does not flag their intended
+> reads past the end. Add a no-op instrument_read() for the powerpc
+> selftest that builds the header in user space.
+>
+> Suggested-by: Peter Collingbourne <peter@pcc.me.uk>
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+> Reviewed-by: Marco Elver <elver@google.com>
+> ---
 
-Signed-off-by: Rishikesh Jethwani <rjethwani@purestorage.com>
----
- tools/testing/selftests/net/config |   1 +
- tools/testing/selftests/net/tls.c  | 144 +++++++++++++++++++++++++++++
- 2 files changed, 145 insertions(+)
-
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index cb8cb4696df7..1619478fffc4 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -1,3 +1,4 @@
-+CONFIG_AF_KCM=m
- CONFIG_AMT=m
- CONFIG_BAREUDP=m
- CONFIG_BONDING=m
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 9d3cd4fff062..2e4128e0676a 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -7,19 +7,24 @@
- #include <error.h>
- #include <fcntl.h>
- #include <poll.h>
-+#include <stddef.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <unistd.h>
- 
-+#include <linux/bpf.h>
-+#include <linux/kcm.h>
- #include <linux/tls.h>
- #include <linux/tcp.h>
- #include <linux/socket.h>
- 
- #include <sys/epoll.h>
-+#include <sys/ioctl.h>
- #include <sys/types.h>
- #include <sys/sendfile.h>
- #include <sys/socket.h>
- #include <sys/stat.h>
-+#include <sys/syscall.h>
- 
- #include "kselftest_harness.h"
- 
-@@ -3492,6 +3497,145 @@ TEST(data_steal) {
- 	close(cfd);
- }
- 
-+#ifndef AF_KCM
-+#define AF_KCM 41
-+#endif
-+
-+/* KCM and TLS are mutually exclusive, in either order. */
-+FIXTURE(kcm)
-+{
-+	int fd, cfd, kcm, bpf;
-+};
-+
-+FIXTURE_SETUP(kcm)
-+{
-+	/* KCM parser: each message is everything queued (skb->len) */
-+	struct bpf_insn insns[] = {
-+		{ .code = BPF_LDX | BPF_MEM | BPF_W, .dst_reg = BPF_REG_0,
-+		  .src_reg = BPF_REG_1,
-+		  .off = offsetof(struct __sk_buff, len) },
-+		{ .code = BPF_JMP | BPF_EXIT },
-+	};
-+	union bpf_attr attr = {};
-+	struct sockaddr_in addr;
-+	socklen_t len;
-+	int sfd, ret;
-+
-+	self->fd = -1;
-+	self->cfd = -1;
-+	self->bpf = -1;
-+
-+	self->kcm = socket(AF_KCM, SOCK_DGRAM, KCMPROTO_CONNECTED);
-+	if (self->kcm < 0)
-+		SKIP(return, "no KCM support");
-+
-+	attr.prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
-+	attr.insns = (unsigned long)insns;
-+	attr.insn_cnt = ARRAY_SIZE(insns);
-+	attr.license = (unsigned long)"GPL";
-+	self->bpf = syscall(__NR_bpf, BPF_PROG_LOAD, &attr, sizeof(attr));
-+	if (self->bpf < 0)
-+		SKIP(return, "can't load KCM parser BPF program");
-+
-+	len = sizeof(addr);
-+	addr.sin_family = AF_INET;
-+	addr.sin_addr.s_addr = htonl(INADDR_ANY);
-+	addr.sin_port = 0;
-+
-+	self->fd = socket(AF_INET, SOCK_STREAM, 0);
-+	sfd = socket(AF_INET, SOCK_STREAM, 0);
-+
-+	ret = bind(sfd, &addr, sizeof(addr));
-+	ASSERT_EQ(ret, 0);
-+	ret = listen(sfd, 10);
-+	ASSERT_EQ(ret, 0);
-+	ret = getsockname(sfd, &addr, &len);
-+	ASSERT_EQ(ret, 0);
-+	ret = connect(self->fd, &addr, sizeof(addr));
-+	ASSERT_EQ(ret, 0);
-+	self->cfd = accept(sfd, &addr, &len);
-+	ASSERT_GE(self->cfd, 0);
-+
-+	close(sfd);
-+}
-+
-+FIXTURE_TEARDOWN(kcm)
-+{
-+	close(self->kcm);
-+	close(self->bpf);
-+	close(self->fd);
-+	close(self->cfd);
-+}
-+
-+static int kcm_attach(struct _test_data_kcm *self)
-+{
-+	struct kcm_attach attach = { .fd = self->cfd, .bpf_fd = self->bpf };
-+
-+	return ioctl(self->kcm, SIOCKCMATTACH, &attach);
-+}
-+
-+static int kcm_unattach(struct _test_data_kcm *self)
-+{
-+	struct kcm_unattach unattach = { .fd = self->cfd };
-+
-+	return ioctl(self->kcm, SIOCKCMUNATTACH, &unattach);
-+}
-+
-+static void kcm_tls_then_attach(struct __test_metadata *_metadata,
-+				struct _test_data_kcm *self, int optname)
-+{
-+	struct tls_crypto_info_keys tls;
-+	int ret;
-+
-+	ret = setsockopt(self->cfd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
-+	if (ret && errno == ENOENT)
-+		SKIP(return, "no TLS support");
-+	ASSERT_EQ(ret, 0);
-+
-+	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_128, &tls, 0);
-+	ret = setsockopt(self->cfd, SOL_TLS, optname, &tls, tls.len);
-+	ASSERT_EQ(ret, 0);
-+
-+	EXPECT_EQ(kcm_attach(self), -1);
-+	EXPECT_EQ(errno, EOPNOTSUPP);
-+}
-+
-+TEST_F(kcm, tls_rx_then_attach)
-+{
-+	kcm_tls_then_attach(_metadata, self, TLS_RX);
-+}
-+
-+TEST_F(kcm, tls_tx_then_attach)
-+{
-+	kcm_tls_then_attach(_metadata, self, TLS_TX);
-+}
-+
-+TEST_F(kcm, attach_then_tls)
-+{
-+	int ret;
-+
-+	ASSERT_EQ(kcm_attach(self), 0);
-+
-+	ret = setsockopt(self->cfd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
-+	if (ret && errno == ENOENT)
-+		SKIP(return, "no TLS support");
-+	EXPECT_EQ(ret, -1);
-+	EXPECT_EQ(errno, EINVAL);
-+}
-+
-+TEST_F(kcm, tls_after_unattach)
-+{
-+	int ret;
-+
-+	ASSERT_EQ(kcm_attach(self), 0);
-+	ASSERT_EQ(kcm_unattach(self), 0);
-+
-+	ret = setsockopt(self->cfd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
-+	if (ret && errno == ENOENT)
-+		SKIP(return, "no TLS support");
-+	EXPECT_EQ(ret, 0);
-+}
-+
- static void __attribute__((constructor)) fips_check(void) {
- 	int res;
- 	FILE *f;
--- 
-2.50.1
-
+Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
