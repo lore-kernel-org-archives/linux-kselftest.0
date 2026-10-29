@@ -1,78 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793307517;
-	b=ppT2D/ssTomCJbQD4ILEmH1y1oNZHrz6YJmrAut+pR+lwQr3FoaSgPaQcbl7Y3klAY0w
-	 2oYvOS+jy6dhS3mi/uoKqMAXx4XJb0WH5Ll5K6+kA32WoWrqba7M2McqX3m2o4UPeztm6
-	 tLE32QklcuBpiZdJAJo5zXwJUx7T+As2ZRiCo/cn0klMCm9vRqd3eXWcRJzWRcMskaTdN
-	 yHP4VeHSP0hIzPOAfrubME5lIjmLBbRolHA6DBsSU6ThY1qb+Pq8PXkMC+0dueKvukOAG
-	 UiZN28d32lx3rVCyD3cfydTWDrALrNiHCUCdJHlySHyl+fmVDbvntRP1GFCsLA30aIw==
+	t=1793308757;
+	b=gn6gLJ4MX90UAwCsiDtguSX0f4eQtwDytKSePEbv+5WIfjwwSuJ9GMABLcm/9911FmL1
+	 TFfJ3m5gcrmYwNYvDXnn5qkC5FllQXEqAAEaf+U8JX76lAQZsAhP6zOPFu5KUUMxwhV1X
+	 3O477AN1GBm5sYPt3stlDRl6MtjpCuPIadtad9CXFw7q7glcKqTr8a5tkAumPEaMozgkZ
+	 mtoqUm+l5V457n9lMOgLBaOoJaUqKFfNR5l0SVJ3h9eFTd9ZFDAbgLBedu3v90UhcVppD
+	 ZhF7syzCyDHnNVBKdNK/TpNfgKZyp+IjqH3BcUv7ZMKDSMEAHCmHy6FD9uiIIWkn9sQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793307517;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=dIfxXtJJhYl1IbYSRp7uBxydnNbuRGgEr9ZG2LuSx/c=;
-	b=EJuXEcWW+lHzeqgm5yf5WXVljRVw/eW+mVOKoFupkDCD8e/xpU4O7Ajqwi01EiGkxrc5
-	 zUzVVTBppWBRhbNlDl+6MBK4FQ+UUorghTiaV9Ztb7POsqmq2FeUnKupDGxKzjZZ9y0Kp
-	 l9sIJYG1dAJuaClrfsidx2nNoL23h94/R0Zatxjcup90kQqdzJSRTN2KQUMDcyM+VlHTv
-	 aR7qm3BWL+wy7dDtyRIkg+xkRbywaKugS1lvhWJRaDcm4aEp3oApqzwOe0rrpwhUw00Am
-	 FgFcfnS80Q03qTBisIAVrK1m8QiloU6wB3AvC73bNXQT9hRMOJPVqFKUfbTL1P/I89Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793308757;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=XrOdXK5MJaZc6vQPZfGn1tZxemfMdTWyC26Qnw17Sz4=;
+	b=vhcDe8beWB/QElDFwf8t6xX9amHNG6EddlmZgVs/7SMoRbAXSa84ILS0G2C5R83uTxtu
+	 esV4hWVZ0qERYvxBhfmVoq/tJnTz3k0N6cLh8X7EXCYU47g9ZB4a7Sd2PfjlgXJb65GYC
+	 HHRXz5L4DpHRT9L2y7nPJENu8ZWOaa2VGxprC5rxUcpH7lpi5eDT6x6ggm9S7e4EVxmDU
+	 eoK/Vb7ApTtiXVfYBQ7R2Ja6MbywBs1zesCqdl//m+ak4NpDGdizzzpDWyNQ8totbVZ6w
+	 3ExGYpw37nxd8TSux0bWBQfb8QHiwjeS/zRvUy1MsdPb0f9ECIGbOIphfVMdXGwxdmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Jg3ya3oC;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F178E606A329;
-	Thu, 29 Oct 2026 20:58:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F178E606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=T3a8whui;
+	arc=none smtp.remote-ip=209.85.216.72
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81829606A31D
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 21:19:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81829606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Jg3ya3oC
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CAE01682;
-	Thu, 29 Oct 2026 13:58:32 -0700 (PDT)
-Received: from gaia.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0EDC3F673;
-	Thu, 29 Oct 2026 13:58:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793307515; bh=eGINbpk+u5dvPrarZzSg3shFUdSyR5pE2iLotRLHSCk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Jg3ya3oCDlJtfPw43F1dYsM67Or+gCyrsue5QCdurwpKyWWtwvnp3RvmiZ9Ynid6f
-	 iXK50kRZhgRaNStldTmZwtCpo9XV7zcXJIQFkujqsnRBs7R0sgV/HmWc4ZXcZO8oWA
-	 kvVh9562O4fhFDKMW7e1cT/sxwAvKVPukiz1ppBs=
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Will Deacon <will@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	=?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mark Brown <broonie@kernel.org>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Zong Li <zong.li@sifive.com>,
-	Charlie Jenkins <thecharlesjenkins@gmail.com>,
-	Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-	Zishun Yi <vulab@iscas.ac.cn>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: Re: (subset) [PATCH v3 0/4] arm64, riscv: release shadow stacks on failed fork
-Date: Thu, 29 Oct 2026 20:57:00 +0000
-Message-ID: <179330742036.2531571.12603232226357262067.b4-ty@b4>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261028154315.1272705-1-ivanrwcm25@gmail.com>
-References: <20261028154315.1272705-1-ivanrwcm25@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=T3a8whui
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3ae73921fd1so34343a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 14:19:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793308756; x=1793913556; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XrOdXK5MJaZc6vQPZfGn1tZxemfMdTWyC26Qnw17Sz4=;
+        b=T3a8whuihdDx7Y3dZu/J4WSUiyuHu9KemApWFzyeBszF2peBcDP0C4EVAQxN66wsxM
+         f57YGcJyXwcqZYHYEcJyAuGT5gPucJgoGtBuFR4A5gDnw135fTcGfr5LQFFF5maUGKMY
+         BYNp9IACZYfJfyMBXwCwAGv0voFPGfKsdLgYwn9J60/sYbfzsBQcXdD5+yhpq72eAtj8
+         Bp+mdAMNzG18sJa2M60ABls83VarqTu9yyXxQReLWvZOWIZsHhQPLgus1oEi6RdQrgTL
+         xGHdFiyJ4gR40o86k1jf3G5nS0x9aR8LftC+LdEG9O7dUx0UXCrpcIaR+Xpr7wvEZYSf
+         BlMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793308756; x=1793913556;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=XrOdXK5MJaZc6vQPZfGn1tZxemfMdTWyC26Qnw17Sz4=;
+        b=Z0tQibzh/AyC3qEf441FW/ResuJIjuWJEleh3OigB6FsAW8XoqZ85zRsacpXqa3Cws
+         VNm7rKQpY6xEhkNwhn1gbXmujGo03lyn7ld02/x60XqzZobtODOHhG9tUPauGrK/Kcsl
+         inXjVKtiut43XQLdgzc66M1Y+SitiaRjwezn1+bqJda6Bw6IU6UFlU3zcPeaPz5J4ZNH
+         u84GwRQQPsE1ORrXFGJcxze4CGnAc6/ac5ybtYXHIqfqzY/JP8zBzm2nEdDSDVMhITpv
+         GM+KLfYAtPsU8I084QlxeHYlr57b4i2vW1sWdBOySyBr7RsLpFlgU7ptyyvPWmp82TJp
+         wxUQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz95y35bewF0OKbG1n6mKwB1yut1+iemNu1vHqm00+FKg2qcE9mEJT0Sk1RslhdHy/t3OebQb/l5OOlZg1i8sc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLUl1DtrujqCBoQWTdcrw8Xg3jQB7qvNXX+4D+03xMmErLAa+Qt
+	WJc4SGqmmT0/oMVjM5GHSDmqB7yAYxoVtuqNjXj5S7fLPXaRJKgiF2IPRVF6nGCfSvDGFs1Zop9
+	ErFGvSA==
+X-Received: from pgfd7-n1.prod.google.com ([2002:a05:6a02:6547:10b0:cc7:e6e5:e624])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4cc8:b0:3a0:c276:1ec0
+ with SMTP id 98e67ed59e1d1-3ae897f673emr156104a91.28.1793308755622; Thu, 29
+ Oct 2026 14:19:15 -0700 (PDT)
+Date: Thu, 29 Oct 2026 14:19:14 -0700
+In-Reply-To: <20261029202817.901145-1-jmattson@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,28 +77,89 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20261029202817.901145-1-jmattson@google.com>
+Message-ID: <auO4UueaV0mTVzzB@google.com>
+Subject: Re: [PATCH 1/3] KVM: SVM: Check EFER.SVME before updating MSR_VM_CR
+ on guest writes
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Yosry Ahmed <yosry@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On Wed, 28 Oct 2026 12:43:11 -0300, Iván Ezequiel Rodriguez wrote:
-> clone3(CLONE_VM|CLONE_PIDFD) can fail in put_user() after copy_thread()
-> has mapped a shadow stack into the shared mm. copy_process() then calls
-> exit_thread(). arm64 and riscv did not implement it, so the VMA leaked.
+On Thu, Oct 29, 2026, Jim Mattson wrote:
+> (Host- initiated writes are allowed to set any valid MSR_VM_CR bits.)
+
+Eww.  Why?  If we allow this, then we'll end up with the mess where the guest
+can't write back the current value (if userspace is being weird).  I get that
+we want to avoid ordering issues, but there's *already* a required order here,
+unless userspace ignores the failure from svm_set_vm_cr() and continues on.
+
+KVM doesn't advertise the MSR as something to be saved/restored, and none of
+QEMU, CHV, CrosVM, or our VMM appear to save/restore it.  So why make trouble
+for ourselves?
+
+> Fixes: 4a810181c8bc ("KVM: SVM: Implement emulation of vm_cr msr")
+> Signed-off-by: Jim Mattson <jmattson@google.com>
+> ---
+>  arch/x86/kvm/svm/svm.c | 22 +++++++++++++---------
+>  1 file changed, 13 insertions(+), 9 deletions(-)
 > 
-> x86 already frees via exit_thread() -> shstk_free(). Its separate TLS
-> leak is when copy_thread() fails after the alloc and skips exit_thread().
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 136069dfcd44..3a0a507c94b2 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3015,14 +3015,24 @@ static int svm_complete_emulated_msr(struct kvm_vcpu *vcpu, int err)
+>  	return 1;
+>  }
+>  
+> -static int svm_set_vm_cr(struct kvm_vcpu *vcpu, u64 data)
+> +static int svm_set_vm_cr(struct kvm_vcpu *vcpu, struct msr_data *msr)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+> -	int svm_dis, chg_mask;
+> +	u64 data = msr->data;
+> +	int chg_mask;
+>  
+>  	if (data & ~SVM_VM_CR_VALID_MASK)
+>  		return 1;
+>  
+> +	if (msr->host_initiated) {
+> +		svm->nested.vm_cr_msr = data;
+> +		return 0;
+> +	}
+> +
+> +	/* check for svm_disable while efer.svme is set */
+> +	if ((data & SVM_VM_CR_SVM_DIS_MASK) && (vcpu->arch.efer & EFER_SVME))
+> +		return 1;
+> +
+>  	chg_mask = SVM_VM_CR_VALID_MASK;
+>  
+>  	if (svm->nested.vm_cr_msr & SVM_VM_CR_SVM_DIS_MASK)
+> @@ -3031,12 +3041,6 @@ static int svm_set_vm_cr(struct kvm_vcpu *vcpu, u64 data)
+>  	svm->nested.vm_cr_msr &= ~chg_mask;
+>  	svm->nested.vm_cr_msr |= (data & chg_mask);
+>  
+> -	svm_dis = svm->nested.vm_cr_msr & SVM_VM_CR_SVM_DIS_MASK;
+> -
+> -	/* check for svm_disable while efer.svme is set */
+> -	if (svm_dis && (vcpu->arch.efer & EFER_SVME))
+> -		return 1;
+> -
+>  	return 0;
+>  }
+>  
+> @@ -3262,7 +3266,7 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
+>  		svm->nested.hsave_msr = data & PAGE_MASK;
+>  		break;
+>  	case MSR_VM_CR:
+> -		return svm_set_vm_cr(vcpu, data);
+> +		return svm_set_vm_cr(vcpu, msr);
+>  	case MSR_VM_IGNNE:
+>  		kvm_pr_unimpl_wrmsr(vcpu, ecx, data);
+>  		break;
+> -- 
+> 2.56.0.317.g454f8302e1-goog
 > 
-> [...]
-
-Applied to arm64 (for-next/core), thanks!
-
-Only the arm64 changes, riscv can go through the riscv tree. I changed
-the commit log a bit on the first patch and addressed some nits Mark
-raised. As a separate patch, it might be good to add a kselftest for the
-io_uring worker thread and GCS.
-
-[1/4] arm64/gcs: release GCS on failed fork
-      https://git.kernel.org/arm64/c/078e122f3bf0
-[3/4] selftests/arm64: GCS must not leak on a failed clone3
-      https://git.kernel.org/arm64/c/f46be4da2cbb
