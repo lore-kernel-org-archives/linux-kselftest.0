@@ -1,73 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793270702;
-	b=29aSHhEbSCZ31xSBfJv5K9muDjmAIwbI7ONCwTf+UmzIW5XW6AKU6bRP8BvfzpXvUL9S
-	 BmogCBMVyeYEIkrxeDMXMhVqYb0YnzpeGZG2Nqg2w5RpcLmGwZZDtO+A6x4GgaWrVoyC5
-	 LNi84jlRLbDwvx8CtcGIgOrFoD6kDli6fxLlmIiQ+yia97t3rOKgGbftrmML2ZiNwnBt2
-	 bjhM3RlE0RfBy5E/pqbb+0IYIErtM/JGrnW8EVfhq9cLAp5uEjtafP1cc9DCb4VjpDsja
-	 w5bqvFP43KECG/F6Ks08/PntMHFHxBqPhtc9RSJah8wQXUibLGgRPwrcjwTGNc+DBCg==
+	t=1793271328;
+	b=oYZByuj8ZM69vH9F/ChQ+3MwYErhnaAZ2NBenXWOMgoCvwXdgEO7AR4V5xk0vjBhYHQi
+	 lSAwqOX9b5rjoSGVl99mHVbxnhHZgqu6h2blwTWHdJYWf94dtwNJVmpL3wcQqbh7BDguL
+	 57VTFWunj6wVpJFr3kuaLnqlkGEKsGcRENxLOooEjAeMEmnfyJN+5GWpcxZqNk1kkX6/7
+	 xMc41LsPQ+J6at40Ke+GW+xRbN/CCFVngGr7KyX0ndfzEBG9gwu9UKFn7lqJjbW4k7Be1
+	 jRLkttBCAFJVK46oD4ps4dMxNlqTZTBKUY+/sZDxrCXM7R/+7d5fVImltpkfZnOAfbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793270702;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=0dCSBHfUVHBP5GH3Zssr2yssdn3VkCL1gUTLqNUcb1c=;
-	b=3g0GjEFfFfK3bdiVjF2Fdb1J/4Gm/QksdLuuGkVBI3y1WFvMmkuKsMhRgl9+7dQ31pTb
-	 x68yyDC9/YCvxZdyjSg8mBO4O9U1DZ2p1uoyLXYbIfuL2fND+gsPh2VZIHqYJIZ4bLEJB
-	 cwtFFLmlqVwI7sQjphZTEKksfsg0+Eeemt80AhFHATnh/GBKRQKNzbjtZU/15ltKI+FWk
-	 PLCQ8z7FaZ4XKK9cMc9zFSWVndQpch6bGIuIoSx3KO2ohdWfVeuRzHnY7vHM5Kp++wBg6
-	 2Oblunedc5SjdW5JBeD7GE9T/DyiDYP8rz1fgDRI3o9N9gZNj+NJfBfjqCn4FBzviwA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793271328;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=QkkwAFQHohFN3MMtdm1q3jZttxO/j+fe5cVvGi3Xl6c=;
+	b=YgU/RR9K5CvbIQceL+Xe91OE6zVeK31Yji/nz7g3hVzb7GGSWZyjAgiSLXgzWgIT2qaK
+	 jJQaWroEAE9JNpkWEQclbyL3PT4tHhSO/Ot36DB+jggPO5ywnJ/8aeVnRtY7NnqMygMHv
+	 fOTZnIvhmR+N/o9obIly1xqamY6va3c3puLig5zXOEQb0EyfkXerANGwIzleVOG2mqGlj
+	 dDyerCEm5ZjQO3+eFco1cgO2b1MzGLtPifD6riXVLd8HCr0WXabq4gGOEQPGr4WTLcUVy
+	 ldTBxYl/5demT4SX6jKnvqxRxhWW5kt4r3XmXGV9pkGJn3Vbc2yp8obkk08yrhTUulA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nxT2VMz4;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=hAfZlOvp;
+	arc=none smtp.remote-ip=192.198.163.7
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBDD606A31F;
-	Thu, 29 Oct 2026 10:45:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F638606A31A;
+	Thu, 29 Oct 2026 10:55:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F638606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nxT2VMz4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 569071F031E2;
-	Thu, 29 Oct 2026 10:44:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793270702;
-	bh=0dCSBHfUVHBP5GH3Zssr2yssdn3VkCL1gUTLqNUcb1c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nxT2VMz4fnyBGepb2y6DIfK6SE3t2B76Yk1hsA8J6xw19WDTRWQkc5zer0rtHjzZQ
-	 Gb5inbSwozgewNJrlxHySAlYyumEcf2I2H89YJtQ2mKV0FR1qRmlFr6921WsPFWLvf
-	 mDO6xtXeNV75v/I7AsXrq4ElCmke3k3ksppR2nVk6RK7nwvVoDAMyGrK3MqSVHCrLS
-	 tx08eVD4EuQq6XQyn5UuT1nZTBQdXegs6VSSweVrPGuWGxNOLxCoSSp+LhLfxnwPRU
-	 jvL20xWFcOw1tu/0Ngm+yTfllKoTUKGa6bFKvqepHlY87fecj0Xp5xBmzDsbE6PVCD
-	 GcxWud5QzBBKw==
-Date: Thu, 29 Oct 2026 11:44:52 +0100
-From: Alexey Gladkov <legion@kernel.org>
-To: Andy Lutomirski <luto@amacapital.net>
-Cc: "Hallgrimur H. Gunnarsson" <halg@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jan Kara <jack@suse.cz>, James Morris <jmorris@namei.org>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, Jann Horn <jannh@google.com>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	KP Singh <kpsingh@kernel.org>, Jonathan Calmels <jcalmels@3xx0.net>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-	containers@lists.linux.dev, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
- opt-in netns loopback
-Message-ID: <auMjpJwXQJyXr3fW@example.org>
-References: <20261028221705.3915340-1-halg@google.com>
- <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=hAfZlOvp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793271328; x=1824807328;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QuCVJTSRuC+l8TTfanattdAyMrkAFWAplA63tjk/Ubc=;
+  b=hAfZlOvp1RmtV47iSAy9QuJfiKnX+l4gbbxj6jECqTjnpacxc9mE4faq
+   GKpDpggwEXYffFJnEMUoSDriMYu0NyQMjbXAuoydhGv8Fwn52PbYsc65e
+   1Q0A2Uj6SQZ5qthnubO8qePkGgmoJ/dZ8ROAJWnKVe8Nq1jkMIvpZRIu7
+   Zrb+hASRIDh17zVE2fUVN6upDNLkYzb3lMfs2iJ83v3rbXvjMbWgj51ts
+   tMNuExDOop3HznnjAPu90VECzB9gd3gcV2O1VehhX2YgCi1sYyzc+ZlVC
+   Xv6l/Mt6MUXE38kO+4DSyBoMXs9PjGPAx6Nj++HK58eAyIqdFmc00E+Yx
+   w==;
+X-CSE-ConnectionGUID: bnJQe9QeSTe13SFAw4aeEg==
+X-CSE-MsgGUID: XiN9O3laR5Wc6iP1ROjqwQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="1899186"
+X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
+   d="scan'208";a="1899186"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 03:55:26 -0700
+X-CSE-ConnectionGUID: TCIFsRTITRCDp/Up5ewsjw==
+X-CSE-MsgGUID: pxmLGcUrRe6SW/aUTpSCkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
+   d="scan'208";a="5208689"
+Received: from unknown (HELO [10.238.2.205]) ([10.238.2.205])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 03:55:21 -0700
+Message-ID: <2afe6fcd-eadc-4f9d-bbe4-0e6449479603@linux.intel.com>
+Date: Thu, 29 Oct 2026 18:55:19 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,97 +72,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 14/28] KVM: VMX: Virtualize FRED event_data
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: kvm@vger.kernel.org, x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+ Shivansh Dhiman <shivansh.dhiman@amd.com>,
+ David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
+ Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
+ David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+ <20260911213659.2025974-15-sohil.mehta@intel.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <20260911213659.2025974-15-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 28, 2026 at 03:56:11PM -0700, Andy Lutomirski wrote:
-> On Wed, Oct 28, 2026 at 3:18 PM Hallgrimur H. Gunnarsson
-> <halg@google.com> wrote:
-> >
-> > When an unprivileged process creates a new user namespace, it is granted
-> > a full set of capabilities (CAP_FULL_SET) scoped to that namespace.
-> > While these capabilities are isolated to the namespace, they allow
-> > unprivileged local users to reach deep kernel subsystems (most notably
-> > networking configuration and raw sockets via CAP_NET_ADMIN and
-> > CAP_NET_RAW) that historically assumed a trusted caller and have
-> > accounted for a large share of local privilege escalation
-> > vulnerabilities.
-> >
-> > Many workloads and sandboxes use unprivileged user namespaces strictly
-> > for basic UID/GID, mount, PID, or network isolation and never need
-> > high-risk capabilities like CAP_NET_ADMIN or CAP_NET_RAW. Likewise,
-> > system administrators often want a host-wide policy ceiling restricting
-> > which capabilities unprivileged user namespaces may acquire, without
-> > disabling unprivileged user namespaces altogether.
-> >
-> > Prior work by Jonathan Calmels [1] proposed addressing this via a sixth
-> > per-thread capability set (cap_userns) alongside a global sysctl mask.
-> > During that discussion [1, 2], feedback (e.g. from Casey Schaufler)
-> > suggested that rather than adding another per-thread capability set and
-> > prctl() interface, capability restrictions could be integrated directly
-> > into struct user_namespace and configured via clone3(). At the same
-> > time, as noted in [1], a clone3() flag alone is not sufficient for
-> > administrators who need to enforce a host-wide ceiling on unprivileged
-> > user namespaces without modifying every userspace callsite.
-> >
-> > This series combines both pieces of feedback: it embeds a capability
-> > bounding set (cap_bset) directly into struct user_namespace, reusing
-> > the existing task cap_bset, cap_permitted, and cap_effective sets on
-> > namespace entry, and provides both a system-wide sysctl ceiling for
-> > unprivileged user namespaces and a CLONE_NEWUSER_BSET flag for
-> > voluntary per-namespace restriction via clone3().
-> 
-> Why should the task's cap masks affect this?  *Maybe* cap_bset makes
-> sense, but I'm struggling a bit to see why cap_permitted and
-> cap_effective should matter.
-> 
-> Also, I think that Docker in non-userns mode restricts cap_bset, and
-> the purpose of that restriction is rather at odds with interpreting it
-> as a restriction on newly created user namespaces for purposes of
-> vulnerability mitigation.
-> 
-> >
-> > In addition, because restricting CAP_NET_ADMIN at user namespace
-> > creation time prevents userspace from bringing up the loopback
-> > interface in new network namespaces, the series first introduces
-> > an opt-in flag to automatically enable loopback on network namespace
-> > creation:
-> >
-> > 1. Opt-in loopback activation on netns creation (Patch 1)
-> >
-> >   New network namespaces start with the loopback interface (lo) DOWN by
-> >   default, requiring CAP_NET_ADMIN over the owning user namespace to
-> >   bring it up. To block external network access while preserving
-> >   localhost networking, sandboxes commonly create an isolated network
-> >   namespace with only the loopback interface enabled.
-> >
-> 
-> The whole unshare/clone flag situation is getting out of hand, IMO.
-> And this new thing makes logical sense but is really about reducing
-> exposure.
-> 
-> Perhaps we should instead have a small list associated with a userns
-> (extensible in the future) of things that the ns's admin (i.e. whoever
-> has CAP_SYS_ADMIN relative to the ns) may do.  That list could
-> include:
-> 
-> - Create loopback with sensible defaults for ipv4 and/or ipv6 (i see
-> no obvious reason to separate them)
-> - Create tun/tap interfaces in that ns (and attach them, etc)
-> 
-> And add a very simple new API to do these things.  Actually, the
-> tun/tap could just use the normal mechanism.
-> 
-> Thoughts?
+On 9/12/2026 5:36 AM, Sohil Mehta wrote:
+>  
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 94d684210cf6..e10ac6b280f6 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -431,9 +431,22 @@ void kvm_deliver_exception_payload(struct kvm_vcpu *vcpu,
 
-I think that's an interesting idea. I also think the whole flag issue is
-moving in the wrong direction.
+kvm_deliver_exception_payload() returns early if !ex->has_payload.
 
-Are you thinking of something like `struct open_how` in openat2,
-or something else?
+For example, if a #PF is injected, kvm_deliver_exception_payload() sets
+ex->event_data to cr2.
+Later, if a #DB without payload is queued via KVM_GUESTDBG_INJECT_DB, the
+event_data is not updated.
+It seems the stale #PF event_data will be write to INJECTED_EVENT_DATA and
+delivered to #DB handler in the guest.
 
--- 
-Rgrds, legion
-
+>  		 * breakpoint), it is reserved and must be zero in DR6.
+>  		 */
+>  		vcpu->arch.dr6 &= ~BIT(12);
+> +
+> +		/*
+> +		 * FRED #DB event data matches DR6, but follows the polarity of
+> +		 * VMX's pending debug exceptions, not DR6.
+> +		 */
+> +		ex->event_data = ex->payload & ~BIT(12);
+> +		break;
+> +	case NM_VECTOR:
+> +		ex->event_data = ex->payload;
+>  		break;
+>  	case PF_VECTOR:
+>  		vcpu->arch.cr2 = ex->payload;
+> +		ex->event_data = ex->payload;
+> +		break;
+> +	default:
+> +		ex->event_data = 0;
+>  		break;
+>  	}
+>  
