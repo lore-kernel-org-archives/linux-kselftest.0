@@ -1,114 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.219
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793266570;
-	b=IpjcPs/UwXa91+5K33QZkyYCMNNl9f8Tqv3kTq12rlOnPxnKzQtYHU69fup/kX+yUOVK
-	 pRGhWghGuVFELYFPzJcjvrQ6NpurFKc7uUquZXfzod1ybHGOnPJZPgu43mzoBYiIaXs5X
-	 5CPEq6Qo5qHNdDwNIbywLuxJth9i1vzzRHKlcBF3nw1uC3Mbkw1zDOlzB0WFgA9FTvQ18
-	 UsDJjLB8VotJE09lIz9T+W7Wx6ngbxK5DBt+RdH10IQf28uCLmyb/R6UiONUgDZr4wH5X
-	 kwpvOXi/lBZS5/ywuHUm3a0ZQ8aPYhCZTpBnzbIFqAXAtVfulCQUyqCG5HKA2Bmhflw==
+	t=1793266981;
+	b=U43gSwFozU0xusdAzKfpd+H0m3dZNdjrNffcb0o5PNXnOF7ZtQ/DEs8reCzeKRO5PRNk
+	 j5jclla64SAYoyCxWwgs7dnZb+uQ2huF2YRHwKxSd5G6y+RWYva5cIw2xYzVrgS9jzdN6
+	 vHZ2oia+tZY24RUrHCAWyiz2ImaMoa6KPQUSN+DcADp0ccWg9mx121d73z9XhcaDD5GvJ
+	 iKtvUbW45LFEGG4EcGvWDY4MGtiT3WKXDcnPY9+G0Kuje7UxWC2ZtCPduOVWGe31826DW
+	 wTEJ092MVe2vkbv4hTH86PZXILm4rXE+nNB//TOGXuBbk/8UBmpRFj4+Au8zjlXDo5A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793266570;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=hzOUhhpV11demFlh59Tft/tHrYohYb0/kBzwZWpxs64=;
-	b=nr3TEbjwQwfvv4WYrYrJCVg+xo1tymqvhd3QuAz9hhRo78bcL+007NqD9Lk4rxTpDM5p
-	 SUZ4kkJD9g5rXCl2w+KAElOLIVOnCgChnF8UPYqnwWBEp4sR9/b456EZ+VaQSDjKkPTvS
-	 vVHT86pi5EL7e/vGjaXADlIipDHmB6ziWqOY5yuePeHnGkYWK6cA/Sty2UpugQx/4zn6P
-	 Gv28eqYBrL6S8AYJQhYszCd0pPEl1Z+Jk2WayADv/w22d9+Gc+B95PpAHt2Eg1w1fUNvo
-	 hmdGcWFa5oJ7srzeSd6RbUWJ/NNNES6Jpv6HVRBXq440v4fo7/zah4JgDWo84LGkbXA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793266981;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=UP6gHQkhKRJUMAuDqFnPe45vLrw8ei1MhRg8EtXJDb8=;
+	b=lb59fKvhNUTBCEVd1MbysU58r68KBJRyRVjye31nys3zpIME7hWkPET3CywCKAzMPaES
+	 ybMZgXPH9FRapygzqmeaFTA7uogcWbt1C64gQC2sqFapGV8u3bNpAMEX5p+7ljAGKTjat
+	 wr4P8DeNxyiVnnPemtMowukbqzXnZZm1RwWl1UgfoWzgzOd0st91P+H2Gue6C9LY488Th
+	 B7vA4+Dch0SPVLzvTaAQeO5btHkmH0TWjjDsGoyM3VDE4TZeeFAi5MKPU9dK5plIH+TY6
+	 VWIo2P4InzD6rG3TeSvHeoD4lQhsn26pSVT6DRTVsEwN8bew/Sl2Sk0cjOv8MkXMxrA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b="ly/wfBfW";
-	arc=none smtp.remote-ip=74.125.224.53
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=enYnEgW9;
+	arc=none smtp.remote-ip=91.218.175.219
+Received: from mta0.migadu.com (out-219.mta0.migadu.com [91.218.175.219])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AEF606A31D
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 09:36:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51AEF606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FFD606A31E
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 09:42:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1FFD606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=ly/wfBfW
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-679e6ab6471so429186d50.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 02:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1793266568; x=1793871368; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hzOUhhpV11demFlh59Tft/tHrYohYb0/kBzwZWpxs64=;
-        b=ly/wfBfWMVEzWxCgsqsaGeWG9kaAy9McsBcfGXzxZ6JEl4eZFJztoAYNbUYnAtnQdT
-         kwWj7GOIxz1UP3KhSEJRd6XI+FjCMz661R7ylsTSIcQJPZejEfal/SKCX4Bx62Pdko/+
-         VX1mxT1xyAN6+sr3cOmLuDZrea2OHjRNdCFhw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793266568; x=1793871368;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=hzOUhhpV11demFlh59Tft/tHrYohYb0/kBzwZWpxs64=;
-        b=WxHRqI8jt8S42goXG6996wdwSZ7ZtYkXRqYWRcR89wPXeoegdLE9zynHPEAqGgycEE
-         WhGfeYdTvuEcoLsVvL23fZqjsxzG9TppEFpl8DQTXc71glQQKrelAWgZ/USZ9j1MQ1Ym
-         5AZ9OsAuke/oWEltGJwP0MRaa9Ds2GYPTq7EOf1A5wiBwil6u157+YBymbu9rqsj4cLQ
-         EpEqWMAej0w0mkg13eynqzj2VUYhcETwL9SUnTfRidytPkI3L/rDSltwXLZn+VDVeaaP
-         BCcPh/ZpTauZmQqBCQ5T0UzpUPzC2tkv2jUP4zdc488Kgs+Cp4XhjT4JyN+FWTRx7Beq
-         ccUA==
-X-Forwarded-Encrypted: i=1; AKwUvBwsAT5SQCy09ANohD3OZeZj2FJgD7Fh4MUy3Hkov1vFiTXcCADmccjBHualUngLvqnxAtBOaOS/QFsP6AGUibk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJd2SvkEnAZnyRanVEHIxoa5/m3b5jfHkNVZXjBvu5k2agvr5dY
-	pk98OrnxZLQhAFqTKM+Irr0xJn5K0sblUmn/ivpe8hWyH5ognAJHU4bj37y4/tkdwQ==
-X-Gm-Gg: AYBFou1wL2IN4sS1oDJIWV+Sl44oFWze/xwDawV2fMebMoIq43c3665KrFA0Vv2V4kc
-	WzspZLxUewArX7ct5BubE8tddBtvltqyg5WsplWsrHABWJ5ug8iGoshqvahNSNgCBwI6rUGsRLP
-	Hed04nkYM/Grrv8VSpt/7UJtu7qn2KUDEy0+PDwkhT8YZPc6v7MDusPvk+/wG5Fgq8j9GIRDffy
-	lkXFe8LnR/ixtdvEhlLHtZd/LA8lJxGwklS21m45+RsCrUk7uAKf1p0V183eAfSpGdfD/M5T4fX
-	UaS0Hy20XVEQYIMWo0J6XA7qFX4TOsiFKXM7qtUXGZc1gfmMpOjSptvWkgXapK5hAwl8S3Q3CZU
-	nUWKQGCv/8ZqF/uUmjGqB2NC6bwW5Pc5Su3sJ9xPpeMFs2A1tpgbXarA4P2HFaIKGhE4JAXvstP
-	GM8gQ+Pgo6NCY6tr1WtQPQyFE7YND1tFUTDOFR4Vqk/VKgW+hVcBdR6c4TcJgfvAlw8JGsoj53N
-	3YZTPaXpmP8SHzgM9B9Rh0lXgQ+N6kiiA9meuYDT2BRNXbqGZKMVrKL2dJvC3o28EUeepAL7QTC
-	tC+otcOxHOTZhoBxRcQhcqYEetsak82nLvB71isSQdc30dlkb1hoeW2iiYbaexcBNr/RAXgrFBq
-	3pHjkAFLuBtadscA=
-X-Received: by 2002:a05:690e:1909:b0:677:b7c3:12c3 with SMTP id 956f58d0204a3-67a8d22eb63mr1824691d50.29.1793266568197;
-        Thu, 29 Oct 2026 02:36:08 -0700 (PDT)
-Received: from mbili.tail33bf8.ts.net ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67a7a0c31cfsm3058873d50.9.2026.10.29.02.36.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 02:36:07 -0700 (PDT)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Eric Dumazet <edumazet@kernel.org>,
-	bpf@vger.kernel.org,
-	bot+bpf-ci@kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	David Ahern <dsahern@gmail.com>,
-	Martin KaFai Lau <kafai@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Victor Nogueira <victor@mojatatu.com>,
-	linux-kselftest@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH net v2] bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
-Date: Thu, 29 Oct 2026 05:36:03 -0400
-Message-Id: <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=enYnEgW9
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=iS3D+aJiyxzfc6b48kGp2uoaVhzDYrJGX0S/tMkSCok=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793266977; v=1; x=1793871777;
+ b=enYnEgW92EmhxTm+hGdhj/hwFz7ZdeQWB3O8UUhPgAq/EuwAR4LDMQTd2yfNENk8iGM+L7O2
+ q+DD8yx42bk0Lc8zamCJeYqQiJ0fe8ADVQ6FyYgmuLW+0/tSlS61Sgn/yeZ1xiLzQZPTHVEILSA
+ MTWAH/CFZtdesbifkBnWP2U0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id cbe5db6c4e60f0d6;
+	Thu, 29 Oct 2026 09:42:57 +0000
+X-Mizu-Trace-ID: cbe5db6c4e60f0d6
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <661486ab-4879-47cd-8035-ae0d7a7d7462@linux.dev>
+Date: Thu, 29 Oct 2026 17:42:52 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -118,164 +58,151 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next] cgroup/cpuset: Fix incorrect CPU accounting with
+ parent's effective_xcpus expansion
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261028152608.648427-1-longman@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261028152608.648427-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The issue:
-This is a follow-up to the short link-layer header fixes from Eric.
-After vlan pop_eth, a privileged SCHED_ACT BPF program can call
-bpf_skb_change_head(skb, 1, 0) and then bpf_redirect_neigh().
 
-__bpf_redirect_neigh() calls skb_pull(skb, sizeof(*ethh)) after checking
-only that mac_header < network_header.  It does not check that the MAC
-header is long enough or that it is linear.
 
-A SCHED_ACT BPF program can do:
+在 2026/10/28 23:26, Waiman Long 写道:
+> Commit ec0254b9eb49 ("cgroup/cpuset: Release invalid isolated CPUs with
+> a shrunk root partition parent") fixes incorrect isolated_cpus accounting
+> when contraction of a parent's effective_xcpus can cause a child partition
+> to lose isolated CPUs. Expansion of parent's effective_cpus can also allow
+> a child partition to gain more effective_xcpus. However, the current code
+> doesn't handle this case correctly leading to incorrect effective_cpus
+> and isolated_cpus accounting. Fix that by looking for this possible
+> expansion of effective_xcpus and perform the proper accounting action.
+> 
+> New test cases are added to test this effective_xcpus expansion scenarios.
+> 
+> Reported-by: Guopeng Zhang <guopeng.zhang@linux.dev>
+> Link: https://lore.kernel.org/lkml/20261027123837.100909-1-guopeng.zhang@linux.dev
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-    bpf_skb_change_head(skb, 1, 0);
-    bpf_redirect_neigh(lo, NULL, 0, 0);
+I have tested this patch. In the scenarios I tested, the double grant
+and the isolated_cpus accounting after the expansion are now correct.
 
-after vlan pop_eth.  The skb then has mac_len == 1 and only one byte of
-linear data; skb_pull(ETH_HLEN) trips the skb->len < skb->data_len BUG in
-__skb_pull():
+> ---
+>  kernel/cgroup/cpuset.c                            | 12 ++++++++++++
+>  tools/testing/selftests/cgroup/test_cpuset_prs.sh | 15 +++++++++++++++
+>  2 files changed, 27 insertions(+)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 3219f927c35e..39c81a0a8ab9 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2097,6 +2097,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  							     parent->effective_xcpus);
+>  			if (!cpumask_empty(tmp->addmask))
+>  				isolated_cpus_release(cs, tmp->addmask);
+> +			/* Expansion of parent's effective_xcpus is handled below */
+>  		}
+>  		if (nocpu) {
+>  			part_error = PERR_NOCPUS;
+> @@ -2106,11 +2107,22 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  						     parent->effective_xcpus);
+>  		} else if ((parent_prs == PRS_ISOLATED) &&
+>  			   ((old_prs == PRS_ROOT) || (old_prs == -PRS_ROOT))) {
+> +			/* Parent partition state changed to PRS_ISOLATED */
+>  			part_error = PERR_ISOPARENT;
+>  			if (old_prs == PRS_ROOT) {
+>  				cpumask_copy(tmp->addmask, cs->effective_xcpus);
+>  				adding = true;
+>  			}
+> +		} else if (is_partition_valid(cs) &&
+> +			   !cpumask_equal(tmp->delmask, cs->effective_xcpus)) {
 
-    kernel BUG at include/linux/skbuff.h:2839
-    RIP: skb_pull+0xc5/0x100
-    Call Trace: skb_do_redirect -> ...
+The branch is also entered when the freshly computed effective xcpus
+shrink, e.g. after a parent contraction. The cpumask_andnot() then
+computes an empty delta and it doesn't seem to cause any harm. Do we
+need to tighten the condition?
 
-The Fix:
-Use skb_mac_header_len(), i.e. network_header - mac_header, rather than
-skb->mac_len.  mac_len is zero for locally generated tc egress and netkit
-packets, while skb_mac_header_len() still rejects the one-byte header
-produced by pop_eth + bpf_skb_change_head(skb, 1, 0).
+> +			/*
+> +			 * If there is an expansion of parent's effective_xcpus,
+> +			 * we may take more xcpus from parent. The parent's
+> +			 * effective_cpus should still have active CPUs or nocpu
+> +			 * should have been set.
+> +			 */
+> +			deleting = cpumask_andnot(tmp->delmask, tmp->delmask,
+> +						  cs->effective_xcpus);
+>  		} else if (is_partition_invalid(cs)) {
+>  			struct cgroup_subsys_state *css;
+>  			struct cpuset *child;
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 83ef6c781af3..844efdf029cd 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -531,6 +531,21 @@ TEST_MATRIX=(
+>  	" C1-4:P1 C3-4:P2   .      .    T:C4-6   .      .      .     0 A1:5-6|A2:4 A1:P1|A2:P2 4"
+>  	" C1-4:P1 C1-2:P2   .      .    T:C4-6   .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
+>  
+> +	# The extra CPUs gained by a child partition when its parent expands the
+> +	# exclusive CPUs have to be taken away from the parent.
+> +	" C2-6:X2-5:P1 CX3-6:P1 \
+> +	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P1 ."
+> +	" C2-6:X2-5:P1 CX3-6:P2 \
+> +	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P2 3-6"
+> +
+> +	# Both expansion and contraction of parent's effective_xcpus will be
+> +	# correctly handled in child partition and the child can be invalidated
+> +	# if a populated parent could lose all its effective_cpus.
+> +	" C2-6:X2-5:P1 CX3,5-6:P2 \
+> +	                    .      .    X4-6     .      .      .     0 A1:4|A2:5-6|XA2:5-6 A1:P1|A2:P2 5-6"
+> +	" C2-6:X2-5:P1 CX3-6:P2 \
+> +	                    .      .   T:X4-6    .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
+> +
+>  	#
+>  	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+>  	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
 
-Also use pskb_may_pull() to ensure the Ethernet header is linear before
-reading or pulling it, and re-read ethh afterwards since pskb_may_pull()
-may reallocate skb->head.
+BTW, about the housekeeping check issue from my previous email.
+I verified it with the session below on a nohz_full=8-31 boot where
+CPUs 0-7 are the housekeeping CPUs:
 
-Add egress coverage to tc_redirect_neigh: the existing test only attaches
-redirect_neigh at ingress, where mac_len is populated.
+  # cat /sys/devices/system/cpu/nohz_full
+  8-31
+  # cd /sys/fs/cgroup
+  # echo +cpuset > cgroup.subtree_control
+  # mkdir -p A/B
+  # echo 0-7 > A/cpuset.cpus
+  # echo 1-7 > A/cpuset.cpus.exclusive
+  # echo root > A/cpuset.cpus.partition
+  # echo +cpuset > A/cgroup.subtree_control
+  # echo 0-7 > A/B/cpuset.cpus
+  # echo 0-7 > A/B/cpuset.cpus.exclusive
+  # echo isolated > A/B/cpuset.cpus.partition
+  # cat /sys/fs/cgroup/cpuset.cpus.isolated
+  1-7
+  # cat A/B/cpuset.cpus.exclusive.effective
+  1-7
+  # echo 0-7 > A/cpuset.cpus.exclusive
+  # cat A/B/cpuset.cpus.partition
+  isolated
+  # cat /sys/fs/cgroup/cpuset.cpus.isolated
+  0-7
 
-Conditions to recreate the bug:
-On x86-64 with 4 KiB pages, enable CONFIG_PACKET, CONFIG_BPF_SYSCALL,
-CONFIG_NET_SCH_INGRESS, CONFIG_NET_CLS_MATCHALL, CONFIG_NET_ACT_VLAN and
-CONFIG_NET_ACT_BPF.  Run as root with BPF loading, network administration
-and raw-packet privileges.  Bring lo up and attach a SCHED_ACT program
-that calls bpf_skb_change_head(skb, 1, 0), then returns
-bpf_redirect_neigh(skb->ifindex, NULL, 0, 0):
+B stays a valid isolated partition holding all the housekeeping CPUs
+and there is no warning at all.
 
-  ip link set lo up
-  tc qdisc add dev lo clsact
-  tc filter add dev lo egress matchall action vlan pop_eth pipe \
-      action bpf object-file neigh_chghead.o section action
+If the housekeeping issue is going to be addressed in this series, is
+a test case like the one below worth adding?
 
-Send an untagged ETH_P_IP frame of ETH_HLEN + 8192 bytes through an
-AF_PACKET/SOCK_RAW socket bound to lo, without PACKET_VNET_HDR or
-PACKET_QDISC_BYPASS.  Use a unicast destination MAC.  The sender's skb
-has a 14-byte linear Ethernet prefix and a fragmented payload; pop_eth
-removes that prefix and change_head restores only one linear byte.
-The unfixed neighbor redirect then tries to pull 14 bytes and BUGs.
++	# An isolated child partition cannot grow to take over the last
++	# housekeeping CPU when its parent expands the exclusive CPUs.
++	" C0-7:X1-7:P1 C0-7:X0-7:P2 .      .      X0-7     .      .      .     0 A1:0-7 A1:P1|A2:P-2 ."
 
-Fixes: b4ab31414970 ("bpf: Add redirect_neigh helper as redirect drop-in")
-Reported-by: BPF CI <bot+bpf-ci@kernel.org>
-Link: https://lore.kernel.org/all/2a0f5ff1d8db81b07fc4b344b8e68e3505fcbf36f72a471d1678b2f1cecd881b@mail.kernel.org/
-Link: https://lore.kernel.org/netdev/20261027082604.1485903-1-edumazet@kernel.org/
-Cc: stable@vger.kernel.org
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
-v2:
-- use skb_mac_header_len() instead of mac_len; mac_len is zero for
-  locally generated tc egress and netkit packets (BPF CI)
-- add tc-egress coverage to tc_redirect_neigh
-- document the nonlinear AF_PACKET reproduction conditions
-
- net/core/filter.c                             |  6 ++++-
- .../selftests/bpf/prog_tests/tc_redirect.c    | 26 +++++++++++++++++++
- .../selftests/bpf/progs/test_tc_neigh.c       | 10 +++++++
- 3 files changed, 41 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 70dc621672f2..4925f3e355d4 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2432,10 +2432,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
- static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
- 				struct bpf_nh_params *nh)
- {
--	struct ethhdr *ethh = eth_hdr(skb);
-+	struct ethhdr *ethh;
- 
- 	if (unlikely(skb->mac_header >= skb->network_header))
- 		goto out;
-+	if (unlikely(skb_mac_header_len(skb) < ETH_HLEN ||
-+		     !pskb_may_pull(skb, ETH_HLEN)))
-+		goto out;
-+	ethh = eth_hdr(skb);
- 	bpf_push_mac_rcsum(skb);
- 	if (is_multicast_ether_addr(ethh->h_dest))
- 		goto out;
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-index af8968b89ad7..829f84fb64a3 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-@@ -407,6 +407,26 @@ static int netns_load_bpf(const struct bpf_program *src_prog,
- 	return -1;
- }
- 
-+static int netns_load_egress_bpf(const struct bpf_program *prog,
-+				 const char *ns, int ifindex)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, qdisc);
-+	struct nstoken *nstoken;
-+	int err;
-+
-+	nstoken = open_netns(ns);
-+	if (!ASSERT_OK_PTR(nstoken, "setns egress"))
-+		return -1;
-+
-+	QDISC_CLSACT_CREATE(&qdisc, ifindex);
-+	XGRESS_FILTER_ADD(&qdisc, BPF_TC_EGRESS, prog, 0);
-+	close_netns(nstoken);
-+	return 0;
-+fail:
-+	close_netns(nstoken);
-+	return -1;
-+}
-+
- static struct bpf_link *netns_attach_nk(const char *ns, int ifindex,
- 					struct bpf_program *prog)
- {
-@@ -1055,6 +1075,12 @@ static void test_tc_redirect_neigh(struct netns_setup_result *setup_result)
- 			   skel->progs.tc_chk, setup_result))
- 		goto done;
- 
-+	if (netns_load_egress_bpf(skel->progs.tc_egress, NS_SRC,
-+				  setup_result->ifindex_src) ||
-+	    netns_load_egress_bpf(skel->progs.tc_egress, NS_DST,
-+				  setup_result->ifindex_dst))
-+		goto done;
-+
- 	if (!ASSERT_OK(set_forwarding(false), "disable forwarding"))
- 		goto done;
- 
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_neigh.c b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-index de15155f2609..e0b6c14a3935 100644
---- a/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-+++ b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-@@ -133,4 +133,14 @@ int tc_src(struct __sk_buff *skb)
- 	return bpf_redirect_neigh(IFINDEX_DST, NULL, 0, 0);
- }
- 
-+SEC("tc")
-+int tc_egress(struct __sk_buff *skb)
-+{
-+	if (skb->mark)
-+		return TC_ACT_OK;
-+
-+	skb->mark = 1;
-+	return bpf_redirect_neigh(skb->ifindex, NULL, 0, 0);
-+}
-+
- char __license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+Thanks,
+Guopeng
