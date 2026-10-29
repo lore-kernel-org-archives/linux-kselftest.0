@@ -1,60 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793237988;
-	b=W60CDXnb3trvniO6c4nGy8a9anXYPmr0TAfzi4hAKCUHFvKC2t7Kk2n8LDuGv+Y1hNlx
-	 BGv//mjHo7iVhxIAorHGjf1ewBCl7gaFFh7SMg5xb9dx72lxzJA6Qjor2qbW93rHRVtAD
-	 n78zU03YbPAVyVdGVSoR0DHBYZQyfhMxnfrqhB/JUcKS4qnZ6NDxVpItRtMCeob9k6NvO
-	 4S1B1UVYFzJZzlNCfibn09JTFq6hO861iVBSwFpLFeWWv6IcycVV5vYcgr7iPRqsjk2er
-	 FoKPD6P7mcwh82Ll0TakGSH9Mx3mH6bNEWu0U7Q6RtytyrT2qvjGFjGmVmwG+GfvGew==
+	t=1793238778;
+	b=bEZOTzAaq9pmGuOEYBDerInplwhvUe4hC0YAK7Aw9L6WVCeiMJmT+Hl36ur7FB18ETX2
+	 HFoIbF8lxIkDzkgnLNhSZ1fXNpZ6A1LoDUySFMeNsQDUvm0POABS83DB1N0ENP27/ehRc
+	 EmjnHxdBxlISqdN9IZggO98t0g54rZarGT75d6VJuxqvkqSIhBUMfbNUDW5z84tTRLjLo
+	 /JhcQ6DKGbbo4DNQK0ls5g+iAPWOillkuUI3N9qXuFy/+/ywnYrKFDkgGDmsEn8Jm3ik3
+	 XQHma9+Oo+2WlWG09JZ9f3Yn4IrgvTpGmJUpKgSTFMZNv/8jljtaPWfme16NB45tZSQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793237988;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=DWQxbmV0bH8re7GX2QHEPfKuuqupaaE79RPxwBK2nIA=;
-	b=pU8ZbQvaS0sn63hQLOTIga4a5Eht4Qobzmn4HHQx9Aj4L7J3bGCcvqAaxFG6UvK9rsJz
-	 c2KMO/bSy5SQzJoaNs/bdqHkqQwkMNQbvGrhlP2gKaJ+6uKperi2uWluMCWtbvtmz6kaF
-	 Z4E/Gy4Amg4Cft2RkJQJNMTHF5xyfUptOvcIESxossvzF2SUJpp0JE1XbIL+3Dmu4bM+J
-	 p/2Wh2xz7w6wTCdJPS9TODyBDUAAJSHYWhnmlSG+fWp1vr/DQhFUEBSO0LrwinlAEpXcZ
-	 BNpUjfYSK/R9DQSzh7Ji109PkmE1d7BvfqhvFsI2QrU2YxpuPPp5UEzrE+J0BqvEnaw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793238778;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=VS3KrUAsZqGFDdQ1zZWj5siDrI6dINzVkvHLgIOwcqQ=;
+	b=i7Oarw9gO/p24U11tHSpglDK2yt1S6F5hmFye+Nf2GjJRwQbKkmA74sjlL2KWcutqNMS
+	 d7HQvPO6M8KCXYoI2e+Durb0va8MmCzD7eChwXjueCusNz4ry9BmN9yH7WHLAnZdfnGrM
+	 yTwAMLKuFN2AqSxyWz+KFuIyWI+Pp0/JEkyc/05KKM1pE3RS0AxC/opUqz7Xq5GD6M0+y
+	 YLjaEN8jMszlzhiS6hEAS/u+WksqRKTjB+aYI8L3n+1EAHUl2OsQ4uV3vGLW+t0XebDqP
+	 UNz8JC4AHPlGy2KBjM5WEErmWUlCkUQZtBag9rcDSMm1Y/0FU7NClm2fheVi+XncITQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dumBjmEs;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=I6mBccfK;
+	arc=none smtp.remote-ip=91.218.175.46
+Received: from mta0.migadu.com (out-46.mta0.migadu.com [91.218.175.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB79606A31C;
-	Thu, 29 Oct 2026 01:39:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CE5606A31A
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 01:52:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6CE5606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dumBjmEs
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D6E1F01828;
-	Thu, 29 Oct 2026 01:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793237988;
-	bh=DWQxbmV0bH8re7GX2QHEPfKuuqupaaE79RPxwBK2nIA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dumBjmEs4eiLodakeYnT3akEBBb0DysCs9Cor+j8+D1UuNJx7P3luwR2NRZsUKNTK
-	 lj3MtlzOOH6UKK9ZLdsjtlLviGhfRyvPkYtfj46Qw9J5+hiCmqMlIFY1UMIYJktdCd
-	 yEJaVwguacAUuRGH0nbgloUrcWPG6LhMoF5eMDaW586t6ecZvCVjrjJ+Pw40+XasZL
-	 BPoS/rzIMJDwaZz+NUfZ+s+ER9Q76W2ZM1kRVUpusE+kgX0JzzLIpoYZgd+oP2DQ0O
-	 LKunZyahiEH6AtjFF71zn4WyM9I+/SfAeyQUEPgDFXmAPxZzJt5aVpeR+HMh3SMeBl
-	 k6HphE2eM0MyQ==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 15/15] selftests/ftrace: Add event filter syntax check test case
-Date: Thu, 29 Oct 2026 10:39:44 +0900
-Message-ID: <179323798449.740114.5416715723328926616.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <179323784538.740114.15323117974242744566.stgit@devnote2>
-References: <179323784538.740114.15323117974242744566.stgit@devnote2>
-User-Agent: StGit/0.19
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=I6mBccfK
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=L5Q6rCoHvu1FDzBsQtgKrDF+QPXj/u5Q9tsLLNU5L+Y=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793238776; v=1; x=1793843576;
+ b=I6mBccfKKKY8NPjFyfsHE6zdDeDSuhASqL1OBCfxshXBGCTV+SmHrmX2fIKrHgDdTFS1IxL9
+ n1IaKO4MxlXimXduqZz8Ls/ILCXKFWD9lBLoKHvCQdUuxJHrMjxSlVKkH+OdBsE3mt2bAkqUmMq
+ WrUfXl80Qvj+7c2eQrh/tVXc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e06e74143ea9c3fb;
+	Thu, 29 Oct 2026 01:52:55 +0000
+X-Mizu-Trace-ID: e06e74143ea9c3fb
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ed6fecb4-38e9-4a73-8c1a-7bdd80175a69@linux.dev>
+Date: Thu, 29 Oct 2026 09:52:51 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,143 +58,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cgroup/cpuset: Fix missing effective_xcpus accounting of
+ child partitions
+To: Waiman Long <longman@redhat.com>
+Cc: ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+ mkoutny@suse.com, shuah@kernel.org, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20261027123837.100909-1-guopeng.zhang@linux.dev>
+ <c00f13e5-d048-4d5d-98ea-984ea7ebc13b@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <c00f13e5-d048-4d5d-98ea-984ea7ebc13b@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Add a new ftracetest test case (filter-syntax-check.tc) to verify valid
-event filter expressions, error_log caret reporting for malformed filter
-expressions (empty filters, missing fields, unbalanced parentheses and
-quotes, dangling logical operators, invalid fields/values/cpulists),
-newline truncation on multi-line filter input, and error returns on
-invalid subsystem filters.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
-Changes in v3:
- - Replace negated pipelines (! cmd) with explicit
-   "if cmd; then exit_fail; fi" checks to properly catch unexpected success
-   under POSIX sh with set -e.
- - Add test cases for empty string matching (prev_comm == "",
-   prev_comm ~ "").
- - Add test cases for out-of-range CPU IDs with CPUS{} comparison.
- - Add test cases for missing operands after operators.
- - Add test cases for empty operands and stray operators.
- - Add test cases for operand type mismatches and brace errors.
- - Add test cases for function event filter syntax checks (including
-   INVALID_OP and ILLEGAL_FIELD_OP caret checks).
- - Add test cases for multi-line input validation on event and subsystem
-   filters.
----
- .../ftrace/test.d/filter/filter-syntax-check.tc    |  100 ++++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/filter/filter-syntax-check.tc
+在 2026/10/28 23:30, Waiman Long 写道:
+> On 10/27/26 8:38 AM, Guopeng Zhang wrote:
+>> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>>
+>> When a partition root expands its exclusive CPUs, a valid child
+>> partition will be able to claim more CPUs from its parent. As
+>> update_cpumasks_hier() always updates a cpuset before its descendants,
+>> the parent has already been committed when the child partition is
+>> reached. Its effective_cpus is computed with the child's old
+>> effective_xcpus subtracted and no further adjustment is made
+>> after the child commits its new effective_xcpus.
+>>
+>> The additional CPUs are thus granted to both the parent and the child
+>> partitions. generate_sched_domains() then emits the warning below
+>> about the overlapping sched domains:
+>>
+>>    WARNING: kernel/cgroup/cpuset.c:919 at rebuild_sched_domains_locked+0x1ec/0x2e0, CPU#21: bash/1225
+>>
+>> Fix that by taking the CPUs newly added to a valid child partition
+>> away from its parent at the commit point of update_cpumasks_hier()
+>> right before the new effective_xcpus is committed. The tasks in the
+>> parent cpuset as well as its other children will be updated if its
+>> effective_cpus is changed.
+>>
+>> A new test case is added to test_cpuset_prs.sh to test this patch.
+>>
+>> Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
+>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> 
+> Thanks for reporting this bug. Yes, the current code doesn't handle expansion of parent effective_xcpus correctly. I would prefer to handle it inside update_parent_effective_cpumask() and try to minimize partition related changes in update_cpumasks_hier(). I have posted an alternative patch for your review. Let me know how you think about it.
+> 
+Thanks for the alternative patch.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/filter/filter-syntax-check.tc b/tools/testing/selftests/ftrace/test.d/filter/filter-syntax-check.tc
-new file mode 100644
-index 000000000000..02fb2be6e6eb
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/filter/filter-syntax-check.tc
-@@ -0,0 +1,100 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: event filter - test filter syntax error check
-+# requires: set_event events/sched/sched_switch/filter error_log
-+# flags: instance
-+
-+check_error() { # command-with-error-pos-by-^
-+    ftrace_errlog_check 'event filter parse error' "$1" 'events/sched/sched_switch/filter'
-+}
-+
-+# Valid filter expressions
-+echo '(common_pid == 0)' > events/sched/sched_switch/filter
-+echo '((common_pid == 0) && (prev_pid == 0))' > events/sched/sched_switch/filter
-+echo 'prev_comm ~ "*sh"' > events/sched/sched_switch/filter
-+echo 'prev_comm ~ "*"' > events/sched/sched_switch/filter
-+echo 'prev_comm == ""' > events/sched/sched_switch/filter
-+echo 'prev_comm ~ ""' > events/sched/sched_switch/filter
-+echo 'common_pid == CPUS{0}' > events/sched/sched_switch/filter
-+echo 'common_pid != CPUS{0}' > events/sched/sched_switch/filter
-+echo 0 > events/sched/sched_switch/filter
-+
-+# Empty or meaningless filter expressions
-+check_error '^()'						# NO_FILTER
-+check_error '^== 1'						# INVALID_FILTER
-+check_error 'common_pid ==^'					# INVALID_FILTER
-+check_error 'common_pid !=^'					# INVALID_FILTER
-+check_error 'common_pid >=^'					# INVALID_FILTER
-+
-+# Unbalanced parentheses and quotes
-+check_error '^(common_pid == 1'					# TOO_MANY_OPEN
-+check_error 'common_pid == 1^)'					# TOO_MANY_CLOSE
-+check_error 'prev_comm == ^"bash'				# MISSING_QUOTE
-+
-+# Dangling logical operators and empty operands
-+check_error 'common_pid == 1 &&^'				# TOO_MANY_PREDS
-+check_error 'common_pid == 1 ||^'				# TOO_MANY_PREDS
-+check_error 'common_pid == 1 || (common_pid == 2 && ^)'		# INVALID_FILTER
-+check_error '(common_pid == ^)'					# INVALID_VALUE
-+check_error 'common_pid == ^&& common_pid == 0'			# INVALID_VALUE
-+
-+# Invalid field, operator, or operand type
-+check_error '^no_such_field == 1'				# FIELD_NOT_FOUND
-+check_error 'common_pid == ^@'					# INVALID_VALUE
-+check_error 'common_pid == ^"1"'				# EXPECT_DIGIT
-+check_error 'prev_comm == ^0'					# EXPECT_STRING
-+check_error 'common_pid ^~ 1'					# ILLEGAL_FIELD_OP
-+
-+# CPUS{} syntax errors
-+check_error 'common_pid ^> CPUS{0}'				# ILLEGAL_FIELD_OP
-+check_error 'common_pid == CPUS^0}'				# MISSING_BRACE_OPEN
-+check_error 'common_pid == CPUS{0^'				# MISSING_BRACE_CLOSE
-+check_error 'common_pid == CPUS{^}'				# INVALID_CPULIST
-+check_error 'common_pid == CPUS{99999^}'			# INVALID_CPULIST
-+
-+# Function event filter errors (if supported)
-+if [ -f events/kmem/kmem_cache_free/filter ]; then
-+    check_kmem_error() {
-+        ftrace_errlog_check 'event filter parse error' "$1" 'events/kmem/kmem_cache_free/filter'
-+    }
-+    check_kmem_error 'call_site.function == non_exist_func^'	# NO_FUNCTION
-+    check_kmem_error 'call_site.function ==^'			# INVALID_FILTER
-+    check_kmem_error 'call_site.function ^> 0'			# INVALID_OP
-+    check_kmem_error 'common_type^.function == 0'		# ILLEGAL_FIELD_OP
-+    echo 0 > events/kmem/kmem_cache_free/filter
-+fi
-+
-+# Multi-line input with non-whitespace characters after newline must fail
-+if ( printf "common_pid == 0\ncommon_pid == 1" | \
-+     dd of=events/sched/sched_switch/filter bs=4096 ) 2> /dev/null; then
-+    exit_fail
-+fi
-+if ( printf "common_pid == CPUS{0\n\"} && common_pid == 0" | \
-+     dd of=events/sched/sched_switch/filter bs=4096 ) 2> /dev/null; then
-+    exit_fail
-+fi
-+
-+# Trailing whitespace characters after newline are permitted
-+printf "common_pid == 0\n  \n\t \n" | \
-+    dd of=events/sched/sched_switch/filter bs=4096 2> /dev/null
-+echo 0 > events/sched/sched_switch/filter
-+
-+# Subsystem filter must fail on invalid filter expressions
-+echo 'common_pid >= 0' > events/sched/filter
-+if echo 'no_such_field == 1' > events/sched/filter 2> /dev/null; then
-+    exit_fail
-+fi
-+if echo 'common_pid == 1 &&' > events/sched/filter 2> /dev/null; then
-+    exit_fail
-+fi
-+if ( printf "common_pid == 0\nfoo" | \
-+     dd of=events/sched/filter bs=4096 ) 2> /dev/null; then
-+    exit_fail
-+fi
-+
-+# Subsystem filter with trailing whitespace after newline must succeed
-+printf "common_pid == 0\n  \n\t \n" | \
-+    dd of=events/sched/filter bs=4096 2> /dev/null
-+echo 0 > events/sched/filter
-+
-+exit 0
+Well, I am still learning how you approach this whole series of
+problems.
+
+One more thing I found yesterday: neither the current code nor my
+patch runs the housekeeping check when a valid child partition gains
+CPUs from its parent, e.g. when its parent expands the exclusive
+CPUs. With nohz_full, an isolated child partition can take over the
+last housekeeping CPU. I verified this on a nohz_full=1-7 boot.
+
+I handled it roughly like the diff below. Please take a look and see
+if it is worth handling together in this series.
+
+@@ -2142,12 +2142,28 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+ 				deleting = !cpumask_empty(tmp->delmask);
+ 			else
+ 				part_error = PERR_NOTEXCL;
++		} else if (cpumask_andnot(tmp->addmask, tmp->delmask,
++					  cs->effective_xcpus) &&
++			   prstate_housekeeping_conflict(cs->partition_root_state,
++							parent_prs,
++							tmp->delmask, NULL)) {
++			/*
++			 * A valid partition may be able to claim more CPUs
++			 * from its parent, e.g. when its parent expands the
++			 * exclusive CPUs. The newly computed effective xcpus
++			 * may not have been housekeeping checked before.
++			 */
++			part_error = PERR_HKEEPING;
++			adding = cpumask_and(tmp->addmask,
++				       cs->effective_xcpus,
++				       parent->effective_xcpus);
+ 		}
+
+I have something urgent at hand today, so I will get to your patch a
+bit later and run it through the test cases I have, including the
+isolated_cpus accounting case I mentioned in my previous reply.
+
+Thanks,
+Guopeng
 
