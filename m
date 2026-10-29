@@ -1,54 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.192
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793268697;
-	b=M7VuFNQuzyPx7SdQ/Y8DMUqxjQL4FglLiNIpLZ3oOyMal4sgN+fV+4Gh6OnhCUiVOMHh
-	 kctw631xraZ7tZhiD31AZSxIEnM6Ohp1Iy0gxIxQ/Vi7LkUAakcs1MqmR2vyN2VXjLmer
-	 3QanRXc7OIa2sHfGGxEj3URu3Xoqzhw/Zk0cvsB8YOGRJEVGpUt+5jzg1OMdBHebwhDyN
-	 xrfWBmbsmxapUDQoxTNgHaWDGZGGD0SEqY/nsZO2Ye1DX4LGA3zvvZ+7E/cLocn0piHx0
-	 CxO6LmkxTOfqZVuqnnfBfdunUtbKCSNRKvdf/iABrtwUuTWNy2kmSyOfBnozZdcOjng==
+	t=1793269147;
+	b=vCRDMHUh6Vn2Ek+gj/bbb475kP+5n7jxItwu6n52VmywaIemxnl35zRziDDaXITEimnA
+	 kfx7X0dH4Wzjygq50K/Tl2uniDFDGRe8ysfunQ7wZmnGsDW9JkfIr30mHda2MDuPy0rED
+	 hRf8uMqHri+FFhUTLfj1ELEqQpHOXZOZXYRwFPnwPLqXURjnkcfPwcx6wyOaVBQH6d0hJ
+	 Lf6jtE6w2VkDiMN5/ebkf8nVlq1ujaF3Z7SKdqg82Gs9RqGONF5nU2xyeHpsAJoy51Kar
+	 8efAd0smTIgbFEpfFDM7aO1WLHcrzN5W1wtyTyKZaG3VtXLig333PlRmPlRSXu5mPTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793268697;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=FAoeFjOhHMIomvSZEyPcUceFOZEousEjiVEkUk7cB2Y=;
-	b=O9k2EB9OF0O3achtFL49O/VbUTvqsSOn0UmNNx5gzbZYpENwmuRgnT4UjnXn8KaVcTZz
-	 F6oYMq+O4dZnkEdYXx0nE+muVcOhqGCqgUVKn3YoEfBWzVHc28qXxuU7OnfbnAf1F3wEl
-	 8mrTTPkKdEdMisIsdnR6rLY9X3u4cQQhUoibFASZWsZdtD7LvBpyplYOc6DDPxbuAjjwh
-	 ORlmIwpsgPDRcmA3zLpxt/I3GdFB/2fOZSYLkj3CzbFEeUARhGwNEPLX8p0CsScdZNKpl
-	 9EddoKqLcm4FGyLznUZrS/9IgMlrFlFvtnI8M4+uw1elhnLd/3/LhDT42HCyevUpZ2g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793269147;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=Vc0r3JbZbwBvUVapNGhL09kDmaTErdcaYY3i2MzSoa4=;
+	b=DC1i/5rmIKlBwoPf7BOuNXDqGtMamSOj0Dxus9sL5ypwF4Ci+oaqMnOjMIqhTRz5rmMJ
+	 zmCa8vEwi3RkzF2yjelrkFWAwG0Tv7X4FqgPQUeVLwd3asVjvcu+ODNtEoauFMEGNGz09
+	 Hwhj02e4tK700N1pnuLMjlxh0KIP8Xiq+Rb8bEfiy+yRp4jz0Solh8jjLyjUP0hLog+7N
+	 vUOLOryZnU/7Gq/4vMum0cOWXPziBABrMrsGx6QOaw7OqTs8onQX8wCzphqJ02l7G8w81
+	 BUk2c6hMCQK55f89FTN2akCzVefbjigqmKE4yurfR14cEF//OOmAnyQlRMR5SryYSNA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W5WC4w0c;
-	arc=none smtp.remote-ip=95.215.58.192
-Received: from mta1.migadu.com (out-192.mta1.migadu.com [95.215.58.192])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zH9z4kbb;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91C8606A31C
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 10:11:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C91C8606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB77606A321
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 10:19:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CBB77606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W5WC4w0c
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=O6pECeJaIkk7IfSov1GVY8i4R6cQbSZNmIkkj1P7D6Q=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793268695; v=1; x=1793873495;
- b=W5WC4w0csS4VEBLZ2tQ0uytPiTEYb99WY1GvVsXg6l0O8ex/VRZXKkrvDBct7VCmR2++I9yt
- J1Tzsp1mH2e0cfsCaugOhV+bVlES9qtmuDXLzyvlpvaYXbNsekpoZ3NVes9FyZF9eS3QIzsbDxr
- 13N8iOXXWc173Mkp2JmAx2cA=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 73988b42a70c48c5;
-	Thu, 29 Oct 2026 10:11:34 +0000
-X-Mizu-Trace-ID: 73988b42a70c48c5
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <895cb52c-1542-4ff7-abaf-844a73126fa8@linux.dev>
-Date: Thu, 29 Oct 2026 18:11:25 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zH9z4kbb
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso20161155e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 03:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793269145; x=1793873945; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Vc0r3JbZbwBvUVapNGhL09kDmaTErdcaYY3i2MzSoa4=;
+        b=zH9z4kbbMg0lkkb/HqgCLaFR9vONpMS7UnrW2ezQXaMot4yuVlvx8b5AsRhSxwcAbi
+         Q4V4plM0s/t0NDmjNPggc0m3ZhTaJqh16rAqpGi9MHj+RiOCp8gednbCJjh+al/OBh3J
+         k7dr5f93QI3uvgi5N70JgAPgUqm5BbmDSTg4+7OuWMyvYgfA37I5zYTduwmKcfRgttzJ
+         kjcY4e0V4EKRJbYh1+4WRLNTrxvUqyF0Wh6n+2CKqJa9D29js7cu4+6Z8dPMKadEGaoD
+         kMgHq+0nvRzb+a+PbaN9D/ZrUsU0nRFfB6YPncLGLwQk91Qn1/Z4TSQbNgEhroKs+9x9
+         ox+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793269145; x=1793873945;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Vc0r3JbZbwBvUVapNGhL09kDmaTErdcaYY3i2MzSoa4=;
+        b=HyXG9ZHrjY0+76GCqR6NGU8uCRddOboc/4lu719CTi3ZOtONVbr9Vej/ZPolL85YIU
+         Gj2rU0BrgpMgQhPgj2di7uunazOuMYcATwx7nzCJtV7i/COlGFkKHS0HwCTt+lKooAs2
+         D2Tp3AUE+xXLVDy3DG3lSdvG1VsBSFjI//EG/V0dKO58s63c57Ip1Tx/Hg+pCFaTA3Y2
+         553aEmRe1mvREdJbWV2aNb7U7U/1qWzAoNZYa3PRwW70EqI00lrsQBhQU+p0dqGM662b
+         f43nABurJOFzKKxtDyfX0AhCIFuxDE04as4VebP/by+JXxt9crW9a9aGthBYKYRpEaCZ
+         YBag==
+X-Forwarded-Encrypted: i=1; AKwUvBwkHYzbYixmf12rH2U5ReIEZ0dAKR1+BLyeXP1Vt59qx41MRY8iVO5gy+PkGgTc/wa+TmUFaO5pr87/54PWZRw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLF/HWcUhMXSVyok/QQcOUIg5/e8pZ8wndLJ2VZJB2q23sif5TV
+	mUTTbJJtmTs5Fl5GXRN8BenFdjxU61kuauxmfjAqIhJ2qbp1FqlCu8LJ
+X-Gm-Gg: AYBFou3NJT7zg/pSRL16ZA6ONuD6h7kLW2OH0vmAie6R2IP2uWzofUrFSi+sBGns+6C
+	5b2YtHTb6aOrvS6x7iouPGdeVvqOiso450Pa7bysRNEK96VrTn9jIUTSBJ4D5mDySYNrznA/ENI
+	a0OP640I56P+VoRI2/c3eap5ZNwvrB8HrqCOk1DKIZ0bZRaEFGM7GiV///z85B8CM/m9GPsgd9a
+	nodI/uDhQAbSUswYBfCdAprPMMRL8pb1XvFIg77quUIqrHc5Mdcjp00w12VchusoIaCw87OtKsY
+	e4nvvHF2L/dDSOyoqceQOxt6X3nc9FCDxnS6C1Q0f23C+gzHWAKxYbrKo6i5xysiQ/+Tb4AcQJn
+	pZOR9hKRZcPaAvOEbKV63sbx3T5sfH/+9o9bJtng9QfQ2xJA0Wdl+OeWyzNrmelvBrhYlVIrhXu
+	KtK188Nd1TkLOrRpDjE1p8b7r/E9UnU75azVoeaTupRGqdrqLYWzMi79nD5GMYO/fyNDcAT3ytD
+	ul8ebLa7nzkKAkyJ92EBQ1ckpKcOatu0zp7eHSjhJAZrFPwrIGUo14lQi6pKrC7msGo1zV5Iv7L
+	feVQ8yyQPAgW9yodCSxlT6z3vjk4GlAwY649XsQYXxJm3L8yW3KBBdFXN5D7xUMLjg==
+X-Received: by 2002:a05:600c:6088:b0:4a1:742e:3 with SMTP id 5b1f17b1804b1-4a9677ca203mr118445565e9.27.1793269145060;
+        Thu, 29 Oct 2026 03:19:05 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd354asm31946023f8f.43.2026.10.29.03.19.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2026 03:19:04 -0700 (PDT)
+Date: Thu, 29 Oct 2026 10:18:59 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Esko Mobius via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
+Cc: echoowall@gmail.com, netdev@vger.kernel.org, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "David S. Miller"
+ <davem@davemloft.net>, Simon Horman <horms@kernel.org>, David Ahern
+ <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, Jiayuan Chen
+ <jiayuan.chen@linux.dev>, Shuah Khan <shuah@kernel.org>, Thorsten Leemhuis
+ <regressions@leemhuis.info>, regressions@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, Eric Dumazet <edumazet@kernel.org>
+Subject: Re: [PATCH net 2/2] Revert "net: advertise TCP MSS from the
+ configured MTU, not the learned PMTU"
+Message-ID: <20261029101859.6893f1a0@pumpkin>
+In-Reply-To: <20261026-advmss-revert-v1-2-272fa4b7ecb6@gmail.com>
+References: <20261026-advmss-revert-v1-0-272fa4b7ecb6@gmail.com>
+	<20261026-advmss-revert-v1-2-272fa4b7ecb6@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,116 +106,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
- cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
- alexei.starovoitov@gmail.com
-Subject: Re: [PATCH 2/5] blk-iocost: add BPF struct_ops cost model support
-To: Tejun Heo <tj@kernel.org>
-References: <20261028143534.135968-1-cui.tao@linux.dev>
- <20261028143534.135968-3-cui.tao@linux.dev>
- <0753eaa990c954aa56a0c5fa8ba302e2@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <0753eaa990c954aa56a0c5fa8ba302e2@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello Tejun,
+On Mon, 26 Oct 2026 15:23:09 +0800
+Esko Mobius via B4 Relay <devnull+echoowall.gmail.com@kernel.org> wrote:
 
-在 2026/10/29 04:09, Tejun Heo 写道:
-> Hello, Tao.
+> From: Esko Mobius <echoowall@gmail.com>
 > 
-> On Wed, Oct 28, 2026 at 10:35:31PM +0800, Tao Cui wrote:
->> +/*
->> +/*
->> + * Deliver iocg_init()/iocg_free() to the cgroups already online on the
+> This reverts commit 2640e6419594 ("net: advertise TCP MSS from the
+> configured MTU, not the learned PMTU").
 > 
-> The comment opens with "/*" twice. clang warns "'/*' within block comment
-> [-Wcomment]" and CONFIG_WERROR builds break.
+> That commit stopped the learned PMTU from lowering the MSS we advertise
+> in SYN and SYN-ACK. For symmetric paths it argued that "the peer runs
+> its own PMTU discovery and usually already knows the real path MTU".
+> That only holds if ICMP "fragmentation needed" can reach the peer. When
+> the peer sits behind a firewall that drops inbound ICMP, its PMTU
+> discovery is a black hole (RFC 2923, section 2.1), and the smaller MSS
+> we advertised was the only thing keeping its full-size segments off the
+> narrow hop.
 > 
-A stray line was left over from an earlier edit. Sorry about that.
->> +			/*
->> +			 * A blkg which never went online never reached the
->> +			 * radix tree, so it must not receive an init either;
->> ...
->> +			if (!iocg || !iocg->pd.online)
->> +				continue;
-> 
-> blkg_create() adds a blkg to q->blkg_list only after radix_tree_insert()
-> succeeds, so the blkgs skipped here are the ones blkg_destroy() already
-> took offline, not ones that never reached the radix tree.
-> 
-You're right, the comment described the wrong blkgs. It goes away with
-the walk, which I'll drop in v12 together with the callbacks.
+> Inbound ICMP filtering is very common in enterprise and carrier
+> networks, and it is pervasive in mainland China. We hit this in
+> production after the commit was backported to 6.12.111: TCP connections
+> that reach a server through a relay with a smaller-MTU hop complete the
+> handshake, then stall as soon as the client sends full-size segments.
+> Clients on networks that let ICMP through, and connections that bypass
+> the relay, are unaffected, which made it hard to trace back to the
+> kernel.
 
->> +	if (!disk_live(disk)) {
->> +		mutex_unlock(&q->rq_qos_mutex);
->> +		blk_mq_unfreeze_queue(q, memflags);
->> +		blkdev_put_no_open(bdev);
->> +		return -ENODEV;
->> +	}
-> 
-> The guard() suggestion from v10 was only partly applied. This unlock,
-> unfreeze and put sequence is repeated on three error paths.
-> 
-I'll fold the reg error path into a single out label. Detach no longer
-needs the freeze after the v12 rework.
+If it isn't a silly question, how to connections in the other direction
+work?
 
->> +	/*
->> +	 * Scope the mutex so the tail bdev put runs with blkcg_mutex
->> +	 * already released: dropping the last device reference can
->> +	 * reach disk_release() -> blkcg_exit_disk() ->
->> +	 * blkg_destroy_all(), which takes q->blkcg_mutex.
->> +	 */
->> +	{
->> +		guard(mutex)(&q->blkcg_mutex);
-> 
-> The bare { } block isn't necessary, and ioc_bpf_detach() has the same
-> block with the same comment. Can you drop them?
-> 
-I'll drop both.
->> +	/*
->> +	 * The attachment is checked under rq_qos_mutex first, so an unmatched
->> +	 * detach exits without freezing.
->> +	 */
->> +	mutex_lock(&q->rq_qos_mutex);
->> +	spin_lock_irq(&q->queue_lock);
->> +	ioc = q_to_ioc(q);
->> +	if (ioc) {
->> +		spin_lock(&ioc->lock);
->> +		matched = ioc_attached_model_locked(ioc) == ops &&
->> +			  ioc->bpf_link == link;
->> ...
-> 
-> The same 11 lines check the attachment again after the freeze. The check
-> under rq_qos_mutex after the freeze is the one that matters.
-> 
-This goes away with the freeze removal: detach becomes a single
-mutex-critical section.
->> +/*
->> + * Pluggable cost model interface for blk-iocost.
->> + *
->> + * A BPF struct_ops implementation can take over the cost model of one device.
->> ...
->> + * offline and its free. Both callbacks are called with ioc->lock held and must
->> + * not sleep; the delivery points nest inside queue_lock except for iocg_free()
->> + * from ioc_pd_free() in blkg_free_workfn().
->> + */
-> 
-> This restates the attach mechanics and lists the call sites. The comments
-> and descriptions in general are still long and narrate mechanics.
-> 
-v12 folds everything back into blk-iocost.c, so the private header and
-the long interface comment both go away.
+I'd have thought they'd need that ICMP message to get through.
 
-Thanks,
-Tao
-
-> Thanks.
-> 
-> --
-> tejun
-
+David
