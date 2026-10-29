@@ -1,54 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.81
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793233548;
-	b=QJ89y1qnTzNKUKGFs5V8fWf6ppp2F5vgjhviUg/UiMdkbV+yEfa65lL3JoydZWhQVdBT
-	 En+GuGvqf4JG4rvmMGxY9v0MxcoZ62qEDOJeGw4sivk70e+hoHB6mFfo7JhpU6Y1mZeSz
-	 1Go8xlbXLskKwcAggSfS4VgsB0rQoAZY9sExxA/y6m9LPAbhsuBG+uGVBVTmE8WbAtujg
-	 6S9w6y5VhJXuLV7JG88D2QHx3aILLlHuDFIXTxxdCqxLc+ue2D1QQHfhJMzxeI/RNff8C
-	 bX37xmJIAL0IptVq0p/Z2ePGuj7nonEkkjkG3qkcBqGbzdHYshpOtMVKBFLT2EYReZg==
+	t=1793234335;
+	b=lqEBOA66zJi0sLfjcXAU/3u6Jx5cZ/PL/eYYcy08wb1NUD0jP1tFzKonQZKLgELeEN1c
+	 aHNiZ2lEvcKAk9GiDyjNnSsXSgNEa6YxmzNCukGsPPdUzKZCY6dhra+fZIJ5AR5UYCf7K
+	 qz+VqipxX230xsPlHAwXfVnICInyAqmRFFQyqii82yXASGap6bS1DGn8y2iHiekd0CZr4
+	 fIhJU140TEddid991YYnnmXP/8N5woM4DDkhtOm2i7sJ2rOHcbgz+zt/CmSlP6VQN+RxM
+	 iNzlTBihG02grKUDNVctR4hX9gzCPv4p24Y5i8qBAKzVt+PV/6KAr+mTk/cEETOZrMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793233548;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=P+4VVR2gpLvsEHdIjCTthnXLZ9TQdByWRp+bxozVmD4=;
-	b=TzYuUsQVmN23M/WpJsYGOr2N6+UZ2OlgAV7wXqUbrNhW8413rFiFgwp2I5WB2Cm3Gk5o
-	 4qNijpn0Y2305ABl6d1q45awg2t1fC42/PNrfxYzQzKypE68QTyoGEtSXB1RyTVVQN3SG
-	 3IPjDA5BwARFIUtAUSTN+JTXKHsTUMigtmHwXowkTVt4T5m2IeVqYUw/VJUcW72rPFwsh
-	 VSSLio7jAAwv0tHpzOsJ0x+8F0/VxO/OvxAuErs7pSsBinC1OEfpLjLu1G709oZo0+xr5
-	 ugn0uIn2muYYEvZO5sh5KnSxQEPdzBUbWvWviBZdtqUwy6j77lalvxvgajZdTR4NISA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793234335;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=LGUbBch1/OYdHnTxkjCH2wbrptcygGBhOyaO0PaTRYo=;
+	b=0l13P+y43LsfldbAeYPEltz8RMDYyfsMlH1N53bwkHLaNFfrOxBeY+wndbOSAFTiLVdy
+	 Yx+MtegoVFMNpaqmLVMmPnoaztN0OPoHvmdi36E3Iv4q/JBwphLVDFCwsfg/4Kr+TxbcP
+	 bjTsuDp9pPYvU1Ufhbc8vZ18iJ5tYt+YadcyDCipN82OQSeQn2iBcVnZv6HHqYPfFM10g
+	 hGQfnGVKq+hH+Q1vakOk7Y050MPbhlKqiT5V3Fxo3LBjI/7XBb6uI9CkVbwQKpBhKEPUQ
+	 BCINJiuPVa87URNJGKYHZxIKSJo0VmYLcoC3UIUgnf6stTdRJ+04m2VYsATTydaoK/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NPa4LHT6;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="A/Eks8PX";
+	arc=none smtp.remote-ip=91.218.175.81
+Received: from mta0.migadu.com (out-81.mta0.migadu.com [91.218.175.81])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7B9606A31F;
-	Thu, 29 Oct 2026 00:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0BC606A31D
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 00:38:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF0BC606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NPa4LHT6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F6A1F031E0;
-	Thu, 29 Oct 2026 00:25:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793233547;
-	bh=P+4VVR2gpLvsEHdIjCTthnXLZ9TQdByWRp+bxozVmD4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=NPa4LHT6YOrb/FsVdX424AthRCwyyvXJXSEu7Y6JAvC4JEolnjSwVb6woAoTKJb2B
-	 KpW8ojull0bAX+v82Wdrzd7uD/v8VQozsokRmf5QvYQe/k7t3+nzGMleltlgqiiMPb
-	 1MPVjBhqMuFvDRwAZSnOYFwzhXZ/p9BYJXA0r84jKr90XM+YPXS7mCZDRGYkijgi/M
-	 yf2DZYWLYHNasS6k0k0jQgF2wFTnapg0EMTJfowHNZshh9gFPW1CGqRkeYug/xPU3G
-	 uF02Y2lMMJ1ZruTHK9aa90cWWr8m6CFJ4PowXt/OXwQ3FqX9g6IJSvy0nE+EQPdfMZ
-	 YmjoLkkVKJ4eg==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 03/16] tracing/filters: Fix false success return in process_system_preds()
-Date: Thu, 29 Oct 2026 09:25:44 +0900
-Message-ID: <undine-1793233544695295393-1ccb0da0c6955df7@undined.local>
-X-Mailer: UndineD 0.1
-In-Reply-To: <20261028092846.3782e698@gandalf.local.home>
-References: <179314820431.684037.4147763044424284198.stgit@devnote2> <179314823296.684037.17602272705996028005.stgit@devnote2> <20261028092846.3782e698@gandalf.local.home>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=A/Eks8PX
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=tmMY9UeHWouXSyJW7uvlBsehOpe1njzsUfCIaw1Ok5Q=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793234330; v=1; x=1793839130;
+ b=A/Eks8PXc7FJckhaxUn8SyM1BRDX9urOaWjFyjZ0PVkxId2TUF3fDEofy/tNUC8tWxU9tOGp
+ CkecdiMyfk2J6u56gUFscfMci24BqlNgix3fCfGy5d8pVESriT01AeE2+RYWpcZ9DmVBiULSXqC
+ qZx+Of8cixvjNA3MS2HOmrR4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id 435ee883788e7d0a;
+	Thu, 29 Oct 2026 00:38:50 +0000
+X-Mizu-Trace-ID: 435ee883788e7d0a
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 29 Oct 2026 08:38:42 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Justin Iurman <justin.iurman@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH 0/3] net: ioam6: makes IOAM insertion transparent to IPv6
+ ECMP
+Message-ID: <auKVkslL-fBrMl7t@fedora>
+References: <20261028-ipv6_ioam_ecmp-v1-0-9b6715b6f4c0@kylinos.cn>
+ <auGryXdPv2mx0qlp@fedora>
+ <20261028165812.1b40d1d4@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,100 +72,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261028165812.1b40d1d4@kernel.org>
 
-On Wed, 28 Oct 2026 09:28:46 -0400, Steven Rostedt <rostedt@goodmis.org> wrote:
-> On Wed, 28 Oct 2026 09:43:53 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Hi Jakub,
+On Wed, Oct 28, 2026 at 04:58:12PM -0700, Jakub Kicinski wrote:
+> On Wed, 28 Oct 2026 16:01:13 +0800 Hangbin Liu wrote:
+> > On Wed, Oct 28, 2026 at 01:45:28PM +0800, Hangbin Liu wrote:
+> > > This series makes IOAM insertion transparent to IPv6 ECMP, as required
+> > > by RFC 9486 (C2): a packet carrying IOAM options must be forwarded
+> > > along the same path as the identical packet without them.  
+> > 
+> > Sorry, forgot to add target repo "net". I will add it in next version.
 > 
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > In process_system_preds(), "fail" is initialized to true to indicate
-> > whether any event in the subsystem successfully applied the filter.
-> > However, "fail = false;" was placed at the end of the event loop outside
-> > the error check, unconditionally clearing "fail" on every iteration even
-> > when process_preds() returned an error.
-> > 
-> > As a result, if every event in the subsystem fails to match the filter
-> > (e.g., an invalid field), process_system_preds() returns 0 (success)
-> > instead of -EINVAL. Consequently, create_system_filter() considers the
-> > operation successful and silently resets the subsystem filter display to
-> > the default global filter message instead of reporting the parse error.
-> > 
-> > Move "fail = false;" into the else branch of the error check so that
-> > "fail" is only cleared when at least one event filter succeeds. Because
-> > file->filter is still replaced even when process_preds() fails, check
-> > !list_empty(&filter_list->list) on the fail and fail_mem paths so any
-> > replaced old filters are freed after an RCU grace period via
-> > delay_free_filter().
-> > 
-> > Fixes: 80765597bc58 ("tracing: Rewrite filter logic to be simpler and faster")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > ---
-> >  kernel/trace/trace_events_filter.c |   15 +++++++++------
-> >  1 file changed, 9 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> > index f7c067a58ba4..617bc3c0bb0c 100644
-> > --- a/kernel/trace/trace_events_filter.c
-> > +++ b/kernel/trace/trace_events_filter.c
-> > @@ -2354,8 +2354,10 @@ static int process_system_preds(struct trace_subsystem_dir *dir,
-> >  			filter_disable(file);
-> >  			parse_error(pe, FILT_ERR_BAD_SUBSYS_FILTER, 0);
-> >  			append_filter_err(tr, pe, filter);
-> > -		} else
-> > +		} else {
-> >  			event_set_filtered_flag(file);
-> > +			fail = false;
-> > +		}
-> >  
-> >  
-> >  		filter_item = kzalloc_obj(*filter_item);
-> > @@ -2370,8 +2372,6 @@ static int process_system_preds(struct trace_subsystem_dir *dir,
-> >  		filter_item->filter = event_filter(file);
-> >  		event_set_filter(file, filter);
-> >  		filter = NULL;
-> > -
-> > -		fail = false;
-> >  	}
-> >  
-> >  	if (fail)
-> > @@ -2386,14 +2386,17 @@ static int process_system_preds(struct trace_subsystem_dir *dir,
-> >  	return 0;
-> >   fail:
-> >  	/* No call succeeded */
-> > -	free_filter_list(filter_list);
-> > +	if (!list_empty(&filter_list->list))
-> > +		delay_free_filter(filter_list);
-> > +	else
-> > +		free_filter_list(filter_list);
-> >  	parse_error(pe, FILT_ERR_BAD_SUBSYS_FILTER, 0);
-> >  	return -EINVAL;
-> >   fail_mem:
-> >  	__free_filter(filter);
-> >  
-> > -	/* If any call succeeded, we still need to sync */
-> > -	if (!fail)
-> > +	/* If any filter was replaced, we still need to sync */
-> > +	if (!list_empty(&filter_list->list))
-> >  		delay_free_filter(filter_list);
-> >  	else
-> >  		free_filter_list(filter_list);
+> CI bot says:
 > 
-> I still prefer my suggestion which cleans up the code and gets rid of the
-> duplicate if statement for freeing.
+> The new selftest added alongside this series (tools/testing/selftests/net/ioam6_ecmp.sh)
+> is failing in our CI on the "Transit input ECMP with/without IOAM" scenario:
 > 
->   https://lore.kernel.org/all/20261026153258.5259323d@gandalf.local.home/
-
-Ah, indeed. Sorry I missed it. Let me update it.
-
-Thanks!
-
+>   TEST: Transit input ECMP with/without IOAM (diverged on seed 1: without IOAM via
+>         link A, with IOAM via link B)   [FAIL]
+>   TEST: Transit input ECMP with/without IOAM (seed 2..12)                [ OK ]
+>   TEST: Encapsulating node re-lookup ECMP with/without IOAM (seed 1..12) [ OK ]
 > 
-> -- Steve
->
+> 11 of the 12 "transit input" seeds pass, and the whole "encapsulating node re-lookup"
+> scenario passes on all seeds, so this looks like an edge case in the Hop-by-Hop
+> nexthdr-recovery logic used for the policy-0 multipath hash, rather than a test
+> infra/flake issue. Could you take a look at whether the recovered "virtual" nexthdr
+> (or the padding/option-length walk used to compute it) is correct for all IOAM option
+> layouts/trace sizes, since one specific packet still ends up hashed to a different ECMP
+> sibling than the equivalent packet without IOAM?
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks for the report. I run it locally multi times and didn't got this issue.
+I will try reproduce it first and check the reason.
+
+Thanks
+Hangbin
